@@ -439,6 +439,10 @@
      "name": "War Wizard"
     }
    ],
+   "trappings": [
+    "Quarterstaff",
+    "Sack Full of Gifts (contains ingredients for Soren's spells and assorted treasures worth a total of 40 GC)"
+   ],
    "spells": {
     "Petty Magic": [
      "Bearings",
@@ -453,6 +457,15 @@
      "Bridge",
      "Drop",
      "Entangle"
+    ],
+    "Lore of Witchcraft": [
+     "Blight",
+     "Creeping Menace",
+     "Curse of Ill-Fortune",
+     "The Evil Eye"
+    ],
+    "Lore of Tzeentch": [
+     "Treason of Tzeentch"
     ]
    },
    "keywords": [
@@ -2420,8 +2433,16 @@
     "Wax slate and stylus"
    ],
    "spells": {
-    "Petty: Bearings, Dazzle, Dart, Warning Arcane: Aethyric Armour, Flight": [
-     "Lore of Heavens"
+    "spells": [
+     "Petty: Bearings",
+     "Dazzle",
+     "Dart",
+     "Warning Arcane: Aethyric Armour",
+     "Flight"
+    ],
+    "Lore of Heavens": [
+     "Starcrossed",
+     "T'Essla's Arc"
     ]
    },
    "keywords": [
@@ -3460,6 +3481,12 @@
      "name": "War Wizard"
     }
    ],
+   "trappings": [
+    "Collection of Decorated Skulls",
+    "Golden Snake Helm",
+    "Serpent Swarm",
+    "Staff"
+   ],
    "spells": {
     "Arcane Magic": [
      "Blast",
@@ -3467,6 +3494,12 @@
      "Entangle",
      "Fearsome",
      "Ward"
+    ],
+    "Lore of Beasts": [
+     "Hunter's Hide",
+     "Quick Passage",
+     "The Amber Spear",
+     "Vengeful Hood"
     ]
    },
    "keywords": [
@@ -3762,6 +3795,16 @@
      "name": "Intuition",
      "nameFr": "Intuition",
      "value": 49
+    },
+    {
+     "name": "Language (Battle)",
+     "nameFr": "Langue (Bataille)",
+     "value": 53
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 75
     },
     {
      "name": "Outdoor Survival",
@@ -5019,6 +5062,7 @@
     "Soc": null
    },
    "wounds": 1,
+   "size": "tiny",
    "attacks": [
     {
      "name": "Proboscis",
@@ -5042,6 +5086,11 @@
     {
      "name": "Painless",
      "ref": "E0-T-042"
+    },
+    {
+     "name": "Size",
+     "param": "Tiny",
+     "ref": "E0-T-045"
     },
     {
      "name": "Wallcrawler",

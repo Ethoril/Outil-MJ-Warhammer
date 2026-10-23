@@ -211,6 +211,12 @@
      "name": "Sixth Sense"
     }
    ],
+   "trappings": [
+    "Grimoire",
+    "Enchanted Staff",
+    "Practical Robes of the Light Order",
+    "Purse containing coins to the value of 4GCs"
+   ],
    "spells": {
     "spells": [
      "Petty: Bearings",
@@ -220,6 +226,14 @@
      "Magic Flame",
      "Shock",
      "Warning"
+    ],
+    "Lore of Light": [
+     "Daemonbane",
+     "Dazzling Brightness",
+     "Eyes of Volans",
+     "Light of Purity",
+     "Ph�'s Protection",
+     "Pierce the Veil"
     ]
    },
    "nameFrSource": "proposition"
@@ -1551,8 +1565,17 @@
     "Pale Scythe"
    ],
    "spells": {
-    "Petty: Dart, Drain, Shock, Warning Arcane: Aethyric Arms, Bridge, Flight, Teleport": [
-     "Lore of Death"
+    "spells": [
+     "Petty: Dart",
+     "Drain",
+     "Shock",
+     "Warning Arcane: Aethyric Arms",
+     "Bridge",
+     "Flight",
+     "Teleport"
+    ],
+    "Lore of Death": [
+     "Elspeth has memorised all spells from the Lore of Death"
     ]
    },
    "keywords": [
@@ -1972,6 +1995,11 @@
      "name": "War Wizard"
     }
    ],
+   "trappings": [
+    "Enchanted Staff",
+    "Eagle Totem",
+    "Standard Robes"
+   ],
    "spells": {
     "spells": [
      "Petty: Animal Friend",
@@ -1979,6 +2007,19 @@
      "Produce Small Animal",
      "Spring",
      "Warning"
+    ],
+    "Lore of Beasts": [
+     "Aethyric Armour",
+     "Aethyric Arms",
+     "Amber Talons",
+     "Beast Form",
+     "Beast Master",
+     "Beast Tongue",
+     "Breath",
+     "Dark Vision",
+     "Entangle",
+     "Wyssan's Wildform",
+     "Winter Coat"
     ]
    },
    "keywords": [
@@ -3204,6 +3245,11 @@
      "ref": "E0-T-030"
     },
     {
+     "name": "Mutation",
+     "param": "Extra arm - +1 Attack",
+     "ref": "E0-T-040"
+    },
+    {
      "name": "Size",
      "param": "Small",
      "ref": "E0-T-045"
@@ -3467,8 +3513,23 @@
     "Mouldy Robes"
    ],
    "spells": {
-    "Petty Magic Bearings, Careful Step, Gust, Marsh Lights, Spring, Sounds Arcane Breath, Entangle, Fearsome, Ward M�na's": [
-     "Marsh Magic"
+    "spells": [
+     "Petty Magic Bearings",
+     "Careful Step",
+     "Gust",
+     "Marsh Lights",
+     "Spring",
+     "Sounds Arcane Breath",
+     "Entangle",
+     "Fearsome",
+     "Ward M�na's"
+    ],
+    "Marsh Magic": [
+     "A Bite of Midges",
+     "Despondent Slough",
+     "Inculcate Mizzle",
+     "Mystic Mist",
+     "O Mere be More"
     ]
    },
    "nameFrSource": "proposition"

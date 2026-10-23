@@ -3066,10 +3066,20 @@
    },
    "attacks": [
     {
-     "name": "Pistol +8 (20), Weapon (Rapier) +8, Weapon (Hook",
-     "damage": 6,
+     "name": "Pistol",
+     "damage": 8,
      "trait": "Ranged",
      "ranged": true
+    },
+    {
+     "name": "Rapier",
+     "damage": 8,
+     "trait": "Weapon"
+    },
+    {
+     "name": "Hook",
+     "damage": 6,
+     "trait": "Weapon"
     }
    ],
    "skills": [
@@ -3690,6 +3700,17 @@
      "name": "Intuition",
      "nameFr": "Intuition",
      "value": 69
+    },
+    {
+     "name": "Language (Gospodarinyi)",
+     "nameFr": "Langue (Gospodar)",
+     "value": 54
+    },
+    {
+     "name": "Language (Reiskpiel)",
+     "nameFr": "Langue (Reiskpiel)",
+     "frUnverified": true,
+     "value": 67
     },
     {
      "name": "Leadership",

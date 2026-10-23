@@ -867,7 +867,10 @@
      "name": "Strike Mighty Blow"
     },
     {
-     "name": "Strong Back Strong-minded"
+     "name": "Strong Back"
+    },
+    {
+     "name": "Strong-minded"
     },
     {
      "name": "Sturdy"
@@ -2790,9 +2793,8 @@
      "value": 135
     },
     {
-     "name": "Melee (Two handed)",
-     "nameFr": "Corps à corps (Two handed)",
-     "frUnverified": true,
+     "name": "Melee (Two-handed)",
+     "nameFr": "Corps à corps (Deux mains)",
      "value": 115
     },
     {

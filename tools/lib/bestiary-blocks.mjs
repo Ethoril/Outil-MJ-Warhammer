@@ -12,7 +12,7 @@ const HEADER = /\bM\s+WS\s+BS\s+S\s+T\s+I\s+Agi?\s+Dex\s+Int\s+W[Pp]\s+Fel(?:\s+
 const CELL = /(?:[+\-−–—�]?\d+\*?|[-–—−�]+|\*)/g;
 const DASH = /^[-–—−�]+$/;
 const NEGATIVE = /^[\-−–—�]\d/;
-const SECTION_START = /^(Traits|Attack Traits|Skills|Talents|Trappings|Spells|Mutations|Optional|Armour|Attacks|Petty Magic|Arcane Magic|Weapons?|Special)\b/;
+const SECTION_START = /^(Lore of [A-Z][a-z]+(?=:)|Magic of [A-Z][a-z]+(?=:)|High Magic(?=:)|Yenlui State|Obsession|Traits|Attack Traits|Skills|Talents|Trappings|Spells|Mutations|Optional|Armour|Attacks|Petty Magic|Arcane Magic|Weapons?|Special)\b/;
 const BARE_LABEL = /^(Attacks|Armour|Skills|Traits|Optional Traits|Talents|Trappings|Spells)$/;
 /** Lecture élargie (étiquettes décalées, interligne double, « Options: ») : réservée aux livres importés depuis L16, pour ne pas bouger les livres déjà relus. */
 let lenient = false;
@@ -114,7 +114,15 @@ export function pageBlocks(pageText) {
     let right = neighbour ? Math.max(head.end + 1, neighbour.start - 4) : Infinity;
     if (gutter && head.start < gutter - 5) right = Math.min(right, gutter);
     const left = Math.max(gutter && head.start > gutter ? gutter + 1 : 0, head.start - (lenient ? 6 : 3));
-    const windowOf = line => (line || '').slice(left, right === Infinity ? undefined : right);
+    const atGutter = gutter !== null && right === gutter;
+    const windowOf = line => {
+      const text = line || '';
+      if (!atGutter) return text.slice(left, right === Infinity ? undefined : right);
+      // Gouttière tombée dans un mot de la colonne de gauche (« Stone », « 56, ») : le mot est gardé entier (3 caractères au plus).
+      const spill = /^\S{1,3}(?=\s|$)/.exec(text.slice(right));
+      const cut = text[right - 1] && text[right - 1] !== ' ' && spill ? right + spill[0].length : right;
+      return text.slice(left, cut);
+    };
     const rightLimit = right === Infinity ? 1e9 : right;
     // Titre : texte avant l'en-tête sur la même ligne, sinon lignes juste au-dessus (majuscules, ou intitulé entre parenthèses).
     const inline = clean(lines[head.line].slice(Math.max(0, head.start - 45), head.start)).replace(/^.*\s{2,}/, '');
@@ -187,7 +195,11 @@ export function pageBlocks(pageText) {
       // Format V4 : après un blanc, seule une étiquette de section (ou le contenu d'une étiquette seule sur sa ligne) prolonge le bloc.
       // Mise en page à interligne double (L16 p. 28) : un seul blanc, suivi d'une suite en minuscule ou entre parenthèses d'une liste commencée, prolonge le bloc.
       const spaced = lenient && blank === 1 && /^[a-zà-ÿ(]/.test(text) && body.some(line => /^(?:Attack Traits|Optional Traits|Traits|Skills|Talents|Trappings):/.test(line)) && body.length > 0 && !/[.]$/.test(body[body.length - 1] || '');
-      if (!v5Block && blank && !SECTION_START.test(text) && !spaced && !(BARE_LABEL.test(body[body.length - 1] || '') && blank <= 2)) break;
+      // L14 (Sea Wardens) : une ligne de richesse (« Gold 3 ») précédée d'un blanc ouvre le corps, sans quoi il reste vide.
+      // Même livre : « Trappings: … items to hand: » est suivi, après un blanc, de la liste elle-même.
+      const trappingsList = blank === 1 && /(?:to hand|following items|equipped with):$/.test(body[body.length - 1] || '') && body.some(line => /^Trappings:/.test(line));
+      const wealthOpening = !body.length && /^(?:Gold|Silver|Brass)\s+\d+\s*$/.test(text);
+      if (!v5Block && blank && !SECTION_START.test(text) && !spaced && !wealthOpening && !trappingsList && !(BARE_LABEL.test(body[body.length - 1] || '') && blank <= 2)) break;
       // Titre d'un bloc suivant (dans la même fenêtre) : fin du corps.
       if (isTitleText(text) && lines.slice(k + 1, k + 4).some((_, d) => heads.some(other => other.line === k + 1 + d && other.start >= left - 8 && other.start < rightLimit))) break;
       blank = 0;
@@ -206,8 +218,9 @@ export function pageBlocks(pageText) {
 }
 
 // V4 : « Traits: … Skills: … » (étiquette suivie de deux-points, n'importe où dans le texte). V5 : étiquette seule en début de ligne.
-const V4_LABELS_BASE = ['Attack Traits', 'Optional Traits', 'Traits', 'Skills', 'Talents', 'Trappings', 'Spells', 'Mutations', 'Optional', 'Petty Magic', 'Arcane Magic'];
-const labelRe = wide => new RegExp(`(?:^|\\s)(${(wide ? [...V4_LABELS_BASE, 'Options'] : V4_LABELS_BASE).join('|')}):`, 'g');
+const V4_LABELS_BASE = ['Yenlui State', 'Obsession', 'Attack Traits', 'Optional Traits', 'Traits', 'Skills', 'Talents', 'Trappings', 'Spells', 'Mutations', 'Optional', 'Petty Magic', 'Arcane Magic'];
+const LORE_PATTERNS = ['Lore of [A-Z][a-z]+', 'Magic of [A-Z][a-z]+', 'High Magic'];
+const labelRe = wide => new RegExp(`(?:^|\\s)(${[...(wide ? [...V4_LABELS_BASE, 'Options'] : [...V4_LABELS_BASE, ...LORE_PATTERNS])].join('|')}):`, 'g');
 const V5_LABEL_RE = /^(Attacks|Armour|Skills|Traits|Optional Traits|Talents|Trappings|Spells)(?=\s|$)/;
 
 /** Sections étiquetées du corps, sous forme { étiquette: texte } ; `lead` : texte avant la première étiquette. */

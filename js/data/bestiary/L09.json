@@ -5574,14 +5574,33 @@
     "Rapier"
    ],
    "spells": {
-    "Petty: Bearings, Careful Step, Drain, Light, Murmured Whisper, Rot, Twitch": [
-     "Lore of Death"
+    "spells": [
+     "Petty: Bearings",
+     "Careful Step",
+     "Drain",
+     "Light",
+     "Murmured Whisper",
+     "Rot",
+     "Twitch"
     ],
-    "Aethyric Armour, Blast, Soul Vortex, Steal Life, Purple Pall of Shyish, Terrifying": [
-     "Lore of Beasts"
+    "Lore of Death": [
+     "Aethyric Armour",
+     "Blast",
+     "Soul Vortex",
+     "Steal Life",
+     "Purple Pall of Shyish",
+     "Terrifying"
     ],
-    "Amber Talons, Beast Form, Bridge, Entangle, Flock of Doom,": [
-     "Mundane Aura Lore of Dark Magic"
+    "Lore of Beasts": [
+     "Amber Talons",
+     "Beast Form",
+     "Bridge",
+     "Entangle",
+     "Flock of Doom"
+    ],
+    "Mundane Aura Lore of Dark Magic": [
+     "Doombolt",
+     "Shroud of Despair"
     ]
    },
    "keywords": [

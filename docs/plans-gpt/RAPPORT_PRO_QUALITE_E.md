@@ -9,7 +9,8 @@ Plan : `PLAN_PRO_QUALITE_E.md`. Branche `pro/qualite-e`, départ `9c12613`. Choi
 | Q2 | FAIT | (voir `git log`, « Q2 ») |
 | Q3 | FAIT | (voir `git log`, « Q3 ») |
 | Q4 | FAIT | (voir `git log`, « Q4 ») |
-| Q5 à Q10, R | à faire | — |
+| Q5 | FAIT | (voir `git log`, « Q5 ») |
+| Q6 à Q10, R | à faire | — |
 
 ## Q0 — contrôle de complétude
 
@@ -87,3 +88,13 @@ Les compétences manquantes restantes ne viennent plus de `readSkills` : ce sont
 - Test : `tests/pro-q4-traits-attaques.test.js`.
 - Branché : `buildParticipantFromBestiary` (js/core/bestiary-profiles.js) transforme déjà `attacks` en actions ; les données sont donc utilisées. L'Immunité reste un Trait affiché, sans lecture générique par le moteur (code testé, non appelé).
 - Suite complète : un seul échec, étranger au lot (`divin-v5-e0-independent`, reçu de recette produit au lot R).
+
+## Q5 — Sea Wardens of Cothique, L14 (FAIT)
+
+- Cause : le corps du profil était coupé à sa première ligne (un blanc entre la ligne de valeurs et « Gold 3 »). `tools/lib/bestiary-blocks.mjs` : ligne de richesse après blanc ouvre le corps ; « Yenlui State: », « Obsession: », « Lore of X: », « Magic of X: », « High Magic: » sont des étiquettes de section ; la liste qui suit « … items to hand: » prolonge le bloc ; un mot de la colonne de gauche coupé par la gouttière est gardé entier. `tools/lib/bestiary-profile.mjs` : la phrase d'introduction de l'équipement n'est plus un objet ; `readSpells` lit les listes par Lore et ne prend plus le texte avant le premier intitulé pour un intitulé.
+- Les 12 profils du plan (E0-P-472 à 477, 479, 480, 482, 484, 485, 486) ont attaques, compétences et talents. Dalroth (p.45) vérifié contre la page : Elf Bow +8, Blade of Darting Steel +8, 30 compétences, 12 talents, équipement complet.
+- Livres régénérés (23) : 8 fichiers modifiés (L04, L07, L09, L14, L16, L17, L20, L25) ; caractéristiques et Blessures de tous les profils identiques à `HEAD` (script de comparaison : 0 écart). Hors L14, ajouts ou corrections de lecture : équipement et Lores de L07/L17, Traits Size/Stride/Mutation (L04, L07, L17), Language (Battle) et Melee (Basic) de L07, « Strong Back » / « Strong-minded » séparés (L16), Pistol/Rapier/Hook séparés avec les bons dégâts (L25), listes de sorts de L09, L17, L20 rattachées au bon Lore (elles l'étaient au précédent).
+- Test : `tests/pro-q5-sea-wardens.test.js` (7 tests).
+- Restent incomplets dans L14 (hors des 12 du plan, voir `QE-Q5-4`) : E0-P-481, E0-P-483, E0-P-488, E0-P-490. Contrôle Q0 L14 : 16 profils incomplets au départ → 4.
+- Aucune fonction de jeu : données et outil de génération. Les sorts (`spells`) et l'équipement (`trappings`) n'ont aucun appelant dans `js/` : code testé, non appelé. Les attaques sont déjà transformées en actions par `buildParticipantFromBestiary` (js/core/bestiary-profiles.js).
+- Suite complète : 4277 réussis, 1 échec étranger au lot (`divin-v5-e0-independent`, reçu de recette produit au lot R).

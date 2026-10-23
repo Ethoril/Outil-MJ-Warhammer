@@ -7705,8 +7705,25 @@
     }
    ],
    "spells": {
-    "Petty: Dart, Dazzle, Light, Magic Flame, Spring, Shock Light: Blinding Light, Clarity of Thought": [
-     "Witchcraft"
+    "spells": [
+     "Petty: Dart",
+     "Dazzle",
+     "Light",
+     "Magic Flame",
+     "Spring",
+     "Shock Light: Blinding Light",
+     "Clarity of Thought"
+    ],
+    "Witchcraft": [
+     "Aethyric Armour",
+     "Blast",
+     "Blight",
+     "Bolt",
+     "Curse of Crippling Pain",
+     "Curse of Ill- Fortune",
+     "Teleport",
+     "Terrifying",
+     "Ward"
     ]
    },
    "keywords": [

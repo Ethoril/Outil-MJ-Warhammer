@@ -23,7 +23,9 @@ export function readTraitItem(text) {
 }
 
 /** Équipement : la liste, et les notes à astérisque (« *These fade away… ») qui la suivent dans le bloc. */
-export function readTrappings(text) {
+export function readTrappings(rawText) {
+  // L14 : « Whilst Dalroth could equip himself … he can be expected to have the following items to hand: Blade… » ; la phrase d'introduction n'est pas un objet.
+  const text = rawText.replace(/^[A-Z][^:]{20,}\b(?:to hand|following items|equipped with):\s*/, '');
   const cut = /\s\*(?=[A-Za-z])/.exec(text);
   const list = cut ? text.slice(0, cut.index) : text;
   return { items: splitList(list), notes: cut ? [clean(text.slice(cut.index))] : [] };
@@ -144,14 +146,25 @@ export function readArmour(text) {
   return result;
 }
 
+const LORE_LABEL = /^(?:Lore of [A-Z][a-z]+|Magic of [A-Z][a-z]+|High Magic)$/;
+
 /** Sorts : « Petty Magic: A, B Arcane Magic: C » ou liste simple. */
 export function readSpells(sections) {
   const spells = {};
+  // L14 : une liste par Lore (« Lore of Shadows: … », « High Magic: … ») forme sa propre section.
+  const lores = Object.keys(sections).filter(label => LORE_LABEL.test(label));
   const raw = [sections.Spells, sections['Petty Magic'] && `Petty Magic: ${sections['Petty Magic']}`, sections['Arcane Magic'] && `Arcane Magic: ${sections['Arcane Magic']}`].filter(Boolean).join(' ');
-  if (!raw) return spells;
-  const parts = raw.split(/(?:^|\s)((?:Petty Magic|Arcane Magic|Lore of [A-Za-z ]+|Chaos Magic|Witchcraft|Daemonology|Necromancy|Hedgecraft|[A-Z][A-Za-z' ]+ Magic|[A-Z][A-Za-z' ]*(?:Lore|Spells))):/).filter(Boolean);
-  if (parts.length < 2) return { spells: splitList(raw) };
-  for (let i = 0; i + 1 < parts.length; i += 2) spells[clean(parts[i])] = splitList(parts[i + 1]);
+  if (raw) {
+    const pieces = raw.split(/(?:^|\s)((?:Petty Magic|Arcane Magic|Lore of [A-Za-z ]+|Chaos Magic|Witchcraft|Daemonology|Necromancy|Hedgecraft|[A-Z][A-Za-z' ]+ Magic|[A-Z][A-Za-z' ]*(?:Lore|Spells))):/);
+    // Texte avant le premier intitulé (« Spells: Petty: A, B Lore of Light: C ») : liste simple, gardée sous « spells ».
+    const lead = clean(pieces[0]);
+    if (pieces.length < 3) spells.spells = splitList(raw);
+    else {
+      if (lead) spells.spells = splitList(lead);
+      for (let i = 1; i + 1 < pieces.length; i += 2) spells[clean(pieces[i])] = splitList(pieces[i + 1]);
+    }
+  }
+  for (const label of lores) spells[label] = splitList(sections[label]);
   return spells;
 }
 

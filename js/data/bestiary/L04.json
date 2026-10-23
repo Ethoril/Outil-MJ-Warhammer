@@ -2669,6 +2669,7 @@
     "Soc": 15
    },
    "wounds": 10,
+   "size": "average",
    "attacks": [
     {
      "name": "Weapon",
@@ -2688,6 +2689,15 @@
     {
      "name": "Skittish",
      "ref": "E0-T-047"
+    },
+    {
+     "name": "Size",
+     "param": "Average",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Stride",
+     "ref": "E0-T-084"
     },
     {
      "name": "Tracker",
