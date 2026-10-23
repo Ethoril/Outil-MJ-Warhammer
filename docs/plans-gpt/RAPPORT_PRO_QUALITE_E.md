@@ -317,3 +317,10 @@ Branché / non appelé (grep dans `js/`) :
 - **Contrôle Q25, 23 livres** : 0 écart de valeurs ; très incomplets 4 → 0 ; talents 48 → 44, compétences 55 → 54, attaques 33 → 25, Traits 68 → 67, équipement 150 → 149, sorts 14, bruit d'équipement 70. L09 : 0 manque. Le reste est à Q27.
 - Test : `tests/pro-q26-cas-nommes.test.js` (12 tests) ; `pro-q15-normalisation-noms` (Mòna) et `pro-d9-l09` (Dark Steed : nature « bete » issue du Trait Bestial désormais lu) mis à jour. Suite complète lancée une fois : 4423 tests, 1 échec (cette assertion), corrigé et relancé en vert.
 - **Branché / non appelé** : données de livre et outil ; les attaques, armures et Traits gagnés passent par `buildParticipantFromBestiary` (appelants : `js/ui/bestiary-library.js`, `js/core/bestiary-templates.js`, `js/core/v5-spell-contracts.js`) ; `condition` des PA et `optionalTraits` : aucun appelant du moteur (code testé, non appelé). Aucune valeur durable de personnage.
+
+## Q27a — complétude de L24 et Phénix L14 (FAIT ; Q27 non terminé)
+
+- Q27 est découpé par groupe de livres. **Q27a = L24** : 12 profils signalés relus sur leurs pages ; 1 vrai manque (Flamespyre Phoenix, L14 p.83 : talent Acute Sense (Vision), `BODY_OVERRIDES`, L14 régénéré) ; 62 éléments justifiés un par un dans `tools/lib/bestiary-justified.mjs` (`QE-Q27a-1`, qui corrige `QE-Q25-1` : E0-P-822 n'avait pas de vrai manque). Contrôle L14+L24 : 0 manque non justifié.
+- Reste (mesure avant ce lot, profils signalés) : L01 3, L02 2, L04 2, L06 1, L07 9, L10 1, L11 3, L12 8, L13 3, L16 11, L17 10, L18 13, L19 7, L20 20, L21 19, L22 12, L23 15, L25 6, L26 16 (Q27b, Q27c…).
+- Test : `tests/pro-q27a-faux-positifs.test.js` (3 tests). Suite complète lancée une fois : 4426 réussis, 0 échec.
+- Outil de contrôle et données de livre : rien à déclarer « branché » (le Phénix passe par `buildParticipantFromBestiary` comme avant, avec son talent). Aucune valeur durable de personnage.

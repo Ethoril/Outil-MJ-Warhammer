@@ -8,12 +8,12 @@ import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { corpusBooks } from './lib/bestiary-extract.mjs';
 import { repairGlyphs } from './lib/bestiary-glyphs.mjs';
+import { JUSTIFIED } from './lib/bestiary-justified.mjs';
 import { blockAfter, completenessGaps, extendedGaps, findValueRow, normalizeBlockText, stackedBlock, veryIncomplete } from './lib/bestiary-completeness.mjs';
 
 // Catégories contrôlées : talents et compétences (Q0), attaques, Traits, équipement, sorts, bruit d'équipement (Q11).
 const CATEGORIES = ['talents', 'skills', 'attacks', 'traits', 'trappings', 'spells', 'trappingNoise', 'veryIncomplete'];
-// Faux positifs connus, justifiés : deux profils côte à côte, la rubrique imprimée après le second est celle du premier (Kraken L14 p.82 : « Acute Sense (Vision) » est un talent du Grand Aigle).
-const NEIGHBOUR_TEXT = { 'E0-P-488': ['talents'] };
+let justifiedCount = 0;
 const KEYS = ['M', 'CC', 'CT', 'F', 'E', 'I', 'Ag', 'Dex', 'Int', 'FM', 'Soc'];
 let failures = 0;
 const skillWarnings = [];
@@ -29,6 +29,7 @@ for (const book of process.argv.slice(2)) {
   const unpadded = pages.map(page => normalizeBlockText(page).replace(/(?<=\s)0(\d)(?=\s)/g, '$1'));
   let checked = 0;
   const gaps_ = [];
+  const justified_ = [];
   const skipped = [];
   for (const record of data.profiles) {
     if (record.kind !== 'profile' || record.blockKey?.endsWith(':manual')) { skipped.push(`${record.id} ${record.name} (${record.kind})`); continue; }
@@ -45,7 +46,15 @@ for (const book of process.argv.slice(2)) {
     if (blockAt >= 0) {
       const block = stackedBlock(text, blockAt) ?? blockAfter(text, blockAt);
       const gaps = { ...completenessGaps(record, block, catalogue), ...extendedGaps(record, block), veryIncomplete: veryIncomplete(record, block) };
-      for (const category of NEIGHBOUR_TEXT[record.id] || []) gaps[category] = [];
+      // Faux positifs relus sur la page (tools/lib/bestiary-justified.mjs) : sortis du décompte, gardés dans le rapport avec leur raison.
+      const justified = {};
+      for (const [category, reason] of Object.entries(JUSTIFIED[record.id] || {})) {
+        if (!gaps[category]?.length) continue;
+        justified[category] = { items: gaps[category], reason };
+        gaps[category] = [];
+        justifiedCount += justified[category].items.length;
+      }
+      if (Object.keys(justified).length) justified_.push({ id: record.id, name: record.name, page: record.physicalPage, justifiés: justified });
       if (CATEGORIES.some(category => gaps[category].length)) gaps_.push({ id: record.id, name: record.name, page: record.physicalPage, ...gaps });
     }
     // Compétences : chaque nom et chaque valeur gardés doivent figurer sur la page (aucune valeur inventée) ; avertissement seulement.
@@ -57,7 +66,7 @@ for (const book of process.argv.slice(2)) {
       if (!forms.some(form => squash(text).includes(squash(form)))) { skillWarnings.push(`avertissement ${book} ${record.id} ${record.name} : compétence « ${skill.name} ${skill.value} » absente du texte brut de la page`); }
     }
   }
-  writeFileSync(`tmp/divin/bestiary-completude-${book}.json`, `${JSON.stringify({ book, profils: data.profiles.length, manques: gaps_ }, null, 1)}
+  writeFileSync(`tmp/divin/bestiary-completude-${book}.json`, `${JSON.stringify({ book, profils: data.profiles.length, manques: gaps_, justifiés: justified_ }, null, 1)}
 `);
   totals[book] = { profils: gaps_.length };
   for (const category of CATEGORIES) totals[book][category] = gaps_.reduce((n, g) => n + g[category].length, 0);
@@ -65,6 +74,7 @@ for (const book of process.argv.slice(2)) {
 }
 console.log(`complétude (profils incomplets puis manques par catégorie) : ${JSON.stringify(totals)}`);
 console.log(`total par catégorie : ${JSON.stringify(Object.fromEntries(CATEGORIES.map(category => [category, Object.values(totals).reduce((n, t) => n + t[category], 0)])))}`);
+console.log(`manques justifiés (faux positifs relus, bestiary-justified.mjs) : ${justifiedCount}`);
 // Triés (livre, puis identifiant) : la sortie ne dépend pas de l'ordre de lecture.
 for (const line of skillWarnings.sort()) console.error(line);
 console.log(`avertissements de compétences : ${skillWarnings.length}`);

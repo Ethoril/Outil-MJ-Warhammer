@@ -401,6 +401,11 @@ export const BODY_OVERRIDES = Object.freeze({
   'L24:20:1': [
     'Traits: Weapon (Fist) +3'
   ],
+  // Sea Wardens of Cothique (L14) p. 83 : Flamespyre Phoenix, le Trait « Vulnerable to Cold » passe à la ligne et la ligne « Talents: Acute Sense (Vision) » était perdue.
+  'L14:83:0': [
+    'Traits: Attuned to Magic, Bite +7, Flight 100, Magical, Phoenix Reborn, Size (Large), Territorial, Vulnerable to Cold, Wake of Fire, Ward 8+, Weapon (Claws) +9',
+    'Talents: Acute Sense (Vision)'
+  ],
   // Van Hal's Stone (L10) p. 51 : Graug the Terrible, la liste des Traits est entrecoupée par la prose de la colonne voisine.
   'L10:51:1': [
     'Traits',
