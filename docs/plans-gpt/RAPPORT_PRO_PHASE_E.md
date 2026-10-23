@@ -27,7 +27,8 @@ Branche `pro/phase-e`. Plan : `PLAN_PRO_PHASE_E.md`. Choix d'interprétation : `
 | T8 Régénération (d10 saisi, soin plafonné, critique guéri sur un 10, feu exclu) | FAIT (choix E-T8) | voir `git log` |
 | T9 Plusieurs têtes (registre par tête, effet global, attaques gratuites par tête valide, Perception +2 DR) | FAIT (choix E-T9) | voir `git log` |
 | T10 Taille (barème p. 360, poids au surnombre, écart avec un adversaire, Blessures sur demande) | FAIT (choix E-T10) | voir `git log` |
-| T11, T12, F1-F2, S1, R1 | À FAIRE | |
+| T11 modificateurs de gabarit (application à un profil importé, modificateurs signés, W, Traits, compétences ; choix E-T11) | FAIT | voir `git log` |
+| T12, F1-F2, S1, R1 | À FAIRE | |
 
 ## Dernière suite complète
 
