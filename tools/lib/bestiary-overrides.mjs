@@ -181,6 +181,28 @@ export const BODY_OVERRIDES = Object.freeze({
   'L17:210:0': [
     "Traits: Afraid (Snakes), Armour 6 (12), Corruption (Moderate), Distracting, Ward (9+), Weapon (Chaos Runeblade) +10 Skills: Animal Care 87, Athletics 85, Bribery 60, Channelling (Dhar 115, Hysh 95), Charm 55, Consume Alcohol 72, Cool 105, Dodge 80, Endurance 82, Entertain (Acting 65, Singing 65), Evaluate 97, Gossip 60, Intimidate 64, Intuition 98, Language (Classical 97, Dark Tongue 97, Magick 117), Leadership 65, Lore (Altdorf 87, Daemonology 97, Dark Magic 97, Magic 107, Nehekhara 87, Tzeentch 99, Warfare 87), Melee (Basic 82, Polearm 72), Perception 88, Pick Lock 78, Research 97, Ride (Dragon 90, Horse 80), Sleight of Hand 78, Stealth (Rural) 80 Talents: Aethyric Attunement, Animal Affinity, Arcane Lore (Daemonology, Lore of Light), Cat-tongued, Chaos Magic (Tzeentch), Combat Aware, Commanding Presence, Detect Artefact, Doomed (`A skein of fate is woven through your life, winding like a serpent. Understand it or face damnation.'), Fast Hands, Frightening, Impassioned Zeal, Instinctive Diction, Iron Will, Lightning Reflexes, Luck 3, Magical Sense, Menacing, Nimble Fingered, Petty Magic, Read/Write, Savant (Tzeentch), Savvy, Second Sight, Sixth Sense, Strike Mighty Blow, Strong-minded, Tower of Memories, Very Resilient, War Wizard, Wilful Corruption Spells: Petty Magic Spells: Dart, Drain, Eavesdrop, Open Lock, Sounds, Warning Arcane Spells: Bolt, Blast, Corrosive Blood, Distracting, Entangle, Flight, Manifest Lesser Daemon, Octagram, Teleport, Ward Lore of Daemonology Spells: Detect Daemon, Manifest Lesser Daemon, Octagram Lore of Light Spells: Abulla's Snare, Assault of Stone, Banishment, Blinding Light, Driving Intent, Eyes of Volans, Hands of Karkora, Net of Amyntok, Speed of Thought, Time Amok Lore of Tzeentch Spells: Bolt of Change, Boon of Tzeentch, Blue Fire of Tzeentch, Curse of Tzeentch, The Flickering Flames of Fickle Fate, Mindfire, Pink Fire of Tzeentch, Transformation of Tzeentch, Treason of Tzeentch, Tzeentch's Firestorm, Tzeentch's Golden Aura, Sense the Skein, Word of Tzeentch Trappings: Chaos Armour (cannot be removed), Chaos Runeblade (+SB+5, Damaging, Hack, Magical, Penetrating, Unbreakable), The Cloak of Golden Glamour, Grimoire of Dark Magicks, Skull of Katam, Talisman of Tzeentch Mental Corruption: Hollow Heart\r"
   ],
+  // Van Hal's Stone (L10) p. 51 : Graug the Terrible, la liste des Traits est entrecoupée par la prose de la colonne voisine.
+  'L10:51:1': [
+    'Traits',
+    'Armour +4 AP All Locations, Construct, Flight (100), Hatred (Dwarfs), Night Vision, Size (Enormous), Tail +9, Territorial, Trained (Mount), Undead, Weapon +10'
+  ],
+  // Van Hal's Stone (L10) p. 83 : Gretchen Beirne, les étiquettes (colonne de droite) sont réordonnées par l'extraction : relues sur la page.
+  'L10:83:0': [
+    'Attacks', 'Sickle (28/+6)',
+    'Armour', 'Toughness Bonus: 2',
+    'Skills', 'Animal Care 47, Channelling (Magick) 43, Cool 47, Intuition 40, Language (Magick) 47, Language (Reikspiel) 72, Lore (Folklore) 47, Lore (Herbs) 47, Outdoor Survival 47, Trade (Herbalist) 44',
+    'Traits and Talents', 'Arcane Magic (Hedgecraft), Catfall, Petty Magic, Pure Soul, Second Sight',
+    'Spells', 'Petty Magic: Animal Friend, Marsh Lights, Warning Lore of Hedgecraft: Goodwill, Part the Branches, Protective Charm',
+    'Trappings', 'Backpack, Hand Weapon (Sickle), 1d10 Lucky Charms, Quarterstaff, Antitoxin Kit, Healing Poultice, Trade Tools (Herbalist)'
+  ],
+  // Van Hal's Stone (L10) p. 89 : Ranolf Quickfingers, même mise en page.
+  'L10:89:0': [
+    'Attacks', 'Crowbar (32/+7)',
+    'Armour', 'Toughness Bonus: 3',
+    'Skills', 'Climb 39, Dodge 33, Evaluate 32, Haggle 35, Intimidate 39, Language (Reikspiel) 60, Melee (Basic) 30, Perception 36, Pick Lock 58, Sleight of Hand 58, Stealth (Urban) 33',
+    'Traits and Talents', 'Fast Hands, Flee!, Mutation (Distended Digits), Supportive',
+    'Trappings', 'Crowbar, Leather Jerkin, Sack, Cloth Mask, Leather Gloves'
+  ],
   // Altdorf (L20) p. 132 : le Brochet de Reikerbahn, la ligne de Compétences est collée aux Corruptions mentales, que le modèle n'accueille pas ; seule la Compétence est rétablie (E-D26).
   'L20:132:0': [
     'Traits: Amphibious, Armour 2, Belligerent, Bite +8, Big, Cold-blooded, Dark Vision, Frenzy, Hatred (Fishermen), Hungry, Size (Large), Tail Attack +7, Territorial',

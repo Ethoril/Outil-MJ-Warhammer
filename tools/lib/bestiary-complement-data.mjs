@@ -12,7 +12,7 @@ export const TRAIT_ALIASES = Object.freeze({
   claws: 'Creature Weapons (Claws, Beak, Slam, Tongue)', claw: 'Creature Weapons (Claws, Beak, Slam, Tongue)',
   '2 claws': 'Creature Weapons (Claws, Beak, Slam, Tongue)', beak: 'Creature Weapons (Claws, Beak, Slam, Tongue)',
   slam: 'Creature Weapons (Claws, Beak, Slam, Tongue)', 'tongue attack': 'Creature Weapons (Claws, Beak, Slam, Tongue)',
-  'weapon+8': 'Weapon', 'weapon+11': 'Weapon', 'weapon +6': 'Weapon', 'weapon +8': 'Weapon', 'immunity to psychology*': 'Immune to Psychology'
+  weapons: 'Weapon', 'weapon+8': 'Weapon','weapon+11': 'Weapon', 'weapon +6': 'Weapon', 'weapon +8': 'Weapon', 'immunity to psychology*': 'Immune to Psychology'
 });
 
 const V4_NOTE = 'Termes V4 convertis en V5 au lot de l’implantation (±10 → ±1 DR, Avantage → Élan).';

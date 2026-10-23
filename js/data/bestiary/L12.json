@@ -2382,6 +2382,117 @@
     "Soc": 35
    },
    "wounds": 22,
+   "armour": {
+    "ap": 3,
+    "printedTotal": 9
+   },
+   "attacks": [
+    {
+     "name": "Weapon",
+     "damage": 9,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 80
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 65
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 80
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 75
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 65
+    },
+    {
+     "name": "Lore (Warfare)",
+     "nameFr": "Savoir (Guerre)",
+     "value": 60
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 80
+    },
+    {
+     "name": "Melee (Polearm)",
+     "nameFr": "Corps à corps (Armes d’hast)",
+     "value": 80
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 70
+    }
+   ],
+   "traits": [
+    {
+     "name": "Afraid",
+     "param": "Elves",
+     "ref": "E0-T-001"
+    },
+    {
+     "name": "Animosity",
+     "param": "Greenskins",
+     "ref": "E0-T-003"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Combat Aware"
+    },
+    {
+     "name": "Combat Reflexes"
+    },
+    {
+     "name": "Furious Assault"
+    },
+    {
+     "name": "Inspiring"
+    },
+    {
+     "name": "Luck"
+    },
+    {
+     "name": "Resolute"
+    },
+    {
+     "name": "Unshakable"
+    },
+    {
+     "name": "War Leader"
+    }
+   ],
+   "trappings": [
+    "Helmet",
+    "Mail Shirt",
+    "Sword",
+    "Shield",
+    "Spear"
+   ],
    "keywords": [
     "gobelin"
    ],
@@ -2410,6 +2521,119 @@
     "Soc": 30
    },
    "wounds": 16,
+   "armour": {
+    "ap": 1,
+    "printedTotal": 5
+   },
+   "attacks": [
+    {
+     "name": "Spear",
+     "damage": 8,
+     "trait": "Weapon"
+    },
+    {
+     "name": "Spiked Club",
+     "damage": 8,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 60
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 70
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 60
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 60
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 45
+    },
+    {
+     "name": "Lore (Warfare)",
+     "nameFr": "Savoir (Guerre)",
+     "value": 50
+    },
+    {
+     "name": "Melee (Polearm)",
+     "nameFr": "Corps à corps (Armes d’hast)",
+     "value": 70
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 65
+    },
+    {
+     "name": "Melee (Polearm)",
+     "nameFr": "Corps à corps (Armes d’hast)",
+     "value": 65
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 55
+    }
+   ],
+   "traits": [
+    {
+     "name": "Afraid",
+     "param": "Elves",
+     "ref": "E0-T-001"
+    },
+    {
+     "name": "Animosity",
+     "param": "Greenskins",
+     "ref": "E0-T-003"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Combat Aware"
+    },
+    {
+     "name": "Combat Reflexes"
+    },
+    {
+     "name": "Furious Assault"
+    },
+    {
+     "name": "Inspiring"
+    },
+    {
+     "name": "Resolute"
+    },
+    {
+     "name": "Warleader"
+    }
+   ],
+   "trappings": [
+    "Leather Armour",
+    "Spear",
+    "Spiked Club"
+   ],
    "keywords": [
     "gobelin"
    ],
@@ -2438,6 +2662,66 @@
     "Soc": 20
    },
    "wounds": 11,
+   "armour": {
+    "ap": 3,
+    "printedTotal": 6
+   },
+   "attacks": [
+    {
+     "name": "Weapon",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 35
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 45
+    },
+    {
+     "name": "Melee (Polearm)",
+     "nameFr": "Corps à corps (Armes d’hast)",
+     "value": 40
+    }
+   ],
+   "traits": [
+    {
+     "name": "Afraid",
+     "param": "Elves",
+     "ref": "E0-T-001"
+    },
+    {
+     "name": "Animosity",
+     "param": "Greenskins",
+     "ref": "E0-T-003"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Combat Reflexes"
+    },
+    {
+     "name": "Resolute"
+    }
+   ],
+   "trappings": [
+    "Chainmail Armour",
+    "Spear"
+   ],
    "keywords": [
     "gobelin",
     "soldat"
@@ -2640,6 +2924,21 @@
      "name": "Lore (Warfare)",
      "nameFr": "Savoir (Guerre)",
      "value": 60
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 90
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 70
+    },
+    {
+     "name": "Ranged (Bow)",
+     "nameFr": "Projectiles (Arc)",
+     "value": 55
     }
    ],
    "traits": [
@@ -2664,6 +2963,39 @@
      "name": "Night Vision",
      "ref": "E0-T-041"
     }
+   ],
+   "talents": [
+    {
+     "name": "Combat Aware"
+    },
+    {
+     "name": "Combat Reflexes"
+    },
+    {
+     "name": "Furious Assault"
+    },
+    {
+     "name": "Inspiring"
+    },
+    {
+     "name": "Luck"
+    },
+    {
+     "name": "Resolute"
+    },
+    {
+     "name": "Unshakable"
+    },
+    {
+     "name": "Warleader"
+    }
+   ],
+   "trappings": [
+    "Bow and 12 Arrows",
+    "Dwarf Tickler (Choppa)",
+    "Helmet",
+    "Mail Shirt",
+    "Shield"
    ],
    "keywords": [
     "orque"
@@ -5125,6 +5457,177 @@
     "Soc": 35
    },
    "wounds": 23,
+   "armour": {
+    "ap": 3,
+    "printedTotal": 9
+   },
+   "attacks": [
+    {
+     "name": "Skarsnik's Prodda",
+     "damage": 9,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Animal Training",
+     "nameFr": "Dressage",
+     "value": 80
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 80
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 75
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 80
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 75
+    },
+    {
+     "name": "Language (Reikspiel)",
+     "nameFr": "Langue (Reikspiel)",
+     "value": 80
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 65
+    },
+    {
+     "name": "Lore (Dwarfs)",
+     "nameFr": "Savoir (Nains)",
+     "value": 80
+    },
+    {
+     "name": "Lore (Skaven)",
+     "nameFr": "Savoir (Skavens)",
+     "value": 80
+    },
+    {
+     "name": "Lore (Warfare)",
+     "nameFr": "Savoir (Guerre)",
+     "value": 90
+    },
+    {
+     "name": "Melee (Polearm)",
+     "nameFr": "Corps à corps (Armes d’hast)",
+     "value": 80
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 70
+    },
+    {
+     "name": "Set Trap",
+     "nameFr": "Piégeage",
+     "value": 80
+    },
+    {
+     "name": "Stealth (Underground)",
+     "nameFr": "Discrétion (Souterraine)",
+     "value": 70
+    }
+   ],
+   "traits": [
+    {
+     "name": "Afraid",
+     "param": "Elves",
+     "ref": "E0-T-001"
+    },
+    {
+     "name": "Animosity",
+     "param": "Orcs and Goblins",
+     "ref": "E0-T-003"
+    },
+    {
+     "name": "Dark Vision",
+     "ref": "E0-T-017"
+    },
+    {
+     "name": "Hatred",
+     "param": "Dwarfs",
+     "ref": "E0-T-027"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Animal Affinity"
+    },
+    {
+     "name": "Blather"
+    },
+    {
+     "name": "Combat Aware"
+    },
+    {
+     "name": "Combat Reflexes"
+    },
+    {
+     "name": "Commanding Presence"
+    },
+    {
+     "name": "Enclosed Fighter"
+    },
+    {
+     "name": "Feint"
+    },
+    {
+     "name": "Inspiring"
+    },
+    {
+     "name": "Luck",
+     "rank": 3
+    },
+    {
+     "name": "Resolute"
+    },
+    {
+     "name": "Unshakable"
+    },
+    {
+     "name": "Savvy"
+    },
+    {
+     "name": "Sixth Sense"
+    },
+    {
+     "name": "Trapper"
+    },
+    {
+     "name": "Tunnel Rat"
+    },
+    {
+     "name": "Warleader"
+    },
+    {
+     "name": "Well-prepared"
+    }
+   ],
+   "trappings": [
+    "Collection of Dwarf Beard-Scalps",
+    "Piecemeal Armour",
+    "Skarsnik's Prodda"
+   ],
    "keywords": [
     "peaux-vertes"
    ],

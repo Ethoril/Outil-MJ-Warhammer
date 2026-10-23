@@ -2812,6 +2812,11 @@
    },
    "attacks": [
     {
+     "name": "Hand Weapon",
+     "value": 30,
+     "damage": 7
+    },
+    {
      "name": "Shortbow and Arrows",
      "value": 35,
      "damage": 6,

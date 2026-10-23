@@ -116,12 +116,16 @@ const QUALITY_START = /^(?:Accurate|Blackpowder|Blast|Damaging|Defensive|Distrac
 
 export function readAttacks(text) {
   const attacks = [];
-  const pattern = /(?:^|\s)([A-Z][^:()]*?)(?:\s*\(([^()]*)\))?\s*:\s*\(\s*(\d+)\s*\/\s*([+-]?\d+)\s*\)/g;
+  // Le deux-points est facultatif (L10 V5 : « Bow (50/+7) range of 50 yards with the Impale Quality Hand Weapon (42/+6) »).
+  const pattern = /(?:^|\s)([A-Z][^:()]*?)(?:\s*\(([^()]*)\))?\s*(?::\s*)?\(\s*(\d+)\s*\/\s*([+-]?\d+)\s*\)/g;
   const marks = [...text.matchAll(pattern)];
   marks.forEach((mark, index) => {
     const end = index + 1 < marks.length ? marks[index + 1].index : text.length;
     const tail = clean(text.slice(mark.index + mark[0].length, end));
     let name = clean(mark[1]);
+    // Sans deux-points, le nom suit la fin de la phrase de l'attaque précédente (« … Impale Quality Hand Weapon ») : coupé après « Quality ».
+    const afterQuality = /^.*\b(?:Qualit(?:y|ies)|Flaws?)\s+(?=[A-Z])/.exec(name);
+    if (afterQuality && attacks.length) { const previous = attacks[attacks.length - 1]; previous.tail = clean(`${previous.tail || ''} ${afterQuality[0]}`); name = name.slice(afterQuality[0].length); }
     const peeled = [];
     for (let found = QUALITY_START.exec(name); found && found[0].length < name.length; found = QUALITY_START.exec(name)) { peeled.push(found[0].replace(/,\s*$/, '').trim()); name = name.slice(found[0].length); }
     if (peeled.length && attacks.length) { const previous = attacks[attacks.length - 1]; previous.tail = clean(`${previous.tail || ''} ${peeled.join(', ')}`); }
@@ -205,11 +209,28 @@ export function parseBlock(block, { traitDictionary = new Set(), talentDictionar
   if (sections.Attacks) profile.attacks = readAttacks(sections.Attacks);
   if (sections.Armour) profile.armour = readArmour(sections.Armour);
   if (sections.Traits !== undefined) Object.assign(profile, listTraits(sections.Traits, mode, traitDictionary, 'traits'));
+  // L10 (V5) : « Armour +3 AP All Locations » ouvre la liste des Traits ; c'est l'armure du profil, sur toutes les zones.
+  const traitArmour = /^Armour\s+\+(\d+)\s+AP\b/.exec(sections.Traits || '');
+  if (traitArmour && !profile.armour?.parts?.length) profile.armour = { parts: [{ name: 'Armour', ap: Number(traitArmour[1]) }] };
   // « Traits*: » : tous les Traits de la rubrique sont conditionnels (la note à astérisque dit à quelle condition).
   if (profile.traits && /\bTraits\*\s*:/.test(block.body || '')) profile.traits = profile.traits.map(trait => ({ ...trait, conditional: true }));
   if (sections.Traits === undefined && mode === 'v5' && traitDictionary.size) {
     const scanned = readDescribedNames(block.body, traitDictionary).map(readTraitItem).filter(Boolean);
     if (scanned.length) profile.traits = scanned;
+  }
+  // L10 (V5) : rubrique « Traits and Talents » ; un nom du catalogue des talents est un talent, le reste un Trait.
+  if (sections['Traits and Talents']) {
+    const items = splitList(sections['Traits and Talents']);
+    const baseName = item => clean(item.replace(/\s*\(.*\)\s*$/, '').replace(/\s+\d+$/, ''));
+    const flat = name => name.toLowerCase().replace(/[-\s]+/g, ' ');
+    const talentNames = new Set([...talentDictionary].map(flat));
+    const isTalent = item => talentNames.has(flat(baseName(item)));
+    // Un nom connu des deux dictionnaires (Night Vision, Fearless) reste aussi un Trait, comme avant la lecture de cette rubrique.
+    // Tous les éléments passent aussi par la lecture des Traits : l'étape suivante (`cleanTraits`) ne garde que les noms de Trait connus.
+    const traits = items.map(readTraitItem).filter(Boolean);
+    if (traits.length) profile.traits = [...(profile.traits || []), ...traits];
+    const talents = readTalents(items.filter(isTalent).join(', '));
+    if (talents.length) profile.talents = [...(profile.talents || []), ...talents];
   }
   if (sections['Attack Traits'] !== undefined) Object.assign(profile, listTraits(sections['Attack Traits'], mode, traitDictionary, 'attackTraits'));
   const optional = sections['Optional Traits'] ?? sections.Optional;

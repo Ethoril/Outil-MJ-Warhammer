@@ -3721,6 +3721,82 @@
     "Soc": 20
    },
    "wounds": 6,
+   "size": "small",
+   "armour": {
+    "ap": 2,
+    "printedTotal": 4
+   },
+   "skills": [
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 50
+    },
+    {
+     "name": "Ranged (Blowpipe)",
+     "nameFr": "Projectiles (Blowpipe)",
+     "frUnverified": true,
+     "value": 55
+    },
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 55
+    }
+   ],
+   "traits": [
+    {
+     "name": "Amphibious",
+     "ref": "E0-T-002"
+    },
+    {
+     "name": "Arboreal",
+     "ref": "E0-T-069"
+    },
+    {
+     "name": "Chameleon",
+     "ref": "E0-T-207"
+    },
+    {
+     "name": "Cold-blooded",
+     "ref": "E0-T-012"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Small",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Stealthy",
+     "ref": "E0-T-050"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Champion",
+     "ref": "E0-T-010"
+    },
+    {
+     "name": "Clever",
+     "ref": "E0-T-073"
+    },
+    {
+     "name": "Swamp-strider",
+     "ref": "E0-T-085"
+    },
+    {
+     "name": "Tracker",
+     "ref": "E0-T-059"
+    },
+    {
+     "name": "Wallcrawler",
+     "ref": "E0-T-067"
+    }
+   ],
    "keywords": [
     "skink"
    ],
@@ -7079,6 +7155,11 @@
      "name": "Bite",
      "damage": 5,
      "trait": "Bite"
+    },
+    {
+     "name": "Horns",
+     "damage": 8,
+     "trait": "Weapon"
     }
    ],
    "traits": [
@@ -7495,6 +7576,38 @@
     "Soc": null
    },
    "wounds": 88,
+   "attacks": [
+    {
+     "name": "Bite",
+     "damage": 11,
+     "trait": "Bite"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bite",
+     "rating": "+11",
+     "ref": "E0-T-006"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Stealthy",
+     "ref": "E0-T-050"
+    },
+    {
+     "name": "Territorial",
+     "ref": "E0-T-056"
+    },
+    {
+     "name": "Trained",
+     "param": "Mount, War",
+     "ref": "E0-T-060"
+    }
+   ],
+   "specialRules": [
+    "Weapon (Claws) +11 Toxic Bile"
+   ],
    "abilities": [
     "E0-T-192"
    ],

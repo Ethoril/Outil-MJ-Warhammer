@@ -18,6 +18,7 @@ Plan : `PLAN_PRO_QUALITE_E.md`. Branche `pro/qualite-e`, départ `9c12613`. Choi
 | Q10b | FAIT | (voir `git log`, « Q10b ») |
 | Q11 | FAIT | (voir `git log`, « Q11 ») |
 | Q12a | FAIT (L01-L04 ; Q12b et Q12c à faire) | (voir `git log`, « Q12a »)  |
+| Q12b | FAIT (L07-L12 ; Q12c à faire) | (voir `git log`, « Q12b »)  |
 | R | FAIT (avec réserve : manques de complétude non justifiés un par un) | (voir `git log`, « R ») |
 
 ## Q0 — contrôle de complétude
@@ -179,3 +180,12 @@ Branché / non appelé (grep dans `js/`) :
 - Les autres livres, régénérés par le même outil, n'ont gagné que des lignes (aucun profil retiré) : `QE-Q12a-4`. État de départ de Q12b/Q12c (mesuré, manques restants par livre) dans le contrôle : `node tools/verify-bestiary-stats.mjs L01 … L26`.
 - Tests : `tests/pro-q12a-colonnes-imbriquees.test.js` (7 tests).
 - **Branché / non appelé** : outil et données de livre seulement (aucune fonction de jeu ajoutée).
+
+## Q12b — profils vides et colonnes, L07-L12 (FAIT)
+
+- **Causes trouvées dans l'outil** (`tools/lib/bestiary-blocks.mjs`, `bestiary-profile.mjs`, alias dans `bestiary-complement-data.mjs`) : voir `QE-Q12b-1`. La principale : le Trait « Armour 3 (9) » en début de ligne faisait lire tout le bloc V4 (Boggrub Legbiter, Gutbug, Ratlicker, Skarsnik, profils de L07, L09, L11) comme un bloc V5, donc vide. Pour L10 (V5) : rubrique « Traits and Talents », armure « Armour +3 AP All », attaques sans deux-points, en-tête à cheval sur la gouttière, libellé centré.
+- **État après** (contrôle Q11) : profils sans aucune donnée hors caractéristiques, L07-L12 : 19 → 0 (L09 : Dark Steed, War Hydra, Sea Dragon, Dockside Thug ; L10 : 7 ; L11 : 2 ; L12 : 4, dont Boggrub Legbiter p. 36, complet). Manques L07-L12 (total par catégorie) : talents 46 → 6, compétences 47 → 1, attaques 10 → 5, Traits 65 → 30, équipement 27 → 9 ; sorts (141) laissés à Q14. Détail et justification un par un : `QE-Q12b-4`.
+- **Valeurs imprimées** : 23 livres comparés à `9c12613` : seuls E0-P-125 et E0-P-126 diffèrent (déjà signalés, `QE-Q12a-1`). Comparés à `HEAD` : 0 entrée perdue, 0 profil retiré (script `tmp/divin/q12b-removed.mjs`).
+- Relectures ciblées (`BODY_OVERRIDES`) : Graug, Gretchen Beirne, Ranolf Quickfingers (`QE-Q12b-2`).
+- Test : `tests/pro-q12b-profils-vides-l07-l12.test.js` (13 tests).
+- **Branché / non appelé** : outil et données de livre seulement (aucune fonction de jeu ajoutée). Les attaques des profils gagnés deviennent des actions via `buildParticipantFromBestiary` (appelants : `js/ui/bestiary-library.js`, `js/core/bestiary-templates.js`) ; `spells`, `trappings` : code testé, non appelé.

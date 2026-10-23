@@ -12,8 +12,8 @@ const HEADER = /\bM\s+WS\s+BS\s+S\s+T\s+I\s+Agi?\s+Dex\s+Int\s+W[Pp]\s+Fel(?:\s+
 const CELL = /(?:[+\-−–—�]?\d+\*?|[-–—−�]+|\*)/g;
 const DASH = /^[-–—−�]+$/;
 const NEGATIVE = /^[\-−–—�]\d/;
-const SECTION_START = /^(Lore of [A-Z][a-z]+(?=:)|Magic of [A-Z][a-z]+(?=:)|High Magic(?=:)|Yenlui State|Obsession|Traits|Attack Traits|Skills|Talents|Trappings|Spells|Mutations|Optional|Armour|Attacks|Petty Magic|Arcane Magic|Weapons?|Special|Fate Points?|Miracles)\b/;
-const BARE_LABEL = /^(Attacks|Armour|Skills|Traits|Optional Traits|Talents|Trappings|Spells)$/;
+const SECTION_START = /^(Lore of [A-Z][a-z]+(?=:)|Magic of [A-Z][a-z]+(?=:)|High Magic(?=:)|Yenlui State|Obsession|Traits and Talents|Traits|Attack Traits|Skills|Talents|Trappings|Spells|Mutations|Optional|Armour|Attacks|Petty Magic|Arcane Magic|Weapons?|Special|Fate Points?|Miracles)\b/;
+const BARE_LABEL = /^(Attacks|Armour|Skills|Traits and Talents|Traits|Optional Traits|Talents|Trappings|Spells)$/;
 /** Lecture élargie (étiquettes décalées, interligne double, « Options: ») : réservée aux livres importés depuis L16, pour ne pas bouger les livres déjà relus. */
 let lenient = false;
 export const setLenient = value => { lenient = Boolean(value); };
@@ -112,7 +112,9 @@ export function pageBlocks(pageText) {
     // Bord droit : prochain bloc à droite sur la page (profils côte à côte, colonne voisine), sinon le bord de la page.
     const neighbour = heads.filter(other => other !== head && other.start > head.start + 20).sort((x, y) => x.start - y.start)[0];
     let right = neighbour ? Math.max(head.end + 1, neighbour.start - 4) : Infinity;
-    if (gutter && head.start < gutter - 5) right = Math.min(right, gutter);
+    // En-tête à cheval sur la gouttière (L10 p. 81 : valeurs en bas de la colonne de gauche, corps dans celle de droite) : la gouttière ne le borne pas.
+    const straddle = gutter !== null && head.start < gutter - 5 && head.end > gutter + 2;
+    if (gutter && head.start < gutter - 5 && !straddle) right = Math.min(right, gutter);
     let left = Math.max(gutter && head.start > gutter ? gutter + 1 : 0, head.start - (lenient ? 6 : 3));
     const atGutter = gutter !== null && right === gutter;
     const windowOf = line => {
@@ -122,6 +124,13 @@ export function pageBlocks(pageText) {
       const spill = /^\S{1,3}(?=\s|$)/.exec(text.slice(right));
       const cut = text[right - 1] && text[right - 1] !== ' ' && spill ? right + spill[0].length : right;
       return text.slice(left, cut);
+    };
+    // Voisin plus bas que ce bloc (L10 p. 68 : Crypt Horror sous Crypt Ghast) : un libellé de section centré (« Traits ») qui dépasse à droite
+    // de la fenêtre, au-dessus du titre du voisin, appartient à ce bloc. Seul un libellé seul sur sa part de ligne est repris.
+    const centredLabel = k => {
+      if (!neighbour || neighbour.line <= head.line || k >= neighbour.line - 3 || right === Infinity) return '';
+      const whole = clean((lines[k] || '').slice(left));
+      return BARE_LABEL.test(whole) && whole !== clean(windowOf(lines[k])) ? whole : '';
     };
     const rightLimit = right === Infinity ? 1e9 : right;
     // Titre : texte avant l'en-tête sur la même ligne, sinon lignes juste au-dessus (majuscules, ou intitulé entre parenthèses).
@@ -187,13 +196,13 @@ export function pageBlocks(pageText) {
       const found = /^( *)(?:Skills|Traits\*?|Talents|Trappings|Attacks|Armour|Spells)(?::|\s*$)/.exec((lines[k] || '').slice(floor, right === Infinity ? undefined : right));
       if (found && floor + found[1].length < labelLeft) labelLeft = floor + found[1].length;
     }
-    left = labelLeft;
+    left = straddle ? gutter + 1 : labelLeft;
     // Corps : fenêtre de lignes sous la ligne des valeurs.
     const body = [];
     const rawBody = [];
     let blank = 0;
     for (let k = rowAt + 1; k < lines.length; k += 1) {
-      let text = clean(stripBleed(windowOf(lines[k])));
+      let text = centredLabel(k) || clean(stripBleed(windowOf(lines[k])));
       // Une étiquette « Traits: » peut commencer quelques colonnes avant l'en-tête (L16 p. 30, 45) : fenêtre élargie à gauche pour elle seule.
       if (lenient && !SECTION_START.test(text)) {
         const wider = clean((lines[k] || '').slice(Math.max(gutter && head.start > gutter ? gutter + 1 : 0, left - 8), right === Infinity ? undefined : right)).replace(/^\S*\s+(?=(?:Attack Traits|Optional Traits|Traits|Skills|Talents|Trappings):)/, '');
@@ -217,12 +226,17 @@ export function pageBlocks(pageText) {
       const wealthOpening = !body.length && /^(?:Gold|Silver|Brass)\s+\d+\s*$/.test(text);
       // Note à astérisque d'un bloc V4 (« *These Traits only come into play… ») : prolonge le bloc après un blanc.
       const starNote = blank === 1 && /^\*[A-Za-z]/.test(text) && body.some(line => /^Traits\*:/.test(line));
-      if (!v5Block && blank && !SECTION_START.test(text) && !spaced && !starNote && !wealthOpening && !trappingsList && !(BARE_LABEL.test(body[body.length - 1] || '') && blank <= 2)) break;
+      // Un blanc isolé au milieu des Compétences (L12 p. 48 : « Melee (Basic) » puis « 90, Perception 70 ») : la valeur qui suit prolonge la liste.
+      const lastLabel = [...body].reverse().find(line => /^(?:Attack Traits|Optional Traits|Traits|Skills|Talents|Trappings):/.test(line));
+      const skillsTail = blank === 1 && /^\d+,\s/.test(text) && /^Skills:/.test(lastLabel || '');
+      // Règle spéciale d'un Trait (« A Fool's End � Soporific Breath… », L11 p. 30) : son paragraphe, après un blanc, précède encore les Compétences du bloc.
+      const ruleStart = blank === 1 && /^[A-Z][A-Za-z' !,&-]{2,40}\s[�–—]\s/.test(text) && body.some(line => /^(?:Attack Traits|Traits):/.test(line)) && !body.some(line => /^(?:Skills|Talents|Trappings):/.test(line));
+      if (!v5Block && blank && !SECTION_START.test(text) && !spaced && !skillsTail && !ruleStart && !starNote &&!wealthOpening && !trappingsList && !(BARE_LABEL.test(body[body.length - 1] || '') && blank <= 2)) break;
       // Titre d'un bloc suivant (dans la même fenêtre) : fin du corps.
       if (isTitleText(text) && lines.slice(k + 1, k + 4).some((_, d) => heads.some(other => other.line === k + 1 + d && other.start >= left - 8 && other.start < rightLimit))) break;
       blank = 0;
       body.push(text);
-      rawBody.push(windowOf(lines[k]));
+      rawBody.push(centredLabel(k) || windowOf(lines[k]));
       if (body.length > 45) break;
     }
     // Fiche à deux colonnes internes (Vampire…) : la colonne de gauche d'abord, puis celle de droite.
@@ -240,7 +254,7 @@ const V4_LABELS_BASE = ['Yenlui State', 'Obsession', 'Attack Traits', 'Optional 
 const LORE_PATTERNS = ['Lore of [A-Z][a-z]+', 'Magic of [A-Z][a-z]+', 'High Magic'];
 // « Traits*: » (L01 p. 79) : Traits conditionnels, la note à astérisque suit ; l'astérisque est retiré de l'étiquette.
 const labelRe = wide => new RegExp(`(?:^|\\s)(${[...(wide ? [...V4_LABELS_BASE, 'Options'] : [...V4_LABELS_BASE, ...LORE_PATTERNS])].join('|')})\\*?:`, 'g');
-const V5_LABEL_RE = /^(Attacks|Armour(?!\s+by\s+Location)|Skills|Traits|Optional Traits|Talents|Trappings|Spells)(?=\s|$)/;
+const V5_LABEL_RE = /^(Attacks|Armour(?!\s+by\s+Location)|Skills|Traits and Talents|Traits|Optional Traits|Talents|Trappings|Spells)(?=\s|$)/;
 
 /** Sections étiquetées du corps, sous forme { étiquette: texte } ; `lead` : texte avant la première étiquette. */
 export function splitSections(bodyLines) {
@@ -250,7 +264,9 @@ export function splitSections(bodyLines) {
   const put = (label, text) => { sections[label] = sections[label] ? `${sections[label]} ${text}` : text; };
   // Un bloc V5 commence par une étiquette seule ; une ligne « Armour of … » du texte voisin, plus bas, ne le rend pas V5 (L16 p. 7).
   const firstLine = lines.find(line => line) || '';
-  const startsV5 = lenient ? V5_LABEL_RE.test(firstLine) && !/:/.test(firstLine.slice(0, 12)) : lines.some(line => line && V5_LABEL_RE.test(line) && !/:/.test(line.slice(0, 12)));
+  // Un bloc qui s'ouvre sur une étiquette V4 (« Traits: ») n'est jamais V5 : sa ligne « Armour 3 (9), Infected… » est un Trait, pas la rubrique Armour (L12 p. 36).
+  const opensV4 = /^(?:Attack Traits|Optional Traits|Traits|Skills|Talents|Trappings|Spells)\*?:/.test(firstLine);
+  const startsV5 = lenient ? V5_LABEL_RE.test(firstLine) && !/:/.test(firstLine.slice(0, 12)) : !opensV4 && lines.some(line => line && V5_LABEL_RE.test(line) && !/:/.test(line.slice(0, 12)));
   const V4_LABEL_RE = labelRe(lenient);
   if (!startsV5 && [...joined.matchAll(V4_LABEL_RE)].length) {
     const marks = [...joined.matchAll(V4_LABEL_RE)].map(found => ({ label: found[1], start: found.index + found[0].length, at: found.index }));
@@ -265,6 +281,8 @@ export function splitSections(bodyLines) {
   const chunks = new Map();
   for (const line of lines) {
     const found = V5_LABEL_RE.exec(line);
+    // Bloc V5 de L10 : « Armour +3 AP All, Night Vision… » ouvre la liste des Traits ; ce n'est pas la rubrique Armour (L10 p. 51).
+    if (found && found[1] === 'Armour' && current === 'Traits' && /^Armour\s+\+\d+\s+AP\b/.test(line)) { chunks.get(current).push(line); continue; }
     if (found) { current = found[1]; chunks.set(current, [clean(line.slice(found[0].length))]); } else if (current) chunks.get(current).push(line); else if (line) lead.push(line);
   }
   const last = [...chunks.keys()].pop();

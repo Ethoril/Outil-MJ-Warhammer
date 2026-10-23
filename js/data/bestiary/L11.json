@@ -412,6 +412,50 @@
     "Soc": 20
    },
    "wounds": 11,
+   "armour": {
+    "ap": 1,
+    "printedTotal": 4
+   },
+   "attacks": [
+    {
+     "name": "Short Bow",
+     "damage": 5,
+     "trait": "Ranged",
+     "ranged": true
+    },
+    {
+     "name": "Crude Spear",
+     "damage": 6,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Animosity",
+     "param": "Greenskins",
+     "ref": "E0-T-003"
+    },
+    {
+     "name": "Arboreal",
+     "ref": "E0-T-069"
+    },
+    {
+     "name": "Afraid",
+     "param": "Elves",
+     "ref": "E0-T-001"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Venom",
+     "ref": "E0-T-064"
+    }
+   ],
+   "specialRules": [
+    "Borrowed Courage"
+   ],
    "keywords": [
     "gobelin"
    ],
@@ -1126,6 +1170,70 @@
     "Soc": null
    },
    "wounds": 88,
+   "size": "enormous",
+   "armour": {
+    "ap": 5,
+    "printedTotal": 12
+   },
+   "attacks": [
+    {
+     "name": "Horns",
+     "damage": 13,
+     "trait": "Horns"
+    },
+    {
+     "name": "Curling Horns",
+     "damage": 13,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Melee (Curling Horns)",
+     "nameFr": "Corps à corps (Curling Horns)",
+     "frUnverified": true,
+     "value": 70
+    }
+   ],
+   "traits": [
+    {
+     "name": "Belligerent",
+     "ref": "E0-T-004"
+    },
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Grim",
+     "ref": "E0-T-026"
+    },
+    {
+     "name": "Painless",
+     "ref": "E0-T-042"
+    },
+    {
+     "name": "Size",
+     "param": "Enormous",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Stride",
+     "ref": "E0-T-084"
+    },
+    {
+     "name": "Horns",
+     "rating": "+13",
+     "conditional": true,
+     "ref": "E0-T-028"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Berserk Charge",
+     "rank": 3
+    }
+   ],
    "abilities": [
     "E0-T-107",
     "E0-T-106"
@@ -1320,6 +1428,19 @@
      "trait": "Weapon"
     }
    ],
+   "skills": [
+    {
+     "name": "Melee (Root-like Claws)",
+     "nameFr": "Corps à corps (Root-like Claws)",
+     "frUnverified": true,
+     "value": 75
+    },
+    {
+     "name": "Stealth",
+     "nameFr": "Discrétion",
+     "value": 65
+    }
+   ],
    "traits": [
     {
      "name": "Arboreal",
@@ -1367,6 +1488,26 @@
      "name": "Tail",
      "rating": "+9",
      "ref": "E0-T-054"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Magical",
+     "ref": "E0-T-036"
+    },
+    {
+     "name": "Spellcaster",
+     "param": "Jade",
+     "ref": "E0-T-048"
+    },
+    {
+     "name": "Trained",
+     "param": "Mount",
+     "ref": "E0-T-060"
+    },
+    {
+     "name": "Venom",
+     "ref": "E0-T-064"
     }
    ],
    "abilities": [
@@ -2511,6 +2652,13 @@
      "ref": "E0-T-119"
     }
    ],
+   "optionalTraits": [
+    {
+     "name": "Size",
+     "param": "Small, Large-Enormous",
+     "ref": "E0-T-045"
+    }
+   ],
    "abilities": [
     "E0-T-119",
     "E0-T-120",
@@ -2922,6 +3070,18 @@
      "trait": "Weapon"
     }
    ],
+   "skills": [
+    {
+     "name": "Channelling",
+     "nameFr": "Focalisation",
+     "value": 80
+    },
+    {
+     "name": "Language (Magick)",
+     "nameFr": "Langue (Magick)",
+     "value": 75
+    }
+   ],
    "traits": [
     {
      "name": "Amphibious",
@@ -2981,6 +3141,21 @@
      "ref": "E0-T-065"
     }
    ],
+   "optionalTraits": [
+    {
+     "name": "Hardy",
+     "ref": "E0-T-079"
+    },
+    {
+     "name": "Hungry",
+     "ref": "E0-T-029"
+    },
+    {
+     "name": "Spellcaster",
+     "param": "Death",
+     "ref": "E0-T-048"
+    }
+   ],
    "abilities": [
     "E0-T-125",
     "E0-T-126"
@@ -3021,6 +3196,13 @@
      "trait": "Weapon"
     }
    ],
+   "skills": [
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 60
+    }
+   ],
    "traits": [
     {
      "name": "Amphibious",
@@ -3042,6 +3224,12 @@
     {
      "name": "Swamp-strider",
      "ref": "E0-T-085"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
     }
    ],
    "abilities": [
@@ -5778,6 +5966,19 @@
      "trait": "Weapon"
     }
    ],
+   "skills": [
+    {
+     "name": "Melee (Sickle Claws)",
+     "nameFr": "Corps à corps (Sickle Claws)",
+     "frUnverified": true,
+     "value": 73
+    },
+    {
+     "name": "Stealth",
+     "nameFr": "Discrétion",
+     "value": 68
+    }
+   ],
    "traits": [
     {
      "name": "Dark Vision",
@@ -5816,6 +6017,18 @@
      "rating": "+12",
      "param": "Nightmares",
      "ref": "E0-T-009"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Enclosed Fighter"
+    },
+    {
+     "name": "Reaction Strike"
+    },
+    {
+     "name": "Shadow",
+     "rank": 2
     }
    ],
    "abilities": [
@@ -5885,6 +6098,45 @@
     {
      "name": "Undead",
      "ref": "E0-T-061"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Champion",
+     "ref": "E0-T-010"
+    },
+    {
+     "name": "Chill Grasp",
+     "ref": "E0-T-011"
+    },
+    {
+     "name": "Fury",
+     "ref": "E0-T-078"
+    },
+    {
+     "name": "Hardy",
+     "ref": "E0-T-079"
+    },
+    {
+     "name": "Stealthy",
+     "ref": "E0-T-050"
+    },
+    {
+     "name": "Territorial",
+     "ref": "E0-T-056"
+    },
+    {
+     "name": "Unstable",
+     "ref": "E0-T-062"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Combat Master",
+     "rank": 2
+    },
+    {
+     "name": "Strike to Injure"
     }
    ],
    "abilities": [
