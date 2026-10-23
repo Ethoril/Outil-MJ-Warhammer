@@ -38517,5 +38517,3294 @@
       "Ne pas implanter"
     ],
     "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0001",
+    "phase": "artisanat",
+    "lot": "L26",
+    "source": "L26 p.8",
+    "question": "Implanter « Saison des herbes » ? Hors saison, la disponibilité devient un degré plus rare ; les herbes déjà Exotiques sont alors introuvables.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0002",
+    "phase": "artisanat",
+    "lot": "L26",
+    "source": "L26 p.8",
+    "question": "Implanter « Identification et préparation des herbes » ? Savoir (Herbes) trouve et identifie ; Métier (Herboriste) prépare les formes complexes avec outils ; les draughts exigent Apothicaire ; Empoisonneur peut remplacer pour les préparations nocives.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0003",
+    "phase": "artisanat",
+    "lot": "L26",
+    "source": "L26 p.8",
+    "question": "Implanter « Administrer les herbes » ? Une préparation correctement faite peut normalement être administrée par presque n’importe qui, sans compétence particulière ; les exceptions des préparations restent applicables.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0004",
+    "phase": "artisanat",
+    "lot": "L26",
+    "source": "L26 p.9",
+    "question": "Implanter « Localités et saisons des herbes » ? La table de vingt et une herbes fixe terrain, saison et disponibilité pour la recherche ; ses prix et Encombrements ne prouvent aucun effet curatif.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0005",
+    "phase": "artisanat",
+    "lot": "L26",
+    "source": "L26 p.9",
+    "question": "Implanter « Activité de cueillette » ? Entre aventures, chercher en saison dans le bon terrain à un jour de trajet ; Savoir (Herbes) +20 donne des DR à dépenser en doses : Commun 1, Peu courant 2, Rare 3, Exotique 4. Reliquat perdu.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0006",
+    "phase": "artisanat",
+    "lot": "L26",
+    "source": "L26 p.9",
+    "question": "Implanter « Cueillette urgente ou activité » ? La cueillette du livre de base reste une option en urgence ; l’activité dédiée est préférée entre aventures pour éviter la récolte lucrative sans limite de temps.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0007",
+    "phase": "artisanat",
+    "lot": "L26",
+    "source": "L26 p.10",
+    "question": "Implanter « Cataplasme » ? Métier (Herboriste) permet le cataplasme ; il se conserve environ un mois, puis devient inefficace ou toxique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0008",
+    "phase": "artisanat",
+    "lot": "L26",
+    "source": "L26 p.10",
+    "question": "Implanter « Infusion » ? Métier (Herboriste) prépare les infusions, dont les herbes séchées se conservent des années dans les bonnes conditions.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0009",
+    "phase": "artisanat",
+    "lot": "L26",
+    "source": "L26 p.10",
+    "question": "Implanter « Potion préparée » ? Métier (Apothicaire) prépare les draughts ; bien scellés, ils se gardent au moins un an.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0010",
+    "phase": "artisanat",
+    "lot": "L26",
+    "source": "L26 p.10",
+    "question": "Implanter « Herbes crues » ? Les préparations crues ne nécessitent pas de compétence mais ne se conservent que quelques jours.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0011",
+    "phase": "artisanat",
+    "lot": "L26",
+    "source": "L26 p.10",
+    "question": "Implanter « Dissimuler une préparation » ? Cuisine ou Empoisonneur peut dissimuler le goût d’une herbe dans nourriture ou boisson.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0012",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.10",
+    "question": "Implanter « Agurk en vapeur » ? Respirer l’infusion provoque des tremblements : Dextérité baisse de vingt pour trois heures, sauf Résistance +0 réussi ou Immunité (Poison).",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0013",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.10",
+    "question": "Implanter « Agurk en potion » ? L’ingestion donne deux Empoisonné sauf réussite de Résistance −10 ; Immunité (Poison) protège.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0014",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.11",
+    "question": "Implanter « Alfunas » ? Un cataplasme quotidien réduit de moitié le temps de guérison d’une fracture ou luxation ; il ne soigne pas instantanément des Blessures.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0015",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.11",
+    "question": "Implanter « Gesundheit » ? Avec un cataplasme quotidien, Résistance +20 réduit d’un jour par DR la durée d’une Plaie purulente.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0016",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.11",
+    "question": "Implanter « Sève de Graveroot » ? Sur une arme, la sève inflige un Empoisonné aux Morts-vivants, résistible par Résistance −10.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0017",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.11",
+    "question": "Implanter « Cataplasme de Graveroot » ? Le cataplasme donne, pour la journée, +20 aux Tests contre une Plaie purulente causée par un Mort-vivant doté d’Infecté.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0018",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.11",
+    "question": "Implanter « Potion de Graveroot » ? La potion rend pâle et froid pendant d10+2 heures ; elle ne confère ni Mort-vivant ni immunité.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0019",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.12",
+    "question": "Implanter « Démangeaisons de Juck » ? L’herbe crue agit après d10 minutes : tous les Tests subissent −20 pour 2d10+40 minutes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0020",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.12",
+    "question": "Implanter « Réprimer Juck » ? Un Test de Volonté +0 réduit la pénalité de dix par DR pendant dix minutes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0021",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.12",
+    "question": "Implanter « Juck contre le froid » ? Un cataplasme rend d10 Blessures par jour parmi celles perdues par exposition au froid.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0022",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.13",
+    "question": "Implanter « Infusion de Slowmind » ? Détectable par Perception −10 ; Résistance +0 ou Intelligence et Volonté baissent de dix pour 2d10+4 heures. Doses non cumulatives ; Immunité (Poison) protège.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0023",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.13",
+    "question": "Implanter « Slowmind contre le saignement » ? Un cataplasme retire immédiatement un Hémorragique ; plus d’une dose exige Résistance +0 ou les effets nocifs de l’infusion.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0024",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.14",
+    "question": "Implanter « Rustwort contre la Packer’s Pox » ? L’herbe crue prise quotidiennement donne +10 aux Tests contre la Packer’s Pox.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0025",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.14",
+    "question": "Implanter « Potion de Rustwort » ? La potion réduit d10 jours de la durée de maladie ; plus d’une dose par jour provoque des nausées pendant d10 heures.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0026",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.14",
+    "question": "Implanter « Infusion de Spellwort » ? Pour dix moins BE heures, les Tests liés au lancement de sorts subissent −10 et ceux de résistance à la magie reçoivent +10.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0027",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.14",
+    "question": "Implanter « Potion de Spellwort » ? La potion dure une heure et masque les traces magiques à Seconde vue ; utiliser la magie révèle de nouveau la nature magique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0028",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.15",
+    "question": "Implanter « Cataplasme de Spiderleaf » ? Les bandages au cataplasme retirent un Hémorragique supplémentaire par DR du Test de Guérison.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0029",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.15",
+    "question": "Implanter « Spiderleaf crue » ? Un Test de Guérison réussi avec la plante crue retire un Hémorragique supplémentaire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0030",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.15",
+    "question": "Implanter « Cataplasme de Tarrabeth » ? Le patient dort vingt-quatre heures et reçoit +60 à Résistance pour sa guérison naturelle de la journée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0031",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.15",
+    "question": "Implanter « Tarrabeth sur une arme » ? Une dose couvre une arme ou trois flèches/carreaux ; la cible blessée fait Résistance +0 ou gagne un Exténué.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0032",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.15",
+    "question": "Implanter « Trinkwort » ? La racine crue donne +20 aux Tests de Résistance à l’alcool pendant vingt-quatre heures.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0033",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.16",
+    "question": "Implanter « Valériane » ? Une infusion rend une Blessure par jour ; aucun effet sur les Blessures critiques.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0038",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.25",
+    "question": "Implanter « Entrer dans une écluse » ? Un personnage formé en Canotage ou Voile entre sans jet ; sinon Conduite +20 est requise.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0039",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.25",
+    "question": "Implanter « Résistance d’une porte d’écluse » ? Une porte a Endurance huit et 4d10 points de dégâts, moyenne vingt-deux ; traiter les dégâts comme en combat, un Critique détruit la porte.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0040",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.25",
+    "question": "Implanter « Réparer une écluse » ? Charpenterie −20 prend d10 heures et rend d10 points par succès, à six pistoles par point ; les responsables paient les réparations et au moins d10 CO d’amende et sont retenus jusque-là.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0041",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.25",
+    "question": "Implanter « Après un accident d’écluse » ? Les Tests de Sociabilité avec l’éclusier et les voyageurs retardés subissent −10 à −30 selon les dégâts.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0042",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.26",
+    "question": "Implanter « Échec d’écluse −1 à −0 » ? Une touche de coque à +5, mêmes dégâts aux portes ; entrée possible en poussant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0043",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.26",
+    "question": "Implanter « Échec d’écluse −2 à −3 » ? Une touche de coque à +10, mêmes dégâts aux portes ; reculer et recommencer l’approche.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0044",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.26",
+    "question": "Implanter « Échec d’écluse −4 à −5 » ? Une touche de coque à +10 contre la rive et vingt pour cent de risque d’échouage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0045",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.26",
+    "question": "Implanter « Échec d’écluse ≤−6 » ? Déversoir : coque +15 et trente pour cent d’échouage ; rapides : coque +20 et quarante pour cent.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0046",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.28",
+    "question": "Implanter « Qui conduit le bateau » ? Le timonier teste Voile pour un voilier ; le meilleur rameur teste Canotage pour un bateau à rames. Savoir (Fleuves) donne +1 DR sur fleuve ou canal seulement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0047",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.28",
+    "question": "Implanter « Conduite fluviale courante » ? Les personnages formés ne testent que pour un danger ou événement ; avec le voyage de L23, un Test par étape.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0048",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.28",
+    "question": "Implanter « Voile non apprise sur rivière » ? Sans Voile, tester Agilité +0 au début du jour : succès vitesse normale, échec vitesse −25%, échec cuisant vitesse divisée par deux.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0049",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.28",
+    "question": "Implanter « Tirages du vent fluvial » ? Tirer séparément d10 force et d10 direction ; direction 1–3 arrière, 4–7 côté, 8–10 avant. Un vent de côté vient aussi souvent de bâbord que de tribord.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0050",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.28",
+    "question": "Implanter « Évolution du vent fluvial » ? À aube, midi, crépuscule et minuit : d10, un seul change le vent d’un cran, aussi souvent dans chaque sens ; aux extrêmes, seul le cran intérieur est possible.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0051",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.28",
+    "question": "Implanter « Vent calme » ? Dérive vers l’aval à vingt-cinq pour cent de M normal ; Conduite −10.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0052",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.28",
+    "question": "Implanter « Vent léger » ? M arrière +5%, côté inchangé, avant −5%.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0053",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.28",
+    "question": "Implanter « Vent soutenu » ? M arrière +10%, côté +5% après virement réussi, avant −10%.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0054",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.28",
+    "question": "Implanter « Vent fort » ? M arrière +20%, côté +10% après virement réussi, avant −20%.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0055",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.28",
+    "question": "Implanter « Vent très fort » ? M arrière +25%, côté sans bonus et risque de chavirage ; avant −25% avec risque pour le gréement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0056",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.28",
+    "question": "Implanter « Vent latéral très fort » ? Réussir Conduite pour abattre la voile ; un échec provoque un Critique de gréement et embarque de l’eau. Redresser par Conduite chaque tour, −5 cumulatif par échec ; coule après BE Rounds.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0057",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.28",
+    "question": "Implanter « Vent de face très fort » ? Conduite pour éviter le Critique de gréement ; en échec dérive à vingt-cinq pour cent de M normal modifié par le vent et Conduite −20 pour diriger.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0058",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.29",
+    "question": "Implanter « Dégâts aux bateaux fluviaux » ? Le score d’Endurance réduit les dégâts et le score de Damage mesure la capacité à en subir ; utiliser localisation par inversion de Tir ou d100 selon les circonstances.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0059",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.29",
+    "question": "Implanter « Localisations fluviales » ? d100 : 01–30 équipage ; 31–50 équipage à rames, gréement à voile ; 51–60 rames ou gouverne ; 61–80 coque ; 81–00 coque à rames, superstructure à voile.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0060",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.29",
+    "question": "Implanter « Adapter la localisation » ? Adapter à la direction du tir ; équipage non exposé devient coque ou superstructure au MJ ; une barque ouverte peut recevoir une touche sur la cargaison.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0061",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.29",
+    "question": "Implanter « Déclenchement du Critique fluvial » ? Un double provoque un Critique sur la localisation ; à zéro capacité de dégâts, toute nouvelle touche est critique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0062",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.29",
+    "question": "Implanter « Critique fluvial : gréement » ? Personnel sur le pont : Initiative ou touche +5 et un Enchevêtré ; le bateau ne fait que dériver tant que ce n’est pas réparé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0063",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.29",
+    "question": "Implanter « Critique fluvial : rames » ? Rameurs touchés à +5, bateau en dérive ; option une rame brisée : Construction navale ou Charpenterie −10 improvise une godille en quelques tours, demi-vitesse et Conduite +0 pour diriger.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0064",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.29",
+    "question": "Implanter « Critique fluvial : gouverne » ? Timonier touché à +5 ; diriger subit −30 jusqu’à réparation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0065",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.29",
+    "question": "Implanter « Critique fluvial : coque » ? Coque percée, bateau coule en autant de minutes que son Endurance.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0066",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.29",
+    "question": "Implanter « Critique fluvial : superstructure » ? Occupants : Initiative ou touche +5 ; aucun autre effet direct sur le bateau.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0067",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.30",
+    "question": "Implanter « Bateau échoué » ? L’échouage inflige douze dégâts à la coque et immobilise ; Force avec malus égal à l’Encombrement total bateau+cargo pour dégager, assistance des personnes avec corde non lourdement chargées.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0068",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.30",
+    "question": "Implanter « Coque percée et écopage » ? Le bateau coule après son Endurance en minutes ; réparer à temps évite le naufrage. Écoper prend deux fois autant de tours que la durée d’entrée d’eau.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0069",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.30",
+    "question": "Implanter « Bateau engorgé d’eau » ? Pour chaque tour où le bateau prend l’eau, il perd un pour cent de M et subit −10 en Conduite jusqu’à écopage ; cargo non étanche perd d10 pour cent de sa valeur sauf mesures adaptées.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0071",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.30",
+    "question": "Implanter « Réparations temporaires fluviales » ? Construction navale ou Charpenterie −10 à −30 ; chaque succès prend vingt minutes et rend d10 points de dégâts.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0072",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.30",
+    "question": "Implanter « Tenue des réparations fluviales » ? Chaque jour de voyage : Endurance du bateau, échec retire d10−4 points. Le MJ peut demander des jets supplémentaires après dégâts ou manœuvres stressantes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0073",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.30",
+    "question": "Implanter « Débris flottants » ? Un échec de Conduite contre ces débris fait subir deux touches de coque à +10 chacune.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0074",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.31",
+    "question": "Implanter « Déblayer un embâcle » ? Le blocage a d10×10 Endurance et « fait 2d10 Damage » ; le percuter inflige une touche +10 à chacun. À la main, enlever 3d10 objets de 4d10 Encombrement chacun.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0075",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.31",
+    "question": "Implanter « Pilote fluvial » ? Un pilote local guide sans accident dans rochers et hauts-fonds ; sinon familiarité ou Perception réussie permet une Conduite formée, défaut une Conduite non apprise.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0076",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.31",
+    "question": "Implanter « Rochers » ? Heurter un rocher inflige coque +15, vingt pour cent d’échouage et cinquante pour cent de coque percée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0077",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.31",
+    "question": "Implanter « Hauts-fonds » ? Heurter un haut-fond inflige coque +5 et quarante pour cent d’échouage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0078",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.31",
+    "question": "Implanter « Feu sur le bois » ? Les dégâts d’Enflammé ignorent le BE du bateau en bois, mais ses PA s’appliquent normalement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0079",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.31",
+    "question": "Implanter « Bôme en mouvement » ? Esquive +0 ou touche +5 ; un personnage touché fait ensuite Athlétisme +0 ou tombe dans le fleuve.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0080",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.33",
+    "question": "Implanter « Charge des bateaux fluviaux » ? Vehicle Encumbrance mesure le bateau ; Carries mesure son cargo. Chaque dépassement de dix pour cent impose −1 DR aux Tests de Conduite.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0081",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.33",
+    "question": "Implanter « Bateau fluvial : Row boat » ? Modèle : M 4, Endurance 35, Blessures 10, poids 25 Enc, charge 60 Enc ; rames, longueur 10 pieds, prix 6 CO.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0082",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.33",
+    "question": "Implanter « Bateau fluvial : Fishing skiff » ? Modèle : M 6, Endurance 40, Blessures 20, poids 35 Enc, charge 120 Enc ; rames et voiles, longueur 15 pieds, prix 45 CO.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0083",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.33",
+    "question": "Implanter « Bateau fluvial : Typical barge » ? Modèle : M 8, Endurance 45, Blessures 60, poids 100 Enc, charge 300 Enc ; rames et voiles, longueur 20 pieds, prix 225 CO.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0084",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.33",
+    "question": "Implanter « Bateau fluvial : Large barge » ? Modèle : M 6, Endurance 45, Blessures 90, poids 180 Enc, charge 500 Enc ; rames et voiles, longueur 30 pieds, prix 445 CO.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0085",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.33",
+    "question": "Implanter « Bateau fluvial : Patrol boat » ? Modèle : M 9, Endurance 60, Blessures 120, poids 130 Enc, charge 80 Enc ; rames et voiles, longueur 25 pieds, prix 655 CO.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0086",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.64",
+    "question": "Implanter « Encombrement des améliorations » ? Chaque point ajouté à Vehicle Encumbrance retranche un point de Carries.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0087",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.64",
+    "question": "Implanter « Blindage de bronze » ? Un PA ; entretien au moins tous les trois mois, sinon M −1 et Conduite −10, sans perte d’armure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0088",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.64",
+    "question": "Implanter « Blindage de fer » ? Deux PA ; entretien mensuel, sinon M −1 et Conduite −10. La rouille peut retirer tous les PA selon la clause « Failure indicates ».",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0089",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.64",
+    "question": "Implanter « Coque de course : vitesse » ? La coque permet jusqu’au double de M normal ; Conduite −10 toutes les heures.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0090",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.64",
+    "question": "Implanter « Coque de course : échec normal » ? Un échec marginal ou normal interdit de dépasser M normal.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0091",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.64",
+    "question": "Implanter « Coque de course : échec impressive » ? Un échec impressionnant limite à la moitié de M normal.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0092",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.64",
+    "question": "Implanter « Coque de course : échec astounding » ? Un échec cuisant abîme la coque : demi-M jusqu’à réparation coûtant la moitié du prix de l’amélioration.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0093",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.64",
+    "question": "Implanter « Réparer une coque de course » ? Les réparations normales coûtent le double ; les Tests nécessaires sont un degré plus difficiles.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0094",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.64",
+    "question": "Implanter « Lissage de coque fluviale » ? Le lissage prend au moins une semaine et donne M +1 ; réparations cinquante pour cent plus chères, ou bénéfice perdu.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0095",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.65",
+    "question": "Implanter « Grand gouvernail » ? Chaque Conduite s’accompagne de Force ; ajouter les DR si Force réussi, pas de malus pour échec ordinaire. Échec cuisant ou maladresse projette le timonier à l’eau.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0096",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.65",
+    "question": "Implanter « Double gouvernail » ? M −1 ; avec un personnage formé à chacun des deux gouvernails, Conduite pour diriger reçoit +20.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0097",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.65",
+    "question": "Implanter « Freins d’eau fluviaux » ? Demi/ouverture complète : M −1/−2 vers l’amont, M +1/+2 vers l’aval.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0098",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.65",
+    "question": "Implanter « Parois blindées » ? Un personnage derrière les parois bénéficie de couvert lourd ; les attaques à distance contre lui sont Très difficiles.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0099",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.66",
+    "question": "Implanter « Sabords fluviaux » ? Tirer derrière un couvert adapté, petit sabord pour arme individuelle ou grand pour arme collective ; ouvrir ou fermer prend une Action.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0101",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.66",
+    "question": "Implanter « Pavois surélevés » ? Le personnage accroupi sur le pont reçoit couvert moyen ; les tirs contre lui sont Difficiles.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0102",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.66",
+    "question": "Implanter « Bateau allégé » ? Retirer les cabines réduit le poids selon modèle ; la capacité de cargo augmente de soixante-quinze pour cent. Construit ainsi, le bateau coûte soixante-quinze pour cent du prix normal.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0103",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.66",
+    "question": "Implanter « Foc volant fluvial » ? Longueur +10% ; vent arrière donne +5% M supplémentaire, côté aucun effet, face double la pénalité de vitesse.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0104",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.66",
+    "question": "Implanter « Gréement de course » ? M +10% arrière/côté ; pénalité de face réduite de −5% selon la prose. Foc compris et non cumulable ; Conduite −10 ; dégâts au gréement doublés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0105",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.67",
+    "question": "Implanter « Dames de nage fermées » ? Une rame ordinaire sort sur échec de Canotage et demande une Action pour être remise ; une dame fermée empêche ce problème.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0106",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.67",
+    "question": "Implanter « Rames cuillères » ? Si Force réussi, ajouter le BF en yards au Mouvement du bateau pour ce Round ; aucun M permanent gagné.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0107",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.67",
+    "question": "Implanter « Armes dissimulées » ? Rendre une arme de bord dissimulable augmente prix et Encombrement de dix pour cent.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0108",
+    "phase": "combat",
+    "lot": "L26",
+    "source": "L26 p.67",
+    "question": "Implanter « Munition fluviale : ball » ? Un canon chargé à boulet reçoit Percutante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0109",
+    "phase": "combat",
+    "lot": "L26",
+    "source": "L26 p.67",
+    "question": "Implanter « Munition fluviale : grapeshot » ? Un canon chargé à mitraille reçoit Explosion cinq.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0110",
+    "phase": "combat",
+    "lot": "L26",
+    "source": "L26 p.67",
+    "question": "Implanter « Munition fluviale : chain » ? À au moins quatre DR au tir, le boulet chaîné provoque un Critique automatique de gréement, sans nouvelle qualité.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0111",
+    "phase": "combat",
+    "lot": "L26",
+    "source": "L26 p.67",
+    "question": "Implanter « Canon fixe » ? Le canon tire seulement droit dans son axe d’installation, à la différence de la baliste sur pivot.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0112",
+    "phase": "combat",
+    "lot": "L26",
+    "source": "L26 p.68",
+    "question": "Implanter « Déplacer une catapulte » ? Les catapultes demandent deux à trois Actions de déplacement selon leur taille ; un mortier demande trois Actions.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0113",
+    "phase": "combat",
+    "lot": "L26",
+    "source": "L26 p.68",
+    "question": "Implanter « Fourche de mousquet » ? Le support donne +10 pour toucher mais exige une Action pour y replacer l’arme après rechargement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0114",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.68",
+    "question": "Implanter « Éperon fluvial » ? En collision frontale, l’autre bateau reçoit tous les dégâts ; l’éperon donne aussi cinq PA de face.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0115",
+    "phase": "combat",
+    "lot": "L26",
+    "source": "L26 p.68",
+    "question": "Implanter « Recul du canon à salve » ? À chaque tir, Résistance +20 ou perdre une Blessure par niveau d’échec ; échec cuisant provoque un Critique d’épaule utilisant la table du bras.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0116",
+    "phase": "combat",
+    "lot": "L26",
+    "source": "L26 p.68",
+    "question": "Implanter « Arme de bord : Ballista » ? Portée 100, dégâts +12 ; Précise, Empaleuse, Pénétrante, Recharge3. Groupe Ingénierie ; baliste et catapultes sans Poudre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0117",
+    "phase": "combat",
+    "lot": "L26",
+    "source": "L26 p.68",
+    "question": "Implanter « Arme de bord : Cannon small » ? Portée 50, dégâts +10 ; Explosion2, Dévastatrice, Dangereuse, Recharge4. Groupe Ingénierie ; baliste et catapultes sans Poudre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0118",
+    "phase": "combat",
+    "lot": "L26",
+    "source": "L26 p.68",
+    "question": "Implanter « Arme de bord : Cannon medium » ? Portée 75, dégâts +14 ; Explosion3, Dévastatrice, Dangereuse, Recharge6. Groupe Ingénierie ; baliste et catapultes sans Poudre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0119",
+    "phase": "combat",
+    "lot": "L26",
+    "source": "L26 p.68",
+    "question": "Implanter « Arme de bord : Catapult small » ? Portée 50, dégâts +10 ; Dévastatrice, Percutante, Imprécise, Recharge3. Groupe Ingénierie ; baliste et catapultes sans Poudre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0120",
+    "phase": "combat",
+    "lot": "L26",
+    "source": "L26 p.68",
+    "question": "Implanter « Arme de bord : Catapult medium » ? Portée 75, dégâts +15 ; Dévastatrice, Percutante, Imprécise, Recharge3. Groupe Ingénierie ; baliste et catapultes sans Poudre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0121",
+    "phase": "combat",
+    "lot": "L26",
+    "source": "L26 p.68",
+    "question": "Implanter « Arme de bord : Mortar » ? Portée 30, dégâts +20 ; Explosion5, Dévastatrice, Percutante, Dangereuse, Recharge4. Groupe Ingénierie ; baliste et catapultes sans Poudre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0122",
+    "phase": "combat",
+    "lot": "L26",
+    "source": "L26 p.68",
+    "question": "Implanter « Arme de bord : Swivel gun » ? Portée 30, dégâts +15 ; Explosion2, Dangereuse, Recharge4. Groupe Ingénierie ; baliste et catapultes sans Poudre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0123",
+    "phase": "combat",
+    "lot": "L26",
+    "source": "L26 p.68",
+    "question": "Implanter « Arme de bord : Volley gun » ? Portée 50, dégâts +9 ; Explosion2, Dangereuse, Recharge7. Groupe Ingénierie ; baliste et catapultes sans Poudre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0124",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.69",
+    "question": "Implanter « Propulsion enchantée » ? Au MJ, un enchantement temporaire peut donner jusqu’à M +3 et/ou immunité aux obstacles météorologiques ; pas de rituel ni prix mécanique inventé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0125",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.69",
+    "question": "Implanter « Vapeur fluviale » ? Conserve M normal indépendamment du vent ; ingénieur qualifié utilisant Métier (Ingénierie) au lieu de Conduite. Capacité occupée environ moitié, avec charbon une semaine ou bois deux jours.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0127",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.69",
+    "question": "Implanter « Incident vapeur fluvial 01–40 » ? Dérive à vingt-cinq pour cent de M normal pendant d10 Rounds.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0128",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.69",
+    "question": "Implanter « Incident vapeur fluvial 41–60 » ? Ingénieur : Initiative ou perdre d10−5 Blessures, minimum un, sans armure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0129",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.69",
+    "question": "Implanter « Incident vapeur fluvial 61–80 » ? Arrêt, dérive vingt-cinq pour cent ; Ingénierie +0 redémarre, puis cinq moins DR Rounds.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0130",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.69",
+    "question": "Implanter « Incident vapeur fluvial 81–90 » ? Éteint : remplacer le charbon en 2d4 Rounds, Ingénierie pour redémarrer, puis cinq moins DR Rounds.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0131",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.69",
+    "question": "Implanter « Incident vapeur fluvial 91–95 » ? Retirer le charbon, attendre vingt+d10 minutes ; Ingénierie −10 répare puis +0 redémarre, cinq moins DR Rounds de pression.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0132",
+    "phase": "navigation",
+    "lot": "L26",
+    "source": "L26 p.69",
+    "question": "Implanter « Incident vapeur fluvial 96–00 » ? Moteur détruit ; Critiques de coque et superstructure, douze dégâts Explosion et Percutants à tous les occupants du compartiment.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0133",
+    "phase": "argent-statut",
+    "lot": "L26",
+    "source": "L26 p.70",
+    "question": "Implanter « Portée du commerce fluvial » ? Les cargaisons sont achetées puis revendues ; la livraison pour un employeur régulier relève plutôt de l’activité Revenu. La richesse excessive reste une difficulté à gérer au MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0134",
+    "phase": "argent-statut",
+    "lot": "L26",
+    "source": "L26 p.71",
+    "question": "Implanter « Disponibilité d’un cargo » ? Chaque jour, d100 au plus dix fois la somme Taille+Richesse trouve un cargo. Subsistance seule n’offre pas de cargo ; les biens de gros sont normalement Communs.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0135",
+    "phase": "argent-statut",
+    "lot": "L26",
+    "source": "L26 p.71",
+    "question": "Implanter « Deux offres d’un centre commercial » ? Avec Trade parmi les productions : tirer séparément disponibilité locale et disponibilité d’un second cargo aléatoire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0136",
+    "phase": "argent-statut",
+    "lot": "L26",
+    "source": "L26 p.71",
+    "question": "Implanter « Type de production locale » ? Une production de gros fixe le type de cargo ; plusieurs sont départagées aléatoirement. Sans production de gros, choisir ou tirer selon la saison.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0137",
+    "phase": "argent-statut",
+    "lot": "L26",
+    "source": "L26 p.71",
+    "question": "Implanter « Volume de cargaison » ? Arrondir le d100 au multiple de dix supérieur, puis multiplier par Taille+Richesse pour obtenir le volume en Encombrement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0138",
+    "phase": "argent-statut",
+    "lot": "L26",
+    "source": "L26 p.71",
+    "question": "Implanter « Volume d’un centre commercial » ? Avec Trade, comparer d100 et son inversion, garder le plus grand avant arrondi à la dizaine puis multiplication.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0139",
+    "phase": "argent-statut",
+    "lot": "L26",
+    "source": "L26 p.71",
+    "question": "Implanter « Taille commerciale des localités » ? Hameau jusqu’à deux cents :1 ; village jusqu’à mille cinq cents :2 ; ville jusqu’à dix mille :3 ; cité au-delà :4.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0140",
+    "phase": "argent-statut",
+    "lot": "L26",
+    "source": "L26 p.71",
+    "question": "Implanter « Richesse à l’achat » ? Richesse : Misérable non chiffré, Pauvre1, Moyenne2, Active3, Prospère4 ; ces valeurs alimentent disponibilité et volume.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0141",
+    "phase": "argent-statut",
+    "lot": "L26",
+    "source": "L26 p.72",
+    "question": "Implanter « Cargo saisonnier : céréales » ? Plages printemps/été/automne/hiver : 01–09 / 01–19 / 01–35 / 01–19 ; prix 1 / 0.5 / 0.25 / 0.5 CO par dix Enc.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0142",
+    "phase": "argent-statut",
+    "lot": "L26",
+    "source": "L26 p.72",
+    "question": "Implanter « Cargo saisonnier : armements » ? Plages printemps/été/automne/hiver : 10–15 / 20–23 / 36–40 / 20–23 ; prix 12 / 10 / 8 / 10 CO par dix Enc.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0143",
+    "phase": "argent-statut",
+    "lot": "L26",
+    "source": "L26 p.72",
+    "question": "Implanter « Cargo saisonnier : luxe » ? Plages printemps/été/automne/hiver : 16–20 / 24–29 / 41–44 / 24–29 ; prix 50 / 50 / 50 / 50 CO par dix Enc.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0144",
+    "phase": "argent-statut",
+    "lot": "L26",
+    "source": "L26 p.72",
+    "question": "Implanter « Cargo saisonnier : métal » ? Plages printemps/été/automne/hiver : 21–30 / 30–39 / 45–60 / 30–44 ; prix 8 / 8 / 8 / 8 CO par dix Enc.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0145",
+    "phase": "argent-statut",
+    "lot": "L26",
+    "source": "L26 p.72",
+    "question": "Implanter « Cargo saisonnier : bois » ? Plages printemps/été/automne/hiver : 31–55 / 40–74 / 61–80 / 45–60 ; prix 3 / 1.5 / 2 / 3.5 CO par dix Enc.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0146",
+    "phase": "argent-statut",
+    "lot": "L26",
+    "source": "L26 p.72",
+    "question": "Implanter « Cargo saisonnier : vin et brandy » ? Plages printemps/été/automne/hiver : 56–75 / 75–85 / 81–95 / 61–95 ; prix selon qualité déterminée à l’achat.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0147",
+    "phase": "argent-statut",
+    "lot": "L26",
+    "source": "L26 p.72",
+    "question": "Implanter « Cargo saisonnier : laine » ? Plages printemps/été/automne/hiver : 76–00 / 86–00 / 96–00 / 96–00 ; prix 1 / 1.5 / 2 / 3 CO par dix Enc.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0148",
+    "phase": "argent-statut",
+    "lot": "L26",
+    "source": "L26 p.72",
+    "question": "Implanter « Qualité du vin et brandy » ? Tirer secrètement d10 à l’achat et noter la qualité ; un lieu réputé comme Kemperbad l’augmente de deux crans.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0149",
+    "phase": "argent-statut",
+    "lot": "L26",
+    "source": "L26 p.72",
+    "question": "Implanter « Prix et qualité du vin » ? d10 :1 piquette0,5 ;2–3 passable1 ;4–5 moyen1,5 ;6–7 bon3 ;8–9 excellent6 ;10 supérieur12 CO.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0150",
+    "phase": "argent-statut",
+    "lot": "L26",
+    "source": "L26 p.72",
+    "question": "Implanter « Évaluer le vin » ? Évaluation +0 identifie la qualité réelle, ou difficulté Moyenne si Résistance à l’alcool atteint cinquante ; un échec donne une estimation fausse proportionnelle à ses DR négatifs.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0151",
+    "phase": "argent-statut",
+    "lot": "L26",
+    "source": "L26 p.73",
+    "question": "Implanter « Marchandage d’un cargo » ? Opposition de Marchandage pour prix ±10%, jusqu’à ±20% avec Négociateur ; même procédure à l’achat et après offre à la vente.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0152",
+    "phase": "argent-statut",
+    "lot": "L26",
+    "source": "L26 p.73",
+    "question": "Implanter « Compétence d’un marchand » ? Pour éviter de générer un PNJ, son Marchandage vaut 2d10+30 ou un score choisi entre trente-deux et cinquante-deux.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0153",
+    "phase": "argent-statut",
+    "lot": "L26",
+    "source": "L26 p.73",
+    "question": "Implanter « Acheter une fraction de cargo » ? La fraction augmente de dix pour cent le prix de base par dix Enc ; un marchand ne vend pas moins de dix Enc par cette procédure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0154",
+    "phase": "argent-statut",
+    "lot": "L26",
+    "source": "L26 p.73",
+    "question": "Implanter « Métal dans un centre métallurgique » ? Ajouter dix pour cent au prix de vente du métal si Metalworking figure dans les productions de la localité.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0155",
+    "phase": "argent-statut",
+    "lot": "L26",
+    "source": "L26 p.73",
+    "question": "Implanter « Demande des petites localités » ? Les « Villages de Taille1 » ne demandent normalement que du grain au printemps ; le MJ peut autoriser jusqu’à d10 Enc d’autres biens sans les règles de demande ordinaires.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0156",
+    "phase": "argent-statut",
+    "lot": "L26",
+    "source": "L26 p.73",
+    "question": "Implanter « Vendre ce qui est déjà produit » ? Une localité ne demande normalement pas ses propres productions ; vin/brandy supérieur fait exception, avec au moins d10 Enc achetables chaque jour.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0157",
+    "phase": "argent-statut",
+    "lot": "L26",
+    "source": "L26 p.73",
+    "question": "Implanter « Revendre au port d’achat » ? Il faut changer de localité ou attendre au moins une semaine avant de tenter de revendre où le cargo a été acheté.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0158",
+    "phase": "argent-statut",
+    "lot": "L26",
+    "source": "L26 p.74",
+    "question": "Implanter « Trouver un acheteur » ? d100 au plus Taille×10, plus trente avec Trade, trouve un acheteur. Un premier échec autorise une seconde recherche pour la moitié du cargo ; après nouvel échec, pas d’offre raisonnable.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0159",
+    "phase": "argent-statut",
+    "lot": "L26",
+    "source": "L26 p.74",
+    "question": "Implanter « Barème d’offre fluvial » ? Richesse1 Misérable : moitié du prix de base ;2 Pauvre :−20% ;3 Moyenne :base ;4 Active :+5% ;5 Prospère :+10%.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0160",
+    "phase": "argent-statut",
+    "lot": "L26",
+    "source": "L26 p.74",
+    "question": "Implanter « Vente urgente dans un centre commercial » ? Avec Trade parmi les productions, vendre un cargo invendable à moitié de son prix de base est possible.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0161",
+    "phase": "argent-statut",
+    "lot": "L26",
+    "source": "L26 p.74",
+    "question": "Implanter « Commerce guidé par une rumeur » ? À une auberge adaptée : Ragot −10 réussi, puis d100 localité dans le gazetteer et d100 rumeur. Le bien pertinent peut être vendu sans limite de volume au double du prix de base.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0162",
+    "phase": "argent-statut",
+    "lot": "L26",
+    "source": "L26 p.78",
+    "question": "Implanter « Rumeur commerciale 01–05 » ? La demande exceptionnelle porte sur luxe, vin, grain ; ces marchandises répondent à la rumeur de cette plage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0163",
+    "phase": "argent-statut",
+    "lot": "L26",
+    "source": "L26 p.78",
+    "question": "Implanter « Rumeur commerciale 06–10 » ? La demande exceptionnelle porte sur armements ; ces marchandises répondent à la rumeur de cette plage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0164",
+    "phase": "argent-statut",
+    "lot": "L26",
+    "source": "L26 p.78",
+    "question": "Implanter « Rumeur commerciale 11–15 » ? La demande exceptionnelle porte sur grain, métal, bois ; ces marchandises répondent à la rumeur de cette plage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0165",
+    "phase": "argent-statut",
+    "lot": "L26",
+    "source": "L26 p.78",
+    "question": "Implanter « Rumeur commerciale 16–20 » ? La demande exceptionnelle porte sur bois, luxe ; ces marchandises répondent à la rumeur de cette plage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0166",
+    "phase": "argent-statut",
+    "lot": "L26",
+    "source": "L26 p.78",
+    "question": "Implanter « Rumeur commerciale 21–25 » ? La demande exceptionnelle porte sur grain, laine ; ces marchandises répondent à la rumeur de cette plage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0167",
+    "phase": "argent-statut",
+    "lot": "L26",
+    "source": "L26 p.78",
+    "question": "Implanter « Rumeur commerciale 26–30 » ? La demande exceptionnelle porte sur grain ; ces marchandises répondent à la rumeur de cette plage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0168",
+    "phase": "argent-statut",
+    "lot": "L26",
+    "source": "L26 p.78",
+    "question": "Implanter « Rumeur commerciale 31–35 » ? La demande exceptionnelle porte sur armements, métal ; ces marchandises répondent à la rumeur de cette plage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0169",
+    "phase": "argent-statut",
+    "lot": "L26",
+    "source": "L26 p.78",
+    "question": "Implanter « Rumeur commerciale 36–40 » ? La demande exceptionnelle porte sur métal, bois, luxe ; ces marchandises répondent à la rumeur de cette plage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0170",
+    "phase": "argent-statut",
+    "lot": "L26",
+    "source": "L26 p.78",
+    "question": "Implanter « Rumeur commerciale 41–45 » ? La demande exceptionnelle porte sur armements, grain ; ces marchandises répondent à la rumeur de cette plage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0171",
+    "phase": "argent-statut",
+    "lot": "L26",
+    "source": "L26 p.78",
+    "question": "Implanter « Rumeur commerciale 46–50 » ? La demande exceptionnelle porte sur grain, bois ; ces marchandises répondent à la rumeur de cette plage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0172",
+    "phase": "argent-statut",
+    "lot": "L26",
+    "source": "L26 p.78",
+    "question": "Implanter « Rumeur commerciale 51–55 » ? La demande exceptionnelle porte sur luxe, vin ; ces marchandises répondent à la rumeur de cette plage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0173",
+    "phase": "argent-statut",
+    "lot": "L26",
+    "source": "L26 p.78",
+    "question": "Implanter « Rumeur commerciale 56–60 » ? La demande exceptionnelle porte sur bois, métal ; ces marchandises répondent à la rumeur de cette plage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0174",
+    "phase": "argent-statut",
+    "lot": "L26",
+    "source": "L26 p.78",
+    "question": "Implanter « Rumeur commerciale 61–65 » ? La demande exceptionnelle porte sur bois, métal ; ces marchandises répondent à la rumeur de cette plage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0175",
+    "phase": "argent-statut",
+    "lot": "L26",
+    "source": "L26 p.78",
+    "question": "Implanter « Rumeur commerciale 66–70 » ? La demande exceptionnelle porte sur armements, grain, laine ; ces marchandises répondent à la rumeur de cette plage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0176",
+    "phase": "argent-statut",
+    "lot": "L26",
+    "source": "L26 p.78",
+    "question": "Implanter « Rumeur commerciale 71–75 » ? La demande exceptionnelle porte sur luxe, vin ; ces marchandises répondent à la rumeur de cette plage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0177",
+    "phase": "argent-statut",
+    "lot": "L26",
+    "source": "L26 p.78",
+    "question": "Implanter « Rumeur commerciale 76–80 » ? La demande exceptionnelle porte sur Tool, bois, vin ou brandy ; ces marchandises répondent à la rumeur de cette plage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0178",
+    "phase": "argent-statut",
+    "lot": "L26",
+    "source": "L26 p.78",
+    "question": "Implanter « Rumeur commerciale 81–85 » ? La demande exceptionnelle porte sur armements, grain ; ces marchandises répondent à la rumeur de cette plage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0179",
+    "phase": "argent-statut",
+    "lot": "L26",
+    "source": "L26 p.78",
+    "question": "Implanter « Rumeur commerciale 86–90 » ? La demande exceptionnelle porte sur armements, grain ; ces marchandises répondent à la rumeur de cette plage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0180",
+    "phase": "argent-statut",
+    "lot": "L26",
+    "source": "L26 p.78",
+    "question": "Implanter « Rumeur commerciale 91–95 » ? La demande exceptionnelle porte sur métal ; ces marchandises répondent à la rumeur de cette plage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0181",
+    "phase": "argent-statut",
+    "lot": "L26",
+    "source": "L26 p.78",
+    "question": "Implanter « Rumeur commerciale 96–00 » ? La demande exceptionnelle porte sur armements, grain, luxe, bois, vin ou brandy, laine ; ces marchandises répondent à la rumeur de cette plage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0182",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.91",
+    "question": "Implanter « Risque d’eau non bouillie » ? Boire l’eau fluviale non bouillie expose ; après Natation ratée, Volonté +0 ratée fait avaler de l’eau. Le MJ peut exposer les plaies ouvertes lors d’immersion.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0183",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.91",
+    "question": "Implanter « Résister à l’exposition fluviale » ? Chaque exposition applicable exige Résistance +0 avec les modificateurs cumulés de source et, en immersion seulement, blessures et États.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0184",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.91",
+    "question": "Implanter « Exposition : city » ? Ville ou marais : −30.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0185",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.91",
+    "question": "Implanter « Exposition : downstream five » ? À moins de cinq miles en aval d’une cité ou ville : −20.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0186",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.91",
+    "question": "Implanter « Exposition : downstream two » ? À moins de deux miles en aval d’une ville : −10.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0187",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.91",
+    "question": "Implanter « Exposition : country » ? Campagne : aucun ajustement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0188",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.91",
+    "question": "Implanter « Exposition : headwater » ? Sources au-dessus de la dernière localité : +10.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0189",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.91",
+    "question": "Implanter « Immersion : remaining » ? Une Blessure ou moins restante : −30.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0190",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.91",
+    "question": "Implanter « Immersion : lost five » ? Au moins cinq Blessures perdues : −20.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0191",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.91",
+    "question": "Implanter « Immersion : lost zero five » ? Zéro à cinq Blessures perdues : −10.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0192",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.91",
+    "question": "Implanter « Immersion : bleeding » ? Chaque Hémorragique : −10.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0193",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.91",
+    "question": "Implanter « Immersion : stunned » ? Chaque Sonné : −5.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0194",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.91",
+    "question": "Implanter « Immersion : entangled » ? Chaque Enchevêtré : −5.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0195",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.91",
+    "question": "Implanter « Immersion : unconscious » ? Inconscient : −20.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0196",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.91",
+    "question": "Implanter « Déterminer la maladie fluviale » ? Après Résistance ratée, d100 plus dix par niveau d’échec détermine la maladie ; relancer Infection mineure/Plaie purulente si le personnage n’a aucune blessure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0197",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.91",
+    "question": "Implanter « Maladie fluviale 01–40 » ? Cette plage du jet modifié désigne Galloping Trots ; les maladies du socle non détaillées dans ce livre conservent leur définition.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0198",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.91",
+    "question": "Implanter « Maladie fluviale 41–60 » ? Cette plage du jet modifié désigne The Gripe ; les maladies du socle non détaillées dans ce livre conservent leur définition.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0199",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.91",
+    "question": "Implanter « Maladie fluviale 61–70 » ? Cette plage du jet modifié désigne Minor Infection ; les maladies du socle non détaillées dans ce livre conservent leur définition.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0200",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.91",
+    "question": "Implanter « Maladie fluviale 71–75 » ? Cette plage du jet modifié désigne Festering Wound ; les maladies du socle non détaillées dans ce livre conservent leur définition.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0201",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.91",
+    "question": "Implanter « Maladie fluviale 76–80 » ? Cette plage du jet modifié désigne Cavity Worms ; les maladies du socle non détaillées dans ce livre conservent leur définition.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0202",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.91",
+    "question": "Implanter « Maladie fluviale 81–90 » ? Cette plage du jet modifié désigne Reikworms ; les maladies du socle non détaillées dans ce livre conservent leur définition.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0203",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.91",
+    "question": "Implanter « Maladie fluviale 91–00 » ? Cette plage du jet modifié désigne The Bloody Flux ; les maladies du socle non détaillées dans ce livre conservent leur définition.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0204",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.92",
+    "question": "Implanter « Incubation du ver des cavités » ? Eau sale ou aliments avariés peuvent infecter ; incubation cinq+d10 jours, durée annoncée une semaine, avec phases d’infection décrites séparément.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0205",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.92",
+    "question": "Implanter « Détecter le ver avant migration » ? Chaque jour, Perception +0 permet de remarquer le parasite dans la bouche ou la gorge.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0206",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.92",
+    "question": "Implanter « Retirer le ver avant migration » ? Personnage formé : Guérison Average(+10) ; non formé : Dextérité. Se traiter exige un miroir et −10 ; échec donne un Hémorragique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0207",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.92",
+    "question": "Implanter « Pénalité du ver présent » ? Tant que le parasite demeure, tous les Tests subissent −10.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0208",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.92",
+    "question": "Implanter « Migration vers le cerveau » ? Après une semaine : Perception +20 chaque jour pour voir le sang ; Surgery −10 permet l’extraction. Après trois jours supplémentaires, l’extraction tuerait l’hôte.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0209",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.92",
+    "question": "Implanter « Dégâts cérébraux du ver » ? À ce stade, Endurance caractéristique chaque jour ; échec : d10 plus niveaux d’échec sur la table de conséquences.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0210",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.92",
+    "question": "Implanter « Ver : perte de Initiative » ? Cette plage fait perdre d10 points de Initiative ; ce sont des points de caractéristique, pas des DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0211",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.92",
+    "question": "Implanter « Ver : perte de Intelligence » ? Cette plage fait perdre d10 points de Intelligence ; ce sont des points de caractéristique, pas des DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0212",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.92",
+    "question": "Implanter « Ver : perte de Volonté » ? Cette plage fait perdre d10 points de Volonté ; ce sont des points de caractéristique, pas des DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0213",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.92",
+    "question": "Implanter « Ver : perte de Sociabilité » ? Cette plage fait perdre d10 points de Sociabilité ; ce sont des points de caractéristique, pas des DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0216",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.92",
+    "question": "Implanter « Ver : décès » ? Le résultat treize de la table cérébrale cause la mort ; la table ne précise pas de plage supérieure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0217",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.92",
+    "question": "Implanter « Éclosion et permanence des pertes » ? Les œufs éclosent d10 jours après ponte ; chez le survivant, les pénalités deviennent permanentes et ne se restaurent que magiquement ou miraculeusement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0218",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.93",
+    "question": "Implanter « Maladie des coliques » ? Contraction par eau sale, incubation deux heures, durée 2d10 jours ; symptômes Gripes, Fièvre, Flux modéré et Nausée. Aucun remède infaillible publié.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0219",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.93",
+    "question": "Implanter « Incubation du ver du Reik » ? Contraction par eau sale, incubation quatre-vingt-cinq+d10 jours, durée une semaine ; la prose décrit l’ampoule après trois mois sans fixer une conversion universelle du mois.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0220",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.93",
+    "question": "Implanter « Ver du Reik : résistance affaiblie » ? Chaque tranche complète de trente jours d’infection impose −5 aux Tests de Résistance contre les maladies ; après mort du ver, la pénalité décroît d’un point par jour.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0221",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.93",
+    "question": "Implanter « Ampoule du ver du Reik » ? Tirer la localisation comme en combat ; tous les Tests d’Agilité subissent −5%, et Sociabilité −10 si la localisation est visible.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0222",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.93",
+    "question": "Implanter « Rupture de l’ampoule » ? Au septième jour d’ampoule, Résistance chaque heure ; première défaite, ou dernière heure si tous réussis : perte d’une Blessure et un Sonné.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0223",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.93",
+    "question": "Implanter « Soigner la plaie du ver du Reik » ? Sonné persiste jusqu’aux soins de la plaie ; immerger le site dans l’eau le soulage temporairement. Aucun traitement curatif de l’infestation n’est connu.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0224",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.93",
+    "question": "Implanter « Symptôme Gripes : pénalité » ? Les coliques donnent −20 à tous les Tests.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0225",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.93",
+    "question": "Implanter « Coliques : échec normal » ? Sur échec normal ou pire de tout Test, impossible de bouger ou agir au Round suivant et un Sonné.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0226",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.93",
+    "question": "Implanter « Coliques : échec impressionnant » ? Sur échec impressionnant ou pire, Volonté ou un À terre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0227",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.93",
+    "question": "Implanter « Coliques : échec cuisant » ? Un échec cuisant provoque Inconscient à cause de la douleur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0228",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.93",
+    "question": "Implanter « Écorce de saule » ? La teinture donne +10 aux Tests résultant des coliques pendant 1d4 heures, sans guérir la maladie.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0229",
+    "phase": "competences",
+    "lot": "L26",
+    "source": "L26 p.22",
+    "question": "Implanter « Besoin de sang d’Orlok » ? Ce vampire doit drainer seize Blessures par nuit pour ne pas tomber en poussière ; cette exigence propre ne s’applique pas à tous les Vampires.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0230",
+    "phase": "competences",
+    "lot": "L26",
+    "source": "L26 p.38",
+    "question": "Implanter « Faux remèdes » ? Le MJ choisit un effet : aucun, trois Empoisonné et/ou Sonné, peau bleue d10 jours, ou autre conséquence à définir. Aucun tirage équiprobable n’est publié.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0231",
+    "phase": "competences",
+    "lot": "L26",
+    "source": "L26 p.44",
+    "question": "Implanter « Conditions de victoire de fosse » ? Au choix : mort, premier sang dès une Blessure perdue, ou défaite à trois Blessures restantes ou moins.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0232",
+    "phase": "competences",
+    "lot": "L26",
+    "source": "L26 p.50",
+    "question": "Implanter « Passager utile » ? Canotage, Voile ou Savoir (Fleuves) réussi pendant le marchandage peut justifier jusqu’à cinquante pour cent de remise si le capitaine a besoin d’aide.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0233",
+    "phase": "competences",
+    "lot": "L26",
+    "source": "L26 p.53",
+    "question": "Implanter « Éviter le bateau des nobles » ? Conduite +0 permet d’éviter la collision de cette rencontre ; aucune immunité aux dégâts n’est déduite du rang social.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0234",
+    "phase": "corruption",
+    "lot": "L26",
+    "source": "L26 p.58",
+    "question": "Implanter « Dague de malepierre dans sa caisse » ? Chaque heure à dix pieds de la caisse est une exposition mineure à la Corruption ; pas de point automatique ni portée étendue au bateau entier.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0235",
+    "phase": "competences",
+    "lot": "L26",
+    "source": "L26 p.60",
+    "question": "Implanter « Remorquage d’un bateau abandonné » ? Remorquer ce bateau réduit de moitié la vitesse normale et impose −10 aux Tests de conduite.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0236",
+    "phase": "competences",
+    "lot": "L26",
+    "source": "L26 p.62",
+    "question": "Implanter « Coffre des codes » ? Le coffre exige cinq DR en Crochetage +0 ; le forcer doit vaincre Endurance cinquante et vingt-cinq Blessures.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0237",
+    "phase": "combat",
+    "lot": "L26",
+    "source": "L26 p.83",
+    "question": "Implanter « Cordes d’abordage des pirates » ? Les bateaux sont rapprochés en quatre Rounds ; couper toutes les cordes avant ce délai permet la fuite. Chaque corde a BE trois et huit Blessures.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0238",
+    "phase": "bestiaire",
+    "lot": "L26",
+    "source": "L26 p.83",
+    "question": "Implanter « Branchies de Vieth » ? Sa mutation lui permet de respirer sous l’eau ; le bonnet dissimule les branchies et l’aileron. Aucun bonus de Natation supplémentaire n’est chiffré.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0239",
+    "phase": "bestiaire",
+    "lot": "L26",
+    "source": "L26 p.85",
+    "question": "Implanter « Sens particuliers des amibes » ? La Vision dans le noir des amibes détecte mouvements et chaleur corporelle ; elles n’ont pas les autres sens ordinaires.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0241",
+    "phase": "maladies-poisons",
+    "lot": "L26",
+    "source": "L26 p.86",
+    "question": "Implanter « Cataplasme de salive de sangsue » ? Prélever la salive sur une sangsue vivante puis la préparer en cataplasme donne +1 DR aux Tests de Guérison pour traiter une Blessure critique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0242",
+    "phase": "bestiaire",
+    "lot": "L26",
+    "source": "L26 p.86",
+    "question": "Implanter « Cibles du musc des sangsues » ? Le musc des Chameleoleeches n’affecte que les mammifères doués de conscience ; son effet de Trait reste renvoyé au bestiaire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0253",
+    "phase": "bestiaire",
+    "lot": "L26",
+    "source": "L26 p.90",
+    "question": "Implanter « Engloutir : attaques interdites » ? Une créature ne peut plus attaquer une victime entièrement engloutie ; elle peut encore attaquer d’autres cibles assez proches.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0254",
+    "phase": "corruption",
+    "lot": "L26",
+    "source": "L26 p.95",
+    "question": "Implanter « Lire le Liber Mutandis » ? Lire-écrire et Langue (Classique) requis ; trois heures et Intelligence −10 pour lire. Un échec impose de tout recommencer ; un second Test d’Intelligence +0 est ensuite requis.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0255",
+    "phase": "creation",
+    "lot": "L26",
+    "source": "L26 p.95",
+    "question": "Implanter « Savoir du Liber Mutandis » ? Après réussite du second Test, dépenser des PX pour Savoir (Tzeentch) devient possible quelle que soit la carrière ; un échec permet une nouvelle lecture avec les deux Tests.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0256",
+    "phase": "corruption",
+    "lot": "L26",
+    "source": "L26 p.95",
+    "question": "Implanter « Corruption du Liber Mutandis » ? Après accès au savoir, Volonté ou exposition : mineure sur échec marginal/normal, modérée sur impressionnant, majeure sur cuisant ; mutations mentales publiées hors Q18.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0257",
+    "phase": "creation",
+    "lot": "L26",
+    "source": "L26 p.96",
+    "question": "Implanter « Double carrière des sorciers de la Couronne » ? Un sorcier du culte peut suivre sa carrière quotidienne et Sorcier, avec leurs compétences et talents ; la première peut déjà être Sorcier d’un autre domaine.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0272",
+    "phase": "creation",
+    "lot": "L26",
+    "source": "L26 p.100",
+    "question": "Implanter « Accès à Guerrier de Tzeentch » ? Carrière humaine PNJ par défaut ; un PJ peut la suivre avec accord MJ. Chaque montée de rang exige, en plus des PX, un acte de corruption et de changement jugé par le MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0273",
+    "phase": "creation",
+    "lot": "L26",
+    "source": "L26 p.101",
+    "question": "Implanter « Schéma de Guerrier de Tzeentch » ? Rang1 ouvre CC, Endurance et Intelligence ; rang2 ajoute Volonté ; rang3 Dextérité ; rang4 Force. Les symboles sont lus sur l’image, pas depuis les trois h de l’extraction.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0274",
+    "phase": "creation",
+    "lot": "L26",
+    "source": "L26 p.101",
+    "question": "Implanter « Guerrier de Tzeentch : Initiate of the Mysteries » ? Le rang Laiton 1 ouvre sa liste de compétences et talents et requiert ses dotations ; les ingrédients magiques sont exclus par arbitrage MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0275",
+    "phase": "creation",
+    "lot": "L26",
+    "source": "L26 p.101",
+    "question": "Implanter « Guerrier de Tzeentch : Favoured of Tzeentch » ? Le rang Laiton 5 ouvre sa liste de compétences et talents et requiert ses dotations ; les ingrédients magiques sont exclus par arbitrage MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0276",
+    "phase": "creation",
+    "lot": "L26",
+    "source": "L26 p.101",
+    "question": "Implanter « Guerrier de Tzeentch : Warrior of Tzeentch » ? Le rang Argent 4 ouvre sa liste de compétences et talents et requiert ses dotations ; les ingrédients magiques sont exclus par arbitrage MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0277",
+    "phase": "creation",
+    "lot": "L26",
+    "source": "L26 p.101",
+    "question": "Implanter « Guerrier de Tzeentch : Chosen of Tzeentch » ? Le rang Or 1 ouvre sa liste de compétences et talents et requiert ses dotations ; les ingrédients magiques sont exclus par arbitrage MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0278",
+    "phase": "argent-statut",
+    "lot": "L26",
+    "source": "L26 p.102",
+    "question": "Implanter « Rabais du paquebot » ? Le capitaine peut réduire un tarif en route mais ne peut dépasser dix pour cent du plein tarif ; les arrangements artistiques suivent leur règle distincte.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0279",
+    "phase": "argent-statut",
+    "lot": "L26",
+    "source": "L26 p.102",
+    "question": "Implanter « Couchette supplémentaire » ? Seulement quand les autres cabines de même classe sont pleines, une couchette pliante dans une cabine passager ou serviteur coûte vingt-cinq pour cent de plus.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0280",
+    "phase": "competences",
+    "lot": "L26",
+    "source": "L26 p.103",
+    "question": "Implanter « Observance à bord » ? Ne pas assister aux prières rend les Tests de Sociabilité avec tout membre d’équipage un degré plus difficiles ; cela ne donne pas de Péché automatique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0281",
+    "phase": "argent-statut",
+    "lot": "L26",
+    "source": "L26 p.104",
+    "question": "Implanter « Passage d’un artiste » ? Un artiste obtient cinquante pour cent de remise non négociable avec Représentation ou Musique −10 réussi, modifié selon sa spécialité ; enfreindre les règles peut retirer le rabais.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0282",
+    "phase": "bestiaire",
+    "lot": "L26",
+    "source": "L26 p.118",
+    "question": "Implanter « Stabilité des Charognes contrôlées » ? Ces Charognes ne sont pas Instables tant qu’elles sont sous le contrôle de Gräber ; aucune règle générale d’animation ni capacité de transport n’est inventée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0283",
+    "phase": "bestiaire",
+    "lot": "L26",
+    "source": "L26 p.118",
+    "question": "Implanter « Charognes sans cavalier humain » ? Ces oiseaux sont trop petits pour porter un cavalier de taille humaine malgré leur profil Grand.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0284",
+    "phase": "competences",
+    "lot": "L26",
+    "source": "L26 p.118",
+    "question": "Implanter « Manœuvrer vers la berge » ? Dans cette scène, Conduite −10 et six Rounds moins un par DR pour rejoindre la berge ; aucun minimum n’est publié.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0285",
+    "phase": "competences",
+    "lot": "L26",
+    "source": "L26 p.118",
+    "question": "Implanter « Rattraper une pierre larguée » ? Rattraper la pierre exige Dextérité ; un échec inflige une Blessure par niveau d’échec.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0287",
+    "phase": "creation",
+    "lot": "L26",
+    "source": "L26 p.125",
+    "question": "Implanter « Secrets de Sigrid : dotation » ? Chaque secret choisi pour ce personnage de remplacement donne d10 pistoles supplémentaires ; les deux séquelles psychologiques restent hors Q18.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L26-0288",
+    "phase": "creation",
+    "lot": "L26",
+    "source": "L26 p.125",
+    "question": "Implanter « Ancienne initiation de Sigrid » ? Le secret d’une ancienne initiation à Slaanesh donne Étiquette (Cultistes de Slaanesh), sans rendre la biographie entière générique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
   }
 ]

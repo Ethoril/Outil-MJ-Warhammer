@@ -171,3 +171,20 @@ La référence à un symbole existant est une preuve de localisation, pas une pr
 | F-C98 | L25 p140–157 ; E0/C0 | Profil ou clause autonome ? | Traits/leurres exacts renvoyés ; seules capacités manquantes ajoutées, pas deuxièmeBF. | Import de nom/Traits ne prouve pas capacité propre. | Déduire toute l’exécution du profil, écarté. |
 | F-C99 | L25 p14/87/91 | Renvoi global suffisant ? | Résumé système ne couvre pas chaque vent ; douze clauses de Miracles sans identité propre restent absentes. | Référence exacte exigée. | Déclarer toute la page déjà couverte, écarté. |
 | F-C100 | L25 p56/57/63/67 | Normaliser les carrières et chants ? | Trous07/68 gardés ; sept chants séparés, ignorer un État ne le retire pas. | Effets déterminés et ambiguïtés source. | Ajouter une table réparée ou retrait d’État définitif, écarté. |
+
+## L26 — choix F-C101 à F-C112
+
+| Id | Source | Question | Choix | Raison | Alternative |
+| --- | --- | --- | --- | --- | --- |
+| F-C101 | L26 p2/9/33/101 | Texte extrait suffisant ? | Folio=physique ; table33 entièrement manquée et symboles101 lus en image. | Extraction ne prouve pas absence de table. | Omettre les bateaux ou inventer le schéma, écarté. |
+| F-C102 | L26 p12–16 ; Q18/C0 | Toute herbe est une drogue ? | Stimulants et Schlafenkraut exclu selon limite C0 ; préparations médicales/poisons conservés. | Exclusion ciblée, sans supprimer soins ou anti-hémorragique. | Écarter toutes les herbes, écarté. |
+| F-C103 | L26 p10/13/16 | Résumés hérités contradictoires ? | Signaler Valerian introductif et délai Schlafenkraut, sans modifier C0 ni déduire un effet nouveau. | Sources précises et héritage intègre. | Corriger d’autres inventaires dans F0, écarté. |
+| F-C104 | L26 p25–33 | Endurance, Bonus, Damage et unités ? | Conserver chaque libellé, tours/Rounds/minutes et anomalies de score ; pas moteur inventé. | Variantes fluviales antérieures àL25. | Tout fusionner dans la matrice navale récente, écarté. |
+| F-C105 | L26 p30/64–69 | Doublons et variantes L25 ? | Trois renvois exacts ; réparations20min, sabords, éperon, freins et vapeur distincts. | Les différences changent le résultat jouable. | Déclarer le chapitre couvert globalement, écarté. |
+| F-C106 | L26 p28/64/66/69 | Pas de cinq et seuils absents ? | Signalement explicite, aucune conversion fractionnaire imposée ni plancher ajouté. | Source ne les définit pas. | Réparer la table à la génération, écarté. |
+| F-C107 | L26 p71–74 | Quel prix et quelle richesse ? | Garder les deux échelles, unité de cargo ouverte et erreur arithmétique notée ; arrondir le d100 avant produit. | Table/image et exemple se contredisent pour le prix, pas pour le volume. | Normaliser sans choixMJ, écarté. |
+| F-C108 | L26 p78 | Tool ou Wool ? | Conserver Tool et catégorie manquante comme question ouverte. | Image dit Tool, pas erreur d’extraction. | Remplacer automatiquement par Laine, écarté. |
+| F-C109 | L26 p91–93 | Cumuls et tables hors bornes ? | Chevauchements gardés ; >100maladie et >13cerveau non définis. | Aucun clamp imprimé. | Garantir un tirage total artificiel, écarté. |
+| F-C110 | L26 p92–93 ; Q18 | Exclure toute conséquence du parasite ? | Traits psychologiques permanents exclus ; infection et dommages biologiques conservés. | Q18 ne supprime pas les maladies. | Assimiler tout dommage de caractéristique à une séquelle psychologique, écarté. |
+| F-C111 | L26 p85–90/98–101 | Étiquette déjà importée suffisante ? | Traits/sorts exacts renvoyés ; sens, restriction d’Engloutir, cataplasme et carrière manquants ajoutés. | Un nom de profil n’atteste pas une clause particulière. | Déduire l’automatisation depuis le catalogue, écarté. |
+| F-C112 | L26 p100–125 | Extension scénaristique ? | Conserver clauses transportables avec contexte, pas rancune, récit de mort forcée ou système de récompense. | Audit mécanique borné et pas recette UI. | Convertir toute narration en règle automatique, écarté. |
