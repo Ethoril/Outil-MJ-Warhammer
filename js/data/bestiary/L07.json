@@ -3797,6 +3797,11 @@
      "ref": "E0-T-067"
     }
    ],
+   "talents": [
+    {
+     "name": "Acute Sense (Sight)"
+    }
+   ],
    "keywords": [
     "skink"
    ],
@@ -6897,6 +6902,7 @@
     "Soc": null
    },
    "wounds": 24,
+   "size": "large",
    "attacks": [
     {
      "name": "Tail",
@@ -6910,6 +6916,34 @@
     }
    ],
    "traits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Cold-blooded",
+     "ref": "E0-T-012"
+    },
+    {
+     "name": "Fear",
+     "rating": "1",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Fly",
+     "rating": "100",
+     "ref": "E0-T-023"
+    },
+    {
+     "name": "Hatred",
+     "param": "Blot Toads",
+     "ref": "E0-T-027"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    },
     {
      "name": "Tail",
      "rating": "+3",
@@ -6927,8 +6961,10 @@
      "ref": "E0-T-060"
     }
    ],
-   "specialRules": [
-    "Acute Sense (Vision"
+   "talents": [
+    {
+     "name": "Acute Sense (Vision: as Character Talent)"
+    }
    ],
    "keywords": [
     "bete"
@@ -6958,6 +6994,7 @@
     "Soc": null
    },
    "wounds": 26,
+   "size": "large",
    "attacks": [
     {
      "name": "Bite",
@@ -6977,6 +7014,29 @@
    ],
    "traits": [
     {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Cold-blooded",
+     "ref": "E0-T-012"
+    },
+    {
+     "name": "Fear",
+     "rating": "1",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Fly",
+     "rating": "100",
+     "ref": "E0-T-023"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    },
+    {
      "name": "Bite",
      "rating": "+5",
      "ref": "E0-T-006"
@@ -6995,8 +7055,10 @@
      "ref": "E0-T-060"
     }
    ],
-   "specialRules": [
-    "Acute Sense (Vision"
+   "talents": [
+    {
+     "name": "Acute Sense (Vision: as Character Talent)"
+    }
    ],
    "keywords": [
     "bete"
@@ -7576,6 +7638,11 @@
     "Soc": null
    },
    "wounds": 88,
+   "size": "enormous",
+   "armour": {
+    "ap": 4,
+    "printedTotal": 9
+   },
    "attacks": [
     {
      "name": "Bite",
@@ -7584,6 +7651,37 @@
     }
    ],
    "traits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Fear",
+     "rating": "1",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Grim",
+     "rating": "2",
+     "ref": "E0-T-026"
+    },
+    {
+     "name": "Immune to Psychology",
+     "ref": "E0-T-030"
+    },
+    {
+     "name": "Painless",
+     "ref": "E0-T-042"
+    },
+    {
+     "name": "Size",
+     "param": "Enormous",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Tracker",
+     "ref": "E0-T-059"
+    },
     {
      "name": "Bite",
      "rating": "+11",
@@ -7603,6 +7701,11 @@
      "name": "Trained",
      "param": "Mount, War",
      "ref": "E0-T-060"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Acute Sense (Hearing: as Character Talent)"
     }
    ],
    "specialRules": [

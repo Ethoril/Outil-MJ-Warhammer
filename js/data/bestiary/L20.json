@@ -4467,6 +4467,11 @@
      "value": 55
     },
     {
+     "name": "Lore (Reikland)",
+     "nameFr": "Savoir (Reikland)",
+     "value": 48
+    },
+    {
      "name": "Melee (Basic)",
      "nameFr": "Corps à corps (Base)",
      "value": 32
@@ -7516,6 +7521,9 @@
     },
     {
      "name": "Hardy Reversal"
+    },
+    {
+     "name": "Doomed (Beware the flames of passion)"
     }
    ],
    "trappings": [

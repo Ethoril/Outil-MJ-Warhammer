@@ -19,6 +19,7 @@ Plan : `PLAN_PRO_QUALITE_E.md`. Branche `pro/qualite-e`, départ `9c12613`. Choi
 | Q11 | FAIT | (voir `git log`, « Q11 ») |
 | Q12a | FAIT (L01-L04 ; Q12b et Q12c à faire) | (voir `git log`, « Q12a »)  |
 | Q12b | FAIT (L07-L12 ; Q12c à faire) | (voir `git log`, « Q12b »)  |
+| Q12c | FAIT en partie (L13-L26 : causes d'outil réparées, manques restants non justifiés un par un, `QE-Q12c-4`) | (voir `git log`, « Q12c ») |
 | R | FAIT (avec réserve : manques de complétude non justifiés un par un) | (voir `git log`, « R ») |
 
 ## Q0 — contrôle de complétude
@@ -189,3 +190,11 @@ Branché / non appelé (grep dans `js/`) :
 - Relectures ciblées (`BODY_OVERRIDES`) : Graug, Gretchen Beirne, Ranolf Quickfingers (`QE-Q12b-2`).
 - Test : `tests/pro-q12b-profils-vides-l07-l12.test.js` (13 tests).
 - **Branché / non appelé** : outil et données de livre seulement (aucune fonction de jeu ajoutée). Les attaques des profils gagnés deviennent des actions via `buildParticipantFromBestiary` (appelants : `js/ui/bestiary-library.js`, `js/core/bestiary-templates.js`) ; `spells`, `trappings` : code testé, non appelé.
+
+## Q12c — profils vides et incomplets, L13-L26 (FAIT en partie)
+
+- **Causes trouvées dans l'outil** (`tools/lib/bestiary-blocks.mjs`, `bestiary-profile.mjs`, `bestiary-record.mjs`, `bestiary-glossary.mjs`, `bestiary-overrides.mjs`) : voir `QE-Q12c-1`. Principales : un « : » dans une parenthèse vidait la liste des Traits (Great Eagle) ; la rubrique « Options: » coupait le bloc (Ogre Gorger : 11 compétences et 9 talents retrouvés) ; « 2 × » rendu en U+FFFD ; compétences collées par le livre ; Runesmithing.
+- **État après** (contrôle Q11, L13-L26) : profils sans aucune donnée hors caractéristiques : 5 → 2 (les deux gabarits Infirm et Diamond in the Rough, sans Traits imprimés). Manques par catégorie : talents 44 → 37, compétences 80 → 66, attaques 34 → 30, Traits 70 → 54. **Le zéro du plan n'est pas atteint** : les manques restants (~187 lignes, dont ~74 sont du texte de profil voisin) ne sont justifiés que par groupes de causes (`QE-Q12c-4`), pas profil par profil.
+- **Valeurs imprimées** : 23 livres comparés à `9c12613` : seuls E0-P-125 et E0-P-126 diffèrent (`QE-Q12a-1`) ; aucun profil retiré ; aucune entrée perdue par rapport à `HEAD`.
+- Test : `tests/pro-q12c-profils-l13-l26.test.js` (7 tests).
+- **Branché / non appelé** : outil et données de livre seulement (aucune fonction de jeu ajoutée). Les attaques gagnées (Great Eagle, Josef Aufwiegler) deviennent des actions via `buildParticipantFromBestiary` (appelants : `js/ui/bestiary-library.js`, `js/core/bestiary-templates.js`) ; `talents`, `spells`, `trappings` : code testé, non appelé.

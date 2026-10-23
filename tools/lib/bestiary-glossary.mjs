@@ -15,7 +15,7 @@ export const SKILL_GROUP_FR = Object.freeze({
 });
 
 /** Variantes d'orthographe ou de pluriel rencontrées dans les livres, ramenées au nom de groupe canonique. */
-export const SKILL_GROUP_ALIASES = Object.freeze({ Intimidation: 'Intimidate', Athlethics: 'Athletics', Tracking: 'Track', Bribe: 'Bribery', Brawl: 'Melee' });
+export const SKILL_GROUP_ALIASES = Object.freeze({ Intimidation: 'Intimidate', Athlethics: 'Athletics', Tracking: 'Track', Bribe: 'Bribery', Brawl: 'Melee', Intuation: 'Intuition' });
 
 const BASE = { Basic: 'Base', Brawling: 'Bagarre', Brawl: 'Bagarre', Polearm: 'Armes d’hast', 'Pole-arm': 'Armes d’hast', 'Pole-Arm': 'Armes d’hast', 'Pole Arm': 'Armes d’hast', Fencing: 'Escrime', 'Two-Handed': 'Deux mains', 'Two-handed': 'Deux mains', 'Two Handed': 'Deux mains', Parry: 'Parade', Cavalry: 'Cavalerie', Flail: 'Fléau' };
 export const SKILL_SPEC_FR = Object.freeze({
@@ -47,4 +47,7 @@ export function skillNameFr(name) {
   return specFr ? { nameFr: `${groupFr} (${specFr})`, verified: true } : { nameFr: `${groupFr} (${specialization})`, verified: false };
 }
 
-export const SKILL_GROUPS = Object.freeze(new Set([...Object.keys(SKILL_GROUP_FR), ...Object.keys(SKILL_GROUP_ALIASES)]));
+/** Compétences imprimées par un livre (Lords of Stone and Steel) dont le nom français n'est pas établi : gardées en anglais, signalées non vérifiées. */
+const UNTRANSLATED_GROUPS = ['Runesmithing'];
+
+export const SKILL_GROUPS = Object.freeze(new Set([...Object.keys(SKILL_GROUP_FR), ...Object.keys(SKILL_GROUP_ALIASES), ...UNTRANSLATED_GROUPS]));

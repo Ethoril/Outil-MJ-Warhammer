@@ -698,6 +698,12 @@
     "Soc": 33
    },
    "wounds": 13,
+   "traits": [
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    }
+   ],
    "nameFrSource": "proposition"
   },
   {

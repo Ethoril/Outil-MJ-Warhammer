@@ -1379,6 +1379,16 @@
      "value": 41
     },
     {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 61
+    },
+    {
+     "name": "Melee (Polearm)",
+     "nameFr": "Corps à corps (Armes d’hast)",
+     "value": 51
+    },
+    {
      "name": "Play (Drum)",
      "nameFr": "Musicien (Tambour)",
      "value": 41

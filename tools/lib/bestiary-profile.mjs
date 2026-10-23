@@ -35,7 +35,7 @@ function readTraitItemPlain(text) {
   const item = clean(text.replace(/\*+$/, ''));
   if (!item) return null;
   // Attaque (« Weapon (Fangs) +7 », « 2x Weapon (Claws) +10 », « Bite +9 ») suivie du nom d'une capacité collée dans la liste : on ne garde que l'attaque.
-  const natural = /^(?:(\d+)\s*[x×]\s*)?(Weapon|Ranged|Bite|Horns|Tail Attack|Tail|Claws?|Beak|Slam|Tongue Attack)\b\s*(?:d\s*)?(?:\(([^()]*)\))?\s*([+-]\s?\d+)(?:\s*\((\d+)\))?/i.exec(item);
+  const natural = /^(?:(\d+)\s*[x×\uFFFD]\s*)?(Weapon|Ranged|Bite|Horns|Tail Attack|Tail|Claws?|Beak|Slam|Tongue Attack)\b\s*(?:d\s*)?(?:\(([^()]*)\))?\s*([+-]\s?\d+)(?:\s*\((\d+)\))?/i.exec(item);
   if (natural && !/[+-]\d/.test(natural[3] || '')) {
     const trait = { name: natural[2].replace(/^./, letter => letter.toUpperCase()), rating: natural[4].replace(/\s+/g, '') };
     if (natural[3]) trait.param = clean(natural[3]);
@@ -79,13 +79,15 @@ export function readSkills(text) {
     // Une ou plusieurs spécialisations avec leur valeur dans la parenthèse : « Melee (Basic 76) », « Melee (Basic 65, Two-Handed 65) ».
     const grouped = /^(.+?)\s*\(([^)]*\d[^)]*)\)$/.exec(item);
     if (grouped) {
-      for (const part of splitList(grouped[2])) {
+      // Valeurs collées sans virgule (« Basic 61 Polearm 51 ») ou séparées par un point (« Politics 73. Warfare 78 ») : coquilles du livre.
+      for (const part of splitList(grouped[2].replace(/(\d)\.\s+(?=[A-Z])/g, '$1, ').replace(/(\d)\s+(?=[A-Z][a-z])/g, '$1, '))) {
         const sub = /^(.*?)\s+([+-]?\d+)$/.exec(part);
         if (sub) skills.push({ name: `${clean(grouped[1])} (${clean(sub[1])})`, value: Number(sub[2]), modifier: /^[+-]/.test(sub[2]) });
       }
       continue;
     }
-    const single = /^(.*?)\s+([+-]?\d+)$/.exec(item);
+    // « Secret Signs (Guilder)40 » : espace oublié par le livre après la parenthèse.
+    const single = /^(.*?)\s+([+-]?\d+)$/.exec(item) || /^(.*\))([+-]?\d+)$/.exec(item);
     skills.push(single ? { name: clean(single[1]), value: Number(single[2]), modifier: /^[+-]/.test(single[2]) } : { name: item, value: null, modifier: false });
   }
   return skills;
@@ -184,7 +186,8 @@ export function listTraits(text, mode, dictionary, key) {
   }
   const rules = [];
   for (const item of splitList(text)) {
-    const colon = item.indexOf(':');
+    // Un « : » dans une parenthèse (« Acute Sense (Vision: as Character Talent) ») fait partie du Trait, pas d'une règle spéciale.
+    const colon = item.replace(/\([^)]*\)/g, group => ' '.repeat(group.length)).indexOf(':');
     if (colon >= 0) {
       const head = clean(item.slice(0, colon));
       const known = [...dictionary].filter(name => head === name || head.startsWith(`${name} `)).sort((a, b) => b.length - a.length)[0];
@@ -233,7 +236,7 @@ export function parseBlock(block, { traitDictionary = new Set(), talentDictionar
     if (talents.length) profile.talents = [...(profile.talents || []), ...talents];
   }
   if (sections['Attack Traits'] !== undefined) Object.assign(profile, listTraits(sections['Attack Traits'], mode, traitDictionary, 'attackTraits'));
-  const optional = sections['Optional Traits'] ?? sections.Optional;
+  const optional = sections['Optional Traits'] ?? sections.Optional ?? sections.Options;
   if (optional !== undefined) profile.optional = splitList(optional).map(readTraitItem).filter(Boolean);
   if (sections.Skills) profile.skills = readSkills(sections.Skills);
   // Liste décrite (V5) : le premier deux-points précède la première virgule. Liste simple avec une clause (« Criminal, …, Doomed: "…", … », L04 p. 64) : lue comme liste.

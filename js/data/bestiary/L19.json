@@ -2502,6 +2502,9 @@
     },
     {
      "name": "Warleader Stinging Tail"
+    },
+    {
+     "name": "Acute Sense (Smell)"
     }
    ],
    "trappings": [
@@ -3105,6 +3108,49 @@
      "ref": "E0-T-059"
     }
    ],
+   "optionalTraits": [
+    {
+     "name": "Belligerent",
+     "ref": "E0-T-004"
+    },
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Big",
+     "ref": "E0-T-071"
+    },
+    {
+     "name": "Blessed",
+     "param": "Ulric",
+     "ref": "E0-T-007"
+    },
+    {
+     "name": "Champion",
+     "ref": "E0-T-010"
+    },
+    {
+     "name": "Die Hard",
+     "ref": "E0-T-075"
+    },
+    {
+     "name": "Fast",
+     "ref": "E0-T-077"
+    },
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    },
+    {
+     "name": "Immune to Psychology",
+     "ref": "E0-T-030"
+    },
+    {
+     "name": "Regeneration",
+     "ref": "E0-T-044"
+    }
+   ],
    "abilities": [
     "E0-T-261"
    ],
@@ -3229,6 +3275,37 @@
     {
      "name": "Tracker",
      "ref": "E0-T-059"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Belligerent",
+     "ref": "E0-T-004"
+    },
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Blessed",
+     "param": "Ulric",
+     "ref": "E0-T-007"
+    },
+    {
+     "name": "Die Hard",
+     "ref": "E0-T-075"
+    },
+    {
+     "name": "Fast",
+     "ref": "E0-T-077"
+    },
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    },
+    {
+     "name": "Stealthy",
+     "ref": "E0-T-050"
     }
    ],
    "keywords": [

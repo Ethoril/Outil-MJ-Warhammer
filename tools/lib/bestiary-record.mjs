@@ -40,7 +40,7 @@ export function cleanTraits(traits = [], { canonical, traitRefs }) {
     const name = canonical(trait.name);
     if (!name) { dropped.push(trait.name); continue; }
     // « Claws +6 », « 2 Claws +4 », « Slam +6 » (V4) sont des Creature Weapons : l'arme nommée devient la précision, le multiplicateur est gardé.
-    const weapon = name === 'Creature Weapons' && !trait.param ? /^(?:(\d+)\s*[x×]?\s*)?([A-Za-z][A-Za-z ]*)$/.exec(String(trait.name).trim()) : null;
+    const weapon = name === 'Creature Weapons' && !trait.param ? /^(?:(\d+)\s*[x×\uFFFD]?\s*)?([A-Za-z][A-Za-z ]*)$/.exec(String(trait.name).trim()) : null;
     const named = weapon && weapon[2].toLowerCase() !== 'creature weapons' ? weapon : null;
     // Une précision « see below » renvoie à un texte voisin : ce n'est pas une valeur.
     const seeElsewhere = /^see\s/i.test(trait.param || '');
@@ -175,7 +175,12 @@ export function buildRecord(extracted, entry, context) {
   const listed = traits.kept.filter(trait => !structural.has(trait.name));
   if (listed.length) record.traits = listed;
   if (optional.kept.length) record.optionalTraits = optional.kept;
-  if (extracted.talents?.length) record.talents = extracted.talents.filter(talent => talent.name && !isNoise(talent.name.replace(/\(.*\)/, ''))).map(talent => ({ name: talent.name, ...(talent.rank ? { rank: talent.rank } : {}) }));
+  // Un Talent du catalogue imprimé dans la liste des Traits d'un profil V4 (« Acute Sense (Vision: as Character Talent) ») est un Talent, pas un Trait.
+  const baseName = name => String(name).replace(/\s*\(.*\)\s*$/, '').toLowerCase();
+  const listedTalents = new Set((extracted.talents || []).map(talent => baseName(talent.name)));
+  const traitTalents = trimmed.filter(trait => !canonical(trait.name) && trait.param && isCatalogueTalent(trait.name) && !listedTalents.has(baseName(trait.name))).map(trait => ({ name: `${trait.name}${trait.param ? ` (${trait.param})` : ''}` }));
+  const talents = [...(extracted.talents || []).filter(talent => talent.name && !isNoise(talent.name.replace(/\(.*\)/, ''))).map(talent => ({ name: talent.name, ...(talent.rank ? { rank: talent.rank } : {}) })), ...traitTalents];
+  if (extracted.talents?.length || traitTalents.length) record.talents = talents;
   if (extracted.trappings?.length) record.trappings = joinTrappings(extracted.trappings, TRAPPING_JOINS[entry.id]).filter(isTrappingName);
   if (extracted.notes?.length) record.notes = extracted.notes;
   if (extracted.mutations?.length) record.mutations = extracted.mutations;

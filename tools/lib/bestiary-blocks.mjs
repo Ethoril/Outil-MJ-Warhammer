@@ -12,7 +12,7 @@ const HEADER = /\bM\s+WS\s+BS\s+S\s+T\s+I\s+Agi?\s+Dex\s+Int\s+W[Pp]\s+Fel(?:\s+
 const CELL = /(?:[+\-−–—�]?\d+\*?|[-–—−�]+|\*)/g;
 const DASH = /^[-–—−�]+$/;
 const NEGATIVE = /^[\-−–—�]\d/;
-const SECTION_START = /^(Lore of [A-Z][a-z]+(?=:)|Magic of [A-Z][a-z]+(?=:)|High Magic(?=:)|Yenlui State|Obsession|Traits and Talents|Traits|Attack Traits|Skills|Talents|Trappings|Spells|Mutations|Optional|Armour|Attacks|Petty Magic|Arcane Magic|Weapons?|Special|Fate Points?|Miracles)\b/;
+const SECTION_START = /^(Lore of [A-Z][a-z]+(?=:)|Magic of [A-Z][a-z]+(?=:)|High Magic(?=:)|Yenlui State|Obsession|Traits and Talents|Traits|Attack Traits|Skills|Talents|Trappings|Spells|Mutations|Optional|Options|Armour|Attacks|Petty Magic|Arcane Magic|Weapons?|Special|Fate Points?|Miracles)\b/;
 const BARE_LABEL = /^(Attacks|Armour|Skills|Traits and Talents|Traits|Optional Traits|Talents|Trappings|Spells)$/;
 /** Lecture élargie (étiquettes décalées, interligne double, « Options: ») : réservée aux livres importés depuis L16, pour ne pas bouger les livres déjà relus. */
 let lenient = false;

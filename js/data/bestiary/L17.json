@@ -2370,6 +2370,24 @@
      "ref": "E0-T-062"
     }
    ],
+   "optionalTraits": [
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    },
+    {
+     "name": "Hungry",
+     "ref": "E0-T-029"
+    },
+    {
+     "name": "Infestation",
+     "ref": "E0-T-033"
+    },
+    {
+     "name": "Territorial",
+     "ref": "E0-T-056"
+    }
+   ],
    "nameFrSource": "proposition"
   },
   {

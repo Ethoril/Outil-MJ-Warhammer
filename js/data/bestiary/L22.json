@@ -2457,6 +2457,18 @@
      "value": 37
     },
     {
+     "name": "Lore (Mushroom Stews)",
+     "nameFr": "Savoir (Mushroom Stews)",
+     "frUnverified": true,
+     "value": 65
+    },
+    {
+     "name": "Lore (Middle Mountains)",
+     "nameFr": "Savoir (Middle Mountains)",
+     "frUnverified": true,
+     "value": 53
+    },
+    {
      "name": "Melee (Basic)",
      "nameFr": "Corps à corps (Base)",
      "value": 37
@@ -2514,6 +2526,54 @@
     "Soc": 25
    },
    "wounds": 32,
+   "size": "large",
+   "attacks": [
+    {
+     "name": "Beak",
+     "damage": 8,
+     "trait": "Creature Weapons"
+    },
+    {
+     "name": "Claws",
+     "damage": 6,
+     "trait": "Creature Weapons",
+     "count": 2
+    }
+   ],
+   "traits": [
+    {
+     "name": "Creature Weapons",
+     "rating": "+8",
+     "param": "Beak",
+     "ref": "E0-T-288"
+    },
+    {
+     "name": "Creature Weapons",
+     "rating": "+6",
+     "param": "Claws",
+     "count": 2,
+     "ref": "E0-T-288"
+    },
+    {
+     "name": "Fear",
+     "rating": "1",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Fly",
+     "rating": "100",
+     "ref": "E0-T-023"
+    },
+    {
+     "name": "Skittish",
+     "ref": "E0-T-047"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    }
+   ],
    "optionalTraits": [
     {
      "name": "Size",
@@ -2533,8 +2593,10 @@
      "ref": "E0-T-056"
     }
    ],
-   "specialRules": [
-    "Acute Sense (Vision"
+   "talents": [
+    {
+     "name": "Acute Sense (Vision: as Character Talent)"
+    }
    ],
    "keywords": [
     "oiseau-geant"

@@ -181,6 +181,14 @@ export const BODY_OVERRIDES = Object.freeze({
   'L17:210:0': [
     "Traits: Afraid (Snakes), Armour 6 (12), Corruption (Moderate), Distracting, Ward (9+), Weapon (Chaos Runeblade) +10 Skills: Animal Care 87, Athletics 85, Bribery 60, Channelling (Dhar 115, Hysh 95), Charm 55, Consume Alcohol 72, Cool 105, Dodge 80, Endurance 82, Entertain (Acting 65, Singing 65), Evaluate 97, Gossip 60, Intimidate 64, Intuition 98, Language (Classical 97, Dark Tongue 97, Magick 117), Leadership 65, Lore (Altdorf 87, Daemonology 97, Dark Magic 97, Magic 107, Nehekhara 87, Tzeentch 99, Warfare 87), Melee (Basic 82, Polearm 72), Perception 88, Pick Lock 78, Research 97, Ride (Dragon 90, Horse 80), Sleight of Hand 78, Stealth (Rural) 80 Talents: Aethyric Attunement, Animal Affinity, Arcane Lore (Daemonology, Lore of Light), Cat-tongued, Chaos Magic (Tzeentch), Combat Aware, Commanding Presence, Detect Artefact, Doomed (`A skein of fate is woven through your life, winding like a serpent. Understand it or face damnation.'), Fast Hands, Frightening, Impassioned Zeal, Instinctive Diction, Iron Will, Lightning Reflexes, Luck 3, Magical Sense, Menacing, Nimble Fingered, Petty Magic, Read/Write, Savant (Tzeentch), Savvy, Second Sight, Sixth Sense, Strike Mighty Blow, Strong-minded, Tower of Memories, Very Resilient, War Wizard, Wilful Corruption Spells: Petty Magic Spells: Dart, Drain, Eavesdrop, Open Lock, Sounds, Warning Arcane Spells: Bolt, Blast, Corrosive Blood, Distracting, Entangle, Flight, Manifest Lesser Daemon, Octagram, Teleport, Ward Lore of Daemonology Spells: Detect Daemon, Manifest Lesser Daemon, Octagram Lore of Light Spells: Abulla's Snare, Assault of Stone, Banishment, Blinding Light, Driving Intent, Eyes of Volans, Hands of Karkora, Net of Amyntok, Speed of Thought, Time Amok Lore of Tzeentch Spells: Bolt of Change, Boon of Tzeentch, Blue Fire of Tzeentch, Curse of Tzeentch, The Flickering Flames of Fickle Fate, Mindfire, Pink Fire of Tzeentch, Transformation of Tzeentch, Treason of Tzeentch, Tzeentch's Firestorm, Tzeentch's Golden Aura, Sense the Skein, Word of Tzeentch Trappings: Chaos Armour (cannot be removed), Chaos Runeblade (+SB+5, Damaging, Hack, Magical, Penetrating, Unbreakable), The Cloak of Golden Glamour, Grimoire of Dark Magicks, Skull of Katam, Talisman of Tzeentch Mental Corruption: Hollow Heart\r"
   ],
+  // Altdorf (L21) p. 22 : Murderous Altdorfer, le Trait est dans la prose (« Ils sont Frenzied ») ; ni Compétence ni Talent, pas d'armure.
+  'L21:22:1': [
+    'Traits: Frenzy'
+  ],
+  // Ennemi Intérieur, Une nuit agitée (L24) p. 19 : Josef Aufwiegler, la ligne imprimée « Talents: Weapon (Fist) +3 » est une arme (coquille du livre, comme « Weapons (Spear) +8 »).
+  'L24:20:1': [
+    'Traits: Weapon (Fist) +3'
+  ],
   // Van Hal's Stone (L10) p. 51 : Graug the Terrible, la liste des Traits est entrecoupée par la prose de la colonne voisine.
   'L10:51:1': [
     'Traits',

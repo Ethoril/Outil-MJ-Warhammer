@@ -927,7 +927,13 @@
     "Soc": 73
    },
    "wounds": 10,
-   "talents": [],
+   "attacks": [
+    {
+     "name": "Fist",
+     "damage": 3,
+     "trait": "Weapon"
+    }
+   ],
    "nameFrSource": "proposition"
   },
   {
@@ -2844,6 +2850,13 @@
     "Soc": 58
    },
    "wounds": 20,
+   "attacks": [
+    {
+     "name": "Dagger",
+     "damage": 5,
+     "trait": "Weapon"
+    }
+   ],
    "traits": [
     {
      "name": "Corruption",
@@ -2878,7 +2891,21 @@
     },
     {
      "name": "Mutation",
+     "param": "Cosmetic: Extra mouth on stomach",
      "ref": "E0-T-040"
+    },
+    {
+     "name": "Spellcaster",
+     "param": "Daemonology, Slaanesh: Breath, Distracting, Eavesdrop, Manifest Lesser Daemon, Mundane Aura, Open Lock",
+     "ref": "E0-T-048"
+    },
+    {
+     "name": "Painless",
+     "ref": "E0-T-042"
+    },
+    {
+     "name": "Tough",
+     "ref": "E0-T-086"
     }
    ],
    "keywords": [
@@ -3937,6 +3964,18 @@
     "Soc": 43
    },
    "wounds": 28,
+   "attacks": [
+    {
+     "name": "Tail",
+     "damage": 6,
+     "trait": "Tail"
+    },
+    {
+     "name": "Dagger",
+     "damage": 5,
+     "trait": "Weapon"
+    }
+   ],
    "skills": [
     {
      "name": "Channelling",
@@ -4005,7 +4044,26 @@
     },
     {
      "name": "Mutation",
+     "param": "Cosmetic: Maggoty Tail",
      "ref": "E0-T-040"
+    },
+    {
+     "name": "Spellcaster",
+     "param": "Nurgle: Breath, Corrosive Blood, Reveal the Inner Beauty, Shock, Sleep",
+     "ref": "E0-T-048"
+    },
+    {
+     "name": "Painless",
+     "ref": "E0-T-042"
+    },
+    {
+     "name": "Tail",
+     "rating": "6",
+     "ref": "E0-T-054"
+    },
+    {
+     "name": "Tough",
+     "ref": "E0-T-086"
     }
    ],
    "trappings": [
@@ -5868,6 +5926,11 @@
      "name": "Haggle",
      "nameFr": "Marchandage",
      "value": 81
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 75
     },
     {
      "name": "Language (Bretonnian)",
