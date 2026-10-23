@@ -15,6 +15,7 @@ Plan : `PLAN_PRO_QUALITE_E.md`. Branche `pro/qualite-e`, départ `9c12613`. Choi
 | Q8 | FAIT | (voir `git log`, « Q8 ») |
 | Q9 | FAIT | (voir `git log`, « Q9 ») |
 | Q10 | BLOCKED (question au MJ, `QE-Q10-1`) | aucun (rien modifié) |
+| Q10b | FAIT | (voir `git log`, « Q10b ») |
 | R | FAIT (avec réserve : manques de complétude non justifiés un par un) | (voir `git log`, « R ») |
 
 ## Q0 — contrôle de complétude
@@ -157,3 +158,13 @@ Branché / non appelé (grep dans `js/`) :
 - **12 valeurs inchangées** : comparaison des 23 livres avec `9c12613` (caractéristiques et Blessures de chaque profil) : 0 écart, 0 profil ajouté ou retiré.
 - **Recette** : `node tools/run-divine-recipe.mjs` : « RECETTE DIVINE VERTE — 26 commandes » (dont la suite complète `node`, sans échec ; le reçu `recipe-receipt.json` existe désormais). `tmp/divin/base-manifest.json` recréé depuis les 4 sources protégées de `9c12613`.
 - **Tableau branché / non appelé** : Q0-Q3, Q5 : outils et données de livre (aucune fonction de jeu ; `trappings`, `notes`, `conditional`, `spells` : code testé, non appelé). Q4 : attaques branchées via `buildParticipantFromBestiary` ; Immunité : code testé, non appelé. Q6 : branché (`buildParticipantFromBestiary`, appelants dans `bestiary-library.js`, `bestiary-templates.js`, `v5-spell-contracts.js`) ; affichage du champ `notes` non vérifié. Q7 : branché (`removeExpiredSummons` ← `store.js`). Q8 : `attacksAreMagical` et `planNaturalAttack` branchés ; `planSwarm`, `planPsychology`, `planCreatureMagic` : code testé, non appelé. Q9 : `validateFamiliarLink` et la libération branchés via le store ; `linkFamiliar` sans appelant dans l'interface. Q10 : BLOCKED (`QE-Q10-1`).
+
+## Q10b — Master and Commander au catalogue (FAIT)
+
+- Réimport par `tools/generate-reference-catalog.mjs --source-dir=…` (207 talents) ; **seuls les blocs talents du snapshot sont retenus** (la sortie brute écrasait équipement, magie et `sourceManifest`, voir `QE-Q10b-1`). `talent-master-and-commander` (« Maître à bord », Sea of Claws p. 63, limite Bonus de Sociabilité) est reconnu par son id sous « Master and Commander » et « Maître à bord ».
+- Chaîne de données mise à jour par les outils existants : `build-v5-talent-classification.mjs` (tri, clause moteur « manual-approved »), `build-v5-talent-coverage.mjs` (contrat « verified »), `build-v5-divine-contracts.mjs` (empreinte du snapshot) ; inventaire (entrée et empreintes), miroir `Talents.csv` (ligne ajoutée) ; `sw.js` inchangé (aucun fichier nouveau).
+- Effet de bord légitime : le `talent-source.js` importé retire le « = » de saisie de 4 descriptions (Affable, Chance, Coup puissant, Doigts de fée) ; empreintes mises à jour (`QE-Q10b-2`).
+- Moteur : `js/core/v5-effects.js`, repli par nom retiré (le rang vient des lignes résolues par id), nom français corrigé en « Maître à bord ».
+- Comptes 206 → 207 mis à jour dans 4 tests ; nouveau test `tests/pro-q10b-master-and-commander.test.js` (4 tests : catalogue et id, contrat verified, +1 DR par niveau à bord, repli par nom retiré).
+- Branché / non appelé : `leadershipRallySlModifiers` n'a aucun appelant dans `js/` hors de `v5-effects.js` : **code testé, non appelé** (le bonus de Commandement n'est pas appliqué depuis l'interface). Le talent lui-même est dans le catalogue (`getReferenceCatalogue`, `resolveTalent`) donc sélectionnable sur une fiche.
+- Suite complète : verte, aucun échec. **Réserve pour R2** : la recette divine compare snapshot et `Talents.csv` à `tmp/divin/base-manifest.json` ; ce manifeste est à régénérer (`QE-Q10b-4`).

@@ -18,10 +18,10 @@ for (const [date, expected] of [['2026-10-07T10:00:00.000Z', 'instantané local 
   });
 }
 
-test('Lot2 références — 206 identités et empreintes de descriptions actualisées dans l’inventaire portable', async () => {
+test('Lot2 références — 207 identités et empreintes de descriptions actualisées dans l’inventaire portable', async () => {
   const inventory = JSON.parse(await readFile(new URL('../docs/lot2/LOT2_INVENTAIRE_TALENTS.json', import.meta.url), 'utf8'));
-  assert.equal(snapshot.talents.entries.length, 206);
-  assert.equal(inventory.items.length, 206);
+  assert.equal(snapshot.talents.entries.length, 207);
+  assert.equal(inventory.items.length, 207);
   const byId = new Map(snapshot.talents.entries.map(item => [item.id, item]));
   for (const item of inventory.items) {
     assert.ok(byId.has(item.talentId));

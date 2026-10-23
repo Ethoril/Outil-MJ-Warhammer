@@ -256,12 +256,10 @@ export function recoverV5Condition(participant,condition,options={}) {
   return createReceipt(participant,next,{removed:removal.removed,acquiredInstances,needsInput,reminders});
 }
 /** Master and Commander (L25 p.63) : +1 DR par rang aux Tests de Commandement à bord ; le fait « à bord » reste une saisie MJ. */
-export const MASTER_AND_COMMANDER_TALENT=Object.freeze({id:'talent-master-and-commander',nom:'Maître et Commandant',englishName:'Master and Commander',source:'L25 p.63'});
-/** Rang du Talent : lignes résolues du catalogue, ou lignes de fiche reconnues par leur nom (le catalogue de 206 Talents n'inclut pas ce supplément). */
+export const MASTER_AND_COMMANDER_TALENT=Object.freeze({id:'talent-master-and-commander',nom:'Maître à bord',englishName:'Master and Commander',source:'L25 p.63'});
+/** Rang du Talent : lignes résolues du catalogue (« Maître à bord » est au catalogue importé depuis le 23/10/2026). */
 function masterAndCommanderRank(participant){
-  const resolved=acquiredV5Talents(participant).filter(row=>row.talentId===MASTER_AND_COMMANDER_TALENT.id).map(row=>row.rank);
-  const byName=(participant?.talents||[]).filter(row=>row?.status!=='resolved'&&/master\s+and\s+commander|ma[iî]tre\s+et\s+commandant/i.test(String(row?.nom??row?.name??''))).length;
-  return Math.max(0,...resolved,byName);
+  return Math.max(0,...acquiredV5Talents(participant).filter(row=>row.talentId===MASTER_AND_COMMANDER_TALENT.id).map(row=>row.rank));
 }
 export function leadershipRallySlModifiers({participant,onBoardVessel}={}) {
   const modifiers=[],needsInput=[],rank=masterAndCommanderRank(participant);

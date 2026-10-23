@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "contentVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
+  "contentVersion": "references:93602871a0d1833b0c69e74f62e5318ce809b08ecea55623df5e48229cdfbb79",
   "fetchedAt": "2026-10-14T09:18:25.745Z",
-  "localRevision": "2026-10-17-catalogue-v5-reliquats",
+  "localRevision": "2026-10-23-talent-master-and-commander",
   "sourceFiles": {
     "js/fiche/equipment.js": {
       "sha256": "eff19ac1781fa878ad17f631e9584b017be255a1c6e42da675f4d51be107ab93"
@@ -20,30 +20,30 @@
       "sha256": "6c9a2637dfd4d8338f39ced414ffbad424cb9ba1fc00f08615a271a1dca60676"
     },
     "js/catalogue/talent-source.js": {
-      "sha256": "119640eb0ab7eb08a19d24309a143d105eafa939cfe8b2a469f2bebec8cadc0a"
+      "sha256": "b12604e5d6f177348c2ad57ac3a884e14248bc475ea8b02c004122ece03089d2"
     },
     "js/catalogue/referentiel-public.json": {
-      "sha256": "a79dce8ce0f4ec7bcd67857afab741a24237c1e127c68e0199d1333ef26ca2e1"
+      "sha256": "10dbb7c96c97de5603c6e0f87db7399bb9ef4c4157754fda5d0869c350325a02"
     },
     "js/catalogue/talents-sheet-snapshot.json": {
-      "sha256": "a8fd8d339c1902ec9e2693aa3ba48e3bee2a7902c032787087249167f7ea9dd3"
+      "sha256": "fd7e40c35751f7883f269f8b8eb742b63d7669fb3d6e4c378a649633226b0fa8"
     },
     "js/data/equipment-catalog.json": {
-      "sha256": "9e3adb0c9fbb954ea09764d10132743818c30b1aad698d5945be58008e747c25"
+      "sha256": "6bae86e0b9a05a9bc0a9ea311979cda19ca858955fbe8d71a020e506c3fb3440"
     },
     "js/data/skills.json": {
       "sha256": "12e9f8cd6b84884a353245f2ca74e0044fde6841e0db15693434d15a06d74d81"
     },
     "js/data/fiche-catalog.json": {
-      "sha256": "baabcb12d3050b348bf55dbfc82894bd385ace6b1a7e57ab6962251da4c0d203"
+      "sha256": "35e056318d33445355721f92c9a2d186f24a91a72c1d892a6e5fb232a0f4eee7"
     },
     "tools/refresh-equipment-catalog.mjs": {
       "sha256": "ecebb83e089ed246b55d8c121ce90439918e8edb386af9968544a5ea61110d29"
     }
   },
   "published": {
-    "catalogVersion": "sha256:0d272acace5d42634b8bb7f88a547a0eec17bf7cc92aa394079edcf260e2915f",
-    "publishedAt": "2026-10-07",
+    "catalogVersion": "sha256:4d3dff852ab0cf4f10e31ea206e0b8c6baaa7865c049eaacee9d4c2e89c15141",
+    "publishedAt": "2026-10-23",
     "sources": {
       "skills": "js/data/skills.json",
       "careers": "js/data/careers.json",
@@ -3622,7 +3622,7 @@
       ]
     },
     "talents": {
-      "version": "sha256:4e0f6039fc9a9efa31be6a36c863ff302ddcc4b8e042f9c4ea66474809edd2b5",
+      "version": "sha256:4118ad2a8092bd4adc85f3537857d2e557a4cb77b3daf0f35aa6c7e0fb24ba46",
       "entries": [
         {
           "nom": "Acharné",
@@ -7302,6 +7302,14 @@
           ]
         },
         {
+          "id": "talent-4d_61_ee_74_72_65_20_e0_20_62_6f_72_64",
+          "key": "maître à bord",
+          "nom": "Maître à bord",
+          "sources": [
+            "sheet"
+          ]
+        },
+        {
           "id": "talent-4d_61_ee_74_72_65_20_61_72_74_69_73_61_6e",
           "key": "maître artisan",
           "nom": "Maître artisan",
@@ -7558,13 +7566,13 @@
       "aliases": [],
       "templates": [],
       "localDescriptions": [],
-      "descriptionSnapshotVersion": "sha256:0e2a9ccf3059a936e9af670386aa2565f3069127558b77629c267f078b9a956e"
+      "descriptionSnapshotVersion": "sha256:711189dcb64920f251f3b08e06ac8bf4df93e09e8c32390b24c684d1282fbea0"
     }
   },
   "talents": {
     "schemaVersion": 2,
-    "catalogVersion": "sha256:8e1cbacfb94e59532708d5f9fbd69e49c4a5714eba242ec0e90e660da18a2b48",
-    "fetchedAt": "2026-10-14T09:18:25.745Z",
+    "catalogVersion": "sha256:711189dcb64920f251f3b08e06ac8bf4df93e09e8c32390b24c684d1282fbea0",
+    "fetchedAt": "2026-10-23",
     "source": {
       "kind": "google-sheets-public-snapshot",
       "spreadsheetId": "1SCnAJCthdto7ROjovuyDYmz4y9GJBBLfThuYNmYR_Cs",
@@ -7587,7 +7595,7 @@
         "nom": "Affable",
         "englishName": "Suave",
         "sourceLabel": "Affable (Suave)",
-        "description": "=+5 en Sociabilité, sans compter comme Augmentations.",
+        "description": "+5 en Sociabilité, sans compter comme Augmentations.",
         "limitText": "1",
         "source": "Livre de base V5, p. 127 ; achat : p. 191",
         "specializationLabel": null
@@ -7809,7 +7817,7 @@
         "nom": "Chanceux",
         "englishName": "Luck",
         "sourceLabel": "Chanceux (Luck)",
-        "description": "=+1 au maximum de points de Chance par acquisition, jusqu’à +3 avec trois acquisitions.",
+        "description": "+1 au maximum de points de Chance par acquisition, jusqu’à +3 avec trois acquisitions.",
         "limitText": "3",
         "source": "Livre de base V5, p. 122 ; achat : p. 191",
         "specializationLabel": null
@@ -7979,7 +7987,7 @@
         "nom": "Coup puissant",
         "englishName": "Strike Mighty Blow",
         "sourceLabel": "Coup puissant (Strike Mighty Blow)",
-        "description": "=+1 dégât avec les armes de corps à corps, ou +2 si l'attaque a été effectuée avec Avantage V5.",
+        "description": "+1 dégât avec les armes de corps à corps, ou +2 si l'attaque a été effectuée avec Avantage V5.",
         "limitText": "1",
         "source": "Livre de base V5, p. 127 ; achat : p. 191",
         "specializationLabel": null
@@ -8109,7 +8117,7 @@
         "nom": "Doigts de fée",
         "englishName": "Nimble-fingered",
         "sourceLabel": "Doigts de fée (Nimble-fingered)",
-        "description": "=+5 en Dextérité, sans compter comme une Augmentation.",
+        "description": "+5 en Dextérité, sans compter comme une Augmentation.",
         "limitText": "1",
         "source": "Livre de base V5, p. 123 ; achat : p. 191",
         "specializationLabel": null
@@ -8723,6 +8731,16 @@
         "description": "À chaque acquisition, créez un chef-d’œuvre extraordinaire avec une Compétence Art ou Métier. Il impressionne ses témoins et procure des bonus fixés par le MJ, généralement en Sociabilité. Sa vente rapporte au moins dix fois la valeur normale. Chaque nouvelle acquisition produit une nouvelle œuvre.",
         "limitText": "Sans limitation",
         "source": "Livre de base V5, p. 122 ; achat : p. 191",
+        "specializationLabel": null
+      },
+      {
+        "id": "talent-master-and-commander",
+        "nom": "Maître à bord",
+        "englishName": "Master and Commander",
+        "sourceLabel": "Maître à bord (Master and Commander)",
+        "description": "Votre équipage vous respecte et vous fait confiance. Tout Test de Commandement approprié à bord de votre navire ou impliquant votre équipage gagne un bonus de DR égal à vos niveaux dans ce Talent ; le bonus s'applique aux Tests d'équipage comme aux Tests de Commandement individuels. Tests : Commandement.",
+        "limitText": "Bonus de Sociabilité",
+        "source": "Sea of Claws (V4), p. 63",
         "specializationLabel": null
       },
       {
@@ -20134,7 +20152,7 @@
     {
       "worksheet": "Talents",
       "url": "https://docs.google.com/spreadsheets/d/1SCnAJCthdto7ROjovuyDYmz4y9GJBBLfThuYNmYR_Cs/gviz/tq?tqx=out:csv&sheet=Talents",
-      "sha256": "dff408c3dea1cd46ab78ae7debf450e071ca68aba0049f1b736841cff75b80df",
+      "sha256": "6c5b2722067eb1af0a620ea15d916133ef4834eab276797213b4765925cc57fd",
       "fetchedAt": "2026-10-14T09:18:25.745Z",
       "status": "public-export"
     },
