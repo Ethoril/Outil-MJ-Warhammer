@@ -25660,5 +25660,655 @@
       "Ne pas implanter"
     ],
     "statut": "ouvert"
+  },
+  {
+    "id": "F-L20-0001",
+    "phase": "Voyage et environnement",
+    "lot": "L20",
+    "source": "L20 p.8",
+    "question": "Implanter « Brouillard : saison et heure » ? Au d100 : brouillard sur 01–35 au printemps et en automne, 01–10 en été, 01–20 en hiver ; retrancher dix au jet avant midi.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L20-0002",
+    "phase": "Voyage et environnement",
+    "lot": "L20",
+    "source": "L20 p.8",
+    "question": "Implanter « Brouillard : étendue » ? Au d100 : 01–35 quartiers populaires, 36–55 quartiers inquiétants, 56–75 confluence, 76–95 rives, 96–00 toute la ville ; appliquer aux quartiers listés dans chaque groupe.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L20-0003",
+    "phase": "Voyage et environnement",
+    "lot": "L20",
+    "source": "L20 p.8",
+    "question": "Implanter « Brouillard 01–35 : brume légère » ? 01–35 : À plus de cinquante pieds, CT et Perception visuelle subissent −1 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L20-0004",
+    "phase": "Voyage et environnement",
+    "lot": "L20",
+    "source": "L20 p.8",
+    "question": "Implanter « Brouillard 36–51 : brume modérée » ? 36–51 : À plus de vingt pieds, CT et Perception visuelle subissent −1 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L20-0005",
+    "phase": "Voyage et environnement",
+    "lot": "L20",
+    "source": "L20 p.8",
+    "question": "Implanter « Brouillard 52–85 : brouillard » ? 52–85 : À plus de dix pieds, CT et Perception visuelle subissent −2 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L20-0006",
+    "phase": "Voyage et environnement",
+    "lot": "L20",
+    "source": "L20 p.8",
+    "question": "Implanter « Brouillard 86–99 : purée de pois » ? 86–99 : À plus de cinq pieds, CT et Perception visuelle subissent −3 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L20-0007",
+    "phase": "Voyage et environnement",
+    "lot": "L20",
+    "source": "L20 p.8",
+    "question": "Implanter « Brouillard 00 : brouet miasmatique » ? 00 : À plus de cinq pieds, CT et Perception visuelle subissent −3 DR ; les Tests pour éviter une maladie subissent −1 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L20-0008",
+    "phase": "Magie générale et objets",
+    "lot": "L20",
+    "source": "L20 p.21",
+    "question": "Implanter « Bâton de Volans : toucher » ? Pour le seigneur sorcier qui le manie, le bâton compte comme une partie du corps afin de toucher lors d’une incantation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L20-0009",
+    "phase": "Magie générale et objets",
+    "lot": "L20",
+    "source": "L20 p.21",
+    "question": "Implanter « Bâton de Volans : Tests magiques » ? Le bâton ajoute deux DR aux Tests de Focalisation et de Langue (Magick).",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L20-0010",
+    "phase": "Magie générale et objets",
+    "lot": "L20",
+    "source": "L20 p.21",
+    "question": "Implanter « Bâton de Volans : éviter l’incident » ? Lors d’une Incantation imparfaite du porteur, Volonté −1 DR réussie empêche l’incident.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L20-0011",
+    "phase": "Magie générale et objets",
+    "lot": "L20",
+    "source": "L20 p.21",
+    "question": "Implanter « Bâton ardent : toucher » ? Le bâton ardent compte comme une partie du corps de son porteur pour toucher lors des sorts.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L20-0012",
+    "phase": "Magie générale et objets",
+    "lot": "L20",
+    "source": "L20 p.21",
+    "question": "Implanter « Bâton ardent : portée du Feu » ? Le porteur double la portée des sorts du Domaine du Feu qu’il lance.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L20-0013",
+    "phase": "Magie générale et objets",
+    "lot": "L20",
+    "source": "L20 p.21",
+    "question": "Implanter « Bâton ardent : zone du Feu » ? Le porteur peut augmenter la zone d’un sort du Domaine du Feu d’un nombre de yards égal à son BFM.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L20-0014",
+    "phase": "Magie générale et objets",
+    "lot": "L20",
+    "source": "L20 p.21",
+    "question": "Implanter « Épée flamboyante : enchantement » ? En présence d’Aqshy, la lame reçoit les effets d’Épée flamboyante de Rhuin.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L20-0015",
+    "phase": "Magie générale et objets",
+    "lot": "L20",
+    "source": "L20 p.21",
+    "question": "Implanter « Épée flamboyante : retour des flammes » ? Dissipation ou absence d’Aqshy peut éteindre l’effet ; il revient au Tour suivant où la lame est exposée à Aqshy.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L20-0016",
+    "phase": "Magie générale et objets",
+    "lot": "L20",
+    "source": "L20 p.21",
+    "question": "Implanter « Pierre de Feu d’Agni » ? Toute tentative réussie d’incanter un sort du Domaine du Feu à huit yards de la pierre gagne un DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L20-0017",
+    "phase": "Magie générale et objets",
+    "lot": "L20",
+    "source": "L20 p.21",
+    "question": "Implanter « Rubis ardent : connaître la formule » ? Une personne à proximité peut entendre la formule chuchotée lors de l’activation avec Perception −2 DR réussie.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L20-0018",
+    "phase": "Magie générale et objets",
+    "lot": "L20",
+    "source": "L20 p.21",
+    "question": "Implanter « Rubis ardent : Protection » ? Dire la formule enveloppe le porteur de flammes magiques et lui accorde Protection (7+) pendant huit Rounds.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L20-0019",
+    "phase": "Magie générale et objets",
+    "lot": "L20",
+    "source": "L20 p.21",
+    "question": "Implanter « Rubis ardent : recharge » ? Après activation, le rubis est inutilisable pendant d10 jours ; le délai est divisé par deux s’il reste près d’un être ou objet imprégné d’Aqshy.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L20-0020",
+    "phase": "Maladies et poisons",
+    "lot": "L20",
+    "source": "L20 p.50",
+    "question": "Implanter « Dormir chez Miriam : risque sanitaire » ? Chaque nuit en dortoir chez Miriam expose avec cinq pour cent de risque à la vérole démangeante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L20-0021",
+    "phase": "Maladies et poisons",
+    "lot": "L20",
+    "source": "L20 p.50",
+    "question": "Implanter « Manger chez Miriam : risque sanitaire » ? Le repas de Miriam expose avec cinq pour cent de risque à la Courante galopante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L20-0026",
+    "phase": "Équipement et artisanat",
+    "lot": "L20",
+    "source": "L20 p.78",
+    "question": "Implanter « Croc runique de Solland : lame » ? L’épée est magique, porte Incassable et Raffiné (3), et blesse les créatures immunisées aux attaques non magiques.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L20-0028",
+    "phase": "Équipement et artisanat",
+    "lot": "L20",
+    "source": "L20 p.94",
+    "question": "Implanter « Magnin : usage en mêlée » ? Le couteau Magnin s’emploie comme une dague en mêlée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L20-0029",
+    "phase": "Équipement et artisanat",
+    "lot": "L20",
+    "source": "L20 p.94",
+    "question": "Implanter « Magnin : lancer maîtrisé » ? Le lancer pleinement maîtrisé a une portée de BF × deux, des dégâts de BF + trois, Percutant et un encombrement nul.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L20-0030",
+    "phase": "Équipement et artisanat",
+    "lot": "L20",
+    "source": "L20 p.94",
+    "question": "Implanter « Magnin : porteur non formé » ? Sans maîtrise, le lancer compte comme un couteau de lancer ordinaire ; il reçoit Imprécis et Lent si le porteur n’atteint pas à la fois Force 58 et Tir (Lancer) 83.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L20-0031",
+    "phase": "Équipement et artisanat",
+    "lot": "L20",
+    "source": "L20 p.149",
+    "question": "Implanter « Fusil de chasse de Kazran » ? Le fusil de chasse de Kazran a la moitié de la portée et du prix d’un long fusil du Hochland, et environ la moitié de sa longueur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L20-0032",
+    "phase": "Équipement et artisanat",
+    "lot": "L20",
+    "source": "L20 p.149",
+    "question": "Implanter « Armes à poudre de Kazran » ? Toutes les armes à poudre produites par Kazran possèdent Raffiné et Solide.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L20-0033",
+    "phase": "Magie générale et objets",
+    "lot": "L20",
+    "source": "L20 p.153",
+    "question": "Implanter « Hexxerbezrik : Vents favorables » ? Dans ce quartier, incanter ou focaliser pour les Domaines du Métal, Vie, Cieux, Ombres, Mort et Feu gagne +1 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L20-0034",
+    "phase": "Magie générale et objets",
+    "lot": "L20",
+    "source": "L20 p.153",
+    "question": "Implanter « Altdorf : Ghur repoussé » ? Dans les murs d’Altdorf, les Tests pour focaliser et incanter des sorts d’Arcane avec Ghur subissent −2 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L20-0035",
+    "phase": "Magie générale et objets",
+    "lot": "L20",
+    "source": "L20 p.216",
+    "question": "Implanter « Bouton brûlant : contact » ? Toucher une cible avec ce bouton d’argent inflige un Enflammé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L20-0036",
+    "phase": "Magie générale et objets",
+    "lot": "L20",
+    "source": "L20 p.216",
+    "question": "Implanter « Bouton brûlant : attaque opposée » ? En combat ou contre une cible non consentante, le porteur doit réussir une opposition de Bagarre, généralement contre Corps à corps ou Esquive.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L20-0037",
+    "phase": "Magie générale et objets",
+    "lot": "L20",
+    "source": "L20 p.216",
+    "question": "Implanter « Bouton brûlant : corruption » ? Le bouton est une source mineure de Corruption.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L20-0038",
+    "phase": "Entre-aventures",
+    "lot": "L20",
+    "source": "L20 p.219",
+    "question": "Implanter « Apprendre une arme inhabituelle » ? Après une activité d’entraînement, Corps à corps ou Tir −1 DR, avec la spécialisation de l’arme ; réussite, maîtrise de l’arme.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L20-0039",
+    "phase": "Entre-aventures",
+    "lot": "L20",
+    "source": "L20 p.219",
+    "question": "Implanter « Entraînement : nouvel essai » ? Après un échec d’entraînement, attendre la prochaine période entre aventures avant de recommencer.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L20-0040",
+    "phase": "Entre-aventures",
+    "lot": "L20",
+    "source": "L20 p.219",
+    "question": "Implanter « Étudier un objet magique » ? Consacrer une activité à l’étude de l’objet et faire Recherche −1 DR pour découvrir son usage selon le barème.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L20-0041",
+    "phase": "Entre-aventures",
+    "lot": "L20",
+    "source": "L20 p.219",
+    "question": "Implanter « Objet magique : +4 DR ou mieux » ? À +4 DR ou mieux, découvrir l’usage complet de l’objet, ainsi que ses particularités et ses dangers.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L20-0042",
+    "phase": "Entre-aventures",
+    "lot": "L20",
+    "source": "L20 p.219",
+    "question": "Implanter « Objet magique : +0 réussi à +3 DR » ? À +0 réussi jusqu’à +3 DR, découvrir la fonction principale de l’objet et comment l’activer.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L20-0043",
+    "phase": "Entre-aventures",
+    "lot": "L20",
+    "source": "L20 p.219",
+    "question": "Implanter « Objet magique : −0 raté à −3 DR » ? De −0 raté à −3 DR, ne rien apprendre d’utile sur l’objet.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L20-0044",
+    "phase": "Entre-aventures",
+    "lot": "L20",
+    "source": "L20 p.219",
+    "question": "Implanter « Objet magique : −4 DR ou pire » ? À −4 DR ou pire, ne rien découvrir et passer le Test d’exposition modérée à la Corruption provoquée par la manipulation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L20-0045",
+    "phase": "Entre-aventures",
+    "lot": "L20",
+    "source": "L20 p.220",
+    "question": "Implanter « Mécénat : investir et reprendre » ? Comme variante de Banque, investir au moins cinq CO dans un dramaturge ; consacrer une autre activité à récupérer l’investissement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L20-0046",
+    "phase": "Entre-aventures",
+    "lot": "L20",
+    "source": "L20 p.220",
+    "question": "Implanter « Mécénat : évaluer le résultat » ? Au retrait de l’investissement, Évaluation +0 détermine le résultat du spectacle et les retours de la table.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L20-0047",
+    "phase": "Entre-aventures",
+    "lot": "L20",
+    "source": "L20 p.220",
+    "question": "Implanter « Mécénat : +6 DR ou mieux » ? Le capital revient avec vingt pour cent de bénéfice ; durant l’aventure suivante, inverser les Tests de Sociabilité envers quiconque apprécie le théâtre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L20-0048",
+    "phase": "Entre-aventures",
+    "lot": "L20",
+    "source": "L20 p.220",
+    "question": "Implanter « Mécénat : +3 à +5 DR » ? Le capital revient ; inverser un Test de Sociabilité durant l’aventure suivante envers une personne qui apprécie les arts.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L20-0049",
+    "phase": "Entre-aventures",
+    "lot": "L20",
+    "source": "L20 p.220",
+    "question": "Implanter « Mécénat : +0 réussi à +2 DR » ? La moitié du capital revient ; inverser un Test de Sociabilité durant l’aventure suivante envers une personne qui apprécie les arts.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L20-0050",
+    "phase": "Entre-aventures",
+    "lot": "L20",
+    "source": "L20 p.220",
+    "question": "Implanter « Mécénat : −0 raté à −2 DR » ? L’investissement est perdu.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L20-0051",
+    "phase": "Entre-aventures",
+    "lot": "L20",
+    "source": "L20 p.220",
+    "question": "Implanter « Mécénat : −3 à −5 DR » ? Le capital est perdu ; un noble offensé jure de défier en duel tous les mécènes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L20-0052",
+    "phase": "Entre-aventures",
+    "lot": "L20",
+    "source": "L20 p.220",
+    "question": "Implanter « Mécénat : −6 DR ou pire » ? Le spectacle attire soit l’inspecteur fiscal royal, soit un répurgateur local ; le joueur choisit lequel.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L20-0053",
+    "phase": "Entre-aventures",
+    "lot": "L20",
+    "source": "L20 p.220",
+    "question": "Implanter « Recherche au Collège : accès » ? Un mage licencié peut consacrer une activité à la recherche dans son ancien Collège pour réviser et mémoriser ses sorts.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L20-0054",
+    "phase": "Entre-aventures",
+    "lot": "L20",
+    "source": "L20 p.220",
+    "question": "Implanter « Recherche au Collège : réduction de PX » ? Recherche +0 ; chaque DR positif autorise l’achat d’un sort avec cent PX de moins, sans descendre sous cent PX par sort.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L20-0055",
+    "phase": "Entre-aventures",
+    "lot": "L20",
+    "source": "L20 p.220",
+    "question": "Implanter « Recherche au Collège : achat immédiat » ? Pour profiter de la réduction, acheter immédiatement les sorts ; aucune remise à conserver pour une autre période.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
   }
 ]

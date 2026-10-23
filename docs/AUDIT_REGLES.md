@@ -27,7 +27,7 @@ L’audit de couverture est statique : une référence moteur ne vaut pas recett
 | L17 — Winds Of Magic.pdf | 367 | 0 | 12 | 1 | 353 | 1 |
 | L18 — WFRP_Power_Behind_the_Throne_Companion.pdf | 100 | 0 | 0 | 0 | 96 | 4 |
 | L19 — WFRP-Middenheim-City-of-the-White-Wolf_18.01.2021.pdf | 155 | 0 | 0 | 0 | 152 | 3 |
-| L20 — WFRP_Altdorf_Crown_of_the_Empire.pdf | 0 | 0 | 0 | 0 | 0 | 0 |
+| L20 — WFRP_Altdorf_Crown_of_the_Empire.pdf | 62 | 0 | 0 | 0 | 58 | 4 |
 | L21 — WFRP_Empire_in_Ruins_Companion.pdf | 0 | 0 | 0 | 0 | 0 | 0 |
 | L22 — WFRP_The_Horned_Rat_Enemy_Within_Campaign_Director_s_Cut_Volume_4_Companion1.pdf | 0 | 0 | 0 | 0 | 0 | 0 |
 | L23 — Warhammer_Fantasy_Roleplay_Enemy_in_Shadows_Companion.pdf | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -73,14 +73,14 @@ L05 — noms français seulement : 219 entrées avec nom sourcé et 100 avec ter
 | Destin et Chance | 12 | 0 | 3 | 0 | 9 | 0 |
 | Divin | 7 | 0 | 0 | 0 | 7 | 0 |
 | Divin — renvois | 9 | 0 | 0 | 0 | 9 | 0 |
-| Divination | 20 | 0 | 0 | 0 | 19 | 1 |
+| Divination | 23 | 0 | 0 | 0 | 22 | 1 |
 | Dons et talents | 4 | 0 | 0 | 0 | 4 | 0 |
-| Entre-aventures | 94 | 0 | 0 | 0 | 83 | 11 |
+| Entre-aventures | 112 | 0 | 0 | 0 | 101 | 11 |
 | Entre-aventures et progression | 87 | 0 | 0 | 0 | 87 | 0 |
 | Environnement magique | 45 | 0 | 0 | 0 | 45 | 0 |
 | Familiers | 30 | 0 | 10 | 0 | 20 | 0 |
 | Grimoires | 18 | 0 | 0 | 0 | 18 | 0 |
-| Hors granularité | 7 | 0 | 0 | 0 | 0 | 7 |
+| Hors granularité | 11 | 0 | 0 | 0 | 0 | 11 |
 | Incidents magiques | 18 | 0 | 0 | 0 | 18 | 0 |
 | Intrigues et société | 5 | 0 | 0 | 0 | 5 | 0 |
 | Jeux et compétitions | 77 | 0 | 0 | 0 | 76 | 1 |
@@ -88,9 +88,9 @@ L05 — noms français seulement : 219 entrées avec nom sourcé et 100 avec ter
 | Magie : sorts existants | 32 | 0 | 0 | 0 | 32 | 0 |
 | Magie et traditions | 1 | 0 | 0 | 0 | 1 | 0 |
 | Magie générale | 59 | 14 | 18 | 0 | 26 | 1 |
-| Magie générale et objets | 17 | 0 | 0 | 0 | 15 | 2 |
+| Magie générale et objets | 34 | 0 | 0 | 0 | 32 | 2 |
 | Magie — incidents | 43 | 16 | 4 | 23 | 0 | 0 |
-| Maladies et poisons | 61 | 0 | 0 | 0 | 60 | 1 |
+| Maladies et poisons | 63 | 0 | 0 | 0 | 62 | 1 |
 | Montures | 27 | 0 | 1 | 0 | 26 | 0 |
 | Objets magiques | 89 | 0 | 0 | 2 | 87 | 0 |
 | PNJ — procédures | 14 | 0 | 0 | 0 | 12 | 2 |
@@ -99,9 +99,9 @@ L05 — noms français seulement : 219 entrées avec nom sourcé et 100 avec ter
 | Prières — clauses manquantes | 2 | 0 | 0 | 0 | 2 | 0 |
 | Progression | 2 | 0 | 0 | 0 | 2 | 0 |
 | Psychologie | 15 | 0 | 0 | 15 | 0 | 0 |
-| Religion | 2 | 0 | 0 | 0 | 2 | 0 |
+| Religion | 4 | 0 | 0 | 0 | 4 | 0 |
 | Religion — renvois | 4 | 0 | 0 | 0 | 4 | 0 |
-| Runes | 27 | 0 | 0 | 0 | 27 | 0 |
+| Runes | 28 | 0 | 0 | 0 | 28 | 0 |
 | Récolte et commerce | 13 | 0 | 0 | 0 | 13 | 0 |
 | Soins et remèdes | 10 | 0 | 0 | 0 | 10 | 0 |
 | Talents | 231 | 80 | 55 | 83 | 13 | 0 |
@@ -110,12 +110,12 @@ L05 — noms français seulement : 219 entrées avec nom sourcé et 100 avec ter
 | Tests | 35 | 16 | 2 | 0 | 17 | 0 |
 | Transformations | 5 | 0 | 0 | 0 | 5 | 0 |
 | Vents de magie | 79 | 0 | 0 | 0 | 79 | 0 |
-| Voyage et environnement | 71 | 0 | 0 | 0 | 71 | 0 |
+| Voyage et environnement | 78 | 0 | 0 | 0 | 78 | 0 |
 | Voyage et navigation | 11 | 0 | 0 | 0 | 11 | 0 |
 | Véhicules et combat naval | 59 | 0 | 1 | 0 | 58 | 0 |
 | Véhicules et navigation | 5 | 0 | 0 | 0 | 5 | 0 |
 | Équipement | 5 | 0 | 0 | 0 | 5 | 0 |
-| Équipement et artisanat | 12 | 0 | 0 | 0 | 12 | 0 |
+| Équipement et artisanat | 20 | 0 | 0 | 0 | 20 | 0 |
 | Équipement spécialisé | 20 | 0 | 1 | 0 | 19 | 0 |
 | États | 29 | 12 | 15 | 1 | 1 | 0 |
 
@@ -1200,6 +1200,9 @@ L05 — noms français seulement : 219 entrées avec nom sourcé et 100 avec ter
 - **F-L17-0056 — Accès à la Psychométrie** (L17 p.47, absent) : Compétence avancée d’Int réservée aux humains, incompatible avec Augure. À la création, céder un talent aléatoire d’espèce sauf carrière Psychomètre ; seules certaines carrières permettent ensuite de progresser. Mystique,Mage de laHaie,Nonne,Prêtre,Psychomètre,Prêtre-guerrier,Sorcier,Mage ; source47-48. Accès à la compétence distinct de son Test.
 - **F-L17-0057 — Usage de Psychométrie** (L17 p.47, absent) : Toucher l’objet ou la personne, ou être sur le lieu, pour lire son passé ; chaque usage exige Endurance +2 DR ou un Exténué. Recherche statique dans js/core, js/ui et js/data : aucun flux dédié à cette clause retrouvé. Une saisie générique de Test, modificateur ou État ne prouve pas sa procédure ni son déclencheur.
 - **F-L17-0058 — Barème de Psychométrie** (L17 p.48, absent) : Sur réussite : +6 DR donne au moins trois informations dont une pertinente, +4/5 deux, +2/3 une, +0/1 une métaphore. Sur échec : 0/−1 rien, −2/3 indice trompeur, −4/5 visions perturbantes, ≤−6 cauchemars et une Corruption. Table48vue : ne pas transformer+6en troisfaitsimportants. Aucune procédure dédiée repérée.
+- **F-L20-0022 — Psychométrie : accès** (L20 p.61, absent) : Compétence d’Intelligence réservée aux humains ; à la création, céder un talent aléatoire ; progression réservée aux carrières magiques et religieuses citées. L20 p.61 lu et vu : Mystique, Mage de la Haie, Nonne, Prêtre, Prêtre-guerrier, Sorcier, Mage. L17 p.47–48, plus récent, complète l’accès avec Psychomètre et l’incompatibilité avec Augure ; ne pas retirer ces ajouts au profit de L20. Déjà porté par l’inventaire référencé : Clause déjà recensée dans l’inventaire référencé ; aucun second sélecteur F1.
+- **F-L20-0023 — Psychométrie : contact et fatigue** (L20 p.61, absent) : Être sur les lieux, toucher l’objet ou la personne concernée ; après chaque usage, Résistance +2 DR ou un Exténué, quel que soit le résultat. Même clause que L17, plus récent. Endurance Test est ici la compétence française Résistance, pas la caractéristique E ; aucun flux spécifique repéré. Déjà porté par l’inventaire référencé : Clause déjà recensée dans l’inventaire référencé ; aucun second sélecteur F1.
+- **F-L20-0024 — Psychométrie : informations et corruption** (L20 p.61, absent) : De +6 DR aux échecs, appliquer les informations, métaphores, erreurs et cauchemars du barème ; à −6 ou pire, un point de Corruption mentale. Table p.61 vue : +6 au moins trois informations dont une pertinente, +4/5 deux, +2/3 une, +0/1 métaphore ; −0/−1 rien, −2/−3 erreur, −4/−5 visions trompeuses, ≤−6 cauchemars/Corruption mentale. Le meurtre illustratif ne devient pas un résultat universel. Déjà porté par l’inventaire référencé : Clause déjà recensée dans l’inventaire référencé ; aucun second sélecteur F1.
 
 ### Dons et talents
 
@@ -1293,6 +1296,24 @@ L05 — noms français seulement : 219 entrées avec nom sourcé et 100 avec ter
 - **F-L16-0140 — Prêter le serment de Tueur** (L16 p.67, absent) : Après une semaine de rupture et d’abandon des possessions, passer au niveau 1 de Tueur coûte 0 PX, même hors Classe ou carrière incomplète. Un niveau supérieur autorisé par le MJ coûte 100 PX. L16 V4, mise à jour imprimée du 14 juillet 2025 ; folio = page physique. Nom français proposé. Recherche statique dans js/core, js/ui et catalogues : aucun flux spécifique établi ; saisie générique insuffisante.
 - **F-L16-0146 — Destin du Tueur** (L16 p.77, absent) : Un Tueur peut dépenser du Destin pour survivre selon la procédure ordinaire. L16 V4, mise à jour imprimée du 14 juillet 2025 ; folio = page physique. Nom français proposé. Recherche statique dans js/core, js/ui et catalogues : aucun flux spécifique établi ; saisie générique insuffisante.
 - **F-L16-0147 — Tueur : exemption de maintien de Statut** (L16 p.77, absent) : Le MJ peut exempter les Tueurs de l’obligation d’activité liée au maintien du Statut. L16 V4, mise à jour imprimée du 14 juillet 2025 ; folio = page physique. Nom français proposé. Recherche statique dans js/core, js/ui et catalogues : aucun flux spécifique établi ; saisie générique insuffisante.
+- **F-L20-0038 — Apprendre une arme inhabituelle** (L20 p.219, absent) : Après une activité d’entraînement, Corps à corps ou Tir −1 DR, avec la spécialisation de l’arme ; réussite, maîtrise de l’arme. L20 V4, folio = page physique ; nom français proposé. Recherche statique js/core, js/ui et js/data : aucun flux dédié établi. Les capacités génériques ou étiquettes ne prouvent pas cet objet ou sa procédure.
+- **F-L20-0039 — Entraînement : nouvel essai** (L20 p.219, absent) : Après un échec d’entraînement, attendre la prochaine période entre aventures avant de recommencer. L20 V4, folio = page physique ; nom français proposé. Recherche statique js/core, js/ui et js/data : aucun flux dédié établi. Les capacités génériques ou étiquettes ne prouvent pas cet objet ou sa procédure.
+- **F-L20-0040 — Étudier un objet magique** (L20 p.219, absent) : Consacrer une activité à l’étude de l’objet et faire Recherche −1 DR pour découvrir son usage selon le barème. Table titrée Patronage Result Table dans le livre, mais colonnes Information Learned et texte concernent bien l’étude d’artefact. Pas correction du PDF.
+- **F-L20-0041 — Objet magique : +4 DR ou mieux** (L20 p.219, absent) : À +4 DR ou mieux, découvrir l’usage complet de l’objet, ainsi que ses particularités et ses dangers. Image et détail de table vus : cellule commune à +6 et +4/+5 ; ne pas attribuer la connaissance complète au seul+6.
+- **F-L20-0042 — Objet magique : +0 réussi à +3 DR** (L20 p.219, absent) : À +0 réussi jusqu’à +3 DR, découvrir la fonction principale de l’objet et comment l’activer. Cellule commune +2/+3 et +0/+1 vérifiée sur image ; réussite +0 et échec−0 distincts.
+- **F-L20-0043 — Objet magique : −0 raté à −3 DR** (L20 p.219, absent) : De −0 raté à −3 DR, ne rien apprendre d’utile sur l’objet. L20 V4, folio = page physique ; nom français proposé. Recherche statique js/core, js/ui et js/data : aucun flux dédié établi. Les capacités génériques ou étiquettes ne prouvent pas cet objet ou sa procédure.
+- **F-L20-0044 — Objet magique : −4 DR ou pire** (L20 p.219, absent) : À −4 DR ou pire, ne rien découvrir et passer le Test d’exposition modérée à la Corruption provoquée par la manipulation. La Corruption n’est pas automatique : le texte demande un Test. Aucun point ni type mental/physique inventé.
+- **F-L20-0045 — Mécénat : investir et reprendre** (L20 p.220, absent) : Comme variante de Banque, investir au moins cinq CO dans un dramaturge ; consacrer une autre activité à récupérer l’investissement. L20 V4, folio = page physique ; nom français proposé. Recherche statique js/core, js/ui et js/data : aucun flux dédié établi. Les capacités génériques ou étiquettes ne prouvent pas cet objet ou sa procédure.
+- **F-L20-0046 — Mécénat : évaluer le résultat** (L20 p.220, absent) : Au retrait de l’investissement, Évaluation +0 détermine le résultat du spectacle et les retours de la table. L20 V4, folio = page physique ; nom français proposé. Recherche statique js/core, js/ui et js/data : aucun flux dédié établi. Les capacités génériques ou étiquettes ne prouvent pas cet objet ou sa procédure.
+- **F-L20-0047 — Mécénat : +6 DR ou mieux** (L20 p.220, absent) : Le capital revient avec vingt pour cent de bénéfice ; durant l’aventure suivante, inverser les Tests de Sociabilité envers quiconque apprécie le théâtre. Table p.220 vue ; Fellowship = Sociabilité. Inversion n’est pas relance ni bonus de DR. Au désastre, aucun rendement financier chiffré imprimé : ne pas inventer un remboursement ou une perte différente.
+- **F-L20-0048 — Mécénat : +3 à +5 DR** (L20 p.220, absent) : Le capital revient ; inverser un Test de Sociabilité durant l’aventure suivante envers une personne qui apprécie les arts. Table p.220 vue ; Fellowship = Sociabilité. Inversion n’est pas relance ni bonus de DR. Au désastre, aucun rendement financier chiffré imprimé : ne pas inventer un remboursement ou une perte différente.
+- **F-L20-0049 — Mécénat : +0 réussi à +2 DR** (L20 p.220, absent) : La moitié du capital revient ; inverser un Test de Sociabilité durant l’aventure suivante envers une personne qui apprécie les arts. Table p.220 vue ; Fellowship = Sociabilité. Inversion n’est pas relance ni bonus de DR. Au désastre, aucun rendement financier chiffré imprimé : ne pas inventer un remboursement ou une perte différente.
+- **F-L20-0050 — Mécénat : −0 raté à −2 DR** (L20 p.220, absent) : L’investissement est perdu. Table p.220 vue ; Fellowship = Sociabilité. Inversion n’est pas relance ni bonus de DR. Au désastre, aucun rendement financier chiffré imprimé : ne pas inventer un remboursement ou une perte différente.
+- **F-L20-0051 — Mécénat : −3 à −5 DR** (L20 p.220, absent) : Le capital est perdu ; un noble offensé jure de défier en duel tous les mécènes. Table p.220 vue ; Fellowship = Sociabilité. Inversion n’est pas relance ni bonus de DR. Au désastre, aucun rendement financier chiffré imprimé : ne pas inventer un remboursement ou une perte différente.
+- **F-L20-0052 — Mécénat : −6 DR ou pire** (L20 p.220, absent) : Le spectacle attire soit l’inspecteur fiscal royal, soit un répurgateur local ; le joueur choisit lequel. Table p.220 vue ; Fellowship = Sociabilité. Inversion n’est pas relance ni bonus de DR. Au désastre, aucun rendement financier chiffré imprimé : ne pas inventer un remboursement ou une perte différente.
+- **F-L20-0053 — Recherche au Collège : accès** (L20 p.220, absent) : Un mage licencié peut consacrer une activité à la recherche dans son ancien Collège pour réviser et mémoriser ses sorts. L20 V4, folio = page physique ; nom français proposé. Recherche statique js/core, js/ui et js/data : aucun flux dédié établi. Les capacités génériques ou étiquettes ne prouvent pas cet objet ou sa procédure.
+- **F-L20-0054 — Recherche au Collège : réduction de PX** (L20 p.220, absent) : Recherche +0 ; chaque DR positif autorise l’achat d’un sort avec cent PX de moins, sans descendre sous cent PX par sort. Un sort à réduction fixe par DR, pas cent PX fois les DR sur chaque sort. Réserves d’expérience et achats distincts du lancement de sorts.
+- **F-L20-0055 — Recherche au Collège : achat immédiat** (L20 p.220, absent) : Pour profiter de la réduction, acheter immédiatement les sorts ; aucune remise à conserver pour une autre période. Pas utile aux débutants n’ayant pas encore mémorisé BInt sorts selon le texte ; pas nouveau plafond total de sorts à BInt.
 
 ### Entre-aventures et progression
 
@@ -1678,6 +1699,23 @@ L05 — noms français seulement : 219 entrées avec nom sourcé et 100 avec ter
 - **F-L19-0027 — Cabinet démoniaque : identification** (L19 p.71, absent) : Le cabinet identifie un objet par Savoir (Objets magiques) à 96 ; l’utiliser expose à une source mineure de Corruption. Objet autonome ; les deux recherches préalables de Lukas/Josef à 85/71 et le tarif/délai de leur service restent propres aux PNJ. Pas reproduction de leurs profils.
 - **F-L19-0028 — Bénir une arme dans la Flamme** (L19 p.97, absent) : Un prêtre notable doit accepter les motifs du demandeur ; déposer l’arme dix heures dans la Flamme lors d’une période calme permet de la bénir. L19 V4, folio = page physique ; nom français proposé. Recherche statique js/core, js/ui, js/data : aucun flux propre établi. Une étiquette, un profil ou une saisie générique ne prouve pas la procédure.
 - **F-L19-0029 — Flamme éternelle : enchantement** (L19 p.97, absent) : L’arme devient magique et gagne un dégât pendant 1d10 + 10 jours ; prolongation possible si elle sert une tâche importante pour Ulric. Dix heures d’exposition, pas durée d’un Round. Aucun Péché, charge, coût universel, prolongation chiffrée ni soin inventé. L’intermédiaire Lukas donne un autre délai de service.
+- **F-L20-0008 — Bâton de Volans : toucher** (L20 p.21, absent) : Pour le seigneur sorcier qui le manie, le bâton compte comme une partie du corps afin de toucher lors d’une incantation. L20 V4, folio = page physique ; nom français proposé. Recherche statique js/core, js/ui et js/data : aucun flux dédié établi. Les capacités génériques ou étiquettes ne prouvent pas cet objet ou sa procédure.
+- **F-L20-0009 — Bâton de Volans : Tests magiques** (L20 p.21, absent) : Le bâton ajoute deux DR aux Tests de Focalisation et de Langue (Magick). La source donne directement +2 SL ; bonus de DR conservé et non transformé en bonus de caractéristique.
+- **F-L20-0010 — Bâton de Volans : éviter l’incident** (L20 p.21, absent) : Lors d’une Incantation imparfaite du porteur, Volonté −1 DR réussie empêche l’incident. Caractéristique Willpower, pas compétence Calme ; ne pas promettre l’annulation de toute conséquence avant son déclencheur.
+- **F-L20-0011 — Bâton ardent : toucher** (L20 p.21, absent) : Le bâton ardent compte comme une partie du corps de son porteur pour toucher lors des sorts. L20 V4, folio = page physique ; nom français proposé. Recherche statique js/core, js/ui et js/data : aucun flux dédié établi. Les capacités génériques ou étiquettes ne prouvent pas cet objet ou sa procédure.
+- **F-L20-0012 — Bâton ardent : portée du Feu** (L20 p.21, absent) : Le porteur double la portée des sorts du Domaine du Feu qu’il lance. L20 V4, folio = page physique ; nom français proposé. Recherche statique js/core, js/ui et js/data : aucun flux dédié établi. Les capacités génériques ou étiquettes ne prouvent pas cet objet ou sa procédure.
+- **F-L20-0013 — Bâton ardent : zone du Feu** (L20 p.21, absent) : Le porteur peut augmenter la zone d’un sort du Domaine du Feu d’un nombre de yards égal à son BFM. Ni rayon ni diamètre précisé dans cette clause : ne pas convertir silencieusement la géométrie. Aucun cumul de surpuissance supposé.
+- **F-L20-0014 — Épée flamboyante : enchantement** (L20 p.21, absent) : En présence d’Aqshy, la lame reçoit les effets d’Épée flamboyante de Rhuin. Attribution d’objet distincte du sort déjà inventorié ; appliquer la version V5 du sort, pas recréer une liste de sorts. Pas de caractéristiques de lame inventées.
+- **F-L20-0015 — Épée flamboyante : retour des flammes** (L20 p.21, absent) : Dissipation ou absence d’Aqshy peut éteindre l’effet ; il revient au Tour suivant où la lame est exposée à Aqshy. La présence d’Aqshy est un fait MJ, pas un seuil de Vent inventé ; l’épée abîme son fourreau sans barème publié.
+- **F-L20-0016 — Pierre de Feu d’Agni** (L20 p.21, absent) : Toute tentative réussie d’incanter un sort du Domaine du Feu à huit yards de la pierre gagne un DR. Succès préalable exigé : ce bonus ne transforme pas un échec en réussite. La source n’exclut pas les autres lanceurs ni les ennemis ; pas bonus à Focalisation.
+- **F-L20-0017 — Rubis ardent : connaître la formule** (L20 p.21, absent) : Une personne à proximité peut entendre la formule chuchotée lors de l’activation avec Perception −2 DR réussie. Commande propre à l’objet ; pas révélation automatique des autres propriétés ni portée d’écoute chiffrée inventée.
+- **F-L20-0018 — Rubis ardent : Protection** (L20 p.21, absent) : Dire la formule enveloppe le porteur de flammes magiques et lui accorde Protection (7+) pendant huit Rounds. Effet d’objet distinct du Trait Protection ; aucun état Enflammé ni dégâts de feu sur le porteur déduits de la description.
+- **F-L20-0019 — Rubis ardent : recharge** (L20 p.21, absent) : Après activation, le rubis est inutilisable pendant d10 jours ; le délai est divisé par deux s’il reste près d’un être ou objet imprégné d’Aqshy. Ni arrondi des demi-journées, rayon de proximité ou règle pour une exposition intermittente publiés. Pas recharge sur l’heure système.
+- **F-L20-0033 — Hexxerbezrik : Vents favorables** (L20 p.153, absent) : Dans ce quartier, incanter ou focaliser pour les Domaines du Métal, Vie, Cieux, Ombres, Mort et Feu gagne +1 DR. Source dit Cast or Channel spells ; garder les domaines cités, pas extension à toute magie. Hysh n’est ni facilité ni gêné.
+- **F-L20-0034 — Altdorf : Ghur repoussé** (L20 p.153, absent) : Dans les murs d’Altdorf, les Tests pour focaliser et incanter des sorts d’Arcane avec Ghur subissent −2 DR. Portée ville entière, distincte du quartier Hexxerbezrik. Conserver Arcane spells imprimé ; ni -2 à tout Test d’un mage d’Ambre, ni bonus/malus de caractéristique.
+- **F-L20-0035 — Bouton brûlant : contact** (L20 p.216, absent) : Toucher une cible avec ce bouton d’argent inflige un Enflammé. Effet d’objet autonome, non porté par une capacité E0 dédiée trouvée. Le profil de Katarina ne prouve pas son activation. Aucun dégât additionnel inventé.
+- **F-L20-0036 — Bouton brûlant : attaque opposée** (L20 p.216, absent) : En combat ou contre une cible non consentante, le porteur doit réussir une opposition de Bagarre, généralement contre Corps à corps ou Esquive. Page216 vue : autorenvoi @@ non résolu, mais l’effet et le Test sont imprimés sous le profil. Aucune Action gratuite, dépense d’Élan ou répétition illimitée inventée.
+- **F-L20-0037 — Bouton brûlant : corruption** (L20 p.216, absent) : Le bouton est une source mineure de Corruption. Pas un point automatique à chaque toucher : conserver les règles d’exposition V5 et l’arbitrage MJ. Les cinq autres bijoux nommés n’ont pas d’effet chiffré ici.
 
 ### Magie — incidents
 
@@ -1767,6 +1805,8 @@ L05 — noms français seulement : 219 entrées avec nom sourcé et 100 avec ter
 - **F-L19-0035 — Variole verte : durée** (L19 p.128, absent) : La maladie dure 3d10 + 10 jours. L19 V4, folio = page physique ; nom français proposé. Recherche statique js/core, js/ui, js/data : aucun flux propre établi. Une étiquette, un profil ou une saisie générique ne prouve pas la procédure.
 - **F-L19-0036 — Variole verte : symptômes** (L19 p.128, absent) : Appliquer Bubons, Convulsions, Rage homicide, Persistance (Intermédiaire) et Vérole. Symptômes standards du socle référencés, sans les recopier ou les remplacer par de simples États de combat. Persistance Average est une difficulté de Test, proposée +2 DR.
 - **F-L19-0037 — Variole verte : rage homicide** (L19 p.128, absent) : Haine des vivants et Frénésie restent simultanées ; contrôle tous les cinq Rounds, lucidité limitée à fuir ou avertir. Identité et clause vérifiées ; renvoi documentaire seulement, aucune qualification runtime déduite. Déjà porté par l’inventaire référencé : Clause déjà recensée individuellement dans cet inventaire ; aucun second sélecteur F1.
+- **F-L20-0020 — Dormir chez Miriam : risque sanitaire** (L20 p.50, absent) : Chaque nuit en dortoir chez Miriam expose avec cinq pour cent de risque à la vérole démangeante. Itching Pox, nom FR de travail. Le tirage d’exposition ne prouve pas la contraction automatique ; résoudre la maladie du socle.
+- **F-L20-0021 — Manger chez Miriam : risque sanitaire** (L20 p.50, absent) : Le repas de Miriam expose avec cinq pour cent de risque à la Courante galopante. Galloping Trots ; ne pas confondre avec la maladie de peau du couchage, ni cumuler les deux sur chaque achat.
 
 ### Montures
 
@@ -2052,6 +2092,8 @@ L05 — noms français seulement : 219 entrées avec nom sourcé et 100 avec ter
 
 - **F-L19-0154 — Ulric : usages locaux** (L19 p.21, absent) : Les usages et commandements locaux restent au registre divin. Identité et clause vérifiées ; renvoi documentaire seulement, aucune qualification runtime déduite. Déjà porté par l’inventaire référencé : Clause déjà recensée individuellement dans cet inventaire ; aucun second sélecteur F1.
 - **F-L19-0155 — Ulric : pénitence locale** (L19 p.112, absent) : La pénitence locale relève du registre divin et des décisions MJ sur la note libre. Identité et clause vérifiées ; renvoi documentaire seulement, aucune qualification runtime déduite. Déjà porté par l’inventaire référencé : Clause déjà recensée individuellement dans cet inventaire ; aucun second sélecteur F1.
+- **F-L20-0061 — Cultes : usages locaux** (L20 p.27, absent) : Les usages locaux de Ranald et les commandements de Solkan relèvent de l’inventaire divin. Identité et clause déjà inventoriées ; aucun statut runtime déduit du renvoi. Déjà porté par l’inventaire référencé : Clause déjà recensée dans l’inventaire référencé ; aucun second sélecteur F1.
+- **F-L20-0062 — Pèlerinage de pénitence** (L20 p.219, absent) : Le pèlerinage de Sigmar passe par Prière +2 DR, réduction de Péché et traitement de l’échec ou de la maladresse selon les décisions MJ. Arbitrages B-C44 et B-C45 prioritaires : fatigue du premier jour en rappel seul. Ni réimplantation ni nouveau sélecteur du flux divin. Déjà porté par l’inventaire référencé : Clause déjà recensée dans l’inventaire référencé ; aucun second sélecteur F1.
 
 ### Religion — renvois
 
@@ -2089,6 +2131,7 @@ L05 — noms français seulement : 219 entrées avec nom sourcé et 100 avec ter
 - **F-L16-0207 — Purification** (L16 p.46, absent) : Les runes purifient l’air des mines ; aucun nouveau barème ici. Renvoi individuel vérifié, sans nouvelle qualification runtime ni recette du domaine. Déjà porté par l’inventaire référencé : Clause exacte déjà portée par cet inventaire ; éviter un second choix F1.
 - **F-L16-0208 — Tranchant** (L16 p.79, absent) : Deux runes donnent +2 dégâts à la hache de Gotrek. Renvoi individuel vérifié, sans nouvelle qualification runtime ni recette du domaine. Déjà porté par l’inventaire référencé : Clause exacte déjà portée par cet inventaire ; éviter un second choix F1.
 - **F-L16-0209 — Coupure** (L16 p.79, absent) : La hache ignore deux PA. Renvoi individuel vérifié, sans nouvelle qualification runtime ni recette du domaine. Déjà porté par l’inventaire référencé : Clause exacte déjà portée par cet inventaire ; éviter un second choix F1.
+- **F-L20-0060 — Rune de Lumière : éclairage** (L20 p.200, absent) : La rune éclaire l’installation souterraine comme une lanterne. Identité et clause déjà inventoriées ; aucun statut runtime déduit du renvoi. Déjà porté par l’inventaire référencé : Clause déjà recensée dans l’inventaire référencé ; aucun second sélecteur F1.
 
 ### Récolte et commerce
 
@@ -2416,6 +2459,13 @@ L05 — noms français seulement : 219 entrées avec nom sourcé et 100 avec ter
 - **F-L16-0035 — 17–18 : détour facultatif** (L16 p.56, absent) : Accepter ajoute une étape ; un voyageur joue Savoir (Géologie) ou Navigation +2 DR pour découvrir une chose de valeur. L16 V4, mise à jour imprimée du 14 juillet 2025 ; folio = page physique. Nom français proposé. Recherche statique dans js/core, js/ui et catalogues : aucun flux spécifique établi ; saisie générique insuffisante.
 - **F-L16-0036 — 19 : vestiges** (L16 p.56, absent) : Après découverte de dépouilles, Estimation +2 DR permet d’identifier les objets précieux à piller ; on peut choisir l’inhumation. L16 V4, mise à jour imprimée du 14 juillet 2025 ; folio = page physique. Nom français proposé. Recherche statique dans js/core, js/ui et catalogues : aucun flux spécifique établi ; saisie générique insuffisante.
 - **F-L16-0037 — 20 : raccourci** (L16 p.56, absent) : Un voyageur joue Navigation ou Signes secrets (Mineur) +2 DR ; réussite : sauter la prochaine étape. L16 V4, mise à jour imprimée du 14 juillet 2025 ; folio = page physique. Nom français proposé. Recherche statique dans js/core, js/ui et catalogues : aucun flux spécifique établi ; saisie générique insuffisante.
+- **F-L20-0001 — Brouillard : saison et heure** (L20 p.8, absent) : Au d100 : brouillard sur 01–35 au printemps et en automne, 01–10 en été, 01–20 en hiver ; retrancher dix au jet avant midi. −10 modifie le jet de météo, pas un Test : ne pas le convertir en −1 DR. Résultats inférieurs à01 après correction non explicitement bornés.
+- **F-L20-0002 — Brouillard : étendue** (L20 p.8, absent) : Au d100 : 01–35 quartiers populaires, 36–55 quartiers inquiétants, 56–75 confluence, 76–95 rives, 96–00 toute la ville ; appliquer aux quartiers listés dans chaque groupe. Table p.8 vue ; les groupes géographiques se chevauchent et ne sont pas des rayons ou pourcentages de terrain.
+- **F-L20-0003 — Brouillard 01–35 : brume légère** (L20 p.8, absent) : 01–35 : À plus de cinquante pieds, CT et Perception visuelle subissent −1 DR. Seuil strict more than conservé. Tables vues ; distances en pieds imprimés, aucun arrondi arbitraire en mètres ni durée de dissipation inventés.
+- **F-L20-0004 — Brouillard 36–51 : brume modérée** (L20 p.8, absent) : 36–51 : À plus de vingt pieds, CT et Perception visuelle subissent −1 DR. Seuil strict more than conservé. Tables vues ; distances en pieds imprimés, aucun arrondi arbitraire en mètres ni durée de dissipation inventés.
+- **F-L20-0005 — Brouillard 52–85 : brouillard** (L20 p.8, absent) : 52–85 : À plus de dix pieds, CT et Perception visuelle subissent −2 DR. Seuil strict more than conservé. Tables vues ; distances en pieds imprimés, aucun arrondi arbitraire en mètres ni durée de dissipation inventés.
+- **F-L20-0006 — Brouillard 86–99 : purée de pois** (L20 p.8, absent) : 86–99 : À plus de cinq pieds, CT et Perception visuelle subissent −3 DR. Seuil strict more than conservé. Tables vues ; distances en pieds imprimés, aucun arrondi arbitraire en mètres ni durée de dissipation inventés.
+- **F-L20-0007 — Brouillard 00 : brouet miasmatique** (L20 p.8, absent) : 00 : À plus de cinq pieds, CT et Perception visuelle subissent −3 DR ; les Tests pour éviter une maladie subissent −1 DR. Seuil strict more than conservé. Tables vues ; distances en pieds imprimés, aucun arrondi arbitraire en mètres ni durée de dissipation inventés.
 
 ### Voyage et navigation
 
@@ -2522,6 +2572,14 @@ L05 — noms français seulement : 219 entrées avec nom sourcé et 100 avec ter
 - **F-L19-0143 — Forge : tarif et remise** (L19 p.69, absent) : Tarif demandé : trois pistoles par heure ; négociable au prix du catalogue, avec dix pour cent possibles aux clients importants ou réguliers. L19 V4, folio = page physique ; nom français proposé. Recherche statique js/core, js/ui, js/data : aucun flux propre établi. Une étiquette, un profil ou une saisie générique ne prouve pas la procédure.
 - **F-L19-0144 — Luigi et Salvatore : Raffiné** (L19 p.74, absent) : Les marchandises possèdent Raffiné pour une fois et demie le prix ordinaire, au lieu du double habituel. L19 V4, folio = page physique ; nom français proposé. Recherche statique js/core, js/ui, js/data : aucun flux propre établi. Une étiquette, un profil ou une saisie générique ne prouve pas la procédure.
 - **F-L19-0145 — Luigi et Salvatore : Raffiné et Solide** (L19 p.74, absent) : Les articles concernés possèdent Raffiné et Solide pour trois fois le prix ordinaire, au lieu de quatre. L19 V4, folio = page physique ; nom français proposé. Recherche statique js/core, js/ui, js/data : aucun flux propre établi. Une étiquette, un profil ou une saisie générique ne prouve pas la procédure.
+- **F-L20-0025 — Lauriers de la Victoire** (L20 p.78, absent) : Les lauriers donnent Peur (2) à partir du deuxième Round de combat. Identité et clause déjà inventoriées ; aucun statut runtime déduit du renvoi. Déjà porté par l’inventaire référencé : Clause déjà recensée dans l’inventaire référencé ; aucun second sélecteur F1.
+- **F-L20-0026 — Croc runique de Solland : lame** (L20 p.78, absent) : L’épée est magique, porte Incassable et Raffiné (3), et blesse les créatures immunisées aux attaques non magiques. Qualités et caractère magique de l’objet, distincts de la Maître Rune. Pas deuxième ajout de BF aux dégâts déjà calculés du profil de Kurt.
+- **F-L20-0027 — Croc runique de Solland : rune** (L20 p.78, absent) : La Maître Rune d’Alaric ignore BE et PA, y compris magiques ou du Trait Armure ; Protection reste applicable. Identité et clause déjà inventoriées ; aucun statut runtime déduit du renvoi. Déjà porté par l’inventaire référencé : Clause déjà recensée dans l’inventaire référencé ; aucun second sélecteur F1.
+- **F-L20-0028 — Magnin : usage en mêlée** (L20 p.94, absent) : Le couteau Magnin s’emploie comme une dague en mêlée. L20 V4, folio = page physique ; nom français proposé. Recherche statique js/core, js/ui et js/data : aucun flux dédié établi. Les capacités génériques ou étiquettes ne prouvent pas cet objet ou sa procédure.
+- **F-L20-0029 — Magnin : lancer maîtrisé** (L20 p.94, absent) : Le lancer pleinement maîtrisé a une portée de BF × deux, des dégâts de BF + trois, Percutant et un encombrement nul. Table p.94 vue ; données d’arme, pas recopie du profil PNJ. La valeur +8 du profil d’Harald est déjà calculée : ne pas ajouter de nouveau son BF.
+- **F-L20-0030 — Magnin : porteur non formé** (L20 p.94, absent) : Sans maîtrise, le lancer compte comme un couteau de lancer ordinaire ; il reçoit Imprécis et Lent si le porteur n’atteint pas à la fois Force 58 et Tir (Lancer) 83. Force58 et Tir83 correspondent aux seuils relatifs à Harald p.94 ; les deux conditions évitent les défauts mais la phrase Only by taking l’activité exige encore l’entraînement pour le plein effet. Pas assimilation automatique des seuils à la maîtrise.
+- **F-L20-0031 — Fusil de chasse de Kazran** (L20 p.149, absent) : Le fusil de chasse de Kazran a la moitié de la portée et du prix d’un long fusil du Hochland, et environ la moitié de sa longueur. Le texte rattache ces moitiés aux hunting rifles ; pas division automatique de la portée de tous ses pistolets. Aucun dégât inédit publié.
+- **F-L20-0032 — Armes à poudre de Kazran** (L20 p.149, absent) : Toutes les armes à poudre produites par Kazran possèdent Raffiné et Solide. L20 V4, folio = page physique ; nom français proposé. Recherche statique js/core, js/ui et js/data : aucun flux dédié établi. Les capacités génériques ou étiquettes ne prouvent pas cet objet ou sa procédure.
 
 ### Équipement spécialisé
 
