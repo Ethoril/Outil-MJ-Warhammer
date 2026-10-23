@@ -291,7 +291,7 @@
      "name": "Etiquette (Cultists)"
     },
     {
-     "name": "Read/ Write"
+     "name": "Read/Write"
     },
     {
      "name": "Savant (Theology)"
@@ -1690,7 +1690,7 @@
      "name": "Etiquette (Soldiers)"
     },
     {
-     "name": "Stout-Hearted"
+     "name": "Stout-hearted"
     },
     {
      "name": "War Leader"
@@ -2857,7 +2857,7 @@
      "name": "Combat Aware"
     },
     {
-     "name": "War leader"
+     "name": "War Leader"
     },
     {
      "name": "Etiquette (Soldiers)"
@@ -3284,7 +3284,7 @@
      "name": "Menacing"
     },
     {
-     "name": "Nimble Fingered"
+     "name": "Nimble-fingered"
     },
     {
      "name": "Noble Blood"
@@ -3296,10 +3296,10 @@
      "name": "Public Speaker"
     },
     {
-     "name": "Read/ Write"
+     "name": "Read/Write"
     },
     {
-     "name": "Resistance (Disease)"
+     "name": "Resistant (Disease)"
     },
     {
      "name": "Reversal"
@@ -3336,7 +3336,7 @@
      "name": "War Wizard"
     },
     {
-     "name": "Warleader"
+     "name": "War Leader"
     },
     {
      "name": "Willful Corruption"
@@ -5197,7 +5197,7 @@
     },
     {
      "name": "Spellcaster",
-     "param": "Chaos � Tzeentch",
+     "param": "Chaos – Tzeentch",
      "ref": "E0-T-048"
     }
    ],

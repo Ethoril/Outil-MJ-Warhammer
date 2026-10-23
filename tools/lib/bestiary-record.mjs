@@ -15,6 +15,35 @@ const CATALOGUE_TALENTS = new Set(JSON.parse(readFileSync('js/data/reference-sna
 /** Un nom présent au catalogue des talents n'est jamais du bruit (« Iron Will », « Strike to Stun »…). */
 export const isCatalogueTalent = text => CATALOGUE_TALENTS.has(text.replace(/\(.*\)/, '').replace(/\s+/g, ' ').trim().toLowerCase());
 
+/** Noms de talents imprimés autrement que le catalogue (coquilles, tirets, V4 → V5) : même talent, nom du catalogue. « Strider » n'a pas d'équivalent au catalogue : inchangé. */
+const TALENT_ALIASES = new Map(Object.entries({
+  'read/ write': 'Read/Write', warleader: 'War Leader', 'war leader': 'War Leader', 'fleet footed': 'Fleet-footed', 'public speaking': 'Public Speaker', 'public-speaking': 'Public Speaker',
+  resistance: 'Resistant', 'nimble fingered': 'Nimble-fingered', 'stout-hearted': 'Stout-hearted', 'stout- hearted': 'Stout-hearted', unshakable: 'Unshakeable',
+  'strong-minded': 'Strong-minded', 'strong minded': 'Strong-minded', 'strong-minded.': 'Strong-minded', 'strong back': 'Strong Back', 'magic resistant': 'Magic Resistance',
+  etiqutte: 'Etiquette', ettiquette: 'Etiquette', 'instrinctive diction': 'Instinctive Diction'
+}));
+export function canonicalTalentName(name) {
+  const found = /^([^(]*?)(\s*\(.*)?$/.exec(String(name).trim());
+  const alias = TALENT_ALIASES.get(found[1].replace(/\s+/g, ' ').trim().toLowerCase());
+  return alias ? `${alias}${found[2] || ''}` : String(name).trim();
+}
+
+/**
+ * Un nom de talent suivi du début de la rubrique voisine (« Warleader Stinging Tail: … », « War Wizard Slann Special Rules: … », « Flee! Noble Blood ») :
+ * le nom du catalogue reste, le reste est un second talent s'il est au catalogue, sinon le titre de la rubrique voisine (écarté).
+ */
+export function splitGluedTalent(name) {
+  const text = canonicalTalentName(name);
+  if (/[(\d]/.test(text) || isCatalogueTalent(text)) return [text];
+  const words = text.split(' ');
+  for (let cut = words.length - 1; cut >= 1; cut -= 1) {
+    const head = canonicalTalentName(words.slice(0, cut).join(' '));
+    const tail = words.slice(cut).join(' ');
+    if (isCatalogueTalent(head) && /^[A-Z]/.test(tail)) return isCatalogueTalent(canonicalTalentName(tail)) ? [head, canonicalTalentName(tail)] : [head];
+  }
+  return [text];
+}
+
 const isNoise = text => !isCatalogueTalent(text) && (text.length > 40 || /(?:^|\s)[a-z.']/.test(text.replace(/\(.*\)/, '')) || /\b(?:the|and|with|who|that|which|his|her|their|they|will|when|from)\b/i.test(text) || /\d/.test(text.replace(/\(.*\)/, '')));
 
 /** Compétences : seules celles dont le groupe est connu et la valeur chiffrée sont gardées ; le reste est du texte voisin (liste `dropped`). */
@@ -183,7 +212,7 @@ export function buildRecord(extracted, entry, context) {
   const baseName = name => String(name).replace(/\s*\(.*\)\s*$/, '').toLowerCase();
   const listedTalents = new Set((extracted.talents || []).map(talent => baseName(talent.name)));
   const traitTalents = trimmed.filter(trait => !canonical(trait.name) && trait.param && isCatalogueTalent(trait.name) && !listedTalents.has(baseName(trait.name))).map(trait => ({ name: `${trait.name}${trait.param ? ` (${trait.param})` : ''}` }));
-  const talents = [...(extracted.talents || []).filter(talent => talent.name && !isNoise(talent.name.replace(/\(.*\)/, ''))).map(talent => ({ name: talent.name, ...(talent.rank ? { rank: talent.rank } : {}) })), ...traitTalents];
+  const talents = [...(extracted.talents || []).filter(talent => talent.name).flatMap(talent => splitGluedTalent(talent.name).map((name, index, parts) => ({ name, rank: index === parts.length - 1 ? talent.rank : undefined }))).filter(talent => !isNoise(talent.name.replace(/\(.*\)/, ''))).map(talent => ({ name: talent.name, ...(talent.rank ? { rank: talent.rank } : {}) })), ...traitTalents];
   if (extracted.talents?.length || traitTalents.length) record.talents = talents;
   if (extracted.trappings?.length) record.trappings = joinTrappings(extracted.trappings, TRAPPING_JOINS[entry.id]).filter(item => isTrappingName(item) || (TRAPPING_JOINS[entry.id] || []).includes(item));
   if (extracted.notes?.length) record.notes = extracted.notes;

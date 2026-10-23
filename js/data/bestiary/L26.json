@@ -585,7 +585,7 @@
    "trappings": [
     "Hand Weapon (Sword)",
     "Leather Jack",
-    "Stolen Amulet of B�gen",
+    "Stolen Amulet of Bögen",
     "Uniform",
     "2d10 Brass Pennies"
    ],
@@ -714,7 +714,7 @@
      "name": "Read/Write"
     },
     {
-     "name": "Resistance (Disease)"
+     "name": "Resistant (Disease)"
     },
     {
      "name": "Seasoned Traveller"
@@ -2015,7 +2015,7 @@
      "name": "Night Vision"
     },
     {
-     "name": "Nimble Fingered"
+     "name": "Nimble-fingered"
     },
     {
      "name": "Savvy"
@@ -4774,7 +4774,7 @@
      "name": "Seasoned Traveller"
     },
     {
-     "name": "Strong-Minded",
+     "name": "Strong-minded",
      "rank": 2
     },
     {
@@ -5473,10 +5473,13 @@
    ],
    "talents": [
     {
+     "name": "Dirty Fighting"
+    },
+    {
      "name": "Flee!"
     },
     {
-     "name": "Public-Speaking"
+     "name": "Public Speaker"
     },
     {
      "name": "Read/Write"
@@ -5980,7 +5983,7 @@
      "name": "Read/Write"
     },
     {
-     "name": "Resistance (Poison)"
+     "name": "Resistant (Poison)"
     }
    ],
    "trappings": [
@@ -6458,7 +6461,7 @@
    "trappings": [
     "Entourage of Clerks",
     "Exquisite Clothing",
-    "d10 � 30 Gold Crown"
+    "d10 × 30 Gold Crown"
    ],
    "keywords": [
     "humain"

@@ -1244,13 +1244,16 @@
      "name": "Relentless"
     },
     {
-     "name": "Read/ Write"
+     "name": "Read/Write"
     },
     {
      "name": "Strike Mighty Blow"
     },
     {
      "name": "Unshakeable"
+    },
+    {
+     "name": "Warrior Born"
     },
     {
      "name": "Trick Rider"
@@ -1732,6 +1735,9 @@
      "name": "Scale Sheer Surface"
     },
     {
+     "name": "Shadow"
+    },
+    {
      "name": "Striding Gait (Any)"
     }
    ],
@@ -2035,13 +2041,19 @@
      "name": "Mimic"
     },
     {
-     "name": "Read/ Write"
+     "name": "Read/Write"
     },
     {
      "name": "Shadow"
     },
     {
      "name": "Sixth Sense"
+    },
+    {
+     "name": "Strike to Injure"
+    },
+    {
+     "name": "Gifts of Khaine"
     }
    ],
    "trappings": [
@@ -2507,6 +2519,12 @@
     },
     {
      "name": "Pharmacist"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Gifts of Khaine"
     }
    ],
    "trappings": [

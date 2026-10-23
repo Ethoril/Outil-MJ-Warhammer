@@ -167,7 +167,7 @@
      "name": "Orientation"
     },
     {
-     "name": "Public Speaking"
+     "name": "Public Speaker"
     },
     {
      "name": "Read/Write"
@@ -464,7 +464,7 @@
    ],
    "talents": [
     {
-     "name": "Magic Resistant"
+     "name": "Magic Resistance"
     },
     {
      "name": "Night Vision"
@@ -488,7 +488,7 @@
      "name": "Strong Back"
     },
     {
-     "name": "Strong-Minded"
+     "name": "Strong-minded"
     },
     {
      "name": "Strong Swimmer"
@@ -690,7 +690,7 @@
      "name": "Pilot"
     },
     {
-     "name": "Public Speaking"
+     "name": "Public Speaker"
     },
     {
      "name": "Savvy"
@@ -827,7 +827,7 @@
      "name": "Fisherman"
     },
     {
-     "name": "Stout-Hearted"
+     "name": "Stout-hearted"
     },
     {
      "name": "Strong Back"
@@ -974,7 +974,7 @@
      "name": "Read/Write"
     },
     {
-     "name": "Stout-Hearted"
+     "name": "Stout-hearted"
     },
     {
      "name": "Suave"
@@ -1111,7 +1111,7 @@
      "name": "Sea Legs"
     },
     {
-     "name": "Stout- Hearted"
+     "name": "Stout-hearted"
     },
     {
      "name": "Strong Back"
@@ -1247,7 +1247,7 @@
      "name": "Orientation"
     },
     {
-     "name": "Stout- Hearted"
+     "name": "Stout-hearted"
     },
     {
      "name": "Strong Back"
@@ -1560,7 +1560,7 @@
      "name": "Read/Write"
     },
     {
-     "name": "Resistance (Disease)"
+     "name": "Resistant (Disease)"
     },
     {
      "name": "Savvy"
@@ -3023,7 +3023,7 @@
      "name": "Tenacious"
     },
     {
-     "name": "Unshakable",
+     "name": "Unshakeable",
      "rank": 3
     },
     {
@@ -3596,7 +3596,7 @@
      "name": "Tenacious"
     },
     {
-     "name": "Unshakable"
+     "name": "Unshakeable"
     },
     {
      "name": "Very Resilient"
@@ -3903,7 +3903,7 @@
      "name": "Strong Legs"
     },
     {
-     "name": "Unshakable"
+     "name": "Unshakeable"
     },
     {
      "name": "Warrior Born"
@@ -4199,7 +4199,7 @@
      "name": "Tunnel Rat"
     },
     {
-     "name": "Unshakable"
+     "name": "Unshakeable"
     },
     {
      "name": "Very Resilient"

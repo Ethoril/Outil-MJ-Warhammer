@@ -249,7 +249,7 @@
      "trait": "Weapon"
     },
     {
-     "name": "Zweih�nder",
+     "name": "Zweihänder",
      "damage": 11,
      "trait": "Weapon"
     }
@@ -1368,7 +1368,7 @@
      "rank": 2
     },
     {
-     "name": "Nimble Fingered"
+     "name": "Nimble-fingered"
     },
     {
      "name": "Read/Write"
@@ -1593,7 +1593,7 @@
      "name": "Perfect Pitch"
     },
     {
-     "name": "Read/ Write"
+     "name": "Read/Write"
     },
     {
      "name": "Small"
@@ -2776,7 +2776,7 @@
      "rank": 5
     },
     {
-     "name": "Nimble Fingered"
+     "name": "Nimble-fingered"
     },
     {
      "name": "Noble Blood"
@@ -2789,7 +2789,7 @@
      "name": "Read/Write"
     },
     {
-     "name": "Resistance (Disease)"
+     "name": "Resistant (Disease)"
     },
     {
      "name": "Savvy"
@@ -2809,7 +2809,7 @@
      "rank": 2
     },
     {
-     "name": "Warleader"
+     "name": "War Leader"
     },
     {
      "name": "Wealthy",
@@ -4526,7 +4526,7 @@
      "name": "Mimic"
     },
     {
-     "name": "Nimble Fingered"
+     "name": "Nimble-fingered"
     },
     {
      "name": "Noble Blood"
@@ -4541,7 +4541,7 @@
      "name": "Savvy"
     },
     {
-     "name": "Unshakable"
+     "name": "Unshakeable"
     },
     {
      "name": "War Leader"
@@ -4833,7 +4833,10 @@
    ],
    "talents": [
     {
-     "name": "Flee! Noble Blood"
+     "name": "Flee!"
+    },
+    {
+     "name": "Noble Blood"
     },
     {
      "name": "Strike Mighty Blow"
@@ -5246,7 +5249,7 @@
      "name": "Noble Blood"
     },
     {
-     "name": "Read/ Write"
+     "name": "Read/Write"
     },
     {
      "name": "Suave"
@@ -5776,10 +5779,10 @@
      "name": "Dealmaker"
     },
     {
-     "name": "Etiqutte (Guilder)"
+     "name": "Etiquette (Guilder)"
     },
     {
-     "name": "Etiqutte (Nobles)"
+     "name": "Etiquette (Nobles)"
     },
     {
      "name": "Field Dressing"
@@ -5992,7 +5995,7 @@
      "name": "Embezzle"
     },
     {
-     "name": "Ettiquette (Merchants, Nobles)"
+     "name": "Etiquette (Merchants, Nobles)"
     },
     {
      "name": "Luck"
@@ -6299,7 +6302,7 @@
      "name": "Etiquette (Physicians)"
     },
     {
-     "name": "Read/ Write"
+     "name": "Read/Write"
     },
     {
      "name": "Savant (Medicine)"
@@ -6488,14 +6491,14 @@
      "name": "Noble Blood"
     },
     {
-     "name": "Public Speaking",
+     "name": "Public Speaker",
      "rank": 2
     },
     {
      "name": "Warrior Born"
     },
     {
-     "name": "Warleader",
+     "name": "War Leader",
      "rank": 3
     }
    ],

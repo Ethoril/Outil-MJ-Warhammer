@@ -7,6 +7,7 @@
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { corpusBooks } from './lib/bestiary-extract.mjs';
+import { repairGlyphs } from './lib/bestiary-glyphs.mjs';
 import { blockAfter, completenessGaps, extendedGaps, normalizeBlockText } from './lib/bestiary-completeness.mjs';
 
 // Catégories contrôlées : talents et compétences (Q0), attaques, Traits, équipement, sorts, bruit d'équipement (Q11).
@@ -22,7 +23,7 @@ const totals = {};
 for (const book of process.argv.slice(2)) {
   const data = JSON.parse(readFileSync(`js/data/bestiary/${book}.json`, 'utf8'));
   const meta = corpusBooks().find(item => item.id === book);
-  const pages = execFileSync('pdftotext', [meta.path, '-'], { maxBuffer: 1 << 28 }).toString('utf8').split('\f')
+  const pages = repairGlyphs(execFileSync('pdftotext', [meta.path, '-'], { maxBuffer: 1 << 28 }).toString('utf8')).split('\f')
     .map(page => page.replace(/[­−–—�]/g, '-').replace(/-{2,}/g, '-').replace(/\*/g, '').replace(/\s+/g, ' '));
   // Un zéro initial imprimé (« 09 », « 04 ») est la même valeur que « 9 », « 4 ».
   const unpadded = pages.map(page => normalizeBlockText(page).replace(/(?<=\s)0(\d)(?=\s)/g, '$1'));

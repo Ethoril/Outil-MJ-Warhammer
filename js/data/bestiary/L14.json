@@ -298,7 +298,7 @@
      "name": "Sure Shot"
     },
     {
-     "name": "Warleader"
+     "name": "War Leader"
     },
     {
      "name": "Wealthy",
@@ -486,7 +486,7 @@
      "name": "Orientation"
     },
     {
-     "name": "Read/ Write"
+     "name": "Read/Write"
     },
     {
      "name": "Strong Swimmer"
@@ -999,7 +999,7 @@
      "name": "Etiquette (Crew, Nobles, Scholars, Soldiers)"
     },
     {
-     "name": "Fleet Footed"
+     "name": "Fleet-footed"
     },
     {
      "name": "Furious Assault"
@@ -1039,7 +1039,7 @@
      "name": "Pilot"
     },
     {
-     "name": "Public Speaking"
+     "name": "Public Speaker"
     },
     {
      "name": "Read/Write"
@@ -1068,7 +1068,7 @@
      "rank": 2
     },
     {
-     "name": "Warleader"
+     "name": "War Leader"
     },
     {
      "name": "Wealthy",
@@ -1857,7 +1857,7 @@
      "name": "Read/Write"
     },
     {
-     "name": "Strong back"
+     "name": "Strong Back"
     },
     {
      "name": "Strong Swimmer"
@@ -2719,8 +2719,8 @@
      "value": 52
     },
     {
-     "name": "Language (Elth�rin)",
-     "nameFr": "Langue (Elth�rin)",
+     "name": "Language (Elthárin)",
+     "nameFr": "Langue (Elthárin)",
      "frUnverified": true,
      "value": 73
     },
@@ -3466,8 +3466,8 @@
      "value": 42
     },
     {
-     "name": "Language (Elth�rin)",
-     "nameFr": "Langue (Elth�rin)",
+     "name": "Language (Elthárin)",
+     "nameFr": "Langue (Elthárin)",
      "frUnverified": true,
      "value": 57
     },
@@ -3559,7 +3559,7 @@
      "name": "Read/Write"
     },
     {
-     "name": "Resistance (Chaos)"
+     "name": "Resistant (Chaos)"
     },
     {
      "name": "Rover"
@@ -3821,7 +3821,7 @@
      "name": "Enclosed Fighter"
     },
     {
-     "name": "Fleet Footed"
+     "name": "Fleet-footed"
     },
     {
      "name": "Furious Assault",

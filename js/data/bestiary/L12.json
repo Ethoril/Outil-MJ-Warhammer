@@ -981,7 +981,7 @@
      "name": "Resolute"
     },
     {
-     "name": "Warleader"
+     "name": "War Leader"
     }
    ],
    "trappings": [
@@ -1083,7 +1083,7 @@
      "name": "Resolute"
     },
     {
-     "name": "Warleader"
+     "name": "War Leader"
     }
    ],
    "trappings": [
@@ -1184,10 +1184,10 @@
      "name": "Resolute"
     },
     {
-     "name": "Unshakable"
+     "name": "Unshakeable"
     },
     {
-     "name": "Warleader"
+     "name": "War Leader"
     }
    ],
    "trappings": [
@@ -1987,7 +1987,7 @@
      "name": "Resolute"
     },
     {
-     "name": "Warleader"
+     "name": "War Leader"
     }
    ],
    "trappings": [
@@ -2482,7 +2482,7 @@
      "name": "Resolute"
     },
     {
-     "name": "Unshakable"
+     "name": "Unshakeable"
     },
     {
      "name": "War Leader"
@@ -2628,7 +2628,7 @@
      "name": "Resolute"
     },
     {
-     "name": "Warleader"
+     "name": "War Leader"
     }
    ],
    "trappings": [
@@ -2986,10 +2986,10 @@
      "name": "Resolute"
     },
     {
-     "name": "Unshakable"
+     "name": "Unshakeable"
     },
     {
-     "name": "Warleader"
+     "name": "War Leader"
     }
    ],
    "trappings": [
@@ -3136,7 +3136,7 @@
      "name": "Resolute"
     },
     {
-     "name": "Warleader"
+     "name": "War Leader"
     }
    ],
    "trappings": [
@@ -3663,10 +3663,10 @@
      "name": "Resolute"
     },
     {
-     "name": "Unshakable"
+     "name": "Unshakeable"
     },
     {
-     "name": "Warleader"
+     "name": "War Leader"
     }
    ],
    "trappings": [
@@ -4051,7 +4051,7 @@
      "name": "Roughrider"
     },
     {
-     "name": "Warleader"
+     "name": "War Leader"
     }
    ],
    "trappings": [
@@ -4495,7 +4495,7 @@
      "name": "Resolute"
     },
     {
-     "name": "Warleader"
+     "name": "War Leader"
     }
    ],
    "trappings": [
@@ -4774,7 +4774,7 @@
    },
    "attacks": [
     {
-     "name": "Zweih�nder",
+     "name": "Zweihänder",
      "damage": 10,
      "trait": "Weapon"
     }
@@ -4846,7 +4846,7 @@
     "Club",
     "Gutplate",
     "Mix of Chain and Plate Mail",
-    "Two-Handed Scimitar (counts as Zweih�nder)"
+    "Two-Handed Scimitar (counts as Zweihänder)"
    ],
    "keywords": [
     "ogre"
@@ -5360,7 +5360,7 @@
      "name": "Second Sight"
     },
     {
-     "name": "War Wizard Water Wise"
+     "name": "War Wizard"
     }
    ],
    "spells": {
@@ -5613,7 +5613,7 @@
      "name": "Resolute"
     },
     {
-     "name": "Unshakable"
+     "name": "Unshakeable"
     },
     {
      "name": "Savvy"
@@ -5628,7 +5628,7 @@
      "name": "Tunnel Rat"
     },
     {
-     "name": "Warleader"
+     "name": "War Leader"
     },
     {
      "name": "Well-prepared"
@@ -5850,7 +5850,7 @@
      "name": "Savvy"
     },
     {
-     "name": "Warleader"
+     "name": "War Leader"
     }
    ],
    "trappings": [

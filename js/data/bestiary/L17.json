@@ -232,7 +232,7 @@
      "Dazzling Brightness",
      "Eyes of Volans",
      "Light of Purity",
-     "Ph�'s Protection",
+     "Phâ's Protection",
      "Pierce the Veil"
     ]
    },
@@ -455,10 +455,10 @@
      "name": "Petty Magic"
     },
     {
-     "name": "Read/ Write"
+     "name": "Read/Write"
     },
     {
-     "name": "Resistance (Poison)"
+     "name": "Resistant (Poison)"
     },
     {
      "name": "Second Sight"
@@ -992,10 +992,10 @@
      "name": "Petty Magic"
     },
     {
-     "name": "Read/ Write"
+     "name": "Read/Write"
     },
     {
-     "name": "Resistance (Disease)"
+     "name": "Resistant (Disease)"
     },
     {
      "name": "Savvy"
@@ -1634,10 +1634,10 @@
      "name": "Perfect Pitch"
     },
     {
-     "name": "Read/ Write"
+     "name": "Read/Write"
     },
     {
-     "name": "Resistance (Disease)"
+     "name": "Resistant (Disease)"
     },
     {
      "name": "Savvy"
@@ -3121,7 +3121,7 @@
      "name": "Menacing"
     },
     {
-     "name": "Nimble Fingered"
+     "name": "Nimble-fingered"
     },
     {
      "name": "Petty Magic"
@@ -3513,8 +3513,8 @@
    ],
    "skills": [
     {
-     "name": "Channelling (M�na's Marsh Magic)",
-     "nameFr": "Focalisation (M�na's Marsh Magic)",
+     "name": "Channelling (Mána's Marsh Magic)",
+     "nameFr": "Focalisation (Mána's Marsh Magic)",
      "frUnverified": true,
      "value": 90
     },
@@ -3602,7 +3602,7 @@
      "name": "Aethyric Attunement"
     },
     {
-     "name": "Arcane Magic (M�na's Marsh Magic)"
+     "name": "Arcane Magic (Mána's Marsh Magic)"
     },
     {
      "name": "Instinctive Diction",
@@ -3647,7 +3647,7 @@
      "Fearsome",
      "Ward"
     ],
-    "M�na's Marsh Magic": [
+    "Mána's Marsh Magic": [
      "A Bite of Midges",
      "Despondent Slough",
      "Inculcate Mizzle",

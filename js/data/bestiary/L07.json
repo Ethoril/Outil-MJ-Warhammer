@@ -227,7 +227,7 @@
      "name": "Public Speaker"
     },
     {
-     "name": "Resistance (Chaos)"
+     "name": "Resistant (Chaos)"
     },
     {
      "name": "Savvy"
@@ -242,7 +242,7 @@
      "name": "Very Strong"
     },
     {
-     "name": "Warleader"
+     "name": "War Leader"
     },
     {
      "name": "Warrior Born"
@@ -953,7 +953,7 @@
    ],
    "spells": {
     "notes": [
-     "Lord Skrolk is an accomplished wizard whose power is further bolstered by his loathsome god. He can be considered to have access to any spells from the following lists: � Petty Magic � The Lore of Nurgle"
+     "Lord Skrolk is an accomplished wizard whose power is further bolstered by his loathsome god. He can be considered to have access to any spells from the following lists: • Petty Magic • The Lore of Nurgle"
     ]
    },
    "keywords": [
@@ -2133,8 +2133,8 @@
      "value": 70
     },
     {
-     "name": "Language (Elth�rin)",
-     "nameFr": "Langue (Elth�rin)",
+     "name": "Language (Elthárin)",
+     "nameFr": "Langue (Elthárin)",
      "frUnverified": true,
      "value": 85
     },
@@ -2261,7 +2261,7 @@
      "name": "Pilot"
     },
     {
-     "name": "Public Speaking"
+     "name": "Public Speaker"
     },
     {
      "name": "Read/Write"
@@ -2273,7 +2273,7 @@
      "name": "Stout-hearted"
     },
     {
-     "name": "Warleader"
+     "name": "War Leader"
     }
    ],
    "trappings": [
@@ -2355,8 +2355,8 @@
      "value": 67
     },
     {
-     "name": "Language (Elth�rin)",
-     "nameFr": "Langue (Elth�rin)",
+     "name": "Language (Elthárin)",
+     "nameFr": "Langue (Elthárin)",
      "frUnverified": true,
      "value": 38
     },
@@ -2645,7 +2645,7 @@
      "name": "Petty Magic"
     },
     {
-     "name": "Read/ Write"
+     "name": "Read/Write"
     },
     {
      "name": "Savant (Magic)"
@@ -2666,7 +2666,7 @@
      "name": "Tower of Memories"
     },
     {
-     "name": "War Wizard Slann"
+     "name": "War Wizard"
     }
    ],
    "abilities": [
@@ -3232,7 +3232,7 @@
      "name": "Tower of Memories"
     },
     {
-     "name": "War Wizard Slann"
+     "name": "War Wizard"
     }
    ],
    "abilities": [
@@ -3423,7 +3423,7 @@
      "name": "Tower of Memories"
     },
     {
-     "name": "War Wizard Slann"
+     "name": "War Wizard"
     }
    ],
    "abilities": [
@@ -4625,7 +4625,7 @@
      "name": "Instinctive Diction"
     },
     {
-     "name": "Resistance (Chaos)"
+     "name": "Resistant (Chaos)"
     },
     {
      "name": "Second Sight"
@@ -8229,7 +8229,7 @@
      "name": "Resolute"
     },
     {
-     "name": "Warleader"
+     "name": "War Leader"
     }
    ],
    "keywords": [

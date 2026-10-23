@@ -120,7 +120,7 @@
      "name": "Night Vision"
     },
     {
-     "name": "Resistance (Chaos)"
+     "name": "Resistant (Chaos)"
     },
     {
      "name": "Small"
@@ -263,7 +263,7 @@
      "name": "Night Vision"
     },
     {
-     "name": "Resistance (Chaos)"
+     "name": "Resistant (Chaos)"
     },
     {
      "name": "Seasoned Traveller"
@@ -415,10 +415,10 @@
      "name": "Panhandle"
     },
     {
-     "name": "Resistance (Chaos)"
+     "name": "Resistant (Chaos)"
     },
     {
-     "name": "Resistance (Disease)"
+     "name": "Resistant (Disease)"
     },
     {
      "name": "Small"
@@ -572,7 +572,7 @@
      "name": "Nose for Trouble"
     },
     {
-     "name": "Resistance (Chaos)"
+     "name": "Resistant (Chaos)"
     },
     {
      "name": "Small"
@@ -706,10 +706,10 @@
      "name": "Night Vision"
     },
     {
-     "name": "Public Speaking"
+     "name": "Public Speaker"
     },
     {
-     "name": "Resistance(Chaos)"
+     "name": "Resistant(Chaos)"
     },
     {
      "name": "Small"
@@ -831,10 +831,10 @@
      "name": "Night Vision"
     },
     {
-     "name": "Resistance (Chaos)"
+     "name": "Resistant (Chaos)"
     },
     {
-     "name": "Resistance (Disease)"
+     "name": "Resistant (Disease)"
     },
     {
      "name": "Small"
@@ -970,7 +970,7 @@
      "name": "Noble Blood"
     },
     {
-     "name": "Resistance (Chaos)"
+     "name": "Resistant (Chaos)"
     },
     {
      "name": "Small"
@@ -1049,7 +1049,7 @@
      "name": "Fearless (Witches)"
     },
     {
-     "name": "Magic Resistant"
+     "name": "Magic Resistance"
     },
     {
      "name": "Night Vision"
@@ -1064,7 +1064,7 @@
      "name": "Resolute"
     },
     {
-     "name": "Strong-Minded"
+     "name": "Strong-minded"
     },
     {
      "name": "Sturdy"
@@ -1138,7 +1138,7 @@
      "name": "Lip Reading"
     },
     {
-     "name": "Magic Resistant"
+     "name": "Magic Resistance"
     },
     {
      "name": "Night Vision"
@@ -1150,7 +1150,7 @@
      "name": "Shadow"
     },
     {
-     "name": "Strong-Minded"
+     "name": "Strong-minded"
     },
     {
      "name": "Sturdy"
@@ -1225,7 +1225,7 @@
      "name": "Linguistics"
     },
     {
-     "name": "Magic Resistant"
+     "name": "Magic Resistance"
     },
     {
      "name": "Night Vision"
@@ -1240,7 +1240,7 @@
      "name": "Speedreader"
     },
     {
-     "name": "Strong-Minded"
+     "name": "Strong-minded"
     },
     {
      "name": "Sturdy"
@@ -1334,7 +1334,7 @@
      "name": "Savant (Engineer)"
     },
     {
-     "name": "Strong-Minded"
+     "name": "Strong-minded"
     },
     {
      "name": "Sturdy"
@@ -1497,7 +1497,7 @@
      "name": "Sturdy"
     },
     {
-     "name": "Warleader"
+     "name": "War Leader"
     }
    ],
    "trappings": [

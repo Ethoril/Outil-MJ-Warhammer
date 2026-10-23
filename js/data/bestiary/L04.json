@@ -281,7 +281,7 @@
      "name": "Gregarious"
     },
     {
-     "name": "Nimble Fingered"
+     "name": "Nimble-fingered"
     },
     {
      "name": "Numismatics"
@@ -423,7 +423,7 @@
      "name": "Flee!"
     },
     {
-     "name": "Nimble Fingered"
+     "name": "Nimble-fingered"
     },
     {
      "name": "Savvy"
@@ -564,7 +564,7 @@
      "name": "Flee!"
     },
     {
-     "name": "Nimble Fingered"
+     "name": "Nimble-fingered"
     },
     {
      "name": "Savvy"
@@ -713,7 +713,7 @@
      "name": "Gregarious"
     },
     {
-     "name": "Nimble Fingered"
+     "name": "Nimble-fingered"
     },
     {
      "name": "Savvy"
@@ -849,7 +849,7 @@
      "name": "Luck"
     },
     {
-     "name": "Nimble Fingered"
+     "name": "Nimble-fingered"
     },
     {
      "name": "Savvy"
@@ -998,10 +998,10 @@
      "name": "Gregarious"
     },
     {
-     "name": "Nimble Fingered"
+     "name": "Nimble-fingered"
     },
     {
-     "name": "Read/ Write"
+     "name": "Read/Write"
     },
     {
      "name": "Savvy"
@@ -1412,7 +1412,7 @@
      "name": "Menacing"
     },
     {
-     "name": "Resistance (Poison)"
+     "name": "Resistant (Poison)"
     },
     {
      "name": "Savvy"
@@ -1909,7 +1909,7 @@
      "name": "Orientation"
     },
     {
-     "name": "Resistance (Poison)"
+     "name": "Resistant (Poison)"
     },
     {
      "name": "Rover"

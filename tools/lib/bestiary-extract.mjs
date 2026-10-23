@@ -6,6 +6,7 @@ import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { pageBlocks, setLenient } from './bestiary-blocks.mjs';
 import { parseBlock } from './bestiary-profile.mjs';
+import { repairGlyphs } from './bestiary-glyphs.mjs';
 import { CELL_OVERRIDES, BODY_OVERRIDES } from './bestiary-overrides.mjs';
 
 const read = path => JSON.parse(readFileSync(path, 'utf8'));
@@ -23,7 +24,7 @@ export function dictionaries() {
 
 /** Texte layout d'un livre, une chaîne par page physique. */
 export function bookPages(book) {
-  return execFileSync('pdftotext', ['-layout', book.path, '-'], { maxBuffer: 1 << 28 }).toString('utf8').split('\f');
+  return repairGlyphs(execFileSync('pdftotext', ['-layout', book.path, '-'], { maxBuffer: 1 << 28 }).toString('utf8')).split('\f');
 }
 
 /** Profils des livres demandés : [{ key, book, physicalPage, index, zone, title, stats, … }] et lignes de valeurs à confirmer. */

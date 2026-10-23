@@ -73,7 +73,7 @@ test('Q12b : un libellé centré qui dépasse la fenêtre, au-dessus du titre du
 
 test('Q12b : « Traits and Talents » V5 sépare les talents du catalogue (Niels Vorberren, Grimes)', () => {
   const niels = byId(load('L10'), 'E0-P-378');
-  assert.deepEqual(names(niels.talents), ['Marksman', 'Night Vision', 'Nimble Fingered', 'Roughrider', 'Tunnel Fighter']);
+  assert.deepEqual(names(niels.talents), ['Marksman', 'Night Vision', 'Nimble-fingered', 'Roughrider', 'Tunnel Fighter']);
   assert.equal(niels.attacks.length, 2);
   assert.equal(niels.attacks[0].rangeYards, 50);
   assert.equal(byId(load('L10'), 'E0-P-392').attacks.length, 1);

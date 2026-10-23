@@ -109,8 +109,8 @@
      "value": 46
     },
     {
-     "name": "Language (Elth�rin)",
-     "nameFr": "Langue (Elth�rin)",
+     "name": "Language (Elthárin)",
+     "nameFr": "Langue (Elthárin)",
      "frUnverified": true,
      "value": 37
     },
@@ -375,7 +375,7 @@
     "Dwarf Greataxe",
     "Dwarf Crossbow and Ammunition",
     "Mail Coat",
-    "Map of Drakenh�henzug",
+    "Map of Drakenhöhenzug",
     "Plate Helm (Open)",
     "Sturdy Boots",
     "Rope",
@@ -1647,7 +1647,7 @@
      "name": "Night Vision"
     },
     {
-     "name": "Nimble Fingered"
+     "name": "Nimble-fingered"
     },
     {
      "name": "Roughrider"

@@ -222,7 +222,7 @@
      "name": "Menacing"
     },
     {
-     "name": "Nimble Fingered"
+     "name": "Nimble-fingered"
     },
     {
      "name": "Petty Magic"
@@ -1031,7 +1031,7 @@
      "name": "Perfect Pitch"
     },
     {
-     "name": "Public Speaking"
+     "name": "Public Speaker"
     },
     {
      "name": "Savvy"
@@ -1202,6 +1202,9 @@
      "name": "Sharp"
     },
     {
+     "name": "Well-prepared"
+    },
+    {
      "name": "Writing Equipment"
     }
    ],
@@ -1352,7 +1355,7 @@
      "name": "Magic Resistance"
     },
     {
-     "name": "Nimble Fingered"
+     "name": "Nimble-fingered"
     },
     {
      "name": "Night Vision",
@@ -1369,7 +1372,7 @@
      "rank": 2
     },
     {
-     "name": "Strong-Minded",
+     "name": "Strong-minded",
      "rank": 2
     },
     {
@@ -1545,7 +1548,7 @@
      "name": "Savvy"
     },
     {
-     "name": "Suave Courtly Garb"
+     "name": "Suave"
     }
    ],
    "keywords": [
@@ -1668,7 +1671,7 @@
      "name": "Doomed"
     },
     {
-     "name": "Nimble Fingered"
+     "name": "Nimble-fingered"
     },
     {
      "name": "Panhandle"
@@ -1677,7 +1680,7 @@
      "name": "Perfect Pitch"
     },
     {
-     "name": "Public Speaking"
+     "name": "Public Speaker"
     },
     {
      "name": "Read/Write"
@@ -1836,7 +1839,7 @@
      "name": "Night Vision"
     },
     {
-     "name": "Nimble Fingered"
+     "name": "Nimble-fingered"
     },
     {
      "name": "Scale Sheer Surface"
@@ -2421,6 +2424,9 @@
     },
     {
      "name": "Savvy"
+    },
+    {
+     "name": "Stout-hearted"
     },
     {
      "name": "Strike Mighty Blow",
@@ -3052,7 +3058,7 @@
      "name": "Suave"
     },
     {
-     "name": "Unshakable"
+     "name": "Unshakeable"
     },
     {
      "name": "Wealthy",
@@ -3478,7 +3484,7 @@
      "name": "Nose for Trouble"
     },
     {
-     "name": "Read/ Write"
+     "name": "Read/Write"
     },
     {
      "name": "Robust",
@@ -4218,7 +4224,7 @@
      "name": "Orientation"
     },
     {
-     "name": "Resistance (Disease)"
+     "name": "Resistant (Disease)"
     },
     {
      "name": "Savvy"
@@ -5477,7 +5483,7 @@
      "name": "Etiquette (Guilder)"
     },
     {
-     "name": "Magic Resistant"
+     "name": "Magic Resistance"
     },
     {
      "name": "Marksman"
@@ -5495,7 +5501,7 @@
      "name": "Relentless"
     },
     {
-     "name": "Strong-Minded"
+     "name": "Strong-minded"
     },
     {
      "name": "Sturdy"
@@ -5651,7 +5657,7 @@
      "name": "Night Vision"
     },
     {
-     "name": "Read/ Write"
+     "name": "Read/Write"
     },
     {
      "name": "Sniper"
@@ -5809,7 +5815,7 @@
      "name": "Menacing"
     },
     {
-     "name": "Nimble Fingered"
+     "name": "Nimble-fingered"
     },
     {
      "name": "Petty Magic"
@@ -6936,7 +6942,7 @@
      "name": "Read/Write"
     },
     {
-     "name": "Resistance (Disease)"
+     "name": "Resistant (Disease)"
     },
     {
      "name": "Secret Identity",
@@ -7066,7 +7072,7 @@
      "name": "Read/Write"
     },
     {
-     "name": "Resistance (Chaos)"
+     "name": "Resistant (Chaos)"
     },
     {
      "name": "Shadow"
@@ -7220,10 +7226,10 @@
      "name": "Public Speaker"
     },
     {
-     "name": "Read/ Write"
+     "name": "Read/Write"
     },
     {
-     "name": "Resistance (Chaos)"
+     "name": "Resistant (Chaos)"
     },
     {
      "name": "Schemer"
@@ -7594,7 +7600,10 @@
      "name": "Disarm"
     },
     {
-     "name": "Hardy Reversal"
+     "name": "Hardy"
+    },
+    {
+     "name": "Reversal"
     },
     {
      "name": "Doomed (Beware the flames of passion)"
@@ -7762,7 +7771,7 @@
      "name": "Menacing"
     },
     {
-     "name": "Nimble Fingered"
+     "name": "Nimble-fingered"
     },
     {
      "name": "Petty Magic"
