@@ -235,6 +235,7 @@ export function normalizeResolutionInput(input = {}) {
   // Attaque naturelle choisie (Trait de créature) : ses dégâts calculés remplacent ceux de l'action (« imprimé » : l'action garde les siens).
   const natural = naturalPlanOf(actor, input.v5);
   if (natural && /^\d+$/.test(String(natural.damageFormula))) { action.damage = Number(natural.damageFormula); delete action.damageFormula; }
+  else if (natural?.noDamage) { action.damage = 0; delete action.damageFormula; }
   if (action.extensions?.fiche?.requiresLink) throw new ResolutionError('Lier une compétence à cette arme avant de résoudre son attaque', 'SKILL_LINK_REQUIRED');
   const target = isRecord(input.target) ? clone(input.target) : null;
   const entered=input.roll??input.dieRoll??input.enteredRoll;
@@ -624,7 +625,8 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     protectionReceipts.push(protection);
     const targetArmour = protection.ap;
 
-    if (targetArmour !== null && !mechanicalWarnings.length)     damage = computeDamage({
+    // Souffle de Fumée (V5 p.357) : aucun dégât, ni ceux de l'action ni le NR.
+    if (targetArmour !== null && !mechanicalWarnings.length && naturalPlanOf(actor, normalized.v5)?.noDamage !== true)     damage = computeDamage({
       weaponDamage,
       strengthBonus,
       damageBonus:damageBonus+magicWeaponBonus(actor,action,nature.ranged,Number(action.damage) || 0),

@@ -95,6 +95,7 @@ export function planNaturalAttack(participant, key, options = {}) {
     if (type) {
       plan.reminders.push(`Souffle de ${type.fr}${type.add === undefined ? '' : ` : dégâts B${type.stat === 'F' ? 'F' : 'E'}+${type.add}`}.`);
       if (type.reminder) plan.reminders.push(type.reminder);
+      if (!type.stat) plan.noDamage = true;
       if (type.stat) {
         const base = type.stat === 'F' ? bonus : bonusOf(participant?.caracs?.E);
         if (base === null) plan.unresolved.push(`Souffle de ${type.fr} : ${type.stat === 'F' ? 'Force' : 'Endurance'} du participant inconnue, dégâts à saisir.`);
@@ -125,7 +126,8 @@ export function planNaturalAttack(participant, key, options = {}) {
     if ((options.used ?? 0) >= 1) plan.unresolved.push(`${rule.fr} : déjà utilisé ce Tour.`);
   }
   if (rule.perDetail) {
-    const count = Number.parseInt(owned.detail, 10);
+    // « 8 × +9 » (nombre imprimé × valeur) ou « 4 » ; un chiffre signé (« +9 ») est la valeur d'attaque, pas le nombre de tentacules.
+    const count = /^\d+/.test(owned.detail) ? Number.parseInt(owned.detail, 10) : NaN;
     if (!Number.isInteger(count) || count < 1) plan.unresolved.push(`${rule.fr} : nombre de tentacules illisible.`);
     else {
       plan.quota = { id: `creature:${key}`, scope: 'turn', maximum: count };

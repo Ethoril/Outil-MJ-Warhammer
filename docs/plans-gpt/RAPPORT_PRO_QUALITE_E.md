@@ -28,6 +28,7 @@ Plan : `PLAN_PRO_QUALITE_E.md`. Branche `pro/qualite-e`, départ `9c12613`. Choi
 | Q18 | FAIT (`QE-Q18-1` à `QE-Q18-5`) | (voir `git log`, « Q18 ») |
 | R | FAIT (avec réserve : manques de complétude non justifiés un par un) | (voir `git log`, « R ») |
 | R2 | FAIT (avec réserve : `QE-R2-1`) | (voir `git log`, « R2 ») |
+| Q20 | FAIT (`QE-D-23-1`, `QE-Q20-1`, `QE-Q20-2`) | (voir `git log`, « Q20 ») |
 
 ## Q0 — contrôle de complétude
 
@@ -262,3 +263,9 @@ Branché / non appelé (grep dans `js/`) :
 - **Valeurs imprimées** : 23 livres comparés à `9c12613` : seuls E0-P-125 et E0-P-126 diffèrent (`QE-Q12a-1`, en attente du MJ) ; 0 profil ajouté ou retiré.
 - **Recette** : `node tools/run-divine-recipe.mjs` : « RECETTE DIVINE VERTE — 26 commandes » (suite complète `node` incluse, sans échec). Manifeste de base régénéré (`QE-R2-2`).
 - **Branché (appelant + chemin d'interface) / non appelé** : Q10b : talent au catalogue (`resolveTalent`), `leadershipRallySlModifiers` code testé, non appelé. Q14 : sorts branchés (`bestiarySpellLines` ← `bestiary-library.js`, `fiche-details.js`), hors moteur de magie. Q15 : outil et données. Q16 : branché (`buildParticipantFromBestiary` ← bibliothèque, « Ajouter au combat ») ; `multiAttack` et `freeAttack` informatifs, non lus. Q17 : branché (`deriveReminders` ← `Store.getReminders` ← `main.js`), rendu non vérifié dans un navigateur. Q18 : branché (panneau de Résolution → `naturalAttack` → `naturalPlanOf`) ; `planCreatureMagic` code testé, non appelé. Q19 : branché (`Store.removeParticipant`).
+
+## Q20 — attaques gratuites des attaques multiples (FAIT)
+
+- Décisions du MJ du 23/10 consignées (`QE-D-23-1`). `js/core/bestiary-profiles.js` : Tentacules, toutes les actions sont des attaques gratuites ; autre multiplicateur (Carrion « Claws 2 »), seules les actions au-delà de la première le sont ; le Trait s'écrit « Tentacles (8 × +9) ». `js/core/v5-store-action.js` : quota par Tour réel des attaques gratuites, sans Élan (Kraken 8, Carrion 1 Griffe gratuite). `js/core/creature-combat.js` : quota des Tentacules tiré du nombre imprimé (Kraken 8, Amoebae E0-P-027 = 2, Jetsam E0-P-028 = 2) et non de la valeur +9. Souffle de Fumée : `noDamage`, `js/core/resolution.js` n'applique aucun dégât. Dégâts du Trait V5 déjà prioritaires sur l'imprimé, vérifié par un test sur un profil V4. Choix : `QE-Q20-1`, `QE-Q20-2`.
+- Test : `tests/pro-q20-attaques-gratuites.test.js` (6 tests, par `previewResolution` / `applyResolution` du Store). Suite complète lancée une fois : 4395 réussis, 0 échec.
+- **Branché (appelant + chemin d'interface)** : le quota est lu dans `v5-store-action.js` à partir de l'action choisie du participant (bibliothèque → « Ajouter au combat » → panneau de Résolution) ; `naturalPlanOf` ← panneau « Attaque naturelle ». Rendu non vérifié dans un navigateur. `multiAttack` est désormais lu (Store), `freeAttack` aussi.

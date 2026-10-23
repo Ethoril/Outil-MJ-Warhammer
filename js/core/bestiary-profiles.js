@@ -158,7 +158,9 @@ export function bestiarySpellLines(spells) {
 
 const traitText = trait => {
   const detail = trait.param ?? trait.rating;
-  return detail === undefined || detail === null || detail === '' ? trait.name : `${trait.name} (${detail})`;
+  if (detail === undefined || detail === null || detail === '') return trait.name;
+  // « Tentacles (8 × +9) » : le nombre imprimé reste lisible par le quota des attaques gratuites (creature-combat.js).
+  return isInt(trait.count) && trait.count > 1 ? `${trait.name} (${trait.count} × ${detail})` : `${trait.name} (${detail})`;
 };
 
 /**
@@ -168,8 +170,10 @@ const traitText = trait => {
 function attackActions(attack) {
   const ranged = isInt(attack.rangeYards);
   const of = isInt(attack.count) && attack.count > 1 ? attack.count : 1;
+  // Tentacules : toutes les attaques sont gratuites ; décision du MJ du 23/10 : tout autre multiplicateur ne rend gratuite que chaque attaque au-delà de la première.
+  const tentacles = /tentacle/i.test(`${attack.trait || ''} ${attack.name || ''}`);
   return Array.from({ length: of }, (_, position) => {
-    const free = attack.free || (of > 1 ? 'all' : null);
+    const free = attack.free || (of > 1 && (tentacles || position > 0) ? 'all' : null);
     const v5 = { kind: ranged ? 'ranged' : 'melee', ...(free ? { [BESTIARY_FREE_ATTACK_KEY]: free } : {}), ...(of > 1 ? { multiAttack: { group: attack.name, index: position + 1, of } } : {}) };
     return normalizeAction({
       name: of > 1 ? `${attack.name} ${position + 1}` : attack.name, type: 'attack', attr: ranged ? 'CT' : 'CC', base: attack.value ?? '', damage: attack.damage,

@@ -71,6 +71,13 @@ export function buildV5StoreActionInput(envelope, raw = {}) {
     for(const cost of natural.costs)if(!costs.some(c=>c.resource===cost.resource))costs.push({id:'creature:'+context.naturalAttack+':'+cost.resource,...cost});
     if(natural.quota)quotas.push(natural.quota);
   }
+  // Attaques multiples d'un profil de bestiaire (« 2 Claws », « 8 × Tentacles ») : les attaques gratuites partagent un quota par Tour,
+  // sans Élan ; Tentacules : toutes gratuites (quota commun avec l'attaque naturelle), autre multiplicateur : toutes sauf la première.
+  const multi=supplied.action?.extensions?.v5?.multiAttack;
+  if(multi&&supplied.action.extensions.v5.freeAttack&&!v5.extraAttack){
+    const tentacles=/tentacle/i.test(multi.group),id=tentacles?'creature:tentacles':'creature:multi:'+encodeURIComponent(String(multi.group).toLowerCase());
+    if(!quotas.some(q=>q.id===id))quotas.push({id,scope:'turn',maximum:tentacles?multi.of:multi.of-1});
+  }
   let quotaActorId;
   const selected=context.preRollTalent;
   if(selected&&selected!=='none'){
