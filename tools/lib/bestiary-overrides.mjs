@@ -426,6 +426,27 @@ export const BODY_OVERRIDES = Object.freeze({
     'Talents: Furious Assault, Menacing, Strike Mighty Blow',
     'Trappings: Chaos Armour (cannot be removed) decorated with the skin of a dire wolf, Hand Axe'
   ],
+  // Le Rat cornu (L22) p. 77 : Blightking, dernier objet « A Thirst for Battle and the Diseased End of All Things » et paragraphe de la colonne (« The Blightkings enjoy… ») collé à la liste ; « Two- Handed » césure du livre.
+  'L22:77:0': [
+    'Traits: Armoured 6, Shield 2*, Belligerent, Champion, Corruption (Moderate), Disease (Nurgle\'s Rot), Weapon (Sword +10, Great Axe +12)',
+    'Talents: Hardy 2, Strike Mighty Blow 2',
+    'Skills: Athletics 40, Melee (Basic 80, Two-Handed 80, Parry 80), Perception 60',
+    'Trappings: Putrid Great Axe, A Pair of Swords that Occassionaly Laugh, Shield Bearing the Skulls of a Dozen Slain Warriors, Cursed Plate Bedecked with Tributes to Nurgle, A Thirst for Battle and the Diseased End of All Things'
+  ],
+  // Le Rat cornu (L22) p. 78 : Behram Gundarson, « Tunnel Rat » est imprimé parmi les Traits mais c'est un talent (comme chez Martina Kurtz, p. 103).
+  'L22:78:0': [
+    'Traits: Animosity (Elves), Hatred (Greenskins, Skaven), Night Vision, Prejudice (Elves), Tough, Weapon (Hand Weapon) +9',
+    'Skills: Climb 43, Consume Alcohol 46, Cool 55, Dodge 42, Endurance 52, Intuition 40, Leadership 55, Lore (Skaven) 43, Melee (Basic) 65, Perception 45, Ranged (Crossbow) 35, Track 40',
+    'Talents: Enclosed Fighter, Fearless (Everything), Frenzy, Slayer, Strike Mighty Blow, Tunnel Rat',
+    'Trappings: Armour, Helmet, Shield, Axe (Hand Weapon), Crossbow and 10 bolts'
+  ],
+  // Le Rat cornu (L22) p. 103 : Wilhelm Koch, la ligne « Mental Corruption: » (Traits propres de corruption) précédait Trappings et coupait la liste ; gardée comme Trait Mental Corruption.
+  'L22:103:1': [
+    'Traits: Armour 1, Mental Corruption (Erratic Fantasist, Suspicious Mind), Weapon (Pick) +7',
+    'Skills: Cool 32, Endurance 55, Haggle 42, Intuition 44, Lore (Middle Mountains) 42, Melee (Basic 36, Two-Handed 36), Outdoor Survival 42, Perception 44',
+    'Talents: Doomed (Lose thyself slowly, piece by piece)',
+    'Trappings: Roughspun Robes over Leather Jack, Dagger, Pick'
+  ],
   // Ennemi Intérieur, Une nuit agitée (L24) p. 19 : Josef Aufwiegler, la ligne imprimée « Talents: Weapon (Fist) +3 » est une arme (coquille du livre, comme « Weapons (Spear) +8 »).
   'L24:20:1': [
     'Traits: Weapon (Fist) +3'

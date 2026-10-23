@@ -2314,7 +2314,7 @@
    ],
    "talents": [
     {
-     "name": "Doomed! (Find Thy Path and Stray Not)"
+     "name": "Doomed (Find Thy Path and Stray Not)"
     },
     {
      "name": "Flee!"
@@ -2861,9 +2861,8 @@
      "value": 80
     },
     {
-     "name": "Melee (Two- Handed)",
-     "nameFr": "Corps à corps (Two- Handed)",
-     "frUnverified": true,
+     "name": "Melee (Two-Handed)",
+     "nameFr": "Corps à corps (Deux mains)",
      "value": 80
     },
     {
@@ -2918,8 +2917,7 @@
     "A Pair of Swords that Occassionaly Laugh",
     "Shield Bearing the Skulls of a Dozen Slain Warriors",
     "Cursed Plate Bedecked with Tributes to Nurgle",
-    "a Sword and Shield",
-    "or a Pair of Swords them once during their turn."
+    "A Thirst for Battle and the Diseased End of All Things"
    ],
    "nameFrSource": "proposition"
   },
@@ -3055,6 +3053,9 @@
     },
     {
      "name": "Strike Mighty Blow"
+    },
+    {
+     "name": "Tunnel Rat"
     }
    ],
    "trappings": [
@@ -4022,10 +4023,22 @@
      "value": 44
     }
    ],
+   "traits": [
+    {
+     "name": "Mental Corruption",
+     "param": "Erratic Fantasist, Suspicious Mind",
+     "ref": "E0-T-038"
+    }
+   ],
    "talents": [
     {
      "name": "Doomed (Lose thyself slowly, piece by piece)"
     }
+   ],
+   "trappings": [
+    "Roughspun Robes over Leather Jack",
+    "Dagger",
+    "Pick"
    ],
    "nameFrSource": "proposition"
   },

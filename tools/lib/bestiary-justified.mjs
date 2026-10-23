@@ -107,5 +107,11 @@ export const JUSTIFIED = Object.freeze({
   'E0-P-703': { trappingNoise: 'L21 p.79 : « dagger » est imprimé en minuscules par le livre.' },
   'E0-P-709': { trappings: 'L21 p.85 : « 7 GCs SPELLS Petty: … ERNST HEIDLEMANN » est l\'encadré SPELLS suivi du titre du profil voisin ; les trois objets et les sorts (champ spells) sont présents.' },
   'E0-P-712': { traits: 'L21 p.118 : « Undead Hexwraiths Hexwraiths » est le titre et le texte du profil voisin ; les huit Traits du Winged Nightmare sont présents.' },
+  // Q27g : L22 (Le Rat cornu, Companion) relu sur ses pages.
+  'E0-P-734': { traits: 'L22 p.50 : « Wolf Rat Long » et « Clan Moulder » sont le titre et le texte du profil voisin (Wolf Rat, « Long ago, Clan Moulder bred… ») ; Armour 2, Bite, Weapon, Size et Trained du Great Pox Rat sont présents.' },
+  'E0-P-741': { skills: 'L22 p.71 : « Lore (Mushroom Stews 65 Middle Mountains 53) » : le livre a oublié la virgule entre deux spécialisations ; Lore (Mushroom Stews) 65 et Lore (Middle Mountains) 53 sont présentes.' },
+  'E0-P-749': { trappings: 'L22 p.94 : « FORMER INTERROGATOR » est le titre du profil voisin (Paolo Gentile) ; les quatre objets de Claudia Carbonetti sont présents.' },
+  'E0-P-751': { traits: 'L22 p.95 : « Britta » et « Ilona » sont le texte du profil voisin (Knud, Britta, Ilona, and Mikhail) ; les cinq Traits de Giuseppe sont présents.' },
+  'E0-P-757': { traits: 'L22 p.120 : « Undead FLYING DEATH SKULLS » est le dernier Trait de Carrion suivi du titre du profil voisin ; Undead est présent.' },
   'E0-P-607': { attacks: 'L19 p.143 : « and go on to score a goal if their total is +25 » est la règle de jeu rapide du match (texte de la colonne voisine) ; le Nain n\'a aucune attaque imprimée.' }
 });

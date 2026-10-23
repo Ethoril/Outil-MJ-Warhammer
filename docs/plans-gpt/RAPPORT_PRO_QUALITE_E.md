@@ -39,6 +39,7 @@ Plan : `PLAN_PRO_QUALITE_E.md`. Branche `pro/qualite-e`, départ `9c12613`. Choi
 | Q27d | FAIT (L17, L18, L19 ; Q27 non terminé : L20-L23, L25, L26) | (voir `git log`, « Q27d ») |
 | Q27e | FAIT (L20 ; Q27 non terminé : L21-L23, L25, L26) | (voir `git log`, « Q27e ») |
 | Q27f | FAIT (L21 ; Q27 non terminé : L22, L23, L25, L26) | (voir `git log`, « Q27f ») |
+| Q27g | FAIT (L22 ; Q27 non terminé : L23, L25, L26) | (voir `git log`, « Q27g ») |
 
 ## Q0 — contrôle de complétude
 
@@ -375,3 +376,12 @@ Branché / non appelé (grep dans `js/`) :
 - Test : `tests/pro-q27f-completude.test.js` (5 tests).
 - Outil de contrôle et données de livre : rien à déclarer « branché » (l'attaque et les listes gagnées passent par `buildParticipantFromBestiary`, appelants : `js/ui/bestiary-library.js`, `js/core/bestiary-templates.js`). Aucune valeur durable de personnage.
 - Suite complète lancée une fois : 4461 réussis, 0 échec.
+
+## Q27g — complétude de L22 (FAIT ; Q27 non terminé)
+
+- Mesure avant : 9 profils signalés dans L22 (talents 1, compétences 1, Traits 6, équipement 4, bruit d'équipement 2). Tous relus sur leurs pages. **Après : 0 manque non justifié sur L01-L22 et L24** ; 5 profils justifiés un par un (`QE-Q27g-1`).
+- **Vrais manques corrigés** : « Doomed! » de Jan Guterwass (alias vers Doomed), Blightking (dernier objet « A Thirst for Battle… », paragraphe voisin retiré, Melee (Two-Handed)), Behram Gundarson (Tunnel Rat gardé comme talent), Wilhelm Koch (équipement coupé par « Mental Corruption: », gardée comme Trait). Détail : `QE-Q27g-2`, `QE-Q27g-3`.
+- **Livres régénérés** : seul L22 change (`build-bestiary-profiles.mjs L22`), par des lignes gagnées ou nettoyées. 12 caractéristiques et Blessures inchangées (contrôle : 43/43 lignes retrouvées).
+- **Contrôle, 23 livres** : talents 6, compétences 3, attaques 2, Traits 7, équipement 58, sorts 0, bruit d'équipement 3 (avant : 7, 4, 2, 13, 62, 0, 5) ; reste : L23 15 profils, L25 5, L26 10 (Q27h…).
+- Test : `tests/pro-q27g-completude.test.js` (4 tests).
+- Outil de contrôle et données de livre : rien à déclarer « branché » (les équipements et Traits gagnés passent par `buildParticipantFromBestiary`, appelants : `js/ui/bestiary-library.js`, `js/core/bestiary-templates.js`). Aucune valeur durable de personnage.

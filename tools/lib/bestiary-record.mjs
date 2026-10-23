@@ -20,7 +20,8 @@ const TALENT_ALIASES = new Map(Object.entries({
   'read/ write': 'Read/Write', warleader: 'War Leader', 'war leader': 'War Leader', 'fleet footed': 'Fleet-footed', 'public speaking': 'Public Speaker', 'public-speaking': 'Public Speaker',
   resistance: 'Resistant', 'nimble fingered': 'Nimble-fingered', 'stout-hearted': 'Stout-hearted', 'stout- hearted': 'Stout-hearted', unshakable: 'Unshakeable',
   'strong-minded': 'Strong-minded', 'strong minded': 'Strong-minded', 'strong-minded.': 'Strong-minded', 'strong back': 'Strong Back', 'magic resistant': 'Magic Resistance',
-  etiqutte: 'Etiquette', ettiquette: 'Etiquette', 'instrinctive diction': 'Instinctive Diction'
+  // « Doomed! (Find Thy Path and Stray Not) » (Jan Guterwass, L22 p. 62) : point d'exclamation de trop, le talent est Doomed.
+  'doomed!': 'Doomed', etiqutte: 'Etiquette', ettiquette: 'Etiquette', 'instrinctive diction': 'Instinctive Diction'
 }));
 export function canonicalTalentName(rawName) {
   // « Acute Sense (Vision: as Character Talent) » (L07) : la précision est « Vision », le reste renvoie au livre de base.
