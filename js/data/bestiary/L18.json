@@ -1382,6 +1382,7 @@
     "Disguise Kit",
     "2 Doses of Heartkill (WFRP, page 306)",
     "Magical Headband (under broad-brimmed hat, 1 AP, head)",
+    "Magical Sword (counts as a Hand Weapon but is magical and benefits from the Impale and Damaging Qualities)",
     "Mail Coat",
     "Potion of Resistance (see below)",
     "2 Opals (worth 20 GCs each)",
@@ -1445,6 +1446,7 @@
     {
      "name": "Fear",
      "rating": "2",
+     "conditional": true,
      "ref": "E0-T-022"
     },
     {
@@ -2449,15 +2451,21 @@
     {
      "name": "Immunity",
      "param": "Fear",
+     "conditional": true,
      "ref": "E0-T-031"
     },
     {
      "name": "Tough",
+     "conditional": true,
      "ref": "E0-T-086"
     }
    ],
    "trappings": [
-    "Warpstone filling (15 GC)"
+    "Warpstone filling (15 GC)",
+    "Piece of Warpstone (50 GC)"
+   ],
+   "notes": [
+    "*These fade away in 24 hours if Wuder discards all warpstone from his possession."
    ],
    "nameFrSource": "proposition"
   },
@@ -2515,6 +2523,7 @@
     {
      "name": "Fly",
      "rating": "100",
+     "conditional": true,
      "ref": "E0-T-023"
     },
     {
@@ -2660,6 +2669,7 @@
     {
      "name": "Fly",
      "rating": "100",
+     "conditional": true,
      "ref": "E0-T-023"
     },
     {

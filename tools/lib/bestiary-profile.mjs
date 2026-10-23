@@ -17,6 +17,19 @@ const RATING = /^(?<name>[^()]*?[A-Za-z!'’.\- ]+?)(?:\s*\((?<param>[^]*)\))?(?
 
 /** Un élément de liste de Traits : « Armour 3 (7) », « Weapon (Spear) +8 », « Size (Large) », « Web 40 », « Bestial ». */
 export function readTraitItem(text) {
+  const trait = readTraitItemPlain(text);
+  // Un astérisque final marque un Trait conditionnel (la note du bloc dit à quelle condition il tombe).
+  return trait && /\*+\s*$/.test(text) ? { ...trait, conditional: true } : trait;
+}
+
+/** Équipement : la liste, et les notes à astérisque (« *These fade away… ») qui la suivent dans le bloc. */
+export function readTrappings(text) {
+  const cut = /\s\*(?=[A-Za-z])/.exec(text);
+  const list = cut ? text.slice(0, cut.index) : text;
+  return { items: splitList(list), notes: cut ? [clean(text.slice(cut.index))] : [] };
+}
+
+function readTraitItemPlain(text) {
   const item = clean(text.replace(/\*+$/, ''));
   if (!item) return null;
   // Attaque (« Weapon (Fangs) +7 », « 2x Weapon (Claws) +10 », « Bite +9 ») suivie du nom d'une capacité collée dans la liste : on ne garde que l'attaque.
@@ -188,7 +201,11 @@ export function parseBlock(block, { traitDictionary = new Set(), talentDictionar
   if (optional !== undefined) profile.optional = splitList(optional).map(readTraitItem).filter(Boolean);
   if (sections.Skills) profile.skills = readSkills(sections.Skills);
   if (sections.Talents) profile.talents = /:/.test(sections.Talents) && talentDictionary.size ? readDescribedNames(sections.Talents, talentDictionary).map(name => ({ name })) : readTalents(sections.Talents);
-  if (sections.Trappings) profile.trappings = splitList(sections.Trappings);
+  if (sections.Trappings) {
+    const { items, notes } = readTrappings(sections.Trappings);
+    profile.trappings = items;
+    if (notes.length) profile.notes = notes;
+  }
   if (sections.Mutations) profile.mutations = splitList(sections.Mutations);
   const spells = readSpells(sections);
   if (Object.keys(spells).length) profile.spells = spells;

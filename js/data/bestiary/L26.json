@@ -1367,7 +1367,11 @@
     "2 Elf Arrows",
     "Sturdy Boots and Cloak",
     "Storm Lantern",
-    "Lantern Oil"
+    "Lantern Oil",
+    "2d10 Silver Shillings"
+   ],
+   "notes": [
+    "*The extra Wounds from Hardy have already been included in the profile."
    ],
    "keywords": [
     "humain"
@@ -2824,6 +2828,7 @@
    ],
    "trappings": [
     "Bowl",
+    "Exquisite Elf Harp (worth at least 45 GC, more to an interested collector)",
     "Troubadour's Outfit",
     "3d10 Brass Pennies"
    ],
@@ -3098,6 +3103,7 @@
     }
    ],
    "trappings": [
+    "Mootish Book (Staying Far Away - Anecdotes of the Ruinous Powers)",
     "Writing Kit",
     "A Nameless Dread"
    ],

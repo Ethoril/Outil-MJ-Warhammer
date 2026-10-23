@@ -666,6 +666,7 @@
     }
    ],
    "trappings": [
+    "Poisoned Dagger (the first Wound it causes inflicts the effects of Heartkill; the blade is coated with enough poison for three strikes)",
     "Servant's Clothing"
    ],
    "nameFrSource": "proposition"
@@ -4544,6 +4545,7 @@
     },
     {
      "name": "Unstable",
+     "conditional": true,
      "ref": "E0-T-062"
     }
    ],
@@ -4672,6 +4674,7 @@
     {
      "name": "Spellcaster",
      "param": "Manifest Lesser Daemon",
+     "conditional": true,
      "ref": "E0-T-048"
     }
    ],

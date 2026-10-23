@@ -396,6 +396,7 @@
     {
      "name": "Shield",
      "rating": "2",
+     "conditional": true,
      "ref": "E0-T-287"
     },
     {
@@ -481,6 +482,7 @@
     {
      "name": "Shield",
      "rating": "2",
+     "conditional": true,
      "ref": "E0-T-287"
     },
     {
@@ -2410,7 +2412,8 @@
    "trappings": [
     "Coach and Team of Horses",
     "Gem Encrusted Dagger (6 GC)",
-    "Letters of Introduction to Petra Liebkosen and Kirsten Jung"
+    "Letters of Introduction to Petra Liebkosen and Kirsten Jung",
+    "A Dwindling Fortune (approximate 200 GC in property and holdings excluding those listed here)"
    ],
    "keywords": [
     "cultiste"
@@ -2783,6 +2786,7 @@
     {
      "name": "Shield",
      "rating": "2",
+     "conditional": true,
      "ref": "E0-T-287"
     },
     {
@@ -4298,6 +4302,7 @@
     {
      "name": "Fly",
      "rating": "100",
+     "conditional": true,
      "ref": "E0-T-023"
     },
     {

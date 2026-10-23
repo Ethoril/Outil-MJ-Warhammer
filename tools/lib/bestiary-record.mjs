@@ -5,6 +5,7 @@
 import { readFileSync } from 'node:fs';
 import { SKILL_GROUPS, SKILL_GROUP_ALIASES, skillNameFr } from './bestiary-glossary.mjs';
 import { BASE_REFERENTIAL, keywordAncestors, normalizeKeywordText, resolveKeyword } from '../../js/core/creature-keywords.js';
+import { TRAPPING_JOINS } from './bestiary-overrides.mjs';
 
 const CARACS = ['M', 'CC', 'CT', 'F', 'E', 'I', 'Ag', 'Dex', 'Int', 'FM', 'Soc'];
 const ATTACK_TRAITS = new Set(['Weapon', 'Bite', 'Horns', 'Tail', 'Tail Attack', 'Claws', 'Claw', '2 Claws', 'Beak', 'Slam', 'Tongue Attack', 'Ranged']);
@@ -38,7 +39,7 @@ export function cleanTraits(traits = [], { canonical, traitRefs }) {
   for (const trait of traits) {
     const name = canonical(trait.name);
     if (!name) { dropped.push(trait.name); continue; }
-    kept.push({ name, ...(trait.rating !== undefined ? { rating: trait.rating } : {}), ...(trait.param ? { param: trait.param } : {}), ...(trait.printed !== undefined ? { printed: trait.printed } : {}), ...(trait.count ? { count: trait.count } : {}), ...(trait.weapons ? { weapons: trait.weapons } : {}), ...(traitRefs.get(name) ? { ref: traitRefs.get(name) } : {}) });
+    kept.push({ name, ...(trait.rating !== undefined ? { rating: trait.rating } : {}), ...(trait.param ? { param: trait.param } : {}), ...(trait.printed !== undefined ? { printed: trait.printed } : {}), ...(trait.count ? { count: trait.count } : {}), ...(trait.weapons ? { weapons: trait.weapons } : {}), ...(trait.conditional ? { conditional: true } : {}), ...(traitRefs.get(name) ? { ref: traitRefs.get(name) } : {}) });
   }
   return { kept, dropped };
 }
@@ -108,6 +109,28 @@ export function assignKeywords(name, traits, referential = BASE_REFERENTIAL) {
   return unique.filter(id => !unique.some(other => other !== id && keywordAncestors(other, referential).has(id)));
 }
 
+/**
+ * Un nom d'équipement n'a plus de longueur maximale : un nom long est gardé s'il se termine par sa parenthèse (« Poisoned Dagger (la première
+ * Blessure…) ») ; une phrase collée à la liste par la mise en page ne se termine pas ainsi et reste écartée.
+ */
+export function isTrappingName(item) {
+  if (item.length <= 60) return true;
+  if (!item.endsWith(')') || /^(?:as|or|and|but|which|that|when|if)\s/i.test(item)) return false;
+  const open = item.indexOf('(');
+  return open > 0 && item.slice(0, open).trim().length <= 60 && !/[.:;]\s|\s--\s/.test(item.slice(0, open)) && item.lastIndexOf('(') >= open && [...item].reduce((depth, char) => (char === '(' ? depth + 1 : char === ')' ? depth - 1 : depth), 0) === 0;
+}
+
+/** Recolle les noms d'équipement imprimés avec des virgules internes (liste `names` du profil) que le découpage à virgules a séparés. */
+export function joinTrappings(items, names = []) {
+  let list = [...items];
+  for (const name of names) {
+    const parts = name.split(',').map(part => part.trim());
+    const at = list.findIndex((_, start) => parts.every((part, offset) => list[start + offset] === part));
+    if (at >= 0) list.splice(at, parts.length, name);
+  }
+  return list;
+}
+
 /** Fiche d'un profil extrait, rattaché à son entrée d'inventaire. */
 export function buildRecord(extracted, entry, context) {
   const { canonical, traitRefs, displayName, referential } = context;
@@ -146,7 +169,8 @@ export function buildRecord(extracted, entry, context) {
   if (listed.length) record.traits = listed;
   if (optional.kept.length) record.optionalTraits = optional.kept;
   if (extracted.talents?.length) record.talents = extracted.talents.filter(talent => talent.name && !isNoise(talent.name.replace(/\(.*\)/, ''))).map(talent => ({ name: talent.name, ...(talent.rank ? { rank: talent.rank } : {}) }));
-  if (extracted.trappings?.length) record.trappings = extracted.trappings.filter(item => item.length <= 60);
+  if (extracted.trappings?.length) record.trappings = joinTrappings(extracted.trappings, TRAPPING_JOINS[entry.id]).filter(isTrappingName);
+  if (extracted.notes?.length) record.notes = extracted.notes;
   if (extracted.mutations?.length) record.mutations = extracted.mutations;
   if (extracted.spells) record.spells = extracted.spells;
   const rules = (extracted.specialRules || []).filter(rule => rule.split(/\s+/).length <= 5 && /^[A-Z]/.test(rule) && !/[.;]/.test(rule));

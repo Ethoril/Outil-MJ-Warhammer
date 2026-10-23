@@ -7,7 +7,8 @@ Plan : `PLAN_PRO_QUALITE_E.md`. Branche `pro/qualite-e`, départ `9c12613`. Choi
 | Q0 | FAIT | (voir `git log`, « Q0 ») |
 | Q1 | FAIT | (voir `git log`, « Q1 ») |
 | Q2 | FAIT | (voir `git log`, « Q2 ») |
-| Q3 à Q10, R | à faire | — |
+| Q3 | FAIT | (voir `git log`, « Q3 ») |
+| Q4 à Q10, R | à faire | — |
 
 ## Q0 — contrôle de complétude
 
@@ -69,3 +70,11 @@ Les compétences manquantes restantes ne viennent plus de `readSkills` : ce sont
 ### Suite complète (après Q2)
 
 4262 réussis, 1 échec étranger au lot : `divin-v5-e0-independent` (« la recette refuse un cwd externe ») attend `tmp/divin/recipe-receipt.json`, produit au lot R.
+
+## Q3 — équipement et notes (FAIT)
+
+- `tools/lib/bestiary-record.mjs` : la coupe `item.length <= 60` est remplacée par `isTrappingName` (un nom long est gardé s'il se termine par sa parenthèse, sans phrase collée ni début en « as/or/and… ») ; `joinTrappings` recolle les noms à virgules internes déclarés dans `TRAPPING_JOINS` (`tools/lib/bestiary-overrides.mjs`, Helena E0-P-625). `tools/lib/bestiary-profile.mjs` : `readTrappings` sépare la note à astérisque de la liste (champ `notes` du profil) ; `readTraitItem` marque `conditional: true` un Trait suivi d'un astérisque.
+- Livres régénérés (23) : comparaison profil par profil avec le commit précédent, **aucun autre champ modifié** (12 caractéristiques, Blessures, attaques, compétences intacts) ; 25 profils changent d'équipement (Herveaux : dague empoisonnée, Tyrkel : prothèse, Wuder : Piece of Warpstone), 2 gagnent une note (Wuder, Klaus Jager E0-P-933), Helena est recollée. Seules des entrées sont ajoutées, hors les fragments de Helena recollés.
+- Test : `tests/pro-q3-equipement.test.js` (4 profils et fonctions).
+- `trappings`, `notes` et `conditional` sont des données de livre sans appelant dans `js/` : code testé, non appelé.
+- Suite complète : 4266 réussis, 1 échec étranger au lot (`divin-v5-e0-independent`, reçu de recette produit au lot R).

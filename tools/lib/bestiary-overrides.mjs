@@ -145,6 +145,11 @@ export const ARMOUR_DETAIL = Object.freeze({
   'E0-P-575': 'Helm 2, Plate 3'
 });
 
+/** Équipement dont le nom imprimé contient des virgules (Helena Bastiat-Hatzburg, Altdorf L20 p. 72) : recollé après le découpage à virgules. */
+export const TRAPPING_JOINS = Object.freeze({
+  'E0-P-625': ['Notebook of Plans, Schemes, and Dirty Secrets']
+});
+
 /**
  * Corps de bloc relus sur la page quand la mise en page (interligne double) empêche de suivre les lignes d'un bloc. Clé : « livre:page:rang ».
  * Le texte est celui du livre, recopié ligne à ligne.

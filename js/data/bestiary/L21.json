@@ -3366,6 +3366,7 @@
     {
      "name": "Fear",
      "rating": "2",
+     "conditional": true,
      "ref": "E0-T-022"
     },
     {
@@ -3885,6 +3886,7 @@
     {
      "name": "Fear",
      "rating": "1",
+     "conditional": true,
      "ref": "E0-T-022"
     },
     {
@@ -4220,6 +4222,7 @@
     }
    ],
    "trappings": [
+    "Assorted outfits (jumbled mix of common and best craftsmanship clothes; he tends to pick randomly when dressing)",
     "Deck of Cards",
     "Wooden Cutlery",
     "Bone Dice",
@@ -4624,6 +4627,7 @@
    ],
    "trappings": [
     "Chain of Office (tacky gold necklace worth 5 GC)",
+    "Kenselheim Magistrate Livery (Fine Quality Clothing in black and green)",
     "dagger"
    ],
    "nameFrSource": "proposition"
@@ -5291,6 +5295,7 @@
    ],
    "trappings": [
     "8 GCs",
+    "Travelling Case (including personal effects and 8 vials of a bright red liquid, a preparation to alleviate Toughness Loss)",
     "Sword"
    ],
    "keywords": [
@@ -5602,6 +5607,7 @@
     {
      "name": "Fly",
      "rating": "100",
+     "conditional": true,
      "ref": "E0-T-023"
     },
     {
