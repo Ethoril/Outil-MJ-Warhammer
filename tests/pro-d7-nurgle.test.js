@@ -38,6 +38,17 @@ test('Attribut de Nurgle — appliqué à la cible d’un sort de durée (couche
  const off=await encounter();await cast(off.store,c,{targetTests:{foe:{resistanceRoll:95,roll:95}}});
  assert.ok(!subject(off.store,'foe').extensions.v5.spellEffects.some(e=>e.spellId==='lore-attribute-nurgle'),'attribut coupé (réglage par défaut de la fixture)');
 });
+test('Attribut de Nurgle — D-C51 : un coup qui blesse une cible marquée propose au MJ de jouer le Test de Blessure Suppurée',async()=>{
+ const c=getSpellContract('Miasme de pestilence');
+ const {store}=await encounter();
+ await cast(store,c,{attributeActive:true,targetTests:{foe:{resistanceRoll:95,roll:95}}});
+ const hit=store.previewResolution({actorId:'mage',targetId:'foe',action:{id:'blade',type:'attack',base:90,damage:3},roll:5,defense:{roll:99,base:10,label:'Esquive'}});
+ assert.ok(hit.damage?.finalDamage>0,'le coup blesse');
+ assert.ok(hit.reminders.some(r=>/Test de Blessure Suppurée/.test(r)&&/Foe|foe/.test(r)),hit.reminders.join(' | '));
+ const {store:clean}=await encounter();
+ const plain=clean.previewResolution({actorId:'mage',targetId:'foe',action:{id:'blade',type:'attack',base:90,damage:3},roll:5,defense:{roll:99,base:10,label:'Esquive'}});
+ assert.ok(!plain.reminders.some(r=>/Blessure Suppurée/.test(r)),'sans marque, aucun rappel');
+});
 test('Miasme de pestilence — Endurance −2 DR : raté = Nausée (couche), réussi = évité ; exemptés : dévoués, moines, non-vivants',async()=>{
  const c=getSpellContract('Miasme de pestilence');
  for(const [roll,affected] of [[95,true],[3,false]]){

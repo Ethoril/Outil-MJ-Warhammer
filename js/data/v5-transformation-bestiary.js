@@ -211,3 +211,48 @@ export const TRANSFORMATION_TRAIT_NOTES = Object.freeze({
   'Stupide': 'Test d’Intelligence Facile (+4 DR) avant d’agir, sauf si dirigé.',
   'Artificiel': 'Ne teste jamais Int, FM ni Soc ; Endurance pour la FM.'
 });
+
+/**
+ * Profils des morts-vivants relevés par Relever les morts et Réanimation (D-C40) : Squelette (V5 Livre de base p.339) et
+ * Zombie (p.340), valeurs du bestiaire de la phase E (`js/data/bestiary/L06.json`). Les armures facultatives ne sont pas comptées
+ * (PA 0), le MJ les ajoute si besoin. Sans ces profils, les deux sorts sont refusés (décision du MJ du 22/10).
+ */
+const undeadAttack = (id, name, value, damage, extra = {}) => ({ id, name, value, damage, free: null, qualities: [], ...extra });
+
+export const UNDEAD_SUMMON_PROFILES = Object.freeze({
+  skeleton: {
+    name: 'Squelette', page: 339, M: 4, wounds: 12,
+    caracs: { CC: 25, CT: 25, F: 30, E: 30, I: 20, Ag: 20, Dex: 25 },
+    skills: [['Corps à corps (Base)', 30]],
+    traits: ['Artificiel', 'Infravision', 'Peur', 'Insensible à la douleur', 'Mort-vivant', 'Instable'],
+    attacks: [undeadAttack('hand-weapon', 'Arme de poing', 30, 7, { qualities: ['magique'] })]
+  },
+  zombie: {
+    name: 'Zombie', page: 340, M: 4, wounds: 12,
+    caracs: { CC: 15, F: 30, E: 30, I: 5, Ag: 10, Dex: 10 },
+    skills: [['Corps à corps (Base)', 25], ['Corps à corps (Bagarre)', 30]],
+    traits: ['Artificiel', 'Infravision', 'Peur', 'Infecté', 'Insensible à la douleur', 'Mort-vivant', 'Instable'],
+    attacks: [undeadAttack('hand-weapon', 'Arme de poing', 25, 7, { qualities: ['magique'] }), undeadAttack('bite', 'Morsure', 30, 6, { free: 'momentum' })]
+  }
+});
+
+let available = true;
+/** Réservé aux tests : simule l'absence des profils (la constante exportée reste la valeur livrée). */
+export function setUndeadProfilesAvailable(value) { available = Boolean(value); }
+export const undeadProfilesAvailable = () => available;
+
+/** Participant ordinaire d'un mort-vivant relevé (champs standards, attaques au format de beastFormActions). */
+export function undeadSummonParticipant(kind, { id, name, camp, casterId, states = [] }) {
+  const profile = UNDEAD_SUMMON_PROFILES[kind];
+  const caracs = { ...profile.caracs, M: profile.M };
+  return {
+    id, name, kind: 'Créature', camp, zone: 'active', initiative: caracs.I,
+    hp: profile.wounds, maxHp: profile.wounds, caracs, armor: { head: 0, body: 0, arms: 0, legs: 0 },
+    skills: profile.skills.map(([skill, total]) => ({ name: skill, total, status: 'resolved' })),
+    traits: [...profile.traits], states,
+    actions: profile.attacks.map(a => ({
+      id: `undead-summon:${a.id}`, note: `${a.name}${a.free === 'momentum' ? ' — attaque gratuite en perdant l’Élan' : ''}`, type: 'attack', attr: 'CC', base: a.value, mod: 0,
+      damageFormula: `BF+${a.damage - Math.floor(profile.caracs.F / 10)}`, qualities: a.qualities.map(quality => ({ id: quality })), extensions: { v5: { kind: 'melee' } } })),
+    isAuxiliary: true, casterId, noMomentum: false
+  };
+}

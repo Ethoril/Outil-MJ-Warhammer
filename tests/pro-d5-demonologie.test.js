@@ -25,7 +25,7 @@ test('Destruction de Démon Mineur — Démon seulement ; Endurance +4 DR oppos�
  assert.equal(c.effects.opposedTest.targetSlModifier,4);assert.equal(c.effects.destroyOnOpposedWin,true);
  const run=async(actorRoll,foeRoll)=>{
   const {store}=await encounter({foe:{traits:['Démoniaque'],hp:20}});
-  await cast(store,c,{domainFactsExtra:{opposedActorRoll:actorRoll},targetTests:{foe:{opponentRoll:foeRoll,resistanceRoll:foeRoll,roll:foeRoll}}});
+  await cast(store,c,{domainFactsExtra:{opposedActorRoll:actorRoll,boostedStat:'Ag'},targetTests:{foe:{opponentRoll:foeRoll,resistanceRoll:foeRoll,roll:foeRoll}}});
   return subject(store,'foe');
  };
  const won=await run(5,95);assert.equal(won.hp,0);assert.equal(won.zone,'bench');assert.equal(won.extensions.v5.destroyed,true);
@@ -35,19 +35,34 @@ test('Destruction de Démon Mineur — Démon seulement ; Endurance +4 DR oppos�
  assert.equal(ordinary.targetResults?.[0]?.destroyed||false,false,'une cible non démoniaque n’est pas détruite');
  assert.match(c.reminders,/\+10 à la caractéristique choisie/);
 });
+test('Destruction de Démon Mineur — D-C30 : victoire = +10 à la caractéristique choisie du lanceur, défaite = rien',async()=>{
+ const c=getSpellContract('Destruction de Démon Mineur');
+ const run=async(actorRoll,foeRoll)=>{
+  const {store}=await encounter({foe:{traits:['Démoniaque'],hp:20}});
+  await cast(store,c,{domainFactsExtra:{opposedActorRoll:actorRoll,boostedStat:'Ag'},targetTests:{foe:{opponentRoll:foeRoll,resistanceRoll:foeRoll,roll:foeRoll}}});
+  return store;
+ };
+ const won=await run(5,95);
+ const layer=subject(won,'mage').extensions.v5.spellEffects.find(e=>e.spellId===c.id);
+ assert.equal(layer.statModifiers.Ag,10);assert.deepEqual(Object.keys(layer.statModifiers),['Ag']);
+ assert.equal((subject(won,'foe').extensions.v5.spellEffects||[]).some(e=>e.spellId===c.id&&Object.keys(e.statModifiers||{}).length),false,'aucun bonus sur le démon');
+ const lost=await run(95,5);
+ assert.equal((subject(lost,'mage').extensions?.v5?.spellEffects||[]).some(e=>e.spellId===c.id),false);
+ assert.equal(c.effects.facts.find(f=>f.key==='boostedStat').options.length,10);
+});
 test('Destruction de Démon Mineur — un Démon de grande taille est exempté même si l’opposition est gagnée',async()=>{
  const c=getSpellContract('Destruction de Démon Mineur');
  const {store}=await encounter({foe:{traits:['Démoniaque','Grande'],hp:20}});
- await cast(store,c,{domainFactsExtra:{opposedActorRoll:5},targetTests:{foe:{opponentRoll:95,resistanceRoll:95,roll:95}}});
+ await cast(store,c,{domainFactsExtra:{opposedActorRoll:5,boostedStat:'Ag'},targetTests:{foe:{opponentRoll:95,resistanceRoll:95,roll:95}}});
  assert.equal(subject(store,'foe').hp,20);assert.ok(!subject(store,'foe').extensions?.v5?.destroyed);
 });
 test('Destruction de Démon Mineur — l’opposition exige deux dés explicites',async()=>{
  const c=getSpellContract('Destruction de Démon Mineur');const {store}=await encounter({foe:{traits:['Démoniaque'],hp:20}});
  assert.equal(store.previewSpellExecution(c.id,inputFor(c,{domainFactsExtra:{}})).ready,false);
 });
-test('Manifestation de Démon Mineur — participant à créer par le MJ, un ordre puis disparition (rappel)',()=>{
+test('Manifestation de Démon Mineur — participant à créer par le MJ, un ordre ; ordre inachevé à la fin de la durée = démon hostile (D-C32, rappel)',()=>{
  const c=getSpellContract('Manifestation de Démon Mineur');
- assert.equal(c.effects.assistedSummon,true);assert.match(c.reminders,/un seul ordre/);assert.match(c.reminders,/disparaît quand même/);
+ assert.equal(c.effects.assistedSummon,true);assert.match(c.reminders,/un seul ordre/);assert.match(c.reminders,/reste et devient hostile/);
  assert.deepEqual(c.effects.facts.find(f=>f.key==='daemonKind').options.map(o=>o[0]),['bloodletter','daemonette']);
 });
 test('Octogramme — barrière démoniaque rappelée, version V5 sans clause d’évasion',async()=>{

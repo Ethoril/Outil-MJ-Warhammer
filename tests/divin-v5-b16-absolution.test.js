@@ -30,8 +30,8 @@ test('B16 — Altdorf : +2 DR, retrait 1 ou 2 à +4 DR, Sigmar et pèlerinage co
   c=await fixture(3);await go(c.store,altdorf({roll:30,executionId:'b16-alt30'}));assert.equal(sin(c.store),1);assert.equal(snap(c.store).extensions.v5.divineWrathRecoveries.at(-1).wrath.triggered,false);
   c=await fixture(0);assert.equal(c.store.previewDivineAbsolution(altdorf()).ready,false);
 });
-test('B16 — Altdorf : échec ordinaire = un Exténué, aucun retrait',async()=>{
-  const{store}=await fixture(3);await go(store,altdorf({roll:97}));assert.equal(sin(store),3);assert.deepEqual(priest(store).states.map(s=>[s.name,s.level||1]),[['Exténué',1]]);
+test('B16 — Altdorf (B-C45) : échec ordinaire = rappel d’Exténué sans État posé, aucun retrait',async()=>{
+  const{store}=await fixture(3);await go(store,altdorf({roll:97}));assert.equal(sin(store),3);assert.deepEqual(priest(store).states,[]);assert.equal(snap(store).extensions.v5.divineWrathRecoveries.at(-1).absolution.fatigued,true);
 });
 test('B16 — Altdorf : maladresse ouvre la table à Péché positif (pas d’Exténué)',async()=>{
   const{store}=await fixture(1);const miss=store.previewDivineAbsolution(altdorf({roll:99,executionId:'b16-f'}));assert.equal(miss.ready,false);assert.ok(miss.needsInput.some(n=>n.field==='wrathRoll'));

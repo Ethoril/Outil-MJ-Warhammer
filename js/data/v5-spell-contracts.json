@@ -17414,9 +17414,9 @@
         }
       ]
     },
-    "reminders": "Un pieu de bois gravé, planté en terre, repousse pendant un mois un type de créature choisi à l’apprentissage du sort. Toute créature du type choisi qui s’approche à moins de 100 mètres fait un Test de Calme Intermédiaire (+0 DR) ou gagne un état Brisé ; le MJ désigne les créatures et les approches (aucune position n’est suivie). Le sort peut être appris plusieurs fois, un type par apprentissage. Lecture littérale de la source pour la suite : celui qui sort de l’état Brisé fait un Test d’Intuition Intermédiaire (+0 DR) ; sur un échec il comprend que le pieu a causé cette panique magique. Pieu : rappel narratif.",
+    "reminders": "Un pieu de bois gravé, planté en terre, repousse pendant un mois un type de créature choisi à l’apprentissage du sort. Toute créature du type choisi qui s’approche à moins de 100 mètres fait un Test de Calme Intermédiaire (+0 DR) ou gagne un état Brisé ; le MJ désigne les créatures et les approches (aucune position n’est suivie). Le sort peut être appris plusieurs fois, un type par apprentissage. Décision du MJ (22/10) pour la suite : celui qui sort de l’état Brisé fait un Test d’Intuition Intermédiaire (+0 DR) ; sur une réussite il comprend que le pieu a causé cette panique magique (coquille présumée du texte corrigée). Pieu : rappel narratif.",
     "assistedClauses": [
-      "Toute créature du type choisi qui s’approche à moins de 100 mètres fait un Test de Calme Intermédiaire (+0 DR) ou gagne un état Brisé ; le MJ désigne les créatures et les approches (aucune position n’est suivie). Le sort peut être appris plusieurs fois, un type par apprentissage. Lecture littérale de la source pour la suite : celui qui sort de l’état Brisé fait un Test d’Intuition Intermédiaire (+0 DR) ; sur un échec il comprend que le pieu a causé cette panique magique. Pieu : rappel narratif."
+      "Toute créature du type choisi qui s’approche à moins de 100 mètres fait un Test de Calme Intermédiaire (+0 DR) ou gagne un état Brisé ; le MJ désigne les créatures et les approches (aucune position n’est suivie). Le sort peut être appris plusieurs fois, un type par apprentissage. Décision du MJ (22/10) pour la suite : celui qui sort de l’état Brisé fait un Test d’Intuition Intermédiaire (+0 DR) ; sur une réussite il comprend que le pieu a causé cette panique magique (coquille présumée du texte corrigée). Pieu : rappel narratif."
     ],
     "sharedWith": null,
     "sourceBook": "L02",
@@ -17455,13 +17455,13 @@
     },
     "effects": {
       "type": "special",
-      "specialState": {
-        "ignoreFatiguePenalties": true
+      "removeConditionLevels": {
+        "Exténué": 1
       }
     },
-    "reminders": "La cible ignore tous les effets de ses états Exténué pendant la durée. Les états Exténué restent comptés ; leur pénalité (−1 DR par état en V5) est ignorée pendant la durée puis reprend. Version V5 distincte de Bonne santé (Sorcellerie), qui retire un état.",
+    "reminders": "La cible ignore tous les effets de ses états Exténué pendant la durée. Décision du MJ (22/10) : le sort retire un état Exténué (un seul niveau) de la cible, de façon définitive ; la pénalité n’est plus ignorée.",
     "assistedClauses": [
-      "Les états Exténué restent comptés ; leur pénalité (−1 DR par état en V5) est ignorée pendant la durée puis reprend. Version V5 distincte de Bonne santé (Sorcellerie), qui retire un état."
+      "Décision du MJ (22/10) : le sort retire un état Exténué (un seul niveau) de la cible, de façon définitive ; la pénalité n’est plus ignorée."
     ],
     "sharedWith": null,
     "sourceBook": "L02",
@@ -18397,11 +18397,65 @@
         "resistOnLoss": true,
         "casterWinsTies": true
       },
-      "destroyOnOpposedWin": true
+      "destroyOnOpposedWin": true,
+      "casterBoostOnDestroy": {
+        "fact": "boostedStat",
+        "amount": 10
+      },
+      "facts": [
+        {
+          "key": "boostedStat",
+          "label": "Destruction : caractéristique du lanceur qui gagne +10 en cas de victoire",
+          "type": "select",
+          "options": [
+            [
+              "CC",
+              "Capacité de Combat"
+            ],
+            [
+              "CT",
+              "Capacité de Tir"
+            ],
+            [
+              "F",
+              "Force"
+            ],
+            [
+              "E",
+              "Endurance"
+            ],
+            [
+              "I",
+              "Initiative"
+            ],
+            [
+              "Ag",
+              "Agilité"
+            ],
+            [
+              "Dex",
+              "Dextérité"
+            ],
+            [
+              "Int",
+              "Intelligence"
+            ],
+            [
+              "FM",
+              "Force Mentale"
+            ],
+            [
+              "Soc",
+              "Sociabilité"
+            ]
+          ],
+          "owner": "caster"
+        }
+      ]
     },
-    "reminders": "Votre sort défait le Dhar qui tient un démon ensemble : si vous remportez l’opposition d’Endurance, il est détruit et vous gagnez +10 à une caractéristique de votre choix pour la durée. Cible : un Démon de taille Moyenne ou moins (Petite ou Moyenne ; taille lue sur les Traits, à vérifier par le MJ). Opposition : Test d’incantation contre Endurance Accessible (+4 DR) de la cible, deux dés explicites ; égalité au lanceur. Victoire : démon détruit, et +10 à la caractéristique choisie du lanceur pendant Bonus de Force Mentale Rounds (à reporter sur la fiche).",
+    "reminders": "Votre sort défait le Dhar qui tient un démon ensemble : si vous remportez l’opposition d’Endurance, il est détruit et vous gagnez +10 à une caractéristique de votre choix pour la durée. Cible : un Démon de taille Moyenne ou moins (Petite ou Moyenne ; taille lue sur les Traits, à vérifier par le MJ). Opposition : Test d’incantation contre Endurance Accessible (+4 DR) de la cible, deux dés explicites ; égalité au lanceur. Victoire : démon détruit, et +10 à la caractéristique choisie du lanceur pendant Bonus de Force Mentale Rounds (appliqué au lanceur par le moteur, décision du MJ du 22/10).",
     "assistedClauses": [
-      "Cible : un Démon de taille Moyenne ou moins (Petite ou Moyenne ; taille lue sur les Traits, à vérifier par le MJ). Opposition : Test d’incantation contre Endurance Accessible (+4 DR) de la cible, deux dés explicites ; égalité au lanceur. Victoire : démon détruit, et +10 à la caractéristique choisie du lanceur pendant Bonus de Force Mentale Rounds (à reporter sur la fiche)."
+      "Cible : un Démon de taille Moyenne ou moins (Petite ou Moyenne ; taille lue sur les Traits, à vérifier par le MJ). Opposition : Test d’incantation contre Endurance Accessible (+4 DR) de la cible, deux dés explicites ; égalité au lanceur. Victoire : démon détruit, et +10 à la caractéristique choisie du lanceur pendant Bonus de Force Mentale Rounds (appliqué au lanceur par le moteur, décision du MJ du 22/10)."
     ],
     "sharedWith": null,
     "sourceBook": "L06",
@@ -18517,9 +18571,9 @@
         }
       ]
     },
-    "reminders": "Vous déchirez le voile : un Démon mineur (Sanguinaire ou Démonette) surgit ; une opposition Focalisation (Dhar) contre Calme décide s’il obéit à un ordre, après quoi il disparaît, sinon il attaque. Profil du démon (L06 p. 349) : participant à créer par le MJ (profils de bestiaire : phase E). Opposition Focalisation (Dhar) du lanceur contre Calme du démon, jouée par le MJ. Victoire : le démon exécute un seul ordre, pris au pied de la lettre, puis disparaît ; si l’ordre n’est pas accompli à la fin de la durée, le démon disparaît quand même. Échec : il attaque immédiatement.",
+    "reminders": "Vous déchirez le voile : un Démon mineur (Sanguinaire ou Démonette) surgit ; une opposition Focalisation (Dhar) contre Calme décide s’il obéit à un ordre, après quoi il disparaît, sinon il attaque. Profil du démon (L06 p. 349) : participant à créer par le MJ (profils de bestiaire : phase E). Opposition Focalisation (Dhar) du lanceur contre Calme du démon, jouée par le MJ. Victoire : le démon exécute un seul ordre, pris au pied de la lettre, puis disparaît ; si l’ordre n’est pas accompli à la fin de la durée, le démon reste et devient hostile (décision du MJ du 22/10) ; un ordre accompli le fait disparaître. Échec : il attaque immédiatement.",
     "assistedClauses": [
-      "Profil du démon (L06 p. 349) : participant à créer par le MJ (profils de bestiaire : phase E). Opposition Focalisation (Dhar) du lanceur contre Calme du démon, jouée par le MJ. Victoire : le démon exécute un seul ordre, pris au pied de la lettre, puis disparaît ; si l’ordre n’est pas accompli à la fin de la durée, le démon disparaît quand même. Échec : il attaque immédiatement."
+      "Profil du démon (L06 p. 349) : participant à créer par le MJ (profils de bestiaire : phase E). Opposition Focalisation (Dhar) du lanceur contre Calme du démon, jouée par le MJ. Victoire : le démon exécute un seul ordre, pris au pied de la lettre, puis disparaît ; si l’ordre n’est pas accompli à la fin de la durée, le démon reste et devient hostile (décision du MJ du 22/10) ; un ordre accompli le fait disparaître. Échec : il attaque immédiatement."
     ],
     "sharedWith": null,
     "sourceBook": "L06",
@@ -18617,6 +18671,9 @@
       "type": "summon",
       "summon": {
         "generic": true,
+        "profileKinds": {
+          "default": "skeleton"
+        },
         "name": "Squelette",
         "addDr": true,
         "count": 1,
@@ -18654,9 +18711,9 @@
         "unit": "minutes"
       }
     },
-    "reminders": "Un flot de Dhar sur la terre nue fait surgir 1 + DR Squelettes, À Terre, à la fin du Round ; ils obéissent à des ordres simples. Un squelette de plus par +2 DR. Profil des Squelettes : participants génériques sans caractéristiques (profils de bestiaire : phase E) ; le MJ complète les fiches. Terre nue : rappel narratif, aucun refus. +2 DR : un Squelette de plus.",
+    "reminders": "Un flot de Dhar sur la terre nue fait surgir 1 + DR Squelettes, À Terre, à la fin du Round ; ils obéissent à des ordres simples. Un squelette de plus par +2 DR. Profil des Squelettes : celui du bestiaire (V5 Livre de base p. 339), armure facultative non comptée ; le sort est refusé si le profil manque (décision du MJ du 22/10). Terre nue : rappel narratif, aucun refus. +2 DR : un Squelette de plus.",
     "assistedClauses": [
-      "Profil des Squelettes : participants génériques sans caractéristiques (profils de bestiaire : phase E) ; le MJ complète les fiches. Terre nue : rappel narratif, aucun refus. +2 DR : un Squelette de plus."
+      "Profil des Squelettes : celui du bestiaire (V5 Livre de base p. 339), armure facultative non comptée ; le sort est refusé si le profil manque (décision du MJ du 22/10). Terre nue : rappel narratif, aucun refus. +2 DR : un Squelette de plus."
     ],
     "sharedWith": null,
     "sourceBook": "L06",
@@ -18714,6 +18771,10 @@
           "zombies": "Zombie",
           "skeletons": "Squelette"
         },
+        "profileKinds": {
+          "zombies": "zombie",
+          "skeletons": "skeleton"
+        },
         "baseFormula": "BFM",
         "addDr": true,
         "count": 1,
@@ -18767,9 +18828,9 @@
         "unit": "minutes"
       }
     },
-    "reminders": "Un Dhar visqueux s’enfonce dans des cadavres : BFM + DR corps se relèvent en Zombies ou en Squelettes, À Terre, sous votre contrôle. Un mort de plus par +2 DR. Cadavres présents : à déclarer par le MJ. Profils des Zombies et des Squelettes : phase E (participants génériques en attendant). +2 DR : un mort de plus.",
+    "reminders": "Un Dhar visqueux s’enfonce dans des cadavres : BFM + DR corps se relèvent en Zombies ou en Squelettes, À Terre, sous votre contrôle. Un mort de plus par +2 DR. Cadavres présents : à déclarer par le MJ. Profils des Zombies (p. 340) et des Squelettes (p. 339) pris dans le bestiaire ; sort refusé si le profil manque (décision du MJ du 22/10). +2 DR : un mort de plus.",
     "assistedClauses": [
-      "Cadavres présents : à déclarer par le MJ. Profils des Zombies et des Squelettes : phase E (participants génériques en attendant). +2 DR : un mort de plus."
+      "Cadavres présents : à déclarer par le MJ. Profils des Zombies (p. 340) et des Squelettes (p. 339) pris dans le bestiaire ; sort refusé si le profil manque (décision du MJ du 22/10). +2 DR : un mort de plus."
     ],
     "sharedWith": null,
     "sourceBook": "L06",
@@ -24077,15 +24138,16 @@
     "effects": {
       "type": "healing",
       "healing": {
-        "amountFormula": "BE"
+        "amountFormula": "BE",
+        "onTarget": true
       },
       "targetRule": {
         "alliesOnly": true
       }
     },
-    "reminders": "Vous donnez de la puissance magique à votre Familier ou construit : la créature magique récupère aussitôt un nombre de Blessures égal à son Bonus d’Endurance ; avec +3 DR ou plus, le double. Le soin est calculé sur le Bonus d’Endurance du lanceur (le moteur ne lit pas celui de la cible) ; vérifier par le MJ et corriger sur la fiche du familier ou du construit. Le doublement à +3 DR est le seul effet de l’option de surpuissance. Cible : votre Familier ou construit (désigné par le MJ).",
+    "reminders": "Vous donnez de la puissance magique à votre Familier ou construit : la créature magique récupère aussitôt un nombre de Blessures égal à son Bonus d’Endurance ; avec +3 DR ou plus, le double. Le soin est calculé sur le Bonus d’Endurance du serviteur (décision du MJ du 22/10) ; son Endurance doit figurer sur sa fiche. Le doublement à +3 DR est le seul effet de l’option de surpuissance. Cible : votre Familier ou construit (désigné par le MJ).",
     "assistedClauses": [
-      "Le soin est calculé sur le Bonus d’Endurance du lanceur (le moteur ne lit pas celui de la cible) ; vérifier par le MJ et corriger sur la fiche du familier ou du construit. Le doublement à +3 DR est le seul effet de l’option de surpuissance. Cible : votre Familier ou construit (désigné par le MJ)."
+      "Le soin est calculé sur le Bonus d’Endurance du serviteur (décision du MJ du 22/10) ; son Endurance doit figurer sur sa fiche. Le doublement à +3 DR est le seul effet de l’option de surpuissance. Cible : votre Familier ou construit (désigné par le MJ)."
     ],
     "sharedWith": null,
     "sourceBook": "L17",

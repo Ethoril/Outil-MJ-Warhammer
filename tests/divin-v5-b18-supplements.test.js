@@ -21,12 +21,18 @@ test('B18 relique — Courroux : résultat ≤ 0 évité, sans table, sans décr
 });
 test('B18 relique — la réduction décale la ligne de table avec une preuve de jet cohérente',async()=>{
   const{store}=await fixture(1);await store.setDivineRelic('priest',relic({wrathReduction:10}));
-  const p=store.previewDivineExecution(BATTLE,input(16,{executionId:'b18-shift'}));assert.equal(p.ready,true,p.error);assert.equal(p.wrathTableResult.id,'wrath:16-20');assert.equal(p.preview.wrath.rawRoll,16);assert.equal(p.preview.wrath.roll,6);assert.equal(p.preview.wrath.modifiedRoll,16);assert.equal(p.preview.wrath.relic.wrathReduction,10);
+  const p=store.previewDivineExecution(BATTLE,input(16,{executionId:'b18-shift'}));assert.equal(p.ready,true,p.error);assert.equal(p.wrathTableResult.id,'wrath:16-20');assert.equal(p.preview.wrath.rawRoll,16);assert.equal(p.preview.wrath.roll,16);assert.equal(p.preview.wrath.modifiedRoll,16);assert.equal(p.preview.wrath.relic.wrathReduction,10);
   await store.applyDivineExecution(BATTLE,{preview:p});assert.equal(sin(store),0);assert.equal(priest(store).states[0].name,'À Terre');
 });
-test('B18 relique — un résultat positif non représentable par un jet 1–100 est refusé, pas inventé',async()=>{
+test('B18 relique (B-C50) — le malus s’applique au total (d100 + 10 × Péché), le d100 saisi reste la preuve 1–100',async()=>{
   const{store}=await fixture(3);await store.setDivineRelic('priest',relic({wrathReduction:30}));
-  const p=store.previewDivineExecution(BATTLE,input(5,{executionId:'b18-low'}));assert.equal(p.ready,false);assert.ok(p.needsInput.some(n=>n.field==='wrathRoll'));
+  const p=store.previewDivineExecution(BATTLE,input(16,{executionId:'b18-low'}));assert.equal(p.ready,true,p.error);
+  assert.equal(p.preview.wrath.roll,16);assert.equal(p.preview.wrath.modifiedRoll,16);assert.equal(p.preview.wrath.avoided,undefined);assert.equal(p.wrathTableResult.id,'wrath:16-20');
+});
+test('B18 relique (B-C50) — total réduit à 0 ou moins : Courroux évité même avec des Péchés',async()=>{
+  const{store}=await fixture(2);await store.setDivineRelic('priest',relic({wrathReduction:30}));
+  const p=store.previewDivineExecution(BATTLE,input(10,{executionId:'b18-total-avoid'}));assert.equal(p.ready,true,p.error);
+  assert.equal(p.preview.wrath.roll,10);assert.equal(p.preview.wrath.modifiedRoll,0);assert.equal(p.preview.wrath.avoided,true);assert.equal(p.wrathTableResult,null);
 });
 test('B18 relique — récupération B04 et retrait, Undo/Redo et rechargement',async()=>{
   const{store,persistence}=await fixture(1);await store.setDivineRelic('priest',relic({wrathReduction:20}));

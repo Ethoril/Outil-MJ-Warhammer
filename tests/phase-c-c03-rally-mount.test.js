@@ -6,6 +6,7 @@ import {
   recoverV5Condition,
   previewLeadershipRallyAllies,
   leadershipRallySlModifiers,
+  MASTER_AND_COMMANDER_TALENT,
   previewDeliciousExcruciation
 } from '../js/core/v5-effects.js';
 
@@ -76,13 +77,17 @@ test('C03 — Commandement : ralliement d’alliés (L06-018), budget 1 + (DR �
   assert.match(bl.error, /Brisé/);
 });
 
-test('C03 — Master and Commander (L25-003) : +1 DR par rang à bord, fait MJ requis', () => {
-  assert.deepEqual(leadershipRallySlModifiers({ masterAndCommanderRank: 0 }).modifiers, []);
-  const unknown = leadershipRallySlModifiers({ masterAndCommanderRank: 2 });
+test('C03 — Master and Commander (L25-003, 22/10) : Talent du catalogue, +1 DR par rang à bord, fait « à bord » MJ', () => {
+  const holder = (rank) => ({ id: 'cap', talents: rank ? [{ id: MASTER_AND_COMMANDER_TALENT.id, status: 'resolved', rank }] : [] });
+  assert.equal(MASTER_AND_COMMANDER_TALENT.id, 'talent-master-and-commander');
+  assert.match(MASTER_AND_COMMANDER_TALENT.source, /L25.*63/);
+  assert.deepEqual(leadershipRallySlModifiers({ participant: holder(0) }).modifiers, []);
+  assert.deepEqual(leadershipRallySlModifiers({ masterAndCommanderRank: 2 }).modifiers, []);
+  const unknown = leadershipRallySlModifiers({ participant: holder(2) });
   assert.ok(unknown.needsInput.some((n) => n.field === 'onBoardVessel'));
-  const no = leadershipRallySlModifiers({ masterAndCommanderRank: 2, onBoardVessel: false });
+  const no = leadershipRallySlModifiers({ participant: holder(2), onBoardVessel: false });
   assert.deepEqual(no.modifiers, []);
-  const yes = leadershipRallySlModifiers({ masterAndCommanderRank: 2, onBoardVessel: true });
+  const yes = leadershipRallySlModifiers({ participant: holder(2), onBoardVessel: true });
   assert.equal(yes.modifiers[0].amount, 2);
   assert.equal(yes.needsInput.length, 0);
 });

@@ -38,7 +38,8 @@ test('C04 — Intimidation en combat (L06-019) : Peur 1 + (DR net − 1), groupe
   assert.equal(lose.ready, true);
   assert.equal(lose.addedStates.length, 0);
   const tie = previewCombatIntimidation({ author, target, authorTest: { sl: 2 }, defenceTest: { sl: 2 }, encounterId: 'e' });
-  assert.equal(tie.addedStates[0].rating, 1);
+  assert.equal(tie.ready, true);
+  assert.equal(tie.addedStates.length, 0);
   const immune = previewCombatIntimidation({ author, target: person('a', { traits: ['Sans peur'], states: [{ key: 'heart-of-the-wolf' }] }), authorTest: { sl: 4 }, defenceTest: { sl: 0 }, encounterId: 'e' });
   assert.equal(immune.addedStates.length, 0);
   const missing = previewCombatIntimidation({ author, target, authorTest: { sl: 4 }, encounterId: 'e' });
@@ -134,7 +135,11 @@ test('C04 — Animosité supplantée par Peur ou Terreur (L06-006), monture non 
   assert.equal(isAnimosityOverridden(person('a', { states: [animus, { key: 'terror-of-talent' }] })), true);
   assert.ok(untrainedMountDisadvantage({ training: null }));
   assert.equal(untrainedMountDisadvantage({ training: 'Guerre' }), null);
-  assert.equal(effectiveSizeAgainstFear({ riderSize: 3, mountSize: 5, accomplishedRider: true, sizeOnlyCause: true }), 5);
-  assert.equal(effectiveSizeAgainstFear({ riderSize: 3, mountSize: 5, accomplishedRider: true, sizeOnlyCause: false }), 3);
-  assert.equal(effectiveSizeAgainstFear({ riderSize: 3, mountSize: 5, accomplishedRider: false, sizeOnlyCause: true }), 3);
+  // C0-L13-013 (22/10) : « Cavalier accompli » = Talent Cavalier émérite du cavalier, plus un fait MJ.
+  const roughrider = person('cav', { talents: [{ id: 'talent-roughrider', status: 'resolved', rank: 1 }] });
+  const plain = person('cav2');
+  assert.equal(effectiveSizeAgainstFear({ rider: roughrider, riderSize: 3, mountSize: 5, sizeOnlyCause: true }), 5);
+  assert.equal(effectiveSizeAgainstFear({ rider: roughrider, riderSize: 3, mountSize: 5, sizeOnlyCause: false }), 3);
+  assert.equal(effectiveSizeAgainstFear({ rider: plain, riderSize: 3, mountSize: 5, sizeOnlyCause: true }), 3);
+  assert.equal(effectiveSizeAgainstFear({ rider: plain, riderSize: 3, mountSize: 5, accomplishedRider: true, sizeOnlyCause: true }), 3);
 });

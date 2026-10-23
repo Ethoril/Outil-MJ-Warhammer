@@ -70,3 +70,42 @@ Sources : inventaire `docs/lot3/LOT4_TRADITIONS_SUPPLEMENTS.json` (90 runes : 82
 - D0b-Q11, Q12, Q13 : alias et variantes, trois Retribution, runes de reliques sans seuil.
 - Accès par culte (SYS-13, pp. 134-140) : les listes de chaque culte n'ont pas été relevées ici.
 - Le moteur doit-il gérer l'artisanat de gravure (semaines, ateliers) ou seulement le résultat saisi ?
+
+## 8. Décisions du MJ du 22/10 et propositions de lecture (avant tout code)
+
+### 8.1 Décisions
+
+- **Gravure = résultat saisi, pas d'artisanat.** Le moteur ne suit ni semaines, ni ateliers, ni Tests prolongés. Le MJ déclare « la rune R est gravée sur l'objet O » (événement unique, Annuler/Rétablir, reçu CAS). Le modèle `RuneEngraving` du §4.3 est réduit à `{ itemId, runeId, engravedAt, flaw }`. Les règles de SYS-06 (Test prolongé, −2 DR) deviennent un rappel affiché, jamais calculées. Les règles de trois runes, d'une seule rune de maître, de Fierté et Jalousie (SYS-07, SYS-09) restent contrôlées à la saisie. `drRequired` sert d'information, jamais de seuil bloquant.
+- **Liste propre à chaque culte** (SYS-13, pp. 134-140) : la rune ne se choisit que dans la liste du culte du Forgerune. Les listes sont à relever dans le livre (voir 8.3) ; tant qu'un culte n'est pas relevé, l'outil n'invente pas sa liste et laisse le MJ saisir une rune hors liste avec un avertissement.
+- **Huit runes à dés inversés** : lecture proposée ci-dessous, à valider avant code.
+
+### 8.2 Les huit runes « dés inversés » et le moteur d'inversion
+
+Le moteur (`js/core/v5-roll.js`) connaît deux inversions de jet d100 : **facultative** (Élan net > 0, le joueur choisit entre le jet et son inverse si l'inverse est meilleur) et **obligatoire** (Élan net < 0, l'inverse s'impose s'il est pire). Proposition : une rune « inverse » ne crée pas un troisième mécanisme ; elle **ajoute une source d'inversion** au Test visé, avec le sens que le texte lui donne.
+
+| Id | Rune | Page | Test visé | Lecture proposée |
+|---|---|---|---|---|
+| D0b-R-015 | Maître du Tueur | 126 | attaque du porteur et gravité critique, contre le type choisi | inversion **facultative** (favorable au porteur) sur son jet d'attaque et son jet de Critique contre le type |
+| D0b-R-080 | Maître du Tueur de gobelins | 33 | idem, contre les gobelins | idem, instance de R-015 (pas de cumul) |
+| D0b-R-076 | Fléau des géants (maître) | 7 | idem, contre les géants | idem |
+| D0b-R-036 | Maître de l'Équilibre | 127 | lancement d'un ennemi visible ; opposition runique dans la portée | inversion **obligatoire** (défavorable à l'ennemi) sur son Test de lancement |
+| D0b-R-038 | Maître de la Royauté | 128 | Charme / Intimidation / Commandement visant un nain ou un groupe majoritairement nain | inversion **obligatoire** sur le Test de l'auteur ; la majorité naine est un fait MJ |
+| D0b-R-052 | Maître d'Expulsion du Chaos | 129 | résistances et tables de Corruption ; bonus d'Avantage virtuel contre Démon Instable | inversion **facultative** (favorable) sur les Tests de résistance et le jet de Corruption du porteur ; le bonus d'Avantage virtuel est un reçu MJ (pas converti) |
+| D0b-R-053 | Maître de Grimnir | 129 | tirs adverses contre les alliés affectés | inversion **obligatoire** sur le tir adverse, tant que la cible est dans la zone (zone saisie par le MJ) |
+| D0b-R-054 | Maître de Grungni | 129 | lancements adverses contre les alliés affectés | idem, pour les lancements |
+
+Points à trancher par le MJ :
+1. Le sens (facultative pour le porteur, obligatoire pour l'adversaire) est-il bien celui du texte ? Les résumés de l'inventaire disent seulement « inversion ».
+2. Si une inversion obligatoire (rune) rencontre une inversion facultative (Élan positif) sur le même Test : proposition = elles s'annulent, comme les Avantages de signe opposé (net = 0).
+3. Plusieurs runes d'inversion sur un même Test : pas de cumul (une inversion reste une inversion).
+4. Les autres éléments de ces textes (bonus d'Avantage virtuel de R-052) restent en reçu MJ.
+
+### 8.3 Listes par culte (pp. 134-140) — à relever
+
+Rien n'a été relevé dans cette note (aucune lecture de PDF dans ce lot). Pour chaque culte (Grimnir, Grungni, Valaya, Morgrim, Smednir, Thungni, Gazul, et ceux que le livre ajoute), relever : nom, runes accessibles (id D0b-R-xxx), rune de maître propre. Ajout au modèle : `cults: [...]` dans chaque entrée de rune (déjà prévu §4.1) et `forgerune.cult` sur la fiche. Le relevé est un travail préalable du futur lot de code, à faire par lecture visuelle des pages.
+
+### 8.4 Questions restantes
+
+- D0b-Q11, Q12, Q13 (inchangées, §7).
+- Validation de 8.2 (points 1 à 4) avant code.
+- Les listes de culte de 8.3.

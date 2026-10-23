@@ -1,6 +1,13 @@
 const clone = value => JSON.parse(JSON.stringify(value));
 const CAMPAIGN_SECONDS_PER_UNIT = Object.freeze({ seconds: 1, minutes: 60, hours: 3600, days: 86400 });
 
+/** B-C26 : aube (6 h) proposée par défaut pour « le premier matin » ; la seconde 0 de campagne est lue comme minuit. Prochaine aube strictement future. */
+export function defaultFirstMorningAt(campaignSeconds) {
+  if (!Number.isSafeInteger(campaignSeconds) || campaignSeconds < 0) return null;
+  const dawn = 6 * 3600, day = 86400;
+  return campaignSeconds - (campaignSeconds % day) + dawn + (campaignSeconds % day >= dawn ? day : 0);
+}
+
 /** Convert an explicit MJ campaign duration without rounding a fractional second. */
 export function campaignDurationSeconds(value, unit = 'seconds') {
   const factor = CAMPAIGN_SECONDS_PER_UNIT[unit];
