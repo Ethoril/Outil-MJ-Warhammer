@@ -29040,5 +29040,2930 @@
       "Ne pas implanter"
     ],
     "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0002",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.22",
+    "question": "Implanter « Monture rétive : repartir » ? Après échec du contrôle, la monture s’arrête ; Équitation contre Volonté, ou Emprise sur les animaux opposée si menée par la bride, la fait repartir au plus à demi-marche.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0003",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.24",
+    "question": "Implanter « Charge : poule » ? Capacité de transport de l’animal : 0 points d’encombrement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0004",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.24",
+    "question": "Implanter « Charge : mouton » ? Capacité de transport de l’animal : 2 points d’encombrement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0005",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.24",
+    "question": "Implanter « Charge : porc » ? Capacité de transport de l’animal : 3 points d’encombrement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0006",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.24",
+    "question": "Implanter « Charge : chien » ? Capacité de transport de l’animal : 8 points d’encombrement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0007",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.24",
+    "question": "Implanter « Charge : poney » ? Capacité de transport de l’animal : 14 points d’encombrement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0008",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.24",
+    "question": "Implanter « Charge : âne ou mule » ? Capacité de transport de l’animal : 14 points d’encombrement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0009",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.24",
+    "question": "Implanter « Charge : cheval de trait » ? Capacité de transport de l’animal : 20 points d’encombrement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0010",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.24",
+    "question": "Implanter « Charge : cheval de trait lourd » ? Capacité de transport de l’animal : 30 points d’encombrement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0011",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.24",
+    "question": "Implanter « Charge : bœuf » ? Capacité de transport de l’animal : 30 points d’encombrement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0012",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.24",
+    "question": "Implanter « Charge : palefroi » ? Capacité de transport de l’animal : 16 points d’encombrement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0013",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.24",
+    "question": "Implanter « Charge : cheval de guerre léger » ? Capacité de transport de l’animal : 18 points d’encombrement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0014",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.24",
+    "question": "Implanter « Charge : destrier » ? Capacité de transport de l’animal : 20 points d’encombrement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0015",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.25",
+    "question": "Implanter « Allures : chien » ? Mouvement 4 ; marche 8 yards, trot non chiffré, course 24 yards.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0016",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.25",
+    "question": "Implanter « Allures : poney, âne ou mule » ? Mouvement 4 ; marche 8 yards, trot non chiffré, course 16 yards.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0017",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.25",
+    "question": "Implanter « Allures : cheval de trait » ? Mouvement 5 ; marche 10 yards, trot non chiffré, course 20 yards.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0018",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.25",
+    "question": "Implanter « Allures : cheval de trait lourd » ? Mouvement 4 ; marche 8 yards, trot non chiffré, course 16 yards.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0019",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.25",
+    "question": "Implanter « Allures : bœuf » ? Mouvement 3 ; marche 6 yards, trot non chiffré, course 12 yards.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0020",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.25",
+    "question": "Implanter « Allures : palefroi » ? Mouvement 7 ; marche 14 yards, trot 21 yards, course 42 yards.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0021",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.25",
+    "question": "Implanter « Allures : cheval de guerre léger » ? Mouvement 7 ; marche 14 yards, trot 21 yards, course 42 yards.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0022",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.25",
+    "question": "Implanter « Allures : destrier » ? Mouvement 4 ; marche 8 yards, trot 12 yards, course 24 yards.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0023",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.25",
+    "question": "Implanter « Conduite : conditions ordinaires » ? Sans obstacle ni difficulté particulière, conduire un véhicule ou monter ne demande normalement aucun Test.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0024",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.25",
+    "question": "Implanter « Incidents de monture : option » ? Le MJ peut employer les incidents détaillés du supplément au lieu de ceux du socle V4.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0025",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.25",
+    "question": "Implanter « Allures de voyage » ? Après encombrement, chaque point de Mouvement vaut un mile par heure au pas, un et demi au trot, deux au galop de voyage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0026",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.25",
+    "question": "Implanter « Monture : repos de marche » ? Marcher jusqu’à douze heures ; une heure de repos avec eau restaure BE heures de marche.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0027",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.25",
+    "question": "Implanter « Monture : endurance rapide » ? Trot limité à BE heures ; course limitée à BE divisé par deux heures.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0028",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.25",
+    "question": "Implanter « Monture : fatigue forcée » ? Par heure au-delà de l’endurance ordinaire, un Exténué et Résistance +0 ; échec, un Exténué de plus et incident de monture.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0029",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.25",
+    "question": "Implanter « Monture : effondrement » ? Au-delà de BE Exténué, gagner Sonné et À Terre ; Résistance +0 sans modificateur, échec : animal poussé à la mort.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0030",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.25",
+    "question": "Implanter « Incident de monture 01–40 » ? Harnachement rompu.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0031",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.25",
+    "question": "Implanter « Incident de monture 41–85 » ? Fer perdu.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0032",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.25",
+    "question": "Implanter « Incident de monture 86–98 » ? Boiterie.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0033",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.25",
+    "question": "Implanter « Incident de monture 99–00 » ? Patte cassée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0034",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.26",
+    "question": "Implanter « Harnachement rompu : chute » ? Équitation −1 DR ou chute de deux yards ; jusqu’à réparation, Équitation −2 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0035",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.26",
+    "question": "Implanter « Fer perdu » ? Équitation −1 DR ou chute de deux yards ; marche seule jusqu’au remplacement du fer, aller plus vite rend boiteux.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0036",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.26",
+    "question": "Implanter « Boiterie : déplacement » ? Au plus demi-marche, sans cavalier, charge ou traction ; continuer le voyage ajoute une étape.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0037",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.26",
+    "question": "Implanter « Boiterie : forcer » ? Imposer portage, traction ou déplacement contraire à la limitation coûte d10 Blessures sans BE ; sur huit ou plus, Résistance +0 ou Critique à la patte.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0038",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.26",
+    "question": "Implanter « Patte cassée » ? Fracture majeure de patte et immobilité ; si elle guérit, Mouvement divisé par deux.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0039",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.26",
+    "question": "Implanter « Chute : pied coincé » ? Après chute de monture due à échec d’au moins six DR, Esquive +0 ; échec, pied coincé dans l’étrier.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0040",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.26",
+    "question": "Implanter « Étrier : libération à l’arrêt » ? Monture immobile : Athlétisme étendu +0, trois DR, pour libérer le pied.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0041",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.26",
+    "question": "Implanter « Étrier : traîné » ? Monture en mouvement : À Terre et Entravé ; un dégât par Tour à la marche, Mouvement dégâts par Round au trot ou galop.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0042",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.26",
+    "question": "Implanter « Étrier : couper la sangle » ? Pas de Force pour casser l’entrave ; avec arme tranchante encore en main, CC −3 DR pour couper la sangle.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0043",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.27",
+    "question": "Implanter « Charrette : données » ? Encombrement 10, capacité 25, propulsion un animal, Endurance 25, Blessures 10.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0044",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.27",
+    "question": "Implanter « Chaise à porteurs : données » ? Encombrement 5, capacité 10, propulsion deux porteurs, Endurance 20, Blessures 8.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0045",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.27",
+    "question": "Implanter « Coche : données » ? Encombrement 100, capacité 80, propulsion deux à quatre animaux, Endurance 45, Blessures 50.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0046",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.27",
+    "question": "Implanter « Charrette à bras : données » ? Encombrement 5, capacité 50, propulsion un à deux opérateurs, Endurance 20, Blessures 8.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0047",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.27",
+    "question": "Implanter « Petit palanquin : données » ? Encombrement 10, capacité 10, propulsion deux porteurs, Endurance 30, Blessures 20.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0048",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.27",
+    "question": "Implanter « Grand palanquin : données » ? Encombrement 20, capacité 20, propulsion deux à quatre porteurs, Endurance 35, Blessures 35.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0049",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.27",
+    "question": "Implanter « Chariot léger : données » ? Encombrement 30, capacité 30, propulsion deux à quatre animaux, Endurance 50, Blessures 35.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0050",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.27",
+    "question": "Implanter « Chariot moyen : données » ? Encombrement 50, capacité 60, propulsion deux à six animaux, Endurance 50, Blessures 60.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0051",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.27",
+    "question": "Implanter « Chariot lourd : données » ? Encombrement 75, capacité 100, propulsion deux à huit animaux, Endurance 50, Blessures 95.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0052",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.27",
+    "question": "Implanter « Véhicule à roues : effort » ? Pousser ou tracter un véhicule à roues ne compte que pour un dixième de l’encombrement du véhicule et de sa charge.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0053",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.27",
+    "question": "Implanter « Palanquin : charge portée » ? Pour chaise ou palanquin sans roues, les porteurs supportent tout l’encombrement du véhicule et de son contenu.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0054",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.27",
+    "question": "Implanter « Coche de ligne : occupants » ? Six passagers à l’intérieur, quatre sur le toit avec les bagages ; équipage conducteur et assistant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0055",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.28",
+    "question": "Implanter « Véhicules : allures sûres » ? Les animaux attelés peuvent marcher ou trotter sans danger de cette règle ; les opérateurs à pied ne peuvent que marcher.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0056",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.28",
+    "question": "Implanter « Attelage : course forcée » ? Par mile couru, Conduite +0 avec −1 DR par mile déjà couru ; échec, retour à la marche et Résistance +0 de chaque animal ou un Exténué.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0057",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.28",
+    "question": "Implanter « Course d’attelage : échecs graves » ? À −6 DR de Conduite, incident de véhicule ; Résistance d’animal à −4 DR ou pire ajoute un Exténué ; à −6, d10 Blessures réduites par BE, minimum une.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0058",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.28",
+    "question": "Implanter « Incident de véhicule 01–50 » ? Hors de contrôle.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0059",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.28",
+    "question": "Implanter « Incident de véhicule 51–79 » ? Endommagé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0060",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.28",
+    "question": "Implanter « Incident de véhicule 80–95 » ? Brisé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0061",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.28",
+    "question": "Implanter « Incident de véhicule 96–100 » ? Collision.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0062",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.28",
+    "question": "Implanter « Véhicule : hors de contrôle » ? Sans reprise de contrôle en d10 Rounds, heurte un obstacle : Endommagé à la marche, Collision si plus vite ; peut aussi suivre incapacité du conducteur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0063",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.28",
+    "question": "Implanter « Véhicule : endommagé » ? Marche seule jusqu’à réparation par Métier adapté ; forcer une allure supérieure le rend Brisé après d10 Rounds.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0064",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.28",
+    "question": "Implanter « Véhicule : brisé » ? Subit d10 dégâts réduits par BE, minimum un, et ne roule plus avant réparation ; chaque occupant perd une Blessure sans BE ni armure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0065",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.28",
+    "question": "Implanter « Véhicule brisé : rênes » ? Si l’attelage se détache, Athlétisme +0 du conducteur pour lâcher les rênes ; échec, chute et traîné selon la règle de monture.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0066",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.28",
+    "question": "Implanter « Véhicule : collision » ? Occupants : 2d10 Blessures réduites par BE et armure, minimum une ; véhicule : 2d10 dégâts réduits par BE, minimum un ; réparation requise.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0067",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.28",
+    "question": "Implanter « Roue de secours » ? Poser une roue de rechange est possible avec Conduite ou un Métier adapté.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0068",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.29",
+    "question": "Implanter « Quadrupèdes : localisations » ? Inverser le jet de touche : 01–16 tête,17–56 corps,57–67 antérieur gauche,68–78 antérieur droit,79–89 postérieur gauche,90–00 postérieur droit.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0069",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.29",
+    "question": "Implanter « Quadrupèdes : touche impossible » ? Si la position ou la taille rend la localisation impraticable, le MJ peut remplacer la touche par le corps.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0070",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.29",
+    "question": "Implanter « Véhicule : attaque de mêlée » ? Véhicule immobile, touche automatique ; mouvement ou partie précise difficile, attaque ciblée −2 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0071",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.29",
+    "question": "Implanter « Conducteur : défense » ? En opposition de mêlée, un conducteur attaqué peut employer Conduite appropriée à la place de sa mêlée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0072",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.29",
+    "question": "Implanter « Soins animaliers : compétences » ? Soin aux animaux traite animaux malades ou blessés ; magie de soin agit comme sur les peuples ordinaires.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0073",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.29",
+    "question": "Implanter « Remède animal : erreur » ? Avec Soin aux animaux et compétence de collecte/préparation, un ingrédient dangereux n’entre que sur échec d’au moins six DR ; sans ces compétences, dès l’échec ordinaire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0074",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.29",
+    "question": "Implanter « Remède animal : poison » ? Un animal qui avale un remède ou aliment toxique fait Résistance +0 ou gagne un ou plusieurs Empoisonné.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0075",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.29",
+    "question": "Implanter « Sauter sur un véhicule » ? Vitesses accordées : Athlétisme +0 pour sauter sur le véhicule en mouvement, sinon chute de deux yards.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0077",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.29",
+    "question": "Implanter « Déloger un cavalier » ? Sauter sur une monture déjà montée exige aussi Équitation opposée ; le perdant chute de deux yards.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0078",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.29",
+    "question": "Implanter « Saut sans vitesse accordée » ? Depuis une position immobile, les sauts de transfert vers véhicule ou monture subissent −2 DR supplémentaires.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0079",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.30",
+    "question": "Implanter « Véhicule : tirs » ? Résoudre les tirs normalement, souvent Grande taille et +2 DR ; balles/flèches/carreaux ne font généralement pas de dégâts appréciables au bois/toile.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0080",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.30",
+    "question": "Implanter « Véhicule : critiques » ? Pas de Blessure Critique ordinaire ; critique d’un coup ciblé déclenche l’effet de pièce. En mouvement, critique ou zéro Blessure : Conduite −2 DR ou incident.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0081",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.30",
+    "question": "Implanter « Véhicule : harnais » ? Le harnais atteint provoque Hors de contrôle.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0082",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.30",
+    "question": "Implanter « Véhicule : roue » ? Roue cassée : arrêt avant réparation ; deux roues, renversement, charge perdue et chute des passagers d’un yard.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0083",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.30",
+    "question": "Implanter « Véhicule : habitacle » ? La moitié des dégâts frappe aussi un passager ou objet de chargement aléatoire ; une chaise/palanquin perd un brancard, tombe et est immobilisé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0084",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.30",
+    "question": "Implanter « Véhicule : réparation » ? Avec outils, matériaux et atelier adaptés, Métier approprié réussi : une heure rend d10 + DR dégâts.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0085",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.31",
+    "question": "Implanter « Voyage : étapes » ? Le MJ choisit les étapes ; chacune comporte météo, une activité par personnage et événements, puis phase d’arrivée en fin de trajet.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0086",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.31",
+    "question": "Implanter « Voyage : groupe lent » ? Si le Mouvement le plus bas est trois ou moins, ajouter une à deux étapes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0087",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.31",
+    "question": "Implanter « Voyage : montures rapides » ? Si tous ont une monture à Mouvement six ou plus, diviser les étapes par deux, minimum une.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0088",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.31",
+    "question": "Implanter « Voyage : meilleur itinéraire » ? Navigation ou Savoir local +0, +2 DR avec carte ; réussite, retirer une étape, minimum une.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0089",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.32",
+    "question": "Implanter « Voyage : échelle des étapes » ? Localités voisines : en général une étape ; grandes villes, deux à quatre ; au-delà, diviser en trajets avec repos et ravitaillement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0090",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.32",
+    "question": "Implanter « Voyage : vivres » ? Personnages et montures consomment un point d’encombrement de nourriture par jour, coût deux shillings ; ravitaillement par glanage possible.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0091",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.32",
+    "question": "Implanter « Météo : tirage » ? Tirer le d100 de météo au début de chaque étape dans la colonne de saison.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0092",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.32",
+    "question": "Implanter « Météo : printemps » ? 01–10 sec,11–30 beau,31–90 pluie,91–95 averse,96–00 neige.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0093",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.32",
+    "question": "Implanter « Météo : été » ? 01–40 sec,41–70 beau,71–95 pluie,96–00 averse.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0094",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.32",
+    "question": "Implanter « Météo : automne » ? 01–30 sec,31–60 beau,61–90 pluie,91–98 averse,99–00 neige.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0095",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.32",
+    "question": "Implanter « Météo : hiver » ? 01–10 beau,11–60 pluie,61–65 averse,66–90 neige,91–00 blizzard.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0096",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.33",
+    "question": "Implanter « Météo : latitude » ? Au nord du Reikland, ajouter dix à trente au jet ; au sud, retrancher dix à trente selon le MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0097",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.33",
+    "question": "Implanter « Temps sec » ? Sous sécheresse, glanage −1 DR pour trouver de l’eau.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0098",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.33",
+    "question": "Implanter « Pluie » ? Visibilité soixante-quinze pieds ou moins ; tirs −1 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0099",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.33",
+    "question": "Implanter « Averse : activité physique » ? Visibilité presque nulle, sons bas inaudibles, −1 DR aux Tests physiques et tout objet non abrité est trempé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0100",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.33",
+    "question": "Implanter « Averse : tirs et poudre » ? Tirs −2 DR et poudre exposée aussitôt ruinée ; les éclairs peuvent effrayer les bêtes Craintives.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0101",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.33",
+    "question": "Implanter « Neige » ? Visibilité cent cinquante pieds ; marche seule ; Résistance +2 DR en voyage ou un Exténué.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0102",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.34",
+    "question": "Implanter « Blizzard » ? Visibilité presque nulle, marche seule et tirs inutilisables ; Résistance +0 ou un Exténué.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0103",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.33",
+    "question": "Implanter « Intempéries : Exposition » ? En fin d’étape sous pluie/neige, Exposition si le personnage ne possède pas à la fois manteau adapté et tente ou abri.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0104",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.33",
+    "question": "Implanter « Tempête : Exposition » ? Averse/blizzard imposent Exposition même avec manteau et tente ; s’il manque l’un, −1 DR, les deux, −2 DR ; effets jusqu’au réchauffement à l’abri.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0105",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.33",
+    "question": "Implanter « Voyage : rhume à l’arrivée » ? En hiver/printemps, avoir souffert d’Exposition durant le voyage transmet le rhume qui se manifeste à l’arrivée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0106",
+    "phase": "Maladies et poisons",
+    "lot": "L23",
+    "source": "L23 p.33",
+    "question": "Implanter « Rhume : contraction » ? Résistance +0 à l’exposition aux éléments ou à une toux/éternuement infecté très proche ; échec, rhume.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0107",
+    "phase": "Maladies et poisons",
+    "lot": "L23",
+    "source": "L23 p.33",
+    "question": "Implanter « Rhume : évolution » ? Incubation vingt +4d10 heures ; durée d10 jours ; Toux et éternuements et Malaise. Nouvelle Exposition sous pluie/neige ajoute d10 jours.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0108",
+    "phase": "Maladies et poisons",
+    "lot": "L23",
+    "source": "L23 p.33",
+    "question": "Implanter « Rhume : pneumonie » ? Si la durée du rhume dépasse quatorze jours, il devient pneumonie.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0109",
+    "phase": "Maladies et poisons",
+    "lot": "L23",
+    "source": "L23 p.33",
+    "question": "Implanter « Pneumonie : symptômes » ? Incubation immédiate ; durée3d10 jours ; Toux et éternuements, Fièvre et Malaise.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0110",
+    "phase": "Maladies et poisons",
+    "lot": "L23",
+    "source": "L23 p.33",
+    "question": "Implanter « Pneumonie : effort » ? Chaque jour d’effort physique, Résistance +0 ; échec, Fièvre sévère. Tant qu’elle est sévère, refaire ce Test quotidien ou ajouter Flétrissement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0111",
+    "phase": "Entre-aventures",
+    "lot": "L23",
+    "source": "L23 p.34",
+    "question": "Implanter « Activités en route : quota » ? Une activité par personnage et par étape ; le MJ peut autoriser certaines activités entre aventures et les personnages choisissent leur ordre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0112",
+    "phase": "Entre-aventures",
+    "lot": "L23",
+    "source": "L23 p.34",
+    "question": "Implanter « Activité : fatigue » ? Échouer à un Test d’activité en route donne un Exténué.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0113",
+    "phase": "Entre-aventures",
+    "lot": "L23",
+    "source": "L23 p.34",
+    "question": "Implanter « Vie en plein air » ? Survie +0 avec −1 DR par degré météo éloigné de Beau ; réussite dispense le groupe d’Exposition pour les intempéries.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0114",
+    "phase": "Entre-aventures",
+    "lot": "L23",
+    "source": "L23 p.34",
+    "question": "Implanter « Glanage en route » ? Consacrer l’activité à Survie pour compléter nourriture/eau selon les règles de collecte du socle.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0115",
+    "phase": "Entre-aventures",
+    "lot": "L23",
+    "source": "L23 p.34",
+    "question": "Implanter « Recueillir des informations » ? Si la route permet des échanges, Ragot +0 ; autant de questions que de DR, réponses selon ce que savent réellement les habitants.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0116",
+    "phase": "Entre-aventures",
+    "lot": "L23",
+    "source": "L23 p.34",
+    "question": "Implanter « Monter la garde » ? Perception +0 ; réussite empêche le groupe d’être Surpris durant cette étape.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0117",
+    "phase": "Entre-aventures",
+    "lot": "L23",
+    "source": "L23 p.34",
+    "question": "Implanter « Cartographier le trajet » ? Métier (Cartographie) ou Art (Dessin) étendu, seuil deux fois les étapes du trajet ; poursuivre aux activités suivantes avec matériel d’écriture.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0118",
+    "phase": "Entre-aventures",
+    "lot": "L23",
+    "source": "L23 p.35",
+    "question": "Implanter « Pratiquer une compétence » ? Compétence praticable durant le voyage à +0 ; réussite, inverser un Test de cette compétence lors d’une étape suivante ou de l’aventure suivante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0119",
+    "phase": "Entre-aventures",
+    "lot": "L23",
+    "source": "L23 p.35",
+    "question": "Implanter « Récupérer en voyage » ? L’étape compte comme repos pour les soins ; activité interdite si un Exténué a été acquis durant cette étape.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0120",
+    "phase": "Entre-aventures",
+    "lot": "L23",
+    "source": "L23 p.35",
+    "question": "Implanter « Installer le camp » ? Survie +0 ou Guérison +0 ; dépenser les DR pour enlever Exténué à un personnage ou le soigner selon Guérison.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0121",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.35",
+    "question": "Implanter « Rencontres : choix » ? Le MJ peut tirer ou choisir ; réussite d’au moins quatre DR peut déclencher une rencontre positive, maladresse ou majorité d’échecs une mauvaise rencontre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0122",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.35",
+    "question": "Implanter « Rencontre favorable 46–60 : Auberge confortable » ? Si le groupe paie l’auberge, les personnages se remettent des États persistants.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0123",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.35",
+    "question": "Implanter « Rencontre favorable 61–75 : Temps libre » ? Chaque personnage peut faire une activité de voyage supplémentaire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0124",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.35",
+    "question": "Implanter « Rencontre favorable 91–95 : Raccourci » ? Sauter la prochaine étape du trajet.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0125",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.35",
+    "question": "Implanter « Rencontre favorable 96–100 : Voyage reposant » ? Guérir toutes les Blessures et retirer tous les Exténué.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0126",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.37",
+    "question": "Implanter « Rencontre01–10 : route coupée » ? Un personnage fait Survie +2 DR pour trouver un détour ; échec, tous gagnent un Exténué.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0127",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.37",
+    "question": "Implanter « Rencontre21–30 : territoire hostile » ? Passage furtif : chaque personnage fait Discrétion (Rurale) +0 ou embuscade ; choisir le détour impose Exténué.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0128",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.37",
+    "question": "Implanter « Rencontre51–70 : temps terrible » ? Ajouter quarante au prochain jet de météo ; dernière étape, l’intempérie frappe plutôt la destination.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0129",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.37",
+    "question": "Implanter « Rencontre71–80 : matériel abîmé » ? Une pièce essentielle du matériel de voyage est perdue ou détruite ; réparation ou Exposition dépend du matériel affecté.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0130",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.37",
+    "question": "Implanter « Rencontre81–90 : mauvaises conditions » ? Tous sont exposés à la Vérole du tanneur selon la maladie du socle.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0131",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.37",
+    "question": "Implanter « Rencontre91–100 : monture enfuie » ? Récupérer la monture donne un Exténué au chercheur ; nuit pluvieuse/neigeuse ou tempête, Exposition en plus.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0132",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.36",
+    "question": "Implanter « Rencontre81–90 : signes divins » ? Savoir (Théologie) peut fournir davantage d’informations sur le signe reçu durant le voyage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0133",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.38",
+    "question": "Implanter « Arrivée : apparence épuisée » ? Arriver Exténué sans se nettoyer pénalise les Tests de Sociabilité : −2 DR si statut Or, −1 DR si Argent, aucun si Bronze.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0134",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.38",
+    "question": "Implanter « Arrivée : maladies incubées » ? Les maladies contractées en route avec incubation se déclarent pendant la phase d’arrivée, dans cette procédure abstraite de voyage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0135",
+    "phase": "Voyage et environnement",
+    "lot": "L23",
+    "source": "L23 p.38",
+    "question": "Implanter « Arrivée : services et nouvelles » ? Savoir régional +2 DR révèle où trouver provisions/services ; Ragot +0 informe des événements locaux.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0136",
+    "phase": "Corruption et mutations",
+    "lot": "L23",
+    "source": "L23 p.65",
+    "question": "Implanter « Mutations : table étendue » ? Pour une mutation physique, le MJ peut utiliser la table étendue avec colonne Indivis ou dieu du Chaos concerné.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0137",
+    "phase": "Corruption et mutations",
+    "lot": "L23",
+    "source": "L23 p.68",
+    "question": "Implanter « Mutations : dissimulation » ? Note un : seulement cachable par vêtement ; note trois : impossible à cacher ; jambes animales, Athlétisme −1 DR pour marcher normalement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0139",
+    "phase": "Corruption et mutations",
+    "lot": "L23",
+    "source": "L23 p.66",
+    "question": "Implanter « Mutation : Sang acide » ? Gagner le Trait Sang corrosif.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0140",
+    "phase": "Corruption et mutations",
+    "lot": "L23",
+    "source": "L23 p.66",
+    "question": "Implanter « Mutation : Visage à bec » ? Gagner Morsure +3.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0141",
+    "phase": "Corruption et mutations",
+    "lot": "L23",
+    "source": "L23 p.66",
+    "question": "Implanter « Mutation : Tête bestiale » ? Tirer la tête animale sur la sous-table du folio69.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0142",
+    "phase": "Corruption et mutations",
+    "lot": "L23",
+    "source": "L23 p.66",
+    "question": "Implanter « Mutation : Extrémités armées » ? Dextérité réduite définitivement à zéro ; ne peut être désarmé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0143",
+    "phase": "Corruption et mutations",
+    "lot": "L23",
+    "source": "L23 p.66",
+    "question": "Implanter « Mutation : Grandes oreilles » ? Gagner Sens aiguisé (Ouïe).",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0144",
+    "phase": "Corruption et mutations",
+    "lot": "L23",
+    "source": "L23 p.66",
+    "question": "Implanter « Mutation : Pattes d’oiseau » ? Gagner le Trait Arboricole.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0146",
+    "phase": "Corruption et mutations",
+    "lot": "L23",
+    "source": "L23 p.66",
+    "question": "Implanter « Mutation : Souffle de feu » ? Gagner Souffle cinq (Feu).",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0147",
+    "phase": "Corruption et mutations",
+    "lot": "L23",
+    "source": "L23 p.66",
+    "question": "Implanter « Mutation : Yeux exorbités » ? Gagner dix Initiative.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0148",
+    "phase": "Corruption et mutations",
+    "lot": "L23",
+    "source": "L23 p.66",
+    "question": "Implanter « Mutation : Peau brûlante » ? Une créature ou un objet en contact physique fait Athlétisme ou gagne un Enflammé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0149",
+    "phase": "Corruption et mutations",
+    "lot": "L23",
+    "source": "L23 p.66",
+    "question": "Implanter « Mutation : Carapace » ? Gagner un PA à deux localisations tirées au hasard.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0150",
+    "phase": "Corruption et mutations",
+    "lot": "L23",
+    "source": "L23 p.66",
+    "question": "Implanter « Mutation : Griffes » ? Les mains deviennent une arme de créature avec dégâts égaux au BF.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0151",
+    "phase": "Corruption et mutations",
+    "lot": "L23",
+    "source": "L23 p.66",
+    "question": "Implanter « Mutation : Nuage de mouches » ? Gagner Distrayant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0153",
+    "phase": "Corruption et mutations",
+    "lot": "L23",
+    "source": "L23 p.66",
+    "question": "Implanter « Mutation : Tête à crête » ? Gagner Attirant seulement dans les rapports avec mutants et hommes-bêtes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0154",
+    "phase": "Corruption et mutations",
+    "lot": "L23",
+    "source": "L23 p.66",
+    "question": "Implanter « Mutation : Cri assourdissant » ? Gagner Distrayant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0156",
+    "phase": "Corruption et mutations",
+    "lot": "L23",
+    "source": "L23 p.66",
+    "question": "Implanter « Mutation : Bras élastiques » ? Traiter toute arme de mêlée comme ayant jusqu’à deux crans d’allonge de plus.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0158",
+    "phase": "Corruption et mutations",
+    "lot": "L23",
+    "source": "L23 p.66",
+    "question": "Implanter « Mutation : Mauvais œil : pouvoir » ? Dépenser un Point de Chance lance Mauvais œil sans Test, puis subir immédiatement un incident mineur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0161",
+    "phase": "Corruption et mutations",
+    "lot": "L23",
+    "source": "L23 p.66",
+    "question": "Implanter « Mutation : Yeux pédonculés » ? Voir au-dessus ou autour d’obstacles.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0163",
+    "phase": "Corruption et mutations",
+    "lot": "L23",
+    "source": "L23 p.66",
+    "question": "Implanter « Mutation : Odeur répugnante » ? Gagner Distrayant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0164",
+    "phase": "Corruption et mutations",
+    "lot": "L23",
+    "source": "L23 p.67",
+    "question": "Implanter « Mutation : Peau velue » ? Immunité à l’Exposition froide, mais effets de l’Exposition chaude doublés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0165",
+    "phase": "Corruption et mutations",
+    "lot": "L23",
+    "source": "L23 p.67",
+    "question": "Implanter « Mutation : Branchies » ? Pouvoir respirer sous l’eau.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0168",
+    "phase": "Corruption et mutations",
+    "lot": "L23",
+    "source": "L23 p.67",
+    "question": "Implanter « Mutation : Sans tête : localisations » ? Les touches à la tête ratent.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0169",
+    "phase": "Corruption et mutations",
+    "lot": "L23",
+    "source": "L23 p.67",
+    "question": "Implanter « Mutation : Sauteur » ? Mouvement fixé à deux, impossible à augmenter ; gagner Bond.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0171",
+    "phase": "Corruption et mutations",
+    "lot": "L23",
+    "source": "L23 p.67",
+    "question": "Implanter « Mutation : Peau de fer » ? Gagner deux PA partout et perdre dix Agilité.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0173",
+    "phase": "Corruption et mutations",
+    "lot": "L23",
+    "source": "L23 p.67",
+    "question": "Implanter « Mutation : Longs bras » ? À allonge égale à celle de l’adversaire, l’arme compte comme plus longue.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0174",
+    "phase": "Corruption et mutations",
+    "lot": "L23",
+    "source": "L23 p.67",
+    "question": "Implanter « Mutation : Longues jambes » ? Gagner deux Mouvement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0175",
+    "phase": "Corruption et mutations",
+    "lot": "L23",
+    "source": "L23 p.67",
+    "question": "Implanter « Mutation : Long cou » ? La moitié des touches au corps deviennent des touches à la tête.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0176",
+    "phase": "Corruption et mutations",
+    "lot": "L23",
+    "source": "L23 p.67",
+    "question": "Implanter « Mutation : Bras multiples » ? Gagner une attaque gratuite.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0177",
+    "phase": "Corruption et mutations",
+    "lot": "L23",
+    "source": "L23 p.67",
+    "question": "Implanter « Mutation : Jambes multiples » ? Gagner un Mouvement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0178",
+    "phase": "Corruption et mutations",
+    "lot": "L23",
+    "source": "L23 p.67",
+    "question": "Implanter « Mutation : Œil unique » ? Perdre vingt CT.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0180",
+    "phase": "Corruption et mutations",
+    "lot": "L23",
+    "source": "L23 p.67",
+    "question": "Implanter « Mutation : Tête d’épingle » ? Gagner Stupide.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0181",
+    "phase": "Corruption et mutations",
+    "lot": "L23",
+    "source": "L23 p.67",
+    "question": "Implanter « Mutation : Tête pointue » ? Gagner Stupide et ne plus pouvoir porter de casque.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0182",
+    "phase": "Corruption et mutations",
+    "lot": "L23",
+    "source": "L23 p.67",
+    "question": "Implanter « Mutation : Visage réarrangé » ? Gagner Peur un ; ceux qui essaient de lire un mensonge du porteur subissent −2 DR à Intuition.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0184",
+    "phase": "Corruption et mutations",
+    "lot": "L23",
+    "source": "L23 p.67",
+    "question": "Implanter « Mutation : Chair pourrie : infection » ? Gagner Infecté.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0185",
+    "phase": "Corruption et mutations",
+    "lot": "L23",
+    "source": "L23 p.67",
+    "question": "Implanter « Mutation : Couleurs changeantes » ? Gagner Distrayant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0188",
+    "phase": "Corruption et mutations",
+    "lot": "L23",
+    "source": "L23 p.67",
+    "question": "Implanter « Mutation : Peau épineuse » ? Armure interdite ; un PA partout ; lors d’une Charge, attaque gratuite avec Arme +4.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0189",
+    "phase": "Corruption et mutations",
+    "lot": "L23",
+    "source": "L23 p.67",
+    "question": "Implanter « Mutation : Mains et pieds à ventouses » ? Gagner Grimpeur de murs.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0190",
+    "phase": "Corruption et mutations",
+    "lot": "L23",
+    "source": "L23 p.67",
+    "question": "Implanter « Mutation : Queue » ? Gagner Attaque caudale +3.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0192",
+    "phase": "Corruption et mutations",
+    "lot": "L23",
+    "source": "L23 p.67",
+    "question": "Implanter « Mutation : Trois yeux » ? Gagner Sens aiguisé (Vue).",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0194",
+    "phase": "Corruption et mutations",
+    "lot": "L23",
+    "source": "L23 p.68",
+    "question": "Implanter « Mutation : Deux têtes » ? Gagner Ambidextre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0195",
+    "phase": "Corruption et mutations",
+    "lot": "L23",
+    "source": "L23 p.68",
+    "question": "Implanter « Mutation : Cornes inégales » ? Un PA à la tête ; arme de créature avec dégâts BF.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0196",
+    "phase": "Corruption et mutations",
+    "lot": "L23",
+    "source": "L23 p.68",
+    "question": "Implanter « Mutation : Peau inhabituelle » ? Couleur ou texture inhabituelle, impossible à cacher selon la note trois.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0198",
+    "phase": "Corruption et mutations",
+    "lot": "L23",
+    "source": "L23 p.68",
+    "question": "Implanter « Mutation : Pieds palmés V4 » ? Gagner Amphibie.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0199",
+    "phase": "Corruption et mutations",
+    "lot": "L23",
+    "source": "L23 p.68",
+    "question": "Implanter « Mutation : Pus suintant » ? Tirer la localisation d’où provient le pus.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0200",
+    "phase": "Corruption et mutations",
+    "lot": "L23",
+    "source": "L23 p.68",
+    "question": "Implanter « Mutation : Museau à moustaches V4 » ? Pistage +1 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0201",
+    "phase": "Corruption et mutations",
+    "lot": "L23",
+    "source": "L23 p.68",
+    "question": "Implanter « Mutation : Ailes » ? Gagner Vol soixante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0202",
+    "phase": "Corruption et mutations",
+    "lot": "L23",
+    "source": "L23 p.69",
+    "question": "Implanter « Tête bestiale : ours » ? Un PA à la tête et Morsure +9.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0203",
+    "phase": "Corruption et mutations",
+    "lot": "L23",
+    "source": "L23 p.69",
+    "question": "Implanter « Tête bestiale : sanglier » ? Un PA à la tête et Cornes (Défenses).",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0204",
+    "phase": "Corruption et mutations",
+    "lot": "L23",
+    "source": "L23 p.69",
+    "question": "Implanter « Tête bestiale : taureau » ? Un PA à la tête et Cornes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0205",
+    "phase": "Corruption et mutations",
+    "lot": "L23",
+    "source": "L23 p.69",
+    "question": "Implanter « Tête bestiale : chien » ? Morsure +5.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0206",
+    "phase": "Corruption et mutations",
+    "lot": "L23",
+    "source": "L23 p.69",
+    "question": "Implanter « Tête bestiale : aigle » ? Morsure +4.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0207",
+    "phase": "Corruption et mutations",
+    "lot": "L23",
+    "source": "L23 p.69",
+    "question": "Implanter « Tête bestiale : rat » ? Morsure +4 et Infecté.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0208",
+    "phase": "Corruption et mutations",
+    "lot": "L23",
+    "source": "L23 p.69",
+    "question": "Implanter « Tête bestiale : araignée géante » ? Morsure +3 et Venin (Accessible).",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0209",
+    "phase": "Corruption et mutations",
+    "lot": "L23",
+    "source": "L23 p.69",
+    "question": "Implanter « Tête bestiale : chèvre » ? Cornes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0210",
+    "phase": "Corruption et mutations",
+    "lot": "L23",
+    "source": "L23 p.69",
+    "question": "Implanter « Tête bestiale : loup » ? Un PA à la tête, Morsure +6 et Sens aiguisé (Odorat).",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0211",
+    "phase": "Corruption et mutations",
+    "lot": "L23",
+    "source": "L23 p.69",
+    "question": "Implanter « Tête bestiale : serpent » ? Un PA à la tête, Morsure +3 et Venin (Accessible).",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0214",
+    "phase": "Magie générale et objets",
+    "lot": "L23",
+    "source": "L23 p.75",
+    "question": "Implanter « Disciple du changement » ? Rang maximal un ; lorsqu’une mutation est acquise, tirer deux fois et choisir le résultat.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0215",
+    "phase": "Magie générale et objets",
+    "lot": "L23",
+    "source": "L23 p.75",
+    "question": "Implanter « Double vie » ? Rang maximal un ; entrer dans une seconde carrière en parallèle de celle du Chaos, progresser dans chacune et en changer avec accord du MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0216",
+    "phase": "Magie générale et objets",
+    "lot": "L23",
+    "source": "L23 p.75",
+    "question": "Implanter « Bénédiction de Tzeentch : sort » ? Rang maximal un ; acquérir ce talent donne un sort choisi dans un Domaine de magie de Couleur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0217",
+    "phase": "Magie générale et objets",
+    "lot": "L23",
+    "source": "L23 p.75",
+    "question": "Implanter « Bénédiction de Tzeentch : achats » ? Pour chaque sort de Tzeentch mémorisé, pouvoir acheter un sort supplémentaire de magie de Couleur pour cent PX.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0218",
+    "phase": "Magie générale et objets",
+    "lot": "L23",
+    "source": "L23 p.78",
+    "question": "Implanter « Sources de Dhar : Focalisation » ? Une source de Dhar proche donne de un à trois DR de Focalisation (Dhar), montant décidé par le MJ selon sa puissance.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0219",
+    "phase": "Magie générale et objets",
+    "lot": "L23",
+    "source": "L23 p.78",
+    "question": "Implanter « Dhar : surpuissance V4 » ? Variante V4 : chaque DR au-delà du NI permet la surpuissance au lieu de deux DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0220",
+    "phase": "Magie générale et objets",
+    "lot": "L23",
+    "source": "L23 p.78",
+    "question": "Implanter « Dhar : doubles » ? Un double de Focalisation ou Langue (Magick) lié à Dhar constitue une exposition mineure à la Corruption.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0221",
+    "phase": "Magie générale et objets",
+    "lot": "L23",
+    "source": "L23 p.78",
+    "question": "Implanter « Dhar : huit au jet » ? Un huit au jet de Focalisation/incantation fait subir à tous les vivants à Volonté yards une exposition mineure et le même incident mineur ;88rend les deux majeurs.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0223",
+    "phase": "Magie générale et objets",
+    "lot": "L23",
+    "source": "L23 p.79",
+    "question": "Implanter « Imprégné de magie : aura » ? Rang maximal un ; les sorts lancés à BFM yards gagnent un DR, une seule fois même si plusieurs porteurs sont proches.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0254",
+    "phase": "Magie générale et objets",
+    "lot": "L23",
+    "source": "L23 p.85",
+    "question": "Implanter « Horreurs : groupe de neuf » ? Par neuf porteurs du Feu de Tzeentch ou multiple de neuf, le groupe met sa puissance en commun pour lancer Tempête de feu de Tzeentch à la place.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0256",
+    "phase": "Combat et capacités",
+    "lot": "L23",
+    "source": "L23 p.87",
+    "question": "Implanter « Grand félin : coup mortel » ? Le grand félin bénéficie de la règle Coup mortel contre tout adversaire, quelle que soit sa Taille.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0257",
+    "phase": "Combat et capacités",
+    "lot": "L23",
+    "source": "L23 p.99",
+    "question": "Implanter « Tirer un tapis » ? Force −1 DR, avec −1 DR supplémentaire par personne sur le tapis ; chacune fait Athlétisme +0 ou gagne À Terre et un Sonné.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0258",
+    "phase": "Magie générale et objets",
+    "lot": "L23",
+    "source": "L23 p.104",
+    "question": "Implanter « Remèdes de malepierre : récupération » ? Les traitements du traité facilitent d’un degré les Tests de guérison d’infection ; un Test déjà Très facile devient automatiquement réussi ; chaque dose expose à la Corruption mineure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0259",
+    "phase": "Magie générale et objets",
+    "lot": "L23",
+    "source": "L23 p.104",
+    "question": "Implanter « Traité médical : substitution » ? L’apothicaire possédant le traité peut remplacer un ingrédient de préparation par malepierre ; exposition modérée du préparateur et mineure du consommateur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0260",
+    "phase": "Maladies et poisons",
+    "lot": "L23",
+    "source": "L23 p.104",
+    "question": "Implanter « Acide de malepierre : projection » ? Être éclaboussé inflige une touche à +8 dégâts et une exposition modérée à la Corruption.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0261",
+    "phase": "Maladies et poisons",
+    "lot": "L23",
+    "source": "L23 p.104",
+    "question": "Implanter « Acide de malepierre : ingestion » ? Résistance −3 DR ; échec, +10 dégâts et un Empoisonné, puis autant supplémentaires par DR négatif.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0262",
+    "phase": "Équipement et artisanat",
+    "lot": "L23",
+    "source": "L23 p.106",
+    "question": "Implanter « Fourrure dorée : protection » ? La fourrure de la Bête impériale protège de certaines menaces comme acide, électricité et feu.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0263",
+    "phase": "Équipement et artisanat",
+    "lot": "L23",
+    "source": "L23 p.106",
+    "question": "Implanter « Fourrure dorée : vêtement » ? Porter un vêtement tissé de sa fourrure expose à la Corruption mineure chaque heure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0264",
+    "phase": "Équipement et artisanat",
+    "lot": "L23",
+    "source": "L23 p.106",
+    "question": "Implanter « Fourrure dorée : fonte » ? Fondre la peau donne10d10 CO de métal ; fonte, exposition modérée ; manipuler lingot ou monnaie, mineure, évitée par des gants.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0265",
+    "phase": "Équipement et artisanat",
+    "lot": "L23",
+    "source": "L23 p.106",
+    "question": "Implanter « Or contaminé : mélange » ? La souillure de cet or ne peut être enlevée ; le fondre avec un autre or contamine tous les moulages.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0266",
+    "phase": "Combat et capacités",
+    "lot": "L23",
+    "source": "L23 p.106",
+    "question": "Implanter « Bêtes de ferme mutantes : crachat » ? À trois yards, tir avec CT ; cible touchée, Résistance +0 ou un Empoisonné.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0268",
+    "phase": "Création et carrières",
+    "lot": "L23",
+    "source": "L23 p.115",
+    "question": "Implanter « Harbull : argent des secrets » ? À la création de ce prétiré, recevoir d10 deniers supplémentaires par secret choisi.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0269",
+    "phase": "Création et carrières",
+    "lot": "L23",
+    "source": "L23 p.117",
+    "question": "Implanter « Werner : argent des secrets » ? À la création de ce prétiré, recevoir d10 deniers supplémentaires par secret choisi.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0270",
+    "phase": "Création et carrières",
+    "lot": "L23",
+    "source": "L23 p.119",
+    "question": "Implanter « Wanda : argent des secrets » ? À la création de ce prétiré, recevoir d10 deniers supplémentaires par secret choisi.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0271",
+    "phase": "Création et carrières",
+    "lot": "L23",
+    "source": "L23 p.121",
+    "question": "Implanter « Johann : argent des secrets » ? À la création de ce prétiré, recevoir d10 deniers supplémentaires par secret choisi.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0272",
+    "phase": "Création et carrières",
+    "lot": "L23",
+    "source": "L23 p.123",
+    "question": "Implanter « Malmir : argent des secrets » ? À la création de ce prétiré, recevoir d10 deniers supplémentaires par secret choisi.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0273",
+    "phase": "Création et carrières",
+    "lot": "L23",
+    "source": "L23 p.125",
+    "question": "Implanter « Kirsten : argent des secrets » ? À la création de ce prétiré, recevoir d10 deniers supplémentaires par secret choisi.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0274",
+    "phase": "Création et carrières",
+    "lot": "L23",
+    "source": "L23 p.117",
+    "question": "Implanter « Werner : secret sans destin funeste » ? Choisir ce secret retire le talent Destin funeste de Werner.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0275",
+    "phase": "Création et carrières",
+    "lot": "L23",
+    "source": "L23 p.125",
+    "question": "Implanter « Kirsten : secret de vol » ? Au premier paiement du compagnon choisi comme victime, il manque autant de deniers que Kirsten a gagné en choisissant ce secret.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0276",
+    "phase": "Argent et statut",
+    "lot": "L23",
+    "source": "L23 p.15",
+    "question": "Implanter « Guilde : travail annuel » ? Dans certaines guildes artisanales, le membre doit une journée de travail non payée par an à sa guilde.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0277",
+    "phase": "Argent et statut",
+    "lot": "L23",
+    "source": "L23 p.40",
+    "question": "Implanter « Péage : nombre de jambes » ? Le péage est généralement d’un à quatre deniers par jambe qui passe ; ouvrages particuliers peuvent coûter davantage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0278",
+    "phase": "Compétences et Tests",
+    "lot": "L23",
+    "source": "L23 p.57",
+    "question": "Implanter « Bonneteau : repérer le tour » ? Perception opposée à Escamotage permet de comprendre le tour du bonimenteur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0279",
+    "phase": "Compétences et Tests",
+    "lot": "L23",
+    "source": "L23 p.44",
+    "question": "Implanter « Chasseur de primes : premier échange » ? Un personnage paraissant issu de l’armée ou du maintien de l’ordre reçoit un bonus de dix en Sociabilité lors du premier échange avec un chasseur de primes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0280",
+    "phase": "Équipement et artisanat",
+    "lot": "L23",
+    "source": "L23 p.59",
+    "question": "Implanter « Chaussures rembourrées » ? Les semelles rembourrées donnent +1 DR à Discrétion pour suivre une victime sans bruit.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L23-0281",
+    "phase": "Création et carrières",
+    "lot": "L23",
+    "source": "L23 p.77",
+    "question": "Implanter « Magus de Tzeentch : accès PJ » ? Carrière humaine normalement pour PNJ ; un PJ peut la suivre avec permission du MJ, selon les règles ordinaires.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
   }
 ]
