@@ -29,6 +29,7 @@ Plan : `PLAN_PRO_QUALITE_E.md`. Branche `pro/qualite-e`, départ `9c12613`. Choi
 | R | FAIT (avec réserve : manques de complétude non justifiés un par un) | (voir `git log`, « R ») |
 | R2 | FAIT (avec réserve : `QE-R2-1`) | (voir `git log`, « R2 ») |
 | Q20 | FAIT (`QE-D-23-1`, `QE-Q20-1`, `QE-Q20-2`) | (voir `git log`, « Q20 ») |
+| Q21 | FAIT (`QE-Q21-1`) | (voir `git log`, « Q21 ») |
 
 ## Q0 — contrôle de complétude
 
@@ -269,3 +270,9 @@ Branché / non appelé (grep dans `js/`) :
 - Décisions du MJ du 23/10 consignées (`QE-D-23-1`). `js/core/bestiary-profiles.js` : Tentacules, toutes les actions sont des attaques gratuites ; autre multiplicateur (Carrion « Claws 2 »), seules les actions au-delà de la première le sont ; le Trait s'écrit « Tentacles (8 × +9) ». `js/core/v5-store-action.js` : quota par Tour réel des attaques gratuites, sans Élan (Kraken 8, Carrion 1 Griffe gratuite). `js/core/creature-combat.js` : quota des Tentacules tiré du nombre imprimé (Kraken 8, Amoebae E0-P-027 = 2, Jetsam E0-P-028 = 2) et non de la valeur +9. Souffle de Fumée : `noDamage`, `js/core/resolution.js` n'applique aucun dégât. Dégâts du Trait V5 déjà prioritaires sur l'imprimé, vérifié par un test sur un profil V4. Choix : `QE-Q20-1`, `QE-Q20-2`.
 - Test : `tests/pro-q20-attaques-gratuites.test.js` (6 tests, par `previewResolution` / `applyResolution` du Store). Suite complète lancée une fois : 4395 réussis, 0 échec.
 - **Branché (appelant + chemin d'interface)** : le quota est lu dans `v5-store-action.js` à partir de l'action choisie du participant (bibliothèque → « Ajouter au combat » → panneau de Résolution) ; `naturalPlanOf` ← panneau « Attaque naturelle ». Rendu non vérifié dans un navigateur. `multiAttack` est désormais lu (Store), `freeAttack` aussi.
+
+## Q21 — listes de Taille pour les attaques naturelles (FAIT)
+
+- `js/core/creature-combat.js` : `naturalAttackNeedsSize(key)` (Attaque caudale, Piétinement, Langue). `js/ui/resolution-panel.js` : les listes « Taille de l’auteur » / « Taille de la cible » (fonction `sizeSelects`, extraite du Battement) s'affichent dès que l'attaque naturelle choisie en dépend ; le Battement les réutilise sans doublon. Choix : `QE-Q21-1`.
+- Test : `tests/pro-q21-tailles-attaques-naturelles.test.js` (3 tests : désignation, scénario de store Attaque caudale → « À terre » si l'auteur est plus grand, absent à Taille égale, source du panneau). Suite complète lancée une fois : 4398 réussis, 0 échec.
+- **Branché (appelant + chemin d'interface)** : `naturalAttackNeedsSize` ← `js/ui/resolution-panel.js` ; chemin : panneau de Résolution → « Attaque naturelle » → listes de Taille → `draft.actorSize/targetSize` → `v5Input` (workspace-view.js) → `naturalPlanOf`. Rendu non vérifié dans un navigateur : le test du panneau est une vérification du source.

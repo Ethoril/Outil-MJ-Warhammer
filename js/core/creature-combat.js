@@ -66,7 +66,13 @@ export function naturalCombatTraits(participant) {
   return traitsOf(participant).filter(trait => (seen.has(trait.key) ? false : seen.add(trait.key)));
 }
 
-const isZoo = participant => participant?.extensions?.v5?.bestiary?.book === 'L11';
+/** Vrai si un effet de l'attaque naturelle dépend de la Taille de l'auteur et de la cible (Attaque caudale, Piétinement, Langue). */
+export function naturalAttackNeedsSize(key) {
+  const rule = RULES[key];
+  return Boolean(rule && (rule.smallerEffect || rule.smallerOnly || rule.pullsSmaller));
+}
+
+const isZoo =participant => participant?.extensions?.v5?.bestiary?.book === 'L11';
 
 /**
  * Plan d'une capacité de combat naturel. `options` : `charged` (Charge faite), `actorSize` / `targetSize` (rangs de Taille 0-6),

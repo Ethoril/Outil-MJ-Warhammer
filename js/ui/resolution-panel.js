@@ -9,7 +9,7 @@ import {renderSituationFields,renderSupportFields} from './v5-talent-situations.
 import { renderV5TalentMeasures } from './v5-talent-measures.js';
 import { V5_ACTIVATED_TALENTS,knownV5MartialQualities,noTestV5TalentAction }  from '../core/v5-talent-actions.js';
 import { inferV5Kind, hasMomentum } from '../core/v5-combat-rules.js';
-import { naturalCombatTraits } from '../core/creature-combat.js';
+import { naturalCombatTraits, naturalAttackNeedsSize } from '../core/creature-combat.js';
 import { EXCLUDED_BASE_CHARACTERISTIC_TALENTS } from '../core/talent-contracts.js';
 import { hasV5Talent, V5_TALENT_IDS } from '../core/v5-talents.js';
 import { ammunitionCompatibility, equipmentAttackContext } from '../core/equipment.js';
@@ -1211,6 +1211,21 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
     select.addEventListener('change', () => handlers.select({ v5Context: { ...(draft.v5Context || {}), naturalAttack: select.value || undefined } }));
     label.append(select); v5.appendChild(label);
   }
+  // Listes de Taille (rangs 0-6) : Battement, et toute attaque naturelle dont un effet dépend de la Taille (Attaque caudale, Piétinement, Langue).
+  let sizesShown = false;
+  const sizeSelects = () => {
+    sizesShown = true;
+    for (const [key, labelText] of [['actorSize','Taille de l’auteur'],['targetSize','Taille de la cible']]) {
+      const label = node('label', 'workspace-type', labelText); const select = document.createElement('select');
+      select.appendChild(new Option('À préciser', ''));
+      for (const [value, text] of [[0,'Minuscule'],[1,'Très petite'],[2,'Petite'],[3,'Moyenne'],[4,'Grande'],[5,'Énorme'],[6,'Monstrueuse']])
+        select.appendChild(new Option(text, String(value)));
+      select.value = draft[key] == null ? '' : String(draft[key]); select.setAttribute('aria-label', labelText); select.dataset.focusKey = key;
+      select.addEventListener('change', () => handlers.select({ [key]: select.value === '' ? null : Number(select.value) }));
+      label.appendChild(select); v5.appendChild(label);
+    }
+  };
+  if (type === 'attack' && naturalAttackNeedsSize(draft.v5Context?.naturalAttack)) sizeSelects();
   if (kind.value === 'melee' && type === 'attack') {
     const charge = node('label','workspace-type'); const check = document.createElement('input'); check.type='checkbox'; check.checked=draft.charging === true;
     check.addEventListener('change',()=>handlers.select({charging:check.checked})); charge.append(check,'Charge donnant Élan (distance et conditions vérifiées)'); v5.appendChild(charge);
@@ -1241,15 +1256,7 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
     if (kind.value === 'melee' && hasV5Talent(actor, V5_TALENT_IDS.beatBlade)) {
       talentToggle('beatBlade', 'Battement : remplacer toutes les Blessures et conséquences du critique', draft.beatBlade);
       if (draft.beatBlade) {
-        for (const [key, labelText] of [['actorSize','Taille de l’auteur'],['targetSize','Taille de la cible']]) {
-          const label = node('label', 'workspace-type', labelText); const select = document.createElement('select');
-          select.appendChild(new Option('À préciser', ''));
-          for (const [value, text] of [[0,'Minuscule'],[1,'Très petite'],[2,'Petite'],[3,'Moyenne'],[4,'Grande'],[5,'Énorme'],[6,'Monstrueuse']])
-            select.appendChild(new Option(text, String(value)));
-          select.value = draft[key] == null ? '' : String(draft[key]); select.setAttribute('aria-label', labelText); select.dataset.focusKey = key;
-          select.addEventListener('change', () => handlers.select({ [key]: select.value === '' ? null : Number(select.value) }));
-          label.appendChild(select); v5.appendChild(label);
-        }
+        if (!sizesShown) sizeSelects();
         v5.appendChild(node('p', 'workspace-muted', 'Jusqu’à la fin du prochain Tour de l’auteur : la cible ne peut opposer Corps à corps ; Esquive reste possible et les attaques de mêlée contre elle ont Avantage.'));
       }
     }
