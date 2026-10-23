@@ -1,6 +1,6 @@
 # Rapport GPT — Phase F0 : audit des règles
 
-État au 23 octobre 2026 : **audit du corpus en cours**. L06 a reçu sa revue F0, hors domaines explicitement renvoyés aux inventaires existants ; L05 a reçu le rattachement des noms ; L17, L11, L13, L14, L16, L18, L19, L20, L21, L22 et L23 ont reçu leur revue des mécaniques F0. L24 a reçu la revue décrite ci-dessous ; L25 a reçu sa revue dans la portée ci-dessous ; L26, L01, L02, L03, L04, L07, L08 et L09 ont reçu les revues décrites ci-dessous. 24 livres sur vingt-six sont traités dans les portées documentaires précisées ci-dessous (L05 : noms seuls). Restent L12, L15.
+État au 23 octobre 2026 : **audit du corpus en cours**. L06 a reçu sa revue F0, hors domaines explicitement renvoyés aux inventaires existants ; L05 a reçu le rattachement des noms ; L17, L11, L13, L14, L16, L18, L19, L20, L21, L22 et L23 ont reçu leur revue des mécaniques F0. L24 a reçu la revue décrite ci-dessous ; L25 a reçu sa revue dans la portée ci-dessous ; L26, L01, L02, L03, L04, L07, L08 et L09 ont reçu les revues décrites ci-dessous. 25 livres sur vingt-six sont traités dans les portées documentaires précisées ci-dessous (L05 : noms seuls). Restent L15.
 
 ## Travail local et sources
 
@@ -507,3 +507,13 @@ Repérage des 96 pages puis lecture ciblée des clauses transportables : voyages
 Registre : 90 entrées, 58 sélecteurs nouveaux, 30 purs renvois exclus ; statuts {"absent":87,"assiste":1,"hors-granularite":2}. Les 6392 entrées héritées sont identiques ; total 6482 entrées / 5018 sélecteurs. Lecture : tmp/audit/L10-finish-reading.json ; les reçus bruts restent read:false. Audit statique, aucune recette à la table revendiquée.
 
 Contrôles : deux générations identiques et --check ; suite complète 4054/4054, zéro échec, annulé ou ignoré, 101115.6707 ms, tmp/audit/L10-finish-full.log. Intégrité, LF et diff--check vérifiés avant commit ; cinq documents autorisés, aucun js/ ni test hérité modifié. Commit local relevé dans la succession. Restent : L12, L15.
+
+## L12 — Tribes and Tribulations EN.pdf
+
+Source : 112 pages physiques, SHA-256 `008c2e08337b15dd6776ae108acae4749d5276fbcff63eb7db74e3b9daf8dc6e`. V4 explicite p2, copyright2024, dernière édition25janvier2024. Folio=physique.
+
+Repérage de112pages,24pages contrôlées en image, clauses ciblées des espèces/gabarits/montures, venin, artillerie, objets, gastromancie, trolls, Waaagh et némésis. Table41 : Bâclée au troisième manque diffère de DangereuseL13 ; table83 : Frénésie21–30 et gaz61–65 contredisent C0-L12-002, laissé intact et non utilisé comme fausse exclusion. Lignes d’incidents distinctes, pas réinventaire de sorts ou profils. Les recherches runtime en tmp/audit/L12-finish-runtime.txt retrouvent les contrats de sorts et le talent de commandant d’équipe, sans prouver les nouveaux systèmes. Aucun statut positif attribué sur un simple symbole. Conversions de Tests seulement dans v5Proposal ; ingrédients neutralisés. Stimulants volontaires et suivi collectif de némésis exclus précisémentQ18 ; venins, hallucination temporaire corruptrice et blessures anatomiques conservés. Idoles101 : bonus commun et deux bonus de domaine séparés ; Petite Waaagh98 : échéance de Chance de fin de rencontre conservée comme lacune complète, malgré le contrat de gain existant. Brainbursta100 imprime Sonné initial+1 parDR ; l’arbitrage D-C94 prioritaire reste intact. Soin de Grande Gueule : calcul et application mawRoll trouvés et raccordés aux contrats, mais champ UI dédié non retrouvé ; statut complet conservateur absent, couverture moteur partielle documentée.
+
+Registre : 217 entrées, 116 sélecteurs nouveaux, 98 purs renvois exclus ; statuts {"absent":214,"hors-granularite":3}. Les 6482 entrées héritées sont identiques ; total 6699 entrées / 5134 sélecteurs. Lecture : tmp/audit/L12-finish-reading.json ; les reçus bruts restent read:false. Audit statique, aucune recette à la table revendiquée.
+
+Contrôles : deux générations identiques et --check ; suite complète 4054/4054, zéro échec, annulé ou ignoré, 100152.612 ms, tmp/audit/L12-finish-full.log. Intégrité, LF et diff--check vérifiés avant commit ; cinq documents autorisés, aucun js/ ni test hérité modifié. Commit local relevé dans la succession. Restent : L15.

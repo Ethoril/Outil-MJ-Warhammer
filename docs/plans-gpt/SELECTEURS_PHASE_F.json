@@ -65232,5 +65232,1513 @@
       "Ne pas implanter"
     ],
     "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0001",
+    "phase": "Bestiaire",
+    "lot": "L12",
+    "source": "L12 p.6",
+    "question": "Implanter « Provoquer une querelle peaux-vertes » ? Si les PJ créent un motif de querelle, le chef teste Commandement +0 ; un échec tire sur la table d’Animosité.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0002",
+    "phase": "Bestiaire",
+    "lot": "L12",
+    "source": "L12 p.6",
+    "question": "Implanter « Querelle — exceptions » ? Pas de querelle provoquée en présence d’un danger clair, d’un ennemi haï, d’une source de Peur/Terreur ou d’un chef Orque noir.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0003",
+    "phase": "Bestiaire",
+    "lot": "L12",
+    "source": "L12 p.6",
+    "question": "Implanter « Arrêter la querelle » ? Le chef peut retester Commandement à chaque Round ; −2 DR si un Hobgobelin est présent.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0004",
+    "phase": "Bestiaire",
+    "lot": "L12",
+    "source": "L12 p.6",
+    "question": "Implanter « Querelle 1–2 — quolibets » ? Les membres s’insultent sans violence physique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0005",
+    "phase": "Bestiaire",
+    "lot": "L12",
+    "source": "L12 p.6",
+    "question": "Implanter « Querelle 3–5 — bagarre » ? Deux membres se frappent à mains nues, le groupe regarde.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0006",
+    "phase": "Bestiaire",
+    "lot": "L12",
+    "source": "L12 p.6",
+    "question": "Implanter « Querelle 6–7 — brimade » ? 1d10 membres frappent le plus faible.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0007",
+    "phase": "Bestiaire",
+    "lot": "L12",
+    "source": "L12 p.6",
+    "question": "Implanter « Querelle 8 — bouc émissaire » ? Le chef attaque un subordonné avec ses armes pour reprendre autorité.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0008",
+    "phase": "Bestiaire",
+    "lot": "L12",
+    "source": "L12 p.6",
+    "question": "Implanter « Querelle 9 — mutinerie » ? Le groupe se sépare en deux factions qui se quittent.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0009",
+    "phase": "Bestiaire",
+    "lot": "L12",
+    "source": "L12 p.6",
+    "question": "Implanter « Querelle 10 — combat » ? 1d10+1 membres s’affrontent avec leurs armes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0010",
+    "phase": "Bestiaire",
+    "lot": "L12",
+    "source": "L12 p.8",
+    "question": "Implanter « Gnoblars — limites de gabarit » ? Ni Seigneur de guerre, ni Chamane, ni Seigneur chamane pour les Gnoblars.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0015",
+    "phase": "Bestiaire",
+    "lot": "L12",
+    "source": "L12 p.10",
+    "question": "Implanter « Peinture de guerre sauvage » ? Sans peinture ou sans foi en elle, l’Orque sauvage perd Protection 10.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0020",
+    "phase": "Bestiaire",
+    "lot": "L12",
+    "source": "L12 p.13",
+    "question": "Implanter « Snotlings — gabarits permis » ? Un Snotling exceptionnel peut être Soldat ou Tirailleur ; équipement utile limité aux armes de jet.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0021",
+    "phase": "Bestiaire",
+    "lot": "L12",
+    "source": "L12 p.13",
+    "question": "Implanter « Vesses-de-loup snotlings » ? Jet comme une pierre pour portée et dégâts ; une Blessure reçue déclenche Venin Intermédiaire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0025",
+    "phase": "Bestiaire",
+    "lot": "L12",
+    "source": "L12 p.16",
+    "question": "Implanter « Appliquer un gabarit » ? Choisir base et gabarit, ajouter compétences/Talents/Traits/équipement puis recalculer Blessures d’après F/E/FM.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0026",
+    "phase": "Bestiaire",
+    "lot": "L12",
+    "source": "L12 p.16",
+    "question": "Implanter « Gabarit monté » ? Ajouter une monture autorisée et Équitation appropriée +15.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0031",
+    "phase": "Bestiaire",
+    "lot": "L12",
+    "source": "L12 p.17",
+    "question": "Implanter « Orque sauvage — armure » ? Armure normalement limitée au bouclier ; peinture enchantée et Protection 10 conservées.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0032",
+    "phase": "Bestiaire",
+    "lot": "L12",
+    "source": "L12 p.17",
+    "question": "Implanter « Chamane — armure » ? Retirer le Trait Armure du profil de base en appliquant un gabarit de chamane.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0037",
+    "phase": "Bestiaire",
+    "lot": "L12",
+    "source": "L12 p.19",
+    "question": "Implanter « Montures orques » ? Orques et Orques sauvages : sanglier ; Orque noir : sanglier seulement pour Chef ou Seigneur de guerre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0038",
+    "phase": "Bestiaire",
+    "lot": "L12",
+    "source": "L12 p.19",
+    "question": "Implanter « Montures gobelines » ? Commun et Hobgobelin : loup géant ; Forestier : araignée géante ; Nocturne Soldat/Élite : squig bondissant ; Chef/Seigneur/Chamanes : squig géant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0039",
+    "phase": "Bestiaire",
+    "lot": "L12",
+    "source": "L12 p.19",
+    "question": "Implanter « Montures ogres » ? Ogre Élite ou Chef peut prendre un Mournfang ; Gnoblars et Snotlings ne montent normalement pas.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0049",
+    "phase": "Bestiaire",
+    "lot": "L12",
+    "source": "L12 p.29",
+    "question": "Implanter « Flèches au venin d’araignée — poison » ? Après Blessure, Endurance +0 ; échec : 1 Empoisonné.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0050",
+    "phase": "Bestiaire",
+    "lot": "L12",
+    "source": "L12 p.29",
+    "question": "Implanter « Flèches au venin — inconscience » ? À zéro Blessure avec ce poison, la victime devient Inconsciente ; les Empoisonné restants ne la tuent pas.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0051",
+    "phase": "Bestiaire",
+    "lot": "L12",
+    "source": "L12 p.29",
+    "question": "Implanter « Bugshot — rivalité des éclaireurs » ? 20 % de contestation ; Calme +40 ou querelle violente avec l’autre éclaireur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0057",
+    "phase": "Combat",
+    "lot": "L12",
+    "source": "L12 p.41",
+    "question": "Implanter « Lance-traits gobelin » ? Encombrement20, portée150, dégâts+12 ; Précise, Équipage2, Dangereuse, Recharge3.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0058",
+    "phase": "Combat",
+    "lot": "L12",
+    "source": "L12 p.41",
+    "question": "Implanter « Plongeur de la mort » ? Encombrement20, portée120, dégâts+13 ; Précise, Dangereuse, Impact, Recharge3.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0059",
+    "phase": "Combat",
+    "lot": "L12",
+    "source": "L12 p.41",
+    "question": "Implanter « Lance-rocs » ? Encombrement40, portée100, dégâts+15 ; Équipage3, Dangereuse, Imprécise, Recharge3.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0060",
+    "phase": "Combat",
+    "lot": "L12",
+    "source": "L12 p.41",
+    "question": "Implanter « Projectile de baliste » ? Encombrement1, portée de l’arme, aucun dégât additionnel chiffré ; Empaleuse et Pénétrante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0061",
+    "phase": "Combat",
+    "lot": "L12",
+    "source": "L12 p.41",
+    "question": "Implanter « Pierre de catapulte » ? Encombrement3, portée de l’arme, aucun dégât additionnel chiffré ; Dévastatrice et Impact.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0062",
+    "phase": "Combat",
+    "lot": "L12",
+    "source": "L12 p.41",
+    "question": "Implanter « Équipage — compétence et tireur » ? Tous les servants doivent connaître la compétence de tir ; désigner un tireur pour le Test ; surnombre sans bonus de rendement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0063",
+    "phase": "Combat",
+    "lot": "L12",
+    "source": "L12 p.41",
+    "question": "Implanter « Équipage — sous-effectif » ? Un servant manquant double Recharge ; deux ajoutent Imprécise ; trois ajoutent Bâclée, cumulativement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0064",
+    "phase": "Combat",
+    "lot": "L12",
+    "source": "L12 p.41",
+    "question": "Implanter « Équipage — défaut doublonné » ? Un défaut déjà présent donne à la place −10 au Tir.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0065",
+    "phase": "Combat",
+    "lot": "L12",
+    "source": "L12 p.41",
+    "question": "Implanter « Équipage — rechargement » ? Un membre peut aider les Tests déterminant la durée de rechargement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0066",
+    "phase": "Combat",
+    "lot": "L12",
+    "source": "L12 p.41",
+    "question": "Implanter « Équipage — incident de tir » ? Tous les membres de l’équipe subissent l’incident de l’arme.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0067",
+    "phase": "Combat",
+    "lot": "L12",
+    "source": "L12 p.41",
+    "question": "Implanter « Plongeur — opérateur-munition » ? Aucun défaut Équipage ; le Gobelin ailé vise et actionne lui-même la catapulte, réutilisable tant qu’il reste des volontaires équipés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0068",
+    "phase": "Combat",
+    "lot": "L12",
+    "source": "L12 p.41",
+    "question": "Implanter « Artilleur gobelin » ? Base Gobelin commun avec Projectiles Arbalète ou Catapulte +10.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0069",
+    "phase": "Bestiaire",
+    "lot": "L12",
+    "source": "L12 p.46",
+    "question": "Implanter « Péage des Boyz — négociation » ? Tests de Sociabilité à −10 pour négocier un passage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0070",
+    "phase": "Bestiaire",
+    "lot": "L12",
+    "source": "L12 p.46",
+    "question": "Implanter « Péage des Boyz — accord respecté » ? Même après paiement, Pigbok doit réussir Commandement +20 pour empêcher les Boyz d’attaquer.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0075",
+    "phase": "Bestiaire",
+    "lot": "L12",
+    "source": "L12 p.56",
+    "question": "Implanter « Rencontre des Stone Snakes » ? Perception opposée au meilleur Orque détermine qui repère l’autre groupe en premier.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0080",
+    "phase": "Bestiaire",
+    "lot": "L12",
+    "source": "L12 p.63",
+    "question": "Implanter « Peau de Wulfang — cavalier » ? Le porteur gagne un rang de Cavalier aguerri.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0081",
+    "phase": "Bestiaire",
+    "lot": "L12",
+    "source": "L12 p.63",
+    "question": "Implanter « Peau de Wulfang — monture » ? La monture du porteur gagne +1 Mouvement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0086",
+    "phase": "Bestiaire",
+    "lot": "L12",
+    "source": "L12 p.73",
+    "question": "Implanter « Magie ogre — compétence » ? Langue Magick des lanceurs ogres repose sur Endurance au lieu d’Intelligence ; remplacer aussi le bonus du gabarit.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0091",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.82",
+    "question": "Implanter « Grande Gueule — soin après lancement » ? Après sort réussi, tirer d10 ; sur 10 ou résultat au moins égal au NI, rendre autant de Blessures que le NI.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0098",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.83",
+    "question": "Implanter « Incident de gastromancie 01–15 » ? −2 DR aux Tests de Sociabilité jusqu’au nettoyage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0099",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.83",
+    "question": "Implanter « Incident de gastromancie 16–20 » ? Endurance −20 ; échec : parole et gastromancie interdites 1d10 Rounds.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0100",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.83",
+    "question": "Implanter « Incident de gastromancie 21–30 » ? Entrer en Frénésie.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0101",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.83",
+    "question": "Implanter « Incident de gastromancie 31–35 » ? Nausée pendant 1d10 heures.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0102",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.83",
+    "question": "Implanter « Incident de gastromancie 36–40 » ? Perdre une dent.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0103",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.83",
+    "question": "Implanter « Incident de gastromancie 41–45 » ? Contracter immédiatement le Flux sanglant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0104",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.83",
+    "question": "Implanter « Incident de gastromancie 46–50 » ? Dans 2d10 Rounds, manger une livre de chair ou subir la famine comme après deux jours sans manger.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0105",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.83",
+    "question": "Implanter « Incident de gastromancie 51–55 » ? Affamé pour tous à3d10 yards ; si déjà Affamé, Calme+0 ou dévorer immédiatement la nourriture/créature la plus proche.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0106",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.83",
+    "question": "Implanter « Incident de gastromancie 56–60 » ? Pendant1d10 Rounds, Endurance+0 à chaque Tour ; échec1 Blessure ; Vomissement accordé pendant ce temps.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0107",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.83",
+    "question": "Implanter « Incident de gastromancie 61–65 » ? À20 yards, Endurance+0 ou Nausée1d10 heures.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0108",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.83",
+    "question": "Implanter « Incident de gastromancie 66–70 » ? Perdre1d10 dents.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0109",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.83",
+    "question": "Implanter « Incident de gastromancie 71–75 » ? Trois Empoisonné ; le retrait du dernier déclenche le nuage nauséabond de61–65.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0110",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.83",
+    "question": "Implanter « Incident de gastromancie 76–80 » ? Touche1d10 dégâts au corps.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0111",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.83",
+    "question": "Implanter « Incident de gastromancie 81–85 » ? Pendant1d10 Tours, Endurance−10 ; échec : vomi, Esquive−20 dans5 yards ou dégâtsBE+4 et Sonné.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0112",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.83",
+    "question": "Implanter « Incident de gastromancie 86–90 » ? 1 Blessure, parole et magie interdites1d10 jours ; ensuite −2 DR permanents aux Tests parlés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0113",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.83",
+    "question": "Implanter « Incident de gastromancie 91–95 » ? Touche2d10 dégâts au corps.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0114",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.83",
+    "question": "Implanter « Incident de gastromancie 96–100 » ? Mâchoire brisée : trois Sonné ; Endurance+0 ou Inconscient ; fracture majeure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0115",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.83",
+    "question": "Implanter « Incident de gastromancie 101–115 » ? Touche3d10 dégâts au corps.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0116",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.83",
+    "question": "Implanter « Incident de gastromancie 116–120 » ? Boucher tué ; à10 yards Esquive−20 ou dégâtsBE+6 et Sonné.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0117",
+    "phase": "Bestiaire",
+    "lot": "L12",
+    "source": "L12 p.88",
+    "question": "Implanter « Gabarits trolls — cumul » ? Un seul type parmi Pierre/Rivière/Chaos/Bile ; jusqu’à quatre caractères additionnels, soit cinq gabarits au plus ; mégère exige Rivière.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0118",
+    "phase": "Bestiaire",
+    "lot": "L12",
+    "source": "L12 p.88",
+    "question": "Implanter « Troll du Chaos — mutations » ? Tirer deux mutations physiques sur la table de base ou la colonne Khorne du compagnon L23.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0119",
+    "phase": "Bestiaire",
+    "lot": "L12",
+    "source": "L12 p.88",
+    "question": "Implanter « Troll du Chaos — vomi corrupteur » ? Une touche de vomissement expose à la Corruption modérée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0120",
+    "phase": "Bestiaire",
+    "lot": "L12",
+    "source": "L12 p.88",
+    "question": "Implanter « Troll bileux — régénération pourrie » ? La régénération rend 1d10/2 Blessures, arrondi inférieur explicite.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0121",
+    "phase": "Bestiaire",
+    "lot": "L12",
+    "source": "L12 p.88",
+    "question": "Implanter « Troll bileux — vomi » ? Le Vomissement suit le sort Flot de Corruption de Nurgle.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0126",
+    "phase": "Bestiaire",
+    "lot": "L12",
+    "source": "L12 p.89",
+    "question": "Implanter « Vieux troll — camouflage » ? Furtif tant que le troll n’a ni bougé ni pris d’Action.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0127",
+    "phase": "Bestiaire",
+    "lot": "L12",
+    "source": "L12 p.89",
+    "question": "Implanter « Troll affamé — délai » ? Sans repas dans les 24 heures, commencer à subir la famine.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0128",
+    "phase": "Bestiaire",
+    "lot": "L12",
+    "source": "L12 p.89",
+    "question": "Implanter « Mégère — lucidité aquatique » ? À l’intérieur d’un plan d’eau, la mégère ne subit pas Stupide.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0134",
+    "phase": "Bestiaire",
+    "lot": "L12",
+    "source": "L12 p.91",
+    "question": "Implanter « Embuscade de trolls » ? Avant la rencontre, Perception opposée à Discrétion des trolls camouflés immobiles.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0137",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.94",
+    "question": "Implanter « Waaagh — isolement » ? Sans semblable visible et en population locale faible, −2 DR à la Focalisation et à l’Incantation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0138",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.94",
+    "question": "Implanter « Waaagh — énergie de groupe » ? Focalisation : +1 DR par Orque, Hobgobelin ou paire de Gobelins dans Volonté yards.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0139",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.94",
+    "question": "Implanter « Waaagh — table d’incident » ? Employer la table propre ; ajouter2 au d100 par Orque, Hobgobelin ou paire de Gobelins dans BFM yards.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0140",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.95",
+    "question": "Implanter « Waaagh — accès par espèce » ? Orques et Sauvages : Grande ; Gobelins : Petite ; Hobgobelins : une des deux ; Seigneur chamane peut les deux avec au plus deux sorts de l’une.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0141",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.96",
+    "question": "Implanter « Incident Waaagh 01–10 » ? Brume verte malodorante sans effet chiffré supplémentaire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0142",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.96",
+    "question": "Implanter « Incident Waaagh 11–15 » ? Pendant1d10 Rounds, ni parole, ni Incantation, ni Focalisation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0143",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.96",
+    "question": "Implanter « Incident Waaagh 16–20 » ? Assourdi au chamane et aux porteurs de Sens aiguisés Ouïe dans10 yards.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0144",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.96",
+    "question": "Implanter « Incident Waaagh 21–25 » ? Un Exténué ; Nocturne sous champignon : Endurance+0 ratée transforme le chamane en champignons.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0145",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.96",
+    "question": "Implanter « Incident Waaagh 26–30 » ? Un Sonné.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0146",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.96",
+    "question": "Implanter « Incident Waaagh 31–35 » ? 2 Blessures sans BE/PA ; Endurance+20 ou Sonné.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0147",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.96",
+    "question": "Implanter « Incident Waaagh 36–40 » ? Un squig apparaît et attaque le chamane.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0148",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.96",
+    "question": "Implanter « Incident Waaagh 41–45 » ? Le sort frappe une cible aléatoire dans10 yards, chamane compris.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0149",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.96",
+    "question": "Implanter « Incident Waaagh 46–50 » ? Sonné égal aux DR du dernier Test magique, minimum1.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0150",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.96",
+    "question": "Implanter « Incident Waaagh 56–60 » ? Chamane :1d10 touches dégâts2 ; chacun dans10 yards :une touche dégâts2.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0151",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.96",
+    "question": "Implanter « Incident Waaagh 61–65 » ? Aveuglé pour2 Rounds et un Exténué.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0152",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.96",
+    "question": "Implanter « Incident Waaagh 66–70 » ? Un Enflammé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0153",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.96",
+    "question": "Implanter « Incident Waaagh 71–75 » ? 1d10 Blessures sans BE/PA et À terre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0154",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.96",
+    "question": "Implanter « Incident Waaagh 76–80 » ? Trois Sonné.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0155",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.96",
+    "question": "Implanter « Incident Waaagh 81–85 » ? Deux Sonné ; dans1d10 yards, Esquive+0 ou touche dégâts3 à localisation aléatoire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0156",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.96",
+    "question": "Implanter « Incident Waaagh 86–90 » ? Deux Sonné et1d10 Blessures à la tête sans BE/PA.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0157",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.96",
+    "question": "Implanter « Incident Waaagh 91–95 » ? Un sort oublié définitivement au hasard et Aveuglé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0158",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.96",
+    "question": "Implanter « Incident Waaagh 96–100 » ? Inconscient au chamane ; Orques/Gobelins dans10 yards :un Sonné.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0159",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.96",
+    "question": "Implanter « Incident Waaagh 101–105 » ? Amputation des deux yeux et1d10+3 Blessures à la tête.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0160",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.96",
+    "question": "Implanter « Incident Waaagh 106–110 » ? Mort du chamane par explosion de la tête.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0161",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.96",
+    "question": "Implanter « Incident Waaagh 111+ » ? Mort du chamane ; chaque Orque/Hobgobelin/Gobelin dans10 yards meurt aussi sur Calme−30 raté.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0163",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.97",
+    "question": "Implanter « Bâton de cuivre » ? Le porteur est isolé :−2 DR en Focalisation/Incantation ; ignorer les présences proches pour modifier la table Waaagh.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0164",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.97",
+    "question": "Implanter « Dangly Wotnotz » ? Relancer volontairement une Incantation réussie ; conserver obligatoirement le second jet.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0165",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.97",
+    "question": "Implanter « Effigie de Mork » ? Relancer Esquive ou Corps à corps en défense ; second résultat obligatoire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0166",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.97",
+    "question": "Implanter « Effigie de Gork » ? Relancer Corps à corps en attaque ; second résultat obligatoire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0167",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.97",
+    "question": "Implanter « Amulette verte — résistance » ? Résistance à la Magie2 accordée au porteur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0168",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.97",
+    "question": "Implanter « Amulette verte — décharge » ? À chaque sort reçu, d100 ; sur01 :1d10 Blessures sans BE/PA et À terre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0169",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.97",
+    "question": "Implanter « Bâton chamanique » ? Tirer1d10 une fois ; compter autant d’Orques proches dansBFM yards pour magie et incidents.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0170",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.97",
+    "question": "Implanter « Étude de magie Waaagh étrangère » ? Un autre magicien qui étudie sort ou artefact Waaagh risque Corruption et table d’incidents selon le MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0180",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.99",
+    "question": "Implanter « Skullback — morsure corruptrice » ? Blessé puis Empoisonné par morsure : Calme+20 ou1 Corruption, hors exception des chamanes forestiers.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0201",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.102",
+    "question": "Implanter « Némésis — génération » ? Trois d10, un dans chaque colonne Ruse/Brutalité/Ambition ; le MJ peut cumuler plusieurs Traits.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0202",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.102",
+    "question": "Implanter « Némésis — atout de ruse » ? Un Trait de ruse fournit un atout exploitable au chef.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0203",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.102",
+    "question": "Implanter « Némésis — ambition » ? Franchir une étape importante de l’ambition accorde un rang de Chance.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0205",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.105",
+    "question": "Implanter « Prodda de Skarsnik — arme » ? Compte comme hallebarde ; ses attaques sont magiques.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0206",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.105",
+    "question": "Implanter « Prodda de Skarsnik — sort » ? Une Action pour Regard vindicatif, Langue Magick75 et +1 DR par Gobelin nocturne àBFM yards.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0209",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.107",
+    "question": "Implanter « Croc rouge » ? Arme à Dévastatrice et Rapide ; accorde le Trait Magique au porteur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0211",
+    "phase": "Bestiaire",
+    "lot": "L12",
+    "source": "L12 p.108",
+    "question": "Implanter « Sog’Kog — deux têtes » ? Ambidextre et relance d’Intuition, Perception ou Pistage raté ; le second résultat est imposé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0212",
+    "phase": "Bestiaire",
+    "lot": "L12",
+    "source": "L12 p.108",
+    "question": "Implanter « Sog’Kog — bras multiples » ? Une attaque supplémentaire de dégâts +6 par Tour.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0214",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.98",
+    "question": "Implanter « Petite Waaagh — Chance » ? Des DR d’Incantation peuvent servir à la surpuissance ou à obtenir un unique Point de Chance, au-dessus du maximum ; perdu à la fin de rencontre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0215",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.101",
+    "question": "Implanter « Idole — énergie » ? À Volonté yards d’une Idole de Gork ou Mork, +1 DR à Focalisation et Incantation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0216",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.101",
+    "question": "Implanter « Idole de Mork — spécialisation » ? Petite Waaagh réussie : +1 DR supplémentaire près de l’Idole de Mork.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L12-0217",
+    "phase": "Magie générale",
+    "lot": "L12",
+    "source": "L12 p.101",
+    "question": "Implanter « Idole de Gork — spécialisation » ? Grande Waaagh réussie : +1 DR supplémentaire près de l’Idole de Gork.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
   }
 ]

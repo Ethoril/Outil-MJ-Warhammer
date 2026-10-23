@@ -277,3 +277,17 @@ La référence à un symbole existant est une preuve de localisation, pas une pr
 | F-C174 | L10 49–51 | Profils et annexes ? | Sens des vivants, prison, nexus et lien du Sablier propres recensés. | Profil E0 seul insuffisant. | Tout déduire des Traits, écarté. |
 | F-C175 | L10 32/40 | Normaliser objets ? | Prix, caractéristiques, recharge, dégâts tiret et quart de portée conservés. | Image confirme les cellules, pas d’effet fiable pour bougie ou huile superstitieuse. | Inventer détection des morts-vivants, écarté. |
 | F-C176 | L10 88 ; D0b-Q02 | Magie des Vampires ? | Aucune liste créée ; accès Bylorak distinct, effets des bénédictions hérités. | Sommaire et clauses ne fournissent pas de domaine de Vampires. | Créer des sorts depuis PNJ, écarté. |
+
+## L12 — choix F-C177 à F-C185
+
+| Id | Source | Question | Choix | Raison | Alternative |
+| --- | --- | --- | --- | --- | --- |
+| F-C177 | L12 2/7/41/83 | Édition et extraction ? | V4 janvier2024 ; carte7 et tables vues, folio=physique. | Table41/83 très désalignées ; page40 sans motif de Test reste une prose lue en image. | Inférer absence mécanique de l’extraction, écarté. |
+| F-C178 | L12 41 ; L13 125 | Équipage identique ? | Shoddy/Bâclée au troisième manque dansL12 ; Dangerous/Dangereuse dansL13 conservé séparément. | Divergence source réelle. | Fusionner en nom commun, écarté. |
+| F-C179 | L12 83 ; C0-L12-002 | Où est Frénésie ? | Image :21–30 ;61–65 est gaz nauséabond. Entrées F0 correctes et anomalie héritée signalée sans modification C0. | Renvoi exact impossible vers la ligne erronée. | Exclure Frénésie par faux renvoi61–65, écarté. |
+| F-C180 | L12 82 ; règle maison | Ingrédients exigés ? | Aucun ; soin après lancement et incidents séparés ; système déjà renvoyéD0b-SYS-03. | Arbitrage prioritaire au supplément. | Réactiver un coût obligatoire, écarté. |
+| F-C181 | L12 88–89/108 | Gabarit prouve toutes annexes ? | Régénération divisée, corruption du vomi, camouflage et lucidité aquatique recensés ; repas affamé exactC0. | Étiquette E0 ne prouve pas ses lecteurs. | Certifier la totalité depuis profil, écarté. |
+| F-C182 | L12 94/97/99 | Unités variables ? | Volonté entière etBFM distincts ;+2 au d100, bonus2d10 au score et durées gardés ; pas arrondi de paire inventé. | Les unités ne sont pas toutes des Tests. | Transformer+2d10 en DR variable sans source, écarté. |
+| F-C183 | L12 99/102 ; Q18 | Drogue et poison ? | Stimulants volontaires et suivi collectif de faction exclus ; venin subi et Corruption conservés. | Limite ciblée, pas exclusion globale de magie ou poisons. | Ignorer tout99 ou toute Animosité tactique6, écarté. |
+| F-C184 | L12 95/98–101 ; D-C94/95 | Sorts et système ? | Sorts/attributs exacts renvoyés ; énergie, isolement, objets, incidents et accès restent clauses propres. | Sort lançable ne prouve pas système de Waaagh complet. | Déduire couverture générale du catalogue, écarté. |
+| F-C185 | L12 102–108 | Némésis et PNJ ? | Génération et trois récompenses séparées, objets et variantesSog’Kog propres ; scènes et30 descriptions non chiffrées ne sont pas30 automatismes. | Granularité mécanique du brief. | Transformer tout conseil de scénario en règle, écarté. |
