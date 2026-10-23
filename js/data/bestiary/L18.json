@@ -2256,7 +2256,13 @@
     },
     {
      "name": "Noble Blood"
+    },
+    {
+     "name": "Read/Write"
     }
+   ],
+   "notes": [
+    "Parzival's Status has been effectively reduced due to his current circumstances."
    ],
    "keywords": [
     "noble",

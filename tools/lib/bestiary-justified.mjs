@@ -61,5 +61,26 @@ export const JUSTIFIED = Object.freeze({
     trappings: 'L16 p.33 : « Like King Brokk » ouvre la phrase d\'introduction de la liste (« …her ceremonial outfit consists of: ») ; les objets sont présents.',
     trappingNoise: 'L16 p.33 : la liste de cérémonie imprime ses objets en minuscules (« a brynduraz necklace (worth 200,000 GC) »…), ce sont des objets du livre.'
   },
-  'E0-P-503': { trappingNoise: 'L16 p.51 : « the Severed Head of a Night Goblin she calls `Alfie\' » est un objet imprimé tel quel (minuscule initiale, apostrophe de citation du livre).' }
+  'E0-P-503': { trappingNoise: 'L16 p.51 : « the Severed Head of a Night Goblin she calls `Alfie\' » est un objet imprimé tel quel (minuscule initiale, apostrophe de citation du livre).' },
+  // Q27d : L17, L18, L19 relus sur leurs pages.
+  'E0-P-515': { attacks: 'L17 p.30 : « not only does Champion +10 », « but magic stops flowing Die Hard +10 », « Horns (SB+3) +5 » sont la table des Traits de construct du rituel (colonne de droite, coût en CN), pas des attaques du profil ; Weapon +8 est présent.' },
+  'E0-P-521': { spells: 'L17 p.121 : « Elspeth has memorised all spells from the Lore of Death » est collé à « Trappings: » ; Death\'s Timekeeper, Grimoire, High Quality Elaborate Robes et Magical Licence sont ses objets, présents dans l\'équipement.' },
+  'E0-P-525': { attacks: 'L17 p.175 : « benefiting from +2 SL » est la règle Soundless (+2 SL aux Tests de Discrétion) ; Bite +9 et Weapon (Teeth and Horns) +10 sont présents.' },
+  'E0-P-543': { trappingNoise: 'L18 p.53 : « a purse containing coins to a value of 2 GC » est un objet imprimé tel quel (minuscule initiale du livre).' },
+  'E0-P-545': { trappingNoise: 'L18 p.60 : « 3 GCs in assorted denominations, but can can lay her hands on 100 GCs within an hour » est le dernier objet imprimé de la liste, avec sa coquille (« can can »).' },
+  'E0-P-547': { trappingNoise: 'L18 p.66 : « purse containing coins to a value of 6 shillings » est un objet imprimé tel quel.' },
+  'E0-P-548': { trappingNoise: 'L18 p.68 : « robes » et « purse containing coins to a value of 2 GC » sont des objets imprimés tels quels (minuscules du livre).' },
+  'E0-P-549': { trappingNoise: 'L18 p.71 : « robes » et « purse containing coins to a value of 1 GC » sont des objets imprimés tels quels (minuscules du livre).' },
+  'E0-P-550': { trappingNoise: 'L18 p.74 : « Magical Sword (counts as a Hand Weapon but is magical and benefits from the Impale and Damaging Qualities) » et « access to coins to a value of 22 GCs » sont des objets imprimés ; la parenthèse décrit l\'arme.' },
+  'E0-P-557': {
+    skills: 'L18 p.97 : « Language (Magick 74, Reikspiel) 48 » : la valeur 48 suit la parenthèse (coquille de mise en page) ; Language (Magick) 74 et Language (Reikspiel) 48 sont présents.',
+    trappings: 'L18 p.97 : « As above, plus enough Warpstone… » renvoie à l\'équipement du Skaven Grey Seer précédent ; la liste y est reprise et la Warpstone ajoutée.',
+    spells: 'L18 p.97 : « As above, plus Chain Attack and Terrifying » : les sorts du Grey Seer précédent sont repris et Chain Attack et Terrifying ajoutés.',
+    trappingNoise: 'L18 p.97 : « enough Warpstone to double the SL of three Casting/Channelling Tests (WFRP 244) » est l\'objet imprimé (minuscule initiale du livre).'
+  },
+  'E0-P-566': { trappingNoise: 'L18 p.117 : « Possessions: Mail coat, helmet, axe » : les objets du mort-vivant sont imprimés en minuscules.' },
+  'E0-P-568': { trappingNoise: 'L18 p.117 : « Possessions: Mail coat, helmet, axe » : les objets du mort-vivant sont imprimés en minuscules.' },
+  'E0-P-569': { trappingNoise: 'L18 p.118 : « Possessions: dagger, spell ingredients, bedroll, necromantic tomes, purse with 5 GCs 17/6 » : tous les objets sont imprimés en minuscules.' },
+  'E0-P-594': { trappingNoise: 'L19 p.110 : « Trappings: Spell ingredients, sword, crutches. » : « sword » et « crutches » sont imprimés en minuscules.' },
+  'E0-P-607': { attacks: 'L19 p.143 : « and go on to score a goal if their total is +25 » est la règle de jeu rapide du match (texte de la colonne voisine) ; le Nain n\'a aucune attaque imprimée.' }
 });

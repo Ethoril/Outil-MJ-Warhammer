@@ -35,6 +35,8 @@ Plan : `PLAN_PRO_QUALITE_E.md`. Branche `pro/qualite-e`, départ `9c12613`. Choi
 | Q24 | FAIT sans modification de code (`QE-Q24-1`) | (voir `git log`, « Q24 ») |
 | Q25 | FAIT (`QE-Q25-1`) | (voir `git log`, « Q25 ») |
 | Q26 | FAIT (`QE-Q26-1` à `QE-Q26-8`) | (voir `git log`, « Q26 ») |
+| Q27a-c | FAIT (L01-L16 ; voir sections ci-dessous) | (voir `git log`, « Q27a » à « Q27c ») |
+| Q27d | FAIT (L17, L18, L19 ; Q27 non terminé : L20-L23, L25, L26) | (voir `git log`, « Q27d ») |
 
 ## Q0 — contrôle de complétude
 
@@ -342,3 +344,13 @@ Branché / non appelé (grep dans `js/`) :
 - **Contrôle, 23 livres** : talents 12, compétences 20, attaques 15, Traits 44, équipement 125, sorts 13, bruit d'équipement 44 (avant : 13, 28, 20, 46, 134, 13, 62). Reste à traiter : L17 10 profils, L18 13, L19 7, L20 20, L21 19, L22 12, L23 15, L25 5, L26 16 (Q27d, Q27e…).
 - Test : `tests/pro-q27c-completude.test.js` (8 tests). Suite complète lancée une fois : 4441 réussis, 0 échec.
 - Outil de contrôle et données de livre : rien à déclarer « branché » (le Souffle et les tentacules de Sog'Kog passent par `buildParticipantFromBestiary`, appelants : `js/ui/bestiary-library.js`, `js/core/bestiary-templates.js`). Aucune valeur durable de personnage.
+
+## Q27d — complétude de L17, L18, L19 (FAIT ; Q27 non terminé)
+
+- Mesure avant : 30 profils signalés (L17 10, L18 13, L19 7 ; talents 2, compétences 1, attaques 5, Traits 8, équipement 12, sorts 8, bruit d'équipement 23). Tous relus sur leurs pages. **Après : 0 manque non justifié sur L01-L19** ; 15 profils justifiés un par un (`QE-Q27d-1`).
+- **Vrais manques corrigés** : lignes « Marks: » des Magiciens (L17, notes), Trappings et Marks de Balthasar Gelt après une Note, Power Familiar (talent Suffuse With collé au texte voisin), Parzival (Read/Write mangé par la note à astérisque), Library Disc (Taille Large, équipement décrit par une phrase), Pestilential Liche-Thing (Spellcasting), « and » de tête de dernier objet (Gerdon L19, L21, L26). Détail : `QE-Q27d-3`.
+- **Faux positifs du contrôle corrigés** : parenthèse de Trait coupée à un mot minuscule (Prejudice, 5 profils), talent du catalogue imprimé parmi les Traits (Acute Sense, Castellan-Warlord), renvoi de page, titre voisin et intitulé collé dans les sorts.
+- **Livres régénérés** (23) : seuls L06, L17, L18, L19, L21, L26 changent, par des lignes gagnées ou nettoyées (L06 : talent parasite « T » remplacé par le vrai talent et note du gabarit, `QE-Q27d-4`). Aucune valeur imprimée changée. Question au MJ : deux Traits Armour (Klaglich, `QE-Q27d-2`).
+- **Contrôle, 23 livres** : talents 10, compétences 19, attaques 10, Traits 21, équipement 113, sorts 5, bruit d'équipement 17 (avant : 12, 20, 15, 44, 125, 13, 44) ; L17-L19 à 0. Reste : L20 18 profils, L21 17, L22 9, L23 15, L25 5, L26 10 (Q27e, Q27f).
+- Test : `tests/pro-q27d-completude.test.js` (8 tests). Suite complète lancée une fois : 4449 réussis, 0 échec.
+- Outil de contrôle et données de livre : rien à déclarer « branché » (les notes et la Taille du Library Disc passent par `buildParticipantFromBestiary`, appelants : `js/ui/bestiary-library.js`, `js/core/bestiary-templates.js`). Aucune valeur durable de personnage.

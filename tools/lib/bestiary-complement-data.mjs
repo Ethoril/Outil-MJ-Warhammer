@@ -5,7 +5,7 @@
  */
 
 export const TRAIT_ALIASES = Object.freeze({
-  immune: 'Immunity', flight: 'Fly', regenerate: 'Regeneration', 'immunity to psychology': 'Immune to Psychology', 'tail attack': 'Tail',
+  immune: 'Immunity', spellcasting: 'Spellcaster', flight: 'Fly', regenerate: 'Regeneration', 'immunity to psychology': 'Immune to Psychology', 'tail attack': 'Tail',
   'wall crawler': 'Wallcrawler', corrupting: 'Corruption', coldblooded: 'Cold-blooded', 'swamp strider': 'Swamp-strider', 'cold blooded': 'Cold-blooded', corrupted: 'Corruption', distrating: 'Distracting', 'stupid.': 'Stupid',
   armoured: 'Armour', 'armour 1': 'Armour', 'armour 2': 'Armour', small: 'Size', strider: 'Striding Gait', 'fear 2': 'Fear',
   hallucinogenic: 'Hallucinogen', 'anticoagulant': 'Anticoagulant Saliva', 'mark of khorne': 'Mark of Khorne', 'the mark of khorne': 'Mark of Khorne',

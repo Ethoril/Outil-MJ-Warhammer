@@ -4067,7 +4067,7 @@
     "Sling Bag containing 2 Candles",
     "4 Matches",
     "Hood",
-    "and Stolen Goods worth 17 Shillings"
+    "Stolen Goods worth 17 Shillings"
    ],
    "keywords": [
     "humain"
@@ -4463,6 +4463,11 @@
     {
      "name": "Regeneration",
      "ref": "E0-T-044"
+    },
+    {
+     "name": "Spellcaster",
+     "param": "Death and Necromancy",
+     "ref": "E0-T-048"
     },
     {
      "name": "Terror",

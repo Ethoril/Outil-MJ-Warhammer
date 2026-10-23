@@ -233,7 +233,9 @@ export function pageBlocks(pageText) {
       const ruleStart = blank === 1 && /^[A-Z][A-Za-z' !,&-]{2,40}\s[�–—]\s/.test(text) && body.some(line => /^(?:Attack Traits|Traits):/.test(line)) && !body.some(line => /^(?:Skills|Talents|Trappings):/.test(line));
       // « Amputations: In 2496 IC, Gotrek lost… » (L16 p. 79) : paragraphe de règle entre les Talents et « Fate Points » / « Trappings », après un blanc.
       const amputations = blank === 1 && /^Amputations:/.test(text) && body.some(line => /^Talents:/.test(line));
-      if (!v5Block && blank && !SECTION_START.test(text) && !amputations && !spaced && !skillsTail && !ruleStart && !starNote &&!wealthOpening && !trappingsList && !(BARE_LABEL.test(body[body.length - 1] || '') && blank <= 2)) break;
+      // « Marks: Mark of Hysh, Stoicism » (Magiciens, L17) : ligne des Marques, séparée de l'équipement par un blanc.
+      const marksLine = blank === 1 && /^(?:Marks:|Trappings:|Note: [A-Z][a-z]+'s (?:library|grimoire))/.test(text) && body.some(line => /^(?:Talents|Trappings|Spells):/.test(line));
+      if (!v5Block && blank && !SECTION_START.test(text) && !amputations && !marksLine && !spaced && !skillsTail && !ruleStart && !starNote &&!wealthOpening && !trappingsList && !(BARE_LABEL.test(body[body.length - 1] || '') && blank <= 2)) break;
       // Titre d'un bloc suivant (dans la même fenêtre) : fin du corps.
       if (isTitleText(text) && lines.slice(k + 1, k + 4).some((_, d) => heads.some(other => other.line === k + 1 + d && other.start >= left - 8 && other.start < rightLimit))) break;
       blank = 0;
@@ -252,7 +254,7 @@ export function pageBlocks(pageText) {
 }
 
 // V4 : « Traits: … Skills: … » (étiquette suivie de deux-points, n'importe où dans le texte). V5 : étiquette seule en début de ligne.
-const V4_LABELS_BASE = ['Yenlui State', 'Obsession', 'Attack Traits', 'Optional Traits', 'Traits', 'Skills', 'Talents?', 'Trappings', 'Possessions', 'Spells', 'Petty', 'Arcane(?: Magic)? and Lore(?: Spells)?', 'Arcane', '(?:Arcane|Petty Magic) Spells', '[^\\s:]+ Marsh Magic', 'Little Waaagh!', 'Lore of the Big Waaagh!', 'Lore of [A-Z][a-z]+ Spells', '(?:Petty|Witchcraft|Daemonology|Necromancy|Hedgecraft|Chaos) Spells','Mutations', 'Optional', 'Petty Magic', 'Arcane Magic', 'Fate Points?', 'Amputations', 'Miracles', 'Armour by Location', 'Special Rules'];
+const V4_LABELS_BASE = ['Yenlui State', 'Obsession', 'Attack Traits', 'Optional Traits', 'Traits', 'Skills', 'Talents?', 'Trappings', 'Possessions', 'Spells', 'Petty', 'Arcane(?: Magic)? and Lore(?: Spells)?', 'Arcane', '(?:Arcane|Petty Magic) Spells', '[^\\s:]+ Marsh Magic', 'Little Waaagh!', 'Lore of the Big Waaagh!', 'Lore of [A-Z][a-z]+ Spells', '(?:Petty|Witchcraft|Daemonology|Necromancy|Hedgecraft|Chaos) Spells','Mutations', 'Optional', 'Petty Magic', 'Arcane Magic', 'Fate Points?', 'Amputations', 'Marks', 'Note', 'Miracles', 'Armour by Location', 'Special Rules'];
 const LORE_PATTERNS = ['Lore of [A-Z][a-z]+', 'Magic of [A-Z][a-z]+', 'High Magic'];
 // « Traits*: » (L01 p. 79) : Traits conditionnels, la note à astérisque suit ; l'astérisque est retiré de l'étiquette.
 const labelRe = wide => new RegExp(`(?:^|\\s)(${[...(wide ? [...V4_LABELS_BASE, 'Options'] : [...V4_LABELS_BASE, ...LORE_PATTERNS])].join('|')})\\*?:`, 'g');

@@ -5,7 +5,7 @@
 import { SKILL_GROUP_ALIASES } from './bestiary-glossary.mjs';
 import { TRAIT_ALIASES } from './bestiary-complement-data.mjs';
 
-const LABEL = /\b(?:Traits|Skills|Talents|Trappings|Spells|Mutations|Special Rules|Optional Traits|Optional|Armour by Location|Armour|Weapons|Equipment|Notes|Fate Points?|Miracles)\s*:/;
+const LABEL = /\b(?:Traits|Skills|Talents|Trappings|Spells|Mutations|Special Rules|Optional Traits|Optional|Armour by Location|Armour|Weapons|Equipment|Notes|Fate Points?|Miracles|Marks)\s*:/;
 const HEADER = / M WS BS S T I Ag[i]? Dex Int WP Fel(?: W)?/;
 
 /** Texte brut normalisé : tirets typographiques, césures « Two- handed » recollées, espaces simples. */
@@ -139,7 +139,8 @@ export function printedTraits(block) {
     // Le texte de la colonne voisine (minuscule initiale, phrase longue) met fin à la liste ; un intitulé « Attack » collé au dernier Trait est retiré.
     if (/^[a-z]/.test(raw) || raw.length > 60) break;
     // Le dernier Trait peut être suivi directement de la prose voisine : on garde les mots à majuscule (et « of », « and »…).
-    const words = raw.replace(/\s+Attack$/, '').split(' ');
+    // Q27d : une parenthèse reste d'un seul tenant (« Prejudice (Those she Presumes to be Weak) »), seule la prose qui la suit est écartée.
+    const words = raw.replace(/\s+Attack$/, '').match(/\([^()]*\)|\S+/g) || [];
     const stop = words.findIndex((word, index) => index > 0 && /^[a-z]/.test(word) && !/^(?:of|and|to|in|from|or)$/.test(word));
     const item = (stop > 0 ? words.slice(0, stop) : words).join(' ');
     if (/\+\d/.test(item) || /^Creature Weapons/i.test(item) || /^Armour\b/i.test(item) || /^(?:Weapon|Ranged)\b/.test(item)) continue;
@@ -155,6 +156,8 @@ export function recordTraitKeys(record) {
   for (const trait of [...(record.traits || []), ...(record.optionalTraits || []), ...(record.abilities || [])]) {
     const name = typeof trait === 'string' ? trait : trait?.name;
     if (name) keys.add(traitKey(name));
+    // « Large » seul (Trait V4) est gardé comme Size (Large).
+    if (name === 'Size' && trait?.param) keys.add(traitKey(trait.param));
   }
   return keys;
 }
@@ -181,7 +184,7 @@ export function printedSpells(block) {
     // V5 : « Trappings » sans deux-points ; Domaines nus (« Light: », « Witchcraft: »), « High Magic: », « Marsh Magic: » ouvrent aussi une autre liste.
     const other = SPELL_STOP.exec(rest);
     const stop = Math.min(end ? end.index : rest.length, next ? next.index : rest.length, other ? other.index : rest.length);
-    const items = splitTopLevel(rest.slice(0, stop)).map(item => item.replace(/\*/g, '').replace(/\s+\d{1,3}$/, '').trim()).filter(item => !/^(?:Petty Magic|As above)$|\b(?:knows|memorised)\b/.test(item));
+    const items = splitTopLevel(rest.slice(0, stop)).map(item => item.replace(/\*/g, '').replace(/\s*\((?:see )?page \d+\)/, '').replace(/\s+(?:[A-Z][A-Z'’-]+\s+)+[A-Z][A-Z'’-]+$/, '').replace(/\s+(?:Petty|Arcane)(?: Magic)?(?: and Lore)?$/, '').replace(/\s+\d{1,3}$/, '').trim()).filter(item => !/^(?:Petty Magic|As above)$|\b(?:knows|memorised)\b/.test(item));
     const cut = items.findIndex(item => !item || item.length > 45);
     for (const item of cut >= 0 ? items.slice(0, cut) : items) found.push({ label: item, key: letters(item) });
   }
@@ -207,7 +210,8 @@ export function recordSpellKeys(record) {
 /** Manques étendus d'un profil (attaques, Traits, équipement, sorts) et bruit d'équipement. Comparaison hors ponctuation et casse. */
 export function extendedGaps(record, block) {
   const haveAttacks = recordAttackKeys(record);
-  const haveTraits = recordTraitKeys(record);
+  // Q27d : un talent du catalogue imprimé dans la liste des Traits (« Acute Sense (Smell) ») est gardé comme talent.
+  const haveTraits = new Set([...recordTraitKeys(record), ...(record.talents || []).map(talent => traitKey(String(talent?.name ?? '').replace(/\(.*?\)/g, ' ').replace(/\s+/g, ' ').trim()))]);
   const attackNames = new Set((record.attacks || []).map(attack => letters(attack.name)));
   const haveTraitRatings = new Set((record.traits || []).filter(trait => trait?.rating).map(trait => `${letters(trait.name)}|${String(trait.rating).replace(/\D/g, '')}`));
   const trappings = (record.trappings || []).map(letters);

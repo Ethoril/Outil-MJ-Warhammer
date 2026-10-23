@@ -5517,8 +5517,11 @@
      "name": "Combat Reflexes"
     },
     {
-     "name": "T"
+     "name": "Resolute"
     }
+   ],
+   "notes": [
+    "Wounds need to be increased due to changes to S, T, and WP."
    ],
    "starred": [
     "wounds"
@@ -5606,8 +5609,11 @@
      "name": "Resolute"
     },
     {
-     "name": "T"
+     "name": "War Leader"
     }
+   ],
+   "notes": [
+    "Wounds need to be increased due to changes to S, T, and WP."
    ],
    "starred": [
     "wounds"
@@ -5701,8 +5707,11 @@
      "name": "Unshakeable"
     },
     {
-     "name": "T"
+     "name": "War Leader"
     }
+   ],
+   "notes": [
+    "Wounds need to be increased due to changes to S, T, and WP."
    ],
    "starred": [
     "wounds"

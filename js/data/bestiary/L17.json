@@ -217,6 +217,9 @@
     "Practical Robes of the Light Order",
     "Purse containing coins to the value of 4GCs"
    ],
+   "notes": [
+    "Marks: Mark of Hysh, Stoicism"
+   ],
    "spells": {
     "Petty": [
      "Bearings",
@@ -476,6 +479,19 @@
      "name": "Wealth",
      "rank": 4
     }
+   ],
+   "trappings": [
+    "Amulet of Sea Gold",
+    "Enchanted Staff",
+    "Sword",
+    "The Gleaming Robe",
+    "Vial of Al-kahest (see page 52)",
+    "Vial of Panacea Universalis (see page 163)",
+    "Quicksilver (Pegasus housed at the Imperial Zoo)",
+    "Private Library and Workshop at the Gold College"
+   ],
+   "notes": [
+    "Marks: Shining Orbs, Hardness, Mark of Chamon"
    ],
    "spells": {
     "Petty": [
@@ -756,6 +772,9 @@
     "Magical Licence",
     "College Library",
     "Workshop at College"
+   ],
+   "notes": [
+    "Marks: Rapid Growth, Whiff of Ghyran"
    ],
    "spells": {
     "Petty": [
@@ -2101,6 +2120,9 @@
     "Eagle Totem",
     "Standard Robes"
    ],
+   "notes": [
+    "Marks: Feral, Mark of Ghur"
+   ],
    "spells": {
     "Petty": [
      "Animal Friend",
@@ -2709,6 +2731,9 @@
     },
     {
      "name": "Small"
+    },
+    {
+     "name": "Suffuse With (Wind) (see page 186)"
     }
    ],
    "nameFrSource": "proposition"
@@ -3422,6 +3447,7 @@
     "Soc": 5
    },
    "wounds": 26,
+   "size": "large",
    "armour": {
     "ap": 1,
     "printedTotal": 5
@@ -3463,12 +3489,17 @@
      "ref": "E0-T-030"
     },
     {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    },
+    {
      "name": "Unstable",
      "ref": "E0-T-062"
     }
    ],
-   "trappings": [
-    "roll on the Random Grimoire table on page 166."
+   "notes": [
+    "The Disc is piled high with all manner of grimoires and scrolls. If a Character should acquire one of the texts on the disc, roll on the Random Grimoire table on page 166."
    ],
    "keywords": [
     "tzeentch",

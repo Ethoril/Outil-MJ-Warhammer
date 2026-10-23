@@ -27,6 +27,8 @@ export function readTrappings(rawText) {
   // L14 : « Whilst Dalroth could equip himself … he can be expected to have the following items to hand: Blade… » ; la phrase d'introduction n'est pas un objet.
   // « …his preferred attire consists of: Crown… » (L16 p. 32) et « …, add the following: Bandages » (L16 p. 45) : même chose en cours de liste.
   // « Trade Tools (Embalmer, Smith). Outside the hold, add the following: Bandages, Restorative Brew » (L16 p. 45) : variante de la liste, pas une phrase.
+  // « The Disc is piled high with all manner of grimoires… » (L17 p. 213) : l'équipement est une phrase de description, gardée en note.
+  if (/^The [A-Za-z ]+ (?:is|are) [^,]*\.\s/.test(rawText)) return { items: [], notes: [clean(rawText)] };
   const text = rawText.replace(/\.\s+Outside the hold(?=,\s*add the following:)/, '').replace(/^[A-Z][^:]{20,}\b(?:to hand|following items|equipped with|consists of):\s*/, '').replace(/(^|,\s*)(?:add )?the following:\s*/g, '$1');
   // « Sword * Adalbert is still… » (L02 p. 90) : l'astérisque peut être suivi d'une espace.
   const cut = /\s\*\s?(?=[A-Za-z])/.exec(text);
@@ -53,6 +55,8 @@ export function readTrappings(rawText) {
 function readTraitItemPlain(text) {
   const item = clean(text.replace(/\*+$/, ''));
   if (!item) return null;
+  // « Large » seul (Library Disc of Tzeentch, L17 p. 213) : la Taille imprimée comme Trait V4.
+  if (/^(?:Tiny|Large|Enormous|Monstrous)$/.test(item)) return { name: 'Size', param: item };
   // « Breath +12 (Fire) » (Salamander, L07 p. 175) : le Souffle V4 porte ses dégâts imprimés, le type est la précision.
   // Quelques lettres de la colonne voisine peuvent s'intercaler (« Breath +17 nd (Brimstone Fire) », Hagdar L16 p. 84) : écartées.
   const breath = /^Breath\s*([+-]\d+)(?:\s+[a-z]{1,3})?\s*\(([^()]*)\)$/.exec(item) || /^Breath\s*([+-]\d+)\s*\(([^()]*)\)$/i.exec(item);
@@ -126,6 +130,10 @@ export function readSkills(text) {
 /** Talents : noms (avec spécialisation entre parenthèses, rang entier final), sans clause. */
 export function readTalents(text) {
   return splitList(text).map(item => {
+    // Titre en majuscules d'un profil voisin collé au dernier talent (« …(see page 186) SPELL FAMILIAR », L17 p. 182).
+    item = item.replace(/\s+[A-Z][A-Z'’-]{2,}(?:\s+[A-Z][A-Z'’-]{2,})+$/, '');
+    // Phrase du texte voisin collée après la parenthèse du dernier talent (« …(see page 186) The familiars formed in the halls… », L17 p. 182).
+    item = item.replace(/(\))\s+(?:The|This|These|A|An)\s+[a-z][\s\S]*$/, '$1');
     // Une longue parenthèse est une clause de règle, sauf liste de spécialisations (« Arcane Magic (Beasts, Death, Fire, Heavens, Light, Life, Metal, Shadow) »).
     // Un astérisque final (« Strike Mighty Blow 2* », Krag-Breaker L11 p. 25) marque une valeur conditionnelle : le talent et son rang restent.
     const base = clean(item.replace(/[.*]+$/, '').replace(/\s*\((?:[^()]*\s){7,}[^()]*\)\s*$/, group => (/^\s*\((?:[A-Z][\w'’-]*(?: (?:of )?[A-Z][\w'’-]*){0,2})(?:, (?:[A-Z][\w'’-]*(?: (?:of )?[A-Z][\w'’-]*){0,2}))+\)\s*$/.test(group) ? group : '')).replace(/:.*$/, ''));
@@ -318,7 +326,10 @@ export function parseBlock(block, { traitDictionary = new Set(), talentDictionar
   if (sections.Skills) profile.skills = readSkills(sections.Skills);
   // Liste décrite (V5) : le premier deux-points précède la première virgule. Liste simple avec une clause (« Criminal, …, Doomed: "…", … », L04 p. 64) : lue comme liste.
   const describedTalents = sections.Talents && /:/.test(sections.Talents) && talentDictionary.size && !(sections.Talents.indexOf(',') >= 0 && sections.Talents.indexOf(',') < sections.Talents.indexOf(':'));
-  if (sections.Talents) profile.talents = describedTalents ? readDescribedNames(sections.Talents, talentDictionary).map(name => ({ name })) : readTalents(sections.Talents);
+  // « Read/Write *Parzival's Status has been effectively reduced… » (L18 p. 115) : la note à astérisque qui suit les talents est une note du profil.
+  const talentStar = sections.Talents ? /\s\*\s?(?=[A-Z])/.exec(sections.Talents) : null;
+  const talentsText = talentStar ? sections.Talents.slice(0, talentStar.index) : sections.Talents;
+  if (talentsText) profile.talents = describedTalents ? readDescribedNames(talentsText, talentDictionary).map(name => ({ name })) : readTalents(talentsText);
   // « Possessions: Mail coat, helmet, axe » (L18 p. 117) : l'équipement d'un mort-vivant.
   const trappingsText = sections.Trappings || sections.Possessions;
   if (trappingsText) {
@@ -326,6 +337,9 @@ export function parseBlock(block, { traitDictionary = new Set(), talentDictionar
     profile.trappings = items;
     if (notes.length) profile.notes = notes;
   }
+  // Q27d : "Marks: Mark of Hysh, Stoicism" (Magiciens, L17) : note du profil.
+  if (sections.Marks) profile.notes = [...(profile.notes || []), `Marks: ${clean(sections.Marks)}`];
+  if (talentStar) profile.notes = [...(profile.notes || []), clean(sections.Talents.slice(talentStar.index).replace(/\s*\*\s*/, ''))];
   if (sections.Mutations) profile.mutations = splitList(sections.Mutations);
   const spells = readSpells(sections);
   if (Object.keys(spells).length) profile.spells = spells;

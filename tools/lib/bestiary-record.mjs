@@ -228,7 +228,7 @@ export function buildRecord(extracted, entry, context) {
   const talents = [...(extracted.talents || []).filter(talent => talent.name).flatMap(talent => splitGluedTalent(talent.name).map((name, index, parts) => ({ name, rank: index === parts.length - 1 ? talent.rank : undefined }))).filter(talent => !isNoise(talent.name.replace(/\(.*\)/, ''))).map(talent => ({ name: talent.name, ...(talent.rank ? { rank: talent.rank } : {}) })), ...traitTalents];
   if (extracted.talents?.length || traitTalents.length) record.talents = talents;
   const trims = TRAPPING_TRIMS[entry.id] || [];
-  if (extracted.trappings?.length) record.trappings = joinTrappings(extracted.trappings, TRAPPING_JOINS[entry.id]).map(item => trims.find(name => item.startsWith(`${name} `)) ?? item).filter(item => isTrappingName(item) || (TRAPPING_JOINS[entry.id] || []).includes(item));
+  if (extracted.trappings?.length) record.trappings = joinTrappings(extracted.trappings, TRAPPING_JOINS[entry.id]).map(item => item.replace(/^and\s+(?=[A-Z])/, '')).map(item => trims.find(name => item.startsWith(`${name} `)) ?? item).filter(item => isTrappingName(item) || (TRAPPING_JOINS[entry.id] || []).includes(item));
   if (extracted.notes?.length) record.notes = extracted.notes;
   if (extracted.mutations?.length) record.mutations = extracted.mutations;
   if (extracted.spells) record.spells = extracted.spells;
