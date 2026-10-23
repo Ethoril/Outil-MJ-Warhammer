@@ -1,4 +1,5 @@
 import {activeMagicTalent} from './v5-magic-talents.js';
+import {familiarIgnoresAblaze} from './familiars.js';
 /** Pure V5 Conditions and explicit combat clocks, core pp.184–187. No dice draw. */
 import { normalizeEffects, normalizeState } from './effects.js';
 import { withMomentum } from './v5-combat-rules.js';
@@ -352,7 +353,8 @@ export function advanceV5Effects(participant,transition={},inputs={}) {
     }
     let hp=Number(next.hp);
     if(!Number.isFinite(hp)||hp<0){needs(needsInput,'currentWounds','Blessures courantes non négatives requises');hp=null;}
-    const flames=levels(next.states,'enflamme');
+    const ablaze=levels(next.states,'enflamme'),flames=familiarIgnoresAblaze(next)?0:ablaze;
+    if(ablaze&&!flames)reminders.push('Enflammé : sans dégâts pour un homoncule Imprégné d’Aqshy.');
     if(flames){
       const roll=explicitD10(inputs.fireRoll,'fireRoll',needsInput),be=toughnessBonus(next,inputs.toughnessBonus,needsInput),ap=fireArmour(next,inputs.fireArmour,needsInput);
       if(hp!==null&&roll!==null&&be!==null&&ap!==null){

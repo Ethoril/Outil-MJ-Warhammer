@@ -30,7 +30,8 @@ Branche `pro/phase-e`. Plan : `PLAN_PRO_PHASE_E.md`. Choix d'interprétation : `
 | T11 modificateurs de gabarit (application à un profil importé, modificateurs signés, W, Traits, compétences ; choix E-T11) | FAIT | voir `git log` |
 | T12 capacités propres du Zoo et de Lustria (138 entrées : 46 raccordées aux lots T1 à T7, 92 rappels motivés par entrée ; choix E-T12) | FAIT | voir `git log` |
 | F1 conception des familiers (`CONCEPTION_FAMILIERS.md` : deux systèmes, conversion V5, modèle de liens, services, 12 cas de test ; choix E-F1) | FAIT | voir `git log` |
-| F2, S1, R1 | À FAIRE | |
+| F2 liens maître-familier (`familiars.js`, commandes du store annulables, assistance et talents de compagnon, Embrasé d'Aqshy, États/soins refusés, mort d'un animal ; choix E-F2 : pas d'interface de saisie du lien) | FAIT | voir `git log` |
+| S1, R1 | À FAIRE | |
 
 ## Dernière suite complète
 
