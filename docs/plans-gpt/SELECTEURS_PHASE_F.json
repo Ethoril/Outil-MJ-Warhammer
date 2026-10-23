@@ -59408,5 +59408,3151 @@
       "Ne pas implanter"
     ],
     "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0001",
+    "phase": "Équipement et navigation",
+    "lot": "L08",
+    "source": "L08 p.32",
+    "question": "Implanter « Marchés elfes — qualité minimale » ? Hors consommables simples, tout objet acheté a au moins Durable1 et Belle facture1 ; prix et disponibilité locaux à Ulthuan seulement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0002",
+    "phase": "Équipement et navigation",
+    "lot": "L08",
+    "source": "L08 p.32",
+    "question": "Implanter « Objet unique — fabrication » ? Disponibilité Unique compte Exotique pour difficulté de fabrication ; matières premières au quart de la valeur en Ulthuan, davantage à l’étranger.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0003",
+    "phase": "Équipement et navigation",
+    "lot": "L08",
+    "source": "L08 p.32",
+    "question": "Implanter « Objet unique — attribution » ? Objet peut être accordé au personnage prometteur ; usage ignoble le fait considérer ennemi par la plupart des Asur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0004",
+    "phase": "Équipement et navigation",
+    "lot": "L08",
+    "source": "L08 p.33",
+    "question": "Implanter « Lance de cavalerie — hors charge » ? Compte comme arme improvisée si utilisée pendant un Tour sans charge.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0005",
+    "phase": "Équipement et navigation",
+    "lot": "L08",
+    "source": "L08 p.33",
+    "question": "Implanter « Espadon de Hoeth — discipline » ? Nécessaire à la danse des épées ; fabrication magique mais lame elle-même non enchantée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0006",
+    "phase": "Équipement et navigation",
+    "lot": "L08",
+    "source": "L08 p.34",
+    "question": "Implanter « Ithilmar — poids et prix » ? Pièce transportée plutôt que portée : Encombrement minimum1 ; toutes pièces Uniques ; prix ordinaire×128, y compris maille/écailles/barde.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0007",
+    "phase": "Équipement et navigation",
+    "lot": "L08",
+    "source": "L08 p.34",
+    "question": "Implanter « Armures elfiques — malus » ? Ithilmar/Dragon restent plates sauf exception ; Discrétion−10 portée ; casques ouverts Perception−10, fermés−20.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0008",
+    "phase": "Équipement et navigation",
+    "lot": "L08",
+    "source": "L08 p.35",
+    "question": "Implanter « Dragon — immunité au feu localisée » ? Si localisation couverte, une attaque ne pose pas Enflammé ; protection complète requise quand le déclencheur n’a pas de localisation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0009",
+    "phase": "Équipement et navigation",
+    "lot": "L08",
+    "source": "L08 p.35",
+    "question": "Implanter « Dragon — attaques chaudes » ? Contre attaque de chaleur, sesPA sont doublés et restent applicables même si l’attaque ignore l’armure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0010",
+    "phase": "Équipement et navigation",
+    "lot": "L08",
+    "source": "L08 p.35",
+    "question": "Implanter « Dragon — limites » ? Pas de protection contre manque d’air, fumées/toxines, exposition prolongée ; seule plate, Unique, prix ordinaire×1024.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0011",
+    "phase": "Équipement et navigation",
+    "lot": "L08",
+    "source": "L08 p.35",
+    "question": "Implanter « Cape de lion — superposition » ? Qualité Surcouche permet de porter la cape au-dessus des armures, y compris Ithilmar et Dragon, avec règles Archives3.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0012",
+    "phase": "Équipement et navigation",
+    "lot": "L08",
+    "source": "L08 p.36",
+    "question": "Implanter « Herbes — marché local » ? Table de tarifs/disponibilités propre à Ulthuan ; champignons hallucinogènes, Plaisir de Ranald et Spit indisponibles faute d’importation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0013",
+    "phase": "Équipement et navigation",
+    "lot": "L08",
+    "source": "L08 p.36",
+    "question": "Implanter « Feuille-cœur — Dragon » ? Fumée inhalée retire1 Exténué ; Dragon éveillé qui la voit ou sent remarque immédiatement le signal, sans obéissance garantie.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0014",
+    "phase": "Équipement et navigation",
+    "lot": "L08",
+    "source": "L08 p.36",
+    "question": "Implanter « Narinocha — ivresse » ? Résistance à l’alcool+0 par verre ; échec ivresse ordinaire mais Elfes utilisent la table locale au lieu de l’ivresse du socle.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0021",
+    "phase": "Équipement et navigation",
+    "lot": "L08",
+    "source": "L08 p.37",
+    "question": "Implanter « Extrait de racine solaire » ? Fiole de dix doses ; une dose dans l’eau donne+20aux Tests contre contraction de maladie pendant semaine suivante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0022",
+    "phase": "Équipement et navigation",
+    "lot": "L08",
+    "source": "L08 p.37",
+    "question": "Implanter « Aethyrolabe — mesure » ? Savoir Magie+0 révèle concentrations relatives des Vents ; Savoir Magie−20 pointe la concentration la plus proche d’un Vent choisi.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0023",
+    "phase": "Équipement et navigation",
+    "lot": "L08",
+    "source": "L08 p.37",
+    "question": "Implanter « Plume de Phénix de feu » ? Environ un an de flamme ; éclaire comme lanterne et enflamme comme torche.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0024",
+    "phase": "Équipement et navigation",
+    "lot": "L08",
+    "source": "L08 p.37",
+    "question": "Implanter « Plume de Phénix de givre » ? Environ un an de froid ; lumière de bougie et réfrigération équivalente à une brique de glace.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0025",
+    "phase": "Équipement et navigation",
+    "lot": "L08",
+    "source": "L08 p.37",
+    "question": "Implanter « Bâton de Nightelm » ? Ciblé par Sorcellerie, Démonologie, Nécromancie, Magie noire ou Chaos : Résistance magique3 ; peut servir de hampe d’arme d’hast.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0026",
+    "phase": "Équipement et navigation",
+    "lot": "L08",
+    "source": "L08 p.37",
+    "question": "Implanter « Bois du Bosquet éternel » ? Fabrication−4 DR ; armes d’hast et arcs réalisés avec ce bois reçoivent Durable4.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0027",
+    "phase": "Équipement et navigation",
+    "lot": "L08",
+    "source": "L08 p.37",
+    "question": "Implanter « Fragment de pierre » ? Prière+0 révèle direction de la pierre gardienne la plus proche ; aide à méditation Yenlui.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0030",
+    "phase": "Équipement et navigation",
+    "lot": "L08",
+    "source": "L08 p.40",
+    "question": "Implanter « Éperon dragon » ? 15 PA contre dommages de collision frontale ; s’il provoque la collision frontale, ajouter20 auBE pour l’indice de collision.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0031",
+    "phase": "Équipement et navigation",
+    "lot": "L08",
+    "source": "L08 p.40",
+    "question": "Implanter « Navires — vitesse11 » ? 22 yards/Round, environ8, 5miles/h, 7, 5nœuds, 17miles par quart2h ou66, 5 par quart8h.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0032",
+    "phase": "Équipement et navigation",
+    "lot": "L08",
+    "source": "L08 p.40",
+    "question": "Implanter « Navires — vitesse12 » ? 24 yards/Round, environ9miles/h, 8nœuds, 18miles par quart2h ou72 par quart8h.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0033",
+    "phase": "Équipement et navigation",
+    "lot": "L08",
+    "source": "L08 p.40",
+    "question": "Implanter « Griffe d’aigle — modes » ? Batterie de portée150 yards, dégâts+13, Précise ou Volée6, équipe2, Recharge3 ; clause Volée commune renvoyée L07.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0034",
+    "phase": "Équipement et navigation",
+    "lot": "L08",
+    "source": "L08 p.40",
+    "question": "Implanter « Flotte de guerre — variantes » ? Cinq modèles ont profils, équipages et batteries propres ; Hawkship différent du modèle de Lustria, ne pas fusionner les valeurs.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0036",
+    "phase": "Équipement et navigation",
+    "lot": "L08",
+    "source": "L08 p.42",
+    "question": "Implanter « Flotte marchande et chars » ? Albatros, Aigle d’or, Razorbill, Tidecutter ont capacité/manœuvre/équipage propres ; Tidecutter utilise Conduite, pas Voile.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0037",
+    "phase": "Personnages",
+    "lot": "L08",
+    "source": "L08 p.46",
+    "question": "Implanter « Yenlui — suivi » ? Trait Psychologie Clair, Équilibré ou Sombre ; acte extrême, revue mensuelle ou entre-deux permetMJ de déplacer l’état ; certains sorts imposent transition.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0038",
+    "phase": "Personnages",
+    "lot": "L08",
+    "source": "L08 p.46",
+    "question": "Implanter « Yenlui — facteurs sombres » ? Cruauté, indulgence extrême et gain de Corruption poussent vers Sombre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0039",
+    "phase": "Personnages",
+    "lot": "L08",
+    "source": "L08 p.46",
+    "question": "Implanter « Yenlui — facteurs clairs » ? Bonté exceptionnelle, abstinence et méditation au fragment de pierre ou sanctuaireCadai poussent vers Clair.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0040",
+    "phase": "Personnages",
+    "lot": "L08",
+    "source": "L08 p.47",
+    "question": "Implanter « Yenlui sombre — ordinaire » ? Haute Magie−2 DR ; Tests E etFM−1 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0041",
+    "phase": "Personnages",
+    "lot": "L08",
+    "source": "L08 p.47",
+    "question": "Implanter « Yenlui clair — ordinaire » ? Magie noire−2 DR ; Tests E etI−1 DR ; Équilibré sans modificateur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0042",
+    "phase": "Personnages",
+    "lot": "L08",
+    "source": "L08 p.47",
+    "question": "Implanter « Yenlui sombre — plus de350ans » ? Haute Magie−3 DR ; E/FM−2 DR, Soc−1 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0043",
+    "phase": "Personnages",
+    "lot": "L08",
+    "source": "L08 p.47",
+    "question": "Implanter « Yenlui clair — plus de350ans » ? Magie noire−3 DR ; E/I−2 DR, Soc−1 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0044",
+    "phase": "Personnages",
+    "lot": "L08",
+    "source": "L08 p.47",
+    "question": "Implanter « Yenlui sombre — plus de870ans » ? Haute Magie−4 DR ; E/FM/Soc−3 DR ; Ag/Dex/Int−2 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0045",
+    "phase": "Personnages",
+    "lot": "L08",
+    "source": "L08 p.47",
+    "question": "Implanter « Yenlui clair — plus de870ans » ? Magie noire−4 DR ; E/I/Soc−3 DR ; CC/CT/F−2 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0046",
+    "phase": "Personnages",
+    "lot": "L08",
+    "source": "L08 p.48",
+    "question": "Implanter « Obsession — choix » ? Avec accordMJ, remplacer Ambition longue par Obsession ; objectif permanent et avantages/inconvénients dépendent de Yenlui.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0047",
+    "phase": "Personnages",
+    "lot": "L08",
+    "source": "L08 p.48",
+    "question": "Implanter « Obsession — équilibre » ? Clair : bénéfices sans pénalité ; Équilibré : pénalité possible après bénéfice ; Sombre : pénalité possible même sans bénéfice.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0049",
+    "phase": "Personnages",
+    "lot": "L08",
+    "source": "L08 p.49",
+    "question": "Implanter « Obsession — pénalité » ? MJ peut imposer−2 DR au Test compromis ; en Équilibré une occurrence possible par bénéfice reçu.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0050",
+    "phase": "Personnages",
+    "lot": "L08",
+    "source": "L08 p.49",
+    "question": "Implanter « Rêve — ambition » ? Avec accordMJ, à son sommeil l’Elfe peut remplacer Ambition courte par un rêve prémonitoire proposé ; sinon rêve oublié.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0051",
+    "phase": "Personnages",
+    "lot": "L08",
+    "source": "L08 p.49",
+    "question": "Implanter « Rêve — réalisation » ? Quand la scène survient, Tests réussis gagnent+1 DR ; duréeMJ d’une rencontre à un jour ; nouvelle Ambition courte possible en fin de séance.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0053",
+    "phase": "Personnages",
+    "lot": "L08",
+    "source": "L08 p.51",
+    "question": "Implanter « Sang d’Aenarion — origine » ? Noble haut elfe : 5% ; autre haut elfe : 1% ; alternative accordMJ ; octroie le talent Sang d’Aenarion.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0054",
+    "phase": "Personnages",
+    "lot": "L08",
+    "source": "L08 p.51",
+    "question": "Implanter « Sang d’Aenarion — Destin » ? Talent donne1 Destin supplémentaire à la création.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0055",
+    "phase": "Personnages",
+    "lot": "L08",
+    "source": "L08 p.51",
+    "question": "Implanter « Prodige magique » ? Choisir l’option : prixPX des sorts divisé par deux.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0056",
+    "phase": "Personnages",
+    "lot": "L08",
+    "source": "L08 p.51",
+    "question": "Implanter « Prodige martial » ? Autre option : moitiéPX pour Réflexes de combat, Véloce, Réflexes foudroyants, Tireur d’élite, Perspicace, Très fort, Né pour la guerre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0057",
+    "phase": "Personnages",
+    "lot": "L08",
+    "source": "L08 p.51",
+    "question": "Implanter « Sang d’Aenarion — Yenlui » ? Chaque fin de semaine, Calme+20 ou Yenlui Sombre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0059",
+    "phase": "Personnages",
+    "lot": "L08",
+    "source": "L08 p.52",
+    "question": "Implanter « Ancien — expérience » ? Chaque époque vécue, naissance comprise sauf époqueFin : carrière choisie donne10 avances ou aléatoire15, avances de compétences premier rang ; maximum5 par compétence/époque.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0060",
+    "phase": "Personnages",
+    "lot": "L08",
+    "source": "L08 p.52",
+    "question": "Implanter « Ancien — fardeaux » ? Tous les fardeaux des époques vécues se cumulent ; seul le plus ancien fardeauYenlui s’applique, sans cumul de Tests hebdomadaires.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0061",
+    "phase": "Personnages",
+    "lot": "L08",
+    "source": "L08 p.53",
+    "question": "Implanter « Époque de Fin » ? 40–130 ans, âge30+10d10, aucun fardeau ; sert de référence au nombre d’époques.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0062",
+    "phase": "Personnages",
+    "lot": "L08",
+    "source": "L08 p.53",
+    "question": "Implanter « Époque d’Acier » ? 130–210 ans, 120+9d10 ; seulement1 point libre Destin/Résilience ; Calme+40 chaque semaine ou vers Clair.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0063",
+    "phase": "Personnages",
+    "lot": "L08",
+    "source": "L08 p.53",
+    "question": "Implanter « Époque d’Incursion » ? 210–350 ans, 200+15d10 ; 5 Corruption initiale ; Calme+20 chaque semaine ou vers Clair.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0064",
+    "phase": "Personnages",
+    "lot": "L08",
+    "source": "L08 p.53",
+    "question": "Implanter « Époque des Voyages » ? 350–610 ans, 320+30d10 ; maximum1 Activité hors devoirs/responsabilités ; Calme+0 hebdomadaire ou Clair.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0065",
+    "phase": "Personnages",
+    "lot": "L08",
+    "source": "L08 p.53",
+    "question": "Implanter « Époque du Sage » ? 610–870 ans, 580+30d10 ; Préjugé Humains ; Calme−10 hebdomadaire ou vers Clair.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0066",
+    "phase": "Personnages",
+    "lot": "L08",
+    "source": "L08 p.53",
+    "question": "Implanter « Époque des Ombres » ? 870 ans et plus, 840+30d10 ; Destin, Chance, Résilience, Détermination à0 sans augmentation durant création ; Calme−20 hebdomadaire ou vers Clair.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0067",
+    "phase": "Personnages",
+    "lot": "L08",
+    "source": "L08 p.53",
+    "question": "Implanter « Ordre des priorités » ? Sang d’Aenarion prime sur Yenlui, qui prime sur vieillesse pour les options conflictuelles.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0068",
+    "phase": "Carrières",
+    "lot": "L08",
+    "source": "L08 p.54",
+    "question": "Implanter « Caledor — origine » ? Liste propre de compétences/talents, dont Présence imposante ou Résolu, Seconde vue ou Esprit fort.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0069",
+    "phase": "Carrières",
+    "lot": "L08",
+    "source": "L08 p.54",
+    "question": "Implanter « Ellyrion — origine » ? Liste propre avec Équitation et soins/charme animal ; Affinité animale ou Orientation, Seconde vue ou Sixième sens.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0070",
+    "phase": "Carrières",
+    "lot": "L08",
+    "source": "L08 p.54",
+    "question": "Implanter « Avelorn — origine » ? Liste propre, Charme artistique/Attrayant ou Artiste, Seconde vue ou Sixième sens.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0071",
+    "phase": "Carrières",
+    "lot": "L08",
+    "source": "L08 p.54",
+    "question": "Implanter « Saphery — origine » ? Liste propre avec Savoir et Recherche ; Vue ou Studieux, Calme ou Astucieux, Seconde vue.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0072",
+    "phase": "Carrières",
+    "lot": "L08",
+    "source": "L08 p.54",
+    "question": "Implanter « Eataine — origine » ? Liste propre avec Langue au choix et elfique, Voile/Natation ; Marchandeur ou Astucieux, Intrigant ou Sixième sens.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0073",
+    "phase": "Carrières",
+    "lot": "L08",
+    "source": "L08 p.55",
+    "question": "Implanter « Tiranoc — origine » ? Liste propre ; Calme ou Haine Elfes noirs, Tenace ou Sixième sens.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0074",
+    "phase": "Carrières",
+    "lot": "L08",
+    "source": "L08 p.55",
+    "question": "Implanter « Nagarythe — origine » ? Liste propre, Discrétion rurale et Survie ; Haine Elfes noirs, Errant ou Sixième sens.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0075",
+    "phase": "Carrières",
+    "lot": "L08",
+    "source": "L08 p.55",
+    "question": "Implanter « Chrace — origine » ? Liste propre, Soins/Piégeage ; Endurci ou Œil du chasseur, Sixième sens, Arpenteur Forêts.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0076",
+    "phase": "Carrières",
+    "lot": "L08",
+    "source": "L08 p.55",
+    "question": "Implanter « Cothique — origine » ? Liste propre, Marchandage/Voile/Natation ; Nageur ou Endurci, Orientation ou Sixième sens.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0077",
+    "phase": "Carrières",
+    "lot": "L08",
+    "source": "L08 p.55",
+    "question": "Implanter « Yvresse — origine » ? Liste propre ; Calme ou Cœur vaillant, Résolu ou Implacable, Seconde vue ou Sixième sens.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0078",
+    "phase": "Carrières",
+    "lot": "L08",
+    "source": "L08 p.57",
+    "question": "Implanter « Uranai — création » ? Caractéristiques de Haut Elfe, table marine et liste propre ; choisir enclave et royaume d’origine ; après carrière initiale, toute carrière haut elfe accessible.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0079",
+    "phase": "Carrières",
+    "lot": "L08",
+    "source": "L08 p.57",
+    "question": "Implanter « Uranai mal dégrossi » ? Face aux Hauts Elfes Caledor/Ellyrion/Avelorn/Saphery, Standing diminué de1 ; pas à Eataine ni royaumes extérieurs.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0080",
+    "phase": "Carrières",
+    "lot": "L08",
+    "source": "L08 p.58",
+    "question": "Implanter « Carrières — tables d’origine » ? Choisir table socle ou cinq colonnes locales ; carrières marquées* seulement en culture elfique, aucun Prêtre initial.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0081",
+    "phase": "Carrières",
+    "lot": "L08",
+    "source": "L08 p.58",
+    "question": "Implanter « Marins — table alternative » ? ClasseSeafarer de L25 possible, particulièrement Uranai/royaumes extérieurs ; Canonnier utilise compétence elfique alternative.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0082",
+    "phase": "Carrières",
+    "lot": "L08",
+    "source": "L08 p.60",
+    "question": "Implanter « Soldat — adaptation » ? Archer ou Artilleur possible ; Tir Poudre noire interdit, artillerie répétitrice elfique à la place.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0083",
+    "phase": "Carrières",
+    "lot": "L08",
+    "source": "L08 p.60",
+    "question": "Implanter « Cavalier — adaptation » ? Tir Poudre noire→Pistage ; pistolet→arc elfique et10 flèches ; Cavalier léger capitaine : Tir Poudre→Signes Éclaireurs, pistolets→arme magique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0084",
+    "phase": "Carrières",
+    "lot": "L08",
+    "source": "L08 p.60",
+    "question": "Implanter « Gladiateur — adaptation » ? Premier rang peut remplacer Combat déloyal par Feinte.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0085",
+    "phase": "Carrières",
+    "lot": "L08",
+    "source": "L08 p.60",
+    "question": "Implanter « Sorcier — licence » ? Haut Elfe indépendant ne requiert pas licence de magie au second rang ; ne devient pas Mage de Hoeth pour autant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0086",
+    "phase": "Carrières",
+    "lot": "L08",
+    "source": "L08 p.61",
+    "question": "Implanter « Bailli — royaume extérieur » ? Standing de tous rangs+1 ; pas dans royaumes intérieurs.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0087",
+    "phase": "Carrières",
+    "lot": "L08",
+    "source": "L08 p.62",
+    "question": "Implanter « Artisan — adaptation » ? Rang2 Étiquette Guilde→Nobles, licence→patronage ; rang3 Signes Guilde→Savoir Magie ; rang4 guilde→position à la cour, titre Créateur exalté.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0088",
+    "phase": "Carrières",
+    "lot": "L08",
+    "source": "L08 p.62",
+    "question": "Implanter « Marchand — adaptation » ? Licence de guilde remplacée au rang2 par charte marchande.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0089",
+    "phase": "Carrières",
+    "lot": "L08",
+    "source": "L08 p.62",
+    "question": "Implanter « Artiste itinérant — standing » ? Sur Ulthuan, Standing de tous rangs+1.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0090",
+    "phase": "Carrières",
+    "lot": "L08",
+    "source": "L08 p.63",
+    "question": "Implanter « Marin — adaptation » ? Rang1 Résistance alcool et Mêlée Bagarre→Athlétisme/Mêlée Base ; rang2 Athlétisme→Intuition.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0091",
+    "phase": "Carrières",
+    "lot": "L08",
+    "source": "L08 p.63",
+    "question": "Implanter « Amuseur — alternative » ? Avec Up in Arms, peut choisir Vivandier à la place.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0092",
+    "phase": "Carrières",
+    "lot": "L08",
+    "source": "L08 p.63",
+    "question": "Implanter « Protagoniste — adaptation » ? Poings américains initiaux remplacés par épée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0093",
+    "phase": "Carrières",
+    "lot": "L08",
+    "source": "L08 p.64",
+    "question": "Implanter « Garde maritime — carrière » ? Haut Elfe ; Argent1/3/5 puisOr1 ; quatre rangs de compétences, talents et matériel naval.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0094",
+    "phase": "Carrières",
+    "lot": "L08",
+    "source": "L08 p.66",
+    "question": "Implanter « Maître des épées — carrière » ? Haut Elfe ; Argent2/5 puisOr1/2 ; première pratique martiale, puis danse des épées et fonctions decommandement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0095",
+    "phase": "Combat",
+    "lot": "L08",
+    "source": "L08 p.68",
+    "question": "Implanter « Arts martiaux — mains nues » ? Retirer Inoffensive des attaques à mains nues ; maximum BCC niveaux.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0096",
+    "phase": "Combat",
+    "lot": "L08",
+    "source": "L08 p.68",
+    "question": "Implanter « Arts martiaux — qualités apprises » ? Chaque niveau après le premier apprend une Qualité parmi Dévastatrice, Défensive, Perturbante, Rapide, Perforante, Précise, Assommante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0098",
+    "phase": "Combat",
+    "lot": "L08",
+    "source": "L08 p.68",
+    "question": "Implanter « Danse des épées — accès » ? Talent une fois ; apprend Purification ; nouvelle technique coûte100 PX par technique déjà connue ; espadon de Hoeth requis, ancienne école familiale seulement éventuelleMJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0099",
+    "phase": "Combat",
+    "lot": "L08",
+    "source": "L08 p.68",
+    "question": "Implanter « Danse des épées — exécution » ? Mêlée Deux mains atteint les DR de la technique ; échec perd tous Avantages, échec stupéfiant ajoute Oups ; Yenlui Clair/Équilibré+0, Sombre−30.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0100",
+    "phase": "Combat",
+    "lot": "L08",
+    "source": "L08 p.68",
+    "question": "Implanter « Rituel de purification » ? Seuil1 DR ; plusieurs minutes de30formes ; à l’aube vers Clair, au couchant vers Sombre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0101",
+    "phase": "Combat",
+    "lot": "L08",
+    "source": "L08 p.68",
+    "question": "Implanter « Vol du Phénix » ? Seuil1 DR, hors Engagé ; lancer àBF+BFM yards, dégâts arme et Perforante ; chaque DR ajoute1à portée et dégâts.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0102",
+    "phase": "Combat",
+    "lot": "L08",
+    "source": "L08 p.68",
+    "question": "Implanter « Voie du Soleil » ? Seuil1 DR ; Chef de guerre+1 pendantBFM Rounds ; chaque DR donne autre rang ou1 Round.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0103",
+    "phase": "Combat",
+    "lot": "L08",
+    "source": "L08 p.69",
+    "question": "Implanter « Voie du Givre » ? Seuil1 DR ; pendantBCC Rounds, frappes réussies ignorent1 PA ; chaque DR ajoute10au jet de gravité critique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0104",
+    "phase": "Combat",
+    "lot": "L08",
+    "source": "L08 p.69",
+    "question": "Implanter « Voie de la Tempête » ? Seuil1 DR ; parer tous tirs avec Mêlée Deux mains pendantBI Rounds,+1 Round par DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0105",
+    "phase": "Combat",
+    "lot": "L08",
+    "source": "L08 p.69",
+    "question": "Implanter « Voie de la Pluie » ? Seuil2 DR ; Esquive+1 DR pendantBAg Rounds ; chaque DR donne+1 DR Esquive et1 Round supplémentaire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0106",
+    "phase": "Combat",
+    "lot": "L08",
+    "source": "L08 p.69",
+    "question": "Implanter « Ombres de Loec » ? Seuil2 DR ; déplacement jusqu’àDR×M yards, minimum5, terrain bloque normalement ; anciens ennemis engagés Initiative+0 ouSurpris.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0107",
+    "phase": "Combat",
+    "lot": "L08",
+    "source": "L08 p.69",
+    "question": "Implanter « Voie du Faucon » ? Seuil3 DR ; cible dans BFM yards fait Résistance−10 ou10+DR dégâts sans armure et2 Assourdi ; chaque DR ajoute1cible et1yard.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0108",
+    "phase": "Combat",
+    "lot": "L08",
+    "source": "L08 p.69",
+    "question": "Implanter « Voie de l’Eau tombante » ? Seuil3 DR ; une attaque contre chaque ennemi engagé à allonge, trois contre ceux avec Essaim.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0109",
+    "phase": "Combat",
+    "lot": "L08",
+    "source": "L08 p.69",
+    "question": "Implanter « Frappe finale du Maître » ? Seuil4 DR ; Esquive−30 de cible ou coup imparable à+4dégâts,+1parDR de danse.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0110",
+    "phase": "Carrières",
+    "lot": "L08",
+    "source": "L08 p.70",
+    "question": "Implanter « Guerrier fantôme — carrière » ? Haut Elfe ; Bronze2/4 puisArgent1/3 ; quatre rangs furtifs avec Tir et Discrétion.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0111",
+    "phase": "Carrières",
+    "lot": "L08",
+    "source": "L08 p.72",
+    "question": "Implanter « Marchand aventurier — carrière » ? Haut Elfe ; Bronze4/Argent3/Or1/Or3 ; quatre rangs navals, entreprise et chasse aux monstres.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0112",
+    "phase": "Carrières",
+    "lot": "L08",
+    "source": "L08 p.74",
+    "question": "Implanter « Esthéticien — carrière » ? Haut Elfe ; Bronze3/Argent1/Argent4/Or2 ; quatre rangs artistiques et sociaux.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0113",
+    "phase": "Magie",
+    "lot": "L08",
+    "source": "L08 p.78",
+    "question": "Implanter « Mage — formation » ? Accès à la Tour après bénédiction d’Isha ; apprendre Haute Magie exige normalement dix ans d’étude.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0114",
+    "phase": "Magie",
+    "lot": "L08",
+    "source": "L08 p.79",
+    "question": "Implanter « Mage — passage de Sorcier » ? Un Sorcier ne peut apprendre Haute Magie dans sa carrière ; il doit entrer Mage au rang1, même déjà savant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0115",
+    "phase": "Magie",
+    "lot": "L08",
+    "source": "L08 p.79",
+    "question": "Implanter « Mage — magie mineure » ? Au moins quatre sorts mineurs de la liste elfique requis avant rang Étudiant Mage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0116",
+    "phase": "Magie",
+    "lot": "L08",
+    "source": "L08 p.79",
+    "question": "Implanter « Domaines — nombre » ? Elfe peut avoir jusqu’àBFM Domaines d’Arcane colorés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0117",
+    "phase": "Magie",
+    "lot": "L08",
+    "source": "L08 p.79",
+    "question": "Implanter « Domaines — formation locale » ? Avant nouveau Domaine : dix avances de Focalisation et quatre sorts du précédent ; hors Ulthuan ou institution humaine : vingt avances et huit sorts.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0118",
+    "phase": "Magie",
+    "lot": "L08",
+    "source": "L08 p.79",
+    "question": "Implanter « Sorts d’Arcane — comptes » ? Sorts d’Arcane appris avec un Domaine comptent dans ses quatre/huit ; version d’un autre Domaine est un nouveau sort avec prixPX propre ; pas de double compte.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0119",
+    "phase": "Magie",
+    "lot": "L08",
+    "source": "L08 p.79",
+    "question": "Implanter « Arcanes elfiques — accès » ? Talents de tous les Vents requis ; ne compte que pour le Domaine appris le plus récemment ; achat unique possible une fois les prérequis réunis.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0120",
+    "phase": "Magie",
+    "lot": "L08",
+    "source": "L08 p.80",
+    "question": "Implanter « Béni par Isha — parcours complet » ? Étudiant Mage fini, FM≥80, Magie mineure et quatre sorts elfiques ; huit Domaines avec dix avances de Focalisation et quatre sorts chacun avant Béni par Isha.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0125",
+    "phase": "Magie",
+    "lot": "L08",
+    "source": "L08 p.81",
+    "question": "Implanter « Arcanes elfiques — canalisation » ? Utiliser la Focalisation la plus faible des Vents requis et le modificateur environnemental le moins favorable.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0138",
+    "phase": "Magie",
+    "lot": "L08",
+    "source": "L08 p.83",
+    "question": "Implanter « Focalisation Qhaysh — plafond » ? Avances de Qhaysh ne dépassent jamais celles d’aucune des huit Focalisations colorées ; PNJ sans scores détaillés utilisent Qhaysh pour chaque Vent.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0139",
+    "phase": "Magie",
+    "lot": "L08",
+    "source": "L08 p.83",
+    "question": "Implanter « Focalisation Qhaysh — environnement » ? Vent isolé faible n’empêche pas de lancer ; plusieurs faibles :−1/−2 DR MJ ; plusieurs forts peuvent accorder bonus équivalent.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0140",
+    "phase": "Magie",
+    "lot": "L08",
+    "source": "L08 p.83",
+    "question": "Implanter « Béni par Isha — talent » ? Elfe seulement, rang unique ; novice d’Isha béni par Reine éternelle ou Ariel, autorise apprentissage de Haute Magie.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0141",
+    "phase": "Magie",
+    "lot": "L08",
+    "source": "L08 p.83",
+    "question": "Implanter « Haute Magie — rang unique » ? Qhaysh et Béni par Isha requis ; maximum 1, contrairement au Bonus d’Intelligence de L07.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0142",
+    "phase": "Magie",
+    "lot": "L08",
+    "source": "L08 p.83",
+    "question": "Implanter « Haute Magie — accès aux Vents » ? Les sorts des huit Domaines colorés ne sont pas empêchés par l’absence locale de leurVent.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0143",
+    "phase": "Magie",
+    "lot": "L08",
+    "source": "L08 p.83",
+    "question": "Implanter « Haute Magie — prix des sorts » ? Par tranche de BI sorts connus, le suivant coûte200 PX, 400 PX, 600 PX, 800 PX, etc.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0146",
+    "phase": "Magie",
+    "lot": "L08",
+    "source": "L08 p.83",
+    "question": "Implanter « Lileath — autres bonus multiples » ? Chaque rang peut aussi lever une interdiction de cumul d’autres bonus de sorts, Haute Magie et Domaines colorés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0147",
+    "phase": "Magie",
+    "lot": "L08",
+    "source": "L08 p.83",
+    "question": "Implanter « Carrière de cinquième rang » ? Mage, Vaul, Mathlann, Hoeth : 25 avances dans sept caractéristiques et huit compétences, un talent actuel ; acquisitions antérieures peuvent compter.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0150",
+    "phase": "Magie",
+    "lot": "L08",
+    "source": "L08 p.84",
+    "question": "Implanter « Haute Magie — surpuissance » ? Options spéciales s’ajoutent à portée, zone, durée, cibles et dégâts usuels ; tous les DR dépensés comptent pour épuisement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0161",
+    "phase": "Magie",
+    "lot": "L08",
+    "source": "L08 p.84",
+    "question": "Implanter « Rune Cadai — quitter la zone » ? Quitter la zone impose un nouveau déploiement au retour.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0162",
+    "phase": "Magie",
+    "lot": "L08",
+    "source": "L08 p.85",
+    "question": "Implanter « Haute Magie — malepierre » ? Peut accroître Haute Magie normalement ; usage socialement proscrit, risques habituels conservés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0165",
+    "phase": "Magie",
+    "lot": "L08",
+    "source": "L08 p.85",
+    "question": "Implanter « Robes — Qhaysh » ? Robes pratique/standard/élaborée donnent+1/+2/+3 DR auVent unique associé ; aucun ensemble n’aide Qhaysh.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0166",
+    "phase": "Magie",
+    "lot": "L08",
+    "source": "L08 p.85",
+    "question": "Implanter « Bâton de Lileath » ? Au rangMage, bâton réduitNI de tous sorts colorés et Haute Magie de1, minimum0 pour règle des bâtons ; perdre le bâton rend remplacement difficile.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0185",
+    "phase": "Carrières",
+    "lot": "L08",
+    "source": "L08 p.90",
+    "question": "Implanter « Mage — carrière » ? Haut Elfe ; Argent1/2 puisOr1/3/6 ; cinq rangs avec formationreligieuse et spécialisations de Focalisation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0186",
+    "phase": "Religion et magie",
+    "lot": "L08",
+    "source": "L08 p.98",
+    "question": "Implanter « Sanctuaire elfique » ? Sorcier, Mage ou Prêtre elfe fait Prière+0 pour accéder à sanctuaire du dieu comme jonction, +1à+3 DR au lancement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0187",
+    "phase": "Religion et magie",
+    "lot": "L08",
+    "source": "L08 p.99",
+    "question": "Implanter « Prêtre — accès et progression » ? Prêtrises aux rangs3–5, après Étudiant Mage fini ; caractéristiques/talents du rang3 à compléter avant4 comme premier rang, anciennes compétences admises, nouvelle compétence de Revenu.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0188",
+    "phase": "Religion et magie",
+    "lot": "L08",
+    "source": "L08 p.99",
+    "question": "Implanter « Prêtre — répertoire » ? Apprendre Haute Magie générale avant de maîtriser le répertoire du culte fait traiter comme Étudiant Mage Argent2 pour Statut/Revenu.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0189",
+    "phase": "Religion et magie",
+    "lot": "L08",
+    "source": "L08 p.99",
+    "question": "Implanter « Mage — sorts religieux » ? Apprentissage possible avec tuteur ou textes et accès social adéquat ; pas d’interdiction technique absolue ; grimoire exempte les restrictions de répertoire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0190",
+    "phase": "Religion et magie",
+    "lot": "L08",
+    "source": "L08 p.99",
+    "question": "Implanter « Préceptes — Yenlui » ? Comportement conforme au culte selonMJ : ajuster de+1ou−1 DR tout Test altérant Yenlui.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0191",
+    "phase": "Religion et magie",
+    "lot": "L08",
+    "source": "L08 p.99",
+    "question": "Implanter « Préceptes — sociabilité » ? Comportement conforme selonMJ :+1 DR aux Tests Soc avec Elfes respectant ce dieu.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0192",
+    "phase": "Religion et magie",
+    "lot": "L08",
+    "source": "L08 p.99",
+    "question": "Implanter « Surpuissances de culte » ? Certaines options exigent sacrifice/Yenlui spécifique ; sans sacrifice, options ordinaires seulement ; Mages apprenant ces sorts soumis au même cadre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0194",
+    "phase": "Carrières",
+    "lot": "L08",
+    "source": "L08 p.100",
+    "question": "Implanter « Forgeron-prêtre de Vaul — carrière » ? Haut Elfe ou Sylvain ; rangs3–5 Or2/4/7 ; objets et talents decréation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0198",
+    "phase": "Religion et magie",
+    "lot": "L08",
+    "source": "L08 p.101",
+    "question": "Implanter « L’esprit sur le corps2 — vision » ? Vision mentale des formes, sans couleurs/expressions/détails sauf objets fabriqués ; Métier Forgeron sans pénalité de cécité.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0200",
+    "phase": "Religion et magie",
+    "lot": "L08",
+    "source": "L08 p.101",
+    "question": "Implanter « L’esprit sur le corps3 — critiques » ? Dépenser Détermination permet d’ignorer les pénalités de Blessures critiques aux Tests étendus.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0201",
+    "phase": "Religion et magie",
+    "lot": "L08",
+    "source": "L08 p.101",
+    "question": "Implanter « Vaul — objet offert » ? Objet combustible d’au moins2 CO détruit avant Focalisation ; vaut1d10 heures d’accès aux options, puis nouveau sacrifice ; cécité compte sacrifice permanent.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0212",
+    "phase": "Carrières",
+    "lot": "L08",
+    "source": "L08 p.104",
+    "question": "Implanter « Tisseur de tempêtes — carrière » ? Haut Elfe ; rangs3–5 Or2/5/7 ; compétences et talents demer.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0216",
+    "phase": "Religion et magie",
+    "lot": "L08",
+    "source": "L08 p.105",
+    "question": "Implanter « Œil2 — récupération » ? Récupérer Exténué en moitié du temps normal décidéMJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0217",
+    "phase": "Religion et magie",
+    "lot": "L08",
+    "source": "L08 p.105",
+    "question": "Implanter « Œil3 — météo » ? Ajouter ou retirer1à tout dé de table météo, L25p106 ou L04p114.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0218",
+    "phase": "Religion et magie",
+    "lot": "L08",
+    "source": "L08 p.105",
+    "question": "Implanter « Prêtre de Mathlann à bord » ? Yenlui Clair ou Équilibré : Humeur de Manann+5+1d10.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0230",
+    "phase": "Carrières",
+    "lot": "L08",
+    "source": "L08 p.108",
+    "question": "Implanter « Maître du savoir de Hoeth — carrière » ? Haut Elfe ; rangs3–5 Or2/5/7 ; six compétences au rang3, puis deux etune.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0232",
+    "phase": "Religion et magie",
+    "lot": "L08",
+    "source": "L08 p.109",
+    "question": "Implanter « Sanctuaire1 — Corruption » ? Immunité aux points de Corruption issus du lancement magique pendant méditation active.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0235",
+    "phase": "Religion et magie",
+    "lot": "L08",
+    "source": "L08 p.109",
+    "question": "Implanter « Sanctuaire3 — autres Tests » ? Exemption des malus de Yenlui pour tous les autres Tests concernés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0236",
+    "phase": "Religion et magie",
+    "lot": "L08",
+    "source": "L08 p.109",
+    "question": "Implanter « Hoeth — mémoire du sacrifice » ? Recherche étendue faite dans semaine avant sort ; après semaine, Recherche−30 pour rappeler, échec oblige à refaire sacrifice.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0237",
+    "phase": "Religion et magie",
+    "lot": "L08",
+    "source": "L08 p.109",
+    "question": "Implanter « Hoeth — bibliothèque » ? Recherche étendue du sacrifice :+2 DR avec bibliothèque magique fournie,+5 DR avec Tour de Hoeth.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0250",
+    "phase": "Religion et magie",
+    "lot": "L08",
+    "source": "L08 p.112",
+    "question": "Implanter « Pacte noir elfique — bonus » ? Relance pour art, vice ou séduction par Pacte noir reçoit+2 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0251",
+    "phase": "Religion et magie",
+    "lot": "L08",
+    "source": "L08 p.112",
+    "question": "Implanter « Pacte noir elfique — nuit » ? Nuit suivante, rêves de Slaanesh : exposition mineure, Calme+0 pour résister à un point de Corruption additionnel.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0252",
+    "phase": "Religion et magie",
+    "lot": "L08",
+    "source": "L08 p.112",
+    "question": "Implanter « Implorer Atharti » ? Après prière rituelle, 24 heures : Prière+0 pour annuler chaque gain de Corruption lié àSlaanesh ; échec ajoute encore autant queDR négatifs.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0256",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.118",
+    "question": "Implanter « Intrigue — mise en place » ? Définir instigateur, ciblePNJ, objectif et tactique ; MJ fixe complexité mineure/modérée/majeure ; options deleviers, priorités et scène sociale.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0257",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.118",
+    "question": "Implanter « Intrigue — portée » ? Scénario avec mécanique propre reste prioritaire, et personnalité/argumentation peuvent empêcher l’application automatique du système générique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0258",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.119",
+    "question": "Implanter « Objectif — intérêt fugace » ? Devient Ambition courte, poursuivie quelques mois puis remplaçable, ou rêveelfique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0259",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.119",
+    "question": "Implanter « Objectif — engagement solide » ? Devient Ambition longue, poursuivie un an environ puis remplaçable, ou obsessionelfique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0260",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.119",
+    "question": "Implanter « Objectif — priorité durable » ? Devient Motivation ou Obsession, persistante tant que circonstances le permettent.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0261",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.119",
+    "question": "Implanter « Complexité — définition » ? Mineure petit changement/rang clair ; modérée ambiguïté/protocole ; majeure projet ambitieux/subtil/complexe nécessitant plusieurs interventions.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0262",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.120",
+    "question": "Implanter « Persuasion — compétences » ? Corruption, Charme, Divertissement acteur/conteur, Commérage, Intimidation ou Commandement ; Charme choix ordinairement sûr, autres tactiques peuvent être pénaliséesMJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0263",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.120",
+    "question": "Implanter « Persuasion — Intimidation sociale » ? Intimidation d’intrigue fondée sur Soc, à la place de F.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0264",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.121",
+    "question": "Implanter « Levier — exploitation discrète » ? Bonus delevier seulement si connu et tactique adaptée ; révéler sa connaissance compromet le déni plausible ; choix/tirage selon personnalitéMJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0265",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.121",
+    "question": "Implanter « Levier 01–03 — dettes » ? Tactique Corruption reçoit+1 DR si celevier de la cible est connu et utilisé discrètement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0266",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.121",
+    "question": "Implanter « Levier 04–10 — désir de paraître accueillant » ? Tactique Charme reçoit+1 DR si celevier de la cible est connu et utilisé discrètement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0267",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.121",
+    "question": "Implanter « Levier 11–12 — goût des allégories » ? Tactique Divertissement reçoit+1 DR si celevier de la cible est connu et utilisé discrètement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0268",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.121",
+    "question": "Implanter « Levier 13–17 — goût de parler plutôt qu’écouter » ? Tactique Commérage reçoit+1 DR si celevier de la cible est connu et utilisé discrètement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0269",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.121",
+    "question": "Implanter « Levier 18–20 — maladresse face au conflit » ? Tactique Intimidation reçoit+1 DR si celevier de la cible est connu et utilisé discrètement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0270",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.121",
+    "question": "Implanter « Levier 21–24 — désir de soutenir les meneurs » ? Tactique Commandement reçoit+1 DR si celevier de la cible est connu et utilisé discrètement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0271",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.121",
+    "question": "Implanter « Levier 25–27 — baisse de fortune » ? Tactique Corruption reçoit+1 DR si celevier de la cible est connu et utilisé discrètement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0272",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.121",
+    "question": "Implanter « Levier 28–34 — sensibilité à flatterie » ? Tactique Charme reçoit+1 DR si celevier de la cible est connu et utilisé discrètement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0273",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.121",
+    "question": "Implanter « Levier 35–36 — recherche de distraction » ? Tactique Divertissement reçoit+1 DR si celevier de la cible est connu et utilisé discrètement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0274",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.121",
+    "question": "Implanter « Levier 37–41 — souci des modes » ? Tactique Commérage reçoit+1 DR si celevier de la cible est connu et utilisé discrètement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0275",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.121",
+    "question": "Implanter « Levier 41–43 — lâcheté physique » ? Tactique Intimidation reçoit+1 DR si celevier de la cible est connu et utilisé discrètement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0276",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.121",
+    "question": "Implanter « Levier 44–47 — besoin d’inspiration » ? Tactique Commandement reçoit+1 DR si celevier de la cible est connu et utilisé discrètement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0277",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.121",
+    "question": "Implanter « Levier 48–50 — envie de soutenir uneentreprise » ? Tactique Corruption reçoit+2 DR si celevier de la cible est connu et utilisé discrètement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0278",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.121",
+    "question": "Implanter « Levier 51–57 — recherche d’un ami » ? Tactique Charme reçoit+2 DR si celevier de la cible est connu et utilisé discrètement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0279",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.121",
+    "question": "Implanter « Levier 58–59 — attrait de nouveauté » ? Tactique Divertissement reçoit+2 DR si celevier de la cible est connu et utilisé discrètement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0280",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.121",
+    "question": "Implanter « Levier 60–64 — besoin d’approbation » ? Tactique Commérage reçoit+2 DR si celevier de la cible est connu et utilisé discrètement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0281",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.121",
+    "question": "Implanter « Levier 65–67 — secret honteux » ? Tactique Intimidation reçoit+2 DR si celevier de la cible est connu et utilisé discrètement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0282",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.121",
+    "question": "Implanter « Levier 68–71 — besoin d’exemple » ? Tactique Commandement reçoit+2 DR si celevier de la cible est connu et utilisé discrètement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0283",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.121",
+    "question": "Implanter « Levier 72–74 — cupidité » ? Tactique Corruption reçoit+3 DR si celevier de la cible est connu et utilisé discrètement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0284",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.121",
+    "question": "Implanter « Levier 75–81 — besoin de se sentir désirable » ? Tactique Charme reçoit+3 DR si celevier de la cible est connu et utilisé discrètement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0285",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.121",
+    "question": "Implanter « Levier 82–83 — désir de paraître cultivé » ? Tactique Divertissement reçoit+3 DR si celevier de la cible est connu et utilisé discrètement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0286",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.121",
+    "question": "Implanter « Levier 84–88 — plaisir des ragots » ? Tactique Commérage reçoit+3 DR si celevier de la cible est connu et utilisé discrètement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0287",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.121",
+    "question": "Implanter « Levier 89–91 — crainte pour sesproches » ? Tactique Intimidation reçoit+3 DR si celevier de la cible est connu et utilisé discrètement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0288",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.121",
+    "question": "Implanter « Levier 92–96 — absence de vocation » ? Tactique Commandement reçoit+3 DR si celevier de la cible est connu et utilisé discrètement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0289",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.121",
+    "question": "Implanter « Levier 97–00 — vanité extrême » ? Tactique Charme reçoit+4 DR si celevier de la cible est connu et utilisé discrètement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0290",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.122",
+    "question": "Implanter « Levier — découverte » ? Après observation, Test combiné Intuition/Perception−20 ou Commérage−10 ; tableauDR donne information et risque deréaction inverse.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0291",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.122",
+    "question": "Implanter « Levier — réaction inverse » ? MJ peut définir un levier qui déplaît ; bonus devient malus ; résultat dedécouverte peut donner chance d’inversion ponctuelle.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0292",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.122",
+    "question": "Implanter « Découverte ≥+6 » ? Leviers et ampleur révélés, sans réaction inattendue.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0293",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.122",
+    "question": "Implanter « Découverte +4 à+5 » ? Leviers et ampleur révélés, 5% de réactioninverse.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0294",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.122",
+    "question": "Implanter « Découverte +2 à+3 » ? Leviers révélés, 10% de réactioninverse.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0295",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.122",
+    "question": "Implanter « Découverte +0 à+1 » ? Simple indice delevier, 15% de réactioninverse.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0296",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.122",
+    "question": "Implanter « Découverte −0 à−3 » ? Aucun effet.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0297",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.122",
+    "question": "Implanter « Découverte ≤−4 » ? Cible découvre manipulation directement ou par rumeur selon compétence ; intrigue échoue.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0298",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.123",
+    "question": "Implanter « Scène sociale — Chaos » ? Suggérer opposition auChaos avant Geheimnisnacht :+1 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0299",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.123",
+    "question": "Implanter « Scène sociale — alliance naine » ? Décrier les liens avec Nains un jour sacré de Sigmar :−1 DR, ou−2 DR dans GrandeCathédrale.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0300",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.123",
+    "question": "Implanter « Intrigue — Activité » ? Entre aventures, ActivitéIntrigue suit mêmes règles ; observation et scènes sociales seulement si occasion prévisibleMJ ; complications normales.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0301",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.123",
+    "question": "Implanter « Persuasion — cadence » ? Un Test normalement par48 heures ; plus souvent si événement important ou crise selonMJ ; Activité, événement ou interaction en partie donnent occasion.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0302",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.123",
+    "question": "Implanter « Persuasion — jugement » ? Résoudre après l’échange complet avecleviers/scènes/faitsMJ ; cible n’adopte que position compatible avec sa personnalité, même si prétend adhérer.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0303",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.124",
+    "question": "Implanter « Persuasion — lire la cible » ? Opposition d’Intuition pour savoir immédiatement comment la cible accueille l’objectif ; risque de sefaire remarquer selonDR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0304",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.124",
+    "question": "Implanter « Persuasion mineure ≥+6 » ? Adopte comme prioritédurable.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0305",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.124",
+    "question": "Implanter « Persuasion modérée ≥+6 » ? Adopte comme intérêtfugace, puis complexitémineure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0306",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.124",
+    "question": "Implanter « Persuasion majeure ≥+6 » ? Sympathise et soutient sansadopter, puis complexitémodérée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0307",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.124",
+    "question": "Implanter « Persuasion mineure +4 à+5 » ? Adopte comme engagementsolide.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0308",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.124",
+    "question": "Implanter « Persuasion modérée +4 à+5 » ? Sympathise sansadopter, puis complexitémineure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0309",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.124",
+    "question": "Implanter « Persuasion majeure +4 à+5 » ? Complexité devient modérée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0310",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.124",
+    "question": "Implanter « Persuasion mineure +2 à+3 » ? Adopte comme intérêtfugace.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0311",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.124",
+    "question": "Implanter « Persuasion modérée +2 à+3 » ? Complexité devient mineure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0312",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.124",
+    "question": "Implanter « Persuasion majeure +2 à+3 » ? Complexité devient modérée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0313",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.124",
+    "question": "Implanter « Persuasion mineure +0 à+1 » ? Sympathise et soutient, sans adoption.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0314",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.124",
+    "question": "Implanter « Persuasion modérée +0 à+1 » ? Complexité devient mineure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0315",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.124",
+    "question": "Implanter « Persuasion majeure +0 à+1 » ? Réfléchit sansconclusion ; prochains Tests+1 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0316",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.124",
+    "question": "Implanter « Persuasion mineure −0 à−1 » ? Aucun changement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0317",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.124",
+    "question": "Implanter « Persuasion modérée −0 à−1 » ? Aucun changement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0318",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.124",
+    "question": "Implanter « Persuasion majeure −0 à−1 » ? Aucun changement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0319",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.124",
+    "question": "Implanter « Persuasion mineure −2 à−3 » ? Complexité devient modérée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0320",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.124",
+    "question": "Implanter « Persuasion modérée −2 à−3 » ? Complexité devient majeure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0321",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.124",
+    "question": "Implanter « Persuasion majeure −2 à−3 » ? Découvre auteur et but de lamanipulation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0322",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.124",
+    "question": "Implanter « Persuasion mineure −4 à−5 » ? Complexité devient majeure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0323",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.124",
+    "question": "Implanter « Persuasion modérée −4 à−5 » ? Découvre auteur et but de lamanipulation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0324",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.124",
+    "question": "Implanter « Persuasion majeure −4 à−5 » ? Découvre auteur et but de lamanipulation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0325",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.124",
+    "question": "Implanter « Persuasion mineure ≤−6 » ? Découvre auteur et but de lamanipulation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0326",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.124",
+    "question": "Implanter « Persuasion modérée ≤−6 » ? Découvre auteur et but de lamanipulation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0327",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.124",
+    "question": "Implanter « Persuasion majeure ≤−6 » ? Découvre auteur et but de lamanipulation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0328",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.124",
+    "question": "Implanter « Intuition opposée ≥+4 » ? Comprend disposition, profondeur d’adhésion et possibilité de conclure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0329",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.124",
+    "question": "Implanter « Intuition opposée +0 à+3 » ? Comprend seulement si cible favorable à l’objectif.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0330",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.124",
+    "question": "Implanter « Intuition opposée −0 à−3 » ? Ne comprend rien.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0331",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.124",
+    "question": "Implanter « Intuition opposée ≤−4 » ? Ne comprend rien et la cible perçoit une manœuvre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0332",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.125",
+    "question": "Implanter « Intrigue — conclusion » ? Adoption modifie comportement sur prochaines semaines selon urgence/ressources ; cible consciente de manipulation réagit selonMJ, peut feindre et continuer l’intrigue.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0333",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.125",
+    "question": "Implanter « Intrigue — réputation » ? Courtisan démasqué envers nobles/cour ne peut plus faire ActivitéRevenu avant restauration du respect des pairs.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0334",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.125",
+    "question": "Implanter « Intrigue — complications » ? Après chaque persuasion si poursuite, tirer/décider complication ; instigateur peut l’ignorer, et répéter tactique sans s’adapter augmente difficultéMJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0335",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.126",
+    "question": "Implanter « Complications — dé imprimé » ? Table intitulée1d10 mais plages01–00 ; conserver discordance sans la normaliser en silencieux1d100.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0336",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.126",
+    "question": "Implanter « Complication 01–19 — Aucune » ? Poursuivre sans changement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0337",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.126",
+    "question": "Implanter « Complication 20–24 — Bienfaiteur » ? Nouveau financeur considère comme rival l’instigateur qui veutcorrompre lacible.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0338",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.126",
+    "question": "Implanter « Complication 25–30 — Chantage » ? Si conduite compromettante vue par tiers, payer pour éviter dénonciation ; prixMJ non fixé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0339",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.126",
+    "question": "Implanter « Complication 31–34 — Instigateur compromis » ? Changer d’instigateur, ou Persuasion−3 DR désormais.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0340",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.126",
+    "question": "Implanter « Complication 35–39 — Nouvelle faiblesse » ? Nouveaulevier choisi ou tiré, exploitable si découvert.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0341",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.126",
+    "question": "Implanter « Complication 40–45 — Fortune améliorée » ? Leviers de Corruption ne donnent plus debonus.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0342",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.126",
+    "question": "Implanter « Complication 46–50 — Source defonds » ? Instigateur utilisant Corruption devient sollicité pour acheter faveurs/informations.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0343",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.126",
+    "question": "Implanter « Complication 51–54 — Rival jaloux » ? Ami/conseiller jaloux devient ennemi de l’instigateur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0344",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.126",
+    "question": "Implanter « Complication 55–59 — Lassitude sociale » ? Leviers de Charme ne donnent plus debonus.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0345",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.126",
+    "question": "Implanter « Complication 60–65 — Ami envahissant » ? Cible recherche constamment compagnie et présence de l’instigateur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0346",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.126",
+    "question": "Implanter « Complication 66–70 — Concentration » ? Leviers de Divertissement ne donnent plus debonus.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0347",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.126",
+    "question": "Implanter « Complication 71–76 — Maître des fêtes » ? Instigateur employant Divertissement sera sollicité comme artiste/conteur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0348",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.126",
+    "question": "Implanter « Complication 77–80 — Fin des ragots » ? Leviers de Commérage ne donnent plus debonus.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0349",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.126",
+    "question": "Implanter « Complication 81–86 — Plus de héros » ? Leviers de Commandement ne donnent plus debonus.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0350",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.126",
+    "question": "Implanter « Complication 87–92 — Courage retrouvé » ? Leviers d’Intimidation ne donnent plus debonus.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0351",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.126",
+    "question": "Implanter « Complication 93–97 — Contre-intrigue » ? AutreinstigateurPNJ mène sa propre persuasion contre l’instigateur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L08-0352",
+    "phase": "Intrigues",
+    "lot": "L08",
+    "source": "L08 p.126",
+    "question": "Implanter « Complication 98–00 — Contre-intrigue tenace » ? AutreinstigateurPNJ mène persuasion puis1d10 Tests supplémentaires, un par semaine, sauf si exposé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
   }
 ]
