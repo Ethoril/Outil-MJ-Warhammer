@@ -55859,5 +55859,3554 @@
       "Ne pas implanter"
     ],
     "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0001",
+    "phase": "Magie et environnement",
+    "lot": "L07",
+    "source": "L07 p.27",
+    "question": "Implanter « Lac Xuhua — enfermement » ? Entrer en plongée empêche de traverser la surface pour ressortir ; la noyade menace sans issue mécanique publiée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0002",
+    "phase": "Magie et environnement",
+    "lot": "L07",
+    "source": "L07 p.28",
+    "question": "Implanter « Sources d’éternité — apprentissage » ? Boire permet d’apprendre un sort normalement inaccessible, selon le fonctionnement du talent Sorcier !.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0003",
+    "phase": "Magie et environnement",
+    "lot": "L07",
+    "source": "L07 p.28",
+    "question": "Implanter « Sources d’éternité — prix physique » ? Après la vision, Calme−10 ; échec : perte permanente de3 Blessures.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0004",
+    "phase": "Magie et environnement",
+    "lot": "L07",
+    "source": "L07 p.30",
+    "question": "Implanter « Planeur — équipage et autonomie » ? Deux personnes, pilote et tireur au fusil à répétition ; hauteur200 pieds, BE4 et23 Blessures ; tient un peu plus d’une heure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0005",
+    "phase": "Magie et environnement",
+    "lot": "L07",
+    "source": "L07 p.30",
+    "question": "Implanter « Planeur — Expérimental2 » ? Chaque heure : Métier Ingénieur+0 ; double en échec casse une pièce ; deux casses arrêtent le planeur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0008",
+    "phase": "Magie et environnement",
+    "lot": "L07",
+    "source": "L07 p.57",
+    "question": "Implanter « Chaudron — exposition » ? Projection, voies respiratoires découvertes ou quelques minutes près du chaudron : Résistance−30 ou maladie tirée au d100.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0009",
+    "phase": "Maladies",
+    "lot": "L07",
+    "source": "L07 p.57",
+    "question": "Implanter « Chaudron 01–11 — Peste noire » ? Après exposition échouée, plage 01–11 : Peste noire ; effet de maladie à résoudre séparément.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0010",
+    "phase": "Maladies",
+    "lot": "L07",
+    "source": "L07 p.57",
+    "question": "Implanter « Chaudron 12–24 — Pourriture du sang » ? Après exposition échouée, plage 12–24 : Pourriture du sang ; effet de maladie à résoudre séparément.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0011",
+    "phase": "Maladies",
+    "lot": "L07",
+    "source": "L07 p.57",
+    "question": "Implanter « Chaudron 25–37 — Flux sanglant » ? Après exposition échouée, plage 25–37 : Flux sanglant ; effet de maladie à résoudre séparément.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0012",
+    "phase": "Maladies",
+    "lot": "L07",
+    "source": "L07 p.57",
+    "question": "Implanter « Chaudron 38–43 — Variole prurigineuse » ? Après exposition échouée, plage 38–43 : Variole prurigineuse ; effet de maladie à résoudre séparément.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0013",
+    "phase": "Maladies",
+    "lot": "L07",
+    "source": "L07 p.57",
+    "question": "Implanter « Chaudron 44–51 — Fièvre de Ratte » ? Après exposition échouée, plage 44–51 : Fièvre de Ratte ; effet de maladie à résoudre séparément.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0014",
+    "phase": "Maladies",
+    "lot": "L07",
+    "source": "L07 p.57",
+    "question": "Implanter « Chaudron 52–74 — Ague bilieuse » ? Après exposition échouée, plage 52–74 : Ague bilieuse ; effet de maladie à résoudre séparément.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0015",
+    "phase": "Maladies",
+    "lot": "L07",
+    "source": "L07 p.57",
+    "question": "Implanter « Chaudron 75–82 — Pourriture oculaire » ? Après exposition échouée, plage 75–82 : Pourriture oculaire ; effet de maladie à résoudre séparément.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0016",
+    "phase": "Maladies",
+    "lot": "L07",
+    "source": "L07 p.57",
+    "question": "Implanter « Chaudron 83–89 — Asphyxie pulmonaire » ? Après exposition échouée, plage 83–89 : Asphyxie pulmonaire ; effet de maladie à résoudre séparément.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0017",
+    "phase": "Maladies",
+    "lot": "L07",
+    "source": "L07 p.57",
+    "question": "Implanter « Chaudron 90–00 — Fièvre du crâne jaune » ? Après exposition échouée, plage 90–00 : Fièvre du crâne jaune ; effet de maladie à résoudre séparément.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0019",
+    "phase": "Magie et environnement",
+    "lot": "L07",
+    "source": "L07 p.58",
+    "question": "Implanter « Infestations — corruption du livre » ? Toucher l’ouvrage est une influence mineure, le porter modérée et le lire majeure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0021",
+    "phase": "Magie et environnement",
+    "lot": "L07",
+    "source": "L07 p.59",
+    "question": "Implanter « Pectoral — activation » ? Porté au cou, ou ceinture pour Nain/Halfling ; Calme+0 réussi tire1d10 d’altération météo pour les non-Slann.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0022",
+    "phase": "Magie et environnement",
+    "lot": "L07",
+    "source": "L07 p.59",
+    "question": "Implanter « Pectoral1 — pluie » ? Pluie torrentielle dans10 yards de rayon ; porteur excepté.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0023",
+    "phase": "Magie et environnement",
+    "lot": "L07",
+    "source": "L07 p.59",
+    "question": "Implanter « Pectoral2 — bourrasque » ? Dans10 yards, Athlétisme−20 ou À Terre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0024",
+    "phase": "Magie et environnement",
+    "lot": "L07",
+    "source": "L07 p.59",
+    "question": "Implanter « Pectoral3 — éclair isolé » ? Un ami ou ennemi aléatoire dans10 yards prend1d10 dégâts, ignorant l’armure métallique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0025",
+    "phase": "Magie et environnement",
+    "lot": "L07",
+    "source": "L07 p.59",
+    "question": "Implanter « Pectoral4 — brouillard » ? Obscurcit tout dans20 yards de rayon pendant1d10 minutes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0026",
+    "phase": "Magie et environnement",
+    "lot": "L07",
+    "source": "L07 p.59",
+    "question": "Implanter « Pectoral5 — éclat » ? Dans10 yards, Résistance−20 ou1 Aveuglé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0027",
+    "phase": "Magie et environnement",
+    "lot": "L07",
+    "source": "L07 p.59",
+    "question": "Implanter « Pectoral6 — chaleur » ? Dégâts8 dans toutes les directions ; Athlétisme−20 ou À Terre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0028",
+    "phase": "Magie et environnement",
+    "lot": "L07",
+    "source": "L07 p.59",
+    "question": "Implanter « Pectoral7 — glace » ? Rayon30 pieds pendant15 minutes ; tout mouvement exige Athlétisme−20 ou À Terre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0029",
+    "phase": "Magie et environnement",
+    "lot": "L07",
+    "source": "L07 p.59",
+    "question": "Implanter « Pectoral8 — trois éclairs » ? Trois cibles aléatoires dans10 yards prennent10 dégâts ; dans20 yards, Résistance−20 ou1 Assourdi.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0030",
+    "phase": "Magie et environnement",
+    "lot": "L07",
+    "source": "L07 p.59",
+    "question": "Implanter « Pectoral9 — ouragan » ? Dans20 yards hors porteur, Athlétisme−30 ou renversé et11 dégâts.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0031",
+    "phase": "Magie et environnement",
+    "lot": "L07",
+    "source": "L07 p.59",
+    "question": "Implanter « Pectoral10 — cumul » ? Relancer deux fois le tableau et ajouter les effets.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0032",
+    "phase": "Magie et environnement",
+    "lot": "L07",
+    "source": "L07 p.60",
+    "question": "Implanter « Autel — corruption » ? Séjour prolongé : influence modérée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0033",
+    "phase": "Magie et environnement",
+    "lot": "L07",
+    "source": "L07 p.60",
+    "question": "Implanter « Autel — fièvre » ? Toucher l’autel ou le liquide : Résistance−20 ou Fièvre du crâne jaune.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0034",
+    "phase": "Magie et environnement",
+    "lot": "L07",
+    "source": "L07 p.60",
+    "question": "Implanter « Trône — entrée » ? Résistance−10 ou passer le Round suivant à vomir.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0035",
+    "phase": "Magie et environnement",
+    "lot": "L07",
+    "source": "L07 p.60",
+    "question": "Implanter « Trône — sol » ? Plus de deux ou trois pas exige Athlétisme+0, ou À Terre dans la boue.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0036",
+    "phase": "Magie et environnement",
+    "lot": "L07",
+    "source": "L07 p.60",
+    "question": "Implanter « Trône — corruption » ? Présence démoniaque : influence majeure ; au-delà de15 minutes, Calme−20 ou plaie en marque de Nurgle.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0037",
+    "phase": "Magie et environnement",
+    "lot": "L07",
+    "source": "L07 p.60",
+    "question": "Implanter « Brassard — séisme » ? Volonté−10 réussi, une fois/jour, rayon30 yards ; Athlétisme−20 ou À Terre et9 dégâts au corps.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0038",
+    "phase": "Magie et environnement",
+    "lot": "L07",
+    "source": "L07 p.61",
+    "question": "Implanter « Cor de profanation » ? Une fois/Round à la place des attaques ;1d10 ennemis les plus proches : Round suivant à retirer les vermines,−20 à tous les Tests, ou Résistance−10 contre Peste noire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0039",
+    "phase": "Magie et environnement",
+    "lot": "L07",
+    "source": "L07 p.61",
+    "question": "Implanter « Épée pestilentielle » ? Arme magique ; chaque blessé fait Résistance−10 ou gagne1 Empoisonné.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0041",
+    "phase": "Magie et environnement",
+    "lot": "L07",
+    "source": "L07 p.62",
+    "question": "Implanter « Skrolk — mémoire des sorts » ? Avant chaque sort hors Magie mineure, Savoir Magie−10 ; échec oblige à lire le Liber pour lancer.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0042",
+    "phase": "Magie et environnement",
+    "lot": "L07",
+    "source": "L07 p.62",
+    "question": "Implanter « Liber Bubonicus » ? Contient tous les sorts Peste et Nurgle ; manipulation : influence majeure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0044",
+    "phase": "Magie et environnement",
+    "lot": "L07",
+    "source": "L07 p.63",
+    "question": "Implanter « Bâton de corruption — blessure » ? Blessé par le bâton : Résistance+20 ou effets immédiats de Gangrène.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0045",
+    "phase": "Magie et environnement",
+    "lot": "L07",
+    "source": "L07 p.63",
+    "question": "Implanter « Bâton de corruption — aura » ? Rester plus de3 Rounds dans3 yards : Résistance+0 ou maladie du Chaudron ; manipulation : influence majeure ; maniement comme bâton.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0047",
+    "phase": "Magie et environnement",
+    "lot": "L07",
+    "source": "L07 p.69",
+    "question": "Implanter « Sargasses — immobilisation » ? Manœuvre−20, ou Voile/Rame, pour traverser les détroits ; échec immobilise le navire, libération par2d10 heures de coupe.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0048",
+    "phase": "Magie et environnement",
+    "lot": "L07",
+    "source": "L07 p.69",
+    "question": "Implanter « Sargasses — pilote » ? Après2d10 heures, guide proposé pour5 CO par membre d’équipage ou un cadavre frais ; refus : abordage nocturne, passage si assaut repoussé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0049",
+    "phase": "Magie et environnement",
+    "lot": "L07",
+    "source": "L07 p.71",
+    "question": "Implanter « Sanctuaire de vie — protection » ? Aura d’un mile de diamètre ; Démons et Morts-vivants exclus ; autres créatures combattent seulement en défense, végétation docile.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0050",
+    "phase": "Magie et environnement",
+    "lot": "L07",
+    "source": "L07 p.71",
+    "question": "Implanter « Sanctuaire de vie — magie » ? Jade lance à+60 ; Dhar/Shyish à−30 et dissipation du sanctuaire avec Langue Magick70.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0051",
+    "phase": "Magie et environnement",
+    "lot": "L07",
+    "source": "L07 p.71",
+    "question": "Implanter « Sanctuaire de vie — accueil » ? Après une semaine, animaux agressifs et nourriture nocive mettent fin au refuge.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0053",
+    "phase": "Magie et environnement",
+    "lot": "L07",
+    "source": "L07 p.74",
+    "question": "Implanter « Brine Wife — flatterie » ? Charme−20 réussi peut la faire écouter, voire libérer une victime suffisamment flatteuse.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0054",
+    "phase": "Magie et environnement",
+    "lot": "L07",
+    "source": "L07 p.75",
+    "question": "Implanter « Miroir de divination » ? Donne accès à Psychométrie à son utilisateur ; source mineure de Corruption.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0055",
+    "phase": "Magie et environnement",
+    "lot": "L07",
+    "source": "L07 p.75",
+    "question": "Implanter « Brine Wife — appel » ? Action de chant ; dans I yards, Calme−20 ou seuls les mouvements vers la Syreen restent possibles, texte assimilant à Inconscient.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0058",
+    "phase": "Équipement",
+    "lot": "L07",
+    "source": "L07 p.81",
+    "question": "Implanter « Appareil cylindrique spectral » ? Même effet que Manteau de Mathlann,activé par magie d’Ombres comme sort lié.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0059",
+    "phase": "Équipement",
+    "lot": "L07",
+    "source": "L07 p.81",
+    "question": "Implanter « Comptoir elfique — propriété » ? Étrangers autorisés à posséder des biens, sauf Nains admis temporairement sans achat immobilier.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0063",
+    "phase": "Équipement",
+    "lot": "L07",
+    "source": "L07 p.88",
+    "question": "Implanter « Tridents des porteurs » ? Compter comme Lance, réduire Allonge à Longue et ajouter Piège-lame.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0064",
+    "phase": "Magie et environnement",
+    "lot": "L07",
+    "source": "L07 p.89",
+    "question": "Implanter « Typhon de poussière — voiles » ? Mettre en panne selon Sea of Claws, sinon voiles détruites ; Manœuvre+0 pour éviter le chavirage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0065",
+    "phase": "Magie et environnement",
+    "lot": "L07",
+    "source": "L07 p.89",
+    "question": "Implanter « Typhon de poussière — exposition » ? Chaque Round exposé :1d10+1 dégâts, Corruption mineure, Force+20 ou projection1d10 pieds aléatoires et À Terre ; dure5–10 Rounds.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0066",
+    "phase": "Magie et environnement",
+    "lot": "L07",
+    "source": "L07 p.89",
+    "question": "Implanter « Volée — tirs multiples » ? En mode Volée, effectuer autant de tirs que l’indice, chacun séparé ; dégâts−4.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0067",
+    "phase": "Magie et environnement",
+    "lot": "L07",
+    "source": "L07 p.89",
+    "question": "Implanter « Artillerie elfique — modes » ? Griffe d’aigle : Précise ou Volée6, équipe2 Recharge3 ; Œil d’aigle : Dévastatrice, équipe1 Recharge1.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0069",
+    "phase": "Magie et environnement",
+    "lot": "L07",
+    "source": "L07 p.90",
+    "question": "Implanter « Heaume du Kraken — capacités » ? Porter ce heaume donne Régénération et Terreur2 ; description consultable sans octroi de capacités établi.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0070",
+    "phase": "Magie et environnement",
+    "lot": "L07",
+    "source": "L07 p.90",
+    "question": "Implanter « Lames rouges » ? Armes magiques ; après Test de Corps à corps Base, inversion possible des dés pour le calcul des dégâts.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0073",
+    "phase": "Magie et environnement",
+    "lot": "L07",
+    "source": "L07 p.96",
+    "question": "Implanter « Xahutec — corruption » ? Chaque jour dans la ville expose à une influence mineure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0074",
+    "phase": "Magie et environnement",
+    "lot": "L07",
+    "source": "L07 p.101",
+    "question": "Implanter « Tlaxtlan — Cieux » ? Incantation et Focalisation Cieux :+2 DR ; Morrslieb pleine décidée MJ, unité8 provoque incident mineur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0075",
+    "phase": "Magie et environnement",
+    "lot": "L07",
+    "source": "L07 p.111",
+    "question": "Implanter « Jardins flottants — herbes » ? Toutes les herbes du socle et du compagnon Reik peuvent s’y trouver, avec la flore létale locale.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0076",
+    "phase": "Magie et environnement",
+    "lot": "L07",
+    "source": "L07 p.111",
+    "question": "Implanter « Courage devant les Skinks » ? Arrêter la créature attaquant les jardins donne+1 DR aux Tests de Sociabilité avec les témoins skinks.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0078",
+    "phase": "Personnages",
+    "lot": "L07",
+    "source": "L07 p.123",
+    "question": "Implanter « Slann — répertoires par génération » ? Cinquième :8–20 sorts colorés et2 de Haute Magie ; quatrième16–32/4 ; troisième20–40/8 ; seconde25–50/10 ; première≥30/≥10 ; tous sorts mineurs et Arcane.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0088",
+    "phase": "Personnages",
+    "lot": "L07",
+    "source": "L07 p.126",
+    "question": "Implanter « Quaysh — modificateurs locaux » ? Un Vent faible n’empêche pas Haute Magie ; plusieurs Vents faibles :−1 ou−2 DR MJ ; bonus équivalents si plusieurs forts.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0089",
+    "phase": "Personnages",
+    "lot": "L07",
+    "source": "L07 p.126",
+    "question": "Implanter « Quaysh — accès » ? Spécialisation de Focalisation accessible après apprentissage du talent Haute Magie.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0094",
+    "phase": "Personnages",
+    "lot": "L07",
+    "source": "L07 p.127",
+    "question": "Implanter « Béni par Isha » ? Elfes seulement, une acquisition ; service d’Isha et bénédiction de la Reine éternelle ou Ariel donnent accès à Haute Magie.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0095",
+    "phase": "Personnages",
+    "lot": "L07",
+    "source": "L07 p.127",
+    "question": "Implanter « Haute Magie — apprentissage » ? Maximum BI, Slann ou Elfe Béni par Isha ; chaque acquisition apprend un sort de Haute Magie et annule la règle des Domaines multiples.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0096",
+    "phase": "Personnages",
+    "lot": "L07",
+    "source": "L07 p.127",
+    "question": "Implanter « Haute Magie — Vents et surpuissance » ? Accès à plusieurs Vents pour huit domaines colorés ; réussite ajoute le niveau du talent aux DR de surpuissance de Haute Magie.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0097",
+    "phase": "Personnages",
+    "lot": "L07",
+    "source": "L07 p.127",
+    "question": "Implanter « Haute Magie — expression » ? Slann lancent télépathiquement et avec gestes minimaux ; Elfes gardent les paroles requises.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0098",
+    "phase": "Personnages",
+    "lot": "L07",
+    "source": "L07 p.127",
+    "question": "Implanter « Haute Magie — formation elfique » ? Formation longue à Hoeth ou auprès d’une Haute Tisseuse ; apprentissage PJ pendant longue pause ; bonusPX initiaux peuvent acheter Béni par Isha.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0106",
+    "phase": "Personnages",
+    "lot": "L07",
+    "source": "L07 p.129",
+    "question": "Implanter « Haute Magie slann — réseau requis » ? Les sorts géomantiques spécifiques exigent un nœud ou une ligne tellurique dans BFM miles.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0111",
+    "phase": "Personnages",
+    "lot": "L07",
+    "source": "L07 p.130",
+    "question": "Implanter « Nœud1 — protection du Chaos » ? Démons et sorts du Chaos bannis immédiatement, sauf maintien par puissant artefact ou malepierre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0112",
+    "phase": "Personnages",
+    "lot": "L07",
+    "source": "L07 p.130",
+    "question": "Implanter « Nœud3 — climat » ? La zone possède un climat tropical,tempéré ou arctique différent de la région.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0113",
+    "phase": "Personnages",
+    "lot": "L07",
+    "source": "L07 p.130",
+    "question": "Implanter « Nœud4 — courants » ? Vents et courants marins changent d’intensité,direction ou température à la rencontre de la zone.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0114",
+    "phase": "Personnages",
+    "lot": "L07",
+    "source": "L07 p.130",
+    "question": "Implanter « Nœud5 — temps ralenti » ? Temps divisé par deux pour vieillissement et durées des effets.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0115",
+    "phase": "Personnages",
+    "lot": "L07",
+    "source": "L07 p.130",
+    "question": "Implanter « Nœud6 — naissance » ? Fertilité et croissance accrues ; Morts-vivants nécromantiques ne peuvent entrer.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0116",
+    "phase": "Personnages",
+    "lot": "L07",
+    "source": "L07 p.130",
+    "question": "Implanter « Nœud7 — portail » ? Un type de magie reçoit chaque Round un bonus de1d10/2, annoncé+1 à+5.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0117",
+    "phase": "Personnages",
+    "lot": "L07",
+    "source": "L07 p.130",
+    "question": "Implanter « Nœud8 — chemin » ? Conditions locales telles qu’un sort d’activation permettent la téléportation vers un autre nœud du chemin.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0118",
+    "phase": "Personnages",
+    "lot": "L07",
+    "source": "L07 p.130",
+    "question": "Implanter « Nœud9 — phare solaire » ? Hommes-lézards gagnent1Avantage au début de chaque bataille.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0119",
+    "phase": "Personnages",
+    "lot": "L07",
+    "source": "L07 p.130",
+    "question": "Implanter « Nœud10 — transport lunaire » ? Modifie les marées et fait flotter les pierres.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0120",
+    "phase": "Personnages",
+    "lot": "L07",
+    "source": "L07 p.130",
+    "question": "Implanter « Nœuds — portée et cumul » ? Un nœud peut porter plusieurs propriétés ; zone allant d’un temple à plusieurs miles, en plus de+2 DR de Focalisation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0123",
+    "phase": "Personnages",
+    "lot": "L07",
+    "source": "L07 p.135",
+    "question": "Implanter « Anatomie — dents et membres » ? Critiques avec perte de dents en font perdre le double ; trois doigts et pouce, trois ou quatre orteils selon ponte.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0124",
+    "phase": "Personnages",
+    "lot": "L07",
+    "source": "L07 p.135",
+    "question": "Implanter « Queue — localisation arrière » ? Attaque arrière touchant la jambe atteint la queue dans50% des cas ; tableau critique propre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0125",
+    "phase": "Personnages",
+    "lot": "L07",
+    "source": "L07 p.135",
+    "question": "Implanter « Queue01–40 » ? 1 Blessure et1Hémorragique supplémentaires.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0126",
+    "phase": "Personnages",
+    "lot": "L07",
+    "source": "L07 p.135",
+    "question": "Implanter « Queue41–60 » ? 2 Blessures et2Hémorragique supplémentaires.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0127",
+    "phase": "Personnages",
+    "lot": "L07",
+    "source": "L07 p.135",
+    "question": "Implanter « Queue61–80 » ? 3 Blessures, Sonné et Ag−20 jusqu’à guérison de la queue.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0128",
+    "phase": "Personnages",
+    "lot": "L07",
+    "source": "L07 p.135",
+    "question": "Implanter « Queue81–00 » ? 5 Blessures,5Hémorragique et Sonné ; queue amputée et Ag−20 permanent.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0130",
+    "phase": "Personnages",
+    "lot": "L07",
+    "source": "L07 p.139",
+    "question": "Implanter « Skinks PNJ — castes » ? Six modèles de caste s’appliquent au profil de base ; pas de cumul sur les PJ, même s’ils exercent ces fonctions.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0131",
+    "phase": "Personnages",
+    "lot": "L07",
+    "source": "L07 p.139",
+    "question": "Implanter « Caste prêtres » ? Int+15,FM+15,Soc+10 ; Lanceur Bêtes/Cieux ; Intuition+15,Commandement+25,Perception+20 ; Orateur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0132",
+    "phase": "Personnages",
+    "lot": "L07",
+    "source": "L07 p.139",
+    "question": "Implanter « Caste fonctionnaires » ? Int+10,FM+5,Soc+10 ; Évaluation/Intuition/Langue/Perception+10 et Lire/Écrire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0133",
+    "phase": "Personnages",
+    "lot": "L07",
+    "source": "L07 p.139",
+    "question": "Implanter « Caste industrie » ? Int+5,E+10,FM+5 ; Résistance/Évaluation+5,Ingénierie+10 ; Costaud et Calcul mental.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0134",
+    "phase": "Personnages",
+    "lot": "L07",
+    "source": "L07 p.139",
+    "question": "Implanter « Caste martiale » ? CT+5,I+10,Ag+10,FM+5 ; Furtif,Pisteur ; Esquive/Mêlée/Perception/Tir/Discrétion+10 ; Fuite !, Tireur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0135",
+    "phase": "Personnages",
+    "lot": "L07",
+    "source": "L07 p.139",
+    "question": "Implanter « Caste artisans » ? Dex+20,Int+10,FM+5 ; Évaluation+10,Métier+15 ; Artiste et Artisan.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0136",
+    "phase": "Personnages",
+    "lot": "L07",
+    "source": "L07 p.139",
+    "question": "Implanter « Caste élevage » ? Ag+15,Soc+10 ; Soins/Dressage reptile/Charme animal/Survie+15/+15/+15/+10 ; Affinité animale,Tenace.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0137",
+    "phase": "Personnages",
+    "lot": "L07",
+    "source": "L07 p.139",
+    "question": "Implanter « Magie skink — domaines » ? Bêtes ou Cieux, Vie rare ; jamais plus d’un Vent ; contraintes vestimentaires des Vents restent applicables.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0144",
+    "phase": "Personnages",
+    "lot": "L07",
+    "source": "L07 p.151",
+    "question": "Implanter « Marques — cumul » ? Combiner plusieurs Marques rares ; chez le Skink elles se cumulent avec la caste PNJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0145",
+    "phase": "Personnages",
+    "lot": "L07",
+    "source": "L07 p.151",
+    "question": "Implanter « Marque Chotec » ? I+10 et Ag+10 ; Réflexes de combat.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0146",
+    "phase": "Personnages",
+    "lot": "L07",
+    "source": "L07 p.151",
+    "question": "Implanter « Marque Huanchi » ? Skink/Saurus seulement ; I+5 et Ag+10 ; Vision dans le noir,Furtif et Ombre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0147",
+    "phase": "Personnages",
+    "lot": "L07",
+    "source": "L07 p.151",
+    "question": "Implanter « Marque Itzl » ? Skink/Saurus seulement ; Ag+5 et Soc+5 ; Affinité animale.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0148",
+    "phase": "Personnages",
+    "lot": "L07",
+    "source": "L07 p.151",
+    "question": "Implanter « Marque Quetzl » ? E+5 et Armure+1 ; Endurci et Implacable.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0149",
+    "phase": "Personnages",
+    "lot": "L07",
+    "source": "L07 p.151",
+    "question": "Implanter « Marque Sotek — corps » ? CC+10,F+5 ; Immunité Poison et Charge berserk ; Haine Skavens renvoyée C0.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0150",
+    "phase": "Personnages",
+    "lot": "L07",
+    "source": "L07 p.151",
+    "question": "Implanter « Marque Tepok » ? Skink/Saurus seulement ; I+5,Int+15,Résistance magique1 et Sixième sens.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0151",
+    "phase": "Personnages",
+    "lot": "L07",
+    "source": "L07 p.151",
+    "question": "Implanter « Marque Tlazcotl — corps » ? FM+10 ; Sans peur Morts-vivants et sang-chauds renvoyé C0.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0152",
+    "phase": "Personnages",
+    "lot": "L07",
+    "source": "L07 p.151",
+    "question": "Implanter « Marque Tzunki » ? CT+5,Ag+5 ; Amphibie et Sens aiguisé Vue.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0153",
+    "phase": "Personnages",
+    "lot": "L07",
+    "source": "L07 p.151",
+    "question": "Implanter « Marque des Anciens » ? Skink/Saurus seulement ; Soc+15,Chef et Chance.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0158",
+    "phase": "Magie et environnement",
+    "lot": "L07",
+    "source": "L07 p.155",
+    "question": "Implanter « Tlat’l — faveur sociale » ? Aider le Coatl donne+1 DR aux Tests de Sociabilité avec les Skinks proches.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0159",
+    "phase": "Magie et environnement",
+    "lot": "L07",
+    "source": "L07 p.155",
+    "question": "Implanter « Plume du Coatl » ? Une utilisation retire1 Corruption ou donne1 Chance, puis la plume se consume.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0161",
+    "phase": "Personnages",
+    "lot": "L07",
+    "source": "L07 p.160",
+    "question": "Implanter « Skink PJ — caractéristiques » ? Deux distributions de2d10 pour Skink et Caméléon ; M6, Blessures2×BE+BFM ; Destin1/0,Résilience0, deux points à répartir.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0162",
+    "phase": "Personnages",
+    "lot": "L07",
+    "source": "L07 p.160",
+    "question": "Implanter « Skink PJ — acquisitions » ? Deux compétences à5avances,deux à3 ; deux talents choisis, tous Traits de l’espèce ; listes Caméléon distinctes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0163",
+    "phase": "Personnages",
+    "lot": "L07",
+    "source": "L07 p.160",
+    "question": "Implanter « Skink PJ — carrière fixe » ? Carrière reçue à la ponte ; changement interdit quel que soit l’expérience.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0164",
+    "phase": "Personnages",
+    "lot": "L07",
+    "source": "L07 p.161",
+    "question": "Implanter « Skink — tirage de carrière » ? Table de20carrières de01–100 ; Érudit peut devenir Interprète, Mystique Oracle.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0165",
+    "phase": "Personnages",
+    "lot": "L07",
+    "source": "L07 p.161",
+    "question": "Implanter « Caméléon — tirage de carrière » ? 01 Noble,02–100 Éclaireur ; autres carrières sans plage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0166",
+    "phase": "Personnages",
+    "lot": "L07",
+    "source": "L07 p.162",
+    "question": "Implanter « Skink — prix d’une Marque » ? Skink ordinaire seulement : renoncer aux deux points libres Destin/Résilience pour une Marque.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0167",
+    "phase": "Personnages",
+    "lot": "L07",
+    "source": "L07 p.162",
+    "question": "Implanter « Skink — compétences de combat » ? Ajouter Mêlée Base et Tir Sarbacane/Arc/Lancer au premier rang ; seules Mêlée Base/Hast sont permises.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0168",
+    "phase": "Personnages",
+    "lot": "L07",
+    "source": "L07 p.162",
+    "question": "Implanter « Skink — compétences animales » ? Soins,Dressage et Charme animal seulement envers animaux à sang-froid.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0169",
+    "phase": "Personnages",
+    "lot": "L07",
+    "source": "L07 p.162",
+    "question": "Implanter « Skink — alcool » ? Règles d’ivresse humaines ; hors mezcal,−2 DR aux Tests de résistance à l’alcool.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0170",
+    "phase": "Personnages",
+    "lot": "L07",
+    "source": "L07 p.162",
+    "question": "Implanter « Skink — Langues et Savoirs » ? Classique devient Anciens ; Théologie devient Anciens,Empire Local ; Anatomie seulement Hommes-lézards ; langue étrangère difficile à articuler.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0171",
+    "phase": "Personnages",
+    "lot": "L07",
+    "source": "L07 p.162",
+    "question": "Implanter « Skink — tirs substitués » ? Arbalète devient Arc,Fronde Lancer,Poudre noire et Ingénierie Sarbacane.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0172",
+    "phase": "Personnages",
+    "lot": "L07",
+    "source": "L07 p.162",
+    "question": "Implanter « Skink — monte » ? Équitation Cheval ou Au choix devient Sang-froid ; accès seulement marqué par Itzl.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0173",
+    "phase": "Personnages",
+    "lot": "L07",
+    "source": "L07 p.162",
+    "question": "Implanter « Skink — signes et métiers » ? Signes des chasseurs remplacés par nœuds lézards ; Métier Barbier et Explosifs ignorés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0174",
+    "phase": "Personnages",
+    "lot": "L07",
+    "source": "L07 p.162",
+    "question": "Implanter « Skink — corruption et maladies » ? Corruption/mutation comme humains ; seules maladies visant les sang-froid affectent le Skink.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0175",
+    "phase": "Personnages",
+    "lot": "L07",
+    "source": "L07 p.162",
+    "question": "Implanter « Skink — biens et statut » ? Pas de biens obligatoires pour avancer si le stock communautaire contient l’objet requis ; hiérarchie déléguée par Slann.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0176",
+    "phase": "Personnages",
+    "lot": "L07",
+    "source": "L07 p.163",
+    "question": "Implanter « Sarbacane — accès » ? Tir Sarbacane exotique ; personnage non formé n’en fait pas usage efficace ; poisons locaux à choisir, pas de dose gratuite automatique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0250",
+    "phase": "Exploration",
+    "lot": "L07",
+    "source": "L07 p.184",
+    "question": "Implanter « Créatures — recherche » ? En explorant1mile carré ou en rencontre d’expédition, tirer selon habitat ; second tirage des monstres selon table.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0251",
+    "phase": "Maladies",
+    "lot": "L07",
+    "source": "L07 p.186",
+    "question": "Implanter « Ague bilieuse » ? Contact infecté : Résistance+40 ; incubation2d10 minutes ; Nausée1d10 jours,puis Fièvre2d10 heures,puis Malaise2d10 jours.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0252",
+    "phase": "Maladies",
+    "lot": "L07",
+    "source": "L07 p.186",
+    "question": "Implanter « Pourriture oculaire » ? Eau infectée : Résistance+20 ; incubation3d10+5 jours,durée3d10+8 jours ; Persistant+0 et Défaillance des yeux.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0253",
+    "phase": "Maladies",
+    "lot": "L07",
+    "source": "L07 p.186",
+    "question": "Implanter « Crises de ver aveugle » ? Morsure de Blindwyrm ; incubation1d10 heures ; Flux,Nausée,Parasitisme jusqu’à résolution du parasite.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0254",
+    "phase": "Maladies",
+    "lot": "L07",
+    "source": "L07 p.186",
+    "question": "Implanter « Fièvre des eaux noires » ? Eau infectée : Résistance+40 ; incubation1d10 heures,durée1d10 jours ; Fièvre,Malaise,Pustules.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0255",
+    "phase": "Maladies",
+    "lot": "L07",
+    "source": "L07 p.186",
+    "question": "Implanter « Pourriture cérébrale » ? Critique à la tête par Brainfluke ; incubation1d10 jours ; Convulsions,Désorientation,Défaillance yeux/nez,Parasitisme.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0256",
+    "phase": "Maladies",
+    "lot": "L07",
+    "source": "L07 p.187",
+    "question": "Implanter « Ague cataleptique » ? Morsure de chauve-souris sanguine : Résistance+0 ; incubation1d10 heures,durée3d10 heures ; Fléau,Convulsions,Fièvre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0257",
+    "phase": "Maladies",
+    "lot": "L07",
+    "source": "L07 p.187",
+    "question": "Implanter « Asphyxie pulmonaire » ? Chaque jour en jungle humide ou marais miasmatique : Résistance+20 ; incubation2d10 heures,durée1d10 jours ; Toux,Fièvre,Persistant,Malaise.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0258",
+    "phase": "Maladies",
+    "lot": "L07",
+    "source": "L07 p.187",
+    "question": "Implanter « Invasion fongique » ? Hémorragique du nuage de spores sur sang-chaud : Résistance+20 ; incubation2d10 jours ; Désorientation,Gangrène,Malaise,Parasitisme,Blessé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0259",
+    "phase": "Maladies",
+    "lot": "L07",
+    "source": "L07 p.187",
+    "question": "Implanter « Nécrose des pieds » ? Une semaine en jungle/marais pour sang-chaud : Survie+0 ou infection ; incubation1d10 heures,durée4+1d10 jours ; Bubons,Gangrène jambes,Malaise,Blessé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0260",
+    "phase": "Maladies",
+    "lot": "L07",
+    "source": "L07 p.187",
+    "question": "Implanter « Brume mentale — arrivée » ? Au premier aperçu de Lustria, sang-chaud tire1d10 :1/2/3 Résistance+0/−10/−20 ;4–6/7–8/9–10 Calme+0/−10/−20 ; échec : Désorientation immédiate.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0261",
+    "phase": "Maladies",
+    "lot": "L07",
+    "source": "L07 p.187",
+    "question": "Implanter « Brume mentale — rétablissement » ? Chaque semaine en Lustria, refaire le Test ; réussite libère jusqu’à départ puis retour, durée sinon potentiellement chronique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0262",
+    "phase": "Maladies",
+    "lot": "L07",
+    "source": "L07 p.188",
+    "question": "Implanter « Fièvre du crâne jaune » ? Seulement sang-froid ; contact : Résistance+40 ; incubation2d10 heures,durée2d10 jours ; Convulsions,Fièvre,Persistant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0263",
+    "phase": "Maladies",
+    "lot": "L07",
+    "source": "L07 p.188",
+    "question": "Implanter « Désorientation » ? −1 DR à tous les Tests fondés sur Ag,Dex ou Int ; pas de traitement, fin avec la maladie.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0264",
+    "phase": "Maladies",
+    "lot": "L07",
+    "source": "L07 p.188",
+    "question": "Implanter « Défaillance — yeux » ? −3 DR à Perception visuelle.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0265",
+    "phase": "Maladies",
+    "lot": "L07",
+    "source": "L07 p.188",
+    "question": "Implanter « Défaillance — nez » ? −3 DR à Perception olfactive.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0266",
+    "phase": "Maladies",
+    "lot": "L07",
+    "source": "L07 p.188",
+    "question": "Implanter « Défaillance — oreilles » ? −3 DR à Perception auditive.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0267",
+    "phase": "Maladies",
+    "lot": "L07",
+    "source": "L07 p.188",
+    "question": "Implanter « Défaillance — bouche » ? −3 DR aux Tests de Langue.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0268",
+    "phase": "Maladies",
+    "lot": "L07",
+    "source": "L07 p.188",
+    "question": "Implanter « Défaillance — onguent » ? Dix doses pour1pistole ; une dose soulage le symptôme1d10 heures.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0269",
+    "phase": "Maladies",
+    "lot": "L07",
+    "source": "L07 p.188",
+    "question": "Implanter « Parasitisme — traitement » ? Supporter au moins1 Empoisonné pendant BE du parasite Rounds ; celui-ci fait Résistance+0, échec le tue ; hôte survivant guéri le lendemain.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0270",
+    "phase": "Magie et environnement",
+    "lot": "L07",
+    "source": "L07 p.191",
+    "question": "Implanter « Jungle — Focalisation Ghur » ? DR de Focalisation Ghur doublés ; critique donne incident majeur, ou mineur avec Harmonisation aethyrique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0271",
+    "phase": "Magie et environnement",
+    "lot": "L07",
+    "source": "L07 p.191",
+    "question": "Implanter « Marais — Focalisation Ghyran » ? DR de Focalisation Ghyran doublés ; critique donne incident majeur, ou mineur avec Harmonisation aethyrique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0272",
+    "phase": "Carrières",
+    "lot": "L07",
+    "source": "L07 p.192",
+    "question": "Implanter « Carrières locales — table » ? Résidents acclimatés utilisent une table locale à six colonnes d’espèce/culture ; nouveaux arrivants peuvent garder la table ordinaire au choixMJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0273",
+    "phase": "Carrières",
+    "lot": "L07",
+    "source": "L07 p.193",
+    "question": "Implanter « Carrières locales — substitutions » ? Humains non norses partagent une colonne mais gardent substitutions culturelles ; classe marins possible ; Norses Batelier→Échoueur,Marin→Navigateur,Huissier fluvial→équivalent marin.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0274",
+    "phase": "Carrières",
+    "lot": "L07",
+    "source": "L07 p.194",
+    "question": "Implanter « Interprète — carrière » ? Nain,Halfling,Humain ou Elfe ; rangs Bronze4/Argent1/Argent3/Argent5 ; compétences,talents et matériel propres.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0275",
+    "phase": "Carrières",
+    "lot": "L07",
+    "source": "L07 p.195",
+    "question": "Implanter « Interprète — accès » ? Remplace Avocat au tirage en Lustria ; hors contexte possible avec accordMJ ; Avocat arrivant doit payer lesPX de changement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0276",
+    "phase": "Carrières",
+    "lot": "L07",
+    "source": "L07 p.196",
+    "question": "Implanter « Oracle — carrière » ? Humain ou Elfe ; rangs Bronze2/Bronze5/Argent2/Argent5 ; accès Magie Bêtes/Cieux au troisième rang.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0277",
+    "phase": "Carrières",
+    "lot": "L07",
+    "source": "L07 p.197",
+    "question": "Implanter « Oracle — accès » ? Remplace Mystique au tirage en Lustria ; hors contexte possible avec accordMJ ; Mystique arrivant paie le changement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0278",
+    "phase": "Carrières",
+    "lot": "L07",
+    "source": "L07 p.198",
+    "question": "Implanter « Survivaliste — carrière » ? Nain,Halfling,Humain ou Elfe ; Bronze1/Bronze4/Bronze5/Argent3, listes propres.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0279",
+    "phase": "Carrières",
+    "lot": "L07",
+    "source": "L07 p.199",
+    "question": "Implanter « Survivaliste — accès » ? Remplace Patrouilleur routier au tirage en Lustria ; hors contexte possible avec accordMJ ; arrivant paie le changement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0280",
+    "phase": "Carrières",
+    "lot": "L07",
+    "source": "L07 p.199",
+    "question": "Implanter « Ogres — substitutions locales » ? Chasseur de primes→Pionnier,Colporteur→Survivaliste ; avec classe marins : Mendiant→Échoueur,Artiste→Chanteur,Marin→Navigateur,Docker→Canonnier.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0281",
+    "phase": "Carrières",
+    "lot": "L07",
+    "source": "L07 p.200",
+    "question": "Implanter « Pionnier — carrière » ? Nain,Halfling,Humain ou Elfe ; Bronze3/Argent1/Argent2/Or1, listes propres.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0282",
+    "phase": "Carrières",
+    "lot": "L07",
+    "source": "L07 p.201",
+    "question": "Implanter « Pionnier — accès » ? Remplace Cocher au tirage en Lustria ; hors contexte possible avec accordMJ ; Cocher arrivant paie le changement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0283",
+    "phase": "Carrières",
+    "lot": "L07",
+    "source": "L07 p.201",
+    "question": "Implanter « Dix compétences de départ » ? Les nouvelles carrières offrent dix compétences au premier rang ; huit seulement doivent atteindre le seuil d’avances pour progresser.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0284",
+    "phase": "Voyage et environnement",
+    "lot": "L07",
+    "source": "L07 p.202",
+    "question": "Implanter « Expédition — étapes » ? Étapes abstraites décidéesMJ ; généralement1 entre colonies, au plus4 vers une cité, sites difficiles pouvant en compter2 ; chaque étape fait météo,Activités,rencontre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0285",
+    "phase": "Voyage et environnement",
+    "lot": "L07",
+    "source": "L07 p.202",
+    "question": "Implanter « Expédition — mouvement » ? Plus lent à M≤3 :+1 étape ; tout le groupe sur montures/navire M≥6 :−1, minimum1 ; bateau seulement à rames sans voile :+1 étape.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0286",
+    "phase": "Voyage et environnement",
+    "lot": "L07",
+    "source": "L07 p.202",
+    "question": "Implanter « Expédition — préparation » ? Un personnage fait Navigation ou Savoir Lustria−10,+20 si carte récente exacte ; réussite retire1 étape, minimum1.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0287",
+    "phase": "Voyage et environnement",
+    "lot": "L07",
+    "source": "L07 p.202",
+    "question": "Implanter « Météo — saisons » ? Saison sèche de mi-Sommerzeit à mi-Ulriczeit ; tirer1d10 par étape, avec colonnes sèche et humide distinctes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0288",
+    "phase": "Voyage et environnement",
+    "lot": "L07",
+    "source": "L07 p.202",
+    "question": "Implanter « Météo — chaleur étouffante » ? Humide1/sec1–4 : Résistance−10 contre exposition ; échecs s’accumulent si chaleur persiste.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0289",
+    "phase": "Voyage et environnement",
+    "lot": "L07",
+    "source": "L07 p.203",
+    "question": "Implanter « Météo — clémente » ? Humide2/sec5–6 : aucun effet additionnel.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0290",
+    "phase": "Voyage et environnement",
+    "lot": "L07",
+    "source": "L07 p.203",
+    "question": "Implanter « Météo — vapeurs » ? Humide3–4/sec7 : au matin, visibilité25 yards et tirs−20.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0291",
+    "phase": "Voyage et environnement",
+    "lot": "L07",
+    "source": "L07 p.203",
+    "question": "Implanter « Météo — averses » ? Humide5–6/sec8 : visibilité25 yards,toutes attaques−10 et Résistance contre infection−1 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0292",
+    "phase": "Voyage et environnement",
+    "lot": "L07",
+    "source": "L07 p.203",
+    "question": "Implanter « Météo — déluge » ? Humide7–8/sec9 : visibilité presque nulle, sons sous cri inaudibles, physique−10,tirs−20 ; poudre exposée ruinée,maladies−10 ; animaux Craintifs Charme animal/Équitation+20 ou fuite.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0293",
+    "phase": "Voyage et environnement",
+    "lot": "L07",
+    "source": "L07 p.203",
+    "question": "Implanter « Météo — tempête » ? Humide9–10/sec10 : effets Déluge,+1 étape, pas de déplacement ; seule Activité Abri permise ; sans abri réussi,tous prennent12 dégâts au corps.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0294",
+    "phase": "Voyage et environnement",
+    "lot": "L07",
+    "source": "L07 p.203",
+    "question": "Implanter « Activités — cadence » ? Chaque personnage peut choisir une Activité par étape, ordre libre, avant les rencontres.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0295",
+    "phase": "Voyage et environnement",
+    "lot": "L07",
+    "source": "L07 p.203",
+    "question": "Implanter « Activités — fatigue » ? Échec au Test d’Activité :1 Exténué ; récupérable seulement à l’abri d’une colonie ou par Camp, sauf exception propre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0296",
+    "phase": "Voyage et environnement",
+    "lot": "L07",
+    "source": "L07 p.203",
+    "question": "Implanter « Trouver abri » ? Survie−10, encore−10 sous déluge ou−20 en tempête ; réussite protège tout le groupe des malus persistants d’exposition/pluie et blessures de tempête pour l’étape.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0297",
+    "phase": "Voyage et environnement",
+    "lot": "L07",
+    "source": "L07 p.203",
+    "question": "Implanter « Fourrager » ? Survie−10 ; réussite nourrit selon le socle ; échec impressionnant/stupéfiant remplace Exténué par Empoisonné, puis perte1 Blessure et tentatives de retrait répétées.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0298",
+    "phase": "Voyage et environnement",
+    "lot": "L07",
+    "source": "L07 p.204",
+    "question": "Implanter « Garder la veille » ? Perception−10 ; réussite interdit Surprise pour groupe à cette étape ; grand échec permetMJ d’inverser le prochain tirage de rencontre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0299",
+    "phase": "Voyage et environnement",
+    "lot": "L07",
+    "source": "L07 p.204",
+    "question": "Implanter « Cartographier » ? Matériel requis ; Métier Cartographe/Art Dessin+0 étendu,2×étapes DR ; carte finie avant arrivée :+20 préparation du retour même chemin ; vente base1 CO.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0300",
+    "phase": "Voyage et environnement",
+    "lot": "L07",
+    "source": "L07 p.204",
+    "question": "Implanter « Faire camp » ? Survie ou Soins−10 ; réussite retire1 Exténué à soi/allié puis autant queDR supplémentaires ; Soins peut plutôt donner le bénéfice ordinaire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0301",
+    "phase": "Voyage et environnement",
+    "lot": "L07",
+    "source": "L07 p.204",
+    "question": "Implanter « Pratiquer une compétence » ? Test pertinent−10 réussi donne une inversion d’un jet de cette compétence pour l’expédition ou reste de l’aventure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0302",
+    "phase": "Voyage et environnement",
+    "lot": "L07",
+    "source": "L07 p.204",
+    "question": "Implanter « Réparer le bateau » ? Outils adéquats, Métier Construction navale/Charpentier−10 ; rend1d10+DR Blessures ou retire les pénalités d’une rencontre fluviale, jusqu’à fin d’expédition.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0303",
+    "phase": "Voyage et environnement",
+    "lot": "L07",
+    "source": "L07 p.204",
+    "question": "Implanter « Activités exceptionnelles » ? Autres Activités possibles avec justificationMJ ; restrictions de grande puissance et amélioration elfique ne s’appliquent pas pendant l’expédition.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0304",
+    "phase": "Voyage et environnement",
+    "lot": "L07",
+    "source": "L07 p.205",
+    "question": "Implanter « Rencontres — cadence » ? Après météo et Activités,1d100 sur la table des rencontres ; pas d’obligation de résoudre en combat.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0305",
+    "phase": "Voyage et environnement",
+    "lot": "L07",
+    "source": "L07 p.205",
+    "question": "Implanter « Rencontre01–05 — migration » ? Esquive+20 ou5 dégâts au corps multipliés par le nombre d’échelons de Taille sous Monstrueuse.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0306",
+    "phase": "Voyage et environnement",
+    "lot": "L07",
+    "source": "L07 p.205",
+    "question": "Implanter « Rencontre06–15 — pièges » ? Perception+0 ou10 dégâts à localisation aléatoire, puis même attaque sauf réussite de Piégeage+0.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0307",
+    "phase": "Voyage et environnement",
+    "lot": "L07",
+    "source": "L07 p.205",
+    "question": "Implanter « Rencontre16–25 — prédateurs » ? Charme animal+0 chacun ; par échec, choisir10 dégâts aléatoires,ressource/objet perdu ou disparition d’un alliéPNJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0308",
+    "phase": "Voyage et environnement",
+    "lot": "L07",
+    "source": "L07 p.205",
+    "question": "Implanter « Rencontre26–35 — crue » ? Athlétisme+0 ou Natation+20 ; échec au choix5 Blessures de noyade sans protection ou ressource/objet perdu.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0309",
+    "phase": "Voyage et environnement",
+    "lot": "L07",
+    "source": "L07 p.205",
+    "question": "Implanter « Rencontre36–45 — maladie » ? Tirer maladie du Chaudron ; personnages,montures et compagnons testent contre la contraction.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0310",
+    "phase": "Voyage et environnement",
+    "lot": "L07",
+    "source": "L07 p.205",
+    "question": "Implanter « Rencontre46–50 — rations gâtées » ? Toutes rations perdues ; famine à tester une fois par étape ; nourris par Fourrager exemptés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0311",
+    "phase": "Voyage et environnement",
+    "lot": "L07",
+    "source": "L07 p.205",
+    "question": "Implanter « Rencontre51–60 — sol mouvant » ? Survie+20 ou piégé ; abandonner du matériel jusqu’à Encombrement≤4 pour sortir.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0312",
+    "phase": "Voyage et environnement",
+    "lot": "L07",
+    "source": "L07 p.205",
+    "question": "Implanter « Rencontre66–70 — chemins changeants » ? Un personnage fait Navigation+0 ; sans réussite,+1 étape.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0313",
+    "phase": "Voyage et environnement",
+    "lot": "L07",
+    "source": "L07 p.205",
+    "question": "Implanter « Rencontre76–85 — insectes » ? Calme+0 ou Soc−10 jusqu’à fin d’aventure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0314",
+    "phase": "Voyage et environnement",
+    "lot": "L07",
+    "source": "L07 p.205",
+    "question": "Implanter « Rencontre86–90 — éruption » ? Chaque personnage gagne Empoisonné ; perte1 Blessure puis Détermination ou Résistance/Soins avec−10 pour retirer, répéter jusqu’au retrait ou décès.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0315",
+    "phase": "Voyage et environnement",
+    "lot": "L07",
+    "source": "L07 p.205",
+    "question": "Implanter « Rencontre91–95 — présages » ? Calme+20 ou dépenses de Chance interdites pour le reste de l’aventure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0316",
+    "phase": "Voyage et environnement",
+    "lot": "L07",
+    "source": "L07 p.205",
+    "question": "Implanter « Rencontre96–100 — barrières » ? Calme+0 chacun ; si tous échouent,+1 étape ; vérifier aussi contraction de Brume mentale.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0319",
+    "phase": "Voyage et environnement",
+    "lot": "L07",
+    "source": "L07 p.206",
+    "question": "Implanter « Voyage fluvial — choix » ? Sur étape en eau, joueurs peuvent remplacer rencontre jungle par1d10 fluvial ; dégâts bateau diminués par Endurance,0 Blessure coule.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0320",
+    "phase": "Voyage et environnement",
+    "lot": "L07",
+    "source": "L07 p.206",
+    "question": "Implanter « Fleuve1 — gréement » ? Initiative+0 chacun ou5 dégâts aléatoires ; bateau inutilisable jusqu’à réparation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0321",
+    "phase": "Voyage et environnement",
+    "lot": "L07",
+    "source": "L07 p.206",
+    "question": "Implanter « Fleuve2 — gouvernail » ? Rame/Voile−30 pour la suite jusqu’à réparation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0322",
+    "phase": "Voyage et environnement",
+    "lot": "L07",
+    "source": "L07 p.206",
+    "question": "Implanter « Fleuve3 — aviron » ? Rameur aléatoire prend5 dégâts aléatoires ; Manœuvre du bateau−1 DR ensuite.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0323",
+    "phase": "Voyage et environnement",
+    "lot": "L07",
+    "source": "L07 p.206",
+    "question": "Implanter « Fleuve4 — échouage » ? Manœuvre+0 ou12 dégâts bateau ; chacun fait Résistance+0 pour le remettre à l’eau, échec1 Exténué.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0324",
+    "phase": "Voyage et environnement",
+    "lot": "L07",
+    "source": "L07 p.206",
+    "question": "Implanter « Fleuve5 — rapides » ? Manœuvre Voile+0 ou15 dégâts bateau.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0325",
+    "phase": "Voyage et environnement",
+    "lot": "L07",
+    "source": "L07 p.206",
+    "question": "Implanter « Fleuve6 — bôme » ? Esquive+0 chacun ou5 dégâts aléatoires et probable chute à l’eau.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0326",
+    "phase": "Voyage et environnement",
+    "lot": "L07",
+    "source": "L07 p.206",
+    "question": "Implanter « Fleuve7–8 — débris » ? Manœuvre+0 ou deux touches de10 dégâts bateau.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0327",
+    "phase": "Voyage et environnement",
+    "lot": "L07",
+    "source": "L07 p.206",
+    "question": "Implanter « Fleuve9–10 — vent debout » ? Voile impossible ; Rame+0 chacun ou1 Exténué.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0328",
+    "phase": "Voyage et environnement",
+    "lot": "L07",
+    "source": "L07 p.206",
+    "question": "Implanter « Bateaux — aides propres » ? Canot+2 DR Rame,skiff+1 DR Voile/Rame,knarr−1 DR Voile/Rame ; drakkar M6 à30 rameurs au lieu de4 ; patrouilleur1 PA.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0329",
+    "phase": "Exploration",
+    "lot": "L07",
+    "source": "L07 p.207",
+    "question": "Implanter « Cités — découverte » ? Site connu : choisir sa ligne ; sinon1d100, bonus possibles selon préparationMJ ; types de ruines avec défense et butin distincts.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0330",
+    "phase": "Exploration",
+    "lot": "L07",
+    "source": "L07 p.208",
+    "question": "Implanter « Cité disparue » ? En suivant une expédition : Perception+0 retrouve équipement ruiné et10d10 pistoles ; sinon pas de butin.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0331",
+    "phase": "Exploration",
+    "lot": "L07",
+    "source": "L07 p.208",
+    "question": "Implanter « Cité ensevelie » ? Un jour, Résistance/Survie−30 :1d10 CO de décors ;01 révèle une stèle ; pièges possibles après accès.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0332",
+    "phase": "Exploration",
+    "lot": "L07",
+    "source": "L07 p.208",
+    "question": "Implanter « Cité engloutie » ? Un jour,Natation−20 :1 Enc de gemmes ; échec marginal1–2 gemmes à3 CO ;01 révèle Plaque ;6 Skinks appellent12 Skinks+1 Kroxigor si repérés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0333",
+    "phase": "Exploration",
+    "lot": "L07",
+    "source": "L07 p.208",
+    "question": "Implanter « Cité profanée » ? Garnison selon rencontre locale ou Skaven/Orques/Morts-vivants ; passer les défenses donne bloc d’obsinite et stèle du chef.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0334",
+    "phase": "Exploration",
+    "lot": "L07",
+    "source": "L07 p.208",
+    "question": "Implanter « Cité pillée » ? Arrivée de20 Saurus et soutien skink ; un jour Perception−20 trouve obsinite ; fuyards ont3 Enc or,1 Enc gemmes et Plaque.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0335",
+    "phase": "Exploration",
+    "lot": "L07",
+    "source": "L07 p.208",
+    "question": "Implanter « Cité abandonnée » ? Monstre(s) selon table ;1d10crânes de Stegadon,œufs sur Perception−10 ; jours de travail et Résistance−20 :2 Enc or,réduit si échec marginal.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0336",
+    "phase": "Exploration",
+    "lot": "L07",
+    "source": "L07 p.208",
+    "question": "Implanter « Cité ruinée » ? 12 Skinks surveillent,renforts Skinks→Saurus→Kroxigor→Stegadon ; par jour Perception−10 :1 Enc or ; grandes réussites gemmes/obsinite puis stèle/Plaque.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0337",
+    "phase": "Exploration",
+    "lot": "L07",
+    "source": "L07 p.208",
+    "question": "Implanter « Cité vivante » ? Centaines de défenseurs ; infiltration puis Évaluation/Perception/Escamotage+0 donne1 Enc or ; trésors plus rares davantage gardés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0338",
+    "phase": "Exploration",
+    "lot": "L07",
+    "source": "L07 p.209",
+    "question": "Implanter « Butin — vente » ? Valeur proportionnelle à Encombrement ; négociation normale, multiplicateur d’acheteur privilégié distinct ; poursuite dépend de l’objet, pas de la défense franchie.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0339",
+    "phase": "Exploration",
+    "lot": "L07",
+    "source": "L07 p.209",
+    "question": "Implanter « Butin — or » ? 25 CO par Enc ;6 Saurus et6 Skinks peuvent poursuivre dans territoire local seulement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0340",
+    "phase": "Exploration",
+    "lot": "L07",
+    "source": "L07 p.209",
+    "question": "Implanter « Butin — gemmes » ? 36 CO pour12 gemmes/1 Enc ; représailles locales comme l’or.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0341",
+    "phase": "Exploration",
+    "lot": "L07",
+    "source": "L07 p.209",
+    "question": "Implanter « Butin — obsinite » ? 40 CO le bloc/4 Enc ;×2forgeron,×3alchimiste/guilde ingénieurs ; équipes d’élite proportionnées au vol.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0342",
+    "phase": "Exploration",
+    "lot": "L07",
+    "source": "L07 p.209",
+    "question": "Implanter « Butin — crâne » ? 5 CO par crâne de Stegadon/1 Enc ;×2collectionneur/naturaliste ; objet magique caché peut motiver poursuite.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0343",
+    "phase": "Exploration",
+    "lot": "L07",
+    "source": "L07 p.209",
+    "question": "Implanter « Butin — œuf » ? 15 CO l’œuf de Sang-froid/1 Enc ;×2Zoo/maîtres dresseurs ; œufs rares peuvent provoquer poursuite.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0344",
+    "phase": "Exploration",
+    "lot": "L07",
+    "source": "L07 p.209",
+    "question": "Implanter « Butin — stèle » ? 5 CO/2 Enc,×10lanceur ; armée peut assiéger une colonie abritant la stèle.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0345",
+    "phase": "Exploration",
+    "lot": "L07",
+    "source": "L07 p.209",
+    "question": "Implanter « Butin — Plaque » ? 20 CO/1 Enc,×8mage impérial/×15elfe ; poursuite au-delà des océans, nouvelles armées possibles.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0346",
+    "phase": "Entre-aventures",
+    "lot": "L07",
+    "source": "L07 p.210",
+    "question": "Implanter « Colonies — installations existantes » ? Skeggi,Citadelle,Port Reaver et Swamp Town ont stocks de structures explicités ; avantage accessible en contribuant ou respectant les bâtisseurs.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0347",
+    "phase": "Entre-aventures",
+    "lot": "L07",
+    "source": "L07 p.210",
+    "question": "Implanter « Ferme — construction et vivres » ? 100 Bois ; chaque ferme soutient un Port,Monument,Établissement ou Capitole ; déficit désactive des structures au choixMJ jusqu’au retour des vivres.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0348",
+    "phase": "Entre-aventures",
+    "lot": "L07",
+    "source": "L07 p.211",
+    "question": "Implanter « Fortification » ? 80 Bois,sans vivres ; peut être sacrifiée à la place d’une destruction par événement sauf interdiction explicite.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0349",
+    "phase": "Entre-aventures",
+    "lot": "L07",
+    "source": "L07 p.211",
+    "question": "Implanter « Importer du bois » ? 1 CO par pointBois importé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0350",
+    "phase": "Entre-aventures",
+    "lot": "L07",
+    "source": "L07 p.211",
+    "question": "Implanter « Importer des vivres » ? 10 CO pour capacité d’une ferme jusqu’à fin de prochaine aventure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0351",
+    "phase": "Entre-aventures",
+    "lot": "L07",
+    "source": "L07 p.211",
+    "question": "Implanter « Patronage — réputation » ? Patron puissant réduit de1structure le seuil de réputation ; dette de Faveur significative,perte de réputation s’il est mécontent.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0352",
+    "phase": "Entre-aventures",
+    "lot": "L07",
+    "source": "L07 p.211",
+    "question": "Implanter « Exporter du bois » ? 1pistole par pointBois vendu ;1 Enc par point à transporter par bateau.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0353",
+    "phase": "Entre-aventures",
+    "lot": "L07",
+    "source": "L07 p.211",
+    "question": "Implanter « Exporter des vivres » ? 10 pistoles par ferme excédentaire ; charge10 Enc et capacité navale requise.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0354",
+    "phase": "Entre-aventures",
+    "lot": "L07",
+    "source": "L07 p.211",
+    "question": "Implanter « Commerce — ports » ? Skeggi,Citadelle,Reaver,Swamp Town,Santa Magritta : Taille/Richesse,productions et demandes propres,avec règles de commerce L25/L26.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0355",
+    "phase": "Entre-aventures",
+    "lot": "L07",
+    "source": "L07 p.211",
+    "question": "Implanter « Colonie nouvelle — croissance » ? Départ Taille1/Richesse1 et une production ;≥5structures donne Taille2,réputation établie donne Richesse2.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0356",
+    "phase": "Entre-aventures",
+    "lot": "L07",
+    "source": "L07 p.212",
+    "question": "Implanter « Port » ? 150 Bois et vivres ; abrite les bateaux utilisables à l’aventure,prérequis du commerce extérieur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0357",
+    "phase": "Entre-aventures",
+    "lot": "L07",
+    "source": "L07 p.212",
+    "question": "Implanter « Monument — accès religieux » ? 150 Bois et vivres ; choisir une Bénédiction ; séjour donne Prière de base et accès à cette Bénédiction sans Béni,même hors domaine,jusqu’à fin prochaine aventure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0358",
+    "phase": "Entre-aventures",
+    "lot": "L07",
+    "source": "L07 p.212",
+    "question": "Implanter « Monument — pratiquant » ? Connaître déjà la Bénédiction donne+20aux Tests de Prière correspondants pendant prochaine aventure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0359",
+    "phase": "Entre-aventures",
+    "lot": "L07",
+    "source": "L07 p.212",
+    "question": "Implanter « Établissement de loisir » ? 150 Bois et vivres ; séjour permet à l’aventure suivante de payer1 Détermination pour retirer tous les Exténué.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0360",
+    "phase": "Entre-aventures",
+    "lot": "L07",
+    "source": "L07 p.212",
+    "question": "Implanter « Capitole — prérequis » ? 200 Bois,vivres et réputation établie ; un seul par colonie ; réputation exige3Ports/Monuments/Établissements,même doublons ; perte expose à prise de pouvoir.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0361",
+    "phase": "Entre-aventures",
+    "lot": "L07",
+    "source": "L07 p.212",
+    "question": "Implanter « Capitole — avantages » ? Si chefPJ,allié ou pantin : restrictions de grande puissance levées ; unPJ par entre-deux peut inverser son tirage d’événement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0362",
+    "phase": "Entre-aventures",
+    "lot": "L07",
+    "source": "L07 p.213",
+    "question": "Implanter « Événements — cadre » ? Tirer la table locale à la place de la table générale ; destruction de structure absente ignorée ; sans règles de colonie,effets narratifsMJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0363",
+    "phase": "Entre-aventures",
+    "lot": "L07",
+    "source": "L07 p.213",
+    "question": "Implanter « Événement 01 Ruine » ? Deux structures détruites au choixMJ ; prochain tirage détruit toute colonie et tue les résidents sauf intervention par aventure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0364",
+    "phase": "Entre-aventures",
+    "lot": "L07",
+    "source": "L07 p.213",
+    "question": "Implanter « Événement 02–06 Désastre » ? Deux structures détruites au choixMJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0365",
+    "phase": "Entre-aventures",
+    "lot": "L07",
+    "source": "L07 p.213",
+    "question": "Implanter « Événement 07–09 Ruée » ? Deux structures détruites,ou une Fortification à la place.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0366",
+    "phase": "Entre-aventures",
+    "lot": "L07",
+    "source": "L07 p.213",
+    "question": "Implanter « Événement 10–11 Pourriture » ? Une structure détruite,sans substitution par Fortification.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0367",
+    "phase": "Entre-aventures",
+    "lot": "L07",
+    "source": "L07 p.213",
+    "question": "Implanter « Événement 12–14 Extorsion » ? 20 CO ou destruction d’une structure par les pillards ; prêteur pour tout/demi-coût exige Faveur significative/majeure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0368",
+    "phase": "Entre-aventures",
+    "lot": "L07",
+    "source": "L07 p.213",
+    "question": "Implanter « Événement 15–17 Raz-de-marée » ? Un Port détruit ; chaque navire amarré50% d’être détruit.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0369",
+    "phase": "Entre-aventures",
+    "lot": "L07",
+    "source": "L07 p.213",
+    "question": "Implanter « Événement 18–21 Intrusion » ? Une ferme détruite,puis vérifier structures sans vivres.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0370",
+    "phase": "Entre-aventures",
+    "lot": "L07",
+    "source": "L07 p.213",
+    "question": "Implanter « Événement 22–24 Vandalisme » ? Un Établissement ou Capitole détruit au choixMJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0371",
+    "phase": "Entre-aventures",
+    "lot": "L07",
+    "source": "L07 p.214",
+    "question": "Implanter « Événement 25–27 Sacrilège » ? Un Monument profané et détruit.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0372",
+    "phase": "Entre-aventures",
+    "lot": "L07",
+    "source": "L07 p.214",
+    "question": "Implanter « Événement 28–31 Épidémie » ? Maladie aléatoire du Chaudron ; personnages,montures et compagnons testent la contraction.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0373",
+    "phase": "Entre-aventures",
+    "lot": "L07",
+    "source": "L07 p.214",
+    "question": "Implanter « Événement 37–39 Fauteurs de troubles » ? Guerriers : revenus+50% avant prochaine aventure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0374",
+    "phase": "Entre-aventures",
+    "lot": "L07",
+    "source": "L07 p.214",
+    "question": "Implanter « Événement 43–46 Mutinerie » ? Courtisans sans Activité Revenu ; Fomenter dissension reçoit+10aux Tests avant prochaine aventure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0375",
+    "phase": "Entre-aventures",
+    "lot": "L07",
+    "source": "L07 p.214",
+    "question": "Implanter « Événement 47–49 Blocus » ? Aucun bateau ne sort du Port avant élimination de la menace.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0376",
+    "phase": "Entre-aventures",
+    "lot": "L07",
+    "source": "L07 p.214",
+    "question": "Implanter « Événement 50–51 Répression » ? Revenus des Filous divisés par deux jusqu’à prochaine aventure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0377",
+    "phase": "Entre-aventures",
+    "lot": "L07",
+    "source": "L07 p.214",
+    "question": "Implanter « Événement 52–54 Dette » ? Faveur majeure/significative locale appelée : perdre une Activité ; hors Lustria,10% de poursuite par représentant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0378",
+    "phase": "Entre-aventures",
+    "lot": "L07",
+    "source": "L07 p.214",
+    "question": "Implanter « Événement 55–58 Nouveaux venus » ? Bourgeois et Paysans : revenus+50%.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0379",
+    "phase": "Entre-aventures",
+    "lot": "L07",
+    "source": "L07 p.214",
+    "question": "Implanter « Événement 59–61 Jungle » ? Construction bloquée jusqu’à trois nouvelles Activités Déforestation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0380",
+    "phase": "Entre-aventures",
+    "lot": "L07",
+    "source": "L07 p.215",
+    "question": "Implanter « Événement 62–63 Expédition revenue » ? Lettrés : revenus+50% avant prochaine aventure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0381",
+    "phase": "Entre-aventures",
+    "lot": "L07",
+    "source": "L07 p.215",
+    "question": "Implanter « Événement 67–69 Fête » ? Perdre une Activité à célébrer.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0382",
+    "phase": "Entre-aventures",
+    "lot": "L07",
+    "source": "L07 p.215",
+    "question": "Implanter « Événement 70–72 Brumes » ? Filous : revenus+50% avant prochaine aventure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0383",
+    "phase": "Entre-aventures",
+    "lot": "L07",
+    "source": "L07 p.215",
+    "question": "Implanter « Événement 76–78 Repos » ? Avec Établissement,maximum de Détermination+1 pour prochaine aventure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0384",
+    "phase": "Entre-aventures",
+    "lot": "L07",
+    "source": "L07 p.215",
+    "question": "Implanter « Événement 82–85 Trésor » ? Trouver10 CO de trésors volés,possible réclamation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0385",
+    "phase": "Entre-aventures",
+    "lot": "L07",
+    "source": "L07 p.215",
+    "question": "Implanter « Événement 86–88 Diversification » ? Une ferme compte comme deux pour soutien et construction de structures.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0386",
+    "phase": "Entre-aventures",
+    "lot": "L07",
+    "source": "L07 p.215",
+    "question": "Implanter « Événement 89–91 Lettre » ? Avec Port,message livré avec offre de Faveur significative ou ressources,aide à choisir.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0387",
+    "phase": "Entre-aventures",
+    "lot": "L07",
+    "source": "L07 p.215",
+    "question": "Implanter « Événement 92–94 Sentier » ? Rôdeurs et Riverains : revenus+50% et Dernières nouvelles+20avant aventure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0388",
+    "phase": "Entre-aventures",
+    "lot": "L07",
+    "source": "L07 p.215",
+    "question": "Implanter « Événement 95–98 Tribut » ? Avec Capitole et dirigeantPJ/allié,5 CO à chaquePJ et allié.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0389",
+    "phase": "Entre-aventures",
+    "lot": "L07",
+    "source": "L07 p.215",
+    "question": "Implanter « Événement 99–100 Cieux » ? Prière des Bénédictions de Monuments+20 pour prochaine aventure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0390",
+    "phase": "Entre-aventures",
+    "lot": "L07",
+    "source": "L07 p.216",
+    "question": "Implanter « Déforestation — récolte » ? Une Activité produit10 Bois ; double journée ajoute10,mais Résistance+20 échoué donne Exténué au début suivant,grand échec peut exposer à maladie.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0391",
+    "phase": "Entre-aventures",
+    "lot": "L07",
+    "source": "L07 p.216",
+    "question": "Implanter « Déforestation — équipe » ? Commandement+20 avec équipe ; réussite produit+20 Bois,échec+10 Bois.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0392",
+    "phase": "Entre-aventures",
+    "lot": "L07",
+    "source": "L07 p.216",
+    "question": "Implanter « Accord avec les Anciens » ? Monument requis ; une semaine de dévotion donne inversion de tous les Tests de Prière de sa Bénédiction pour prochaine aventure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0393",
+    "phase": "Entre-aventures",
+    "lot": "L07",
+    "source": "L07 p.216",
+    "question": "Implanter « Construction navale » ? Port requis ; payer le bateau selon table206,chaqueBois dépensé réduit le prix de2 CO ; bateau disponible ou confiéPNJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0394",
+    "phase": "Entre-aventures",
+    "lot": "L07",
+    "source": "L07 p.216",
+    "question": "Implanter « Construction de structure » ? Choisir une structure et payer intégralement leBois à la sélection ; autres prérequis vivres/réputation obligatoires.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0395",
+    "phase": "Entre-aventures",
+    "lot": "L07",
+    "source": "L07 p.216",
+    "question": "Implanter « Activités — Lustria » ? Règles habituelles de restriction grande puissance/elfes entre aventures ; aucun placement bancaire,autres Activités possibles selonMJ,tuteurs parfois plus difficiles à trouver.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0396",
+    "phase": "Entre-aventures",
+    "lot": "L07",
+    "source": "L07 p.217",
+    "question": "Implanter « Divertir » ? Établissement requis ; Revenu par Divertissement,Représentation ou Musique plutôt que compétence de métier,Statut compté Argent3.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0397",
+    "phase": "Entre-aventures",
+    "lot": "L07",
+    "source": "L07 p.217",
+    "question": "Implanter « Patrouiller la frontière » ? Fortification requise ; prochaine expédition,une inversion de Test contre rencontre jungle/fleuve,pour soi ou allié.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0398",
+    "phase": "Entre-aventures",
+    "lot": "L07",
+    "source": "L07 p.217",
+    "question": "Implanter « Rationner » ? Ferme requise ; nourrit et abreuve tout groupe et compagnons pour aventure suivante,ou3 étapes d’expédition puis Fourrager.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0399",
+    "phase": "Entre-aventures",
+    "lot": "L07",
+    "source": "L07 p.217",
+    "question": "Implanter « Financer une expédition » ? Capitole requis ; investir1–20 CO ; au prochain entre-deux,1d100+investissement détermine le retour.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0400",
+    "phase": "Entre-aventures",
+    "lot": "L07",
+    "source": "L07 p.217",
+    "question": "Implanter « Financement01–55 » ? Expédition disparue,investissement perdu.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0401",
+    "phase": "Entre-aventures",
+    "lot": "L07",
+    "source": "L07 p.217",
+    "question": "Implanter « Financement56–80 » ? Survivants sans richesse ; remboursement seulement question morale,sans procédure de recouvrement définie.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0402",
+    "phase": "Entre-aventures",
+    "lot": "L07",
+    "source": "L07 p.217",
+    "question": "Implanter « Financement81–95 » ? Remboursement double de l’investissement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L07-0403",
+    "phase": "Entre-aventures",
+    "lot": "L07",
+    "source": "L07 p.217",
+    "question": "Implanter « Financement96–100 » ? Remboursement décuple ; représailles lézardes possibles.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
   }
 ]

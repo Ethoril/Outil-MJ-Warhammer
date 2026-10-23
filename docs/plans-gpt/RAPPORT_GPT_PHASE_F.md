@@ -1,6 +1,6 @@
 # Rapport GPT — Phase F0 : audit des règles
 
-État au 23 octobre 2026 : **audit du corpus en cours**. L06 a reçu sa revue F0, hors domaines explicitement renvoyés aux inventaires existants ; L05 a reçu le rattachement des noms ; L17, L11, L13, L14, L16, L18, L19, L20, L21, L22 et L23 ont reçu leur revue des mécaniques F0. L24 a reçu la revue décrite ci-dessous ; L25 a reçu sa revue dans la portée ci-dessous ; L26, L01, L02, L03 et L04 ont reçu les revues décrites ci-dessous. Vingt livres sur vingt-six sont traités dans ces portées documentaires ; les 6 autres restent à traiter, à partir de L07. Aucun achèvement des 26 livres n’est prétendu.
+État au 23 octobre 2026 : **audit du corpus en cours**. L06 a reçu sa revue F0, hors domaines explicitement renvoyés aux inventaires existants ; L05 a reçu le rattachement des noms ; L17, L11, L13, L14, L16, L18, L19, L20, L21, L22 et L23 ont reçu leur revue des mécaniques F0. L24 a reçu la revue décrite ci-dessous ; L25 a reçu sa revue dans la portée ci-dessous ; L26, L01, L02, L03 et L04 ont reçu les revues décrites ci-dessous. 21 livres sur vingt-six sont traités dans ces portées documentaires ; les 5 autres restent à traiter, à partir de L08. Aucun achèvement des 26 livres n’est prétendu.
 
 ## Travail local et sources
 
@@ -437,3 +437,25 @@ Q18 est limité aux quatre volets isolés : Poudre hilarante, Weirdroot de la vi
 Registre : 495 entrées, 412 nouveaux sélecteurs ; 78 purs renvois exclus ; statuts {"absent":490,"hors-granularite":4,"assiste":1}. Les 4832 entrées héritées sont identiques ; total 5327 entrées / 4297 sélecteurs. Portée de lecture : tmp/audit/L04-reading-scope-batch.json ; reçus bruts read:false conservés. Aucun achèvement global ni recette UI revendiqués.
 
 Contrôles : génération deux fois puis --check ; suite complète 4 054/4 054, zéro échec/annulé/ignoré, 104054.2614 ms, tmp/audit/L04-full-batch.log. Intégrité, LF et diff--check verts ; cinq documents autorisés, aucun js/ ni test hérité modifié. Commit local de ce livre à relever dans la succession après validation. 6 livres restent à partir de L07.
+
+## L07 — Lustria EN
+
+Source : Lustria EN.pdf ; 224 pages physiques ; SHA-256 `975555bd937144d8e99236be2b38aa8b96bf06ac4072523c30c187e6504a0554`. V4, copyright2023, Last Edited15March2023, crédits p2 vus. folio=physique ; p5 illustration,p6 carte,p106 carte,p116 fac-similés,p164 illustration,p224 publicité.
+
+Lecture ciblée des mécaniques sur les onze chapitres, avec repérage de l’histoire, des biographies et des scénarios sans attestation de lecture mot à mot de cette prose. Sommaire/crédits et pages sans texte contrôlés ;27 pages inspectées en image, notamment les tables de Marques/castes/création,quatre schémas de carrière,météo,rencontres,bateaux,cités et financement. Reçus bruts conservés read:false.
+
+Sites et objets : Sources d’éternité,Pectoral dix résultats,Cor/Épée/Liber/Bâton de corruption,Brassard,sargasses,Sanctuaire de vie,Brine Wife,appareil spectral,tridents,typhon,Lames rouges et Heaume distingués. Le renfort+2PA est effectivement lu par les couches d’armure et la résolution ; Régénération/Terreur et Volée sont seulement consultables en notes/mots-clés. Aucune capacité déduite de l’étiquette E0-P ; pas de recetteUI. Les miracles de Mathlann,sorts et variantes slann,capacitésE0 et courageC0 ont des renvois exacts.
+
+Hommes-lézards : répertoires,Quaysh,accès à Haute Magie,nœuds géomantiques,anatomie et quatre critiques de queue,castes,Marques,création et carrière fixe,substitutions et restrictions des Skinks conservés. Tables139/151/160/161 relues en image ; modifications de caractéristiques ne deviennent pas desDR. Méditations exclues selonD-C102,sorts orques selonD-C90–94 et sourceL12 prioritaire. Les talents Haute Magie V4 restent des propositions documentaires à confronter àL08 ; aucun contrat elfique remplacé.
+
+Maladies : onze affections locales,contractions/incubations/durées et symptômes,Brume mentale et ses retests,Défaillance par organe,onguents et traitement du Parasitisme séparés. L’hôte doit subir le poison pendant le BE du parasite ; la résistance est celle du parasite. Infections et affections temporaires ne sont pas automatiquement excluesQ18. Restriction sang-froid de Fièvre du crâne jaune gardée malgré formulation locale d’autel plus large ; sang-froid de catégorie distinct du Trait.
+
+Expéditions et colonies : étapes,préparation,météo,Activités,fatigue,rencontres jungle/fleuve,exploration et butins,structures,vivres,commerce,événements à effet déterminé et huit Activités propres. Q18 ne retire pas toute gestion de colonie ou d’expédition. Les événements purement narratifs ne deviennent pas des mécaniques supplémentaires. L’accès religieux de Monument n’est pas couvert par la simple présence de sa Bénédiction au catalogue.
+
+Anomalies conservées : carrière92 double ; table de créatures185 avec Jungle35,Marais96–97 et Montagne92–93 chevauchants,Plaines100 absent au premier tirage ; découverte de cité46–55 absente ; bonus d100 sans borne ; financement d100+investissement peut dépasser100 ; réduction de prix naval sans plancher ; demi-dé de nœud sans arrondi ; Endurance du bateau et non BE imprimée. Table de carrières locales contient d’autres plages irrégulières,noms de rangOracle/Interprète identiques conservés. Conversions des Tests uniquement dans v5Proposal ; argent,Bois,caractéristiques,distances et dégâts gardent leurs unités.
+
+Choix F-C146–153. Recherches statiques dans tmp/audit/L07-runtime-search-three.txt et L07-magic-volley-three.txt ; quelques globWindows initialement refusés ont été remplacés par recherches de répertoires et lecteurs directs. HorsF0 : histoire,mythes,rumeurs sans effet fixé,scénarios et récompenses narratives,profils et domaines déjà inventoriés. Corpus encore partiel.
+
+Registre : 403 entrées, 273 nouveaux sélecteurs ; 128 purs renvois exclus ; statuts {"absent":399,"rappel":2,"automatise":1,"hors-granularite":1}. Les 5327 entrées héritées sont identiques ; total 5730 entrées / 4570 sélecteurs. Portée de lecture : tmp/audit/L07-reading-scope-three.json ; reçus bruts read:false conservés. Aucun achèvement global ni recette UI revendiqués.
+
+Contrôles : deux générations identiques puis --check ; suite complète 4 054/4 054, zéro échec/annulé/ignoré, 97743.1681 ms, tmp/audit/L07-full-three.log. Intégrité, LF et diff--check verts ; cinq documents autorisés, aucun js/ ni test hérité modifié. Commit local à relever dans la succession ; 5 livres restent à partir de L08.
