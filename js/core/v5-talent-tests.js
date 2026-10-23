@@ -6,6 +6,10 @@ import qualityRegistry from '../data/v5-quality-talent-contracts.json' with { ty
 import { getReferenceCatalogue } from './reference-catalog.js';
 import { acquiredV5Talents, evaluateV5Talents, V5_TALENT_CONTRACTS } from './v5-talents.js';
 import { participantKeywords } from './creature-keywords.js';
+import { leadershipRallySlModifiers, MASTER_AND_COMMANDER_TALENT } from './v5-effects.js';
+
+/** Compétence Commandement du catalogue : seul Test où Maître à bord (Sea of Claws p. 63) s'applique. */
+const LEADERSHIP_SKILL_ID = 'skill-43_6f_6d_6d_61_6e_64_65_6d_65_6e_74-base';
 
 export const V5_TEST_TALENT_IDS = Object.freeze([...registry.contracts,...qualityRegistry.contracts,...additionalRegistry.contracts].filter(row => row.clauses.some(clause => clause.event === 'test.beforeRoll' || clause.event === 'test.afterRoll')).map(row => row.talentId));
 export const V5_TALENT_TEST_CONTEXT_FIELDS = Object.freeze([...registry.contextDescriptors,...additionalRegistry.contextDescriptors]);
@@ -29,7 +33,9 @@ export function buildV5TalentTestContext(action = {}, settings = {}, extra = {})
 export function applicableV5TalentTestFields(participant, skillId) {
   const acquired = acquiredV5Talents(participant);
   const skill = getReferenceCatalogue().skills.find(row => row.id === skillId);
-  return V5_TALENT_TEST_CONTEXT_FIELDS.filter(row => acquired.some(item => item.talentId === row.talentId)
+  const onBoard = skillId === LEADERSHIP_SKILL_ID && acquired.some(item => item.talentId === MASTER_AND_COMMANDER_TALENT.id)
+    ? [{ field: 'onBoardVessel', label: 'Test de Commandement à bord d’un navire (Maître à bord)', type: 'boolean', talentId: MASTER_AND_COMMANDER_TALENT.id, options: [{ value: true, label: 'Oui' }, { value: false, label: 'Non' }] }] : [];
+  return [...V5_TALENT_TEST_CONTEXT_FIELDS.filter(row => acquired.some(item => item.talentId === row.talentId)
     && (!row.skillIds || row.skillIds.includes(skill?.id))
     && (!row.skillGroupIds || row.skillGroupIds.includes(skill?.groupId))).map(row => {
       const result = { field: row.field, label: row.label, type: row.type, talentId: row.talentId, ...(row.options?{options:row.options}:{}) };
@@ -37,15 +43,16 @@ export function applicableV5TalentTestFields(participant, skillId) {
       if (row.optionsFromAcquisitions) result.options = [...new Set(acquired.filter(item => item.talentId === row.talentId)
         .map(item => item.specialization).filter(Boolean))].map(value => ({ value, label: value }));
       return result;
-    });
+    }), ...onBoard];
 }
 export function previewV5TalentTestModifiers(participant, { action, settings = {}, kind, role = 'actor', opponent = null } = {}) {
   const context = buildV5TalentTestContext(action, settings, { kind, opponent });
   const plan = evaluateV5Talents(participant, { event: 'test.beforeRoll', role, context, includeTalents: V5_TEST_TALENT_IDS });
   const names = labels();
   const source = proposal => ({ id: 'talent:' + proposal.stackGroup, label: proposal.origins.map(row => names.get(row.talentId) || row.talentId).join(', ') });
-  return { plan, context,forceSuccess:plan.proposals.some(p=>p.op==='forceTestSuccess'),ignoreNegative:plan.proposals.some(p=>p.op==='ignoreNegativeModifiers'), ignoredPenalties:plan.proposals.filter(row=>row.op==='ignoreConditionPenalty'), penaltyRules:plan.proposals.filter(row=>['suppressTestPenalty','limitTestPenalty'].includes(row.op)), unresolved: unknowns(plan),
-    slModifiers: plan.proposals.filter(row => row.op === 'modifySL').map(row => ({ ...source(row), amount: row.amount })),
+  const command = context.skillId === LEADERSHIP_SKILL_ID ? leadershipRallySlModifiers({ participant, onBoardVessel: context.onBoardVessel }) : { modifiers: [], needsInput: [] };
+  return { plan, context,commandModifiers:command.modifiers,forceSuccess:plan.proposals.some(p=>p.op==='forceTestSuccess'),ignoreNegative:plan.proposals.some(p=>p.op==='ignoreNegativeModifiers'), ignoredPenalties:plan.proposals.filter(row=>row.op==='ignoreConditionPenalty'), penaltyRules:plan.proposals.filter(row=>['suppressTestPenalty','limitTestPenalty'].includes(row.op)), unresolved: [...unknowns(plan), ...command.needsInput.map(row => 'Maître à bord : ' + row.label + '.')],
+    slModifiers: [...plan.proposals.filter(row => row.op === 'modifySL').map(row => ({ ...source(row), amount: row.amount })), ...command.modifiers],
     advantageSources: plan.proposals.filter(row => row.op === 'grantAdvantage').map(source),
     disadvantageSources: plan.proposals.filter(row => row.op === 'grantDisadvantage').map(source) };
 }

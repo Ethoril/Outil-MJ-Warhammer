@@ -31,6 +31,7 @@ Plan : `PLAN_PRO_QUALITE_E.md`. Branche `pro/qualite-e`, départ `9c12613`. Choi
 | Q20 | FAIT (`QE-D-23-1`, `QE-Q20-1`, `QE-Q20-2`) | (voir `git log`, « Q20 ») |
 | Q21 | FAIT (`QE-Q21-1`) | (voir `git log`, « Q21 ») |
 | Q22 | FAIT (`QE-Q22-1`) | (voir `git log`, « Q22 ») |
+| Q23 | FAIT (`QE-Q23-1`) | (voir `git log`, « Q23 ») |
 
 ## Q0 — contrôle de complétude
 
@@ -283,3 +284,9 @@ Branché / non appelé (grep dans `js/`) :
 - `js/core/store.js` : `getParticipantReminders(id)` et `resolveParticipantReminder(id, rappel, décision)`, dérivés des participants du combat, valables sans scène active (`getReminders` reste vide sans scène, inchangé). `js/core/reminders.js` : `buildParticipantReminders` (texte + boutons Fait / Ignorer). `js/ui/card.js` : la carte affiche le bloc sous l'armure et le clic résout. `js/main.js` : libellé « Rappel du participant ». Choix : `QE-Q22-1`.
 - Test : `tests/pro-q22-rappels-carte.test.js` (5 tests : combat de bibliothèque sans scène, résolution durable après changement de Round, autre participant, bloc de carte, branchement par lecture du source). Le test de la carte est un double de DOM, pas un navigateur.
 - **Branché (appelant + chemin d'interface)** : `getParticipantReminders` ← `js/ui/card.js` (`renderParticipantCard`) ; `resolveParticipantReminder` ← `card.js` (`handleZoneClick`, bouton `.btn-reminder`). Chemin : bibliothèque → « Ajouter au combat » → carte du participant. Rendu non vérifié dans un navigateur. Pas de variable persistante nouvelle (les choix de rappel existaient déjà).
+
+## Q23 — Maître à bord appliqué par le moteur (FAIT)
+
+- `js/core/v5-talent-tests.js` : `previewV5TalentTestModifiers` ajoute les DR de `leadershipRallySlModifiers` (+1 par niveau, à bord) aux `slModifiers` des Tests de Commandement et pose une question `unresolved` si « à bord » est inconnu ; `applicableV5TalentTestFields` propose le champ Oui/Non `onBoardVessel` au porteur du talent, pour Commandement seulement. Choix : `QE-Q23-1`. Texte du contrat inchangé (déjà cohérent). Pas de variable persistante nouvelle.
+- Test : `tests/pro-q23-maitre-a-bord-moteur.test.js` (4 tests par `buildCombatTest` : 2 niveaux à bord → DR 1 → 3 ; hors navire / inconnu / sans talent / autre compétence ; champ d interface). Suite complète lancée une fois : 4407 réussis, 0 échec.
+- **Branché (appelant + chemin d interface)** : `leadershipRallySlModifiers` ← `js/core/v5-talent-tests.js` ← `v5-combat-rules.js` (`buildCombatTest`) et `resolution.js` ; chemin : panneau de Résolution → compétence Commandement → champ « à bord » (`resolution-panel.js`, `applicableV5TalentTestFields`). Rendu non vérifié dans un navigateur. **Code testé, non appelé** : `previewLeadershipRallyAllies` (budget de ralliement des Brisés), hors périmètre de Q23.
