@@ -14,7 +14,8 @@ Plan : `PLAN_PRO_QUALITE_E.md`. Branche `pro/qualite-e`, départ `9c12613`. Choi
 | Q7 | FAIT | (voir `git log`, « Q7 ») |
 | Q8 | FAIT | (voir `git log`, « Q8 ») |
 | Q9 | FAIT | (voir `git log`, « Q9 ») |
-| Q10, R | à faire | — |
+| Q10 | BLOCKED (question au MJ, `QE-Q10-1`) | aucun (rien modifié) |
+| R | à faire | — |
 
 ## Q0 — contrôle de complétude
 
@@ -143,3 +144,9 @@ Branché / non appelé (grep dans `js/`) :
 - Test : `tests/pro-q9-liens-familiers.test.js` (4 tests). Choix : `QE-Q9-1`.
 - Branché : `validateFamiliarLink` est appelé par `linkFamiliar` (js/core/store.js) ; la libération est dans `removeParticipant` (store.js). Aucun appelant de `linkFamiliar` dans l’interface (hors du store) : code testé, non appelé depuis l’UI (chantier suivant du plan).
 - Suite complète : seul échec, étranger au lot (`divin-v5-e0-independent`, reçu de recette produit au lot R).
+
+## Q10 — Master and Commander (BLOCKED)
+
+- Essai : Talent ajouté au résolveur sans toucher au snapshot (id `talent-master-and-commander`, L25 p.63). Il était reconnu par son id et sa limite suivait le Bonus de Sociabilité, mais 4 tests figeant la feuille source échouaient (206 identités ×2, contrat « verified » par identité, liste de cache de sw.js). Les satisfaire reviendrait à assouplir ces contrôles : retour en arrière complet, aucun code ni test conservé.
+- Question au MJ consignée dans `QE-Q10-1` : ajouter le Talent à la feuille Drive, ou autoriser un supplément local (comptes à 207 et contrat local).
+- Aucune fonction ajoutée. `v5-effects.js` reste inchangé (rang saisi, id `talent-master-and-commander`).
