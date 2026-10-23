@@ -372,7 +372,7 @@ async function awaitStore(operation, label = 'Opération locale') {
 
 const reminderTransitionLabels = { endTurn: 'Fin de tour', startTurn: 'Début de tour' };
 const reminderStatusLabels = { pending: 'À traiter', resolve: 'Résolu', ignore: 'Ignoré', snooze: 'Reporté', snoozed: 'Reporté' };
-const reminderKindLabels = { endTurn: 'Fin de tour', startTurn: 'Début de tour', 'effect-expiring': 'État qui expire', 'automatic-announced': 'Effet automatique', consequence: 'Conséquence', reinforcement: 'Renfort' };
+const reminderKindLabels = { endTurn: 'Fin de tour', startTurn: 'Début de tour', 'effect-expiring': 'État qui expire', 'automatic-announced': 'Effet automatique', consequence: 'Conséquence', reinforcement: 'Renfort', 'participant-reminder': 'Rappel du participant' };
 function readableReminder(item) {
   const transition = reminderTransitionLabels[item?.payload?.transitionType || item?.transitionType] || '';
   const kind = reminderKindLabels[item?.kind] || item?.kind || 'Rappel';

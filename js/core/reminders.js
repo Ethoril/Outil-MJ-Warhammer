@@ -141,3 +141,32 @@ export function resolveReminder(reminders, id, decision, details = {}) {
     return { ...clone(item), status: decision, choice };
   });
 }
+
+// Bloc des rappels portés par un participant, pour sa carte de combat (armure imprimée non déterminée, démon expiré…).
+export const PARTICIPANT_REMINDER_ACTIONS = [['resolve', 'Fait'], ['ignore', 'Ignorer']];
+
+/** Construit le bloc des rappels ; `createElement` est celui du document (ou un double en test). Renvoie null s'il n'y en a pas. */
+export function buildParticipantReminders(createElement, reminders = []) {
+  const pending = (Array.isArray(reminders) ? reminders : []).filter(item => item?.status === 'pending');
+  if (!pending.length) return null;
+  const block = createElement('div');
+  block.className = 'actor-reminders';
+  for (const item of pending) {
+    const row = createElement('div');
+    row.className = 'actor-reminder';
+    row.dataset.reminderId = item.id;
+    const text = createElement('span');
+    text.textContent = `⚠ ${item.text}`;
+    row.appendChild(text);
+    for (const [decision, label] of PARTICIPANT_REMINDER_ACTIONS) {
+      const button = createElement('button');
+      button.type = 'button';
+      button.className = 'tiny btn-reminder';
+      button.dataset.decision = decision;
+      button.textContent = label;
+      row.appendChild(button);
+    }
+    block.appendChild(row);
+  }
+  return block;
+}

@@ -341,6 +341,9 @@ details summary:hover { color: var(--accent); }
 .state-badge { cursor: pointer; }
 .state-badge:hover { background: #a32a2a; color: #fff; border-color: #a32a2a; }
 .actor-armor { font-size: 0.8em; color: var(--muted); text-align: center; background: rgba(0,0,0,0.03); border-radius: 4px; padding: 2px; }
+.actor-reminders { display: grid; gap: 4px; margin-top: 4px; }
+.actor-reminder { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; font-size: 0.8em; border: 1px solid var(--chip, currentColor); border-radius: 4px; padding: 2px 4px; }
+.actor-reminder > span { flex: 1 1 12em; overflow-wrap: anywhere; }
 
 .actor-dice-section { display: flex; flex-direction: column; gap: 6px; }
 .mini-dice-line { display: flex; gap: 4px; align-items: center; }

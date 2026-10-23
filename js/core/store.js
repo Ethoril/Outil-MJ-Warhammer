@@ -3202,6 +3202,18 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       const named = actor?.name && !transition.actorName ? { ...transition, actorName: actor.name } : transition;
       return pendingReminders(deriveReminders(snapshot, named, reminderChoices));
     },
+    // Rappels portés par un participant (carte de combat) : indépendants de la scène active, donc aussi pour un combat monté depuis la bibliothèque.
+    getParticipantReminders(participantId) {
+      const snapshot = { sceneId: activeScene?.id || 'combat', participants: Array.from(combat.participants.values()).filter(item => item?.id === participantId) };
+      return pendingReminders(deriveReminders(snapshot, { id: `round-${combat.round || 0}`, type: 'participant', round: combat.round || 0 }, reminderChoices)).filter(item => item.kind === 'participant-reminder');
+    },
+    resolveParticipantReminder(participantId, id, decision, details = {}) {
+      const snapshot = { sceneId: activeScene?.id || 'combat', participants: Array.from(combat.participants.values()).filter(item => item?.id === participantId) };
+      const transition = { id: `round-${combat.round || 0}`, type: 'participant', round: combat.round || 0 };
+      const choice = resolveReminder(deriveReminders(snapshot, transition, reminderChoices), id, decision, details).find(item => item.id === id)?.choice;
+      if (!choice) return false;
+      return api.executeCommand('resolve-reminder', draft => ({ ...draft, reminderChoices: [...(draft.reminderChoices || []).filter(item => item.id !== id), choice] }));
+    },
     listReminderChoices() { return cloneValue(reminderChoices); },
     resolveReminder(id, decision, details = {}) {
       if (!activeScene) return false;

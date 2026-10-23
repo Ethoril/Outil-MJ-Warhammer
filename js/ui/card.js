@@ -5,6 +5,7 @@ import { DiceLine } from '../core/models.js';
 import { renderMiniDiceLine } from './dice-line.js';
 import { showToast } from './toast.js';
 import { contextMessage } from './messages.js';
+import { buildParticipantReminders } from '../core/reminders.js';
 
 export function initCardUI(Store, Combat) {
   const observe = (result, label = 'Modification') => Promise.resolve(result).then(value => { if (value === false || value?.ok === false) throw value?.error || new Error(`${label} impossible.`); return value; }).catch(error => showToast(contextMessage(`${label} impossible`, error, 'réessayez.'), 'error'));
@@ -247,6 +248,9 @@ export function initCardUI(Store, Combat) {
     }
     armDiv.innerHTML = armText;
 
+    const remindersBlock = buildParticipantReminders(tag => document.createElement(tag), Store.getParticipantReminders?.(p.id));
+    if (remindersBlock) armDiv.after(remindersBlock);
+
     const diceContainer = div.querySelector('.dice-list');
     const myDice = Store.getDiceLines().filter(dl => dl.participantId === p.id);
     myDice.forEach(dl => { const lineEl = renderMiniDiceLine(dl, p, Store); diceContainer.appendChild(lineEl); });
@@ -311,6 +315,13 @@ export function initCardUI(Store, Combat) {
       const stateId = e.target.dataset.stateId;
       const nextStates = p.states.filter((state, index) => normalizeState(state, index).id !== stateId);
       observe(Store.updateParticipant(id, { states: normalizeEffects(nextStates) }), 'État');
+      return;
+    }
+
+    if (e.target.matches('.btn-reminder')) {
+      e.preventDefault();
+      const reminderId = e.target.closest('.actor-reminder')?.dataset.reminderId;
+      if (reminderId) observe(Store.resolveParticipantReminder(id, reminderId, e.target.dataset.decision), 'Rappel');
       return;
     }
 
