@@ -7,8 +7,12 @@
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { corpusBooks } from './lib/bestiary-extract.mjs';
-import { blockAfter, completenessGaps, normalizeBlockText } from './lib/bestiary-completeness.mjs';
+import { blockAfter, completenessGaps, extendedGaps, normalizeBlockText } from './lib/bestiary-completeness.mjs';
 
+// Catégories contrôlées : talents et compétences (Q0), attaques, Traits, équipement, sorts, bruit d'équipement (Q11).
+const CATEGORIES = ['talents', 'skills', 'attacks', 'traits', 'trappings', 'spells', 'trappingNoise'];
+// Faux positifs connus, justifiés : deux profils côte à côte, la rubrique imprimée après le second est celle du premier (Kraken L14 p.82 : « Acute Sense (Vision) » est un talent du Grand Aigle).
+const NEIGHBOUR_TEXT = { 'E0-P-488': ['talents'] };
 const KEYS = ['M', 'CC', 'CT', 'F', 'E', 'I', 'Ag', 'Dex', 'Int', 'FM', 'Soc'];
 let failures = 0;
 let skillWarnings = 0;
@@ -37,8 +41,10 @@ for (const book of process.argv.slice(2)) {
     if (at >= 0) checked += 1;
     else { failures += 1; console.error(`ÉCART ${book} p.${record.physicalPage} ${record.id} ${record.name} : ${row}`); }
     if (at >= 0) {
-      const gaps = completenessGaps(record, blockAfter(text, at), catalogue);
-      if (gaps.talents.length || gaps.skills.length) gaps_.push({ id: record.id, name: record.name, page: record.physicalPage, ...gaps });
+      const block = blockAfter(text, at);
+      const gaps = { ...completenessGaps(record, block, catalogue), ...extendedGaps(record, block) };
+      for (const category of NEIGHBOUR_TEXT[record.id] || []) gaps[category] = [];
+      if (CATEGORIES.some(category => gaps[category].length)) gaps_.push({ id: record.id, name: record.name, page: record.physicalPage, ...gaps });
     }
     // Compétences : chaque nom et chaque valeur gardés doivent figurer sur la page (aucune valeur inventée) ; avertissement seulement.
     for (const skill of record.skills || []) {
@@ -51,9 +57,11 @@ for (const book of process.argv.slice(2)) {
   }
   writeFileSync(`tmp/divin/bestiary-completude-${book}.json`, `${JSON.stringify({ book, profils: data.profiles.length, manques: gaps_ }, null, 1)}
 `);
-  totals[book] = { profils: gaps_.length, talents: gaps_.reduce((n, g) => n + g.talents.length, 0), competences: gaps_.reduce((n, g) => n + g.skills.length, 0) };
+  totals[book] = { profils: gaps_.length };
+  for (const category of CATEGORIES) totals[book][category] = gaps_.reduce((n, g) => n + g[category].length, 0);
   console.log(`${book} : ${checked}/${data.profiles.length - skipped.length} lignes de valeurs retrouvées dans le texte brut ; non contrôlables : ${skipped.length}${skipped.length ? ` (${skipped.slice(0, 4).join(', ')}…)` : ''}`);
 }
-console.log(`complétude (profils incomplets, talents manquants, compétences manquantes) : ${JSON.stringify(totals)}`);
+console.log(`complétude (profils incomplets puis manques par catégorie) : ${JSON.stringify(totals)}`);
+console.log(`total par catégorie : ${JSON.stringify(Object.fromEntries(CATEGORIES.map(category => [category, Object.values(totals).reduce((n, t) => n + t[category], 0)])))}`);
 console.log(`avertissements de compétences : ${skillWarnings}`);
 process.exitCode = failures ? 1 : 0;

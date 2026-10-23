@@ -16,6 +16,7 @@ Plan : `PLAN_PRO_QUALITE_E.md`. Branche `pro/qualite-e`, départ `9c12613`. Choi
 | Q9 | FAIT | (voir `git log`, « Q9 ») |
 | Q10 | BLOCKED (question au MJ, `QE-Q10-1`) | aucun (rien modifié) |
 | Q10b | FAIT | (voir `git log`, « Q10b ») |
+| Q11 | FAIT | (voir `git log`, « Q11 ») |
 | R | FAIT (avec réserve : manques de complétude non justifiés un par un) | (voir `git log`, « R ») |
 
 ## Q0 — contrôle de complétude
