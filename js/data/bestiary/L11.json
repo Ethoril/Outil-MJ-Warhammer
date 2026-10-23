@@ -502,6 +502,13 @@
      "trait": "Weapon"
     }
    ],
+   "skills": [
+    {
+     "name": "Pray",
+     "nameFr": "Prière",
+     "value": 60
+    }
+   ],
    "traits": [
     {
      "name": "Animosity",
@@ -1972,6 +1979,10 @@
     {
      "name": "Bestial",
      "ref": "E0-T-005"
+    },
+    {
+     "name": "Cold-blooded",
+     "ref": "E0-T-012"
     },
     {
      "name": "Night Vision",

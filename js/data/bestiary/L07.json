@@ -1583,6 +1583,11 @@
      "ref": "E0-T-002"
     },
     {
+     "name": "Corruption",
+     "param": "Minor",
+     "ref": "E0-T-016"
+    },
+    {
      "name": "Dark Vision",
      "ref": "E0-T-017"
     },
@@ -5020,6 +5025,10 @@
      "name": "Size",
      "param": "Tiny",
      "ref": "E0-T-045"
+    },
+    {
+     "name": "Swamp-strider",
+     "ref": "E0-T-085"
     }
    ],
    "abilities": [
@@ -6915,6 +6924,12 @@
      "ref": "E0-T-005"
     },
     {
+     "name": "Breath",
+     "rating": "+12",
+     "param": "Fire",
+     "ref": "E0-T-009"
+    },
+    {
      "name": "Cold-blooded",
      "ref": "E0-T-012"
     },
@@ -7046,7 +7061,7 @@
    ],
    "talents": [
     {
-     "name": "Acute Sense (Vision: as Character Talent)"
+     "name": "Acute Sense (Vision)"
     }
    ],
    "keywords": [
@@ -7140,7 +7155,7 @@
    ],
    "talents": [
     {
-     "name": "Acute Sense (Vision: as Character Talent)"
+     "name": "Acute Sense (Vision)"
     }
    ],
    "keywords": [
@@ -7816,7 +7831,7 @@
    ],
    "talents": [
     {
-     "name": "Acute Sense (Hearing: as Character Talent)"
+     "name": "Acute Sense (Hearing)"
     }
    ],
    "specialRules": [

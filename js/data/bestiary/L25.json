@@ -2252,6 +2252,11 @@
      "ref": "E0-T-002"
     },
     {
+     "name": "Corruption",
+     "param": "Minor",
+     "ref": "E0-T-016"
+    },
+    {
      "name": "Dark Vision",
      "ref": "E0-T-017"
     },

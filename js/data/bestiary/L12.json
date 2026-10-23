@@ -5129,6 +5129,12 @@
    ],
    "traits": [
     {
+     "name": "Breath",
+     "rating": "+10",
+     "param": "Poison",
+     "ref": "E0-T-009"
+    },
+    {
      "name": "Size",
      "param": "Enormous",
      "ref": "E0-T-045"
@@ -5297,6 +5303,12 @@
      "name": "Bite",
      "rating": "+8",
      "ref": "E0-T-006"
+    },
+    {
+     "name": "Breath",
+     "rating": "+10",
+     "param": "Poison",
+     "ref": "E0-T-009"
     },
     {
      "name": "Die Hard",

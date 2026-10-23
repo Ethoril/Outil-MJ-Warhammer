@@ -3567,6 +3567,12 @@
      "ref": "E0-T-006"
     },
     {
+     "name": "Breath",
+     "rating": "+17",
+     "param": "Brimstone Fire",
+     "ref": "E0-T-009"
+    },
+    {
      "name": "Fly",
      "rating": "80",
      "ref": "E0-T-023"
@@ -4244,6 +4250,7 @@
    ],
    "trappings": [
     "Assortment of rusted steel and mouldy leather armour",
+    "Leather satchel containing six vials of harmless coloured water and a pot containing 8 doses of Skalm",
     "Shield",
     "Sword",
     "Warpforged Halberd",

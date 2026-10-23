@@ -647,6 +647,11 @@
      "value": 35
     },
     {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 70
+    },
+    {
      "name": "Dodge",
      "nameFr": "Esquive",
      "value": 30

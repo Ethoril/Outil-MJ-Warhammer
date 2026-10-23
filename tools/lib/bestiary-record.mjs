@@ -22,7 +22,9 @@ const TALENT_ALIASES = new Map(Object.entries({
   'strong-minded': 'Strong-minded', 'strong minded': 'Strong-minded', 'strong-minded.': 'Strong-minded', 'strong back': 'Strong Back', 'magic resistant': 'Magic Resistance',
   etiqutte: 'Etiquette', ettiquette: 'Etiquette', 'instrinctive diction': 'Instinctive Diction'
 }));
-export function canonicalTalentName(name) {
+export function canonicalTalentName(rawName) {
+  // « Acute Sense (Vision: as Character Talent) » (L07) : la précision est « Vision », le reste renvoie au livre de base.
+  const name = String(rawName).replace(/:\s*as Character Talent/i, '');
   const found = /^([^(]*?)(\s*\(.*)?$/.exec(String(name).trim());
   const alias = TALENT_ALIASES.get(found[1].replace(/\s+/g, ' ').trim().toLowerCase());
   return alias ? `${alias}${found[2] || ''}` : String(name).trim();
@@ -34,6 +36,12 @@ export function canonicalTalentName(name) {
  */
 export function splitGluedTalent(name) {
   const text = canonicalTalentName(name);
+  // « Blather Bless (Taal) » (L04 p. 83, virgule oubliée) : la spécialisation finale appartient au dernier talent.
+  const specialised = /^([^(\d]+?)(\s*\([^()]*\))$/.exec(text);
+  if (specialised && !isCatalogueTalent(specialised[1])) {
+    const parts = splitGluedTalent(specialised[1]);
+    if (parts.length > 1) return [...parts.slice(0, -1), `${parts[parts.length - 1]}${specialised[2]}`];
+  }
   if (/[(\d]/.test(text) || isCatalogueTalent(text)) return [text];
   const words = text.split(' ');
   for (let cut = words.length - 1; cut >= 1; cut -= 1) {
@@ -158,6 +166,8 @@ export function assignKeywords(name, traits, referential = BASE_REFERENTIAL) {
  */
 export function isTrappingName(item) {
   if (item.length <= 60) return true;
+  // Un contenant et son contenu (« Pouch containing Writing Kit and 10 sheets of Parchment and 200 GC », L02 p. 30) est un seul objet.
+  if (item.length <= 120 && /^[A-Z][A-Za-z' -]{2,30} containing [A-Z0-9a-z]/.test(item) && !/[.:;]\s|\s--\s/.test(item)) return true;
   if (!item.endsWith(')') || /^(?:as|or|and|but|which|that|when|if)\s/i.test(item)) return false;
   const open = item.indexOf('(');
   return open > 0 && item.slice(0, open).trim().length <= 60 && !/[.:;]\s|\s--\s/.test(item.slice(0, open)) && item.lastIndexOf('(') >= open && [...item].reduce((depth, char) => (char === '(' ? depth + 1 : char === ')' ? depth - 1 : depth), 0) === 0;
@@ -214,7 +224,7 @@ export function buildRecord(extracted, entry, context) {
   // Un Talent du catalogue imprimé dans la liste des Traits d'un profil V4 (« Acute Sense (Vision: as Character Talent) ») est un Talent, pas un Trait.
   const baseName = name => String(name).replace(/\s*\(.*\)\s*$/, '').toLowerCase();
   const listedTalents = new Set((extracted.talents || []).map(talent => baseName(talent.name)));
-  const traitTalents = trimmed.filter(trait => !canonical(trait.name) && trait.param && isCatalogueTalent(trait.name) && !listedTalents.has(baseName(trait.name))).map(trait => ({ name: `${trait.name}${trait.param ? ` (${trait.param})` : ''}` }));
+  const traitTalents = trimmed.filter(trait => !canonical(trait.name) && trait.param && isCatalogueTalent(trait.name) && !listedTalents.has(baseName(trait.name))).map(trait => ({ name: `${trait.name}${trait.param ? ` (${trait.param.replace(/:\s*as Character Talent/i, '')})` : ''}` }));
   const talents = [...(extracted.talents || []).filter(talent => talent.name).flatMap(talent => splitGluedTalent(talent.name).map((name, index, parts) => ({ name, rank: index === parts.length - 1 ? talent.rank : undefined }))).filter(talent => !isNoise(talent.name.replace(/\(.*\)/, ''))).map(talent => ({ name: talent.name, ...(talent.rank ? { rank: talent.rank } : {}) })), ...traitTalents];
   if (extracted.talents?.length || traitTalents.length) record.talents = talents;
   if (extracted.trappings?.length) record.trappings = joinTrappings(extracted.trappings, TRAPPING_JOINS[entry.id]).filter(item => isTrappingName(item) || (TRAPPING_JOINS[entry.id] || []).includes(item));

@@ -1888,7 +1888,10 @@
    ],
    "talents": [
     {
-     "name": "Blather Bless (Taal)"
+     "name": "Blather"
+    },
+    {
+     "name": "Bless (Taal)"
     },
     {
      "name": "Hardy"

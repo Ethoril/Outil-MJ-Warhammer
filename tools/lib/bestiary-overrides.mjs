@@ -432,5 +432,17 @@ export const BODY_OVERRIDES = Object.freeze({
   'L20:132:0': [
     'Traits: Amphibious, Armour 2, Belligerent, Bite +8, Big, Cold-blooded, Dark Vision, Frenzy, Hatred (Fishermen), Hungry, Size (Large), Tail Attack +7, Territorial',
     'Skills: Melee (Unarmed) 68'
+  ],
+  // The Great Hospice (L01) p. 80 : Richter Kless, la colonne de gauche (prose) s'intercale dans la ligne de Compétences (« Lore (Chaos) 79 » coupé) et masque Traits, Talents et Équipement.
+  'L01:80:0': [
+    'Traits: Mental Corruption (Chaotic Dreams)',
+    'Skills: Intuition 41, Language (Classical) 47, Language (Dark Tongue of Chaos) 42, Language (Gospodarinyi) 35, Lore (Theology) 45, Lore (Chaos) 79, Perception 43, Research 56',
+    'Talents: Bookish, Etiquette (Scholars), Linguistics, Magnum Opus (Liber Chaotica), Read/Write, Savant (Chaos), Savvy, Speedreader, Tower of Memories',
+    'Trappings: Ragged Clothes'
+  ],
+  // L11 p. 15 : Forest Goblin Shaman, « Skills: Pray 60 » est suivi de « Spider-god Blessings: … » (liste de bénédictions, pas de compétences).
+  'L11:15:1': [
+    'Traits: Animosity (Greenskins), Arboreal, Blessed (Spider-god), Fear 1, Immunity (Poison), Miracles (Spider-god), Night Vision, Painless, Venom, Weapon (Spider-god Staff) +8, Not All There: toxin-induced haze',
+    'Skills: Pray 60'
   ]
 });

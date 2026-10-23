@@ -1554,6 +1554,11 @@
      "value": 55
     },
     {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 65
+    },
+    {
      "name": "Language (Estalian)",
      "nameFr": "Langue (Estalien)",
      "value": 37
@@ -1567,6 +1572,11 @@
      "name": "Leadership",
      "nameFr": "Commandement",
      "value": 57
+    },
+    {
+     "name": "Lore (Politics)",
+     "nameFr": "Savoir (Politique)",
+     "value": 65
     },
     {
      "name": "Melee (Basic)",
@@ -1584,9 +1594,19 @@
      "value": 45
     },
     {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 36
+    },
+    {
      "name": "Sail",
      "nameFr": "Voile",
      "value": 47
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 35
     }
    ],
    "talents": [
@@ -1827,7 +1847,61 @@
      "name": "Lore (Theology)",
      "nameFr": "Savoir (Théologie)",
      "value": 45
+    },
+    {
+     "name": "Lore (Chaos)",
+     "nameFr": "Savoir (Chaos)",
+     "value": 79
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 43
+    },
+    {
+     "name": "Research",
+     "nameFr": "Recherche",
+     "value": 56
     }
+   ],
+   "traits": [
+    {
+     "name": "Mental Corruption",
+     "param": "Chaotic Dreams",
+     "ref": "E0-T-038"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Bookish"
+    },
+    {
+     "name": "Etiquette (Scholars)"
+    },
+    {
+     "name": "Linguistics"
+    },
+    {
+     "name": "Magnum Opus (Liber Chaotica)"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Savant (Chaos)"
+    },
+    {
+     "name": "Savvy"
+    },
+    {
+     "name": "Speedreader"
+    },
+    {
+     "name": "Tower of Memories"
+    }
+   ],
+   "trappings": [
+    "Ragged Clothes"
    ],
    "keywords": [
     "humain"

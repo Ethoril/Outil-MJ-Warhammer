@@ -27,7 +27,8 @@ export function readTrappings(rawText) {
   // L14 : « Whilst Dalroth could equip himself … he can be expected to have the following items to hand: Blade… » ; la phrase d'introduction n'est pas un objet.
   // « …his preferred attire consists of: Crown… » (L16 p. 32) et « …, add the following: Bandages » (L16 p. 45) : même chose en cours de liste.
   const text = rawText.replace(/^[A-Z][^:]{20,}\b(?:to hand|following items|equipped with|consists of):\s*/, '').replace(/(^|,\s*)(?:add )?the following:\s*/g, '$1');
-  const cut = /\s\*(?=[A-Za-z])/.exec(text);
+  // « Sword * Adalbert is still… » (L02 p. 90) : l'astérisque peut être suivi d'une espace.
+  const cut = /\s\*\s?(?=[A-Za-z])/.exec(text);
   // Titre en majuscules d'un profil voisin collé à la liste (« Zweihander, Dagger POWER FAMILIAR but familiars… », L17 p. 182) : la liste s'arrête avant.
   const neighbour = /\s[A-Z][A-Z'’-]{2,}(?:\s[A-Z][A-Z'’-]{2,})+\b/.exec(cut ? text.slice(0, cut.index) : text);
   const end = neighbour ? neighbour.index : (cut ? cut.index : text.length);
@@ -47,6 +48,9 @@ export function readTrappings(rawText) {
 function readTraitItemPlain(text) {
   const item = clean(text.replace(/\*+$/, ''));
   if (!item) return null;
+  // « Breath +12 (Fire) » (Salamander, L07 p. 175) : le Souffle V4 porte ses dégâts imprimés, le type est la précision.
+  const breath = /^Breath\s*([+-]\d+)\s*\(([^()]*)\)$/i.exec(item);
+  if (breath) return { name: 'Breath', param: clean(breath[2]), rating: breath[1] };
   // Attaque (« Weapon (Fangs) +7 », « 2x Weapon (Claws) +10 », « Bite +9 ») suivie du nom d'une capacité collée dans la liste : on ne garde que l'attaque.
   const natural = /^(?:(\d+)\s*[x×\uFFFD]\s*)?(Weapon|Ranged|Bite|Horns|Tail Attack|Tail|Claws?|Tentacles?|Beak|Slam|Tongue Attack)\b\s*(?:d\s*)?(?:\(([^()]*)\))?\s*([+-]\s?\d+)(?:\s*\((\d+)\))?/i.exec(item);
   if (natural && !/[+-]\d/.test(natural[3] || '')) {
@@ -91,7 +95,8 @@ export function readSkills(text) {
   const skills = [];
   // Césures de mise en page (« Two- handed », « Pole- arm ») recollées ; « Pole-arm » et « Pole Arm » sont la spécialisation Polearm.
   const joined = text.replace(/([\wà-ÿ])- (?=[a-zà-ÿ])/g, '$1-').replace(/\bPole[- ]arm\b/gi, 'Polearm');
-  for (const rawItem of splitList(joined)) {
+  // Note à astérisque collée à la dernière compétence (« Swim 35 *All Tests connected with… », L01 p. 78) : la liste s'arrête avant.
+  for (const rawItem of splitList(joined.replace(/\s\*\s?[A-Z][\s\S]*$/, '')).map(entry => entry.replace(/\s*\*+$/, ''))) {
     // « Language (Magick 74, Reikspiel) 48 » (L18 p. 97) : la dernière spécialisation a sa valeur après la parenthèse.
     const item = rawItem.replace(/\s*\(\+\d+ SL[^)]*\)\s*$/, '').trim().replace(/^(.+?)\s*\(([^)]*\d[^)]*[^\d\s)])\)\s*(\d+)$/, '$1 ($2 $3)');
     // Une ou plusieurs spécialisations avec leur valeur dans la parenthèse : « Melee (Basic 76) », « Melee (Basic 65, Two-Handed 65) ».

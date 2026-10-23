@@ -177,6 +177,7 @@
     "Dagger",
     "Hand Mirror",
     "Jewellery worth 200 GC",
+    "Pouch containing Writing Kit and 10 sheets of Parchment and 200 GC",
     "Townhouses in Altdorf and Auerswald",
     "Riding Horse with Saddle and Harness"
    ],
@@ -1233,6 +1234,11 @@
      "value": 55
     },
     {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 49
+    },
+    {
      "name": "Endurance",
      "nameFr": "Résistance",
      "value": 40
@@ -1383,8 +1389,10 @@
     "Pouch containing 12 Gold Crowns and 10 Shillings",
     "Reinforced Soft Kit and Great Helm",
     "Saddle and Tack",
-    "Sword * Adalbert is still getting used to his prosthetic leg",
-    "and may not Dodge until he does so."
+    "Sword"
+   ],
+   "notes": [
+    "* Adalbert is still getting used to his prosthetic leg, and may not Dodge until he does so."
    ],
    "keywords": [
     "humain"

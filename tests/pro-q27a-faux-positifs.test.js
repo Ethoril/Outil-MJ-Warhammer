@@ -1,10 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { JUSTIFIED } from '../tools/lib/bestiary-justified.mjs';
 
 const CATEGORIES = ['talents', 'skills', 'attacks', 'traits', 'trappings', 'spells', 'trappingNoise', 'veryIncomplete'];
-const books = ['L14', 'L24'].map(book => JSON.parse(readFileSync(`js/data/bestiary/${book}.json`, 'utf8')));
+const books = readdirSync('js/data/bestiary').filter(name => /^L\d+\.json$/.test(name)).map(name => JSON.parse(readFileSync(`js/data/bestiary/${name}`, 'utf8')));
 const profiles = new Map(books.flatMap(book => book.profiles.map(profile => [profile.id, profile])));
 
 test('Q27a : chaque faux positif justifié a une raison, une catégorie du contrôle et un profil existant', () => {

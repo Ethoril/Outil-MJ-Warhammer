@@ -324,3 +324,12 @@ Branché / non appelé (grep dans `js/`) :
 - Reste (mesure avant ce lot, profils signalés) : L01 3, L02 2, L04 2, L06 1, L07 9, L10 1, L11 3, L12 8, L13 3, L16 11, L17 10, L18 13, L19 7, L20 20, L21 19, L22 12, L23 15, L25 6, L26 16 (Q27b, Q27c…).
 - Test : `tests/pro-q27a-faux-positifs.test.js` (3 tests). Suite complète lancée une fois : 4426 réussis, 0 échec.
 - Outil de contrôle et données de livre : rien à déclarer « branché » (le Phénix passe par `buildParticipantFromBestiary` comme avant, avec son talent). Aucune valeur durable de personnage.
+
+## Q27b — complétude de L01, L02, L03, L04, L06, L07, L09, L10, L11 (FAIT ; Q27 non terminé)
+
+- Mesure avant : 21 profils signalés dans L01-L11 (talents 10, compétences 8, attaques 1, Traits 12, équipement 9, sorts 1, bruit d'équipement 2). Tous relus sur leurs pages. **Après : 0 manque non justifié sur L01-L11** ; 19 faux positifs justifiés un par un (`QE-Q27b-1` et `-2`).
+- **Vrais manques corrigés dans l'outil** : compétence suivie d'un astérisque (« Gossip 65* », Dodge 49*) ; note à astérisque collée à la dernière compétence (« Swim 35 *All Tests… ») ; note « * … » avec espace dans l'équipement (Adalbert, devient note du profil) ; « Pouch containing … » de plus de 60 caractères (objet unique) ; virgule oubliée entre talents (« Blather Bless (Taal) ») ; Souffle V4 « Breath +12 (Fire) » (Trait Breath, rating, type) ; alias Corrupting, Coldblooded, Swamp Strider ; « : as Character Talent » retiré des talents Acute Sense. **Relus à la main** (`BODY_OVERRIDES`) : Richter Kless (L01 p.80), Forest Goblin Shaman (L11 p.15).
+- **Livres régénérés** (23, les changements d'outil touchent aussi les autres livres) : uniquement des lignes gagnées (3 Souffles L12/L16, 1 Cool L21, Corruption L25, objet « Leather satchel containing… » L16) et le renommage des talents Acute Sense (L07, L22). Aucune valeur imprimée changée, aucune entrée perdue.
+- **Contrôle, 23 livres** : talents 13, compétences 28, attaques 20, Traits 46, équipement 134, sorts 13, bruit d'équipement 62 (reste de Q27c à Q27e : L12 8 profils, L13 3, L16 11, L17 10, L18 13, L19 7, L20 20, L21 19, L22 12, L23 15, L25 5, L26 16).
+- Test : `tests/pro-q27b-completude.test.js` (7 tests) ; `pro-q27a-faux-positifs` lit désormais les 23 livres. Suite complète lancée une fois : 4433 réussis, 0 échec.
+- Outil de contrôle et données de livre : rien à déclarer « branché ». Aucune valeur durable de personnage.
