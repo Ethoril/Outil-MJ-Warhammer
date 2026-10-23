@@ -31965,5 +31965,1045 @@
       "Ne pas implanter"
     ],
     "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0001",
+    "phase": "argent-statut",
+    "lot": "L24",
+    "source": "L24 p.6",
+    "question": "Implanter « Argent aléatoire des PNJ » ? Sans argent indiqué au profil, une recette selon le Statut détermine les espèces portées ; un montant explicite au profil prime.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0002",
+    "phase": "maladies-poisons",
+    "lot": "L24",
+    "source": "L24 p.18",
+    "question": "Implanter « Dague empoisonnée à trois frappes » ? Cette lame porte trois frappes de poison ; la première Blessure causée déclenche Heartkill. La réserve de doses est distincte de l’effet du poison.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0003",
+    "phase": "combat",
+    "lot": "L24",
+    "source": "L24 p.29",
+    "question": "Implanter « Duel judiciaire au premier sang » ? Selon l’accusation, le duel se termine au premier coup retirant plus de trois Blessures ou lorsqu’un combattant atteint zéro Blessure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0008",
+    "phase": "combat",
+    "lot": "L24",
+    "source": "L24 p.67",
+    "question": "Implanter « Griffes du tigre » ? Ces armes emploient le profil de dague avec Corps à corps (Bagarre). Un Test réussi permet de faire passer les blessures pour celles d’un grand félin.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0009",
+    "phase": "maladies-poisons",
+    "lot": "L24",
+    "source": "L24 p.74",
+    "question": "Implanter « Poudre émétique » ? Une dose ingérée dans boisson ou nourriture provoque de violents vomissements sous dix minutes ; aucun Test de résistance, dégât ou État chiffré n’est publié.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0010",
+    "phase": "corruption",
+    "lot": "L24",
+    "source": "L24 p.79",
+    "question": "Implanter « Exposition dans un laboratoire contaminé » ? Rester plus de BE Rounds dans ce laboratoire expose à une influence corruptrice mineure ; le contexte est explicitement un lieu contaminé par la malepierre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0011",
+    "phase": "corruption",
+    "lot": "L24",
+    "source": "L24 p.79",
+    "question": "Implanter « Contact avec un matériel contaminé » ? Chaque minute de contact, même commencée, avec ce matériel de laboratoire expose à une influence corruptrice modérée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0012",
+    "phase": "creation",
+    "lot": "L24",
+    "source": "L24 p.87",
+    "question": "Implanter « Tirage d’espèce avec les Gnomes » ? Le d100 attribue Humain 01–89, Halfling 90–93, Nain 94–97, Gnome 98, Haut Elfe 99, Elfe sylvain 00 ; accepter le premier résultat donne vingt PX.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0013",
+    "phase": "creation",
+    "lot": "L24",
+    "source": "L24 p.87",
+    "question": "Implanter « Carrière aléatoire des Gnomes » ? La table propre aux Gnomes détermine classe et carrière ; une carrière absente peut être autorisée par le MJ selon les règles communes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0014",
+    "phase": "creation",
+    "lot": "L24",
+    "source": "L24 p.88",
+    "question": "Implanter « Génération des caractéristiques gnomes » ? Les dix caractéristiques utilisent 2d10 avec les bases propres aux Gnomes ; Force et CT partent de dix, Volonté de quarante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0015",
+    "phase": "creation",
+    "lot": "L24",
+    "source": "L24 p.88",
+    "question": "Implanter « Blessures initiales des Gnomes » ? Les Blessures initiales valent deux fois le Bonus d’Endurance plus le Bonus de Volonté.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0016",
+    "phase": "creation",
+    "lot": "L24",
+    "source": "L24 p.88",
+    "question": "Implanter « Destin et Résilience initiaux des Gnomes » ? Le Gnome reçoit deux Destin, zéro Résilience et deux points supplémentaires à répartir selon la procédure commune.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0017",
+    "phase": "creation",
+    "lot": "L24",
+    "source": "L24 p.88",
+    "question": "Implanter « Mouvement initial des Gnomes » ? Le Mouvement initial d’un Gnome est trois. Le Petit maison V4 reste prioritaire ; aucune conversion automatique en Taille V5.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0018",
+    "phase": "creation",
+    "lot": "L24",
+    "source": "L24 p.88",
+    "question": "Implanter « Compétences d’espèce des Gnomes » ? Choisir trois compétences à cinq avances et trois à trois avances parmi douze compétences d’espèce ; Reikspiel est déjà parlé couramment.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0019",
+    "phase": "creation",
+    "lot": "L24",
+    "source": "L24 p.88",
+    "question": "Implanter « Talents d’espèce des Gnomes » ? La prose annonce cinq talents d’espèce ; la liste présente cinq emplacements avec choix, puis Petit séparé. Conserver cette présentation sans retirer arbitrairement un don.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0020",
+    "phase": "magie",
+    "lot": "L24",
+    "source": "L24 p.88",
+    "question": "Implanter « Domaines accessibles aux Gnomes » ? Les Gnomes ne peuvent apprendre que les Ombres, la Magie noire et le Chaos ; Nécromancie, Démonologie et Chaos sont interdits culturellement, sans les rendre mécaniquement inaccessibles.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0021",
+    "phase": "magie",
+    "lot": "L24",
+    "source": "L24 p.88",
+    "question": "Implanter « Dissipation innée des Gnomes » ? Un Gnome disposant de Langue (Magick) peut tenter de dissiper même sans talent donnant le lancement de sorts.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0022",
+    "phase": "talents",
+    "lot": "L24",
+    "source": "L24 p.88",
+    "question": "Implanter « Imprégné d’Ulgu : substitution en Discrétion » ? Le talent de rang maximal un permet d’utiliser Focalisation (Ulgu) à la place de Discrétion pour les Tests pertinents.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0024",
+    "phase": "creation",
+    "lot": "L24",
+    "source": "L24 p.89",
+    "question": "Implanter « Âge et taille des Gnomes » ? L’âge initial aléatoire vaut 10d10+20 ans ; la taille vaut 3 pieds 4 pouces plus 1d10 pouces.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0025",
+    "phase": "creation",
+    "lot": "L24",
+    "source": "L24 p.89",
+    "question": "Implanter « Couleur des yeux gnomes » ? Le 2d10 répartit les couleurs des yeux, du bleu pâle au violet ; le grisonnement lié à l’âge reste descriptif.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0026",
+    "phase": "creation",
+    "lot": "L24",
+    "source": "L24 p.89",
+    "question": "Implanter « Couleur des cheveux gnomes » ? La couleur initiale des cheveux se tire sur 2d10 ; le changement vers le gris puis l’argent avec l’âge ne donne aucun modificateur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0028",
+    "phase": "corruption",
+    "lot": "L24",
+    "source": "L24 p.90",
+    "question": "Implanter « Mutations des Gnomes comme les Humains » ? Pour les mutations, les Gnomes emploient les règles humaines ; le renvoi publié p.183 ne redéfinit pas ces règles.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0029",
+    "phase": "competences",
+    "lot": "L24",
+    "source": "L24 p.91",
+    "question": "Implanter « Critiques hors combat des jeux » ? Dans ces jeux, un double sur un Test réussi compte comme Critique même hors combat.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0030",
+    "phase": "competences",
+    "lot": "L24",
+    "source": "L24 p.91",
+    "question": "Implanter « Résolution rapide des jeux » ? Une opposition à +0 avec la compétence du jeu, ou Jeu si aucune n’est indiquée, tranche par les DR ; cette option remplace la procédure détaillée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0031",
+    "phase": "competences",
+    "lot": "L24",
+    "source": "L24 p.91",
+    "question": "Implanter « Al-zahr : mise et cible » ? Chacun mise autant ; le premier choisit une cible entre sept et quinze. Les joueurs lancent ensuite 2d10 à tour de rôle.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0032",
+    "phase": "competences",
+    "lot": "L24",
+    "source": "L24 p.91",
+    "question": "Implanter « Al-zahr : gain » ? Obtenir la cible ou vingt donne tout le pot et termine la manche.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0033",
+    "phase": "competences",
+    "lot": "L24",
+    "source": "L24 p.91",
+    "question": "Implanter « Al-zahr : prélèvement » ? Un total de seize à dix-neuf permet de prendre une mise du pot.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0034",
+    "phase": "competences",
+    "lot": "L24",
+    "source": "L24 p.91",
+    "question": "Implanter « Al-zahr : nouvelle cible » ? Un total de sept à quinze qui ne vaut pas la cible devient la cible du joueur suivant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0035",
+    "phase": "competences",
+    "lot": "L24",
+    "source": "L24 p.91",
+    "question": "Implanter « Al-zahr : mise supplémentaire » ? Un total de trois à six impose de remettre une mise ou de quitter la manche.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0036",
+    "phase": "competences",
+    "lot": "L24",
+    "source": "L24 p.91",
+    "question": "Implanter « Al-zahr : élimination » ? Un total de deux élimine de la manche.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0037",
+    "phase": "competences",
+    "lot": "L24",
+    "source": "L24 p.91",
+    "question": "Implanter « Al-zahr : fin de partie » ? La manche finit quand le pot est vide ou qu’un seul joueur reste, emportant le reliquat ; la partie comporte normalement autant de manches que de joueurs.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0038",
+    "phase": "destin-chance",
+    "lot": "L24",
+    "source": "L24 p.91",
+    "question": "Implanter « Al-zahr : Chance » ? Un point de Chance permet de relancer le résultat de son tour d’Al-zahr, un jet de dés du jeu.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0039",
+    "phase": "talents",
+    "lot": "L24",
+    "source": "L24 p.91",
+    "question": "Implanter « Al-zahr : talent Joueur de dés » ? Chaque rang de Diceman ajoute un dé au lancer ; le joueur garde deux dés pour former son total.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0040",
+    "phase": "competences",
+    "lot": "L24",
+    "source": "L24 p.91",
+    "question": "Implanter « Alvatafl : prises » ? Chaque Round, Intelligence ou Savoir (Guerre) à +0 donne DR+BInt ; les Elfes prennent ce nombre de Nains, les Nains le quart arrondi au supérieur en Elfes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0041",
+    "phase": "competences",
+    "lot": "L24",
+    "source": "L24 p.91",
+    "question": "Implanter « Alvatafl : victoire critique » ? Sur Critique, les Nains gagnent si l’unité du jet ne dépasse pas leurs prises d’Elfes ; les Elfes gagnent si quatre fois l’unité ne dépasse pas leurs prises de Nains.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0042",
+    "phase": "competences",
+    "lot": "L24",
+    "source": "L24 p.91",
+    "question": "Implanter « Alvatafl : majorité et nul » ? Prendre plus de la moitié des pièces adverses gagne ; atteindre cette condition des deux côtés au même Round donne un nul.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0043",
+    "phase": "competences",
+    "lot": "L24",
+    "source": "L24 p.92",
+    "question": "Implanter « Bras de fer : opposition prolongée » ? Chaque Round oppose la Force à +0, avec BF ajouté aux DR ; le premier à dix DR gagne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0044",
+    "phase": "competences",
+    "lot": "L24",
+    "source": "L24 p.92",
+    "question": "Implanter « Bras de fer : Avantage » ? Le gagnant d’un Round reçoit un Avantage pour la suite de la rencontre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0045",
+    "phase": "competences",
+    "lot": "L24",
+    "source": "L24 p.92",
+    "question": "Implanter « Bras de fer : fatigue » ? Chaque tranche de BE Rounds sans vainqueur donne un Exténué ; cinq minutes de repos permettent son retrait.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0046",
+    "phase": "competences",
+    "lot": "L24",
+    "source": "L24 p.92",
+    "question": "Implanter « La Bête : quilles et Critique » ? Trois lancers pour seize quilles : CT très facile donne DR+BCT quilles ; un Critique abat toutes les quilles restantes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0047",
+    "phase": "competences",
+    "lot": "L24",
+    "source": "L24 p.92",
+    "question": "Implanter « La Bête : difficulté à 12–15 quilles » ? Avec 12–15 quilles restantes, la difficulté V4 du lancer suivant est +60.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0048",
+    "phase": "competences",
+    "lot": "L24",
+    "source": "L24 p.92",
+    "question": "Implanter « La Bête : difficulté à 10–11 quilles » ? Avec 10–11 quilles restantes, la difficulté V4 du lancer suivant est +40.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0049",
+    "phase": "competences",
+    "lot": "L24",
+    "source": "L24 p.92",
+    "question": "Implanter « La Bête : difficulté à 8–9 quilles » ? Avec 8–9 quilles restantes, la difficulté V4 du lancer suivant est +20.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0050",
+    "phase": "competences",
+    "lot": "L24",
+    "source": "L24 p.92",
+    "question": "Implanter « La Bête : difficulté à 6–7 ou 1 quilles » ? Avec 6–7 ou 1 quilles restantes, la difficulté V4 du lancer suivant est +0.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0051",
+    "phase": "competences",
+    "lot": "L24",
+    "source": "L24 p.92",
+    "question": "Implanter « La Bête : difficulté à 3–5 quilles » ? Avec 3–5 quilles restantes, la difficulté V4 du lancer suivant est −10.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0052",
+    "phase": "competences",
+    "lot": "L24",
+    "source": "L24 p.92",
+    "question": "Implanter « La Bête : difficulté à 2 quilles » ? Avec 2 quilles restantes, la difficulté V4 du lancer suivant est −20.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0053",
+    "phase": "competences",
+    "lot": "L24",
+    "source": "L24 p.92",
+    "question": "Implanter « Boules : lancer et plafond » ? Chacun lance trois boules avec Projectile (Lancer) à +0 ; un succès conserve ses DR, plafonnés à six ; un échec sort des limites.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0054",
+    "phase": "competences",
+    "lot": "L24",
+    "source": "L24 p.92",
+    "question": "Implanter « Boules : déplacer une boule adverse » ? Égaler ou dépasser le score d’une boule adverse permet de dépenser des DR pour réduire son score d’autant ; zéro la met hors jeu.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0055",
+    "phase": "competences",
+    "lot": "L24",
+    "source": "L24 p.92",
+    "question": "Implanter « Boules : score de partie » ? Après les lancers, le plus grand score gagne ; égalité maintenue. En version à points, chaque boule meilleure que toutes les adverses rapporte un point ; trois parties normalement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0056",
+    "phase": "competences",
+    "lot": "L24",
+    "source": "L24 p.93",
+    "question": "Implanter « Anneaux : cinq lancers » ? Choisir une cible avant chaque Projectile (Lancer) ; la réussite donne ses points, le Critique prend la cible suivante de la table ; meilleur total après cinq lancers.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0057",
+    "phase": "competences",
+    "lot": "L24",
+    "source": "L24 p.93",
+    "question": "Implanter « Anneaux : nez » ? Viser nez emploie +60 en V4 ; une réussite vaut 10 points.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0058",
+    "phase": "competences",
+    "lot": "L24",
+    "source": "L24 p.93",
+    "question": "Implanter « Anneaux : front » ? Viser front emploie +40 en V4 ; une réussite vaut 20 points.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0059",
+    "phase": "competences",
+    "lot": "L24",
+    "source": "L24 p.93",
+    "question": "Implanter « Anneaux : cornes » ? Viser cornes emploie +20 en V4 ; une réussite vaut 30 points.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0060",
+    "phase": "competences",
+    "lot": "L24",
+    "source": "L24 p.93",
+    "question": "Implanter « Anneaux : oreille » ? Viser oreille emploie +0 en V4 ; une réussite vaut 40 points.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0061",
+    "phase": "competences",
+    "lot": "L24",
+    "source": "L24 p.93",
+    "question": "Implanter « Anneaux : joue » ? Viser joue emploie −10 en V4 ; une réussite vaut 50 points.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0062",
+    "phase": "competences",
+    "lot": "L24",
+    "source": "L24 p.93",
+    "question": "Implanter « Anneaux : barbe » ? Viser barbe emploie −20 en V4 ; une réussite vaut 75 points.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0063",
+    "phase": "competences",
+    "lot": "L24",
+    "source": "L24 p.93",
+    "question": "Implanter « Anneaux : gorge » ? Viser gorge emploie −30 en V4 ; une réussite vaut 100 points.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0064",
+    "phase": "talents",
+    "lot": "L24",
+    "source": "L24 p.93",
+    "question": "Implanter « Anneaux : Tireur de précision » ? Sharpshooter rend chaque Test d’anneaux un cran plus facile ; par exemple les cornes passent de +20 à +40 en V4.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0065",
+    "phase": "competences",
+    "lot": "L24",
+    "source": "L24 p.93",
+    "question": "Implanter « Cerevis : jeu et Initiative » ? Chaque Round combine Jeu et Initiative à +20. Le plus faible DR de Jeu marque une chouette ; échouer l’Initiative impose de boire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0066",
+    "phase": "competences",
+    "lot": "L24",
+    "source": "L24 p.93",
+    "question": "Implanter « Cerevis : chouettes et alcool » ? Boire une demi-chope efface une chouette ; tous les trois échecs d’Initiative et toutes les deux chouettes effacées, tester Résistance à l’alcool à +0.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0067",
+    "phase": "competences",
+    "lot": "L24",
+    "source": "L24 p.94",
+    "question": "Implanter « Fléchettes : tours et score exact » ? Un tirage à pile ou face décide du premier ; chacun lance trois fois. La cible est cinq cent un points exactement ; dépasser termine le tour et annule la dernière fléchette seule.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0068",
+    "phase": "competences",
+    "lot": "L24",
+    "source": "L24 p.94",
+    "question": "Implanter « Fléchettes : réussite » ? Projectile (Lancer) à +0 réussi : choisir unité, dizaine, ou l’une d’elles multipliée par dix pour les points.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0069",
+    "phase": "competences",
+    "lot": "L24",
+    "source": "L24 p.94",
+    "question": "Implanter « Fléchettes : échec » ? Sur échec du lancer, marquer le chiffre des unités ; sur maladresse, manquer complètement le plateau.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0070",
+    "phase": "competences",
+    "lot": "L24",
+    "source": "L24 p.94",
+    "question": "Implanter « Fléchettes : Critique » ? Un Critique permet de choisir librement un score de un à cent points.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0071",
+    "phase": "talents",
+    "lot": "L24",
+    "source": "L24 p.94",
+    "question": "Implanter « Fléchettes : précision » ? Sharpshooter permet de modifier d’un le résultat du dé des unités, entre un et dix.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0072",
+    "phase": "competences",
+    "lot": "L24",
+    "source": "L24 p.94",
+    "question": "Implanter « Dominos : opposition et départage » ? Opposition de Jeu à +20 ; les ex æquo comparent les unités du jet, la plus petite l’emporte.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0073",
+    "phase": "competences",
+    "lot": "L24",
+    "source": "L24 p.94",
+    "question": "Implanter « Dwile Flonking : touches » ? Opposer Projectile (Lancer) à Esquive d’un danseur aléatoire parmi onze : succès un point, trois DR deux points, six DR trois points.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0074",
+    "phase": "competences",
+    "lot": "L24",
+    "source": "L24 p.94",
+    "question": "Implanter « Dwile Flonking : boire après un raté » ? Après un raté, boire une pinte et tester Résistance à l’alcool à +0 ; un échec fait perdre un point à l’équipe.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0075",
+    "phase": "competences",
+    "lot": "L24",
+    "source": "L24 p.94",
+    "question": "Implanter « Dwile Flonking : score final » ? Deux équipes de douze jouent jusqu’au lancer de chacun ; tout joueur n’ayant pas tiré sur la table d’ivresse fait perdre un point à son équipe.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0076",
+    "phase": "competences",
+    "lot": "L24",
+    "source": "L24 p.94",
+    "question": "Implanter « Middenball rapide : points d’équipe » ? Chaque Round, additionner pour chaque équipe les DR de Bagarre à +20 ou Athlétisme à +0 ; le meilleur total gagne un Avantage pour le Round suivant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0077",
+    "phase": "competences",
+    "lot": "L24",
+    "source": "L24 p.94",
+    "question": "Implanter « Middenball rapide : but et durée » ? Le meilleur total d’équipe marque aussi un but à vingt-cinq ou plus ; deux mi-temps de trois Rounds, chaque Round durant dix minutes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0078",
+    "phase": "competences",
+    "lot": "L24",
+    "source": "L24 p.95",
+    "question": "Implanter « Mühlen : opposition prolongée » ? Intelligence à +40 en opposition prolongée, BInt ajouté par Round ; neuf DR gagnent, mais atteindre neuf des deux côtés au même Round donne nul.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0079",
+    "phase": "competences",
+    "lot": "L24",
+    "source": "L24 p.95",
+    "question": "Implanter « Quiz : sept manches » ? Sept Rounds d’Intelligence de très facile à très difficile ; au moins une réussite dans l’équipe rapporte un point ; égalité départagée par une nouvelle question très difficile.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0080",
+    "phase": "competences",
+    "lot": "L24",
+    "source": "L24 p.95",
+    "question": "Implanter « Quiz : Savoir pertinent » ? Le MJ peut autoriser le Savoir du thème en remplacement de l’Intelligence pour une manche.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0081",
+    "phase": "competences",
+    "lot": "L24",
+    "source": "L24 p.95",
+    "question": "Implanter « Impératrice écarlate : pot et égalités » ? Chacun mise puis teste Jeu à +20 ; égalité : remettre une mise ou quitter, jusqu’à un vainqueur qui emporte le pot.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0082",
+    "phase": "talents",
+    "lot": "L24",
+    "source": "L24 p.95",
+    "question": "Implanter « Impératrice écarlate : mémoire » ? Avec Tower of Memories permettant de compter les cartes, le Test de Jeu devient facile à +40.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0083",
+    "phase": "competences",
+    "lot": "L24",
+    "source": "L24 p.95",
+    "question": "Implanter « Pierres : opposition et limite » ? Intelligence à +20 en opposition prolongée ; le premier à dix DR gagne ; sans vainqueur après dix Rounds, la partie est nulle.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0084",
+    "phase": "divin",
+    "lot": "L24",
+    "source": "L24 p.90",
+    "question": "Implanter « Accès divin de Evawn » ? Le culte de Evawn reçoit les six Bénédictions et trois Miracles de sa ligne, adaptés à son identité ; aucun nouveau miracle inventé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0085",
+    "phase": "divin",
+    "lot": "L24",
+    "source": "L24 p.90",
+    "question": "Implanter « Accès divin de Mabyn » ? Le culte de Mabyn reçoit les six Bénédictions et trois Miracles de sa ligne, adaptés à son identité ; aucun nouveau miracle inventé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L24-0086",
+    "phase": "divin",
+    "lot": "L24",
+    "source": "L24 p.90",
+    "question": "Implanter « Accès divin de Ringil » ? Le culte de Ringil reçoit les six Bénédictions et trois Miracles de sa ligne, adaptés à son identité ; aucun nouveau miracle inventé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
   }
 ]

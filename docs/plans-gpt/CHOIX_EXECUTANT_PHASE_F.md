@@ -145,3 +145,14 @@ La référence à un symbole existant est une preuve de localisation, pas une pr
 | F-C82 | L23 folios75/78–85 ; code | Imprégné du moteur suffit-il ? | Non : lecteur du Vent à8yards et après succès distinct de Suffused with Magic àBFMyards. Mindfire+2SLsurune cible signalé face à D0b. | Corps des fonctions/UI et source lus, pas égalité sur un nom. | Généraliser le lecteur ou modifier les contrats existants, écarté. |
 | F-C83 | L23 folios87/99/104/106 | Objets proches des profils ? | Acquisition d’effets et danger du tapis conservés ; expositions médicales/acide/or séparées, sans ingrédient d’incantation exigé. | Effets transportables déterminés, sans importer l’intrigue. | Octroyer l’immunité de la peau à tout vêtement dérivé ou guérir les Critiques, écarté. |
 | F-C84 | L23 fiches et folios15/40/44/57/59 | Copier les prétirés et l’économie ? | Allocations et secrets à effet chiffré seulement ; péage par jambe, obligation de guilde, opposition et équipement contextuels. | Profils/biographies/prix seuls ne sont pas des règles nouvelles. | Doter tous les personnages des secrets ou généraliser le bonus social, écarté. |
+
+## L24 — choix F-C85 à F-C90
+
+| Id | Source | Question | Choix | Raison | Alternative |
+| --- | --- | --- | --- | --- | --- |
+| F-C85 | L24 folios2/87–95 | Foliotage et tables ? | Physique=folio+1 ; images des tables vues, colonnes réattribuées. | PDF liminaire distinct des compagnons précédents. | Reprendre le décalage L23, écarté. |
+| F-C86 | L24 folio88 | Cinq ou six talents gnomes ? | Cinq emplacements et Petit séparé conservés face à prose cinq ; pas suppression arbitraire. | Divergence publiée, Petit maison prioritaire. | Retirer un emplacement, écarté. |
+| F-C87 | L24 folio88 ; fonctions Imprégné | Couverture complète ? | Aura assistée seulement ; substitution Ulgu non garantie par la première Focalisation. | Lecture du corps moteur et UI, pas simple label. | Certifier tout le talent, écarté. |
+| F-C88 | L24 folio90 | Accès de culte couvert par les commandements ? | Trois listes d’accès séparées ; commandements seul renvoi divin. | Chaque clause exige un renvoi exact. | Exclure toute la page via un résumé général, écarté. |
+| F-C89 | L24 folios91–95 | Unités et exceptions des jeux ? | Points, dés, Rounds sportifs, crans de difficulté et Critiques propres séparés ; Avantage en proposition Élan. | Ne pas convertir les scores en DR ni inventer progression ou arrondis. | Généraliser le Test de Jeu et perdre les clauses, écarté. |
+| F-C90 | L24 aventures ; Q18 | Scénario et poisons ? | Clauses transportables seules ; scènes et profils hors F0 ; alcool ordinaire et poudre émétique conservés. | Pas extension de Q18 à toute boisson ou poison. | Inventorier tous les indices ou exclure les jeux à boire, écarté. |

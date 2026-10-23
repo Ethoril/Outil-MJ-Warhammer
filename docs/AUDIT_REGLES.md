@@ -31,7 +31,7 @@ L’audit de couverture est statique : une référence moteur ne vaut pas recett
 | L21 — WFRP_Empire_in_Ruins_Companion.pdf | 75 | 0 | 0 | 0 | 74 | 1 |
 | L22 — WFRP_The_Horned_Rat_Enemy_Within_Campaign_Director_s_Cut_Volume_4_Companion1.pdf | 212 | 0 | 0 | 0 | 210 | 2 |
 | L23 — Warhammer_Fantasy_Roleplay_Enemy_in_Shadows_Companion.pdf | 281 | 0 | 0 | 0 | 279 | 2 |
-| L24 — Warhammer_Fantasy_Roleplay_Rough_Nights__Hard_Days_PDF.pdf.pdf | 0 | 0 | 0 | 0 | 0 | 0 |
+| L24 — Warhammer_Fantasy_Roleplay_Rough_Nights__Hard_Days_PDF.pdf.pdf | 86 | 0 | 1 | 0 | 85 | 0 |
 | L25 — WFRP_Sea_Of_Claws_221021.pdf | 0 | 0 | 0 | 0 | 0 | 0 |
 | L26 — WFRP_Death_on_the_Reik_Companion.pdf | 0 | 0 | 0 | 0 | 0 | 0 |
 
@@ -116,6 +116,18 @@ L05 — noms français seulement : 219 entrées avec nom sourcé et 100 avec ter
 | Voyage et navigation | 11 | 0 | 0 | 0 | 11 | 0 |
 | Véhicules et combat naval | 59 | 0 | 1 | 0 | 58 | 0 |
 | Véhicules et navigation | 5 | 0 | 0 | 0 | 5 | 0 |
+| argent-statut | 1 | 0 | 0 | 0 | 1 | 0 |
+| bestiaire | 1 | 0 | 0 | 0 | 1 | 0 |
+| combat | 2 | 0 | 0 | 0 | 2 | 0 |
+| competences | 50 | 0 | 0 | 0 | 50 | 0 |
+| corruption | 3 | 0 | 0 | 0 | 3 | 0 |
+| courage | 2 | 0 | 0 | 0 | 2 | 0 |
+| creation | 11 | 0 | 0 | 0 | 11 | 0 |
+| destin-chance | 1 | 0 | 0 | 0 | 1 | 0 |
+| divin | 4 | 0 | 0 | 0 | 4 | 0 |
+| magie | 3 | 0 | 0 | 0 | 3 | 0 |
+| maladies-poisons | 2 | 0 | 0 | 0 | 2 | 0 |
+| talents | 6 | 0 | 1 | 0 | 5 | 0 |
 | Équipement | 5 | 0 | 0 | 0 | 5 | 0 |
 | Équipement et artisanat | 113 | 0 | 0 | 0 | 112 | 1 |
 | Équipement spécialisé | 20 | 0 | 1 | 0 | 19 | 0 |
@@ -3031,6 +3043,127 @@ L05 — noms français seulement : 219 entrées avec nom sourcé et 100 avec ter
 - **F-L06-0290 — Faire avancer une embarcation à rames** (L06 p.158, absent) : M de quatre, réduit jusqu’à moitié en remontant le courant ou en surcharge, augmenté jusqu’à moitié avec le courant. Flux complet de préparation, calcul, coût, durée et application non repéré dans les moteurs et interfaces ; suivi manuel requis.
 - **F-L06-0291 — Accélérer à la rame** (L06 p.158, absent) : Ramer +0 augmente M d’un, ou de deux à +5 DR ; le rameur devient Exténué. Flux complet de préparation, calcul, coût, durée et application non repéré dans les moteurs et interfaces ; suivi manuel requis.
 - **F-L06-0292 — Manœuvrer un navire à voile** (L06 p.158, absent) : Un progrès suffit aux tâches ordinaires ; difficulté selon météo, obstacles et équipage ; sous vent modéré, victoire de vitesse contre une barque. Flux complet de préparation, calcul, coût, durée et application non repéré dans les moteurs et interfaces ; suivi manuel requis. Nom/termes FR : Voile (L05 p.131).
+
+### argent-statut
+
+- **F-L24-0001 — Argent aléatoire des PNJ** (L24 p.6, absent) : Sans argent indiqué au profil, une recette selon le Statut détermine les espèces portées ; un montant explicite au profil prime. Physique 7, folio 6. Audit statique ; titres français proposés.
+
+### bestiaire
+
+- **F-L24-0007 — Reformation après Instable** (L24 p.65, absent) : Inta-Dapesht se reforme huit heures après sa destruction par Instable, avec toutes ses Blessures. Physique 66, folio 65. Audit statique ; titres français proposés. Le résumé E0 cite p.66 ; clause lue folio65/physique66. Ne pas généraliser à tous les Éthérés. Déjà porté par l’inventaire référencé : Clause déjà portée par cette entrée exacte ; aucun doublon de sélection.
+
+### combat
+
+- **F-L24-0003 — Duel judiciaire au premier sang** (L24 p.29, absent) : Selon l’accusation, le duel se termine au premier coup retirant plus de trois Blessures ou lorsqu’un combattant atteint zéro Blessure. Physique 30, folio 29. Audit statique ; titres français proposés. Protocole autonome. Les variantes légales et équipements anecdotiques ne deviennent pas des restrictions universelles.
+- **F-L24-0008 — Griffes du tigre** (L24 p.67, absent) : Ces armes emploient le profil de dague avec Corps à corps (Bagarre). Un Test réussi permet de faire passer les blessures pour celles d’un grand félin. Physique 68, folio 67. Audit statique ; titres français proposés.
+
+### competences
+
+- **F-L24-0029 — Critiques hors combat des jeux** (L24 p.91, absent) : Dans ces jeux, un double sur un Test réussi compte comme Critique même hors combat. Physique 92, folio 91. Audit statique ; titres français proposés.
+- **F-L24-0030 — Résolution rapide des jeux** (L24 p.91, absent) : Une opposition à +0 avec la compétence du jeu, ou Jeu si aucune n’est indiquée, tranche par les DR ; cette option remplace la procédure détaillée. Physique 92, folio 91. Audit statique ; titres français proposés.
+- **F-L24-0031 — Al-zahr : mise et cible** (L24 p.91, absent) : Chacun mise autant ; le premier choisit une cible entre sept et quinze. Les joueurs lancent ensuite 2d10 à tour de rôle. Physique 92, folio 91. Audit statique ; titres français proposés.
+- **F-L24-0032 — Al-zahr : gain** (L24 p.91, absent) : Obtenir la cible ou vingt donne tout le pot et termine la manche. Physique 92, folio 91. Audit statique ; titres français proposés.
+- **F-L24-0033 — Al-zahr : prélèvement** (L24 p.91, absent) : Un total de seize à dix-neuf permet de prendre une mise du pot. Physique 92, folio 91. Audit statique ; titres français proposés.
+- **F-L24-0034 — Al-zahr : nouvelle cible** (L24 p.91, absent) : Un total de sept à quinze qui ne vaut pas la cible devient la cible du joueur suivant. Physique 92, folio 91. Audit statique ; titres français proposés.
+- **F-L24-0035 — Al-zahr : mise supplémentaire** (L24 p.91, absent) : Un total de trois à six impose de remettre une mise ou de quitter la manche. Physique 92, folio 91. Audit statique ; titres français proposés.
+- **F-L24-0036 — Al-zahr : élimination** (L24 p.91, absent) : Un total de deux élimine de la manche. Physique 92, folio 91. Audit statique ; titres français proposés.
+- **F-L24-0037 — Al-zahr : fin de partie** (L24 p.91, absent) : La manche finit quand le pot est vide ou qu’un seul joueur reste, emportant le reliquat ; la partie comporte normalement autant de manches que de joueurs. Physique 92, folio 91. Audit statique ; titres français proposés.
+- **F-L24-0040 — Alvatafl : prises** (L24 p.91, absent) : Chaque Round, Intelligence ou Savoir (Guerre) à +0 donne DR+BInt ; les Elfes prennent ce nombre de Nains, les Nains le quart arrondi au supérieur en Elfes. Physique 92, folio 91. Audit statique ; titres français proposés. Aucun plancher pour un total négatif publié. Les nombres de pièces du descriptif ne sont pas des profils.
+- **F-L24-0041 — Alvatafl : victoire critique** (L24 p.91, absent) : Sur Critique, les Nains gagnent si l’unité du jet ne dépasse pas leurs prises d’Elfes ; les Elfes gagnent si quatre fois l’unité ne dépasse pas leurs prises de Nains. Physique 92, folio 91. Audit statique ; titres français proposés.
+- **F-L24-0042 — Alvatafl : majorité et nul** (L24 p.91, absent) : Prendre plus de la moitié des pièces adverses gagne ; atteindre cette condition des deux côtés au même Round donne un nul. Physique 92, folio 91. Audit statique ; titres français proposés.
+- **F-L24-0043 — Bras de fer : opposition prolongée** (L24 p.92, absent) : Chaque Round oppose la Force à +0, avec BF ajouté aux DR ; le premier à dix DR gagne. Physique 93, folio 92. Audit statique ; titres français proposés.
+- **F-L24-0044 — Bras de fer : Avantage** (L24 p.92, absent) : Le gagnant d’un Round reçoit un Avantage pour la suite de la rencontre. Physique 93, folio 92. Audit statique ; titres français proposés.
+- **F-L24-0045 — Bras de fer : fatigue** (L24 p.92, absent) : Chaque tranche de BE Rounds sans vainqueur donne un Exténué ; cinq minutes de repos permettent son retrait. Physique 93, folio 92. Audit statique ; titres français proposés.
+- **F-L24-0046 — La Bête : quilles et Critique** (L24 p.92, absent) : Trois lancers pour seize quilles : CT très facile donne DR+BCT quilles ; un Critique abat toutes les quilles restantes. Physique 93, folio 92. Audit statique ; titres français proposés.
+- **F-L24-0047 — La Bête : difficulté à 12–15 quilles** (L24 p.92, absent) : Avec 12–15 quilles restantes, la difficulté V4 du lancer suivant est +60. Physique 93, folio 92. Audit statique ; titres français proposés.
+- **F-L24-0048 — La Bête : difficulté à 10–11 quilles** (L24 p.92, absent) : Avec 10–11 quilles restantes, la difficulté V4 du lancer suivant est +40. Physique 93, folio 92. Audit statique ; titres français proposés.
+- **F-L24-0049 — La Bête : difficulté à 8–9 quilles** (L24 p.92, absent) : Avec 8–9 quilles restantes, la difficulté V4 du lancer suivant est +20. Physique 93, folio 92. Audit statique ; titres français proposés.
+- **F-L24-0050 — La Bête : difficulté à 6–7 ou 1 quilles** (L24 p.92, absent) : Avec 6–7 ou 1 quilles restantes, la difficulté V4 du lancer suivant est +0. Physique 93, folio 92. Audit statique ; titres français proposés.
+- **F-L24-0051 — La Bête : difficulté à 3–5 quilles** (L24 p.92, absent) : Avec 3–5 quilles restantes, la difficulté V4 du lancer suivant est −10. Physique 93, folio 92. Audit statique ; titres français proposés.
+- **F-L24-0052 — La Bête : difficulté à 2 quilles** (L24 p.92, absent) : Avec 2 quilles restantes, la difficulté V4 du lancer suivant est −20. Physique 93, folio 92. Audit statique ; titres français proposés.
+- **F-L24-0053 — Boules : lancer et plafond** (L24 p.92, absent) : Chacun lance trois boules avec Projectile (Lancer) à +0 ; un succès conserve ses DR, plafonnés à six ; un échec sort des limites. Physique 93, folio 92. Audit statique ; titres français proposés.
+- **F-L24-0054 — Boules : déplacer une boule adverse** (L24 p.92, absent) : Égaler ou dépasser le score d’une boule adverse permet de dépenser des DR pour réduire son score d’autant ; zéro la met hors jeu. Physique 93, folio 92. Audit statique ; titres français proposés.
+- **F-L24-0055 — Boules : score de partie** (L24 p.92, absent) : Après les lancers, le plus grand score gagne ; égalité maintenue. En version à points, chaque boule meilleure que toutes les adverses rapporte un point ; trois parties normalement. Physique 93, folio 92. Audit statique ; titres français proposés.
+- **F-L24-0056 — Anneaux : cinq lancers** (L24 p.93, absent) : Choisir une cible avant chaque Projectile (Lancer) ; la réussite donne ses points, le Critique prend la cible suivante de la table ; meilleur total après cinq lancers. Physique 94, folio 93. Audit statique ; titres français proposés. Aucune cible suivante publiée après la gorge à100points, pas boucle inventée.
+- **F-L24-0057 — Anneaux : nez** (L24 p.93, absent) : Viser nez emploie +60 en V4 ; une réussite vaut 10 points. Physique 94, folio 93. Audit statique ; titres français proposés.
+- **F-L24-0058 — Anneaux : front** (L24 p.93, absent) : Viser front emploie +40 en V4 ; une réussite vaut 20 points. Physique 94, folio 93. Audit statique ; titres français proposés.
+- **F-L24-0059 — Anneaux : cornes** (L24 p.93, absent) : Viser cornes emploie +20 en V4 ; une réussite vaut 30 points. Physique 94, folio 93. Audit statique ; titres français proposés.
+- **F-L24-0060 — Anneaux : oreille** (L24 p.93, absent) : Viser oreille emploie +0 en V4 ; une réussite vaut 40 points. Physique 94, folio 93. Audit statique ; titres français proposés.
+- **F-L24-0061 — Anneaux : joue** (L24 p.93, absent) : Viser joue emploie −10 en V4 ; une réussite vaut 50 points. Physique 94, folio 93. Audit statique ; titres français proposés.
+- **F-L24-0062 — Anneaux : barbe** (L24 p.93, absent) : Viser barbe emploie −20 en V4 ; une réussite vaut 75 points. Physique 94, folio 93. Audit statique ; titres français proposés.
+- **F-L24-0063 — Anneaux : gorge** (L24 p.93, absent) : Viser gorge emploie −30 en V4 ; une réussite vaut 100 points. Physique 94, folio 93. Audit statique ; titres français proposés.
+- **F-L24-0065 — Cerevis : jeu et Initiative** (L24 p.93, absent) : Chaque Round combine Jeu et Initiative à +20. Le plus faible DR de Jeu marque une chouette ; échouer l’Initiative impose de boire. Physique 94, folio 93. Audit statique ; titres français proposés.
+- **F-L24-0066 — Cerevis : chouettes et alcool** (L24 p.93, absent) : Boire une demi-chope efface une chouette ; tous les trois échecs d’Initiative et toutes les deux chouettes effacées, tester Résistance à l’alcool à +0. Physique 94, folio 93. Audit statique ; titres français proposés. Alcool ordinaire conservé ; table d’ivresse du socle, pas drogue Q18 ni addiction ajoutée.
+- **F-L24-0067 — Fléchettes : tours et score exact** (L24 p.94, absent) : Un tirage à pile ou face décide du premier ; chacun lance trois fois. La cible est cinq cent un points exactement ; dépasser termine le tour et annule la dernière fléchette seule. Physique 95, folio 94. Audit statique ; titres français proposés.
+- **F-L24-0068 — Fléchettes : réussite** (L24 p.94, absent) : Projectile (Lancer) à +0 réussi : choisir unité, dizaine, ou l’une d’elles multipliée par dix pour les points. Physique 95, folio 94. Audit statique ; titres français proposés.
+- **F-L24-0069 — Fléchettes : échec** (L24 p.94, absent) : Sur échec du lancer, marquer le chiffre des unités ; sur maladresse, manquer complètement le plateau. Physique 95, folio 94. Audit statique ; titres français proposés.
+- **F-L24-0070 — Fléchettes : Critique** (L24 p.94, absent) : Un Critique permet de choisir librement un score de un à cent points. Physique 95, folio 94. Audit statique ; titres français proposés.
+- **F-L24-0072 — Dominos : opposition et départage** (L24 p.94, absent) : Opposition de Jeu à +20 ; les ex æquo comparent les unités du jet, la plus petite l’emporte. Physique 95, folio 94. Audit statique ; titres français proposés.
+- **F-L24-0073 — Dwile Flonking : touches** (L24 p.94, absent) : Opposer Projectile (Lancer) à Esquive d’un danseur aléatoire parmi onze : succès un point, trois DR deux points, six DR trois points. Physique 95, folio 94. Audit statique ; titres français proposés.
+- **F-L24-0074 — Dwile Flonking : boire après un raté** (L24 p.94, absent) : Après un raté, boire une pinte et tester Résistance à l’alcool à +0 ; un échec fait perdre un point à l’équipe. Physique 95, folio 94. Audit statique ; titres français proposés.
+- **F-L24-0075 — Dwile Flonking : score final** (L24 p.94, absent) : Deux équipes de douze jouent jusqu’au lancer de chacun ; tout joueur n’ayant pas tiré sur la table d’ivresse fait perdre un point à son équipe. Physique 95, folio 94. Audit statique ; titres français proposés.
+- **F-L24-0076 — Middenball rapide : points d’équipe** (L24 p.94, absent) : Chaque Round, additionner pour chaque équipe les DR de Bagarre à +20 ou Athlétisme à +0 ; le meilleur total gagne un Avantage pour le Round suivant. Physique 95, folio 94. Audit statique ; titres français proposés.
+- **F-L24-0077 — Middenball rapide : but et durée** (L24 p.94, absent) : Le meilleur total d’équipe marque aussi un but à vingt-cinq ou plus ; deux mi-temps de trois Rounds, chaque Round durant dix minutes. Physique 95, folio 94. Audit statique ; titres français proposés. Les Rounds sportifs ne sont pas les Rounds de combat ; L19 plus récent prioritaire pour divergences.
+- **F-L24-0078 — Mühlen : opposition prolongée** (L24 p.95, absent) : Intelligence à +40 en opposition prolongée, BInt ajouté par Round ; neuf DR gagnent, mais atteindre neuf des deux côtés au même Round donne nul. Physique 96, folio 95. Audit statique ; titres français proposés.
+- **F-L24-0079 — Quiz : sept manches** (L24 p.95, absent) : Sept Rounds d’Intelligence de très facile à très difficile ; au moins une réussite dans l’équipe rapporte un point ; égalité départagée par une nouvelle question très difficile. Physique 96, folio 95. Audit statique ; titres français proposés. Les cinq difficultés intermédiaires ne sont pas imposées par la source, ne pas inventer une progression uniforme.
+- **F-L24-0080 — Quiz : Savoir pertinent** (L24 p.95, absent) : Le MJ peut autoriser le Savoir du thème en remplacement de l’Intelligence pour une manche. Physique 96, folio 95. Audit statique ; titres français proposés.
+- **F-L24-0081 — Impératrice écarlate : pot et égalités** (L24 p.95, absent) : Chacun mise puis teste Jeu à +20 ; égalité : remettre une mise ou quitter, jusqu’à un vainqueur qui emporte le pot. Physique 96, folio 95. Audit statique ; titres français proposés.
+- **F-L24-0083 — Pierres : opposition et limite** (L24 p.95, absent) : Intelligence à +20 en opposition prolongée ; le premier à dix DR gagne ; sans vainqueur après dix Rounds, la partie est nulle. Physique 96, folio 95. Audit statique ; titres français proposés.
+
+### corruption
+
+- **F-L24-0010 — Exposition dans un laboratoire contaminé** (L24 p.79, absent) : Rester plus de BE Rounds dans ce laboratoire expose à une influence corruptrice mineure ; le contexte est explicitement un lieu contaminé par la malepierre. Physique 80, folio 79. Audit statique ; titres français proposés.
+- **F-L24-0011 — Contact avec un matériel contaminé** (L24 p.79, absent) : Chaque minute de contact, même commencée, avec ce matériel de laboratoire expose à une influence corruptrice modérée. Physique 80, folio 79. Audit statique ; titres français proposés. Pas de point automatique. Perception du lieu par Focalisation ou Seconde vue séparée du jet de résistance.
+- **F-L24-0028 — Mutations des Gnomes comme les Humains** (L24 p.90, absent) : Pour les mutations, les Gnomes emploient les règles humaines ; le renvoi publié p.183 ne redéfinit pas ces règles. Physique 91, folio 90. Audit statique ; titres français proposés. Ne pas réinventorier toutes les mutations ; seule l’éligibilité d’espèce est nouvelle.
+
+### courage
+
+- **F-L24-0004 — Peur et ralliement des scènes** (L24 p.45, absent) : La Peur de l’acteur et le ralliement de la foule relèvent des applications déjà recensées de Peur et Commandement. Physique 46, folio 45. Audit statique ; titres français proposés. Déjà porté par l’inventaire référencé : Clause déjà portée par cette entrée exacte ; aucun doublon de sélection.
+- **F-L24-0005 — Terreur du spectre** (L24 p.60, absent) : La Terreur et le ralliement du graf renvoient à l’application scénaristique existante ; pas nouveau système de courage. Physique 61, folio 60. Audit statique ; titres français proposés. Déjà porté par l’inventaire référencé : Clause déjà portée par cette entrée exacte ; aucun doublon de sélection.
+
+### creation
+
+- **F-L24-0012 — Tirage d’espèce avec les Gnomes** (L24 p.87, absent) : Le d100 attribue Humain 01–89, Halfling 90–93, Nain 94–97, Gnome 98, Haut Elfe 99, Elfe sylvain 00 ; accepter le premier résultat donne vingt PX. Physique 88, folio 87. Audit statique ; titres français proposés.
+- **F-L24-0013 — Carrière aléatoire des Gnomes** (L24 p.87, absent) : La table propre aux Gnomes détermine classe et carrière ; une carrière absente peut être autorisée par le MJ selon les règles communes. Physique 88, folio 87. Audit statique ; titres français proposés. 43 lignes vues : Apothicaire01, Avocat02, Médecin03–04, Prêtre05, Érudit06–07, Sorcier08–14, Agitateur15, Artisan16–17, Mendiant18, Enquêteur19, Marchand20–21, Ratier22, Citadin23–28, Garde29, Conseiller30, Artiste31, Émissaire32, Noble33, Serviteur34–35, Espion36–40, Gardien41–42, Bailli43, Herboriste44, Chasseur45–46, Mineur47–54, Éclaireur55–58, Villageois59–62, Chasseur de primes63, Amuseur64–68, Messager69, Colporteur70–75, Batelier76, Riverain77–80, Contrebandier81–83, Entremetteur84–85, Charlatan86–90, Receleur91, Hors-la-loi92, Racketteur93–94, Voleur95–97, Garde98, Soldat99, Prêtre-guerrier00. Noms FR proposés ; Watchman29 et Guard98 distincts.
+- **F-L24-0014 — Génération des caractéristiques gnomes** (L24 p.88, absent) : Les dix caractéristiques utilisent 2d10 avec les bases propres aux Gnomes ; Force et CT partent de dix, Volonté de quarante. Physique 89, folio 88. Audit statique ; titres français proposés. Image : bases CC20/CT10/F10/E15/I30/Ag30/Dex30/Int30/FM40/Soc15. Caractéristiques, pas DR.
+- **F-L24-0015 — Blessures initiales des Gnomes** (L24 p.88, absent) : Les Blessures initiales valent deux fois le Bonus d’Endurance plus le Bonus de Volonté. Physique 89, folio 88. Audit statique ; titres français proposés.
+- **F-L24-0016 — Destin et Résilience initiaux des Gnomes** (L24 p.88, absent) : Le Gnome reçoit deux Destin, zéro Résilience et deux points supplémentaires à répartir selon la procédure commune. Physique 89, folio 88. Audit statique ; titres français proposés.
+- **F-L24-0017 — Mouvement initial des Gnomes** (L24 p.88, absent) : Le Mouvement initial d’un Gnome est trois. Le Petit maison V4 reste prioritaire ; aucune conversion automatique en Taille V5. Physique 89, folio 88. Audit statique ; titres français proposés.
+- **F-L24-0018 — Compétences d’espèce des Gnomes** (L24 p.88, absent) : Choisir trois compétences à cinq avances et trois à trois avances parmi douze compétences d’espèce ; Reikspiel est déjà parlé couramment. Physique 89, folio 88. Audit statique ; titres français proposés. Liste : Focalisation Ulgu, Charme, Résistance alcool, Esquive, Divertissement, Ragot, Marchandage, Ghassally, Magick, Wastelander, Survie, Discrétion.
+- **F-L24-0019 — Talents d’espèce des Gnomes** (L24 p.88, absent) : La prose annonce cinq talents d’espèce ; la liste présente cinq emplacements avec choix, puis Petit séparé. Conserver cette présentation sans retirer arbitrairement un don. Physique 89, folio 88. Audit statique ; titres français proposés. Sous-estimé/Imprégné Ulgu ; Chanceux/Imitateur ; Vision nocturne ; Pêcheur/Lire-écrire ; Seconde vue/Sixième sens ; Petit. Ambiguïté cinq contre six conservée.
+- **F-L24-0024 — Âge et taille des Gnomes** (L24 p.89, absent) : L’âge initial aléatoire vaut 10d10+20 ans ; la taille vaut 3 pieds 4 pouces plus 1d10 pouces. Physique 90, folio 89. Audit statique ; titres français proposés.
+- **F-L24-0025 — Couleur des yeux gnomes** (L24 p.89, absent) : Le 2d10 répartit les couleurs des yeux, du bleu pâle au violet ; le grisonnement lié à l’âge reste descriptif. Physique 90, folio 89. Audit statique ; titres français proposés. 2bleu pâle,3bleu,4bleu profond,5–7turquoise,8–11vert pâle,12–14noisette,15–17brun pâle,18brun,19brun foncé,20violet. Table vérifiée en image physique90.
+- **F-L24-0026 — Couleur des cheveux gnomes** (L24 p.89, absent) : La couleur initiale des cheveux se tire sur 2d10 ; le changement vers le gris puis l’argent avec l’âge ne donne aucun modificateur. Physique 90, folio 89. Audit statique ; titres français proposés. 2noir,3brun foncé,4auburn,5–7brun,8–11brun clair,12–14roux,15–17blond roux,18blond doré,19blond blanc,20blanc. Table vérifiée en image physique90.
+
+### destin-chance
+
+- **F-L24-0038 — Al-zahr : Chance** (L24 p.91, absent) : Un point de Chance permet de relancer le résultat de son tour d’Al-zahr, un jet de dés du jeu. Physique 92, folio 91. Audit statique ; titres français proposés.
+
+### divin
+
+- **F-L24-0027 — Religion commune des prêtres gnomes** (L24 p.90, absent) : Le système religieux et les commandements d’Evawn, Mabyn et Ringil restent dans l’inventaire divin ; aucune exemption elfique pour les Gnomes. Physique 91, folio 90. Audit statique ; titres français proposés. Déjà porté par l’inventaire référencé : Clause déjà portée par cette entrée exacte ; aucun doublon de sélection.
+- **F-L24-0084 — Accès divin de Evawn** (L24 p.90, absent) : Le culte de Evawn reçoit les six Bénédictions et trois Miracles de sa ligne, adaptés à son identité ; aucun nouveau miracle inventé. Physique 91, folio 90. Audit statique ; titres français proposés. Liste d’accès absente du résumé des commandements : Bénédictions Charisme, Courage, Chance, Finesse, Endurance, Protection ; Miracles An Invitation ; Rich Man, Poor Man, Beggar Man, Thief ; Rhya’s Shelter. Effets individuels existants non réinventoriés. Table physique91 vue.
+- **F-L24-0085 — Accès divin de Mabyn** (L24 p.90, absent) : Le culte de Mabyn reçoit les six Bénédictions et trois Miracles de sa ligne, adaptés à son identité ; aucun nouveau miracle inventé. Physique 91, folio 90. Audit statique ; titres français proposés. Liste d’accès absente du résumé des commandements : Bénédictions Bataille, Endurance, Protection, Droiture, Ténacité, Sagesse ; Miracles Death Mask ; You Ain’t Seen Me, Right? ; Sword of Justice. Effets individuels existants non réinventoriés. Table physique91 vue.
+- **F-L24-0086 — Accès divin de Ringil** (L24 p.90, absent) : Le culte de Ringil reçoit les six Bénédictions et trois Miracles de sa ligne, adaptés à son identité ; aucun nouveau miracle inventé. Physique 91, folio 90. Audit statique ; titres français proposés. Liste d’accès absente du résumé des commandements : Bénédictions Souffle, Charisme, Conscience, Grâce, Chasse, Esprit ; Miracles Blind Justice ; Leaping Stag ; Ranald’s Grace. Effets individuels existants non réinventoriés. Table physique91 vue.
+
+### magie
+
+- **F-L24-0006 — Révéler la beauté intérieure** (L24 p.52, absent) : Le sort de Nurgle conserve son entrée de tradition ; ses caractéristiques perdues ne se convertissent pas en DR. Physique 53, folio 52. Audit statique ; titres français proposés. Déjà porté par l’inventaire référencé : Clause déjà portée par cette entrée exacte ; aucun doublon de sélection.
+- **F-L24-0020 — Domaines accessibles aux Gnomes** (L24 p.88, absent) : Les Gnomes ne peuvent apprendre que les Ombres, la Magie noire et le Chaos ; Nécromancie, Démonologie et Chaos sont interdits culturellement, sans les rendre mécaniquement inaccessibles. Physique 89, folio 88. Audit statique ; titres français proposés.
+- **F-L24-0021 — Dissipation innée des Gnomes** (L24 p.88, absent) : Un Gnome disposant de Langue (Magick) peut tenter de dissiper même sans talent donnant le lancement de sorts. Physique 89, folio 88. Audit statique ; titres français proposés. Le système générique de dissipation ne démontre pas cette exception d’accès par espèce.
+
+### maladies-poisons
+
+- **F-L24-0002 — Dague empoisonnée à trois frappes** (L24 p.18, absent) : Cette lame porte trois frappes de poison ; la première Blessure causée déclenche Heartkill. La réserve de doses est distincte de l’effet du poison. Physique 19, folio 18. Audit statique ; titres français proposés.
+- **F-L24-0009 — Poudre émétique** (L24 p.74, absent) : Une dose ingérée dans boisson ou nourriture provoque de violents vomissements sous dix minutes ; aucun Test de résistance, dégât ou État chiffré n’est publié. Physique 75, folio 74. Audit statique ; titres français proposés. Même poudre folio77. Poison transportable ; ne pas convertir nausée narrative en Empoisonné ni ajouter addiction Q18.
+
+### talents
+
+- **F-L24-0022 — Imprégné d’Ulgu : substitution en Discrétion** (L24 p.88, absent) : Le talent de rang maximal un permet d’utiliser Focalisation (Ulgu) à la place de Discrétion pour les Tests pertinents. Physique 89, folio 88. Audit statique ; titres français proposés. Le flux Imprégné existe, mais magicSkillReplacement prend la première Focalisation non Haute sans vérifier Ulgu ; identité partielle, aucun lecteur exact de la spécialisation établi.
+- **F-L24-0039 — Al-zahr : talent Joueur de dés** (L24 p.91, absent) : Chaque rang de Diceman ajoute un dé au lancer ; le joueur garde deux dés pour former son total. Physique 92, folio 91. Audit statique ; titres français proposés.
+- **F-L24-0064 — Anneaux : Tireur de précision** (L24 p.93, absent) : Sharpshooter rend chaque Test d’anneaux un cran plus facile ; par exemple les cornes passent de +20 à +40 en V4. Physique 94, folio 93. Audit statique ; titres français proposés. Conserver les crans publiés, ne pas transformer le cran en+1DR uniforme entre+0et+20.
+- **F-L24-0071 — Fléchettes : précision** (L24 p.94, absent) : Sharpshooter permet de modifier d’un le résultat du dé des unités, entre un et dix. Physique 95, folio 94. Audit statique ; titres français proposés. Le texte ne précise pas l’ordre face au Critique ou à la réussite ; aucun nouveau Critique après modification inventé.
+- **F-L24-0082 — Impératrice écarlate : mémoire** (L24 p.95, absent) : Avec Tower of Memories permettant de compter les cartes, le Test de Jeu devient facile à +40. Physique 96, folio 95. Audit statique ; titres français proposés.
 
 ### Équipement
 
