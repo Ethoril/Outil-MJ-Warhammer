@@ -48,7 +48,9 @@ export function printedSkills(block, catalogueNames = new Set()) {
   const text = segment(block, 'Skills');
   if (text === null) return [];
   const found = [];
-  for (const item of splitTopLevel(text)) {
+  for (const raw of splitTopLevel(text)) {
+    // « Ride Horse 42 » (L21 p. 41) : parenthèses oubliées par le livre, même lecture que `readSkills`.
+    const item = raw.replace(/^Ride ([A-Z][a-z]+) (?=\d)/, 'Ride ($1) ');
     // Un talent à rang imprimé dans la ligne des compétences (« Dual Wielder 2 », Lokhir L07) n'est pas une compétence.
     const ranked = /^(.+?)\s+(\d)$/.exec(item);
     if (ranked && catalogueNames.has(ranked[1].toLowerCase())) continue;

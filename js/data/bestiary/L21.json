@@ -2531,6 +2531,11 @@
      "name": "Perception",
      "nameFr": "Perception",
      "value": 37
+    },
+    {
+     "name": "Ride (Horse)",
+     "nameFr": "Chevaucher (Cheval)",
+     "value": 42
     }
    ],
    "talents": [
@@ -2941,22 +2946,105 @@
      "damage": 6,
      "trait": "Ranged",
      "ranged": true
+    },
+    {
+     "name": "Sword",
+     "damage": 7,
+     "trait": "Weapon"
     }
    ],
-   "traits": [
+   "skills": [
     {
-     "name": "Striding Gait",
-     "param": "Highlands",
-     "ref": "E0-T-051"
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 41
+    },
+    {
+     "name": "Charm Animal",
+     "nameFr": "Emprise sur les animaux",
+     "value": 35
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 35
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 38
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 44
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 31
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 35
+    },
+    {
+     "name": "Lore (Ostland)",
+     "nameFr": "Savoir (Ostland)",
+     "frUnverified": true,
+     "value": 36
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 48
+    },
+    {
+     "name": "Navigation",
+     "nameFr": "Orientation",
+     "value": 45
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 36
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 47
+    },
+    {
+     "name": "Ranged (Bow)",
+     "nameFr": "Projectiles (Arc)",
+     "value": 60
+    },
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 45
+    },
+    {
+     "name": "Track",
+     "nameFr": "Pistage",
+     "value": 44
     }
    ],
-   "optionalTraits": [
+   "talents": [
     {
-     "name": "Ranged",
-     "rating": "60",
-     "param": "Bow",
-     "ref": "E0-T-082"
+     "name": "Combat Aware"
+    },
+    {
+     "name": "Strider (Highlands)"
     }
+   ],
+   "trappings": [
+    "Sword",
+    "Bow",
+    "Uniform",
+    "Grey surcoat",
+    "Cloak"
    ],
    "keywords": [
     "soldat"
@@ -3763,6 +3851,13 @@
    },
    "wounds": 176,
    "size": "monstrous",
+   "attacks": [
+    {
+     "name": "Weapon",
+     "damage": 13,
+     "trait": "Weapon"
+    }
+   ],
    "traits": [
     {
      "name": "Construct",
@@ -3802,7 +3897,7 @@
     }
    ],
    "specialRules": [
-    "Weapon+13 Suffused with Death"
+    "Suffused with Death"
    ],
    "abilities": [
     "E0-T-255",
@@ -4548,6 +4643,7 @@
    ],
    "trappings": [
     "Bottle of Spirits",
+    "Book of Pressed Flowers taken from every battlefield she has ever fought on (worth 5 GC to someone interested in botany)",
     "pouch with 23 s 18d",
     "armour and weapons (Military Flail, three daggers, sword)."
    ],
@@ -4882,7 +4978,7 @@
    ],
    "trappings": [
     "Chaos Armour (cannot be removed)",
-    "Sword The horde is largely made up of mutants and Beastmen"
+    "Sword"
    ],
    "keywords": [
     "guerrier-du-chaos"
@@ -4922,6 +5018,68 @@
      "trait": "Weapon"
     }
    ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 80
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 35
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 65
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 70
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 65
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 35
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 65
+    },
+    {
+     "name": "Language (Magick)",
+     "nameFr": "Langue (Magick)",
+     "value": 65
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 35
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 70
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 70
+    },
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 75
+    }
+   ],
    "traits": [
     {
      "name": "Clever",
@@ -4944,6 +5102,21 @@
      "name": "Tough",
      "ref": "E0-T-086"
     }
+   ],
+   "talents": [
+    {
+     "name": "Furious Assault"
+    },
+    {
+     "name": "Menacing"
+    },
+    {
+     "name": "Strike Mighty Blow"
+    }
+   ],
+   "trappings": [
+    "Chaos Armour (cannot be removed) decorated with the skin of a dire wolf",
+    "Hand Axe"
    ],
    "keywords": [
     "guerrier-du-chaos"

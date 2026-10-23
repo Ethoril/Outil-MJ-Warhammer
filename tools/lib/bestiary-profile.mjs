@@ -109,7 +109,8 @@ export function readSkills(text) {
   const skills = [];
   // Césures de mise en page (« Two- handed », « Pole- arm ») recollées ; « Pole-arm » et « Pole Arm » sont la spécialisation Polearm.
   // Fragment de la colonne voisine entre un nom et sa parenthèse (« Melee rd, (Basic 90, Two-handed 100) », Brokk Ironpick L16 p. 32) : écarté.
-  const joined = text.replace(/([\wà-ÿ])- (?=[a-zà-ÿ])/g, '$1-').replace(/\bPole[- ]arm\b/gi, 'Polearm').replace(/(\p{L}) [a-z]{1,3},(?= \()/gu, '$1');
+  // « Ride Horse 42 » (Renia Grünewald, L21 p. 41) : parenthèses oubliées par le livre.
+  const joined = text.replace(/(^|,\s*)Ride ([A-Z][a-z]+) (?=\d)/g, '$1Ride ($2) ').replace(/([\wà-ÿ])- (?=[a-zà-ÿ])/g, '$1-').replace(/\bPole[- ]arm\b/gi, 'Polearm').replace(/(\p{L}) [a-z]{1,3},(?= \()/gu, '$1');
   // Note à astérisque collée à la dernière compétence (« Swim 35 *All Tests connected with… », L01 p. 78) : la liste s'arrête avant.
   for (const rawItem of splitList(joined.replace(/\s\*\s?[A-Z][\s\S]*$/, '')).map(entry => entry.replace(/\s*\*+$/, ''))) {
     // « Language (Magick 74, Reikspiel) 48 » (L18 p. 97) : la dernière spécialisation a sa valeur après la parenthèse.
@@ -273,7 +274,7 @@ export function listTraits(text, mode, dictionary, key) {
     if (colon >= 0) {
       const head = clean(item.slice(0, colon));
       // « Weapon (Claws) +11 Toxic Bile: … », « Weapon +8 Font of Flame: … » : l'attaque imprimée est un Trait, le titre qui la suit est la règle spéciale.
-      const attackHead = /^((?:Weapon|Ranged|Bite|Horns|Tail(?: Attack)?|Claws?|Tentacles?|Beak|Slam|Tongue Attack)\b.*?[+-]\s?\d+(?:\s*\(\d+\))?)\s+([A-Z][A-Za-z'’-]*(?:\s+(?:(?:of|the|and|in|to)\s+)?[A-Z][A-Za-z'’-]*){0,3})$/.exec(head);
+      const attackHead = /^((?:Weapon|Ranged|Bite|Horns|Tail(?: Attack)?|Claws?|Tentacles?|Beak|Slam|Tongue Attack)\b.*?[+-]\s?\d+(?:\s*\(\d+\))?)\s+([A-Z][A-Za-z'’-]*(?:\s+(?:(?:of|the|and|in|to|with)\s+)?[A-Z][A-Za-z'’-]*){0,3})$/.exec(head);
       if (attackHead) { const attack = readTraitItem(attackHead[1]); if (attack) out[key].push(attack); rules.push(attackHead[2]); break; }
       const known = [...dictionary].filter(name => head === name || head.startsWith(`${name} `)).sort((a, b) => b.length - a.length)[0];
       if (known && head !== known) { out[key].push(readTraitItem(known)); rules.push(clean(head.slice(known.length))); } else rules.push(head);

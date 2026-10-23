@@ -37,6 +37,8 @@ Plan : `PLAN_PRO_QUALITE_E.md`. Branche `pro/qualite-e`, départ `9c12613`. Choi
 | Q26 | FAIT (`QE-Q26-1` à `QE-Q26-8`) | (voir `git log`, « Q26 ») |
 | Q27a-c | FAIT (L01-L16 ; voir sections ci-dessous) | (voir `git log`, « Q27a » à « Q27c ») |
 | Q27d | FAIT (L17, L18, L19 ; Q27 non terminé : L20-L23, L25, L26) | (voir `git log`, « Q27d ») |
+| Q27e | FAIT (L20 ; Q27 non terminé : L21-L23, L25, L26) | (voir `git log`, « Q27e ») |
+| Q27f | FAIT (L21 ; Q27 non terminé : L22, L23, L25, L26) | (voir `git log`, « Q27f ») |
 
 ## Q0 — contrôle de complétude
 
@@ -363,3 +365,13 @@ Branché / non appelé (grep dans `js/`) :
 - **Contrôle, 23 livres** : talents 10, compétences 18, attaques 4, Traits 17, équipement 83, sorts 0, bruit d'équipement 10 (avant : 10, 19, 10, 21, 113, 5, 17) ; L01-L20 et L24 à 0. Reste : L21 15 profils, L22 9, L23 15, L25 5, L26 10 (Q27f).
 - Test : `tests/pro-q27e-completude.test.js` (7 tests). Suite complète lancée une fois : 4456 réussis, 0 échec.
 - Outil de contrôle et données de livre : rien à déclarer « branché » (les attaques gagnées passent par `buildParticipantFromBestiary`, appelants : `js/ui/bestiary-library.js`, `js/core/bestiary-templates.js`). Aucune valeur durable de personnage.
+
+## Q27f — complétude de L21 (FAIT ; Q27 non terminé)
+
+- Mesure avant : 15 profils signalés dans L21 (talents 3, compétences 14, attaques 2, Traits 4, équipement 21, bruit d'équipement 5). Tous relus sur leurs pages. **Après : 0 manque non justifié sur L01-L21 et L24** ; 10 profils justifiés un par un (`QE-Q27f-1`).
+- **Vrais manques corrigés** : Ride Horse 42 de Renia (parenthèses oubliées), Sword +7 et lignes « Optional: » du Vanguard Soldier (`QE-Q27f-3`, question au MJ), attaque Weapon +13 du Necrofex Colossus (perdue dans `specialRules`), Sword de Zurn (texte voisin retiré), Book of Pressed Flowers de Gerta, 12 compétences, 3 talents et l'équipement d'Ulfhednar. Détail : `QE-Q27f-2`.
+- **Livres régénérés** (23) : seul L21 change, par des lignes gagnées ou nettoyées. 12 caractéristiques et Blessures inchangées (contrôle : 58/58 lignes retrouvées).
+- **Contrôle, 23 livres** : talents 7, compétences 4, attaques 2, Traits 13, équipement 62, sorts 0, bruit d'équipement 5 (avant : 10, 18, 4, 17, 83, 0, 10) ; reste : L22 9 profils, L23 15, L25 5, L26 10 (Q27g…).
+- Test : `tests/pro-q27f-completude.test.js` (5 tests).
+- Outil de contrôle et données de livre : rien à déclarer « branché » (l'attaque et les listes gagnées passent par `buildParticipantFromBestiary`, appelants : `js/ui/bestiary-library.js`, `js/core/bestiary-templates.js`). Aucune valeur durable de personnage.
+- Suite complète lancée une fois : 4461 réussis, 0 échec.

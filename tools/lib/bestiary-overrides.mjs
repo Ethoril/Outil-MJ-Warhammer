@@ -152,7 +152,9 @@ export const TRAPPING_TRIMS = Object.freeze({
   'E0-P-502': ['Restorative Brew'],
   'E0-P-512': ['Pair of Swords'],
   // Altdorf (L20) p. 195 : Concern Peony Hayfoot, « Herbs Worth 12/5 » est suivi d'un mot de la colonne voisine (« …all that sort of thing »).
-  'E0-P-652': ['Herbs Worth 12/5']
+  'E0-P-652': ['Herbs Worth 12/5'],
+  // Altdorf (L21) p. 84 : Zurn, « Sword » est suivi du texte de la colonne voisine (« The horde is largely made up… »).
+  'E0-P-705': ['Sword']
 });
 
 /** Équipement dont le nom imprimé contient des virgules (Helena Bastiat-Hatzburg, Altdorf L20 p. 72) : recollé après le découpage à virgules. */
@@ -167,7 +169,10 @@ export const TRAPPING_JOINS = Object.freeze({
   'E0-P-557': ['enough Warpstone to double the SL of three Casting/Channelling Tests (WFRP 244)'],
   'E0-P-472': ['Vaults containing vast wealth of coin, rare minerals, and magical items'],
   // Tribes and Tribulations (L12) p. 107 : Gorfang, « Ramshackle armour incorporating plate, mail, and scale » est un seul objet.
-  'E0-P-455': ['Ramshackle armour incorporating plate, mail, and scale']
+  'E0-P-455': ['Ramshackle armour incorporating plate, mail, and scale'],
+  // Altdorf (L21) p. 78 : Gerta Faernmaus, objet décrit sur trois lignes, sa parenthèse finale n'est pas celle d'un nom.
+  'E0-P-706': ['Chaos Armour (cannot be removed) decorated with the skin of a dire wolf'],
+  'E0-P-700': ['Book of Pressed Flowers taken from every battlefield she has ever fought on (worth 5 GC to someone interested in botany)']
 });
 
 /**
@@ -406,6 +411,20 @@ export const BODY_OVERRIDES = Object.freeze({
   // Altdorf (L21) p. 22 : Murderous Altdorfer, le Trait est dans la prose (« Ils sont Frenzied ») ; ni Compétence ni Talent, pas d'armure.
   'L21:22:1': [
     'Traits: Frenzy'
+  ],
+  // Altdorf (L21) p. 42 : Vanguard Soldier, « Sword +7 » passe à la ligne suivante et les lignes « Optional: » (compétences, talents sous l'intitulé « Traits: », équipement) étaient lues comme des Traits facultatifs.
+  'L21:42:2': [
+    'Traits: Armour (Leather) 1, Ranged (Bow) +6, Sword +7',
+    'Skills: Athletics 41, Charm Animal 35, Climb 35, Cool 38, Endurance 44, Gossip 31, Haggle 35, Lore (Ostland) 36, Melee (Basic) 48, Navigation 45, Outdoor Survival 36, Perception 47, Ranged (Bow) 60, Stealth (Rural) 45, Track 44',
+    'Talents: Combat Aware, Strider (Highlands)',
+    'Trappings: Sword, Bow, Uniform, Grey surcoat, Cloak'
+  ],
+  // Altdorf (L21) p. 84 : Ulfhednar the Destroyer, colonne de gauche : les rubriques Skills, Talents et Trappings sont séparées des Traits par la note à astérisque.
+  'L21:84:2': [
+    'Traits: Armoured 5, Clever, Champion, Fast, Mutation (Elastic Arms*), Tough, Weapon +8',
+    'Skills: Athletics 80, Charm 35, Consume Alcohol 65, Dodge 70, Endurance 65, Gossip 35, Intimidate 65, Language (Magick) 65, Leadership 35, Melee (Basic) 70, Perception 70, Stealth (Rural) 75',
+    'Talents: Furious Assault, Menacing, Strike Mighty Blow',
+    'Trappings: Chaos Armour (cannot be removed) decorated with the skin of a dire wolf, Hand Axe'
   ],
   // Ennemi Intérieur, Une nuit agitée (L24) p. 19 : Josef Aufwiegler, la ligne imprimée « Talents: Weapon (Fist) +3 » est une arme (coquille du livre, comme « Weapons (Spear) +8 »).
   'L24:20:1': [

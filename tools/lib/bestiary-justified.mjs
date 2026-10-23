@@ -96,5 +96,16 @@ export const JUSTIFIED = Object.freeze({
   'E0-P-650': { spells: 'L20 p.167 : « Spells: Chylis knows every Petty Magic and Arcane Spell, plus all those from the Lores of Fire, Heavens, and Life. » est une phrase, gardée telle quelle dans les notes de sorts.' },
   'E0-P-652': { trappings: 'L20 p.195 : « Markus Spiel » est le nom du conseiller du texte voisin (encadré de scénario), pas un objet ; Coarst Clothing (coquille du livre) et Herbs Worth 12/5 sont présents.' },
   'E0-P-657': { spells: 'L20 p.218 : « Ward 0 As part of their pact with Tzeentch » : Ward est présent, la suite est le texte de la colonne voisine.' },
+  // Q27f : L21 (Altdorf Companion, Empire in Ruins) relu sur ses pages.
+  'E0-P-666': { trappings: 'L21 p.22 : « and with daemonic whispers lurking in their mind » est la note à astérisque du Cool 70* (« While leading a sizable mob… ») ; les quatre objets sont présents.' },
+  'E0-P-669': { traits: 'L21 p.24 : « Medium This » est le titre et le début du texte du profil voisin (Animated Furniture, Medium) ; les Traits du Coach sont tous présents.' },
+  'E0-P-670': { traits: 'L21 p.24 : « Stride Animated Furniture » et « Small This » sont les titres et textes des profils voisins (Large et Small) ; Stride et les Traits du profil Medium sont présents.' },
+  'E0-P-681': { trappings: 'L21 p.40 : « HUMAN PRIEST (SILVER 2) » est le titre du profil voisin (Father von Tunz) ; les huit objets de Zielin sont présents.' },
+  'E0-P-699': { trappingNoise: 'L21 p.73 : « two household servants » est un objet imprimé tel quel (minuscule initiale du livre).' },
+  'E0-P-700': { trappingNoise: 'L21 p.78 : « Book of Pressed Flowers taken from every battlefield she has ever fought on (worth 5 GC…) » est un seul objet décrit (recollé), « pouch with 23 s 18d » et « armour and weapons (…) » sont imprimés en minuscules ; tous sont présents.' },
+  'E0-P-702': { skills: 'L21 p.79 : « he has hired Mentag… RUPRECHT ETZBURGER » est le texte du profil voisin ; les trois compétences du Guard Sergent (Melee Basic 55, Polearm 45, Perception 50) sont présentes.' },
+  'E0-P-703': { trappingNoise: 'L21 p.79 : « dagger » est imprimé en minuscules par le livre.' },
+  'E0-P-709': { trappings: 'L21 p.85 : « 7 GCs SPELLS Petty: … ERNST HEIDLEMANN » est l\'encadré SPELLS suivi du titre du profil voisin ; les trois objets et les sorts (champ spells) sont présents.' },
+  'E0-P-712': { traits: 'L21 p.118 : « Undead Hexwraiths Hexwraiths » est le titre et le texte du profil voisin ; les huit Traits du Winged Nightmare sont présents.' },
   'E0-P-607': { attacks: 'L19 p.143 : « and go on to score a goal if their total is +25 » est la règle de jeu rapide du match (texte de la colonne voisine) ; le Nain n\'a aucune attaque imprimée.' }
 });
