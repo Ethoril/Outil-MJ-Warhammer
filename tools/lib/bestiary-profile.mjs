@@ -57,9 +57,12 @@ export function readTraitItem(text) {
 /** Compétence : « Melee (Basic 65, Two-Handed 65) », « Entertain (Taunt) 27 », « Dodge +10 », « Cool 48 ». */
 export function readSkills(text) {
   const skills = [];
-  for (const rawItem of splitList(text)) {
+  // Césures de mise en page (« Two- handed », « Pole- arm ») recollées ; « Pole-arm » et « Pole Arm » sont la spécialisation Polearm.
+  const joined = text.replace(/([\wà-ÿ])- (?=[a-zà-ÿ])/g, '$1-').replace(/\bPole[- ]arm\b/gi, 'Polearm');
+  for (const rawItem of splitList(joined)) {
     const item = rawItem.replace(/\s*\(\+\d+ SL[^)]*\)\s*$/, '').trim();
-    const grouped = /^(.+?)\s*\(([^)]*\d[^)]*(?:,[^)]*)+)\)$/.exec(item);
+    // Une ou plusieurs spécialisations avec leur valeur dans la parenthèse : « Melee (Basic 76) », « Melee (Basic 65, Two-Handed 65) ».
+    const grouped = /^(.+?)\s*\(([^)]*\d[^)]*)\)$/.exec(item);
     if (grouped) {
       for (const part of splitList(grouped[2])) {
         const sub = /^(.*?)\s+([+-]?\d+)$/.exec(part);

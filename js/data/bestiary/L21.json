@@ -1933,9 +1933,8 @@
      "value": 70
     },
     {
-     "name": "Melee (Pole- arm)",
-     "nameFr": "Corps à corps (Pole- arm)",
-     "frUnverified": true,
+     "name": "Melee (Polearm)",
+     "nameFr": "Corps à corps (Armes d’hast)",
      "value": 68
     },
     {
@@ -2623,7 +2622,7 @@
      "value": 45
     },
     {
-     "name": "Melee (Pole-arm)",
+     "name": "Melee (Polearm)",
      "nameFr": "Corps à corps (Armes d’hast)",
      "value": 45
     },
@@ -2798,7 +2797,7 @@
      "value": 60
     },
     {
-     "name": "Melee (Pole-arm)",
+     "name": "Melee (Polearm)",
      "nameFr": "Corps à corps (Armes d’hast)",
      "value": 60
     },
@@ -4472,7 +4471,7 @@
    ],
    "skills": [
     {
-     "name": "Melee (Pole-Arm)",
+     "name": "Melee (Polearm)",
      "nameFr": "Corps à corps (Armes d’hast)",
      "value": 45
     },
@@ -4524,7 +4523,7 @@
      "value": 55
     },
     {
-     "name": "Melee (Pole-Arm)",
+     "name": "Melee (Polearm)",
      "nameFr": "Corps à corps (Armes d’hast)",
      "value": 45
     },

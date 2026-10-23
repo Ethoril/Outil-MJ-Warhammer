@@ -4165,6 +4165,11 @@
      "value": 73
     },
     {
+     "name": "Language (Magick)",
+     "nameFr": "Langue (Magick)",
+     "value": 97
+    },
+    {
      "name": "Lore (Lustria)",
      "nameFr": "Savoir (Lustria)",
      "frUnverified": true,

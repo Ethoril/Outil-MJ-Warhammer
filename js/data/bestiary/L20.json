@@ -2960,7 +2960,7 @@
      "value": 87
     },
     {
-     "name": "Melee (Pole Arm)",
+     "name": "Melee (Polearm)",
      "nameFr": "Corps à corps (Armes d’hast)",
      "value": 82
     },
@@ -6664,6 +6664,11 @@
      "value": 87
     },
     {
+     "name": "Language (Thief)",
+     "nameFr": "Langue (Voleur)",
+     "value": 96
+    },
+    {
      "name": "Leadership",
      "nameFr": "Commandement",
      "value": 72
@@ -6694,6 +6699,11 @@
      "name": "Lore (Local)",
      "nameFr": "Savoir (Local)",
      "value": 96
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 76
     },
     {
      "name": "Perception",
@@ -7443,6 +7453,11 @@
      "name": "Melee (Brawling)",
      "nameFr": "Corps à corps (Bagarre)",
      "value": 65
+    },
+    {
+     "name": "Ranged (Throwing)",
+     "nameFr": "Projectiles (Jet)",
+     "value": 75
     },
     {
      "name": "Stealth (Urban)",

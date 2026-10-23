@@ -384,6 +384,11 @@
      "value": 47
     },
     {
+     "name": "Language (Reikspiel)",
+     "nameFr": "Langue (Reikspiel)",
+     "value": 65
+    },
+    {
      "name": "Lore (Beasts)",
      "nameFr": "Savoir (Bêtes)",
      "value": 70
@@ -430,9 +435,8 @@
      "value": 100
     },
     {
-     "name": "Melee (Two- handed)",
-     "nameFr": "Corps à corps (Two- handed)",
-     "frUnverified": true,
+     "name": "Melee (Two-handed)",
+     "nameFr": "Corps à corps (Deux mains)",
      "value": 85
     },
     {
@@ -2544,9 +2548,8 @@
      "value": 77
     },
     {
-     "name": "Melee (Two- handed)",
-     "nameFr": "Corps à corps (Two- handed)",
-     "frUnverified": true,
+     "name": "Melee (Two-handed)",
+     "nameFr": "Corps à corps (Deux mains)",
      "value": 87
     },
     {

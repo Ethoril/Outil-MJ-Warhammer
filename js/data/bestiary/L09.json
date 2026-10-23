@@ -4023,6 +4023,12 @@
    },
    "skills": [
     {
+     "name": "Channelling (Dhar)",
+     "nameFr": "Focalisation (Dhar)",
+     "frUnverified": true,
+     "value": 90
+    },
+    {
      "name": "Cool",
      "nameFr": "Calme",
      "value": 90

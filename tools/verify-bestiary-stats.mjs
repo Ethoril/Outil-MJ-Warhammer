@@ -44,7 +44,9 @@ for (const book of process.argv.slice(2)) {
     for (const skill of record.skills || []) {
       const spec = /\((.+)\)$/.exec(skill.name)?.[1];
       const forms = [`${skill.name} ${skill.value}`, spec && `${spec} ${skill.value}`].filter(Boolean);
-      if (!forms.some(form => text.includes(form))) { skillWarnings += 1; console.error(`avertissement ${book} ${record.id} ${record.name} : compétence « ${skill.name} ${skill.value} » absente du texte brut de la page`); }
+      // Comparaison hors ponctuation, espaces et casse : césures « Two- handed » et tirets rendus en U+FFFD ne sont pas des écarts.
+      const squash = value => value.toLowerCase().replace(/[^\p{L}\p{N}]/gu, '');
+      if (!forms.some(form => squash(text).includes(squash(form)))) { skillWarnings += 1; console.error(`avertissement ${book} ${record.id} ${record.name} : compétence « ${skill.name} ${skill.value} » absente du texte brut de la page`); }
     }
   }
   writeFileSync(`tmp/divin/bestiary-completude-${book}.json`, `${JSON.stringify({ book, profils: data.profiles.length, manques: gaps_ }, null, 1)}

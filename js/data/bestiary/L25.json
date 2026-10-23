@@ -4047,6 +4047,12 @@
      "value": 98
     },
     {
+     "name": "Ranged (Skaven Ranged Weaponry)",
+     "nameFr": "Projectiles (Skaven Ranged Weaponry)",
+     "frUnverified": true,
+     "value": 95
+    },
+    {
      "name": "Row",
      "nameFr": "Ramer",
      "value": 98

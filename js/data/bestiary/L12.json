@@ -2499,6 +2499,11 @@
      "value": 65
     },
     {
+     "name": "Lore (Metallurgy)",
+     "nameFr": "Savoir (Métallurgie)",
+     "value": 48
+    },
+    {
      "name": "Melee (Basic)",
      "nameFr": "Corps à corps (Base)",
      "value": 59
