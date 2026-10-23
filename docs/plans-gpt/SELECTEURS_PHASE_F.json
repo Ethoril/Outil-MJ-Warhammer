@@ -50503,5 +50503,5361 @@
       "Ne pas implanter"
     ],
     "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0001",
+    "phase": "Religion et environnement",
+    "lot": "L04",
+    "source": "L04 p.11",
+    "question": "Implanter « Ranald — rédemption » ? Un prêtre pécheur peut imiter avec ingéniosité les exploits des saints voleurs pour retrouver la faveur ; aucune remise chiffrée automatique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0002",
+    "phase": "Création et carrières",
+    "lot": "L04",
+    "source": "L04 p.12",
+    "question": "Implanter « Dix énigmes — étude » ? Non-prêtre de Ranald sachant lire : Intuition −10 étendue,8 DR, puis Intelligence −20 sans aide ; réussite donne5 avances en Savoir(Ranald) et voie d’initiation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0003",
+    "phase": "Création et carrières",
+    "lot": "L04",
+    "source": "L04 p.13",
+    "question": "Implanter « Ranald — choix de prêtrise » ? Un résultat de carrière Prêtre permet choisir Voleur, Joueur, Mystificateur ou Libérateur selon l’aspect ; carrière générique possible avec liste d’initiation adaptée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0004",
+    "phase": "Création et carrières",
+    "lot": "L04",
+    "source": "L04 p.13",
+    "question": "Implanter « Ranald — initiation générique » ? Liste de compétences du premier rang adaptée : Athlétisme, Corruption, Calme, Résistance, Jeu, Intuition, Théologie, Perception, Prière et Discrétion urbaine.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0005",
+    "phase": "Création et carrières",
+    "lot": "L04",
+    "source": "L04 p.13",
+    "question": "Implanter « Ranald — changer d’aspect » ? À partir du rang Prêtre, passer au rang Prêtre du nouvel aspect, éventuellement en baissant de rang ; miracles connus conservés même hors liste du nouvel aspect.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0006",
+    "phase": "Création et carrières",
+    "lot": "L04",
+    "source": "L04 p.13",
+    "question": "Implanter « Ranald — miracles génériques élargis » ? Le Prêtre générique peut acheter Bamboozle, Perfect Empathy, Talk Your Way Out et Unremembered Face de ce supplément, aux coûts habituels.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0013",
+    "phase": "Religion et environnement",
+    "lot": "L04",
+    "source": "L04 p.13",
+    "question": "Implanter « Ranald — accès aux Bénédictions » ? Tous les aspects donnent accès à Charisme,Conscience,Finesse,Chance,Protection,Vivacité ; effets renvoyés aux six entrées divines.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0014",
+    "phase": "Création et carrières",
+    "lot": "L04",
+    "source": "L04 p.14",
+    "question": "Implanter « Prêtre-voleur — carrière » ? Humain, quatre rangs Bronze1/Bronze4/Argent1/Argent3 avec listes propres et Invocation du Rôdeur nocturne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0015",
+    "phase": "Création et carrières",
+    "lot": "L04",
+    "source": "L04 p.15",
+    "question": "Implanter « Pari de Ranald — apprentissage » ? Prière −10 : réussite, prochain miracle à moitié de son coût normal ; échec, coût normal plus10 PX par DR négatif ; Péché séparé dans inventaire Courroux.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0016",
+    "phase": "Religion et environnement",
+    "lot": "L04",
+    "source": "L04 p.15",
+    "question": "Implanter « Pari de Ranald — Péché » ? Échec au pari de Prière−10 : gagner1 Point de Péché, en plus du surcoût du prochain miracle.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0017",
+    "phase": "Création et carrières",
+    "lot": "L04",
+    "source": "L04 p.16",
+    "question": "Implanter « Prêtre-joueur — carrière » ? Humain, quatre rangs Bronze1/Argent1/Argent3/Argent5 avec listes propres et Invocation du Joueur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0032",
+    "phase": "Création et carrières",
+    "lot": "L04",
+    "source": "L04 p.20",
+    "question": "Implanter « Prêtre-mystificateur — carrière » ? Humain, quatre rangs Bronze1/Argent1/Argent3/Or1 avec listes propres et Invocation du Trompeur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0033",
+    "phase": "Création et carrières",
+    "lot": "L04",
+    "source": "L04 p.22",
+    "question": "Implanter « Prêtre-libérateur — carrière » ? Humain, quatre rangs Bronze1/Bronze4/Argent1/Argent3 avec listes propres et Invocation du Protecteur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0034",
+    "phase": "Religion et environnement",
+    "lot": "L04",
+    "source": "L04 p.23",
+    "question": "Implanter « Pèlerinage des doigts » ? Huit tâches de difficulté croissante données par prêtres confirmés, hors aspect favori ; chaque tâche achevée autorise un tatouage de croix.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0035",
+    "phase": "Création et carrières",
+    "lot": "L04",
+    "source": "L04 p.24",
+    "question": "Implanter « Ranald le Négociant — carrière » ? Prêtre générique avec Marchandage et Évaluation ajoutés aux compétences initiales ; pas de carrière autonome.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0049",
+    "phase": "Création et carrières",
+    "lot": "L04",
+    "source": "L04 p.27",
+    "question": "Implanter « Pickpocket — variante de carrière » ? Voleur : dix compétences initiales propres, dont Clownerie ; au rang1 remplacer Coup assommant par Mains lestes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0050",
+    "phase": "Compétences",
+    "lot": "L04",
+    "source": "L04 p.27",
+    "question": "Implanter « Vol à la tire — opposition » ? Pour dérober un objet porté, opposition Escamotage/Perception ; témoin vigilant impose une opposition supplémentaire contre sa Perception.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0051",
+    "phase": "Compétences",
+    "lot": "L04",
+    "source": "L04 p.27",
+    "question": "Implanter « Vol à la tire — réussite positive » ? Réussite avec au moins+1 DR : objet pris et victime inconsciente du vol.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0052",
+    "phase": "Compétences",
+    "lot": "L04",
+    "source": "L04 p.27",
+    "question": "Implanter « Vol à la tire — réussite marginale » ? À+0 DR, objet pris mais alarme en1d10 Rounds par la victime.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0053",
+    "phase": "Compétences",
+    "lot": "L04",
+    "source": "L04 p.27",
+    "question": "Implanter « Vol à la tire — échec marginal » ? À−0 DR, pas d’objet mais victime ne remarque pas la tentative.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0054",
+    "phase": "Compétences",
+    "lot": "L04",
+    "source": "L04 p.27",
+    "question": "Implanter « Vol à la tire — échec négatif » ? À−1 DR ou pire, pas d’objet et victime consciente de la tentative.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0055",
+    "phase": "Compétences",
+    "lot": "L04",
+    "source": "L04 p.27",
+    "question": "Implanter « Bourse — espèces ordinaires » ? Monnaie portée égale au statut en pièces du rang correspondant ; option table2d10 de contenu et particularité de victime.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0056",
+    "phase": "Compétences",
+    "lot": "L04",
+    "source": "L04 p.28",
+    "question": "Implanter « Bourse — tirage de contenu » ? 2d10 :2artefact compromettant,3–4vide,5–6une pièce,7dés10 sous,8–9mouchoir1pistole,10–12argent doublé ; autres valeurs jusqu’à20 distinguées dans notes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0057",
+    "phase": "Compétences",
+    "lot": "L04",
+    "source": "L04 p.28",
+    "question": "Implanter « Artefact — malepierre » ? Résultat2 : malepierre en boîte plombée,3 CO et influence corruptrice modérée ; ne pas inférer d’exemption par le plomb.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0058",
+    "phase": "Compétences",
+    "lot": "L04",
+    "source": "L04 p.28",
+    "question": "Implanter « Artefacts — butin suspect » ? Table2d10 de preuves/objets suspects ; icônes, documents, bijoux et reliques sans effet défini restent butin narratif ; fiole aléatoire sans potion inventée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0059",
+    "phase": "Compétences",
+    "lot": "L04",
+    "source": "L04 p.28",
+    "question": "Implanter « Artefact — lotus noir » ? Résultat20 : deux doses de Lotus noir prêtes comme venin de lame ; effet de poison du socle, sans assimilation aux droguesQ18.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0061",
+    "phase": "Compétences",
+    "lot": "L04",
+    "source": "L04 p.29",
+    "question": "Implanter « Victime2 — reconnaissance » ? Perception −20 permet au voleur de remarquer que la victime le reconnaît, degré de familiarité MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0062",
+    "phase": "Compétences",
+    "lot": "L04",
+    "source": "L04 p.29",
+    "question": "Implanter « Victime5 — amputation » ? d10 :1–3jambe,4–6bras,7–8yeux,9langue,10oreilles ; effet du membre non réinventé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0063",
+    "phase": "Compétences",
+    "lot": "L04",
+    "source": "L04 p.29",
+    "question": "Implanter « Victime6 — fausse bourse » ? Contient deux sous ; d10=1 ajoute aiguille empoisonnée ; Perception +0 ratée lors du vol donne Empoisonné.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0064",
+    "phase": "Compétences",
+    "lot": "L04",
+    "source": "L04 p.29",
+    "question": "Implanter « Victime7 — insouciante » ? Perception de la victime −1 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0065",
+    "phase": "Compétences",
+    "lot": "L04",
+    "source": "L04 p.29",
+    "question": "Implanter « Victime8 — ivresse » ? Alcool : utiliser table d’ivresse ; alternative racine hallucinogène séparée horsQ18.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0066",
+    "phase": "Compétences",
+    "lot": "L04",
+    "source": "L04 p.29",
+    "question": "Implanter « Victimes9/10/12 — qualités » ? Résultats9/10/12 donnent respectivement Élite/Brutal/Malin à la victime ; génération spécifique, effets de Traits renvoyés au bestiaire du socle.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0067",
+    "phase": "Compétences",
+    "lot": "L04",
+    "source": "L04 p.29",
+    "question": "Implanter « Victime11 — prudente » ? Un point de Chance utilisable pour relancer un Test qui empêche de subir un crime.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0068",
+    "phase": "Compétences",
+    "lot": "L04",
+    "source": "L04 p.29",
+    "question": "Implanter « Victime13 — variole » ? Victime atteinte de Variole démangeante ; Perception +20 du voleur pour voir les vésicules avant l’approche.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0069",
+    "phase": "Compétences",
+    "lot": "L04",
+    "source": "L04 p.29",
+    "question": "Implanter « Victime15 — nerveuse » ? Perception de la victime +1 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0070",
+    "phase": "Compétences",
+    "lot": "L04",
+    "source": "L04 p.29",
+    "question": "Implanter « Victime19 — peste » ? Perception +0 pour reconnaître les symptômes avant contact et éviter le Test de contagion de Peste noire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0071",
+    "phase": "Compétences",
+    "lot": "L04",
+    "source": "L04 p.29",
+    "question": "Implanter « Victime20 — mutation » ? d10 :1–2jambes animales,3–4corpulent,5–6émacié,7–8articulations supplémentaires,9–10plumes ; pas d’effet nouveau ajouté aux mutations du socle.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0073",
+    "phase": "Création et carrières",
+    "lot": "L04",
+    "source": "L04 p.30",
+    "question": "Implanter « Cambrioleur — variante de carrière » ? Voleur : liste initiale avec Savoir local et CC(Bagarre) ; au rang3 remplacer Trappeur par Identité secrète.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0074",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.31",
+    "question": "Implanter « Revenu du voleur — choix » ? Voleur, pickpocket ou cambrioleur peut prendre son Revenu normal seul ou avec un jet de complications sur 1d10.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0075",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.31",
+    "question": "Implanter « Revenu — allié accusé » ? Si l’allié est un Contact, régler son sort avant la prochaine période : aide en aventure ou trois Activités du groupe à la suivante ; sans aide, le sort suit son cours.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0076",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.31",
+    "question": "Implanter « Voleur — soupçons différés » ? Résultat2 : Sous surveillance sera le premier événement de la prochaine période.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0077",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.31",
+    "question": "Implanter « Voleur — lieu interdit » ? Résultats3–4 : au moins un établissement devient inaccessible, choisi par le MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0078",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.31",
+    "question": "Implanter « Voleur — trouvailles » ? 5–6 : une bourse supplémentaire ; 7–8 : Faveur mineure ; 10 : deux bourses supplémentaires.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0079",
+    "phase": "Équipement",
+    "lot": "L04",
+    "source": "L04 p.32",
+    "question": "Implanter « Outils de voleur — contenu » ? Kit ordinaire sans équipement ésotérique ; outils spéciaux doivent s’acheter séparément, prix/disponibilité de guide et achat potentiellement suspect.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0080",
+    "phase": "Équipement",
+    "lot": "L04",
+    "source": "L04 p.32",
+    "question": "Implanter « Tarrabeth — distraire les chiens » ? Chien à cinq yards du sachet : Calme +20 ou distraction1d10 Rounds avant reprise de piste ; à−6 DR ou pire, abandon de la piste.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0081",
+    "phase": "Équipement",
+    "lot": "L04",
+    "source": "L04 p.32",
+    "question": "Implanter « Suie — camouflage » ? Vêtements/équipement/peau couverts : Perception visuelle adverse −1 DR pour repérer ou distinguer l’apparence dans l’obscurité.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0082",
+    "phase": "Équipement",
+    "lot": "L04",
+    "source": "L04 p.32",
+    "question": "Implanter « Chausse-trappes — pose » ? Une Action disperse une douzaine de pointes dans une zone de diamètre2 yards.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0083",
+    "phase": "Équipement",
+    "lot": "L04",
+    "source": "L04 p.32",
+    "question": "Implanter « Chausse-trappes — traversée » ? Athlétisme −20, ou+20 si averti et marche ; échec : touche1d10dégâts à une jambe aléatoire et un Sonné.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0084",
+    "phase": "Équipement",
+    "lot": "L04",
+    "source": "L04 p.32",
+    "question": "Implanter « Crampons — escalade » ? +2 DR sur roche/bois ; +1 DR sur corde.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0085",
+    "phase": "Équipement",
+    "lot": "L04",
+    "source": "L04 p.32",
+    "question": "Implanter « Crampons — autres mouvements » ? Hors escalade : Athlétisme−1 DR, Discrétion−2 DR et tout autre Test impliquant mouvement−2 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0086",
+    "phase": "Équipement",
+    "lot": "L04",
+    "source": "L04 p.33",
+    "question": "Implanter « Coupe-verre — Test » ? Art(Gravure)+20 pour percer ou détacher une petite partie de vitre ; tableau d’issue selon signe et DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0087",
+    "phase": "Équipement",
+    "lot": "L04",
+    "source": "L04 p.33",
+    "question": "Implanter « Coupe-verre — +1DR ou plus » ? Ouverture réussie sans complication.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0088",
+    "phase": "Équipement",
+    "lot": "L04",
+    "source": "L04 p.33",
+    "question": "Implanter « Coupe-verre — +0DR » ? Ouverture mais bruit comme une vitre ordinairement cassée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0089",
+    "phase": "Équipement",
+    "lot": "L04",
+    "source": "L04 p.33",
+    "question": "Implanter « Coupe-verre — −0DR » ? Ouverture mais touche3dégâts à la main principale ; pas de bruit ajouté par déduction.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0090",
+    "phase": "Équipement",
+    "lot": "L04",
+    "source": "L04 p.33",
+    "question": "Implanter « Coupe-verre — −1DR ou pire » ? Vitre brisée bruyamment et touche3dégâts à la main principale.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0091",
+    "phase": "Équipement",
+    "lot": "L04",
+    "source": "L04 p.33",
+    "question": "Implanter « Périscope » ? Perception visuelle possible derrière angle ou obstacle en restant caché ou à couvert ; pas de bonus numérique publié.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0092",
+    "phase": "Équipement",
+    "lot": "L04",
+    "source": "L04 p.33",
+    "question": "Implanter « Fumigène — nuage » ? Lancé comme incendiaire ; pièce ou diamètre10 yards ; durée2d10 Rounds, doublée en lieu clos.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0093",
+    "phase": "Équipement",
+    "lot": "L04",
+    "source": "L04 p.33",
+    "question": "Implanter « Fumigène — visibilité et air » ? Impossible de voir au travers, un yard de vision à l’intérieur ; tester l’asphyxie du socle ; pas de brûlure ajoutée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0094",
+    "phase": "Équipement",
+    "lot": "L04",
+    "source": "L04 p.33",
+    "question": "Implanter « Mummit — ouverture » ? Porte à serrure à clé ou verrou, pas cadenas : Escamotage −20 pour déplacer le pêne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0095",
+    "phase": "Équipement",
+    "lot": "L04",
+    "source": "L04 p.33",
+    "question": "Implanter « Mummit — +1DR ou plus » ? Ouvrir sans dommage, porte refermable à clé ensuite.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0096",
+    "phase": "Équipement",
+    "lot": "L04",
+    "source": "L04 p.33",
+    "question": "Implanter « Mummit — +0DR » ? Ouvrir mais mécanisme détruit, réparation nécessaire évidente à l’utilisateur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0097",
+    "phase": "Équipement",
+    "lot": "L04",
+    "source": "L04 p.33",
+    "question": "Implanter « Mummit — −0DR » ? Échec d’ouverture sans autre conséquence publiée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0098",
+    "phase": "Équipement",
+    "lot": "L04",
+    "source": "L04 p.33",
+    "question": "Implanter « Mummit — −1DR ou pire » ? Échec et grattement bruyant audible dans les pièces voisines.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0099",
+    "phase": "Équipement",
+    "lot": "L04",
+    "source": "L04 p.33",
+    "question": "Implanter « Canne télescopique » ? Dextérité pour manipuler jusqu’à quatre yards ; tous Tests utilisant l’outil−2 DR ; longueur physique12pieds conservée sans autre portée déduite.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0100",
+    "phase": "Compétences",
+    "lot": "L04",
+    "source": "L04 p.34",
+    "question": "Implanter « Pillage de tombe » ? Test étendu combiné Athlétisme/Discrétion−20,5 DR ; sans réussite en5 Rounds, intervention des gardiens à gérer ; ville généralement2gardes, bourg1, hameau parfois0.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0101",
+    "phase": "Compétences",
+    "lot": "L04",
+    "source": "L04 p.34",
+    "question": "Implanter « Tombe ordinaire — contenu » ? Par défaut deux sous sur le cadavre ; tables de complications à utiliser avec parcimonie ou pour inspiration MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0103",
+    "phase": "Compétences",
+    "lot": "L04",
+    "source": "L04 p.35",
+    "question": "Implanter « Crypte2 — pieu » ? Savoir(Morts-vivants)+60 révèle le rôle antivampire du pieu ; conséquence du retrait laissée au MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0104",
+    "phase": "Compétences",
+    "lot": "L04",
+    "source": "L04 p.35",
+    "question": "Implanter « Crypte4–6 — fosse commune » ? Exposition à la Peste noire, Test de contamination du socle requis.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0105",
+    "phase": "Compétences",
+    "lot": "L04",
+    "source": "L04 p.35",
+    "question": "Implanter « Crypte — objets funéraires » ? 7–9veste9 pistoles et vêtements5 ;10–12deux sous ;13–15manteau1 CO/vêtements10 pistoles/bagues4 CO ;19robe4 CO/vêtements2 CO/bijoux10 CO ;20même butin et identification.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0106",
+    "phase": "Compétences",
+    "lot": "L04",
+    "source": "L04 p.35",
+    "question": "Implanter « Crypte16–18 — goules » ? Deux goules dérangées pendant leur repas ; rien de valeur ne subsiste ; profils et Traits non réinventoriés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0107",
+    "phase": "Compétences",
+    "lot": "L04",
+    "source": "L04 p.35",
+    "question": "Implanter « Crypte20 — identification » ? Savoir(Héraldique)−20 reconnaît une personnalité locale disparue récemment.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0108",
+    "phase": "Compétences",
+    "lot": "L04",
+    "source": "L04 p.35",
+    "question": "Implanter « Cadavre3 — agitation » ? Le corps peut devenir zombie si exposé à influence corruptrice ou incident magique à proximité ; éventualité MJ, pas métamorphose systématique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0109",
+    "phase": "Compétences",
+    "lot": "L04",
+    "source": "L04 p.35",
+    "question": "Implanter « Cadavre4–7 — Shyish » ? Seconde vue révèle l’aura ; sorts de Mort réussis à huit yards gagnent+1 DR, non cumulable avec d’autres cadavres identiques.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0110",
+    "phase": "Compétences",
+    "lot": "L04",
+    "source": "L04 p.35",
+    "question": "Implanter « Cadavre20 — fantôme » ? L’esprit peut hanter le pilleur jusqu’à une nouvelle sépulture respectueuse ; apparition et poursuite à l’appréciation MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0111",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.36",
+    "question": "Implanter « Pilleur — choix de Revenu » ? Prendre son Revenu normal seul ou avec un jet de complications sur 1d10.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0112",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.36",
+    "question": "Implanter « Pilleur — poursuivant éthéré » ? Résultat1 : les morts-vivants éthérés rencontrés jusqu’à la prochaine période haïssent le personnage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0113",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.36",
+    "question": "Implanter « Pilleur — aura de Shyish » ? Résultat2 : aura détectable par Seconde vue jusqu’à la prochaine période, sans bonus aux sorts.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0114",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.36",
+    "question": "Implanter « Pilleur — trouvailles et faveur » ? 5–6 : un objet de la table de butin des cryptes ; 7–8 : Faveur majeure ; 10 : deux objets de cette table.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0115",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.36",
+    "question": "Implanter « Pilleur — cauchemars passagers » ? Résultat9 : toutes les deux semaines jusqu’à la prochaine période, Calme+0 ou un état Exténué.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0116",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.38",
+    "question": "Implanter « Recel — complication facultative » ? Choix entre Revenu normal et table ; les complications peuvent réduire les gains, la plupart les conservent.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0117",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.38",
+    "question": "Implanter « Receleur — catastrophe commerciale » ? Résultat1 : Marchandage−10 ou perte de la moitié du Revenu.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0118",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.38",
+    "question": "Implanter « Receleur — salle de vente compromise » ? Résultat2 : résoudre le problème avant la prochaine période, sinon Sous surveillance en premier événement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0119",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.38",
+    "question": "Implanter « Receleur — poisons au rabais » ? Résultats7–8 : contact fournissant des poisons au quart du prix normal.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0120",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.38",
+    "question": "Implanter « Receleur — butin supplémentaire » ? Résultat9 : deux tirages supplémentaires de bourse.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0121",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.38",
+    "question": "Implanter « Receleur — corruption » ? Résultat10 : exposition à une source modérée de Corruption.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0122",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.38",
+    "question": "Implanter « Entremetteur — événements » ? Répression criminelle et Nouvelle lune s’appliquent même si son métier n’est pas illégal.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0123",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.38",
+    "question": "Implanter « Charlatan — maladie lucrative » ? Maladie malveillante double le Revenu de faux remèdes, sauf si le charlatan souffre lui-même de Flux sanglant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0125",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.39",
+    "question": "Implanter « Entremetteur — faveur majeure » ? Résultat1 : un client doit une Faveur majeure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0126",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.39",
+    "question": "Implanter « Entremetteur — chantage » ? Résultat2 : payer2 CO avant la prochaine période sous menace de révélation au parent du client.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0127",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.39",
+    "question": "Implanter « Entremetteur — faveur modérée » ? Résultats7–8 : Faveur dite modérée dans la source.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0128",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.39",
+    "question": "Implanter « Entremetteur — réseau » ? Résultat9 : Tests d’Établir un Contact de cette période à+1 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0129",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.39",
+    "question": "Implanter « Charlatan — investissement » ? Résultats7–8 : aucun Revenu cette fois ; prochain Revenu réussi multiplié par1d10.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0130",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.39",
+    "question": "Implanter « Charlatan — associé » ? Résultat9 : payer1pistole au début de chaque période suivante ; au Revenu,1d10 :1–9 gains+20%,10 l’associé vole tous les fonds.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0131",
+    "phase": "Compétences",
+    "lot": "L04",
+    "source": "L04 p.41",
+    "question": "Implanter « Recel — reconnaître un objet » ? Acheteur soupçonneux : Ragot ou Évaluation+0, modifié par valeur et temps écoulé ; détection spécifique, pas toute vente automatiquement opposée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0132",
+    "phase": "Compétences",
+    "lot": "L04",
+    "source": "L04 p.41",
+    "question": "Implanter « Reconnaissance — valeur » ? 0–10 CO+0 ;11–20+10 ;21–30+20 ;31–40+30 ;41etplus+40 au Test.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0133",
+    "phase": "Compétences",
+    "lot": "L04",
+    "source": "L04 p.41",
+    "question": "Implanter « Reconnaissance — ancienneté » ? Vol≤1 mois+10 ;1–6 mois+0 ;6–12 mois−10 ;1–2ans−20 ;2ansouplus−30.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0134",
+    "phase": "Compétences",
+    "lot": "L04",
+    "source": "L04 p.41",
+    "question": "Implanter « Recel — effacer les marques » ? Métier et difficulté MJ ; réussite : acheteur Ragot/Évaluation−2 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0135",
+    "phase": "Compétences",
+    "lot": "L04",
+    "source": "L04 p.41",
+    "question": "Implanter « Recel — démonter l’objet » ? Métier+0 pour bijou/métal précieux : réussite composants valant50 %, échec25 % ; vente sans risque de reconnaissance.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0136",
+    "phase": "Compétences",
+    "lot": "L04",
+    "source": "L04 p.41",
+    "question": "Implanter « Recel — autre ville » ? Avant diffusion de la nouvelle du vol, Ragot de l’acheteur−3 DR ; Évaluation non visée par cette clause.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0137",
+    "phase": "Compétences",
+    "lot": "L04",
+    "source": "L04 p.41",
+    "question": "Implanter « Recel en Activité » ? Option MJ d’ajouter bonus à Revenu/Banque pour biens de grande valeur ; aucun montant fixé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0138",
+    "phase": "Création et carrières",
+    "lot": "L04",
+    "source": "L04 p.42",
+    "question": "Implanter « Détourneur — caractéristiques et compétences » ? Voleur : au rang1 remplacer Agilité par Intelligence, liste initiale sociale/économique ; écritoire et boulier peuvent remplacer l’équipement initial.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0139",
+    "phase": "Création et carrières",
+    "lot": "L04",
+    "source": "L04 p.42",
+    "question": "Implanter « Détourneur — talents par rang » ? Remplacements propres aux quatre rangs : Corruption/Détournement/Lire au rang1 ; Numismatique/Guilde/Baratiner au rang2 ; Négociateur/Astucieux/Calcul au rang3 ; Intrigant/Belles paroles/Chance au rang4.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0140",
+    "phase": "Création et carrières",
+    "lot": "L04",
+    "source": "L04 p.42",
+    "question": "Implanter « Détourneur — respectabilité » ? Compte Argent1 aux Tests sociaux ; Criminel inutilisable sauf identité criminelle révélée aux interlocuteurs.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0141",
+    "phase": "Création et carrières",
+    "lot": "L04",
+    "source": "L04 p.42",
+    "question": "Implanter « Détourneur — classe sociale discrète » ? Sans liens avec d’autres criminels, compte Bourgeois plutôt que Roublard ; Répression criminelle et Nouvelle lune ne s’appliquent pas.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0142",
+    "phase": "Compétences",
+    "lot": "L04",
+    "source": "L04 p.42",
+    "question": "Implanter « Détourner des marchandises » ? Le talent Détournement peut prendre des biens de valeur égale au tirage au lieu de monnaie ; aucune autre valeur créée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0143",
+    "phase": "Compétences",
+    "lot": "L04",
+    "source": "L04 p.42",
+    "question": "Implanter « Entreprise visée — tirage » ? Trois d10 indépendants : type de bien, gain de Détournement, Intelligence du patron ; colonnes ne sont pas une seule ligne liée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0144",
+    "phase": "Compétences",
+    "lot": "L04",
+    "source": "L04 p.43",
+    "question": "Implanter « Marché noir — acheter » ? Activité, Ragot+0 réussi trouve l’objet ; prix augmenté de deux fois sa valeur normale, formulation source conservée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0145",
+    "phase": "Compétences",
+    "lot": "L04",
+    "source": "L04 p.43",
+    "question": "Implanter « Marché noir — vendre » ? Bawd ou receleur : Marchandage+0, vente à50 % de valeur, +10 % par2 DR supplémentaires.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0146",
+    "phase": "Compétences",
+    "lot": "L04",
+    "source": "L04 p.43",
+    "question": "Implanter « Tripot — miser » ? Interdit après Banque ; choisir jeu et mise, Jeu−20 ; réussite récupère mise plus une mise parDR, échec perd mise et dette égale à mise×DRnégatifs.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0147",
+    "phase": "Compétences",
+    "lot": "L04",
+    "source": "L04 p.43",
+    "question": "Implanter « Installer une identité » ? Statut supérieur : dépenser un Revenu entier autant de fois que son échelon ; Interprétation(Acteur)−10, plus difficile si célébrité au choix MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0148",
+    "phase": "Compétences",
+    "lot": "L04",
+    "source": "L04 p.43",
+    "question": "Implanter « Identité installée — effets » ? Réussite : Charme/Interprétation(Acteur)+2 DR sous cette identité à l’aventure suivante ; Identité secrète temporaire si inconnue, même région requise.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0149",
+    "phase": "Compétences",
+    "lot": "L04",
+    "source": "L04 p.43",
+    "question": "Implanter « Campagne de rumeurs » ? Charme−20 ; réussite change la réputation pendant une semaine et détail enplus par2 DR ; échec par2 DR répand l’inverse ; échec impressionnant donne réputation de commère.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0150",
+    "phase": "Création et carrières",
+    "lot": "L04",
+    "source": "L04 p.44",
+    "question": "Implanter « Faussaire — accès et carrière » ? Toutes espèces listées ; quatre rangs Bronze2/Argent1/Argent4/Or2, listes propres ; un Charlatan tiré aléatoirement peut être remplacé par Faussaire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0151",
+    "phase": "Compétences",
+    "lot": "L04",
+    "source": "L04 p.45",
+    "question": "Implanter « Moule à fausse monnaie » ? Un jour et Métier(Artiste ou Forgeron)−20 pour moule de la devise précise.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0152",
+    "phase": "Compétences",
+    "lot": "L04",
+    "source": "L04 p.45",
+    "question": "Implanter « Fausses pièces — fabrication » ? Quart d’once de métal de base par pièce, une journée et Métier+0 : jusqu’à50 pièces ; échec, pièces visiblement défectueuses.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0153",
+    "phase": "Compétences",
+    "lot": "L04",
+    "source": "L04 p.45",
+    "question": "Implanter « Fausses pièces — écoulement » ? Pièces défectueuses : opposition Escamotage/Perception pour les passer ; commerçant les refuse si reconnues, récidive signalée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0154",
+    "phase": "Compétences",
+    "lot": "L04",
+    "source": "L04 p.45",
+    "question": "Implanter « Faux documents ou sceaux » ? Connaître l’original ; Art(Calligraphie/Gravure/Sculpture)−10, semaine par défaut ; réussite copie détectable à Évaluation−30, échec à+0.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0155",
+    "phase": "Compétences",
+    "lot": "L04",
+    "source": "L04 p.45",
+    "question": "Implanter « Fausse œuvre — étude » ? Activité Consulter un expert pour accéder à l’original puis Art étendu pour l’étudier ; temps et seuil décidés par le MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0156",
+    "phase": "Compétences",
+    "lot": "L04",
+    "source": "L04 p.45",
+    "question": "Implanter « Fausse œuvre — copie » ? Art étendu−20, temps/seuilMJ ; noter séparément tousDRnégatifs qui facilitent l’identification ; recommencer une œuvre achevée donne+1 DR de pratique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0157",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.46",
+    "question": "Implanter « Contact occasionnel » ? Commérage+20 permet de nommer un contact correspondant au service demandé ; difficulté et confiance adaptées par le MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0164",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.50",
+    "question": "Implanter « Établir un Contact » ? Activité : Commérage−10 et dépense égale au Statut du contact ; échec nécessite une nouvelle Activité.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0165",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.50",
+    "question": "Implanter « Fiche de Contact » ? Noter nom, métier, description, réseau et compétences utiles pour reprendre le même contact.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0166",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.52",
+    "question": "Implanter « Qualité du Contact — choix » ? Le MJ choisit ou tire sur1d10 les qualités de Service et de Relation du tableau.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0167",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.52",
+    "question": "Implanter « Contact — exécrable » ? Jet1 : Tests du contact staté à−2 DR, sinon score25 ; relation froide, prêt à dénoncer pour se sauver.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0168",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.52",
+    "question": "Implanter « Contact — médiocre » ? Jets2–3 : Tests du contact staté à−2 DR, sinon score35 ; relation incertaine.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0169",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.52",
+    "question": "Implanter « Contact — convenable » ? Jets4–7 : service correct et relation moyenne ; aucun score numérique imposé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0170",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.52",
+    "question": "Implanter « Contact — supérieur » ? Jets8–9 : Tests du contact staté à+1 DR, sinon score55 ; bonne relation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0171",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.52",
+    "question": "Implanter « Contact — excellent » ? Jet10 : Tests du contact staté à+2 DR, sinon score65 ; relation solide.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0172",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.52",
+    "question": "Implanter « Contact — renforcer la relation » ? Une Activité supplémentaire Établir un Contact améliore sa Relation d’un cran ; ne modifie pas le Service.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0173",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.53",
+    "question": "Implanter « Évolution des Contacts » ? Jet du MJ tous les trois mois et à chaque période d’entre-deux ; il peut ignorer un résultat négatif si le PJ a entretenu activement le lien.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0174",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.53",
+    "question": "Implanter « Contact — stabilité » ? 01–33 : aucun changement notable.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0175",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.53",
+    "question": "Implanter « Contact — se cache » ? 34–39 : retrouver le contact qui a quitté son domicile mais reste probablement dans la même ville ou province.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0176",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.53",
+    "question": "Implanter « Contact — négligence professionnelle » ? 34–39 : Service diminue d’un niveau.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0177",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.53",
+    "question": "Implanter « Contact — changement de bande » ? 40–44 : passe dans une organisation criminelle ou faction rivale ; peut y recommander les PJ selon leur Relation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0178",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.53",
+    "question": "Implanter « Contact — client douteux » ? 45–48 : client hostile ou douteux à déterminer par le MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0179",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.53",
+    "question": "Implanter « Contact — difficultés financières » ? 49–54 : peut demander un prêt au personnage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0180",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.53",
+    "question": "Implanter « Contact — maladie » ? 55–59 : contracte la Vérole urticante et peut contaminer pendant1d10 semaines.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0181",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.53",
+    "question": "Implanter « Contact — corruption » ? 60–64 : exposé à une source modérée de Corruption.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0182",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.53",
+    "question": "Implanter « Contact — filature » ? 65–69 :33% de chances qu’une rencontre avec le PJ soit remarquée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0183",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.53",
+    "question": "Implanter « Contact — conversion religieuse » ? 70–73 : changement d’attitude religieuse et de rapport au crime à fixer par le MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0184",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.53",
+    "question": "Implanter « Contact — oublié » ? 74–78 : sans rencontre depuis le précédent jet, Relation dégradée d’un cran.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0185",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.53",
+    "question": "Implanter « Contact — emprisonné » ? 79–83 : indisponible en prison pendant2d10 mois.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0186",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.53",
+    "question": "Implanter « Contact — apprentissage » ? 84–89 : Service amélioré d’un cran.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0187",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.53",
+    "question": "Implanter « Contact — déménagement » ? 90–93 : change de ville, traces éventuelles à l’ancienne adresse ou chez les connaissances.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0188",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.53",
+    "question": "Implanter « Contact — honnête reconversion » ? 94–97 : renonce au crime ; un bon lien peut permettre de le convaincre de rendre service.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0189",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.53",
+    "question": "Implanter « Contact — agression » ? 98–00 : subit une Blessure critique aléatoire, éventuellement mortelle.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0190",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.54",
+    "question": "Implanter « August — qualités » ? Service supérieur, Relation moyenne ; lien avec les Hooks impose une Relation froide.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0191",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.54",
+    "question": "Implanter « August — introduction » ? Présenter August à Franz Baumann de Bögenhafen améliore sa Relation d’un cran.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0192",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.55",
+    "question": "Implanter « August — Ubersreik » ? Le lien pertinent avec Crooked Hammer peut améliorer sa Relation d’un cran.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0194",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.56",
+    "question": "Implanter « Contacts — renseignement direct » ? Le MJ peut laisser un Contact donner l’information pertinente sans nouveau Test de Commérage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0195",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.58",
+    "question": "Implanter « Créer une bande » ? Activité Créer une bande :10 pistoles, bande de niveau1 ; limitée à sa ville, nouvelle ville exige une nouvelle bande.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0196",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.58",
+    "question": "Implanter « Agrandir une bande » ? Nouvelle Activité, coût du niveau visé et Commandement+0 ; échec perd la somme sans progression.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0197",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.59",
+    "question": "Implanter « Bande — niveau1 » ? Croissance10 pistoles ;2 racketteurs, ressources2 pistoles, influence clerc/compagnon de guilde, recours auprès d’un milicien.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0198",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.59",
+    "question": "Implanter « Bande — niveau2 » ? Croissance1 CO ;1d10 racketteurs, ressources4 pistoles, fonctionnaire débutant/membre de guilde, recours auprès d’un sergent.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0199",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.59",
+    "question": "Implanter « Bande — niveau3 » ? Croissance10 CO ;2d10 racketteurs, ressources1 CO, fonctionnaire urbain/maître de guilde, recours auprès d’un capitaine.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0200",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.59",
+    "question": "Implanter « Bande — niveau4 » ? Croissance100 CO ;4d10 racketteurs, ressources4 CO, haut fonctionnaire/président de guilde, recours auprès d’un juge.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0201",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.59",
+    "question": "Implanter « Organiser le crime » ? À chaque période, Commandement+0 entretient la bande et ouvre au choix renforts ou ressources à la prochaine aventure ; échec ou omission réduit le niveau de1.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0202",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.59",
+    "question": "Implanter « Appeler du renfort » ? Après entretien réussi, une fois pendant la prochaine aventure au lieu de la bande, appeler les racketteurs du niveau.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0203",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.59",
+    "question": "Implanter « Obtenir des ressources » ? Après entretien réussi et choix de cette option, commencer la prochaine aventure avec l’argent du niveau.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0204",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.59",
+    "question": "Implanter « Maintenir son influence » ? Activité Intimidation+0 réussie : un usage d’influence ou un recours juridique pendant la prochaine aventure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0205",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.59",
+    "question": "Implanter « Exercer son influence » ? Faire agir le contact du rang selon son autorité, sans pouvoir le contraindre contre ses propres intérêts.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0206",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.59",
+    "question": "Implanter « Résoudre une affaire judiciaire » ? Résoudre une seule affaire adaptée au rang du contact ; une culpabilité publiquement connue peut limiter le juge à améliorer la détention.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0207",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.60",
+    "question": "Implanter « Événement criminel » ? Après les événements personnels, un jet par bande à chaque période ; joueur le plus impliqué lance.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0208",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.60",
+    "question": "Implanter « Bande — milice corrompue » ? 01–04 : Revenu à moitié ou interdiction de Maintenir/Organiser ; future guerre contre milice corrompue au Test indiqué−20.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0209",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.60",
+    "question": "Implanter « Bande — conflit de territoire » ? 05–08 : Organiser compte un niveau de moins jusqu’à trois aventures ou reconquête ; Tests de guerre contre ces rivaux à+1 DR pendant ce conflit.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0210",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.60",
+    "question": "Implanter « Bande — répression » ? 09–12 : pas d’Organiser avant la fin de la prochaine aventure ; carrières criminelles sans Revenu.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0211",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.60",
+    "question": "Implanter « Bande — enquête fiscale » ? 13–16 : consacrer une Activité à l’enquête ou payer10% du dernier coût de croissance.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0212",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.60",
+    "question": "Implanter « Bande — faveur religieuse » ? 17–20 : ressources actuelles d’Organiser+50%, mais pas d’Organiser à la période suivante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0213",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.60",
+    "question": "Implanter « Bande — vol interne » ? 21–24 : disparition de l’objet portatif le plus précieux du personnage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0214",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.60",
+    "question": "Implanter « Bande — défection » ? 25–28 : remplacer le membre après la prochaine aventure ; son nouveau groupe bénéficie de+10 aux oppositions contre la bande.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0215",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.60",
+    "question": "Implanter « Bande — source perdue » ? 29–32 : remplacer la source de gains ; s’il n’y en avait qu’une, ressources du niveau1 cette période.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0216",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.60",
+    "question": "Implanter « Bande — exemple cruel ou clémence » ? 33–36 : Intimidation+10 et Charme−10 jusqu’à fin prochaine aventure ; épargner l’associé réduit plutôt la bande d’un niveau effectif jusque-là.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0217",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.60",
+    "question": "Implanter « Bande — mauvaise association » ? 37–40 : événement personnel supplémentaire, relancer s’il répète celui déjà obtenu.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0218",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.60",
+    "question": "Implanter « Bande — prêtre de Ranald » ? 41–44 : ressources remplacées par1d10 pistoles par niveau ; chasser le prêtre fait perdre1point de Chance à la prochaine séance.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0219",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.61",
+    "question": "Implanter « Bande — informateur milicien » ? 45–48 : ignorer un futur événement impliquant la milice ou+2 DR à un Test de guerre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0220",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.61",
+    "question": "Implanter « Bande — objet compromettant » ? 49–52 : remettre l’objet à la milice permet de relancer le prochain événement la concernant, second résultat obligatoire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0221",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.61",
+    "question": "Implanter « Bande — entraide administrative » ? 53–56 : un membre consacre une Activité hors Revenu aux affaires du groupe ; peut aider un Test d’une autre Activité.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0222",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.61",
+    "question": "Implanter « Bande — extension professionnelle » ? 57–60 : une Activité normalement réservée à une autre classe devient accessible.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0223",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.61",
+    "question": "Implanter « Bande — apprentissage avantageux » ? 61–64 : Entraînement sans argent, ou Apprentissage inhabituel à moitié prix avec Test à+20.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0224",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.61",
+    "question": "Implanter « Bande — transfuge » ? 65–70 :+2 DR aux Tests de la prochaine guerre ; informateur rejoint définitivement après celle-ci et peut devenir Contact.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0225",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.61",
+    "question": "Implanter « Bande — nouvelle source » ? 71–75 : source de revenus ajoutée ; Obtenir des ressources rapporte le double cette période.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0226",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.61",
+    "question": "Implanter « Bande — tribut » ? 76–80 : objet d’une valeur maximale égale au coût de croissance vers le niveau courant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0227",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.61",
+    "question": "Implanter « Bande — impunité limitée » ? 81–84 : la milice ferme les yeux sur les petits délits pendant au moins une semaine, durée précise au MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0228",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.61",
+    "question": "Implanter « Bande — intimidation ennemie » ? 85–88 : céder interdit Organiser cette période ; résister réduit de2 les prochains renforts et donne+2 DR social avec les criminels locaux.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0229",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.61",
+    "question": "Implanter « Guerre des bandes — procédure » ? 89–92 : Intimidation+0 opposée à chaque période, +1 DR par niveau ; première bande à10 DR cumulés gagne ; croissance interdite pendant la guerre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0230",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.61",
+    "question": "Implanter « Guerre des bandes — résolution » ? Perdant dissous ; gagnant ignore les guerres des cinq prochaines périodes et ses ressources réussies y augmentent de50%.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0231",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.61",
+    "question": "Implanter « Bande — offre de rachat » ? 93–96 : vendre pour deux fois le dernier coût de croissance, ou résoudre97–00 en refusant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0232",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.61",
+    "question": "Implanter « Bande — coup de force » ? 97–00 : Intimidation+0 opposée ; perdant réduit d’un niveau ; pas de croissance cette période.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0233",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.63",
+    "question": "Implanter « Cotisation mensuelle » ? Chaque mois, une pièce de la dénomination du Statut par niveau de bande, indépendamment de l’échelon personnel.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0236",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.67",
+    "question": "Implanter « Privilèges de bande — niveau1 » ? Contacts entremetteur/racketteur, plans publics, recel jusqu’à10 CO par mois, avocat crimes mineurs/modérés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0237",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.67",
+    "question": "Implanter « Privilèges de bande — niveau2 » ? Ajoute charlatan/receleur, horaires de milice, recel20 CO/mois, avocat crimes mineurs/modérés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0238",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.67",
+    "question": "Implanter « Privilèges de bande — niveau3 » ? Ajoute faussaire, plans d’égouts/bâtiments importants, recel40 CO/mois, avocat jusqu’aux crimes graves.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0239",
+    "phase": "Entre-deux aventures",
+    "lot": "L04",
+    "source": "L04 p.67",
+    "question": "Implanter « Privilèges de bande — niveau4 » ? Tous Contacts, doubles de clés/complices internes, recel80 CO/mois, avocat tous crimes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0240",
+    "phase": "Religion et objets",
+    "lot": "L04",
+    "source": "L04 p.81",
+    "question": "Implanter « Grand heaume cornu — accès » ? Les enchantements exigent Béni(Taal) ; objet unique donné aux fidèles jugés dignes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0241",
+    "phase": "Religion et objets",
+    "lot": "L04",
+    "source": "L04 p.81",
+    "question": "Implanter « Grand heaume cornu — protection » ? Accorde3 PA à la tête.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0242",
+    "phase": "Religion et objets",
+    "lot": "L04",
+    "source": "L04 p.81",
+    "question": "Implanter « Grand heaume cornu — animaux » ? Les animaux sauvages n’attaquent jamais le porteur, même contrôlés magiquement ; créatures du Chaos exclues.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0243",
+    "phase": "Religion et objets",
+    "lot": "L04",
+    "source": "L04 p.81",
+    "question": "Implanter « Grand heaume cornu — immunité » ? Les sorts de Ghur, Ghyran et Azyr n’affectent le porteur d’aucune manière.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0244",
+    "phase": "Religion et objets",
+    "lot": "L04",
+    "source": "L04 p.81",
+    "question": "Implanter « Grand heaume cornu — volonté » ? Accorde+15 à la caractéristique Force Mentale tant qu’il est porté.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0245",
+    "phase": "Religion et objets",
+    "lot": "L04",
+    "source": "L04 p.81",
+    "question": "Implanter « Grand heaume cornu — invocation » ? Accorde+1 DR pour invoquer les miracles de Taal tant qu’il est porté.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0246",
+    "phase": "Religion et objets",
+    "lot": "L04",
+    "source": "L04 p.83",
+    "question": "Implanter « Périapte d’ambre » ? Amulette magique de Pedragar donnant une Protection10+.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0248",
+    "phase": "Religion et objets",
+    "lot": "L04",
+    "source": "L04 p.84",
+    "question": "Implanter « Pèlerinage des pierres » ? Visiter douze sites de Talabecland à pied nu hors routes/rivières, ne manger que chasse/cueillette, sacrifier cerf ou sanglier au douzième et bain de sang :+1niveau d’Âme pure permanent.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0249",
+    "phase": "Religion et objets",
+    "lot": "L04",
+    "source": "L04 p.86",
+    "question": "Implanter « Prêtre-rôdeur de Taal — carrière » ? Humain ; quatre rangs Bronze2/Bronze5/Argent4/Or1, compétences et talents propres, Béni puis Invocation(Taal).",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0250",
+    "phase": "Religion et objets",
+    "lot": "L04",
+    "source": "L04 p.87",
+    "question": "Implanter « Prêtre-rôdeur — initiation » ? Choisi par un prêtre confirmé, apprentissage itinérant ; épreuve de chasse pour nourrir les prêtres avant l’admission.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0251",
+    "phase": "Religion et environnement",
+    "lot": "L04",
+    "source": "L04 p.87",
+    "question": "Implanter « Malédiction de Taal » ? Sur Courroux supérieur à151, option de remplacer le résultat : sans dépense de1 Destin, esprit animal et vie sauvage sous domination de Taal.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0261",
+    "phase": "Religion et objets",
+    "lot": "L04",
+    "source": "L04 p.89",
+    "question": "Implanter « Prêtre générique de Taal » ? Liste initiale propre : Athlétisme, Emprise animaux, Calme, Résistance, Intuition, Théologie, Survie, Perception, Prière, Recherche.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0262",
+    "phase": "Religion et objets",
+    "lot": "L04",
+    "source": "L04 p.89",
+    "question": "Implanter « Moine de Taal » ? Carrière Nonne avec liste initiale adaptée incluant Calligraphie, Emprise animaux, Survie, Soin et Prière.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0263",
+    "phase": "Religion et objets",
+    "lot": "L04",
+    "source": "L04 p.89",
+    "question": "Implanter « Longues-jambes de Taal » ? Éclaireur avec compétences de Guide adaptées : Soin animaux, Emprise animaux, Escalade, Résistance, Commérage, Savoir local, CC base, Survie, Perception, CT arc.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0264",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.92",
+    "question": "Implanter « Présence de milice — ajustements » ? 1d10 :+1 ville, quartier riche/marché, poste visible, Répression/Émeutes récente ;−1 petite ville, quartier pauvre,23h–5h ;−3 zone interdite à la milice.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0265",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.93",
+    "question": "Implanter « Milice — loin » ? Résultat1–2 : arrivée après20 minutes ou plus ;3–5 : après20 Rounds ou plus.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0266",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.93",
+    "question": "Implanter « Milice — cent yards » ? 6–8 : patrouille à100 yards ; opposition Perception−30/Discrétion pour voir un crime public ; arrivée en10 Rounds.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0267",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.93",
+    "question": "Implanter « Milice — cinquante yards » ? 9 : patrouille à50 yards ; opposition Perception−10/Discrétion ; arrivée en5 Rounds.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0268",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.93",
+    "question": "Implanter « Milice — sur place » ? 10 : patrouille présente, Perception+20 opposée à Discrétion si crime visible ; réponse immédiate.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0269",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.93",
+    "question": "Implanter « Milice — composition » ? Deux à cinq miliciens avec un sergent ; six à dix lors de troubles publics.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0270",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.93",
+    "question": "Implanter « Milice — légalité incertaine » ? Savoir(Loi)+0 du sergent détermine s’il reconnaît correctement une infraction douteuse.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0273",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.94",
+    "question": "Implanter « Sentence immédiate — coups » ? Pour une infraction mineure, la milice peut frapper jusqu’à une Blessure critique puis cesser.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0274",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.94",
+    "question": "Implanter « Sentence immédiate — confiscation » ? Amende sur place possible : saisir argent et objets précieux transportés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0275",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.94",
+    "question": "Implanter « Arrestation » ? Récidive ou infraction grave : poste de milice puis prison en attendant le procès.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0276",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.94",
+    "question": "Implanter « Noble — traitement privilégié » ? Sang noble reconnu peut éviter coups/amende/arrestation immédiate ; si crime trop public, détention jusqu’à l’autorité compétente.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0278",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.95",
+    "question": "Implanter « Justice sommaire » ? Selon la tactique et accord du MJ, Charme, Divertissement(Comédie) ou Commandement réussi peut alléger la peine sans annuler normalement la culpabilité.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0279",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.95",
+    "question": "Implanter « Audience contradictoire » ? Argent/Or ou lettré admis à plaider : Savoir(Loi)+0 peut faire reconsidérer l’affaire, en plus du Test de clémence.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0280",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.95",
+    "question": "Implanter « Avocat — honoraires » ? Préparer l’affaire coûte4 CO ; avocat typique Savoir(Loi)55, employable à la place du prévenu.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0281",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.95",
+    "question": "Implanter « Audience — résultat » ? Réussir les deux Tests peut alléger la peine ; deux réussites stupéfiantes sont normalement nécessaires à l’acquittement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0282",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.96",
+    "question": "Implanter « Choix des peines » ? Le MJ choisit deux ou trois peines adaptées, une seule en cas de clémence, selon trois degrés de gravité.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0283",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.96",
+    "question": "Implanter « Peines modérées — durée et argent » ? Pilori jusqu’à une semaine, amende jusqu’à50 CO avec détention jusqu’au paiement, travaux forcés un mois ou masque diurne un mois.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0284",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.96",
+    "question": "Implanter « Peines modérées — autres effets » ? Fouet jusqu’à au moins5 Blessures, mutilation au marteau, marque, changement forcé vers Nonne/Moine, enrôlement ou parade infamante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0285",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.96",
+    "question": "Implanter « Peines graves — argent et durée » ? Amende jusqu’à200 CO et détention jusqu’au paiement, travaux forcés1d10ans, confiscation de tous les biens ou bannissement/hors-la-loi.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0286",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.96",
+    "question": "Implanter « Peines graves — lésions » ? Amputation doigt/oreille/nez, marque frontale, fouet jusqu’à Blessure critique ou membres brisés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0287",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.96",
+    "question": "Implanter « Peines atroces » ? Cécité, travaux forcés à vie ou exécution selon la méthode choisie ; aucune résolution de dégâts inventée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0288",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.96",
+    "question": "Implanter « Gravité — crimes de biens » ? Vol jusqu’à1pistole modéré, jusqu’à1 CO grave, au-delà atroce ; recel jusqu’à5 CO modéré, au-delà grave ; charlatan et faussaire assimilés au vol.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0289",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.96",
+    "question": "Implanter « Gravité — infractions professionnelles » ? Barème par carrière : agitation, coups/meurtre, pillage de tombes, enlèvement, contrebande, magie interdite et naufrage provoqué.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0290",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.97",
+    "question": "Implanter « Patron — libération » ? Un patron peut intervenir contre une Faveur significative ; dépend du crime et de sa relation au personnage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0291",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.97",
+    "question": "Implanter « Attendre un prisonnier » ? Le groupe peut suspendre ses aventures et jouer une période d’entre-deux par mois de peine.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0292",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.97",
+    "question": "Implanter « Prison — événements appliqués » ? Les événements restent tirés ; Alliée accusée, Trahison, Éclair, Prévenu, Maladie, Morr et Animal pestilentiel suivent leurs règles ordinaires.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0293",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.97",
+    "question": "Implanter « Prison — évasion et événements » ? Répression/Sous surveillance :−1 DR aux Tests d’évasion ; Nouvelle lune :+1 DR ; Émeutes :+2 DR cette période.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0294",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.97",
+    "question": "Implanter « Prison — dette et ennemi » ? Anciennes dettes conserve la Faveur pour la sortie sans perdre d’Activité ; Bière renversée désigne gardien ou codétenu ; Estime inattendue peut procurer un patron.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0295",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.97",
+    "question": "Implanter « Prison — changer de carrière » ? Limité à Agitateur, Charlatan, Receleur, Faussaire, Racketteur, Protagoniste, Voleur, Contrebandier.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0296",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.97",
+    "question": "Implanter « Prison — entraînement » ? Compétences de ces carrières seulement ; paiement remplacé par Faveur majeure au maître.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0297",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.97",
+    "question": "Implanter « Prison — apprentissage inhabituel » ? Talents de ces carrières seulement ; paiement remplacé par Faveur majeure au maître.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0298",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.97",
+    "question": "Implanter « Prison — étudier une cible » ? Activité ordinaire permise, représentant des informations de codétenus plutôt qu’une observation sur place.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0299",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.98",
+    "question": "Implanter « Évasion — accès et assistance » ? Seulement si le MJ la juge possible ; un PJ tente, les autres peuvent sacrifier leur Activité pour l’aider.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0300",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.98",
+    "question": "Implanter « Évasion — poste de milice » ? Discrétion ou Escamotage+0 simple.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0301",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.98",
+    "question": "Implanter « Évasion — crime modéré » ? Discrétion ou Escamotage+0 étendu,5 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0302",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.98",
+    "question": "Implanter « Évasion — crime grave » ? Discrétion ou Escamotage−10 étendu,7 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0303",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.98",
+    "question": "Implanter « Évasion — crime atroce » ? Discrétion ou Escamotage−20 étendu,10 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0304",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.98",
+    "question": "Implanter « Évasion — limite et conséquence » ? Réussir sous cinq Rounds ; échec impressionnant ou pire peut faire arrêter les complices ; évadé et aides reconnus déclarés hors-la-loi.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0305",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.98",
+    "question": "Implanter « Évasion — Rijker » ? Natation, Ramer ou Voile−20 pour atteindre l’île puis encore pour la quitter.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0306",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.98",
+    "question": "Implanter « Évasion — Mundsen » ? Chaque participant doit combattre un geôlier utilisant le profil de milicien.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0307",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.98",
+    "question": "Implanter « Évasion — colonie minière » ? Survie−20 pour atteindre la colonie puis pour la quitter ; prison célèbre peut faire capturer tous les participants sur échec.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0308",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.98",
+    "question": "Implanter « Pot-de-vin — coût de base » ? Bronze :2d10 sous par échelon ; Argent :1d10 pistoles par échelon ; Or :1 CO par échelon.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0309",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.98",
+    "question": "Implanter « Pot-de-vin — intégrité » ? 1d10 :1–2 incorruptible ;3–8 influençable ;9–10 vénal.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0310",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.98",
+    "question": "Implanter « Pot-de-vin — influençable » ? Prix de base pour crime trivial,×3 modéré,×5 grave ; refuse crime atroce.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0311",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.98",
+    "question": "Implanter « Pot-de-vin — vénal » ? Prix de base pour trivial,×2 modéré,×4 grave,×10 atroce.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0312",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.98",
+    "question": "Implanter « Corruption — estimation » ? Test de Corruption :+1 DR ou mieux révèle intégrité et prix ;+0 seulement intégrité ;−0 aucun indice ;−1 ou pire dévoile la tentative à la cible.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0313",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.99",
+    "question": "Implanter « Hors-la-loi — reconnaissance » ? Chaque jour de retour au lieu du crime, opposition Discrétion+0/Perception ; échec révèle l’identité, conséquences au MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0314",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.99",
+    "question": "Implanter « Hors-la-loi — pardon » ? Acquittement au procès, grâce impériale ou grâce de l’Électeur dans sa province peut lever la proscription.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0315",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.100",
+    "question": "Implanter « Embuscade — détection » ? Meilleure Perception des voyageurs opposée à la pire Discrétion des bandits, difficulté+0.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0316",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.100",
+    "question": "Implanter « Embuscade — obstacle » ? Piégeage+0 des bandits opposé à Équitation ou Conduite ; avoir repéré l’embuscade donne+2 DR pour éviter les pièges.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0317",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.100",
+    "question": "Implanter « Hors-la-loi — revenu facultatif » ? Revenu normal seul ou avec1d10complications.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0318",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.100",
+    "question": "Implanter « Hors-la-loi — pertes humaines » ? Résultat1 : compagnon tué/blessé ; sans effet pour rangs1–2, mais touche un homme de main des rangs3–4.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0319",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.100",
+    "question": "Implanter « Hors-la-loi — voisins dangereux » ? Résultat2 : résoudre la menace ou déplacer le camp avant de prendre un nouveau Revenu.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0320",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.100",
+    "question": "Implanter « Hors-la-loi — cavale » ? Résultats3–4 : Revenu conservé mais aucune autre Activité cette période.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0321",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.100",
+    "question": "Implanter « Hors-la-loi — trouvailles » ? 5–6 : une bourse en plus ;10 : deux bourses en plus.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0322",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.100",
+    "question": "Implanter « Hors-la-loi — rival dominant » ? 7–8 : roi des bandits demande services ou contribution, sinon peut attaquer la bande.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0323",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.100",
+    "question": "Implanter « Hors-la-loi — chasseur » ? 9 : affronter le chasseur de primes avant la prochaine période d’entre-deux.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0325",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.101",
+    "question": "Implanter « Chef hors-la-loi — bande » ? Rang3 exige au moins deux hors-la-loi en plus du chef ; absence de commandement peut conduire à son remplacement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0326",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.101",
+    "question": "Implanter « Camp des hors-la-loi » ? Bon camp et nourriture régulière peuvent donner+2 DR au Commandement du chef.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0327",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.102",
+    "question": "Implanter « Roi des bandits — fief » ? Rang4 exige au moins deux bandes et un repaire permanent plus solide qu’un camp.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0328",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.102",
+    "question": "Implanter « Générer une bande » ? Tables1d10 de personnalité, mobile et crime ; résultats multiples pour factions ou plusieurs crimes ; Contempt relance le crime originel.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0329",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.103",
+    "question": "Implanter « Générer un chef » ? Trois tables1d10 : réputation, but et type de bande ; pas de valeurs chiffrées de combat déduites.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0332",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.104",
+    "question": "Implanter « Contrats illustratifs — primes » ? Gertrude300 CO, Hans vivant40 CO ; Pel texte100 CO mais encadré150 CO.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0333",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.106",
+    "question": "Implanter « Mandat — autorisation » ? Primes publiques ouvertes à tous ; mandat privé selon contrat ; personne erronée ou mise à mort sans autorisation peut exposer à poursuites.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0334",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.106",
+    "question": "Implanter « Mandat — preuve et paiement » ? Respecter vivant/mort et identification ; tête intacte, autres marques ou témoins crédibles si corps détruit ; information menant à arrestation peut suffire selon contrat.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0335",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.106",
+    "question": "Implanter « Mandat — priorité » ? Mandat impérial prioritaire au provincial ; tribunal militaire impérial supérieur au provincial ; répartition judiciaire au MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0336",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.107",
+    "question": "Implanter « Chasseur — rang professionnel » ? Rang2 demande expérience d’au moins un mandat actif ; le MJ peut accepter une prime publique effectivement encaissée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0337",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.107",
+    "question": "Implanter « Piste — renseignement acheté » ? Pot-de-vin offert donne+2 DR aux Commérages ultérieurs ; Commérages localisent puis Pistage précise la position.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0338",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.107",
+    "question": "Implanter « Capture — reddition » ? Intimidation opposée à Calme, habituellement−30, jusqu’à+0 si conditions favorables.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0339",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.108",
+    "question": "Implanter « Prime — tête comme preuve » ? Détacher une tête de cadavre ne nécessite aucun jet ; les Blessures critiques déterminent son état pour l’identification judiciaire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0340",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.108",
+    "question": "Implanter « Ville à guilde de chasseurs » ? Seuls membres peuvent encaisser les avis publics ; indépendants peuvent proposer leurs services pour mandats privés ; arrestation illégale assimilée à coups/enlèvement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0343",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.109",
+    "question": "Implanter « Chercher des mandats » ? Commérage+0 aux alentours du tribunal : nombre de contrats disponibles égal aux DR positifs.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0344",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.109",
+    "question": "Implanter « Générateur de mandats » ? Tables1d10 d’agent, criminel et conditions ; récompenses par ligne5/5/5/8/10/8/10/15/40/80 CO avec contraintes vivant ou mort.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0345",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.110",
+    "question": "Implanter « Brunner — reconnaissance » ? Savoir local permet de reconnaître Brunner ; offrir un verre peut obtenir un contact pour un mandat qu’il a refusé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0346",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.111",
+    "question": "Implanter « Brunner — poursuite du groupe » ? PJ hors-la-loi individuels réservés aux rangs3–4 ; fuite de Vaulkberg poursuivie en général si prime≥20 CO ; preuve matérielle de corruption peut infléchir sa poursuite.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0347",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.111",
+    "question": "Implanter « Drakesmalice — porteur » ? Maniée par Brunner, l’épée prend feu :+1Dégât et Enflammé sur les cibles.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0349",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.112",
+    "question": "Implanter « Voyage sauvage — séquence » ? Préparation facultative, étapes/météo/terrain au MJ, puis Activités de voyage, événement et Activités de camp à chaque étape.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0350",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.113",
+    "question": "Implanter « Étapes — durée » ? Étape typique : huit heures de déplacement par jour ; distance adaptée au terrain et à l’urgence par le MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0351",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.113",
+    "question": "Implanter « Étapes — distances » ? Table Mouvement0–10 : distances distinctes en plaines/collines, forêts et marais/montagnes, en miles pour huit heures ; arrondis imprimés conservés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0352",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.113",
+    "question": "Implanter « Voyage — provisions » ? Suivre eau, nourriture et fourrage ; hors route seuls chasse/pêche/cueillette renouvellent les repas.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0353",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.114",
+    "question": "Implanter « Météo — tirage » ? Un1d10 par colonne, changement conseillé quotidien ; printemps/automne+2, hiver+4, climat froid/altitude+2.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0354",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.114",
+    "question": "Implanter « Météo — température » ? 1 étouffant,2 chaud,3–8 confortable,9–11 frais,13et14+ glacial ;12 non précisé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0355",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.114",
+    "question": "Implanter « Météo — précipitations » ? 1–5 aucune,6–8 légères,9–10 fortes,11 très fortes,13 fortes,14+ aucune ;12 non précisé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0356",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.114",
+    "question": "Implanter « Météo — visibilité et vent » ? Table à deux colonnes distinctes : dégagé/brume/brouillard épais et vent immobile à très fort ; choix du MJ possible.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0357",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.114",
+    "question": "Implanter « Chaleur — eau et exposition » ? Temps chaud : un gallon d’eau par jour, Test d’exposition si nécessaire une fois par étape.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0358",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.114",
+    "question": "Implanter « Chaleur étouffante » ? Deux gallons/jour ; Résistance+0 une fois par étape si bien préparé, deux fois sinon.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0359",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.114",
+    "question": "Implanter « Froid frais » ? Sans vêtements chauds, Résistance+0 contre exposition ; renouveler la nuit sans bon camp et feu.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0360",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.114",
+    "question": "Implanter « Froid glacial » ? Au moins un Test d’exposition, deux si mal équipé, plus la nuit sans très bon abri et feu ; gants nécessaires.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0361",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.114",
+    "question": "Implanter « Gants et température » ? Gants par grand froid :−2 DR aux tâches de Dextérité ; morts-vivants et Artificiels sans pénalité thermique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0362",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.114",
+    "question": "Implanter « Pluie — exposition » ? Option MJ cumulable :−10 aux Tests de Résistance contre le froid sous précipitations.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0363",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.114",
+    "question": "Implanter « Précipitations légères » ? −1 DR à Athlétisme, Escalade et CT(Poudre noire).",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0364",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.114",
+    "question": "Implanter « Précipitations fortes » ? −2 DR à Athlétisme, Escalade et CT(Poudre noire).",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0365",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.114",
+    "question": "Implanter « Précipitations très fortes » ? −3 DR à Athlétisme, Escalade et CT(Poudre noire),−1 DR aux autres Tests ; Amphibie ignore les pénalités dues à la pluie.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0366",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.115",
+    "question": "Implanter « Brume » ? −1 DR à Navigation, tir et Perception visuelle si cible à plus de20 yards.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0367",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.115",
+    "question": "Implanter « Brouillard » ? −2 DR à Navigation, tir et Perception visuelle au-delà de10 yards ; Fimir+1 DR au Calme.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0368",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.115",
+    "question": "Implanter « Brouillard épais » ? −3 DR à Navigation, tir et Perception visuelle au-delà de5 yards ; Fimir+2 DR au Calme.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0369",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.115",
+    "question": "Implanter « Animaux — eau » ? Chaque monture ou bête de somme nécessite au moins quatre fois l’eau d’un humain.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0370",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.115",
+    "question": "Implanter « Tente — camp » ? Une tente rend Monter le camp Accessible au lieu d’Intermédiaire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0371",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.116",
+    "question": "Implanter « Événements sauvages — fréquence » ? Chaque étape :1d10, événement sur8+ ; table selon terrain, résultat écartable si le MJ le juge inadapté.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0372",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.116",
+    "question": "Implanter « Plaine — obstacle » ? Résultat1 : sans moyen de traversée, ajouter deux étapes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0373",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.116",
+    "question": "Implanter « Plaine — tertre » ? 2 : Savoir(Histoire ou local)+40 reconnaît un tombeau ancien, puis table dédiée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0374",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.116",
+    "question": "Implanter « Plaine — monolithe ou ruine » ? 3 : table de monolithe ;4 : table de ruine.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0375",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.116",
+    "question": "Implanter « Animal malade » ? 5 : Soin aux animaux−20 ou effets de Plaie infectée ; deuxième résultat pour le même animal le tue.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0376",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.116",
+    "question": "Implanter « Équipement usé » ? 6 : Métier pertinent−20 évite l’usure ; sinon métal gagne Médiocre, cuir/toile/bois détruit.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0377",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.116",
+    "question": "Implanter « Plaine — voyageurs » ? 7 :4–6 colporteurs/villageois, profil Hors-la-loi et table de particularité des victimes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0378",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.116",
+    "question": "Implanter « Plaine — source » ? 8 : ravitaillement en eau comme Activité Eau réussie sans Test.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0379",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.116",
+    "question": "Implanter « Plaine — rencontres » ? 9 : six loups ou deux ours ;10 :4–6 ennemis appropriés, selon le MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0380",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.117",
+    "question": "Implanter « Montagne et forêt — table commune » ? Résultats1–5 : tirer sur la table des plaines ;6–10 : événement propre au terrain.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0381",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.117",
+    "question": "Implanter « Mal des montagnes » ? Montagne6 : Résistance+0 ou Malaise/Nausée immédiats ; cesse hors exposition ou sur réussite ; nains, ogres et animaux adaptés exemptés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0382",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.117",
+    "question": "Implanter « Éboulis » ? Montagne7 : détour de deux étapes ou Athlétisme+0 par voyageur ; échec chute1d10 yards, quadrupèdes+2 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0383",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.117",
+    "question": "Implanter « Blizzard » ? Montagne8 : glacial, pluie/neige très forte, brouillard épais, vent très fort jusqu’à fin d’étape, puis relancer météo.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0384",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.117",
+    "question": "Implanter « Antre — état de la bête » ? Montagne9 :1d10 ;1–3 territoriale dans50 yards,4–5 affamée,6–7 combat à mort,8–9 absente mais3% de retour par Round,10 absente.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0385",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.117",
+    "question": "Implanter « Antre — affamée et trésor » ? Affamée : F/E−20, autres caractéristiques−10, Blessures−3d10 ; butin : deux jets de la colonne du tombeau.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0386",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.117",
+    "question": "Implanter « Montagne — ennemis » ? Résultat10 : groupe adapté, dont exemple deux Trolls de pierre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0387",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.117",
+    "question": "Implanter « Bloodsedge — identification » ? Forêt6 : reconnaître par Savoir(Herbes)+40 ou Survie+0 pour éviter ; variante Lustria renvoyée, sans imposer le livre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0388",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.117",
+    "question": "Implanter « Bloodsedge — traversée » ? À défaut de variante Lustria, zone3d10 yards ; Esquive−20 chaque Round, échec touche Dégâts5 à localisation aléatoire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0389",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.117",
+    "question": "Implanter « Forêt — herbes » ? 7 : Savoir(Herbes)+40 reconnaît les plantes ; renvois aux remèdes/drogues du livre de base ou supplément.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0390",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.117",
+    "question": "Implanter « Forêt — esprits nuisibles » ? 8 : sans règle de Salzenmund, sommeil troublé donne Exténué jusqu’à une Activité Récupérer réussie.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0391",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.117",
+    "question": "Implanter « Forêt — araignées et ennemis » ? 9 :4–6 araignées géantes, toutes Petites sauf une Grande, combattent à mort ;10 : ennemis forestiers au choix du MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0392",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.118",
+    "question": "Implanter « Marais — table commune » ? 1–5 : tirer sur la table des plaines ;9 : antre monstrueuse ;10 : ennemis adaptés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0393",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.118",
+    "question": "Implanter « Fièvre des marais » ? 6 : Résistance+0 à la morsure ; incubation1d5 jours, durée1d10 jours, Malaise, Fièvre et Flux modéré.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0394",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.118",
+    "question": "Implanter « Boue mouvante » ? 7 : détour de deux étapes ou Force+0 étendue15 DR par voyageur/animal ; maladresse impose suffocation et recommencer ; seuls sortis peuvent aider.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0395",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.118",
+    "question": "Implanter « Air vicié — traversée » ? 8 : poche2d10 yards, Résistance+20 chaque tour contre effets d’ivresse ; inconscient meurt sans secours après BE Rounds ;1 Résilience permet de sortir.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0396",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.118",
+    "question": "Implanter « Air vicié — récupération » ? Sorti du gaz, Résistance+20 toutes les cinq minutes ; réussite dissipe les effets.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0397",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.119",
+    "question": "Implanter « Ruines — génération » ? 2d10 pour une table de repaires, vestiges, occupants ou édifices ; capacités de PNJ non fournies laissées au MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0398",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.119",
+    "question": "Implanter « Ruines — sorcière et mage » ? Résultats2/20 : Focalisation et Langue(Magick) au moins35+4d10, quatre sorts mineurs et quatre de domaine propre, choix MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0399",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.119",
+    "question": "Implanter « Ruines — comptoir » ? 3 : Perception+0 étendue15 DR découvre1d10 CO en objets/monnaies.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0400",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.119",
+    "question": "Implanter « Ruines — snotlings » ? 6–7 :2d10 occupants, cache valant5d10 pistoles ;8–14 gravats sans particularité.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0401",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.119",
+    "question": "Implanter « Ruines — abri solide » ? 15–16 : Monter le camp+5 DR si repos sur place.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0402",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.119",
+    "question": "Implanter « Ruines — bandits » ? 17–18 :6–8 hors-la-loi, deux jets de butin de tombeau.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0403",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.119",
+    "question": "Implanter « Ruines — trolls » ? 19 : trois trolls ;1–3 attaquent sauf repas Taille Moyenne+,4–5 affamés,F/E−20 autres−10 Blessures−3d10 ;6–7 combat mortel,8–9 retour3%/Round,10 absents ; deux butins.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0404",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.120",
+    "question": "Implanter « Monolithes — génération » ? 1d10 :1–3borne,4–5pierre des hardes,6cercle ogham,7–8pierre gardienne,9tombe,10totem orque.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0405",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.120",
+    "question": "Implanter « Pierre des hardes — visites » ? Soirée :10% de visite d’un chamane avec1d10Gors/Ungors ; source mineure de Corruption.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0406",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.120",
+    "question": "Implanter « Pierre gardienne — Vents » ? 1d10 :1–8lumière/métal/vie/cieux/ombres/mort/feu/bêtes ;9deux domaines,10trois domaines par relances.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0407",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.120",
+    "question": "Implanter « Totem orque — visites » ? Soirée :10% de visite d’1d10Orques/Gobelins hostiles ; chamane si variante Tribes and Tribulations disponible.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0408",
+    "phase": "Religion et environnement",
+    "lot": "L04",
+    "source": "L04 p.120",
+    "question": "Implanter « Pierre des hardes — bonus local » ? Dans20 yards, Magie noire ou domaines du Chaos :+1 DR à Incantation et+1 DR à Focalisation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0409",
+    "phase": "Religion et environnement",
+    "lot": "L04",
+    "source": "L04 p.120",
+    "question": "Implanter « Cercle ogham — bonus local » ? Dans20 yards, Vie ou Magie naturelle :+1 DR à Incantation et+1 DR à Focalisation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0410",
+    "phase": "Religion et environnement",
+    "lot": "L04",
+    "source": "L04 p.120",
+    "question": "Implanter « Pierre gardienne — bonus local » ? Dans20 yards, domaine relié à la pierre :+1 DR à Incantation et+1 DR à Focalisation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0411",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.121",
+    "question": "Implanter « Tombeau — accès caché » ? Entrée3 : Perception−20 pour trouver l’ouverture.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0412",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.121",
+    "question": "Implanter « Tombeau — porte de chêne » ? Entrées4/5 : Crochetage4/5 DR, Endurance50 et20 Blessures.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0413",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.121",
+    "question": "Implanter « Tombeau — grille de fer » ? Entrées6/7 : Crochetage4/5 DR, Endurance60 et25 Blessures.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0414",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.121",
+    "question": "Implanter « Tombeau — dalle » ? Entrées8/9 : Force−20 étendue10 DR ;10 : Force−30 étendue15 DR ; maladresse donne Exténué.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0415",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.121",
+    "question": "Implanter « Tombeau — trésor » ? Colonne de butin1d10 : rien1–2,2 CO en3,1d10 CO en4,2d10 CO en5–6,rien de valeur en7,3d10 CO/Enc4 en8,armes de qualité en9,objet magique/potions en10.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0416",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.121",
+    "question": "Implanter « Tombeau — occupants » ? Colonne de rencontre : gobelins, bandits, pilleurs, nécromant, spectres, squelettes et banshee/cairn selon résultat ; profils renvoyés, pas recopiés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0417",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.121",
+    "question": "Implanter « Tombeau — régénération » ? Particularité3 : les morts-vivants présents gagnent Régénération.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0418",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.121",
+    "question": "Implanter « Tombeau — immersion » ? Particularité5 : Natation−20 étendue15 DR pour récupérer le butin.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0419",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.121",
+    "question": "Implanter « Tombeau — rats et gel » ? 6 : six rats géants attaquent ;7 : exposition immédiate au froid.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0420",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.121",
+    "question": "Implanter « Tombeau — chute de pierres » ? 8 : Perception+0 par voyageur ; premier échec subit1d10Dégâts à la tête, réduits par PA et Endurance.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0421",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.121",
+    "question": "Implanter « Moisissure jaune — repérage » ? 9 : Savoir(Plantes)+20 ou Savoir(Herbes)+0 ; Discrétion+20 évite de déclencher les spores.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0422",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.121",
+    "question": "Implanter « Moisissure jaune — spores » ? Nuage5 yards pendant1d10 Rounds ; Résistance+20 ou1 Aveuglé plus un par DR négatif ; chaque Round dans le nuage cause1Blessure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0423",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.121",
+    "question": "Implanter « Tombeau — labyrinthe » ? 10 : Navigation+0 étendue20 DR ; maladresse renvoie à l’entrée et remet la progression à zéro.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0424",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.122",
+    "question": "Implanter « Activités de voyage — économie » ? Avant départ une préparation collective ; à chaque étape une Activité en route et une au camp par PJ ; ne remplacent pas les Activités d’entre-deux.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0425",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.122",
+    "question": "Implanter « Préparer l’expédition » ? Avec cartes, journaux ou voyageurs expérimentés, chaque PJ fait Survie ou Recherche+0 ; chaque DR achète une relance d’événement ou de Test de voyage/camp.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0426",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.122",
+    "question": "Implanter « Deux Activités — fatigue » ? Faire voyage et camp dans la même étape impose Résistance−20 ou Exténué ; repos calme peut retirer la fatigue le matin.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0427",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.122",
+    "question": "Implanter « Activités simultanées » ? Carte+Navigation ou deux parmi Eau/Chasse/Cueillette/Reconnaissance :−1 DR aux deux Tests ; occupation incompatible peut bloquer une Activité.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0428",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.124",
+    "question": "Implanter « Manques — faim et eau » ? Sans nourriture, trouver des repas ou subir famine ; sans eau, chercher par Activité Eau ou subir soif.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0429",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.124",
+    "question": "Implanter « Manques — cuisson et abri » ? Sans cuisine, Test contre Courante galopante ; sans camp, exposition thermique ou pénalités aux soins nocturnes ; Récupérer traite fatigue et blessures.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0430",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.124",
+    "question": "Implanter « Terrain — bois clairsemés » ? Cueillette+1 DR, chasse+1 DR, camp+2 DR, autres sans modificateur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0431",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.124",
+    "question": "Implanter « Terrain — collines » ? Eau−1 DR, cueillette−1 DR, garde+1 DR, autres sans modificateur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0432",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.124",
+    "question": "Implanter « Terrain — forêt profonde » ? Navigation−2 DR,eau−1 DR,cueillette+1 DR,chasse−1 DR,camp+1 DR,garde−1 DR ; pêche inchangée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0433",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.124",
+    "question": "Implanter « Terrain — plaine tempérée » ? Navigation+1 DR,chasse+1 DR,camp−1 DR,garde+1 DR, autres sans modificateur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0434",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.124",
+    "question": "Implanter « Terrain — marais » ? Eau+2 DR,cueillette−1 DR,pêche+1 DR,camp−1 DR,garde+1 DR, autres sans modificateur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0435",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.124",
+    "question": "Implanter « Terrain — montagne » ? Cueillette−2 DR,chasse−1 DR,pêche−2 DR,camp−1 DR, autres sans modificateur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0436",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.124",
+    "question": "Implanter « Terrain — atténuation » ? Le MJ peut lever les modificateurs liés à un obstacle effectivement contourné, par exemple vue dégagée ou grotte abritée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0437",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.125",
+    "question": "Implanter « Cueillette — nourriture » ? Survie, Herbes ou équivalent+0 : un repas-personne/jour par DR ; maladresse peut fournir un aliment donnant Empoisonné ; cuisson nécessaire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0438",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.125",
+    "question": "Implanter « Marche forcée » ? Toute la troupe doit y consacrer son Activité ; distance doublée, Résistance+0 par PJ ou Exténué au début du camp.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0439",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.125",
+    "question": "Implanter « Chasse ou pêche — nourriture » ? Survie+0 : deux repas-personnes/jour par DR ; Œil du chasseur/Pêcheur applicable hors montagne ; cuisson nécessaire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0440",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.125",
+    "question": "Implanter « Navigation — étape » ? Au moins un navigateur par étape : Navigation+0 ; guide local peut dispenser du Test mais impose son itinéraire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0441",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.125",
+    "question": "Implanter « Navigation — double Activité » ? Consacrer voyage et camp à la navigation donne+1 DR et empêche toute autre Activité.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0442",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.125",
+    "question": "Implanter « Navigation — repères » ? Connaissance locale+3 DR, perdu−3 DR ; carte/conseil correct+1 DR, excellent+3 DR, trompeur−1à−3 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0443",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.125",
+    "question": "Implanter « Navigation — outils et ciel » ? Carte réussie à l’étape précédente+1 DR,outils navigateur+2 DR,ciel clair dégagé+1 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0444",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.125",
+    "question": "Implanter « Navigation — raccourci » ? +3 DR ou mieux réduit le trajet total d’une étape ;+0à+2 DR accomplit l’étape normalement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0445",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.125",
+    "question": "Implanter « Navigation — égarement » ? −0à−2 DR ajoute une étape et un événement à la suivante ;−3 DR ou pire ajoute aussi Perdu−3 DR jusqu’à une Navigation réussie.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0446",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.126",
+    "question": "Implanter « Cartographier » ? Chaque étape, Cartographie+20 ou Dessin+0 ; réussite donne+1 DR à Navigation de la suivante ; double Activité donne+1 DR sans autre occupation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0447",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.126",
+    "question": "Implanter « Cartes — vente » ? Carte simple3 pistoles par étape couverte ; DR au-delà du minimum double ce prix ; réputation peut encore l’augmenter.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0448",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.126",
+    "question": "Implanter « Reconnaissance » ? Perception+0 : connaître à l’avance les événements défavorables ; menace évitable peut être contournée en ajoutant deux étapes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0449",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.126",
+    "question": "Implanter « Pister » ? Pistage+20 contre proie inconsciente ; si elle efface ses traces, opposition Discrétion rurale ; échec : retour au dernier point sûr pour réessayer.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0450",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.126",
+    "question": "Implanter « Eau — réapprovisionnement » ? Survie+0 réussie réapprovisionne toute l’expédition.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0451",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.126",
+    "question": "Implanter « Eau — contamination » ? Échec critique peut souiller l’eau ; Perception+0 la repère ; ingestion déclenche le Test de Flux sanglant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0452",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.126",
+    "question": "Implanter « Cuisine » ? Cuisine+20 ou Survie+0 prépare les aliments et prévient la Courante galopante ; échec perd un repas-personne par DR négatif.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0453",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.126",
+    "question": "Implanter « Cuisine — échec critique » ? Le MJ peut lancer1d10 :1–3 dégoûtant,4–5 gâché,6–7 brûlé,8 poison,9 Flux sanglant,10 Courante galopante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0454",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.126",
+    "question": "Implanter « Cuisine — dégoût » ? 1–3 : Résistance+20 ou impossible de manger ;4–5 tout gâché ;6–7 tout brûlé et fumée visible des ennemis proches.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0455",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.126",
+    "question": "Implanter « Cuisine — intoxication » ? 8 : états Empoisonné égaux aux DR d’échec de la cuisine ;9 : Résistance+40 ou Flux sanglant ;10 : Résistance+20 ou Courante galopante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0456",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.127",
+    "question": "Implanter « Journal » ? Lire/Écrire requis ; qualité évaluée au besoin par Écriture+20 ou Langue quelconque pour un récit factuel.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0457",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.127",
+    "question": "Implanter « Monter le camp » ? Survie+0 réussie donne repos et protection contre chaleur étouffante/fraîcheur ; échec nuit peu reposante, maladresse complication au MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0458",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.127",
+    "question": "Implanter « Camp — guérison nocturne » ? Résistance nocturne passe de+20 à+0 dans un camp improvisé ; réussite critique de Monter le camp restaure+20.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0459",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.127",
+    "question": "Implanter « Récupérer » ? Journée sans voyage dans bon camp pour récupérer ; effort notable ou nouvel Exténué gâche l’Activité ; d’autres PJ peuvent travailler au camp.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0460",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.127",
+    "question": "Implanter « Pièges de chasse » ? Piégeage+0 au camp : un repas-personne/jour par DR au matin ; critique peut doubler, maladresse attirer prédateur ; cuisson nécessaire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0461",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.127",
+    "question": "Implanter « Monter la garde — fatigue » ? Peut être troisième Activité avec un Exténué supplémentaire ; garde≤3 heures permet repos suffisant pour retirer fatigue, au-delà non.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0462",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.127",
+    "question": "Implanter « Monter la garde — sommeil » ? S’il est déjà Exténué, le guetteur fait Force Mentale+20 ou s’endort.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0463",
+    "phase": "Voyage et environnement",
+    "lot": "L04",
+    "source": "L04 p.128",
+    "question": "Implanter « Muletier — carrière » ? Nain/Halfling/Humain, quatre rangs Bronze4/Argent2/Argent4/Or1 ; remplace Messager tiré aléatoirement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0464",
+    "phase": "Chasse et animaux",
+    "lot": "L04",
+    "source": "L04 p.130",
+    "question": "Implanter « Chasse d’entre-deux » ? Activité générale permet trois Tests de chasse aux résultats cumulés ; voyage utilise un Test.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0465",
+    "phase": "Chasse et animaux",
+    "lot": "L04",
+    "source": "L04 p.131",
+    "question": "Implanter « Valeur du gibier — petits animaux » ? Jours/prix : poisson1/3 sous,rat¼/1sou,gélinotte½/3 sous,poulet1/5 sous,lapin1/6 sous ; utilisations dérivées au tableau.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0466",
+    "phase": "Chasse et animaux",
+    "lot": "L04",
+    "source": "L04 p.131",
+    "question": "Implanter « Valeur du gibier — fourrure » ? Castor1jour/1pistole6 sous,blaireau1/1pistole2 sous,loup6/15 pistoles,ours20/2 CO ; viande peu comestible sans valeur commerciale.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0467",
+    "phase": "Chasse et animaux",
+    "lot": "L04",
+    "source": "L04 p.131",
+    "question": "Implanter « Valeur du gibier — grand gibier » ? Chèvre15 jours/5 pistoles,sanglier15/4 pistoles,petit cerf15/15 pistoles,grand cerf25/1 CO10 pistoles ; saison/état/légalité modifient prix au MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0468",
+    "phase": "Chasse et animaux",
+    "lot": "L04",
+    "source": "L04 p.132",
+    "question": "Implanter « Chasse — petit gibier » ? Blaireau,poulet,gélinotte,lapin,rat : Survie+0 en forêt,collines,bois clairsemés/plaines ; castor+0 en forêt,bois clairsemés/marais.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0469",
+    "phase": "Chasse et animaux",
+    "lot": "L04",
+    "source": "L04 p.132",
+    "question": "Implanter « Chasse — chèvre et sanglier » ? Chèvre en collines/montagnes, sanglier en forêt/bois clairsemés : Survie−10.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0470",
+    "phase": "Chasse et animaux",
+    "lot": "L04",
+    "source": "L04 p.132",
+    "question": "Implanter « Chasse — loup » ? Forêt,collines,bois clairsemés/plaines : Survie−10.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0471",
+    "phase": "Chasse et animaux",
+    "lot": "L04",
+    "source": "L04 p.132",
+    "question": "Implanter « Chasse — ours et cervidés » ? Ours tout terrain et petit cerf forêt/collines/bois/plaines : Survie−20 ; grand cerf mêmes terrains−30.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0472",
+    "phase": "Chasse et animaux",
+    "lot": "L04",
+    "source": "L04 p.132",
+    "question": "Implanter « Tenue du chasseur » ? 15 pistoles,Enc2,Rare :+2 DR aux Discrétions dans le terrain imité par la tenue.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0473",
+    "phase": "Chasse et animaux",
+    "lot": "L04",
+    "source": "L04 p.132",
+    "question": "Implanter « Animaux de chasse — acquisition » ? Chiens Lockhund2 CO/Bamse4 CO/Marsh5 CO ; faucons Dove10 CO/Redhawk25 CO,Enc1 ; disponibilités spécifiques du tableau.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0492",
+    "phase": "Chasse et animaux",
+    "lot": "L04",
+    "source": "L04 p.136",
+    "question": "Implanter « Bechafen — wyvernes » ? Prime actuelle de60 CO pour une tête de wyverne, annoncée décroissante sans barème fixé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0493",
+    "phase": "Chasse et animaux",
+    "lot": "L04",
+    "source": "L04 p.138",
+    "question": "Implanter « Garde-chasse — carrière » ? Nain/Halfling/Humain/Elfe sylvain ; rangs Bronze4/Argent1/Argent2/Argent4 ; peut remplacer Patrouilleur tiré.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0494",
+    "phase": "Chasse et animaux",
+    "lot": "L04",
+    "source": "L04 p.140",
+    "question": "Implanter « Braconnier — carrière » ? Nain/Halfling/Humain/Elfe sylvain ; rangs Bronze2/Bronze4/Argent1/Argent4 ; peut remplacer Chasseur tiré.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L04-0495",
+    "phase": "Justice",
+    "lot": "L04",
+    "source": "L04 p.141",
+    "question": "Implanter « Braconnage — peine » ? Perte d’un doigt typique ; service religieux ou chasse punitive à la place selon seigneur ; survie au retour en civilisation peut valoir grâce.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
   }
 ]
