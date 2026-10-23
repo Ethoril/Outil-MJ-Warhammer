@@ -10,7 +10,8 @@ Plan : `PLAN_PRO_QUALITE_E.md`. Branche `pro/qualite-e`, départ `9c12613`. Choi
 | Q3 | FAIT | (voir `git log`, « Q3 ») |
 | Q4 | FAIT | (voir `git log`, « Q4 ») |
 | Q5 | FAIT | (voir `git log`, « Q5 ») |
-| Q6 à Q10, R | à faire | — |
+| Q6 | FAIT | (voir `git log`, « Q6 ») |
+| Q7 à Q10, R | à faire | — |
 
 ## Q0 — contrôle de complétude
 
@@ -98,3 +99,11 @@ Les compétences manquantes restantes ne viennent plus de `readSkills` : ce sont
 - Restent incomplets dans L14 (hors des 12 du plan, voir `QE-Q5-4`) : E0-P-481, E0-P-483, E0-P-488, E0-P-490. Contrôle Q0 L14 : 16 profils incomplets au départ → 4.
 - Aucune fonction de jeu : données et outil de génération. Les sorts (`spells`) et l'équipement (`trappings`) n'ont aucun appelant dans `js/` : code testé, non appelé. Les attaques sont déjà transformées en actions par `buildParticipantFromBestiary` (js/core/bestiary-profiles.js).
 - Suite complète : 4277 réussis, 1 échec étranger au lot (`divin-v5-e0-independent`, reçu de recette produit au lot R).
+
+## Q6 — armure par zones (FAIT)
+
+- `js/core/bestiary-profiles.js` (`printedArmour`, `detailArmour`) : un `ap` d'ensemble est limité aux zones que `detail` nomme (Body, Chest → corps ; Headband → tête ; Arms ; Rear Legs → jambes) ; une armure décrite seulement par `detail` prend les zones du catalogue d'armures (`reference-snapshot.json`, via `getReferenceCatalogue`) pour Mail Coat, Mail Shirt, Leather Jack, Helm, Plate, ou la zone nommée (« Body 2 »), avec le PA imprimé. Pièce inconnue (Hide, Leather) ou sans valeur (« Body », « Body Only ») : PA à 0 et rappel dans `notes` du participant. Aucune donnée de livre modifiée.
+- `js/ui/bestiary-library.js` : la fiche affiche `zones : <detail>`.
+- Test : `tests/pro-q6-armure.test.js` (7 tests) : E0-P-628 PA 1 au corps seul ; E0-P-556 « Mail Coat 2 » corps et bras ; E0-P-575 casque et plastron ; rappel pour E0-P-593, 616, 704.
+- Branché : `buildParticipantFromBestiary` a des appelants dans `js/ui/bestiary-library.js`, `js/core/bestiary-templates.js` et `js/core/v5-spell-contracts.js` ; l'armure par zones et le rappel passent par l'outil. L'affichage du champ `notes` du participant dans l'interface n'a pas été vérifié.
+- Suite complète : 4284 réussis, 1 échec étranger au lot (`divin-v5-e0-independent`, reçu de recette produit au lot R).

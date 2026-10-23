@@ -4,6 +4,7 @@
  */
 import { activeReferential } from './creature-keywords.js';
 import { cloneValue, normalizeAction, uid } from './models.js';
+import { getReferenceCatalogue } from './reference-catalog.js';
 
 export const BESTIARY_STAT_KEYS = Object.freeze(['M', 'CC', 'CT', 'F', 'E', 'I', 'Ag', 'Dex', 'Int', 'FM', 'Soc']);
 export const BESTIARY_KINDS = Object.freeze(['profile', 'template', 'pregenerated-character']);
@@ -97,17 +98,53 @@ export const BESTIARY_FREE_ATTACK_KEY = 'freeAttack';
 
 const ARMOUR_ZONES = Object.freeze({ head: /\bhead\b/i, body: /\bbody\b/i, arms: /\barms?\b/i, legs: /\blegs?\b/i });
 
-/** Armure imprimée par zone : `ap` d'ensemble partout, sinon pièces non facultatives (zone nommée, ou partout). Aucun BE ajouté. */
+// Zones nommées par un `detail` (« Headband », « Chest », « Rear Legs » comprises).
+const DETAIL_ZONES = Object.freeze({ head: /\b(?:head|headband)\b/i, body: /\b(?:body|chest)\b/i, arms: /\barms?\b/i, legs: /\blegs?\b/i });
+// Pièces V4/V5 imprimées dans `detail` → nom français du catalogue d'armures (zones seulement : le PA reste celui du livre).
+const CATALOGUE_PIECES = Object.freeze({ 'mail coat': 'Cotte de mailles', 'mail shirt': 'Chemise de mailles', 'leather jack': 'Veste de cuir', helm: 'Heaume', plate: 'Plastron' });
+const CATALOGUE_ZONE = Object.freeze({ head: 'head', body: 'body', rightArm: 'arms', leftArm: 'arms', rightLeg: 'legs', leftLeg: 'legs' });
+
+const namedZones = text => Object.keys(DETAIL_ZONES).filter(key => DETAIL_ZONES[key].test(text || ''));
+
+function cataloguePieceZones(name) {
+  const french = CATALOGUE_PIECES[name.toLowerCase().replace(/\s+/g, ' ').trim()];
+  const item = french && getReferenceCatalogue().items.find(entry => entry.kind === 'armour' && entry.name === french);
+  return item ? [...new Set(item.locations.map(id => CATALOGUE_ZONE[id]))] : null;
+}
+
+/** Armure décrite seulement par `detail` (« Mail Coat 2 », « Helm 2, Plate 3 », « Body 2 ») : zones du catalogue ou nommées, sinon rappel. */
+function detailArmour(detail, zones) {
+  const reminders = [];
+  for (const piece of String(detail).split(',').map(text => text.trim()).filter(Boolean)) {
+    const match = /^(.*?)\s*(\d+)?$/.exec(piece);
+    const name = match[1].replace(/\s+only$/i, '').trim(), value = match[2] === undefined ? null : Number(match[2]);
+    const targets = cataloguePieceZones(name) || (name && namedZones(name).length ? namedZones(name) : null);
+    if (!targets || value === null) { reminders.push(piece); continue; }
+    for (const key of targets) zones[key] = Math.max(zones[key], value);
+  }
+  return reminders;
+}
+
+/**
+ * Armure imprimée par zone : `ap` d'ensemble (limité aux zones nommées par `detail`), sinon pièces non facultatives (zone nommée, ou partout),
+ * sinon `detail` seul (zones du catalogue). Aucun BE ajouté. `reminder` : texte à montrer quand la valeur ou la zone n'est pas déterminable.
+ */
 function printedArmour(armour, includeOptional) {
   const zones = { head: 0, body: 0, arms: 0, legs: 0 };
-  if (!armour) return zones;
-  if (isInt(armour.ap)) { for (const key of Object.keys(zones)) zones[key] = armour.ap; return zones; }
+  if (!armour) return { zones, reminder: '' };
+  if (isInt(armour.ap)) {
+    const named = namedZones(armour.detail);
+    for (const key of named.length ? named : Object.keys(zones)) zones[key] = armour.ap;
+    return { zones, reminder: '' };
+  }
   for (const part of armour.parts || []) {
     if ((part.optional && !includeOptional) || !isInt(part.ap)) continue;
     const named = Object.keys(zones).filter(key => ARMOUR_ZONES[key].test(part.locations || ''));
     for (const key of named.length ? named : Object.keys(zones)) zones[key] = Math.max(zones[key], part.ap);
   }
-  return zones;
+  const printed = Object.values(zones).some(value => value > 0);
+  const unresolved = !printed && isText(armour.detail) ? detailArmour(armour.detail, zones) : [];
+  return { zones, reminder: unresolved.length ? `Armure imprimée « ${unresolved.join(', ')} » : zones ou PA non déterminés, à régler à la main (PA laissés à 0).` : '' };
 }
 
 const traitText = trait => {
@@ -141,14 +178,15 @@ export function buildParticipantFromBestiary(id, options = {}) {
   const base = nameFr && record.nameFr ? record.nameFr : record.name;
   const wounds = isInt(record.wounds) ? record.wounds : null;
   const traits = (record.traits || []).filter(trait => isText(trait?.name));
+  const { zones: armor, reminder: armourReminder } = printedArmour(record.armour, includeOptional);
   return {
     id: idFactory(), name: index === null ? base : `${base} ${index}`, kind: 'Créature', camp, zone,
     initiative: record.stats.I ?? 0, hp: wounds, maxHp: wounds,
     caracs: Object.fromEntries(Object.entries(record.stats).filter(([, value]) => value !== null)),
-    armor: printedArmour(record.armour, includeOptional),
+    armor,
     actions: (record.attacks || []).filter(attack => includeOptional || !attack.optional).map(attackAction),
     skills: (record.skills || []).map(skill => ({ name: skill.nameFr || skill.name, total: skill.value })),
-    traits: traits.map(traitText), keywords: [...(record.keywords || [])], tags: [], notes: '',
+    traits: traits.map(traitText), keywords: [...(record.keywords || [])], tags: [], notes: armourReminder,
     extensions: { v5: { bestiary: {
       id: record.id, book: record.book, page: record.page, name: record.name, edition: record.edition ?? null,
       armour: cloneValue(record.armour || {}), traitRefs: Object.fromEntries(traits.filter(trait => trait.ref).map(trait => [trait.name, trait.ref])),
