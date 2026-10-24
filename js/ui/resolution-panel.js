@@ -21,6 +21,7 @@ import { ammunitionCompatibility, equipmentAttackContext } from '../core/equipme
 import { formatDamageFormula, damageBreakdown, describeWeaponDamage, inferActionType, previewHpLoss } from '../core/resolution.js';
 import { getReferenceCatalogue } from '../core/reference-catalog.js';
 import { V5_TEST_TALENT_IDS, V5_TALENT_TEST_CONTEXT_FIELDS, applicableV5TalentTestFields } from '../core/v5-talent-tests.js';
+import { MASTER_AND_COMMANDER_TALENT } from '../core/v5-effects.js';
 import { acquiredV5TalentCoverage, V5_TALENT_TREATMENT_LABELS } from '../core/v5-talent-coverage.js';
 import { actionHasDamage } from '../core/damage.js';
 import { qualityLabel } from '../core/quality-normalization.js';
@@ -1292,7 +1293,7 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
   const talentFields=node('div','workspace-v5-context');
   const addTalentContext=(role,subject,selectedAction)=>{
     const contextKey=role==='defender'?'defenseContext':'v5Context',current=draft[contextKey]||{};
-    if(!(subject?.talents||[]).some(row=>V5_TEST_TALENT_IDS.includes(row.id)||V5_ACTIVATED_TALENTS[row.id]))return;
+    if(!(subject?.talents||[]).some(row=>V5_TEST_TALENT_IDS.includes(row.id)||V5_ACTIVATED_TALENTS[row.id]||row.id===MASTER_AND_COMMANDER_TALENT.id))return;
     const importedSkill=selectedAction?.extensions?.fiche?.skillId;
     const skillId=importedSkill||current.skillId;
     const label=node('label','workspace-type',role==='defender'?'Compétence de défense pour les talents':'Compétence de ce Test pour les talents');

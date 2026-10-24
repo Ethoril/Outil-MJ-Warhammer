@@ -42,6 +42,7 @@ Plan : `PLAN_PRO_QUALITE_E.md`. Branche `pro/qualite-e`, départ `9c12613`. Choi
 | Q27g | FAIT (L22 ; Q27 non terminé : L23, L25, L26) | (voir `git log`, « Q27g ») |
 | Q27h | FAIT (L23 ; Q27 non terminé : L25, L26) | (voir `git log`, « Q27h ») |
 | Q27i | FAIT (L25, L26 ; Q27 terminé, 0 manque non justifié sur les 23 livres) | (voir `git log`, « Q27i ») |
+| Q28 | FAIT (`QE-Q28-1`) | (voir `git log`, « Q28 ») |
 
 ## Q0 — contrôle de complétude
 
@@ -405,3 +406,10 @@ Branché / non appelé (grep dans `js/`) :
 - **Contrôle, 23 livres** : talents 0, compétences 0, attaques 0, Traits 0, équipement 0, sorts 0, bruit d'équipement 0 (avant : 0, 3, 0, 1, 26, 0, 3). Reste 10 avertissements de compétence (coquilles de noms du livre, `QE-Q27i-3`), pas des manques.
 - Test : `tests/pro-q27i-completude.test.js` (5 tests).
 - Outil de contrôle et données de livre : rien à déclarer « branché » (les compétences et talents gagnés passent par `buildParticipantFromBestiary`, appelants : `js/ui/bestiary-library.js`, `js/core/bestiary-templates.js`). Aucune valeur durable de personnage.
+
+## Q28 — régression Q23 : champ « à bord » pour le porteur de Maître à bord seul (FAIT)
+
+- **Cause** : `addTalentContext` (`js/ui/resolution-panel.js`) sortait si le porteur n'avait aucun talent de `V5_TEST_TALENT_IDS` ou `V5_ACTIVATED_TALENTS` ; Maître à bord n'est dans aucun des deux, donc ni le champ « Test de Commandement à bord d'un navire » ni la liste de compétence n'apparaissaient et le Test restait `manual`. **Correction** : le talent `talent-master-and-commander` (`MASTER_AND_COMMANDER_TALENT.id`) suffit à ouvrir le bloc.
+- **Test de rendu navigateur** (DOM réel, Playwright) : `tests/pro-q28-maitre-a-bord-ui-browser.mjs` — capitaine avec Maître à bord seul + Commandement : champ visible ; sans le talent ou pour une autre compétence : pas de champ ; réponse « oui » à 2 niveaux : DR 1 → 3. Vérifié échouant sans le correctif (contre-épreuve), vert avec. Il n'est pas dans `npm test` (comme les autres `*-browser.mjs`).
+- **Suite complète** : 4475 tests, 0 échec.
+- **Branché** : champ « à bord » atteignable depuis le panneau de Résolution (`renderResolutionPanel`, appelant : `js/ui/workspace-view.js:1517`) ; moteur `leadershipRallySlModifiers` appelé par `previewV5TalentTestModifiers` (`js/core/v5-talent-tests.js`). Aucune valeur durable de personnage.
