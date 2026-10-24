@@ -77,7 +77,10 @@ export function createBestiaryLoader(fetchJson, base = './js/data/bestiary/') {
       return once(books, book, async () => {
         const entry = (await loader.index()).find(item => item.book === book);
         if (!entry) throw new Error(`livre de bestiaire inconnu : ${book}`);
-        return (await fetchJson(`${base}${entry.file}`)).profiles;
+        // L'édition est portée par le livre (index et fichier), pas par chaque profil : elle est recopiée pour que le participant la connaisse.
+        const file = await fetchJson(`${base}${entry.file}`);
+        const edition = file.edition ?? entry.edition ?? null;
+        return edition ? file.profiles.map(profile => (profile.edition ? profile : { ...profile, edition })) : file.profiles;
       });
     },
     /** Profils des livres demandés, concaténés dans l'ordre demandé. */

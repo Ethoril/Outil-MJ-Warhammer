@@ -23,7 +23,7 @@ import { BASE_REFERENTIAL, resolveKeyword } from '../js/core/creature-keywords.j
 
 const BOOKS = {
   L01: ['Archives of the Empire 2', 'V4'], L02: ['Archives of the Empire 3', 'V4'], L03: ['Archives of the Empire Volume 1', 'V4'], L04: ['Deft Steps, Light Fingers', 'V4'],
-  L05: ['Livre de base (V4, français)', 'V4'], L06: ['Livre de base V5', 'V5'], L07: ['Lustria', 'V4'], L09: ['Temple of Spite', 'V4'], L10: ['Sylvania, The Cursed County', 'V4'],
+  L05: ['Livre de base (V4, français)', 'V4'], L06: ['Livre de base V5', 'V5'], L07: ['Lustria', 'V4'], L09: ['Temple of Spite', 'V5'], L10: ['Sylvania, The Cursed County', 'V5'],
   L11: ['The Imperial Zoo', 'V4'], L12: ['Tribes and Tribulations', 'V4'], L13: ['Up in Arms', 'V4'], L14: ['Sea Wardens of Cothique', 'V4'],
   L16: ['Lords of Stone and Steel', 'V4'], L17: ['Winds of Magic', 'V4'], L18: ['Power Behind the Throne Companion', 'V4'], L19: ['Middenheim: City of the White Wolf', 'V4'],
   L20: ['Altdorf: Crown of the Empire', 'V4'], L21: ['Empire in Ruins Companion', 'V4'], L22: ['The Horned Rat Companion', 'V4'], L23: ['Enemy in Shadows Companion', 'V4'],

@@ -43,7 +43,8 @@ test('Q30 Queue : l’attaque ordinaire prend BF+2 sans choisir l’Attaque natu
   assert.equal(hit(store, 'tail', { name: 'Tail', damage: 3 }), hit(store, 'tail-fixed', { name: 'Fixed', damage: 7 }), 'BF 5 + 2');
   assert.equal(hit(store, 'sword', { name: 'Sword', damage: 3 }), hit(store, 'sword-fixed', { name: 'Fixed', damage: 3 }));
   assert.equal(inferNaturalAttackKey(beast(['Tail']), { name: 'Sword' }), null);
-  assert.equal(inferNaturalAttackKey(beast([]), { name: 'Tail' }), null, 'Trait absent : pas de formule');
+  // Décision (4) du MJ du 24/10 (Q35) : une attaque naturelle sans le Trait suit aussi la formule, par le nom de l'attaque.
+  assert.equal(inferNaturalAttackKey(beast([]), { name: 'Tail' }), 'tail', 'Trait absent : reconnue par son nom');
 });
 
 test('Q30 Kraken : une attaque ordinaire de tentacule fait BF (formule V5), pas le chiffre imprimé', async () => {

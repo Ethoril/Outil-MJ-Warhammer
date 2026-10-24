@@ -227,6 +227,19 @@ export function naturalPlanOf(actor, v5) {
 }
 // Les Tailles viennent du champ de l'interface (`v5.actorSize`) ou, pour le Store, du contexte.
 const naturalSizes = v5 => ({ actorSize: v5?.context?.actorSize ?? v5?.actorSize, targetSize: v5?.context?.targetSize ?? v5?.targetSize });
+/**
+ * Décisions du MJ des 23 et 24/10 : l'attaque ordinaire de mêlée d'un profil qui porte le nom d'un Trait d'attaque naturelle (Bite, Tail,
+ * Horns, Tentacles…) suit la formule V5 du Trait, avec le bonus de Taille (livres V4). Rien ne s'ajoute à un tir, une attaque gratuite ou
+ * une attaque bonus ; les coûts et quotas ne sont pas posés ici. `null` hors de ces cas.
+ */
+function inferredNaturalPlan(actor, action, v5) {
+  if (!actor || !attackType(action.type)) return null;
+  const key = inferNaturalAttackKey(actor, action);
+  if (!key) return null;
+  const context = v5?.context || {};
+  const ordinary = v5?.kind !== 'ranged' && v5?.extraAttack !== true && !context.freeAttackTalent && !action.extensions?.v5?.freeAttack;
+  return planNaturalAttack(actor, key, { ordinary, charged: context.charged ?? v5?.charging, actorSize: naturalSizes(v5).actorSize, targetSize: naturalSizes(v5).targetSize });
+}
 const foldKey = text => String(text).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 export function normalizeResolutionInput(input = {}) {
   if (!isRecord(input)) throw new ResolutionError('Entrée de résolution invalide');
@@ -236,11 +249,11 @@ export function normalizeResolutionInput(input = {}) {
   const natural = naturalPlanOf(actor, input.v5);
   if (natural && /^\d+$/.test(String(natural.damageFormula))) { action.damage = Number(natural.damageFormula); delete action.damageFormula; }
   else if (natural?.noDamage) { action.damage = 0; delete action.damageFormula; }
-  else if (!natural && actor && attackType(action.type)) {
-    // Décision du MJ du 23/10 : l'attaque ordinaire d'un Trait d'attaque naturelle (Bite, Tail, Tentacles…) suit la formule V5 du Trait.
-    const key = inferNaturalAttackKey(actor, action);
-    const inferred = key && planNaturalAttack(actor, key, { actorSize: naturalSizes(input.v5).actorSize, targetSize: naturalSizes(input.v5).targetSize });
+  else if (!natural) {
+    const inferred = inferredNaturalPlan(actor, action, input.v5);
     if (inferred && /^\d+$/.test(String(inferred.damageFormula))) { action.damage = Number(inferred.damageFormula); delete action.damageFormula; }
+    // Formule sans valeur (Morsure sans chiffre de Trait) : le chiffre imprimé reste la Valeur, le bonus de Taille s'y ajoute.
+    else if (inferred?.sizeBonus && Number.isFinite(Number(action.damage)) && !action.damageFormula) action.damage = Number(action.damage) + inferred.sizeBonus;
   }
   if (action.extensions?.fiche?.requiresLink) throw new ResolutionError('Lier une compétence à cette arme avant de résoudre son attaque', 'SKILL_LINK_REQUIRED');
   const target = isRecord(input.target) ? clone(input.target) : null;
@@ -739,6 +752,12 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   // Attaque naturelle : états de la touche (Langue, Constricteur, Toile, Souffle) selon le plan du Trait ; rappels du plan joints au détail.
   const naturalPlan = naturalPlanOf(actor, normalized.v5), naturalReminders = [], { actorSize: naturalActorSize, targetSize: naturalTargetSize } = naturalSizes(normalized.v5);
   const naturalHitStates = [];
+  // Cornes en attaque ordinaire : la Charge du Trait (Livre de base V5 p.358) est demandée, comme pour l'attaque naturelle choisie.
+  const inferredNatural = !naturalPlan && inferredNaturalPlan(actor, action, normalized.v5);
+  if (inferredNatural) {
+    if (inferredNatural.key === 'horns') unresolved.push(...inferredNatural.unresolved.filter(text => /Charge/.test(text)));
+    naturalReminders.push(...inferredNatural.reminders.filter(text => /^Taille :/.test(text)));
+  }
   if (naturalPlan) {
     naturalReminders.push(...naturalPlan.reminders);
     unresolved.push(...naturalPlan.unresolved.filter(text => !/Trait absent|déjà/.test(text)));

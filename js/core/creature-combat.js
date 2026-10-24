@@ -4,6 +4,7 @@
 // dégâts, effets proposés) sans rien écrire. Les effets que le moteur ne calcule pas restent en rappel, jamais présentés comme faits.
 
 import { strengthBonusOf } from './damage.js';
+import { planCreatureSize } from './creature-size.js';
 
 const fold = value => String(value ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/\s+/g, ' ').trim();
 
@@ -12,10 +13,10 @@ const MOMENTUM = Object.freeze({ resource: 'momentum', amount: 1 });
 // `bf` : supplément de dégâts (BF + n) ; `rating` : les dégâts sont la Valeur du Trait (BF inclus, « Bite (7) » ou « Bite (Strength Bonus + 1) »),
 // à défaut de valeur le chiffre imprimé de l'attaque du profil est la Valeur V5.
 const RULES = {
-  bite: { fr: 'Morsure', names: ['bite', 'morsure'], cost: MOMENTUM, rating: true, test: 'CC', note: 'Livre de base V5 p.356 : les dégâts valent la Valeur du Trait, Bonus de Force déjà inclus.' },
+  bite: { fr: 'Morsure', names: ['bite', 'morsure'], cost: MOMENTUM, rating: true, sizeBonus: true, test: 'CC', note: 'Livre de base V5 p.356 : les dégâts valent la Valeur du Trait, Bonus de Force déjà inclus.' },
   horns: { fr: 'Cornes', names: ['horns', 'cornes'], requires: 'charge', bf: 4, test: 'CC', note: 'Une Charge permet une attaque gratuite des cornes (BF+4).' },
-  tail: { fr: 'Attaque caudale', names: ['tail', 'attaque caudale'], cost: MOMENTUM, bf: 2, test: 'CC', smallerEffect: 'À terre', note: 'Une cible plus petite blessée devient À terre.' },
-  stomp: { fr: 'Piétinement', names: ['stomp', 'pietinement'], cost: MOMENTUM, bf: 0, test: 'CC', skill: 'Corps à corps (Bagarre)', smallerOnly: true, note: 'Attaque de Bagarre contre une créature plus petite.' },
+  tail: { fr: 'Attaque caudale', names: ['tail', 'attaque caudale'], cost: MOMENTUM, bf: 2, sizeBonus: true, test: 'CC', smallerEffect: 'À terre', note: 'Une cible plus petite blessée devient À terre.' },
+  stomp: { fr: 'Piétinement', names: ['stomp', 'pietinement'], cost: MOMENTUM, bf: 0, sizeBonus: true, test: 'CC', skill: 'Corps à corps (Bagarre)', smallerOnly: true, note: 'Attaque de Bagarre contre une créature plus petite.' },
   tentacles: { fr: 'Tentacules', names: ['tentacles', 'tentacules'], bf: 0, test: 'CC', perDetail: true, effect: 'Enchevêtré', note: 'Une attaque gratuite par tentacule ; les dégâts peuvent donner Enchevêtré puis une empoignade.' },
   tongue: { fr: 'Langue préhensile', names: ['tongue', 'langue', 'langue prehensile'], cost: MOMENTUM, bf: 0, test: 'CT', ranged: true, pullsSmaller: true, onHit: 'Enchevêtré', note: 'Si l\'attaque touche : un Enchevêtré, et la cible plus petite est attirée au contact ; choix : libérer, attaque supplémentaire ou empoignade.' },
   constrictor: { fr: 'Constricteur', names: ['constrictor', 'constricteur'], onHit: 'Enchevêtré', note: 'Toute touche donne Enchevêtré, puis une empoignade est possible.' },
@@ -73,27 +74,32 @@ export function naturalAttackNeedsSize(key) {
   return Boolean(rule && (rule.smallerEffect || rule.smallerOnly || rule.pullsSmaller));
 }
 
+const isV5Book = participant => participant?.extensions?.v5?.bestiary?.edition === 'V5';
+
 /**
- * Décision du MJ du 23/10 : une attaque ordinaire du profil qui porte le nom d'un Trait d'attaque naturelle que le participant possède
- * (« Bite », « Tail 2 », « Tentacules 3 »…) prend la formule V5 du Trait. Rend la clé du Trait, ou `null` (arme, Trait absent).
+ * Décisions du MJ des 23 et 24/10 : une attaque ordinaire du profil qui porte le nom d'un Trait d'attaque naturelle (« Bite », « Tail 2 »,
+ * « Tentacules 3 »…) prend la formule V5 du Trait, que le profil possède ou non le Trait (Morsures sans Trait), avec le bonus de Taille
+ * en mêlée pour les livres V4. Un livre V5 imprime déjà la Taille dans son chiffre : il est gardé (`null`), comme les armes.
  */
 export function inferNaturalAttackKey(participant, action) {
   const key = BY_NAME.get(fold(action?.name).replace(/\s*\d+$/, ''));
-  if (!key || !['bite', 'horns', 'tail', 'stomp', 'tentacles'].includes(key)) return null;
-  return traitsOf(participant).some(trait => trait.key === key) ? key : null;
+  if (!key || !['bite', 'horns', 'tail', 'stomp', 'tentacles'].includes(key) || isV5Book(participant)) return null;
+  return key;
 }
 
 const isZoo =participant => participant?.extensions?.v5?.bestiary?.book === 'L11';
 
 /**
  * Plan d'une capacité de combat naturel. `options` : `charged` (Charge faite), `actorSize` / `targetSize` (rangs de Taille 0-6),
- * `momentum` (le MJ confirme qu'il reste de l'Élan), `used` (nombre d'utilisations déjà faites ce Tour).
+ * `momentum` (le MJ confirme qu'il reste de l'Élan), `used` (nombre d'utilisations déjà faites ce Tour), `ordinary` (attaque ordinaire de
+ * mêlée, ni gratuite ni bonus : le bonus de Taille V5 s'ajoute pour les livres V4, voir `sizeBonus` du plan).
  * Rend `{ available, costs, quota, damageFormula, effects, unresolved, reminders, receipt }`.
  */
 export function planNaturalAttack(participant, key, options = {}) {
   const rule = RULES[key];
-  const owned = rule && traitsOf(participant).find(trait => trait.key === key);
-  const plan = { key, label: rule?.fr ?? key, available: false, costs: [], quota: null, damageFormula: null, effects: [], unresolved: [], reminders: [] };
+  // Une attaque ordinaire sans le Trait (décision (4) du 24/10) est lue comme un Trait sans valeur.
+  const owned = rule && (traitsOf(participant).find(trait => trait.key === key) ?? (options.ordinary === true ? { key, name: rule.fr, detail: '' } : null));
+  const plan = { key, label: rule?.fr ?? key, available: false, costs: [], quota: null, damageFormula: null, sizeBonus: 0, effects: [], unresolved: [], reminders: [] };
   if (!rule || !owned) { plan.unresolved.push(`${plan.label} : Trait absent du participant.`); return { ...plan, receipt: receiptOf(plan) }; }
   if (isZoo(participant) && ['howl', 'vomit'].includes(key)) plan.reminders.push(`${rule.fr} (Imperial Zoo) : coût en Avantages et résolution propres au Zoo, à appliquer à la main (E0-T-${key === 'howl' ? '090' : '095'}).`);
 
@@ -101,12 +107,19 @@ export function planNaturalAttack(participant, key, options = {}) {
   if (rule.rating) {
     const detail = String(owned.detail ?? '').trim();
     const plus = /^(?:strength bonus|bonus de force|bf)\s*\+\s*(\d+)$/i.exec(detail);
-    if (/^\d+$/.test(detail)) plan.damageFormula = detail;
+    // Livres V4 : « Bite +9 » est le total imprimé, Bonus de Force compris, donc la Valeur du Trait.
+    if (/^\d+$/.test(detail) || (/^\+\s*\d+$/.test(detail) && !isV5Book(participant))) plan.damageFormula = detail.replace(/\D/g, '');
     else if (plus && bonus !== null) plan.damageFormula = `${bonus + Number(plus[1])}`;
     else plan.damageFormula = 'imprimé';
   } else if (Number.isInteger(rule.bf)) {
     if (bonus === null) plan.unresolved.push(`${rule.fr} : Force du participant inconnue, dégâts BF${rule.bf ? `+${rule.bf}` : ''} à saisir.`);
     else plan.damageFormula = `${bonus + rule.bf}`;
+  }
+  // Livre de base V5 p.360 : Grande/Énorme +BF, Monstrueuse +2 BF, en mêlée seulement. Un livre V5 l'imprime déjà.
+  if (rule.sizeBonus && options.ordinary === true && !isV5Book(participant)) {
+    plan.sizeBonus = planCreatureSize(participant, { printedProfile: false }).damage.bonus;
+    if (plan.sizeBonus && /^\d+$/.test(String(plan.damageFormula))) plan.damageFormula = `${Number(plan.damageFormula) + plan.sizeBonus}`;
+    if (plan.sizeBonus) plan.reminders.push(`Taille : +${plan.sizeBonus} aux dégâts de mêlée (Livre de base V5 p.360).`);
   }
   if (key === 'breath') {
     const printedType = fold(owned.detail);
