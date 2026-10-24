@@ -9,7 +9,8 @@ import { getSpellContract } from '../js/core/v5-spell-contracts.js';
 const book = id => JSON.parse(readFileSync(`js/data/bestiary/${id}.json`, 'utf8')).profiles;
 const library = ['L18', 'L19', 'L20', 'L21', 'L23'].flatMap(book);
 const transition = (round = 1) => ({ id: `round-${round}`, type: 'endTurn', actorId: null, round });
-const participantTexts = reminders => reminders.filter(item => item.kind === 'participant-reminder').map(item => item.text);
+// Hors rappels dérivés des Traits (`:trait-`, lots B1 à B3) : ces tests regardent les rappels posés dans `extensions.v5.reminders`.
+const participantTexts = reminders => reminders.filter(item => item.kind === 'participant-reminder' && !item.effectId.includes(':trait-')).map(item => item.text);
 
 test('Q17 : armure inconnue → rappel de la carte de combat par deriveReminders', () => {
   const participant = buildParticipantFromBestiary('E0-P-593', { library, zone: 'active' });
@@ -37,7 +38,7 @@ test('Q17 : la copie dans la Réserve garde le rappel', () => {
 test('Q17 : un rappel résolu ne revient pas au Round suivant', () => {
   const participant = buildParticipantFromBestiary('E0-P-593', { library, zone: 'active' });
   const snapshot = { sceneId: 's', participants: [participant] };
-  const item = deriveReminders(snapshot, transition(1)).find(entry => entry.kind === 'participant-reminder');
+  const item = deriveReminders(snapshot, transition(1)).find(entry => entry.kind === 'participant-reminder' && !entry.effectId.includes(':trait-'));
   const [choice] = resolveReminder([item], item.id, 'resolve').map(entry => entry.choice);
   assert.deepEqual(participantTexts(deriveReminders(snapshot, transition(2), [choice])), []);
 });

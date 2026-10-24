@@ -7,6 +7,7 @@ import { showToast } from './toast.js';
 import { contextMessage } from './messages.js';
 import { buildParticipantReminders } from '../core/reminders.js';
 import { buildHeadsBlock, nextHeadState } from './heads-block.js';
+import { buildRegenerationBlock, readRegenerationInputs } from './regeneration-block.js';
 
 export function initCardUI(Store, Combat) {
   const observe = (result, label = 'Modification') => Promise.resolve(result).then(value => { if (value === false || value?.ok === false) throw value?.error || new Error(`${label} impossible.`); return value; }).catch(error => showToast(contextMessage(`${label} impossible`, error, 'réessayez.'), 'error'));
@@ -253,6 +254,8 @@ export function initCardUI(Store, Combat) {
     if (remindersBlock) armDiv.after(remindersBlock);
     const headsBlock = buildHeadsBlock(tag => document.createElement(tag), p);
     if (headsBlock) armDiv.after(headsBlock);
+    const regenerationBlock = buildRegenerationBlock(tag => document.createElement(tag), p);
+    if (regenerationBlock) armDiv.after(regenerationBlock);
 
     const diceContainer = div.querySelector('.dice-list');
     const myDice = Store.getDiceLines().filter(dl => dl.participantId === p.id);
@@ -318,6 +321,14 @@ export function initCardUI(Store, Combat) {
       const stateId = e.target.dataset.stateId;
       const nextStates = p.states.filter((state, index) => normalizeState(state, index).id !== stateId);
       observe(Store.updateParticipant(id, { states: normalizeEffects(nextStates) }), 'État');
+      return;
+    }
+
+    if (e.target.matches('.btn-regeneration')) {
+      e.preventDefault();
+      const { roll, fireWounds } = readRegenerationInputs(e.target.closest('.actor-regeneration'));
+      if (!Number.isInteger(roll) || roll < 1 || roll > 10) { showToast('Régénération : saisissez le d10 (1 à 10).', 'error'); return; }
+      observe(Store.applyRegeneration(id, roll, { fireWounds }), 'Régénération');
       return;
     }
 

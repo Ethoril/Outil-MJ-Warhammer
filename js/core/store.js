@@ -74,6 +74,7 @@ import { advanceGameClock, campaignDurationSeconds, createGameClock, deriveTurnP
 import { advanceCampaignSnapshot } from './v5-campaign-time.js';
 import { proposeNewKeyword, referentialFromExtensions, setActiveReferential } from './creature-keywords.js';
 import { validateFamiliarLink, buildFamiliarLink, familiarBackLink, familiarLinksOf } from './familiars.js';
+import { hasRegeneration, planRegeneration } from './creature-regeneration.js';
 import { hasManyHeads, headRegistryOf, applyHeadCritical, restoreHead, HEAD_STATES } from './creature-heads.js';
 const withV5 = (participant, change) => ({ ...participant, extensions: { ...(participant.extensions || {}), v5: change(participant.extensions?.v5 || {}) } });
 import { validatePrayerSLCaps,getPrayerSLModifiers } from './v5-divine-prayer-caps.js';
@@ -2278,6 +2279,30 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       const result = api.executeCommand('set-familiar-range', draft => ({ ...draft, combat: { ...draft.combat, participants: (draft.combat?.participants || []).map(item => item.id === masterId
         ? withV5(item, v5 => ({ ...v5, familiarLinks: (v5.familiarLinks || []).map(row => row.id === linkId ? { ...row, inRange: inRange === true } : row) })) : item) } }));
       return typeof result?.then === 'function' ? result.then(done => ({ ...done, ok: true })) : { ...result, ok: true };
+    },
+    /** Régénération (début de Round) : le MJ saisit le d10 ; soin et guérison d'un critique en une seule commande annulable. */
+    applyRegeneration(participantId, roll, options = {}) {
+      const participant = combat.participants.get(participantId);
+      if (!hasRegeneration(participant)) return { ok: false, reason: 'no-regeneration', message: 'Ce participant n’a pas le Trait Régénération.' };
+      const plan = planRegeneration(participant, { roll, fireWounds: options.fireWounds, fireCriticalIds: options.fireCriticalIds });
+      if (!plan.available) return { ok: false, reason: 'refused', message: plan.unresolved.join(' ') };
+      const amount = plan.heal?.amount ?? 0;
+      let healed = 0;
+      const result = api.executeCommand('regeneration', draft => {
+        const target = (draft.combat?.participants || []).find(item => item.id === participantId);
+        if (!target) throw new TypeError('Participant introuvable');
+        const receipt = healV5Wounds(target, amount);
+        healed = receipt.hpDelta ?? 0;
+        const records = receipt.participant.extensions?.v5?.criticalWounds || [];
+        const next = plan.criticalHeal ? withV5(receipt.participant, v5 => ({ ...v5, criticalWounds: records.filter(row => row.id !== plan.criticalHeal.id) })) : receipt.participant;
+        return { ...draft,
+          combat: { ...draft.combat, participants: draft.combat.participants.map(item => (item.id === participantId ? next : item)) },
+          log: [{ id: uid(), kind: 'effect', actorId: participantId, targetId: participantId,
+            text: `${target.name} · Régénération (d10 ${roll}) : ${healed} Blessure(s) regagnée(s)${plan.criticalHeal ? ` · Blessure Critique guérie (${plan.criticalHeal.name || plan.criticalHeal.id})` : ''}`,
+            detail: { kind: 'regeneration', roll, healed, criticalHeal: plan.criticalHeal, reminders: plan.reminders } }, ...(draft.log || [])].slice(0, 300) };
+      });
+      const done = value => ({ ...value, ok: value?.ok !== false, healed, criticalHeal: plan.criticalHeal });
+      return typeof result?.then === 'function' ? result.then(done) : done(result);
     },
     /** Plusieurs têtes : état d'une tête (Blessure Critique à la tête, guérison), posé par le MJ ; le registre est gardé dans `extensions.v5.heads`. */
     setHeadState(participantId, headId, state) {

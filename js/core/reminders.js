@@ -1,9 +1,10 @@
 /** Pure, persistable E14 reminder derivation. */
 import { sizeReminders } from './creature-size.js';
 import { manyHeadsReminders } from './creature-heads.js';
+import { regenerationReminders } from './creature-regeneration.js';
 
 // Un module de Trait par ligne : [clé stable, fonction participant → textes]. Ajouter ici les autres `xxxReminders`.
-const TRAIT_REMINDERS = [['size', sizeReminders], ['heads', manyHeadsReminders]];
+const TRAIT_REMINDERS = [['size', sizeReminders], ['heads', manyHeadsReminders], ['regeneration', regenerationReminders]];
 const traitReminderTexts = person => TRAIT_REMINDERS.flatMap(([name, fn]) => fn(person).map((text, index) => ({ key: `${name}-${index}`, text })));
 
 const hasOwn = (value, key) => Object.prototype.hasOwnProperty.call(value, key);

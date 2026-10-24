@@ -7,6 +7,14 @@ Plan : `PLAN_PRO_BRANCHEMENT.md`. Choix et questions : `CHOIX_EXECUTANT_BRANCHEM
 | B0 | FAIT (inventaire ci-dessous) |
 | B1 | FAIT (Taille branchée, voir ci-dessous) |
 | B2 | FAIT (Plusieurs têtes branché, voir ci-dessous) |
+| B3 | FAIT (Régénération branchée, voir ci-dessous) |
+
+## B3 — Régénération (24/10/2026)
+
+- **Branché** : `regenerationReminders` via `TRAIT_REMINDERS` (`reminders.js`) → rappel du Trait sur la carte et le Personnage actif.
+- **Branché** : `hasRegeneration`/`planRegeneration` par `Store.applyRegeneration(id, d10, { fireWounds })` (`store.js`), commande annulable `regeneration` : soin plafonné au maximum (`healV5Wounds`), à 0 Blessure 8+ rend 1, un 10 retire une Blessure Critique du registre, Blessures de feu manquantes déduites. Chemin d'interface : bloc de carte `js/ui/regeneration-block.js` (champs d10 et feu, bouton « Régénérer », `card.js`) ; d10 hors 1-10 refusé. Le dé n'est pas tiré par l'outil.
+- Limites : le rappel n'est pas lié au changement de Round (affiché en permanence sur la carte, pas de saisie automatique au `nextTurn`) ; les critiques de feu (`fireCriticalIds`) ne sont pas saisissables à l'écran, le premier critique du registre est guéri sur un 10 ; Empoisonné à 0 Blessure bloque le soin (règle de `healV5Wounds`).
+- Test : `tests/pro-b3-regeneration-branchee.test.js` (Hydre de guerre L09).
 
 ## B2 — Plusieurs têtes (24/10/2026)
 

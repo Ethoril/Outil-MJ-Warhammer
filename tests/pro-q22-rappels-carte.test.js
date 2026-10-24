@@ -16,6 +16,9 @@ function fakeElement(tag) {
   return { tag, children, dataset: {}, className: '', textContent: '', appendChild(child) { children.push(child); return child; } };
 }
 
+// Skree porte aussi le Trait Régénération (rappel de Trait, lot B3) : ces tests ne regardent que le rappel d'armure.
+const armourReminders = (store, id) => store.getParticipantReminders(id).filter(item => /armour-unresolved/.test(item.id));
+
 async function combatFromLibrary() {
   const store = createStore({ persistence: memoryPersistence() });
   await store.ready;
@@ -28,18 +31,18 @@ test('Q22 : sans scène active, la carte reçoit le rappel d’armure alors que 
   const { store, id } = await combatFromLibrary();
   assert.equal(store.getActiveScene?.() ?? null, null);
   assert.deepEqual(store.getReminders({ id: 'round-0', type: 'endTurn' }), []);
-  const reminders = store.getParticipantReminders(id);
+  const reminders = armourReminders(store, id);
   assert.equal(reminders.length, 1);
   assert.match(reminders[0].text, /Armure imprimée/);
 });
 
 test('Q22 : résoudre le rappel depuis la carte le retire, aussi après changement de Round', async () => {
   const { store, id } = await combatFromLibrary();
-  const [item] = store.getParticipantReminders(id);
+  const [item] = armourReminders(store, id);
   await store.resolveParticipantReminder(id, item.id, 'resolve');
-  assert.deepEqual(store.getParticipantReminders(id), []);
+  assert.deepEqual(armourReminders(store, id), []);
   store.getCombat().round = 2;
-  assert.deepEqual(store.getParticipantReminders(id), []);
+  assert.deepEqual(armourReminders(store, id), []);
 });
 
 test('Q22 : le rappel d’un autre participant ne se retrouve pas sur la carte', async () => {
@@ -50,9 +53,9 @@ test('Q22 : le rappel d’un autre participant ne se retrouve pas sur la carte',
 test('Q22 : le bloc de carte affiche le texte et deux boutons par rappel, rien sans rappel', async () => {
   const { store, id } = await combatFromLibrary();
   assert.equal(buildParticipantReminders(fakeElement, []), null);
-  const block = buildParticipantReminders(fakeElement, store.getParticipantReminders(id));
+  const block = buildParticipantReminders(fakeElement, armourReminders(store, id));
   const [row] = block.children;
-  assert.equal(row.dataset.reminderId, store.getParticipantReminders(id)[0].id);
+  assert.equal(row.dataset.reminderId, armourReminders(store, id)[0].id);
   assert.match(row.children[0].textContent, /Armure imprimée/);
   assert.deepEqual(row.children.slice(1).map(button => button.dataset.decision), ['resolve', 'ignore']);
 });
