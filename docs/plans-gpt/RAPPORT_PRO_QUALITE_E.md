@@ -43,6 +43,7 @@ Plan : `PLAN_PRO_QUALITE_E.md`. Branche `pro/qualite-e`, départ `9c12613`. Choi
 | Q27h | FAIT (L23 ; Q27 non terminé : L25, L26) | (voir `git log`, « Q27h ») |
 | Q27i | FAIT (L25, L26 ; Q27 terminé, 0 manque non justifié sur les 23 livres) | (voir `git log`, « Q27i ») |
 | Q28 | FAIT (`QE-Q28-1`) | (voir `git log`, « Q28 ») |
+| Q29 | FAIT | (voir `git log`, « Q29 ») |
 
 ## Q0 — contrôle de complétude
 
@@ -413,3 +414,10 @@ Branché / non appelé (grep dans `js/`) :
 - **Test de rendu navigateur** (DOM réel, Playwright) : `tests/pro-q28-maitre-a-bord-ui-browser.mjs` — capitaine avec Maître à bord seul + Commandement : champ visible ; sans le talent ou pour une autre compétence : pas de champ ; réponse « oui » à 2 niveaux : DR 1 → 3. Vérifié échouant sans le correctif (contre-épreuve), vert avec. Il n'est pas dans `npm test` (comme les autres `*-browser.mjs`).
 - **Suite complète** : 4475 tests, 0 échec.
 - **Branché** : champ « à bord » atteignable depuis le panneau de Résolution (`renderResolutionPanel`, appelant : `js/ui/workspace-view.js:1517`) ; moteur `leadershipRallySlModifiers` appelé par `previewV5TalentTestModifiers` (`js/core/v5-talent-tests.js`). Aucune valeur durable de personnage.
+
+## Q29 — listes de Taille en double (FAIT)
+
+- **Cause** : `sizeSelects()` (`js/ui/resolution-panel.js`) et deux anciens blocs (charge contre un Pourfendeur, liste Grand/Petit/Piétinement/Langue/Peur) construisaient chacun leur paire de listes : Piétinement et Langue en montraient deux paires. **Correction** : les deux anciens blocs appellent `sizeSelects()` (gardé par `sizesShown`) ; un seul jeu de listes, libellés « Taille de l’auteur » / « Taille de la cible ».
+- **Test de rendu navigateur** (DOM réel, Playwright) : `tests/pro-q29-tailles-ui-browser.mjs` : Piétinement, Langue, Attaque caudale = exactement 2 listes ; Morsure = 0 ; Piétinement + Grand = 2 ; Grand seul = 2. Contre-épreuve : sans le correctif, Piétinement, Langue et Piétinement + Grand échouent. Hors `npm test` (comme les autres `*-browser.mjs`).
+- **Suite complète** : 4475 tests, 0 échec.
+- **Branché** : `renderResolutionPanel` (appelant : `js/ui/workspace-view.js`), vérifié par rendu. Aucune valeur durable de personnage.
