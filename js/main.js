@@ -1050,6 +1050,8 @@ const workspaceView = DOM.panels.workspace && qs('#workspace-root') ? initWorksp
   Store, Combat, Bus, mount: qs('#workspace-root'), showNavigation: false,
   actions: {
     ...encounterListActions,
+    // La bibliothèque de bestiaire vit sous la vue de travail et ne se montre que dans l'espace Bibliothèque.
+    spaceShown: space => { qs('#bestiary-library').hidden = space !== 'library'; },
     createProfile: openCreateProfileView,
     duplicateProfile: id => awaitStore(Store.duplicateProfile(id), 'Duplication'),
     removeProfile: id => awaitStore(Store.removeProfile(id), 'Suppression'),

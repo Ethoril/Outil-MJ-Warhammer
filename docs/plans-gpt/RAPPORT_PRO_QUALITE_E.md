@@ -54,6 +54,7 @@ Plan : `PLAN_PRO_QUALITE_E.md`. Branche `pro/qualite-e`, départ `9c12613`. Choi
 | Q37 | FAIT (`QE-Q37-1`) | (voir `git log`, « Q37 ») |
 | Q38 | FAIT (`QE-Q38-1` à `QE-Q38-3`) | (voir `git log`, « Q38 ») |
 | R4 | FAIT (questions ouvertes pour le MJ : `QE-Q12a-1`, `QE-Q36-3`) | (voir `git log`, « R4 ») |
+| Q39 | FAIT (`QE-Q39-1`) | (voir `git log`, « Q39 ») |
 
 ## Q0 — contrôle de complétude
 
@@ -540,3 +541,10 @@ Branché / non appelé (grep dans `js/`) :
   - **Réserve** : Q20 à Q23 ont été vérifiés par le source ou par le Store, pas par un rendu DOM (les tests de rendu datent de Q28 et après).
 - **Questions ouvertes pour le MJ** : `QE-Q12a-1` (E0-P-125, 126, accepté le 23/10) et `QE-Q36-3` (E0-P-388 Erich Frohlich : « Toughness Bonus: » imprimé sans nombre, garder l'absence ou saisir 3).
 - Aucune valeur durable de personnage modifiée (`VARIABLES_PERSISTANTES_PJ.md` inchangé).
+
+## Q39 — bibliothèque de bestiaire atteignable (FAIT)
+
+- **Défaut antérieur au lot** : `#bestiary-library` était dans `#panel-reserve`, que `switchTab('workspace', …)` cache en permanence ; aucun onglet n'y menait. **Corrections du rapport** : les mentions « chemin : bibliothèque → Ajouter au combat » des lignes de Q15/Q16 (« chemin d’interface : bibliothèque du bestiaire → … », l. 265 et la synthèse l. 290) et des sections Q17, Q22, Q37, R4 décrivaient un chemin qui n'était **pas atteignable** dans l'application avant Q39 ; il l'est depuis ce lot (le code et les tests de rendu par faux DOM étaient justes, l'accès non).
+- `index.html` : `<details id="bestiary-library">` déplacé sous `#workspace-root` (dans `#panel-workspace`), `hidden` au départ. `js/ui/workspace-view.js` : rappel `actions.spaceShown(space)` appelé à chaque rendu ; `js/main.js` : `spaceShown` montre la bibliothèque dans l'espace « Bibliothèque » seulement (y compris quand l'espace change par un bouton interne de la vue). Aucun fichier de version touché.
+- Test : `tests/pro-q39-bibliotheque-bestiaire-ui-browser.mjs` (application réelle `index.html`, Firebase simulé) : onglets Préparer et Jouer ne la montrent pas ; onglet Bibliothèque → ouverture → recherche « Stegadon » → « Fiche » → « Ajouter au combat » → le Stegadon est au banc de Jouer. 7 contrôles verts.
+- **Branché (appelant + chemin d'interface vérifié par un test navigateur sur l'application réelle)** : `createBestiaryLibrary` ← `js/main.js`, atteinte par l'onglet Bibliothèque. Aucune valeur durable de personnage.

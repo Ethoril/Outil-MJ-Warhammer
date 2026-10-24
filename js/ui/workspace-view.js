@@ -362,6 +362,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     suspendScene: typeof actions.suspendScene === 'function' ? actions.suspendScene : null,
     restartCombat: typeof actions.restartCombat === 'function' ? actions.restartCombat : null,
     showPlay: typeof actions.showPlay === 'function' ? actions.showPlay : null,
+    spaceShown: typeof actions.spaceShown === 'function' ? actions.spaceShown : null,
     createProfile: typeof actions.createProfile === 'function' ? actions.createProfile : null,
     duplicateProfile: typeof actions.duplicateProfile === 'function' ? actions.duplicateProfile : null,
     removeProfile: typeof actions.removeProfile === 'function' ? actions.removeProfile : null,
@@ -1720,6 +1721,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     refs.prepare.hidden = state.space !== 'prepare';
     refs.play.hidden = state.space !== 'play';
     refs.library.hidden = state.space !== 'library';
+    callbacks.spaceShown?.(state.space);
     renderPrepare();
     renderPlay();
     renderLibrary();
