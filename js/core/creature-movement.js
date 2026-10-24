@@ -136,6 +136,28 @@ function receiptOf(plan) {
   };
 }
 
+/**
+ * Effets des Traits de déplacement sur un Test, quand le contexte les détermine (sinon seul le rappel de la carte reste).
+ * `context` : `airborne` (le porteur de Vol est en vol), `inWater` (booléen, Créature marine). Rend `[{ id, label, amount }]`.
+ */
+export function movementTestRules({ actor, skillLabel = '', kind, defending = false, context = {} }) {
+  const modifiers = [];
+  const label = fold(skillLabel);
+  const owns = key => traitsOf(actor).some(trait => trait.key === key);
+  const push = (key, id, labelText, scope) => {
+    const plan = planMovement(actor, key, { inWater: context.inWater });
+    for (const modifier of plan.modifiers) if (modifier.scope === scope) modifiers.push({ id, label: labelText, amount: modifier.dr });
+  };
+  if (owns('fly') && kind === 'ranged' && !defending && context.airborne === true) push('fly', 'move:fly-ranged', 'Tir en vol (Vol)', 'tir propre');
+  if (owns('amphibious') && /natation|swim/.test(label)) push('amphibious', 'move:amphibious-swim', 'Natation (Amphibie)', 'Natation');
+  if (owns('arboreal') && /escalade|climb|discretion/.test(label)) push('arboreal', 'move:arboreal', 'Escalade ou Discrétion (Arboricole)', 'Escalade et Discrétion');
+  if (owns('marine') && context.inWater === false) push('marine', 'move:marine-dry', "Créature marine hors de l'eau", 'tous les Tests');
+  return modifiers;
+}
+
+/** Vrai si le participant porte un Trait de déplacement de la clé donnée (le panneau n'affiche une question que si besoin). */
+export const carriesMovement = (participant, key) => traitsOf(participant).some(trait => trait.key === key);
+
 /** Rappels de déplacement d'un participant, sans doublon (affichage de fiche). */
 export function movementReminders(participant) {
   const out = [];

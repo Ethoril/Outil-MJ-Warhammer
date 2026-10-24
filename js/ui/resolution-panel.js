@@ -11,6 +11,7 @@ import { V5_ACTIVATED_TALENTS,knownV5MartialQualities,noTestV5TalentAction }  fr
 import { inferV5Kind, hasMomentum } from '../core/v5-combat-rules.js';
 import { naturalCombatTraits, naturalAttackNeedsSize } from '../core/creature-combat.js';
 import { carriesSense } from '../core/creature-senses.js';
+import { carriesMovement } from '../core/creature-movement.js';
 import { EXCLUDED_BASE_CHARACTERISTIC_TALENTS } from '../core/talent-contracts.js';
 import { hasV5Talent, V5_TALENT_IDS } from '../core/v5-talents.js';
 import { ammunitionCompatibility, equipmentAttackContext } from '../core/equipment.js';
@@ -1334,6 +1335,9 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
   // Traits de sens : le moteur ne connaît ni les distances ni le mouvement, c'est le MJ qui le constate.
   if (target && carriesSense(target, 'chameleon')) contextField(fields, 'actor', 'targetMoving', 'La cible Caméléon se déplace (Perception pour la voir)');
   if (participants.some(person => person.id !== actor.id && carriesSense(person, 'distracting'))) contextField(fields, 'actor', 'distractingInRange', 'Un Perturbant est à portée (−2 DR, une seule fois)');
+  // Traits de déplacement : le moteur ne connaît ni l'altitude ni le milieu, c'est le MJ qui le constate.
+  if (kind.value === 'ranged' && carriesMovement(actor, 'fly')) contextField(fields, 'actor', 'airborne', 'Le tireur en Vol est en vol (−2 DR au tir)');
+  if (carriesMovement(actor, 'marine')) contextField(fields, 'actor', 'inWater', 'La Créature marine est dans l’eau');
   contextField(fields,'actor','blackpowderBrokenTest','Calme contre un tir À Poudre noire');
   if(draft.v5Context?.blackpowderBrokenTest){const current=draft.v5Context,wrap=node('label','workspace-type','Auteur du tir À Poudre noire'),select=document.createElement('select');select.setAttribute('aria-label',wrap.textContent);select.append(new Option('Choisir',''));for(const shooter of participants.filter(p=>p.id!==actor.id))select.append(new Option(shooter.name,shooter.id));select.value=current.blackpowderShooterId||'';select.addEventListener('change',()=>handlers.select({v5Context:{...current,blackpowderShooterId:select.value||undefined}}));wrap.append(select);fields.append(wrap);}
   if (kind.value === 'ranged' && target) { contextField(fields, 'actor', 'rangedOppositionAllowed', 'Tir opposé : exception vérifiée par le MJ'); contextField(fields, 'actor', 'pointBlank', 'Tir à bout portant'); }

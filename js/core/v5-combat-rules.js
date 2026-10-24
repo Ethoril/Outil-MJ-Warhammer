@@ -9,6 +9,7 @@ import {situationPlan} from './v5-talent-situations.js';
 import {contactWeapon} from './v5-talent-contact.js';
 import {psychologyTestRules} from './v5-talent-psychology.js';
 import {senseTestRules} from './creature-senses.js';
+import {movementTestRules} from './creature-movement.js';
 import {unavailableDisarmedWeapon} from './v5-talent-replacements.js';
 import {warLeaderSubstitution} from './v5-talent-situations.js';
 import { pendingCrewSkill,sourceActive } from './v5-talent-actions.js';
@@ -127,6 +128,7 @@ export function buildCombatTest(normalized, role = 'actor') {
   const senses=senseTestRules({actor,opponent:target,participants:normalized.v5State?.participants||[],skillLabel,kind,defending,context:settings.context||{},currentBase:Number(action.base)||0});
   if(senses.base)action={...action,base:senses.base.score};
   modifiers.push(...senses.modifiers);
+  modifiers.push(...movementTestRules({actor,skillLabel,kind,defending,context:settings.context||{}}));
   if(settings.context?.blackpowderBrokenTest===true&&talentModifiers.context.skillId==='skill-43_61_6c_6d_65-base')modifiers.push({id:'quality:blackpowder-calm',label:'Calme Accessible contre À Poudre noire',amount:2});
   // Attraction des flèches : les tireurs adverses gagnent des DR contre la cible.
   if(!defending && kind==='ranged' && Number(target?.extensions?.v5?.specialStates?.incomingRangedBonusSl))modifiers.push({id:'spell-ranged-attraction',label:'Attraction des flèches',amount:Number(target.extensions.v5.specialStates.incomingRangedBonusSl)});
