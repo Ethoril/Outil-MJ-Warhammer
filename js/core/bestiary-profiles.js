@@ -176,7 +176,8 @@ const traitText = trait => {
  * `multiAttack` ; livre de base V5 (L06) p. 362 : « 8 Tentacles : la créature peut faire 8 attaques gratuites ».
  */
 function attackActions(attack) {
-  const ranged = isInt(attack.rangeYards);
+  // Une attaque imprimée « Ranged (Pistol) +9 » sans portée reste une attaque à distance (CT), portée à saisir par le MJ.
+  const ranged = isInt(attack.rangeYards) || attack.ranged === true;
   const of = isInt(attack.count) && attack.count > 1 ? attack.count : 1;
   // Tentacules : toutes les attaques sont gratuites ; décision du MJ du 23/10 : tout autre multiplicateur ne rend gratuite que chaque attaque au-delà de la première.
   const tentacles = /tentacle/i.test(`${attack.trait || ''} ${attack.name || ''}`);
@@ -185,7 +186,7 @@ function attackActions(attack) {
     const v5 = { kind: ranged ? 'ranged' : 'melee', ...(free ? { [BESTIARY_FREE_ATTACK_KEY]: free } : {}), ...(of > 1 ? { multiAttack: { group: attack.name, index: position + 1, of } } : {}) };
     return normalizeAction({
       name: of > 1 ? `${attack.name} ${position + 1}` : attack.name, type: 'attack', attr: ranged ? 'CT' : 'CC', base: attack.value ?? '', damage: attack.damage,
-      qualities: cloneValue(attack.qualities || []), ...(ranged ? { rangeYards: attack.rangeYards } : {}),
+      qualities: cloneValue(attack.qualities || []), ...(isInt(attack.rangeYards) ? { rangeYards: attack.rangeYards } : {}),
       ...(attack.detail ? { detail: attack.detail } : {}), extensions: { v5 }
     });
   });

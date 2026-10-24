@@ -1764,6 +1764,8 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       rememberFocus(target);
       state.space = target.dataset.workspaceSpace;
       render();
+      // Prévient l'application pour que l'onglet actif et le bandeau de combat suivent (goToSpace).
+      refs.root.dispatchEvent(new CustomEvent('workspace-space-request', { bubbles: true, detail: { space: state.space } }));
       return;
     }
     if (target.dataset.workspaceSelect) {

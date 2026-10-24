@@ -276,6 +276,7 @@ function goToSpace(space) {
   workspaceView?.setSpace(space);
   combatBanner?.render(space);
 }
+document.addEventListener('workspace-space-request', event => goToSpace(event.detail?.space || 'prepare'));
 const activeSpace = () => document.querySelector('.tab.is-active')?.dataset.workspaceSpace || 'prepare';
 tabArray.forEach((t, idx) => {
   t.addEventListener('click', () => goToSpace(t.dataset.workspaceSpace || 'prepare'));
