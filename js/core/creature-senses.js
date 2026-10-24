@@ -103,6 +103,35 @@ export function distractingPenalty(sources, distances) {
   return { dr: reach.some(Boolean) ? -2 : 0, sources: reach.filter(Boolean).length, unresolved: unknown };
 }
 
+const has = (participant, key) => traitsOf(participant).some(trait => trait.key === key);
+
+/**
+ * Effets des Traits de sens sur un Test, quand le contexte les détermine (rien d'inventé sinon : le rappel de la carte reste).
+ * `actor` passe le Test contre `opponent` ; `participants` : toute la scène ; `context` : `targetMoving` (Caméléon), `distractingInRange` (Perturbant).
+ * Rend `{ modifiers: [{ id, label, amount }], base: { score, label } | null }` ; `base` = valeur de compétence du Trait (Furtif, Pisteur) si elle dépasse `currentBase`.
+ */
+export function senseTestRules({ actor, opponent, participants = [], skillLabel = '', kind, defending = false, context = {}, currentBase = 0 }) {
+  const modifiers = [];
+  const label = fold(skillLabel);
+  if (has(opponent, 'chameleon')) {
+    if (kind === 'ranged' && !defending) modifiers.push({ id: 'sense:chameleon-ranged', label: 'Tir contre un Caméléon', amount: -2 });
+    if (/perception/.test(label) && typeof context.targetMoving === 'boolean') modifiers.push({ id: 'sense:chameleon-sight', label: `Voir un Caméléon ${context.targetMoving ? 'qui bouge' : 'immobile'}`, amount: context.targetMoving ? -2 : -4 });
+  }
+  if (context.distractingInRange === true && (participants || []).some(person => person?.id !== actor?.id && has(person, 'distracting'))) {
+    modifiers.push({ id: 'sense:distracting', label: 'Perturbant à portée (une seule fois)', amount: -2 });
+  }
+  let base = null;
+  const skillKey = /discretion/.test(label) ? 'stealthy' : /pistage|tracking|track/.test(label) ? 'tracker' : null;
+  if (skillKey && has(actor, skillKey)) {
+    const skill = planSense(actor, skillKey).skills[0];
+    if (skill && skill.value > currentBase) base = { score: skill.value, label: `${RULES[skillKey].fr} : ${skill.skill} ${skill.value} (${skill.source})` };
+  }
+  return { modifiers, base };
+}
+
+/** Participants de la scène qui portent un Trait de sens donné (le panneau n'affiche une question que s'il en existe). */
+export const carriesSense = (participant, key) => has(participant, key);
+
 function receiptOf(plan) {
   return {
     ability: plan.label,

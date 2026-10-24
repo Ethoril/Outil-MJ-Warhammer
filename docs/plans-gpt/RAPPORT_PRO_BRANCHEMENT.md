@@ -10,6 +10,15 @@ Plan : `PLAN_PRO_BRANCHEMENT.md`. Choix et questions : `CHOIX_EXECUTANT_BRANCHEM
 | B3 | FAIT (Régénération branchée, voir ci-dessous) |
 | B4 | FAIT (Psychologie branchée, voir ci-dessous ; question BR-06 au MJ) |
 | B4c | FAIT (corrections de la contre-vérification ; question BR-09 au MJ) |
+| B5 | FAIT (Sens branchés sauf Sens aiguisé, voir ci-dessous ; question BR-11 au MJ) |
+
+## B5 — Sens et discrétion (24/10/2026)
+
+- **Branché** : `senseReminders` via `TRAIT_REMINDERS` (`reminders.js`) → rappels permanents Infravision, Vision nocturne, Furtif, Pisteur, Perturbant, Caméléon, Sens vibratoires sur la carte et le Personnage actif.
+- **Branché** : `senseTestRules` (nouvelle, `creature-senses.js`), appelée par `buildCombatTest` (`v5-combat-rules.js`) pour tout Test : tir contre un Caméléon −2 DR (aucune saisie) ; Perception pour voir un Caméléon −4 (immobile) ou −2 (qui bouge) une fois la case « La cible Caméléon se déplace » renseignée ; Perturbant −2 DR une seule fois, quel que soit le nombre de sources, une fois la case « Un Perturbant est à portée » cochée ; Furtif (Discrétion) et Pisteur (Pistage) portent le score à Agilité+10 / Intelligence+10 s’il dépasse celui de l’action. Chemin d’interface : « Circonstances des Tests » du panneau de résolution (`resolution-panel.js`, les deux cases n’apparaissent que si la scène contient un porteur). Sans contexte précisé : rien d’appliqué, le rappel de la carte reste.
+- **Code testé, non appelé** : `distractingPenalty` (le moteur ne connaît pas les distances), `planSense` pour Infravision, Vision nocturne et Sens vibratoires (effets de vision/Surprise non branchés : rappels seulement).
+- **Non branché** : Sens aiguisé / « Acuité sensorielle » (BR-11).
+- Test : `tests/pro-b5-sens-branches.test.js` (Skink caméléon L07). Suite : 4615 tests, seul échec « recette refuse un cwd externe » (propre au worktree).
 
 ## B4c — Corrections de la contre-vérification de B0-B2 (24/10/2026)
 
