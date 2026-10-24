@@ -1233,6 +1233,7 @@
      "name": "Crossbow Pistol",
      "damage": 7,
      "trait": "Ranged",
+     "rangeYards": 10,
      "ranged": true
     },
     {
@@ -1492,6 +1493,7 @@
      "name": "Repeater Pistol loaded with Aqshy-Infused Powder",
      "damage": 10,
      "trait": "Ranged",
+     "rangeYards": 10,
      "ranged": true
     },
     {
@@ -1732,6 +1734,7 @@
      "name": "Bow",
      "damage": 5,
      "trait": "Ranged",
+     "rangeYards": 50,
      "ranged": true
     },
     {
@@ -2306,6 +2309,7 @@
      "name": "Bow",
      "damage": 7,
      "trait": "Ranged",
+     "rangeYards": 50,
      "ranged": true
     },
     {
@@ -2477,6 +2481,7 @@
      "name": "Bow",
      "damage": 7,
      "trait": "Ranged",
+     "rangeYards": 50,
      "ranged": true
     },
     {
@@ -2667,6 +2672,7 @@
      "name": "Crossbow",
      "damage": 9,
      "trait": "Ranged",
+     "rangeYards": 60,
      "ranged": true
     },
     {
@@ -2833,6 +2839,7 @@
      "name": "Crossbow Pistol",
      "damage": 7,
      "trait": "Ranged",
+     "rangeYards": 10,
      "ranged": true
     },
     {
@@ -3071,6 +3078,7 @@
     "Warrant Papers",
     "5d10 gc"
    ],
+   "fatePoints": 2,
    "keywords": [
     "humain"
    ],

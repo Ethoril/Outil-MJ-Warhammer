@@ -262,6 +262,7 @@
      "name": "Bow",
      "damage": 6,
      "trait": "Ranged",
+     "rangeYards": 50,
      "ranged": true
     },
     {
@@ -441,6 +442,7 @@
      "name": "Crossbow",
      "damage": 9,
      "trait": "Ranged",
+     "rangeYards": 60,
      "ranged": true
     },
     {

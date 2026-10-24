@@ -63,7 +63,7 @@ function readTraitItemPlain(text) {
   const breath = /^Breath\s*([+-]\d+)(?:\s+[a-z]{1,3})?\s*\(([^()]*)\)$/.exec(item) || /^Breath\s*([+-]\d+)\s*\(([^()]*)\)$/i.exec(item);
   if (breath) return { name: 'Breath', param: clean(breath[2]), rating: breath[1] };
   // Attaque (« Weapon (Fangs) +7 », « 2x Weapon (Claws) +10 », « Bite +9 ») suivie du nom d'une capacité collée dans la liste : on ne garde que l'attaque.
-  const natural = /^(?:(\d+)\s*[x×\uFFFD]?\s*)?(Weapon|Ranged|Bite|Horns|Tail Attack|Tail|Claws?|Tentacles?|Beak|Slam|Tongue Attack)\b\s*(?:d\s*)?(?:\(([^()]*)\))?\s*([+-]\s?\d+)(?:\s*\((\d+)\))?(?:\s*\(([A-Z][^()]*)\))?/i.exec(item);
+  const natural = /^(?:(\d+)\s*[x×\uFFFD]?\s*)?(Weapon|Ranged|Bite|Horns|Tail Attack|Tail|Claws?|Tentacles?|Beak|Slam|Tongue Attack)\b\s*(?:d\s*)?(?:\(([^()]*)\))?\s*([+-]\s?\d+)\*?(?:\s*\((\d+)\))?(?:\s*\(([A-Z][^()]*)\))?/i.exec(item);
   if (natural && !/[+-]\d/.test(natural[3] || '')) {
     const trait = { name: natural[2].replace(/^./, letter => letter.toUpperCase()), rating: natural[4].replace(/\s+/g, '') };
     if (natural[3]) trait.param = clean(natural[3]).replace(/([a-z])- (?=[A-Z])/g, '$1-');
@@ -416,6 +416,9 @@ export function parseBlock(block, { traitDictionary = new Set(), talentDictionar
   // Q27d : "Marks: Mark of Hysh, Stoicism" (Magiciens, L17) : note du profil.
   // L10 (V5) : rubriques « Blessings » (Cacciatore p. 14) et « Miracles: » (Seiren Walburg p. 92), listes de noms gardées en note du profil.
   for (const label of ['Blessings', 'Miracles']) if (mode === 'v5' && sections[label]) profile.notes = [...(profile.notes || []), `${label}: ${clean(sections[label])}`];
+  // « Fate Points: 2 » (Brunner, L04 p. 111 ; Gotrek, L16 p. 79) : Points de Destin imprimés, gardés tels quels.
+  const fate = /^(\d+)\b/.exec(sections['Fate Points'] || sections['Fate Point'] || '');
+  if (fate) profile.fatePoints = Number(fate[1]);
   if (sections.Marks) profile.notes = [...(profile.notes || []), `Marks: ${clean(sections.Marks)}`];
   if (talentStar) profile.notes = [...(profile.notes || []), clean(sections.Talents.slice(talentStar.index).replace(/\s*\*\s*/, ''))];
   if (sections.Mutations) profile.mutations = splitList(sections.Mutations);

@@ -120,6 +120,6 @@ test('Q40 contrôle : une ligne « Optional Traits » entière absente est signa
 
 test('Q40 contrôle : l\'arme après « or » de la ligne « Attack Traits » est une attaque imprimée (Warlock Engineer)', () => {
   const raw = ' 5 40 30 30 30 35 40 30 25 20 15 11 Traits: Armour 2 (6), Night Vision Attack Traits: Ranged (Warp Blade) +7 (48) or Ranged (Warplock Pistol) +9 (20), Weapon (Warp Blade) +10';
-  const record = { ...base, traits: [{ name: 'Night Vision' }], attacks: [{ name: 'Warp Blade', damage: 7 }, { name: 'Warp Blade', damage: 10 }] };
-  assert.deepEqual(gaps(record, raw).attacks, ['Ranged (Warplock Pistol) +9']);
+  const record = { ...base, traits: [{ name: 'Night Vision' }], attacks: [{ name: 'Warp Blade', damage: 7, rangeYards: 48 }, { name: 'Warp Blade', damage: 10 }] };
+  assert.deepEqual(gaps(record, raw).attacks, ['Ranged (Warplock Pistol) +9', 'portée de Ranged (Warplock Pistol) +9 (20)']);
 });

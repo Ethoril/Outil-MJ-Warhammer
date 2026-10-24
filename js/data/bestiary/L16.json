@@ -301,6 +301,7 @@
      "name": "Dwarf Crossbow",
      "damage": 10,
      "trait": "Ranged",
+     "rangeYards": 80,
      "ranged": true
     },
     {
@@ -960,6 +961,7 @@
      "name": "Blunderbuss",
      "damage": 8,
      "trait": "Ranged",
+     "rangeYards": 12,
      "ranged": true
     },
     {
@@ -1294,6 +1296,7 @@
      "name": "Dwarf Pistol",
      "damage": 10,
      "trait": "Ranged",
+     "rangeYards": 20,
      "ranged": true
     },
     {
@@ -2305,6 +2308,7 @@
      "name": "Dwarf Crossbow",
      "damage": 10,
      "trait": "Ranged",
+     "rangeYards": 80,
      "qualities": [
       "Damaging",
       "Impale",
@@ -2544,6 +2548,7 @@
      "name": "Dwarf Throwing Axes",
      "damage": 9,
      "trait": "Ranged",
+     "rangeYards": 10,
      "qualities": [
       "Hack"
      ],
@@ -3085,6 +3090,7 @@
     "Jewelry worth 200 GC",
     "Gotrek's Axe"
    ],
+   "fatePoints": 3,
    "keywords": [
     "nain"
    ],

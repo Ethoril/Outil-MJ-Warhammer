@@ -170,6 +170,19 @@ export function printedAttacks(block) {
   return found;
 }
 
+/**
+ * Q41 : portée imprimée d'une arme à distance V4 (« Ranged (Bow) +7 (50) », « Ranged (Longbow) +10* (100) », « Ranged (Dwarf Crossbow) (80) +10 ») : nom et portée en yards.
+ */
+export function printedRanges(block) {
+  const text = [segment(block, 'Traits'), segment(block, 'Attack Traits')].filter(part => part !== null).join(', ');
+  const found = [];
+  for (const item of splitTopLevel(text).flatMap(part => part.split(/\s+or\s+(?=Ranged\b)/))) {
+    const m = /^Ranged\s*\(([^()]*)\)\s*(?:\+\d+\*?\s*\((\d+)\)|\((\d+)\)\s*\+\d+)/.exec(item);
+    if (m) found.push({ label: `portée de ${item.slice(0, 60)}`, name: m[1], range: Number(m[2] || m[3]) });
+  }
+  return found;
+}
+
 // Q40 : « Tongue Attack » et « Tongue » sont la même attaque ; « Weapon (Curling Horns) +10 » est la même attaque que « Horns +10 » (jumelle, même dégâts, nom qui se termine par celui de l'attaque naturelle).
 export const recordAttackKeys = record => {
   const keys = new Set();
@@ -313,7 +326,7 @@ export function extendedGaps(record, block) {
   const haveSpells = recordSpellKeys(record);
   return {
     // Q27c : un Souffle « Breath +10 (Poison) » est gardé comme Trait (rating +10), pas comme action : il compte comme présent.
-    attacks: printedAttacks(block).filter(attack => !haveAttacks.has(attack.key) && !haveTraitRatings.has(attack.key.split('|').slice(0, 2).join('|')) && !(record.attacks || []).some(other => attack.key.split('|')[1] === String(other.damage) && attack.key.split('|')[0].endsWith(letters(other.name)))).map(attack => attack.label),
+    attacks: printedAttacks(block).filter(attack => !haveAttacks.has(attack.key) && !haveTraitRatings.has(attack.key.split('|').slice(0, 2).join('|')) && !(record.attacks || []).some(other => attack.key.split('|')[1] === String(other.damage) && attack.key.split('|')[0].endsWith(letters(other.name)))).map(attack => attack.label).concat(printedRanges(block).filter(printed => !(record.attacks || []).some(attack => attack.rangeYards === printed.range && (letters(attack.name) === letters(printed.name) || letters(attack.name).endsWith(letters(printed.name)) || letters(printed.name).endsWith(letters(attack.name))))).map(printed => printed.label)),
     traits: printedTraits(block).filter(trait => !haveTraits.has(trait.key) && !attackNames.has(trait.key)).map(trait => trait.label),
     trappings: printedTrappings(block).filter(item => !trappings.some(have => have.includes(item.key) || (have.length >= 4 && item.key.includes(have)))).map(item => item.label),
     spells: printedSpells(block).filter(spell => !haveSpells.has(spell.key)).map(spell => spell.label),

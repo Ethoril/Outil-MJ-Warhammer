@@ -56,6 +56,7 @@ Plan : `PLAN_PRO_QUALITE_E.md`. Branche `pro/qualite-e`, départ `9c12613`. Choi
 | R4 | FAIT (questions ouvertes pour le MJ : `QE-Q12a-1`, `QE-Q36-3`) | (voir `git log`, « R4 ») |
 | Q39 | FAIT (`QE-Q39-1`) | (voir `git log`, « Q39 ») |
 | Q40 | FAIT (`QE-Q40-1` à `QE-Q40-6`) | (voir `git log`, « Q40 ») |
+| Q41 | FAIT (`QE-Q41-1` à `QE-Q41-4`) | (voir `git log`, « Q41 ») |
 
 ## Q0 — contrôle de complétude
 
@@ -558,3 +559,12 @@ Branché / non appelé (grep dans `js/`) :
 - Test : `tests/pro-q40-extraction.test.js` (12 tests : 8 sur les données par cas de page, 4 sur le contrôle).
 - **Branché / non appelé** : outil et données de livre. `skills`, `attacks` (Teeth, Claws, Warplock Pistol) deviennent des actions via `buildParticipantFromBestiary` (appelants : `js/ui/bestiary-library.js`, `js/core/bestiary-templates.js`) ; l'attaque facultative (`optional: true`, Warplock Pistol) n'est **pas** dans le participant par défaut et **aucun appelant de `js/` ne pose `includeOptional`** : code testé, non appelé. `optionalTraits`, `optionalSpecialRules`, `notes` : aucun lecteur dans `js/` (code testé, non appelé). Aucune valeur durable de personnage (`VARIABLES_PERSISTANTES_PJ.md` inchangé).
 - Suite complète : 4559 tests verts.
+
+## Q41 — portées des attaques à distance V4 (FAIT)
+
+- **Cause** : `buildAttacks` (`tools/lib/bestiary-record.mjs`) ne lisait la portée que dans le texte d'une attaque V5 ; pour un Trait V4 « Ranged (Bow) +7 (50) », elle était lue (`printed`) mais jamais reportée. Elle l'est maintenant (`rangeYards`) ; `tools/lib/bestiary-profile.mjs` tolère l'astérisque (« Longbow +10* (100) », L11 E0-P-044). Les Points de Destin imprimés (« Fate Points: 2 ») sont lus dans `fatePoints`. Choix : `QE-Q41-1` à `QE-Q41-4`.
+- **Livres régénérés** (23, par `tools/build-bestiary-profiles.mjs`) : 14 fichiers modifiés ; comparaison profil par profil avec `HEAD` : **0 valeur imprimée changée**, 0 entrée perdue, 0 profil ajouté ou retiré ; 80 attaques gagnent `rangeYards`, 2 profils `fatePoints`. Sur 119 attaques à distance (hors L09 déjà couvert, inclus ici dans le décompte), 80 ont leur portée ; les 39 autres n'en impriment pas (relu), dont « Bolas 12 » (`QE-Q41-2`).
+- **Contrôle** (`tools/lib/bestiary-completeness.mjs`, `printedRanges`) : signale une portée imprimée absente de l'attaque. **État de départ** (données de `HEAD`, L03, L04, L11, L16) : 21 manques ; **après** : 0 manque non justifié sur les 23 livres (313 justifiés, inchangé), 0 écart de valeurs.
+- Test : `tests/pro-q41-portees.test.js` (6 tests : L04 E0-P-176 et L03 E0-P-157 sur le profil et le participant, L11 E0-P-044, contrôle, Points de Destin et rendu de la fiche par faux DOM) ; `tests/pro-q40-extraction.test.js` ajusté (son enregistrement synthétique n'avait pas de portée).
+- **Branché / non appelé** : `buildParticipantFromBestiary` (appelants : `js/ui/bestiary-library.js`, `js/core/bestiary-templates.js`) pose `rangeYards` sur l'action du participant, qui devient une action à distance (CT ; avant : mêlée CC faute de portée) ; chemin d'interface : onglet Bibliothèque → fiche (affiche « portée N yards ») → Ajouter au combat (Q39). **Aucun module de `js/` ne lit `action.rangeYards` pour la résolution** (grep : `bestiary-profiles.js`, `bestiary-library.js`, et `v5-magic-miscasts.js` pour autre chose) : la portée est portée par le participant mais **non exploitée par la résolution** (code testé, non appelé). `fatePoints` : lu par la fiche de la bibliothèque seulement. Aucune valeur durable de personnage (`VARIABLES_PERSISTANTES_PJ.md` inchangé).
+- Suite complète : un seul échec (test synthétique de Q40), corrigé ; les deux fichiers de tests concernés relancés, verts.

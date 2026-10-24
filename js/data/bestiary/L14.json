@@ -754,6 +754,7 @@
      "name": "Elf Bow",
      "damage": 8,
      "trait": "Ranged",
+     "rangeYards": 150,
      "qualities": [
       "Accurate",
       "Damaging",
@@ -1173,6 +1174,7 @@
      "name": "Elf Bow",
      "damage": 8,
      "trait": "Ranged",
+     "rangeYards": 150,
      "qualities": [
       "Accurate",
       "Damaging",
@@ -1430,6 +1432,7 @@
      "name": "Bow of Anirain",
      "damage": 9,
      "trait": "Ranged",
+     "rangeYards": 150,
      "qualities": [
       "Accurate",
       "Damaging",
@@ -1798,6 +1801,7 @@
      "name": "Elf Bow",
      "damage": 8,
      "trait": "Ranged",
+     "rangeYards": 150,
      "qualities": [
       "Accurate",
       "Damaging",
@@ -2223,6 +2227,7 @@
      "name": "Elf Bow",
      "damage": 8,
      "trait": "Ranged",
+     "rangeYards": 150,
      "qualities": [
       "Accurate",
       "Damaging",
@@ -3518,6 +3523,7 @@
      "name": "Sling",
      "damage": 7,
      "trait": "Ranged",
+     "rangeYards": 60,
      "ranged": true
     },
     {
@@ -3733,6 +3739,7 @@
      "name": "Rending Star",
      "damage": 6,
      "trait": "Ranged",
+     "rangeYards": 12,
      "ranged": true
     },
     {

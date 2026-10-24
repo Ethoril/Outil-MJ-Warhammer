@@ -5425,6 +5425,7 @@
      "name": "Repeater Pistol",
      "damage": 8,
      "trait": "Ranged",
+     "rangeYards": 20,
      "ranged": true
     },
     {

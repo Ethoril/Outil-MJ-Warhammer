@@ -45,6 +45,7 @@
      "name": "Pistol",
      "damage": 8,
      "trait": "Ranged",
+     "rangeYards": 20,
      "ranged": true
     }
    ],
@@ -370,6 +371,7 @@
      "name": "Pistol",
      "damage": 8,
      "trait": "Ranged",
+     "rangeYards": 20,
      "ranged": true
     },
     {
@@ -1304,6 +1306,7 @@
      "name": "Crossbow",
      "damage": 9,
      "trait": "Ranged",
+     "rangeYards": 60,
      "ranged": true
     },
     {
@@ -1794,6 +1797,7 @@
      "name": "Own Body",
      "damage": 7,
      "trait": "Ranged",
+     "rangeYards": 20,
      "ranged": true
     },
     {
@@ -3094,6 +3098,7 @@
      "name": "Pistol",
      "damage": 8,
      "trait": "Ranged",
+     "rangeYards": 20,
      "ranged": true
     },
     {
@@ -3373,6 +3378,7 @@
      "name": "Pistols",
      "damage": 8,
      "trait": "Ranged",
+     "rangeYards": 20,
      "ranged": true
     },
     {
@@ -3973,6 +3979,7 @@
      "name": "Pistol",
      "damage": 7,
      "trait": "Ranged",
+     "rangeYards": 10,
      "ranged": true
     },
     {

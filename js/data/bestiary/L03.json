@@ -36,6 +36,7 @@
      "name": "Bow",
      "damage": 5,
      "trait": "Ranged",
+     "rangeYards": 50,
      "ranged": true
     },
     {
@@ -1019,6 +1020,7 @@
      "name": "Pistol",
      "damage": 9,
      "trait": "Ranged",
+     "rangeYards": 20,
      "ranged": true
     },
     {
@@ -1289,6 +1291,7 @@
      "name": "Repeater Pistol",
      "damage": 8,
      "trait": "Ranged",
+     "rangeYards": 10,
      "ranged": true
     },
     {

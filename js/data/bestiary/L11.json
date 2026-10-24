@@ -439,6 +439,7 @@
      "name": "Short Bow",
      "damage": 5,
      "trait": "Ranged",
+     "rangeYards": 20,
      "ranged": true
     },
     {
@@ -1414,6 +1415,7 @@
      "name": "Shortbow",
      "damage": 5,
      "trait": "Ranged",
+     "rangeYards": 20,
      "ranged": true
     },
     {
@@ -2286,6 +2288,7 @@
      "name": "Whip",
      "damage": 6,
      "trait": "Ranged",
+     "rangeYards": 6,
      "ranged": true
     },
     {
@@ -4567,6 +4570,7 @@
      "name": "Longbow",
      "damage": 10,
      "trait": "Ranged",
+     "rangeYards": 100,
      "ranged": true
     },
     {
@@ -6391,12 +6395,14 @@
      "name": "Warp Blade",
      "damage": 7,
      "trait": "Ranged",
+     "rangeYards": 48,
      "ranged": true
     },
     {
      "name": "Warplock Pistol",
      "damage": 9,
      "trait": "Ranged",
+     "rangeYards": 20,
      "ranged": true,
      "optional": true
     },
@@ -6464,6 +6470,7 @@
      "name": "Ratling Cannon",
      "damage": 11,
      "trait": "Ranged",
+     "rangeYards": 40,
      "ranged": true
     },
     {

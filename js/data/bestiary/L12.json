@@ -1871,6 +1871,7 @@
      "name": "Bow",
      "damage": 7,
      "trait": "Ranged",
+     "rangeYards": 50,
      "ranged": true
     },
     {
@@ -2295,6 +2296,7 @@
      "name": "Bow",
      "damage": 7,
      "trait": "Ranged",
+     "rangeYards": 50,
      "ranged": true
     }
    ],
@@ -2888,6 +2890,7 @@
      "name": "Bow",
      "damage": 9,
      "trait": "Ranged",
+     "rangeYards": 50,
      "ranged": true
     },
     {
@@ -3036,6 +3039,7 @@
      "name": "Bow",
      "damage": 8,
      "trait": "Ranged",
+     "rangeYards": 50,
      "ranged": true
     },
     {
@@ -3277,6 +3281,7 @@
      "name": "Bow",
      "damage": 7,
      "trait": "Ranged",
+     "rangeYards": 50,
      "ranged": true
     },
     {
@@ -3713,6 +3718,7 @@
      "name": "Ranged",
      "damage": 7,
      "trait": "Ranged",
+     "rangeYards": 50,
      "ranged": true
     },
     {
@@ -3825,12 +3831,14 @@
      "name": "Knives",
      "damage": 6,
      "trait": "Ranged",
+     "rangeYards": 6,
      "ranged": true
     },
     {
      "name": "Sling",
      "damage": 7,
      "trait": "Ranged",
+     "rangeYards": 60,
      "ranged": true
     },
     {
@@ -3949,6 +3957,7 @@
      "name": "Bow",
      "damage": 7,
      "trait": "Ranged",
+     "rangeYards": 50,
      "ranged": true
     },
     {
@@ -4305,6 +4314,7 @@
      "name": "Ranged",
      "damage": 7,
      "trait": "Ranged",
+     "rangeYards": 50,
      "ranged": true
     },
     {
@@ -4676,6 +4686,7 @@
      "name": "Javelins",
      "damage": 8,
      "trait": "Ranged",
+     "rangeYards": 12,
      "ranged": true
     },
     {

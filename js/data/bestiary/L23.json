@@ -543,6 +543,7 @@
      "name": "Crossbow",
      "damage": 9,
      "trait": "Ranged",
+     "rangeYards": 60,
      "ranged": true
     },
     {
@@ -643,6 +644,7 @@
      "name": "Crossbow",
      "damage": 9,
      "trait": "Ranged",
+     "rangeYards": 60,
      "ranged": true
     },
     {
@@ -771,6 +773,7 @@
      "name": "Pistol",
      "damage": 8,
      "trait": "Ranged",
+     "rangeYards": 20,
      "ranged": true
     },
     {
@@ -925,6 +928,7 @@
      "name": "Pistol",
      "damage": 8,
      "trait": "Ranged",
+     "rangeYards": 20,
      "ranged": true
     },
     {
@@ -1100,6 +1104,7 @@
      "name": "Crossbow",
      "damage": 9,
      "trait": "Ranged",
+     "rangeYards": 60,
      "ranged": true
     },
     {
@@ -1232,6 +1237,7 @@
      "name": "Throwing Knives",
      "damage": 4,
      "trait": "Ranged",
+     "rangeYards": 4,
      "ranged": true
     },
     {
@@ -1504,6 +1510,7 @@
      "name": "Pistol",
      "damage": 8,
      "trait": "Ranged",
+     "rangeYards": 20,
      "ranged": true
     },
     {
@@ -1738,6 +1745,7 @@
      "name": "Bow",
      "damage": 8,
      "trait": "Ranged",
+     "rangeYards": 60,
      "ranged": true
     },
     {
@@ -3621,6 +3629,7 @@
      "name": "Short Bow",
      "damage": 6,
      "trait": "Ranged",
+     "rangeYards": 20,
      "ranged": true
     },
     {
@@ -3909,6 +3918,7 @@
      "name": "Bomb",
      "damage": 12,
      "trait": "Ranged",
+     "rangeYards": 2,
      "ranged": true
     },
     {
@@ -4014,6 +4024,7 @@
      "name": "Blunderbuss",
      "damage": 8,
      "trait": "Ranged",
+     "rangeYards": 20,
      "ranged": true
     },
     {
@@ -4543,6 +4554,7 @@
      "name": "Bow",
      "damage": 6,
      "trait": "Ranged",
+     "rangeYards": 60,
      "ranged": true
     },
     {
@@ -4722,6 +4734,7 @@
      "name": "Bow",
      "damage": 7,
      "trait": "Ranged",
+     "rangeYards": 60,
      "ranged": true
     },
     {
@@ -5653,6 +5666,7 @@
      "name": "Whip",
      "damage": 5,
      "trait": "Ranged",
+     "rangeYards": 6,
      "ranged": true
     },
     {
@@ -6024,6 +6038,7 @@
      "name": "Whip",
      "damage": 5,
      "trait": "Ranged",
+     "rangeYards": 6,
      "ranged": true
     },
     {

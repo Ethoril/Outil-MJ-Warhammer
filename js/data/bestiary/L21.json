@@ -3944,6 +3944,7 @@
      "name": "Bow",
      "damage": 6,
      "trait": "Ranged",
+     "rangeYards": 50,
      "ranged": true
     }
    ],
@@ -5240,6 +5241,7 @@
      "name": "Bow",
      "damage": 6,
      "trait": "Ranged",
+     "rangeYards": 50,
      "ranged": true
     }
    ],

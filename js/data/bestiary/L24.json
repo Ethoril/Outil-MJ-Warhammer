@@ -1102,6 +1102,7 @@
      "name": "Whip",
      "damage": 5,
      "trait": "Ranged",
+     "rangeYards": 6,
      "ranged": true
     },
     {
@@ -1194,12 +1195,14 @@
      "name": "Blunderbuss",
      "damage": 8,
      "trait": "Ranged",
+     "rangeYards": 20,
      "ranged": true
     },
     {
      "name": "Whip",
      "damage": 6,
      "trait": "Ranged",
+     "rangeYards": 6,
      "ranged": true
     },
     {
@@ -2069,6 +2072,7 @@
      "name": "Pistol",
      "damage": 8,
      "trait": "Ranged",
+     "rangeYards": 20,
      "ranged": true
     },
     {
@@ -3232,6 +3236,7 @@
      "name": "Throwing Knife",
      "damage": 5,
      "trait": "Ranged",
+     "rangeYards": 6,
      "ranged": true
     },
     {
@@ -3431,6 +3436,7 @@
      "name": "Improvised Explosive",
      "damage": 6,
      "trait": "Ranged",
+     "rangeYards": 3,
      "ranged": true
     },
     {

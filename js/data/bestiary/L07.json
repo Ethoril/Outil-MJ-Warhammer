@@ -1137,6 +1137,7 @@
      "name": "Pistol",
      "damage": 8,
      "trait": "Ranged",
+     "rangeYards": 20,
      "ranged": true
     },
     {
@@ -3791,6 +3792,7 @@
      "name": "Blowpipe",
      "damage": 1,
      "trait": "Ranged",
+     "rangeYards": 20,
      "ranged": true
     }
    ],
@@ -6839,6 +6841,7 @@
      "name": "Ranged",
      "damage": 8,
      "trait": "Ranged",
+     "rangeYards": 30,
      "ranged": true
     },
     {

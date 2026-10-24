@@ -554,12 +554,14 @@
      "name": "Warpstone Star",
      "damage": 7,
      "trait": "Ranged",
+     "rangeYards": 8,
      "ranged": true
     },
     {
      "name": "Death Globe",
      "damage": 12,
      "trait": "Ranged",
+     "rangeYards": 8,
      "ranged": true
     }
    ],
@@ -2142,12 +2144,14 @@
      "name": "Crossbow Pistol",
      "damage": 9,
      "trait": "Ranged",
+     "rangeYards": 10,
      "ranged": true
     },
     {
      "name": "Jezzail",
      "damage": 10,
      "trait": "Ranged",
+     "rangeYards": 120,
      "ranged": true
     },
     {

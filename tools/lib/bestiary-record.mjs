@@ -131,7 +131,9 @@ export function buildAttacks(extracted, traitList) {
     if (trait.weapons) { for (const weapon of trait.weapons) attacks.push({ name: weapon.name, damage: weapon.damage, trait: 'Weapon' }); continue; }
     const damage = number(trait.rating);
     if (damage === null || Number.isNaN(damage)) continue;
-    attacks.push({ name: trait.param || trait.name, damage, trait: trait.name, ...(trait.count ? { count: trait.count } : {}), ...(trait.qualities?.length ? { qualities: trait.qualities } : {}), ...(trait.name === 'Ranged' ? { ranged: true } : {}), ...(trait.alternative ? { optional: true } : {}) });
+    // « Ranged (Bow) +7 (50) », « Ranged (Dwarf Crossbow) (80) +10 » : le nombre entre parenthèses d'une arme à distance V4 est sa portée en yards (Q41).
+    const rangeYards = trait.name === 'Ranged' && Number.isInteger(trait.printed) && trait.printed > 0 ? trait.printed : null;
+    attacks.push({ name: trait.param || trait.name, damage, trait: trait.name, ...(rangeYards ? { rangeYards } : {}), ...(trait.count ? { count: trait.count } : {}), ...(trait.qualities?.length ? { qualities: trait.qualities } : {}), ...(trait.name === 'Ranged' ? { ranged: true } : {}), ...(trait.alternative ? { optional: true } : {}) });
   }
   // Le livre imprime parfois la même attaque deux fois (« Horns (Tusks) +10 » et « Weapon (Tusks) +10 », Krag-Breaker « Horns +13 » et « Weapon (Curling Horns) +13 ») :
   // une arme de même dégâts dont le nom est celui d'une attaque naturelle (ou finit par lui) n'est pas une seconde attaque.
@@ -262,6 +264,7 @@ export function buildRecord(extracted, entry, context) {
   if (extracted.trappings?.length) record.trappings = joinTrappings(extracted.trappings, TRAPPING_JOINS[entry.id]).map(item => item.replace(/^and\s+(?=[A-Z])/, '')).map(item => trims.find(name => item.startsWith(`${name} `)) ?? item).filter(item => isTrappingName(item) || (TRAPPING_JOINS[entry.id] || []).includes(item));
   const printedNotes = [...(extracted.notes || []), ...(OPTIONAL_NOTES[entry.id] || []).map(text => `Option: ${text}`)];
   if (printedNotes.length) record.notes = printedNotes;
+  if (Number.isInteger(extracted.fatePoints)) record.fatePoints = extracted.fatePoints;
   if (extracted.mutations?.length) record.mutations = extracted.mutations;
   if (extracted.spells) record.spells = extracted.spells;
   const rules = [...(extracted.specialRules || []).filter(rule => rule.split(/\s+/).length <= 5 && /^[A-Z]/.test(rule) && !/[.;]/.test(rule)), ...traits.dropped.filter(name => TRAITS_KEPT_AS_RULES.has(name)).map(name => { const printed = trimmed.find(trait => trait.name === name); return printed?.param ? `${name} (${printed.param})` : name; })];
