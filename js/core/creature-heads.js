@@ -35,6 +35,9 @@ export function parseManyHeadsTrait(trait) {
 export const manyHeadsTrait = participant => traitListOf(participant).map(parseManyHeadsTrait).find(Boolean) ?? null;
 export const hasManyHeads = participant => manyHeadsTrait(participant) !== null;
 
+/** Clé (`bite`, `horns`, `tongue`) d'une attaque à une par tête d'après son nom, ou `null`. */
+export const headAttackKeyOf = name => FREE_ATTACK_TRAITS.find(attack => attack.names.includes(fold(name).replace(/\s*\d+$/, '')))?.key ?? null;
+
 /** Registre initial : une tête valide par tête du Trait (`[]` si le nombre est inconnu). */
 export function createHeadRegistry(participant) {
   const trait = manyHeadsTrait(participant);
@@ -76,7 +79,8 @@ export function planManyHeads(participant, registry, options = {}) {
     // Toutes les têtes sont neutralisées : la créature subit le moins grave des degrés atteints.
     plan.globalEffect = disabled.reduce((low, head) => (SEVERITY[head.state] < SEVERITY[low] ? head.state : low), disabled[0].state);
   }
-  const owned = traitListOf(participant).map(item => fold(parseNameOnly(item)));
+  // Morsure, Cornes, Langue : Trait du participant ou action imprimée du profil (la Bite de la Hydre de guerre n'est qu'une action).
+  const owned = [...traitListOf(participant).map(item => fold(parseNameOnly(item))), ...(participant?.actions ?? []).map(action => fold(action?.name).replace(/\s*\d+$/, ''))];
   for (const attack of FREE_ATTACK_TRAITS) {
     if (owned.some(name => attack.names.includes(name))) plan.freeAttacks.push({ key: attack.key, label: attack.label, count: plan.healthy });
   }
@@ -109,7 +113,24 @@ export function restoreHead(registry, headId) {
   return normalizeRegistry(registry).map(head => (head.id === headId ? { ...head, state: 'healthy' } : head));
 }
 
-/** Rappel de Plusieurs têtes d'un participant (affichage de fiche). */
+const STATE_FR = { healthy: 'valide', stunned: 'étourdie', unconscious: 'inconsciente', dead: 'morte' };
+export const headStateLabel = state => STATE_FR[state] ?? STATE_FR.healthy;
+
+/** Registre des têtes tenu par le participant (`extensions.v5.heads`) ; à défaut, toutes valides. */
+export const headRegistryOf = participant => {
+  const stored = participant?.extensions?.v5?.heads;
+  return Array.isArray(stored) && stored.length ? normalizeRegistry(stored) : createHeadRegistry(participant);
+};
+
+/** Rappels de Plusieurs têtes d'un participant : état des têtes, attaques gratuites, Perception, effet global (affichage de fiche). */
 export function manyHeadsReminders(participant) {
-  return hasManyHeads(participant) ? [`${LABEL} : ${NOTE}`] : [];
+  if (!hasManyHeads(participant)) return [];
+  const plan = planManyHeads(participant, headRegistryOf(participant));
+  if (plan.total === null) return [`${LABEL} : ${plan.unresolved.join(' ')}`];
+  const lines = [`${LABEL} : ${plan.healthy} tête(s) valide(s) sur ${plan.total}.`];
+  if (plan.freeAttacks.length) lines.push(`Attaques gratuites par tête valide : ${plan.freeAttacks.map(entry => `${entry.label} ×${entry.count}`).join(', ')}.`);
+  if (plan.perception) lines.push(`Perception : ${plan.perception.modifier > 0 ? '+' : ''}${plan.perception.modifier} ${plan.perception.unit} (${plan.perception.cause}).`);
+  if (plan.globalEffect) lines.push(`Toutes les têtes sont neutralisées : la créature est ${{ stunned: 'étourdie', unconscious: 'inconsciente', dead: 'morte' }[plan.globalEffect]} (degré le moins grave atteint).`);
+  else lines.push(NOTE);
+  return lines;
 }

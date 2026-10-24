@@ -6,6 +6,15 @@ Plan : `PLAN_PRO_BRANCHEMENT.md`. Choix et questions : `CHOIX_EXECUTANT_BRANCHEM
 | --- | --- |
 | B0 | FAIT (inventaire ci-dessous) |
 | B1 | FAIT (Taille branchée, voir ci-dessous) |
+| B2 | FAIT (Plusieurs têtes branché, voir ci-dessous) |
+
+## B2 — Plusieurs têtes (24/10/2026)
+
+- **Branché** : `manyHeadsReminders` via `TRAIT_REMINDERS` (`reminders.js`) → carte et Personnage actif : têtes valides sur total, attaques gratuites par tête, Perception +2 DR (≥ 2 têtes valides), effet global quand toutes les têtes sont neutralisées. Le rappel est un affichage : le +2 DR de Perception n'est pas appliqué à un Test (voir B5).
+- **Branché** : quota d'attaques gratuites (`v5-store-action.js`) : une Morsure/Cornes/Langue gratuite par tête valide et par Tour, pour une attaque naturelle déclarée ou une action gratuite du profil (la Bite de la Hydre de guerre n'est qu'une action, `planManyHeads` lit donc aussi les actions) ; aucune tête valide = refus. L'Élan de la Bite gratuite reste celui du profil.
+- **Branché** : `Store.setHeadState` (commande annulable `set-head-state`, registre dans `extensions.v5.heads`) et `applyHeadCritical`/`restoreHead` ; bouton par tête sur la carte (`js/ui/heads-block.js`, clic = valide → étourdie → inconsciente → morte), la Blessure critique ne touche qu'une tête.
+- Test : `tests/pro-b2-plusieurs-tetes-branche.test.js` (Hydre de guerre L09). `pro-t9` ajusté (rappel désormais détaillé). Suite : 4590 tests, seul échec restant « recette refuse un cwd externe » (propre au worktree).
+- Limite : un rappel « Fait » sur la carte reste masqué même si le nombre de têtes valides change ensuite (identifiant par rang).
 
 ## B1 — Taille (24/10/2026)
 

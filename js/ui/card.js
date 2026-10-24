@@ -6,6 +6,7 @@ import { renderMiniDiceLine } from './dice-line.js';
 import { showToast } from './toast.js';
 import { contextMessage } from './messages.js';
 import { buildParticipantReminders } from '../core/reminders.js';
+import { buildHeadsBlock, nextHeadState } from './heads-block.js';
 
 export function initCardUI(Store, Combat) {
   const observe = (result, label = 'Modification') => Promise.resolve(result).then(value => { if (value === false || value?.ok === false) throw value?.error || new Error(`${label} impossible.`); return value; }).catch(error => showToast(contextMessage(`${label} impossible`, error, 'réessayez.'), 'error'));
@@ -250,6 +251,8 @@ export function initCardUI(Store, Combat) {
 
     const remindersBlock = buildParticipantReminders(tag => document.createElement(tag), Store.getParticipantReminders?.(p.id));
     if (remindersBlock) armDiv.after(remindersBlock);
+    const headsBlock = buildHeadsBlock(tag => document.createElement(tag), p);
+    if (headsBlock) armDiv.after(headsBlock);
 
     const diceContainer = div.querySelector('.dice-list');
     const myDice = Store.getDiceLines().filter(dl => dl.participantId === p.id);
@@ -315,6 +318,12 @@ export function initCardUI(Store, Combat) {
       const stateId = e.target.dataset.stateId;
       const nextStates = p.states.filter((state, index) => normalizeState(state, index).id !== stateId);
       observe(Store.updateParticipant(id, { states: normalizeEffects(nextStates) }), 'État');
+      return;
+    }
+
+    if (e.target.matches('.btn-head')) {
+      e.preventDefault();
+      observe(Store.setHeadState(id, e.target.dataset.headId, nextHeadState(e.target.dataset.state)), 'Tête');
       return;
     }
 

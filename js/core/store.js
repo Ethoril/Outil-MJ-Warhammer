@@ -74,6 +74,7 @@ import { advanceGameClock, campaignDurationSeconds, createGameClock, deriveTurnP
 import { advanceCampaignSnapshot } from './v5-campaign-time.js';
 import { proposeNewKeyword, referentialFromExtensions, setActiveReferential } from './creature-keywords.js';
 import { validateFamiliarLink, buildFamiliarLink, familiarBackLink, familiarLinksOf } from './familiars.js';
+import { hasManyHeads, headRegistryOf, applyHeadCritical, restoreHead, HEAD_STATES } from './creature-heads.js';
 const withV5 = (participant, change) => ({ ...participant, extensions: { ...(participant.extensions || {}), v5: change(participant.extensions?.v5 || {}) } });
 import { validatePrayerSLCaps,getPrayerSLModifiers } from './v5-divine-prayer-caps.js';
 import { previewV5BrokenEscape, isV5BrokenEscapeActionBlocked, BROKEN_ESCAPE_SOURCE, BROKEN_ESCAPE_RULE_VERSION } from './v5-broken-escape.js';
@@ -2276,6 +2277,18 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       if (!link || link.system !== 'animal') return { ok: false, reason: 'unknown-link', message: 'Lien d’animal introuvable.' };
       const result = api.executeCommand('set-familiar-range', draft => ({ ...draft, combat: { ...draft.combat, participants: (draft.combat?.participants || []).map(item => item.id === masterId
         ? withV5(item, v5 => ({ ...v5, familiarLinks: (v5.familiarLinks || []).map(row => row.id === linkId ? { ...row, inRange: inRange === true } : row) })) : item) } }));
+      return typeof result?.then === 'function' ? result.then(done => ({ ...done, ok: true })) : { ...result, ok: true };
+    },
+    /** Plusieurs têtes : état d'une tête (Blessure Critique à la tête, guérison), posé par le MJ ; le registre est gardé dans `extensions.v5.heads`. */
+    setHeadState(participantId, headId, state) {
+      const participant = combat.participants.get(participantId);
+      if (!hasManyHeads(participant)) return { ok: false, reason: 'no-heads', message: 'Ce participant n’a pas le Trait Plusieurs têtes.' };
+      if (!HEAD_STATES.includes(state)) return { ok: false, reason: 'bad-state', message: 'État de tête inconnu.' };
+      const registry = headRegistryOf(participant);
+      const next = state === 'healthy' ? restoreHead(registry, headId) : applyHeadCritical(participant, registry, state, headId);
+      if (next.unresolved?.length) return { ok: false, reason: 'refused', message: next.unresolved.join(' ') };
+      const heads = state === 'healthy' ? next : next.registry;
+      const result = api.executeCommand('set-head-state', draft => ({ ...draft, combat: { ...draft.combat, participants: (draft.combat?.participants || []).map(item => (item.id === participantId ? withV5(item, v5 => ({ ...v5, heads })) : item)) } }));
       return typeof result?.then === 'function' ? result.then(done => ({ ...done, ok: true })) : { ...result, ok: true };
     },
     listPersistentCharacters() { return cloneValue(persistentCharacters); },
