@@ -647,6 +647,9 @@
      "ref": "E0-T-056"
     }
    ],
+   "notes": [
+    "Option: Remove Bestial, Territorial, & Trained — Add 15 Fel"
+   ],
    "abilities": [
     "E0-T-099"
    ],
@@ -688,6 +691,14 @@
      "name": "Fangs",
      "damage": 8,
      "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Melee (Fangs)",
+     "nameFr": "Corps à corps (Fangs)",
+     "frUnverified": true,
+     "value": 75
     }
    ],
    "traits": [
@@ -817,6 +828,10 @@
      "name": "Tail",
      "rating": "+9",
      "ref": "E0-T-054"
+    },
+    {
+     "name": "Territorial",
+     "ref": "E0-T-056"
     }
    ],
    "keywords": [
@@ -997,6 +1012,9 @@
      "ref": "E0-T-060"
     }
    ],
+   "notes": [
+    "Option: Remove Bestial — Add +20 Fel"
+   ],
    "abilities": [
     "E0-T-102",
     "E0-T-103"
@@ -1091,6 +1109,30 @@
      "ref": "E0-T-009"
     }
    ],
+   "optionalTraits": [
+    {
+     "name": "Corrosive Blood",
+     "ref": "E0-T-015"
+    },
+    {
+     "name": "Horns",
+     "rating": "+9",
+     "param": "Hooked Spines",
+     "ref": "E0-T-028"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Size",
+     "param": "Enormous, Monstrous",
+     "ref": "E0-T-045"
+    }
+   ],
+   "specialRules": [
+    "Slime"
+   ],
    "abilities": [
     "E0-T-104",
     "E0-T-105",
@@ -1172,6 +1214,11 @@
     {
      "name": "Territorial",
      "ref": "E0-T-056"
+    },
+    {
+     "name": "Trained",
+     "param": "Drive",
+     "ref": "E0-T-060"
     }
    ],
    "abilities": [
@@ -1411,6 +1458,15 @@
      "name": "Infected",
      "ref": "E0-T-032"
     }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Stealthy",
+     "ref": "E0-T-050"
+    }
+   ],
+   "notes": [
+    "Option: Ranged (Net 3) (6)"
    ],
    "keywords": [
     "gobelin"
@@ -1780,7 +1836,15 @@
     {
      "name": "Horns",
      "ref": "E0-T-028"
+    },
+    {
+     "name": "Trained",
+     "param": "Broken, Guard, Magic, Mount, War",
+     "ref": "E0-T-060"
     }
+   ],
+   "notes": [
+    "Option: Remove Bestial, Change Size to Large, Add +20 to I, Int, and Fel — Change W to 42 & add Stealth (Rural) 65"
    ],
    "abilities": [
     "E0-T-111"
@@ -2358,6 +2422,10 @@
     {
      "name": "Infestation",
      "ref": "E0-T-033"
+    },
+    {
+     "name": "Mutation",
+     "ref": "E0-T-040"
     }
    ],
    "abilities": [
@@ -3087,6 +3155,9 @@
      "ref": "E0-T-042"
     }
    ],
+   "notes": [
+    "Option: Remove Stupid — Add Stealthy"
+   ],
    "abilities": [
     "E0-T-123",
     "E0-T-124"
@@ -3402,6 +3473,9 @@
      "ref": "E0-T-057"
     }
    ],
+   "optionalSpecialRules": [
+    "Fanatical Cultists"
+   ],
    "abilities": [
     "E0-T-129"
    ],
@@ -3443,6 +3517,19 @@
      "name": "Hidden Maw",
      "damage": 12,
      "trait": "Bite"
+    },
+    {
+     "name": "Teeth",
+     "damage": 10,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Melee (Teeth)",
+     "nameFr": "Corps à corps (Teeth)",
+     "frUnverified": true,
+     "value": 75
     }
    ],
    "traits": [
@@ -5387,6 +5474,13 @@
      "trait": "Weapon"
     }
    ],
+   "skills": [
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 75
+    }
+   ],
    "traits": [
     {
      "name": "Arboreal",
@@ -5491,6 +5585,24 @@
      "name": "Bite",
      "damage": 9,
      "trait": "Bite"
+    },
+    {
+     "name": "Claws",
+     "damage": 10,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Melee (Claws)",
+     "nameFr": "Corps à corps (Claws)",
+     "frUnverified": true,
+     "value": 65
+    },
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 62
     }
    ],
    "traits": [
@@ -5626,9 +5738,16 @@
    ],
    "optionalTraits": [
     {
+     "name": "Magic Resistance",
+     "ref": "E0-T-037"
+    },
+    {
      "name": "Painless",
      "ref": "E0-T-042"
     }
+   ],
+   "optionalSpecialRules": [
+    "Cult (Fanatical or Chaos)"
    ],
    "abilities": [
     "E0-T-150"
@@ -5773,12 +5892,22 @@
    ],
    "optionalTraits": [
     {
+     "name": "Armour",
+     "rating": "1-3",
+     "ref": "E0-T-070"
+    },
+    {
      "name": "Bite",
      "ref": "E0-T-006"
     },
     {
      "name": "Distracting",
      "ref": "E0-T-020"
+    },
+    {
+     "name": "Fear",
+     "rating": "1-2",
+     "ref": "E0-T-022"
     },
     {
      "name": "Fury",
@@ -6265,6 +6394,13 @@
      "ranged": true
     },
     {
+     "name": "Warplock Pistol",
+     "damage": 9,
+     "trait": "Ranged",
+     "ranged": true,
+     "optional": true
+    },
+    {
      "name": "Warp Blade",
      "damage": 10,
      "trait": "Weapon"
@@ -6281,6 +6417,10 @@
      "name": "Disease",
      "param": "Ratte Fever",
      "ref": "E0-T-019"
+    },
+    {
+     "name": "Mutation",
+     "ref": "E0-T-040"
     }
    ],
    "abilities": [

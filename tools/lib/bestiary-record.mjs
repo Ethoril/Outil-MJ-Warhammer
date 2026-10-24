@@ -5,7 +5,7 @@
 import { readFileSync } from 'node:fs';
 import { SKILL_GROUPS, SKILL_GROUP_ALIASES, skillNameFr } from './bestiary-glossary.mjs';
 import { BASE_REFERENTIAL, keywordAncestors, normalizeKeywordText, resolveKeyword } from '../../js/core/creature-keywords.js';
-import { OPTIONAL_RULES_KEPT, TRAITS_KEPT_AS_RULES, TRAPPING_JOINS, TRAPPING_TRIMS } from './bestiary-overrides.mjs';
+import { OPTIONAL_NOTES, OPTIONAL_RULES_KEPT, TRAITS_KEPT_AS_RULES, TRAPPING_JOINS, TRAPPING_TRIMS } from './bestiary-overrides.mjs';
 
 const CARACS = ['M', 'CC', 'CT', 'F', 'E', 'I', 'Ag', 'Dex', 'Int', 'FM', 'Soc'];
 const ATTACK_TRAITS = new Set(['Weapon', 'Bite', 'Horns', 'Tail', 'Tail Attack', 'Claws', 'Claw', '2 Claws', 'Beak', 'Slam', 'Tongue Attack', 'Tentacles', 'Ranged', 'Creature Weapons']);
@@ -98,7 +98,7 @@ export function cleanTraits(traits = [], { canonical, traitRefs }) {
     const seeElsewhere = /^see\s/i.test(trait.param || '');
     const param = named ? named[2].replace(/^./, letter => letter.toUpperCase()) : (trait.param && !seeElsewhere ? trait.param : null);
     const count = trait.count || (named?.[1] ? Number(named[1]) : 0);
-    kept.push({ name, ...(trait.rating !== undefined ? { rating: trait.rating } : {}), ...(param ? { param } : {}), ...(trait.printed !== undefined ? { printed: trait.printed } : {}), ...(count ? { count } : {}), ...(trait.weapons ? { weapons: trait.weapons } : {}), ...(trait.qualities?.length ? { qualities: trait.qualities } : {}), ...(trait.conditional ? { conditional: true } : {}), ...(traitRefs.get(name) ? { ref: traitRefs.get(name) } : {}) });
+    kept.push({ name, ...(trait.rating !== undefined ? { rating: trait.rating } : {}), ...(param ? { param } : {}), ...(trait.printed !== undefined ? { printed: trait.printed } : {}), ...(count ? { count } : {}), ...(trait.weapons ? { weapons: trait.weapons } : {}), ...(trait.qualities?.length ? { qualities: trait.qualities } : {}), ...(trait.conditional ? { conditional: true } : {}), ...(trait.alternative ? { alternative: true } : {}), ...(traitRefs.get(name) ? { ref: traitRefs.get(name) } : {}) });
   }
   return { kept, dropped };
 }
@@ -131,7 +131,7 @@ export function buildAttacks(extracted, traitList) {
     if (trait.weapons) { for (const weapon of trait.weapons) attacks.push({ name: weapon.name, damage: weapon.damage, trait: 'Weapon' }); continue; }
     const damage = number(trait.rating);
     if (damage === null || Number.isNaN(damage)) continue;
-    attacks.push({ name: trait.param || trait.name, damage, trait: trait.name, ...(trait.count ? { count: trait.count } : {}), ...(trait.qualities?.length ? { qualities: trait.qualities } : {}), ...(trait.name === 'Ranged' ? { ranged: true } : {}) });
+    attacks.push({ name: trait.param || trait.name, damage, trait: trait.name, ...(trait.count ? { count: trait.count } : {}), ...(trait.qualities?.length ? { qualities: trait.qualities } : {}), ...(trait.name === 'Ranged' ? { ranged: true } : {}), ...(trait.alternative ? { optional: true } : {}) });
   }
   // Le livre imprime parfois la même attaque deux fois (« Horns (Tusks) +10 » et « Weapon (Tusks) +10 », Krag-Breaker « Horns +13 » et « Weapon (Curling Horns) +13 ») :
   // une arme de même dégâts dont le nom est celui d'une attaque naturelle (ou finit par lui) n'est pas une seconde attaque.
@@ -243,7 +243,8 @@ export function buildRecord(extracted, entry, context) {
   const listed = traits.kept.filter(trait => !structural.has(trait.name));
   if (listed.length) record.traits = listed;
   if (optional.kept.length) record.optionalTraits = optional.kept;
-  const optionalRules = optional.dropped.filter(name => OPTIONAL_RULES_KEPT.has(name));
+  // Q40 : la précision imprimée est gardée avec le nom (« Cult (Fanatical or Chaos) »).
+  const optionalRules = (extracted.optional || []).filter(trait => trait?.name && !canonical(trait.name) && OPTIONAL_RULES_KEPT.has(trait.name)).map(trait => (trait.param ? `${trait.name} (${trait.param})` : trait.name));
   if (optionalRules.length) record.optionalSpecialRules = optionalRules;
   // Un Talent du catalogue dans la liste facultative (« Trained (…), Sixth Sense », Drakenhund L10 p. 38) n'est pas un Trait : gardé à part, jamais perdu.
   const optionalTalents = (extracted.optional || []).filter(trait => trait?.name && !canonical(trait.name) && isCatalogueTalent(canonicalTalentName(trait.name)))
@@ -259,7 +260,8 @@ export function buildRecord(extracted, entry, context) {
   if (extracted.talents?.length || traitTalents.length) record.talents = uniqueTalents;
   const trims = TRAPPING_TRIMS[entry.id] || [];
   if (extracted.trappings?.length) record.trappings = joinTrappings(extracted.trappings, TRAPPING_JOINS[entry.id]).map(item => item.replace(/^and\s+(?=[A-Z])/, '')).map(item => trims.find(name => item.startsWith(`${name} `)) ?? item).filter(item => isTrappingName(item) || (TRAPPING_JOINS[entry.id] || []).includes(item));
-  if (extracted.notes?.length) record.notes = extracted.notes;
+  const printedNotes = [...(extracted.notes || []), ...(OPTIONAL_NOTES[entry.id] || []).map(text => `Option: ${text}`)];
+  if (printedNotes.length) record.notes = printedNotes;
   if (extracted.mutations?.length) record.mutations = extracted.mutations;
   if (extracted.spells) record.spells = extracted.spells;
   const rules = [...(extracted.specialRules || []).filter(rule => rule.split(/\s+/).length <= 5 && /^[A-Z]/.test(rule) && !/[.;]/.test(rule)), ...traits.dropped.filter(name => TRAITS_KEPT_AS_RULES.has(name)).map(name => { const printed = trimmed.find(trait => trait.name === name); return printed?.param ? `${name} (${printed.param})` : name; })];

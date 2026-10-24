@@ -183,3 +183,10 @@ export const JUSTIFIED_Q34 = Object.freeze({
   'E0-P-822': { traits: 'L24 p.20 : « Prejudice (Boors) » est le Trait d\'Ursula Kopfgeld (colonne de droite) ; Josef Aufwiegler imprime seulement « Talents: Weapon (Fist) +3 ».' },
   'E0-P-836': { traits: 'L24 p.34 : « Prejudice (Rivals) » est le Trait d\'Eberhardt von Dammenblatz (colonne de gauche) ; l\'Imperial Viper imprime Armour (Scales) 1, Bestial, Cold-Blooded, Size (Small), Weapon (Fangs) +4, Venom (Hard), tous présents.' }
 });
+
+// Q40 : manques du contrôle des options (« Optional: » / « Optional Traits »), relus sur la page.
+export const JUSTIFIED_Q40 = Object.freeze({
+  'E0-P-091': { optional: 'L06 p.338 : deux profils empilés (Snotling E0-P-092 au-dessus, Crypt Ghoul dessous) ; le texte brut mêle les Compétences du Ghoul et les options « Swarm, Trained (Broken, Fetch, Guard), Venom » du Snotling, qui les a. Le Crypt Ghoul imprime « Optional Traits : Bestial, Venom (Challenging) », présents.' },
+  'E0-P-311': { optional: 'L09 p.44 : quatre profils empilés ; « Champion » est l\'option des trois autres (E0-P-312, 313, 314, qui l\'ont). Le Dark Elf E0-P-311 imprime « Optional Traits : Frenzy, Stealthy », présents.' },
+  'E0-P-687': { optional: 'L21 p.42 : le livre étiquette « Optional: » la ligne des Compétences (Athletics 41 … Track 44) puis celle de l\'équipement (Sword, Bow, Uniform, Grey surcoat, Cloak) ; les 15 compétences sont dans skills et les 5 objets dans trappings, tous présents.' }
+});

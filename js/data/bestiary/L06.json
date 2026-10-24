@@ -1831,6 +1831,10 @@
      "name": "Size",
      "param": "Enormous or Monstrous",
      "ref": "E0-T-045"
+    },
+    {
+     "name": "Territorial",
+     "ref": "E0-T-056"
     }
    ],
    "keywords": [
@@ -3061,6 +3065,12 @@
     {
      "name": "Night Vision",
      "ref": "E0-T-041"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Painless",
+     "ref": "E0-T-042"
     }
    ],
    "keywords": [
@@ -4743,6 +4753,9 @@
      "name": "Mutation",
      "ref": "E0-T-040"
     }
+   ],
+   "notes": [
+    "Optional Traits: Any Creature Traits the GM feels appropriate"
    ],
    "keywords": [
     "mutant"

@@ -5045,6 +5045,12 @@
      "ref": "E0-T-085"
     }
    ],
+   "optionalTraits": [
+    {
+     "name": "Swarm",
+     "ref": "E0-T-053"
+    }
+   ],
    "abilities": [
     "E0-T-180"
    ],
@@ -5101,6 +5107,12 @@
      "name": "Size",
      "param": "Tiny",
      "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Swarm",
+     "ref": "E0-T-053"
     }
    ],
    "abilities": [
@@ -5336,6 +5348,10 @@
     {
      "name": "Belligerent",
      "ref": "E0-T-004"
+    },
+    {
+     "name": "Swarm",
+     "ref": "E0-T-053"
     }
    ],
    "abilities": [
@@ -6051,6 +6067,12 @@
      "name": "Venom",
      "param": "Difficult",
      "ref": "E0-T-064"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Swarm",
+     "ref": "E0-T-053"
     }
    ],
    "abilities": [

@@ -187,7 +187,16 @@ export const TRAPPING_JOINS = Object.freeze({
 export const TRAITS_KEPT_AS_RULES = Object.freeze(new Set(['Animalistic Legs', 'Mark of Slaanesh', 'Coven Sorcerer', 'Prey of the Dark Prince', 'Vampiric Gaze', 'Hunger', 'Corrupt']));
 
 // Noms imprimés dans la liste facultative sans équivalent à l'inventaire (River Trolls, L26 p. 89 : « Stealth », qui est une compétence) : gardés dans `optionalSpecialRules`.
-export const OPTIONAL_RULES_KEPT = Object.freeze(new Set(['Stealth']));
+// Q40 : « Cult (Fanatical or Chaos) » (Leviathan, L11 p. 85), « Fanatical Cultists » (Fen Worm, L11 p. 52) : noms imprimés sans Trait à l'inventaire.
+export const OPTIONAL_RULES_KEPT = Object.freeze(new Set(['Stealth', 'Cult', 'Fanatical Cultists']));
+
+// Q40 : options imprimées qui modifient le profil (« Remove Bestial — Add +20 Fel ») : ni Trait ni attaque, gardées telles qu'imprimées en note du profil.
+export const OPTIONAL_NOTES = Object.freeze({
+  'E0-P-007': ['Remove Bestial, Territorial, & Trained — Add 15 Fel'],
+  'E0-P-011': ['Remove Bestial — Add +20 Fel'],
+  'E0-P-030': ['Remove Stupid — Add Stealthy'],
+  'E0-P-019': ['Remove Bestial, Change Size to Large, Add +20 to I, Int, and Fel — Change W to 42 & add Stealth (Rural) 65']
+});
 
 export const BODY_LINE_FIXES =Object.freeze({
   // Temple of Spite (L09) p. 97 : Samuril Meurlith, « Dagger » mangé par la prose de la colonne voisine (« …taking credit for Dagger (60/+5) with the Fast Quality »).

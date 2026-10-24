@@ -5,7 +5,7 @@
 import { SKILL_GROUP_ALIASES } from './bestiary-glossary.mjs';
 import { TRAIT_ALIASES } from './bestiary-complement-data.mjs';
 
-const LABEL = /\b(?:Traits Continued|Traits|Skills|Talents|Trappings|Spells|Mutations|Special Rules|Optional Traits|Optional|Armour by Location|Armour|Weapons|Equipment|Notes|Fate Points?|Miracles|Marks)\s*:/;
+const LABEL = /\b(?:Traits Continued|Traits|Skills?|Talents?|Trappings|Spells|Mutations|Special Rules|Optional Traits|Optional|Armour by Location|Armour|Weapons|Equipment|Notes|Fate Points?|Miracles|Marks)\s*:/;
 const HEADER = / M WS BS S T I Ag[i]? Dex Int WP Fel(?: W)?/;
 
 /** Texte brut normalisé : tirets typographiques, césures « Two- handed » recollées, espaces simples. */
@@ -48,13 +48,15 @@ const group = name => letters(SKILL_GROUP_ALIASES[name.trim()] || name.trim());
 
 /** Clés « groupe|spécialisation|valeur » des compétences imprimées : « Melee (Basic 76) », « Lore (Art 91, Law 96) », « Dodge 98 », « Stealth (Urban) 88 ». */
 export function printedSkills(block, catalogueNames = new Set()) {
-  const text = segment(block, 'Skills');
+  // Q40 : « Skill: Melee (Fangs) 75 » (singulier, L11) est la même rubrique.
+  const text = segment(block, 'Skills?');
   if (text === null) return [];
   const found = [];
   // « Lore (… Naggaroth 110) Melee (Basic) 75 » (L09 p. 87) : virgule oubliée par le livre après une parenthèse, comme `readSkills`.
   for (const raw of splitTopLevel(text.replace(/(\d)\)\s+(?=[A-Z][a-z]+(?:\s[A-Z][a-z]+)?(?:\s*\(|\s+\d))/g, '$1), '))) {
     // « Ride Horse 42 » (L21 p. 41) : parenthèses oubliées par le livre, même lecture que `readSkills`.
-    const item = raw.replace(/^Ride ([A-Z][a-z]+) (?=\d)/, 'Ride ($1) ');
+    // Q40 : « Stealth (Rural) 75 (+5 SL for Arboreal) » : le commentaire de bonus de DR qui suit la valeur n'est pas une spécialisation.
+    const item = raw.replace(/^Ride ([A-Z][a-z]+) (?=\d)/, 'Ride ($1) ').replace(/\s*\(\+\d+ SL[^)]*\)\s*$/, '');
     // Un talent à rang imprimé dans la ligne des compétences (« Dual Wielder 2 », Lokhir L07) n'est pas une compétence.
     const ranked = /^(.+?)\s+(\d)$/.exec(item);
     if (ranked && catalogueNames.has(ranked[1].toLowerCase())) continue;
@@ -114,7 +116,7 @@ function chainNames(item, variants) {
 
 /** Noms du catalogue (anglais) présents dans la rubrique « Talents » du bloc. Le texte voisin collé au dernier talent ne compte que par son début. */
 export function printedTalents(block, catalogueNames) {
-  const text = segment(block, 'Talents');
+  const text = segment(block, 'Talents?');
   if (text === null) return [];
   const variants = nameVariants(catalogueNames);
   const found = [];
@@ -144,11 +146,15 @@ const ATTACK = /^(?:(\d+)\s*[×xX-]?\s*)?([A-Za-z][A-Za-z' -]*?)\s*(?:\(([^)]*)\
 
 /** Attaques imprimées dans la rubrique « Traits » : « Bite +6 », « 2 Claws +7 », « 8 × Tentacles +9 », « Weapon (Sword) +9 (Impale) », « Creature Weapons (Beak +9, 2 Claws +7) ». */
 export function printedAttacks(block) {
-  const text = segment(block, 'Traits');
+  // Q40 : la ligne « Attack Traits: » (V4) porte les attaques de la plupart des profils ; « Traits » s'arrête à son intitulé.
+  const traitsText = segment(block, 'Traits');
+  const attackText = segment(block, 'Attack Traits');
+  const text = traitsText === null ? attackText : (attackText === null ? traitsText : `${traitsText.replace(/\s+Attack$/, '')}, ${attackText}`);
   if (text === null || isDescribed(text)) return [];
   const found = [];
   const add = (count, name, damage, label) => found.push({ label, key: `${letters(name)}|${damage}|${count || 1}` });
-  for (const item of splitTopLevel(text)) {
+  // Q40 : « Ranged (Warp Blade) +7 (48) or Ranged (Warplock Pistol) +9 (20) » : l'arme après « or » est une attaque imprimée.
+  for (const item of splitTopLevel(text).flatMap(part => part.split(/\s+or\s+(?=(?:Ranged|Weapon)\b)/))) {
     // « Armour +2 AP All Locations » (L10) est l'armure du profil, pas une attaque.
     if (/^Armour\s+\+\d+\s+AP\b/.test(item)) continue;
     const creature = /^Creature Weapons\s*\((.*)\)$/.exec(item);
@@ -158,12 +164,21 @@ export function printedAttacks(block) {
     }
     // « Weapon +6 (Claws) » (L17 p. 213, L23 p. 86) : sans nom avant les dégâts, la parenthèse est le nom de l'arme.
     const m = ATTACK.exec(item.replace(/^Weapon\s*([+-]\d+)\s*\(([A-Za-z][^()]*)\)$/, 'Weapon ($2) $1'));
-    if (m) add(Number(m[1]), m[3] ? m[3] : m[2].replace(/ Attack$/, ''), m[4], m[0]);
+    // Q40 : « Breath (Slime) +5 » : la parenthèse est le type du Souffle, pas le nom de l'arme ; un début en minuscule est de la prose de la ligne « Attack Traits ».
+    if (m && /^[A-Z0-9]/.test(item)) add(Number(m[1]), m[3] && !/^Breath$/i.test(m[2].trim()) ? m[3] : m[2].replace(/ Attack$/, ''), m[4], m[0]);
   }
   return found;
 }
 
-export const recordAttackKeys = record => new Set((record.attacks || []).map(attack => `${letters(attack.name)}|${attack.damage}|${attack.count || 1}`));
+// Q40 : « Tongue Attack » et « Tongue » sont la même attaque ; « Weapon (Curling Horns) +10 » est la même attaque que « Horns +10 » (jumelle, même dégâts, nom qui se termine par celui de l'attaque naturelle).
+export const recordAttackKeys = record => {
+  const keys = new Set();
+  for (const attack of record.attacks || []) {
+    keys.add(`${letters(attack.name)}|${attack.damage}|${attack.count || 1}`);
+    keys.add(`${letters(attack.name).replace(/attack$/, '')}|${attack.damage}|${attack.count || 1}`);
+  }
+  return keys;
+};
 
 /** Traits imprimés (hors attaques « +N » et armure) sous la forme { label, key }. */
 export function printedTraits(block) {
@@ -195,6 +210,48 @@ export function recordTraitKeys(record) {
     if (name === 'Size' && trait?.param) keys.add(traitKey(trait.param));
   }
   return keys;
+}
+
+/**
+ * Q40 : Traits facultatifs imprimés (« Optional Traits: … », « Optional: … ») : chaque élément, dernier compris, doit figurer dans le profil
+ * (Trait facultatif, règle, talent, attaque ou note). Un élément « Swarm Posterior Flame » (nom suivi du titre de sa règle) compte par son début.
+ */
+export function printedOptional(block) {
+  const found = [];
+  for (const label of ['Optional Traits', 'Optional']) {
+    const text = segment(block, label);
+    if (text === null) continue;
+    for (const raw of splitTopLevel(text).slice(0, 30)) {
+      // « Swarm Posterior Flame: The Fireleech will… » : nom du Trait suivi du titre de sa règle ; ce qui suit le deux-points est de la prose et clôt la liste.
+      const titled = /^([^:()]{3,60}(?:\([^)]*\))?[^:()]{0,20}):\s/.exec(raw);
+      if (titled && raw.length > 60) { found.push({ label: titled[1].trim(), key: traitKey(titled[1].replace(/\(.*?\)/g, ' ').replace(/[\d+]+/g, ' ').replace(/\s+/g, ' ').trim()), words: titled[1].trim().split(/\s+/) }); break; }
+      if (/^[a-z]/.test(raw) || raw.length > 60) break;
+      // « & Trained - Add 15 Fel », « Remove Bestial - Add +20 Fel » : l'élément est ce qui précède le tiret ; « & » initial retiré.
+      const words = (raw.replace(/^&\s*/, '').split(/\s-\s/)[0].match(/\([^()]*\)|\S+/g) || []);
+      // La prose voisine (minuscule, guillemet ouvrant « ` », numéro de page romain ou chiffré, mot qui suit un « +N ») met fin à l'élément.
+      const stop = words.findIndex((word, index) => index > 0 && (/^[a-z`‘]/.test(word) && !/^(?:of|and|to|in|from|or)$/.test(word) || /^(?:[IVXL]{2,}|\d{3})$/.test(word) || (index > words.findIndex(other => /\+\d+$/.test(other)) && words.some(other => /\+\d+$/.test(other)) && !word.startsWith('('))));
+      const item = (stop > 0 ? words.slice(0, stop) : words).join(' ').replace(/\.$/, '');
+      // Les options qui modifient le profil (« Remove Bestial », « Change Size to Large », « Add +20 to I ») sont gardées en note (OPTIONAL_NOTES).
+      if (/^(?:Remove|Change|Add)\b/.test(item)) { found.push({ label: item, key: `note:${letters(item)}`, words: [item] }); continue; }
+      const name = item.replace(/^\d+\s*[x×]\s*/i, '').replace(/\(.*?\)/g, ' ').replace(/\*/g, '').replace(/[\d+]+/g, ' ').replace(/[-–]\s*/g, ' ').replace(/\s+/g, ' ').trim();
+      if (name.length < 3 || name.length > 40) continue;
+      found.push({ label: item, key: traitKey(name), words: name.split(' ') });
+    }
+  }
+  return found;
+}
+
+/** Noms (clés) de tout ce que le profil garde pour ses options : Traits facultatifs, règles, talents, attaques, notes. */
+export function recordOptionalKeys(record) {
+  const names = [];
+  for (const trait of [...(record.optionalTraits || []), ...(record.optionalSpecialRules || []), ...(record.optionalTalents || []), ...(record.traits || []), ...(record.talents || [])]) names.push(typeof trait === 'string' ? trait : trait?.name);
+  for (const attack of record.attacks || []) names.push(attack.name, attack.trait);
+  return { keys: new Set(names.filter(Boolean).map(name => traitKey(String(name).replace(/\(.*?\)/g, ' ').replace(/[\d+]+/g, ' ').trim()))), notes: letters((record.notes || []).join(' ')) };
+}
+
+export function optionalGaps(record, block) {
+  const { keys, notes } = recordOptionalKeys(record);
+  return printedOptional(block).filter(item => !keys.has(item.key) && !(item.words.length > 1 && keys.has(traitKey(item.words[0]))) && !notes.includes(letters(item.label))).map(item => item.label);
 }
 
 /** Équipement imprimé (rubrique « Trappings »), élément par élément ; s'arrête à la première phrase de la colonne voisine. */
@@ -256,11 +313,12 @@ export function extendedGaps(record, block) {
   const haveSpells = recordSpellKeys(record);
   return {
     // Q27c : un Souffle « Breath +10 (Poison) » est gardé comme Trait (rating +10), pas comme action : il compte comme présent.
-    attacks: printedAttacks(block).filter(attack => !haveAttacks.has(attack.key) && !haveTraitRatings.has(attack.key.split('|').slice(0, 2).join('|'))).map(attack => attack.label),
+    attacks: printedAttacks(block).filter(attack => !haveAttacks.has(attack.key) && !haveTraitRatings.has(attack.key.split('|').slice(0, 2).join('|')) && !(record.attacks || []).some(other => attack.key.split('|')[1] === String(other.damage) && attack.key.split('|')[0].endsWith(letters(other.name)))).map(attack => attack.label),
     traits: printedTraits(block).filter(trait => !haveTraits.has(trait.key) && !attackNames.has(trait.key)).map(trait => trait.label),
     trappings: printedTrappings(block).filter(item => !trappings.some(have => have.includes(item.key) || (have.length >= 4 && item.key.includes(have)))).map(item => item.label),
     spells: printedSpells(block).filter(spell => !haveSpells.has(spell.key)).map(spell => spell.label),
-    trappingNoise: trappingNoise(record)
+    trappingNoise: trappingNoise(record),
+    optional: optionalGaps(record, block)
   };
 }
 

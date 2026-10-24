@@ -7350,6 +7350,11 @@
     {
      "name": "Territorial",
      "ref": "E0-T-056"
+    },
+    {
+     "name": "Trained",
+     "param": "War",
+     "ref": "E0-T-060"
     }
    ],
    "keywords": [

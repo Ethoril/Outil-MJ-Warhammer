@@ -13,7 +13,7 @@ export function readStats(cells) {
   return stats;
 }
 
-const RATING = /^(?<name>[^()]*?[A-Za-z!'’.\- ]+?)(?:\s*\((?<param>[^]*)\))?(?:\s+(?<rating>[+-]?\d+\+?))?(?:\s*\((?<printed>\d+)\))?$/;
+const RATING = /^(?<name>[^()]*?[A-Za-z!'’.\- ]+?)(?:\s*\((?<param>[^]*)\))?(?:\s+(?<rating>[+-]?\d+(?:[-–�]\d+)?\+?))?(?:\s*\((?<printed>\d+)\))?$/;
 
 /** Un élément de liste de Traits : « Armour 3 (7) », « Weapon (Spear) +8 », « Size (Large) », « Web 40 », « Bestial ». */
 export function readTraitItem(text) {
@@ -94,7 +94,8 @@ function readTraitItemPlain(text) {
   const { name, param, rating, printed } = found.groups;
   const trait = { name: clean(name) };
   if (param) trait.param = clean(param);
-  if (rating !== undefined) trait.rating = rating;
+  // « Armour 1–3 » (Siren, L11 p. 86) : intervalle imprimé, tiret rendu en U+FFFD par le PDF.
+  if (rating !== undefined) trait.rating = rating.replace(/[–�]/g, '-');
   if (printed !== undefined) trait.printed = Number(printed);
   // « Fly (80) », « Vol (80) » : une précision purement numérique est la valeur du Trait.
   if (trait.param && /^\d+\+?$/.test(trait.param) && trait.rating === undefined) { trait.rating = trait.param; delete trait.param; }
@@ -283,7 +284,12 @@ export function listTraits(text, mode, dictionary, key) {
     return out;
   }
   const rules = [];
-  for (const item of splitList(text)) {
+  // « Ranged (Warp Blade) +7 (48) or Ranged (Warplock Pistol) +9 (20) » (Warlock Engineer, L11 p. 95) : l'arme après « or » est une alternative, lue comme une attaque facultative.
+  const entries = splitList(text).flatMap(item => {
+    const parts = item.split(/\s+or\s+(?=(?:Ranged|Weapon)\s*\()/);
+    return parts.map((part, index) => ({ item: part, alternative: index > 0 }));
+  });
+  for (const { item, alternative } of entries) {
     // Un « : » dans une parenthèse (« Acute Sense (Vision: as Character Talent) ») fait partie du Trait, pas d'une règle spéciale.
     // « Venom Spiteful � Drakwald Mancatchers… » (L11 p. 13) : la règle spéciale s'ouvre sur un tiret au lieu d'un deux-points ; le Trait qui la précède est celui du dictionnaire.
     const masked = item.replace(/\([^)]*\)/g, group => ' '.repeat(group.length));
@@ -302,7 +308,7 @@ export function listTraits(text, mode, dictionary, key) {
       break;
     }
     const trait = readTraitItem(item);
-    if (trait) out[key].push(trait);
+    if (trait) out[key].push(alternative ? { ...trait, alternative: true } : trait);
   }
   if (rules.length) out.specialRules = rules;
   return out;
@@ -360,14 +366,34 @@ export function parseBlock(block, { traitDictionary = new Set(), talentDictionar
   // « Breath (Fire or Poison): See the WFRP Core Rulebook… » dans la ligne Attacks (V5, War Hydra L09 p. 47, Dragon L06 p. 330) : le Souffle est un Trait, sans dégâts imprimés.
   const breathLine = /\bBreath\s*\(([^()]*)\)/.exec(sections.Attacks || '');
   if (breathLine && !(profile.traits || []).some(trait => trait.name === 'Breath')) profile.traits = [...(profile.traits || []), { name: 'Breath', param: clean(breathLine[1]) }];
+  // « … beat them senseless for later torture. Ranged (Net 3) (6) » (Night Goblins, L11 p. 28) : arme facultative imprimée dans la prose, sans dégâts (Net 3, portée 6) ; gardée en note du profil, jamais comme attaque inventée.
+  const printedOption = sections['Attack Traits'] === undefined ? null : /\.\s+[^.]*?\b(Ranged \([A-Za-z -]+ \d+\) \(\d+\))/.exec(sections['Attack Traits']);
+  if (printedOption) profile.notes = [...(profile.notes || []), `Option: ${printedOption[1]}`];
   if (sections['Attack Traits'] !== undefined) Object.assign(profile, listTraits(sections['Attack Traits'], mode, traitDictionary, 'attackTraits'));
   const optional = sections['Optional Traits'] ?? sections.Optional ?? sections.Options;
   // « … Trained (Broken, Drive) Note: The small but vicious dog… » (L06 p. 325) : la note qui suit la liste n'en fait pas partie.
   // « Trained (Broken, Guard) When facing an especially irksome… » (Drakwald Mancatcher, L11 p. 13) : la prose qui suit la dernière parenthèse n'est pas un Trait.
-  const optionalList = optional === undefined ? '' : optional.replace(/\s+Note:.*$/, '').replace(/\)\s+(?=[A-Z][a-z]+\s+[a-z]+\s+[a-z]+).*$/, ')');
+  // « Optional: Stealthy Before a Night Goblin tribe commits… » (L11 p. 28), « …, Mutation The Warlock Engineers that lead… » (L11 p. 95) : le dernier nom, sans parenthèse, est suivi de la prose voisine.
+  // « Optional: Swarm Posterior Flame: The Fireleech will… » (L07 p. 168) : la règle spéciale d'un Trait facultatif suit la liste ; la liste s'arrête au nom du dictionnaire qui précède le titre de la règle.
+  const optionalHead = (() => {
+    if (optional === undefined || !traitDictionary.size) return optional;
+    const masked = optional.replace(/\([^)]*\)/g, group => ' '.repeat(group.length));
+    const colon = masked.indexOf(':');
+    if (colon < 0) return optional;
+    const items = splitList(optional.slice(0, colon));
+    const last = items.pop() || '';
+    const known = [...traitDictionary].filter(name => last.startsWith(`${name} `) && /^[A-Z][A-Za-z'’ -]*$/.test(last.slice(name.length + 1))).sort((a, b) => b.length - a.length)[0];
+    return known ? [...items, known].join(', ') : optional;
+  })();
+  // « …, Territorial, Trained (War). » (Carrion, L26 p. 118) : le point final de la liste ne fait pas partie du dernier Trait.
+  // « Trained (Broken, Guard, Magic, Mount, War) Remove Bestial, Change Size… » (Wyvern, L11 p. 32) : virgule oubliée par le livre avant une option « Remove ».
+  const optionalList = optionalHead === undefined ? '' : optionalHead.replace(/\)\s+(?=Remove\b)/, '), ').replace(/\s+Note:.*$/, '').replace(/\)\s+(?=[A-Z][a-z]+\s+[a-z]+\s+[a-z]+).*$/, ')').replace(/(^|,\s*)([A-Z][A-Za-z'’-]+(?: [A-Z][A-Za-z'’-]+)??)\s+(?=(?:[`‘]\w+|[A-Z][a-z]+\s+[a-z]+\s+[a-z]+\s+[a-z]+|[A-Z][A-Za-z']+(?:\s+[A-Z][A-Za-z']+){0,3}\s+(?:are|is|was|were|has|have|can|will|may)\s+[a-z]+|(?:The|A|An|Before|After|When|While|If|Some|Many|Most|These|Those|This|That|In|On|At|For|With|Each|All|Any|Only|Once|Although|Unlike)\s+[A-Za-z]+\s+[A-Za-z]+)).*$/, '$1$2');
   // « Options: Three of the Plague Monks are suffering from Foaming Lungrot… » (Plague Monk, L16 p. 90) : de la prose, pas une liste de Traits ; gardée en note du profil.
   const optionalProse = optional !== undefined && sections.Options !== undefined && /^(?:[A-Z][a-z]+ (?:of|are|is|may|can|have|has)\b|Unless\b)/.test(optionalList);
-  if (optional !== undefined && !optionalProse) profile.optional = splitList(optionalList).map(readTraitItem).filter(Boolean);
+  // « Any Creature Traits the GM feels appropriate » (Mutant, L06 p. 347) : consigne imprimée, pas un Trait ; gardée en note du profil.
+  const optionalAny = optional !== undefined && /^Any\b[^,]*\bthe GM\b/.test(optionalList);
+  if (optionalAny) profile.notes = [...(profile.notes || []), `Optional Traits: ${clean(optionalList)}`];
+  if (optional !== undefined && !optionalProse && !optionalAny) profile.optional = splitList(optionalList.replace(/\.\s*$/, '')).map(readTraitItem).filter(Boolean);
   if (optionalProse) profile.notes = [...(profile.notes || []), `Options: ${clean(optionalList)}`];
   // Q34a : la note imprimée (Traits du chien de ratier, L06 p. 325) est gardée en note du profil, jamais perdue.
   const optionalNote = optional === undefined ? null : /\s+(Note:.*)$/.exec(optional);

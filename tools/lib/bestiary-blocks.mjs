@@ -122,7 +122,9 @@ export function pageBlocks(pageText) {
       if (!atGutter) {
         // Profils côte à côte (L04 p. 103, Outlaw : « Candles and 5 Matches ») : un nombre de 1-2 chiffres qui déborde de la marge de 4 colonnes sur le voisin reste à son profil.
         const digits = right === Infinity ? null : /^ ?\d{1,2}(?= {2})/.exec(text.slice(right));
-        return text.slice(left, right === Infinity ? undefined : right + (digits ? digits[0].length : 0));
+        // Mot de la colonne de gauche coupé par la marge (Razorgor, L11 p. 19 : « Territori|al ») : la fin du mot (3 caractères au plus) est gardée.
+        const tail = right === Infinity || digits || !text[right - 1] || text[right - 1] === ' ' ? null : /^\S{1,3}(?=\s|$)/.exec(text.slice(right));
+        return text.slice(left, right === Infinity ? undefined : right + (digits ? digits[0].length : 0) + (tail ? tail[0].length : 0));
       }
       // Gouttière tombée dans un mot de la colonne de gauche (« Stone », « 56, ») : le mot est gardé entier (3 caractères au plus).
       const spill = /^\S{1,3}(?=\s|$)/.exec(text.slice(right));
@@ -239,7 +241,17 @@ export function pageBlocks(pageText) {
       const amputations = blank === 1 && /^Amputations:/.test(text) && body.some(line => /^Talents:/.test(line));
       // « Marks: Mark of Hysh, Stoicism » (Magiciens, L17) : ligne des Marques, séparée de l'équipement par un blanc.
       const marksLine = blank === 1 && /^(?:Marks:|Trappings:|Note: [A-Z][a-z]+'s (?:library|grimoire))/.test(text) && body.some(line => /^(?:Talents|Trappings|Spells):/.test(line));
-      if (!v5Block && blank && !SECTION_START.test(text) && !amputations && !marksLine && !spaced && !skillsTail && !ruleStart && !starNote &&!wealthOpening && !trappingsList && !(BARE_LABEL.test(body[body.length - 1] || '') && blank <= 2)) break;
+      // Traits facultatifs en fin de colonne, sous les paragraphes de règle des Traits (Dread Maw, L11 p. 23 : « Slime: … » puis « Optional Traits: … ») : seule la ligne d'étiquette qui suit dans la même colonne, sans autre profil ni étiquette entre, rattache ces paragraphes au bloc.
+      const optionalAhead = !v5Block && blank >= 1 && !SECTION_START.test(text) && body.some(line => /^Attack Traits:/.test(line)) && !body.some(line => /^(?:Skills|Talents|Trappings|Optional Traits):/.test(line)) && (() => {
+        for (let j = k + 1; j < Math.min(lines.length, k + 70); j += 1) {
+          if (heads.some(other => other !== head && other.line === j && other.start < rightLimit && other.end > left)) return false;
+          const ahead = clean(stripBleed(windowOf(lines[j])));
+          if (/^Optional Traits:/.test(ahead)) return true;
+          if (/^(?:Traits|Attack Traits|Skills|Talents|Trappings):/.test(ahead) || (isTitleText(ahead) && !SECTION_START.test(ahead))) return false;
+        }
+        return false;
+      })();
+      if (!v5Block && blank && !SECTION_START.test(text) && !optionalAhead && !amputations && !marksLine && !spaced && !skillsTail && !ruleStart && !starNote &&!wealthOpening && !trappingsList && !(BARE_LABEL.test(body[body.length - 1] || '') && blank <= 2)) break;
       // Titre d'un bloc suivant (dans la même fenêtre) : fin du corps.
       if (isTitleText(text) && lines.slice(k + 1, k + 4).some((_, d) => heads.some(other => other.line === k + 1 + d && other.start >= left - 8 && other.start < rightLimit))) break;
       blank = 0;
@@ -258,7 +270,7 @@ export function pageBlocks(pageText) {
 }
 
 // V4 : « Traits: … Skills: … » (étiquette suivie de deux-points, n'importe où dans le texte). V5 : étiquette seule en début de ligne.
-const V4_LABELS_BASE = ['Yenlui State', 'Obsession', 'Attack Traits', 'Optional Traits', 'Traits', 'Skills', 'Talents?', 'Trappings', 'Possessions', 'Spells', 'Petty', 'Arcane(?: Magic)? and Lore(?: Spells)?', 'Arcane', '(?:Arcane|Petty Magic) Spells', '[^\\s:]+ Marsh Magic', 'Little Waaagh!', 'Lore of the Big Waaagh!', 'Lore of [A-Z][a-z]+ Spells', '(?:Petty|Witchcraft|Daemonology|Necromancy|Hedgecraft|Chaos) Spells','Mutations', 'Optional', 'Petty Magic', 'Arcane Magic', 'Fate Points?', 'Amputations', 'Marks', 'Note', 'Miracles', 'Armour by Location', 'Special Rules'];
+const V4_LABELS_BASE = ['Yenlui State', 'Obsession', 'Attack Traits', 'Optional Traits', 'Traits', 'Skills?', 'Talents?', 'Trappings', 'Possessions', 'Spells', 'Petty', 'Arcane(?: Magic)? and Lore(?: Spells)?', 'Arcane', '(?:Arcane|Petty Magic) Spells', '[^\\s:]+ Marsh Magic', 'Little Waaagh!', 'Lore of the Big Waaagh!', 'Lore of [A-Z][a-z]+ Spells', '(?:Petty|Witchcraft|Daemonology|Necromancy|Hedgecraft|Chaos) Spells','Mutations', 'Optional', 'Petty Magic', 'Arcane Magic', 'Fate Points?', 'Amputations', 'Marks', 'Notes?', 'Miracles', 'Armour by Location', 'Special Rules'];
 const LORE_PATTERNS = ['Lore of [A-Z][a-z]+', 'Magic of [A-Z][a-z]+', 'High Magic'];
 // « Traits*: » (L01 p. 79) : Traits conditionnels, la note à astérisque suit ; l'astérisque est retiré de l'étiquette.
 const labelRe = wide => new RegExp(`(?:^|\\s)(${[...(wide ? [...V4_LABELS_BASE, 'Options'] : [...V4_LABELS_BASE, ...LORE_PATTERNS])].join('|')})\\*?:`, 'g');
@@ -288,7 +300,8 @@ export function splitSections(bodyLines) {
       // « Skills: Symbol of Verena, Somber Academic Robes » après les Talents (Chancellor von Festschrift, L20 p. 163) : coquille du livre, c'est la ligne Trappings.
       // « Trappings: Ranged (Bow) +6 » avant les Skills, puis un second « Trappings: » (Thomas Fabhber, L20 p. 109) : la première ligne est la ligne Traits.
       const weaponOnly = mark.label === 'Trappings' && !sections.Skills && !sections.Traits && /^(?:Weapon|Ranged)\b[^,]*[+-]\d+$/.test(text) && marks.slice(index + 1).some(next => next.label === 'Trappings');
-      const label = mark.label === 'Talent' ? 'Talents' : (mark.label === 'Skills' && sections.Talents && !sections.Trappings && !/\b\d{2}\b/.test(text) ? 'Trappings' : (weaponOnly ? 'Traits' : mark.label));
+      const markLabel = mark.label === 'Skill' ? 'Skills' : mark.label;
+      const label = markLabel === 'Talent' ? 'Talents' : (markLabel === 'Skills' && sections.Talents && !sections.Trappings && !/\b\d{2}\b/.test(text) ? 'Trappings' : (weaponOnly ? 'Traits' : markLabel));
       // « Mutation (Beaked Face*), Tough, Weapon +8 * Gain the Bite +3 Creature Trait. » (Zurn, L21 p. 84) : la note à astérisque séparée par une espace est une note du profil.
       const starNote = label === 'Traits' ? /\s\*\s+([A-Z].*)$/.exec(text) : null;
       if (starNote) put('Traits note', starNote[1]);
@@ -323,7 +336,7 @@ export function splitSections(bodyLines) {
           // Les Traits décrits (V5) se suivent en paragraphes « Nom : clause » : un paragraphe qui s'ouvre ainsi prolonge la rubrique (L09 p. 46).
           const nextTrait = (label === 'Traits' || label === 'Optional Traits') && next && /^[A-Z][A-Za-z'’ -]+(?: \([^)]*\))?(?: [+\d]\d*\+?)?:\s/.test(next);
           // Traits facultatifs (L10 p. 38) : la suite en minuscule est une lettrine du texte voisin (« dham Irregulars »), seule la virgule prolonge la liste.
-          const optionalList = label === 'Optional';
+          const optionalList = label === 'Optional' || label === 'Optional Traits';
           // Équipement coupé par un blanc au milieu d'un nom (L10 p. 9 : « Wardenship of the » / « River Stir… », « Royal Garb (Best » / « Quality) ») : mot de liaison final ou parenthèse ouverte.
           const openName = label === 'Trappings' && (/\b(?:of|the|and|or|to|with|a|an|in)$/.test(previous) || kept.join(' ').split('(').length > kept.join(' ').split(')').length);
           if (seen && !(/,$/.test(previous) || nextTrait || openName || (!optionalList && next && /^[a-zà-ÿ(]/.test(next)))) break;

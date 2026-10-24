@@ -8,11 +8,11 @@ import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { corpusBooks } from './lib/bestiary-extract.mjs';
 import { repairGlyphs } from './lib/bestiary-glyphs.mjs';
-import { JUSTIFIED, JUSTIFIED_Q34 } from './lib/bestiary-justified.mjs';
+import { JUSTIFIED, JUSTIFIED_Q34, JUSTIFIED_Q40 } from './lib/bestiary-justified.mjs';
 import { blockAfter, colonize, completenessGaps, extendedGaps, findValueRow, formatGaps, normalizeBlockText, stackedBlock, veryIncomplete } from './lib/bestiary-completeness.mjs';
 
-// Catégories contrôlées : talents et compétences (Q0), attaques, Traits, équipement, sorts, bruit d'équipement (Q11).
-const CATEGORIES = ['talents', 'skills', 'attacks', 'traits', 'trappings', 'spells', 'trappingNoise', 'veryIncomplete'];
+// Catégories contrôlées : talents et compétences (Q0), attaques, Traits, équipement, sorts, bruit d'équipement (Q11), options (Q40).
+const CATEGORIES = ['talents', 'skills', 'attacks', 'traits', 'trappings', 'spells', 'trappingNoise', 'veryIncomplete', 'optional'];
 let justifiedCount = 0;
 const KEYS = ['M', 'CC', 'CT', 'F', 'E', 'I', 'Ag', 'Dex', 'Int', 'FM', 'Soc'];
 let failures = 0;
@@ -66,6 +66,13 @@ for (const book of args.filter(arg => !arg.startsWith('--'))) {
       for (const [category, list] of Object.entries(formatGaps(record, block, catalogue, traitNames))) gaps[category] = [...gaps[category], ...list.filter(item => !legacy[category].includes(item))];
       // Q34 : les manques propres à Q32 relus sur la page (JUSTIFIED_Q34, citant la page) sont sortis du décompte à leur tour.
       for (const [category, reason] of Object.entries(JUSTIFIED_Q34[record.id] || {})) {
+        if (!gaps[category]?.length) continue;
+        justified[category] = { items: [...(justified[category]?.items || []), ...gaps[category]], reason: [justified[category]?.reason, reason].filter(Boolean).join(' | ') };
+        justifiedCount += gaps[category].length;
+        gaps[category] = [];
+      }
+      // Q40 : manques propres au contrôle des options, relus sur la page (JUSTIFIED_Q40).
+      for (const [category, reason] of Object.entries(JUSTIFIED_Q40[record.id] || {})) {
         if (!gaps[category]?.length) continue;
         justified[category] = { items: [...(justified[category]?.items || []), ...gaps[category]], reason: [justified[category]?.reason, reason].filter(Boolean).join(' | ') };
         justifiedCount += gaps[category].length;
