@@ -5,7 +5,7 @@
 import { readFileSync } from 'node:fs';
 import { SKILL_GROUPS, SKILL_GROUP_ALIASES, skillNameFr } from './bestiary-glossary.mjs';
 import { BASE_REFERENTIAL, keywordAncestors, normalizeKeywordText, resolveKeyword } from '../../js/core/creature-keywords.js';
-import { TRAITS_KEPT_AS_RULES, TRAPPING_JOINS, TRAPPING_TRIMS } from './bestiary-overrides.mjs';
+import { OPTIONAL_RULES_KEPT, TRAITS_KEPT_AS_RULES, TRAPPING_JOINS, TRAPPING_TRIMS } from './bestiary-overrides.mjs';
 
 const CARACS = ['M', 'CC', 'CT', 'F', 'E', 'I', 'Ag', 'Dex', 'Int', 'FM', 'Soc'];
 const ATTACK_TRAITS = new Set(['Weapon', 'Bite', 'Horns', 'Tail', 'Tail Attack', 'Claws', 'Claw', '2 Claws', 'Beak', 'Slam', 'Tongue Attack', 'Tentacles', 'Ranged', 'Creature Weapons']);
@@ -20,6 +20,8 @@ const TALENT_ALIASES = new Map(Object.entries({
   'read/ write': 'Read/Write', warleader: 'War Leader', 'war leader': 'War Leader', 'fleet footed': 'Fleet-footed', 'public speaking': 'Public Speaker', 'public-speaking': 'Public Speaker',
   resistance: 'Resistant', 'nimble fingered': 'Nimble-fingered', 'stout-hearted': 'Stout-hearted', 'stout- hearted': 'Stout-hearted', unshakable: 'Unshakeable',
   'strong-minded': 'Strong-minded', 'strong minded': 'Strong-minded', 'strong-minded.': 'Strong-minded', 'strong back': 'Strong Back', 'magic resistant': 'Magic Resistance',
+  // « Arcane Magick (Beasts) Bookish » (Kelrathi, L09 p. 104) : coquille du livre (Magick), virgule oubliée avant Bookish.
+  'arcane magick': 'Arcane Magic',
   // « Doomed! (Find Thy Path and Stray Not) » (Jan Guterwass, L22 p. 62) : point d'exclamation de trop, le talent est Doomed.
   'doomed!': 'Doomed', infighter: 'In-fighter', 'in fighter': 'In-fighter', 'cat tongued': 'Cat-tongued', 'cat- tongued': 'Cat-tongued', 'in- fighter': 'In-fighter', etiqutte: 'Etiquette', ettiquette: 'Etiquette', 'instrinctive diction': 'Instinctive Diction'
 }));
@@ -63,7 +65,13 @@ export function cleanSkills(skills = []) {
   const kept = [];
   const dropped = [];
   const unvalued = [];
+  // Liste entière imprimée sans aucune valeur (Gurniksson Hammerback, L03 p. 63 : « Leadership, Lore (Geology), Stealth (Underground) ») : gardée à part, jamais avec une valeur inventée.
+  const noValues = skills.length > 0 && skills.every(skill => skill.value === null);
   for (const skill of skills) {
+    if (noValues && !skill.unvalued) {
+      const found = /^([A-Z][A-Za-z' ]+?)(?:\s*\(([^()]{1,40})\))?$/.exec(skill.name.trim());
+      if (found && SKILL_GROUPS.has(found[1].trim()) && !/\d/.test(found[2] || '')) { unvalued.push(skill.name.trim()); continue; }
+    }
     // Compétence imprimée sans valeur (« Language (Elthárin) ») : gardée à part, jamais avec une valeur inventée.
     if (skill.unvalued) { if (/^Language \(/.test(skill.name)) unvalued.push(skill.name); else dropped.push(skill.name); continue; }
     const found = /^([A-Z][A-Za-z' ]+?)(?:\s*\(([^()]{1,40})\))?$/.exec(skill.name.trim());
@@ -136,7 +144,7 @@ export function buildArmour(extracted, traitList) {
   const armour = {};
   if (extracted.armour) {
     if (extracted.armour.toughnessBonus !== undefined) armour.toughnessBonus = extracted.armour.toughnessBonus;
-    if (extracted.armour.parts?.length) armour.parts = extracted.armour.parts.map(part => ({ name: part.name, ap: part.ap, ...(part.optional ? { optional: true } : {}), ...(part.locations ? { locations: part.locations } : {}), ...(part.condition ? { condition: part.condition } : {}) }));
+    if (extracted.armour.parts?.length) armour.parts = extracted.armour.parts.map(part => ({ name: part.name, ap: part.ap, ...(part.optional ? { optional: true } : {}), ...(part.locations ? { locations: part.locations } : {}), ...(part.slBonus ? { slBonus: part.slBonus } : {}), ...(part.condition ? { condition: part.condition } : {}) }));
   }
   const trait = traitList.find(item => item.name === 'Armour');
   if (trait) {
@@ -235,6 +243,8 @@ export function buildRecord(extracted, entry, context) {
   const listed = traits.kept.filter(trait => !structural.has(trait.name));
   if (listed.length) record.traits = listed;
   if (optional.kept.length) record.optionalTraits = optional.kept;
+  const optionalRules = optional.dropped.filter(name => OPTIONAL_RULES_KEPT.has(name));
+  if (optionalRules.length) record.optionalSpecialRules = optionalRules;
   // Un Talent du catalogue dans la liste facultative (« Trained (…), Sixth Sense », Drakenhund L10 p. 38) n'est pas un Trait : gardé à part, jamais perdu.
   const optionalTalents = (extracted.optional || []).filter(trait => trait?.name && !canonical(trait.name) && isCatalogueTalent(canonicalTalentName(trait.name)))
     .map(trait => ({ name: `${canonicalTalentName(trait.name)}${trait.param ? ` (${trait.param})` : ''}` }));

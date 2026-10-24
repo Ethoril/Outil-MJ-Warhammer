@@ -186,7 +186,10 @@ export const TRAPPING_JOINS = Object.freeze({
 // Noms de Traits imprimés que l'inventaire ne connaît pas : gardés dans `specialRules` plutôt que perdus (Urzo, L23 p. 104 : Animalistic Legs).
 export const TRAITS_KEPT_AS_RULES = Object.freeze(new Set(['Animalistic Legs', 'Mark of Slaanesh', 'Coven Sorcerer', 'Prey of the Dark Prince', 'Vampiric Gaze', 'Hunger', 'Corrupt']));
 
-export const BODY_LINE_FIXES = Object.freeze({
+// Noms imprimés dans la liste facultative sans équivalent à l'inventaire (River Trolls, L26 p. 89 : « Stealth », qui est une compétence) : gardés dans `optionalSpecialRules`.
+export const OPTIONAL_RULES_KEPT = Object.freeze(new Set(['Stealth']));
+
+export const BODY_LINE_FIXES =Object.freeze({
   // Temple of Spite (L09) p. 97 : Samuril Meurlith, « Dagger » mangé par la prose de la colonne voisine (« …taking credit for Dagger (60/+5) with the Fast Quality »).
   'L09:97:0': [['(60/+5) with the Fast Quality', 'Dagger (60/+5) with the Fast Quality']],
   // Sylvania (L10) p. 87 : Matthias Primvik, fragments de la prose voisine (« a », « uty. », « lf, », « t -- the », « ing ») collés aux rubriques.

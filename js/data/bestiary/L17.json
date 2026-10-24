@@ -3275,12 +3275,9 @@
    "size": "small",
    "attacks": [
     {
-     "name": "Weapon",
+     "name": "Claws",
      "damage": 6,
-     "trait": "Weapon",
-     "qualities": [
-      "Claws"
-     ]
+     "trait": "Weapon"
     }
    ],
    "skills": [
@@ -3364,12 +3361,9 @@
    "size": "small",
    "attacks": [
     {
-     "name": "Weapon",
+     "name": "Quill",
      "damage": 9,
-     "trait": "Weapon",
-     "qualities": [
-      "Quill"
-     ]
+     "trait": "Weapon"
     }
    ],
    "traits": [
@@ -3461,12 +3455,9 @@
    },
    "attacks": [
     {
-     "name": "Weapon",
+     "name": "Bite",
      "damage": 8,
-     "trait": "Weapon",
-     "qualities": [
-      "Bite"
-     ]
+     "trait": "Weapon"
     }
    ],
    "traits": [

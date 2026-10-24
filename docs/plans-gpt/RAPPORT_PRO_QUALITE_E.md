@@ -48,6 +48,9 @@ Plan : `PLAN_PRO_QUALITE_E.md`. Branche `pro/qualite-e`, départ `9c12613`. Choi
 | Q31 | FAIT (`QE-Q31-1`) | (voir `git log`, « Q31 ») |
 | Q32 | FAIT (`QE-Q32-1`) | (voir `git log`, « Q32 ») |
 | Q33 | FAIT (`QE-Q33-1` à `QE-Q33-6`) | (voir `git log`, « Q33 ») |
+| Q34a-c | FAIT (23 livres à 0 manque non justifié) | (voir `git log`, « Q34a » à « Q34c ») |
+| Q35 | FAIT (`QE-Q35-1` à `QE-Q35-4`) | (voir `git log`, « Q35 ») |
+| Q36 | FAIT (`QE-Q36-1` à `QE-Q36-7`, question `QE-Q36-3`) | (voir `git log`, « Q36 ») |
 
 ## Q0 — contrôle de complétude
 
@@ -498,3 +501,12 @@ Branché / non appelé (grep dans `js/`) :
 - **Résultats** : Stégadon L07 Queue 12, Wyverne Queue 14, Ripperdactyl Queue 8, Chien L06 imprimé (5), tentacule sans bonus de Taille. Valeurs imprimées inchangées.
 - Tests : `tests/pro-q35-taille-formule.test.js` (7 tests, scénarios de store par `previewResolution`) ; `pro-q30` mis à jour (Trait absent : reconnu par le nom). Suite complète : 4523 tests verts.
 - **Branché (appelant + chemin d'interface)** : `inferNaturalAttackKey`/`planNaturalAttack` ← `normalizeResolutionInput` (`js/core/resolution.js`), atteint par tout aperçu et toute résolution d'attaque du panneau de Résolution ; `planCreatureSize` ← `creature-combat.js` (donc branché). Chargeur : `createBestiaryLoader` ← `js/main.js`, `js/ui/bestiary-library.js`. Outil de liste : hors `js/`, code testé, non appelé par l'application. Pas de test de rendu ajouté : aucun changement d'affichage hors rappel « Taille : +n » dans les rappels de résolution.
+
+## Q36 — données confirmées (FAIT)
+
+- **Cas corrigés dans l'outil** (`tools/lib/bestiary-blocks.mjs`, `bestiary-profile.mjs`, `bestiary-record.mjs`, `bestiary-completeness.mjs`, `bestiary-overrides.mjs`), livres régénérés par `tools/build-bestiary-profiles.mjs` (23 livres) ; chaque cas relu sur sa page du PDF : Doomfire Warlock E0-P-325 (L09 p. 52 : Ward 8+ perdu, le paragraphe « Ward 8+: » n'était pas reconnu), Kelrathi E0-P-355 (p. 104 : Arcane Magic (Beasts) et Bookish), armes lues comme qualités L17 E0-P-532/533/534 et L23 E0-P-788/789/790 (arme nommée Claws, Quill, Bite), Outlaw E0-P-176 (« 5 Matches »), Gurniksson E0-P-161 (3 compétences sans valeur → `unvaluedSkills`), armure L10 E0-P-382, 388, 390 (« Breastplate: +2 AP Body », zone Body) et E0-P-368 (« Toughness Bonus: +3 »), bouclier facultatif de L06 (14 profils, dont E0-P-099 et 063 : `ap` 2, `slBonus` 1, condition), River Trolls E0-P-963 (`optionalSpecialRules: Stealth`), Plague Monk E0-P-512 (Options en note, Foaming Lungrot), Zurn E0-P-705 (note « * Gain the Bite +3 Creature Trait. »). Détail : `QE-Q36-1` à `QE-Q36-7`.
+- **Effets de bord corrects** : Outlaw Chief E0-P-177 (même « 5 Matches »), Leviathan L11 E0-P-054 (Claws +12 au lieu de +1, même coupe de marge), Clanrat et Plague Rat (Options en note).
+- **Question au MJ** : E0-P-388 Erich Frohlich, le livre imprime « Toughness Bonus: » sans nombre (`QE-Q36-3`) ; rien d'inventé.
+- **Valeurs imprimées** : 23 livres comparés à `9c12613` : seuls E0-P-125, 126 (Base → Total) et E0-P-323 Sea Dragon diffèrent (déjà justifiés). Contrôle de complétude L03, L06, L09, L10, L16, L17, L21, L23, L26 : 0 manque non justifié.
+- Tests : `tests/pro-q36-cas-confirmes.test.js` (12 tests) ; assertion de `pro-q33` mise à jour (Doomfire Warlock 7 Traits). Suite complète lancée une fois : 4536 tests verts.
+- **Branché / non appelé (grep dans `js/`)** : **branché** — les zones d'armure (`locations`) sont lues par `printedArmour` (`js/core/bestiary-profiles.js`, appelé par `buildParticipantFromBestiary`, lui-même appelé par `js/ui/bestiary-library.js` et `js/core/bestiary-templates.js`) ; les armes nommées deviennent des actions par la même fonction. **Code testé, non appelé** : `slBonus`, `unvaluedSkills`, `optionalSpecialRules`, les notes (`Options: …`, `* Gain the Bite…`) n'ont aucun lecteur dans `js/` (Q37 pour `unvaluedSkills`). Aucune valeur durable de personnage.

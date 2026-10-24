@@ -5592,7 +5592,7 @@
     },
     {
      "name": "Claws",
-     "damage": 1,
+     "damage": 12,
      "trait": "Weapon"
     }
    ],

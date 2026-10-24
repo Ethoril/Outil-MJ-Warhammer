@@ -4541,6 +4541,9 @@
      "ref": "E0-T-086"
     }
    ],
+   "optionalSpecialRules": [
+    "Stealth"
+   ],
    "keywords": [
     "troll"
    ],

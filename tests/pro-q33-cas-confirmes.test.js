@@ -70,10 +70,10 @@ test('Q33 L09 « Traits and Talents » : Demeth, Valerion, Hulreth, Selthira, Ha
   assert.ok(names(find('L09', 'E0-P-359').talents).includes('Gifts of Khaine'));
 });
 
-test('Q33 L09 : Anointed (Mark of Slaanesh, Night Vision, Ward), Doomfire Warlock (6 Traits), Samuril (Dagger), Scorath', () => {
+test('Q33 L09 : Anointed (Mark of Slaanesh, Night Vision, Ward), Doomfire Warlock (7 Traits, dont Ward 8+), Samuril (Dagger), Scorath', () => {
   const anointed = find('L09', 'E0-P-324');
   for (const name of ['Mark of Slaanesh', 'Night Vision', 'Ward']) assert.ok(names(anointed.traits).includes(name), name);
-  assert.deepEqual(names(find('L09', 'E0-P-325').traits), ['Afraid', 'Coven Sorcerer', 'Hatred', 'Night Vision', 'Prey of the Dark Prince', 'Venom']);
+  assert.deepEqual(names(find('L09', 'E0-P-325').traits), ['Afraid', 'Coven Sorcerer', 'Hatred', 'Night Vision', 'Prey of the Dark Prince', 'Venom', 'Ward']);
   assert.deepEqual(find('L09', 'E0-P-353').attacks.map(attack => [attack.name, attack.value, attack.damage]), [['Dagger', 60, 5]]);
   const scorath = find('L09', 'E0-P-354');
   assert.ok(scorath.skills.some(skill => skill.name === 'Melee (Basic)' && skill.value === 68));

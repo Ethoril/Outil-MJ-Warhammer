@@ -4091,6 +4091,9 @@
     "Shield",
     "Sword"
    ],
+   "notes": [
+    "Options: Five of the Clanrats are suffering from Foaming Lungrot and have Fatigued Conditions as a result. They may also pass it on to any creatures they encounter."
+   ],
    "keywords": [
     "skaven"
    ],
@@ -4174,6 +4177,9 @@
     "Mouldy Robes",
     "Pair of Swords"
    ],
+   "notes": [
+    "Options: Three of the Plague Monks are suffering from Foaming Lungrot and have Fatigued Conditions as a result. They may also pass it on to any creatures they encounter."
+   ],
    "keywords": [
     "skaven"
    ],
@@ -4242,6 +4248,9 @@
      "param": "Broken, Fetch, War",
      "ref": "E0-T-060"
     }
+   ],
+   "notes": [
+    "Options: Unless the rats are encountered as single creatures or small groups, it may be better to use the Swarm Trait. The Plague Rats are not really trained as such but share an unspoken bond with the Plague Monks that sees them behave according to purposes they could never understand. Should they be separated from the Plague Monks, or the Plague Monks be killed, they revert to their animal instincts and lose their Trained Traits."
    ],
    "keywords": [
     "rat"

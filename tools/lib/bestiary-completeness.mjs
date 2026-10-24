@@ -156,7 +156,8 @@ export function printedAttacks(block) {
       for (const part of splitTopLevel(creature[1])) { const m = ATTACK.exec(part); if (m) add(Number(m[1]), m[2], m[4], m[0]); }
       continue;
     }
-    const m = ATTACK.exec(item);
+    // « Weapon +6 (Claws) » (L17 p. 213, L23 p. 86) : sans nom avant les dégâts, la parenthèse est le nom de l'arme.
+    const m = ATTACK.exec(item.replace(/^Weapon\s*([+-]\d+)\s*\(([A-Za-z][^()]*)\)$/, 'Weapon ($2) $1'));
     if (m) add(Number(m[1]), m[3] ? m[3] : m[2].replace(/ Attack$/, ''), m[4], m[0]);
   }
   return found;

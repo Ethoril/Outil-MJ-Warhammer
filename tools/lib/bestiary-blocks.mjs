@@ -119,7 +119,11 @@ export function pageBlocks(pageText) {
     const atGutter = gutter !== null && right === gutter;
     const windowOf = line => {
       const text = line || '';
-      if (!atGutter) return text.slice(left, right === Infinity ? undefined : right);
+      if (!atGutter) {
+        // Profils côte à côte (L04 p. 103, Outlaw : « Candles and 5 Matches ») : un nombre de 1-2 chiffres qui déborde de la marge de 4 colonnes sur le voisin reste à son profil.
+        const digits = right === Infinity ? null : /^ ?\d{1,2}(?= {2})/.exec(text.slice(right));
+        return text.slice(left, right === Infinity ? undefined : right + (digits ? digits[0].length : 0));
+      }
       // Gouttière tombée dans un mot de la colonne de gauche (« Stone », « 56, ») : le mot est gardé entier (3 caractères au plus).
       const spill = /^\S{1,3}(?=\s|$)/.exec(text.slice(right));
       const cut = text[right - 1] && text[right - 1] !== ' ' && spill ? right + spill[0].length : right;
@@ -285,7 +289,10 @@ export function splitSections(bodyLines) {
       // « Trappings: Ranged (Bow) +6 » avant les Skills, puis un second « Trappings: » (Thomas Fabhber, L20 p. 109) : la première ligne est la ligne Traits.
       const weaponOnly = mark.label === 'Trappings' && !sections.Skills && !sections.Traits && /^(?:Weapon|Ranged)\b[^,]*[+-]\d+$/.test(text) && marks.slice(index + 1).some(next => next.label === 'Trappings');
       const label = mark.label === 'Talent' ? 'Talents' : (mark.label === 'Skills' && sections.Talents && !sections.Trappings && !/\b\d{2}\b/.test(text) ? 'Trappings' : (weaponOnly ? 'Traits' : mark.label));
-      put(label, label === 'Traits' ? text.replace(/\s\*[A-Za-z].*$/, '') : text);
+      // « Mutation (Beaked Face*), Tough, Weapon +8 * Gain the Bite +3 Creature Trait. » (Zurn, L21 p. 84) : la note à astérisque séparée par une espace est une note du profil.
+      const starNote = label === 'Traits' ? /\s\*\s+([A-Z].*)$/.exec(text) : null;
+      if (starNote) put('Traits note', starNote[1]);
+      put(label, label === 'Traits' ? (starNote ? text.slice(0, starNote.index) : text).replace(/\s\*[A-Za-z].*$/, '') : text);
     });
     return { sections, lead: clean(joined.slice(0, marks[0].at)), mode: 'v4' };
   }
@@ -314,7 +321,7 @@ export function splitSections(bodyLines) {
           const next = parts.slice(i + 1).find(line => line !== '');
           const previous = kept.filter(Boolean).pop() || '';
           // Les Traits décrits (V5) se suivent en paragraphes « Nom : clause » : un paragraphe qui s'ouvre ainsi prolonge la rubrique (L09 p. 46).
-          const nextTrait = (label === 'Traits' || label === 'Optional Traits') && next && /^[A-Z][A-Za-z'’ -]+(?: \([^)]*\))?(?: [+\d]\d*)?:\s/.test(next);
+          const nextTrait = (label === 'Traits' || label === 'Optional Traits') && next && /^[A-Z][A-Za-z'’ -]+(?: \([^)]*\))?(?: [+\d]\d*\+?)?:\s/.test(next);
           // Traits facultatifs (L10 p. 38) : la suite en minuscule est une lettrine du texte voisin (« dham Irregulars »), seule la virgule prolonge la liste.
           const optionalList = label === 'Optional';
           // Équipement coupé par un blanc au milieu d'un nom (L10 p. 9 : « Wardenship of the » / « River Stir… », « Royal Garb (Best » / « Quality) ») : mot de liaison final ou parenthèse ouverte.

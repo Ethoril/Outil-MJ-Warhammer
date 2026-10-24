@@ -705,6 +705,9 @@
     "Soc": 30
    },
    "wounds": 13,
+   "armour": {
+    "toughnessBonus": 3
+   },
    "attacks": [
     {
      "name": "Staff",
@@ -2210,7 +2213,14 @@
    },
    "wounds": 9,
    "armour": {
-    "toughnessBonus": 3
+    "toughnessBonus": 3,
+    "parts": [
+     {
+      "name": "Breastplate",
+      "ap": 2,
+      "locations": "Body"
+     }
+    ]
    },
    "attacks": [
     {
@@ -3020,6 +3030,15 @@
     "Soc": 32
    },
    "wounds": 12,
+   "armour": {
+    "parts": [
+     {
+      "name": "Leather Jerkin",
+      "ap": 1,
+      "locations": "Body"
+     }
+    ]
+   },
    "attacks": [
     {
      "name": "Woodsman's Axe",
@@ -3282,7 +3301,14 @@
    },
    "wounds": 16,
    "armour": {
-    "toughnessBonus": 4
+    "toughnessBonus": 4,
+    "parts": [
+     {
+      "name": "Leather Jerkin",
+      "ap": 1,
+      "locations": "Body"
+     }
+    ]
    },
    "attacks": [
     {
@@ -3423,7 +3449,8 @@
     "parts": [
      {
       "name": "Leather Jerkin",
-      "ap": 1
+      "ap": 1,
+      "locations": "Body"
      }
     ]
    },
@@ -3544,7 +3571,8 @@
     "parts": [
      {
       "name": "Mail Shirt",
-      "ap": 2
+      "ap": 2,
+      "locations": "Body"
      }
     ]
    },

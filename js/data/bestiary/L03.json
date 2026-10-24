@@ -1384,6 +1384,11 @@
      "trait": "Weapon"
     }
    ],
+   "unvaluedSkills": [
+    "Leadership",
+    "Lore (Geology)",
+    "Stealth (Underground)"
+   ],
    "talents": [
     {
      "name": "Argumentative"

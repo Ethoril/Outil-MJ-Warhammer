@@ -3305,12 +3305,9 @@
      "trait": "Horns"
     },
     {
-     "name": "Weapon",
+     "name": "Claws",
      "damage": 8,
-     "trait": "Weapon",
-     "qualities": [
-      "Claws"
-     ]
+     "trait": "Weapon"
     }
    ],
    "skills": [
@@ -3419,12 +3416,9 @@
    "wounds": 12,
    "attacks": [
     {
-     "name": "Weapon",
+     "name": "Claws",
      "damage": 8,
-     "trait": "Weapon",
-     "qualities": [
-      "Claws"
-     ]
+     "trait": "Weapon"
     }
    ],
    "skills": [
@@ -3528,12 +3522,9 @@
    "wounds": 12,
    "attacks": [
     {
-     "name": "Weapon",
+     "name": "Claws",
      "damage": 6,
-     "trait": "Weapon",
-     "qualities": [
-      "Claws"
-     ]
+     "trait": "Weapon"
     }
    ],
    "skills": [

@@ -1298,6 +1298,11 @@
      "name": "Venom",
      "param": "Challenging",
      "ref": "E0-T-064"
+    },
+    {
+     "name": "Ward",
+     "rating": "8+",
+     "ref": "E0-T-066"
     }
    ],
    "keywords": [
@@ -5900,6 +5905,12 @@
     },
     {
      "name": "Animal Affinity"
+    },
+    {
+     "name": "Arcane Magic (Beasts)"
+    },
+    {
+     "name": "Bookish"
     },
     {
      "name": "Careful Strike"

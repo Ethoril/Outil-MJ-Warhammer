@@ -43,6 +43,13 @@
       "name": "Medium Armour",
       "ap": 3,
       "optional": true
+     },
+     {
+      "name": "Shield",
+      "ap": 2,
+      "optional": true,
+      "slBonus": 1,
+      "condition": "when Opposing an attack with Dodge or Melee"
      }
     ]
    },
@@ -125,6 +132,13 @@
       "name": "Light Armour",
       "ap": 1,
       "optional": true
+     },
+     {
+      "name": "Shield",
+      "ap": 2,
+      "optional": true,
+      "slBonus": 1,
+      "condition": "when Opposing an attack with Dodge or Melee"
      }
     ]
    },
@@ -218,6 +232,13 @@
       "name": "Medium Armour",
       "ap": 3,
       "optional": true
+     },
+     {
+      "name": "Shield",
+      "ap": 2,
+      "optional": true,
+      "slBonus": 1,
+      "condition": "when Opposing an attack with Dodge or Melee"
      }
     ]
    },
@@ -316,6 +337,13 @@
       "name": "Light Armour",
       "ap": 1,
       "optional": true
+     },
+     {
+      "name": "Shield",
+      "ap": 2,
+      "optional": true,
+      "slBonus": 1,
+      "condition": "when Opposing an attack with Dodge or Melee"
      }
     ]
    },
@@ -995,6 +1023,13 @@
       "ap": 2,
       "optional": true,
       "locations": "Head"
+     },
+     {
+      "name": "Ironfist",
+      "ap": 2,
+      "optional": true,
+      "slBonus": 1,
+      "condition": "when Opposing an attack with Dodge or Melee"
      }
     ]
    },
@@ -2820,6 +2855,13 @@
       "ap": 2,
       "optional": true,
       "locations": "Head"
+     },
+     {
+      "name": "Shield",
+      "ap": 2,
+      "optional": true,
+      "slBonus": 1,
+      "condition": "when Opposing an attack with Dodge or Melee"
      }
     ]
    },
@@ -2958,6 +3000,13 @@
       "ap": 2,
       "optional": true,
       "locations": "Head"
+     },
+     {
+      "name": "Shield",
+      "ap": 2,
+      "optional": true,
+      "slBonus": 1,
+      "condition": "when Opposing an attack with Dodge or Melee"
      }
     ]
    },
@@ -3224,6 +3273,13 @@
       "name": "Medium Armour",
       "ap": 3,
       "optional": true
+     },
+     {
+      "name": "Shield",
+      "ap": 2,
+      "optional": true,
+      "slBonus": 1,
+      "condition": "when Opposing an attack with Dodge or Melee"
      }
     ]
    },
@@ -3851,6 +3907,13 @@
       "name": "Heavy Armour",
       "ap": 5,
       "optional": true
+     },
+     {
+      "name": "Shield",
+      "ap": 2,
+      "optional": true,
+      "slBonus": 1,
+      "condition": "when Opposing an attack with Dodge or Melee"
      }
     ]
    },
@@ -4185,6 +4248,13 @@
       "name": "Medium Armour",
       "ap": 3,
       "optional": true
+     },
+     {
+      "name": "Shield",
+      "ap": 2,
+      "optional": true,
+      "slBonus": 1,
+      "condition": "when Opposing an attack with Dodge or Melee"
      }
     ]
    },
@@ -4287,6 +4357,13 @@
       "name": "Light Armour",
       "ap": 1,
       "optional": true
+     },
+     {
+      "name": "Shield",
+      "ap": 2,
+      "optional": true,
+      "slBonus": 1,
+      "condition": "when Opposing an attack with Dodge or Melee"
      }
     ]
    },
@@ -4405,6 +4482,13 @@
       "name": "Light Armour",
       "ap": 1,
       "optional": true
+     },
+     {
+      "name": "Shield",
+      "ap": 2,
+      "optional": true,
+      "slBonus": 1,
+      "condition": "when Opposing an attack with Dodge or Melee"
      }
     ]
    },
@@ -4530,6 +4614,13 @@
       "name": "Medium Armour",
       "ap": 3,
       "optional": true
+     },
+     {
+      "name": "Shield",
+      "ap": 2,
+      "optional": true,
+      "slBonus": 1,
+      "condition": "when Opposing an attack with Dodge or Melee"
      }
     ]
    },
@@ -4687,6 +4778,13 @@
      {
       "name": "Heavy Armour",
       "ap": 5
+     },
+     {
+      "name": "Shield",
+      "ap": 2,
+      "optional": true,
+      "slBonus": 1,
+      "condition": "when Opposing an attack with Dodge or Melee"
      }
     ]
    },
@@ -5037,6 +5135,13 @@
       "name": "Medium Armour",
       "ap": 3,
       "optional": true
+     },
+     {
+      "name": "Shield",
+      "ap": 2,
+      "optional": true,
+      "slBonus": 1,
+      "condition": "when Opposing an attack with Dodge or Melee"
      }
     ]
    },

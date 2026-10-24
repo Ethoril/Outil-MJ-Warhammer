@@ -70,6 +70,8 @@ function readTraitItemPlain(text) {
     if (natural[1]) trait.count = Number(natural[1]);
     if (natural[5]) trait.printed = Number(natural[5]);
     // « Tail +9 (Pummel) », « Weapon (Obsidian Claws) +10 (Hack, Penetrating) » (Hagdar, L16 p. 84) : qualités de l'attaque entre parenthèses.
+    // « Weapon +6 (Claws) » (Xirat'P L17 p. 213, Chaos Fury L23 p. 86) : sans nom avant les dégâts, la parenthèse est le nom de l'arme, pas une qualité.
+    if (/^weapon$/i.test(natural[2]) && !natural[3] && natural[6] && !/^see\b/i.test(natural[6])) { trait.param = clean(natural[6]); return trait; }
     const qualities = natural[6] && !/^see\b/i.test(natural[6]) ? splitList(natural[6]).filter(part => /^[A-Z][A-Za-z' -]*(?: \d+)?$/.test(part) && part.split(/\s+/).length <= 3) : [];
     if (qualities.length) trait.qualities = qualities;
     return trait;
@@ -201,12 +203,16 @@ export function readAttacks(text) {
 /** Armure V5 : « Toughness Bonus: 4 Hide: +1 AP Optional Light Armour: +1 AP » ; V4 : trait Armour. */
 export function readArmour(text) {
   const result = { parts: [] };
-  const tb = /Toughness Bonus:\s*(\d+)/.exec(text);
+  // « Toughness Bonus: +3 » (Elsbeth Blattner, L10 p. 15) : signe imprimé devant le nombre.
+  const tb = /Toughness Bonus:\s*\+?(\d+)/.exec(text);
   if (tb) result.toughnessBonus = Number(tb[1]);
   // « Shield: +2 AP when Opposing an attack with Dodge or Melee » (Damina Hroska, L09 p. 73) : PA conditionnels, jamais ajoutés d'office (partie facultative avec sa condition).
-  for (const part of text.matchAll(/(Optional\s+)?([A-Z][A-Za-z' -]*?):\s*\+(\d+)\s*AP(?:\s+to\s+([A-Za-z ,and]+?))?(?:\s+(when\s+[A-Za-z ,]+?))?(?=\s+(?:Optional|[A-Z][A-Za-z' -]*:)|$)/g)) {
+  for (const part of text.matchAll(/(Optional\s+)?([A-Z][A-Za-z' -]*?):\s*\+(\d+)\s*AP(?:\s+to\s+([A-Za-z ,and]+?)|\s+((?:Body|Head|Arms?|Legs?)(?:(?:,\s*|\s+and\s+)(?:Body|Head|Arms?|Legs?))*)(?=\s|$))?(?:\s+and\s+\+(\d+)\s*SL)?(?:\s+(when\s+[A-Za-z ,]+?))?(?=\s+(?:Optional|[A-Z][A-Za-z' -]*:)|$)/g)) {
     if (/^Toughness Bonus/.test(part[2])) continue;
-    result.parts.push({ name: clean(part[2]), ap: Number(part[3]), optional: Boolean(part[1]) || Boolean(part[5]), ...(part[4] ? { locations: clean(part[4]) } : {}), ...(part[5] ? { condition: clean(part[5]) } : {}) });
+    // « Breastplate: +2 AP Body » (L10 p. 85) : la zone suit « AP » sans « to ».
+    const locations = part[4] || part[5];
+    // « Optional Shield: +2 AP and +1 SL when Opposing an attack with Dodge or Melee » (L06 p. 343 et autres) : bonus de DR conditionnel, gardé tel qu'imprimé.
+    result.parts.push({ name: clean(part[2]), ap: Number(part[3]), optional: Boolean(part[1]) || Boolean(part[7]), ...(locations ? { locations: clean(locations) } : {}), ...(part[6] ? { slBonus: Number(part[6]) } : {}), ...(part[7] ? { condition: clean(part[7]) } : {}) });
   }
   return result;
 }
@@ -335,7 +341,8 @@ export function parseBlock(block, { traitDictionary = new Set(), talentDictionar
     const plainTail = cut >= 0 && !/:/.test(mixed.slice(cut + 2));
     const describedItems = described && union.size ? readDescribedNames(plainTail ? mixed.slice(0, cut + 1) : mixed, union) : [];
     const items = describedItems.length ? [...describedItems, ...(plainTail ? splitList(mixed.slice(cut + 2)) : [])] : (plainTail ? [...splitList(mixed.slice(0, cut + 1)), ...splitList(mixed.slice(cut + 2))] : splitList(mixed));
-    const baseName = item => clean(item.replace(/\.$/, '').replace(/\s*\(.*\)\s*$/, '').replace(/\s+\d+$/, ''));
+    // « Arcane Magick (Beasts) Bookish » (Kelrathi, L09 p. 104) : coquille du livre, Magick pour Magic.
+    const baseName = item => clean(item.replace(/\.$/, '').replace(/\s*\(.*\)\s*$/, '').replace(/\s+\d+$/, '').replace(/^Arcane Magick\b/, 'Arcane Magic'));
     const flat = name => name.toLowerCase().replace(/[-\s]+/g, '');
     const talentNames = new Set([...talentDictionary].map(flat));
     // « Acute Sense (Taste) Attractive » : virgule oubliée après une parenthèse, chaque moitié doit être un talent (séparées plus tard par `splitGluedTalent`).
@@ -358,7 +365,10 @@ export function parseBlock(block, { traitDictionary = new Set(), talentDictionar
   // « … Trained (Broken, Drive) Note: The small but vicious dog… » (L06 p. 325) : la note qui suit la liste n'en fait pas partie.
   // « Trained (Broken, Guard) When facing an especially irksome… » (Drakwald Mancatcher, L11 p. 13) : la prose qui suit la dernière parenthèse n'est pas un Trait.
   const optionalList = optional === undefined ? '' : optional.replace(/\s+Note:.*$/, '').replace(/\)\s+(?=[A-Z][a-z]+\s+[a-z]+\s+[a-z]+).*$/, ')');
-  if (optional !== undefined) profile.optional = splitList(optionalList).map(readTraitItem).filter(Boolean);
+  // « Options: Three of the Plague Monks are suffering from Foaming Lungrot… » (Plague Monk, L16 p. 90) : de la prose, pas une liste de Traits ; gardée en note du profil.
+  const optionalProse = optional !== undefined && sections.Options !== undefined && /^(?:[A-Z][a-z]+ (?:of|are|is|may|can|have|has)\b|Unless\b)/.test(optionalList);
+  if (optional !== undefined && !optionalProse) profile.optional = splitList(optionalList).map(readTraitItem).filter(Boolean);
+  if (optionalProse) profile.notes = [...(profile.notes || []), `Options: ${clean(optionalList)}`];
   // Q34a : la note imprimée (Traits du chien de ratier, L06 p. 325) est gardée en note du profil, jamais perdue.
   const optionalNote = optional === undefined ? null : /\s+(Note:.*)$/.exec(optional);
   if (optionalNote) profile.notes = [...(profile.notes || []), clean(optionalNote[1])];
@@ -374,8 +384,9 @@ export function parseBlock(block, { traitDictionary = new Set(), talentDictionar
   if (trappingsText) {
     const { items, notes } = readTrappings(trappingsText);
     profile.trappings = items;
-    if (notes.length) profile.notes = notes;
+    if (notes.length) profile.notes = [...(profile.notes || []), ...notes];
   }
+  if (sections['Traits note']) profile.notes = [...(profile.notes || []), `* ${clean(sections['Traits note'])}`];
   // Q27d : "Marks: Mark of Hysh, Stoicism" (Magiciens, L17) : note du profil.
   // L10 (V5) : rubriques « Blessings » (Cacciatore p. 14) et « Miracles: » (Seiren Walburg p. 92), listes de noms gardées en note du profil.
   for (const label of ['Blessings', 'Miracles']) if (mode === 'v5' && sections[label]) profile.notes = [...(profile.notes || []), `${label}: ${clean(sections[label])}`];
