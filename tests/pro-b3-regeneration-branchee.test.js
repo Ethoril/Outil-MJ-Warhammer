@@ -84,6 +84,6 @@ test('B3 : la carte affiche le bloc de Régénération (d10, feu, bouton) et lit
   assert.equal(block.children.at(-1).className, 'tiny btn-regeneration');
   assert.equal(buildRegenerationBlock(make, store.getCombat().participants.get('hero')), null);
   const fields = { '.regen-roll': { value: '8' }, '.regen-fire': { value: '' } };
-  assert.deepEqual(readRegenerationInputs({ querySelector: selector => fields[selector] }), { roll: 8, fireWounds: 0 });
+  assert.deepEqual(readRegenerationInputs({ querySelector: selector => fields[selector] }), { roll: 8, fireWounds: 0, fireCriticalIds: [] });
   assert.ok(Number.isNaN(readRegenerationInputs({ querySelector: () => ({ value: '' }) }).roll));
 });

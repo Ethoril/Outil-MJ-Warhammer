@@ -1,6 +1,6 @@
 import { hasRegeneration } from '../core/creature-regeneration.js';
 
-/** Bloc de Régénération (Trait Régénération) : d10 de début de Round, Blessures de feu non régénérables, bouton « Régénérer ». `null` sans le Trait. */
+/** Bloc de Régénération (Trait Régénération) : d10 de début de Round, Blessures et critiques de feu non régénérables, bouton « Régénérer ». `null` sans le Trait. */
 export function buildRegenerationBlock(createElement, participant) {
   if (!hasRegeneration(participant)) return null;
   const block = createElement('div');
@@ -18,6 +18,22 @@ export function buildRegenerationBlock(createElement, participant) {
     field.title = title;
     block.appendChild(field);
   }
+  // Critiques causés par le feu : non guérissables par un 10 (coche par Blessure Critique enregistrée).
+  const records = Array.isArray(participant?.extensions?.v5?.criticalWounds) ? participant.extensions.v5.criticalWounds : [];
+  for (const record of records.filter(row => row?.id)) {
+    const wrap = createElement('label');
+    wrap.className = 'regen-fire-crit-label';
+    const box = createElement('input');
+    box.type = 'checkbox';
+    box.className = 'regen-fire-crit';
+    box.value = record.id;
+    box.title = 'Critique causé par le feu (non guérissable par un 10)';
+    wrap.appendChild(box);
+    const text = createElement('span');
+    text.textContent = ` Feu : ${record.name || record.id}`;
+    wrap.appendChild(text);
+    block.appendChild(wrap);
+  }
   const button = createElement('button');
   button.type = 'button';
   button.className = 'tiny btn-regeneration';
@@ -27,9 +43,10 @@ export function buildRegenerationBlock(createElement, participant) {
   return block;
 }
 
-/** Lit le d10 et les Blessures de feu saisis dans le bloc ; `roll` vaut NaN si le champ est vide. */
+/** Lit le d10, les Blessures de feu et les critiques de feu cochés dans le bloc ; `roll` vaut NaN si le champ est vide. */
 export function readRegenerationInputs(block) {
   const read = selector => { const raw = block?.querySelector(selector)?.value; return raw === '' || raw === undefined ? NaN : Number(raw); };
   const fire = read('.regen-fire');
-  return { roll: read('.regen-roll'), fireWounds: Number.isInteger(fire) && fire > 0 ? fire : 0 };
+  const fireCriticalIds = [...(block?.querySelectorAll?.('.regen-fire-crit') || [])].filter(box => box.checked).map(box => box.value);
+  return { roll: read('.regen-roll'), fireWounds: Number.isInteger(fire) && fire > 0 ? fire : 0, fireCriticalIds };
 }

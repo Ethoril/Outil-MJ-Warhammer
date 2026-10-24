@@ -2,6 +2,8 @@
 // Module pur : lit les Traits (texte « Nom (précision) », noms anglais ou français) et rend un plan (valeurs de compétence, portées,
 // modificateurs, effets, points non résolus, rappels, reçu) sans rien écrire. Ce que le moteur ne sait pas trancher reste en rappel.
 
+import { isLiving } from './creature-natures.js';
+
 const fold = value => String(value ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/\s+/g, ' ').trim();
 
 const RULES = {
@@ -117,11 +119,13 @@ export function senseTestRules({ actor, opponent, participants = [], skillLabel 
     if (kind === 'ranged' && !defending) modifiers.push({ id: 'sense:chameleon-ranged', label: 'Tir contre un Caméléon', amount: -2 });
     if (/perception/.test(label) && typeof context.targetMoving === 'boolean') modifiers.push({ id: 'sense:chameleon-sight', label: `Voir un Caméléon ${context.targetMoving ? 'qui bouge' : 'immobile'}`, amount: context.targetMoving ? -2 : -4 });
   }
-  if (context.distractingInRange === true && (participants || []).some(person => person?.id !== actor?.id && has(person, 'distracting'))) {
+  // Perturbant : seuls les vivants le subissent (ni Mort-vivant, Démoniaque, Éthéré ni Artificiel), en attaque comme en défense.
+  if (context.distractingInRange === true && isLiving(actor) && (participants || []).some(person => person?.id !== actor?.id && has(person, 'distracting'))) {
     modifiers.push({ id: 'sense:distracting', label: 'Perturbant à portée (une seule fois)', amount: -2 });
   }
   let base = null;
-  const skillKey = /discretion/.test(label) ? 'stealthy' : /pistage|tracking|track/.test(label) ? 'tracker' : null;
+  // Furtif ne vaut que pour Discrétion (Rurale), pas Urbaine ni Souterrains.
+  const skillKey = /(discretion|stealth).*rural/.test(label) ? 'stealthy' : /pistage|tracking|track/.test(label) ? 'tracker' : null;
   if (skillKey && has(actor, skillKey)) {
     const skill = planSense(actor, skillKey).skills[0];
     if (skill && skill.value > currentBase) base = { score: skill.value, label: `${RULES[skillKey].fr} : ${skill.skill} ${skill.value} (${skill.source})` };

@@ -111,7 +111,7 @@ export function applyHeadCritical(participant, registry, effect, headId) {
 /**
  * Critiques d'attaque appliqués à une créature à Plusieurs têtes : un coup critique à la tête (Sonné, mort instantanée) ne touche qu'une tête
  * (`headId`, sinon la première valide). Rend `null` si rien ne concerne les têtes, sinon le nouveau registre, le plan, la tête touchée et
- * `stripStunned` (le Sonné du critique ne s'applique à la créature que si toutes les têtes sont neutralisées).
+ * `stripStunned` et `stunnedCount` (les Sonné des critiques à la tête ne s'appliquent à la créature que si toutes les têtes sont neutralisées).
  */
 export function applyHeadCriticals(participant, details, headId) {
   if (!hasManyHeads(participant)) return null;
@@ -122,7 +122,9 @@ export function applyHeadCriticals(participant, details, headId) {
     const parsed = detail.parsed || detail.effect?.parsed;
     const effect = parsed?.death ? 'dead' : (parsed?.states || []).some(state => state.key === 'sonne') ? 'stunned' : null;
     if (!effect) continue;
-    const result = applyHeadCritical(participant, registry, effect, headId);
+    // Tête désignée inconnue du registre : se rabattre sur la première tête valide plutôt que d'ignorer le critique.
+    const known = headId !== undefined && registry.some(head => head.id === headId);
+    const result = applyHeadCritical(participant, registry, effect, known ? headId : undefined);
     if (result.unresolved.length) continue;
     const hit = result.registry.find((head, index) => head.state !== registry[index]?.state);
     registry = result.registry;
@@ -131,7 +133,7 @@ export function applyHeadCriticals(participant, details, headId) {
   }
   if (!touched.length) return null;
   const plan = planManyHeads(participant, registry);
-  return { registry, plan, touched, stripStunned: stunned && !plan.globalEffect };
+  return { registry, plan, touched, stripStunned: stunned && !plan.globalEffect, stunnedCount: touched.filter(item => item.effect === 'stunned').length };
 }
 
 /** Remet une tête à l'état valide (fin d'étourdissement, guérison) : nouveau registre. */

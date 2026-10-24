@@ -4,7 +4,7 @@ import { normalizeEffects, normalizeState } from '../core/effects.js';
 import { DiceLine } from '../core/models.js';
 import { renderMiniDiceLine } from './dice-line.js';
 import { showToast } from './toast.js';
-import { contextMessage } from './messages.js';
+import { contextMessage, refusalError } from './messages.js';
 import { buildParticipantReminders } from '../core/reminders.js';
 import { buildHeadsBlock, nextHeadState } from './heads-block.js';
 import { buildRegenerationBlock, readRegenerationInputs } from './regeneration-block.js';
@@ -12,7 +12,7 @@ import { buildPsychologyBlock, readPsychologyInputs } from './psychology-block.j
 import { buildCreatureStatesBlock, readCreatureStatesInputs } from './creature-states-block.js';
 
 export function initCardUI(Store, Combat) {
-  const observe = (result, label = 'Modification') => Promise.resolve(result).then(value => { if (value === false || value?.ok === false) throw value?.error || new Error(`${label} impossible.`); return value; }).catch(error => showToast(contextMessage(`${label} impossible`, error, 'réessayez.'), 'error'));
+  const observe = (result, label = 'Modification') => Promise.resolve(result).then(value => { if (value === false || value?.ok === false) throw refusalError(value, label); return value; }).catch(error => showToast(contextMessage(`${label} impossible`, error, 'réessayez.'), 'error'));
   function getP(id) {
     return Store.getCombat().participants.get(id);
   }
@@ -332,9 +332,9 @@ export function initCardUI(Store, Combat) {
 
     if (e.target.matches('.btn-regeneration')) {
       e.preventDefault();
-      const { roll, fireWounds } = readRegenerationInputs(e.target.closest('.actor-regeneration'));
+      const { roll, fireWounds, fireCriticalIds } = readRegenerationInputs(e.target.closest('.actor-regeneration'));
       if (!Number.isInteger(roll) || roll < 1 || roll > 10) { showToast('Régénération : saisissez le d10 (1 à 10).', 'error'); return; }
-      observe(Store.applyRegeneration(id, roll, { fireWounds }), 'Régénération');
+      observe(Store.applyRegeneration(id, roll, { fireWounds, fireCriticalIds }), 'Régénération');
       return;
     }
 

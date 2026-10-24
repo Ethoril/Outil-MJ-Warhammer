@@ -1336,7 +1336,7 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
   if (target && carriesSense(target, 'chameleon')) contextField(fields, 'actor', 'targetMoving', 'La cible Caméléon se déplace (Perception pour la voir)');
   if (participants.some(person => person.id !== actor.id && carriesSense(person, 'distracting'))) contextField(fields, 'actor', 'distractingInRange', 'Un Perturbant est à portée (−2 DR, une seule fois)');
   // Traits de déplacement : le moteur ne connaît ni l'altitude ni le milieu, c'est le MJ qui le constate.
-  if (kind.value === 'ranged' && carriesMovement(actor, 'fly')) contextField(fields, 'actor', 'airborne', 'Le tireur en Vol est en vol (−2 DR au tir)');
+  if (kind.value === 'ranged' && target && carriesMovement(target, 'fly')) contextField(fields, 'actor', 'targetAirborne', 'La cible en Vol est en vol (−2 DR au tir)');
   if (carriesMovement(actor, 'marine')) contextField(fields, 'actor', 'inWater', 'La Créature marine est dans l’eau');
   contextField(fields,'actor','blackpowderBrokenTest','Calme contre un tir À Poudre noire');
   if(draft.v5Context?.blackpowderBrokenTest){const current=draft.v5Context,wrap=node('label','workspace-type','Auteur du tir À Poudre noire'),select=document.createElement('select');select.setAttribute('aria-label',wrap.textContent);select.append(new Option('Choisir',''));for(const shooter of participants.filter(p=>p.id!==actor.id))select.append(new Option(shooter.name,shooter.id));select.value=current.blackpowderShooterId||'';select.addEventListener('change',()=>handlers.select({v5Context:{...current,blackpowderShooterId:select.value||undefined}}));wrap.append(select);fields.append(wrap);}
@@ -1345,6 +1345,7 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
   if (['attack', 'opposition'].includes(type) && target) {
     fields.appendChild(rubric('Circonstances de la défense'));
     for (const [key, label] of [['involvesMovement','Le Test implique un mouvement'],['runningOrHiding','Le Test sert à fuir ou se cacher'],['reliesOnSight','Le Test est réalisable sans voir mais repose sur la vue'],['requiresSight','Le Test est impossible sans voir'],['usesFellowship','Le Test utilise la Sociabilité']]) contextField(fields, 'defender', key, label);
+    if (participants.some(person => person.id !== target.id && carriesSense(person, 'distracting'))) contextField(fields, 'defender', 'distractingInRange', 'Un Perturbant est à portée du défenseur (−2 DR, une seule fois)');
     conditionModeField(fields, 'defender');
   }
   contextual.appendChild(fields); v5.appendChild(contextual);

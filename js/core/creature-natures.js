@@ -31,6 +31,9 @@ const natureTraits = participant => [
   ...(Array.isArray(participant?.extensions?.traits) ? participant.extensions.traits : [])
 ].map(parseNatureTrait).filter(Boolean);
 
+/** Vrai pour un vivant : aucune nature Mort-vivant, Démoniaque, Éthéré ni Artificiel (Perturbant ne vise que les vivants). */
+export const isLiving = participant => !natureTraits(participant).some(trait => ['undead', 'daemonic', 'ethereal', 'construct'].includes(trait.key));
+
 /** Seuil d'un d10 (« 8+ », « 8 » : 8 ou plus) ; `null` si absent ou hors d10. */
 const thresholdOf = detail => {
   const value = Number.parseInt(String(detail), 10);

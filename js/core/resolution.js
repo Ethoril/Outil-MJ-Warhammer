@@ -992,7 +992,9 @@ export function applyResolution(preview, currentState) {
   // Plusieurs têtes : le critique à la tête ne touche qu'une tête (`v5.context.headId`, sinon la première valide).
   const headHit = preview.attack && target ? applyHeadCriticals(target, [preview.critical?.details, preview.critical?.second], preview.input.v5?.context?.headId) : null;
   const rawConditions = preview.targetConditionApplication || criticalEffects.states;
-  const targetConditions = headHit?.stripStunned ? rawConditions.filter(condition => condition.key !== 'sonne') : rawConditions;
+  // Seuls les Sonné issus des critiques à la tête sont retirés (un Sonné d'un autre critique reste).
+  let toStrip = headHit?.stripStunned ? headHit.stunnedCount : 0;
+  const targetConditions = rawConditions.filter(condition => !(condition.key === 'sonne' && toStrip > 0 && toStrip--));
   if (preview.attack && preview.targetId && (preview.damage || criticalEffects.extraWounds || targetConditions.length || headHit)) {
     if (!target) return { status: 'stale', requiresPreview: true, state: clone(currentState), resolution: clone(preview) };
     if (JSON.stringify(target) !== JSON.stringify(preview.input.target)) {

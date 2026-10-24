@@ -14,6 +14,19 @@ Plan : `PLAN_PRO_BRANCHEMENT.md`. Choix et questions : `CHOIX_EXECUTANT_BRANCHEM
 | B6 | FAIT (Déplacement branché, voir ci-dessous ; question BR-12 au MJ) |
 | B7 | FAIT (Nuée, Venin, rappels d'états et de natures, voir ci-dessous) |
 | B8 | FAIT (Lanceur de sorts ouvert, rappels de magie et de capacités, voir ci-dessous ; BR-14) |
+| B8c | FAIT (corrections de B3-B6, réponses du MJ du 24/10 : BR-10, BR-11, BR-12) |
+
+## B8c — Corrections de B3-B6 et réponses du MJ (24/10/2026)
+
+1. **Vol (BR-12)** : inversé. `movementTestRules` reçoit l’adversaire (`opponent`, passé par `buildCombatTest`) ; −2 DR au tireur quand la cible porte Vol et que « La cible en Vol est en vol » = Oui (`targetAirborne`, `resolution-panel.js`, affichée seulement pour un tir contre un porteur de Vol). Plus rien sur les tirs du volant (la case `airborne` disparaît).
+2. **Furtif** : ne s’applique plus qu’à Discrétion (Rurale) (`creature-senses.js`).
+3. **Raison d’un refus** : `refusalError` (`messages.js`), utilisée par `observe` (`card.js`) : les refus `{ ok:false, message }` affichent leur message. Preuve : test de la fonction et du câblage dans `card.js` (le dépôt n’a pas de rendu DOM de la carte en test).
+4. **Régénération sur un 10** : retire aussi les États (`stateIds`) du critique guéri, dans la même commande annulable (`store.js`, `recoverV5Condition` en `divine-removal`).
+5. **Critiques de feu** : faisable, fait. Le bloc de Régénération de la carte affiche une case « Feu : <critique> » par Blessure Critique enregistrée ; les cochées vont dans `fireCriticalIds` (jamais guéries par un 10). Branché : `regeneration-block.js` → `card.js` → `applyRegeneration`.
+6. **Perturbant en défense** : case « Un Perturbant est à portée du défenseur » dans les circonstances de la défense (`resolution-panel.js`) ; `senseTestRules` ne frappe que les vivants (`isLiving`, `creature-natures.js` : ni Mort-vivant, Démoniaque, Éthéré ni Artificiel). Prouvé par la défense du Store.
+7. **Sonné de tête** : seuls les Sonné issus des critiques à la tête sont retirés (`stunnedCount`, `resolution.js`) ; un second Sonné reste. Une tête désignée inconnue retombe sur la première tête valide (`creature-heads.js`).
+8. Plan : lignes B4, B5, B6 précisent ce qui reste en rappel. Choix BR-10, BR-11, BR-12 consignés comme tranchés.
+- Test : `tests/pro-b8c-corrections.test.js` (9 tests) ; `pro-b6-…` et `pro-b3-…` mis à jour. Suite : 4632 tests, seul échec « recette refuse un cwd externe » (propre au worktree) après correction du test B3.
 
 ## B8 — Magie et capacités (24/10/2026)
 
@@ -36,7 +49,7 @@ Plan : `PLAN_PRO_BRANCHEMENT.md`. Choix et questions : `CHOIX_EXECUTANT_BRANCHEM
 - **Branché** : `movementReminders` via `TRAIT_REMINDERS` (`reminders.js`) → rappel de chaque Trait de déplacement (Vol, Bond, Foulée, Grimpant, Amphibie, Arboricole, Fouissage, Marine…) sur la carte et le Personnage actif.
 - **Branché** : `movementTestRules` (nouvelle, `creature-movement.js`, s’appuie sur `planMovement`), appelée par `buildCombatTest` (`v5-combat-rules.js`) : tir d’un porteur de Vol −2 DR quand « le tireur en Vol est en vol » est précisé ; Amphibie +1 DR en Natation (Bonus d’Agilité pour le Zoo) ; Arboricole + Bonus d’Agilité en Escalade et Discrétion ; Créature marine hors de l’eau −2 DR à tous les Tests une fois « dans l’eau » = Non. Chemin d’interface : « Circonstances des Tests » du panneau de résolution (`resolution-panel.js`, listes À préciser/Oui/Non affichées seulement pour un porteur de Vol au tir ou de Créature marine). Sans contexte : rien d’appliqué, le rappel reste.
 - **Code testé, non appelé** : `planMovement` pour Bond, Foulée, Foulée adaptée, Grimpant, Limicole, Fouissage, Respiration aquatique, Aquatique (le moteur n’a ni carte ni distances : rappels seulement), Charge du Vol (Élan de Charge déjà géré par la Charge existante).
-- Limite : le plan disait « −2 DR au tir contre une créature en vol » ; le module (lecture du livre, E-T4) donne −2 DR aux tirs **du porteur** en vol, c’est ce qui est branché (BR-12).
+- Limite (remplacée en B8c) : le MJ a tranché le 24/10 (BR-12) : −2 DR aux tirs **contre** une créature en vol ; voir B8c.
 - Test : `tests/pro-b6-deplacement-branche.test.js` (Roc plume-vive et Skink caméléon, L07). Suite : seul échec « recette refuse un cwd externe » (propre au worktree).
 
 ## B5 — Sens et discrétion (24/10/2026)

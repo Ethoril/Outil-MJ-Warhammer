@@ -2296,7 +2296,13 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         const receipt = healV5Wounds(target, amount);
         healed = receipt.hpDelta ?? 0;
         const records = receipt.participant.extensions?.v5?.criticalWounds || [];
-        const next = plan.criticalHeal ? withV5(receipt.participant, v5 => ({ ...v5, criticalWounds: records.filter(row => row.id !== plan.criticalHeal.id) })) : receipt.participant;
+        let next = plan.criticalHeal ? withV5(receipt.participant, v5 => ({ ...v5, criticalWounds: records.filter(row => row.id !== plan.criticalHeal.id) })) : receipt.participant;
+        // Un 10 régénère le critique et ses États (E0-T-044), comme le soin divin des critiques.
+        const healedRecord = plan.criticalHeal ? records.find(row => row.id === plan.criticalHeal.id) : null;
+        for (const stateId of new Set(healedRecord?.stateIds || [])) {
+          if (!(next.states || []).some(row => row.id === stateId)) continue;
+          next = recoverV5Condition(next, stateId, { method: 'divine-removal', amount: Number.MAX_SAFE_INTEGER }).participant;
+        }
         return { ...draft,
           combat: { ...draft.combat, participants: draft.combat.participants.map(item => (item.id === participantId ? next : item)) },
           log: [{ id: uid(), kind: 'effect', actorId: participantId, targetId: participantId,
