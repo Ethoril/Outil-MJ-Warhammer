@@ -44,6 +44,7 @@ Plan : `PLAN_PRO_QUALITE_E.md`. Branche `pro/qualite-e`, départ `9c12613`. Choi
 | Q27i | FAIT (L25, L26 ; Q27 terminé, 0 manque non justifié sur les 23 livres) | (voir `git log`, « Q27i ») |
 | Q28 | FAIT (`QE-Q28-1`) | (voir `git log`, « Q28 ») |
 | Q29 | FAIT | (voir `git log`, « Q29 ») |
+| Q30 | FAIT (`QE-Q30-1`) | (voir `git log`, « Q30 ») |
 
 ## Q0 — contrôle de complétude
 
@@ -421,3 +422,10 @@ Branché / non appelé (grep dans `js/`) :
 - **Test de rendu navigateur** (DOM réel, Playwright) : `tests/pro-q29-tailles-ui-browser.mjs` : Piétinement, Langue, Attaque caudale = exactement 2 listes ; Morsure = 0 ; Piétinement + Grand = 2 ; Grand seul = 2. Contre-épreuve : sans le correctif, Piétinement, Langue et Piétinement + Grand échouent. Hors `npm test` (comme les autres `*-browser.mjs`).
 - **Suite complète** : 4475 tests, 0 échec.
 - **Branché** : `renderResolutionPanel` (appelant : `js/ui/workspace-view.js`), vérifié par rendu. Aucune valeur durable de personnage.
+
+## Q30 — formule V5 par défaut des attaques naturelles (FAIT)
+
+- **Moteur** : `inferNaturalAttackKey` (`js/core/creature-combat.js`) ; `normalizeResolutionInput` (`js/core/resolution.js`) : une attaque ordinaire dont le nom est celui d'un Trait Bite, Horns, Tail, Stomp ou Tentacles possédé prend la formule V5 sans choisir la liste « Attaque naturelle » (dégâts seulement). Morsure : plus `printed` ; Valeur du Trait (livre de base V5 p.356), BF+n pour « Strength Bonus + n », chiffre imprimé à défaut. Armes et Claws gardent leurs dégâts. Tentacules sans nombre imprimé : nombre d'actions de tentacule du participant. Choix : `QE-Q30-1`.
+- **Test** : `tests/pro-q30-formule-v5-defaut.test.js` (5 tests, par `store.previewResolution` : Morsure, Queue, Kraken = BF 8 et non 9 imprimé, arme inchangée, ancien participant à tentacules).
+- **Branché** : `inferNaturalAttackKey` ← `js/core/resolution.js` (`normalizeResolutionInput`, appelé par le Store pour chaque résolution, donc par le panneau de Résolution). Pas de test de rendu navigateur : aucun changement d'interface, le test passe par le Store.
+- **Suite complète** : 4480 tests, 0 échec. Aucune valeur durable de personnage.

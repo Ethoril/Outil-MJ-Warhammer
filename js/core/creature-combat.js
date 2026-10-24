@@ -9,9 +9,10 @@ const fold = value => String(value ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '
 
 const MOMENTUM = Object.freeze({ resource: 'momentum', amount: 1 });
 
-// `bf` : supplément de dégâts (BF + n) ; `printed` : les dégâts imprimés de l'attaque du profil sont déjà complets.
+// `bf` : supplément de dégâts (BF + n) ; `rating` : les dégâts sont la Valeur du Trait (BF inclus, « Bite (7) » ou « Bite (Strength Bonus + 1) »),
+// à défaut de valeur le chiffre imprimé de l'attaque du profil est la Valeur V5.
 const RULES = {
-  bite: { fr: 'Morsure', names: ['bite', 'morsure'], cost: MOMENTUM, printed: true, test: 'CC', note: 'Dégâts du profil : Bonus de Force déjà inclus.' },
+  bite: { fr: 'Morsure', names: ['bite', 'morsure'], cost: MOMENTUM, rating: true, test: 'CC', note: 'Livre de base V5 p.356 : les dégâts valent la Valeur du Trait, Bonus de Force déjà inclus.' },
   horns: { fr: 'Cornes', names: ['horns', 'cornes'], requires: 'charge', bf: 4, test: 'CC', note: 'Une Charge permet une attaque gratuite des cornes (BF+4).' },
   tail: { fr: 'Attaque caudale', names: ['tail', 'attaque caudale'], cost: MOMENTUM, bf: 2, test: 'CC', smallerEffect: 'À terre', note: 'Une cible plus petite blessée devient À terre.' },
   stomp: { fr: 'Piétinement', names: ['stomp', 'pietinement'], cost: MOMENTUM, bf: 0, test: 'CC', skill: 'Corps à corps (Bagarre)', smallerOnly: true, note: 'Attaque de Bagarre contre une créature plus petite.' },
@@ -72,6 +73,16 @@ export function naturalAttackNeedsSize(key) {
   return Boolean(rule && (rule.smallerEffect || rule.smallerOnly || rule.pullsSmaller));
 }
 
+/**
+ * Décision du MJ du 23/10 : une attaque ordinaire du profil qui porte le nom d'un Trait d'attaque naturelle que le participant possède
+ * (« Bite », « Tail 2 », « Tentacules 3 »…) prend la formule V5 du Trait. Rend la clé du Trait, ou `null` (arme, Trait absent).
+ */
+export function inferNaturalAttackKey(participant, action) {
+  const key = BY_NAME.get(fold(action?.name).replace(/\s*\d+$/, ''));
+  if (!key || !['bite', 'horns', 'tail', 'stomp', 'tentacles'].includes(key)) return null;
+  return traitsOf(participant).some(trait => trait.key === key) ? key : null;
+}
+
 const isZoo =participant => participant?.extensions?.v5?.bestiary?.book === 'L11';
 
 /**
@@ -87,8 +98,13 @@ export function planNaturalAttack(participant, key, options = {}) {
   if (isZoo(participant) && ['howl', 'vomit'].includes(key)) plan.reminders.push(`${rule.fr} (Imperial Zoo) : coût en Avantages et résolution propres au Zoo, à appliquer à la main (E0-T-${key === 'howl' ? '090' : '095'}).`);
 
   const bonus = strengthBonusOf(participant?.caracs);
-  if (rule.printed) plan.damageFormula = 'imprimé';
-  else if (Number.isInteger(rule.bf)) {
+  if (rule.rating) {
+    const detail = String(owned.detail ?? '').trim();
+    const plus = /^(?:strength bonus|bonus de force|bf)\s*\+\s*(\d+)$/i.exec(detail);
+    if (/^\d+$/.test(detail)) plan.damageFormula = detail;
+    else if (plus && bonus !== null) plan.damageFormula = `${bonus + Number(plus[1])}`;
+    else plan.damageFormula = 'imprimé';
+  } else if (Number.isInteger(rule.bf)) {
     if (bonus === null) plan.unresolved.push(`${rule.fr} : Force du participant inconnue, dégâts BF${rule.bf ? `+${rule.bf}` : ''} à saisir.`);
     else plan.damageFormula = `${bonus + rule.bf}`;
   }
@@ -133,7 +149,9 @@ export function planNaturalAttack(participant, key, options = {}) {
   }
   if (rule.perDetail) {
     // « 8 × +9 » (nombre imprimé × valeur) ou « 4 » ; un chiffre signé (« +9 ») est la valeur d'attaque, pas le nombre de tentacules.
-    const count = /^\d+/.test(owned.detail) ? Number.parseInt(owned.detail, 10) : NaN;
+    // Sans nombre imprimé (ancien participant « Tentacles (+9) ») : autant d'attaques que d'actions de tentacule du participant.
+    const actionCount = (participant?.actions || []).filter(action => BY_NAME.get(fold(action?.name).replace(/\s*\d+$/, '')) === 'tentacles').length;
+    const count = /^\d+/.test(owned.detail) ? Number.parseInt(owned.detail, 10) : actionCount || NaN;
     if (!Number.isInteger(count) || count < 1) plan.unresolved.push(`${rule.fr} : nombre de tentacules illisible.`);
     else {
       plan.quota = { id: `creature:${key}`, scope: 'turn', maximum: count };

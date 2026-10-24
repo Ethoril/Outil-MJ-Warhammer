@@ -19,7 +19,7 @@ import {
 import { isCriticalRoll, isFumbleRoll } from './roll-qualities.js';
 import { actionHasDamage, actionWeaponDamage, computeDamage, evaluateWeaponDamage, formatDamageFormula, formatWeaponDamage, strengthBonusOf } from './damage.js';
 import { normalizeQualities } from './quality-normalization.js';
-import { planNaturalAttack } from './creature-combat.js';
+import { planNaturalAttack, inferNaturalAttackKey } from './creature-combat.js';
 import { acquireV5Conditions,healV5Wounds } from './v5-effects.js';
 import { slExtremeLayers } from './v5-divine-effects-tests.js';
 import { hasArcaneMagicLore } from './v5-magic-attributes.js';
@@ -236,6 +236,12 @@ export function normalizeResolutionInput(input = {}) {
   const natural = naturalPlanOf(actor, input.v5);
   if (natural && /^\d+$/.test(String(natural.damageFormula))) { action.damage = Number(natural.damageFormula); delete action.damageFormula; }
   else if (natural?.noDamage) { action.damage = 0; delete action.damageFormula; }
+  else if (!natural && actor && attackType(action.type)) {
+    // Décision du MJ du 23/10 : l'attaque ordinaire d'un Trait d'attaque naturelle (Bite, Tail, Tentacles…) suit la formule V5 du Trait.
+    const key = inferNaturalAttackKey(actor, action);
+    const inferred = key && planNaturalAttack(actor, key, { actorSize: naturalSizes(input.v5).actorSize, targetSize: naturalSizes(input.v5).targetSize });
+    if (inferred && /^\d+$/.test(String(inferred.damageFormula))) { action.damage = Number(inferred.damageFormula); delete action.damageFormula; }
+  }
   if (action.extensions?.fiche?.requiresLink) throw new ResolutionError('Lier une compétence à cette arme avant de résoudre son attaque', 'SKILL_LINK_REQUIRED');
   const target = isRecord(input.target) ? clone(input.target) : null;
   const entered=input.roll??input.dieRoll??input.enteredRoll;
