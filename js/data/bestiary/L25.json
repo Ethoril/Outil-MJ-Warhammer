@@ -917,6 +917,11 @@
      "value": 36
     },
     {
+     "name": "Language (Wastelander)",
+     "nameFr": "Langue (Wastelander)",
+     "value": 51
+    },
+    {
      "name": "Leadership",
      "nameFr": "Commandement",
      "value": 56
@@ -1542,6 +1547,11 @@
      "name": "Perception",
      "nameFr": "Perception",
      "value": 41
+    },
+    {
+     "name": "Sleight of Hand",
+     "nameFr": "Escamotage",
+     "value": 51
     },
     {
      "name": "Trade (Barber)",
@@ -2856,6 +2866,17 @@
      "nameFr": "Savoir (Elves)",
      "frUnverified": true,
      "value": 59
+    },
+    {
+     "name": "Lore (Theology)",
+     "nameFr": "Savoir (Théologie)",
+     "value": 69
+    },
+    {
+     "name": "Lore (Oceans)",
+     "nameFr": "Savoir (Oceans)",
+     "frUnverified": true,
+     "value": 99
     },
     {
      "name": "Melee (Polearm)",

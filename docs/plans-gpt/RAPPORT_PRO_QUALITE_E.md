@@ -41,6 +41,7 @@ Plan : `PLAN_PRO_QUALITE_E.md`. Branche `pro/qualite-e`, départ `9c12613`. Choi
 | Q27f | FAIT (L21 ; Q27 non terminé : L22, L23, L25, L26) | (voir `git log`, « Q27f ») |
 | Q27g | FAIT (L22 ; Q27 non terminé : L23, L25, L26) | (voir `git log`, « Q27g ») |
 | Q27h | FAIT (L23 ; Q27 non terminé : L25, L26) | (voir `git log`, « Q27h ») |
+| Q27i | FAIT (L25, L26 ; Q27 terminé, 0 manque non justifié sur les 23 livres) | (voir `git log`, « Q27i ») |
 
 ## Q0 — contrôle de complétude
 
@@ -395,3 +396,12 @@ Branché / non appelé (grep dans `js/`) :
 - **Contrôle, 23 livres** : talents 0, compétences 3, attaques 0, Traits 1, équipement 26, sorts 0, bruit d'équipement 3 (avant : 6, 3, 2, 7, 58, 0, 3) ; les 10 avertissements de compétence restants sont des coquilles de noms du livre (« Athlethics »…) ou du texte à colonnes, pas des manques.
 - Test : `tests/pro-q27h-completude.test.js` (5 tests).
 - Outil de contrôle et données de livre : rien à déclarer « branché » (équipements, talents et Traits gagnés passent par `buildParticipantFromBestiary`, appelants : `js/ui/bestiary-library.js`, `js/core/bestiary-templates.js` ; `specialRules` : code testé, non appelé). Aucune valeur durable de personnage.
+
+## Q27i — complétude de L25 et L26 (FAIT ; Q27 terminé)
+
+- Mesure avant : 15 profils signalés (L25 5 : compétences 3, équipement 2, bruit 1 ; L26 10 : Trait 1, équipement 24, bruit 2). Tous relus sur leurs pages. **Après : 0 manque non justifié sur les 23 livres** (talents 0, compétences 0, attaques 0, Traits 0, équipement 0, sorts 0, bruit d'équipement 0) ; 13 profils justifiés un par un (`QE-Q27i-1`).
+- **Vrais manques corrigés dans l'outil** : Language (Wastelander) 51 de l'Officer et Sleight of Hand 51 du Doktor (L25 p.127, texte du voisin dans le nom de la compétence), Lore (Theology) 69 et Lore (Oceans) 99 de Triton (L25 p.149, parenthèse du livre fermée trop tôt), Resistance (Chaos) de Bella Hornwhistler (L26 p.58, imprimé parmi les Traits : devient le talent Resistant (Chaos)). Détail : `QE-Q27i-2`.
+- **Livres régénérés** (23, `build-bestiary-profiles.mjs`) : L09, L10, L25, L26 changent, uniquement par des lignes gagnées (Melee (Basic) 68 de Scorath, Resistant (Poison) de Kelrathi et de Trevna Fane en plus des 5 profils L25/L26). Aucune valeur imprimée changée (contrôle : lignes retrouvées sur 23 livres, git diff sans ligne de caractéristiques).
+- **Contrôle, 23 livres** : talents 0, compétences 0, attaques 0, Traits 0, équipement 0, sorts 0, bruit d'équipement 0 (avant : 0, 3, 0, 1, 26, 0, 3). Reste 10 avertissements de compétence (coquilles de noms du livre, `QE-Q27i-3`), pas des manques.
+- Test : `tests/pro-q27i-completude.test.js` (5 tests).
+- Outil de contrôle et données de livre : rien à déclarer « branché » (les compétences et talents gagnés passent par `buildParticipantFromBestiary`, appelants : `js/ui/bestiary-library.js`, `js/core/bestiary-templates.js`). Aucune valeur durable de personnage.

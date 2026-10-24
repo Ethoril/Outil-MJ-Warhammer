@@ -110,7 +110,9 @@ export function readSkills(text) {
   // Césures de mise en page (« Two- handed », « Pole- arm ») recollées ; « Pole-arm » et « Pole Arm » sont la spécialisation Polearm.
   // Fragment de la colonne voisine entre un nom et sa parenthèse (« Melee rd, (Basic 90, Two-handed 100) », Brokk Ironpick L16 p. 32) : écarté.
   // « Ride Horse 42 » (Renia Grünewald, L21 p. 41) : parenthèses oubliées par le livre.
-  const joined = text.replace(/(^|,\s*)Ride ([A-Z][a-z]+) (?=\d)/g, '$1Ride ($2) ').replace(/([\wà-ÿ])- (?=[a-zà-ÿ])/g, '$1-').replace(/\bPole[- ]arm\b/gi, 'Polearm').replace(/(\p{L}) [a-z]{1,3},(?= \()/gu, '$1');
+  // « Language im (Wastelander) 51 » (Officer, L25 p. 127) : lettres du voisin sans virgule ; « Sleight 61, of Hand 51 » (Doktor, même page) : valeur du voisin coincée dans un nom coupé en fin de ligne.
+  // « Lore (Elves) 59, Theology 69, Oceans 99) » (Triton, L25 p. 149) : parenthèse du livre fermée après le premier nom au lieu de la fin de la liste.
+  const joined = text.replace(/(^|,\s*)Ride ([A-Z][a-z]+) (?=\d)/g, '$1Ride ($2) ').replace(/([\wà-ÿ])- (?=[a-zà-ÿ])/g, '$1-').replace(/\bPole[- ]arm\b/gi, 'Polearm').replace(/(\p{L}) [a-z]{1,3},?(?= \()/gu, '$1').replace(/\bSleight(?: \d+,)? of Hand\b/g, 'Sleight of Hand').replace(/\bLore \(([^()]*)\) (\d+), ([^()]*\d)\)(?=,|\s*$)/g, 'Lore ($1 $2, $3)');
   // Note à astérisque collée à la dernière compétence (« Swim 35 *All Tests connected with… », L01 p. 78) : la liste s'arrête avant.
   for (const rawItem of splitList(joined.replace(/\s\*\s?[A-Z][\s\S]*$/, '')).map(entry => entry.replace(/\s*\*+$/, ''))) {
     // « Language (Magick 74, Reikspiel) 48 » (L18 p. 97) : la dernière spécialisation a sa valeur après la parenthèse.

@@ -225,10 +225,10 @@ export function buildRecord(extracted, entry, context) {
   const listed = traits.kept.filter(trait => !structural.has(trait.name));
   if (listed.length) record.traits = listed;
   if (optional.kept.length) record.optionalTraits = optional.kept;
-  // Un Talent du catalogue imprimé dans la liste des Traits d'un profil V4 (« Acute Sense (Vision: as Character Talent) ») est un Talent, pas un Trait.
+  // Un Talent du catalogue imprimé dans la liste des Traits d'un profil V4 (« Acute Sense (Vision: as Character Talent) ») est un Talent, pas un Trait ; de même « Resistance (Chaos) » (Bella Hornwhistler, L26 p. 58), nom rattaché à Resistant.
   const baseName = name => String(name).replace(/\s*\(.*\)\s*$/, '').toLowerCase();
   const listedTalents = new Set((extracted.talents || []).map(talent => baseName(talent.name)));
-  const traitTalents = trimmed.filter(trait => !canonical(trait.name) && trait.param && isCatalogueTalent(trait.name) && !listedTalents.has(baseName(trait.name))).map(trait => ({ name: `${trait.name}${trait.param ? ` (${trait.param.replace(/:\s*as Character Talent/i, '')})` : ''}` }));
+  const traitTalents = trimmed.filter(trait => !canonical(trait.name) && trait.param && isCatalogueTalent(canonicalTalentName(trait.name)) && !listedTalents.has(baseName(canonicalTalentName(trait.name)))).map(trait => ({ name: `${canonicalTalentName(trait.name)}${trait.param ? ` (${trait.param.replace(/:\s*as Character Talent/i, '')})` : ''}` }));
   const talents = [...(extracted.talents || []).filter(talent => talent.name).flatMap(talent => splitGluedTalent(talent.name).map((name, index, parts) => ({ name, rank: index === parts.length - 1 ? talent.rank : undefined }))).filter(talent => !isNoise(talent.name.replace(/\(.*\)/, ''))).map(talent => ({ name: talent.name, ...(talent.rank ? { rank: talent.rank } : {}) })), ...traitTalents];
   if (extracted.talents?.length || traitTalents.length) record.talents = talents;
   const trims = TRAPPING_TRIMS[entry.id] || [];

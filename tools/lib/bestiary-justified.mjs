@@ -123,5 +123,19 @@ export const JUSTIFIED = Object.freeze({
   'E0-P-807': { attacks: 'L23 p.108 : « Claw +4 » est le Trait du profil voisin (Imperial Beast) ; les Farmyard Beasts ont Bite +3 et Weapon +5.', traits: 'L23 p.108 : « Size (Small) » est le Trait du profil voisin (Imperial Beast) ; les cinq Traits des Farmyard Beasts sont présents.' },
   'E0-P-808': { traits: 'L23 p.108 : « Hatred (Keepers) » et « Venom (Challenging) » sont les Traits du profil voisin (Farmyard Beasts) ; les cinq Traits de l\'Imperial Beast sont présents.' },
   'E0-P-812': { trappingNoise: 'L23 p.111 : « Potions and Charms, all fake (at the GM\'s discretion, some may have interesting but unplanned effects) » est un seul objet imprimé (recollé par TRAPPING_JOINS) ; le contrôle lit sa longue parenthèse comme une phrase.' },
-  'E0-P-607': { attacks: 'L19 p.143 : « and go on to score a goal if their total is +25 » est la règle de jeu rapide du match (texte de la colonne voisine) ; le Nain n\'a aucune attaque imprimée.' }
+  'E0-P-607': { attacks: 'L19 p.143 : « and go on to score a goal if their total is +25 » est la règle de jeu rapide du match (texte de la colonne voisine) ; le Nain n\'a aucune attaque imprimée.' },
+  // Q27i : L25 (Sea of Claws) et L26 (Death on the Reik Companion) relus sur leurs pages.
+  'E0-P-903': { trappingNoise: 'L25 p.127 : « either a Halberd or a Crossbow and 10 Bolts » est un objet imprimé tel quel (même ligne que E0-P-461).' },
+  'E0-P-918': { skills: 'L25 p.149 : « Lore (Elves) 59, Theology 69, Oceans 99) » : le livre ferme la parenthèse après le premier nom ; Lore (Elves) 59, Lore (Theology) 69 et Lore (Oceans) 99 sont présentes (readSkills).' },
+  'E0-P-921': { trappings: 'L25 p.155 : « Wulfrik\'s successes mark him as favoured by the gods. Any Charm, Intimidate… » est la prose « Favoured Champion » de la colonne voisine ; la ligne Trappings imprimée (Bastard Sword, Heavy Armour, Shield, Skull Trophies) est présente.' },
+  'E0-P-923': { trappings: 'L26 p.18 : « ONWARD TO MIDDENHEIM After the events of Death on the Reik… » est l\'encadré de la colonne voisine collé à « 5d10 GC » ; les six objets imprimés sont présents.' },
+  'E0-P-926': { trappings: 'L26 p.21 : « NO HAPPY ENDINGS With Count Orlok disposed of, and Karl and Hans recovering » est l\'encadré voisin ; les quatre objets du Vampire Noble sont présents.' },
+  'E0-P-940': { trappings: 'L26 p.48 : « Careful Step, Dart, Warning, Arcane: Bolt, Dark Vision… The Amber Spear 48 » sont les sorts, Traits et pages de la colonne voisine ; les sept objets de la ligne Trappings imprimée sont présents.' },
+  'E0-P-950': { traits: 'L26 p.58 : « Resistance (Chaos) » est imprimé parmi les Traits mais c\'est le talent Resistant (Chaos) du catalogue ; il est présent dans les talents du profil (comme Acute Sense, Q27d).' },
+  'E0-P-967': { trappingNoise: 'L26 p.106 : « Trappings: Various, often Hand Weapon (Boat Hook or Dagger), Uniform » est imprimé tel quel.' },
+  'E0-P-970': { trappings: 'L26 p.107 : « sociable » vient de « Personality: Garrulous, sociable, perfectionist. » (colonne voisine) ; les quatre objets imprimés sont présents.' },
+  'E0-P-973': { trappings: 'L26 p.108 : « Obnoxious Trader Appearance: Middle-aged, overweight… Motivations: Greed » est la description du Purser (colonne voisine) ; les cinq objets de sa ligne Trappings sont présents.' },
+  'E0-P-975': { trappings: 'L26 p.109 : « aristocratic » vient de « Appearance: Elderly, aristocratic, well-dressed. » (Experienced Broker, colonne voisine) ; les trois objets imprimés sont présents.' },
+  'E0-P-977': { trappingNoise: 'L26 p.109 : « d10 × 30 Gold Crown » est imprimé tel quel en fin de Trappings.' },
+  'E0-P-981': { trappings: 'L26 p.111 : « FORMER OFFICER (GOLD 1) » est la fin du titre du profil voisin (Armchair General) ; les six objets imprimés sont présents.' }
 });

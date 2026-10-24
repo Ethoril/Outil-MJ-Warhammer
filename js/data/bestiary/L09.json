@@ -5317,6 +5317,11 @@
      "value": 83
     },
     {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 68
+    },
+    {
      "name": "Outdoor Survival",
      "nameFr": "Survie en extérieur",
      "value": 68
@@ -5636,6 +5641,9 @@
     },
     {
      "name": "Surgery"
+    },
+    {
+     "name": "Resistant (Poison)"
     }
    ],
    "trappings": [
