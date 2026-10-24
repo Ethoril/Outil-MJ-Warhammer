@@ -76,7 +76,10 @@ export function buildV5StoreActionInput(envelope, raw = {}) {
   // attaque naturelle ou portée par une action gratuite du profil (« Bite », freeAttack).
   if(hasManyHeads(actor)){
     const attackKey=context.naturalAttack||(supplied.action?.extensions?.v5?.freeAttack?headAttackKeyOf(supplied.action.name):null);
-    const perHead=attackKey&&planManyHeads(actor,headRegistryOf(actor)).freeAttacks.find(entry=>entry.key===attackKey);
+    const headsPlan=attackKey?planManyHeads(actor,headRegistryOf(actor)):null;
+    // Nombre de têtes absent ou registre différent : le plafond par tête ne peut pas être appliqué, on le dit au lieu de le sauter.
+    if(headsPlan?.unresolved.length)throw new TypeError(headsPlan.unresolved.join(' '));
+    const perHead=headsPlan?.freeAttacks.find(entry=>entry.key===attackKey);
     if(perHead){
       if(perHead.count<1)throw new TypeError('Plusieurs têtes : aucune tête valide pour cette attaque.');
       quotas.push({id:'creature:heads:'+perHead.key,scope:'turn',maximum:perHead.count});

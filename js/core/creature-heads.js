@@ -108,6 +108,32 @@ export function applyHeadCritical(participant, registry, effect, headId) {
   return { registry: next, plan: planManyHeads(participant, next), unresolved: [] };
 }
 
+/**
+ * Critiques d'attaque appliqués à une créature à Plusieurs têtes : un coup critique à la tête (Sonné, mort instantanée) ne touche qu'une tête
+ * (`headId`, sinon la première valide). Rend `null` si rien ne concerne les têtes, sinon le nouveau registre, le plan, la tête touchée et
+ * `stripStunned` (le Sonné du critique ne s'applique à la créature que si toutes les têtes sont neutralisées).
+ */
+export function applyHeadCriticals(participant, details, headId) {
+  if (!hasManyHeads(participant)) return null;
+  let registry = headRegistryOf(participant);
+  const touched = [];
+  let stunned = false;
+  for (const detail of (details || []).filter(item => item && !item.pending && item.location?.key === 'HEAD')) {
+    const parsed = detail.parsed || detail.effect?.parsed;
+    const effect = parsed?.death ? 'dead' : (parsed?.states || []).some(state => state.key === 'sonne') ? 'stunned' : null;
+    if (!effect) continue;
+    const result = applyHeadCritical(participant, registry, effect, headId);
+    if (result.unresolved.length) continue;
+    const hit = result.registry.find((head, index) => head.state !== registry[index]?.state);
+    registry = result.registry;
+    touched.push({ headId: hit?.id ?? null, effect });
+    if (effect === 'stunned') stunned = true;
+  }
+  if (!touched.length) return null;
+  const plan = planManyHeads(participant, registry);
+  return { registry, plan, touched, stripStunned: stunned && !plan.globalEffect };
+}
+
 /** Remet une tête à l'état valide (fin d'étourdissement, guérison) : nouveau registre. */
 export function restoreHead(registry, headId) {
   return normalizeRegistry(registry).map(head => (head.id === headId ? { ...head, state: 'healthy' } : head));
@@ -124,13 +150,18 @@ export const headRegistryOf = participant => {
 
 /** Rappels de Plusieurs têtes d'un participant : état des têtes, attaques gratuites, Perception, effet global (affichage de fiche). */
 export function manyHeadsReminders(participant) {
+  return manyHeadsReminderItems(participant).map(item => item.text);
+}
+
+/** Mêmes rappels, avec une clé stable par sens (compte, attaques, Perception, effet global, note) : un « Fait » ne masque que sa ligne. */
+export function manyHeadsReminderItems(participant) {
   if (!hasManyHeads(participant)) return [];
   const plan = planManyHeads(participant, headRegistryOf(participant));
-  if (plan.total === null) return [`${LABEL} : ${plan.unresolved.join(' ')}`];
-  const lines = [`${LABEL} : ${plan.healthy} tête(s) valide(s) sur ${plan.total}.`];
-  if (plan.freeAttacks.length) lines.push(`Attaques gratuites par tête valide : ${plan.freeAttacks.map(entry => `${entry.label} ×${entry.count}`).join(', ')}.`);
-  if (plan.perception) lines.push(`Perception : ${plan.perception.modifier > 0 ? '+' : ''}${plan.perception.modifier} ${plan.perception.unit} (${plan.perception.cause}).`);
-  if (plan.globalEffect) lines.push(`Toutes les têtes sont neutralisées : la créature est ${{ stunned: 'étourdie', unconscious: 'inconsciente', dead: 'morte' }[plan.globalEffect]} (degré le moins grave atteint).`);
-  else lines.push(NOTE);
+  if (plan.total === null) return [{ key: 'heads-unresolved', text: `${LABEL} : ${plan.unresolved.join(' ')}` }];
+  const lines = [{ key: 'heads-count', text: `${LABEL} : ${plan.healthy} tête(s) valide(s) sur ${plan.total}.` }];
+  if (plan.freeAttacks.length) lines.push({ key: 'heads-free-attacks', text: `Attaques gratuites par tête valide : ${plan.freeAttacks.map(entry => `${entry.label} ×${entry.count}`).join(', ')}.` });
+  if (plan.perception) lines.push({ key: 'heads-perception', text: `Perception : ${plan.perception.modifier > 0 ? '+' : ''}${plan.perception.modifier} ${plan.perception.unit} (${plan.perception.cause}).` });
+  if (plan.globalEffect) lines.push({ key: 'heads-global', text: `Toutes les têtes sont neutralisées : la créature est ${{ stunned: 'étourdie', unconscious: 'inconsciente', dead: 'morte' }[plan.globalEffect]} (degré le moins grave atteint).` });
+  else lines.push({ key: 'heads-note', text: NOTE });
   return lines;
 }

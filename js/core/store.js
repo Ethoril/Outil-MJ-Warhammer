@@ -3283,7 +3283,8 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
     resolveParticipantReminder(participantId, id, decision, details = {}) {
       const snapshot = { sceneId: activeScene?.id || 'combat', participants: Array.from(combat.participants.values()).filter(item => item?.id === participantId) };
       const transition = { id: `round-${combat.round || 0}`, type: 'participant', round: combat.round || 0 };
-      const choice = resolveReminder(deriveReminders(snapshot, transition, reminderChoices), id, decision, details).find(item => item.id === id)?.choice;
+      const derived = deriveReminders(snapshot, transition, reminderChoices);
+      const choice = resolveReminder(derived, id, decision, { text: derived.find(item => item.id === id)?.text, ...details }).find(item => item.id === id)?.choice;
       if (!choice) return false;
       return api.executeCommand('resolve-reminder', draft => ({ ...draft, reminderChoices: [...(draft.reminderChoices || []).filter(item => item.id !== id), choice] }));
     },

@@ -1,12 +1,13 @@
 /** Pure, persistable E14 reminder derivation. */
 import { sizeReminders } from './creature-size.js';
-import { manyHeadsReminders } from './creature-heads.js';
+import { manyHeadsReminderItems } from './creature-heads.js';
 import { regenerationReminders } from './creature-regeneration.js';
 import { psychologyReminders } from './creature-psychology.js';
 
 // Un module de Trait par ligne : [clé stable, fonction participant → textes]. Ajouter ici les autres `xxxReminders`.
-const TRAIT_REMINDERS = [['size', sizeReminders], ['heads', manyHeadsReminders], ['regeneration', regenerationReminders], ['psychology', psychologyReminders]];
-const traitReminderTexts = person => TRAIT_REMINDERS.flatMap(([name, fn]) => fn(person).map((text, index) => ({ key: `${name}-${index}`, text })));
+const TRAIT_REMINDERS = [['size', sizeReminders], ['heads', manyHeadsReminderItems], ['regeneration', regenerationReminders], ['psychology', psychologyReminders]];
+// Un module rend des textes (clé = rang) ou des `{ key, text }` (clé stable par sens du rappel).
+const traitReminderTexts = person => TRAIT_REMINDERS.flatMap(([name, fn]) => fn(person).map((entry, index) => (typeof entry === 'string' ? { key: `${name}-${index}`, text: entry } : { key: `${name}-${entry.key}`, text: entry.text })));
 
 const hasOwn = (value, key) => Object.prototype.hasOwnProperty.call(value, key);
 const isRecord = value => value !== null && typeof value === 'object' && !Array.isArray(value);
@@ -91,8 +92,9 @@ export function deriveReminders(snapshot = {}, transition = {}, choices = []) {
   // Rappels portés par un participant (`extensions.v5.reminders` : armure non déterminée du bestiaire, démon expiré).
   for (const person of Array.isArray(snapshot.participants) ? snapshot.participants : []) {
     if (!person?.id) continue;
-    // Rappels dérivés des Traits (calculés à l'affichage, jamais écrits dans le participant).
-    for (const { key, text } of traitReminderTexts(person)) candidates.push({ kind: 'participant-reminder', effectId: `${person.id}:trait-${key}`, text: `${person.name || 'Participant'} : ${text}`, mode: 'reminder' });
+    // Rappels dérivés des Traits (calculés à l'affichage, jamais écrits dans le participant) : permanents, donc réservés à la carte
+    // et au Personnage actif (transition « participant »), jamais à « À traiter » qui ne garde que les rappels liés à un moment.
+    if (transition.type === 'participant') for (const { key, text } of traitReminderTexts(person)) candidates.push({ kind: 'participant-reminder', effectId: `${person.id}:trait-${key}`, text: `${person.name || 'Participant'} : ${text}`, mode: 'reminder' });
     for (const note of Array.isArray(person.extensions?.v5?.reminders) ? person.extensions.v5.reminders : []) {
       if (!note?.id || typeof note.text !== 'string') continue;
       candidates.push({ kind: 'participant-reminder', effectId: `${person.id}:${note.id}`, text: `${person.name || 'Participant'} : ${note.text}`, mode: 'reminder' });
@@ -102,15 +104,21 @@ export function deriveReminders(snapshot = {}, transition = {}, choices = []) {
   const seen = new Set();
   const priorChoices = new Map((Array.isArray(choices) ? choices : []).map(choice => [choice.id, choice]));
   // Un rappel de participant résolu ou ignoré ne revient pas aux transitions suivantes (son id dépend du Round).
-  const settledParticipantReminders = new Set((Array.isArray(choices) ? choices : [])
+  // Le texte alors affiché est conservé : un rappel dont le contenu change (têtes valides…) réapparaît.
+  const recordedText = choice => choice?.text ?? choice?.choice?.text;
+  const sameText = (recorded, text) => recorded === undefined || recorded === text;
+  const settledParticipantReminders = new Map((Array.isArray(choices) ? choices : [])
     .filter(choice => [REMINDER_DECISIONS.RESOLVE, REMINDER_DECISIONS.IGNORE].includes(choice?.decision || choice?.choice?.decision))
-    .map(choice => String(choice.id)).filter(id => id.includes(':participant-reminder:')).map(id => id.slice(id.indexOf(':participant-reminder:'))));
+    .filter(choice => String(choice.id).includes(':participant-reminder:'))
+    .map(choice => [String(choice.id).slice(String(choice.id).indexOf(':participant-reminder:')), recordedText(choice)]));
   for (const candidate of candidates) {
-    if (candidate.kind === 'participant-reminder' && settledParticipantReminders.has(`:participant-reminder:${candidate.effectId}`)) continue;
+    const settledKey = `:participant-reminder:${candidate.effectId}`;
+    if (candidate.kind === 'participant-reminder' && settledParticipantReminders.has(settledKey) && sameText(settledParticipantReminders.get(settledKey), candidate.text)) continue;
     const item = reminder(candidate, sceneId, transitionId);
     if (seen.has(item.id)) continue;
     seen.add(item.id);
-    const choice = priorChoices.get(item.id);
+    let choice = priorChoices.get(item.id);
+    if (candidate.kind === 'participant-reminder' && choice && !sameText(recordedText(choice), candidate.text)) choice = undefined;
     const decision = choice?.decision || choice?.choice?.decision;
     if (decision === REMINDER_DECISIONS.IGNORE || decision === REMINDER_DECISIONS.RESOLVE) {
       item.status = decision;

@@ -20,6 +20,7 @@ import { isCriticalRoll, isFumbleRoll } from './roll-qualities.js';
 import { actionHasDamage, actionWeaponDamage, computeDamage, evaluateWeaponDamage, formatDamageFormula, formatWeaponDamage, strengthBonusOf } from './damage.js';
 import { normalizeQualities } from './quality-normalization.js';
 import { planNaturalAttack, inferNaturalAttackKey } from './creature-combat.js';
+import { applyHeadCriticals } from './creature-heads.js';
 import { acquireV5Conditions,healV5Wounds } from './v5-effects.js';
 import { slExtremeLayers } from './v5-divine-effects-tests.js';
 import { hasArcaneMagicLore } from './v5-magic-attributes.js';
@@ -988,13 +989,20 @@ export function applyResolution(preview, currentState) {
   const nextState = clone(currentState);
   const target = participantById(currentState, preview.targetId);
   const criticalEffects = preview.critical?.application || { extraWounds: 0, states: [] };
-  const targetConditions = preview.targetConditionApplication || criticalEffects.states;
-  if (preview.attack && preview.targetId && (preview.damage || criticalEffects.extraWounds || targetConditions.length)) {
+  // Plusieurs têtes : le critique à la tête ne touche qu'une tête (`v5.context.headId`, sinon la première valide).
+  const headHit = preview.attack && target ? applyHeadCriticals(target, [preview.critical?.details, preview.critical?.second], preview.input.v5?.context?.headId) : null;
+  const rawConditions = preview.targetConditionApplication || criticalEffects.states;
+  const targetConditions = headHit?.stripStunned ? rawConditions.filter(condition => condition.key !== 'sonne') : rawConditions;
+  if (preview.attack && preview.targetId && (preview.damage || criticalEffects.extraWounds || targetConditions.length || headHit)) {
     if (!target) return { status: 'stale', requiresPreview: true, state: clone(currentState), resolution: clone(preview) };
     if (JSON.stringify(target) !== JSON.stringify(preview.input.target)) {
       return { status: 'stale', requiresPreview: true, state: clone(currentState), resolution: clone(preview) };
     }
     const updated = clone(target);
+    if (headHit) {
+      updated.extensions ??= {};
+      updated.extensions.v5 = { ...(updated.extensions.v5 || {}), heads: headHit.registry };
+    }
     const oldHp = Number(updated.hp) || 0;
     updated.hp = Math.max(0, oldHp - previewHpLoss(preview));
     if (targetConditions.length) {

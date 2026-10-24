@@ -9,6 +9,17 @@ Plan : `PLAN_PRO_BRANCHEMENT.md`. Choix et questions : `CHOIX_EXECUTANT_BRANCHEM
 | B2 | FAIT (Plusieurs têtes branché, voir ci-dessous) |
 | B3 | FAIT (Régénération branchée, voir ci-dessous) |
 | B4 | FAIT (Psychologie branchée, voir ci-dessous ; question BR-06 au MJ) |
+| B4c | FAIT (corrections de la contre-vérification ; question BR-09 au MJ) |
+
+## B4c — Corrections de la contre-vérification de B0-B2 (24/10/2026)
+
+1. **Branché** : les rappels permanents de Traits (`TRAIT_REMINDERS`) ne sont dérivés que pour la transition `participant` (carte et Personnage actif), plus pour « À traiter » (`Store.getReminders`, transitions de tour). `sizeReminders` ne sort plus que pour Grande ou plus. Les rappels statiques `extensions.v5.reminders` (armure, démon) restent inchangés. Règle pour B5 et suivants : un rappel de Trait est permanent (carte) ; seuls les rappels liés à un moment vont dans « À traiter ».
+2. **Branché** : clé stable par sens pour les têtes (`manyHeadsReminderItems` : `heads-count`, `heads-free-attacks`, `heads-perception`, `heads-global`, `heads-note`) ; `resolveParticipantReminder` enregistre le texte affiché et un rappel dont le texte change réapparaît (ligne d’état après la chute d’une tête).
+3. **Branché** : `applyResolution` (`resolution.js`) appelle `applyHeadCriticals` : un critique à la tête (Sonné → tête étourdie, mort instantanée → tête morte) touche une seule tête (`v5.context.headId`, sinon la première valide), dans la même commande donc annulable. Le Sonné n’est appliqué à la créature que si toutes les têtes sont neutralisées (effet global, degré le moins grave) ; la mort instantanée reste un rappel du livre. Limite : aucune saisie de la tête à l’écran de résolution (la tête se corrige par les boutons de la carte) ; le tableau V5 de la tête n’a pas d’« inconscient ».
+4. **Surnombre / Désengagement** : rappel seulement. L’outil ne calcule aucun surnombre ni Désengagement pour un Trait Taille (le Désengagement libre existant est propre au talent) ; écart consigné (BR-08).
+5. **Force opposée à un cran** : non modifiée. Le texte de Grande taille (`Talents.csv`, Archives of the Empire 2) dit : victoire automatique à deux catégories d’écart ; à une seule, le plus petit doit obtenir un Critique pour comparer les DR — c’est ce que fait le code. Le texte du Trait Taille de L06 p. 360 n’est pas dans le dépôt : question au MJ (BR-09).
+6. Message au lieu d’un saut silencieux : une attaque gratuite d’une créature à Plusieurs têtes sans nombre de têtes (ou registre différent) est refusée avec le message du module. Inventaire B0 complété ci-dessous.
+- Test : `tests/pro-b4c-corrections.test.js`.
 
 ## B4 — Psychologie (24/10/2026)
 
@@ -135,6 +146,7 @@ Colonne « Appelant » : fichier hors module. « Moment » : instant de jeu où 
 | `planFamiliarDeath`, `familiarDeathDamage` | **aucun** | mort du maître ou de l'animal | suppression de participant (`store.js:1475-1497`) |
 | `linkedFamiliars`, `senseSharingRange`, `familiarReminders` | **aucun** | affichage, partage de sens | carte et Personnage actif |
 | `validateFamiliarLink`… (création par Destin/Résilience) | — | création | B10 : question Résilience à instruire (voir fichier des choix) |
+| `familiarOfOf`, `isLinkActive`, `COMPANION_TRAITS`, `SPELL_FAMILIAR_SPELL_CAP`, constantes `FAMILIAR_*`, `HOMUNCULUS_KINDS` | **aucun** (internes au module ou aux tests) | selon B10-B11 | à brancher avec les services ci-dessus |
 
 ### Ordre de branchement proposé
 1. B1 Taille (crée l'accroche commune des rappels de Traits dans `deriveReminders`, réutilisée ensuite par tous).
