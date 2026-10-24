@@ -9,7 +9,7 @@ import { execFileSync } from 'node:child_process';
 import { corpusBooks } from './lib/bestiary-extract.mjs';
 import { repairGlyphs } from './lib/bestiary-glyphs.mjs';
 import { JUSTIFIED } from './lib/bestiary-justified.mjs';
-import { blockAfter, completenessGaps, extendedGaps, findValueRow, normalizeBlockText, stackedBlock, veryIncomplete } from './lib/bestiary-completeness.mjs';
+import { blockAfter, colonize, completenessGaps, extendedGaps, findValueRow, formatGaps, normalizeBlockText, stackedBlock, veryIncomplete } from './lib/bestiary-completeness.mjs';
 
 // Catégories contrôlées : talents et compétences (Q0), attaques, Traits, équipement, sorts, bruit d'équipement (Q11).
 const CATEGORIES = ['talents', 'skills', 'attacks', 'traits', 'trappings', 'spells', 'trappingNoise', 'veryIncomplete'];
@@ -18,6 +18,8 @@ const KEYS = ['M', 'CC', 'CT', 'F', 'E', 'I', 'Ag', 'Dex', 'Int', 'FM', 'Soc'];
 let failures = 0;
 const skillWarnings = [];
 const catalogue = new Set(JSON.parse(readFileSync('js/data/reference-snapshot.json', 'utf8')).talents.entries.map(entry => entry.englishName.toLowerCase()));
+// Noms de Traits de l'inventaire (Q32 : « Nom : description » des livres L06 et L09).
+const traitNames = new Set(JSON.parse(readFileSync('docs/BESTIAIRE_INVENTAIRE.json', 'utf8')).traits.map(trait => trait.name));
 mkdirSync('tmp/divin', { recursive: true });
 const totals = {};
 for (const book of process.argv.slice(2)) {
@@ -44,8 +46,11 @@ for (const book of process.argv.slice(2)) {
     // Sur un écart de valeurs, le bloc reste contrôlé à partir de la ligne imprimée de même forme (première colonne libre).
     const blockAt = at >= 0 ? at : findValueRow(text, ['\\d+', ...tokens.slice(1)], record.name);
     if (blockAt >= 0) {
-      const block = stackedBlock(text, blockAt) ?? blockAfter(text, blockAt);
-      const gaps = { ...completenessGaps(record, block, catalogue), ...extendedGaps(record, block), veryIncomplete: veryIncomplete(record, block) };
+      const raw = stackedBlock(text, blockAt) ?? blockAfter(text, blockAt);
+      // Q32 : rubriques sans deux-points (L06, L09, L10) lues comme les autres ; descriptions « Nom : texte », « Traits Continued », attaques V5 et Souffle.
+      const block = colonize(raw);
+      const gaps = { ...completenessGaps(record, block, catalogue), ...extendedGaps(record, block), veryIncomplete: veryIncomplete(record, raw) };
+      const legacy = JSON.parse(JSON.stringify(gaps));
       // Faux positifs relus sur la page (tools/lib/bestiary-justified.mjs) : sortis du décompte, gardés dans le rapport avec leur raison.
       const justified = {};
       for (const [category, reason] of Object.entries(JUSTIFIED[record.id] || {})) {
@@ -54,6 +59,8 @@ for (const book of process.argv.slice(2)) {
         gaps[category] = [];
         justifiedCount += justified[category].items.length;
       }
+      // Les manques propres à Q32 s'ajoutent après : une justification relue avant Q32 ne les couvre pas (Q34 les relit).
+      for (const [category, list] of Object.entries(formatGaps(record, block, catalogue, traitNames))) gaps[category] = [...gaps[category], ...list.filter(item => !legacy[category].includes(item))];
       if (Object.keys(justified).length) justified_.push({ id: record.id, name: record.name, page: record.physicalPage, justifiés: justified });
       if (CATEGORIES.some(category => gaps[category].length)) gaps_.push({ id: record.id, name: record.name, page: record.physicalPage, ...gaps });
     }

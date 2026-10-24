@@ -5,7 +5,7 @@
 import { SKILL_GROUP_ALIASES } from './bestiary-glossary.mjs';
 import { TRAIT_ALIASES } from './bestiary-complement-data.mjs';
 
-const LABEL = /\b(?:Traits|Skills|Talents|Trappings|Spells|Mutations|Special Rules|Optional Traits|Optional|Armour by Location|Armour|Weapons|Equipment|Notes|Fate Points?|Miracles|Marks)\s*:/;
+const LABEL = /\b(?:Traits Continued|Traits|Skills|Talents|Trappings|Spells|Mutations|Special Rules|Optional Traits|Optional|Armour by Location|Armour|Weapons|Equipment|Notes|Fate Points?|Miracles|Marks)\s*:/;
 const HEADER = / M WS BS S T I Ag[i]? Dex Int WP Fel(?: W)?/;
 
 /** Texte brut normalisé : tirets typographiques, césures « Two- handed » recollées, espaces simples. */
@@ -25,6 +25,9 @@ function segment(block, label) {
   const end = LABEL.exec(rest);
   return end ? rest.slice(0, end.index) : rest;
 }
+
+/** Rubrique en description (L06, L09) : « Hatred (High Elves): See Hatred in… Night Vision: See clearly… » au lieu d'une liste à virgules. */
+const isDescribed = text => /^\s*[A-Z](?:[^:,()]|\([^)]*\)){1,70}:\s/.test(text);
 
 /** Découpe sur les virgules hors parenthèses. */
 export function splitTopLevel(text) {
@@ -78,17 +81,43 @@ export function recordSkillKeys(record) {
   }));
 }
 
+/**
+ * Noms connus (minuscules) sous leurs variantes imprimées : « In-fighter » s'imprime « Infighter » quand la césure de fin de ligne perd le trait d'union.
+ * Liste [variante, nom canonique], du plus long au plus court.
+ */
+const variantCache = new WeakMap();
+function nameVariants(names) {
+  if (variantCache.has(names)) return variantCache.get(names);
+  const list = [];
+  for (const name of names) {
+    list.push([name, name]);
+    if (name.includes('-')) list.push([name.replace(/-/g, ''), name]);
+  }
+  list.sort((a, b) => b[0].length - a[0].length);
+  variantCache.set(names, list);
+  return list;
+}
+
+/** Noms reconnus au début d'un élément de liste, l'un après l'autre : « Acute Sense (Taste) Attractive » (virgule oubliée par le livre) = deux noms. */
+function chainNames(item, variants) {
+  const found = [];
+  let rest = item.replace(/\(.*?\)/g, ' ').replace(/\s+/g, ' ').trim().toLowerCase();
+  while (rest) {
+    const hit = variants.find(([variant]) => rest === variant || rest.startsWith(`${variant} `) || rest === `${variant}!`);
+    if (!hit) break;
+    found.push(hit[1]);
+    rest = rest.slice(hit[0].length).replace(/^!/, '').trim();
+  }
+  return found;
+}
+
 /** Noms du catalogue (anglais) présents dans la rubrique « Talents » du bloc. Le texte voisin collé au dernier talent ne compte que par son début. */
 export function printedTalents(block, catalogueNames) {
   const text = segment(block, 'Talents');
   if (text === null) return [];
-  const names = [...catalogueNames].sort((a, b) => b.length - a.length);
+  const variants = nameVariants(catalogueNames);
   const found = [];
-  for (const item of splitTopLevel(text).slice(0, 60)) {
-    const plain = item.replace(/\(.*?\)/g, ' ').replace(/\s+/g, ' ').trim().toLowerCase();
-    const hit = names.find(name => plain === name || plain.startsWith(`${name} `) || plain === `${name}!`);
-    if (hit) found.push(hit);
-  }
+  for (const item of splitTopLevel(text).slice(0, 60)) found.push(...chainNames(item, variants));
   return [...new Set(found)];
 }
 
@@ -115,7 +144,7 @@ const ATTACK = /^(?:(\d+)\s*[×xX-]?\s*)?([A-Za-z][A-Za-z' -]*?)\s*(?:\(([^)]*)\
 /** Attaques imprimées dans la rubrique « Traits » : « Bite +6 », « 2 Claws +7 », « 8 × Tentacles +9 », « Weapon (Sword) +9 (Impale) », « Creature Weapons (Beak +9, 2 Claws +7) ». */
 export function printedAttacks(block) {
   const text = segment(block, 'Traits');
-  if (text === null) return [];
+  if (text === null || isDescribed(text)) return [];
   const found = [];
   const add = (count, name, damage, label) => found.push({ label, key: `${letters(name)}|${damage}|${count || 1}` });
   for (const item of splitTopLevel(text)) {
@@ -135,7 +164,7 @@ export const recordAttackKeys = record => new Set((record.attacks || []).map(att
 /** Traits imprimés (hors attaques « +N » et armure) sous la forme { label, key }. */
 export function printedTraits(block) {
   const text = segment(block, 'Traits');
-  if (text === null) return [];
+  if (text === null || isDescribed(text)) return [];
   const found = [];
   for (const raw of splitTopLevel(text).slice(0, 40)) {
     // Le texte de la colonne voisine (minuscule initiale, phrase longue) met fin à la liste ; un intitulé « Attack » collé au dernier Trait est retiré.
@@ -292,4 +321,135 @@ export function stackedBlock(pageText, index) {
   groups.push(tail.slice(start));
   if (groups.length !== size) return null;
   return groups[own - first];
+}
+
+// ---- Q32 : tous les formats (rubriques sans deux-points, descriptions « Nom : texte », « Traits Continued », attaques V5, Souffle) ----
+
+const BARE_HEADINGS = [
+  ['Optional Traits', /\bOptional Traits (?=[A-Z])/],
+  ['Traits and Talents', /\bTraits and Talents (?=[A-Z])/],
+  ['Traits Continued', /\bTraits Continued (?=[A-Z])/],
+  ['Skills', /\bSkills (?=[A-Z])/],
+  ['Talents', /(?<!and )\bTalents (?=[A-Z])/],
+  ['Traits', /(?<!Optional )\bTraits (?!Continued)(?=[A-Z])/],
+  ['Trappings', /\bTrappings (?=[A-Z])/]
+];
+
+/**
+ * Mise en page sans deux-points (L06 livre de base, L09, L10) : « Skills Charm 35 » devient « Skills: Charm 35 » (première occurrence de chaque rubrique),
+ * pour que les contrôles de compétences, talents, Traits et équipement lisent ces blocs comme les autres. Un bloc qui a déjà une rubrique à deux-points est rendu tel quel.
+ */
+export function colonize(block) {
+  if (/\b(?:Skills|Talents|Traits|Trappings)\s*:/.test(block)) return block;
+  let text = block;
+  for (const [label, pattern] of BARE_HEADINGS) text = text.replace(pattern, `${label}: `);
+  return text;
+}
+
+const escapeRegex = value => value.replace(/[.*+?^$(){}|[\]\\/]/g, '\\$&');
+
+// Alias imprimés lisibles comme nom (« Regenerate ») ; les alias d'attaques (Claws, Tentacles…) ne sont pas des noms de Trait.
+const ALIAS_NAMES = Object.entries(TRAIT_ALIASES).filter(([from, to]) => /^[a-z -]+$/.test(from) && !/^Creature Weapons/.test(to)).map(([from]) => from);
+
+/** Table des noms de Traits et de talents cherchés dans les rubriques : variante imprimée en minuscules -> { name, talent }. */
+function nameTable(catalogueNames, traitNames) {
+  const table = new Map();
+  for (const [variant, name] of nameVariants(catalogueNames)) table.set(variant, { name, talent: true });
+  for (const raw of [...traitNames, ...ALIAS_NAMES]) {
+    const name = raw.replace(/\(.*?\)/g, ' ').replace(/\s+/g, ' ').trim().toLowerCase();
+    if (name.length < 4 || /^(?:armou?r|weapon|ranged|optional)/.test(name)) continue;
+    for (const variant of name.includes('-') ? [name, name.replace(/-/g, '')] : [name]) if (!table.has(variant)) table.set(variant, { name, talent: false });
+  }
+  return table;
+}
+const tableCache = new WeakMap();
+const tableFor = (catalogueNames, traitNames) => {
+  const cached = tableCache.get(catalogueNames);
+  if (cached?.traitNames === traitNames) return cached.table;
+  const table = nameTable(catalogueNames, traitNames);
+  tableCache.set(catalogueNames, { traitNames, table });
+  return table;
+};
+
+/** Textes des rubriques de Traits et de talents du bloc (« Traits », « Traits Continued », « Talents », « Traits and Talents »), hors Optional Traits. */
+function traitSegments(block) {
+  const texts = [];
+  for (const start of block.matchAll(/(?<!Optional )\b(?:Traits and Talents|Traits Continued|Talents|Traits)\s*:/g)) {
+    const rest = block.slice(start.index + start[0].length);
+    const end = LABEL.exec(rest);
+    texts.push(end ? rest.slice(0, end.index) : rest);
+  }
+  return texts;
+}
+
+/** Noms de Traits ou de talents imprimés dans une rubrique, au format description ou liste : { name, talent }. */
+function printedNamed(text, table) {
+  if (isDescribed(text)) {
+    const hits = [];
+    for (const [variant, info] of table) {
+      for (const hit of text.matchAll(new RegExp(`(?<![A-Za-z'’-])${escapeRegex(variant).replace(/ /g, '\\s+')}(?:\\s*\\([^)]*\\))?(?:\\s+\\d+)?\\s*:`, 'gi'))) hits.push({ start: hit.index, end: hit.index + hit[0].length, info });
+    }
+    // Un nom contenu dans un nom plus long (« Vision » dans « Night Vision ») n'est pas lu à part.
+    return hits.filter(hit => !hits.some(other => other !== hit && other.start <= hit.start && other.end >= hit.end && other.end - other.start > hit.end - hit.start)).map(hit => hit.info);
+  }
+  const variants = [...table.keys()].sort((a, b) => b.length - a.length).map(variant => [variant, table.get(variant)]);
+  const found = [];
+  for (const item of splitTopLevel(text).slice(0, 60)) {
+    let rest = item.replace(/\(.*?\)/g, ' ').replace(/\s+/g, ' ').trim().toLowerCase();
+    while (rest) {
+      const hit = variants.find(([variant]) => rest === variant || rest.startsWith(`${variant} `) || rest === `${variant}!`);
+      if (!hit) break;
+      found.push(hit[1]);
+      rest = rest.slice(hit[0].length).replace(/^!/, '').trim();
+    }
+  }
+  return found;
+}
+
+/** Attaques V5 de la ligne « Attacks » (« Talons (45/+14) ») et Souffle imprimé dans cette ligne (« Breath (Fire or Poison): … »). */
+export function printedV5Attacks(block) {
+  const start = /\bAttacks\s/.exec(block);
+  if (!start) return [];
+  const rest = block.slice(start.index + start[0].length);
+  const end = /\bArmour\b/.exec(rest);
+  const text = end ? rest.slice(0, end.index) : rest;
+  const found = [];
+  for (const hit of text.matchAll(/([A-Za-z' -]*?):?\s*\((\d+)\s*\/\s*\+(\d+)\)/g)) {
+    // Le nom est la fin du texte qui précède : jusqu'à quatre mots à majuscule (et « of », « and »…), pas la phrase du livre qui le précède (« Lose Momentum to make this free attack Tail »).
+    const words = hit[1].trim().split(/\s+/);
+    const name = [];
+    for (let i = words.length - 1; i >= 0 && name.length < 4; i -= 1) {
+      if (!/^[A-Z]/.test(words[i]) && !/^(?:of|and|the|with)$/.test(words[i])) break;
+      name.unshift(words[i]);
+    }
+    while (name.length && /^(?:of|and|the|with)$/.test(name[0])) name.shift();
+    if (name.length) found.push({ label: `${name.join(' ')} (${hit[2]}/+${hit[3]})`, name: letters(name.join(' ')), damage: hit[3], breath: false });
+  }
+  for (const hit of text.matchAll(/\bBreath\s*\(([^)]*)\)/g)) found.push({ label: `Breath (${hit[1]})`, name: 'breath', damage: null, breath: true });
+  return found;
+}
+
+/**
+ * Manques propres aux autres formats : nom de Trait ou de talent (catalogue et inventaire des Traits) imprimé dans une rubrique de Traits ou de talents
+ * (liste à virgules, « Nom : description », « Traits Continued ») et absent du profil ; attaque V5 ou Souffle de la ligne « Attacks » absent du profil.
+ * `block` est le bloc déjà passé par `colonize`.
+ */
+export function formatGaps(record, block, catalogueNames, traitNames) {
+  const table = tableFor(catalogueNames, traitNames);
+  const have = new Set([...recordTraitKeys(record), ...(record.talents || []).map(talent => traitKey(String(talent?.name ?? '').replace(/\(.*?\)/g, ' ').replace(/\s+/g, ' ').trim()))]);
+  const gaps = { talents: [], traits: [] };
+  for (const text of traitSegments(block)) {
+    for (const info of printedNamed(text, table)) {
+      if (have.has(traitKey(info.name))) continue;
+      const list = info.talent ? gaps.talents : gaps.traits;
+      if (!list.includes(info.name)) list.push(info.name);
+    }
+  }
+  const attackKeys = new Set((record.attacks || []).map(attack => `${letters(attack.name)}|${attack.damage}`));
+  const breathPresent = [...have].some(key => key.includes('breath')) || (record.attacks || []).some(attack => /breath/i.test(attack.name));
+  const attacks = [];
+  for (const attack of printedV5Attacks(block)) {
+    if (attack.breath ? !breathPresent : !attackKeys.has(`${attack.name}|${attack.damage}`)) attacks.push(attack.label);
+  }
+  return { talents: gaps.talents.sort(), traits: gaps.traits.sort(), attacks };
 }
