@@ -1143,6 +1143,11 @@
      "name": "Rapier",
      "damage": 10,
      "trait": "Weapon"
+    },
+    {
+     "name": "Zweihander",
+     "damage": 11,
+     "trait": "Weapon"
     }
    ],
    "skills": [
@@ -1458,6 +1463,9 @@
     "Doll named `Anna'",
     "Pistol with Ammunition for 12 Shots",
     "Suit of Plate Armour"
+   ],
+   "specialRules": [
+    "Vampiric Gaze"
    ],
    "keywords": [
     "vampire"
@@ -7954,7 +7962,8 @@
     }
    ],
    "specialRules": [
-    "Fearsome Roar"
+    "Fearsome Roar",
+    "Hunger"
    ],
    "keywords": [
     "bete",

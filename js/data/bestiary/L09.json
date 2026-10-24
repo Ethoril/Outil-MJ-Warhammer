@@ -770,6 +770,11 @@
     {
      "name": "Tracker",
      "ref": "E0-T-059"
+    },
+    {
+     "name": "Breath",
+     "param": "Fire or Poison",
+     "ref": "E0-T-009"
     }
    ],
    "optionalTraits": [
@@ -1103,6 +1108,11 @@
      "name": "Size",
      "param": "Monstrous",
      "ref": "E0-T-045"
+    },
+    {
+     "name": "Breath",
+     "param": "Any One",
+     "ref": "E0-T-009"
     }
    ],
    "optionalTraits": [
@@ -1197,6 +1207,19 @@
      "name": "Hatred",
      "param": "High Elves",
      "ref": "E0-T-027"
+    },
+    {
+     "name": "Mark of Slaanesh",
+     "ref": "E0-T-224"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Ward",
+     "rating": "8+",
+     "ref": "E0-T-066"
     }
    ],
    "optionalTraits": [
@@ -1208,11 +1231,6 @@
      "name": "Spellcaster",
      "param": "Lore of Slaanesh",
      "ref": "E0-T-048"
-    }
-   ],
-   "talents": [
-    {
-     "name": "Night Vision"
     }
    ],
    "keywords": [
@@ -1258,6 +1276,28 @@
      "name": "Afraid",
      "param": "Followers of Slaanesh",
      "ref": "E0-T-001"
+    },
+    {
+     "name": "Coven Sorcerer",
+     "ref": "E0-T-225"
+    },
+    {
+     "name": "Hatred",
+     "param": "High Elves",
+     "ref": "E0-T-027"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Prey of the Dark Prince",
+     "ref": "E0-T-226"
+    },
+    {
+     "name": "Venom",
+     "param": "Challenging",
+     "ref": "E0-T-064"
     }
    ],
    "keywords": [
@@ -2682,9 +2722,6 @@
     },
     {
      "name": "Read/Write"
-    },
-    {
-     "name": "Gifts of Khaine"
     }
    ],
    "trappings": [
@@ -3131,6 +3168,35 @@
      "ref": "E0-T-041"
     }
    ],
+   "talents": [
+    {
+     "name": "Hatred (High Elves, Morandors)"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Combat Aware"
+    },
+    {
+     "name": "Combat Reflexes"
+    },
+    {
+     "name": "Inspiring"
+    },
+    {
+     "name": "Menacing"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Shieldsman"
+    },
+    {
+     "name": "War Leader"
+    }
+   ],
    "trappings": [
     "Dagger",
     "Fine Black Cloak",
@@ -3186,7 +3252,13 @@
     {
      "name": "Razor-tipped Grand Cathayan Fan",
      "value": 85,
-     "damage": 6
+     "damage": 6,
+     "inflicts": [
+      {
+       "condition": "Bleeding",
+       "count": 1
+      }
+     ]
     },
     {
      "name": "Repeater Handbow and Bolts",
@@ -3469,6 +3541,32 @@
      "ref": "E0-T-041"
     }
    ],
+   "talents": [
+    {
+     "name": "Hatred (High Elves)"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Briber"
+    },
+    {
+     "name": "Carouser"
+    },
+    {
+     "name": "Etiquette (Druchii Nobles)"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Schemer"
+    },
+    {
+     "name": "Supportive"
+    }
+   ],
    "trappings": [
     "Dagger",
     "High Quality Cloak",
@@ -3631,6 +3729,44 @@
      "ref": "E0-T-041"
     }
    ],
+   "talents": [
+    {
+     "name": "Hatred (High Elves)"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Catfall"
+    },
+    {
+     "name": "Combat Reflexes"
+    },
+    {
+     "name": "Dual Wielder"
+    },
+    {
+     "name": "Furious Assault"
+    },
+    {
+     "name": "Inspiring"
+    },
+    {
+     "name": "Menacing"
+    },
+    {
+     "name": "Old Salt"
+    },
+    {
+     "name": "Pilot"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Strong Swimmer"
+    }
+   ],
    "trappings": [
     "Medium Armour",
     "Pair of Swords",
@@ -3761,6 +3897,35 @@
      "ref": "E0-T-041"
     }
    ],
+   "talents": [
+    {
+     "name": "Hatred (High Elves)"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Accurate Shot"
+    },
+    {
+     "name": "Combat Reflexes"
+    },
+    {
+     "name": "Dual Wielder"
+    },
+    {
+     "name": "Old Salt"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Sharpshooter"
+    },
+    {
+     "name": "Sniper"
+    }
+   ],
    "trappings": [
     "Medium Armour",
     "Pair of Swords",
@@ -3877,6 +4042,23 @@
     {
      "name": "Night Vision",
      "ref": "E0-T-041"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Hatred (High Elves)"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Combat Reflexes"
+    },
+    {
+     "name": "Old Salt"
+    },
+    {
+     "name": "Read/Write"
     }
    ],
    "trappings": [
@@ -4068,6 +4250,34 @@
      "name": "Leadership",
      "nameFr": "Commandement",
      "value": 85
+    },
+    {
+     "name": "Lore (Coasts and Tides)",
+     "nameFr": "Savoir (Coasts and Tides)",
+     "frUnverified": true,
+     "value": 90
+    },
+    {
+     "name": "Lore (High Elf)",
+     "nameFr": "Savoir (High Elf)",
+     "frUnverified": true,
+     "value": 100
+    },
+    {
+     "name": "Lore (History)",
+     "nameFr": "Savoir (Histoire)",
+     "value": 95
+    },
+    {
+     "name": "Lore (Naggaroth)",
+     "nameFr": "Savoir (Naggaroth)",
+     "frUnverified": true,
+     "value": 110
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 75
     },
     {
      "name": "Navigation",
@@ -5059,6 +5269,29 @@
      "ref": "E0-T-041"
     }
    ],
+   "talents": [
+    {
+     "name": "Hatred (High Elves)"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Orientation"
+    },
+    {
+     "name": "Rover"
+    },
+    {
+     "name": "Scale Sheer Surface"
+    },
+    {
+     "name": "Shadow"
+    },
+    {
+     "name": "Trick Rider"
+    }
+   ],
    "trappings": [
     "Dark Steed (Bloodwind)",
     "Medium Armour",
@@ -5097,6 +5330,16 @@
    "armour": {
     "toughnessBonus": 3
    },
+   "attacks": [
+    {
+     "name": "Dagger",
+     "value": 60,
+     "damage": 5,
+     "qualities": [
+      "Fast"
+     ]
+    }
+   ],
    "skills": [
     {
      "name": "Channelling (Dhar)",
@@ -5169,6 +5412,41 @@
     {
      "name": "Night Vision",
      "ref": "E0-T-041"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Hatred (High Elves)"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Aethyric Attunement"
+    },
+    {
+     "name": "Arcane Magic (Dark Magic)"
+    },
+    {
+     "name": "Attractive"
+    },
+    {
+     "name": "Instinctive Diction"
+    },
+    {
+     "name": "Petty Magic"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Second Sight"
+    },
+    {
+     "name": "Sixth Sense"
+    },
+    {
+     "name": "Soul Pact"
     }
    ],
    "trappings": [
@@ -5362,6 +5640,11 @@
      "name": "Swim",
      "nameFr": "Natation",
      "value": 44
+    },
+    {
+     "name": "Track",
+     "nameFr": "Pistage",
+     "value": 80
     }
    ],
    "traits": [
@@ -5437,6 +5720,9 @@
     },
     {
      "name": "Trapper"
+    },
+    {
+     "name": "Trick Riding"
     }
    ],
    "trappings": [
@@ -5607,6 +5893,12 @@
    ],
    "talents": [
     {
+     "name": "Hatred (High Elves)"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
      "name": "Animal Affinity"
     },
     {
@@ -5637,13 +5929,13 @@
      "name": "Read/Write"
     },
     {
+     "name": "Resistant (Poison)"
+    },
+    {
      "name": "Savant (Beasts)"
     },
     {
      "name": "Surgery"
-    },
-    {
-     "name": "Resistant (Poison)"
     }
    ],
    "trappings": [
@@ -5823,6 +6115,44 @@
      "ref": "E0-T-041"
     }
    ],
+   "talents": [
+    {
+     "name": "Hatred (High Elves)"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Catfall"
+    },
+    {
+     "name": "Combat Reflexes"
+    },
+    {
+     "name": "Dual Wielder"
+    },
+    {
+     "name": "Furious Assault"
+    },
+    {
+     "name": "Inspiring"
+    },
+    {
+     "name": "Menacing"
+    },
+    {
+     "name": "Old Salt"
+    },
+    {
+     "name": "Pilot"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Strong Swimmer"
+    }
+   ],
    "trappings": [
     "Medium Armour",
     "Pair of Swords",
@@ -5993,6 +6323,38 @@
      "ref": "E0-T-041"
     }
    ],
+   "talents": [
+    {
+     "name": "Hatred (High Elves)"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Blather"
+    },
+    {
+     "name": "Cat-tongued"
+    },
+    {
+     "name": "Dealmaker"
+    },
+    {
+     "name": "Etiquette (High Elves, Scholars)"
+    },
+    {
+     "name": "Numismatics"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Sharp"
+    },
+    {
+     "name": "Suave"
+    }
+   ],
    "trappings": [
     "Dagger",
     "Mail Shirt",
@@ -6067,6 +6429,11 @@
      "name": "Perception",
      "nameFr": "Perception",
      "value": 70
+    },
+    {
+     "name": "Perform (Dance)",
+     "nameFr": "Représentation (Danse)",
+     "value": 60
     }
    ],
    "traits": [
@@ -6082,6 +6449,35 @@
     {
      "name": "Night Vision",
      "ref": "E0-T-041"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Battle Rage"
+    },
+    {
+     "name": "Combat Reflexes"
+    },
+    {
+     "name": "Dual Wielder"
+    },
+    {
+     "name": "Etiquette (Cult of Khaine)"
+    },
+    {
+     "name": "Frenzy"
+    },
+    {
+     "name": "Hatred (High Elves)"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Strike to Injure"
     }
    ],
    "trappings": [
@@ -6206,6 +6602,44 @@
      "ref": "E0-T-051"
     }
    ],
+   "talents": [
+    {
+     "name": "Battle Rage"
+    },
+    {
+     "name": "Combat Reflexes"
+    },
+    {
+     "name": "Dual Wielder"
+    },
+    {
+     "name": "Etiquette (Cult of Khaine)"
+    },
+    {
+     "name": "Furious Assault"
+    },
+    {
+     "name": "Frenzy"
+    },
+    {
+     "name": "Gifts of Khaine"
+    },
+    {
+     "name": "Hatred (High Elves)"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Pharmacist"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Striding Gait (Woodland)"
+    }
+   ],
    "trappings": [
     "Blood-stained Robes",
     "Three Potions of Frenzy",
@@ -6305,6 +6739,43 @@
      "value": 95
     },
     {
+     "name": "Language (Arabyan)",
+     "nameFr": "Langue (Arabyan)",
+     "frUnverified": true,
+     "value": 90
+    },
+    {
+     "name": "Language (Bretonnian)",
+     "nameFr": "Langue (Bretonnien)",
+     "value": 90
+    },
+    {
+     "name": "Language (Cathayan)",
+     "nameFr": "Langue (Cathayen)",
+     "value": 95
+    },
+    {
+     "name": "Language (Dark Tongue)",
+     "nameFr": "Langue (Sombre / Dark Tongue)",
+     "value": 95
+    },
+    {
+     "name": "Language (Elthárin)",
+     "nameFr": "Langue (Elthárin)",
+     "frUnverified": true,
+     "value": 100
+    },
+    {
+     "name": "Language (Reikspiel)",
+     "nameFr": "Langue (Reikspiel)",
+     "value": 90
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 90
+    },
+    {
      "name": "Lore (Theology)",
      "nameFr": "Savoir (Théologie)",
      "value": 94
@@ -6348,6 +6819,12 @@
    ],
    "talents": [
     {
+     "name": "Hatred (High Elves)"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
      "name": "Ambidextrous"
     },
     {
@@ -6376,6 +6853,9 @@
     },
     {
      "name": "Holy Visions"
+    },
+    {
+     "name": "In-fighter"
     },
     {
      "name": "Inspiring"
@@ -6634,6 +7114,12 @@
     }
    ],
    "talents": [
+    {
+     "name": "Hatred (High Elves)"
+    },
+    {
+     "name": "Night Vision"
+    },
     {
      "name": "Briber"
     },
@@ -6938,19 +7424,20 @@
      "ref": "E0-T-227"
     },
     {
-     "name": "Frenzy",
-     "ref": "E0-T-024"
-    },
-    {
      "name": "Magic Resistance",
      "ref": "E0-T-037"
-    },
-    {
-     "name": "Night Vision",
-     "ref": "E0-T-041"
     }
    ],
    "talents": [
+    {
+     "name": "Frenzy"
+    },
+    {
+     "name": "Hatred (High Elves)"
+    },
+    {
+     "name": "Night Vision"
+    },
     {
      "name": "Acute Sense (Sight)"
     },
@@ -6997,9 +7484,6 @@
      "name": "Fearless (All)"
     },
     {
-     "name": "Frenzy"
-    },
-    {
      "name": "Furious Assault"
     },
     {
@@ -7019,9 +7503,6 @@
     },
     {
      "name": "Magic Resistance"
-    },
-    {
-     "name": "Night Vision"
     },
     {
      "name": "Pharmacist"
@@ -7213,6 +7694,9 @@
      "nameFr": "Discrétion (Urbaine)",
      "value": 65
     }
+   ],
+   "unvaluedSkills": [
+    "Language (Elthárin)"
    ],
    "traits": [
     {

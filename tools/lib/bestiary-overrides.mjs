@@ -182,7 +182,22 @@ export const TRAPPING_JOINS = Object.freeze({
  * Le texte est celui du livre, recopié ligne à ligne.
  */
 // Noms de Traits imprimés que l'inventaire ne connaît pas : gardés dans `specialRules` plutôt que perdus (Urzo, L23 p. 104 : Animalistic Legs).
-export const TRAITS_KEPT_AS_RULES = Object.freeze(new Set(['Animalistic Legs']));
+export const TRAITS_KEPT_AS_RULES = Object.freeze(new Set(['Animalistic Legs', 'Mark of Slaanesh', 'Coven Sorcerer', 'Prey of the Dark Prince', 'Vampiric Gaze', 'Hunger']));
+
+export const BODY_LINE_FIXES = Object.freeze({
+  // Temple of Spite (L09) p. 97 : Samuril Meurlith, « Dagger » mangé par la prose de la colonne voisine (« …taking credit for Dagger (60/+5) with the Fast Quality »).
+  'L09:97:0': [['(60/+5) with the Fast Quality', 'Dagger (60/+5) with the Fast Quality']],
+  // Sylvania (L10) p. 87 : Matthias Primvik, fragments de la prose voisine (« a », « uty. », « lf, », « t -- the », « ing ») collés aux rubriques.
+  'L10:87:0': [['a', ''], ['uty.', ''], ['lf,', ''], ['t -- the', ''], ['ing', ''], ['Intimidate 40, Language (Reikspiel) 65,', 'Intimidate 40, Language (Reikspiel) 65,']],
+  // Sylvania (L10) p. 93 : Emil Hartwig, « Boat » mangé par la prose voisine.
+  'L10:93:0': [['ook (49/+8)', 'Boat Hook (49/+8)']],
+  // Livre de base V5 (L06) p. 322 : Human Thug, « 2 Leather Jack » (le 2 est la fin du numéro de page 322 imprimé en marge).
+  'L06:322:1': [['2 Leather Jack, Pouch containing 3d10 Brass Pennies, Sling', 'Leather Jack, Pouch containing 3d10 Brass Pennies, Sling']],
+  // Livre de base V5 (L06) p. 344 : Varghulf, le début de « Traits Continued » (colonne de droite, chiffre « 4 » de la page) a mangé le début de Hungry.
+  'L06:344:0': [['feast, losing their next Move and Action', 'Hungry: If they incapacitate an opponent or encounter a fresh body, they must pass an Average (+2 SL) Cool Test or feast, losing their next Move and Action']],
+  // Livre de base V5 (L06) p. 331 : Fenbeast, lettre « c » de la citation voisine collée à la qualité « Magical ».
+  'L06:331:0': [['c', '']]
+});
 
 export const BODY_OVERRIDES = Object.freeze({
   // Temple of Spite (L09) p. 122 : Duriath Helbane, la prose de la colonne voisine mange le début de plusieurs lignes (« dium Armour », « gon Cloak », « Old ation », « er's Crown ») : relu sur la page.
@@ -202,6 +217,25 @@ export const BODY_OVERRIDES = Object.freeze({
     'Briber, Carouser, Catfall, Combat Reflexes, Commanding Presence, Coolheaded, Dealmaker, Dual Wielder, Etiquette (Corsairs, Nobles), Furious Assault, In-fighter, Inspiring, Iron Will, Luck, Menacing, Noble Blood, Old Salt, Orientation, Pilot, Public Speaking, Read/Write, Schemer, Seasoned Traveller, Stout-hearted, Strong Swimmer, Suave, War Leader',
     'Trappings',
     'Fleetmaster\'s Crown, Medium Armour, Repeater Handbow with 21 Bolts, Sea Dragon Cloak, Two Swords'
+  ],
+  // Livre de base V5 (L06) p. 343 : Vampire, le titre de la rubrique « Traits » et ses deux premiers Traits (Night Vision…) étaient lus dans le titre du profil.
+  'L06:343:0': [
+    'Attacks',
+    'Hand Weapon: (55/+9)',
+    'Bite: (60/+8) Lose Momentum to make this Free Attack',
+    'Armour',
+    'Toughness Bonus: 4',
+    'Optional Medium Armour: +3 AP',
+    'Optional Heavy Armour: +5 AP',
+    'Optional Shield: +2 AP and +1 SL when Opposing an attack with Dodge or Melee',
+    'Skills',
+    'Charm 35, Climb 60, Intuition 50, Melee (Basic) 55, Melee (Brawling) 60, Perception 50, Stealth (Rural) 60, Stealth (Urban) 60, Track 40',
+    'Traits',
+    'Night Vision: See clearly for 20 yards and extend the illumination distance of light sources by 20 yards',
+    'Undead: Not reliant on air, food, water, and other things needed to sustain life, affected by spells, miracles, or other abilities that affect Undead only',
+    'Vampiric: Whenever the creature performs a successful Bite attack against an appropriate opponent, they heal as many Wounds as the opponent loses.',
+    'Optional Traits',
+    'Bestial, Champion, Corruption (Minor), Dark Vision, Distracting, Fear, Fly 40, Frenzy, Hungry, Mental Corruption, Painless, Petrifying Gaze, Regeneration, Spellcaster (Death or Necromancy), Tracker, Wallcrawler'
   ],
   // Temple of Spite (L09) p. 45 : Dark Steed, la colonne de droite (Dark Pegasus, armures des gabarits) s'intercale entre les rubriques ; « Option: » = armure facultative.
   'L09:45:1': [
@@ -224,6 +258,7 @@ export const BODY_OVERRIDES = Object.freeze({
     'Attacks',
     'Talons (45/+14)',
     'Bite (45/+8) Lose Momentum to make this free attack',
+    'Breath (Fire or Poison): See the WFRP Core Rulebook for details of Breath attacks',
     'Armour',
     'Toughness Bonus: 5',
     'Scales: +2 AP',
@@ -247,6 +282,7 @@ export const BODY_OVERRIDES = Object.freeze({
     'Claws (70/+25)',
     'Bite (70/+10) Lose Momentum to make this free attack',
     'Tail (70/+9) Lose Momentum to make this free attack, smaller opponents take a Prone Condition if wounded',
+    'Breath (Any One): See the WFRP Core Rulebook for details of Breath attacks',
     'Armour',
     'Toughness Bonus: 8',
     'Scales: +3 AP',

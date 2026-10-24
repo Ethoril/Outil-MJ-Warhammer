@@ -223,6 +223,9 @@
      "value": 64
     }
    ],
+   "unvaluedSkills": [
+    "Language (Elthárin)"
+   ],
    "talents": [
     {
      "name": "Acute Sense (Sight)"
@@ -353,7 +356,10 @@
     {
      "name": "Spear",
      "damage": 7,
-     "trait": "Weapon"
+     "trait": "Weapon",
+     "qualities": [
+      "Impale"
+     ]
     },
     {
      "name": "Sword",
@@ -459,6 +465,9 @@
      "value": 40
     }
    ],
+   "unvaluedSkills": [
+    "Language (Elthárin)"
+   ],
    "traits": [
     {
      "name": "Animosity",
@@ -535,7 +544,10 @@
     {
      "name": "Spear",
      "damage": 7,
-     "trait": "Weapon"
+     "trait": "Weapon",
+     "qualities": [
+      "Impale"
+     ]
     },
     {
      "name": "Sword",
@@ -656,6 +668,9 @@
      "value": 40
     }
    ],
+   "unvaluedSkills": [
+    "Language (Elthárin)"
+   ],
    "traits": [
     {
      "name": "Animosity",
@@ -739,12 +754,22 @@
      "name": "Elf Bow",
      "damage": 8,
      "trait": "Ranged",
+     "qualities": [
+      "Accurate",
+      "Damaging",
+      "Impale",
+      "Penetrating",
+      "Precise"
+     ],
      "ranged": true
     },
     {
      "name": "Incandescent Spear",
      "damage": 10,
-     "trait": "Weapon"
+     "trait": "Weapon",
+     "qualities": [
+      "Impale"
+     ]
     },
     {
      "name": "Sword",
@@ -964,6 +989,9 @@
      "value": 57
     }
    ],
+   "unvaluedSkills": [
+    "Language (Elthárin)"
+   ],
    "talents": [
     {
      "name": "Acute Sense (Hearing, Sight)"
@@ -1145,12 +1173,23 @@
      "name": "Elf Bow",
      "damage": 8,
      "trait": "Ranged",
+     "qualities": [
+      "Accurate",
+      "Damaging",
+      "Impale",
+      "Penetrating",
+      "Precise"
+     ],
      "ranged": true
     },
     {
      "name": "Blade of Darting Steel",
      "damage": 8,
-     "trait": "Weapon"
+     "trait": "Weapon",
+     "qualities": [
+      "Fast",
+      "Precise"
+     ]
     }
    ],
    "skills": [
@@ -1307,6 +1346,9 @@
      "value": 36
     }
    ],
+   "unvaluedSkills": [
+    "Language (Elthárin)"
+   ],
    "talents": [
     {
      "name": "Acute Sense (Sight)"
@@ -1388,6 +1430,13 @@
      "name": "Bow of Anirain",
      "damage": 9,
      "trait": "Ranged",
+     "qualities": [
+      "Accurate",
+      "Damaging",
+      "Impale",
+      "Penetrating",
+      "Precise"
+     ],
      "ranged": true
     },
     {
@@ -1559,6 +1608,9 @@
      "nameFr": "Natation",
      "value": 36
     }
+   ],
+   "unvaluedSkills": [
+    "Language (Elthárin)"
    ],
    "traits": [
     {
@@ -1746,12 +1798,22 @@
      "name": "Elf Bow",
      "damage": 8,
      "trait": "Ranged",
+     "qualities": [
+      "Accurate",
+      "Damaging",
+      "Impale",
+      "Penetrating",
+      "Precise"
+     ],
      "ranged": true
     },
     {
      "name": "Spear",
      "damage": 7,
-     "trait": "Weapon"
+     "trait": "Weapon",
+     "qualities": [
+      "Impale"
+     ]
     }
    ],
    "skills": [
@@ -1827,6 +1889,9 @@
      "nameFr": "Natation",
      "value": 61
     }
+   ],
+   "unvaluedSkills": [
+    "Language (Elthárin)"
    ],
    "talents": [
     {
@@ -2002,6 +2067,32 @@
      "value": 90
     },
     {
+     "name": "Language (Grand Cathayan)",
+     "nameFr": "Langue (Grand Cathayan)",
+     "frUnverified": true,
+     "value": 69
+    },
+    {
+     "name": "Language (Magick)",
+     "nameFr": "Langue (Magick)",
+     "value": 76
+    },
+    {
+     "name": "Language (Tilean)",
+     "nameFr": "Langue (Tiléen)",
+     "value": 69
+    },
+    {
+     "name": "Language (Reikspiel)",
+     "nameFr": "Langue (Reikspiel)",
+     "value": 76
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 80
+    },
+    {
      "name": "Melee (Basic)",
      "nameFr": "Corps à corps (Base)",
      "value": 64
@@ -2021,6 +2112,9 @@
      "nameFr": "Représentation (Danse)",
      "value": 85
     }
+   ],
+   "unvaluedSkills": [
+    "Language (Elthárin)"
    ],
    "talents": [
     {
@@ -2129,6 +2223,13 @@
      "name": "Elf Bow",
      "damage": 8,
      "trait": "Ranged",
+     "qualities": [
+      "Accurate",
+      "Damaging",
+      "Impale",
+      "Penetrating",
+      "Precise"
+     ],
      "ranged": true
     },
     {
@@ -2445,6 +2546,9 @@
      "nameFr": "Natation",
      "value": 37
     }
+   ],
+   "unvaluedSkills": [
+    "Language (Eltharin)"
    ],
    "talents": [
     {
@@ -3326,6 +3430,9 @@
      "value": 82
     }
    ],
+   "unvaluedSkills": [
+    "Language (Elthárin)"
+   ],
    "traits": [
     {
      "name": "Prejudice",
@@ -3416,7 +3523,11 @@
     {
      "name": "Axe",
      "damage": 8,
-     "trait": "Weapon"
+     "trait": "Weapon",
+     "qualities": [
+      "Hack",
+      "Unbalanced"
+     ]
     }
    ],
    "skills": [
@@ -3547,6 +3658,9 @@
      "name": "Acute Sense (Hearing)"
     },
     {
+     "name": "Cat-tongued"
+    },
+    {
      "name": "Flee!"
     },
     {
@@ -3624,7 +3738,10 @@
     {
      "name": "Main Gauche",
      "damage": 6,
-     "trait": "Weapon"
+     "trait": "Weapon",
+     "qualities": [
+      "Defensive"
+     ]
     },
     {
      "name": "Sword",
@@ -3931,12 +4048,20 @@
     {
      "name": "Bite",
      "damage": 9,
-     "trait": "Bite"
+     "trait": "Bite",
+     "qualities": [
+      "Fast",
+      "Penetrating"
+     ]
     },
     {
      "name": "Claws",
      "damage": 10,
-     "trait": "Weapon"
+     "trait": "Weapon",
+     "qualities": [
+      "Fast",
+      "Penetrating"
+     ]
     }
    ],
    "skills": [
@@ -3959,6 +4084,10 @@
     {
      "name": "Bite",
      "rating": "+9",
+     "qualities": [
+      "Fast",
+      "Penetrating"
+     ],
      "ref": "E0-T-006"
     },
     {

@@ -743,7 +743,7 @@
     "Hand Weapon",
     "Hood",
     "Knuckledusters",
-    "2 Leather Jack",
+    "Leather Jack",
     "Pouch containing 3d10 Brass Pennies",
     "Sling Bag containing 2 Candles and 5 Matches"
    ],
@@ -857,6 +857,9 @@
     },
     {
      "name": "Night Vision"
+    },
+    {
+     "name": "Resistant (Chaos)"
     }
    ],
    "trappings": [
@@ -2079,6 +2082,11 @@
      "name": "Size",
      "param": "Enormous",
      "ref": "E0-T-045"
+    },
+    {
+     "name": "Breath",
+     "param": "Any One",
+     "ref": "E0-T-009"
     }
    ],
    "optionalTraits": [
@@ -2170,7 +2178,7 @@
      "value": 40,
      "damage": 14,
      "qualities": [
-      "Magical c"
+      "Magical"
      ]
     }
    ],
@@ -3896,12 +3904,17 @@
      "name": "Stealth (Urban)",
      "nameFr": "Discrétion (Urbaine)",
      "value": 60
+    },
+    {
+     "name": "Track",
+     "nameFr": "Pistage",
+     "value": 40
     }
    ],
    "traits": [
     {
-     "name": "Bite",
-     "ref": "E0-T-006"
+     "name": "Night Vision",
+     "ref": "E0-T-041"
     },
     {
      "name": "Undead",
@@ -4077,6 +4090,10 @@
      "name": "Hatred",
      "param": "Living",
      "ref": "E0-T-027"
+    },
+    {
+     "name": "Hungry",
+     "ref": "E0-T-029"
     },
     {
      "name": "Regeneration",

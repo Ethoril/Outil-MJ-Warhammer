@@ -46,6 +46,8 @@ Plan : `PLAN_PRO_QUALITE_E.md`. Branche `pro/qualite-e`, départ `9c12613`. Choi
 | Q29 | FAIT | (voir `git log`, « Q29 ») |
 | Q30 | FAIT (`QE-Q30-1`) | (voir `git log`, « Q30 ») |
 | Q31 | FAIT (`QE-Q31-1`) | (voir `git log`, « Q31 ») |
+| Q32 | FAIT (`QE-Q32-1`) | (voir `git log`, « Q32 ») |
+| Q33 | FAIT (`QE-Q33-1` à `QE-Q33-6`) | (voir `git log`, « Q33 ») |
 
 ## Q0 — contrôle de complétude
 
@@ -447,3 +449,12 @@ Branché / non appelé (grep dans `js/`) :
 - Valeurs imprimées : inchangées (aucun livre régénéré ; 0 écart de lignes de valeurs sur 23 livres).
 - Test : `tests/pro-q32-controle-formats.test.js` (7 tests). Suite complète lancée une fois : 4489 réussis, 0 échec.
 - Outil de contrôle seulement : rien à déclarer « branché » (code testé, non appelé par l'application ; hors `js/`). Aucune valeur durable de personnage.
+
+## Q33 — données, cas confirmés (FAIT)
+
+- **Causes d'outil réparées** (`tools/lib/bestiary-blocks.mjs`, `bestiary-profile.mjs`, `bestiary-record.mjs`, `bestiary-extract.mjs`, `bestiary-overrides.mjs`) : voir `QE-Q33-1` à `QE-Q33-6`. Principales : rubrique « Traits and Talents » en descriptions « Nom : texte » (L09) lue comme une liste à virgules (80 talents perdus sur 14 profils) ; une ligne de description qui commence par « Talents as if… » ouvrait une fausse rubrique (Anointed) ; « Traits and talents » en minuscule (Selthira) ; rubriques « Blessings » et « Miracles: » (L10) ; Souffle de la ligne Attacks (V5) ; qualités entre parenthèses derrière un Trait d'attaque (Hagdar) ; compétences collées après une parenthèse, « Haggle (45) », lettre isolée, spécialisation imprimée sans valeur ; talents collés après une parenthèse et graphies imprimées (Infighter, Cat tongued, Resistance (X)).
+- **Cas confirmés** : Breath (War Hydra, Sea Dragon, Dragon L06 : Trait Breath avec son type ; Hagdar : Tail Pummel, Obsidian Claws Hack/Penetrating) ; L09 (341, 343-346, 348, 352, 353 Dagger, 354 Scorath, 355-361 dont Perform (Dance) 60, 324, 325, 360 In-fighter + 7 compétences, Damina : Bleeding des coups) ; L10 (367 à 390) ; L06 (069, 070, 099, 100, 083) ; césures (123, 485) ; parasites (L16 512, L21 705, L13 464 : déjà propres). Harkon (Vampiric Gaze, Zweihander +11) et Dread Saurian (Hunger) : justifications retirées, Traits gardés en `specialRules`.
+- **Contrôle Q32 après correction** (23 livres) : talents 107 → 16, compétences 13 → 11, attaques 33 → 28, Traits 38 → 33, équipement 16 → 16 ; profils signalés 80 → 48. Le reste (faux positifs de texte voisin, préfixes d'attaque « Optional », « Fast », « Free Attack » que le contrôle ne retire pas, colonnes mêlées) est relu et justifié page par page au lot Q34.
+- **Valeurs imprimées** : 23 livres comparés à `9c12613` : seuls E0-P-125, E0-P-126 (Base → Total, MJ) et E0-P-323 Sea Dragon (M 10, justifié Q26) diffèrent ; aucun profil retiré.
+- Tests : `tests/pro-q33-cas-confirmes.test.js` (13 tests). Assertion mise à jour : `pro-d2-l06` (Vampire : Night Vision, Undead, Vampiric, `QE-Q33-6`). Suite complète lancée une fois : 4502 tests.
+- **Branché / non appelé** : données de livre et outil de génération. `qualities` d'un Trait d'attaque et `inflicts`, `unvaluedSkills`, notes `Blessings:` / `Miracles:` n'ont aucun appelant dans `js/` : code testé, non appelé. Les attaques gagnées (Dagger de Samuril, Boat Hook, Zweihander) deviennent des actions via `buildParticipantFromBestiary` (appelants : `js/ui/bestiary-library.js`, `js/core/bestiary-templates.js`). Aucune valeur durable de personnage.

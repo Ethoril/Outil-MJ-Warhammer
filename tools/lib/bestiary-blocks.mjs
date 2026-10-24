@@ -12,8 +12,8 @@ const HEADER = /\bM\s+WS\s+BS\s+S\s+T\s+I\s+Agi?\s+Dex\s+Int\s+W[Pp]\s+Fel(?:\s+
 const CELL = /(?:[+\-−–—�]?\d+\*?|[-–—−�]+|\*)/g;
 const DASH = /^[-–—−�]+$/;
 const NEGATIVE = /^[\-−–—�]\d/;
-const SECTION_START = /^(Lore of [A-Z][a-z]+(?=:)|Magic of [A-Z][a-z]+(?=:)|High Magic(?=:)|Yenlui State|Obsession|Traits and Talents|Traits|Attack Traits|Skills|Talents|Trappings|Possessions|Spells|SPELLS|Petty(?=:)|(?:Beasts|Death|Fire|Heavens|Life|Light|Metal|Shadows|Hedgecraft|Necromancy|Daemonology|Witchcraft|Tzeentch|Nurgle|Slaanesh|Khorne)(?=:)|Arcane(?: and Lore)?(?=:)|(?:Arcane|Petty Magic) Spells(?=:)|(?:Lore of [A-Z][a-z]+|Petty|Witchcraft|Daemonology|Necromancy|Hedgecraft|Chaos) Spells(?=:)|Mutations|Optional|Options|Armour|Attacks|Petty Magic|Arcane Magic|Weapons?|Special|Fate Points?|Miracles)\b/;
-const BARE_LABEL = /^(Attacks|Armour|Skills|Traits and Talents|Traits|Optional Traits|Talents|Trappings|Spells)$/;
+const SECTION_START = /^(Lore of [A-Z][a-z]+(?=:)|Magic of [A-Z][a-z]+(?=:)|High Magic(?=:)|Yenlui State|Obsession|Traits and [Tt]alents|Traits|Attack Traits|Skills|Talents|Trappings|Possessions|Spells|SPELLS|Petty(?=:)|(?:Beasts|Death|Fire|Heavens|Life|Light|Metal|Shadows|Hedgecraft|Necromancy|Daemonology|Witchcraft|Tzeentch|Nurgle|Slaanesh|Khorne)(?=:)|Arcane(?: and Lore)?(?=:)|(?:Arcane|Petty Magic) Spells(?=:)|(?:Lore of [A-Z][a-z]+|Petty|Witchcraft|Daemonology|Necromancy|Hedgecraft|Chaos) Spells(?=:)|Mutations|Optional|Options|Armour|Attacks|Petty Magic|Arcane Magic|Weapons?|Special|Fate Points?|Miracles|Blessings)\b/;
+const BARE_LABEL = /^(Attacks|Armour|Skills|Traits and [Tt]alents|Traits|Optional Traits|Talents|Trappings|Spells)$/;
 /** Lecture élargie (étiquettes décalées, interligne double, « Options: ») : réservée aux livres importés depuis L16, pour ne pas bouger les livres déjà relus. */
 let lenient = false;
 export const setLenient = value => { lenient = Boolean(value); };
@@ -258,11 +258,12 @@ const V4_LABELS_BASE = ['Yenlui State', 'Obsession', 'Attack Traits', 'Optional 
 const LORE_PATTERNS = ['Lore of [A-Z][a-z]+', 'Magic of [A-Z][a-z]+', 'High Magic'];
 // « Traits*: » (L01 p. 79) : Traits conditionnels, la note à astérisque suit ; l'astérisque est retiré de l'étiquette.
 const labelRe = wide => new RegExp(`(?:^|\\s)(${[...(wide ? [...V4_LABELS_BASE, 'Options'] : [...V4_LABELS_BASE, ...LORE_PATTERNS])].join('|')})\\*?:`, 'g');
-const V5_LABEL_RE = /^(Attacks|Armour(?!\s+by\s+Location)|Skills|Traits and Talents|Traits|Optional Traits|Talents|Trappings|Spells)(?=\s|$)/;
+const V5_LABEL_RE = /^(Attacks|Armour(?!\s+by\s+Location)|Skills|Traits and [Tt]alents|Traits|Optional Traits|Talents|Trappings|Spells|Blessings|Miracles:?)(?=\s|$)/;
 
 /** Sections étiquetées du corps, sous forme { étiquette: texte } ; `lead` : texte avant la première étiquette. */
 export function splitSections(bodyLines) {
-  const lines = Array.isArray(bodyLines) ? bodyLines : [bodyLines];
+  // « Traits and talents » (Selthira, L09 p. 116) : même rubrique que « Traits and Talents ».
+  const lines = (Array.isArray(bodyLines) ? bodyLines : [bodyLines]).map(line => line.replace(/^Traits and talents(?=s|$)/, "Traits and Talents"));
   // Intitulé « SPELLS » centré (sans deux-points) : même rôle que « Spells: ».
   // « …, Trained (Broken, Mount) Combat Traits: Bite +9, Weapon (Talons) +9 » (Demigryph Mount, L13 p. 109) : l'intitulé « Combat Traits: » prolonge la liste des Traits.
   const joined = clean(lines.join(' ')).replace(/(^|\s)SPELLS(?=\s)/g, '$1Spells:').replace(/\s+Combat Traits:\s*/g, ', ');
@@ -290,11 +291,13 @@ export function splitSections(bodyLines) {
   let current = null;
   const lead = [];
   const chunks = new Map();
-  for (const line of lines) {
-    const found = V5_LABEL_RE.exec(line);
+  for (const [lineIndex, line] of lines.entries()) {
+    const labelMatch = V5_LABEL_RE.exec(line);
+    // « Talents as if they were Career Advances… » (Mark of Slaanesh, L09 p. 51) : une ligne qui prolonge un paragraphe (la précédente n'est pas vide) et dont le premier mot est une étiquette suivie de minuscules n'en ouvre pas.
+    const found = labelMatch && !(lineIndex > 0 && lines[lineIndex - 1] && /^\s+[a-zà-ÿ]/.test(line.slice(labelMatch[0].length))) ? labelMatch : null;
     // Bloc V5 de L10 : « Armour +3 AP All, Night Vision… » ouvre la liste des Traits ; ce n'est pas la rubrique Armour (L10 p. 51).
     if (found && found[1] === 'Armour' && current === 'Traits' && /^Armour\s+\+\d+\s+AP\b/.test(line)) { chunks.get(current).push(line); continue; }
-    if (found) { current = found[1]; chunks.set(current, [clean(line.slice(found[0].length))]); } else if (current) chunks.get(current).push(line); else if (line) lead.push(line);
+    if (found) { current = found[1].replace(/:$/, ''); chunks.set(current, [clean(line.slice(found[0].length))]); } else if (current) chunks.get(current).push(line); else if (line) lead.push(line);
   }
   const last = [...chunks.keys()].pop();
   for (const [label, parts] of chunks) {

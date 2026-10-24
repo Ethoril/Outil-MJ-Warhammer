@@ -3277,7 +3277,10 @@
     {
      "name": "Weapon",
      "damage": 6,
-     "trait": "Weapon"
+     "trait": "Weapon",
+     "qualities": [
+      "Claws"
+     ]
     }
    ],
    "skills": [
@@ -3363,7 +3366,10 @@
     {
      "name": "Weapon",
      "damage": 9,
-     "trait": "Weapon"
+     "trait": "Weapon",
+     "qualities": [
+      "Quill"
+     ]
     }
    ],
    "traits": [
@@ -3457,7 +3463,10 @@
     {
      "name": "Weapon",
      "damage": 8,
-     "trait": "Weapon"
+     "trait": "Weapon",
+     "qualities": [
+      "Bite"
+     ]
     }
    ],
    "traits": [

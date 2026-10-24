@@ -1711,12 +1711,18 @@
     {
      "name": "Tail",
      "damage": 12,
-     "trait": "Tail"
+     "trait": "Tail",
+     "qualities": [
+      "Venom"
+     ]
     },
     {
      "name": "Teeth",
      "damage": 10,
-     "trait": "Weapon"
+     "trait": "Weapon",
+     "qualities": [
+      "Infected"
+     ]
     }
    ],
    "traits": [
@@ -1737,6 +1743,9 @@
     {
      "name": "Tail",
      "rating": "+12",
+     "qualities": [
+      "Venom"
+     ],
      "ref": "E0-T-054"
     }
    ],

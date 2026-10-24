@@ -656,6 +656,9 @@
     },
     {
      "name": "Savant (Vampires)"
+    },
+    {
+     "name": "Sharpshooter"
     }
    ],
    "trappings": [
@@ -667,6 +670,9 @@
     "Silvered Sword",
     "Stake and Mallet",
     "Warding Herbs"
+   ],
+   "notes": [
+    "Blessings: Breath, Courage, Fortune, Righteousness, Tenacity, Wisdom"
    ],
    "keywords": [
     "humain"
@@ -754,6 +760,9 @@
     },
     {
      "name": "Petty Magic"
+    },
+    {
+     "name": "Read/Write"
     },
     {
      "name": "Second Sight"
@@ -1524,6 +1533,12 @@
    ],
    "talents": [
     {
+     "name": "Acute Sense (Taste)"
+    },
+    {
+     "name": "Attractive"
+    },
+    {
      "name": "Craftsman (Cook)"
     },
     {
@@ -2065,13 +2080,13 @@
      "name": "Read/Write"
     },
     {
+     "name": "Resistant (Poison)"
+    },
+    {
      "name": "Savant (Drakenhof)"
     },
     {
      "name": "Shadow"
-    },
-    {
-     "name": "Resistant (Poison)"
     }
    ],
    "trappings": [
@@ -2378,6 +2393,12 @@
      "name": "Noble Blood"
     },
     {
+     "name": "Fearless (Paupers)"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
      "name": "Suave"
     }
    ],
@@ -2430,6 +2451,11 @@
    ],
    "skills": [
     {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 40
+    },
+    {
      "name": "Cool",
      "nameFr": "Calme",
      "value": 39
@@ -2455,6 +2481,11 @@
      "value": 38
     },
     {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 45
+    },
+    {
      "name": "Intuition",
      "nameFr": "Intuition",
      "value": 40
@@ -2478,9 +2509,17 @@
      "name": "Perception",
      "nameFr": "Perception",
      "value": 42
+    },
+    {
+     "name": "Pick Lock",
+     "nameFr": "Crochetage",
+     "value": 42
     }
    ],
    "talents": [
+    {
+     "name": "Break and Enter"
+    },
     {
      "name": "Catfall"
     },
@@ -2498,7 +2537,7 @@
     "Small Lock Box",
     "Ledger",
     "Coach and Horses",
-    "Mercenary Guards ing"
+    "Mercenary Guards"
    ],
    "keywords": [
     "humain"
@@ -3115,12 +3154,18 @@
     },
     {
      "name": "Read/Write"
+    },
+    {
+     "name": "Resistant (Poison)"
     }
    ],
    "trappings": [
     "Ceremonial Robes",
     "Hourglass",
     "The Book of Doorways"
+   ],
+   "notes": [
+    "Miracles: Destroy Undead, Dooming, Last Rites"
    ],
    "keywords": [
     "humain"
@@ -3153,6 +3198,13 @@
    "armour": {
     "toughnessBonus": 4
    },
+   "attacks": [
+    {
+     "name": "Boat Hook",
+     "value": 49,
+     "damage": 8
+    }
+   ],
    "skills": [
     {
      "name": "Athletics",
@@ -3226,6 +3278,12 @@
     },
     {
      "name": "Dealmaker"
+    },
+    {
+     "name": "Etiquette (Criminals)"
+    },
+    {
+     "name": "Gregarious"
     },
     {
      "name": "Strong Back"

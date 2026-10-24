@@ -21,7 +21,7 @@ const TALENT_ALIASES = new Map(Object.entries({
   resistance: 'Resistant', 'nimble fingered': 'Nimble-fingered', 'stout-hearted': 'Stout-hearted', 'stout- hearted': 'Stout-hearted', unshakable: 'Unshakeable',
   'strong-minded': 'Strong-minded', 'strong minded': 'Strong-minded', 'strong-minded.': 'Strong-minded', 'strong back': 'Strong Back', 'magic resistant': 'Magic Resistance',
   // « Doomed! (Find Thy Path and Stray Not) » (Jan Guterwass, L22 p. 62) : point d'exclamation de trop, le talent est Doomed.
-  'doomed!': 'Doomed', etiqutte: 'Etiquette', ettiquette: 'Etiquette', 'instrinctive diction': 'Instinctive Diction'
+  'doomed!': 'Doomed', infighter: 'In-fighter', 'in fighter': 'In-fighter', 'cat tongued': 'Cat-tongued', 'cat- tongued': 'Cat-tongued', 'in- fighter': 'In-fighter', etiqutte: 'Etiquette', ettiquette: 'Etiquette', 'instrinctive diction': 'Instinctive Diction'
 }));
 export function canonicalTalentName(rawName) {
   // « Acute Sense (Vision: as Character Talent) » (L07) : la précision est « Vision », le reste renvoie au livre de base.
@@ -37,6 +37,9 @@ export function canonicalTalentName(rawName) {
  */
 export function splitGluedTalent(name) {
   const text = canonicalTalentName(name);
+  // « Acute Sense (Taste) Attractive », « Etiquette (Criminals) Gregarious » (L10 pp. 80, 93) : virgule oubliée après une parenthèse, le second nom est un talent du catalogue.
+  const afterParen = /^(.+?\([^()]*\))\s+([A-Z][A-Za-z' /-]+)$/.exec(text);
+  if (afterParen && isCatalogueTalent(canonicalTalentName(afterParen[2]))) return [...splitGluedTalent(afterParen[1]), canonicalTalentName(afterParen[2])];
   // « Blather Bless (Taal) » (L04 p. 83, virgule oubliée) : la spécialisation finale appartient au dernier talent.
   const specialised = /^([^(\d]+?)(\s*\([^()]*\))$/.exec(text);
   if (specialised && !isCatalogueTalent(specialised[1])) {
@@ -59,7 +62,10 @@ const isNoise = text => !isCatalogueTalent(text) && (text.length > 40 || /(?:^|\
 export function cleanSkills(skills = []) {
   const kept = [];
   const dropped = [];
+  const unvalued = [];
   for (const skill of skills) {
+    // Compétence imprimée sans valeur (« Language (Elthárin) ») : gardée à part, jamais avec une valeur inventée.
+    if (skill.unvalued) { if (/^Language \(/.test(skill.name)) unvalued.push(skill.name); else dropped.push(skill.name); continue; }
     const found = /^([A-Z][A-Za-z' ]+?)(?:\s*\(([^()]{1,40})\))?$/.exec(skill.name.trim());
     const group = found && (SKILL_GROUP_ALIASES[found[1].trim()] || found[1].trim());
     const specificationOk = !found?.[2] || !/\d/.test(found[2]) && found[2].split(/\s+/).length <= 4;
@@ -67,7 +73,7 @@ export function cleanSkills(skills = []) {
     const fr = skillNameFr(`${group}${found[2] ? ` (${found[2].trim()})` : ''}`);
     kept.push({ name: `${group}${found[2] ? ` (${found[2].trim()})` : ''}`, nameFr: fr.nameFr, ...(fr.verified ? {} : { frUnverified: true }), value: skill.value, ...(skill.modifier ? { modifier: true } : {}) });
   }
-  return { kept, dropped };
+  return { kept, dropped, unvalued };
 }
 
 /** Traits : nom canonique (alias V4 → V5), valeur et précision imprimées, lien d'inventaire ; une ligne de texte voisin est écartée. */
@@ -84,7 +90,7 @@ export function cleanTraits(traits = [], { canonical, traitRefs }) {
     const seeElsewhere = /^see\s/i.test(trait.param || '');
     const param = named ? named[2].replace(/^./, letter => letter.toUpperCase()) : (trait.param && !seeElsewhere ? trait.param : null);
     const count = trait.count || (named?.[1] ? Number(named[1]) : 0);
-    kept.push({ name, ...(trait.rating !== undefined ? { rating: trait.rating } : {}), ...(param ? { param } : {}), ...(trait.printed !== undefined ? { printed: trait.printed } : {}), ...(count ? { count } : {}), ...(trait.weapons ? { weapons: trait.weapons } : {}), ...(trait.conditional ? { conditional: true } : {}), ...(traitRefs.get(name) ? { ref: traitRefs.get(name) } : {}) });
+    kept.push({ name, ...(trait.rating !== undefined ? { rating: trait.rating } : {}), ...(param ? { param } : {}), ...(trait.printed !== undefined ? { printed: trait.printed } : {}), ...(count ? { count } : {}), ...(trait.weapons ? { weapons: trait.weapons } : {}), ...(trait.qualities?.length ? { qualities: trait.qualities } : {}), ...(trait.conditional ? { conditional: true } : {}), ...(traitRefs.get(name) ? { ref: traitRefs.get(name) } : {}) });
   }
   return { kept, dropped };
 }
@@ -99,6 +105,9 @@ export function buildAttacks(extracted, traitList) {
     const tail = attack.tail || '';
     const range = /(\d+)\s*yards?/i.exec(tail);
     if (range) entry.rangeYards = Number(range[1]);
+    // « hits that do Damage inflict 1 Bleeding Condition » (Damina Hroska, L09 p. 73) : état infligé par les coups qui blessent.
+    const inflicted = /\binflict\s+(\d+)\s+([A-Z][a-z]+)\s+Conditions?/.exec(tail);
+    if (inflicted) entry.inflicts = [{ condition: inflicted[2], count: Number(inflicted[1]) }];
     if (/free attack only when charging/i.test(tail)) entry.free = 'charge';
     else if (/lose momentum to make this free attack/i.test(tail)) entry.free = 'momentum';
     const flags = tail.replace(/free attack only when charging|lose momentum to make this free attack/ig, '').replace(/\d+\s*yards?/i, '').split(',').map(part => part.trim()).filter(part => part && /^[A-Z]/.test(part) && part.split(/\s+/).length <= 3 && !/[.:;]/.test(part));
@@ -114,7 +123,7 @@ export function buildAttacks(extracted, traitList) {
     if (trait.weapons) { for (const weapon of trait.weapons) attacks.push({ name: weapon.name, damage: weapon.damage, trait: 'Weapon' }); continue; }
     const damage = number(trait.rating);
     if (damage === null || Number.isNaN(damage)) continue;
-    attacks.push({ name: trait.param || trait.name, damage, trait: trait.name, ...(trait.count ? { count: trait.count } : {}), ...(trait.name === 'Ranged' ? { ranged: true } : {}) });
+    attacks.push({ name: trait.param || trait.name, damage, trait: trait.name, ...(trait.count ? { count: trait.count } : {}), ...(trait.qualities?.length ? { qualities: trait.qualities } : {}), ...(trait.name === 'Ranged' ? { ranged: true } : {}) });
   }
   // Le livre imprime parfois la même attaque deux fois (« Horns (Tusks) +10 » et « Weapon (Tusks) +10 », Krag-Breaker « Horns +13 » et « Weapon (Curling Horns) +13 ») :
   // une arme de même dégâts dont le nom est celui d'une attaque naturelle (ou finit par lui) n'est pas une seconde attaque.
@@ -220,6 +229,7 @@ export function buildRecord(extracted, entry, context) {
     if (attacks.length) record.attacks = attacks;
   }
   if (skills.kept.length) record.skills = skills.kept;
+  if (skills.unvalued.length) record.unvaluedSkills = skills.unvalued;
   // Armure, Armes et Tirs sont des données d'attaque et d'armure ; les attaques naturelles (Bite, Horns, Tail…) restent aussi des Traits.
   const structural = new Set(['Armour', 'Weapon', 'Ranged']);
   const listed = traits.kept.filter(trait => !structural.has(trait.name));
@@ -230,7 +240,9 @@ export function buildRecord(extracted, entry, context) {
   const listedTalents = new Set((extracted.talents || []).map(talent => baseName(talent.name)));
   const traitTalents = trimmed.filter(trait => !canonical(trait.name) && trait.param && isCatalogueTalent(canonicalTalentName(trait.name)) && !listedTalents.has(baseName(canonicalTalentName(trait.name)))).map(trait => ({ name: `${canonicalTalentName(trait.name)}${trait.param ? ` (${trait.param.replace(/:\s*as Character Talent/i, '')})` : ''}` }));
   const talents = [...(extracted.talents || []).filter(talent => talent.name).flatMap(talent => splitGluedTalent(talent.name).map((name, index, parts) => ({ name, rank: index === parts.length - 1 ? talent.rank : undefined }))).filter(talent => !isNoise(talent.name.replace(/\(.*\)/, ''))).map(talent => ({ name: talent.name, ...(talent.rank ? { rank: talent.rank } : {}) })), ...traitTalents];
-  if (extracted.talents?.length || traitTalents.length) record.talents = talents;
+  // Le même talent lu deux fois (liste imprimée et Trait « Resistance (Poison) ») n'est gardé qu'une fois.
+  const uniqueTalents = talents.filter((talent, index) => talents.findIndex(other => other.name === talent.name && other.rank === talent.rank) === index);
+  if (extracted.talents?.length || traitTalents.length) record.talents = uniqueTalents;
   const trims = TRAPPING_TRIMS[entry.id] || [];
   if (extracted.trappings?.length) record.trappings = joinTrappings(extracted.trappings, TRAPPING_JOINS[entry.id]).map(item => item.replace(/^and\s+(?=[A-Z])/, '')).map(item => trims.find(name => item.startsWith(`${name} `)) ?? item).filter(item => isTrappingName(item) || (TRAPPING_JOINS[entry.id] || []).includes(item));
   if (extracted.notes?.length) record.notes = extracted.notes;

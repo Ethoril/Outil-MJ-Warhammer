@@ -39,7 +39,11 @@
     {
      "name": "Axe of Grimnir",
      "damage": 10,
-     "trait": "Weapon"
+     "trait": "Weapon",
+     "qualities": [
+      "Damaging",
+      "Hack"
+     ]
     }
    ],
    "skills": [
@@ -302,7 +306,12 @@
     {
      "name": "Hammer of Azul",
      "damage": 14,
-     "trait": "Weapon"
+     "trait": "Weapon",
+     "qualities": [
+      "Damaging",
+      "Impact",
+      "Pummel"
+     ]
     }
    ],
    "skills": [
@@ -483,6 +492,9 @@
      "value": 75
     }
    ],
+   "unvaluedSkills": [
+    "Language (Khazalid)"
+   ],
    "talents": [
     {
      "name": "Accurate Shot"
@@ -620,12 +632,21 @@
     {
      "name": "Axe of Dargo",
      "damage": 15,
-     "trait": "Weapon"
+     "trait": "Weapon",
+     "qualities": [
+      "Damaging",
+      "Hack",
+      "Impact",
+      "Tiring"
+     ]
     },
     {
      "name": "Dwarf Axe",
      "damage": 13,
-     "trait": "Weapon"
+     "trait": "Weapon",
+     "qualities": [
+      "Hack"
+     ]
     }
    ],
    "skills": [
@@ -775,6 +796,9 @@
      "nameFr": "Perception",
      "value": 61
     }
+   ],
+   "unvaluedSkills": [
+    "Language (Khazalid)"
    ],
    "talents": [
     {
@@ -941,7 +965,10 @@
     {
      "name": "Dwarf Warhammer",
      "damage": 7,
-     "trait": "Weapon"
+     "trait": "Weapon",
+     "qualities": [
+      "Pummel"
+     ]
     }
    ],
    "skills": [
@@ -1082,7 +1109,12 @@
     {
      "name": "Runic Greataxe",
      "damage": 12,
-     "trait": "Weapon"
+     "trait": "Weapon",
+     "qualities": [
+      "Hack",
+      "Impact",
+      "Tiring"
+     ]
     }
    ],
    "skills": [
@@ -1172,6 +1204,9 @@
      "nameFr": "Projectiles (Poudre noire)",
      "value": 55
     }
+   ],
+   "unvaluedSkills": [
+    "Language (Khazalid)"
    ],
    "talents": [
     {
@@ -1264,7 +1299,10 @@
     {
      "name": "Hammer",
      "damage": 8,
-     "trait": "Weapon"
+     "trait": "Weapon",
+     "qualities": [
+      "Pummel"
+     ]
     }
    ],
    "skills": [
@@ -1453,7 +1491,11 @@
     {
      "name": "The Ironpick",
      "damage": 11,
-     "trait": "Weapon"
+     "trait": "Weapon",
+     "qualities": [
+      "Damaging",
+      "Impale"
+     ]
     }
    ],
    "skills": [
@@ -1676,7 +1718,10 @@
     {
      "name": "Thurma's Warhammer",
      "damage": 9,
-     "trait": "Weapon"
+     "trait": "Weapon",
+     "qualities": [
+      "Pummel"
+     ]
     }
    ],
    "skills": [
@@ -1893,7 +1938,10 @@
     {
      "name": "Hammer",
      "damage": 8,
-     "trait": "Weapon"
+     "trait": "Weapon",
+     "qualities": [
+      "Pummel"
+     ]
     }
    ],
    "skills": [
@@ -2042,7 +2090,11 @@
     {
      "name": "Dwarf Greathammer",
      "damage": 11,
-     "trait": "Weapon"
+     "trait": "Weapon",
+     "qualities": [
+      "Damaging",
+      "Pummel"
+     ]
     }
    ],
    "skills": [
@@ -2253,12 +2305,21 @@
      "name": "Dwarf Crossbow",
      "damage": 10,
      "trait": "Ranged",
+     "qualities": [
+      "Damaging",
+      "Impale",
+      "Precise",
+      "Reload 1"
+     ],
      "ranged": true
     },
     {
      "name": "Dwarf Axe",
      "damage": 7,
-     "trait": "Weapon"
+     "trait": "Weapon",
+     "qualities": [
+      "Hack"
+     ]
     }
    ],
    "skills": [
@@ -2483,12 +2544,20 @@
      "name": "Dwarf Throwing Axes",
      "damage": 9,
      "trait": "Ranged",
+     "qualities": [
+      "Hack"
+     ],
      "ranged": true
     },
     {
      "name": "Dwarf Greataxe",
      "damage": 11,
-     "trait": "Weapon"
+     "trait": "Weapon",
+     "qualities": [
+      "Hack",
+      "Impact",
+      "Tiring"
+     ]
     }
    ],
    "skills": [
@@ -2611,6 +2680,9 @@
      "value": 41
     }
    ],
+   "unvaluedSkills": [
+    "Language (Khazalid)"
+   ],
    "talents": [
     {
      "name": "Ambidextrous",
@@ -2716,7 +2788,11 @@
     {
      "name": "Gotrek's Axe",
      "damage": 15,
-     "trait": "Weapon"
+     "trait": "Weapon",
+     "qualities": [
+      "Damaging",
+      "Hack"
+     ]
     }
    ],
    "skills": [
@@ -3045,7 +3121,11 @@
     {
      "name": "Karaghul",
      "damage": 9,
-     "trait": "Weapon"
+     "trait": "Weapon",
+     "qualities": [
+      "Fast",
+      "Penetrating"
+     ]
     }
    ],
    "skills": [
@@ -3380,7 +3460,10 @@
     {
      "name": "Claws",
      "damage": 9,
-     "trait": "Weapon"
+     "trait": "Weapon",
+     "qualities": [
+      "Impale"
+     ]
     }
    ],
    "skills": [
@@ -3579,7 +3662,11 @@
     {
      "name": "Obsidian Claws",
      "damage": 10,
-     "trait": "Weapon"
+     "trait": "Weapon",
+     "qualities": [
+      "Hack",
+      "Penetrating"
+     ]
     }
    ],
    "traits": [
@@ -3686,12 +3773,19 @@
     {
      "name": "Tail",
      "damage": 9,
-     "trait": "Tail"
+     "trait": "Tail",
+     "qualities": [
+      "Pummel"
+     ]
     },
     {
      "name": "Obsidian Claws",
      "damage": 10,
-     "trait": "Weapon"
+     "trait": "Weapon",
+     "qualities": [
+      "Hack",
+      "Penetrating"
+     ]
     }
    ],
    "traits": [
@@ -3742,6 +3836,9 @@
     {
      "name": "Tail",
      "rating": "+9",
+     "qualities": [
+      "Pummel"
+     ],
      "ref": "E0-T-054"
     }
    ],
@@ -3782,7 +3879,10 @@
     {
      "name": "Fists",
      "damage": 11,
-     "trait": "Weapon"
+     "trait": "Weapon",
+     "qualities": [
+      "Pummel"
+     ]
     }
    ],
    "traits": [

@@ -63,12 +63,15 @@ function readTraitItemPlain(text) {
   const breath = /^Breath\s*([+-]\d+)(?:\s+[a-z]{1,3})?\s*\(([^()]*)\)$/.exec(item) || /^Breath\s*([+-]\d+)\s*\(([^()]*)\)$/i.exec(item);
   if (breath) return { name: 'Breath', param: clean(breath[2]), rating: breath[1] };
   // Attaque (« Weapon (Fangs) +7 », « 2x Weapon (Claws) +10 », « Bite +9 ») suivie du nom d'une capacité collée dans la liste : on ne garde que l'attaque.
-  const natural = /^(?:(\d+)\s*[x×\uFFFD]?\s*)?(Weapon|Ranged|Bite|Horns|Tail Attack|Tail|Claws?|Tentacles?|Beak|Slam|Tongue Attack)\b\s*(?:d\s*)?(?:\(([^()]*)\))?\s*([+-]\s?\d+)(?:\s*\((\d+)\))?/i.exec(item);
+  const natural = /^(?:(\d+)\s*[x×\uFFFD]?\s*)?(Weapon|Ranged|Bite|Horns|Tail Attack|Tail|Claws?|Tentacles?|Beak|Slam|Tongue Attack)\b\s*(?:d\s*)?(?:\(([^()]*)\))?\s*([+-]\s?\d+)(?:\s*\((\d+)\))?(?:\s*\(([A-Z][^()]*)\))?/i.exec(item);
   if (natural && !/[+-]\d/.test(natural[3] || '')) {
     const trait = { name: natural[2].replace(/^./, letter => letter.toUpperCase()), rating: natural[4].replace(/\s+/g, '') };
     if (natural[3]) trait.param = clean(natural[3]).replace(/([a-z])- (?=[A-Z])/g, '$1-');
     if (natural[1]) trait.count = Number(natural[1]);
     if (natural[5]) trait.printed = Number(natural[5]);
+    // « Tail +9 (Pummel) », « Weapon (Obsidian Claws) +10 (Hack, Penetrating) » (Hagdar, L16 p. 84) : qualités de l'attaque entre parenthèses.
+    const qualities = natural[6] && !/^see\b/i.test(natural[6]) ? splitList(natural[6]).filter(part => /^[A-Z][A-Za-z' -]*(?: \d+)?$/.test(part) && part.split(/\s+/).length <= 3) : [];
+    if (qualities.length) trait.qualities = qualities;
     return trait;
   }
   // « Dagger +5 » (Freya Husslhaus, L20 p. 101), « Unarmed +7 » (Willi Pick p. 36), « Melee (Crowbar) +9 » (Gustav Zasle p. 136) : arme V4 imprimée sans le mot « Weapon ».
@@ -112,11 +115,13 @@ export function readSkills(text) {
   // « Ride Horse 42 » (Renia Grünewald, L21 p. 41) : parenthèses oubliées par le livre.
   // « Language im (Wastelander) 51 » (Officer, L25 p. 127) : lettres du voisin sans virgule ; « Sleight 61, of Hand 51 » (Doktor, même page) : valeur du voisin coincée dans un nom coupé en fin de ligne.
   // « Lore (Elves) 59, Theology 69, Oceans 99) » (Triton, L25 p. 149) : parenthèse du livre fermée après le premier nom au lieu de la fin de la liste.
-  const joined = text.replace(/(^|,\s*)Ride ([A-Z][a-z]+) (?=\d)/g, '$1Ride ($2) ').replace(/([\wà-ÿ])- (?=[a-zà-ÿ])/g, '$1-').replace(/\bPole[- ]arm\b/gi, 'Polearm').replace(/(\p{L}) [a-z]{1,3},?(?= \()/gu, '$1').replace(/\bSleight(?: \d+,)? of Hand\b/g, 'Sleight of Hand').replace(/\bLore \(([^()]*)\) (\d+), ([^()]*\d)\)(?=,|\s*$)/g, 'Lore ($1 $2, $3)');
+  // « Language (Arabyan 90, … Reikspiel 90) Leadership 90 » (Hulreth, L09 p. 118) : virgule oubliée après une parenthèse de valeurs.
+  const joined = text.replace(/(\d)\)\s+(?=[A-Z][a-z]+(?:\s\(|\s\d))/g, '$1), ').replace(/(^|,\s*)Ride ([A-Z][a-z]+) (?=\d)/g, '$1Ride ($2) ').replace(/([\wà-ÿ])- (?=[a-zà-ÿ])/g, '$1-').replace(/\bPole[- ]arm\b/gi, 'Polearm').replace(/(\p{L}) [a-z]{1,3},?(?= \()/gu, '$1').replace(/\bSleight(?: \d+,)? of Hand\b/g, 'Sleight of Hand').replace(/\bLore \(([^()]*)\) (\d+), ([^()]*\d)\)(?=,|\s*$)/g, 'Lore ($1 $2, $3)');
   // Note à astérisque collée à la dernière compétence (« Swim 35 *All Tests connected with… », L01 p. 78) : la liste s'arrête avant.
   for (const rawItem of splitList(joined.replace(/\s\*\s?[A-Z][\s\S]*$/, '')).map(entry => entry.replace(/\s*\*+$/, ''))) {
     // « Language (Magick 74, Reikspiel) 48 » (L18 p. 97) : la dernière spécialisation a sa valeur après la parenthèse.
-    const item = rawItem.replace(/\s*\(\+\d+ SL[^)]*\)\s*$/, '').trim().replace(/^(.+?)\s*\(([^)]*\d[^)]*[^\d\s)])\)\s*(\d+)$/, '$1 ($2 $3)');
+    // « Track 80 r » (Scorath, L09 p. 103) : lettre isolée de la colonne voisine après la dernière valeur.
+    const item = rawItem.replace(/\s*\(\+\d+ SL[^)]*\)\s*$/, '').replace(/(\d)\s+[a-z]$/, '$1').replace(/^([A-Za-z][A-Za-z ]*?)\s*\((\d+)\)$/, '$1 $2').trim().replace(/^(.+?)\s*\(([^)]*\d[^)]*[^\d\s)])\)\s*(\d+)$/, '$1 ($2 $3)');
     // Une ou plusieurs spécialisations avec leur valeur dans la parenthèse : « Melee (Basic 76) », « Melee (Basic 65, Two-Handed 65) ».
     const grouped = /^(.+?)\s*\(([^)]*\d[^)]*)\)$/.exec(item);
     if (grouped) {
@@ -124,6 +129,8 @@ export function readSkills(text) {
       for (const part of splitList(grouped[2].replace(/(\d)\.\s+(?=[A-Z])/g, '$1, ').replace(/(\d)\s+(?=[A-Z][a-z])/g, '$1, '))) {
         const sub = /^(.*?)\s+([+-]?\d+)$/.exec(part);
         if (sub) skills.push({ name: `${clean(grouped[1])} (${clean(sub[1])})`, value: Number(sub[2]), modifier: /^[+-]/.test(sub[2]) });
+        // « Language (Bretonnian 90, Elthárin, Magick 95) » (Kernethar Grimwitch, L09 p. 126) : spécialisation imprimée sans valeur, signalée plutôt que perdue.
+        else if (/^\p{Lu}[\p{L}'’ ]{2,25}$/u.test(part)) skills.push({ name: `${clean(grouped[1])} (${clean(part)})`, value: null, modifier: false, unvalued: true });
       }
       continue;
     }
@@ -299,7 +306,8 @@ export function parseBlock(block, { traitDictionary = new Set(), talentDictionar
   const warnings = [];
   if (sections.Attacks) profile.attacks = readAttacks(sections.Attacks);
   if (sections.Armour) profile.armour = readArmour(sections.Armour);
-  if (sections.Traits !== undefined) Object.assign(profile, listTraits(sections.Traits, mode, traitDictionary, 'traits'));
+  // « Weapon (Rapier) +10 or (Zweihander) +11 » (Luthor Harkon, L07 p. 73) : deux armes au choix, deux Traits Weapon.
+  if (sections.Traits !== undefined) Object.assign(profile, listTraits(mode === 'v4' ? sections.Traits.replace(/\bWeapon \(([^()]+)\) (\+\d+) or \(([^()]+)\) (\+\d+)/g, 'Weapon ($1) $2, Weapon ($3) $4') : sections.Traits, mode, traitDictionary, 'traits'));
   // L10 (V5) : « Armour +3 AP All Locations » ouvre la liste des Traits ; c'est l'armure du profil, sur toutes les zones.
   const traitArmour = /^Armour\s+\+(\d+)\s+AP\b/.exec(sections.Traits || '');
   if (traitArmour && !profile.armour?.parts?.length) profile.armour = { parts: [{ name: 'Armour', ap: Number(traitArmour[1]) }] };
@@ -314,18 +322,31 @@ export function parseBlock(block, { traitDictionary = new Set(), talentDictionar
     // Traits décrits (« Nom : clause. ») suivis de la liste des talents sur la ligne suivante (L09 p. 122) : la liste ne reste pas collée à la dernière clause.
     const mixed = sections['Traits and Talents'];
     const cut = /:/.test(mixed) ? mixed.lastIndexOf('. ') : -1;
-    const items = cut >= 0 && !/:/.test(mixed.slice(cut + 2)) ? [...splitList(mixed.slice(0, cut + 1)), ...splitList(mixed.slice(cut + 2))] : splitList(mixed);
+    // Liste décrite en entier (« Hatred (High Elves): See… Night Vision: See… Accurate Shot: … », L09 p. 81) : noms reconnus d'après les deux dictionnaires.
+    const outsideParens = mixed.replace(/\([^)]*\)/g, group => ' '.repeat(group.length));
+    const described = /:/.test(mixed) && (outsideParens.indexOf(',') < 0 || outsideParens.indexOf(',') > outsideParens.indexOf(':'));
+    const union = new Set([...traitDictionary, ...talentDictionary]);
+    const plainTail = cut >= 0 && !/:/.test(mixed.slice(cut + 2));
+    const describedItems = described && union.size ? readDescribedNames(plainTail ? mixed.slice(0, cut + 1) : mixed, union) : [];
+    const items = describedItems.length ? [...describedItems, ...(plainTail ? splitList(mixed.slice(cut + 2)) : [])] : (plainTail ? [...splitList(mixed.slice(0, cut + 1)), ...splitList(mixed.slice(cut + 2))] : splitList(mixed));
     const baseName = item => clean(item.replace(/\.$/, '').replace(/\s*\(.*\)\s*$/, '').replace(/\s+\d+$/, ''));
-    const flat = name => name.toLowerCase().replace(/[-\s]+/g, ' ');
+    const flat = name => name.toLowerCase().replace(/[-\s]+/g, '');
     const talentNames = new Set([...talentDictionary].map(flat));
-    const isTalent = item => talentNames.has(flat(baseName(item)));
+    // « Acute Sense (Taste) Attractive » : virgule oubliée après une parenthèse, chaque moitié doit être un talent (séparées plus tard par `splitGluedTalent`).
+    const isTalent = item => talentNames.has(flat(baseName(item))) || (/\)\s+[A-Z]/.test(item) && item.split(/(?<=\))\s+/).length === 2 && item.split(/(?<=\))\s+/).every(part => talentNames.has(flat(baseName(part)))));
     // Un nom connu des deux dictionnaires (Night Vision, Fearless) reste aussi un Trait, comme avant la lecture de cette rubrique.
     // Tous les éléments passent aussi par la lecture des Traits : l'étape suivante (`cleanTraits`) ne garde que les noms de Trait connus.
     const traits = items.map(readTraitItem).filter(Boolean);
-    if (traits.length) profile.traits = [...(profile.traits || []), ...traits];
+    // Le balayage des Traits décrits a déjà lu ceux de cette rubrique : pas de doublon.
+    const known = new Set((profile.traits || []).map(trait => `${trait.name}|${trait.param || ''}`));
+    const fresh = traits.filter(trait => !known.has(`${trait.name}|${trait.param || ''}`));
+    if (fresh.length) profile.traits = [...(profile.traits || []), ...fresh];
     const talents = readTalents(items.filter(isTalent).join(', '));
     if (talents.length) profile.talents = [...(profile.talents || []), ...talents];
   }
+  // « Breath (Fire or Poison): See the WFRP Core Rulebook… » dans la ligne Attacks (V5, War Hydra L09 p. 47, Dragon L06 p. 330) : le Souffle est un Trait, sans dégâts imprimés.
+  const breathLine = /\bBreath\s*\(([^()]*)\)/.exec(sections.Attacks || '');
+  if (breathLine && !(profile.traits || []).some(trait => trait.name === 'Breath')) profile.traits = [...(profile.traits || []), { name: 'Breath', param: clean(breathLine[1]) }];
   if (sections['Attack Traits'] !== undefined) Object.assign(profile, listTraits(sections['Attack Traits'], mode, traitDictionary, 'attackTraits'));
   const optional = sections['Optional Traits'] ?? sections.Optional ?? sections.Options;
   // « … Trained (Broken, Drive) Note: The small but vicious dog… » (L06 p. 325) : la note qui suit la liste n'en fait pas partie.
@@ -345,6 +366,8 @@ export function parseBlock(block, { traitDictionary = new Set(), talentDictionar
     if (notes.length) profile.notes = notes;
   }
   // Q27d : "Marks: Mark of Hysh, Stoicism" (Magiciens, L17) : note du profil.
+  // L10 (V5) : rubriques « Blessings » (Cacciatore p. 14) et « Miracles: » (Seiren Walburg p. 92), listes de noms gardées en note du profil.
+  for (const label of ['Blessings', 'Miracles']) if (mode === 'v5' && sections[label]) profile.notes = [...(profile.notes || []), `${label}: ${clean(sections[label])}`];
   if (sections.Marks) profile.notes = [...(profile.notes || []), `Marks: ${clean(sections.Marks)}`];
   if (talentStar) profile.notes = [...(profile.notes || []), clean(sections.Talents.slice(talentStar.index).replace(/\s*\*\s*/, ''))];
   if (sections.Mutations) profile.mutations = splitList(sections.Mutations);
