@@ -57,6 +57,7 @@ Plan : `PLAN_PRO_QUALITE_E.md`. Branche `pro/qualite-e`, départ `9c12613`. Choi
 | Q39 | FAIT (`QE-Q39-1`) | (voir `git log`, « Q39 ») |
 | Q40 | FAIT (`QE-Q40-1` à `QE-Q40-6`) | (voir `git log`, « Q40 ») |
 | Q41 | FAIT (`QE-Q41-1` à `QE-Q41-4`) | (voir `git log`, « Q41 ») |
+| Q42 | FAIT (`QE-Q42-1`, `QE-Q42-2`) | (voir `git log`, « Q42 ») |
 
 ## Q0 — contrôle de complétude
 
@@ -568,3 +569,15 @@ Branché / non appelé (grep dans `js/`) :
 - Test : `tests/pro-q41-portees.test.js` (6 tests : L04 E0-P-176 et L03 E0-P-157 sur le profil et le participant, L11 E0-P-044, contrôle, Points de Destin et rendu de la fiche par faux DOM) ; `tests/pro-q40-extraction.test.js` ajusté (son enregistrement synthétique n'avait pas de portée).
 - **Branché / non appelé** : `buildParticipantFromBestiary` (appelants : `js/ui/bestiary-library.js`, `js/core/bestiary-templates.js`) pose `rangeYards` sur l'action du participant, qui devient une action à distance (CT ; avant : mêlée CC faute de portée) ; chemin d'interface : onglet Bibliothèque → fiche (affiche « portée N yards ») → Ajouter au combat (Q39). **Aucun module de `js/` ne lit `action.rangeYards` pour la résolution** (grep : `bestiary-profiles.js`, `bestiary-library.js`, et `v5-magic-miscasts.js` pour autre chose) : la portée est portée par le participant mais **non exploitée par la résolution** (code testé, non appelé). `fatePoints` : lu par la fiche de la bibliothèque seulement. Aucune valeur durable de personnage (`VARIABLES_PERSISTANTES_PJ.md` inchangé).
 - Suite complète : un seul échec (test synthétique de Q40), corrigé ; les deux fichiers de tests concernés relancés, verts.
+
+## Q42 — défauts mineurs du code (FAIT)
+
+- **Recommencer** (`js/core/store.js`, `restartCombat`) : les lignes de quota du Tour « :0:pre-combat » de `actionLedger.quotaUsage` sont retirées, avec ou sans scène active ; Annuler les rétablit (commande unique). Kraken : 8 tentacules, Recommencer, 8 de nouveau (avant : 0).
+- **Taille sans Force lisible** (`js/core/creature-combat.js`) : le message « Taille : Force requise pour le bonus de dégâts. » de `planCreatureSize` est relayé dans `unresolved` du plan (avant : jeté, bonus 0 silencieux).
+- **Dégâts d'une action personnalisée remplacés** (`js/core/resolution.js`, `normalizeResolutionInput`) : une action sans marque de bestiaire (`extensions.v5.kind` absent) dont les dégâts numériques saisis diffèrent de la formule V5 reçoit le rappel « Dégâts de l'action (3) remplacés par la formule V5 du Trait (12) » dans `preview.reminders`. Pas de rappel pour une action venue du bestiaire.
+- **Rappel du participant sur le personnage actif** (`js/ui/workspace-view.js`, `participantReminderBlock`, partagé avec le banc) : affiché sous les Blessures de la fiche du personnage actif ; « Fait » le retire.
+- **Section « Compétences sans valeur imprimée »** (`js/ui/fiche-details.js`) : masquée quand elle est vide. `tests/pro-q37-competences-sans-valeur.test.js` ajusté (il exigeait « (0) »).
+- **Maître à bord sur fiche non résolue** : sans objet (précision du MJ).
+- Tests : `tests/pro-q42-defauts-mineurs.test.js` (3 tests de store/moteur) ; `tests/pro-q42-interface-browser.mjs` (navigateur réel : onglet Jouer → rappel sur la fiche, « Fait », section masquée/visible).
+- **Branché / non appelé** : tout est branché. Recommencer : `restartCombat` ← `js/main.js` (bouton « Recommencer »). Taille et dégâts remplacés : `planNaturalAttack` / `normalizeResolutionInput` ← résolution du Store (panneau Résolution). Rappel : `Store.getParticipantReminders` ← `workspace-view.js` (onglet Jouer, vérifié au navigateur). Section fiche : `renderFicheDetails` (vérifié au navigateur). Aucune valeur durable de personnage (`VARIABLES_PERSISTANTES_PJ.md` inchangé).
+- Suite complète : un seul échec (Q37, ancien « (0) »), corrigé ; fichier relancé, vert.

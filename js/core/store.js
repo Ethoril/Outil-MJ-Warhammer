@@ -2308,12 +2308,17 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       if (scene && !source) throw missing();
       if (scene && !(source.entries || []).length) throw empty();
       if (!scene && !combat.participants.size) throw new Error('Aucun combat à recommencer');
+      // Le Round 0 recommence : son quota d'attaques gratuites (Tour « :0:pre-combat ») est remis à zéro.
+      const freshV5 = draft => {
+        const v5 = draft.extensions?.v5 || {}, ledger = v5.actionLedger;
+        return { ...v5, turnIndex: 1, ...(ledger ? { actionLedger: { ...ledger, quotaUsage: (ledger.quotaUsage || []).filter(row => !String(row.scopeKey || '').includes(':0:pre-combat')) } } : {}) };
+      };
       return api.executeCommand('restart-combat', draft => {
         const current = draft.activeScene?.status === 'active' ? draft.activeScene : null;
         if (!current) {
           return {
             ...draft,
-            extensions: { ...(draft.extensions || {}), v5: { ...(draft.extensions?.v5 || {}), turnIndex: 1 } },
+            extensions: { ...(draft.extensions || {}), v5: freshV5(draft) },
             combat: {
               ...draft.combat, round: 0, currentActorId: null,
               participants: (draft.combat?.participants || []).map(item => (withMomentum({ ...item, hp: item.maxHp ?? item.hp, states: [] }, false)))
@@ -2329,7 +2334,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         const oldIds = new Set((current.participants || []).map(item => item?.id).filter(Boolean));
         return {
           ...draft,
-          extensions: { ...(draft.extensions || {}), v5: { ...(draft.extensions?.v5 || {}), turnIndex: 1 } },
+          extensions: { ...(draft.extensions || {}), v5: freshV5(draft) },
           activeScene: nextScene,
           // Départ : ordre d'initiative, donc mode automatique même si la piste avait été réordonnée à la main.
           combat: { ...draft.combat, round: 0, currentActorId: null, order: [...nextScene.order], participants: cloneValue(nextScene.participants), orderMode: ORDER_MODES.AUTOMATIC },

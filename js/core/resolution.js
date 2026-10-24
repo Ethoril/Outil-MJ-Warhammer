@@ -246,12 +246,19 @@ export function normalizeResolutionInput(input = {}) {
   const actor = isRecord(input.actor) ? clone(input.actor) : null;
   const action = isRecord(input.action) ? clone(input.action) : {};
   // Attaque naturelle choisie (Trait de créature) : ses dégâts calculés remplacent ceux de l'action (« imprimé » : l'action garde les siens).
+  // Dégâts saisis à la main sur une action personnalisée (sans marque de bestiaire) : remplacés par la formule, le MJ en est averti.
+  const typedDamage = !action.extensions?.v5?.kind && hasOwn(action, 'damage') && action.damage !== '' && Number.isFinite(Number(action.damage)) ? Number(action.damage) : null;
+  let damageReplaced = null;
+  const replaceDamage = formula => {
+    if (typedDamage !== null && typedDamage !== Number(formula)) damageReplaced = `Dégâts de l’action (${typedDamage}) remplacés par la formule V5 du Trait (${Number(formula)}) ; saisissez une attaque d’arme pour garder les vôtres.`;
+    action.damage = Number(formula); delete action.damageFormula;
+  };
   const natural = naturalPlanOf(actor, input.v5);
-  if (natural && /^\d+$/.test(String(natural.damageFormula))) { action.damage = Number(natural.damageFormula); delete action.damageFormula; }
+  if (natural && /^\d+$/.test(String(natural.damageFormula))) replaceDamage(natural.damageFormula);
   else if (natural?.noDamage) { action.damage = 0; delete action.damageFormula; }
   else if (!natural) {
     const inferred = inferredNaturalPlan(actor, action, input.v5);
-    if (inferred && /^\d+$/.test(String(inferred.damageFormula))) { action.damage = Number(inferred.damageFormula); delete action.damageFormula; }
+    if (inferred && /^\d+$/.test(String(inferred.damageFormula))) replaceDamage(inferred.damageFormula);
     // Formule sans valeur (Morsure sans chiffre de Trait) : le chiffre imprimé reste la Valeur, le bonus de Taille s'y ajoute.
     else if (inferred?.sizeBonus && Number.isFinite(Number(action.damage)) && !action.damageFormula) action.damage = Number(action.damage) + inferred.sizeBonus;
   }
@@ -294,6 +301,7 @@ export function normalizeResolutionInput(input = {}) {
   return {
     resolutionId,
     baseRevision,automaticNoRoll,noTestAction,
+    ...(damageReplaced ? { damageReplaced } : {}),
     ...(input.round !== undefined ? { round: input.round } : {}),
     ...(isRecord(input.prayerSLContext) ? { prayerSLContext: clone(input.prayerSLContext) } : {}),
     v5: isRecord(input.v5) ? clone(input.v5) : {},
@@ -753,6 +761,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   const naturalPlan = naturalPlanOf(actor, normalized.v5), naturalReminders = [], { actorSize: naturalActorSize, targetSize: naturalTargetSize } = naturalSizes(normalized.v5);
   const naturalHitStates = [];
   // Cornes en attaque ordinaire : la Charge du Trait (Livre de base V5 p.358) est demandée, comme pour l'attaque naturelle choisie.
+  if (normalized.damageReplaced) naturalReminders.push(normalized.damageReplaced);
   const inferredNatural = !naturalPlan && inferredNaturalPlan(actor, action, normalized.v5);
   if (inferredNatural) {
     if (inferredNatural.key === 'horns') unresolved.push(...inferredNatural.unresolved.filter(text => /Charge/.test(text)));

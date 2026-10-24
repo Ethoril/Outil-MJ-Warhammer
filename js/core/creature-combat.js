@@ -117,7 +117,9 @@ export function planNaturalAttack(participant, key, options = {}) {
   }
   // Livre de base V5 p.360 : Grande/Énorme +BF, Monstrueuse +2 BF, en mêlée seulement. Un livre V5 l'imprime déjà.
   if (rule.sizeBonus && options.ordinary === true && !isV5Book(participant)) {
-    plan.sizeBonus = planCreatureSize(participant, { printedProfile: false }).damage.bonus;
+    const sizePlan = planCreatureSize(participant, { printedProfile: false });
+    plan.sizeBonus = sizePlan.damage.bonus;
+    plan.unresolved.push(...sizePlan.unresolved);
     if (plan.sizeBonus && /^\d+$/.test(String(plan.damageFormula))) plan.damageFormula = `${Number(plan.damageFormula) + plan.sizeBonus}`;
     if (plan.sizeBonus) plan.reminders.push(`Taille : +${plan.sizeBonus} aux dégâts de mêlée (Livre de base V5 p.360).`);
   }

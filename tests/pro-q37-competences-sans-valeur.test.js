@@ -41,7 +41,7 @@ test('Q37 rendu : fiche de la bibliothèque et fiche du participant affichent le
     assert.match(details.textContent, /Lore \(Geology\)/);
     const other = library.find(profile => profile.kind !== 'template' && !profile.unvaluedSkills && profile.stats);
     const plain = renderFicheDetails(buildParticipantFromBestiary(other.id, { library }));
-    assert.match(plain.textContent, /Compétences sans valeur imprimée \(bestiaire\) \(0\)/);
+    assert.doesNotMatch(plain.textContent, /Compétences sans valeur imprimée/, 'Q42 : section masquée quand elle est vide');
   } finally {
     if (previous === undefined) delete globalThis.document; else globalThis.document = previous;
   }
