@@ -52,6 +52,7 @@ Plan : `PLAN_PRO_QUALITE_E.md`. Branche `pro/qualite-e`, départ `9c12613`. Choi
 | Q35 | FAIT (`QE-Q35-1` à `QE-Q35-4`) | (voir `git log`, « Q35 ») |
 | Q36 | FAIT (`QE-Q36-1` à `QE-Q36-7`, question `QE-Q36-3`) | (voir `git log`, « Q36 ») |
 | Q37 | FAIT (`QE-Q37-1`) | (voir `git log`, « Q37 ») |
+| Q38 | FAIT (`QE-Q38-1` à `QE-Q38-3`) | (voir `git log`, « Q38 ») |
 
 ## Q0 — contrôle de complétude
 
@@ -517,3 +518,12 @@ Branché / non appelé (grep dans `js/`) :
 - `js/core/bestiary-profiles.js` : `unvaluedSkillNames` ; `buildParticipantFromBestiary` pose `extensions.v5.bestiary.unvaluedSkills` (la copie dans la Réserve le garde). `js/ui/bestiary-library.js` : ligne « Compétences sans valeur imprimée » de la fiche. `js/ui/fiche-details.js` : section « Compétences sans valeur imprimée (bestiaire) ». Hors de `participant.skills` (QE-Q37-1). Aucune donnée de livre modifiée.
 - Test : `tests/pro-q37-competences-sans-valeur.test.js` (4 tests, rendu par faux DOM : Gurniksson L03, profil L14 à Elthárin). Suite complète : 4540 tests verts.
 - **Branché (appelant + chemin d'interface)** : `unvaluedSkillNames` ← `renderBestiarySheet` (fiche ouverte par le bouton « Fiche » de la bibliothèque) et `renderFicheDetails` (appelé par `workspace-view.js` et `reserve.js`) ; `extensions.v5.bestiary.unvaluedSkills` posé par `buildParticipantFromBestiary`. Le moteur de jeu ne les lit pas (affichage seulement). Aucune valeur durable de personnage.
+
+## Q38 — contrôle, angles morts, et deux cas de code (FAIT)
+
+- **Contrôle** (`tools/lib/bestiary-completeness.mjs`, `tools/verify-bestiary-stats.mjs`) : « Ward 8+: » est lu comme le Trait Ward ; dans une rubrique « Traits and Talents » mixte, la liste de talents qui suit les descriptions est lue (Kelrathi), avec la coquille « Magick » → Magic ; une liste incluse dans une description (Anointed, « may purchase the following Talents ») n'est pas lue. Option `--data-dir=<dossier>` pour rejouer le contrôle sur les données d'un autre commit.
+- **Rejeu sur les données de `e49ea03`** (L09) : signalés Doomfire Warlock E0-P-325 (Ward) et Kelrathi E0-P-355 (Arcane Magic, Bookish) ; Anointed n'est pas signalé. **Données actuelles, 23 livres : 0 manque non justifié** (299 justifiés, 10 avertissements de compétences déjà connus). Aucune donnée de livre modifiée.
+- **Code** : (1) `js/core/v5-store-action.js` : store neuf sans rencontre ni scène, attaque gratuite de créature au Round 0 acceptée (rencontre implicite `sans-rencontre`, quota rappelé) ; (2) `js/core/creature-combat.js` : ancien participant à une seule action « Tentacles » et au Trait « Tentacles (+9) » : nombre de tentacules demandé (non résolu), plus de quota silencieux de 1 ; `context.tentacleCount` le fournit.
+- **Non traités dans le contrôle** (déjà corrigés dans les données par Q33/Q36) : « Resistance » vs Resistant, Perform (Dance) 60, Hagdar, options de carrière L19 611, armure « +2 AP Body », bouclier optionnel (`QE-Q38-1`).
+- Tests : `tests/pro-q38-controle.test.js` (3), `tests/pro-q38-code.test.js` (4, scénarios de store réels). Suite complète : 4547 tests verts.
+- **Branché (appelant + chemin d'interface)** : l'attaque gratuite au Round 0 passe par `buildV5StoreActionInput` (appelé par le store pour tout aperçu de Résolution) : branché. `context.tentacleCount` : **aucun champ de `js/ui` ne le pose** (`QE-Q38-2`) : code testé, non appelé par l'interface ; la question « nombre à préciser » s'affiche toutefois dans l'aperçu non résolu. Contrôle : outil hors `js/`. Aucune valeur durable de personnage.

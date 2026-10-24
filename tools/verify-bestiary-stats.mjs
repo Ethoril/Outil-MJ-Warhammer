@@ -22,8 +22,11 @@ const catalogue = new Set(JSON.parse(readFileSync('js/data/reference-snapshot.js
 const traitNames = new Set(JSON.parse(readFileSync('docs/BESTIAIRE_INVENTAIRE.json', 'utf8')).traits.map(trait => trait.name));
 mkdirSync('tmp/divin', { recursive: true });
 const totals = {};
-for (const book of process.argv.slice(2)) {
-  const data = JSON.parse(readFileSync(`js/data/bestiary/${book}.json`, 'utf8'));
+// --data-dir=<dossier> : rejeu du contrôle sur les données d'un autre commit (Q38) ; défaut js/data/bestiary.
+const args = process.argv.slice(2);
+const dataDir = args.find(arg => arg.startsWith('--data-dir='))?.slice('--data-dir='.length) || 'js/data/bestiary';
+for (const book of args.filter(arg => !arg.startsWith('--'))) {
+  const data = JSON.parse(readFileSync(`${dataDir}/${book}.json`, 'utf8'));
   const meta = corpusBooks().find(item => item.id === book);
   const pages = repairGlyphs(execFileSync('pdftotext', [meta.path, '-'], { maxBuffer: 1 << 28 }).toString('utf8')).split('\f')
     .map(page => page.replace(/[­−–—�]/g, '-').replace(/-{2,}/g, '-').replace(/\*/g, '').replace(/\s+/g, ' '));

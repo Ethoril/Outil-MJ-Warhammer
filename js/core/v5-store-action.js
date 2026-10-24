@@ -66,7 +66,7 @@ export function buildV5StoreActionInput(envelope, raw = {}) {
   const quotas=[...(v5.quotas||[])],exemptions=[...(v5.exemptions||[])],actor=state.participants.find(p=>p.id===actorId),context=v5.context||{};
   // Combat naturel (T2) : l'attaque gratuite d'un Trait de créature coûte l'Élan qu'il indique ; le Trait est exigé.
   if(context.naturalAttack){
-    const natural=planNaturalAttack(actor,context.naturalAttack,{used:context.naturalUsed,charged:context.charged??v5.charging,actorSize:context.actorSize??v5.actorSize,targetSize:context.targetSize??v5.targetSize});
+    const natural=planNaturalAttack(actor,context.naturalAttack,{used:context.naturalUsed,count:context.tentacleCount,charged:context.charged??v5.charging,actorSize:context.actorSize??v5.actorSize,targetSize:context.targetSize??v5.targetSize});
     if(natural.unresolved.some(r=>/Trait absent|déjà/.test(r)))throw new TypeError(natural.unresolved.join(' '));
     for(const cost of natural.costs)if(!costs.some(c=>c.resource===cost.resource))costs.push({id:'creature:'+context.naturalAttack+':'+cost.resource,...cost});
     if(natural.quota)quotas.push(natural.quota);
@@ -161,8 +161,9 @@ export function buildV5StoreActionInput(envelope, raw = {}) {
   const hasRequest = costs.length || quotas.length || exemptions.length || v5.extraAttack;
   // Avant le premier Round (combat monté, pas encore démarré) : pas de Tour courant ; les attaques gratuites de créature
   // (quotas « creature: ») partagent alors un Tour 0 par rencontre, et le quota est rappelé dans l'aperçu.
-  const preCombatQuota = !clock.turnId && clock.encounterId && quotas.some(q => q.scope === 'turn' && q.id.startsWith('creature:'));
-  const quotaClock = preCombatQuota ? { ...clock, turnId: `${clock.encounterId}:0:pre-combat` } : clock;
+  // Store neuf sans rencontre ni scène : une rencontre implicite porte le Tour 0.
+  const preCombatQuota = !clock.turnId && quotas.some(q => q.scope === 'turn' && q.id.startsWith('creature:'));
+  const quotaClock = preCombatQuota ? { ...clock, encounterId: clock.encounterId || 'sans-rencontre', turnId: `${clock.encounterId || 'sans-rencontre'}:0:pre-combat` } : clock;
   let actionCostPlan = null, paid = state;
   if (hasRequest) {
     actionCostPlan = previewV5ActionCosts({ state, actionId: resolutionId, actorId, costs, quotas, exemptions,...(quotaActorId?{quotaActorId}:{} ), extraAttack: v5.extraAttack === true, clock: quotaClock });

@@ -162,10 +162,12 @@ export function planNaturalAttack(participant, key, options = {}) {
   }
   if (rule.perDetail) {
     // « 8 × +9 » (nombre imprimé × valeur) ou « 4 » ; un chiffre signé (« +9 ») est la valeur d'attaque, pas le nombre de tentacules.
-    // Sans nombre imprimé (ancien participant « Tentacles (+9) ») : autant d'attaques que d'actions de tentacule du participant.
+    // Sans nombre imprimé (ancien participant « Tentacles (+9) ») : autant d'attaques que d'actions numérotées de tentacule ;
+    // une seule action (« Tentacles ») ne dit rien du nombre : il est demandé au MJ (`options.count`), jamais un quota silencieux de 1.
     const actionCount = (participant?.actions || []).filter(action => BY_NAME.get(fold(action?.name).replace(/\s*\d+$/, '')) === 'tentacles').length;
-    const count = /^\d+/.test(owned.detail) ? Number.parseInt(owned.detail, 10) : actionCount || NaN;
-    if (!Number.isInteger(count) || count < 1) plan.unresolved.push(`${rule.fr} : nombre de tentacules illisible.`);
+    const given = Number.isInteger(options.count) && options.count >= 1 ? options.count : null;
+    const count = /^\d+/.test(owned.detail) ? Number.parseInt(owned.detail, 10) : given ?? (actionCount > 1 ? actionCount : NaN);
+    if (!Number.isInteger(count) || count < 1) plan.unresolved.push(`${rule.fr} : nombre de tentacules à préciser (illisible dans le profil).`);
     else {
       plan.quota = { id: `creature:${key}`, scope: 'turn', maximum: count };
       if ((options.used ?? 0) >= count) plan.unresolved.push(`${rule.fr} : les ${count} attaques gratuites sont déjà faites ce Tour.`);

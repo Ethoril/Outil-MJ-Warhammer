@@ -391,21 +391,35 @@ function printedNamed(text, table) {
   if (isDescribed(text)) {
     const hits = [];
     for (const [variant, info] of table) {
-      for (const hit of text.matchAll(new RegExp(`(?<![A-Za-z'’-])${escapeRegex(variant).replace(/ /g, '\\s+')}(?:\\s*\\([^)]*\\))?(?:\\s+\\d+)?\\s*:`, 'gi'))) hits.push({ start: hit.index, end: hit.index + hit[0].length, info });
+      for (const hit of text.matchAll(new RegExp(`(?<![A-Za-z'’-])${escapeRegex(variant).replace(/ /g, '\\s+')}(?:\\s*\\([^)]*\\))?(?:\\s+\\d+\\+?)?\\s*:`, 'gi'))) hits.push({ start: hit.index, end: hit.index + hit[0].length, info });
     }
     // Un nom contenu dans un nom plus long (« Vision » dans « Night Vision ») n'est pas lu à part.
-    return hits.filter(hit => !hits.some(other => other !== hit && other.start <= hit.start && other.end >= hit.end && other.end - other.start > hit.end - hit.start)).map(hit => hit.info);
+    const described = hits.filter(hit => !hits.some(other => other !== hit && other.start <= hit.start && other.end >= hit.end && other.end - other.start > hit.end - hit.start)).map(hit => hit.info);
+    // Rubrique mixte (L09 « Traits and Talents ») : descriptions puis liste de talents à virgules (Kelrathi). La liste est le texte après la dernière phrase
+    // et son premier élément doit être entièrement un nom connu ; une liste incluse dans une description (Anointed, « may purchase the following Talents ») n'est pas lue.
+    const lastStop = text.lastIndexOf('. ');
+    const tail = lastStop < 0 ? '' : text.slice(lastStop + 2);
+    const head = splitTopLevel(tail)[0];
+    const listed = head !== undefined && listNames(head, table, true).length ? listNames(tail, table, true) : [];
+    return [...described, ...listed.filter(info => !described.includes(info))];
   }
+  return listNames(text, table, false);
+}
+
+/** Noms d'une liste à virgules ; `whole` : l'élément doit être entièrement lu (pas de prose). « Magick » est une coquille d'impression de « Magic » (Kelrathi, L09 p.104). */
+function listNames(text, table, whole) {
   const variants = [...table.keys()].sort((a, b) => b.length - a.length).map(variant => [variant, table.get(variant)]);
   const found = [];
   for (const item of splitTopLevel(text).slice(0, 60)) {
-    let rest = item.replace(/\(.*?\)/g, ' ').replace(/\s+/g, ' ').trim().toLowerCase();
+    let rest = item.replace(/\(.*?\)/g, ' ').replace(/\bmagick\b/gi, 'magic').replace(/\s+/g, ' ').trim().toLowerCase();
+    const items = [];
     while (rest) {
       const hit = variants.find(([variant]) => rest === variant || rest.startsWith(`${variant} `) || rest === `${variant}!`);
       if (!hit) break;
-      found.push(hit[1]);
+      items.push(hit[1]);
       rest = rest.slice(hit[0].length).replace(/^!/, '').trim();
     }
+    if (!whole || !rest) found.push(...items);
   }
   return found;
 }
