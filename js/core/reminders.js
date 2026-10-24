@@ -82,7 +82,7 @@ export function deriveReminders(snapshot = {}, transition = {}, choices = []) {
   }
   // Rappels portés par un participant (`extensions.v5.reminders` : armure non déterminée du bestiaire, démon expiré).
   for (const person of Array.isArray(snapshot.participants) ? snapshot.participants : []) {
-    if (!person?.id || person.zone === 'bench') continue;
+    if (!person?.id) continue;
     for (const note of Array.isArray(person.extensions?.v5?.reminders) ? person.extensions.v5.reminders : []) {
       if (!note?.id || typeof note.text !== 'string') continue;
       candidates.push({ kind: 'participant-reminder', effectId: `${person.id}:${note.id}`, text: `${person.name || 'Participant'} : ${note.text}`, mode: 'reminder' });

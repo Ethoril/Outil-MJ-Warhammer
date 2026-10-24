@@ -25,6 +25,7 @@ import { CAMP_LABELS, normalizeCamp, encounterDisplayStatus, encounterSummary, s
 import { uid } from '../core/models.js';
 import { renderFicheDetails } from './fiche-details.js';
 import { renderSilhouette } from './silhouette.js';
+import { buildParticipantReminders } from '../core/reminders.js';
 import { renderResolutionPanel, actionKey, minusSigned, defenseOptions, defaultDefenseValue } from './resolution-panel.js';
 import { initSidePanel } from './side-panel.js';
 import { getSpellContract, getAllSpellContracts } from '../core/v5-spell-contracts.js';
@@ -679,6 +680,17 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         const remove = defeatedParticipantButton(participant, `bench-remove-${participant.id}`);
         if (remove) row.appendChild(remove);
         bench.appendChild(row);
+        // Rappels du participant au banc (armure inconnue du bestiaire…) : visibles avant son entrée en combat.
+        const reminders = buildParticipantReminders(tag => node(tag, ''), Store.getParticipantReminders?.(participant.id));
+        if (reminders) {
+          reminders.addEventListener('click', event => {
+            const decision = event.target?.dataset?.decision, reminderId = event.target?.closest?.('.actor-reminder')?.dataset?.reminderId;
+            if (!decision || !reminderId) return;
+            event.preventDefault();
+            Promise.resolve(Store.resolveParticipantReminder(participant.id, reminderId, decision)).finally(() => render());
+          });
+          bench.appendChild(reminders);
+        }
       });
       column.appendChild(bench);
     }

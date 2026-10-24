@@ -19,11 +19,12 @@ test('Q17 : armure inconnue → rappel de la carte de combat par deriveReminders
   assert.match(participantTexts(reminders)[0], new RegExp(participant.name));
 });
 
-test('Q17 : pas de rappel pour une armure déterminée, ni pour un participant en banc', () => {
+// Q31 : le banc n'est plus exclu (« Ajouter au combat » depuis la bibliothèque pose au banc).
+test('Q17 : pas de rappel pour une armure déterminée ; le participant au banc garde le sien (Q31)', () => {
   const known = buildParticipantFromBestiary('E0-P-556', { library, zone: 'active' });
   assert.deepEqual(participantTexts(deriveReminders({ sceneId: 's', participants: [known] }, transition())), []);
   const bench = buildParticipantFromBestiary('E0-P-593', { library, zone: 'bench' });
-  assert.deepEqual(participantTexts(deriveReminders({ sceneId: 's', participants: [bench] }, transition())), []);
+  assert.equal(participantTexts(deriveReminders({ sceneId: 's', participants: [bench] }, transition())).length, 1);
 });
 
 test('Q17 : la copie dans la Réserve garde le rappel', () => {

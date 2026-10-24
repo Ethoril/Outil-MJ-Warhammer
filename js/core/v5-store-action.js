@@ -159,9 +159,13 @@ export function buildV5StoreActionInput(envelope, raw = {}) {
     }
   }
   const hasRequest = costs.length || quotas.length || exemptions.length || v5.extraAttack;
+  // Avant le premier Round (combat monté, pas encore démarré) : pas de Tour courant ; les attaques gratuites de créature
+  // (quotas « creature: ») partagent alors un Tour 0 par rencontre, et le quota est rappelé dans l'aperçu.
+  const preCombatQuota = !clock.turnId && clock.encounterId && quotas.some(q => q.scope === 'turn' && q.id.startsWith('creature:'));
+  const quotaClock = preCombatQuota ? { ...clock, turnId: `${clock.encounterId}:0:pre-combat` } : clock;
   let actionCostPlan = null, paid = state;
   if (hasRequest) {
-    actionCostPlan = previewV5ActionCosts({ state, actionId: resolutionId, actorId, costs, quotas, exemptions,...(quotaActorId?{quotaActorId}:{} ), extraAttack: v5.extraAttack === true, clock });
+    actionCostPlan = previewV5ActionCosts({ state, actionId: resolutionId, actorId, costs, quotas, exemptions,...(quotaActorId?{quotaActorId}:{} ), extraAttack: v5.extraAttack === true, clock: quotaClock });
     const prepared = prepareV5ActionState(actionCostPlan, state);
     if (prepared.status === 'prepared') paid = prepared.state;
   }
@@ -169,7 +173,7 @@ export function buildV5StoreActionInput(envelope, raw = {}) {
     actor: paid.participants.find(item => item.id === actorId) || supplied.actor,
     target: paid.participants.find(item => item.id === targetId) || supplied.target || null,
     round: state.round ?? supplied.round, baseRevision: supplied.baseRevision ?? state.revision,
-    v5State: paid, v5Clock: clock, authorNextTurnEnd: authorNextTurnEnd(envelope, actorId), actionCostPlan, secondaryTalentRequests, reactionValidation,
+    v5State: paid, v5Clock: quotaClock, ...(preCombatQuota ? { preCombatQuota: quotas.filter(q => q.id.startsWith('creature:')).map(q => ({ id: q.id, maximum: q.maximum })) } : {}), authorNextTurnEnd: authorNextTurnEnd(envelope, actorId), actionCostPlan, secondaryTalentRequests, reactionValidation,
     fortuneReroll, fortuneRerollRoll: hasValidReroll ? Number(rawReroll) : null, initialRollBeforeFortune, freeReroll, reverseDiceApplied, ...(reverseDiceApplied ? { reverseDice: { used: true } } : {}) };
 }
 export function annotateV5StoreActionPreview(preview, input) {
@@ -179,7 +183,8 @@ export function annotateV5StoreActionPreview(preview, input) {
     const alternative = previewResolution({ ...input, roll: reversed, dieRoll: reversed, enteredRoll: reversed });
     if (alternative.success === true) preview = { ...preview, reverseDiceHint: { reversed, wouldSucceed: true } };
   }
-  if (input.reactionValidation?.ready === false) preview = { ...preview, unresolved: [...(preview.unresolved || []), input.reactionValidation.reason] };
+  if (input.preCombatQuota?.length) preview = { ...preview, reminders: [...(preview.reminders || []), `Avant le premier Round : attaques gratuites limitées à ${input.preCombatQuota.map(q => q.maximum).join(' + ')} avant le début du combat (quota du Tour 0).`] };
+  if (input.reactionValidation?.ready === false) preview ={ ...preview, unresolved: [...(preview.unresolved || []), input.reactionValidation.reason] };
   if (input.fortuneReroll) {
     if (input.fortuneRerollRoll === null) {
       preview = { ...preview, unresolved: [...(preview.unresolved || []), 'Relance de Fortune : saisir le nouveau jet d100 (1 à 100).'] };

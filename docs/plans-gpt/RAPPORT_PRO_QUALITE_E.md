@@ -45,6 +45,7 @@ Plan : `PLAN_PRO_QUALITE_E.md`. Branche `pro/qualite-e`, départ `9c12613`. Choi
 | Q28 | FAIT (`QE-Q28-1`) | (voir `git log`, « Q28 ») |
 | Q29 | FAIT | (voir `git log`, « Q29 ») |
 | Q30 | FAIT (`QE-Q30-1`) | (voir `git log`, « Q30 ») |
+| Q31 | FAIT (`QE-Q31-1`) | (voir `git log`, « Q31 ») |
 
 ## Q0 — contrôle de complétude
 
@@ -429,3 +430,11 @@ Branché / non appelé (grep dans `js/`) :
 - **Test** : `tests/pro-q30-formule-v5-defaut.test.js` (5 tests, par `store.previewResolution` : Morsure, Queue, Kraken = BF 8 et non 9 imprimé, arme inchangée, ancien participant à tentacules).
 - **Branché** : `inferNaturalAttackKey` ← `js/core/resolution.js` (`normalizeResolutionInput`, appelé par le Store pour chaque résolution, donc par le panneau de Résolution). Pas de test de rendu navigateur : aucun changement d'interface, le test passe par le Store.
 - **Suite complète** : 4480 tests, 0 échec. Aucune valeur durable de personnage.
+
+## Q31 — rappels au banc, attaques gratuites au Round 0 (FAIT)
+
+- **Rappels** : `js/core/reminders.js` n'ignore plus `zone === 'bench'` ; `js/ui/workspace-view.js` affiche le bloc de rappels (`buildParticipantReminders`) sous chaque ligne de la rubrique « En attente », avec Fait / Ignorer (`Store.resolveParticipantReminder`, puis rendu).
+- **Round 0** : `js/core/v5-store-action.js` : sans Tour courant, les quotas de Tour `creature:` (tentacules, multiplicateurs) prennent un Tour 0 par rencontre ; l'aperçu rappelle le quota (« Avant le premier Round… »). Choix : `QE-Q31-1`.
+- **Tests** : `tests/pro-q31-banc-rappels-ui-browser.mjs` (rendu DOM réel, Playwright, Store réel : rappel au banc affiché, « Fait » le retire ; échoue sans le correctif), `tests/pro-q31-attaques-gratuites-round0.test.js` (Kraken au Round 0 : attaque acceptée, quota rappelé, 9e refusée ; les 2 tests échouent sans le correctif). Assertion de `pro-q17` mise à jour (banc). Le test navigateur n'est pas dans `npm test` (comme les autres `*-browser.mjs`).
+- **Suite complète** : 4482 tests, 0 échec.
+- **Branché** : rappels du banc ← rubrique « En attente » de `workspace-view.js` (onglet Jouer), vérifié par rendu DOM ; quota Round 0 ← `buildV5StoreActionInput`, appelé par le Store pour chaque résolution (panneau de Résolution). Aucune valeur durable de personnage.
