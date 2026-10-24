@@ -58,6 +58,7 @@ Plan : `PLAN_PRO_QUALITE_E.md`. Branche `pro/qualite-e`, départ `9c12613`. Choi
 | Q40 | FAIT (`QE-Q40-1` à `QE-Q40-6`) | (voir `git log`, « Q40 ») |
 | Q41 | FAIT (`QE-Q41-1` à `QE-Q41-4`) | (voir `git log`, « Q41 ») |
 | Q42 | FAIT (`QE-Q42-1`, `QE-Q42-2`) | (voir `git log`, « Q42 ») |
+| R5 | FAIT | (voir `git log`, « R5 ») |
 
 ## Q0 — contrôle de complétude
 
@@ -581,3 +582,11 @@ Branché / non appelé (grep dans `js/`) :
 - Tests : `tests/pro-q42-defauts-mineurs.test.js` (3 tests de store/moteur) ; `tests/pro-q42-interface-browser.mjs` (navigateur réel : onglet Jouer → rappel sur la fiche, « Fait », section masquée/visible).
 - **Branché / non appelé** : tout est branché. Recommencer : `restartCombat` ← `js/main.js` (bouton « Recommencer »). Taille et dégâts remplacés : `planNaturalAttack` / `normalizeResolutionInput` ← résolution du Store (panneau Résolution). Rappel : `Store.getParticipantReminders` ← `workspace-view.js` (onglet Jouer, vérifié au navigateur). Section fiche : `renderFicheDetails` (vérifié au navigateur). Aucune valeur durable de personnage (`VARIABLES_PERSISTANTES_PJ.md` inchangé).
 - Suite complète : un seul échec (Q37, ancien « (0) »), corrigé ; fichier relancé, vert.
+
+## R5 — clôture de la sixième passe (FAIT)
+
+- **Valeurs imprimées** : `tmp/divin/cmp-base.mjs` (23 livres contre `9c12613`, 12 caractéristiques et Blessures) : 0 écart non justifié, 0 profil ajouté ou retiré (exceptions déjà acceptées : E0-P-125, E0-P-126, E0-P-323).
+- **Contrôle de complétude, 23 livres** (`node tools/verify-bestiary-stats.mjs L01 … L26`) : toutes les lignes de valeurs retrouvées ; 0 manque non justifié dans toutes les catégories (talents, compétences, attaques, Traits, équipement, sorts, bruit, très incomplets, options) ; 313 manques justifiés ; 10 avertissements de compétence connus (coquilles d'impression).
+- **Recette** : `node tools/run-divine-recipe.mjs` : « RECETTE DIVINE VERTE — 26 commandes » (suite complète `node` incluse, sans échec).
+- **Branché / non appelé** : Q39 (bibliothèque, test navigateur sur l'application réelle), Q42 (Recommencer, Taille, dégâts remplacés, rappel sur le personnage actif, section masquée) : branchés, chemins d'interface vérifiés. Q40 : outil et données ; `includeOptional`, `optionalTraits`, `notes` : code testé, non appelé. Q41 : `rangeYards` porté par le participant mais non lu par la résolution : code testé, non appelé. Restent en code testé non appelé : `context.tentacleCount`, `planSwarm`, `planPsychology`, `planCreatureMagic`, `linkFamiliar` côté interface (voir R4).
+- Questions ouvertes pour le MJ : `QE-Q12a-1`, `QE-Q36-3`. Aucune valeur durable de personnage modifiée.
