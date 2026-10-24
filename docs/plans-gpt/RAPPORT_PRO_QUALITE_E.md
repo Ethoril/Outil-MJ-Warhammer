@@ -53,6 +53,7 @@ Plan : `PLAN_PRO_QUALITE_E.md`. Branche `pro/qualite-e`, départ `9c12613`. Choi
 | Q36 | FAIT (`QE-Q36-1` à `QE-Q36-7`, question `QE-Q36-3`) | (voir `git log`, « Q36 ») |
 | Q37 | FAIT (`QE-Q37-1`) | (voir `git log`, « Q37 ») |
 | Q38 | FAIT (`QE-Q38-1` à `QE-Q38-3`) | (voir `git log`, « Q38 ») |
+| R4 | FAIT (questions ouvertes pour le MJ : `QE-Q12a-1`, `QE-Q36-3`) | (voir `git log`, « R4 ») |
 
 ## Q0 — contrôle de complétude
 
@@ -527,3 +528,15 @@ Branché / non appelé (grep dans `js/`) :
 - **Non traités dans le contrôle** (déjà corrigés dans les données par Q33/Q36) : « Resistance » vs Resistant, Perform (Dance) 60, Hagdar, options de carrière L19 611, armure « +2 AP Body », bouclier optionnel (`QE-Q38-1`).
 - Tests : `tests/pro-q38-controle.test.js` (3), `tests/pro-q38-code.test.js` (4, scénarios de store réels). Suite complète : 4547 tests verts.
 - **Branché (appelant + chemin d'interface)** : l'attaque gratuite au Round 0 passe par `buildV5StoreActionInput` (appelé par le store pour tout aperçu de Résolution) : branché. `context.tentacleCount` : **aucun champ de `js/ui` ne le pose** (`QE-Q38-2`) : code testé, non appelé par l'interface ; la question « nombre à préciser » s'affiche toutefois dans l'aperçu non résolu. Contrôle : outil hors `js/`. Aucune valeur durable de personnage.
+
+## R4 — clôture de la cinquième passe (FAIT)
+
+- **Valeurs imprimées** : 23 livres comparés à `9c12613` (`tmp/divin/cmp-base.mjs`, 12 caractéristiques et Blessures de chaque profil) : seuls E0-P-125, E0-P-126 (ligne Base → Total, accepté par le MJ) et E0-P-323 Sea Dragon (M 10, justifié Q26) diffèrent ; 0 profil ajouté ou retiré.
+- **Contrôle de complétude, 23 livres** (`node tools/verify-bestiary-stats.mjs L01 … L26`) : toutes les lignes de valeurs retrouvées ; talents 0, compétences 0, attaques 0, Traits 0, équipement 0, sorts 0, bruit 0, très incomplets 0 ; 299 manques justifiés (faux positifs relus page par page, `bestiary-justified.mjs`) ; 10 avertissements de compétence (coquilles d'impression du livre, relues au lot Q34).
+- **Recette** : `node tools/run-divine-recipe.mjs` : « RECETTE DIVINE VERTE — 26 commandes » (suite complète `node` incluse, sans échec ; 4547 tests au dernier décompte, lot Q38).
+- **Branché (appelant + chemin d'interface) / non appelé**, vérifié par grep dans `js/` :
+  - **Branché** : rappels au banc et attaque gratuite au Round 0 (Q31 ; `workspace-view.js`, `buildV5StoreActionInput` ← Store, tests de rendu et de store) ; listes de Taille et champ « à bord » (Q28, Q29 ; `renderResolutionPanel` ← `workspace-view.js`, test de rendu) ; formule V5 et Taille des attaques naturelles (Q30, Q35 ; `normalizeResolutionInput` ← Store) ; armure par zones et bouclier optionnel (`printedArmour` ← `buildParticipantFromBestiary` ← bibliothèque et `bestiary-templates.js`) ; compétences sans valeur (Q37 ; `renderBestiarySheet`, `renderFicheDetails`, faux DOM) ; attaque gratuite au Round 0 sans rencontre (Q38, via le Store).
+  - **Code testé, non appelé** : `context.tentacleCount` (aucun champ de `js/ui` ne le pose, `QE-Q38-2`) ; `slBonus`, `optionalSpecialRules`, `optionalTalents`, `qualities`, `inflicts`, notes de profil (aucun lecteur dans `js/`) ; `previewLeadershipRallyAllies`, `planSwarm`, `planPsychology`, `planCreatureMagic` (aucun appelant hors de leurs modules) ; `linkFamiliar` (aucun appelant dans `js/ui`) ; `tools/list-v5-natural-gaps.mjs` et le contrôle de complétude (outils hors `js/`).
+  - **Réserve** : Q20 à Q23 ont été vérifiés par le source ou par le Store, pas par un rendu DOM (les tests de rendu datent de Q28 et après).
+- **Questions ouvertes pour le MJ** : `QE-Q12a-1` (E0-P-125, 126, accepté le 23/10) et `QE-Q36-3` (E0-P-388 Erich Frohlich : « Toughness Bonus: » imprimé sans nombre, garder l'absence ou saisir 3).
+- Aucune valeur durable de personnage modifiée (`VARIABLES_PERSISTANTES_PJ.md` inchangé).
