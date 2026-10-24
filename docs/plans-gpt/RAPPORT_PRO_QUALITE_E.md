@@ -478,3 +478,13 @@ Branché / non appelé (grep dans `js/`) :
 - **Valeurs imprimées** (23 livres comparés à `9c12613`) : seuls E0-P-125, E0-P-126 (Base → Total) et E0-P-323 Sea Dragon diffèrent.
 - Test : `tests/pro-q34b-completude.test.js` (7 tests). Suite complète lancée une fois.
 - **Branché / non appelé** : outil de contrôle et données de livre. `optionalTalents` : aucun appelant dans `js/` (code testé, non appelé). Les équipements et Traits facultatifs ajoutés passent par `buildParticipantFromBestiary` (appelants : `js/ui/bestiary-library.js`, `js/core/bestiary-templates.js`). Aucune valeur durable de personnage.
+
+## Q34c — complétude de L14 à L26 (FAIT)
+
+- **Mesure avant** (contrôle Q32/Q33, L14, L16-L26 ; L15 n'existe pas) : 11 profils signalés sur 10 livres, 18 manques : talents 6, Traits 12 (L14 1 profil, L17 1, L19 3, L20 1, L21 1, L23 2, L24 2). Compétences, attaques, équipement, sorts, bruit, très incomplets : 0.
+- **Relecture page par page** (PDF, `pdftotext -layout`) : les 18 manques sont du texte voisin (table de Traits de construct L17 p.30, bloc d'espèce « Humains » L19 p.152-153, prose et liste de sorts L20 p.21, titre du profil suivant L21 p.24, profils côte à côte L23 p.108 et L24 p.20/34, paragraphe de règle « Vulnerable to Heat » L14 p.84). Aucun élément réellement imprimé n'était perdu : **aucune donnée modifiée**, les 23 livres sont identiques à `HEAD`.
+- **Justifications** : 11 entrées dans `JUSTIFIED_Q34` (page citée, profil voisin qui imprime l'élément, liste imprimée du profil présente), QE-Q34c-1.
+- **Contrôle L14-L26** : talents 0, compétences 0, attaques 0, Traits 0, équipement 0, sorts 0, bruit 0, très incomplets 0 ; 230 manques justifiés au total sur ces livres. 6 avertissements de compétence = coquilles d'impression du livre relues sur la page (« Athlethics », « Intuation », « Bribe »), QE-Q34c-3.
+- **Q34 complet** : les 23 livres sont à 0 manque non justifié (Q34a L01-L06, Q34b L07-L13, Q34c L14-L26). Valeurs imprimées inchangées depuis `9c12613` hors E0-P-125, 126 et 323 (déjà justifiés).
+- Test : `tests/pro-q34c-completude.test.js` (3 tests). Suite complète lancée une fois.
+- **Branché / non appelé** : outil de contrôle seulement (hors `js/`) : code testé, non appelé par l'application. Aucune donnée de livre ni valeur durable de personnage modifiée.
