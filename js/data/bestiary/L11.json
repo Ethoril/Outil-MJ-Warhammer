@@ -283,6 +283,10 @@
      "name": "Web",
      "rating": "40",
      "ref": "E0-T-068"
+    },
+    {
+     "name": "Venom",
+     "ref": "E0-T-064"
     }
    ],
    "optionalTraits": [
@@ -290,7 +294,15 @@
      "name": "Size",
      "param": "Enormous",
      "ref": "E0-T-045"
+    },
+    {
+     "name": "Trained",
+     "param": "Broken, Guard, Magic, Mount, War",
+     "ref": "E0-T-060"
     }
+   ],
+   "specialRules": [
+    "Spiteful"
    ],
    "abilities": [
     "E0-T-096"
@@ -978,6 +990,11 @@
     {
      "name": "Territorial",
      "ref": "E0-T-056"
+    },
+    {
+     "name": "Trained",
+     "param": "Broken, Guard, Magic, Mount, War",
+     "ref": "E0-T-060"
     }
    ],
    "abilities": [

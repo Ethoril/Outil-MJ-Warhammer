@@ -159,6 +159,8 @@ export const TRAPPING_TRIMS = Object.freeze({
 
 /** Équipement dont le nom imprimé contient des virgules (Helena Bastiat-Hatzburg, Altdorf L20 p. 72) : recollé après le découpage à virgules. */
 export const TRAPPING_JOINS = Object.freeze({
+  // Sylvania, The Cursed County (L10) p. 9 : le comte Alberich, « The Stirland Runefang, Orc Hewer » est le nom de l'épée, un seul objet.
+  'E0-P-364': ['The Stirland Runefang, Orc Hewer'],
   'E0-P-625': ['Notebook of Plans, Schemes, and Dirty Secrets'],
   // Sea Wardens of Cothique (L14) p. 27 : Prince Dalloran, la dernière puce de la liste est une seule phrase à virgules.
   // Power Behind the Throne Companion (L18) p. 60 : Nastassia, « 3 GCs in assorted denominations, but can can lay her hands on 100 GCs within an hour » est un seul objet.
@@ -182,7 +184,7 @@ export const TRAPPING_JOINS = Object.freeze({
  * Le texte est celui du livre, recopié ligne à ligne.
  */
 // Noms de Traits imprimés que l'inventaire ne connaît pas : gardés dans `specialRules` plutôt que perdus (Urzo, L23 p. 104 : Animalistic Legs).
-export const TRAITS_KEPT_AS_RULES = Object.freeze(new Set(['Animalistic Legs', 'Mark of Slaanesh', 'Coven Sorcerer', 'Prey of the Dark Prince', 'Vampiric Gaze', 'Hunger']));
+export const TRAITS_KEPT_AS_RULES = Object.freeze(new Set(['Animalistic Legs', 'Mark of Slaanesh', 'Coven Sorcerer', 'Prey of the Dark Prince', 'Vampiric Gaze', 'Hunger', 'Corrupt']));
 
 export const BODY_LINE_FIXES = Object.freeze({
   // Temple of Spite (L09) p. 97 : Samuril Meurlith, « Dagger » mangé par la prose de la colonne voisine (« …taking credit for Dagger (60/+5) with the Fast Quality »).

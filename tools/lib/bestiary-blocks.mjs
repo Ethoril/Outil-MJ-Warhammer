@@ -258,7 +258,8 @@ const V4_LABELS_BASE = ['Yenlui State', 'Obsession', 'Attack Traits', 'Optional 
 const LORE_PATTERNS = ['Lore of [A-Z][a-z]+', 'Magic of [A-Z][a-z]+', 'High Magic'];
 // « Traits*: » (L01 p. 79) : Traits conditionnels, la note à astérisque suit ; l'astérisque est retiré de l'étiquette.
 const labelRe = wide => new RegExp(`(?:^|\\s)(${[...(wide ? [...V4_LABELS_BASE, 'Options'] : [...V4_LABELS_BASE, ...LORE_PATTERNS])].join('|')})\\*?:`, 'g');
-const V5_LABEL_RE = /^(Attacks|Armour(?!\s+by\s+Location)|Skills|Traits and [Tt]alents|Traits|Optional Traits|Talents|Trappings|Spells|Blessings|Miracles:?)(?=\s|$)/;
+// L10 (V5) : « Optional » seul sur sa ligne ouvre la liste des Traits facultatifs (Drakenhund p. 38, Patchwork Man p. 74) ; « Optional Bow and Arrows » est une attaque.
+const V5_LABEL_RE = /^(Attacks|Armour(?!\s+by\s+Location)|Skills|Traits and [Tt]alents|Traits|Optional Traits|Optional(?=\s*$)|Talents|Trappings|Spells|Blessings|Miracles:?)(?=\s|$)/;
 
 /** Sections étiquetées du corps, sous forme { étiquette: texte } ; `lead` : texte avant la première étiquette. */
 export function splitSections(bodyLines) {
@@ -314,7 +315,11 @@ export function splitSections(bodyLines) {
           const previous = kept.filter(Boolean).pop() || '';
           // Les Traits décrits (V5) se suivent en paragraphes « Nom : clause » : un paragraphe qui s'ouvre ainsi prolonge la rubrique (L09 p. 46).
           const nextTrait = (label === 'Traits' || label === 'Optional Traits') && next && /^[A-Z][A-Za-z'’ -]+(?: \([^)]*\))?(?: [+\d]\d*)?:\s/.test(next);
-          if (seen && !(/,$/.test(previous) || nextTrait || (next && /^[a-zà-ÿ(]/.test(next)))) break;
+          // Traits facultatifs (L10 p. 38) : la suite en minuscule est une lettrine du texte voisin (« dham Irregulars »), seule la virgule prolonge la liste.
+          const optionalList = label === 'Optional';
+          // Équipement coupé par un blanc au milieu d'un nom (L10 p. 9 : « Wardenship of the » / « River Stir… », « Royal Garb (Best » / « Quality) ») : mot de liaison final ou parenthèse ouverte.
+          const openName = label === 'Trappings' && (/\b(?:of|the|and|or|to|with|a|an|in)$/.test(previous) || kept.join(' ').split('(').length > kept.join(' ').split(')').length);
+          if (seen && !(/,$/.test(previous) || nextTrait || openName || (!optionalList && next && /^[a-zà-ÿ(]/.test(next)))) break;
           continue;
         }
         kept.push(part); if (part) seen = true;

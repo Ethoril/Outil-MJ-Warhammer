@@ -235,6 +235,10 @@ export function buildRecord(extracted, entry, context) {
   const listed = traits.kept.filter(trait => !structural.has(trait.name));
   if (listed.length) record.traits = listed;
   if (optional.kept.length) record.optionalTraits = optional.kept;
+  // Un Talent du catalogue dans la liste facultative (« Trained (…), Sixth Sense », Drakenhund L10 p. 38) n'est pas un Trait : gardé à part, jamais perdu.
+  const optionalTalents = (extracted.optional || []).filter(trait => trait?.name && !canonical(trait.name) && isCatalogueTalent(canonicalTalentName(trait.name)))
+    .map(trait => ({ name: `${canonicalTalentName(trait.name)}${trait.param ? ` (${trait.param})` : ''}` }));
+  if (optionalTalents.length) record.optionalTalents = optionalTalents;
   // Un Talent du catalogue imprimé dans la liste des Traits d'un profil V4 (« Acute Sense (Vision: as Character Talent) ») est un Talent, pas un Trait ; de même « Resistance (Chaos) » (Bella Hornwhistler, L26 p. 58), nom rattaché à Resistant.
   const baseName = name => String(name).replace(/\s*\(.*\)\s*$/, '').toLowerCase();
   const listedTalents = new Set((extracted.talents || []).map(talent => baseName(talent.name)));
@@ -248,7 +252,7 @@ export function buildRecord(extracted, entry, context) {
   if (extracted.notes?.length) record.notes = extracted.notes;
   if (extracted.mutations?.length) record.mutations = extracted.mutations;
   if (extracted.spells) record.spells = extracted.spells;
-  const rules = [...(extracted.specialRules || []).filter(rule => rule.split(/\s+/).length <= 5 && /^[A-Z]/.test(rule) && !/[.;]/.test(rule)), ...traits.dropped.filter(name => TRAITS_KEPT_AS_RULES.has(name))];
+  const rules = [...(extracted.specialRules || []).filter(rule => rule.split(/\s+/).length <= 5 && /^[A-Z]/.test(rule) && !/[.;]/.test(rule)), ...traits.dropped.filter(name => TRAITS_KEPT_AS_RULES.has(name)).map(name => { const printed = trimmed.find(trait => trait.name === name); return printed?.param ? `${name} (${printed.param})` : name; })];
   if (rules.length) record.specialRules = rules;
   if (extracted.starred?.length) record.starred = extracted.starred.map(key => (key === 'W' ? 'wounds' : key));
   const abilities = [...(entry.abilityRefs || [])];

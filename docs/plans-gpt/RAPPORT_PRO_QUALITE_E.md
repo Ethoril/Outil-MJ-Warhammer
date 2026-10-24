@@ -468,3 +468,13 @@ Branché / non appelé (grep dans `js/`) :
 - **Contrôle, L01-L06** : talents 0, compétences 0, attaques 0, Traits 0, équipement 0, sorts 0, bruit 0, très incomplets 0. Reste 3 avertissements de compétence (variantes du livre : « Intimidation 49 » Gunna p.65, « Tracking 70 » Dragon p.330, « Drive 45 » coupé en fin de ligne chez le Merchant p.321), pas des manques.
 - Test : `tests/pro-q34a-completude.test.js` (4 tests).
 - **Branché / non appelé** : outil de contrôle et données de livre ; `notes` d'un profil : code testé, non appelé pour cette note (aucun module de `js/` ne la lit). Aucune valeur durable de personnage.
+
+## Q34b — complétude de L07 à L13 (FAIT)
+
+- **Mesure avant** : sur L07-L13 (L08 n'existe pas), le contrôle Q32 signalait des manques de Traits, d'attaques, de compétences, d'équipement et de talents (surtout L10 et L11) ; état de départ de cette session : travail commencé, non commité.
+- **Outil** : rubrique « Optional » seule (L10), Talent dans la liste facultative (`optionalTalents`), équipement coupé en pleine expression, nom d'arme à virgule (`TRAPPING_JOINS`), règle spéciale après un tiret (L11), prose après `Trained (…)`, virgule oubliée après une parenthèse de compétence (« Lore (… Naggaroth 110) Melee (Basic) 75 »), « Armour +2 AP … » n'est pas une attaque, `Corrupt` gardé en règle. Le contrôle lit aussi `optionalTalents`.
+- **Données** : régénérées par `tools/build-bestiary-profiles.mjs` sur les 23 livres ; seuls L07 (Roc : Trained), L09 (une ligne d'équipement), L10 (Alberich, 5 profils à Traits facultatifs) et L11 (Mancatcher, Griffon) changent ; les 19 autres livres sont identiques.
+- **Contrôle L07-L13** : talents 0, compétences 0, attaques 0, Traits 0, équipement 0, sorts 0, bruit 0, très incomplets 0 ; 26 manques justifiés (13 nouveaux dans `JUSTIFIED_Q34`, page citée, QE-Q34b-4). 1 avertissement de compétence (Harboth, L12 E0-P-426 : « Melee (Basic) 90 » non retrouvée dans le texte brut, variante du livre déjà relue).
+- **Valeurs imprimées** (23 livres comparés à `9c12613`) : seuls E0-P-125, E0-P-126 (Base → Total) et E0-P-323 Sea Dragon diffèrent.
+- Test : `tests/pro-q34b-completude.test.js` (7 tests). Suite complète lancée une fois.
+- **Branché / non appelé** : outil de contrôle et données de livre. `optionalTalents` : aucun appelant dans `js/` (code testé, non appelé). Les équipements et Traits facultatifs ajoutés passent par `buildParticipantFromBestiary` (appelants : `js/ui/bestiary-library.js`, `js/core/bestiary-templates.js`). Aucune valeur durable de personnage.

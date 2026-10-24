@@ -51,7 +51,8 @@ export function printedSkills(block, catalogueNames = new Set()) {
   const text = segment(block, 'Skills');
   if (text === null) return [];
   const found = [];
-  for (const raw of splitTopLevel(text)) {
+  // « Lore (… Naggaroth 110) Melee (Basic) 75 » (L09 p. 87) : virgule oubliée par le livre après une parenthèse, comme `readSkills`.
+  for (const raw of splitTopLevel(text.replace(/(\d)\)\s+(?=[A-Z][a-z]+(?:\s[A-Z][a-z]+)?(?:\s*\(|\s+\d))/g, '$1), '))) {
     // « Ride Horse 42 » (L21 p. 41) : parenthèses oubliées par le livre, même lecture que `readSkills`.
     const item = raw.replace(/^Ride ([A-Z][a-z]+) (?=\d)/, 'Ride ($1) ');
     // Un talent à rang imprimé dans la ligne des compétences (« Dual Wielder 2 », Lokhir L07) n'est pas une compétence.
@@ -121,7 +122,7 @@ export function printedTalents(block, catalogueNames) {
   return [...new Set(found)];
 }
 
-export const recordTalentNames = record => new Set((record.talents || []).map(talent => talent.name.replace(/\(.*\)/, '').replace(/\s+/g, ' ').trim().toLowerCase()));
+export const recordTalentNames = record => new Set([...(record.talents || []), ...(record.optionalTalents || [])].map(talent => talent.name.replace(/\(.*\)/, '').replace(/\s+/g, ' ').trim().toLowerCase()));
 
 /** Manques d'un profil : talents du catalogue et compétences imprimés mais absents du JSON. */
 export function completenessGaps(record, block, catalogueNames) {
@@ -148,6 +149,8 @@ export function printedAttacks(block) {
   const found = [];
   const add = (count, name, damage, label) => found.push({ label, key: `${letters(name)}|${damage}|${count || 1}` });
   for (const item of splitTopLevel(text)) {
+    // « Armour +2 AP All Locations » (L10) est l'armure du profil, pas une attaque.
+    if (/^Armour\s+\+\d+\s+AP\b/.test(item)) continue;
     const creature = /^Creature Weapons\s*\((.*)\)$/.exec(item);
     if (creature) {
       for (const part of splitTopLevel(creature[1])) { const m = ATTACK.exec(part); if (m) add(Number(m[1]), m[2], m[4], m[0]); }
@@ -245,7 +248,7 @@ export function recordSpellKeys(record) {
 export function extendedGaps(record, block) {
   const haveAttacks = recordAttackKeys(record);
   // Q27d : un talent du catalogue imprimé dans la liste des Traits (« Acute Sense (Smell) ») est gardé comme talent.
-  const haveTraits = new Set([...recordTraitKeys(record), ...(record.talents || []).map(talent => traitKey(String(talent?.name ?? '').replace(/\(.*?\)/g, ' ').replace(/\s+/g, ' ').trim()))]);
+  const haveTraits = new Set([...recordTraitKeys(record), ...[...(record.talents || []), ...(record.optionalTalents || [])].map(talent => traitKey(String(talent?.name ?? '').replace(/\(.*?\)/g, ' ').replace(/\s+/g, ' ').trim()))]);
   const attackNames = new Set((record.attacks || []).map(attack => letters(attack.name)));
   const haveTraitRatings = new Set((record.traits || []).filter(trait => trait?.rating).map(trait => `${letters(trait.name)}|${String(trait.rating).replace(/\D/g, '')}`));
   const trappings = (record.trappings || []).map(letters);
@@ -436,7 +439,7 @@ export function printedV5Attacks(block) {
  */
 export function formatGaps(record, block, catalogueNames, traitNames) {
   const table = tableFor(catalogueNames, traitNames);
-  const have = new Set([...recordTraitKeys(record), ...(record.talents || []).map(talent => traitKey(String(talent?.name ?? '').replace(/\(.*?\)/g, ' ').replace(/\s+/g, ' ').trim()))]);
+  const have = new Set([...recordTraitKeys(record), ...[...(record.talents || []), ...(record.optionalTalents || [])].map(talent => traitKey(String(talent?.name ?? '').replace(/\(.*?\)/g, ' ').replace(/\s+/g, ' ').trim()))]);
   const gaps = { talents: [], traits: [] };
   for (const text of traitSegments(block)) {
     for (const info of printedNamed(text, table)) {
@@ -445,7 +448,8 @@ export function formatGaps(record, block, catalogueNames, traitNames) {
       if (!list.includes(info.name)) list.push(info.name);
     }
   }
-  const attackKeys = new Set((record.attacks || []).map(attack => `${letters(attack.name)}|${attack.damage}`));
+  // « The Stirland Runefang, Orc Hewer (46/+6) » (L10 p. 9) : le contrôle lit le nom après la virgule, le profil garde le nom imprimé entier.
+  const attackKeys = new Set((record.attacks || []).flatMap(attack => [attack.name, ...(attack.name.includes(',') ? [attack.name.split(',').pop()] : [])].map(name => `${letters(name)}|${attack.damage}`)));
   const breathPresent = [...have].some(key => key.includes('breath')) || (record.attacks || []).some(attack => /breath/i.test(attack.name));
   const attacks = [];
   for (const attack of printedV5Attacks(block)) {

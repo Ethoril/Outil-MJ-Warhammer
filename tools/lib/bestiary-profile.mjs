@@ -279,7 +279,13 @@ export function listTraits(text, mode, dictionary, key) {
   const rules = [];
   for (const item of splitList(text)) {
     // Un « : » dans une parenthèse (« Acute Sense (Vision: as Character Talent) ») fait partie du Trait, pas d'une règle spéciale.
-    const colon = item.replace(/\([^)]*\)/g, group => ' '.repeat(group.length)).indexOf(':');
+    // « Venom Spiteful � Drakwald Mancatchers… » (L11 p. 13) : la règle spéciale s'ouvre sur un tiret au lieu d'un deux-points ; le Trait qui la précède est celui du dictionnaire.
+    const masked = item.replace(/\([^)]*\)/g, group => ' '.repeat(group.length));
+    const dash = dictionary.size && masked.indexOf(':') < 0 ? masked.search(/\s[�–—]\s/) : -1;
+    // Le tiret ne compte que derrière un nom du dictionnaire suivi d'un titre (« Venom Spiteful ») ; ailleurs la liste continue comme avant.
+    const dashHead = dash >= 0 ? clean(item.slice(0, dash)) : '';
+    const dashed = dash >= 0 && [...dictionary].some(name => dashHead.startsWith(`${name} `) && /^[A-Z][A-Za-z'’ -]*$/.test(dashHead.slice(name.length + 1)));
+    const colon = dashed ? dash : masked.indexOf(':');
     if (colon >= 0) {
       const head = clean(item.slice(0, colon));
       // « Weapon (Claws) +11 Toxic Bile: … », « Weapon +8 Font of Flame: … » : l'attaque imprimée est un Trait, le titre qui la suit est la règle spéciale.
@@ -350,7 +356,9 @@ export function parseBlock(block, { traitDictionary = new Set(), talentDictionar
   if (sections['Attack Traits'] !== undefined) Object.assign(profile, listTraits(sections['Attack Traits'], mode, traitDictionary, 'attackTraits'));
   const optional = sections['Optional Traits'] ?? sections.Optional ?? sections.Options;
   // « … Trained (Broken, Drive) Note: The small but vicious dog… » (L06 p. 325) : la note qui suit la liste n'en fait pas partie.
-  if (optional !== undefined) profile.optional = splitList(optional.replace(/\s+Note:.*$/, '')).map(readTraitItem).filter(Boolean);
+  // « Trained (Broken, Guard) When facing an especially irksome… » (Drakwald Mancatcher, L11 p. 13) : la prose qui suit la dernière parenthèse n'est pas un Trait.
+  const optionalList = optional === undefined ? '' : optional.replace(/\s+Note:.*$/, '').replace(/\)\s+(?=[A-Z][a-z]+\s+[a-z]+\s+[a-z]+).*$/, ')');
+  if (optional !== undefined) profile.optional = splitList(optionalList).map(readTraitItem).filter(Boolean);
   // Q34a : la note imprimée (Traits du chien de ratier, L06 p. 325) est gardée en note du profil, jamais perdue.
   const optionalNote = optional === undefined ? null : /\s+(Note:.*)$/.exec(optional);
   if (optionalNote) profile.notes = [...(profile.notes || []), clean(optionalNote[1])];

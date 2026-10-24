@@ -151,11 +151,14 @@
     }
    ],
    "trappings": [
-    "The Stirland Runefang",
-    "Orc Hewer",
+    "The Stirland Runefang, Orc Hewer",
     "Full Plate (Best Quality)",
     "Grand County of Stirland",
-    "Wardenship of the"
+    "Wardenship of the River Stir",
+    "Overlordship of Sylvania",
+    "Royal Garb (Best Quality)",
+    "The Wurtbad City Coffers and Crown Jewels",
+    "Various Lands and Estates throughout the Empire"
    ],
    "keywords": [
     "noble"
@@ -849,6 +852,18 @@
      "ref": "E0-T-059"
     }
    ],
+   "optionalTraits": [
+    {
+     "name": "Trained",
+     "param": "Broken, Heel, Hunt, Magic, Point, Track, War",
+     "ref": "E0-T-060"
+    }
+   ],
+   "optionalTalents": [
+    {
+     "name": "Sixth Sense"
+    }
+   ],
    "keywords": [
     "bete"
    ],
@@ -934,6 +949,9 @@
      "ref": "E0-T-048"
     }
    ],
+   "specialRules": [
+    "Corrupt"
+   ],
    "keywords": [
     "fantome"
    ],
@@ -999,6 +1017,27 @@
     {
      "name": "Painless",
      "ref": "E0-T-042"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Champion",
+     "ref": "E0-T-010"
+    },
+    {
+     "name": "Hatred",
+     "param": "The Living",
+     "ref": "E0-T-027"
+    },
+    {
+     "name": "Spellcaster",
+     "param": "Necromancy",
+     "ref": "E0-T-048"
+    },
+    {
+     "name": "Fear",
+     "rating": "1",
+     "ref": "E0-T-022"
     }
    ],
    "keywords": [
@@ -1255,6 +1294,17 @@
      "ref": "E0-T-045"
     }
    ],
+   "optionalTraits": [
+    {
+     "name": "Corruption",
+     "param": "Minor",
+     "ref": "E0-T-016"
+    },
+    {
+     "name": "Venom",
+     "ref": "E0-T-064"
+    }
+   ],
    "keywords": [
     "goule"
    ],
@@ -1319,6 +1369,42 @@
     {
      "name": "Undead",
      "ref": "E0-T-061"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Animosity",
+     "param": "The Living",
+     "ref": "E0-T-003"
+    },
+    {
+     "name": "Champion",
+     "ref": "E0-T-010"
+    },
+    {
+     "name": "Cunning",
+     "ref": "E0-T-074"
+    },
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    },
+    {
+     "name": "Infestation",
+     "ref": "E0-T-033"
+    },
+    {
+     "name": "Mental Corruption",
+     "ref": "E0-T-038"
+    },
+    {
+     "name": "Spellcaster",
+     "param": "Necromancy",
+     "ref": "E0-T-048"
+    },
+    {
+     "name": "Stealthy",
+     "ref": "E0-T-050"
     }
    ],
    "keywords": [

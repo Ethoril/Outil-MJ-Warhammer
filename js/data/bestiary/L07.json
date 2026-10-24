@@ -2052,6 +2052,11 @@
     {
      "name": "Frenzy",
      "ref": "E0-T-024"
+    },
+    {
+     "name": "Trained",
+     "param": "Broken, Drive, Magic, War",
+     "ref": "E0-T-060"
     }
    ],
    "keywords": [
