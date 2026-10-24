@@ -5,6 +5,14 @@ Plan : `PLAN_PRO_BRANCHEMENT.md`. Choix et questions : `CHOIX_EXECUTANT_BRANCHEM
 | Lot | État |
 | --- | --- |
 | B0 | FAIT (inventaire ci-dessous) |
+| B1 | FAIT (Taille branchée, voir ci-dessous) |
+
+## B1 — Taille (24/10/2026)
+
+- **Branché** : `previewLarge` (`js/core/v5-talent-size.js`, appelé par `previewV5CombatPrelude` à chaque résolution) accepte désormais le Trait Taille (Grande ou plus, via `creatureSizeOf`) comme source, au même titre que le talent Grande taille : une seule source de vérité. Effets : −2 DR à la défense en mêlée contre l’attaquant plus grand (`v5-combat-rules.js:148`, inchangé) ; Force opposée gagnée automatiquement à deux crans (`resolveSizeOpposition`). Les rangs saisis à l’écran priment ; sinon rang du Trait, l’autre camp sans Trait étant supposé Moyen. Le bonus de dégâts +BF reste réservé au talent (un profil imprimé l’inclut déjà).
+- **Branché** : `sizeReminders` via `deriveReminders` (`js/core/reminders.js`, table `TRAIT_REMINDERS`, accroche commune BR-01) → carte (`card.js:251`) et Personnage actif, par `Store.getParticipantReminders`. Le poids au surnombre y figure en rappel : le moteur ne calcule pas de surnombre.
+- **Non appliqué** : « pas de Désengagement » pour une créature à Trait Taille (le Désengagement libre existant est propre au talent) ; aucun texte du livre ne le détermine dans le module, rien d’inventé.
+- Tests : `tests/pro-b1-taille-branchee.test.js` (Stegadon L07 contre PJ, via le store). Suite complète : 4583 verts, 1 échec étranger au lot (« la recette refuse un cwd externe », propre au worktree sous `tmp/`).
 
 ## B0 — Inventaire des appelants et points d'accroche (24/10/2026)
 
