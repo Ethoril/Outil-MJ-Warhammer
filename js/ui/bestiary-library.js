@@ -2,7 +2,7 @@
  * Bibliothèque de profils de bestiaire : liste filtrable (livre, nom, mot-clé avec descendants), fiche en lecture seule,
  * ajout au combat (un ou plusieurs exemplaires) et copie dans la Réserve. Les données se chargent à la demande, livre par livre.
  */
-import { BESTIARY_STAT_KEYS, armourDetailNamesZones, bestiarySpellLines, buildParticipantFromBestiary, buildReserveProfileFromBestiary, createBestiaryLoader, filterBestiary } from '../core/bestiary-profiles.js';
+import { BESTIARY_STAT_KEYS, armourDetailNamesZones, bestiarySpellLines, buildParticipantFromBestiary, buildReserveProfileFromBestiary, createBestiaryLoader, filterBestiary, unvaluedSkillNames } from '../core/bestiary-profiles.js';
 import { keywordMatches, keywordTree } from '../core/creature-keywords.js';
 import { CAMP_LABELS } from '../core/encounters.js';
 import { Participant, Profile } from '../core/models.js';
@@ -28,6 +28,7 @@ export function renderBestiarySheet(record, referential) {
     line('Armure', [armour.ap !== undefined ? `PA ${armour.ap}` : '', ...(armour.parts || []).map(part => `${part.name}${part.locations ? ` (${part.locations})` : ''} ${printed(part.ap)}${part.optional ? ' facultatif' : ''}`), armour.detail ? `${armourDetailNamesZones(armour.detail) ? 'zones' : 'détail'} : ${armour.detail}` : '', armour.printedTotal !== undefined ? `total imprimé ${armour.printedTotal}` : ''].filter(Boolean).join(' ; '));
     line('Attaques', (record.attacks || []).map(attack => `${attack.count > 1 ? `${attack.count} × ` : ''}${attack.name}${attack.value !== undefined ? ` ${attack.value}` : ''}, dégâts ${attack.damage}${attack.free ? ' (gratuite)' : ''}${attack.optional ? ' (facultative)' : ''}`).join(' ; '));
     line('Compétences', (record.skills || []).map(skill => `${skill.nameFr || skill.name} ${skill.value}`).join(', '));
+    line('Compétences sans valeur imprimée', unvaluedSkillNames(record.unvaluedSkills).join(', '));
     line('Traits', (record.traits || []).map(trait => `${trait.name}${trait.param ?? trait.rating ? ` (${trait.param ?? trait.rating})` : ''}`).join(', '));
     line('Traits facultatifs', (record.optionalTraits || []).map(trait => trait.name).join(', '));
     line('Sorts', bestiarySpellLines(record.spells).join(' ; '));

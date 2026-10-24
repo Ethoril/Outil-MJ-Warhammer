@@ -159,6 +159,11 @@ export function bestiarySpellLines(spells) {
     .map(([label, list]) => (label === 'notes' ? list.join(' ') : `${label === 'spells' ? 'Sorts' : label} : ${list.join(', ')}`));
 }
 
+/** Compétences imprimées sans valeur (« Language (Elthárin) », L14 ; Gurniksson, L03) : à afficher telles quelles, jamais comme un test avec une valeur inventée. */
+export function unvaluedSkillNames(skills) {
+  return (Array.isArray(skills) ? skills : []).filter(isText);
+}
+
 const traitText = trait => {
   const detail = trait.param ?? trait.rating;
   if (detail === undefined || detail === null || detail === '') return trait.name;
@@ -217,7 +222,9 @@ export function buildParticipantFromBestiary(id, options = {}) {
       armour: cloneValue(record.armour || {}), traitRefs: Object.fromEntries(traits.filter(trait => trait.ref).map(trait => [trait.name, trait.ref])),
       optionalTraits: (record.optionalTraits || []).map(traitText), abilityRefs: [...(record.abilities || [])], ...(record.woundsAbsent ? { woundsAbsent: true } : {}),
       // Sorts imprimés, par liste (« Petty », « Lore of X »…) : consultation seulement, ils ne sont pas dans `participant.spells` (qui ouvre la Focalisation et le choix de sort).
-      ...(record.spells ? { spells: cloneValue(record.spells) } : {})
+      ...(record.spells ? { spells: cloneValue(record.spells) } : {}),
+      // Compétences imprimées sans valeur : consultation seulement, absentes de `participant.skills` (aucune valeur à tester).
+      ...(unvaluedSkillNames(record.unvaluedSkills).length ? { unvaluedSkills: unvaluedSkillNames(record.unvaluedSkills) } : {})
     } } }
   };
 }

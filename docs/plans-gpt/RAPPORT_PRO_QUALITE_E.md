@@ -51,6 +51,7 @@ Plan : `PLAN_PRO_QUALITE_E.md`. Branche `pro/qualite-e`, départ `9c12613`. Choi
 | Q34a-c | FAIT (23 livres à 0 manque non justifié) | (voir `git log`, « Q34a » à « Q34c ») |
 | Q35 | FAIT (`QE-Q35-1` à `QE-Q35-4`) | (voir `git log`, « Q35 ») |
 | Q36 | FAIT (`QE-Q36-1` à `QE-Q36-7`, question `QE-Q36-3`) | (voir `git log`, « Q36 ») |
+| Q37 | FAIT (`QE-Q37-1`) | (voir `git log`, « Q37 ») |
 
 ## Q0 — contrôle de complétude
 
@@ -510,3 +511,9 @@ Branché / non appelé (grep dans `js/`) :
 - **Valeurs imprimées** : 23 livres comparés à `9c12613` : seuls E0-P-125, 126 (Base → Total) et E0-P-323 Sea Dragon diffèrent (déjà justifiés). Contrôle de complétude L03, L06, L09, L10, L16, L17, L21, L23, L26 : 0 manque non justifié.
 - Tests : `tests/pro-q36-cas-confirmes.test.js` (12 tests) ; assertion de `pro-q33` mise à jour (Doomfire Warlock 7 Traits). Suite complète lancée une fois : 4536 tests verts.
 - **Branché / non appelé (grep dans `js/`)** : **branché** — les zones d'armure (`locations`) sont lues par `printedArmour` (`js/core/bestiary-profiles.js`, appelé par `buildParticipantFromBestiary`, lui-même appelé par `js/ui/bestiary-library.js` et `js/core/bestiary-templates.js`) ; les armes nommées deviennent des actions par la même fonction. **Code testé, non appelé** : `slBonus`, `unvaluedSkills`, `optionalSpecialRules`, les notes (`Options: …`, `* Gain the Bite…`) n'ont aucun lecteur dans `js/` (Q37 pour `unvaluedSkills`). Aucune valeur durable de personnage.
+
+## Q37 — compétences imprimées sans valeur (FAIT)
+
+- `js/core/bestiary-profiles.js` : `unvaluedSkillNames` ; `buildParticipantFromBestiary` pose `extensions.v5.bestiary.unvaluedSkills` (la copie dans la Réserve le garde). `js/ui/bestiary-library.js` : ligne « Compétences sans valeur imprimée » de la fiche. `js/ui/fiche-details.js` : section « Compétences sans valeur imprimée (bestiaire) ». Hors de `participant.skills` (QE-Q37-1). Aucune donnée de livre modifiée.
+- Test : `tests/pro-q37-competences-sans-valeur.test.js` (4 tests, rendu par faux DOM : Gurniksson L03, profil L14 à Elthárin). Suite complète : 4540 tests verts.
+- **Branché (appelant + chemin d'interface)** : `unvaluedSkillNames` ← `renderBestiarySheet` (fiche ouverte par le bouton « Fiche » de la bibliothèque) et `renderFicheDetails` (appelé par `workspace-view.js` et `reserve.js`) ; `extensions.v5.bestiary.unvaluedSkills` posé par `buildParticipantFromBestiary`. Le moteur de jeu ne les lit pas (affichage seulement). Aucune valeur durable de personnage.
