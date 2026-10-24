@@ -76,6 +76,7 @@ import { proposeNewKeyword, referentialFromExtensions, setActiveReferential } fr
 import { validateFamiliarLink, buildFamiliarLink, familiarBackLink, familiarLinksOf } from './familiars.js';
 import { hasRegeneration, planRegeneration } from './creature-regeneration.js';
 import { hasManyHeads, headRegistryOf, applyHeadCritical, restoreHead, HEAD_STATES } from './creature-heads.js';
+import { planPsychology, psychologyTraits } from './creature-psychology.js';
 const withV5 = (participant, change) => ({ ...participant, extensions: { ...(participant.extensions || {}), v5: change(participant.extensions?.v5 || {}) } });
 import { validatePrayerSLCaps,getPrayerSLModifiers } from './v5-divine-prayer-caps.js';
 import { previewV5BrokenEscape, isV5BrokenEscapeActionBlocked, BROKEN_ESCAPE_SOURCE, BROKEN_ESCAPE_RULE_VERSION } from './v5-broken-escape.js';
@@ -2302,6 +2303,35 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
             detail: { kind: 'regeneration', roll, healed, criticalHeal: plan.criticalHeal, reminders: plan.reminders } }, ...(draft.log || [])].slice(0, 300) };
       });
       const done = value => ({ ...value, ok: value?.ok !== false, healed, criticalHeal: plan.criticalHeal });
+      return typeof result?.then === 'function' ? result.then(done) : done(result);
+    },
+    /**
+     * Trait Peur ou Terreur d'une créature, au contact ou à la vue : pose l'effet en attente du Test de Calme (`fear-of-talent` /
+     * `terror-of-talent`) sur la cible désignée, ou sur chaque adversaire actif ; alliés, immunisés et rencontre déjà subie exemptés. Annulable.
+     */
+    applyCreaturePsychology(sourceId, key, options = {}) {
+      const source = combat.participants.get(sourceId);
+      const label = key === 'fear' ? 'Peur' : 'Terreur';
+      if (!['fear', 'terror'].includes(key) || !psychologyTraits(source).some(trait => trait.key === key)) return { ok: false, reason: 'no-trait', message: `Ce participant n’a pas le Trait ${label}.` };
+      const envelope = currentEnvelope();
+      const encounterId = v5StoreActionClock(envelope).encounterId || 'default-encounter';
+      const active = (envelope.combat?.participants || []).filter(item => item.zone === 'active' && item.id !== sourceId);
+      const targets = options.targetId ? active.filter(item => item.id === options.targetId) : active.filter(item => item.camp !== source.camp);
+      const additions = new Map();
+      const blocked = [];
+      for (const target of targets) {
+        const plan = planPsychology(source, key, { target, encounterId });
+        if (!plan.available) blocked.push(...plan.unresolved);
+        else if (plan.states.length) additions.set(target.id, plan.states);
+      }
+      if (!additions.size) return { ok: false, reason: 'no-target', message: [...new Set(blocked)].join(' ') || `${label} : aucune cible à affecter (alliée, immunisée ou rencontre déjà subie).` };
+      const names = targets.filter(item => additions.has(item.id)).map(item => item.name || item.id);
+      const result = api.executeCommand('creature-psychology', draft => ({ ...draft,
+        combat: { ...draft.combat, participants: (draft.combat?.participants || []).map(item => (additions.has(item.id) ? { ...item, states: [...(item.states || []), ...additions.get(item.id)] } : item)) },
+        log: [{ id: uid(), kind: 'effect', actorId: sourceId, targetId: options.targetId || null,
+          text: `${source.name} · ${label} : Test de Calme demandé à ${names.join(', ')}`,
+          detail: { kind: 'creature-psychology', key, targetIds: [...additions.keys()] } }, ...(draft.log || [])].slice(0, 300) }));
+      const done = value => ({ ...value, ok: value?.ok !== false, targetIds: [...additions.keys()] });
       return typeof result?.then === 'function' ? result.then(done) : done(result);
     },
     /** Plusieurs têtes : état d'une tête (Blessure Critique à la tête, guérison), posé par le MJ ; le registre est gardé dans `extensions.v5.heads`. */

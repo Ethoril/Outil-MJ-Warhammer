@@ -8,6 +8,16 @@ Plan : `PLAN_PRO_BRANCHEMENT.md`. Choix et questions : `CHOIX_EXECUTANT_BRANCHEM
 | B1 | FAIT (Taille branchée, voir ci-dessous) |
 | B2 | FAIT (Plusieurs têtes branché, voir ci-dessous) |
 | B3 | FAIT (Régénération branchée, voir ci-dessous) |
+| B4 | FAIT (Psychologie branchée, voir ci-dessous ; question BR-06 au MJ) |
+
+## B4 — Psychologie (24/10/2026)
+
+- **Branché** : `psychologyReminders` via `TRAIT_REMINDERS` (`reminders.js`) → rappel de chaque Trait de Psychologie (Peur, Terreur, Bestial, Animosité, Préjugé, Haine, Frénésie, Stupide, Affamé, Craintif, Belliqueux, Territorial…) sur la carte et le Personnage actif.
+- **Branché** : `planPsychology` (Peur, Terreur) et `psychologyTraits` par `Store.applyCreaturePsychology(sourceId, key, { targetId })` (`store.js`), commande annulable `creature-psychology` : pose l'effet en attente (`terror-of-talent`/`fear-of-talent`) sur la cible ou sur chaque adversaire actif ; alliés, Immunité Psychologique et rencontre déjà subie exemptés. Chemin d'interface : bloc de carte `js/ui/psychology-block.js` (cible, bouton par Trait, `card.js`). La cible résout ensuite son Test de Calme par l'action existante « Résoudre la Terreur » (échec : Brisé = indice + DR négatifs après le premier, puis Peur au même indice) ou « surmonter la Peur ».
+- Corrections : `isPsychologyImmune` reconnaît désormais « Immunité Psychologique » (le motif exigeait « psychologie ») ; l'action générique s'appelle « Résoudre la Terreur » et les effets qui suivent une Terreur de Trait ne portent plus la mention « de taille ».
+- **Code testé, non appelé** : `fearImmunity` ; les branches de `planPsychology` autres que Peur/Terreur (Haine, Animosité, Frénésie, Stupide, Affamé, Féroce…) restent des rappels, sans Test ni modificateur appliqué (l'immunité à la Peur par Haine/Belliqueux passe déjà par le service commun).
+- Limite : critère « Dragon » non applicable en V5 (BR-06, question au MJ) ; scénario fait sur le Spectre des cairns (L06, Terreur 3). Indice de Terreur non imprimé : refusé (pas de saisie à l'écran).
+- Test : `tests/pro-b4-psychologie-branchee.test.js`. Nouveau module ajouté à la liste de cache de `sw.js` (version inchangée, comme en B2-B3). Suite : 4602 tests, 4600 verts ; échecs : « sw.js — tous les modules mis en cache » (corrigé ensuite, `tests/sw.test.js` vert) et « recette refuse un cwd externe » (propre au worktree). Aucune assertion existante modifiée.
 
 ## B3 — Régénération (24/10/2026)
 
