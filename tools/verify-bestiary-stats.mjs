@@ -8,7 +8,7 @@ import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { corpusBooks } from './lib/bestiary-extract.mjs';
 import { repairGlyphs } from './lib/bestiary-glyphs.mjs';
-import { JUSTIFIED } from './lib/bestiary-justified.mjs';
+import { JUSTIFIED, JUSTIFIED_Q34 } from './lib/bestiary-justified.mjs';
 import { blockAfter, colonize, completenessGaps, extendedGaps, findValueRow, formatGaps, normalizeBlockText, stackedBlock, veryIncomplete } from './lib/bestiary-completeness.mjs';
 
 // Catégories contrôlées : talents et compétences (Q0), attaques, Traits, équipement, sorts, bruit d'équipement (Q11).
@@ -61,6 +61,13 @@ for (const book of process.argv.slice(2)) {
       }
       // Les manques propres à Q32 s'ajoutent après : une justification relue avant Q32 ne les couvre pas (Q34 les relit).
       for (const [category, list] of Object.entries(formatGaps(record, block, catalogue, traitNames))) gaps[category] = [...gaps[category], ...list.filter(item => !legacy[category].includes(item))];
+      // Q34 : les manques propres à Q32 relus sur la page (JUSTIFIED_Q34, citant la page) sont sortis du décompte à leur tour.
+      for (const [category, reason] of Object.entries(JUSTIFIED_Q34[record.id] || {})) {
+        if (!gaps[category]?.length) continue;
+        justified[category] = { items: [...(justified[category]?.items || []), ...gaps[category]], reason: [justified[category]?.reason, reason].filter(Boolean).join(' | ') };
+        justifiedCount += gaps[category].length;
+        gaps[category] = [];
+      }
       if (Object.keys(justified).length) justified_.push({ id: record.id, name: record.name, page: record.physicalPage, justifiés: justified });
       if (CATEGORIES.some(category => gaps[category].length)) gaps_.push({ id: record.id, name: record.name, page: record.physicalPage, ...gaps });
     }

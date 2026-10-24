@@ -351,6 +351,9 @@ export function parseBlock(block, { traitDictionary = new Set(), talentDictionar
   const optional = sections['Optional Traits'] ?? sections.Optional ?? sections.Options;
   // « … Trained (Broken, Drive) Note: The small but vicious dog… » (L06 p. 325) : la note qui suit la liste n'en fait pas partie.
   if (optional !== undefined) profile.optional = splitList(optional.replace(/\s+Note:.*$/, '')).map(readTraitItem).filter(Boolean);
+  // Q34a : la note imprimée (Traits du chien de ratier, L06 p. 325) est gardée en note du profil, jamais perdue.
+  const optionalNote = optional === undefined ? null : /\s+(Note:.*)$/.exec(optional);
+  if (optionalNote) profile.notes = [...(profile.notes || []), clean(optionalNote[1])];
   if (sections.Skills) profile.skills = readSkills(sections.Skills);
   // Liste décrite (V5) : le premier deux-points précède la première virgule. Liste simple avec une clause (« Criminal, …, Doomed: "…", … », L04 p. 64) : lue comme liste.
   const describedTalents = sections.Talents && /:/.test(sections.Talents) && talentDictionary.size && !(sections.Talents.indexOf(',') >= 0 && sections.Talents.indexOf(',') < sections.Talents.indexOf(':'));

@@ -35,6 +35,16 @@ export const JUSTIFIED = Object.freeze({
   'E0-P-137': { skills: 'L01 p.80 : « amongst which a handful of words… » est la prose de la colonne voisine, intercalée dans la ligne ; Lore (Chaos) 79, Perception 43 et Research 56 sont présents (BODY_OVERRIDES L01:80:0).' },
   'E0-P-167': { trappings: 'L04 p.48 : Hat, Knuckledusters, Leather Jack, Mail Shirt et Sword sont l\'équipement du Racketeer (colonne voisine) ; le Bawd a le sien complet.' },
   'E0-P-074': { traits: 'L06 p.325 : « Trained (Broken, Fetch, War) » est la note du chien de ratier (« Note: … begins play with the Traits »), pas un Trait du Dog ; ses Traits optionnels sont lus.' },
+  // Q34a (L01-L06) : manques propres à Q32, relus sur la page.
+  'E0-P-068': {
+    skills: 'L06 p.321 : Athletics 40, Cool 40, Dodge 40, Gossip 40, Haggle 35, Intimidate 45, Melee (Basic) 55, Perception 50 sont les compétences du Human Watchman (colonne de gauche) ; le Merchant imprime Animal Care 45… Navigation 45 (Drive 45 coupé en fin de ligne), tous présents.',
+    trappings: 'Idem : Copper Badge, Lamp Oil, Lantern and Pole, Leather Jack, Uniform sont l\'équipement du Watchman ; le Merchant imprime Abacus, Canvas Tarpaulin, Cloak, Clothing, Dagger, Hat, Mule and Cart, Pouch, Sling Bag, tous présents.'
+  },
+  'E0-P-069': {
+    trappings: 'Idem : Crowbar et Leather Jerkin sont l\'équipement du Halfling Thief.'
+  },
+  'E0-P-070': { trappings: 'L06 p.322 : Hand Weapon, Knuckledusters et Leather Jack (avec le numéro de page 322) sont l\'équipement du Human Thug (colonne de gauche) ; le Thief imprime Clothing, Crowbar, Dagger, Hood, Leather Jerkin, Pouch, Sack, Sling Bag, tous présents.' },
+  'E0-P-091': { traits: 'L06 p.338 : Melee (Brawling) 35, Stealth 40, Track 40, Swarm et Trained (Broken, Fetch, Guard) sont les compétences et Traits optionnels du Snotling (colonne de gauche) ; le Crypt Ghoul imprime Infected, Night Vision et, en option, Bestial et Venom (Challenging), tous présents.' },
   'E0-P-263': { traits: 'L07 p.142 : Acute Sense (Sight) est imprimé parmi les Traits ; le catalogue en fait un talent, présent dans les talents du profil.' },
   'E0-P-298': { attacks: 'L07 p.175 : « Breath +12 (Fire) » est un Souffle (Trait Breath, rating +12, précision Fire), lu par les attaques naturelles du moteur, pas une attaque de la liste.' },
   'E0-P-299': { traits: 'L07 p.176 : Acute Sense (Vision) est imprimé parmi les Traits ; le catalogue en fait un talent, présent dans les talents du profil (« as Character Talent » retiré).' },
@@ -136,4 +146,14 @@ export const JUSTIFIED = Object.freeze({
   'E0-P-975': { trappings: 'L26 p.109 : « aristocratic » vient de « Appearance: Elderly, aristocratic, well-dressed. » (Experienced Broker, colonne voisine) ; les trois objets imprimés sont présents.' },
   'E0-P-977': { trappingNoise: 'L26 p.109 : « d10 × 30 Gold Crown » est imprimé tel quel en fin de Trappings.' },
   'E0-P-981': { trappings: 'L26 p.111 : « FORMER OFFICER (GOLD 1) » est la fin du titre du profil voisin (Armchair General) ; les six objets imprimés sont présents.' }
+});
+
+/**
+ * Q34 : manques propres au contrôle Q32 (rubriques décrites, noms chaînés, attaques V5…) relus sur la page.
+ * Même forme que JUSTIFIED, mais appliqués après les manques de formatGaps, que JUSTIFIED ne voit pas (QE-Q32-1).
+ */
+export const JUSTIFIED_Q34 = Object.freeze({
+  'E0-P-158': { talents: 'L03 p.56 : Fearless (Witches), Relentless et Resolute sont les talents d\'Alrik Skagsson (colonne de droite) ; Karstin Largsdottir imprime Gregarious, Lip Reading, Magic Resistant, Night Vision, Read/Write, Shadow, Strong-Minded, Sturdy, tous présents.' },
+  'E0-P-161': { talents: 'L03 p.63 : Combat Aware et Inspiring sont les talents de Ragni Thorisson (colonne de droite) ; Gurniksson Hammerback imprime Argumentative, Careful Strike, Magic Resistance, Night Vision, Relentless, Resolute, Sturdy, Tunnel Rat.' },
+  'E0-P-069': { talents: 'L06 p.322 : Acute Sense (Taste), Catfall, Flee! et Night Vision sont les talents du Halfling Thief (colonne de droite) ; le Thug imprime Briber, Cardsharp, Iron Jaw, Very Strong.' }
 });

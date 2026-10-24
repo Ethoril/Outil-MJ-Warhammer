@@ -423,7 +423,7 @@ export function printedV5Attacks(block) {
       name.unshift(words[i]);
     }
     while (name.length && /^(?:of|and|the|with)$/.test(name[0])) name.shift();
-    if (name.length) found.push({ label: `${name.join(' ')} (${hit[2]}/+${hit[3]})`, name: letters(name.join(' ')), damage: hit[3], breath: false });
+    if (name.length) found.push({ label: `${name.join(' ')} (${hit[2]}/+${hit[3]})`, name: letters(name.join(' ')), names: name.map((_, i) => letters(name.slice(i).join(' '))), damage: hit[3], breath: false });
   }
   for (const hit of text.matchAll(/\bBreath\s*\(([^)]*)\)/g)) found.push({ label: `Breath (${hit[1]})`, name: 'breath', damage: null, breath: true });
   return found;
@@ -449,7 +449,8 @@ export function formatGaps(record, block, catalogueNames, traitNames) {
   const breathPresent = [...have].some(key => key.includes('breath')) || (record.attacks || []).some(attack => /breath/i.test(attack.name));
   const attacks = [];
   for (const attack of printedV5Attacks(block)) {
-    if (attack.breath ? !breathPresent : !attackKeys.has(`${attack.name}|${attack.damage}`)) attacks.push(attack.label);
+    // Une qualité imprimée avant le nom (« Optional Bow and Arrows », « Penetrating Tail », « Free Attack Tail ») ou la fin de la qualité de l'attaque précédente n'est pas le nom : un suffixe qui correspond suffit.
+    if (attack.breath ? !breathPresent : !attack.names.some(name => attackKeys.has(`${name}|${attack.damage}`))) attacks.push(attack.label);
   }
   return { talents: gaps.talents.sort(), traits: gaps.traits.sort(), attacks };
 }
