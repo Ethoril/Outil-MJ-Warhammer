@@ -576,16 +576,13 @@
      "name": "Doomed"
     },
     {
-     "name": "Sixth Sense"
-    },
-    {
      "name": "Strong Swimmer"
     }
    ],
    "trappings": [
     "Hand Weapon (Sword)",
     "Leather Jack",
-    "Stolen Amulet of B�gen",
+    "Stolen Amulet of Bögen",
     "Uniform",
     "2d10 Brass Pennies"
    ],
@@ -714,7 +711,7 @@
      "name": "Read/Write"
     },
     {
-     "name": "Resistance (Disease)"
+     "name": "Resistant (Disease)"
     },
     {
      "name": "Seasoned Traveller"
@@ -1349,7 +1346,7 @@
      "name": "Doomed (Thy neighbours worries are thine own!)"
     },
     {
-     "name": "Hardy*"
+     "name": "Hardy"
     },
     {
      "name": "Perfect Pitch"
@@ -1367,7 +1364,11 @@
     "2 Elf Arrows",
     "Sturdy Boots and Cloak",
     "Storm Lantern",
-    "Lantern Oil"
+    "Lantern Oil",
+    "2d10 Silver Shillings"
+   ],
+   "notes": [
+    "*The extra Wounds from Hardy have already been included in the profile."
    ],
    "keywords": [
     "humain"
@@ -2011,7 +2012,7 @@
      "name": "Night Vision"
     },
     {
-     "name": "Nimble Fingered"
+     "name": "Nimble-fingered"
     },
     {
      "name": "Savvy"
@@ -2170,6 +2171,26 @@
     "Wizard's Robes",
     "1 Gold Crown."
    ],
+   "spells": {
+    "Petty": [
+     "Bearings",
+     "Careful Step",
+     "Dart",
+     "Warning"
+    ],
+    "Arcane": [
+     "Bolt",
+     "Dark Vision",
+     "Terrifying",
+     "Ward"
+    ],
+    "Lore of Beasts": [
+     "Beast Master",
+     "Beast Tongue",
+     "Flock of Doom",
+     "The Amber Spear"
+    ]
+   },
    "keywords": [
     "humain"
    ],
@@ -2386,6 +2407,9 @@
     },
     {
      "name": "Doomed (No Master but the River)"
+    },
+    {
+     "name": "Nose for Trouble"
     }
    ],
    "trappings": [
@@ -2737,7 +2761,7 @@
     "Pleasure Barge",
     "200 GC in Coin",
     "Jewellery",
-    "and Promissory Notes"
+    "Promissory Notes"
    ],
    "keywords": [
     "humain"
@@ -2821,6 +2845,7 @@
    ],
    "trappings": [
     "Bowl",
+    "Exquisite Elf Harp (worth at least 45 GC, more to an interested collector)",
     "Troubadour's Outfit",
     "3d10 Brass Pennies"
    ],
@@ -3092,9 +3117,13 @@
    "talents": [
     {
      "name": "Read/Write"
+    },
+    {
+     "name": "Resistant (Chaos)"
     }
    ],
    "trappings": [
+    "Mootish Book (Staying Far Away - Anecdotes of the Ruinous Powers)",
     "Writing Kit",
     "A Nameless Dread"
    ],
@@ -3356,6 +3385,9 @@
     }
    ],
    "talents": [
+    {
+     "name": "Break and Enter"
+    },
     {
      "name": "Criminal"
     },
@@ -3767,10 +3799,7 @@
    ],
    "trappings": [
     "Hand Weapon (Sword)",
-    "Pistol with 10 shots",
-    "this headwear serves a purpose beyond boastful pride",
-    "Veith is able to breath underwater",
-    "and swim with unnatural skill."
+    "Pistol with 10 shots"
    ],
    "keywords": [
     "humain"
@@ -3923,7 +3952,6 @@
     },
     {
      "name": "Creeping",
-     "param": "see below",
      "ref": "E0-T-278"
     },
     {
@@ -3937,7 +3965,6 @@
     },
     {
      "name": "Engulf",
-     "param": "see below",
      "ref": "E0-T-119"
     },
     {
@@ -4023,7 +4050,6 @@
    "traits": [
     {
      "name": "Aquatic",
-     "param": "see below",
      "ref": "E0-T-210"
     },
     {
@@ -4230,12 +4256,10 @@
     },
     {
      "name": "Capricious",
-     "param": "see below",
      "ref": "E0-T-281"
     },
     {
      "name": "Naiad War-Form",
-     "param": "see below",
      "ref": "E0-T-282"
     },
     {
@@ -4517,6 +4541,9 @@
      "ref": "E0-T-086"
     }
    ],
+   "optionalSpecialRules": [
+    "Stealth"
+   ],
    "keywords": [
     "troll"
    ],
@@ -4750,7 +4777,7 @@
      "name": "Seasoned Traveller"
     },
     {
-     "name": "Strong-Minded",
+     "name": "Strong-minded",
      "rank": 2
     },
     {
@@ -5447,6 +5474,23 @@
      "ref": "E0-T-081"
     }
    ],
+   "talents": [
+    {
+     "name": "Dirty Fighting"
+    },
+    {
+     "name": "Flee!"
+    },
+    {
+     "name": "Public Speaker"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Numismatics"
+    }
+   ],
    "trappings": [
     "Soap",
     "Oarsman's Uniform",
@@ -5942,7 +5986,7 @@
      "name": "Read/Write"
     },
     {
-     "name": "Resistance (Poison)"
+     "name": "Resistant (Poison)"
     }
    ],
    "trappings": [
@@ -6420,7 +6464,7 @@
    "trappings": [
     "Entourage of Clerks",
     "Exquisite Clothing",
-    "d10 � 30 Gold Crown"
+    "d10 × 30 Gold Crown"
    ],
    "keywords": [
     "humain"
@@ -7106,7 +7150,7 @@
     "Backpack with 3 Books",
     "Food",
     "Drink",
-    "and Formal Robes",
+    "Formal Robes",
     "Pouch with Shard of Black Stone",
     "Quarterstaff used as walking stick",
     "2 Gold Coins"
@@ -7214,7 +7258,7 @@
     "Hammer Pendant",
     "Backpack with Food",
     "Drink",
-    "and Formal Robes",
+    "Formal Robes",
     "3/5 each"
    ],
    "keywords": [
@@ -7306,6 +7350,11 @@
     {
      "name": "Territorial",
      "ref": "E0-T-056"
+    },
+    {
+     "name": "Trained",
+     "param": "War",
+     "ref": "E0-T-060"
     }
    ],
    "keywords": [

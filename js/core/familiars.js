@@ -51,6 +51,7 @@ export function validateFamiliarLink(master, familiar, link) {
     if (link.kind !== 'power') return refuse('animal-kind', 'Un familier animal est toujours de Puissance.');
     if (!Object.hasOwn(COMPANION_TRAITS, link.species)) return refuse('unknown-species', 'Espèce de compagnon inconnue.');
   }
+  if (familiarLinksOf(familiar).length) return refuse('familiar-is-master', 'Ce participant a déjà un familier : il ne peut pas être le familier d’un autre.');
   return { ok: true };
 }
 

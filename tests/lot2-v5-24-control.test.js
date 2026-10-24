@@ -168,8 +168,8 @@ test('Contrôle 2.4 — Dur à cuire et dix bonus de caractéristiques ne sont j
 
 
 
-test('Contrôle 2.4 — les 206 identités ont des clauses lisibles, mixtes et source suspendue distinctes',()=>{
- const catalogue=getReferenceCatalogue();assert.equal(coverage.items.length,206);assert.equal(new Set(coverage.items.map(row=>row.talentId)).size,206);
+test('Contrôle 2.4 — les 207 identités ont des clauses lisibles, mixtes et source suspendue distinctes',()=>{
+ const catalogue=getReferenceCatalogue();assert.equal(coverage.items.length,207);assert.equal(new Set(coverage.items.map(row=>row.talentId)).size,207);
  for(const row of catalogue.talents){const item=v5TalentCoverage(row.id);assert.equal(item.status,'verified');assert.ok(item.clauses.length>0);for(const clause of item.clauses){assert.ok(['automatic','assisted','reminder','excluded','deferred','owned','pending'].includes(clause.mode));assert.ok(clause.text?.trim());}}
  const publicSpeaker=v5TalentCoverage('talent-public-speaker');assert.ok(publicSpeaker.clauses.some(row=>row.mode==='automatic'));assert.ok(publicSpeaker.clauses.some(row=>row.mode==='assisted'));assert.ok(publicSpeaker.clauses.some(row=>row.mode==='reminder'));assert.ok(!publicSpeaker.clauses.some(row=>row.mode==='pending'));
  const resistant=v5TalentCoverage('talent-resistant');assert.ok(resistant.clauses.some(row=>row.mode==='automatic'));assert.ok(resistant.clauses.some(row=>row.mode==='assisted'));

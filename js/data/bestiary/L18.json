@@ -530,6 +530,9 @@
      "name": "Lip Reading"
     },
     {
+     "name": "Master of Disguise"
+    },
+    {
      "name": "Mimic"
     },
     {
@@ -546,6 +549,9 @@
     },
     {
      "name": "Suave"
+    },
+    {
+     "name": "Tower of Memories"
     }
    ],
    "trappings": [
@@ -555,10 +561,7 @@
     "Pass to Inner Palace",
     "Potion of Invisibility",
     "Throat Slitter",
-    "3 GCs in assorted denominations",
-    "this item grants its wearer the Immunity to Poison Trait",
-    "it has the Fast Quality",
-    "and ignores the AP of any armour with the Weakpoints Flaw."
+    "3 GCs in assorted denominations, but can can lay her hands on 100 GCs within an hour"
    ],
    "keywords": [
     "humain"
@@ -984,7 +987,7 @@
      "name": "Savvy"
     },
     {
-     "name": "Strong-Minded"
+     "name": "Strong-minded"
     }
    ],
    "trappings": [
@@ -1138,13 +1141,13 @@
      "name": "Read/Write"
     },
     {
-     "name": "Resistance (Disease)"
+     "name": "Resistant (Disease)"
     },
     {
      "name": "Savvy"
     },
     {
-     "name": "Strong-Minded"
+     "name": "Strong-minded"
     },
     {
      "name": "Surgery"
@@ -1346,6 +1349,9 @@
      "name": "Lip Reading"
     },
     {
+     "name": "Master of Disguise"
+    },
+    {
      "name": "Mimic"
     },
     {
@@ -1363,6 +1369,9 @@
     },
     {
      "name": "Suave"
+    },
+    {
+     "name": "Tower of Memories"
     }
    ],
    "trappings": [
@@ -1370,11 +1379,12 @@
     "Disguise Kit",
     "2 Doses of Heartkill (WFRP, page 306)",
     "Magical Headband (under broad-brimmed hat, 1 AP, head)",
+    "Magical Sword (counts as a Hand Weapon but is magical and benefits from the Impale and Damaging Qualities)",
     "Mail Coat",
     "Potion of Resistance (see below)",
     "2 Opals (worth 20 GCs each)",
     "access to coins to a value of 22 GCs",
-    "11/�"
+    "11/–"
    ],
    "keywords": [
     "humain"
@@ -1433,6 +1443,7 @@
     {
      "name": "Fear",
      "rating": "2",
+     "conditional": true,
      "ref": "E0-T-022"
     },
     {
@@ -1554,6 +1565,9 @@
     },
     {
      "name": "Disarm"
+    },
+    {
+     "name": "Strike to Stun"
     }
    ],
    "trappings": [
@@ -1625,7 +1639,11 @@
      "ref": "E0-T-033"
     }
    ],
-   "talents": [],
+   "talents": [
+    {
+     "name": "Strike to Stun"
+    }
+   ],
    "trappings": [
     "Club",
     "Ring of Keys"
@@ -1715,7 +1733,11 @@
      "value": 37
     }
    ],
-   "talents": [],
+   "talents": [
+    {
+     "name": "Strike to Stun"
+    }
+   ],
    "trappings": [
     "Club",
     "Dagger",
@@ -1899,6 +1921,9 @@
      "name": "Hardy"
     },
     {
+     "name": "Strike to Stun"
+    },
+    {
      "name": "Strike Mighty Blow"
     }
    ],
@@ -1953,6 +1978,16 @@
      "name": "Melee (Polearm)",
      "nameFr": "Corps à corps (Armes d’hast)",
      "value": 53
+    },
+    {
+     "name": "Language (Magick)",
+     "nameFr": "Langue (Magick)",
+     "value": 74
+    },
+    {
+     "name": "Language (Reikspiel)",
+     "nameFr": "Langue (Reikspiel)",
+     "value": 48
     }
    ],
    "traits": [
@@ -1981,7 +2016,7 @@
      "rank": 2
     },
     {
-     "name": "Instrinctive Diction",
+     "name": "Instinctive Diction",
      "rank": 2
     },
     {
@@ -1989,12 +2024,20 @@
     }
    ],
    "trappings": [
-    "As above"
+    "Grey Robes",
+    "Quarterstaff",
+    "4 Doses of Mandrake Snuff",
+    "Grimoire",
+    "Magic Ring (see box on page 94)",
+    "enough Warpstone to double the SL of three Casting/Channelling Tests (WFRP 244)"
    ],
    "spells": {
     "spells": [
-     "As above",
-     "plus Chain Attack and Terrifying"
+     "Aethyric Armour",
+     "Bolt",
+     "Silence",
+     "Chain Attack",
+     "Terrifying"
     ]
    },
    "keywords": [
@@ -2213,7 +2256,13 @@
     },
     {
      "name": "Noble Blood"
+    },
+    {
+     "name": "Read/Write"
     }
+   ],
+   "notes": [
+    "Parzival's Status has been effectively reduced due to his current circumstances."
    ],
    "keywords": [
     "noble",
@@ -2282,7 +2331,7 @@
      "rank": 2
     },
     {
-     "name": "Strong-Minded"
+     "name": "Strong-minded"
     },
     {
      "name": "Tenacious"
@@ -2423,15 +2472,21 @@
     {
      "name": "Immunity",
      "param": "Fear",
+     "conditional": true,
      "ref": "E0-T-031"
     },
     {
      "name": "Tough",
+     "conditional": true,
      "ref": "E0-T-086"
     }
    ],
    "trappings": [
-    "Warpstone filling (15 GC)"
+    "Warpstone filling (15 GC)",
+    "Piece of Warpstone (50 GC)"
+   ],
+   "notes": [
+    "*These fade away in 24 hours if Wuder discards all warpstone from his possession."
    ],
    "nameFrSource": "proposition"
   },
@@ -2489,6 +2544,7 @@
     {
      "name": "Fly",
      "rating": "100",
+     "conditional": true,
      "ref": "E0-T-023"
     },
     {
@@ -2545,6 +2601,13 @@
    "armour": {
     "ap": 2
    },
+   "attacks": [
+    {
+     "name": "Weapon",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
    "traits": [
     {
      "name": "Construct",
@@ -2577,8 +2640,10 @@
      "ref": "E0-T-062"
     }
    ],
-   "specialRules": [
-    "Weapon+7 Possessions"
+   "trappings": [
+    "Mail coat",
+    "helmet",
+    "axe"
    ],
    "keywords": [
     "zombie"
@@ -2614,6 +2679,11 @@
      "name": "Bite",
      "damage": 5,
      "trait": "Bite"
+    },
+    {
+     "name": "Weapon",
+     "damage": 6,
+     "trait": "Weapon"
     }
    ],
    "traits": [
@@ -2634,6 +2704,7 @@
     {
      "name": "Fly",
      "rating": "100",
+     "conditional": true,
      "ref": "E0-T-023"
     },
     {
@@ -2651,7 +2722,7 @@
     }
    ],
    "specialRules": [
-    "Weapon +6 Flaming Dangerous"
+    "Flaming Dangerous"
    ],
    "starred": [
     "M"
@@ -2697,6 +2768,18 @@
      "trait": "Weapon"
     }
    ],
+   "skills": [
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 75
+    },
+    {
+     "name": "Melee (Parry)",
+     "nameFr": "Corps à corps (Parade)",
+     "value": 80
+    }
+   ],
    "traits": [
     {
      "name": "Shield",
@@ -2734,6 +2817,11 @@
      "name": "Undead",
      "ref": "E0-T-061"
     }
+   ],
+   "trappings": [
+    "Mail coat",
+    "helmet",
+    "axe"
    ],
    "keywords": [
     "zombie"
@@ -2858,7 +2946,13 @@
      "name": "Instinctive Diction"
     },
     {
+     "name": "Iron Will"
+    },
+    {
      "name": "Magical Sense"
+    },
+    {
+     "name": "Nose for Trouble"
     },
     {
      "name": "Petty Magic"
@@ -2873,13 +2967,19 @@
      "name": "Sixth Sense"
     },
     {
-     "name": "Strong-minded."
+     "name": "Strong-minded"
     }
    ],
+   "trappings": [
+    "dagger",
+    "spell ingredients",
+    "bedroll",
+    "necromantic tomes",
+    "purse with 5 GCs 17/6."
+   ],
    "spells": {
-    "spells": [
-     "All Lore of Death and Lore of Necromancy spells",
-     "at GM's discretion."
+    "notes": [
+     "All Lore of Death and Lore of Necromancy spells, at GM's discretion."
     ]
    },
    "nameFrSource": "proposition"
@@ -2915,6 +3015,12 @@
      "name": "Weapon",
      "damage": 8,
      "trait": "Weapon"
+    },
+    {
+     "name": "Bow",
+     "damage": 6,
+     "trait": "Ranged",
+     "ranged": true
     }
    ],
    "traits": [
@@ -2945,7 +3051,7 @@
     }
    ],
    "specialRules": [
-    "Ranged (Bow) +6 Headless"
+    "Headless"
    ],
    "abilities": [
     "E0-T-265"
@@ -2981,6 +3087,13 @@
    "armour": {
     "ap": 2
    },
+   "attacks": [
+    {
+     "name": "Weapon",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
    "traits": [
     {
      "name": "Construct",
@@ -3009,7 +3122,7 @@
     }
    ],
    "specialRules": [
-    "Weapon +7 Headless"
+    "Headless"
    ],
    "abilities": [
     "E0-T-265"

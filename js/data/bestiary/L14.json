@@ -31,6 +31,294 @@
     "Soc": 75
    },
    "wounds": 18,
+   "armour": {
+    "ap": 4,
+    "printedTotal": 7
+   },
+   "attacks": [
+    {
+     "name": "Blade of Sea Gold",
+     "damage": 8,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Animal Care",
+     "nameFr": "Soin aux animaux",
+     "value": 108
+    },
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 95
+    },
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 100
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 110
+    },
+    {
+     "name": "Charm Animal",
+     "nameFr": "Emprise sur les animaux",
+     "value": 103
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 64
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 118
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 50
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 95
+    },
+    {
+     "name": "Drive",
+     "nameFr": "Conduite d’attelage",
+     "value": 95
+    },
+    {
+     "name": "Entertain (Singing)",
+     "nameFr": "Divertissement (Chant)",
+     "value": 80
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 123
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 108
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 95
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 110
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 69
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 108
+    },
+    {
+     "name": "Language (Bretonnian)",
+     "nameFr": "Langue (Bretonnien)",
+     "value": 98
+    },
+    {
+     "name": "Language (Classical)",
+     "nameFr": "Langue (Classique)",
+     "value": 108
+    },
+    {
+     "name": "Language (Guilder)",
+     "nameFr": "Langue (Guilde)",
+     "value": 108
+    },
+    {
+     "name": "Language (Norse)",
+     "nameFr": "Langue (Norse)",
+     "value": 93
+    },
+    {
+     "name": "Language (Reikspiel)",
+     "nameFr": "Langue (Reikspiel)",
+     "value": 98
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 110
+    },
+    {
+     "name": "Lore (Heraldry)",
+     "nameFr": "Savoir (Héraldique)",
+     "value": 108
+    },
+    {
+     "name": "Lore (Cothique)",
+     "nameFr": "Savoir (Cothique)",
+     "frUnverified": true,
+     "value": 108
+    },
+    {
+     "name": "Lore (Politics)",
+     "nameFr": "Savoir (Politique)",
+     "value": 108
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 120
+    },
+    {
+     "name": "Navigation",
+     "nameFr": "Orientation",
+     "value": 108
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 108
+    },
+    {
+     "name": "Play (Harp)",
+     "nameFr": "Musicien (Harp)",
+     "frUnverified": true,
+     "value": 75
+    },
+    {
+     "name": "Ranged (Bow)",
+     "nameFr": "Projectiles (Arc)",
+     "value": 65
+    },
+    {
+     "name": "Ride (Horse)",
+     "nameFr": "Chevaucher (Cheval)",
+     "value": 95
+    },
+    {
+     "name": "Sail (Albatross)",
+     "nameFr": "Voile (Albatross)",
+     "frUnverified": true,
+     "value": 85
+    },
+    {
+     "name": "Sail (Bloodhawk)",
+     "nameFr": "Voile (Bloodhawk)",
+     "frUnverified": true,
+     "value": 85
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 64
+    }
+   ],
+   "unvaluedSkills": [
+    "Language (Elthárin)"
+   ],
+   "talents": [
+    {
+     "name": "Acute Sense (Sight)"
+    },
+    {
+     "name": "Blather"
+    },
+    {
+     "name": "Briber"
+    },
+    {
+     "name": "Carouser"
+    },
+    {
+     "name": "Cat-tongued"
+    },
+    {
+     "name": "Commanding Presence"
+    },
+    {
+     "name": "Dealmaker"
+    },
+    {
+     "name": "Etiquette (Guilder, Nobles, Soldiers)"
+    },
+    {
+     "name": "Iron Jaw"
+    },
+    {
+     "name": "Iron Will"
+    },
+    {
+     "name": "Luck",
+     "rank": 3
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Noble Blood"
+    },
+    {
+     "name": "Numismatics"
+    },
+    {
+     "name": "Orientation"
+    },
+    {
+     "name": "Pilot"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Savvy"
+    },
+    {
+     "name": "Seasoned Traveller"
+    },
+    {
+     "name": "Sharp"
+    },
+    {
+     "name": "Sixth Sense"
+    },
+    {
+     "name": "Strong Swimmer"
+    },
+    {
+     "name": "Suave"
+    },
+    {
+     "name": "Sure Shot"
+    },
+    {
+     "name": "War Leader"
+    },
+    {
+     "name": "Wealthy",
+     "rank": 20
+    }
+   ],
+   "trappings": [
+    "Blade of Sea Gold",
+    "Breastplate and Helm (Ithilmar)",
+    "Courtly Garb",
+    "Ceremonial Family Sword",
+    "Jewellery worth 850 GC",
+    "Shield",
+    "Mines near Tor Koruali",
+    "Nautilus Palace",
+    "Vaults containing vast wealth of coin, rare minerals, and magical items"
+   ],
    "keywords": [
     "noble",
     "haut-elfe"
@@ -60,6 +348,169 @@
     "Soc": 40
    },
    "wounds": 16,
+   "armour": {
+    "ap": 4,
+    "printedTotal": 8
+   },
+   "attacks": [
+    {
+     "name": "Spear",
+     "damage": 7,
+     "trait": "Weapon",
+     "qualities": [
+      "Impale"
+     ]
+    },
+    {
+     "name": "Sword",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 60
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 40
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 63
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 50
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 60
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 50
+    },
+    {
+     "name": "Entertain (Singing)",
+     "nameFr": "Divertissement (Chant)",
+     "value": 50
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 50
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 50
+    },
+    {
+     "name": "Language (Battle)",
+     "nameFr": "Langue (Bataille)",
+     "value": 50
+    },
+    {
+     "name": "Language (Reikspiel)",
+     "nameFr": "Langue (Reikspiel)",
+     "value": 43
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 65
+    },
+    {
+     "name": "Melee (Polearm)",
+     "nameFr": "Corps à corps (Armes d’hast)",
+     "value": 65
+    },
+    {
+     "name": "Navigation",
+     "nameFr": "Orientation",
+     "value": 53
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 45
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 53
+    },
+    {
+     "name": "Row",
+     "nameFr": "Ramer",
+     "value": 40
+    },
+    {
+     "name": "Sail (Hawkship)",
+     "nameFr": "Voile (Hawkship)",
+     "frUnverified": true,
+     "value": 60
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 40
+    }
+   ],
+   "unvaluedSkills": [
+    "Language (Elthárin)"
+   ],
+   "traits": [
+    {
+     "name": "Animosity",
+     "param": "Druchii",
+     "ref": "E0-T-003"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Acute Sense (Sight)"
+    },
+    {
+     "name": "Drilled"
+    },
+    {
+     "name": "Etiquette (Soldiers)"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Old Salt"
+    },
+    {
+     "name": "Orientation"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Strong Swimmer"
+    },
+    {
+     "name": "Warrior Born"
+    }
+   ],
+   "trappings": [
+    "Mail Shirt",
+    "Open Helm",
+    "Shield",
+    "Spear",
+    "Sword"
+   ],
    "nameFrSource": "proposition"
   },
   {
@@ -85,6 +536,190 @@
     "Soc": 40
    },
    "wounds": 16,
+   "armour": {
+    "ap": 4,
+    "printedTotal": 8
+   },
+   "attacks": [
+    {
+     "name": "Spear",
+     "damage": 7,
+     "trait": "Weapon",
+     "qualities": [
+      "Impale"
+     ]
+    },
+    {
+     "name": "Sword",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 65
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 45
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 73
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 50
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 65
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 60
+    },
+    {
+     "name": "Entertain (Singing)",
+     "nameFr": "Divertissement (Chant)",
+     "value": 50
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 50
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 50
+    },
+    {
+     "name": "Heal",
+     "nameFr": "Guérison",
+     "value": 45
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 70
+    },
+    {
+     "name": "Language (Battle)",
+     "nameFr": "Langue (Bataille)",
+     "value": 55
+    },
+    {
+     "name": "Language (Reikspiel)",
+     "nameFr": "Langue (Reikspiel)",
+     "value": 43
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 45
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 75
+    },
+    {
+     "name": "Melee (Polearm)",
+     "nameFr": "Corps à corps (Armes d’hast)",
+     "value": 75
+    },
+    {
+     "name": "Navigation",
+     "nameFr": "Orientation",
+     "value": 68
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 50
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 73
+    },
+    {
+     "name": "Row",
+     "nameFr": "Ramer",
+     "value": 40
+    },
+    {
+     "name": "Sail (Hawkship)",
+     "nameFr": "Voile (Hawkship)",
+     "frUnverified": true,
+     "value": 60
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 40
+    }
+   ],
+   "unvaluedSkills": [
+    "Language (Elthárin)"
+   ],
+   "traits": [
+    {
+     "name": "Animosity",
+     "param": "Druchii",
+     "ref": "E0-T-003"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Acute Sense (Sight)"
+    },
+    {
+     "name": "Combat Aware"
+    },
+    {
+     "name": "Drilled"
+    },
+    {
+     "name": "Etiquette (Soldiers)"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Old Salt"
+    },
+    {
+     "name": "Orientation"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Strong Swimmer"
+    },
+    {
+     "name": "War Leader"
+    },
+    {
+     "name": "Warrior Born"
+    }
+   ],
+   "trappings": [
+    "Mail Shirt",
+    "Open Helm",
+    "Shield",
+    "Spear",
+    "Sword"
+   ],
    "nameFrSource": "proposition"
   },
   {
@@ -110,6 +745,402 @@
     "Soc": 60
    },
    "wounds": 19,
+   "armour": {
+    "ap": 2,
+    "printedTotal": 7
+   },
+   "attacks": [
+    {
+     "name": "Elf Bow",
+     "damage": 8,
+     "trait": "Ranged",
+     "rangeYards": 150,
+     "qualities": [
+      "Accurate",
+      "Damaging",
+      "Impale",
+      "Penetrating",
+      "Precise"
+     ],
+     "ranged": true
+    },
+    {
+     "name": "Incandescent Spear",
+     "damage": 10,
+     "trait": "Weapon",
+     "qualities": [
+      "Impale"
+     ]
+    },
+    {
+     "name": "Sword",
+     "damage": 9,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 102
+    },
+    {
+     "name": "Art (Calligraphy)",
+     "nameFr": "Art (Calligraphie)",
+     "value": 65
+    },
+    {
+     "name": "Art (Cartography)",
+     "nameFr": "Art (Cartographie)",
+     "value": 65
+    },
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 65
+    },
+    {
+     "name": "Channelling (Azyr)",
+     "nameFr": "Focalisation (Azyr)",
+     "frUnverified": true,
+     "value": 89
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 70
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 57
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 51
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 114
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 97
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 61
+    },
+    {
+     "name": "Entertain (Singing)",
+     "nameFr": "Divertissement (Chant)",
+     "value": 65
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 95
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 90
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 80
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 65
+    },
+    {
+     "name": "Heal",
+     "nameFr": "Guérison",
+     "value": 105
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 57
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 97
+    },
+    {
+     "name": "Language (Magick)",
+     "nameFr": "Langue (Magick)",
+     "value": 100
+    },
+    {
+     "name": "Language (Reikspiel)",
+     "nameFr": "Langue (Reikspiel)",
+     "value": 90
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 90
+    },
+    {
+     "name": "Lore (Astrology)",
+     "nameFr": "Savoir (Astrologie)",
+     "value": 100
+    },
+    {
+     "name": "Lore (Heraldry)",
+     "nameFr": "Savoir (Héraldique)",
+     "value": 105
+    },
+    {
+     "name": "Lore (Magic)",
+     "nameFr": "Savoir (Magie)",
+     "value": 105
+    },
+    {
+     "name": "Lore (Oceans)",
+     "nameFr": "Savoir (Oceans)",
+     "frUnverified": true,
+     "value": 115
+    },
+    {
+     "name": "Lore (Theology)",
+     "nameFr": "Savoir (Théologie)",
+     "value": 95
+    },
+    {
+     "name": "Lore (Warfare)",
+     "nameFr": "Savoir (Guerre)",
+     "value": 110
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 107
+    },
+    {
+     "name": "Melee (Polearm)",
+     "nameFr": "Corps à corps (Armes d’hast)",
+     "value": 102
+    },
+    {
+     "name": "Navigation",
+     "nameFr": "Orientation",
+     "value": 77
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 95
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 112
+    },
+    {
+     "name": "Play (Flute)",
+     "nameFr": "Musicien (Flute)",
+     "frUnverified": true,
+     "value": 65
+    },
+    {
+     "name": "Ranged (Bow)",
+     "nameFr": "Projectiles (Arc)",
+     "value": 96
+    },
+    {
+     "name": "Research",
+     "nameFr": "Recherche",
+     "value": 90
+    },
+    {
+     "name": "Ride (Horse)",
+     "nameFr": "Chevaucher (Cheval)",
+     "value": 87
+    },
+    {
+     "name": "Row",
+     "nameFr": "Ramer",
+     "value": 52
+    },
+    {
+     "name": "Sail (Hawkship)",
+     "nameFr": "Voile (Hawkship)",
+     "frUnverified": true,
+     "value": 85
+    },
+    {
+     "name": "Sail (Dragonship)",
+     "nameFr": "Voile (Dragonship)",
+     "frUnverified": true,
+     "value": 80
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 57
+    }
+   ],
+   "unvaluedSkills": [
+    "Language (Elthárin)"
+   ],
+   "talents": [
+    {
+     "name": "Acute Sense (Hearing, Sight)"
+    },
+    {
+     "name": "Aethyric Attunement"
+    },
+    {
+     "name": "Arcane Magic (Lore of Heavens)"
+    },
+    {
+     "name": "Combat Aware",
+     "rank": 2
+    },
+    {
+     "name": "Combat Master",
+     "rank": 3
+    },
+    {
+     "name": "Combat Reflexes",
+     "rank": 2
+    },
+    {
+     "name": "Coolheaded"
+    },
+    {
+     "name": "Deadeye Shot"
+    },
+    {
+     "name": "Distract"
+    },
+    {
+     "name": "Etiquette (Crew, Nobles, Scholars, Soldiers)"
+    },
+    {
+     "name": "Fleet-footed"
+    },
+    {
+     "name": "Furious Assault"
+    },
+    {
+     "name": "Inspiring"
+    },
+    {
+     "name": "Instinctive Diction"
+    },
+    {
+     "name": "Luck",
+     "rank": 3
+    },
+    {
+     "name": "Marksman"
+    },
+    {
+     "name": "Master and Commander"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Noble Blood"
+    },
+    {
+     "name": "Old Salt"
+    },
+    {
+     "name": "Orientation"
+    },
+    {
+     "name": "Petty Magic"
+    },
+    {
+     "name": "Pilot"
+    },
+    {
+     "name": "Public Speaker"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Savant (Astrology, Oceans)"
+    },
+    {
+     "name": "Savvy"
+    },
+    {
+     "name": "Second Sight"
+    },
+    {
+     "name": "Sixth Sense"
+    },
+    {
+     "name": "Sniper"
+    },
+    {
+     "name": "Strike Mighty Blow",
+     "rank": 2
+    },
+    {
+     "name": "Strong Swimmer",
+     "rank": 2
+    },
+    {
+     "name": "War Leader"
+    },
+    {
+     "name": "Wealthy",
+     "rank": 18
+    }
+   ],
+   "trappings": [
+    "Courtly Garb",
+    "Elf Bow with 12 Elf Arrows",
+    "Incandescent Spear",
+    "Jewellery worth 550 GC",
+    "Mansion in Tor Koruali",
+    "Palace in Elisia",
+    "Shield",
+    "Suit of Ithilmar Plate Armour (Durable 2, Fine 2, Impenetrable, Weakpoints)",
+    "Sword"
+   ],
+   "spells": {
+    "Petty": [
+     "Bearings",
+     "Bless Arrow",
+     "Dazzle",
+     "Gust",
+     "Identify Disease",
+     "Protection from Rain",
+     "Purify Water",
+     "Reveal Magic"
+    ],
+    "Lore of Heavens": [
+     "Blessings of Bel Shanaar",
+     "Divination",
+     "Drop",
+     "Enemy Foreseen",
+     "Entangle",
+     "Lens on the Sky",
+     "Let the Four Winds Blow!",
+     "Magic Shield",
+     "Sea of Glass",
+     "The First Portent of Amul",
+     "The Second Portent of Amul",
+     "The Third Portent of Amul"
+    ]
+   },
    "keywords": [
     "haut-elfe"
    ],
@@ -138,6 +1169,235 @@
     "Soc": 42
    },
    "wounds": 13,
+   "attacks": [
+    {
+     "name": "Elf Bow",
+     "damage": 8,
+     "trait": "Ranged",
+     "rangeYards": 150,
+     "qualities": [
+      "Accurate",
+      "Damaging",
+      "Impale",
+      "Penetrating",
+      "Precise"
+     ],
+     "ranged": true
+    },
+    {
+     "name": "Blade of Darting Steel",
+     "damage": 8,
+     "trait": "Weapon",
+     "qualities": [
+      "Fast",
+      "Precise"
+     ]
+    }
+   ],
+   "skills": [
+    {
+     "name": "Animal Care",
+     "nameFr": "Soin aux animaux",
+     "value": 44
+    },
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 57
+    },
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 52
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 47
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 41
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 50
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 52
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 41
+    },
+    {
+     "name": "Entertain (Singing)",
+     "nameFr": "Divertissement (Chant)",
+     "value": 45
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 44
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 44
+    },
+    {
+     "name": "Heal",
+     "nameFr": "Guérison",
+     "value": 39
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 41
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 86
+    },
+    {
+     "name": "Language (Classical)",
+     "nameFr": "Langue (Classique)",
+     "value": 44
+    },
+    {
+     "name": "Language (Reikspiel)",
+     "nameFr": "Langue (Reikspiel)",
+     "value": 44
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 52
+    },
+    {
+     "name": "Lore (Heraldry)",
+     "nameFr": "Savoir (Héraldique)",
+     "value": 49
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 93
+    },
+    {
+     "name": "Melee (Cavalry)",
+     "nameFr": "Corps à corps (Cavalerie)",
+     "value": 88
+    },
+    {
+     "name": "Melee (Fencing)",
+     "nameFr": "Corps à corps (Escrime)",
+     "value": 88
+    },
+    {
+     "name": "Melee (Parry)",
+     "nameFr": "Corps à corps (Parade)",
+     "value": 83
+    },
+    {
+     "name": "Navigation",
+     "nameFr": "Orientation",
+     "value": 37
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 86
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 39
+    },
+    {
+     "name": "Play (Harp)",
+     "nameFr": "Musicien (Harp)",
+     "frUnverified": true,
+     "value": 65
+    },
+    {
+     "name": "Ranged (Bow)",
+     "nameFr": "Projectiles (Arc)",
+     "value": 49
+    },
+    {
+     "name": "Ride (Horse)",
+     "nameFr": "Chevaucher (Cheval)",
+     "value": 52
+    },
+    {
+     "name": "Sail (Hawkship)",
+     "nameFr": "Voile (Hawkship)",
+     "frUnverified": true,
+     "value": 52
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 36
+    }
+   ],
+   "unvaluedSkills": [
+    "Language (Elthárin)"
+   ],
+   "talents": [
+    {
+     "name": "Acute Sense (Sight)"
+    },
+    {
+     "name": "Beat Blade"
+    },
+    {
+     "name": "Combat Reflexes"
+    },
+    {
+     "name": "Distract"
+    },
+    {
+     "name": "Etiquette (Nobles)"
+    },
+    {
+     "name": "Luck"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Noble Blood"
+    },
+    {
+     "name": "Old Salt"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Sixth Sense"
+    },
+    {
+     "name": "Warrior Born"
+    }
+   ],
+   "trappings": [
+    "Blade of Darting Steel",
+    "Courtly Garb",
+    "Elf Bow with 12 Elf Arrows",
+    "Elven Steed",
+    "Jewellery worth 100 GC",
+    "Lance",
+    "Main Gauche"
+   ],
    "keywords": [
     "noble",
     "haut-elfe"
@@ -167,6 +1427,264 @@
     "Soc": 53
    },
    "wounds": 13,
+   "attacks": [
+    {
+     "name": "Bow of Anirain",
+     "damage": 9,
+     "trait": "Ranged",
+     "rangeYards": 150,
+     "qualities": [
+      "Accurate",
+      "Damaging",
+      "Impale",
+      "Penetrating",
+      "Precise"
+     ],
+     "ranged": true
+    },
+    {
+     "name": "Sword",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Animal Care",
+     "nameFr": "Soin aux animaux",
+     "value": 52
+    },
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 59
+    },
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 63
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 58
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 41
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 51
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 54
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 54
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 51
+    },
+    {
+     "name": "Entertain (Singing)",
+     "nameFr": "Divertissement (Chant)",
+     "value": 61
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 47
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 52
+    },
+    {
+     "name": "Heal",
+     "nameFr": "Guérison",
+     "value": 47
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 41
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 80
+    },
+    {
+     "name": "Language (Classical)",
+     "nameFr": "Langue (Classique)",
+     "value": 52
+    },
+    {
+     "name": "Language (Reikspiel)",
+     "nameFr": "Langue (Reikspiel)",
+     "value": 52
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 63
+    },
+    {
+     "name": "Lore (Beasts)",
+     "nameFr": "Savoir (Bêtes)",
+     "value": 52
+    },
+    {
+     "name": "Lore (Heraldry)",
+     "nameFr": "Savoir (Héraldique)",
+     "value": 52
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 69
+    },
+    {
+     "name": "Melee (Cavalry)",
+     "nameFr": "Corps à corps (Cavalerie)",
+     "value": 69
+    },
+    {
+     "name": "Melee (Fencing)",
+     "nameFr": "Corps à corps (Escrime)",
+     "value": 69
+    },
+    {
+     "name": "Melee (Parry)",
+     "nameFr": "Corps à corps (Parade)",
+     "value": 64
+    },
+    {
+     "name": "Navigation",
+     "nameFr": "Orientation",
+     "value": 45
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 52
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 80
+    },
+    {
+     "name": "Play (Harp)",
+     "nameFr": "Musicien (Harp)",
+     "frUnverified": true,
+     "value": 64
+    },
+    {
+     "name": "Ranged (Bow)",
+     "nameFr": "Projectiles (Arc)",
+     "value": 64
+    },
+    {
+     "name": "Ride (Horse)",
+     "nameFr": "Chevaucher (Cheval)",
+     "value": 54
+    },
+    {
+     "name": "Sail (Hawkship)",
+     "nameFr": "Voile (Hawkship)",
+     "frUnverified": true,
+     "value": 49
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 36
+    }
+   ],
+   "unvaluedSkills": [
+    "Language (Elthárin)"
+   ],
+   "traits": [
+    {
+     "name": "Prejudice",
+     "param": "Non-Elves",
+     "ref": "E0-T-081"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Accurate Shot"
+    },
+    {
+     "name": "Acute Sense (Sight)"
+    },
+    {
+     "name": "Attractive"
+    },
+    {
+     "name": "Briber"
+    },
+    {
+     "name": "Carouser"
+    },
+    {
+     "name": "Etiquette (Nobles)"
+    },
+    {
+     "name": "Feint"
+    },
+    {
+     "name": "Luck"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Noble Blood"
+    },
+    {
+     "name": "Old Salt"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Reversal"
+    },
+    {
+     "name": "Rover"
+    },
+    {
+     "name": "Sixth Sense"
+    },
+    {
+     "name": "Step Aside"
+    },
+    {
+     "name": "Suave"
+    }
+   ],
+   "trappings": [
+    "Bow of Anirain with 12 Elf Arrows",
+    "Breastplate and Helm",
+    "Courtly Garb",
+    "Elven Steed",
+    "Jewellery worth 100 GC",
+    "Lance",
+    "Main Gauche",
+    "Sword"
+   ],
    "keywords": [
     "noble",
     "haut-elfe"
@@ -278,6 +1796,150 @@
     "Soc": 42
    },
    "wounds": 13,
+   "attacks": [
+    {
+     "name": "Elf Bow",
+     "damage": 8,
+     "trait": "Ranged",
+     "rangeYards": 150,
+     "qualities": [
+      "Accurate",
+      "Damaging",
+      "Impale",
+      "Penetrating",
+      "Precise"
+     ],
+     "ranged": true
+    },
+    {
+     "name": "Spear",
+     "damage": 7,
+     "trait": "Weapon",
+     "qualities": [
+      "Impale"
+     ]
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 65
+    },
+    {
+     "name": "Charm Animal",
+     "nameFr": "Emprise sur les animaux",
+     "value": 58
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 58
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 48
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 48
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 62
+    },
+    {
+     "name": "Language (Norse)",
+     "nameFr": "Langue (Norse)",
+     "value": 48
+    },
+    {
+     "name": "Language (Reikspiel)",
+     "nameFr": "Langue (Reikspiel)",
+     "value": 46
+    },
+    {
+     "name": "Melee (Polearm)",
+     "nameFr": "Corps à corps (Armes d’hast)",
+     "value": 73
+    },
+    {
+     "name": "Navigation",
+     "nameFr": "Orientation",
+     "value": 66
+    },
+    {
+     "name": "Ranged (Bow)",
+     "nameFr": "Projectiles (Arc)",
+     "value": 66
+    },
+    {
+     "name": "Sail (Razorbill)",
+     "nameFr": "Voile (Razorbill)",
+     "frUnverified": true,
+     "value": 65
+    },
+    {
+     "name": "Sail (Tidcutter)",
+     "nameFr": "Voile (Tidcutter)",
+     "frUnverified": true,
+     "value": 65
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 61
+    }
+   ],
+   "unvaluedSkills": [
+    "Language (Elthárin)"
+   ],
+   "talents": [
+    {
+     "name": "Acute Sense (Sight)"
+    },
+    {
+     "name": "Animal Affinity"
+    },
+    {
+     "name": "Coolheaded"
+    },
+    {
+     "name": "Fisherman"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Orientation"
+    },
+    {
+     "name": "Sixth Sense"
+    },
+    {
+     "name": "Strider (Coastal)"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Strong Back"
+    },
+    {
+     "name": "Strong Swimmer"
+    }
+   ],
+   "trappings": [
+    "Elf Bow and 10 Elf Arrows",
+    "1d10 Fish",
+    "Net",
+    "Spear",
+    "Tidecutter",
+    "Worn but sturdy travelling gear"
+   ],
    "keywords": [
     "haut-elfe"
    ],
@@ -306,6 +1968,232 @@
     "Soc": 65
    },
    "wounds": 15,
+   "attacks": [
+    {
+     "name": "Sword",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 70
+    },
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 85
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 95
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 86
+    },
+    {
+     "name": "Channelling (Ulgu)",
+     "nameFr": "Focalisation (Ulgu)",
+     "frUnverified": true,
+     "value": 76
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 47
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 85
+    },
+    {
+     "name": "Entertain (Singing)",
+     "nameFr": "Divertissement (Chant)",
+     "value": 68
+    },
+    {
+     "name": "Entertain (Storytelling)",
+     "nameFr": "Divertissement (Contes)",
+     "value": 80
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 86
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 91
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 95
+    },
+    {
+     "name": "Lore (Arts)",
+     "nameFr": "Savoir (Arts)",
+     "frUnverified": true,
+     "value": 86
+    },
+    {
+     "name": "Lore (Law)",
+     "nameFr": "Savoir (Loi)",
+     "value": 81
+    },
+    {
+     "name": "Lore (Poisons)",
+     "nameFr": "Savoir (Poison)",
+     "value": 81
+    },
+    {
+     "name": "Lore (Tor Koruali)",
+     "nameFr": "Savoir (Tor Koruali)",
+     "frUnverified": true,
+     "value": 86
+    },
+    {
+     "name": "Lore (Ulthuan)",
+     "nameFr": "Savoir (Ulthuan)",
+     "frUnverified": true,
+     "value": 81
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 90
+    },
+    {
+     "name": "Language (Grand Cathayan)",
+     "nameFr": "Langue (Grand Cathayan)",
+     "frUnverified": true,
+     "value": 69
+    },
+    {
+     "name": "Language (Magick)",
+     "nameFr": "Langue (Magick)",
+     "value": 76
+    },
+    {
+     "name": "Language (Tilean)",
+     "nameFr": "Langue (Tiléen)",
+     "value": 69
+    },
+    {
+     "name": "Language (Reikspiel)",
+     "nameFr": "Langue (Reikspiel)",
+     "value": 76
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 80
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 64
+    },
+    {
+     "name": "Navigation",
+     "nameFr": "Orientation",
+     "value": 76
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 95
+    },
+    {
+     "name": "Perform (Dance)",
+     "nameFr": "Représentation (Danse)",
+     "value": 85
+    }
+   ],
+   "unvaluedSkills": [
+    "Language (Elthárin)"
+   ],
+   "talents": [
+    {
+     "name": "Acute Sense (Sight)"
+    },
+    {
+     "name": "Attractive"
+    },
+    {
+     "name": "Aethyric Attunement"
+    },
+    {
+     "name": "Arcane Magic (Shadow)"
+    },
+    {
+     "name": "Blather"
+    },
+    {
+     "name": "Briber"
+    },
+    {
+     "name": "Carouser"
+    },
+    {
+     "name": "Criminal"
+    },
+    {
+     "name": "Dealmaker"
+    },
+    {
+     "name": "Etiquette (Ulthuan)"
+    },
+    {
+     "name": "Gregarious"
+    },
+    {
+     "name": "Hatred (Followers of Slaanesh)"
+    },
+    {
+     "name": "Kingpin"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Savvy"
+    },
+    {
+     "name": "Sixth Sense"
+    },
+    {
+     "name": "Strong Swimmer"
+    },
+    {
+     "name": "Wealthy",
+     "rank": 2
+    }
+   ],
+   "trappings": [
+    "Network of Courtesans and Informants",
+    "Personal Blend of Narcotics",
+    "Sultry Clothing",
+    "Sword"
+   ],
+   "spells": {
+    "Lore of Shadows": [
+     "Doppelganger",
+     "Illusion",
+     "Mindslip",
+     "Shadowstep"
+    ]
+   },
    "keywords": [
     "haut-elfe"
    ],
@@ -339,6 +2227,14 @@
      "name": "Elf Bow",
      "damage": 8,
      "trait": "Ranged",
+     "rangeYards": 150,
+     "qualities": [
+      "Accurate",
+      "Damaging",
+      "Impale",
+      "Penetrating",
+      "Precise"
+     ],
      "ranged": true
     },
     {
@@ -656,9 +2552,94 @@
      "value": 37
     }
    ],
+   "unvaluedSkills": [
+    "Language (Eltharin)"
+   ],
    "talents": [
     {
+     "name": "Acute Sense (Sight)"
+    },
+    {
+     "name": "Aethyric Attunement"
+    },
+    {
+     "name": "Arcane Magic (Beasts, Death, Fire, Heavens, Light, Life, Metal, Shadow)"
+    },
+    {
+     "name": "Blather"
+    },
+    {
+     "name": "Blessed by Isha"
+    },
+    {
+     "name": "Bookish"
+    },
+    {
+     "name": "Cadai Meditation"
+    },
+    {
+     "name": "Commanding Presence"
+    },
+    {
+     "name": "Coolheaded"
+    },
+    {
+     "name": "Detect Artefact"
+    },
+    {
+     "name": "Etiquette (Nobles)"
+    },
+    {
+     "name": "Fast Hands"
+    },
+    {
+     "name": "Hardy"
+    },
+    {
+     "name": "Lileath's Blessing",
+     "rank": 3
+    },
+    {
      "name": "High Magic"
+    },
+    {
+     "name": "Iron Will"
+    },
+    {
+     "name": "Magical Sense"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Petty Magic"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Savant (Law, Magic)"
+    },
+    {
+     "name": "Savvy"
+    },
+    {
+     "name": "Second Sight"
+    },
+    {
+     "name": "Sixth Sense"
+    },
+    {
+     "name": "Speedreader"
+    },
+    {
+     "name": "Strong Swimmer"
+    },
+    {
+     "name": "Suave"
+    },
+    {
+     "name": "War Wizard"
     }
    ],
    "trappings": [
@@ -666,6 +2647,95 @@
     "Imposing Ledger",
     "Robes of Office"
    ],
+   "spells": {
+    "Petty": [
+     "Bless Arrow",
+     "Calm",
+     "Green Finger",
+     "Identify Disease",
+     "Protection from Rain",
+     "Purify Water",
+     "Remove Dirt",
+     "Reveal Magic"
+    ],
+    "Lore of Beasts": [
+     "Amber Talons",
+     "Beast Master",
+     "Beast Tongue",
+     "Flock of Doom"
+    ],
+    "Lore of Death": [
+     "Sanctify",
+     "Scythe of Shyish",
+     "Soul Vortex",
+     "Steal Life"
+    ],
+    "Lore of Fire": [
+     "Aqshy's Aegis",
+     "Blast (Fire)",
+     "Cauterise",
+     "Crown of Flame",
+     "Firewall",
+     "Flaming Sword of Rhuin",
+     "Purge"
+    ],
+    "Lore of Heavens": [
+     "Blast (Heavens)",
+     "Bolt (Heavens)",
+     "Cerulean Shield",
+     "Comet of Casandora",
+     "Starcrossed",
+     "The First Portent of Amul"
+    ],
+    "Lore of Metal": [
+     "Aethyric Armour (Metal)",
+     "Aethyric Arms (Metal)",
+     "Enchant Weapon",
+     "Fool's Gold",
+     "Glittering Robe"
+    ],
+    "Lore of Life": [
+     "Barkskin",
+     "Bridge (Life)",
+     "Earthblood",
+     "Earthpool",
+     "Flight (Life)",
+     "Forest of Thorns",
+     "Lie of the Land",
+     "Lifebloom",
+     "Regenerate"
+    ],
+    "Lore of Light": [
+     "Banishment",
+     "Blinding Light",
+     "Clarity of Thought",
+     "Healing Light",
+     "Speed of Thought"
+    ],
+    "Lore of Shadows": [
+     "Doppelganger",
+     "Illusion",
+     "Mindslip",
+     "Shadowsteed",
+     "Shadowstep"
+    ],
+    "High Magic": [
+     "Coruscation of Finreir",
+     "Curse of Arrow Attraction",
+     "Deadlock",
+     "Drain Magic",
+     "Glamour of Teclis",
+     "Soul Quench",
+     "Tempest"
+    ],
+    "Magic of Hoeth": [
+     "Arcane Insight",
+     "Divine Stylus",
+     "Enlightenment",
+     "Psychic Sending",
+     "The Primary Words"
+    ]
+   },
    "keywords": [
     "haut-elfe"
    ],
@@ -694,6 +2764,198 @@
     "Soc": 59
    },
    "wounds": 12,
+   "attacks": [
+    {
+     "name": "Sword",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Animal Care",
+     "nameFr": "Soin aux animaux",
+     "value": 60
+    },
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 65
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 74
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 34
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 53
+    },
+    {
+     "name": "Drive",
+     "nameFr": "Conduite d’attelage",
+     "value": 48
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 69
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 65
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 68
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 74
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 52
+    },
+    {
+     "name": "Language (Elthárin)",
+     "nameFr": "Langue (Elthárin)",
+     "frUnverified": true,
+     "value": 73
+    },
+    {
+     "name": "Language (Guilder)",
+     "nameFr": "Langue (Guilde)",
+     "value": 68
+    },
+    {
+     "name": "Language (Norse)",
+     "nameFr": "Langue (Norse)",
+     "value": 61
+    },
+    {
+     "name": "Language (Tilean)",
+     "nameFr": "Langue (Tiléen)",
+     "value": 62
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 65
+    },
+    {
+     "name": "Lore (History)",
+     "nameFr": "Savoir (Histoire)",
+     "value": 68
+    },
+    {
+     "name": "Lore (Marienburg)",
+     "nameFr": "Savoir (Marienburg)",
+     "frUnverified": true,
+     "value": 68
+    },
+    {
+     "name": "Lore (Reikland)",
+     "nameFr": "Savoir (Reikland)",
+     "value": 63
+    },
+    {
+     "name": "Lore (Ulthuan)",
+     "nameFr": "Savoir (Ulthuan)",
+     "frUnverified": true,
+     "value": 69
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 36
+    },
+    {
+     "name": "Navigation",
+     "nameFr": "Orientation",
+     "value": 54
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 58
+    },
+    {
+     "name": "Ranged (Bow)",
+     "nameFr": "Projectiles (Arc)",
+     "value": 38
+    },
+    {
+     "name": "Secret Signs (Guilder)",
+     "nameFr": "Signes secrets (Guilde)",
+     "value": 65
+    }
+   ],
+   "traits": [
+    {
+     "name": "Prejudice",
+     "param": "Dwarfs",
+     "ref": "E0-T-081"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Attractive"
+    },
+    {
+     "name": "Blather"
+    },
+    {
+     "name": "Briber"
+    },
+    {
+     "name": "Cat-tongued"
+    },
+    {
+     "name": "Dealmaker"
+    },
+    {
+     "name": "Embezzle"
+    },
+    {
+     "name": "Etiquette (Guilder, High Elves)"
+    },
+    {
+     "name": "Lightning Reflexes"
+    },
+    {
+     "name": "Pure Soul"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Savvy"
+    },
+    {
+     "name": "Suave"
+    },
+    {
+     "name": "Super Numerate"
+    }
+   ],
+   "trappings": [
+    "Fine Quality",
+    "Horse",
+    "Sword",
+    "Town House in Lothern",
+    "Very Clean Clothes"
+   ],
    "keywords": [
     "humain"
    ],
@@ -723,6 +2985,141 @@
    },
    "wounds": 1,
    "size": "tiny",
+   "skills": [
+    {
+     "name": "Charm Animal",
+     "nameFr": "Emprise sur les animaux",
+     "value": 93
+    },
+    {
+     "name": "Channelling (Dhar)",
+     "nameFr": "Focalisation (Dhar)",
+     "frUnverified": true,
+     "value": 98
+    },
+    {
+     "name": "Channelling (Ghyran)",
+     "nameFr": "Focalisation (Ghyran)",
+     "frUnverified": true,
+     "value": 108
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 103
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 108
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 55
+    },
+    {
+     "name": "Entertain (Fortune-telling)",
+     "nameFr": "Divertissement (Fortune-telling)",
+     "frUnverified": true,
+     "value": 71
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 39
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 75
+    },
+    {
+     "name": "Language (Eltharin)",
+     "nameFr": "Langue (Eltharin)",
+     "value": 60
+    },
+    {
+     "name": "Language (Magick)",
+     "nameFr": "Langue (Magick)",
+     "value": 75
+    },
+    {
+     "name": "Language (Reikspeil)",
+     "nameFr": "Langue (Reikspeil)",
+     "frUnverified": true,
+     "value": 60
+    },
+    {
+     "name": "Lore (Athel Loren)",
+     "nameFr": "Savoir (Athel Loren)",
+     "frUnverified": true,
+     "value": 55
+    },
+    {
+     "name": "Lore (Cothique)",
+     "nameFr": "Savoir (Cothique)",
+     "frUnverified": true,
+     "value": 75
+    },
+    {
+     "name": "Lore (Dark Magic)",
+     "nameFr": "Savoir (Magie noire)",
+     "value": 65
+    },
+    {
+     "name": "Lore (Elves)",
+     "nameFr": "Savoir (Elves)",
+     "frUnverified": true,
+     "value": 75
+    },
+    {
+     "name": "Lore (Law)",
+     "nameFr": "Savoir (Loi)",
+     "value": 55
+    },
+    {
+     "name": "Lore (Magic)",
+     "nameFr": "Savoir (Magie)",
+     "value": 75
+    },
+    {
+     "name": "Lore (Nature)",
+     "nameFr": "Savoir (Nature)",
+     "frUnverified": true,
+     "value": 65
+    },
+    {
+     "name": "Lore (Theology)",
+     "nameFr": "Savoir (Théologie)",
+     "value": 65
+    },
+    {
+     "name": "Melee (Polearm)",
+     "nameFr": "Corps à corps (Armes d’hast)",
+     "value": 63
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 80
+    },
+    {
+     "name": "Sleight of Hand",
+     "nameFr": "Escamotage",
+     "value": 76
+    },
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 98
+    },
+    {
+     "name": "Stealth (Urban)",
+     "nameFr": "Discrétion (Urbaine)",
+     "value": 93
+    }
+   ],
    "traits": [
     {
      "name": "Animosity",
@@ -769,6 +3166,89 @@
      "ref": "E0-T-067"
     }
    ],
+   "talents": [
+    {
+     "name": "Aethyric Attunement"
+    },
+    {
+     "name": "Arcane Magic (Lore of Life, Witchcraft)"
+    },
+    {
+     "name": "Blather"
+    },
+    {
+     "name": "Berserk Charge"
+    },
+    {
+     "name": "Careful Strike"
+    },
+    {
+     "name": "Combat Aware"
+    },
+    {
+     "name": "Detect Artefact"
+    },
+    {
+     "name": "Flee!"
+    },
+    {
+     "name": "Frightening"
+    },
+    {
+     "name": "Instinctive Diction",
+     "rank": 3
+    },
+    {
+     "name": "Iron Will"
+    },
+    {
+     "name": "Luck",
+     "rank": 3
+    },
+    {
+     "name": "Magical Sense"
+    },
+    {
+     "name": "Menacing"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Rover"
+    },
+    {
+     "name": "Second Sight"
+    },
+    {
+     "name": "Sixth Sense"
+    },
+    {
+     "name": "Strike to Injure"
+    }
+   ],
+   "trappings": [
+    "Twig Spear"
+   ],
+   "spells": {
+    "Lore of Life": [
+     "Barkskin",
+     "Dwellers Below",
+     "Earthblood",
+     "Earthpool",
+     "Forest of Thorns",
+     "Gardener's Warcry",
+     "Nature's Whisper",
+     "Vital Growth"
+    ],
+    "Lore of Witchcraft": [
+     "Creeping Menace (Giant Rats, Seagulls)",
+     "Curse of Ill Fortune",
+     "Curse of Crippling Pain",
+     "Haunting Horror",
+     "The Evil Eye"
+    ]
+   },
    "nameFrSource": "proposition"
   },
   {
@@ -794,6 +3274,218 @@
     "Soc": 64
    },
    "wounds": 12,
+   "attacks": [
+    {
+     "name": "Sword",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Animal Care",
+     "nameFr": "Soin aux animaux",
+     "value": 69
+    },
+    {
+     "name": "Art (Painting)",
+     "nameFr": "Art (Peinture)",
+     "value": 82
+    },
+    {
+     "name": "Art (Topiary)",
+     "nameFr": "Art (Topiary)",
+     "frUnverified": true,
+     "value": 72
+    },
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 76
+    },
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 74
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 84
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 49
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 47
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 79
+    },
+    {
+     "name": "Drive",
+     "nameFr": "Conduite d’attelage",
+     "value": 76
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 76
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 52
+    },
+    {
+     "name": "Entertain (Acting)",
+     "nameFr": "Divertissement (Acteur)",
+     "value": 84
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 100
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 69
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 90
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 84
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 98
+    },
+    {
+     "name": "Language (Bretonnian)",
+     "nameFr": "Langue (Bretonnien)",
+     "value": 85
+    },
+    {
+     "name": "Language (Reikspiel)",
+     "nameFr": "Langue (Reikspiel)",
+     "value": 85
+    },
+    {
+     "name": "Language (Wastelander)",
+     "nameFr": "Langue (Wastelander)",
+     "value": 85
+    },
+    {
+     "name": "Lore (Heraldry)",
+     "nameFr": "Savoir (Héraldique)",
+     "value": 85
+    },
+    {
+     "name": "Lore (Magic)",
+     "nameFr": "Savoir (Magie)",
+     "value": 95
+    },
+    {
+     "name": "Lore (Politics)",
+     "nameFr": "Savoir (Politique)",
+     "value": 95
+    },
+    {
+     "name": "Lore (Theology)",
+     "nameFr": "Savoir (Théologie)",
+     "value": 80
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 42
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 103
+    },
+    {
+     "name": "Stealth (Urban)",
+     "nameFr": "Discrétion (Urbaine)",
+     "value": 66
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 32
+    },
+    {
+     "name": "Trade (Jeweller)",
+     "nameFr": "Métier (Jeweller)",
+     "frUnverified": true,
+     "value": 82
+    }
+   ],
+   "unvaluedSkills": [
+    "Language (Elthárin)"
+   ],
+   "traits": [
+    {
+     "name": "Prejudice",
+     "param": "Non-Elves",
+     "ref": "E0-T-081"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Acute Sense (Sight)"
+    },
+    {
+     "name": "Artistic"
+    },
+    {
+     "name": "Beneath Notice"
+    },
+    {
+     "name": "Carouser"
+    },
+    {
+     "name": "Detect Artefact"
+    },
+    {
+     "name": "Gregarious"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Sixth Sense"
+    },
+    {
+     "name": "Strong Swimmer"
+    },
+    {
+     "name": "Suave"
+    }
+   ],
+   "trappings": [
+    "Elegant but Restrained Robes",
+    "Slender Knife",
+    "Staff of Office",
+    "Sword"
+   ],
    "keywords": [
     "haut-elfe"
    ],
@@ -822,6 +3514,194 @@
     "Soc": 37
    },
    "wounds": 17,
+   "armour": {
+    "ap": 1,
+    "printedTotal": 6
+   },
+   "attacks": [
+    {
+     "name": "Sling",
+     "damage": 7,
+     "trait": "Ranged",
+     "rangeYards": 60,
+     "ranged": true
+    },
+    {
+     "name": "Axe",
+     "damage": 8,
+     "trait": "Weapon",
+     "qualities": [
+      "Hack",
+      "Unbalanced"
+     ]
+    }
+   ],
+   "skills": [
+    {
+     "name": "Animal Care",
+     "nameFr": "Soin aux animaux",
+     "value": 49
+    },
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 43
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 47
+    },
+    {
+     "name": "Charm Animal",
+     "nameFr": "Emprise sur les animaux",
+     "value": 36
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 57
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 49
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 62
+    },
+    {
+     "name": "Entertain (Acting)",
+     "nameFr": "Divertissement (Acteur)",
+     "value": 51
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 42
+    },
+    {
+     "name": "Language (Elthárin)",
+     "nameFr": "Langue (Elthárin)",
+     "frUnverified": true,
+     "value": 57
+    },
+    {
+     "name": "Language (Reikspiel)",
+     "nameFr": "Langue (Reikspiel)",
+     "value": 54
+    },
+    {
+     "name": "Lore (Beasts)",
+     "nameFr": "Savoir (Bêtes)",
+     "value": 65
+    },
+    {
+     "name": "Lore (Cothique)",
+     "nameFr": "Savoir (Cothique)",
+     "frUnverified": true,
+     "value": 50
+    },
+    {
+     "name": "Lore (Norsca)",
+     "nameFr": "Savoir (Norsca)",
+     "frUnverified": true,
+     "value": 54
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 40
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 75
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 52
+    },
+    {
+     "name": "Ranged (Sling)",
+     "nameFr": "Projectiles (Fronde)",
+     "value": 59
+    },
+    {
+     "name": "Row",
+     "nameFr": "Ramer",
+     "value": 56
+    },
+    {
+     "name": "Set Trap",
+     "nameFr": "Piégeage",
+     "value": 54
+    },
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 58
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 54
+    },
+    {
+     "name": "Track",
+     "nameFr": "Pistage",
+     "value": 43
+    }
+   ],
+   "talents": [
+    {
+     "name": "Accurate Shot"
+    },
+    {
+     "name": "Acute Sense (Hearing)"
+    },
+    {
+     "name": "Cat-tongued"
+    },
+    {
+     "name": "Flee!"
+    },
+    {
+     "name": "Linguistics"
+    },
+    {
+     "name": "Lip Reading"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Resistant (Chaos)"
+    },
+    {
+     "name": "Rover"
+    },
+    {
+     "name": "Sea Legs"
+    },
+    {
+     "name": "Secret Identity"
+    },
+    {
+     "name": "Sixth Sense"
+    }
+   ],
+   "trappings": [
+    "Animal Traps",
+    "Furs",
+    "Hand Axe",
+    "Leather Jerkin",
+    "Nordlander Merchant Disguise",
+    "Sling with Stone Bullets"
+   ],
    "keywords": [
     "norse"
    ],
@@ -850,6 +3730,294 @@
     "Soc": 53
    },
    "wounds": 18,
+   "armour": {
+    "ap": 1,
+    "printedTotal": 5
+   },
+   "attacks": [
+    {
+     "name": "Rending Star",
+     "damage": 6,
+     "trait": "Ranged",
+     "rangeYards": 12,
+     "ranged": true
+    },
+    {
+     "name": "Main Gauche",
+     "damage": 6,
+     "trait": "Weapon",
+     "qualities": [
+      "Defensive"
+     ]
+    },
+    {
+     "name": "Sword",
+     "damage": 8,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 120
+    },
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 73
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 78
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 68
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 95
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 61
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 110
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 71
+    },
+    {
+     "name": "Entertain (Acting)",
+     "nameFr": "Divertissement (Acteur)",
+     "value": 73
+    },
+    {
+     "name": "Entertain (Taunt)",
+     "nameFr": "Divertissement (Raillerie)",
+     "value": 78
+    },
+    {
+     "name": "Entertain (Storytelling)",
+     "nameFr": "Divertissement (Contes)",
+     "value": 73
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 85
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 73
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 73
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 58
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 125
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 135
+    },
+    {
+     "name": "Melee (Parrying)",
+     "nameFr": "Corps à corps (Parrying)",
+     "frUnverified": true,
+     "value": 120
+    },
+    {
+     "name": "Navigation",
+     "nameFr": "Orientation",
+     "value": 85
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 125
+    },
+    {
+     "name": "Perform (Dancing)",
+     "nameFr": "Représentation (Danse)",
+     "value": 110
+    },
+    {
+     "name": "Pick Lock",
+     "nameFr": "Crochetage",
+     "value": 88
+    },
+    {
+     "name": "Ranged (Crossbow)",
+     "nameFr": "Projectiles (Arbalète)",
+     "value": 99
+    },
+    {
+     "name": "Ranged (Thrown)",
+     "nameFr": "Projectiles (Jet)",
+     "value": 114
+    },
+    {
+     "name": "Ride (Horse)",
+     "nameFr": "Chevaucher (Cheval)",
+     "value": 110
+    },
+    {
+     "name": "Sail (Skiff)",
+     "nameFr": "Voile (Skiff)",
+     "frUnverified": true,
+     "value": 110
+    },
+    {
+     "name": "Sleight of Hand",
+     "nameFr": "Escamotage",
+     "value": 93
+    },
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 130
+    },
+    {
+     "name": "Stealth (Underground)",
+     "nameFr": "Discrétion (Souterraine)",
+     "value": 110
+    },
+    {
+     "name": "Stealth (Urban)",
+     "nameFr": "Discrétion (Urbaine)",
+     "value": 120
+    }
+   ],
+   "talents": [
+    {
+     "name": "Accurate Shot",
+     "rank": 2
+    },
+    {
+     "name": "Acute Sense (Sight)"
+    },
+    {
+     "name": "Ambidextrous"
+    },
+    {
+     "name": "Careful Strike",
+     "rank": 4
+    },
+    {
+     "name": "Combat Reflexes",
+     "rank": 3
+    },
+    {
+     "name": "Coolheaded"
+    },
+    {
+     "name": "Disarm"
+    },
+    {
+     "name": "Distract"
+    },
+    {
+     "name": "Dual Wielder"
+    },
+    {
+     "name": "Enclosed Fighter"
+    },
+    {
+     "name": "Fleet-footed"
+    },
+    {
+     "name": "Furious Assault",
+     "rank": 3
+    },
+    {
+     "name": "Hatred (High Elves)"
+    },
+    {
+     "name": "In-fighter"
+    },
+    {
+     "name": "Lightning Reflexes"
+    },
+    {
+     "name": "Luck",
+     "rank": 4
+    },
+    {
+     "name": "Marksman"
+    },
+    {
+     "name": "Master of Disguise"
+    },
+    {
+     "name": "Mimic"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Second Sight"
+    },
+    {
+     "name": "Secret Identity"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Reversal"
+    },
+    {
+     "name": "Shadow"
+    },
+    {
+     "name": "Strike Mighty Blow"
+    },
+    {
+     "name": "Strike to Injure",
+     "rank": 2
+    },
+    {
+     "name": "Strike to Stun",
+     "rank": 2
+    },
+    {
+     "name": "Warrior Born"
+    }
+   ],
+   "trappings": [
+    "Cloak",
+    "Heart of Woe",
+    "Hood",
+    "Leather Jack",
+    "Main Gauche",
+    "2 Potions of Diabolic Strength",
+    "6 Rending Stars",
+    "Sword",
+    "6 Vials of Black Lotus Blade Venom",
+    "6 Vials of Dark Venom Blade Venom"
+   ],
    "keywords": [
     "elfe-noir"
    ],
@@ -887,12 +4055,20 @@
     {
      "name": "Bite",
      "damage": 9,
-     "trait": "Bite"
+     "trait": "Bite",
+     "qualities": [
+      "Fast",
+      "Penetrating"
+     ]
     },
     {
      "name": "Claws",
      "damage": 10,
-     "trait": "Weapon"
+     "trait": "Weapon",
+     "qualities": [
+      "Fast",
+      "Penetrating"
+     ]
     }
    ],
    "skills": [
@@ -915,6 +4091,10 @@
     {
      "name": "Bite",
      "rating": "+9",
+     "qualities": [
+      "Fast",
+      "Penetrating"
+     ],
      "ref": "E0-T-006"
     },
     {
@@ -1015,6 +4195,12 @@
    "size": "monstrous",
    "attacks": [
     {
+     "name": "Tentacles",
+     "damage": 9,
+     "trait": "Tentacles",
+     "count": 8
+    },
+    {
      "name": "Beak",
      "damage": 12,
      "trait": "Weapon"
@@ -1054,6 +4240,12 @@
     {
      "name": "Stealthy",
      "ref": "E0-T-050"
+    },
+    {
+     "name": "Tentacles",
+     "rating": "+9",
+     "count": 8,
+     "ref": "E0-T-055"
     }
    ],
    "keywords": [
@@ -1212,6 +4404,11 @@
      "name": "Ward",
      "rating": "8+",
      "ref": "E0-T-066"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Acute Sense (Vision)"
     }
    ],
    "nameFrSource": "proposition"

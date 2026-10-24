@@ -169,6 +169,9 @@
      "rank": 4
     },
     {
+     "name": "Iron Will"
+    },
+    {
      "name": "Luck",
      "rank": 3
     },
@@ -246,7 +249,7 @@
      "trait": "Weapon"
     },
     {
-     "name": "Zweih�nder",
+     "name": "Zweihänder",
      "damage": 11,
      "trait": "Weapon"
     }
@@ -480,7 +483,11 @@
      "ref": "E0-T-086"
     }
    ],
-   "talents": [],
+   "talents": [
+    {
+     "name": "Strike to Stun"
+    }
+   ],
    "nameFrSource": "proposition"
   },
   {
@@ -659,6 +666,7 @@
     }
    ],
    "trappings": [
+    "Poisoned Dagger (the first Wound it causes inflicts the effects of Heartkill; the blade is coated with enough poison for three strikes)",
     "Servant's Clothing"
    ],
    "nameFrSource": "proposition"
@@ -919,7 +927,13 @@
     "Soc": 73
    },
    "wounds": 10,
-   "talents": [],
+   "attacks": [
+    {
+     "name": "Fist",
+     "damage": 3,
+     "trait": "Weapon"
+    }
+   ],
    "nameFrSource": "proposition"
   },
   {
@@ -1088,6 +1102,7 @@
      "name": "Whip",
      "damage": 5,
      "trait": "Ranged",
+     "rangeYards": 6,
      "ranged": true
     },
     {
@@ -1132,6 +1147,20 @@
     "Soc": 43
    },
    "wounds": 17,
+   "attacks": [
+    {
+     "name": "Dagger",
+     "damage": 5,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Prejudice",
+     "param": "Warriors",
+     "ref": "E0-T-081"
+    }
+   ],
    "keywords": [
     "slaanesh",
     "cultiste"
@@ -1166,12 +1195,14 @@
      "name": "Blunderbuss",
      "damage": 8,
      "trait": "Ranged",
+     "rangeYards": 20,
      "ranged": true
     },
     {
      "name": "Whip",
      "damage": 6,
      "trait": "Ranged",
+     "rangeYards": 6,
      "ranged": true
     },
     {
@@ -1347,7 +1378,7 @@
      "rank": 2
     },
     {
-     "name": "Nimble Fingered"
+     "name": "Nimble-fingered"
     },
     {
      "name": "Read/Write"
@@ -1572,7 +1603,7 @@
      "name": "Perfect Pitch"
     },
     {
-     "name": "Read/ Write"
+     "name": "Read/Write"
     },
     {
      "name": "Small"
@@ -1802,6 +1833,9 @@
     {
      "name": "Etiquette (Nobles)",
      "rank": 2
+    },
+    {
+     "name": "Iron Will"
     },
     {
      "name": "Marksman"
@@ -2038,6 +2072,7 @@
      "name": "Pistol",
      "damage": 8,
      "trait": "Ranged",
+     "rangeYards": 20,
      "ranged": true
     },
     {
@@ -2435,6 +2470,7 @@
     },
     {
      "name": "Creature Weapons",
+     "param": "Claws",
      "ref": "E0-T-288"
     },
     {
@@ -2737,6 +2773,9 @@
      "rank": 4
     },
     {
+     "name": "Iron Will"
+    },
+    {
      "name": "Lip Reading"
     },
     {
@@ -2748,7 +2787,7 @@
      "rank": 5
     },
     {
-     "name": "Nimble Fingered"
+     "name": "Nimble-fingered"
     },
     {
      "name": "Noble Blood"
@@ -2761,7 +2800,7 @@
      "name": "Read/Write"
     },
     {
-     "name": "Resistance (Disease)"
+     "name": "Resistant (Disease)"
     },
     {
      "name": "Savvy"
@@ -2781,7 +2820,7 @@
      "rank": 2
     },
     {
-     "name": "Warleader"
+     "name": "War Leader"
     },
     {
      "name": "Wealthy",
@@ -2822,6 +2861,13 @@
     "Soc": 58
    },
    "wounds": 20,
+   "attacks": [
+    {
+     "name": "Dagger",
+     "damage": 5,
+     "trait": "Weapon"
+    }
+   ],
    "traits": [
     {
      "name": "Corruption",
@@ -2856,7 +2902,21 @@
     },
     {
      "name": "Mutation",
+     "param": "Cosmetic: Extra mouth on stomach",
      "ref": "E0-T-040"
+    },
+    {
+     "name": "Spellcaster",
+     "param": "Daemonology, Slaanesh: Breath, Distracting, Eavesdrop, Manifest Lesser Daemon, Mundane Aura, Open Lock",
+     "ref": "E0-T-048"
+    },
+    {
+     "name": "Painless",
+     "ref": "E0-T-042"
+    },
+    {
+     "name": "Tough",
+     "ref": "E0-T-086"
     }
    ],
    "keywords": [
@@ -3176,6 +3236,7 @@
      "name": "Throwing Knife",
      "damage": 5,
      "trait": "Ranged",
+     "rangeYards": 6,
      "ranged": true
     },
     {
@@ -3375,6 +3436,7 @@
      "name": "Improvised Explosive",
      "damage": 6,
      "trait": "Ranged",
+     "rangeYards": 3,
      "ranged": true
     },
     {
@@ -3782,12 +3844,19 @@
      "name": "Magnum Opus"
     },
     {
+     "name": "Master of Disguise",
+     "rank": 6
+    },
+    {
      "name": "Master Orator",
      "rank": 6
     },
     {
      "name": "Mimic",
      "rank": 3
+    },
+    {
+     "name": "Nose for Trouble"
     },
     {
      "name": "Public Speaker",
@@ -3908,6 +3977,18 @@
     "Soc": 43
    },
    "wounds": 28,
+   "attacks": [
+    {
+     "name": "Tail",
+     "damage": 6,
+     "trait": "Tail"
+    },
+    {
+     "name": "Dagger",
+     "damage": 5,
+     "trait": "Weapon"
+    }
+   ],
    "skills": [
     {
      "name": "Channelling",
@@ -3976,7 +4057,26 @@
     },
     {
      "name": "Mutation",
+     "param": "Cosmetic: Maggoty Tail",
      "ref": "E0-T-040"
+    },
+    {
+     "name": "Spellcaster",
+     "param": "Nurgle: Breath, Corrosive Blood, Reveal the Inner Beauty, Shock, Sleep",
+     "ref": "E0-T-048"
+    },
+    {
+     "name": "Painless",
+     "ref": "E0-T-042"
+    },
+    {
+     "name": "Tail",
+     "rating": "6",
+     "ref": "E0-T-054"
+    },
+    {
+     "name": "Tough",
+     "ref": "E0-T-086"
     }
    ],
    "trappings": [
@@ -4430,13 +4530,16 @@
      "name": "Etiquette (Nobles)"
     },
     {
+     "name": "Iron Will"
+    },
+    {
      "name": "Luck"
     },
     {
      "name": "Mimic"
     },
     {
-     "name": "Nimble Fingered"
+     "name": "Nimble-fingered"
     },
     {
      "name": "Noble Blood"
@@ -4451,7 +4554,7 @@
      "name": "Savvy"
     },
     {
-     "name": "Unshakable"
+     "name": "Unshakeable"
     },
     {
      "name": "War Leader"
@@ -4485,6 +4588,13 @@
     "Soc": 12
    },
    "wounds": 19,
+   "attacks": [
+    {
+     "name": "Claws",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
    "traits": [
     {
      "name": "Chill Grasp",
@@ -4521,11 +4631,9 @@
     },
     {
      "name": "Unstable",
+     "conditional": true,
      "ref": "E0-T-062"
     }
-   ],
-   "specialRules": [
-    "Weapon (Claws) +7 *Note"
    ],
    "abilities": [
     "E0-T-286"
@@ -4640,6 +4748,13 @@
     "Soc": 43
    },
    "wounds": 10,
+   "attacks": [
+    {
+     "name": "Dagger",
+     "damage": 5,
+     "trait": "Weapon"
+    }
+   ],
    "traits": [
     {
      "name": "Corruption",
@@ -4649,6 +4764,7 @@
     {
      "name": "Spellcaster",
      "param": "Manifest Lesser Daemon",
+     "conditional": true,
      "ref": "E0-T-048"
     }
    ],
@@ -4662,9 +4778,6 @@
     {
      "name": "Wealthy"
     }
-   ],
-   "specialRules": [
-    "Weapon (Dagger) +5 *Note"
    ],
    "keywords": [
     "cultiste"
@@ -4733,7 +4846,10 @@
    ],
    "talents": [
     {
-     "name": "Flee! Noble Blood"
+     "name": "Flee!"
+    },
+    {
+     "name": "Noble Blood"
     },
     {
      "name": "Strike Mighty Blow"
@@ -5146,7 +5262,7 @@
      "name": "Noble Blood"
     },
     {
-     "name": "Read/ Write"
+     "name": "Read/Write"
     },
     {
      "name": "Suave"
@@ -5483,6 +5599,9 @@
      "name": "Lip Reading"
     },
     {
+     "name": "Master of Disguise"
+    },
+    {
      "name": "Noble Blood"
     },
     {
@@ -5673,10 +5792,10 @@
      "name": "Dealmaker"
     },
     {
-     "name": "Etiqutte (Guilder)"
+     "name": "Etiquette (Guilder)"
     },
     {
-     "name": "Etiqutte (Nobles)"
+     "name": "Etiquette (Nobles)"
     },
     {
      "name": "Field Dressing"
@@ -5825,6 +5944,11 @@
      "value": 81
     },
     {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 75
+    },
+    {
      "name": "Language (Bretonnian)",
      "nameFr": "Langue (Bretonnien)",
      "value": 63
@@ -5884,7 +6008,7 @@
      "name": "Embezzle"
     },
     {
-     "name": "Ettiquette (Merchants, Nobles)"
+     "name": "Etiquette (Merchants, Nobles)"
     },
     {
      "name": "Luck"
@@ -6191,7 +6315,7 @@
      "name": "Etiquette (Physicians)"
     },
     {
-     "name": "Read/ Write"
+     "name": "Read/Write"
     },
     {
      "name": "Savant (Medicine)"
@@ -6380,14 +6504,14 @@
      "name": "Noble Blood"
     },
     {
-     "name": "Public Speaking",
+     "name": "Public Speaker",
      "rank": 2
     },
     {
      "name": "Warrior Born"
     },
     {
-     "name": "Warleader",
+     "name": "War Leader",
      "rank": 3
     }
    ],
@@ -6485,6 +6609,9 @@
     },
     {
      "name": "Robust"
+    },
+    {
+     "name": "Strike to Stun"
     }
    ],
    "nameFrSource": "proposition"

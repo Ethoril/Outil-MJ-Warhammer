@@ -66,10 +66,17 @@ export function buildV5StoreActionInput(envelope, raw = {}) {
   const quotas=[...(v5.quotas||[])],exemptions=[...(v5.exemptions||[])],actor=state.participants.find(p=>p.id===actorId),context=v5.context||{};
   // Combat naturel (T2) : l'attaque gratuite d'un Trait de créature coûte l'Élan qu'il indique ; le Trait est exigé.
   if(context.naturalAttack){
-    const natural=planNaturalAttack(actor,context.naturalAttack,{used:context.naturalUsed,charged:context.charged,actorSize:context.actorSize,targetSize:context.targetSize});
+    const natural=planNaturalAttack(actor,context.naturalAttack,{used:context.naturalUsed,count:context.tentacleCount,charged:context.charged??v5.charging,actorSize:context.actorSize??v5.actorSize,targetSize:context.targetSize??v5.targetSize});
     if(natural.unresolved.some(r=>/Trait absent|déjà/.test(r)))throw new TypeError(natural.unresolved.join(' '));
     for(const cost of natural.costs)if(!costs.some(c=>c.resource===cost.resource))costs.push({id:'creature:'+context.naturalAttack+':'+cost.resource,...cost});
     if(natural.quota)quotas.push(natural.quota);
+  }
+  // Attaques multiples d'un profil de bestiaire (« 2 Claws », « 8 × Tentacles ») : les attaques gratuites partagent un quota par Tour,
+  // sans Élan ; Tentacules : toutes gratuites (quota commun avec l'attaque naturelle), autre multiplicateur : toutes sauf la première.
+  const multi=supplied.action?.extensions?.v5?.multiAttack;
+  if(multi&&supplied.action.extensions.v5.freeAttack&&!v5.extraAttack){
+    const tentacles=/tentacle/i.test(multi.group),id=tentacles?'creature:tentacles':'creature:multi:'+encodeURIComponent(String(multi.group).toLowerCase());
+    if(!quotas.some(q=>q.id===id))quotas.push({id,scope:'turn',maximum:tentacles?multi.of:multi.of-1});
   }
   let quotaActorId;
   const selected=context.preRollTalent;
@@ -152,9 +159,14 @@ export function buildV5StoreActionInput(envelope, raw = {}) {
     }
   }
   const hasRequest = costs.length || quotas.length || exemptions.length || v5.extraAttack;
+  // Avant le premier Round (combat monté, pas encore démarré) : pas de Tour courant ; les attaques gratuites de créature
+  // (quotas « creature: ») partagent alors un Tour 0 par rencontre, et le quota est rappelé dans l'aperçu.
+  // Store neuf sans rencontre ni scène : une rencontre implicite porte le Tour 0.
+  const preCombatQuota = !clock.turnId && quotas.some(q => q.scope === 'turn' && q.id.startsWith('creature:'));
+  const quotaClock = preCombatQuota ? { ...clock, encounterId: clock.encounterId || 'sans-rencontre', turnId: `${clock.encounterId || 'sans-rencontre'}:0:pre-combat` } : clock;
   let actionCostPlan = null, paid = state;
   if (hasRequest) {
-    actionCostPlan = previewV5ActionCosts({ state, actionId: resolutionId, actorId, costs, quotas, exemptions,...(quotaActorId?{quotaActorId}:{} ), extraAttack: v5.extraAttack === true, clock });
+    actionCostPlan = previewV5ActionCosts({ state, actionId: resolutionId, actorId, costs, quotas, exemptions,...(quotaActorId?{quotaActorId}:{} ), extraAttack: v5.extraAttack === true, clock: quotaClock });
     const prepared = prepareV5ActionState(actionCostPlan, state);
     if (prepared.status === 'prepared') paid = prepared.state;
   }
@@ -162,7 +174,7 @@ export function buildV5StoreActionInput(envelope, raw = {}) {
     actor: paid.participants.find(item => item.id === actorId) || supplied.actor,
     target: paid.participants.find(item => item.id === targetId) || supplied.target || null,
     round: state.round ?? supplied.round, baseRevision: supplied.baseRevision ?? state.revision,
-    v5State: paid, v5Clock: clock, authorNextTurnEnd: authorNextTurnEnd(envelope, actorId), actionCostPlan, secondaryTalentRequests, reactionValidation,
+    v5State: paid, v5Clock: quotaClock, ...(preCombatQuota ? { preCombatQuota: quotas.filter(q => q.id.startsWith('creature:')).map(q => ({ id: q.id, maximum: q.maximum })) } : {}), authorNextTurnEnd: authorNextTurnEnd(envelope, actorId), actionCostPlan, secondaryTalentRequests, reactionValidation,
     fortuneReroll, fortuneRerollRoll: hasValidReroll ? Number(rawReroll) : null, initialRollBeforeFortune, freeReroll, reverseDiceApplied, ...(reverseDiceApplied ? { reverseDice: { used: true } } : {}) };
 }
 export function annotateV5StoreActionPreview(preview, input) {
@@ -172,7 +184,8 @@ export function annotateV5StoreActionPreview(preview, input) {
     const alternative = previewResolution({ ...input, roll: reversed, dieRoll: reversed, enteredRoll: reversed });
     if (alternative.success === true) preview = { ...preview, reverseDiceHint: { reversed, wouldSucceed: true } };
   }
-  if (input.reactionValidation?.ready === false) preview = { ...preview, unresolved: [...(preview.unresolved || []), input.reactionValidation.reason] };
+  if (input.preCombatQuota?.length) preview = { ...preview, reminders: [...(preview.reminders || []), `Avant le premier Round : attaques gratuites limitées à ${input.preCombatQuota.map(q => q.maximum).join(' + ')} avant le début du combat (quota du Tour 0).`] };
+  if (input.reactionValidation?.ready === false) preview ={ ...preview, unresolved: [...(preview.unresolved || []), input.reactionValidation.reason] };
   if (input.fortuneReroll) {
     if (input.fortuneRerollRoll === null) {
       preview = { ...preview, unresolved: [...(preview.unresolved || []), 'Relance de Fortune : saisir le nouveau jet d100 (1 à 100).'] };

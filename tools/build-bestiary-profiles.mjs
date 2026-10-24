@@ -14,6 +14,7 @@ import { KEYWORDS_MANUAL } from './lib/bestiary-keywords-manual.mjs';
 import { parsePregenerated } from './lib/bestiary-pregen.mjs';
 import { cleanSkills } from './lib/bestiary-record.mjs';
 import { execFileSync } from 'node:child_process';
+import { repairGlyphs } from './lib/bestiary-glyphs.mjs';
 import { NAMES_FR } from './lib/bestiary-names-fr.mjs';
 import { proposeFrenchName } from './lib/bestiary-names-glossary.mjs';
 import { TRAIT_ALIASES } from './lib/bestiary-complement-data.mjs';
@@ -22,7 +23,7 @@ import { BASE_REFERENTIAL, resolveKeyword } from '../js/core/creature-keywords.j
 
 const BOOKS = {
   L01: ['Archives of the Empire 2', 'V4'], L02: ['Archives of the Empire 3', 'V4'], L03: ['Archives of the Empire Volume 1', 'V4'], L04: ['Deft Steps, Light Fingers', 'V4'],
-  L05: ['Livre de base (V4, français)', 'V4'], L06: ['Livre de base V5', 'V5'], L07: ['Lustria', 'V4'], L09: ['Temple of Spite', 'V4'], L10: ['Sylvania, The Cursed County', 'V4'],
+  L05: ['Livre de base (V4, français)', 'V4'], L06: ['Livre de base V5', 'V5'], L07: ['Lustria', 'V4'], L09: ['Temple of Spite', 'V5'], L10: ['Sylvania, The Cursed County', 'V5'],
   L11: ['The Imperial Zoo', 'V4'], L12: ['Tribes and Tribulations', 'V4'], L13: ['Up in Arms', 'V4'], L14: ['Sea Wardens of Cothique', 'V4'],
   L16: ['Lords of Stone and Steel', 'V4'], L17: ['Winds of Magic', 'V4'], L18: ['Power Behind the Throne Companion', 'V4'], L19: ['Middenheim: City of the White Wolf', 'V4'],
   L20: ['Altdorf: Crown of the Empire', 'V4'], L21: ['Empire in Ruins Companion', 'V4'], L22: ['The Horned Rat Companion', 'V4'], L23: ['Enemy in Shadows Companion', 'V4'],
@@ -38,16 +39,18 @@ const baseName = name => name.replace(/\s*\(.*\)\s*$/, '').replace(/\s+—.*$/, 
 const canonicalNames = new Map();
 const traitRefs = new Map();
 const traitFr = new Map();
+// L'inventaire écrit « Tzeentch’s Fire » (apostrophe courbe), les livres l'impriment avec l'apostrophe droite (Pink Horror, L23 p. 87).
+const straightQuote = text => text.replace(/[’‘`]/g, '\'');
 for (const trait of inventory.traits) {
   const base = baseName(trait.name);
-  if (!canonicalNames.has(base.toLowerCase())) canonicalNames.set(base.toLowerCase(), base);
+  if (!canonicalNames.has(straightQuote(base).toLowerCase())) canonicalNames.set(straightQuote(base).toLowerCase(), base);
   const better = !traitRefs.has(base) || (trait.kind === 'trait' && !String(traitRefs.get(base)).startsWith('E0-T-0') );
   if (better || trait.kind === 'trait') { if (!traitRefs.has(base) || trait.kind === 'trait') traitRefs.set(base, trait.id); }
   if (trait.nameFr && !traitFr.has(base)) traitFr.set(base, baseName(trait.nameFr));
 }
 const canonical = name => {
   // Les coupures de ligne laissent « Cold- blooded » : le trait d'union suivi d'un blanc est recollé.
-  const key = String(name).trim().toLowerCase().replace(/-\s+/g, '-');
+  const key = straightQuote(String(name).trim().toLowerCase().replace(/-\s+/g, '-'));
   const direct = canonicalNames.get(key);
   if (direct) return direct;
   const alias = TRAIT_ALIASES[key];
@@ -103,7 +106,7 @@ for (const book of ids) {
   const talentDictionary = new Set(JSON.parse(readFileSync('js/data/reference-snapshot.json', 'utf8')).talents.entries.map(item => item.englishName).filter(Boolean));
   for (const entry of missing.filter(item => item.kind === 'pregenerated-character')) {
     const meta = manifest.find(item => item.id === book);
-    const page = flag => execFileSync('pdftotext', [...flag, '-f', String(entry.physicalPage), '-l', String(entry.physicalPage), meta.path, '-'], { maxBuffer: 1 << 26 }).toString('utf8');
+    const page = flag => repairGlyphs(execFileSync('pdftotext', [...flag, '-f', String(entry.physicalPage), '-l', String(entry.physicalPage), meta.path, '-'], { maxBuffer: 1 << 26 }).toString('utf8'));
     const parsed = parsePregenerated(page([]), page(['-layout']), talentDictionary);
     const skills = cleanSkills(parsed.skills);
     const record = {

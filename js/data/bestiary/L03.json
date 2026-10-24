@@ -31,6 +31,110 @@
     "Soc": 40
    },
    "wounds": 11,
+   "attacks": [
+    {
+     "name": "Bow",
+     "damage": 5,
+     "trait": "Ranged",
+     "rangeYards": 50,
+     "ranged": true
+    },
+    {
+     "name": "Dagger",
+     "damage": 4,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 33
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 26
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 63
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 38
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 41
+    },
+    {
+     "name": "Language (Battle)",
+     "nameFr": "Langue (Bataille)",
+     "value": 32
+    },
+    {
+     "name": "Lore (Reikland)",
+     "nameFr": "Savoir (Reikland)",
+     "value": 30
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 35
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 38
+    },
+    {
+     "name": "Play (Drum)",
+     "nameFr": "Musicien (Tambour)",
+     "value": 49
+    },
+    {
+     "name": "Ranged (Bow)",
+     "nameFr": "Projectiles (Arc)",
+     "value": 59
+    },
+    {
+     "name": "Stealth",
+     "nameFr": "Discrétion",
+     "value": 31
+    }
+   ],
+   "talents": [
+    {
+     "name": "Acute Sense (Taste)"
+    },
+    {
+     "name": "Deadeye Shot"
+    },
+    {
+     "name": "Marksman"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Resistant (Chaos)"
+    },
+    {
+     "name": "Small"
+    }
+   ],
+   "trappings": [
+    "Bow (with 10 Arrows)",
+    "Breastplate",
+    "Dagger",
+    "Leather Jack",
+    "Helmet with impressive feather",
+    "Uniform"
+   ],
    "keywords": [
     "soldat",
     "halfling"
@@ -160,7 +264,7 @@
      "name": "Night Vision"
     },
     {
-     "name": "Resistance (Chaos)"
+     "name": "Resistant (Chaos)"
     },
     {
      "name": "Seasoned Traveller"
@@ -312,10 +416,10 @@
      "name": "Panhandle"
     },
     {
-     "name": "Resistance (Chaos)"
+     "name": "Resistant (Chaos)"
     },
     {
-     "name": "Resistance (Disease)"
+     "name": "Resistant (Disease)"
     },
     {
      "name": "Small"
@@ -466,7 +570,10 @@
      "name": "Night Vision"
     },
     {
-     "name": "Resistance (Chaos)"
+     "name": "Nose for Trouble"
+    },
+    {
+     "name": "Resistant (Chaos)"
     },
     {
      "name": "Small"
@@ -600,10 +707,10 @@
      "name": "Night Vision"
     },
     {
-     "name": "Public Speaking"
+     "name": "Public Speaker"
     },
     {
-     "name": "Resistance(Chaos)"
+     "name": "Resistant(Chaos)"
     },
     {
      "name": "Small"
@@ -725,10 +832,10 @@
      "name": "Night Vision"
     },
     {
-     "name": "Resistance (Chaos)"
+     "name": "Resistant (Chaos)"
     },
     {
-     "name": "Resistance (Disease)"
+     "name": "Resistant (Disease)"
     },
     {
      "name": "Small"
@@ -864,7 +971,7 @@
      "name": "Noble Blood"
     },
     {
-     "name": "Resistance (Chaos)"
+     "name": "Resistant (Chaos)"
     },
     {
      "name": "Small"
@@ -872,6 +979,7 @@
    ],
    "trappings": [
     "Courtly Garb",
+    "Tiny Foil (counts as a Dagger, may be used with Melee (Basic) or Melee (Fencing))",
     "4 Rings worth 3 GC each",
     "Lolli Skelfsider (Servant)"
    ],
@@ -912,6 +1020,7 @@
      "name": "Pistol",
      "damage": 9,
      "trait": "Ranged",
+     "rangeYards": 20,
      "ranged": true
     },
     {
@@ -942,7 +1051,7 @@
      "name": "Fearless (Witches)"
     },
     {
-     "name": "Magic Resistant"
+     "name": "Magic Resistance"
     },
     {
      "name": "Night Vision"
@@ -957,7 +1066,7 @@
      "name": "Resolute"
     },
     {
-     "name": "Strong-Minded"
+     "name": "Strong-minded"
     },
     {
      "name": "Sturdy"
@@ -1031,7 +1140,7 @@
      "name": "Lip Reading"
     },
     {
-     "name": "Magic Resistant"
+     "name": "Magic Resistance"
     },
     {
      "name": "Night Vision"
@@ -1043,7 +1152,7 @@
      "name": "Shadow"
     },
     {
-     "name": "Strong-Minded"
+     "name": "Strong-minded"
     },
     {
      "name": "Sturdy"
@@ -1118,7 +1227,7 @@
      "name": "Linguistics"
     },
     {
-     "name": "Magic Resistant"
+     "name": "Magic Resistance"
     },
     {
      "name": "Night Vision"
@@ -1133,7 +1242,7 @@
      "name": "Speedreader"
     },
     {
-     "name": "Strong-Minded"
+     "name": "Strong-minded"
     },
     {
      "name": "Sturdy"
@@ -1182,6 +1291,7 @@
      "name": "Repeater Pistol",
      "damage": 8,
      "trait": "Ranged",
+     "rangeYards": 10,
      "ranged": true
     },
     {
@@ -1227,7 +1337,7 @@
      "name": "Savant (Engineer)"
     },
     {
-     "name": "Strong-Minded"
+     "name": "Strong-minded"
     },
     {
      "name": "Sturdy"
@@ -1276,6 +1386,11 @@
      "damage": 8,
      "trait": "Weapon"
     }
+   ],
+   "unvaluedSkills": [
+    "Leadership",
+    "Lore (Geology)",
+    "Stealth (Underground)"
    ],
    "talents": [
     {
@@ -1390,7 +1505,7 @@
      "name": "Sturdy"
     },
     {
-     "name": "Warleader"
+     "name": "War Leader"
     }
    ],
    "trappings": [

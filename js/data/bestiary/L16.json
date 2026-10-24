@@ -39,7 +39,11 @@
     {
      "name": "Axe of Grimnir",
      "damage": 10,
-     "trait": "Weapon"
+     "trait": "Weapon",
+     "qualities": [
+      "Damaging",
+      "Hack"
+     ]
     }
    ],
    "skills": [
@@ -258,9 +262,7 @@
     "Clothing",
     "Dragon Crown of Karaz",
     "Great Book of Grudges",
-    "Jewellery worth 1",
-    "the Ruling Rune",
-    "Intimidate"
+    "Jewellery worth 1,750 GC"
    ],
    "keywords": [
     "nain"
@@ -299,12 +301,18 @@
      "name": "Dwarf Crossbow",
      "damage": 10,
      "trait": "Ranged",
+     "rangeYards": 80,
      "ranged": true
     },
     {
      "name": "Hammer of Azul",
      "damage": 14,
-     "trait": "Weapon"
+     "trait": "Weapon",
+     "qualities": [
+      "Damaging",
+      "Impact",
+      "Pummel"
+     ]
     }
    ],
    "skills": [
@@ -384,6 +392,11 @@
      "value": 47
     },
     {
+     "name": "Language (Reikspiel)",
+     "nameFr": "Langue (Reikspiel)",
+     "value": 65
+    },
+    {
      "name": "Lore (Beasts)",
      "nameFr": "Savoir (Bêtes)",
      "value": 70
@@ -430,9 +443,8 @@
      "value": 100
     },
     {
-     "name": "Melee (Two- handed)",
-     "nameFr": "Corps à corps (Two- handed)",
-     "frUnverified": true,
+     "name": "Melee (Two-handed)",
+     "nameFr": "Corps à corps (Deux mains)",
      "value": 85
     },
     {
@@ -481,6 +493,9 @@
      "value": 75
     }
    ],
+   "unvaluedSkills": [
+    "Language (Khazalid)"
+   ],
    "talents": [
     {
      "name": "Accurate Shot"
@@ -513,6 +528,9 @@
      "name": "Inspiring"
     },
     {
+     "name": "Iron Will"
+    },
+    {
      "name": "Long Memory"
     },
     {
@@ -531,7 +549,7 @@
      "name": "Public Speaker"
     },
     {
-     "name": "Read/ Write"
+     "name": "Read/Write"
     },
     {
      "name": "Relentless"
@@ -615,12 +633,21 @@
     {
      "name": "Axe of Dargo",
      "damage": 15,
-     "trait": "Weapon"
+     "trait": "Weapon",
+     "qualities": [
+      "Damaging",
+      "Hack",
+      "Impact",
+      "Tiring"
+     ]
     },
     {
      "name": "Dwarf Axe",
      "damage": 13,
-     "trait": "Weapon"
+     "trait": "Weapon",
+     "qualities": [
+      "Hack"
+     ]
     }
    ],
    "skills": [
@@ -771,6 +798,9 @@
      "value": 61
     }
    ],
+   "unvaluedSkills": [
+    "Language (Khazalid)"
+   ],
    "talents": [
     {
      "name": "Ambidextrous"
@@ -818,6 +848,9 @@
      "name": "Iron Jaw"
     },
     {
+     "name": "Iron Will"
+    },
+    {
      "name": "Long Memory"
     },
     {
@@ -857,7 +890,10 @@
      "name": "Strike Mighty Blow"
     },
     {
-     "name": "Strong Back Strong-minded"
+     "name": "Strong Back"
+    },
+    {
+     "name": "Strong-minded"
     },
     {
      "name": "Sturdy"
@@ -925,12 +961,16 @@
      "name": "Blunderbuss",
      "damage": 8,
      "trait": "Ranged",
+     "rangeYards": 12,
      "ranged": true
     },
     {
      "name": "Dwarf Warhammer",
      "damage": 7,
-     "trait": "Weapon"
+     "trait": "Weapon",
+     "qualities": [
+      "Pummel"
+     ]
     }
    ],
    "skills": [
@@ -1071,7 +1111,12 @@
     {
      "name": "Runic Greataxe",
      "damage": 12,
-     "trait": "Weapon"
+     "trait": "Weapon",
+     "qualities": [
+      "Hack",
+      "Impact",
+      "Tiring"
+     ]
     }
    ],
    "skills": [
@@ -1162,6 +1207,9 @@
      "value": 55
     }
    ],
+   "unvaluedSkills": [
+    "Language (Khazalid)"
+   ],
    "talents": [
     {
      "name": "Combat Aware"
@@ -1248,12 +1296,16 @@
      "name": "Dwarf Pistol",
      "damage": 10,
      "trait": "Ranged",
+     "rangeYards": 20,
      "ranged": true
     },
     {
      "name": "Hammer",
      "damage": 8,
-     "trait": "Weapon"
+     "trait": "Weapon",
+     "qualities": [
+      "Pummel"
+     ]
     }
    ],
    "skills": [
@@ -1354,6 +1406,11 @@
      "value": 36
     },
     {
+     "name": "Secret Signs (Guilder)",
+     "nameFr": "Signes secrets (Guilde)",
+     "value": 40
+    },
+    {
      "name": "Trade (Smith)",
      "nameFr": "Métier (Forgeron)",
      "value": 66
@@ -1376,10 +1433,10 @@
      "name": "Night Vision"
     },
     {
-     "name": "Nimble Fingered"
+     "name": "Nimble-fingered"
     },
     {
-     "name": "Read/ Write"
+     "name": "Read/Write"
     },
     {
      "name": "Strong Back"
@@ -1437,7 +1494,11 @@
     {
      "name": "The Ironpick",
      "damage": 11,
-     "trait": "Weapon"
+     "trait": "Weapon",
+     "qualities": [
+      "Damaging",
+      "Impale"
+     ]
     }
    ],
    "skills": [
@@ -1522,6 +1583,26 @@
      "value": 68
     },
     {
+     "name": "Lore (Politics)",
+     "nameFr": "Savoir (Politique)",
+     "value": 73
+    },
+    {
+     "name": "Lore (Warfare)",
+     "nameFr": "Savoir (Guerre)",
+     "value": 78
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 90
+    },
+    {
+     "name": "Melee (Two-handed)",
+     "nameFr": "Corps à corps (Deux mains)",
+     "value": 100
+    },
+    {
      "name": "Perception",
      "nameFr": "Perception",
      "value": 30
@@ -1548,6 +1629,10 @@
     }
    ],
    "talents": [
+    {
+     "name": "Ancestral Grudge (Orcs and Goblins, Skaven)",
+     "rank": 2
+    },
     {
      "name": "Carouser"
     },
@@ -1596,9 +1681,11 @@
     }
    ],
    "trappings": [
+    "Crown of Karak Norn",
     "gromril shield",
     "the Ironpick",
     "jewellery worth 1000 GC",
+    "leather gloves (one of which bears a badge of Valaya inscribed with the Rune of Truth)",
     "suit of gromril mail",
     "the war horn of Karak Norn"
    ],
@@ -1634,7 +1721,10 @@
     {
      "name": "Thurma's Warhammer",
      "damage": 9,
-     "trait": "Weapon"
+     "trait": "Weapon",
+     "qualities": [
+      "Pummel"
+     ]
     }
    ],
    "skills": [
@@ -1813,8 +1903,7 @@
     }
    ],
    "trappings": [
-    "Like King Brokk",
-    "Queen Thurma could have her pick of personal possessions",
+    "Bronze belt inscribed with 2 Runes of Warding",
     "a brynduraz necklace (worth 200,000 GC)",
     "the Crown of Queen Hadora",
     "other jewels worth 2000 GC",
@@ -1852,7 +1941,10 @@
     {
      "name": "Hammer",
      "damage": 8,
-     "trait": "Weapon"
+     "trait": "Weapon",
+     "qualities": [
+      "Pummel"
+     ]
     }
    ],
    "skills": [
@@ -1947,7 +2039,7 @@
      "name": "Etiquette (Guilder)"
     },
     {
-     "name": "Nimble Fingered"
+     "name": "Nimble-fingered"
     },
     {
      "name": "Strong Back"
@@ -2001,7 +2093,11 @@
     {
      "name": "Dwarf Greathammer",
      "damage": 11,
-     "trait": "Weapon"
+     "trait": "Weapon",
+     "qualities": [
+      "Damaging",
+      "Pummel"
+     ]
     }
    ],
    "skills": [
@@ -2106,6 +2202,12 @@
      "value": 43
     },
     {
+     "name": "Runesmithing",
+     "nameFr": "Runesmithing",
+     "frUnverified": true,
+     "value": 61
+    },
+    {
      "name": "Secret Signs (Guilder)",
      "nameFr": "Signes secrets (Guilde)",
      "value": 43
@@ -2206,12 +2308,22 @@
      "name": "Dwarf Crossbow",
      "damage": 10,
      "trait": "Ranged",
+     "rangeYards": 80,
+     "qualities": [
+      "Damaging",
+      "Impale",
+      "Precise",
+      "Reload 1"
+     ],
      "ranged": true
     },
     {
      "name": "Dwarf Axe",
      "damage": 7,
-     "trait": "Weapon"
+     "trait": "Weapon",
+     "qualities": [
+      "Hack"
+     ]
     }
    ],
    "skills": [
@@ -2321,6 +2433,12 @@
      "value": 41
     },
     {
+     "name": "Runesmithing",
+     "nameFr": "Runesmithing",
+     "frUnverified": true,
+     "value": 58
+    },
+    {
      "name": "Trade (Apothecary)",
      "nameFr": "Métier (Apothicaire)",
      "value": 53
@@ -2369,7 +2487,7 @@
      "name": "Read/Write"
     },
     {
-     "name": "Resistance (Disease)"
+     "name": "Resistant (Disease)"
     },
     {
      "name": "Rune Magic (Protection and Talismantic Runes)"
@@ -2393,9 +2511,9 @@
    "trappings": [
     "Beardling Initiate",
     "Cult Medallion",
-    "Trade Tools (Embalmer, Smith). Outside the hold",
-    "add the following: Bandages",
-    "Restorative Brew Once the preparations are completed"
+    "Trade Tools (Embalmer, Smith)",
+    "Bandages",
+    "Restorative Brew"
    ],
    "keywords": [
     "nain"
@@ -2430,12 +2548,21 @@
      "name": "Dwarf Throwing Axes",
      "damage": 9,
      "trait": "Ranged",
+     "rangeYards": 10,
+     "qualities": [
+      "Hack"
+     ],
      "ranged": true
     },
     {
      "name": "Dwarf Greataxe",
      "damage": 11,
-     "trait": "Weapon"
+     "trait": "Weapon",
+     "qualities": [
+      "Hack",
+      "Impact",
+      "Tiring"
+     ]
     }
    ],
    "skills": [
@@ -2538,9 +2665,8 @@
      "value": 77
     },
     {
-     "name": "Melee (Two- handed)",
-     "nameFr": "Corps à corps (Two- handed)",
-     "frUnverified": true,
+     "name": "Melee (Two-handed)",
+     "nameFr": "Corps à corps (Deux mains)",
      "value": 87
     },
     {
@@ -2558,6 +2684,9 @@
      "nameFr": "Projectiles (Jet)",
      "value": 41
     }
+   ],
+   "unvaluedSkills": [
+    "Language (Khazalid)"
    ],
    "talents": [
     {
@@ -2598,7 +2727,7 @@
      "name": "Night Vision"
     },
     {
-     "name": "Read/ Write"
+     "name": "Read/Write"
     },
     {
      "name": "Relentless"
@@ -2664,7 +2793,11 @@
     {
      "name": "Gotrek's Axe",
      "damage": 15,
-     "trait": "Weapon"
+     "trait": "Weapon",
+     "qualities": [
+      "Damaging",
+      "Hack"
+     ]
     }
    ],
    "skills": [
@@ -2780,9 +2913,8 @@
      "value": 135
     },
     {
-     "name": "Melee (Two handed)",
-     "nameFr": "Corps à corps (Two handed)",
-     "frUnverified": true,
+     "name": "Melee (Two-handed)",
+     "nameFr": "Corps à corps (Deux mains)",
      "value": 115
     },
     {
@@ -2953,6 +3085,12 @@
      "name": "Warrior Born"
     }
    ],
+   "trappings": [
+    "Clothing",
+    "Jewelry worth 200 GC",
+    "Gotrek's Axe"
+   ],
+   "fatePoints": 3,
    "keywords": [
     "nain"
    ],
@@ -2989,7 +3127,11 @@
     {
      "name": "Karaghul",
      "damage": 9,
-     "trait": "Weapon"
+     "trait": "Weapon",
+     "qualities": [
+      "Fast",
+      "Penetrating"
+     ]
     }
    ],
    "skills": [
@@ -3268,6 +3410,12 @@
     },
     {
      "name": "Strike Mighty Blow"
+    },
+    {
+     "name": "Strike to Stun"
+    },
+    {
+     "name": "Strike to Injure"
     }
    ],
    "trappings": [
@@ -3318,7 +3466,67 @@
     {
      "name": "Claws",
      "damage": 9,
-     "trait": "Weapon"
+     "trait": "Weapon",
+     "qualities": [
+      "Impale"
+     ]
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 50
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 75
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 45
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 85
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 75
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 40
+    },
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 50
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 40
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 45
+    },
+    {
+     "name": "Stealth (Underground)",
+     "nameFr": "Discrétion (Souterraine)",
+     "value": 55
+    },
+    {
+     "name": "Track",
+     "nameFr": "Pistage",
+     "value": 50
     }
    ],
    "traits": [
@@ -3359,6 +3567,58 @@
     {
      "name": "Tracker",
      "ref": "E0-T-059"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Fury",
+     "ref": "E0-T-078"
+    },
+    {
+     "name": "Mutation",
+     "ref": "E0-T-040"
+    },
+    {
+     "name": "Painless",
+     "ref": "E0-T-042"
+    },
+    {
+     "name": "Territorial",
+     "ref": "E0-T-056"
+    },
+    {
+     "name": "Wallcrawler",
+     "ref": "E0-T-067"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Acute Sense (Hearing, Smell, Taste)"
+    },
+    {
+     "name": "Catfall"
+    },
+    {
+     "name": "Contortionist"
+    },
+    {
+     "name": "Enclosed Fighter"
+    },
+    {
+     "name": "Implacable",
+     "rank": 2
+    },
+    {
+     "name": "Shadow"
+    },
+    {
+     "name": "Strider (Rocky)"
+    },
+    {
+     "name": "Tenacious"
+    },
+    {
+     "name": "Tunnel Rat"
     }
    ],
    "keywords": [
@@ -3408,7 +3668,11 @@
     {
      "name": "Obsidian Claws",
      "damage": 10,
-     "trait": "Weapon"
+     "trait": "Weapon",
+     "qualities": [
+      "Hack",
+      "Penetrating"
+     ]
     }
    ],
    "traits": [
@@ -3416,6 +3680,12 @@
      "name": "Bite",
      "rating": "+10",
      "ref": "E0-T-006"
+    },
+    {
+     "name": "Breath",
+     "rating": "+17",
+     "param": "Brimstone Fire",
+     "ref": "E0-T-009"
     },
     {
      "name": "Fly",
@@ -3445,6 +3715,26 @@
      "name": "Tail",
      "rating": "+9",
      "ref": "E0-T-054"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Magical",
+     "ref": "E0-T-036"
+    },
+    {
+     "name": "Mental Corruption",
+     "ref": "E0-T-038"
+    },
+    {
+     "name": "Size",
+     "param": "Monstrous",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Spellcaster",
+     "param": "Fire",
+     "ref": "E0-T-048"
     }
    ],
    "keywords": [
@@ -3489,12 +3779,19 @@
     {
      "name": "Tail",
      "damage": 9,
-     "trait": "Tail"
+     "trait": "Tail",
+     "qualities": [
+      "Pummel"
+     ]
     },
     {
      "name": "Obsidian Claws",
      "damage": 10,
-     "trait": "Weapon"
+     "trait": "Weapon",
+     "qualities": [
+      "Hack",
+      "Penetrating"
+     ]
     }
    ],
    "traits": [
@@ -3502,6 +3799,12 @@
      "name": "Bite",
      "rating": "+10",
      "ref": "E0-T-006"
+    },
+    {
+     "name": "Breath",
+     "rating": "+17",
+     "param": "Brimstone Fire",
+     "ref": "E0-T-009"
     },
     {
      "name": "Daemonic",
@@ -3539,6 +3842,9 @@
     {
      "name": "Tail",
      "rating": "+9",
+     "qualities": [
+      "Pummel"
+     ],
      "ref": "E0-T-054"
     }
    ],
@@ -3579,7 +3885,10 @@
     {
      "name": "Fists",
      "damage": 11,
-     "trait": "Weapon"
+     "trait": "Weapon",
+     "qualities": [
+      "Pummel"
+     ]
     }
    ],
    "traits": [
@@ -3612,6 +3921,13 @@
     {
      "name": "Unstable",
      "ref": "E0-T-062"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Size",
+     "param": "Enormous, Monstrous",
+     "ref": "E0-T-045"
     }
    ],
    "nameFrSource": "proposition"
@@ -3781,6 +4097,9 @@
     "Shield",
     "Sword"
    ],
+   "notes": [
+    "Options: Five of the Clanrats are suffering from Foaming Lungrot and have Fatigued Conditions as a result. They may also pass it on to any creatures they encounter."
+   ],
    "keywords": [
     "skaven"
    ],
@@ -3862,7 +4181,10 @@
    ],
    "trappings": [
     "Mouldy Robes",
-    "Pair of Swords y"
+    "Pair of Swords"
+   ],
+   "notes": [
+    "Options: Three of the Plague Monks are suffering from Foaming Lungrot and have Fatigued Conditions as a result. They may also pass it on to any creatures they encounter."
    ],
    "keywords": [
     "skaven"
@@ -3932,6 +4254,9 @@
      "param": "Broken, Fetch, War",
      "ref": "E0-T-060"
     }
+   ],
+   "notes": [
+    "Options: Unless the rats are encountered as single creatures or small groups, it may be better to use the Swarm Trait. The Plague Rats are not really trained as such but share an unspoken bond with the Plague Monks that sees them behave according to purposes they could never understand. Should they be separated from the Plague Monks, or the Plague Monks be killed, they revert to their animal instincts and lose their Trained Traits."
    ],
    "keywords": [
     "rat"
@@ -4068,6 +4393,7 @@
    ],
    "trappings": [
     "Assortment of rusted steel and mouldy leather armour",
+    "Leather satchel containing six vials of harmless coloured water and a pot containing 8 doses of Skalm",
     "Shield",
     "Sword",
     "Warpforged Halberd",

@@ -5,14 +5,15 @@
  */
 
 export const TRAIT_ALIASES = Object.freeze({
-  flight: 'Fly', regenerate: 'Regeneration', 'immunity to psychology': 'Immune to Psychology', 'tail attack': 'Tail',
-  'wall crawler': 'Wallcrawler', 'cold blooded': 'Cold-blooded', corrupted: 'Corruption', distrating: 'Distracting', 'stupid.': 'Stupid',
+  immune: 'Immunity', spellcasting: 'Spellcaster', flight: 'Fly', regenerate: 'Regeneration', 'immunity to psychology': 'Immune to Psychology', 'tail attack': 'Tail',
+  'wall crawler': 'Wallcrawler', corrupting: 'Corruption', coldblooded: 'Cold-blooded', 'swamp strider': 'Swamp-strider', 'cold blooded': 'Cold-blooded', corrupted: 'Corruption', distrating: 'Distracting', 'stupid.': 'Stupid',
   armoured: 'Armour', 'armour 1': 'Armour', 'armour 2': 'Armour', small: 'Size', strider: 'Striding Gait', 'fear 2': 'Fear',
   hallucinogenic: 'Hallucinogen', 'anticoagulant': 'Anticoagulant Saliva', 'mark of khorne': 'Mark of Khorne', 'the mark of khorne': 'Mark of Khorne',
   claws: 'Creature Weapons (Claws, Beak, Slam, Tongue)', claw: 'Creature Weapons (Claws, Beak, Slam, Tongue)',
   '2 claws': 'Creature Weapons (Claws, Beak, Slam, Tongue)', beak: 'Creature Weapons (Claws, Beak, Slam, Tongue)',
+  tentacles: 'Creature Weapons (Claws, Beak, Slam, Tongue)', tentacle: 'Creature Weapons (Claws, Beak, Slam, Tongue)',
   slam: 'Creature Weapons (Claws, Beak, Slam, Tongue)', 'tongue attack': 'Creature Weapons (Claws, Beak, Slam, Tongue)',
-  'weapon+8': 'Weapon', 'weapon+11': 'Weapon', 'weapon +6': 'Weapon', 'weapon +8': 'Weapon', 'immunity to psychology*': 'Immune to Psychology'
+  venomous: 'Venom', weapons: 'Weapon', 'weapon+8': 'Weapon','weapon+11': 'Weapon', 'weapon +6': 'Weapon', 'weapon +8': 'Weapon', 'immunity to psychology*': 'Immune to Psychology'
 });
 
 const V4_NOTE = 'Termes V4 convertis en V5 au lot de l’implantation (±10 → ±1 DR, Avantage → Élan).';

@@ -2,7 +2,7 @@
  "schemaVersion": 1,
  "book": "L10",
  "title": "Sylvania, The Cursed County",
- "edition": "V4",
+ "edition": "V5",
  "source": {
   "corpusId": "L10",
   "sha256": "445ca4421ec9323e34bc7e60a0f73c68df02f732da365d5f269341054c41dfa5"
@@ -34,6 +34,32 @@
    "armour": {
     "toughnessBonus": 2
    },
+   "attacks": [
+    {
+     "name": "Rapier",
+     "value": 46,
+     "damage": 6,
+     "qualities": [
+      "Fast",
+      "Impale"
+     ]
+    },
+    {
+     "name": "Dagger",
+     "value": 43,
+     "damage": 4
+    },
+    {
+     "name": "The Stirland Runefang, Orc Hewer",
+     "value": 46,
+     "damage": 6,
+     "qualities": [
+      "Magical",
+      "Unbreakable",
+      "Fine"
+     ]
+    }
+   ],
    "skills": [
     {
      "name": "Leadership",
@@ -82,8 +108,8 @@
      "value": 46
     },
     {
-     "name": "Language (Elth�rin)",
-     "nameFr": "Langue (Elth�rin)",
+     "name": "Language (Elthárin)",
+     "nameFr": "Langue (Elthárin)",
      "frUnverified": true,
      "value": 37
     },
@@ -103,12 +129,36 @@
      "value": 52
     }
    ],
+   "traits": [
+    {
+     "name": "Animosity",
+     "param": "Courtiers Over 45",
+     "ref": "E0-T-003"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Etiquette (Nobles)"
+    },
+    {
+     "name": "Luck"
+    },
+    {
+     "name": "Noble Blood"
+    },
+    {
+     "name": "Read/Write"
+    }
+   ],
    "trappings": [
-    "The Stirland Runefang",
-    "Orc Hewer",
+    "The Stirland Runefang, Orc Hewer",
     "Full Plate (Best Quality)",
     "Grand County of Stirland",
-    "Wardenship of the"
+    "Wardenship of the River Stir",
+    "Overlordship of Sylvania",
+    "Royal Garb (Best Quality)",
+    "The Wurtbad City Coffers and Crown Jewels",
+    "Various Lands and Estates throughout the Empire"
    ],
    "keywords": [
     "noble"
@@ -147,6 +197,36 @@
      }
     ]
    },
+   "attacks": [
+    {
+     "name": "Dwarf Axe",
+     "value": 77,
+     "damage": 7,
+     "qualities": [
+      "Hack"
+     ]
+    },
+    {
+     "name": "Dwarf Greataxe",
+     "value": 68,
+     "damage": 9,
+     "qualities": [
+      "Hack",
+      "Impact",
+      "Tiring"
+     ]
+    },
+    {
+     "name": "Crossbow",
+     "value": 60,
+     "damage": 9,
+     "rangeYards": 50,
+     "qualities": [
+      "Impale",
+      "Reload 3"
+     ]
+    }
+   ],
    "skills": [
     {
      "name": "Athletics",
@@ -254,8 +334,41 @@
    ],
    "traits": [
     {
+     "name": "Magic Resistance",
+     "ref": "E0-T-037"
+    },
+    {
      "name": "Night Vision",
      "ref": "E0-T-041"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Magic Resistance"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Rover"
+    },
+    {
+     "name": "Stone Soup"
+    },
+    {
+     "name": "Strong Back"
+    },
+    {
+     "name": "Sturdy"
+    },
+    {
+     "name": "Tenacious"
+    },
+    {
+     "name": "Trapper"
     }
    ],
    "trappings": [
@@ -264,7 +377,7 @@
     "Dwarf Greataxe",
     "Dwarf Crossbow and Ammunition",
     "Mail Coat",
-    "Map of Drakenh�henzug",
+    "Map of Drakenhöhenzug",
     "Plate Helm (Open)",
     "Sturdy Boots",
     "Rope",
@@ -393,6 +506,23 @@
      "value": 52
     }
    ],
+   "talents": [
+    {
+     "name": "Briber"
+    },
+    {
+     "name": "Carouser"
+    },
+    {
+     "name": "Etiquette (Nobles)"
+    },
+    {
+     "name": "Gregarious"
+    },
+    {
+     "name": "Noble Blood"
+    }
+   ],
    "trappings": [
     "Clerks and Tax Collectors",
     "Hand Weapon",
@@ -439,6 +569,13 @@
      }
     ]
    },
+   "attacks": [
+    {
+     "name": "Mallet and Stake",
+     "value": 55,
+     "damage": 3
+    }
+   ],
    "skills": [
     {
      "name": "Dodge",
@@ -510,6 +647,23 @@
      "ref": "E0-T-041"
     }
    ],
+   "talents": [
+    {
+     "name": "Bless (Morr)"
+    },
+    {
+     "name": "Hatred (Vampires)"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Savant (Vampires)"
+    },
+    {
+     "name": "Sharpshooter"
+    }
+   ],
    "trappings": [
     "Apprentice Vampire Hunters",
     "Crossbow Pistol with 10 Bolts",
@@ -519,6 +673,9 @@
     "Silvered Sword",
     "Stake and Mallet",
     "Warding Herbs"
+   ],
+   "notes": [
+    "Blessings: Breath, Courage, Fortune, Righteousness, Tenacity, Wisdom"
    ],
    "keywords": [
     "humain"
@@ -548,6 +705,16 @@
     "Soc": 30
    },
    "wounds": 13,
+   "armour": {
+    "toughnessBonus": 3
+   },
+   "attacks": [
+    {
+     "name": "Staff",
+     "value": 45,
+     "damage": 6
+    }
+   ],
    "skills": [
     {
      "name": "Channelling (Shyish)",
@@ -593,6 +760,20 @@
      "value": 50
     }
    ],
+   "talents": [
+    {
+     "name": "Arcane Magic (Lore of Death)"
+    },
+    {
+     "name": "Petty Magic"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Second Sight"
+    }
+   ],
    "trappings": [
     "Enchanted Staff",
     "Grimoire",
@@ -600,12 +781,13 @@
     "Practical Robes"
    ],
    "spells": {
-    "Petty Magic": [
+    "Petty": [
      "Drain",
      "Marsh Lights",
-     "Open Lock"
+     "Open Lock",
+     "Rot"
     ],
-    "Rot Lore of Death Magic": [
+    "Lore of Death": [
      "Dying Words",
      "Sanctify"
     ]
@@ -671,6 +853,18 @@
     {
      "name": "Tracker",
      "ref": "E0-T-059"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Trained",
+     "param": "Broken, Heel, Hunt, Magic, Point, Track, War",
+     "ref": "E0-T-060"
+    }
+   ],
+   "optionalTalents": [
+    {
+     "name": "Sixth Sense"
     }
    ],
    "keywords": [
@@ -758,6 +952,9 @@
      "ref": "E0-T-048"
     }
    ],
+   "specialRules": [
+    "Corrupt"
+   ],
    "keywords": [
     "fantome"
    ],
@@ -786,6 +983,66 @@
     "Soc": 30
    },
    "wounds": 30,
+   "armour": {
+    "parts": [
+     {
+      "name": "Armour",
+      "ap": 3
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Weapon",
+     "damage": 8,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Medium",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Spellcaster",
+     "param": "Daemonology",
+     "ref": "E0-T-048"
+    },
+    {
+     "name": "Undead",
+     "ref": "E0-T-061"
+    },
+    {
+     "name": "Painless",
+     "ref": "E0-T-042"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Champion",
+     "ref": "E0-T-010"
+    },
+    {
+     "name": "Hatred",
+     "param": "The Living",
+     "ref": "E0-T-027"
+    },
+    {
+     "name": "Spellcaster",
+     "param": "Necromancy",
+     "ref": "E0-T-048"
+    },
+    {
+     "name": "Fear",
+     "rating": "1",
+     "ref": "E0-T-022"
+    }
+   ],
    "keywords": [
     "sorciere",
     "squelette"
@@ -815,6 +1072,70 @@
     "Soc": null
    },
    "wounds": 88,
+   "size": "enormous",
+   "armour": {
+    "parts": [
+     {
+      "name": "Armour",
+      "ap": 4
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Tail",
+     "damage": 9,
+     "trait": "Tail"
+    },
+    {
+     "name": "Weapon",
+     "damage": 10,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Construct",
+     "ref": "E0-T-014"
+    },
+    {
+     "name": "Fly",
+     "rating": "100",
+     "ref": "E0-T-023"
+    },
+    {
+     "name": "Hatred",
+     "param": "Dwarfs",
+     "ref": "E0-T-027"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Enormous",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Tail",
+     "rating": "+9",
+     "ref": "E0-T-054"
+    },
+    {
+     "name": "Territorial",
+     "ref": "E0-T-056"
+    },
+    {
+     "name": "Trained",
+     "param": "Mount",
+     "ref": "E0-T-060"
+    },
+    {
+     "name": "Undead",
+     "ref": "E0-T-061"
+    }
+   ],
    "keywords": [
     "dragon",
     "zombie"
@@ -844,6 +1165,60 @@
     "Soc": 5
    },
    "wounds": 16,
+   "attacks": [
+    {
+     "name": "Bite",
+     "damage": 7,
+     "trait": "Bite"
+    },
+    {
+     "name": "Claws",
+     "damage": 8,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bite",
+     "rating": "+7",
+     "ref": "E0-T-006"
+    },
+    {
+     "name": "Fearless",
+     "ref": "E0-T-227"
+    },
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    },
+    {
+     "name": "Hungry",
+     "ref": "E0-T-029"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Venom",
+     "param": "Hard",
+     "ref": "E0-T-064"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Champion",
+     "ref": "E0-T-010"
+    },
+    {
+     "name": "Painless",
+     "ref": "E0-T-042"
+    }
+   ],
    "keywords": [
     "goule"
    ],
@@ -922,6 +1297,17 @@
      "ref": "E0-T-045"
     }
    ],
+   "optionalTraits": [
+    {
+     "name": "Corruption",
+     "param": "Minor",
+     "ref": "E0-T-016"
+    },
+    {
+     "name": "Venom",
+     "ref": "E0-T-064"
+    }
+   ],
    "keywords": [
     "goule"
    ],
@@ -950,6 +1336,80 @@
     "Soc": 20
    },
    "wounds": 20,
+   "armour": {
+    "parts": [
+     {
+      "name": "Armour",
+      "ap": 2
+     }
+    ]
+   },
+   "traits": [
+    {
+     "name": "Dark Vision",
+     "ref": "E0-T-017"
+    },
+    {
+     "name": "Die Hard",
+     "ref": "E0-T-075"
+    },
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    },
+    {
+     "name": "Hardy",
+     "ref": "E0-T-079"
+    },
+    {
+     "name": "Painless",
+     "ref": "E0-T-042"
+    },
+    {
+     "name": "Sprinter",
+     "ref": "E0-T-049"
+    },
+    {
+     "name": "Undead",
+     "ref": "E0-T-061"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Animosity",
+     "param": "The Living",
+     "ref": "E0-T-003"
+    },
+    {
+     "name": "Champion",
+     "ref": "E0-T-010"
+    },
+    {
+     "name": "Cunning",
+     "ref": "E0-T-074"
+    },
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    },
+    {
+     "name": "Infestation",
+     "ref": "E0-T-033"
+    },
+    {
+     "name": "Mental Corruption",
+     "ref": "E0-T-038"
+    },
+    {
+     "name": "Spellcaster",
+     "param": "Necromancy",
+     "ref": "E0-T-048"
+    },
+    {
+     "name": "Stealthy",
+     "ref": "E0-T-050"
+    }
+   ],
    "keywords": [
     "mort-vivant"
    ],
@@ -981,6 +1441,13 @@
    "armour": {
     "toughnessBonus": 3
    },
+   "attacks": [
+    {
+     "name": "Hand Weapon",
+     "value": 39,
+     "damage": 6
+    }
+   ],
    "skills": [
     {
      "name": "Animal Care",
@@ -1088,6 +1555,13 @@
    "armour": {
     "toughnessBonus": 3
    },
+   "attacks": [
+    {
+     "name": "Walking Stick",
+     "value": 21,
+     "damage": 3
+    }
+   ],
    "skills": [
     {
      "name": "Athletics",
@@ -1146,6 +1620,23 @@
      "value": 51
     }
    ],
+   "talents": [
+    {
+     "name": "Acute Sense (Taste)"
+    },
+    {
+     "name": "Attractive"
+    },
+    {
+     "name": "Craftsman (Cook)"
+    },
+    {
+     "name": "Etiquette (Guilder)"
+    },
+    {
+     "name": "Nose for Trouble"
+    }
+   ],
    "trappings": [
     "Travelling Cloak",
     "Pickled Invertebrates",
@@ -1180,6 +1671,118 @@
     "Soc": 35
    },
    "wounds": 11,
+   "armour": {
+    "toughnessBonus": 3,
+    "parts": [
+     {
+      "name": "Leather Jack",
+      "ap": 2,
+      "locations": "the Body and Arms Locations"
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Bow",
+     "value": 50,
+     "damage": 7,
+     "rangeYards": 50,
+     "qualities": [
+      "Impale"
+     ]
+    },
+    {
+     "name": "Hand Weapon",
+     "value": 42,
+     "damage": 6
+    }
+   ],
+   "skills": [
+    {
+     "name": "Animal Care",
+     "nameFr": "Soin aux animaux",
+     "value": 35
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 41
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 35
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 30
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 35
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 39
+    },
+    {
+     "name": "Language (Reikspiel)",
+     "nameFr": "Langue (Reikspiel)",
+     "value": 55
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 42
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 40
+    },
+    {
+     "name": "Ranged (Bow)",
+     "nameFr": "Projectiles (Arc)",
+     "value": 50
+    },
+    {
+     "name": "Ride (Horse)",
+     "nameFr": "Chevaucher (Cheval)",
+     "value": 30
+    }
+   ],
+   "traits": [
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Marksman"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Nimble-fingered"
+    },
+    {
+     "name": "Roughrider"
+    },
+    {
+     "name": "Tunnel Fighter"
+    }
+   ],
+   "trappings": [
+    "Bow with 20 arrows",
+    "Hand Weapon",
+    "Light Warhorse",
+    "Leather Jack"
+   ],
    "keywords": [
     "humain",
     "patrouilleur-routier"
@@ -1212,6 +1815,13 @@
    "armour": {
     "toughnessBonus": 3
    },
+   "attacks": [
+    {
+     "name": "Hand Weapon",
+     "value": 41,
+     "damage": 7
+    }
+   ],
    "skills": [
     {
      "name": "Animal Care",
@@ -1281,6 +1891,23 @@
      "value": 37
     }
    ],
+   "talents": [
+    {
+     "name": "Iron Jaw"
+    },
+    {
+     "name": "Pure Soul"
+    },
+    {
+     "name": "Second Sight"
+    },
+    {
+     "name": "Sixth Sense"
+    },
+    {
+     "name": "Tinker"
+    }
+   ],
    "trappings": [
     "Smelly Robes",
     "Herbs and Draughts",
@@ -1315,6 +1942,108 @@
     "Soc": 33
    },
    "wounds": 9,
+   "armour": {
+    "toughnessBonus": 2
+   },
+   "attacks": [
+    {
+     "name": "Sickle",
+     "value": 28,
+     "damage": 6
+    }
+   ],
+   "skills": [
+    {
+     "name": "Animal Care",
+     "nameFr": "Soin aux animaux",
+     "value": 47
+    },
+    {
+     "name": "Channelling (Magick)",
+     "nameFr": "Focalisation (Magick)",
+     "frUnverified": true,
+     "value": 43
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 47
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 40
+    },
+    {
+     "name": "Language (Magick)",
+     "nameFr": "Langue (Magick)",
+     "value": 47
+    },
+    {
+     "name": "Language (Reikspiel)",
+     "nameFr": "Langue (Reikspiel)",
+     "value": 72
+    },
+    {
+     "name": "Lore (Folklore)",
+     "nameFr": "Savoir (Folklore)",
+     "frUnverified": true,
+     "value": 47
+    },
+    {
+     "name": "Lore (Herbs)",
+     "nameFr": "Savoir (Herbes)",
+     "value": 47
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 47
+    },
+    {
+     "name": "Trade (Herbalist)",
+     "nameFr": "Métier (Herboriste)",
+     "value": 44
+    }
+   ],
+   "talents": [
+    {
+     "name": "Arcane Magic (Hedgecraft)"
+    },
+    {
+     "name": "Catfall"
+    },
+    {
+     "name": "Petty Magic"
+    },
+    {
+     "name": "Pure Soul"
+    },
+    {
+     "name": "Second Sight"
+    }
+   ],
+   "trappings": [
+    "Backpack",
+    "Hand Weapon (Sickle)",
+    "1d10 Lucky Charms",
+    "Quarterstaff",
+    "Antitoxin Kit",
+    "Healing Poultice",
+    "Trade Tools (Herbalist)"
+   ],
+   "spells": {
+    "Petty": [
+     "Animal Friend",
+     "Marsh Lights",
+     "Warning"
+    ],
+    "Lore of Hedgecraft": [
+     "Goodwill",
+     "Part the Branches",
+     "Protective Charm"
+    ]
+   },
    "keywords": [
     "humain",
     "sorciere"
@@ -1347,6 +2076,13 @@
    "armour": {
     "toughnessBonus": 3
    },
+   "attacks": [
+    {
+     "name": "Hand Weapon",
+     "value": 28,
+     "damage": 8
+    }
+   ],
    "skills": [
     {
      "name": "Athletics",
@@ -1416,6 +2152,32 @@
      "ref": "E0-T-041"
     }
    ],
+   "talents": [
+    {
+     "name": "Beneath Notice"
+    },
+    {
+     "name": "Briber"
+    },
+    {
+     "name": "Etiquette (Servants)"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Resistant (Poison)"
+    },
+    {
+     "name": "Savant (Drakenhof)"
+    },
+    {
+     "name": "Shadow"
+    }
+   ],
    "trappings": [
     "Floor Brush",
     "Livery",
@@ -1451,8 +2213,28 @@
    },
    "wounds": 9,
    "armour": {
-    "toughnessBonus": 3
+    "toughnessBonus": 3,
+    "parts": [
+     {
+      "name": "Breastplate",
+      "ap": 2,
+      "locations": "Body"
+     }
+    ]
    },
+   "attacks": [
+    {
+     "name": "Foil",
+     "value": 43,
+     "damage": 6,
+     "qualities": [
+      "Fast",
+      "Impale",
+      "Precise",
+      "Undamaging"
+     ]
+    }
+   ],
    "skills": [
     {
      "name": "Bribery",
@@ -1521,6 +2303,32 @@
      "value": 39
     }
    ],
+   "talents": [
+    {
+     "name": "Briber"
+    },
+    {
+     "name": "Carouser"
+    },
+    {
+     "name": "Etiquette (Nobles)"
+    },
+    {
+     "name": "Gregarious"
+    },
+    {
+     "name": "Luck"
+    },
+    {
+     "name": "Noble Blood"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Supportive"
+    }
+   ],
    "trappings": [
     "Coach and Horses",
     "Quality Courtly Garb",
@@ -1561,6 +2369,25 @@
    "armour": {
     "toughnessBonus": 4
    },
+   "attacks": [
+    {
+     "name": "Bite",
+     "value": 55,
+     "damage": 8,
+     "free": "momentum"
+    },
+    {
+     "name": "Foil",
+     "value": 75,
+     "damage": 9,
+     "qualities": [
+      "Fast",
+      "Impale",
+      "Precise",
+      "Undamaging"
+     ]
+    }
+   ],
    "skills": [
     {
      "name": "Gamble",
@@ -1642,6 +2469,35 @@
      "ref": "E0-T-063"
     }
    ],
+   "talents": [
+    {
+     "name": "Attractive"
+    },
+    {
+     "name": "Commanding Presence"
+    },
+    {
+     "name": "Etiquette (Nobles)"
+    },
+    {
+     "name": "Menacing"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Noble Blood"
+    },
+    {
+     "name": "Fearless (Paupers)"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Suave"
+    }
+   ],
    "trappings": [
     "Hand Mirror",
     "Jewellery worth 200GC",
@@ -1682,7 +2538,19 @@
    "armour": {
     "toughnessBonus": 2
    },
+   "attacks": [
+    {
+     "name": "Hand Weapon",
+     "value": 48,
+     "damage": 7
+    }
+   ],
    "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 40
+    },
     {
      "name": "Cool",
      "nameFr": "Calme",
@@ -1709,6 +2577,11 @@
      "value": 38
     },
     {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 45
+    },
+    {
      "name": "Intuition",
      "nameFr": "Intuition",
      "value": 40
@@ -1732,13 +2605,35 @@
      "name": "Perception",
      "nameFr": "Perception",
      "value": 42
+    },
+    {
+     "name": "Pick Lock",
+     "nameFr": "Crochetage",
+     "value": 42
+    }
+   ],
+   "talents": [
+    {
+     "name": "Break and Enter"
+    },
+    {
+     "name": "Catfall"
+    },
+    {
+     "name": "Embezzle"
+    },
+    {
+     "name": "Numismatics"
+    },
+    {
+     "name": "Read/Write"
     }
    ],
    "trappings": [
     "Small Lock Box",
     "Ledger",
     "Coach and Horses",
-    "Mercenary Guards ing"
+    "Mercenary Guards"
    ],
    "keywords": [
     "humain"
@@ -1771,6 +2666,13 @@
    "armour": {
     "toughnessBonus": 2
    },
+   "attacks": [
+    {
+     "name": "Unarmed",
+     "value": 25,
+     "damage": 2
+    }
+   ],
    "skills": [
     {
      "name": "Animal Care",
@@ -1849,6 +2751,26 @@
      "value": 38
     }
    ],
+   "talents": [
+    {
+     "name": "Ambidextrous"
+    },
+    {
+     "name": "Blather"
+    },
+    {
+     "name": "Bless"
+    },
+    {
+     "name": "Holy Visions"
+    },
+    {
+     "name": "Nose for Trouble"
+    },
+    {
+     "name": "Read/Write"
+    }
+   ],
    "trappings": [
     "Book (Psalms of the Marshes)",
     "Ceremonial Robes",
@@ -1882,6 +2804,98 @@
     "Soc": 33
    },
    "wounds": 9,
+   "armour": {
+    "toughnessBonus": 3
+   },
+   "attacks": [
+    {
+     "name": "Crowbar",
+     "value": 32,
+     "damage": 7
+    }
+   ],
+   "skills": [
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 39
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 33
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 32
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 35
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 39
+    },
+    {
+     "name": "Language (Reikspiel)",
+     "nameFr": "Langue (Reikspiel)",
+     "value": 60
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 30
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 36
+    },
+    {
+     "name": "Pick Lock",
+     "nameFr": "Crochetage",
+     "value": 58
+    },
+    {
+     "name": "Sleight of Hand",
+     "nameFr": "Escamotage",
+     "value": 58
+    },
+    {
+     "name": "Stealth (Urban)",
+     "nameFr": "Discrétion (Urbaine)",
+     "value": 33
+    }
+   ],
+   "traits": [
+    {
+     "name": "Mutation",
+     "param": "Distended Digits",
+     "ref": "E0-T-040"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Fast Hands"
+    },
+    {
+     "name": "Flee!"
+    },
+    {
+     "name": "Supportive"
+    }
+   ],
+   "trappings": [
+    "Crowbar",
+    "Leather Jerkin",
+    "Sack",
+    "Cloth Mask",
+    "Leather Gloves"
+   ],
    "keywords": [
     "humain"
    ],
@@ -1972,6 +2986,17 @@
      "value": 36
     }
    ],
+   "talents": [
+    {
+     "name": "Briber"
+    },
+    {
+     "name": "Dealmaker"
+    },
+    {
+     "name": "Iron Jaw"
+    }
+   ],
    "trappings": [
     "Lodgings",
     "Two Sets of Clothes",
@@ -2005,6 +3030,27 @@
     "Soc": 32
    },
    "wounds": 12,
+   "armour": {
+    "parts": [
+     {
+      "name": "Leather Jerkin",
+      "ap": 1,
+      "locations": "Body"
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Woodsman's Axe",
+     "value": 35,
+     "damage": 9,
+     "qualities": [
+      "Damaging",
+      "Hack",
+      "Tiring"
+     ]
+    }
+   ],
    "skills": [
     {
      "name": "Animal Care",
@@ -2069,6 +3115,23 @@
      "ref": "E0-T-079"
     }
    ],
+   "talents": [
+    {
+     "name": "Animal Affinity"
+    },
+    {
+     "name": "Hardy"
+    },
+    {
+     "name": "Nose for Trouble"
+    },
+    {
+     "name": "Strong Back"
+    },
+    {
+     "name": "Sturdy"
+    }
+   ],
    "trappings": [
     "Great Weapon (Woodsman's Axe)",
     "Leather Jerkin",
@@ -2105,6 +3168,13 @@
    "armour": {
     "toughnessBonus": 2
    },
+   "attacks": [
+    {
+     "name": "Unarmed",
+     "value": 28,
+     "damage": 3
+    }
+   ],
    "skills": [
     {
      "name": "Charm",
@@ -2162,12 +3232,45 @@
     {
      "name": "Miracles",
      "ref": "E0-T-039"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Bless (Any One)"
+    },
+    {
+     "name": "Bookish"
+    },
+    {
+     "name": "Doomed"
+    },
+    {
+     "name": "Invoke"
+    },
+    {
+     "name": "Linguistics"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Resistant (Poison)"
     }
    ],
    "trappings": [
     "Ceremonial Robes",
     "Hourglass",
     "The Book of Doorways"
+   ],
+   "notes": [
+    "Miracles: Destroy Undead, Dooming, Last Rites"
    ],
    "keywords": [
     "humain"
@@ -2198,8 +3301,22 @@
    },
    "wounds": 16,
    "armour": {
-    "toughnessBonus": 4
+    "toughnessBonus": 4,
+    "parts": [
+     {
+      "name": "Leather Jerkin",
+      "ap": 1,
+      "locations": "Body"
+     }
+    ]
    },
+   "attacks": [
+    {
+     "name": "Boat Hook",
+     "value": 49,
+     "damage": 8
+    }
+   ],
    "skills": [
     {
      "name": "Athletics",
@@ -2267,6 +3384,29 @@
      "value": 59
     }
    ],
+   "talents": [
+    {
+     "name": "Criminal"
+    },
+    {
+     "name": "Dealmaker"
+    },
+    {
+     "name": "Etiquette (Criminals)"
+    },
+    {
+     "name": "Gregarious"
+    },
+    {
+     "name": "Strong Back"
+    },
+    {
+     "name": "Sturdy"
+    },
+    {
+     "name": "Tenacious"
+    }
+   ],
    "trappings": [
     "Gang of Stevedores",
     "Guild Licence",
@@ -2309,10 +3449,18 @@
     "parts": [
      {
       "name": "Leather Jerkin",
-      "ap": 1
+      "ap": 1,
+      "locations": "Body"
      }
     ]
    },
+   "attacks": [
+    {
+     "name": "Hand Weapon",
+     "value": 37,
+     "damage": 7
+    }
+   ],
    "skills": [
     {
      "name": "Animal Care",
@@ -2371,6 +3519,20 @@
      "ref": "E0-T-041"
     }
    ],
+   "talents": [
+    {
+     "name": "Etiquette (Servants)"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Noble Blood"
+    },
+    {
+     "name": "Read/Write"
+    }
+   ],
    "trappings": [
     "Buckler",
     "Leather Jerkin",
@@ -2409,10 +3571,18 @@
     "parts": [
      {
       "name": "Mail Shirt",
-      "ap": 2
+      "ap": 2,
+      "locations": "Body"
      }
     ]
    },
+   "attacks": [
+    {
+     "name": "Hand Weapon",
+     "value": 50,
+     "damage": 7
+    }
+   ],
    "skills": [
     {
      "name": "Bribery",
@@ -2482,6 +3652,26 @@
      "name": "Fearless",
      "param": "Watchmen",
      "ref": "E0-T-227"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Break and Enter"
+    },
+    {
+     "name": "Criminal"
+    },
+    {
+     "name": "Embezzle"
+    },
+    {
+     "name": "Fearless (Watchmen)"
+    },
+    {
+     "name": "Stone Soup"
+    },
+    {
+     "name": "Super Numerate"
     }
    ],
    "trappings": [

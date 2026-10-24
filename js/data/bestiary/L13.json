@@ -180,6 +180,11 @@
    },
    "attacks": [
     {
+     "name": "Bite",
+     "damage": 9,
+     "trait": "Bite"
+    },
+    {
      "name": "Talons",
      "damage": 9,
      "trait": "Weapon"
@@ -206,6 +211,16 @@
     {
      "name": "Stride",
      "ref": "E0-T-084"
+    },
+    {
+     "name": "Trained",
+     "param": "Broken, Mount, Shock Cavalry, War",
+     "ref": "E0-T-060"
+    },
+    {
+     "name": "Bite",
+     "rating": "+9",
+     "ref": "E0-T-006"
     }
    ],
    "trappings": [
@@ -247,6 +262,7 @@
      "name": "Bow",
      "damage": 6,
      "trait": "Ranged",
+     "rangeYards": 50,
      "ranged": true
     },
     {
@@ -365,6 +381,9 @@
      "name": "Lightning Reflexes"
     },
     {
+     "name": "Nose for Trouble"
+    },
+    {
      "name": "Orientation"
     },
     {
@@ -423,6 +442,7 @@
      "name": "Crossbow",
      "damage": 9,
      "trait": "Ranged",
+     "rangeYards": 60,
      "ranged": true
     },
     {
@@ -858,7 +878,7 @@
      "name": "Doomed"
     },
     {
-     "name": "Read/ Write"
+     "name": "Read/Write"
     },
     {
      "name": "Savvy"
@@ -959,6 +979,16 @@
      "name": "Evaluate",
      "nameFr": "Évaluation",
      "value": 34
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 36
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 46
     },
     {
      "name": "Haggle",
@@ -1151,7 +1181,7 @@
      "name": "Read/Write"
     },
     {
-     "name": "Resistance (Disease)"
+     "name": "Resistant (Disease)"
     },
     {
      "name": "Savvy"

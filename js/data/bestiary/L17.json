@@ -211,15 +211,32 @@
      "name": "Sixth Sense"
     }
    ],
+   "trappings": [
+    "Grimoire",
+    "Enchanted Staff",
+    "Practical Robes of the Light Order",
+    "Purse containing coins to the value of 4GCs"
+   ],
+   "notes": [
+    "Marks: Mark of Hysh, Stoicism"
+   ],
    "spells": {
-    "spells": [
-     "Petty: Bearings",
+    "Petty": [
+     "Bearings",
      "Dazzle",
      "Conserve",
      "Light",
      "Magic Flame",
      "Shock",
      "Warning"
+    ],
+    "Lore of Light": [
+     "Daemonbane",
+     "Dazzling Brightness",
+     "Eyes of Volans",
+     "Light of Purity",
+     "Phâ's Protection",
+     "Pierce the Veil"
     ]
    },
    "nameFrSource": "proposition"
@@ -441,10 +458,10 @@
      "name": "Petty Magic"
     },
     {
-     "name": "Read/ Write"
+     "name": "Read/Write"
     },
     {
-     "name": "Resistance (Poison)"
+     "name": "Resistant (Poison)"
     },
     {
      "name": "Second Sight"
@@ -463,9 +480,22 @@
      "rank": 4
     }
    ],
+   "trappings": [
+    "Amulet of Sea Gold",
+    "Enchanted Staff",
+    "Sword",
+    "The Gleaming Robe",
+    "Vial of Al-kahest (see page 52)",
+    "Vial of Panacea Universalis (see page 163)",
+    "Quicksilver (Pegasus housed at the Imperial Zoo)",
+    "Private Library and Workshop at the Gold College"
+   ],
+   "notes": [
+    "Marks: Shining Orbs, Hardness, Mark of Chamon"
+   ],
    "spells": {
-    "spells": [
-     "Petty: Bearings",
+    "Petty": [
+     "Bearings",
      "Dazzle",
      "Dart",
      "Drain",
@@ -475,6 +505,34 @@
      "Shock",
      "Twitch",
      "Warning"
+    ],
+    "Arcane": [
+     "Aethyric Armour",
+     "Aethyric Arms",
+     "Blast",
+     "Bolt",
+     "Breath",
+     "Bridge",
+     "Chain Attack",
+     "Corrosive Blood",
+     "Fearsome",
+     "Flight",
+     "Teleport",
+     "Ward"
+    ],
+    "Lore of Metal": [
+     "Crucible of Chamon",
+     "Curse of Rust",
+     "Enchant Weapon",
+     "Feather of Lead",
+     "Forge of Chamon",
+     "Gehenna's Golden Globe",
+     "Glittering Robe",
+     "Goldsteel Shielding",
+     "Meteoric Ironclad",
+     "Prismatic Refraction of Habermas",
+     "Replication of Levorg",
+     "Transmutation of Chamon"
     ]
    },
    "nameFrSource": "proposition"
@@ -679,6 +737,9 @@
      "rank": 3
     },
     {
+     "name": "Iron Will"
+    },
+    {
      "name": "Magical Sense"
     },
     {
@@ -703,9 +764,21 @@
      "name": "War Wizard"
     }
    ],
+   "trappings": [
+    "Grimoire",
+    "Enchanted Staff",
+    "Standard Robes",
+    "Golden Sickle",
+    "Magical Licence",
+    "College Library",
+    "Workshop at College"
+   ],
+   "notes": [
+    "Marks: Rapid Growth, Whiff of Ghyran"
+   ],
    "spells": {
-    "spells": [
-     "Petty: Animal Friend",
+    "Petty": [
+     "Animal Friend",
      "Bearings",
      "Conserve",
      "Dart",
@@ -715,6 +788,26 @@
      "Spring",
      "Twitch",
      "Warning"
+    ],
+    "Arcane": [
+     "Arrow Shield",
+     "Blast",
+     "Bridge",
+     "Dark Vision",
+     "Entangle",
+     "Flight",
+     "Push",
+     "Ward"
+    ],
+    "Lore of Life": [
+     "Almanac",
+     "Barkskin",
+     "Dwellers Below",
+     "Forest of Thorns",
+     "Leaf Fall",
+     "Lifebloom",
+     "Regenerate",
+     "Verdant Apotheosis"
     ]
    },
    "keywords": [
@@ -918,10 +1011,10 @@
      "name": "Petty Magic"
     },
     {
-     "name": "Read/ Write"
+     "name": "Read/Write"
     },
     {
-     "name": "Resistance (Disease)"
+     "name": "Resistant (Disease)"
     },
     {
      "name": "Savvy"
@@ -939,9 +1032,16 @@
      "name": "Well-prepared"
     }
    ],
+   "trappings": [
+    "Standard Robe",
+    "Sword",
+    "Staff topped with Telescope",
+    "Library of Prophetic Texts",
+    "Collection of Lustrian Gold Plaques"
+   ],
    "spells": {
-    "spells": [
-     "Petty: Bearings",
+    "Petty": [
+     "Bearings",
      "Conserve",
      "Dart",
      "Drain",
@@ -952,6 +1052,34 @@
      "Sounds",
      "Twitch",
      "Warning"
+    ],
+    "Arcane": [
+     "Aethyric Armour",
+     "Aethyric Arms",
+     "Blast",
+     "Bolt",
+     "Chain Attack",
+     "Dome",
+     "Flight",
+     "Magic Shield",
+     "Move Object",
+     "Push"
+    ],
+    "Lore of Heavens": [
+     "Azure Blades",
+     "Cerulean Shield",
+     "Comet of Casandora",
+     "Curse of Fate",
+     "Divination",
+     "Fate's Fickle Fingers",
+     "Fate Illuminated",
+     "Lens on the Sky",
+     "Mistral From the Stratosphere",
+     "Project Spirit",
+     "Starcrossed",
+     "Storm of Shemtek",
+     "T'Essla's Arc",
+     "Thorsen's Thunderstorm"
     ]
    },
    "nameFrSource": "proposition"
@@ -1269,6 +1397,7 @@
     }
    ],
    "trappings": [
+    "Fine Set of Grey Clothing decorated with Holswig-Schliestein Family Crest",
     "Hooded Green Velvet Cloak",
     "Quill and Ink",
     "Sword",
@@ -1276,13 +1405,16 @@
     "Purse containing 14 GCs"
    ],
    "spells": {
-    "spells": [
-     "Petty Magic Dart",
+    "Petty": [
+     "Dart",
      "Eavesdrop",
      "Magic Flame",
      "Open Lock",
      "Sounds",
-     "Twitch Arcane Choking Shadows",
+     "Twitch"
+    ],
+    "Arcane": [
+     "Choking Shadows",
      "Entangle",
      "Illusion",
      "Mystifying Miasma",
@@ -1522,10 +1654,10 @@
      "name": "Perfect Pitch"
     },
     {
-     "name": "Read/ Write"
+     "name": "Read/Write"
     },
     {
-     "name": "Resistance (Disease)"
+     "name": "Resistant (Disease)"
     },
     {
      "name": "Savvy"
@@ -1548,8 +1680,20 @@
     "Pale Scythe"
    ],
    "spells": {
-    "Petty: Dart, Drain, Shock, Warning Arcane: Aethyric Arms, Bridge, Flight, Teleport": [
-     "Lore of Death"
+    "Petty": [
+     "Dart",
+     "Drain",
+     "Shock",
+     "Warning"
+    ],
+    "Arcane": [
+     "Aethyric Arms",
+     "Bridge",
+     "Flight",
+     "Teleport"
+    ],
+    "notes": [
+     "Elspeth has memorised all spells from the Lore of Death"
     ]
    },
    "keywords": [
@@ -1735,7 +1879,10 @@
      "Crown of Flame",
      "Distracting",
      "Fearsome",
-     "Firewall Petty: Dazzle",
+     "Firewall"
+    ],
+    "Petty": [
+     "Dazzle",
      "Dart",
      "Magic Flame",
      "Shock",
@@ -1936,6 +2083,9 @@
      "name": "Instinctive Diction"
     },
     {
+     "name": "Iron Will"
+    },
+    {
      "name": "Magical Sense"
     },
     {
@@ -1966,13 +2116,34 @@
      "name": "War Wizard"
     }
    ],
+   "trappings": [
+    "Enchanted Staff",
+    "Eagle Totem",
+    "Standard Robes"
+   ],
+   "notes": [
+    "Marks: Feral, Mark of Ghur"
+   ],
    "spells": {
-    "spells": [
-     "Petty: Animal Friend",
+    "Petty": [
+     "Animal Friend",
      "Bearings",
      "Produce Small Animal",
      "Spring",
      "Warning"
+    ],
+    "Lore of Beasts": [
+     "Aethyric Armour",
+     "Aethyric Arms",
+     "Amber Talons",
+     "Beast Form",
+     "Beast Master",
+     "Beast Tongue",
+     "Breath",
+     "Dark Vision",
+     "Entangle",
+     "Wyssan's Wildform",
+     "Winter Coat"
     ]
    },
    "keywords": [
@@ -2029,6 +2200,11 @@
      "ref": "E0-T-026"
     },
     {
+     "name": "Immunity",
+     "param": "All Fire",
+     "ref": "E0-T-031"
+    },
+    {
      "name": "Size",
      "param": "Enormous",
      "ref": "E0-T-045"
@@ -2060,7 +2236,7 @@
    "spells": {
     "spells": [
      "Aethyric Armour",
-     "Ygethmor's Flaming Blizzard (see page 137)"
+     "Ygethmor's Flaming Blizzard"
     ]
    },
    "keywords": [
@@ -2122,6 +2298,11 @@
      "name": "Grim",
      "rating": "3",
      "ref": "E0-T-026"
+    },
+    {
+     "name": "Immunity",
+     "param": "Shyish",
+     "ref": "E0-T-031"
     },
     {
      "name": "Size",
@@ -2207,6 +2388,11 @@
      "name": "Horns",
      "rating": "+10",
      "ref": "E0-T-028"
+    },
+    {
+     "name": "Immunity",
+     "param": "Ghur",
+     "ref": "E0-T-031"
     },
     {
      "name": "Size",
@@ -2308,6 +2494,24 @@
      "ref": "E0-T-062"
     }
    ],
+   "optionalTraits": [
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    },
+    {
+     "name": "Hungry",
+     "ref": "E0-T-029"
+    },
+    {
+     "name": "Infestation",
+     "ref": "E0-T-033"
+    },
+    {
+     "name": "Territorial",
+     "ref": "E0-T-056"
+    }
+   ],
    "nameFrSource": "proposition"
   },
   {
@@ -2382,9 +2586,8 @@
      "value": 50
     },
     {
-     "name": "Melee (Two- handed)",
-     "nameFr": "Corps à corps (Two- handed)",
-     "frUnverified": true,
+     "name": "Melee (Two-handed)",
+     "nameFr": "Corps à corps (Deux mains)",
      "value": 50
     },
     {
@@ -2413,6 +2616,9 @@
      "name": "Sturdy"
     },
     {
+     "name": "Suffuse With (Wind) (see page 186)"
+    },
+    {
      "name": "Very Strong"
     },
     {
@@ -2421,10 +2627,7 @@
    ],
    "trappings": [
     "Zweihander",
-    "Skills",
-    "or Talents",
-    "or they use it to improve their familiar's Characteristics",
-    "Skills"
+    "Dagger"
    ],
    "nameFrSource": "proposition"
   },
@@ -2529,6 +2732,9 @@
     },
     {
      "name": "Small"
+    },
+    {
+     "name": "Suffuse With (Wind) (see page 186)"
     }
    ],
    "nameFrSource": "proposition"
@@ -2632,18 +2838,14 @@
     },
     {
      "name": "Small"
+    },
+    {
+     "name": "Suffuse With (Wind) (see page 186)"
     }
    ],
    "spells": {
-    "spells": [
-     "A Spell Familiar knows up to four spells",
-     "depending on their master's Wizard Career Level. The wizard teaches these spells to their familiar",
-     "so the wizard must already know them. A familiar can learn a new spell each time the wizard gains a Career Level. foot in diameter",
-     "it can take a humanoid shape",
-     "but it is too bright to see any features. Power: A self-lighting candle or small lamp. Its master often carries it",
-     "but it can rapidly levitate and float around if necessary. Its flame flickers when it talks. Spell: A large moth",
-     "bright and white as a full moon. It sheds sparkling scales as it flutters. Drawn to light",
-     "but not foolish enough to get burnt. Familiars of Chamon"
+    "notes": [
+     "A Spell Familiar knows up to four spells, depending on their master's Wizard Career Level. The wizard teaches these spells to their familiar, so the wizard must already know them."
     ]
    },
    "nameFrSource": "proposition"
@@ -2929,6 +3131,9 @@
      "name": "Instinctive Diction"
     },
     {
+     "name": "Iron Will"
+    },
+    {
      "name": "Lightning Reflexes"
     },
     {
@@ -2942,7 +3147,7 @@
      "name": "Menacing"
     },
     {
-     "name": "Nimble Fingered"
+     "name": "Nimble-fingered"
     },
     {
      "name": "Petty Magic"
@@ -2969,6 +3174,9 @@
      "name": "Strong-minded"
     },
     {
+     "name": "Tower of Memories"
+    },
+    {
      "name": "Very Resilient"
     },
     {
@@ -2980,19 +3188,22 @@
    ],
    "trappings": [
     "Chaos Armour (cannot be removed)",
+    "Chaos Runeblade (+SB+5, Damaging, Hack, Magical, Penetrating, Unbreakable)",
     "The Cloak of Golden Glamour",
     "Grimoire of Dark Magicks",
-    "Skull of Katam",
-    "Talisman of Tzeentch Mental Corruption: Hollow Heart"
+    "Skull of Katam"
    ],
    "spells": {
-    "spells": [
-     "Petty Magic Dart",
+    "Petty": [
+     "Dart",
      "Drain",
      "Eavesdrop",
      "Open Lock",
      "Sounds",
-     "Warning Arcane Bolt",
+     "Warning"
+    ],
+    "Arcane": [
+     "Bolt",
      "Blast",
      "Corrosive Blood",
      "Distracting",
@@ -3001,9 +3212,15 @@
      "Manifest Lesser Daemon",
      "Octagram",
      "Teleport",
-     "Ward Lore of Daemonology Detect Daemon",
+     "Ward"
+    ],
+    "Lore of Daemonology": [
+     "Detect Daemon",
      "Manifest Lesser Daemon",
-     "Octagram Lore of Light Abulla's Snare",
+     "Octagram"
+    ],
+    "Lore of Light": [
+     "Abulla's Snare",
      "Assault of Stone",
      "Banishment",
      "Blinding Light",
@@ -3012,7 +3229,10 @@
      "Hands of Karkora",
      "Net of Amyntok",
      "Speed of Thought",
-     "Time Amok Lore of Tzeentch Bolt of Change",
+     "Time Amok"
+    ],
+    "Lore of Tzeentch": [
+     "Bolt of Change",
      "Boon of Tzeentch",
      "Blue Fire of Tzeentch",
      "Curse of Tzeentch",
@@ -3055,7 +3275,7 @@
    "size": "small",
    "attacks": [
     {
-     "name": "Weapon",
+     "name": "Claws",
      "damage": 6,
      "trait": "Weapon"
     }
@@ -3141,7 +3361,7 @@
    "size": "small",
    "attacks": [
     {
-     "name": "Weapon",
+     "name": "Quill",
      "damage": 9,
      "trait": "Weapon"
     }
@@ -3169,6 +3389,11 @@
     {
      "name": "Immune to Psychology",
      "ref": "E0-T-030"
+    },
+    {
+     "name": "Mutation",
+     "param": "Extra arm - +1 Attack",
+     "ref": "E0-T-040"
     },
     {
      "name": "Size",
@@ -3223,13 +3448,14 @@
     "Soc": 5
    },
    "wounds": 26,
+   "size": "large",
    "armour": {
     "ap": 1,
     "printedTotal": 5
    },
    "attacks": [
     {
-     "name": "Weapon",
+     "name": "Bite",
      "damage": 8,
      "trait": "Weapon"
     }
@@ -3264,12 +3490,17 @@
      "ref": "E0-T-030"
     },
     {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    },
+    {
      "name": "Unstable",
      "ref": "E0-T-062"
     }
    ],
-   "trappings": [
-    "roll on the Random Grimoire table on page 166."
+   "notes": [
+    "The Disc is piled high with all manner of grimoires and scrolls. If a Character should acquire one of the texts on the disc, roll on the Random Grimoire table on page 166."
    ],
    "keywords": [
     "tzeentch",
@@ -3314,8 +3545,8 @@
    ],
    "skills": [
     {
-     "name": "Channelling (M�na's Marsh Magic)",
-     "nameFr": "Focalisation (M�na's Marsh Magic)",
+     "name": "Channelling (Mòna's Marsh Magic)",
+     "nameFr": "Focalisation (Mòna's Marsh Magic)",
      "frUnverified": true,
      "value": 90
     },
@@ -3403,7 +3634,7 @@
      "name": "Aethyric Attunement"
     },
     {
-     "name": "Arcane Magic (M�na's Marsh Magic)"
+     "name": "Arcane Magic (Mòna's Marsh Magic)"
     },
     {
      "name": "Instinctive Diction",
@@ -3434,8 +3665,26 @@
     "Mouldy Robes"
    ],
    "spells": {
-    "Petty Magic Bearings, Careful Step, Gust, Marsh Lights, Spring, Sounds Arcane Breath, Entangle, Fearsome, Ward M�na's": [
-     "Marsh Magic"
+    "Petty": [
+     "Bearings",
+     "Careful Step",
+     "Gust",
+     "Marsh Lights",
+     "Spring",
+     "Sounds"
+    ],
+    "Arcane": [
+     "Breath",
+     "Entangle",
+     "Fearsome",
+     "Ward"
+    ],
+    "Mòna's Marsh Magic": [
+     "A Bite of Midges",
+     "Despondent Slough",
+     "Inculcate Mizzle",
+     "Mystic Mist",
+     "O Mere be More"
     ]
    },
    "nameFrSource": "proposition"

@@ -1,5 +1,5 @@
 import { uid } from './models.js';
-import {randomVortexStep} from './v5-magic-turn.js';
+import {randomVortexStep,oppositeCamp} from './v5-magic-turn.js';
 import {buildParticipantFromBestiary,summonProfileLibrary} from './bestiary-profiles.js';
 import {spellObjectChoices,ARCANE_WEAPON_PROFILES} from './equipment.js';
 import {acquiredV5Talents} from './v5-talents.js';
@@ -691,12 +691,12 @@ export function resolveAuxiliarySummons({ contract, caster, options = {} } = {})
     const profileId=spec.profiles?spec.profiles[facts[spec.nameFact]]:spec.profile;
     if(!profileId)throw new Error('Choix de la créature invoquée manquant : '+(spec.nameFact || 'profil'));
     const label=spec.names?.[facts[spec.nameFact]] || spec.name;
-    const camp=spec.outcomeFact && facts[spec.outcomeFact]==='attacks'?'ennemi':caster.camp;
+    const camp=spec.outcomeFact && facts[spec.outcomeFact]==='attacks'?oppositeCamp(caster.camp):caster.camp;
     for(let i=0;i<total;i++){
       const built=buildParticipantFromBestiary(profileId,{library:summonProfileLibrary(),camp,zone:'active',idFactory:()=>'aux-'+contract.id+'-'+uid()+'-'+(i+1)});
       auxiliaries.push({...built,name:total>1?label+' '+(i+1):label,traits:[...built.traits,...(spec.traits || []).filter(t=>!built.traits.includes(t))],
         states:(spec.states || []).map(name=>({id:'st-'+uid(),name,level:1})),isAuxiliary:true,casterId:caster.id,noMomentum:false,
-        extensions:{v5:{...built.extensions.v5,summonedBySpellId:contract.id}}});
+        extensions:{v5:{...built.extensions.v5,summonedBySpellId:contract.id,...(spec.hostileOnExpiry?{hostileOnExpiry:true,summonCasterCamp:caster.camp,summonOutcome:facts[spec.outcomeFact]==='attacks'?'attacks':'obeys'}:{})}}});
     }
   } else if (contract.effects?.summon?.indestructible) {
     const spec={...contract.effects.summon},sl=options.castingSl || 0;if(spec.wsFormula)spec.ws=spellFormulaValue(spec.wsFormula,caster);

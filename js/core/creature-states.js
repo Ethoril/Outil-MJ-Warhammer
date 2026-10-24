@@ -12,7 +12,7 @@ const RULES = {
   disease: { fr: 'Maladie', names: ['disease', 'maladie'], note: 'Porte la maladie indiquée ; contraction selon exposition, atteinte propre décidée par le MJ.' },
   corrosive: { fr: 'Sang corrosif', names: ['corrosive blood', 'sang corrosif'], note: 'Après blessure reçue, un seul d10 de dégâts partagé entre tous les engagés.' },
   vampiric: { fr: 'Vampirique', names: ['vampiric', 'vampirique'], note: 'Une Morsure sur proie admissible soigne autant que les Blessures infligées ; seule méthode de soin.' },
-  swarm: { fr: 'Nuée', names: ['swarm', 'nuee'], note: 'Psychologie et Taille ignorées ; mouvement ignore l\'engagement ; Blessures quintuplées et CC accrue (valeurs du profil) ; Blessure directe aux engagés en fin de Round ; tir facilité de quatre DR.' },
+  swarm: { fr: 'Nuée', names: ['swarm', 'nuee'], note: 'Psychologie et Taille ignorées ; mouvement ignore l\'engagement ; Blessures quintuplées et CC accrue (valeurs du profil) ; chaque engagé perd 1 Blessure en fin de Round ; tir facilité de quatre DR.' },
   unstable: { fr: 'Instable', names: ['unstable', 'instable'], note: 'Fin de Round engagé contre Élan adverse sans le sien : deux Blessures ; à zéro, disparition ou destruction.' },
   diehard: { fr: 'Increvable', names: ['die hard', 'increvable'], note: 'À la mort si le corps est intact : Endurance étendue de six DR à chaque début de Round pendant BE Rounds ; une réussite revient avec une Blessure.' },
   split: { fr: 'Scission', names: ['split', 'scission'], note: 'Sur Blessure Critique ou à zéro Blessure, la créature se scinde en deux Horreurs bleues intactes.' }
@@ -113,8 +113,8 @@ export function planSwarm(participant) {
   if (!owned) return { ...plan, receipt: receiptOf(plan) };
   plan.ignores = { psychology: true, size: true, engagementForMovement: true };
   plan.rangedAgainst = { dr: -4, note: 'tir facilité de quatre DR' };
-  plan.endOfRound = { damage: 'Blessure directe', targets: 'engagés', amountPrinted: false };
-  plan.unresolved.push('Nuée : nombre de Blessures directes de fin de Round à saisir (non imprimé dans l\'inventaire).');
+  // Livre de base, Traits de créature (Swarm) : « All opponents Engaged with a Swarm automatically lose 1 Wound at the end of every Round ».
+  plan.endOfRound = { damage: 'Blessure directe', amount: 1, targets: 'engagés', amountPrinted: true };
   return finish(plan, rule);
 }
 

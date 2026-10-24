@@ -59,7 +59,7 @@ test('T3 Nuée (Lurkerfish E0-P-905) — Psychologie et Taille ignorées, tir à
   const plan = planSwarm(build('L25', 'E0-P-905'));
   assert.deepEqual(plan.ignores, { psychology: true, size: true, engagementForMovement: true });
   assert.equal(plan.rangedAgainst.dr, -4);
-  assert.equal(plan.available, false);
+  assert.equal(plan.endOfRound.amount, 1); // corrigé en Q8 : 1 Blessure par Round à chaque engagé
   assert.equal(planSwarm(synthetic([])).available, false);
 });
 

@@ -93,6 +93,9 @@
      "ref": "E0-T-044"
     }
    ],
+   "specialRules": [
+    "Taal's Own Blades"
+   ],
    "keywords": [
     "bete"
    ],
@@ -194,6 +197,9 @@
      "name": "Animal Affinity"
     }
    ],
+   "specialRules": [
+    "Kurnous' Own Blades"
+   ],
    "keywords": [
     "bete"
    ],
@@ -277,6 +283,10 @@
      "name": "Web",
      "rating": "40",
      "ref": "E0-T-068"
+    },
+    {
+     "name": "Venom",
+     "ref": "E0-T-064"
     }
    ],
    "optionalTraits": [
@@ -284,7 +294,15 @@
      "name": "Size",
      "param": "Enormous",
      "ref": "E0-T-045"
+    },
+    {
+     "name": "Trained",
+     "param": "Broken, Guard, Magic, Mount, War",
+     "ref": "E0-T-060"
     }
+   ],
+   "specialRules": [
+    "Spiteful"
    ],
    "abilities": [
     "E0-T-096"
@@ -412,6 +430,56 @@
     "Soc": 20
    },
    "wounds": 11,
+   "armour": {
+    "ap": 1,
+    "printedTotal": 4
+   },
+   "attacks": [
+    {
+     "name": "Short Bow",
+     "damage": 5,
+     "trait": "Ranged",
+     "rangeYards": 20,
+     "ranged": true
+    },
+    {
+     "name": "Crude Spear",
+     "damage": 6,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Animosity",
+     "param": "Greenskins",
+     "ref": "E0-T-003"
+    },
+    {
+     "name": "Arboreal",
+     "ref": "E0-T-069"
+    },
+    {
+     "name": "Afraid",
+     "param": "Elves",
+     "ref": "E0-T-001"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Venom",
+     "ref": "E0-T-064"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Trick Riding"
+    }
+   ],
+   "specialRules": [
+    "Borrowed Courage"
+   ],
    "keywords": [
     "gobelin"
    ],
@@ -440,6 +508,20 @@
     "Soc": 30
    },
    "wounds": 14,
+   "attacks": [
+    {
+     "name": "Spider-god Staff",
+     "damage": 8,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Pray",
+     "nameFr": "Prière",
+     "value": 60
+    }
+   ],
    "traits": [
     {
      "name": "Animosity",
@@ -482,6 +564,9 @@
      "name": "Venom",
      "ref": "E0-T-064"
     }
+   ],
+   "specialRules": [
+    "Not All There"
    ],
    "abilities": [
     "E0-T-097"
@@ -563,6 +648,9 @@
      "ref": "E0-T-056"
     }
    ],
+   "notes": [
+    "Option: Remove Bestial, Territorial, & Trained — Add 15 Fel"
+   ],
    "abilities": [
     "E0-T-099"
    ],
@@ -606,6 +694,14 @@
      "trait": "Weapon"
     }
    ],
+   "skills": [
+    {
+     "name": "Melee (Fangs)",
+     "nameFr": "Corps à corps (Fangs)",
+     "frUnverified": true,
+     "value": 75
+    }
+   ],
    "traits": [
     {
      "name": "Night Vision",
@@ -623,6 +719,11 @@
     {
      "name": "Tracker",
      "ref": "E0-T-059"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Reactive Strike (2)"
     }
    ],
    "abilities": [
@@ -666,11 +767,6 @@
      "name": "Tusks",
      "damage": 10,
      "trait": "Horns"
-    },
-    {
-     "name": "Tusks",
-     "damage": 10,
-     "trait": "Weapon"
     }
    ],
    "traits": [
@@ -733,6 +829,10 @@
      "name": "Tail",
      "rating": "+9",
      "ref": "E0-T-054"
+    },
+    {
+     "name": "Territorial",
+     "ref": "E0-T-056"
     }
    ],
    "keywords": [
@@ -773,11 +873,6 @@
      "name": "Tusks",
      "damage": 11,
      "trait": "Horns"
-    },
-    {
-     "name": "Tusks",
-     "damage": 11,
-     "trait": "Weapon"
     }
    ],
    "traits": [
@@ -817,6 +912,11 @@
      "rating": "+11",
      "param": "Tusks",
      "ref": "E0-T-028"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Combat Master (3)"
     }
    ],
    "abilities": [
@@ -906,7 +1006,15 @@
     {
      "name": "Territorial",
      "ref": "E0-T-056"
+    },
+    {
+     "name": "Trained",
+     "param": "Broken, Guard, Magic, Mount, War",
+     "ref": "E0-T-060"
     }
+   ],
+   "notes": [
+    "Option: Remove Bestial — Add +20 Fel"
    ],
    "abilities": [
     "E0-T-102",
@@ -951,11 +1059,6 @@
      "name": "Cavernous Maw",
      "damage": 10,
      "trait": "Bite"
-    },
-    {
-     "name": "Cavernous Maw",
-     "damage": 10,
-     "trait": "Weapon"
     }
    ],
    "traits": [
@@ -1007,6 +1110,30 @@
      "ref": "E0-T-009"
     }
    ],
+   "optionalTraits": [
+    {
+     "name": "Corrosive Blood",
+     "ref": "E0-T-015"
+    },
+    {
+     "name": "Horns",
+     "rating": "+9",
+     "param": "Hooked Spines",
+     "ref": "E0-T-028"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Size",
+     "param": "Enormous, Monstrous",
+     "ref": "E0-T-045"
+    }
+   ],
+   "specialRules": [
+    "Slime"
+   ],
    "abilities": [
     "E0-T-104",
     "E0-T-105",
@@ -1050,11 +1177,6 @@
      "name": "Horns",
      "damage": 10,
      "trait": "Horns"
-    },
-    {
-     "name": "Curling Horns",
-     "damage": 10,
-     "trait": "Weapon"
     }
    ],
    "traits": [
@@ -1093,6 +1215,11 @@
     {
      "name": "Territorial",
      "ref": "E0-T-056"
+    },
+    {
+     "name": "Trained",
+     "param": "Drive",
+     "ref": "E0-T-060"
     }
    ],
    "abilities": [
@@ -1126,6 +1253,69 @@
     "Soc": null
    },
    "wounds": 88,
+   "size": "enormous",
+   "armour": {
+    "ap": 5,
+    "printedTotal": 12
+   },
+   "attacks": [
+    {
+     "name": "Horns",
+     "damage": 13,
+     "trait": "Horns"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Melee (Curling Horns)",
+     "nameFr": "Corps à corps (Curling Horns)",
+     "frUnverified": true,
+     "value": 70
+    }
+   ],
+   "traits": [
+    {
+     "name": "Belligerent",
+     "ref": "E0-T-004"
+    },
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Grim",
+     "ref": "E0-T-026"
+    },
+    {
+     "name": "Painless",
+     "ref": "E0-T-042"
+    },
+    {
+     "name": "Size",
+     "param": "Enormous",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Stride",
+     "ref": "E0-T-084"
+    },
+    {
+     "name": "Horns",
+     "rating": "+13",
+     "conditional": true,
+     "ref": "E0-T-028"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Berserk Charge",
+     "rank": 3
+    },
+    {
+     "name": "Strike Mighty Blow",
+     "rank": 2
+    }
+   ],
    "abilities": [
     "E0-T-107",
     "E0-T-106"
@@ -1225,6 +1415,7 @@
      "name": "Shortbow",
      "damage": 5,
      "trait": "Ranged",
+     "rangeYards": 20,
      "ranged": true
     },
     {
@@ -1269,6 +1460,15 @@
      "name": "Infected",
      "ref": "E0-T-032"
     }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Stealthy",
+     "ref": "E0-T-050"
+    }
+   ],
+   "notes": [
+    "Option: Ranged (Net 3) (6)"
    ],
    "keywords": [
     "gobelin"
@@ -1320,6 +1520,19 @@
      "trait": "Weapon"
     }
    ],
+   "skills": [
+    {
+     "name": "Melee (Root-like Claws)",
+     "nameFr": "Corps à corps (Root-like Claws)",
+     "frUnverified": true,
+     "value": 75
+    },
+    {
+     "name": "Stealth",
+     "nameFr": "Discrétion",
+     "value": 65
+    }
+   ],
    "traits": [
     {
      "name": "Arboreal",
@@ -1367,6 +1580,26 @@
      "name": "Tail",
      "rating": "+9",
      "ref": "E0-T-054"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Magical",
+     "ref": "E0-T-036"
+    },
+    {
+     "name": "Spellcaster",
+     "param": "Jade",
+     "ref": "E0-T-048"
+    },
+    {
+     "name": "Trained",
+     "param": "Mount",
+     "ref": "E0-T-060"
+    },
+    {
+     "name": "Venom",
+     "ref": "E0-T-064"
     }
    ],
    "abilities": [
@@ -1553,12 +1786,18 @@
     {
      "name": "Tail",
      "damage": 12,
-     "trait": "Tail"
+     "trait": "Tail",
+     "qualities": [
+      "Venom"
+     ]
     },
     {
      "name": "Teeth",
      "damage": 10,
-     "trait": "Weapon"
+     "trait": "Weapon",
+     "qualities": [
+      "Infected"
+     ]
     }
    ],
    "traits": [
@@ -1579,6 +1818,9 @@
     {
      "name": "Tail",
      "rating": "+12",
+     "qualities": [
+      "Venom"
+     ],
      "ref": "E0-T-054"
     }
    ],
@@ -1596,7 +1838,15 @@
     {
      "name": "Horns",
      "ref": "E0-T-028"
+    },
+    {
+     "name": "Trained",
+     "param": "Broken, Guard, Magic, Mount, War",
+     "ref": "E0-T-060"
     }
+   ],
+   "notes": [
+    "Option: Remove Bestial, Change Size to Large, Add +20 to I, Int, and Fel — Change W to 42 & add Stealth (Rural) 65"
    ],
    "abilities": [
     "E0-T-111"
@@ -1758,6 +2008,9 @@
     },
     {
      "name": "Gregarious"
+    },
+    {
+     "name": "Nose for Trouble"
     }
    ],
    "trappings": [
@@ -1808,11 +2061,6 @@
      "name": "Tail",
      "damage": 9,
      "trait": "Tail"
-    },
-    {
-     "name": "Lethal Tail",
-     "damage": 9,
-     "trait": "Weapon"
     }
    ],
    "traits": [
@@ -1823,6 +2071,10 @@
     {
      "name": "Bestial",
      "ref": "E0-T-005"
+    },
+    {
+     "name": "Cold-blooded",
+     "ref": "E0-T-012"
     },
     {
      "name": "Night Vision",
@@ -1988,6 +2240,7 @@
     },
     {
      "name": "Creature Weapons",
+     "param": "Tongue Attack",
      "ref": "E0-T-288"
     },
     {
@@ -2035,6 +2288,7 @@
      "name": "Whip",
      "damage": 6,
      "trait": "Ranged",
+     "rangeYards": 6,
      "ranged": true
     },
     {
@@ -2171,6 +2425,10 @@
     {
      "name": "Infestation",
      "ref": "E0-T-033"
+    },
+    {
+     "name": "Mutation",
+     "ref": "E0-T-040"
     }
    ],
    "abilities": [
@@ -2480,6 +2738,12 @@
    "wounds": 16,
    "attacks": [
     {
+     "name": "Tentacles",
+     "damage": 6,
+     "trait": "Tentacles",
+     "count": 2
+    },
+    {
      "name": "Pseudopod Lash",
      "damage": 6,
      "trait": "Weapon"
@@ -2505,6 +2769,19 @@
     {
      "name": "Engulf",
      "ref": "E0-T-119"
+    },
+    {
+     "name": "Tentacles",
+     "rating": "+6",
+     "count": 2,
+     "ref": "E0-T-055"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Size",
+     "param": "Small, Large-Enormous",
+     "ref": "E0-T-045"
     }
    ],
    "abilities": [
@@ -2542,6 +2819,12 @@
    "wounds": 34,
    "size": "large",
    "attacks": [
+    {
+     "name": "Tentacles",
+     "damage": 7,
+     "trait": "Tentacles",
+     "count": 2
+    },
     {
      "name": "Pseudopod Lash",
      "damage": 7,
@@ -2619,6 +2902,12 @@
     {
      "name": "Engulf",
      "ref": "E0-T-119"
+    },
+    {
+     "name": "Tentacles",
+     "rating": "+7",
+     "count": 2,
+     "ref": "E0-T-055"
     }
    ],
    "talents": [
@@ -2869,6 +3158,9 @@
      "ref": "E0-T-042"
     }
    ],
+   "notes": [
+    "Option: Remove Stupid — Add Stealthy"
+   ],
    "abilities": [
     "E0-T-123",
     "E0-T-124"
@@ -2916,6 +3208,18 @@
      "name": "Deadwood Staff",
      "damage": 10,
      "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Channelling",
+     "nameFr": "Focalisation",
+     "value": 80
+    },
+    {
+     "name": "Language (Magick)",
+     "nameFr": "Langue (Magick)",
+     "value": 75
     }
    ],
    "traits": [
@@ -2977,6 +3281,21 @@
      "ref": "E0-T-065"
     }
    ],
+   "optionalTraits": [
+    {
+     "name": "Hardy",
+     "ref": "E0-T-079"
+    },
+    {
+     "name": "Hungry",
+     "ref": "E0-T-029"
+    },
+    {
+     "name": "Spellcaster",
+     "param": "Death",
+     "ref": "E0-T-048"
+    }
+   ],
    "abilities": [
     "E0-T-125",
     "E0-T-126"
@@ -3017,6 +3336,13 @@
      "trait": "Weapon"
     }
    ],
+   "skills": [
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 60
+    }
+   ],
    "traits": [
     {
      "name": "Amphibious",
@@ -3038,6 +3364,12 @@
     {
      "name": "Swamp-strider",
      "ref": "E0-T-085"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
     }
    ],
    "abilities": [
@@ -3133,10 +3465,19 @@
      "ref": "E0-T-045"
     },
     {
+     "name": "Tentacles",
+     "rating": "+10",
+     "count": 4,
+     "ref": "E0-T-055"
+    },
+    {
      "name": "Terror",
      "rating": "1",
      "ref": "E0-T-057"
     }
+   ],
+   "optionalSpecialRules": [
+    "Fanatical Cultists"
    ],
    "abilities": [
     "E0-T-129"
@@ -3179,6 +3520,19 @@
      "name": "Hidden Maw",
      "damage": 12,
      "trait": "Bite"
+    },
+    {
+     "name": "Teeth",
+     "damage": 10,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Melee (Teeth)",
+     "nameFr": "Corps à corps (Teeth)",
+     "frUnverified": true,
+     "value": 75
     }
    ],
    "traits": [
@@ -3227,6 +3581,12 @@
      "ref": "E0-T-013"
     }
    ],
+   "talents": [
+    {
+     "name": "Berserk Charge",
+     "rank": 3
+    }
+   ],
    "abilities": [
     "E0-T-130"
    ],
@@ -3264,11 +3624,6 @@
      "name": "Horns",
      "damage": 8,
      "trait": "Horns"
-    },
-    {
-     "name": "Serrated Horns",
-     "damage": 8,
-     "trait": "Weapon"
     }
    ],
    "traits": [
@@ -3376,6 +3731,7 @@
     },
     {
      "name": "Swarm",
+     "conditional": true,
      "ref": "E0-T-053"
     }
    ],
@@ -4214,6 +4570,7 @@
      "name": "Longbow",
      "damage": 10,
      "trait": "Ranged",
+     "rangeYards": 100,
      "ranged": true
     },
     {
@@ -4318,6 +4675,10 @@
     }
    ],
    "talents": [
+    {
+     "name": "Accurate Shot",
+     "rank": 2
+    },
     {
      "name": "Hardy"
     }
@@ -5117,6 +5478,13 @@
      "trait": "Weapon"
     }
    ],
+   "skills": [
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 75
+    }
+   ],
    "traits": [
     {
      "name": "Arboreal",
@@ -5221,6 +5589,24 @@
      "name": "Bite",
      "damage": 9,
      "trait": "Bite"
+    },
+    {
+     "name": "Claws",
+     "damage": 10,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Melee (Claws)",
+     "nameFr": "Corps à corps (Claws)",
+     "frUnverified": true,
+     "value": 65
+    },
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 62
     }
    ],
    "traits": [
@@ -5322,7 +5708,7 @@
     },
     {
      "name": "Claws",
-     "damage": 1,
+     "damage": 12,
      "trait": "Weapon"
     }
    ],
@@ -5356,9 +5742,16 @@
    ],
    "optionalTraits": [
     {
+     "name": "Magic Resistance",
+     "ref": "E0-T-037"
+    },
+    {
      "name": "Painless",
      "ref": "E0-T-042"
     }
+   ],
+   "optionalSpecialRules": [
+    "Cult (Fanatical or Chaos)"
    ],
    "abilities": [
     "E0-T-150"
@@ -5503,6 +5896,11 @@
    ],
    "optionalTraits": [
     {
+     "name": "Armour",
+     "rating": "1-3",
+     "ref": "E0-T-070"
+    },
+    {
      "name": "Bite",
      "ref": "E0-T-006"
     },
@@ -5511,12 +5909,23 @@
      "ref": "E0-T-020"
     },
     {
+     "name": "Fear",
+     "rating": "1-2",
+     "ref": "E0-T-022"
+    },
+    {
      "name": "Fury",
      "ref": "E0-T-078"
     },
     {
      "name": "Painless",
      "ref": "E0-T-042"
+    },
+    {
+     "name": "Tentacles",
+     "rating": "+5",
+     "count": 2,
+     "ref": "E0-T-055"
     }
    ],
    "abilities": [
@@ -5566,11 +5975,6 @@
      "name": "Tail",
      "damage": 13,
      "trait": "Tail"
-    },
-    {
-     "name": "Fanged Maw",
-     "damage": 11,
-     "trait": "Weapon"
     }
    ],
    "traits": [
@@ -5723,6 +6127,11 @@
      "ref": "E0-T-066"
     }
    ],
+   "talents": [
+    {
+     "name": "Enclosed Fighter"
+    }
+   ],
    "abilities": [
     "E0-T-154",
     "E0-T-155",
@@ -5773,6 +6182,19 @@
      "trait": "Weapon"
     }
    ],
+   "skills": [
+    {
+     "name": "Melee (Sickle Claws)",
+     "nameFr": "Corps à corps (Sickle Claws)",
+     "frUnverified": true,
+     "value": 73
+    },
+    {
+     "name": "Stealth",
+     "nameFr": "Discrétion",
+     "value": 68
+    }
+   ],
    "traits": [
     {
      "name": "Dark Vision",
@@ -5811,6 +6233,18 @@
      "rating": "+12",
      "param": "Nightmares",
      "ref": "E0-T-009"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Enclosed Fighter"
+    },
+    {
+     "name": "Reaction Strike"
+    },
+    {
+     "name": "Shadow",
+     "rank": 2
     }
    ],
    "abilities": [
@@ -5882,6 +6316,45 @@
      "ref": "E0-T-061"
     }
    ],
+   "optionalTraits": [
+    {
+     "name": "Champion",
+     "ref": "E0-T-010"
+    },
+    {
+     "name": "Chill Grasp",
+     "ref": "E0-T-011"
+    },
+    {
+     "name": "Fury",
+     "ref": "E0-T-078"
+    },
+    {
+     "name": "Hardy",
+     "ref": "E0-T-079"
+    },
+    {
+     "name": "Stealthy",
+     "ref": "E0-T-050"
+    },
+    {
+     "name": "Territorial",
+     "ref": "E0-T-056"
+    },
+    {
+     "name": "Unstable",
+     "ref": "E0-T-062"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Combat Master",
+     "rank": 2
+    },
+    {
+     "name": "Strike to Injure"
+    }
+   ],
    "abilities": [
     "E0-T-158"
    ],
@@ -5922,7 +6395,16 @@
      "name": "Warp Blade",
      "damage": 7,
      "trait": "Ranged",
+     "rangeYards": 48,
      "ranged": true
+    },
+    {
+     "name": "Warplock Pistol",
+     "damage": 9,
+     "trait": "Ranged",
+     "rangeYards": 20,
+     "ranged": true,
+     "optional": true
     },
     {
      "name": "Warp Blade",
@@ -5941,6 +6423,10 @@
      "name": "Disease",
      "param": "Ratte Fever",
      "ref": "E0-T-019"
+    },
+    {
+     "name": "Mutation",
+     "ref": "E0-T-040"
     }
    ],
    "abilities": [
@@ -5984,6 +6470,7 @@
      "name": "Ratling Cannon",
      "damage": 11,
      "trait": "Ranged",
+     "rangeYards": 40,
      "ranged": true
     },
     {

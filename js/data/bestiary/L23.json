@@ -543,6 +543,7 @@
      "name": "Crossbow",
      "damage": 9,
      "trait": "Ranged",
+     "rangeYards": 60,
      "ranged": true
     },
     {
@@ -638,6 +639,20 @@
     "ap": 1,
     "detail": "Leather Jack"
    },
+   "attacks": [
+    {
+     "name": "Crossbow",
+     "damage": 9,
+     "trait": "Ranged",
+     "rangeYards": 60,
+     "ranged": true
+    },
+    {
+     "name": "Dagger",
+     "damage": 5,
+     "trait": "Weapon"
+    }
+   ],
    "skills": [
     {
      "name": "Bribery",
@@ -710,7 +725,7 @@
      "name": "Small"
     },
     {
-     "name": "Resistance (Chaos)"
+     "name": "Resistant (Chaos)"
     }
    ],
    "trappings": [
@@ -718,7 +733,8 @@
     "Clothing",
     "Crossbow with 10 Bolts",
     "Dagger",
-    "Leather Jack"
+    "Leather Jack",
+    "44 brass pennies (with 16 silver shillings and 3 gold crowns secreted away)"
    ],
    "keywords": [
     "halfling"
@@ -757,6 +773,7 @@
      "name": "Pistol",
      "damage": 8,
      "trait": "Ranged",
+     "rangeYards": 20,
      "ranged": true
     },
     {
@@ -850,6 +867,9 @@
      "name": "Noble Blood"
     },
     {
+     "name": "Nose for Trouble"
+    },
+    {
      "name": "Roughrider"
     },
     {
@@ -908,6 +928,7 @@
      "name": "Pistol",
      "damage": 8,
      "trait": "Ranged",
+     "rangeYards": 20,
      "ranged": true
     },
     {
@@ -1015,6 +1036,9 @@
      "name": "Coolheaded"
     },
     {
+     "name": "Crack the Whip"
+    },
+    {
      "name": "Fearless (Outlaws)"
     },
     {
@@ -1022,6 +1046,9 @@
     },
     {
      "name": "Marksman"
+    },
+    {
+     "name": "Nose for Trouble"
     }
    ],
    "trappings": [
@@ -1077,6 +1104,7 @@
      "name": "Crossbow",
      "damage": 9,
      "trait": "Ranged",
+     "rangeYards": 60,
      "ranged": true
     },
     {
@@ -1157,6 +1185,9 @@
      "name": "Relentless"
     },
     {
+     "name": "Strike to Stun"
+    },
+    {
      "name": "Suave"
     }
    ],
@@ -1206,6 +1237,7 @@
      "name": "Throwing Knives",
      "damage": 4,
      "trait": "Ranged",
+     "rangeYards": 4,
      "ranged": true
     },
     {
@@ -1277,10 +1309,10 @@
      "name": "Night Vision"
     },
     {
-     "name": "Public Speaking"
+     "name": "Public Speaker"
     },
     {
-     "name": "Resistance (Chaos)"
+     "name": "Resistant (Chaos)"
     },
     {
      "name": "Small"
@@ -1433,6 +1465,14 @@
      "rank": 3
     }
    ],
+   "trappings": [
+    "Decks of Cards (marked and unmarked)",
+    "Dice (loaded and unloaded)",
+    "Forged Documents",
+    "2 Sets of Clothing with Secret Pockets and Pouches",
+    "1 Set of Quality Clothing",
+    "10d10 brass pennies"
+   ],
    "keywords": [
     "humain"
    ],
@@ -1470,6 +1510,7 @@
      "name": "Pistol",
      "damage": 8,
      "trait": "Ranged",
+     "rangeYards": 20,
      "ranged": true
     },
     {
@@ -1704,6 +1745,7 @@
      "name": "Bow",
      "damage": 8,
      "trait": "Ranged",
+     "rangeYards": 60,
      "ranged": true
     },
     {
@@ -1915,7 +1957,7 @@
      "name": "Flee!"
     },
     {
-     "name": "Fleet Footed"
+     "name": "Fleet-footed"
     },
     {
      "name": "Rover"
@@ -2653,6 +2695,37 @@
      "ref": "E0-T-027"
     }
    ],
+   "talents": [
+    {
+     "name": "Criminal"
+    },
+    {
+     "name": "Dirty Fighting",
+     "rank": 2
+    },
+    {
+     "name": "Strong Back"
+    },
+    {
+     "name": "Sturdy"
+    },
+    {
+     "name": "Tenacious"
+    },
+    {
+     "name": "Very Strong"
+    }
+   ],
+   "trappings": [
+    "Leather Gloves",
+    "Gang Colours",
+    "Guild License",
+    "Leather Jerkin",
+    "Pipe and Tobacco",
+    "Porter Cap",
+    "Tools",
+    "1d10 silver shillings"
+   ],
    "keywords": [
     "humain"
    ],
@@ -2760,6 +2833,9 @@
    "talents": [
     {
      "name": "Alley Cat"
+    },
+    {
+     "name": "Break and Enter"
     },
     {
      "name": "Criminal"
@@ -3237,7 +3313,7 @@
      "trait": "Horns"
     },
     {
-     "name": "Weapon",
+     "name": "Claws",
      "damage": 8,
      "trait": "Weapon"
     }
@@ -3348,7 +3424,7 @@
    "wounds": 12,
    "attacks": [
     {
-     "name": "Weapon",
+     "name": "Claws",
      "damage": 8,
      "trait": "Weapon"
     }
@@ -3386,6 +3462,10 @@
      "ref": "E0-T-269"
     },
     {
+     "name": "Tzeentch’s Fire",
+     "ref": "E0-T-270"
+    },
+    {
      "name": "Unstable",
      "ref": "E0-T-062"
     }
@@ -3412,6 +3492,7 @@
     {
      "name": "Creature Weapons",
      "rating": "+6",
+     "param": "Tongue Attack",
      "ref": "E0-T-288"
     }
    ],
@@ -3449,7 +3530,7 @@
    "wounds": 12,
    "attacks": [
     {
-     "name": "Weapon",
+     "name": "Claws",
      "damage": 6,
      "trait": "Weapon"
     }
@@ -3483,6 +3564,10 @@
      "ref": "E0-T-022"
     },
     {
+     "name": "Tzeentch’s Fire",
+     "ref": "E0-T-270"
+    },
+    {
      "name": "Unstable",
      "ref": "E0-T-062"
     }
@@ -3504,6 +3589,7 @@
     {
      "name": "Creature Weapons",
      "rating": "+3",
+     "param": "Tongue Attack",
      "ref": "E0-T-288"
     }
    ],
@@ -3543,6 +3629,7 @@
      "name": "Short Bow",
      "damage": 6,
      "trait": "Ranged",
+     "rangeYards": 20,
      "ranged": true
     },
     {
@@ -3772,6 +3859,29 @@
     "Soc": 20
    },
    "wounds": 10,
+   "traits": [
+    {
+     "name": "Dark Vision",
+     "ref": "E0-T-017"
+    },
+    {
+     "name": "Ethereal",
+     "ref": "E0-T-021"
+    },
+    {
+     "name": "Fear",
+     "rating": "2",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Undead",
+     "ref": "E0-T-061"
+    },
+    {
+     "name": "Unstable",
+     "ref": "E0-T-062"
+    }
+   ],
    "starred": [
     "Soc"
    ],
@@ -3808,6 +3918,7 @@
      "name": "Bomb",
      "damage": 12,
      "trait": "Ranged",
+     "rangeYards": 2,
      "ranged": true
     },
     {
@@ -3913,6 +4024,7 @@
      "name": "Blunderbuss",
      "damage": 8,
      "trait": "Ranged",
+     "rangeYards": 20,
      "ranged": true
     },
     {
@@ -4074,6 +4186,9 @@
    "talents": [
     {
      "name": "Strike Mighty Blow"
+    },
+    {
+     "name": "Strike to Stun"
     }
    ],
    "trappings": [
@@ -4311,6 +4426,7 @@
    ],
    "trappings": [
     "Helmet",
+    "Linen Surcoat with Drakensberg Livery (Red Dragon on a Yellow Field)",
     "Leather Jerkin",
     "Mail Shirt",
     "Shield",
@@ -4438,6 +4554,7 @@
      "name": "Bow",
      "damage": 6,
      "trait": "Ranged",
+     "rangeYards": 60,
      "ranged": true
     },
     {
@@ -4498,7 +4615,11 @@
      "value": 35
     }
    ],
-   "talents": [],
+   "talents": [
+    {
+     "name": "Strike to Stun"
+    }
+   ],
    "trappings": [
     "Axe",
     "Black Mask",
@@ -4613,6 +4734,7 @@
      "name": "Bow",
      "damage": 7,
      "trait": "Ranged",
+     "rangeYards": 60,
      "ranged": true
     },
     {
@@ -4721,6 +4843,13 @@
      "name": "Rapid Reload"
     }
    ],
+   "trappings": [
+    "Black Hood",
+    "Bow and 20 Black Arrows",
+    "Leather Jerkin",
+    "Sword",
+    "8d10 brass pennies"
+   ],
    "keywords": [
     "hors-la-loi"
    ],
@@ -4768,7 +4897,6 @@
    "traits": [
     {
      "name": "Frenzy",
-     "param": "see above",
      "ref": "E0-T-024"
     },
     {
@@ -4781,6 +4909,9 @@
      "param": "Large",
      "ref": "E0-T-045"
     }
+   ],
+   "specialRules": [
+    "Animalistic Legs"
    ],
    "nameFrSource": "proposition"
   },
@@ -4817,6 +4948,11 @@
      "trait": "Bite"
     },
     {
+     "name": "Claw",
+     "damage": 5,
+     "trait": "Creature Weapons"
+    },
+    {
      "name": "Horns",
      "damage": 6,
      "trait": "Horns"
@@ -4841,6 +4977,7 @@
     {
      "name": "Creature Weapons",
      "rating": "+5",
+     "param": "Claw",
      "ref": "E0-T-288"
     },
     {
@@ -4953,6 +5090,11 @@
      "trait": "Bite"
     },
     {
+     "name": "Claw",
+     "damage": 3,
+     "trait": "Creature Weapons"
+    },
+    {
      "name": "Weapon",
      "damage": 4,
      "trait": "Weapon"
@@ -4967,6 +5109,7 @@
     {
      "name": "Creature Weapons",
      "rating": "+3",
+     "param": "Claw",
      "ref": "E0-T-288"
     },
     {
@@ -5016,6 +5159,43 @@
     "Soc": 10
    },
    "wounds": 13,
+   "attacks": [
+    {
+     "name": "Bite",
+     "damage": 3,
+     "trait": "Bite"
+    },
+    {
+     "name": "Weapon",
+     "damage": 5,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bite",
+     "rating": "+3",
+     "ref": "E0-T-006"
+    },
+    {
+     "name": "Fury",
+     "ref": "E0-T-078"
+    },
+    {
+     "name": "Hatred",
+     "param": "Keepers",
+     "ref": "E0-T-027"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Venom",
+     "param": "Challenging",
+     "ref": "E0-T-064"
+    }
+   ],
    "keywords": [
     "bete"
    ],
@@ -5052,6 +5232,11 @@
      "trait": "Bite"
     },
     {
+     "name": "Claw",
+     "damage": 4,
+     "trait": "Creature Weapons"
+    },
+    {
      "name": "Weapon",
      "damage": 5,
      "trait": "Weapon"
@@ -5066,6 +5251,7 @@
     {
      "name": "Creature Weapons",
      "rating": "+4",
+     "param": "Claw",
      "ref": "E0-T-288"
     },
     {
@@ -5480,6 +5666,7 @@
      "name": "Whip",
      "damage": 5,
      "trait": "Ranged",
+     "rangeYards": 6,
      "ranged": true
     },
     {
@@ -5631,6 +5818,9 @@
     }
    ],
    "talents": [
+    {
+     "name": "Crack the Whip"
+    },
     {
      "name": "Etiquette (Soldiers)"
     },
@@ -5804,11 +5994,19 @@
      "name": "Seasoned Traveller"
     },
     {
-     "name": "Suave*"
+     "name": "Suave"
     },
     {
      "name": "Well-prepared"
     }
+   ],
+   "trappings": [
+    "Assorted Powders",
+    "Potions and Charms, all fake (at the GM's discretion, some may have interesting but unplanned effects)",
+    "Necklace of Chicken Bones",
+    "Ragged Clothes",
+    "Trade Tools (Cook)",
+    "2d10 silver shillings"
    ],
    "nameFrSource": "proposition"
   },
@@ -5840,6 +6038,7 @@
      "name": "Whip",
      "damage": 5,
      "trait": "Ranged",
+     "rangeYards": 6,
      "ranged": true
     },
     {

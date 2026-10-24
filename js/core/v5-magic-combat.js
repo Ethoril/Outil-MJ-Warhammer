@@ -1,5 +1,5 @@
 import { baseCharacteristicScore } from './v5-magic-talents.js';
-import { natureProtection } from './creature-natures.js';
+import { natureProtection, attacksAreMagical } from './creature-natures.js';
 
 /**
  * Actions conférées par les sorts actifs (hallebarde Magique de la Faux de Shyish) : lues sur les couches d'effet, donc retirées
@@ -117,7 +117,7 @@ export function attackNature({ranged,qualities=[],magical,fire,cold,spell=false,
 export function weaponAttackNature({actor,action={},ranged,kind,declared}={}){
  const rangedValue=typeof ranged==='boolean'?ranged:kind==='ranged'?true:kind==='melee'?false:undefined;
  const weapon=magicWeaponNature(actor,action,rangedValue);
- return attackNature({ranged:rangedValue,qualities:action.qualities,magical:weapon.magical,fire:weapon.fire,declared});
+ return attackNature({ranged:rangedValue,qualities:action.qualities,magical:weapon.magical===true||attacksAreMagical(actor)?true:weapon.magical,fire:weapon.fire,declared});
 }
 
 /** Nature d'un sort lancé : attaque magique de contact ou à distance, de feu par le Domaine ou l'attribut choisi. */

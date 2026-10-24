@@ -80,10 +80,23 @@ export function deriveReminders(snapshot = {}, transition = {}, choices = []) {
       candidates.push({ kind: 'reinforcement', effectId: item.id, text: item.text || 'Renfort attendu', mode: 'reminder', payload: clone(item) });
     }
   }
+  // Rappels portés par un participant (`extensions.v5.reminders` : armure non déterminée du bestiaire, démon expiré).
+  for (const person of Array.isArray(snapshot.participants) ? snapshot.participants : []) {
+    if (!person?.id) continue;
+    for (const note of Array.isArray(person.extensions?.v5?.reminders) ? person.extensions.v5.reminders : []) {
+      if (!note?.id || typeof note.text !== 'string') continue;
+      candidates.push({ kind: 'participant-reminder', effectId: `${person.id}:${note.id}`, text: `${person.name || 'Participant'} : ${note.text}`, mode: 'reminder' });
+    }
+  }
   const selected = [];
   const seen = new Set();
   const priorChoices = new Map((Array.isArray(choices) ? choices : []).map(choice => [choice.id, choice]));
+  // Un rappel de participant résolu ou ignoré ne revient pas aux transitions suivantes (son id dépend du Round).
+  const settledParticipantReminders = new Set((Array.isArray(choices) ? choices : [])
+    .filter(choice => [REMINDER_DECISIONS.RESOLVE, REMINDER_DECISIONS.IGNORE].includes(choice?.decision || choice?.choice?.decision))
+    .map(choice => String(choice.id)).filter(id => id.includes(':participant-reminder:')).map(id => id.slice(id.indexOf(':participant-reminder:'))));
   for (const candidate of candidates) {
+    if (candidate.kind === 'participant-reminder' && settledParticipantReminders.has(`:participant-reminder:${candidate.effectId}`)) continue;
     const item = reminder(candidate, sceneId, transitionId);
     if (seen.has(item.id)) continue;
     seen.add(item.id);
@@ -127,4 +140,33 @@ export function resolveReminder(reminders, id, decision, details = {}) {
     }
     return { ...clone(item), status: decision, choice };
   });
+}
+
+// Bloc des rappels portés par un participant, pour sa carte de combat (armure imprimée non déterminée, démon expiré…).
+export const PARTICIPANT_REMINDER_ACTIONS = [['resolve', 'Fait'], ['ignore', 'Ignorer']];
+
+/** Construit le bloc des rappels ; `createElement` est celui du document (ou un double en test). Renvoie null s'il n'y en a pas. */
+export function buildParticipantReminders(createElement, reminders = []) {
+  const pending = (Array.isArray(reminders) ? reminders : []).filter(item => item?.status === 'pending');
+  if (!pending.length) return null;
+  const block = createElement('div');
+  block.className = 'actor-reminders';
+  for (const item of pending) {
+    const row = createElement('div');
+    row.className = 'actor-reminder';
+    row.dataset.reminderId = item.id;
+    const text = createElement('span');
+    text.textContent = `⚠ ${item.text}`;
+    row.appendChild(text);
+    for (const [decision, label] of PARTICIPANT_REMINDER_ACTIONS) {
+      const button = createElement('button');
+      button.type = 'button';
+      button.className = 'tiny btn-reminder';
+      button.dataset.decision = decision;
+      button.textContent = label;
+      row.appendChild(button);
+    }
+    block.appendChild(row);
+  }
+  return block;
 }

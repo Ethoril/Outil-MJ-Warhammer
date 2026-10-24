@@ -94,7 +94,7 @@
       "status": "validated",
       "ruleVersion": "talent-v5-2026-10-09.1",
       "source": {
-        "effectHash": "sha256:541b83ce4a9bce37565b529477f60c9eb5fb2c5eb05836f4e077457e8b3be897",
+        "effectHash": "sha256:abe58ca2b57c348ec5b1a9cbb1587796c5403a4bc9b0a85176d40c4b861fc182",
         "reference": "Livre de base V5, p. 127 ; achat : p. 191"
       },
       "clauses": [
@@ -332,7 +332,7 @@
   ],
   "sourceDescriptions": {
     "talent-accurate-shot": "Vos attaques à distance réussies infligent +1 Dégât, ou +2 si vous avez pris le temps de viser.",
-    "talent-strike-mighty-blow": "=+1 dégât avec les armes de corps à corps, ou +2 si l'attaque a été effectuée avec Avantage V5.",
+    "talent-strike-mighty-blow": "+1 dégât avec les armes de corps à corps, ou +2 si l'attaque a été effectuée avec Avantage V5.",
     "talent-iron-jaw": "La première fois de chaque rencontre que vous devriez gagner un ou plusieurs états Sonné, vous en gagnez un de moins.",
     "talent-beat-blade": "Après une attaque de Corps à corps réussie, renoncez aux Dégâts : jusqu’à la fin de votre prochain Tour, la cible ne peut plus opposer une Compétence de Corps à corps et les attaques de Corps à corps contre elle ont Avantage V5. Elle peut encore Esquiver. Inefficace contre une cible plus grande que vous.",
     "talent-furious-assault": "Une fois par Round, après avoir touché un adversaire au Corps à corps, vous pouvez immédiatement perdre votre Momentum pour effectuer une attaque supplémentaire."

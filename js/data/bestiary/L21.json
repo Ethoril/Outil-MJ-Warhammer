@@ -291,7 +291,7 @@
      "name": "Etiquette (Cultists)"
     },
     {
-     "name": "Read/ Write"
+     "name": "Read/Write"
     },
     {
      "name": "Savant (Theology)"
@@ -401,7 +401,7 @@
     "Hammer Pendant",
     "Backpack with Food",
     "Drink",
-    "and Formal Robes",
+    "Formal Robes",
     "3/5 each"
    ],
    "keywords": [
@@ -554,6 +554,13 @@
    "armour": {
     "ap": 1
    },
+   "attacks": [
+    {
+     "name": "Weapon",
+     "damage": 8,
+     "trait": "Weapon"
+    }
+   ],
    "traits": [
     {
      "name": "Breath",
@@ -589,7 +596,7 @@
     }
    ],
    "specialRules": [
-    "Weapon +8 Font of Flame"
+    "Font of Flame"
    ],
    "abilities": [
     "E0-T-250",
@@ -638,6 +645,11 @@
      "name": "Charm",
      "nameFr": "Charme",
      "value": 35
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 70
     },
     {
      "name": "Dodge",
@@ -698,6 +710,12 @@
     "Soc": 33
    },
    "wounds": 13,
+   "traits": [
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    }
+   ],
    "nameFrSource": "proposition"
   },
   {
@@ -951,6 +969,13 @@
     "Soc": null
    },
    "wounds": 12,
+   "attacks": [
+    {
+     "name": "Slam",
+     "damage": 6,
+     "trait": "Creature Weapons"
+    }
+   ],
    "traits": [
     {
      "name": "Construct",
@@ -973,6 +998,7 @@
     {
      "name": "Creature Weapons",
      "rating": "+6",
+     "param": "Slam",
      "ref": "E0-T-288"
     },
     {
@@ -1031,6 +1057,13 @@
    },
    "wounds": 12,
    "size": "small",
+   "attacks": [
+    {
+     "name": "Slam",
+     "damage": 5,
+     "trait": "Creature Weapons"
+    }
+   ],
    "traits": [
     {
      "name": "Construct",
@@ -1058,6 +1091,7 @@
     {
      "name": "Creature Weapons",
      "rating": "+5",
+     "param": "Slam",
      "ref": "E0-T-288"
     },
     {
@@ -1116,6 +1150,13 @@
    },
    "wounds": 8,
    "size": "small",
+   "attacks": [
+    {
+     "name": "Slam",
+     "damage": 4,
+     "trait": "Creature Weapons"
+    }
+   ],
    "traits": [
     {
      "name": "Construct",
@@ -1143,6 +1184,7 @@
     {
      "name": "Creature Weapons",
      "rating": "+4",
+     "param": "Slam",
      "ref": "E0-T-288"
     },
     {
@@ -1660,7 +1702,7 @@
      "name": "Etiquette (Soldiers)"
     },
     {
-     "name": "Stout-Hearted"
+     "name": "Stout-hearted"
     },
     {
      "name": "War Leader"
@@ -1933,9 +1975,8 @@
      "value": 70
     },
     {
-     "name": "Melee (Pole- arm)",
-     "nameFr": "Corps à corps (Pole- arm)",
-     "frUnverified": true,
+     "name": "Melee (Polearm)",
+     "nameFr": "Corps à corps (Armes d’hast)",
      "value": 68
     },
     {
@@ -2027,6 +2068,11 @@
      "damage": 6,
      "trait": "Ranged",
      "ranged": true
+    },
+    {
+     "name": "Sword",
+     "damage": 7,
+     "trait": "Weapon"
     }
    ],
    "skills": [
@@ -2193,6 +2239,11 @@
      "damage": 6,
      "trait": "Ranged",
      "ranged": true
+    },
+    {
+     "name": "Sword",
+     "damage": 7,
+     "trait": "Weapon"
     }
    ],
    "skills": [
@@ -2367,6 +2418,13 @@
     "Soc": 42
    },
    "wounds": 12,
+   "attacks": [
+    {
+     "name": "Sword",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
    "skills": [
     {
      "name": "Athletics",
@@ -2473,6 +2531,11 @@
      "name": "Perception",
      "nameFr": "Perception",
      "value": 37
+    },
+    {
+     "name": "Ride (Horse)",
+     "nameFr": "Chevaucher (Cheval)",
+     "value": 42
     }
    ],
    "talents": [
@@ -2623,7 +2686,7 @@
      "value": 45
     },
     {
-     "name": "Melee (Pole-arm)",
+     "name": "Melee (Polearm)",
      "nameFr": "Corps à corps (Armes d’hast)",
      "value": 45
     },
@@ -2798,7 +2861,7 @@
      "value": 60
     },
     {
-     "name": "Melee (Pole-arm)",
+     "name": "Melee (Polearm)",
      "nameFr": "Corps à corps (Armes d’hast)",
      "value": 60
     },
@@ -2826,6 +2889,9 @@
    "talents": [
     {
      "name": "Combat Aware"
+    },
+    {
+     "name": "War Leader"
     },
     {
      "name": "Etiquette (Soldiers)"
@@ -2880,22 +2946,105 @@
      "damage": 6,
      "trait": "Ranged",
      "ranged": true
+    },
+    {
+     "name": "Sword",
+     "damage": 7,
+     "trait": "Weapon"
     }
    ],
-   "traits": [
+   "skills": [
     {
-     "name": "Striding Gait",
-     "param": "Highlands",
-     "ref": "E0-T-051"
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 41
+    },
+    {
+     "name": "Charm Animal",
+     "nameFr": "Emprise sur les animaux",
+     "value": 35
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 35
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 38
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 44
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 31
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 35
+    },
+    {
+     "name": "Lore (Ostland)",
+     "nameFr": "Savoir (Ostland)",
+     "frUnverified": true,
+     "value": 36
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 48
+    },
+    {
+     "name": "Navigation",
+     "nameFr": "Orientation",
+     "value": 45
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 36
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 47
+    },
+    {
+     "name": "Ranged (Bow)",
+     "nameFr": "Projectiles (Arc)",
+     "value": 60
+    },
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 45
+    },
+    {
+     "name": "Track",
+     "nameFr": "Pistage",
+     "value": 44
     }
    ],
-   "optionalTraits": [
+   "talents": [
     {
-     "name": "Ranged",
-     "rating": "60",
-     "param": "Bow",
-     "ref": "E0-T-082"
+     "name": "Combat Aware"
+    },
+    {
+     "name": "Strider (Highlands)"
     }
+   ],
+   "trappings": [
+    "Sword",
+    "Bow",
+    "Uniform",
+    "Grey surcoat",
+    "Cloak"
    ],
    "keywords": [
     "soldat"
@@ -3230,6 +3379,9 @@
      "rank": 4
     },
     {
+     "name": "Iron Will"
+    },
+    {
      "name": "Linguistics"
     },
     {
@@ -3240,13 +3392,16 @@
      "name": "Magical Sense"
     },
     {
+     "name": "Master of Disguise"
+    },
+    {
      "name": "Master Orator"
     },
     {
      "name": "Menacing"
     },
     {
-     "name": "Nimble Fingered"
+     "name": "Nimble-fingered"
     },
     {
      "name": "Noble Blood"
@@ -3258,10 +3413,10 @@
      "name": "Public Speaker"
     },
     {
-     "name": "Read/ Write"
+     "name": "Read/Write"
     },
     {
-     "name": "Resistance (Disease)"
+     "name": "Resistant (Disease)"
     },
     {
      "name": "Reversal"
@@ -3283,7 +3438,13 @@
      "rank": 2
     },
     {
+     "name": "Strike to Injure"
+    },
+    {
      "name": "Tenacious"
+    },
+    {
+     "name": "Tower of Memories"
     },
     {
      "name": "Tzeentch's Blessing"
@@ -3292,12 +3453,57 @@
      "name": "War Wizard"
     },
     {
-     "name": "Warleader"
+     "name": "War Leader"
     },
     {
      "name": "Willful Corruption"
     }
    ],
+   "trappings": [
+    "Chaos Armour",
+    "Amulet of Jade (grants the wearer the Regenerate Creature Trait)"
+   ],
+   "spells": {
+    "Petty": [
+     "Dart",
+     "Drain",
+     "Eavesdrop",
+     "Open Lock",
+     "Sounds",
+     "Warning"
+    ],
+    "Arcane": [
+     "Bolt",
+     "Blast",
+     "Corrosive Blood",
+     "Distracting",
+     "Entangle",
+     "Flight",
+     "Manifest Lesser Daemon",
+     "Octagram",
+     "Teleport",
+     "Ward"
+    ],
+    "Lore of Shadows": [
+     "Illusion"
+    ],
+    "Lore of Tzeentch": [
+     "Bolt of Change",
+     "Boon of Tzeentch",
+     "Blue Fire of Tzeentch",
+     "Curse of Tzeentch",
+     "The Flickering Flames of Fickle Fate",
+     "Mindfire",
+     "Pink Fire of Tzeentch",
+     "The Purple Hand",
+     "Transformation of Tzeentch",
+     "Treason of Tzeentch",
+     "Tzeentch's Firestorm",
+     "Tzeentch's Golden Aura",
+     "Sense the Skein",
+     "Word of Tzeentch"
+    ]
+   },
    "nameFrSource": "proposition"
   },
   {
@@ -3352,6 +3558,7 @@
     {
      "name": "Fear",
      "rating": "2",
+     "conditional": true,
      "ref": "E0-T-022"
     },
     {
@@ -3583,6 +3790,13 @@
    },
    "wounds": 76,
    "size": "enormous",
+   "attacks": [
+    {
+     "name": "Slobbering Mouth",
+     "damage": 11,
+     "trait": "Weapon"
+    }
+   ],
    "traits": [
     {
      "name": "Bestial",
@@ -3601,6 +3815,9 @@
      "param": "Enormous",
      "ref": "E0-T-045"
     }
+   ],
+   "specialRules": [
+    "Messy Demise"
    ],
    "abilities": [
     "E0-T-253"
@@ -3634,6 +3851,13 @@
    },
    "wounds": 176,
    "size": "monstrous",
+   "attacks": [
+    {
+     "name": "Weapon",
+     "damage": 13,
+     "trait": "Weapon"
+    }
+   ],
    "traits": [
     {
      "name": "Construct",
@@ -3673,7 +3897,7 @@
     }
    ],
    "specialRules": [
-    "Weapon+13 Suffused with Death"
+    "Suffused with Death"
    ],
    "abilities": [
     "E0-T-255",
@@ -3720,6 +3944,7 @@
      "name": "Bow",
      "damage": 6,
      "trait": "Ranged",
+     "rangeYards": 50,
      "ranged": true
     }
    ],
@@ -3871,6 +4096,7 @@
     {
      "name": "Fear",
      "rating": "1",
+     "conditional": true,
      "ref": "E0-T-022"
     },
     {
@@ -4206,6 +4432,7 @@
     }
    ],
    "trappings": [
+    "Assorted outfits (jumbled mix of common and best craftsmanship clothes; he tends to pick randomly when dressing)",
     "Deck of Cards",
     "Wooden Cutlery",
     "Bone Dice",
@@ -4417,6 +4644,7 @@
    ],
    "trappings": [
     "Bottle of Spirits",
+    "Book of Pressed Flowers taken from every battlefield she has ever fought on (worth 5 GC to someone interested in botany)",
     "pouch with 23 s 18d",
     "armour and weapons (Military Flail, three daggers, sword)."
    ],
@@ -4457,7 +4685,7 @@
    ],
    "skills": [
     {
-     "name": "Melee (Pole-Arm)",
+     "name": "Melee (Polearm)",
      "nameFr": "Corps à corps (Armes d’hast)",
      "value": 45
     },
@@ -4509,7 +4737,7 @@
      "value": 55
     },
     {
-     "name": "Melee (Pole-Arm)",
+     "name": "Melee (Polearm)",
      "nameFr": "Corps à corps (Armes d’hast)",
      "value": 45
     },
@@ -4610,6 +4838,7 @@
    ],
    "trappings": [
     "Chain of Office (tacky gold necklace worth 5 GC)",
+    "Kenselheim Magistrate Livery (Fine Quality Clothing in black and green)",
     "dagger"
    ],
    "nameFrSource": "proposition"
@@ -4750,7 +4979,10 @@
    ],
    "trappings": [
     "Chaos Armour (cannot be removed)",
-    "Sword The horde is largely made up of mutants and Beastmen"
+    "Sword"
+   ],
+   "notes": [
+    "* Gain the Bite +3 Creature Trait."
    ],
    "keywords": [
     "guerrier-du-chaos"
@@ -4790,6 +5022,68 @@
      "trait": "Weapon"
     }
    ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 80
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 35
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 65
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 70
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 65
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 35
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 65
+    },
+    {
+     "name": "Language (Magick)",
+     "nameFr": "Langue (Magick)",
+     "value": 65
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 35
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 70
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 70
+    },
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 75
+    }
+   ],
    "traits": [
     {
      "name": "Clever",
@@ -4812,6 +5106,21 @@
      "name": "Tough",
      "ref": "E0-T-086"
     }
+   ],
+   "talents": [
+    {
+     "name": "Furious Assault"
+    },
+    {
+     "name": "Menacing"
+    },
+    {
+     "name": "Strike Mighty Blow"
+    }
+   ],
+   "trappings": [
+    "Chaos Armour (cannot be removed) decorated with the skin of a dire wolf",
+    "Hand Axe"
    ],
    "keywords": [
     "guerrier-du-chaos"
@@ -4932,6 +5241,7 @@
      "name": "Bow",
      "damage": 6,
      "trait": "Ranged",
+     "rangeYards": 50,
      "ranged": true
     }
    ],
@@ -5104,7 +5414,7 @@
     },
     {
      "name": "Spellcaster",
-     "param": "Chaos � Tzeentch",
+     "param": "Chaos – Tzeentch",
      "ref": "E0-T-048"
     }
    ],
@@ -5143,6 +5453,35 @@
     "Wand of Onyx",
     "7 GCs"
    ],
+   "spells": {
+    "Petty": [
+     "Dazzle",
+     "Drain",
+     "Eavesdrop",
+     "Light",
+     "Open Lock",
+     "Rot",
+     "Sounds",
+     "Warning"
+    ],
+    "Arcane": [
+     "Aethyric Armour",
+     "Blast",
+     "Chain Attack",
+     "Dark Vision",
+     "Entangle",
+     "Flight",
+     "Mundane Aura",
+     "Teleport"
+    ],
+    "Lore of Tzeentch": [
+     "Gift of the Beast",
+     "Subvert Strength",
+     "Transformation of the Beast",
+     "Treason of Tzeentch",
+     "Tremor"
+    ]
+   },
    "keywords": [
     "humain"
    ],
@@ -5277,8 +5616,28 @@
    ],
    "trappings": [
     "8 GCs",
+    "Travelling Case (including personal effects and 8 vials of a bright red liquid, a preparation to alleviate Toughness Loss)",
     "Sword"
    ],
+   "spells": {
+    "Petty": [
+     "Dart",
+     "Drain",
+     "Magic Flame",
+     "Purify Water",
+     "Shock",
+     "Warning"
+    ],
+    "Arcane": [
+     "Blast",
+     "Chain Attack",
+     "Dark Vision",
+     "Mundane Aura"
+    ],
+    "Lore of Tzeentch": [
+     "Treason of Tzeentchr"
+    ]
+   },
    "keywords": [
     "humain"
    ],
@@ -5420,7 +5779,13 @@
      "name": "Instinctive Diction"
     },
     {
+     "name": "Iron Will"
+    },
+    {
      "name": "Magical Sense"
+    },
+    {
+     "name": "Nose for Trouble"
     },
     {
      "name": "Petty Magic"
@@ -5446,9 +5811,8 @@
     "Purse with 5 GCs 17/6"
    ],
    "spells": {
-    "spells": [
-     "All Lore of Death and Lore of Necromancy spells",
-     "at GM's discretion"
+    "notes": [
+     "All Lore of Death and Lore of Necromancy spells, at GM's discretion"
     ]
    },
    "nameFrSource": "proposition"
@@ -5485,6 +5849,12 @@
      "name": "Bite",
      "damage": 10,
      "trait": "Bite"
+    },
+    {
+     "name": "Claws",
+     "damage": 8,
+     "trait": "Creature Weapons",
+     "count": 2
     }
    ],
    "traits": [
@@ -5500,6 +5870,8 @@
     {
      "name": "Creature Weapons",
      "rating": "+8",
+     "param": "Claws",
+     "count": 2,
      "ref": "E0-T-288"
     },
     {
@@ -5582,6 +5954,7 @@
     {
      "name": "Fly",
      "rating": "100",
+     "conditional": true,
      "ref": "E0-T-023"
     },
     {

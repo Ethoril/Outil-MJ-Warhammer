@@ -88,7 +88,7 @@ test('Section 0 — actualisation depuis les CSV publics épinglés : version ex
  assert.equal(result.ok,true);assert.equal(getReferenceSnapshot().contentVersion,snapshot.contentVersion);
  const lileath=getReferenceSnapshot().talents.entries.find(t=>t.id==='talent-lileath-s-blessing');assert.ok(lileath.description.startsWith('+1'));
  const s=await setup(actor('mage',{talents:[talent('lileath-s-blessing')]}));assert.equal(s.previewChannelling({actorId:'mage',type:'high',roll:75}).test.sl,2);
- for(const id of ['suave','luck','strike-mighty-blow','nimble-fingered'])assert.ok(getReferenceSnapshot().talents.entries.find(t=>t.id==='talent-'+id).description.startsWith('='),id);
+ for(const id of ['suave','luck','strike-mighty-blow','nimble-fingered'])assert.ok(getReferenceSnapshot().talents.entries.find(t=>t.id==='talent-'+id).description.startsWith('+'),id);// le « = » de saisie Sheets est retiré par talent-source.js (import du 23/10/2026)
  assert.doesNotMatch(getReferenceSnapshot().talents.entries.find(t=>t.id==='talent-small').description,/Frappes Mortelles/);
 });
 test('Section 0 — Petit : toucher une cible survivante ne déclenche aucune Frappe Mortelle',async()=>{

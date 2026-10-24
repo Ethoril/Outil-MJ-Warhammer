@@ -43,6 +43,13 @@
       "name": "Medium Armour",
       "ap": 3,
       "optional": true
+     },
+     {
+      "name": "Shield",
+      "ap": 2,
+      "optional": true,
+      "slBonus": 1,
+      "condition": "when Opposing an attack with Dodge or Melee"
      }
     ]
    },
@@ -125,6 +132,13 @@
       "name": "Light Armour",
       "ap": 1,
       "optional": true
+     },
+     {
+      "name": "Shield",
+      "ap": 2,
+      "optional": true,
+      "slBonus": 1,
+      "condition": "when Opposing an attack with Dodge or Melee"
      }
     ]
    },
@@ -218,6 +232,13 @@
       "name": "Medium Armour",
       "ap": 3,
       "optional": true
+     },
+     {
+      "name": "Shield",
+      "ap": 2,
+      "optional": true,
+      "slBonus": 1,
+      "condition": "when Opposing an attack with Dodge or Melee"
      }
     ]
    },
@@ -316,6 +337,13 @@
       "name": "Light Armour",
       "ap": 1,
       "optional": true
+     },
+     {
+      "name": "Shield",
+      "ap": 2,
+      "optional": true,
+      "slBonus": 1,
+      "condition": "when Opposing an attack with Dodge or Melee"
      }
     ]
    },
@@ -472,6 +500,9 @@
      "name": "Acute Sense (Sight)"
     },
     {
+     "name": "Nose for Trouble"
+    },
+    {
      "name": "Supportive"
     },
     {
@@ -489,7 +520,8 @@
     "Leather Jack",
     "Hat",
     "Pouch containing 1d10 Silver Shillings",
-    "Sling Bag containing"
+    "Sling Bag containing Lunch",
+    "Uniform"
    ],
    "keywords": [
     "humain",
@@ -604,7 +636,8 @@
     "Dagger",
     "Hat",
     "Mule and Cart containing Wares",
-    "Pouch containing"
+    "Pouch containing 3d10 Shillings",
+    "Sling Bag containing Lunch"
    ],
    "keywords": [
     "humain"
@@ -738,7 +771,7 @@
     "Hand Weapon",
     "Hood",
     "Knuckledusters",
-    "2 Leather Jack",
+    "Leather Jack",
     "Pouch containing 3d10 Brass Pennies",
     "Sling Bag containing 2 Candles and 5 Matches"
    ],
@@ -852,6 +885,9 @@
     },
     {
      "name": "Night Vision"
+    },
+    {
+     "name": "Resistant (Chaos)"
     }
    ],
    "trappings": [
@@ -987,6 +1023,13 @@
       "ap": 2,
       "optional": true,
       "locations": "Head"
+     },
+     {
+      "name": "Ironfist",
+      "ap": 2,
+      "optional": true,
+      "slBonus": 1,
+      "condition": "when Opposing an attack with Dodge or Melee"
      }
     ]
    },
@@ -1264,6 +1307,9 @@
      "param": "Broken, Drive, Entertain, Fetch, Guard, Magic, War",
      "ref": "E0-T-060"
     }
+   ],
+   "notes": [
+    "Note: The small but vicious dog used by Rat Catchers begins play with the Traits: Frenzy, Tracker, Trained (Broken, Fetch, War)."
    ],
    "keywords": [
     "chien"
@@ -1785,6 +1831,10 @@
      "name": "Size",
      "param": "Enormous or Monstrous",
      "ref": "E0-T-045"
+    },
+    {
+     "name": "Territorial",
+     "ref": "E0-T-056"
     }
    ],
    "keywords": [
@@ -2074,6 +2124,11 @@
      "name": "Size",
      "param": "Enormous",
      "ref": "E0-T-045"
+    },
+    {
+     "name": "Breath",
+     "param": "Any One",
+     "ref": "E0-T-009"
     }
    ],
    "optionalTraits": [
@@ -2165,7 +2220,7 @@
      "value": 40,
      "damage": 14,
      "qualities": [
-      "Magical c"
+      "Magical"
      ]
     }
    ],
@@ -2804,10 +2859,22 @@
       "ap": 2,
       "optional": true,
       "locations": "Head"
+     },
+     {
+      "name": "Shield",
+      "ap": 2,
+      "optional": true,
+      "slBonus": 1,
+      "condition": "when Opposing an attack with Dodge or Melee"
      }
     ]
    },
    "attacks": [
+    {
+     "name": "Hand Weapon",
+     "value": 30,
+     "damage": 7
+    },
     {
      "name": "Shortbow and Arrows",
      "value": 35,
@@ -2937,6 +3004,13 @@
       "ap": 2,
       "optional": true,
       "locations": "Head"
+     },
+     {
+      "name": "Shield",
+      "ap": 2,
+      "optional": true,
+      "slBonus": 1,
+      "condition": "when Opposing an attack with Dodge or Melee"
      }
     ]
    },
@@ -2991,6 +3065,12 @@
     {
      "name": "Night Vision",
      "ref": "E0-T-041"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Painless",
+     "ref": "E0-T-042"
     }
    ],
    "keywords": [
@@ -3203,6 +3283,13 @@
       "name": "Medium Armour",
       "ap": 3,
       "optional": true
+     },
+     {
+      "name": "Shield",
+      "ap": 2,
+      "optional": true,
+      "slBonus": 1,
+      "condition": "when Opposing an attack with Dodge or Melee"
      }
     ]
    },
@@ -3830,6 +3917,13 @@
       "name": "Heavy Armour",
       "ap": 5,
       "optional": true
+     },
+     {
+      "name": "Shield",
+      "ap": 2,
+      "optional": true,
+      "slBonus": 1,
+      "condition": "when Opposing an attack with Dodge or Melee"
      }
     ]
    },
@@ -3886,12 +3980,17 @@
      "name": "Stealth (Urban)",
      "nameFr": "Discrétion (Urbaine)",
      "value": 60
+    },
+    {
+     "name": "Track",
+     "nameFr": "Pistage",
+     "value": 40
     }
    ],
    "traits": [
     {
-     "name": "Bite",
-     "ref": "E0-T-006"
+     "name": "Night Vision",
+     "ref": "E0-T-041"
     },
     {
      "name": "Undead",
@@ -4069,6 +4168,10 @@
      "ref": "E0-T-027"
     },
     {
+     "name": "Hungry",
+     "ref": "E0-T-029"
+    },
+    {
      "name": "Regeneration",
      "ref": "E0-T-044"
     },
@@ -4155,6 +4258,13 @@
       "name": "Medium Armour",
       "ap": 3,
       "optional": true
+     },
+     {
+      "name": "Shield",
+      "ap": 2,
+      "optional": true,
+      "slBonus": 1,
+      "condition": "when Opposing an attack with Dodge or Melee"
      }
     ]
    },
@@ -4257,6 +4367,13 @@
       "name": "Light Armour",
       "ap": 1,
       "optional": true
+     },
+     {
+      "name": "Shield",
+      "ap": 2,
+      "optional": true,
+      "slBonus": 1,
+      "condition": "when Opposing an attack with Dodge or Melee"
      }
     ]
    },
@@ -4375,6 +4492,13 @@
       "name": "Light Armour",
       "ap": 1,
       "optional": true
+     },
+     {
+      "name": "Shield",
+      "ap": 2,
+      "optional": true,
+      "slBonus": 1,
+      "condition": "when Opposing an attack with Dodge or Melee"
      }
     ]
    },
@@ -4500,6 +4624,13 @@
       "name": "Medium Armour",
       "ap": 3,
       "optional": true
+     },
+     {
+      "name": "Shield",
+      "ap": 2,
+      "optional": true,
+      "slBonus": 1,
+      "condition": "when Opposing an attack with Dodge or Melee"
      }
     ]
    },
@@ -4623,6 +4754,9 @@
      "ref": "E0-T-040"
     }
    ],
+   "notes": [
+    "Optional Traits: Any Creature Traits the GM feels appropriate"
+   ],
    "keywords": [
     "mutant"
    ],
@@ -4657,6 +4791,13 @@
      {
       "name": "Heavy Armour",
       "ap": 5
+     },
+     {
+      "name": "Shield",
+      "ap": 2,
+      "optional": true,
+      "slBonus": 1,
+      "condition": "when Opposing an attack with Dodge or Melee"
      }
     ]
    },
@@ -5007,6 +5148,13 @@
       "name": "Medium Armour",
       "ap": 3,
       "optional": true
+     },
+     {
+      "name": "Shield",
+      "ap": 2,
+      "optional": true,
+      "slBonus": 1,
+      "condition": "when Opposing an attack with Dodge or Melee"
      }
     ]
    },
@@ -5385,6 +5533,13 @@
      "nameFr": "Esquive",
      "value": 10,
      "modifier": true
+    },
+    {
+     "name": "Melee (Basic or Polearm)",
+     "nameFr": "Corps à corps (Basic or Polearm)",
+     "frUnverified": true,
+     "value": 10,
+     "modifier": true
     }
    ],
    "starred": [
@@ -5420,6 +5575,13 @@
     {
      "name": "Ranged (Bow, Sling, or Throwing)",
      "nameFr": "Projectiles (Bow, Sling, or Throwing)",
+     "frUnverified": true,
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Stealth (Rural or Underground)",
+     "nameFr": "Discrétion (Rural or Underground)",
      "frUnverified": true,
      "value": 10,
      "modifier": true
@@ -5493,8 +5655,11 @@
      "name": "Combat Reflexes"
     },
     {
-     "name": "T"
+     "name": "Resolute"
     }
+   ],
+   "notes": [
+    "Wounds need to be increased due to changes to S, T, and WP."
    ],
    "starred": [
     "wounds"
@@ -5582,8 +5747,11 @@
      "name": "Resolute"
     },
     {
-     "name": "T"
+     "name": "War Leader"
     }
+   ],
+   "notes": [
+    "Wounds need to be increased due to changes to S, T, and WP."
    ],
    "starred": [
     "wounds"
@@ -5677,8 +5845,11 @@
      "name": "Unshakeable"
     },
     {
-     "name": "T"
+     "name": "War Leader"
     }
+   ],
+   "notes": [
+    "Wounds need to be increased due to changes to S, T, and WP."
    ],
    "starred": [
     "wounds"
@@ -5757,7 +5928,7 @@
     }
    ],
    "spells": {
-    "spells": [
+    "notes": [
      "Choose up to 3 spells from the Petty Magic list and up to 3 from a suitable magical Lore. * Wounds need to be increased due to changes to WP."
     ]
    },
@@ -5869,7 +6040,7 @@
     }
    ],
    "spells": {
-    "spells": [
+    "notes": [
      "Choose up to 6 spells from the Petty Magic list and up to 9 from a suitable magical Lore. * Wounds need to be increased due to changes to WP."
     ]
    },
@@ -6240,7 +6411,7 @@
     "Staff"
    ],
    "spells": {
-    "Petty Magic": [
+    "Petty": [
      "Animal Friend",
      "Dart",
      "Sounds"

@@ -176,6 +176,26 @@
     "Warpstone Charm",
     "10 Doses of Warpstone Snuff"
    ],
+   "spells": {
+    "Petty": [
+     "Favour of the Horned Rat",
+     "Ghostly Flame",
+     "Mark of the Horned Rat",
+     "Rat Thrall",
+     "Vector",
+     "Wrack"
+    ],
+    "Arcane": [
+     "Crackling Doom",
+     "Cracks Call",
+     "Flensing Ruin",
+     "Howling Warpgale",
+     "Scorch",
+     "Warp Lightning",
+     "Warp Shield",
+     "Warp Storm"
+    ]
+   },
    "keywords": [
     "skaven"
    ],
@@ -326,8 +346,7 @@
     }
    ],
    "trappings": [
-    "Heavy Armour",
-    "but they also possess the Damaging and Impale Qualities."
+    "Heavy Armour"
    ],
    "abilities": [
     "E0-T-266"
@@ -396,6 +415,7 @@
     {
      "name": "Shield",
      "rating": "2",
+     "conditional": true,
      "ref": "E0-T-287"
     },
     {
@@ -481,6 +501,7 @@
     {
      "name": "Shield",
      "rating": "2",
+     "conditional": true,
      "ref": "E0-T-287"
     },
     {
@@ -533,12 +554,14 @@
      "name": "Warpstone Star",
      "damage": 7,
      "trait": "Ranged",
+     "rangeYards": 8,
      "ranged": true
     },
     {
      "name": "Death Globe",
      "damage": 12,
      "trait": "Ranged",
+     "rangeYards": 8,
      "ranged": true
     }
    ],
@@ -605,6 +628,9 @@
     },
     {
      "name": "Step Aside"
+    },
+    {
+     "name": "Strike to Injure"
     },
     {
      "name": "Strike Mighty Blow",
@@ -734,7 +760,7 @@
      "name": "Resolute"
     },
     {
-     "name": "Warleader"
+     "name": "War Leader"
     }
    ],
    "trappings": [
@@ -1183,7 +1209,7 @@
      "name": "Resolute"
     },
     {
-     "name": "Warleader"
+     "name": "War Leader"
     }
    ],
    "trappings": [
@@ -2118,12 +2144,14 @@
      "name": "Crossbow Pistol",
      "damage": 9,
      "trait": "Ranged",
+     "rangeYards": 10,
      "ranged": true
     },
     {
      "name": "Jezzail",
      "damage": 10,
      "trait": "Ranged",
+     "rangeYards": 120,
      "ranged": true
     },
     {
@@ -2157,6 +2185,12 @@
      "name": "Ranged (Crossbow)",
      "nameFr": "Projectiles (Arbalète)",
      "value": 66
+    },
+    {
+     "name": "Engineering",
+     "nameFr": "Engineering",
+     "frUnverified": true,
+     "value": 71
     },
     {
      "name": "Stealth",
@@ -2284,7 +2318,7 @@
    ],
    "talents": [
     {
-     "name": "Doomed! (Find Thy Path and Stray Not)"
+     "name": "Doomed (Find Thy Path and Stray Not)"
     },
     {
      "name": "Flee!"
@@ -2407,7 +2441,8 @@
    "trappings": [
     "Coach and Team of Horses",
     "Gem Encrusted Dagger (6 GC)",
-    "Letters of Introduction to Petra Liebkosen and Kirsten Jung"
+    "Letters of Introduction to Petra Liebkosen and Kirsten Jung",
+    "A Dwindling Fortune (approximate 200 GC in property and holdings excluding those listed here)"
    ],
    "keywords": [
     "cultiste"
@@ -2449,6 +2484,18 @@
      "name": "Athletics",
      "nameFr": "Athlétisme",
      "value": 37
+    },
+    {
+     "name": "Lore (Mushroom Stews)",
+     "nameFr": "Savoir (Mushroom Stews)",
+     "frUnverified": true,
+     "value": 65
+    },
+    {
+     "name": "Lore (Middle Mountains)",
+     "nameFr": "Savoir (Middle Mountains)",
+     "frUnverified": true,
+     "value": 53
     },
     {
      "name": "Melee (Basic)",
@@ -2508,6 +2555,54 @@
     "Soc": 25
    },
    "wounds": 32,
+   "size": "large",
+   "attacks": [
+    {
+     "name": "Beak",
+     "damage": 8,
+     "trait": "Creature Weapons"
+    },
+    {
+     "name": "Claws",
+     "damage": 6,
+     "trait": "Creature Weapons",
+     "count": 2
+    }
+   ],
+   "traits": [
+    {
+     "name": "Creature Weapons",
+     "rating": "+8",
+     "param": "Beak",
+     "ref": "E0-T-288"
+    },
+    {
+     "name": "Creature Weapons",
+     "rating": "+6",
+     "param": "Claws",
+     "count": 2,
+     "ref": "E0-T-288"
+    },
+    {
+     "name": "Fear",
+     "rating": "1",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Fly",
+     "rating": "100",
+     "ref": "E0-T-023"
+    },
+    {
+     "name": "Skittish",
+     "ref": "E0-T-047"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    }
+   ],
    "optionalTraits": [
     {
      "name": "Size",
@@ -2527,8 +2622,10 @@
      "ref": "E0-T-056"
     }
    ],
-   "specialRules": [
-    "Acute Sense (Vision"
+   "talents": [
+    {
+     "name": "Acute Sense (Vision)"
+    }
    ],
    "keywords": [
     "oiseau-geant"
@@ -2564,6 +2661,12 @@
      "name": "Bite",
      "damage": 5,
      "trait": "Bite"
+    },
+    {
+     "name": "Claws",
+     "damage": 6,
+     "trait": "Creature Weapons",
+     "count": 2
     }
    ],
    "traits": [
@@ -2579,6 +2682,8 @@
     {
      "name": "Creature Weapons",
      "rating": "+6",
+     "param": "Claws",
+     "count": 2,
      "ref": "E0-T-288"
     },
     {
@@ -2760,9 +2865,8 @@
      "value": 80
     },
     {
-     "name": "Melee (Two- Handed)",
-     "nameFr": "Corps à corps (Two- Handed)",
-     "frUnverified": true,
+     "name": "Melee (Two-Handed)",
+     "nameFr": "Corps à corps (Deux mains)",
      "value": 80
     },
     {
@@ -2780,6 +2884,7 @@
     {
      "name": "Shield",
      "rating": "2",
+     "conditional": true,
      "ref": "E0-T-287"
     },
     {
@@ -2816,8 +2921,7 @@
     "A Pair of Swords that Occassionaly Laugh",
     "Shield Bearing the Skulls of a Dozen Slain Warriors",
     "Cursed Plate Bedecked with Tributes to Nurgle",
-    "a Sword and Shield",
-    "or a Pair of Swords them once during their turn."
+    "A Thirst for Battle and the Diseased End of All Things"
    ],
    "nameFrSource": "proposition"
   },
@@ -2953,6 +3057,9 @@
     },
     {
      "name": "Strike Mighty Blow"
+    },
+    {
+     "name": "Tunnel Rat"
     }
    ],
    "trappings": [
@@ -3269,6 +3376,9 @@
      "name": "Alley Cat"
     },
     {
+     "name": "Break and Enter"
+    },
+    {
      "name": "Etiquette (Criminals, Nobles)"
     },
     {
@@ -3287,7 +3397,13 @@
      "name": "Sixth Sense"
     },
     {
+     "name": "Strike to Stun"
+    },
+    {
      "name": "Tenacious"
+    },
+    {
+     "name": "Tower of Memories"
     }
    ],
    "trappings": [
@@ -3911,10 +4027,22 @@
      "value": 44
     }
    ],
+   "traits": [
+    {
+     "name": "Mental Corruption",
+     "param": "Erratic Fantasist, Suspicious Mind",
+     "ref": "E0-T-038"
+    }
+   ],
    "talents": [
     {
      "name": "Doomed (Lose thyself slowly, piece by piece)"
     }
+   ],
+   "trappings": [
+    "Roughspun Robes over Leather Jack",
+    "Dagger",
+    "Pick"
    ],
    "nameFrSource": "proposition"
   },
@@ -4054,7 +4182,13 @@
      "name": "Instinctive Diction"
     },
     {
+     "name": "Iron Will"
+    },
+    {
      "name": "Magical Sense"
+    },
+    {
+     "name": "Nose for Trouble"
     },
     {
      "name": "Petty Magic"
@@ -4080,9 +4214,8 @@
     "Purse with 5 GCs 17/6"
    ],
    "spells": {
-    "spells": [
-     "All Lore of Death and Lore of Necromancy spells",
-     "at GM's discretion"
+    "notes": [
+     "All Lore of Death and Lore of Necromancy spells, at GM's discretion"
     ]
    },
    "nameFrSource": "proposition"
@@ -4186,15 +4319,31 @@
    },
    "wounds": 21,
    "size": "large",
+   "attacks": [
+    {
+     "name": "Beak",
+     "damage": 9,
+     "trait": "Creature Weapons"
+    },
+    {
+     "name": "Claws",
+     "damage": 7,
+     "trait": "Creature Weapons",
+     "count": 2
+    }
+   ],
    "traits": [
     {
      "name": "Creature Weapons",
      "rating": "+9",
+     "param": "Beak",
      "ref": "E0-T-288"
     },
     {
      "name": "Creature Weapons",
      "rating": "+7",
+     "param": "Claws",
+     "count": 2,
      "ref": "E0-T-288"
     },
     {
@@ -4280,6 +4429,7 @@
     {
      "name": "Fly",
      "rating": "100",
+     "conditional": true,
      "ref": "E0-T-023"
     },
     {

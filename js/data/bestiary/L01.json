@@ -128,13 +128,16 @@
      "rank": 2
     },
     {
+     "name": "In-fighter"
+    },
+    {
      "name": "Large"
     },
     {
      "name": "Night Vision"
     },
     {
-     "name": "Resistance (Poison (Ingested))"
+     "name": "Resistant (Poison (Ingested))"
     },
     {
      "name": "Very Strong"
@@ -179,6 +182,149 @@
     "Soc": 22
    },
    "wounds": 36,
+   "armour": {
+    "ap": 1
+   },
+   "attacks": [
+    {
+     "name": "Bow",
+     "damage": 8,
+     "trait": "Weapon"
+    },
+    {
+     "name": "Club",
+     "damage": 9,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 43
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 55
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 38
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 38
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 55
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 30
+    },
+    {
+     "name": "Heal",
+     "nameFr": "Guérison",
+     "value": 27
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 58
+    },
+    {
+     "name": "Language (Reikspeil)",
+     "nameFr": "Langue (Reikspeil)",
+     "frUnverified": true,
+     "value": 28
+    },
+    {
+     "name": "Lore (Local)",
+     "nameFr": "Savoir (Local)",
+     "value": 30
+    },
+    {
+     "name": "Lore (Ogres)",
+     "nameFr": "Savoir (Ogres)",
+     "frUnverified": true,
+     "value": 30
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 53
+    },
+    {
+     "name": "Navigation",
+     "nameFr": "Orientation",
+     "value": 25
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 30
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 27
+    },
+    {
+     "name": "Ranged (Bow)",
+     "nameFr": "Projectiles (Arc)",
+     "value": 35
+    },
+    {
+     "name": "Track",
+     "nameFr": "Pistage",
+     "value": 5
+    }
+   ],
+   "talents": [
+    {
+     "name": "Combat Reflexes"
+    },
+    {
+     "name": "Dirty Fighting"
+    },
+    {
+     "name": "In-fighter"
+    },
+    {
+     "name": "Large"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Resistant (Poison (Ingested))"
+    },
+    {
+     "name": "Rover"
+    },
+    {
+     "name": "Strike to Stun"
+    },
+    {
+     "name": "Very Strong"
+    },
+    {
+     "name": "Vice (Food)"
+    }
+   ],
+   "trappings": [
+    "Hand Weapon (Cannon Ball Club)",
+    "Gut Plate",
+    "Hand Weapon (Club)",
+    "Bow with 12 Arrows",
+    "2d10 Brass Pennies"
+   ],
    "keywords": [
     "ogre",
     "hors-la-loi"
@@ -200,7 +346,7 @@
     "CT": 17,
     "F": 49,
     "E": 43,
-    "I": 16,
+    "I": 21,
     "Ag": 28,
     "Dex": 26,
     "Int": 25,
@@ -208,6 +354,96 @@
     "Soc": 19
    },
    "wounds": 28,
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 38
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 54
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 53
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 33
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 51
+    },
+    {
+     "name": "Entertain (Storytelling)",
+     "nameFr": "Divertissement (Contes)",
+     "value": 29
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 24
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 52
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 46
+    },
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 39
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 54
+    }
+   ],
+   "talents": [
+    {
+     "name": "Dirty Fighting"
+    },
+    {
+     "name": "Large"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Resistant (Poison (Ingested))"
+    },
+    {
+     "name": "Strong Back"
+    },
+    {
+     "name": "Very Strong"
+    },
+    {
+     "name": "Vice (Food)"
+    }
+   ],
+   "trappings": [
+    "Cloak",
+    "Clothing",
+    "Dagger",
+    "Flask of Spirits",
+    "Hand Weapon (Boat Hook)",
+    "Leather Gloves",
+    "Pouch",
+    "Sling Bag"
+   ],
    "keywords": [
     "ogre"
    ],
@@ -226,16 +462,121 @@
     "M": 6,
     "CC": 29,
     "CT": 19,
-    "F": 58,
-    "E": 51,
+    "F": 68,
+    "E": 61,
     "I": 3,
     "Ag": 21,
-    "Dex": 26,
+    "Dex": 36,
     "Int": 25,
     "FM": 36,
-    "Soc": 19
+    "Soc": 26
    },
-   "wounds": 36,
+   "wounds": 42,
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 26
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 66
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 41
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 26
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 71
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 30
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 71
+    },
+    {
+     "name": "Language (Grumbarth)",
+     "nameFr": "Langue (Grumbarth)",
+     "value": 28
+    },
+    {
+     "name": "Lore (Ogres)",
+     "nameFr": "Savoir (Ogres)",
+     "frUnverified": true,
+     "value": 30
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 32
+    },
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 34
+    },
+    {
+     "name": "Stealth (Urban)",
+     "nameFr": "Discrétion (Urbaine)",
+     "value": 26
+    },
+    {
+     "name": "Trade (Blacksmith)",
+     "nameFr": "Métier (Forgeron)",
+     "value": 32
+    }
+   ],
+   "talents": [
+    {
+     "name": "Craftsman (Blacksmith)"
+    },
+    {
+     "name": "Dirty Fighting"
+    },
+    {
+     "name": "Large"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Resistant (Poison (Ingested))"
+    },
+    {
+     "name": "Very Strong"
+    },
+    {
+     "name": "Vice (Food)"
+    }
+   ],
+   "trappings": [
+    "Chalk",
+    "Cloak",
+    "Clothing",
+    "Dagger",
+    "Guild License",
+    "Hat",
+    "Leather Jerkin",
+    "Lunch",
+    "Pouch",
+    "Sling Bag",
+    "Rags",
+    "Trade Tools (Blacksmith)"
+   ],
    "keywords": [
     "ogre"
    ],
@@ -439,7 +780,7 @@
      "name": "Read/Write"
     },
     {
-     "name": "Resistance (Disease)"
+     "name": "Resistant (Disease)"
     },
     {
      "name": "Robust"
@@ -693,6 +1034,9 @@
     },
     {
      "name": "Stone Soup"
+    },
+    {
+     "name": "Strike to Stun"
     },
     {
      "name": "Panhandle"
@@ -1144,6 +1488,15 @@
     "Soc": 10
    },
    "wounds": 11,
+   "traits": [
+    {
+     "name": "Immune to Psychology",
+     "ref": "E0-T-030"
+    }
+   ],
+   "trappings": [
+    "Ragged Clothing"
+   ],
    "keywords": [
     "humain"
    ],
@@ -1204,6 +1557,11 @@
      "value": 55
     },
     {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 65
+    },
+    {
      "name": "Language (Estalian)",
      "nameFr": "Langue (Estalien)",
      "value": 37
@@ -1217,6 +1575,11 @@
      "name": "Leadership",
      "nameFr": "Commandement",
      "value": 57
+    },
+    {
+     "name": "Lore (Politics)",
+     "nameFr": "Savoir (Politique)",
+     "value": 65
     },
     {
      "name": "Melee (Basic)",
@@ -1234,9 +1597,19 @@
      "value": 45
     },
     {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 36
+    },
+    {
      "name": "Sail",
      "nameFr": "Voile",
      "value": 47
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 35
     }
    ],
    "talents": [
@@ -1265,7 +1638,7 @@
      "name": "Pilot"
     },
     {
-     "name": "Public Speaking"
+     "name": "Public Speaker"
     },
     {
      "name": "Read/Write"
@@ -1320,6 +1693,109 @@
     "Soc": 49
    },
    "wounds": 12,
+   "skills": [
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 52
+    },
+    {
+     "name": "Entertain (Fortune Telling)",
+     "nameFr": "Divertissement (Voyance)",
+     "value": 41
+    },
+    {
+     "name": "Entertain (Prophecy)",
+     "nameFr": "Divertissement (Prophétie)",
+     "value": 47
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 49
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 45
+    },
+    {
+     "name": "Language (Classical)",
+     "nameFr": "Langue (Classique)",
+     "value": 42
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 37
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 39
+    },
+    {
+     "name": "Play (Lute)",
+     "nameFr": "Musicien (Luth)",
+     "value": 42
+    }
+   ],
+   "traits": [
+    {
+     "name": "Fear",
+     "rating": "1",
+     "conditional": true,
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Frenzy",
+     "conditional": true,
+     "ref": "E0-T-024"
+    },
+    {
+     "name": "Fury",
+     "conditional": true,
+     "ref": "E0-T-078"
+    },
+    {
+     "name": "Immune to Psychology",
+     "conditional": true,
+     "ref": "E0-T-030"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Attractive"
+    },
+    {
+     "name": "Etiquette (Nobles)"
+    },
+    {
+     "name": "Holy Visions"
+    },
+    {
+     "name": "Magical Sense"
+    },
+    {
+     "name": "Noble Blood"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Second Sight"
+    },
+    {
+     "name": "Sixth Sense"
+    },
+    {
+     "name": "Suave"
+    }
+   ],
+   "trappings": [
+    "Rich Clothing and Jewellery",
+    "Small Collection of Books on Prophecy and Astrology."
+   ],
    "keywords": [
     "humain"
    ],
@@ -1374,7 +1850,61 @@
      "name": "Lore (Theology)",
      "nameFr": "Savoir (Théologie)",
      "value": 45
+    },
+    {
+     "name": "Lore (Chaos)",
+     "nameFr": "Savoir (Chaos)",
+     "value": 79
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 43
+    },
+    {
+     "name": "Research",
+     "nameFr": "Recherche",
+     "value": 56
     }
+   ],
+   "traits": [
+    {
+     "name": "Mental Corruption",
+     "param": "Chaotic Dreams",
+     "ref": "E0-T-038"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Bookish"
+    },
+    {
+     "name": "Etiquette (Scholars)"
+    },
+    {
+     "name": "Linguistics"
+    },
+    {
+     "name": "Magnum Opus (Liber Chaotica)"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Savant (Chaos)"
+    },
+    {
+     "name": "Savvy"
+    },
+    {
+     "name": "Speedreader"
+    },
+    {
+     "name": "Tower of Memories"
+    }
+   ],
+   "trappings": [
+    "Ragged Clothes"
    ],
    "keywords": [
     "humain"

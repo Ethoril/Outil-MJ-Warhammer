@@ -41,7 +41,8 @@ test('D2 : les natures (Mort-vivant, Démoniaque, Construct) sont des Traits li�
   assert.equal(bloodletter.traits.find(t => t.name === 'Daemonic').rating, '8+');
   assert.deepEqual(bloodletter.keywords, ['demon-de-khorne']);
   assert.deepEqual(bloodletter.attacks.map(a => [a.name, a.qualities ?? null]), [['Hellblade', ['Damaging', 'Magical']], ['Horns', ['Magical']]]);
-  assert.deepEqual(byName('Vampire').traits.map(t => t.name), ['Bite', 'Undead', 'Vampiric']);
+  // Q33 : la page 343 imprime Night Vision, Undead, Vampiric (le « Bite » lu avant n'était que l'attaque Bite, et Night Vision était perdu dans le titre).
+  assert.deepEqual(byName('Vampire').traits.map(t => t.name), ['Night Vision', 'Undead', 'Vampiric']);
 });
 
 test('D2 : gabarits en modificateurs signés (cases vides = aucun modificateur)', () => {

@@ -45,6 +45,7 @@
      "name": "Pistol",
      "damage": 8,
      "trait": "Ranged",
+     "rangeYards": 20,
      "ranged": true
     }
    ],
@@ -167,7 +168,7 @@
      "name": "Orientation"
     },
     {
-     "name": "Public Speaking"
+     "name": "Public Speaker"
     },
     {
      "name": "Read/Write"
@@ -370,6 +371,7 @@
      "name": "Pistol",
      "damage": 8,
      "trait": "Ranged",
+     "rangeYards": 20,
      "ranged": true
     },
     {
@@ -464,7 +466,7 @@
    ],
    "talents": [
     {
-     "name": "Magic Resistant"
+     "name": "Magic Resistance"
     },
     {
      "name": "Night Vision"
@@ -488,7 +490,7 @@
      "name": "Strong Back"
     },
     {
-     "name": "Strong-Minded"
+     "name": "Strong-minded"
     },
     {
      "name": "Strong Swimmer"
@@ -509,7 +511,8 @@
     "Leather Jerkin",
     "Grund A Dum Sailing Ship and Crew",
     "Pistol with ammunition and powder for 10 shots",
-    "Sextant"
+    "Sextant",
+    "Shipping Charts (these display locations of entrances to the Norse Dwarf Karaks and seaports if viewed through Skaldor's lens)"
    ],
    "keywords": [
     "nain"
@@ -689,7 +692,7 @@
      "name": "Pilot"
     },
     {
-     "name": "Public Speaking"
+     "name": "Public Speaker"
     },
     {
      "name": "Savvy"
@@ -826,7 +829,7 @@
      "name": "Fisherman"
     },
     {
-     "name": "Stout-Hearted"
+     "name": "Stout-hearted"
     },
     {
      "name": "Strong Back"
@@ -916,6 +919,11 @@
      "value": 36
     },
     {
+     "name": "Language (Wastelander)",
+     "nameFr": "Langue (Wastelander)",
+     "value": 51
+    },
+    {
      "name": "Leadership",
      "nameFr": "Commandement",
      "value": 56
@@ -964,13 +972,16 @@
      "name": "Etiquette (Crew)"
     },
     {
+     "name": "Master and Commander"
+    },
+    {
      "name": "Orientation"
     },
     {
      "name": "Read/Write"
     },
     {
-     "name": "Stout-Hearted"
+     "name": "Stout-hearted"
     },
     {
      "name": "Suave"
@@ -1107,7 +1118,7 @@
      "name": "Sea Legs"
     },
     {
-     "name": "Stout- Hearted"
+     "name": "Stout-hearted"
     },
     {
      "name": "Strong Back"
@@ -1243,7 +1254,7 @@
      "name": "Orientation"
     },
     {
-     "name": "Stout- Hearted"
+     "name": "Stout-hearted"
     },
     {
      "name": "Strong Back"
@@ -1295,6 +1306,7 @@
      "name": "Crossbow",
      "damage": 9,
      "trait": "Ranged",
+     "rangeYards": 60,
      "ranged": true
     },
     {
@@ -1373,6 +1385,16 @@
      "name": "Leadership",
      "nameFr": "Commandement",
      "value": 41
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 61
+    },
+    {
+     "name": "Melee (Polearm)",
+     "nameFr": "Corps à corps (Armes d’hast)",
+     "value": 51
     },
     {
      "name": "Play (Drum)",
@@ -1530,6 +1552,11 @@
      "value": 41
     },
     {
+     "name": "Sleight of Hand",
+     "nameFr": "Escamotage",
+     "value": 51
+    },
+    {
      "name": "Trade (Barber)",
      "nameFr": "Métier (Barbier)",
      "value": 46
@@ -1546,7 +1573,7 @@
      "name": "Read/Write"
     },
     {
-     "name": "Resistance (Disease)"
+     "name": "Resistant (Disease)"
     },
     {
      "name": "Savvy"
@@ -1770,6 +1797,7 @@
      "name": "Own Body",
      "damage": 7,
      "trait": "Ranged",
+     "rangeYards": 20,
      "ranged": true
     },
     {
@@ -2238,6 +2266,11 @@
      "ref": "E0-T-002"
     },
     {
+     "name": "Corruption",
+     "param": "Minor",
+     "ref": "E0-T-016"
+    },
+    {
      "name": "Dark Vision",
      "ref": "E0-T-017"
     },
@@ -2306,11 +2339,6 @@
      "name": "Tail",
      "damage": 13,
      "trait": "Tail"
-    },
-    {
-     "name": "Fanged Maw",
-     "damage": 11,
-     "trait": "Weapon"
     }
    ],
    "traits": [
@@ -2844,6 +2872,17 @@
      "value": 59
     },
     {
+     "name": "Lore (Theology)",
+     "nameFr": "Savoir (Théologie)",
+     "value": 69
+    },
+    {
+     "name": "Lore (Oceans)",
+     "nameFr": "Savoir (Oceans)",
+     "frUnverified": true,
+     "value": 99
+    },
+    {
      "name": "Melee (Polearm)",
      "nameFr": "Corps à corps (Armes d’hast)",
      "value": 83
@@ -2975,6 +3014,9 @@
      "name": "Iron Jaw"
     },
     {
+     "name": "Iron Will"
+    },
+    {
      "name": "Luck",
      "rank": 2
     },
@@ -2999,10 +3041,14 @@
      "rank": 3
     },
     {
+     "name": "Strike to Injure",
+     "rank": 3
+    },
+    {
      "name": "Tenacious"
     },
     {
-     "name": "Unshakable",
+     "name": "Unshakeable",
      "rank": 3
     },
     {
@@ -3010,16 +3056,7 @@
     }
    ],
    "trappings": [
-    "Triton's Crown (grants Ward 9)",
-    "Triton's Trident Magics (see page 15): Living Mire",
-    "Whirlpool",
-    "Fair Winds",
-    "Sea Curse",
-    "if Triton is disrespected",
-    "Manann's Mood may decrease",
-    "and if he is pleased",
-    "territorial",
-    "trained"
+    "Triton's Crown (grants Ward 9)"
    ],
    "abilities": [
     "E0-T-272",
@@ -3058,10 +3095,21 @@
    },
    "attacks": [
     {
-     "name": "Pistol +8 (20), Weapon (Rapier) +8, Weapon (Hook",
-     "damage": 6,
+     "name": "Pistol",
+     "damage": 8,
      "trait": "Ranged",
+     "rangeYards": 20,
      "ranged": true
+    },
+    {
+     "name": "Rapier",
+     "damage": 8,
+     "trait": "Weapon"
+    },
+    {
+     "name": "Hook",
+     "damage": 6,
+     "trait": "Weapon"
     }
    ],
    "skills": [
@@ -3245,6 +3293,9 @@
      "rank": 5
     },
     {
+     "name": "Iron Will"
+    },
+    {
      "name": "Menacing",
      "rank": 3
     },
@@ -3327,6 +3378,7 @@
      "name": "Pistols",
      "damage": 8,
      "trait": "Ranged",
+     "rangeYards": 20,
      "ranged": true
     },
     {
@@ -3571,7 +3623,7 @@
      "name": "Tenacious"
     },
     {
-     "name": "Unshakable"
+     "name": "Unshakeable"
     },
     {
      "name": "Very Resilient"
@@ -3679,6 +3731,17 @@
      "name": "Intuition",
      "nameFr": "Intuition",
      "value": 69
+    },
+    {
+     "name": "Language (Gospodarinyi)",
+     "nameFr": "Langue (Gospodar)",
+     "value": 54
+    },
+    {
+     "name": "Language (Reiskpiel)",
+     "nameFr": "Langue (Reiskpiel)",
+     "frUnverified": true,
+     "value": 67
     },
     {
      "name": "Leadership",
@@ -3826,6 +3889,9 @@
      "name": "In-fighter"
     },
     {
+     "name": "Iron Will"
+    },
+    {
      "name": "Luck",
      "rank": 2
     },
@@ -3864,7 +3930,7 @@
      "name": "Strong Legs"
     },
     {
-     "name": "Unshakable"
+     "name": "Unshakeable"
     },
     {
      "name": "Warrior Born"
@@ -3913,6 +3979,7 @@
      "name": "Pistol",
      "damage": 7,
      "trait": "Ranged",
+     "rangeYards": 10,
      "ranged": true
     },
     {
@@ -4034,6 +4101,12 @@
      "value": 98
     },
     {
+     "name": "Ranged (Skaven Ranged Weaponry)",
+     "nameFr": "Projectiles (Skaven Ranged Weaponry)",
+     "frUnverified": true,
+     "value": 95
+    },
+    {
      "name": "Row",
      "nameFr": "Ramer",
      "value": 98
@@ -4139,6 +4212,9 @@
      "name": "Strike Mighty Blow"
     },
     {
+     "name": "Strike to Injure"
+    },
+    {
      "name": "Strong Back"
     },
     {
@@ -4151,7 +4227,7 @@
      "name": "Tunnel Rat"
     },
     {
-     "name": "Unshakable"
+     "name": "Unshakeable"
     },
     {
      "name": "Very Resilient"

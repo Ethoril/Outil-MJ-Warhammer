@@ -95,6 +95,9 @@
      "name": "Strike Mighty Blow"
     },
     {
+     "name": "Strike to Stun"
+    },
+    {
      "name": "Tenacious"
     }
    ],
@@ -213,6 +216,9 @@
     },
     {
      "name": "Shieldsman"
+    },
+    {
+     "name": "Strike to Stun"
     },
     {
      "name": "Tenacious"
@@ -989,6 +995,9 @@
      "name": "Read/Write"
     },
     {
+     "name": "Strike to Stun"
+    },
+    {
      "name": "Surgery"
     }
    ],
@@ -1102,6 +1111,9 @@
     }
    ],
    "talents": [
+    {
+     "name": "Break and Enter"
+    },
     {
      "name": "Criminal"
     },
@@ -1543,6 +1555,9 @@
      "name": "Sharp"
     },
     {
+     "name": "Strike to Stun"
+    },
+    {
      "name": "Supportive"
     }
    ],
@@ -1622,7 +1637,7 @@
      "name": "Doomed"
     },
     {
-     "name": "Nimble Fingered"
+     "name": "Nimble-fingered"
     }
    ],
    "keywords": [
@@ -1858,6 +1873,9 @@
      "name": "Fearless (Watchmen)"
     },
     {
+     "name": "Iron Will"
+    },
+    {
      "name": "Menacing"
     },
     {
@@ -1868,6 +1886,9 @@
     },
     {
      "name": "Strike Mighty Blow"
+    },
+    {
+     "name": "Strike to Stun"
     }
    ],
    "keywords": [
@@ -2243,7 +2264,11 @@
      "name": "Sixth Sense"
     },
     {
-     "name": "Strong Minded"
+     "name": "Strong-minded"
+    },
+    {
+     "name": "Tower of Memories",
+     "rank": 4
     },
     {
      "name": "Witch!"
@@ -2463,6 +2488,23 @@
      "name": "Tail",
      "rating": "+6",
      "ref": "E0-T-054"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Combat Aware"
+    },
+    {
+     "name": "Enclosed Fighter"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "War Leader"
+    },
+    {
+     "name": "Acute Sense (Smell)"
     }
    ],
    "trappings": [
@@ -2692,7 +2734,7 @@
      "name": "Instinctive Diction"
     },
     {
-     "name": "Petty Magic Petty Magic"
+     "name": "Petty Magic"
     }
    ],
    "trappings": [
@@ -2701,12 +2743,15 @@
     "crutches."
    ],
    "spells": {
-    "spells": [
+    "Petty": [
      "Drain",
      "Produce Small Animal",
-     "Rot Arcane Magic and Lore Bless with Filth (page 109)",
+     "Rot"
+    ],
+    "Arcane and Lore": [
+     "Bless with Filth",
      "Creeping Menace",
-     "Curse of 110 Crippling Pain",
+     "Curse of Crippling Pain",
      "Stream of Corruption"
     ]
    },
@@ -2806,6 +2851,9 @@
     },
     {
      "name": "Blather"
+    },
+    {
+     "name": "Break and Enter"
     },
     {
      "name": "Criminal"
@@ -2970,6 +3018,11 @@
      "name": "Horns",
      "damage": 10,
      "trait": "Horns"
+    },
+    {
+     "name": "Weapon",
+     "damage": 11,
+     "trait": "Weapon"
     }
    ],
    "traits": [
@@ -3007,7 +3060,7 @@
     }
    ],
    "specialRules": [
-    "Weapon +11 Manifestation of Ghur"
+    "Manifestation of Ghur"
    ],
    "abilities": [
     "E0-T-258",
@@ -3061,6 +3114,49 @@
     {
      "name": "Tracker",
      "ref": "E0-T-059"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Belligerent",
+     "ref": "E0-T-004"
+    },
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Big",
+     "ref": "E0-T-071"
+    },
+    {
+     "name": "Blessed",
+     "param": "Ulric",
+     "ref": "E0-T-007"
+    },
+    {
+     "name": "Champion",
+     "ref": "E0-T-010"
+    },
+    {
+     "name": "Die Hard",
+     "ref": "E0-T-075"
+    },
+    {
+     "name": "Fast",
+     "ref": "E0-T-077"
+    },
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    },
+    {
+     "name": "Immune to Psychology",
+     "ref": "E0-T-030"
+    },
+    {
+     "name": "Regeneration",
+     "ref": "E0-T-044"
     }
    ],
    "abilities": [
@@ -3189,6 +3285,37 @@
      "ref": "E0-T-059"
     }
    ],
+   "optionalTraits": [
+    {
+     "name": "Belligerent",
+     "ref": "E0-T-004"
+    },
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Blessed",
+     "param": "Ulric",
+     "ref": "E0-T-007"
+    },
+    {
+     "name": "Die Hard",
+     "ref": "E0-T-075"
+    },
+    {
+     "name": "Fast",
+     "ref": "E0-T-077"
+    },
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    },
+    {
+     "name": "Stealthy",
+     "ref": "E0-T-050"
+    }
+   ],
    "keywords": [
     "loup"
    ],
@@ -3277,6 +3404,35 @@
      "name": "Trade (Carpenter)",
      "nameFr": "Métier (Charpentier)",
      "value": 44
+    }
+   ],
+   "talents": [
+    {
+     "name": "Acute Sense (Taste)"
+    },
+    {
+     "name": "Beneath Notice"
+    },
+    {
+     "name": "Gregarious"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Resistant (Chaos)"
+    },
+    {
+     "name": "Schemer"
+    },
+    {
+     "name": "Small"
+    },
+    {
+     "name": "Supportive"
     }
    ],
    "nameFrSource": "proposition"
@@ -3555,7 +3711,7 @@
      "name": "Doomed (Eaten by thine very own offspring)"
     },
     {
-     "name": "Nimble Fingered"
+     "name": "Nimble-fingered"
     },
     {
      "name": "Read/Write"
@@ -3911,7 +4067,7 @@
     "Sling Bag containing 2 Candles",
     "4 Matches",
     "Hood",
-    "and Stolen Goods worth 17 Shillings"
+    "Stolen Goods worth 17 Shillings"
    ],
    "keywords": [
     "humain"
@@ -4200,7 +4356,7 @@
      "name": "Fisherman"
     },
     {
-     "name": "Resistance (Disease)"
+     "name": "Resistant (Disease)"
     },
     {
      "name": "Strong Legs"
@@ -4309,6 +4465,11 @@
      "ref": "E0-T-044"
     },
     {
+     "name": "Spellcaster",
+     "param": "Death and Necromancy",
+     "ref": "E0-T-048"
+    },
+    {
      "name": "Terror",
      "rating": "3",
      "ref": "E0-T-057"
@@ -4349,11 +4510,7 @@
      "Raise Dead",
      "Reanimate",
      "Scythe of Shyish",
-     "Steal Life. of Middenheim might look very different. Clues given in Death on the Reik suggest that the cult have a headquarters in Middenheim",
-     "but little notion of how to find it. The Characters must be very proactive to track down and break up the cult in the city. If the Red Crown is destroyed",
-     "Khazrak's campaign will lack critical guidance",
-     "but if the Characters can intercept messages between the cultists and the Beastmen without tipping the Red Crown off",
-     "they could help Middenheim mount a conclusive counter-offensive."
+     "Steal Life"
     ]
    },
    "keywords": [

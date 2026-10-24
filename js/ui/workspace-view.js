@@ -25,6 +25,7 @@ import { CAMP_LABELS, normalizeCamp, encounterDisplayStatus, encounterSummary, s
 import { uid } from '../core/models.js';
 import { renderFicheDetails } from './fiche-details.js';
 import { renderSilhouette } from './silhouette.js';
+import { buildParticipantReminders } from '../core/reminders.js';
 import { renderResolutionPanel, actionKey, minusSigned, defenseOptions, defaultDefenseValue } from './resolution-panel.js';
 import { initSidePanel } from './side-panel.js';
 import { getSpellContract, getAllSpellContracts } from '../core/v5-spell-contracts.js';
@@ -361,6 +362,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     suspendScene: typeof actions.suspendScene === 'function' ? actions.suspendScene : null,
     restartCombat: typeof actions.restartCombat === 'function' ? actions.restartCombat : null,
     showPlay: typeof actions.showPlay === 'function' ? actions.showPlay : null,
+    spaceShown: typeof actions.spaceShown === 'function' ? actions.spaceShown : null,
     createProfile: typeof actions.createProfile === 'function' ? actions.createProfile : null,
     duplicateProfile: typeof actions.duplicateProfile === 'function' ? actions.duplicateProfile : null,
     removeProfile: typeof actions.removeProfile === 'function' ? actions.removeProfile : null,
@@ -679,9 +681,25 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         const remove = defeatedParticipantButton(participant, `bench-remove-${participant.id}`);
         if (remove) row.appendChild(remove);
         bench.appendChild(row);
+        // Rappels du participant au banc (armure inconnue du bestiaire…) : visibles avant son entrée en combat.
+        const reminders = participantReminderBlock(participant);
+        if (reminders) bench.appendChild(reminders);
       });
       column.appendChild(bench);
     }
+  }
+
+  // Bloc des rappels portés par un participant (Fait / Ignorer) ; null sans rappel. Partagé par le banc et la fiche du personnage actif.
+  function participantReminderBlock(participant) {
+    const reminders = buildParticipantReminders(tag => node(tag, ''), Store.getParticipantReminders?.(participant.id));
+    if (!reminders) return null;
+    reminders.addEventListener('click', event => {
+      const decision = event.target?.dataset?.decision, reminderId = event.target?.closest?.('.actor-reminder')?.dataset?.reminderId;
+      if (!decision || !reminderId) return;
+      event.preventDefault();
+      Promise.resolve(Store.resolveParticipantReminder(participant.id, reminderId, decision)).finally(() => render());
+    });
+    return reminders;
   }
 
   function renderStateForm(participant) {
@@ -769,6 +787,8 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     if (hit?.damage || hit?.critical?.application?.extraWounds) hp.appendChild(node('span', 'workspace-sheet-hp-after', ` → ${minusSigned(Math.max(0, (Number(participant.hp) || 0) - previewHpLoss(hit)))}`));
     heading.append(identity, hp);
     sheet.append(heading, hpBar(participant));
+    const ownReminders = !isTarget ? participantReminderBlock(participant) : null;
+    if (ownReminders) sheet.appendChild(ownReminders);
 
     const amount = state.hpAmounts[participant.id] ?? '1';
     const hpControls = node('div', 'workspace-hp-controls');
@@ -1708,6 +1728,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     refs.prepare.hidden = state.space !== 'prepare';
     refs.play.hidden = state.space !== 'play';
     refs.library.hidden = state.space !== 'library';
+    callbacks.spaceShown?.(state.space);
     renderPrepare();
     renderPlay();
     renderLibrary();

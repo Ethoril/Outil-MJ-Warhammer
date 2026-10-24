@@ -1,6 +1,4 @@
-# Tri et raccordement des 206 talents — 9 octobre 2026
-
-> État courant du 10 octobre : application locale **3.14.0**, magie finalisée et [recette 3.5](../lot3/LOT3_RECETTE_3_5.md). Lire d’abord [le bilan complet](../lot3/LOT3_FINALISATION_MAGIE.md). Le tri exclusif ci-dessous et ses 28 talents « lot 3 » décrivent le lot 2 historique. La couverture actuelle compte 285 clauses automatiques, 122 assistées, 63 rappels, 41 fiches, 10 exclusions et 9 clauses différées à un autre périmètre. Ingrédients exclus ; miracles inventoriés seulement. Worktree / branche / HEAD inchangés, aucune publication.
+# Tri et raccordement des 207 talents — 9 octobre 2026
 
 Le tri est effectué par clause. Les effets mesurables utilisent le moteur, avec choix ou faits fournis par le MJ si nécessaire. La fiction reste un rappel. La progression et les valeurs déjà importées appartiennent aux fiches. Aucun bonus de caractéristique ni second calcul de Dur à cuire.
 
@@ -8,12 +6,12 @@ Le tri est effectué par clause. Les effets mesurables utilisent le moteur, avec
 
 | Traitement principal | Talents |
 | --- | ---: |
-| Clauses raccordées au moteur | 131 |
+| Clauses raccordées au moteur | 132 |
 | Entièrement narratifs | 19 |
 | Entièrement gérés par les fiches, hors bonus ci-dessous | 18 |
 | Bonus de caractéristiques exclus | 10 |
 | Magie, prières et effets magiques réservés au lot 3 | 28 |
-| Total | 206 |
+| Total | 207 |
 
 Ces catégories sont exclusives. Les talents mixtes conservent aussi leurs rappels et valeurs de fiche : 52 talents ont des clauses narratives et 38 des clauses de fiche, dont dix exclusions. Les bonus temporaires F/E de Fortification liquide sont également exclus. Les 382 clauses de contrat comprennent 277 automatiques et 105 assistées. Aucun talent mécanique du périmètre 2.4 ne reste en attente.
 
@@ -39,7 +37,7 @@ La neutralisation silencieuse p. 135 conserve volontairement ses conséquences m
 
 Les 166 talents du livre V5 ont l’audit de source existant ; les 39 références de suppléments ne sont pas toutes vérifiées dans leur ouvrage. Petit est un homebrew validé par le MJ. Les contrats épinglent les textes publics et les arbitrages autorisés ; une source modifiée suspend sa contribution. [Audit des sources](ECARTS_LIVRE_V5_AIDES_DE_JEU.md).
 
-## Détail des 206 identités
+## Détail des 207 identités
 
 Les traitements mixtes sont visibles dans les colonnes. Les clauses, identités et empreintes exactes figurent dans [le tri JSON](LOT2_TRI_TALENTS.json). Cette page et la couverture affichée par l’interface sont générées depuis ce même tri.
 
@@ -59,7 +57,7 @@ Les traitements mixtes sont visibles dans les colonnes. Les clauses, identités 
 | Attirant | Moteur raccordé | 3 clause(s) de Tests, combat ou calcul de situation épinglées et raccordées. |
 | Baratiner | Moteur raccordé | 1 clause(s) de Tests, combat ou calcul de situation épinglées et raccordées. |
 | Battement | Moteur raccordé | 1 clause(s) de Tests, combat ou calcul de situation épinglées et raccordées. |
-| Bénédiction de Lileath | Lot 3 | Lot 3 : =+1 DR par acquisition à tout Test de Focalisation (Qhaysh), réussi ou non. Chaque acquisition permet en outre d’ignorer une fois la limite qui réserve normalement le bénéfice au meilleur de plusieurs sorts donnant le même bonus : vous pouvez cumuler une source supplémentaire de ce bonus. S’applique aux sorts de Haute Magie et de magie de couleur. |
+| Bénédiction de Lileath | Lot 3 | Lot 3 : +1 DR par acquisition à tout Test de Focalisation (Qhaysh), réussi ou non. Chaque acquisition permet en outre d’ignorer une fois la limite qui réserve normalement le bénéfice au meilleur de plusieurs sorts donnant le même bonus : vous pouvez cumuler une source supplémentaire de ce bonus. S’applique aux sorts de Haute Magie et de magie de couleur. |
 | Béni | Lot 3 | Lot 3 : Vous connaissez toutes les Bénédictions de la divinité choisie ; une seule divinité normalement. Incompatible dans les deux sens avec Focalisation, Magie des Arcanes, Magie du Chaos, Résistance à la Magie, Magie mineure et Sorcier !. Désapprentissage : 100 PX, perte des Bénédictions et éventuelle défaveur divine décidée par le MJ. |
 | Béni par Isha | Lot 3 | Lot 3 : Réservé aux Elfes ayant reçu la bénédiction de l’Éternelle Reine à Ulthuan (Asur) ou d’Ariel à Athel Loren (Asrai), après leur noviciat d’Isha. Permet d’apprendre Haute Magie (High Magic). |
 | Bon marcheur | Moteur raccordé | 7 clause(s) de Tests, combat ou calcul de situation épinglées et raccordées. |
@@ -68,7 +66,7 @@ Les traitements mixtes sont visibles dans les colonnes. Les clauses, identités 
 | Brouet | Rappel narratif | Rappel narratif : Si un membre du groupe fait un Test de recherche de nourriture, il trouve toujours de quoi vous nourrir en plus des personnes normalement nourries par son résultat, même si le Test échoue. |
 | Caïd | Rappel narratif | Rappel narratif : Criminel ne fait plus naître les soupçons des représentants de la loi et ne vous interdit plus certaines Carrières. La plupart des autres criminels vous respectent, sauf ceux suffisamment préparés qui visent votre position. |
 | Cavalier émérite | Moteur raccordé + Rappel narratif | 4 clause(s) de Tests, combat ou calcul de situation épinglées et raccordées. Rappel narratif : Action/Mouvement de la monture sans Test ; mouvement décidé par le MJ. |
-| Chanceux | Fiche | Fiche : =+1 au maximum de points de Chance par acquisition, jusqu’à +3 avec trois acquisitions. |
+| Chanceux | Fiche | Fiche : +1 au maximum de points de Chance par acquisition, jusqu’à +3 avec trois acquisitions. |
 | Charge berserk | Moteur raccordé | 1 clause(s) de Tests, combat ou calcul de situation épinglées et raccordées. |
 | Chat de gouttière | Moteur raccordé + Rappel narratif | 3 clause(s) de Tests, combat ou calcul de situation épinglées et raccordées. Rappel narratif : Trajet le plus rapide ou le plus discret dans une ville connue. |
 | Chirurgie | Moteur raccordé + Rappel narratif | 3 clause(s) de Tests, combat ou calcul de situation épinglées et raccordées. Rappel narratif : Soigner les critiques exigeant Chirurgie selon leurs clauses de soins. |
@@ -160,6 +158,7 @@ Les traitements mixtes sont visibles dans les colonnes. Les clauses, identités 
 | Magie du Chaos | Lot 3 | Lot 3 : Choisissez un Domaine du Chaos : gagnez un Sort et +1 Corruption à chaque nouveau Sort obtenu. Coût par Sort supplémentaire selon le nombre déjà connu : 0–5 =100 PX ; 6–10 =200 ; 11–15 =300 ; 16–20 =400 ; 21+ =500. Un seul Domaine normalement. Ce talent ne peut jamais être désappris. |
 | Magie mineure | Lot 3 | Lot 3 : Apprenez immédiatement trois sorts de Magie mineure au choix. Coût de chaque sort supplémentaire selon le nombre déjà connu : jusqu’à 5, 50 PX ; 6–10, 100 PX ; 11–15, 150 PX ; 16–20, 200 PX ; 21 ou plus, 250 PX. Abandonner ce talent coûte 100 PX et fait immédiatement perdre tous les sorts qui lui sont liés. |
 | Magnum opus | Fiche | Fiche : À chaque acquisition, créez un chef-d’œuvre extraordinaire avec une Compétence Art ou Métier. Il impressionne ses témoins et procure des bonus fixés par le MJ, généralement en Sociabilité. Sa vente rapporte au moins dix fois la valeur normale. Chaque nouvelle acquisition produit une nouvelle œuvre. |
+| Maître à bord | Moteur raccordé | Moteur raccordé : +1 DR par rang aux Tests de Commandement à bord (leadershipRallySlModifiers) ; le fait « à bord » est confirmé par le MJ. |
 | Mains agiles | Moteur raccordé + Rappel narratif | 4 clause(s) de Tests, combat ou calcul de situation épinglées et raccordées. Rappel narratif : Autoriser Escamotage pour divertir ou pour un Test de contact ; sorts de contact au lot 3. |
 | Maître artisan | Moteur raccordé + Fiche | 3 clause(s) de Tests, combat ou calcul de situation épinglées et raccordées. Fiche : Achats de Métier hors carrière et spécialités. |
 | Maître en déguisement | Moteur raccordé + Rappel narratif | 3 clause(s) de Tests, combat ou calcul de situation épinglées et raccordées. Rappel narratif : Vêtements, posture et expressions crédibles. |

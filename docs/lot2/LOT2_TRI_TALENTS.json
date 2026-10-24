@@ -41,7 +41,7 @@
       "name": "Affable",
       "source": {
         "reference": "Livre de base V5, p. 127 ; achat : p. 191",
-        "effectHash": "sha256:1565fb1de8f9c02df3e78cf706ca0d9a64974e6de464d232db856d5959a72a8e"
+        "effectHash": "sha256:435a440122f4b5b974a1099b2a71535d53c41a47192751299e521b1b50fe4e5d"
       },
       "clauses": [
         {
@@ -519,13 +519,13 @@
       "name": "Chanceux",
       "source": {
         "reference": "Livre de base V5, p. 122 ; achat : p. 191",
-        "effectHash": "sha256:bfca9f34589673ecdb132465a5da04d8317f6a2d899416e49510df11729ae50b"
+        "effectHash": "sha256:2886612d569f192ad008b6d843e41c915f49760b06bedb21033dc85417633b4b"
       },
       "clauses": [
         {
           "scope": "sheet",
           "status": "owned",
-          "text": "=+1 au maximum de points de Chance par acquisition, jusqu’à +3 avec trois acquisitions."
+          "text": "+1 au maximum de points de Chance par acquisition, jusqu’à +3 avec trois acquisitions."
         }
       ]
     },
@@ -959,7 +959,7 @@
       "name": "Coup puissant",
       "source": {
         "reference": "Livre de base V5, p. 127 ; achat : p. 191",
-        "effectHash": "sha256:541b83ce4a9bce37565b529477f60c9eb5fb2c5eb05836f4e077457e8b3be897"
+        "effectHash": "sha256:abe58ca2b57c348ec5b1a9cbb1587796c5403a4bc9b0a85176d40c4b861fc182"
       },
       "clauses": [
         {
@@ -1192,7 +1192,7 @@
       "name": "Doigts de fée",
       "source": {
         "reference": "Livre de base V5, p. 123 ; achat : p. 191",
-        "effectHash": "sha256:605959606008556dfe827540c3cd611f751bf596d118fc6d560ec886bd5ebcda"
+        "effectHash": "sha256:6264f84ff20761f5d62c9851e83af7798601ecc4d8c50d3173aac486a8f5e023"
       },
       "clauses": [
         {
@@ -2682,6 +2682,21 @@
           "scope": "sheet",
           "status": "owned",
           "text": "À chaque acquisition, créez un chef-d’œuvre extraordinaire avec une Compétence Art ou Métier. Il impressionne ses témoins et procure des bonus fixés par le MJ, généralement en Sociabilité. Sa vente rapporte au moins dix fois la valeur normale. Chaque nouvelle acquisition produit une nouvelle œuvre."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-master-and-commander",
+      "name": "Maître à bord",
+      "source": {
+        "reference": "Sea of Claws (V4), p. 63",
+        "effectHash": "sha256:e46b3649b24bcd908f2af30f313006137a441959746d8b70a472498c5c06db2d"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "manual-approved",
+          "text": "+1 DR par rang aux Tests de Commandement à bord (leadershipRallySlModifiers) ; le fait « à bord » est confirmé par le MJ."
         }
       ]
     },

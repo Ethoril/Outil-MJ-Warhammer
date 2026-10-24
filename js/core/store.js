@@ -1471,8 +1471,15 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
     removeParticipant(id) {
       if (!canMutate()) return false;
       const participant = combat.participants.get(id); if (!participant) return;
-      if (persistence) return api.executeCommand('remove-participant', draft => {
-        const participants = (draft.combat?.participants || []).filter(item => item.id !== id);
+      // Un participant lié par un familier passe par une commande annulable même sans persistance : l'historique des liens (commandes) ne se mêle pas à l'instantané hérité.
+      const linked = familiarLinksOf(participant).length > 0 || Boolean(participant.extensions?.v5?.familiarOf);
+      if (persistence || linked) return api.executeCommand('remove-participant', draft => {
+        const stripLinks = item => {
+          if (item.extensions?.v5?.familiarOf?.masterId === id) return withV5(item, v5 => { const { familiarOf, ...rest } = v5; return rest; });
+          if (familiarLinksOf(item).some(row => row.familiarId === id)) return withV5(item, v5 => ({ ...v5, familiarLinks: v5.familiarLinks.filter(row => row.familiarId !== id) }));
+          return item;
+        };
+        const participants = (draft.combat?.participants || []).filter(item => item.id !== id).map(stripLinks);
         const transition = participant.zone === 'active' ? removeFromCombat({ participants: draft.combat?.participants || [], order: draft.combat?.order || [], currentActorId: draft.combat?.currentActorId, participantId: id }) : null;
         return {
           ...draft,
@@ -1485,6 +1492,11 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       recordSnapshot('remove-participant');
       const turnTransition = participant.zone === 'active' ? removeFromCombat({ participants: Array.from(combat.participants.values()), order: combat.order, currentActorId: combat.currentActorId, participantId: id }) : null;
       combat.participants.delete(id);
+      combat.participants.forEach((item, key) => {
+        if (item.extensions?.v5?.familiarOf?.masterId !== id) return;
+        const freed = withV5(item, v5 => { const { familiarOf, ...rest } = v5; return rest; });
+        combat.participants.set(key, freed); markDirty(`combat/participants/${key}`, freed);
+      });
       combat.order = turnTransition ? turnTransition.order : combat.order.filter(x => x !== id);
       if (turnTransition) combat.currentActorId = turnTransition.currentActorId;
       else if (combat.currentActorId === id) combat.currentActorId = null;
@@ -2296,12 +2308,17 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       if (scene && !source) throw missing();
       if (scene && !(source.entries || []).length) throw empty();
       if (!scene && !combat.participants.size) throw new Error('Aucun combat à recommencer');
+      // Le Round 0 recommence : son quota d'attaques gratuites (Tour « :0:pre-combat ») est remis à zéro.
+      const freshV5 = draft => {
+        const v5 = draft.extensions?.v5 || {}, ledger = v5.actionLedger;
+        return { ...v5, turnIndex: 1, ...(ledger ? { actionLedger: { ...ledger, quotaUsage: (ledger.quotaUsage || []).filter(row => !String(row.scopeKey || '').includes(':0:pre-combat')) } } : {}) };
+      };
       return api.executeCommand('restart-combat', draft => {
         const current = draft.activeScene?.status === 'active' ? draft.activeScene : null;
         if (!current) {
           return {
             ...draft,
-            extensions: { ...(draft.extensions || {}), v5: { ...(draft.extensions?.v5 || {}), turnIndex: 1 } },
+            extensions: { ...(draft.extensions || {}), v5: freshV5(draft) },
             combat: {
               ...draft.combat, round: 0, currentActorId: null,
               participants: (draft.combat?.participants || []).map(item => (withMomentum({ ...item, hp: item.maxHp ?? item.hp, states: [] }, false)))
@@ -2317,7 +2334,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         const oldIds = new Set((current.participants || []).map(item => item?.id).filter(Boolean));
         return {
           ...draft,
-          extensions: { ...(draft.extensions || {}), v5: { ...(draft.extensions?.v5 || {}), turnIndex: 1 } },
+          extensions: { ...(draft.extensions || {}), v5: freshV5(draft) },
           activeScene: nextScene,
           // Départ : ordre d'initiative, donc mode automatique même si la piste avait été réordonnée à la main.
           combat: { ...draft.combat, round: 0, currentActorId: null, order: [...nextScene.order], participants: cloneValue(nextScene.participants), orderMode: ORDER_MODES.AUTOMATIC },
@@ -3189,6 +3206,18 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       // The name only feeds the displayed text; reminder ids stay unchanged.
       const named = actor?.name && !transition.actorName ? { ...transition, actorName: actor.name } : transition;
       return pendingReminders(deriveReminders(snapshot, named, reminderChoices));
+    },
+    // Rappels portés par un participant (carte de combat) : indépendants de la scène active, donc aussi pour un combat monté depuis la bibliothèque.
+    getParticipantReminders(participantId) {
+      const snapshot = { sceneId: activeScene?.id || 'combat', participants: Array.from(combat.participants.values()).filter(item => item?.id === participantId) };
+      return pendingReminders(deriveReminders(snapshot, { id: `round-${combat.round || 0}`, type: 'participant', round: combat.round || 0 }, reminderChoices)).filter(item => item.kind === 'participant-reminder');
+    },
+    resolveParticipantReminder(participantId, id, decision, details = {}) {
+      const snapshot = { sceneId: activeScene?.id || 'combat', participants: Array.from(combat.participants.values()).filter(item => item?.id === participantId) };
+      const transition = { id: `round-${combat.round || 0}`, type: 'participant', round: combat.round || 0 };
+      const choice = resolveReminder(deriveReminders(snapshot, transition, reminderChoices), id, decision, details).find(item => item.id === id)?.choice;
+      if (!choice) return false;
+      return api.executeCommand('resolve-reminder', draft => ({ ...draft, reminderChoices: [...(draft.reminderChoices || []).filter(item => item.id !== id), choice] }));
     },
     listReminderChoices() { return cloneValue(reminderChoices); },
     resolveReminder(id, decision, details = {}) {

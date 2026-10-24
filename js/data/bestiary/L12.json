@@ -981,7 +981,7 @@
      "name": "Resolute"
     },
     {
-     "name": "Warleader"
+     "name": "War Leader"
     }
    ],
    "trappings": [
@@ -1083,14 +1083,13 @@
      "name": "Resolute"
     },
     {
-     "name": "Warleader"
+     "name": "War Leader"
     }
    ],
    "trappings": [
     "Choice of appropriate Polearm or Two- Handed Weapon",
     "Hand Weapon",
-    "Mail or Leather and Mail or Plate Armour",
-    "they can also take the Ranged (Bow) +10 Skill"
+    "Mail or Leather and Mail or Plate Armour"
    ],
    "nameFrSource": "proposition"
   },
@@ -1185,17 +1184,16 @@
      "name": "Resolute"
     },
     {
-     "name": "Unshakable"
+     "name": "Unshakeable"
     },
     {
-     "name": "Warleader"
+     "name": "War Leader"
     }
    ],
    "trappings": [
     "Choice of appropriate Polearm or Two- Handed Weapon",
     "Hand Weapon",
-    "Mail or Leather and Mail or Plate Armour",
-    "they can also take the Ranged (Bow) +15 Skill."
+    "Mail or Leather and Mail or Plate Armour"
    ],
    "nameFrSource": "proposition"
   },
@@ -1289,7 +1287,7 @@
     "Staff"
    ],
    "spells": {
-    "spells": [
+    "notes": [
      "Choose up to 3 spells from the Petty Magic list and up to 3 from a suitable magical lore."
     ]
    },
@@ -1420,7 +1418,7 @@
     "Staff"
    ],
    "spells": {
-    "spells": [
+    "notes": [
      "Choose up to 6 spells from the Petty Magic list and up to 9 from a suitable magical lore."
     ]
    },
@@ -1873,6 +1871,7 @@
      "name": "Bow",
      "damage": 7,
      "trait": "Ranged",
+     "rangeYards": 50,
      "ranged": true
     },
     {
@@ -1989,7 +1988,7 @@
      "name": "Resolute"
     },
     {
-     "name": "Warleader"
+     "name": "War Leader"
     }
    ],
    "trappings": [
@@ -2029,7 +2028,7 @@
    "wounds": 11,
    "attacks": [
     {
-     "name": "Skull- Stick",
+     "name": "Skull-Stick",
      "damage": 7,
      "trait": "Weapon"
     }
@@ -2127,14 +2126,18 @@
     "Staff"
    ],
    "spells": {
-    "Petty Magic": [
+    "Petty": [
      "Dart",
-     "Rot"
+     "Rot",
+     "Shock"
     ],
-    "Shock Arcane Magic": [
+    "Arcane": [
      "Bridge",
      "Corrosive Blood",
-     "Entangle Little Waaagh!: Gift of the Spider God",
+     "Entangle"
+    ],
+    "Little Waaagh!": [
+     "Gift of the Spider God",
      "Itchy"
     ]
    },
@@ -2293,6 +2296,7 @@
      "name": "Bow",
      "damage": 7,
      "trait": "Ranged",
+     "rangeYards": 50,
      "ranged": true
     }
    ],
@@ -2382,6 +2386,117 @@
     "Soc": 35
    },
    "wounds": 22,
+   "armour": {
+    "ap": 3,
+    "printedTotal": 9
+   },
+   "attacks": [
+    {
+     "name": "Weapon",
+     "damage": 9,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 80
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 65
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 80
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 75
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 65
+    },
+    {
+     "name": "Lore (Warfare)",
+     "nameFr": "Savoir (Guerre)",
+     "value": 60
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 80
+    },
+    {
+     "name": "Melee (Polearm)",
+     "nameFr": "Corps à corps (Armes d’hast)",
+     "value": 80
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 70
+    }
+   ],
+   "traits": [
+    {
+     "name": "Afraid",
+     "param": "Elves",
+     "ref": "E0-T-001"
+    },
+    {
+     "name": "Animosity",
+     "param": "Greenskins",
+     "ref": "E0-T-003"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Combat Aware"
+    },
+    {
+     "name": "Combat Reflexes"
+    },
+    {
+     "name": "Furious Assault"
+    },
+    {
+     "name": "Inspiring"
+    },
+    {
+     "name": "Luck"
+    },
+    {
+     "name": "Resolute"
+    },
+    {
+     "name": "Unshakeable"
+    },
+    {
+     "name": "War Leader"
+    }
+   ],
+   "trappings": [
+    "Helmet",
+    "Mail Shirt",
+    "Sword",
+    "Shield",
+    "Spear"
+   ],
    "keywords": [
     "gobelin"
    ],
@@ -2410,6 +2525,119 @@
     "Soc": 30
    },
    "wounds": 16,
+   "armour": {
+    "ap": 1,
+    "printedTotal": 5
+   },
+   "attacks": [
+    {
+     "name": "Spear",
+     "damage": 8,
+     "trait": "Weapon"
+    },
+    {
+     "name": "Spiked Club",
+     "damage": 8,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 60
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 70
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 60
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 60
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 45
+    },
+    {
+     "name": "Lore (Warfare)",
+     "nameFr": "Savoir (Guerre)",
+     "value": 50
+    },
+    {
+     "name": "Melee (Polearm)",
+     "nameFr": "Corps à corps (Armes d’hast)",
+     "value": 70
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 65
+    },
+    {
+     "name": "Melee (Polearm)",
+     "nameFr": "Corps à corps (Armes d’hast)",
+     "value": 65
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 55
+    }
+   ],
+   "traits": [
+    {
+     "name": "Afraid",
+     "param": "Elves",
+     "ref": "E0-T-001"
+    },
+    {
+     "name": "Animosity",
+     "param": "Greenskins",
+     "ref": "E0-T-003"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Combat Aware"
+    },
+    {
+     "name": "Combat Reflexes"
+    },
+    {
+     "name": "Furious Assault"
+    },
+    {
+     "name": "Inspiring"
+    },
+    {
+     "name": "Resolute"
+    },
+    {
+     "name": "War Leader"
+    }
+   ],
+   "trappings": [
+    "Leather Armour",
+    "Spear",
+    "Spiked Club"
+   ],
    "keywords": [
     "gobelin"
    ],
@@ -2438,6 +2666,66 @@
     "Soc": 20
    },
    "wounds": 11,
+   "armour": {
+    "ap": 3,
+    "printedTotal": 6
+   },
+   "attacks": [
+    {
+     "name": "Weapon",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 35
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 45
+    },
+    {
+     "name": "Melee (Polearm)",
+     "nameFr": "Corps à corps (Armes d’hast)",
+     "value": 40
+    }
+   ],
+   "traits": [
+    {
+     "name": "Afraid",
+     "param": "Elves",
+     "ref": "E0-T-001"
+    },
+    {
+     "name": "Animosity",
+     "param": "Greenskins",
+     "ref": "E0-T-003"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Combat Reflexes"
+    },
+    {
+     "name": "Resolute"
+    }
+   ],
+   "trappings": [
+    "Chainmail Armour",
+    "Spear"
+   ],
    "keywords": [
     "gobelin",
     "soldat"
@@ -2497,6 +2785,11 @@
      "name": "Language (Khazalid)",
      "nameFr": "Langue (Khazalid)",
      "value": 65
+    },
+    {
+     "name": "Lore (Metallurgy)",
+     "nameFr": "Savoir (Métallurgie)",
+     "value": 48
     },
     {
      "name": "Melee (Basic)",
@@ -2597,6 +2890,7 @@
      "name": "Bow",
      "damage": 9,
      "trait": "Ranged",
+     "rangeYards": 50,
      "ranged": true
     },
     {
@@ -2635,6 +2929,21 @@
      "name": "Lore (Warfare)",
      "nameFr": "Savoir (Guerre)",
      "value": 60
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 90
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 70
+    },
+    {
+     "name": "Ranged (Bow)",
+     "nameFr": "Projectiles (Arc)",
+     "value": 55
     }
    ],
    "traits": [
@@ -2659,6 +2968,39 @@
      "name": "Night Vision",
      "ref": "E0-T-041"
     }
+   ],
+   "talents": [
+    {
+     "name": "Combat Aware"
+    },
+    {
+     "name": "Combat Reflexes"
+    },
+    {
+     "name": "Furious Assault"
+    },
+    {
+     "name": "Inspiring"
+    },
+    {
+     "name": "Luck"
+    },
+    {
+     "name": "Resolute"
+    },
+    {
+     "name": "Unshakeable"
+    },
+    {
+     "name": "War Leader"
+    }
+   ],
+   "trappings": [
+    "Bow and 12 Arrows",
+    "Dwarf Tickler (Choppa)",
+    "Helmet",
+    "Mail Shirt",
+    "Shield"
    ],
    "keywords": [
     "orque"
@@ -2697,6 +3039,7 @@
      "name": "Bow",
      "damage": 8,
      "trait": "Ranged",
+     "rangeYards": 50,
      "ranged": true
     },
     {
@@ -2797,7 +3140,7 @@
      "name": "Resolute"
     },
     {
-     "name": "Warleader"
+     "name": "War Leader"
     }
    ],
    "trappings": [
@@ -2938,6 +3281,7 @@
      "name": "Bow",
      "damage": 7,
      "trait": "Ranged",
+     "rangeYards": 50,
      "ranged": true
     },
     {
@@ -3170,12 +3514,15 @@
     "Warpaint"
    ],
    "spells": {
-    "Petty Magic": [
+    "Petty": [
      "Animal Friend",
      "Dazzle",
      "Drain",
      "Open Lock",
-     "Twitch Lore of the Big Waaagh!:`Ard as Nails",
+     "Twitch"
+    ],
+    "Lore of the Big Waaagh!": [
+     "`Ard as Nails",
      "Bash `Em Lads!",
      "`Eadbutt",
      "Gaze of Mork",
@@ -3321,10 +3668,10 @@
      "name": "Resolute"
     },
     {
-     "name": "Unshakable"
+     "name": "Unshakeable"
     },
     {
-     "name": "Warleader"
+     "name": "War Leader"
     }
    ],
    "trappings": [
@@ -3371,6 +3718,7 @@
      "name": "Ranged",
      "damage": 7,
      "trait": "Ranged",
+     "rangeYards": 50,
      "ranged": true
     },
     {
@@ -3483,12 +3831,14 @@
      "name": "Knives",
      "damage": 6,
      "trait": "Ranged",
+     "rangeYards": 6,
      "ranged": true
     },
     {
      "name": "Sling",
      "damage": 7,
      "trait": "Ranged",
+     "rangeYards": 60,
      "ranged": true
     },
     {
@@ -3607,6 +3957,7 @@
      "name": "Bow",
      "damage": 7,
      "trait": "Ranged",
+     "rangeYards": 50,
      "ranged": true
     },
     {
@@ -3709,7 +4060,7 @@
      "name": "Roughrider"
     },
     {
-     "name": "Warleader"
+     "name": "War Leader"
     }
    ],
    "trappings": [
@@ -3963,6 +4314,7 @@
      "name": "Ranged",
      "damage": 7,
      "trait": "Ranged",
+     "rangeYards": 50,
      "ranged": true
     },
     {
@@ -4064,7 +4416,7 @@
    },
    "attacks": [
     {
-     "name": "Two- Handed Warhammer",
+     "name": "Two-Handed Warhammer",
      "damage": 12,
      "trait": "Weapon"
     }
@@ -4153,7 +4505,7 @@
      "name": "Resolute"
     },
     {
-     "name": "Warleader"
+     "name": "War Leader"
     }
    ],
    "trappings": [
@@ -4285,6 +4637,7 @@
     "Hand Weapon",
     "Ritual Dress incorporating many ingredients and fetishes",
     "Staff",
+    "three lumps of bedrock from the peak of a mountain (for casting Toothcracker)",
     "two potions of spleen and gall (for casting Bilebrew)",
     "six disembodied limbs (for casting Bloodgruel)."
    ],
@@ -4292,7 +4645,7 @@
     "spells": [
      "Bilebrew",
      "Bloodgruel",
-     "Toothcracker."
+     "Toothcracker"
     ]
    },
    "keywords": [
@@ -4333,6 +4686,7 @@
      "name": "Javelins",
      "damage": 8,
      "trait": "Ranged",
+     "rangeYards": 12,
      "ranged": true
     },
     {
@@ -4431,7 +4785,7 @@
    },
    "attacks": [
     {
-     "name": "Zweih�nder",
+     "name": "Zweihänder",
      "damage": 10,
      "trait": "Weapon"
     }
@@ -4503,7 +4857,7 @@
     "Club",
     "Gutplate",
     "Mix of Chain and Plate Mail",
-    "Two-Handed Scimitar (counts as Zweih�nder)"
+    "Two-Handed Scimitar (counts as Zweihänder)"
    ],
    "keywords": [
     "ogre"
@@ -4522,6 +4876,36 @@
    "modifiers": {
     "E": 5
    },
+   "armour": {
+    "ap": 3
+   },
+   "skills": [
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 10,
+     "modifier": true
+    }
+   ],
+   "traits": [
+    {
+     "name": "Magic Resistance",
+     "rating": "2",
+     "ref": "E0-T-037"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Rover"
+    },
+    {
+     "name": "Strider (Rocky)"
+    }
+   ],
    "keywords": [
     "troll"
    ],
@@ -4539,6 +4923,28 @@
    "modifiers": {
     "I": 5
    },
+   "traits": [
+    {
+     "name": "Amphibious",
+     "ref": "E0-T-002"
+    },
+    {
+     "name": "Distracting",
+     "ref": "E0-T-020"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Stealthy",
+     "ref": "E0-T-050"
+    },
+    {
+     "name": "Swamp-strider",
+     "ref": "E0-T-085"
+    }
+   ],
    "keywords": [
     "troll"
    ],
@@ -4734,6 +5140,12 @@
    ],
    "traits": [
     {
+     "name": "Breath",
+     "rating": "+10",
+     "param": "Poison",
+     "ref": "E0-T-009"
+    },
+    {
      "name": "Size",
      "param": "Enormous",
      "ref": "E0-T-045"
@@ -4904,6 +5316,12 @@
      "ref": "E0-T-006"
     },
     {
+     "name": "Breath",
+     "rating": "+10",
+     "param": "Poison",
+     "ref": "E0-T-009"
+    },
+    {
      "name": "Die Hard",
      "ref": "E0-T-075"
     },
@@ -4945,13 +5363,42 @@
      "ref": "E0-T-065"
     }
    ],
+   "talents": [
+    {
+     "name": "Aethyric Attunement"
+    },
+    {
+     "name": "Arcane Magic (Lore of Death)"
+    },
+    {
+     "name": "Blather"
+    },
+    {
+     "name": "Instinctive Diction"
+    },
+    {
+     "name": "Magical Sense"
+    },
+    {
+     "name": "Second Sight"
+    },
+    {
+     "name": "War Wizard"
+    }
+   ],
    "spells": {
-    "spells": [
+    "Petty": [
      "Bearings",
      "Careful Step",
      "Drain",
-     "Marsh Lights Arcane Terrifying",
-     "Ward Lore of Death Caress of Laniph",
+     "Marsh Lights"
+    ],
+    "Arcane": [
+     "Terrifying",
+     "Ward"
+    ],
+    "Lore of Death": [
+     "Caress of Laniph",
      "Soul Vortex",
      "Steal Life"
     ]
@@ -5044,6 +5491,177 @@
     "Soc": 35
    },
    "wounds": 23,
+   "armour": {
+    "ap": 3,
+    "printedTotal": 9
+   },
+   "attacks": [
+    {
+     "name": "Skarsnik's Prodda",
+     "damage": 9,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Animal Training",
+     "nameFr": "Dressage",
+     "value": 80
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 80
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 75
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 80
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 75
+    },
+    {
+     "name": "Language (Reikspiel)",
+     "nameFr": "Langue (Reikspiel)",
+     "value": 80
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 65
+    },
+    {
+     "name": "Lore (Dwarfs)",
+     "nameFr": "Savoir (Nains)",
+     "value": 80
+    },
+    {
+     "name": "Lore (Skaven)",
+     "nameFr": "Savoir (Skavens)",
+     "value": 80
+    },
+    {
+     "name": "Lore (Warfare)",
+     "nameFr": "Savoir (Guerre)",
+     "value": 90
+    },
+    {
+     "name": "Melee (Polearm)",
+     "nameFr": "Corps à corps (Armes d’hast)",
+     "value": 80
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 70
+    },
+    {
+     "name": "Set Trap",
+     "nameFr": "Piégeage",
+     "value": 80
+    },
+    {
+     "name": "Stealth (Underground)",
+     "nameFr": "Discrétion (Souterraine)",
+     "value": 70
+    }
+   ],
+   "traits": [
+    {
+     "name": "Afraid",
+     "param": "Elves",
+     "ref": "E0-T-001"
+    },
+    {
+     "name": "Animosity",
+     "param": "Orcs and Goblins",
+     "ref": "E0-T-003"
+    },
+    {
+     "name": "Dark Vision",
+     "ref": "E0-T-017"
+    },
+    {
+     "name": "Hatred",
+     "param": "Dwarfs",
+     "ref": "E0-T-027"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Animal Affinity"
+    },
+    {
+     "name": "Blather"
+    },
+    {
+     "name": "Combat Aware"
+    },
+    {
+     "name": "Combat Reflexes"
+    },
+    {
+     "name": "Commanding Presence"
+    },
+    {
+     "name": "Enclosed Fighter"
+    },
+    {
+     "name": "Feint"
+    },
+    {
+     "name": "Inspiring"
+    },
+    {
+     "name": "Luck",
+     "rank": 3
+    },
+    {
+     "name": "Resolute"
+    },
+    {
+     "name": "Unshakeable"
+    },
+    {
+     "name": "Savvy"
+    },
+    {
+     "name": "Sixth Sense"
+    },
+    {
+     "name": "Trapper"
+    },
+    {
+     "name": "Tunnel Rat"
+    },
+    {
+     "name": "War Leader"
+    },
+    {
+     "name": "Well-prepared"
+    }
+   ],
+   "trappings": [
+    "Collection of Dwarf Beard-Scalps",
+    "Piecemeal Armour",
+    "Skarsnik's Prodda"
+   ],
    "keywords": [
     "peaux-vertes"
    ],
@@ -5255,13 +5873,11 @@
      "name": "Savvy"
     },
     {
-     "name": "Warleader"
+     "name": "War Leader"
     }
    ],
    "trappings": [
-    "Ramshackle armour incorporating plate",
-    "mail",
-    "and scale",
+    "Ramshackle armour incorporating plate, mail, and scale",
     "The Red Fang",
     "Shield"
    ],
@@ -5308,6 +5924,12 @@
      "name": "Horns",
      "damage": 8,
      "trait": "Horns"
+    },
+    {
+     "name": "Tentacles",
+     "damage": 6,
+     "trait": "Tentacles",
+     "count": 2
     },
     {
      "name": "Two-Handed Stone Axe",
@@ -5357,9 +5979,19 @@
      "ref": "E0-T-052"
     },
     {
+     "name": "Tentacles",
+     "rating": "+6",
+     "count": 2,
+     "ref": "E0-T-055"
+    },
+    {
      "name": "Vomit",
      "ref": "E0-T-065"
     }
+   ],
+   "trappings": [
+    "Collection of the heads of his favourite victims",
+    "Two-Handed Stone Axe"
    ],
    "keywords": [
     "chaos",

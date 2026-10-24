@@ -19,6 +19,7 @@ import {
 import { isCriticalRoll, isFumbleRoll } from './roll-qualities.js';
 import { actionHasDamage, actionWeaponDamage, computeDamage, evaluateWeaponDamage, formatDamageFormula, formatWeaponDamage, strengthBonusOf } from './damage.js';
 import { normalizeQualities } from './quality-normalization.js';
+import { planNaturalAttack, inferNaturalAttackKey } from './creature-combat.js';
 import { acquireV5Conditions,healV5Wounds } from './v5-effects.js';
 import { slExtremeLayers } from './v5-divine-effects-tests.js';
 import { hasArcaneMagicLore } from './v5-magic-attributes.js';
@@ -218,10 +219,49 @@ export function defaultResolutionId(actor, action, target, baseRevision, roll) {
 }
 
 /** Canonicalize inputs without drawing a random value. */
+/** Plan de l'attaque naturelle déclarée dans `v5.context.naturalAttack` (mêmes options que le calcul des coûts du Store) ; `null` sans déclaration. */
+export function naturalPlanOf(actor, v5) {
+  const context = v5?.context;
+  if (!actor || !context?.naturalAttack) return null;
+  return planNaturalAttack(actor, context.naturalAttack, { used: context.naturalUsed, charged: context.charged ?? v5.charging, actorSize: naturalSizes(v5).actorSize, targetSize: naturalSizes(v5).targetSize });
+}
+// Les Tailles viennent du champ de l'interface (`v5.actorSize`) ou, pour le Store, du contexte.
+const naturalSizes = v5 => ({ actorSize: v5?.context?.actorSize ?? v5?.actorSize, targetSize: v5?.context?.targetSize ?? v5?.targetSize });
+/**
+ * Décisions du MJ des 23 et 24/10 : l'attaque ordinaire de mêlée d'un profil qui porte le nom d'un Trait d'attaque naturelle (Bite, Tail,
+ * Horns, Tentacles…) suit la formule V5 du Trait, avec le bonus de Taille (livres V4). Rien ne s'ajoute à un tir, une attaque gratuite ou
+ * une attaque bonus ; les coûts et quotas ne sont pas posés ici. `null` hors de ces cas.
+ */
+function inferredNaturalPlan(actor, action, v5) {
+  if (!actor || !attackType(action.type)) return null;
+  const key = inferNaturalAttackKey(actor, action);
+  if (!key) return null;
+  const context = v5?.context || {};
+  const ordinary = v5?.kind !== 'ranged' && v5?.extraAttack !== true && !context.freeAttackTalent && !action.extensions?.v5?.freeAttack;
+  return planNaturalAttack(actor, key, { ordinary, charged: context.charged ?? v5?.charging, actorSize: naturalSizes(v5).actorSize, targetSize: naturalSizes(v5).targetSize });
+}
+const foldKey = text => String(text).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 export function normalizeResolutionInput(input = {}) {
   if (!isRecord(input)) throw new ResolutionError('Entrée de résolution invalide');
   const actor = isRecord(input.actor) ? clone(input.actor) : null;
   const action = isRecord(input.action) ? clone(input.action) : {};
+  // Attaque naturelle choisie (Trait de créature) : ses dégâts calculés remplacent ceux de l'action (« imprimé » : l'action garde les siens).
+  // Dégâts saisis à la main sur une action personnalisée (sans marque de bestiaire) : remplacés par la formule, le MJ en est averti.
+  const typedDamage = !action.extensions?.v5?.kind && hasOwn(action, 'damage') && action.damage !== '' && Number.isFinite(Number(action.damage)) ? Number(action.damage) : null;
+  let damageReplaced = null;
+  const replaceDamage = formula => {
+    if (typedDamage !== null && typedDamage !== Number(formula)) damageReplaced = `Dégâts de l’action (${typedDamage}) remplacés par la formule V5 du Trait (${Number(formula)}) ; saisissez une attaque d’arme pour garder les vôtres.`;
+    action.damage = Number(formula); delete action.damageFormula;
+  };
+  const natural = naturalPlanOf(actor, input.v5);
+  if (natural && /^\d+$/.test(String(natural.damageFormula))) replaceDamage(natural.damageFormula);
+  else if (natural?.noDamage) { action.damage = 0; delete action.damageFormula; }
+  else if (!natural) {
+    const inferred = inferredNaturalPlan(actor, action, input.v5);
+    if (inferred && /^\d+$/.test(String(inferred.damageFormula))) replaceDamage(inferred.damageFormula);
+    // Formule sans valeur (Morsure sans chiffre de Trait) : le chiffre imprimé reste la Valeur, le bonus de Taille s'y ajoute.
+    else if (inferred?.sizeBonus && Number.isFinite(Number(action.damage)) && !action.damageFormula) action.damage = Number(action.damage) + inferred.sizeBonus;
+  }
   if (action.extensions?.fiche?.requiresLink) throw new ResolutionError('Lier une compétence à cette arme avant de résoudre son attaque', 'SKILL_LINK_REQUIRED');
   const target = isRecord(input.target) ? clone(input.target) : null;
   const entered=input.roll??input.dieRoll??input.enteredRoll;
@@ -261,6 +301,7 @@ export function normalizeResolutionInput(input = {}) {
   return {
     resolutionId,
     baseRevision,automaticNoRoll,noTestAction,
+    ...(damageReplaced ? { damageReplaced } : {}),
     ...(input.round !== undefined ? { round: input.round } : {}),
     ...(isRecord(input.prayerSLContext) ? { prayerSLContext: clone(input.prayerSLContext) } : {}),
     v5: isRecord(input.v5) ? clone(input.v5) : {},
@@ -611,7 +652,8 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     protectionReceipts.push(protection);
     const targetArmour = protection.ap;
 
-    if (targetArmour !== null && !mechanicalWarnings.length)     damage = computeDamage({
+    // Souffle de Fumée (V5 p.357) : aucun dégât, ni ceux de l'action ni le NR.
+    if (targetArmour !== null && !mechanicalWarnings.length && naturalPlanOf(actor, normalized.v5)?.noDamage !== true)     damage = computeDamage({
       weaponDamage,
       strengthBonus,
       damageBonus:damageBonus+magicWeaponBonus(actor,action,nature.ranged,Number(action.damage) || 0),
@@ -715,7 +757,27 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   }
   unresolved.push(...criticalReady);
   const magicHitStates = hit && attackType(action.type) && target && !replacement ? magicWeaponHitConditions(actor, action, nature.ranged, damage?.finalDamage || 0).map(row => ({ id: `${normalized.resolutionId}:magic-weapon:${row.name}`, key: row.name.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase(), name: row.name, level: 1, source: { kind: 'magic-weapon', spellName: row.spellName } })) : [];
-  const targetConditionApplication = [...(criticalBlock?.application?.states || []).map(row => ({ ...clone(row), source: { ...(row.source || {}), kind: 'critical' } })), ...weaponConditions.proposed,...magicHitStates,...special.states];
+  // Attaque naturelle : états de la touche (Langue, Constricteur, Toile, Souffle) selon le plan du Trait ; rappels du plan joints au détail.
+  const naturalPlan = naturalPlanOf(actor, normalized.v5), naturalReminders = [], { actorSize: naturalActorSize, targetSize: naturalTargetSize } = naturalSizes(normalized.v5);
+  const naturalHitStates = [];
+  // Cornes en attaque ordinaire : la Charge du Trait (Livre de base V5 p.358) est demandée, comme pour l'attaque naturelle choisie.
+  if (normalized.damageReplaced) naturalReminders.push(normalized.damageReplaced);
+  const inferredNatural = !naturalPlan && inferredNaturalPlan(actor, action, normalized.v5);
+  if (inferredNatural) {
+    if (inferredNatural.key === 'horns') unresolved.push(...inferredNatural.unresolved.filter(text => /Charge/.test(text)));
+    naturalReminders.push(...inferredNatural.reminders.filter(text => /^Taille :/.test(text)));
+  }
+  if (naturalPlan) {
+    naturalReminders.push(...naturalPlan.reminders);
+    unresolved.push(...naturalPlan.unresolved.filter(text => !/Trait absent|déjà/.test(text)));
+    const dealt = damage?.finalDamage > 0, smaller = Number.isInteger(naturalActorSize) && Number.isInteger(naturalTargetSize) && naturalActorSize > naturalTargetSize;
+    for (const effect of naturalPlan.effects) {
+      if (!effect.state || !hit || !attackType(action.type) || !target || replacement) continue;
+      const applies = effect.trigger === 'touche' || effect.trigger === 'cible perdante' || (effect.trigger === 'dégâts' && dealt) || (effect.trigger === 'cible plus petite blessée' && dealt && smaller);
+      if (applies) naturalHitStates.push({ id: `${normalized.resolutionId}:natural:${naturalPlan.key}:${foldKey(effect.state)}`, key: foldKey(effect.state), name: effect.state, level: 1, source: { kind: 'creature', trait: naturalPlan.key, ...(Number.isInteger(effect.strength) ? { strength: effect.strength } : {}) } });
+    }
+  }
+  const targetConditionApplication = [...(criticalBlock?.application?.states || []).map(row => ({ ...clone(row), source: { ...(row.source || {}), kind: 'critical' } })), ...weaponConditions.proposed,...magicHitStates,...naturalHitStates,...special.states];
   const conditionChanges = {}, talentUsageRequests = [], conditionTalentPlans = [];
   const conditionPlan = (participant, states, role, authorId) => {
     if (!participant || !states?.length) return;
@@ -830,7 +892,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     talentSLChoices: { actor: actorPlan.talentSLChoices || [], defender: defenderPlan?.talentSLChoices || [] },
     weaponConditions,
     targetConditionApplication,actorConditionApplication,defenderWeaponConditions,
-    reminders: [...(magicFearImmune?['Le Bœuf Reste Debout : immunité aux Tests de Peur et Terreur pour la durée.']:[]),...activation.reminders,...special.reminders,...(hit&&attackType(action.type)&&target?reactionReminders(target,nature):[]),...(hit&&target&&damage?.finalDamage>0&&(target.extensions?.v5?.spellEffects||[]).some(e=>e.specialState?.festeringWoundTest)?[`Domaine de Nurgle (D-C51) : ${target.name||target.id} subit des Blessures ; proposer au MJ de jouer le Test de Blessure Suppurée (V5 p. 180). Rien n’est appliqué par l’outil.`]:[]),...(context.silentTakedown === true ? ['Neutralisation silencieuse : Blessures égales au BF et Inconscient si victoire ; Sonné et alarme si la cible gagne. Ces conséquences restent à arbitrer.'] : [])],
+    reminders: [...(magicFearImmune?['Le Bœuf Reste Debout : immunité aux Tests de Peur et Terreur pour la durée.']:[]),...activation.reminders,...special.reminders,...naturalReminders,...(hit&&attackType(action.type)&&target?reactionReminders(target,nature):[]),...(hit&&target&&damage?.finalDamage>0&&(target.extensions?.v5?.spellEffects||[]).some(e=>e.specialState?.festeringWoundTest)?[`Domaine de Nurgle (D-C51) : ${target.name||target.id} subit des Blessures ; proposer au MJ de jouer le Test de Blessure Suppurée (V5 p. 180). Rien n’est appliqué par l’outil.`]:[]),...(context.silentTakedown === true ? ['Neutralisation silencieuse : Blessures égales au BF et Inconscient si victoire ; Sonné et alarme si la cible gagne. Ces conséquences restent à arbitrer.'] : [])],
     activeEffects,talentActionChanges,secondaryTargets,
     damageReplacedByTalent: replacement ? clone(replacement) : null,defenderDamageReplacedByTalent:defenseShield.replacement||null,
     unresolved,

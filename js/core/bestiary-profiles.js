@@ -4,6 +4,7 @@
  */
 import { activeReferential } from './creature-keywords.js';
 import { cloneValue, normalizeAction, uid } from './models.js';
+import { getReferenceCatalogue } from './reference-catalog.js';
 
 export const BESTIARY_STAT_KEYS = Object.freeze(['M', 'CC', 'CT', 'F', 'E', 'I', 'Ag', 'Dex', 'Int', 'FM', 'Soc']);
 export const BESTIARY_KINDS = Object.freeze(['profile', 'template', 'pregenerated-character']);
@@ -38,6 +39,7 @@ export function validateBestiaryRecord(record, referential = activeReferential()
     if (!isText(attack.name)) errors.push('attaque sans nom');
     if (!isInt(attack.damage)) errors.push(`dégâts de ${attack.name} : entier imprimé attendu`);
     if (attack.value !== undefined && !isInt(attack.value)) errors.push(`valeur de ${attack.name} invalide`);
+    if (attack.count !== undefined && (!isInt(attack.count) || attack.count < 1)) errors.push(`multiplicateur de ${attack.name} invalide`);
   }
   for (const skill of record.skills || []) if (!isText(skill.name) || !isInt(skill.value)) errors.push(`compétence invalide : ${skill?.name}`);
   for (const trait of [...(record.traits || []), ...(record.optionalTraits || [])]) if (!isText(trait?.name)) errors.push('Trait sans nom');
@@ -75,7 +77,10 @@ export function createBestiaryLoader(fetchJson, base = './js/data/bestiary/') {
       return once(books, book, async () => {
         const entry = (await loader.index()).find(item => item.book === book);
         if (!entry) throw new Error(`livre de bestiaire inconnu : ${book}`);
-        return (await fetchJson(`${base}${entry.file}`)).profiles;
+        // L'édition est portée par le livre (index et fichier), pas par chaque profil : elle est recopiée pour que le participant la connaisse.
+        const file = await fetchJson(`${base}${entry.file}`);
+        const edition = file.edition ?? entry.edition ?? null;
+        return edition ? file.profiles.map(profile => (profile.edition ? profile : { ...profile, edition })) : file.profiles;
       });
     },
     /** Profils des livres demandés, concaténés dans l'ordre demandé. */
@@ -97,31 +102,92 @@ export const BESTIARY_FREE_ATTACK_KEY = 'freeAttack';
 
 const ARMOUR_ZONES = Object.freeze({ head: /\bhead\b/i, body: /\bbody\b/i, arms: /\barms?\b/i, legs: /\blegs?\b/i });
 
-/** Armure imprimée par zone : `ap` d'ensemble partout, sinon pièces non facultatives (zone nommée, ou partout). Aucun BE ajouté. */
+// Zones nommées par un `detail` (« Headband », « Chest », « Rear Legs » comprises).
+const DETAIL_ZONES = Object.freeze({ head: /\b(?:head|headband)\b/i, body: /\b(?:body|chest)\b/i, arms: /\barms?\b/i, legs: /\blegs?\b/i });
+// Pièces V4/V5 imprimées dans `detail` → nom français du catalogue d'armures (zones seulement : le PA reste celui du livre).
+const CATALOGUE_PIECES = Object.freeze({ 'mail coat': 'Cotte de mailles', 'mail shirt': 'Chemise de mailles', 'leather jack': 'Veste de cuir', helm: 'Heaume', plate: 'Plastron' });
+const CATALOGUE_ZONE = Object.freeze({ head: 'head', body: 'body', rightArm: 'arms', leftArm: 'arms', rightLeg: 'legs', leftLeg: 'legs' });
+
+const namedZones = text => Object.keys(DETAIL_ZONES).filter(key => DETAIL_ZONES[key].test(text || ''));
+/** Vrai quand le `detail` d'armure nomme des zones du corps (sinon c'est une pièce ou un texte libre). */
+export const armourDetailNamesZones = detail => namedZones(detail).length > 0;
+
+function cataloguePieceZones(name) {
+  const french = CATALOGUE_PIECES[name.toLowerCase().replace(/\s+/g, ' ').trim()];
+  const item = french && getReferenceCatalogue().items.find(entry => entry.kind === 'armour' && entry.name === french);
+  return item ? [...new Set(item.locations.map(id => CATALOGUE_ZONE[id]))] : null;
+}
+
+/** Armure décrite seulement par `detail` (« Mail Coat 2 », « Helm 2, Plate 3 », « Body 2 ») : zones du catalogue ou nommées, sinon rappel. */
+function detailArmour(detail, zones) {
+  const reminders = [];
+  for (const piece of String(detail).split(',').map(text => text.trim()).filter(Boolean)) {
+    const match = /^(.*?)\s*(\d+)?$/.exec(piece);
+    const name = match[1].replace(/\s+only$/i, '').trim(), value = match[2] === undefined ? null : Number(match[2]);
+    const targets = cataloguePieceZones(name) || (name && namedZones(name).length ? namedZones(name) : null);
+    if (!targets || value === null) { reminders.push(piece); continue; }
+    for (const key of targets) zones[key] = Math.max(zones[key], value);
+  }
+  return reminders;
+}
+
+/**
+ * Armure imprimée par zone : `ap` d'ensemble (limité aux zones nommées par `detail`), sinon pièces non facultatives (zone nommée, ou partout),
+ * sinon `detail` seul (zones du catalogue). Aucun BE ajouté. `reminder` : texte à montrer quand la valeur ou la zone n'est pas déterminable.
+ */
 function printedArmour(armour, includeOptional) {
   const zones = { head: 0, body: 0, arms: 0, legs: 0 };
-  if (!armour) return zones;
-  if (isInt(armour.ap)) { for (const key of Object.keys(zones)) zones[key] = armour.ap; return zones; }
+  if (!armour) return { zones, reminder: '' };
+  if (isInt(armour.ap)) {
+    const named = namedZones(armour.detail);
+    for (const key of named.length ? named : Object.keys(zones)) zones[key] = armour.ap;
+    return { zones, reminder: '' };
+  }
   for (const part of armour.parts || []) {
     if ((part.optional && !includeOptional) || !isInt(part.ap)) continue;
     const named = Object.keys(zones).filter(key => ARMOUR_ZONES[key].test(part.locations || ''));
     for (const key of named.length ? named : Object.keys(zones)) zones[key] = Math.max(zones[key], part.ap);
   }
-  return zones;
+  const printed = Object.values(zones).some(value => value > 0);
+  const unresolved = !printed && isText(armour.detail) ? detailArmour(armour.detail, zones) : [];
+  return { zones, reminder: unresolved.length ? `Armure imprimée « ${unresolved.join(', ')} » : zones ou PA non déterminés, à régler à la main (PA laissés à 0).` : '' };
+}
+
+/** Sorts d'un profil, une ligne par liste (« Petty : A, B », « Lore of Life : C ») ; la prose (« notes ») est gardée telle quelle. */
+export function bestiarySpellLines(spells) {
+  return Object.entries(spells || {}).filter(([, list]) => Array.isArray(list) && list.length)
+    .map(([label, list]) => (label === 'notes' ? list.join(' ') : `${label === 'spells' ? 'Sorts' : label} : ${list.join(', ')}`));
+}
+
+/** Compétences imprimées sans valeur (« Language (Elthárin) », L14 ; Gurniksson, L03) : à afficher telles quelles, jamais comme un test avec une valeur inventée. */
+export function unvaluedSkillNames(skills) {
+  return (Array.isArray(skills) ? skills : []).filter(isText);
 }
 
 const traitText = trait => {
   const detail = trait.param ?? trait.rating;
-  return detail === undefined || detail === null || detail === '' ? trait.name : `${trait.name} (${detail})`;
+  if (detail === undefined || detail === null || detail === '') return trait.name;
+  // « Tentacles (8 × +9) » : le nombre imprimé reste lisible par le quota des attaques gratuites (creature-combat.js).
+  return isInt(trait.count) && trait.count > 1 ? `${trait.name} (${trait.count} × ${detail})` : `${trait.name} (${detail})`;
 };
 
-function attackAction(attack) {
+/**
+ * Une attaque imprimée « 2 Claws », « 8 × Tentacles » (`count`) devient autant d'actions (« Claws 1 », « Claws 2 »…), chacune marquée
+ * `multiAttack` ; livre de base V5 (L06) p. 362 : « 8 Tentacles : la créature peut faire 8 attaques gratuites ».
+ */
+function attackActions(attack) {
   const ranged = isInt(attack.rangeYards);
-  const v5 = { kind: ranged ? 'ranged' : 'melee', ...(attack.free ? { [BESTIARY_FREE_ATTACK_KEY]: attack.free } : {}) };
-  return normalizeAction({
-    name: attack.name, type: 'attack', attr: ranged ? 'CT' : 'CC', base: attack.value ?? '', damage: attack.damage,
-    qualities: cloneValue(attack.qualities || []), ...(ranged ? { rangeYards: attack.rangeYards } : {}),
-    ...(attack.detail ? { detail: attack.detail } : {}), extensions: { v5 }
+  const of = isInt(attack.count) && attack.count > 1 ? attack.count : 1;
+  // Tentacules : toutes les attaques sont gratuites ; décision du MJ du 23/10 : tout autre multiplicateur ne rend gratuite que chaque attaque au-delà de la première.
+  const tentacles = /tentacle/i.test(`${attack.trait || ''} ${attack.name || ''}`);
+  return Array.from({ length: of }, (_, position) => {
+    const free = attack.free || (of > 1 && (tentacles || position > 0) ? 'all' : null);
+    const v5 = { kind: ranged ? 'ranged' : 'melee', ...(free ? { [BESTIARY_FREE_ATTACK_KEY]: free } : {}), ...(of > 1 ? { multiAttack: { group: attack.name, index: position + 1, of } } : {}) };
+    return normalizeAction({
+      name: of > 1 ? `${attack.name} ${position + 1}` : attack.name, type: 'attack', attr: ranged ? 'CT' : 'CC', base: attack.value ?? '', damage: attack.damage,
+      qualities: cloneValue(attack.qualities || []), ...(ranged ? { rangeYards: attack.rangeYards } : {}),
+      ...(attack.detail ? { detail: attack.detail } : {}), extensions: { v5 }
+    });
   });
 }
 
@@ -141,18 +207,24 @@ export function buildParticipantFromBestiary(id, options = {}) {
   const base = nameFr && record.nameFr ? record.nameFr : record.name;
   const wounds = isInt(record.wounds) ? record.wounds : null;
   const traits = (record.traits || []).filter(trait => isText(trait?.name));
+  const { zones: armor, reminder: armourReminder } = printedArmour(record.armour, includeOptional);
   return {
     id: idFactory(), name: index === null ? base : `${base} ${index}`, kind: 'Créature', camp, zone,
     initiative: record.stats.I ?? 0, hp: wounds, maxHp: wounds,
     caracs: Object.fromEntries(Object.entries(record.stats).filter(([, value]) => value !== null)),
-    armor: printedArmour(record.armour, includeOptional),
-    actions: (record.attacks || []).filter(attack => includeOptional || !attack.optional).map(attackAction),
+    armor,
+    actions: (record.attacks || []).filter(attack => includeOptional || !attack.optional).flatMap(attackActions),
     skills: (record.skills || []).map(skill => ({ name: skill.nameFr || skill.name, total: skill.value })),
-    traits: traits.map(traitText), keywords: [...(record.keywords || [])], tags: [], notes: '',
-    extensions: { v5: { bestiary: {
+    traits: traits.map(traitText), keywords: [...(record.keywords || [])], tags: [], notes: armourReminder,
+    // `extensions.v5.reminders` : rappels affichés en combat par `deriveReminders` (js/core/reminders.js) ; `notes` n'est lu par aucune carte.
+    extensions: { v5: { ...(armourReminder ? { reminders: [{ id: 'armour-unresolved', text: armourReminder }] } : {}), bestiary: {
       id: record.id, book: record.book, page: record.page, name: record.name, edition: record.edition ?? null,
       armour: cloneValue(record.armour || {}), traitRefs: Object.fromEntries(traits.filter(trait => trait.ref).map(trait => [trait.name, trait.ref])),
-      optionalTraits: (record.optionalTraits || []).map(traitText), abilityRefs: [...(record.abilities || [])], ...(record.woundsAbsent ? { woundsAbsent: true } : {})
+      optionalTraits: (record.optionalTraits || []).map(traitText), abilityRefs: [...(record.abilities || [])], ...(record.woundsAbsent ? { woundsAbsent: true } : {}),
+      // Sorts imprimés, par liste (« Petty », « Lore of X »…) : consultation seulement, ils ne sont pas dans `participant.spells` (qui ouvre la Focalisation et le choix de sort).
+      ...(record.spells ? { spells: cloneValue(record.spells) } : {}),
+      // Compétences imprimées sans valeur : consultation seulement, absentes de `participant.skills` (aucune valeur à tester).
+      ...(unvaluedSkillNames(record.unvaluedSkills).length ? { unvaluedSkills: unvaluedSkillNames(record.unvaluedSkills) } : {})
     } } }
   };
 }

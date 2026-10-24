@@ -212,6 +212,9 @@
      "rank": 2
     },
     {
+     "name": "Iron Will"
+    },
+    {
      "name": "Magical Sense",
      "rank": 2
     },
@@ -219,7 +222,7 @@
      "name": "Menacing"
     },
     {
-     "name": "Nimble Fingered"
+     "name": "Nimble-fingered"
     },
     {
      "name": "Petty Magic"
@@ -258,6 +261,35 @@
      "rank": 3
     }
    ],
+   "spells": {
+    "Arcane and Lore": [
+     "Aethyric Armour",
+     "Aqshy's Aegis",
+     "Blast",
+     "Bolt",
+     "Breath",
+     "Cauterise",
+     "Chain Attack",
+     "Crown of Flame",
+     "Dome",
+     "Drop",
+     "Fearsome",
+     "Flaming Hearts",
+     "Firewall",
+     "Great Fires of U'Zhul",
+     "Flaming Sword of Rhuin",
+     "Purge",
+     "Terrifying",
+     "Ward"
+    ],
+    "Petty": [
+     "Dart",
+     "Dazzle",
+     "Light",
+     "Magic Flame",
+     "Shock"
+    ]
+   },
    "nameFrSource": "proposition"
   },
   {
@@ -582,6 +614,11 @@
     "detail": "Body"
    },
    "attacks": [
+    {
+     "name": "Unarmed",
+     "damage": 7,
+     "trait": "Weapon"
+    },
     {
      "name": "Weapon",
      "damage": 10,
@@ -999,7 +1036,7 @@
      "name": "Perfect Pitch"
     },
     {
-     "name": "Public Speaking"
+     "name": "Public Speaker"
     },
     {
      "name": "Savvy"
@@ -1170,6 +1207,9 @@
      "name": "Sharp"
     },
     {
+     "name": "Well-prepared"
+    },
+    {
      "name": "Writing Equipment"
     }
    ],
@@ -1320,7 +1360,7 @@
      "name": "Magic Resistance"
     },
     {
-     "name": "Nimble Fingered"
+     "name": "Nimble-fingered"
     },
     {
      "name": "Night Vision",
@@ -1337,7 +1377,7 @@
      "rank": 2
     },
     {
-     "name": "Strong-Minded",
+     "name": "Strong-minded",
      "rank": 2
     },
     {
@@ -1513,7 +1553,7 @@
      "name": "Savvy"
     },
     {
-     "name": "Suave Courtly Garb"
+     "name": "Suave"
     }
    ],
    "keywords": [
@@ -1636,7 +1676,7 @@
      "name": "Doomed"
     },
     {
-     "name": "Nimble Fingered"
+     "name": "Nimble-fingered"
     },
     {
      "name": "Panhandle"
@@ -1645,7 +1685,7 @@
      "name": "Perfect Pitch"
     },
     {
-     "name": "Public Speaking"
+     "name": "Public Speaker"
     },
     {
      "name": "Read/Write"
@@ -1779,6 +1819,9 @@
      "name": "Alley Cat"
     },
     {
+     "name": "Break and Enter"
+    },
+    {
      "name": "Catfall"
     },
     {
@@ -1801,7 +1844,7 @@
      "name": "Night Vision"
     },
     {
-     "name": "Nimble Fingered"
+     "name": "Nimble-fingered"
     },
     {
      "name": "Scale Sheer Surface"
@@ -1816,6 +1859,7 @@
    "trappings": [
     "Very Fine Lockpicks",
     "Keys to dozens of houses",
+    "Maps of the City showing secret passages and poorly guarded homes",
     "Valuables such as jewellery and coin worth 10 Gold Crowns",
     "a dozen Calling Cards showing the silhouette of a cat."
    ],
@@ -2139,9 +2183,7 @@
     }
    ],
    "trappings": [
-    "Notebook of Plans",
-    "Schemes",
-    "and Dirty Secrets",
+    "Notebook of Plans, Schemes, and Dirty Secrets",
     "2d0 Silver Shillings"
    ],
    "keywords": [
@@ -2360,6 +2402,10 @@
      "rank": 3
     },
     {
+     "name": "Iron Will",
+     "rank": 2
+    },
+    {
      "name": "Luck",
      "rank": 2
     },
@@ -2384,6 +2430,9 @@
     },
     {
      "name": "Savvy"
+    },
+    {
+     "name": "Stout-hearted"
     },
     {
      "name": "Strike Mighty Blow",
@@ -2822,6 +2871,7 @@
    ],
    "trappings": [
     "Monocle",
+    "Steam Powered Hydraulic Hook Prosthetic (Counts as a Hand Weapon with the Entangle quality)",
     "Leather Jack"
    ],
    "keywords": [
@@ -2950,7 +3000,7 @@
      "value": 87
     },
     {
-     "name": "Melee (Pole Arm)",
+     "name": "Melee (Polearm)",
      "nameFr": "Corps à corps (Armes d’hast)",
      "value": 82
     },
@@ -2995,6 +3045,9 @@
      "rank": 3
     },
     {
+     "name": "Iron Will"
+    },
+    {
      "name": "Marksman"
     },
     {
@@ -3011,7 +3064,7 @@
      "name": "Suave"
     },
     {
-     "name": "Unshakable"
+     "name": "Unshakeable"
     },
     {
      "name": "Wealthy",
@@ -3434,7 +3487,10 @@
      "name": "Fearless (Criminals)"
     },
     {
-     "name": "Read/ Write"
+     "name": "Nose for Trouble"
+    },
+    {
+     "name": "Read/Write"
     },
     {
      "name": "Robust",
@@ -3448,6 +3504,9 @@
     },
     {
      "name": "Sprinter"
+    },
+    {
+     "name": "Strike to Stun"
     },
     {
      "name": "Strong Swimmer"
@@ -3494,6 +3553,13 @@
     "Soc": 51
    },
    "wounds": 17,
+   "attacks": [
+    {
+     "name": "Dagger",
+     "damage": 5,
+     "trait": "Weapon"
+    }
+   ],
    "skills": [
     {
      "name": "Art (Writing)",
@@ -3870,6 +3936,10 @@
      "name": "Super Numerate"
     },
     {
+     "name": "Tower of Memories",
+     "rank": 2
+    },
+    {
      "name": "Warrior Born"
     }
    ],
@@ -4167,13 +4237,16 @@
      "name": "Orientation"
     },
     {
-     "name": "Resistance (Disease)"
+     "name": "Resistant (Disease)"
     },
     {
      "name": "Savvy"
     },
     {
      "name": "Strike Mighty Blow"
+    },
+    {
+     "name": "Strike to Stun"
     }
    ],
    "trappings": [
@@ -4211,6 +4284,14 @@
     "Soc": 10
    },
    "wounds": 17,
+   "attacks": [
+    {
+     "name": "Bow",
+     "damage": 6,
+     "trait": "Ranged",
+     "ranged": true
+    }
+   ],
    "skills": [
     {
      "name": "Animal Care",
@@ -4326,7 +4407,8 @@
     }
    ],
    "trappings": [
-    "Ranged (Bow) +6 Fine Clothing",
+    "Fine Clothing",
+    "Cathayan Amulet (a recent gift, the amulet is suffused with Aqshy and has been affecting Thomas's mood)",
     "12 GC"
    ],
    "keywords": [
@@ -4441,6 +4523,11 @@
      "value": 55
     },
     {
+     "name": "Lore (Reikland)",
+     "nameFr": "Savoir (Reikland)",
+     "value": 48
+    },
+    {
      "name": "Melee (Basic)",
      "nameFr": "Corps à corps (Base)",
      "value": 32
@@ -4493,10 +4580,7 @@
     "Lockpicks",
     "Various Charms and Amulets",
     "Knuckledusters",
-    "strange",
-    "sing haunting threnodies",
-    "and sacrifice an animal",
-    "letting its blood spill across the ground. Surely"
+    "15/2"
    ],
    "keywords": [
     "humain"
@@ -4802,6 +4886,13 @@
    "armour": {
     "ap": 1
    },
+   "attacks": [
+    {
+     "name": "Claws",
+     "damage": 6,
+     "trait": "Creature Weapons"
+    }
+   ],
    "traits": [
     {
      "name": "Belligerent",
@@ -4814,6 +4905,7 @@
     {
      "name": "Creature Weapons",
      "rating": "+6",
+     "param": "Claws",
      "ref": "E0-T-288"
     },
     {
@@ -4874,6 +4966,13 @@
     "ap": 1,
     "detail": "Body, Arms"
    },
+   "attacks": [
+    {
+     "name": "Crowbar",
+     "damage": 9,
+     "trait": "Weapon"
+    }
+   ],
    "skills": [
     {
      "name": "Athletics",
@@ -5000,6 +5099,9 @@
    "talents": [
     {
      "name": "Artistic"
+    },
+    {
+     "name": "Break and Enter"
     },
     {
      "name": "Catfall"
@@ -5227,6 +5329,9 @@
      "name": "Instinctive Diction"
     },
     {
+     "name": "Iron Will"
+    },
+    {
      "name": "Kingpin"
     },
     {
@@ -5240,6 +5345,9 @@
     },
     {
      "name": "Strike Mighty Blow"
+    },
+    {
+     "name": "Strike to Stun"
     },
     {
      "name": "Suave"
@@ -5265,8 +5373,21 @@
     "Dagger",
     "Treats for the Little Ones",
     "Leather Jack",
-    "Network of Informants"
+    "Network of Informants",
+    "Cloak with many hidden pockets stuffed with straw and droppings"
    ],
+   "spells": {
+    "Petty": [
+     "Animal Friend",
+     "Eavesdrop",
+     "Produce Small Animal"
+    ],
+    "Lore of Witchcraft": [
+     "Blight",
+     "Creeping Menace",
+     "Curse of Ill-Fortune"
+    ]
+   },
    "keywords": [
     "humain"
    ],
@@ -5304,6 +5425,7 @@
      "name": "Repeater Pistol",
      "damage": 8,
      "trait": "Ranged",
+     "rangeYards": 20,
      "ranged": true
     },
     {
@@ -5388,7 +5510,7 @@
      "name": "Etiquette (Guilder)"
     },
     {
-     "name": "Magic Resistant"
+     "name": "Magic Resistance"
     },
     {
      "name": "Marksman"
@@ -5406,7 +5528,7 @@
      "name": "Relentless"
     },
     {
-     "name": "Strong-Minded"
+     "name": "Strong-minded"
     },
     {
      "name": "Sturdy"
@@ -5562,7 +5684,7 @@
      "name": "Night Vision"
     },
     {
-     "name": "Read/ Write"
+     "name": "Read/Write"
     },
     {
      "name": "Sniper"
@@ -5720,7 +5842,7 @@
      "name": "Menacing"
     },
     {
-     "name": "Nimble Fingered"
+     "name": "Nimble-fingered"
     },
     {
      "name": "Petty Magic"
@@ -5748,6 +5870,28 @@
     "Grimoire",
     "4 GC 22/-"
    ],
+   "spells": {
+    "Lore of Light": [
+     "Aethyric Armour",
+     "Aethyric Arms",
+     "Banishment",
+     "Blast",
+     "Blinding Light",
+     "Bolt",
+     "Clarity of Thought",
+     "Net of Amyntok",
+     "Pha's Protection",
+     "Speed of Thought"
+    ],
+    "Petty": [
+     "Dart",
+     "Dazzle",
+     "Light",
+     "Magic Flame",
+     "Purify Water",
+     "Shock"
+    ]
+   },
    "keywords": [
     "humain"
    ],
@@ -5932,6 +6076,10 @@
     },
     {
      "name": "Super Numerate"
+    },
+    {
+     "name": "Tower of Memories",
+     "rank": 4
     }
    ],
    "trappings": [
@@ -6082,6 +6230,11 @@
      "name": "Play (Lute)",
      "nameFr": "Musicien (Luth)",
      "value": 69
+    },
+    {
+     "name": "Research",
+     "nameFr": "Recherche",
+     "value": 90
     }
    ],
    "talents": [
@@ -6139,9 +6292,17 @@
      "rank": 2
     },
     {
+     "name": "Tower of Memories",
+     "rank": 3
+    },
+    {
      "name": "Wealthy",
      "rank": 2
     }
+   ],
+   "trappings": [
+    "Symbol of Verena",
+    "Somber Academic Robes"
    ],
    "nameFrSource": "proposition"
   },
@@ -6323,6 +6484,20 @@
    "trappings": [
     "Tattered Clothing"
    ],
+   "spells": {
+    "Petty": [
+     "Dazzle",
+     "Drain",
+     "Murmured Whisper",
+     "Eavesdrop"
+    ],
+    "Lore of Witchcraft": [
+     "Curse of Crippling Pain",
+     "Curse of Ill-Fortune",
+     "Haunting Horror",
+     "Evil Eye"
+    ]
+   },
    "keywords": [
     "elfe",
     "sorciere"
@@ -6493,11 +6668,8 @@
     "14/-"
    ],
    "spells": {
-    "spells": [
-     "Chylis knows every Petty Magic and Arcane Spell",
-     "plus all those from the Lores of Fire",
-     "Heavens",
-     "and Life."
+    "notes": [
+     "Chylis knows every Petty Magic and Arcane Spell, plus all those from the Lores of Fire, Heavens, and Life."
     ]
    },
    "keywords": [
@@ -6621,6 +6793,11 @@
      "value": 87
     },
     {
+     "name": "Language (Thief)",
+     "nameFr": "Langue (Voleur)",
+     "value": 96
+    },
+    {
      "name": "Leadership",
      "nameFr": "Commandement",
      "value": 72
@@ -6651,6 +6828,11 @@
      "name": "Lore (Local)",
      "nameFr": "Savoir (Local)",
      "value": 96
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 76
     },
     {
      "name": "Perception",
@@ -6738,6 +6920,9 @@
      "name": "Blather"
     },
     {
+     "name": "Break and Enter"
+    },
+    {
      "name": "Briber"
     },
     {
@@ -6781,13 +6966,19 @@
      "rank": 5
     },
     {
+     "name": "Master of Disguise"
+    },
+    {
+     "name": "Nose for Trouble"
+    },
+    {
      "name": "Numismatics"
     },
     {
      "name": "Read/Write"
     },
     {
-     "name": "Resistance (Disease)"
+     "name": "Resistant (Disease)"
     },
     {
      "name": "Secret Identity",
@@ -6917,7 +7108,7 @@
      "name": "Read/Write"
     },
     {
-     "name": "Resistance (Chaos)"
+     "name": "Resistant (Chaos)"
     },
     {
      "name": "Shadow"
@@ -6928,7 +7119,7 @@
    ],
    "trappings": [
     "Coarst Clothing",
-    "Herbs Worth 12/5 sort of thing"
+    "Herbs Worth 12/5"
    ],
    "nameFrSource": "proposition"
   },
@@ -7071,10 +7262,10 @@
      "name": "Public Speaker"
     },
     {
-     "name": "Read/ Write"
+     "name": "Read/Write"
     },
     {
-     "name": "Resistance (Chaos)"
+     "name": "Resistant (Chaos)"
     },
     {
      "name": "Schemer"
@@ -7393,6 +7584,11 @@
      "value": 65
     },
     {
+     "name": "Ranged (Throwing)",
+     "nameFr": "Projectiles (Jet)",
+     "value": 75
+    },
+    {
      "name": "Stealth (Urban)",
      "nameFr": "Discrétion (Urbaine)",
      "value": 70
@@ -7440,7 +7636,13 @@
      "name": "Disarm"
     },
     {
-     "name": "Hardy Reversal"
+     "name": "Hardy"
+    },
+    {
+     "name": "Reversal"
+    },
+    {
+     "name": "Doomed (Beware the flames of passion)"
     }
    ],
    "trappings": [
@@ -7605,7 +7807,7 @@
      "name": "Menacing"
     },
     {
-     "name": "Nimble Fingered"
+     "name": "Nimble-fingered"
     },
     {
      "name": "Petty Magic"
@@ -7630,8 +7832,28 @@
     }
    ],
    "spells": {
-    "Petty: Dart, Dazzle, Light, Magic Flame, Spring, Shock Light: Blinding Light, Clarity of Thought": [
-     "Witchcraft"
+    "Petty": [
+     "Dart",
+     "Dazzle",
+     "Light",
+     "Magic Flame",
+     "Spring",
+     "Shock"
+    ],
+    "Lore of Light": [
+     "Blinding Light",
+     "Clarity of Thought"
+    ],
+    "Lore of Witchcraft": [
+     "Aethyric Armour",
+     "Blast",
+     "Blight",
+     "Bolt",
+     "Curse of Crippling Pain",
+     "Curse of Ill-Fortune",
+     "Teleport",
+     "Terrifying",
+     "Ward"
     ]
    },
    "keywords": [

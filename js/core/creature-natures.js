@@ -83,10 +83,18 @@ export function willpowerBase(participant) {
   return { value: Number.isFinite(printed) ? printed : null, replacedBy: null };
 }
 
+/**
+ * Les attaques du participant sont-elles magiques par nature ? Livre de base p.357 : Artificiel (« All its attacks are Magical »)
+ * et Démoniaque ; Traits Magique (« Their attacks count as Magical »).
+ */
+export function attacksAreMagical(participant) {
+  return natureTraits(participant).some(trait => ['construct', 'daemonic', 'magical'].includes(trait.key));
+}
+
 const REMINDERS = {
   undead: 'Mort-vivant : ni boire, manger ni respirer ; nature reconnue par les sorts et miracles spécifiques.',
   daemonic: 'Démoniaque : ni boire, manger ni respirer ; disparaît à zéro Blessure ; attaques magiques.',
-  construct: 'Artificiel : ni boire, manger ni respirer ; pas de Tests mentaux, Endurance remplace Volonté ; Force pour les Blessures.',
+  construct: 'Artificiel : ni boire, manger ni respirer ; pas de Tests mentaux, Endurance remplace Volonté ; Force pour les Blessures ; toutes ses attaques sont Magiques.',
   ethereal: 'Éthéré : traverse les solides ; ses attaques sont magiques.',
   painless: 'Insensible à la douleur : ignore les pénalités des Blessures Critiques (hors amputations), mais garde les États.',
   magical: 'Magique : ses attaques sont magiques et affectent les créatures vulnérables à cette seule nature.',

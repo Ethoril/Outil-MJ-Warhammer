@@ -372,7 +372,7 @@ async function awaitStore(operation, label = 'Opération locale') {
 
 const reminderTransitionLabels = { endTurn: 'Fin de tour', startTurn: 'Début de tour' };
 const reminderStatusLabels = { pending: 'À traiter', resolve: 'Résolu', ignore: 'Ignoré', snooze: 'Reporté', snoozed: 'Reporté' };
-const reminderKindLabels = { endTurn: 'Fin de tour', startTurn: 'Début de tour', 'effect-expiring': 'État qui expire', 'automatic-announced': 'Effet automatique', consequence: 'Conséquence', reinforcement: 'Renfort' };
+const reminderKindLabels = { endTurn: 'Fin de tour', startTurn: 'Début de tour', 'effect-expiring': 'État qui expire', 'automatic-announced': 'Effet automatique', consequence: 'Conséquence', reinforcement: 'Renfort', 'participant-reminder': 'Rappel du participant' };
 function readableReminder(item) {
   const transition = reminderTransitionLabels[item?.payload?.transitionType || item?.transitionType] || '';
   const kind = reminderKindLabels[item?.kind] || item?.kind || 'Rappel';
@@ -1050,6 +1050,8 @@ const workspaceView = DOM.panels.workspace && qs('#workspace-root') ? initWorksp
   Store, Combat, Bus, mount: qs('#workspace-root'), showNavigation: false,
   actions: {
     ...encounterListActions,
+    // La bibliothèque de bestiaire vit sous la vue de travail et ne se montre que dans l'espace Bibliothèque.
+    spaceShown: space => { qs('#bestiary-library').hidden = space !== 'library'; },
     createProfile: openCreateProfileView,
     duplicateProfile: id => awaitStore(Store.duplicateProfile(id), 'Duplication'),
     removeProfile: id => awaitStore(Store.removeProfile(id), 'Suppression'),

@@ -73,10 +73,11 @@ const items=sources.map(s=>{
  else {
    if(c)for(const clause of c.clauses)clauses.push({scope:'engine',status:'implemented',contractClauseId:clause.id,text:clause.event+' · '+clause.role+' · '+clause.effects.map(e=>e.op+(e.key?' '+e.key:'')).join(', ')});
    if(id==='strike-to-stun')clauses.push({scope:'engine',status:'manual-approved',text:'Neutralisation silencieuse hors combat (livre p. 135, décision MJ) : Test opposé assisté ; BF Blessures et Inconscient à la victoire, Sonné et alarme à la défaite à arbitrer manuellement.'});
+   if(id==='master-and-commander')clauses.push({scope:'engine',status:'manual-approved',text:'+1 DR par rang aux Tests de Commandement à bord (leadershipRallySlModifiers) ; le fait « à bord » est confirmé par le MJ.'});
    if(pending[id])clauses.push({scope:'engine',status:'pending',text:pending[id]});
    if(mixedSheet[id])clauses.push({scope:'sheet',status:'owned',text:mixedSheet[id]});
    if(mixedNarrative[id])clauses.push({scope:'narrative',status:'reminder',text:mixedNarrative[id]});
-   if(!c&&!pending[id]&&!mixedSheet[id]&&!mixedNarrative[id]){
+   if(!c&&!pending[id]&&!mixedSheet[id]&&!mixedNarrative[id]&&id!=='master-and-commander'){
      if(sheetIds.includes(id))clauses.push({scope:'sheet',status:'owned',text:s.description});
      else if(narrativeIds.includes(id))clauses.push({scope:'narrative',status:'reminder',text:s.description});
      else throw Error('Tri manquant : '+s.id+' '+s.nom);
@@ -95,7 +96,7 @@ const engineClauseCount=items.flatMap(i=>i.clauses).filter(c=>c.status==='implem
 const cell=value=>String(value).replaceAll('|',' / ').replace(/\s+/g,' ').trim();
 const label=c=>c.scope==='engine'?'Moteur raccordé':c.scope==='narrative'?'Rappel narratif':c.scope==='lot3'?'Lot 3':c.status==='excluded'?'Bonus de caractéristique exclu':'Fiche';
 const lines=[
-'# Tri et raccordement des 206 talents — 9 octobre 2026','',
+'# Tri et raccordement des 207 talents — 9 octobre 2026','',
 'Le tri est effectué par clause. Les effets mesurables utilisent le moteur, avec choix ou faits fournis par le MJ si nécessaire. La fiction reste un rappel. La progression et les valeurs déjà importées appartiennent aux fiches. Aucun bonus de caractéristique ni second calcul de Dur à cuire.','',
 '## Bilan sans double comptage','',
 '| Traitement principal | Talents |','| --- | ---: |',
@@ -112,7 +113,7 @@ const lines=[
 'Le raccordement 2.4 et la recette/livraison 2.5 sont terminés localement dans le périmètre convenu. La version 3.13.0 est prête à publier sur autorisation. La reprise entre clients a été éprouvée contre Auth/RTDB locaux, sans compte ni séance de production. [Recette et livraison 2.5](LOT2_RECETTE_2_5.md). Les 28 talents de magie/prières restent au lot 3.','',
 'La neutralisation silencieuse p. 135 conserve volontairement ses conséquences manuelles approuvées : opposition assistée puis BF Blessures/Inconscient à la victoire, Sonné/alarme à la défaite arbitrés par le MJ. Il s’agit d’une limite mécanique approuvée. L’engagement, la géométrie, les armes chargées et les circonstances fictionnelles sont déclarés par le MJ ; leurs conséquences chiffrées sont calculées. Les mesures de poursuite, équipage, réparation et terrain ne simulent ni déplacement ni inventaire de munitions.','',
 'Les 166 talents du livre V5 ont l’audit de source existant ; les 39 références de suppléments ne sont pas toutes vérifiées dans leur ouvrage. Petit est un homebrew validé par le MJ. Les contrats épinglent les textes publics et les arbitrages autorisés ; une source modifiée suspend sa contribution. [Audit des sources](ECARTS_LIVRE_V5_AIDES_DE_JEU.md).','',
-'## Détail des 206 identités','',
+'## Détail des 207 identités','',
 'Les traitements mixtes sont visibles dans les colonnes. Les clauses, identités et empreintes exactes figurent dans [le tri JSON](LOT2_TRI_TALENTS.json). Cette page et la couverture affichée par l’interface sont générées depuis ce même tri.','',
 '| Talent | Traitements | Détail |','| --- | --- | --- |',
 ...items.map(i=>{const engine=i.clauses.filter(c=>c.status==='implemented');const rest=i.clauses.filter(c=>c.status!=='implemented');const details=[...(engine.length?[i.implementationNotes||engine.length+' clause(s) de Tests, combat ou calcul de situation épinglées et raccordées.']:[]),...rest.map(c=>label(c)+' : '+c.text)];return '| '+cell(i.name)+' | '+[...new Set(i.clauses.map(label))].join(' + ')+' | '+cell(details.join(' '))+' |';}),''

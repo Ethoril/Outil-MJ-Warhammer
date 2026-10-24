@@ -21,7 +21,7 @@ test('2.3 real contracts — cinq identités traçables, cinq validées, descrip
   assert.equal(registry.contracts.length,5);
   assert.equal(registry.contracts.filter(item=>item.status==='validated').length,5);
   for(const item of registry.contracts){assert.equal(validateTalentContractV2(item),true);assert.equal(item.source.effectHash,sourceHashes[item.talentId]);assert.equal(hash(registry.sourceDescriptions[item.talentId]),item.source.effectHash);}
-  assert.equal(getReferenceCatalogue().talents.length,206);
+  assert.equal(getReferenceCatalogue().talents.length,207);
   assert.equal(contract('talent-beat-blade').status,'validated');
 });
 

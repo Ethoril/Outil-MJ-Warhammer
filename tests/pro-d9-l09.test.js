@@ -34,5 +34,6 @@ test('D9 : espèces et natures', () => {
   assert.deepEqual(byId('E0-P-336').keywords, ['elfe-noir']);
   assert.deepEqual(byId('E0-P-358').keywords, ['elfe-noir']);
   assert.deepEqual(byId('E0-P-322').keywords, ['monstre']);
-  assert.deepEqual(byId('E0-P-315').keywords, ['cheval']);
+  // Q26 : le Dark Steed (p. 45) a maintenant son Trait Bestial imprimé, d'où la nature « bete » (comme le sang-froid E0-P-317).
+  assert.deepEqual(byId('E0-P-315').keywords, ['bete', 'cheval']);
 });
