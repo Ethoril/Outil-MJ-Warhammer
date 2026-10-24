@@ -13,6 +13,14 @@ Plan : `PLAN_PRO_BRANCHEMENT.md`. Choix et questions : `CHOIX_EXECUTANT_BRANCHEM
 | B5 | FAIT (Sens branchés sauf Sens aiguisé, voir ci-dessous ; question BR-11 au MJ) |
 | B6 | FAIT (Déplacement branché, voir ci-dessous ; question BR-12 au MJ) |
 | B7 | FAIT (Nuée, Venin, rappels d'états et de natures, voir ci-dessous) |
+| B8 | FAIT (Lanceur de sorts ouvert, rappels de magie et de capacités, voir ci-dessous ; BR-14) |
+
+## B8 — Magie et capacités (24/10/2026)
+
+- **Branché** : `creatureMagicReminders` et `creatureAbilityReminders` via `TRAIT_REMINDERS` (`reminders.js`) → rappels permanents sur la carte et le Personnage actif : Résistance à la Magie, Lanceur de sorts, Béni, Miracles, Champion, Marques du Chaos, Corruption, Mutation, Dressé ; capacités propres du profil (`abilityRefs` du bestiaire : « Nom (lot de Traits) : résumé » si prises en charge, « Rappel — Nom : résumé » sinon).
+- **Branché** : `magicActionsFor` / `creatureCastingBases` (`creature-magic.js`), appelée par `actorActions` (`workspace-view.js`, onglet Jouer) : un Lanceur de sorts de bestiaire reçoit Focalisation, Dissipation et Incantation sans sorts ni compétence sur sa fiche ; Focalisation = Volonté+10, Langue magique = Int+10 (valeurs du Trait, sinon FM/Int comme avant). Le panneau d'Incantation propose tous les contrats V5 ; la liste de sorts imprimée du profil reste en consultation (elle n'est pas dans `participant.spells`).
+- **Code testé, non appelé** : `planCreatureMagic` pour Béni, Miracles (Prière Soc+10), Champion, Marques (pas d'effet posé), Dressé (ordres), Corruption, Mutation : rappels seulement. Aucune des capacités de `creature-abilities` n'applique d'effet (le module ne le prévoit pas). Les capacités des Slann (E0-T-211…) ne sont pas dans ce jeu de données : B9.
+- Test : `tests/pro-b8-magie-capacites-branchees.test.js` (Slann de la 5ᵉ génération L07, Horreur rose L23). Suite : 4623 tests, seul échec « recette refuse un cwd externe » (propre au worktree).
 
 ## B7 — États et natures (24/10/2026)
 

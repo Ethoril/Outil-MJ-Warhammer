@@ -1,6 +1,7 @@
 import {createDivinePanel} from './v5-divine-panel.js';
 import {createV5BrokenEscapePanel,isBrokenActor} from './v5-broken-escape-panel.js';
 import {beastFormRestriction} from '../core/v5-magic-arbitrations.js';
+import { magicActionsFor } from '../core/creature-magic.js';
 /**
  * Vue de séance E09.
  *
@@ -397,17 +398,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
   function actorActions(participant) {
     if (!participant) return [];
     const lines = typeof Store.getDiceLines === 'function' ? Store.getDiceLines().filter(line => line.participantId === participant.id) : [];
-    const isMagicUser = Boolean(
-      (participant.spells && participant.spells.length > 0) ||
-      (participant.skills || []).some(s => /focalisation|channelling|magick/i.test(s.name || s.nom || '')) ||
-      participant.extensions?.v5?.channelling ||
-      participant.extensions?.v5?.magic
-    );
-    const magicActions = isMagicUser ? [
-      ...(!beastFormRestriction(participant,'channel') ? [{ id: 'v5-magic:channelling', note: 'Focalisation V5', type: 'channelling', attr: 'FM', base: Number(participant.caracs?.FM) || 50, mod: 0, qualities: [] }] : []),
-      { id: 'v5-magic:dispel', note: 'Dissipation persistante V5', type: 'dispel', attr: 'Int', base: Number(participant.caracs?.Int) || 50, mod: 0, qualities: [] },
-      ...(!beastFormRestriction(participant,'cast') ? [{ id: 'v5-magic:cast', note: 'Incantation V5', type: 'cast', attr: 'Int', base: Number(participant.caracs?.Int) || 50, mod: 0, qualities: [] }] : [])
-    ] : [];
+    const magicActions = magicActionsFor(participant, { channel: !beastFormRestriction(participant, 'channel'), cast: !beastFormRestriction(participant, 'cast') });
     // Équipement lâché sous forme animale : ni armes ni attaques du lanceur, seulement celles de la créature.
     const transformed = Boolean(participant.extensions?.v5?.beastForm);
     const ownActions = ((participant.actions || []).length ? participant.actions : lines).filter(action => !transformed || (!['attack', 'attaque'].includes(action.type) && !action.extensions?.fiche?.equipmentId));
