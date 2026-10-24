@@ -1,4 +1,4 @@
-# Passation — plan de fin de projet (22 octobre 2026, 9 h)
+# Passation — plan de fin de projet (mise à jour le 24 octobre 2026, 21 h)
 
 L’orchestration passe au **compte Claude Pro** (Claude Code avec la configuration `~/.claude-perso`) jusqu’à dimanche 25/10 : le compte Team de l’app est presque à court de quota.
 
@@ -11,6 +11,15 @@ docs/PASSATION_FIN_DE_PROJET.md dans le worktree C:/Users/arnot/.codex/worktrees
 docs/DECISIONS_MJ_CHOIX_EXECUTANTS_22_10.md. Vérifie le chantier E, intègre et publie ce qui est fini,
 puis enchaîne les étapes de la section « Suite ».
 ```
+
+## Point du 24/10, 21 h — où reprendre
+
+- **Chantier en cours** : branchement des Traits de créature et des familiers (décisions du MJ du 22/10). Plan `docs/plans-gpt/PLAN_PRO_BRANCHEMENT.md` (B0 à B11, R), rapport `RAPPORT_PRO_BRANCHEMENT.md`, choix `CHOIX_EXECUTANT_BRANCHEMENT.md`, dans le worktree `E:/Outil MJ Warhammer/tmp/pro-branchement-worktree`, branche `pro/branchement` (partie de `codex/divin-v5` à `d0c81fe`). Faits au 24/10 : B0, B1, B2 ; reprise automatique à 21 h 05.
+- **Veilleur** : `%LOCALAPPDATA%\Temp\pro-watch-branchement.ps1`, journal `pro-watch.log`, **toujours lancé via WMI** (`Invoke-CimMethod -ClassName Win32_Process -MethodName Create`), sinon un redémarrage de l'app le tue. Il est déjà mort une fois sans cause connue (24/10, entre 7 h et 11 h) : surveiller le **processus**, pas seulement le journal (Monitor : `tail -F` du journal + contrôle du processus toutes les 5 min). Onglet de suivi pour le MJ : `tmp/suivi-pro.ps1`.
+- **Questions bloquantes** : à poser au MJ **dès** qu'un lot s'arrête sur BLOCKED.
+- **Contre-vérification** obligatoire avant toute publication (vérificateurs Sonnet indépendants, lecture seule, sur un arbre figé `E:/Outil MJ Warhammer/tmp/verif-qualite` détaché au commit voulu) ; ciblée tous les 3-4 lots, large avant publication. **Quota partagé** entre l'orchestrateur, ses vérificateurs et l'exécutant Pro : doser.
+- **GPT** : lot F0b (`docs/plans-gpt/BRIEF_GPT_PHASE_F0B_SELECTEURS.md`) commencé par le MJ, en cours (GPT à court de tokens) ; à contre-vérifier et intégrer à son retour.
+- Ensuite : intégrer `pro/branchement` (procédure ci-dessous), publier 3.26.0 ; puis runes, F1 (questions au MJ par paquets, après F0b), G, H.
 
 ## Point du 24/10, 17 h 45
 
