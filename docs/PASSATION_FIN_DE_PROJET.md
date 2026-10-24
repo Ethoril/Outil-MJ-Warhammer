@@ -12,7 +12,14 @@ docs/DECISIONS_MJ_CHOIX_EXECUTANTS_22_10.md. Vérifie le chantier E, intègre et
 puis enchaîne les étapes de la section « Suite ».
 ```
 
-## Point du 24/10, 21 h — où reprendre
+## Point du 24/10, 22 h 20 — où reprendre
+
+- `pro/branchement` : B0-B10 commités (dont B4c et B8c, corrections des contre-vérifications de B0-B2 et B3-B6). Quota Pro épuisé, reprise automatique à 2 h 05.
+- Restent B10b (Destin et Résilience importés des fiches, réponse du MJ), B11, B12 (compteur de surnombre, réponse du MJ), puis R. Briefs des lots correctifs : `tmp/correctif-*.md` du worktree, appelés par `prompt-lot.md`.
+- Le veilleur (`pro-watch-branchement.ps1`, relancé via WMI le 24/10 à 21 h 12) choisit le modèle par lot : Opus pour B4 et B10, Sonnet ailleurs ; il adopte un tour en cours à son redémarrage.
+- Avant publication de 3.26.0 : contre-vérification de B7 à R, puis contre-vérification large ; monter la version de cache de `sw.js`.
+
+## Point du 24/10, 21 h
 
 - **Chantier en cours** : branchement des Traits de créature et des familiers (décisions du MJ du 22/10). Plan `docs/plans-gpt/PLAN_PRO_BRANCHEMENT.md` (B0 à B11, R), rapport `RAPPORT_PRO_BRANCHEMENT.md`, choix `CHOIX_EXECUTANT_BRANCHEMENT.md`, dans le worktree `E:/Outil MJ Warhammer/tmp/pro-branchement-worktree`, branche `pro/branchement` (partie de `codex/divin-v5` à `d0c81fe`). Faits au 24/10 : B0, B1, B2 ; reprise automatique à 21 h 05.
 - **Veilleur** : `%LOCALAPPDATA%\Temp\pro-watch-branchement.ps1`, journal `pro-watch.log`, **toujours lancé via WMI** (`Invoke-CimMethod -ClassName Win32_Process -MethodName Create`), sinon un redémarrage de l'app le tue. Il est déjà mort une fois sans cause connue (24/10, entre 7 h et 11 h) : surveiller le **processus**, pas seulement le journal (Monitor : `tail -F` du journal + contrôle du processus toutes les 5 min). Onglet de suivi pour le MJ : `tmp/suivi-pro.ps1`.
