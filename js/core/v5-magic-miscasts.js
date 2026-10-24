@@ -484,7 +484,8 @@ function buildMiscastDetails({ tableKey, entry, roll, secondaryRolls = {}, bfm =
 const talentLabel = talent => talent.id === 'talent-high-magic' ? 'Haute Magie' : `Magie des Arcanes${talent.lore ? ' (' + talent.lore + ')' : ''}`;
 export function resolveMiscast(options = {}) {
   if (options.participant) options = prepareMiscastOptions(options.participant, options);
-  const initialSeverity = options.severity === 'MAJOR' ? 'MAJOR' : 'MINOR';
+  const slannLowered = options.severity === 'MAJOR' && options.slannMishapMaster === true;
+  const initialSeverity = options.severity === 'MAJOR' && !slannLowered ? 'MAJOR' : 'MINOR';
   if (Number(options.attunementRank) >= (initialSeverity==='MAJOR' || options.corruptingInfluence ? 2 : 1) && !options.attunementResolved) {
     const first=resolveMiscast({...options,attunementResolved:true});
     if(options.miscastRoll2==null || !['first','second'].includes(options.miscastChoice)) return {...first,ready:false,choicesRequired:'attunement',summary:'Harmonisation aethyrique : saisir le second jet et choisir le résultat.'};
@@ -648,6 +649,7 @@ export function resolveMiscast(options = {}) {
     overflow,
     cancelled: false,
     cancelReason: null,
+    slannLowered,
     entry,
     name: entry.name,
     description: entry.eff,

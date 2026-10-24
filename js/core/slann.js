@@ -134,6 +134,21 @@ export function contemplationOutcome(participant, sl) {
   };
 }
 
+/** Vrai tant que le Slann est à bord de son palanquin (état posé par `Store.setSlannAboard`, à bord par défaut). */
+export const slannAboard = participant => participant?.extensions?.v5?.slann?.aboard !== false;
+
+/** Rappels affichés sur la carte : capacités, Slann au sol (−3 appliqué aux Tests magiques) et Téléportation de secours à 10 Blessures ou moins. */
+export function slannTraitReminders(participant) {
+  if (!isSlann(participant)) return [];
+  const rows = slannReminders(participant);
+  if (has(participant, ID.ground) || has(participant, ID.palanquin)) {
+    const ground = groundCastModifier(participant, { aboard: slannAboard(participant) });
+    if (ground.modifier) rows.push(`Au sol : ${ground.modifier} aux Tests d'incantation et de Focalisation (appliqué par l'outil). Remonter à bord depuis la carte.`);
+  }
+  if (has(participant, ID.teleport)) rows.push(...planEmergencyTeleportation(participant).reminders);
+  return rows;
+}
+
 /** Rappels de fiche d'un participant : une ligne par capacité slann, assistée (service nommé) ou rappel motivé. */
 export function slannReminders(participant) {
   return slannAbilities(participant).map(entry => entry.status === 'assisted'

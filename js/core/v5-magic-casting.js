@@ -16,6 +16,7 @@ import {
 } from './v5-magic-channelling.js';
 import { resolveMiscast, applyMiscastToParticipant, missingMagicDiceMessage } from './v5-magic-miscasts.js';
 import { uid } from './models.js';
+import { totalPowerCritical } from './slann.js';
 
 export const V5_MAGIC_CASTING_VERSION = 'v5-magic-casting-2026-10-10.1';
 
@@ -242,6 +243,7 @@ function resolveMiscastWithMitigations(tableKey, rawRoll, modifier, options = {}
     roll: rawRoll,
     modifier,
     corruptingInfluence: Boolean(options.corruptingInfluence),
+    slannMishapMaster: options.slannMishapMaster === true,
     hasIngredient: false,
     instinctiveDiction: Boolean(options.instinctiveDiction),
     attunementRank: options.attunementRank, miscastRoll2: options.miscastRoll2, miscastChoice: options.miscastChoice,
@@ -331,7 +333,11 @@ function previewPreparedCasting(participant, spell, options) {
 
   const optionId = testPreview.options.length === 1 ? testPreview.options[0].id : options.choice || 'keep';
   const selectedTest = enforceMagicTestRestrictions(participant,selectV5Test(testPreview, optionId));
-  const { success: testSuccess, sl: testSl, critical, fumble } = selectedTest;
+  const { success: testSuccess, fumble } = selectedTest;
+  // Puissance totale slann : un lancement réussi est aussi critique sur une unité 0 (le double l'est déjà), avec le DR minimal +5 d'un critique.
+  const slannCritical = testSuccess && !selectedTest.critical && totalPowerCritical(participant, roll, { succeeded: true }).critical === true;
+  const critical = selectedTest.critical || slannCritical;
+  const testSl = slannCritical ? Math.max(5, selectedTest.sl) : selectedTest.sl;
 
   let totalCastingSl = 0;
   let spellSuccess = false;

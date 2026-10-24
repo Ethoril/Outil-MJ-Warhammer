@@ -78,6 +78,7 @@ import { hasRegeneration, planRegeneration } from './creature-regeneration.js';
 import { hasManyHeads, headRegistryOf, applyHeadCritical, restoreHead, HEAD_STATES } from './creature-heads.js';
 import { planPsychology, psychologyTraits } from './creature-psychology.js';
 import { planSwarm, planStateOnWound } from './creature-states.js';
+import { isSlann, contemplationOutcome } from './slann.js';
 const withV5 = (participant, change) => ({ ...participant, extensions: { ...(participant.extensions || {}), v5: change(participant.extensions?.v5 || {}) } });
 import { validatePrayerSLCaps,getPrayerSLModifiers } from './v5-divine-prayer-caps.js';
 import { previewV5BrokenEscape, isV5BrokenEscapeActionBlocked, BROKEN_ESCAPE_SOURCE, BROKEN_ESCAPE_RULE_VERSION } from './v5-broken-escape.js';
@@ -2390,6 +2391,28 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       const heads = state === 'healthy' ? next : next.registry;
       const result = api.executeCommand('set-head-state', draft => ({ ...draft, combat: { ...draft.combat, participants: (draft.combat?.participants || []).map(item => (item.id === participantId ? withV5(item, v5 => ({ ...v5, heads })) : item)) } }));
       return typeof result?.then === 'function' ? result.then(done => ({ ...done, ok: true })) : { ...result, ok: true };
+    },
+    /** Slann : à bord du palanquin ou au sol (−3 aux Tests d'incantation et de Focalisation tant qu'il est au sol). Annulable. */
+    setSlannAboard(participantId, aboard) {
+      if (!isSlann(combat.participants.get(participantId))) return { ok: false, reason: 'not-slann', message: 'Réservé aux profils de Slann.' };
+      const result = api.executeCommand('set-slann-aboard', draft => ({ ...draft, combat: { ...draft.combat, participants: (draft.combat?.participants || []).map(item => (item.id === participantId ? withV5(item, v5 => ({ ...v5, slann: { ...(v5.slann || {}), aboard: aboard !== false } })) : item)) } }));
+      return typeof result?.then === 'function' ? result.then(done => ({ ...done, ok: true })) : { ...result, ok: true };
+    },
+    /** Contemplation slann : le MJ saisit les DR du Test de Perception ; la table donne l'état (Brume de pensée : deux Exténué posés ; Détaché : Stupide en rappel). Annulable. */
+    applySlannContemplation(participantId, sl) {
+      const slann = combat.participants.get(participantId);
+      const plan = contemplationOutcome(slann, sl);
+      if (!plan.available) return { ok: false, reason: 'refused', message: plan.unresolved.join(' ') };
+      // Stupide (Détaché) est une psychologie, pas un État du moteur : il reste dans le rappel du journal.
+      const adds = plan.conditions.filter(row => row.name === 'Fatigued').map(row => ({ name: 'Exténué', level: row.count || 1, source: { kind: 'slann-contemplation' } }));
+      const receipt = adds.length ? acquireV5Conditions(slann, adds, { round: combat.round }) : null;
+      const result = api.executeCommand('slann-contemplation', draft => ({ ...draft,
+        combat: { ...draft.combat, participants: (draft.combat?.participants || []).map(item => (item.id === participantId && receipt ? receipt.participant : item)) },
+        log: [{ id: uid(), kind: 'effect', actorId: participantId, targetId: participantId,
+          text: `${slann.name} · Contemplation (DR ${sl}) : ${plan.reminders.join(' ')}`,
+          detail: { kind: 'slann-contemplation', sl: Number(sl), outcome: plan.outcome } }, ...(draft.log || [])].slice(0, 300) }));
+      const done = value => ({ ...value, ok: value?.ok !== false, outcome: plan.outcome, reminders: [...plan.reminders, ...(receipt?.reminders || [])] });
+      return typeof result?.then === 'function' ? result.then(done) : done(result);
     },
     listPersistentCharacters() { return cloneValue(persistentCharacters); },
     savePersistentCharacter(input) {

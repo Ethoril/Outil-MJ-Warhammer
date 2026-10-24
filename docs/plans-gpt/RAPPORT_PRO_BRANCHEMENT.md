@@ -15,6 +15,17 @@ Plan : `PLAN_PRO_BRANCHEMENT.md`. Choix et questions : `CHOIX_EXECUTANT_BRANCHEM
 | B7 | FAIT (Nuée, Venin, rappels d'états et de natures, voir ci-dessous) |
 | B8 | FAIT (Lanceur de sorts ouvert, rappels de magie et de capacités, voir ci-dessous ; BR-14) |
 | B8c | FAIT (corrections de B3-B6, réponses du MJ du 24/10 : BR-10, BR-11, BR-12) |
+| B9 | FAIT (Slann branché sauf palanquin, voir ci-dessous) |
+
+## B9 — Slann (24/10/2026)
+
+- **Branché** : `slannTraitReminders` (`slann.js`, via `TRAIT_REMINDERS`) → rappels des capacités slann sur la carte et le Personnage actif ; « Au sol : −3 » quand le Slann a quitté son palanquin ; rappel de Téléportation de secours à 10 Blessures ou moins (sur les Blessures actuelles ; la Blessure Critique grave n'est pas détectée).
+- **Branché** : `groundCastModifier` + `slannAboard` par `prepareMagicOptions` (`v5-magic-talents.js`) : −3 SL aux Tests d'incantation et de Focalisation tant que `extensions.v5.slann.aboard` est faux. Chemin d'interface : `Store.setSlannAboard` (commande annulable), bouton du bloc `js/ui/slann-block.js` (`card.js`).
+- **Branché** : `mishapSeverity` par `prepareMiscastOptions` → `resolveMiscast` : un incident Majeur devient Mineur (`slannLowered`) pour les profils à Maître des incidents, sauf `viaTelepathy`. Limite : le cas du lancement à travers un autre mage n'a pas de saisie à l'écran, et le Mineur qui déborde vers le Majeur (chaos en cascade) n'est pas touché.
+- **Branché** : `totalPowerCritical` dans `previewPreparedCasting` (`v5-magic-casting.js`) : un lancement réussi sur une unité 0 est critique (DR minimal +5), pour les profils à Puissance totale seulement ; le choix de l'effet critique reste celui de l'incantation existante. La relance de perception des Vents en Lustrie reste un rappel.
+- **Branché** : `contemplationOutcome` par `Store.applySlannContemplation(id, dr)` (commande annulable) : le MJ saisit les DR du Test de Perception dans le bloc de carte ; Brume de pensée pose deux États Exténué ; Détaché (Stupide) reste un rappel du journal (Stupide n'est pas un État du moteur) ; sans DR saisis, refus.
+- **Code testé, non appelé** : `palanquinTraits` (Vol 16 et Protection 8+ ne sont pas posés comme Traits du participant ; couvert selon la direction du tir non appliqué : rappel du palanquin seulement) ; `planEmergencyTeleportation` n'est utilisé que pour son rappel (pas de lancement automatique).
+- Test : `tests/pro-b9-slann-branche.test.js` (Slann des 4ᵉ et 2ᵉ générations, L07). `sw.js` : nouveau module en cache (version inchangée).
 
 ## B8c — Corrections de B3-B6 et réponses du MJ (24/10/2026)
 

@@ -9,6 +9,7 @@ import { buildParticipantReminders } from '../core/reminders.js';
 import { buildHeadsBlock, nextHeadState } from './heads-block.js';
 import { buildRegenerationBlock, readRegenerationInputs } from './regeneration-block.js';
 import { buildPsychologyBlock, readPsychologyInputs } from './psychology-block.js';
+import { buildSlannBlock, readSlannInputs } from './slann-block.js';
 import { buildCreatureStatesBlock, readCreatureStatesInputs } from './creature-states-block.js';
 
 export function initCardUI(Store, Combat) {
@@ -258,6 +259,8 @@ export function initCardUI(Store, Combat) {
     if (headsBlock) armDiv.after(headsBlock);
     const regenerationBlock = buildRegenerationBlock(tag => document.createElement(tag), p);
     if (regenerationBlock) armDiv.after(regenerationBlock);
+    const slannBlock = buildSlannBlock(tag => document.createElement(tag), p);
+    if (slannBlock) armDiv.after(slannBlock);
     const psychologyBlock = buildPsychologyBlock(tag => document.createElement(tag), p, Store.listParticipants());
     if (psychologyBlock) armDiv.after(psychologyBlock);
     const statesBlock = buildCreatureStatesBlock(tag => document.createElement(tag), p, Store.listParticipants());
@@ -342,6 +345,19 @@ export function initCardUI(Store, Combat) {
       e.preventDefault();
       const { targetId } = readPsychologyInputs(e.target.closest('.actor-psychology'));
       observe(Store.applyCreaturePsychology(id, e.target.dataset.psychology, { targetId }), e.target.dataset.psychology === 'fear' ? 'Peur' : 'Terreur');
+      return;
+    }
+
+    if (e.target.matches('.btn-slann-aboard')) {
+      e.preventDefault();
+      observe(Store.setSlannAboard(id, e.target.dataset.aboard !== 'true'), 'Palanquin');
+      return;
+    }
+
+    if (e.target.matches('.btn-slann-contemplation')) {
+      e.preventDefault();
+      const { sl } = readSlannInputs(e.target.closest('.actor-slann'));
+      observe(Store.applySlannContemplation(id, sl), 'Contemplation');
       return;
     }
 
