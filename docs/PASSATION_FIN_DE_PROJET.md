@@ -12,6 +12,13 @@ docs/DECISIONS_MJ_CHOIX_EXECUTANTS_22_10.md. Vérifie le chantier E, intègre et
 puis enchaîne les étapes de la section « Suite ».
 ```
 
+## Point du 24/10, 17 h 45
+
+- **Production 3.25.0** (`main` = `codex/divin-v5` = 88536d8) : phase E (926 profils de 23 livres, bibliothèque accessible depuis l'onglet Bibliothèque), lot correctif du 22/10, audit F0 de GPT (registre `docs/AUDIT_REGLES.json`, 7 019 règles, 5 337 sélecteurs **non encore posés**), lot qualité en six passes (`docs/plans-gpt/PLAN_PRO_QUALITE_E.md`, rapport `RAPPORT_PRO_QUALITE_E.md`), chacune contre-vérifiée.
+- Décisions du MJ des 23-24/10 (attaques naturelles : formule V5 + Taille pour les livres V4, chiffre imprimé gardé pour les livres V5 L06, L09, L10 ; multiplicateurs = attaques gratuites ; Maître à bord ajouté à la feuille Drive) : consignées dans `CHOIX_EXECUTANT_QUALITE_E.md`.
+- Suite : brief GPT F0b (`docs/plans-gpt/BRIEF_GPT_PHASE_F0B_SELECTEURS.md`, regrouper et nettoyer les sélecteurs) à lancer par le MJ ; chantier « brancher les Traits non appelés + familiers selon les décisions du 22/10 » ; puis runes, F1 (questions au MJ par paquets), G, H.
+- Quota : l'orchestrateur, ses vérificateurs et l'exécutant Pro partagent le même quota ; doser les contre-vérifications (une ciblée par petite passe, large avant publication).
+
 ## Point du 23/10, 8 h 15 (compte Team)
 
 - Phase E (24 lots) et lot correctif du 22/10 **fusionnés dans `codex/divin-v5`** (`9c12613`), recette verte, **non publiés** : la contre-vérification indépendante (deux vérificateurs Sonnet) a trouvé des profils incomplets (talents, compétences, équipement perdus à l'extraction ; 12 profils L14 vides ; armure fausse sur 29 profils), des écarts de règle (Langue, Souffle, Nuée, Bestial, Dressé, D-C32 seulement en texte) et beaucoup de code annoncé « branché » sans appelant (Traits T2-T12, Slann, moitié des familiers).
