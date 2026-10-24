@@ -12,6 +12,16 @@ Plan : `PLAN_PRO_BRANCHEMENT.md`. Choix et questions : `CHOIX_EXECUTANT_BRANCHEM
 | B4c | FAIT (corrections de la contre-vérification ; question BR-09 au MJ) |
 | B5 | FAIT (Sens branchés sauf Sens aiguisé, voir ci-dessous ; question BR-11 au MJ) |
 | B6 | FAIT (Déplacement branché, voir ci-dessous ; question BR-12 au MJ) |
+| B7 | FAIT (Nuée, Venin, rappels d'états et de natures, voir ci-dessous) |
+
+## B7 — États et natures (24/10/2026)
+
+- **Branché** : `stateReminders` et `natureReminders` via `TRAIT_REMINDERS` (`reminders.js`) → rappels permanents (Venin, Infecté, Parasité, Maladie, Sang corrosif, Vampirique, Nuée, Instable, Increvable, Scission ; Mort-vivant, Démoniaque, Artificiel, Éthéré, Insensible, Magique, Bouclier) sur la carte et le Personnage actif.
+- **Branché** : `planSwarm` par `Store.applySwarmEndOfRound(id, engagedIds)` (`store.js`), commande annulable `swarm-end-of-round` : 1 Blessure directe à chaque engagé coché (le moteur ne suit pas l'engagement, le MJ le désigne). Chemin d'interface : `js/ui/creature-states-block.js` (cases d'engagés, bouton de fin de Round, `card.js`).
+- **Branché** : `planStateOnWound` (Venin) par `Store.applyCreatureVenom(sourceId, targetId)`, commande annulable `creature-venom` : Empoisonné posé via `acquireV5Conditions` (immunités respectées), difficulté imprimée requise sinon refus. Même bloc de carte.
+- **Déjà branché avant le lot** : Protection/Démoniaque/Éthéré/Immunité (`natureProtection`, `v5-magic-combat.js`, jet de Protection saisi par `wardRoll`), `willpowerBase`, `attacksAreMagical`.
+- **Code testé, non appelé** : `planStateOnWound` pour Infecté, Parasité, Maladie, Sang corrosif ; `planVampiricHeal`, `planUnstableEndOfRound`, `planDieHard`, `planSplit`, `planDeathTriggers` (engagement, Élan, mort : rappels seulement, rien d'automatique) ; `planSwarm` : tir −4 DR contre la Nuée et exemptions de Psychologie/Taille non appliqués.
+- Test : `tests/pro-b7-etats-branches.test.js` (Serpents de Sotek, L07). Décisions du MJ du 24/10 consignées (BR-06, BR-08, BR-09) et lot B12 ajouté au plan. `sw.js` : nouveau module en cache (version inchangée).
 
 ## B6 — Déplacement (24/10/2026)
 

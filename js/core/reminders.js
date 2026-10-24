@@ -5,9 +5,11 @@ import { regenerationReminders } from './creature-regeneration.js';
 import { psychologyReminders } from './creature-psychology.js';
 import { senseReminders } from './creature-senses.js';
 import { movementReminders } from './creature-movement.js';
+import { stateReminders } from './creature-states.js';
+import { natureReminders } from './creature-natures.js';
 
 // Un module de Trait par ligne : [clé stable, fonction participant → textes]. Ajouter ici les autres `xxxReminders`.
-const TRAIT_REMINDERS = [['size', sizeReminders], ['heads', manyHeadsReminderItems], ['regeneration', regenerationReminders], ['psychology', psychologyReminders], ['senses', senseReminders], ['movement', movementReminders]];
+const TRAIT_REMINDERS = [['size', sizeReminders], ['heads', manyHeadsReminderItems], ['regeneration', regenerationReminders], ['psychology', psychologyReminders], ['senses', senseReminders], ['movement', movementReminders], ['states', stateReminders], ['natures', natureReminders]];
 // Un module rend des textes (clé = rang) ou des `{ key, text }` (clé stable par sens du rappel).
 const traitReminderTexts = person => TRAIT_REMINDERS.flatMap(([name, fn]) => fn(person).map((entry, index) => (typeof entry === 'string' ? { key: `${name}-${index}`, text: entry } : { key: `${name}-${entry.key}`, text: entry.text })));
 

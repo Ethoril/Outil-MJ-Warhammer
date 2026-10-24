@@ -77,6 +77,7 @@ import { validateFamiliarLink, buildFamiliarLink, familiarBackLink, familiarLink
 import { hasRegeneration, planRegeneration } from './creature-regeneration.js';
 import { hasManyHeads, headRegistryOf, applyHeadCritical, restoreHead, HEAD_STATES } from './creature-heads.js';
 import { planPsychology, psychologyTraits } from './creature-psychology.js';
+import { planSwarm, planStateOnWound } from './creature-states.js';
 const withV5 = (participant, change) => ({ ...participant, extensions: { ...(participant.extensions || {}), v5: change(participant.extensions?.v5 || {}) } });
 import { validatePrayerSLCaps,getPrayerSLModifiers } from './v5-divine-prayer-caps.js';
 import { previewV5BrokenEscape, isV5BrokenEscapeActionBlocked, BROKEN_ESCAPE_SOURCE, BROKEN_ESCAPE_RULE_VERSION } from './v5-broken-escape.js';
@@ -2332,6 +2333,44 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
           text: `${source.name} · ${label} : Test de Calme demandé à ${names.join(', ')}`,
           detail: { kind: 'creature-psychology', key, targetIds: [...additions.keys()] } }, ...(draft.log || [])].slice(0, 300) }));
       const done = value => ({ ...value, ok: value?.ok !== false, targetIds: [...additions.keys()] });
+      return typeof result?.then === 'function' ? result.then(done) : done(result);
+    },
+    /**
+     * Nuée en fin de Round : chaque adversaire engagé (désigné par le MJ, le moteur ne suit pas l'engagement) perd 1 Blessure directe
+     * (livre de base, Traits de créature, Swarm). Une seule commande annulable.
+     */
+    applySwarmEndOfRound(swarmId, engagedIds = []) {
+      const swarm = combat.participants.get(swarmId);
+      const plan = planSwarm(swarm);
+      if (!plan.available) return { ok: false, reason: 'no-swarm', message: 'Ce participant n’a pas le Trait Nuée.' };
+      const ids = [...new Set(engagedIds)].filter(id => id !== swarmId && combat.participants.get(id)?.zone === 'active');
+      if (!ids.length) return { ok: false, reason: 'no-target', message: 'Nuée : désignez au moins un adversaire engagé.' };
+      const amount = plan.endOfRound.amount;
+      const result = api.executeCommand('swarm-end-of-round', draft => ({ ...draft,
+        combat: { ...draft.combat, participants: (draft.combat?.participants || []).map(item => (ids.includes(item.id) ? { ...item, hp: Math.max(0, (Number(item.hp) || 0) - amount) } : item)) },
+        log: [{ id: uid(), kind: 'effect', actorId: swarmId, targetId: null,
+          text: `${swarm.name} · Nuée, fin de Round : ${amount} Blessure(s) à ${ids.map(id => combat.participants.get(id).name || id).join(', ')}`,
+          detail: { kind: 'swarm-end-of-round', targetIds: ids, amount } }, ...(draft.log || [])].slice(0, 300) }));
+      const done = value => ({ ...value, ok: value?.ok !== false, targetIds: ids });
+      return typeof result?.then === 'function' ? result.then(done) : done(result);
+    },
+    /** Venin : une Blessure infligée par le porteur empoisonne la cible (difficulté de récupération imprimée sur le Trait, sinon refus). Annulable. */
+    applyCreatureVenom(sourceId, targetId) {
+      const source = combat.participants.get(sourceId);
+      const target = combat.participants.get(targetId);
+      const plan = planStateOnWound(source, 'venom');
+      if (plan.unresolved.some(text => /absent du participant/.test(text))) return { ok: false, reason: 'no-trait', message: 'Ce participant n’a pas le Trait Venin.' };
+      if (!plan.available) return { ok: false, reason: 'refused', message: plan.unresolved.join(' ') };
+      if (!target || target.id === sourceId) return { ok: false, reason: 'no-target', message: 'Venin : désignez la cible blessée.' };
+      const difficulty = plan.effects[0].recoveryDifficulty;
+      const receipt = acquireV5Conditions(target, [{ name: 'Empoisonné', level: 1, source: { kind: 'creature-venom', sourceId, difficulty } }], { round: combat.round });
+      if (!receipt.acquiredInstances) return { ok: false, reason: 'ignored', message: [...receipt.reminders, 'Venin : aucun effet (immunité ou état déjà présent).'].join(' ') };
+      const result = api.executeCommand('creature-venom', draft => ({ ...draft,
+        combat: { ...draft.combat, participants: (draft.combat?.participants || []).map(item => (item.id === targetId ? receipt.participant : item)) },
+        log: [{ id: uid(), kind: 'effect', actorId: sourceId, targetId,
+          text: `${source.name} · Venin (${difficulty}) : ${target.name} est Empoisonné`,
+          detail: { kind: 'creature-venom', difficulty } }, ...(draft.log || [])].slice(0, 300) }));
+      const done = value => ({ ...value, ok: value?.ok !== false, reminders: receipt.reminders });
       return typeof result?.then === 'function' ? result.then(done) : done(result);
     },
     /** Plusieurs têtes : état d'une tête (Blessure Critique à la tête, guérison), posé par le MJ ; le registre est gardé dans `extensions.v5.heads`. */

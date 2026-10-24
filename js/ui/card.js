@@ -9,6 +9,7 @@ import { buildParticipantReminders } from '../core/reminders.js';
 import { buildHeadsBlock, nextHeadState } from './heads-block.js';
 import { buildRegenerationBlock, readRegenerationInputs } from './regeneration-block.js';
 import { buildPsychologyBlock, readPsychologyInputs } from './psychology-block.js';
+import { buildCreatureStatesBlock, readCreatureStatesInputs } from './creature-states-block.js';
 
 export function initCardUI(Store, Combat) {
   const observe = (result, label = 'Modification') => Promise.resolve(result).then(value => { if (value === false || value?.ok === false) throw value?.error || new Error(`${label} impossible.`); return value; }).catch(error => showToast(contextMessage(`${label} impossible`, error, 'réessayez.'), 'error'));
@@ -259,6 +260,8 @@ export function initCardUI(Store, Combat) {
     if (regenerationBlock) armDiv.after(regenerationBlock);
     const psychologyBlock = buildPsychologyBlock(tag => document.createElement(tag), p, Store.listParticipants());
     if (psychologyBlock) armDiv.after(psychologyBlock);
+    const statesBlock = buildCreatureStatesBlock(tag => document.createElement(tag), p, Store.listParticipants());
+    if (statesBlock) armDiv.after(statesBlock);
 
     const diceContainer = div.querySelector('.dice-list');
     const myDice = Store.getDiceLines().filter(dl => dl.participantId === p.id);
@@ -339,6 +342,18 @@ export function initCardUI(Store, Combat) {
       e.preventDefault();
       const { targetId } = readPsychologyInputs(e.target.closest('.actor-psychology'));
       observe(Store.applyCreaturePsychology(id, e.target.dataset.psychology, { targetId }), e.target.dataset.psychology === 'fear' ? 'Peur' : 'Terreur');
+      return;
+    }
+
+    if (e.target.matches('.btn-swarm-end-round')) {
+      e.preventDefault();
+      observe(Store.applySwarmEndOfRound(id, readCreatureStatesInputs(e.target.closest('.actor-creature-states')).engagedIds), 'Nuée');
+      return;
+    }
+
+    if (e.target.matches('.btn-creature-venom')) {
+      e.preventDefault();
+      observe(Store.applyCreatureVenom(id, readCreatureStatesInputs(e.target.closest('.actor-creature-states')).venomTargetId), 'Venin');
       return;
     }
 
