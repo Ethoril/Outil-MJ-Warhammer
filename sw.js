@@ -181,6 +181,7 @@ const ASSETS_TO_CACHE = [
   './js/ui/regeneration-block.js',
   './js/ui/psychology-block.js',
   './js/ui/slann-block.js',
+  './js/ui/familiar-block.js',
   './js/ui/creature-states-block.js',
   './js/ui/combat-banner.js',
   './js/ui/combat-view.js',

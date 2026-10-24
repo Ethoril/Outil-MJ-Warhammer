@@ -16,6 +16,16 @@ Plan : `PLAN_PRO_BRANCHEMENT.md`. Choix et questions : `CHOIX_EXECUTANT_BRANCHEM
 | B8 | FAIT (Lanceur de sorts ouvert, rappels de magie et de capacités, voir ci-dessous ; BR-14) |
 | B8c | FAIT (corrections de B3-B6, réponses du MJ du 24/10 : BR-10, BR-11, BR-12) |
 | B9 | FAIT (Slann branché sauf palanquin, voir ci-dessous) |
+| B10 | FAIT (création de familier depuis la carte, voir ci-dessous ; question BR-02 au MJ) |
+
+## B10 — Création de familier (24/10/2026)
+
+- **Branché** : `planFamiliarCreation` (nouvelle, `familiars.js`) par `Store.createFamiliar(masterId, familiarId, input)` (`store.js`), commande annulable `create-familiar` : lien posé des deux côtés, **1 Destin ou 1 Résilience** débité du maître, plus un par point supplémentaire cédé (chacun enregistré comme point à répartir, `creation.pointsToDistribute`), familier d’un PJ passé au camp `allie` (PNJ allié), ligne de journal « Création de familier ». Annuler rend le point et retire le lien. Chemin d’interface : bloc « Familier » de la carte d’un PJ (`js/ui/familiar-block.js`, `card.js`) : familier choisi parmi les participants présents, Homoncule (Familier de combat, de puissance, de sort ; Imprégné de Vent) ou Familier animal (espèce), Destin ou Résilience, suppléments, solde saisi si l’outil ne le connaît pas, bouton « Création de familier ». Le bloc liste ensuite les familiers liés avec « Retirer le lien » (`unlinkFamiliar`, branché).
+- **Résilience (BR-02)** : absente de la fiche et de l’outil ; nouvelle valeur durable `extensions.v5.resilience` (validée par `sanitize.js`). Le Destin courant n’est pas importé non plus (`destin` de la fiche = maximum) : sans solde connu, la saisie du MJ est exigée, sinon refus avec message. Question au MJ consignée.
+- **Branché** : `familiarLinkLabel` (bloc et journal), `familiarCostBalance` (bloc et plan).
+- Limites : le débit porte sur le participant du combat (comme les autres commandes de lien), pas sur le personnage persistant ni la fiche (phase H) ; la répartition des points reste au MJ (compteur affiché) ; aucun profil de familier n’est instancié (on lie un participant déjà présent).
+- Noms français du §7.2 de la conception appliqués à l’écran et au message de refus d’un type inconnu.
+- Test : `tests/pro-b10-creation-familier.test.js` (bloc rendu, création, Destin débité, Annuler le rend ; Résilience saisie ; refus). `sw.js` : nouveau module en cache (version inchangée). Suite : 4640 tests, seul échec « recette refuse un cwd externe » (propre au worktree). Aucune assertion existante modifiée.
 
 ## B9 — Slann (24/10/2026)
 

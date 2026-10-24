@@ -73,7 +73,7 @@ import { momentumAfterChange, withMomentum } from './v5-combat-rules.js';
 import { advanceGameClock, campaignDurationSeconds, createGameClock, deriveTurnPhasePlan, readCombatPosition, reconcileGameClockPosition } from './v5-game-time.js';
 import { advanceCampaignSnapshot } from './v5-campaign-time.js';
 import { proposeNewKeyword, referentialFromExtensions, setActiveReferential } from './creature-keywords.js';
-import { validateFamiliarLink, buildFamiliarLink, familiarBackLink, familiarLinksOf } from './familiars.js';
+import { validateFamiliarLink, buildFamiliarLink, familiarBackLink, familiarLinksOf, planFamiliarCreation, familiarLinkLabel } from './familiars.js';
 import { hasRegeneration, planRegeneration } from './creature-regeneration.js';
 import { hasManyHeads, headRegistryOf, applyHeadCritical, restoreHead, HEAD_STATES } from './creature-heads.js';
 import { planPsychology, psychologyTraits } from './creature-psychology.js';
@@ -2263,6 +2263,30 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         if (item.id === familiarId) return withV5(item, v5 => ({ ...v5, familiarOf: familiarBackLink(master, link) }));
         return item;
       }) } }));
+      return typeof result?.then === 'function' ? result.then(done => ({ ...done, ok: true, link })) : { ...result, ok: true, link };
+    },
+    /**
+     * Création de familier (B10, décisions du MJ du 22/10) : lien posé des deux côtés, 1 Destin ou 1 Résilience débité du maître
+     * (plus un par point supplémentaire cédé, chacun à répartir), familier d'un PJ passé PNJ allié : une seule commande annulable.
+     */
+    createFamiliar(masterId, familiarId, input = {}) {
+      const master = combat.participants.get(masterId), familiar = combat.participants.get(familiarId);
+      const plan = planFamiliarCreation(master, familiar, input);
+      if (!plan.ok) return plan;
+      const creation = { resource: plan.resource, before: plan.before, spent: plan.spent, after: plan.after, pointsToDistribute: plan.pointsToDistribute, balanceEntered: plan.balanceEntered };
+      const link = { ...buildFamiliarLink(familiar, input, { id: uid(), createdAt: Date.now() }), creation };
+      const result = api.executeCommand('create-familiar', draft => ({ ...draft,
+        combat: { ...draft.combat, participants: (draft.combat?.participants || []).map(item => {
+          if (item.id === masterId) {
+            const next = withV5(item, v5 => ({ ...v5, familiarLinks: [...(v5.familiarLinks || []), link], [plan.resource]: plan.after }));
+            return plan.resource === 'fate' ? { ...next, fate: plan.after } : next;
+          }
+          if (item.id === familiarId) return { ...withV5(item, v5 => ({ ...v5, familiarOf: familiarBackLink(master, link) })), camp: plan.camp };
+          return item;
+        }) },
+        log: [{ id: uid(), kind: 'management', actorId: masterId, targetId: familiarId,
+          text: `Création de familier : ${familiarLinkLabel(link, familiar)}, lié à ${master.name} (${plan.spent} ${plan.label}, ${plan.before} → ${plan.after})`,
+          detail: { kind: 'create-familiar', linkId: link.id, ...creation } }, ...(draft.log || [])].slice(0, 300) }));
       return typeof result?.then === 'function' ? result.then(done => ({ ...done, ok: true, link })) : { ...result, ok: true, link };
     },
     unlinkFamiliar(masterId, linkId) {

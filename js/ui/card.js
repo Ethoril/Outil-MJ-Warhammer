@@ -11,6 +11,7 @@ import { buildRegenerationBlock, readRegenerationInputs } from './regeneration-b
 import { buildPsychologyBlock, readPsychologyInputs } from './psychology-block.js';
 import { buildSlannBlock, readSlannInputs } from './slann-block.js';
 import { buildCreatureStatesBlock, readCreatureStatesInputs } from './creature-states-block.js';
+import { buildFamiliarBlock, readFamiliarInputs } from './familiar-block.js';
 
 export function initCardUI(Store, Combat) {
   const observe = (result, label = 'Modification') => Promise.resolve(result).then(value => { if (value === false || value?.ok === false) throw refusalError(value, label); return value; }).catch(error => showToast(contextMessage(`${label} impossible`, error, 'réessayez.'), 'error'));
@@ -265,6 +266,8 @@ export function initCardUI(Store, Combat) {
     if (psychologyBlock) armDiv.after(psychologyBlock);
     const statesBlock = buildCreatureStatesBlock(tag => document.createElement(tag), p, Store.listParticipants());
     if (statesBlock) armDiv.after(statesBlock);
+    const familiarBlock = buildFamiliarBlock(tag => document.createElement(tag), p, Store.listParticipants());
+    if (familiarBlock) armDiv.after(familiarBlock);
 
     const diceContainer = div.querySelector('.dice-list');
     const myDice = Store.getDiceLines().filter(dl => dl.participantId === p.id);
@@ -370,6 +373,20 @@ export function initCardUI(Store, Combat) {
     if (e.target.matches('.btn-creature-venom')) {
       e.preventDefault();
       observe(Store.applyCreatureVenom(id, readCreatureStatesInputs(e.target.closest('.actor-creature-states')).venomTargetId), 'Venin');
+      return;
+    }
+
+    if (e.target.matches('.btn-create-familiar')) {
+      e.preventDefault();
+      const input = readFamiliarInputs(e.target.closest('.actor-familiar'));
+      if (!input.familiarId) { showToast('Création de familier : choisissez le familier.', 'error'); return; }
+      observe(Store.createFamiliar(id, input.familiarId, input), 'Création de familier');
+      return;
+    }
+
+    if (e.target.matches('.btn-unlink-familiar')) {
+      e.preventDefault();
+      observe(Store.unlinkFamiliar(id, e.target.dataset.linkId), 'Lien de familier');
       return;
     }
 

@@ -55,7 +55,7 @@ function sanitizeMagicFields(value) {
   };
   numeric(['sin'], 0, Number.MAX_SAFE_INTEGER, true);
   numeric(['ward', 'threshold', 'rangedOpponentPenaltySl'], -1000, 1000);
-  numeric(['fortune', 'fate', 'temporaryFortune', 'temporaryFate', 'remainingTempFortune', 'remainingTempFate', 'tempFortunePoints', 'tempFatePoints', 'magicTalentRank', 'casterLileathRank'], 0, 1000, true);
+  numeric(['fortune', 'fate', 'temporaryFortune', 'temporaryFate', 'remainingTempFortune', 'remainingTempFate', 'resilience', 'tempFortunePoints', 'tempFatePoints', 'magicTalentRank', 'casterLileathRank'], 0, 1000, true);
   numeric(['damageReduction', 'magicShieldBonusSl', 'bonusActions'], 0, 1000);
   // Leçons divines porte un modificateur de SL négatif source-validé. Les
   // sanctions de dégâts et les anciens effets gardent leur normalisation usuelle.
