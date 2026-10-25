@@ -15,8 +15,8 @@ Le brief F2 autorise les commits locaux et impose un arrêt à la fin de chaque 
 | Préparation | FAIT | Worktree neuf depuis main ; aucun changement hérité ; réglages LF ; `npm ci` : 3 paquets, audit npm sans vulnérabilité signalée. |
 | Repérage des 194 règles | FAIT, documentaire, `7c576e2` | Audits Luna séparés T1, T2 et T3 ; corrections après revue du principal et contrôle croisé Luna. 45 + 69 + 80 identifiants, sans omission ni doublon. Section Exécution ajoutée au plan sans changer son texte initial. |
 | F2-C | CORRIGÉ ET REVÉRIFIÉ LOCALEMENT | `734a3e2`, remplace le verdict initial invalidé par Claude; décisions MJ appliquées, nouvelle revue Luna et validation principale. Limites exactes ci-dessous. |
-| F2-A | CARACTÉRISATIONS EN COURS | Après C stabilisé `734a3e2`; aucun code A avant commit séparé de ces tests. |
-| F2-B | NON COMMENCÉ | Aucun code modifié. |
+| F2-A | FAIT `f135c65` | Initialisation et surprise, vrais parcours, revue Luna, 4 757/4 757 et navigateur verts. |
+| F2-B | CARACTÉRISATIONS EN COURS | Après A validé; aucun code B avant commit séparé des caractérisations. |
 | F2-D | EN ATTENTE T2 | Fin de T1, contre-vérification Claude et feu vert MJ requis avant T2. |
 | F2-E | EN ATTENTE T2 | Après D ; aucun code commencé. |
 | F2-N | EN ATTENTE T2 | Aucun code commencé. |
@@ -44,6 +44,17 @@ Les deux premières suites principales de correction ont passé 4 722/4 722, ava
 Assertions antérieures F2 modifiées : `tests/f2-c-weapon-skills.test.js` (1) Escrime zéro avec Base entraînée attend désormais le score réel de Base, conformément au défaut Claude n°5, en conservant retrait des Qualités et Défauts; (2) monté absent attend démonté et absence de question récurrente, conformément à la décision MJ. Le nom du premier test et le runner UI reflètent ces comportements. Aucun test de caractérisation pré-code ni test antérieur au chantier F2 n'a été modifié. Les tests nouveaux couvrent application Store, Undo/reload et les vraies générations de sorts; les premiers rouges utiles de la correction sont distingués des erreurs de fixture/import, jamais présentés comme preuve de chaque clause.
 
 Limites actuelles : le contrôle C filtre les attaques, pas les défenses/parades (limite mineure permise à consigner par Claude). Une catégorie générique sans association source reste un choix de compétence MJ, pas un mapping canonique certifié. Baliste/Catapulte peuvent rester bloquées par `precise`/`percutante`, qualités V4 déjà non validées dans la base, hors C; aucun contournement ni moteur de qualité ajouté. Ingénierie personnalisée sans portée/provenance demande sa nature au MJ. Une conjurée dépourvue de toute provenance exploitable réclame les données MJ; elle n'est pas déclarée maîtrisée à partir de son nom. Recette complète de phase non exécutée; **T1 reste à terminer par A puis B**.
+
+## Livraison A — état courant
+
+Production `f135c65`, caractérisations préalables `b25d1ac` intactes. Initiative de combat distincte de l'I historique, d10 PNJ capturé une fois, saisie PJ, BI ajouté une fois; Combat instinctif conserve deux d10 et le choix explicite, préparation legacy reprise avec provenance puis consommée. I modifiée après préparation : nouvelle paire requise, champ historique restauré; I inconnue demandée au MJ. Les égalités utilisent le vrai pipeline de Tests V5, les effets d'État et de magie, puis le choix du vainqueur; tournoi n−1 pour 3+ selon A-EGALITES-01. Surprise par camp et service canonique. Lancement/restart préparés sans mutation puis une commande annulable; reprise/reload conservent les jets. Ordre automatique résolu conservé avec renforts, retour manuel→auto et Souffle froid.
+
+- Principal après gel final : `node --test --test-concurrency=4`, **4 757/4 757**, zéro échec/ignoré, 140 174 ms; `tmp/gpt-phase-f2/a-principal-verified.log`.
+- Acceptation dédiée codeur : **148/148**; revue indépendante Luna, sources PDF et repros ciblés : aucun défaut restant vérifié, `tmp/gpt-phase-f2/REVUE_A_LUNA.md`.
+- Vrai index/main : `node tests/f2-a-initiative-surprise.browser.mjs`, sortie **0** après gel, `tmp/gpt-phase-f2/a-browser-verified.log`; bandeau/N, rencontre par deux routes, restart/reprise, égalités 2/3 et preuves, Undo/Redo/reload, retour automatique, PJ/PNJ Combat instinctif.
+- Principal : diff complet de production relu, frontières/LF/diff-check verts; aucun test hérité ni caractérisation pré-code modifié. Les deux nouveaux fichiers sont les acceptations Node et le runner navigateur.
+
+La première suite A a échoué sur un test hérité de reprise de scène (clés A false/null ajoutées à une scène ancienne); code corrigé sans modifier le test. La passe 4 755/4 755 précède les derniers raccords Combat instinctif et n'est pas la preuve finale. Le reçu courant est 4 757/4 757 ci-dessus. Limites précises : ancien `#btn-start` masqué testé par clic DOM sur son listener; démarrage visible testé par bandeau/N. Aucun exemple source concret d'Avantage au Test d'I trouvé pour éprouver de bout en bout la branche générique d'inversion; Fatigue et modificateur magique d'I réellement testés. Données d'initiative transitoires du combat, aucune nouvelle valeur durable de fiche PJ. **T1 reste ouverte jusqu'à B; T2 non commencé.**
 
 ## Validation historique de la première livraison (supersédée)
 
