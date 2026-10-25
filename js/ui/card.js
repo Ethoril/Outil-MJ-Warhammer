@@ -4,11 +4,17 @@ import { normalizeEffects, normalizeState } from '../core/effects.js';
 import { DiceLine } from '../core/models.js';
 import { renderMiniDiceLine } from './dice-line.js';
 import { showToast } from './toast.js';
-import { contextMessage } from './messages.js';
+import { contextMessage, refusalError } from './messages.js';
 import { buildParticipantReminders } from '../core/reminders.js';
+import { buildHeadsBlock, nextHeadState } from './heads-block.js';
+import { buildRegenerationBlock, readRegenerationInputs } from './regeneration-block.js';
+import { buildPsychologyBlock, readPsychologyInputs } from './psychology-block.js';
+import { buildSlannBlock, readSlannInputs } from './slann-block.js';
+import { buildCreatureStatesBlock, readCreatureStatesInputs } from './creature-states-block.js';
+import { buildFamiliarBlock, readFamiliarInputs, readFamiliarDeathInputs } from './familiar-block.js';
 
 export function initCardUI(Store, Combat) {
-  const observe = (result, label = 'Modification') => Promise.resolve(result).then(value => { if (value === false || value?.ok === false) throw value?.error || new Error(`${label} impossible.`); return value; }).catch(error => showToast(contextMessage(`${label} impossible`, error, 'réessayez.'), 'error'));
+  const observe = (result, label = 'Modification') => Promise.resolve(result).then(value => { if (value === false || value?.ok === false) throw refusalError(value, label); return value; }).catch(error => showToast(contextMessage(`${label} impossible`, error, 'réessayez.'), 'error'));
   function getP(id) {
     return Store.getCombat().participants.get(id);
   }
@@ -250,6 +256,18 @@ export function initCardUI(Store, Combat) {
 
     const remindersBlock = buildParticipantReminders(tag => document.createElement(tag), Store.getParticipantReminders?.(p.id));
     if (remindersBlock) armDiv.after(remindersBlock);
+    const headsBlock = buildHeadsBlock(tag => document.createElement(tag), p);
+    if (headsBlock) armDiv.after(headsBlock);
+    const regenerationBlock = buildRegenerationBlock(tag => document.createElement(tag), p);
+    if (regenerationBlock) armDiv.after(regenerationBlock);
+    const slannBlock = buildSlannBlock(tag => document.createElement(tag), p);
+    if (slannBlock) armDiv.after(slannBlock);
+    const psychologyBlock = buildPsychologyBlock(tag => document.createElement(tag), p, Store.listParticipants());
+    if (psychologyBlock) armDiv.after(psychologyBlock);
+    const statesBlock = buildCreatureStatesBlock(tag => document.createElement(tag), p, Store.listParticipants());
+    if (statesBlock) armDiv.after(statesBlock);
+    const familiarBlock = buildFamiliarBlock(tag => document.createElement(tag), p, Store.listParticipants());
+    if (familiarBlock) armDiv.after(familiarBlock);
 
     const diceContainer = div.querySelector('.dice-list');
     const myDice = Store.getDiceLines().filter(dl => dl.participantId === p.id);
@@ -315,6 +333,79 @@ export function initCardUI(Store, Combat) {
       const stateId = e.target.dataset.stateId;
       const nextStates = p.states.filter((state, index) => normalizeState(state, index).id !== stateId);
       observe(Store.updateParticipant(id, { states: normalizeEffects(nextStates) }), 'État');
+      return;
+    }
+
+    if (e.target.matches('.btn-regeneration')) {
+      e.preventDefault();
+      const { roll, fireWounds, fireCriticalIds } = readRegenerationInputs(e.target.closest('.actor-regeneration'));
+      if (!Number.isInteger(roll) || roll < 1 || roll > 10) { showToast('Régénération : saisissez le d10 (1 à 10).', 'error'); return; }
+      observe(Store.applyRegeneration(id, roll, { fireWounds, fireCriticalIds }), 'Régénération');
+      return;
+    }
+
+    if (e.target.matches('.btn-creature-psychology')) {
+      e.preventDefault();
+      const { targetId } = readPsychologyInputs(e.target.closest('.actor-psychology'));
+      observe(Store.applyCreaturePsychology(id, e.target.dataset.psychology, { targetId }), e.target.dataset.psychology === 'fear' ? 'Peur' : 'Terreur');
+      return;
+    }
+
+    if (e.target.matches('.btn-slann-aboard')) {
+      e.preventDefault();
+      observe(Store.setSlannAboard(id, e.target.dataset.aboard !== 'true'), 'Palanquin');
+      return;
+    }
+
+    if (e.target.matches('.btn-slann-contemplation')) {
+      e.preventDefault();
+      const { sl, success } = readSlannInputs(e.target.closest('.actor-slann'));
+      observe(Store.applySlannContemplation(id, sl, { success }), 'Contemplation');
+      return;
+    }
+
+    if (e.target.matches('.btn-swarm-end-round')) {
+      e.preventDefault();
+      observe(Store.applySwarmEndOfRound(id, readCreatureStatesInputs(e.target.closest('.actor-creature-states')).engagedIds), 'Nuée');
+      return;
+    }
+
+    if (e.target.matches('.btn-creature-venom')) {
+      e.preventDefault();
+      observe(Store.applyCreatureVenom(id, readCreatureStatesInputs(e.target.closest('.actor-creature-states')).venomTargetId), 'Venin');
+      return;
+    }
+
+    if (e.target.matches('.btn-create-familiar')) {
+      e.preventDefault();
+      const input = readFamiliarInputs(e.target.closest('.actor-familiar'));
+      if (!input.familiarId) { showToast('Création de familier : choisissez le familier.', 'error'); return; }
+      observe(Store.createFamiliar(id, input.familiarId, input), 'Création de familier');
+      return;
+    }
+
+    if (e.target.matches('.btn-familiar-range')) {
+      e.preventDefault();
+      observe(Store.setFamiliarRange(id, e.target.dataset.linkId, e.target.dataset.inRange !== 'true'), 'Portée du familier');
+      return;
+    }
+
+    if (e.target.matches('.btn-familiar-death')) {
+      e.preventDefault();
+      const input = readFamiliarDeathInputs(e.target.closest('.actor-familiar'));
+      observe(Store.resolveFamiliarDeath(id, e.target.dataset.familiarId, input), 'Mort du familier');
+      return;
+    }
+
+    if (e.target.matches('.btn-unlink-familiar')) {
+      e.preventDefault();
+      observe(Store.unlinkFamiliar(id, e.target.dataset.linkId), 'Lien de familier');
+      return;
+    }
+
+    if (e.target.matches('.btn-head')) {
+      e.preventDefault();
+      observe(Store.setHeadState(id, e.target.dataset.headId, nextHeadState(e.target.dataset.state)), 'Tête');
       return;
     }
 

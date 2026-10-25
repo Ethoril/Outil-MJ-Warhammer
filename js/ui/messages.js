@@ -50,3 +50,10 @@ export function contextMessage(prefix, error, fallback) {
   const message = userMessage(error, fallback);
   return `${prefix} : ${message.charAt(0).toLocaleLowerCase('fr-FR')}${message.slice(1)}`;
 }
+
+/** Erreur à montrer pour un refus de commande `{ ok:false, message }` (la raison du refus), ou pour `false`. */
+export function refusalError(value, label = 'Modification') {
+  if (value?.error) return value.error;
+  if (typeof value?.message === 'string' && value.message.trim()) return userError(value.message.trim());
+  return new Error(`${label} impossible.`);
+}

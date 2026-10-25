@@ -2,12 +2,15 @@ import {enforceMagicTestRestrictions,activeMagicTalent} from './v5-magic-talents
 import {applyScytheOfShyishRules} from './v5-magic-arbitrations.js';
 import {transformationRestrictions} from './v5-magic-combat.js';
 import {getReferenceCatalogue} from './reference-catalog.js';
-import {familiarSupport} from './familiars.js';
+import {familiarSupport,withCompanionTalents} from './familiars.js';
 import {magicSkillModifiers,magicAdverseModifiers,effectiveSkillScore,magicSkillReplacement,familiarSkillSupport,magicTalentRank} from './v5-magic-talents.js';
 /** Common V5 combat context; session resources live in extensions.v5. */
 import {situationPlan} from './v5-talent-situations.js';
 import {contactWeapon} from './v5-talent-contact.js';
 import {psychologyTestRules} from './v5-talent-psychology.js';
+import {senseTestRules} from './creature-senses.js';
+import {movementTestRules} from './creature-movement.js';
+import {outnumberTestRules} from './outnumbering.js';
 import {unavailableDisarmedWeapon} from './v5-talent-replacements.js';
 import {warLeaderSubstitution} from './v5-talent-situations.js';
 import { pendingCrewSkill,sourceActive } from './v5-talent-actions.js';
@@ -104,7 +107,8 @@ export function buildCombatTest(normalized, role = 'actor') {
   const ignoreConditions = actor.extensions?.v5?.specialStates?.ignoreConditionPenalties === true;
   const talentRole=defending?'defender':['attack','attaque'].includes(action.type)?'attacker':'actor';
   const contact=contactWeapon(normalized,actor,action,settings);action=contact.action;
-  const talentModifiers=previewV5TalentTestModifiers(actor,{action,settings,kind,role:talentRole,opponent:target});
+  // Talents donnés par les Traits de compagnon d'un familier animal à portée : comptés comme ceux du maître pour ce Test.
+  const talentModifiers=previewV5TalentTestModifiers(withCompanionTalents(actor,normalized.v5State?.participants||[]),{action,settings,kind,role:talentRole,opponent:target});
   const unresolved = [...contact.unresolved], restrictions = [];if(unavailableDisarmedWeapon(actor,action))restrictions.push('Cette arme a été désarmée : la récupérer avant de l’employer.');
   if(!defending && target?.extensions?.v5?.specialStates?.tinySwarmCannotAttack && /nu[eé]e|swarm/i.test((actor.traits || []).join(' '))){
     const size=Number(settings.actorSize ?? normalized.attackContext?.actorSize);
@@ -122,6 +126,13 @@ export function buildCombatTest(normalized, role = 'actor') {
     ...(target&&!defending?magicAdverseModifiers(target,skillLabel):[]),...(defending&&kind==='ranged'?magicSkillModifiers(actor,'Défense contre Tir'):[]),...(settings.slModifiers || [])];
   const suffused=magicSkillReplacement(actor,skill?.nom || action.label || action.note || '',settings.context);
   action={...action,base:suffused?.score ?? (action.extensions?.v5?.scoreIsCurrent ? action.base : effectiveSkillScore(actor,action.base,action.attr || skill?.carac))};
+  // Traits de sens (Caméléon, Perturbant, Furtif, Pisteur) : appliqués quand le contexte les détermine, sinon rappel de la carte.
+  const senses=senseTestRules({actor,opponent:target,participants:normalized.v5State?.participants||[],skillLabel,kind,defending,context:settings.context||{},currentBase:Number(action.base)||0});
+  if(senses.base)action={...action,base:senses.base.score};
+  modifiers.push(...senses.modifiers);
+  modifiers.push(...movementTestRules({actor,skillLabel,kind,defending,context:settings.context||{}}));
+  // Surnombre et Encerclement (L06 p. 167, BR-16) : le Test d'attaque de mêlée seulement, sur les engagés cochés par le MJ.
+  modifiers.push(...outnumberTestRules({actor,target,participants:normalized.v5State?.participants||[],kind,defending,action,context:settings.context||{}}));
   if(settings.context?.blackpowderBrokenTest===true&&talentModifiers.context.skillId==='skill-43_61_6c_6d_65-base')modifiers.push({id:'quality:blackpowder-calm',label:'Calme Accessible contre À Poudre noire',amount:2});
   // Attraction des flèches : les tireurs adverses gagnent des DR contre la cible.
   if(!defending && kind==='ranged' && Number(target?.extensions?.v5?.specialStates?.incomingRangedBonusSl))modifiers.push({id:'spell-ranged-attraction',label:'Attraction des flèches',amount:Number(target.extensions.v5.specialStates.incomingRangedBonusSl)});
@@ -252,7 +263,7 @@ export function buildCombatTest(normalized, role = 'actor') {
   }
   if(talentModifiers.forceSuccess||!defending&&normalized.noTestAction){test=structuredClone(test);const first=test.options[0];first.result={...first.result,roll:1,success:true,sl:0,critical:false,fumble:false,zeroOutcome:'marginalSuccess',automatic:true,noTest:!defending&&normalized.noTestAction===true,details:{...first.result.details,doubled:false}};test.options=[{...first,id:'keep'}];test.choiceRequired=false;test.forcedInversion=false;}
   if(frenzy&&!defending&&kind==='melee'&&['attack','attaque'].includes(action.type)){const enemies=(normalized.v5State?.participants||[]).filter(p=>p.id!==actor.id&&p.camp!==actor.camp&&Number(p.hp)>0&&p.zone==='active'),nearest=context.nearestEnemyId||(enemies.length===1?enemies[0].id:null);if(!nearest||!enemies.some(p=>p.id===nearest)||normalized.target?.id!==nearest)restrictions.push('Frénésie : désigner et attaquer l’ennemi le plus proche.');}
-  const talentSL = previewV5TalentSLChoices(actor, test, { action, settings, kind, role: talentRole, opponent: target });
+  const talentSL = previewV5TalentSLChoices(withCompanionTalents(actor,normalized.v5State?.participants||[]), test, { action, settings, kind, role: talentRole, opponent: target });
   test = talentSL.test; unresolved.push(...talentSL.unresolved);
   test={...test,options:test.options.map(o=>({...o,result:enforceMagicTestRestrictions(actor,o.result,{magical:false})}))};
   return { test, crewSkill,talentPlans: [talentModifiers.plan, ...talentSL.plans,...psychology.plans,...contact.plans,...(contactTalent?[contactTalent]:[]),...(dualWhirlwind?[dualWhirlwind]:[]),...(warLeader?[{proposals:[{origins:[warLeader.source]}]}]:[])], talentSLChoices: talentSL.choiceDescriptors, kind, penalty: appliedPenalty, penaltyStates: [...relevant].filter(([, value]) => value).map(([key]) => key),

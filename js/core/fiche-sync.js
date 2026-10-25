@@ -135,11 +135,34 @@ export function ficheSnapshot(charId, fiche, metadata = {}) {
     equipment: equipmentResult.items, spells, prayers, coverage, warnings };
   // `chance` is the fiche's current resource; `destin` is its maximum.
   // Empty/missing/invalid values do not authorize a resource initialization.
-  if (own(raw, 'chance') && ((typeof raw.chance === 'string' && /^\d+$/.test(raw.chance)) || typeof raw.chance === 'number') && Number.isSafeInteger(Number(raw.chance)) && Number(raw.chance) >= 0) {
-    snapshot.resources = { fortune: Number(raw.chance) };
-  }
+  const count = key => own(raw, key) && ((typeof raw[key] === 'string' && /^\d+$/.test(raw[key])) || typeof raw[key] === 'number') && Number.isSafeInteger(Number(raw[key])) && Number(raw[key]) >= 0 ? Number(raw[key]) : null;
+  if (count('chance') !== null) snapshot.resources = { fortune: count('chance') };
+  // B10b : Destin et Résilience de la fiche, lus à la synchronisation (voir `importFicheDurables`).
+  const durables = {};
+  if (count('destin') !== null) durables.fate = count('destin');
+  if (count('resilience') !== null) durables.resilience = count('resilience');
+  if (Object.keys(durables).length) snapshot.durables = durables;
   source.fingerprint = ficheFingerprint(snapshot);
   return snapshot;
+}
+
+/**
+ * B10b : Destin et Résilience de la fiche vers `extensions.v5.fate` (canonique ; le miroir `fate` n'est pas écrit) et `extensions.v5.resilience`.
+ * La valeur de la fiche s'écrit quand l'outil n'en a pas encore ou quand la fiche a changé par rapport à une valeur précédente connue ; sinon un point débité dans l'outil (création de familier) n'est pas rendu par une relecture.
+ */
+function importFicheDurables(subject, snapshot, previousSnapshot) {
+  const wanted = snapshot?.durables || {};
+  const previous = previousSnapshot?.durables || {};
+  const v5 = { ...(subject.extensions?.v5 || {}) };
+  for (const key of ['fate', 'resilience']) {
+    if (!Number.isSafeInteger(wanted[key])) continue;
+    const known = v5[key] ?? (key === 'fate' ? subject.fate : undefined);
+    // Sans valeur précédente connue (snapshot antérieur à B10b), la valeur de l'outil n'est pas écrasée ; le snapshot garde celle de la fiche.
+    const changed = Number.isSafeInteger(previous[key]) && previous[key] !== wanted[key];
+    if (known === undefined || known === null || known === '' || changed) v5[key] = wanted[key];
+  }
+  if (!Object.keys(v5).some(key => v5[key] !== subject.extensions?.v5?.[key])) return subject;
+  return { ...subject, extensions: { ...(subject.extensions || {}), v5 } };
 }
 
 // Premier mot significatif d'un nom : articles, particules et mots de moins de 3 lettres sont écartés.
@@ -369,6 +392,7 @@ export function planProfileSync(snapshot, profile, choices = {}) {
   const health = planHealthSync(profile, usableMax(snapshot), { template: true });
   Object.assign(updated, maxPatch(profile, usableMax(snapshot), { template: true }));
   updated.extensions = { ...(profile.extensions || {}), ficheId: snapshot.charId };
+  Object.assign(updated, importFicheDurables(updated, snapshot, profile.ficheSnapshot));
   // Keep latest source status, but each excluded collection retains its previous playable data.
   updated.ficheSnapshot = cloneValue(snapshot);
   const warnings = cloneValue(snapshot.warnings || []);
@@ -478,7 +502,7 @@ export function applyFicheSync(draft, entries) {
         }
         for(const key of ['maxHp','hp','skills','talents','equipment','actions','armorLocations','armor','protection','M','movement']){if(subject[key]!==undefined)output[key]=cloneValue(subject[key]);else delete output[key];}
       }
-      return output;
+      return importFicheDurables(output, entry.snapshot, subject.ficheSnapshot);
     };
     const touchedIds = new Set();
     if (next.combat) {
@@ -489,7 +513,9 @@ export function applyFicheSync(draft, entries) {
     }
     // ActiveScene is a mirror of combat. Copy the already-updated participant to avoid a second delta.
     const combatById = new Map((next.combat?.participants || []).map(item => [item.id, item]));
-    const syncScene = scene => scene ? { ...scene, participants: (scene.participants || []).map(subject => subject.profileId !== profile.id ? subject : touchedIds.has(subject.id) ? cloneValue(combatById.get(subject.id)) : copyFields(subject)) } : scene;
+    // Le miroir `fate` n'existe que sur les participants du combat (modèle) : la copie de scène garde la forme de la scène.
+    const sceneCopy = subject => { const copy = cloneValue(combatById.get(subject.id)); if (!own(subject, 'fate')) delete copy.fate; return copy; };
+    const syncScene = scene => scene ? { ...scene, participants: (scene.participants || []).map(subject => subject.profileId !== profile.id ? subject : touchedIds.has(subject.id) ? sceneCopy(subject) : copyFields(subject)) } : scene;
     if (next.activeScene) next.activeScene = syncScene(next.activeScene);
     if (Array.isArray(next.suspendedScenes)) next.suspendedScenes = next.suspendedScenes.map(scene => ({ ...scene, participants: (scene.participants || []).map(subject => subject.profileId === profile.id ? copyFields(subject) : subject) }));
     if (Array.isArray(next.diceLines)) {

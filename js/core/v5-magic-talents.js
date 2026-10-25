@@ -5,6 +5,7 @@ import { getReferenceCatalogue } from './reference-catalog.js';
 import { previewV5Test, selectV5Test, normalizeV5Roll } from './v5-roll.js';
 import { getBurnoutStatus, consumeCadaiRune, prepareCadaiRerolls } from './v5-magic-high.js';
 import { applyPrayerSLCaps,getPrayerSLModifiers } from './v5-divine-prayer-caps.js';
+import { mishapSeverity, groundCastModifier, slannAboard } from './slann.js';
 
 const ruleError=message=>Object.assign(new Error(message),{userFacing:true});
 export function magicTalentRank(actor, id, specialization = null) {
@@ -46,7 +47,9 @@ export function assertMagicTurn(actor, options={}) {
 export function prepareMiscastOptions(actor, options = {}) {
   const blocked = actor?.extensions?.v5?.specialStates?.forbidMitigation;
   return { ...options, instinctiveDiction: !blocked && Boolean(options.instinctiveDiction) && magicTalentRank(actor, 'instinctive-diction') > 0,
-    attunementRank: blocked ? 0 : magicTalentRank(actor, 'aethyric-attunement') };
+    attunementRank: blocked ? 0 : magicTalentRank(actor, 'aethyric-attunement'),
+    // Maître des incidents (Slann) : un incident Majeur devient Mineur, sauf lancement à travers un autre mage (`viaTelepathy`).
+    slannMishapMaster: mishapSeverity(actor, 'major', { viaTelepathy: options.viaTelepathy === true }).lowered };
 }
 export function prepareMagicOptions(actor, kind, options={}, spell = null) {
   if (['casting','channelling'].includes(kind)) assertMagicTurn(actor, options);
@@ -74,6 +77,7 @@ export function prepareMagicOptions(actor, kind, options={}, spell = null) {
   if(flags?.clarityOfThought && mental)for(let i=slModifiers.length-1;i>=0;i--)if(slModifiers[i].amount<0 && /psychology|mental.?mutation|mutation.?mental/i.test(slModifiers[i].id))slModifiers.splice(i,1);
   const penalty=Math.max(flags?.clarityOfThought && mental?0:levels.get('sonne')||0,ignoreFatigue?0:levels.get('extenue')||0,levels.get('empoisonne')||0);
   if(penalty)slModifiers.push({id:'magic-condition-penalty',label:'Pénalité d’État',amount:-penalty});
+  if(['casting','channelling'].includes(kind)){const ground=groundCastModifier(actor,{aboard:slannAboard(actor)});if(ground.available && ground.modifier)slModifiers.push({id:'slann-ground',label:'Slann au sol',amount:ground.modifier});}
   if(Number(activeMagicTalent(actor,'sanctuary-of-the-mind')?.magicTalentRank)>=3)for(const modifier of slModifiers)if(modifier.id==='yenlui' && modifier.amount<0)modifier.amount=0;
   const lore=String(spell?.wind || spell?.type || options.wind || options.lore || '').toLowerCase();
   for(const effect of actor.extensions?.v5?.spellEffects || []) if(effect.loreTestBonus && ['casting','channelling'].includes(kind) && (lore===effect.loreTestBonus.lore || effect.loreTestBonus.lore==='fire' && /aqshy|feu/.test(lore))) slModifiers.push({id:'spell-lore-bonus',label:effect.spellName,amount:effect.loreTestBonus.amount});

@@ -98,7 +98,7 @@ export function planCreatureSize(participant, options = {}) {
   return { ...plan, receipt: { ability: LABEL, size: size.label, damage: plan.damage.kind, outnumberWeight: plan.outnumberWeight, blocked: plan.unresolved.slice() } };
 }
 
-/** Rappel de Taille d'un participant dont la catégorie est imprimée (affichage de fiche). */
+/** Rappel de Taille d'un participant de catégorie imprimée Grande ou plus (Moyenne et Petite : la note n'a aucun effet). */
 export function sizeReminders(participant) {
-  return hasExplicitSize(participant) ? [`${LABEL} : ${NOTE}`] : [];
+  return hasExplicitSize(participant) && creatureSizeOf(participant).rank >= SIZE_RANKS.large ? [`${LABEL} : ${NOTE}`] : [];
 }

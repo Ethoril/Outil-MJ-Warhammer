@@ -62,7 +62,7 @@ export function previewSmallActivation(n){
 export function terrorAction(subject){
   if(!(subject.states||[]).some(s=>s.key==='terror-of-talent'&&activeSource(s)))return null;
   const skill=getReferenceCatalogue().skills.find(s=>s.nom==='Calme');
-  return {id:'activate:overcome-terror',note:'Résoudre la Terreur de taille',type:'skill',attr:'FM',base:subject.skills?.find(s=>s.id===skill.id&&s.status==='resolved')?.total??subject.caracs?.FM,mod:0,qualities:[],extensions:{fiche:{skillId:skill.id},v5:{kind:'test',initialContext:{talentAction:'overcome-terror',psychologyKind:'terror'}}}};
+  return {id:'activate:overcome-terror',note:'Résoudre la Terreur',type:'skill',attr:'FM',base:subject.skills?.find(s=>s.id===skill.id&&s.status==='resolved')?.total??subject.caracs?.FM,mod:0,qualities:[],extensions:{fiche:{skillId:skill.id},v5:{kind:'test',initialContext:{talentAction:'overcome-terror',psychologyKind:'terror'}}}};
 }
 export function previewSmallTerror(n,test){
   if(n.v5.context?.talentAction!=='overcome-terror')return null;
@@ -73,7 +73,9 @@ export function previewSmallTerror(n,test){
   if(effect&&terrors.some(s=>s.rating>effect.rating))unresolved.push('Terreur : commencer par le degré le plus élevé.');
   if(!unresolved.length){
     const affected=terrors.filter(s=>s.rating<=effect.rating);plan.proposals.push(...affected.map(s=>({origins:[s.source]})));
-    const states=affected.flatMap(s=>[{...s,key:'terror-resolved',name:'Terreur de taille résolue'}, {...s,id:s.id+':fear',key:'fear-of-talent',name:'Peur de taille ('+s.rating+')',mode:'sl',successes:0,restriction:'cannotGainMomentum'}]);
+    // Terreur d'un Trait de créature (B4) : pas de mention « de taille » dans le nom des effets qui suivent.
+    const size=s=>s.source?.psychologySourceKind==='trait'?'':' de taille';
+    const states=affected.flatMap(s=>[{...s,key:'terror-resolved',name:'Terreur'+size(s)+' résolue'}, {...s,id:s.id+':fear',key:'fear-of-talent',name:'Peur'+size(s)+' ('+s.rating+')',mode:'sl',successes:0,restriction:'cannotGainMomentum'}]);
     if(test.success)states.push({id:n.resolutionId+':terror-immunity',key:'terror-immunity',name:'Terreur surmontée pour cette rencontre',kind:'talent-pending',level:1,source:effect.source,encounterId:n.v5Clock.encounterId});
     else conditions.push({key:'brise',name:'Brisé',level:effect.rating+Math.max(0,-test.sl-1),source:{kind:'talent',talentId:effect.source.talentId,talentOrigins:[effect.source]}});
     changes.push({participantId:n.actor.id,removeIds:affected.map(s=>s.id),add:states});

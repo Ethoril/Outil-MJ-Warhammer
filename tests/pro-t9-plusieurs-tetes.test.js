@@ -74,6 +74,8 @@ test('T9 reçu et rappels', () => {
   const plan = planManyHeads(hydra(), undefined);
   assert.equal(plan.receipt.ability, 'Plusieurs têtes');
   assert.deepEqual(plan.receipt.freeAttacks, ['Morsure ×5']);
-  assert.equal(manyHeadsReminders(hydra()).length, 1);
+  // B2 : le rappel dit l'état des têtes, les attaques gratuites, la Perception, puis la règle des Blessures critiques.
+  assert.match(manyHeadsReminders(hydra())[0], /5 tête\(s\) valide\(s\) sur 5/);
+  assert.equal(manyHeadsReminders(hydra()).length, 4);
   assert.deepEqual(manyHeadsReminders(hydra(['Bite'])), []);
 });

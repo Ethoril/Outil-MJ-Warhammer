@@ -9,6 +9,7 @@ import { previewV5ActionCosts, prepareV5ActionState, commitV5ActionCosts } from 
 import { projectV5Resources, commitV5Resources } from './v5-resources.js';
 import { effectiveOrder } from './turn-order.js';
 import { planNaturalAttack } from './creature-combat.js';
+import { planManyHeads, headRegistryOf, hasManyHeads, headAttackKeyOf } from './creature-heads.js';
 import { defaultResolutionId, previewResolution } from './resolution.js';
 import { FREE_REROLL_SOURCE, freeRerollLayers, consumeFreeReroll, reverseDiceLayers, consumeReverseDice } from './v5-divine-effects-conditions.js';
 import { slExtremeLayers, consumeSlExtreme } from './v5-divine-effects-tests.js';
@@ -70,6 +71,19 @@ export function buildV5StoreActionInput(envelope, raw = {}) {
     if(natural.unresolved.some(r=>/Trait absent|déjà/.test(r)))throw new TypeError(natural.unresolved.join(' '));
     for(const cost of natural.costs)if(!costs.some(c=>c.resource===cost.resource))costs.push({id:'creature:'+context.naturalAttack+':'+cost.resource,...cost});
     if(natural.quota)quotas.push(natural.quota);
+  }
+  // Plusieurs têtes : au plus une attaque gratuite (Morsure, Cornes, Langue) par tête valide et par Tour, qu'elle soit déclarée comme
+  // attaque naturelle ou portée par une action gratuite du profil (« Bite », freeAttack).
+  if(hasManyHeads(actor)){
+    const attackKey=context.naturalAttack||(supplied.action?.extensions?.v5?.freeAttack?headAttackKeyOf(supplied.action.name):null);
+    const headsPlan=attackKey?planManyHeads(actor,headRegistryOf(actor)):null;
+    // Nombre de têtes absent ou registre différent : le plafond par tête ne peut pas être appliqué, on le dit au lieu de le sauter.
+    if(headsPlan?.unresolved.length)throw new TypeError(headsPlan.unresolved.join(' '));
+    const perHead=headsPlan?.freeAttacks.find(entry=>entry.key===attackKey);
+    if(perHead){
+      if(perHead.count<1)throw new TypeError('Plusieurs têtes : aucune tête valide pour cette attaque.');
+      quotas.push({id:'creature:heads:'+perHead.key,scope:'turn',maximum:perHead.count});
+    }
   }
   // Attaques multiples d'un profil de bestiaire (« 2 Claws », « 8 × Tentacles ») : les attaques gratuites partagent un quota par Tour,
   // sans Élan ; Tentacules : toutes gratuites (quota commun avec l'attaque naturelle), autre multiplicateur : toutes sauf la première.

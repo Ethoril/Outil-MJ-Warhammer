@@ -1,6 +1,8 @@
 import {createDivinePanel} from './v5-divine-panel.js';
 import {createV5BrokenEscapePanel,isBrokenActor} from './v5-broken-escape-panel.js';
 import {beastFormRestriction} from '../core/v5-magic-arbitrations.js';
+import { magicActionsFor } from '../core/creature-magic.js';
+import { familiarOfOf, FAMILIAR_HEALING_SOURCES } from '../core/familiars.js';
 /**
  * Vue de séance E09.
  *
@@ -15,6 +17,7 @@ import { openCampaignTimeDialog } from './v5-campaign-time-dialog.js';
 import { isMiscastConditionLocked } from '../core/v5-magic-miscasts.js';
 import { recoveryMethodsFor } from './v5-effect-dialog.js';
 import { hasMomentum, inferV5Kind } from '../core/v5-combat-rules.js';
+import { withoutOutnumberContext } from '../core/outnumbering.js';
 import { equipmentAttackContext, locationProtection } from '../core/equipment.js';
 import { d100 } from '../core/dice.js';
 import { inferActionType, previewHpLoss, ResolutionError } from '../core/resolution.js';
@@ -290,6 +293,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     lastFocusAction: null,
     actionBusy: false,
     hpAmounts: {},
+    healSources: {},
     stateForm: null,
     // Résolution draft: survives every Bus re-render (no keystroke lost).
     resolution: emptyResolution(null)
@@ -397,17 +401,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
   function actorActions(participant) {
     if (!participant) return [];
     const lines = typeof Store.getDiceLines === 'function' ? Store.getDiceLines().filter(line => line.participantId === participant.id) : [];
-    const isMagicUser = Boolean(
-      (participant.spells && participant.spells.length > 0) ||
-      (participant.skills || []).some(s => /focalisation|channelling|magick/i.test(s.name || s.nom || '')) ||
-      participant.extensions?.v5?.channelling ||
-      participant.extensions?.v5?.magic
-    );
-    const magicActions = isMagicUser ? [
-      ...(!beastFormRestriction(participant,'channel') ? [{ id: 'v5-magic:channelling', note: 'Focalisation V5', type: 'channelling', attr: 'FM', base: Number(participant.caracs?.FM) || 50, mod: 0, qualities: [] }] : []),
-      { id: 'v5-magic:dispel', note: 'Dissipation persistante V5', type: 'dispel', attr: 'Int', base: Number(participant.caracs?.Int) || 50, mod: 0, qualities: [] },
-      ...(!beastFormRestriction(participant,'cast') ? [{ id: 'v5-magic:cast', note: 'Incantation V5', type: 'cast', attr: 'Int', base: Number(participant.caracs?.Int) || 50, mod: 0, qualities: [] }] : [])
-    ] : [];
+    const magicActions = magicActionsFor(participant, { channel: !beastFormRestriction(participant, 'channel'), cast: !beastFormRestriction(participant, 'cast') });
     // Équipement lâché sous forme animale : ni armes ni attaques du lanceur, seulement celles de la créature.
     const transformed = Boolean(participant.extensions?.v5?.beastForm);
     const ownActions = ((participant.actions || []).length ? participant.actions : lines).filter(action => !transformed || (!['attack', 'attaque'].includes(action.type) && !action.extensions?.fiche?.equipmentId));
@@ -468,6 +462,9 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       target = groups.adversaries[0] || others[0] || (type === 'cast' ? actor : null);
     }
     if (draft.preview && !draft.preview.v5MagicKind && (draft.preview.targetId ?? draft.preview.input?.targetId ?? null) !== (target?.id ?? null)) { draft.preview = null; resetCritical(draft); }
+    // Les engagés cochés valent pour la cible où ils ont été saisis : une cible qui change sans passer par un choix les périme.
+    if (draft.outnumberTargetId && draft.outnumberTargetId !== (target?.id ?? null) && draft.v5Context) draft.v5Context = withoutOutnumberContext(draft.v5Context);
+    draft.outnumberTargetId = target?.id ?? null;
     const defense = ['attack','opposition'].includes(type) && target ? defenseChoice(target, type) : null;
     if (defense) {
       // Valeur pré-remplie pour une cible, une option et sa valeur : une autre combinaison (jet disparu,
@@ -702,6 +699,8 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     return reminders;
   }
 
+  const isHomunculusParticipant = participant => familiarOfOf(participant)?.system === 'homunculus';
+
   function renderStateForm(participant) {
     const form = node('div', 'workspace-state-form');
     form.setAttribute('role', 'group');
@@ -732,6 +731,13 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     }
     const author=readParticipants(Store).find(item=>item.id===readCombat(Store).currentActorId)||participant;
     expirationFields.append(node('p','workspace-muted',`Auteur : ${author.name} · Cible : ${participant.name}`));
+    // Un homoncule ne subit Hémorragique, Exténué, Empoisonné ou une maladie que d'une source magique.
+    const magical = document.createElement('input');
+    magical.type = 'checkbox'; magical.checked = draft.magical === true;
+    magical.dataset.focusKey = 'state-form-magical';
+    magical.addEventListener('change', () => { draft.magical = magical.checked; });
+    const magicalLabel = node('label', 'workspace-type', 'Source magique ');
+    magicalLabel.appendChild(magical);
     const add = button('Ajouter', 'workspace-secondary', { 'data-focus-key': 'state-form-add' });
     add.dataset.workspaceAction = 'add-state';
     add.dataset.actorId = participant.id;
@@ -742,7 +748,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       alert.setAttribute('role', 'alert');
       form.appendChild(alert);
     }
-    form.append(name, level, expiry, expirationFields, add, cancel);
+    form.append(name, level, expiry, expirationFields, ...(isHomunculusParticipant(participant) ? [magicalLabel] : []), add, cancel);
     return form;
   }
 
@@ -815,6 +821,17 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     });
     labelControls();
     hpControls.append(minus, quantity, plus);
+    // Un homoncule ne guérit que par guérison naturelle ou par la magie : la source du soin se choisit avant « + ».
+    if (isHomunculusParticipant(participant)) {
+      const source = document.createElement('select');
+      source.setAttribute('aria-label', `Source du soin pour ${participant.name}`);
+      source.dataset.focusKey = `hp-source-${participant.id}`;
+      source.append(new Option('Source du soin…', ''));
+      FAMILIAR_HEALING_SOURCES.forEach(row => source.append(new Option(row.label, row.kind)));
+      source.value = state.healSources[participant.id] || '';
+      source.addEventListener('change', () => { state.healSources[participant.id] = source.value; });
+      hpControls.insertBefore(source, plus);
+    }
     sheet.appendChild(hpControls);
 
     const caracs = participant.caracs || {};
@@ -1004,6 +1021,8 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         draft.defenseKind = null; draft.defenseSlModifier = null;
         draft.defenseAdvantages = 0; draft.defenseDisadvantages = 0; draft.defenseContext = {};
         draft.protectionContext = {};
+        // Les engagés cochés valaient pour l'ancienne cible.
+        if (draft.v5Context) draft.v5Context = withoutOutnumberContext(draft.v5Context);
         draft.magicTargetIds = patch.targetId && patch.targetId !== 'none' ? [patch.targetId] : [];
       }
       const actionChanged = 'actionKey' in patch && patch.actionKey !== draft.actionKey;
@@ -1414,7 +1433,9 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
             if ((shown ?? option.base) == null || shown === '' || !Number.isInteger(Number(shown ?? option.base))) throw userError(`Précisez le score de défense de ${target.name} avant la comparaison.`);
             input.defense = { extensions:option.extensions,attr:option.attr,roll: defenseRoll, base: (shown ?? option.base) ?? 0, mod: option.mod || 0, qualities: option.qualities || [], label: option.statLabel, v5: { ...defenseV5Input({ ...context, defense: { option } }, target.id === context.target?.id ? draft : { ...draft, defenseKind: null, defenseSlModifier: null, defenseAdvantages: 0, defenseDisadvantages: 0, defenseContext: {} }), choice: null } };
           }
-          input.v5 = { ...v5Input(context, draft), targetSize: target.id === context.target?.id ? draft.targetSize : null, choice: null };
+          // Le surnombre saisi ne vaut que pour la cible sélectionnée.
+          const base = v5Input(context, draft);
+          input.v5 = { ...base, ...(target.id === context.target?.id ? {} : { context: withoutOutnumberContext(base.context) }), targetSize: target.id === context.target?.id ? draft.targetSize : null, choice: null };
           return { targetId: target.id, name: target.name, hp: target.hp, preview: Store.previewResolution(input) };
         });
       } catch (error) {
@@ -1746,10 +1767,10 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     state.lastFocusAction = target?.dataset.workspaceAction || null;
   }
 
-  function updateStates(participantId, next, focusKey, acquire = false) {
+  function updateStates(participantId, next, focusKey, acquire = false, extra = {}) {
     const operation = acquire && callbacks.acquireStates ? callbacks.acquireStates : callbacks.setStates;
     const states = acquire && !callbacks.acquireStates ? [...normalizeEffects(readParticipants(Store).find(item => item.id === participantId)?.states), ...next] : next;
-    return Promise.resolve(operation(participantId, states))
+    return Promise.resolve(operation(participantId, states, extra))
       .then(result => { if(result?.status!=='cancelled') state.stateForm = null; render(focusKey); })
       .catch(error => {
         if (state.stateForm) state.stateForm.error = userMessage(error, 'État non enregistré : réessayez.');
@@ -1829,7 +1850,13 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       }
       case 'edit-fortune': callbacks.editFortune?.(participantId); break;
       case 'toggle-momentum': if (participant) Promise.resolve(callbacks.setMomentum?.(participantId, !hasMomentum(participant))).catch(error => { state.resolution.error = { field: 'general', message: userMessage(error, 'Élan non enregistré : réessayez.') }; render(); }); break;
-      case 'adjust-hp': callbacks.adjustHp?.({ participantId, delta: Number(target.dataset.hpDelta) }); break;
+      case 'adjust-hp': {
+        const delta = Number(target.dataset.hpDelta);
+        const healSource = delta > 0 && isHomunculusParticipant(participant) && state.healSources[participantId] ? { kind: state.healSources[participantId] } : null;
+        // Le refus se lit même sans panneau de résolution ouvert : toast d'erreur (import différé : toast.js lit le DOM au chargement).
+        Promise.resolve(callbacks.adjustHp?.({ participantId, delta, ...(healSource ? { source: healSource } : {}) })).catch(error => import('./toast.js').then(({ showToast }) => showToast(userMessage(error, 'PV non ajustés : réessayez.'), 'error')));
+        break;
+      }
       case 'enter-participant': callbacks.enterParticipant?.(participantId); break;
       case 'add-profile-to-combat': callbacks.addProfileToCombat?.(target.dataset.profileId); break;
       case 'open-state-form':
@@ -1855,7 +1882,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
           const expiry={phase:form.expiryPhase,round,...(form.expiryPhase!=='endOfRound'?{turn:1,actorId:form.expiryActorId||participantId}:{})};
           added=createV5TimedEffect(added,{authorId:readCombat(Store).currentActorId||participantId,targetId:participantId,expiry});
         }
-        updateStates(participantId, [added], `state-add-${participantId}`, true);
+        updateStates(participantId, [added], `state-add-${participantId}`, true, { magical: form.magical === true });
         break;
       }
       case 'heal-critical': {

@@ -45,7 +45,7 @@ export function validateFamiliarLink(master, familiar, link) {
   if (owner && owner.masterId) return refuse('already-linked', owner.masterId === master.id ? 'Ce familier est déjà lié à ce maître.' : 'Ce familier est déjà lié à un autre maître.');
   if (familiarOfOf(master)) return refuse('master-is-familiar', 'Un familier ne peut pas avoir de familier.');
   if (link.system === 'homunculus') {
-    if (!HOMUNCULUS_KINDS.includes(link.kind)) return refuse('unknown-kind', 'Type d’homoncule inconnu : Combat, Puissance ou Sorts.');
+    if (!HOMUNCULUS_KINDS.includes(link.kind)) return refuse('unknown-kind', 'Type d’homoncule inconnu : Familier de combat, de puissance ou de sort.');
     if (!FAMILIAR_WINDS.includes(link.wind)) return refuse('unknown-wind', 'Vent de magie hors liste.');
   } else {
     if (link.kind !== 'power') return refuse('animal-kind', 'Un familier animal est toujours de Puissance.');
@@ -66,6 +66,57 @@ export function buildFamiliarLink(familiar, link, { id, createdAt = null } = {})
   };
 }
 export const familiarBackLink = (master, link) => ({ masterId: master.id, linkId: link.id, system: link.system, kind: link.kind, wind: link.wind, species: link.species });
+
+/** Noms français (décisions du MJ du 22/10, CONCEPTION_FAMILIERS §7.2). */
+export const FAMILIAR_NAMES = Object.freeze({
+  homunculus: 'Homoncule', animal: 'Familier animal',
+  combat: 'Familier de combat', power: 'Familier de puissance', spell: 'Familier de sort'
+});
+export const FAMILIAR_WIND_NAMES = Object.freeze({ aqshy: 'Aqshy', azyr: 'Azyr', chamon: 'Chamon', ghur: 'Ghur', ghyran: 'Ghyran', hysh: 'Hysh', shyish: 'Shyish', ulgu: 'Ulgu' });
+/** Ressource sacrifiée à la création : le Destin permanent (`extensions.v5.fate`, miroir `fate`) ou la Résilience (`extensions.v5.resilience`, BR-02). */
+export const FAMILIAR_COSTS = Object.freeze({ fate: 'Destin', resilience: 'Résilience' });
+
+const balanceOf = value => (value !== undefined && value !== null && value !== '' && Number.isSafeInteger(Number(value)) && Number(value) >= 0 ? Number(value) : null);
+/** Solde permanent connu de la ressource du maître, sinon null (la part temporaire du Destin n'est jamais sacrifiée). */
+export function familiarCostBalance(master, resource) {
+  if (resource === 'fate') return balanceOf(v5Of(master).fate ?? master?.fate);
+  if (resource === 'resilience') return balanceOf(v5Of(master).resilience);
+  return null;
+}
+
+/**
+ * Création de familier (décision du MJ du 22/10) : un événement unique qui débite 1 Destin ou 1 Résilience du maître ;
+ * chaque point supplémentaire cédé donne 1 point à répartir au familier. Le solde saisi par le MJ (`balance`) ne sert que
+ * si l'outil ne connaît pas celui du maître. Le familier d'un PJ devient un PNJ allié ; rien n'est écrit ici.
+ */
+export function planFamiliarCreation(master, familiar, input = {}) {
+  const refuse = (reason, message) => ({ ok: false, reason, message });
+  const check = validateFamiliarLink(master, familiar, input);
+  if (!check.ok) return check;
+  const label = FAMILIAR_COSTS[input.resource];
+  if (!label) return refuse('unknown-resource', 'Création de familier : choisir Destin ou Résilience.');
+  const extra = input.extraPoints ?? 0;
+  if (!Number.isInteger(extra) || extra < 0) return refuse('invalid-extra', 'Points supplémentaires : un entier positif ou nul.');
+  const known = familiarCostBalance(master, input.resource);
+  const before = known ?? balanceOf(input.balance);
+  if (before === null) return refuse('unknown-balance', `${label} du maître inconnu${input.resource === 'resilience' ? 'e' : ''} : saisir son solde actuel.`);
+  const spent = 1 + extra;
+  if (before < spent) return refuse('insufficient', `${label} insuffisant${input.resource === 'resilience' ? 'e' : ''} : ${before} point(s) pour ${spent} cédé(s).`);
+  return {
+    ok: true, resource: input.resource, label, before, spent, after: before - spent, pointsToDistribute: extra,
+    balanceEntered: known === null, camp: master.camp === 'pj' ? 'allie' : master.camp
+  };
+}
+
+/** Libellé d'un lien pour la carte du maître. */
+export function familiarLinkLabel(link, familiar) {
+  const parts = [link.system === 'homunculus' ? FAMILIAR_NAMES[link.kind] : FAMILIAR_NAMES.animal];
+  if (link.wind) parts.push('Imprégné d’' + FAMILIAR_WIND_NAMES[link.wind]);
+  if (link.species) parts.push(COMPANION_TRAITS[link.species]?.name || link.species);
+  const points = link.creation?.pointsToDistribute || 0;
+  if (points) parts.push(points + ' point' + (points > 1 ? 's' : '') + ' à répartir');
+  return (familiar?.name || 'Familier disparu') + ' : ' + parts.join(', ');
+}
 
 /** Liens résolus par identité ; un lien dont le familier a disparu reste listé avec `familiar: null`. */
 export function linkedFamiliars(master, participants = []) {
@@ -124,10 +175,13 @@ export function previewFamiliarCondition(familiar, state, source = {}) {
   return { ok: false, receipt: { kind: 'familiar-condition', state: hit[1], message: hit[1] + ' refusé : un homoncule ne le subit que d’une source magique.' } };
 }
 
-/** Un homoncule ne guérit que par sort de soin : ni compétence Soin, ni miracle, ni médecine. */
+/** Sources de soin d'un homoncule (décision du MJ du 25/10/2026) : guérison naturelle et magie, rien d'autre. */
+export const FAMILIAR_HEALING_SOURCES = [{ kind: 'natural', label: 'Guérison naturelle' }, { kind: 'spell', label: 'Sort' }];
+
+/** Un homoncule ne guérit que par guérison naturelle ou par la magie : ni compétence Soin, ni miracle, ni médecine, ni autre soin. */
 export function previewFamiliarHealing(familiar, source = {}) {
-  if (!isHomunculus(familiar) || source.kind === 'spell') return { ok: true, receipt: null };
-  return { ok: false, receipt: { kind: 'familiar-healing', message: 'Soin refusé : un homoncule ne guérit que par un sort de soin (ni Soin, ni miracle, ni médecine).' } };
+  if (!isHomunculus(familiar) || FAMILIAR_HEALING_SOURCES.some(row => row.kind === source.kind)) return { ok: true, receipt: null };
+  return { ok: false, receipt: { kind: 'familiar-healing', message: 'Soin refusé : un homoncule ne guérit que par guérison naturelle ou par la magie (ni Soin, ni miracle, ni médecine, ni autre soin) ; choisir la source du soin.' } };
 }
 
 const isElf = master => keywordMatches(participantKeywords(master).ids, 'elfe');

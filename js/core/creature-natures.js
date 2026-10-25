@@ -31,6 +31,9 @@ const natureTraits = participant => [
   ...(Array.isArray(participant?.extensions?.traits) ? participant.extensions.traits : [])
 ].map(parseNatureTrait).filter(Boolean);
 
+/** Vrai pour un vivant : aucune nature Mort-vivant, Démoniaque, Éthéré ni Artificiel (Perturbant ne vise que les vivants). */
+export const isLiving = participant => !natureTraits(participant).some(trait => ['undead', 'daemonic', 'ethereal', 'construct'].includes(trait.key));
+
 /** Seuil d'un d10 (« 8+ », « 8 » : 8 ou plus) ; `null` si absent ou hors d10. */
 const thresholdOf = detail => {
   const value = Number.parseInt(String(detail), 10);
@@ -85,10 +88,10 @@ export function willpowerBase(participant) {
 
 /**
  * Les attaques du participant sont-elles magiques par nature ? Livre de base p.357 : Artificiel (« All its attacks are Magical »)
- * et Démoniaque ; Traits Magique (« Their attacks count as Magical »).
+ * Démoniaque et Éthéré (« all their attacks are Magical ») ; Traits Magique (« Their attacks count as Magical »).
  */
 export function attacksAreMagical(participant) {
-  return natureTraits(participant).some(trait => ['construct', 'daemonic', 'magical'].includes(trait.key));
+  return natureTraits(participant).some(trait => ['construct', 'daemonic', 'ethereal', 'magical'].includes(trait.key));
 }
 
 const REMINDERS = {

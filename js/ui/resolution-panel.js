@@ -10,6 +10,9 @@ import { renderV5TalentMeasures } from './v5-talent-measures.js';
 import { V5_ACTIVATED_TALENTS,knownV5MartialQualities,noTestV5TalentAction }  from '../core/v5-talent-actions.js';
 import { inferV5Kind, hasMomentum } from '../core/v5-combat-rules.js';
 import { naturalCombatTraits, naturalAttackNeedsSize } from '../core/creature-combat.js';
+import { carriesSense } from '../core/creature-senses.js';
+import { carriesMovement } from '../core/creature-movement.js';
+import { engagedCandidates, planOutnumbering } from '../core/outnumbering.js';
 import { EXCLUDED_BASE_CHARACTERISTIC_TALENTS } from '../core/talent-contracts.js';
 import { hasV5Talent, V5_TALENT_IDS } from '../core/v5-talents.js';
 import { ammunitionCompatibility, equipmentAttackContext } from '../core/equipment.js';
@@ -1330,13 +1333,47 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
     else contextField(fields,'actor','isAction','Le Test consomme l’Action du Tour');
   }
   conditionModeField(fields, 'actor');
+  // Traits de sens : le moteur ne connaît ni les distances ni le mouvement, c'est le MJ qui le constate.
+  if (target && carriesSense(target, 'chameleon')) contextField(fields, 'actor', 'targetMoving', 'La cible Caméléon se déplace (Perception pour la voir)');
+  if (participants.some(person => person.id !== actor.id && carriesSense(person, 'distracting'))) contextField(fields, 'actor', 'distractingInRange', 'Un Perturbant est à portée (−2 DR, une seule fois)');
+  // Traits de déplacement : le moteur ne connaît ni l'altitude ni le milieu, c'est le MJ qui le constate.
+  if (kind.value === 'ranged' && carriesMovement(actor, 'fly')) contextField(fields, 'actor', 'airborne', 'Le tireur en Vol est en vol (−2 DR au tir)');
+  if (kind.value === 'ranged' && target && carriesMovement(target, 'fly')) fields.appendChild(node('p', 'workspace-muted', 'Cible en Vol : pour la viser, la portée est décalée d’un cran.'));
+  if (carriesMovement(actor, 'marine')) contextField(fields, 'actor', 'inWater', 'La Créature marine est dans l’eau');
   contextField(fields,'actor','blackpowderBrokenTest','Calme contre un tir À Poudre noire');
   if(draft.v5Context?.blackpowderBrokenTest){const current=draft.v5Context,wrap=node('label','workspace-type','Auteur du tir À Poudre noire'),select=document.createElement('select');select.setAttribute('aria-label',wrap.textContent);select.append(new Option('Choisir',''));for(const shooter of participants.filter(p=>p.id!==actor.id))select.append(new Option(shooter.name,shooter.id));select.value=current.blackpowderShooterId||'';select.addEventListener('change',()=>handlers.select({v5Context:{...current,blackpowderShooterId:select.value||undefined}}));wrap.append(select);fields.append(wrap);}
   if (kind.value === 'ranged' && target) { contextField(fields, 'actor', 'rangedOppositionAllowed', 'Tir opposé : exception vérifiée par le MJ'); contextField(fields, 'actor', 'pointBlank', 'Tir à bout portant'); }
   if (type === 'attack' && target) contextField(fields, 'actor', 'targetHelpless', 'Cible sans défense : situation vérifiée par le MJ');
+  // Surnombre (L06 p. 167, BR-16) : le moteur ne suit pas l'engagement, le MJ coche les engagés avec la cible de chaque côté.
+  if (type === 'attack' && kind.value === 'melee' && target && target.id !== actor.id) {
+    const current = draft.v5Context || {};
+    const engagedBoxes = (key, title, people) => {
+      if (!people.length) return;
+      fields.appendChild(node('p', 'workspace-muted', title));
+      for (const person of people) {
+        const label = node('label', 'workspace-type'), box = document.createElement('input');
+        box.type = 'checkbox'; box.checked = (current[key] || []).includes(person.id); box.setAttribute('aria-label', `${title} ${person.name}`);
+        box.addEventListener('change', () => {
+          const ids = box.checked ? [...new Set([...(current[key] || []), person.id])] : (current[key] || []).filter(id => id !== person.id);
+          // Plus de deuxième attaquant : la case « Cible encerclée » disparaît, son choix avec elle.
+          handlers.select({ v5Context: { ...current, [key]: ids, ...(key === 'outnumberAttackerIds' && !ids.some(id => candidates.attackers.some(person => person.id === id)) ? { surrounded: undefined } : {}) } });
+        });
+        label.append(box, person.name); fields.appendChild(label);
+      }
+    };
+    const candidates = engagedCandidates({ actor, target, participants, context: current });
+    fields.appendChild(rubric('Surnombre (mêlée)'));
+    engagedBoxes('outnumberAttackerIds', 'Engagés avec la cible, du côté de l’attaquant :', candidates.attackers);
+    engagedBoxes('outnumberDefenderIds', 'Engagés avec eux, du côté de la cible :', candidates.defenders);
+    if (candidates.attackers.some(person => (current.outnumberAttackerIds || []).includes(person.id))) contextField(fields, 'actor', 'surrounded', 'Cible encerclée, sans voie d’échappement (en général 3 attaquants, 2 en espace étroit : +2 DR)');
+    const outnumber = planOutnumbering({ actor, target, participants, context: current });
+    if (outnumber.summary) fields.appendChild(node('p', 'workspace-muted', outnumber.summary));
+    fields.appendChild(node('p', 'workspace-muted', 'Désengagement (L06 p. 167) : Désavantage si l’on est en infériorité numérique ; impossible si l’on est encerclé (la Fuite reste possible). Rappel : le moteur n’a pas d’action de Désengagement.'));
+  }
   if (['attack', 'opposition'].includes(type) && target) {
     fields.appendChild(rubric('Circonstances de la défense'));
     for (const [key, label] of [['involvesMovement','Le Test implique un mouvement'],['runningOrHiding','Le Test sert à fuir ou se cacher'],['reliesOnSight','Le Test est réalisable sans voir mais repose sur la vue'],['requiresSight','Le Test est impossible sans voir'],['usesFellowship','Le Test utilise la Sociabilité']]) contextField(fields, 'defender', key, label);
+    if (participants.some(person => person.id !== target.id && carriesSense(person, 'distracting'))) contextField(fields, 'defender', 'distractingInRange', 'Un Perturbant est à portée du défenseur (−2 DR, une seule fois)');
     conditionModeField(fields, 'defender');
   }
   contextual.appendChild(fields); v5.appendChild(contextual);

@@ -73,7 +73,13 @@ import { momentumAfterChange, withMomentum } from './v5-combat-rules.js';
 import { advanceGameClock, campaignDurationSeconds, createGameClock, deriveTurnPhasePlan, readCombatPosition, reconcileGameClockPosition } from './v5-game-time.js';
 import { advanceCampaignSnapshot } from './v5-campaign-time.js';
 import { proposeNewKeyword, referentialFromExtensions, setActiveReferential } from './creature-keywords.js';
-import { validateFamiliarLink, buildFamiliarLink, familiarBackLink, familiarLinksOf } from './familiars.js';
+import { attacksAreMagical } from './creature-natures.js';
+import { validateFamiliarLink, buildFamiliarLink, familiarBackLink, familiarLinksOf, planFamiliarCreation, familiarLinkLabel, previewFamiliarCondition, previewFamiliarHealing, planFamiliarDeath, familiarDeathDamage } from './familiars.js';
+import { hasRegeneration, planRegeneration } from './creature-regeneration.js';
+import { hasManyHeads, headRegistryOf, applyHeadCritical, restoreHead, HEAD_STATES } from './creature-heads.js';
+import { planPsychology, psychologyTraits } from './creature-psychology.js';
+import { planSwarm, planStateOnWound } from './creature-states.js';
+import { isSlann, contemplationOutcome } from './slann.js';
 const withV5 = (participant, change) => ({ ...participant, extensions: { ...(participant.extensions || {}), v5: change(participant.extensions?.v5 || {}) } });
 import { validatePrayerSLCaps,getPrayerSLModifiers } from './v5-divine-prayer-caps.js';
 import { previewV5BrokenEscape, isV5BrokenEscapeActionBlocked, BROKEN_ESCAPE_SOURCE, BROKEN_ESCAPE_RULE_VERSION } from './v5-broken-escape.js';
@@ -702,7 +708,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       actorId: actor.id || input.actorId || null,
       targetId: target.id || preview?.targetId || null,
       actorName: actor.name || null, targetName: target.name || null,
-      text: `${RESOLUTION_TYPE_LABELS[actionType] || 'Action'} — ${opposed ? preview.hit ? 'touché' : 'pas de touche' : outcome} sur ${targetLabel} · DR ${opposed?.netSl ?? preview.sl}${preview.damage || preview.critical?.application?.extraWounds ? ` · ${wounds} Blessures` : ''}${manualDamage}${preview.critical ? ' · critique' : ''}${preview.defenderCritical ? ' · critique défensif' : ''}`,
+      text: `${RESOLUTION_TYPE_LABELS[actionType] || 'Action'} — ${opposed ? preview.hit ? 'touché' : 'pas de touche' : outcome} sur ${targetLabel} · DR ${opposed?.netSl ?? preview.sl}${preview.damage || preview.critical?.application?.extraWounds ? ` · ${wounds} Blessures` : ''}${manualDamage}${preview.critical ? ' · critique' : ''}${preview.defenderCritical ? ' · critique défensif' : ''}${preview.familiarConditionRefusals?.length ? ` · États refusés : ${preview.familiarConditionRefusals.map(row => `${row.name || 'Homoncule'} (${row.state})`).join(', ')}` : ''}`,
       detail: {
         ...(opposed ? { hit: Boolean(preview.hit), opposition: opposed } : {}),
         ruleVersion: preview.ruleVersion,
@@ -730,6 +736,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         source: { actor: cloneValue(actor.ficheSnapshot?.source || null), target: cloneValue(target.ficheSnapshot?.source || null) },
         ...(preview?.talentTrace ? { talentTrace: cloneValue(preview.talentTrace) } : {}),
         ...(preview?.talents ? { talents: cloneValue(preview.talents) } : {}),
+        ...(preview?.familiarConditionRefusals?.length ? { familiarConditionRefusals: cloneValue(preview.familiarConditionRefusals) } : {}),
         ...(preview?.weaponConditions ? { weaponConditions: cloneValue(preview.weaponConditions), targetConditionApplication: cloneValue(preview.targetConditionApplication), reminders: cloneValue(preview.reminders || []) } : {}),
         ...(preview?.talentPlans ? { talentPlans: cloneValue(preview.talentPlans), activeEffects: cloneValue(preview.activeEffects), damageReplacedByTalent: preview.damageReplacedByTalent, secondaryTargets: cloneValue(preview.secondaryTargets||[]) } : {}),
         ...(resolution?.actionCostReceipt ? { actionCostReceipt: cloneValue(resolution.actionCostReceipt) } : {}),
@@ -1523,6 +1530,11 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
 
     acquireConditions(id, states, options = {}) {
       const captured = cloneValue(states), context = cloneValue(options);
+      // Un homoncule ne subit Hémorragique, Exténué, Empoisonné ou une maladie que d'une source magique (`options.magical`).
+      for (const row of normalizeEffects(captured)) {
+        const check = previewFamiliarCondition(combat.participants.get(id), row, { magical: context.magical === true });
+        if (!check.ok) return Promise.resolve({ ok: false, status: 'refused', reason: 'familiar-condition', error: new Error(check.receipt.message + ' Le MJ peut l’imposer par « Modifier ».'), message: check.receipt.message + ' Le MJ peut l’imposer par « Modifier ».', receipt: check.receipt });
+      }
       const actionId = context.resolutionId || uid();
       return commitV5Effect('acquire-conditions-v5', id, (participant, draft) => {
         const proposed = normalizeEffects(captured).map((row, index) => ({ ...row,
@@ -1658,6 +1670,9 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       return commitV5Effect('recover-condition-v5', id, (participant, draft) => recoverV5Condition(participant, condition, v5EffectContext(draft, captured)), options);
     },
     healWounds(id, amount, options = {}) {
+      // Un homoncule ne guérit que par guérison naturelle ou par la magie (`options.source = { kind: 'natural' | 'spell' }`).
+      const check = previewFamiliarHealing(combat.participants.get(id), options.source || {});
+      if (!check.ok) return Promise.resolve({ ok: false, status: 'refused', reason: 'familiar-healing', error: new Error(check.receipt.message), message: check.receipt.message, receipt: check.receipt });
       return commitV5Effect('heal-wounds-v5', id, participant => healV5Wounds(participant, amount), options);
     },
 
@@ -2260,12 +2275,40 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       }) } }));
       return typeof result?.then === 'function' ? result.then(done => ({ ...done, ok: true, link })) : { ...result, ok: true, link };
     },
+    /**
+     * Création de familier (B10, décisions du MJ du 22/10) : lien posé des deux côtés, 1 Destin ou 1 Résilience débité du maître
+     * (plus un par point supplémentaire cédé, chacun à répartir), familier d'un PJ passé PNJ allié : une seule commande annulable.
+     */
+    createFamiliar(masterId, familiarId, input = {}) {
+      const master = combat.participants.get(masterId), familiar = combat.participants.get(familiarId);
+      const plan = planFamiliarCreation(master, familiar, input);
+      if (!plan.ok) return plan;
+      const creation = { resource: plan.resource, before: plan.before, spent: plan.spent, after: plan.after, pointsToDistribute: plan.pointsToDistribute, balanceEntered: plan.balanceEntered, campBefore: familiar.camp };
+      const link = { ...buildFamiliarLink(familiar, input, { id: uid(), createdAt: Date.now() }), creation };
+      const result = api.executeCommand('create-familiar', draft => ({ ...draft,
+        combat: { ...draft.combat, participants: (draft.combat?.participants || []).map(item => {
+          if (item.id === masterId) {
+            const next = withV5(item, v5 => ({ ...v5, familiarLinks: [...(v5.familiarLinks || []), link], [plan.resource]: plan.after }));
+            return plan.resource === 'fate' ? { ...next, fate: plan.after } : next;
+          }
+          if (item.id === familiarId) return { ...withV5(item, v5 => ({ ...v5, familiarOf: familiarBackLink(master, link) })), camp: plan.camp };
+          return item;
+        }) },
+        log: [{ id: uid(), kind: 'management', actorId: masterId, targetId: familiarId,
+          text: `Création de familier : ${familiarLinkLabel(link, familiar)}, lié à ${master.name} (${plan.spent} ${plan.label}, ${plan.before} → ${plan.after})`,
+          detail: { kind: 'create-familiar', linkId: link.id, ...creation } }, ...(draft.log || [])].slice(0, 300) }));
+      return typeof result?.then === 'function' ? result.then(done => ({ ...done, ok: true, link })) : { ...result, ok: true, link };
+    },
     unlinkFamiliar(masterId, linkId) {
       const master = combat.participants.get(masterId), link = familiarLinksOf(master).find(row => row.id === linkId);
       if (!link) return { ok: false, reason: 'unknown-link', message: 'Lien introuvable.' };
       const result = api.executeCommand('unlink-familiar', draft => ({ ...draft, combat: { ...draft.combat, participants: (draft.combat?.participants || []).map(item => {
         if (item.id === masterId) return withV5(item, v5 => ({ ...v5, familiarLinks: (v5.familiarLinks || []).filter(row => row.id !== linkId) }));
-        if (item.id === link.familiarId && item.extensions?.v5?.familiarOf?.linkId === linkId) return withV5(item, v5 => { const { familiarOf, ...rest } = v5; return rest; });
+        if (item.id === link.familiarId && item.extensions?.v5?.familiarOf?.linkId === linkId) {
+          const freed = withV5(item, v5 => { const { familiarOf, ...rest } = v5; return rest; });
+          // Le camp d'avant la création (familier d'un PJ passé PNJ allié) est rendu.
+          return link.creation?.campBefore !== undefined ? { ...freed, camp: link.creation.campBefore } : freed;
+        }
         return item;
       }) } }));
       return typeof result?.then === 'function' ? result.then(done => ({ ...done, ok: true })) : { ...result, ok: true };
@@ -2277,6 +2320,162 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       const result = api.executeCommand('set-familiar-range', draft => ({ ...draft, combat: { ...draft.combat, participants: (draft.combat?.participants || []).map(item => item.id === masterId
         ? withV5(item, v5 => ({ ...v5, familiarLinks: (v5.familiarLinks || []).map(row => row.id === linkId ? { ...row, inRange: inRange === true } : row) })) : item) } }));
       return typeof result?.then === 'function' ? result.then(done => ({ ...done, ok: true })) : { ...result, ok: true };
+    },
+    /**
+     * Mort d'un familier animal : le maître passe un Test de Calme (Difficile, −2 sauf elfe) que le MJ résout à la table ;
+     * sur un échec, deux d10 saisis donnent des Blessures directes (ni Bonus d'Endurance ni armure). Rien n'est appliqué sans confirmation. Annulable.
+     */
+    resolveFamiliarDeath(masterId, familiarId, options = {}) {
+      const master = combat.participants.get(masterId), familiar = combat.participants.get(familiarId);
+      const plan = planFamiliarDeath(master, familiar);
+      if (!plan.applicable) return { ok: false, reason: 'no-animal-link', message: plan.reason };
+      let damage = 0;
+      if (options.calmFailed === true) {
+        const dealt = familiarDeathDamage(options.rolls);
+        if (!dealt.ok) return { ok: false, reason: 'rolls', message: dealt.message };
+        damage = dealt.damage;
+      }
+      const result = api.executeCommand('familiar-death', draft => ({ ...draft,
+        combat: { ...draft.combat, participants: (draft.combat?.participants || []).map(item => (item.id === masterId && damage ? momentumAfterChange(item, { ...item, hp: Math.max(0, (Number(item.hp) || 0) - damage) }) : item)) },
+        log: [{ id: uid(), kind: 'effect', actorId: familiarId, targetId: masterId,
+          text: `${familiar.name} · Mort du familier : ${master.name} ${options.calmFailed === true ? `rate le ${plan.calmTest.label}, ${damage} Blessure(s) directe(s)` : `réussit le ${plan.calmTest.label}`}`,
+          detail: { kind: 'familiar-death', linkId: plan.linkId, calmModifier: plan.calmTest.modifier, calmFailed: options.calmFailed === true, damage, reminders: plan.reminders } }, ...(draft.log || [])].slice(0, 300) }));
+      const done = value => ({ ...value, ok: value?.ok !== false, damage, plan });
+      return typeof result?.then === 'function' ? result.then(done) : done(result);
+    },
+    /** Régénération (début de Round) : le MJ saisit le d10 ; soin et guérison d'un critique en une seule commande annulable. */
+    applyRegeneration(participantId, roll, options = {}) {
+      const participant = combat.participants.get(participantId);
+      if (!hasRegeneration(participant)) return { ok: false, reason: 'no-regeneration', message: 'Ce participant n’a pas le Trait Régénération.' };
+      const plan = planRegeneration(participant, { roll, fireWounds: options.fireWounds, fireCriticalIds: options.fireCriticalIds });
+      if (!plan.available) return { ok: false, reason: 'refused', message: plan.unresolved.join(' ') };
+      const amount = plan.heal?.amount ?? 0;
+      let healed = 0;
+      const result = api.executeCommand('regeneration', draft => {
+        const target = (draft.combat?.participants || []).find(item => item.id === participantId);
+        if (!target) throw new TypeError('Participant introuvable');
+        const receipt = healV5Wounds(target, amount);
+        healed = receipt.hpDelta ?? 0;
+        const records = receipt.participant.extensions?.v5?.criticalWounds || [];
+        let next = plan.criticalHeal ? withV5(receipt.participant, v5 => ({ ...v5, criticalWounds: records.filter(row => row.id !== plan.criticalHeal.id) })) : receipt.participant;
+        // Un 10 régénère le critique et ses États (E0-T-044), comme le soin divin des critiques.
+        const healedRecord = plan.criticalHeal ? records.find(row => row.id === plan.criticalHeal.id) : null;
+        for (const stateId of new Set(healedRecord?.stateIds || [])) {
+          if (!(next.states || []).some(row => row.id === stateId)) continue;
+          next = recoverV5Condition(next, stateId, { method: 'divine-removal', amount: Number.MAX_SAFE_INTEGER }).participant;
+        }
+        return { ...draft,
+          combat: { ...draft.combat, participants: draft.combat.participants.map(item => (item.id === participantId ? next : item)) },
+          log: [{ id: uid(), kind: 'effect', actorId: participantId, targetId: participantId,
+            text: `${target.name} · Régénération (d10 ${roll}) : ${healed} Blessure(s) regagnée(s)${plan.criticalHeal ? ` · Blessure Critique guérie (${plan.criticalHeal.name || plan.criticalHeal.id})` : ''}`,
+            detail: { kind: 'regeneration', roll, healed, criticalHeal: plan.criticalHeal, reminders: plan.reminders } }, ...(draft.log || [])].slice(0, 300) };
+      });
+      const done = value => ({ ...value, ok: value?.ok !== false, healed, criticalHeal: plan.criticalHeal });
+      return typeof result?.then === 'function' ? result.then(done) : done(result);
+    },
+    /**
+     * Trait Peur ou Terreur d'une créature, au contact ou à la vue : pose l'effet en attente du Test de Calme (`fear-of-talent` /
+     * `terror-of-talent`) sur la cible désignée, ou sur chaque adversaire actif ; alliés, immunisés et rencontre déjà subie exemptés. Annulable.
+     */
+    applyCreaturePsychology(sourceId, key, options = {}) {
+      const source = combat.participants.get(sourceId);
+      const label = key === 'fear' ? 'Peur' : 'Terreur';
+      if (!['fear', 'terror'].includes(key) || !psychologyTraits(source).some(trait => trait.key === key)) return { ok: false, reason: 'no-trait', message: `Ce participant n’a pas le Trait ${label}.` };
+      const envelope = currentEnvelope();
+      const encounterId = v5StoreActionClock(envelope).encounterId || 'default-encounter';
+      const active = (envelope.combat?.participants || []).filter(item => item.zone === 'active' && item.id !== sourceId);
+      const targets = options.targetId ? active.filter(item => item.id === options.targetId) : active.filter(item => item.camp !== source.camp);
+      const additions = new Map();
+      const blocked = [];
+      for (const target of targets) {
+        const plan = planPsychology(source, key, { target, encounterId });
+        if (!plan.available) blocked.push(...plan.unresolved);
+        else if (plan.states.length) additions.set(target.id, plan.states);
+      }
+      if (!additions.size) return { ok: false, reason: 'no-target', message: [...new Set(blocked)].join(' ') || `${label} : aucune cible à affecter (alliée, immunisée ou rencontre déjà subie).` };
+      const names = targets.filter(item => additions.has(item.id)).map(item => item.name || item.id);
+      const result = api.executeCommand('creature-psychology', draft => ({ ...draft,
+        combat: { ...draft.combat, participants: (draft.combat?.participants || []).map(item => (additions.has(item.id) ? { ...item, states: [...(item.states || []), ...additions.get(item.id)] } : item)) },
+        log: [{ id: uid(), kind: 'effect', actorId: sourceId, targetId: options.targetId || null,
+          text: `${source.name} · ${label} : Test de Calme demandé à ${names.join(', ')}`,
+          detail: { kind: 'creature-psychology', key, targetIds: [...additions.keys()] } }, ...(draft.log || [])].slice(0, 300) }));
+      const done = value => ({ ...value, ok: value?.ok !== false, targetIds: [...additions.keys()] });
+      return typeof result?.then === 'function' ? result.then(done) : done(result);
+    },
+    /**
+     * Nuée en fin de Round : chaque adversaire engagé (désigné par le MJ, le moteur ne suit pas l'engagement) perd 1 Blessure directe
+     * (livre de base, Traits de créature, Swarm). Une seule commande annulable.
+     */
+    applySwarmEndOfRound(swarmId, engagedIds = []) {
+      const swarm = combat.participants.get(swarmId);
+      const plan = planSwarm(swarm);
+      if (!plan.available) return { ok: false, reason: 'no-swarm', message: 'Ce participant n’a pas le Trait Nuée.' };
+      const ids = [...new Set(engagedIds)].filter(id => id !== swarmId && combat.participants.get(id)?.zone === 'active');
+      if (!ids.length) return { ok: false, reason: 'no-target', message: 'Nuée : désignez au moins un adversaire engagé.' };
+      const amount = plan.endOfRound.amount;
+      const result = api.executeCommand('swarm-end-of-round', draft => ({ ...draft,
+        combat: { ...draft.combat, participants: (draft.combat?.participants || []).map(item => (ids.includes(item.id) ? momentumAfterChange(item, { ...item, hp: Math.max(0, (Number(item.hp) || 0) - amount) }) : item)) },
+        log: [{ id: uid(), kind: 'effect', actorId: swarmId, targetId: null,
+          text: `${swarm.name} · Nuée, fin de Round : ${amount} Blessure(s) à ${ids.map(id => combat.participants.get(id).name || id).join(', ')}`,
+          detail: { kind: 'swarm-end-of-round', targetIds: ids, amount } }, ...(draft.log || [])].slice(0, 300) }));
+      const done = value => ({ ...value, ok: value?.ok !== false, targetIds: ids });
+      return typeof result?.then === 'function' ? result.then(done) : done(result);
+    },
+    /** Venin : une Blessure infligée par le porteur empoisonne la cible (difficulté de récupération imprimée sur le Trait, sinon refus). Annulable. */
+    applyCreatureVenom(sourceId, targetId) {
+      const source = combat.participants.get(sourceId);
+      const target = combat.participants.get(targetId);
+      const plan = planStateOnWound(source, 'venom');
+      if (plan.unresolved.some(text => /absent du participant/.test(text))) return { ok: false, reason: 'no-trait', message: 'Ce participant n’a pas le Trait Venin.' };
+      if (!plan.available) return { ok: false, reason: 'refused', message: plan.unresolved.join(' ') };
+      if (!target || target.id === sourceId) return { ok: false, reason: 'no-target', message: 'Venin : désignez la cible blessée.' };
+      const difficulty = plan.effects[0].recoveryDifficulty;
+      // Un homoncule n'est empoisonné que par un porteur de Venin magique.
+      const allowed = previewFamiliarCondition(target, 'Empoisonné', { magical: attacksAreMagical(source) });
+      if (!allowed.ok) return { ok: false, reason: 'familiar-condition', message: allowed.receipt.message, receipt: allowed.receipt };
+      const receipt = acquireV5Conditions(target, [{ name: 'Empoisonné', level: 1, source: { kind: 'creature-venom', sourceId, difficulty } }], { round: combat.round });
+      if (!receipt.acquiredInstances) return { ok: false, reason: 'ignored', message: [...receipt.reminders, 'Venin : aucun effet (immunité ou état déjà présent).'].join(' ') };
+      const result = api.executeCommand('creature-venom', draft => ({ ...draft,
+        combat: { ...draft.combat, participants: (draft.combat?.participants || []).map(item => (item.id === targetId ? receipt.participant : item)) },
+        log: [{ id: uid(), kind: 'effect', actorId: sourceId, targetId,
+          text: `${source.name} · Venin (${difficulty}) : ${target.name} est Empoisonné`,
+          detail: { kind: 'creature-venom', difficulty } }, ...(draft.log || [])].slice(0, 300) }));
+      const done = value => ({ ...value, ok: value?.ok !== false, reminders: receipt.reminders });
+      return typeof result?.then === 'function' ? result.then(done) : done(result);
+    },
+    /** Plusieurs têtes : état d'une tête (Blessure Critique à la tête, guérison), posé par le MJ ; le registre est gardé dans `extensions.v5.heads`. */
+    setHeadState(participantId, headId, state) {
+      const participant = combat.participants.get(participantId);
+      if (!hasManyHeads(participant)) return { ok: false, reason: 'no-heads', message: 'Ce participant n’a pas le Trait Plusieurs têtes.' };
+      if (!HEAD_STATES.includes(state)) return { ok: false, reason: 'bad-state', message: 'État de tête inconnu.' };
+      const registry = headRegistryOf(participant);
+      const next = state === 'healthy' ? restoreHead(registry, headId) : applyHeadCritical(participant, registry, state, headId);
+      if (next.unresolved?.length) return { ok: false, reason: 'refused', message: next.unresolved.join(' ') };
+      const heads = state === 'healthy' ? next : next.registry;
+      const result = api.executeCommand('set-head-state', draft => ({ ...draft, combat: { ...draft.combat, participants: (draft.combat?.participants || []).map(item => (item.id === participantId ? withV5(item, v5 => ({ ...v5, heads })) : item)) } }));
+      return typeof result?.then === 'function' ? result.then(done => ({ ...done, ok: true })) : { ...result, ok: true };
+    },
+    /** Slann : à bord du palanquin ou au sol (−3 aux Tests d'incantation et de Focalisation tant qu'il est au sol). Annulable. */
+    setSlannAboard(participantId, aboard) {
+      if (!isSlann(combat.participants.get(participantId))) return { ok: false, reason: 'not-slann', message: 'Réservé aux profils de Slann.' };
+      const result = api.executeCommand('set-slann-aboard', draft => ({ ...draft, combat: { ...draft.combat, participants: (draft.combat?.participants || []).map(item => (item.id === participantId ? withV5(item, v5 => ({ ...v5, slann: { ...(v5.slann || {}), aboard: aboard !== false } })) : item)) } }));
+      return typeof result?.then === 'function' ? result.then(done => ({ ...done, ok: true })) : { ...result, ok: true };
+    },
+    /** Contemplation slann : le MJ saisit les DR du Test de Perception (+0 réussi ou −0 échec marginal pour un zéro) ; la table donne l'état (Brume de pensée : deux Exténué posés ; Détaché : Stupide en rappel). Annulable. */
+    applySlannContemplation(participantId, sl, options = {}) {
+      const slann = combat.participants.get(participantId);
+      const plan = contemplationOutcome(slann, sl, options);
+      if (!plan.available) return { ok: false, reason: 'refused', message: plan.unresolved.join(' ') };
+      // Stupide (Détaché) est une psychologie, pas un État du moteur : il reste dans le rappel du journal.
+      const adds = plan.conditions.filter(row => row.name === 'Fatigued').map(row => ({ name: 'Exténué', level: row.count || 1, source: { kind: 'slann-contemplation' } }));
+      const receipt = adds.length ? acquireV5Conditions(slann, adds, { round: combat.round }) : null;
+      const result = api.executeCommand('slann-contemplation', draft => ({ ...draft,
+        combat: { ...draft.combat, participants: (draft.combat?.participants || []).map(item => (item.id === participantId && receipt ? receipt.participant : item)) },
+        log: [{ id: uid(), kind: 'effect', actorId: participantId, targetId: participantId,
+          text: `${slann.name} · Contemplation (DR ${plan.receipt.zero ? (plan.receipt.zero === 'success' ? '+0' : '−0') : sl}) : ${plan.reminders.join(' ')}`,
+          detail: { kind: 'slann-contemplation', sl: plan.receipt.sl, zero: plan.receipt.zero, outcome: plan.outcome } }, ...(draft.log || [])].slice(0, 300) }));
+      const done = value => ({ ...value, ok: value?.ok !== false, outcome: plan.outcome, reminders: [...plan.reminders, ...(receipt?.reminders || [])] });
+      return typeof result?.then === 'function' ? result.then(done) : done(result);
     },
     listPersistentCharacters() { return cloneValue(persistentCharacters); },
     savePersistentCharacter(input) {
@@ -3209,13 +3408,14 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
     },
     // Rappels portés par un participant (carte de combat) : indépendants de la scène active, donc aussi pour un combat monté depuis la bibliothèque.
     getParticipantReminders(participantId) {
-      const snapshot = { sceneId: activeScene?.id || 'combat', participants: Array.from(combat.participants.values()).filter(item => item?.id === participantId) };
+      const snapshot = { sceneId: activeScene?.id || 'combat', participants: Array.from(combat.participants.values()).filter(item => item?.id === participantId), allParticipants: Array.from(combat.participants.values()) };
       return pendingReminders(deriveReminders(snapshot, { id: `round-${combat.round || 0}`, type: 'participant', round: combat.round || 0 }, reminderChoices)).filter(item => item.kind === 'participant-reminder');
     },
     resolveParticipantReminder(participantId, id, decision, details = {}) {
-      const snapshot = { sceneId: activeScene?.id || 'combat', participants: Array.from(combat.participants.values()).filter(item => item?.id === participantId) };
+      const snapshot = { sceneId: activeScene?.id || 'combat', participants: Array.from(combat.participants.values()).filter(item => item?.id === participantId), allParticipants: Array.from(combat.participants.values()) };
       const transition = { id: `round-${combat.round || 0}`, type: 'participant', round: combat.round || 0 };
-      const choice = resolveReminder(deriveReminders(snapshot, transition, reminderChoices), id, decision, details).find(item => item.id === id)?.choice;
+      const derived = deriveReminders(snapshot, transition, reminderChoices);
+      const choice = resolveReminder(derived, id, decision, { text: derived.find(item => item.id === id)?.text, ...details }).find(item => item.id === id)?.choice;
       if (!choice) return false;
       return api.executeCommand('resolve-reminder', draft => ({ ...draft, reminderChoices: [...(draft.reminderChoices || []).filter(item => item.id !== id), choice] }));
     },

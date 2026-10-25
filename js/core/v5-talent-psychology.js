@@ -18,7 +18,7 @@ export function isPsychologyImmune(subject,{kind='fear',enemyGroup=null,enemy=nu
  if(!subject||ignorePsychologyImmunity===true)return false;
  if((subject.states||[]).some(s=>s.key==='frenzy'&&activeSource(s)))return true;
  const undead=hasTrait(subject,/mort[- ]vivant|undead/i);
- const psychImmune=hasTrait(subject,/immunit[eé].*psychologie|immune to psychology|nu[eé]e|swarm/i)||subject.extensions?.v5?.specialStates?.immuneToPsychology===true;
+ const psychImmune=hasTrait(subject,/immunit[eé].*psycholog|immune to psychology|nu[eé]e|swarm/i)||subject.extensions?.v5?.specialStates?.immuneToPsychology===true;
  if(psychImmune&&!(ignoreUndeadImmunity===true&&undead))return true;
  if((subject.states||[]).some(s=>['heart-of-the-wolf','ox-stands','beacon-of-virtue'].includes(s.key)))return true;
  if(kind==='fear'||kind==='intimidate'){
