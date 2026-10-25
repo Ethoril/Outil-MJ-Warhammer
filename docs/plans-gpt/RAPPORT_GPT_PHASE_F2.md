@@ -14,8 +14,8 @@ Le brief F2 autorise les commits locaux et impose un arrêt à la fin de chaque 
 |---|---|---|
 | Préparation | FAIT | Worktree neuf depuis main ; aucun changement hérité ; réglages LF ; `npm ci` : 3 paquets, audit npm sans vulnérabilité signalée. |
 | Repérage des 194 règles | FAIT, documentaire, `7c576e2` | Audits Luna séparés T1, T2 et T3 ; corrections après revue du principal et contrôle croisé Luna. 45 + 69 + 80 identifiants, sans omission ni doublon. Section Exécution ajoutée au plan sans changer son texte initial. |
-| F2-C | FAIT sur contrats de fiche / faits MJ, réserve de portée ci-dessous | `1034dc9` ; code Luna, corrections par le codeur, relecture indépendante Luna favorable, lecture du diff et validation finale par le principal. Attaques matérialisées des sorts conservées : ne pas présenter C comme une couverture globale de ces attaques. |
-| F2-A | NON COMMENCÉ | Aucun code modifié. |
+| F2-C | CORRIGÉ ET REVÉRIFIÉ LOCALEMENT | `734a3e2`, remplace le verdict initial invalidé par Claude; décisions MJ appliquées, nouvelle revue Luna et validation principale. Limites exactes ci-dessous. |
+| F2-A | CARACTÉRISATIONS EN COURS | Après C stabilisé `734a3e2`; aucun code A avant commit séparé de ces tests. |
 | F2-B | NON COMMENCÉ | Aucun code modifié. |
 | F2-D | EN ATTENTE T2 | Fin de T1, contre-vérification Claude et feu vert MJ requis avant T2. |
 | F2-E | EN ATTENTE T2 | Après D ; aucun code commencé. |
@@ -29,7 +29,23 @@ Le brief F2 autorise les commits locaux et impose un arrêt à la fin de chaque 
 | F2-H | EN ATTENTE T4 | Aucun code commencé. |
 | F2-J | EN ATTENTE T4 | Conception des séquelles à soumettre en fin de T3 ; J1/J2 non commencés. |
 
-## Validation
+## Correction C après Claude — état courant
+
+Code `734a3e2`, caractérisations préalables `5e60fdd` intactes. Les sept décisions du MJ sont recopiées en tête du fichier de choix (`bbe726b`). Les six défauts bloquants Claude sont corrigés : delta CC/CT appliqué une seule fois; ancien lien de mauvaise spécialité résolu par voie licite/repli CC; Siège/Embarquée et alias accessibles aux compétences réelles; score manuel conservé puis effets appliqués; meilleures voies entraînées prises par défaut, y compris spécialité exacte présente à zéro; état monté durable et mains de bâtarde selon catalogue/checkbox. Les armes conjurées comprennent le générateur aethyrique et la Faux de Shyish; les anciennes instances récupèrent leurs données par lien vers la couche/contrat. Le score imposé des Poings de Gork reste prioritaire.
+
+- Principal, code gelé final : `node --test --test-concurrency=4` **4 723/4 723**, zéro échec/ignoré, 107 862 ms; `tmp/gpt-phase-f2/c-claude-principal-verified.log`.
+- Acceptation dédiée du codeur : **93/93**, `c-claude-targeted-legal-fallback.log`; remplacement final de la fixture Parade par la vraie compétence Bouclier du catalogue : régressions **14/14**, `c-claude-regressions-real-parade.log`.
+- Principal : trois runners navigateur verts après dernier gel, journaux `c-claude-principal-verified-ui.log`, `c-claude-principal-verified-workspace.log`, `c-claude-principal-verified-state.log`. Vraie page index/main : monté/mains, édition concurrente préservée, Undo/Redo/reload, Canon Nain appliqué avec perte de PV puis annulation. Baliste : choix MJ générique et reçu de maîtrise contrôlés, sans application certifiée.
+- Nouvelle Luna indépendante à contexte neuf : sources relues, contre-exemples du rapport et de la prérevue rejoués; suites ciblées finales **41/41**. Aucun bloquant vérifié après gel 3; `tmp/gpt-phase-f2/REVUE_C_CORRECTIONS_LUNA.md`.
+- Revue du principal : diff de production lu, garde des onze fichiers protégés, texte initial du plan identique octet pour octet, LF, aucune création de module runtime et `git diff --check` verts (`tmp/gpt-phase-f2/check-boundaries.mjs`).
+
+Les deux premières suites principales de correction ont passé 4 722/4 722, avant deux derniers contre-exemples (CC nulle au générateur, voie entraînée masquée par spécialité à zéro). Elles ne prouvent pas le code final. Les journaux distincts sont conservés; le reçu final est `c-claude-principal-verified.log`.
+
+Assertions antérieures F2 modifiées : `tests/f2-c-weapon-skills.test.js` (1) Escrime zéro avec Base entraînée attend désormais le score réel de Base, conformément au défaut Claude n°5, en conservant retrait des Qualités et Défauts; (2) monté absent attend démonté et absence de question récurrente, conformément à la décision MJ. Le nom du premier test et le runner UI reflètent ces comportements. Aucun test de caractérisation pré-code ni test antérieur au chantier F2 n'a été modifié. Les tests nouveaux couvrent application Store, Undo/reload et les vraies générations de sorts; les premiers rouges utiles de la correction sont distingués des erreurs de fixture/import, jamais présentés comme preuve de chaque clause.
+
+Limites actuelles : le contrôle C filtre les attaques, pas les défenses/parades (limite mineure permise à consigner par Claude). Une catégorie générique sans association source reste un choix de compétence MJ, pas un mapping canonique certifié. Baliste/Catapulte peuvent rester bloquées par `precise`/`percutante`, qualités V4 déjà non validées dans la base, hors C; aucun contournement ni moteur de qualité ajouté. Ingénierie personnalisée sans portée/provenance demande sa nature au MJ. Une conjurée dépourvue de toute provenance exploitable réclame les données MJ; elle n'est pas déclarée maîtrisée à partir de son nom. Recette complète de phase non exécutée; **T1 reste à terminer par A puis B**.
+
+## Validation historique de la première livraison (supersédée)
 
 **État final du code `1034dc9` :**
 
@@ -52,7 +68,7 @@ La première trace TDD C (`tmp/gpt-phase-f2/f2-c-step2-red.log`) contient 4 test
 
 Les contre-exemples de relecture ont donné lieu aux corrections et tests : gardes de tir/emplacements ouverts, voies manuelles historiques, familles de compétences homonymes, valeurs nulles, Ingénierie mêlée/tir, Hast avec apostrophe, spécialisations personnalisées, Escrime/Base à zéro, défauts de bâtarde non maîtrisée, compétence Cavalerie conservée à pied, qualités source filtrées avant préambule/talents, dégâts improvisés issus du catalogue et raccord du constructeur UI. Le premier passage global pendant la construction avait neuf échecs ; le journal `full-suite.log` a ensuite été remplacé par les passes corrigées et ne sert pas de reçu de cette passe ancienne. Les résultats finaux de référence sont ceux du principal indiqués ci-dessus.
 
-## Portée exacte et limites ouvertes
+## Portée de la première livraison (historique remplacé par la correction C ci-dessus)
 
 - Les conséquences de maîtrise sont calculées dans le vrai flux d'équipement de fiche et pour les faits MJ explicitement renseignés. Les données nécessaires absentes bloquent avec reçu ; zéro augmentation et donnée absente sont distincts. Les anciennes actions manuelles sans contrat ni faits d'entraînement restent assistées par le MJ, sans maîtrise inventée (C-MANUEL-01).
 - **Armes conjurées / attaques matérialisées des sorts : chemin existant conservé.** Le générateur reprend une compétence, un score MJ ou un score fixé par le sort ; il ne vérifie pas les augmentations. Le traitement nouveau de C n'y réapplique pas la garde générale des compétences avancées. C'est une limite réelle du périmètre d'exécution retenu, à relire avec le MJ, pas une preuve que la règle est déjà couverte sur ces attaques. Ni les sorts ni ce chemin ne sont certifiés exhaustifs par cette livraison. Voir C-MATERIALISEES-01 et la succession avant toute extension ; ne pas attribuer cette exclusion à un arbitrage explicite du MJ.
