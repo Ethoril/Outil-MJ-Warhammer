@@ -16,7 +16,7 @@ Le brief F2 autorise les commits locaux et impose un arrêt à la fin de chaque 
 | Repérage des 194 règles | FAIT, documentaire, `7c576e2` | Audits Luna séparés T1, T2 et T3 ; corrections après revue du principal et contrôle croisé Luna. 45 + 69 + 80 identifiants, sans omission ni doublon. Section Exécution ajoutée au plan sans changer son texte initial. |
 | F2-C | CORRIGÉ ET REVÉRIFIÉ LOCALEMENT | `734a3e2`, remplace le verdict initial invalidé par Claude; décisions MJ appliquées, nouvelle revue Luna et validation principale. Limites exactes ci-dessous. |
 | F2-A | FAIT `f135c65` | Initialisation et surprise, vrais parcours, revue Luna, 4 757/4 757 et navigateur verts. |
-| F2-B | CARACTÉRISATIONS EN COURS | Après A validé; aucun code B avant commit séparé des caractérisations. |
+| F2-B | EN COURS | Caractérisations `efcb63e` (6/6), puis GO tests métier/production à Luna; pas encore livré. |
 | F2-D | EN ATTENTE T2 | Fin de T1, contre-vérification Claude et feu vert MJ requis avant T2. |
 | F2-E | EN ATTENTE T2 | Après D ; aucun code commencé. |
 | F2-N | EN ATTENTE T2 | Aucun code commencé. |
