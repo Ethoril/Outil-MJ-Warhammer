@@ -32,7 +32,7 @@ export function previewV5Turn(state, { inputs = {} } = {}) {
   const prayerGate=wrathForcedPrayerGate(before,combat.currentActorId,{endingTurn:true});if(prayerGate)return {...prayerGate,baseRevision:before.localRevision||0,requests:[]};
   const brokenGate=brokenEscapeTurnGate(before);if(brokenGate)return {...brokenGate,ready:false,baseRevision:before.localRevision||0,requests:[]};
   // Le froid prend effet sur l'ordre automatique au prochain Round, jamais sur les Tours en cours.
-  const order = before.extensions?.v5?.orderRound===combat.round?effectiveOrder(combat.participants || [],{mode:'manual',order:combat.order}):effectiveOrder(combat.participants || [], { mode: combat.orderMode, order: combat.order,round:combat.round });
+  const order = before.extensions?.v5?.orderRound===combat.round?effectiveOrder(combat.participants || [],{mode:'manual',order:combat.order}):effectiveOrder(combat.participants || [], { mode: combat.orderMode, order: combat.order,autoOrder:before.extensions?.v5?.combatInitiativeResolution?.order,round:combat.round });
   const transition = nextTurn({ participants: combat.participants, order, currentActorId: combat.currentActorId, round: combat.round });
   if (!transition.currentActorId) return { status: 'idle', ready: false, baseRevision: state.localRevision || 0, requests: [] };
   const fromPosition = readCombatPosition(before);
@@ -110,7 +110,7 @@ export function previewV5Turn(state, { inputs = {} } = {}) {
       const spells=roundSpellEffects(participants,row.phase,row.round,inputs,row.actorId); participants=spells.participants; requests.push(...spells.requests); effectLogs.push(...spells.logs);
     }
   }
-  if(transition.round>combat.round){transition.order=effectiveOrder(participants,{mode:combat.orderMode,order:combat.order,round:transition.round});transition.currentActorId=transition.order[0] || null;}
+  if(transition.round>combat.round){transition.order=effectiveOrder(participants,{mode:combat.orderMode,order:combat.order,autoOrder:before.extensions?.v5?.combatInitiativeResolution?.order,round:transition.round});transition.currentActorId=transition.order[0] || null;}
   toPosition = { ...fromPosition, round: transition.round, turnIndex: turn + 1, currentActorId: transition.currentActorId };
   try { phasePlan = deriveTurnPhasePlan({ from: fromPosition, to: toPosition }); }
   catch (error) { return { status: 'clock-conflict', ready: false, baseRevision: before.localRevision || 0, requests: [], error: error.message }; }

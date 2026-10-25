@@ -132,7 +132,12 @@ export function previewV5TalentActivation(normalized,actorTest,opposed){
     const dice=[context.initiativeFirst,context.initiativeSecond],choice=context.initiativeChoice;
     if(!dice.every(n=>Number.isSafeInteger(n)&&n>=1&&n<=10)||!['first','second'].includes(choice))unresolved.push('Combat instinctif : deux d10 explicites et choix du joueur requis.');
     const initiative=actor.caracs?.I;if(!Number.isSafeInteger(initiative))unresolved.push('Combat instinctif : caractéristique Initiative requise.');
-    if(!unresolved.length)changes.push({participantId:actor.id,patch:{initiative:Math.floor(initiative/10)+dice[choice==='first'?0:1]}});
+    if(!unresolved.length){
+      const selectedDie=dice[choice==='first'?0:1],existing=actor.extensions?.v5?.combatReflexesPreparation;
+      const originalInitiative=existing?.version===1&&existing.participantId===actor.id&&Number.isSafeInteger(existing.originalInitiative)?existing.originalInitiative:actor.initiative;
+      const preparation={version:1,participantId:actor.id,originalInitiative,characteristic:initiative,dice:[...dice],choice,selectedDie,provenance:{kind:'legacy-talent-activation',resolutionId:normalized.resolutionId}};
+      changes.push({participantId:actor.id,patch:{initiative:Math.floor(initiative/10)+selectedDie,extensions:{...(actor.extensions||{}),v5:{...(actor.extensions?.v5||{}),combatReflexesPreparation:preparation}}}});
+    }
   }
   if(selected==='end-frenzy'){
     if(context.nearbyEnemiesDefeated!==true)unresolved.push('Frénésie : confirmer que tous les ennemis proches sont vaincus.');
