@@ -245,3 +245,7 @@ Colonne « Appelant » : fichier hors module. « Moment » : instant de jeu où 
 
 ### Constat
 Les 8 branchements existants (attaques naturelles, Protection/Ward, magie `willpowerBase`, Résistance à la Magie, soutien/feu des familiers, liens de familier dans le store) sont les seuls appelants hors module. Toutes les autres fonctions `plan*` et toutes les fonctions `*Reminders` sont **code testé, non appelé**.
+
+## B12 — Compteur de surnombre (25/10/2026)
+
+BLOQUÉ, aucun code écrit. L'échelle de poids (1, 1, 2, 3, 4) est dans le dépôt (`creature-size.js`, L06 p. 360), mais le bonus de surnombre (seuil, valeur, plafond) n'est dans aucune règle du dépôt ni dans les pages lisibles ici. Question BR-16 consignée dans `CHOIX_EXECUTANT_BRANCHEMENT.md`. Reprise : dès que le MJ donne la règle.
