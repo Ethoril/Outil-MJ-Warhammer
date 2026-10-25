@@ -31,14 +31,15 @@ const skill = (actorId, targetId, label, v5 = {}, extra = {}) => ({ resolutionId
 const hydra = () => ({ ...buildParticipantFromBestiary('E0-P-319', { library: l09, zone: 'active' }), id: 'beast', camp: 'ennemi', zone: 'active', states: [] });
 const distractingProfile = () => l07.find(profile => JSON.stringify(profile.traits || []).includes('Distracting'));
 
-test('B8c : le −2 DR du Vol vise le tir contre une créature en vol, pas le tir du volant', async () => {
+// Annulé en B11c (décision du MJ du 25/10, retour au livre de base p.358) : le −2 DR vise de nouveau le tir du porteur de Vol en vol.
+test('B8c : le −2 DR du Vol vise le tir du volant en vol (retour au livre de base en B11c), pas le tir contre lui', async () => {
   const roc = fromProfile(l07, 'Roc plume-vive', 'roc');
   const store = await table([roc, human('h')], ['h', 'roc']);
-  assert.equal(amount(store.previewResolution(shot('h', 'roc', { targetAirborne: true })), 'move:fly-ranged'), -2);
-  assert.equal(amount(store.previewResolution(shot('h', 'roc', {})), 'move:fly-ranged'), undefined);
-  assert.equal(amount(store.previewResolution(shot('h', 'roc', { targetAirborne: false })), 'move:fly-ranged'), undefined);
-  assert.equal(amount(store.previewResolution(shot('roc', 'h', { targetAirborne: true })), 'move:fly-ranged'), undefined);
-  assert.equal(amount(store.previewResolution(shot('roc', 'h', { airborne: true })), 'move:fly-ranged'), undefined);
+  assert.equal(amount(store.previewResolution(shot('roc', 'h', { airborne: true })), 'move:fly-ranged'), -2);
+  assert.equal(amount(store.previewResolution(shot('roc', 'h', {})), 'move:fly-ranged'), undefined);
+  assert.equal(amount(store.previewResolution(shot('roc', 'h', { airborne: false })), 'move:fly-ranged'), undefined);
+  assert.equal(amount(store.previewResolution(shot('h', 'roc', { targetAirborne: true })), 'move:fly-ranged'), undefined);
+  assert.equal(amount(store.previewResolution(shot('h', 'roc', { airborne: true })), 'move:fly-ranged'), undefined);
 });
 
 test('B8c : Furtif ne vaut que pour Discrétion (Rurale)', async () => {

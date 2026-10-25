@@ -148,8 +148,7 @@ export function ficheSnapshot(charId, fiche, metadata = {}) {
 
 /**
  * B10b : Destin et Résilience de la fiche vers `extensions.v5.fate` (canonique ; le miroir `fate` n'est pas écrit) et `extensions.v5.resilience`.
- * La valeur de la fiche s'écrit quand l'outil n'en a pas encore ou quand la fiche a changé depuis la dernière
- * synchronisation ; sinon un point débité dans l'outil (création de familier) n'est pas rendu par une relecture.
+ * La valeur de la fiche s'écrit quand l'outil n'en a pas encore ou quand la fiche a changé par rapport à une valeur précédente connue ; sinon un point débité dans l'outil (création de familier) n'est pas rendu par une relecture.
  */
 function importFicheDurables(subject, snapshot, previousSnapshot) {
   const wanted = snapshot?.durables || {};
@@ -158,7 +157,9 @@ function importFicheDurables(subject, snapshot, previousSnapshot) {
   for (const key of ['fate', 'resilience']) {
     if (!Number.isSafeInteger(wanted[key])) continue;
     const known = v5[key] ?? (key === 'fate' ? subject.fate : undefined);
-    if (known === undefined || known === null || known === '' || previous[key] !== wanted[key]) v5[key] = wanted[key];
+    // Sans valeur précédente connue (snapshot antérieur à B10b), la valeur de l'outil n'est pas écrasée ; le snapshot garde celle de la fiche.
+    const changed = Number.isSafeInteger(previous[key]) && previous[key] !== wanted[key];
+    if (known === undefined || known === null || known === '' || changed) v5[key] = wanted[key];
   }
   if (!Object.keys(v5).some(key => v5[key] !== subject.extensions?.v5?.[key])) return subject;
   return { ...subject, extensions: { ...(subject.extensions || {}), v5 } };

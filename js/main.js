@@ -28,7 +28,7 @@ import { initFicheSyncView } from './ui/fiche-sync-view.js';
 import { parseProfileJson, parseProfileInput, PROFILE_JSON_EXAMPLE } from './core/json-profile-import.js';
 import { createActionEditor, preserveEditedV5Modifier } from './ui/action-editor.js';
 import { createEncounter, normalizeEncounter, normalizeCamp, CAMP_LABELS } from './core/encounters.js';
-import { userError, userMessage, contextMessage } from './ui/messages.js';
+import { userError, userMessage, contextMessage, refusalError } from './ui/messages.js';
 import { deriveReminders, pendingReminders, resolveReminder, REMINDER_DECISIONS } from './core/reminders.js';
 import { createScene, proposeSceneEvent } from './core/scene-events.js';
 import { normalizeEffects, normalizeState } from './core/effects.js';
@@ -366,7 +366,8 @@ function requireStoreApi(name) {
 
 async function awaitStore(operation, label = 'Opération locale') {
   const result = await operation;
-  if (result?.ok === false) throw result.error || new Error(`${label} impossible.`);
+  // Un refus { ok:false, message } montre sa raison au MJ (voir `refusalError`).
+  if (result?.ok === false) throw typeof result.message === 'string' && result.message.trim() ? refusalError({ message: result.message }, label) : result.error || new Error(`${label} impossible.`);
   if (result === false) throw new Error(`${label} impossible.`);
   return result;
 }
@@ -1248,7 +1249,7 @@ const workspaceView = DOM.panels.workspace && qs('#workspace-root') ? initWorksp
     getFortune: id => Store.getFortune(id),
     editFortune: id => editFortuneFor(id),
     setMomentum: (id, value) => awaitStore(Store.executeCommand('set-momentum', draft => ({ ...draft, combat: { ...draft.combat, participants: (draft.combat?.participants || []).map(participant => participant.id === id ? withMomentum(participant, value) : participant) } })), 'Élan'),
-    acquireStates: (id, states) => resolveV5EffectOperation((inputs, baseRevision) => Store.acquireConditions(id, states, { ...(inputs[id] || {}), baseRevision, authorId: Store.getCombat().currentActorId || id, targetId: id, round: Store.getCombat().round }), { title: 'Ajouter un État V5' }),
+    acquireStates: (id, states, extra = {}) => resolveV5EffectOperation((inputs, baseRevision) => Store.acquireConditions(id, states, { ...(inputs[id] || {}), ...(extra.magical === true ? { magical: true } : {}), baseRevision, authorId: Store.getCombat().currentActorId || id, targetId: id, round: Store.getCombat().round }), { title: 'Ajouter un État V5' }),
     recoverState: async (id, state) => {
       const participant = Store.getCombat().participants.get(id); if (!participant) return { status: 'cancelled' };
       const method = await chooseV5RecoveryMethod({ participantName: participant.name, condition: state, getFortune: () => Store.getFortune(id), editFortune: () => editFortuneFor(id) }); if (!method) return { status: 'cancelled' };
@@ -1278,8 +1279,8 @@ const workspaceView = DOM.panels.workspace && qs('#workspace-root') ? initWorksp
     renderRules: content => { renderReferenceTables('', content, { getEnvelope:()=>JSON.parse(Store.getFullJSON()) }); },
     renderOverview: renderWorkspaceOverview,
     renderLog: content => { renderLog(Store, content, { contextual: true }); },
-    adjustHp: ({ participantId, delta }) => {
-      if (Number(delta) > 0 && typeof Store.healWounds === 'function') return resolveV5EffectOperation((inputs, baseRevision) => Store.healWounds(participantId, Number(delta), { ...(inputs[participantId] || {}), baseRevision }), { title: 'Récupérer des Blessures' });
+    adjustHp: ({ participantId, delta, source }) => {
+      if (Number(delta) > 0 && typeof Store.healWounds === 'function') return resolveV5EffectOperation((inputs, baseRevision) => Store.healWounds(participantId, Number(delta), { ...(inputs[participantId] || {}), ...(source ? { source } : {}), baseRevision }), { title: 'Récupérer des Blessures' });
       if (typeof Store.executeCommand === 'function') {
         return awaitStore(Store.executeCommand('adjust-hp', draft => {
           const participants = (draft.combat?.participants || []).map(participant => participant.id === participantId

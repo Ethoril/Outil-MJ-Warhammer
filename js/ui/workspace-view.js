@@ -2,6 +2,7 @@ import {createDivinePanel} from './v5-divine-panel.js';
 import {createV5BrokenEscapePanel,isBrokenActor} from './v5-broken-escape-panel.js';
 import {beastFormRestriction} from '../core/v5-magic-arbitrations.js';
 import { magicActionsFor } from '../core/creature-magic.js';
+import { familiarOfOf, FAMILIAR_HEALING_SOURCES } from '../core/familiars.js';
 /**
  * Vue de séance E09.
  *
@@ -291,6 +292,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     lastFocusAction: null,
     actionBusy: false,
     hpAmounts: {},
+    healSources: {},
     stateForm: null,
     // Résolution draft: survives every Bus re-render (no keystroke lost).
     resolution: emptyResolution(null)
@@ -693,6 +695,8 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     return reminders;
   }
 
+  const isHomunculusParticipant = participant => familiarOfOf(participant)?.system === 'homunculus';
+
   function renderStateForm(participant) {
     const form = node('div', 'workspace-state-form');
     form.setAttribute('role', 'group');
@@ -723,6 +727,13 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     }
     const author=readParticipants(Store).find(item=>item.id===readCombat(Store).currentActorId)||participant;
     expirationFields.append(node('p','workspace-muted',`Auteur : ${author.name} · Cible : ${participant.name}`));
+    // Un homoncule ne subit Hémorragique, Exténué, Empoisonné ou une maladie que d'une source magique.
+    const magical = document.createElement('input');
+    magical.type = 'checkbox'; magical.checked = draft.magical === true;
+    magical.dataset.focusKey = 'state-form-magical';
+    magical.addEventListener('change', () => { draft.magical = magical.checked; });
+    const magicalLabel = node('label', 'workspace-type', 'Source magique ');
+    magicalLabel.appendChild(magical);
     const add = button('Ajouter', 'workspace-secondary', { 'data-focus-key': 'state-form-add' });
     add.dataset.workspaceAction = 'add-state';
     add.dataset.actorId = participant.id;
@@ -733,7 +744,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       alert.setAttribute('role', 'alert');
       form.appendChild(alert);
     }
-    form.append(name, level, expiry, expirationFields, add, cancel);
+    form.append(name, level, expiry, expirationFields, ...(isHomunculusParticipant(participant) ? [magicalLabel] : []), add, cancel);
     return form;
   }
 
@@ -806,6 +817,17 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     });
     labelControls();
     hpControls.append(minus, quantity, plus);
+    // Un homoncule ne guérit que par guérison naturelle ou par la magie : la source du soin se choisit avant « + ».
+    if (isHomunculusParticipant(participant)) {
+      const source = document.createElement('select');
+      source.setAttribute('aria-label', `Source du soin pour ${participant.name}`);
+      source.dataset.focusKey = `hp-source-${participant.id}`;
+      source.append(new Option('Source du soin…', ''));
+      FAMILIAR_HEALING_SOURCES.forEach(row => source.append(new Option(row.label, row.kind)));
+      source.value = state.healSources[participant.id] || '';
+      source.addEventListener('change', () => { state.healSources[participant.id] = source.value; });
+      hpControls.insertBefore(source, plus);
+    }
     sheet.appendChild(hpControls);
 
     const caracs = participant.caracs || {};
@@ -1737,10 +1759,10 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     state.lastFocusAction = target?.dataset.workspaceAction || null;
   }
 
-  function updateStates(participantId, next, focusKey, acquire = false) {
+  function updateStates(participantId, next, focusKey, acquire = false, extra = {}) {
     const operation = acquire && callbacks.acquireStates ? callbacks.acquireStates : callbacks.setStates;
     const states = acquire && !callbacks.acquireStates ? [...normalizeEffects(readParticipants(Store).find(item => item.id === participantId)?.states), ...next] : next;
-    return Promise.resolve(operation(participantId, states))
+    return Promise.resolve(operation(participantId, states, extra))
       .then(result => { if(result?.status!=='cancelled') state.stateForm = null; render(focusKey); })
       .catch(error => {
         if (state.stateForm) state.stateForm.error = userMessage(error, 'État non enregistré : réessayez.');
@@ -1820,7 +1842,13 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       }
       case 'edit-fortune': callbacks.editFortune?.(participantId); break;
       case 'toggle-momentum': if (participant) Promise.resolve(callbacks.setMomentum?.(participantId, !hasMomentum(participant))).catch(error => { state.resolution.error = { field: 'general', message: userMessage(error, 'Élan non enregistré : réessayez.') }; render(); }); break;
-      case 'adjust-hp': callbacks.adjustHp?.({ participantId, delta: Number(target.dataset.hpDelta) }); break;
+      case 'adjust-hp': {
+        const delta = Number(target.dataset.hpDelta);
+        const healSource = delta > 0 && isHomunculusParticipant(participant) && state.healSources[participantId] ? { kind: state.healSources[participantId] } : null;
+        // Le refus se lit même sans panneau de résolution ouvert : toast d'erreur (import différé : toast.js lit le DOM au chargement).
+        Promise.resolve(callbacks.adjustHp?.({ participantId, delta, ...(healSource ? { source: healSource } : {}) })).catch(error => import('./toast.js').then(({ showToast }) => showToast(userMessage(error, 'PV non ajustés : réessayez.'), 'error')));
+        break;
+      }
       case 'enter-participant': callbacks.enterParticipant?.(participantId); break;
       case 'add-profile-to-combat': callbacks.addProfileToCombat?.(target.dataset.profileId); break;
       case 'open-state-form':
@@ -1846,7 +1874,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
           const expiry={phase:form.expiryPhase,round,...(form.expiryPhase!=='endOfRound'?{turn:1,actorId:form.expiryActorId||participantId}:{})};
           added=createV5TimedEffect(added,{authorId:readCombat(Store).currentActorId||participantId,targetId:participantId,expiry});
         }
-        updateStates(participantId, [added], `state-add-${participantId}`, true);
+        updateStates(participantId, [added], `state-add-${participantId}`, true, { magical: form.magical === true });
         break;
       }
       case 'heal-critical': {

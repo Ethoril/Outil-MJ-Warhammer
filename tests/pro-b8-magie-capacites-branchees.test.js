@@ -31,8 +31,9 @@ test('B8 : un Lanceur de sorts de bestiaire ouvre Focalisation, Dissipation et I
   assert.deepEqual(creatureCastingBases(slann), { focusBase: 95, tongueBase: 95 });
   const actions = magicActionsFor(slann);
   assert.deepEqual(actions.map(action => action.type), ['channelling', 'dispel', 'cast']);
-  assert.equal(actions[0].base, 95);
-  assert.equal(actions[2].base, 95);
+  // B11c : la compétence imprimée du Slann (105) prime sur la base du Trait (95) et c'est elle que le Test emploie.
+  assert.equal(actions[0].base, 105);
+  assert.equal(actions[2].base, 105);
   assert.deepEqual(magicActionsFor(slann, { channel: false, cast: false }).map(action => action.type), ['dispel']);
   assert.deepEqual(magicActionsFor(store.getCombat().participants.get('hero')), []);
   assert.equal(creatureCastingBases(store.getCombat().participants.get('hero')), null);

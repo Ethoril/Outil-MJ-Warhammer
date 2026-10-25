@@ -359,8 +359,8 @@ export function initCardUI(Store, Combat) {
 
     if (e.target.matches('.btn-slann-contemplation')) {
       e.preventDefault();
-      const { sl } = readSlannInputs(e.target.closest('.actor-slann'));
-      observe(Store.applySlannContemplation(id, sl), 'Contemplation');
+      const { sl, success } = readSlannInputs(e.target.closest('.actor-slann'));
+      observe(Store.applySlannContemplation(id, sl, { success }), 'Contemplation');
       return;
     }
 

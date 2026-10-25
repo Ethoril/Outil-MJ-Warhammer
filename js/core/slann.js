@@ -10,7 +10,7 @@ const ID = {
 /** Disposition des neuf capacités : `assisted` (service ci-dessous) ou `reminder` (rappel motivé). */
 export const SLANN_ABILITIES = [
   { id: ID.augur, name: 'Augure slann', status: 'reminder', motive: 'Dépend des règles de Psychométrie et d\'Augure d\'autres suppléments, hors outil.', summaryFr: 'Psychométrie comme compétence de base ; exception à l\'incompatibilité avec la magie.' },
-  { id: ID.contemplation, name: 'Contemplation slann', status: 'assisted', by: 'contemplationOutcome', summaryFr: 'Test de Perception (Difficile −10) quand les alentours changent ; la table donne l\'état du Slann.' },
+  { id: ID.contemplation, name: 'Contemplation slann', status: 'assisted', by: 'contemplationOutcome', summaryFr: 'Test de Perception (Difficile −1 DR) quand les alentours changent ; la table donne l\'état du Slann.' },
   { id: ID.totalPower, name: 'Puissance totale slann', status: 'assisted', by: 'totalPowerCritical', summaryFr: 'Lancement réussi critique aussi sur un double ou une unité 0 ; relance de perception des Vents en Lustrie (rappel).' },
   { id: ID.mishaps, name: 'Maître des incidents', status: 'assisted', by: 'mishapSeverity', summaryFr: 'Incident majeur devenu mineur, sauf lancement à travers un autre mage (Télépathie).' },
   { id: ID.teleport, name: 'Téléportation de secours', status: 'assisted', by: 'planEmergencyTeleportation', summaryFr: 'À 10 Blessures ou moins, ou Blessure Critique grave : action gratuite pour lancer Téléportation.' },
@@ -112,25 +112,47 @@ export function planEmergencyTeleportation(participant, { wounds = null, graveCr
   };
 }
 
-const CONTEMPLATION = [
-  { min: 2, key: 'alive', label: 'Alerte (Alive to the Moment)', text: 'Le Slann réagit à son entourage sans pénalité.' },
-  { min: 0, key: 'detached', label: 'Détaché (Detached)', text: 'Stupide pour le reste de la rencontre, puis alerte ou retour à la méditation selon les circonstances.' },
-  { min: -3, key: 'fog', label: 'Brume de pensée (Thought Fog)', text: 'Deux États Exténué ; à son tour, Mouvement ou Action, pas les deux.' },
-  { min: -Infinity, key: 'lost', label: 'Perdu dans ses pensées (Lost in Thought)', text: 'Aucune conscience de son entourage, aucune réaction.' }
-];
+// Table de Contemplation (L07 p.125) : « +2 ou plus », « 0 à +1 », « −0 à −3 », « −4 ou moins ». Le zéro se lit selon le Test :
+// +0 est une réussite (Détaché), −0 un échec marginal (Brume de pensée).
+const CONTEMPLATION = {
+  alive: { key: 'alive', label: 'Alerte (Alive to the Moment)', text: 'Le Slann réagit à son entourage sans pénalité.' },
+  detached: { key: 'detached', label: 'Détaché (Detached)', text: 'Stupide pour le reste de la rencontre, puis alerte ou retour à la méditation selon les circonstances.' },
+  fog: { key: 'fog', label: 'Brume de pensée (Thought Fog)', text: 'Deux États Exténué ; à son tour, Mouvement ou Action, pas les deux.' },
+  lost: { key: 'lost', label: 'Perdu dans ses pensées (Lost in Thought)', text: 'Aucune conscience de son entourage, aucune réaction.' }
+};
 
-/** Table de Contemplation selon les DR du Test de Perception saisi (Difficile −10 ; Stimuli bruyants : Moyen +0 ; attaque : Facile +40). */
-export function contemplationOutcome(participant, sl) {
+/**
+ * DR du Test de Perception de Contemplation : entier, ou chaîne signée (« +0 », « -0 »). Un zéro non signé demande `success`
+ * (réussite ou échec du Test) ; `-0` numérique ou chaîne vaut échec marginal. `null` si la saisie est invalide.
+ */
+function readContemplationSl(sl, success) {
+  const text = typeof sl === 'string' ? sl.trim().replace(/[−–]/g, '-') : null;
+  if (sl === null || sl === undefined || text === '') return null;
+  const value = Number(text ?? sl);
+  if (!Number.isInteger(value)) return null;
+  if (value !== 0) return { value, zero: null };
+  if (text?.startsWith('-') || Object.is(sl, -0)) return { value, zero: 'failure' };
+  if (text?.startsWith('+')) return { value, zero: 'success' };
+  if (success === true) return { value, zero: 'success' };
+  if (success === false) return { value, zero: 'failure' };
+  return { value, zero: 'unknown' };
+}
+
+/** Table de Contemplation selon les DR du Test de Perception saisi (Difficile −1 DR ; Stimuli bruyants : Stimulant +0 ; attaque : Facile +4 DR). */
+export function contemplationOutcome(participant, sl, { success } = {}) {
   const label = 'Contemplation slann';
   if (!has(participant, ID.contemplation)) return notSlann('slann-contemplation', label);
-  const value = Number(sl);
-  if (sl === null || sl === undefined || sl === '' || !Number.isInteger(value)) return refused('slann-contemplation', label, `${label} : DR du Test de Perception à saisir (entier).`);
-  const row = CONTEMPLATION.find(entry => value >= entry.min);
+  const read = readContemplationSl(sl, success);
+  if (!read) return refused('slann-contemplation', label, `${label} : DR du Test de Perception à saisir (entier).`);
+  if (read.zero === 'unknown') return refused('slann-contemplation', label, `${label} : 0 DR, préciser +0 (Test réussi) ou −0 (échec marginal).`);
+  const { value, zero } = read;
+  const key = value >= 2 ? 'alive' : value === 1 || zero === 'success' ? 'detached' : value >= -3 ? 'fog' : 'lost';
+  const row = CONTEMPLATION[key];
   const conditions = row.key === 'fog' ? [{ name: 'Fatigued', count: 2 }] : row.key === 'detached' ? [{ name: 'Stupid', scope: 'rencontre' }] : [];
   return {
     key: 'slann-contemplation', label, available: true, effects: [], outcome: row.key, conditions,
     unresolved: [], reminders: [`${row.label} : ${row.text}`],
-    receipt: { ability: label, sl: value, outcome: row.key, conditions, blocked: [] }
+    receipt: { ability: label, sl: value, zero, outcome: row.key, conditions, blocked: [] }
   };
 }
 

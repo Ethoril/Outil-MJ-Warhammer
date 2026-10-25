@@ -175,10 +175,13 @@ export function previewFamiliarCondition(familiar, state, source = {}) {
   return { ok: false, receipt: { kind: 'familiar-condition', state: hit[1], message: hit[1] + ' refusé : un homoncule ne le subit que d’une source magique.' } };
 }
 
-/** Un homoncule ne guérit que par sort de soin : ni compétence Soin, ni miracle, ni médecine. */
+/** Sources de soin d'un homoncule (décision du MJ du 25/10/2026) : guérison naturelle et magie, rien d'autre. */
+export const FAMILIAR_HEALING_SOURCES = [{ kind: 'natural', label: 'Guérison naturelle' }, { kind: 'spell', label: 'Sort' }];
+
+/** Un homoncule ne guérit que par guérison naturelle ou par la magie : ni compétence Soin, ni miracle, ni médecine, ni autre soin. */
 export function previewFamiliarHealing(familiar, source = {}) {
-  if (!isHomunculus(familiar) || source.kind === 'spell') return { ok: true, receipt: null };
-  return { ok: false, receipt: { kind: 'familiar-healing', message: 'Soin refusé : un homoncule ne guérit que par un sort de soin (ni Soin, ni miracle, ni médecine).' } };
+  if (!isHomunculus(familiar) || FAMILIAR_HEALING_SOURCES.some(row => row.kind === source.kind)) return { ok: true, receipt: null };
+  return { ok: false, receipt: { kind: 'familiar-healing', message: 'Soin refusé : un homoncule ne guérit que par guérison naturelle ou par la magie (ni Soin, ni miracle, ni médecine, ni autre soin) ; choisir la source du soin.' } };
 }
 
 const isElf = master => keywordMatches(participantKeywords(master).ids, 'elfe');

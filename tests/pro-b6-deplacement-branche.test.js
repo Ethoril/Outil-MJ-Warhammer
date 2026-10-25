@@ -20,12 +20,12 @@ const amount = (preview, id) => preview.test.details.modifiers.find(m => m.id ==
 const shot = (actorId, targetId, context) => ({ resolutionId: `b6-shot-${actorId}`, actorId, targetId, action: { type: 'attack', base: 50, attr: 'CT', damage: 4 }, roll: 24, defense: { base: 30, roll: 82, v5: { kind: 'test' } }, v5: { kind: 'ranged', context } });
 const skill = (actorId, targetId, label, context, extra = {}) => ({ resolutionId: `b6-${actorId}-${label}`, actorId, targetId, action: { type: 'skill', label, base: 40, attr: 'Ag', ...extra }, roll: 24, defense: { base: 30, roll: 82, v5: { kind: 'test' } }, v5: { kind: 'test', context } });
 
-// Décision du MJ (BR-12, 24/10) : le −2 DR vise les tirs contre une créature en vol (voir pro-b8c-corrections).
-test('B6 : un tir contre un Roc en vol est à −2 DR quand le MJ le précise, rien sinon ni pour le tir du Roc', async () => {
+// BR-12, retour au livre de base (décision du MJ du 25/10, B11c) : le −2 DR vise le tir du Roc en vol, pas les tirs contre lui.
+test('B6 : le tir d’un Roc en vol est à −2 DR quand le MJ le précise, rien sinon ni pour un tir contre lui', async () => {
   const { store, made: [roc] } = await table('Roc plume-vive');
-  assert.equal(amount(store.previewResolution(shot('h', roc.id, { targetAirborne: true })), 'move:fly-ranged'), -2);
-  assert.equal(amount(store.previewResolution(shot('h', roc.id, {})), 'move:fly-ranged'), undefined);
-  assert.equal(amount(store.previewResolution(shot(roc.id, 'h', { targetAirborne: true })), 'move:fly-ranged'), undefined);
+  assert.equal(amount(store.previewResolution(shot(roc.id, 'h', { airborne: true })), 'move:fly-ranged'), -2);
+  assert.equal(amount(store.previewResolution(shot(roc.id, 'h', {})), 'move:fly-ranged'), undefined);
+  assert.equal(amount(store.previewResolution(shot('h', roc.id, { airborne: true, targetAirborne: true })), 'move:fly-ranged'), undefined);
 });
 
 test('B6 : Amphibie et Arboricole modifient Natation, Escalade et Discrétion', async () => {

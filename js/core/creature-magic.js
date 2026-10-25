@@ -4,6 +4,8 @@
 // points non résolus, rappels, reçu) sans rien écrire. Seule la Résistance à la Magie est lue par un service (sorts) ; le reste est assisté.
 
 import { willpowerBase } from './creature-natures.js';
+import { resolveCastingSkill } from './v5-magic-casting.js';
+import { resolveChannellingSkill } from './v5-magic-channelling.js';
 
 const fold = value => String(value ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/\s+/g, ' ').trim();
 
@@ -193,18 +195,23 @@ export function creatureMagicReminders(participant) {
 /**
  * Valeurs de départ de Focalisation et de Langue magique d'un Lanceur de sorts (`null` sans le Trait) : de quoi ouvrir les actions de
  * magie d'une créature qui n'a ni sorts ni compétence de Focalisation sur sa fiche. Un champ vaut `null` si la caractéristique manque.
+ * `baseline` : calcul sur les caractéristiques de base (`baseCaracs`), pour les Tests : `effectiveSkillScore` y ajoute ensuite l'écart
+ * entre caractéristiques courantes et de base, qui ne doit compter qu'une fois.
  */
-export function creatureCastingBases(participant) {
+export function creatureCastingBases(participant, { baseline = false } = {}) {
   if (!traitsOf(participant).some(trait => trait.key === 'spellcaster')) return null;
-  const { tests } = planCreatureMagic(participant, 'spellcaster');
+  const baseCaracs = participant?.extensions?.v5?.baseCaracs || participant?.baseCaracs;
+  const subject = baseline && baseCaracs ? { ...participant, caracs: { ...participant.caracs, ...baseCaracs } } : participant;
+  const { tests } = planCreatureMagic(subject, 'spellcaster');
   const baseOf = skill => tests.find(test => test.skill === skill)?.base ?? null;
   return { focusBase: baseOf('Focalisation'), tongueBase: baseOf('Langue magique') };
 }
 
 /**
  * Actions de magie V5 (Focalisation, Dissipation, Incantation) d'un participant ; vide s'il n'est pas lanceur.
- * `allow.channel` / `allow.cast` : false quand une forme animale les interdit. Un Lanceur de sorts de bestiaire est lanceur d'office,
- * ses bases étant celles du Trait (Focalisation Volonté+10, Langue magique Intelligence+10).
+ * `allow.channel` / `allow.cast` : false quand une forme animale les interdit. Un Lanceur de sorts de bestiaire est lanceur d'office ;
+ * la base affichée est celle que le Test emploie vraiment : la compétence imprimée si elle existe, sinon la base du Trait
+ * (Focalisation Volonté+10, Langue magique Intelligence+10).
  */
 export function magicActionsFor(participant, allow = {}) {
   const casting = creatureCastingBases(participant);
@@ -216,11 +223,11 @@ export function magicActionsFor(participant, allow = {}) {
     || participant?.extensions?.v5?.magic
   );
   if (!isMagicUser) return [];
-  const FM = casting?.focusBase ?? (Number(participant.caracs?.FM) || 50);
-  const Int = Number(participant.caracs?.Int) || 50;
+  const FM = resolveChannellingSkill(participant).score || 50;
+  const tongue = resolveCastingSkill(participant).score || Number(participant.caracs?.Int) || 50;
   return [
     ...(allow.channel !== false ? [{ id: 'v5-magic:channelling', note: 'Focalisation V5', type: 'channelling', attr: 'FM', base: FM, mod: 0, qualities: [] }] : []),
-    { id: 'v5-magic:dispel', note: 'Dissipation persistante V5', type: 'dispel', attr: 'Int', base: Int, mod: 0, qualities: [] },
-    ...(allow.cast !== false ? [{ id: 'v5-magic:cast', note: 'Incantation V5', type: 'cast', attr: 'Int', base: casting?.tongueBase ?? Int, mod: 0, qualities: [] }] : [])
+    { id: 'v5-magic:dispel', note: 'Dissipation persistante V5', type: 'dispel', attr: 'Int', base: tongue, mod: 0, qualities: [] },
+    ...(allow.cast !== false ? [{ id: 'v5-magic:cast', note: 'Incantation V5', type: 'cast', attr: 'Int', base: tongue, mod: 0, qualities: [] }] : [])
   ];
 }

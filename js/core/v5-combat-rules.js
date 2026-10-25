@@ -129,7 +129,7 @@ export function buildCombatTest(normalized, role = 'actor') {
   const senses=senseTestRules({actor,opponent:target,participants:normalized.v5State?.participants||[],skillLabel,kind,defending,context:settings.context||{},currentBase:Number(action.base)||0});
   if(senses.base)action={...action,base:senses.base.score};
   modifiers.push(...senses.modifiers);
-  modifiers.push(...movementTestRules({actor,opponent:target,skillLabel,kind,defending,context:settings.context||{}}));
+  modifiers.push(...movementTestRules({actor,skillLabel,kind,defending,context:settings.context||{}}));
   if(settings.context?.blackpowderBrokenTest===true&&talentModifiers.context.skillId==='skill-43_61_6c_6d_65-base')modifiers.push({id:'quality:blackpowder-calm',label:'Calme Accessible contre À Poudre noire',amount:2});
   // Attraction des flèches : les tireurs adverses gagnent des DR contre la cible.
   if(!defending && kind==='ranged' && Number(target?.extensions?.v5?.specialStates?.incomingRangedBonusSl))modifiers.push({id:'spell-ranged-attraction',label:'Attraction des flèches',amount:Number(target.extensions.v5.specialStates.incomingRangedBonusSl)});

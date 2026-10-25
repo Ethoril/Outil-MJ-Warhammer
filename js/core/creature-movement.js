@@ -6,7 +6,7 @@
 const fold = value => String(value ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/\s+/g, ' ').trim();
 
 const RULES = {
-  fly: { fr: 'Vol', names: ['fly', 'vol'], note: 'Mouvement aérien à l\'indice, peut charger, doit voler si commence en vol ; portée de tir décalée, tirs contre lui en vol à −2 DR.' },
+  fly: { fr: 'Vol', names: ['fly', 'vol'], note: 'Mouvement aérien à l\'indice, peut charger, doit voler si commence en vol ; −2 DR à ses attaques à distance quand il vole ; pour le viser, la portée est décalée d\'un cran.' },
   bounce: { fr: 'Bond', names: ['bounce', 'bond'], note: 'Double Mouvement pour Charge, Saut ou Sprint ; franchit terrain et créatures intermédiaires.' },
   sprinter: { fr: 'Foulée', names: ['sprinter', 'stride', 'foulee'], note: 'Distance de course multipliée par un et demi.' },
   stridingGait: { fr: 'Foulée adaptée', names: ['striding gait', 'strider', 'foulee adaptee'], note: 'Ignore les pénalités du terrain nommé, +1 DR Athlétisme et Discrétion dans ce terrain.' },
@@ -138,9 +138,9 @@ function receiptOf(plan) {
 
 /**
  * Effets des Traits de déplacement sur un Test, quand le contexte les détermine (sinon seul le rappel de la carte reste).
- * `context` : `targetAirborne` (la cible porteuse de Vol est en vol : −2 DR au tireur), `inWater` (booléen, Créature marine). Rend `[{ id, label, amount }]`.
+ * `context` : `airborne` (le tireur porteur de Vol est en vol : −2 DR à son tir, livre de base p.358), `inWater` (booléen, Créature marine). Rend `[{ id, label, amount }]`.
  */
-export function movementTestRules({ actor, opponent = null, skillLabel = '', kind, defending = false, context = {} }) {
+export function movementTestRules({ actor, skillLabel = '', kind, defending = false, context = {} }) {
   const modifiers = [];
   const label = fold(skillLabel);
   const owns = key => traitsOf(actor).some(trait => trait.key === key);
@@ -148,11 +148,8 @@ export function movementTestRules({ actor, opponent = null, skillLabel = '', kin
     const plan = planMovement(actor, key, { inWater: context.inWater });
     for (const modifier of plan.modifiers) if (modifier.scope === scope) modifiers.push({ id, label: labelText, amount: modifier.dr });
   };
-  // Décision du MJ (BR-12, 24/10) : le −2 DR vise les tirs CONTRE une créature en vol, pas ceux du volant.
-  if (kind === 'ranged' && !defending && context.targetAirborne === true && opponent && carriesMovement(opponent, 'fly')) {
-    const plan = planMovement(opponent, 'fly', {});
-    for (const modifier of plan.modifiers) if (modifier.scope === 'tir propre') modifiers.push({ id: 'move:fly-ranged', label: 'Tir contre une créature en vol (Vol)', amount: modifier.dr });
-  }
+  // BR-12, retour au livre de base (décision du MJ du 25/10) : −2 DR aux attaques à distance DU porteur de Vol en vol ; rien de chiffré contre lui.
+  if (owns('fly') && kind === 'ranged' && !defending && context.airborne === true) push('fly', 'move:fly-ranged', 'Tir en vol (Vol)', 'tir propre');
   if (owns('amphibious') && /natation|swim/.test(label)) push('amphibious', 'move:amphibious-swim', 'Natation (Amphibie)', 'Natation');
   if (owns('arboreal') && /escalade|climb|discretion/.test(label)) push('arboreal', 'move:arboreal', 'Escalade ou Discrétion (Arboricole)', 'Escalade et Discrétion');
   if (owns('marine') && context.inWater === false) push('marine', 'move:marine-dry', "Créature marine hors de l'eau", 'tous les Tests');

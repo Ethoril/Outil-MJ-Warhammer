@@ -61,7 +61,7 @@ test('B11 : soin et États refusés à un homoncule sauf source magique ; l’an
   const history = store.getHistory().past.length;
   const refused = await store.healWounds('imp', 2);
   assert.equal(refused.ok, false);
-  assert.match(refused.message, /ne guérit que par un sort de soin/);
+  assert.match(refused.message, /ne guérit que par guérison naturelle ou par la magie/);
   assert.equal(get(store, 'imp').hp, 3);
   const healed = await store.healWounds('imp', 2, { source: { kind: 'spell' } });
   assert.equal(healed.ok, true);

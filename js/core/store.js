@@ -73,6 +73,7 @@ import { momentumAfterChange, withMomentum } from './v5-combat-rules.js';
 import { advanceGameClock, campaignDurationSeconds, createGameClock, deriveTurnPhasePlan, readCombatPosition, reconcileGameClockPosition } from './v5-game-time.js';
 import { advanceCampaignSnapshot } from './v5-campaign-time.js';
 import { proposeNewKeyword, referentialFromExtensions, setActiveReferential } from './creature-keywords.js';
+import { attacksAreMagical } from './creature-natures.js';
 import { validateFamiliarLink, buildFamiliarLink, familiarBackLink, familiarLinksOf, planFamiliarCreation, familiarLinkLabel, previewFamiliarCondition, previewFamiliarHealing, planFamiliarDeath, familiarDeathDamage } from './familiars.js';
 import { hasRegeneration, planRegeneration } from './creature-regeneration.js';
 import { hasManyHeads, headRegistryOf, applyHeadCritical, restoreHead, HEAD_STATES } from './creature-heads.js';
@@ -707,7 +708,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       actorId: actor.id || input.actorId || null,
       targetId: target.id || preview?.targetId || null,
       actorName: actor.name || null, targetName: target.name || null,
-      text: `${RESOLUTION_TYPE_LABELS[actionType] || 'Action'} — ${opposed ? preview.hit ? 'touché' : 'pas de touche' : outcome} sur ${targetLabel} · DR ${opposed?.netSl ?? preview.sl}${preview.damage || preview.critical?.application?.extraWounds ? ` · ${wounds} Blessures` : ''}${manualDamage}${preview.critical ? ' · critique' : ''}${preview.defenderCritical ? ' · critique défensif' : ''}`,
+      text: `${RESOLUTION_TYPE_LABELS[actionType] || 'Action'} — ${opposed ? preview.hit ? 'touché' : 'pas de touche' : outcome} sur ${targetLabel} · DR ${opposed?.netSl ?? preview.sl}${preview.damage || preview.critical?.application?.extraWounds ? ` · ${wounds} Blessures` : ''}${manualDamage}${preview.critical ? ' · critique' : ''}${preview.defenderCritical ? ' · critique défensif' : ''}${preview.familiarConditionRefusals?.length ? ` · États refusés : ${preview.familiarConditionRefusals.map(row => `${row.name || 'Homoncule'} (${row.state})`).join(', ')}` : ''}`,
       detail: {
         ...(opposed ? { hit: Boolean(preview.hit), opposition: opposed } : {}),
         ruleVersion: preview.ruleVersion,
@@ -735,6 +736,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         source: { actor: cloneValue(actor.ficheSnapshot?.source || null), target: cloneValue(target.ficheSnapshot?.source || null) },
         ...(preview?.talentTrace ? { talentTrace: cloneValue(preview.talentTrace) } : {}),
         ...(preview?.talents ? { talents: cloneValue(preview.talents) } : {}),
+        ...(preview?.familiarConditionRefusals?.length ? { familiarConditionRefusals: cloneValue(preview.familiarConditionRefusals) } : {}),
         ...(preview?.weaponConditions ? { weaponConditions: cloneValue(preview.weaponConditions), targetConditionApplication: cloneValue(preview.targetConditionApplication), reminders: cloneValue(preview.reminders || []) } : {}),
         ...(preview?.talentPlans ? { talentPlans: cloneValue(preview.talentPlans), activeEffects: cloneValue(preview.activeEffects), damageReplacedByTalent: preview.damageReplacedByTalent, secondaryTargets: cloneValue(preview.secondaryTargets||[]) } : {}),
         ...(resolution?.actionCostReceipt ? { actionCostReceipt: cloneValue(resolution.actionCostReceipt) } : {}),
@@ -1668,7 +1670,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       return commitV5Effect('recover-condition-v5', id, (participant, draft) => recoverV5Condition(participant, condition, v5EffectContext(draft, captured)), options);
     },
     healWounds(id, amount, options = {}) {
-      // Un homoncule ne guérit que par un sort de soin (`options.source = { kind: 'spell' }`).
+      // Un homoncule ne guérit que par guérison naturelle ou par la magie (`options.source = { kind: 'natural' | 'spell' }`).
       const check = previewFamiliarHealing(combat.participants.get(id), options.source || {});
       if (!check.ok) return Promise.resolve({ ok: false, status: 'refused', reason: 'familiar-healing', error: new Error(check.receipt.message), message: check.receipt.message, receipt: check.receipt });
       return commitV5Effect('heal-wounds-v5', id, participant => healV5Wounds(participant, amount), options);
@@ -2281,7 +2283,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       const master = combat.participants.get(masterId), familiar = combat.participants.get(familiarId);
       const plan = planFamiliarCreation(master, familiar, input);
       if (!plan.ok) return plan;
-      const creation = { resource: plan.resource, before: plan.before, spent: plan.spent, after: plan.after, pointsToDistribute: plan.pointsToDistribute, balanceEntered: plan.balanceEntered };
+      const creation = { resource: plan.resource, before: plan.before, spent: plan.spent, after: plan.after, pointsToDistribute: plan.pointsToDistribute, balanceEntered: plan.balanceEntered, campBefore: familiar.camp };
       const link = { ...buildFamiliarLink(familiar, input, { id: uid(), createdAt: Date.now() }), creation };
       const result = api.executeCommand('create-familiar', draft => ({ ...draft,
         combat: { ...draft.combat, participants: (draft.combat?.participants || []).map(item => {
@@ -2302,7 +2304,11 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       if (!link) return { ok: false, reason: 'unknown-link', message: 'Lien introuvable.' };
       const result = api.executeCommand('unlink-familiar', draft => ({ ...draft, combat: { ...draft.combat, participants: (draft.combat?.participants || []).map(item => {
         if (item.id === masterId) return withV5(item, v5 => ({ ...v5, familiarLinks: (v5.familiarLinks || []).filter(row => row.id !== linkId) }));
-        if (item.id === link.familiarId && item.extensions?.v5?.familiarOf?.linkId === linkId) return withV5(item, v5 => { const { familiarOf, ...rest } = v5; return rest; });
+        if (item.id === link.familiarId && item.extensions?.v5?.familiarOf?.linkId === linkId) {
+          const freed = withV5(item, v5 => { const { familiarOf, ...rest } = v5; return rest; });
+          // Le camp d'avant la création (familier d'un PJ passé PNJ allié) est rendu.
+          return link.creation?.campBefore !== undefined ? { ...freed, camp: link.creation.campBefore } : freed;
+        }
         return item;
       }) } }));
       return typeof result?.then === 'function' ? result.then(done => ({ ...done, ok: true })) : { ...result, ok: true };
@@ -2330,7 +2336,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         damage = dealt.damage;
       }
       const result = api.executeCommand('familiar-death', draft => ({ ...draft,
-        combat: { ...draft.combat, participants: (draft.combat?.participants || []).map(item => (item.id === masterId && damage ? { ...item, hp: Math.max(0, (Number(item.hp) || 0) - damage) } : item)) },
+        combat: { ...draft.combat, participants: (draft.combat?.participants || []).map(item => (item.id === masterId && damage ? momentumAfterChange(item, { ...item, hp: Math.max(0, (Number(item.hp) || 0) - damage) }) : item)) },
         log: [{ id: uid(), kind: 'effect', actorId: familiarId, targetId: masterId,
           text: `${familiar.name} · Mort du familier : ${master.name} ${options.calmFailed === true ? `rate le ${plan.calmTest.label}, ${damage} Blessure(s) directe(s)` : `réussit le ${plan.calmTest.label}`}`,
           detail: { kind: 'familiar-death', linkId: plan.linkId, calmModifier: plan.calmTest.modifier, calmFailed: options.calmFailed === true, damage, reminders: plan.reminders } }, ...(draft.log || [])].slice(0, 300) }));
@@ -2408,7 +2414,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       if (!ids.length) return { ok: false, reason: 'no-target', message: 'Nuée : désignez au moins un adversaire engagé.' };
       const amount = plan.endOfRound.amount;
       const result = api.executeCommand('swarm-end-of-round', draft => ({ ...draft,
-        combat: { ...draft.combat, participants: (draft.combat?.participants || []).map(item => (ids.includes(item.id) ? { ...item, hp: Math.max(0, (Number(item.hp) || 0) - amount) } : item)) },
+        combat: { ...draft.combat, participants: (draft.combat?.participants || []).map(item => (ids.includes(item.id) ? momentumAfterChange(item, { ...item, hp: Math.max(0, (Number(item.hp) || 0) - amount) }) : item)) },
         log: [{ id: uid(), kind: 'effect', actorId: swarmId, targetId: null,
           text: `${swarm.name} · Nuée, fin de Round : ${amount} Blessure(s) à ${ids.map(id => combat.participants.get(id).name || id).join(', ')}`,
           detail: { kind: 'swarm-end-of-round', targetIds: ids, amount } }, ...(draft.log || [])].slice(0, 300) }));
@@ -2424,6 +2430,9 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       if (!plan.available) return { ok: false, reason: 'refused', message: plan.unresolved.join(' ') };
       if (!target || target.id === sourceId) return { ok: false, reason: 'no-target', message: 'Venin : désignez la cible blessée.' };
       const difficulty = plan.effects[0].recoveryDifficulty;
+      // Un homoncule n'est empoisonné que par un porteur de Venin magique.
+      const allowed = previewFamiliarCondition(target, 'Empoisonné', { magical: attacksAreMagical(source) });
+      if (!allowed.ok) return { ok: false, reason: 'familiar-condition', message: allowed.receipt.message, receipt: allowed.receipt };
       const receipt = acquireV5Conditions(target, [{ name: 'Empoisonné', level: 1, source: { kind: 'creature-venom', sourceId, difficulty } }], { round: combat.round });
       if (!receipt.acquiredInstances) return { ok: false, reason: 'ignored', message: [...receipt.reminders, 'Venin : aucun effet (immunité ou état déjà présent).'].join(' ') };
       const result = api.executeCommand('creature-venom', draft => ({ ...draft,
@@ -2452,10 +2461,10 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       const result = api.executeCommand('set-slann-aboard', draft => ({ ...draft, combat: { ...draft.combat, participants: (draft.combat?.participants || []).map(item => (item.id === participantId ? withV5(item, v5 => ({ ...v5, slann: { ...(v5.slann || {}), aboard: aboard !== false } })) : item)) } }));
       return typeof result?.then === 'function' ? result.then(done => ({ ...done, ok: true })) : { ...result, ok: true };
     },
-    /** Contemplation slann : le MJ saisit les DR du Test de Perception ; la table donne l'état (Brume de pensée : deux Exténué posés ; Détaché : Stupide en rappel). Annulable. */
-    applySlannContemplation(participantId, sl) {
+    /** Contemplation slann : le MJ saisit les DR du Test de Perception (+0 réussi ou −0 échec marginal pour un zéro) ; la table donne l'état (Brume de pensée : deux Exténué posés ; Détaché : Stupide en rappel). Annulable. */
+    applySlannContemplation(participantId, sl, options = {}) {
       const slann = combat.participants.get(participantId);
-      const plan = contemplationOutcome(slann, sl);
+      const plan = contemplationOutcome(slann, sl, options);
       if (!plan.available) return { ok: false, reason: 'refused', message: plan.unresolved.join(' ') };
       // Stupide (Détaché) est une psychologie, pas un État du moteur : il reste dans le rappel du journal.
       const adds = plan.conditions.filter(row => row.name === 'Fatigued').map(row => ({ name: 'Exténué', level: row.count || 1, source: { kind: 'slann-contemplation' } }));
@@ -2463,8 +2472,8 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       const result = api.executeCommand('slann-contemplation', draft => ({ ...draft,
         combat: { ...draft.combat, participants: (draft.combat?.participants || []).map(item => (item.id === participantId && receipt ? receipt.participant : item)) },
         log: [{ id: uid(), kind: 'effect', actorId: participantId, targetId: participantId,
-          text: `${slann.name} · Contemplation (DR ${sl}) : ${plan.reminders.join(' ')}`,
-          detail: { kind: 'slann-contemplation', sl: Number(sl), outcome: plan.outcome } }, ...(draft.log || [])].slice(0, 300) }));
+          text: `${slann.name} · Contemplation (DR ${plan.receipt.zero ? (plan.receipt.zero === 'success' ? '+0' : '−0') : sl}) : ${plan.reminders.join(' ')}`,
+          detail: { kind: 'slann-contemplation', sl: plan.receipt.sl, zero: plan.receipt.zero, outcome: plan.outcome } }, ...(draft.log || [])].slice(0, 300) }));
       const done = value => ({ ...value, ok: value?.ok !== false, outcome: plan.outcome, reminders: [...plan.reminders, ...(receipt?.reminders || [])] });
       return typeof result?.then === 'function' ? result.then(done) : done(result);
     },

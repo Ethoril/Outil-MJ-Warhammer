@@ -80,8 +80,10 @@ test('S1 Contemplation : table de DR, états posés en reçu seulement', () => {
   const at = sl => contemplationOutcome(second(), sl);
   assert.equal(at(2).outcome, 'alive');
   assert.equal(at(1).outcome, 'detached');
-  assert.equal(at(0).outcome, 'detached');
-  assert.deepEqual(at(0).conditions, [{ name: 'Stupid', scope: 'rencontre' }]);
+  // B11c : le zéro se lit selon le Test (L07 p.125 : « 0 à +1 » Détaché, « −0 à −3 » Brume de pensée) ; un 0 sans précision est refusé.
+  assert.equal(contemplationOutcome(second(), 0, { success: true }).outcome, 'detached');
+  assert.deepEqual(contemplationOutcome(second(), 0, { success: true }).conditions, [{ name: 'Stupid', scope: 'rencontre' }]);
+  assert.equal(at(0).available, false);
   assert.equal(at(-1).outcome, 'fog');
   assert.deepEqual(at(-3).conditions, [{ name: 'Fatigued', count: 2 }]);
   assert.equal(at(-4).outcome, 'lost');

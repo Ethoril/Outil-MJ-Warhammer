@@ -59,7 +59,7 @@ test('B10 : créer un familier depuis le bloc de la carte, Destin débité, PNJ 
   assert.equal(get(store, 'hero').extensions.v5.fate, 1);
   assert.equal(get(store, 'hero').fate, 1);
   const link = get(store, 'hero').extensions.v5.familiarLinks[0];
-  assert.deepEqual(link.creation, { resource: 'fate', before: 3, spent: 2, after: 1, pointsToDistribute: 1, balanceEntered: false });
+  assert.deepEqual(link.creation, { resource: 'fate', before: 3, spent: 2, after: 1, pointsToDistribute: 1, balanceEntered: false, campBefore: 'neutre' }); // B11c : camp d'avant la création, rendu au retrait du lien
   assert.equal(get(store, 'imp').extensions.v5.familiarOf.masterId, 'hero');
   assert.equal(get(store, 'imp').camp, 'allie');
   assert.match(store.getLog()[0].text, /Création de familier/);

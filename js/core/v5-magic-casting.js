@@ -17,6 +17,7 @@ import {
 import { resolveMiscast, applyMiscastToParticipant, missingMagicDiceMessage } from './v5-magic-miscasts.js';
 import { uid } from './models.js';
 import { totalPowerCritical } from './slann.js';
+import { creatureCastingBases } from './creature-magic.js';
 
 export const V5_MAGIC_CASTING_VERSION = 'v5-magic-casting-2026-10-10.1';
 
@@ -210,7 +211,8 @@ export function resolveCastingSkill(participant) {
     skillName = foundAction.note || foundAction.name || skillName;
     score = Number(foundAction.base);
   } else {
-    score = baseCharacteristicScore(participant,'Int');
+    // Sans compétence imprimée, un Lanceur de sorts de bestiaire teste à la base de son Trait (Intelligence+10) ; sinon la caractéristique brute.
+    score = creatureCastingBases(participant, { baseline: true })?.tongueBase ?? baseCharacteristicScore(participant,'Int');
   }
 
   return {
@@ -334,8 +336,8 @@ function previewPreparedCasting(participant, spell, options) {
   const optionId = testPreview.options.length === 1 ? testPreview.options[0].id : options.choice || 'keep';
   const selectedTest = enforceMagicTestRestrictions(participant,selectV5Test(testPreview, optionId));
   const { success: testSuccess, fumble } = selectedTest;
-  // Puissance totale slann : un lancement réussi est aussi critique sur une unité 0 (le double l'est déjà), avec le DR minimal +5 d'un critique.
-  const slannCritical = testSuccess && !selectedTest.critical && totalPowerCritical(participant, roll, { succeeded: true }).critical === true;
+  // Puissance totale slann : un lancement réussi est aussi critique sur une unité 0 (le double l'est déjà), lu sur le jet retenu (après Avantage ou Désavantage), avec le DR minimal +5 d'un critique.
+  const slannCritical = testSuccess && !selectedTest.critical && totalPowerCritical(participant, selectedTest.roll, { succeeded: true }).critical === true;
   const critical = selectedTest.critical || slannCritical;
   const testSl = slannCritical ? Math.max(5, selectedTest.sl) : selectedTest.sl;
 

@@ -13,6 +13,7 @@ import { resolveMiscast, applyMiscastToParticipant, explicitMagicDie, missingMag
 import { armorMaterial, unknownArmorMaterials } from './v5-armor-material.js';
 import { uid } from './models.js';
 import {endSpellEffectsOnEvent} from './v5-magic-turn.js';
+import { creatureCastingBases } from './creature-magic.js';
 
 export const V5_MAGIC_CHANNELLING_VERSION = 'v5-magic-channelling-2026-10-10.1';
 
@@ -173,7 +174,8 @@ export function resolveChannellingSkill(participant, { type = 'winds', wind = nu
     skillName = foundAction.note || foundAction.name || skillName;
     score = Number(foundAction.base);
   } else {
-    score = baseCharacteristicScore(participant,'FM');
+    // Sans compétence imprimée, un Lanceur de sorts de bestiaire teste à la base de son Trait (Volonté+10) ; sinon la caractéristique brute.
+    score = creatureCastingBases(participant, { baseline: true })?.focusBase ?? baseCharacteristicScore(participant,'FM');
   }
 
   return {

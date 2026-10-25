@@ -34,6 +34,7 @@ import { getV5CriticalEffect, V5_CRITICAL_TABLE_VERSION } from '../data/v5-crits
 import { previewV5ActionQualities, v5ActionQualityContext, previewV5WeaponConditions, v5QualityMechanicalStatus } from './v5-talent-qualities.js';
 import { consumeDivineLayers } from './v5-divine-effects-gear.js';
 import { refreshEffectLayers } from './v5-magic-effects.js';
+import { previewFamiliarCondition } from './familiars.js';
 import { applyPrayerSLCaps,getPrayerSLModifiers } from './v5-divine-prayer-caps.js';
 
 export { damageBreakdown, formatDamageFormula, formatWeaponDamage, describeWeaponDamage } from './damage.js';
@@ -792,12 +793,18 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     conditionChanges[role] = receipt;
     unresolved.push(...receipt.needsInput.map(item => `${role === 'actor' ? 'Attaquant' : 'Cible'} : ${item.label}`));
   };
+  // Un homoncule n'acquiert Hémorragique, Exténué, Empoisonné ni maladie que d'une source magique : l'aperçu les montre refusés.
+  const familiarConditionRefusals = [];
+  if (target) refuseFamiliarConditions(target, targetConditionApplication, nature?.magical === true, familiarConditionRefusals);
   conditionPlan(target, targetConditionApplication, 'target', actor?.id);
   if (criticalBlock?.application) criticalBlock.application.states = targetConditionApplication.filter(row => row.source?.kind !== 'quality');
   weaponConditions.applied = targetConditionApplication.filter(row => row.source?.kind === 'quality');
   const activation=previewV5TalentActivation(normalized,actorTest,opposed);supplementaryTalentPlans.push(activation.plan);unresolved.push(...activation.unresolved);
   const magicFumbleStates=!actorTest.success&&fumbleClassification.maladresse&&!replacement?magicWeaponFumbleConditions(actor,action,nature.ranged).filter(row=>!(row.exceptLore&&hasArcaneMagicLore(actor,row.exceptLore))).map(row=>({id:`${normalized.resolutionId}:magic-weapon-fumble:${row.name}`,key:row.name.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase(),name:row.name,level:1,source:{kind:'magic-weapon',spellName:row.spellName}})):[];
-  const actorConditionApplication=[...(activation.conditions||[]),...magicFumbleStates,...(defenderCritical?.application?.states||[]).map(row=>({...row,source:{...row.source,kind:'critical'}})),...defenderWeaponConditions.proposed,...blackpowderStates];
+  // Chaque source est jugée sur sa propre nature (règle de l'homoncule) : l'attaque ou l'arme enchantée de l'acteur, celle du défenseur, la poudre noire.
+  const defenderMagical=target?defenderNature().magical===true:false;
+  const kept=(rows,magical)=>{const copy=[...rows];if(actor)refuseFamiliarConditions(actor,copy,magical,familiarConditionRefusals);return copy;};
+  const actorConditionApplication=[...kept(activation.conditions||[],nature?.magical===true),...kept(magicFumbleStates,nature?.magical===true),...kept((defenderCritical?.application?.states||[]).map(row=>({...row,source:{...row.source,kind:'critical'}})),defenderMagical),...kept(defenderWeaponConditions.proposed,defenderMagical),...kept(blackpowderStates,false)];
   conditionPlan(actor,actorConditionApplication,'actor',context.blackpowderBrokenTest?context.blackpowderShooterId:target?.id);
   if(defenderCritical?.application)defenderCritical.application.states=actorConditionApplication.filter(row=>row.source?.kind==='critical');
   defenderWeaponConditions.applied=actorConditionApplication.filter(row=>row.source?.keywordId==='assommante');
@@ -865,7 +872,9 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
       const critical=second?{kind:'Critique',second,excessWounds:excess,items:criticalItems(null,second,context.whirlwindDeclined?.[id]||[])}:null;if(critical)critical.application=criticalApplication(critical.items);
       const words=previewV5WeaponConditions({qualities:action.qualities,hit:true,location,target:victim,actor,damage:dealt,resolutionId:normalized.resolutionId+':'+id});
       supplementaryTalentPlans.push(...(words.talentPlans||[]));unresolved.push(...words.unresolved);mechanicalWarnings.push(...words.warnings);
+      if(critical?.application)refuseFamiliarConditions(victim,critical.application.states,nature?.magical===true,familiarConditionRefusals);
       const incoming=[...(critical?.application.states||[]).map(s=>({...s,source:{...s.source,kind:'critical'}})),...words.proposed];
+      refuseFamiliarConditions(victim,incoming,nature?.magical===true,familiarConditionRefusals);
       const reduced=previewV5TalentConditions(victim,incoming,{state:normalized.v5State,clock:normalized.v5Clock,actionId:normalized.resolutionId+':condition:'+id});
       conditionTalentPlans.push(reduced.plan);talentUsageRequests.push(...reduced.usageRequests);unresolved.push(...reduced.plan.unresolved.flatMap(r=>r.fields.map(f=>victim.name+' : préciser '+f)));
       const receipt=acquireV5Conditions(victim,reduced.states,{resolutionId:normalized.resolutionId,authorId:actor.id,targetId:id,round:normalized.round,source:{}});unresolved.push(...receipt.needsInput.map(r=>victim.name+' : '+r.label));
@@ -892,8 +901,8 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     talentPlans: [normalized.qualityTalentPlan, ...(actorPlan.talentPlans || []), ...(defenderPlan?.talentPlans || []), damageTalents, beatTalents, ...(weaponConditions.talentPlans||[]), ...criticalTalentPlans, ...supplementaryTalentPlans, ...conditionTalentPlans].filter(Boolean),
     talentSLChoices: { actor: actorPlan.talentSLChoices || [], defender: defenderPlan?.talentSLChoices || [] },
     weaponConditions,
-    targetConditionApplication,actorConditionApplication,defenderWeaponConditions,
-    reminders: [...(magicFearImmune?['Le Bœuf Reste Debout : immunité aux Tests de Peur et Terreur pour la durée.']:[]),...activation.reminders,...special.reminders,...naturalReminders,...(hit&&attackType(action.type)&&target?reactionReminders(target,nature):[]),...(hit&&target&&damage?.finalDamage>0&&(target.extensions?.v5?.spellEffects||[]).some(e=>e.specialState?.festeringWoundTest)?[`Domaine de Nurgle (D-C51) : ${target.name||target.id} subit des Blessures ; proposer au MJ de jouer le Test de Blessure Suppurée (V5 p. 180). Rien n’est appliqué par l’outil.`]:[]),...(context.silentTakedown === true ? ['Neutralisation silencieuse : Blessures égales au BF et Inconscient si victoire ; Sonné et alarme si la cible gagne. Ces conséquences restent à arbitrer.'] : [])],
+    targetConditionApplication,actorConditionApplication,defenderWeaponConditions,familiarConditionRefusals,
+    reminders: [...familiarConditionRefusals.map(row => `${row.name || 'Homoncule'} : ${row.message}`),...(magicFearImmune?['Le Bœuf Reste Debout : immunité aux Tests de Peur et Terreur pour la durée.']:[]),...activation.reminders,...special.reminders,...naturalReminders,...(hit&&attackType(action.type)&&target?reactionReminders(target,nature):[]),...(hit&&target&&damage?.finalDamage>0&&(target.extensions?.v5?.spellEffects||[]).some(e=>e.specialState?.festeringWoundTest)?[`Domaine de Nurgle (D-C51) : ${target.name||target.id} subit des Blessures ; proposer au MJ de jouer le Test de Blessure Suppurée (V5 p. 180). Rien n’est appliqué par l’outil.`]:[]),...(context.silentTakedown === true ? ['Neutralisation silencieuse : Blessures égales au BF et Inconscient si victoire ; Sonné et alarme si la cible gagne. Ces conséquences restent à arbitrer.'] : [])],
     activeEffects,talentActionChanges,secondaryTargets,
     damageReplacedByTalent: replacement ? clone(replacement) : null,defenderDamageReplacedByTalent:defenseShield.replacement||null,
     unresolved,
@@ -933,6 +942,20 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
 }
 
 export const replayResolution = previewResolution;
+
+/**
+ * Règle de l'homoncule (`previewFamiliarCondition`) appliquée à l'aperçu : retire de `states` (sur place) ceux que `subject` ne peut pas
+ * acquérir de cette source et les note dans `refusals` avec la raison. `magical` : nature magique de l'attaque (sort, arme enchantée,
+ * qualité Magique, créature au Trait Magique ou déclaration du MJ, L17 p. 187).
+ */
+function refuseFamiliarConditions(subject, states, magical, refusals) {
+  for (let index = states.length - 1; index >= 0; index--) {
+    const check = previewFamiliarCondition(subject, states[index], { magical });
+    if (check.ok) continue;
+    refusals.unshift({ participantId: subject.id, name: subject.name, ...check.receipt });
+    states.splice(index, 1);
+  }
+}
 
 /** Apply a preview once to a revisioned state; stale target/revision requires a new preview. */
 export function applyResolution(preview, currentState) {
