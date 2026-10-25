@@ -303,7 +303,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       actorId, actionKey: null, externalActionId: null, type: null, attackRoll: '', defenseStat: null, defenseBase: null, defenseSource: null, defenseRoll: '', protectionContext: {}, ammunitionId: '', ammunitionArbitrated: false,
       // Critique : jets saisis, effets décochés et erreurs de saisie par champ (l'aperçu reste affiché).
       criticalInjureRoll: '', criticalInjureSecondRoll: '', criticalInjureAlternativeRoll: '', criticalInjureSecondAlternativeRoll: '', defenderCriticalSecondRoll:'',defenderCriticalSecondAlternativeRoll:'',defenderCriticalInjureSecondRoll:'',defenderCriticalInjureSecondAlternativeRoll:'',defenderCriticalInjureRoll: '', defenderCriticalInjureAlternativeRoll: '', criticalLocationRoll: '', criticalEffectRoll: '', criticalSecondRoll: '', criticalEffectAlternativeRoll: '', criticalSecondAlternativeRoll: '', criticalDeclined: [], criticalErrors: {}, defenderCriticalLocationRoll: '', defenderCriticalEffectRoll: '', defenderCriticalEffectAlternativeRoll: '', defenderCriticalDeclined: [],
-      v5Kind: null, v5SlModifier: null, v5Advantages: 0, v5Disadvantages: 0, v5Choice: null, defenseChoice: null, charging: false, extraAttack: false, reactionId: null, reactionAction: null, aimed: false, beatBlade: false, actorSize: null, targetSize: null, defenseKind: null, defenseSlModifier: null, defenseAdvantages: 0, defenseDisadvantages: 0, v5Context: {}, defenseContext: {},
+      v5Kind: null, v5SlModifier: null, v5Advantages: 0, v5Disadvantages: 0, v5Choice: null, defenseChoice: null, charging: false, extraAttack: false, reactionId: null, reactionAction: null, aimed: false, beatBlade: false, actorSize: null, targetSize: null, defenseKind: null, defenseSlModifier: null, defenseAdvantages: 0, defenseDisadvantages: 0, v5Context: {}, defenseContext: {}, combatDefensiveSkillId: '', combatAimWeaponId: '', combatAimWeaponName: '', combatAimWeaponHeldConfirmed: false, combatAimWeaponKindConfirmed: false,
       preview: null, comparison: null, error: null, busy: false, brokenEscapeVisibility:null, hideSkillId:null
     };
   }
@@ -316,7 +316,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
   const MAGIC_DICE_KEYS = ['magicFumbleLossRoll', 'magicMiscastRoll', 'magicMiscastRoll2', 'magicMajorRoll', 'magicSecondaryDurationRoll', 'magicSecondaryDamageRoll', 'magicSecondaryDistanceRoll', 'magicSecondaryLocation', 'magicResistanceRoll', 'magicVortexDirection', 'magicVortexWillpower', 'magicVortexDirectionRoll', 'magicVortexDistance', 'magicNoOtherTargets', 'magicRoll3d10', 'magicDurationAmount', 'magicDurationUnit', 'magicBurnoutRoll', 'magicCadaiTestRoll', 'magicCadaiMiscastRoll', 'magicCadaiBurnoutRoll', 'magicCadaiCorruptionRoll', 'magicCorruptionInitialRoll', 'magicExtraRoll1', 'magicExtraRoll2', 'magicExtraDuration1', 'magicExtraDuration2', 'magicExtraDamage1', 'magicExtraDamage2', 'magicExtraDistance1', 'magicExtraDistance2', 'magicExtraLocation1', 'magicExtraLocation2', 'magicDispelRoll', 'magicPersistentRestart', 'magicWardRoll'];
   // Réponses propres à une attaque (nature, d10 de Protection, Test de Calme) : jamais reportées sur la suivante.
   function forgetAttackAnswers(draft) {
-    const { attackNature, magicWardRoll, reductionCalm, ...context } = draft.v5Context || {};
+    const { attackNature, magicWardRoll, reductionCalm, trip, tripPrimaryResolutionId, athleticsSkillId, tripFallEnduranceRoll, tripLegLocationRoll, tripLegCriticalEffectRoll, tripExtraLocationRoll, tripExtraCriticalEffectRoll, tripFallWardRoll, tripFallCalmTest, secondWeaponAttack, primaryResolutionId, extraordinaryShot, extraordinaryShotDescription, extraordinaryShotDifficulty, throwingWeapon, scatterDirectionRoll, scatterDistanceRolls, shooterTargetDistanceYards, targetEngaged, engagedTargetIds, engagedTargetRoll, engagedDefensesById, confirmLethalDeath, lethalIntent, ...context } = draft.v5Context || {};
     draft.v5Context = context;
     const { attackNature: defenseNature, ...defenseContext } = draft.defenseContext || {};
     draft.defenseContext = defenseContext;
@@ -387,6 +387,8 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     recoverState: typeof actions.recoverState === 'function' ? actions.recoverState : null,
     healCriticalWound: typeof actions.healCriticalWound === 'function' ? actions.healCriticalWound : Store.healCriticalWound?.bind(Store),
     applyResolution: typeof actions.applyResolution === 'function' ? actions.applyResolution : null,
+    declareCombatAction: typeof actions.declareCombatAction === 'function' ? actions.declareCombatAction : null,
+    declareCombatMovement: typeof actions.declareCombatMovement === 'function' ? actions.declareCombatMovement : null,
     addProfileToCombat: typeof actions.addProfileToCombat === 'function' ? actions.addProfileToCombat : null
   };
 
@@ -444,7 +446,10 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     const draft = state.resolution;
     const actions = actorActions(actor);
     const keys = actions.map(actionKey);
-    if (!keys.includes(draft.actionKey)) draft.actionKey = keys[0] || null;
+    if (!keys.includes(draft.actionKey)) {
+      draft.actionKey = keys[0] || null;
+      draft.v5Kind = null; draft.v5SlModifier = null; draft.charging = false; draft.extraAttack = false; draft.reactionId = null; draft.reactionAction = null; draft.aimed = false; draft.beatBlade = false; draft.fortuneReroll = false; draft.reverseDice = false; draft.fortuneRerollRoll = null; draft.actorSize = null; draft.targetSize = null; draft.v5Advantages = 0; draft.v5Disadvantages = 0; draft.v5Context = {}; draft.talentChoices = {}; draft.type = null; draft.ammunitionId = ''; draft.ammunitionArbitrated = false; draft.protectionContext = {};
+    }
     const action = actions[keys.indexOf(draft.actionKey)] || null;
     const type = draft.type || (action && ['channelling', 'cast', 'dispel'].includes(action.type) ? action.type : (action ? inferActionType(action) : null));
 
@@ -461,7 +466,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     if (!target && state.targetChoice !== 'none' && !['skill', 'channelling'].includes(type)) {
       target = groups.adversaries[0] || others[0] || (type === 'cast' ? actor : null);
     }
-    if (draft.preview && !draft.preview.v5MagicKind && (draft.preview.targetId ?? draft.preview.input?.targetId ?? null) !== (target?.id ?? null)) { draft.preview = null; resetCritical(draft); }
+    if (draft.preview && !draft.preview.v5MagicKind && (draft.preview.engagedShot?.intendedTargetId ?? draft.preview.targetId ?? draft.preview.input?.targetId ?? null) !== (target?.id ?? null)) { draft.preview = null; resetCritical(draft); }
     // Les engagés cochés valent pour la cible où ils ont été saisis : une cible qui change sans passer par un choix les périme.
     if (draft.outnumberTargetId && draft.outnumberTargetId !== (target?.id ?? null) && draft.v5Context) draft.v5Context = withoutOutnumberContext(draft.v5Context);
     draft.outnumberTargetId = target?.id ?? null;
@@ -1005,6 +1010,28 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
   }
 
   const resolutionHandlers = {
+    async declareCombatAction(kind, values = {}) {
+      const draft = state.resolution;
+      if (!callbacks.declareCombatAction || !draft.actorId || draft.busy) return;
+      draft.busy = true; draft.error = null; render();
+      try {
+        const result = await callbacks.declareCombatAction({ actorId: draft.actorId, kind, ...values, actionId: `combat-action:${uid()}` });
+        if (result?.status !== 'applied') throw new Error(result?.error || result?.reason || 'Action non enregistrée.');
+      } catch (error) {
+        draft.error = { field: 'general', message: userMessage(error, 'Action de combat non enregistrée.') };
+      } finally { draft.busy = false; render(); }
+    },
+    async declareCombatMovement() {
+      const draft = state.resolution;
+      if (!callbacks.declareCombatMovement || !draft.actorId || draft.busy) return;
+      draft.busy = true; draft.error = null; render();
+      try {
+        const result = await callbacks.declareCombatMovement(draft.actorId);
+        if (result?.status !== 'applied') throw new Error(result?.error || result?.reason || 'Déplacement non enregistré.');
+      } catch (error) {
+        draft.error = { field: 'general', message: userMessage(error, 'Déplacement non enregistré.') };
+      } finally { draft.busy = false; render(); }
+    },
     select(patch) {
       const draft = state.resolution;
       draft.magicOpSpent = {};
@@ -1017,7 +1044,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         draft.magicBeastKey='';draft.magicBeastTraits=[];draft.magicKadonMonster='';draft.magicKadonOther=false;draft.magicApoSteps=0;draft.magicApoCritical=false;draft.magicApoRaise=false;
         if (!('magicTargetIds' in patch)) draft.magicTargetIds = [];
       }
-      for (const key of ['v5Kind','v5SlModifier','v5Advantages','v5Disadvantages','charging','extraAttack','reactionId','aimed','beatBlade','fortuneReroll','reverseDice','fortuneRerollRoll','actorSize','targetSize','defenseKind','defenseSlModifier','defenseAdvantages','defenseDisadvantages','v5Context','defenseContext','talentChoices','defenseTalentChoices','magicChannelMode','magicChannelType','magicLore','magicFumbleLossRoll','magicMiscastRoll','magicMajorRoll','magicSecondaryDurationRoll','magicSecondaryDamageRoll','magicSecondaryDistanceRoll','magicSecondaryLocation','magicSpellId','magicArcaneArmorPoints','magicArcaneEnhancedDamage','magicArcaneChooseItem','magicArcaneTargets','magicMjChoice','magicChosenStats','magicHogTier','magicResistanceRoll','magicVortexDirection','magicVortexDistance','magicCriticalChoice','magicOvercastDamage','magicOvercastTargets','magicOvercastRange','magicOvercastDuration','magicOvercastAoe','magicOvercastSpecial','magicBeastKey','magicRoll3d10','magicTargetIds']) if (key in patch) draft[key] = patch[key];
+      for (const key of ['v5Kind','v5SlModifier','v5Advantages','v5Disadvantages','charging','extraAttack','reactionId','aimed','beatBlade','fortuneReroll','reverseDice','fortuneRerollRoll','actorSize','targetSize','defenseKind','defenseSlModifier','defenseAdvantages','defenseDisadvantages','v5Context','defenseContext','combatDefensiveSkillId','combatAimWeaponId','combatAimWeaponName','combatAimWeaponHeldConfirmed','combatAimWeaponKindConfirmed','talentChoices','defenseTalentChoices','magicChannelMode','magicChannelType','magicLore','magicFumbleLossRoll','magicMiscastRoll','magicMajorRoll','magicSecondaryDurationRoll','magicSecondaryDamageRoll','magicSecondaryDistanceRoll','magicSecondaryLocation','magicSpellId','magicArcaneArmorPoints','magicArcaneEnhancedDamage','magicArcaneChooseItem','magicArcaneTargets','magicMjChoice','magicChosenStats','magicHogTier','magicResistanceRoll','magicVortexDirection','magicVortexDistance','magicCriticalChoice','magicOvercastDamage','magicOvercastTargets','magicOvercastRange','magicOvercastDuration','magicOvercastAoe','magicOvercastSpecial','magicBeastKey','magicRoll3d10','magicTargetIds']) if (key in patch) draft[key] = patch[key];
       for(const [key,value] of Object.entries(patch))if(/^magic[A-Z]/.test(key))draft[key]=value;
       draft.v5Choice = null; draft.defenseChoice = null;
       if ('targetId' in patch) {
@@ -1028,7 +1055,12 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         draft.defenseAdvantages = 0; draft.defenseDisadvantages = 0; draft.defenseContext = {};
         draft.protectionContext = {};
         // Les engagés cochés valaient pour l'ancienne cible.
-        if (draft.v5Context) draft.v5Context = withoutOutnumberContext(draft.v5Context);
+        if (draft.v5Context) {
+          draft.v5Context = withoutOutnumberContext(draft.v5Context);
+          draft.v5Context.targetEngaged = undefined; draft.v5Context.engagedTargetIds = undefined;
+          draft.v5Context.engagedTargetRoll = undefined; draft.v5Context.engagedDefensesById = undefined;
+          for (const key of ['trip','tripPrimaryResolutionId','athleticsSkillId','tripFallEnduranceRoll','tripLegLocationRoll','tripLegCriticalEffectRoll','tripExtraLocationRoll','tripExtraCriticalEffectRoll','tripFallWardRoll','tripFallCalmTest']) delete draft.v5Context[key];
+        }
         draft.magicTargetIds = patch.targetId && patch.targetId !== 'none' ? [patch.targetId] : [];
       }
       const actionChanged = 'actionKey' in patch && patch.actionKey !== draft.actionKey;
@@ -1561,6 +1593,15 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     const prayers=divinePanel.render(context.actor,context.participants);if(prayers)center.appendChild(prayers);
 
     const draft = state.resolution;
+    let previousWeaponAttacks = [];
+    try {
+      const envelope = JSON.parse(Store.getFullJSON());
+      const encounterId = envelope.activeScene?.encounterId || envelope.activeScene?.id || envelope.extensions?.v5?.combatId;
+      const serial = envelope.activeScene?.extensions?.v5?.turnIndex ?? envelope.extensions?.v5?.turnIndex;
+      const turnId = encounterId && Number.isSafeInteger(serial) && serial > 0 ? `${envelope.activeScene?.id || encounterId}:${serial}:${context.actor?.id}` : null;
+      previousWeaponAttacks = (envelope.extensions?.v5?.standardTurnActions || []).filter(row => row.actorId === context.actor?.id && row.encounterId === encounterId && row.turnId === turnId && row.kind === 'action' && row.targetId)
+        .map(row => ({ ...row, weaponName: context.actor?.equipment?.find(item => item.id === row.weaponId)?.name || 'Action' }));
+    } catch { previousWeaponAttacks = []; }
     center.appendChild(renderResolutionPanel({
       draft,
       actor: context.actor,participants:context.participants,
@@ -1570,8 +1611,11 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       target: context.target,
       groups: context.groups,
       defense: context.defense,
+      previousWeaponAttacks,
       canCalculate: typeof Store.previewResolution === 'function' || ['channelling', 'cast', 'dispel'].includes(context.type),
       canApply: Boolean(callbacks.applyResolution || ['channelling', 'cast', 'dispel'].includes(context.type)),
+      canDeclareCombatAction: Boolean(callbacks.declareCombatAction),
+      canDeclareCombatMovement: Boolean(callbacks.declareCombatMovement),
       handlers: resolutionHandlers
     }));
 

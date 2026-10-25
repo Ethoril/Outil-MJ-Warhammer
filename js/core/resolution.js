@@ -7,7 +7,7 @@ import {previewTalentReplacement,resoluteException,applyForgeProtection,lodgedHa
 import {previewSituationAfter} from './v5-talent-situations.js';
 import { previewV5TalentTestModifiers } from './v5-talent-tests.js';
 import { previewV5TalentActivation,refreshV5TalentEffects,previewV5FrenzyExit,noTestV5TalentAction,sourceActive } from './v5-talent-actions.js';
-import { prepareV5TalentCriticalRolls,previewV5CombatPrelude } from './v5-talent-combat.js';
+import { prepareV5TalentCriticalRolls,previewV5CombatPrelude,computeV5WeaponReachGuide,computeV5WeaponRangeBands } from './v5-talent-combat.js';
 import { locationProtection, mergeEquipmentQualities, ammunitionCompatibility, equipmentAttackContext, equipmentQualities, applyWeaponSkillRules, weaponSkillGroupInfo } from './equipment.js';
 import { keywordMechanicalStatus } from './keywords.js';
 import { getReferenceStatus, getReferenceCatalogue } from './reference-catalog.js';
@@ -101,6 +101,9 @@ export function describeResolutionDetail(detail) {
   if(detail.test?.automatic)parts.push('Réussite automatique, sans jet.');else if (present(detail.roll)) parts.push(`Jet : ${detail.roll}`);
   if (present(detail.targetScore)) parts.push(`Seuil : ${detail.targetScore}`);
   if (present(detail.sl)) parts.push(`DR : ${signedValue(detail.sl)}${detail.slBonus ? ` (${detail.slBonus > 0 ? 'Pointue' : 'Imprécise'} ${signedValue(detail.slBonus)})` : ''}`);
+  if(detail.resultTier?.label)parts.push(`Palier : ${detail.resultTier.label}`);
+  if(detail.extraordinaryShot)parts.push(`Tir extraordinaire (${detail.extraordinaryShot.talentId}) : ${detail.extraordinaryShot.description} · difficulté MJ ${signedValue(detail.extraordinaryShot.difficulty)} DR.`);
+  if(detail.lethalDeath?.confirmedBy==='explicit-gm')parts.push('Mort directe : option de table activée et confirmation explicite du MJ ; cible marquée morte (0 PV).');
   const opposition = isRecord(detail.opposition) && isRecord(detail.opposition.defender) ? detail.opposition : null;
   if (opposition) {
     const { label, score, roll } = opposition.defender;
@@ -454,7 +457,7 @@ function criticalApplication(items) {
 }
 
 /** Registre des Blessures Critiques d'attaque : un enregistrement stable par critique appliqué (principal puis secondaire). */
-function appendCriticalWoundRecords(participant, criticals, { resolutionId, authorId, round, beforeStates = [] }) {
+function appendCriticalWoundRecords(participant, criticals, { resolutionId, authorId, round, beforeStates = [], source='attack' }) {
   const present = (criticals || []).filter(detail => detail && !detail.pending);
   if (!present.length) return;
   const previousIds = new Set(beforeStates.map(state => state.id));
@@ -464,7 +467,7 @@ function appendCriticalWoundRecords(participant, criticals, { resolutionId, auth
   participant.extensions ??= {};
   participant.extensions.v5 ??= {};
   participant.extensions.v5.criticalWounds = [...(participant.extensions.v5.criticalWounds || []),
-    ...present.map((detail, index) => ({ id: `${resolutionId}:crit:${participant.id}:${index}`, source: 'attack',
+    ...present.map((detail, index) => ({ id: `${resolutionId}:crit:${participant.id}:${index}`, source,
       location: detail.location?.name ?? null, name: detail.effect?.name ?? null, effectRoll: detail.effectRoll ?? null,
       // Les acquisitions des deux critiques sont groupées : leurs États communs sont rattachés au premier enregistrement.
       round, resolutionId, authorId, stateIds: index === 0 ? stateIds : [] }))];
@@ -576,7 +579,7 @@ export function previewResolution(input) {
 }
 
 function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defenderTest) {
-  const { actor, action, target } = normalized;
+  let { actor, action, target } = normalized;
   const criticalTalentPlans=[];const supplementaryTalentPlans=[...(normalized.combatPrelude?.plans||[])];
   const criticalReady=[];
   const defenseSupport={...normalized,actor:target,target:actor,v5:normalized.defense?.v5||{},combatPrelude:{forge:normalized.combatPrelude?.defenderForge,alliedShield:normalized.combatPrelude?.defenderShield}};
@@ -590,23 +593,105 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   const extremeLayer = normalized.noTestAction ? null : slExtremeLayers(actor)[0];
   const slExtreme = extremeLayer ? { before: actorTest.sl, after: actorTest.success ? Math.max(actorTest.sl, extremeLayer.slExtreme.magnitude) : Math.min(actorTest.sl, -extremeLayer.slExtreme.magnitude) } : null;
   if (slExtreme) actorTest = { ...actorTest, sl: slExtreme.after };
-  const roll = actorTest.roll, targetScore = actorTest.score, success = actorTest.success, sl = actorTest.sl;
+  let roll = actorTest.roll, targetScore = actorTest.score, success = actorTest.success, sl = actorTest.sl;
   const penalties = { value: actorPlan.penalty, names: actorPlan.penaltyStates };
   const slBonus = actorTest.details.modifiers.filter(item => item.id.startsWith('quality-')).reduce((sum, item) => sum + item.amount, 0);
-  const doubled = actorTest.details.doubled;
-  const criticalClassification = isCriticalRoll(roll, doubled, action.qualities);
-  const fumbleClassification = isFumbleRoll(roll, doubled, action.qualities);
-  const opposition = defenderTest ? resolveV5Opposition(actorTest, defenderTest) : null;
+  let doubled = actorTest.details.doubled;
+  let criticalClassification = isCriticalRoll(roll, doubled, action.qualities);
+  let fumbleClassification = isFumbleRoll(roll, doubled, action.qualities);
+  let opposition = defenderTest ? resolveV5Opposition(actorTest, defenderTest) : null;
   let opposed = opposition ? { mode: 'opposed', attacker: { ...actorTest },
     defender: { ...defenderTest, label: normalized.defense.label, base: normalized.defense.base, mod: defenderTest.details.totalModifier, statePenalty: defenderPlan.penalty }, netSl: opposition.netSl,
     winner: opposition.winner === 'initiator' ? 'attacker' : 'defender', tie: opposition.tie } : null;
   opposed=resolveSizeOpposition(opposed,normalized.combatPrelude?.large,actorTest,defenderTest);
-  const targetLevels = conditionLevels(target);
+  let targetLevels = conditionLevels(target);
   const context = normalized.v5.context || {};
-  const cannotDefend = targetLevels.has('surpris') || targetLevels.has('inconscient') || context.targetHelpless === true || context.targetCannotDefend === true;
-  const helpless = (targetLevels.has('inconscient') || context.targetHelpless === true || context.targetCannotDefend === true)
-    && (actorPlan.kind === 'melee' || (actorPlan.kind === 'ranged' && context.pointBlank === true));
-  const hit = helpless && !opposed ? true : opposed ? opposed.winner === 'attacker' : success;
+  let cannotDefend = targetLevels.has('surpris') || targetLevels.has('inconscient') || context.targetHelpless === true || context.targetCannotDefend === true;
+  let helpless = (targetLevels.has('inconscient') || context.targetHelpless === true || context.targetCannotDefend === true)
+    && (actorPlan.kind === 'melee' || (actorPlan.kind === 'ranged' && (context.pointBlank === true || context.shotRange==='point-blank')));
+  let hit = helpless && !opposed ? true : opposed ? opposed.winner === 'attacker' : success;
+  let engagedShot=null,engagedUnresolved=[],lethalDeath=null,lethalUnresolved=[];
+  if(actorPlan.kind==='ranged'&&context.targetEngaged===true&&actorTest.advantage?.net<0&&actorTest.optionId==='reverse'&&!hit){
+    const ordinaryPlan=previewV5Test({score:actorTest.score,roll:normalized.roll,kind:actorTest.kind,slModifiers:actorTest.details.modifiers,advantageSources:actorTest.advantage.advantage,disadvantageSources:actorTest.advantage.disadvantage.filter(row=>row.id!=='target-engaged')}),ordinary=selectV5Test(ordinaryPlan,ordinaryPlan.options[0].id);
+    const wouldHit=defenderTest?resolveV5Opposition(ordinary,defenderTest).winner==='initiator':ordinary.success;
+    if(wouldHit){
+      const ids=context.engagedTargetIds,die=Number(context.engagedTargetRoll),participants=normalized.v5State?.participants||[];
+      if(!Array.isArray(ids)||ids.length<2||new Set(ids).size!==ids.length||!ids.includes(normalized.target?.id)||!ids.every(id=>typeof id==='string'&&participants.some(row=>row.id===id&&row.zone==='active')))engagedUnresolved.push('Tir engagé : désigner tous les combattants actifs de la mêlée (cible initiale comprise).');
+      else if(!Number.isInteger(die)||die<1||die>100)engagedUnresolved.push('Tir engagé : saisir le dé de sélection aléatoire d100.');
+      else {
+        const index=Math.floor((die-1)*ids.length/100),selectedId=ids[index],selected=participants.find(row=>row.id===selectedId);
+        let selectedDefense=selectedId===normalized.target?.id?normalized.defense:context.engagedDefensesById?.[selectedId];
+        const validDefense=!selectedDefense?false:Number.isFinite(Number(selectedDefense.base))&&Number.isInteger(Number(selectedDefense.roll))&&Number(selectedDefense.roll)>=1&&Number(selectedDefense.roll)<=100;
+        if((!selectedDefense||!validDefense)&&normalized.defense)engagedUnresolved.push('Tir engagé : fournir le Test de défense de la cible tirée au sort.');
+        else {
+          const intendedTargetId=normalized.target?.id||null;
+          normalized={...normalized,target:selected,targetId:selected?.id||null,defense:selectedDefense};target=selected;
+          actorTest=ordinary;roll=actorTest.roll;targetScore=actorTest.score;success=actorTest.success;sl=actorTest.sl;doubled=actorTest.details.doubled;
+          criticalClassification=isCriticalRoll(roll,doubled,action.qualities);fumbleClassification=isFumbleRoll(roll,doubled,action.qualities);
+          defenderPlan=selectedDefense?buildCombatTest(normalized,'defender'):null;
+          defenderTest=selectedDefense?selectV5Test(defenderPlan.test,selectedDefense.v5?.choice||defenderPlan.test.options[0].id):null;
+          targetLevels=conditionLevels(target);cannotDefend=targetLevels.has('surpris')||targetLevels.has('inconscient')||context.targetHelpless===true||context.targetCannotDefend===true;
+          helpless=(targetLevels.has('inconscient')||context.targetHelpless===true||context.targetCannotDefend===true)&&(actorPlan.kind==='melee'||(actorPlan.kind==='ranged'&&(context.pointBlank===true||context.shotRange==='point-blank')));
+          opposition=defenderTest?resolveV5Opposition(actorTest,defenderTest):null;
+          opposed=opposition?{mode:'opposed',attacker:{...actorTest},defender:{...defenderTest,label:selectedDefense.label,base:selectedDefense.base,mod:defenderTest.details.totalModifier,statePenalty:defenderPlan.penalty},netSl:opposition.netSl,winner:opposition.winner==='initiator'?'attacker':'defender',tie:opposition.tie}:null;
+          hit=helpless&&!opposed?true:opposed?opposed.winner==='attacker':true;
+          engagedShot={roll:die,selectedIndex:index,selectedTargetId:selectedId,intendedTargetId,candidates:[...ids],reason:'forced-disadvantage-miss'};
+        }
+      }
+    }
+  }
+  let trip=null,tripFall=null,tripUnresolved=[];const tripSelected=context.trip===true&&opposed?.winner==='attacker';
+  if(context.trip===true&&opposed){
+    if(!tripSelected)trip={winner:opposed.winner,conditionApplied:false,costId:'combat:trip:momentum'};
+    else {
+      trip={winner:'attacker',conditionApplied:true,targetCondition:{key:'aterre',name:'À Terre',level:1,source:{kind:'trip',authorId:actor?.id}} ,costId:'combat:trip:momentum'};
+      if(target?.extensions?.v5?.mounted===true){
+        const knownToughness=Number(target.caracs?.E),declaredToughness=Number(context.tripFallToughnessScore),toughness=Number.isFinite(knownToughness)?knownToughness:context.tripFallToughnessConfirmed===true&&Number.isFinite(declaredToughness)?declaredToughness:null,tb=toughness===null?null:Math.floor(toughness/10);
+        if(tb===null)tripUnresolved.push('Croche-pied monté : Bonus d’Endurance de la cible requis.');
+        else {
+          const rawDamage=Math.max(0,6-tb),fallProtection=previewMagicProtection(target,rawDamage,{wardRoll:context.tripFallWardRoll,nature:{fall:true},calm:context.tripFallCalmTest||null});
+          if(!fallProtection.ready)tripUnresolved.push('Chute du Croche-pied : '+(fallProtection.error||'Protection de chute à résoudre.'));
+          const damageLoss=fallProtection.ready?fallProtection.amount:0,criticals=[];let enduranceTest=null;
+          if(fallProtection.ready&&damageLoss>tb){
+            const roll=Number(context.tripFallEnduranceRoll);
+            if(!Number.isInteger(roll)||roll<1||roll>100)tripUnresolved.push('Chute du Croche-pied : Test d’Endurance +0 requis (d100).');
+            else {
+              enduranceTest=previewV5Test({score:toughness,roll,kind:'test'}).options[0].result;
+              if(!enduranceTest.success){
+                const legRoll=Number(context.tripLegLocationRoll),legEffect=Number(context.tripLegCriticalEffectRoll),leg=Number.isInteger(legRoll)&&legRoll>=1&&legRoll<=100?locationOf(legRoll):null;
+                if(!leg||leg.key!=='LEG')tripUnresolved.push('Chute du Croche-pied : saisir une localisation d100 de Jambe pour la Blessure Critique.');
+                if(!Number.isInteger(legEffect)||legEffect<1||legEffect>100)tripUnresolved.push('Chute du Croche-pied : saisir le d100 d’effet Critique de Jambe.');
+                if(leg&&leg.key==='LEG'&&Number.isInteger(legEffect))criticals.push(criticalDetails({effect:legEffect},leg,0));
+                if(enduranceTest.sl<=-5){const locationRoll=Number(context.tripExtraLocationRoll),effectRoll=Number(context.tripExtraCriticalEffectRoll),location=Number.isInteger(locationRoll)&&locationRoll>=1&&locationRoll<=100?locationOf(locationRoll):null;
+                  if(!location)tripUnresolved.push('Chute du Croche-pied : localisation d100 supplémentaire requise pour l’Échec éclatant.');
+                  if(!Number.isInteger(effectRoll)||effectRoll<1||effectRoll>100)tripUnresolved.push('Chute du Croche-pied : d100 d’effet Critique supplémentaire requis.');
+                  if(location&&Number.isInteger(effectRoll))criticals.push(criticalDetails({effect:effectRoll},location,0));
+                }
+              }
+            }
+          }
+          const effects=criticals.map(detail=>criticalApplication(criticalItems(detail,null,[])));
+          tripFall={yards:2,rawDamage,damageLoss,toughnessBonus:tb,armourApplied:false,protection:fallProtection,enduranceTest,criticals,extraCriticalWounds:effects.reduce((sum,row)=>sum+row.extraWounds,0),criticalStates:effects.flatMap(row=>row.states)};
+        }
+      }
+    }
+  }
+  if(context.lethalIntent===true&&hit){
+    if(!helpless)
+      lethalUnresolved.push('Mort directe : seules les attaques de mêlée ou de tir à bout portant contre une cible sans défense sont admissibles.');
+    else if(context.lethalTableEnabled!==true)lethalUnresolved.push('Mort directe : activer explicitement l’option létale de la table avant confirmation.');
+    else if(context.confirmLethalDeath!==true)lethalUnresolved.push('Mort directe : confirmation explicite du MJ requise avant application.');
+    else lethalDeath={targetId:target?.id,confirmedBy:'explicit-gm',tableOptionEnabled:true};
+  }
+  let scatter=null,scatterUnresolved=[];
+  if(context.throwingWeapon===true&&attackType(action.type)&&actorPlan.kind==='ranged'&&!hit){
+    const direction=Number(context.scatterDirectionRoll),dice=context.scatterDistanceRolls,distance=Number(context.shooterTargetDistanceYards);
+    if(!Number.isInteger(direction)||direction<1||direction>10)scatterUnresolved.push('Déviation : saisir le résultat de direction d10 (1 à 10).');
+    else if(direction===9||direction===10)scatter={directionRoll:direction,direction:direction===9?'aux pieds du tireur':'aux pieds de la cible',distanceYards:0};
+    else if(!Array.isArray(dice)||dice.length!==2||dice.some(value=>!Number.isInteger(value)||value<1||value>10))scatterUnresolved.push('Déviation : saisir les deux dés de distance d10.');
+    else if(!Number.isFinite(distance)||distance<0)scatterUnresolved.push('Déviation : saisir la distance tireur-cible en yards pour plafonner le résultat.');
+    else {const rolled=dice[0]+dice[1],maximum=Math.floor(distance/2);scatter={directionRoll:direction,direction:['','haut-gauche','haut','haut-droite','gauche','droite','bas-gauche','bas','bas-droite'][direction],distanceRolls:[...dice],distanceYards:Math.min(rolled,maximum),rolledDistanceYards:rolled,maximumYards:maximum};}
+  }
   const criticalAttack = !(context.specialAttack==='whirlwind-of-death'||hit&&['dirty-fighting','disarm','shieldsman'].includes(context.specialAttack)) && attackType(action.type) && normalized.v5.context?.silentTakedown !== true && success && criticalClassification.critique;
   const criticalLocationRoll = normalized.criticalRolls?.location;
   const location = hit && attackType(action.type) ? attackLocation(normalized, roll) : null;
@@ -638,7 +723,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   let protection = null;
   // Preserve every protection consulted, including pieces/criticals it suppresses.
   const protectionReceipts = [];
-  const unresolved = [...(normalized.combatPrelude?.unresolved||[]),...actorPlan.unresolved, ...(defenderPlan?.unresolved || []), ...actorPlan.restrictions, ...(defenderPlan?.restrictions || [])];
+  const unresolved = [...(normalized.combatPrelude?.unresolved||[]),...actorPlan.unresolved, ...(defenderPlan?.unresolved || []), ...actorPlan.restrictions, ...(defenderPlan?.restrictions || []),...scatterUnresolved,...engagedUnresolved,...lethalUnresolved,...tripUnresolved];
   if(furyDue&&!furyValid)unresolved.push('Fureur d’Ulric : saisir le d10 de dégâts (relancer et ajouter sur 10).');
   // Bénédiction de Protection : un ennemi qui attaque le porteur doit réussir un Test de Calme Accessible (+2 DR) ; le MJ saisit le résultat dans v5.context.protectionCalm.
   const attackDeterrentLayer = attackType(action.type) && actor?.camp !== target?.camp
@@ -815,7 +900,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
       if (applies) naturalHitStates.push({ id: `${normalized.resolutionId}:natural:${naturalPlan.key}:${foldKey(effect.state)}`, key: foldKey(effect.state), name: effect.state, level: 1, source: { kind: 'creature', trait: naturalPlan.key, ...(Number.isInteger(effect.strength) ? { strength: effect.strength } : {}) } });
     }
   }
-  const targetConditionApplication = [...(criticalBlock?.application?.states || []).map(row => ({ ...clone(row), source: { ...(row.source || {}), kind: 'critical' } })), ...weaponConditions.proposed,...magicHitStates,...naturalHitStates,...special.states];
+  const targetConditionApplication = [...(criticalBlock?.application?.states || []).map(row => ({ ...clone(row), source: { ...(row.source || {}), kind: 'critical' } })), ...weaponConditions.proposed,...magicHitStates,...naturalHitStates,...special.states,...(trip?.conditionApplied?[trip.targetCondition]:[]),...(tripFall?.criticalStates||[])];
   const conditionChanges = {}, talentUsageRequests = [], conditionTalentPlans = [];
   const conditionPlan = (participant, states, role, authorId) => {
     if (!participant || !states?.length) return;
@@ -951,7 +1036,16 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     roll,
     success,
     hit,
+    scatter,
+    engagedShot,
+    lethalDeath,
+    trip,
+    tripFall,
+    extraordinaryShot:actorPlan.extraordinaryShot||null,
+    reachGuide:actorPlan.kind==='melee'?computeV5WeaponReachGuide(context.weaponReach||(actor?.equipment?.find(item=>item.id===action?.extensions?.fiche?.equipmentId)||action?.extensions?.equipment)?.reach||action?.reach):null,
+    rangeBands:actorPlan.kind==='ranged'?computeV5WeaponRangeBands(context.weaponRangeYards??(actor?.equipment?.find(item=>item.id===action?.extensions?.fiche?.equipmentId)||action?.extensions?.equipment)?.range??action?.range,actor):null,
     sl,
+    resultTier: actorTest.resultTier,
     slBonus,
     double: doubled,
     critical: criticalBlock,
@@ -1055,7 +1149,7 @@ export function applyResolution(preview, currentState) {
   // Seuls les Sonné issus des critiques à la tête sont retirés (un Sonné d'un autre critique reste).
   let toStrip = headHit?.stripStunned ? headHit.stunnedCount : 0;
   const targetConditions = rawConditions.filter(condition => !(condition.key === 'sonne' && toStrip > 0 && toStrip--));
-  if (preview.attack && preview.targetId && (preview.damage || criticalEffects.extraWounds || targetConditions.length || headHit)) {
+  if ((preview.attack || preview.tripFall || preview.trip?.conditionApplied) && preview.targetId && (preview.damage || criticalEffects.extraWounds || targetConditions.length || headHit || preview.lethalDeath || preview.tripFall)) {
     if (!target) return { status: 'stale', requiresPreview: true, state: clone(currentState), resolution: clone(preview) };
     if (JSON.stringify(target) !== JSON.stringify(preview.input.target)) {
       return { status: 'stale', requiresPreview: true, state: clone(currentState), resolution: clone(preview) };
@@ -1066,7 +1160,9 @@ export function applyResolution(preview, currentState) {
       updated.extensions.v5 = { ...(updated.extensions.v5 || {}), heads: headHit.registry };
     }
     const oldHp = Number(updated.hp) || 0;
-    updated.hp = Math.max(0, oldHp - previewHpLoss(preview));
+    updated.hp = Math.max(0, oldHp - previewHpLoss(preview) - (preview.tripFall?.damageLoss||0) - (preview.tripFall?.extraCriticalWounds||0));
+    if(preview.lethalDeath?.targetId===updated.id){updated.hp=0;updated.extensions??={};updated.extensions.v5={...(updated.extensions.v5||{}),dead:true};}
+    if(preview.tripFall){updated.extensions??={};updated.extensions.v5={...(updated.extensions.v5||{}),mounted:false};}
     if (targetConditions.length) {
       const receipt = acquireV5Conditions(updated, targetConditions, { resolutionId: preview.resolutionId, authorId: preview.input.actor?.id, targetId: updated.id, round: preview.input.round, source: {} });
       if (!receipt.ready) return { status: 'manual', reason: receipt.needsInput[0].label, state: clone(currentState), resolution: clone(preview) };
@@ -1074,6 +1170,7 @@ export function applyResolution(preview, currentState) {
     }
     appendCriticalWoundRecords(updated, [preview.critical?.details, preview.critical?.second],
       { resolutionId: preview.resolutionId, authorId: preview.input.actor?.id, round: preview.input.round, beforeStates: target.states || [] });
+    if(preview.tripFall?.criticals?.length)appendCriticalWoundRecords(updated,preview.tripFall.criticals,{resolutionId:preview.resolutionId+':fall',authorId:preview.input.actor?.id,round:preview.input.round,beforeStates:target.states||[],source:'fall'});
     nextState.participants = participantListWithUpdate(currentState, preview.targetId, updated);
   }
   const defenderEffects = preview.defenderCritical?.application;
@@ -1145,6 +1242,8 @@ export function applyResolution(preview, currentState) {
   nextState.revision = currentState.revision + 1;
   nextState.appliedResolutionIds = [...appliedIds, preview.resolutionId].slice(-MAX_APPLIED_RESOLUTION_IDS);
   const resolution = clone(preview);
+  if(preview.lethalDeath)resolution.lethalDeath={...clone(preview.lethalDeath),application:{hp:0,dead:true}};
+  if(preview.tripFall)resolution.tripFall={...clone(preview.tripFall),application:{hpLoss:preview.tripFall.damageLoss+(preview.tripFall.extraCriticalWounds||0),mounted:false,prone:preview.trip?.conditionApplied===true}};
   resolution.application = { status: 'applied', applied: true, revision: nextState.revision };
   return { status: 'applied', state: nextState, resolution };
 }

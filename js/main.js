@@ -1510,6 +1510,20 @@ const workspaceView = DOM.panels.workspace && qs('#workspace-root') ? initWorksp
       else if (result?.status !== 'stale') throw new Error(result?.reason || 'Résolution non appliquée.');
       return result;
     },
+    declareCombatAction: async input => {
+      const preview = Store.previewV5CombatAction(input);
+      if (!preview?.ready) throw new Error(preview?.unresolved?.join(' ') || preview?.needsInput?.join(' ') || 'Action de combat indisponible.');
+      const result = await awaitStore(Store.applyV5CombatAction(preview), input.kind === 'aim' ? 'Visée' : 'Action défensive');
+      if (result?.status !== 'applied') throw new Error(result?.error || result?.reason || 'Action de combat non enregistrée.');
+      showToast(input.kind === 'aim' ? 'Visée enregistrée pour la cible choisie.' : 'Action défensive enregistrée.', 'success');
+      return result;
+    },
+    declareCombatMovement: async actorId => {
+      const result = await awaitStore(Store.declareV5CombatMovement({ actorId }), 'Déplacement déclaré');
+      if (result?.status !== 'applied') throw new Error(result?.error || result?.reason || 'Déplacement non enregistré.');
+      showToast('Déplacement déclaré : la Visée est annulée et le prochain tir reçoit −1 DR.', 'success');
+      return result;
+    },
     renderRules: content => { renderReferenceTables('', content, { getEnvelope:()=>JSON.parse(Store.getFullJSON()) }); },
     renderOverview: renderWorkspaceOverview,
     renderLog: content => { renderLog(Store, content, { contextual: true }); },

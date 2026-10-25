@@ -54,7 +54,15 @@ function evaluate({ score, roll, modifiers, advantage, kind, channellingGain }) 
   if (kind === 'test' && critical && !channellingGain) sl = Math.max(5, sl);
   if (kind === 'test' && fumble) sl = Math.min(-5, sl);
   const zeroOutcome = sl === 0 ? (success ? 'marginalSuccess' : 'marginalFailure') : null;
-  return { ruleVersion: V5_TEST_RULE_VERSION, roll, score, kind, success, sl, zeroOutcome, critical, fumble,
+  const resultTier = sl >= 5 ? { id: 'success-5-plus', label: 'Réussite éclatante' }
+    : sl >= 3 ? { id: 'success-3-4', label: 'Réussite impressionnante' }
+    : sl >= 1 ? { id: 'success-1-2', label: 'Réussite' }
+    : success ? { id: 'success-zero', label: 'Réussite marginale' }
+    : sl <= -5 ? { id: 'failure-5-minus', label: 'Échec éclatant' }
+    : sl <= -3 ? { id: 'failure-3-4', label: 'Échec impressionnant' }
+    : sl <= -1 ? { id: 'failure-1-2', label: 'Échec' }
+    : { id: 'failure-zero', label: 'Échec marginal' };
+  return { ruleVersion: V5_TEST_RULE_VERSION, roll, score, kind, success, sl, zeroOutcome, resultTier, critical, fumble,
     details: { baseSl, modifiers: modifiers.map(item => ({ ...item })), advantageSl: advantage.slModifier,
       totalModifier, beforeCriticalSl, automatic, doubled } };
 }

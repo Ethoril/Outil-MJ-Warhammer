@@ -12,6 +12,7 @@ But : préparer la phase H du plan de fin de projet (écriture en retour de l’
 | Points de Chance permanents | `extensions.v5.characterResources[].fortune`, clé `characterId` ; projection `extensions.v5.resources.fortune` | `chance` (initialisation explicite depuis le solde connu importé) | dépenses, corrections MJ, renouvellement explicite | existant ; B09 `af31809` |
 | Pénitences en cours et accomplies | `extensions.v5.divinePenances[]` : identité, culte, texte, source, origine, statut et clôture MJ | absente | Courroux 96–100, création et clôture MJ | phase B B10 `aa62ca0` |
 | Blessures Critiques (registre) | `extensions.v5.criticalWounds` | absente | combat, soins, Larmes de Shallya, bouton Guérir | phase A (A9, A11) |
+| Mort confirmée par le MJ | `extensions.v5.dead` (booléen) avec `hp = 0` | absente | option létale de la table activée, choix létal et confirmation explicite du MJ contre une cible admissible sans défense | F2-B |
 
 ## Complément phase B — reprise gpt/phase-b4
 

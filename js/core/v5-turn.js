@@ -141,6 +141,11 @@ export function previewV5Turn(state, { inputs = {} } = {}) {
     combat: { ...combat, participants, ...transition },
     log: [{ id: `v5-turn:${before.localRevision || 0}:${turn}:management`,  kind: 'management', actorId: nextActor?.id, actorName: nextActor?.name,
       text: `▶ ${transition.round !== combat.round ? `Round ${transition.round} — ` : ''}Tour de ${nextActor?.name || '—'}` }, ...effectLogs, ...(before.log || [])].slice(0, 300) };
+  const combatActions=stateAfter.extensions?.v5?.combatActions;
+  if(combatActions?.byActorId?.[nextActor?.id]?.kind==='defensive'){
+    const expired={...combatActions.byActorId};delete expired[nextActor.id];
+    stateAfter={...stateAfter,extensions:{...stateAfter.extensions,v5:{...stateAfter.extensions.v5,combatActions:{...combatActions,byActorId:expired}}}};
+  }
   const divineClock=expireDivineAtClock(stateAfter,{fromClock:clock,toClock:clockResult.clock,receipt:clockResult.receipt});
   if(!divineClock.ok)return {status:'requires-input',ready:false,baseRevision:before.localRevision||0,requests:[],error:divineClock.needsInput.map(row=>row.message).join(' '),needsInput:divineClock.needsInput};
   stateAfter=divineClock.state;

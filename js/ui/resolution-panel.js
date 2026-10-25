@@ -8,8 +8,10 @@ import { ARCANE_ARMOR_LOCATIONS } from '../core/v5-magic-arcane-unforgiving.js';
 import {renderSituationFields,renderSupportFields} from './v5-talent-situations.js';
 import { renderV5TalentMeasures } from './v5-talent-measures.js';
 import { V5_ACTIVATED_TALENTS,knownV5MartialQualities,noTestV5TalentAction }  from '../core/v5-talent-actions.js';
+import { computeV5WeaponReachGuide, computeV5WeaponRangeBands } from '../core/v5-talent-combat.js';
 import { inferV5Kind, hasMomentum } from '../core/v5-combat-rules.js';
 import { naturalCombatTraits, naturalAttackNeedsSize } from '../core/creature-combat.js';
+import { creatureSizeOf } from '../core/creature-size.js';
 import { carriesSense } from '../core/creature-senses.js';
 import { carriesMovement } from '../core/creature-movement.js';
 import { engagedCandidates, planOutnumbering } from '../core/outnumbering.js';
@@ -925,7 +927,7 @@ function renderV5MagicResult(preview, target, draft, handlers) {
   return result;
 }
 
-function renderResult(preview, target, draft, handlers) {
+function renderResult(preview, target, draft, handlers, participants=[]) {
   if (preview?.v5MagicKind) return renderV5MagicResult(preview, target, draft, handlers);
   const result = node('div', 'workspace-result');
   if (preview.choiceRequired) result.appendChild(node('p', 'workspace-muted', 'Aperçu provisoire : les joueurs doivent confirmer leurs choix.'));
@@ -946,6 +948,26 @@ function renderResult(preview, target, draft, handlers) {
   if (preview.fumble) pills.appendChild(node('span', 'workspace-outcome is-critical', 'Maladresse de l’attaquant'));
   if (preview.defenderFumble) pills.appendChild(node('span', 'workspace-outcome is-critical', 'Maladresse du défenseur'));
   result.appendChild(pills);
+  if(preview.engagedShot){
+    const chosen=participants.find(row=>row.id===preview.engagedShot.selectedTargetId)?.name||target?.name||'combattant choisi';
+    result.appendChild(node('p','workspace-result-line',`Tir contre des combattants engagés : déviation vers ${chosen} (d100 ${preview.engagedShot.roll}). La résolution ci-dessous porte sur cette cible.`));
+  }
+  if(preview.scatter){
+    const scatter=preview.scatter,direction=Number(scatter.directionRoll)===9?'aux pieds du tireur':Number(scatter.directionRoll)===10?'aux pieds de la cible':scatter.direction||'direction non déterminée';
+    result.appendChild(node('p','workspace-result-line',`Arme de jet déviée : d10 ${scatter.directionRoll} · ${direction} · 2d10 ${scatter.distanceRolls?.join(' et ')} yards = ${scatter.rolledDistanceYards} yards, plafond ${scatter.maximumYards} yards, résultat ${scatter.distanceYards} yards. Le pion reste en place.`));
+  }
+  if(preview.trip){
+    const winner=preview.trip.winner==='attacker'?preview.input?.actor?.name||'l’attaquant':preview.input?.target?.name||target?.name||'le défenseur';
+    result.appendChild(node('p','workspace-result-line',`Opposition de Croche-pied : victoire de ${winner}. Coût prévu : 1 Élan.${preview.trip.conditionApplied?` ${target?.name||'La cible'} reçoit À Terre.`:'Aucune chute ni état À Terre.'}`));
+  }
+  if(preview.tripFall){
+    const fall=preview.tripFall,tests=fall.enduranceTest?`Test d’Endurance ${fall.enduranceTest.success?'réussi':'raté'} · ${fall.enduranceTest.sl} DR`:'aucun Test d’Endurance requis';
+    result.appendChild(node('p','workspace-result-line',`Chute verticale de ${fall.yards} yards : ${fall.rawDamage} Blessure(s) avant protection, ${fall.damageLoss} perdue(s) après protection, BE ${fall.toughnessBonus}; Armure non déduite. ${tests}${fall.criticals?.length?` · ${fall.criticals.length} critique(s) à appliquer`:''}.`));
+  }
+  if(preview.lethalDeath){
+    const who=participants.find(row=>row.id===preview.lethalDeath.targetId)?.name||target?.name||'la cible';
+    result.appendChild(node('p','workspace-critical-death',`Option létale confirmée par le MJ : ${who} sera déclaré mort et à 0 Blessure si ce résultat est appliqué.`));
+  }
   if(preview.prayerSLAdjustment)result.appendChild(node('p','workspace-result-line',`Courroux « Pensez à vos actes » · ${preview.prayerSLAdjustment.rawSL} DR bruts → ${preview.prayerSLAdjustment.effectiveSL} DR appliqués · plafond de +0 pendant huit jours impériaux.`));
   if(preview.weaponSkillReceipt){
     const receipt=preview.weaponSkillReceipt,source=preview.input.action.extensions?.equipment||preview.input.actor?.equipment?.find(row=>row?.id===preview.input.action.extensions?.fiche?.equipmentId),names={
@@ -963,8 +985,9 @@ function renderResult(preview, target, draft, handlers) {
   for(const state of preview.actorConditionApplication||[])if(state.source?.keywordId==='a-poudre-noire')result.append(node('p','workspace-result-line','À Poudre noire : '+state.level+' état(s) Brisé sur '+preview.input.actor.name));
   if(preview.test?.automatic)result.appendChild(node('p','workspace-result-line',preview.test.noTest?'Choix de talent sans Test.':'Réussite automatique, sans jet.'));
   if(preview.defenderDamage)result.appendChild(node('p','workspace-result-line','Riposte : '+preview.defenderDamage.finalDamage+' Blessures sur '+(preview.input.actor?.name||'l’attaquant')));
+  const effectiveTarget = participants.find(row => row.id === preview.targetId) || target;
   if (preview.attack) result.appendChild(node('p', 'workspace-result-line', `${preview.hit ? 'Touché' : 'Pas de touche'}${preview.location ? ` · ${preview.location.name}` : ''}`));
-  if (target && preview.damage) result.appendChild(node('p', 'workspace-result-line', `${target.name} : ${previewHpLoss(preview)} Blessures proposées · PV ${target.hp} → ${Math.max(0, Number(target.hp) - previewHpLoss(preview))}`));
+  if (effectiveTarget && preview.damage) result.appendChild(node('p', 'workspace-result-line', `${effectiveTarget.name} : ${previewHpLoss(preview)} Blessures proposées · PV ${effectiveTarget.hp} → ${Math.max(0, Number(effectiveTarget.hp) - previewHpLoss(preview))}`));
   if (preview.actionCosts?.paid?.length) result.appendChild(node('p', 'workspace-result-line',
     'Coût proposé avant le jet : ' + preview.actionCosts.paid.map(cost => cost.resource === 'momentum' ? '1 Élan' : cost.amount + ' ' + cost.resource).join(', ')));
   if (preview.damageReplacedByTalent) result.appendChild(node('p', 'workspace-result-line', preview.damageReplacedByTalent.name||'Battement : 0 Blessure ; toutes les conséquences du critique remplacé sont supprimées. Esquive reste possible.'));
@@ -1078,7 +1101,7 @@ function renderComparison(entries, handlers, busy) {
  * @param {object} options.handlers select, input, roll, calculate, compare, choose, apply, cancel
  */
 function renderDivineSocialFacts(subject,draft,handlers,{defending=false}={}){const checked=readDivineRejections(subject),cults=[...new Set(checked.records.filter(row=>row.kind==='permanent'||row.stage<2).map(row=>row.cult))];if(!cults.length)return null;const key=defending?'defenseContext':'v5Context',context=draft[key]||{},box=node('div','workspace-divine-social');box.append(node('p','workspace-muted',(defending?'Défenseur':'Auteur')+' : une interaction avec un membre du culte est au mieux Très Difficile (−3 DR), sans amélioration positive au-dessus de ce seuil. Source L06 p.219.'));for(const cult of cults){const text=(defending?'Défenseur · ':'')+'L’interaction concerne un membre de '+cult,label=node('label','workspace-type',text),select=document.createElement('select');select.setAttribute('aria-label',text);select.append(new Option('À préciser',''),new Option('Oui','true'),new Option('Non','false'));select.value=typeof context.divineCultMembership?.[cult]==='boolean'?String(context.divineCultMembership[cult]):'';select.addEventListener('change',()=>handlers.select({[key]:{...context,divineCultMembership:{...context.divineCultMembership,[cult]:select.value===''?undefined:select.value==='true'}}}));label.append(select);box.append(label);}const text=(defending?'Défenseur · ':'')+'Ce Test est une interaction sociale',label=node('label','workspace-type',text),select=document.createElement('select');select.setAttribute('aria-label',text);select.append(new Option('Selon la compétence choisie',''),new Option('Oui','true'));select.value=context.socialInteraction===true?'true':'';select.addEventListener('change',()=>handlers.select({[key]:{...context,socialInteraction:select.value==='true'?true:undefined}}));label.append(select);box.append(label);return box;}
-export function renderResolutionPanel({ draft, actor, participants=[], actions, actionKey: selectedKey, type, target, groups, defense, canCalculate, canApply, handlers }) {
+export function renderResolutionPanel({ draft, actor, participants=[], actions, actionKey: selectedKey, type, target, groups, defense, previousWeaponAttacks=[], canCalculate, canApply, canDeclareCombatAction=false, canDeclareCombatMovement=false, handlers }) {
   const section = node('section', 'workspace-resolution workspace-card');
   section.setAttribute('aria-labelledby', 'workspace-resolution-title');
   const title = node('h3', 'workspace-rubric', 'Résolution');
@@ -1155,6 +1178,79 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
 
     if (!actions.length) return section;
     const action = actions.find((item, index) => actionKey(item, index) === selectedKey) || actions[0];
+
+    if (canDeclareCombatAction || canDeclareCombatMovement) {
+      const combatActions = node('section', 'workspace-resolution-row');
+      combatActions.appendChild(rubric('Actions du Tour'));
+      combatActions.appendChild(node('p', 'workspace-muted', 'Mouvement narratif non observable automatiquement : indiquez-le quand il a lieu. La réorganisation des combattants ne constitue pas un déplacement.'));
+      if (canDeclareCombatMovement) {
+        const move = button('Déclarer un déplacement effectué', 'workspace-secondary', { 'data-focus-key': 'declare-movement' });
+        move.disabled = draft.busy; move.addEventListener('click', () => handlers.declareCombatMovement()); combatActions.appendChild(move);
+      }
+      if (canDeclareCombatAction && target && target.id !== actor.id) {
+        const weapons=(actor.equipment||[]).filter(row=>row?.kind==='weapon');
+        if(weapons.length){
+          const label=node('label','workspace-type',`Arme de tir tenue pour viser ${target.name}`),select=document.createElement('select');select.setAttribute('aria-label',label.textContent);
+          select.append(new Option('Choisir une arme équipée…',''));for(const weapon of weapons)select.append(new Option(`${weapon.name||weapon.id}${String(weapon.range||'').trim()?'':' · portée non renseignée'}`,weapon.id));
+          select.value=draft.combatAimWeaponId||'';select.addEventListener('change',()=>handlers.select({combatAimWeaponId:select.value,combatAimWeaponHeldConfirmed:false,combatAimWeaponKindConfirmed:false}));label.append(select);combatActions.appendChild(label);
+          const selectedWeapon=weapons.find(row=>row.id===draft.combatAimWeaponId);
+          if(selectedWeapon&&!String(selectedWeapon.range||'').trim()){
+            const kindLabel=node('label','workspace-type','Je confirme que cette arme équipée est une arme à distance');const ranged=document.createElement('input');ranged.type='checkbox';ranged.checked=draft.combatAimWeaponKindConfirmed===true;ranged.setAttribute('aria-label',kindLabel.textContent);ranged.addEventListener('change',()=>handlers.select({combatAimWeaponKindConfirmed:ranged.checked}));kindLabel.prepend(ranged);combatActions.appendChild(kindLabel);
+          }
+          const confirmLabel=node('label','workspace-type','Je confirme que cette arme est tenue en main');const confirm=document.createElement('input');confirm.type='checkbox';confirm.checked=draft.combatAimWeaponHeldConfirmed===true;confirm.disabled=!draft.combatAimWeaponId;confirm.setAttribute('aria-label',confirmLabel.textContent);confirm.addEventListener('change',()=>handlers.select({combatAimWeaponHeldConfirmed:confirm.checked}));confirmLabel.prepend(confirm);combatActions.appendChild(confirmLabel);
+          const aim = button(`Viser ${target.name}`, 'workspace-secondary', { 'data-focus-key': 'declare-aim' });
+          aim.disabled = draft.busy || !draft.combatAimWeaponId || draft.combatAimWeaponHeldConfirmed!==true || Boolean(selectedWeapon&&!String(selectedWeapon.range||'').trim()&&draft.combatAimWeaponKindConfirmed!==true);
+          aim.addEventListener('click', () => handlers.declareCombatAction('aim', { targetId: target.id, weaponId:draft.combatAimWeaponId, rangedWeaponConfirmed: Boolean(selectedWeapon&&!String(selectedWeapon.range||'').trim()), rangedWeaponHeldConfirmed:draft.combatAimWeaponHeldConfirmed===true }));
+          combatActions.appendChild(aim);
+        } else {
+          const nameLabel=node('label','workspace-type','Nom de l’arme de tir utilisée pour viser '+target.name),nameInput=document.createElement('input');nameInput.type='text';nameInput.value=draft.combatAimWeaponName||'';nameInput.setAttribute('aria-label',nameLabel.textContent);nameInput.addEventListener('change',()=>handlers.select({combatAimWeaponName:nameInput.value.trim()}));nameLabel.appendChild(nameInput);combatActions.appendChild(nameLabel);
+          const natureLabel=node('label','workspace-type','Je confirme que cette attaque utilise une arme à distance');const nature=document.createElement('input');nature.type='checkbox';nature.checked=draft.combatAimWeaponKindConfirmed===true;nature.setAttribute('aria-label',natureLabel.textContent);nature.addEventListener('change',()=>handlers.select({combatAimWeaponKindConfirmed:nature.checked}));natureLabel.prepend(nature);combatActions.appendChild(natureLabel);
+          const heldLabel=node('label','workspace-type','Je confirme que l’arme est tenue en main');const held=document.createElement('input');held.type='checkbox';held.checked=draft.combatAimWeaponHeldConfirmed===true;held.setAttribute('aria-label',heldLabel.textContent);held.addEventListener('change',()=>handlers.select({combatAimWeaponHeldConfirmed:held.checked}));heldLabel.prepend(held);combatActions.appendChild(heldLabel);
+          const aim=button(`Viser ${target.name}`,'workspace-secondary',{'data-focus-key':'declare-aim'});aim.disabled=draft.busy||!draft.combatAimWeaponName||draft.combatAimWeaponKindConfirmed!==true||draft.combatAimWeaponHeldConfirmed!==true;aim.addEventListener('click',()=>handlers.declareCombatAction('aim',{targetId:target.id,weaponName:draft.combatAimWeaponName,rangedWeaponConfirmed:true,rangedWeaponHeldConfirmed:true}));combatActions.appendChild(aim);
+        }
+      }
+      const tripPrimaries=previousWeaponAttacks.filter(row=>row.targetId===target?.id&&row.hit===true&&row.actionType==='attack');
+      const athletics=(target?.skills||[]).filter(row=>row.status==='resolved'&&row.id&&/athlet/i.test(String(row.name||row.nom||'').normalize('NFD').replace(/[\u0300-\u036f]/g,''))&&Number.isFinite(Number(row.total??row.value)));
+      if(target&&tripPrimaries.length){
+        combatActions.appendChild(rubric('Croche-pied · après une touche appliquée sur '+target.name));
+        const primaryLabel=node('label','workspace-type','Attaque réussie déjà appliquée ce Tour'),primarySelect=document.createElement('select');primarySelect.setAttribute('aria-label',primaryLabel.textContent);primarySelect.append(new Option('Choisir la touche…',''));
+        for(const row of tripPrimaries)primarySelect.append(new Option(`${row.weaponName} · ${target.name}`+(row.hit?' · touche':''),row.actionId));
+        primarySelect.value=draft.v5Context?.tripPrimaryResolutionId||'';primarySelect.addEventListener('change',()=>handlers.select({v5Context:{...(draft.v5Context||{}),tripPrimaryResolutionId:primarySelect.value||undefined}}));primaryLabel.append(primarySelect);combatActions.appendChild(primaryLabel);
+        if(athletics.length){
+          const skillLabel=node('label','workspace-type',`Athlétisme de ${target.name}`),skillSelect=document.createElement('select');skillSelect.setAttribute('aria-label',skillLabel.textContent);skillSelect.append(new Option('Choisir la compétence…',''));
+          for(const skill of athletics)skillSelect.append(new Option(`${skill.name||skill.nom} · ${skill.total??skill.value}`,skill.id));
+          skillSelect.value=draft.v5Context?.athleticsSkillId||'';skillSelect.addEventListener('change',()=>handlers.select({v5Context:{...(draft.v5Context||{}),athleticsSkillId:skillSelect.value||undefined}}));skillLabel.append(skillSelect);combatActions.appendChild(skillLabel);
+          const prepare=button('Préparer le Croche-pied','workspace-secondary',{'data-focus-key':'prepare-trip'});prepare.disabled=draft.busy||!draft.v5Context?.tripPrimaryResolutionId||!draft.v5Context?.athleticsSkillId;
+          prepare.addEventListener('click',()=>handlers.select({v5Context:{...(draft.v5Context||{}),trip:true},v5Kind:'test'}));combatActions.appendChild(prepare);
+          if(draft.v5Context?.trip===true){
+            combatActions.appendChild(node('p','workspace-muted',`Opposition Force de ${actor.name} contre Athlétisme de ${target.name}. Entrez les deux d100 ci-dessous; l’Élan sera débité une fois, quelle que soit l’issue. Seule une victoire de l’attaquant fait tomber ${target.name}.`));
+            if(target.extensions?.v5?.mounted===true){
+              combatActions.appendChild(node('p','workspace-muted','Cible montée : chute verticale de 2 yards, démontage et À Terre après victoire de l’attaquant. Les champs conditionnels restent vides tant que leurs dés réels ne sont pas lancés.'));
+              const fallFields=[['tripFallWardRoll',`Protection de chute de ${target.name} (d10, si requise)`,1,10],['tripFallEnduranceRoll',`Test d’Endurance de ${target.name} (d100, si perte après protection > BE)`,1,100],['tripLegLocationRoll','Localisation d100 (doit donner Jambe)',1,100],['tripLegCriticalEffectRoll','Effet d100 du critique à la Jambe',1,100],['tripExtraLocationRoll','Localisation d100 du critique supplémentaire (échec extraordinaire)',1,100],['tripExtraCriticalEffectRoll','Effet d100 du critique supplémentaire (échec extraordinaire)',1,100]];
+              for(const[key,text,min,max]of fallFields){const label=node('label','workspace-type',text),input=document.createElement('input');input.type='number';input.min=String(min);input.max=String(max);input.value=draft.v5Context?.[key]??'';input.setAttribute('aria-label',text);input.addEventListener('change',()=>handlers.select({v5Context:{...(draft.v5Context||{}),[key]:input.value===''?null:Number(input.value)}}));label.append(input);combatActions.appendChild(label);}
+              const calmLabel=node('label','workspace-type',`Test de Calme de ${target.name} contre la protection de chute (si requis)`),calmSelect=document.createElement('select');calmSelect.setAttribute('aria-label',calmLabel.textContent);calmSelect.append(new Option('À préciser si requis',''),new Option('Échec','fail'),new Option('Réussite','success'));calmSelect.value=draft.v5Context?.tripFallCalmTest?.success===true?'success':draft.v5Context?.tripFallCalmTest?.success===false?'fail':'';
+              const calmSl=document.createElement('input');calmSl.type='number';calmSl.min='0';calmSl.max='20';calmSl.value=draft.v5Context?.tripFallCalmTest?.sl??'';calmSl.setAttribute('aria-label',`DR du Test de Calme de ${target.name}`);
+              const saveCalm=()=>handlers.select({v5Context:{...(draft.v5Context||{}),tripFallCalmTest:calmSelect.value?{success:calmSelect.value==='success',sl:Number(calmSl.value)||0}:null}});calmSelect.addEventListener('change',saveCalm);calmSl.addEventListener('change',saveCalm);calmLabel.append(calmSelect,calmSl);combatActions.appendChild(calmLabel);
+            }
+          }
+        }else combatActions.appendChild(node('p','workspace-field-error',`Croche-pied indisponible : ${target.name} doit avoir une compétence Athlétisme résolue.`));
+      }
+      const skills = canDeclareCombatAction ? (actor.skills || []).filter(row => row.status === 'resolved' && row.id && Number.isFinite(Number(row.total))) : [];
+      if (skills.length) {
+        const label = node('label', 'workspace-type', 'Compétence choisie pour l’Action défensive');
+        const select = document.createElement('select'); select.setAttribute('aria-label', label.textContent);
+        select.append(new Option('Choisir une compétence…', ''));
+        for (const skill of skills) select.append(new Option(`${skill.name || skill.nom || skill.id} · ${skill.total}`, skill.id));
+        select.value = draft.combatDefensiveSkillId || '';
+        select.addEventListener('change', () => handlers.select({ combatDefensiveSkillId: select.value }));
+        label.appendChild(select); combatActions.appendChild(label);
+        const defend = button('Déclarer l’Action défensive', 'workspace-secondary', { 'data-focus-key': 'declare-defensive' });
+        defend.disabled = draft.busy || !draft.combatDefensiveSkillId;
+        defend.addEventListener('click', () => handlers.declareCombatAction('defensive', { skillId: draft.combatDefensiveSkillId }));
+        combatActions.appendChild(defend);
+      } else if (canDeclareCombatAction) combatActions.appendChild(node('p', 'workspace-muted', 'Aucune compétence résolue disponible pour l’Action défensive.'));
+      section.appendChild(combatActions);
+    }
 
     if(action.extensions?.fiche?.requiresLink) section.appendChild(node('p','workspace-field-error','Compétence à choisir dans « Mettre à jour les PJ » avant de lancer cette action.'));
     const conjured=conjuredWeaponMetadata(actor,action);
@@ -1305,12 +1401,15 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
       select.appendChild(new Option('À préciser', ''));
       for (const [value, text] of [[0,'Minuscule'],[1,'Très petite'],[2,'Petite'],[3,'Moyenne'],[4,'Grande'],[5,'Énorme'],[6,'Monstrueuse']])
         select.appendChild(new Option(text, String(value)));
-      select.value = draft[key] == null ? '' : String(draft[key]); select.setAttribute('aria-label', labelText); select.dataset.focusKey = key;
+      const person = key === 'actorSize' ? actor : target;
+      const size = creatureSizeOf(person);
+      select.value = draft[key] == null ? String(size.rank) : String(draft[key]); select.setAttribute('aria-label', labelText); select.dataset.focusKey = key;
       select.addEventListener('change', () => handlers.select({ [key]: select.value === '' ? null : Number(select.value) }));
       label.appendChild(select); v5.appendChild(label);
     }
+    if (creatureSizeOf(actor).assumed || target && creatureSizeOf(target).assumed) v5.appendChild(node('p', 'workspace-muted', 'Taille non renseignée sur la fiche : Moyenne est la valeur supposée. Le MJ peut corriger les listes si nécessaire.'));
   };
-  if (type === 'attack' && naturalAttackNeedsSize(draft.v5Context?.naturalAttack)) sizeSelects();
+  if (type === 'attack') sizeSelects();
   if (kind.value === 'melee' && type === 'attack') {
     const charge = node('label','workspace-type'); const check = document.createElement('input'); check.type='checkbox'; check.checked=draft.charging === true;
     check.addEventListener('change',()=>handlers.select({charging:check.checked})); charge.append(check,'Charge donnant Élan (distance et conditions vérifiées)'); v5.appendChild(charge);
@@ -1365,6 +1464,15 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
     select.addEventListener('change', () => handlers.select({ [contextKey]: { ...current, [key]: select.value === '' ? undefined : select.value === 'true' } }));
     caption.appendChild(select); container.appendChild(caption);
   };
+  const choiceField = (container, key, label, options) => {
+    const current = draft.v5Context || {}, caption = node('label', 'workspace-type', label), select = document.createElement('select');
+    select.setAttribute('aria-label', label); select.dataset.focusKey = `actor-${key}`;
+    select.append(new Option('À préciser', ''));
+    for (const [value, text] of options) select.append(new Option(text, value));
+    select.value = current[key] == null ? '' : String(current[key]);
+    select.addEventListener('change', () => handlers.select({ v5Context: { ...current, [key]: select.value || undefined } }));
+    caption.appendChild(select); container.appendChild(caption);
+  };
   const conditionModeField = (container, role) => {
     const contextKey = role === 'actor' ? 'v5Context' : 'defenseContext'; const current = draft[contextKey] || {};
     const label = node('label', 'workspace-type', 'Pénalité retenue entre États mixtes'); const select = document.createElement('select');
@@ -1406,7 +1514,9 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
     }
   }
   if(talentFields.childNodes.length){talentFields.prepend(rubric('Contexte des talents'));v5.append(talentFields);}
-  const contextual = node('details', 'workspace-v5-context-details'); contextual.appendChild(node('summary', '', 'Circonstances des Tests'));
+  const contextual = node('details', 'workspace-v5-context-details'); contextual.open = draft.combatSituationOpen ?? type === 'attack';
+  contextual.addEventListener('toggle', () => { draft.combatSituationOpen = contextual.open; });
+  contextual.appendChild(node('summary', '', 'Circonstances des Tests'));
   const fields = node('div', 'workspace-v5-context');
   for (const [key, label] of [['involvesMovement','Le Test implique un mouvement'],['runningOrHiding','Le Test sert à fuir ou se cacher'],['reliesOnSight','Le Test est réalisable sans voir mais repose sur la vue'],['requiresSight','Le Test est impossible sans voir'],['usesFellowship','Le Test utilise la Sociabilité']]) contextField(fields, 'actor', key, label);
   if(['skill','defense','opposition'].includes(type)&&isBrokenActor(actor)&&!draft.reactionId){
@@ -1457,11 +1567,117 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
     if (participants.some(person => person.id !== target.id && carriesSense(person, 'distracting'))) contextField(fields, 'defender', 'distractingInRange', 'Un Perturbant est à portée du défenseur (−2 DR, une seule fois)');
     conditionModeField(fields, 'defender');
   }
+  if (type === 'attack') {
+    fields.appendChild(rubric('Circonstances de combat · L06 p.166'));
+    if (kind.value === 'ranged') {
+      const rangedWeapons = (actor?.equipment || []).filter(item => item?.kind === 'weapon' && String(item.range || '').trim());
+      const rangedWeapon = actor?.equipment?.find(item => item?.id === action.extensions?.fiche?.equipmentId) || action.extensions?.equipment || (rangedWeapons.length === 1 ? rangedWeapons[0] : null);
+      const rangeBands = computeV5WeaponRangeBands(draft.v5Context?.weaponRangeYards ?? rangedWeapon?.range ?? action.range, actor);
+      choiceField(fields, 'shotRange', 'Bande de portée choisie par le MJ', [['point-blank','Bout portant'],['short','Courte'],['medium','Moyenne'],['long','Longue'],['extreme','Extrême']]);
+      if (rangeBands) fields.appendChild(node('p', 'workspace-muted', `Bandes dérivées de la portée imprimée (${rangeBands.printedYards} yards) : Bout portant ≤ ${rangeBands.pointBlankYards} yards (+2 DR) · Courte ≤ ${rangeBands.shortYards} yards (+1 DR) · Moyenne ≤ ${rangeBands.mediumYards} yards (0 DR) · Longue ≤ ${rangeBands.longYards} yards (−1 DR) · Extrême ≤ ${rangeBands.extremeYards} yards (−2 DR).`));
+      choiceField(fields, 'weather', 'Météo', [['normal','Aucune pénalité'],['fog','Brouillard (−1 DR)'],['rain-wind','Pluie ou vent (−2 DR)'],['extreme','Météo extrême (−3 DR)']]);
+      choiceField(fields, 'lighting', 'Lumière', [['normal','Aucune pénalité'],['fog','Faible lumière (−1 DR)'],['dim','Pénombre (−1 DR)'],['dark','Noir total (−3 DR)']]);
+      fields.appendChild(node('p', 'workspace-muted', 'Météo et lumière partagent une seule ligne du tableau : seule la pénalité la plus sévère s’applique. La portée est un choix du MJ; l’application ne suit pas la distance.'));
+      const covered = node('label', 'workspace-type', 'La cible est à couvert ou À Terre (−1 DR, une seule fois)');
+      const cover = document.createElement('input'); cover.type = 'checkbox'; cover.checked = Number(draft.v5Context?.penalties?.cover || draft.v5Context?.penalties?.targetProne) < 0; cover.setAttribute('aria-label', covered.textContent);
+      cover.addEventListener('change', () => { const current = draft.v5Context || {}, penalties = { ...(current.penalties || {}) }; delete penalties.targetProne; if (cover.checked) penalties.cover = -1; else delete penalties.cover; handlers.select({ v5Context: { ...current, penalties } }); }); covered.prepend(cover); fields.appendChild(covered);
+      const moved = node('label', 'workspace-type', 'Tireur déplacé avant ce tir (−1 DR)');
+      const movedBox = document.createElement('input'); movedBox.type = 'checkbox'; movedBox.checked = draft.v5Context?.movedBeforeRangedAttack === true; movedBox.setAttribute('aria-label', moved.textContent);
+      movedBox.addEventListener('change', () => handlers.select({ v5Context: { ...(draft.v5Context || {}), movedBeforeRangedAttack: movedBox.checked } })); moved.prepend(movedBox); fields.appendChild(moved);
+      if (hasV5Talent(actor, 'talent-sharpshooter')) {
+        const extraordinary = node('label', 'workspace-type', 'Tir extraordinaire selon Tireur d’élite');
+        const enabled = document.createElement('input'); enabled.type = 'checkbox'; enabled.checked = draft.v5Context?.extraordinaryShot === true; enabled.setAttribute('aria-label', extraordinary.textContent);
+        enabled.addEventListener('change', () => handlers.select({ v5Context: { ...(draft.v5Context || {}), extraordinaryShot: enabled.checked } }));
+        extraordinary.prepend(enabled); fields.appendChild(extraordinary);
+        if (enabled.checked) {
+          const description = node('label', 'workspace-type', 'Décrire le Tir extraordinaire');
+          const text = document.createElement('input'); text.type = 'text'; text.value = draft.v5Context?.extraordinaryShotDescription || ''; text.setAttribute('aria-label', description.textContent);
+          text.addEventListener('change', () => handlers.select({ v5Context: { ...(draft.v5Context || {}), extraordinaryShotDescription: text.value } })); description.appendChild(text); fields.appendChild(description);
+          const difficulty = node('label', 'workspace-type', 'Difficulté du Tir extraordinaire (DR signés)');
+          const value = document.createElement('input'); value.type = 'number'; value.step = '1'; value.value = draft.v5Context?.extraordinaryShotDifficulty ?? ''; value.setAttribute('aria-label', difficulty.textContent);
+          value.addEventListener('change', () => handlers.select({ v5Context: { ...(draft.v5Context || {}), extraordinaryShotDifficulty: value.value === '' ? undefined : Number(value.value) } })); difficulty.appendChild(value); fields.appendChild(difficulty);
+        }
+      }
+      const throwing = node('label', 'workspace-type', 'Il s’agit d’une arme de jet (dispersion seulement si le tir échoue)');
+      const throwingBox = document.createElement('input'); throwingBox.type='checkbox'; throwingBox.checked=draft.v5Context?.throwingWeapon===true; throwingBox.setAttribute('aria-label',throwing.textContent);
+      throwingBox.addEventListener('change',()=>handlers.select({v5Context:{...(draft.v5Context||{}),throwingWeapon:throwingBox.checked}})); throwing.prepend(throwingBox); fields.appendChild(throwing);
+      if (draft.v5Context?.throwingWeapon === true) {
+        choiceField(fields,'scatterDirectionRoll','Déviation d10 (direction relative à la cible)',[[1,'1 · haut-gauche'],[2,'2 · haut'],[3,'3 · haut-droite'],[4,'4 · gauche'],[5,'5 · droite'],[6,'6 · bas-gauche'],[7,'7 · bas'],[8,'8 · bas-droite'],[9,'9 · aux pieds du tireur'],[10,'10 · aux pieds de la cible']]);
+        const rolls = draft.v5Context?.scatterDistanceRolls || [];
+        for (let index=0; index<2; index++) {
+          const label=node('label','workspace-type',`Dispersion · d10 ${index+1} (yards)`),input=document.createElement('input');input.type='number';input.min='1';input.max='10';input.value=rolls[index]??'';input.setAttribute('aria-label',label.textContent);
+          input.addEventListener('change',()=>{const next=[...(draft.v5Context?.scatterDistanceRolls||[])];next.length=2;next[index]=input.value===''?null:Number(input.value);handlers.select({v5Context:{...(draft.v5Context||{}),scatterDistanceRolls:next}});});label.appendChild(input);fields.appendChild(label);
+        }
+        const label=node('label','workspace-type','Distance cible-tireur confirmée par le MJ (yards; nécessaire pour plafonner la dispersion)');const distance=document.createElement('input');distance.type='number';distance.min='0';distance.step='1';distance.value=draft.v5Context?.shooterTargetDistanceYards??'';distance.setAttribute('aria-label',label.textContent);
+        distance.addEventListener('change',()=>handlers.select({v5Context:{...(draft.v5Context||{}),shooterTargetDistanceYards:distance.value===''?null:Number(distance.value)}}));label.appendChild(distance);fields.appendChild(label);
+        fields.appendChild(node('p','workspace-muted','Le reçu conserve les dés, la distance obtenue et le plafond; le pion n’est pas déplacé automatiquement. Pour un résultat aux pieds du tireur ou de la cible, aucun repère de distance n’est requis.'));
+      }
+      contextField(fields, 'actor', 'targetEngaged', 'La cible est engagée au corps à corps (Désavantage au tir)');
+      if (draft.v5Context?.targetEngaged === true && target) {
+        const current = draft.v5Context || {}, engagedIds = new Set(current.engagedTargetIds || [target.id]); engagedIds.add(target.id);
+        fields.appendChild(node('p', 'workspace-muted', 'Cochez les combattants effectivement engagés, alliés compris. Le jet de choix est saisi une fois et reste stable au recalcul.'));
+        for (const person of participants.filter(row => row.zone === 'active' && row.id !== actor.id)) {
+          const label = node('label', 'workspace-type', `${person.name} · ${person.kind === 'PJ' ? 'Personnage joueur' : 'Personnage non joueur'}${person.camp ? ` · ${person.camp}` : ''}`), check = document.createElement('input');
+          check.type = 'checkbox'; check.checked = engagedIds.has(person.id); check.disabled = person.id === target.id; check.setAttribute('aria-label', `Engagé avec la cible : ${person.name}`);
+          check.addEventListener('change', () => { const next = new Set(draft.v5Context?.engagedTargetIds || [target.id]); if (check.checked) next.add(person.id); else next.delete(person.id); next.add(target.id); handlers.select({ v5Context: { ...(draft.v5Context || {}), engagedTargetIds: [...next] } }); });
+          label.prepend(check); fields.appendChild(label);
+          if (person.id !== target.id && engagedIds.has(person.id)) {
+            const defense = current.engagedDefensesById?.[person.id] || {};
+            const kindLabel = node('label', 'workspace-type', `Défense de ${person.name}`), kindSelect = document.createElement('select');
+            kindSelect.setAttribute('aria-label', `Type de défense de ${person.name}`); kindSelect.append(new Option('Esquive / autre Test','test'),new Option('Corps à corps','melee'));
+            kindSelect.value = defense.v5?.kind || 'test';
+            const baseLabel = node('label','workspace-type',`Score de défense de ${person.name}`), baseInput = document.createElement('input'); baseInput.type='number'; baseInput.min='0'; baseInput.max='200'; baseInput.value=defense.base??''; baseInput.setAttribute('aria-label',baseLabel.textContent);
+            const rollLabel = node('label','workspace-type',`Jet de défense d100 de ${person.name}`), rollInput = document.createElement('input'); rollInput.type='number'; rollInput.min='1'; rollInput.max='100'; rollInput.value=defense.roll??''; rollInput.setAttribute('aria-label',rollLabel.textContent);
+            const saveDefense = () => { const all = { ...(draft.v5Context?.engagedDefensesById || {}) }; all[person.id] = { base: baseInput.value === '' ? null : Number(baseInput.value), roll: rollInput.value === '' ? null : Number(rollInput.value), label: kindSelect.value === 'melee' ? 'Corps à corps' : 'Esquive', v5: { kind: kindSelect.value, choice: 'keep' } }; handlers.select({ v5Context: { ...(draft.v5Context || {}), engagedDefensesById: all } }); };
+            kindSelect.addEventListener('change', saveDefense); baseInput.addEventListener('change', saveDefense); rollInput.addEventListener('change', saveDefense);
+            kindLabel.appendChild(kindSelect); baseLabel.appendChild(baseInput); rollLabel.appendChild(rollInput); fields.append(kindLabel,baseLabel,rollLabel);
+          }
+        }
+        const rollLabel = node('label','workspace-type','Jet d100 pour désigner le combattant touché'); const roll = document.createElement('input'); roll.type='number'; roll.min='1'; roll.max='100'; roll.value=current.engagedTargetRoll??''; roll.setAttribute('aria-label',rollLabel.textContent);
+        roll.addEventListener('change',()=>handlers.select({v5Context:{...(draft.v5Context||{}),engagedTargetRoll:roll.value===''?null:Number(roll.value)}})); rollLabel.appendChild(roll); fields.appendChild(rollLabel);
+      }
+    } else if (kind.value === 'melee') {
+      choiceField(fields, 'height', 'Hauteur relative', [['attacker','Attaquant plus haut (+1 DR)'],['defender','Défenseur plus haut (−1 DR)']]);
+      contextField(fields, 'actor', 'difficultTerrain', 'Terrain difficile (−1 DR)');
+      contextField(fields, 'actor', 'narrowSpace', 'Espace exigu (choix du MJ)');
+      if (draft.v5Context?.narrowSpace === true) choiceField(fields, 'weaponReachBand', 'Allonge de l’arme dans cet espace', [['very-short','Très courte (aucun malus)'],['short','Courte (aucun malus)'],['average','Moyenne (−1 DR)'],['superior','Supérieure (−2 DR)']]);
+      const offHand = node('label', 'workspace-type', 'Attaque avec la main secondaire (−2 DR selon les talents)');
+      const offHandBox = document.createElement('input'); offHandBox.type = 'checkbox'; offHandBox.checked = Number(draft.v5Context?.penalties?.offHand) === -2; offHandBox.setAttribute('aria-label', offHand.textContent);
+      offHandBox.addEventListener('change', () => { const current = draft.v5Context || {}, penalties = { ...(current.penalties || {}) }; if (offHandBox.checked) penalties.offHand = -2; else delete penalties.offHand; handlers.select({ v5Context: { ...current, penalties } }); }); offHand.prepend(offHandBox); fields.appendChild(offHand);
+      const equipmentId = action.extensions?.fiche?.equipmentId, meleeWeapons = (actor?.equipment || []).filter(item => item?.kind === 'weapon' && String(item.reach || '').trim());
+      const currentWeapon = actor?.equipment?.find(item => item?.id === equipmentId) || action.extensions?.equipment || (meleeWeapons.length === 1 ? meleeWeapons[0] : null);
+      const reachGuide = computeV5WeaponReachGuide(draft.v5Context?.weaponReach || currentWeapon?.reach || action.reach);
+      if (reachGuide) fields.appendChild(node('p', 'workspace-result-line', reachGuide.text));
+      fields.appendChild(node('p', 'workspace-muted', 'Repères imprimés : allonge Très longue = 4 yards, Massive = 6. Les bandes servent d’aide au MJ; la position et la distance ne sont pas suivies.'));
+      const oneHanded = currentWeapon && (currentWeapon.grip === 'one-hand' || currentWeapon.hands === 1 || currentWeapon.oneHanded === true);
+      const eligiblePrimaries = previousWeaponAttacks.filter(row => row.weaponId && row.weaponId !== equipmentId);
+      if (oneHanded && eligiblePrimaries.length) {
+        const primary = node('label', 'workspace-type', 'Attaque précédente pour l’attaque immédiate de l’autre arme');
+        const select = document.createElement('select'); select.setAttribute('aria-label', primary.textContent);
+        select.append(new Option('Choisir l’attaque déjà appliquée…', ''));
+        for (const row of eligiblePrimaries) select.append(new Option(`${row.weaponName} · ${row.hit ? 'touche' : 'ratée'}`, row.actionId));
+        select.value = draft.v5Context?.primaryResolutionId || '';
+        select.addEventListener('change', () => handlers.select({ extraAttack: Boolean(select.value), v5Context: { ...(draft.v5Context || {}), primaryResolutionId: select.value || undefined, secondWeaponAttack: Boolean(select.value) } }));
+        primary.appendChild(select); fields.appendChild(primary);
+        fields.appendChild(node('p', 'workspace-muted', 'Une arme différente utilisable à une main; coût de l’attaque supplémentaire : 1 Élan. Une seule attaque de seconde arme par Tour, même si l’Élan est regagné.'));
+      } else if (oneHanded) fields.appendChild(node('p', 'workspace-muted', 'Aucune attaque d’une autre arme de ce Tour n’est disponible pour la seconde arme.'));
+    }
+    if (target && (kind.value === 'melee' || kind.value === 'ranged')) {
+      const current=draft.v5Context||{}, helpless=current.targetHelpless===true||(target.states||[]).some(row=>['inconscient','unconscious'].includes(row.key));
+      fields.appendChild(rubric('Issue létale · confirmation MJ'));
+      fields.appendChild(node('p','workspace-muted','L’option létale est désactivée par défaut. Une intention létale demande une activation distincte de la règle de table, puis une confirmation explicite de la mort. Valable contre une cible sans défense en mêlée ou à bout portant.'));
+      const checkbox=(text,key)=>{const label=node('label','workspace-type',text),check=document.createElement('input');check.type='checkbox';check.checked=current[key]===true;check.setAttribute('aria-label',text);check.addEventListener('change',()=>handlers.select({v5Context:{...(draft.v5Context||{}),[key]:check.checked,...(['lethalIntent','lethalTableEnabled'].includes(key)&&!check.checked?{confirmLethalDeath:false}:{})}}));label.prepend(check);fields.appendChild(label);return check;};
+      checkbox('Activer l’option létale de la table pour cette résolution','lethalTableEnabled');
+      checkbox('Déclarer une intention létale contre '+target.name,'lethalIntent');
+      if(helpless&&current.lethalTableEnabled===true&&current.lethalIntent===true)checkbox('Je confirme explicitement la mort de '+target.name,'confirmLethalDeath');
+      else if(current.lethalIntent===true&&!helpless)fields.appendChild(node('p','workspace-field-error','La cible doit être déclarée sans défense avant la confirmation explicite.'));
+    }
+  }
   contextual.appendChild(fields); v5.appendChild(contextual);
   if(type==='attack'&&target&&draft.charging&&hasV5Talent(target,'talent-slayer')&&!draft.beatBlade){if(!sizesShown)sizeSelects();}
   if(type==='attack'&&target){const guards=participants.filter(p=>p.id!==actor.id&&p.id!==target.id&&p.camp===target.camp&&hasV5Talent(p,'talent-kingsguard'));for(const guard of guards){const label=node('label','workspace-type');const check=document.createElement('input');check.type='checkbox';check.checked=(draft.v5Context?.nearbyGuardIds||[]).includes(guard.id);check.setAttribute('aria-label','Garde royal à deux yards : '+guard.name);check.addEventListener('change',()=>{const ids=(draft.v5Context?.nearbyGuardIds||[]).filter(id=>id!==guard.id);if(check.checked)ids.push(guard.id);handlers.select({v5Context:{...draft.v5Context,nearbyGuardIds:ids}});});label.append(check,'Garde royal à deux yards : '+guard.name);v5.append(label);}}
   const current={...(action.extensions?.v5?.initialContext||{}),...(draft.v5Context||{})};
-  if(['frightening','large-fear','stomp','large-disengage'].includes(current.talentAction)||['tongue','stomp'].includes(current.naturalAttack)||['disarm'].includes(current.specialAttack)||hasV5Talent(actor,'talent-large')||hasV5Talent(target,'talent-large')||hasV5Talent(actor,'talent-small')||hasV5Talent(target,'talent-small')||current.specialAttack==='whirlwind-of-death'&&participants.some(p=>(current.engagedIds||[]).includes(p.id)&&hasV5Talent(p,'talent-small'))){if(!sizesShown)sizeSelects();}
+  if(['frightening','large-fear','stomp','large-disengage'].includes(current.talentAction)||naturalAttackNeedsSize(draft.v5Context?.naturalAttack)||['disarm'].includes(current.specialAttack)||hasV5Talent(actor,'talent-large')||hasV5Talent(target,'talent-large')||hasV5Talent(actor,'talent-small')||hasV5Talent(target,'talent-small')||current.specialAttack==='whirlwind-of-death'&&participants.some(p=>(current.engagedIds||[]).includes(p.id)&&hasV5Talent(p,'talent-small'))){if(!sizesShown)sizeSelects();}
   if(current.talentAction==='frenzy' && magicTalentRank(actor,'suffuse-with','Aqshy')){
     const label=node('label','workspace-type','Compétence du Test de Frénésie'),select=document.createElement('select');
     select.setAttribute('aria-label',label.textContent);select.append(new Option('Force Mentale','FM'),new Option('Focalisation (Aqshy)','Aqshy'));select.value=current.magicSuffusedWind==='Aqshy'?'Aqshy':'FM';
@@ -1523,7 +1739,7 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
   }
   const penalties=node('details','workspace-v5-context-details');penalties.append(node('summary','','Pénalités de situation en DR'));
   const addPenaltyFields=(role)=>{const field=role==='actor'?'v5Context':'defenseContext',current=draft[field]||{};
-    for(const [key,text]of [['offHand','Main secondaire'],['mounted','Esquive montée'],['confined','Espace exigu'],['status','Statut supérieur'],['proneAttack','Attaque À terre'],['belowTarget','Attaque sous la cible'],['cover','Couvert'],['targetProne','Tir sur une cible À terre'],['longRange','Longue portée'],['extremeRange','Portée extrême'],['flying','Tir sous Trait Vol'],['terrainMovement','Terrain gênant le mouvement'],['critical','Blessure critique'],['amputation','Amputation']]){
+    for(const [key,text]of [['mounted','Esquive montée'],['confined','Espace exigu'],['status','Statut supérieur'],['proneAttack','Attaque À terre'],['belowTarget','Attaque sous la cible'],['longRange','Longue portée'],['extremeRange','Portée extrême'],['flying','Tir sous Trait Vol'],['terrainMovement','Terrain gênant le mouvement'],['critical','Blessure critique'],['amputation','Amputation']]){
       const label=node('label','workspace-type',text+(role==='defender'?' (défense)':''));const input=document.createElement('input');input.type='number';input.step='1';input.max='0';input.value=current.penalties?.[key]??'';input.setAttribute('aria-label',label.textContent);input.addEventListener('change',()=>handlers.select({[field]:{...current,penalties:{...current.penalties,[key]:input.value===''?undefined:Number(input.value)}}}));label.append(input);penalties.append(label);
     }
   };addPenaltyFields('actor');if(target&&['attack','opposition'].includes(type))addPenaltyFields('defender');v5.append(penalties);
@@ -1655,7 +1871,7 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
     commands.appendChild(cancel);
     live.appendChild(commands);
   } else if (preview) {
-    live.appendChild(renderResult(preview, target, draft, handlers));
+    live.appendChild(renderResult(preview, target, draft, handlers, participants));
     const apply = node('div', 'workspace-inline-actions workspace-resolution-commands');
     if (preview.v5MagicKind) {
       const magicLabel = preview.v5MagicKind === 'channelling'
@@ -1681,9 +1897,10 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
       const invalidCritical = Object.keys(draft.criticalErrors || {}).length > 0;
       const effects = preview.critical?.application;
       const manual = preview.weapon?.status === 'manual';
-      const label = needsLocation && target ? (manual ? `Appliquer le critique à ${target.name}` : `Appliquer les dégâts à ${target.name}`)
-        : preview.damage && target ? `Appliquer ${previewHpLoss(preview)} dégâts à ${target.name}`
-          : target && effects && (effects.extraWounds || effects.states.length) ? `Appliquer le critique à ${target.name}`
+      const effectiveTarget = participants.find(row => row.id === preview.targetId) || target;
+      const label = needsLocation && effectiveTarget ? (manual ? `Appliquer le critique à ${effectiveTarget.name}` : `Appliquer les dégâts à ${effectiveTarget.name}`)
+        : preview.damage && effectiveTarget ? `Appliquer ${previewHpLoss(preview)} dégâts à ${effectiveTarget.name}`
+          : effectiveTarget && effects && (effects.extraWounds || effects.states.length) ? `Appliquer le critique à ${effectiveTarget.name}`
             : manual ? 'Enregistrer sans dégâts' : 'Enregistrer le résultat';
       const primary = button(label, 'workspace-primary', { 'data-focus-key': 'apply' });
       primary.disabled = preview.choiceRequired || preview.unresolved?.length > 0 || preview.critical?.details?.pending || preview.critical?.second?.pending || preview.defenderCritical?.details?.pending || preview.defenderCritical?.details?.needsAlternative || draft.busy || !canApply || needsTarget || needsLocation || invalidCritical || preview.critical?.details?.needsAlternative || preview.critical?.second?.needsAlternative || Boolean(preview.protection?.manual?.length || preview.mechanicalWarnings?.length);

@@ -106,6 +106,22 @@ function recordV5ActionUsage(envelope,actorId,actionId){
 function standardV5ActionSpent(envelope,actorId,clock=v5StoreActionClock(envelope)){
  return Boolean(clock.encounterId&&clock.turnId&&(envelope.extensions?.v5?.standardTurnActions||[]).some(row=>row.actorId===actorId&&row.encounterId===clock.encounterId&&row.turnId===clock.turnId));
 }
+function combatActionState(envelope){return envelope.extensions?.v5?.combatActions||{byActorId:{},receipts:[]};}
+function combatActionBlock(envelope,actorId){
+ const clock=v5StoreActionClock(envelope),row=combatActionState(envelope).byActorId?.[actorId];
+ return row&&row.turnId===clock.turnId&&row.encounterId===clock.encounterId
+  ?{ready:false,status:'blocked',code:'F2_COMBAT_ACTION_SPENT',error:'Une Action de combat spéciale a déjà été dépensée pendant ce Tour.'}:null;
+}
+function ordinaryActionAfterCombatActionBlock(envelope,actorId){
+ const block=combatActionBlock(envelope,actorId);return block?{...block,error:'Visée ou Défensive a déjà consommé l’Action de ce Tour.'}:null;
+}
+function canonicalFreeAttack(preview,input={}){
+ const source=preview?.input||input,v5=source.v5||{},costs=preview?.actionCosts;
+ if(v5.extraAttack!==true||!costs?.ready)return false;
+ const waived=(costs.waived||[]).some(row=>row.resource==='momentum'&&Array.isArray(row.waivedBy)&&row.waivedBy.length>0);
+ const quota=(costs.usages||[]).some(row=>row.quotaId!=='system:momentum-extra-attack'&&Number.isFinite(row.maximum)&&row.after<=row.maximum);
+ return waived&&quota;
+}
 function brokenEscapeActionSpent(envelope,actorId,clock=v5StoreActionClock(envelope)){
  if(!clock.encounterId||!clock.turnId)return false;
  const key=JSON.stringify([clock.encounterId,clock.turnId]);
@@ -762,6 +778,14 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         ...(preview?.familiarConditionRefusals?.length ? { familiarConditionRefusals: cloneValue(preview.familiarConditionRefusals) } : {}),
         ...(preview?.weaponConditions ? { weaponConditions: cloneValue(preview.weaponConditions), targetConditionApplication: cloneValue(preview.targetConditionApplication), reminders: cloneValue(preview.reminders || []) } : {}),
         ...(preview?.talentPlans ? { talentPlans: cloneValue(preview.talentPlans), activeEffects: cloneValue(preview.activeEffects), damageReplacedByTalent: preview.damageReplacedByTalent, secondaryTargets: cloneValue(preview.secondaryTargets||[]) } : {}),
+        ...(preview?.scatter ? { scatter: cloneValue(preview.scatter) } : {}),
+        ...(preview?.engagedShot ? { engagedShot: cloneValue(preview.engagedShot) } : {}),
+        ...(preview?.trip ? { trip: cloneValue(preview.trip) } : {}),
+        ...(preview?.tripFall ? { tripFall: cloneValue(preview.tripFall) } : {}),
+        ...(preview?.lethalDeath ? { lethalDeath: cloneValue(preview.lethalDeath) } : {}),
+        ...(preview?.extraordinaryShot ? { extraordinaryShot: cloneValue(preview.extraordinaryShot) } : {}),
+        ...(preview?.rangedRange ? { rangedRange: cloneValue(preview.rangedRange) } : {}),
+        ...(preview?.meleeReachGuide ? { meleeReachGuide: cloneValue(preview.meleeReachGuide) } : {}),
         ...(resolution?.actionCostReceipt ? { actionCostReceipt: cloneValue(resolution.actionCostReceipt) } : {}),
         ...(resolution?.talentUsageReceipts?.length ? { talentUsageReceipts: cloneValue(resolution.talentUsageReceipts) } : {}),
         application: resolution?.application || null
@@ -2816,6 +2840,24 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
     },
     previewResolution(input = {}) {
       const snapshot=currentEnvelope();
+      input=structuredClone(input);
+      const actorForAction=snapshot.combat?.participants?.find(row=>row.id===(input.actorId||input.actor?.id));
+      if(input.v5?.context?.trip===true){
+        const context=input.v5.context,actor=snapshot.combat?.participants?.find(row=>row.id===(input.actorId||input.actor?.id)),target=snapshot.combat?.participants?.find(row=>row.id===(input.targetId||input.target?.id)),clock=v5StoreActionClock(snapshot),primary=(snapshot.extensions?.v5?.standardTurnActions||[]).find(row=>row.actionId===context.tripPrimaryResolutionId&&row.actorId===actor?.id&&row.targetId===target?.id&&row.hit===true&&row.actionType==='attack'&&row.turnId===clock.turnId&&row.encounterId===clock.encounterId),skill=target?.skills?.find(row=>row.id===context.athleticsSkillId&&/athlet/i.test(String(row.name||row.nom||'').normalize('NFD').replace(/[\u0300-\u036f]/g,''))),knownSkill=Number(skill?.total??skill?.value),declaredSkill=Number(context.athleticsScore),force=Number(actor?.caracs?.F),declaredForce=Number(context.forceScore);
+        const athleticsScore=Number.isFinite(knownSkill)?knownSkill:context.athleticsScoreConfirmed===true&&Number.isFinite(declaredSkill)?declaredSkill:null,forceScore=Number.isFinite(force)?force:context.forceScoreConfirmed===true&&Number.isFinite(declaredForce)?declaredForce:null;
+        const missing=[];if(!actor||!target)missing.push('Choisir l’attaquant et la cible du Croche-pied.');if(!primary)missing.push('Croche-pied : une touche appliquée de cet attaquant sur cette cible pendant ce Tour est requise.');else if(!primary.qualityIds?.includes('croche-pied'))missing.push('Croche-pied : l’attaque appliquée doit provenir d’une arme portant l’atout Croche-pied.');if(forceScore===null)missing.push('Croche-pied : Force absente ; confirmer la caractéristique du MJ.');if(athleticsScore===null)missing.push('Croche-pied : Athlétisme absent ; confirmer le score de la cible par le MJ.');
+        if(missing.length)return {ready:false,status:'requires-input',error:missing[0],unresolved:missing,baseRevision:localRevision,input};
+        input.action={...(input.action||{}),type:'opposition',attr:'F',base:forceScore,label:'Force',extensions:{...(input.action?.extensions||{}),fiche:{...(input.action?.extensions?.fiche||{}),skillId:null}}};
+        input.defense={...(input.defense||{}),base:athleticsScore,label:'Athlétisme',v5:{...(input.defense?.v5||{}),kind:'test',context:{...(input.defense?.v5?.context||{}),...(skill?.id?{skillId:skill.id}:{})}}};
+        input.v5={...input.v5,kind:'test',context:{...input.v5.context,isAction:false},costs:[...(input.v5.costs||[]).filter(row=>row.id!=='combat:trip:momentum'),{id:'combat:trip:momentum',resource:'momentum',amount:1}]};
+      }
+      const reactionCandidate=Boolean(input.v5?.reactionId||input.reactionId),ordinaryIntent=!reactionCandidate&&(isV5ActionUse(null,input)||['attack','attaque'].includes(input.action?.type)),freeAttackCandidate=input.v5?.extraAttack===true&&['divine-free-attack','reaction-strike','glorious-demise','frenzy'].includes(input.v5?.context?.freeAttackTalent);
+      if(ordinaryIntent&&!freeAttackCandidate){const block=ordinaryActionAfterCombatActionBlock(snapshot,actorForAction?.id);if(block)return {...block,baseRevision:localRevision,input:structuredClone(input)};}
+      const combatAction=combatActionState(snapshot).byActorId?.[actorForAction?.id],clockNow=v5StoreActionClock(snapshot),activeCombatAction=combatAction&&combatAction.encounterId===clockNow.encounterId&&(combatAction.kind==='aim'||combatAction.turnId===clockNow.turnId)?combatAction:null;
+      if(activeCombatAction?.kind==='aim'&&input.v5?.kind==='ranged'&&input.targetId===activeCombatAction.targetId){input.v5={...input.v5,context:{...(input.v5.context||{}),aimedTargetId:activeCombatAction.targetId}};}
+      const movement=combatActionState(snapshot).movementByActorId?.[actorForAction?.id];if(movement&&movement.turnId===clockNow.turnId&&movement.encounterId===clockNow.encounterId&&input.v5?.kind==='ranged')input.v5={...input.v5,context:{...(input.v5.context||{}),movedBeforeRangedAttack:true}};
+      const defenseId=input.targetId||input.defense?.actorId,defensive=combatActionState(snapshot).byActorId?.[defenseId];
+      if(defensive?.kind==='defensive'&&defensive.encounterId===clockNow.encounterId){const skillId=input.defense?.extensions?.fiche?.skillId||input.defense?.v5?.context?.skillId;if(skillId===defensive.skillId){input.defense={...input.defense,v5:{...(input.defense.v5||{}),context:{...(input.defense.v5?.context||{}),combatDefensiveActionBonus:2}}};}}
       if(combatReflexesAlreadyInitialized(snapshot,input))return {ready:false,status:'requires-input',error:combatReflexesAlreadyDeterminedMessage,unresolved:[combatReflexesAlreadyDeterminedMessage],baseRevision:localRevision,input:structuredClone(input)};
       const prepared = buildV5StoreActionInput(snapshot, input);
       const actorId=prepared.actor?.id||prepared.actorId||input.actorId, escape=snapshot.extensions?.v5?.brokenEscape?.byActorId?.[actorId];
@@ -2839,16 +2881,59 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         if(defender){const needs=prayerCapClockNeeds(defender,snapshot,`combat.participants.${defender.id}`);if(needs.length)return {ready:false,status:'requires-input',error:needs[0].message,needsInput:needs,unresolved:needs.map(row=>row.message),baseRevision:localRevision};}
       }
       const preview=annotateV5StoreActionPreview(buildResolutionPreview(prepared), prepared);
+      if(!reaction&&ordinaryIntent&&!canonicalFreeAttack(preview,input)){const block=ordinaryActionAfterCombatActionBlock(snapshot,actorForAction?.id);if(block)return {...block,baseRevision:localRevision,input:structuredClone(input)};}
       if(!reaction&&isV5ActionUse(preview,input)){const actionBlock=brokenEscapeActionBlock(snapshot,actorId);if(actionBlock)return {...actionBlock,baseRevision:localRevision,input:structuredClone(input)};}
       if(!reaction&&preview.attack===true){const actionBlock=brokenEscapeActionBlock(snapshot,actorId);if(actionBlock)return {...actionBlock,baseRevision:localRevision,input:structuredClone(input)};}
       return {...preview,ready:(preview.unresolved||[]).length===0,input:{...(preview.input||prepared),brokenEscapeFacts:structuredClone(input.brokenEscapeFacts)}};
+    },
+    previewV5CombatAction(input={}){
+      const snapshot=currentEnvelope(),actorId=input.actorId||snapshot.combat?.currentActorId,actor=snapshot.combat?.participants?.find(row=>row.id===actorId),clock=v5StoreActionClock(snapshot);
+      const needsInput=[];if(!['aim','defensive'].includes(input.kind))needsInput.push('Choisir Visée ou Défensive.');
+      if(!actor||actor.zone!=='active'||actorId!==snapshot.combat?.currentActorId)needsInput.push('L’Action doit viser le combattant actif du Tour.');
+      let aimWeapon=null;let aimWeaponRanged=false;if(input.kind==='aim'&&actor){aimWeapon=actor.equipment?.find(item=>item.id===input.weaponId&&item.kind==='weapon');const label=String(aimWeapon?.category||'')+' '+String(aimWeapon?.name||'');aimWeaponRanged=Boolean(aimWeapon&&((String(aimWeapon.range||'').trim())||aimWeapon.ranged===true||/distance|projectile|arc |arbal[eè]te|fronde|armes?.?à.?feu/i.test(label)));if(!aimWeapon&&!(typeof input.weaponName==='string'&&input.weaponName.trim()&&input.rangedWeaponConfirmed===true))needsInput.push('Choisir une arme à distance équipée ou déclarer explicitement au MJ la nature et le nom de l’arme.');else if(aimWeapon&&!aimWeaponRanged&&input.rangedWeaponConfirmed!==true)needsInput.push('Confirmer explicitement que l’arme choisie est à distance (portée numérique inconnue).');else if(input.rangedWeaponHeldConfirmed!==true)needsInput.push('Confirmer que l’arme à distance choisie est en main.');}
+      if(input.kind==='aim'&&!snapshot.combat?.participants?.some(row=>row.id===input.targetId&&row.zone==='active'))needsInput.push('Choisir une cible active pour la Visée.');
+      if(input.kind==='defensive'&&typeof input.skillId!=='string')needsInput.push('Choisir la compétence défensive.');
+      const spent=standardV5ActionSpent(snapshot,actorId,clock)||Boolean(combatActionBlock(snapshot,actorId));
+      if(spent)needsInput.push('Une Action a déjà été dépensée pendant ce Tour.');
+      return {ready:needsInput.length===0,status:needsInput.length?'requires-input':'ready',kind:input.kind,actorId,targetId:input.targetId||null,skillId:input.skillId||null,weaponId:aimWeapon?.id||null,weaponName:aimWeapon?.name||input.weaponName?.trim()||null,rangedWeaponConfirmed:aimWeaponRanged||input.rangedWeaponConfirmed===true,rangedWeaponHeldConfirmed:input.rangedWeaponHeldConfirmed===true,actionId:input.actionId||`combat-action:${actorId}:${clock.turnId}:${input.kind}`,clock,baseRevision:localRevision,needsInput,unresolved:needsInput};
+    },
+    declareV5CombatMovement(input={}){
+      const snapshot=currentEnvelope(),actorId=input.actorId||snapshot.combat?.currentActorId,clock=v5StoreActionClock(snapshot),actor=snapshot.combat?.participants?.find(row=>row.id===actorId);
+      if(!actor||actor.zone!=='active'||actorId!==snapshot.combat?.currentActorId)return {status:'blocked',reason:'Le déplacement doit être déclaré pour l’acteur du Tour courant.'};
+      const saved=api.executeCommand('v5-combat-movement-declared',draft=>{
+        if(draft.localRevision!==snapshot.localRevision||v5StoreActionClock(draft).turnId!==clock.turnId)throw Object.assign(new Error('Le Tour a changé; redéclarez le déplacement.'),{userFacing:true});
+        const root=draft.extensions?.v5||{},state=structuredClone(root.combatActions||{byActorId:{},receipts:[]}),movement={actorId,encounterId:clock.encounterId,turnId:clock.turnId,round:clock.round};
+        state.movementByActorId??={};state.movementByActorId[actorId]=movement;
+        if(state.byActorId?.[actorId]?.kind==='aim')delete state.byActorId[actorId];
+        state.receipts=[...(state.receipts||[]),{id:`movement:${actorId}:${clock.turnId}`,kind:'movement-declared',...movement}].slice(-300);
+        draft.extensions??={};draft.extensions.v5={...root,combatActions:state};return draft;
+      });
+      return saved&&typeof saved.then==='function'?saved.then(result=>result?.ok===false?{status:'error',reason:result.error}:{status:'applied',actorId,clock,persistence:result}):{status:'applied',actorId,clock,persistence:saved};
+    },
+    applyV5CombatAction(preview){
+      const captured=cloneValue(preview),actorId=captured?.actorId,clock=captured?.clock;
+      if(!captured?.ready)return Promise.resolve({status:'blocked',reason:'Action spéciale non prête.'});
+      let receipt;
+      const saved=api.executeCommand('v5-combat-action',draft=>{
+        const now=v5StoreActionClock(draft),actor=draft.combat?.participants?.find(row=>row.id===actorId);
+        if(draft.localRevision!==captured.baseRevision||now.turnId!==clock.turnId||now.encounterId!==clock.encounterId)throw Object.assign(new Error('Le Tour a changé; recalculez l’Action.'),{userFacing:true});
+        if(!actor||draft.combat?.currentActorId!==actorId||standardV5ActionSpent(draft,actorId,now)||combatActionBlock(draft,actorId))throw Object.assign(new Error('Une Action a déjà été dépensée ou le Tour ne correspond plus.'),{userFacing:true});
+        const root=draft.extensions?.v5||{},state=structuredClone(root.combatActions||{byActorId:{},receipts:[]});state.byActorId??={};
+        state.byActorId[actorId]={actorId,kind:captured.kind,targetId:captured.targetId,skillId:captured.skillId,weaponId:captured.weaponId||null,weaponName:captured.weaponName||null,rangedWeaponConfirmed:captured.rangedWeaponConfirmed===true,rangedWeaponHeldConfirmed:captured.rangedWeaponHeldConfirmed===true,turnId:now.turnId,encounterId:now.encounterId,round:now.round,actionId:captured.actionId};
+        receipt={id:captured.actionId,kind:captured.kind,actorId,targetId:captured.targetId,skillId:captured.skillId,weaponId:captured.weaponId||null,weaponName:captured.weaponName||null,rangedWeaponConfirmed:captured.rangedWeaponConfirmed===true,rangedWeaponHeldConfirmed:captured.rangedWeaponHeldConfirmed===true,clock:now};state.receipts=[...(state.receipts||[]),receipt].slice(-300);
+        draft.extensions??={};draft.extensions.v5={...root,combatActions:state};recordV5ActionUsage(draft,actorId,captured.actionId);return draft;
+      });
+      const finish=result=>result?.ok===false?{status:'error',reason:result.error}:{status:'applied',receipt,persistence:result};
+      return saved&&typeof saved.then==='function'?saved.then(finish):Promise.resolve(finish(saved));
     },
     applyResolution(supplied) {
       const preview = cloneValue(supplied);
       const actorId=preview.input?.actor?.id||preview.input?.actorId||preview.actorId||preview.input?.source?.id;
       const snapshot=currentEnvelope(),escapeActor=snapshot.combat?.participants?.find(row=>row.id===actorId),escape=snapshot.extensions?.v5?.brokenEscape?.byActorId?.[actorId];
+      const ordinaryIntent=(isV5ActionUse(preview,preview.input||{})||['attack','attaque'].includes(preview.input?.action?.type))&&!canonicalFreeAttack(preview,preview.input||{});
       if(combatReflexesAlreadyInitialized(snapshot,preview.input||{}))return Promise.resolve({status:'manual',reason:combatReflexesAlreadyDeterminedMessage});
       const guardPrepared=buildV5StoreActionInput(snapshot,preview.input||{}),reaction=hasV5ReactionOpportunity(guardPrepared);
+      if(!reaction&&ordinaryIntent){const block=ordinaryActionAfterCombatActionBlock(snapshot,actorId);if(block)return Promise.resolve({status:'manual',reason:block.error,code:block.code});}
       if(!reaction&&!isExplicitV5NonAction(preview,preview.input||{})&&escapeActor?.states?.some(row=>['brise','broken'].includes(String(row.key||row.name||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()))){
         const blocked=isV5BrokenEscapeActionBlocked(escapeActor,{visibleToAnyEnemy:preview.input?.brokenEscapeFacts?.visibleToAnyEnemy,sequence:escape});
         if(blocked)throw new Error(blocked==='needs-fact'?'Le MJ doit confirmer la visibilité envers tout ennemi.':'Brisé impose Move (Flee), puis Action (Sprint) tant que le personnage reste visible.');
@@ -2861,6 +2946,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         if(combatReflexesAlreadyInitialized(draft,preview.input||{}))throw Object.assign(new Error(combatReflexesAlreadyDeterminedMessage),{code:'RESOLUTION_MANUAL'});
 
         const commitPrepared=buildV5StoreActionInput(draft,preview.input||{}),commitReaction=hasV5ReactionOpportunity(commitPrepared),commitActor=draft.combat?.participants?.find(row=>row.id===actorId);
+        if(!commitReaction&&ordinaryIntent){const block=ordinaryActionAfterCombatActionBlock(draft,actorId);if(block)throw Object.assign(new Error(block.error),{code:'RESOLUTION_MANUAL'});}
         if(!commitReaction)throwBrokenEscapeActionClassification(brokenEscapeActionClassificationBlock(commitActor,preview,preview.input||{}));
         if(!commitReaction&&isV5ActionUse(preview,preview.input||{})){const actionBlock=brokenEscapeActionBlock(draft,actorId);if(actionBlock)throw Object.assign(new Error(actionBlock.error),{userFacing:true,code:actionBlock.code});}
         let result;
@@ -2884,7 +2970,13 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
           ...v5StoreActionResult(draft, result),
           log: [resolutionLogEntry(preview, result.resolution), ...(draft.log || [])].slice(0, 300)
         };
-        if(isV5ActionUse(preview,preview.input||{})&&!commitReaction)recordV5ActionUsage(next,resolvedActorId,preview.resolutionId);
+        if(isV5ActionUse(preview,preview.input||{})&&!commitReaction){recordV5ActionUsage(next,resolvedActorId,preview.resolutionId);const v5=next.extensions?.v5||{},rows=v5.standardTurnActions||[],weaponId=preview.input?.action?.extensions?.fiche?.equipmentId,qualityIds=(preview.input?.action?.qualities||[]).map(row=>typeof row==='string'?row:row?.id).filter(Boolean);next.extensions.v5={...v5,standardTurnActions:rows.map(row=>row.actionId===preview.resolutionId?{...row,targetId:preview.targetId||preview.input?.target?.id||preview.input?.targetId||null,weaponId:weaponId||null,qualityIds:[...new Set(qualityIds)],hit:preview.hit===true,actionType:preview.actionType}:row)};}
+        const combatRoot=next.extensions?.v5||{},combatState=structuredClone(combatRoot.combatActions||{byActorId:{},receipts:[]}),owned=combatState.byActorId?.[resolvedActorId];
+        if(owned?.kind==='aim'&&(preview.attack===true||preview.input?.v5?.context?.isAction===true||preview.input?.v5?.context?.movedBeforeRangedAttack===true))delete combatState.byActorId[resolvedActorId];
+        if(combatState.byActorId?.[actorId]?.kind==='aim'&&preview.input?.v5?.kind==='ranged'&&preview.input?.targetId===combatState.byActorId[actorId].targetId&&preview.attack===true)delete combatState.byActorId[actorId];
+        const defendedActorId=preview.targetId||preview.input?.target?.id||preview.input?.targetId;
+        if(preview.defenderTest&&combatState.byActorId?.[defendedActorId]?.kind==='aim')delete combatState.byActorId[defendedActorId];
+        next.extensions??={};next.extensions.v5={...combatRoot,combatActions:combatState};
         if(!reaction&&!isExplicitV5NonAction(preview,preview.input||{})&&escapeActor?.states?.some(row=>['brise','broken'].includes(String(row.key||row.name||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase())))recordV5EscapeVisibility(next,actorId,preview.input?.brokenEscapeFacts?.visibleToAnyEnemy,preview.resolutionId);
         return next;
       });
@@ -3456,6 +3548,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
     },
     previewDivineExecution(identifier,input={}) {
       const envelope=currentEnvelope(),actorId=input.actorId||envelope.combat?.currentActorId,actor=envelope.combat?.participants?.find(row=>row.id===actorId),sequence=envelope.extensions?.v5?.brokenEscape?.byActorId?.[actorId];
+      const actionSpent=combatActionBlock(envelope,actorId);if(actionSpent)return {...actionSpent,baseRevision:localRevision};
       const actionBlock=brokenEscapeActionBlock(envelope,actorId);if(actionBlock)return {...actionBlock,baseRevision:localRevision};
       const brise=actor?.states?.some(row=>['brise','broken'].includes(String(row.key||row.name||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()));
       if(brise){const fact=input.brokenEscapeFacts?.visibleToAnyEnemy;if(typeof fact!=='boolean')return {ready:false,status:'requires-input',error:'Le MJ doit confirmer la visibilité actuelle envers tout ennemi.',needsInput:[{field:'brokenEscapeFacts.visibleToAnyEnemy',label:'Confirmer la visibilité actuelle envers tout ennemi.'}],baseRevision:localRevision};
@@ -3466,12 +3559,14 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       input=cloneValue(input);let execution;
       const saved=api.executeCommand('v5-divine-prayer',draft=>{
         const actorId=input.preview?.input?.actorId||input.preview?.input?.actor?.id||draft.combat?.currentActorId,actor=draft.combat?.participants?.find(row=>row.id===actorId),brise=actor?.states?.some(row=>['brise','broken'].includes(String(row.key||row.name||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()));
+        const actionSpent=combatActionBlock(draft,actorId);if(actionSpent)throw Object.assign(new Error(actionSpent.error),{userFacing:true,code:actionSpent.code});
         const actionBlock=brokenEscapeActionBlock(draft,actorId);if(actionBlock)throw Object.assign(new Error(actionBlock.error),{userFacing:true,code:actionBlock.code});
         const visibility=input.brokenEscapeFacts?.visibleToAnyEnemy??input.preview?.input?.brokenEscapeFacts?.visibleToAnyEnemy;
         if(brise){if(typeof visibility!=='boolean')throw Object.assign(new Error('Le MJ doit confirmer la visibilité actuelle envers tout ennemi.'),{userFacing:true});const blocked=isV5BrokenEscapeActionBlocked(actor,{visibleToAnyEnemy:visibility,sequence:draft.extensions?.v5?.brokenEscape?.byActorId?.[actorId]});if(blocked)throw Object.assign(new Error('Brisé impose Move (Flee), puis Action (Sprint) tant que le personnage reste visible.'),{userFacing:true});const actionBlock=brokenEscapeActionBlock(draft,actorId);if(actionBlock)throw Object.assign(new Error(actionBlock.error),{userFacing:true,code:actionBlock.code});}
         execution=applyStoreDivine(draft,identifier,input);
         if (execution?.ready && execution.state) registerNewV5Participants(draft, execution.state);
         if(execution?.ready&&execution.state){const executionId=execution.executionId||input.preview?.executionId||`prayer:${identifier}:${execution.state.localRevision}`,tracked=recordV5ActionUsage(execution.state,actorId,executionId);if(!tracked.ok)throw Object.assign(new Error(tracked.reason),{userFacing:true});
+          if(execution.state.extensions?.v5?.combatActions?.byActorId?.[actorId]?.kind==='aim')delete execution.state.extensions.v5.combatActions.byActorId[actorId];
           if((execution.state.combat?.participants||[]).find(row=>row.id===actorId)?.states?.some(row=>['brise','broken'].includes(String(row.key||row.name||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase())))recordV5EscapeVisibility(execution.state,actorId,visibility,executionId);}
         return execution.state;
       });
@@ -3509,6 +3604,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
     previewSpellExecution(contractOrId, input = {}) {
       const contract = typeof contractOrId === 'object' && contractOrId?.id ? contractOrId : getSpellContract(contractOrId);
       const actorId = input.actorId || input.casterId || combat.currentActorId;
+      const actionSpent=combatActionBlock(currentEnvelope(),actorId);if(actionSpent)return {...actionSpent,baseRevision:localRevision};
       const actor = (combat.participants.get(actorId)) || Array.from(combat.participants.values())[0];
       const actionBlock=brokenEscapeActionBlock(currentEnvelope(),actorId);if(actionBlock)return {...actionBlock,baseRevision:localRevision};
       if(actor?.states?.some(row=>['brise','broken'].includes(String(row.key||row.name||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()))){const blocked=isV5BrokenEscapeActionBlocked(actor,{visibleToAnyEnemy:input.brokenEscapeFacts?.visibleToAnyEnemy,sequence:currentEnvelope().extensions?.v5?.brokenEscape?.byActorId?.[actorId]});if(blocked)return {ready:false,status:'requires-input',error:blocked==='needs-fact'?'Le MJ doit confirmer la visibilité envers tout ennemi.':'Brisé impose Move (Flee), puis Action (Sprint) tant que le personnage reste visible.',needsInput:blocked==='needs-fact'?[{field:'brokenEscapeFacts.visibleToAnyEnemy',label:'Confirmer la visibilité actuelle envers tout ennemi.'}]:[],baseRevision:localRevision};}
@@ -3523,10 +3619,14 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         const contract = typeof contractOrId === 'object' && contractOrId?.id ? contractOrId : getSpellContract(contractOrId);
         const beforeResources=structuredClone(draft);
         const actorId=input.actorId||input.casterId||draft.combat?.currentActorId,actor=draft.combat?.participants?.find(row=>row.id===actorId);
+        const actionSpent=combatActionBlock(draft,actorId);if(actionSpent)throw Object.assign(new Error(actionSpent.error),{userFacing:true,code:actionSpent.code});
         const actionBlock=brokenEscapeActionBlock(draft,actorId);if(actionBlock)throw Object.assign(new Error(actionBlock.error),{userFacing:true,code:actionBlock.code});
         if(actor?.states?.some(row=>['brise','broken'].includes(String(row.key||row.name||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()))){const blocked=isV5BrokenEscapeActionBlocked(actor,{visibleToAnyEnemy:input.brokenEscapeFacts?.visibleToAnyEnemy,sequence:draft.extensions?.v5?.brokenEscape?.byActorId?.[actorId]});if(blocked)throw Object.assign(new Error(blocked==='needs-fact'?'Le MJ doit confirmer la visibilité envers tout ennemi.':'Brisé impose Move (Flee), puis Action (Sprint) tant que le personnage reste visible.'),{userFacing:true});}
         execResult = applySpellExecutionInternal(draft, contract, input);
-        if (execResult?.ready !== false) registerNewV5Participants(beforeResources, draft);
+        if (execResult?.ready !== false) {
+          registerNewV5Participants(beforeResources, draft);
+          if(draft.extensions?.v5?.combatActions?.byActorId?.[actorId]?.kind==='aim')delete draft.extensions.v5.combatActions.byActorId[actorId];
+        }
         // V5 p. 255 : une attaque magique effectivement appliquée termine aussi l’invisibilité, dans la même commande.
         const offensive=input.offensiveAction===true || contract.effects?.missile || contract.effects?.damage || contract.effects?.rolledDamage || contract.effects?.vortex || contract.effects?.breath || contract.effects?.sleep || contract.effects?.dropHeldObject || contract.effects?.opposedTest || contract.effects?.suppression || ['damage','magic-missile'].includes(contract.effects?.type) || (contract.effects?.conditions || []).some(s=>/aveugl|sonn|enchev|empoison|brise|enflam|hemorrag/i.test(typeof s==='string'?s:s.name));
         if(offensive && (input.targetIds || []).some(id=>id!==(input.actorId || draft.combat.currentActorId)))draft.combat.participants=endSpellEffectsOnEvent(draft.combat.participants,input.actorId || draft.combat.currentActorId,'attack');

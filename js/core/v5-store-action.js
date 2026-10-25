@@ -65,6 +65,15 @@ export function buildV5StoreActionInput(envelope, raw = {}) {
   const costs = [...(v5.costs || [])];
   if (v5.extraAttack === true && !costs.some(cost => cost.resource === 'momentum')) costs.push({ id: 'system:extra-attack-momentum', resource: 'momentum', amount: 1 });
   const quotas=[...(v5.quotas||[])],exemptions=[...(v5.exemptions||[])],actor=state.participants.find(p=>p.id===actorId),context=v5.context||{};
+  if(context.secondWeaponAttack===true){
+    if(!v5.extraAttack||v5.kind!=='melee')throw new TypeError('Seconde arme : attaque supplémentaire de mêlée requise.');
+    if(context.freeAttackTalent!=='dual-wielder'||context.primaryResolutionId!==undefined){
+      const primary=(envelope.extensions?.v5?.standardTurnActions||[]).find(row=>row.actionId===context.primaryResolutionId&&row.actorId===actorId&&row.encounterId===clock.encounterId&&row.turnId===clock.turnId&&row.kind==='action'&&row.weaponId);
+      const weaponId=supplied.action?.extensions?.fiche?.equipmentId,weapon=actor?.equipment?.find(item=>item.id===weaponId);
+      if(!primary||primary.weaponId===weaponId||!weapon||!(weapon.grip==='one-hand'||weapon.hands===1||weapon.oneHanded===true))throw new TypeError('Seconde arme : attaque précédente et arme différente utilisable à une main requises.');
+      if(!quotas.some(q=>q.id==='combat:base-second-weapon'))quotas.push({id:'combat:base-second-weapon',scope:'turn',maximum:1});
+    }
+  }
   // Combat naturel (T2) : l'attaque gratuite d'un Trait de créature coûte l'Élan qu'il indique ; le Trait est exigé.
   if(context.naturalAttack){
     const natural=planNaturalAttack(actor,context.naturalAttack,{used:context.naturalUsed,count:context.tentacleCount,charged:context.charged??v5.charging,actorSize:context.actorSize??v5.actorSize,targetSize:context.targetSize??v5.targetSize});

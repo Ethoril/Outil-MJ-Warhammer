@@ -18,7 +18,7 @@ import { previewV5Test,reverseV5Roll }  from './v5-roll.js';
 import { activeEngines } from './roll-qualities.js';
 import { keywordMechanicalStatus } from './keywords.js';
 import { activeV5TalentEffects } from './v5-talents.js';
-import { applyV5TalentPenaltyRules } from './v5-talent-combat.js';
+import { applyV5TalentPenaltyRules, applyV5AttackSituationModifiers } from './v5-talent-combat.js';
 import { normalizeState } from './effects.js';
 import { previewV5TalentTestModifiers, previewV5TalentSLChoices } from './v5-talent-tests.js';
 export const V5_COMBAT_RULE_VERSION = 'v5-combat-2026-10-09.24.6';
@@ -32,6 +32,7 @@ export const withMomentum = (actor, value) => {
 export const conditionLevels = actor => {
   const levels = new Map();
   for (const [index, raw] of (actor?.states || []).entries()) {
+    if (Number(raw?.level) === 0 || (raw?.source?.source?.effectHash && !sourceActive(raw))) continue;
     const state = normalizeState(raw, index);if(['talent-active','talent-pending'].includes(state.kind))continue;
     const key = state.key.replace(/[- ]/g, '');
     levels.set(key, (levels.get(key) || 0) + state.level);
@@ -133,6 +134,19 @@ export function buildCombatTest(normalized, role = 'actor') {
   const modifiers = [...support.modifiers,...magicSkillModifiers(actor,skillLabel,{...settings.context,carac:settings.context?.carac||skill?.carac||action.attr}),
     // Clés « … adverse » du porteur opposé, et « Défense contre Tir » du défenseur visé par un tir.
     ...(target&&!defending?magicAdverseModifiers(target,skillLabel):[]),...(defending&&kind==='ranged'?magicSkillModifiers(actor,'Défense contre Tir'):[]),...(settings.slModifiers || [])];
+  let extraordinaryShot=null;
+  if(!defending&&settings.context?.extraordinaryShot===true){
+    const activeSharpshooter=talentModifiers.penaltyRules.some(rule=>rule.origins?.some(origin=>origin.talentId==='talent-sharpshooter'));
+    const description=String(settings.context.extraordinaryShotDescription||'').trim(),difficulty=settings.context.extraordinaryShotDifficulty;
+    if(kind!=='ranged')unresolved.push('Tir extraordinaire : Test de tir requis.');
+    else if(!activeSharpshooter)unresolved.push('Tir extraordinaire : Talent Tireur d’élite acquis et actif requis.');
+    if(!description)unresolved.push('Tir extraordinaire : description MJ requise.');
+    if(!Number.isSafeInteger(difficulty))unresolved.push('Tir extraordinaire : difficulté en DR entière fixée par le MJ requise.');
+    if(kind==='ranged'&&activeSharpshooter&&description&&Number.isSafeInteger(difficulty)){
+      modifiers.push({id:'talent:sharpshooter-extraordinary',label:'Tir extraordinaire — '+description,amount:difficulty});
+      extraordinaryShot={talentId:'talent-sharpshooter',description,difficulty};
+    }
+  }
   const suffused=magicSkillReplacement(actor,skill?.nom || action.label || action.note || '',settings.context);
   action={...action,base:suffused?.score ?? (action.extensions?.v5?.scoreIsCurrent ? action.base : effectiveSkillScore(actor,action.base,action.attr || skill?.carac))};
   // Traits de sens (Caméléon, Perturbant, Furtif, Pisteur) : appliqués quand le contexte les détermine, sinon rappel de la carte.
@@ -232,6 +246,7 @@ export function buildCombatTest(normalized, role = 'actor') {
     if (targetLevels.has('aveugle') && !levels.has('aveugle')) advantages.push({ id: 'target-blinded', label: 'Cible Aveuglée' });
     if (targetLevels.has('surpris')) modifiers.push({ id: 'target-surprised', label: 'Cible Surprise', amount: 2 });
   }
+  if(!defending&&kind==='ranged'&&settings.context?.targetEngaged===true)disadvantages.push({id:'target-engaged',label:'Tir sur une cible engagée'});
   // Different Condition penalties do not add. Like-for-like penalties select
   // the largest; a DR penalty versus inversion requires an explicit MJ ruling.
   const worstDisadvantage = [...conditionDisadvantages.values()].sort((a, b) => b.length - a.length)[0] || [];
@@ -249,6 +264,8 @@ export function buildCombatTest(normalized, role = 'actor') {
   modifiers.push(...talentModifiers.slModifiers); advantages.push(...talentModifiers.advantageSources); disadvantages.push(...talentModifiers.disadvantageSources);
   unresolved.push(...talentModifiers.unresolved);
   applyV5TalentPenaltyRules(modifiers,talentModifiers.penaltyRules,{kind,role:talentRole,context:settings.context||{},advantage:advantages.length-disadvantages.length,aimed:settings.aimed});
+  if(defending&&settings.context?.combatDefensiveActionBonus===2)modifiers.push({id:'combat:defensive-action',label:'Action Défensive choisie',amount:2});
+  unresolved.push(...applyV5AttackSituationModifiers(modifiers,{role:talentRole,kind,actionType:action.type,actor,target,context:settings.context||{},actorSize:settings.actorSize,targetSize:settings.targetSize,talentRules:talentModifiers.penaltyRules,advantage:advantages.length-disadvantages.length,aimed:settings.aimed}));
   if((actor.states||[]).some(s=>s.restriction==='noMomentumOrAdvantage'&&sourceActive(s)))advantages.length=0;
   // Faux de Shyish (V5 p. 247) : un Mort-vivant engagé avec le porteur n'a pas d'Avantage ; son Élan (hasMomentum) n'est pas touché.
   if(kind==='melee'&&target?.extensions?.v5?.specialStates?.scytheOfShyish){const scythe=applyScytheOfShyishRules({target:actor,isEngagedWithWielder:true,advantageSources:advantages,hasMomentum:hasMomentum(actor)});if(scythe.advantageSuppressed)advantages.splice(0,advantages.length,...scythe.allowedAdvantages);}
@@ -276,5 +293,5 @@ export function buildCombatTest(normalized, role = 'actor') {
   test = talentSL.test; unresolved.push(...talentSL.unresolved);
   test={...test,options:test.options.map(o=>({...o,result:enforceMagicTestRestrictions(actor,o.result,{magical:false})}))};
   return { test, crewSkill,talentPlans: [talentModifiers.plan, ...talentSL.plans,...psychology.plans,...contact.plans,...(contactTalent?[contactTalent]:[]),...(dualWhirlwind?[dualWhirlwind]:[]),...(warLeader?[{proposals:[{origins:[warLeader.source]}]}]:[])], talentSLChoices: talentSL.choiceDescriptors, kind, penalty: appliedPenalty, penaltyStates: [...relevant].filter(([, value]) => value).map(([key]) => key),
-    unresolved, restrictions, charging, qualityBonus: conditionalBonus };
+    unresolved, restrictions, charging, qualityBonus: conditionalBonus,extraordinaryShot };
 }
