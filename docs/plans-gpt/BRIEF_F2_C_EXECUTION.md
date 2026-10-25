@@ -16,6 +16,8 @@ Réutiliser métadonnées réelles du catalogue et des équipements. Ne pas déc
 
 `js/core/weapon-skill-rules.js` (neuf), `js/core/fiche-sync.js`, `js/core/equipment.js`, `js/core/v5-combat-rules.js`, `js/core/resolution.js`, `js/ui/resolution-panel.js`, `tests/f2-c-*.test.js`, `tests/f2-c-*.mjs`. Rapports intermédiaires et logs sous `tmp/gpt-phase-f2/`. Aucune autre édition sans prévenir l'exécutant pour complément de plan préalable. `sw.js`, catalogue, version, JSON générés et arbitrages intacts. Ne pas modifier le rapport global ni les choix sans demande du principal.
 
+Complément avant code : `tests/sw.test.js:34` impose que chaque module de `js/` soit listé dans le service worker, que les règles communes interdisent de modifier. Pour C, **ne pas créer le module neuf** : exporter les fonctions pures de maîtrise depuis `js/core/equipment.js` existant et les raccorder à la résolution. Ne pas modifier le test du service worker. Cette décision d'organisation ne change aucune règle de jeu.
+
 ## Séquence imposée
 
 1. Écrire uniquement `tests/f2-c-characterization.test.js` caractérisant les vrais chemins existants à risque (`resolution.js`), les actions d'armes de fiche et conjurées, la sélection confirmée et l'absence de mutation des entrées. Exécuter ces tests sur le code intact. Prévenir le principal avec résultat et attendre qu'il confirme le commit séparé avant toute édition de production.

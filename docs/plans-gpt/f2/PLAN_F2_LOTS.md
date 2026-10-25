@@ -134,6 +134,8 @@ Les cinq fichiers partagés à risque du brief exigent des tests de caractérisa
 
 Les commandes s'exécutent à la racine du worktree, avec `TEMP` et `TMP` dans `E:/Outil MJ Warhammer/tmp/gpt-phase-f2-runtime`, **extérieur au checkout** mais sur E:, pour les gardes de traversal. Créer `tmp/divin/`. Un reçu de recette hérité, si utilisé comme précondition du test E0, est identifié comme tel et ne prouve aucune recette F2.
 
+Contrainte de chargement découverte avant code : `tests/sw.test.js:34` exige le précache de tous les modules JS/JSON et `sw.js` est interdit par les règles communes. En T1, utiliser les modules existants autorisés plutôt que les nouveaux modules proposés : fonctions pures C dans `equipment.js`, calcul d'initiative A dans `turn-order.js`, circonstances/actions B dans `v5-combat-rules.js` et `v5-store-action.js`. Les nouveaux modules des tranches suivantes nécessiteront une clarification du périmètre du précache avant leur création ; ne pas contourner le test ni l'interdiction.
+
 ### T1 - F2-C (risque élevé : sélection et résolution)
 
 - Fichiers : nouveau `js/core/weapon-skill-rules.js`, `js/core/fiche-sync.js`, `js/core/equipment.js`, `js/core/v5-combat-rules.js`, `js/core/resolution.js`, `js/ui/resolution-panel.js`. Le catalogue reste intact ; les variantes d'usage s'appliquent à l'action résolue, pas aux données source.
