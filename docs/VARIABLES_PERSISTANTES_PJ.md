@@ -4,6 +4,8 @@ But : préparer la phase H du plan de fin de projet (écriture en retour de l’
 
 | Variable | Emplacement dans l’outil | Source sur la fiche aujourd’hui | Modifiée par | Lot / commit |
 | --- | --- | --- | --- | --- |
+| État monté du participant | `extensions.v5.mounted` (booléen ; absent = `false`) | absent | case à cocher du MJ dans « Modifier le participant » | F2-C |
+| Mains utilisées pour une épée bâtarde | `extensions.v5.weaponHandsByEquipmentId[<equipmentId>]` (1 ou 2 ; absent = nom catalogue, notamment `(2M)`) | nom du catalogue et choix MJ | case à cocher par instance dans « Modifier le participant » | F2-C |
 | Points de Péché | `extensions.v5.divine.sin` | absente | prières, Courroux, absolution, saisie MJ | divin (P4), phase B |
 | Points de Corruption | `extensions.v5.corruptionPoints` | absente | sorts, Courroux, Larmes de Shallya… | lot 3, phase B, phase D |
 | Culte(s) | déduit des talents Béni / Invocation (spécialisation) | talents (importés) | — | divin |

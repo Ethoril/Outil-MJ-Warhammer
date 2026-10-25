@@ -18,6 +18,19 @@ Le rapport indiquait également : « Après correction : nouvelle vérification 
 
 C-MATERIALISEES-01 et B-SOURCE-02 ci-dessous sont conservés uniquement comme historique de choix **refusés par le MJ**, sans autorité pour l'implémentation suivante.
 
+## Précisions d'exécution de C après contre-vérification
+
+Ces précisions sont des choix de raccord, pas des décisions ajoutées au nom du MJ.
+
+| ID | Source | Question | Choix | Raison | Alternative |
+|---|---|---|---|---|---|
+| C-CAVALERIE-02 | L06 p.166/301; règle catalogue `(2M)` | Un lien historique Cavalerie annule-t-il le profil improvisé à pied ? | Non. Une arme identifiée à une main reste improvisée à pied, compétence Base ou repli CC. Cavalerie confirmée reste possible pour les voies licites, notamment deux mains; les exceptions Sabre/Marteau gardent leur règle. Cette précision remplace la portée trop générale de C-CAVALERIE-01 historique. | Une compétence liée ne change pas la nature du profil imposé par la règle. | Garder la Lance à une main comme lance normale à pied du seul fait du lien Cavalerie. |
+| C-SIEGE-01 | Catalogue du MJ, L06 p.166, rapport Claude | Quelle spécialité pour une catégorie générique Siège/Embarquée ? | Lire les voies Poudre noire/Ingénierie pour le profil à poudre; pour les autres profils sans association établie, choix explicite du MJ dans les vraies spécialités Projectiles, tracé comme donnée MJ. Aucun lien automatique inventé Catapulte→Jet/Ingénierie ou Baliste→Arbalète. | La catégorie d'aide ne prouve pas une spécialité absente du catalogue. Le choix MJ ne devient pas une règle publiée. | Inventer une spécialité Siège ou sélectionner le meilleur Tir sans déclaration. |
+| C-SCORE-01 | Contrat historique `action.base`, `baseCaracs`/`caracs`, rapport Claude | Le score manuel conservé est-il déjà modifié par les effets ? | Conserver le score lié pré-effet, puis appliquer le delta de caractéristique une fois; 75 et effet +10 donnent 85. Seul un marqueur préexistant explicite de score courant évite ce delta. | Préserver la saisie ne supprime pas les effets applicables et n'autorise pas leur double compte. | Marquer toute saisie comme score courant et perdre l'effet. |
+| C-CONJUREES-02 | Décision MJ, L06 p.242/247/301, L13 p.95–96 | Comment raccorder les armes de sorts et leurs anciennes instances ? | Groupes canoniques communs au générateur et au combat; Faux de Shyish incluse; reconstruction ancienne par `spellEffectId`, couche et ID de contrat, jamais par supposition sur le nom. Le score imposé par le contrat, notamment Poings de Gork 55, prime. Métadonnées irrécupérables : saisie MJ de groupe/données sans maîtrise inventée. | Applique la décision universelle du MJ en conservant les exceptions sourcées et l'expiration des sorts. | Exclure les conjurées ou inventer leurs augmentations. |
+
+Limites vérifiées : le filtrage C concerne les attaques, les défenses/parades restent une limite explicitement consignée conformément au rapport Claude. Une Ingénierie personnalisée sans portée/provenance réclame sa nature au MJ. Le choix de groupe de la Baliste/Catapulte est résolu; l'application peut rester bloquée par `precise`/`percutante`, qualités V4 déjà non validées dans la base et hors de C. Ne pas annoncer que les onze profils ont été appliqués mécaniquement.
+
 ## Historique des choix d'exécutant et état de validation
 
 Choix d'exécutant préparés pour A/B (pas des décisions du MJ) :

@@ -27,11 +27,13 @@ function importedWeapon({ category, name = 'Arme test', range = '', advanced = [
 
 const resolve = (fixture, context = {}) => previewResolution({ actor: fixture.actor, target, action: fixture.imported, roll: 40, baseRevision: 0, v5: { context: { ...fixture.context, ...context } } });
 
-test('F2-C — arme de mêlée sans avance de spécialité retombe sur CC et perd les qualités bénéfiques', () => {
+test('F2-C — Escrime à zéro utilise Base entraînée sans accorder les qualités bénéfiques', () => {
   const f = importedWeapon({ category: 'Escrime', advanced: [{ nom: 'Corps à corps (Escrime)', adv: 0 }] });
   assert.equal(f.imported.extensions.fiche.requiresLink, false);
   const result = resolve(f);
-  assert.equal(result.score.base, f.snapshot.caracs.CC);
+  const base = f.snapshot.skills.find(row => row.name === 'Corps à corps (Base)');
+  assert.ok(base?.advances > 0);
+  assert.equal(result.score.base, base.total);
   assert.deepEqual(result.input.action.qualities.map(row => row.id), ['desequilibree']);
   assert.deepEqual(result.input.action.qualities.map(row => row.id).filter(id => id === 'desequilibree'), ['desequilibree'], 'le Défaut reste actif');
   assert.deepEqual(f.snapshot, f.original, 'les données importées sources ne changent pas');
@@ -204,7 +206,8 @@ test('F2-C — armes de cavalerie à pied distinguent Deux mains et l’arme imp
 
 test('F2-C — Marteau de cavalerie à pied utilise Deux mains', () => {
   const missingMounted = importedWeapon({ category: 'Cavalerie', name: 'Marteau de cavalerie', advanced: [{ nom: 'Corps à corps (Deux mains)', adv: 3 }] });
-  assert.ok(resolve(missingMounted).unresolved.some(text => /préciser si le personnage est monté/i.test(text)), 'monté absent n’équivaut pas à pied');
+  assert.equal(resolve(missingMounted).weaponSkillReceipt.mounted, false, 'monté absent se lit démonté par défaut');
+  assert.ok(!resolve(missingMounted).unresolved.some(text => /monté|cavalier/i.test(text)), 'la résolution ne redemande pas l’état monté à chaque action');
   const f = importedWeapon({ category: 'Cavalerie', name: 'Marteau de cavalerie', advanced: [{ nom: 'Corps à corps (Deux mains)', adv: 3 }], context: { weaponMounted: false } });
   const result = resolve(f);
   assert.equal(result.score.base, f.snapshot.caracs.CC + 3);

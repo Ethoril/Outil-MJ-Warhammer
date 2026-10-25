@@ -383,6 +383,7 @@ export function planProfileSync(snapshot, profile, choices = {}) {
           qualities: equipmentQualities(item),
           extensions: { ...(previous?.extensions || adopted?.extensions || {}), fiche: { charId: snapshot.charId, equipmentId: item.id, role,
             skillId: skill?.id || null, skillName: skill?.name || '', bindingVersion: 1,
+            syncedWeaponSkillScore: skill?.total ?? null,
             equipmentVersion: item.catalogVersion ?? null, requiresLink: !linked }, equipment: cloneValue(item) } });
         const change = previous ? ficheFingerprint(previous) === ficheFingerprint(action) ? 'unchanged' : 'changed' : adopted ? 'adopted' : 'added';
         equipmentActions.push({ id: action.id, key, equipmentId: item.id, role, name: action.note, skill: skill?.name || '', proposed,

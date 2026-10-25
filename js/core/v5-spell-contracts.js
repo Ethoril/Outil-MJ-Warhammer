@@ -2260,12 +2260,15 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
     if (effects.killAtZero && Number(target.hp) === 0) { targetReceipt.kill = true; computedSpecialState.dead=true; computedSpecialState.cannotRaiseUndead=true; }
     const computedGrantedActions = [];
     if(effects.conjureWeapon === true){
-      const profile=effects.conjureWeaponProfile ? {qualities:[],...structuredClone(effects.conjureWeaponProfile)} : ARCANE_WEAPON_PROFILES[effects.conjureWeaponKey||domainFacts.weaponKey],id='spell-weapon-'+uid();
+      const requestedWeaponKey=effects.conjureWeaponKey||domainFacts.weaponKey||null;
+      const profile=effects.conjureWeaponProfile ? {qualities:[],...structuredClone(effects.conjureWeaponProfile)} : ARCANE_WEAPON_PROFILES[requestedWeaponKey];
+      const id='spell-weapon-'+uid();
+      if(!profile)throw new Error('Profil d’arme conjurée absent : le sort ou le MJ doit préciser le profil avant de matérialiser l’action.');
       // Profil et valeur d'attaque propres au sort (ex. Poings de Gork : Corps à corps (Bagarre) 55, Arme +9).
       const score=effects.conjureWeaponScore ?? conjuredWeaponSkillScore(actor,profile.id) ?? domainFacts.weaponSkillScore;
       const qualities=[...profile.qualities.map(q=>typeof q==='string'?{id:q}:structuredClone(q)),{id:'magique'}];
       if(profile.id==='garrote')for(const q of qualities)if(q.id==='immobilisante'){q.rating=Number(actor.caracs.F);q.parameter=String(q.rating);}
-      computedGrantedActions.push({id,note:profile.name+' aethyrique',type:'attack',attr:'CC',base:score,damage:profile.damage ?? 0,damageFormula:profile.damage===null?'0':'BF'+(profile.damage?'+'+profile.damage:''),qualities,extensions:{v5:{weaponHands:profile.hands,weaponReach:profile.reach,magical:true,materialized:true}}});
+      computedGrantedActions.push({id,note:profile.name+' aethyrique',type:'attack',attr:'CC',base:score,damage:profile.damage ?? 0,damageFormula:profile.damage===null?'0':'BF'+(profile.damage?'+'+profile.damage:''),qualities,extensions:{v5:{weaponHands:profile.hands,weaponReach:profile.reach,magical:true,materialized:true,conjuredWeaponKey:profile.id||requestedWeaponKey,conjuredWeaponProfile:structuredClone(profile),...(effects.conjureWeaponScore!==undefined?{spellWeaponScoreImposed:true}:{})}}});
       targetReceipt.actions.push({kind:'conjured-weapon',profile:structuredClone(profile),score,summary:profile.name+' aethyrique : '+score+', dégâts '+(profile.damage===null?'aucun':'BF + '+profile.damage)+', '+profile.hands+' main(s), allonge '+profile.reach+'. Lance sans Charge / lance ou épée bâtarde à une main : adapter le profil conformément à p. 301.'});
       // Variantes déclarées de l'arme conjurée (ex. Dague de l'Art : BF + 8 contre Éthéré ou Corruption) : une action de plus, choisie par le MJ selon la cible.
       for(const extra of effects.extraConjuredActions || []){const base=computedGrantedActions[computedGrantedActions.length-1];computedGrantedActions.push({...structuredClone(base),id:id+':'+extra.id,note:extra.note,damage:extra.damage,damageFormula:extra.damageFormula});}
@@ -2691,8 +2694,9 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
     // A-02 : la Faux de Shyish est une couche d'effet (drapeau lu au combat, hallebarde conférée) : tout expire avec elle.
     if (specialTag === 'scythe-of-shyish') {
       computedSpecialState.scytheOfShyish = true;
+      const profile=ARCANE_WEAPON_PROFILES.halberd;
       computedGrantedActions.push({ id: 'halberd', note: 'Hallebarde Magique (Faux de Shyish)', type: 'attack', attr: 'CC', damageFormula: `BF+${bfm + 4}`,
-        reach: 'Longue', qualities: [{ id: 'magique' }, { id: 'defensive' }, { id: 'taille' }, { id: 'empaleuse' }], extensions: { v5: { kind: 'melee', weaponReach: 'Longue' } } });
+        base:conjuredWeaponSkillScore(actor,profile.id)??undefined,reach: 'Longue', qualities: [{ id: 'magique' }, { id: 'defensive' }, { id: 'taille' }, { id: 'empaleuse' }], extensions: { v5: { kind: 'melee', weaponReach: 'Longue',weaponHands:profile.hands,magical:true,conjuredWeaponKey:profile.id,conjuredWeaponProfile:structuredClone(profile) } } });
     }
 
     const hasStatMods = Object.keys(computedStatModifiers).length > 0;

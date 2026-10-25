@@ -1107,6 +1107,8 @@ const workspaceView = DOM.panels.workspace && qs('#workspace-root') ? initWorksp
               <select name="camp">${Object.entries(CAMP_LABELS).map(([value, label]) => `<option value="${value}">${label}</option>`).join('')}</select>
             </label>
           </div>
+          <section class="participant-state-edit card"><h3>Combat monté</h3><label><input name="mounted" type="checkbox"> Le personnage est monté</label><p class="muted">L’état est conservé sur ce participant entre les Actions. Une fiche ancienne sans cette donnée est considérée démontée.</p></section>
+          <section class="participant-state-edit card participant-weapon-options"><h3>Armes avec choix durable</h3><p class="muted">Les mains de l’épée bâtarde suivent l’instance d’arme et sont modifiables ici.</p><div class="participant-weapon-options-list"></div></section>
           <section class="participant-state-edit card">
             <div class="row"><h3>États — arbitrage du MJ</h3><p class="muted">Cette correction manuelle remplace les états. Pour une acquisition ou une récupération selon les règles, utilisez les commandes de Jouer.</p><button type="button" class="ghost small" data-add-state>Ajouter un état</button></div>
             <div class="participant-state-list"></div>
@@ -1123,11 +1125,27 @@ const workspaceView = DOM.panels.workspace && qs('#workspace-root') ? initWorksp
         form.elements.initiative.readOnly = Boolean(participant.extensions?.ficheId);
         form.elements.zone.value = participant.zone === 'active' ? 'active' : 'bench';
         form.elements.camp.value = normalizeCamp(participant.camp, participant.kind);
+        const originalV5 = participant.extensions?.v5 || {};
+        form.elements.mounted.checked = originalV5.mounted === true;
+        const weaponHandsById = { ...(originalV5.weaponHandsByEquipmentId || {}) };
+        const weaponOptionsMount = form.querySelector('.participant-weapon-options-list');
+        const handChoices = (participant.equipment || []).filter(item => item.kind === 'weapon' && /épée bâtarde|bastard sword/i.test(item.name || ''));
+        if (!handChoices.length) form.querySelector('.participant-weapon-options').hidden = true;
+        for (const item of handChoices) {
+          const label = document.createElement('label');
+          const checkbox = document.createElement('input'); checkbox.type = 'checkbox'; checkbox.dataset.weaponHandsId = item.id;
+          checkbox.checked = weaponHandsById[item.id] === 2 || weaponHandsById[item.id] !== 1 && /\(\s*2\s*M\s*\)/i.test(item.name);
+          checkbox.setAttribute('aria-label', `${item.name} · utilisée à deux mains`);
+          label.append(checkbox, document.createTextNode(`${item.name} · utilisée à deux mains`)); weaponOptionsMount.append(label);
+        }
         // Fenêtre non modale : seuls les champs modifiés ici sont envoyés, pour ne pas
         // écraser les PV ou les états changés entre-temps par la fiche ou le tour suivant.
         const fields = ['name', 'hp', 'initiative', 'zone', 'camp'];
         const baseline = Object.fromEntries(fields.map(field => [field, form.elements[field].value]));
         const fieldChanged = field => form.elements[field].value !== baseline[field];
+        const baselineMounted = form.elements.mounted.checked;
+        const baselineWeaponHands = Object.fromEntries([...form.querySelectorAll('[data-weapon-hands-id]')].map(checkbox => [checkbox.dataset.weaponHandsId, String(checkbox.checked)]));
+        const weaponHandsChanged = () => [...form.querySelectorAll('[data-weapon-hands-id]')].some(checkbox => String(checkbox.checked) !== baselineWeaponHands[checkbox.dataset.weaponHandsId]);
         let actionsTouched = false;
 
         const alertError = message => {
@@ -1208,6 +1226,22 @@ const workspaceView = DOM.panels.workspace && qs('#workspace-root') ? initWorksp
             if (fieldChanged('hp')) patch.hp = Number(form.elements.hp.value) || 0;
             if (!participant.extensions?.ficheId && fieldChanged('initiative')) patch.initiative = Number(form.elements.initiative.value) || 0;
             if (fieldChanged('camp')) patch.camp = form.elements.camp.value;
+            const participantLive = Store.getCombat().participants.get(id) || participant;
+            const mountedChanged = form.elements.mounted.checked !== baselineMounted;
+            const handsChanged = weaponHandsChanged();
+            if (mountedChanged || handsChanged) {
+              const liveExtensions = participantLive.extensions || {}, liveV5 = liveExtensions.v5 || {}, nextV5 = { ...liveV5 };
+              if (mountedChanged) nextV5.mounted = form.elements.mounted.checked;
+              if (handsChanged) {
+                const nextHands = { ...(liveV5.weaponHandsByEquipmentId || {}) };
+                for (const checkbox of form.querySelectorAll('[data-weapon-hands-id]')) {
+                  if (String(checkbox.checked) === baselineWeaponHands[checkbox.dataset.weaponHandsId]) continue;
+                  nextHands[checkbox.dataset.weaponHandsId] = checkbox.checked ? 2 : 1;
+                }
+                nextV5.weaponHandsByEquipmentId = nextHands;
+              }
+              patch.extensions = { ...liveExtensions, v5: nextV5 };
+            }
             if (statesChanged()) patch.states = normalizeEffects(stateValues);
             if (actionsTouched) {
               const liveActions = Store.getCombat().participants.get(id)?.actions || [];

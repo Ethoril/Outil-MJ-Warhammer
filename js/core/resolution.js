@@ -499,7 +499,12 @@ export function previewResolution(input) {
   normalized.action = { ...normalized.action, ...weaponSkill.action };
   normalized.weaponSkillReceipt = weaponSkill.receipt || normalized.weaponSkillReceipt;
   normalized.weaponSkillUnresolved = [...new Set([...(normalized.weaponSkillUnresolved||[]), ...weaponSkill.unresolved])];
-  if (weaponSkill.slModifier !== undefined) normalized.v5.slModifier = Math.min(Number(normalized.v5.slModifier) || 0, weaponSkill.slModifier);
+  if (weaponSkill.slModifier !== undefined) {
+    const sources=weaponSkill.receipt?.applied?.filter(id=>id==='ballistic-skill-minus-1-dr'||id==='powder-skill-engineering-minus-2-dr')||[];
+    const applied=new Set(normalized.v5.weaponSkillModifierSources||[]);
+    const fresh=sources.filter(id=>!applied.has(id));
+    if(fresh.length){normalized.v5.slModifier=(Number(normalized.v5.slModifier)||0)+weaponSkill.slModifier;normalized.v5.weaponSkillModifierSources=[...applied,...fresh];}
+  }
   normalized.qualityTalentPlan = prepared.plan;
   const actorSkillId=normalized.action?.extensions?.fiche?.skillId||normalized.v5?.context?.skillId;
   const defenderSkillId=normalized.defense?.extensions?.fiche?.skillId||normalized.defense?.v5?.context?.skillId;
