@@ -12,8 +12,8 @@ const ficheWeapon = {
 
 test('F2-C caractérisation — la compétence proposée reste confirmable sur une arme de fiche', () => {
   const skills = [
-    { id: 'melee-basic', name: 'Corps à corps (Base)', total: 61 },
-    { id: 'melee-fencing', name: 'Corps à corps (Escrime)', total: 72 }
+    { id: 'melee-basic', name: 'Corps à corps (Base)', total: 61, advances: 1, basic: true },
+    { id: 'melee-fencing', name: 'Corps à corps (Escrime)', total: 72, advances: 1, basic: false }
   ];
   const weaponAction = { id: 'attack-sword', type: 'attack', note: 'Épée de fiche', base: 61, damage: 4,
     qualities: ['Déséquilibrée'], extensions: { fiche: {
