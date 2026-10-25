@@ -88,10 +88,10 @@ export function willpowerBase(participant) {
 
 /**
  * Les attaques du participant sont-elles magiques par nature ? Livre de base p.357 : Artificiel (« All its attacks are Magical »)
- * et Démoniaque ; Traits Magique (« Their attacks count as Magical »).
+ * Démoniaque et Éthéré (« all their attacks are Magical ») ; Traits Magique (« Their attacks count as Magical »).
  */
 export function attacksAreMagical(participant) {
-  return natureTraits(participant).some(trait => ['construct', 'daemonic', 'magical'].includes(trait.key));
+  return natureTraits(participant).some(trait => ['construct', 'daemonic', 'ethereal', 'magical'].includes(trait.key));
 }
 
 const REMINDERS = {

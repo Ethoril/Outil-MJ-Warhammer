@@ -119,9 +119,9 @@ test('B11c 3 : Venin et États de critique ne touchent un homoncule que d’une 
   const entry = plainStore.getLog ? plainStore.getLog()[0] : JSON.parse(plainStore.getFullJSON()).log[0];
   assert.match(entry.text, /États refusés : imp \(Hémorragique\)/);
   assert.equal(entry.detail.familiarConditionRefusals[0].state, 'Hémorragique');
-  // Attaquant au Trait Magique, arme enchantée ou nature déclarée par le MJ : l'État passe.
-  for (const [id, declared] of [['demon', undefined], ['foe', { magical: true }]]) {
-    const store = await table([person('hero', { camp: 'pj', kind: 'PJ', extensions: { v5: { fate: 3 } } }), person('imp', { camp: 'neutre' }), person('foe'), person('demon', { traits: [{ name: 'Daemonic' }] })]);
+  // Attaquant au Trait Magique, Démoniaque ou Éthéré (décision du MJ du 25/10), arme enchantée ou nature déclarée par le MJ : l'État passe.
+  for (const [id, declared] of [['demon', undefined], ['ghost', undefined], ['foe', { magical: true }]]) {
+    const store = await table([person('hero', { camp: 'pj', kind: 'PJ', extensions: { v5: { fate: 3 } } }), person('imp', { camp: 'neutre' }), person('foe'), person('demon', { traits: [{ name: 'Daemonic' }] }), person('ghost', { traits: [{ name: 'Ethereal' }] })]);
     await store.createFamiliar('hero', 'imp', homunculus);
     const input = strike(id);
     if (declared) input.v5 = { ...input.v5, context: { attackNature: declared } };
