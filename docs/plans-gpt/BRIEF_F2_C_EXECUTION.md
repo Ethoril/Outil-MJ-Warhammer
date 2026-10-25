@@ -20,6 +20,8 @@ Complément avant code : `tests/sw.test.js:34` impose que chaque module de `js/`
 
 Extension de périmètre avant édition : `js/core/v5-talent-qualities.js` est autorisé. Ce pipeline restaure des qualités depuis l'équipement et construit les plans de talents ; il doit recevoir l'action effective et son identité improvisée avant la planification. Ne pas remplacer silencieusement les règles de fusion des munitions ni supprimer des talents indépendants de la maîtrise. Test d'intégration requis sur arme improvisée par usage à pied et talent concerné, et sur qualités de munitions.
 
+Seconde extension avant édition : `js/ui/workspace-view.js`, limitée au constructeur `v5Input` et aux imports requis pour utiliser groupe/nature du contexte et équipement réel. Un choix Arc sur une arme de groupe inconnu, ou un brouillon restauré Ingénierie tir sans événement change, ne doit pas afficher Tir tout en envoyant Corps à corps au moteur. Test du raccord formulaire vers constructeur réel requis ; un handler capturé seul ne prouve pas ce raccord.
+
 ## Séquence imposée
 
 1. Écrire uniquement `tests/f2-c-characterization.test.js` caractérisant les vrais chemins existants à risque (`resolution.js`), les actions d'armes de fiche et conjurées, la sélection confirmée et l'absence de mutation des entrées. Exécuter ces tests sur le code intact. Prévenir le principal avec résultat et attendre qu'il confirme le commit séparé avant toute édition de production.
