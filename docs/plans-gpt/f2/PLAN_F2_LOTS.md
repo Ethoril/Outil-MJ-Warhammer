@@ -147,7 +147,7 @@ Contrainte de chargement découverte avant code : `tests/sw.test.js:34` exige le
 
 ### T1 - F2-A (risque élevé : ordre et Store)
 
-- Fichiers : calcul dans `js/core/turn-order.js` (module existant, voir contrainte précache), `js/core/store.js`, `js/core/v5-turn.js`, `js/core/encounters.js`, `js/main.js` (raccord du lancement UI), UI d'ouverture dans `js/ui/workspace-view.js`, `js/ui/combat-view.js`, `js/ui/combat-banner.js`.
+- Fichiers : calcul dans `js/core/turn-order.js` (module existant, voir contrainte précache), `js/core/store.js`, `js/core/v5-turn.js`, `js/core/encounters.js`, `js/core/combat.js` si raccord du démarrage libre nécessaire (caractériser d'abord), `js/main.js` (raccord du lancement UI), UI d'ouverture dans `js/ui/workspace-view.js`, `js/ui/combat-view.js`, `js/ui/combat-banner.js`.
 - Tests : 3 PNJ + 2 PJ avec dés fixés, Bonus d'Initiative ajouté une seule fois ; PJ sans jet bloque l'ouverture avec reçu MJ ; PNJ d10 bornes 1/10 ; égalité score puis Initiative, égalité persistante demande l'opposition et le choix du gagnant. Surprise seulement sur camp coché, pas sur alliés, pas de surprise si aucun camp choisi. Recommencer, annuler/rétablir, persister/recharger sans nouveau tirage ; ordre manuel, renforts et acteur courant inchangés hors ouverture.
 - Acceptation : `node --test tests/f2-a-initiative-surprise.test.js tests/f2-a-characterization.test.js tests/e08-turn-order.test.js`, puis suite complète et parcours navigateur d'ouverture du combat.
 
