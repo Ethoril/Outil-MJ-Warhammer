@@ -18,7 +18,7 @@ import { isMiscastConditionLocked } from '../core/v5-magic-miscasts.js';
 import { recoveryMethodsFor } from './v5-effect-dialog.js';
 import { hasMomentum, inferV5Kind } from '../core/v5-combat-rules.js';
 import { withoutOutnumberContext } from '../core/outnumbering.js';
-import { equipmentAttackContext, locationProtection } from '../core/equipment.js';
+import { equipmentAttackContext, locationProtection, weaponSkillGroupInfo } from '../core/equipment.js';
 import { d100 } from '../core/dice.js';
 import { inferActionType, previewHpLoss, ResolutionError } from '../core/resolution.js';
 import { userMessage, userError } from './messages.js';
@@ -948,9 +948,15 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
   }
   function v5Input(context, draft) {
     if (draft.v5SlModifier != null && !Number.isInteger(draft.v5SlModifier)) throw userError('Le modificateur V5 doit être un nombre entier de DR.');
-    return { kind: draft.v5Kind || inferV5Kind({ ...context.action, type: context.type }, equipmentAttackContext(context.action.extensions?.equipment)),
+    const action={...context.action,type:context.type},attack=['attack','attaque'].includes(context.type);
+    const weapon=action.extensions?.equipment||context.actor?.equipment?.find(row=>row.id===action.extensions?.fiche?.equipmentId);
+    const weaponContext={...(action.extensions?.v5?.initialContext||{}),...(draft.v5Context||{})};
+    const metadataGroup=weaponSkillGroupInfo(weapon?.category,weapon);
+    const selectedGroup=!metadataGroup&&attack?weaponSkillGroupInfo(weaponContext.weaponTrainingGroup,weapon):null;
+    const attackContext=equipmentAttackContext(weapon,attack?weaponContext:{});
+    return { kind: (attack?selectedGroup?.kind:null) || draft.v5Kind || inferV5Kind(action, attackContext),
       ...(draft.v5SlModifier != null ? { slModifier: draft.v5SlModifier } : context.action.extensions?.v5?.slModifier != null ? { slModifier: context.action.extensions.v5.slModifier } : {}),
-      choice: draft.v5Choice, charging: draft.charging, context: { ...(context.action.extensions?.v5?.initialContext||{}),...(draft.v5Context||{}), ...(context.action.id?.startsWith('broken-hide:')?{isAction:true}: {}) },
+      choice: draft.v5Choice, charging: draft.charging, context: { ...weaponContext, ...(context.action.id?.startsWith('broken-hide:')?{isAction:true}: {}) },
       talentChoices: { ...(draft.talentChoices || {}), 'talent-beat-blade:replace-damage': draft.beatBlade === true },
       fortuneReroll: draft.fortuneReroll === true,
       ...(draft.reverseDice === true ? { reverseDice: true } : {}),

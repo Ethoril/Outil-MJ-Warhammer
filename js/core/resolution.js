@@ -8,7 +8,7 @@ import {previewSituationAfter} from './v5-talent-situations.js';
 import { previewV5TalentTestModifiers } from './v5-talent-tests.js';
 import { previewV5TalentActivation,refreshV5TalentEffects,previewV5FrenzyExit,noTestV5TalentAction,sourceActive } from './v5-talent-actions.js';
 import { prepareV5TalentCriticalRolls,previewV5CombatPrelude } from './v5-talent-combat.js';
-import { locationProtection, mergeEquipmentQualities, ammunitionCompatibility, equipmentAttackContext } from './equipment.js';
+import { locationProtection, mergeEquipmentQualities, ammunitionCompatibility, equipmentAttackContext, equipmentQualities, applyWeaponSkillRules, weaponSkillGroupInfo } from './equipment.js';
 import { keywordMechanicalStatus } from './keywords.js';
 import { getReferenceStatus, getReferenceCatalogue } from './reference-catalog.js';
 import { ENGINES } from '../data/keyword-engines.js';
@@ -264,7 +264,17 @@ export function normalizeResolutionInput(input = {}) {
     // Formule sans valeur (Morsure sans chiffre de Trait) : le chiffre imprimé reste la Valeur, le bonus de Taille s'y ajoute.
     else if (inferred?.sizeBonus && Number.isFinite(Number(action.damage)) && !action.damageFormula) action.damage = Number(action.damage) + inferred.sizeBonus;
   }
-  if (action.extensions?.fiche?.requiresLink) throw new ResolutionError('Lier une compétence à cette arme avant de résoudre son attaque', 'SKILL_LINK_REQUIRED');
+  if (action.extensions?.fiche?.requiresLink) {
+    const linkedItem=actor?.equipment?.find(item=>item.id===action.extensions?.fiche?.equipmentId)||action.extensions?.equipment||null;
+    const unresolvedWeaponGroup=linkedItem?.kind==='weapon'&&!weaponSkillGroupInfo(linkedItem.category,linkedItem);
+    const selectedWeaponGroup=weaponSkillGroupInfo(input.v5?.context?.weaponTrainingGroup,linkedItem);
+    const selectedSkillId=input.v5?.context?.weaponSkillId;
+    const selectedSkillRef=selectedSkillId&&getReferenceCatalogue().skills.find(row=>row.id===selectedSkillId);
+    const actorSkills=actor?.skills?.length?actor.skills:actor?.ficheSnapshot?.skills||[];
+    const selectedSkillRow=selectedSkillId&&actorSkills.find(row=>row.id===selectedSkillId);
+    const resolvedSkillChoice=selectedSkillRef&&(selectedSkillRow?.status!=='open'&&selectedSkillRow?.status!=='ambiguous'&&selectedSkillRow?.status!=='unresolved'||input.v5?.context?.weaponAdvances!==undefined&&input.v5.context.weaponAdvances!=='');
+    if(!(unresolvedWeaponGroup&&selectedWeaponGroup)&&!resolvedSkillChoice)throw new ResolutionError('Lier une compétence à cette arme avant de résoudre son attaque', 'SKILL_LINK_REQUIRED');
+  }
   const target = isRecord(input.target) ? clone(input.target) : null;
   const entered=input.roll??input.dieRoll??input.enteredRoll;
   const noTestAction=!attackType(action.type)&&!input.defense&&noTestV5TalentAction(actor,input.v5?.context?.talentAction,target);
@@ -283,7 +293,8 @@ export function normalizeResolutionInput(input = {}) {
   if(input.ammunitionId && !ammunition) throw new ResolutionError('Munition déclarée introuvable', 'AMMUNITION_NOT_FOUND');
   if(ammunition){const compatibility=ammunitionCompatibility(weaponItem,ammunition);if(compatibility.status==='incompatible'||(compatibility.status==='manual'&&input.ammunitionArbitrated!==true))throw new ResolutionError('La compatibilité de cette munition avec cette arme doit être vérifiée', 'AMMUNITION_INCOMPATIBLE', compatibility);}
   const merged = ammunition && weaponItem ? mergeEquipmentQualities(weaponItem, ammunition) : null;
-  const qualities = normalizeQualities(merged?.qualities || action.qualities || input.qualities || []);
+  const qualities = normalizeQualities(merged ? [...(action.qualities || []), ...equipmentQualities(ammunition)] : action.qualities || input.qualities || []);
+  action.qualities = qualities;
   const resolutionId = String(input.resolutionId || input.id || defaultResolutionId(actor, action, target, baseRevision, roll));
   if (!resolutionId.trim()) throw new ResolutionError('resolutionId invalide');
   // Defender settings describe the Test actually chosen (Melee or Dodge).
@@ -323,7 +334,7 @@ export function normalizeResolutionInput(input = {}) {
     target,
     roll,
     criticalRolls: normalizeCriticalRolls(input.criticalRolls),
-    attackContext: equipmentAttackContext(weaponItem),
+    attackContext: equipmentAttackContext(weaponItem,input.v5?.context||{}),
     protectionContext: isRecord(input.protectionContext) ? clone(input.protectionContext) : {},
     ...(ammunition ? { ammunitionId: ammunition.id, ...(input.ammunitionArbitrated === true ? { ammunitionArbitrated: true } : {}), ammunitionSources: merged?.sources || [] } : {}),
     criticalDeclined: Array.isArray(input.criticalDeclined) ? input.criticalDeclined.map(String) : [],
@@ -466,9 +477,29 @@ export function previewHpLoss(preview) {
 
 /** Resolve and compare through the same pure V5 action calculation. No random draw. */
 export function previewResolution(input) {
-  const initial=normalizeResolutionInput(input);const prelude=previewV5CombatPrelude(initial);initial.combatPrelude=prelude;
-  const prepared = previewV5ActionQualities(initial);
+  const initial=normalizeResolutionInput(input);
+  const weaponItem = initial.actor?.equipment?.find(item => item.id === initial.action?.extensions?.fiche?.equipmentId);
+  const weaponSkillContext=initial.v5?.context||{};
+  const sourceQualities=weaponItem?normalizeQualities([...equipmentQualities(weaponItem),...(initial.action.qualities||[])]):initial.action.qualities;
+  const weaponSkillPreview=applyWeaponSkillRules(initial.actor,initial.action,{weapon:weaponItem||initial.action?.extensions?.equipment||null,context:weaponSkillContext,sourceQualities});
+  if(weaponSkillPreview.receipt){
+    initial.action={...initial.action,...weaponSkillPreview.action};
+    initial.action.qualities=weaponSkillPreview.action.qualities;
+  }
+  if(weaponSkillPreview.receipt?.applied.includes('improvised-weapon-profile')){
+    initial.action={...initial.action,contactImprovised:true,sourceQualities:weaponSkillPreview.action.sourceQualities};
+  }
+  const prelude=previewV5CombatPrelude(initial);initial.combatPrelude=prelude;
+  const prepared = previewV5ActionQualities(initial,weaponSkillPreview.receipt?{sourceQualities:weaponSkillPreview.action.qualities}:undefined);
   const normalized = prepared.normalized;
+  const weaponSkill = applyWeaponSkillRules(normalized.actor, normalized.action, {
+    weapon: weaponItem || normalized.action?.extensions?.equipment || null,
+    context: normalized.v5?.context || {}
+  });
+  normalized.action = { ...normalized.action, ...weaponSkill.action };
+  normalized.weaponSkillReceipt = weaponSkill.receipt || normalized.weaponSkillReceipt;
+  normalized.weaponSkillUnresolved = [...new Set([...(normalized.weaponSkillUnresolved||[]), ...weaponSkill.unresolved])];
+  if (weaponSkill.slModifier !== undefined) normalized.v5.slModifier = Math.min(Number(normalized.v5.slModifier) || 0, weaponSkill.slModifier);
   normalized.qualityTalentPlan = prepared.plan;
   const actorSkillId=normalized.action?.extensions?.fiche?.skillId||normalized.v5?.context?.skillId;
   const defenderSkillId=normalized.defense?.extensions?.fiche?.skillId||normalized.defense?.v5?.context?.skillId;
@@ -906,6 +937,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     activeEffects,talentActionChanges,secondaryTargets,
     damageReplacedByTalent: replacement ? clone(replacement) : null,defenderDamageReplacedByTalent:defenseShield.replacement||null,
     unresolved,
+    weaponSkillReceipt: normalized.weaponSkillReceipt,
     defenderCritical,defenderDamage,
     actionType: action.type,
     attack: attackType(action.type),

@@ -109,7 +109,7 @@ export function buildCombatTest(normalized, role = 'actor') {
   const contact=contactWeapon(normalized,actor,action,settings);action=contact.action;
   // Talents donnés par les Traits de compagnon d'un familier animal à portée : comptés comme ceux du maître pour ce Test.
   const talentModifiers=previewV5TalentTestModifiers(withCompanionTalents(actor,normalized.v5State?.participants||[]),{action,settings,kind,role:talentRole,opponent:target});
-  const unresolved = [...contact.unresolved], restrictions = [];if(unavailableDisarmedWeapon(actor,action))restrictions.push('Cette arme a été désarmée : la récupérer avant de l’employer.');
+  const unresolved = [...(normalized.weaponSkillUnresolved||[]),...contact.unresolved], restrictions = [];if(unavailableDisarmedWeapon(actor,action))restrictions.push('Cette arme a été désarmée : la récupérer avant de l’employer.');
   if(!defending && target?.extensions?.v5?.specialStates?.tinySwarmCannotAttack && /nu[eé]e|swarm/i.test((actor.traits || []).join(' '))){
     const size=Number(settings.actorSize ?? normalized.attackContext?.actorSize);
     if(!Number.isInteger(size)||size<1||size>7)unresolved.push('Zone de Confort : Taille de la Nuée requise.');
@@ -117,6 +117,15 @@ export function buildCombatTest(normalized, role = 'actor') {
   }
   restrictions.push(...transformationRestrictions(actor,action,{defending,charging:settings.charging===true,momentum:hasMomentum(actor)}));
   const skill=getReferenceCatalogue().skills.find(s=>s.id===(action.extensions?.fiche?.skillId || settings.context?.skillId));
+  const selectedSkillId=action.extensions?.fiche?.skillId||settings.context?.skillId;
+  const fichaSkills=actor?.skills?.length?actor.skills:actor?.ficheSnapshot?.skills||[];
+  const fichaSkill=fichaSkills.find(row=>row.id===selectedSkillId);
+  const referenceSkill=skill||fichaSkill;
+  const advancedAdvances=settings.context?.advancedSkillAdvances??fichaSkill?.advances;
+  const importedSkillAction=action.extensions?.fiche?.bindingVersion===1&&Boolean(actor?.ficheSnapshot);
+  const hasSkillProgressContract=Boolean(fichaSkill||importedSkillAction||Object.hasOwn(settings.context||{},'advancedSkillAdvances'));
+  if(!['attack','attaque'].includes(String(action.type||'').toLowerCase())&&referenceSkill?.basic===false&&hasSkillProgressContract&&(advancedAdvances===undefined||advancedAdvances===null||advancedAdvances===''||!Number.isFinite(Number(advancedAdvances))||Number(advancedAdvances)<1))
+    unresolved.push(advancedAdvances===0||Number(advancedAdvances)===0?'Cette compétence avancée ne peut pas être testée sans au moins une augmentation.':'Les augmentations de cette compétence avancée ne sont pas renseignées : le MJ doit les confirmer avant le Test.');
   const familiar=(normalized.v5State?.participants || []).find(p=>p.id===settings.context?.magicAssistantId);
   const manualSupport=familiarSkillSupport(actor,familiar,skill?.nom || action.label || action.note || '',settings.context);
   const support=manualSupport.modifiers.length||manualSupport.advantages.length?manualSupport:familiarSupport(actor,normalized.v5State?.participants || [],skill?.nom || action.label || action.note || '',settings.context);

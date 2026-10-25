@@ -2,7 +2,7 @@
 // Module pur : aucune E/S. La lecture des fiches est dans fiche-source.js, l'écriture
 // passe par Store.applyFicheSync (une seule commande annulable).
 import { cloneValue, normalizeAction, uid } from './models.js';
-import { normalizeEquipment, calculateArmor, armourProtection, equipmentQualities } from './equipment.js';
+import { normalizeEquipment, calculateArmor, armourProtection, equipmentQualities, weaponSkillGroupInfo } from './equipment.js';
 import { getReferenceCatalogue, resolveSkill, aggregateTalents } from './reference-catalog.js';
 import { actionHasDamage, normalizeDamageFields, strengthBonusOf } from './damage.js';
 import { rebaseMagicLayers } from './v5-magic-effects.js';
@@ -289,6 +289,11 @@ const maxPatch = (subject, max, options) => {
 };
 
 function proposeEquipmentSkill(item, role, skills) {
+  if(item.kind==='weapon'&&String(item.category||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()==='ingenierie'){
+    const group=weaponSkillGroupInfo(item.category,item);if(!group)return '';
+    const skillName=`${group.kind==='ranged'?'Projectiles':'Corps à corps'} (Ingénierie)`,match=resolveSkill(skillName),found=(match?.entry&&findSkill(skills,match.entry.id))||findSkill(skills,skillName);
+    return found?.name||'';
+  }
   const ranged = item.kind !== 'shield' && Boolean(String(item.range || '').trim());
   const category = ({ "Arme d'Hast": 'Hast', "Armes d'Hast": 'Hast', 'Deux-Mains': 'Deux mains', 'Bouclier': 'Base', 'Poudre Noire': 'Poudre noire', 'Explosif': 'Explosifs' })[item.category] || String(item.category || '').trim();
   // Category comes from the source object, never a guessed characteristic from a weapon name.
@@ -366,14 +371,19 @@ export function planProfileSync(snapshot, profile, choices = {}) {
         const wanted = own(equipmentLinks, key) ? equipmentLinks[key] : stored?.skillId || stored?.skillName || '';
         const skill = findSkill(availableSkills, wanted);
         const proposed = proposeEquipmentSkill(item, role, availableSkills);
+        const weaponGroup = item.kind === 'weapon' && weaponSkillGroupInfo(item.category,item);
+        const fallbackAttr = weaponGroup?.kind === 'ranged' || String(item.range || '').trim() ? 'CT' : 'CC';
+        const noSkillException = weaponGroup?.kind==='ranged'&&['arbalete','lancer','sarbacane'].includes(String(item.category||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase());
+        const fallbackCarac = item.kind === 'weapon' && !wanted && (weaponGroup?.kind==='melee'||noSkillException) ? snapshot.caracs[fallbackAttr] : null;
+        const linked = Boolean(skill) || role === 'attack' && item.kind === 'weapon' && !wanted && (weaponGroup?.kind==='melee'||noSkillException);
         const action = normalizeAction({ ...(previous || adopted || {}), id: previous?.id || adopted?.id || equipmentActionId(key),
           note: role === 'defense' ? `Parade — ${item.name}` : item.name, type: role,
-          base: skill?.total ?? '', attr: skill?.carac || 'Custom',
+          base: skill?.total ?? fallbackCarac ?? '', attr: skill?.carac || (fallbackCarac !== null ? fallbackAttr : 'Custom'),
           ...normalizeDamageFields({ damage: role === 'attack' ? item.damage : 0 }),
           qualities: equipmentQualities(item),
           extensions: { ...(previous?.extensions || adopted?.extensions || {}), fiche: { charId: snapshot.charId, equipmentId: item.id, role,
             skillId: skill?.id || null, skillName: skill?.name || '', bindingVersion: 1,
-            equipmentVersion: item.catalogVersion ?? null, requiresLink: !skill }, equipment: cloneValue(item) } });
+            equipmentVersion: item.catalogVersion ?? null, requiresLink: !linked }, equipment: cloneValue(item) } });
         const change = previous ? ficheFingerprint(previous) === ficheFingerprint(action) ? 'unchanged' : 'changed' : adopted ? 'adopted' : 'added';
         equipmentActions.push({ id: action.id, key, equipmentId: item.id, role, name: action.note, skill: skill?.name || '', proposed,
           requiresLink: !skill, change, adoptCandidates: allActions.filter(row => !sourceActionKey(row) && row.type === role).map(row => ({ id: row.id, name: row.note })), action });

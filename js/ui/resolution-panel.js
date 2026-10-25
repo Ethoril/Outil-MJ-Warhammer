@@ -15,7 +15,7 @@ import { carriesMovement } from '../core/creature-movement.js';
 import { engagedCandidates, planOutnumbering } from '../core/outnumbering.js';
 import { EXCLUDED_BASE_CHARACTERISTIC_TALENTS } from '../core/talent-contracts.js';
 import { hasV5Talent, V5_TALENT_IDS } from '../core/v5-talents.js';
-import { ammunitionCompatibility, equipmentAttackContext } from '../core/equipment.js';
+import { ammunitionCompatibility, equipmentAttackContext, weaponSkillGroupInfo } from '../core/equipment.js';
 /**
  * Résolution intégrée de Jouer (sans modale). Ce module ne fait que construire
  * le DOM à partir du brouillon tenu par workspace-view : toute saisie remonte
@@ -947,6 +947,19 @@ function renderResult(preview, target, draft, handlers) {
   if (preview.defenderFumble) pills.appendChild(node('span', 'workspace-outcome is-critical', 'Maladresse du défenseur'));
   result.appendChild(pills);
   if(preview.prayerSLAdjustment)result.appendChild(node('p','workspace-result-line',`Courroux « Pensez à vos actes » · ${preview.prayerSLAdjustment.rawSL} DR bruts → ${preview.prayerSLAdjustment.effectiveSL} DR appliqués · plafond de +0 pendant huit jours impériaux.`));
+  if(preview.weaponSkillReceipt){
+    const receipt=preview.weaponSkillReceipt,source=preview.input.action.extensions?.equipment||preview.input.actor?.equipment?.find(row=>row.id===preview.input.action.extensions?.fiche?.equipmentId),names={
+      'untrained-melee-cc-without-benefits':'Capacité de Combat sans Qualités bénéfiques', 'ballistic-skill-minus-1-dr':'Capacité de Tir, −1 DR',
+      'powder-skill-engineering-minus-2-dr':'Poudre noire sur Ingénierie, −2 DR', 'blowpipe-ct-dangerous':'Capacité de Tir, Dangereuse',
+      'two-handed-cavalry-on-foot':'arme de cavalerie à pied, Deux mains', 'single-handed-cavalry-improvised':'arme de cavalerie à une main, à pied',
+      'cavalry-hammer-on-foot':'marteau de cavalerie à pied, Deux mains', 'improvised-weapon-profile':'profil du catalogue Arme improvisée appliqué',
+      'fencing-with-basic':'Escrime employée avec Base, sans Qualités', 'bastard-sword-one-handed':'épée bâtarde à une main',
+      'main-gauche-as-dagger':'Main gauche traitée comme une dague', 'sabre-basic-slash-2':'Sabre avec Base, Entaille 2'
+    };
+    const effects=(receipt.applied||[]).map(code=>names[code]).filter(Boolean),skill=(preview.input.actor?.skills||[]).find(row=>row.id===receipt.skillId),fencingWithBasic=(receipt.applied||[]).includes('fencing-with-basic');
+    const trainingLabel=receipt.trained===true?(fencingWithBasic?'compétence de base utilisée':`spécialité entraînée${skill?.name?` (${skill.name})`:''}`):receipt.trained===false?'sans maîtrise du groupe':'données MJ requises';
+    result.appendChild(node('p',receipt.missing?'workspace-field-error':'workspace-result-line',`${source?.name||'Arme'} · groupe ${receipt.group||'à confirmer'} · ${trainingLabel}${effects.length?` · ${effects.join(' · ')}`:''}`));
+  }
   for(const state of preview.actorConditionApplication||[])if(state.source?.keywordId==='a-poudre-noire')result.append(node('p','workspace-result-line','À Poudre noire : '+state.level+' état(s) Brisé sur '+preview.input.actor.name));
   if(preview.test?.automatic)result.appendChild(node('p','workspace-result-line',preview.test.noTest?'Choix de talent sans Test.':'Réussite automatique, sans jet.'));
   if(preview.defenderDamage)result.appendChild(node('p','workspace-result-line','Riposte : '+preview.defenderDamage.finalDamage+' Blessures sur '+(preview.input.actor?.name||'l’attaquant')));
@@ -1144,6 +1157,46 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
     const action = actions.find((item, index) => actionKey(item, index) === selectedKey) || actions[0];
 
     if(action.extensions?.fiche?.requiresLink) section.appendChild(node('p','workspace-field-error','Compétence à choisir dans « Mettre à jour les PJ » avant de lancer cette action.'));
+    const weapon = action.extensions?.equipment || actor?.equipment?.find(row => row.id === action.extensions?.fiche?.equipmentId);
+    if(type==='attack'&&weapon?.kind==='weapon'){
+      const current=draft.v5Context||{};
+      const groups=['Base','Bagarre','Escrime','Fléau','Cavalerie','Deux-Mains',"Arme d'Hast",'Armes d’Hast','Parade','Arc','Arbalète','Fronde','Lancer','Poudre Noire','Ingénierie mêlée','Ingénierie tir','Explosif','Explosifs','Sarbacane','Siège','Embarquée','Entraves'];
+      if(!weaponSkillGroupInfo(weapon.category,weapon)){
+        const label=node('label','workspace-type','Groupe d’arme à confirmer par le MJ'),select=document.createElement('select');select.setAttribute('aria-label',label.textContent);select.append(new Option('Choisir un groupe',''));groups.forEach(value=>select.append(new Option(value,value)));select.value=current.weaponTrainingGroup||'';select.addEventListener('change',()=>handlers.select({v5Context:{...current,weaponTrainingGroup:select.value||undefined},...(select.value==='Ingénierie tir'?{v5Kind:'ranged'}:select.value==='Ingénierie mêlée'?{v5Kind:'melee'}:{})}));label.append(select);section.append(label);
+      }
+      const effectiveGroup=current.weaponTrainingGroup||weapon.category;
+      const isCavalry=/^cavalerie$/i.test(String(effectiveGroup||''));
+      const foldedWeaponName=String(weapon.name||action.note||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLocaleLowerCase();
+      const isBastard=/epee batarde/.test(foldedWeaponName);
+      const isSabre=/sabre/.test(foldedWeaponName);
+      const isCavalryHammer=/marteau de cavalerie/.test(foldedWeaponName);
+      if(isCavalry){
+        const label=node('label','workspace-type','Le personnage est monté'),select=document.createElement('select');select.setAttribute('aria-label',label.textContent);select.append(new Option('À préciser',''),new Option('Oui','true'),new Option('Non','false'));select.value=typeof current.weaponMounted==='boolean'?String(current.weaponMounted):'';select.addEventListener('change',()=>handlers.select({v5Context:{...current,weaponMounted:select.value===''?undefined:select.value==='true'}}));label.append(select);section.append(label);
+      }
+      if(isBastard||isCavalry&&current.weaponMounted===false&&!isSabre&&!isCavalryHammer){
+        const label=node('label','workspace-type',isBastard?'Main utilisée pour l’épée bâtarde':'Arme de cavalerie à pied : mains utilisées'),select=document.createElement('select');select.setAttribute('aria-label',label.textContent);select.append(new Option('À préciser',''),new Option('Une main','1'),new Option('Deux mains','2'));select.value=String(current.weaponHands||'');select.addEventListener('change',()=>handlers.select({v5Context:{...current,weaponHands:select.value?Number(select.value):undefined}}));label.append(select);section.append(label);
+      }
+      const skills=actor?.skills||actor?.ficheSnapshot?.skills||[];
+      const selectedSkill=current.weaponSkillId||action.extensions?.fiche?.skillId||'';
+      if(skills.length&&(isCavalry||isBastard||action.extensions?.fiche?.requiresLink||!weaponSkillGroupInfo(weapon.category,weapon))){
+        const label=node('label','workspace-type','Compétence utilisée pour cette arme'),select=document.createElement('select');select.setAttribute('aria-label',label.textContent);select.append(new Option('Spécialité du groupe',''));skills.forEach(skill=>{if(!skill?.id||!skill.name)return;const advances=skill.advances==null?'augmentations inconnues':`${skill.advances} augmentation(s)`;select.append(new Option(`${skill.name} · ${advances}`,skill.id));});select.value=selectedSkill;select.addEventListener('change',()=>handlers.select({v5Context:{...current,weaponSkillId:select.value||undefined}}));label.append(select);section.append(label);
+      }
+      const selected=skills.find(skill=>skill.id===selectedSkill);
+      const missingTrainingFacts=!skills.length||actor?.ficheSnapshot?.coverage?.skills!=='present'&&!actor?.ficheSkillsComplete||Boolean(selected&&(selected.advances==null||selected.total==null));
+      if(missingTrainingFacts||isCavalry||isBastard||action.extensions?.fiche?.requiresLink||!weaponSkillGroupInfo(weapon.category,weapon)){
+        const hasActionScore=action.base!==null&&action.base!==undefined&&action.base!==''&&Number.isSafeInteger(Number(action.base));
+        const advances=node('label','workspace-type','Augmentations de la spécialité (MJ, si la fiche ne les fournit pas)'),advanceInput=document.createElement('input');advanceInput.type='number';advanceInput.min='0';advanceInput.step='1';advanceInput.value=current.weaponAdvances??'';advanceInput.setAttribute('aria-label',advances.textContent);advanceInput.addEventListener('change',()=>handlers.select({v5Context:{...current,weaponAdvances:advanceInput.value===''?undefined:Number(advanceInput.value),weaponSkillScore:current.weaponSkillScore??(hasActionScore?Number(action.base):undefined)}}));advances.append(advanceInput);section.append(advances);
+        const score=node('label','workspace-type','Score de compétence (prérempli depuis l’action, à confirmer par le MJ)'),scoreInput=document.createElement('input');scoreInput.type='number';scoreInput.min='0';scoreInput.value=current.weaponSkillScore??(hasActionScore?Number(action.base):'');scoreInput.setAttribute('aria-label',score.textContent);scoreInput.addEventListener('change',()=>handlers.select({v5Context:{...current,weaponSkillScore:scoreInput.value===''?undefined:Number(scoreInput.value)}}));score.append(scoreInput);section.append(score);
+      }
+    }
+    if(type!=='attack'){
+      const skillId=action.extensions?.fiche?.skillId||draft.v5Context?.skillId;
+      const referenceSkill=getReferenceCatalogue().skills.find(row=>row.id===skillId);
+      const fichaSkill=(actor?.skills||actor?.ficheSnapshot?.skills||[]).find(row=>row.id===skillId);
+      if(referenceSkill?.basic===false&&(!fichaSkill||fichaSkill.advances==null)){
+        const current=draft.v5Context||{},label=node('label','workspace-type','Augmentations de cette compétence avancée (MJ, si la fiche ne les fournit pas)'),input=document.createElement('input');input.type='number';input.min='0';input.step='1';input.value=current.advancedSkillAdvances??'';input.setAttribute('aria-label',label.textContent);input.addEventListener('change',()=>handlers.select({v5Context:{...current,advancedSkillAdvances:input.value===''?undefined:Number(input.value)}}));label.append(input);section.append(label);
+      }
+    }
     if (['channelling', 'cast', 'dispel'].includes(type)) {
       section.appendChild(renderV5MagicContext({ actor, participants, target, type, draft, handlers }));
     } else {
@@ -1158,7 +1211,8 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
           if(shields.length){const label=node('label','workspace-type','Bouclier');const select=document.createElement('select');select.setAttribute('aria-label','Bouclier utilisé');select.append(new Option('Aucun',''));shields.forEach(row=>select.append(new Option(row.name,row.id)));select.value=context.shieldId||'';select.addEventListener('change',()=>handlers.select({protectionContext:{...context,shieldId:select.value}}));label.append(select);block.append(label);}
           for(const [key,text] of [['shieldAvailable','Bouclier disponible ce tour'],['opposedWithShield','Défense opposée avec ce bouclier'],['ranged','Attaque à distance'],['lineOfSight','Attaquant visible']]) {
             const label=node('label','workspace-type',text);const choice=document.createElement('select');choice.setAttribute('aria-label',text);
-            const inferred=key === 'ranged' && action.extensions?.equipment ? equipmentAttackContext(action.extensions.equipment)?.ranged : undefined;
+            const protectionWeapon=action.extensions?.equipment||actor?.equipment?.find(row=>row.id===action.extensions?.fiche?.equipmentId);
+            const inferred=key === 'ranged' && protectionWeapon ? equipmentAttackContext(protectionWeapon,draft.v5Context||{})?.ranged : undefined;
             const value=typeof inferred==='boolean'?inferred:context[key];choice.append(new Option('À préciser',''),new Option('Oui','true'),new Option('Non','false'));choice.value=typeof value==='boolean'?String(value):'';choice.disabled=typeof inferred==='boolean';
             choice.addEventListener('change',()=>handlers.select({protectionContext:{...context,[key]:choice.value===''?undefined:choice.value==='true'}}));label.append(choice);block.append(label);
           }
@@ -1168,8 +1222,12 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
       const v5 = node('div', 'workspace-v5-context');
       v5.appendChild(rubric('Test V5'));if(type!=='attack'){const social=renderDivineSocialFacts(actor,draft,handlers);if(social)v5.append(social);if(type==='opposition'&&target){const defenseSocial=renderDivineSocialFacts(target,draft,handlers,{defending:true});if(defenseSocial)v5.append(defenseSocial);}}
       if((actor?.extensions?.v5?.spellEffects || []).some(e=>e.magicTalentId==='talent-mind-over-body')){const label=node('label','workspace-type','Pénalité de Blessures Critiques (DR négatifs, hors autre modificateur)');const input=document.createElement('input');input.type='number';input.max='0';input.min='-100';input.value=draft.v5Context?.magicCriticalPenalty ?? '';input.setAttribute('aria-label',label.textContent);input.addEventListener('input',()=>handlers.input('v5Context',{...draft.v5Context,magicCriticalPenalty:input.value===''?null:Number(input.value)}));label.append(input);v5.append(label);}
-      const attackKind=draft.v5Kind || inferV5Kind({ ...action, type }, equipmentAttackContext(action.extensions?.equipment));
-      const attackBase=weaponAttackNature({actor,action:{...action,type},ranged:equipmentAttackContext(action.extensions?.equipment)?.ranged,kind:attackKind});
+      const actionEquipment=action.extensions?.equipment||actor?.equipment?.find(row=>row.id===action.extensions?.fiche?.equipmentId);
+      const metadataGroup=weaponSkillGroupInfo(actionEquipment?.category,actionEquipment);
+      const selectedGroupInfo=type==='attack'&&!metadataGroup?weaponSkillGroupInfo(draft.v5Context?.weaponTrainingGroup,actionEquipment):null;
+      const attackContext=equipmentAttackContext(actionEquipment,type==='attack'?draft.v5Context||{}:{});
+      const attackKind=selectedGroupInfo?.kind || draft.v5Kind || inferV5Kind({ ...action, type }, attackContext);
+      const attackBase=weaponAttackNature({actor,action:{...action,type},ranged:attackContext?.ranged,kind:attackKind});
       for(const field of natureSelects(target,()=>draft.v5Context?.attackNature,next=>handlers.select({v5Context:{...draft.v5Context,attackNature:next}}),attackBase))v5.append(field);
       // Bénédiction de Protection : résultat du Test de Calme Accessible (+2 DR) de l’attaquant, saisi par le MJ.
       const protectionLayer=(target?.extensions?.v5?.divineEffects||[]).find(layer=>layer?.attackDeterrent);
@@ -1198,7 +1256,10 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
   };
   const kindLabel = node('label', 'workspace-type', 'Nature du Test'); const kind = document.createElement('select');
   for (const [value, label] of [['melee','Corps à corps'],['ranged','Tir'],['test','Autre Test']]) kind.appendChild(new Option(label,value));
-  kind.value = draft.v5Kind || inferV5Kind({ ...action, type }, equipmentAttackContext(action.extensions?.equipment));
+  const kindEquipment=action.extensions?.equipment||actor?.equipment?.find(row=>row.id===action.extensions?.fiche?.equipmentId);
+  const kindMetadataGroup=weaponSkillGroupInfo(kindEquipment?.category,kindEquipment);
+  const selectedKind=type==='attack'&&!kindMetadataGroup?weaponSkillGroupInfo(draft.v5Context?.weaponTrainingGroup,kindEquipment)?.kind:null;
+  kind.value = selectedKind || draft.v5Kind || inferV5Kind({ ...action, type }, equipmentAttackContext(kindEquipment,type==='attack'?draft.v5Context||{}:{}));
   kind.setAttribute('aria-label','Nature du Test'); kind.dataset.focusKey='v5-kind'; kind.addEventListener('change', () => handlers.select({ v5Kind: kind.value }));
   kindLabel.appendChild(kind); v5.appendChild(kindLabel);
   numberField('v5SlModifier', 'Modificateur V5 (DR)', draft.v5SlModifier ?? action.extensions?.v5?.slModifier ?? (action.mod ? null : 0));
@@ -1532,7 +1593,8 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
 
   const commands = node('div', 'workspace-inline-actions workspace-resolution-commands');
   const calculate = button('Calculer', 'workspace-secondary', { 'data-focus-key': 'calculate' });
-  calculate.disabled = draft.busy || !canCalculate || action.extensions?.fiche?.requiresLink;
+  const explicitWeaponGroup=type==='attack'&&Boolean(draft.v5Context?.weaponTrainingGroup||draft.v5Context?.weaponSkillId);
+  calculate.disabled = draft.busy || !canCalculate || action.extensions?.fiche?.requiresLink&&!explicitWeaponGroup;
   if (!canCalculate) calculate.title = 'Action indisponible';
   calculate.addEventListener('click', () => handlers.calculate());
   commands.appendChild(calculate);

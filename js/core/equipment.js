@@ -4,6 +4,7 @@ import talentQualityRegistry from '../data/v5-quality-talent-contracts.json' wit
 import contracts from '../data/keyword-engine-contracts.json' with { type: 'json' };
 import { getReferenceCatalogue, resolveKeyword } from './reference-catalog.js';
 import { conditionalArmour, natureTagLabel } from './v5-magic-combat.js';
+import { normalizeDamageFields } from './damage.js';
 export { HIT_LOCATIONS, armourProtection, equipmentFormula, armourLayer, validateEquipmentItem };
 /** Armes de corps à corps conjurables (V5 p. 301), sans prix ni inventaire permanent. */
 export const ARCANE_WEAPON_PROFILES=Object.freeze(Object.fromEntries([
@@ -53,11 +54,249 @@ export const calculateArmor=items=>Object.fromEntries(armourProtection(items).lo
 export function equipmentQualities(item){return (item?.keywords||[]).map(word=>({...word,...(word.parameter!==''&&Number.isFinite(Number(word.parameter))?{rating:Number(word.parameter)}:{})}));}
 
 const categoryKey = value => String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/gu,'').toLowerCase().trim();
-const RANGED_CATEGORIES = new Set(['arbalete','arc','embarquee','entraves','explosif','explosifs','fronde','ingenierie','lancer','poudre noire','sarbacane','siege']);
+const RANGED_CATEGORIES = new Set(['arbalete','arc','embarquee','entraves','explosif','explosifs','fronde','lancer','poudre noire','sarbacane','siege']);
 /** Source item declares range and category; absence of an item is not a melee default. */
-export function equipmentAttackContext(item){
+export function equipmentAttackContext(item, context = {}){
  if(!item||!['weapon','shield'].includes(item.kind))return null;
- return {ranged:Boolean(String(item.range||'').trim())||RANGED_CATEGORIES.has(categoryKey(item.category)),equipmentId:item.id,source:'fiche-equipment'};
+ const category=categoryKey(item.category),source=categoryKey(item.source||'');
+ const knownCategory=WEAPON_GROUPS.get(foldedWeaponText(item.category));
+ const selectedGroup=WEAPON_GROUPS.get(foldedWeaponText(context.weaponTrainingGroup||''));
+ const chosenNature=categoryKey(context.weaponTrainingGroup||'');
+ const engineeringNature=category==='ingenierie'?
+  source.includes('armes a distance')?true:source.includes('armes corps a corps')?false:
+  ['ingenierie tir','ingenierie projectiles'].includes(chosenNature)?true:
+  ['ingenierie melee','ingenierie corps a corps'].includes(chosenNature)?false:null:null;
+ const useSelection=category==='ingenierie'?engineeringNature!==null:!knownCategory&&Boolean(selectedGroup);
+ const ranged=useSelection?category==='ingenierie'?engineeringNature===true:selectedGroup.kind==='ranged':Boolean(String(item.range||'').trim())||RANGED_CATEGORIES.has(category);
+ return {ranged,equipmentId:item.id,source:'fiche-equipment',...(category==='ingenierie'&&engineeringNature===null&&!String(item.range||'').trim()?{needsWeaponNature:true}:{})};
+}
+
+const WEAPON_GROUPS = new Map([
+ ['base', {kind:'melee', specialty:'Base'}], ['arme de base', {kind:'melee', specialty:'Base'}], ['armes de base', {kind:'melee', specialty:'Base'}],
+ ['bagarre', {kind:'melee', specialty:'Bagarre'}], ['escrime', {kind:'melee', specialty:'Escrime'}], ['fleau', {kind:'melee', specialty:'Fléau'}],
+ ['cavalerie', {kind:'melee', specialty:'Cavalerie'}], ['deux mains', {kind:'melee', specialty:'Deux mains'}],
+ ['arme d hast', {kind:'melee', specialty:'Hast'}], ['armes d hast', {kind:'melee', specialty:'Hast'}], ['hast', {kind:'melee', specialty:'Hast'}],
+ ['parade', {kind:'melee', specialty:'Parade'}],
+ ['arc', {kind:'ranged', specialty:'Arc'}], ['arbalete', {kind:'ranged', specialty:'Arbalète'}], ['fronde', {kind:'ranged', specialty:'Fronde'}],
+ ['lancer', {kind:'ranged', specialty:'Lancer'}], ['poudre noire', {kind:'ranged', specialty:'Poudre noire'}], ['ingenierie', {kind:'ranged', specialty:'Ingénierie'}],
+ ['ingenierie melee', {kind:'melee', specialty:'Ingénierie'}], ['ingenierie tir', {kind:'ranged', specialty:'Ingénierie'}], ['ingenierie corps a corps', {kind:'melee', specialty:'Ingénierie'}], ['ingenierie projectiles', {kind:'ranged', specialty:'Ingénierie'}],
+ ['explosif', {kind:'ranged', specialty:'Explosifs'}], ['explosifs', {kind:'ranged', specialty:'Explosifs'}], ['sarbacane', {kind:'ranged', specialty:'Sarbacane'}],
+ ['siege', {kind:'ranged', specialty:'Siège'}], ['embarquee', {kind:'ranged', specialty:'Embarquée'}], ['entraves', {kind:'ranged', specialty:'Entraves'}]
+]);
+const foldedWeaponText = value => categoryKey(value).replace(/[’']/g,' ').replace(/-/g,' ').replace(/\s+/g,' ').trim();
+const weaponGroupFor = (value, weapon = null) => {
+ const key=foldedWeaponText(value),known=WEAPON_GROUPS.get(key);if(!known)return null;
+ if(key==='ingenierie'&&weapon){
+  const nature=equipmentAttackContext(weapon);
+  if(nature?.needsWeaponNature)return null;
+  return {...known,kind:nature?.ranged?'ranged':'melee'};
+ }
+ return known;
+};
+export const weaponSkillGroupInfo = (value, weapon = null) => weaponGroupFor(value, weapon);
+const weaponWords = () => getReferenceCatalogue()?.keywords || [];
+const keywordType = id => weaponWords().find(word => word.id === id)?.type || '';
+const skillSpec = skill => {
+ const text=foldedWeaponText(skill?.specialization || skill?.specialty || String(skill?.name || '').match(/\(([^)]+)\)\s*$/)?.[1] || '');
+ return ({'jet':'lancer','armes d hast':'hast','deux mains':'deux mains','bouclier':'parade'}[text]||text);
+};
+const skillFamily = skill => categoryKey(skill?.group || String(skill?.name||'').match(/^([^()]+)\s*\(/)?.[1] || '');
+const skillMatchesGroup = (skill, group) => skillFamily(skill)===(group?.kind==='ranged'?'projectiles':'corps a corps');
+const skillHasAdvance = skill => {
+ if(!skill||!Object.hasOwn(skill,'advances')||skill.advances===null||skill.advances===''||!Number.isFinite(Number(skill.advances)))return null;
+ return Number(skill.advances)>0;
+};
+const skillCaracScore = (actor, skill) => {
+ for(const raw of [skill?.total,skill?.value,skill?.score]){
+  if(raw===null||raw===undefined||raw==='')continue;
+  const score=Number(raw);if(Number.isFinite(score)&&score>=0)return score;
+ }
+ return null;
+};
+const hasScoreValue = value => value!==null&&value!==undefined&&value!==''&&Number.isSafeInteger(Number(value));
+const scoreFor = (actor, skill, context) => {
+ if(context?.weaponSkillScore!==undefined&&context.weaponSkillScore!==null&&context.weaponSkillScore!==''
+   &&(!context.weaponSkillId||context.weaponSkillId===skill?.id||skill?.id==='mj-weapon-skill')){
+  const value=Number(context.weaponSkillScore);return Number.isSafeInteger(value)&&value>=0?value:null;
+ }
+ return skillCaracScore(actor,skill);
+};
+const advancesFor = (skill, context) => {
+ if(context?.weaponAdvances!==undefined&&context?.weaponAdvances!==null&&context?.weaponAdvances!==''){
+  const value=Number(context.weaponAdvances);return Number.isSafeInteger(value)&&value>=0?value>0:null;
+ }
+ return skillHasAdvance(skill);
+};
+const characteristicScore = (actor, code) => {
+ const aliases=code==='CC'?['CC','cc']:['CT','ct'];
+ for(const key of aliases){const raw=actor?.caracs?.[key];if(raw===null||raw===undefined||raw==='')continue;const value=Number(raw);if(Number.isFinite(value)&&value>=0)return value;}
+ return null;
+};
+const addQuality = (qualities, id, parameter='') => qualities.some(word=>word.id===id)?qualities:[...qualities,{id,parameter}];
+const stripBeneficialQualities = qualities => qualities.filter(word => word.talentOrigins?.length || keywordType(word.id) !== 'Atout d’arme' && keywordType(word.id) !== 'Atout d\'arme');
+
+/**
+ * Apply weapon-group rules to an action copy. Unknown training facts are returned as
+ * unresolved receipts so callers cannot accidentally roll or apply an unsupported attack.
+ */
+export function applyWeaponSkillRules(actor, action, { weapon = null, context = {}, sourceQualities = null } = {}) {
+ const unchanged={action:{...action,qualities:(sourceQualities||action?.qualities||[]).map(word=>typeof word==='string'?{id:word,parameter:''}:{...word})},unresolved:[],receipt:null};
+ const fiche=action?.extensions?.fiche||{};
+ const equipment=weapon||action?.extensions?.equipment||null;
+ const isMaterialized=action?.extensions?.v5?.materialized===true;
+ if(!['attack','attaque'].includes(String(action?.type||'').toLowerCase())||isMaterialized||!equipment)return unchanged;
+ const itemKind=equipment.kind;
+ if(itemKind!=='weapon')return unchanged;
+ let qualities=unchanged.action.qualities;
+ const unresolved=[];
+ const receipt={kind:'weapon-skill',equipmentId:equipment.id||fiche.equipmentId||null,group:null,skillId:null,trained:null,applied:[]};
+ const hasExplicitTrainingFact=context.weaponTrainingGroup||context.weaponSkillId||context.weaponAdvances!==undefined&&context.weaponAdvances!==null&&context.weaponAdvances!==''||context.weaponSkillScore!==undefined&&context.weaponSkillScore!==''&&context.weaponSkillScore!==null||context.weaponMounted!==undefined||context.weaponHands!==undefined||fiche.skillId||fiche.weaponTrainingGroup;
+ const declared=context.weaponTrainingGroup||fiche.weaponTrainingGroup||equipment.category;
+ const sourceGroup=weaponGroupFor(equipment.category,equipment);
+ const group=sourceGroup||weaponGroupFor(declared,equipment);
+ if(!group){if(fiche.bindingVersion!==1&&!hasExplicitTrainingFact)return unchanged;unresolved.push('Groupe d’arme manquant ou inconnu : le MJ doit préciser le groupe avant ce Test.');return {...unchanged,unresolved,receipt:{...receipt,missing:'group'}};}
+ let skills=Array.isArray(actor?.skills)&&actor.skills.length?actor.skills:Array.isArray(actor?.ficheSnapshot?.skills)?actor.ficheSnapshot.skills:Array.isArray(actor?.skills)?actor.skills:null;
+ const availableSkillRows=Array.isArray(skills)?skills:[];
+ const hasMatchingSkillFact=availableSkillRows.some(skill=>skillMatchesGroup(skill,group)&&skillSpec(skill)===categoryKey(group.specialty));
+ if(fiche.bindingVersion!==1&&!hasExplicitTrainingFact&&!hasMatchingSkillFact)return unchanged;
+ receipt.group=group.specialty;
+ const manualAdvances=Number(context.weaponAdvances),manualScore=Number(context.weaponSkillScore ?? (fiche.skillId&&hasScoreValue(action.base)?action.base:undefined));
+ const hasManualAdvances=context.weaponAdvances!==undefined&&context.weaponAdvances!==null&&context.weaponAdvances!=='';
+ const hasManualScore=context.weaponSkillScore!==undefined&&context.weaponSkillScore!==null&&context.weaponSkillScore!==''||Boolean(fiche.skillId&&hasScoreValue(action.base));
+ const chosenId=context.weaponSkillId||fiche.skillId||null;
+ const chosenReference=chosenId&&getReferenceCatalogue()?.skills?.find(skill=>skill.id===chosenId);
+ const manualSpecialty=chosenReference?.specialization||weaponGroupFor(context.weaponTrainingSpecialty,equipment)?.specialty||group.specialty;
+ const skillRows=Array.isArray(skills)?skills:[];
+ const listedChosen=chosenId?skillRows.find(skill=>skill.id===chosenId||skill.name===chosenId||skill.storageKey===chosenId):null;
+ if(chosenId&&chosenReference&&!listedChosen&&(!hasManualAdvances||!hasManualScore)){
+  const missing=!hasManualAdvances?'advances':'score';unresolved.push(missing==='advances'?'Les augmentations de la compétence choisie ne sont pas renseignées : le MJ doit les saisir.':'Le score de la compétence choisie est indisponible : le MJ doit le saisir.');
+  return {...unchanged,unresolved,receipt:{...receipt,missing:missing==='advances'?'skill-advances':'skill-score'}};
+ }
+ if(Array.isArray(skills)&&hasManualAdvances&&hasManualScore&&Number.isSafeInteger(manualAdvances)&&manualAdvances>=0&&Number.isSafeInteger(manualScore)&&manualScore>=0){
+  const manualSpec=manualSpecialty;
+  const groupName=chosenReference?.group||(group.kind==='ranged'?'Projectiles':'Corps à corps');
+  const manual={id:'mj-weapon-skill',name:chosenReference?.nom||`${groupName} (${manualSpec})`,group:groupName,specialty:manualSpec,total:manualScore,advances:manualAdvances,basic:chosenReference?.basic??false,status:'mj-confirmed'};
+  skills=[...skills.filter(row=>row.id!=='mj-weapon-skill'),manual];
+ }
+ if(!Array.isArray(skills)&&hasManualAdvances&&hasManualScore&&Number.isSafeInteger(manualAdvances)&&manualAdvances>=0&&Number.isSafeInteger(manualScore)&&manualScore>=0){
+  const manualSpec=manualSpecialty;
+  const groupName=chosenReference?.group||(group.kind==='ranged'?'Projectiles':'Corps à corps');
+  skills=[{id:'mj-weapon-skill',name:chosenReference?.nom||`${groupName} (${manualSpec})`,group:groupName,specialty:manualSpec,total:manualScore,advances:manualAdvances,basic:chosenReference?.basic??false,status:'mj-confirmed'}];
+ }
+ if(!skills){unresolved.push('Données de compétences et d’avancements de la fiche indisponibles : le MJ doit confirmer la maîtrise de cette arme.');return {...unchanged,unresolved,receipt:{...receipt,missing:'skill-advances'}};}
+ const chosen=chosenId?(skills.find(skill=>skill.id===chosenId||skill.name===chosenId||skill.storageKey===chosenId)||((hasManualAdvances&&hasManualScore)?skills.find(skill=>skill.id==='mj-weapon-skill'):null)):skills.find(skill=>skill.id==='mj-weapon-skill')||null;
+ const categoryName=foldedWeaponText(equipment.category||declared);
+ const itemName=foldedWeaponText(equipment.name||action.note);
+ const isCavalry=categoryName==='cavalerie';
+ const isMainGauche=/\bmain gauche\b/.test(itemName);
+ const isBastard=/\bepee batarde\b/.test(itemName);
+ const isCavalryHammer=/marteau de cavalerie/.test(itemName);
+ const isSabre=/\bsabre\b/.test(itemName);
+ const mounted=context.weaponMounted;
+ const hands=Number(context.weaponHands||action.extensions?.v5?.weaponHands||equipment.hands||0);
+ const selectedSpec=skillSpec(chosen);
+ let effectiveGroup=group;
+ let fallbackReason='';
+ if(isCavalry&&typeof mounted!=='boolean'){
+  unresolved.push('Arme de cavalerie : préciser si le personnage est monté.');
+  return {...unchanged,unresolved,receipt:{...receipt,missing:'mounted'}};
+ }
+ if(isCavalry&&!mounted){
+  if(isCavalryHammer){effectiveGroup=selectedSpec==='deux mains'?{kind:'melee',specialty:'Deux mains'}:group;receipt.applied.push('cavalry-hammer-on-foot');if(selectedSpec==='deux mains')receipt.applied.push('two-handed-cavalry-on-foot');}
+  else if(isSabre){effectiveGroup={kind:'melee',specialty:selectedSpec==='escrime'?'Escrime':'Base'};receipt.applied.push('sabre-on-foot');}
+  else if(hands===2){effectiveGroup=selectedSpec==='deux mains'?{kind:'melee',specialty:'Deux mains'}:group;if(selectedSpec==='deux mains')receipt.applied.push('two-handed-cavalry-on-foot');}
+ else if(hands===1){effectiveGroup={kind:'melee',specialty:'Base'};fallbackReason='improvised-cavalry';receipt.applied.push('single-handed-cavalry-improvised');}
+  else {unresolved.push('Arme de cavalerie à pied : préciser si l’arme se manie à une ou deux mains.');return {...unchanged,unresolved,receipt:{...receipt,missing:'hands'}};}
+ }
+ if(isBastard&&hands===1) {effectiveGroup={kind:'melee',specialty:'Base'};qualities=addQuality(addQuality(qualities,'epuisante'),'lente');unchanged.action.qualities=qualities;receipt.applied.push('bastard-sword-one-handed');}
+ if(isBastard&&hands===0&&context.weaponHands==null&&action.extensions?.v5?.weaponHands==null){unresolved.push('Épée bâtarde : préciser si elle est maniée à une ou deux mains.');return {...unchanged,unresolved,receipt:{...receipt,missing:'hands'}};}
+ if(isMainGauche)effectiveGroup={kind:'melee',specialty:'Parade'};
+ if(isCavalry&&!mounted&&isSabre&&selectedSpec==='escrime')effectiveGroup={kind:'melee',specialty:'Escrime'};
+ receipt.group=effectiveGroup.specialty;
+ if(fallbackReason==='improvised-cavalry'){
+  const improvised=getReferenceCatalogue()?.items?.find(item=>item.kind==='weapon'&&item.name==='Arme improvisée');
+  if(!improvised){unresolved.push('Profil d’arme improvisée absent du catalogue : le MJ doit confirmer Dégâts et Défauts.');return {...unchanged,unresolved,receipt:{...receipt,missing:'improvised-profile'}};}
+  const damage=normalizeDamageFields({damage:improvised.damage,damageFormula:improvised.damageFormula});
+  unchanged.action={...unchanged.action,...damage,reach:improvised.reach||unchanged.action.reach};
+  const profileQualities=equipmentQualities(improvised);unchanged.action.sourceQualities=profileQualities.map(word=>({...word}));
+  if(action.contactImprovised!==true){qualities=profileQualities;unchanged.action.qualities=qualities;}
+  receipt.applied.push('improvised-weapon-profile');
+ }
+ const exactSkill=skills.find(skill=>skillMatchesGroup(skill,effectiveGroup)&&skillSpec(skill)===categoryKey(effectiveGroup.specialty)&&!skill.status?.match(/open|ambiguous|unresolved/));
+ let usable=chosen&&skillMatchesGroup(chosen,effectiveGroup)&&skillSpec(chosen)===categoryKey(effectiveGroup.specialty)?chosen:exactSkill;
+ if(isCavalry&&!mounted&&isCavalryHammer&&selectedSpec==='deux mains')usable=chosen&&skillMatchesGroup(chosen,{kind:'melee'})&&skillSpec(chosen)==='deux mains'?chosen:skills.find(skill=>skillMatchesGroup(skill,{kind:'melee'})&&skillSpec(skill)==='deux mains');
+ if(isCavalry&&!mounted&&hands===2&&!isCavalryHammer&&!isSabre&&selectedSpec==='deux mains')usable=chosen&&skillMatchesGroup(chosen,{kind:'melee'})&&skillSpec(chosen)==='deux mains'?chosen:skills.find(skill=>skillMatchesGroup(skill,{kind:'melee'})&&skillSpec(skill)==='deux mains');
+ if(isCavalry&&!mounted&&hands===1&&!isCavalryHammer&&!isSabre)usable=chosen&&skillMatchesGroup(chosen,{kind:'melee'})&&skillSpec(chosen)==='base'?chosen:skills.find(skill=>skillMatchesGroup(skill,{kind:'melee'})&&skillSpec(skill)==='base');
+ if(isBastard&&hands===1)usable=chosen&&skillMatchesGroup(chosen,{kind:'melee'})&&skillSpec(chosen)==='base'?chosen:skills.find(skill=>skillMatchesGroup(skill,{kind:'melee'})&&skillSpec(skill)==='base');
+ if(isMainGauche&&skillMatchesGroup(chosen,{kind:'melee'})&&selectedSpec==='base')usable=chosen;
+ if(group.kind==='ranged'){
+  const isCrossbowOrThrowing=['arbalete','lancer'].includes(categoryName);
+  const isPowderOrExplosive=['poudre noire','explosif','explosifs'].includes(categoryName);
+  const isEngineering=categoryName==='ingenierie';
+  const chosenSpecialty=selectedSpec;
+  const engineering=skills.find(skill=>skillMatchesGroup(skill,{kind:'ranged'})&&skillSpec(skill)==='ingenierie');
+  const powder=skills.find(skill=>skillMatchesGroup(skill,{kind:'ranged'})&&skillSpec(skill)==='poudre noire');
+  const chosenInRangedFamily=chosen&&skillMatchesGroup(chosen,{kind:'ranged'});
+  const explicitAlternate=chosenInRangedFamily&&(isPowderOrExplosive&&chosenSpecialty==='ingenierie'||isEngineering&&chosenSpecialty==='poudre noire');
+  if(chosen&&(!chosenInRangedFamily||chosenSpecialty!==categoryKey(effectiveGroup.specialty))&&!explicitAlternate){unresolved.push('La compétence confirmée ne correspond pas au groupe de cette arme : le MJ doit choisir la spécialité appropriée.');return {...unchanged,unresolved,receipt:{...receipt,missing:'skill-group-mismatch'}};}
+  if(isEngineering&&chosenSpecialty==='poudre noire'&&chosenInRangedFamily){usable=chosen;if(skillHasAdvance(chosen)===true){unchanged.slModifier=-2;receipt.applied.push('powder-skill-engineering-minus-2-dr');}}
+  if(isPowderOrExplosive&&chosenSpecialty==='ingenierie'&&chosenInRangedFamily)usable=chosen;
+  const trainedState=advancesFor(usable,context);
+  if(usable&&trainedState===null){unresolved.push('Les augmentations de cette compétence ne sont pas renseignées : le MJ doit confirmer les données de fiche.');return {...unchanged,unresolved,receipt:{...receipt,missing:'skill-advances'}};}
+  if(usable&&trainedState===true){
+   receipt.trained=true;receipt.skillId=usable.id;
+   const score=scoreFor(actor,usable,context);if(score===null){unresolved.push('Le score de la compétence de groupe est indisponible : le MJ doit actualiser ou saisir la valeur de fiche.');return {...unchanged,unresolved,receipt:{...receipt,missing:'skill-score'}};}
+   unchanged.action.base=score;unchanged.action.attr='CT';
+   return {...unchanged,receipt};
+  }
+  if(isCrossbowOrThrowing){
+   const ct=characteristicScore(actor,'CT');if(ct===null){unresolved.push('Capacité de Tir absente : le MJ doit saisir la caractéristique avant ce tir.');return {...unchanged,unresolved,receipt:{...receipt,missing:'ct'}};}
+   unchanged.action.base=ct;unchanged.action.attr='CT';unchanged.slModifier=-1;receipt.trained=false;receipt.applied.push('ballistic-skill-minus-1-dr');return {...unchanged,receipt};
+  }
+  if(!usable&&skills.length&&!['present'].includes(actor?.ficheSnapshot?.coverage?.skills)&&!actor?.ficheSkillsComplete){unresolved.push('La liste des compétences de la fiche est incomplète : le MJ doit confirmer la spécialité avant ce tir.');return {...unchanged,unresolved,receipt:{...receipt,missing:'skill-coverage'}};}
+  if(categoryName==='sarbacane'){
+   if(chosen&&selectedSpec!=='sarbacane'){unresolved.push('La compétence confirmée ne correspond pas au groupe Sarbacane : le MJ doit choisir la spécialité appropriée.');return {...unchanged,unresolved,receipt:{...receipt,missing:'skill-group-mismatch'}};}
+   if(usable&&skillHasAdvance(usable)===null){unresolved.push('Les augmentations de cette compétence ne sont pas renseignées : le MJ doit confirmer les données de fiche.');return {...unchanged,unresolved,receipt:{...receipt,missing:'skill-advances'}};}
+   const ct=characteristicScore(actor,'CT');if(ct===null){unresolved.push('Capacité de Tir absente : le MJ doit saisir la caractéristique avant ce tir.');return {...unchanged,unresolved,receipt:{...receipt,missing:'ct'}};}
+   unchanged.action.base=ct;unchanged.action.attr='CT';unchanged.action.qualities=addQuality(qualities,'dangereuse');receipt.trained=false;receipt.applied.push('blowpipe-ct-dangerous');return {...unchanged,receipt};
+  }
+  unresolved.push('Aucune augmentation dans la spécialité de tir appropriée : cette attaque est interdite.');
+  return {...unchanged,unresolved,receipt:{...receipt,missing:'ranged-training'}};
+ }
+ // Fencing with Basic is explicitly permitted, but never grants weapon qualities.
+ const chosenInMeleeFamily=chosen&&skillMatchesGroup(chosen,{kind:'melee'});
+ const chosenReferenceRow=chosen&&getReferenceCatalogue()?.skills?.find(skill=>skill.id===chosen.id);
+ const fencingWithBase=categoryName==='escrime'&&selectedSpec==='base'&&chosenInMeleeFamily&&(chosen.basic===true||chosenReferenceRow?.basic===true);
+ if(fencingWithBase){usable=chosen;}
+ const meleeAlternative=chosenInMeleeFamily&&(isMainGauche&&selectedSpec==='base'||isCavalry&&!mounted&&hands===1&&selectedSpec==='cavalerie'||isCavalry&&!mounted&&hands===2&&selectedSpec==='cavalerie'||isCavalry&&!mounted&&isCavalryHammer&&selectedSpec==='cavalerie'||isCavalry&&!mounted&&isSabre&&['cavalerie','base','escrime'].includes(selectedSpec)||isBastard&&hands===1&&selectedSpec==='deux mains');
+ if(chosen&&(!chosenInMeleeFamily||selectedSpec!==categoryKey(effectiveGroup.specialty))&&!fencingWithBase&&!meleeAlternative){unresolved.push('La compétence confirmée ne correspond pas au groupe de cette arme : le MJ doit choisir la spécialité appropriée.');return {...unchanged,unresolved,receipt:{...receipt,missing:'skill-group-mismatch'}};}
+ if(fencingWithBase){
+  const score=scoreFor(actor,chosen,context);if(score===null){unresolved.push('Le score de la compétence de groupe est indisponible : le MJ doit actualiser ou saisir la valeur de fiche.');return {...unchanged,unresolved,receipt:{...receipt,missing:'skill-score'}};}
+  receipt.trained=true;receipt.skillId=chosen.id;unchanged.action.base=score;unchanged.action.attr='CC';unchanged.action.qualities=stripBeneficialQualities(qualities);receipt.applied.push('fencing-with-basic');return {...unchanged,receipt};
+ }
+ if(usable&&advancesFor(usable,context)===null){unresolved.push('Les augmentations de cette compétence ne sont pas renseignées : le MJ doit confirmer les données de fiche.');return {...unchanged,unresolved,receipt:{...receipt,missing:'skill-advances'}};}
+ const trained=usable&&advancesFor(usable,context)===true;
+ if(trained){
+  receipt.trained=true;receipt.skillId=usable.id;
+  if(isBastard&&hands===1)unchanged.action.qualities=addQuality(addQuality(qualities,'epuisante'),'lente');
+  if(categoryName==='cavalerie'&&!mounted&&isSabre&&selectedSpec==='base'){
+   unchanged.action.qualities=qualities.map(word=>word.id==='entaille'?{...word,parameter:'2'}:word);
+   receipt.applied.push('sabre-basic-slash-2');
+  }
+  if(isMainGauche&&selectedSpec!=='parade'){
+   unchanged.action.qualities=qualities.filter(word=>word.id!=='defensive');receipt.applied.push('main-gauche-as-dagger');
+  }
+  const score=scoreFor(actor,usable,context);if(score===null){unresolved.push('Le score de la compétence de groupe est indisponible : le MJ doit actualiser ou saisir la valeur de fiche.');return {...unchanged,unresolved,receipt:{...receipt,missing:'skill-score'}};}
+  unchanged.action.base=score;unchanged.action.attr='CC';
+  return {...unchanged,receipt};
+ }
+ const cc=characteristicScore(actor,'CC');
+ if(cc===null){unresolved.push('Capacité de Combat absente : le MJ doit saisir la caractéristique avant cette attaque.');return {...unchanged,unresolved,receipt:{...receipt,missing:'cc'}};}
+ unchanged.action.base=cc;unchanged.action.attr='CC';unchanged.action.qualities=stripBeneficialQualities(qualities);receipt.trained=false;receipt.applied.push('untrained-melee-cc-without-benefits');
+ if(effectiveGroup.specialty==='Fléau')unchanged.action.qualities=addQuality(unchanged.action.qualities,'dangereuse');
+ if(isMainGauche)unchanged.action.qualities=unchanged.action.qualities.filter(word=>word.id!=='defensive');
+ if(!usable&&actor?.ficheSnapshot?.coverage?.skills!=='present'&&!actor?.ficheSkillsComplete){unresolved.push('La liste des compétences ou des augmentations de la fiche est incomplète : le MJ doit confirmer la maîtrise de cette arme.');return {...unchanged,unresolved,receipt:{...receipt,missing:'skill-coverage'}};}
+ return {...unchanged,receipt};
 }
 
 export function ammunitionCompatibility(weapon,ammunition){
