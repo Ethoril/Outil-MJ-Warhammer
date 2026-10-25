@@ -39,6 +39,7 @@ const ASSETS_TO_CACHE = [
   './js/core/creature-regeneration.js',
   './js/core/creature-heads.js',
   './js/core/creature-size.js',
+  './js/core/outnumbering.js',
   './js/core/bestiary-templates.js',
   './js/core/creature-abilities.js',
   './js/core/creature-senses.js',

@@ -17,6 +17,7 @@ import { openCampaignTimeDialog } from './v5-campaign-time-dialog.js';
 import { isMiscastConditionLocked } from '../core/v5-magic-miscasts.js';
 import { recoveryMethodsFor } from './v5-effect-dialog.js';
 import { hasMomentum, inferV5Kind } from '../core/v5-combat-rules.js';
+import { withoutOutnumberContext } from '../core/outnumbering.js';
 import { equipmentAttackContext, locationProtection } from '../core/equipment.js';
 import { d100 } from '../core/dice.js';
 import { inferActionType, previewHpLoss, ResolutionError } from '../core/resolution.js';
@@ -461,6 +462,9 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       target = groups.adversaries[0] || others[0] || (type === 'cast' ? actor : null);
     }
     if (draft.preview && !draft.preview.v5MagicKind && (draft.preview.targetId ?? draft.preview.input?.targetId ?? null) !== (target?.id ?? null)) { draft.preview = null; resetCritical(draft); }
+    // Les engagés cochés valent pour la cible où ils ont été saisis : une cible qui change sans passer par un choix les périme.
+    if (draft.outnumberTargetId && draft.outnumberTargetId !== (target?.id ?? null) && draft.v5Context) draft.v5Context = withoutOutnumberContext(draft.v5Context);
+    draft.outnumberTargetId = target?.id ?? null;
     const defense = ['attack','opposition'].includes(type) && target ? defenseChoice(target, type) : null;
     if (defense) {
       // Valeur pré-remplie pour une cible, une option et sa valeur : une autre combinaison (jet disparu,
@@ -1017,6 +1021,8 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         draft.defenseKind = null; draft.defenseSlModifier = null;
         draft.defenseAdvantages = 0; draft.defenseDisadvantages = 0; draft.defenseContext = {};
         draft.protectionContext = {};
+        // Les engagés cochés valaient pour l'ancienne cible.
+        if (draft.v5Context) draft.v5Context = withoutOutnumberContext(draft.v5Context);
         draft.magicTargetIds = patch.targetId && patch.targetId !== 'none' ? [patch.targetId] : [];
       }
       const actionChanged = 'actionKey' in patch && patch.actionKey !== draft.actionKey;
@@ -1427,7 +1433,9 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
             if ((shown ?? option.base) == null || shown === '' || !Number.isInteger(Number(shown ?? option.base))) throw userError(`Précisez le score de défense de ${target.name} avant la comparaison.`);
             input.defense = { extensions:option.extensions,attr:option.attr,roll: defenseRoll, base: (shown ?? option.base) ?? 0, mod: option.mod || 0, qualities: option.qualities || [], label: option.statLabel, v5: { ...defenseV5Input({ ...context, defense: { option } }, target.id === context.target?.id ? draft : { ...draft, defenseKind: null, defenseSlModifier: null, defenseAdvantages: 0, defenseDisadvantages: 0, defenseContext: {} }), choice: null } };
           }
-          input.v5 = { ...v5Input(context, draft), targetSize: target.id === context.target?.id ? draft.targetSize : null, choice: null };
+          // Le surnombre saisi ne vaut que pour la cible sélectionnée.
+          const base = v5Input(context, draft);
+          input.v5 = { ...base, ...(target.id === context.target?.id ? {} : { context: withoutOutnumberContext(base.context) }), targetSize: target.id === context.target?.id ? draft.targetSize : null, choice: null };
           return { targetId: target.id, name: target.name, hp: target.hp, preview: Store.previewResolution(input) };
         });
       } catch (error) {
