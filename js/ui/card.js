@@ -11,7 +11,7 @@ import { buildRegenerationBlock, readRegenerationInputs } from './regeneration-b
 import { buildPsychologyBlock, readPsychologyInputs } from './psychology-block.js';
 import { buildSlannBlock, readSlannInputs } from './slann-block.js';
 import { buildCreatureStatesBlock, readCreatureStatesInputs } from './creature-states-block.js';
-import { buildFamiliarBlock, readFamiliarInputs } from './familiar-block.js';
+import { buildFamiliarBlock, readFamiliarInputs, readFamiliarDeathInputs } from './familiar-block.js';
 
 export function initCardUI(Store, Combat) {
   const observe = (result, label = 'Modification') => Promise.resolve(result).then(value => { if (value === false || value?.ok === false) throw refusalError(value, label); return value; }).catch(error => showToast(contextMessage(`${label} impossible`, error, 'réessayez.'), 'error'));
@@ -381,6 +381,19 @@ export function initCardUI(Store, Combat) {
       const input = readFamiliarInputs(e.target.closest('.actor-familiar'));
       if (!input.familiarId) { showToast('Création de familier : choisissez le familier.', 'error'); return; }
       observe(Store.createFamiliar(id, input.familiarId, input), 'Création de familier');
+      return;
+    }
+
+    if (e.target.matches('.btn-familiar-range')) {
+      e.preventDefault();
+      observe(Store.setFamiliarRange(id, e.target.dataset.linkId, e.target.dataset.inRange !== 'true'), 'Portée du familier');
+      return;
+    }
+
+    if (e.target.matches('.btn-familiar-death')) {
+      e.preventDefault();
+      const input = readFamiliarDeathInputs(e.target.closest('.actor-familiar'));
+      observe(Store.resolveFamiliarDeath(id, e.target.dataset.familiarId, input), 'Mort du familier');
       return;
     }
 

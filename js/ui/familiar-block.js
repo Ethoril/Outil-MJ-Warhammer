@@ -41,6 +41,7 @@ export function buildFamiliarBlock(createElement, participant, participants = []
   const label = createElement('span');
   label.textContent = 'Familier :';
   block.appendChild(label);
+  let animalDeath = false;
   for (const { link, familiar } of linkedFamiliars(participant, participants)) {
     const row = createElement('span');
     row.className = 'familiar-link';
@@ -53,6 +54,37 @@ export function buildFamiliarBlock(createElement, participant, participants = []
     unlink.textContent = 'Retirer le lien';
     unlink.title = 'Retire le lien des deux côtés sans rendre le point sacrifié (Annuler la création le rend)';
     block.appendChild(unlink);
+    if (link.system !== 'animal' || !familiar) continue;
+    // Un animal n'agit (talents de compagnon, soutien) qu'à 4 yards : booléen posé par le MJ.
+    const range = createElement('button');
+    range.type = 'button';
+    range.className = 'tiny btn-familiar-range';
+    range.dataset.linkId = link.id;
+    range.dataset.inRange = link.inRange === true ? 'true' : 'false';
+    range.textContent = link.inRange === true ? 'À portée (4 yards)' : 'Hors de portée';
+    range.title = 'Bascule la portée du familier animal : hors de portée, ses talents de compagnon et son soutien sont suspendus';
+    block.appendChild(range);
+    const death = createElement('button');
+    death.type = 'button';
+    death.className = 'tiny btn-familiar-death';
+    death.dataset.linkId = link.id;
+    death.dataset.familiarId = familiar.id;
+    death.textContent = 'Mort du familier';
+    death.title = 'Test de Calme Difficile du maître ; si « Calme raté » est coché, les deux d10 saisis sont infligés en Blessures directes';
+    block.appendChild(death);
+    animalDeath = true;
+  }
+  if (animalDeath) {
+    const failed = createElement('input');
+    failed.type = 'checkbox';
+    failed.className = 'familiar-calm-failed';
+    failed.title = 'Le maître a raté le Test de Calme à la mort de son familier';
+    block.appendChild(failed);
+    const failedLabel = createElement('span');
+    failedLabel.textContent = 'Calme raté';
+    block.appendChild(failedLabel);
+    addNumber(createElement, block, 'familiar-death-d1', 'Premier d10 des dégâts', 'd10');
+    addNumber(createElement, block, 'familiar-death-d2', 'Second d10 des dégâts', 'd10');
   }
   const candidates = participants.filter(item => item.id !== participant.id && item.kind !== 'PJ' && !familiarOfOf(item) && !familiarLinksOf(item).length);
   if (!candidates.length) return block;
@@ -72,6 +104,12 @@ export function buildFamiliarBlock(createElement, participant, participants = []
   button.title = 'Lie le familier, débite le point sacrifié du maître (annulable : Annuler rend le point)';
   block.appendChild(button);
   return block;
+}
+
+/** Saisie de la mort d'un familier animal : Calme raté (case) et les deux d10 (null si vides). */
+export function readFamiliarDeathInputs(block) {
+  const d10 = selector => { const raw = block?.querySelector(selector)?.value ?? ''; return raw === '' ? null : Number(raw); };
+  return { calmFailed: block?.querySelector('.familiar-calm-failed')?.checked === true, rolls: [d10('.familiar-death-d1'), d10('.familiar-death-d2')] };
 }
 
 /** Lit la saisie du bloc ; le Vent ne vaut que pour un homoncule, l'espèce que pour un animal. */

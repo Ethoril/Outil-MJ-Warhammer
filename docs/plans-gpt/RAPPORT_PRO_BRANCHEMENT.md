@@ -18,6 +18,17 @@ Plan : `PLAN_PRO_BRANCHEMENT.md`. Choix et questions : `CHOIX_EXECUTANT_BRANCHEM
 | B9 | FAIT (Slann branché sauf palanquin, voir ci-dessous) |
 | B10 | FAIT (création de familier depuis la carte, voir ci-dessous ; question BR-02 au MJ) |
 | B10b | FAIT (Destin et Résilience importés des fiches, réponse du MJ à BR-02) |
+| B11 | FAIT (talents de compagnon, refus à l'homoncule, mort de l'animal, rappels, portée, voir ci-dessous) |
+
+## B11 — Familiers, services restants (25/10/2026)
+
+- **Branché** : `withCompanionTalents` par `buildCombatTest` (`v5-combat-rules.js`, avant `previewV5TalentTestModifiers` et `previewV5TalentSLChoices`) : les talents de compagnon d'un animal **à portée** comptent pour les Tests du maître (copie, le participant stocké n'est jamais modifié). Preuve : Avantage de Chat de gouttière sur Discrétion (Urbaine) présent à portée, absent hors de portée.
+- **Branché** : `companionTalents` (rappels du maître sur la carte : talents donnés, « déjà connu : +1 DR à ajouter à la main » car le moteur ne sait pas quand ce talent s'applique, talents sans équivalent V5) et `familiarReminders` (homoncule/animal) via `deriveReminders` ; `Store.getParticipantReminders` fournit maintenant la liste complète des participants (`allParticipants`) pour que le maître voie son animal.
+- **Branché** : `previewFamiliarCondition` dans `Store.acquireConditions` (Hémorragique, Exténué, Empoisonné, maladie refusés à un homoncule sauf `options.magical`) et `previewFamiliarHealing` dans `Store.healWounds` (refus sauf `options.source = { kind: 'spell' }`) ; refus rendu avec son message, aucune commande ajoutée à l'historique. Le chemin « Modifier » reste la main du MJ. Limite : aucun écran ne pose encore `magical`/`source` (les lancements de sorts n'utilisent pas ces deux commandes) ; un soin de sort sur un homoncule se fait donc par « Modifier ».
+- **Branché** : `planFamiliarDeath` + `familiarDeathDamage` par `Store.resolveFamiliarDeath(masterId, familiarId, { calmFailed, rolls })` (commande annulable `familiar-death`), boutons du bloc Familier de la carte (`familiar-block.js`, `card.js`) : « Mort du familier », case « Calme raté », deux d10 ; Blessures directes seulement si le Calme est raté, sinon journal seul. L'animal n'est pas retiré du combat (le MJ le retire). Mort du **maître** : rappel du familier (« subit le même sort »), rien d'automatique.
+- **Branché** : `setFamiliarRange` (existait sans écran) : bouton « À portée / Hors de portée » par animal, indispensable aux talents de compagnon.
+- **Code testé, non appelé** : `senseSharingRange` (portée du partage sensoriel, aucune action n'en dépend).
+- Test : `tests/pro-b11-familiers-services.test.js` (4 tests). Aucun nouveau module (`sw.js` inchangé). Suite : 4648 tests, seul échec « recette refuse un cwd externe » (propre au worktree).
 
 ## B10b — Destin et Résilience lus depuis les fiches (24/10/2026)
 

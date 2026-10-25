@@ -10,9 +10,16 @@ import { natureReminders } from './creature-natures.js';
 import { creatureMagicReminders } from './creature-magic.js';
 import { creatureAbilityReminders } from './creature-abilities.js';
 import { slannTraitReminders } from './slann.js';
+import { familiarReminders, companionTalents } from './familiars.js';
 
 // Un module de Trait par ligne : [clé stable, fonction participant → textes]. Ajouter ici les autres `xxxReminders`.
-const TRAIT_REMINDERS = [['size', sizeReminders], ['heads', manyHeadsReminderItems], ['regeneration', regenerationReminders], ['psychology', psychologyReminders], ['senses', senseReminders], ['movement', movementReminders], ['states', stateReminders], ['natures', natureReminders], ['magic', creatureMagicReminders], ['abilities', creatureAbilityReminders], ['slann', slannTraitReminders]];
+const TRAIT_REMINDERS = [['size', sizeReminders], ['heads', manyHeadsReminderItems], ['regeneration', regenerationReminders], ['psychology', psychologyReminders], ['senses', senseReminders], ['movement', movementReminders], ['states', stateReminders], ['natures', natureReminders], ['magic', creatureMagicReminders], ['abilities', creatureAbilityReminders], ['slann', slannTraitReminders], ['familiar', familiarReminders]];
+// Rappels du maître d'un animal à portée : talents de compagnon donnés (appliqués aux Tests) ou déjà connus (+1 DR à la main), sans équivalent V5.
+const companionReminderTexts = (person, participants) => {
+  const { granted, bonuses, reminders } = companionTalents(person, participants);
+  return [...granted.filter(row => row.talentId).map(row => `Talent de compagnon : ${row.name} (compté pour ses Tests tant que l’animal est à portée).`),
+    ...bonuses.map(row => `${row.label} : +1 DR quand ce talent s’applique, à ajouter à la main.`), ...reminders];
+};
 // Un module rend des textes (clé = rang) ou des `{ key, text }` (clé stable par sens du rappel).
 const traitReminderTexts = person => TRAIT_REMINDERS.flatMap(([name, fn]) => fn(person).map((entry, index) => (typeof entry === 'string' ? { key: `${name}-${index}`, text: entry } : { key: `${name}-${entry.key}`, text: entry.text })));
 
@@ -101,7 +108,10 @@ export function deriveReminders(snapshot = {}, transition = {}, choices = []) {
     if (!person?.id) continue;
     // Rappels dérivés des Traits (calculés à l'affichage, jamais écrits dans le participant) : permanents, donc réservés à la carte
     // et au Personnage actif (transition « participant »), jamais à « À traiter » qui ne garde que les rappels liés à un moment.
-    if (transition.type === 'participant') for (const { key, text } of traitReminderTexts(person)) candidates.push({ kind: 'participant-reminder', effectId: `${person.id}:trait-${key}`, text: `${person.name || 'Participant'} : ${text}`, mode: 'reminder' });
+    if (transition.type === 'participant') {
+      const entries = [...traitReminderTexts(person), ...companionReminderTexts(person, snapshot.allParticipants || snapshot.participants).map((text, index) => ({ key: `companion-${index}`, text }))];
+      for (const { key, text } of entries) candidates.push({ kind: 'participant-reminder', effectId: `${person.id}:trait-${key}`, text: `${person.name || 'Participant'} : ${text}`, mode: 'reminder' });
+    }
     for (const note of Array.isArray(person.extensions?.v5?.reminders) ? person.extensions.v5.reminders : []) {
       if (!note?.id || typeof note.text !== 'string') continue;
       candidates.push({ kind: 'participant-reminder', effectId: `${person.id}:${note.id}`, text: `${person.name || 'Participant'} : ${note.text}`, mode: 'reminder' });

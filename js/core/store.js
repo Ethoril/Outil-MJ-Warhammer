@@ -73,7 +73,7 @@ import { momentumAfterChange, withMomentum } from './v5-combat-rules.js';
 import { advanceGameClock, campaignDurationSeconds, createGameClock, deriveTurnPhasePlan, readCombatPosition, reconcileGameClockPosition } from './v5-game-time.js';
 import { advanceCampaignSnapshot } from './v5-campaign-time.js';
 import { proposeNewKeyword, referentialFromExtensions, setActiveReferential } from './creature-keywords.js';
-import { validateFamiliarLink, buildFamiliarLink, familiarBackLink, familiarLinksOf, planFamiliarCreation, familiarLinkLabel } from './familiars.js';
+import { validateFamiliarLink, buildFamiliarLink, familiarBackLink, familiarLinksOf, planFamiliarCreation, familiarLinkLabel, previewFamiliarCondition, previewFamiliarHealing, planFamiliarDeath, familiarDeathDamage } from './familiars.js';
 import { hasRegeneration, planRegeneration } from './creature-regeneration.js';
 import { hasManyHeads, headRegistryOf, applyHeadCritical, restoreHead, HEAD_STATES } from './creature-heads.js';
 import { planPsychology, psychologyTraits } from './creature-psychology.js';
@@ -1528,6 +1528,11 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
 
     acquireConditions(id, states, options = {}) {
       const captured = cloneValue(states), context = cloneValue(options);
+      // Un homoncule ne subit Hémorragique, Exténué, Empoisonné ou une maladie que d'une source magique (`options.magical`).
+      for (const row of normalizeEffects(captured)) {
+        const check = previewFamiliarCondition(combat.participants.get(id), row, { magical: context.magical === true });
+        if (!check.ok) return Promise.resolve({ ok: false, status: 'refused', reason: 'familiar-condition', error: new Error(check.receipt.message + ' Le MJ peut l’imposer par « Modifier ».'), message: check.receipt.message + ' Le MJ peut l’imposer par « Modifier ».', receipt: check.receipt });
+      }
       const actionId = context.resolutionId || uid();
       return commitV5Effect('acquire-conditions-v5', id, (participant, draft) => {
         const proposed = normalizeEffects(captured).map((row, index) => ({ ...row,
@@ -1663,6 +1668,9 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       return commitV5Effect('recover-condition-v5', id, (participant, draft) => recoverV5Condition(participant, condition, v5EffectContext(draft, captured)), options);
     },
     healWounds(id, amount, options = {}) {
+      // Un homoncule ne guérit que par un sort de soin (`options.source = { kind: 'spell' }`).
+      const check = previewFamiliarHealing(combat.participants.get(id), options.source || {});
+      if (!check.ok) return Promise.resolve({ ok: false, status: 'refused', reason: 'familiar-healing', error: new Error(check.receipt.message), message: check.receipt.message, receipt: check.receipt });
       return commitV5Effect('heal-wounds-v5', id, participant => healV5Wounds(participant, amount), options);
     },
 
@@ -2306,6 +2314,28 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       const result = api.executeCommand('set-familiar-range', draft => ({ ...draft, combat: { ...draft.combat, participants: (draft.combat?.participants || []).map(item => item.id === masterId
         ? withV5(item, v5 => ({ ...v5, familiarLinks: (v5.familiarLinks || []).map(row => row.id === linkId ? { ...row, inRange: inRange === true } : row) })) : item) } }));
       return typeof result?.then === 'function' ? result.then(done => ({ ...done, ok: true })) : { ...result, ok: true };
+    },
+    /**
+     * Mort d'un familier animal : le maître passe un Test de Calme (Difficile, −2 sauf elfe) que le MJ résout à la table ;
+     * sur un échec, deux d10 saisis donnent des Blessures directes (ni Bonus d'Endurance ni armure). Rien n'est appliqué sans confirmation. Annulable.
+     */
+    resolveFamiliarDeath(masterId, familiarId, options = {}) {
+      const master = combat.participants.get(masterId), familiar = combat.participants.get(familiarId);
+      const plan = planFamiliarDeath(master, familiar);
+      if (!plan.applicable) return { ok: false, reason: 'no-animal-link', message: plan.reason };
+      let damage = 0;
+      if (options.calmFailed === true) {
+        const dealt = familiarDeathDamage(options.rolls);
+        if (!dealt.ok) return { ok: false, reason: 'rolls', message: dealt.message };
+        damage = dealt.damage;
+      }
+      const result = api.executeCommand('familiar-death', draft => ({ ...draft,
+        combat: { ...draft.combat, participants: (draft.combat?.participants || []).map(item => (item.id === masterId && damage ? { ...item, hp: Math.max(0, (Number(item.hp) || 0) - damage) } : item)) },
+        log: [{ id: uid(), kind: 'effect', actorId: familiarId, targetId: masterId,
+          text: `${familiar.name} · Mort du familier : ${master.name} ${options.calmFailed === true ? `rate le ${plan.calmTest.label}, ${damage} Blessure(s) directe(s)` : `réussit le ${plan.calmTest.label}`}`,
+          detail: { kind: 'familiar-death', linkId: plan.linkId, calmModifier: plan.calmTest.modifier, calmFailed: options.calmFailed === true, damage, reminders: plan.reminders } }, ...(draft.log || [])].slice(0, 300) }));
+      const done = value => ({ ...value, ok: value?.ok !== false, damage, plan });
+      return typeof result?.then === 'function' ? result.then(done) : done(result);
     },
     /** Régénération (début de Round) : le MJ saisit le d10 ; soin et guérison d'un critique en une seule commande annulable. */
     applyRegeneration(participantId, roll, options = {}) {
@@ -3369,11 +3399,11 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
     },
     // Rappels portés par un participant (carte de combat) : indépendants de la scène active, donc aussi pour un combat monté depuis la bibliothèque.
     getParticipantReminders(participantId) {
-      const snapshot = { sceneId: activeScene?.id || 'combat', participants: Array.from(combat.participants.values()).filter(item => item?.id === participantId) };
+      const snapshot = { sceneId: activeScene?.id || 'combat', participants: Array.from(combat.participants.values()).filter(item => item?.id === participantId), allParticipants: Array.from(combat.participants.values()) };
       return pendingReminders(deriveReminders(snapshot, { id: `round-${combat.round || 0}`, type: 'participant', round: combat.round || 0 }, reminderChoices)).filter(item => item.kind === 'participant-reminder');
     },
     resolveParticipantReminder(participantId, id, decision, details = {}) {
-      const snapshot = { sceneId: activeScene?.id || 'combat', participants: Array.from(combat.participants.values()).filter(item => item?.id === participantId) };
+      const snapshot = { sceneId: activeScene?.id || 'combat', participants: Array.from(combat.participants.values()).filter(item => item?.id === participantId), allParticipants: Array.from(combat.participants.values()) };
       const transition = { id: `round-${combat.round || 0}`, type: 'participant', round: combat.round || 0 };
       const derived = deriveReminders(snapshot, transition, reminderChoices);
       const choice = resolveReminder(derived, id, decision, { text: derived.find(item => item.id === id)?.text, ...details }).find(item => item.id === id)?.choice;
