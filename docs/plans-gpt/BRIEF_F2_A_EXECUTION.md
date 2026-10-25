@@ -1,0 +1,23 @@
+# Brief d'exécution F2-A - Initiative et surprise
+
+Ne commencer qu'après livraison locale de C. Worktree `E:/Outil MJ Warhammer/tmp/gpt-phase-f2-worktree`, branche `gpt/phase-f2`. Code par Luna, vérification indépendante par une autre Luna à contexte neuf. Lire brief général, règles communes, arbitrages, plan section Exécution et les trois règles A du JSON. PDF L06 p.161 à relire (extraction ciblée disponible).
+
+## Comportements et intégration
+
+- Au début d'un combat, PNJ : d10 tiré automatiquement par l'outil + Bonus d'Initiative ; PJ : résultat d10 renseigné par le MJ, outil ajoute le Bonus. Ne pas assimiler le champ historique `initiative` à un jet : il contient généralement la caractéristique I. Conserver I et le résultat de combat distinctement. Pas de dé manquant transformé silencieusement en zéro, ni de double ajout du Bonus. PNJ : dé injecté dans tests, tiré une fois dans le flux réel, jamais à chaque rendu/reload.
+- Comparer le score de combat, puis I ; si égalité persistante, demander un Test opposé d'Initiative et permettre au gagnant de choisir l'ordre. Aucun nom/id comme résolution mécanique d'une égalité non réglée. Si plusieurs acteurs ont égalité, toutes les positions doivent être réglées de façon explicite ; préserver reproductibilité et idempotence.
+- À l'ouverture : choix « côté surpris » par le MJ, suite à son arbitrage de l'embuscade. Poser Surpris sur tout ce camp actif seulement par le service canonique des États ; pas sur le camp adverse, pas de surprise si aucun camp choisi. Surprise n'autorise pas un calcul automatique de perception/placement non demandé.
+- Vrai flux disponible au MJ à l'ouverture de rencontre et de combat libre. Une méthode helper isolée ou une API sans bouton/champs n'est pas livrable. Préserver les parcours legacy hors initialisation, les renforts, le mode manuel et les invocations. Une reprise de scène ne retire ni ne relance les initiatives déjà initialisées. Recommencer : expliciter la réinitialisation puis redemander les jets requis ; aucune relance PNJ à la simple lecture.
+- Une seule commande finale persistante/annulable pour l'initialisation (ou le lancement complet), avec garde de révision. Ne pas enregistrer un combat apparemment prêt s'il manque les jets PJ ou la résolution des égalités.
+
+## Fichiers et séquence
+
+Fichiers de production autorisés : `js/core/turn-order.js`, `js/core/store.js`, `js/core/v5-turn.js`, `js/core/encounters.js`, `js/main.js`, `js/ui/workspace-view.js`, `js/ui/combat-view.js`, `js/ui/combat-banner.js`. Pas de nouveau fichier JS sous `js/` (précache exige sw.js, interdit). `tests/f2-a-*.test.js` et `tests/f2-a-*.mjs` autorisés. Rien d'autre sans extension préalable justifiée du plan par le principal. Version, index, catalogue, sw et arbitrages intacts.
+
+1. Avant tout changement partagé, tests de caractérisation dans `tests/f2-a-characterization.test.js` : tri legacy, manuel, renforts, acteur courant, lancement/reprise et redémarrage. Les exécuter sur code intact après C, prévenir le principal et **attendre son commit séparé**.
+2. Tests nouveaux dans `tests/f2-a-initiative-surprise.test.js`, puis rouge mécanique documenté, puis code. Éviter simple échec d'import pour prétendre à TDD.
+3. Tests : trois PNJ/deux PJ dés fixés ; bornes 1 et 10 ; Bonus ajouté une fois ; manque jet PJ/I bloque ; égalité score départagée I ; égalité score et I demande opposition et choix gagnant ; scénario trois ex aequo ; camp choisi seulement reçoit Surpris ; aucun camp aucun ajout ; relire/recharger ne relance pas ; Undo/Redo restaure exactement dés, ordre et états ; manuel et renforts préservés.
+4. Acceptation : `node --test tests/f2-a-initiative-surprise.test.js tests/f2-a-characterization.test.js tests/e08-turn-order.test.js`, puis `node --test --test-concurrency=4`. TEMP/TMP = `E:/Outil MJ Warhammer/tmp/gpt-phase-f2-runtime`, logs sous `tmp/gpt-phase-f2/`. Aucun lancement de suite complète parallèle.
+5. Ajouter un parcours navigateur ciblé qui ouvre le vrai flux, saisit les dés PJ, vérifie ordre et surprise, change mode manuel et recharge. Les tests doivent utiliser l'interface réelle et constater l'état après application, pas seulement capturer le formulaire.
+
+Pas de commit de code par le sous-agent. Rendre les règles couvertes, diff, tests, choix éventuels, limites et preuves. Le principal et un vérificateur Luna indépendant doivent valider avant livraison locale. Corriger les constats par le codeur puis nouvelle vérification.

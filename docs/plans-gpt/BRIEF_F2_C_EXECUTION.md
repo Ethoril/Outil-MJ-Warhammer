@@ -18,6 +18,8 @@ Réutiliser métadonnées réelles du catalogue et des équipements. Ne pas déc
 
 Complément avant code : `tests/sw.test.js:34` impose que chaque module de `js/` soit listé dans le service worker, que les règles communes interdisent de modifier. Pour C, **ne pas créer le module neuf** : exporter les fonctions pures de maîtrise depuis `js/core/equipment.js` existant et les raccorder à la résolution. Ne pas modifier le test du service worker. Cette décision d'organisation ne change aucune règle de jeu.
 
+Extension de périmètre avant édition : `js/core/v5-talent-qualities.js` est autorisé. Ce pipeline restaure des qualités depuis l'équipement et construit les plans de talents ; il doit recevoir l'action effective et son identité improvisée avant la planification. Ne pas remplacer silencieusement les règles de fusion des munitions ni supprimer des talents indépendants de la maîtrise. Test d'intégration requis sur arme improvisée par usage à pied et talent concerné, et sur qualités de munitions.
+
 ## Séquence imposée
 
 1. Écrire uniquement `tests/f2-c-characterization.test.js` caractérisant les vrais chemins existants à risque (`resolution.js`), les actions d'armes de fiche et conjurées, la sélection confirmée et l'absence de mutation des entrées. Exécuter ces tests sur le code intact. Prévenir le principal avec résultat et attendre qu'il confirme le commit séparé avant toute édition de production.
