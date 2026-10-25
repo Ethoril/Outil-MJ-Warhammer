@@ -20,6 +20,14 @@ C-MATERIALISEES-01 et B-SOURCE-02 ci-dessous sont conservés uniquement comme hi
 
 ## Historique des choix d'exécutant et état de validation
 
+Choix d'exécutant préparés pour A/B (pas des décisions du MJ) :
+
+| ID | Source | Question | Choix | Raison | Alternative |
+|---|---|---|---|---|---|
+| A-RENFORT-01 | Brief A, insertion historique | Comment intégrer un renfort sans jet après initialisation ? | Préserver son insertion explicite existante et l'ordre résolu; aucune comparaison de son I brute au score de combat des anciens. | Empêche un mélange de grandeurs et conserve tours/quotas. | Imposer un nouveau jet aux renforts sans décision source. |
+| B-TRIP-01 | L13 p.89, conversion V4→V5 du brief | Coût de 2 Avantages dans un Élan binaire ? | 1 Élan, consommé une fois avant l'opposition Force/Athlétisme après touche; défaite sans À Terre. | Conversion prudente selon délégation du brief; aucune réserve de deux Élans n'existe. | Garder 2 Avantages V4 ou rendre l'action gratuite. |
+| B-MOUVEMENT-01 | L06 p.167, parcours workspace | Comment annuler Visée sur un mouvement spatial non observable ? | Commande explicite de mouvement déclaré et invalidation sur les actions de mouvement connues; aucune déduction depuis le rangement initiative/zone. | `moveParticipant` ne déplace pas le personnage dans l'espace. | Annuler à chaque rangement d'ordre ou prétendre suivre une position absente. |
+
 | ID | Source | Question | Choix | Raison | Alternative |
 |---|---|---|---|---|---|
 | C-SOURCE-01 | L06 p.166 et p.300, deux rendus PDF consultés ; F2_LOTS F-L06-0103 / 1030 | p.300 imprime « Improved Weapons » mais p.166 imprime « Improvised Weapons ». | Arme improvisée à pied à une main, sans modifier la transcription p.300. | p.166 confirme explicitement la règle retenue dans le plan et les questions F2 ; ce n'est pas une correction arbitraire d'extraction. | Lire isolément p.300 malgré la règle explicite p.166. |

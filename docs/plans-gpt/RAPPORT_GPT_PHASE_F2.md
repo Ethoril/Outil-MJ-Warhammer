@@ -6,6 +6,8 @@ Au dernier contrôle, main a avancé extérieurement à `8ed9099` ; par rapport 
 
 ## Périmètre et état
 
+**Reprise du 25/10 après contre-vérification Claude : C n'est pas livrable dans l'état `1034dc9`.** Le rapport `tmp/gpt-phase-f2/CONTRE_VERIFICATION_CLAUDE_F2-C.md` invalide le verdict favorable précédent : six régressions bloquantes et décisions MJ nouvelles, dont l'extension aux armes conjurées. Les résultats historiques ci-dessous prouvent seulement les vérifications alors effectuées. Correction en cours selon `BRIEF_F2_C_CORRECTIONS_CLAUDE.md`, décisions MJ recopiées et commitées `bbe726b`; caractérisations Store avant correction `5e60fdd`. Nouvelle revue Luna requise avant A puis B. La demande directe du MJ autorise cet enchaînement et impose l'arrêt à la fin de T1.
+
 Le brief F2 autorise les commits locaux et impose un arrêt à la fin de chaque tranche. La tranche autorisée en premier est T1 : C, A, B. Aucune fusion ni publication n'est autorisée. Les 194 règles du JSON restent la liste de référence ; le complément d'exécution du plan décrit les clauses déjà couvertes et les clauses restantes sans changer les décisions du MJ.
 
 | Étape / lot | État | Preuve |

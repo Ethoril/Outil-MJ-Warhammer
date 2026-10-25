@@ -1,5 +1,9 @@
 # Succession GPT - Phase F2
 
+## Instruction courante du MJ — reprise après Claude
+
+Le rapport ignoré `tmp/gpt-phase-f2/CONTRE_VERIFICATION_CLAUDE_F2-C.md` a invalidé le verdict de livraison C ci-dessous. Historique conservé, **ne pas le prendre pour une validation actuelle**. Les décisions MJ sont recopiées en tête de `CHOIX_EXECUTANT_PHASE_F2.md` (`bbe726b`) et les caractérisations Store précédant les corrections sont commitées `5e60fdd`. Corriger selon `BRIEF_F2_C_CORRECTIONS_CLAUDE.md`, revérifier avec une Luna indépendante, puis A et B selon leurs briefs, et arrêter à la fin de T1. L'exclusion des armes conjurées est refusée par MJ et doit disparaître du code, sauf score imposé par le sort. Ne pas demander une approbation intermédiaire déjà fournie par cette instruction directe. La contre-vérification Claude de T1 reste requise avant T2; aucune publication.
+
 ## Reprise obligatoire
 
 - Travailler dans `E:/Outil MJ Warhammer/tmp/gpt-phase-f2-worktree`, branche `gpt/phase-f2`, jamais dans main. Base `d737c5a` (3.26.0). Le checkout était neuf et propre au début ; aucun héritage sale.

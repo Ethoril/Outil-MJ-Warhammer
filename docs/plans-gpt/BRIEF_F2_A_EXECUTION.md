@@ -21,3 +21,11 @@ Fichiers de production autorisés : `js/core/turn-order.js`, `js/core/store.js`,
 5. Ajouter un parcours navigateur ciblé qui ouvre le vrai flux, saisit les dés PJ, vérifie ordre et surprise, change mode manuel et recharge. Les tests doivent utiliser l'interface réelle et constater l'état après application, pas seulement capturer le formulaire.
 
 Pas de commit de code par le sous-agent. Rendre les règles couvertes, diff, tests, choix éventuels, limites et preuves. Le principal et un vérificateur Luna indépendant doivent valider avant livraison locale. Corriger les constats par le codeur puis nouvelle vérification.
+
+## Précisions après préparation d'architecture du 25/10
+
+Le corpus PDF est hors dépôt : suivre `docs/divin/DIVIN_CORPUS_LIVRES.json`, notamment `E:/Projet Warhammer Ennemi Intérieur/tmp/catalogue-bibliotheque/pdfs/Livre de base V5 EN v2.pdf`. Son absence parmi les fichiers Git ne signifie pas qu'il est indisponible. Relire la page 161 réelle.
+
+Conserver le score initial résolu comme ordre stable. Un renfort sans jet de combat ne doit jamais être comparé par son I brute (par exemple 40) aux scores de combat (4–15) des anciens participants. Préserver la règle existante d'insertion explicite et les tours déjà passés; pas de jet nouveau inventé pour un renfort. Tester ordre automatique et manuel, `effectiveOrder`, Round suivant et reload, sans tour supplémentaire d'une invocation liée. Ne pas recalculer les anciens jets lors d'une insertion ni au changement de Round.
+
+Le dialogue doit capturer les dés PNJ une seule fois et garder ces valeurs dans son modèle de préparation; les aperçus et rendus restent purs. Une garde `baseRevision` vérifie la commande finale. Les trois routes réelles (lancement de rencontre, combat libre, recommencer) doivent être raccordées explicitement, avec annulation sans mutation; « reprendre » conserve intégralement l'existant. Une égalité à trois acteurs requiert une résolution complète explicite, avec provenance des oppositions et choix du gagnant, pas une permutation libre qui contourne le Test demandé.
