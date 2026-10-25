@@ -17,6 +17,14 @@ Plan : `PLAN_PRO_BRANCHEMENT.md`. Choix et questions : `CHOIX_EXECUTANT_BRANCHEM
 | B8c | FAIT (corrections de B3-B6, réponses du MJ du 24/10 : BR-10, BR-11, BR-12) |
 | B9 | FAIT (Slann branché sauf palanquin, voir ci-dessous) |
 | B10 | FAIT (création de familier depuis la carte, voir ci-dessous ; question BR-02 au MJ) |
+| B10b | FAIT (Destin et Résilience importés des fiches, réponse du MJ à BR-02) |
+
+## B10b — Destin et Résilience lus depuis les fiches (24/10/2026)
+
+- **Branché** : `ficheSnapshot` (`fiche-sync.js`) lit `destin` et `resilience` de la fiche (champs présents dans la fixture `fiche-caelel.json`) dans `durables.fate` et `durables.resilience` (hors `resources`, qui reste la Chance seule) ; `importFicheDurables` les écrit dans `extensions.v5.fate` (canonique, le miroir `fate` n’est pas écrit à l’import) et `extensions.v5.resilience` du profil et de chaque copie (participants, scènes, personnages persistants) par `planProfileSync` et `applyFicheSync`, donc par la synchronisation de l’onglet fiches. Écrit si l’outil n’a pas la valeur ou si la fiche a changé depuis la dernière synchronisation ; une relecture inchangée ne rend pas un point débité.
+- Limite : la fiche n’a qu’un `destin` (pas de courant distinct du maximum) ; le débit de l’outil n’est pas réécrit côté fiche (phase H, noté dans `VARIABLES_PERSISTANTES_PJ.md`). Fiche sans l’un des champs : saisie à la main conservée (test).
+- Une assertion existante ajustée : `tests/e26-fiche-sync.test.js` attend maintenant `v5: { fate: 1, resilience: 1 }` dans les extensions du profil (la fixture porte `destin` et `resilience`). `fiche-sync.js` : la copie de scène garde la forme de la scène (sans miroir `fate`), pour qu’une resynchronisation inchangée reste sans effet. Suite : 4644 tests, seul échec « recette refuse un cwd externe » (propre au worktree).
+- Test : `tests/pro-b10b-destin-resilience-fiches.test.js` (fiche Destin 3, Résilience 2 → création en Résilience débite 1 → Annuler le rend ; resynchronisation ; fiche sans Résilience).
 
 ## B10 — Création de familier (24/10/2026)
 
