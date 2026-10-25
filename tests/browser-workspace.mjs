@@ -89,6 +89,9 @@ async function main() {
         getCombat: () => combat,
         getDiceLines: () => diceLines,
         previewResolution: input => previewResolution({ ...input, target: input.targetId ? combat.participants.get(input.targetId) : null }),
+        // Aucun état divin simulé : même réponse que le vrai Store pour un acteur absent de la rencontre.
+        resolveDivineAccess: () => ({ allowed: false, mode: 'denied', grantId: null, reason: 'Acteur de prière absent de la rencontre.', needsInput: [] }),
+        getDivineAccessGrants: () => [],
         canUndo: () => false,
         undo: () => false
       };
@@ -316,19 +319,16 @@ async function main() {
     const result = page.locator('.workspace-result');
     await expect(result).toContainText('Attaque : Réussite · DR +2');
     await expect(result).toContainText('Défense : Échec · DR −4');
-    await expect(result).toContainText('DR net +6 · touché');
-    // 23 n'est pas un double, mais la cible est à −2 PV : Acharnement, donc critique. Sans sa localisation, pas de dégâts.
-    await expect(result).toContainText('Acharnement : cible à −2 PV, gravité +10');
-    await expect(result).toContainText('Dégâts : lancez d’abord la localisation du critique.');
-    await expect(page.getByRole('button', { name: 'Appliquer les dégâts à Combattant 2' })).toBeDisabled();
-    await expect(page.getByRole('button', { name: 'Appliquer les dégâts à Combattant 2' })).toHaveAttribute('title', 'Lancez d’abord la localisation du critique');
-    await page.locator('[data-roll-input="critical-location"]').fill('32');
-    await page.locator('[data-roll-input="critical-location"]').press('Enter');
-    await expect(result).toContainText('32 → bras droit');
+    await expect(result).toContainText('Maladresse du défenseur');
+    await expect(result).toContainText('DR net +6');
+    await expect(result).toContainText('Touché · Bras Droit');
+    // V5 : plus d'Acharnement ni de PV sous zéro. Une cible restée à −2 PV (ancienne sauvegarde)
+    // bloque l'application tant que ses PV ne sont pas migrés à 0 ; le dépassement part dans un
+    // critique d'excédent (+10 par Blessure en trop) dont la localisation vient de l'attaque.
+    await expect(result).toContainText('PV historiques négatifs : migration explicite à 0 requise avant une action V5.');
+    await expect(result).not.toContainText('Acharnement');
     await expect(result).toContainText('8 arme + 6 DR − 3 BE − 1 PA = 10');
     await expect(targetSheet.locator('.silhouette-zone.is-hit')).toHaveAttribute('data-zone', 'arm-right');
-    await expect(targetSheet).toContainText('→ −12');
-    await expect(result).toContainText('PV −2 → −12');
     await expect(page.getByRole('button', { name: 'Appliquer 10 dégâts à Combattant 2' })).toBeDisabled();
     await page.getByRole('button', { name: 'Annuler le résultat calculé' }).click();
     await expect(result).toHaveCount(0);
@@ -337,9 +337,9 @@ async function main() {
     await page.evaluate(() => { window.workspaceTestData.diceLines[0].qualities = ['Inoffensive']; });
     await rerender();
     await page.locator('[data-roll-input="defense"]').press('Enter');
-    await page.locator('[data-roll-input="critical-location"]').fill('32');
-    await page.locator('[data-roll-input="critical-location"]').press('Enter');
-    await expect(result.locator('.workspace-formula-notes').filter({ hasText: 'Inoffensive' })).toHaveText('Inoffensive : PA ×2, pas de minimum');
+    // V5 : le doublement des PA se lit dans la formule des dégâts et Inoffensive demande une seconde gravité au critique d'excédent.
+    await expect(result).toContainText('8 arme + 6 DR − 3 BE − 2 PA (×2) = 9');
+    await expect(result.locator('.workspace-critical').getByText('Inoffensive : deuxième gravité (retenir le minimum)')).toBeVisible();
     await page.evaluate(() => { delete window.workspaceTestData.diceLines[0].qualities; });
     await page.getByRole('button', { name: 'Annuler le résultat calculé' }).click();
 
@@ -347,7 +347,7 @@ async function main() {
     await page.getByRole('button', { name: 'Comparer les cibles' }).click();
     const comparison = page.locator('.workspace-comparison-item');
     await expect(comparison).toHaveCount(11);
-    await expect(comparison.first()).toContainText('Combattant 2 : touché · coup critique (localisation à lancer)');
+    await expect(comparison.first()).toContainText('Combattant 2 : touché · 10 dégâts · PV −2 → 0');
     await expect(comparison.nth(1)).toContainText('Combattant 4 : touché · 10 dégâts · PV 10 → 0');
     await expect(page.locator('.workspace-comparison')).toContainText('Combattant 5 : ');
     await page.getByRole('button', { name: 'Choisir Combattant 4' }).click();
@@ -369,13 +369,13 @@ async function main() {
     const defenseSelect = page.getByRole('combobox', { name: 'Défense de Combattant 2 : caractéristique ou jet' });
     await expect(defenseSelect.locator('option:checked')).toHaveText('Esquive · 38');
     await expect(defenseSelect.locator('optgroup[label="Jets enregistrés"] option')).toHaveText(['Épée rouillée · 30', 'Esquive · 38']);
-    await expect(defenseSelect.locator('optgroup[label="Caractéristiques"] option')).toHaveText(['CC · 41', 'Ag · 33']);
+    await expect(defenseSelect.locator('optgroup[label="Caractéristiques"] option')).toHaveText(['CC · 41', 'Ag · 33', 'F · 30']);
     await expect(page.locator('.workspace-defense-base')).toHaveValue('38');
     await expect(page.locator('.workspace-defense .workspace-roll-label').last()).toHaveText('Jet de défense (Esquive 38)');
     await page.locator('[data-roll-input="defense"]').fill('88');
     await page.locator('[data-roll-input="defense"]').press('Enter');
     await expect(result).toContainText('Défense : Échec · DR −5');
-    await expect(result).toContainText('DR net +7 · touché');
+    await expect(result).toContainText('DR net +7');
     await page.getByRole('button', { name: 'Comparer les cibles' }).click();
     await expect(page.locator('.workspace-comparison-item').first()).toContainText('Combattant 2 : touché');
     await defenseSelect.selectOption('CC');
@@ -419,12 +419,14 @@ async function main() {
     await attack.fill('22');
     await attack.press('Enter');
     const critical = page.locator('.workspace-critical').first();
-    await expect(result).toContainText('Coup critique');
+    await expect(result).toContainText('Critique du jet');
     await expect(result).not.toContainText('Acharnement');
     await expect(critical.locator('.workspace-roll-label').first()).toHaveText('Localisation du critique (nouveau d100)');
     await expect(page.locator('[data-roll-input="critical-effect"]')).toHaveCount(0);
-    await expect(result).toContainText('Dégâts : lancez d’abord la localisation du critique.');
-    await expect(targetSheet.locator('.silhouette-zone.is-hit')).toHaveCount(0);
+    // V5 : la localisation de l'attaque (22 → Bras Gauche) fixe déjà les dégâts ; seul le critique du jet attend la sienne.
+    await expect(result).toContainText('Combattant 4 : 6 Blessures proposées · PV 3 → 0');
+    await expect(page.locator('.workspace-resolution [data-focus-key="apply"]')).toBeDisabled();
+    await expect(page.locator('.workspace-resolution [data-focus-key="apply"]')).toHaveAttribute('title', 'Lancez d’abord la localisation du critique');
     // Un jet invalide s'affiche sous son champ sans effacer le bloc.
     const criticalLocation = page.locator('[data-roll-input="critical-location"]');
     await criticalLocation.fill('abc');
@@ -438,35 +440,38 @@ async function main() {
     await expect(criticalLocation).toBeFocused();
     await criticalLocation.pressSequentially('7');
     await criticalLocation.press('Enter');
-    await expect(result).toContainText('57 → corps');
-    await expect(targetSheet.locator('.silhouette-zone.is-hit')).toHaveAttribute('data-zone', 'body');
-    await expect(result).toContainText('8 arme + 2 DR − 3 BE − 2 PA = 5');
-    await expect(result).toContainText('PV 3 → −2');
-    await expect(result).toContainText('Second critique — PV sous zéro · bras gauche (jet inversé 22)');
-    await expect(page.locator('.workspace-critical.is-second [data-roll-input="critical-second"]')).toBeVisible();
-    // Gravité 43 (corps) : +2 Blessures, rappels ; les deux cases sont cochées par défaut.
-    await page.locator('[data-roll-input="critical-effect"]').fill('43');
+    await expect(result).toContainText('57 → Corps');
+    // La zone touchée et la protection viennent de la localisation de l'attaque (22 → Bras Gauche), pas du critique.
+    await expect(targetSheet.locator('.silhouette-zone.is-hit')).toHaveAttribute('data-zone', 'arm-left');
+    await expect(result).toContainText('8 arme + 2 DR − 3 BE − 1 PA = 6');
+    await expect(result).toContainText('PV 3 → 0');
+    await expect(result).toContainText('Critique d’excédent : 3 Blessures au-delà de 0');
+    await expect(result).toContainText('22 → Bras Gauche');
+    await expect(page.locator('[data-roll-input="critical-second"]')).toBeVisible();
+    // Gravité 55 (corps) : +2 Blessures, rappels ; la case est cochée par défaut.
+    await page.locator('[data-roll-input="critical-effect"]').fill('55');
     await page.locator('[data-roll-input="critical-effect"]').press('Enter');
-    await expect(result).toContainText('43 → « Clavicule tordue » : +2 Blessures, un bras inutilisable 1d10 rounds.');
-    await expect(result).toContainText('À arbitrer : un bras inutilisable 1d10 rounds');
+    await expect(result).toContainText('55 → « Clavicule tordue » : +2 Blessures. Tirer un bras ; lâcher l’objet ; bras inutilisable 1d10 Rounds.');
+    await expect(result).toContainText('À traiter : Tirer un bras ; lâcher l’objet ; bras inutilisable 1d10 Rounds.');
     const wounds = page.getByRole('checkbox', { name: '+2 Blessures' });
     await expect(wounds).toBeChecked();
-    await expect(result).toContainText('PV 3 → −4');
-    await expect(page.getByRole('button', { name: 'Appliquer 7 dégâts à Combattant 4' })).toBeVisible();
+    // Les Blessures du critique s'ajoutent aux dégâts proposés (6 + 2) ; les PV affichés restent plancher à 0.
+    await expect(result).toContainText('Combattant 4 : 8 Blessures proposées · PV 3 → 0');
     await wounds.uncheck();
     await expect(wounds).toBeFocused();
     await expect(wounds).not.toBeChecked();
-    await expect(result).toContainText('PV 3 → −2');
-    await expect(page.locator('[data-roll-input="critical-effect"]')).toHaveValue('43');
+    await expect(result).toContainText('Combattant 4 : 6 Blessures proposées · PV 3 → 0');
+    await expect(page.locator('[data-roll-input="critical-effect"]')).toHaveValue('55');
     await wounds.check();
-    // Gravité du second critique (Bras Gauche, 60) : +3 Blessures en plus, coche indépendante.
+    await expect(result).toContainText('Combattant 4 : 8 Blessures proposées · PV 3 → 0');
+    // Gravité du critique d'excédent (Bras Gauche, +30 : 60 + 30 = 90) : ses Blessures en plus, coche indépendante.
     await page.locator('[data-roll-input="critical-second"]').fill('60');
     await page.locator('[data-roll-input="critical-second"]').press('Enter');
-    await expect(result).toContainText('60 → « Ligament rompu »');
+    await expect(result).toContainText('60 + 30 = 90 → « Coude fracassé » : +3 Blessures. Lâcher l’objet ; fracture majeure.');
     await expect(page.getByRole('checkbox', { name: '+3 Blessures' })).toBeChecked();
-    await expect(result).toContainText('PV 3 → −7');
+    await expect(result).toContainText('Combattant 4 : 11 Blessures proposées · PV 3 → 0');
     await page.getByRole('checkbox', { name: '+3 Blessures' }).uncheck();
-    await expect(result).toContainText('PV 3 → −4');
+    await expect(result).toContainText('Combattant 4 : 8 Blessures proposées · PV 3 → 0');
     // Un changement de jet d'attaque remet les jets de critique à zéro.
     await attack.fill('33');
     await expect(criticalLocation).toHaveCount(0);
