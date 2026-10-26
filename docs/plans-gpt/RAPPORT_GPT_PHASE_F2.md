@@ -1,5 +1,33 @@
 # Rapport GPT - Phase F2
 
+## Reprises T1 BIS — 27/10/2026 : corrections terminées, arrêt avant T2
+
+Source : `tmp/gpt-phase-f2/CONTRE_VERIFICATION_CLAUDE_T1_BIS.md`. Les trois réponses du MJ du 26/10 après-midi sont recopiées en tête de `CHOIX_EXECUTANT_PHASE_F2.md` (commit `f85e113`). La priorité de spécialité exacte est confirmée ; Maniement de deux armes exige toujours une première attaque enregistrée dans l'outil, conformément au choix du MJ. La phrase « voies de Talents conservées » a été corrigée.
+
+| Point | Correction et contrôle |
+|---|---|
+| 1 | Visée reconnaît aussi le libellé normalisé dans `action.note` ; le tir avec une arme déclarée par nom conserve +1 DR. Test après passage au Tour suivant. |
+| 2 | La préparation d'initiative et le lancement d'une rencontre tout au banc sont autorisés ; seul le démarrage du combat exige un actif. Parcours réel de lancement vérifié en navigateur. |
+| 3 | Les catégories d'Hast des suppléments sont reconnues à deux mains, dont Hallebarde et Lance longue Haut Elfe. |
+| 4 | Jet, Fronde, Fouet, Lasso et explosifs du catalogue sont utilisables à une main sauf mention deux mains ; les autres armes à portée conservent leur garde. |
+| 5 | `applyCombatInitialization` revérifie les actifs avant et dans la transaction de démarrage, y compris face à un aperçu altéré. |
+| 6 | Arme aethyrique ancienne sans clé ou arme reliée à un contrat de conjuration sans profil : groupe à confirmer par le MJ. Le contrat permet de reconnaître l'arme même renommée ; le libellé aethyrique sert au raccord historique sans contrat. Le groupe n'est jamais déduit du nom. Dent et griffe reste hors du contrôle d'arme conjurée. |
+| 7 | Refus de dissipation : motif `error` réutilisé et fallback lisible ; badge I/ordre conservé après édition ou annulation ; seule l'infobulle Initiative de `index.html` change, par exception autorisée pour ce point. |
+| Décision ajout actif | Commande explicite « + Actif » depuis les profils : après initialisation au Round 0, préparation sans mutation, d10 PNJ automatique capturé une fois, d10 PJ saisi, BI et égalités par le mécanisme existant, puis insertion atomique annulable. L'ajout habituel au banc reste disponible. Les APIs d'ajout actif sans initiative refusent ce cas et orientent vers la préparation ; `previewCombatParticipantAddition` accepte un profil ou un participant direct. Avant initialisation et à partir du Round 1, insertion active/renfort conservée. |
+
+### Validation finale T1 BIS
+
+Correctifs de production et tests commités : `a2e520f`. Revue ciblée indépendante : verdict conforme, aucun bug bloquant trouvé sur les chemins couverts.
+
+- Caractérisations/régressions Store initiales séparées : `89addd5`, avant code de production. Huit tests nouveaux au total dans `tests/f2-t1-bis-regressions.test.js`. La fixture Visée de ce nouveau fichier a été complétée pour exercer le tir au Tour suivant ; aucun test de caractérisation historique F2 ni test hérité Node n'a été modifié.
+- Revue indépendante Luna ciblée : `tmp/gpt-phase-f2/REVUE_T1_BIS_LUNA.md` ; tests ciblés **29/29**, lecture des routes Store/UI et sondes sur arme renommée liée au contrat et dissipation réellement refusée après Défensive.
+- Suite complète principale : `node --test --test-concurrency=4`, **4 825/4 825**, zéro échec, annulé ou ignoré, **126 887,6867 ms** ; `tmp/gpt-phase-f2/t1-bis-full-verified.log`. Reçu F0 préexistant utilisé uniquement pour le prérequis E0, aucune recette de fin de phase F2 revendiquée.
+- Six parcours navigateur principaux verts : `f2-a-initiative-surprise`, `f2-b-combat-actions`, `f2-b-two-weapons`, `f2-c-ui`, `f2-c-workspace`, `f2-c-state` ; journaux `tmp/gpt-phase-f2/t1-bis-<runner>-browser.log`. A couvre aussi le nouvel ajout actif et le lancement tout au banc, le badge après validation/annulation. La première passe CUI a échoué sur une fixture nouvelle sans action, avant le rendu du résultat ; fixture complétée, puis les trois parcours C relancés et verts. Aucun code de production n'a changé après le gel de la suite complète.
+- Adaptation de test navigateur existant : `f2-c-ui.browser.mjs` attend maintenant le sélecteur de groupe pour l'ancienne arme aethyrique sans clé, en accord avec le point 6 ; ajout d'un cas naturel distinct et du fallback dissipation. `f2-a-initiative-surprise.browser.mjs` reçoit uniquement des contrôles supplémentaires.
+- Frontières : texte initial du plan identique, dix fichiers protégés intacts et `index.html` contrôlé séparément (seule infobulle autorisée), LF, aucun nouveau module runtime, `git diff --check` propre. Catalogue, version et précache intacts.
+
+**Arrêt demandé après cette reprise. T2 n'est pas commencé.** Pas de fusion ni publication. T2 demeure conditionné à la mise à jour du catalogue par la feuille et le site, puis à l'instruction du MJ ; ne pas modifier `reference-snapshot.json` à la main. Les sections suivantes sont l'historique des validations antérieures.
+
 ## Reprise T1 après contre-vérification Claude — 26/10/2026
 
 La contre-vérification `tmp/gpt-phase-f2/CONTRE_VERIFICATION_CLAUDE_T1.md` sur `02b203b` remplace le verdict de clôture précédent : elle demande les corrections 1 à 20 avant T2. Le MJ autorise ces corrections, leur revue indépendante et une nouvelle suite complète, puis impose l'arrêt avant T2. Les trois nouvelles décisions du MJ sont recopiées en tête de `CHOIX_EXECUTANT_PHASE_F2.md` ; elles remplacent les choix historiques incompatibles, notamment A-EGALITES-01.

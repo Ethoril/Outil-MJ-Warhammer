@@ -1,5 +1,13 @@
 # Succession GPT — Phase F2
 
+## Fin de reprise T1 BIS — 27/10/2026 : arrêt demandé
+
+Instruction du MJ exécutée : réponses du MJ de `CONTRE_VERIFICATION_CLAUDE_T1_BIS.md` recopiées en tête des choix ; points 1 à 7 corrigés, ajout direct actif avant le Round 1 avec préparation/jet/BI/ordre raccordé ; revue Luna indépendante ciblée et validation complète. Voir le bloc T1 BIS en tête du rapport pour les changements, les adaptations de tests et les preuves.
+
+Validation principale : **4 825/4 825 tests Node**, zéro échec/ignoré (`tmp/gpt-phase-f2/t1-bis-full-verified.log`), et **six parcours navigateur T1 verts** (`t1-bis-<runner>-browser.log`). Revue : `tmp/gpt-phase-f2/REVUE_T1_BIS_LUNA.md`. Caractérisations initiales : `89addd5` ; décisions MJ/cadrage : `f85e113` ; code/tests : `a2e520f`. Verdict de revue ciblée conforme, aucun bug bloquant trouvé sur les chemins couverts. Le nouvel ajout « + Actif » est explicite ; « + Au combat » garde l'ajout au banc. Les APIs sans jet refusent un ajout actif post-tirage Round 0, la préparation dédiée fournit la voie de résolution atomique.
+
+**Chantier arrêté ici. Ne pas commencer T2, fusionner ni publier.** Le MJ met d'abord les armes et armures de base en V5 dans sa feuille et le site, puis l'outil relira le catalogue. Ne pas retoucher `reference-snapshot.json` à la main. Les états et prochaines étapes plus bas sont historiques ; la présente instruction de fin de reprise prime.
+
 ## Reprise prioritaire — contre-vérification T1 du 26/10/2026
 
 Le verdict historique de clôture ci-dessous a été invalidé par les points 1 à 20 de `tmp/gpt-phase-f2/CONTRE_VERIFICATION_CLAUDE_T1.md` (arbre `02b203b`). L'instruction directe du MJ autorise leur correction, la recopie des décisions en tête de `CHOIX_EXECUTANT_PHASE_F2.md`, une revue indépendante et la suite complète, puis un arrêt avant T2. Les trois décisions nouvelles priment sur les choix historiques : ordre MJ direct à partir de trois ex aequo ; spécialité exacte d'arme par défaut ; jet d'initiative pour les activations avant le Round 1. Le tournoi A-EGALITES-01 ci-dessous est donc historique et remplacé.
