@@ -18,6 +18,10 @@ export function initCardUI(Store, Combat) {
   function getP(id) {
     return Store.getCombat().participants.get(id);
   }
+  function initiativeBadgeText(participant, initiative=participant?.initiative) {
+    const combatInitiative=participant?.extensions?.v5?.combatInitiative;
+    return combatInitiative?.initialized?`I ${initiative} · ordre ${combatInitiative.score}`:`I ${initiative}`;
+  }
 
   function updateHpBadgeElement(el, hp, maxHp) {
     if (!el) return;
@@ -198,7 +202,7 @@ export function initCardUI(Store, Combat) {
     }
     if ('initiative' in changes) {
       const initBadge = card.querySelector('.init-badge');
-      if (initBadge) initBadge.textContent = `I ${changes.initiative}`;
+      if (initBadge) initBadge.textContent = initiativeBadgeText(getP(id),changes.initiative);
     }
     if ('states' in changes) {
       const statesDiv = card.querySelector('.states');
@@ -472,13 +476,13 @@ export function initCardUI(Store, Combat) {
           return;
         }
       }
-      badgeEl.textContent = `I ${p.initiative}`;
+      badgeEl.textContent = initiativeBadgeText(getP(p.id)||p);
     }
 
     function cancel() {
       if (settled) return;
       settled = true;
-      badgeEl.textContent = `I ${p.initiative}`;
+      badgeEl.textContent = initiativeBadgeText(getP(p.id)||p);
     }
 
     input.addEventListener('keydown', (ev) => {

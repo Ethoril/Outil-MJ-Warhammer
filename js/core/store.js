@@ -1528,6 +1528,8 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
 
     addParticipant(p) {
       if (!canMutate()) return false;
+      if(p?.zone==='active'&&Number(combat.round)===0&&stateExtensions?.v5?.combatInitiativeInitialized===true&&!p.extensions?.v5?.combatInitiative?.initialized)
+        throw Object.assign(new Error('Un ajout direct actif avant le Round 1 doit recevoir son jet d’Initiative dans le dialogue de préparation.'),{code:'COMBAT_INIT_REQUIRED',userFacing:true});
       if (persistence) {
         const captured = JSON.parse(JSON.stringify(p));
         return api.executeCommand('add-participant', draft => {
@@ -1819,6 +1821,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
 
     getEffectiveOrder() { return effectiveCombatOrder(); },
     getOrderMode() { return orderMode; },
+    isCombatInitiativeInitialized() { return stateExtensions?.v5?.combatInitiativeInitialized===true; },
     previewEncounterLaunch(idOrEncounter) {
       const encounter=typeof idOrEncounter==='string'?encounters.find(item=>item.id===idOrEncounter):idOrEncounter;
       if(!encounter)throw new Error('Rencontre introuvable');
@@ -1844,7 +1847,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       const scenePreview=captured.scenePreview?cloneValue(captured.scenePreview):null,staging=captured.staging?cloneValue(captured.staging):null;
       const participants=Array.isArray(captured.participants)?captured.participants:scenePreview?.scene?.participants||staging?.scene?.participants||staging?.participants||currentEnvelope().combat?.participants||[];
       const plan=prepareCombatInitiative(participants,{...staging,...captured,tieOrders:captured.tieOrders??staging?.tieOrders,opposedRolls:captured.opposedRolls??staging?.opposedRolls,tieChoices:captured.tieChoices??staging?.tieChoices});
-      if(!participants.some(row=>row?.zone==='active')){
+      if(captured.startCombat===true&&!participants.some(row=>row?.zone==='active')){
         plan.needsInput.push({field:'activeCombatants',label:'Au moins un combattant actif est requis pour initialiser le combat.'});
         plan.ready=false;plan.status='requires-input';
       }
@@ -1857,7 +1860,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
     previewCombatParticipantActivation(id) {
       const participant=(currentEnvelope().combat?.participants||[]).find(row=>row.id===id);
       if(!participant)throw new Error('Combattant introuvable');
-      if(Number(combat.round)!==0||stateExtensions?.v5?.combatInitiativeInitialized!==true||participant.zone==='active'||participant.extensions?.v5?.combatInitiative?.initialized)return null;
+      if(Number(combat.round)!==0||stateExtensions?.v5?.combatInitiativeInitialized!==true||participant.extensions?.v5?.combatInitiative?.initialized)return null;
       const participants=(currentEnvelope().combat?.participants||[]).map(row=>row.id===id?{...row,zone:'active'}:cloneValue(row));
       const tieOrders={},opposedRolls={},tieChoices={};
       for(const group of stateExtensions?.v5?.combatInitiativeResolution?.tieGroups||[]){
@@ -1873,11 +1876,36 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       }
       return {kind:'activate-pre-round',participantId:id,baseRevision:localRevision,participants,tieOrders,opposedRolls,tieChoices};
     },
+    previewCombatParticipantAddition(participantOrProfileId) {
+      if(Number(combat.round)!==0||stateExtensions?.v5?.combatInitiativeInitialized!==true)return null;
+      const current=currentEnvelope(),profiles=new Map((current.reserve||[]).map(row=>[row.id,row]));
+      let participant,profile=null;
+      if(typeof participantOrProfileId==='string'){
+        profile=profiles.get(participantOrProfileId);if(!profile)throw new Error('Profil introuvable');
+        const names=new Set((current.combat?.participants||[]).map(row=>row.name));
+        participant=participantFromProfile(profile,{name:uniqueName(profile.name,names),zone:'active'});
+      }else{
+        participant=cloneValue(participantOrProfileId||{});
+        if(!participant.id)throw new TypeError('Le participant doit avoir un identifiant.');
+        participant.zone='active';
+      }
+      if((current.combat?.participants||[]).some(row=>row.id===participant.id))throw new Error('Ce participant est déjà dans le combat.');
+      const participants=[...(current.combat?.participants||[]).map(cloneValue),participant],tieOrders={},opposedRolls={},tieChoices={};
+      for(const group of stateExtensions?.v5?.combatInitiativeResolution?.tieGroups||[]){
+        const key=(group.participantIds||[]).join('|');
+        if(group.bracketOrder?.length)tieOrders[key]=[...group.bracketOrder];
+        if(group.chosenOrder?.length)tieChoices[key]=[...group.chosenOrder];
+        for(const match of group.matches||[]){const matchId=`${key}:${match.initiatorId}:${match.opponentId}`;opposedRolls[matchId]={initiatorRoll:match.initiatorRoll,opponentRoll:match.opponentRoll,...(match.initiatorOptionId?{initiatorChoice:match.initiatorOptionId}:{}),...(match.opponentOptionId?{opponentChoice:match.opponentOptionId}:{}),...(match.initiatorConditionPenaltyMode?{initiatorConditionPenaltyMode:match.initiatorConditionPenaltyMode}:{}),...(match.opponentConditionPenaltyMode?{opponentConditionPenaltyMode:match.opponentConditionPenaltyMode}:{})};}
+      }
+      return {kind:'add-active-participant-pre-round',participant,profileId:profile?.id||participant.profileId||null,
+        participantDiceLines:profile?diceLinesFromProfile(profile,participant.id):[],baseRevision:localRevision,participants,tieOrders,opposedRolls,tieChoices};
+    },
     applyCombatInitialization(preview = {}) {
       const captured=cloneValue(preview||{}),expected=captured.baseRevision;
       if(!Number.isSafeInteger(expected)||expected!==localRevision)return {ok:false,status:'stale',requiresPreview:true};
       if(captured.ready!==true)return {ok:false,status:'requires-input',needsInput:cloneValue(captured.needsInput||[])};
       const current=currentEnvelope(),scenePreview=captured.scenePreview||null,staging=captured.staging||null,currentParticipants=scenePreview?.scene?.participants||staging?.scene?.participants||staging?.participants||current.combat?.participants||[],activeIds=currentParticipants.filter(row=>row.zone==='active').map(row=>row.id);
+      if(captured.startCombat===true&&!activeIds.length)return {ok:false,status:'requires-input',needsInput:[{field:'activeCombatants',label:'Au moins un combattant actif est requis pour démarrer le combat.'}]};
       if(!scenePreview&&JSON.stringify(activeIds)!==JSON.stringify(captured.participantIds||[]))return {ok:false,status:'stale',requiresPreview:true};
       let plan=prepareCombatInitiative(currentParticipants,captured.request||{});
       if(!plan.ready)return {ok:false,status:'requires-input',needsInput:plan.needsInput};
@@ -1885,6 +1913,10 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         if(draft.localRevision!==expected)throw Object.assign(new Error('Le combat a changé depuis la préparation.'),{code:'COMBAT_INIT_STALE'});
         let sourceScene=scenePreview?.scene||staging?.scene||null;
         let sourceParticipants=sourceScene?.participants||staging?.participants||draft.combat?.participants||[];
+        if(staging?.kind==='add-active-participant-pre-round'){
+          if((draft.combat?.participants||[]).some(row=>row.id===staging.participant?.id)
+            ||staging.profileId&&!(draft.reserve||[]).some(row=>row.id===staging.profileId))throw Object.assign(new Error('Le participant à ajouter a changé depuis la préparation.'),{code:'COMBAT_INIT_STALE'});
+        }
         if(staging?.kind==='launch'||staging?.kind==='restart-scene'){
           if(draft.localRevision!==expected)throw Object.assign(new Error('Le combat a changé depuis la préparation.'),{code:'COMBAT_INIT_STALE'});
           const encounter=(draft.encounters||[]).find(item=>item.id===staging.encounterId);
@@ -1900,6 +1932,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         }
         if(staging?.kind==='restart-free')sourceParticipants=(draft.combat?.participants||[]).map(item=>withMomentum({...item,hp:item.maxHp??item.hp,states:[],extensions:{...(item.extensions||{}),v5:{...(item.extensions?.v5||{}),combatInitiative:undefined}}},false));
         const ids=sourceParticipants.filter(row=>row.zone==='active').map(row=>row.id);
+        if(captured.startCombat===true&&!ids.length)throw Object.assign(new Error('Au moins un combattant actif est requis pour démarrer le combat.'),{code:'COMBAT_INIT_INPUT',needsInput:[{field:'activeCombatants',label:'Au moins un combattant actif est requis pour démarrer le combat.'}]});
         if(!scenePreview&&JSON.stringify(ids)!==JSON.stringify(captured.participantIds||[]))throw Object.assign(new Error('Les combattants actifs ont changé depuis la préparation.'),{code:'COMBAT_INIT_STALE'});
         if(scenePreview&&!(draft.encounters||[]).some(item=>item.id===scenePreview.scene.encounterId))throw Object.assign(new Error('La rencontre a changé depuis la préparation.'),{code:'COMBAT_INIT_STALE'});
         plan=prepareCombatInitiative(sourceParticipants,captured.request||{});
@@ -1947,6 +1980,12 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         if(staging?.kind==='activate-pre-round'){
           const scene=draft.activeScene?{...draft.activeScene,participants:nextParticipants,order,extensions:{...(draft.activeScene.extensions||{}),v5:{...(draft.activeScene.extensions?.v5||{}),combatInitiativeResolution:resolution}}}:draft.activeScene;
           return {...draft,extensions,activeScene:scene,combat:{...draft.combat,participants:nextParticipants,order,orderMode:ORDER_MODES.AUTOMATIC}};
+        }
+        if(staging?.kind==='add-active-participant-pre-round'){
+          const logEntry={id:uid(),ts:Date.now(),kind:'management',text:`${staging.participant.name} ajouté directement actif avec Initiative avant le Round 1.`};
+          const scene=draft.activeScene?{...draft.activeScene,participants:nextParticipants,order,extensions:{...(draft.activeScene.extensions||{}),v5:{...(draft.activeScene.extensions?.v5||{}),combatInitiativeResolution:resolution}}}:draft.activeScene;
+          return {...draft,extensions,activeScene:scene,combat:{...draft.combat,participants:nextParticipants,order,orderMode:ORDER_MODES.AUTOMATIC},
+            diceLines:[...(draft.diceLines||[]),...(staging.participantDiceLines||[])],log:[logEntry,...(draft.log||[])].slice(0,300)};
         }
         const firstActorId=order[0]||null,round=captured.startCombat===true?1:Number(draft.combat?.round)||0;
         const startedLog=captured.startCombat===true&&firstActorId?[{id:uid(),kind:'management',actorId:firstActorId,actorName:nextParticipants.find(row=>row.id===firstActorId)?.name,text:`Combat démarré. Round 1. Tour: ${nextParticipants.find(row=>row.id===firstActorId)?.name}`},...log]:log;
@@ -2179,6 +2218,8 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       const selectedIds = (Array.isArray(profileIds) ? profileIds : [profileIds]).filter(id => reserve.has(id));
       if (!selectedIds.length) throw new Error('Aucun profil à ajouter');
       const targetZone = zone === 'active' ? 'active' : 'bench';
+      if(targetZone==='active'&&Number(combat.round)===0&&stateExtensions?.v5?.combatInitiativeInitialized===true)
+        throw Object.assign(new Error('Un profil ajouté directement actif avant le Round 1 doit recevoir son jet d’Initiative dans le dialogue de préparation.'),{code:'COMBAT_INIT_REQUIRED',userFacing:true});
       return api.executeCommand('add-profiles-to-combat', draft => {
         const profiles = new Map((draft.reserve || []).map(profile => [profile.id, profile]));
         const participants = [...(draft.combat?.participants || [])];
@@ -2908,7 +2949,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       if(ordinaryIntent&&!freeAttackCandidate){const block=ordinaryActionAfterCombatActionBlock(snapshot,actorForAction?.id);if(block)return {...block,baseRevision:localRevision,input:structuredClone(input)};}
       const combatAction=combatActionState(snapshot).byActorId?.[actorForAction?.id],clockNow=v5StoreActionClock(snapshot),activeCombatAction=combatAction&&combatAction.encounterId===clockNow.encounterId&&(combatAction.kind==='aim'||combatAction.turnId===clockNow.turnId)?combatAction:null;
       if(input.v5?.context)delete input.v5.context.aimedTargetId;
-      if(activeCombatAction?.kind==='aim'&&input.v5?.kind==='ranged'&&input.targetId===activeCombatAction.targetId&&(activeCombatAction.weaponId?input.action?.extensions?.fiche?.equipmentId===activeCombatAction.weaponId:String(input.action?.name||input.action?.nom||'')===activeCombatAction.weaponName)){input.v5={...input.v5,context:{...(input.v5.context||{}),aimedTargetId:activeCombatAction.targetId}};}
+      if(activeCombatAction?.kind==='aim'&&input.v5?.kind==='ranged'&&input.targetId===activeCombatAction.targetId&&(activeCombatAction.weaponId?input.action?.extensions?.fiche?.equipmentId===activeCombatAction.weaponId:String(input.action?.name||input.action?.nom||input.action?.note||'')===activeCombatAction.weaponName)){input.v5={...input.v5,context:{...(input.v5.context||{}),aimedTargetId:activeCombatAction.targetId}};}
       const movement=combatActionState(snapshot).movementByActorId?.[actorForAction?.id];if(movement&&movement.turnId===clockNow.turnId&&movement.encounterId===clockNow.encounterId&&input.v5?.kind==='ranged')input.v5={...input.v5,context:{...(input.v5.context||{}),movedBeforeRangedAttack:true}};
       const defenseId=input.targetId||input.defense?.actorId,defensive=combatActionState(snapshot).byActorId?.[defenseId];
       if(defensive?.kind==='defensive'&&defensive.encounterId===clockNow.encounterId){const skillId=input.defense?.extensions?.fiche?.skillId||input.defense?.v5?.context?.skillId;if(skillId===defensive.skillId){input.defense={...input.defense,v5:{...(input.defense.v5||{}),context:{...(input.defense.v5?.context||{}),combatDefensiveActionBonus:2}}};}}

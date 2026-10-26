@@ -388,7 +388,7 @@ async function awaitStore(operation, label = 'Opération locale') {
 function openCombatInitiativeDialog({ staging = null, startCombat = false, title = 'Préparer l’initiative' } = {}) {
   const participants = staging?.scene?.participants || staging?.participants || Store.listParticipants().filter(row => row.zone === 'active');
   const active = participants.filter(row => row.zone === 'active');
-  if (!active.length) { showToast('Aucun combattant actif à initialiser.', 'info'); return Promise.resolve({ status: 'cancelled' }); }
+  if (startCombat && !active.length) { showToast('Aucun combattant actif à initialiser.', 'info'); return Promise.resolve({ status: 'cancelled' }); }
   const state = { diceById: {}, combatReflexesById: {}, characteristicById: {}, tieOrders: { ...(staging?.tieOrders||{}) }, opposedRolls: { ...(staging?.opposedRolls||{}) }, tieChoices: { ...(staging?.tieChoices||{}) }, surprisedCamp: '', preview: null };
   for (const actor of active) {
     const pendingReflexPreparation=actor.extensions?.v5?.combatReflexesPreparation;
@@ -1515,6 +1515,22 @@ const workspaceView = DOM.panels.workspace && qs('#workspace-root') ? initWorksp
         await awaitStore(Store.addProfilesToCombat([id]), 'Ajout au combat');
         showToast(`${Store.getProfile(id)?.name || 'Profil'} ajouté en attente`, 'success');
       } catch (error) { showToast(contextMessage('Profil non ajouté au combat', error, 'réessayez.'), 'error'); }
+    },
+    addProfileToActiveCombat: async id => {
+      try {
+        const profileName=Store.getProfile(id)?.name||'Profil';
+        if(Store.getCombat().round===0&&Store.isCombatInitiativeInitialized?.()){
+          const staging=requireStoreApi('previewCombatParticipantAddition')(id);
+          const initialized=await openCombatInitiativeDialog({staging,title:`Initiative · Ajout actif de ${profileName}`});
+          if(initialized?.status==='cancelled')return false;
+          if(initialized?.status!=='applied')throw new Error(initialized?.error||initialized?.reason||'Ajout actif non enregistré.');
+          showToast(`${profileName} ajouté actif avec Initiative`, 'success');
+          return true;
+        }
+        await awaitStore(Store.addProfilesToCombat([id],{zone:'active'}),'Ajout actif au combat');
+        showToast(`${profileName} ajouté actif`, 'success');
+        return true;
+      } catch (error) { showToast(contextMessage('Profil non ajouté actif', error, 'réessayez.'), 'error'); return false; }
     },
     applyResolution: async preview => {
       const result = await awaitStore(requireStoreApi('applyResolution')(preview), 'Résolution');

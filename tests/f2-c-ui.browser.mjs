@@ -43,7 +43,9 @@ try{
  assert.ok(!cannonOptions.some(text=>/^Arc(?:\s|$)/i.test(text)),'le sélecteur ne propose pas Arc pour le canon à poudre');
  const legacyConjured={id:'legacy-conjured',note:'Arme aethyrique ancienne',type:'attack',attr:'CC',base:50,damage:4,qualities:[{id:'magique'}],extensions:{v5:{kind:'melee',materialized:true}}};
  await render({weapon:null,action:legacyConjured});
- assert.equal(await page.getByLabel('Groupe d’arme à confirmer par le MJ').count(),0,'materialized sans clé ni profil ne transforme pas une attaque naturelle en arme');
+ assert.equal(await page.getByLabel('Groupe d’arme à confirmer par le MJ').count(),1,'une arme aethyrique matérialisée sans clé demande son groupe au MJ');
+ await render({weapon:null,action:{...legacyConjured,id:'natural-attack',note:'Dent et griffe',extensions:{v5:{kind:'melee',materialized:true}}}});
+ assert.equal(await page.getByLabel('Groupe d’arme à confirmer par le MJ').count(),0,'les attaques naturelles sans nom d’arme aethyrique restent hors du contrôle de groupe');
  await render({weapon:{...ambiguous,id:'ascii',name:'Epee batarde (2M)',category:'Deux-Mains'},action:{...action,id:'ascii-action',extensions:{fiche:{bindingVersion:1,equipmentId:'ascii',requiresLink:true}}}});
  assert.match(await page.locator('.workspace-muted').allTextContents().then(rows=>rows.join(' ')),/réglage durable/,'l’aperçu indique que les mains se règlent sur le participant');
  await render({weapon:ambiguous,action,draft:{preview:{actionType:'attack',success:true,sl:0,input:{actor:{skills:[],equipment:[]},action:{extensions:{fiche:{equipmentId:ambiguous.id}}}},weaponSkillReceipt:{trained:true,group:'Base',skillId:'base',applied:['fencing-with-basic']}}}});
@@ -58,5 +60,7 @@ try{
  }
  await render({weapon:{...ambiguous,id:'one-hand',name:'Épée bâtarde',category:'Deux-Mains'},action:{...action,extensions:{fiche:{bindingVersion:1,equipmentId:'one-hand'}}}});
  assert.match((await page.locator('.workspace-muted').allTextContents()).join(' '),/Épée bâtarde : 1 main/);
+ const dispelLine=await page.evaluate(()=>{const action={id:'dispel-fixture',note:'Dissiper',type:'skill'};const panel=window.renderResolutionPanel({draft:{preview:{v5MagicKind:'dispel',allowed:false}},actor:{id:'mj',name:'MJ',skills:[],equipment:[],states:[]},participants:[],actions:[action],actionKey:action.id,type:'dispel',target:null,groups:{adversaries:[],allies:[]},defense:{options:[]},canCalculate:false,canApply:false,handlers:window.handlers});document.body.replaceChildren(panel);return panel.querySelector('.workspace-field-error')?.textContent||'';});
+ assert.match(dispelLine,/Dissipation impossible : Conditions de dissipation non remplies\./,'un refus de dissipation sans motif ne laisse pas une ligne rouge vide');
  console.log('F2-C UI T1: sélecteur de correction des liens, Base explicite, attaques naturelles sans groupe et bâtarde une main vérifiés.');
 }finally{await browser.close();await new Promise(done=>server.close(done));}

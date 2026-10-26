@@ -106,8 +106,10 @@ export function weaponHandsForParticipant(item, actor=null, {action=null, contex
  if(!known||known.kind!=='weapon')return null;
  const folded=value=>String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
  const category=folded(known.category),name=folded(known.name),keywords=new Set((known.keywords||[]).map(row=>folded(typeof row==='string'?row:row?.id)));
- if(category==='deux-mains'||category==='hast'||/\(\s*2\s*m\s*\)/i.test(known.name||''))return 2;
+ if(category==='deux-mains'||/hast/.test(category)||/\(\s*2\s*m\s*\)/i.test(known.name||''))return 2;
  if(keywords.has('pistolet')||/\bpistolet\b/.test(name))return 1;
+ if(['lancer','fronde','fouet','entraves','explosif','explosifs'].some(value=>category.includes(value))
+   ||/couteau de lancer|fronde|fouet|lasso|bombe|explosif/i.test(name))return 1;
  if(String(known.range||'').trim())return null;
  return 1;
 }
@@ -224,7 +226,8 @@ export function applyWeaponSkillRules(actor, action, { weapon = null, context = 
  const conjuredGroup=conjured?.group||CONJURED_WEAPON_GROUPS[key];
  const generatedProfile=conjured?.profile||action?.extensions?.v5?.conjuredWeaponProfile;
  const materializedGroup=conjuredGroup||generatedProfile?.trainingGroup||generatedProfile?.category||null;
- const isMaterialized=Boolean(conjured?.key||conjured?.profile);
+ const legacyAethyric=conjured?.materialized===true&&/aethyrique/i.test(String(action?.note||action?.name||''));
+ const isMaterialized=Boolean(conjured?.key||conjured?.profile||conjured?.spellContract?.effects?.conjureWeapon===true||legacyAethyric);
  const equipment=weapon||action?.extensions?.equipment||(isMaterialized?{id:`conjured:${key||'unknown'}`,kind:'weapon',name:generatedProfile?.name||action.note||key||'Arme conjurée',category:materializedGroup||'',range:'',keywords:(action.qualities||[]).map(row=>typeof row==='string'?{id:row}:row)}:null);
  if(!['attack','attaque'].includes(String(action?.type||'').toLowerCase())||!equipment)return unchanged;
  const itemKind=equipment.kind;

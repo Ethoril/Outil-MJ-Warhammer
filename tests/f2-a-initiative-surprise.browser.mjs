@@ -306,6 +306,9 @@ try {
     await Store.addParticipant({ id: 'f2a-pre-bench', name: 'Renfort avant Round 1', kind: 'PNJ', camp: 'ennemi', zone: 'bench', hp: 10, maxHp: 10, initiative: 30, caracs: { I: 30 } });
     await Store.applyCombatInitialization(Store.previewCombatInitialization({ diceById: { 'f2a-pre-active': 5 } }));
   });
+  const directAddition=await page.evaluate(async()=>{const {Store}=await import('/Outil-MJ-Warhammer/js/main.js');try{await Store.addParticipant({id:'f2a-direct-after-roll',name:'Ajout actif direct',kind:'PNJ',camp:'ennemi',zone:'active',hp:10,maxHp:10,initiative:35,caracs:{I:35}});return 'accepted';}catch(error){return error.code||error.message;}});
+  assert.equal(directAddition,'COMBAT_INIT_REQUIRED','un ajout actif après le tirage doit passer par une saisie d’Initiative');
+  assert.equal(await page.evaluate(async()=>{const {Store}=await import('/Outil-MJ-Warhammer/js/main.js');return Store.listParticipants().some(row=>row.id==='f2a-direct-after-roll');}),false,'le refus API ne laisse pas un combattant non initialisé dans la piste');
   await page.locator('#tab-combat').click();
   await page.locator('#workspace-play [aria-label="Faire entrer Renfort avant Round 1"]').click();
   const activationDialog=page.locator('dialog.tool-sheet');await activationDialog.waitFor({state:'visible'});
@@ -364,6 +367,33 @@ try {
   const npcReflexApplied = await page.evaluate(async () => { const { Store } = await import('/Outil-MJ-Warhammer/js/main.js'); const person = Store.listParticipants()[0]; return { initiative: person.initiative, meta: person.extensions.v5.combatInitiative }; });
   assert.equal(npcReflexApplied.initiative, 43); assert.deepEqual(npcReflexApplied.meta.dice, [3, 9]); assert.equal(npcReflexApplied.meta.choice, 'second'); assert.equal(npcReflexApplied.meta.score, 13);
   await page.evaluate(() => { Math.random = window.__f2ReflexRandom; delete window.__f2ReflexRandom; });
+
+  // A reserve profile added from the live UI after the initial draw opens one atomic Round-0 initiative dialog.
+  await page.evaluate(async()=>{const {Store}=await import('/Outil-MJ-Warhammer/js/main.js');await Store.resetCombat();await Store.addParticipant({id:'f2a-round0-active',name:'Actif Round 0',kind:'PNJ',camp:'ennemi',zone:'active',initiative:40,hp:10,maxHp:10,caracs:{I:40}});await Store.applyCombatInitialization(Store.previewCombatInitialization({diceById:{'f2a-round0-active':5}}));await Store.addProfile({id:'f2a-direct-profile',name:'Ajout direct',kind:'PNJ',initiative:35,hp:10,caracs:{I:35}});});
+  await page.locator('#tab-combat').click();
+  await page.locator('#workspace-side-tab-profiles').click();
+  await page.locator('#workspace-play [aria-label="Ajouter Ajout direct actif au combat"]').click();
+  const directDialog=page.locator('dialog.tool-sheet');await directDialog.waitFor({state:'visible'});
+  const directDie=Number(await directDialog.locator('input[name^="die:"]').last().inputValue());assert.ok(directDie>=1&&directDie<=10);
+  await directDialog.getByRole('button',{name:'Confirmer et appliquer'}).click();
+  const directApplied=await page.evaluate(async()=>{const {Store}=await import('/Outil-MJ-Warhammer/js/main.js');return Store.listParticipants().find(row=>row.profileId==='f2a-direct-profile');});
+  assert.equal(directApplied.zone,'active');assert.equal(directApplied.extensions.v5.combatInitiative.die,directDie);
+  const activeBadge=page.locator('.actor-card[data-id="f2a-round0-active"] .init-badge');
+  const beforeBadge=await activeBadge.innerText(),combatScore=beforeBadge.match(/ordre (\d+)/)?.[1];assert.ok(combatScore);
+  await activeBadge.evaluate(el=>el.click());await activeBadge.locator('input').evaluate(input=>{input.value='41';input.dispatchEvent(new KeyboardEvent('keydown',{key:'Enter',bubbles:true,cancelable:true}));});
+  await page.waitForFunction(({selector,score})=>{const text=document.querySelector(selector)?.textContent||'';return text.includes('I 41')&&text.includes(`ordre ${score}`);},{selector:'.actor-card[data-id="f2a-round0-active"] .init-badge',score:combatScore});
+  await activeBadge.evaluate(el=>el.click());await activeBadge.locator('input').evaluate(input=>{input.value='99';input.dispatchEvent(new KeyboardEvent('keydown',{key:'Escape',bubbles:true,cancelable:true}));});
+  assert.match(await activeBadge.innerText(),new RegExp(`I 41 · ordre ${combatScore}`),'édition annulée garde le badge du score de combat');
+
+  // An encounter whose entire composition is on the bench still opens and commits the encounter launch route.
+  await page.evaluate(async()=>{const {Store}=await import('/Outil-MJ-Warhammer/js/main.js');if(Store.getActiveScene())await Store.suspendActiveScene();await Store.resetCombat();await Store.saveEncounter({id:'f2a-all-bench',title:'Rencontre tout au banc',entries:[{id:'f2a-all-bench-entry',profileId:'f2a-direct-profile',quantity:1,camp:'ennemi',zone:'bench'}]});});
+  await page.locator('#tab-prepare').click();
+  await page.locator('#workspace-prepare [data-workspace-action="launch-encounter"][data-encounter-id="f2a-all-bench"]').click();
+  const benchDialog=page.locator('dialog.tool-sheet');await benchDialog.waitFor({state:'visible'});
+  assert.equal(await benchDialog.locator('input[name^="die:"]').count(),0,'tout le banc ne demande aucun dé actif');
+  await benchDialog.getByRole('button',{name:'Confirmer et appliquer'}).click();
+  const allBench=await page.evaluate(async()=>{const {Store}=await import('/Outil-MJ-Warhammer/js/main.js');return Store.getActiveScene();});
+  assert.equal(allBench.title,'Rencontre tout au banc');assert.equal(allBench.participants[0].zone,'bench');
   assert.deepEqual(errors, []);
   await context.close();
 } finally { await browser?.close(); await new Promise(done => server.close(done)); }

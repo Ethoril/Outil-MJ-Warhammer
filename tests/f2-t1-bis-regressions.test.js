@@ -1,8 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createStore } from '../js/core/store.js';
+import { createCombatEngine } from '../js/core/combat.js';
 import { getReferenceCatalogue } from '../js/core/reference-catalog.js';
-import { weaponHandsForParticipant } from '../js/core/equipment.js';
+import { applyWeaponSkillRules, weaponHandsForParticipant } from '../js/core/equipment.js';
 
 const clone = value => structuredClone(value);
 function persistence() {
@@ -19,13 +20,15 @@ async function setup(participants) {
 }
 
 test('T1 BIS 1 — Visée déclarée par nom est reconnue après normalisation de l’action', async () => {
-  const { store } = await setup([person('archer', { kind: 'PJ', camp: 'pj' }), person('target')]);
+  const saved=persistence(),store=createStore({persistence:saved,storage:null});await store.ready;
+  const initial=base([person('archer', { kind: 'PJ', camp: 'pj' }), person('target')]);
+  initial.combat.round=1;initial.combat.currentActorId='archer';initial.extensions.v5.combatScopeId='aim-scope';
+  await store.loadFromJSON(initial);
   await store.applyV5CombatAction(store.previewV5CombatAction({ actorId: 'archer', kind: 'aim', targetId: 'target', weaponName: 'Arc', rangedWeaponConfirmed: true, rangedWeaponHeldConfirmed: true }));
-  const actor = person('archer', { kind: 'PJ', camp: 'pj' });
+  const engine=createCombatEngine(store);await engine.nextTurn();await engine.nextTurn();
   const shot = store.previewResolution({ resolutionId: 'aim-by-name', actorId: 'archer', targetId: 'target', action: { type: 'attack', name: 'Arc', note: 'Arc', attr: 'CT', base: 50, damage: 4 }, roll: 20, v5: { kind: 'ranged', choice: 'keep' } });
-  assert.equal(shot.ready, true, JSON.stringify(shot.unresolved));
+  assert.equal(shot.ready, true, JSON.stringify(shot.unresolved||shot));
   assert.equal(shot.test.details.modifiers.find(row => row.id === 'aim:target')?.amount, 1);
-  assert.equal(actor.name, 'archer');
 });
 
 test('T1 BIS 2/5 — préparation de rencontre tout au banc permise, démarrage refusé et Store revérifie', async () => {
@@ -62,4 +65,62 @@ test('T1 BIS 7 — l’initialisation défensive Store refuse un combat tout au 
   const result = await store.applyCombatInitialization({ ...plan, startCombat: true });
   assert.equal(result.status, 'requires-input');
   assert.equal(store.getCombat().round, 0);
+});
+
+test('T1 BIS 6 — arme aethyrique matérialisée sans clé demande son groupe, attaque naturelle reste hors contrôle', () => {
+  const actor=person('mage');
+  const ethereal={id:'ethereal',type:'attack',note:'Arme aethyrique',attr:'CC',base:50,qualities:[],extensions:{v5:{materialized:true}}};
+  const unresolved=applyWeaponSkillRules(actor,ethereal);
+  assert.ok(unresolved.unresolved.some(text=>/groupe d’arme manquant/i.test(text)));
+  assert.equal(unresolved.receipt.missing,'group');
+  const natural=applyWeaponSkillRules(actor,{...ethereal,id:'natural',note:'Dent et griffe'});
+  assert.deepEqual(natural.unresolved,[]);
+});
+
+test('T1 BIS A — ajout direct actif refusé sans jet; activation avant Round 1 reçoit son jet et rejoint l’ordre', async () => {
+  const { store } = await setup([person('first')]);
+  const initial=store.previewCombatInitialization({diceById:{first:4}});
+  assert.equal(initial.ready,true,JSON.stringify(initial.needsInput));
+  await store.applyCombatInitialization(initial);
+  assert.throws(()=>store.addParticipant(person('direct',{initiative:35,caracs:{I:35}})),error=>error.code==='COMBAT_INIT_REQUIRED');
+  assert.equal(store.listParticipants().some(row=>row.id==='direct'),false,'un ajout actif direct ne se glisse pas sans jet');
+  await store.addParticipant(person('reinforcement',{initiative:35,caracs:{I:35},zone:'bench'}));
+  const staging=store.previewCombatParticipantActivation('reinforcement');
+  assert.ok(staging,'l’entrée en jeu avant le Round 1 ouvre la saisie d’initiative');
+  const plan=store.previewCombatInitialization({staging,diceById:{first:4,reinforcement:8}});
+  assert.equal(plan.ready,true,JSON.stringify(plan.needsInput));
+  const applied=await store.applyCombatInitialization(plan);
+  assert.equal(applied.status,'applied');
+  const added=store.listParticipants().find(row=>row.id==='reinforcement');
+  assert.equal(added.extensions.v5.combatInitiative.die,8);
+  assert.equal(added.extensions.v5.combatInitiative.score,11);
+  assert.ok(store.getCombat().order.includes('reinforcement'));
+});
+
+test('T1 BIS A — addProfilesToCombat ne place pas un profil actif sans jet après initialisation', async () => {
+  const { store } = await setup([person('first')]);
+  await store.applyCombatInitialization(store.previewCombatInitialization({diceById:{first:4}}));
+  await store.addProfile({id:'profile',name:'Nouvel ennemi',kind:'PNJ',initiative:30,caracs:{I:30},hp:10});
+  assert.throws(()=>store.addProfilesToCombat(['profile'],{zone:'active'}),error=>error.code==='COMBAT_INIT_REQUIRED');
+  assert.equal(store.listParticipants().some(row=>row.profileId==='profile'),false);
+  const staging=store.previewCombatParticipantAddition('profile');
+  assert.ok(staging);
+  const plan=store.previewCombatInitialization({staging,diceById:{[staging.participant.id]:7}});
+  assert.equal(plan.ready,true,JSON.stringify(plan.needsInput));
+  assert.equal(store.listParticipants().some(row=>row.profileId==='profile'),false,'l’aperçu ne crée pas le participant avant confirmation');
+  assert.equal((await store.applyCombatInitialization(plan)).status,'applied');
+  const added=store.listParticipants().find(row=>row.profileId==='profile');
+  assert.equal(added.zone,'active');assert.equal(added.extensions.v5.combatInitiative.die,7);
+});
+
+test('T1 BIS A — PJ ajouté actif avant le Round 1 doit saisir son d10 dans l’aperçu', async () => {
+  const { store }=await setup([person('first')]);
+  await store.applyCombatInitialization(store.previewCombatInitialization({diceById:{first:4}}));
+  const staging=store.previewCombatParticipantAddition(person('new-pj',{kind:'PJ',camp:'pj',initiative:35,caracs:{I:35}}));
+  const missing=store.previewCombatInitialization({staging});
+  assert.equal(missing.ready,false);assert.ok(missing.needsInput.some(row=>row.participantId==='new-pj'&&row.field==='die'));
+  const ready=store.previewCombatInitialization({staging,diceById:{'new-pj':6}});
+  assert.equal(ready.ready,true,JSON.stringify(ready.needsInput));
+  assert.equal(ready.participants.find(row=>row.id==='first').extensions.v5.combatInitiative.die,4);
+  assert.equal(ready.participants.find(row=>row.id==='new-pj').extensions.v5.combatInitiative.die,6);
 });

@@ -390,7 +390,8 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     applyResolution: typeof actions.applyResolution === 'function' ? actions.applyResolution : null,
     declareCombatAction: typeof actions.declareCombatAction === 'function' ? actions.declareCombatAction : null,
     declareCombatMovement: typeof actions.declareCombatMovement === 'function' ? actions.declareCombatMovement : null,
-    addProfileToCombat: typeof actions.addProfileToCombat === 'function' ? actions.addProfileToCombat : null
+    addProfileToCombat: typeof actions.addProfileToCombat === 'function' ? actions.addProfileToCombat : null,
+    addProfileToActiveCombat: typeof actions.addProfileToActiveCombat === 'function' ? actions.addProfileToActiveCombat : null
   };
 
   const divinePanel=createDivinePanel({Store,refresh:()=>render()});
@@ -1662,7 +1663,11 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       add.dataset.profileId = profile.id;
       add.disabled = !callbacks.addProfileToCombat;
       if (!callbacks.addProfileToCombat) add.title = 'Action indisponible';
-      item.append(text, add);
+      const addActive=button('+ Actif', 'workspace-secondary', { 'aria-label': `Ajouter ${profile.name} actif au combat` });
+      addActive.dataset.workspaceAction='add-profile-active-to-combat';addActive.dataset.profileId=profile.id;
+      addActive.disabled=!callbacks.addProfileToActiveCombat;
+      if(!callbacks.addProfileToActiveCombat)addActive.title='Action indisponible';
+      item.append(text, add, addActive);
       list.appendChild(item);
     });
   }
@@ -1909,6 +1914,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       }
       case 'enter-participant': callbacks.enterParticipant?.(participantId); break;
       case 'add-profile-to-combat': callbacks.addProfileToCombat?.(target.dataset.profileId); break;
+      case 'add-profile-active-to-combat': callbacks.addProfileToActiveCombat?.(target.dataset.profileId); break;
       case 'open-state-form':
         state.stateForm = state.stateForm?.participantId === participantId
           ? null

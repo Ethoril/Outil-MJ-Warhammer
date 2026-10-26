@@ -752,7 +752,8 @@ function renderV5MagicResult(preview, target, draft, handlers) {
 
   if(preview.error)result.appendChild(node('p','workspace-result-line',preview.error));
   if (preview.v5MagicKind === 'dispel') {
-    result.appendChild(node('p', preview.allowed === false ? 'workspace-result-line workspace-field-error' : 'workspace-result-line', preview.reason ? `Dissipation impossible : ${preview.reason}` : preview.summary));
+    const dispelReason=preview.reason||preview.error;
+    result.appendChild(node('p', preview.allowed === false ? 'workspace-result-line workspace-field-error' : 'workspace-result-line', preview.allowed===false?`Dissipation impossible : ${dispelReason||'Conditions de dissipation non remplies.'}`:dispelReason?`Dissipation impossible : ${dispelReason}`:preview.summary||'Dissipation prête.'));
     if (preview.attemptFailed) result.appendChild(node('p', 'workspace-result-line workspace-field-error', 'Total négatif : la tentative est échouée ; cocher « Recommencer la tentative » pour repartir de zéro DR.'));
     return result;
   }
@@ -1255,7 +1256,7 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
 
     if(action.extensions?.fiche?.requiresLink) section.appendChild(node('p','workspace-field-error','Compétence à choisir dans « Mettre à jour les PJ » avant de lancer cette action.'));
     const conjured=conjuredWeaponMetadata(actor,action);
-    const materialized=Boolean(conjured?.key||conjured?.profile);
+    const materialized=Boolean(conjured?.key||conjured?.profile||conjured?.spellContract?.effects?.conjureWeapon===true||conjured?.materialized===true&&/aethyrique/i.test(String(action.note||action.name||'')));
     const conjuredProfile=conjured?.profile||action.extensions?.v5?.conjuredWeaponProfile;
     const conjuredGroup=conjured?.group;
     const weapon = action.extensions?.equipment || actor?.equipment?.find(row => row?.id === action.extensions?.fiche?.equipmentId)
