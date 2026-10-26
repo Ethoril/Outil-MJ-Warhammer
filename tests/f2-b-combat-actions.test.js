@@ -5,10 +5,13 @@ import { createCombatEngine } from '../js/core/combat.js';
 import { previewResolution } from '../js/core/resolution.js';
 import { getDivineContract, getAllDivineContracts } from '../js/core/v5-divine-store.js';
 import { buildExpiry } from '../js/ui/v5-divine-form-model.js';
+import { v5StoreActionClock } from '../js/core/v5-store-action.js';
+import { getReferenceCatalogue } from '../js/core/reference-catalog.js';
+import { weaponHandsForParticipant } from '../js/core/equipment.js';
 
 const HOWL='divine:miracle:ulric:howl-of-the-wolf';
 const person=(id,extra={})=>({id,name:id,kind:'PJ',camp:id==='a'?'pj':'ennemi',zone:'active',initiative:60,hp:40,maxHp:40,
-  caracs:{CC:60,CT:60,F:40,E:30,I:50,Ag:40,Dex:40,Int:60,FM:60,Soc:60,M:4},skills:[{name:'Prière',status:'resolved',total:60},{name:'Langue (Magick)',status:'resolved',total:200}],
+  caracs:{CC:60,CT:60,F:40,E:30,I:50,Ag:40,Dex:40,Int:60,FM:60,Soc:60,M:4},skills:[{id:'dodge',name:'Esquive',status:'resolved',total:40},{name:'Prière',status:'resolved',total:60},{name:'Langue (Magick)',status:'resolved',total:200}],
   talents:[],prayers:[],spells:[{name:'Carreau',status:'resolved'}],
   states:[],equipment:[],traits:[],armor:{head:0,body:0,arms:0,legs:0},extensions:{v5:{hasMomentum:id==='a',divine:{sin:0},magic:{reserve:{type:'winds',sl:0}}}},...extra});
 function persistence(){let data=null;return {async load(){return data&&structuredClone(data)},async saveAtomic({state}){data=structuredClone(state);return {ok:true}},read(){return data&&structuredClone(data)}}}
@@ -16,6 +19,81 @@ async function setup({actor=person('a'),target=person('b')}={}){const p=persiste
 const hit=(id,extra={})=>({resolutionId:id,actorId:'a',targetId:'b',action:{type:'attack',attr:'CC',base:60,damage:5},roll:25,
   defense:{base:35,roll:80,v5:{kind:'melee',choice:'keep'}},v5:{kind:'melee',choice:'keep',...extra}});
 const ordinary=id=>({resolutionId:id,actorId:'a',action:{type:'skill',attr:'Int',base:60},roll:25,v5:{kind:'test',context:{isAction:true,involvesMovement:false,requiresSight:false,reliesOnSight:false}}});
+
+test('F2-B Claude 20 — l’horloge garde le préfixe de scène historique et isole un scope renouvelé',()=>{
+ const common={combat:{round:2,currentActorId:'a'},extensions:{v5:{turnIndex:7,combatId:'combat-1'}}};
+ assert.deepEqual(v5StoreActionClock({...common,activeScene:{id:'scene-1',encounterId:'enc-1'}}),{encounterId:'enc-1',round:2,turnId:'scene-1:7:a'});
+ assert.equal(v5StoreActionClock({...common,activeScene:{id:'scene-1',encounterId:'enc-1',extensions:{v5:{combatScopeId:'scope-scene',turnIndex:7}}}}).turnId,'scope-scene:7:a');
+ assert.equal(v5StoreActionClock({...common,extensions:{v5:{turnIndex:7,combatScopeId:'scope-root'}}}).turnId,'scope-root:7:a');
+ const resumed=v5StoreActionClock({...common,extensions:{v5:{turnIndex:7,combatScopeId:'scope-other-combat'}},activeScene:{id:'scene-1',encounterId:'enc-1',extensions:{v5:{combatScopeId:'scope-resumed',turnIndex:7}}}});
+ assert.equal(resumed.encounterId,'scope-resumed');assert.equal(resumed.turnId,'scope-resumed:7:a','une scène reprise garde son scope malgré le scope racine du combat suivant');
+});
+
+test('F2-B Claude 20 — reactionId racine est validé comme une réaction, pas perdu au premier niveau',async()=>{
+ const {store}=await setup();
+ const p=store.previewResolution({...hit('root-reaction-id'),reactionId:'reaction-invented'});
+ assert.equal(p.ready,false);assert.match(p.error||p.unresolved.join(' '),/réaction|reaction/i);
+ assert.equal(p.input.v5.reactionId,'reaction-invented');
+});
+
+test('F2-B Claude 17/20 — Défensive refuse compétence absente et bloque les quatre API magie',async()=>{
+ const {store}=await setup();assert.equal(store.previewV5CombatAction({actorId:'a',kind:'defensive',skillId:'missing'}).ready,false);
+ await store.applyV5CombatAction(store.previewV5CombatAction({actorId:'a',kind:'defensive',skillId:'dodge'}));
+ for(const p of [store.previewChannelling({actorId:'a',roll:25}),store.previewCasting({}, {actorId:'a',roll:25}),store.previewDispelCasting({}, {actorId:'a'}),store.previewDispelPersistent({}, {actorId:'a'}),store.previewDivineWrathRecovery({actorId:'a'})]){assert.equal(p.ready,false);assert.equal(p.code,'F2_COMBAT_ACTION_SPENT');}
+});
+
+test('F2-B Claude 17 — Focalisation annule Visée dans sa transaction, Undo la restaure',async()=>{
+ const bow={id:'bow',kind:'weapon',name:'Arc',category:'Arc',range:60,damage:'BF+4'};
+ const {store,persistence}=await setup({actor:person('a',{equipment:[bow]})});
+ const beforeDefense=store.previewChannelling({actorId:'a',type:'winds',roll:25});assert.equal(beforeDefense.ready,true);
+ await store.applyV5CombatAction(store.previewV5CombatAction({actorId:'a',kind:'defensive',skillId:'dodge'}));
+ await assert.rejects(async()=>store.applyChannelling(beforeDefense),/déjà été dépensée/);
+ await store.undo();
+ await store.applyV5CombatAction(store.previewV5CombatAction({actorId:'a',kind:'aim',targetId:'b',weaponId:'bow',rangedWeaponHeldConfirmed:true}));
+ const engine=createCombatEngine(store);await engine.nextTurn();await engine.nextTurn();
+ const channel=store.previewChannelling({actorId:'a',type:'winds',roll:25});assert.equal(channel.ready,true);
+ await store.applyChannelling(channel);assert.equal(persistence.read().extensions.v5.combatActions.byActorId.a,undefined);
+ assert.ok(persistence.read().extensions.v5.standardTurnActions.some(row=>row.actionId.startsWith('v5-channelling:')));
+ await store.undo();assert.equal(persistence.read().extensions.v5.combatActions.byActorId.a.kind,'aim');
+});
+
+test('F2-B Claude 14 — armes catalogue : épée puis pistolet, armes à deux mains refusées',async()=>{
+ const items=getReferenceCatalogue().items,sword=items.find(item=>item.kind==='weapon'&&item.name==='Épée'),pistol=items.find(item=>item.kind==='weapon'&&item.name==='Pistolet'),greatsword=items.find(item=>item.kind==='weapon'&&item.name==='Espadon de Hoeth Haut Elfe'),bow=items.find(item=>item.kind==='weapon'&&item.category==='Arc'),bastard=items.find(item=>item.kind==='weapon'&&item.name==='Épée bâtarde (2M)');
+ assert.equal(weaponHandsForParticipant(sword),1);assert.equal(weaponHandsForParticipant(pistol),1);assert.equal(weaponHandsForParticipant(greatsword),2);assert.equal(weaponHandsForParticipant(bow),2,'un arc ne peut pas être déclaré une arme utilisable à une main par défaut');
+ assert.equal(weaponHandsForParticipant({...bastard,hands:2},{extensions:{v5:{weaponHandsByEquipmentId:{[bastard.id]:1}}}}),1,'le choix durable de l’Épée bâtarde prévaut sur la main générique de l’instance');
+ const {store}=await setup({actor:person('a',{equipment:[sword,pistol],skills:[{id:'gun',name:'Projectiles (Poudre noire)',group:'Projectiles',specialty:'Poudre noire',total:60,advances:10,status:'resolved'}]})});
+ await store.applyResolution(store.previewResolution({...hit('primary-sword'),action:{...hit('').action,extensions:{fiche:{equipmentId:sword.id}}}}));
+ await store.updateParticipant('a',{extensions:{v5:{hasMomentum:true}}});
+ const request={resolutionId:'secondary-pistol',actorId:'a',targetId:'b',action:{type:'attack',attr:'CT',base:60,damage:8,extensions:{fiche:{equipmentId:pistol.id}}},roll:25,v5:{kind:'ranged',extraAttack:true,choice:'keep',context:{secondWeaponAttack:true,primaryResolutionId:'primary-sword'}}};
+ const p=store.previewResolution(request);assert.equal(p.ready,true,JSON.stringify(p.unresolved));assert.equal(p.test.details.modifiers.find(row=>row.id==='penalty:offHand').amount,-2);
+ await store.updateParticipant('a',{equipment:[greatsword,pistol]});
+ const primaryGreatsword={...hit('primary-greatsword'),action:{...hit('').action,extensions:{fiche:{equipmentId:greatsword.id}}}};
+ assert.equal((await store.applyResolution(store.previewResolution(primaryGreatsword))).status,'applied');
+ await store.updateParticipant('a',{extensions:{v5:{hasMomentum:true}}});
+ assert.equal(store.previewResolution({...request,resolutionId:'secondary-after-greatsword',v5:{...request.v5,context:{...request.v5.context,primaryResolutionId:'primary-greatsword'}}}).ready,false);
+});
+
+test('F2-B Claude 15 — Croche-pied une fois par touche, même cible déjà À Terre',async()=>{
+ const weapon={id:'trip',kind:'weapon',name:'Gaffe',category:'Bagarre',damage:'BF+4',keywords:[{id:'croche-pied'}]};
+ const {store,persistence}=await setup({actor:person('a',{equipment:[weapon]}),target:person('b',{states:[{key:'a-terre',name:'À Terre',level:1}],skills:[{id:'athletics',name:'Athlétisme',total:30,status:'resolved'}]})});
+ await store.applyResolution(store.previewResolution({...hit('trip-primary-once'),action:{...hit('').action,extensions:{fiche:{equipmentId:'trip'}}}}));
+ await store.updateParticipant('a',{extensions:{v5:{hasMomentum:true}}});
+ const request={resolutionId:'trip-once',actorId:'a',targetId:'b',action:{type:'test',attr:'F',base:40},roll:25,defense:{base:30,roll:80,v5:{kind:'test',choice:'keep',context:{involvesMovement:false}}},v5:{kind:'test',choice:'keep',context:{trip:true,tripPrimaryResolutionId:'trip-primary-once',athleticsSkillId:'athletics'}}};
+ const p=store.previewResolution(request);assert.equal(p.ready,true,JSON.stringify(p.unresolved));assert.equal((await store.applyResolution(p)).status,'applied');
+ assert.equal(persistence.read().combat.participants.find(row=>row.id==='b').states.filter(row=>['aterre','a-terre'].includes(row.key)).length,1);
+ await store.updateParticipant('a',{extensions:{v5:{hasMomentum:true}}});assert.equal(store.previewResolution({...request,resolutionId:'trip-twice'}).ready,false);
+});
+
+test('F2-B Claude 20 — la Visée ne bénéficie qu’à la même arme et journal garde les deux paliers',async()=>{
+ const bow=id=>({id,kind:'weapon',name:id,category:'Arc',range:60,damage:'BF+4'});
+ const {store,persistence}=await setup({actor:person('a',{equipment:[bow('bow'),bow('other')],skills:[{id:'bow-skill',name:'Projectiles (Arc)',group:'Projectiles',specialty:'Arc',total:60,advances:10,status:'resolved'}]})});
+ await store.applyV5CombatAction(store.previewV5CombatAction({actorId:'a',kind:'aim',targetId:'b',weaponId:'bow',rangedWeaponHeldConfirmed:true}));
+ const engine=createCombatEngine(store);await engine.nextTurn();await engine.nextTurn();
+ const request=id=>({resolutionId:'shot-'+id,actorId:'a',targetId:'b',action:{type:'attack',attr:'CT',base:60,damage:4,extensions:{fiche:{equipmentId:id}}},roll:25,v5:{kind:'ranged',choice:'keep'}});
+ assert.equal(store.previewResolution(request('other')).test.details.modifiers.some(row=>row.id==='aim:target'),false);
+ const shot=store.previewResolution(request('bow'));assert.equal(shot.test.details.modifiers.find(row=>row.id==='aim:target').amount,1);
+ assert.equal((await store.applyResolution(shot)).status,'applied');assert.deepEqual(persistence.read().log[0].detail.resultTier,shot.test.resultTier);
+});
 
 test('F2-B — les Actions manuelles historiques restent applicables; une Action spéciale ultérieure est refusée',async()=>{
   const {store}=await setup();const first=store.previewResolution(hit('first-action'));
@@ -56,7 +134,7 @@ test('F2-B — Action Défensive/Vise sont persistées, distinctes et libèrent 
   const aimed=aimStore.previewV5CombatAction({actorId:'a',kind:'aim',targetId:'b',weaponId:'bow',rangedWeaponHeldConfirmed:true,actionId:'aim-a'});
   assert.equal(aimed.ready,true);assert.equal((await aimStore.applyV5CombatAction(aimed)).status,'applied');
   const aimEngine=createCombatEngine(aimStore);await aimEngine.nextTurn();await aimEngine.nextTurn();
-  const shot=aimStore.previewResolution({ ...hit('aimed-shot'), action:{type:'attack',attr:'CT',base:60,damage:5},defense:undefined,v5:{kind:'ranged',context:{}} });
+  const shot=aimStore.previewResolution({ ...hit('aimed-shot'), action:{type:'attack',attr:'CT',base:60,damage:5,extensions:{fiche:{equipmentId:'bow'}}},defense:undefined,v5:{kind:'ranged',context:{}} });
   assert.equal(shot.test.sl,5,'Visée ajoute +1 aux DR de base 4 du jet 25 contre score 60');
   assert.equal((await aimStore.applyResolution(shot)).status,'applied');
   assert.equal(aimStore.previewV5CombatAction({actorId:'a',kind:'aim',targetId:'b',weaponId:'bow',rangedWeaponHeldConfirmed:true,actionId:'aim-again'}).ready,false,
@@ -151,7 +229,7 @@ test('F2-B — après une attaque même ratée, seconde arme différente consomm
   const retry=store.previewResolution({...extra.input,resolutionId:'second-axe-again'});assert.equal(retry.actionCosts.ready,false);
   const ledger=(await persistence.read())?.extensions?.v5?.actionLedger;
   assert.equal(ledger.quotaUsage.find(row=>row.quotaId==='combat:base-second-weapon')?.used,1);
-  assert.throws(()=>store.previewResolution({...hit('same-weapon',{extraAttack:true,context:{secondWeaponAttack:true,weaponId:'sword',primaryResolutionId:'first-missed'}}),action:{type:'attack',attr:'CC',base:60,damage:5,extensions:{fiche:{equipmentId:'sword'}}}}),/arme différente utilisable à une main/);
+  assert.equal(store.previewResolution({...hit('same-weapon',{extraAttack:true,context:{secondWeaponAttack:true,weaponId:'sword',primaryResolutionId:'first-missed'}}),action:{type:'attack',attr:'CC',base:60,damage:5,extensions:{fiche:{equipmentId:'sword'}}}}).ready,false);
   const dualActor=person('a',{equipment:[item('sword','Épée'),item('axe','Hache')],talents:[{id:'talent-dual-wielder',name:'Maniement de deux armes',status:'resolved',rank:1}],extensions:{v5:{hasMomentum:false,divine:{sin:0},magic:{reserve:{type:'winds',sl:0}}}}});
   const {store:dualStore}=await setup({actor:dualActor});
   const dualPrimary=dualStore.previewResolution({...hit('dual-primary'),action:{type:'attack',attr:'CC',base:60,damage:5,extensions:{fiche:{equipmentId:'sword'}}}});

@@ -1,6 +1,6 @@
 import { DOM, escapeHtml } from './dom.js';
 
-export function initCombatViewUI(Store, Combat, cardUI, onRunDiceLine) {
+export function initCombatViewUI(Store, Combat, cardUI, onRunDiceLine, onMoveParticipant = null) {
   function renderCombat() {
     const combat = Store.getCombat();
     if (DOM.combat.pillRound) DOM.combat.pillRound.textContent = `Round: ${combat.round}`;
@@ -20,7 +20,8 @@ export function initCombatViewUI(Store, Combat, cardUI, onRunDiceLine) {
         el.className = 'init-token';
         if (p.color && p.color !== 'default') el.classList.add('color-' + p.color);
         if (Combat.actorAtTurn()?.id === p.id) el.classList.add('current');
-        el.innerHTML = `<strong>${escapeHtml(p.name)}</strong><small>${p.initiative}</small>`;
+        const combatScore=p.extensions?.v5?.combatInitiative?.initialized?p.extensions.v5.combatInitiative.score:null;
+        el.innerHTML = `<strong>${escapeHtml(p.name)}</strong><small>${combatScore===null?`I ${p.initiative}`:`Combat ${combatScore} · I ${p.initiative}`}</small>`;
         DOM.combat.initTracker.appendChild(el);
       });
     }
@@ -58,7 +59,8 @@ export function initCombatViewUI(Store, Combat, cardUI, onRunDiceLine) {
     const container = this; const targetZone = container.dataset.zone;
     const afterElement = getDragAfterElement(container, e.clientY);
     const beforeId = afterElement ? afterElement.dataset.id : null;
-    Store.moveParticipant(id, targetZone, beforeId);
+    if(onMoveParticipant)onMoveParticipant(id,targetZone,beforeId);
+    else Store.moveParticipant(id, targetZone, beforeId);
   }
 
   [DOM.combat.zoneActive, DOM.combat.zoneBench].forEach(zone => {

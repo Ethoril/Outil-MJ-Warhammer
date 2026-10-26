@@ -115,6 +115,16 @@ function combatActionBlock(envelope,actorId){
 function ordinaryActionAfterCombatActionBlock(envelope,actorId){
  const block=combatActionBlock(envelope,actorId);return block?{...block,error:'Visée ou Défensive a déjà consommé l’Action de ce Tour.'}:null;
 }
+/** Keep magic mutations, Action use and loss of Aim in the same undoable command. */
+function combatMagicActionStore(api,actorId){
+ return {...api,executeCommand(type,mutator,options){return api.executeCommand(type,draft=>{
+  const block=combatActionBlock(draft,actorId);if(block)throw Object.assign(new Error(block.error),{userFacing:true,code:block.code});
+  const next=mutator(draft)||draft;
+  if(next.extensions?.v5?.combatActions?.byActorId?.[actorId]?.kind==='aim')delete next.extensions.v5.combatActions.byActorId[actorId];
+  recordV5ActionUsage(next,actorId,`${type}:${next.localRevision}`);
+  return next;
+ },options);}};
+}
 function canonicalFreeAttack(preview,input={}){
  const source=preview?.input||input,v5=source.v5||{},costs=preview?.actionCosts;
  if(v5.extraAttack!==true||!costs?.ready)return false;
@@ -244,6 +254,10 @@ function withoutCombatInitiativeResolution(extensions) {
   const next={...(extensions||{})},v5={...(extensions?.v5||{})};
   delete v5.combatInitiativeInitialized; delete v5.combatInitiativeResolution; delete v5.orderRound;
   next.v5=v5; return next;
+}
+function freshCombatScopedV5(value, combatScopeId = uid()) {
+  const { combatActions, standardTurnActions, ...v5 } = value || {};
+  return { ...v5, combatScopeId, turnIndex: 1 };
 }
 
 export function createStore({ storage = typeof localStorage !== 'undefined' ? localStorage : null, sync = null, persistence = null, persistenceFactory = null, contextId = 'guest', divineAuthority = 'MJ', appVersion = 'unknown', bus = null, now = () => new Date().toLocaleTimeString(), onSyncStatus = null, onLocalStatus = null, onReady = null } = {}) {
@@ -761,6 +775,8 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         roll: preview?.roll ?? null,
         targetScore: preview?.score?.target ?? null,
         sl: preview?.sl ?? null,
+        resultTier: cloneValue(preview?.resultTier),
+        defenderResultTier: cloneValue(preview?.defenderTest?.resultTier),
         ...(preview?.slBonus ? { slBonus: preview.slBonus } : {}),
         ...(preview?.location ? { location: { roll: preview.location.roll, name: preview.location.name } } : {}),
         damage: preview?.damage || null,
@@ -1729,6 +1745,8 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
     moveParticipant(id, zone, beforeId = null) {
       if (!canMutate()) return false;
       const p = combat.participants.get(id); if (!p) return;
+      if(zone==='active'&&p.zone!=='active'&&Number(combat.round)===0&&stateExtensions?.v5?.combatInitiativeInitialized===true&&!p.extensions?.v5?.combatInitiative?.initialized)
+        throw Object.assign(new Error('Un combattant activé avant le Round 1 doit recevoir son jet d’Initiative dans le dialogue de préparation.'),{code:'COMBAT_INIT_REQUIRED',userFacing:true});
       if (persistence) return api.executeCommand('move-participant', draft => {
         const participants = (draft.combat?.participants || []).map(item => item.id === id ? { ...item, zone } : item);
         const remaining = (draft.combat?.order || []).filter(item => item !== id);
@@ -1825,12 +1843,35 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       const captured=cloneValue(input||{}),expected=captured.baseRevision??captured.scenePreview?.baseRevision??captured.staging?.baseRevision??localRevision;
       const scenePreview=captured.scenePreview?cloneValue(captured.scenePreview):null,staging=captured.staging?cloneValue(captured.staging):null;
       const participants=Array.isArray(captured.participants)?captured.participants:scenePreview?.scene?.participants||staging?.scene?.participants||staging?.participants||currentEnvelope().combat?.participants||[];
-      const plan=prepareCombatInitiative(participants,captured);
+      const plan=prepareCombatInitiative(participants,{...staging,...captured,tieOrders:captured.tieOrders??staging?.tieOrders,opposedRolls:captured.opposedRolls??staging?.opposedRolls,tieChoices:captured.tieChoices??staging?.tieChoices});
+      if(!participants.some(row=>row?.zone==='active')){
+        plan.needsInput.push({field:'activeCombatants',label:'Au moins un combattant actif est requis pour initialiser le combat.'});
+        plan.ready=false;plan.status='requires-input';
+      }
       return {...plan,baseRevision:expected,participantIds:participants.filter(row=>row.zone==='active').map(row=>row.id),
         ...(captured.startCombat===true?{startCombat:true}:{}),
         ...(scenePreview?{scenePreview}:{}),
         ...(staging?{staging}:{}),
-        request:{diceById:captured.diceById||{},combatReflexesById:captured.combatReflexesById||{},characteristicById:captured.characteristicById||{},tieOrders:captured.tieOrders||{},opposedRolls:captured.opposedRolls||{},tieChoices:captured.tieChoices||{},surprisedCamp:captured.surprisedCamp??null}};
+        request:{diceById:captured.diceById||{},combatReflexesById:captured.combatReflexesById||{},characteristicById:captured.characteristicById||{},tieOrders:captured.tieOrders??staging?.tieOrders??{},opposedRolls:captured.opposedRolls??staging?.opposedRolls??{},tieChoices:captured.tieChoices??staging?.tieChoices??{},surprisedCamp:captured.surprisedCamp??null}};
+    },
+    previewCombatParticipantActivation(id) {
+      const participant=(currentEnvelope().combat?.participants||[]).find(row=>row.id===id);
+      if(!participant)throw new Error('Combattant introuvable');
+      if(Number(combat.round)!==0||stateExtensions?.v5?.combatInitiativeInitialized!==true||participant.zone==='active'||participant.extensions?.v5?.combatInitiative?.initialized)return null;
+      const participants=(currentEnvelope().combat?.participants||[]).map(row=>row.id===id?{...row,zone:'active'}:cloneValue(row));
+      const tieOrders={},opposedRolls={},tieChoices={};
+      for(const group of stateExtensions?.v5?.combatInitiativeResolution?.tieGroups||[]){
+        const key=(group.participantIds||[]).join('|');
+        if(group.bracketOrder?.length)tieOrders[key]=[...group.bracketOrder];
+        if(group.chosenOrder?.length)tieChoices[key]=[...group.chosenOrder];
+        for(const match of group.matches||[]){
+          const matchId=`${key}:${match.initiatorId}:${match.opponentId}`;
+          opposedRolls[matchId]={initiatorRoll:match.initiatorRoll,opponentRoll:match.opponentRoll,
+            ...(match.initiatorOptionId?{initiatorChoice:match.initiatorOptionId}:{}),...(match.opponentOptionId?{opponentChoice:match.opponentOptionId}:{}),
+            ...(match.initiatorConditionPenaltyMode?{initiatorConditionPenaltyMode:match.initiatorConditionPenaltyMode}:{}),...(match.opponentConditionPenaltyMode?{opponentConditionPenaltyMode:match.opponentConditionPenaltyMode}:{})};
+        }
+      }
+      return {kind:'activate-pre-round',participantId:id,baseRevision:localRevision,participants,tieOrders,opposedRolls,tieChoices};
     },
     applyCombatInitialization(preview = {}) {
       const captured=cloneValue(preview||{}),expected=captured.baseRevision;
@@ -1871,7 +1912,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         }),log=[...(draft.log||[])];
         const resolution={version:1,participants:plan.participants.filter(row=>row.zone==='active').map(row=>({participantId:row.id,characteristic:row.extensions?.v5?.combatInitiative?.characteristic,characteristicSource:row.extensions?.v5?.combatInitiative?.characteristicSource,die:row.extensions?.v5?.combatInitiative?.die,bonus:row.extensions?.v5?.combatInitiative?.bonus,score:row.extensions?.v5?.combatInitiative?.score,...(row.extensions?.v5?.combatInitiative?.talentId==='talent-combat-reflexes'?{talentId:'talent-combat-reflexes',dice:[...row.extensions.v5.combatInitiative.dice],choice:row.extensions.v5.combatInitiative.choice,...(row.extensions.v5.combatInitiative.preparationProvenance?{preparationProvenance:cloneValue(row.extensions.v5.combatInitiative.preparationProvenance)}:{})}:{})})),order:[...plan.order],tieGroups:plan.tieGroups.map(group=>{
           const matches=plan.oppositions.filter(match=>match.groupKey===group.key);
-          return {participantIds:[...group.participantIds],bracketOrder:[...(captured.request?.tieOrders?.[group.key]||[])],matches:matches.map(match=>({id:match.id,initiatorId:match.initiatorId,opponentId:match.opponentId,initiatorRoll:match.initiator.roll,initiatorDR:match.initiator.sl,initiatorOptionId:match.initiator.optionId,opponentRoll:match.opponent.roll,opponentDR:match.opponent.sl,opponentOptionId:match.opponent.optionId,winnerId:match.winnerId,netDR:match.netSl,tie:match.tie})),winnerId:matches.at(-1)?.winnerId||null,chosenOrder:[...(captured.request?.tieChoices?.[group.key]||[])]};
+          return {participantIds:[...group.participantIds],directChoice:group.participantIds.length>=3,bracketOrder:[...(captured.request?.tieOrders?.[group.key]||[])],matches:matches.map(match=>({id:match.id,initiatorId:match.initiatorId,opponentId:match.opponentId,initiatorRoll:match.initiator.roll,initiatorDR:match.initiator.sl,initiatorOptionId:match.initiator.optionId,initiatorConditionPenaltyMode:match.initiatorConditionPenaltyMode,opponentRoll:match.opponent.roll,opponentDR:match.opponent.sl,opponentOptionId:match.opponent.optionId,opponentConditionPenaltyMode:match.opponentConditionPenaltyMode,winnerId:match.winnerId,netDR:match.netSl,tie:match.tie})),winnerId:matches.at(-1)?.winnerId||null,chosenOrder:[...(captured.request?.tieChoices?.[group.key]||[])]};
         })};
         if(plan.surprisedCamp){
           nextParticipants=nextParticipants.map(row=>{
@@ -1882,13 +1923,15 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
           });
         }
         const order=plan.order;
-        const extensions={...(draft.extensions||{}),v5:{...(draft.extensions?.v5||{}),combatInitiativeInitialized:true,combatInitiativeResolution:resolution,orderRound:Number(draft.combat?.round)>0?draft.combat.round:null}};
+        const startsNewScope=staging?.kind==='launch'||staging?.kind==='restart-scene'||staging?.kind==='restart-free'||captured.startCombat===true;
+        const combatScopeId=startsNewScope?uid():draft.extensions?.v5?.combatScopeId;
+        const extensions={...(draft.extensions||{}),v5:{...(draft.extensions?.v5||{}),...(combatScopeId?{combatScopeId}:{}),combatInitiativeInitialized:true,combatInitiativeResolution:resolution,orderRound:Number(draft.combat?.round)>0?draft.combat.round:null}};
         if(sourceScene){
-          const scene=freshScene({...cloneValue(sourceScene),status:'active',round:0,currentActorId:null,participants:nextParticipants,order,extensions:{...(sourceScene.extensions||{}),v5:{...(sourceScene.extensions?.v5||{}),combatInitiativeResolution:resolution}}});
+          const scene=freshScene({...cloneValue(sourceScene),status:'active',round:0,currentActorId:null,participants:nextParticipants,order,extensions:{...(sourceScene.extensions||{}),v5:{...(sourceScene.extensions?.v5||{}),...(combatScopeId?{combatScopeId}:{}),combatInitiativeResolution:resolution}}});
           let nextExtensions=extensions,diceLines=draft.diceLines||[],reminderChoices=draft.reminderChoices||[];
           if(staging?.kind==='restart-scene'){
             const v5=extensions.v5||{},ledger=v5.actionLedger,oldIds=new Set((draft.activeScene?.participants||[]).map(row=>row.id));
-            nextExtensions={...extensions,v5:{...v5,turnIndex:1,...(ledger?{actionLedger:{...ledger,quotaUsage:(ledger.quotaUsage||[]).filter(row=>!String(row.scopeKey||'').includes(':0:pre-combat'))}}:{})}};
+            nextExtensions={...extensions,v5:{...freshCombatScopedV5(v5,combatScopeId),combatInitiativeInitialized:true,combatInitiativeResolution:resolution,orderRound:null,...(ledger?{actionLedger:{...ledger,quotaUsage:(ledger.quotaUsage||[]).filter(row=>!String(row.scopeKey||'').includes(':0:pre-combat'))}}:{})}};
             diceLines=diceLines.filter(line=>!oldIds.has(line.participantId)).map(line=>oldIds.has(line.targetId)?{...line,targetId:null}:line);
             reminderChoices=reminderChoices.filter(choice=>!String(choice.id||'').startsWith(`${draft.activeScene?.id}:`));
           }
@@ -1899,7 +1942,11 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         if(staging?.kind==='restart-free'){
           if(JSON.stringify(ids)!==JSON.stringify(staging.participantIds||[]))throw Object.assign(new Error('Les combattants ont changé depuis la préparation.'),{code:'COMBAT_INIT_STALE'});
           const v5=draft.extensions?.v5||{},ledger=v5.actionLedger;
-          return {...draft,extensions:{...(draft.extensions||{}),v5:{...v5,turnIndex:1,combatInitiativeInitialized:true,combatInitiativeResolution:resolution,orderRound:null,...(ledger?{actionLedger:{...ledger,quotaUsage:(ledger.quotaUsage||[]).filter(row=>!String(row.scopeKey||'').includes(':0:pre-combat'))}}:{})}},combat:{...draft.combat,round:0,currentActorId:null,participants:nextParticipants,order,orderMode:ORDER_MODES.AUTOMATIC},log:[{id:uid(),ts:Date.now(),kind:'management',text:'Combat recommencé : PV remis au maximum.'},...log].slice(0,300)};
+          return {...draft,extensions:{...(draft.extensions||{}),v5:{...freshCombatScopedV5(v5,combatScopeId),combatInitiativeInitialized:true,combatInitiativeResolution:resolution,orderRound:null,...(ledger?{actionLedger:{...ledger,quotaUsage:(ledger.quotaUsage||[]).filter(row=>!String(row.scopeKey||'').includes(':0:pre-combat'))}}:{})}},combat:{...draft.combat,round:0,currentActorId:null,participants:nextParticipants,order,orderMode:ORDER_MODES.AUTOMATIC},log:[{id:uid(),ts:Date.now(),kind:'management',text:'Combat recommencé : PV remis au maximum.'},...log].slice(0,300)};
+        }
+        if(staging?.kind==='activate-pre-round'){
+          const scene=draft.activeScene?{...draft.activeScene,participants:nextParticipants,order,extensions:{...(draft.activeScene.extensions||{}),v5:{...(draft.activeScene.extensions?.v5||{}),combatInitiativeResolution:resolution}}}:draft.activeScene;
+          return {...draft,extensions,activeScene:scene,combat:{...draft.combat,participants:nextParticipants,order,orderMode:ORDER_MODES.AUTOMATIC}};
         }
         const firstActorId=order[0]||null,round=captured.startCombat===true?1:Number(draft.combat?.round)||0;
         const startedLog=captured.startCombat===true&&firstActorId?[{id:uid(),kind:'management',actorId:firstActorId,actorName:nextParticipants.find(row=>row.id===firstActorId)?.name,text:`Combat démarré. Round 1. Tour: ${nextParticipants.find(row=>row.id===firstActorId)?.name}`},...log]:log;
@@ -2685,8 +2732,8 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       if (!scene && !combat.participants.size) throw new Error('Aucun combat à recommencer');
       // Le Round 0 recommence : son quota d'attaques gratuites (Tour « :0:pre-combat ») est remis à zéro.
       const freshV5 = draft => {
-        const v5 = draft.extensions?.v5 || {}, ledger = v5.actionLedger;
-        return { ...v5, turnIndex: 1, ...(ledger ? { actionLedger: { ...ledger, quotaUsage: (ledger.quotaUsage || []).filter(row => !String(row.scopeKey || '').includes(':0:pre-combat')) } } : {}) };
+        const v5 = freshCombatScopedV5(draft.extensions?.v5), ledger = v5.actionLedger;
+        return { ...v5, ...(ledger ? { actionLedger: { ...ledger, quotaUsage: (ledger.quotaUsage || []).filter(row => !String(row.scopeKey || '').includes(':0:pre-combat')) } } : {}) };
       };
       return api.executeCommand('restart-combat', draft => {
         const current = draft.activeScene?.status === 'active' ? draft.activeScene : null;
@@ -2705,11 +2752,13 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         if (!encounter) throw missing();
         if (!(encounter.entries || []).length) throw empty();
         const launched = freshScene(launchEncounter(encounter, { profiles: draft.reserve || [], persistentCharacters: draft.persistentCharacters || [], activeScene: null }));
-        const nextScene = { ...launched, id: current.id, startedAt: current.startedAt };
+        const resetV5=freshV5(draft);
+        const nextScene = { ...launched, id: current.id, startedAt: current.startedAt,
+          extensions:{...(launched.extensions||{}),v5:{...(launched.extensions?.v5||{}),combatScopeId:resetV5.combatScopeId}} };
         const oldIds = new Set((current.participants || []).map(item => item?.id).filter(Boolean));
         return {
           ...draft,
-          extensions: { ...(draft.extensions || {}), v5: freshV5(draft) },
+          extensions: { ...(draft.extensions || {}), v5: resetV5 },
           activeScene: nextScene,
           // Départ : ordre d'initiative, donc mode automatique même si la piste avait été réordonnée à la main.
           combat: { ...draft.combat, round: 0, currentActorId: null, order: [...nextScene.order], participants: cloneValue(nextScene.participants), orderMode: ORDER_MODES.AUTOMATIC },
@@ -2727,6 +2776,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       if (!activeScene) throw new Error('Aucune scène active');
       return api.executeCommand('suspend-scene', draft => ({
         ...closeV5ReactionOpportunities(draft), activeScene: null,
+        extensions: withoutCombatInitiativeResolution(draft.extensions),
         suspendedScenes: [...(draft.suspendedScenes || []), suspendScene({ ...draft.activeScene, participants: (draft.activeScene.participants || []).map(participant => withMomentum(participant, false)) })],
         combat: { ...draft.combat, round: 0, currentActorId: null, order: [], participants: [] },
         encounters: (draft.encounters || []).map(item => item.id === draft.activeScene.encounterId ? { ...item, status: 'suspended' } : item)
@@ -2737,6 +2787,8 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       if (!scene) throw new Error('Scène suspendue introuvable');
       return api.executeCommand('resume-scene', draft => {
         const v5={...(draft.extensions?.v5||{})},proof=scene.extensions?.v5?.combatInitiativeResolution;
+        if(scene.extensions?.v5?.combatScopeId)v5.combatScopeId=scene.extensions.v5.combatScopeId;
+        else delete v5.combatScopeId;
         if(proof){v5.combatInitiativeInitialized=true;v5.combatInitiativeResolution=proof;}
         else {delete v5.combatInitiativeInitialized;delete v5.combatInitiativeResolution;delete v5.orderRound;}
         return {
@@ -2841,11 +2893,12 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
     previewResolution(input = {}) {
       const snapshot=currentEnvelope();
       input=structuredClone(input);
+      if(input.reactionId&&!input.v5?.reactionId)input.v5={...(input.v5||{}),reactionId:input.reactionId};
       const actorForAction=snapshot.combat?.participants?.find(row=>row.id===(input.actorId||input.actor?.id));
       if(input.v5?.context?.trip===true){
         const context=input.v5.context,actor=snapshot.combat?.participants?.find(row=>row.id===(input.actorId||input.actor?.id)),target=snapshot.combat?.participants?.find(row=>row.id===(input.targetId||input.target?.id)),clock=v5StoreActionClock(snapshot),primary=(snapshot.extensions?.v5?.standardTurnActions||[]).find(row=>row.actionId===context.tripPrimaryResolutionId&&row.actorId===actor?.id&&row.targetId===target?.id&&row.hit===true&&row.actionType==='attack'&&row.turnId===clock.turnId&&row.encounterId===clock.encounterId),skill=target?.skills?.find(row=>row.id===context.athleticsSkillId&&/athlet/i.test(String(row.name||row.nom||'').normalize('NFD').replace(/[\u0300-\u036f]/g,''))),knownSkill=Number(skill?.total??skill?.value),declaredSkill=Number(context.athleticsScore),force=Number(actor?.caracs?.F),declaredForce=Number(context.forceScore);
         const athleticsScore=Number.isFinite(knownSkill)?knownSkill:context.athleticsScoreConfirmed===true&&Number.isFinite(declaredSkill)?declaredSkill:null,forceScore=Number.isFinite(force)?force:context.forceScoreConfirmed===true&&Number.isFinite(declaredForce)?declaredForce:null;
-        const missing=[];if(!actor||!target)missing.push('Choisir l’attaquant et la cible du Croche-pied.');if(!primary)missing.push('Croche-pied : une touche appliquée de cet attaquant sur cette cible pendant ce Tour est requise.');else if(!primary.qualityIds?.includes('croche-pied'))missing.push('Croche-pied : l’attaque appliquée doit provenir d’une arme portant l’atout Croche-pied.');if(forceScore===null)missing.push('Croche-pied : Force absente ; confirmer la caractéristique du MJ.');if(athleticsScore===null)missing.push('Croche-pied : Athlétisme absent ; confirmer le score de la cible par le MJ.');
+        const missing=[];if(!actor||!target)missing.push('Choisir l’attaquant et la cible du Croche-pied.');if(!primary)missing.push('Croche-pied : une touche appliquée de cet attaquant sur cette cible pendant ce Tour est requise.');else if(!primary.qualityIds?.includes('croche-pied'))missing.push('Croche-pied : l’attaque appliquée doit provenir d’une arme portant l’atout Croche-pied.');if((snapshot.extensions?.v5?.combatActions?.trippedResolutionIds||[]).includes(context.tripPrimaryResolutionId))missing.push('Croche-pied : cette touche a déjà été utilisée.');if(forceScore===null)missing.push('Croche-pied : Force absente ; confirmer la caractéristique du MJ.');if(athleticsScore===null)missing.push('Croche-pied : Athlétisme absent ; confirmer le score de la cible par le MJ.');
         if(missing.length)return {ready:false,status:'requires-input',error:missing[0],unresolved:missing,baseRevision:localRevision,input};
         input.action={...(input.action||{}),type:'opposition',attr:'F',base:forceScore,label:'Force',extensions:{...(input.action?.extensions||{}),fiche:{...(input.action?.extensions?.fiche||{}),skillId:null}}};
         input.defense={...(input.defense||{}),base:athleticsScore,label:'Athlétisme',v5:{...(input.defense?.v5||{}),kind:'test',context:{...(input.defense?.v5?.context||{}),...(skill?.id?{skillId:skill.id}:{})}}};
@@ -2854,12 +2907,13 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       const reactionCandidate=Boolean(input.v5?.reactionId||input.reactionId),ordinaryIntent=!reactionCandidate&&(isV5ActionUse(null,input)||['attack','attaque'].includes(input.action?.type)),freeAttackCandidate=input.v5?.extraAttack===true&&['divine-free-attack','reaction-strike','glorious-demise','frenzy'].includes(input.v5?.context?.freeAttackTalent);
       if(ordinaryIntent&&!freeAttackCandidate){const block=ordinaryActionAfterCombatActionBlock(snapshot,actorForAction?.id);if(block)return {...block,baseRevision:localRevision,input:structuredClone(input)};}
       const combatAction=combatActionState(snapshot).byActorId?.[actorForAction?.id],clockNow=v5StoreActionClock(snapshot),activeCombatAction=combatAction&&combatAction.encounterId===clockNow.encounterId&&(combatAction.kind==='aim'||combatAction.turnId===clockNow.turnId)?combatAction:null;
-      if(activeCombatAction?.kind==='aim'&&input.v5?.kind==='ranged'&&input.targetId===activeCombatAction.targetId){input.v5={...input.v5,context:{...(input.v5.context||{}),aimedTargetId:activeCombatAction.targetId}};}
+      if(input.v5?.context)delete input.v5.context.aimedTargetId;
+      if(activeCombatAction?.kind==='aim'&&input.v5?.kind==='ranged'&&input.targetId===activeCombatAction.targetId&&(activeCombatAction.weaponId?input.action?.extensions?.fiche?.equipmentId===activeCombatAction.weaponId:String(input.action?.name||input.action?.nom||'')===activeCombatAction.weaponName)){input.v5={...input.v5,context:{...(input.v5.context||{}),aimedTargetId:activeCombatAction.targetId}};}
       const movement=combatActionState(snapshot).movementByActorId?.[actorForAction?.id];if(movement&&movement.turnId===clockNow.turnId&&movement.encounterId===clockNow.encounterId&&input.v5?.kind==='ranged')input.v5={...input.v5,context:{...(input.v5.context||{}),movedBeforeRangedAttack:true}};
       const defenseId=input.targetId||input.defense?.actorId,defensive=combatActionState(snapshot).byActorId?.[defenseId];
       if(defensive?.kind==='defensive'&&defensive.encounterId===clockNow.encounterId){const skillId=input.defense?.extensions?.fiche?.skillId||input.defense?.v5?.context?.skillId;if(skillId===defensive.skillId){input.defense={...input.defense,v5:{...(input.defense.v5||{}),context:{...(input.defense.v5?.context||{}),combatDefensiveActionBonus:2}}};}}
       if(combatReflexesAlreadyInitialized(snapshot,input))return {ready:false,status:'requires-input',error:combatReflexesAlreadyDeterminedMessage,unresolved:[combatReflexesAlreadyDeterminedMessage],baseRevision:localRevision,input:structuredClone(input)};
-      const prepared = buildV5StoreActionInput(snapshot, input);
+      let prepared;try{prepared=buildV5StoreActionInput(snapshot,input);}catch(error){if(!(error instanceof TypeError)||!error.message.startsWith('Seconde arme :'))throw error;return {ready:false,status:'requires-input',error:error.message,unresolved:[error.message],baseRevision:localRevision,input};}
       const actorId=prepared.actor?.id||prepared.actorId||input.actorId, escape=snapshot.extensions?.v5?.brokenEscape?.byActorId?.[actorId];
       const escapeActor=snapshot.combat?.participants?.find(row=>row.id===actorId);
       const reaction=hasV5ReactionOpportunity(prepared);
@@ -2892,7 +2946,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       if(!actor||actor.zone!=='active'||actorId!==snapshot.combat?.currentActorId)needsInput.push('L’Action doit viser le combattant actif du Tour.');
       let aimWeapon=null;let aimWeaponRanged=false;if(input.kind==='aim'&&actor){aimWeapon=actor.equipment?.find(item=>item.id===input.weaponId&&item.kind==='weapon');const label=String(aimWeapon?.category||'')+' '+String(aimWeapon?.name||'');aimWeaponRanged=Boolean(aimWeapon&&((String(aimWeapon.range||'').trim())||aimWeapon.ranged===true||/distance|projectile|arc |arbal[eè]te|fronde|armes?.?à.?feu/i.test(label)));if(!aimWeapon&&!(typeof input.weaponName==='string'&&input.weaponName.trim()&&input.rangedWeaponConfirmed===true))needsInput.push('Choisir une arme à distance équipée ou déclarer explicitement au MJ la nature et le nom de l’arme.');else if(aimWeapon&&!aimWeaponRanged&&input.rangedWeaponConfirmed!==true)needsInput.push('Confirmer explicitement que l’arme choisie est à distance (portée numérique inconnue).');else if(input.rangedWeaponHeldConfirmed!==true)needsInput.push('Confirmer que l’arme à distance choisie est en main.');}
       if(input.kind==='aim'&&!snapshot.combat?.participants?.some(row=>row.id===input.targetId&&row.zone==='active'))needsInput.push('Choisir une cible active pour la Visée.');
-      if(input.kind==='defensive'&&typeof input.skillId!=='string')needsInput.push('Choisir la compétence défensive.');
+      if(input.kind==='defensive'&&(!input.skillId||!actor?.skills?.some(skill=>skill.id===input.skillId)))needsInput.push('Choisir une compétence défensive possédée.');
       const spent=standardV5ActionSpent(snapshot,actorId,clock)||Boolean(combatActionBlock(snapshot,actorId));
       if(spent)needsInput.push('Une Action a déjà été dépensée pendant ce Tour.');
       return {ready:needsInput.length===0,status:needsInput.length?'requires-input':'ready',kind:input.kind,actorId,targetId:input.targetId||null,skillId:input.skillId||null,weaponId:aimWeapon?.id||null,weaponName:aimWeapon?.name||input.weaponName?.trim()||null,rangedWeaponConfirmed:aimWeaponRanged||input.rangedWeaponConfirmed===true,rangedWeaponHeldConfirmed:input.rangedWeaponHeldConfirmed===true,actionId:input.actionId||`combat-action:${actorId}:${clock.turnId}:${input.kind}`,clock,baseRevision:localRevision,needsInput,unresolved:needsInput};
@@ -2972,6 +3026,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         };
         if(isV5ActionUse(preview,preview.input||{})&&!commitReaction){recordV5ActionUsage(next,resolvedActorId,preview.resolutionId);const v5=next.extensions?.v5||{},rows=v5.standardTurnActions||[],weaponId=preview.input?.action?.extensions?.fiche?.equipmentId,qualityIds=(preview.input?.action?.qualities||[]).map(row=>typeof row==='string'?row:row?.id).filter(Boolean);next.extensions.v5={...v5,standardTurnActions:rows.map(row=>row.actionId===preview.resolutionId?{...row,targetId:preview.targetId||preview.input?.target?.id||preview.input?.targetId||null,weaponId:weaponId||null,qualityIds:[...new Set(qualityIds)],hit:preview.hit===true,actionType:preview.actionType}:row)};}
         const combatRoot=next.extensions?.v5||{},combatState=structuredClone(combatRoot.combatActions||{byActorId:{},receipts:[]}),owned=combatState.byActorId?.[resolvedActorId];
+        if(preview.input?.v5?.context?.trip===true){const primaryId=preview.input.v5.context.tripPrimaryResolutionId;if((combatState.trippedResolutionIds||[]).includes(primaryId))throw Object.assign(new Error('Cette touche a déjà servi pour un Croche-pied.'),{userFacing:true});combatState.trippedResolutionIds=[...(combatState.trippedResolutionIds||[]),primaryId].slice(-500);}
         if(owned?.kind==='aim'&&(preview.attack===true||preview.input?.v5?.context?.isAction===true||preview.input?.v5?.context?.movedBeforeRangedAttack===true))delete combatState.byActorId[resolvedActorId];
         if(combatState.byActorId?.[actorId]?.kind==='aim'&&preview.input?.v5?.kind==='ranged'&&preview.input?.targetId===combatState.byActorId[actorId].targetId&&preview.attack===true)delete combatState.byActorId[actorId];
         const defendedActorId=preview.targetId||preview.input?.target?.id||preview.input?.targetId;
@@ -3059,19 +3114,23 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
     discardSimulation(simulation) { return discardSimulation(simulation); },
     previewChannelling(input = {}) {
       const actorId = input.actorId || input.actor?.id || combat.currentActorId;
+      const blocked=combatActionBlock(currentEnvelope(),actorId);if(blocked)return {...blocked,allowed:false,unresolved:[blocked.error]};
       const participant = (combat.participants.get(actorId)) || Array.from(combat.participants.values())[0];
       return {...previewChannelling(participant, {...input,assistant:combat.participants.get(input.assistantId),turnKey:String(combat.round || 1)+':'+String(stateExtensions?.v5?.turnIndex || 1)}),input:structuredClone(input),baseRevision:localRevision};
     },
     applyChannelling(preview, options = {}) {
-      return applyChannelling(api, preview, {...options,turnKey:String(combat.round || 1)+':'+String(stateExtensions?.v5?.turnIndex || 1)});
+      const actorId=options.actorId||preview.input?.actorId||combat.currentActorId;
+      return applyChannelling(combatMagicActionStore(api,actorId), preview, {...options,actorId,turnKey:String(combat.round || 1)+':'+String(stateExtensions?.v5?.turnIndex || 1)});
     },
     previewCasting(spell, input = {}) {
       const actorId = input.actorId || input.actor?.id || combat.currentActorId;
+      const blocked=combatActionBlock(currentEnvelope(),actorId);if(blocked)return {...blocked,allowed:false,unresolved:[blocked.error]};
       const participant = (combat.participants.get(actorId)) || Array.from(combat.participants.values())[0];
       return {...previewCasting(participant, spell, {...input,assistant:combat.participants.get(input.assistantId),turnKey:String(combat.round || 1)+':'+String(stateExtensions?.v5?.turnIndex || 1)}),input:structuredClone(input),baseRevision:localRevision};
     },
     applyCasting(preview, options = {}) {
-      return applyCasting(api, preview, options);
+      const actorId=options.actorId||preview.input?.actorId||combat.currentActorId;
+      return applyCasting(combatMagicActionStore(api,actorId), preview, {...options,actorId});
     },
     previewMiscast(input = {}) {
       const actorId = input.actorId || input.actor?.id || combat.currentActorId;
@@ -3192,21 +3251,23 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
     },
     previewDispelCasting(castingPreview, input = {}) {
       const dispellerId = input.dispellerId || input.actorId || combat.currentActorId;
+      const blocked=combatActionBlock(currentEnvelope(),dispellerId);if(blocked)return {...blocked,allowed:false,unresolved:[blocked.error]};
       const dispeller = (combat.participants.get(dispellerId)) || Array.from(combat.participants.values())[0];
       const round = input.round !== undefined ? input.round : currentMagicRound(combat);
       return previewDispelCasting(dispeller, castingPreview, { turnKey: `${round}:${stateExtensions?.v5?.turnIndex ?? 1}`, round, ...input });
     },
     applyDispelCasting(preview, options = {}) {
-      return applyDispelCasting(api, preview, options);
+      return applyDispelCasting(combatMagicActionStore(api,preview.dispellerId), preview, options);
     },
     previewDispelPersistent(persistentEffect, input = {}) {
       const dispellerId = input.dispellerId || input.actorId || combat.currentActorId;
+      const blocked=combatActionBlock(currentEnvelope(),dispellerId);if(blocked)return {...blocked,allowed:false,unresolved:[blocked.error]};
       const dispeller = (combat.participants.get(dispellerId)) || Array.from(combat.participants.values())[0];
       return previewDispelPersistent(dispeller, persistentEffect, input);
     },
     applyDispelPersistent(preview, options = {}) {
       if(preview.baseRevision!==undefined && preview.baseRevision!==localRevision)throw new Error('État modifié : recalcul requis.');
-      return applyDispelPersistent(api, preview, options);
+      return applyDispelPersistent(combatMagicActionStore(api,preview.dispellerId), preview, options);
     },
     applySpellEffects(participantId, effectDefinition, options = {}) {
       const targetId = participantId || combat.currentActorId;
@@ -3525,6 +3586,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
     },
     previewDivineWrathRecovery(input={}) {
       const envelope=currentEnvelope(),actorId=input.actorId,actor=envelope.combat?.participants?.find(row=>row.id===actorId);
+      const spent=combatActionBlock(envelope,actorId);if(spent)return {...spent,baseRevision:localRevision};
       const block=brokenEscapeActionBlock(envelope,actorId);if(block)return block;
       if(isBrokenEscapeActor(actor)){
         const visible=input.brokenEscapeFacts?.visibleToAnyEnemy;
@@ -3536,9 +3598,11 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       const captured=cloneValue(input);let execution;
       const saved=api.executeCommand('v5-divine-wrath-recovery',draft=>{
         const actorId=captured.preview?.input?.actorId,actor=draft.combat?.participants?.find(row=>row.id===actorId),visible=captured.preview?.input?.brokenEscapeFacts?.visibleToAnyEnemy;
+        const spent=combatActionBlock(draft,actorId);if(spent)throw Object.assign(new Error(spent.error),{userFacing:true,code:spent.code});
         const block=brokenEscapeActionBlock(draft,actorId);
         if(block||isBrokenEscapeActor(actor)&&(typeof visible!=='boolean'||isV5BrokenEscapeActionBlocked(actor,{visibleToAnyEnemy:visible,sequence:draft.extensions?.v5?.brokenEscape?.byActorId?.[actorId]})))throw Object.assign(new Error('Brisé : Prière de récupération indisponible pour ce Tour.'),{userFacing:true});
         execution=applyStoreDivineWrathRecovery(draft,captured);
+        if(execution.state.extensions?.v5?.combatActions?.byActorId?.[actorId]?.kind==='aim')delete execution.state.extensions.v5.combatActions.byActorId[actorId];
         if(execution?.state)registerNewV5Participants(draft,execution.state);
         recordV5ActionUsage(execution.state,actorId,execution.executionId);
         if(isBrokenEscapeActor(execution.state.combat.participants.find(row=>row.id===actorId)))recordV5EscapeVisibility(execution.state,actorId,visible,execution.executionId);

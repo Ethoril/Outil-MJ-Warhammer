@@ -1,4 +1,5 @@
 import {normalizeCamp} from '../core/encounters.js';
+import {v5CombatActionClock} from '../core/v5-resources.js';
 /** Interface MJ de la séquence obligatoire de Brisé (L06 p.163, 185–186).
  * Les faits restent locaux jusqu’au commit d’un reçu Store.
  */
@@ -22,10 +23,8 @@ export function renderBrokenEscapeVisibilityControl({actor,value,onChange,key='f
 const hideSkills=actor=>(actor?.skills||[]).filter(s=>s.status==='resolved'&&Number.isInteger(Number(s.total??s.value))&&/discr[eé]tion|stealth|\bhide\b/i.test(s.name||s.nom||s.sourceName||''));
 function stateOf(Store){try{return JSON.parse(Store.getFullJSON());}catch{return {};}}
 function turnOf(state){
- const enc=state.activeScene?.encounterId||state.activeScene?.id||state.extensions?.v5?.combatId;
- const serial=state.activeScene?.extensions?.v5?.turnIndex??state.extensions?.v5?.turnIndex;
- const actor=state.combat?.currentActorId;
- return {encounterId:enc,round:Number.isSafeInteger(state.combat?.round)&&state.combat.round>0?state.combat.round:null,actorId:actor,turnId:enc&&actor&&Number.isSafeInteger(serial)&&serial>0?(state.activeScene?.id||enc)+':'+serial+':'+actor:null};
+ const clock=v5CombatActionClock(state);
+ return {...clock,round:clock.round??null,actorId:state.combat?.currentActorId,turnId:clock.turnId??null};
 }
 function selectField(parent,label,value,key,options,change){
  const wrap=node('label','workspace-type',label),select=document.createElement('select');

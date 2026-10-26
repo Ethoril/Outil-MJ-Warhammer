@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createStore } from '../js/core/store.js';
 import { userMessage } from '../js/ui/messages.js';
+import { v5StoreActionClock } from '../js/core/v5-store-action.js';
 
 function memoryPersistence() {
   let state = null;
@@ -41,12 +42,25 @@ test('restartCombat — retour au lancement, annulable', async () => {
   await store.moveParticipant(benched.id, 'active');
   await store.addProfilesToCombat(['chien'], { zone: 'active' });
   assert.equal(store.listParticipants().length, 4);
+  const withTurnReceipts=JSON.parse(store.getFullJSON());
+  withTurnReceipts.extensions.v5.combatScopeId='old-combat-scope';
+  withTurnReceipts.extensions.v5.combatActions={byActorId:{[first.id]:{turnId:'old-turn'}},receipts:[{id:'old'}]};
+  withTurnReceipts.extensions.v5.standardTurnActions=[{actionId:'old-action',actorId:first.id}];
+  await store.loadFromJSON(withTurnReceipts);
   const before = { scene: store.getActiveScene(), combat: shape(store) };
+  const clockState=JSON.parse(store.getFullJSON());clockState.combat.round=1;clockState.combat.currentActorId=first.id;clockState.activeScene.extensions.v5.turnIndex=1;
+  const beforeTurnId=v5StoreActionClock(clockState).turnId;
 
   await store.restartCombat();
   const after = store.getActiveScene();
-  assert.equal(after.id, scene.id);
-  assert.equal(after.startedAt, scene.startedAt);
+  assert.equal(after.id, scene.id, 'le contrat conserve l’identité de scène');
+  assert.equal(after.startedAt, scene.startedAt, 'le contrat conserve le démarrage de scène');
+  const restartedState=JSON.parse(store.getFullJSON());
+  assert.notEqual(restartedState.extensions.v5.combatScopeId,'old-combat-scope');
+  const restartClock={...restartedState,combat:{...restartedState.combat,round:1,currentActorId:first.id},activeScene:{...restartedState.activeScene,extensions:{...restartedState.activeScene.extensions,v5:{...restartedState.activeScene.extensions.v5,turnIndex:1}}}};
+  assert.notEqual(v5StoreActionClock(restartClock).turnId,beforeTurnId,'le même acteur reçoit un turnId distinct après redémarrage');
+  assert.equal(restartedState.extensions.v5.combatActions,undefined);
+  assert.equal(restartedState.extensions.v5.standardTurnActions,undefined);
   assert.equal(after.status, 'active');
   assert.equal(after.round, 0);
   assert.equal(after.currentActorId, null);
@@ -91,8 +105,14 @@ test('restartCombat — combat sans scène : PV au maximum, états vidés', asyn
   const [participant] = store.listParticipants();
   await store.updateParticipant(participant.id, { hp: 2, states: ['Sonné|2'] });
   await store.setRoundTurn(3, participant.id);
+  const before=JSON.parse(store.getFullJSON());before.extensions.v5.combatScopeId='scope-before';before.extensions.v5.combatActions={byActorId:{[participant.id]:{kind:'aim'}},receipts:[{id:'stale'}]};before.extensions.v5.standardTurnActions=[{actionId:'stale'}];
+  await store.loadFromJSON(before);
   await store.restartCombat();
   const [after] = store.listParticipants();
+  const restarted=JSON.parse(store.getFullJSON());
+  assert.notEqual(restarted.extensions.v5.combatScopeId,'scope-before');
+  assert.equal(restarted.extensions.v5.combatActions,undefined);
+  assert.equal(restarted.extensions.v5.standardTurnActions,undefined);
   assert.equal(after.id, participant.id);
   assert.equal(after.zone, 'active');
   assert.equal(after.hp, 12);

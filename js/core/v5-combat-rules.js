@@ -14,7 +14,7 @@ import {outnumberTestRules} from './outnumbering.js';
 import {unavailableDisarmedWeapon} from './v5-talent-replacements.js';
 import {warLeaderSubstitution} from './v5-talent-situations.js';
 import { pendingCrewSkill,sourceActive } from './v5-talent-actions.js';
-import { previewV5Test,reverseV5Roll }  from './v5-roll.js';
+import { previewV5Test,reverseV5Roll,refreshV5ResultTier }  from './v5-roll.js';
 import { activeEngines } from './roll-qualities.js';
 import { keywordMechanicalStatus } from './keywords.js';
 import { activeV5TalentEffects } from './v5-talents.js';
@@ -141,8 +141,8 @@ export function buildCombatTest(normalized, role = 'actor') {
     if(kind!=='ranged')unresolved.push('Tir extraordinaire : Test de tir requis.');
     else if(!activeSharpshooter)unresolved.push('Tir extraordinaire : Talent Tireur d’élite acquis et actif requis.');
     if(!description)unresolved.push('Tir extraordinaire : description MJ requise.');
-    if(!Number.isSafeInteger(difficulty))unresolved.push('Tir extraordinaire : difficulté en DR entière fixée par le MJ requise.');
-    if(kind==='ranged'&&activeSharpshooter&&description&&Number.isSafeInteger(difficulty)){
+    if(!Number.isSafeInteger(difficulty)||difficulty>0)unresolved.push('Tir extraordinaire : difficulté en DR entière inférieure ou égale à zéro fixée par le MJ requise.');
+    if(kind==='ranged'&&activeSharpshooter&&description&&Number.isSafeInteger(difficulty)&&difficulty<=0){
       modifiers.push({id:'talent:sharpshooter-extraordinary',label:'Tir extraordinaire — '+description,amount:difficulty});
       extraordinaryShot={talentId:'talent-sharpshooter',description,difficulty};
     }
@@ -291,7 +291,7 @@ export function buildCombatTest(normalized, role = 'actor') {
   if(frenzy&&!defending&&kind==='melee'&&['attack','attaque'].includes(action.type)){const enemies=(normalized.v5State?.participants||[]).filter(p=>p.id!==actor.id&&p.camp!==actor.camp&&Number(p.hp)>0&&p.zone==='active'),nearest=context.nearestEnemyId||(enemies.length===1?enemies[0].id:null);if(!nearest||!enemies.some(p=>p.id===nearest)||normalized.target?.id!==nearest)restrictions.push('Frénésie : désigner et attaquer l’ennemi le plus proche.');}
   const talentSL = previewV5TalentSLChoices(withCompanionTalents(actor,normalized.v5State?.participants||[]), test, { action, settings, kind, role: talentRole, opponent: target });
   test = talentSL.test; unresolved.push(...talentSL.unresolved);
-  test={...test,options:test.options.map(o=>({...o,result:enforceMagicTestRestrictions(actor,o.result,{magical:false})}))};
+  test={...test,options:test.options.map(o=>({...o,result:refreshV5ResultTier(enforceMagicTestRestrictions(actor,o.result,{magical:false}))}))};
   return { test, crewSkill,talentPlans: [talentModifiers.plan, ...talentSL.plans,...psychology.plans,...contact.plans,...(contactTalent?[contactTalent]:[]),...(dualWhirlwind?[dualWhirlwind]:[]),...(warLeader?[{proposals:[{origins:[warLeader.source]}]}]:[])], talentSLChoices: talentSL.choiceDescriptors, kind, penalty: appliedPenalty, penaltyStates: [...relevant].filter(([, value]) => value).map(([key]) => key),
     unresolved, restrictions, charging, qualityBonus: conditionalBonus,extraordinaryShot };
 }

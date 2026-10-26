@@ -9,6 +9,7 @@ import { fixture as arcaneFixture, spellInput, contractFor } from './helpers/lot
 import { encounter as waaaghEncounter, cast as castSpell, subject as participant } from './helpers/lot3-domain-fixture.js';
 import { getSpellContract } from '../js/core/v5-spell-contracts.js';
 import { magicGrantedActions } from '../js/core/v5-magic-combat.js';
+import divineGearHandlers from '../js/core/v5-divine-effects-gear.js';
 
 const catalogue = getReferenceCatalogue();
 const target = { id: 'target', hp: 20, caracs: { E: 30 }, states: [] };
@@ -33,6 +34,88 @@ const actionFor = (item, skill = null, extra = {}) => ({
 const preview = (item, skills, { context = {}, slModifier = 0, action = actionFor(item, skills[0]), actorExtra = {} } = {}) =>
   previewResolution({ actor: actorFor(item, skills, actorExtra), target, action, roll: 40, baseRevision: 0,
     v5: { context, slModifier } });
+
+test('F2-C T1 — Dent et griffe garde ses attaques naturelles sans contrôle de groupe', () => {
+  const contracts=JSON.parse(readFileSync(new URL('../js/data/v5-divine-contracts.json',import.meta.url),'utf8'));
+  const contract=contracts.contracts.find(row=>row.name==='Dent et griffe');
+  const effect=contract.effects.find(row=>row.type==='grant-actions');
+  const layer=divineGearHandlers['grant-actions'].buildLayer(effect);
+  assert.ok(layer.grantedActions.length);
+  for(const granted of layer.grantedActions){
+    const action={...granted,base:54,damage:4};
+    const result=previewResolution({actor:actorFor(null,[],{equipment:[]}),target,action,roll:40,v5:{context:{targetHelpless:true}}});
+    assert.equal(result.weaponSkillReceipt,undefined);
+    assert.deepEqual(result.unresolved,[]);
+    assert.equal(applyResolution(result,{revision:0,participants:[structuredClone(target)]}).status,'applied');
+  }
+});
+
+test('F2-C T1 — les canons à poudre acceptent les faits MJ sans compétence possédée', () => {
+  const items=catalogue.items.filter(row=>row.kind==='weapon'&&['Siège','Embarquée'].includes(row.category)&&(row.keywords||[]).some(word=>word.id==='a-poudre-noire'));
+  assert.equal(items.length,8);
+  for(const item of items){
+    const result=preview(item,[],{context:{weaponTrainingSpecialty:'Poudre noire',weaponAdvances:2,weaponSkillScore:55}});
+    assert.deepEqual(result.unresolved,[],item.name);
+    assert.equal(result.score.base,55,item.name);
+    assert.equal(result.weaponSkillReceipt.trained,true);
+    assert.ok(preview(item,[],{context:{weaponTrainingSpecialty:'Arc',weaponAdvances:2,weaponSkillScore:55}}).unresolved.length,'Arc ne devient pas une voie licite');
+  }
+});
+
+test('F2-C T1 — sans lien la spécialité exacte entraînée prime sur Base et sur l’ordre des compétences', () => {
+  const item=itemById('weapon-armes-corps-a-corps-escrime-petit-sabre');
+  const base={...skillByName('Corps à corps (Base)'),total:69},escrime={...skillByName('Corps à corps (Escrime)'),total:60};
+  for(const skills of [[base,escrime],[escrime,base]]){
+    const result=preview(item,skills,{action:actionFor(item)});
+    assert.deepEqual(result.unresolved,[]);
+    assert.equal(result.score.base,60);
+    assert.equal(result.weaponSkillReceipt.skillId,escrime.id);
+    assert.ok(result.input.action.qualities.some(row=>row.id==='rapide'));
+    const explicit=preview(item,skills,{action:actionFor(item),context:{weaponSkillId:base.id}});
+    assert.equal(explicit.score.base,69);
+    assert.ok(!explicit.input.action.qualities.some(row=>row.id==='rapide'));
+  }
+});
+
+test('F2-C T1 — un groupe Siège générique ne prend pas une compétence sans storageKey pour un lien', () => {
+  const item=itemById('weapon-armes-a-distance-siege-baliste-navale');
+  const arc=skillByName('Projectiles (Arc)'),crossbow=skillByName('Projectiles (Arbalète)');
+  for(const skills of [[arc,crossbow],[crossbow,arc]]){
+    const result=preview(item,skills,{action:actionFor(item)});
+    assert.equal(result.weaponSkillReceipt.missing,'weapon-training-specialty-required');
+  }
+});
+
+test('F2-C T1 — les liens Arc périmés se corrigent par le choix de résolution', () => {
+  const arc=skillByName('Projectiles (Arc)');
+  for(const [item,valid] of [[catalogue.items.find(row=>row.kind==='weapon'&&row.category==='Base'),skillByName('Corps à corps (Base)')],[catalogue.items.find(row=>row.kind==='weapon'&&row.category==='Arbalète'),skillByName('Projectiles (Arbalète)')]]){
+    const skills=[arc,valid],action=actionFor(item,arc);
+    assert.ok(preview(item,skills,{action}).unresolved.length,'un lien erroné ne certifie pas la maîtrise');
+    const result=preview(item,skills,{action,context:{weaponSkillId:valid.id}});
+    assert.deepEqual(result.unresolved,[]);
+    assert.equal(result.score.base,valid.total);
+    assert.equal(result.weaponSkillReceipt.skillId,valid.id);
+    assert.equal(applyResolution(result,{revision:0,participants:[structuredClone(target)]}).status,'applied');
+  }
+});
+
+test('F2-C T1 — la bâtarde sans suffixe a le défaut une main et ses défauts', () => {
+  const item={id:'custom-bastard',kind:'weapon',name:'Épée bâtarde',category:'Deux mains',keywords:[]};
+  const result=preview(item,[skillByName('Corps à corps (Base)')]);
+  assert.deepEqual(result.unresolved,[]);
+  assert.equal(result.weaponSkillReceipt.hands,1);
+  assert.ok(result.input.action.qualities.some(row=>row.id==='epuisante'));
+  assert.ok(result.input.action.qualities.some(row=>row.id==='lente'));
+});
+
+test('F2-C T1 — le malus CT conserve le modificateur de DR porté par l’action', () => {
+  const item=catalogue.items.find(row=>row.kind==='weapon'&&row.category==='Lancer');
+  const action=actionFor(item);action.extensions.v5.slModifier=2;
+  const result=previewResolution({actor:actorFor(item,[]),target,action,roll:40,v5:{context:{targetHelpless:true}}});
+  assert.deepEqual(result.unresolved,[]);
+  assert.equal(result.score.mod,1);
+  assert.equal(previewResolution(result.input).score.mod,1,'ré-aperçu sans cumul');
+});
 
 test('F2-C Claude — les replis CC/CT utilisent la base avant que le delta de caractéristique soit ajouté', async () => {
   const rapier = itemById('weapon-armes-corps-a-corps-escrime-petit-sabre');
@@ -274,7 +357,7 @@ test('F2-C Claude — les profils conjurés utilisent le même groupe canonique 
   assert.deepEqual(result.unresolved,[]);assert.equal(result.weaponSkillReceipt.group,'Base');assert.equal(result.score.base,base.total);
 });
 
-test('F2-C Claude — une action sans compétence liée privilégie une voie légale entraînée sur sa spécialité à zéro', () => {
+test('F2-C T1 — la spécialité exacte présente à zéro prime aussi sur Base, les alternatives restent licites', () => {
   const base=skillByName('Corps à corps (Base)'),escrime=skillByName('Corps à corps (Escrime)'),parade={...skillByName('Corps à corps (Bouclier)'),total:54,advances:0},cavalry=skillByName('Corps à corps (Cavalerie)');
   const run=(item,skills)=>{
     const actor=actorFor(item,skills,{extensions:{v5:{mounted:false}},ficheSnapshot:{skills,coverage:{skills:'present'}}});
@@ -283,7 +366,11 @@ test('F2-C Claude — une action sans compétence liée privilégie une voie lé
   };
   const mainGauche=itemById('weapon-armes-corps-a-corps-parade-main-gauche');
   const main=run(mainGauche,[{...parade,total:54,advances:0},{...base,total:69,advances:5}]);
-  assert.deepEqual(main.unresolved,[]);assert.equal(main.receipt.trained,true);assert.equal(main.receipt.skillId,base.id);assert.equal(main.action.base,69);assert.ok(!main.action.qualities.some(row=>row.id==='defensive'));
+  assert.deepEqual(main.unresolved,[]);assert.equal(main.receipt.trained,false);assert.equal(main.action.base,54);assert.ok(!main.action.qualities.some(row=>row.id==='defensive'));
+  const fencing=itemById('weapon-armes-corps-a-corps-escrime-petit-sabre'),skills=[{...base,total:69,advances:5},{...escrime,total:54,advances:0}];
+  const exactZero=run(fencing,skills);assert.equal(exactZero.receipt.trained,false);assert.equal(exactZero.action.base,54);
+  const explicitBase=applyWeaponSkillRules(actorFor(fencing,skills),actionFor(fencing),{weapon:fencing,context:{weaponSkillId:base.id}});
+  assert.deepEqual(explicitBase.unresolved,[]);assert.equal(explicitBase.action.base,69);assert.equal(explicitBase.receipt.skillId,base.id);
   const sabre=itemById('weapon-armes-corps-a-corps-cavalerie-sabre');
   const footSabre=run(sabre,[{...base,total:54,advances:0},{...escrime,total:69,advances:5}]);
   assert.deepEqual(footSabre.unresolved,[]);assert.equal(footSabre.receipt.trained,true);assert.equal(footSabre.receipt.skillId,escrime.id);assert.equal(footSabre.action.base,69);

@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import * as TurnOrder from '../js/core/turn-order.js';
 import { createStore } from '../js/core/store.js';
 import { effectiveOrder } from '../js/core/turn-order.js';
+import { v5StoreActionClock } from '../js/core/v5-store-action.js';
 
 const clone = value => structuredClone(value);
 function memoryPersistence() {
@@ -82,6 +83,17 @@ test('F2-A — d10 1 et 10 acceptés ; dé PJ, I absente ou acteur sans score re
   const missingCharacteristic = buildPlan([unknownI], { diceById: { unknown: 5 } });
   assert.equal(missingCharacteristic.ready, false);
   assert.ok(missingCharacteristic.needsInput.some(row => row.participantId === 'unknown' && row.field === 'characteristic'));
+});
+
+test('F2-A — le Store refuse d’initialiser ou démarrer sans combattant actif', async () => {
+  const {store}=await fixture([person('bench-only',{zone:'bench'})]);
+  const revision=store.getLocalRevision(),preview=store.previewCombatInitialization({startCombat:true});
+  assert.equal(preview.ready,false);
+  assert.ok(preview.needsInput.some(row=>row.field==='activeCombatants'));
+  const result=await store.applyCombatInitialization(preview);
+  assert.equal(result.status,'requires-input');
+  assert.equal(store.getLocalRevision(),revision);
+  assert.equal(store.getCombat().round,0);
 });
 
 test('F2-A — après normalisation Store, I historique normalisée à zéro sans caracs.I demande encore une saisie', async () => {
@@ -223,38 +235,24 @@ test('F2-A — après détermination, l’activation legacy et sa simulation son
   assert.equal(store.listParticipants()[0].initiative, 43);
 });
 
-test('F2-A — tournoi à trois utilise n−1 Tests opposés V5 tracés et le gagnant choisit une permutation complète', () => {
+test('F2-A — à trois ex aequo, le MJ choisit directement une permutation complète', () => {
   const participants = [person('a'), person('b'), person('c')];
   const initial = buildPlan(participants, { diceById: { a: 5, b: 5, c: 5 } });
   const group = initial.tieGroups[0];
   assert.ok(group, 'le triplet ex aequo doit être explicite');
-  const ordered = buildPlan(participants, {
-    diceById: { a: 5, b: 5, c: 5 },
-    tieOrders: { [group.key]: ['a', 'b', 'c'] },
-    opposedRolls: {
-      [`${group.key}:a:b`]: { initiatorRoll: 21, opponentRoll: 31 },
-      [`${group.key}:a:c`]: { initiatorRoll: 11, opponentRoll: 41 }
-    },
-    tieChoices: { [group.key]: ['c', 'b', 'a'] }
-  });
+  const ordered = buildPlan(participants, { diceById: { a: 5, b: 5, c: 5 }, tieChoices: { [group.key]: ['c', 'b', 'a'] } });
   assert.equal(ordered.ready, true);
-  assert.deepEqual(ordered.order, ['c', 'b', 'a'], 'le vainqueur peut choisir de jouer en dernier');
-  assert.equal(ordered.oppositions.length, 2);
-  assert.deepEqual(ordered.oppositions.map(row => [row.initiatorId, row.opponentId, row.winnerId]), [['a', 'b', 'a'], ['a', 'c', 'a']]);
-  assert.ok(ordered.oppositions.every(row => Number.isFinite(row.initiator.sl) && Number.isFinite(row.opponent.sl)));
-
-  const missingOpponent = buildPlan(participants, {
-    diceById: { a: 5, b: 5, c: 5 }, tieOrders: { [group.key]: ['a', 'b', 'c'] },
-      opposedRolls: { [`${group.key}:a:b`]: { initiatorRoll: 21 } }
-  });
-  assert.equal(missingOpponent.ready, false, 'un champ manquant bloque au lieu de produire un ordre');
-  assert.ok(missingOpponent.needsInput.some(row => row.field === 'opponentRoll'));
+  assert.deepEqual(ordered.order, ['c', 'b', 'a']);
+  assert.equal(ordered.oppositions.length, 0);
+  const missingChoice = buildPlan(participants, { diceById: { a: 5, b: 5, c: 5 } });
+  assert.equal(missingChoice.ready, false, 'l’ordre choisi par le MJ est requis');
+  assert.ok(missingChoice.needsInput.some(row => row.field === 'tieChoice' && row.direct));
   const incompleteChoice = buildPlan(participants, {
     diceById: { a: 5, b: 5, c: 5 }, tieOrders: { [group.key]: ['a', 'b', 'c'] },
     opposedRolls: { [`${group.key}:0`]: { initiatorRoll: 21, opponentRoll: 31 }, [`${group.key}:1`]: { initiatorRoll: 11, opponentRoll: 41 } },
     tieChoices: { [group.key]: ['a', 'b', 'b'] }
   });
-  assert.equal(incompleteChoice.ready, false, 'le choix du gagnant est une permutation complète, sans doublon');
+  assert.equal(incompleteChoice.ready, false, 'le choix du MJ est une permutation complète, sans doublon');
 });
 
 test('F2-A — oppositions égales utilisent le départage V5 en faveur de l’initiateur déclaré', () => {
@@ -378,7 +376,11 @@ test('F2-A — redémarrage staged: annulation conserve la scène; une applicati
   await store.saveEncounter({ id: 'restart-enc', title: 'Cour', entries: [{ id: 'entry', profileId: 'restart-foe', quantity: 1, camp: 'ennemi', zone: 'active' }] });
   const launch = store.previewEncounterLaunch('restart-enc');
   await store.applyCombatInitialization(store.previewCombatInitialization({ staging: launch, diceById: { [launch.scene.participants[0].id]: 9 } }));
+  const scoped=JSON.parse(store.getFullJSON());scoped.extensions.v5.combatScopeId='old-combat-scope';scoped.extensions.v5.combatActions={byActorId:{old:{kind:'aim'}},receipts:[{id:'old'}]};scoped.extensions.v5.standardTurnActions=[{actionId:'old-action'}];
+  await store.loadFromJSON(scoped);
   const oldScene = store.getActiveScene(), revision = store.getLocalRevision();
+  const beforeClock=JSON.parse(store.getFullJSON());beforeClock.combat.round=1;beforeClock.combat.currentActorId=beforeClock.combat.participants[0].id;beforeClock.activeScene.extensions.v5.turnIndex=1;
+  const oldTurnId=v5StoreActionClock(beforeClock).turnId;
   const stagedRestart = store.previewCombatRestart();
   const restartPreview = store.previewCombatInitialization({ staging: stagedRestart, diceById: { [stagedRestart.scene.participants[0].id]: 3 } });
   assert.equal(restartPreview.ready, true);
@@ -389,8 +391,33 @@ test('F2-A — redémarrage staged: annulation conserve la scène; une applicati
   assert.equal(store.getCombat().round, 0);
   assert.equal(store.listParticipants()[0].extensions.v5.combatInitiative.die, 3);
   assert.equal(store.listParticipants()[0].extensions.v5.combatInitiative.score, 7);
+  assert.equal(store.getActiveScene().id,oldScene.id,'l’identité de scène reste celle du contrat existant');
+  const restarted=JSON.parse(store.getFullJSON());
+  assert.notEqual(restarted.extensions.v5.combatScopeId,'old-combat-scope');
+  assert.equal(restarted.activeScene.extensions.v5.combatScopeId,restarted.extensions.v5.combatScopeId,'scène et enveloppe partagent la même portée de combat');
+  const afterClock={...restarted,combat:{...restarted.combat,round:1,currentActorId:beforeClock.combat.currentActorId},activeScene:{...restarted.activeScene,extensions:{...restarted.activeScene.extensions,v5:{...restarted.activeScene.extensions.v5,turnIndex:1}}}};
+  assert.notEqual(v5StoreActionClock(afterClock).turnId,oldTurnId);
+  assert.equal(restarted.extensions.v5.combatActions,undefined);
+  assert.equal(restarted.extensions.v5.standardTurnActions,undefined);
   assert.equal(await store.undo(), true);
   assert.deepEqual(store.getActiveScene(), oldScene);
+});
+
+test('F2-A — redémarrage staged sans scène renouvelle la portée et purge les reçus d’actions', async () => {
+  const {store}=await fixture([person('solo',{I:40})]);
+  await store.applyCombatInitialization(store.previewCombatInitialization({diceById:{solo:5}}));
+  const state=JSON.parse(store.getFullJSON()),oldScope=state.extensions.v5.combatScopeId;
+  state.extensions.v5.combatActions={byActorId:{solo:{kind:'aim'}},receipts:[{id:'stale'}]};
+  state.extensions.v5.standardTurnActions=[{actionId:'stale'}];
+  await store.loadFromJSON(state);
+  const staging=store.previewCombatRestart(),preview=store.previewCombatInitialization({staging,diceById:{solo:3}});
+  assert.equal(preview.ready,true);
+  await store.applyCombatInitialization(preview);
+  const restarted=JSON.parse(store.getFullJSON());
+  assert.notEqual(restarted.extensions.v5.combatScopeId,oldScope);
+  assert.equal(restarted.extensions.v5.combatActions,undefined);
+  assert.equal(restarted.extensions.v5.standardTurnActions,undefined);
+  assert.equal(store.getCombat().round,0);
 });
 
 test('F2-A — revenir du manuel à auto restaure le score résolu, avec Undo et reload', async () => {
@@ -488,6 +515,101 @@ test('F2-A — terminer le combat efface le marqueur de piste initialisée avant
   assert.equal(envelope.extensions.v5.combatInitiativeInitialized, undefined);
   assert.equal(envelope.extensions.v5.combatInitiativeResolution, undefined);
   assert.equal(envelope.combat.participants.length, 0);
+});
+
+test('F2-A — suspendre une scène efface le marqueur global avant le prochain combat libre', async () => {
+  const { store } = await fixture([]);
+  await store.addProfile({ id: 'suspend-profile', name: 'Garde', kind: 'PNJ', hp: 10, initiative: 40, caracs: { I: 40 } });
+  await store.saveEncounter({ id: 'suspend-enc', title: 'Scène', entries: [{ id: 'suspend-entry', profileId: 'suspend-profile', quantity: 1, camp: 'ennemi', zone: 'active' }] });
+  const staging=store.previewEncounterLaunch('suspend-enc'), actorId=staging.scene.participants[0].id;
+  await store.applyCombatInitialization(store.previewCombatInitialization({ staging, diceById: { [actorId]: 5 } }));
+  await store.suspendActiveScene();
+  assert.equal(JSON.parse(store.getFullJSON()).extensions.v5.combatInitiativeInitialized, undefined);
+  assert.ok(store.listSuspendedScenes()[0].participants[0].extensions.v5.combatInitiative.initialized);
+});
+
+test('F2-A — reprendre S1 après un combat libre restaure sa portée et garde ses reçus', async () => {
+  const {store}=await fixture([]);
+  await store.addProfile({id:'scope-profile',name:'Garde',kind:'PNJ',hp:10,initiative:40,caracs:{I:40}});
+  await store.saveEncounter({id:'scope-enc',title:'S1',entries:[{id:'scope-entry',profileId:'scope-profile',quantity:1,camp:'ennemi',zone:'active'}]});
+  const launch=store.previewEncounterLaunch('scope-enc'),sceneActor=launch.scene.participants[0].id;
+  await store.applyCombatInitialization(store.previewCombatInitialization({staging:launch,diceById:{[sceneActor]:5}}));
+  const first=JSON.parse(store.getFullJSON()),s1Scope=first.activeScene.extensions.v5.combatScopeId;
+  first.extensions.v5.standardTurnActions=[{actionId:'s1-action',actorId:sceneActor}];first.extensions.v5.combatActions={byActorId:{[sceneActor]:{kind:'aim'}},receipts:[{id:'s1-receipt'}]};
+  await store.loadFromJSON(first);await store.suspendActiveScene();
+  await store.addParticipant(person('free-actor',{I:30}));
+  await store.applyCombatInitialization(store.previewCombatInitialization({diceById:{'free-actor':7},startCombat:true}));
+  const freeScope=JSON.parse(store.getFullJSON()).extensions.v5.combatScopeId;
+  assert.notEqual(freeScope,s1Scope);
+  const suspended=store.listSuspendedScenes()[0];await store.resumeScene(suspended.id);
+  const resumed=JSON.parse(store.getFullJSON());
+  assert.equal(resumed.extensions.v5.combatScopeId,s1Scope);
+  assert.equal(resumed.activeScene.extensions.v5.combatScopeId,s1Scope);
+  assert.deepEqual(resumed.extensions.v5.standardTurnActions,first.extensions.v5.standardTurnActions);
+  assert.deepEqual(resumed.extensions.v5.combatActions,first.extensions.v5.combatActions);
+  const clockState={...resumed,combat:{...resumed.combat,round:1,currentActorId:'free-actor'},activeScene:{...resumed.activeScene,extensions:{...resumed.activeScene.extensions,v5:{...resumed.activeScene.extensions.v5,turnIndex:1}}}};
+  assert.ok(v5StoreActionClock(clockState).turnId.startsWith(`${s1Scope}:`));
+});
+
+test('F2-A — un participant déjà tiré remis du banc retrouve son rang au score', async () => {
+  const returning=person('returning',{I:40,zone:'bench'}),fast=person('fast',{I:30}),slow=person('slow',{I:20});
+  returning.extensions.v5.combatInitiative={die:9,score:13,characteristic:40,initialized:true,orderIndex:1};
+  fast.extensions.v5.combatInitiative={die:10,score:13,characteristic:30,initialized:true,orderIndex:2};
+  slow.extensions.v5.combatInitiative={die:1,score:3,characteristic:20,initialized:true,orderIndex:3};
+  const {store}=await fixture([returning,fast,slow]);
+  const state=baseState([returning,fast,slow]);state.extensions.v5.combatInitiativeInitialized=true;state.extensions.v5.combatInitiativeResolution={order:['returning','fast','slow']};
+  await store.loadFromJSON(state);
+  await store.moveParticipant('returning','active');
+  assert.deepEqual(store.getEffectiveOrder(),['returning','fast','slow']);
+});
+
+test('F2-A — le retour du banc respecte l’ordre manuel déjà choisi', async () => {
+  const returning=person('returning',{I:40,zone:'bench'}),first=person('first',{I:30}),second=person('second',{I:20});
+  for(const [id,score] of [['returning',14],['first',8],['second',5]]){
+    const row=[returning,first,second].find(item=>item.id===id);row.extensions.v5.combatInitiative={die:score-Math.floor(row.caracs.I/10),score,characteristic:row.caracs.I,initialized:true};
+  }
+  const {store}=await fixture([returning,first,second]);
+  const state=baseState([returning,first,second]);state.combat.orderMode='manual';state.combat.order=['second','first'];state.combat.currentActorId='second';
+  state.extensions.v5.combatInitiativeInitialized=true;state.extensions.v5.combatInitiativeResolution={order:['returning','first','second']};
+  await store.loadFromJSON(state);await store.moveParticipant('returning','active');
+  assert.deepEqual(store.getEffectiveOrder(),['second','returning','first']);
+});
+
+test('F2-A — activation après tirage et avant Round 1 exige un nouveau jet sans relancer les anciens', async () => {
+  const active=person('already',{I:40}),bench=person('late',{I:30,zone:'bench'});
+  active.extensions.v5.combatInitiative={die:8,score:12,characteristic:40,initialized:true,orderIndex:0};
+  const {store}=await fixture([active,bench]);
+  const state=baseState([active,bench]);state.extensions.v5.combatInitiativeInitialized=true;state.extensions.v5.combatInitiativeResolution={order:['already']};
+  await store.loadFromJSON(state);
+  assert.throws(()=>store.moveParticipant('late','active'),/doit recevoir son jet/,'Store interdit une activation Round 0 qui contourne le dialogue');
+  const staging=store.previewCombatParticipantActivation('late');
+  assert.equal(staging.kind,'activate-pre-round');
+  const preview=store.previewCombatInitialization({staging,diceById:{late:3}});
+  assert.equal(preview.ready,true,JSON.stringify(preview.needsInput));
+  await store.applyCombatInitialization(preview);
+  const rows=store.listParticipants();
+  assert.equal(rows.find(row=>row.id==='already').extensions.v5.combatInitiative.die,8);
+  assert.equal(rows.find(row=>row.id==='late').extensions.v5.combatInitiative.die,3);
+  assert.deepEqual(store.getCombat().order,['already','late']);
+});
+
+test('F2-A — activation pré-Round 1 conserve les dés et départages d’une égalité déjà réglée', async () => {
+  const {store}=await fixture([person('one',{I:40}),person('two',{I:40})]);
+  const groupKey='one|two',matchId='one|two:one:two';
+  await store.applyCombatInitialization(store.previewCombatInitialization({diceById:{one:1,two:1},tieOrders:{[groupKey]:['one','two']},opposedRolls:{[matchId]:{initiatorRoll:20,opponentRoll:80}},tieChoices:{[groupKey]:['two','one']}}));
+  await store.addParticipant(person('late',{I:30,zone:'bench'}));
+  const staging=store.previewCombatParticipantActivation('late');
+  assert.deepEqual(staging.tieOrders[groupKey],['one','two']);
+  assert.deepEqual(staging.tieChoices[groupKey],['two','one']);
+  assert.equal(staging.opposedRolls[matchId].initiatorRoll,20);
+  assert.equal(staging.opposedRolls[matchId].opponentRoll,80);
+  const preview=store.previewCombatInitialization({staging,diceById:{late:10}});
+  assert.equal(preview.ready,true,JSON.stringify(preview.needsInput));
+  await store.applyCombatInitialization(preview);
+  const proof=JSON.parse(store.getFullJSON()).extensions.v5.combatInitiativeResolution;
+  assert.deepEqual(proof.tieGroups[0].chosenOrder,['two','one']);
+  assert.equal(proof.tieGroups[0].matches[0].initiatorRoll,20);
+  assert.deepEqual(store.getCombat().order,['late','two','one']);
 });
 
 test('F2-A — Test opposé d’I applique Exténué au DR via le pipeline V5, sans pénalité d’Action', () => {

@@ -14,7 +14,7 @@ try{
  const page=await browser.newPage();const origin=`http://127.0.0.1:${server.address().port}`;
  await page.goto(`${origin}/blank`);
  await page.evaluate(async origin=>{window.renderResolutionPanel=(await import(`${origin}/js/ui/resolution-panel.js`)).renderResolutionPanel;window.calls=[];window.handlers=new Proxy({}, {get:()=> (...args)=>window.calls.push(args)});},origin);
- const render=async ({weapon,action,draft={},withTarget=false})=>page.evaluate(({weapon,action,draft,withTarget})=>{const actor={id:'mj',name:'MJ',caracs:{CC:40,CT:35},skills:[],equipment:[weapon],ficheSnapshot:{skills:[],coverage:{skills:'absent'}},states:[]};const target=withTarget?{id:'target',name:'Cible',camp:'enemy',caracs:{CC:30,Ag:30},skills:[],equipment:[],states:[],hp:10,armor:{}}:null;const panel=window.renderResolutionPanel({draft,actor,participants:[actor,...(target?[target]:[])],actions:[action],actionKey:action.id,type:'attack',target,groups:{adversaries:target?[target]:[],allies:[]},defense:{options:[],value:'Ag',option:{value:'Ag',statLabel:'Ag',mod:0,v5:{kind:'test',slModifier:0}}},canCalculate:false,canApply:false,handlers:window.handlers});document.body.replaceChildren(panel);}, {weapon,action,draft,withTarget});
+ const render=async ({weapon,action,draft={},withTarget=false,skills=[]})=>page.evaluate(({weapon,action,draft,withTarget,skills})=>{const actor={id:'mj',name:'MJ',caracs:{CC:40,CT:35},skills,equipment:weapon?[weapon]:[],ficheSnapshot:{skills:[],coverage:{skills:'absent'}},states:[]};const target=withTarget?{id:'target',name:'Cible',camp:'enemy',caracs:{CC:30,Ag:30},skills:[],equipment:[],states:[],hp:10,armor:{}}:null;const panel=window.renderResolutionPanel({draft,actor,participants:[actor,...(target?[target]:[])],actions:[action],actionKey:action.id,type:'attack',target,groups:{adversaries:target?[target]:[],allies:[]},defense:{options:[],value:'Ag',option:{value:'Ag',statLabel:'Ag',mod:0,v5:{kind:'test',slModifier:0}}},canCalculate:false,canApply:false,handlers:window.handlers});document.body.replaceChildren(panel);}, {weapon,action,draft,withTarget,skills});
  const ambiguous={id:'ambiguous',kind:'weapon',name:'Objet d’ingénierie',category:'Ingénierie',source:'',range:'',hands:1,keywords:[]};
  const action={id:'act',note:'Objet d’ingénierie',type:'attack',base:'',attr:'CC',damage:1,qualities:[],extensions:{fiche:{bindingVersion:1,equipmentId:'ambiguous',requiresLink:true}}};
  await render({weapon:ambiguous,action});
@@ -43,16 +43,20 @@ try{
  assert.ok(!cannonOptions.some(text=>/^Arc(?:\s|$)/i.test(text)),'le sélecteur ne propose pas Arc pour le canon à poudre');
  const legacyConjured={id:'legacy-conjured',note:'Arme aethyrique ancienne',type:'attack',attr:'CC',base:50,damage:4,qualities:[{id:'magique'}],extensions:{v5:{kind:'melee',materialized:true}}};
  await render({weapon:null,action:legacyConjured});
- const conjuredGroup=page.getByLabel('Groupe d’arme à confirmer par le MJ');assert.ok(await conjuredGroup.count(),'une arme conjurée ancienne sans provenance a un contrôle MJ visible');
- await conjuredGroup.selectOption('Deux-Mains');
- assert.equal((await page.evaluate(()=>window.calls.at(-1)[0].v5Context.weaponTrainingGroup)),'Deux-Mains','le groupe choisi est transmis au moteur');
- await page.getByLabel('Augmentations de la spécialité (MJ, si la fiche ne les fournit pas)').fill('1');
- await page.getByLabel('Augmentations de la spécialité (MJ, si la fiche ne les fournit pas)').dispatchEvent('change');
- assert.equal((await page.evaluate(()=>window.calls.at(-1)[0].v5Context.weaponAdvances)),1,'l’ancienne arme offre les faits MJ nécessaires au contrôle de maîtrise');
+ assert.equal(await page.getByLabel('Groupe d’arme à confirmer par le MJ').count(),0,'materialized sans clé ni profil ne transforme pas une attaque naturelle en arme');
  await render({weapon:{...ambiguous,id:'ascii',name:'Epee batarde (2M)',category:'Deux-Mains'},action:{...action,id:'ascii-action',extensions:{fiche:{bindingVersion:1,equipmentId:'ascii',requiresLink:true}}}});
  assert.match(await page.locator('.workspace-muted').allTextContents().then(rows=>rows.join(' ')),/réglage durable/,'l’aperçu indique que les mains se règlent sur le participant');
  await render({weapon:ambiguous,action,draft:{preview:{actionType:'attack',success:true,sl:0,input:{actor:{skills:[],equipment:[]},action:{extensions:{fiche:{equipmentId:ambiguous.id}}}},weaponSkillReceipt:{trained:true,group:'Base',skillId:'base',applied:['fencing-with-basic']}}}});
  const receiptText=await page.locator('.workspace-result-line').allTextContents();
- assert.ok(receiptText.some(text=>text.includes('compétence de base utilisée')),'le reçu ne présente pas Base à zéro comme une spécialité entraînée');
- console.log('F2-C UI: nature Ingénierie, spécialité Siège explicite, score vide et mains durables vérifiés.');
+ assert.ok(receiptText.some(text=>text.includes('compétence de base utilisée')),'le reçu distingue une utilisation entraînée de Base');
+ const skills=[{id:'arc',name:'Projectiles (Arc)',group:'Projectiles',specialization:'Arc',advances:2,total:55},{id:'base',name:'Corps à corps (Base)',group:'Corps à corps',specialization:'Base',advances:2,total:60},{id:'crossbow',name:'Projectiles (Arbalète)',group:'Projectiles',specialization:'Arbalète',advances:2,total:65}];
+ for(const [category,selected,correct] of [['Base','arc','base'],['Arbalète','arc','crossbow'],['Escrime','base','base']]){
+  const weapon={...ambiguous,id:'stale',name:'Arme',category};
+  await render({weapon,skills,action:{...action,extensions:{fiche:{bindingVersion:1,equipmentId:'stale',skillId:selected}}}});
+  await page.getByLabel('Compétence utilisée pour cette arme').selectOption(correct);
+  assert.equal((await page.evaluate(()=>window.calls.at(-1)[0].v5Context.weaponSkillId)),correct,'le lien erroné se corrige dans le panneau');
+ }
+ await render({weapon:{...ambiguous,id:'one-hand',name:'Épée bâtarde',category:'Deux-Mains'},action:{...action,extensions:{fiche:{bindingVersion:1,equipmentId:'one-hand'}}}});
+ assert.match((await page.locator('.workspace-muted').allTextContents()).join(' '),/Épée bâtarde : 1 main/);
+ console.log('F2-C UI T1: sélecteur de correction des liens, Base explicite, attaques naturelles sans groupe et bâtarde une main vérifiés.');
 }finally{await browser.close();await new Promise(done=>server.close(done));}

@@ -1,5 +1,59 @@
 # Rapport GPT - Phase F2
 
+## Reprise T1 après contre-vérification Claude — 26/10/2026
+
+La contre-vérification `tmp/gpt-phase-f2/CONTRE_VERIFICATION_CLAUDE_T1.md` sur `02b203b` remplace le verdict de clôture précédent : elle demande les corrections 1 à 20 avant T2. Le MJ autorise ces corrections, leur revue indépendante et une nouvelle suite complète, puis impose l'arrêt avant T2. Les trois nouvelles décisions du MJ sont recopiées en tête de `CHOIX_EXECUTANT_PHASE_F2.md` ; elles remplacent les choix historiques incompatibles, notamment A-EGALITES-01.
+
+Les résultats historiques ci-dessous concernent les états antérieurs. Les corrections de cette reprise sont gelées ; les revues indépendantes et preuves finales sont décrites ci-dessous.
+
+### Corrections de la contre-vérification T1
+
+| Point Claude | Raccord demandé et contrôle |
+|---|---|
+| 1 | Dent et griffe et autres attaques naturelles ne sont pas assimilés à une arme conjurée sans clé/profil ; vrai contrat testé. |
+| 2 | Les huit profils Siège/Embarquée à poudre acceptent les faits MJ de spécialité, augmentations et score ; voie Arc refusée. |
+| 3 | Aucun lien absent ne peut sélectionner une compétence par `storageKey` absent ; spécialité exacte prioritaire, même à zéro, Base explicite reste disponible. |
+| 4 | Bâtarde sans suffixe : défaut une main cohérent entre moteur et panneau. |
+| 5 | Le panneau offre un choix de compétence pour corriger les liens périmés de mêlée et de tir. |
+| 6 | Modificateur de DR porté par l'action conservé au cumul de maîtrise ; reçu Base à zéro sans étiquettes contradictoires. |
+| 7 | Retour du banc d'un combattant déjà initialisé : rang de combat restauré en automatique, ordre manuel préservé. |
+| 8 | Suspension : marqueur global d'initialisation retiré ; preuve de scène conservée pour la reprise. |
+| 9 | Piste et carte distinguent le score de combat de l'Initiative historique ; champ de caractéristique étiqueté I. |
+| 10 | Avertissement de remplacement d'un ordre manuel ; API d'initialisation sans combattant actif refusée. |
+| 11 | Hauteur et terrain utilisent chacun une seule pénalité malgré les anciens champs. |
+| 12 | Les suppressions de Talents reconnaissent les nouvelles clés hauteur/terrain ; Sapeur conserve uniquement les exemptions de son contrat. |
+| 13 | Cible sans Trait de Taille = Moyenne pour les modificateurs de tir. |
+| 14 | Seconde arme au tir admise ; contrôle des deux armes à une main, refus d'aperçu lisible et voies de Talents conservées. Raccord au vrai catalogue et au panneau commun mêlée/tir. |
+| 15 | Une tentative de Croche-pied par touche, sans second État À Terre. |
+| 16 | Paliers recalculés après ajustements, exposés pour le défenseur et copiés dans le journal. |
+| 17 | Gardes Défensive/Viser et perte de Visée dans les transactions de Focalisation, Incantation, dissipation et Prière, y compris récupération du Courroux. |
+| 18 | Changer de cible purge intention létale, option létale et confirmation de mort. |
+| 19 | Lecture des États alignée sur niveau zéro et source inactive ; caractérisation supplémentaire hors B. |
+| 20 | Réaction au premier niveau normalisée ; Défensive exige une compétence possédée ; difficulté extraordinaire non positive ; Visée liée à l'arme ; redémarrage avec portée de Tour neuve et état d'Actions purgé ; déviation déduite du groupe, demi-distance conservée ; variables documentées. |
+
+Les corrections restent limitées à T1. La nouvelle contre-vérification Claude ciblée et le feu vert du MJ restent nécessaires avant T2.
+
+### Revues et validation de la reprise
+
+- Revue Luna C : `tmp/gpt-phase-f2/REVUE_T1_C_CORRECTIONS_LUNA.md`, **48/48** ciblés et navigateur C verts ; complément spécialité exacte à zéro, **48/48**, dans `REVUE_T1_C_COMPLEMENT_LUNA.md`.
+- Revue Luna A : `tmp/gpt-phase-f2/REVUE_T1_A_CORRECTIONS_LUNA.md`, **51/51** ciblés et navigateur A verts, avec suspension/reprise et portée de combat redémarré.
+- Revues Luna B : `tmp/gpt-phase-f2/REVUE_T1_B_CORRECTIONS_LUNA.md` et `REVUE_T1_B_COMPLEMENT_LUNA.md`, contrôle des livres, sondes Store/UI et des raccords catalogue, scope, Brisé/Prière. Les constats sur la récupération du Courroux et la liste UI des attaques précédentes ont été corrigés puis revérifiés ; **53/53** ciblés et **9/9** P5 au dernier complément.
+- Principal : **11/11** sur les consommateurs de portée de Tour et Brisé (`t1-corrections-clock-consumers.log`), **30/30** sur les gardes d'erreurs/Actions (`t1-corrections-preview-error-regressions.log`), **7/7** Q35 (`t1-corrections-q35.log`). Les six parcours navigateur passent : cinq runners T1 existants et le nouveau `tests/f2-b-two-weapons.browser.mjs` (logs `t1-corrections-final-*-browser.log`). Le sixième utilise le vrai catalogue et contrôle aussi les trois confirmations létales après changement de cible.
+- Première suite complète : **4 814/4 817**, trois échecs (`t1-corrections-full-final.log`). Deux provenaient d'une interception trop large des `TypeError` dans l'aperçu ; le correctif est limité aux erreurs de seconde arme et les refus historiques sont préservés, sans modifier leurs tests. Le troisième était l'attente historique de tir Q35, désormais affectée par le malus de Taille du point 13. Ce premier journal n'est pas la preuve finale.
+- Suite complète finale : `node --test --test-concurrency=4`, **4 817/4 817**, zéro échec, annulé ou ignoré, 112 179 ms ; journal `tmp/gpt-phase-f2/t1-corrections-full-verified.log`. Les deux runners B ont aussi été rejoués après la restriction finale du `catch`, avec succès (`t1-corrections-verified-f2-b-combat-actions-browser.log` et `t1-corrections-verified-f2-b-two-weapons-browser.log`). TEMP/TMP = `E:/Outil MJ Warhammer/tmp/gpt-phase-f2-runtime`. Reçu F0 préexistant conservé pour le seul prérequis E0 ; aucune recette F2 de fin de phase n'est revendiquée.
+- Contrôle frontières : onze fichiers protégés inchangés, texte initial du plan conservé, LF, aucun nouveau module runtime, `git diff --check` propre. Extension de raccord documentée à la fin de l'appendice Exécution du plan, sans changer son texte initial.
+
+### Adaptations explicites des tests existants
+
+- `f2-a-initiative-surprise.test.js` et son runner navigateur : le tournoi de trois ex aequo est remplacé par le choix direct du MJ ; les oppositions à deux restent exercées. E25 garde ses attentes d'identité/date de scène et reçoit des assertions supplémentaires de portée/Undo.
+- `f2-c-weapon-skills.test.js` : une spécialité exacte à zéro donne le repli CC par défaut, Base demeure un choix MJ ; Base à zéro n'est plus étiquetée comme entraînée. `f2-c-claude-regressions.test.js` : l'ancienne priorité automatique de Base entraînée sur la spécialité exacte à zéro est remplacée conformément à la nouvelle décision du MJ.
+- `f2-c-ui.browser.mjs` : `materialized:true` seul ne représente plus une arme conjurée à renseigner ; de vrais contrats d'armes conjurées restent testés en parallèle.
+- `f2-b-combat-actions.test.js` : compétence Esquive réellement possédée dans la fixture Défensive, arme du tir visé liée à l'action ; mauvais choix de seconde arme attendu non prêt au lieu d'une exception. Le cas seconde arme utilise maintenant Épée/Pistolet/Espadon du catalogue.
+- `f2-b-combat-modifiers.test.js` : la demi-distance de 7 yards vaut 3,5 et non 3. `lot2-v5-remaining-talents.test.js` : la fixture du Talent à deux armes possède deux armes utilisables à une main et une première attaque réellement appliquée ; exemptions d'Élan, Parade et quota conservés.
+- `pro-q35-taille-formule.test.js` : le tir du Stégadon contre la cible sans Trait reçoit désormais −1 DR ; le test vérifie ce facteur et les dégâts diminués d'un point, tout en conservant l'absence de bonus de dégâts de Taille au tir. Aucune règle n'est changée pour rétablir l'ancien total.
+
+Les tests de caractérisation préalables F2-C/A/B ne sont pas modifiés. Les compléments hors B sont des assertions supplémentaires sur les États et les consommateurs d'identité de Tour. Les limites héritées hors de ces points restent celles consignées plus bas, notamment les qualités bloquantes de Baliste/Catapulte ; aucun lot T2 n'a été commencé.
+
 Date : 25/10/2026. Worktree : `E:/Outil MJ Warhammer/tmp/gpt-phase-f2-worktree`, branche `gpt/phase-f2`, base `d737c5acc47e012039eb3bbf669c8a4df1c34eff` (main, version 3.26.0).
 
 Au dernier contrôle, main a avancé extérieurement à `8ed9099` ; par rapport à la base F2, seuls `tests/browser-index.mjs` et `tests/browser-workspace.mjs` diffèrent. Ces changements n'ont pas été intégrés ici et ne sont pas revendiqués dans les résultats F2. Le code de production de base reste le même ; aucune fusion/rebase de ce worktree n'a été faite.

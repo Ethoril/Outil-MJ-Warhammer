@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { conditionLevels, momentumAfterChange } from '../js/core/v5-combat-rules.js';
 import { previewResolution } from '../js/core/resolution.js';
 
 const subject = (id, extra = {}) => ({ id, name: id, camp: id === 'a' ? 'pj' : 'ennemi', zone: 'active', hp: 40, maxHp: 40,
@@ -12,6 +13,43 @@ const attack = ({ kind = 'ranged', actor = subject('a'), target = subject('b'), 
 });
 const mods = preview => Object.fromEntries(preview.test.details.modifiers.map(row => [row.id, row.amount]));
 const delta = (preview, base = attack()) => preview.test.sl - base.test.sl;
+
+test('F2-B Claude 11-13 — facteurs anciens/nouveaux dédoublonnés, Sapeur et cible Moyenne implicite',()=>{
+ const context={height:'defender',difficultTerrain:true,penalties:{belowTarget:-1,terrainMovement:-1}};
+ const p=attack({kind:'melee',context});assert.equal(p.test.sl,attack({kind:'melee'}).test.sl-2);assert.equal(p.test.details.modifiers.filter(row=>row.amount<0).length,2);
+ const sapper=subject('a',{talents:[{id:'talent-underminer',status:'resolved',rank:1}]});
+ const sp=attack({kind:'melee',actor:sapper,context});assert.equal(mods(sp)['height:melee'],0);assert.equal(mods(sp)['terrain:melee'],-1,'Sapeur supprime la hauteur, pas le terrain (contrat existant)');
+ const size=attack({actorSize:4});assert.equal(mods(size)['size:ranged-target'],-1);
+});
+
+test('F2-B Claude 16 — Pointue recalcule le palier attaquant et défenseur',()=>{
+ const action={type:'attack',attr:'CC',base:60,damage:4,qualities:[{id:'pointue'}]};
+ const p=attack({kind:'melee',action,roll:40,defense:{base:60,roll:40,qualities:[{id:'pointue'}],v5:{kind:'melee',choice:'keep'}}});
+ assert.equal(p.sl,3);assert.equal(p.resultTier.id,'success-3-4');assert.equal(p.test.resultTier.id,'success-3-4');
+ assert.equal(p.defenderResultTier.id,'success-1-2');assert.equal(p.defenderTest.resultTier.id,'success-1-2');
+});
+
+test('F2-B Claude 19 — États niveau zéro et sources inactives sont ignorés dans les deux lectures',()=>{
+ for(const state of [{key:'surpris',level:0},{key:'surpris',level:1,source:{talentId:'talent-underminer',source:{effectHash:'obsolete'}}}]){
+  const p=attack({kind:'melee',target:subject('b',{states:[state]}),defense:{base:40,roll:80,v5:{kind:'melee'}}});
+  assert.equal(p.test.details.modifiers.some(row=>row.id==='target:surprised'),false);
+  assert.ok(p.defenderTest,'aucune interdiction de défense via conditionLevels');
+ }
+});
+
+test('F2-B Claude 19 — caractérisation conditionLevels hors modificateurs de combat',()=>{
+ const before=subject('a',{extensions:{v5:{hasMomentum:true}}});
+ const after={...before,states:[{key:'surpris',level:0},{key:'a-terre',level:1,source:{talentId:'talent-underminer',source:{effectHash:'obsolete'}}}]};
+ assert.deepEqual([...conditionLevels(after)],[]);
+ assert.equal(momentumAfterChange(before,after).extensions.v5.hasMomentum,true,'un état nul ou une source de talent périmée ne compte pas comme nouvelle condition globale');
+});
+
+test('F2-B Claude 20 — difficulté positive refusée et dispersion déduite du groupe Lancer',()=>{
+ const actor=subject('a',{talents:[{id:'talent-sharpshooter',status:'resolved',rank:1}]});
+ assert.ok(attack({actor,context:{extraordinaryShot:true,extraordinaryShotDescription:'ricochet',extraordinaryShotDifficulty:1}}).unresolved.some(row=>row.includes('inférieure ou égale à zéro')));
+ const thrown=attack({roll:95,action:{type:'attack',attr:'CT',base:60,damage:4,category:'Lancer'},context:{scatterDirectionRoll:1,scatterDistanceRolls:[10,9],shooterTargetDistanceYards:7}});
+ assert.equal(thrown.scatter.maximumYards,3.5);assert.equal(thrown.scatter.distanceYards,3.5);
+});
 
 test('F2-B — six circonstances de Tir sont additives et portent uniquement sur le Test d’attaque', () => {
   const preview = attack({ target: subject('b',{states:[{key:'surpris',level:1}]}), context: { penalties: { cover: -1 },
@@ -128,7 +166,7 @@ test('F2-B — les huit paliers distinguent succès +0 de l’échec −0', () =
 
 test('F2-B — dispersion uniquement pour le Tir d’arme de jet raté, avec d10 relatif et demi-distance plafonnée',()=>{
   const failed=attack({roll:99,context:{throwingWeapon:true,scatterDirectionRoll:1,scatterDistanceRolls:[10,9],shooterTargetDistanceYards:7}});
-  assert.deepEqual(failed.unresolved,[]);assert.deepEqual(failed.scatter,{directionRoll:1,direction:'haut-gauche',distanceRolls:[10,9],distanceYards:3,rolledDistanceYards:19,maximumYards:3});
+  assert.deepEqual(failed.unresolved,[]);assert.deepEqual(failed.scatter,{directionRoll:1,direction:'haut-gauche',distanceRolls:[10,9],distanceYards:3.5,rolledDistanceYards:19,maximumYards:3.5});
   const shooter=attack({roll:99,context:{throwingWeapon:true,scatterDirectionRoll:9}});assert.equal(shooter.scatter.direction,'aux pieds du tireur');
   const target=attack({roll:99,context:{throwingWeapon:true,scatterDirectionRoll:10}});assert.equal(target.scatter.direction,'aux pieds de la cible');
   const missing=attack({roll:99,context:{throwingWeapon:true,scatterDirectionRoll:1,scatterDistanceRolls:[3,4]}});assert.ok(missing.unresolved.some(row=>/distance tireur-cible/i.test(row)));

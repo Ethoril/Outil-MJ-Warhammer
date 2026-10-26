@@ -4,6 +4,23 @@ const record = value => value && typeof value === 'object' && !Array.isArray(val
 const text = value => typeof value === 'string' && value.trim() ? value : null;
 const balance = value => { if (!Number.isSafeInteger(value) || value < 0) throw new TypeError('Solde de Fortune invalide'); return value; };
 
+/** Shared action/quota clock, including restarted combats and legacy saved scenes. */
+export function v5CombatActionClock(envelope) {
+  const scene = envelope.activeScene;
+  const combatScopeId = scene?.extensions?.v5?.combatScopeId || (!scene ? envelope.extensions?.v5?.combatScopeId : null);
+  const encounterId = combatScopeId || scene?.encounterId || scene?.id || envelope.extensions?.v5?.combatId;
+  const turnScopeId = combatScopeId || scene?.id || encounterId;
+  const round = envelope.combat?.round;
+  const serial = scene?.extensions?.v5?.turnIndex ?? envelope.extensions?.v5?.turnIndex;
+  const actorId = envelope.combat?.currentActorId;
+  return {
+    ...(envelope.extensions?.v5?.talentSessionId ? {sessionId: envelope.extensions.v5.talentSessionId} : {}),
+    ...(encounterId ? {encounterId} : {}),
+    ...(Number.isSafeInteger(round) && round > 0 ? {round} : {}),
+    ...(encounterId && actorId && Number.isSafeInteger(serial) && serial > 0 ? {turnId: `${turnScopeId}:${serial}:${actorId}`} : {})
+  };
+}
+
 /** Never match a name or a repeated NPC template to a character. */
 export function v5ResourceIdentity(envelope, subject) {
   if (!record(subject)) return null;

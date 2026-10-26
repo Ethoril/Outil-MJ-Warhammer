@@ -25,7 +25,7 @@ import { acquireV5Conditions,healV5Wounds } from './v5-effects.js';
 import { slExtremeLayers } from './v5-divine-effects-tests.js';
 import { hasArcaneMagicLore } from './v5-magic-attributes.js';
 import {divineSocialRestriction} from './v5-divine-access.js';
-import { previewV5Test,selectV5Test, resolveV5Opposition, reverseV5Roll } from './v5-roll.js';
+import { previewV5Test,selectV5Test, resolveV5Opposition, reverseV5Roll,refreshV5ResultTier } from './v5-roll.js';
 import { buildV5RollDecision } from './v5-decision.js';
 import { previewMomentumEvents } from './v5-momentum.js';
 import { buildCombatTest, hasMomentum, withMomentum, conditionLevels, inferV5Kind,v5ShieldDefense, V5_COMBAT_RULE_VERSION } from './v5-combat-rules.js';
@@ -102,6 +102,7 @@ export function describeResolutionDetail(detail) {
   if (present(detail.targetScore)) parts.push(`Seuil : ${detail.targetScore}`);
   if (present(detail.sl)) parts.push(`DR : ${signedValue(detail.sl)}${detail.slBonus ? ` (${detail.slBonus > 0 ? 'Pointue' : 'Imprécise'} ${signedValue(detail.slBonus)})` : ''}`);
   if(detail.resultTier?.label)parts.push(`Palier : ${detail.resultTier.label}`);
+  if(detail.defenderResultTier?.label)parts.push(`Palier du défenseur : ${detail.defenderResultTier.label}`);
   if(detail.extraordinaryShot)parts.push(`Tir extraordinaire (${detail.extraordinaryShot.talentId}) : ${detail.extraordinaryShot.description} · difficulté MJ ${signedValue(detail.extraordinaryShot.difficulty)} DR.`);
   if(detail.lethalDeath?.confirmedBy==='explicit-gm')parts.push('Mort directe : option de table activée et confirmation explicite du MJ ; cible marquée morte (0 PV).');
   const opposition = isRecord(detail.opposition) && isRecord(detail.opposition.defender) ? detail.opposition : null;
@@ -506,7 +507,7 @@ export function previewResolution(input) {
     const sources=weaponSkill.receipt?.applied?.filter(id=>id==='ballistic-skill-minus-1-dr'||id==='powder-skill-engineering-minus-2-dr')||[];
     const applied=new Set(normalized.v5.weaponSkillModifierSources||[]);
     const fresh=sources.filter(id=>!applied.has(id));
-    if(fresh.length){normalized.v5.slModifier=(Number(normalized.v5.slModifier)||0)+weaponSkill.slModifier;normalized.v5.weaponSkillModifierSources=[...applied,...fresh];}
+    if(fresh.length){normalized.v5.slModifier=(Number(normalized.v5.slModifier??normalized.action.extensions?.v5?.slModifier)||0)+weaponSkill.slModifier;normalized.v5.weaponSkillModifierSources=[...applied,...fresh];}
   }
   normalized.qualityTalentPlan = prepared.plan;
   const actorSkillId=normalized.action?.extensions?.fiche?.skillId||normalized.v5?.context?.skillId;
@@ -593,6 +594,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   const extremeLayer = normalized.noTestAction ? null : slExtremeLayers(actor)[0];
   const slExtreme = extremeLayer ? { before: actorTest.sl, after: actorTest.success ? Math.max(actorTest.sl, extremeLayer.slExtreme.magnitude) : Math.min(actorTest.sl, -extremeLayer.slExtreme.magnitude) } : null;
   if (slExtreme) actorTest = { ...actorTest, sl: slExtreme.after };
+  actorTest=refreshV5ResultTier(actorTest);if(defenderTest)defenderTest=refreshV5ResultTier(defenderTest);
   let roll = actorTest.roll, targetScore = actorTest.score, success = actorTest.success, sl = actorTest.sl;
   const penalties = { value: actorPlan.penalty, names: actorPlan.penaltyStates };
   const slBonus = actorTest.details.modifiers.filter(item => item.id.startsWith('quality-')).reduce((sum, item) => sum + item.amount, 0);
@@ -644,7 +646,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   if(context.trip===true&&opposed){
     if(!tripSelected)trip={winner:opposed.winner,conditionApplied:false,costId:'combat:trip:momentum'};
     else {
-      trip={winner:'attacker',conditionApplied:true,targetCondition:{key:'aterre',name:'À Terre',level:1,source:{kind:'trip',authorId:actor?.id}} ,costId:'combat:trip:momentum'};
+      trip={winner:'attacker',conditionApplied:!targetLevels.has('aterre'),targetCondition:{key:'aterre',name:'À Terre',level:1,source:{kind:'trip',authorId:actor?.id}} ,costId:'combat:trip:momentum'};
       if(target?.extensions?.v5?.mounted===true){
         const knownToughness=Number(target.caracs?.E),declaredToughness=Number(context.tripFallToughnessScore),toughness=Number.isFinite(knownToughness)?knownToughness:context.tripFallToughnessConfirmed===true&&Number.isFinite(declaredToughness)?declaredToughness:null,tb=toughness===null?null:Math.floor(toughness/10);
         if(tb===null)tripUnresolved.push('Croche-pied monté : Bonus d’Endurance de la cible requis.');
@@ -684,13 +686,15 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     else lethalDeath={targetId:target?.id,confirmedBy:'explicit-gm',tableOptionEnabled:true};
   }
   let scatter=null,scatterUnresolved=[];
-  if(context.throwingWeapon===true&&attackType(action.type)&&actorPlan.kind==='ranged'&&!hit){
+  const thrownEquipment=actor?.equipment?.find(item=>item.id===action?.extensions?.fiche?.equipmentId)||action?.extensions?.equipment;
+  const throwingWeapon=weaponSkillGroupInfo(thrownEquipment?.category||context.weaponGroup||action?.category,thrownEquipment)?.specialty==='Lancer';
+  if((throwingWeapon||context.throwingWeapon===true)&&attackType(action.type)&&actorPlan.kind==='ranged'&&!hit){
     const direction=Number(context.scatterDirectionRoll),dice=context.scatterDistanceRolls,distance=Number(context.shooterTargetDistanceYards);
     if(!Number.isInteger(direction)||direction<1||direction>10)scatterUnresolved.push('Déviation : saisir le résultat de direction d10 (1 à 10).');
     else if(direction===9||direction===10)scatter={directionRoll:direction,direction:direction===9?'aux pieds du tireur':'aux pieds de la cible',distanceYards:0};
     else if(!Array.isArray(dice)||dice.length!==2||dice.some(value=>!Number.isInteger(value)||value<1||value>10))scatterUnresolved.push('Déviation : saisir les deux dés de distance d10.');
     else if(!Number.isFinite(distance)||distance<0)scatterUnresolved.push('Déviation : saisir la distance tireur-cible en yards pour plafonner le résultat.');
-    else {const rolled=dice[0]+dice[1],maximum=Math.floor(distance/2);scatter={directionRoll:direction,direction:['','haut-gauche','haut','haut-droite','gauche','droite','bas-gauche','bas','bas-droite'][direction],distanceRolls:[...dice],distanceYards:Math.min(rolled,maximum),rolledDistanceYards:rolled,maximumYards:maximum};}
+    else {const rolled=dice[0]+dice[1],maximum=distance/2;scatter={directionRoll:direction,direction:['','haut-gauche','haut','haut-droite','gauche','droite','bas-gauche','bas','bas-droite'][direction],distanceRolls:[...dice],distanceYards:Math.min(rolled,maximum),rolledDistanceYards:rolled,maximumYards:maximum};}
   }
   const criticalAttack = !(context.specialAttack==='whirlwind-of-death'||hit&&['dirty-fighting','disarm','shieldsman'].includes(context.specialAttack)) && attackType(action.type) && normalized.v5.context?.silentTakedown !== true && success && criticalClassification.critique;
   const criticalLocationRoll = normalized.criticalRolls?.location;
@@ -1046,6 +1050,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     rangeBands:actorPlan.kind==='ranged'?computeV5WeaponRangeBands(context.weaponRangeYards??(actor?.equipment?.find(item=>item.id===action?.extensions?.fiche?.equipmentId)||action?.extensions?.equipment)?.range??action?.range,actor):null,
     sl,
     resultTier: actorTest.resultTier,
+    defenderResultTier: defenderTest?.resultTier||null,
     slBonus,
     double: doubled,
     critical: criticalBlock,

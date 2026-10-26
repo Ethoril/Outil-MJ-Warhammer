@@ -9,13 +9,14 @@ import { processCombatTurnSpells, shieldAtTurnStart, recurringSpellHits, roundSp
 import { advanceGameClock, createGameClock, deriveTurnPhasePlan, readCombatPosition } from './v5-game-time.js';
 import { expireDivineAtClock } from './v5-divine-store.js';
 import { resolveV5ConditionTestContext } from './v5-test-context.js';
+import { v5CombatActionClock } from './v5-resources.js';
 
 const kinds = { fireRoll: 'd10', bleedingDeathRoll: 'd10', fireCriticalRoll: 'd100', bleedingEnduranceTest: 'test', poisonEnduranceTest: 'test', recoveryTest: 'test', currentWounds: 'manual' };
 function brokenEscapeTurnGate(state){
  const actor=state.combat?.participants?.find(row=>row.id===state.combat?.currentActorId);
  const context=actor&&resolveV5ConditionTestContext(actor,{characteristic:'Ag',isAction:true,involvesMovement:true,runningOrHiding:true,requiresSight:false,reliesOnSight:false});
  if(!(context?.levels?.brise>0))return null;
- const scene=state.activeScene,encounterId=scene?.encounterId||scene?.id||state.extensions?.v5?.combatId,serial=scene?.extensions?.v5?.turnIndex??state.extensions?.v5?.turnIndex,turnId=encounterId&&actor?.id&&Number.isSafeInteger(serial)?`${scene?.id||encounterId}:${serial}:${actor.id}`:null;
+ const {encounterId,turnId}=v5CombatActionClock(state);
  if(!turnId)return {status:'requires-input',code:'BROKEN_ESCAPE_CLOCK',error:'Horloge canonique du Tour requise pour vérifier la fuite de Brisé.',needsInput:[{field:'clock.turnId',label:'Établir l’horloge canonique du Tour.'}]};
  const sequence=state.extensions?.v5?.brokenEscape?.byActorId?.[actor.id];
  if(sequence?.turnId===turnId&&sequence.factsCommitted===true&&sequence.visibleToAnyEnemy===false)return null;

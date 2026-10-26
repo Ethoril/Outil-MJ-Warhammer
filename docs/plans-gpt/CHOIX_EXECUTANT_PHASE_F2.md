@@ -1,5 +1,17 @@
 # Choix d'exécutant - Phase F2
 
+## Décisions du MJ — contre-vérification T1 du 26/10/2026
+
+Source : `tmp/gpt-phase-f2/CONTRE_VERIFICATION_CLAUDE_T1.md`, instruction directe du MJ du 26/10/2026. Ces décisions priment sur les choix historiques ci-dessous.
+
+- **Égalité d'initiative à 3 ex aequo ou plus : le MJ fixe directement l'ordre** des ex aequo (remplace le tournoi A-EGALITES-01). À deux, la règle du livre reste : Initiative, puis Test opposé, le gagnant choisit.
+- **Compétence par défaut : la spécialité exacte de l'arme** quand elle est présente (rapière avec Escrime 60 et Base 69 → Escrime 60 avec ses Qualités), même si une autre voie licite a un total plus haut ; le MJ peut choisir Base dans le sélecteur.
+- **Participant activé après le tirage mais avant le Round 1 : il tire son jet** (PNJ d10 automatique, PJ saisi, + Bonus d'Initiative) et prend sa place. À partir du Round 1, comportement de renfort inchangé.
+
+La reprise porte sur les points 1 à 20 de la contre-vérification T1, suivis d'une revue indépendante et de la suite complète. Arrêt avant T2 ; nouvelle contre-vérification Claude ciblée à obtenir avant son ouverture.
+
+Précision de raccord à la décision de spécialité exacte : une spécialité présente à zéro augmentation reste prioritaire par défaut sur Base entraînée. Elle produit alors le repli CC sans Qualités prévu par le livre ; le MJ peut sélectionner explicitement Base. Ce raccord remplace l'ancien défaut automatique « voie entraînée la plus haute » dans ce cas aussi, sans accorder une maîtrise à zéro augmentation.
+
 Date : 25/10/2026. Les décisions du MJ dans le brief et les arbitrages ne sont pas des choix de l'exécutant.
 
 ## Décisions du MJ - contre-vérification F2-C du 25/10 au soir

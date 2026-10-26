@@ -17,7 +17,7 @@ import { carriesMovement } from '../core/creature-movement.js';
 import { engagedCandidates, planOutnumbering } from '../core/outnumbering.js';
 import { EXCLUDED_BASE_CHARACTERISTIC_TALENTS } from '../core/talent-contracts.js';
 import { hasV5Talent, V5_TALENT_IDS } from '../core/v5-talents.js';
-import { ammunitionCompatibility, equipmentAttackContext, weaponSkillGroupInfo, conjuredWeaponMetadata } from '../core/equipment.js';
+import { ammunitionCompatibility, equipmentAttackContext, weaponSkillGroupInfo, conjuredWeaponMetadata, weaponHandsForParticipant } from '../core/equipment.js';
 /**
  * Résolution intégrée de Jouer (sans modale). Ce module ne fait que construire
  * le DOM à partir du brouillon tenu par workspace-view : toute saisie remonte
@@ -1028,6 +1028,7 @@ function renderResult(preview, target, draft, handlers, participants=[]) {
   calculations.appendChild(node('summary', '', 'Détail des calculs et règles'));
   for (const [name, test] of [['Attaque / Test', preview.test], ['Défense', preview.defenderTest]]) {
     if (!test) continue;
+    if(test.resultTier?.label)calculations.appendChild(node('p','workspace-formula-notes',`${name} : ${test.resultTier.label} (${signed(test.sl)} DR)`));
     calculations.appendChild(node('p', 'workspace-formula-notes', `${name} : ${test.automatic?'réussite automatique, sans jet':`jet initial ${test.initialRoll}, jet final ${test.roll}`} · score ${test.score} · DR de base ${signed(test.details.baseSl)} · modificateurs ${signed(test.details.totalModifier)} · ${test.advantage.advantage.length} Avantage(s), ${test.advantage.disadvantage.length} Désavantage(s)`));
     for (const modifier of test.details.modifiers) calculations.appendChild(node('p', 'workspace-formula-notes', `${modifier.label} : ${signed(modifier.amount)} DR`));
     if (test.zeroOutcome) calculations.appendChild(node('p', 'workspace-formula-notes', test.success ? 'Réussite marginale (+0 DR)' : 'Échec marginal (−0 DR)'));
@@ -1254,12 +1255,11 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
 
     if(action.extensions?.fiche?.requiresLink) section.appendChild(node('p','workspace-field-error','Compétence à choisir dans « Mettre à jour les PJ » avant de lancer cette action.'));
     const conjured=conjuredWeaponMetadata(actor,action);
-    const materialized=Boolean(conjured)||action.extensions?.v5?.materialized===true;
-    const legacyGranted=Boolean(action.spellEffectId||action.extensions?.v5?.spellEffectId);
+    const materialized=Boolean(conjured?.key||conjured?.profile);
     const conjuredProfile=conjured?.profile||action.extensions?.v5?.conjuredWeaponProfile;
     const conjuredGroup=conjured?.group;
     const weapon = action.extensions?.equipment || actor?.equipment?.find(row => row?.id === action.extensions?.fiche?.equipmentId)
-      ||(materialized||legacyGranted?{id:`conjured:${action.extensions?.v5?.conjuredWeaponKey||action.id}`,kind:'weapon',name:conjuredProfile?.name||action.note||'Arme conjurée',category:conjuredGroup||'',hands:conjuredProfile?.hands||action.extensions?.v5?.weaponHands,range:'',keywords:(action.qualities||[]).map(row=>typeof row==='string'?{id:row}:row)}:null);
+      ||(materialized?{id:`conjured:${action.extensions?.v5?.conjuredWeaponKey||action.id}`,kind:'weapon',name:conjuredProfile?.name||action.note||'Arme conjurée',category:conjuredGroup||'',hands:conjuredProfile?.hands||action.extensions?.v5?.weaponHands,range:'',keywords:(action.qualities||[]).map(row=>typeof row==='string'?{id:row}:row)}:null);
     if(type==='attack'&&weapon?.kind==='weapon'&&!conjured?.spellScoreImposed){
       const current=draft.v5Context||{};
       const groups=['Base','Bagarre','Escrime','Fléau','Cavalerie','Deux-Mains',"Arme d'Hast",'Armes d’Hast','Parade','Arc','Arbalète','Fronde','Lancer','Poudre Noire','Ingénierie mêlée','Ingénierie tir','Explosif','Explosifs','Sarbacane','Siège','Embarquée','Entraves'];
@@ -1293,7 +1293,7 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
           else handlers.select({v5Context:{...current,weaponSkillId:undefined,weaponTrainingSpecialty:undefined,weaponAdvances:undefined,weaponSkillScore:undefined}});
         });label.append(select);section.append(label);
       }
-      if(skills.length&&(isCavalry||isBastard||action.extensions?.fiche?.requiresLink||materialized&&!weaponSkillGroupInfo(weapon.category,weapon)||!weaponSkillGroupInfo(weapon.category,weapon))){
+      if(skills.length&&!genericRanged){
         const label=node('label','workspace-type','Compétence utilisée pour cette arme'),select=document.createElement('select');select.setAttribute('aria-label',label.textContent);select.append(new Option('Spécialité du groupe',''));skills.forEach(skill=>{if(!skill?.id||!skill.name)return;const advances=skill.advances==null?'augmentations inconnues':`${skill.advances} augmentation(s)`;select.append(new Option(`${skill.name} · ${advances}`,skill.id));});select.value=selectedSkill;select.addEventListener('change',()=>handlers.select({v5Context:{...current,weaponSkillId:select.value||undefined}}));label.append(select);section.append(label);
       }
       const selected=skills.find(skill=>skill.id===selectedSkill);
@@ -1594,14 +1594,17 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
           const text = document.createElement('input'); text.type = 'text'; text.value = draft.v5Context?.extraordinaryShotDescription || ''; text.setAttribute('aria-label', description.textContent);
           text.addEventListener('change', () => handlers.select({ v5Context: { ...(draft.v5Context || {}), extraordinaryShotDescription: text.value } })); description.appendChild(text); fields.appendChild(description);
           const difficulty = node('label', 'workspace-type', 'Difficulté du Tir extraordinaire (DR signés)');
-          const value = document.createElement('input'); value.type = 'number'; value.step = '1'; value.value = draft.v5Context?.extraordinaryShotDifficulty ?? ''; value.setAttribute('aria-label', difficulty.textContent);
+          const value = document.createElement('input'); value.type = 'number'; value.step = '1'; value.max='0'; value.value = draft.v5Context?.extraordinaryShotDifficulty ?? ''; value.setAttribute('aria-label', difficulty.textContent);
           value.addEventListener('change', () => handlers.select({ v5Context: { ...(draft.v5Context || {}), extraordinaryShotDifficulty: value.value === '' ? undefined : Number(value.value) } })); difficulty.appendChild(value); fields.appendChild(difficulty);
         }
       }
       const throwing = node('label', 'workspace-type', 'Il s’agit d’une arme de jet (dispersion seulement si le tir échoue)');
+      const thrownWeapon=actor.equipment?.find(item=>item.id===action.extensions?.fiche?.equipmentId)||action.extensions?.equipment;
+      const knownThrowing=weaponSkillGroupInfo(thrownWeapon?.category||draft.v5Context?.weaponGroup||action.category,thrownWeapon)?.specialty==='Lancer';
       const throwingBox = document.createElement('input'); throwingBox.type='checkbox'; throwingBox.checked=draft.v5Context?.throwingWeapon===true; throwingBox.setAttribute('aria-label',throwing.textContent);
       throwingBox.addEventListener('change',()=>handlers.select({v5Context:{...(draft.v5Context||{}),throwingWeapon:throwingBox.checked}})); throwing.prepend(throwingBox); fields.appendChild(throwing);
-      if (draft.v5Context?.throwingWeapon === true) {
+      if(knownThrowing){throwingBox.checked=true;throwingBox.disabled=true;}
+      if (knownThrowing||draft.v5Context?.throwingWeapon === true) {
         choiceField(fields,'scatterDirectionRoll','Déviation d10 (direction relative à la cible)',[[1,'1 · haut-gauche'],[2,'2 · haut'],[3,'3 · haut-droite'],[4,'4 · gauche'],[5,'5 · droite'],[6,'6 · bas-gauche'],[7,'7 · bas'],[8,'8 · bas-droite'],[9,'9 · aux pieds du tireur'],[10,'10 · aux pieds de la cible']]);
         const rolls = draft.v5Context?.scatterDistanceRolls || [];
         for (let index=0; index<2; index++) {
@@ -1641,17 +1644,25 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
       contextField(fields, 'actor', 'difficultTerrain', 'Terrain difficile (−1 DR)');
       contextField(fields, 'actor', 'narrowSpace', 'Espace exigu (choix du MJ)');
       if (draft.v5Context?.narrowSpace === true) choiceField(fields, 'weaponReachBand', 'Allonge de l’arme dans cet espace', [['very-short','Très courte (aucun malus)'],['short','Courte (aucun malus)'],['average','Moyenne (−1 DR)'],['superior','Supérieure (−2 DR)']]);
-      const offHand = node('label', 'workspace-type', 'Attaque avec la main secondaire (−2 DR selon les talents)');
-      const offHandBox = document.createElement('input'); offHandBox.type = 'checkbox'; offHandBox.checked = Number(draft.v5Context?.penalties?.offHand) === -2; offHandBox.setAttribute('aria-label', offHand.textContent);
-      offHandBox.addEventListener('change', () => { const current = draft.v5Context || {}, penalties = { ...(current.penalties || {}) }; if (offHandBox.checked) penalties.offHand = -2; else delete penalties.offHand; handlers.select({ v5Context: { ...current, penalties } }); }); offHand.prepend(offHandBox); fields.appendChild(offHand);
       const equipmentId = action.extensions?.fiche?.equipmentId, meleeWeapons = (actor?.equipment || []).filter(item => item?.kind === 'weapon' && String(item.reach || '').trim());
       const currentWeapon = actor?.equipment?.find(item => item?.id === equipmentId) || action.extensions?.equipment || (meleeWeapons.length === 1 ? meleeWeapons[0] : null);
       const reachGuide = computeV5WeaponReachGuide(draft.v5Context?.weaponReach || currentWeapon?.reach || action.reach);
       if (reachGuide) fields.appendChild(node('p', 'workspace-result-line', reachGuide.text));
       fields.appendChild(node('p', 'workspace-muted', 'Repères imprimés : allonge Très longue = 4 yards, Massive = 6. Les bandes servent d’aide au MJ; la position et la distance ne sont pas suivies.'));
-      const oneHanded = currentWeapon && (currentWeapon.grip === 'one-hand' || currentWeapon.hands === 1 || currentWeapon.oneHanded === true);
-      const eligiblePrimaries = previousWeaponAttacks.filter(row => row.weaponId && row.weaponId !== equipmentId);
-      if (oneHanded && eligiblePrimaries.length) {
+    }
+    if(type==='attack'&&['melee','ranged'].includes(kind.value)) {
+      const offHand = node('label', 'workspace-type', 'Attaque avec la main secondaire (−2 DR selon les règles)');
+      const offHandBox = document.createElement('input'); offHandBox.type = 'checkbox'; offHandBox.checked = Number(draft.v5Context?.penalties?.offHand) === -2; offHandBox.setAttribute('aria-label', offHand.textContent);
+      offHandBox.addEventListener('change', () => { const current = draft.v5Context || {}, penalties = { ...(current.penalties || {}) }; if (offHandBox.checked) penalties.offHand = -2; else delete penalties.offHand; handlers.select({ v5Context: { ...current, penalties } }); }); offHand.prepend(offHandBox); fields.appendChild(offHand);
+      const equipmentId=action.extensions?.fiche?.equipmentId,allWeapons=(actor?.equipment||[]).filter(item=>item?.kind==='weapon');
+      const currentWeapon=allWeapons.find(item=>item.id===equipmentId)||action.extensions?.equipment||(allWeapons.length===1?allWeapons[0]:null);
+      const oneHanded=weaponHandsForParticipant(currentWeapon,actor,{action,context:draft.v5Context})===1;
+      const eligiblePrimaries=previousWeaponAttacks.filter(row=>{
+        if(!row.weaponId||row.weaponId===equipmentId)return false;
+        const primaryWeapon=allWeapons.find(item=>item.id===row.weaponId);
+        return weaponHandsForParticipant(primaryWeapon,actor)===1;
+      });
+      if(oneHanded&&eligiblePrimaries.length) {
         const primary = node('label', 'workspace-type', 'Attaque précédente pour l’attaque immédiate de l’autre arme');
         const select = document.createElement('select'); select.setAttribute('aria-label', primary.textContent);
         select.append(new Option('Choisir l’attaque déjà appliquée…', ''));
@@ -1660,7 +1671,8 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
         select.addEventListener('change', () => handlers.select({ extraAttack: Boolean(select.value), v5Context: { ...(draft.v5Context || {}), primaryResolutionId: select.value || undefined, secondWeaponAttack: Boolean(select.value) } }));
         primary.appendChild(select); fields.appendChild(primary);
         fields.appendChild(node('p', 'workspace-muted', 'Une arme différente utilisable à une main; coût de l’attaque supplémentaire : 1 Élan. Une seule attaque de seconde arme par Tour, même si l’Élan est regagné.'));
-      } else if (oneHanded) fields.appendChild(node('p', 'workspace-muted', 'Aucune attaque d’une autre arme de ce Tour n’est disponible pour la seconde arme.'));
+      } else if(oneHanded) fields.appendChild(node('p','workspace-muted','Aucune attaque d’une autre arme à une main de ce Tour n’est disponible pour la seconde arme.'));
+      else if(currentWeapon)fields.appendChild(node('p','workspace-muted','La seconde attaque exige une arme actuelle utilisable à une main.'));
     }
     if (target && (kind.value === 'melee' || kind.value === 'ranged')) {
       const current=draft.v5Context||{}, helpless=current.targetHelpless===true||(target.states||[]).some(row=>['inconscient','unconscious'].includes(row.key));
@@ -1740,6 +1752,7 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
   const penalties=node('details','workspace-v5-context-details');penalties.append(node('summary','','Pénalités de situation en DR'));
   const addPenaltyFields=(role)=>{const field=role==='actor'?'v5Context':'defenseContext',current=draft[field]||{};
     for(const [key,text]of [['mounted','Esquive montée'],['confined','Espace exigu'],['status','Statut supérieur'],['proneAttack','Attaque À terre'],['belowTarget','Attaque sous la cible'],['longRange','Longue portée'],['extremeRange','Portée extrême'],['flying','Tir sous Trait Vol'],['terrainMovement','Terrain gênant le mouvement'],['critical','Blessure critique'],['amputation','Amputation']]){
+      if(role==='actor'&&['belowTarget','terrainMovement'].includes(key))continue;
       const label=node('label','workspace-type',text+(role==='defender'?' (défense)':''));const input=document.createElement('input');input.type='number';input.step='1';input.max='0';input.value=current.penalties?.[key]??'';input.setAttribute('aria-label',label.textContent);input.addEventListener('change',()=>handlers.select({[field]:{...current,penalties:{...current.penalties,[key]:input.value===''?undefined:Number(input.value)}}}));label.append(input);penalties.append(label);
     }
   };addPenaltyFields('actor');if(target&&['attack','opposition'].includes(type))addPenaltyFields('defender');v5.append(penalties);

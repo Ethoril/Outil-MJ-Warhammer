@@ -233,3 +233,7 @@ Contrainte de chargement découverte avant code : `tests/sw.test.js:34` exige le
 ### Fermeture de phase
 
 Après validation des quatre tranches seulement : `node tools/run-divine-recipe.mjs`, parcours navigateur de tous les écrans touchés, rapport complet distinguant exécuté, testé, assisté MJ et limites. Aucun bump, push, merge ou publication.
+
+### Extension de raccord T1 après contre-vérification du 26/10/2026
+
+Les points 9, 14 et 20 nécessitent aussi `js/ui/card.js`, `js/core/v5-resources.js`, `js/core/v5-divine-prayer-caps.js` et `js/ui/v5-broken-escape-panel.js`. Le score de combat doit être visible sur la carte ; la lecture des mains du catalogue doit être commune au panneau et au moteur ; les consommateurs d'identité de Tour (quotas, Prière forcée, Brisé, liste d'attaques précédentes) doivent utiliser la même portée après redémarrage. Le helper commun est placé dans un module existant sans dépendance, sans créer de module à précacher. Les moteurs d'horloge de magie/campagne restent intacts. Caractérisations héritées conservées ; régressions d'intégration supplémentaires dans `tests/f2-t1-clock-consumers.test.js`, en complément des tests C/A/B et E25. Cette extension corrige T1 et n'ouvre aucun lot T2.

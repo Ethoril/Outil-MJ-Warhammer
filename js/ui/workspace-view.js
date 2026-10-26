@@ -19,6 +19,7 @@ import { recoveryMethodsFor } from './v5-effect-dialog.js';
 import { hasMomentum, inferV5Kind } from '../core/v5-combat-rules.js';
 import { withoutOutnumberContext } from '../core/outnumbering.js';
 import { equipmentAttackContext, locationProtection, weaponSkillGroupInfo } from '../core/equipment.js';
+import { v5StoreActionClock } from '../core/v5-store-action.js';
 import { d100 } from '../core/dice.js';
 import { inferActionType, previewHpLoss, ResolutionError } from '../core/resolution.js';
 import { userMessage, userError } from './messages.js';
@@ -1059,6 +1060,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
           draft.v5Context = withoutOutnumberContext(draft.v5Context);
           draft.v5Context.targetEngaged = undefined; draft.v5Context.engagedTargetIds = undefined;
           draft.v5Context.engagedTargetRoll = undefined; draft.v5Context.engagedDefensesById = undefined;
+          for(const key of ['lethalIntent','lethalTableEnabled','confirmLethalDeath'])delete draft.v5Context[key];
           for (const key of ['trip','tripPrimaryResolutionId','athleticsSkillId','tripFallEnduranceRoll','tripLegLocationRoll','tripLegCriticalEffectRoll','tripExtraLocationRoll','tripExtraCriticalEffectRoll','tripFallWardRoll','tripFallCalmTest']) delete draft.v5Context[key];
         }
         draft.magicTargetIds = patch.targetId && patch.targetId !== 'none' ? [patch.targetId] : [];
@@ -1596,9 +1598,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     let previousWeaponAttacks = [];
     try {
       const envelope = JSON.parse(Store.getFullJSON());
-      const encounterId = envelope.activeScene?.encounterId || envelope.activeScene?.id || envelope.extensions?.v5?.combatId;
-      const serial = envelope.activeScene?.extensions?.v5?.turnIndex ?? envelope.extensions?.v5?.turnIndex;
-      const turnId = encounterId && Number.isSafeInteger(serial) && serial > 0 ? `${envelope.activeScene?.id || encounterId}:${serial}:${context.actor?.id}` : null;
+      const {encounterId,turnId}=v5StoreActionClock({...envelope,combat:{...(envelope.combat||{}),currentActorId:context.actor?.id}});
       previousWeaponAttacks = (envelope.extensions?.v5?.standardTurnActions || []).filter(row => row.actorId === context.actor?.id && row.encounterId === encounterId && row.turnId === turnId && row.kind === 'action' && row.targetId)
         .map(row => ({ ...row, weaponName: context.actor?.equipment?.find(item => item.id === row.weaponId)?.name || 'Action' }));
     } catch { previousWeaponAttacks = []; }

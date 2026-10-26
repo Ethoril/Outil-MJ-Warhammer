@@ -98,9 +98,9 @@ export function prepareCombatInitiative(participants, {
     const pendingValid=pendingSourceValid&&pending.characteristic===characteristic
       &&Array.isArray(pending.dice)&&pending.dice.length===2&&pending.dice.every(n=>Number.isInteger(n)&&n>=1&&n<=10)
       &&['first','second'].includes(pending.choice)&&pending.selectedDie===pending.dice[pending.choice==='first'?0:1];
-    const reflexInput=combatReflexesById[participant.id]||{};
-    const reflexDice=pendingValid?pending.dice:reflexInput.dice,reflexChoice=pendingValid?pending.choice:reflexInput.choice;
-    let die=reflex?undefined:diceById[participant.id];
+    const reflexInput=combatReflexesById[participant.id]||{},existing=combatInitiativeOf(participant);
+    const reflexDice=pendingValid?pending.dice:reflexInput.dice||(existing?.initialized?existing.dice:undefined),reflexChoice=pendingValid?pending.choice:reflexInput.choice||(existing?.initialized?existing.choice:undefined);
+    let die=reflex?undefined:(diceById[participant.id]??(existing?.initialized?existing.die:undefined));
     if(!Number.isInteger(characteristic)||characteristic<0)needsInput.push({participantId:participant.id,field:'characteristic'});
     if(reflex){
       if(!Array.isArray(reflexDice)||reflexDice.length!==2||!reflexDice.every(n=>Number.isInteger(n)&&n>=1&&n<=10))needsInput.push({participantId:participant.id,field:'combatReflexesDice'});
@@ -123,6 +123,13 @@ export function prepareCombatInitiative(participants, {
   }
   const oppositions=[],resolvedGroups=new Map();
   for(const group of tieGroups){
+    if(group.participantIds.length>=3){
+      const choice=tieChoices[group.key];
+      const valid=Array.isArray(choice)&&choice.length===group.participantIds.length&&new Set(choice).size===choice.length&&choice.every(id=>group.participantIds.includes(id));
+      if(!valid)needsInput.push({field:'tieChoice',groupKey:group.key,participantIds:group.participantIds,direct:true});
+      else resolvedGroups.set(group.key,{supplied:choice,direct:true});
+      continue;
+    }
     const supplied=tieOrders[group.key];
     const exact=Array.isArray(supplied)&&supplied.length===group.participantIds.length&&new Set(supplied).size===supplied.length&&supplied.every(id=>group.participantIds.includes(id));
     if(!exact){needsInput.push({field:'tieOrder',groupKey:group.key,participantIds:group.participantIds});continue;}
@@ -143,7 +150,9 @@ export function prepareCombatInitiative(participants, {
       const selectTest=(plan,rolls,side)=>selectV5Test(plan.test,rolls[`${side}Choice`]||plan.test.options[0].id);
       const initiator=selectTest(initiatorPlan,rolls,'initiator'),opponent=selectTest(opponentPlan,rolls,'opponent');
       const result=resolveV5Opposition(initiator,opponent),winnerId=result.winner==='initiator'?initiatorId:opponentId;
-      oppositions.push({id,groupKey:group.key,initiatorId,opponentId,initiator,opponent,winnerId,netSl:result.netSl,tie:result.tie});champion=winnerId;
+      oppositions.push({id,groupKey:group.key,initiatorId,opponentId,initiator,opponent,winnerId,netSl:result.netSl,tie:result.tie,
+        initiatorChoice:rolls.initiatorChoice??initiatorPlan.test.options[0]?.id,opponentChoice:rolls.opponentChoice??opponentPlan.test.options[0]?.id,
+        initiatorConditionPenaltyMode:rolls.initiatorConditionPenaltyMode,opponentConditionPenaltyMode:rolls.opponentConditionPenaltyMode});champion=winnerId;
     }
     const completed=oppositions.filter(row=>row.groupKey===group.key).length>=supplied.length-1;
     if(!completed)continue;
@@ -191,7 +200,17 @@ export function insertParticipantsByInitiative(combat, participants) {
   if (!newcomers.length) return combat.order || [];
   if((combat.participants||[]).some(participant=>combatInitiativeOf(participant)?.initialized)){
     let order=effectiveOrder((combat.participants||[]).filter(participant=>previous.has(participant.id)),{mode:ORDER_MODES.MANUAL,order:combat.order});
-    for(const participant of newcomers)order=insertReinforcement(order,participant.id,combat.currentActorId||null);
+    const returning=newcomers.filter(participant=>combatInitiativeOf(participant)?.initialized);
+    const reinforcements=newcomers.filter(participant=>!combatInitiativeOf(participant)?.initialized);
+    if(returning.length&&combat.orderMode!==ORDER_MODES.MANUAL){
+      const ranked=initiativeOrder(participants,combat.round),rank=id=>ranked.indexOf(id);
+      for(const participant of returning){
+        order=order.filter(id=>id!==participant.id);
+        const position=order.findIndex(id=>rank(id)>rank(participant.id));
+        order.splice(position<0?order.length:position,0,participant.id);
+      }
+    }
+    for(const participant of [...(combat.orderMode===ORDER_MODES.MANUAL?returning:[]),...reinforcements])order=insertReinforcement(order,participant.id,combat.currentActorId||null);
     return order;
   }
   const ranked = initiativeOrder(participants, combat.round), rank = id => ranked.indexOf(id);

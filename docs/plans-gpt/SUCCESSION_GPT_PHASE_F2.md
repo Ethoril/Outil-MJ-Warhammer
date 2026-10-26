@@ -1,5 +1,15 @@
 # Succession GPT — Phase F2
 
+## Reprise prioritaire — contre-vérification T1 du 26/10/2026
+
+Le verdict historique de clôture ci-dessous a été invalidé par les points 1 à 20 de `tmp/gpt-phase-f2/CONTRE_VERIFICATION_CLAUDE_T1.md` (arbre `02b203b`). L'instruction directe du MJ autorise leur correction, la recopie des décisions en tête de `CHOIX_EXECUTANT_PHASE_F2.md`, une revue indépendante et la suite complète, puis un arrêt avant T2. Les trois décisions nouvelles priment sur les choix historiques : ordre MJ direct à partir de trois ex aequo ; spécialité exacte d'arme par défaut ; jet d'initiative pour les activations avant le Round 1. Le tournoi A-EGALITES-01 ci-dessous est donc historique et remplacé.
+
+**Corrections 1 à 20 terminées et revérifiées localement.** Revues indépendantes Luna C, complément C à zéro, A, B et complément B favorables (`tmp/gpt-phase-f2/REVUE_T1_*_LUNA.md`). Suite complète finale **4 817/4 817**, zéro échec/ignoré, `tmp/gpt-phase-f2/t1-corrections-full-verified.log` ; six parcours navigateur verts, dont le nouveau `tests/f2-b-two-weapons.browser.mjs` sur Épée/Pistolet du catalogue et changement de cible létale. Les deux runners B sont verts après le dernier correctif de garde d'erreur. La première suite (4 814/4 817) et ses trois échecs corrigés sont conservés et expliqués dans le rapport, sans être présentés comme validation finale.
+
+Le point 20 utilise `combatScopeId` pour distinguer les redémarrages, tout en gardant l'identité/date de scène et les identifiants des anciennes sauvegardes sans scope. Tous les consommateurs d'identité de Tour (Store, coûts, Prière forcée, Brisé, UI) partagent `v5CombatActionClock` dans le module existant `v5-resources.js`. Les horloges de magie/campagne restent intactes. Les assertions de tests adaptées aux décisions/corrections demandées sont listées dans le rapport ; les caractérisations préalables F2 restent intactes.
+
+**Arrêt avant T2.** Ne pas démarrer T2, fusionner, publier ou changer de version. La prochaine étape est la nouvelle contre-vérification Claude ciblée sur les vingt points, puis le feu vert du MJ. Les preuves courantes sont récapitulées en tête du rapport de phase ; les résultats plus anciens ne certifient pas les corrections nouvelles.
+
 ## Clôture de la Tranche T1 (C, A, B) — 25/10/2026
 
 Sur instruction du MJ (« reprends et termine le lot B / Tranche 1 stp »), le lot **F2-B** a été finalisé, vérifié sur la suite complète Node et les 5 parcours navigateur de T1, puis commité. **La Tranche T1 (F2-C, F2-A, F2-B) est intégralement livrée et close localement sur `gpt/phase-f2`. Arrêt réglementaire de fin de tranche : T2 n'est pas commencé.**

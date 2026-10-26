@@ -12,7 +12,11 @@ But : préparer la phase H du plan de fin de projet (écriture en retour de l’
 | Points de Chance permanents | `extensions.v5.characterResources[].fortune`, clé `characterId` ; projection `extensions.v5.resources.fortune` | `chance` (initialisation explicite depuis le solde connu importé) | dépenses, corrections MJ, renouvellement explicite | existant ; B09 `af31809` |
 | Pénitences en cours et accomplies | `extensions.v5.divinePenances[]` : identité, culte, texte, source, origine, statut et clôture MJ | absente | Courroux 96–100, création et clôture MJ | phase B B10 `aa62ca0` |
 | Blessures Critiques (registre) | `extensions.v5.criticalWounds` | absente | combat, soins, Larmes de Shallya, bouton Guérir | phase A (A9, A11) |
-| Mort confirmée par le MJ | `extensions.v5.dead` (booléen) avec `hp = 0` | absente | option létale de la table activée, choix létal et confirmation explicite du MJ contre une cible admissible sans défense | F2-B |
+| Mort confirmée par le MJ | `extensions.v5.dead` (booléen) avec `hp = 0` | absente | moteurs de mort préexistants ; F2-B ajoute l’option létale de la table, le choix létal et la confirmation explicite du MJ contre une cible admissible sans défense | préexistant ; complément F2-B |
+
+État de combat persistant à travers sauvegarde/rechargement (sans retour vers une fiche durable) : `extensions.v5.combatActions` appartient à l’enveloppe de séance. Il contient `byActorId` (Défensive ou Visée, compétence/arme/cible, horloge), `movementByActorId`, `trippedResolutionIds` (une tentative de Croche-pied par touche) et les reçus `receipts`. Il est restauré par Undo/Redo, expire au Tour approprié et est purgé au nouveau combat.
+
+Identité de l'occurrence de combat : `extensions.v5.combatScopeId` (enveloppe et `activeScene.extensions.v5.combatScopeId` pour une scène). L'initialisation d'un nouveau combat et le redémarrage la renouvellent ; la reprise conserve celle de la scène. Quotas, Actions, Prière et Brisé partagent cette identité de Tour, avec compatibilité des anciennes sauvegardes sans ce champ. L'identité et la date de création de la scène restent conservées au redémarrage. Cette donnée de séance n'est pas destinée au retour vers la fiche.
 
 ## Complément phase B — reprise gpt/phase-b4
 

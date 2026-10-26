@@ -93,6 +93,25 @@ export function equipmentAttackContext(item, context = {}){
  return {ranged,equipmentId:item.id,source:'fiche-equipment',...(category==='ingenierie'&&engineeringNature===null&&!String(item.range||'').trim()?{needsWeaponNature:true}:{})};
 }
 
+/** Determine one/two-handed use from explicit participant data, then the checked catalogue. */
+export function weaponHandsForParticipant(item, actor=null, {action=null, context={}}={}) {
+ if(!item)return null;
+ const itemId=item.id||item.baseId||action?.extensions?.fiche?.equipmentId;
+ const explicit=[context.weaponHands,action?.extensions?.v5?.weaponHands,
+  itemId&&actor?.extensions?.v5?.weaponHandsByEquipmentId?.[itemId],item.hands,
+  item.grip==='one-hand'?1:item.grip==='two-hands'?2:undefined,
+  item.oneHanded===true?1:item.oneHanded===false?2:undefined];
+ for(const value of explicit){if(value===undefined||value===null||value==='')continue;const hands=Number(value);return hands===1||hands===2?hands:null;}
+ const catalogue=getReferenceCatalogue(),known=(catalogue.items||[]).find(row=>row.id===(item.baseId||item.id));
+ if(!known||known.kind!=='weapon')return null;
+ const folded=value=>String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+ const category=folded(known.category),name=folded(known.name),keywords=new Set((known.keywords||[]).map(row=>folded(typeof row==='string'?row:row?.id)));
+ if(category==='deux-mains'||category==='hast'||/\(\s*2\s*m\s*\)/i.test(known.name||''))return 2;
+ if(keywords.has('pistolet')||/\bpistolet\b/.test(name))return 1;
+ if(String(known.range||'').trim())return null;
+ return 1;
+}
+
 const WEAPON_GROUPS = new Map([
  ['base', {kind:'melee', specialty:'Base'}], ['arme de base', {kind:'melee', specialty:'Base'}], ['armes de base', {kind:'melee', specialty:'Base'}],
  ['bagarre', {kind:'melee', specialty:'Bagarre'}], ['escrime', {kind:'melee', specialty:'Escrime'}], ['fleau', {kind:'melee', specialty:'Fléau'}],
@@ -205,7 +224,7 @@ export function applyWeaponSkillRules(actor, action, { weapon = null, context = 
  const conjuredGroup=conjured?.group||CONJURED_WEAPON_GROUPS[key];
  const generatedProfile=conjured?.profile||action?.extensions?.v5?.conjuredWeaponProfile;
  const materializedGroup=conjuredGroup||generatedProfile?.trainingGroup||generatedProfile?.category||null;
- const isMaterialized=Boolean(conjured)||action?.extensions?.v5?.materialized===true;
+ const isMaterialized=Boolean(conjured?.key||conjured?.profile);
  const equipment=weapon||action?.extensions?.equipment||(isMaterialized?{id:`conjured:${key||'unknown'}`,kind:'weapon',name:generatedProfile?.name||action.note||key||'Arme conjurée',category:materializedGroup||'',range:'',keywords:(action.qualities||[]).map(row=>typeof row==='string'?{id:row}:row)}:null);
  if(!['attack','attaque'].includes(String(action?.type||'').toLowerCase())||!equipment)return unchanged;
  const itemKind=equipment.kind;
@@ -223,7 +242,7 @@ export function applyWeaponSkillRules(actor, action, { weapon = null, context = 
  const availableSkillRows=Array.isArray(skills)?skills:[];
  const rangedAlternatives=group?.kind==='ranged'?rangedSpecialtiesForWeapon(equipment):[];
  const linked=context.weaponSkillId||fiche.skillId;
- const linkedSkill=availableSkillRows.find(skill=>skill.id===linked||skill.name===linked||skill.storageKey===linked);
+ const linkedSkill=linked?availableSkillRows.find(skill=>skill.id===linked||skill.name===linked||skill.storageKey===linked):null;
  const manualRangedSpec=context.weaponTrainingSpecialty&&getReferenceCatalogue()?.skills?.find(skill=>skill.group==='Projectiles'&&foldedWeaponText(skill.specialization)===foldedWeaponText(context.weaponTrainingSpecialty))?.specialization;
  if(group?.kind==='ranged'&&!rangedAlternatives.length&&['siege','embarquee'].includes(foldedWeaponText(equipment.category))&&!context.weaponSkillId&&!fiche.skillId&&!manualRangedSpec){
   unresolved.push('Cette arme appartient à un groupe générique sans spécialité de tir déterminée : le MJ doit choisir une compétence Projectiles dans le sélecteur de résolution.');
@@ -234,6 +253,7 @@ export function applyWeaponSkillRules(actor, action, { weapon = null, context = 
   const chosenCandidate=linkedSkill&&candidates.includes(linkedSkill)?linkedSkill
    :!linked?bestAvailableSkill(candidates,()=>true):null;
   if(chosenCandidate)group={...group,specialty:skillSpec(chosenCandidate),catalogueGroup:group.specialty};
+  else if(manualRangedSpec&&rangedAlternatives.includes(skillSpec({specialty:manualRangedSpec})))group={...group,specialty:manualRangedSpec,catalogueGroup:group.specialty,trainingChoice:'explicit-mj-selection'};
  }
  if(group?.kind==='ranged'&&!rangedAlternatives.length&&['siege','embarquee'].includes(foldedWeaponText(equipment.category))&&linkedSkill&&skillMatchesGroup(linkedSkill,{kind:'ranged'}))
   group={...group,specialty:skillSpec(linkedSkill),catalogueGroup:group.specialty,trainingChoice:'explicit-mj-or-historical-link'};
@@ -279,7 +299,7 @@ export function applyWeaponSkillRules(actor, action, { weapon = null, context = 
  const itemId=equipment.id||fiche.equipmentId;
  const persistedHands=actor?.extensions?.v5?.weaponHandsByEquipmentId?.[itemId];
  const nameHands=/\(\s*2\s*M\s*\)/i.test(equipment.name||action.note||'')?2:null;
- const defaultHands=nameHands??(foldedWeaponText(equipment.category||declared)==='cavalerie'?1:0);
+ const defaultHands=nameHands??(isBastard||foldedWeaponText(equipment.category||declared)==='cavalerie'?1:0);
  const handsValue=context.weaponHands??action.extensions?.v5?.weaponHands??persistedHands??equipment.hands;
  const hands=Number(handsValue!==undefined&&handsValue!==null&&handsValue!==''?handsValue:defaultHands);
  let selectedSpec=skillSpec(chosen);
@@ -330,8 +350,9 @@ export function applyWeaponSkillRules(actor, action, { weapon = null, context = 
  }
  const exactSkillPredicate=skill=>skillMatchesGroup(skill,effectiveGroup)&&skillSpec(skill)===foldedWeaponText(effectiveGroup.specialty)&&!skill.status?.match(/open|ambiguous|unresolved/);
  const baseFallbackPredicate=skill=>effectiveGroup.kind==='melee'&&baseFallbackAllowed&&skillMatchesGroup(skill,{kind:'melee'})&&skillSpec(skill)==='base'&&skillHasAdvance(skill)!==null;
- const exactSkill=bestAvailableSkill(skills,skill=>skillHasAdvance(skill)===true&&(exactSkillPredicate(skill)||baseFallbackPredicate(skill)))
+ const exactSkill=bestAvailableSkill(skills,skill=>skillHasAdvance(skill)===true&&exactSkillPredicate(skill))
   ||bestAvailableSkill(skills,exactSkillPredicate)
+  ||bestAvailableSkill(skills,skill=>skillHasAdvance(skill)===true&&baseFallbackPredicate(skill))
   ||bestAvailableSkill(skills,baseFallbackPredicate);
  let usable=chosen&&skillMatchesGroup(chosen,effectiveGroup)&&skillSpec(chosen)===foldedWeaponText(effectiveGroup.specialty)?chosen:exactSkill;
  if(isCavalry&&!mounted&&isCavalryHammer&&selectedSpec==='deux mains')usable=chosen&&skillMatchesGroup(chosen,{kind:'melee'})&&skillSpec(chosen)==='deux mains'?chosen:skills.find(skill=>skillMatchesGroup(skill,{kind:'melee'})&&skillSpec(skill)==='deux mains');
@@ -381,7 +402,7 @@ export function applyWeaponSkillRules(actor, action, { weapon = null, context = 
  if(chosen&&(!chosenNowInMeleeFamily||selectedSpec!==foldedWeaponText(effectiveGroup.specialty))&&!fencingWithBase&&!meleeAlternative){unresolved.push('La compétence confirmée ne correspond pas au groupe de cette arme : le MJ doit choisir la spécialité appropriée.');return {...unchanged,unresolved,receipt:{...receipt,missing:'skill-group-mismatch'}};}
  if(usable&&advancesFor(usable,context)===null){unresolved.push('Les augmentations de cette compétence ne sont pas renseignées : le MJ doit confirmer les données de fiche.');return {...unchanged,unresolved,receipt:{...receipt,missing:'skill-advances'}};}
  const trained=usable&&advancesFor(usable,context)===true;
- if(fencingWithBase)receipt.applied.push('fencing-with-basic');
+ if(fencingWithBase&&trained)receipt.applied.push('fencing-with-basic');
  if(trained){
   receipt.trained=true;receipt.skillId=usable.id;
   if(isBastard&&hands===1)unchanged.action.qualities=addQuality(addQuality(qualities,'epuisante'),'lente');

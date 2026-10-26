@@ -33,10 +33,12 @@ try {
     const { Store } = await import('/Outil-MJ-Warhammer/js/main.js'); await Store.ready;
     await Store.addParticipant({ id: 'f2a-npc', name: 'Garde', kind: 'PNJ', camp: 'ennemi', zone: 'active', hp: 12, maxHp: 12, initiative: 40, caracs: { I: 40 } });
     await Store.addParticipant({ id: 'f2a-pj', name: 'Aline', kind: 'PJ', camp: 'pj', zone: 'active', hp: 12, maxHp: 12, initiative: 0, caracs: { I: 0 } });
+    await Store.setOrderMode('manual'); await Store.moveInOrder('f2a-npc','f2a-pj');
   });
   await page.locator('#combat-banner .combat-banner-primary').click({ timeout: 10000 });
   const dialog = page.locator('dialog.tool-sheet');
   await dialog.waitFor({ state: 'visible' });
+  assert.match(await dialog.innerText(),/ordre manuel existe déjà/i,'le MJ est averti que son ordre sera remplacé');
   const npcDie = Number(await dialog.locator('input[name="die:f2a-npc"]').inputValue());
   assert.ok(npcDie >= 1 && npcDie <= 10);
   await dialog.locator('input[name="characteristic:f2a-pj"]').fill('35');
@@ -58,6 +60,10 @@ try {
   assert.equal(state.actor, state.order[0]);
   assert.equal(state.participants.find(row => row.id === 'f2a-pj').extensions.v5.combatInitiative.characteristic, 35);
   assert.equal(state.participants.find(row => row.id === 'f2a-pj').initiative, 0);
+  await page.locator('#tab-combat').click();
+  const pjCombatScore=state.participants.find(row=>row.id==='f2a-pj').extensions.v5.combatInitiative.score;
+  assert.match(await page.locator('#init-tracker .init-token').filter({hasText:'Aline'}).innerText(),new RegExp(`Combat ${pjCombatScore} · I 0`));
+  assert.match(await page.locator('.actor-card[data-id="f2a-pj"] .init-badge').innerText(),new RegExp(`I 0 · ordre ${pjCombatScore}`));
   assert.ok(state.participants.find(row => row.id === 'f2a-npc').states.some(row => row.key === 'surpris'));
   assert.ok(!state.participants.find(row => row.id === 'f2a-pj').states.some(row => row.key === 'surpris'));
   const exactApplied = await page.evaluate(async () => { const { Store } = await import('/Outil-MJ-Warhammer/js/main.js'); return JSON.parse(Store.getFullJSON()); });
@@ -180,6 +186,12 @@ try {
   await page.locator('#tab-prepare').click();
   await page.locator('#workspace-prepare [data-workspace-action="suspend-scene"]').click();
   await page.waitForFunction(async () => { const { Store } = await import('/Outil-MJ-Warhammer/js/main.js'); return Store.getActiveScene() === null; });
+  await page.evaluate(async()=>{const {Store}=await import('/Outil-MJ-Warhammer/js/main.js');await Store.addParticipant({id:'f2a-after-suspend',name:'Combat libre suivant',kind:'PNJ',camp:'ennemi',zone:'active',hp:10,maxHp:10,initiative:40,caracs:{I:40}});});
+  await page.locator('#tab-combat').click();await page.locator('#combat-banner .combat-banner-primary').click();
+  const afterSuspendDialog=page.locator('dialog.tool-sheet');await afterSuspendDialog.waitFor({state:'visible'});
+  assert.equal(await afterSuspendDialog.locator('input[name="die:f2a-after-suspend"]').count(),1,'après suspension, le combat libre suivant redemande un d10');
+  await afterSuspendDialog.getByRole('button',{name:'Annuler',exact:true}).click();
+  await page.evaluate(async()=>{const {Store}=await import('/Outil-MJ-Warhammer/js/main.js');await Store.resetCombat();});
   await page.locator('#btn-menu').click();
   await page.locator('#app-menu').getByRole('button', { name: 'Reprendre « Via préparation »' }).click();
   await page.waitForFunction(async () => { const { Store } = await import('/Outil-MJ-Warhammer/js/main.js'); return Store.getActiveScene()?.status === 'active'; });
@@ -203,13 +215,14 @@ try {
   await applyRestart.locator('input[name^="die:"]:not([readonly])').fill('4');
   await applyRestart.getByRole('button', { name: 'Calculer / actualiser l’ordre' }).click();
   await applyRestart.getByRole('button', { name: 'Confirmer et appliquer' }).click();
-  const restarted = await page.evaluate(async () => { const { Store } = await import('/Outil-MJ-Warhammer/js/main.js'); const scene = Store.getActiveScene(); return { round: Store.getCombat().round, sceneId: scene?.id, die: scene?.participants[0]?.extensions?.v5?.combatInitiative?.die }; });
+  const restarted = await page.evaluate(async () => { const { Store } = await import('/Outil-MJ-Warhammer/js/main.js'); const scene = Store.getActiveScene(); return { round: Store.getCombat().round, sceneId: scene?.id, scopeId: scene?.extensions?.v5?.combatScopeId, die: scene?.participants[0]?.extensions?.v5?.combatInitiative?.die }; });
   assert.equal(restarted.round, 0, 'recommencer revient au Round 0');
-  assert.equal(restarted.sceneId, launchedScene.id);
+  assert.equal(restarted.sceneId, launchedScene.id, 'le contrat conserve l’identité de scène');
+  assert.ok(restarted.scopeId&&restarted.scopeId!==launchedScene.id,'le redémarrage renouvelle la portée des turnId sans changer la scène');
   assert.equal(restarted.die, restartNpcDie);
   await page.evaluate(() => { Math.random = window.__f2RestartRandom; delete window.__f2RestartRandom; });
 
-  // Three-way tie through the visible tournament selectors; no participant IDs are supplied by the runner.
+  // Three-way tie through the visible direct-order selector; no participant IDs are supplied by the runner.
   await page.evaluate(async () => {
     const { Store } = await import('/Outil-MJ-Warhammer/js/main.js');
     await Store.resetCombat();
@@ -220,23 +233,10 @@ try {
   const tieDialog = page.locator('dialog.tool-sheet'); await tieDialog.waitFor({ state: 'visible' });
   for (const input of await tieDialog.locator('input[name^="die:"]').all()) await input.fill('5');
   await tieDialog.getByRole('button', { name: 'Calculer / actualiser l’ordre' }).click();
-  const bracket = tieDialog.locator('select[data-kind="tieOrder"]');
-  assert.equal(await bracket.count(), 3, 'l’égalité à trois demande l’ordre du tournoi');
-  for (const [index, name] of ['Alba', 'Basile', 'Cléo'].entries()) await bracket.nth(index).selectOption({ label: `${name} · pj · PJ` });
-  await tieDialog.getByRole('button', { name: 'Calculer / actualiser l’ordre' }).click();
-  for (let match = 0; match < 2; match++) {
-    for (const roll of ['20', '80']) {
-      const opposed = tieDialog.locator('[data-match-id]');
-      assert.equal(await opposed.count(), 1, `le match ${match + 1} demande un d100 à la fois`);
-      await opposed.fill(roll);
-      await tieDialog.getByRole('button', { name: 'Calculer / actualiser l’ordre' }).click();
-    }
-  }
+  assert.equal(await tieDialog.locator('select[data-kind="tieOrder"]').count(), 0, 'à trois, aucun tournoi ni Test opposé n’est demandé');
+  assert.match(await tieDialog.locator('[data-tie-area]').innerText(), /choisissez directement l’ordre/i);
   const tieChoice = tieDialog.locator('select[data-kind="tieChoice"]');
-  assert.equal(await tieChoice.count(), 3, 'le gagnant final choisit une permutation complète');
-  const winnerText = await tieDialog.locator('[data-tie-area]').innerText();
-  const winnerName = ['Alba', 'Basile', 'Cléo'].find(name => winnerText.includes(`${name} · pj · PJ a gagné`));
-  assert.ok(winnerName, `le gagnant est nommé avant le choix: ${winnerText}`);
+  assert.equal(await tieChoice.count(), 3, 'le MJ choisit une permutation complète');
   const chosenOrder = ['Cléo', 'Basile', 'Alba'];
   for (const [index, name] of chosenOrder.entries()) await tieChoice.nth(index).selectOption({ label: `${name} · pj · PJ` });
   await tieDialog.getByRole('button', { name: 'Calculer / actualiser l’ordre' }).click();
@@ -244,12 +244,11 @@ try {
   const tiedState = await page.evaluate(async () => { const { Store } = await import('/Outil-MJ-Warhammer/js/main.js'); const full = JSON.parse(Store.getFullJSON()); return { order: Store.getCombat().order, people: Store.listParticipants(), full, initiative: full.combat.participants[0]?.extensions?.v5?.combatInitiative, resolution: full.extensions?.v5?.combatInitiativeResolution }; });
   assert.deepEqual(tiedState.order.map(id => tiedState.people.find(person => person.id === id)?.name), chosenOrder, 'le vrai dialogue applique la permutation choisie');
   const tieAudit = tiedState.resolution?.tieGroups?.[0];
-  assert.equal(tieAudit?.matches?.length, 2, 'l’enveloppe sauvegardée conserve les deux oppositions du tournoi');
+  assert.equal(tieAudit?.matches?.length, 0, 'trois ex aequo ne produisent pas d’opposition');
   assert.deepEqual(tieAudit.participantIds.map(id => tiedState.people.find(person => person.id === id)?.name), ['Alba', 'Basile', 'Cléo']);
-  assert.deepEqual(tieAudit.bracketOrder.map(id => tiedState.people.find(person => person.id === id)?.name), ['Alba', 'Basile', 'Cléo']);
+  assert.deepEqual(tieAudit.bracketOrder, []);
   assert.deepEqual(tieAudit.chosenOrder.map(id => tiedState.people.find(person => person.id === id)?.name), chosenOrder);
-  assert.ok(tieAudit.matches.every(match => Number.isFinite(match.initiatorRoll) && Number.isFinite(match.opponentRoll) && Number.isFinite(match.initiatorDR) && Number.isFinite(match.opponentDR) && match.winnerId && match.initiatorId && match.opponentId), 'l’enveloppe conserve IDs, jets, DR et gagnant de chaque opposition');
-  console.log(`equality audit persisted: ${tieAudit.matches.length} matches with rolls/DR/winners and chosen order`);
+  console.log(`equality audit persisted: direct chosen order for ${tieAudit.participantIds.length} participants`);
   await page.locator('#btn-undo').click();
   const tieUndo = await page.evaluate(async () => { const { Store } = await import('/Outil-MJ-Warhammer/js/main.js'); return { round: Store.getCombat().round, initialized: Store.listParticipants().some(person => person.extensions?.v5?.combatInitiative), order: Store.getCombat().order }; });
   assert.equal(tieUndo.round, 0); assert.equal(tieUndo.initialized, false);
@@ -260,7 +259,7 @@ try {
   const tieReload = await page.evaluate(async () => { const { Store } = await import('/Outil-MJ-Warhammer/js/main.js'); await Store.ready; const combat = Store.getCombat(), full = JSON.parse(Store.getFullJSON()); return { order: combat.order, initiative: Store.listParticipants()[0]?.extensions?.v5?.combatInitiative, resolution: full.extensions?.v5?.combatInitiativeResolution }; });
   assert.deepEqual(tieReload.order, tiedState.order, 'reload conserve l’ordre choisi après les oppositions');
   assert.equal(tieReload.initiative.die, tiedState.initiative.die);
-  assert.deepEqual(tieReload.resolution, tiedState.resolution, 'reload restitue exactement les jets, SL et vainqueurs du tournoi');
+  assert.deepEqual(tieReload.resolution, tiedState.resolution, 'reload restitue exactement l’ordre direct choisi par le MJ');
 
   await page.evaluate(async () => {
     const { Store } = await import('/Outil-MJ-Warhammer/js/main.js'); await Store.resetCombat();
@@ -300,6 +299,27 @@ try {
   assert.deepEqual(automaticOrder.names, ['Émile', 'Daria'], 'Trier par initiative restaure l’ordre résolu canonique');
 
   await participantEditor.getByRole('button', { name: 'Fermer', exact: true }).click();
+  // A pre-Round 1 bench activation opens the same initiative dialog, keeps old dice, and captures the new PNJ die once.
+  await page.evaluate(async () => {
+    const { Store } = await import('/Outil-MJ-Warhammer/js/main.js'); await Store.resetCombat();
+    await Store.addParticipant({ id: 'f2a-pre-active', name: 'Déjà tiré', kind: 'PNJ', camp: 'ennemi', zone: 'active', hp: 10, maxHp: 10, initiative: 40, caracs: { I: 40 } });
+    await Store.addParticipant({ id: 'f2a-pre-bench', name: 'Renfort avant Round 1', kind: 'PNJ', camp: 'ennemi', zone: 'bench', hp: 10, maxHp: 10, initiative: 30, caracs: { I: 30 } });
+    await Store.applyCombatInitialization(Store.previewCombatInitialization({ diceById: { 'f2a-pre-active': 5 } }));
+  });
+  await page.locator('#tab-combat').click();
+  await page.locator('#workspace-play [aria-label="Faire entrer Renfort avant Round 1"]').click();
+  const activationDialog=page.locator('dialog.tool-sheet');await activationDialog.waitFor({state:'visible'});
+  assert.equal(await activationDialog.locator('input[name="die:f2a-pre-active"]').inputValue(),'5','le jet antérieur reste fixé');
+  const preRoundDie=Number(await activationDialog.locator('input[name="die:f2a-pre-bench"]').inputValue());
+  assert.ok(preRoundDie>=1&&preRoundDie<=10,'le nouveau PNJ reçoit son d10 avant le Round 1');
+  await activationDialog.getByRole('button',{name:'Calculer / actualiser l’ordre'}).click();
+  assert.equal(Number(await activationDialog.locator('input[name="die:f2a-pre-bench"]').inputValue()),preRoundDie);
+  await activationDialog.getByRole('button',{name:'Confirmer et appliquer'}).click();
+  const preRoundApplied=await page.evaluate(async()=>{const {Store}=await import('/Outil-MJ-Warhammer/js/main.js');return {round:Store.getCombat().round,participants:Store.listParticipants()};});
+  assert.equal(preRoundApplied.round,0);assert.equal(preRoundApplied.participants.find(row=>row.id==='f2a-pre-bench').zone,'active');
+  assert.equal(preRoundApplied.participants.find(row=>row.id==='f2a-pre-active').extensions.v5.combatInitiative.die,5);
+  assert.equal(preRoundApplied.participants.find(row=>row.id==='f2a-pre-bench').extensions.v5.combatInitiative.die,preRoundDie);
+
   await page.evaluate(async () => {
     const { Store } = await import('/Outil-MJ-Warhammer/js/main.js'); await Store.resetCombat();
     await Store.addParticipant({ id: 'f2a-reflex-pj', name: 'Réflexe PJ', kind: 'PJ', camp: 'pj', zone: 'active', hp: 10, maxHp: 10, initiative: 43, caracs: { I: 43 }, talents: [{ id: 'talent-combat-reflexes', status: 'resolved', rank: 1 }] });

@@ -15,6 +15,7 @@ export const V5_TYPED_PENALTIES=Object.freeze(PENALTIES);
 const ATTACK_ONLY=new Set(['cover','targetProne','longRange','extremeRange','terrainMovement']);
 const foldState=value=>String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'');
 const hasState=(person,...keys)=>(person?.states||[]).some((row,index)=>{
+ if(Number(row?.level)===0)return false;
  if(row.source?.source?.effectHash&&!sourceActive(row))return false;
  const state=normalizeState(row,index);
  if(!state||['talent-active','talent-pending'].includes(state.kind)||!(Number(state.level)>0))return false;
@@ -44,9 +45,8 @@ export function applyV5AttackSituationModifiers(modifiers,{role,kind,actionType,
  if(role!=='attacker'||!['attack','attaque'].includes(actionType)||!['melee','ranged'].includes(kind))return [];
  const situationStart=modifiers.length,unresolved=[],add=(id,label,amount)=>{if(amount)modifiers.push({id,label,amount});};
  if(kind==='ranged'){
-  const explicitTargetSize=Number.isSafeInteger(targetSize)||!creatureSizeOf(target).assumed;
   const ar=Number.isSafeInteger(actorSize)?actorSize:creatureSizeOf(actor).rank,tr=Number.isSafeInteger(targetSize)?targetSize:creatureSizeOf(target).rank;
-  if(explicitTargetSize)add('size:ranged-target','Taille de la cible',tr===6?2:tr>ar?1:tr<ar?-1:0);
+  add('size:ranged-target','Taille de la cible',tr===6?2:tr>ar?1:tr<ar?-1:0);
   const bands={'point-blank':2,short:1,medium:0,long:-1,extreme:-2};
   if(context.shotRange!==undefined){if(!Object.hasOwn(bands,context.shotRange))unresolved.push('Bande de portée MJ invalide.');else add('range:'+context.shotRange,'Bande de portée choisie par le MJ',bands[context.shotRange]);}
   const surprised=hasState(target,'surpris','surprised');
@@ -64,11 +64,11 @@ export function applyV5AttackSituationModifiers(modifiers,{role,kind,actionType,
  }else{
   if(context.height==='attacker')add('height:melee','Avantage de hauteur',1);else if(context.height==='defender')add('height:melee','Désavantage de hauteur',-1);
   if(hasState(target,'enchevetre','entangled'))add('target:entangled','Cible Enchevêtrée',1);
-  if(context.secondWeaponAttack===true&&!context.penalties?.offHand)add('penalty:offHand','Main secondaire',-2);
   if(context.difficultTerrain===true)add('terrain:melee','Terrain difficile',-1);
   if(context.narrowSpace===true){if(!['very-short','short','average','superior'].includes(context.weaponReachBand))unresolved.push('Allonge de l’arme requise pour le combat en espace exigu.');else if(context.weaponReachBand==='average'||context.weaponReachBand==='superior')add('confined:melee','Espace exigu',context.weaponReachBand==='average'?-1:-2);}
   if(hasState(actor,'aterre','prone')&&!context.penalties?.proneAttack)add('penalty:proneAttack','Attaquant À Terre',-1);
  }
+ if(context.secondWeaponAttack===true&&!context.penalties?.offHand)add('penalty:offHand','Main secondaire',-2);
  const situationRows=modifiers.splice(situationStart);applyV5TalentPenaltyRules(situationRows,talentRules,{kind,role,context:{},advantage,aimed});modifiers.push(...situationRows);
  return unresolved;
 }
@@ -106,12 +106,13 @@ export function applyV5TalentPenaltyRules(modifiers,rules,{kind,role,context,adv
     if(kind==='ranged'&&role==='attacker'&&['cover','targetProne'].includes(key))continue;
     if(kind==='ranged'&&role==='attacker'&&context.shotRange!==undefined&&['longRange','extremeRange'].includes(key))continue;
     if(kind==='melee'&&role==='attacker'&&context.narrowSpace===true&&key==='confined')continue;
+    if(kind==='melee'&&role==='attacker'&&(context.height!==undefined&&key==='belowTarget'||context.difficultTerrain!==undefined&&key==='terrainMovement'))continue;
     const raw=context.penalties?.[key];if(raw==null||raw===0)continue;
     if(!Number.isSafeInteger(raw)||raw>0)throw new TypeError('Pénalité en DR invalide : '+key);
     modifiers.push({id:'penalty:'+key,label,amount:standard==null?raw:-standard});
   }
   for(const rule of rules){
-    const keys=rule.key==='calledShot'?['called-shot']:rule.key==='difficulty'?['difficulty']:rule.key==='confined'?['penalty:confined','confined:melee']:rule.key==='longRange'?['penalty:longRange','range:long']:rule.key==='extremeRange'?['penalty:extremeRange','range:extreme']:['penalty:'+rule.key];
+    const keys=rule.key==='calledShot'?['called-shot']:rule.key==='difficulty'?['difficulty']:rule.key==='confined'?['penalty:confined','confined:melee']:rule.key==='belowTarget'?['penalty:belowTarget','height:melee']:rule.key==='terrainMovement'?['penalty:terrainMovement','terrain:melee']:rule.key==='longRange'?['penalty:longRange','range:long']:rule.key==='extremeRange'?['penalty:extremeRange','range:extreme']:['penalty:'+rule.key];
     for(const row of modifiers.filter(row=>keys.includes(row.id)&&row.amount<0)){
       const suppressed=rule.op==='suppressTestPenalty'||rule.key==='calledShot'&&(kind==='melee'?advantage>0:aimed===true);
       const amount=suppressed?0:Math.max(row.amount,-rule.amount);

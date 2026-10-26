@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createStore} from '../js/core/store.js';
+import {createCombatEngine} from '../js/core/combat.js';
 import {advanceV5Effects,recoverV5Condition,healV5Wounds} from '../js/core/v5-effects.js';
 import {imposeHistoricalWrath} from './fixtures/divine-wrath-history.mjs';
 import {getPrayerSLModifiers} from '../js/core/v5-divine-prayer-caps.js';
@@ -37,6 +38,20 @@ test('B04 — Prière de récupération +2 réelle, échec appliqué puis réuss
  assert.equal((await store.applyDivineWrathRecovery({preview})).ok,true);assert.equal(level(priest(store),'a-terre'),1);
  preview=store.previewDivineWrathRecovery({actorId:'priest',stateId:state.id,roll:65,canSpeak:true});assert.equal(preview.test.success,true,'+2 transforme le résultat défavorable');
  await store.applyDivineWrathRecovery({preview});assert.equal(level(priest(store),'a-terre'),0);
+});
+test('F2-B — récupération de Courroux consomme Visée dans la même transaction et Undo la restaure',async()=>{
+ const bow={id:'recovery-bow',kind:'weapon',name:'Arc',category:'Arc',range:60,damage:'BF+4',grip:'two-hands'};
+ const {store}=await fixture(1,{equipment:[bow]});await impose(store,6);
+ await store.updateParticipant('ally',{name:'zzz'});
+ const engine=createCombatEngine(store);await engine.start();
+ const aimed=store.previewV5CombatAction({actorId:'priest',kind:'aim',targetId:'ally',weaponId:bow.id,rangedWeaponHeldConfirmed:true});
+ assert.equal(aimed.ready,true,JSON.stringify(aimed));await store.applyV5CombatAction(aimed);
+ await engine.nextTurn();await engine.nextTurn();
+ const stateId=priest(store).states.find(row=>row.key==='a-terre').id;
+ const recovery=store.previewDivineWrathRecovery({actorId:'priest',stateId,roll:65,canSpeak:true});assert.equal(recovery.ready,true,recovery.error);
+ assert.equal((await store.applyDivineWrathRecovery({preview:recovery})).ok,true);
+ assert.equal(snap(store).extensions.v5.combatActions?.byActorId?.priest,undefined);
+ await store.undo();assert.equal(snap(store).extensions.v5.combatActions.byActorId.priest.kind,'aim');
 });
 test('B04 — Aveuglé retire 1+DR seulement sur l’occurrence choisie, conserve le reste',async()=>{
  const {store}=await fixture();await impose(store,56);await store.acquireConditions('priest',[{id:'ordinary-blind',name:'Aveuglé',level:2}]);

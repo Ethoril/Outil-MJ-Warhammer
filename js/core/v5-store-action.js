@@ -6,9 +6,10 @@ import { v5ResourceIdentity } from './v5-resources.js';
 import { validateV5ReactionInput, registerV5ReactionOpportunities } from './v5-reactions.js';
 /** Bridge from the durable Store envelope to the pure V5 action transaction. */
 import { previewV5ActionCosts, prepareV5ActionState, commitV5ActionCosts } from './v5-action-costs.js';
-import { projectV5Resources, commitV5Resources } from './v5-resources.js';
+import { projectV5Resources, commitV5Resources, v5CombatActionClock } from './v5-resources.js';
 import { effectiveOrder } from './turn-order.js';
 import { planNaturalAttack } from './creature-combat.js';
+import { weaponHandsForParticipant } from './equipment.js';
 import { planManyHeads, headRegistryOf, hasManyHeads, headAttackKeyOf } from './creature-heads.js';
 import { defaultResolutionId, previewResolution } from './resolution.js';
 import { FREE_REROLL_SOURCE, freeRerollLayers, consumeFreeReroll, reverseDiceLayers, consumeReverseDice } from './v5-divine-effects-conditions.js';
@@ -16,19 +17,7 @@ import { slExtremeLayers, consumeSlExtreme } from './v5-divine-effects-tests.js'
 const clone = structuredClone;
 // Même lecture que attackType() de resolution.js : « attack » ou « attaque » (fiches importées).
 const isAttackType = type => ['attack', 'attaque'].includes(String(type || '').trim().toLocaleLowerCase());
-export function v5StoreActionClock(envelope) {
-  const scene = envelope.activeScene;
-  const encounterId = scene?.encounterId || scene?.id || envelope.extensions?.v5?.combatId;
-  const round = envelope.combat?.round;
-  const serial = scene?.extensions?.v5?.turnIndex ?? envelope.extensions?.v5?.turnIndex;
-  const actorId = envelope.combat?.currentActorId;
-  return {
-    ...(envelope.extensions?.v5?.talentSessionId?{sessionId:envelope.extensions.v5.talentSessionId}:{}),
-    ...(encounterId ? { encounterId } : {}),
-    ...(Number.isSafeInteger(round) && round > 0 ? { round } : {}),
-    ...(encounterId && actorId && Number.isSafeInteger(serial) && serial > 0 ? { turnId: `${scene?.id || encounterId}:${serial}:${actorId}` } : {})
-  };
-}
+export const v5StoreActionClock = v5CombatActionClock;
 export function v5StoreActionState(envelope) {
   return { revision: envelope.localRevision || 0,
     ...(Number.isSafeInteger(envelope.combat?.round) && envelope.combat.round > 0 ? { round: envelope.combat.round } : {}),
@@ -46,6 +35,7 @@ function authorNextTurnEnd(envelope, actorId) {
   return { phase: 'endOfTurn', actorId, round: combat.round + Math.floor((current + distance) / order.length), turn: serial + distance, moment: 'afterEffects' };
 }
 export function buildV5StoreActionInput(envelope, raw = {}) {
+ if(raw.reactionId&&!raw.v5?.reactionId)raw={...raw,v5:{...(raw.v5||{}),reactionId:raw.reactionId}};
  const sourceActorId=raw.actorId||raw.actor?.id,sourceActor=envelope.combat?.participants?.find(row=>row.id===sourceActorId);
  const fold=value=>String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
  const skillId=raw.action?.extensions?.fiche?.skillId||raw.v5?.context?.skillId,skill=sourceActor?.skills?.find(row=>row.id===skillId);
@@ -66,11 +56,12 @@ export function buildV5StoreActionInput(envelope, raw = {}) {
   if (v5.extraAttack === true && !costs.some(cost => cost.resource === 'momentum')) costs.push({ id: 'system:extra-attack-momentum', resource: 'momentum', amount: 1 });
   const quotas=[...(v5.quotas||[])],exemptions=[...(v5.exemptions||[])],actor=state.participants.find(p=>p.id===actorId),context=v5.context||{};
   if(context.secondWeaponAttack===true){
-    if(!v5.extraAttack||v5.kind!=='melee')throw new TypeError('Seconde arme : attaque supplémentaire de mêlée requise.');
-    if(context.freeAttackTalent!=='dual-wielder'||context.primaryResolutionId!==undefined){
+    if(!v5.extraAttack||!['melee','ranged'].includes(v5.kind))throw new TypeError('Seconde arme : attaque supplémentaire de mêlée ou de tir requise.');
+    {
       const primary=(envelope.extensions?.v5?.standardTurnActions||[]).find(row=>row.actionId===context.primaryResolutionId&&row.actorId===actorId&&row.encounterId===clock.encounterId&&row.turnId===clock.turnId&&row.kind==='action'&&row.weaponId);
       const weaponId=supplied.action?.extensions?.fiche?.equipmentId,weapon=actor?.equipment?.find(item=>item.id===weaponId);
-      if(!primary||primary.weaponId===weaponId||!weapon||!(weapon.grip==='one-hand'||weapon.hands===1||weapon.oneHanded===true))throw new TypeError('Seconde arme : attaque précédente et arme différente utilisable à une main requises.');
+      const firstWeapon=actor?.equipment?.find(item=>item.id===primary?.weaponId);
+      if(!primary||primary.actionType!=='attack'||primary.weaponId===weaponId||weaponHandsForParticipant(weapon,actor)!==1||weaponHandsForParticipant(firstWeapon,actor)!==1)throw new TypeError('Seconde arme : attaque précédente et deux armes différentes utilisables à une main requises.');
       if(!quotas.some(q=>q.id==='combat:base-second-weapon'))quotas.push({id:'combat:base-second-weapon',scope:'turn',maximum:1});
     }
   }

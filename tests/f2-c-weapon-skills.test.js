@@ -27,13 +27,15 @@ function importedWeapon({ category, name = 'Arme test', range = '', advanced = [
 
 const resolve = (fixture, context = {}) => previewResolution({ actor: fixture.actor, target, action: fixture.imported, roll: 40, baseRevision: 0, v5: { context: { ...fixture.context, ...context } } });
 
-test('F2-C — Escrime à zéro utilise Base entraînée sans accorder les qualités bénéfiques', () => {
+test('F2-C T1 — Escrime présente à zéro garde le repli CC par défaut, Base entraînée reste un choix MJ', () => {
   const f = importedWeapon({ category: 'Escrime', advanced: [{ nom: 'Corps à corps (Escrime)', adv: 0 }] });
   assert.equal(f.imported.extensions.fiche.requiresLink, false);
   const result = resolve(f);
   const base = f.snapshot.skills.find(row => row.name === 'Corps à corps (Base)');
   assert.ok(base?.advances > 0);
-  assert.equal(result.score.base, base.total);
+  assert.equal(result.score.base, f.actor.caracs.CC);
+  assert.equal(result.weaponSkillReceipt.trained, false);
+  assert.equal(resolve(f,{weaponSkillId:base.id}).score.base,base.total);
   assert.deepEqual(result.input.action.qualities.map(row => row.id), ['desequilibree']);
   assert.deepEqual(result.input.action.qualities.map(row => row.id).filter(id => id === 'desequilibree'), ['desequilibree'], 'le Défaut reste actif');
   assert.deepEqual(f.snapshot, f.original, 'les données importées sources ne changent pas');
@@ -174,7 +176,8 @@ test('F2-C — Escrime employée avec Base garde le score confirmé et perd ses 
   const result = resolve(f);
   assert.equal(result.score.base, f.actor.caracs.CC);
   assert.deepEqual(result.input.action.qualities.map(row => row.id), ['desequilibree']);
-  assert.equal(result.weaponSkillReceipt.applied.filter(code=>code==='fencing-with-basic').length,1);
+  assert.equal(result.weaponSkillReceipt.applied.filter(code=>code==='fencing-with-basic').length,0,'Base à zéro est un repli CC, pas une compétence Base entraînée');
+  assert.equal(result.weaponSkillReceipt.trained,false);
 });
 
 test('F2-C — armes de cavalerie à pied distinguent Deux mains et l’arme improvisée', () => {
