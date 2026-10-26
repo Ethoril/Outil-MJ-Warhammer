@@ -23,7 +23,7 @@ Les résultats historiques ci-dessous concernent les états antérieurs. Les cor
 | 11 | Hauteur et terrain utilisent chacun une seule pénalité malgré les anciens champs. |
 | 12 | Les suppressions de Talents reconnaissent les nouvelles clés hauteur/terrain ; Sapeur conserve uniquement les exemptions de son contrat. |
 | 13 | Cible sans Trait de Taille = Moyenne pour les modificateurs de tir. |
-| 14 | Seconde arme au tir admise ; contrôle des deux armes à une main, refus d'aperçu lisible et voies de Talents conservées. Raccord au vrai catalogue et au panneau commun mêlée/tir. |
+| 14 | Seconde arme au tir admise ; contrôle des deux armes à une main, refus d'aperçu lisible ; Maniement de deux armes exige une première attaque enregistrée dans l'outil, conformément à la confirmation du MJ T1 BIS. Exemptions d'Élan, Parade et quota conservés. Raccord au vrai catalogue et au panneau commun mêlée/tir. |
 | 15 | Une tentative de Croche-pied par touche, sans second État À Terre. |
 | 16 | Paliers recalculés après ajustements, exposés pour le défenseur et copiés dans le journal. |
 | 17 | Gardes Défensive/Viser et perte de Visée dans les transactions de Focalisation, Incantation, dissipation et Prière, y compris récupération du Courroux. |
