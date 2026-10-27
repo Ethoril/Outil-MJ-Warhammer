@@ -147,6 +147,23 @@ test('F2-N — dégagement retire les niveaux de toutes les occurrences liées a
   assert.deepEqual(result.actor.states.map(row=>row.id),['foreign']);
 });
 
+test('F2-N caractérisation T2 bis — le dégagement de l’initiateur libère aussi le partenaire lié',()=>{
+  const holder=participant('holder',40,[
+    {id:'holder-grapple-state',key:'enchevetre',name:'Enchevêtré',level:1,source:{kind:'grapple',linkId:'grapple:entry-1'}}
+  ]);
+  const held=participant('held',40,[
+    {id:'held-grapple-state',key:'enchevetre',name:'Enchevêtré',level:2,source:{kind:'grapple',linkId:'grapple:entry-1'}}
+  ]);
+  const active=link({targetConditionIds:['held-grapple-state']});
+  const plan=previewGrappleAction({actor:holder,target:held,link:active,action:'escape',
+    actorTest:{roll:34,success:true,sl:2},opponentTest:{sl:0},resolutionId:'holder-escape',round:3});
+  assert.equal(plan.endLink,true);
+  const result=applyGrappleAction(plan,{actor:holder,target:held,link:active});
+  assert.equal(result.link.status,'released');
+  assert.equal(stateLevel(result.actor),0,'l’initiateur est libéré');
+  assert.equal(stateLevel(result.target),0,'le partenaire est libéré par la clôture du même lien');
+});
+
 test('F2-N — perdre l’opposition laisse lien, Blessures et États inchangés', () => {
   const actor = participant('holder');
   const target = participant('held', 40, [{ id: 'grapple-state', key: 'enchevetre', level: 2, source: { kind: 'grapple', linkId: 'grapple:entry-1' } }]);
