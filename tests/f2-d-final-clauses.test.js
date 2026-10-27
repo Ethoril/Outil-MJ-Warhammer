@@ -28,13 +28,13 @@ test('F2-D L13 — le Couteau Bollock garde seulement Perforante hors Surprise/�
 
 test('F2-D L13 — Couteau Bollock active ses qualités conditionnelles contre une cible À Terre si formé', () => {
   const prone = knifePreview('Couteau Bollock', [{ id: 'prone', key: 'a-terre', name: 'À Terre', level: 1 }], true);
-  assert.deepEqual(prone.input.action.qualities.map(row => typeof row === 'string' ? row : row.id).sort(), ['empaleuse', 'perforante', 'precise']);
+  assert.deepEqual(prone.input.action.qualities.map(row => typeof row === 'string' ? row : row.id).sort(), ['empaleuse', 'perforante', 'pointue']);
   const ordinaryKnife = knifePreview('Couteau');
   assert.deepEqual(ordinaryKnife.input.action.qualities.map(row => typeof row === 'string' ? row : row.id), ['perforante']);
   const surprised=knifePreview('Couteau Bollock',[{id:'surprised',key:'surpris',name:'Surpris',level:1}],true);
-  assert.deepEqual(surprised.input.action.qualities.map(row=>typeof row==='string'?row:row.id).sort(),['empaleuse','perforante','precise']);
+  assert.deepEqual(surprised.input.action.qualities.map(row=>typeof row==='string'?row:row.id).sort(),['empaleuse','perforante','pointue']);
   const untrainedSurprise=knifePreview('Couteau Bollock',[{id:'surprised',key:'surpris',name:'Surpris',level:1}],false);
-  assert.ok(!untrainedSurprise.input.action.qualities.some(row=>['empaleuse','precise'].includes(typeof row==='string'?row:row.id)));
+  assert.ok(!untrainedSurprise.input.action.qualities.some(row=>['empaleuse','pointue'].includes(typeof row==='string'?row:row.id)));
   const inactiveProne=knifePreview('Couteau Bollock',[{id:'prone-zero',key:'a-terre',name:'À Terre',level:0}],true);
   assert.deepEqual(inactiveProne.input.action.qualities.map(row=>typeof row==='string'?row:row.id),['perforante']);
   const inactiveSurprise=knifePreview('Couteau Bollock',[{id:'surprised-zero',key:'surpris',name:'Surpris',level:0}],true);
@@ -42,7 +42,7 @@ test('F2-D L13 — Couteau Bollock active ses qualités conditionnelles contre u
   const staleSurprise=knifePreview('Couteau Bollock',[{id:'surprised-stale',key:'surpris',name:'Surpris',level:1,source:{talentId:'talent-frenzy',source:{effectHash:'sha256:'+'0'.repeat(64)}}}],true);
   assert.deepEqual(staleSurprise.input.action.qualities.map(row=>typeof row==='string'?row:row.id),['perforante']);
   const surprisedWithoutDefense=knifePreview('Couteau Bollock',[{id:'surprised',key:'surpris',name:'Surpris',level:1}],true,false);
-  assert.deepEqual(surprisedWithoutDefense.input.action.qualities.map(row=>typeof row==='string'?row:row.id).sort(),['empaleuse','perforante','precise']);
+  assert.deepEqual(surprisedWithoutDefense.input.action.qualities.map(row=>typeof row==='string'?row:row.id).sort(),['empaleuse','perforante','pointue']);
 });
 
 test('F2-D L06 — attaque au bouclier suspend sa protection, persiste et Undo la rétablit', async () => {

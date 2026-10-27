@@ -524,7 +524,7 @@ export function previewResolution(input) {
   if (weaponItem?.baseId === 'weapon-armes-corps-a-corps-base-couteau-bollock') {
     const states=initial.target?.states||[],hasState=(...keys)=>states.some(row=>keys.includes(foldKey(row?.key||row?.name||''))
       &&Number(row.level??1)>0&&!(row.source?.source?.effectHash&&!sourceActive(row)));
-    const conditional=conditionalV5KnifeQualities({qualities:[...equipmentQualities(weaponItem),{id:'empaleuse'},{id:'precise'},...(initial.action.qualities||[])],
+    const conditional=conditionalV5KnifeQualities({qualities:[...equipmentQualities(weaponItem),{id:'empaleuse'},{id:'pointue'},...(initial.action.qualities||[])],
       targetSurprised:hasState('surpris','surprised'),targetProne:hasState('a-terre','aterre','prone')}).qualities;
     initial.action={...initial.action,qualities:conditional};
   }
@@ -1021,9 +1021,13 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     if(hit&&action.qualities.some(row=>(typeof row==='string'?row:row?.id)==='taille')){
       const struckItemId=context.struckItemId;
       const struck=(protection.counted||[]).find(item=>item.id===struckItemId)||[protection.shield].find(item=>item?.id===struckItemId);
+      // No armour or shield piece at this location: Hack has nothing to damage and must not block the attack.
+      const pieceAvailable=(protection.counted||[]).length>0||Boolean(protection.shield);
       hack=protection.ap===null?{ready:false,unresolved:['Taille : PA effectifs de la localisation à préciser avant réduction.']}
+        :!pieceAvailable?{ready:false,unresolved:[],none:true}
         :previewV5Hack({qualities:action.qualities,hit:true,struckItemId,currentAp:struck?.ap});
-      if(!hack.ready)unresolved.push(...hack.unresolved);
+      if(hack.none){hack=null;if(protection.ap>0)mechanicalWarnings.push({keywordId:'taille',reason:'taille-aucune-piece-identifiable'});}
+      else if(!hack.ready)unresolved.push(...hack.unresolved);
       else {
         protection={...protection,ap:Math.max(0,protection.ap-1),...(struck.kind==='shield'?{shieldAp:Math.max(0,(protection.shieldAp||0)-1)}:{})};
         hack={...hack,struckItemId,struckItemName:struck.name};

@@ -197,7 +197,7 @@ export function previewV5Spread({ qualities = [], rangeBand, targetIds, weaponDa
 export function conditionalV5KnifeQualities({ qualities = [], targetSurprised = false, targetProne = false } = {}) {
   const base = unique(qualities.map(row => typeof row === 'string' ? row : row?.id).filter(Boolean));
   const conditional = targetSurprised || targetProne;
-  const out = base.filter(id => !['empaleuse', 'precise'].includes(id) || conditional);
+  const out = base.filter(id => !['empaleuse', 'pointue'].includes(id) || conditional);
   return result({ qualities: out });
 }
 

@@ -413,10 +413,10 @@ test('F2-D résolution — Explosion ignores opposition and DR, and applies to e
   assert.equal(refused.state.participants.find(row=>row.id===unknownHp.id).hp,undefined,'aucune cible sans PV n’est écrasée à 0');
 });
 
-test('F2-D pure proposal — conditional knife keeps Penetrating and gates only Impale/Precise', () => {
-  assert.deepEqual(conditionalV5KnifeQualities({ qualities: ['empaleuse', 'precise', 'perforante'], targetSurprised: false, targetProne: false }).qualities, ['perforante']);
-  assert.deepEqual(conditionalV5KnifeQualities({ qualities: ['empaleuse', 'precise', 'perforante'], targetProne: true }).qualities,
-    ['empaleuse', 'precise', 'perforante']);
+test('F2-D pure proposal — conditional knife keeps Penetrating and gates only Impale/Pointue', () => {
+  assert.deepEqual(conditionalV5KnifeQualities({ qualities: ['empaleuse', 'pointue', 'perforante'], targetSurprised: false, targetProne: false }).qualities, ['perforante']);
+  assert.deepEqual(conditionalV5KnifeQualities({ qualities: ['empaleuse', 'pointue', 'perforante'], targetProne: true }).qualities,
+    ['empaleuse', 'pointue', 'perforante']);
 });
 
 test('F2-D pure proposal — V5 shield defense, attached coverage, ranged boundary and attack suspension', () => {

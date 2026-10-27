@@ -1903,7 +1903,7 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
   }
   const linkedWeapon=actor?.equipment?.find(row=>row.id===action?.extensions?.fiche?.equipmentId)||action?.extensions?.equipment;
   const failureWeaponName=String(linkedWeapon?.name||action?.note||action?.name||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
-  const isGunAxe=/hache.fusil|gun axe/.test(failureWeaponName),isGunHalberd=/hallebarde.fusil|gun halberd/.test(failureWeaponName),isGriffonsfoot=/griffonsfoot/.test(failureWeaponName),isHandMortar=/mortier a main|hand mortar/.test(failureWeaponName),isVolley=/arquebuse a salve|volley gun/.test(failureWeaponName),isMatchlock=/matchlock|meche/.test(failureWeaponName);
+  const isGunAxe=/hache.fusil|gun axe/.test(failureWeaponName),isGunHalberd=/hallebarde.fusil|gun halberd/.test(failureWeaponName),isGriffonsfoot=/griffonsfoot/.test(failureWeaponName),isHandMortar=/mortier (?:a|de) main|hand mortar/.test(failureWeaponName),isVolley=/arquebuse a salve|volley gun/.test(failureWeaponName),isMatchlock=/matchlock|meche/.test(failureWeaponName);
   const salvoActive=linkedWeapon?.keywords?.some(row=>['salve','salvo'].includes(typeof row==='string'?row:row?.id))||action?.qualities?.some(row=>['salve','salvo'].includes(typeof row==='string'?row:row?.id));
   const priorSalvoShots=previousWeaponAttacks.filter(row=>row.weaponId===linkedWeapon?.id&&row.actionType==='attack').length;
   if(salvoActive&&type==='attack'&&priorSalvoShots>0)v5.append(node('p','workspace-muted',`Salve : −${priorSalvoShots} DR (tir(s) antérieur(s) de cette arme pendant ce Tour).`));

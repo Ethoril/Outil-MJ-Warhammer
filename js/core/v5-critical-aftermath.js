@@ -92,6 +92,11 @@ export function updateCriticalDeathCountdown(participant, { round, toughnessBonu
       const cancelled = { ...current, status: 'cancelled', cancelledAtRound: round, cancelReason: reason };
       return { status: 'cancelled', participant: withV5(participant, { [CRITICAL_DEATH_FIELD]: cancelled }), countdown: cancelled };
     }
+    // A refusal covers one episode only: once it ends, a later Unconscious episode opens a new countdown.
+    if (current?.status === 'declined') {
+      const closed = { ...current, status: 'cancelled', cancelledAtRound: round, cancelReason: 'declined-episode-ended' };
+      return { status: 'not-eligible', participant: withV5(participant, { [CRITICAL_DEATH_FIELD]: closed }), countdown: closed };
+    }
     return { status: 'not-eligible', participant };
   }
   if (current?.status === 'declined' || current?.status === 'confirmed') return { status: current.status, participant, countdown: clone(current) };

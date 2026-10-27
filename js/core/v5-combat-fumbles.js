@@ -85,7 +85,7 @@ function participantEffects(normalized, context, resolution = {}) {
   const weaponName = fold(context.weaponName || item?.name || normalized.action?.note || normalized.action?.name);
   const isGunAxe = /hache.fusil|gun axe/.test(weaponName);
   const isGunHalberd = /hallebarde.fusil|gun halberd/.test(weaponName);
-  const isHandMortar = /mortier a main|hand mortar/.test(weaponName);
+  const isHandMortar = /mortier (?:a|de) main|hand mortar/.test(weaponName);
   const isGriffonsfoot = /griffonsfoot/.test(weaponName);
   const isVolleyGun = /arquebuse a salve|volley gun/.test(weaponName);
   const isMatchlock = /matchlock|meche/.test(weaponName);
@@ -154,7 +154,7 @@ function participantEffects(normalized, context, resolution = {}) {
   if (context.lightFuseAction === true) {if(!item?.id)unresolved.push('Arme à mèche : liez l’exemplaire pour enregistrer durablement la mèche.');else effects.push({type:'light-fuse',targetId:actorId,equipmentId:item.id,convertedFrom:'L13-0107'});}
   if (context.bombPayload===true) {
     const mortarName=fold(item?.name||context.weaponName||normalized.action?.note);
-    const isMortar=/mortier a main|hand mortar/.test(mortarName);
+    const isMortar=/mortier (?:a|de) main|hand mortar/.test(mortarName);
     if(!isMortar||context.reloading!==true) unresolved.push('Bombe incendiaire : elle doit être chargée dans un mortier à main pendant son rechargement réussi (L13-0117).');
     else if(resolution.success!==true) unresolved.push('Bombe incendiaire : le rechargement du mortier doit réussir avant de fixer la mèche (L13-0117).');
     else {
