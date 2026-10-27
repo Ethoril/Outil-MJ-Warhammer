@@ -1,5 +1,19 @@
 # Choix d'exécutant - Phase F2
 
+## Décisions du MJ — tranche T2 (27/10/2026)
+
+Source : `tmp/gpt-phase-f2/BRIEF_T2.md` ; ces décisions priment sur les formulations historiques ci-dessous.
+- **V5 partout** ; règles V4 retenues converties (±10 → ±1 DR, Avantage → Élan, 2 Avantages → 1 Élan comme B-TRIP-01).
+- **Catalogue V5** (F2-R) : groupe Parade supprimé, Parade = atout d'arme ; boucliers = armures avec la qualité **Bouclier** (L06 p.306 : +1 DR en opposition avec Esquive ou Corps à corps, sans cumul avec Défensive ; PA du bouclier appliqués si le coup touche ; à 2 PA ou plus, opposition aux tirs avec Esquive ; un seul bouclier ; arme improvisée en attaque) ; **Inflige X** ; mots-clés V4 (Perturbante, Lente, Épuisante, Précise, Percutante, Immobilisante, Protectrice) gardés seulement pour les exemplaires anciens : ne pas les supprimer, ne pas leur inventer de nouvelle mécanique.
+- **Recharge comptée en succès, pas en Actions** (note du MJ, F-L06-1064) ; À répétition : un chargeur entamé réduit la recharge.
+- **Pénalités d'armure V5** : −1 DR en Discrétion pour toute maille ou plate portée (une fois par catégorie) ; Heaume −2 DR en Perception ; le reste selon le catalogue.
+- **Distances jamais suivies** : Explosion, Dispersion et déviation passent par des cibles ou bandes désignées par le MJ.
+- **La mort reste au MJ** : jamais appliquée sans confirmation. **Option de mort subite des figurants** = réglage de table désactivé par défaut, PNJ secondaires seulement (jamais PJ ni PNJ « Chanceux »).
+- **Critiques : rester en V5** (second critique sur dégâts excédentaires, coagulation au d10) ; les blessures V4 de L13 sont écartées.
+- **Séquelles des critiques** (F2-I) : enregistrées comme valeurs durables du personnage, une seule fois, pour le futur module de suivi hors combat (F2-J, module neuf, indépendant de l'horloge de magie) et l'écriture future vers la fiche (`docs/VARIABLES_PERSISTANTES_PJ.md`).
+- **Malus de tir sans entraînement cumulés** avec les autres modificateurs ; état **monté / démonté** durable sur le participant (lot C) à réutiliser tel quel.
+
+
 ## Décisions du MJ — réponses à la contre-vérification T1 BIS (26/10/2026)
 
 Source : `tmp/gpt-phase-f2/CONTRE_VERIFICATION_CLAUDE_T1_BIS.md`, section « Réponses du MJ (26/10 après-midi) », recopiée sur instruction directe du 27/10/2026. Ces décisions priment sur les formulations historiques ci-dessous.
