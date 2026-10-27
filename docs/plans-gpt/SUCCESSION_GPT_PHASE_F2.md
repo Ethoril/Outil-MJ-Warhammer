@@ -1,4 +1,12 @@
-# Succession GPT — Phase F2
+# Succession — Phase F2
+
+## T2 — reprise et vérification du 27/10/2026
+
+Les travaux D/E/N/I et la conception K2 sont dans le worktree `E:/Outil MJ Warhammer/tmp/gpt-phase-f2-worktree`, branche `gpt/phase-f2`. Lire la section T2 du rapport `RAPPORT_GPT_PHASE_F2.md` et les choix `CHOIX_EXECUTANT_PHASE_F2.md` avant toute reprise ; ils consignent les résultats, les tests modifiés et les limites. F2-R est commité et sa contre-vérification a explicitement autorisé T2 sans correction préalable.
+
+La suite complète après les corrections de garde et de BE/E compte 4 994 réussites sur 4 995 tests, avec un échec de précache ; le brief interdit de modifier `sw.js`. Six nouveaux modules doivent être ajoutés au précache par Claude à la publication, voir le rapport. Le catalogue générique Salve diverge de l’interprétation de la table de L13 et le Javelot Blackbriar présente un `Inflige` vide : conserver ces réserves visibles, sans modifier le snapshot à la main. La conception K2 n’est pas une autorisation de saisie des tables.
+
+Ne pas commencer T3 avant la contre-vérification Claude de T2 et le feu vert du MJ. Aucun push, fusion, changement de version ni publication n’est autorisé par cette tranche.
 
 ## Fin de reprise T1 BIS — 27/10/2026 : arrêt demandé
 

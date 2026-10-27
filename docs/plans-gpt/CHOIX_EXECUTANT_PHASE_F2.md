@@ -1,5 +1,13 @@
 # Choix d'exécutant - Phase F2
 
+## Choix d’exécutant — recharge T2
+
+| ID | Source | Question | Choix | Raison | Alternative |
+|---|---|---|---|---|---|
+| D-RECHARGE-01 | F-L06-1064 ; L06 p.305 ; brief T2 | Comment compter les succès demandés, la source imprimée parlant d’Actions sans préciser le rôle des DR ? | Un Test réussi ajoute un succès, quels que soient ses DR ; un échec n’en ajoute aucun. | Raccord explicite au nombre de succès demandé par le MJ sans conserver l’unité Action du texte imprimé. | Cumuler les DR positifs de chaque Test. |
+
+Ce choix est une proposition d’exécutant, pas une décision supplémentaire du MJ.
+
 ## Décisions du MJ — tranche T2 (27/10/2026)
 
 Source : `tmp/gpt-phase-f2/BRIEF_T2.md` ; ces décisions priment sur les formulations historiques ci-dessous.
@@ -95,3 +103,11 @@ Choix d'exécutant préparés pour A/B (pas des décisions du MJ) :
 | B-SOURCE-02, REFUSÉ par le MJ | L06 p.166 tableau rendu et lu ; p.186 À Terre ; `v5-combat-rules.js` | Tableau : attaquant À Terre -1 DR ; description détaillée : Désavantage sur Tests impliquant mouvement. | Préserver le Désavantage d'État existant sur la mêlée ; ne pas doubler la pénalité avec -1 DR de la même situation. | Même principe de priorité à la description détaillée, sans affaiblir la règle existante ni cumuler deux traductions d'une même cause. | Remplacer le Désavantage par le seul -1 DR du tableau. |
 
 Chaque choix à venir indiquera : identifiant, source, question, choix, raison et alternative, pour relecture par le MJ.
+
+## Choix d’exécutant — Salve T2
+
+| ID | Source | Question | Choix | Raison | Alternative |
+|---|---|---|---|---|---|
+| E-SALVE-01 | L13 p.123 et 126 ; catalogue V5, mot-clé Salve | Combien de points restaurer après Recharge d’un profil sans astérisque ? | Restaurer la capacité complète ; les profils imprimés avec astérisque regagnent un point par cycle. | La note imprimée réserve explicitement la recharge par point aux profils astérisqués ; conversion soumise à relecture. | Appliquer à tous les profils la description générique du catalogue, qui indique un point par Recharge. |
+
+Conflit documentaire ouvert : la description générique du catalogue V5 ne distingue pas les profils. Ce choix n’est pas une décision du MJ.
