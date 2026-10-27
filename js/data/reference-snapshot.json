@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "contentVersion": "references:e60b01e2d49c235dc586931e2820a1921823ec3478d9e3b6d1477b91d532b5b1",
+  "contentVersion": "references:cc6581a45b6a4fe0ce7f6baaf7aeb84bb0d51c75916c84a9e3bcafe41e6001ea",
   "fetchedAt": "2026-10-27",
   "localRevision": "2026-10-27-equipment-v5",
   "sourceFiles": {
@@ -29,7 +29,7 @@
       "sha256": "fd7e40c35751f7883f269f8b8eb742b63d7669fb3d6e4c378a649633226b0fa8"
     },
     "js/data/equipment-catalog.json": {
-      "sha256": "69d6e27eb626b18432961836b92e9f981c59a5b040871e02abf3dd49fc628547"
+      "sha256": "a383b847aeb848e18d7c0e896305ea1b6318656bae620a1972235b0f7027383b"
     },
     "js/data/skills.json": {
       "sha256": "12e9f8cd6b84884a353245f2ca74e0044fde6841e0db15693434d15a06d74d81"
@@ -38,7 +38,7 @@
       "sha256": "35e056318d33445355721f92c9a2d186f24a91a72c1d892a6e5fb232a0f4eee7"
     },
     "tools/refresh-equipment-catalog.mjs": {
-      "sha256": "b3943d4c7fbb20dd28af78a8dbcd33794aafc3f13976f50ceb99cc7a4c8c6ae6"
+      "sha256": "dabeeca443658c3a090a921b01c074e15c49047474f73e1b81fe933be91bbea1"
     }
   },
   "published": {
@@ -10214,7 +10214,7 @@
     }
   },
   "equipment": {
-    "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+    "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
     "fetchedAt": "2026-10-27",
     "sources": {
       "Mots Clés Armes et Armures": {
@@ -11003,7 +11003,7 @@
       {
         "id": "weapon-armes-corps-a-corps-arme-d-hast-hallebarde-haut-elfe",
         "baseId": "weapon-armes-corps-a-corps-arme-d-hast-hallebarde-haut-elfe",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Hallebarde Haut Elfe",
         "category": "Arme d'Hast",
@@ -11042,7 +11042,7 @@
       {
         "id": "weapon-armes-corps-a-corps-arme-d-hast-lance-longue-haut-elfe",
         "baseId": "weapon-armes-corps-a-corps-arme-d-hast-lance-longue-haut-elfe",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Lance longue Haut Elfe",
         "category": "Arme d'Hast",
@@ -11073,7 +11073,7 @@
       {
         "id": "weapon-armes-corps-a-corps-armes-d-hast-baton-de-combat-2m",
         "baseId": "weapon-armes-corps-a-corps-armes-d-hast-baton-de-combat-2m",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Bâton de combat (2M)",
         "category": "Armes d'Hast",
@@ -11104,7 +11104,7 @@
       {
         "id": "weapon-armes-corps-a-corps-armes-d-hast-hallebarde-2m",
         "baseId": "weapon-armes-corps-a-corps-armes-d-hast-hallebarde-2m",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Hallebarde (2M)",
         "category": "Armes d'Hast",
@@ -11135,7 +11135,7 @@
       {
         "id": "weapon-armes-corps-a-corps-armes-d-hast-lance-2m",
         "baseId": "weapon-armes-corps-a-corps-armes-d-hast-lance-2m",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Lance (2M)",
         "category": "Armes d'Hast",
@@ -11162,7 +11162,7 @@
       {
         "id": "weapon-armes-corps-a-corps-armes-d-hast-pique-2m",
         "baseId": "weapon-armes-corps-a-corps-armes-d-hast-pique-2m",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Pique (2M)",
         "category": "Armes d'Hast",
@@ -11185,7 +11185,7 @@
       {
         "id": "weapon-armes-corps-a-corps-armes-d-hast-ahlspiess-2m",
         "baseId": "weapon-armes-corps-a-corps-armes-d-hast-ahlspiess-2m",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Ahlspiess (2M)",
         "category": "Armes d'Hast",
@@ -11212,7 +11212,7 @@
       {
         "id": "weapon-armes-corps-a-corps-armes-d-hast-guisarme-2m",
         "baseId": "weapon-armes-corps-a-corps-armes-d-hast-guisarme-2m",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Guisarme (2M)",
         "category": "Armes d'Hast",
@@ -11243,7 +11243,7 @@
       {
         "id": "weapon-armes-corps-a-corps-armes-d-hast-mancatcher-2m",
         "baseId": "weapon-armes-corps-a-corps-armes-d-hast-mancatcher-2m",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Mancatcher (2M)",
         "category": "Armes d'Hast",
@@ -11270,7 +11270,7 @@
       {
         "id": "weapon-armes-corps-a-corps-armes-d-hast-partizan-glaive-2m",
         "baseId": "weapon-armes-corps-a-corps-armes-d-hast-partizan-glaive-2m",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Partizan/Glaive (2M)",
         "category": "Armes d'Hast",
@@ -11301,7 +11301,7 @@
       {
         "id": "weapon-armes-corps-a-corps-armes-d-hast-hache-d-armes-2m",
         "baseId": "weapon-armes-corps-a-corps-armes-d-hast-hache-d-armes-2m",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Hache d'armes (2M)",
         "category": "Armes d'Hast",
@@ -11336,7 +11336,7 @@
       {
         "id": "weapon-armes-corps-a-corps-armes-d-hast-lance-eonir-2m",
         "baseId": "weapon-armes-corps-a-corps-armes-d-hast-lance-eonir-2m",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Lance Eonir (2M)",
         "category": "Armes d'Hast",
@@ -11359,7 +11359,7 @@
       {
         "id": "weapon-armes-corps-a-corps-bagarre-mains-nues",
         "baseId": "weapon-armes-corps-a-corps-bagarre-mains-nues",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Mains nues",
         "category": "Bagarre",
@@ -11382,7 +11382,7 @@
       {
         "id": "weapon-armes-corps-a-corps-bagarre-coup-de-poing",
         "baseId": "weapon-armes-corps-a-corps-bagarre-coup-de-poing",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Coup-de-poing",
         "category": "Bagarre",
@@ -11400,7 +11400,7 @@
       {
         "id": "weapon-armes-corps-a-corps-bagarre-gantelet-a-pointes",
         "baseId": "weapon-armes-corps-a-corps-bagarre-gantelet-a-pointes",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Gantelet à pointes",
         "category": "Bagarre",
@@ -11427,7 +11427,7 @@
       {
         "id": "weapon-armes-corps-a-corps-bagarre-gaffe-de-marin",
         "baseId": "weapon-armes-corps-a-corps-bagarre-gaffe-de-marin",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Gaffe de marin",
         "category": "Bagarre",
@@ -11454,7 +11454,7 @@
       {
         "id": "weapon-armes-corps-a-corps-bagarre-garrot-2m",
         "baseId": "weapon-armes-corps-a-corps-bagarre-garrot-2m",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Garrot (2M)",
         "category": "Bagarre",
@@ -11481,7 +11481,7 @@
       {
         "id": "weapon-armes-corps-a-corps-bagarre-gantelet-verrouille",
         "baseId": "weapon-armes-corps-a-corps-bagarre-gantelet-verrouille",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Gantelet verrouillé",
         "category": "Bagarre",
@@ -11504,7 +11504,7 @@
       {
         "id": "weapon-armes-corps-a-corps-bagarre-matraque-souple",
         "baseId": "weapon-armes-corps-a-corps-bagarre-matraque-souple",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Matraque souple",
         "category": "Bagarre",
@@ -11535,7 +11535,7 @@
       {
         "id": "weapon-armes-corps-a-corps-bagarre-lames-de-poignet-druchii",
         "baseId": "weapon-armes-corps-a-corps-bagarre-lames-de-poignet-druchii",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Lames de poignet Druchii",
         "category": "Bagarre",
@@ -11566,7 +11566,7 @@
       {
         "id": "weapon-armes-corps-a-corps-base-couteau",
         "baseId": "weapon-armes-corps-a-corps-base-couteau",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Couteau",
         "category": "Base",
@@ -11589,7 +11589,7 @@
       {
         "id": "weapon-armes-corps-a-corps-base-dague",
         "baseId": "weapon-armes-corps-a-corps-base-dague",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Dague",
         "category": "Base",
@@ -11607,7 +11607,7 @@
       {
         "id": "weapon-armes-corps-a-corps-base-hache",
         "baseId": "weapon-armes-corps-a-corps-base-hache",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Hache",
         "category": "Base",
@@ -11630,7 +11630,7 @@
       {
         "id": "weapon-armes-corps-a-corps-base-couteau-bollock",
         "baseId": "weapon-armes-corps-a-corps-base-couteau-bollock",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Couteau Bollock",
         "category": "Base",
@@ -11653,7 +11653,7 @@
       {
         "id": "weapon-armes-corps-a-corps-base-gourdin",
         "baseId": "weapon-armes-corps-a-corps-base-gourdin",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Gourdin",
         "category": "Base",
@@ -11676,7 +11676,7 @@
       {
         "id": "weapon-armes-corps-a-corps-base-arme-improvisee",
         "baseId": "weapon-armes-corps-a-corps-base-arme-improvisee",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Arme improvisée",
         "category": "Base",
@@ -11703,7 +11703,7 @@
       {
         "id": "weapon-armes-corps-a-corps-base-masse",
         "baseId": "weapon-armes-corps-a-corps-base-masse",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Masse",
         "category": "Base",
@@ -11726,7 +11726,7 @@
       {
         "id": "weapon-armes-corps-a-corps-base-pic-de-guerre",
         "baseId": "weapon-armes-corps-a-corps-base-pic-de-guerre",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Pic de guerre",
         "category": "Base",
@@ -11749,7 +11749,7 @@
       {
         "id": "weapon-armes-corps-a-corps-base-cimeterre",
         "baseId": "weapon-armes-corps-a-corps-base-cimeterre",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Cimeterre",
         "category": "Base",
@@ -11772,7 +11772,7 @@
       {
         "id": "weapon-armes-corps-a-corps-base-epee",
         "baseId": "weapon-armes-corps-a-corps-base-epee",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Épée",
         "category": "Base",
@@ -11790,7 +11790,7 @@
       {
         "id": "weapon-armes-corps-a-corps-base-marteau-de-guerre",
         "baseId": "weapon-armes-corps-a-corps-base-marteau-de-guerre",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Marteau de guerre",
         "category": "Base",
@@ -11813,7 +11813,7 @@
       {
         "id": "weapon-armes-corps-a-corps-base-lame-de-guerre-eonir",
         "baseId": "weapon-armes-corps-a-corps-base-lame-de-guerre-eonir",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Lame de guerre Eonir",
         "category": "Base",
@@ -11836,7 +11836,7 @@
       {
         "id": "weapon-armes-corps-a-corps-base-hache-barbelee",
         "baseId": "weapon-armes-corps-a-corps-base-hache-barbelee",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Hache barbelée",
         "category": "Base",
@@ -11859,7 +11859,7 @@
       {
         "id": "weapon-armes-corps-a-corps-base-marteau-nain",
         "baseId": "weapon-armes-corps-a-corps-base-marteau-nain",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Marteau nain",
         "category": "Base",
@@ -11882,7 +11882,7 @@
       {
         "id": "weapon-armes-corps-a-corps-base-fendoir-de-mamie",
         "baseId": "weapon-armes-corps-a-corps-base-fendoir-de-mamie",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Fendoir de Mamie",
         "category": "Base",
@@ -11905,7 +11905,7 @@
       {
         "id": "weapon-armes-corps-a-corps-base-poele-en-fer",
         "baseId": "weapon-armes-corps-a-corps-base-poele-en-fer",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Poêle en fer",
         "category": "Base",
@@ -11928,7 +11928,7 @@
       {
         "id": "weapon-armes-corps-a-corps-base-epee-haut-elfe",
         "baseId": "weapon-armes-corps-a-corps-base-epee-haut-elfe",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Épée Haut Elfe",
         "category": "Base",
@@ -11955,7 +11955,7 @@
       {
         "id": "weapon-armes-corps-a-corps-base-dague-haut-elfe",
         "baseId": "weapon-armes-corps-a-corps-base-dague-haut-elfe",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Dague Haut Elfe",
         "category": "Base",
@@ -11982,7 +11982,7 @@
       {
         "id": "weapon-armes-corps-a-corps-base-lame-epine-spineblade-druchii",
         "baseId": "weapon-armes-corps-a-corps-base-lame-epine-spineblade-druchii",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Lame-épine (Spineblade) Druchii",
         "category": "Base",
@@ -12013,7 +12013,7 @@
       {
         "id": "weapon-armes-corps-a-corps-base-hache-naine",
         "baseId": "weapon-armes-corps-a-corps-base-hache-naine",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Hache Naine",
         "category": "Base",
@@ -12036,7 +12036,7 @@
       {
         "id": "weapon-armes-corps-a-corps-base-marteau-de-guerre-nain",
         "baseId": "weapon-armes-corps-a-corps-base-marteau-de-guerre-nain",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Marteau de Guerre Nain",
         "category": "Base",
@@ -12059,7 +12059,7 @@
       {
         "id": "weapon-armes-corps-a-corps-base-massue-en-obsinite-homme-lezard",
         "baseId": "weapon-armes-corps-a-corps-base-massue-en-obsinite-homme-lezard",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Massue en Obsinite Homme Lézard",
         "category": "Base",
@@ -12082,7 +12082,7 @@
       {
         "id": "weapon-armes-corps-a-corps-base-maul-a-pointes-en-obsinite-homme-lezard",
         "baseId": "weapon-armes-corps-a-corps-base-maul-a-pointes-en-obsinite-homme-lezard",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Maul à pointes en Obsinite Homme Lézard",
         "category": "Base",
@@ -12109,7 +12109,7 @@
       {
         "id": "weapon-armes-corps-a-corps-base-dague-de-poing-punch-dagger-skaven",
         "baseId": "weapon-armes-corps-a-corps-base-dague-de-poing-punch-dagger-skaven",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Dague de poing (Punch Dagger) Skaven",
         "category": "Base",
@@ -12136,7 +12136,7 @@
       {
         "id": "weapon-armes-corps-a-corps-base-griffes-de-rat-rat-claws-skaven",
         "baseId": "weapon-armes-corps-a-corps-base-griffes-de-rat-rat-claws-skaven",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Griffes de rat (Rat Claws) Skaven",
         "category": "Base",
@@ -12163,7 +12163,7 @@
       {
         "id": "weapon-armes-corps-a-corps-base-arme-de-queue-tail-weapon-skaven",
         "baseId": "weapon-armes-corps-a-corps-base-arme-de-queue-tail-weapon-skaven",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Arme de queue (Tail Weapon) Skaven",
         "category": "Base",
@@ -12190,7 +12190,7 @@
       {
         "id": "weapon-armes-corps-a-corps-cavalerie-lance-de-cavalerie",
         "baseId": "weapon-armes-corps-a-corps-cavalerie-lance-de-cavalerie",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Lance de cavalerie",
         "category": "Cavalerie",
@@ -12217,7 +12217,7 @@
       {
         "id": "weapon-armes-corps-a-corps-cavalerie-marteau-a-bec-de-corbin-2m",
         "baseId": "weapon-armes-corps-a-corps-cavalerie-marteau-a-bec-de-corbin-2m",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Marteau à bec-de-corbin (2M)",
         "category": "Cavalerie",
@@ -12240,7 +12240,7 @@
       {
         "id": "weapon-armes-corps-a-corps-cavalerie-demi-lance",
         "baseId": "weapon-armes-corps-a-corps-cavalerie-demi-lance",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Demi-lance",
         "category": "Cavalerie",
@@ -12267,7 +12267,7 @@
       {
         "id": "weapon-armes-corps-a-corps-cavalerie-sabre",
         "baseId": "weapon-armes-corps-a-corps-cavalerie-sabre",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Sabre",
         "category": "Cavalerie",
@@ -12290,7 +12290,7 @@
       {
         "id": "weapon-armes-corps-a-corps-cavalerie-lance-de-cavalerie-haut-elfe",
         "baseId": "weapon-armes-corps-a-corps-cavalerie-lance-de-cavalerie-haut-elfe",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Lance de cavalerie Haut Elfe",
         "category": "Cavalerie",
@@ -12325,7 +12325,7 @@
       {
         "id": "weapon-armes-corps-a-corps-deux-mains-grande-hache-haut-elfe",
         "baseId": "weapon-armes-corps-a-corps-deux-mains-grande-hache-haut-elfe",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Grande Hache Haut Elfe",
         "category": "Deux-Mains",
@@ -12364,7 +12364,7 @@
       {
         "id": "weapon-armes-corps-a-corps-deux-mains-espadon-de-hoeth-haut-elfe",
         "baseId": "weapon-armes-corps-a-corps-deux-mains-espadon-de-hoeth-haut-elfe",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Espadon de Hoeth Haut Elfe",
         "category": "Deux-Mains",
@@ -12399,7 +12399,7 @@
       {
         "id": "weapon-armes-corps-a-corps-deux-mains-voleuse-d-ame-soultaker-druchii",
         "baseId": "weapon-armes-corps-a-corps-deux-mains-voleuse-d-ame-soultaker-druchii",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Voleuse d'âme (Soultaker) Druchii",
         "category": "Deux-Mains",
@@ -12430,7 +12430,7 @@
       {
         "id": "weapon-armes-corps-a-corps-deux-mains-grande-hache-naine",
         "baseId": "weapon-armes-corps-a-corps-deux-mains-grande-hache-naine",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Grande Hache Naine",
         "category": "Deux-Mains",
@@ -12461,7 +12461,7 @@
       {
         "id": "weapon-armes-corps-a-corps-deux-mains-grand-marteau-nain",
         "baseId": "weapon-armes-corps-a-corps-deux-mains-grand-marteau-nain",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Grand Marteau Nain",
         "category": "Deux-Mains",
@@ -12488,7 +12488,7 @@
       {
         "id": "weapon-armes-corps-a-corps-deux-mains-pioche-naine",
         "baseId": "weapon-armes-corps-a-corps-deux-mains-pioche-naine",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Pioche Naine",
         "category": "Deux-Mains",
@@ -12515,7 +12515,7 @@
       {
         "id": "weapon-armes-corps-a-corps-deux-mains-epee-batarde-2m",
         "baseId": "weapon-armes-corps-a-corps-deux-mains-epee-batarde-2m",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Épée bâtarde (2M)",
         "category": "Deux-Mains",
@@ -12542,7 +12542,7 @@
       {
         "id": "weapon-armes-corps-a-corps-deux-mains-grande-hache-2m",
         "baseId": "weapon-armes-corps-a-corps-deux-mains-grande-hache-2m",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Grande hache (2M)",
         "category": "Deux-Mains",
@@ -12573,7 +12573,7 @@
       {
         "id": "weapon-armes-corps-a-corps-deux-mains-marteau-de-guerre-2m",
         "baseId": "weapon-armes-corps-a-corps-deux-mains-marteau-de-guerre-2m",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Marteau de guerre (2M)",
         "category": "Deux-Mains",
@@ -12604,7 +12604,7 @@
       {
         "id": "weapon-armes-corps-a-corps-deux-mains-pioche-2m",
         "baseId": "weapon-armes-corps-a-corps-deux-mains-pioche-2m",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Pioche (2M)",
         "category": "Deux-Mains",
@@ -12635,7 +12635,7 @@
       {
         "id": "weapon-armes-corps-a-corps-deux-mains-zweihander-2m",
         "baseId": "weapon-armes-corps-a-corps-deux-mains-zweihander-2m",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Zweihänder (2M)",
         "category": "Deux-Mains",
@@ -12662,7 +12662,7 @@
       {
         "id": "weapon-armes-corps-a-corps-deux-mains-zweihander-flamberge-2m",
         "baseId": "weapon-armes-corps-a-corps-deux-mains-zweihander-flamberge-2m",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Zweihänder Flamberge (2M)",
         "category": "Deux-Mains",
@@ -12693,7 +12693,7 @@
       {
         "id": "weapon-armes-corps-a-corps-deux-mains-epee-du-bois-sauvage-2m",
         "baseId": "weapon-armes-corps-a-corps-deux-mains-epee-du-bois-sauvage-2m",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Épée du Bois Sauvage (2M)",
         "category": "Deux-Mains",
@@ -12720,7 +12720,7 @@
       {
         "id": "weapon-armes-corps-a-corps-deux-mains-hache-de-tueur-2m",
         "baseId": "weapon-armes-corps-a-corps-deux-mains-hache-de-tueur-2m",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Hache de Tueur (2M)",
         "category": "Deux-Mains",
@@ -12747,7 +12747,7 @@
       {
         "id": "weapon-armes-corps-a-corps-escrime-fleuret",
         "baseId": "weapon-armes-corps-a-corps-escrime-fleuret",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Fleuret",
         "category": "Escrime",
@@ -12782,7 +12782,7 @@
       {
         "id": "weapon-armes-corps-a-corps-escrime-rapiere",
         "baseId": "weapon-armes-corps-a-corps-escrime-rapiere",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Rapière",
         "category": "Escrime",
@@ -12809,7 +12809,7 @@
       {
         "id": "weapon-armes-corps-a-corps-escrime-petit-sabre",
         "baseId": "weapon-armes-corps-a-corps-escrime-petit-sabre",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Petit sabre",
         "category": "Escrime",
@@ -12840,7 +12840,7 @@
       {
         "id": "weapon-armes-corps-a-corps-escrime-targe-buckler",
         "baseId": "weapon-armes-corps-a-corps-escrime-targe-buckler",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Targe (Buckler)",
         "category": "Escrime",
@@ -12867,7 +12867,7 @@
       {
         "id": "weapon-armes-corps-a-corps-fleau-fleau",
         "baseId": "weapon-armes-corps-a-corps-fleau-fleau",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Fléau",
         "category": "Fléau",
@@ -12898,7 +12898,7 @@
       {
         "id": "weapon-armes-corps-a-corps-fleau-fleau-a-grain-2m",
         "baseId": "weapon-armes-corps-a-corps-fleau-fleau-a-grain-2m",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Fléau à grain (2M)",
         "category": "Fléau",
@@ -12925,7 +12925,7 @@
       {
         "id": "weapon-armes-corps-a-corps-fleau-fleau-d-armes-2m",
         "baseId": "weapon-armes-corps-a-corps-fleau-fleau-d-armes-2m",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Fléau d’armes (2M)",
         "category": "Fléau",
@@ -12960,7 +12960,7 @@
       {
         "id": "weapon-armes-corps-a-corps-fleau-lames-tournoyantes-de-la-mort-naines",
         "baseId": "weapon-armes-corps-a-corps-fleau-lames-tournoyantes-de-la-mort-naines",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Lames tournoyantes de la mort Naines",
         "category": "Fléau",
@@ -12999,7 +12999,7 @@
       {
         "id": "weapon-armes-corps-a-corps-fleau-encensoir-a-peste-skaven",
         "baseId": "weapon-armes-corps-a-corps-fleau-encensoir-a-peste-skaven",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Encensoir à Peste Skaven",
         "category": "Fléau",
@@ -13038,7 +13038,7 @@
       {
         "id": "weapon-armes-corps-a-corps-fleau-fouet",
         "baseId": "weapon-armes-corps-a-corps-fleau-fouet",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Fouet",
         "category": "Fléau",
@@ -13069,7 +13069,7 @@
       {
         "id": "weapon-armes-corps-a-corps-ingenierie-foret-a-vapeur-nain",
         "baseId": "weapon-armes-corps-a-corps-ingenierie-foret-a-vapeur-nain",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Foret à Vapeur Nain",
         "category": "Ingénierie",
@@ -13096,7 +13096,7 @@
       {
         "id": "weapon-armes-corps-a-corps-ingenierie-hache-dentee-cog-axe-naine",
         "baseId": "weapon-armes-corps-a-corps-ingenierie-hache-dentee-cog-axe-naine",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Hache Dentée (Cog Axe) Naine",
         "category": "Ingénierie",
@@ -13127,7 +13127,7 @@
       {
         "id": "weapon-armes-corps-a-corps-ingenierie-gantelet-a-vapeur-nain",
         "baseId": "weapon-armes-corps-a-corps-ingenierie-gantelet-a-vapeur-nain",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Gantelet à Vapeur Nain",
         "category": "Ingénierie",
@@ -13154,7 +13154,7 @@
       {
         "id": "weapon-armes-corps-a-corps-escrime-brise-epee",
         "baseId": "weapon-armes-corps-a-corps-escrime-brise-epee",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Brise-épée",
         "category": "Escrime",
@@ -13185,7 +13185,7 @@
       {
         "id": "weapon-armes-corps-a-corps-escrime-main-gauche",
         "baseId": "weapon-armes-corps-a-corps-escrime-main-gauche",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Main gauche",
         "category": "Escrime",
@@ -13216,7 +13216,7 @@
       {
         "id": "weapon-armes-corps-a-corps-base-cape",
         "baseId": "weapon-armes-corps-a-corps-base-cape",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Cape",
         "category": "Base",
@@ -13247,13 +13247,13 @@
       {
         "id": "weapon-armes-corps-a-corps-base-filet",
         "baseId": "weapon-armes-corps-a-corps-base-filet",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Filet",
         "category": "Base",
         "damage": "-",
         "reach": "Courte",
-        "range": "BF",
+        "range": "",
         "ap": null,
         "locations": [],
         "layer": "none",
@@ -13268,13 +13268,13 @@
           }
         ],
         "notes": "Défensive, Inflige (Empêtré 50)",
-        "source": "Aides de jeu : Armes Corps à Corps / Base / Filet ; portée : Livre de base V5 EN, p. 303",
+        "source": "Aides de jeu : Armes Corps à Corps / Base / Filet",
         "custom": false
       },
       {
         "id": "weapon-armes-corps-a-corps-base-filet-druchii",
         "baseId": "weapon-armes-corps-a-corps-base-filet-druchii",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Filet Druchii",
         "category": "Base",
@@ -13313,7 +13313,7 @@
       {
         "id": "weapon-armes-a-distance-arbalete-arbalete-2m",
         "baseId": "weapon-armes-a-distance-arbalete-arbalete-2m",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Arbalète (2M)",
         "category": "Arbalète",
@@ -13336,7 +13336,7 @@
       {
         "id": "weapon-armes-a-distance-arbalete-arbalete-de-poing",
         "baseId": "weapon-armes-a-distance-arbalete-arbalete-de-poing",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Arbalète de poing",
         "category": "Arbalète",
@@ -13363,7 +13363,7 @@
       {
         "id": "weapon-armes-a-distance-arbalete-arbalete-lourde-2m",
         "baseId": "weapon-armes-a-distance-arbalete-arbalete-lourde-2m",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Arbalète lourde (2M)",
         "category": "Arbalète",
@@ -13386,7 +13386,7 @@
       {
         "id": "weapon-armes-a-distance-arbalete-arbalete-naine-2m",
         "baseId": "weapon-armes-a-distance-arbalete-arbalete-naine-2m",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Arbalète naine (2M)",
         "category": "Arbalète",
@@ -13417,7 +13417,7 @@
       {
         "id": "weapon-armes-a-distance-arbalete-arbalete-a-repetition-druchii",
         "baseId": "weapon-armes-a-distance-arbalete-arbalete-a-repetition-druchii",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Arbalète à Répétition Druchii",
         "category": "Arbalète",
@@ -13448,7 +13448,7 @@
       {
         "id": "weapon-armes-a-distance-arbalete-arbalete-de-poing-a-repetition-druchii",
         "baseId": "weapon-armes-a-distance-arbalete-arbalete-de-poing-a-repetition-druchii",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Arbalète de poing à Répétition Druchii",
         "category": "Arbalète",
@@ -13483,7 +13483,7 @@
       {
         "id": "weapon-armes-a-distance-arbalete-baliste-faucheuse-reaper-bolt-thrower-druchii",
         "baseId": "weapon-armes-a-distance-arbalete-baliste-faucheuse-reaper-bolt-thrower-druchii",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Baliste Faucheuse (Reaper Bolt Thrower) Druchii",
         "category": "Arbalète",
@@ -13518,7 +13518,7 @@
       {
         "id": "weapon-armes-a-distance-arbalete-faucheuse-des-cieux-sky-reaper-druchii",
         "baseId": "weapon-armes-a-distance-arbalete-faucheuse-des-cieux-sky-reaper-druchii",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Faucheuse des cieux (Sky Reaper) Druchii",
         "category": "Arbalète",
@@ -13553,7 +13553,7 @@
       {
         "id": "weapon-armes-a-distance-arbalete-harpon-ravageur-druchii",
         "baseId": "weapon-armes-a-distance-arbalete-harpon-ravageur-druchii",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Harpon Ravageur Druchii",
         "category": "Arbalète",
@@ -13588,7 +13588,7 @@
       {
         "id": "weapon-armes-a-distance-arbalete-arbalete-naine-2m-2",
         "baseId": "weapon-armes-a-distance-arbalete-arbalete-naine-2m-2",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Arbalète Naine (2M)",
         "category": "Arbalète",
@@ -13623,7 +13623,7 @@
       {
         "id": "weapon-armes-a-distance-arc-arc-2m",
         "baseId": "weapon-armes-a-distance-arc-arc-2m",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Arc (2M)",
         "category": "Arc",
@@ -13641,7 +13641,7 @@
       {
         "id": "weapon-armes-a-distance-arc-arc-court-2m",
         "baseId": "weapon-armes-a-distance-arc-arc-court-2m",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Arc court (2M)",
         "category": "Arc",
@@ -13659,7 +13659,7 @@
       {
         "id": "weapon-armes-a-distance-arc-arc-elfique-2m",
         "baseId": "weapon-armes-a-distance-arc-arc-elfique-2m",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Arc elfique (2M)",
         "category": "Arc",
@@ -13686,7 +13686,7 @@
       {
         "id": "weapon-armes-a-distance-arc-arc-long-2m",
         "baseId": "weapon-armes-a-distance-arc-arc-long-2m",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Arc long (2M)",
         "category": "Arc",
@@ -13709,7 +13709,7 @@
       {
         "id": "weapon-armes-a-distance-arc-arc-d-anirain-haut-elfe",
         "baseId": "weapon-armes-a-distance-arc-arc-d-anirain-haut-elfe",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Arc d'Anirain Haut Elfe",
         "category": "Arc",
@@ -13744,7 +13744,7 @@
       {
         "id": "weapon-armes-a-distance-embarquee-mitrailleuse-clattergun-nain",
         "baseId": "weapon-armes-a-distance-embarquee-mitrailleuse-clattergun-nain",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Mitrailleuse (Clattergun) Nain",
         "category": "Embarquée",
@@ -13791,7 +13791,7 @@
       {
         "id": "weapon-armes-a-distance-embarquee-canon-fracasseur-breaker-nain",
         "baseId": "weapon-armes-a-distance-embarquee-canon-fracasseur-breaker-nain",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Canon Fracasseur (Breaker) Nain",
         "category": "Embarquée",
@@ -13834,7 +13834,7 @@
       {
         "id": "weapon-armes-a-distance-embarquee-canon-tempete-tempest-nain",
         "baseId": "weapon-armes-a-distance-embarquee-canon-tempete-tempest-nain",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Canon Tempête (Tempest) Nain",
         "category": "Embarquée",
@@ -13877,7 +13877,7 @@
       {
         "id": "weapon-armes-a-distance-embarquee-canon-tonnerre-thunder-nain",
         "baseId": "weapon-armes-a-distance-embarquee-canon-tonnerre-thunder-nain",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Canon Tonnerre (Thunder) Nain",
         "category": "Embarquée",
@@ -13920,7 +13920,7 @@
       {
         "id": "weapon-armes-a-distance-entraves-lasso-2m",
         "baseId": "weapon-armes-a-distance-entraves-lasso-2m",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Lasso (2M)",
         "category": "Entraves",
@@ -13943,7 +13943,7 @@
       {
         "id": "weapon-armes-a-distance-entraves-filet",
         "baseId": "weapon-armes-a-distance-entraves-filet",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Filet",
         "category": "Entraves",
@@ -13966,7 +13966,7 @@
       {
         "id": "weapon-armes-a-distance-explosif-globe-de-vent-empoisonne-skaven",
         "baseId": "weapon-armes-a-distance-explosif-globe-de-vent-empoisonne-skaven",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Globe de Vent Empoisonné Skaven",
         "category": "Explosif",
@@ -13993,7 +13993,7 @@
       {
         "id": "weapon-armes-a-distance-explosifs-bombe",
         "baseId": "weapon-armes-a-distance-explosifs-bombe",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Bombe",
         "category": "Explosifs",
@@ -14032,7 +14032,7 @@
       {
         "id": "weapon-armes-a-distance-explosifs-bombe-incendiaire",
         "baseId": "weapon-armes-a-distance-explosifs-bombe-incendiaire",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Bombe incendiaire",
         "category": "Explosifs",
@@ -14071,7 +14071,7 @@
       {
         "id": "weapon-armes-a-distance-explosifs-bombe-cinderblast",
         "baseId": "weapon-armes-a-distance-explosifs-bombe-cinderblast",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Bombe Cinderblast",
         "category": "Explosifs",
@@ -14106,7 +14106,7 @@
       {
         "id": "weapon-armes-a-distance-fronde-fronde",
         "baseId": "weapon-armes-a-distance-fronde-fronde",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Fronde",
         "category": "Fronde",
@@ -14124,7 +14124,7 @@
       {
         "id": "weapon-armes-a-distance-fronde-fustibale-2m",
         "baseId": "weapon-armes-a-distance-fronde-fustibale-2m",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Fustibale (2M)",
         "category": "Fronde",
@@ -14142,7 +14142,7 @@
       {
         "id": "weapon-armes-a-distance-ingenierie-arquebuse-a-repetition-2m",
         "baseId": "weapon-armes-a-distance-ingenierie-arquebuse-a-repetition-2m",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Arquebuse à répétition (2M)",
         "category": "Ingénierie",
@@ -14181,7 +14181,7 @@
       {
         "id": "weapon-armes-a-distance-ingenierie-pistolet-a-repetition",
         "baseId": "weapon-armes-a-distance-ingenierie-pistolet-a-repetition",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Pistolet à répétition",
         "category": "Ingénierie",
@@ -14224,7 +14224,7 @@
       {
         "id": "weapon-armes-a-distance-ingenierie-poivriere",
         "baseId": "weapon-armes-a-distance-ingenierie-poivriere",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Poivrière",
         "category": "Ingénierie",
@@ -14267,7 +14267,7 @@
       {
         "id": "weapon-armes-a-distance-ingenierie-mortier-de-main-2m",
         "baseId": "weapon-armes-a-distance-ingenierie-mortier-de-main-2m",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Mortier de main (2M)",
         "category": "Ingénierie",
@@ -14306,7 +14306,7 @@
       {
         "id": "weapon-armes-a-distance-ingenierie-pistolet-canne",
         "baseId": "weapon-armes-a-distance-ingenierie-pistolet-canne",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Pistolet-Canne",
         "category": "Ingénierie",
@@ -14345,7 +14345,7 @@
       {
         "id": "weapon-armes-a-distance-ingenierie-pistolet-drakefire",
         "baseId": "weapon-armes-a-distance-ingenierie-pistolet-drakefire",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Pistolet Drakefire",
         "category": "Ingénierie",
@@ -14380,7 +14380,7 @@
       {
         "id": "weapon-armes-a-distance-ingenierie-fusil-drac-de-fer-drakegun-nain",
         "baseId": "weapon-armes-a-distance-ingenierie-fusil-drac-de-fer-drakegun-nain",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Fusil Drac de Fer (Drakegun) Nain",
         "category": "Ingénierie",
@@ -14423,7 +14423,7 @@
       {
         "id": "ammunition-armes-a-distance-ingenierie-torpille-a-fleau-de-troll-1-munition-nain",
         "baseId": "ammunition-armes-a-distance-ingenierie-torpille-a-fleau-de-troll-1-munition-nain",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "ammunition",
         "name": "Torpille à Fléau de Troll (1 munition) Nain",
         "category": "Ingénierie",
@@ -14458,7 +14458,7 @@
       {
         "id": "weapon-armes-a-distance-ingenierie-pistolet-drac-de-fer-nain",
         "baseId": "weapon-armes-a-distance-ingenierie-pistolet-drac-de-fer-nain",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Pistolet Drac de Fer Nain",
         "category": "Ingénierie",
@@ -14505,7 +14505,7 @@
       {
         "id": "weapon-armes-a-distance-ingenierie-arquebuse-naine-a-repetition",
         "baseId": "weapon-armes-a-distance-ingenierie-arquebuse-naine-a-repetition",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Arquebuse Naine à Répétition",
         "category": "Ingénierie",
@@ -14552,7 +14552,7 @@
       {
         "id": "weapon-armes-a-distance-ingenierie-mitrailleuse-ratling-skaven",
         "baseId": "weapon-armes-a-distance-ingenierie-mitrailleuse-ratling-skaven",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Mitrailleuse Ratling Skaven",
         "category": "Ingénierie",
@@ -14595,7 +14595,7 @@
       {
         "id": "weapon-armes-a-distance-ingenierie-lance-feu-a-malepierre-skaven",
         "baseId": "weapon-armes-a-distance-ingenierie-lance-feu-a-malepierre-skaven",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Lance-Feu à Malepierre Skaven",
         "category": "Ingénierie",
@@ -14638,7 +14638,7 @@
       {
         "id": "weapon-armes-a-distance-lancer-javelot-blackbriar-elfe-sylvain",
         "baseId": "weapon-armes-a-distance-lancer-javelot-blackbriar-elfe-sylvain",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Javelot Blackbriar elfe sylvain",
         "category": "Lancer",
@@ -14665,7 +14665,7 @@
       {
         "id": "weapon-armes-a-distance-entraves-bolas",
         "baseId": "weapon-armes-a-distance-entraves-bolas",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Bolas",
         "category": "Entraves",
@@ -14692,7 +14692,7 @@
       {
         "id": "weapon-armes-a-distance-lancer-couteau-de-lancer",
         "baseId": "weapon-armes-a-distance-lancer-couteau-de-lancer",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Couteau de lancer",
         "category": "Lancer",
@@ -14710,7 +14710,7 @@
       {
         "id": "weapon-armes-a-distance-lancer-flechette",
         "baseId": "weapon-armes-a-distance-lancer-flechette",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Fléchette",
         "category": "Lancer",
@@ -14733,7 +14733,7 @@
       {
         "id": "weapon-armes-a-distance-lancer-hache-de-lancer",
         "baseId": "weapon-armes-a-distance-lancer-hache-de-lancer",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Hache de lancer",
         "category": "Lancer",
@@ -14756,7 +14756,7 @@
       {
         "id": "weapon-armes-a-distance-lancer-javelot",
         "baseId": "weapon-armes-a-distance-lancer-javelot",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Javelot",
         "category": "Lancer",
@@ -14779,7 +14779,7 @@
       {
         "id": "weapon-armes-a-distance-lancer-rocher",
         "baseId": "weapon-armes-a-distance-lancer-rocher",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Rocher",
         "category": "Lancer",
@@ -14802,7 +14802,7 @@
       {
         "id": "weapon-armes-a-distance-poudre-noire-arquebuse-2m",
         "baseId": "weapon-armes-a-distance-poudre-noire-arquebuse-2m",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Arquebuse (2M)",
         "category": "Poudre Noire",
@@ -14833,7 +14833,7 @@
       {
         "id": "weapon-armes-a-distance-ingenierie-long-fusil-d-hochland-2m",
         "baseId": "weapon-armes-a-distance-ingenierie-long-fusil-d-hochland-2m",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Long fusil d’Hochland (2M)",
         "category": "Ingénierie",
@@ -14868,7 +14868,7 @@
       {
         "id": "weapon-armes-a-distance-poudre-noire-pistolet",
         "baseId": "weapon-armes-a-distance-poudre-noire-pistolet",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Pistolet",
         "category": "Poudre Noire",
@@ -14903,7 +14903,7 @@
       {
         "id": "weapon-armes-a-distance-poudre-noire-tromblon-2m",
         "baseId": "weapon-armes-a-distance-poudre-noire-tromblon-2m",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Tromblon (2M)",
         "category": "Poudre Noire",
@@ -14942,7 +14942,7 @@
       {
         "id": "weapon-armes-a-distance-poudre-noire-mousquet-a-meche-2m",
         "baseId": "weapon-armes-a-distance-poudre-noire-mousquet-a-meche-2m",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Mousquet à mèche (2M)",
         "category": "Poudre Noire",
@@ -14977,7 +14977,7 @@
       {
         "id": "weapon-armes-a-distance-poudre-noire-tromblon-a-meche-2m",
         "baseId": "weapon-armes-a-distance-poudre-noire-tromblon-a-meche-2m",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Tromblon à mèche (2M)",
         "category": "Poudre Noire",
@@ -15016,7 +15016,7 @@
       {
         "id": "weapon-armes-a-distance-poudre-noire-mousquet-double-canon-2m",
         "baseId": "weapon-armes-a-distance-poudre-noire-mousquet-double-canon-2m",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Mousquet double canon (2M)",
         "category": "Poudre Noire",
@@ -15055,7 +15055,7 @@
       {
         "id": "weapon-armes-a-distance-poudre-noire-pistolet-griffonsfoot",
         "baseId": "weapon-armes-a-distance-poudre-noire-pistolet-griffonsfoot",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Pistolet Griffonsfoot",
         "category": "Poudre Noire",
@@ -15094,7 +15094,7 @@
       {
         "id": "weapon-armes-a-distance-poudre-noire-hache-fusil-2m",
         "baseId": "weapon-armes-a-distance-poudre-noire-hache-fusil-2m",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Hache-Fusil (2M)",
         "category": "Poudre Noire",
@@ -15133,7 +15133,7 @@
       {
         "id": "weapon-armes-a-distance-poudre-noire-hallebarde-fusil-2m",
         "baseId": "weapon-armes-a-distance-poudre-noire-hallebarde-fusil-2m",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Hallebarde-Fusil (2M)",
         "category": "Poudre Noire",
@@ -15172,7 +15172,7 @@
       {
         "id": "weapon-armes-a-distance-poudre-noire-mousquet-nain-2m",
         "baseId": "weapon-armes-a-distance-poudre-noire-mousquet-nain-2m",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Mousquet nain (2M)",
         "category": "Poudre Noire",
@@ -15207,7 +15207,7 @@
       {
         "id": "weapon-armes-a-distance-poudre-noire-pistolet-nain",
         "baseId": "weapon-armes-a-distance-poudre-noire-pistolet-nain",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Pistolet nain",
         "category": "Poudre Noire",
@@ -15246,7 +15246,7 @@
       {
         "id": "weapon-armes-a-distance-poudre-noire-arquebuse-naine-2m",
         "baseId": "weapon-armes-a-distance-poudre-noire-arquebuse-naine-2m",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Arquebuse Naine (2M)",
         "category": "Poudre Noire",
@@ -15285,7 +15285,7 @@
       {
         "id": "weapon-armes-a-distance-poudre-noire-pistolet-nain-2",
         "baseId": "weapon-armes-a-distance-poudre-noire-pistolet-nain-2",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Pistolet Nain",
         "category": "Poudre Noire",
@@ -15328,7 +15328,7 @@
       {
         "id": "weapon-armes-a-distance-poudre-noire-canon-naval-petit",
         "baseId": "weapon-armes-a-distance-poudre-noire-canon-naval-petit",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Canon naval (petit)",
         "category": "Poudre Noire",
@@ -15367,7 +15367,7 @@
       {
         "id": "weapon-armes-a-distance-poudre-noire-canon-naval-moyen",
         "baseId": "weapon-armes-a-distance-poudre-noire-canon-naval-moyen",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Canon naval (moyen)",
         "category": "Poudre Noire",
@@ -15406,7 +15406,7 @@
       {
         "id": "weapon-armes-a-distance-poudre-noire-mortier-naval",
         "baseId": "weapon-armes-a-distance-poudre-noire-mortier-naval",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Mortier naval",
         "category": "Poudre Noire",
@@ -15445,7 +15445,7 @@
       {
         "id": "weapon-armes-a-distance-poudre-noire-pistolet-a-malepierre-skaven",
         "baseId": "weapon-armes-a-distance-poudre-noire-pistolet-a-malepierre-skaven",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Pistolet à Malepierre Skaven",
         "category": "Poudre Noire",
@@ -15488,7 +15488,7 @@
       {
         "id": "weapon-armes-a-distance-poudre-noire-jezzail-a-malepierre-skaven",
         "baseId": "weapon-armes-a-distance-poudre-noire-jezzail-a-malepierre-skaven",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Jezzail à Malepierre Skaven",
         "category": "Poudre Noire",
@@ -15531,7 +15531,7 @@
       {
         "id": "ammunition-armes-a-distance-sarbacane-flechettes-lot-de-12-homme-lezard",
         "baseId": "ammunition-armes-a-distance-sarbacane-flechettes-lot-de-12-homme-lezard",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "ammunition",
         "name": "Fléchettes (lot de 12) Homme Lézard",
         "category": "Sarbacane",
@@ -15549,7 +15549,7 @@
       {
         "id": "weapon-armes-a-distance-sarbacane-sarbacane-homme-lezard",
         "baseId": "weapon-armes-a-distance-sarbacane-sarbacane-homme-lezard",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Sarbacane Homme Lézard",
         "category": "Sarbacane",
@@ -15572,7 +15572,7 @@
       {
         "id": "weapon-armes-a-distance-siege-canon-pivotant-avec-balles-nain",
         "baseId": "weapon-armes-a-distance-siege-canon-pivotant-avec-balles-nain",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Canon Pivotant (avec balles) Nain",
         "category": "Siège",
@@ -15619,7 +15619,7 @@
       {
         "id": "weapon-armes-a-distance-siege-bombarde-petit-canon-nain",
         "baseId": "weapon-armes-a-distance-siege-bombarde-petit-canon-nain",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Bombarde (petit canon) Nain",
         "category": "Siège",
@@ -15662,7 +15662,7 @@
       {
         "id": "weapon-armes-a-distance-siege-mortier-nain",
         "baseId": "weapon-armes-a-distance-siege-mortier-nain",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Mortier Nain",
         "category": "Siège",
@@ -15705,7 +15705,7 @@
       {
         "id": "weapon-armes-a-distance-siege-canon-nain",
         "baseId": "weapon-armes-a-distance-siege-canon-nain",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Canon Nain",
         "category": "Siège",
@@ -15748,7 +15748,7 @@
       {
         "id": "weapon-armes-a-distance-siege-baliste-navale",
         "baseId": "weapon-armes-a-distance-siege-baliste-navale",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Baliste navale",
         "category": "Siège",
@@ -15783,7 +15783,7 @@
       {
         "id": "weapon-armes-a-distance-siege-catapulte-petite",
         "baseId": "weapon-armes-a-distance-siege-catapulte-petite",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Catapulte (petite)",
         "category": "Siège",
@@ -15814,7 +15814,7 @@
       {
         "id": "weapon-armes-a-distance-siege-catapulte-moyenne",
         "baseId": "weapon-armes-a-distance-siege-catapulte-moyenne",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "weapon",
         "name": "Catapulte (moyenne)",
         "category": "Siège",
@@ -15845,7 +15845,7 @@
       {
         "id": "armour-armures-cuir-souple-calotte-de-cuir",
         "baseId": "armour-armures-cuir-souple-calotte-de-cuir",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "armour",
         "name": "Calotte de cuir",
         "category": "Cuir Souple",
@@ -15870,7 +15870,7 @@
       {
         "id": "armour-armures-cuir-souple-jambieres-de-cuir",
         "baseId": "armour-armures-cuir-souple-jambieres-de-cuir",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "armour",
         "name": "Jambières de cuir",
         "category": "Cuir Souple",
@@ -15891,7 +15891,7 @@
       {
         "id": "armour-armures-cuir-souple-justaucorps-de-cuir",
         "baseId": "armour-armures-cuir-souple-justaucorps-de-cuir",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "armour",
         "name": "Justaucorps de cuir",
         "category": "Cuir Souple",
@@ -15911,7 +15911,7 @@
       {
         "id": "armour-armures-cuir-souple-veste-de-cuir",
         "baseId": "armour-armures-cuir-souple-veste-de-cuir",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "armour",
         "name": "Veste de cuir",
         "category": "Cuir Souple",
@@ -15933,7 +15933,7 @@
       {
         "id": "armour-armures-cuir-bouilli-plastron-de-cuir",
         "baseId": "armour-armures-cuir-bouilli-plastron-de-cuir",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "armour",
         "name": "Plastron de cuir",
         "category": "Cuir Bouilli",
@@ -15958,7 +15958,7 @@
       {
         "id": "armour-armures-mailles-chausses-de-mailles",
         "baseId": "armour-armures-mailles-chausses-de-mailles",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "armour",
         "name": "Chausses de mailles",
         "category": "Mailles",
@@ -15984,7 +15984,7 @@
       {
         "id": "armour-armures-mailles-chemise-de-mailles",
         "baseId": "armour-armures-mailles-chemise-de-mailles",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "armour",
         "name": "Chemise de mailles",
         "category": "Mailles",
@@ -16009,7 +16009,7 @@
       {
         "id": "armour-armures-mailles-coiffe-de-mailles",
         "baseId": "armour-armures-mailles-coiffe-de-mailles",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "armour",
         "name": "Coiffe de mailles",
         "category": "Mailles",
@@ -16038,7 +16038,7 @@
       {
         "id": "armour-armures-mailles-cotte-de-mailles",
         "baseId": "armour-armures-mailles-cotte-de-mailles",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "armour",
         "name": "Cotte de mailles",
         "category": "Mailles",
@@ -16065,7 +16065,7 @@
       {
         "id": "armour-armures-plates-brassards",
         "baseId": "armour-armures-plates-brassards",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "armour",
         "name": "Brassards",
         "category": "Plates",
@@ -16095,7 +16095,7 @@
       {
         "id": "armour-armures-plates-heaume",
         "baseId": "armour-armures-plates-heaume",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "armour",
         "name": "Heaume",
         "category": "Plates",
@@ -16124,7 +16124,7 @@
       {
         "id": "armour-armures-plates-heaume-ouvert",
         "baseId": "armour-armures-plates-heaume-ouvert",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "armour",
         "name": "Heaume ouvert",
         "category": "Plates",
@@ -16149,7 +16149,7 @@
       {
         "id": "armour-armures-plates-jambieres-d-acier",
         "baseId": "armour-armures-plates-jambieres-d-acier",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "armour",
         "name": "Jambières d’acier",
         "category": "Plates",
@@ -16179,7 +16179,7 @@
       {
         "id": "armour-armures-plates-plastron",
         "baseId": "armour-armures-plates-plastron",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "armour",
         "name": "Plastron",
         "category": "Plates",
@@ -16208,7 +16208,7 @@
       {
         "id": "armour-armures-magique-et-unique-cape-de-dragon-des-mers",
         "baseId": "armour-armures-magique-et-unique-cape-de-dragon-des-mers",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "armour",
         "name": "Cape de Dragon des Mers",
         "category": "Magique et Unique",
@@ -16228,7 +16228,7 @@
       {
         "id": "armour-armures-magique-et-unique-heaume-du-kraken",
         "baseId": "armour-armures-magique-et-unique-heaume-du-kraken",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "armour",
         "name": "Heaume du Kraken",
         "category": "Magique et Unique",
@@ -16253,7 +16253,7 @@
       {
         "id": "armour-armures-magique-et-unique-cape-de-plumes-coatl",
         "baseId": "armour-armures-magique-et-unique-cape-de-plumes-coatl",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "armour",
         "name": "Cape de Plumes (Coatl)",
         "category": "Magique et Unique",
@@ -16273,7 +16273,7 @@
       {
         "id": "armour-armures-magique-et-unique-gantelets-de-l-etrangleur",
         "baseId": "armour-armures-magique-et-unique-gantelets-de-l-etrangleur",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "armour",
         "name": "Gantelets de l'Étrangleur",
         "category": "Magique et Unique",
@@ -16294,7 +16294,7 @@
       {
         "id": "armour-armures-magique-et-unique-chale-de-loup-wulfshawl",
         "baseId": "armour-armures-magique-et-unique-chale-de-loup-wulfshawl",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "armour",
         "name": "Châle de Loup (Wulfshawl)",
         "category": "Magique et Unique",
@@ -16315,7 +16315,7 @@
       {
         "id": "armour-armures-magique-et-unique-vision-des-revenants",
         "baseId": "armour-armures-magique-et-unique-vision-des-revenants",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "armour",
         "name": "Vision des Revenants",
         "category": "Magique et Unique",
@@ -16338,7 +16338,7 @@
       {
         "id": "armour-armures-amelioration-gantelet-a-pointes",
         "baseId": "armour-armures-amelioration-gantelet-a-pointes",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "armour",
         "name": "Gantelet à pointes",
         "category": "Amélioration",
@@ -16364,7 +16364,7 @@
       {
         "id": "armour-armures-amelioration-gantelet-verrouille",
         "baseId": "armour-armures-amelioration-gantelet-verrouille",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "armour",
         "name": "Gantelet verrouillé",
         "category": "Amélioration",
@@ -16390,7 +16390,7 @@
       {
         "id": "armour-armures-gromril-nain-plastron",
         "baseId": "armour-armures-gromril-nain-plastron",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "armour",
         "name": "Plastron",
         "category": "Gromril (nain)",
@@ -16427,7 +16427,7 @@
       {
         "id": "armour-armures-gromril-nain-heaume-ouvert",
         "baseId": "armour-armures-gromril-nain-heaume-ouvert",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "armour",
         "name": "Heaume ouvert",
         "category": "Gromril (nain)",
@@ -16460,7 +16460,7 @@
       {
         "id": "armour-armures-gromril-nain-brassards",
         "baseId": "armour-armures-gromril-nain-brassards",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "armour",
         "name": "Brassards",
         "category": "Gromril (nain)",
@@ -16498,7 +16498,7 @@
       {
         "id": "armour-armures-gromril-nain-jambieres-de-plates",
         "baseId": "armour-armures-gromril-nain-jambieres-de-plates",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "armour",
         "name": "Jambières de plates",
         "category": "Gromril (nain)",
@@ -16536,7 +16536,7 @@
       {
         "id": "armour-armures-gromril-nain-heaume",
         "baseId": "armour-armures-gromril-nain-heaume",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "armour",
         "name": "Heaume",
         "category": "Gromril (nain)",
@@ -16573,7 +16573,7 @@
       {
         "id": "armour-armures-mailles-naines-jupe-de-mailles",
         "baseId": "armour-armures-mailles-naines-jupe-de-mailles",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "armour",
         "name": "Jupe de mailles",
         "category": "Mailles Naines",
@@ -16603,7 +16603,7 @@
       {
         "id": "armour-armures-plates-naines-casque-de-mineur-ouvert",
         "baseId": "armour-armures-plates-naines-casque-de-mineur-ouvert",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "armour",
         "name": "Casque de mineur (ouvert)",
         "category": "Plates Naines",
@@ -16628,7 +16628,7 @@
       {
         "id": "armour-armures-ithilmar-haut-elfe-plastron",
         "baseId": "armour-armures-ithilmar-haut-elfe-plastron",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "armour",
         "name": "Plastron",
         "category": "Ithilmar Haut Elfe",
@@ -16665,7 +16665,7 @@
       {
         "id": "armour-armures-ithilmar-haut-elfe-heaume-ouvert",
         "baseId": "armour-armures-ithilmar-haut-elfe-heaume-ouvert",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "armour",
         "name": "Heaume ouvert",
         "category": "Ithilmar Haut Elfe",
@@ -16698,7 +16698,7 @@
       {
         "id": "armour-armures-ithilmar-haut-elfe-brassards",
         "baseId": "armour-armures-ithilmar-haut-elfe-brassards",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "armour",
         "name": "Brassards",
         "category": "Ithilmar Haut Elfe",
@@ -16736,7 +16736,7 @@
       {
         "id": "armour-armures-ithilmar-haut-elfe-jambieres-de-plates",
         "baseId": "armour-armures-ithilmar-haut-elfe-jambieres-de-plates",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "armour",
         "name": "Jambières de plates",
         "category": "Ithilmar Haut Elfe",
@@ -16774,7 +16774,7 @@
       {
         "id": "armour-armures-ithilmar-haut-elfe-heaume",
         "baseId": "armour-armures-ithilmar-haut-elfe-heaume",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "armour",
         "name": "Heaume",
         "category": "Ithilmar Haut Elfe",
@@ -16811,7 +16811,7 @@
       {
         "id": "armour-armures-ithilmar-haut-elfe-heaume-ithiltaen",
         "baseId": "armour-armures-ithilmar-haut-elfe-heaume-ithiltaen",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "armour",
         "name": "Heaume Ithiltaen",
         "category": "Ithilmar Haut Elfe",
@@ -16848,7 +16848,7 @@
       {
         "id": "armour-armures-dragon-haut-elfe-plastron",
         "baseId": "armour-armures-dragon-haut-elfe-plastron",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "armour",
         "name": "Plastron",
         "category": "Dragon Haut Elfe",
@@ -16885,7 +16885,7 @@
       {
         "id": "armour-armures-dragon-haut-elfe-heaume-ouvert",
         "baseId": "armour-armures-dragon-haut-elfe-heaume-ouvert",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "armour",
         "name": "Heaume ouvert",
         "category": "Dragon Haut Elfe",
@@ -16918,7 +16918,7 @@
       {
         "id": "armour-armures-dragon-haut-elfe-brassards",
         "baseId": "armour-armures-dragon-haut-elfe-brassards",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "armour",
         "name": "Brassards",
         "category": "Dragon Haut Elfe",
@@ -16956,7 +16956,7 @@
       {
         "id": "armour-armures-dragon-haut-elfe-jambieres-de-plates",
         "baseId": "armour-armures-dragon-haut-elfe-jambieres-de-plates",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "armour",
         "name": "Jambières de plates",
         "category": "Dragon Haut Elfe",
@@ -16994,7 +16994,7 @@
       {
         "id": "armour-armures-dragon-haut-elfe-heaume",
         "baseId": "armour-armures-dragon-haut-elfe-heaume",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "armour",
         "name": "Heaume",
         "category": "Dragon Haut Elfe",
@@ -17031,7 +17031,7 @@
       {
         "id": "armour-armures-cape-haut-elfe-cape-de-lion-blanc",
         "baseId": "armour-armures-cape-haut-elfe-cape-de-lion-blanc",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "armour",
         "name": "Cape de Lion Blanc",
         "category": "Cape Haut Elfe",
@@ -17060,7 +17060,7 @@
       {
         "id": "shield-armures-bouclier-targe-buckler",
         "baseId": "shield-armures-bouclier-targe-buckler",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "shield",
         "name": "Targe (Buckler)",
         "category": "Bouclier",
@@ -17090,7 +17090,7 @@
       {
         "id": "shield-armures-bouclier-bouclier",
         "baseId": "shield-armures-bouclier-bouclier",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "shield",
         "name": "Bouclier",
         "category": "Bouclier",
@@ -17120,7 +17120,7 @@
       {
         "id": "shield-armures-bouclier-grand-bouclier",
         "baseId": "shield-armures-bouclier-grand-bouclier",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "shield",
         "name": "Grand Bouclier",
         "category": "Bouclier",
@@ -17150,7 +17150,7 @@
       {
         "id": "shield-armures-bouclier-pavois-pavise",
         "baseId": "shield-armures-bouclier-pavois-pavise",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "shield",
         "name": "Pavois (Pavise)",
         "category": "Bouclier",
@@ -17180,7 +17180,7 @@
       {
         "id": "shield-armures-bouclier-bouclier-haut-elfe",
         "baseId": "shield-armures-bouclier-bouclier-haut-elfe",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "shield",
         "name": "Bouclier Haut Elfe",
         "category": "Bouclier",
@@ -17218,7 +17218,7 @@
       {
         "id": "ammunition-livre-de-base-arc-fleches-12",
         "baseId": "ammunition-livre-de-base-arc-fleches-12",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "ammunition",
         "name": "Flèches (12)",
         "category": "Arc",
@@ -17241,7 +17241,7 @@
       {
         "id": "ammunition-livre-de-base-arc-fleches-elfiques-12",
         "baseId": "ammunition-livre-de-base-arc-fleches-elfiques-12",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "ammunition",
         "name": "Flèches elfiques (12)",
         "category": "Arc",
@@ -17264,7 +17264,7 @@
       {
         "id": "ammunition-livre-de-base-arbalete-carreaux-12",
         "baseId": "ammunition-livre-de-base-arbalete-carreaux-12",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "ammunition",
         "name": "Carreaux (12)",
         "category": "Arbalète",
@@ -17287,7 +17287,7 @@
       {
         "id": "ammunition-livre-de-base-fronde-balles-de-plomb-12",
         "baseId": "ammunition-livre-de-base-fronde-balles-de-plomb-12",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "ammunition",
         "name": "Balles de plomb (12)",
         "category": "Fronde",
@@ -17310,7 +17310,7 @@
       {
         "id": "ammunition-livre-de-base-fronde-pierres-12",
         "baseId": "ammunition-livre-de-base-fronde-pierres-12",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "ammunition",
         "name": "Pierres (12)",
         "category": "Fronde",
@@ -17333,7 +17333,7 @@
       {
         "id": "ammunition-livre-de-base-poudre-noire-balles-et-poudre-12",
         "baseId": "ammunition-livre-de-base-poudre-noire-balles-et-poudre-12",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "ammunition",
         "name": "Balles et poudre (12)",
         "category": "Poudre Noire",
@@ -17360,7 +17360,7 @@
       {
         "id": "ammunition-livre-de-base-poudre-noire-grenaille-et-poudre-12",
         "baseId": "ammunition-livre-de-base-poudre-noire-grenaille-et-poudre-12",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "ammunition",
         "name": "Grenaille et poudre (12)",
         "category": "Poudre Noire",
@@ -17383,7 +17383,7 @@
       {
         "id": "ammunition-livre-de-base-poudre-noire-munitions-improvisees-et-poudre",
         "baseId": "ammunition-livre-de-base-poudre-noire-munitions-improvisees-et-poudre",
-        "catalogVersion": "equipment:8d46ce87f7a4c978350813a0f7c39c0e0cce079f9e2a0f944f237b1a62fc1b23",
+        "catalogVersion": "equipment:3a24acfeebd283ad3f927507c3a9546b475cd11e4e844876232ac76179d85afd",
         "kind": "ammunition",
         "name": "Munitions improvisées et poudre",
         "category": "Poudre Noire",

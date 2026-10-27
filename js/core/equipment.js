@@ -102,7 +102,9 @@ export function weaponHandsForParticipant(item, actor=null, {action=null, contex
   item.grip==='one-hand'?1:item.grip==='two-hands'?2:undefined,
   item.oneHanded===true?1:item.oneHanded===false?2:undefined];
  for(const value of explicit){if(value===undefined||value===null||value==='')continue;const hands=Number(value);return hands===1||hands===2?hands:null;}
- const catalogue=getReferenceCatalogue(),known=(catalogue.items||[]).find(row=>row.id===(item.baseId||item.id));
+ const catalogue=getReferenceCatalogue(),catalogued=(catalogue.items||[]).find(row=>row.id===(item.baseId||item.id));
+ // Exemplaire ancien dont le modèle a quitté le catalogue (passage V5) : ses propres nom et catégorie font foi, sans conversion.
+ const known=catalogued||(item.kind==='weapon'&&(item.category||item.name)?item:null);
  if(!known||known.kind!=='weapon')return null;
  const folded=value=>String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
  const category=folded(known.category),name=folded(known.name),keywords=new Set((known.keywords||[]).map(row=>folded(typeof row==='string'?row:row?.id)));
@@ -239,10 +241,10 @@ export function applyWeaponSkillRules(actor, action, { weapon = null, context = 
  const sourceGroup=weaponGroupFor(equipment.category,equipment);
  let group=sourceGroup||weaponGroupFor(declared,equipment);
  if(isMaterialized&&conjured?.spellScoreImposed)return unchanged;
- // Les anciens objets de groupe Parade gardent leur compétence explicitement
- // liée jusqu'à décision du MJ. Le groupe n'est plus proposé ni inféré pour les
+ // Les anciens objets de groupe Parade restent résolus (lien explicite ou non)
+ // jusqu'à décision du MJ. Le groupe n'est plus proposé ni inféré pour les
  // nouveaux profils.
- if(!group&&foldedWeaponText(declared)==='parade'&&(fiche.skillId||context.weaponSkillId||context.weaponTrainingSpecialty==='Parade'))
+ if(!group&&foldedWeaponText(declared)==='parade')
   group={kind:'melee',specialty:'Parade',legacy:true};
  if(!group){if(fiche.bindingVersion!==1&&!hasExplicitTrainingFact)return unchanged;unresolved.push('Groupe d’arme manquant ou inconnu : le MJ doit préciser le groupe avant ce Test.');return {...unchanged,unresolved,receipt:{...receipt,missing:'group'}};}
  let skills=Array.isArray(actor?.skills)&&actor.skills.length?actor.skills:Array.isArray(actor?.ficheSnapshot?.skills)?actor.ficheSnapshot.skills:Array.isArray(actor?.skills)?actor.skills:null;

@@ -1,6 +1,6 @@
 # Matrice des références et des moteurs — lot 1
 
-Version de contenu : `references:e60b01e2d49c235dc586931e2820a1921823ec3478d9e3b6d1477b91d532b5b1`. Référence publique récupérée le 2026-10-27. Générée par `node tools/generate-reference-matrix.mjs`.
+Version de contenu : `references:cc6581a45b6a4fe0ce7f6baaf7aeb84bb0d51c75916c84a9e3bcafe41e6001ea`. Référence publique récupérée le 2026-10-27. Générée par `node tools/generate-reference-matrix.mjs`.
 
 La fiche fait autorité sur chaque exemplaire personnalisé ; Aides de jeu fait autorité sur les définitions. Les exports CSV publics ci-dessous sont les seuls documents distants lus. Aucune donnée Firestore privée de PJ n’a été chargée pour établir cette matrice. Les succès HTTP et la parité des fichiers de référence ne valent pas une recette authentifiée des cinq fiches.
 
