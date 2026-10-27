@@ -2949,7 +2949,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       if(ordinaryIntent&&!freeAttackCandidate){const block=ordinaryActionAfterCombatActionBlock(snapshot,actorForAction?.id);if(block)return {...block,baseRevision:localRevision,input:structuredClone(input)};}
       const combatAction=combatActionState(snapshot).byActorId?.[actorForAction?.id],clockNow=v5StoreActionClock(snapshot),activeCombatAction=combatAction&&combatAction.encounterId===clockNow.encounterId&&(combatAction.kind==='aim'||combatAction.turnId===clockNow.turnId)?combatAction:null;
       if(input.v5?.context)delete input.v5.context.aimedTargetId;
-      if(activeCombatAction?.kind==='aim'&&input.v5?.kind==='ranged'&&input.targetId===activeCombatAction.targetId&&(activeCombatAction.weaponId?input.action?.extensions?.fiche?.equipmentId===activeCombatAction.weaponId:String(input.action?.name||input.action?.nom||input.action?.note||'')===activeCombatAction.weaponName)){input.v5={...input.v5,context:{...(input.v5.context||{}),aimedTargetId:activeCombatAction.targetId}};}
+      if(activeCombatAction?.kind==='aim'&&input.v5?.kind==='ranged'&&input.targetId===activeCombatAction.targetId&&(activeCombatAction.weaponId?input.action?.extensions?.fiche?.equipmentId===activeCombatAction.weaponId:String(input.action?.name||input.action?.nom||input.action?.note||'').trim().toLowerCase()===String(activeCombatAction.weaponName||'').trim().toLowerCase())){input.v5={...input.v5,context:{...(input.v5.context||{}),aimedTargetId:activeCombatAction.targetId}};}
       const movement=combatActionState(snapshot).movementByActorId?.[actorForAction?.id];if(movement&&movement.turnId===clockNow.turnId&&movement.encounterId===clockNow.encounterId&&input.v5?.kind==='ranged')input.v5={...input.v5,context:{...(input.v5.context||{}),movedBeforeRangedAttack:true}};
       const defenseId=input.targetId||input.defense?.actorId,defensive=combatActionState(snapshot).byActorId?.[defenseId];
       if(defensive?.kind==='defensive'&&defensive.encounterId===clockNow.encounterId){const skillId=input.defense?.extensions?.fiche?.skillId||input.defense?.v5?.context?.skillId;if(skillId===defensive.skillId){input.defense={...input.defense,v5:{...(input.defense.v5||{}),context:{...(input.defense.v5?.context||{}),combatDefensiveActionBonus:2}}};}}
@@ -3833,6 +3833,11 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       return { ...proposal, baseRevision: localRevision, sceneRevision: activeScene.revision ?? null };
     },
     applySceneEvent(event, options = {}) {
+      // Décision du MJ (26/10) : tout personnage a son jet d’Initiative avant le Round 1, renfort de scène compris.
+      const reinforcementId = event?.consequence?.type === 'reinforcement' ? (event.consequence.participantId || event.consequence.id) : null;
+      const reinforced = reinforcementId ? combat.participants.get(reinforcementId) : null;
+      if (reinforced && reinforced.zone !== 'active' && Number(combat.round) === 0 && stateExtensions?.v5?.combatInitiativeInitialized === true && !reinforced.extensions?.v5?.combatInitiative?.initialized)
+        return Promise.resolve({ status: 'error', code: 'COMBAT_INIT_REQUIRED', reason: 'Un renfort avant le Round 1 doit d’abord recevoir son jet d’Initiative : faites-le entrer en jeu depuis le banc.' });
       let semanticResult = null;
       const commit = api.executeCommand('apply-scene-event', draft => {
         const scene = draft.activeScene;

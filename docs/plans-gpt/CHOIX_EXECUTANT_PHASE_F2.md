@@ -4,11 +4,13 @@
 
 Source : `tmp/gpt-phase-f2/CONTRE_VERIFICATION_CLAUDE_T1_BIS.md`, section « Réponses du MJ (26/10 après-midi) », recopiée sur instruction directe du 27/10/2026. Ces décisions priment sur les formulations historiques ci-dessous.
 
-- **Spécialité exacte prioritaire, confirmée.** Une spécialité qui figure sur la fiche a forcément au moins une augmentation (à 0, elle n'apparaît pas sur la fiche) : quand elle est présente, elle est prise par défaut. Le comportement actuel convient ; la « Précision de raccord » devient une décision du MJ.
+- **Spécialité exacte prioritaire, confirmée.** Une spécialité qui figure sur la fiche a forcément au moins une augmentation (à 0, elle n'apparaît pas sur la fiche) : quand elle est présente, elle est prise par défaut. Le comportement actuel convient.
 - **Tout personnage doit avoir son initiative avant le Round 1** : un participant ajouté directement actif après le tirage (sans passer par le banc) tire aussi son jet (PNJ d10 automatique, PJ saisi, + Bonus d'Initiative) et prend sa place. À partir du Round 1, renfort inchangé.
 - **Maniement de deux armes : on garde** l'exigence d'une première attaque enregistrée dans l'outil. Corriger seulement la phrase du rapport « voies de Talents conservées ».
 
-Le MJ passe les armes et armures du livre de base en V5 : feuille et site seront mis à jour d'abord, puis l'outil relira le catalogue. **Ne pas commencer T2 (lot D) avant la mise à jour du catalogue ; ne pas modifier `reference-snapshot.json` à la main.** La présente reprise se limite aux points 1 à 7 et à l'ajout direct avant le Round 1 ; revue ciblée, suite complète puis arrêt sans T2.
+Le MJ passe les armes et armures du livre de base en V5 : feuille et site seront mis à jour d'abord, puis l'outil relira le catalogue. **Ne pas commencer T2 (lot D) avant la mise à jour du catalogue ; ne pas modifier `reference-snapshot.json` à la main.**
+
+Note d'exécution (consigne de reprise, pas une décision du MJ) : la présente reprise se limite aux points 1 à 7 et à l'ajout direct avant le Round 1 ; revue ciblée, suite complète puis arrêt sans T2.
 
 ## Décisions du MJ — contre-vérification T1 du 26/10/2026
 
@@ -20,7 +22,7 @@ Source : `tmp/gpt-phase-f2/CONTRE_VERIFICATION_CLAUDE_T1.md`, instruction direct
 
 La reprise porte sur les points 1 à 20 de la contre-vérification T1, suivis d'une revue indépendante et de la suite complète. Arrêt avant T2 ; nouvelle contre-vérification Claude ciblée à obtenir avant son ouverture.
 
-Précision de raccord, désormais validée par le MJ dans sa réponse T1 BIS ci-dessus : une spécialité présente à zéro augmentation reste prioritaire par défaut sur Base entraînée. Elle produit alors le repli CC sans Qualités prévu par le livre ; le MJ peut sélectionner explicitement Base. Ce raccord remplace l'ancien défaut automatique « voie entraînée la plus haute » dans ce cas aussi, sans accorder une maîtrise à zéro augmentation.
+Note d'exécutant (pas une décision du MJ ; cas théorique, puisque selon le MJ une spécialité à 0 n'apparaît pas sur la fiche) : une spécialité présente à zéro augmentation reste prioritaire par défaut sur Base entraînée. Elle produit alors le repli CC sans Qualités prévu par le livre ; le MJ peut sélectionner explicitement Base. Ce raccord remplace l'ancien défaut automatique « voie entraînée la plus haute » dans ce cas aussi, sans accorder une maîtrise à zéro augmentation.
 
 Date : 25/10/2026. Les décisions du MJ dans le brief et les arbitrages ne sont pas des choix de l'exécutant.
 

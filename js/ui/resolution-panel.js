@@ -750,7 +750,7 @@ function renderV5MagicResult(preview, target, draft, handlers) {
   const result = node('div', 'workspace-result workspace-magic-result');
   const pills = node('div', 'workspace-result-pills');
 
-  if(preview.error)result.appendChild(node('p','workspace-result-line',preview.error));
+  if(preview.error&&preview.v5MagicKind!=='dispel')result.appendChild(node('p','workspace-result-line',preview.error));
   if (preview.v5MagicKind === 'dispel') {
     const dispelReason=preview.reason||preview.error;
     result.appendChild(node('p', preview.allowed === false ? 'workspace-result-line workspace-field-error' : 'workspace-result-line', preview.allowed===false?`Dissipation impossible : ${dispelReason||'Conditions de dissipation non remplies.'}`:dispelReason?`Dissipation impossible : ${dispelReason}`:preview.summary||'Dissipation prête.'));
