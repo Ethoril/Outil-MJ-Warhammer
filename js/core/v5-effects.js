@@ -439,9 +439,12 @@ export function healV5Wounds(participant,amount) {
   integer(amount,'Blessures récupérées');const next=clone(participant),states=normalizeEffects(next.states);
   const hp=Number(next.hp);if(!Number.isFinite(hp)||hp<0)throw new TypeError('Blessures courantes invalides');
   if(hp===0&&levels(states,'empoisonne'))return createReceipt(participant,{...next,states},{reminders:['Empoisonné à 0 Blessure : impossible de récupérer des Blessures avant retrait du poison.']});
+  const lodged=(next.extensions?.v5?.lodgedProjectiles||[]).filter(row=>row?.removed!==true).length;
+  const blocked=Math.min(amount,lodged),effectiveAmount=amount-blocked;
   const ceiling=Number.isFinite(Number(next.maxHp))&&next.maxHp!==null?Math.max(hp,Number(next.maxHp)):Number.MAX_SAFE_INTEGER;
-  next.hp=Math.min(ceiling,hp+amount);const actual=next.hp-hp,clear=removeInstances(states,'hemorragique',actual);next.states=clear.states;
+  next.hp=Math.min(ceiling,hp+effectiveAmount);const actual=next.hp-hp,clear=removeInstances(states,'hemorragique',actual);next.states=clear.states;
   const removed=[...clear.removed];
   if(actual>0)next.states=releaseWrathWoundLocks(next.states,removed);
-  return createReceipt(participant,next,{removed});
+  return createReceipt(participant,next,{removed,...(blocked?{healingBlockedByLodgedProjectiles:blocked,
+    reminders:[`${blocked} Blessure(s) non récupérée(s) : ${blocked} projectile(s) Empaleuse restent fichés.`]}:{})});
 }

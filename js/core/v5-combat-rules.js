@@ -13,8 +13,10 @@ import {movementTestRules} from './creature-movement.js';
 import {outnumberTestRules} from './outnumbering.js';
 import {unavailableDisarmedWeapon} from './v5-talent-replacements.js';
 import {warLeaderSubstitution} from './v5-talent-situations.js';
+import {calculateV5ArmorPenalty,previewV5Parry} from './v5-weapon-qualities.js';
 import { pendingCrewSkill,sourceActive } from './v5-talent-actions.js';
 import { previewV5Test,reverseV5Roll,refreshV5ResultTier }  from './v5-roll.js';
+import { previewV5PistolContact } from './v5-weapon-qualities.js';
 import { activeEngines } from './roll-qualities.js';
 import { keywordMechanicalStatus } from './keywords.js';
 import { activeV5TalentEffects } from './v5-talents.js';
@@ -61,18 +63,46 @@ export function inferV5Kind(action = {}, attackContext = {}) {
   return action.extensions?.v5?.kind || (['attack', 'attaque'].includes(action.type)
     ? (typeof attackContext?.ranged === 'boolean' ? attackContext.ranged ? 'ranged' : 'melee' : action.attr === 'CT' ? 'ranged' : 'melee') : 'test');
 }
-/** A held, available shield explicitly chosen to oppose this attack. */
-export function v5ShieldDefense(normalized) {
+/** A held, available shield explicitly chosen to oppose this attack. `confirmed` is legacy Protectrice; `v5Bonus` is V5 Bouclier. */
+export function v5ShieldDefense(normalized, catalogue = getReferenceCatalogue()) {
   const context = normalized.protectionContext || {};
   const shield = normalized.target?.equipment?.find(item => item.kind === 'shield' && item.id === context.shieldId);
+  const bouclier = shield?.keywords?.some(item => item.id === 'bouclier') === true;
   const word = shield?.keywords?.find(item => item.id === 'protectrice');
-  const rating = word?.parameter?.trim() === '' ? null : Number(word?.parameter);
+  const rating = bouclier ? Number(shield?.ap) : word?.parameter?.trim() === '' ? null : Number(word?.parameter);
+  const source = catalogue.keywords.find(item => item.id === 'bouclier');
+  const bouclierSourceCovered = source?.edition === 'V5' && source?.source === 'Livre de base V5 EN p.306'
+    && source?.effect === "En s'opposant à une attaque avec Esquive ou Corps à corps, confère +1 DR (sans cumul avec Défensive) et applique ses PA si le coup touche. Avec 2 PA ou plus, permet d'opposer les tirs avec Esquive à toute portée. Un seul bouclier compte. Porté attaché au bras ou en bandoulière, ses PA ne s'appliquent qu'à la Tête, au Corps et au Bras non directeur. En attaque, compte comme Arme improvisée (allonge Personnelle) et perd sa protection jusqu'au début du prochain Tour.";
+  const validRating = Number.isSafeInteger(rating) && (bouclier ? rating >= 0 : rating > 0);
   const contextConfirmed = Boolean(normalized.defense && shield && context.shieldAvailable === true && context.opposedWithShield === true
-    && !normalized.target?.extensions?.shieldUnavailable?.includes(shield.id) && Number.isSafeInteger(rating) && rating > 0);
-  const sourceCovered = !contextConfirmed || keywordMechanicalStatus('protectrice').status === 'covered';
+    && !normalized.target?.extensions?.shieldUnavailable?.includes(shield.id) && validRating);
+  const sourceCovered = !contextConfirmed || (bouclier
+    ? bouclierSourceCovered
+    : keywordMechanicalStatus('protectrice').status === 'covered');
   const confirmed = contextConfirmed && sourceCovered;
-  return { confirmed, rangedDodgeAllowed: confirmed && rating >= 2, rating: confirmed ? rating : null,
-    unresolved: contextConfirmed && !sourceCovered ? 'Bouclier : source de Protectrice non couverte ; arbitrage MJ requis.' : null };
+  const label = normalized.defense?.label || normalized.defense?.note || '';
+  const skillId = normalized.defense?.extensions?.fiche?.skillId || normalized.defense?.v5?.context?.skillId;
+  const skillName = skillId ? catalogue.skills.find(row => row.id === skillId)?.nom || '' : '';
+  const defenseName = `${label} ${skillName}`.normalize('NFD').replace(/[\u0300-\u036f]/gu, '').toLowerCase();
+  const dodgeDefense = /esquive|dodge/u.test(defenseName);
+  const meleeDefense = /corps\s*a\s*corps|melee|^\s*cc\b/u.test(defenseName);
+  const rangedAttack = typeof normalized.attackContext?.ranged === 'boolean' ? normalized.attackContext.ranged
+    : normalized.v5?.kind === 'ranged' || normalized.action?.attr === 'CT';
+  const canUseV5Bonus = (dodgeDefense || meleeDefense) && (!rangedAttack || dodgeDefense && rating >= 2);
+  const unresolved = contextConfirmed && !sourceCovered
+    ? bouclier ? 'Bouclier V5 : source ou effet modifié ; recalcul et arbitrage MJ requis.'
+      : 'Bouclier : source de Protectrice non couverte ; arbitrage MJ requis.'
+    : contextConfirmed && bouclier && !canUseV5Bonus
+      ? rangedAttack ? 'Bouclier V5 contre un tir : Esquive et 2 PA au moins requis.'
+        : 'Bouclier V5 : opposition par Esquive ou Corps à corps requise.' : null;
+  const v5Confirmed = confirmed && bouclier && canUseV5Bonus;
+  const legacyRanged = !bouclier && rating >= 2;
+  return { confirmed: !bouclier && confirmed,
+    ...(bouclier ? { v5Bonus: v5Confirmed } : {}),
+    rangedDodgeAllowed: bouclier ? v5Confirmed && rangedAttack && rating >= 2 && dodgeDefense
+      : confirmed && legacyRanged,
+    rating: (bouclier ? v5Confirmed : confirmed) ? rating : null,
+    unresolved };
 }
 // Malice de Ranald : pendant la durée, dans tout Test opposé contre l’adversaire désigné, deux Caractéristiques du prêtre prennent
 // la valeur de l’adversaire ; la fiche ne change pas, le score du Test est décalé de l’écart lu au moment du Test.
@@ -134,6 +164,29 @@ export function buildCombatTest(normalized, role = 'actor') {
   const modifiers = [...support.modifiers,...magicSkillModifiers(actor,skillLabel,{...settings.context,carac:settings.context?.carac||skill?.carac||action.attr}),
     // Clés « … adverse » du porteur opposé, et « Défense contre Tir » du défenseur visé par un tir.
     ...(target&&!defending?magicAdverseModifiers(target,skillLabel):[]),...(defending&&kind==='ranged'?magicSkillModifiers(actor,'Défense contre Tir'):[]),...(settings.slModifiers || [])];
+  if(defending&&settings.context?.offHandWeapon===true)modifiers.push({id:'quality:offhand-defense',label:'Défense avec la main non directrice',amount:-2});
+  const parryDefense=previewV5Parry({qualities:action.qualities||[],defending,offHand:settings.context?.offHandWeapon===true});
+  if(parryDefense.defensePenalty===0){const index=modifiers.findIndex(row=>row.id==='quality:offhand-defense');if(index>=0)modifiers.splice(index,1);}
+  if(!defending&&['test','skill'].includes(kind)){
+    const wornIds=Array.isArray(settings.context?.wornArmorItemIds)?settings.context.wornArmorItemIds:[];
+    const worn=actor?.equipment?.filter(item=>wornIds.includes(item.id)&&item.kind==='armour')||[];
+    if(worn.length!==new Set(wornIds).size)unresolved.push('Armure portée : sélectionner uniquement des pièces d’armure de l’inventaire actif.');
+    const armor=calculateV5ArmorPenalty({worn});
+    const foldedLabel=String(skillLabel||'').normalize('NFD').replace(/[\u0300-\u036f]/gu,'').toLowerCase();
+    if(armor.stealthDr&&/(?:discretion|furtivite)/u.test(foldedLabel))modifiers.push({id:'armor:stealth',label:'Armure portée (mailles/plates)',amount:armor.stealthDr});
+    if(armor.perceptionDr&&/perception/u.test(foldedLabel))modifiers.push({id:'armor:perception',label:'Heaume fermé porté',amount:armor.perceptionDr});
+  }
+  if(defending&&kind==='melee'&&normalized.action?.qualities?.some(row=>(typeof row==='string'?row:row?.id)==='a-enroulement'))
+    modifiers.push({id:'quality:a-enroulement',label:'Arme à enroulement adverse',amount:-1});
+  if(!defending){
+    const queued=actor?.extensions?.v5?.combatEffects||[],penalty=queued.find(row=>row.kind==='next-action-sl');
+    const declaredAction=['attack','attaque'].includes(String(action.type||'').toLowerCase())||settings.context?.isAction===true;
+    if(penalty&&declaredAction)modifiers.push({id:'fumble:next-action-sl',label:'Maladresse précédente : pénalité à la prochaine Action',amount:Number(penalty.amount)||-1});
+    const ankle=queued.find(row=>row.kind==='twisted-ankle'&&row.location===settings.context?.legUsed
+      &&Number.isSafeInteger(Number(settings.round??normalized.round))&&Number(settings.round??normalized.round)<Number(row.createdRound||0)+Number(row.rounds||0));
+    if(ankle)modifiers.push({id:`fumble:twisted-ankle:${ankle.id||ankle.location}`,label:'Cheville tordue : Test utilisant la jambe affectée',amount:-1});
+    if(!defending&&queued.some(row=>row.kind==='lose-next-action'))restrictions.push('Maladresse précédente : cette Action est perdue ; terminez le Tour sans résoudre d’Action.');
+  }
   let extraordinaryShot=null;
   if(!defending&&settings.context?.extraordinaryShot===true){
     const activeSharpshooter=talentModifiers.penaltyRules.some(rule=>rule.origins?.some(origin=>origin.talentId==='talent-sharpshooter'));
@@ -172,7 +225,7 @@ export function buildCombatTest(normalized, role = 'actor') {
     const defensive = defenseEngines.some(engine => engine.id === 'defensive' && !overriddenDefense.has(engine.id));
     const shieldDefense = v5ShieldDefense(normalized);
     if (shieldDefense.unresolved) unresolved.push(shieldDefense.unresolved);
-    const shield = shieldDefense.confirmed;
+    const shield = shieldDefense.v5Bonus || shieldDefense.confirmed;
     if (defensive || shield) modifiers.push({ id: 'defensive-protection', label: shield ? 'Bouclier V5 (ne cumule pas Défensive)' : 'Défensive', amount: 1 });
     for (const engine of defenseEngines) if (!overriddenDefense.has(engine.id) && engine.params.bonus < 0)
       modifiers.push({ id: `quality-${engine.id}`, label: 'Déséquilibrée', amount: engine.params.bonus });
@@ -246,7 +299,16 @@ export function buildCombatTest(normalized, role = 'actor') {
     if (targetLevels.has('aveugle') && !levels.has('aveugle')) advantages.push({ id: 'target-blinded', label: 'Cible Aveuglée' });
     if (targetLevels.has('surpris')) modifiers.push({ id: 'target-surprised', label: 'Cible Surprise', amount: 2 });
   }
-  if(!defending&&kind==='ranged'&&settings.context?.targetEngaged===true)disadvantages.push({id:'target-engaged',label:'Tir sur une cible engagée'});
+  const pistolContact=previewV5PistolContact({qualities:action.qualities||[],attack:!defending,engaged:settings.context?.targetEngaged===true,ranged:kind==='ranged'});
+  if(!defending&&kind==='ranged'&&settings.context?.targetEngaged===true&&!pistolContact.allowed)disadvantages.push({id:'target-engaged',label:'Tir sur une cible engagée'});
+  if(!defending&&kind==='test'&&action.attr==='F'&&context.entanglementTest===true){
+    const weaponId=context.entanglementWeaponId||action.extensions?.fiche?.equipmentId||action.extensions?.equipment?.id;
+    const entanglingWeapon=actor?.equipment?.find(row=>row.id===weaponId);
+    const entanglementKind=entanglingWeapon?.extensions?.v5?.entanglementKind
+      ||(entanglingWeapon?.baseId==='weapon-armes-corps-a-corps-armes-d-hast-mancatcher-2m'?'mancatcher':null);
+    if(!entanglingWeapon||entanglementKind!=='mancatcher')unresolved.push('Entrave : choisir un Mancatcher typé pour ce Test de Force.');
+    else if(context.springLoaded===true||entanglingWeapon.extensions?.v5?.springLoaded===true)modifiers.push({id:'quality:mancatcher-spring-loaded',label:'Mancatcher à ressort : +20 au Test de Force pour entraver',amount:2});
+  }
   // Different Condition penalties do not add. Like-for-like penalties select
   // the largest; a DR penalty versus inversion requires an explicit MJ ruling.
   const worstDisadvantage = [...conditionDisadvantages.values()].sort((a, b) => b.length - a.length)[0] || [];

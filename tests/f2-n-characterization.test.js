@@ -23,7 +23,7 @@ test('F2-N caractérisation — Enchevêtré est un état V5 cumulable et sa ré
   assert.equal(passedTest.participant.states.filter(state => state.key === 'enchevetre').reduce((sum, state) => sum + state.level, 0), 1, 'les DR retirent autant de niveaux que le Test en a obtenu');
 });
 
-test('F2-N caractérisation — une empoignade ne dispose pas encore d’un plan dédié dans la résolution', async () => {
+test('F2-N caractérisation — sans déclaration, une Bagarre reste une attaque ordinaire', async () => {
   const { previewResolution } = await import('../js/core/resolution.js');
   const preview = previewResolution({
     actor: { id: 'attaquant', name: 'Attaquant', states: [] },
@@ -35,6 +35,6 @@ test('F2-N caractérisation — une empoignade ne dispose pas encore d’un plan
   });
 
   assert.equal(preview.success, true);
-  assert.ok(preview.damage, 'une attaque de Bagarre ordinaire suit encore le chemin de dégâts');
-  assert.equal(preview.grapple, undefined, 'aucun enregistrement dédié de la prise n’est actuellement exposé');
+  assert.ok(preview.damage, 'sans déclaration, l’attaque suit le chemin ordinaire');
+  assert.equal(preview.grapple, undefined, 'aucune déclaration ne déclenche de prise');
 });

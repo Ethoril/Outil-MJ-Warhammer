@@ -165,10 +165,10 @@ test('F2-B — les huit paliers distinguent succès +0 de l’échec −0', () =
 });
 
 test('F2-B — dispersion uniquement pour le Tir d’arme de jet raté, avec d10 relatif et demi-distance plafonnée',()=>{
-  const failed=attack({roll:99,context:{throwingWeapon:true,scatterDirectionRoll:1,scatterDistanceRolls:[10,9],shooterTargetDistanceYards:7}});
+  const failed=attack({roll:99,context:{throwingWeapon:true,fumbleRoll:1,scatterDirectionRoll:1,scatterDistanceRolls:[10,9],shooterTargetDistanceYards:7}});
   assert.deepEqual(failed.unresolved,[]);assert.deepEqual(failed.scatter,{directionRoll:1,direction:'haut-gauche',distanceRolls:[10,9],distanceYards:3.5,rolledDistanceYards:19,maximumYards:3.5});
-  const shooter=attack({roll:99,context:{throwingWeapon:true,scatterDirectionRoll:9}});assert.equal(shooter.scatter.direction,'aux pieds du tireur');
-  const target=attack({roll:99,context:{throwingWeapon:true,scatterDirectionRoll:10}});assert.equal(target.scatter.direction,'aux pieds de la cible');
-  const missing=attack({roll:99,context:{throwingWeapon:true,scatterDirectionRoll:1,scatterDistanceRolls:[3,4]}});assert.ok(missing.unresolved.some(row=>/distance tireur-cible/i.test(row)));
+  const shooter=attack({roll:99,context:{throwingWeapon:true,fumbleRoll:1,scatterDirectionRoll:9}});assert.equal(shooter.scatter.direction,'aux pieds du tireur');
+  const target=attack({roll:99,context:{throwingWeapon:true,fumbleRoll:1,scatterDirectionRoll:10}});assert.equal(target.scatter.direction,'aux pieds de la cible');
+  const missing=attack({roll:99,context:{throwingWeapon:true,fumbleRoll:1,scatterDirectionRoll:1,scatterDistanceRolls:[3,4]}});assert.ok(missing.unresolved.some(row=>/distance tireur-cible/i.test(row)));
   const nonThrow=attack({roll:99,context:{scatterDirectionRoll:1,scatterDistanceRolls:[3,4],shooterTargetDistanceYards:12}});assert.equal(nonThrow.scatter,null);
 });

@@ -56,7 +56,7 @@ test('B4c : « Fait » sur la ligne d’état des têtes ne masque que cette lig
   assert.match(count().text, /4 tête\(s\) valide\(s\) sur 5/, 'la ligne revient avec le nouveau nombre');
 });
 
-const hit = (n, extra = {}) => ({ resolutionId: `b4c-${n}`, actorId: 'hero', targetId: 'beast', roll: 11, action: { type: 'attack', base: 70, attr: 'CC', damage: 5 }, defense: { base: 10, roll: 99, v5: { kind: 'melee' } }, v5: { kind: 'melee' }, criticalRolls: { location: 5, effect: 20 }, ...extra });
+const hit = (n, extra = {}) => ({ resolutionId: `b4c-${n}`, actorId: 'hero', targetId: 'beast', roll: 11, action: { type: 'attack', base: 70, attr: 'CC', damage: 5 }, defense: { base: 10, roll: 99, v5: { kind: 'melee', context: { defenderFumbleRoll: 1 } } }, v5: { kind: 'melee' }, criticalRolls: { location: 5, effect: 20 }, ...extra });
 const heads = store => store.getCombat().participants.get('beast').extensions.v5.heads;
 
 test('B4c : un critique à la tête (Sonné) étourdit une seule tête de l’Hydre, sans Sonné pour la créature, annulable', async () => {
@@ -97,6 +97,6 @@ test('B4c : un Trait Plusieurs têtes sans nombre fait refuser l’attaque gratu
   beast.traits = beast.traits.map(trait => (/Many Heads/i.test(trait) ? 'Many Heads' : trait));
   await assert.rejects(async () => {
     const bite = beast.actions.find(action => action.name === 'Bite');
-    await store.applyResolution(store.previewResolution({ resolutionId: 'b4c-x', actorId: 'beast', targetId: 'hero', roll: 5, action: clone(bite), defense: { base: 10, roll: 99, v5: { kind: 'melee' } }, v5: { kind: 'melee' } }));
+    await store.applyResolution(store.previewResolution({ resolutionId: 'b4c-x', actorId: 'beast', targetId: 'hero', roll: 5, action: clone(bite), defense: { base: 10, roll: 99, v5: { kind: 'melee', context: { defenderFumbleRoll: 1 } } }, v5: { kind: 'melee' } }));
   }, /têtes/);
 });

@@ -32,7 +32,7 @@ test('Q42 Recommencer remet à zéro le quota d’attaques gratuites du Round 0 
   const run = async () => {
     let done = 0;
     for (const [n, action] of [...tentacles, tentacles[0]].entries()) {
-      const preview = store.previewResolution({ resolutionId: `q42-r-${++seq}`, actorId: 'beast', targetId: 'hero', roll: 5, action: clone({ ...action, base: 60 }), defense: { base: 10, roll: 99, v5: { kind: 'melee' } }, v5: { kind: 'melee' } });
+      const preview = store.previewResolution({ resolutionId: `q42-r-${++seq}`, actorId: 'beast', targetId: 'hero', roll: 5, action: clone({ ...action, base: 60 }), defense: { base: 10, roll: 99, v5: { kind: 'melee', context: { defenderFumbleRoll: 2 } } }, v5: { kind: 'melee' } });
       if (preview.unresolved?.length || (await store.applyResolution(preview)).status !== 'applied') break;
       done += 1;
     }

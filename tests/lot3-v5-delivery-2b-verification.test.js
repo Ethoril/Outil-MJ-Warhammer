@@ -96,8 +96,9 @@ test('Lumière aveuglante : les créatures dotées de la Magie des Arcanes (Lumi
 });
 
 test('Épée enflammée : maladresse du porteur sans Magie des Arcanes (Feu) = Enflammé ; attaque magique', async () => {
+  // A natural 99 on a combat attack is a fumble; provide its explicit d10 table roll.
   const strike = (store, actorId, roll = 99) => store.previewResolution({ actorId, targetId: 'enemy', action: { id:'blade', type: 'attack', attr: 'CC', base: 40, damageFormula: 'BF+4', qualities: [] }, roll,
-    v5: { kind: 'melee', choice: 'keep' }, defense: MELEE_DEFENSE });
+    v5: { kind: 'melee', choice: 'keep', context: { fumbleRoll: 8 } }, defense: MELEE_DEFENSE });
   const store = await combat(wizard('mage'), wizard('enemy', { camp: 'ennemi' }));
   await cast(store, 'Épée Enflammée de Rhuin');
   const fumble = strike(store, 'mage');

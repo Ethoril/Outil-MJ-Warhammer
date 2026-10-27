@@ -31,9 +31,11 @@ const actionFor = (item, skill = null, extra = {}) => ({
   base: skill?.total ?? 54, damage: item.damage ?? 4, qualities: (item.keywords || []).map(row => ({ ...row })),
   extensions: { fiche: { equipmentId: item.id, bindingVersion: 1, ...(skill ? { skillId: skill.id, skillName: skill.name } : {}) }, equipment: item, v5: { kind: 'test' }, ...extra.extensions }
 });
-const preview = (item, skills, { context = {}, slModifier = 0, action = actionFor(item, skills[0]), actorExtra = {} } = {}) =>
-  previewResolution({ actor: actorFor(item, skills, actorExtra), target, action, roll: 40, baseRevision: 0,
-    v5: { context, slModifier } });
+const preview = (item, skills, { context = {}, slModifier = 0, action = actionFor(item, skills[0]), actorExtra = {}, targetExtra = {} } = {}) => {
+  const actor = actorFor(item, skills, actorExtra), targetRow = { ...target, ...targetExtra };
+  return previewResolution({ actor, target: targetRow, action, roll: 40, baseRevision: 0,
+    ...(Array.isArray(context.explosionTargetIds) ? { v5State: { participants: [{ ...actor, zone: 'active' }, { ...targetRow, zone: 'active' }] } } : {}), v5: { context, slModifier } });
+};
 
 test('F2-C T1 — Dent et griffe garde ses attaques naturelles sans contrôle de groupe', () => {
   const contracts=JSON.parse(readFileSync(new URL('../js/data/v5-divine-contracts.json',import.meta.url),'utf8'));
@@ -54,7 +56,7 @@ test('F2-C T1 — les canons à poudre acceptent les faits MJ sans compétence p
   const items=catalogue.items.filter(row=>row.kind==='weapon'&&['Siège','Embarquée'].includes(row.category)&&(row.keywords||[]).some(word=>word.id==='a-poudre-noire'));
   assert.equal(items.length,8);
   for(const item of items){
-    const result=preview(item,[],{context:{weaponTrainingSpecialty:'Poudre noire',weaponAdvances:2,weaponSkillScore:55}});
+    const result=preview(item,[],{context:{weaponTrainingSpecialty:'Poudre noire',weaponAdvances:2,weaponSkillScore:55,explosionTargetIds:['target']}});
     assert.deepEqual(result.unresolved,[],item.name);
     assert.equal(result.score.base,55,item.name);
     assert.equal(result.weaponSkillReceipt.trained,true);
@@ -112,7 +114,7 @@ test('F2-C T1 — le malus CT conserve le modificateur de DR porté par l’acti
   const item=catalogue.items.find(row=>row.kind==='weapon'&&row.category==='Lancer');
   const action=actionFor(item);action.extensions.v5.slModifier=2;
   const result=previewResolution({actor:actorFor(item,[]),target,action,roll:40,v5:{context:{targetHelpless:true}}});
-  assert.deepEqual(result.unresolved,[]);
+  assert.ok(result.unresolved.some(row=>/Inflige/.test(row)),'le catalogue attribue un Inflige vide que la source CSV ne porte pas; le blocage explicite est conservé');
   assert.equal(result.score.mod,1);
   assert.equal(previewResolution(result.input).score.mod,1,'ré-aperçu sans cumul');
 });
@@ -144,14 +146,15 @@ test('F2-C Claude — les replis CC/CT utilisent la base avant que le delta de c
 test('F2-C Claude — un ancien lien vers Base ne bloque pas une arme de spécialité différente', () => {
   const halberd = itemById('weapon-armes-corps-a-corps-arme-d-hast-hallebarde-haut-elfe');
   const base = skillByName('Corps à corps (Base)');
-  const result = preview(halberd, [base], { action: actionFor(halberd, base) });
+  const armour = { id:'training-test-mail', kind:'armour', name:'Cotte de mailles', ap:2, layer:'mail', locations:['head','body','leftArm','rightArm','leftLeg','rightLeg'], keywords:[] };
+  const result = preview(halberd, [base], { action: actionFor(halberd, base), context:{struckItemId:armour.id}, targetExtra:{equipment:[armour]} });
   assert.deepEqual(result.unresolved, []);
   assert.equal(result.score.base, 54);
   assert.equal(result.weaponSkillReceipt.trained, false);
-  assert.equal(applyResolution(result, { revision: 0, participants: [structuredClone(target)] }).status, 'applied');
+  assert.equal(applyResolution(result, { revision: 0, participants: [structuredClone(result.input.target)] }).status, 'applied');
   assert.ok(!result.input.action.qualities.some(row => row.id === 'defensive'));
   const hast = skillByName("Corps à corps (Armes d'hast)");
-  const trained = preview(halberd, [base, hast], { action: { ...actionFor(halberd, base), base: 69 } });
+  const trained = preview(halberd, [base, hast], { action: { ...actionFor(halberd, base), base: 69 }, context:{struckItemId:armour.id}, targetExtra:{equipment:[armour]} });
   assert.deepEqual(trained.unresolved, []);
   assert.equal(trained.score.base, hast.total, 'un ancien score Base ne devient pas une saisie MJ pour la compétence Hast nouvellement utilisée');
   assert.equal(trained.input.action.extensions.fiche.skillId, hast.id, 'les talents reçoivent la spécialité effectivement utilisée');
@@ -173,8 +176,8 @@ test('F2-C Claude — siège et embarquée acceptent les compétences de tir ré
     ['weapon-armes-a-distance-ingenierie-lance-feu-a-malepierre-skaven', 'Projectiles (Lance-flammes)']
   ];
   for (const [itemId, skillName] of testRows) {
-    const item = itemById(itemId), skill = skillByName(skillName), result = preview(item, [skill]);
-    assert.deepEqual(result.unresolved, [], `${item.name} avec ${skill.name}`);
+    const item = itemById(itemId), skill = skillByName(skillName), result = preview(item, [skill], { context:{explosionTargetIds:['target']} });
+    assert.deepEqual(result.unresolved, [], `${item.name} avec ${skill.name}; qualités=${JSON.stringify(result.input.action.qualities)}`);
     assert.equal(result.weaponSkillReceipt.trained, true, item.name);
     assert.equal(result.score.base, skill.total, item.name);
     assert.equal(equipmentAttackContext(item).ranged, true, item.name);
@@ -194,8 +197,9 @@ test('F2-C Claude — siège et embarquée acceptent les compétences de tir ré
   const trained = { ...skillByName('Projectiles (Jet)'), id: 'jet-trained', total: 61, advances: 2 };
   for (const skills of [[low, trained], [trained, low]]) {
     const result = preview(throwing, skills, { action: actionFor(throwing) });
-    assert.deepEqual(result.unresolved, []);
+    assert.ok(result.unresolved.some(row=>/Inflige/.test(row)),'le Javelot Blackbriar garde le profil réel; l’Inflige vide du snapshot reste explicitement bloquant');
     assert.equal(result.weaponSkillReceipt.skillId, 'jet-trained', 'ordre fiche/alias ne masque pas la spécialité entraînée');
+    assert.equal(result.score.base,trained.total);
   }
 });
 
@@ -358,9 +362,13 @@ test('F2-C Claude — les profils conjurés utilisent le même groupe canonique 
   for(const CC of [null,'','   '])assert.equal(conjuredWeaponSkillScore({caracs:{CC},skills:[]},'sword'),null,'une valeur CC nulle ou vide reste absente');
   assert.equal(conjuredWeaponSkillScore({caracs:{},skills:[]},'dagger'),null,'une caractéristique réellement absente ne devient pas 0');
   assert.equal(conjuredWeaponSkillScore({caracs:{CC:null},skills:[{name:'Corps à corps (Base)',total:null,value:'   ',score:0}]},'dagger'),0,'un score de compétence explicitement nul reste connu malgré ses autres champs vides');
-  const net=ARCANE_WEAPON_PROFILES.net,action={id:'spell-net',type:'attack',note:net.name,base:base.total,attr:'CC',qualities:[...net.qualities.map(value=>typeof value==='string'?{id:value}:value),{id:'magique'}],extensions:{v5:{materialized:true,conjuredWeaponKey:'net',conjuredWeaponProfile:net,weaponHands:1}}};
-  const result=previewResolution({actor:{...actor,skills:[{...base,advances:1}]},target,action,roll:40,baseRevision:0,v5:{context:{targetHelpless:true}}});
-  assert.deepEqual(result.unresolved,[]);assert.equal(result.weaponSkillReceipt.group,'Base');assert.equal(result.score.base,base.total);
+  const net=ARCANE_WEAPON_PROFILES.net,action={id:'spell-net',type:'attack',note:net.name,base:base.total,attr:'CC',spellEffectId:'aethyric-arms',qualities:[...net.qualities.map(value=>typeof value==='string'?{id:value}:value),{id:'magique'}],extensions:{v5:{materialized:true,spellEffectId:'aethyric-arms',conjuredWeaponKey:'net',conjuredWeaponProfile:net,weaponHands:1}}};
+  const actorWithEffect={...actor,skills:[{...base,advances:1}],extensions:{v5:{spellEffects:[{id:'aethyric-arms',grantedActions:[{id:'spell-net'}]}]}}};
+  const result=previewResolution({actor:actorWithEffect,target,action,roll:40,baseRevision:0,v5:{context:{targetHelpless:true}}});
+  assert.equal(result.unresolved.length,0,result.unresolved.join('; '));
+  assert.equal(result.entanglement.weaponLocked,true,'le filet conjuré est verrouillé via son effet actif durable');
+  assert.equal(result.weaponSkillReceipt.group,'Base');assert.equal(result.score.base,base.total);
+  assert.deepEqual(net.qualities.find(row=>typeof row==='object'&&row.id==='inflige'),{id:'inflige',parameter:'Empêtré 50'},'Filet V5 p.301 est Inflige (Empêtré 50), pas l’ancien mot-clé V4 Immobilisante');
 });
 
 test('F2-C T1 — la spécialité exacte présente à zéro prime aussi sur Base, les alternatives restent licites', () => {
@@ -399,17 +407,19 @@ test('F2-C Claude — la Faux de Shyish produit une hallebarde contrôlée sans 
   const trainedStore=await create(1),mage=trainedStore.listParticipants().find(row=>row.id==='mage');
   const scythe=magicGrantedActions(mage).find(action=>action.extensions?.v5?.conjuredWeaponKey==='halberd');assert.ok(scythe);assert.equal(scythe.base,62);assert.equal(scythe.extensions.v5.conjuredWeaponKey,'halberd');
   assert.equal(scythe.extensions.v5.materialized,undefined);assert.equal(scythe.damageFormula,'BF+10','le bonus magique et le bonus de sort sont préservés');
-  const foe=trainedStore.listParticipants().find(row=>row.id==='foe');
-  const trained=trainedStore.previewResolution({actorId:'mage',targetId:'foe',actor:mage,target:foe,action:scythe,roll:25,v5:{context:{targetHelpless:true}}});
+  const armour={id:'foe-mail',kind:'armour',name:'Cotte de mailles',ap:2,layer:'mail',locations:['head','body','leftArm','rightArm','leftLeg','rightLeg'],keywords:[]};
+  let foe=trainedStore.listParticipants().find(row=>row.id==='foe');await trainedStore.updateParticipant('foe',{equipment:[...foe.equipment,armour]});foe=trainedStore.listParticipants().find(row=>row.id==='foe');
+  const trained=trainedStore.previewResolution({actorId:'mage',targetId:'foe',actor:mage,target:foe,action:scythe,roll:25,v5:{context:{targetHelpless:true,struckItemId:armour.id}}});
   assert.deepEqual(trained.unresolved,[]);assert.equal(trained.weaponSkillReceipt.group,'Hast');assert.equal(trained.weaponSkillReceipt.trained,true);assert.equal(trained.score.base,62);
   assert.ok(trained.input.action.qualities.some(row=>row.id==='empaleuse'));
   const legacyScythe=structuredClone(scythe);for(const key of ['materialized','conjuredWeaponKey','conjuredWeaponProfile','weaponHands'])delete legacyScythe.extensions.v5[key];
-  const legacy=previewResolution({actor:mage,target:foe,action:legacyScythe,roll:25,v5:{context:{targetHelpless:true}}});
+  const legacy=previewResolution({actor:mage,target:foe,action:legacyScythe,roll:25,v5:{context:{targetHelpless:true,struckItemId:armour.id}}});
   assert.deepEqual(legacy.unresolved,[]);assert.equal(legacy.weaponSkillReceipt.group,'Hast');assert.equal(legacy.weaponSkillReceipt.trained,true,'Faux historique récupère Hallebarde par l’identifiant durable du sort');
   assert.equal((await trainedStore.applyResolution(trained)).status,'applied');assert.equal(await trainedStore.undo(),true);
 
   const untrainedStore=await create(0),untrainedMage=untrainedStore.listParticipants().find(row=>row.id==='mage'),untrainedScythe=magicGrantedActions(untrainedMage).find(action=>action.extensions?.v5?.conjuredWeaponKey==='halberd');
-  const untrained=untrainedStore.previewResolution({actorId:'mage',targetId:'foe',actor:untrainedMage,target:untrainedStore.listParticipants().find(row=>row.id==='foe'),action:untrainedScythe,roll:25,v5:{context:{targetHelpless:true}}});
+  const untrainedFoe=untrainedStore.listParticipants().find(row=>row.id==='foe');await untrainedStore.updateParticipant('foe',{equipment:[...untrainedFoe.equipment,armour]});
+  const untrained=untrainedStore.previewResolution({actorId:'mage',targetId:'foe',actor:untrainedMage,target:untrainedStore.listParticipants().find(row=>row.id==='foe'),action:untrainedScythe,roll:25,v5:{context:{targetHelpless:true,struckItemId:armour.id}}});
   assert.deepEqual(untrained.unresolved,[]);assert.equal(untrained.weaponSkillReceipt.trained,false);assert.equal(untrained.score.base,50);
   assert.equal(untrained.input.action.damageFormula,'BF+10');assert.ok(untrained.input.action.qualities.some(row=>row.id==='magique'));
   assert.ok(!untrained.input.action.qualities.some(row=>['defensive','empaleuse'].includes(row.id)),'les Atouts sont retirés quand Hast est à zéro');

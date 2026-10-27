@@ -1442,6 +1442,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       try {
         if (input.defense && (input.defense.base == null || input.defense.base === '' || !Number.isInteger(Number(input.defense.base)) || Number(input.defense.base) < 0)) throw Object.assign(new ResolutionError('Saisissez un score de défense entier, supérieur ou égal à zéro.', 'INVALID_DEFENSE_SCORE'), { userFacing: true });
         input.v5 = v5Input(context, draft);
+        const combatRound=readCombat(Store).round;let currentTurnIndex=1;try{currentTurnIndex=Number(JSON.parse(Store.getFullJSON()).extensions?.v5?.turnIndex)||1;}catch{}if(Number.isSafeInteger(combatRound)&&combatRound>0){input.round=combatRound;input.v5={...input.v5,context:{...(input.v5.context||{}),currentRound:combatRound,currentTurnIndex}};}
         if (input.defense) input.defense.v5 = defenseV5Input(context, draft);
         draft.preview = Store.previewResolution(input);
       } catch (error) {
@@ -1596,9 +1597,12 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     const prayers=divinePanel.render(context.actor,context.participants);if(prayers)center.appendChild(prayers);
 
     const draft = state.resolution;
-    let previousWeaponAttacks = [];
+    let previousWeaponAttacks = [], resolutionClock = {};
     try {
       const envelope = JSON.parse(Store.getFullJSON());
+      const clockRound=envelope.combat?.round,clockTurnIndex=envelope.activeScene?.extensions?.v5?.turnIndex??envelope.extensions?.v5?.turnIndex;
+      if(Number.isSafeInteger(clockRound)&&clockRound>0)resolutionClock.currentRound=clockRound;
+      if(Number.isSafeInteger(clockTurnIndex)&&clockTurnIndex>0)resolutionClock.currentTurnIndex=clockTurnIndex;
       const {encounterId,turnId}=v5StoreActionClock({...envelope,combat:{...(envelope.combat||{}),currentActorId:context.actor?.id}});
       previousWeaponAttacks = (envelope.extensions?.v5?.standardTurnActions || []).filter(row => row.actorId === context.actor?.id && row.encounterId === encounterId && row.turnId === turnId && row.kind === 'action' && row.targetId)
         .map(row => ({ ...row, weaponName: context.actor?.equipment?.find(item => item.id === row.weaponId)?.name || 'Action' }));
@@ -1613,12 +1617,96 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       groups: context.groups,
       defense: context.defense,
       previousWeaponAttacks,
+      resolutionClock,
       canCalculate: typeof Store.previewResolution === 'function' || ['channelling', 'cast', 'dispel'].includes(context.type),
       canApply: Boolean(callbacks.applyResolution || ['channelling', 'cast', 'dispel'].includes(context.type)),
       canDeclareCombatAction: Boolean(callbacks.declareCombatAction),
       canDeclareCombatMovement: Boolean(callbacks.declareCombatMovement),
       handlers: resolutionHandlers
     }));
+
+    const reloadWeapons=(context.actor?.equipment||[]).filter(item=>item.kind==='weapon'&&!/griffonsfoot/i.test(item.name||'')&&item.keywords?.some(row=>['a-repetition','recharge','salve','salvo'].includes(typeof row==='string'?row:row?.id)));
+    if(reloadWeapons.length){
+      const reloadPanel=node('section','workspace-card workspace-weapon-reload');reloadPanel.setAttribute('aria-label','Rechargement des armes');
+      reloadPanel.appendChild(node('h3','workspace-card-title','Rechargement des armes'));
+      for(const weapon of reloadWeapons){
+        const state=weapon.extensions?.v5?.reloadState,wrap=node('div','workspace-v5-context');
+        const title=node('p','workspace-result-line',`${weapon.name||weapon.id} · ${state?`${state.shotsRemaining} tir(s) restant(s)`:'chargeur non initialisé'}${state?.reloading?` · recharge ${state.accumulatedSuccesses}/${state.requiredSuccesses} succès`:''}`);wrap.appendChild(title);
+        const error=node('p','workspace-error');
+        const apply=async input=>{try{error.textContent='';const plan=Store.previewV5WeaponReload({actorId:context.actor.id,equipmentId:weapon.id,...input});if(!plan.ready)throw new Error(plan.error||'Rechargement à préciser.');const saved=await Store.applyV5WeaponReload(plan);if(saved?.status!=='applied')throw new Error(saved?.reason||'Rechargement non enregistré.');render();}catch(cause){error.textContent=userMessage(cause,'Rechargement non enregistré.');}};
+        const begin=button('Commencer la recharge','workspace-secondary');begin.type='button';begin.addEventListener('click',()=>apply({operation:'begin'}));begin.disabled=state?.reloading===true;wrap.appendChild(begin);
+        if(state?.reloading){
+          const select=document.createElement('select');select.setAttribute('aria-label',`Résultat du Test de recharge — ${weapon.name||weapon.id}`);select.append(new Option('Résultat du Test…',''),new Option('Réussite','success'),new Option('Échec','failure'));
+          const sl=document.createElement('input');sl.type='number';sl.step='1';sl.setAttribute('aria-label',`DR du Test de recharge — ${weapon.name||weapon.id}`);
+          const progress=button('Enregistrer le Test','workspace-primary');progress.type='button';progress.addEventListener('click',()=>{if(!select.value||sl.value===''){error.textContent='Saisissez le résultat et la DR du Test.';return;}apply({operation:'progress',success:select.value==='success',testSl:Number(sl.value),expectedWeaponRevision:state.revision});});wrap.append(select,sl,progress);
+        }
+        wrap.appendChild(error);reloadPanel.appendChild(wrap);
+      }
+      center.appendChild(reloadPanel);
+    }
+    const lodged=(context.participants||[]).flatMap(participant=>(participant.extensions?.v5?.lodgedProjectiles||[]).filter(row=>row.removed!==true).map(projectile=>({participant,projectile})));
+    if(lodged.length){
+      const panel=node('section','workspace-card workspace-impaled-projectiles');panel.setAttribute('aria-label','Projectiles fichés');
+      panel.appendChild(node('h3','workspace-card-title','Projectiles fichés — Empaleuse'));
+      for(const {participant,projectile} of lodged){
+        const wrap=node('div','workspace-v5-context');wrap.appendChild(node('p','workspace-result-line',`${participant.name||participant.id} · ${projectile.ammunitionId} · ${projectile.removal==='surgery'?'chirurgie requise':'Test de Guérison requis'} · 1 Blessure bloquée`));
+        const error=node('p','workspace-error');let surgeryConfirmed=false,skillId='',testRoll='';
+        if(projectile.removal==='surgery'){
+          const label=node('label','workspace-type','Le MJ confirme la chirurgie');const check=document.createElement('input');check.type='checkbox';check.addEventListener('change',()=>{surgeryConfirmed=check.checked;});label.prepend(check);wrap.appendChild(label);
+        }else{
+          const skills=(participant.skills||[]).filter(row=>/gu[eé]rison|heal/iu.test(row.name||row.nom||''));
+          const select=document.createElement('select');select.setAttribute('aria-label',`Compétence Guérison — ${participant.name||participant.id}`);select.append(new Option('Choisir Guérison…',''));for(const row of skills)select.append(new Option(row.name||row.nom||row.id,row.id));select.addEventListener('change',()=>{skillId=select.value;});
+          const input=document.createElement('input');input.type='number';input.min='1';input.max='100';input.step='1';input.setAttribute('aria-label',`d100 du Test de Guérison — ${participant.name||participant.id}`);input.addEventListener('input',()=>{testRoll=input.value;});wrap.append(select,input);
+        }
+        const apply=button('Enregistrer le retrait','workspace-primary');apply.type='button';apply.addEventListener('click',async()=>{try{error.textContent='';const plan=Store.previewV5ProjectileExtraction({participantId:participant.id,projectileId:projectile.id,
+            method:projectile.removal==='surgery'?'surgery':'heal-test',surgeryConfirmed,skillId,roll:testRoll===''?undefined:Number(testRoll)});if(!plan.ready)throw new Error(plan.error);const result=await Store.applyV5ProjectileExtraction(plan);if(result?.status!=='applied')throw new Error(result?.reason||'Retrait non enregistré.');render();}catch(cause){error.textContent=userMessage(cause,'Retrait non enregistré.');}});
+        wrap.append(apply,error);panel.appendChild(wrap);
+      }
+      center.appendChild(panel);
+    }
+
+    const criticalDecisions=[];
+    for(const participant of context.participants||[]){
+      const v5=participant.extensions?.v5||{};
+      for(const record of v5.criticalAftermath||[])if(record.sequela?.criticalDeath===true&&!record.deathDecision)criticalDecisions.push({kind:'table',participant,record});
+      if(['countdown','awaiting-mj'].includes(v5.criticalDeath?.status))criticalDecisions.push({kind:'countdown',participant,countdown:v5.criticalDeath});
+    }
+    if(criticalDecisions.length){
+      const section=node('section','workspace-card workspace-critical-death-decisions');section.setAttribute('aria-label','Décisions MJ sur les morts critiques');
+      section.appendChild(rubric('Décisions du MJ — mort critique'));
+      for(const item of criticalDecisions){
+        const participant=item.participant,label=item.kind==='table'?`${participant.name} · ${item.record.effectName} (${item.record.source?.printedName||item.record.table})`:`${participant.name} · décompte arrivé à l’échéance du Round ${item.countdown.dueRound}`;
+        const row=node('div','workspace-result-line');row.appendChild(node('span','',label));
+        for(const [decision,text] of [['confirm','Confirmer la mort'],['decline','Refuser la mort']]){const button=node('button','workspace-secondary',text);button.type='button';button.disabled=state.resolution.busy;button.addEventListener('click',async()=>{button.disabled=true;try{if(item.kind==='table')await Store.decideImmediateCriticalDeath(participant.id,item.record.id,decision);else await Store.decideCriticalDeath(participant.id,decision,{round:readCombat(Store).round});render();}catch(error){button.disabled=false;const message=userMessage(error,'Décision MJ non enregistrée.');section.appendChild(node('p','workspace-error',message));}});row.appendChild(button);}
+        if(item.kind==='countdown'&&item.countdown.status==='countdown')row.appendChild(node('span','workspace-muted',` — échéance Round ${item.countdown.dueRound}`));
+        section.appendChild(row);
+      }
+      center.appendChild(section);
+    }
+    const amputationFollowups=[];
+    for(const participant of context.participants||[])for(const record of participant.extensions?.v5?.criticalAftermath||[]){
+      if(record.amputationShock)continue;
+      const preview=Store.previewAmputationShock?.({participantId:participant.id,criticalId:record.id});
+      if(preview?.requirements?.length)amputationFollowups.push({participant,record,requirements:preview.requirements});
+    }
+    if(amputationFollowups.length){
+      const section=node('section','workspace-card workspace-amputation-followups');section.setAttribute('aria-label','Chocs d’amputation à résoudre');
+      section.appendChild(rubric('Chocs d’amputation — Test de Résistance'));
+      for(const item of amputationFollowups){
+        const {participant,record,requirements}=item,parts=[...new Set(requirements.map(row=>row.part).filter(Boolean))].join(', ')||'membre';
+        section.appendChild(node('p','workspace-result-line',`${participant.name} · ${record.effectName} · amputation : ${parts} · Résistance ${requirements[0].difficultyDR} DR · chirurgie requise`));
+        const row=node('div','workspace-critical-amputation-controls');
+        const occurrenceLabel=node('label','workspace-type','Amputation effectivement survenue'),occurrence=document.createElement('select');occurrence.setAttribute('aria-label',`Amputation effectivement survenue : ${participant.name}`);occurrence.append(new Option('À confirmer',''),new Option('Oui','true'),new Option('Non','false'));occurrenceLabel.append(occurrence);row.append(occurrenceLabel);
+        const resultLabel=node('label','workspace-type','Test de Résistance'),result=document.createElement('select');result.setAttribute('aria-label',`Résultat du Test de Résistance : ${participant.name}`);result.append(new Option('À préciser',''),new Option('Réussite','success'),new Option('Échec','failure'));resultLabel.append(result);row.append(resultLabel);
+        const slLabel=node('label','workspace-type','DR du Test'),sl=document.createElement('input');sl.type='number';sl.step='1';sl.setAttribute('aria-label',`DR du Test de Résistance : ${participant.name}`);slLabel.append(sl);row.append(slLabel);
+        const apply=node('button','workspace-primary','Enregistrer le choc'),error=node('p','workspace-error');apply.type='button';apply.disabled=state.resolution.busy;apply.addEventListener('click',async()=>{
+          error.textContent='';if(!occurrence.value||!result.value||sl.value===''){error.textContent='Confirmez l’amputation et saisissez le résultat/DR du Test.';return;}
+          const testSL=Number(sl.value),success=result.value==='success';if(!Number.isSafeInteger(testSL)||(success&&testSL<0)||(!success&&testSL>0)){error.textContent='La DR doit être entière, positive ou nulle en réussite, négative ou nulle en échec.';return;}
+          apply.disabled=true;try{const plan=Store.previewAmputationShock({participantId:participant.id,criticalId:record.id,amputationOccurred:occurrence.value==='true',test:{success,sl:testSL}});if(plan.status!=='ready')throw new Error(plan.reason||'Le Test de Résistance reste à préciser.');const saved=await Store.applyAmputationShock(plan);if(saved?.status!=='applied'&&saved?.status!=='duplicate')throw new Error(saved?.reason||'Choc d’amputation non enregistré.');render();}catch(cause){error.textContent=userMessage(cause,'Choc d’amputation non enregistré.');apply.disabled=false;}
+        });row.append(apply,error);section.append(row);
+      }
+      center.appendChild(section);
+    }
 
     if (callbacks.renderOverview) {
       const content = node('div', 'workspace-pending-content');

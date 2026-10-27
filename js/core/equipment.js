@@ -6,10 +6,11 @@ import spellContracts from '../data/v5-spell-contracts.json' with {type:'json'};
 import { getReferenceCatalogue, resolveKeyword } from './reference-catalog.js';
 import { conditionalArmour, natureTagLabel } from './v5-magic-combat.js';
 import { normalizeDamageFields } from './damage.js';
+import { applyV5SportSwordQuality, canUseV5PowderAmmunition } from './v5-weapon-qualities.js';
 export { HIT_LOCATIONS, armourProtection, equipmentFormula, armourLayer, validateEquipmentItem };
 /** Armes de corps à corps conjurables (V5 p. 301), sans prix ni inventaire permanent. */
 export const ARCANE_WEAPON_PROFILES=Object.freeze(Object.fromEntries([
- ['dagger','Dague',2,1,'very-short',[]],['knife','Couteau',1,1,'very-short',['inoffensive']],['hand-weapon','Arme de base',4,1,'average',['desequilibree']],['improvised','Arme improvisée',1,1,'average',['desequilibree','inoffensive']],['net','Filet',null,1,'short',['defensive',{id:'immobilisante',rating:50,parameter:'50'}]],['sword','Épée',4,1,'average',[]],
+ ['dagger','Dague',2,1,'very-short',[]],['knife','Couteau',1,1,'very-short',['inoffensive']],['hand-weapon','Arme de base',4,1,'average',['desequilibree']],['improvised','Arme improvisée',1,1,'average',['desequilibree','inoffensive']],['net','Filet',null,1,'short',['defensive',{id:'inflige',parameter:'Empêtré 50'}]],['sword','Épée',4,1,'average',[]],
  ['garrote','Garrot',2,2,'personal',['immobilisante','inoffensive']],['knuckles','Poing américain',2,1,'personal',[]],['unarmed','Mains nues conjurées',0,1,'personal',['inoffensive']],
  ['cavalry-hammer','Marteau de cavalerie',5,2,'long',['assommante']],['lance','Lance de cavalerie',6,1,'very-long',['devastatrice','empaleuse']],
  ['buckler','Bocle',1,1,'personal',['parade','inoffensive']],['foil','Fleuret',3,1,'average',['rapide','empaleuse','precise','inoffensive']],['main-gauche','Main gauche',2,1,'short',['defensive','empaleuse','parade']],['rapier','Rapière',4,1,'long',['rapide','empaleuse']],['swordbreaker','Brise-lame',1,1,'short',['defensive','parade','piege-lame']],
@@ -234,6 +235,10 @@ export function applyWeaponSkillRules(actor, action, { weapon = null, context = 
  const itemKind=equipment.kind;
  if(itemKind!=='weapon')return unchanged;
  let qualities=unchanged.action.qualities;
+ if(foldedWeaponText(equipment.name)==='epee de sport'){
+  qualities=applyV5SportSwordQuality({weaponName:equipment.name,qualities}).qualities.map(id=>qualities.find(row=>row.id===id)||{id,parameter:''});
+  unchanged.action.qualities=qualities;
+ }
  const unresolved=[];
  const receipt={kind:'weapon-skill',equipmentId:equipment.id||fiche.equipmentId||null,group:null,skillId:null,trained:null,applied:[]};
  const hasExplicitTrainingFact=isMaterialized||context.weaponTrainingGroup||context.weaponTrainingSpecialty||context.weaponSkillId||context.weaponAdvances!==undefined&&context.weaponAdvances!==null&&context.weaponAdvances!==''||context.weaponSkillScore!==undefined&&context.weaponSkillScore!==''&&context.weaponSkillScore!==null||context.weaponMounted!==undefined||context.weaponHands!==undefined||fiche.skillId||fiche.weaponTrainingGroup;
@@ -444,6 +449,13 @@ export function ammunitionCompatibility(weapon,ammunition){
  const category=categoryKey(weapon.category),ammoCategory=categoryKey(ammunition.category);
  const ranged=equipmentAttackContext(weapon)?.ranged;
  if(!ranged)return {status:'incompatible',reason:'arme-non-distance'};
+ if(ammoCategory==='poudre noire'&&['poudre noire','ingenierie'].includes(category)){
+  const name=foldedWeaponText(ammunition.name),ammoType=/grenaille/.test(name)?'grenaille':/improvise/.test(name)?'projectile improvisé':/balles?|bullets?/.test(name)?'balle':'';
+  const isBlunderbuss=/tromblon/.test(foldedWeaponText(weapon.name||weapon.baseId));
+  if(!ammoType)return {status:'incompatible',reason:'munition-poudre-noire-inconnue'};
+  const check=canUseV5PowderAmmunition({weaponGroup:weapon.category,ammunitionType:ammoType,isBlunderbuss});
+  return check.allowed?{status:'compatible'}:{status:'incompatible',reason:'munition-incompatible-avec-arme-a-poudre'};
+ }
  if(!category||!ammoCategory||!RANGED_CATEGORIES.has(category))return {status:'manual',reason:'compatibilite-munition-a-arbitrer'};
  return category===ammoCategory?{status:'compatible'}:{status:'incompatible',reason:'categories-incompatibles'};
 }
@@ -475,7 +487,7 @@ export function locationProtection(target,context={}){
  const attackRoll=Number(context.attackRoll),hitRoll=Number(context.hitLocationRoll??context.location?.roll);
  const attackWords=(context.qualities||[]).map(w=>resolveKeyword(typeof w==='string'?w:w.id)?.id??(typeof w==='string'?w:w.id));
  let criticalIgnored=false;
- for(const item of location?.counted||[]){let include=true;const known=item.keywords.map(w=>w.id);
+ for(const sourceItem of location?.counted||[]){let include=true;const itemDamage=Number(target?.extensions?.v5?.armorDamageByItem?.[sourceItem.id])||0;const item={...sourceItem,ap:Math.max(0,sourceItem.ap-itemDamage)};const known=item.keywords.map(w=>w.id);
  for(const keywordId of known)evaluatedKeywords.add(keywordId);
  for(const keywordId of known)if(!resolveKeyword(keywordId))manual.push(`effet-inconnu:${keywordId}`);
  for(const keywordId of known.filter(word=>['flexible','partielle','points-faibles','impenetrable'].includes(word))){
@@ -503,7 +515,7 @@ export function locationProtection(target,context={}){
     evaluatedKeywords.add('bouclier');
     if(!Number.isSafeInteger(shield.ap)||shield.ap<0)manual.push('protection-bouclier-a-preciser');
     else if(context.defenseProvided===true&&typeof context.ranged==='boolean'){
-     shieldAp=shield.ap;
+     shield={...shield,ap:Math.max(0,shield.ap-(Number(target?.extensions?.v5?.armorDamageByItem?.[shield.id])||0))};shieldAp=shield.ap;
      // V5 : 2 PA ou plus autorisent l’opposition aux tirs à toute portée,
      // sans condition de ligne de vue. La ligne de vue reste une règle V4.
      if(context.ranged===true&&shield.ap<2){shieldAp=0;manual.push('bouclier-projectile-contexte-requis');}

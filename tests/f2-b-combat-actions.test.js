@@ -59,16 +59,17 @@ test('F2-B Claude 17 — Focalisation annule Visée dans sa transaction, Undo la
 
 test('F2-B Claude 14 — armes catalogue : épée puis pistolet, armes à deux mains refusées',async()=>{
  const items=getReferenceCatalogue().items,sword=items.find(item=>item.kind==='weapon'&&item.name==='Épée'),pistol=items.find(item=>item.kind==='weapon'&&item.name==='Pistolet'),greatsword=items.find(item=>item.kind==='weapon'&&item.name==='Espadon de Hoeth Haut Elfe'),bow=items.find(item=>item.kind==='weapon'&&item.category==='Arc'),bastard=items.find(item=>item.kind==='weapon'&&item.name==='Épée bâtarde (2M)');
+ const mail={id:'greatsword-target-mail',kind:'armour',name:'Cotte de mailles',ap:2,layer:'mail',locations:['head','body','leftArm','rightArm','leftLeg','rightLeg'],keywords:[]};
  assert.equal(weaponHandsForParticipant(sword),1);assert.equal(weaponHandsForParticipant(pistol),1);assert.equal(weaponHandsForParticipant(greatsword),2);assert.equal(weaponHandsForParticipant(bow),2,'un arc ne peut pas être déclaré une arme utilisable à une main par défaut');
  assert.equal(weaponHandsForParticipant({...bastard,hands:2},{extensions:{v5:{weaponHandsByEquipmentId:{[bastard.id]:1}}}}),1,'le choix durable de l’Épée bâtarde prévaut sur la main générique de l’instance');
- const {store}=await setup({actor:person('a',{equipment:[sword,pistol],skills:[{id:'gun',name:'Projectiles (Poudre noire)',group:'Projectiles',specialty:'Poudre noire',total:60,advances:10,status:'resolved'}]})});
+ const {store}=await setup({actor:person('a',{equipment:[sword,pistol],skills:[{id:'gun',name:'Projectiles (Poudre noire)',group:'Projectiles',specialty:'Poudre noire',total:60,advances:10,status:'resolved'}]}),target:person('b',{equipment:[mail]})});
  await store.applyResolution(store.previewResolution({...hit('primary-sword'),action:{...hit('').action,extensions:{fiche:{equipmentId:sword.id}}}}));
  await store.updateParticipant('a',{extensions:{v5:{hasMomentum:true}}});
  const request={resolutionId:'secondary-pistol',actorId:'a',targetId:'b',action:{type:'attack',attr:'CT',base:60,damage:8,extensions:{fiche:{equipmentId:pistol.id}}},roll:25,v5:{kind:'ranged',extraAttack:true,choice:'keep',context:{secondWeaponAttack:true,primaryResolutionId:'primary-sword'}}};
  const p=store.previewResolution(request);assert.equal(p.ready,true,JSON.stringify(p.unresolved));assert.equal(p.test.details.modifiers.find(row=>row.id==='penalty:offHand').amount,-2);
  await store.updateParticipant('a',{equipment:[greatsword,pistol]});
- const primaryGreatsword={...hit('primary-greatsword'),action:{...hit('').action,extensions:{fiche:{equipmentId:greatsword.id}}}};
- assert.equal((await store.applyResolution(store.previewResolution(primaryGreatsword))).status,'applied');
+ const primaryGreatsword={...hit('primary-greatsword'),action:{...hit('').action,extensions:{fiche:{equipmentId:greatsword.id}}},v5:{kind:'melee',choice:'keep',context:{struckItemId:mail.id}}};
+ const greatswordApplied=await store.applyResolution(store.previewResolution(primaryGreatsword));assert.equal(greatswordApplied.status,'applied',greatswordApplied.reason);
  await store.updateParticipant('a',{extensions:{v5:{hasMomentum:true}}});
  assert.equal(store.previewResolution({...request,resolutionId:'secondary-after-greatsword',v5:{...request.v5,context:{...request.v5.context,primaryResolutionId:'primary-greatsword'}}}).ready,false);
 });
@@ -218,7 +219,7 @@ test('F2-B — après une attaque même ratée, seconde arme différente consomm
   const item=(id,name)=>({id,baseId:'custom-model',catalogVersion:'fixture-v1',kind:'weapon',name,category:'Base',damage:'BF+4',reach:'Moyenne',range:'',ap:null,locations:[],layer:'none',keywords:[],notes:'',source:'Campagne',custom:true,grip:'one-hand'});
   const actor=person('a',{equipment:[item('sword','Épée'),item('axe','Hache')]});
   const {store,persistence}=await setup();await store.updateParticipant('a',{equipment:actor.equipment});
-  const miss=store.previewResolution({...hit('first-missed'),roll:99,defense:{base:35,roll:20,v5:{kind:'melee'}},action:{type:'attack',attr:'CC',base:60,damage:5,extensions:{fiche:{equipmentId:'sword'}}}});
+  const miss=store.previewResolution({...hit('first-missed'),roll:99,defense:{base:35,roll:20,v5:{kind:'melee'}},action:{type:'attack',attr:'CC',base:60,damage:5,extensions:{fiche:{equipmentId:'sword'}}},v5:{kind:'melee',choice:'keep',context:{fumbleRoll:1}}});
   assert.equal(miss.ready,true);assert.equal(miss.hit,false);assert.equal((await store.applyResolution(miss)).status,'applied');
   await store.updateParticipant('a',{extensions:{v5:{hasMomentum:true,divine:{sin:0},magic:{reserve:{type:'winds',sl:0}}}}});
   const extra=store.previewResolution({...hit('second-axe',{extraAttack:true,context:{secondWeaponAttack:true,weaponId:'axe',primaryResolutionId:'first-missed'}}),action:{type:'attack',attr:'CC',base:60,damage:5,extensions:{fiche:{equipmentId:'axe'}}}});

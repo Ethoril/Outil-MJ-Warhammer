@@ -33,6 +33,17 @@ test('E08 ordre — déplacement manuel devient l’ordre effectif sans fin de t
   assert.equal(mode.currentActorId, 'b');
 });
 
+test('F2-E — agir en dernier s’applique au prochain Round sans écraser l’ordre manuel', () => {
+  const participants=[
+    {id:'fast',name:'Rapide',initiative:50,zone:'active'},
+    {id:'slow',name:'Lent',initiative:80,zone:'active',extensions:{v5:{combatEffects:[{id:'late',kind:'acts-last-next-round',round:2}]}}}
+  ];
+  assert.deepEqual(effectiveOrder(participants,{round:1}),['slow','fast']);
+  assert.deepEqual(effectiveOrder(participants,{round:2}),['fast','slow']);
+  assert.deepEqual(effectiveOrder(participants,{mode:ORDER_MODES.MANUAL,order:['slow','fast'],round:2}),['fast','slow']);
+  assert.deepEqual(effectiveOrder(participants,{round:3}),['slow','fast']);
+});
+
 test('E08 ordre — renfort inséré après l’acteur courant', () => {
   assert.deepEqual(insertReinforcement(['a', 'b'], 'reinforcement', 'a'), ['a', 'reinforcement', 'b']);
   assert.deepEqual(insertReinforcement(['a', 'b'], 'reinforcement', 'missing'), ['a', 'b', 'reinforcement']);

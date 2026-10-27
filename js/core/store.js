@@ -68,8 +68,10 @@ import { normalizeEffects } from './effects.js';
 import { buildV5StoreActionInput, annotateV5StoreActionPreview, applyV5StoreAction, v5StoreActionState, v5StoreActionResult, v5StoreActionClock, commitV5StoreTalentUsages } from './v5-store-action.js';
 import { getV5Fortune, getV5Fate, consumeTemporaryFortune as consumeParticipantTempFortune, consumeTemporaryFate as consumeParticipantTempFate, projectV5Resources, projectV5ResourceEnvelope, commitV5Resources, creditFortuneCorruption, setV5Fortune, refreshV5Fortune, reconcileV5ResourceBindings } from './v5-resources.js';
 import { acquireV5Conditions, recoverV5Condition, healV5Wounds, assertDivineWrathConditionsKept } from './v5-effects.js';
+import { decideCriticalDeath as decideV5CriticalDeath, decideImmediateCriticalDeath as decideV5ImmediateCriticalDeath, updateCriticalDeathCountdown, previewAmputationShock as previewV5AmputationShock, applyAmputationShock as applyV5AmputationShock, amputationShockRequirements } from './v5-critical-aftermath.js';
 import { encounterJournalScope, purgeEncounterJournal, purgeEncounterJournalHistory, tagNewEncounterLogs } from './encounter-journal.js';
 import { momentumAfterChange, withMomentum } from './v5-combat-rules.js';
+import { canUseV5Move } from './v5-combat-fumbles.js';
 import { advanceGameClock, campaignDurationSeconds, createGameClock, deriveTurnPhasePlan, readCombatPosition, reconcileGameClockPosition } from './v5-game-time.js';
 import { advanceCampaignSnapshot } from './v5-campaign-time.js';
 import { proposeNewKeyword, referentialFromExtensions, setActiveReferential } from './creature-keywords.js';
@@ -83,6 +85,55 @@ import { isSlann, contemplationOutcome } from './slann.js';
 const withV5 = (participant, change) => ({ ...participant, extensions: { ...(participant.extensions || {}), v5: change(participant.extensions?.v5 || {}) } });
 import { validatePrayerSLCaps,getPrayerSLModifiers } from './v5-divine-prayer-caps.js';
 import { previewV5BrokenEscape, isV5BrokenEscapeActionBlocked, BROKEN_ESCAPE_SOURCE, BROKEN_ESCAPE_RULE_VERSION } from './v5-broken-escape.js';
+import { previewGrappleTurnActionGate } from './v5-grappling.js';
+import { initialV5ReloadState, beginV5Reload, advanceV5Reload } from './v5-reloading.js';
+import { previewV5ProjectileExtraction } from './v5-weapon-qualities.js';
+
+function grappleTurnGateBlock(envelope,input,actor){
+ const clock=v5StoreActionClock(envelope);
+ if(!actor||!clock.encounterId||!clock.turnId)return null;
+ const priorLinks=(actor.extensions?.v5?.grapples||[]).filter(row=>row.status==='active'&&row.createdTurnId!==clock.turnId);
+ if(!priorLinks.length)return null;
+ const gateActor={...actor,extensions:{...(actor.extensions||{}),v5:{...(actor.extensions?.v5||{}),grapples:priorLinks}}};
+ const skillId=input.action?.extensions?.fiche?.skillId||input.action?.v5?.context?.skillId||input.v5?.context?.skillId;
+ const skill=actor.skills?.find(row=>row.id===skillId);
+ const skillName=skill?.name||skill?.nom||input.action?.label||input.action?.name||input.action?.nom||'';
+ const gate=previewGrappleTurnActionGate({actor:gateActor,action:input.v5?.context?.grappleAction,skillName,alreadySpentAction:standardV5ActionSpent(envelope,actor.id,clock)});
+ return gate.required&&!gate.allowed?{ready:false,status:'requires-input',code:'F2_GRAPPLE_FIRST_ACTION',error:gate.unresolved[0],unresolved:gate.unresolved}:null;
+}
+function criticalDeathToughnessBonus(participant){
+ const stored=participant?.extensions?.v5?.criticalDeath?.toughnessBonus;
+ if(Number.isSafeInteger(stored)&&stored>=0)return stored;
+ const numericCarac=value=>((typeof value==='number'||typeof value==='string'&&value.trim()!=='')&&Number.isFinite(Number(value)))?Number(value):null;
+ const explicit=numericCarac(participant?.caracs?.BE);
+ if(explicit!==null&&Number.isSafeInteger(explicit)&&explicit>=0)return explicit;
+ const endurance=numericCarac(participant?.caracs?.E);
+ if(endurance===null||endurance<0)return null;
+ return Math.floor(endurance/10);
+}
+function reconcileCriticalDeathForRound(envelope,round){
+ for(const participant of envelope.combat?.participants||[]){
+  const be=criticalDeathToughnessBonus(participant);
+  if(be===null)continue;
+  const result=updateCriticalDeathCountdown(participant,{round,toughnessBonus:be});
+  if(result.participant)Object.assign(participant,result.participant);
+ }
+}
+function reconcileCriticalDeathOnParticipantTransitions(before,next){
+ const round=next.combat?.round;if(!Number.isSafeInteger(round)||round<0)return next;
+ const normalized=value=>String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+ const unconscious=participant=>(participant?.states||[]).some(row=>['inconscient','unconscious'].includes(normalized(row.key||row.name))&&Number(row.level??1)>0);
+ const criticalIds=participant=>(participant?.extensions?.v5?.criticalWounds||[]).map(row=>row?.id).filter(id=>typeof id==='string'&&id).sort();
+ const sameCriticalIds=(left,right)=>{const a=criticalIds(left),b=criticalIds(right);return a.length===b.length&&a.every((id,index)=>id===b[index]);};
+ const previous=new Map((before.combat?.participants||[]).map(row=>[row.id,row]));let changed=false;
+ const participants=(next.combat?.participants||[]).map(participant=>{
+  const old=previous.get(participant.id),nowUnconscious=unconscious(participant),wasUnconscious=unconscious(old);
+  if(nowUnconscious===wasUnconscious&&sameCriticalIds(participant,old))return participant;
+  const be=criticalDeathToughnessBonus(participant);if(be===null)return participant;
+  const result=updateCriticalDeathCountdown(participant,{round,toughnessBonus:be});if(!result.participant)return participant;changed=true;return result.participant;
+ });
+ return changed?{...next,combat:{...next.combat,participants}}:next;
+}
 
 function prayerCapClockNeeds(participant, snapshot, path='participant'){
  const check=validatePrayerSLCaps(participant,{clock:snapshot?.extensions?.v5?.gameClock||null});if(!check.ok)return check.needsInput;
@@ -152,6 +203,25 @@ function brokenEscapeActionBlock(envelope,actorId){
  return isBrokenEscapeActor(envelope.combat?.participants?.find(row=>row.id===actorId))&&brokenEscapeActionSpent(envelope,actorId,clock)
   ? {ready:false,status:'blocked',code:'BROKEN_ESCAPE_ACTION_SPENT',error:'Le quota Action du Tour est déjà dépensé pour ce personnage Brisé.'}
   : null;
+}
+function detonateDueV5Bombs(combat, completedActorId, completedTurnIndex){
+ if(!Number.isSafeInteger(completedTurnIndex)||completedTurnIndex<1||!Array.isArray(combat?.participants))return combat;
+ let changed=false;const participants=combat.participants.map(participant=>{
+  const due=[],equipment=(participant.equipment||[]).map(item=>{
+   const v5=item.extensions?.v5||{};if(v5.bombFuse!==true)return item;
+   const ownerId=v5.bombFuseOwnerId;
+   // New fuses count activations of their bearer. Legacy snapshots retain the
+   // old global-index fallback so migration never advances a fuse silently.
+   if(ownerId){if(participant.id!==completedActorId)return item;const remaining=Number(v5.fuseTurnsRemaining);if(!Number.isSafeInteger(remaining)||remaining<1)return item;
+    if(remaining>1){changed=true;return {...item,extensions:{...(item.extensions||{}),v5:{...v5,fuseTurnsRemaining:remaining-1}}};}
+   } else if(Number(v5.fuseDueTurnIndex)>completedTurnIndex)return item;
+   due.push(item);changed=true;return {...item,extensions:{...(item.extensions||{}),v5:{...v5,fuseLit:false,bombFuse:false,fuseDueRound:null,fuseDueTurnIndex:null,bombFuseOwnerId:null,fuseTurnsRemaining:null,bombDetonatedTurnIndex:completedTurnIndex}}};
+  });
+  if(!due.length){return equipment.some((row,index)=>row!==(participant.equipment||[])[index])?{...participant,equipment}:participant;}
+  const rows=participant.extensions?.v5?.combatEffects||[];
+  return {...participant,equipment,extensions:{...(participant.extensions||{}),v5:{...(participant.extensions?.v5||{}),combatEffects:[...rows,...due.map(item=>({id:`bomb-detonation:${item.id}:${completedTurnIndex}`,kind:'bomb-detonation',equipmentId:item.id,turnIndex:completedTurnIndex,requiresTargetResolution:true,source:'L13-0117'}))]}}};
+ });
+ return changed?{...combat,participants}:combat;
 }
 function isV5ActionUse(preview,input={}){
  return preview?.attack===true||input?.attack===true||preview?.input?.v5?.context?.isAction===true||input?.v5?.context?.isAction===true;
@@ -376,7 +446,8 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
   function shieldAfterAttack(participants, preview, round) {
     const actorId = preview?.actorId || preview?.input?.actor?.id;
     if(['attack','attaque'].includes(preview?.input?.action?.type)){participants=endSpellEffectsOnEvent(participants,actorId,'attack');if(preview.targetId)participants=endSpellEffectsOnEvent(participants,preview.targetId,'incoming-attack');}
-    const equipmentId = preview?.input?.action?.extensions?.fiche?.equipmentId;
+    const equipmentId = preview?.shieldAttack?.confirmed ? preview.shieldAttack.shieldId
+      : preview?.input?.action?.extensions?.fiche?.equipmentId;
     if (!preview?.attack || !equipmentId) return participants;
     return participants.map(actor => {
       if (actor.id !== actorId || !actor.equipment?.some(item => item.id === equipmentId && item.kind === 'shield')) return actor;
@@ -1295,6 +1366,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         next = tagNewEncounterLogs(before, next);
         const purgeScope = purgeEncounterId ? encounterJournalScope(fullBefore, purgeEncounterId) : null;
         if (purgeScope) next = purgeEncounterJournal(next, purgeScope);
+        next = reconcileCriticalDeathOnParticipantTransitions(before,next);
         validateCommandEnvelope(next);
         // Canonicalize through the same migration/sanitize pipeline used by
         // hydration.  The exact canonical value is what both IDB and the live
@@ -1745,11 +1817,58 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         const critical = records.find(row => row.id === criticalId);
         if (!critical) throw new TypeError('Blessure Critique introuvable');
         participant.extensions.v5.criticalWounds = records.filter(row => row.id !== criticalId);
+        const be=criticalDeathToughnessBonus(participant);if(be!==null){const reconciled=updateCriticalDeathCountdown(participant,{round:draft.combat?.round,toughnessBonus:be});if(reconciled.participant)Object.assign(participant,reconciled.participant);}
         draft.log = [{ id: uid(), kind: 'management', actorId: participantId, actorName: participant.name,
           text: `${participant.name} : Blessure Critique guérie manuellement · ${critical.name || criticalId}`,
           detail: { kind: 'heal-critical-wound', critical: cloneValue(critical) } }, ...(draft.log || [])].slice(0, 300);
         return draft;
       });
+    },
+    decideCriticalDeath(participantId, decision, options = {}) {
+      const captured=cloneValue(options);
+      return api.executeCommand('decide-critical-death-v5',draft=>{
+        const index=(draft.combat?.participants||[]).findIndex(row=>row.id===participantId);if(index<0)throw new TypeError('Participant introuvable');
+        const result=decideV5CriticalDeath(draft.combat.participants[index],{decision,round:captured.round??draft.combat?.round});
+        if(!['dead','declined'].includes(result.status))throw Object.assign(new Error(result.reason||'Confirmation MJ requise.'),{userFacing:true,code:'CRITICAL_DEATH_CONFIRMATION'});
+        draft.combat.participants[index]=result.participant;return draft;
+      });
+    },
+    decideImmediateCriticalDeath(participantId, criticalId, decision) {
+      return api.executeCommand('decide-immediate-critical-death-v5',draft=>{
+        const index=(draft.combat?.participants||[]).findIndex(row=>row.id===participantId);if(index<0)throw new TypeError('Participant introuvable');
+        const result=decideV5ImmediateCriticalDeath(draft.combat.participants[index],{criticalId,decision});
+        if(!['dead','declined'].includes(result.status))throw Object.assign(new Error(result.reason||'Confirmation MJ requise.'),{userFacing:true,code:'CRITICAL_DEATH_CONFIRMATION'});
+        draft.combat.participants[index]=result.participant;return draft;
+      });
+    },
+    previewAmputationShock(input={}) {
+      const snapshot=currentEnvelope(),participant=snapshot.combat?.participants?.find(row=>row.id===input.participantId);
+      if(!participant)return{status:'blocked',ready:false,reason:'Participant introuvable.',baseRevision:localRevision};
+      const record=(participant.extensions?.v5?.criticalAftermath||[]).find(row=>row.id===input.criticalId);
+      if(!record)return{status:'blocked',ready:false,reason:'Blessure Critique introuvable.',baseRevision:localRevision};
+      if(record.amputationShock)return{status:'duplicate',ready:false,record:cloneValue(record),baseRevision:localRevision};
+      const requirements=amputationShockRequirements(record),difficulties=[...new Set(requirements.map(row=>row.difficultyDR).filter(Number.isSafeInteger))];
+      if(difficulties.length!==1)return{status:'blocked',ready:false,reason:'Difficulté source d’amputation absente ou ambiguë.',baseRevision:localRevision};
+      if(input.difficultyDR!==undefined&&input.difficultyDR!==difficulties[0])return{status:'blocked',ready:false,reason:'Difficulté différente de la table V5 pour cette amputation.',baseRevision:localRevision};
+      return{...previewV5AmputationShock({...input,participant,difficultyDR:difficulties[0]}),baseRevision:localRevision,requirements};
+    },
+    applyAmputationShock(preview={}) {
+      if(preview.status==='duplicate')return Promise.resolve({status:'duplicate',record:cloneValue(preview.record)});
+      if(preview.ready!==true)return Promise.resolve({status:preview.status||'blocked',reason:preview.reason||'Aperçu de choc d’amputation non prêt.'});
+      if(!Number.isSafeInteger(preview.baseRevision))return Promise.resolve({status:'stale',reason:'Révision de l’aperçu absente.'});
+      let receipt;
+      const saved=api.executeCommand('apply-amputation-shock-v5',draft=>{
+        if(draft.localRevision!==preview.baseRevision)throw Object.assign(new Error('La partie a changé; recalculez le choc d’amputation.'),{code:'V5_AMPUTATION_STALE',userFacing:true});
+        const index=(draft.combat?.participants||[]).findIndex(row=>row.id===preview.participantId);if(index<0)throw Object.assign(new Error('Participant introuvable.'),{userFacing:true});
+        const result=applyV5AmputationShock(draft.combat.participants[index],preview);
+        if(result.status!=='applied'&&result.status!=='duplicate')throw Object.assign(new Error(result.reason||'Choc d’amputation refusé.'),{userFacing:true});
+        if(result.status==='applied')draft.combat.participants[index]=result.participant;
+        receipt={status:result.status,participantId:preview.participantId,criticalId:preview.criticalId,record:result.record||null};
+        draft.log=[{id:uid(),kind:'management',actorId:preview.participantId,actorName:draft.combat.participants[index].name,text:`${draft.combat.participants[index].name} : choc d’amputation appliqué · ${result.record?.amputationShock?.part||'amputation'}`,detail:{kind:'amputation-shock',receipt:cloneValue(receipt)}},...(draft.log||[])].slice(0,300);
+        return draft;
+      });
+      const finish=result=>result?.ok===false?{status:'error',reason:result.error}:{...receipt,persistence:result};
+      return saved&&typeof saved.then==='function'?saved.then(finish):Promise.resolve(finish(saved));
     },
     recoverCondition(id, condition, options = {}) {
       const captured = cloneValue(options);
@@ -1805,9 +1924,11 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
     setRoundTurn(round, currentActorId) {
       if (!canMutate()) return false;
       if (persistence) return api.executeCommand('set-round-turn', draft => {
-        return { ...draft, combat: { ...draft.combat, round, currentActorId } };
+        let next={ ...draft, combat: { ...draft.combat, round, currentActorId } };if(round>(draft.combat?.round||0))next.combat=detonateDueV5Bombs(next.combat,draft.combat?.currentActorId,Number(draft.extensions?.v5?.turnIndex)||0);reconcileCriticalDeathForRound(next,round);return next;
       });
-      beginCommand('set-round-turn'); combat.round = round; combat.currentActorId = currentActorId;
+      beginCommand('set-round-turn');const oldRound=combat.round||0,oldActorId=combat.currentActorId; combat.round = round; combat.currentActorId = currentActorId;
+      if(round>oldRound){const next=detonateDueV5Bombs({participants:Array.from(combat.participants.values())},oldActorId,Number(stateExtensions?.v5?.turnIndex)||0);for(const participant of next.participants)combat.participants.set(participant.id,participant);}
+      const participants=Array.from(combat.participants.values());reconcileCriticalDeathForRound({combat:{participants}},round);for(const participant of participants)combat.participants.set(participant.id,participant);
       const clock = stateExtensions?.v5?.gameClock;
       if (clock) {
         const reconciled = reconcileGameClockPosition(clock, readCombatPosition(currentEnvelope()));
@@ -2080,15 +2201,21 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
           participants: draft.combat?.participants || [], order,
           currentActorId: draft.combat?.currentActorId || null, round: draft.combat?.round || 0
         });
-        if(result.round>(draft.combat?.round||0)&&draft.extensions?.v5?.combatInitiativeInitialized){
+        const fumbleReorderDue=(draft.combat?.participants||[]).some(participant=>(participant.extensions?.v5?.combatEffects||[]).some(effect=>effect.kind==='acts-last-next-round'&&Number(effect.round)===result.round));
+        if(result.round>(draft.combat?.round||0)&&(draft.extensions?.v5?.combatInitiativeInitialized||fumbleReorderDue)){
           result.order=effectiveOrder(draft.combat?.participants||[],{mode:draft.combat?.orderMode||ORDER_MODES.AUTOMATIC,order:result.order,autoOrder:draft.extensions?.v5?.combatInitiativeResolution?.order,round:result.round});
           result.currentActorId=result.order[0]||null;
         }
         transitionResult = result;
         const realTurn = beforePosition.round > 0 && Boolean(beforePosition.currentActorId) && Boolean(result.currentActorId);
         const nextTurnIndex = realTurn ? beforePosition.turnIndex + 1 : beforePosition.turnIndex;
-        const combat = { ...draft.combat, participants: draft.combat?.participants || [], order: result.order,
+        let combat = { ...draft.combat, participants: draft.combat?.participants || [], order: result.order,
           currentActorId: result.currentActorId, round: result.round };
+        if(realTurn)combat=detonateDueV5Bombs(combat,beforePosition.currentActorId,beforePosition.turnIndex);
+        if(realTurn&&beforePosition.currentActorId){
+          combat.participants=combat.participants.map(participant=>participant.id!==beforePosition.currentActorId?participant:{...participant,
+            extensions:{...(participant.extensions||{}),v5:{...(participant.extensions?.v5||{}),combatEffects:(participant.extensions?.v5?.combatEffects||[]).filter(effect=>!['lose-next-action','lose-next-move'].includes(effect.kind)||(Number.isSafeInteger(effect.createdTurnIndex)?effect.createdTurnIndex>=beforePosition.turnIndex:false))}}});
+        }
         let extensions = draft.extensions || {};
         let v5 = extensions.v5 || {};
         let activeScene = draft.activeScene;
@@ -2132,6 +2259,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
           if(!divine.ok)throw Object.assign(new Error(divine.needsInput.map(row=>row.message).join(' ')),{code:'V5_TURN_INPUT',needsInput:divine.needsInput});
           nextState=divine.state;
         }
+        reconcileCriticalDeathForRound(nextState,result.round);
         transitionResult = { ...result, phases, clock: cloneValue(clock) };
         return nextState;
       });
@@ -2884,6 +3012,68 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       const finish=result=>result?.ok===false?{status:'error',error:result.error}: {status:'applied',receipt,persistence:result};
       return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
     },
+    previewV5ProjectileExtraction(input = {}) {
+      const envelope=currentEnvelope(),participant=envelope.combat?.participants?.find(row=>row.id===input.participantId);
+      const projectile=participant?.extensions?.v5?.lodgedProjectiles?.find(row=>row.id===input.projectileId);
+      let test=null;
+      if(projectile?.removal==='heal-test'){
+        const skill=participant.skills?.find(row=>row.id===input.skillId&&/gu[eé]rison|heal/iu.test(row.name||row.nom||''));
+        const score=Number(skill?.total??skill?.score??skill?.value),roll=Number(input.roll);
+        if(!Number.isFinite(score)||score<0||score>100||!Number.isInteger(roll)||roll<1||roll>100)
+          return {ready:false,status:'requires-input',error:'Empaleuse : choisir une compétence Guérison et saisir son d100.'};
+        test=previewV5Test({score,roll,kind:'test'}).options[0].result;
+      }
+      const result=previewV5ProjectileExtraction({projectile,method:input.method,success:test?.success,testSl:test?.sl,surgeryConfirmed:input.surgeryConfirmed});
+      if(!result.ready)return {ready:false,status:'requires-input',error:result.unresolved[0]};
+      return {ready:true,baseRevision:envelope.localRevision||0,participantId:participant.id,projectileId:projectile.id,before:structuredClone(projectile),after:{...structuredClone(projectile),removed:true,
+        removalReceipt:{method:result.method,...(test?{test:{roll:test.roll,score:test.score,success:test.success,sl:test.sl}}:{}),...(input.surgeryConfirmed?{surgeryConfirmed:true}:{})}}};
+    },
+    applyV5ProjectileExtraction(supplied) {
+      const plan=cloneValue(supplied);if(!plan?.ready)return Promise.resolve({status:'blocked',reason:'Recalculer l’extraction avant application.'});
+      const saved=api.executeCommand('v5-projectile-extraction',draft=>{
+        if((draft.localRevision||0)!==plan.baseRevision)throw Object.assign(new Error('La partie a changé; recalculez l’extraction.'),{userFacing:true});
+        const participant=draft.combat?.participants?.find(row=>row.id===plan.participantId),live=participant?.extensions?.v5?.lodgedProjectiles?.find(row=>row.id===plan.projectileId);
+        if(!live||JSON.stringify(live)!==JSON.stringify(plan.before))throw Object.assign(new Error('Le projectile fiché a changé; recalculez l’extraction.'),{userFacing:true});
+        const updated=structuredClone(participant);updated.extensions.v5.lodgedProjectiles=updated.extensions.v5.lodgedProjectiles.map(row=>row.id===plan.projectileId?structuredClone(plan.after):row);
+        draft.combat.participants=draft.combat.participants.map(row=>row.id===participant.id?updated:row);return draft;
+      });
+      return Promise.resolve(saved).then(result=>result?.ok===false?{status:'error',reason:result.error}:{status:'applied',participantId:plan.participantId,projectileId:plan.projectileId,persistence:result});
+    },
+    previewV5WeaponReload(input = {}) {
+      const envelope = currentEnvelope(), actor = envelope.combat?.participants?.find(row => row.id === input.actorId);
+      const weapon = actor?.equipment?.find(row => row.id === input.equipmentId && row.kind === 'weapon');
+      if (!actor || !weapon) return { ready: false, status: 'blocked', error: 'Choisir une arme équipée pour le rechargement.' };
+      const current = weapon.extensions?.v5?.reloadState || initialV5ReloadState(weapon).state;
+      if (!current) return { ready: false, status: 'requires-input', error: 'Valeurs À répétition/Recharge non interprétables; arbitrage MJ requis.' };
+      let plan;
+      if (input.operation === 'begin') plan = beginV5Reload(current, { expectedRevision: input.expectedWeaponRevision ?? current.revision });
+      else if (input.operation === 'progress') plan = advanceV5Reload(current, { success: input.success, testSl: input.testSl,
+        expectedRevision: input.expectedWeaponRevision ?? current.revision });
+      else return { ready: false, status: 'blocked', error: 'Choisir début ou progression du rechargement.' };
+      if (!plan.ready || plan.status === 'stale' || plan.status === 'unavailable') return { ready: false, status: plan.status || 'requires-input',
+        error: plan.unresolved?.[0] || `Rechargement indisponible : ${plan.reason || plan.status}.` };
+      return { ready: true, actorId: actor.id, equipmentId: weapon.id, operation: input.operation,
+        baseRevision: envelope.localRevision || 0, before: structuredClone(current), after: structuredClone(plan.state),
+        result: plan.status, progress: plan.progress || null };
+    },
+    applyV5WeaponReload(supplied) {
+      const plan = cloneValue(supplied);
+      if (!plan?.ready) return Promise.resolve({ status: 'blocked', reason: 'Recalculer le rechargement avant application.' });
+      const saved = api.executeCommand('v5-weapon-reload', draft => {
+        if ((draft.localRevision || 0) !== plan.baseRevision) throw Object.assign(new Error('La partie a changé; recalculez le rechargement.'), { userFacing: true });
+        const actor = draft.combat?.participants?.find(row => row.id === plan.actorId);
+        const weapon = actor?.equipment?.find(row => row.id === plan.equipmentId && row.kind === 'weapon');
+        const live = weapon?.extensions?.v5?.reloadState || (weapon && initialV5ReloadState(weapon).state);
+        if (!actor || !weapon || JSON.stringify(live) !== JSON.stringify(plan.before)) throw Object.assign(new Error('L’arme ou son état de recharge a changé; recalculez.'), { userFacing: true });
+        const updated = structuredClone(actor);
+        updated.equipment = updated.equipment.map(row => row.id === plan.equipmentId ? { ...row,
+          extensions: { ...(row.extensions || {}), v5: { ...(row.extensions?.v5 || {}), reloadState: structuredClone(plan.after) } } } : row);
+        draft.combat.participants = draft.combat.participants.map(row => row.id === actor.id ? updated : row);
+        return draft;
+      });
+      return Promise.resolve(saved).then(result => result?.ok === false ? { status: 'error', reason: result.error }
+        : { status: 'applied', equipmentId: plan.equipmentId, state: plan.after, result: plan.result, progress: plan.progress || null, persistence: result });
+    },
     previewBrokenEscape(input = {}) {
       const envelope = currentEnvelope(), actor = envelope.combat?.participants?.find(row => row.id === input.actorId && row.zone === 'active');
       const clock = v5StoreActionClock(envelope);
@@ -2892,6 +3082,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       const quota = (envelope.extensions?.v5?.actionLedger?.quotaUsage || []);
       const used = id => id==='system:turn-action'&&standardV5ActionSpent(envelope,input.actorId,clock) ? 1 : key && quota.find(row => row.actorId === input.actorId && row.quotaId === id && row.scope === 'turn' && row.scopeKey === key)?.used || 0;
       const sequence = envelope.extensions?.v5?.brokenEscape?.byActorId?.[input.actorId] || null;
+      if(input.action==='flee'&&(actor?.extensions?.v5?.combatEffects||[]).some(row=>row.kind==='lose-next-move'))return {ready:false,status:'blocked',error:'Maladresse précédente : ce Mouvement est perdu pour ce Tour.'};
       if (input.action === 'flee' && used('system:turn-action') > 0) return {ready:false,status:'blocked',code:'DIV-BROKEN-MIDTURN-01',needsInput:[{field:'decision.DIV-BROKEN-MIDTURN-01',label:'Décision MJ explicite requise pour cette occurrence.'}],error:'DIV-BROKEN-MIDTURN-01 : une Action a déjà été dépensée pendant ce Tour; décision MJ explicite requise pour cette occurrence.'};
       if (input.action === 'flee' && used('system:turn-move') > 0) return {ready:false,status:'blocked',error:'Le quota Move du Tour est déjà dépensé.'};
       if (['sprint','hide'].includes(input.action) && used('system:turn-action') > 0) return {ready:false,status:'blocked',error:'Le quota Action du Tour est déjà dépensé.'};
@@ -2954,6 +3145,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       input=structuredClone(input);
       if(input.reactionId&&!input.v5?.reactionId)input.v5={...(input.v5||{}),reactionId:input.reactionId};
       const actorForAction=snapshot.combat?.participants?.find(row=>row.id===(input.actorId||input.actor?.id));
+      const grappleGate=grappleTurnGateBlock(snapshot,input,actorForAction);if(grappleGate)return {...grappleGate,baseRevision:localRevision,input:structuredClone(input)};
       if(input.v5?.context?.trip===true){
         const context=input.v5.context,actor=snapshot.combat?.participants?.find(row=>row.id===(input.actorId||input.actor?.id)),target=snapshot.combat?.participants?.find(row=>row.id===(input.targetId||input.target?.id)),clock=v5StoreActionClock(snapshot),primary=(snapshot.extensions?.v5?.standardTurnActions||[]).find(row=>row.actionId===context.tripPrimaryResolutionId&&row.actorId===actor?.id&&row.targetId===target?.id&&row.hit===true&&row.actionType==='attack'&&row.turnId===clock.turnId&&row.encounterId===clock.encounterId),skill=target?.skills?.find(row=>row.id===context.athleticsSkillId&&/athlet/i.test(String(row.name||row.nom||'').normalize('NFD').replace(/[\u0300-\u036f]/g,''))),knownSkill=Number(skill?.total??skill?.value),declaredSkill=Number(context.athleticsScore),force=Number(actor?.caracs?.F),declaredForce=Number(context.forceScore);
         const athleticsScore=Number.isFinite(knownSkill)?knownSkill:context.athleticsScoreConfirmed===true&&Number.isFinite(declaredSkill)?declaredSkill:null,forceScore=Number.isFinite(force)?force:context.forceScoreConfirmed===true&&Number.isFinite(declaredForce)?declaredForce:null;
@@ -2966,6 +3158,11 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       const reactionCandidate=Boolean(input.v5?.reactionId||input.reactionId),ordinaryIntent=!reactionCandidate&&(isV5ActionUse(null,input)||['attack','attaque'].includes(input.action?.type)),freeAttackCandidate=input.v5?.extraAttack===true&&['divine-free-attack','reaction-strike','glorious-demise','frenzy'].includes(input.v5?.context?.freeAttackTalent);
       if(ordinaryIntent&&!freeAttackCandidate){const block=ordinaryActionAfterCombatActionBlock(snapshot,actorForAction?.id);if(block)return {...block,baseRevision:localRevision,input:structuredClone(input)};}
       const combatAction=combatActionState(snapshot).byActorId?.[actorForAction?.id],clockNow=v5StoreActionClock(snapshot),activeCombatAction=combatAction&&combatAction.encounterId===clockNow.encounterId&&(combatAction.kind==='aim'||combatAction.turnId===clockNow.turnId)?combatAction:null;
+      if(['attack','attaque'].includes(String(input.action?.type||'').toLocaleLowerCase())&&actorForAction?.id&&clockNow.turnId&&clockNow.encounterId){
+        const weaponId=input.action?.extensions?.fiche?.equipmentId||input.action?.extensions?.equipment?.id;
+        const salvoPriorShots=(snapshot.extensions?.v5?.standardTurnActions||[]).filter(row=>row.actorId===actorForAction.id&&row.weaponId===weaponId&&row.encounterId===clockNow.encounterId&&row.turnId===clockNow.turnId&&row.kind==='action'&&row.actionType==='attack').length;
+        input.v5={...(input.v5||{}),context:{...(input.v5?.context||{}),salvoPriorShotsThisTurn:salvoPriorShots}};
+      }
       if(input.v5?.context)delete input.v5.context.aimedTargetId;
       if(activeCombatAction?.kind==='aim'&&input.v5?.kind==='ranged'&&input.targetId===activeCombatAction.targetId&&(activeCombatAction.weaponId?input.action?.extensions?.fiche?.equipmentId===activeCombatAction.weaponId:String(input.action?.name||input.action?.nom||input.action?.note||'').trim().toLowerCase()===String(activeCombatAction.weaponName||'').trim().toLowerCase())){input.v5={...input.v5,context:{...(input.v5.context||{}),aimedTargetId:activeCombatAction.targetId}};}
       const movement=combatActionState(snapshot).movementByActorId?.[actorForAction?.id];if(movement&&movement.turnId===clockNow.turnId&&movement.encounterId===clockNow.encounterId&&input.v5?.kind==='ranged')input.v5={...input.v5,context:{...(input.v5.context||{}),movedBeforeRangedAttack:true}};
@@ -2994,6 +3191,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         if(defender){const needs=prayerCapClockNeeds(defender,snapshot,`combat.participants.${defender.id}`);if(needs.length)return {ready:false,status:'requires-input',error:needs[0].message,needsInput:needs,unresolved:needs.map(row=>row.message),baseRevision:localRevision};}
       }
       const preview=annotateV5StoreActionPreview(buildResolutionPreview(prepared), prepared);
+      if(preview.grapple?.link&&clockNow.turnId)preview.grapple.link.createdTurnId=clockNow.turnId;
       if(!reaction&&ordinaryIntent&&!canonicalFreeAttack(preview,input)){const block=ordinaryActionAfterCombatActionBlock(snapshot,actorForAction?.id);if(block)return {...block,baseRevision:localRevision,input:structuredClone(input)};}
       if(!reaction&&isV5ActionUse(preview,input)){const actionBlock=brokenEscapeActionBlock(snapshot,actorId);if(actionBlock)return {...actionBlock,baseRevision:localRevision,input:structuredClone(input)};}
       if(!reaction&&preview.attack===true){const actionBlock=brokenEscapeActionBlock(snapshot,actorId);if(actionBlock)return {...actionBlock,baseRevision:localRevision,input:structuredClone(input)};}
@@ -3013,8 +3211,10 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
     declareV5CombatMovement(input={}){
       const snapshot=currentEnvelope(),actorId=input.actorId||snapshot.combat?.currentActorId,clock=v5StoreActionClock(snapshot),actor=snapshot.combat?.participants?.find(row=>row.id===actorId);
       if(!actor||actor.zone!=='active'||actorId!==snapshot.combat?.currentActorId)return {status:'blocked',reason:'Le déplacement doit être déclaré pour l’acteur du Tour courant.'};
+      const movement=canUseV5Move(actor.extensions?.v5?.combatEffects||[]);if(!movement.ready)return {status:'blocked',reason:movement.reason};
       const saved=api.executeCommand('v5-combat-movement-declared',draft=>{
         if(draft.localRevision!==snapshot.localRevision||v5StoreActionClock(draft).turnId!==clock.turnId)throw Object.assign(new Error('Le Tour a changé; redéclarez le déplacement.'),{userFacing:true});
+        const live=draft.combat?.participants?.find(row=>row.id===actorId);const liveMovement=canUseV5Move(live?.extensions?.v5?.combatEffects||[]);if(!liveMovement.ready)throw Object.assign(new Error(liveMovement.reason),{userFacing:true,code:'V5_MOVE_LOST'});
         const root=draft.extensions?.v5||{},state=structuredClone(root.combatActions||{byActorId:{},receipts:[]}),movement={actorId,encounterId:clock.encounterId,turnId:clock.turnId,round:clock.round};
         state.movementByActorId??={};state.movementByActorId[actorId]=movement;
         if(state.byActorId?.[actorId]?.kind==='aim')delete state.byActorId[actorId];
@@ -3043,6 +3243,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       const preview = cloneValue(supplied);
       const actorId=preview.input?.actor?.id||preview.input?.actorId||preview.actorId||preview.input?.source?.id;
       const snapshot=currentEnvelope(),escapeActor=snapshot.combat?.participants?.find(row=>row.id===actorId),escape=snapshot.extensions?.v5?.brokenEscape?.byActorId?.[actorId];
+      const grappleGate=grappleTurnGateBlock(snapshot,preview.input||{},escapeActor);if(grappleGate)return Promise.resolve({status:'manual',reason:grappleGate.error,code:grappleGate.code});
       const ordinaryIntent=(isV5ActionUse(preview,preview.input||{})||['attack','attaque'].includes(preview.input?.action?.type))&&!canonicalFreeAttack(preview,preview.input||{});
       if(combatReflexesAlreadyInitialized(snapshot,preview.input||{}))return Promise.resolve({status:'manual',reason:combatReflexesAlreadyDeterminedMessage});
       const guardPrepared=buildV5StoreActionInput(snapshot,preview.input||{}),reaction=hasV5ReactionOpportunity(guardPrepared);

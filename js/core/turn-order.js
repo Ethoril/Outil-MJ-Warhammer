@@ -62,6 +62,15 @@ function activeIds(participants) {
   return new Set(activeParticipants(participants).map(participant => participant.id));
 }
 
+function orderWithCombatFumbles(participants, order, round) {
+  if (!Number.isFinite(round)) return order;
+  const byId=new Map(activeParticipants(participants).map(row=>[row.id,row]));
+  return [...order].sort((left,right)=>{
+    const late=id=>(byId.get(id)?.extensions?.v5?.combatEffects||[]).some(effect=>effect.kind==='acts-last-next-round'&&Number(effect.round)===round);
+    return Number(late(left))-Number(late(right));
+  });
+}
+
 /** Return the one order used by both the visible track and the turn engine. */
 export function effectiveOrder(participants, { mode = ORDER_MODES.AUTOMATIC, order = [], autoOrder = null, round } = {}) {
   const ids = activeIds(participants);
@@ -69,17 +78,17 @@ export function effectiveOrder(participants, { mode = ORDER_MODES.AUTOMATIC, ord
   if (initialized) {
     const canonical=Array.isArray(autoOrder)?autoOrder:initiativeOrder(participants,round);
     const base=stableActiveOrder(participants,canonical,round);
-    if (mode !== ORDER_MODES.MANUAL) return base;
+    if (mode !== ORDER_MODES.MANUAL) return orderWithCombatFumbles(participants,base,round);
     const kept=[];for(const id of Array.isArray(order)?order:[])if(ids.has(id)&&!kept.includes(id))kept.push(id);
     for(const id of base)if(!kept.includes(id))kept.push(id);
-    return kept;
+    return orderWithCombatFumbles(participants,kept,round);
   }
-  if (mode !== ORDER_MODES.MANUAL) return initiativeOrder(participants,round);
+  if (mode !== ORDER_MODES.MANUAL) return orderWithCombatFumbles(participants,initiativeOrder(participants,round),round);
   const kept = [];
   for (const id of Array.isArray(order) ? order : []) {
     if (typeof id === 'string' && ids.has(id) && !kept.includes(id)) kept.push(id);
   }
-  return kept.concat(initiativeOrder(participants).filter(id => !kept.includes(id)));
+  return orderWithCombatFumbles(participants,kept.concat(initiativeOrder(participants,round).filter(id => !kept.includes(id))),round);
 }
 
 /** Pure F2-A preparation. All random dice and opposed-test results are supplied by the caller. */
