@@ -1,26 +1,42 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { effectiveOrder, nextTurn, ORDER_MODES } from '../js/core/turn-order.js';
+import { createStore } from '../js/core/store.js';
 
-const participants = [
-  { id: 'a', name: 'A', initiative: 40, zone: 'active' },
-  { id: 'b', name: 'B', initiative: 60, zone: 'active', extensions: { v5: { combatEffects: [{ id: 'late', kind: 'acts-last-next-round', round: 2 }] } } }
-];
+const participant = (id, initiative, extra = {}) => ({
+  id, name: id.toUpperCase(), kind: 'PNJ', camp: 'ennemi', zone: 'active', initiative,
+  hp: 10, maxHp: 10, states: [], extensions: { v5: {}, ...extra }
+});
 
-test('T2 bis characterization — acts-last on an uninitialized legacy combat does not skip a Turn', () => {
-  // Old saves can have no initialized combat initiative and retain a cached order.
-  // The first Round is B, A; only Round 2 should be A, B, then return to B, A.
-  let order = ['b', 'a'];
-  let actor = 'b';
-  let round = 1;
+test('T2 bis — legacy Store: acts-last au début du Round décale un Tour au lieu de le faire perdre', async () => {
+  // Reprend le cas du rapport : ordre manuel B,A au Round 1, puis A,B pour le
+  // Round 2 à cause de l'effet « agit en dernier ». L'initiative V5 est absente.
+  let saved;
+  const persistence = {
+    async load() { return saved && structuredClone(saved); },
+    async saveAtomic({ state }) { saved = structuredClone(state); return { ok: true }; }
+  };
+  const store = createStore({ persistence, storage: null });
+  await store.ready;
+  await store.loadFromJSON({
+    schemaVersion: 3, reserve: [], log: [], diceLines: [],
+    combat: {
+      round: 1, currentActorId: 'B', order: ['B', 'A'],
+      participants: [
+        participant('A', 40),
+        participant('B', 60, { v5: { combatEffects: [{ id: 'late', kind: 'acts-last-next-round', round: 2 }] } })
+      ]
+    },
+    extensions: { v5: {} }
+  });
+
   const observed = [];
   for (let i = 0; i < 6; i++) {
-    observed.push(`${round}:${actor.toUpperCase()}`);
-    const transition = nextTurn({ participants, order, currentActorId: actor, round });
-    order = transition.order;
-    actor = transition.currentActorId;
-    round = transition.round;
-    if (actor) order = effectiveOrder(participants, { mode: ORDER_MODES.MANUAL, order, round });
+    const combat = store.getCombat();
+    observed.push(`${combat.round}:${combat.currentActorId}`);
+    await store.nextTurn();
   }
+
+  // B a bien joué en Round 1 et A en Round 2. La correction doit conserver
+  // l'ordre A,B du Round 2 puis rendre le Tour du Round 3 à B.
   assert.deepEqual(observed, ['1:B', '1:A', '2:A', '2:B', '3:B', '3:A']);
 });
