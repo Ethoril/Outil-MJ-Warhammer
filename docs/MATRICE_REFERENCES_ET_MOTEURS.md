@@ -1,6 +1,6 @@
 # Matrice des références et des moteurs — lot 1
 
-Version de contenu : `references:4de0b18508d550391305158f999f4704ac9ada590796f74b689ab3dc54ee3392`. Référence publique récupérée le 2026-10-08T10:30:43.787Z. Générée par `node tools/generate-reference-matrix.mjs`.
+Version de contenu : `references:e60b01e2d49c235dc586931e2820a1921823ec3478d9e3b6d1477b91d532b5b1`. Référence publique récupérée le 2026-10-27. Générée par `node tools/generate-reference-matrix.mjs`.
 
 La fiche fait autorité sur chaque exemplaire personnalisé ; Aides de jeu fait autorité sur les définitions. Les exports CSV publics ci-dessous sont les seuls documents distants lus. Aucune donnée Firestore privée de PJ n’a été chargée pour établir cette matrice. Les succès HTTP et la parité des fichiers de référence ne valent pas une recette authentifiée des cinq fiches.
 
@@ -9,8 +9,8 @@ La fiche fait autorité sur chaque exemplaire personnalisé ; Aides de jeu fait 
 | Collection | Source | Statut et portée |
 | --- | --- | --- |
 | Talents | Aides de jeu / Talents, gid 1096647859 | 206 définitions bilingues, limites, spécialisations ; alias historiques explicites copiés des fiches |
-| Mots clés | Aides de jeu / Mots Clés Armes et Armures, gid 1604774011 | 55 identifiants explicites, effets, paramètres, alias, sources et éditions |
-| Équipement | Aides de jeu / Armes Corps à Corps, Armes à Distance, Armures | 213 modèles après transformations source des fiches, dont 8 munitions complémentaires |
+| Mots clés | Aides de jeu / Mots Clés Armes et Armures, gid 1604774011 | 57 identifiants explicites, effets, paramètres, alias, sources et éditions |
+| Équipement | Aides de jeu / Armes Corps à Corps, Armes à Distance, Armures | 211 modèles après transformations source des fiches |
 | Compétences | referentiel-public.json + skills.json publiés par le projet fiches | 299 entrées publiées, formes principales et alias source ; compétences complémentaires Lustria selon moteur source |
 | Sorts et miracles | Aides de jeu / Magie gid 0 / Miracles gid 1678905785 | 280 sorts, 15 miracles ; consultation uniquement ; sorts retirés conservés pour historique |
 | Fonctions partagées | js/data/shared : copie versionnée des fonctions pures source | Parité assurée par régénération et tests ; production indépendante des chemins du disque du projet source |
@@ -20,17 +20,17 @@ La fiche fait autorité sur chaque exemplaire personnalisé ; Aides de jeu fait 
 
 | Onglet | Export | SHA-256 |
 | --- | --- | --- |
-| Mots Clés Armes et Armures | [CSV public](https://docs.google.com/spreadsheets/d/1SCnAJCthdto7ROjovuyDYmz4y9GJBBLfThuYNmYR_Cs/gviz/tq?tqx=out:csv&sheet=Mots%20Cl%C3%A9s%20Armes%20et%20Armures) | 86192b476f14280c78c2b1b7581314f6e572e1ad97ce2beeba3117339ad6d536 |
-| Armes Corps à Corps | [CSV public](https://docs.google.com/spreadsheets/d/1SCnAJCthdto7ROjovuyDYmz4y9GJBBLfThuYNmYR_Cs/gviz/tq?tqx=out:csv&sheet=Armes%20Corps%20%C3%A0%20Corps) | 09fbb8508c3e40535667013167b823c89b2d90634857f5b1433c8d8716cfa2d0 |
-| Armes à Distance | [CSV public](https://docs.google.com/spreadsheets/d/1SCnAJCthdto7ROjovuyDYmz4y9GJBBLfThuYNmYR_Cs/gviz/tq?tqx=out:csv&sheet=Armes%20%C3%A0%20Distance) | 31d2c20450c389e0ddb16571fb610b8510ec522700a10511ad12fc52ba7551a5 |
-| Armures | [CSV public](https://docs.google.com/spreadsheets/d/1SCnAJCthdto7ROjovuyDYmz4y9GJBBLfThuYNmYR_Cs/gviz/tq?tqx=out:csv&sheet=Armures) | 859659dd6e52b658be3a5c47a43149176454bf2e164218c3f3ceab6eb688d13d |
-| Talents | [CSV public](https://docs.google.com/spreadsheets/d/1SCnAJCthdto7ROjovuyDYmz4y9GJBBLfThuYNmYR_Cs/gviz/tq?tqx=out:csv&sheet=Talents) | e9ffc83ad41261ffe4e4deb24b8acb757da9ae9c4049be96ee237975cf495cee |
-| Magie | [CSV public](https://docs.google.com/spreadsheets/d/1SCnAJCthdto7ROjovuyDYmz4y9GJBBLfThuYNmYR_Cs/gviz/tq?tqx=out:csv&sheet=Magie) | 62ef4366c087054ab8d639cf3bfb7a15cda936ef408ef634803b87db6463c013 |
-| Miracles | [CSV public](https://docs.google.com/spreadsheets/d/1SCnAJCthdto7ROjovuyDYmz4y9GJBBLfThuYNmYR_Cs/gviz/tq?tqx=out:csv&sheet=Miracles) | 24110efc17a8a6b9bf6170200a39db08eb5af02ea2729922c1db9bc9288fc19f |
+| Mots Clés Armes et Armures | [CSV public](https://docs.google.com/spreadsheets/d/1SCnAJCthdto7ROjovuyDYmz4y9GJBBLfThuYNmYR_Cs/gviz/tq?tqx=out:csv&headers=1&sheet=Mots%20Cl%C3%A9s%20Armes%20et%20Armures) | 2c514b2a8d991dd160fa3ecda559488909beb684826d6602a16187cf4fe5da13 |
+| Armes Corps à Corps | [CSV public](https://docs.google.com/spreadsheets/d/1SCnAJCthdto7ROjovuyDYmz4y9GJBBLfThuYNmYR_Cs/gviz/tq?tqx=out:csv&headers=1&sheet=Armes%20Corps%20%C3%A0%20Corps) | ee022b8079d42990f7cdfda1ca4d9f5e39a83a3394409a680ae7e128dfc9aad4 |
+| Armes à Distance | [CSV public](https://docs.google.com/spreadsheets/d/1SCnAJCthdto7ROjovuyDYmz4y9GJBBLfThuYNmYR_Cs/gviz/tq?tqx=out:csv&headers=1&sheet=Armes%20%C3%A0%20Distance) | 4c74147e420be76065dcf9fde332ed51c44c0ca0a25bfcc9c39e43f59c59d9c8 |
+| Armures | [CSV public](https://docs.google.com/spreadsheets/d/1SCnAJCthdto7ROjovuyDYmz4y9GJBBLfThuYNmYR_Cs/gviz/tq?tqx=out:csv&headers=1&sheet=Armures) | d540299714bc6b7aeb54cf3dbc8436de72ad21136e20f5f70024207aae168d7c |
+| Talents | [CSV public](https://docs.google.com/spreadsheets/d/1SCnAJCthdto7ROjovuyDYmz4y9GJBBLfThuYNmYR_Cs/gviz/tq?tqx=out:csv&sheet=Talents) | 6c5b2722067eb1af0a620ea15d916133ef4834eab276797213b4765925cc57fd |
+| Magie | [CSV public](https://docs.google.com/spreadsheets/d/1SCnAJCthdto7ROjovuyDYmz4y9GJBBLfThuYNmYR_Cs/gviz/tq?tqx=out:csv&sheet=Magie) | 8aca1ccac29f4f0a56388efdef7db700896f29e66857fad50fdc3829bd283db5 |
+| Miracles | [CSV public](https://docs.google.com/spreadsheets/d/1SCnAJCthdto7ROjovuyDYmz4y9GJBBLfThuYNmYR_Cs/gviz/tq?tqx=out:csv&sheet=Miracles) | 6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6 |
 
 ## Contrats de calcul vérifiés
 
-Un moteur n’est actif que si son effet et son édition correspondent au fichier indépendant `js/data/keyword-engine-contracts.json`, audité le 2026-10-08. Ce contrat ne se régénère pas lors d’un rafraîchissement du catalogue. Une définition changée reste consultable ; l’application des dégâts est bloquée avec arbitrage requis. Les paramètres textuels sont conservés ; ils ne sont jamais convertis silencieusement en zéro.
+Un moteur n’est actif que si son effet et son édition correspondent au fichier indépendant `js/data/keyword-engine-contracts.json`, audité le 2026-10-09. Ce contrat ne se régénère pas lors d’un rafraîchissement du catalogue. Une définition changée reste consultable ; l’application des dégâts est bloquée avec arbitrage requis. Les paramètres textuels sont conservés ; ils ne sont jamais convertis silencieusement en zéro.
 
 | Cas | Comportement | Vérification |
 | --- | --- | --- |
@@ -59,8 +59,8 @@ Les mentions « mécanique partielle » indiquent explicitement les effets resta
 | carreau-barbele | Carreau barbelé | V5 supplément | Temple of Spite p.58 | Si la cible subit des Dégâts : Test d'Esquive Intermédiaire (+0 DR), sinon elle est ancrée : À Terre et traînée de 1d10 yards vers le tireur pendant son Round. Retirer le carreau : Test Difficile (-2 DR), +1 Blessure. | Manuel |
 | croche-pied | Croche-pied | V4 supplément | Up in Arms p.89 | Après avoir touché, vous pouvez dépenser 2 Avantage pour un Test opposé Force contre Athlétisme. Si vous l'emportez, la cible subit l'état À Terre (un cavalier chute d'abord de 2 yards). | Manuel |
 | dangereuse | Dangereuse | V5 | Livre de base V5 EN p.305 | Tout Test raté avec un 9 sur le dé des dizaines ou des unités provoque une Maladresse. | Moteur fumble-on-nine |
-| defensive | Défensive | V5 | Livre de base V5 EN p.304 | +1 DR aux Tests de Corps à corps pour s'opposer à une attaque. Une seule arme Défensive compte à la fois ; Déséquilibrée l'emporte. | Manuel |
-| desequilibree | Déséquilibrée | V5 | Livre de base V5 EN p.305 | -1 DR pour s'opposer à une attaque avec cette arme. | Manuel |
+| defensive | Défensive | V5 | Livre de base V5 EN p.304 | +1 DR aux Tests de Corps à corps pour s'opposer à une attaque. Une seule arme Défensive compte à la fois ; Déséquilibrée l'emporte. | Moteur defense-sl-bonus |
+| desequilibree | Déséquilibrée | V5 | Livre de base V5 EN p.305 | -1 DR pour s'opposer à une attaque avec cette arme. | Moteur defense-sl-bonus |
 | devastatrice | Dévastatrice | V5 | Livre de base V5 EN p.304 | Sur une touche, les Dégâts utilisent le plus élevé entre le DR et le dé des unités. Inoffensive l'annule. | Moteur best-of-units-or-sl |
 | dispersion | Dispersion X | V4 supplément | Up in Arms p.89 | Bout portant : 1 cible, Dégâts +X. Portée courte à longue : la cible plus les X créatures visibles les plus proches, sans deux cibles à plus de X yards l'une de l'autre. Portée extrême : même sélection, Dégâts -X. | Manuel |
 | empaleuse | Empaleuse | V5 | Livre de base V5 EN p.304 | Coup critique sur un double ou un multiple de 10 obtenu en réussissant le Test. À distance, le projectile reste fiché : Guérison Intermédiaire (+0 DR) pour une flèche ou un carreau, chirurgien pour une balle ; chaque projectile non retiré empêche de guérir 1 Blessure. | Moteur expanded-critical ; mécanique partielle : projectile fiché et retrait/soins à gérer manuellement |
@@ -68,7 +68,7 @@ Les mentions « mécanique partielle » indiquent explicitement les effets resta
 | entaille | Entaille X | V4 supplément | Up in Arms p.89 | Si l'attaque inflige des Dégâts critiques, ajoute 1 état Hémorragique au Critique ; vous pouvez dépenser X Avantage pour infliger 1 état Hémorragique supplémentaire. | Manuel |
 | epuisante | Épuisante | V4 | Livre de base FR (V4) p.299 | Percutante et Dévastatrice ne s'appliquent que pendant un Round où le porteur a chargé. | Manuel |
 | equipage | Équipage X | V4 supplément | Up in Arms p.125 | Nécessite X servants formés au Tir de l'arme ; un seul tire. Manque 1 servant : Rechargement doublé ; manque 2 : l'arme gagne Imprécise ; manque 3 : elle gagne Dangereuse (cumulatif). Défaut déjà présent : -10 au Tir. Les servants peuvent aider au Rechargement ; un incident touche tous les servants. | Manuel |
-| explosion | Explosion X | V4 | Livre de base FR (V4) p.298 | Chaque personnage à X mètres ou moins du point touché subit DR + Dégâts de l'arme et les états qu'elle inflige. | Manuel |
+| explosion | Explosion X | V5 | Livre de base V5 EN p.304 | Cible tous les personnages dans un diamètre de X yards ; ne peut normalement pas être opposé. Inflige les Dégâts de l'arme (sans le DR, mais Dévastatrice peut utiliser le dé des unités) et les états de l'arme. | Manuel |
 | flexible | Flexible | V5 | Livre de base V5 EN p.306 | Peut se porter sous une armure non Flexible ; les deux protections s'appliquent. | Fonction source de calcul des couches ; sans autre moteur |
 | immobilisante | Immobilisante | V4 | Livre de base FR (V4) p.298 | Une touche inflige 1 état Empêtré de Force égale à celle du porteur. Tant que dure l'entrave, l'arme ne peut servir à rien d'autre ; le porteur peut y mettre fin à tout moment. | Manuel |
 | impenetrable | Impénétrable | V5 | Livre de base V5 EN p.306 | Ignore les Coups critiques causés par un jet pour toucher impair (11, 33…). | Critique ignoré sur jet de toucher impair |
@@ -84,7 +84,7 @@ Les mentions « mécanique partielle » indiquent explicitement les effets resta
 | parade | Parade | V5 | Livre de base V5 EN p.304 | En défense, annule la pénalité de -2 DR de la main non directrice. En combat à deux armes, si la première attaque touche, la seconde faite avec l'arme Parade ne peut pas être opposée. | Manuel |
 | partielle | Partielle | V5 | Livre de base V5 EN p.306 | Si le numéro de localisation de la touche est pair, les PA de cette armure sont ignorés. | PA de la seule pièce ignorés sur numéro de localisation pair |
 | percutante | Percutante | V4 | Livre de base FR (V4) p.298 | Sur une touche, ajoute le dé des unités du jet d'attaque aux Dégâts. Inoffensive l'annule. | Moteur add-units-die |
-| perforante | Perforante | V5 | Livre de base V5 EN p.305 | Ignore 2 PA. | Manuel |
+| perforante | Perforante | V5 | Livre de base V5 EN p.305 | Ignore 2 PA. | Moteur ignore-two-armour |
 | perturbante | Perturbante | V4 | Livre de base FR (V4) p.298 | Au lieu d'infliger des Dégâts, une attaque réussie peut faire reculer la cible d'1 mètre par DR du Test opposé. | Manuel |
 | peu-fiable | Peu fiable | V5 | Livre de base V5 EN p.299 | Un Test raté utilisant l'objet subit -1 DR ; les pénalités de port d'armure sont doublées. | Manuel |
 | piege-lame | Piège-lame | V5 | Livre de base V5 EN p.305 | Sur un Critique en défense contre une arme à lame, si votre Taille est au moins égale à celle de l'adversaire, vous pouvez piéger la lame au lieu du Critique : l'adversaire la lâche. Avec le Talent Désarmement, perdez votre Momentum pour la saisir de la main libre. Pour la briser : Test de Force Très difficile (-3 DR) + DR du Test de Corps à corps, sauf si elle est Incassable. | Manuel |
@@ -96,7 +96,7 @@ Les mentions « mécanique partielle » indiquent explicitement les effets resta
 | protectrice | Protectrice X | V4 | Livre de base FR (V4) p.298 | Quand l'arme sert à s'opposer à une attaque, elle confère X PA à toutes les localisations. Avec X ≥ 2, elle peut aussi s'opposer aux projectiles tirés dans sa ligne de vue. | PA séparés ; bouclier sélectionné, disponible et utilisé pour opposition ; tir : X ≥ 2 + ligne de vue |
 | raffine | Raffiné X | V5 | Livre de base V5 EN p.298 | Signe de statut : l'objet est d'autant plus impressionnant que X est élevé. Aucun effet chiffré. | Manuel |
 | rapide | Rapide | V5 | Livre de base V5 EN p.304 | +2 en Initiative de combat pour attaquer avec cette arme ; perdu si l'arme sert au combat à deux armes. | Manuel |
-| recharge | Recharge X | V4 | Livre de base FR (V4) p.299 | Recharger demande un Test étendu de Projectiles (groupe de l'arme) totalisant X DR ; une interruption remet la progression à zéro. | Manuel |
+| recharge | Recharge X | V5 | Livre de base V5 EN p.305 | Une fois l'arme utilisée, il faut dépenser X Actions avant de pouvoir s'en resservir. Une arme À répétition ayant encore des tirs non utilisés demande 1 Action de moins. | Manuel |
 | renforcee | Renforcée | V4 supplément | Archives of the Empire III p.36 | Une sous-armure renforcée de mailles portée sous des plates leur retire le défaut Points faibles. | Manuel |
 | salve | Salve X | V4 supplément | Up in Arms p.123 | Peut tirer jusqu'à X fois sans recharger, chaque tir consomme 1 point. Plusieurs tirs dans le même Tour : -10 cumulatif au Tir après le premier. Chaque Rechargement réussi rend 1 point de Salve. | Manuel |
 | siege | Siège | V4 supplément | Archives of the Empire II p.89 | Double les Dégâts contre les structures (murs, tours, portes). | Manuel |
@@ -106,6 +106,8 @@ Les mentions « mécanique partielle » indiquent explicitement les effets resta
 | visiere | Visière | V4 supplément | Archives of the Empire III p.36 | Ouvrir ou fermer : 1 Action. Fermée : le casque fonctionne selon son profil. Ouverte : il perd ses propriétés de conception, gagne Partielle et donne -10 en Perception. | Manuel |
 | volee | Volée X | V4 supplément | Lustria p.89 | Tire X projectiles simultanés, chacun avec son propre jet pour toucher ; Dégâts réduits de 4 en mode Volée. | Manuel |
 | volumineux | Volumineux | V5 | Livre de base V5 EN p.299 | +1 Encombrement ; vêtements et armures portés restent à Enc 1. Normalement pas pour les petits objets. | Manuel |
+| bouclier | Bouclier | V5 | Livre de base V5 EN p.306 | En s'opposant à une attaque avec Esquive ou Corps à corps, confère +1 DR (sans cumul avec Défensive) et applique ses PA si le coup touche. Avec 2 PA ou plus, permet d'opposer les tirs avec Esquive à toute portée. Un seul bouclier compte. Porté attaché au bras ou en bandoulière, ses PA ne s'appliquent qu'à la Tête, au Corps et au Bras non directeur. En attaque, compte comme Arme improvisée (allonge Personnelle) et perd sa protection jusqu'au début du prochain Tour. | Manuel |
+| inflige | Inflige X | V5 | Livre de base V5 EN p.304 | Une touche inflige 1 état X à la cible (si un score de Force est indiqué, comme Empêtré 50 ou Empêtré votre Force, il sert aux Tests pour se libérer de l'état). | Manuel |
 
 ## Aides historiques complémentaires
 
@@ -119,9 +121,9 @@ Les onglets publics du classeur ne contiennent pas de référentiel général de
 | table-body-crit — 👕 Critiques au Corps | js/data/crits.js | Table locale, référence et édition à confirmer |
 | table-leg-crit — 🦵 Critiques à la Jambe | js/data/crits.js | Table locale, référence et édition à confirmer |
 | sante — Santé, Critiques et Survie | js/data/rules.js | Aide locale à arbitrer |
-| magie — La Magie & Lancer un Sort | js/data/rules.js | Aide locale à arbitrer |
-| table-magic-minor — ✨ Table Mineure | js/data/magic.js | Table locale, référence et édition à confirmer |
-| table-magic-major — 🔥 Table Majeure | js/data/magic.js | Table locale, référence et édition à confirmer |
+| magie — Magie V5 & règles de la table | js/data/rules.js | Aide locale à arbitrer |
+| table-magic-minor — ✨ Table Mineure V5 | js/data/magic.js | Table locale, référence et édition à confirmer |
+| table-magic-major — 🔥 Table Majeure V5 | js/data/magic.js | Table locale, référence et édition à confirmer |
 | psychologie — Psychologie : Peur & Terreur | js/data/rules.js | Aide locale à arbitrer |
 | corruption — La Corruption & les Mutations | js/data/rules.js | Aide locale à arbitrer |
 

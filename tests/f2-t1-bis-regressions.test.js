@@ -50,10 +50,10 @@ test('T1 BIS 3/4 — hastes des suppléments et armes de jet usuelles ont une pr
     assert.ok(weapon, `arme catalogue: ${name}`);
     assert.equal(weaponHandsForParticipant(weapon), 2, name);
   }
-  for (const name of ['Couteau de lancer', 'Fronde', 'Fouet', 'Lasso']) {
+  for (const name of ['Couteau de lancer', 'Fronde', 'Fouet', 'Lasso (2M)']) {
     const weapon = items.find(row => row.name === name);
     assert.ok(weapon, `arme catalogue: ${name}`);
-    assert.equal(weaponHandsForParticipant(weapon), 1, name);
+    assert.equal(weaponHandsForParticipant(weapon), name === 'Lasso (2M)' ? 2 : 1, name);
   }
   const bomb = items.find(row => /bombe/i.test(row.name) && row.kind === 'weapon');
   if (bomb) assert.equal(weaponHandsForParticipant(bomb), 1, bomb.name);

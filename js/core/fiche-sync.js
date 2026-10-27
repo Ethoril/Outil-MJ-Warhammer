@@ -288,6 +288,30 @@ const maxPatch = (subject, max, options) => {
   return health.computable ? { hp: health.new, maxHp: health.newMax } : {};
 };
 
+// IDs from the V4 catalogue whose V5 source rows moved or merged. Their old
+// instances remain playable until the MJ explicitly replaces them.
+const MOVED_EQUIPMENT_IDS = new Map([
+  ['weapon-armes-corps-a-corps-parade-brise-epee', 'weapon-armes-corps-a-corps-escrime-brise-epee'],
+  ['weapon-armes-corps-a-corps-parade-main-gauche', 'weapon-armes-corps-a-corps-escrime-main-gauche'],
+  ['weapon-armes-corps-a-corps-parade-cape', 'weapon-armes-corps-a-corps-base-cape'],
+  ['weapon-armes-corps-a-corps-parade-filet-druchii', 'weapon-armes-corps-a-corps-base-filet-druchii'],
+  ['weapon-armes-corps-a-corps-parade-filet-leste-2m', 'weapon-armes-a-distance-entraves-filet'],
+  ['weapon-armes-a-distance-lancer-bolas', 'weapon-armes-a-distance-entraves-bolas'],
+  ['weapon-armes-a-distance-poudre-noire-long-fusil-d-hochland-2m', 'weapon-armes-a-distance-ingenierie-long-fusil-d-hochland-2m'],
+  ['weapon-armes-a-distance-poudre-noire-mousquet-2m', 'weapon-armes-a-distance-poudre-noire-mousquet-a-meche-2m'],
+  ['weapon-armes-a-distance-poudre-noire-pistolet-2', 'weapon-armes-a-distance-poudre-noire-pistolet'],
+  ['weapon-armes-corps-a-corps-fleau-fleau-a-grain', 'weapon-armes-corps-a-corps-fleau-fleau-a-grain-2m'],
+  ['weapon-armes-a-distance-entraves-fouet', 'weapon-armes-corps-a-corps-fleau-fouet'],
+  ['weapon-armes-a-distance-entraves-lasso', 'weapon-armes-a-distance-entraves-lasso-2m'],
+  ['shield-armes-corps-a-corps-bouclier-bouclier-haut-elfe', 'shield-armures-bouclier-bouclier-haut-elfe'],
+  ['shield-armes-corps-a-corps-bouclier-bouclier', 'shield-armures-bouclier-bouclier'],
+  ['shield-armes-corps-a-corps-bouclier-pavois', 'shield-armures-bouclier-pavois-pavise'],
+  ['shield-armes-corps-a-corps-bouclier-targe-buckler', 'shield-armures-bouclier-targe-buckler'],
+  ['shield-armes-corps-a-corps-bouclier-bouclier-standard', 'shield-armures-bouclier-bouclier'],
+  ['shield-armes-corps-a-corps-bouclier-grand-bouclier', 'shield-armures-bouclier-grand-bouclier'],
+  ['shield-armes-corps-a-corps-bouclier-pavois-pavise', 'shield-armures-bouclier-pavois-pavise']
+]);
+
 function proposeEquipmentSkill(item, role, skills) {
   if(item.kind==='weapon'&&String(item.category||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()==='ingenierie'){
     const group=weaponSkillGroupInfo(item.category,item);if(!group)return '';
@@ -351,12 +375,65 @@ export function planProfileSync(snapshot, profile, choices = {}) {
     collections[key] = { coverage, ...(coverage === 'present' ? collectionDiff(profile[key], snapshot[key], key === 'talents' ? row => `${row.id || row.name || row.nom}:${row.specialty || row.specialization || ''}` : undefined) : { added: [], changed: [], removed: [] }) };
     if (coverage === 'present') updated[key] = cloneValue(snapshot[key] || []);
   }
+  // A catalogue refresh can remove or rename a source row while a profile still
+  // owns an older playable instance (including V4 keywords or local edits).
+  // Keep those rows verbatim; reconciliation/conversion requires an explicit MJ action.
+  const sourceEquipment = cloneValue(snapshot.equipment || []);
+  const equipmentModelId = item => item?.baseId || item?.id;
+  const currentEquipmentIds = new Set(sourceEquipment.map(item => item.id));
+  const incomingById = new Map(sourceEquipment.map(item => [item.id, item]));
+  const oldByTargetModel = new Map();
+  for (const item of profile.equipment || []) {
+    if (currentEquipmentIds.has(item.id)) continue;
+    const targetModel = MOVED_EQUIPMENT_IDS.get(equipmentModelId(item));
+    if (targetModel) oldByTargetModel.set(targetModel, [...(oldByTargetModel.get(targetModel) || []), item]);
+  }
+  const incomingByModel = new Map();
+  for (const item of sourceEquipment) {
+    const modelId = equipmentModelId(item);
+    incomingByModel.set(modelId, [...(incomingByModel.get(modelId) || []), item]);
+  }
+  const retainedEquipmentIds = new Set();
+  const equipmentWarnings = [];
+  const conflictTargets = new Set();
+  const preserveById = new Map();
+  for (const oldItem of profile.equipment || []) {
+    const incoming = incomingById.get(oldItem.id);
+    if (incoming && equipmentModelId(oldItem) !== equipmentModelId(incoming)) {
+      preserveById.set(oldItem.id, oldItem);
+      retainedEquipmentIds.add(oldItem.id);
+      conflictTargets.add(oldItem.id);
+      equipmentWarnings.push({ field: 'equipment', code: 'moved-instance-arbitration-required', severity: 'warning',
+        message: `« ${oldItem.name || oldItem.id} » (instance ${oldItem.id}, modèle ${equipmentModelId(oldItem)}) devient « ${incoming.name || incoming.id} » (instance ${incoming.id}, modèle ${equipmentModelId(incoming)}). L’identité paraît la même mais le modèle change. Vérifiez ces deux lignes dans la fiche externe, décidez si c’est le même exemplaire ou deux objets différents, corrigez la fiche, puis relisez-la.`,
+        consequence: 'previous-values-preserved' });
+    }
+  }
+  for (const [targetModel, oldItems] of oldByTargetModel) {
+    const incoming = incomingByModel.get(targetModel) || [];
+    if (!incoming.length) continue; // An absent corresponding instance is a deliberate removal.
+    conflictTargets.add(targetModel);
+    for (const item of oldItems) retainedEquipmentIds.add(item.id);
+    equipmentWarnings.push({ field: 'equipment', code: 'moved-instance-arbitration-required', severity: 'warning',
+        message: `Ancien(s) : ${oldItems.map(item => `« ${item.name || item.id} » (instance ${item.id})`).join(', ')}. Candidat(s) V5 : ${incoming.map(item => `« ${item.name || item.id} » (instance ${item.id})`).join(', ')}. Les modèles correspondent à ${targetModel}, mais les IDs d’instance diffèrent : l’outil ne peut pas savoir s’il s’agit des mêmes objets. Vérifiez les lignes dans la fiche externe, corrigez-la selon votre décision, puis relisez-la.`,
+        consequence: 'previous-values-preserved' });
+  }
+  const nextEquipment = [];
+  for (const item of sourceEquipment) {
+    const modelId = equipmentModelId(item);
+    if (conflictTargets.has(modelId) || conflictTargets.has(item.id)) continue;
+    nextEquipment.push(cloneValue(item));
+  }
+  for (const oldItem of profile.equipment || []) if (retainedEquipmentIds.has(oldItem.id)) nextEquipment.push(cloneValue(preserveById.get(oldItem.id) || oldItem));
+  if (snapshot.coverage?.equipment === 'present') updated.equipment = nextEquipment;
   const equipmentActions = [];
   const removedActions = [];
   if (snapshot.coverage?.equipment === 'present') {
     const currentKeys = new Set();
     const adoptedIds = new Set();
-    for (const item of snapshot.equipment || []) {
+    for (const item of updated.equipment || []) {
+      // The old instance is the authoritative playable copy until the MJ replaces
+      // it explicitly. Keep its linked actions byte-for-byte and do not rebuild PA.
+      if (retainedEquipmentIds.has(item.id)) continue;
       if (!['weapon', 'shield'].includes(item.kind)) continue;
       const offensive = item.damage !== null && item.damage !== undefined && String(item.damage).trim() !== '';
       const roles = item.kind === 'shield' ? (offensive ? ['attack', 'defense'] : ['defense']) : !String(item.range || '').trim() ? ['attack', 'defense'] : ['attack'];
@@ -390,11 +467,15 @@ export function planProfileSync(snapshot, profile, choices = {}) {
           requiresLink: !skill, change, adoptCandidates: allActions.filter(row => !sourceActionKey(row) && row.type === role).map(row => ({ id: row.id, name: row.note })), action });
       }
     }
-    removedActions.push(...allActions.filter(action => sourceCharIds.has(action.extensions?.fiche?.charId) && sourceActionKey(action) && !currentKeys.has(sourceActionKey(action))).map(action => ({ id: action.id, name: action.note })));
+    const retiredActions = allActions.filter(action => sourceCharIds.has(action.extensions?.fiche?.charId) && sourceActionKey(action)
+      && !currentKeys.has(sourceActionKey(action)) && retainedEquipmentIds.has(action.extensions?.fiche?.equipmentId));
+    removedActions.push(...allActions.filter(action => sourceCharIds.has(action.extensions?.fiche?.charId) && sourceActionKey(action)
+      && !currentKeys.has(sourceActionKey(action)) && !retainedEquipmentIds.has(action.extensions?.fiche?.equipmentId)).map(action => ({ id: action.id, name: action.note })));
     updated.diceLines = updated.diceLines.filter(action => !(sourceCharIds.has(action.extensions?.fiche?.charId) && sourceActionKey(action)) && !adoptedIds.has(action.id));
+    updated.diceLines.push(...retiredActions.map(cloneValue));
     updated.diceLines.push(...equipmentActions.map(row => row.action));
-    updated.armorLocations = calculateArmor(snapshot.equipment);
-    updated.protection = armourProtection(snapshot.equipment);
+    updated.armorLocations = calculateArmor(updated.equipment);
+    updated.protection = armourProtection(updated.equipment);
   }
   updated.caracs = { ...profile.caracs, ...snapshot.caracs };
   if (snapshot.initiative !== null) updated.initiative = snapshot.initiative;
@@ -406,7 +487,7 @@ export function planProfileSync(snapshot, profile, choices = {}) {
   Object.assign(updated, importFicheDurables(updated, snapshot, profile.ficheSnapshot));
   // Keep latest source status, but each excluded collection retains its previous playable data.
   updated.ficheSnapshot = cloneValue(snapshot);
-  const warnings = cloneValue(snapshot.warnings || []);
+  const warnings = [...cloneValue(snapshot.warnings || []), ...equipmentWarnings];
   if (health.warning) warnings.push({ field: 'hp', code: health.warning, severity: 'warning', ...(health.warning === 'reserve-health-normalized' ? { message: 'Ancienne réserve avec PV courants : la réserve reprend le maximum de fiche ; les Blessures subies restent conservées dans les participants et personnages persistants déjà enregistrés.' } : {}), consequence: health.warning === 'old-maximum-unknown' ? 'hp-preserved' : 'signed-wounds-preserved' });
   return { profileId: profile.id, charId: snapshot.charId, name: profile.name, caracs,
     initiative: { old: profile.initiative, new: snapshot.initiative ?? profile.initiative },
@@ -427,6 +508,8 @@ export function applyFicheSync(draft, entries) {
     const expected = entry.expectedProfileFingerprint || entry.precondition?.profileFingerprint;
     if (expected && expected !== profileSyncFingerprint(profile)) throw Object.assign(new Error('Le profil a changé depuis l’aperçu : actualisez la synchronisation.'), { code: 'fiche-plan-stale' });
     if (profile.extensions?.ficheId && profile.extensions.ficheId !== entry.snapshot.charId && entry.replaceAssociation !== true) throw Object.assign(new Error('Le remplacement du lien de fiche doit être confirmé.'), { code: 'fiche-association-conflict' });
+    const equipmentConflict = planProfileSync(entry.snapshot, profile, entry).warnings.find(warning => warning.code === 'moved-instance-arbitration-required');
+    if (equipmentConflict) throw Object.assign(new Error('La synchronisation est suspendue : une correspondance d’équipement déplacé est incertaine. Arbitrez les exemplaires dans la fiche avant de réessayer.'), { code: 'fiche-equipment-arbitration-required' });
   }
   const applied = new Set();
   for (const entry of entries || []) {

@@ -278,14 +278,14 @@ test('F2-C — la résolution restaure équipement et munitions avant filtrage, 
   assert.deepEqual(inactiveSize.f.equipment.keywords.map(row=>row.id),['taille'],'le filtrage reste sur la copie de résolution');
 });
 
-test('F2-C — Main gauche sans Parade perd Défensive comme une dague', () => {
-  const f = importedWeapon({ category: 'Parade', name: 'Main gauche', qualities: [{ id: 'defensive', parameter: '' }] });
+test('F2-C — Main gauche suit Escrime en V5 et perd Défensive sans maîtrise', () => {
+  const f = importedWeapon({ category: 'Escrime', name: 'Main gauche', advanced: [{ nom: 'Corps à corps (Escrime)', adv: 0 }], qualities: [{ id: 'defensive', parameter: '' }] });
   const result = resolve(f);
   assert.ok(!result.input.action.qualities.some(row => row.id === 'defensive'));
-  const parrying=importedWeapon({category:'Parade',name:'Main gauche',advanced:[{nom:'Corps à corps (Bouclier)',adv:2}],qualities:[{id:'defensive',parameter:''}]});
+  const parrying=importedWeapon({category:'Escrime',name:'Main gauche',advanced:[{nom:'Corps à corps (Escrime)',adv:2}],qualities:[{id:'defensive',parameter:''}]});
   const parryingResult=resolve(parrying);
-  assert.equal(parryingResult.score.base,parrying.snapshot.skills.find(row=>row.name==='Corps à corps (Bouclier)').total);
-  assert.ok(parryingResult.input.action.qualities.some(row=>row.id==='defensive'),'la compétence canonique spécialisée Parade conserve l’avantage de Main gauche');
+  assert.equal(parryingResult.score.base,parrying.snapshot.skills.find(row=>row.name==='Corps à corps (Escrime)').total);
+  assert.ok(parryingResult.input.action.qualities.some(row=>row.id==='defensive'),'la compétence canonique Escrime conserve l’avantage de Main gauche');
 });
 
 test('F2-C — Épée bâtarde à une main avec Base reçoit Épuisante et Lente', () => {

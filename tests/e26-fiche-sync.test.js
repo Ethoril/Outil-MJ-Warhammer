@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { createStore } from '../js/core/store.js';
+import { getReferenceCatalogue } from '../js/core/reference-catalog.js';
 import {
   FICHE_CHAR_IDS, ficheSnapshot, woundsMax, matchFiches, suggestSkill, planProfileSync, applyFicheSync, ficheErrorMessage
 } from '../js/core/fiche-sync.js';
@@ -44,6 +45,79 @@ test('fiche — totaux, initiative et compétences de Caelel', () => {
   assert.equal(skill('Perception').total, 65);
   assert.equal(skill('Athlétisme').total, 66);
   assert.equal(skill('Calme').total, 36, 'une compétence de base sans avance reste utilisable');
+});
+
+test('synchronisation — une suppression catalogue conserve l’exemplaire V4 et son action sans conversion', () => {
+  const oldItem = { id: 'instance-main-gauche-v4', baseId: 'weapon-armes-corps-a-corps-parade-main-gauche', kind: 'weapon', name: 'Main gauche V4 personnalisée', category: 'Parade',
+    damage: 'BF+1', ap: null, locations: [], qualities: [], keywords: [{ id: 'protectrice', parameter: '1' }, { id: 'v4-custom', parameter: 'ancien' }],
+    source: 'copie V4', catalogVersion: 'legacy' };
+  const oldAction = { id: 'main-gauche-action', note: 'Main gauche', type: 'attack', base: 51, damage: 4, qualities: [{ id: 'protectrice', parameter: '1' }],
+    extensions: { fiche: { charId: 'caelel', equipmentId: oldItem.id, role: 'attack', skillName: 'Corps à corps (Parade)' }, equipment: structuredClone(oldItem) } };
+  const prior = profile({ equipment: [oldItem], diceLines: [oldAction], extensions: { ficheId: 'caelel' } });
+  const movedModel = getReferenceCatalogue().items.find(item => item.id === 'weapon-armes-corps-a-corps-escrime-main-gauche');
+  const movedItem = { ...structuredClone(movedModel), id: 'instance-main-gauche-v5', baseId: movedModel.id, custom: true };
+  assert.ok(movedItem, 'l’objet V5 correspondant est disponible dans le catalogue');
+  const nextSnapshot = ficheSnapshot('caelel', { ...caelel, equipment: [] });
+  nextSnapshot.equipment = [structuredClone(movedItem)];
+  const plan = planProfileSync(nextSnapshot, prior);
+  assert.equal(plan.removedActions.length, 0);
+  assert.deepEqual(plan.updated.equipment.map(item => item.id), [oldItem.id], 'le plan conserve l’ancien sans ajouter l’instance V5 comme si son identité était connue');
+  const identityWarning = plan.warnings.find(warning => warning.code === 'moved-instance-arbitration-required');
+  assert.ok(identityWarning);
+  assert.match(identityWarning.message, /Main gauche V4 personnalisée/);
+  assert.match(identityWarning.message, /« Main gauche » \(instance instance-main-gauche-v5\)/);
+  assert.match(identityWarning.message, /fiche externe/);
+  assert.deepEqual(plan.updated.diceLines.find(action => action.id === oldAction.id), oldAction);
+  const draft = { reserve: [prior], combat: { participants: [{ id: 'live', profileId: prior.id, equipment: [oldItem], actions: [oldAction] }] } };
+  assert.throws(() => applyFicheSync(draft, [{ profileId: prior.id, snapshot: nextSnapshot }]), error => error.code === 'fiche-equipment-arbitration-required');
+  assert.deepEqual(draft.reserve[0].equipment, [oldItem], 'le blocage conserve la partie sans effet partiel');
+  const repeated = planProfileSync(nextSnapshot, draft.reserve[0]);
+  assert.equal(repeated.updated.equipment.filter(item => item.id === oldItem.id).length, 1);
+  assert.equal(repeated.updated.diceLines.filter(action => action.id === oldAction.id).length, 1);
+
+  const absentSnapshot = ficheSnapshot('caelel', { ...caelel, equipment: [] });
+  const absent = planProfileSync(absentSnapshot, draft.reserve[0]);
+  assert.equal(absent.updated.equipment.some(item => item.id === oldItem.id), false,
+    'sans le nouvel ID correspondant dans la fiche, l’ancien exemplaire est supprimé');
+  assert.equal(absent.updated.diceLines.some(action => action.id === oldAction.id), false);
+  assert.ok(absent.removedActions.some(action => action.id === oldAction.id), 'l’action V4 figure parmi les suppressions');
+
+  const ordinaryItem = { ...oldItem, id: 'ordinary-removed-item', baseId: 'ordinary-removed-item' };
+  const ordinaryAction = { ...oldAction, id: 'ordinary-removed-action', extensions: { ...oldAction.extensions,
+    fiche: { ...oldAction.extensions.fiche, equipmentId: ordinaryItem.id }, equipment: ordinaryItem } };
+  const ordinaryPlan = planProfileSync(absentSnapshot, profile({ equipment: [ordinaryItem], diceLines: [ordinaryAction], extensions: { ficheId: 'caelel' } }));
+  assert.deepEqual(ordinaryPlan.updated.equipment, [], 'une suppression ordinaire de la fiche est appliquée');
+  assert.equal(ordinaryPlan.updated.diceLines.some(action => action.id === ordinaryAction.id), false);
+  assert.deepEqual(ordinaryPlan.removedActions, [{ id: ordinaryAction.id, name: ordinaryAction.note }]);
+
+  const duplicateOld = { ...oldItem, id: 'instance-main-gauche-v4-second' };
+  const ambiguous = planProfileSync(nextSnapshot, profile({ equipment: [oldItem, duplicateOld], diceLines: [], extensions: { ficheId: 'caelel' } }));
+  assert.deepEqual(ambiguous.updated.equipment.map(item => item.id), [oldItem.id, duplicateOld.id]);
+  assert.ok(ambiguous.warnings.some(warning => warning.code === 'moved-instance-arbitration-required'),
+    'les correspondances multiples sont exposées au MJ sans décider quel exemplaire convertir');
+
+  const oldShield = { id: 'instance-shield-v4', baseId: 'shield-armes-corps-a-corps-bouclier-bouclier', kind: 'shield',
+    name: 'Bouclier V4 personnalisé', category: 'Bouclier', ap: 2, damage: '', locations: [], layer: 'none',
+    keywords: [{ id: 'protectrice', parameter: '2' }, { id: 'v4-custom', parameter: 'garde' }], custom: true };
+  const shieldModel = getReferenceCatalogue().items.find(item => item.id === 'shield-armures-bouclier-bouclier');
+  const newShield = { ...structuredClone(shieldModel), id: 'instance-shield-v5', baseId: shieldModel.id, custom: true };
+  const shieldSnapshot = ficheSnapshot('caelel', { ...caelel, equipment: [] });
+  shieldSnapshot.equipment = [newShield];
+  const shieldPlan = planProfileSync(shieldSnapshot, profile({ equipment: [oldShield], diceLines: [], extensions: { ficheId: 'caelel' } }));
+  assert.deepEqual(shieldPlan.updated.equipment, [oldShield], 'le plan conserve le bouclier V4 sans compter l’instance V5 comme une même pièce');
+  assert.equal(shieldPlan.updated.protection.shields.length, 1, 'la protection du bouclier n’est calculée qu’une fois');
+  assert.ok(shieldPlan.warnings.some(warning => warning.code === 'moved-instance-arbitration-required'));
+
+  const sameIdSnapshot = ficheSnapshot('caelel', { ...caelel, equipment: [] });
+  sameIdSnapshot.equipment = [{ ...movedItem, id: 'instance-main-gauche-v4', baseId: movedModel.id }];
+  const sameIdPlan = planProfileSync(sameIdSnapshot, prior);
+  assert.deepEqual(sameIdPlan.updated.equipment, [oldItem], 'un baseId changé sous le même id d’instance ne remplace pas l’ancien objet');
+  const sameIdWarning = sameIdPlan.warnings.find(warning => warning.code === 'moved-instance-arbitration-required');
+  assert.ok(sameIdWarning);
+  assert.match(sameIdWarning.message, /Main gauche V4 personnalisée/);
+  assert.match(sameIdWarning.message, /Main gauche/);
+  assert.throws(() => applyFicheSync({ reserve: [prior] }, [{ profileId: prior.id, snapshot: sameIdSnapshot }]),
+    error => error.code === 'fiche-equipment-arbitration-required');
 });
 
 test('blessures — Caelel : 3 + 2×4 + 3 + 4 (Dur à cuire) = 18', () => {

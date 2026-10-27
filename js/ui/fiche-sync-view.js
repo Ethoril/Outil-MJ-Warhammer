@@ -225,11 +225,17 @@ export function initFicheSyncView({ mount, hosted = false, source, getContext, c
       if (missing.length) { const absent = document.createElement('p'); absent.className = 'muted'; absent.textContent = `Fiche absente : ${missing.join(', ')}.`; root.appendChild(absent); }
       const chosen = [...selections.entries()].filter(([, selection]) => selection.profileId);
       const unconfirmedReplacement = chosen.some(([charId, selection]) => { const profile = pjs().find(row => row.id === selection.profileId); return profile?.extensions?.ficheId && profile.extensions.ficheId !== charId && selection.replaceAssociation !== true; });
+      const arbitrationRequired = chosen.some(([charId, selection]) => {
+        const profile = pjs().find(row => row.id === selection.profileId);
+        const snapshot = snapshots.find(row => row.charId === charId);
+        return profile && snapshot && planProfileSync(snapshot, profile, selection).warnings.some(warning => warning.code === 'moved-instance-arbitration-required');
+      });
       const duplicate = chosen.length !== new Set(chosen.map(([, selection]) => selection.profileId)).size;
       const adoptions = chosen.flatMap(([,selection]) => Object.values(selection.adoptActions || {}).filter(Boolean));
       const duplicateAdoption = adoptions.length !== new Set(adoptions).size;
       if (duplicateAdoption) { const warn = document.createElement('p'); warn.className='error';warn.setAttribute('role','alert');warn.textContent='Une action locale ne peut remplacer qu’une seule action source. Changez le rapprochement.';root.appendChild(warn); }
       if (duplicate) { const warn = document.createElement('p'); warn.className = 'error'; warn.setAttribute('role', 'alert'); warn.textContent = 'Deux fiches visent le même profil : changez l’une des deux.'; root.appendChild(warn); }
+      if (arbitrationRequired) { const warn = document.createElement('p'); warn.className = 'error'; warn.setAttribute('role', 'alert'); warn.textContent = 'Synchronisation suspendue : les IDs ne permettent pas d’identifier sûrement les exemplaires déplacés. Corrigez ou arbitrez les objets dans la fiche, puis relisez-la.'; root.appendChild(warn); }
       const apply = button(chosen.length ? `Appliquer (${plural(chosen.length, 'fiche')})` : 'Appliquer', async () => {
         apply.disabled = true;
         try {
@@ -254,7 +260,7 @@ export function initFicheSyncView({ mount, hosted = false, source, getContext, c
           await callbacks.onApply?.(chosen.map(([charId, selection]) => ({ charId, profileId: selection.profileId, snapshot: snapshots.find(item => item.charId === charId), links: selection.links, convert: selection.convert, equipmentLinks: selection.equipmentLinks, adoptActions: selection.adoptActions, replaceAssociation: selection.replaceAssociation === true, expectedProfileFingerprint: selection.fingerprint })), { expectedLocalRevision: previewRevision });
         } catch (cause) { error = userMessage(cause, 'Mise à jour non appliquée : réessayez.'); render(); }
       });
-      apply.disabled = !chosen.length || duplicate || duplicateAdoption || unconfirmedReplacement;
+      apply.disabled = !chosen.length || duplicate || duplicateAdoption || unconfirmedReplacement || arbitrationRequired;
       actions.append(apply, button('Relire les fiches', load, 'ghost'), button('Déconnexion', async () => {
         try { await source.signOut(); error = ''; } catch (cause) { fail(cause); }
         userName = ''; phase = 'signin'; render();

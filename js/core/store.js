@@ -238,6 +238,24 @@ function registerNewV5Participants(before, next) {
   const oldIds = new Set((before.combat?.participants || []).filter(participant => participant.zone === 'active').map(participant => participant.id));
   if (!(next.combat?.participants || []).some(participant => participant.zone === 'active' && !oldIds.has(participant.id))) return;
   if(before.extensions?.v5?.combatInitiativeInitialized){
+    // Une invocation qui apparaît après le tirage du Round 0 est un PNJ nouveau :
+    // son initiative doit être tirée immédiatement (d10 + Bonus d'Initiative),
+    // puis il rejoint l'ordre au rang correspondant. Les arrivées ordinaires
+    // conservent leur comportement de renfort.
+    if (before.combat?.round === 0) {
+      for (const participant of next.combat.participants || []) {
+        if (participant.zone !== 'active' || oldIds.has(participant.id)) continue;
+        const v5 = participant.extensions?.v5 || {};
+        const summoned = v5.summonedBySpellId || v5.divineSummon || v5.divineWrathSummon;
+        const characteristic = Number.isInteger(participant.caracs?.I) ? participant.caracs.I : participant.initiative;
+        if (!summoned || !Number.isInteger(characteristic) || characteristic < 0) continue;
+        const die = Math.floor(Math.random() * 10) + 1;
+        participant.extensions = { ...(participant.extensions || {}), v5: { ...v5,
+          combatInitiative: { die, characteristic, characteristicSource: Number.isInteger(participant.caracs?.I) ? 'caracs.I' : 'initiative',
+            bonus: Math.floor(characteristic / 10), score: die + Math.floor(characteristic / 10), initialized: true, summoned: true }
+        } };
+      }
+    }
     const resolved=before.extensions?.v5?.combatInitiativeResolution||{},canonical={...before.combat,order:resolved.order||before.combat?.order||[]};
     const automatic=insertParticipantsByInitiative(canonical,next.combat.participants);
     const actual=before.combat?.orderMode===ORDER_MODES.MANUAL?insertParticipantsByInitiative(before.combat,next.combat.participants):automatic;

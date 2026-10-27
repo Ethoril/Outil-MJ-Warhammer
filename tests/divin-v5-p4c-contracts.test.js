@@ -84,6 +84,29 @@ test('Hurlement du loup : le loup apparaît avec le profil du bestiaire et les v
   assert.equal(describeEffectResult(result.receipt.effectReceipts[0], {}), line);
 });
 
+test('Invocation de Prière au Round 0 après le tirage — initiative automatique et rang selon le score', async () => {
+  const store = await fixture();
+  const snapshot = stateOf(store);
+  snapshot.combat.round = 0;
+  for (const [id, die, characteristic] of [['priest', 10, 50], ['ally', 1, 30], ['foe', 1, 20]]) {
+    const participant = snapshot.combat.participants.find(row => row.id === id);
+    participant.extensions.v5.combatInitiative = { die, characteristic, bonus: Math.floor(characteristic / 10), score: die + Math.floor(characteristic / 10), initialized: true };
+  }
+  snapshot.extensions.v5.combatInitiativeInitialized = true;
+  snapshot.extensions.v5.combatInitiativeResolution = { order: [...snapshot.combat.order] };
+  await store.loadFromJSON(snapshot);
+  await castHowl(store);
+  const wolf = summoned(store)[0];
+  const initiative = wolf.extensions.v5.combatInitiative;
+  assert.ok(initiative.die >= 1 && initiative.die <= 10);
+  assert.equal(initiative.characteristic, wolf.caracs.I);
+  assert.equal(initiative.score, initiative.die + Math.floor(wolf.caracs.I / 10));
+  assert.equal(initiative.initialized, true);
+  const rows = store.listParticipants().filter(row => row.zone === 'active');
+  const expected = [...rows].sort((a, b) => b.extensions.v5.combatInitiative.score - a.extensions.v5.combatInitiative.score).map(row => row.id);
+  assert.deepEqual(store.getCombat().order, expected);
+});
+
 test('Hurlement du loup : fin de prière retire le loup et la couche ; Undo puis Redo restituent exactement', async () => {
   const store = await fixture();
   const s0 = world(store);

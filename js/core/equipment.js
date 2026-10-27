@@ -20,7 +20,7 @@ export const ARCANE_WEAPON_PROFILES=Object.freeze(Object.fromEntries([
 const CONJURED_WEAPON_GROUPS=Object.freeze({
  net:'Base',dagger:'Base',knife:'Base','hand-weapon':'Base',improvised:'Base',sword:'Base',
  garrote:'Bagarre',knuckles:'Bagarre',unarmed:'Bagarre','cavalry-hammer':'Cavalerie',lance:'Cavalerie',
- buckler:'Escrime',foil:'Escrime',rapier:'Escrime','main-gauche':'Parade',swordbreaker:'Parade',
+ buckler:'Escrime',foil:'Escrime',rapier:'Escrime','main-gauche':'Escrime',swordbreaker:'Escrime',
  flail:'Fléau','grain-flail':'Fléau','military-flail':'Fléau',whip:'Fléau',
  halberd:'Hast',pike:'Hast',staff:'Hast',spear:'Hast',
  'bastard-sword':'Deux mains',greataxe:'Deux mains',pick:'Deux mains',warhammer:'Deux mains',zweihander:'Deux mains'
@@ -41,7 +41,7 @@ export function conjuredWeaponMetadata(participant,action){
 export function conjuredWeaponSkillScore(participant,key){
  const fold=s=>String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
  const numeric=value=>value==null||typeof value==='string'&&!value.trim()?null:Number.isFinite(Number(value))?Number(value):null;
- const group=CONJURED_WEAPON_GROUPS[key]||'Base',family=group==='Bagarre'?'bagarre':group==='Cavalerie'?'cavalerie':group==='Escrime'?'escrime':group==='Parade'?'parade':group==='Fléau'?'fleau':group==='Hast'?'hast':group==='Deux mains'?'deux mains':'base';
+ const group=CONJURED_WEAPON_GROUPS[key]||'Base',family=group==='Bagarre'?'bagarre':group==='Cavalerie'?'cavalerie':group==='Escrime'?'escrime':group==='Fléau'?'fleau':group==='Hast'?'hast':group==='Deux mains'?'deux mains':'base';
  const skill=(participant.skills||[]).find(s=>/corps a corps|melee/.test(fold(s.name||s.nom))&&new RegExp(family==='base'?'base|basic':family==='deux mains'?'deux mains|two.hand':family).test(fold(s.name||s.nom)));
  const value=[skill?.total,skill?.value,skill?.score].map(numeric).find(value=>value!==null);
  return value!==undefined?value:group==='Base'||group==='Bagarre'?numeric(participant.caracs?.CC):null;
@@ -119,7 +119,6 @@ const WEAPON_GROUPS = new Map([
  ['bagarre', {kind:'melee', specialty:'Bagarre'}], ['escrime', {kind:'melee', specialty:'Escrime'}], ['fleau', {kind:'melee', specialty:'Fléau'}],
  ['cavalerie', {kind:'melee', specialty:'Cavalerie'}], ['deux mains', {kind:'melee', specialty:'Deux mains'}],
  ['arme d hast', {kind:'melee', specialty:'Hast'}], ['armes d hast', {kind:'melee', specialty:'Hast'}], ['hast', {kind:'melee', specialty:'Hast'}],
- ['parade', {kind:'melee', specialty:'Parade'}],
  ['arc', {kind:'ranged', specialty:'Arc'}], ['arbalete', {kind:'ranged', specialty:'Arbalète'}], ['fronde', {kind:'ranged', specialty:'Fronde'}],
  ['lancer', {kind:'ranged', specialty:'Lancer'}], ['jet',{kind:'ranged',specialty:'Lancer'}], ['armes de jet',{kind:'ranged',specialty:'Lancer'}], ['arbalete de poing',{kind:'ranged',specialty:'Arbalète'}], ['armes a poudre',{kind:'ranged',specialty:'Poudre noire'}], ['poudre noire', {kind:'ranged', specialty:'Poudre noire'}], ['ingenierie', {kind:'ranged', specialty:'Ingénierie'}],
  ['ingenierie melee', {kind:'melee', specialty:'Ingénierie'}], ['ingenierie tir', {kind:'ranged', specialty:'Ingénierie'}], ['ingenierie corps a corps', {kind:'melee', specialty:'Ingénierie'}], ['ingenierie projectiles', {kind:'ranged', specialty:'Ingénierie'}],
@@ -240,6 +239,11 @@ export function applyWeaponSkillRules(actor, action, { weapon = null, context = 
  const sourceGroup=weaponGroupFor(equipment.category,equipment);
  let group=sourceGroup||weaponGroupFor(declared,equipment);
  if(isMaterialized&&conjured?.spellScoreImposed)return unchanged;
+ // Les anciens objets de groupe Parade gardent leur compétence explicitement
+ // liée jusqu'à décision du MJ. Le groupe n'est plus proposé ni inféré pour les
+ // nouveaux profils.
+ if(!group&&foldedWeaponText(declared)==='parade'&&(fiche.skillId||context.weaponSkillId||context.weaponTrainingSpecialty==='Parade'))
+  group={kind:'melee',specialty:'Parade',legacy:true};
  if(!group){if(fiche.bindingVersion!==1&&!hasExplicitTrainingFact)return unchanged;unresolved.push('Groupe d’arme manquant ou inconnu : le MJ doit préciser le groupe avant ce Test.');return {...unchanged,unresolved,receipt:{...receipt,missing:'group'}};}
  let skills=Array.isArray(actor?.skills)&&actor.skills.length?actor.skills:Array.isArray(actor?.ficheSnapshot?.skills)?actor.ficheSnapshot.skills:Array.isArray(actor?.skills)?actor.skills:null;
  const availableSkillRows=Array.isArray(skills)?skills:[];
@@ -328,7 +332,7 @@ export function applyWeaponSkillRules(actor, action, { weapon = null, context = 
  if(isBastard&&hands===1) {effectiveGroup={kind:'melee',specialty:'Base'};qualities=addQuality(addQuality(qualities,'epuisante'),'lente');unchanged.action.qualities=qualities;receipt.applied.push('bastard-sword-one-handed');}
  receipt.hands=hands||null;
  if(isBastard&&hands===0){unresolved.push('Épée bâtarde : mains utilisées manquantes dans le catalogue, demander le choix du MJ.');return {...unchanged,unresolved,receipt:{...receipt,missing:'hands'}};}
- if(isMainGauche)effectiveGroup={kind:'melee',specialty:'Parade'};
+ if(isMainGauche)effectiveGroup={kind:'melee',specialty:'Escrime'};
  if(isCavalry&&!mounted&&isSabre&&selectedSpec==='escrime')effectiveGroup={kind:'melee',specialty:'Escrime'};
  const chosenInMeleeFamily=chosen&&skillMatchesGroup(chosen,{kind:'melee'});
  const chosenReferenceRow=chosen&&getReferenceCatalogue()?.skills?.find(skill=>skill.id===chosen.id);
@@ -337,7 +341,8 @@ export function applyWeaponSkillRules(actor, action, { weapon = null, context = 
  const legalBaseAlternative=selectedSpec==='base'&&baseFallbackAllowed;
  const legalCavalryAlternative=isCavalry&&!mounted&&(['cavalerie','deux mains'].includes(selectedSpec)||hands===2||isSabre&&['base','escrime'].includes(selectedSpec)||isCavalryHammer&&selectedSpec==='cavalerie');
  const legalBastardAlternative=isBastard&&hands===1&&selectedSpec==='deux mains';
- if(chosen&&chosenInMeleeFamily&&effectiveGroup.kind==='melee'&&!legalBaseAlternative&&!legalCavalryAlternative&&!legalBastardAlternative&&selectedSpec!==foldedWeaponText(effectiveGroup.specialty)){
+ const explicitMainGaucheSkill=isMainGauche&&chosen&&chosenInMeleeFamily&&Boolean(context.weaponSkillId||fiche.skillId);
+ if(chosen&&chosenInMeleeFamily&&effectiveGroup.kind==='melee'&&!legalBaseAlternative&&!legalCavalryAlternative&&!legalBastardAlternative&&!explicitMainGaucheSkill&&selectedSpec!==foldedWeaponText(effectiveGroup.specialty)){
   receipt.applied.push('stale-melee-skill-link-fell-back-to-cc');chosen=null;selectedSpec='';
  }
  receipt.group=effectiveGroup.specialty;
@@ -357,12 +362,13 @@ export function applyWeaponSkillRules(actor, action, { weapon = null, context = 
   ||bestAvailableSkill(skills,exactSkillPredicate)
   ||bestAvailableSkill(skills,skill=>skillHasAdvance(skill)===true&&baseFallbackPredicate(skill))
   ||bestAvailableSkill(skills,baseFallbackPredicate);
- let usable=chosen&&skillMatchesGroup(chosen,effectiveGroup)&&skillSpec(chosen)===foldedWeaponText(effectiveGroup.specialty)?chosen:exactSkill;
+ let usable=chosen&&skillMatchesGroup(chosen,effectiveGroup)&&skillSpec(chosen)===foldedWeaponText(effectiveGroup.specialty)?chosen
+  :isMainGauche&&selectedSpec==='parade'&&chosen?chosen:exactSkill;
  if(isCavalry&&!mounted&&isCavalryHammer&&selectedSpec==='deux mains')usable=chosen&&skillMatchesGroup(chosen,{kind:'melee'})&&skillSpec(chosen)==='deux mains'?chosen:skills.find(skill=>skillMatchesGroup(skill,{kind:'melee'})&&skillSpec(skill)==='deux mains');
  if(isCavalry&&!mounted&&hands===2&&!isCavalryHammer&&!isSabre&&selectedSpec==='deux mains')usable=chosen&&skillMatchesGroup(chosen,{kind:'melee'})&&skillSpec(chosen)==='deux mains'?chosen:skills.find(skill=>skillMatchesGroup(skill,{kind:'melee'})&&skillSpec(skill)==='deux mains');
  if(isCavalry&&!mounted&&hands===1&&!isCavalryHammer&&!isSabre)usable=chosen&&skillMatchesGroup(chosen,{kind:'melee'})&&skillSpec(chosen)==='base'?chosen:skills.find(skill=>skillMatchesGroup(skill,{kind:'melee'})&&skillSpec(skill)==='base');
  if(isBastard&&hands===1)usable=chosen&&skillMatchesGroup(chosen,{kind:'melee'})&&skillSpec(chosen)==='base'?chosen:skills.find(skill=>skillMatchesGroup(skill,{kind:'melee'})&&skillSpec(skill)==='base');
- if(isMainGauche&&skillMatchesGroup(chosen,{kind:'melee'})&&selectedSpec==='base')usable=chosen;
+ if(explicitMainGaucheSkill||isMainGauche&&skillMatchesGroup(chosen,{kind:'melee'})&&['base','parade'].includes(selectedSpec))usable=chosen;
  if(categoryName==='escrime'&&usable&&skillSpec(usable)==='base')fencingWithBase=true;
  if(group.kind==='ranged'){
   const isCrossbowOrThrowing=['arbalete','lancer'].includes(categoryName);
@@ -401,10 +407,11 @@ export function applyWeaponSkillRules(actor, action, { weapon = null, context = 
  // Fencing with Basic is explicitly permitted, but never grants weapon qualities.
  const chosenNowInMeleeFamily=chosen&&skillMatchesGroup(chosen,{kind:'melee'});
  if(fencingWithBase&&chosen){usable=chosen;}
- const meleeAlternative=chosenNowInMeleeFamily&&(isMainGauche&&selectedSpec==='base'||isCavalry&&!mounted&&hands===1&&selectedSpec==='cavalerie'||isCavalry&&!mounted&&hands===2&&selectedSpec==='cavalerie'||isCavalry&&!mounted&&isCavalryHammer&&selectedSpec==='cavalerie'||isCavalry&&!mounted&&isSabre&&['cavalerie','base','escrime'].includes(selectedSpec)||isBastard&&hands===1&&selectedSpec==='deux mains');
+ const meleeAlternative=chosenNowInMeleeFamily&&(explicitMainGaucheSkill||isMainGauche&&['base','parade'].includes(selectedSpec)||isCavalry&&!mounted&&hands===1&&selectedSpec==='cavalerie'||isCavalry&&!mounted&&hands===2&&selectedSpec==='cavalerie'||isCavalry&&!mounted&&isCavalryHammer&&selectedSpec==='cavalerie'||isCavalry&&!mounted&&isSabre&&['cavalerie','base','escrime'].includes(selectedSpec)||isBastard&&hands===1&&selectedSpec==='deux mains');
  if(chosen&&(!chosenNowInMeleeFamily||selectedSpec!==foldedWeaponText(effectiveGroup.specialty))&&!fencingWithBase&&!meleeAlternative){unresolved.push('La compétence confirmée ne correspond pas au groupe de cette arme : le MJ doit choisir la spécialité appropriée.');return {...unchanged,unresolved,receipt:{...receipt,missing:'skill-group-mismatch'}};}
  if(usable&&advancesFor(usable,context)===null){unresolved.push('Les augmentations de cette compétence ne sont pas renseignées : le MJ doit confirmer les données de fiche.');return {...unchanged,unresolved,receipt:{...receipt,missing:'skill-advances'}};}
  const trained=usable&&advancesFor(usable,context)===true;
+ if(explicitMainGaucheSkill&&usable)receipt.skillId=usable.id;
  if(fencingWithBase&&trained)receipt.applied.push('fencing-with-basic');
  if(trained){
   receipt.trained=true;receipt.skillId=usable.id;
@@ -413,7 +420,7 @@ export function applyWeaponSkillRules(actor, action, { weapon = null, context = 
    unchanged.action.qualities=qualities.map(word=>word.id==='entaille'?{...word,parameter:'2'}:word);
    receipt.applied.push('sabre-basic-slash-2');
   }
-  if(isMainGauche&&skillSpec(usable)!=='parade'){
+  if(isMainGauche&&!['escrime','parade'].includes(skillSpec(usable))){
    unchanged.action.qualities=qualities.filter(word=>word.id!=='defensive');receipt.applied.push('main-gauche-as-dagger');
   }
   const score=scoreFor(actor,usable,context,action);if(score===null){unresolved.push('Le score de la compétence de groupe est indisponible : le MJ doit actualiser ou saisir la valeur de fiche.');return {...unchanged,unresolved,receipt:{...receipt,missing:'skill-score'}};}
@@ -489,6 +496,17 @@ export function locationProtection(target,context={}){
   else if(context.opposedWithShield===true){
    if(context.defenseProvided!==true)manual.push('jet-opposition-requis:bouclier');
    if(typeof context.ranged!=='boolean')manual.push('type-attaque-requis:bouclier');
+   const v5Shield=shield.keywords.some(word=>word.id==='bouclier');
+   if(v5Shield){
+    evaluatedKeywords.add('bouclier');
+    if(!Number.isSafeInteger(shield.ap)||shield.ap<0)manual.push('protection-bouclier-a-preciser');
+    else if(context.defenseProvided===true&&typeof context.ranged==='boolean'){
+     shieldAp=shield.ap;
+     // V5 : 2 PA ou plus autorisent l’opposition aux tirs à toute portée,
+     // sans condition de ligne de vue. La ligne de vue reste une règle V4.
+     if(context.ranged===true&&shield.ap<2){shieldAp=0;manual.push('bouclier-projectile-contexte-requis');}
+    }
+   }else{
    evaluatedKeywords.add('protectrice');
    const definition=resolveKeyword('protectrice'),baseline=supportedConditional('protectrice');
    if(!definition||definition.effect!==baseline?.effect||definition.edition!==baseline?.edition)manual.push('effet-non-couvert:protectrice');
@@ -497,6 +515,7 @@ export function locationProtection(target,context={}){
    else if(context.defenseProvided===true && typeof context.ranged==='boolean'){
     shieldAp=rating;
     if(context.ranged===true&&(rating<2||context.lineOfSight!==true)){shieldAp=0;manual.push('bouclier-projectile-contexte-requis');}
+   }
    }
   }
   else if(context.opposedWithShield===undefined)manual.push('usage-bouclier-requis');

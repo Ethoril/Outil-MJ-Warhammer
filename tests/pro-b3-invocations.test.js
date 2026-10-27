@@ -21,6 +21,28 @@ test('B3 Relever les morts — Squelettes aux valeurs imprimées, À Terre, cont
  }
 });
 
+test('Invocation au Round 0 après le tirage — tire un d10 et inscrit le bonus d’Initiative',async()=>{
+ const c=getSpellContract('Relever les morts');
+ const {store}=await encounter();
+ const state=JSON.parse(store.getFullJSON());
+ state.combat.round=0;
+ state.extensions.v5.combatInitiativeInitialized=true;
+ state.extensions.v5.combatInitiativeResolution={order:[...state.combat.order]};
+ await store.loadFromJSON(state);
+ await cast(store,c,{sl:0,domainFactsExtra:{minutesToDawn:5}});
+ const summoned=raised(store,c);
+ assert.ok(summoned.length>0);
+ for(const creature of summoned){
+  const initiative=creature.extensions.v5.combatInitiative;
+  assert.ok(initiative.die>=1&&initiative.die<=10);
+  assert.equal(initiative.characteristic,creature.caracs.I);
+  assert.equal(initiative.bonus,Math.floor(creature.caracs.I/10));
+  assert.equal(initiative.score,initiative.die+initiative.bonus);
+  assert.equal(initiative.initialized,true);
+  assert.ok(store.getCombat().order.includes(creature.id));
+ }
+});
+
 test('B3 Réanimation — Zombies ou Squelettes d’après le choix, profil imprimé de chacun',async()=>{
  const c=getSpellContract('Réanimation');
  for(const [kind,id] of [['zombies','E0-P-094'],['skeletons','E0-P-093']]){
