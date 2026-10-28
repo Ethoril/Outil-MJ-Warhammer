@@ -244,3 +244,16 @@ test('Immersion, silk lasso and spit inflict no Wounds nor Critical, the Gargant
   }
   assert.ok(run('E0-P-910', null, 'melee').damage?.finalDamage > 0, 'ordinary bite keeps its damage');
 });
+
+test('Gargantuan discharge keeps its Momentum cost even when the Gargantuan would win the opposition', () => {
+  const built = p('E0-P-910');
+  const actor = { ...built, id: 'gargantuan-cost', camp: 'ennemi', zone: 'active', hp: 80, maxHp: 80, extensions: { ...built.extensions, v5: { ...built.extensions.v5, hasMomentum: true } } };
+  const action = actor.actions.find(row => row.extensions?.v5?.specialProfileAbility === 'gargantuan-electric-discharge');
+  const preview = previewResolution({ resolutionId: 'garg-cost', baseRevision: 0, actor,
+    target: { id: 'held', name: 'Agrippé', zone: 'active', hp: 40, maxHp: 40, caracs: { E: 30 }, equipment: [], states: [] },
+    action, roll: 23, defense: { base: 20, roll: 95, v5: { kind: 'melee' } },
+    v5: { kind: 'melee', context: { f2h: { targetGrappled: true, targetEnduranceSuccess: true, selfEnduranceSuccess: true } } } });
+  const trace = preview.momentum.find(row => row.participantId === actor.id);
+  assert.equal(trace.after, false, JSON.stringify(trace.details));
+  assert.ok(!trace.details.some(row => row.effect === 'gain'));
+});

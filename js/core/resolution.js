@@ -1649,11 +1649,13 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   if ((actor?.extensions?.v5?.bestiary?.id === 'E0-P-921' || actor?.profileId === 'E0-P-921') && context.f2h?.singleCombatLeader === true)
     actorEvents.push(event('profileMomentumGain', { profileAbility: 'wulfrik-champion-slayer' }));
   if (context.outsideCombat !== true && actorPlan.charging) actorEvents.push(event('chargeEnemy'));
-  if (context.outsideCombat !== true && actorPlan.kind === 'melee') {
+  // La décharge du Gargantuan est un effet payé en Élan, pas une attaque opposée : ni gain ni perte d'opposition.
+  const profileEffectOnly = action.extensions?.v5?.specialProfileAbility === 'gargantuan-electric-discharge';
+  if (context.outsideCombat !== true && actorPlan.kind === 'melee' && !profileEffectOnly) {
     if (opposed) actorEvents.push(event(hit ? 'opposedMeleeWon' : 'opposedMeleeLost'));
     else if (!success) actorEvents.push(event('meleeTestFailed'));
   }
-  if (context.outsideCombat !== true && defenderPlan?.kind === 'melee' && opposed) targetEvents.push(event(hit ? 'opposedMeleeLost' : 'opposedMeleeWon'));
+  if (context.outsideCombat !== true && defenderPlan?.kind === 'melee' && opposed && !profileEffectOnly) targetEvents.push(event(hit ? 'opposedMeleeLost' : 'opposedMeleeWon'));
   const criticalEffects = criticalBlock?.application;
   targetEvents.push(event('woundsLost', { amount: Math.min(hpBefore, (damage?.finalDamage || 0) + (criticalEffects?.extraWounds || 0)) }));
   targetEvents.push(event('conditionAcquired', { instances: conditionChanges.target?.acquiredInstances || 0 }));
