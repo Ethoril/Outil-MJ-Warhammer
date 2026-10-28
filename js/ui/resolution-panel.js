@@ -1554,14 +1554,16 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
       useMount.append(useMountCheck,`Employer la BF de ${mount.name||mount.id} pour cette charge`); v5.appendChild(useMount);
     }
   }
-  const talentToggle = (key, text, checked) => {
+  const talentToggle = (key, text, checked, disabled = false) => {
     const label = node('label', 'workspace-type'); const check = document.createElement('input');
-    check.type = 'checkbox'; check.checked = checked === true; check.setAttribute('aria-label', text);
+    check.type = 'checkbox'; check.checked = checked === true; check.disabled=disabled; check.setAttribute('aria-label', text);
     check.dataset.focusKey = key; check.addEventListener('change', () => handlers.select({ [key]: check.checked }));
     label.append(check, text); v5.appendChild(label);
   };
   talentToggle('fortuneReroll', 'Relancer ce Test avec 1 Point de Chance (Fortune)', draft.fortuneReroll);
-  talentToggle('fortuneForAdvantage', 'Dépenser 1 Point de Chance pour obtenir Avantage avant le jet', draft.fortuneForAdvantage);
+  const fortuneAdvantageLocked=draft.preview!=null||draft.attackRoll!==undefined&&draft.attackRoll!==null&&String(draft.attackRoll).trim()!=='';
+  talentToggle('fortuneForAdvantage', 'Dépenser 1 Point de Chance pour obtenir Avantage avant le jet', draft.fortuneForAdvantage,fortuneAdvantageLocked);
+  if(fortuneAdvantageLocked)v5.appendChild(node('p','workspace-muted','Chance → Avantage se choisit avant de connaître le résultat du d100. Effacez le jet avant de modifier ce choix.'));
   // Fortune généreuse (Ranald) : proposée seulement si l’acteur porte encore une faveur d’inversion.
   if ((actor?.extensions?.v5?.divineEffects || []).some(layer => layer?.reverseDice?.remaining > 0)) {
     talentToggle('reverseDice', 'Inverser les dés de ce Test (Fortune généreuse : 82 devient 28)', draft.reverseDice);
