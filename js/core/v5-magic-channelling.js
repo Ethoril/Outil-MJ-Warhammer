@@ -142,8 +142,9 @@ export function calculateMagicArmorPenalty(participant, { wind = null } = {}) {
  * - Haute Magie : "Focalisation (Haute Magie)" ou "Focalisation (Qhaysh)"
  */
 export function resolveChannellingSkill(participant, { type = 'winds', wind = null } = {}) {
-  const bfm = Math.floor((Number(participant?.caracs?.FM) || 0) / 10);
+  // Élémentaire de mer (L25 p.142) : la Force remplace FM, BF compris (MJ, 28/10).
   const characteristic = participant?.extensions?.v5?.bestiary?.id === 'E0-P-909' ? 'F' : 'FM';
+  const bfm = Math.floor((Number(participant?.caracs?.[characteristic]) || 0) / 10);
   const targetType = type === 'high' ? 'high' : 'winds';
 
   const highNames = ['focalisation (haute magie)', 'focalisation (qhaysh)', 'channelling (high magic)', 'focalisation haute magie'];

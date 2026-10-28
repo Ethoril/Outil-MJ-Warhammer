@@ -264,3 +264,19 @@ test('An Exhausted Gargantuan discharges for 6 Damage (L25 p.143)', () => {
   const action = actor.actions.find(row => row.extensions?.v5?.specialProfileAbility === 'gargantuan-electric-discharge');
   assert.equal(normalizeResolutionInput({ actor, action, roll: 23 }).action.damage, 6);
 });
+
+test('Sea Elemental casts and channels with Strength, its BF standing for BI and BFM (MJ 28/10)', async () => {
+  const { resolveCastingSkill } = await import('../js/core/v5-magic-casting.js');
+  const { resolveChannellingSkill } = await import('../js/core/v5-magic-channelling.js');
+  const sea = p('E0-P-909');
+  const bf = Math.floor(sea.caracs.F / 10);
+  const cast = resolveCastingSkill(sea);
+  assert.equal(cast.carac, 'F');
+  assert.equal(cast.bi, bf);
+  assert.equal(cast.bfm, bf);
+  const channel = resolveChannellingSkill(sea);
+  assert.equal(channel.carac, 'F');
+  assert.equal(channel.bfm, bf);
+  const other = p('E0-P-910');
+  assert.equal(resolveCastingSkill(other).bi, Math.floor((other.caracs.Int || 0) / 10));
+});
