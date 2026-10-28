@@ -62,6 +62,19 @@ const preserveEquipmentKeywordDetails = body => {
  ].reduce((value,[before,after,label])=>replaceRequired(value,before,after,label),body);
 };
 const source=resolve(process.argv.find(a=>a.startsWith('--source-dir='))?.slice(13)||'../ennemi-interieur-wfrp4');
+const refreshMagicSourceManifest=async rows=>{
+ const sheets=new Set(['Magie','Miracles']);
+ // These modes use the checked-in mirrors; they must not claim a fresh fetch.
+ return Promise.all((rows||[]).map(async row=>{
+  if(!sheets.has(row.worksheet))return row;
+  let csv;
+  try{csv=await readFile(resolve(root,'js/data/reference-source-csv',`${row.worksheet}.csv`),'utf8');}
+  catch(error){if(error?.code==='ENOENT')return row;throw error;}
+  const hash=createHash('sha256').update(csv).digest('hex');
+  const sheet=encodeURIComponent(row.worksheet);
+  return {...row,url:`https://docs.google.com/spreadsheets/d/1SCnAJCthdto7ROjovuyDYmz4y9GJBBLfThuYNmYR_Cs/gviz/tq?tqx=out:csv&headers=1&sheet=${sheet}`,sha256:hash,status:'local-v5-mirror'};
+ }));
+};
 if(process.argv.includes('--talents-only')){
  const readSource=async path=>readFile(resolve(source,path),'utf8');
  const prior=JSON.parse(await readFile(resolve(root,'js/data/reference-snapshot.json'),'utf8'));
@@ -76,9 +89,9 @@ if(process.argv.includes('--talents-only')){
   await mkdir(dirname(destination),{recursive:true});await writeFile(destination,body);
  }
  const talentCsv=await readFile(resolve(root,'js/data/reference-source-csv/Talents.csv'),'utf8');
- const sourceManifest=(prior.sourceManifest||[]).map(row=>row.worksheet==='Talents'
+ const sourceManifest=await refreshMagicSourceManifest((prior.sourceManifest||[]).map(row=>row.worksheet==='Talents'
   ?{...row,url:'https://docs.google.com/spreadsheets/d/1SCnAJCthdto7ROjovuyDYmz4y9GJBBLfThuYNmYR_Cs/gviz/tq?tqx=out:csv&headers=1&sheet=Talents',sha256:hash(talentCsv),fetchedAt:talents.fetchedAt,status:'local-v5-mirror'}
-  :row);
+  :row));
  const next={...prior,published:{...prior.published,talents:published.talents},talents,sourceFiles,sourceManifest};
  const canonical=(key,value)=>['catalogVersion','contentVersion','version','descriptionSnapshotVersion','fetchedAt','publishedAt'].includes(key)?undefined:value&&typeof value==='object'&&!Array.isArray(value)?Object.fromEntries(Object.keys(value).sort().map(k=>[k,value[k]])):value;
  const useful={skills:next.published.skills,talentContract:next.published.talents,
@@ -125,9 +138,9 @@ if(process.argv.includes('--equipment-only')){
    equipment.keywordHistory[prior.equipment.catalogVersion]=prior.equipment.keywords;
  }
  const next={...prior,equipment,sourceFiles};
- next.sourceManifest=(prior.sourceManifest||[]).map(row=>sourceRows[row.worksheet]
+ next.sourceManifest=await refreshMagicSourceManifest((prior.sourceManifest||[]).map(row=>sourceRows[row.worksheet]
   ?{...row,...sourceRows[row.worksheet],status:'local-v5-mirror',fetchedAt:equipment.fetchedAt}
-  :row);
+  :row));
  const canonical=(key,value)=>['catalogVersion','contentVersion','version','descriptionSnapshotVersion','fetchedAt','publishedAt'].includes(key)?undefined:value&&typeof value==='object'&&!Array.isArray(value)?Object.fromEntries(Object.keys(value).sort().map(k=>[k,value[k]])):value;
  const useful={skills:next.published.skills,talentContract:next.published.talents,
   talents:{entries:next.talents.entries,legacyAliases:next.talents.legacyAliases,specializationTranslations:next.talents.specializationTranslations},

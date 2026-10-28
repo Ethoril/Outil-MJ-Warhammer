@@ -23203,16 +23203,16 @@
     },
     {
       "worksheet": "Magie",
-      "url": "https://docs.google.com/spreadsheets/d/1SCnAJCthdto7ROjovuyDYmz4y9GJBBLfThuYNmYR_Cs/gviz/tq?tqx=out:csv&sheet=Magie",
+      "url": "https://docs.google.com/spreadsheets/d/1SCnAJCthdto7ROjovuyDYmz4y9GJBBLfThuYNmYR_Cs/gviz/tq?tqx=out:csv&headers=1&sheet=Magie",
       "sha256": "8aca1ccac29f4f0a56388efdef7db700896f29e66857fad50fdc3829bd283db5",
-      "fetchedAt": "2026-10-14T09:18:25.745Z",
+      "fetchedAt": "2026-10-28",
       "status": "local-v5-mirror"
     },
     {
       "worksheet": "Miracles",
-      "url": "https://docs.google.com/spreadsheets/d/1SCnAJCthdto7ROjovuyDYmz4y9GJBBLfThuYNmYR_Cs/gviz/tq?tqx=out:csv&sheet=Miracles",
+      "url": "https://docs.google.com/spreadsheets/d/1SCnAJCthdto7ROjovuyDYmz4y9GJBBLfThuYNmYR_Cs/gviz/tq?tqx=out:csv&headers=1&sheet=Miracles",
       "sha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
-      "fetchedAt": "2026-10-14T09:18:25.745Z",
+      "fetchedAt": "2026-10-28",
       "status": "local-v5-mirror"
     }
   ]
