@@ -513,6 +513,7 @@ export function locationProtection(target,context={}){
  let shieldAp=0,shield=null;
  const shields=protection?.shields||[];
  if(context.shieldId){shield=shields.find(item=>item.id===context.shieldId)||null;if(!shield)manual.push('bouclier-introuvable');
+  else if(target?.extensions?.v5?.paviseDeploymentByItemId?.[shield.id]?.status==='planted'){shieldAp=0;}
   else if(context.shieldAvailable===false||target?.extensions?.shieldUnavailable?.includes?.(shield.id))warnings.push('Bouclier indisponible dans cette scène');
   else if(context.shieldAvailable !== true)manual.push('disponibilite-bouclier-requise');
   else if(context.opposedWithShield===true){
@@ -557,8 +558,10 @@ export function locationProtection(target,context={}){
  // Planted pavise (Up in Arms): the declared facing and position are MJ facts.
  // Its printed Shield 5 is a floor for the covered hit, never extra PA stacked
  // on top of armour. The panel requires an explicit facing and attack direction.
- const paviseFacing=context.paviseFacing, attackDirection=context.attackDirection;
- const paviseCovered=context.pavisePlanted===true && ['north','south','east','west'].includes(paviseFacing)
+ const paviseItem=target?.equipment?.find(item=>item.id===context.paviseId&&item.kind==='shield'&&/pavise|pavois/i.test(item.name||item.id||''));
+ const deployment=paviseItem&&target?.extensions?.v5?.paviseDeploymentByItemId?.[context.paviseId];
+ const paviseFacing=deployment?.facing, attackDirection=context.attackDirection;
+ const paviseCovered=deployment?.status==='planted' && ['north','south','east','west'].includes(paviseFacing)
   && attackDirection===paviseFacing && Number(context.paviseDistanceYards)<=1
   && (context.ranged===true || (context.paviseMeleeFirstTurn===true && context.ranged===false));
  if(paviseCovered)ap=Math.max(ap,5);

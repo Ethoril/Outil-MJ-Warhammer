@@ -36,6 +36,7 @@ import { initSidePanel } from './side-panel.js';
 import { getSpellContract, getAllSpellContracts } from '../core/v5-spell-contracts.js';
 import { magicGrantedActions, beastFormActions } from '../core/v5-magic-combat.js';
 import { transformationOvercastCost } from '../core/v5-magic-arbitrations.js';
+import { effectiveSupplementalEncumbrance } from '../core/v5-supplemental-equipment.js';
 
 export const WORKSPACE_SPACES = Object.freeze(['prepare', 'play', 'library']);
 
@@ -1701,6 +1702,36 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       canDeclareCombatMovement: Boolean(callbacks.declareCombatMovement),
       handlers: resolutionHandlers
     }));
+
+    const carriedPavises=(context.actor?.equipment||[]).filter(item=>item.kind==='shield'&&/pavise|pavois/i.test(item.name||item.id||''));
+    if(carriedPavises.length){
+      const deploymentPanel=node('section','workspace-card workspace-pavise-setup');deploymentPanel.setAttribute('aria-label','Mise en place du pavois');
+      deploymentPanel.appendChild(node('h3','workspace-card-title','Mise en place du pavois'));
+      for(const item of carriedPavises){
+        const deployment=context.actor?.extensions?.v5?.paviseDeploymentByItemId?.[item.id]||null,wrap=node('div','workspace-v5-context');
+        const progress=deployment?.status==='planted'?`Planté face au ${deployment.facing} · 2/2 Actions`:deployment?.actionsPaid===1?`Première Action dépensée · face au ${deployment.facing} · en attente d’un autre Tour`: 'Non planté · 0/2 Actions';
+        wrap.appendChild(node('p','workspace-result-line',`${item.name||item.id} · ${progress}`));
+        if(deployment?.status!=='planted'){
+          const label=node('label','workspace-type','Direction choisie par le MJ'),choice=document.createElement('select');choice.setAttribute('aria-label',label.textContent);choice.append(new Option('Choisir…',''));for(const [value,text] of [['north','Nord'],['south','Sud'],['east','Est'],['west','Ouest']])choice.append(new Option(text,value));choice.value=deployment?.facing||'';label.append(choice);wrap.appendChild(label);
+          const error=node('p','workspace-error'),apply=button(deployment?.actionsPaid===1?'Dépenser la seconde Action au prochain Tour':'Dépenser la première Action de mise en place','workspace-primary');apply.type='button';choice.addEventListener('change',()=>{apply.disabled=Boolean(!choice.value||state.busy||!Store);});apply.addEventListener('click',async()=>{apply.disabled=true;error.textContent='';try{const plan=Store.previewV5PaviseDeployment({actorId:context.actor.id,equipmentId:item.id,direction:choice.value});if(!plan.ready)throw new Error(plan.error||'Mise en place non disponible.');const result=await Store.applyV5PaviseDeployment(plan);if(result?.status!=='applied')throw new Error(result?.reason||'Action du pavois non enregistrée.');render();}catch(cause){error.textContent=userMessage(cause,'Action du pavois non enregistrée.');apply.disabled=false;}});apply.disabled=Boolean(!choice.value||state.busy||!Store);wrap.append(error,apply);
+        }
+        deploymentPanel.appendChild(wrap);
+      }
+      deploymentPanel.appendChild(node('p','workspace-muted','Chaque clic dépense et journalise une Action du Tour courant. La seconde Action doit être dépensée à un Tour ultérieur; la protection n’est active qu’après les deux dépenses.'));
+      center.appendChild(deploymentPanel);
+    }
+
+    const leviathanPieces=(context.actor?.equipment||[]).filter(item=>/leviathan plate|plate de leviathan/i.test(item.name||item.id||''));
+    if(leviathanPieces.length){
+      const panel=node('section','workspace-card workspace-leviathan-encumbrance');panel.setAttribute('aria-label','Encombrement de la plate de léviathan');panel.appendChild(node('h3','workspace-card-title','Encombrement de la plate de léviathan'));
+      for(const item of leviathanPieces){const wrap=node('div','workspace-v5-context'),baseline=item.extensions?.v5?.metalEquivalentEncumbrance;
+        const effective=effectiveSupplementalEncumbrance(item,baseline);wrap.appendChild(node('p','workspace-result-line',effective===null?`${item.name} · saisissez l’Encombrement de la pièce métallique équivalente pour calculer cet objet.`:`${item.name} · métal ${baseline} · léviathan ${effective} Encombrement (−1)`));
+        const label=node('label','workspace-type','Encombrement de la pièce métallique équivalente (MJ)');const input=document.createElement('input');input.type='number';input.min='1';input.step='1';input.value=baseline??'';input.setAttribute('aria-label',label.textContent);label.append(input);wrap.appendChild(label);
+        const error=node('p','workspace-error'),save=button('Enregistrer la référence métal','workspace-primary');save.type='button';save.addEventListener('click',async()=>{save.disabled=true;error.textContent='';try{const value=Number(input.value);if(!Number.isSafeInteger(value)||value<1)throw new Error('Saisissez un Encombrement métallique entier positif.');const fresh=(Store.listParticipants?.()||[]).find(row=>row.id===context.actor.id)||context.actor;const equipment=(fresh.equipment||[]).map(row=>row.id!==item.id?row:{...row,extensions:{...(row.extensions||{}),v5:{...(row.extensions?.v5||{}),metalEquivalentEncumbrance:value}}});const result=await Store.updateParticipant(fresh.id,{equipment});if(result?.ok===false)throw new Error(result.error||'Référence non enregistrée.');render();}catch(cause){error.textContent=userMessage(cause,'Référence non enregistrée.');save.disabled=false;}});wrap.append(error,save);panel.appendChild(wrap);
+      }
+      panel.appendChild(node('p','workspace-muted','Calcul stocké sur l’objet : Encombrement de la pièce métallique équivalente moins 1. Aucun autre objet ni PA/Taille ne change.'));
+      center.appendChild(panel);
+    }
 
     const reloadWeapons=(context.actor?.equipment||[]).filter(item=>item.kind==='weapon'&&!/griffonsfoot/i.test(item.name||'')&&item.keywords?.some(row=>['a-repetition','recharge','salve','salvo'].includes(typeof row==='string'?row:row?.id)));
     if(reloadWeapons.length){

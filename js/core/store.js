@@ -3685,6 +3685,40 @@ function resolvedCorruptionTest(participant, skillId, input) {
       });
       return Promise.resolve(saved).then(result=>result?.ok===false?{status:'error',reason:result.error}:{status:'applied',participantId:plan.participantId,projectileId:plan.projectileId,persistence:result});
     },
+    previewV5PaviseDeployment(input = {}) {
+      const envelope=currentEnvelope(),actor=envelope.combat?.participants?.find(row=>row.id===input.actorId);
+      const item=actor?.equipment?.find(row=>row.id===input.equipmentId&&row.kind==='shield'&&/pavise|pavois/i.test(row.name||row.id||''));
+      const clock=v5StoreActionClock(envelope),deployments=actor?.extensions?.v5?.paviseDeploymentByItemId||{},before=deployments[input.equipmentId]||null;
+      if(!actor||!item)return{ready:false,status:'blocked',error:'Choisir un Pavois (Pavise) réellement équipé.'};
+      if(envelope.combat?.currentActorId!==actor.id||!clock.turnId)return{ready:false,status:'blocked',error:'Le porteur doit être l’acteur courant d’un Tour suivi.'};
+      if(standardV5ActionSpent(envelope,actor.id,clock))return{ready:false,status:'blocked',error:'Une Action a déjà été dépensée pendant ce Tour.'};
+      if(before?.status==='planted')return{ready:false,status:'blocked',error:'Ce pavois est déjà planté.'};
+      if(before?.actionsPaid===1&&before.lastTurnId===clock.turnId)return{ready:false,status:'blocked',error:'La seconde Action de mise en place doit être dépensée pendant un autre Tour.'};
+      if(before&&before.actionsPaid!==1)return{ready:false,status:'blocked',error:'État de mise en place du pavois incohérent.'};
+      const direction=input.direction;
+      if(!['north','south','east','west'].includes(direction))return{ready:false,status:'requires-input',error:'Choisir la direction du pavois.'};
+      if(before?.facing&&before.facing!==direction)return{ready:false,status:'blocked',error:'La direction du pavois a déjà été fixée par la première Action.'};
+      return{ready:true,actorId:actor.id,equipmentId:item.id,direction,step:before?2:1,turnId:clock.turnId,baseRevision:envelope.localRevision||0,before:structuredClone(before)};
+    },
+    applyV5PaviseDeployment(supplied) {
+      const plan=cloneValue(supplied);if(!plan?.ready)return Promise.resolve({status:'blocked',reason:plan?.error||'Aperçu de mise en place requis.'});
+      const actionId=`pavise-setup:${plan.equipmentId}:${plan.turnId}`;
+      const saved=api.executeCommand('v5-pavise-deployment',draft=>{
+        if((draft.localRevision||0)!==plan.baseRevision)throw Object.assign(new Error('La partie a changé; recalculez la mise en place.'),{userFacing:true});
+        const actor=draft.combat?.participants?.find(row=>row.id===plan.actorId),item=actor?.equipment?.find(row=>row.id===plan.equipmentId&&row.kind==='shield'&&/pavise|pavois/i.test(row.name||row.id||''));
+        const clock=v5StoreActionClock(draft),before=actor?.extensions?.v5?.paviseDeploymentByItemId?.[plan.equipmentId]||null;
+        if(!actor||!item||draft.combat?.currentActorId!==actor.id||clock.turnId!==plan.turnId||standardV5ActionSpent(draft,actor.id,clock))throw Object.assign(new Error('Tour, porteur ou Action du pavois périmé.'),{userFacing:true});
+        if(JSON.stringify(before)!==JSON.stringify(plan.before)||((plan.step===1&&before)||(plan.step===2&&(!before||before.actionsPaid!==1||before.lastTurnId===clock.turnId||before.facing!==plan.direction))))throw Object.assign(new Error('La mise en place du pavois a changé; recalculez.'),{userFacing:true});
+        const after=plan.step===1?{status:'setting-up',actionsPaid:1,facing:plan.direction,lastTurnId:clock.turnId,startedAt:Date.now()}
+          :{status:'planted',actionsPaid:2,facing:plan.direction,lastTurnId:clock.turnId,plantedAt:Date.now()};
+        actor.extensions??={};actor.extensions.v5??={};actor.extensions.v5.paviseDeploymentByItemId={...(actor.extensions.v5.paviseDeploymentByItemId||{}),[plan.equipmentId]:after};
+        draft.combat.participants=draft.combat.participants.map(row=>row.id===actor.id?actor:row);
+        recordV5ActionUsage(draft,actor.id,actionId);
+        draft.log=[{id:uid(),kind:'management',actorId:actor.id,actorName:actor.name,text:`${actor.name||actor.id} : Action ${plan.step}/2 de mise en place du Pavois`,detail:{kind:'v5-pavise-deployment',equipmentId:plan.equipmentId,after} },...(draft.log||[])].slice(0,300);
+        return draft;
+      });
+      return Promise.resolve(saved).then(result=>result?.ok===false?{status:'error',reason:result.error}:{status:'applied',step:plan.step,statusText:plan.step===2?'planted':'setting-up'});
+    },
     previewV5WeaponReload(input = {}) {
       const envelope = currentEnvelope(), actor = envelope.combat?.participants?.find(row => row.id === input.actorId);
       const weapon = actor?.equipment?.find(row => row.id === input.equipmentId && row.kind === 'weapon');

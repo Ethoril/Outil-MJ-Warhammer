@@ -8,8 +8,8 @@ const RULES = Object.freeze({
   'F-L11-0017': { kind: 'corruption', influence: 'minor', label: 'Jezzail à malepierre' },
   'F-L11-0018': { kind: 'corruption', influence: 'minor', label: 'Pistolet à malepierre' },
   'F-L11-0076': { kind: 'poison', resistanceDR: -1, label: 'Dague funeste' },
-  'F-L11-0078': { kind: 'never-break-in-combat', label: 'Lame à poignée de bois tombé' },
-  'F-L11-0079': { kind: 'critical-bleeding-both', label: 'Lame à poignée de bois arraché' },
+  'F-L11-0078': { kind: 'antler-hilt', label: 'Lame à poignée de bois tombé' },
+  'F-L11-0079': { kind: 'antler-hilt', label: 'Lame à poignée de bois arraché' },
   'F-L11-0081': { kind: 'encumbrance-reduction', amount: 1, label: 'Plate de léviathan' },
   'F-L11-0083': { kind: 'bleeding-on-wound', label: 'Pointes de dragon écharde' },
   'F-L13-0086': { kind: 'pavise-carried', protection: 3, damageFormula: 'BF+2', label: 'Pavois porté' },
@@ -33,19 +33,26 @@ const itemRuleId = item => {
   if (/lance feu.*malepierre/.test(name)) return 'F-L11-0016';
   if (/jezzail.*malepierre/.test(name)) return 'F-L11-0017';
   if (/pistolet.*malepierre/.test(name)) return 'F-L11-0018';
-  if (/lame.*bois tombe|antler hilt|fallen antler/.test(name)) return 'F-L11-0078';
+  if (/lame.*bois tombe|antler hilted blade|antler hilt|fallen antler/.test(name)) return 'F-L11-0078';
   if (/lame.*bois arrache|antler.*violently|violently.*antler/.test(name)) return 'F-L11-0079';
-  if (/plate.*leviathan/.test(name)) return 'F-L11-0081';
+  if (/plate.*leviathan|leviathan.*plate/.test(name)) return 'F-L11-0081';
   if (/pointes.*dragon/.test(name)) return 'F-L11-0083';
   if (/pavois|pavise/.test(name)) return item?.v5?.planted === true ? 'F-L13-0087' : 'F-L13-0086';
   if (/brise os|krag breaker/.test(name)) return 'F-L22-0139';
   if (/griffes.*tigre/.test(name)) return 'F-L24-0008';
   if (/dague funeste|doom dagger/.test(name)) return 'F-L11-0076';
-  if (/bâton enchant|enchanted staff/.test(name)) return 'F-L06-1104';
+  if (/baton.*enchant|enchanted staff/.test(name)) return 'F-L06-1104';
   if (/robe.*sorcier|wizard robe/.test(name)) return 'F-L06-1105';
   if (/warp blade|lame de malepierre/.test(name) || id.toLowerCase().includes('warp-blade')) return 'F-L11-0014';
   return null;
 };
+
+export function effectiveSupplementalEncumbrance(item, metalEquivalentEncumbrance) {
+  const ruleId = itemRuleId(item);
+  const value = Number(metalEquivalentEncumbrance);
+  if (!Number.isSafeInteger(value) || value < 0) return null;
+  return Math.max(0, value - (RULES[ruleId]?.kind === 'encumbrance-reduction' ? 1 : 0));
+}
 
 /**
  * Resolve the supplement clause for one linked item. This function never edits
@@ -89,7 +96,14 @@ export function previewSupplementalEquipment({ item, actor, target, hit = false,
     effects.push({ participantId: actor?.id, state: 'Hémorragique', sourceRuleId: ruleId });
   }
   if (rule.kind === 'bleeding-on-wound' && hit && hurt) effects.push({ participantId: target?.id, state: 'Hémorragique', sourceRuleId: ruleId });
-  if (rule.kind === 'never-break-in-combat') reminders.push('Cette lame ne se brise pas lorsque son porteur l’emploie au combat; les bris hors combat restent possibles.');
+  if (rule.kind === 'antler-hilt') {
+    const origin=context.antlerHandleOrigin||item?.extensions?.v5?.antlerHandleOrigin;
+    if(!origin)unresolved.push('Lame à poignée de bois de Grand Cerf : préciser si le bois est tombé naturellement ou acquis par violence.');
+    else if(origin==='naturally-fallen')reminders.push('Cette lame ne se brise pas lorsque son porteur l’emploie au combat; rouille, déformation et bris hors combat restent possibles.');
+    else if(origin==='violent'&&critical){effects.push({participantId:target?.id,state:'Hémorragique',sourceRuleId:'F-L11-0079'});effects.push({participantId:actor?.id,state:'Hémorragique',sourceRuleId:'F-L11-0079'});}
+    else if(origin==='violent')reminders.push('Poignée acquise par violence : l’effet Hémorragique se déclenche uniquement sur un critique infligé.');
+    else unresolved.push('Origine de la poignée invalide : choisir bois tombé naturellement ou acquis par violence.');
+  }
   if (rule.kind === 'encumbrance-reduction') reminders.push('Encombrement de cette pièce : −1 par rapport à la pièce de plate métallique correspondante; PA et Taille inchangés.');
   if (rule.kind === 'pavise-carried') reminders.push('Pavois porté : appliquer Protectrice 3 selon le flux de bouclier choisi; Défensive, Inoffensive, Lente, Épuisante; Encombrement 4; dégâts BF+2.');
   if (rule.kind === 'pavise-planted') reminders.push('Pavois planté : 2 Actions pour le mettre en place; Protectrice 5 contre les tirs de la direction choisie à 1 yard derrière; en mêlée de face, premier Tour seulement.');

@@ -75,7 +75,8 @@ export function v5ShieldDefense(normalized, catalogue = getReferenceCatalogue())
   const bouclierSourceCovered = source?.edition === 'V5' && source?.source === 'Livre de base V5 EN p.306'
     && source?.effect === "En s'opposant à une attaque avec Esquive ou Corps à corps, confère +1 DR (sans cumul avec Défensive) et applique ses PA si le coup touche. Avec 2 PA ou plus, permet d'opposer les tirs avec Esquive à toute portée. Un seul bouclier compte. Porté attaché au bras ou en bandoulière, ses PA ne s'appliquent qu'à la Tête, au Corps et au Bras non directeur. En attaque, compte comme Arme improvisée (allonge Personnelle) et perd sa protection jusqu'au début du prochain Tour.";
   const validRating = Number.isSafeInteger(rating) && (bouclier ? rating >= 0 : rating > 0);
-  const contextConfirmed = Boolean(normalized.defense && shield && context.shieldAvailable === true && context.opposedWithShield === true
+  const plantedPavise=shield?.kind==='shield'&&normalized.target?.extensions?.v5?.paviseDeploymentByItemId?.[shield.id]?.status==='planted';
+  const contextConfirmed = Boolean(normalized.defense && shield && !plantedPavise && context.shieldAvailable === true && context.opposedWithShield === true
     && !normalized.target?.extensions?.shieldUnavailable?.includes(shield.id) && validRating);
   const sourceCovered = !contextConfirmed || (bouclier
     ? bouclierSourceCovered

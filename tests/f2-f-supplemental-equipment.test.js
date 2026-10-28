@@ -34,7 +34,7 @@ test('F2-F — knife, antler blades, and dragon shards propose only the source e
   const poison = previewSupplementalEquipment({ item: row('F-L11-0076'), actor, target, hit: true, damage: { finalDamage: 1 } });
   assert.match(poison.unresolved.join(' '), /Endurance.*−1 DR/);
   assert.deepEqual(previewSupplementalEquipment({ item: row('F-L11-0076'), actor, target, hit: true, damage: { finalDamage: 1 }, context: { supplementalPoisonTest: { success: false } } }).effects.map(effect => effect.state), ['Empoisonné']);
-  assert.deepEqual(previewSupplementalEquipment({ item: row('F-L11-0079'), actor, target, critical: { id: 'critical' } }).effects.map(effect => effect.participantId), ['target', 'actor']);
+  assert.deepEqual(previewSupplementalEquipment({ item: row('F-L11-0079'), actor, target, critical: { id: 'critical' }, context: { antlerHandleOrigin: 'violent' } }).effects.map(effect => effect.participantId), ['target', 'actor']);
   assert.deepEqual(previewSupplementalEquipment({ item: row('F-L11-0083'), actor, target, hit: true, damage: { finalDamage: 1 } }).effects.map(effect => effect.state), ['Hémorragique']);
 });
 
@@ -62,13 +62,14 @@ test('F2-F — carried/planted pavise, leviathan plate, fallen antler, and warps
   assert.match(previewSupplementalEquipment({ item: row('F-L13-0086') }).reminders.join(' '), /Protectrice 3.*BF\+2/);
   assert.match(previewSupplementalEquipment({ item: row('F-L13-0087') }).reminders.join(' '), /2 Actions.*Protectrice 5/);
   assert.match(previewSupplementalEquipment({ item: row('F-L11-0081') }).reminders.join(' '), /Encombrement.*−1.*PA et Taille inchangés/);
-  assert.match(previewSupplementalEquipment({ item: row('F-L11-0078') }).reminders.join(' '), /ne se brise pas.*combat/);
+  assert.match(previewSupplementalEquipment({ item: row('F-L11-0078'), context: { antlerHandleOrigin: 'naturally-fallen' } }).reminders.join(' '), /ne se brise pas.*combat/);
   assert.ok(previewSupplementalEquipment({ item: row('F-L22-0139'), hit: true, damage: { finalDamage: 1 } }).reminders.some(line => /Pénétrante/.test(line)));
 });
 
 test('F2-F — planted pavise changes effective protection only within declared facing, range and first melee turn', () => {
-  const wearer = { id: 'wearer', armorLocations: { head: 0, body: 2, leftArm: 0, rightArm: 0, leftLeg: 0, rightLeg: 0 }, equipment: [] };
-  const base = { location: 'body', pavisePlanted: true, paviseFacing: 'north', attackDirection: 'north', paviseDistanceYards: 1, ranged: true };
+  const pavise=reference.equipment.items.find(item=>item.id==='shield-armures-bouclier-pavois-pavise');
+  const wearer = { id: 'wearer', equipment:[pavise,{id:'mail',name:'mail',kind:'armour',ap:2,locations:['body'],layer:'rigid',keywords:[]}],extensions:{v5:{paviseDeploymentByItemId:{[pavise.id]:{status:'planted',actionsPaid:2,facing:'north'}}}} };
+  const base = { location: 'body', paviseId:pavise.id, attackDirection: 'north', paviseDistanceYards: 1, ranged: true };
   assert.equal(locationProtection(wearer, base).ap, 5);
   assert.equal(locationProtection(wearer, { ...base, attackDirection: 'south' }).ap, 2);
   assert.equal(locationProtection(wearer, { ...base, paviseDistanceYards: 2 }).ap, 2);
