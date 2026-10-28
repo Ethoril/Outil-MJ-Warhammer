@@ -1,0 +1,14 @@
+# Reprise après contre-vérification T3 — 28 octobre 2026
+
+Cette reprise précède T4. Elle applique les décisions MJ recopiées en tête de `CHOIX_EXECUTANT_PHASE_F2.md`, et conserve les corrections Claude `0abd3ae` et la fusion `44fd928`.
+
+- Corruption : refus de mutation, seuil devenu obsolète, absence de dé de manifestation, caractéristiques supérieures à 100, sources magiques et documentation des données durables. Relecture indépendante des pages L06 187–189 favorable ; tests ciblés 27/27 et 60/60.
+- Destin/Chance : déclaration préalable contrôlée par reçu Store, relances, dialogue, copies anonymes et identités persistantes, première liaison de fiche et conflit de soldes explicité au MJ. Revues indépendantes favorables après corrections ; parcours navigateur, révision et Undo/Redo vérifiés. La couverture du chemin de récupération d'État par Fortune est rétablie séparément.
+- Localisations et montures : araignée sur jambes, Acrobaties équestres, morphologie des profils, entrées MJ, jets de chute séparés et anciens états. Les régressions détectées en revue ont été corrigées ; 48 tests ciblés et ouverture réelle du panneau réussis. Le parcours navigateur complet de deux chutes simultanées reste à approfondir.
+- Référentiel : source fiches `gemini/armes-v5` à `d8a30dd`, 211 objets, 57 mots-clés, 213 talents ; sept exports avec en-têtes et empreintes, 277 sorts et 15 miracles conservés. Six talents sont explicitement non vérifiés et en attente. Tous les contrôles aval `--check` ont passé. Contradiction à signaler : l'arme Gantelet à pointes possède Empaleuse dans la source, malgré la description contraire du brief ; le catalogue suit la feuille.
+- Mots-clés : 21 règles réexaminées, 7 couvertes, 13 partielles, 1 ouverte ; voir `f2/REPRISE_T2_BIS_AUDIT.md`. Inflige reste manuel pour les états non reconnus. Entaille reste partielle : calcul actuel divergent de L13 p.89. Les doublons JSON ont été supprimés et la purge caractérisée.
+- La sonde de classification des sorts périodiques part désormais d'États neutres ; sa matrice a été régénérée et revue. La sonde ne démontre pas exhaustivement les effets conditionnés par des États préexistants.
+
+Suite complète sur le worktree avec TEMP et TMP sur E: : 5 255 / 5 256 tests réussis (`tmp/f2-reprise-t4-suite-2.log` à la racine du workspace principal). Seul `tests/sw.test.js` échoue : 18 modules ne sont pas précachés. Conformément au brief, `sw.js`, la version et la publication sont réservés à Claude après feu vert du MJ. Aucun push ni fusion de publication n'a été effectué.
+
+Tests existants ajustés : morphologie d'araignée et exception Acrobaties équestres pour appliquer les décisions MJ ; Bouclier pour son statut V5 distinct de Protectrice ; test 2.3 pour l'identité de copie après Undo, tout en restaurant la couverture de récupération par Fortune. Les changements de test sont motivés par ces comportements, non par une modification de règle pour satisfaire un test.
