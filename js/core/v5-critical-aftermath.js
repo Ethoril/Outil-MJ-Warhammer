@@ -171,10 +171,11 @@ export function decideImmediateCriticalDeath(participant, { criticalId, decision
 }
 
 function hasLuckTalent(participant) {
-  return (participant.talents || []).some(talent => normalize(talent?.id).includes('talent-luck')
-    || normalize(talent?.id).includes('talent-lucky')
-    || normalize(talent?.name || talent?.nom).includes('chanceux')
-    || normalize(talent?.name || talent?.nom).includes('lucky'));
+  return (participant.talents || []).some(talent => {
+    const id = normalize(typeof talent === 'string' ? talent : talent?.id);
+    const name = normalize(typeof talent === 'string' ? talent : talent?.name || talent?.nom || talent?.nameFr);
+    return id.includes('talent-luck') || id.includes('talent-lucky') || name.includes('chanceux') || name.includes('lucky');
+  });
 }
 
 /** Sudden Death is disabled unless the MJ has enabled the table option explicitly. */
@@ -186,6 +187,9 @@ export function previewSuddenDeath(participant, {
     return { status: 'ineligible', ready: false, reason: 'Mort subite réservée aux PNJ secondaires sans Talent Chanceux.' };
   }
   if (Number(participant.hp) !== 0) return { status: 'ineligible', ready: false, reason: 'Mort subite disponible seulement à 0 Blessure.' };
+  if (participant.extensions?.v5?.dead === true || (participant.states || []).some(state => state.key === 'inconscient' || normalize(state.name) === 'inconscient')) {
+    return { status: 'ineligible', ready: false, reason: 'Cette décision de mort subite a déjà été prise.' };
+  }
   return { status: 'choice-required', ready: true, participantId: participant.id, outcomes: ['dead', 'unconscious'],
     tableOptionEnabled: true, secondaryNpcConfirmed: true, ruleVersion: V5_CRITICAL_AFTERMATH_RULE_VERSION };
 }

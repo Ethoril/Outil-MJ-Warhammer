@@ -18,7 +18,7 @@ async function scene(weapon){
   return store;
 }
 
-test('T2 bis filet générique — la Force catalogue est testée, puis une défaite ajoute Empêtré et se persiste',async()=>{
+test('T2 bis filet générique — la Force catalogue est testée et un échec ne renforce pas Empêtré',async()=>{
   const store=await scene(item('Filet'));
   let victim=store.listParticipants().find(row=>row.id==='victim');
   const condition=victim.states.find(row=>row.key==='enchevetre');assert.equal(condition.strength,50);
@@ -38,7 +38,7 @@ test('T2 bis filet générique — la Force catalogue est testée, puis une déf
   assert.equal(preview.netEscape.freed,false);
   assert.equal((await store.applyResolution(preview)).status,'applied');
   victim=store.listParticipants().find(row=>row.id==='victim');
-  assert.equal(victim.states.find(row=>row.id===condition.id).level,2);
+  assert.equal(victim.states.find(row=>row.id===condition.id).level,1);
   assert.equal(victim.extensions.v5.netEscapeProgress?.[condition.id],undefined,'les DR ne se cumulent pas');
 });
 
@@ -56,11 +56,11 @@ test('T2 bis Mancatcher catalogue — ressort ajoute +2 DR au Test de Force du p
     v5:{kind:'test',context:{netEscapeConditionId:condition.id,netEscapeOpponentRoll:30,requiresSight:false,reliesOnSight:false,usesFellowship:false}}});
   assert.deepEqual(preview.unresolved,[]);
   assert.equal(preview.test.sl,1,'le Test du personnage subit −1 DR pour se dégager');
-  assert.equal(preview.netEscape.opposition.sourceScore,30,'la Force de la source vient du porteur');
-  assert.equal(preview.netEscape.opposition.sourceSl,2,'DR du porteur +2 DR du ressort');
-  assert.equal(preview.netEscape.opposition.netSl,-1);
-  assert.equal(preview.netEscape.freed,false,'sans le +2 DR, le personnage remporterait l’opposition');
+  assert.equal(preview.netEscape.opposition.sourceScore,3,'la Force de la source vient du porteur sans conversion implicite');
+  assert.equal(preview.netEscape.opposition.sourceSl,-1,'DR de la Force publiée 3 +2 DR du ressort');
+  assert.equal(preview.netEscape.opposition.netSl,2);
+  assert.equal(preview.netEscape.freed,true,'l’opposition utilise directement la Force publiée 3');
   assert.equal((await store.applyResolution(preview)).status,'applied');
   victim=store.listParticipants().find(row=>row.id==='victim');
-  assert.equal(victim.states.find(row=>row.id===condition.id).level,2);
+  assert.equal(victim.states.some(row=>row.id===condition.id),false,'l’évasion complète retire l’état Empêtré');
 });

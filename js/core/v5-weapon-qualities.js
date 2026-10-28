@@ -293,13 +293,13 @@ export function naturalWeaponDefaults({ reach, qualities, natural = true } = {})
 export function entanglementStrength({ kind, actorStrength, explicitStrength, springLoaded = false } = {}) {
   if (explicitStrength !== undefined && explicitStrength !== null) {
     if (!positiveInt(explicitStrength) || Number(explicitStrength) > 100) return blocked('Entrave : Force explicite invalide.');
-    return result({ strength: Number(explicitStrength), testBonus: kind === 'mancatcher' && springLoaded ? 20 : 0 });
+    return result({ strength: Number(explicitStrength) });
   }
-  if (kind === 'cloak') return result({ strength: 25, testBonus: 0 });
-  if (kind === 'weighted-net') return result({ strength: 55, testBonus: 0 });
+  if (kind === 'cloak') return result({ strength: 25 });
+  if (kind === 'weighted-net') return result({ strength: 55 });
   if (!['mancatcher', 'garrote', 'druchii-net', 'wielder'].includes(kind)) return blocked('Entrave : type d’arme reconnu requis.');
   if (!positiveInt(actorStrength) || Number(actorStrength) > 100) return blocked('Entrave : Force du porteur requise.');
-  return result({ strength: Number(actorStrength), testBonus: kind === 'mancatcher' && springLoaded ? 20 : 0 });
+  return result({ strength: Number(actorStrength) });
 }
 
 /** Escape by winning an opposed Strength Test. SL do not accumulate across attempts (L06 p.186; MJ ruling over L11 p.29). */
@@ -312,7 +312,7 @@ export function advanceV5NetEscape({ testSl, opponentSl, entangled = 1, opponent
   const removed = won ? Math.min(Number(entangled), 1 + Math.max(0, netSl - 1)) : 0;
   const remainingEntangled = Number(entangled) - removed;
   return result({ won, freed: won, actorSl, opponentSl: sourceSl, netSl,
-    removedEntangled: removed, remainingEntangled, addEntangledOnFailure: !won });
+    removedEntangled: removed, remainingEntangled, addEntangledOnFailure: false });
 }
 
 /** Hooked nets deal damage when the victim struggles; the source does not specify its amount. */

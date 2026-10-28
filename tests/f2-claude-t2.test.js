@@ -44,9 +44,9 @@ test('Claude T2 — le Mortier de main du catalogue explose sur maladresse au re
   assert.ok(preview.unresolved.some(line => /bras directeur touché/.test(line)), JSON.stringify(preview.unresolved));
   const resolved = previewResolution({ resolutionId: 'mortar-with-arm', actor, baseRevision: 0, round: 1, roll: 66,
     action: { id: 'x', type: 'skill', attr: 'CT', base: 20, label: 'Recharge', extensions: { fiche: { equipmentId: 'w1' } } },
-    v5: { kind: 'test', context: { reloading: true, fumbleRoll: 3, weaponDamageMaximum: 12, weaponExplosionArmSide: 'right' } },
+    v5: { kind: 'test', context: { reloading: true, fumbleRoll: 3, weaponExplosionArmSide: 'right' } },
     v5State: { participants: [actor] } });
-  assert.ok(resolved.combatFailure?.effects?.some(effect => effect.type === 'weapon-explosion' && effect.damage === 12 && effect.armSide === 'right'),
+  assert.ok(resolved.combatFailure?.effects?.some(effect => effect.type === 'weapon-explosion' && effect.damage === 7 && effect.damageMode === 'profile-at-zero-sl' && effect.sl === 0 && effect.armSide === 'right'),
     JSON.stringify(resolved.combatFailure?.effects));
 });
 

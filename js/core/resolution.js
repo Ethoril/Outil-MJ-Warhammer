@@ -680,6 +680,9 @@ export function previewResolution(input) {
       result.grapple={...plan,actorIsInitiator};result.unresolved.push(...(plan.unresolved||[]));
       if(plan.ready){result.grapple.suppressOrdinaryDamage=true;result.damage=null;result.critical=null;result.targetConditionApplication=[];}
     }
+  }else if(grappleContext.grappleAction){
+    result.grapple={status:'blocked',ready:false,unresolved:['Empoignade : le lien actif requis pour cette Action n’existe plus.']};
+    result.unresolved.push(...result.grapple.unresolved);
   }
   const adjustmentFor=(byOption,test)=>{
     const caps=byOption.get(test.optionId)||[];return caps.length?{rawSL:caps[0].rawSL,effectiveSL:caps[0].effectiveSL,caps}:null;
@@ -929,7 +932,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
       const sourceParticipant=(normalized.v5State?.participants||[]).find(row=>row.id===source.authorId);
       const sourceStrength=['wielder','mancatcher','garrote','druchii-net'].includes(source.entanglementKind)&&sourceParticipant?.caracs?.F!=null
         ? Number(sourceParticipant.caracs.F) : threshold;
-      const sourceScore=Number.isFinite(sourceStrength)&&sourceStrength>0&&sourceStrength<10?sourceStrength*10:sourceStrength;
+      const sourceScore=sourceStrength;
       const opponentRoll=context.netEscapeOpponentRoll;
       if(!Number.isInteger(opponentRoll)||opponentRoll<1||opponentRoll>100)unresolved.push('Filet : saisir le jet d100 du Test opposé de Force de la source.');
       if(!Number.isSafeInteger(sourceScore)||sourceScore<0||sourceScore>100)unresolved.push('Filet : Force de la source requise pour son Test opposé.');
@@ -976,7 +979,16 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
         if (consumed.status !== 'shot') unresolved.push('À répétition : l’arme doit être rechargée avant un nouveau tir.');
         else {
           const after=consumed.state;
-          if(selectedWeapon.keywords?.some(row=>(typeof row==='string'?row:row?.id)==='a-repetition'&&row?.asterisk===true))after.requiresManualRotation=context.freeHandAvailable!==true;
+          if(selectedWeapon.keywords?.some(row=>(typeof row==='string'?row:row?.id)==='a-repetition'&&row?.asterisk===true)){
+            after.requiresManualRotation=false;
+            if(context.freeHandAvailable!==true){
+              after.shotsRemaining=0;
+              after.requiresReload=true;
+              after.reloading=false;
+              after.accumulatedSuccesses=0;
+              after.requiredSuccesses=after.reloadSuccesses;
+            }
+          }
           weaponReload = { equipmentId: selectedWeapon.id, before: current, after };
         }
       }
@@ -1481,7 +1493,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   unresolved.push(...criticalReady);
   if(actorPlan.crewSkill){talentActionChanges.push({participantId:actor.id,removeIds:[actorPlan.crewSkill.id]});supplementaryTalentPlans.push({proposals:[{op:'substituteCrewSkill',origins:[actorPlan.crewSkill.source]}]});}
   const declaredCombatAction=attackType(action.type)||normalized.v5?.context?.isAction===true;
-  const resolvedRecordKinds=new Set(['weapon-explosion','salvo-artillery-hit','salvo-artillery-destroyed','fumble-ally-hit','misfire']);
+  const resolvedRecordKinds=new Set(['weapon-explosion','salvo-artillery-hit','salvo-artillery-destroyed','fumble-ally-hit','misfire','critical-follow-up']);
   const consumedCombatEffects=declaredCombatAction?(actor?.extensions?.v5?.combatEffects||[]).filter(row=>row.kind==='next-action-sl'||resolvedRecordKinds.has(row.kind)).map(row=>row.id):[];
   return {
     resolutionId: normalized.resolutionId,
@@ -1857,6 +1869,9 @@ export function applyResolution(preview, currentState) {
       if(effect.actsLastNextRound)addPending({kind:'acts-last-next-round',round:(preview.input.round||0)+1});
     } else if(['next-action-sl','lose-next-move','lose-next-action','twisted-ankle'].includes(effect.type))addPending({kind:effect.type,...effect,createdRound:preview.input.round||null,...(Number.isSafeInteger(preview.input.v5Clock?.turnIndex)?{createdTurnIndex:preview.input.v5Clock.turnIndex}:{}),...(preview.input.actor?.id?{createdByActorId:preview.input.actor.id}:{})});
     else if(effect.type==='weapon-explosion'||effect.type==='weapon-discharge'){
+      const equipmentId=effect.equipmentId||preview.input.action?.extensions?.fiche?.equipmentId;
+      if(effect.type==='weapon-explosion'&&equipmentId&&updated.equipment?.some(row=>row.id===equipmentId))
+        updated.equipment=updated.equipment.map(row=>row.id===equipmentId?{...row,extensions:{...(row.extensions||{}),v5:{...(row.extensions?.v5||{}),destroyed:true,misfire:{resolutionId:preview.resolutionId,table:'blackpowder-catastrophe'}}}}:row);
       const location=effect.location==='torse'?{key:'BODY'}:effect.location==='bras-principal'&&['left','right'].includes(effect.armSide)?{key:'ARM',side:effect.armSide}:null;
       const damage=Math.max(0,Number(effect.damage??preview.input.action?.damage)||0);
       if(!location)return {status:'manual',reason:'bras-directeur-inconnu',state:clone(currentState),resolution:clone(preview)};

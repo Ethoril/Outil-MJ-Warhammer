@@ -530,7 +530,7 @@ test('F2-D pure proposal — entanglement Strength values are typed, and hook-ne
   assert.deepEqual(entanglementStrength({ kind: 'cloak' }).strength, 25);
   assert.deepEqual(entanglementStrength({ kind: 'weighted-net' }).strength, 55);
   assert.deepEqual(entanglementStrength({ kind: 'mancatcher', actorStrength: 42, springLoaded: true }),
-    { ready: true, unresolved: [], strength: 42, testBonus: 20 });
+    { ready: true, unresolved: [], strength: 42 });
   assert.deepEqual(entanglementStrength({ kind: 'garrote', actorStrength: 38 }).strength, 38);
   assert.deepEqual(entanglementStrength({ kind: 'garrote', actorStrength: 38, explicitStrength: 44 }).strength, 44);
   assert.equal(entanglementStrength({ kind: 'druchii-net' }).ready, false);
@@ -579,7 +579,7 @@ test('F2-D resolution — Immobilisante locks its linked weapon until opposed Fo
   const blockedAttack=previewResolution({resolutionId:'d-net-blocked-weapon',actor:captor,target:victim,baseRevision:applied.state.revision,round:1,roll:20,
     action:{type:'attack',attr:'CT',base:50,damage:1,qualities:[],extensions:{fiche:{equipmentId:'net-1'}}},attackContext:{ranged:true},v5:{kind:'ranged'}});
   assert.ok(blockedAttack.unresolved.some(row=>row.includes('retenue par un état Empêtré')));
-  for(const [index,[id,roll]] of [['d-net-escape-1',12],['d-net-escape-2',12],['d-net-escape-3',12]].entries()){
+  for(const [index,[id,roll]] of [['d-net-escape-1',30],['d-net-escape-2',12]].entries()){
     const escape=previewResolution({resolutionId:id,actor:entangled,baseRevision:applied.state.revision,round:1,roll,
       action:{type:'test',attr:'F',base:30,label:'Force'},v5:{kind:'test',context:{netEscapeConditionId:entangled.states[0].id,
         netEscapeOpponentRoll:index===0?1:30,involvesMovement:false,requiresSight:false,reliesOnSight:false,usesFellowship:false}}});
@@ -587,6 +587,7 @@ test('F2-D resolution — Immobilisante locks its linked weapon until opposed Fo
     applied=applyResolution(escape,{revision:applied.state.revision,round:1,participants:applied.state.participants,appliedResolutionIds:applied.state.appliedResolutionIds||[]});
     assert.equal(applied.status,'applied');
     entangled=applied.state.participants.find(row=>row.id==='victim');
+    if(index===0)assert.equal(entangled.states.find(row=>row.key==='enchevetre').level,1,'un Test de sortie perdu ne change pas Empêtré');
   }
   assert.equal(entangled.states.some(row=>row.id===lockId),false);
   captor=applied.state.participants.find(row=>row.id==='holder');
@@ -697,7 +698,7 @@ test('F2-D Empaleuse — lodged projectiles block one Wound each and require sou
 test('F2-D pure proposal — net escape opposes each Test independently; SL do not accumulate', () => {
   const lost = advanceV5NetEscape({ testSl: 0, opponentSl: 1, entangled: 2 });
   assert.equal(lost.won, false);
-  assert.equal(lost.addEntangledOnFailure, true);
+  assert.equal(lost.addEntangledOnFailure, false);
   const won = advanceV5NetEscape({ testSl: 2, opponentSl: 0, entangled: 3 });
   assert.equal(won.freed, true);
   assert.equal(won.remainingEntangled, 1);

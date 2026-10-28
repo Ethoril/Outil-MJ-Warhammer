@@ -62,7 +62,8 @@ test('T2 bis — l’incident d’une arme Salve utilise la table dédiée d10 d
   for (let roll = 1; roll <= 10; roll++) {
     const preview = previewCombatFailure({
       ...base('Arquebuse à salve'),
-      context: { weaponName: 'Arquebuse à salve', weaponGroup: 'Engineering', isSalvo: true,
+      normalized: { actor:{...actor,equipment:[{id:'salvo',name:'Arquebuse à salve',kind:'weapon',damage:4,keywords:[{id:'salve',parameter:'4'},{id:'a-poudre-noire'}]}]}, action:{type:'attack',note:'Arquebuse à salve',extensions:{fiche:{equipmentId:'salvo'}}} },
+      context: { weaponName: 'Arquebuse à salve', weaponGroup: 'Engineering',
         remainingSalvo: 3, powderIncidentRoll: 1, salvoIncidentRoll: roll }
     });
     assert.equal(preview.misfire?.outcome?.id, 'misfire', `incident générique d10 1, Salve d10 ${roll}`);

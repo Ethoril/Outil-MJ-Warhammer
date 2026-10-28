@@ -36,21 +36,28 @@ try{
   assert.equal(await freeHand.count(),1,'l’astérisque exige une réponse oui/non');await freeHand.selectOption('true');
   assert.equal(await page.evaluate(()=>window.calls.at(-1)[0].v5Context.freeHandAvailable),true,'la main libre rejoint le contexte de résolution');
   await freeHand.selectOption('false');assert.equal(await page.evaluate(()=>window.calls.at(-1)[0].v5Context.freeHandAvailable),false,'la main occupée est aussi transmise au contexte');
-  assert.ok((await page.locator('.workspace-muted').allTextContents()).some(text=>text.includes('les autres canons restent chargés')),'la saisie explique la perte de Repeater sans vider fictivement le chargeur');
+  await render({actor:pepperbox,target,action:pepperboxAttack,draft:{v5Context:{freeHandAvailable:false}}});
+  assert.ok((await page.locator('.workspace-muted').allTextContents()).some(text=>text.includes('après ce tir, recharge complète nécessaire')),'la main occupée impose une recharge complète après ce tir');
 
-  const trapped={...actor,states:[{id:'net-condition',key:'empetre',name:'Empêtré',level:1,strength:50,source:{hookedNet:true}}]};
+  const trapped={...actor,states:[{id:'net-condition',key:'empetre',name:'Empêtré',level:1,strength:3,source:{hookedNet:true}}]};
   const escape={id:'escape',type:'test',note:'Sortie d’entrave',attr:'F',base:40};
   await render({actor:trapped,target:null,action:escape,type:'test',draft:{v5Context:{netEscapeConditionId:'net-condition'}}});
   await page.getByText('Circonstances des Tests').click();
   assert.equal(await page.getByRole('combobox',{name:'Le Test implique un mouvement'}).count(),0,'la pénalité de mouvement est imposée pour sortir du filet');
+  assert.equal(await page.getByRole('spinbutton',{name:'Jet d100 opposé — Force 3'}).count(),1,'Force 3 reste le seuil imprimé, sans conversion heuristique en 30');
   assert.ok((await page.locator('.workspace-muted').allTextContents()).some(text=>text.includes('L06 p.186 : ce Test est traité comme impliquant un mouvement')),'le panneau explique la pénalité automatique');
   const damage=page.locator('input[aria-label="Filet à crochets : dégâts MJ (armure ignorée)"]');
   assert.equal(await damage.count(),1,'le montant MJ n’est demandé que si l’état vient d’un filet à crochets');
-  const opposingRoll=page.locator('input[aria-label="Jet d100 opposé — Force 50"]');
+
+  const opposingRoll=page.locator('input[aria-label="Jet d100 opposé — Force 3"]');
   assert.equal(await opposingRoll.count(),1,'le jet opposé de la source est explicitement demandé');
   await opposingRoll.fill('35');await opposingRoll.dispatchEvent('change');
   assert.equal(await page.evaluate(()=>window.calls.at(-1)[0].v5Context.netEscapeOpponentRoll),35,'le jet opposé rejoint le contexte de résolution');
   await damage.fill('4');await damage.dispatchEvent('change');
   assert.equal(await page.evaluate(()=>window.calls.at(-1)[0].v5Context.hookedNetDamage),4,'le montant choisi rejoint le contexte de l’évasion');
+  const mortar={...actor,equipment:[{id:'mortar',kind:'weapon',name:'Mortier de main (2M)',keywords:[],damage:8}]};
+  const mortarAction={id:'mortar-test',type:'test',note:'Recharge du mortier',attr:'F',base:40,extensions:{fiche:{equipmentId:'mortar'}}};
+  await render({actor:mortar,target:null,action:mortarAction,type:'test',draft:{preview:{fumble:true,ruleVersion:'test',input:{actor:mortar}},v5Context:{reloading:true,fumbleRoll:4}}});
+  assert.equal(await page.getByRole('spinbutton',{name:'Dégâts maximums du profil du mortier'}).count(),0,'le mortier prend les dégâts du profil sans saisie de maximum');
   console.log('F2-D UI browser: sélection attaque bouclier, jet opposé et dégâts d’évasion du filet à crochets vérifiés.');
 }finally{await browser.close();await new Promise(done=>server.close(done));}

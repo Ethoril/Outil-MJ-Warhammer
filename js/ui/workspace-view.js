@@ -1588,7 +1588,9 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     option.addEventListener('change', async () => { option.disabled = true; try { await Store.setSuddenDeathEnabled(option.checked); render(); } catch (error) { option.disabled = false; option.checked = !option.checked; suddenDeath.appendChild(node('p', 'workspace-error', userMessage(error, 'Réglage non enregistré.'))); } });
     optionLabel.prepend(option); suddenDeath.appendChild(optionLabel);
     if (suddenDeathEnabled) {
-      const candidates = (context.participants || []).filter(row => row.kind === 'PNJ' && Number(row.hp) === 0 && row.extensions?.v5?.dead !== true);
+      const candidates = (context.participants || []).filter(row => ['PNJ', 'Créature'].includes(row.kind)
+        && Number(row.hp) === 0 && row.extensions?.v5?.dead !== true
+        && !(row.states || []).some(state => state.key === 'inconscient' || state.name === 'Inconscient'));
       for (const participant of candidates) {
         const row = node('div', 'workspace-result-line'); row.appendChild(node('span', '', `${participant.name || participant.id} · 0 Blessure`));
         const confirmLabel = node('label', 'workspace-type', 'Confirmer que c’est un PNJ secondaire');

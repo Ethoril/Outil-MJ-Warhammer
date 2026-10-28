@@ -3,16 +3,22 @@ import { createHash } from 'node:crypto';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 const root=resolve(dirname(fileURLToPath(import.meta.url)),'..');
-const preserveEquipmentKeywordDetails = body => body
- .replace("const params = [];", "const params = [];\n        let asterisk = false;")
- .replace("const regex = new RegExp(`(?:^|[,;]|\\\\bou\\\\s)\\\\s*${escaped}(?=$|[\\\\s.(,;])\\\\s*([+-]?\\\\d+|\\\\([^)]*\\\\))?`, 'gu');",
-  "const regex = new RegExp(`(?:^|[,;]|\\\\bou\\\\s)\\\\s*${escaped}(?=$|[\\\\s.(,;])\\\\s*([+-]?\\\\d+|\\\\([^)]*\\\\))?(\\\\*)?`, 'gu');")
- .replace("for (const match of folded.matchAll(regex)) {\n                matched = true;",
-  "for (const match of folded.matchAll(regex)) {\n                if (entry.id === 'inflige') {\n                    const prefix = folded.slice(0, match.index + match[0].length);\n                    const specialStart = prefix.lastIndexOf('special (');\n                    if (specialStart >= 0 && prefix.lastIndexOf(')') < specialStart) continue;\n                }\n                matched = true;\n                asterisk ||= Boolean(match[2]);")
- .replace("const start = match.index + match[0].length - match[1].length;",
-  "const start = match.index + match[0].length - (match[2] ? 1 : 0) - match[1].length;")
- .replace("if (matched) result.push({ id: entry.id, parameter: entry.parameter ? params.join(', ') : '' });",
-  "if (matched) result.push({ id: entry.id, parameter: entry.parameter ? params.join(', ') : '', ...(asterisk ? { asterisk: true } : {}) });");
+const replaceRequired = (source, before, after, label) => {
+ const first=source.indexOf(before);
+ if(first<0 || source.indexOf(before,first+before.length)>=0) throw new Error(`Motif générateur absent ou ambigu (${label})`);
+ return source.slice(0,first)+after+source.slice(first+before.length);
+};
+const preserveEquipmentKeywordDetails = body => [
+ ["const params = [];", "const params = [];\n        let asterisk = false;", 'params'],
+ ["const regex = new RegExp(`(?:^|[,;]|\\\\bou\\\\s)\\\\s*${escaped}(?=$|[\\\\s.(,;])\\\\s*([+-]?\\\\d+|\\\\([^)]*\\\\))?`, 'gu');",
+  "const regex = new RegExp(`(?:^|[,;]|\\\\bou\\\\s)\\\\s*${escaped}(?=$|[\\\\s.(,;])\\\\s*([+-]?\\\\d+|\\\\([^)]*\\\\))?(\\\\*)?`, 'gu');", 'regex'],
+ ["for (const match of folded.matchAll(regex)) {\n                matched = true;",
+  "for (const match of folded.matchAll(regex)) {\n                if (entry.id === 'inflige') {\n                    const prefix = folded.slice(0, match.index + match[0].length);\n                    const specialStart = prefix.lastIndexOf('special (');\n                    if (specialStart >= 0 && prefix.lastIndexOf(')') < specialStart) continue;\n                }\n                matched = true;\n                asterisk ||= Boolean(match[2]);", 'match'],
+ ["const start = match.index + match[0].length - match[1].length;",
+  "const start = match.index + match[0].length - (match[2] ? 1 : 0) - match[1].length;", 'parameter'],
+ ["if (matched) result.push({ id: entry.id, parameter: entry.parameter ? params.join(', ') : '' });",
+  "if (matched) result.push({ id: entry.id, parameter: entry.parameter ? params.join(', ') : '', ...(asterisk ? { asterisk: true } : {}) });", 'result']
+].reduce((value,[before,after,label])=>replaceRequired(value,before,after,label),body);
 const source=resolve(process.argv.find(a=>a.startsWith('--source-dir='))?.slice(13)||'../ennemi-interieur-wfrp4');
 if(process.argv.includes('--equipment-only')){
  const readSource=async path=>readFile(resolve(source,path),'utf8');

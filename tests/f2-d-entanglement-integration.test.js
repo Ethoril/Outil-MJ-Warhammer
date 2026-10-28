@@ -14,7 +14,7 @@ async function setup(){
 }
 const participant=(store,id)=>store.listParticipants().find(row=>row.id===id);
 
-test('F2-D Immobilisante Store — lock, DR cumulés, Undo et rechargement de persistance restent atomiques',async()=>{
+test('F2-D Immobilisante Store — échec sans changement, libération, Undo et rechargement restent atomiques',async()=>{
   let {store,persistence}=await setup();
   let plan=store.previewResolution({actorId:'holder',targetId:'victim',resolutionId:'net-store-hit',roll:20,round:1,
     action:{id:'net-attack',type:'attack',attr:'CT',base:50,damage:0,qualities:[q('immobilisante','2')],extensions:{fiche:{equipmentId:'net-1'}}},
@@ -33,7 +33,7 @@ test('F2-D Immobilisante Store — lock, DR cumulés, Undo et rechargement de pe
   assert.equal(participant(restored,'holder').equipment[0].extensions.v5.entanglementLocks.length,1);
 
   let victim=participant(restored,'victim');
-  for(const [index,roll] of [12,12,12].entries()){
+  for(const [index,roll] of [30,12,12].entries()){
     if(!victim.states.length)break;
     plan=restored.previewResolution({actorId:'victim',resolutionId:`net-store-escape-${index+1}`,roll,round:1,
       action:{id:'escape',type:'test',attr:'F',base:30,label:'Force'},
@@ -42,10 +42,10 @@ test('F2-D Immobilisante Store — lock, DR cumulés, Undo et rechargement de pe
     assert.equal((await restored.applyResolution(plan)).status,'applied');
     victim=participant(restored,'victim');
     if(index===0){
-      assert.equal(victim.states[0].level,2,'un échec opposé ajoute Empêtré');
+      assert.equal(victim.states[0].level,1,'un échec opposé ne change pas Empêtré');
       assert.equal(victim.extensions.v5.netEscapeProgress?.[victim.states[0].id],undefined,'les DR ne se cumulent plus');
       const mid=restored.getFullJSON(),afterReload=createStore({storage:null,persistence});await afterReload.ready;await afterReload.loadFromJSON(mid);
-      assert.equal(participant(afterReload,'victim').states[0].level,2);
+      assert.equal(participant(afterReload,'victim').states[0].level,1);
       restored=afterReload;
     }
   }

@@ -24,16 +24,15 @@ test('T2 bis — caractérisation corrigée : l’import conserve l’astérisqu
   assert.equal(repeater?.asterisk, true);
 });
 
-test('T2 bis — Poivrière p.103 : main occupée conserve les autres canons et exige une rotation avant le tir suivant',()=>{
+test('T2 bis — Poivrière p.103 : main occupée impose une recharge complète après le tir',()=>{
   const model=catalogue.items.find(row=>row.name==='Poivrière'),weapon={...structuredClone(model),id:'pepperbox-1'};
   const actor={id:'shooter',name:'Tireur',camp:'pj',hp:12,caracs:{CT:60,E:30},states:[],skills:[],equipment:[weapon],extensions:{v5:{}}};
   const target={id:'foe',name:'Cible',camp:'foe',hp:12,caracs:{E:30},states:[],armor:{},equipment:[]};
   const input={actor,target,action:{type:'attack',attr:'CT',base:60,damage:8,extensions:{fiche:{equipmentId:weapon.id}}},roll:20,attackContext:{ranged:true},v5:{kind:'ranged'}};
   const unspecified=previewResolution(input);assert.ok(unspecified.unresolved.some(row=>/seconde main/.test(row)),'il faut saisir oui ou non');
   const yes=previewResolution({...input,v5:{kind:'ranged',context:{freeHandAvailable:true}}});assert.equal(yes.unresolved.length,0);assert.equal(yes.weaponReload.after.shotsRemaining,3);
-  const no=previewResolution({...input,v5:{kind:'ranged',context:{freeHandAvailable:false}}});assert.equal(no.unresolved.length,0,'la main occupée n’interdit pas le tir actuel');assert.equal(no.weaponReload.after.shotsRemaining,3,'les trois autres canons préchargés restent conservés');assert.equal(no.weaponReload.after.requiresReload,false);assert.equal(no.weaponReload.after.requiresManualRotation,true);
-  const stateAfterNoHand={...weapon,extensions:{v5:{reloadState:no.weaponReload.after}}},blocked=previewResolution({...input,actor:{...actor,equipment:[stateAfterNoHand]},v5:{kind:'ranged',context:{freeHandAvailable:false}}});assert.ok(blocked.unresolved.some(row=>/préparé manuellement/.test(row)),'un second tir sans rotation manuelle est bloqué');
-  const yesAfterNoHand=previewResolution({...input,actor:{...actor,equipment:[stateAfterNoHand]},v5:{kind:'ranged',context:{freeHandAvailable:true}}});assert.equal(yesAfterNoHand.unresolved.length,0);assert.equal(yesAfterNoHand.weaponReload.after.shotsRemaining,2);assert.equal(yesAfterNoHand.weaponReload.after.requiresManualRotation,false);
+  const no=previewResolution({...input,v5:{kind:'ranged',context:{freeHandAvailable:false}}});assert.equal(no.unresolved.length,0,'la main occupée n’interdit pas le tir actuel');assert.equal(no.weaponReload.after.shotsRemaining,0,'la Poivrière impose une recharge complète');assert.equal(no.weaponReload.after.requiresReload,true);assert.equal(no.weaponReload.after.requiresManualRotation,false);
+  const stateAfterNoHand={...weapon,extensions:{v5:{reloadState:no.weaponReload.after}}},blocked=previewResolution({...input,actor:{...actor,equipment:[stateAfterNoHand]},v5:{kind:'ranged',context:{freeHandAvailable:false}}});assert.ok(blocked.unresolved.some(row=>/rechargée/.test(row)),'un nouveau tir est bloqué jusqu’à la recharge complète');
 });
 
 test('T2 bis — caractérisation corrigée : la décharge Hache-fusil porte les dégâts du profil de tir +9', () => {

@@ -1623,12 +1623,12 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
     if(current.netEscapeConditionId){const state=entangledStates.find(row=>row.id===current.netEscapeConditionId),progress=actor.extensions?.v5?.netEscapeProgress?.[current.netEscapeConditionId]||0;
       const source=state?.source||{},sourceActor=(participants||[]).find(row=>row.id===source.authorId);
       const force=['wielder','mancatcher','garrote','druchii-net'].includes(source.entanglementKind)&&sourceActor?.caracs?.F!=null?Number(sourceActor.caracs.F):Number(state?.strength??source.escapeStrength);
-      const score=Number.isFinite(force)&&force>0&&force<10?force*10:force;
+      const score=force;
       const rollLabel=node('label','workspace-type',`Jet d100 opposé — Force ${Number.isFinite(score)?score:'à préciser'}${source.springLoaded?' · Mancatcher à ressort (+2 DR)':''}`),rollInput=document.createElement('input');
       rollInput.type='number';rollInput.min='1';rollInput.max='100';rollInput.step='1';rollInput.value=current.netEscapeOpponentRoll??'';rollInput.setAttribute('aria-label',rollLabel.textContent);
       rollInput.addEventListener('change',()=>handlers.select({v5Context:{...current,netEscapeOpponentRoll:rollInput.value===''?undefined:Number(rollInput.value)}}));rollLabel.append(rollInput);fields.append(rollLabel);
       if(state?.source?.hookedNet===true){const label=node('label','workspace-type','Filet à crochets : dégâts MJ (armure ignorée)'),input=document.createElement('input');input.type='number';input.min='0';input.step='1';input.value=current.hookedNetDamage??'';input.setAttribute('aria-label',label.textContent);input.addEventListener('change',()=>handlers.select({v5Context:{...current,hookedNetDamage:input.value===''?undefined:Number(input.value)}}));label.append(input);fields.append(label);}
-      fields.append(node('p','workspace-muted',`L06 p.186 : ce Test est traité comme impliquant un mouvement. Gagnez l’opposition pour retirer Empêtré. Chaque DR après le premier retire un état supplémentaire. Les DR des tentatives précédentes ne se cumulent pas. Un échec ajoute un Empêtré. ${progress?'Ancienne progression ignorée.':''}`));}
+      fields.append(node('p','workspace-muted',`L06 p.186 : ce Test est traité comme impliquant un mouvement. Gagnez l’opposition pour retirer Empêtré. Chaque DR après le premier retire un état supplémentaire. Les DR des tentatives précédentes ne se cumulent pas. En cas d’échec, rien ne change (décision MJ, V5). ${progress?'Ancienne progression ignorée.':''}`));}
   }
   const heldEntrapments=[
     ...(actor.equipment||[]).flatMap(weapon=>(weapon.extensions?.v5?.entanglementLocks||[]).map(linkId=>({weapon,linkId}))),
@@ -1644,7 +1644,16 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
     select.addEventListener('change',()=>handlers.select({v5Context:{...current,releaseEntanglementLinkId:select.value||undefined}}));wrap.append(select);fields.append(wrap);
     fields.append(node('p','workspace-muted','Cette option libère volontairement la cible et l’arme liée, sans Test de Force.'));
   }
-  if(['test','skill','defense','opposition'].includes(type)&&isBrokenActor(actor)&&!draft.reactionId){
+  const validGrapple=link=>{
+    if(!link||link.status!=='active'||!actor?.id||![link.initiatorId,link.targetId].includes(actor.id))return false;
+    const initiator=participants.find(row=>row.id===link.initiatorId),held=participants.find(row=>row.id===link.targetId);
+    const alive=subject=>subject&&subject.zone!=='bench'&&subject.extensions?.v5?.dead!==true&&(subject.hp===undefined||Number(subject.hp)>0);
+    return alive(initiator)&&alive(held)&&(held.states||[]).some(state=>state.source?.linkId===link.id
+      &&['enchevetre','entangled'].includes(String(state.key||state.name||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase())&&Number(state.level??1)>0);
+  };
+  const actorHasActiveGrapple=participants.flatMap(row=>row.extensions?.v5?.grapples||[])
+    .some(link=>[link.initiatorId,link.targetId].includes(actor?.id)&&validGrapple(link));
+  if(['test','skill','defense','opposition'].includes(type)&&(isBrokenActor(actor)||actorHasActiveGrapple)&&!draft.reactionId){
     if(action?.id?.startsWith('broken-hide:'))fields.appendChild(node('p','workspace-muted','Le Test consomme l’Action du Tour : Oui (Hide facultatif).'));
     else contextField(fields,'actor','isAction','Le Test consomme l’Action du Tour');
   }
@@ -1903,16 +1912,28 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
   const situationFields=renderSituationFields({actor,target,participants,context:current,onContext:v5Context=>handlers.select({v5Context})});if(situationFields)v5.append(situationFields);
   const anklePenalty=(actor?.extensions?.v5?.combatEffects||[]).find(row=>row.kind==='twisted-ankle'&&Number(draft.round||0)<Number(row.createdRound||0)+Number(row.rounds||0));
   if(anklePenalty){const wrap=node('label','workspace-type','Cheville tordue : jambe utilisée pour ce Test'),select=document.createElement('select');select.setAttribute('aria-label',wrap.textContent);select.append(new Option('Ne pas appliquer',''),new Option('Jambe gauche','jambe-gauche'),new Option('Jambe droite','jambe-droite'));select.value=current.legUsed||'';select.addEventListener('change',()=>handlers.select({v5Context:{...current,legUsed:select.value||undefined}}));wrap.append(select);v5.append(wrap);}
-  const linkedGrapple=[...(actor?.extensions?.v5?.grapples||[]),...(target?.extensions?.v5?.grapples||[])].find(row=>row.status==='active'&&(row.initiatorId===target?.id||row.targetId===target?.id)&&(row.initiatorId===actor?.id||row.targetId===actor?.id));
+  const linkedGrapple=[...(actor?.extensions?.v5?.grapples||[]),...(target?.extensions?.v5?.grapples||[])].find(row=>
+    row.initiatorId===target?.id&&row.targetId===actor?.id||row.initiatorId===actor?.id&&row.targetId===target?.id
+  );
+  const liveLinkedGrapple=validGrapple(linkedGrapple)?linkedGrapple:null;
   if(['attack','skill','opposition'].includes(type)&&(draft.v5Kind==='melee'||String(action?.attr||'').toUpperCase()==='CC')&&target){
     const label=node('label','workspace-type','Déclarer une tentative d’empoignade (Bagarre avant le jet)'),check=document.createElement('input');check.type='checkbox';check.checked=current.grappleDeclared===true;check.addEventListener('change',()=>handlers.select({v5Context:{...current,grappleDeclared:check.checked||undefined,grappleAction:undefined}}));label.prepend(check);v5.append(label);
   }
-  if(linkedGrapple){
+  if(liveLinkedGrapple){
     const label=node('label','workspace-type','Action d’empoignade — Test opposé de Force'),select=document.createElement('select');select.setAttribute('aria-label',label.textContent);select.append(new Option('Choisir',''),new Option('Blesser (BF + DR, sans PA)','damage'),new Option('Immobiliser (Enchevêtré +1, puis +1 par DR au-delà du premier)','immobilize'),new Option('Se dégager','escape'));select.value=current.grappleAction||'';select.addEventListener('change',()=>handlers.select({v5Context:{...current,grappleDeclared:undefined,grappleAction:select.value||undefined}}));label.append(select);v5.append(label);
+  }
+  if(current.grappleAction&&!liveLinkedGrapple){
+    const warning=node('p','workspace-muted','Lien d’empoignade inopérant : l’action enregistrée ne sera pas résolue comme une empoignade. Effacez-la avant de calculer.');
+    const clear=button('Effacer l’action d’empoignade enregistrée','workspace-secondary');clear.addEventListener('click',()=>handlers.select({v5Context:{...current,grappleAction:undefined}}));
+    v5.append(warning,clear);
   }
   const addDirectorArm=(container)=>{const label=node('label','workspace-type','Bras directeur touché : choix du MJ'),select=document.createElement('select');select.setAttribute('aria-label',label.textContent);select.append(new Option('À préciser',''),new Option('Gauche','left'),new Option('Droit','right'));select.value=current.weaponExplosionArmSide||'';select.addEventListener('change',()=>handlers.select({v5Context:{...current,weaponExplosionArmSide:select.value||undefined}}));label.append(select);container.appendChild(label);};
   const combatFumbleDue=Boolean(draft.preview?.fumble),defenderFumbleDue=Boolean(draft.preview?.defenderFumble);
   const powderIncidentDue=Boolean(draft.preview?.combatFailure?.misfire)||Number(draft.attackRoll)>=99&&isBlackpowderIncidentEligible({actor,action,context:current});
+  const incidentWeapon=actor?.equipment?.find(row=>row.id===action?.extensions?.fiche?.equipmentId)||action?.extensions?.equipment;
+  const incidentQualities=[...(incidentWeapon?.keywords||[]),...(action?.qualities||[])].map(row=>typeof row==='string'?row:row?.id);
+  const salvoBlackpowder=incidentQualities.some(value=>['salve','salvo'].includes(value))
+    &&isBlackpowderIncidentEligible({actor,action,context:current,weapon:incidentWeapon});
   const incidentWeaponName=String(actor?.equipment?.find(row=>row.id===action?.extensions?.fiche?.equipmentId)?.name||action?.extensions?.equipment?.name||action?.note||action?.name||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
   if(combatFumbleDue||defenderFumbleDue||powderIncidentDue){
     const failureFields=node('div','workspace-v5-context');
@@ -1924,21 +1945,21 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
     }
     if(defenderFumbleDue){const defenseContext=draft.defenseContext||{},wrap=node('label','workspace-type','Maladresse du défenseur : résultat du d10 (V5 p. 165)'),input=document.createElement('input');input.type='number';input.min='1';input.max='10';input.step='1';input.value=defenseContext.defenderFumbleRoll??'';input.setAttribute('aria-label',wrap.textContent);input.addEventListener('input',()=>handlers.select({defenseContext:{...defenseContext,defenderFumbleRoll:input.value===''?undefined:Number(input.value)}}));wrap.append(input);failureFields.append(wrap);}
     if(powderIncidentDue){addFailureRoll('powderIncidentRoll','Incident de poudre : premier d10 (V5 p. 165)');if(Number(current.powderIncidentRoll)>=9)addDirectorArm(failureFields);}
-    const salvoWeapon=/arquebuse a salve|volley gun/.test(incidentWeaponName);
-    if(powderIncidentDue&&salvoWeapon&&Number(current.powderIncidentRoll)>=1&&Number(current.powderIncidentRoll)<=10)addFailureRoll('salvoIncidentRoll','Incident de Salve : second d10 (L13 p. 126, après l’incident générique)');
-    if(powderIncidentDue&&salvoWeapon&&Number(current.powderIncidentRoll)>=1&&Number(current.powderIncidentRoll)<=10&&Number(current.salvoIncidentRoll)>=1&&Number(current.salvoIncidentRoll)<=10){
+    if(powderIncidentDue&&salvoBlackpowder&&Number(current.powderIncidentRoll)>=1&&Number(current.powderIncidentRoll)<=10)addFailureRoll('salvoIncidentRoll','Incident de Salve : second d10 (L13 p. 126, après l’incident générique)');
+    if(powderIncidentDue&&salvoBlackpowder&&Number(current.powderIncidentRoll)>=1&&Number(current.powderIncidentRoll)<=10&&Number(current.salvoIncidentRoll)>=1&&Number(current.salvoIncidentRoll)<=10){
       const participantsNow=participants.filter(person=>person.zone==='active'),ctx={...current},put=next=>handlers.select({v5Context:next});
       const number=(key,label,min,max)=>{const wrap=node('label','workspace-type',label),input=document.createElement('input');input.type='number';input.min=String(min);input.max=String(max);input.step='1';input.value=ctx[key]??'';input.setAttribute('aria-label',label);input.addEventListener('input',()=>put({...ctx,[key]:input.value===''?undefined:Number(input.value)}));wrap.append(input);failureFields.append(wrap);};
       const outcome=Number(ctx.salvoIncidentRoll);
-      if(outcome>=8)number('remainingSalvo','Incident de Salve : points de Salve restants',1,100);
-      if(outcome<=9){number('salvoUnitsRoll','Incident de Salve : dé des unités (0–9), DR effectifs',0,9);
+      if(outcome>=8)number('remainingSalvo','Incident de Salve : points de Salve restants',0,100);
+      const noRemainingShots=outcome>=8&&Number(ctx.remainingSalvo)===0;
+      if(outcome<=9&&!noRemainingShots){number('salvoUnitsRoll','Incident de Salve : dé des unités (0–9), DR effectifs',0,9);
         const crewWrap=node('label','workspace-type','Incident de Salve : servants touchés (choix du MJ)'),crewSelect=document.createElement('select');crewSelect.multiple=true;crewSelect.setAttribute('aria-label',crewWrap.textContent);for(const person of participantsNow)crewSelect.append(new Option(person.name||person.id,person.id));for(const option of crewSelect.options)option.selected=(ctx.salvoCrewIds||[]).includes(option.value);crewSelect.addEventListener('change',()=>put({...ctx,salvoCrewIds:[...crewSelect.selectedOptions].map(option=>option.value)}));crewWrap.append(crewSelect);failureFields.append(crewWrap);
         for(const id of ctx.salvoCrewIds||[]){const person=participantsNow.find(row=>row.id===id);if(!person)continue;
           const selectLocation=(label,value,onchange)=>{const wrap=node('label','workspace-type',label),select=document.createElement('select');select.setAttribute('aria-label',label);select.append(new Option('À préciser',''),new Option('Tête','head'),new Option('Corps','body'),new Option('Bras gauche','left'),new Option('Bras droit','right'),new Option('Jambe gauche','left-leg'),new Option('Jambe droite','right-leg'));select.value=value||'';select.addEventListener('change',()=>onchange(select.value||undefined));wrap.append(select);failureFields.append(wrap);};
           if(outcome<=4)selectLocation(`Bras principal de ${person.name||id}`,ctx.salvoPrimaryArms?.[id],value=>put({...ctx,salvoPrimaryArms:{...(ctx.salvoPrimaryArms||{}),[id]:value}}));
           else{const count=outcome<=7?1:Math.max(1,Number(ctx.remainingSalvo)||1),rows=[...(ctx.salvoLocations?.[id]||[])];for(let i=0;i<count;i++)selectLocation(`Localisation aléatoire ${i+1} de ${person.name||id}`,rows[i],value=>{const next=[...(ctx.salvoLocations?.[id]||[])];next[i]=value;put({...ctx,salvoLocations:{...(ctx.salvoLocations||{}),[id]:next}});});}
         }
-      }else{
+      }else if(!noRemainingShots){
         for(let i=0;i<Math.max(1,Number(ctx.remainingSalvo)||0);i++){
           const old=(ctx.salvoTrajectories||[])[i]||{},setShot=next=>{const rows=[...(ctx.salvoTrajectories||[])];rows[i]={...old,...next};put({...ctx,salvoTrajectories:rows});};
           for(const [field,label,type,min,max]of[['direction','Direction aléatoire du tir '+(i+1),'text'],['distanceRoll','Distance d100 en yards du tir '+(i+1),'number',1,100]]){const wrap=node('label','workspace-type',label),input=document.createElement('input');input.type=type;if(type==='number'){input.min=String(min);input.max=String(max);}input.value=old[field]??'';input.setAttribute('aria-label',label);input.addEventListener('input',()=>setShot({[field]:type==='number'?(input.value===''?undefined:Number(input.value)):input.value}));wrap.append(input);failureFields.append(wrap);}
@@ -1957,7 +1978,7 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
   const linkedWeapon=actor?.equipment?.find(row=>row.id===action?.extensions?.fiche?.equipmentId)||action?.extensions?.equipment;
   const failureWeaponName=String(linkedWeapon?.name||action?.note||action?.name||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
   const isGunAxe=/hache.fusil|gun axe/.test(failureWeaponName),isGunHalberd=/hallebarde.fusil|gun halberd/.test(failureWeaponName),isGriffonsfoot=/griffonsfoot/.test(failureWeaponName),isHandMortar=/mortier (?:a|de) main|hand mortar/.test(failureWeaponName),isVolley=/arquebuse a salve|volley gun/.test(failureWeaponName),isMatchlock=/matchlock|meche/.test(failureWeaponName);
-  if(linkedWeapon?.keywords?.some(row=>(typeof row==='string'?row:row?.id)==='a-repetition'&&row?.asterisk===true)){const controls=node('div','workspace-v5-context'),wrap=node('label','workspace-type','Seconde main pour la Poivrière'),choice=document.createElement('select');choice.setAttribute('aria-label','Seconde main libre pour préparer le canon de la Poivrière');choice.append(new Option('À préciser',''),new Option('Oui, libre','true'),new Option('Non, occupée','false'));choice.value=typeof current.freeHandAvailable==='boolean'?String(current.freeHandAvailable):'';choice.addEventListener('change',()=>handlers.select({v5Context:{...current,freeHandAvailable:choice.value===''?undefined:choice.value==='true'}}));wrap.append(choice);controls.append(wrap,node('p','workspace-muted','Main occupée : le tir reste possible; les autres canons restent chargés, mais la seconde main doit préparer le canon avant un nouveau tir.'));v5.append(controls);}
+  if(linkedWeapon?.keywords?.some(row=>(typeof row==='string'?row:row?.id)==='a-repetition'&&row?.asterisk===true)){const controls=node('div','workspace-v5-context'),wrap=node('label','workspace-type','Seconde main pour la Poivrière'),choice=document.createElement('select');choice.setAttribute('aria-label','Seconde main libre pour préparer le canon de la Poivrière');choice.append(new Option('À préciser',''),new Option('Oui, libre','true'),new Option('Non, occupée','false'));choice.value=typeof current.freeHandAvailable==='boolean'?String(current.freeHandAvailable):'';choice.addEventListener('change',()=>handlers.select({v5Context:{...current,freeHandAvailable:choice.value===''?undefined:choice.value==='true'}}));wrap.append(choice);controls.append(wrap,node('p','workspace-muted',current.freeHandAvailable===false?'Main occupée : après ce tir, recharge complète nécessaire, comme pour une arme sans À répétition.':'Si la seconde main est occupée, un tir reste possible puis une recharge complète est nécessaire.'));v5.append(controls);}
   const salvoActive=linkedWeapon?.keywords?.some(row=>['salve','salvo'].includes(typeof row==='string'?row:row?.id))||action?.qualities?.some(row=>['salve','salvo'].includes(typeof row==='string'?row:row?.id));
   const priorSalvoShots=previousWeaponAttacks.filter(row=>row.weaponId===linkedWeapon?.id&&row.actionType==='attack').length;
   if(salvoActive&&type==='attack'&&priorSalvoShots>0)v5.append(node('p','workspace-muted',`Salve : −${priorSalvoShots} DR (tir(s) antérieur(s) de cette arme pendant ce Tour).`));
@@ -1969,9 +1990,18 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
     if(isGunAxe||isGunHalberd){addCheck('meleeUse','Utiliser l’arme comme arme de mêlée');addCheck('weaponLoaded','L’arme à feu est chargée');}
     if(isGunHalberd)addTargets('designatedTargetIds','Hallebarde-fusil : personnes directement derrière (choix MJ)');
     if(isGriffonsfoot){const progress=Number(linkedWeapon?.extensions?.v5?.griffonsfootReloadProgress)||0;controls.append(node('p','workspace-muted',`Griffonsfoot · Recharge 6 : ${Math.min(6,progress)}/6 succès. Chaque Test réussi apporte 1 succès plus les DR positifs; un échec n’ajoute rien. Les six projectiles et charges sont débités au terme du cycle.`));addCheck('reloading','Effectuer un Test de Recharge du Griffonsfoot');}
-    if(isHandMortar){addCheck('reloading','Recharger le mortier à main');addCheck('grappleLoaded','Charger le grappin');addCheck('grappleAnchorChosen','Le MJ désigne un point d’ancrage pour la corde');addCheck('bombPayload','Charger une bombe à mèche');if(current.bombPayload){addCheck('bombFuseLit','Le MJ confirme que la mèche de la bombe a été allumée avant chargement');addNumber('fuseTurns','Délai de la mèche en Tours du porteur',1,10);}if(draft.preview?.fumble&&current.reloading&&Number(current.fumbleRoll)>=1&&Number(current.fumbleRoll)<=10){addNumber('weaponDamageMaximum','Dégâts maximums du profil du mortier',0,100);addDirectorArm(controls);}}
+    if(isHandMortar){addCheck('reloading','Recharger le mortier à main');addCheck('grappleLoaded','Charger le grappin');addCheck('grappleAnchorChosen','Le MJ désigne un point d’ancrage pour la corde');addCheck('bombPayload','Charger une bombe à mèche');if(current.bombPayload){addCheck('bombFuseLit','Le MJ confirme que la mèche de la bombe a été allumée avant chargement');addNumber('fuseTurns','Délai de la mèche en Tours du porteur',1,10);}if(draft.preview?.fumble&&current.reloading&&Number(current.fumbleRoll)>=1&&Number(current.fumbleRoll)<=10)addDirectorArm(controls);}
     if(isMatchlock){const light=button('Allumer la mèche — Action distincte','workspace-secondary');light.addEventListener('click',()=>handlers.select({type:'skill',v5Context:{...current,lightFuseAction:true,isAction:true}}));controls.append(light);addCheck('weatherExtinguishesFuse','Pluie ou vent éteint la mèche');}
-    if(isVolley){addNumber('recoilTestBase','Résistance (seuil avant +20)',1,100);addNumber('recoilTestRoll','d100 de Résistance',1,100);const base=Number(current.recoilTestBase),roll=Number(current.recoilTestRoll);let recoilTest=null;if(Number.isInteger(base)&&base>=1&&base<=100&&Number.isInteger(roll)&&roll>=1&&roll<=100)recoilTest=previewV5Test({score:Math.min(100,base+20),roll,kind:'test'}).options[0].result;if(recoilTest&&!recoilTest.success&&recoilTest.sl<=-5)addNumber('recoilCriticalRolls','Critique d’épaule : d100 table du bras V5',1,100);const wrap=node('label','workspace-type','Nombre de servants'),input=document.createElement('input');input.type='number';input.min='1';input.step='1';input.value=current.crewCount??'';input.setAttribute('aria-label',wrap.textContent);input.addEventListener('input',()=>handlers.select({v5Context:{...current,crewCount:input.value===''?undefined:Number(input.value)}}));wrap.append(input);controls.append(wrap);if(current.crewCount===1){const moved=node('label','workspace-type','Servant seul : l’arme a-t-elle été déplacée pendant ce Tour ?'),choice=document.createElement('select');choice.setAttribute('aria-label',moved.textContent);choice.append(new Option('À préciser',''),new Option('Non','false'),new Option('Oui','true'));choice.value=typeof current.moved==='boolean'?String(current.moved):'';choice.addEventListener('change',()=>handlers.select({v5Context:{...current,moved:choice.value===''?undefined:choice.value==='true'}}));moved.append(choice);controls.append(moved);}}
+    if(isVolley){
+      addNumber('recoilTestBase','Résistance (+2 DR)',1,100);addNumber('recoilTestRoll','d100 de Résistance',1,100);
+      const base=Number(current.recoilTestBase),roll=Number(current.recoilTestRoll);
+      let recoilTest=null;
+      if(Number.isInteger(base)&&base>=1&&base<=100&&Number.isInteger(roll)&&roll>=1&&roll<=100)
+        recoilTest=previewV5Test({score:base,roll,kind:'test',slModifiers:[{id:'f2-e:salvo-recoil',label:'Recul de l’arquebuse à salve',amount:2}]}).options[0].result;
+      if(recoilTest&&!recoilTest.success&&recoilTest.sl<=-5)addNumber('recoilCriticalRolls','Critique d’épaule : d100 table du bras V5',1,100);
+      const wrap=node('label','workspace-type','Nombre de servants'),input=document.createElement('input');input.type='number';input.min='1';input.step='1';input.value=current.crewCount??'';input.setAttribute('aria-label',wrap.textContent);input.addEventListener('input',()=>handlers.select({v5Context:{...current,crewCount:input.value===''?undefined:Number(input.value)}}));wrap.append(input);controls.append(wrap);
+      if(current.crewCount===1){const moved=node('label','workspace-type','Servant seul : l’arme a-t-elle été déplacée pendant ce Tour ?'),choice=document.createElement('select');choice.setAttribute('aria-label',moved.textContent);choice.append(new Option('À préciser',''),new Option('Non','false'),new Option('Oui','true'));choice.value=typeof current.moved==='boolean'?String(current.moved):'';choice.addEventListener('change',()=>handlers.select({v5Context:{...current,moved:choice.value===''?undefined:choice.value==='true'}}));moved.append(choice);controls.append(moved);}
+    }
     v5.append(controls);
   }
   if(['griffonsfoot','arquebuse a salve','volley gun'].some(value=>failureWeaponName.includes(value))){

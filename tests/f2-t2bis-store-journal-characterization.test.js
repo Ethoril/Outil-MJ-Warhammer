@@ -10,7 +10,7 @@ const memory = () => {
   };
 };
 
-test('T2 bis characterization — a successful action.type=test is currently journaled as Action', async () => {
+test('T2 bis regression — a successful action.type=test is journaled as Test', async () => {
   const store = createStore({ storage: null, persistence: memory() });
   await store.ready;
   const actor = { id: 'tester', name: 'Testeur', kind: 'PJ', zone: 'active', hp: 10, maxHp: 10,
@@ -22,5 +22,5 @@ test('T2 bis characterization — a successful action.type=test is currently jou
   assert.equal((await store.applyResolution(preview)).status, 'applied');
   const entry = JSON.parse(store.getFullJSON()).log[0];
   assert.equal(entry.detail.actionType, 'test');
-  assert.match(entry.text, /^Action — réussite/u);
+  assert.match(entry.text, /^Test — réussite/u);
 });

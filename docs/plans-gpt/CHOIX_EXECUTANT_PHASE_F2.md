@@ -1,3 +1,18 @@
+## Décisions du MJ — reprise T2 bis et tranche T3 (28/10/2026)
+
+Sources : `tmp/gpt-phase-f2/CONTRE_VERIFICATION_CLAUDE_T2_BIS.md` et `tmp/gpt-phase-f2/BRIEF_T3.md`. Ces décisions priment sur les formulations historiques ci-dessous.
+
+- Mort subite : les créatures sont éligibles comme les PNJ secondaires, sur confirmation du MJ ; jamais les PJ ni les Chanceux.
+- Poivrière sans seconde main libre : un coup puis recharge complète comme une arme sans À répétition.
+- Mortier de main explosant au rechargement : dégâts du profil à +0 DR au bras principal, sans maximum saisi.
+- Échec de sortie de filet : rien ne change.
+- V5 partout ; règles V4 retenues converties (±10 → ±1 DR, Avantage → Élan, Résilience → Destin, Détermination → Chance). L06, L09 et L10 sont V5 ; les autres suppléments, notamment L13, L17 et L23, sont V4.
+- « Ne pas implanter » ne retire aucun comportement existant ; distances jamais suivies, choix au MJ ; mort jamais appliquée sans confirmation.
+- F2-M réutilise l'état durable monté / démonté du lot C ; le Désavantage à l'Esquive remplace l'ancien champ chiffré, sans cumul.
+- Corruption : seuil BE + BFM, doublé par Âme pure, recalculé lorsque ces bonus changent ; points et mutations préparés pour l'écriture future vers la fiche. Aucune mutation sans confirmation du MJ.
+- Mutations : 39 lignes L06, 134 lignes L17 converties en V5 et table étendue L23 selon la conception K2 validée ; compter L23 sur les pages, résumer chaque ligne dans nos mots (douze mots cités au plus), indiquer pages imprimée et PDF et faire vérifier indépendamment chaque ligne. Conversion incertaine assistée, question au MJ, sans valeur par défaut.
+- Malus durables des séquelles : F2-J en T4, pas en T3.
+
 ## Contre-vérification T2 (27/10 soir) — décisions du MJ (première série)
 
 - Sortie d'un filet : **Test opposé de Force contre la Force du filet** (L06 p.186, chaque DR après le premier retire un état Empêtré supplémentaire), au lieu du cumul de DR jusqu'à la valeur de Force.

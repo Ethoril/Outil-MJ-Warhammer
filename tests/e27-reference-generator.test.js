@@ -39,7 +39,24 @@ test('génération équipement-seul : préserve le snapshot non-équipement et l
   mkdirSync(tools,{recursive:true});
   writeFileSync(join(tools,'generate-reference-catalog.mjs'),readFileSync(join(repo,'tools/generate-reference-catalog.mjs')));
   const equipmentSource='export const equipmentOnlyFixture = true;\n';
-  const refreshSource=`const fold = value => String(value).toLowerCase();\nconst helper = true;\nconst sources = [];\nconst keywordRows = [];\nconst items = [];\nconst keywords = [];\nconst catalogVersion = 'after';\n`;
+  const refreshSource=[
+   'const fold = value => String(value).toLowerCase();',
+   'const helper = true;',
+   'const sources = [];',
+   'const keywordRows = [];',
+   '/* Required source-shape markers exercised by the generator guard:',
+   'const params = [];',
+   "const regex = new RegExp(`(?:^|[,;]|\\\\bou\\\\s)\\\\s*${escaped}(?=$|[\\\\s.(,;])\\\\s*([+-]?\\\\d+|\\\\([^)]*\\\\))?`, 'gu');",
+   'for (const match of folded.matchAll(regex)) {',
+   '                matched = true;',
+   'const start = match.index + match[0].length - match[1].length;',
+   "if (matched) result.push({ id: entry.id, parameter: entry.parameter ? params.join(', ') : '' });",
+   '*/',
+   'const items = [];',
+   'const keywords = [];',
+   "const catalogVersion = 'after';",
+   ''
+  ].join('\n');
   mkdirSync(join(source,'js/fiche'),{recursive:true});mkdirSync(join(source,'js/data'),{recursive:true});mkdirSync(join(source,'tools'),{recursive:true});
   writeFileSync(join(source,'js/fiche/equipment.js'),equipmentSource);
   const catalog={catalogVersion:'equipment:new',fetchedAt:'2026-10-27T12:00:00.000Z',items:[{id:'v5-item',catalogVersion:'equipment:new'}],keywords:[{id:'v5-keyword'}],sources:{'Armes Corps à Corps':{url:'new-url',sha256:'new-hash'}}};
@@ -81,6 +98,13 @@ test('génération équipement-seul : préserve le snapshot non-équipement et l
 
   const firstSnapshot=readFileSync(join(root,'js/data/reference-snapshot.json'));
   const firstBuilder=readFileSync(join(root,'js/data/reference-equipment-builder.js'));
+  const refreshPath=join(source,'tools/refresh-equipment-catalog.mjs');
+  writeFileSync(refreshPath,refreshSource.replace('const params = [];','// params marker removed'));
+  let missingPatternError;
+  try { run(); } catch (error) { missingPatternError=error; }
+  assert.ok(missingPatternError,'une source sans motif doit faire échouer la génération');
+  assert.match(String(missingPatternError.stderr),/Motif générateur absent ou ambigu \(params\)/);
+  writeFileSync(refreshPath,refreshSource);
   run();
   assert.deepEqual(readFileSync(join(root,'js/data/reference-snapshot.json')),firstSnapshot,'le snapshot équipement seul est reproductible');
   assert.deepEqual(readFileSync(join(root,'js/data/reference-equipment-builder.js')),firstBuilder,'le générateur équipement est reproductible');

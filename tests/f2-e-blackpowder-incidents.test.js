@@ -345,8 +345,8 @@ test('F2-E — stock initial confirmé puis débité atomiquement lors du tir', 
   assert.equal(updated.extensions.v5.blackpowderStock.history.length,1);
 });
 
-test('F2-E — une mèche de bombe conserve son Round d’échéance et le mortier applique les dégâts maximums au bras', () => {
-  const mortar={id:'mortar',name:'Mortier à main',kind:'weapon',damageMaximum:12,extensions:{v5:{}}},shooter={...actor,equipment:[mortar]};
+test('F2-E reprise T2 bis — une mèche conserve son échéance et le mortier applique les dégâts de son profil au bras', () => {
+  const mortar={id:'mortar',name:'Mortier à main',kind:'weapon',damage:12,extensions:{v5:{}}},shooter={...actor,equipment:[mortar]};
   const lit=previewResolution({actor:shooter,action:{type:'skill',base:10,note:'Mortier à main',extensions:{fiche:{equipmentId:'mortar'}}},roll:1,round:4,
     v5:{kind:'test',context:{bombPayload:true,reloading:true,bombFuseLit:true,fuseTurns:1,currentRound:4,currentTurnIndex:11}},baseRevision:0});
   assert.equal(lit.combatFailure.effects.find(row=>row.type==='bomb-fuse')?.dueRound,4);
@@ -359,7 +359,7 @@ test('F2-E — une mèche de bombe conserve son Round d’échéance et le morti
     v5:{kind:'test',context:{fumbleRoll:1,reloading:true,weaponExplosionArmSide:'right'}},baseRevision:0});
   const exploded=applyResolution(fumble,{revision:0,round:4,participants:[shooter]});
   assert.equal(exploded.status,'applied');
-  assert.equal(exploded.state.participants[0].hp,2,'12 dégâts maximum moins 3 d’Endurance et 1 Blessure de la table de maladresse');
+  assert.equal(exploded.state.participants[0].hp,2,'12 dégâts de profil moins 3 d’Endurance et 1 Blessure de la table de maladresse');
 });
 
 test('F2-E revue — bombe interdite hors mortier et sans rechargement réussi', () => {
@@ -512,16 +512,14 @@ test('F2-E revue — Volley Gun Salvo 7, Recharge 4 sans astérisque remplit le 
   assert.deepEqual({projectiles:shooter.extensions.v5.blackpowderStock.projectiles,powderCharges:shooter.extensions.v5.blackpowderStock.powderCharges},{projectiles:0,powderCharges:0});
 });
 
-test('F2-E — le mortier à main en maladresse de rechargement exige les dégâts maximums, jamais les dégâts du coup', () => {
+test('F2-E reprise T2 bis — le mortier de main en maladresse de rechargement utilise les dégâts du profil à +0 DR', () => {
   const normalized={actor,action:{type:'test',note:'Mortier à main',damage:4},resolutionId:'mortar-reload'};
-  const missing=previewCombatFailure({normalized,fumble:{expanded:false},context:{fumbleRoll:1,reloading:true,weaponDamage:4}});
-  assert.ok(missing.unresolved.some(row=>row.includes('dégâts maximums')));
-  const noSide=previewCombatFailure({normalized,fumble:{expanded:false},context:{fumbleRoll:1,reloading:true,weaponDamageMaximum:12}});
+  const noSide=previewCombatFailure({normalized,fumble:{expanded:false},context:{fumbleRoll:1,reloading:true}});
   assert.ok(noSide.unresolved.some(row=>row.includes('bras directeur')));
   const complete=previewCombatFailure({normalized,fumble:{expanded:false},context:{fumbleRoll:1,reloading:true,weaponDamageMaximum:12,weaponExplosionArmSide:'right'}});
   const explosion=complete.effects.find(row=>row.type==='weapon-explosion');
-  assert.equal(explosion.damage,12);
-  assert.equal(explosion.damageMode,'maximum');
+  assert.equal(explosion.damage,4);
+  assert.equal(explosion.damageMode,'profile-at-zero-sl');
   assert.equal(explosion.sl,0);
 });
 
@@ -540,12 +538,12 @@ test('F2-E — l’explosion touche le bras directeur choisi et applique son arm
     {id:'right',kind:'armour',name:'Brassard droit',ap:4,layer:'mail',locations:['rightArm'],keywords:[]}
   ];
   const resolve=side=>{
-    const mortar={id:'mortar',name:'Mortier à main',kind:'weapon',category:'Explosif',damageMaximum:12};
+    const mortar={id:'mortar',name:'Mortier à main',kind:'weapon',category:'Explosif',damage:12};
     const shooter={...actor,hp:20,equipment:[...armour,mortar]};
     const enemy={id:'enemy',camp:'foes',zone:'active',hp:20,caracs:{E:30},states:[]};
     const participants=[shooter,enemy];
     const preview=previewResolution({actor:shooter,target:enemy,action:{type:'attack',attr:'CT',base:20,damage:4,note:'Mortier à main',extensions:{fiche:{equipmentId:'mortar'}}},roll:66,round:1,baseRevision:0,
-      v5:{kind:'ranged',context:{fumbleRoll:1,reloading:true,weaponDamageMaximum:12,weaponExplosionArmSide:side}}});
+      v5:{kind:'ranged',context:{fumbleRoll:1,reloading:true,weaponExplosionArmSide:side}}});
     assert.equal(preview.unresolved.length,0,preview.unresolved.join('; '));
     return applyResolution(preview,{revision:0,round:1,participants}).state.participants[0].hp;
   };

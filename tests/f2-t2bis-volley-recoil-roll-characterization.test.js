@@ -29,14 +29,14 @@ test('T2 bis caractérisation — le recul reprend les automatiques V5 01–05 e
   const automaticOutcomes = [];
   for (const roll of [1, 2, 3, 4, 5]) {
     const { effect } = recoil(1, roll);
-    const v5 = previewV5Test({ score: 21, roll }).options[0].result;
+    const v5 = previewV5Test({ score: 1, roll, slModifiers:[{id:'salvo-recoil',label:'Résistance (+2 DR)',amount:2}] }).options[0].result;
     assert.equal(v5.details.automatic, 'success');
     automaticOutcomes.push({ roll, actual: [effect.success, effect.sl], expected: [v5.success, v5.sl] });
   }
 
   for (const roll of [96, 97, 98, 99, 100]) {
     const { effect } = recoil(80, roll); // Résistance +20 atteint 100.
-    const v5 = previewV5Test({ score: 100, roll }).options[0].result;
+    const v5 = previewV5Test({ score: 80, roll, slModifiers:[{id:'salvo-recoil',label:'Résistance (+2 DR)',amount:2}] }).options[0].result;
     assert.equal(v5.details.automatic, 'failure');
     automaticOutcomes.push({ roll, actual: [effect.success, effect.sl, effect.astoundingFailure], expected: [v5.success, v5.sl, v5.sl <= -5] });
   }
@@ -47,10 +47,16 @@ test('T2 bis caractérisation — un double raté 99 ou 100 donne un fumble à -
   const doubleOutcomes = [];
   for (const roll of [99, 100]) {
     const { effect } = recoil(80, roll);
-    const v5 = previewV5Test({ score: 100, roll }).options[0].result;
+    const v5 = previewV5Test({ score: 80, roll, slModifiers:[{id:'salvo-recoil',label:'Résistance (+2 DR)',amount:2}] }).options[0].result;
     assert.equal(v5.fumble, true);
     assert.equal(v5.sl, -5);
     doubleOutcomes.push({ roll, actual: [effect.success, effect.sl, effect.astoundingFailure, Boolean(effect.armCritical)], expected: [false, -5, true, true] });
   }
   assert.deepEqual(doubleOutcomes.filter(row => JSON.stringify(row.actual) !== JSON.stringify(row.expected)), []);
+});
+
+test('T2 bis caractérisation — le recul applique +2 DR même si la Résistance dépasse 80', () => {
+  const {effect}=recoil(90,90);
+  assert.equal(effect.sl,2);
+  assert.equal(effect.success,true);
 });

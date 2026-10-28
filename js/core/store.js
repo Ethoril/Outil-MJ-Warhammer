@@ -841,7 +841,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
     };
   }
 
-  const RESOLUTION_TYPE_LABELS = { attack: 'Attaque', skill: 'Compétence', defense: 'Défense', opposition: 'Opposition' };
+  const RESOLUTION_TYPE_LABELS = { attack: 'Attaque', skill: 'Compétence', test: 'Test', defense: 'Défense', opposition: 'Opposition' };
 
   function resolutionLogEntry(preview, resolution) {
     const rawInput = preview?.input || {};

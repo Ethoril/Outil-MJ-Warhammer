@@ -60,15 +60,15 @@ test('T2 bis — Ratling Variable: capacité arbitrée puis état de chargeur pe
   const reloaded=createStore({storage:null,persistence});await reloaded.ready;assert.equal(reloaded.listParticipants().find(row=>row.id==='a').equipment[0].extensions.v5.reloadState.repeaterRating,6);
 });
 
-test('T2 bis — Poivrière: alterner main libre/occupée conserve les canons restants à travers persistence',async()=>{
+test('T2 bis — Poivrière: un tir main libre puis main occupée impose la recharge complète persistante',async()=>{
   const model=getReferenceCatalogue().items.find(row=>row.name==='Poivrière'),persistence=memory(),store=createStore({storage:null,persistence});await store.ready;const pepper=structuredClone(model);pepper.id='pepper-1';
   const shooter={...structuredClone(actor),equipment:[pepper]};await store.loadFromJSON({schemaVersion:3,reserve:[],combat:{round:1,currentActorId:'a',order:['a','t'],participants:[shooter,structuredClone(target)]},log:[],diceLines:[]});
   const base={actorId:'a',targetId:'t',action:{id:'pepper-attack',type:'attack',attr:'CT',base:60,damage:8,extensions:{fiche:{equipmentId:'pepper-1'}}},attackContext:{ranged:true},v5:{kind:'ranged'}};
-  let plan=store.previewResolution({...base,resolutionId:'pepper-no-hand-1',roll:23,v5:{kind:'ranged',context:{freeHandAvailable:false}}});assert.equal(plan.weaponReload.after.shotsRemaining,3);assert.equal((await store.applyResolution(plan)).status,'applied');
-  const afterFirst=store.listParticipants().find(row=>row.id==='a').equipment[0].extensions.v5.reloadState;assert.equal(afterFirst.requiresManualRotation,true);
-  const blocked=store.previewResolution({...base,resolutionId:'pepper-no-hand-2',roll:23,v5:{kind:'ranged',context:{freeHandAvailable:false}}});assert.ok(blocked.unresolved.some(row=>/préparé manuellement/.test(row)));
-  plan=store.previewResolution({...base,resolutionId:'pepper-free-hand-2',roll:23,v5:{kind:'ranged',context:{freeHandAvailable:true}}});assert.equal(plan.weaponReload.after.shotsRemaining,2);assert.equal((await store.applyResolution(plan)).status,'applied');
-  const reloaded=createStore({storage:null,persistence});await reloaded.ready;const state=reloaded.listParticipants().find(row=>row.id==='a').equipment[0].extensions.v5.reloadState;assert.equal(state.shotsRemaining,2);assert.equal(state.requiresManualRotation,false);
+  let plan=store.previewResolution({...base,resolutionId:'pepper-free-hand-1',roll:23,v5:{kind:'ranged',context:{freeHandAvailable:true}}});assert.equal(plan.weaponReload.after.shotsRemaining,3);assert.equal((await store.applyResolution(plan)).status,'applied');
+  const afterFirst=store.listParticipants().find(row=>row.id==='a').equipment[0].extensions.v5.reloadState;assert.equal(afterFirst.requiresReload,false);
+  plan=store.previewResolution({...base,resolutionId:'pepper-no-hand-2',roll:23,v5:{kind:'ranged',context:{freeHandAvailable:false}}});assert.equal(plan.weaponReload.after.shotsRemaining,0);assert.equal(plan.weaponReload.after.requiresReload,true);assert.equal((await store.applyResolution(plan)).status,'applied');
+  const blocked=store.previewResolution({...base,resolutionId:'pepper-free-hand-3',roll:23,v5:{kind:'ranged',context:{freeHandAvailable:true}}});assert.ok(blocked.unresolved.some(row=>/rechargée/.test(row)));
+  const reloaded=createStore({storage:null,persistence});await reloaded.ready;const state=reloaded.listParticipants().find(row=>row.id==='a').equipment[0].extensions.v5.reloadState;assert.equal(state.shotsRemaining,0);assert.equal(state.requiresReload,true);assert.equal(state.requiresManualRotation,false);
 });
 
 test('F2-D resolution — a fired repeater consumes one shot once and Undo restores the charge', () => {
