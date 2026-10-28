@@ -1567,7 +1567,8 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
     if (f2hTargetId === 'E0-P-916') addChoice('fireSize', 'Feu face au Léviathan noir', [['À préciser', ''], ['Torche ou plus petit', 'torch'], ['Grand feu de joie', 'bonfire']]);
     if (f2hActorId === 'E0-P-921') {
       addCheck('targetChaosFollower', 'La cible est adepte du Chaos (Test social)');
-      addCheck('singleCombatLeader', 'Chef ou champion adverse en duel singulier (+1 Élan)');
+      addCheck('singleCombatLeader', 'Chef ou champion adverse en duel singulier (+1 Élan, une fois par duel)');
+      if (f2h.singleCombatLeader === true) addCheck('championSlayerRearm', 'Nouveau duel contre cette cible : réarmer le gain d’Élan');
       addCheck('wulfrikHeadCritical', 'Blessure Critique : choisir la table Critique à la tête');
     }
     v5.append(section);

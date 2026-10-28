@@ -1646,8 +1646,11 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   if (action.extensions?.v5?.specialProfileAbility === 'gargantuan-electric-discharge' && hasMomentum(actor))
     actorEvents.push(event('spend', { profileAbility: 'gargantuan-electric-discharge' }));
   if(normalized.combatPrelude?.targetIncomingMomentum)targetEvents.push({id:normalized.resolutionId+':slayer-charge',type:'chargeEnemy'});
-  if ((actor?.extensions?.v5?.bestiary?.id === 'E0-P-921' || actor?.profileId === 'E0-P-921') && context.f2h?.singleCombatLeader === true)
-    actorEvents.push(event('profileMomentumGain', { profileAbility: 'wulfrik-champion-slayer' }));
+  // Tueur de champions (L25 p.155) : un seul gain d'Élan par duel, consommé à l'application ; le MJ réarme pour un nouveau duel (28/10).
+  const championSlayerUsed = target && !context.f2h?.championSlayerRearm && (actor?.extensions?.v5?.championSlayerDuels || []).includes(target.id);
+  const championSlayerGain = (actor?.extensions?.v5?.bestiary?.id === 'E0-P-921' || actor?.profileId === 'E0-P-921') && context.f2h?.singleCombatLeader === true && target && !championSlayerUsed;
+  if (championSlayerGain) actorEvents.push(event('profileMomentumGain', { profileAbility: 'wulfrik-champion-slayer' }));
+  if (championSlayerUsed && context.f2h?.singleCombatLeader === true) profileAbilityReminders.push('Tueur de champions : l’Élan de ce duel est déjà gagné; réarmer seulement pour un nouveau duel.');
   if (context.outsideCombat !== true && actorPlan.charging) actorEvents.push(event('chargeEnemy'));
   // La décharge du Gargantuan est un effet payé en Élan, pas une attaque opposée : ni gain ni perte d'opposition.
   const profileEffectOnly = action.extensions?.v5?.specialProfileAbility === 'gargantuan-electric-discharge';
@@ -1801,6 +1804,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     talentSLChoices: { actor: actorPlan.talentSLChoices || [], defender: defenderPlan?.talentSLChoices || [] },
     weaponConditions,
     profileAbilityPlans: [...profileAbilityPlans, ...targetProfileAbilityPlans],
+    championSlayerDuel: championSlayerGain ? { participantId: actor.id, targetId: target.id } : null,
     supplementalEquipment,
     weaponReload,
     entanglement,
@@ -2174,6 +2178,10 @@ export function applyResolution(preview, currentState) {
   for (const change of preview.momentum || []) {
     const live = participantById(nextState, change.participantId);
     if (live) nextState.participants = participantListWithUpdate(nextState, live.id, withMomentum(live, change.after));
+  }
+  if (preview.championSlayerDuel) {
+    const live = participantById(nextState, preview.championSlayerDuel.participantId);
+    if (live) { const updated = clone(live); updated.extensions ??= {}; updated.extensions.v5 = { ...(updated.extensions.v5 || {}), championSlayerDuels: [...new Set([...(updated.extensions.v5?.championSlayerDuels || []), preview.championSlayerDuel.targetId])].slice(-50) }; nextState.participants = participantListWithUpdate(nextState, live.id, updated); }
   }
   for(const change of preview.talentActionChanges||[]){
     const live=participantById(nextState,change.participantId);if(!live)return{status:'stale',requiresPreview:true,state:clone(currentState),resolution:clone(preview)};

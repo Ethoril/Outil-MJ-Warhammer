@@ -280,3 +280,24 @@ test('Sea Elemental casts and channels with Strength, its BF standing for BI and
   const other = p('E0-P-910');
   assert.equal(resolveCastingSkill(other).bi, Math.floor((other.caracs.Int || 0) / 10));
 });
+
+test('Wulfrik Champion Slayer gains Momentum once per duel, re-armed by the GM (MJ 28/10)', async () => {
+  const built = p('E0-P-921');
+  const actor = { ...built, talents: [], id: 'wulfrik', camp: 'ennemi', zone: 'active', extensions: { ...built.extensions, v5: { ...built.extensions.v5, hasMomentum: false } } };
+  const target = { id: 'champion', name: 'Champion', kind: 'PNJ', camp: 'pj', zone: 'active', hp: 40, maxHp: 40, caracs: { E: 30 }, armor: { head: 0, body: 0, arms: 0, legs: 0 }, states: [] };
+  const persistence = { async load() { return null; }, async saveAtomic() { return { ok: true }; } };
+  const store = createStore({ persistence }); await store.ready;
+  await store.addParticipant(actor); await store.addParticipant(target);
+  const attack = actor.actions.find(row => row.type === 'attack');
+  const gains = id => (store.previewResolution({ resolutionId: id, actorId: actor.id, targetId: target.id, action: attack, roll: 15,
+    defense: { base: 20, roll: 95, v5: { kind: 'test' } }, v5: { kind: 'melee', context: { f2h: { singleCombatLeader: true, ...(id === 'rearm' ? { championSlayerRearm: true } : {}) } } } }));
+  const first = gains('first');
+  assert.ok(first.momentum.find(row => row.participantId === actor.id).details.some(row => row.eventId.endsWith(':profileMomentumGain')));
+  const firstApplied = await store.applyResolution(first);
+  assert.equal(firstApplied.status, 'applied', JSON.stringify({ reason: firstApplied.reason, unresolved: first.unresolved, choice: first.choiceRequired, hit: first.hit }));
+  assert.deepEqual(store.listParticipants().find(row => row.id === actor.id).extensions.v5.championSlayerDuels, [target.id]);
+  const second = gains('second');
+  assert.ok(!second.momentum.find(row => row.participantId === actor.id).details.some(row => row.eventId.endsWith(':profileMomentumGain')));
+  assert.ok(second.reminders.some(text => /déjà gagné/.test(text)));
+  assert.ok(gains('rearm').momentum.find(row => row.participantId === actor.id).details.some(row => row.eventId.endsWith(':profileMomentumGain')));
+});
