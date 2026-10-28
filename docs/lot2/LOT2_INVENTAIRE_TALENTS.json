@@ -2,10 +2,10 @@
   "format": "lot2-talent-inventory-draft",
   "schemaVersion": 1,
   "createdAt": "2026-10-08",
-  "coverage": "206 identités classées par famille principale ; neuf contrats représentatifs proposés. Noyau développé séparément, aucun automatisme applicatif activé. Les talents mixtes restent à détailler clause par clause.",
+  "coverage": "213 identités : 207 précédemment triées ; six entrées ajoutées depuis les Companions V4 restent non vérifiées et en attente d’adaptation V5. Aucune couverture mécanique n’est présumée.",
   "selection": "Catalogue utile complet, PJ actuels prioritaires",
   "rulePolicy": "Système jouable unique V5. Conversion des descriptions assurée par le MJ à la source Aides de jeu ; le moteur applique les contrats V5 publiés et validés.",
-  "sourceCatalogueVersion": "sha256:711189dcb64920f251f3b08e06ac8bf4df93e09e8c32390b24c684d1282fbea0",
+  "sourceCatalogueVersion": "sha256:18b2426c16438158b38619c2638c93abffc056ba4534636e45807c127e2213e9",
   "sourceCataloguePath": "js/data/reference-snapshot.json (Talents) et js/data/reference-source-csv/Talents.csv",
   "referenceCorePdf": "Livre de base V5 EN v2.pdf (livre personnel, hors dépôt)",
   "counts": {
@@ -17,7 +17,8 @@
     "actions_reactions_et_effets_actifs": 40,
     "lot3_magie_et_prieres": 25,
     "valeurs_permanentes": 6,
-    "etats_et_recuperation": 12
+    "etats_et_recuperation": 12,
+    "supplement_v4_non_verifie": 6
   },
   "items": [
     {
@@ -3377,6 +3378,90 @@
       "priorityEvidence": null,
       "livePjPriority": "a_calculer_depuis_snapshots_importes",
       "clauses": []
+    },
+    {
+      "talentId": "talent-controlled-corruption",
+      "name": "Corruption Contrôlée",
+      "englishName": "Controlled Corruption",
+      "specializationLabel": null,
+      "purchaseLimit": "1",
+      "source": "Power Behind the Throne Companion (V4), p. 34",
+      "sourceEffectSha256": "bb7846e9be529c603e29a3fcfdf22b1e6e46fe84dd5120a950410fb051e61fba",
+      "family": "supplement_v4_non_verifie",
+      "status": "non_verifie_source_v4",
+      "priorityEvidence": null,
+      "livePjPriority": "a_calculer_depuis_snapshots_importes",
+      "clauses": []
+    },
+    {
+      "talentId": "talent-wilful-corruption",
+      "name": "Corruption Volontaire",
+      "englishName": "Wilful Corruption",
+      "specializationLabel": null,
+      "purchaseLimit": "Sans limitation",
+      "source": "Death on the Reik Companion (V4), p. 100",
+      "sourceEffectSha256": "cbf782290305f580639e94118eb52b39725555d9463bf9f857603154f3090387",
+      "family": "supplement_v4_non_verifie",
+      "status": "non_verifie_source_v4",
+      "priorityEvidence": null,
+      "livePjPriority": "a_calculer_depuis_snapshots_importes",
+      "clauses": []
+    },
+    {
+      "talentId": "talent-disciple-of-change",
+      "name": "Disciple du Changement",
+      "englishName": "Disciple of Change",
+      "specializationLabel": null,
+      "purchaseLimit": "1",
+      "source": "Enemy in Shadows Companion (V4), p. 75",
+      "sourceEffectSha256": "349bdd2788d7b0ab9c0ee3a0d4b27797bfb4f1dfdfe05b43a620c3930c03d74d",
+      "family": "supplement_v4_non_verifie",
+      "status": "non_verifie_source_v4",
+      "priorityEvidence": null,
+      "livePjPriority": "a_calculer_depuis_snapshots_importes",
+      "clauses": []
+    },
+    {
+      "talentId": "talent-double-life",
+      "name": "Double Vie",
+      "englishName": "Double Life",
+      "specializationLabel": null,
+      "purchaseLimit": "1",
+      "source": "Enemy in Shadows Companion (V4), p. 75",
+      "sourceEffectSha256": "a136fa3aa3ffd5bff88c5fc5aedf1ba1d12507ab47a4814061332f859ba73254",
+      "family": "supplement_v4_non_verifie",
+      "status": "non_verifie_source_v4",
+      "priorityEvidence": null,
+      "livePjPriority": "a_calculer_depuis_snapshots_importes",
+      "clauses": []
+    },
+    {
+      "talentId": "talent-suffused-with-magic",
+      "name": "Imprégné de Magie",
+      "englishName": "Suffused with Magic",
+      "specializationLabel": null,
+      "purchaseLimit": "1",
+      "source": "Enemy in Shadows Companion (V4), p. 79",
+      "sourceEffectSha256": "cbf1243886c2ac542076ea5b449500e7fbf84ac436ec48422595c94fc4996dd9",
+      "family": "supplement_v4_non_verifie",
+      "status": "non_verifie_source_v4",
+      "priorityEvidence": null,
+      "livePjPriority": "a_calculer_depuis_snapshots_importes",
+      "clauses": []
+    },
+    {
+      "talentId": "talent-extra-spell",
+      "name": "Sort Supplémentaire",
+      "englishName": "Extra Spell",
+      "specializationLabel": null,
+      "purchaseLimit": "Sans limitation",
+      "source": "Power Behind the Throne Companion (V4), p. 34",
+      "sourceEffectSha256": "e1241541da71109eb8219009b6635f623f41323b2d605480806338029c882cb9",
+      "family": "supplement_v4_non_verifie",
+      "status": "non_verifie_source_v4",
+      "priorityEvidence": null,
+      "livePjPriority": "a_calculer_depuis_snapshots_importes",
+      "clauses": []
     }
   ],
   "draftContractsCount": 9,
@@ -3390,12 +3475,12 @@
   "sourceNormalization": {
     "owner": "MJ dans le référentiel source",
     "targetRuleset": "V5",
-    "inventoryState": "207 identités conservées (206 + Maître à bord, ajouté à la feuille Drive le 23 octobre 2026) ; sept descriptions corrigées par le MJ relues le 9 octobre 2026. Les traitements automatiques restent subordonnés aux contrats validés.",
+    "inventoryState": "213 identities : 207 précédemment triées, plus six entrées des Companions V4 importées le 28 octobre 2026 ; ces six sources restent non vérifiées et en attente d’adaptation V5.",
     "runtimeConversion": false,
     "legacyCombatAdvantageCounter": false,
     "bibliographyEditionIsNotMechanic": "Une source V4 peut documenter une description adaptée V5 ; vérifier la clause publiée et son contrat, pas seulement la bibliographie.",
     "activation": "Empreinte d’effet source conforme au contrat V5 validé.",
-    "publicCsvSha256": "6c5b2722067eb1af0a620ea15d916133ef4834eab276797213b4765925cc57fd"
+    "publicCsvSha256": "5525370ffbeeb9e293b728106db33da46f709d8baee28bb3e5ea3a936e828756"
   },
   "commonRules": {
     "source": "Convention du MJ précisée dans ce chat le 8 octobre 2026",
@@ -3482,7 +3567,7 @@
     "requiredVisible": "costs, usage limits, affected targets and pending decisions",
     "journal": "one compact entry per action with expandable receipt"
   },
-  "updatedAt": "2026-10-09",
+  "updatedAt": "2026-10-28",
   "homebrewDecisions": {
     "talent-small": {
       "decidedAt": "2026-10-09",

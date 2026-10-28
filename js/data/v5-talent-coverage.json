@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "ruleVersion": "catalogue-utile-v5-2026-10-10.1",
-  "sourceCatalogueVersion": "references:cec7fce47c38e91cccf2a30abe7bc54c671c4595c4314e48e9e66d7337f284e1",
+  "sourceCatalogueVersion": "references:2a2a785c6940f1ce17b014e6c2ef8baf63de67cddc34da470c2f214b940e3499",
   "policy": "Traitement explicite par clause. Les rappels ne sont pas des automatismes et les contrats actifs sont vérifiés séparément.",
   "items": [
     {
@@ -5677,6 +5677,114 @@
           "mode": "owned",
           "text": "Vous pouvez toujours augmenter le Savoir (Région) correspondant à la région où vous séjournez, même hors de votre carrière actuelle.",
           "scope": "sheet"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-controlled-corruption",
+      "name": "Corruption Contrôlée",
+      "family": "supplement_v4_non_verifie",
+      "description": "Les tests de Résistance contre une mutation deviennent Difficiles (−1 DR) ; à chaque mutation, tirez deux résultats et choisissez. Réservé aux adeptes de Slaanesh.",
+      "source": {
+        "effectHash": "sha256:bb7846e9be529c603e29a3fcfdf22b1e6e46fe84dd5120a950410fb051e61fba",
+        "reference": "Power Behind the Throne Companion (V4), p. 34"
+      },
+      "clauses": [
+        {
+          "id": "tri:0",
+          "mode": "pending",
+          "text": "Source de Companion V4 présente dans la feuille ; adaptation V5 et clauses de l’ouvrage non vérifiées. Aucun effet n’est raccordé ni présumé narratif.",
+          "scope": "source"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-wilful-corruption",
+      "name": "Corruption Volontaire",
+      "family": "supplement_v4_non_verifie",
+      "description": "Quand une mutation est obtenue, tirez deux fois les dés et choisissez le résultat.",
+      "source": {
+        "effectHash": "sha256:cbf782290305f580639e94118eb52b39725555d9463bf9f857603154f3090387",
+        "reference": "Death on the Reik Companion (V4), p. 100"
+      },
+      "clauses": [
+        {
+          "id": "tri:0",
+          "mode": "pending",
+          "text": "Source de Companion V4 présente dans la feuille ; adaptation V5 et clauses de l’ouvrage non vérifiées. Aucun effet n’est raccordé ni présumé narratif.",
+          "scope": "source"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-disciple-of-change",
+      "name": "Disciple du Changement",
+      "family": "supplement_v4_non_verifie",
+      "description": "Lorsqu’une mutation est obtenue, tirez deux résultats et choisissez. Talent normalement réservé aux fidèles de Tzeentch.",
+      "source": {
+        "effectHash": "sha256:349bdd2788d7b0ab9c0ee3a0d4b27797bfb4f1dfdfe05b43a620c3930c03d74d",
+        "reference": "Enemy in Shadows Companion (V4), p. 75"
+      },
+      "clauses": [
+        {
+          "id": "tri:0",
+          "mode": "pending",
+          "text": "Source de Companion V4 présente dans la feuille ; adaptation V5 et clauses de l’ouvrage non vérifiées. Aucun effet n’est raccordé ni présumé narratif.",
+          "scope": "source"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-double-life",
+      "name": "Double Vie",
+      "family": "supplement_v4_non_verifie",
+      "description": "Autorise une seconde carrière en parallèle de la carrière du Chaos ; progression et changements de carrière restent soumis à l’accord du MJ.",
+      "source": {
+        "effectHash": "sha256:a136fa3aa3ffd5bff88c5fc5aedf1ba1d12507ab47a4814061332f859ba73254",
+        "reference": "Enemy in Shadows Companion (V4), p. 75"
+      },
+      "clauses": [
+        {
+          "id": "tri:0",
+          "mode": "pending",
+          "text": "Source de Companion V4 présente dans la feuille ; adaptation V5 et clauses de l’ouvrage non vérifiées. Aucun effet n’est raccordé ni présumé narratif.",
+          "scope": "source"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-suffused-with-magic",
+      "name": "Imprégné de Magie",
+      "family": "supplement_v4_non_verifie",
+      "description": "Les sorts lancés dans un rayon égal au bonus de Force Mentale gagnent +1 DR ; plusieurs porteurs ne cumulent pas ce bonus.",
+      "source": {
+        "effectHash": "sha256:cbf1243886c2ac542076ea5b449500e7fbf84ac436ec48422595c94fc4996dd9",
+        "reference": "Enemy in Shadows Companion (V4), p. 79"
+      },
+      "clauses": [
+        {
+          "id": "tri:0",
+          "mode": "pending",
+          "text": "Source de Companion V4 présente dans la feuille ; adaptation V5 et clauses de l’ouvrage non vérifiées. Aucun effet n’est raccordé ni présumé narratif.",
+          "scope": "source"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-extra-spell",
+      "name": "Sort Supplémentaire",
+      "family": "supplement_v4_non_verifie",
+      "description": "Chaque acquisition donne un sort du Domaine de Slaanesh hors de la liste habituelle ; nécessite ce domaine et nomme le sort choisi. Réservé aux fidèles de Slaanesh.",
+      "source": {
+        "effectHash": "sha256:e1241541da71109eb8219009b6635f623f41323b2d605480806338029c882cb9",
+        "reference": "Power Behind the Throne Companion (V4), p. 34"
+      },
+      "clauses": [
+        {
+          "id": "tri:0",
+          "mode": "pending",
+          "text": "Source de Companion V4 présente dans la feuille ; adaptation V5 et clauses de l’ouvrage non vérifiées. Aucun effet n’est raccordé ni présumé narratif.",
+          "scope": "source"
         }
       ]
     }

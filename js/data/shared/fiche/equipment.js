@@ -81,7 +81,7 @@ export function validateEquipmentItem(item, catalogue, { keptKeywords = null } =
         const definition = catalogue?.keywords?.find(entry => entry.id === word.id);
         if (typeof word.id !== 'string' || !/^[a-z0-9-]{1,100}$/u.test(word.id) || Object.keys(word).some(key => !['id', 'parameter', 'asterisk'].includes(key))
             || typeof word.parameter !== 'string' || word.parameter.length > 100 || (definition && !definition.parameter && word.parameter)) invalid('Mot clé ou paramètre invalide');
-        if(word.asterisk!==undefined&&typeof word.asterisk!=='boolean')invalid('Marqueur astérisque invalide');
+        if (word.asterisk !== undefined && typeof word.asterisk !== 'boolean') invalid('Marqueur astérisque invalide');
         if (!definition && keptKeywords && !keptKeywords.has(word.id)) invalid(`Mot clé hors référentiel : ${word.id}`);
     }
     return item;

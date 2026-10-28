@@ -9,34 +9,35 @@ const keywords = keywordRows.map(row => ({ id: row.Identifiant, name: row.Nom, e
     parameter: row['Paramètre'], source: row.Source, edition: row['Version retenue'],
     aliases: [row['Nom EN'], ...row['Anciens noms'].split(',').map(value => value.trim())].filter(Boolean), note: row.Remarque }));
 function parseKeywords(text) {
-    const clean = String(text || '').normalize('NFC').trim();
-    const folded = fold(clean);
     const result = [];
+    text = String(text || '').normalize('NFC');
+    const parts = [];
+    let start = 0, depth = 0;
+    for (let i = 0; i < text.length; i += 1) {
+        if (text[i] === '(') depth += 1;
+        else if (text[i] === ')') depth = Math.max(0, depth - 1);
+        else if (!depth && /[,;]/u.test(text[i])) { parts.push(text.slice(start, i)); start = i + 1; }
+        else if (!depth && /^\s+ou\s+/iu.test(text.slice(i))) {
+            const separator = text.slice(i).match(/^\s+ou\s+/iu)[0];
+            parts.push(text.slice(start, i)); i += separator.length - 1; start = i + 1;
+        }
+    }
+    parts.push(text.slice(start));
     for (const entry of keywords) {
         const names = [entry.name, ...entry.aliases].map(name => fold(name).replace(/\s+(?:x|\d+)$/u, '')).filter(Boolean);
-        const params = [];
-        let asterisk = false;
-        let matched = false;
         for (const name of names) {
             const escaped = name.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&');
-            const regex = new RegExp(`(?:^|[,;]|\\bou\\s)\\s*${escaped}(?=$|[\\s.(,;])\\s*([+-]?\\d+|\\([^)]*\\))?(\\*)?`, 'gu');
-            for (const match of folded.matchAll(regex)) {
-                if (entry.id === 'inflige') {
-                    const prefix = folded.slice(0, match.index + match[0].length);
-                    const specialStart = prefix.lastIndexOf('special (');
-                    if (specialStart >= 0 && prefix.lastIndexOf(')') < specialStart) continue;
-                }
-                matched = true;
-                asterisk ||= Boolean(match[2]);
-                if (entry.parameter && match[1]) {
-                    const start = match.index + match[0].length - (match[2] ? 1 : 0) - match[1].length;
-                    const rawParam = clean.slice(start, start + match[1].length).replace(/^\(|\)$/gu, '').trim();
-                    if (rawParam && !params.includes(rawParam)) params.push(rawParam);
-                }
+            const pattern = new RegExp(`^\\s*(?:ou\\s+)?${escaped}(?=$|[\\s.(])\\s*([+-]?\\d+|\\([^)]*\\))?`, 'u');
+            const matches = parts.map(value => value.trim()).map(part => ({ part, asterisk: part.includes('*'), match: fold(part.replaceAll('*', '')).match(pattern) })).filter(value => value.match);
+            if (matches.length) {
+                const parameters = matches.map(({ part, match }) => {
+                    if (!entry.parameter || !match[1]) return '';
+                    const start = match.index + match[0].lastIndexOf(match[1]);
+                    return part.slice(start, start + match[1].length).replace(/^\(|\)$/gu, '');
+                }).filter(Boolean);
+                result.push({ id: entry.id, parameter: [...new Set(parameters)].join(' ; '), ...(matches.some(({ asterisk }) => asterisk) ? { asterisk: true } : {}) }); break;
             }
-            if (matched) break;
         }
-        if (matched) result.push({ id: entry.id, parameter: entry.parameter ? params.join(', ') : '', ...(asterisk ? { asterisk: true } : {}) });
     }
     return result;
 }
@@ -68,6 +69,9 @@ const locations = text => {
 };
 const items = [];
 const identities = new Map();
+const standardAmmunitionKeys = new Set(['arc-fleches-12', 'arc-fleches-elfiques-12', 'arbalete-carreaux-12', 'fronde-balles-de-plomb-12',
+    'fronde-pierres-12', 'poudre-noire-balles-et-poudre-12', 'poudre-noire-grenaille-et-poudre-12', 'poudre-noire-munitions-improvisees-et-poudre']);
+const foundAmmunition = new Set();
 for (const [name, defaultKind] of [['Armes Corps à Corps', 'weapon'], ['Armes à Distance', 'weapon'], ['Armures', 'armour']]) {
     for (const row of sheet(name)) {
         const category = row['Catégorie'];
@@ -75,6 +79,8 @@ for (const [name, defaultKind] of [['Armes Corps à Corps', 'weapon'], ['Armes �
         let kind = defaultKind;
         if (fold(category).includes('bouclier')) kind = 'shield';
         if (/fléchettes \(lot|flèche |flèches |carreau|munition|balle.*poudre/iu.test(row.Nom)) kind = 'ammunition';
+        const standardKey = name === 'Armes à Distance' ? `${slug(category)}-${slug(row.Nom)}` : null;
+        if (standardAmmunitionKeys.has(standardKey)) kind = 'ammunition';
         let damage = (row['Dégâts'] || '').replace(/^=\s*/u, '').replace(/^\+\s*(?=BF)/iu, '').trim();
         let reach = row.Allonge || '';
         let range = row['Portée'] || '';
@@ -96,31 +102,21 @@ for (const [name, defaultKind] of [['Armes Corps à Corps', 'weapon'], ['Armes �
         const identity = `${kind}-${slug(name)}-${slug(category)}-${slug(row.Nom)}`;
         const occurrence = identities.get(identity) || 0;
         identities.set(identity, occurrence + 1);
-        const id = identity + (occurrence ? `-${occurrence + 1}` : '');
+        // Munitions du Livre de base : identifiant historique stable (référencé par l'Outil MJ).
+        const id = standardAmmunitionKeys.has(standardKey) ? `ammunition-livre-de-base-${standardKey}` : identity + (occurrence ? `-${occurrence + 1}` : '');
+        if (standardAmmunitionKeys.has(standardKey)) foundAmmunition.add(standardKey);
         const layer = kind !== 'armour' ? 'none' : /^cuir souple/iu.test(category) ? 'leather'
             : /^\s*=*\s*\+/u.test(row["Valeur d'Armure (PA)"]) ? 'bonus' : words.some(word => word.id === 'flexible') ? 'flexible' : 'rigid';
+        const notes = row['Atouts et Défauts'] || row['Atouts et Défauts (et Pénalités)'] || '';
         items.push({ id, baseId: id, catalogVersion: '', kind, name: row.Nom, category, damage, reach, range,
             ap: Number.isFinite(ap) ? ap : null, locations: locations(row['Zones Couvertes'] || ''), layer, keywords: words,
-            notes: row['Atouts et Défauts'] || row['Atouts et Défauts (et Pénalités)'] || '', source, custom: false });
+            notes: kind === 'shield' && words.some(word => word.id === 'bouclier') ? `${notes} ; en attaque : arme improvisée (Inoffensive, Déséquilibrée).` : notes, source, custom: false });
     }
 }
-// Munitions standard absentes des aides de jeu (Livre de base V5 EN p.302).
-const ammunitionSource = 'Livre de base V5 EN p.302, tableau Munitions (complément absent des aides de jeu)';
-const standardAmmunition = [
-    ['Flèches (12)', 'Arc', '+0', 'Comme l’arc', ['empaleuse'], 'Empaleuse'],
-    ['Flèches elfiques (12)', 'Arc', '+0', 'Comme l’arc + 10', ['empaleuse'], 'Empaleuse'],
-    ['Carreaux (12)', 'Arbalète', '+0', 'Comme l’arbalète', ['empaleuse'], 'Empaleuse'],
-    ['Balles de plomb (12)', 'Fronde', '+1', 'Comme la fronde − 10', ['assommante'], 'Assommante'],
-    ['Pierres (12)', 'Fronde', '+0', 'Comme la fronde', ['assommante'], 'Assommante'],
-    ['Balles et poudre (12)', 'Poudre Noire', '+0', 'Comme l’arme', ['empaleuse', 'perforante'], 'Empaleuse, Perforante'],
-    ['Grenaille et poudre (12)', 'Poudre Noire', '+0', 'Comme l’arme', [{ id: 'explosion', parameter: '+1' }], 'Explosion +1'],
-    ['Munitions improvisées et poudre', 'Poudre Noire', '-1', 'Moitié de la portée de l’arme', [], ''],
-];
-for (const [name, category, damage, range, words, notes] of standardAmmunition) {
-    const id = `ammunition-livre-de-base-${slug(category)}-${slug(name)}`;
-    items.push({ id, baseId: id, catalogVersion: '', kind: 'ammunition', name, category, damage, reach: '', range, ap: null, locations: [], layer: 'none',
-        keywords: words.map(word => typeof word === 'string' ? { id: word, parameter: '' } : word), notes, source: ammunitionSource, custom: false });
-}
+// Les munitions du Livre de base (V5 EN p.302) sont désormais dans l'onglet Armes à Distance (MJ, 28/10) :
+// la feuille fait foi, aucune ligne n'est plus ajoutée par ce script.
+const missingAmmunition = [...standardAmmunitionKeys].filter(key => !foundAmmunition.has(key));
+if (missingAmmunition.length) throw new Error(`Munitions du Livre de base absentes de la feuille : ${missingAmmunition.join(', ')}`);
 if (new Set(items.map(item => item.id)).size !== items.length) throw new Error('Identifiants d’équipement en doublon');
 
 return {items,keywords};

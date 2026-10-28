@@ -179,7 +179,7 @@ function updateRulesList(term, root = qs('#panel-rules')) {
       const coverage=v5TalentCoverage(talent.id,catalogue),priority=priorityById.get(talent.id);
       const treatment=coverage.clauses.map(clause=>'<p class="muted">'+escapeHtml(V5_TALENT_TREATMENT_LABELS[clause.mode]+' : '+clause.text)+(clause.reason?' '+escapeHtml(clause.reason):'')+'</p>').join('');
       const imported=priority?'<p class="muted">PJ importés : '+priority.characters+' · acquisitions : '+priority.acquisitions+'</p>':'';
-      const sourceWarning=coverage.status==='sourceChanged'?'<p role="status">Description modifiée : clauses mécaniques suspendues avant revalidation.</p>':coverage.status==='sourceUnavailable'?'<p role="status">Source indisponible : effets à arbitrer.</p>':'';
+      const sourceWarning=coverage.status==='sourceChanged'?'<p role="status">Description modifiée : clauses mécaniques suspendues avant revalidation.</p>':coverage.status==='sourceUnavailable'?'<p role="status">Source indisponible : effets à arbitrer.</p>':coverage.status==='sourceUnverified'?'<p role="status">Source de supplément V4 non vérifiée : adaptation V5 en attente, aucun effet appliqué.</p>':'';
       html += `<tr><td><button type="button" class="rule-favorite ghost" data-favorite-key="${escapeHtml(key)}" aria-label="Favori">${favorites.has(key) ? '★' : '☆'}</button> <strong>${escapeHtml(talent.nom)}</strong>${talent.specializationLabel ? '<p class="muted">Spécialité : '+escapeHtml(talent.specializationLabel)+'</p>' : ''}</td><td>${escapeHtml(talent.description)}${imported}${sourceWarning}${treatment}<p class="muted">Limite : ${escapeHtml(talent.limitText)} · ${escapeHtml(talent.source)}</p></td></tr>`;
     }
     html += '</tbody></table></div></details></div>';

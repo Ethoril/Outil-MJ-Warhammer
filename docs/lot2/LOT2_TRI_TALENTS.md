@@ -1,4 +1,4 @@
-# Tri et raccordement des 207 talents — 9 octobre 2026
+# Tri et raccordement des talents — 28 octobre 2026
 
 Le tri est effectué par clause. Les effets mesurables utilisent le moteur, avec choix ou faits fournis par le MJ si nécessaire. La fiction reste un rappel. La progression et les valeurs déjà importées appartiennent aux fiches. Aucun bonus de caractéristique ni second calcul de Dur à cuire.
 
@@ -11,9 +11,10 @@ Le tri est effectué par clause. Les effets mesurables utilisent le moteur, avec
 | Entièrement gérés par les fiches, hors bonus ci-dessous | 18 |
 | Bonus de caractéristiques exclus | 10 |
 | Magie, prières et effets magiques réservés au lot 3 | 28 |
-| Total | 207 |
+| Sources V4 non vérifiées, en attente | 6 |
+| Total | 213 |
 
-Ces catégories sont exclusives. Les talents mixtes conservent aussi leurs rappels et valeurs de fiche : 52 talents ont des clauses narratives et 38 des clauses de fiche, dont dix exclusions. Les bonus temporaires F/E de Fortification liquide sont également exclus. Les 382 clauses de contrat comprennent 277 automatiques et 105 assistées. Aucun talent mécanique du périmètre 2.4 ne reste en attente.
+Ces catégories sont exclusives. Les talents mixtes conservent aussi leurs rappels et valeurs de fiche : 52 talents ont des clauses narratives et 38 des clauses de fiche, dont dix exclusions. Six entrées ajoutées depuis les Companions V4 restent non vérifiées et en attente d’adaptation V5 ; aucun effet mécanique ou narratif n’est présumé. Les bonus temporaires F/E de Fortification liquide sont également exclus. Les 382 clauses de contrat comprennent 277 automatiques et 105 assistées. Aucun talent mécanique déjà trié dans le périmètre 2.4 ne reste en attente.
 
 ## Arbitrages appliqués
 
@@ -37,7 +38,7 @@ La neutralisation silencieuse p. 135 conserve volontairement ses conséquences m
 
 Les 166 talents du livre V5 ont l’audit de source existant ; les 39 références de suppléments ne sont pas toutes vérifiées dans leur ouvrage. Petit est un homebrew validé par le MJ. Les contrats épinglent les textes publics et les arbitrages autorisés ; une source modifiée suspend sa contribution. [Audit des sources](ECARTS_LIVRE_V5_AIDES_DE_JEU.md).
 
-## Détail des 207 identités
+## Détail des 213 identités
 
 Les traitements mixtes sont visibles dans les colonnes. Les clauses, identités et empreintes exactes figurent dans [le tri JSON](LOT2_TRI_TALENTS.json). Cette page et la couverture affichée par l’interface sont générées depuis ce même tri.
 
@@ -250,3 +251,9 @@ Les traitements mixtes sont visibles dans les colonnes. Les clauses, identités 
 | Vivacité | Bonus de caractéristique exclu | Bonus de caractéristique exclu : Bonus de caractéristique déjà compris dans la fiche. |
 | Volonté de fer | Moteur raccordé | 3 clause(s) de Tests, combat ou calcul de situation épinglées et raccordées. |
 | Voyageur aguerri | Fiche | Fiche : Vous pouvez toujours augmenter le Savoir (Région) correspondant à la région où vous séjournez, même hors de votre carrière actuelle. |
+| Corruption Contrôlée | Source V4 à vérifier | Source V4 à vérifier : Source de Companion V4 présente dans la feuille ; adaptation V5 et clauses de l’ouvrage non vérifiées. Aucun effet n’est raccordé ni présumé narratif. |
+| Corruption Volontaire | Source V4 à vérifier | Source V4 à vérifier : Source de Companion V4 présente dans la feuille ; adaptation V5 et clauses de l’ouvrage non vérifiées. Aucun effet n’est raccordé ni présumé narratif. |
+| Disciple du Changement | Source V4 à vérifier | Source V4 à vérifier : Source de Companion V4 présente dans la feuille ; adaptation V5 et clauses de l’ouvrage non vérifiées. Aucun effet n’est raccordé ni présumé narratif. |
+| Double Vie | Source V4 à vérifier | Source V4 à vérifier : Source de Companion V4 présente dans la feuille ; adaptation V5 et clauses de l’ouvrage non vérifiées. Aucun effet n’est raccordé ni présumé narratif. |
+| Imprégné de Magie | Source V4 à vérifier | Source V4 à vérifier : Source de Companion V4 présente dans la feuille ; adaptation V5 et clauses de l’ouvrage non vérifiées. Aucun effet n’est raccordé ni présumé narratif. |
+| Sort Supplémentaire | Source V4 à vérifier | Source V4 à vérifier : Source de Companion V4 présente dans la feuille ; adaptation V5 et clauses de l’ouvrage non vérifiées. Aucun effet n’est raccordé ni présumé narratif. |

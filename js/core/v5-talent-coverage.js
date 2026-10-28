@@ -8,7 +8,8 @@ export function v5TalentCoverage(talentId, catalogue = getReferenceCatalogue()) 
   const item = coverage.items.find(row => row.talentId === talentId);
   const source = catalogue?.talents?.find(row => row.id === talentId);
   if (!item) return {talentId,status:'unknown',clauses:[{id:'unknown',mode:'reminder',text:'Identité absente du catalogue de couverture ; à vérifier par le MJ.'}]};
-  const status = !source ? 'sourceUnavailable' : source.description !== item.description ? 'sourceChanged' : 'verified';
+  const status = !source ? 'sourceUnavailable' : source.description !== item.description ? 'sourceChanged'
+    : item.family === 'supplement_v4_non_verifie' ? 'sourceUnverified' : 'verified';
   const contracts = new Map(V5_TALENT_CONTRACTS.map(contract => [contract.talentId,contract]));
   const clauses = item.clauses.map(clause => {
     if (!['automatic','assisted'].includes(clause.mode)) return {...clause};

@@ -18,10 +18,10 @@ for (const [date, expected] of [['2026-10-07T10:00:00.000Z', 'instantané local 
   });
 }
 
-test('Lot2 références — 207 identités et empreintes de descriptions actualisées dans l’inventaire portable', async () => {
+test('Lot2 références — 213 identités et empreintes de descriptions actualisées dans l’inventaire portable', async () => {
   const inventory = JSON.parse(await readFile(new URL('../docs/lot2/LOT2_INVENTAIRE_TALENTS.json', import.meta.url), 'utf8'));
-  assert.equal(snapshot.talents.entries.length, 207);
-  assert.equal(inventory.items.length, 207);
+  assert.equal(snapshot.talents.entries.length, 213);
+  assert.equal(inventory.items.length, 213);
   const byId = new Map(snapshot.talents.entries.map(item => [item.id, item]));
   for (const item of inventory.items) {
     assert.ok(byId.has(item.talentId));
@@ -30,4 +30,7 @@ test('Lot2 références — 207 identités et empreintes de descriptions actuali
   const csv = await readFile(new URL('../js/data/reference-source-csv/Talents.csv', import.meta.url));
   assert.equal(createHash('sha256').update(csv).digest('hex'), inventory.sourceNormalization.publicCsvSha256);
   assert.equal(inventory.sourceCatalogueVersion, snapshot.talents.catalogVersion);
+  const pending = inventory.items.filter(item => item.family === 'supplement_v4_non_verifie');
+  assert.equal(pending.length, 6);
+  assert.ok(pending.every(item => item.status === 'non_verifie_source_v4'));
 });

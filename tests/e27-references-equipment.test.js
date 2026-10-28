@@ -26,7 +26,7 @@ test('Références — identifiant explicite et paramètres conservent colonnes 
  assert.throws(()=>parseKeywordCSV('Nom,Effet\nTest,test'),/Colonnes/);
 });
 test('Références — instantané commun source, compétences principales et talents traduits',()=>{
- const pack=getReferenceCatalogue();assert.equal(pack.items.length,211);assert.equal(pack.talents.length,207);
+ const pack=getReferenceCatalogue();assert.equal(pack.items.length,211);assert.equal(pack.talents.length,213);
  assert.equal(pack.magic.spells.length,277);assert.equal(resolveSkill('Corps à corps (Base)').entry.carac,'cc');
  assert.equal(resolveTalent('Hardy').entry.id,resolveTalent('Dur à cuire').entry.id);
  assert.equal(resolveTalent('Magie des Arcanes (Fire)').specialization,'Aqshy');

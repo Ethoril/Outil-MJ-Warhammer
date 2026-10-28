@@ -8,6 +8,7 @@ import { currentV5TalentHashes } from '../js/core/v5-talents.js';
 import { evaluateTalentContractsV2 } from '../js/core/talent-contract-v2.js';
 import coverage from '../js/data/v5-talent-coverage.json' with { type: 'json' };
 import { v5TalentCoverage, importedPjTalentPriorities } from '../js/core/v5-talent-coverage.js';
+const unverifiedSourceV4TalentIds=['talent-controlled-corruption','talent-wilful-corruption','talent-disciple-of-change','talent-double-life','talent-suffused-with-magic','talent-extra-spell'];
 
 const owned=(id,extra={})=>({id,name:id,rank:1,status:'resolved',...extra});
 const skill=name=>{const found=getReferenceCatalogue().skills.find(row=>row.nom===name);assert.ok(found,`Compétence publique inconnue : ${name}`);return found.id;};
@@ -168,9 +169,13 @@ test('Contrôle 2.4 — Dur à cuire et dix bonus de caractéristiques ne sont j
 
 
 
-test('Contrôle 2.4 — les 207 identités ont des clauses lisibles, mixtes et source suspendue distinctes',()=>{
- const catalogue=getReferenceCatalogue();assert.equal(coverage.items.length,207);assert.equal(new Set(coverage.items.map(row=>row.talentId)).size,207);
- for(const row of catalogue.talents){const item=v5TalentCoverage(row.id);assert.equal(item.status,'verified');assert.ok(item.clauses.length>0);for(const clause of item.clauses){assert.ok(['automatic','assisted','reminder','excluded','deferred','owned','pending'].includes(clause.mode));assert.ok(clause.text?.trim());}}
+test('Contrôle 2.4 — les 213 identités distinguent couverture vérifiée et sources V4 en attente',()=>{
+ const catalogue=getReferenceCatalogue();assert.equal(coverage.items.length,213);assert.equal(new Set(coverage.items.map(row=>row.talentId)).size,213);
+ assert.deepEqual(coverage.items.filter(row=>row.family==='supplement_v4_non_verifie').map(row=>row.talentId).sort(),[...unverifiedSourceV4TalentIds].sort());
+ for(const row of catalogue.talents){const item=v5TalentCoverage(row.id);assert.ok(item.clauses.length>0);for(const clause of item.clauses){assert.ok(['automatic','assisted','reminder','excluded','deferred','owned','pending'].includes(clause.mode));assert.ok(clause.text?.trim());}
+   if(unverifiedSourceV4TalentIds.includes(row.id)){assert.equal(item.status,'sourceUnverified');assert.ok(item.clauses.every(clause=>clause.mode==='pending'));assert.ok(!item.clauses.some(clause=>['automatic','assisted'].includes(clause.mode)));}
+   else assert.equal(item.status,'verified');
+ }
  const publicSpeaker=v5TalentCoverage('talent-public-speaker');assert.ok(publicSpeaker.clauses.some(row=>row.mode==='automatic'));assert.ok(publicSpeaker.clauses.some(row=>row.mode==='assisted'));assert.ok(publicSpeaker.clauses.some(row=>row.mode==='reminder'));assert.ok(!publicSpeaker.clauses.some(row=>row.mode==='pending'));
  const resistant=v5TalentCoverage('talent-resistant');assert.ok(resistant.clauses.some(row=>row.mode==='automatic'));assert.ok(resistant.clauses.some(row=>row.mode==='assisted'));
  assert.ok(v5TalentCoverage('talent-strong-minded').clauses.some(row=>row.mode==='assisted'));
@@ -187,7 +192,7 @@ test('Contrôle 2.4 — dix caractéristiques déjà intégrées et magie/prièr
  assert.ok(v5TalentCoverage('talent-hardy').clauses.every(row=>row.mode==='owned'));
  assert.ok(v5TalentCoverage('talent-small').clauses.some(row=>row.mode==='assisted'));
  assert.ok(v5TalentCoverage('talent-riposte').clauses.some(row=>row.mode==='automatic'));
- assert.ok(v5TalentCoverage('talent-reaction-strike').clauses.some(row=>row.mode==='assisted'));assert.ok(!v5TalentCoverage('talent-reaction-strike').clauses.some(row=>row.mode==='pending'));assert.deepEqual(coverage.items.filter(row=>row.clauses.some(c=>c.mode==='pending')).map(row=>row.talentId),[]);
+ assert.ok(v5TalentCoverage('talent-reaction-strike').clauses.some(row=>row.mode==='assisted'));assert.ok(!v5TalentCoverage('talent-reaction-strike').clauses.some(row=>row.mode==='pending'));assert.deepEqual(coverage.items.filter(row=>row.clauses.some(c=>c.mode==='pending')).map(row=>row.talentId).sort(),[...unverifiedSourceV4TalentIds].sort());
 });
 
 const imported=(charId,fingerprint,talents,extra={})=>({kind:'PJ',ficheSnapshot:{charId,source:{fingerprint},coverage:{talents:'present'},talents},...extra});
