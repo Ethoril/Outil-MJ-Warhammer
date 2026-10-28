@@ -32,6 +32,17 @@ test('F2-L: manual Destin assignment records the MJ reason and can be undone',as
   assert.equal(store.getFate('hero').balance,0);
 });
 
+test('F2-L-0899: a recorded permanent V4 Resilience loss reduces the converted Chance maximum',async()=>{
+  const {convertLegacyV4Profile}=await import('../js/core/v5-legacy-conversion.js');
+  const store=createStore({storage:null});await store.ready;const legacy=convertLegacyV4Profile({...p('legacy',0),kind:'PJ',extensions:{v4:{resilience:3,determination:4}}});
+  await store.loadFromJSON({schemaVersion:3,reserve:[legacy],log:[],diceLines:[],combat:{round:0,currentActorId:null,order:[],participants:[]}});
+  assert.equal(store.getFate('legacy').legacyResilience,true);assert.equal(store.getFortune('legacy').permanent,4);
+  await store.setFate('legacy',1,{reason:'Perte définitive de Résilience',permanentResilienceLoss:true});
+  assert.equal(store.getFate('legacy').permanent,1);assert.equal(store.getFortune('legacy').permanent,2);
+  assert.equal(store.getLog()[0].detail.fortuneMaximumReducedBy,2);await store.undo();
+  assert.equal(store.getFate('legacy').permanent,3);assert.equal(store.getFortune('legacy').permanent,4);
+});
+
 test('F2-L: V4 profile Chance conversion reaches the durable Fortune registry view',async()=>{
   const {convertLegacyV4Profile}=await import('../js/core/v5-legacy-conversion.js');
   const profile=convertLegacyV4Profile({id:'legacy-pj',kind:'PJ',extensions:{v4:{determination:4,resilience:2}}});
