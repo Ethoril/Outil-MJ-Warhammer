@@ -113,6 +113,16 @@ const hasTrait = (traits, names) => (Array.isArray(traits) ? traits : []).some(r
   return names.has(fold(name)) || names.has(fold(parameter));
 });
 
+/** One distinct mounted rider event per concurrent state family. Incapacitation remains the sole automatic fall trigger. */
+export function mountedRiderEventsFor(keys = []) {
+  const values = [...keys];
+  if (values.some(key => ['inconscient','unconscient','aterre','prone'].includes(key))) return ['rider-prone'];
+  return [
+    ...(values.some(key => ['surpris','surprised'].includes(key)) ? ['rider-surprised'] : []),
+    ...(values.some(key => ['sonne','stunned'].includes(key)) ? ['rider-stunned'] : [])
+  ];
+}
+
 /** Fall trigger and required Ride test. Applying the fall remains a Store/MJ decision. */
 export function planMountedFall({ event, restraint = null, riderEntangled = false, mountTraits = [], fallPreventedByEquipment = false } = {}) {
   if (fallPreventedByEquipment === true && ['rider-dead', 'rider-unconscious', 'rider-prone'].includes(event)) {

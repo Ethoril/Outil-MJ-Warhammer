@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { resolveCreatureHitLocation, deriveHitMorphology } from '../js/core/v5-hit-morphology.js';
 import { buildParticipantFromBestiary } from '../js/core/bestiary-profiles.js';
-import { planMountedAttack, planMountedDodge } from '../js/core/v5-mounted-combat.js';
+import { mountedRiderEventsFor, planMountedAttack, planMountedDodge } from '../js/core/v5-mounted-combat.js';
 import { previewResolution } from '../js/core/resolution.js';
 import { readFileSync as readSource } from 'node:fs';
 
@@ -58,10 +58,11 @@ test('F2-M reprise — une défense brute d’Ag contre un cavalier reçoit le D
 });
 
 test('F2-M contre-vérification — Surpris et Sonné produisent chacun un plan de chute', () => {
+  assert.deepEqual(mountedRiderEventsFor(new Set(['surpris','sonne'])), ['rider-surprised','rider-stunned']);
   const source = readSource(new URL('../js/core/resolution.js', import.meta.url), 'utf8');
-  assert.match(source, /const eventsForConditions\s*=\s*\(keys\)\s*=>/);
-  assert.match(source, /eventsForConditions\(nextConditionKeys\)/);
-  assert.match(source, /eventsForConditions\(actorConditionKeys\)/);
+  assert.match(source, /mountedRiderEventsFor, planMountedAttack/);
+  assert.match(source, /mountedRiderEventsFor\(nextConditionKeys\)/);
+  assert.match(source, /mountedRiderEventsFor\(actorConditionKeys\)/);
 });
 
 test('F2-G contre-vérification — changer de cible efface aussi le côté de patte choisi', () => {

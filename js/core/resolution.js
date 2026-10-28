@@ -43,7 +43,7 @@ import { creatureSizeOf } from './creature-size.js';
 import { advanceV5NetEscape, conditionalV5KnifeQualities, entanglementStrength, naturalWeaponDefaults, previewV5Blast, previewV5Fast, previewV5Hack, previewV5HookedNet, previewV5ImpaleProjectile, previewV5Inflict, previewV5Parry, previewV5PistolContact, previewV5Shield, previewV5Slash, previewV5Spread, previewV5TrapBlade, validateV5ShieldHands } from './v5-weapon-qualities.js';
 import { consumeV5WeaponShot, initialV5ReloadState } from './v5-reloading.js';
 import { appendageCriticalLocation, deriveHitMorphology, resolveCreatureHitLocation } from './v5-hit-morphology.js';
-import { planMountedAttack, planMountedChargeDamage, planMountedDodge, planMountedFall, resolveMountedMount, V5_RIDE_SKILL_ID } from './v5-mounted-combat.js';
+import { mountedRiderEventsFor, planMountedAttack, planMountedChargeDamage, planMountedDodge, planMountedFall, resolveMountedMount, V5_RIDE_SKILL_ID } from './v5-mounted-combat.js';
 
 export { damageBreakdown, formatDamageFormula, formatWeaponDamage, describeWeaponDamage } from './damage.js';
 
@@ -1390,11 +1390,8 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   const mountedWithPrimary = [normalized.actor, normalized.target, ...mountedRoster].filter((row, index, all) => row && all.findIndex(candidate => candidate?.id === row.id) === index);
   const mountedRiders = mountedRoster.filter(row => row?.extensions?.v5?.mounted === true && row.extensions.v5.mountId);
   const nextConditionKeys = new Set(targetConditionApplication.map(row => foldKey(row.key || row.name)));
-  const eventForCondition = [...nextConditionKeys].some(key => ['inconscient','unconscient','aterre','prone'].includes(key)) ? 'rider-prone'
-    : [...nextConditionKeys].some(key => ['surpris','surprised'].includes(key)) ? 'rider-surprised'
-      : [...nextConditionKeys].some(key => ['sonne','stunned'].includes(key)) ? 'rider-stunned' : null;
   if (tripFall && target?.extensions?.v5?.mounted === true) mountedFallPlans.push({ participantId: target.id, event: 'rider-prone', ...planMountedFall({ event: 'rider-prone', fallPreventedByEquipment: context.fallPreventedByEquipment === true }) });
-  if (target?.extensions?.v5?.mounted === true && eventForCondition && !tripFall) mountedFallPlans.push({ participantId: target.id, event: eventForCondition, ...planMountedFall({ event: eventForCondition, fallPreventedByEquipment: context.fallPreventedByEquipment === true }) });
+  if (target?.extensions?.v5?.mounted === true && !tripFall) for (const event of mountedRiderEventsFor(nextConditionKeys)) mountedFallPlans.push({ participantId: target.id, event, ...planMountedFall({ event, fallPreventedByEquipment: context.fallPreventedByEquipment === true }) });
   const heldTarget = targetConditionApplication.some(row => row.key === 'enchevetre' && row.source?.kind === 'quality'
     && (row.source?.linkId || row.source?.weaponId || row.source?.keywordId === 'immobilisante'));
   const explicitRestraint = context.mountedRestraint === 'anchored' || context.mountedRestraint === 'held';
@@ -1425,17 +1422,20 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
       mountedFallPlans.push({ participantId: rider.id, mountId: target.id, event: 'mount-dead', ...planMountedFall({ event: 'mount-dead' }) });
     }
   }
-  const mountedRideParticipants = new Set(mountedFallPlans.filter(plan => plan.requiredTest).map(plan => plan.participantId));
+  const mountedRidePlanCounts = new Map();
+  for (const plan of mountedFallPlans) if (plan.requiredTest) mountedRidePlanCounts.set(plan.participantId, (mountedRidePlanCounts.get(plan.participantId) || 0) + 1);
   const resolveMountedFallTests = () => { for (const plan of mountedFallPlans) {
     if (!plan.requiredTest) continue;
     const rider = mountedWithPrimary.find(row => row?.id === plan.participantId) || mountedRoster.find(row => row.id === plan.participantId);
     const skill = rider?.skills?.find(row => row?.id === V5_RIDE_SKILL_ID && row.status !== 'unresolved');
-    const riderAnswer = context.mountedRideTestsById?.[plan.participantId] || context.mountedRideTests?.[plan.participantId] || {};
+    const riderAnswers = context.mountedRideTestsById?.[plan.participantId] || context.mountedRideTests?.[plan.participantId] || {};
+    const riderAnswer = riderAnswers[plan.event] || (mountedRidePlanCounts.get(plan.participantId) <= 1 ? riderAnswers : {});
+    const singlePlan = mountedRidePlanCounts.get(plan.participantId) <= 1;
     const manualScore = riderAnswer.score ?? context.mountedRideScoresById?.[plan.participantId]
-      ?? (mountedRideParticipants.size <= 1 ? context.mountedRideScore : undefined);
+      ?? (singlePlan ? context.mountedRideScore : undefined);
     const score = Number.isSafeInteger(skill?.total) ? skill.total : manualScore !== null && manualScore !== undefined && manualScore !== '' && Number.isSafeInteger(Number(manualScore)) ? Number(manualScore) : null;
     const rawRideRoll = riderAnswer.roll ?? context.mountedRideRollsById?.[plan.participantId]
-      ?? (mountedRideParticipants.size <= 1 ? context.mountedRideRoll : undefined);
+      ?? (singlePlan ? context.mountedRideRoll : undefined);
     const roll = Number(rawRideRoll);
     if (score === null || !Number.isInteger(roll) || roll < 1 || roll > 100) {
       plan.unresolved = ['Test de Chevaucher requis : fournissez le score et le d100 du cavalier.'];
@@ -1525,11 +1525,10 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   const kept=(rows,magical)=>{const copy=[...rows];if(actor)refuseFamiliarConditions(actor,copy,magical,familiarConditionRefusals);return copy;};
   const actorConditionApplication=[...kept(activation.conditions||[],nature?.magical===true),...kept(magicFumbleStates,nature?.magical===true),...kept((defenderCritical?.application?.states||[]).map(row=>({...row,source:{...row.source,kind:'critical'}})),defenderMagical),...kept(defenderWeaponConditions.proposed,defenderMagical),...kept(blackpowderStates,false)];
   const actorConditionKeys = new Set(actorConditionApplication.map(row => foldKey(row.key || row.name)));
-  const actorFallEvent = [...actorConditionKeys].some(key => ['inconscient','unconscient','aterre','prone'].includes(key)) ? 'rider-prone'
-    : [...actorConditionKeys].some(key => ['surpris','surprised'].includes(key)) ? 'rider-surprised'
-      : [...actorConditionKeys].some(key => ['sonne','stunned'].includes(key)) ? 'rider-stunned' : null;
-  if (actor?.extensions?.v5?.mounted === true && actorFallEvent) mountedFallPlans.push({ participantId: actor.id, event: actorFallEvent,
-    ...planMountedFall({ event: actorFallEvent, fallPreventedByEquipment: context.fallPreventedByEquipment === true }) });
+  if (actor?.extensions?.v5?.mounted === true) for (const event of mountedRiderEventsFor(actorConditionKeys)) mountedFallPlans.push({ participantId: actor.id, event,
+    ...planMountedFall({ event, fallPreventedByEquipment: context.fallPreventedByEquipment === true }) });
+  mountedRidePlanCounts.clear();
+  for (const plan of mountedFallPlans) if (plan.requiredTest) mountedRidePlanCounts.set(plan.participantId, (mountedRidePlanCounts.get(plan.participantId) || 0) + 1);
   resolveMountedFallTests();
   conditionPlan(actor,actorConditionApplication,'actor',context.blackpowderBrokenTest?context.blackpowderShooterId:target?.id);
   if(defenderCritical?.application)defenderCritical.application.states=actorConditionApplication.filter(row=>row.source?.kind==='critical');

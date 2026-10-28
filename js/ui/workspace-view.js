@@ -1063,7 +1063,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       if ('targetId' in patch) {
         state.targetChoice = patch.targetId;
         draft.v5Context={...(draft.v5Context||{})};for(const key of ['fateAction','fateChosenRoll','fateCriticalLocation'])delete draft.v5Context[key];
-        for (const key of ['hitMorphology','hitAppendage','fallPreventedByEquipment','mountedRestraint','mountedRideTestsById','mountedRideScoresById','mountedRideRollsById']) delete draft.v5Context[key];
+        for (const key of ['hitMorphology','hitAppendage','spiderLegSide','fallPreventedByEquipment','mountedRestraint','mountedRideTestsById','mountedRideScoresById','mountedRideRollsById']) delete draft.v5Context[key];
         draft.fortuneReroll=false;draft.fortuneRerollRolls=[];draft.fortuneForAdvantage=false;
         draft.targetSize = null;
         draft.defenseBase = null; draft.defenseSource = null;

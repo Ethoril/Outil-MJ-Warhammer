@@ -1068,15 +1068,17 @@ function renderResult(preview, target, draft, handlers, participants=[]) {
         if (fall.strengthOpposition) result.appendChild(node('p','workspace-result-line',`Opposition de Force : gagnant ${fall.strengthOpposition.winner} · DR ${fall.strengthOpposition.netSl} · Taille du cavalier ${fall.strengthOpposition.riderSize}.`));
       }
       const current = draft.v5Context || {};
-      if (!renderedMountedRideInputs.has(fall.participantId)) {
-        renderedMountedRideInputs.add(fall.participantId);
-        const rideTests = current.mountedRideTestsById || {}, riderTest = rideTests[fall.participantId] || {};
+      const rideInputKey = `${fall.participantId}:${fall.event}`;
+      if (!renderedMountedRideInputs.has(rideInputKey)) {
+        renderedMountedRideInputs.add(rideInputKey);
+        const rideTests = current.mountedRideTestsById || {}, riderTests = rideTests[fall.participantId] || {}, rideTestCount = preview.mountedFall.filter(row=>row.participantId===fall.participantId&&row.requiredTest).length, riderTest = riderTests[fall.event] || (rideTestCount===1?riderTests:{});
         for (const [field,label,min,max] of [['score','score de Chevaucher',0,100],['roll','d100',1,100]]) {
         const skill = rider?.skills?.find(row => row.id === 'skill-43_68_65_76_61_75_63_68_65_72-base' && row.status !== 'unresolved');
         if (field === 'score' && Number.isSafeInteger(skill?.total)) continue;
-        const wrap = node('label','workspace-type',`${rider?.name||fall.participantId} · ${label}`), input = document.createElement('input');
+        const eventLabel = fall.event === 'rider-surprised' ? 'Surpris' : fall.event === 'rider-stunned' ? 'Sonné' : fall.event;
+        const wrap = node('label','workspace-type',`${rider?.name||fall.participantId} · ${label} (${eventLabel})`), input = document.createElement('input');
         input.type='number'; input.min=String(min); input.max=String(max); input.step='1'; input.value=riderTest[field] ?? ''; input.setAttribute('aria-label',wrap.textContent);
-        input.addEventListener('change',()=>handlers.select({v5Context:{...current,mountedRideTestsById:{...rideTests,[fall.participantId]:{...riderTest,[field]:input.value===''?undefined:Number(input.value)}}}}));
+        input.addEventListener('change',()=>handlers.select({v5Context:{...current,mountedRideTestsById:{...rideTests,[fall.participantId]:rideTestCount===1?{...riderTest,[field]:input.value===''?undefined:Number(input.value)}:{...riderTests,[fall.event]:{...riderTest,[field]:input.value===''?undefined:Number(input.value)}}}}}));
         wrap.append(input); result.append(wrap);
         }
       }
@@ -1713,6 +1715,12 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
     select.setAttribute('aria-label',label.textContent);select.append(new Option('Morphologie du profil',''),new Option('Humanoïde (forcer)','humanoid'),new Option('Quadrupède','quadruped'),new Option('Oiseau','bird'),new Option('Serpent','snake'),new Option('Araignée','spider'));
     select.value=hitMorphologySelection(current.hitMorphologiesById?.[id],deriveHitMorphology(person));
     select.addEventListener('change',()=>handlers.select({v5Context:{...current,hitMorphologiesById:{...(current.hitMorphologiesById||{}),[id]:select.value||undefined}}}));label.append(select);fields.append(label);
+    if (select.value === 'spider') {
+      const sideLabel=node('label','workspace-type',`${prefix}Côté des pattes de ${person.name||id} (choix du MJ)`),sideSelect=document.createElement('select');
+      sideSelect.setAttribute('aria-label',sideLabel.textContent);sideSelect.append(new Option('Choisir le côté',''),new Option('Gauche','left'),new Option('Droite','right'));
+      sideSelect.value=current.spiderLegSidesById?.[id]||'';
+      sideSelect.addEventListener('change',()=>handlers.select({v5Context:{...current,spiderLegSidesById:{...(current.spiderLegSidesById||{}),[id]:sideSelect.value||undefined}}}));sideLabel.append(sideSelect);fields.append(sideLabel);
+    }
   };
   if(type==='test'&&action?.attr==='F'&&testWeaponKind==='mancatcher'){
     contextField(fields,'actor','entanglementTest','Test de Force pour immobiliser avec le Mancatcher');
@@ -2190,6 +2198,12 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
     morphologySelect.setAttribute('aria-label',morphologyLabel.textContent);morphologySelect.append(new Option('Morphologie du profil',''),new Option('Humanoïde (forcer)','humanoid'),new Option('Quadrupède','quadruped'),new Option('Oiseau','bird'),new Option('Serpent','snake'),new Option('Araignée','spider'));
     morphologySelect.value=hitMorphologySelection(current.hitMorphologiesById?.[victim.id],deriveHitMorphology(victim));
     morphologySelect.addEventListener('change',()=>handlers.select({v5Context:{...current,hitMorphologiesById:{...(current.hitMorphologiesById||{}),[victim.id]:morphologySelect.value||undefined}}}));morphologyLabel.append(morphologySelect);v5.append(morphologyLabel);
+    if(morphologySelect.value==='spider'){
+      const sideLabel=node('label','workspace-type',`Tourbillon · Côté des pattes de ${victim.name||victim.id} (choix du MJ)`),sideSelect=document.createElement('select');
+      sideSelect.setAttribute('aria-label',sideLabel.textContent);sideSelect.append(new Option('Choisir le côté',''),new Option('Gauche','left'),new Option('Droite','right'));
+      sideSelect.value=current.spiderLegSidesById?.[victim.id]||'';
+      sideSelect.addEventListener('change',()=>handlers.select({v5Context:{...current,spiderLegSidesById:{...(current.spiderLegSidesById||{}),[victim.id]:sideSelect.value||undefined}}}));sideLabel.append(sideSelect);v5.append(sideLabel);
+    }
     const support=renderSupportFields({actor,target:victim,participants,onlyProtection:true,showMetal:Boolean(current.forgeAuthorIds?.length),context:current.whirlwindSupport?.[victim.id]||{},prefix:victim.name+' — ',onContext:values=>handlers.select({v5Context:{...current,whirlwindSupport:{...current.whirlwindSupport,[victim.id]:values}}})});if(support)v5.append(support);
   }
   const measures=renderV5TalentMeasures(actor);if(measures)v5.append(measures);
