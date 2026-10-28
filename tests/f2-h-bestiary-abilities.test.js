@@ -399,3 +399,15 @@ test('Silk lasso needs no attack roll: only the target Dodge decides (L22 p.73)'
   assert.ok(!dodged.targetConditionApplication.some(row => row.key === 'enchevetre'));
   assert.ok(dodged.reminders.some(text => /Esquive réussie/.test(text)));
 });
+
+test('A Flying Death Skull brought to 0 Wounds proposes its reversion to an ordinary skull (L18 p.107)', () => {
+  const skull = { ...p('E0-P-565'), id: 'skull', zone: 'active', hp: 3, maxHp: 3 };
+  const actor = { id: 'hero', name: 'Héros', zone: 'active', caracs: { CC: 60, F: 40 }, skills: [], equipment: [], states: [] };
+  const run = damage => previewResolution({ resolutionId: 'skull-' + damage, baseRevision: 0, actor, target: skull,
+    action: { type: 'attack', name: 'Épée', base: 60, damage, qualities: [] }, roll: 10,
+    defense: { base: 10, roll: 95, v5: { kind: 'test' } }, v5: { kind: 'melee', context: {} } });
+  const killed = run(20).profileAbilityPlans.find(plan => plan.key === 'flying-death-skull-zero-wounds');
+  assert.equal(killed.effects[0]?.transformation, 'crâne ordinaire');
+  const scratched = run(-20).profileAbilityPlans.find(plan => plan.key === 'flying-death-skull-zero-wounds');
+  assert.deepEqual(scratched.effects, []);
+});
