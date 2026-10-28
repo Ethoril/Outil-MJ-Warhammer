@@ -15,7 +15,7 @@ export function convertLegacyV4Profile(profile) {
   if ([momentum, fate, fortune].some(value => value !== null && value < 0)) throw new TypeError('Ressource V4 négative');
   const next = structuredClone(profile), extensions = next.extensions || {};
   const v5 = { ...(extensions.v5 || {}) };
-  if (momentum !== null) v5.momentum = momentum;
+  if (momentum !== null) v5.hasMomentum = momentum > 0;
   if (fate !== null) v5.fate = fate;
   if (fortune !== null) v5.resources = { ...(v5.resources || {}), fortune };
   if (difficulty !== null) v5.difficultySL = Math.trunc(difficulty / 10);

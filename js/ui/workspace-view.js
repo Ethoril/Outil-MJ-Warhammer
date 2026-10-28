@@ -975,6 +975,8 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       choice: draft.v5Choice, charging: draft.charging, context: { ...weaponContext, ...(context.action.id?.startsWith('broken-hide:')?{isAction:true}: {}) },
       talentChoices: { ...(draft.talentChoices || {}), 'talent-beat-blade:replace-damage': draft.beatBlade === true },
       fortuneReroll: draft.fortuneReroll === true,
+      fortuneForAdvantage: draft.fortuneForAdvantage === true,
+      ...(Array.isArray(draft.fortuneRerollRolls) && draft.fortuneRerollRolls.length ? { fortuneRerollRolls: draft.fortuneRerollRolls } : {}),
       ...(draft.reverseDice === true ? { reverseDice: true } : {}),
       ...(draft.fortuneRerollRoll != null && draft.fortuneRerollRoll !== '' ? { fortuneRerollRoll: Number(draft.fortuneRerollRoll) } : {}),
       extraAttack: draft.extraAttack === true, ...(draft.reactionId ? { reactionId: draft.reactionId } : {}), aimed: draft.aimed === true,
@@ -1055,11 +1057,13 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         draft.magicBeastKey='';draft.magicBeastTraits=[];draft.magicKadonMonster='';draft.magicKadonOther=false;draft.magicApoSteps=0;draft.magicApoCritical=false;draft.magicApoRaise=false;
         if (!('magicTargetIds' in patch)) draft.magicTargetIds = [];
       }
-      for (const key of ['v5Kind','v5SlModifier','v5Advantages','v5Disadvantages','charging','extraAttack','reactionId','aimed','beatBlade','fortuneReroll','reverseDice','fortuneRerollRoll','actorSize','targetSize','defenseKind','defenseSlModifier','defenseAdvantages','defenseDisadvantages','v5Context','defenseContext','combatDefensiveSkillId','combatAimWeaponId','combatAimWeaponName','combatAimWeaponHeldConfirmed','combatAimWeaponKindConfirmed','talentChoices','defenseTalentChoices','magicChannelMode','magicChannelType','magicLore','magicFumbleLossRoll','magicMiscastRoll','magicMajorRoll','magicSecondaryDurationRoll','magicSecondaryDamageRoll','magicSecondaryDistanceRoll','magicSecondaryLocation','magicSpellId','magicArcaneArmorPoints','magicArcaneEnhancedDamage','magicArcaneChooseItem','magicArcaneTargets','magicMjChoice','magicChosenStats','magicHogTier','magicResistanceRoll','magicVortexDirection','magicVortexDistance','magicCriticalChoice','magicOvercastDamage','magicOvercastTargets','magicOvercastRange','magicOvercastDuration','magicOvercastAoe','magicOvercastSpecial','magicBeastKey','magicRoll3d10','magicTargetIds']) if (key in patch) draft[key] = patch[key];
+      for (const key of ['v5Kind','v5SlModifier','v5Advantages','v5Disadvantages','charging','extraAttack','reactionId','aimed','beatBlade','fortuneReroll','fortuneForAdvantage','fortuneRerollRolls','reverseDice','fortuneRerollRoll','actorSize','targetSize','defenseKind','defenseSlModifier','defenseAdvantages','defenseDisadvantages','v5Context','defenseContext','combatDefensiveSkillId','combatAimWeaponId','combatAimWeaponName','combatAimWeaponHeldConfirmed','combatAimWeaponKindConfirmed','talentChoices','defenseTalentChoices','magicChannelMode','magicChannelType','magicLore','magicFumbleLossRoll','magicMiscastRoll','magicMajorRoll','magicSecondaryDurationRoll','magicSecondaryDamageRoll','magicSecondaryDistanceRoll','magicSecondaryLocation','magicSpellId','magicArcaneArmorPoints','magicArcaneEnhancedDamage','magicArcaneChooseItem','magicArcaneTargets','magicMjChoice','magicChosenStats','magicHogTier','magicResistanceRoll','magicVortexDirection','magicVortexDistance','magicCriticalChoice','magicOvercastDamage','magicOvercastTargets','magicOvercastRange','magicOvercastDuration','magicOvercastAoe','magicOvercastSpecial','magicBeastKey','magicRoll3d10','magicTargetIds']) if (key in patch) draft[key] = patch[key];
       for(const [key,value] of Object.entries(patch))if(/^magic[A-Z]/.test(key))draft[key]=value;
       draft.v5Choice = null; draft.defenseChoice = null;
       if ('targetId' in patch) {
         state.targetChoice = patch.targetId;
+        draft.v5Context={...(draft.v5Context||{})};for(const key of ['fateAction','fateChosenRoll','fateCriticalLocation'])delete draft.v5Context[key];
+        draft.fortuneReroll=false;draft.fortuneRerollRolls=[];draft.fortuneForAdvantage=false;
         draft.targetSize = null;
         draft.defenseBase = null; draft.defenseSource = null;
         draft.defenseKind = null; draft.defenseSlModifier = null;
@@ -1076,7 +1080,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         draft.magicTargetIds = patch.targetId && patch.targetId !== 'none' ? [patch.targetId] : [];
       }
       const actionChanged = 'actionKey' in patch && patch.actionKey !== draft.actionKey;
-      if (actionChanged) { draft.v5Kind = null; draft.v5SlModifier = null; draft.charging = false; draft.extraAttack = false; draft.reactionId = null; draft.reactionAction = null; draft.aimed = false; draft.beatBlade = false; draft.fortuneReroll = false; draft.reverseDice = false; draft.fortuneRerollRoll = null; draft.actorSize = null; draft.targetSize = null; draft.v5Advantages = 0; draft.v5Disadvantages = 0; draft.v5Context = {}; draft.talentChoices = {}; draft.actionKey = patch.actionKey; draft.type = null; draft.ammunitionId = ''; draft.ammunitionArbitrated = false; draft.protectionContext = {}; }
+      if (actionChanged) { draft.v5Kind = null; draft.v5SlModifier = null; draft.charging = false; draft.extraAttack = false; draft.reactionId = null; draft.reactionAction = null; draft.aimed = false; draft.beatBlade = false; draft.fortuneReroll = false; draft.fortuneRerollRoll = null;draft.fortuneRerollRolls=[];draft.fortuneForAdvantage=false; draft.reverseDice = false; draft.actorSize = null; draft.targetSize = null; draft.v5Advantages = 0; draft.v5Disadvantages = 0; draft.v5Context = {}; draft.talentChoices = {}; draft.actionKey = patch.actionKey; draft.type = null; draft.ammunitionId = ''; draft.ammunitionArbitrated = false; draft.protectionContext = {}; }
       if ('protectionContext' in patch) draft.protectionContext = patch.protectionContext;
       if ('ammunitionId' in patch) draft.ammunitionId = patch.ammunitionId;
       if ('ammunitionArbitrated' in patch) draft.ammunitionArbitrated = patch.ammunitionArbitrated;

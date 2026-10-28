@@ -5,6 +5,14 @@ import { createStore } from '../js/core/store.js';
 
 const p=(id,fate)=>({id,profileId:id,kind:id==='hero'?'PJ':'PNJ',zone:'active',hp:20,maxHp:20,caracs:{CC:60,CT:60,F:30,E:30,FM:60,I:40,Ag:40},skills:[],states:[],equipment:[],extensions:{v5:{fate}}});
 
+test('F2-L: cancel and survive refuse non-attacks or missing targets',async()=>{
+  const store=createStore({storage:null});await store.ready;await store.loadFromJSON({schemaVersion:3,reserve:[],log:[],diceLines:[],combat:{round:1,currentActorId:'hero',order:['hero'],participants:[p('hero',1)]}});
+  for(const fateAction of ['cancel-attack','survive']){
+    assert.throws(()=>store.previewResolution({actorId:'hero',resolutionId:'invalid-'+fateAction,action:{type:'test',attr:'CC',base:50},roll:30,v5:{kind:'test',context:{fateAction}}}),/attaque et sa cible/);
+    assert.throws(()=>store.previewResolution({actorId:'hero',resolutionId:'untargeted-'+fateAction,action:{type:'attack',attr:'CC',base:50},roll:30,v5:{kind:'melee',context:{fateAction}}}),/attaque et sa cible/);
+  }
+});
+
 test('F2-L: attack costs stay with the attacker while cancellation Destin is paid by the target',()=>{
   const state={revision:0,round:1,currentActorId:'hero',participants:[p('hero',2),p('foe',1)],v5ActionLedger:{appliedActions:[],quotaUsage:[]}};
   const plan=previewV5ActionCosts({state,actionId:'split-payer',actorId:'hero',costs:[{id:'attack-fate',resource:'fate',amount:1},{id:'cancel-fate',resource:'fate',amount:1,actorId:'foe'}]});
@@ -74,12 +82,13 @@ test('F2-L: automatic Fate lets the MJ choose a critical hit location',async()=>
   assert.equal(preview.critical.details.location.name,'Tête');
 });
 
-test('F2-L: survival spends the target Fate, suppresses lethal damage and benches the target',async()=>{
+test('F2-L: Survive requires a confirmed mortal result, not merely 0 Blessure',async()=>{
   const store=createStore({storage:null});await store.ready;
   await store.loadFromJSON({schemaVersion:3,reserve:[],log:[],diceLines:[],combat:{round:1,currentActorId:'hero',order:['hero','foe'],participants:[{...p('hero',0),extensions:{v5:{}}},{...p('foe',1),hp:4}]}});
   const preview=store.previewResolution({actorId:'hero',targetId:'foe',resolutionId:'fate-survive',roll:20,action:{type:'attack',attr:'CC',base:90,damage:10},attackContext:{ranged:false},defense:{base:30,roll:40,v5:{kind:'melee'}},v5:{kind:'melee',context:{fateAction:'survive'}}});
-  assert.equal(preview.ready,true,preview.unresolved?.join('; '));assert.ok(preview.fateSurvival);
-  await store.applyResolution(preview);
+  assert.equal(preview.ready,false);assert.equal(preview.fateSurvival,undefined);assert.match(preview.unresolved.join(' '),/mortel confirmé/);
+  const fatal=store.previewResolution({actorId:'hero',targetId:'foe',resolutionId:'fate-survive-confirmed',roll:20,action:{type:'attack',attr:'CC',base:90,damage:1},attackContext:{ranged:false},defense:{base:30,roll:40,v5:{kind:'melee'}},v5:{kind:'melee',context:{fateAction:'survive',targetHelpless:true,lethalIntent:true,lethalTableEnabled:true,confirmLethalDeath:true}}});
+  assert.equal(fatal.ready,true,fatal.unresolved?.join('; '));assert.ok(fatal.fateSurvival);await store.applyResolution(fatal);
   assert.equal(store.getFate('foe').balance,0);
   assert.equal(store.listParticipants().find(row=>row.id==='foe').zone,'bench');
   assert.equal(store.listParticipants().find(row=>row.id==='foe').hp,4);

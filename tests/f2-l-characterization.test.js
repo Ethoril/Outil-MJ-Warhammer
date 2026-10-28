@@ -64,7 +64,10 @@ test('F2-L characterization — V4 profile conversion is idempotent and maps the
   const once = convertLegacyV4Profile(legacy);
   const twice = convertLegacyV4Profile(once);
   assert.deepEqual(twice, once);
-  assert.deepEqual(once.extensions.v5, { momentum: 2, fate: 3, resources: { fortune: 4 }, difficultySL: 2 });
+  assert.deepEqual(once.extensions.v5, { hasMomentum: true, fate: 3, resources: { fortune: 4 }, difficultySL: 2 });
+  const {parseProfileJson}=await import('../js/core/json-profile-import.js');
+  const imported=parseProfileJson(JSON.stringify({name:'Legacy',kind:'PJ',hp:10,extensions:{v4:{advantage:1,resilience:2,determination:3}}}));
+  assert.deepEqual(imported.profiles[0].extensions.v5,{hasMomentum:true,fate:2,resources:{fortune:3}});
 });
 
 test('F2-L characterization — currency conversions use 1 crown = 20 pistoles = 240 sous and reject negatives', async () => {

@@ -59,7 +59,14 @@ export function buildV5StoreActionInput(envelope, raw = {}) {
   if(v5.context?.freeAttackTalent==='fast-shot')v5.extraAttack=false;
   if(v5.context?.talentAction==='stomp')v5.extraAttack=true;
   const costs = [...(v5.costs || [])];
+  const fortuneForAdvantage=Boolean(v5.context?.fortuneForAdvantage||v5.fortuneForAdvantage||supplied.fortuneForAdvantage);
+  if(fortuneForAdvantage){
+    if(!['test','skill','defense','opposition','attack','attaque'].includes(String(supplied.action?.type||'').toLowerCase()))throw new TypeError('Chance → Avantage : un Test doit être choisi avant le jet.');
+    if(!costs.some(cost=>cost.id==='system:fortune-for-advantage'))costs.push({id:'system:fortune-for-advantage',resource:'fortune',amount:1});
+    v5.advantageSources=[...(v5.advantageSources||[]),{id:'fortune-spent-for-advantage',label:'1 Point de Chance dépensé avant le jet'}];
+  }
   const fateAction = v5.context?.fateAction;
+  if(['cancel-attack','survive'].includes(fateAction)&&(!isAttackType(supplied.action?.type)||!targetId))throw new TypeError(`Destin (${fateAction}) : une attaque et sa cible sont requises.`);
   // Destin laisse le MJ choisir le résultat du dé sans lancer les dés; le moteur
   // garantit ensuite la réussite et conserve les doubles choisis pour un critique.
   if(fateAction==='automatic-success'){
@@ -163,29 +170,33 @@ export function buildV5StoreActionInput(envelope, raw = {}) {
       reverseDiceApplied = v5.reverseDiceApplied = true;
     }
   }
-  const fortuneReroll = Boolean(context.fortuneReroll || v5.fortuneReroll || supplied.fortuneReroll);
-  const rawReroll = context.fortuneRerollRoll ?? v5.fortuneRerollRoll ?? supplied.fortuneRerollRoll;
-  const hasValidReroll = rawReroll !== null && rawReroll !== undefined && rawReroll !== '' && Number.isInteger(Number(rawReroll)) && Number(rawReroll) >= 1 && Number(rawReroll) <= 100;
+  const rerollValues=context.fortuneRerollRolls??v5.fortuneRerollRolls??supplied.fortuneRerollRolls;
+  const legacyReroll=context.fortuneRerollRoll??v5.fortuneRerollRoll??supplied.fortuneRerollRoll;
+  const invalidRerollSequence=Array.isArray(rerollValues)&&rerollValues.some(value=>value===null||value===undefined||value===''||!Number.isInteger(Number(value))||Number(value)<1||Number(value)>100);
+  const rerollRolls=Array.isArray(rerollValues)?rerollValues.map(Number).filter(value=>Number.isInteger(value)&&value>=1&&value<=100):legacyReroll!==null&&legacyReroll!==undefined&&legacyReroll!==''&&Number.isInteger(Number(legacyReroll))&&Number(legacyReroll)>=1&&Number(legacyReroll)<=100?[Number(legacyReroll)]:[];
+  const fortuneReroll = Boolean(context.fortuneReroll || v5.fortuneReroll || supplied.fortuneReroll || rerollValues?.length);
+  const hasValidReroll=rerollRolls.length>0;
   let initialRollBeforeFortune = null, freeReroll = false;
   if (fortuneReroll) {
-    if (!costs.some(c => c.id === 'system:fortune-reroll')) {
-      costs.push({ id: 'system:fortune-reroll', resource: 'fortune', amount: 1 });
+    if (!costs.some(c => c.id?.startsWith('system:fortune-reroll'))) {
+      const chargeCount=Math.max(1,rerollRolls.length);
+      for(let index=0;index<chargeCount;index++)costs.push({id:`system:fortune-reroll:${index+1}`,resource:'fortune',amount:1});
       // Bénédiction de Chance (D4) : échec propre ou opposition perdue ; le Test d'origine est évalué avant la relance.
       // Jet d'origine absent ou invalide : impossible de savoir s'il est raté, la relance reste payante (pas d'erreur levée).
       const initialRoll = Number(supplied.roll ?? supplied.dieRoll ?? supplied.enteredRoll);
       if (freeRerollLayers(actor, { round: state.round, attack: isAttackType(supplied.action?.type) }).length && Number.isInteger(initialRoll) && initialRoll >= 1 && initialRoll <= 100) {
-        const { fortuneReroll: _context, fortuneRerollRoll: _contextRoll, ...plainContext } = context;
-        const { fortuneReroll: _supplied, fortuneRerollRoll: _suppliedRoll, ...plainSupplied } = supplied;
+        const { fortuneReroll: _context, fortuneRerollRoll: _contextRoll, fortuneRerollRolls:_contextRolls, ...plainContext } = context;
+        const { fortuneReroll: _supplied, fortuneRerollRoll: _suppliedRoll, fortuneRerollRolls:_suppliedRolls, ...plainSupplied } = supplied;
         const original = previewResolution({ ...plainSupplied, resolutionId, actorId, targetId,
           actor: supplied.actor?.id === actorId ? supplied.actor : actor, target: state.participants.find(p => p.id === targetId) || supplied.target || null,
           round: state.round ?? supplied.round, baseRevision: supplied.baseRevision ?? state.revision, v5State: state, v5Clock: clock,
-          v5: { ...v5, context: plainContext, fortuneReroll: undefined, fortuneRerollRoll: undefined } });
-        if (original.success === false || original.opposition?.winner === 'defender') { freeReroll = true; exemptions.push({ costId: 'system:fortune-reroll', sourceId: FREE_REROLL_SOURCE }); }
+          v5: { ...v5, context: plainContext, fortuneReroll: undefined, fortuneRerollRoll: undefined, fortuneRerollRolls:undefined } });
+        if (original.success === false || original.opposition?.winner === 'defender') { freeReroll = true; exemptions.push({ costId: 'system:fortune-reroll:1', sourceId: FREE_REROLL_SOURCE }); }
       }
     }
     initialRollBeforeFortune = Number(supplied.roll ?? supplied.dieRoll ?? supplied.enteredRoll);
     if (hasValidReroll) {
-      const nextRoll = Number(rawReroll);
+      const nextRoll = rerollRolls.at(-1);
       supplied.roll = nextRoll;
       if (supplied.dieRoll !== undefined) supplied.dieRoll = nextRoll;
       if (supplied.enteredRoll !== undefined) supplied.enteredRoll = nextRoll;
@@ -209,7 +220,7 @@ export function buildV5StoreActionInput(envelope, raw = {}) {
     target: paid.participants.find(item => item.id === targetId) || supplied.target || null,
     round: state.round ?? supplied.round, baseRevision: supplied.baseRevision ?? state.revision,
     v5State: paid, v5Clock: {...quotaClock,...(Number.isSafeInteger(combatTurnIndex)?{turnIndex:combatTurnIndex}:{})}, ...(preCombatQuota ? { preCombatQuota: quotas.filter(q => q.id.startsWith('creature:')).map(q => ({ id: q.id, maximum: q.maximum })) } : {}), authorNextTurnEnd: authorNextTurnEnd(envelope, actorId), actionCostPlan, secondaryTalentRequests, reactionValidation,
-    fortuneReroll, fortuneRerollRoll: hasValidReroll ? Number(rawReroll) : null, initialRollBeforeFortune, freeReroll, reverseDiceApplied, ...(reverseDiceApplied ? { reverseDice: { used: true } } : {}) };
+    fortuneReroll, fortuneRerollRoll: hasValidReroll ? rerollRolls.at(-1) : null, fortuneRerollRolls:rerollRolls, invalidRerollSequence, initialRollBeforeFortune, freeReroll, reverseDiceApplied, ...(reverseDiceApplied ? { reverseDice: { used: true } } : {}) };
 }
 export function annotateV5StoreActionPreview(preview, input) {
   const fateAction = input.v5?.context?.fateAction;
@@ -226,10 +237,12 @@ export function annotateV5StoreActionPreview(preview, input) {
   if (input.preCombatQuota?.length) preview = { ...preview, reminders: [...(preview.reminders || []), `Avant le premier Round : attaques gratuites limitées à ${input.preCombatQuota.map(q => q.maximum).join(' + ')} avant le début du combat (quota du Tour 0).`] };
   if (input.reactionValidation?.ready === false) preview ={ ...preview, unresolved: [...(preview.unresolved || []), input.reactionValidation.reason] };
   if (input.fortuneReroll) {
+    if(input.invalidRerollSequence){preview={...preview,ready:false,status:'manual',unresolved:[...(preview.unresolved||[]),'Relance de Fortune : chaque résultat doit être un entier de 1 à 100.']};}
     if (input.fortuneRerollRoll === null) {
       preview = { ...preview, unresolved: [...(preview.unresolved || []), 'Relance de Fortune : saisir le nouveau jet d100 (1 à 100).'] };
     }
     preview = { ...preview, fortuneReroll: { active: true, used: Boolean(input.fortuneRerollRoll !== null), initialRoll: input.initialRollBeforeFortune, rerollRoll: input.fortuneRerollRoll,
+      rolls:input.fortuneRerollRolls||[],
       ...(input.freeReroll ? { free: true, reminder: 'Bénédiction de Chance : relance gratuite' } : {}) } };
   }
   if(input.secondaryTalentRequests?.length){

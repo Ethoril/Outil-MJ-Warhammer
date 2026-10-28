@@ -2029,9 +2029,9 @@ function resolvedCorruptionTest(participant, skillId, input) {
         if(draft.localRevision!==baseRevision)throw Object.assign(new Error('La partie a changé. Recalculez le solde de Destin.'),{code:'V5_EFFECT_STALE',userFacing:true});
         const subject=(draft.combat?.participants||[]).find(row=>row.id===id)||(draft.reserve||[]).find(row=>row.id===id)||(draft.persistentCharacters||[]).find(row=>row.id===id);
         if(!subject)throw new TypeError('Personnage introuvable');
-        const identity=subject.extensions?.ficheId||subject.ficheSnapshot?.charId||subject.persistentCharacterId||subject.id;
+        const identity=subject.extensions?.ficheId||subject.ficheSnapshot?.charId||subject.persistentCharacterId||(subject.kind==='PJ'&&typeof subject.profileId==='string'&&subject.profileId.trim()?`profile:${subject.profileId}`:subject.id);
         const update=rows=>(rows||[]).map(row=>{
-          const rowIdentity=row.extensions?.ficheId||row.ficheSnapshot?.charId||row.persistentCharacterId||row.id;
+          const rowIdentity=row.extensions?.ficheId||row.ficheSnapshot?.charId||row.persistentCharacterId||(row.kind==='PJ'&&typeof row.profileId==='string'&&row.profileId.trim()?`profile:${row.profileId}`:row.kind==='PJ'&&row.id===subject.profileId?`profile:${row.id}`:row.id);
           if(row.id!==id&&rowIdentity!==identity)return row;
           const next=cloneValue(row);next.extensions={...(next.extensions||{}),v5:{...(next.extensions?.v5||{}),fate:amount}};
           if(Object.hasOwn(next,'fate'))next.fate=amount;return next;

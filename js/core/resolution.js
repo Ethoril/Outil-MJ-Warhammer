@@ -1759,9 +1759,10 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     result.reminders = [...result.reminders, 'Destin : attaque annulée avant Blessures et Blessures Critiques.'];
   }
   if(normalized.v5?.context?.fateAction==='survive'){
-    const lethal=attackType(action.type)&&target&&hit&&damage&&damage.finalDamage+(criticalBlock?.application?.extraWounds||0)>=(Number(target.hp)||0);
-    if(lethal){result.fateSurvival={participantId:target.id,removedFromEncounter:true};result.hit=false;result.damage=null;result.critical=null;result.defenderCritical=null;result.targetConditionApplication=null;result.weaponConditions=null;result.entanglement=null;result.projectileLodging=null;result.secondaryTargets=[];result.lethalDeath=null;result.reminders=[...result.reminders,'Destin : le personnage survit et quitte la rencontre.'];}
-    else result.unresolved=[...(result.unresolved||[]),'Destin : le choix Survivre exige une attaque qui mettrait la cible à 0 Blessure.'];
+    const deathResult=criticalBlock?.details?.parsed?.death===true||criticalBlock?.second?.parsed?.death===true;
+    const lethal=attackType(action.type)&&target&&hit&&(deathResult||lethalDeath?.targetId===target.id);
+    if(lethal){result.fateSurvival={participantId:target.id,removedFromEncounter:true};result.hit=false;result.damage=null;result.critical=null;result.defenderCritical=null;result.targetConditionApplication=null;result.weaponConditions=null;result.entanglement=null;result.projectileLodging=null;result.secondaryTargets=[];result.lethalDeath=null;result.reminders=[...result.reminders,'Destin : le personnage échappe à la mort et quitte la rencontre.'];}
+    else {result.unresolved=[...(result.unresolved||[]),'Destin : Survivre exige une attaque infligeant un résultat mortel confirmé (un total à 0 Blessure ne suffit pas).'];result.ready=false;result.status='manual';}
   }
   return result;
 }
