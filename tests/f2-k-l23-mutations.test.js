@@ -136,7 +136,8 @@ test('F2-K2 L23 — all 72 physical and Beast Head rows have line-specific V5 pr
   }
   const byName = Object.fromEntries(entries.map(entry => [entry.nom, entry]));
   assert.match(byName['Lolling Tongue'].regleSource, /−10.*Language/);
-  assert.match(byName['Lolling Tongue'].conversion.propositionV5, /−10.*−1 DR/);
+  assert.match(byName['Lolling Tongue'].conversion.propositionV5, /−10.*Language/);
+  assert.doesNotMatch(byName['Lolling Tongue'].conversion.propositionV5, /−1 DR/);
   assert.match(byName['Rearranged Face'].regleSource, /−20.*Intuition/);
   assert.match(byName['Rearranged Face'].conversion.propositionV5, /−20.*−2 DR/);
   assert.match(byName['Whiskered Snout'].regleSource, /\+10 Track/);
