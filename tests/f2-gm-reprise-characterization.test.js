@@ -65,6 +65,12 @@ test('F2-M contre-vérification — Surpris et Sonné produisent chacun un plan 
   assert.match(source, /mountedRiderEventsFor\(actorConditionKeys\)/);
 });
 
+test('F2-M contre-vérification — plusieurs plans exigent un d100 par événement', () => {
+  const source = readSource(new URL('../js/core/resolution.js', import.meta.url), 'utf8');
+  assert.match(source, /mountedRideAnswerFor\(\{[^}]*participantId: plan\.participantId/s);
+  assert.match(source, /mountedRideRollsById\?\.\[plan\.participantId\][^\n]*singlePlan/);
+});
+
 test('F2-G contre-vérification — changer de cible efface aussi le côté de patte choisi', () => {
   const source = readSource(new URL('../js/ui/workspace-view.js', import.meta.url), 'utf8');
   const reset = source.slice(source.indexOf("if ('targetId' in patch)"), source.indexOf('draft.fortuneReroll=false'));
