@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { resolveCreatureHitLocation, deriveHitMorphology } from '../js/core/v5-hit-morphology.js';
 import { buildParticipantFromBestiary } from '../js/core/bestiary-profiles.js';
-import { planMountedDodge } from '../js/core/v5-mounted-combat.js';
+import { planMountedAttack, planMountedDodge } from '../js/core/v5-mounted-combat.js';
 import { previewResolution } from '../js/core/resolution.js';
 
 const l06 = JSON.parse(readFileSync(new URL('../js/data/bestiary/L06.json', import.meta.url), 'utf8')).profiles;
@@ -33,4 +33,25 @@ test('F2-M reprise — Esquive montée est défavorisée sauf Trick Rider', () =
   const trickRider = { ...mounted, talents: [{ id: 'talent-trick-rider', status: 'resolved' }] };
   assert.deepEqual(planMountedDodge(mounted).disadvantageSources.map(row => row.id), ['mounted:dodge']);
   assert.deepEqual(planMountedDodge(trickRider).disadvantageSources, []);
+});
+
+test('F2-M reprise — une ancienne monture sans mountId ne bloque pas l’attaque de cavalerie', () => {
+  const rider = { id: 'rider', extensions: { v5: { mounted: true } } };
+  const plan = planMountedAttack({ actor: rider, target: { id: 'target' }, weapon: { category: 'Cavalerie' } });
+  assert.equal(plan.active, true);
+  assert.deepEqual(plan.unresolved, []);
+  assert.deepEqual(plan.advantageSources, []);
+});
+
+test('F2-M reprise — une défense brute d’Ag contre un cavalier reçoit le Désavantage', () => {
+  const attacker = { id: 'attacker', states: [] };
+  const rider = { id: 'rider', name: 'Cavalier', extensions: { v5: { mounted: true, mountId: 'horse' } }, states: [] };
+  const mount = { id: 'horse', name: 'Cheval', zone: 'active', kind: 'Créature', size: 'large', states: [] };
+  const preview = previewResolution({
+    actor: attacker, target: rider,
+    action: { type: 'attack', attr: 'CC', base: 60, damage: 5 }, roll: 41,
+    defense: { attr: 'Ag', base: 55, roll: 75, label: 'Esquive' },
+    v5: { kind: 'melee' }, v5State: { participants: [attacker, rider, mount] }
+  });
+  assert.ok(preview.defenderTest.advantage.disadvantage.some(row => row.id === 'mounted:dodge'));
 });
