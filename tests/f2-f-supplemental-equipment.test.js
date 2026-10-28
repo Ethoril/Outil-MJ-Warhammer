@@ -21,7 +21,7 @@ test('F2-F — each of the 17 selected source rows has an executable supplement 
 test('F2-F — all four skaven weapon exposures use the real wounded target and retain intensity/modifier', () => {
   const cases = [
     ['F-L11-0013', 'minor', 2], ['F-L11-0016', 'moderate', 0],
-    ['F-L11-0017', 'minor', 0], ['F-L11-0018', 'minor', 0], ['F-L11-0014', 'minor', 0]
+    ['F-L11-0017', 'minor', 0], ['F-L11-0018', 'minor', 0]
   ];
   for (const [id, influence, skillModifier] of cases) {
     const plan = previewSupplementalEquipment({ item: row(id), actor, target, hit: true, damage: { finalDamage: 1 } });
@@ -38,15 +38,11 @@ test('F2-F — knife, antler blades, and dragon shards propose only the source e
   assert.deepEqual(previewSupplementalEquipment({ item: row('F-L11-0083'), actor, target, hit: true, damage: { finalDamage: 1 } }).effects.map(effect => effect.state), ['Hémorragique']);
 });
 
-test('F2-F — tiger claws require an explicit camouflage test and only successful result records disguise', () => {
+test('F2-F — tiger claws disguise a wound from a successful Brawling attack', () => {
   const item = row('F-L24-0008');
-  assert.ok(previewSupplementalEquipment({ item, actor, target, hit: true, damage: { finalDamage: 1 } }).unresolved.some(line => /score et le jet d100/.test(line)));
-  const success = previewSupplementalEquipment({ item, actor, target, hit: true, damage: { finalDamage: 1 }, context: { felidWoundDisguiseTest: { score: 50, roll: 31 } } });
+  const success = previewSupplementalEquipment({ item, actor, target, hit: true, damage: { finalDamage: 1 } });
   assert.equal(success.effects[0].disguiseAs, 'grand félin');
-  assert.equal(success.effects[0].test.success, true);
-  const failure = previewSupplementalEquipment({ item, actor, target, hit: true, damage: { finalDamage: 1 }, context: { felidWoundDisguiseTest: { score: 50, roll: 71 } } });
-  assert.equal(failure.effects.length, 0);
-  assert.ok(failure.reminders.some(line => /échoue/.test(line)));
+  assert.equal(previewSupplementalEquipment({ item, actor, target, hit: false, damage: { finalDamage: 0 } }).effects.length, 0);
 });
 
 test('F2-F — secret d10 exhausts the Fell Dagger poison and breaks it on its next use', () => {

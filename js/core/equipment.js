@@ -496,6 +496,7 @@ export function locationProtection(target,context={}){
  const attackWords=(context.qualities||[]).map(w=>resolveKeyword(typeof w==='string'?w:w.id)?.id??(typeof w==='string'?w:w.id));
  let criticalIgnored=false;
  for(const sourceItem of location?.counted||[]){let include=true;const itemDamage=Number(target?.extensions?.v5?.armorDamageByItem?.[sourceItem.id])||0;const item={...sourceItem,ap:Math.max(0,sourceItem.ap-itemDamage)};const known=item.keywords.map(w=>w.id);
+ if(context.ignoreMetalArmour===true&&/mail|plate|gromril|ithilmar|metal/i.test(String(item.category||item.name||''))){include=false;ignored.push({item,reason:'Warp Blade : les PA de cette pièce métallique sont ignorés'});}
  for(const keywordId of known)evaluatedKeywords.add(keywordId);
  for(const keywordId of known)if(!resolveKeyword(keywordId))manual.push(`effet-inconnu:${keywordId}`);
  for(const keywordId of known.filter(word=>['flexible','partielle','points-faibles','impenetrable'].includes(word))){

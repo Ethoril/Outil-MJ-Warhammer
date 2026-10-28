@@ -1699,14 +1699,18 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
     select.addEventListener('change',()=>handlers.select({v5Context:{...current,supplementalPoisonTest:select.value===''?undefined:{success:select.value==='true'}}}));label.append(select);fields.append(label);
     const rollLabel=node('label','workspace-type','Jet secret du MJ (d10 à chaque utilisation)'),rollInput=document.createElement('input');rollInput.type='number';rollInput.min='1';rollInput.max='10';rollInput.step='1';rollInput.value=current.fellDaggerSecretRoll??'';rollInput.setAttribute('aria-label',rollLabel.textContent);rollInput.addEventListener('change',()=>handlers.select({v5Context:{...current,fellDaggerSecretRoll:rollInput.value===''?undefined:Number(rollInput.value)}}));rollLabel.append(rollInput);fields.append(rollLabel);
   }
+  if(type==='attack'&&/warp blade|lame de malepierre/i.test(String(linkedSupplementalItem?.name||focusActionLabel))){
+    const current=draft.v5Context||{},label=node('label','workspace-type','Test de Résistance de la cible à +20 (si >1 Blessure)'),select=document.createElement('select');
+    select.setAttribute('aria-label',label.textContent);select.append(new Option('À saisir',''),new Option('Réussite','true'),new Option('Échec : appliquer Sonné','false'));
+    select.value=typeof current.warpBladeEnduranceTest?.success==='boolean'?String(current.warpBladeEnduranceTest.success):'';
+    select.addEventListener('change',()=>handlers.select({v5Context:{...current,warpBladeEnduranceTest:select.value===''?undefined:{success:select.value==='true'}}}));label.append(select);fields.append(label);
+    fields.append(node('p','workspace-muted','La Warp Blade ignore les PA des pièces métalliques; ses qualités Défensive, Tailleuse et Empaleuse sont imprimées dans le profil d’attaque.'));
+  }
   if(type==='attack'&&/antler hilted blade|lame.*poignee de bois|lame.*poignée de bois/i.test(String(linkedSupplementalItem?.name||focusActionLabel))){
     const current=draft.v5Context||{},label=node('label','workspace-type','Origine de la poignée en bois de Grand Cerf'),select=document.createElement('select');select.setAttribute('aria-label',label.textContent);select.append(new Option('À préciser',''),new Option('Bois tombé naturellement','naturally-fallen'),new Option('Bois acquis par violence','violent'));select.value=current.antlerHandleOrigin||'';select.addEventListener('change',()=>handlers.select({v5Context:{...current,antlerHandleOrigin:select.value||undefined}}));label.append(select);fields.append(label);
   }
-  if(type==='attack'&&/griffes du tigre|tiger claws/i.test(String(linkedSupplementalItem?.name||focusActionLabel))){
-    const current=draft.v5Context||{},test=current.felidWoundDisguiseTest||{};
-    for(const [key,labelText,min,max] of [['score','Score du Test de camouflage (MJ)',0,100],['roll','Jet d100 du Test',1,100]]){const label=node('label','workspace-type',labelText),input=document.createElement('input');input.type='number';input.min=String(min);input.max=String(max);input.value=test[key]??'';input.setAttribute('aria-label',labelText);input.addEventListener('change',()=>handlers.select({v5Context:{...current,felidWoundDisguiseTest:{...test,[key]:input.value===''?undefined:Number(input.value)}}}));label.append(input);fields.append(label);}
-    fields.append(node('p','workspace-muted','Un Test réussi inscrit les blessures comme celles d’un grand félin; un échec conserve les blessures ordinaires. Saisir le score retenu par le MJ et le jet.'));
-  }
+  if(type==='attack'&&/griffes du tigre|tiger claws/i.test(String(linkedSupplementalItem?.name||focusActionLabel)))
+    fields.append(node('p','workspace-muted','Profil Taggees : les Griffes du tigre utilisent Corps à corps (Bagarre), avec les statistiques d’une Dague. Toute Blessure infligée peut être présentée comme causée par un grand félin.'));
   if(/focalisation/i.test(focusActionLabel)){
     const current=draft.v5Context||{},ruleLabel=node('label','workspace-type','Objet de focalisation utilisé'),ruleSelect=document.createElement('select');
     ruleSelect.setAttribute('aria-label',ruleLabel.textContent);ruleSelect.append(new Option('Aucun',''),new Option('Bâton du domaine (+1 DR)','F-L06-1104'),new Option('Robes de sorcier (rang choisi)','F-L06-1105'));

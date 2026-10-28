@@ -2118,6 +2118,29 @@ function resolvedCorruptionTest(participant, skillId, input) {
       if (!subject) throw new TypeError('Personnage introuvable');
       return corruptionStatusFor(subject, localRevision, sessionId);
     },
+    declareWarpstoneDailyExposure(id, { itemId, dayLabel, confirmed = false, baseRevision = localRevision } = {}) {
+      if (confirmed !== true || typeof itemId !== 'string' || !itemId || typeof dayLabel !== 'string' || !dayLabel.trim() || dayLabel.length > 80)
+        throw Object.assign(new TypeError('Confirmez la journée et l’objet de malepierre porté hors boîte plombée.'), { code: 'CORRUPTION_WARPSTONE_DECLARATION_REQUIRED', userFacing: true });
+      return api.executeCommand('declare-warpstone-daily-exposure-v5', draft => {
+        if (draft.localRevision !== baseRevision) throw Object.assign(new Error('La partie a changé. Relisez l’exposition de malepierre.'), { code: 'CORRUPTION_STALE', userFacing: true });
+        const subject = findCorruptionSubject(draft, id);
+        const item = subject?.equipment?.find(row => row.id === itemId);
+        if (!subject || !item) throw Object.assign(new TypeError('L’objet déclaré doit appartenir au personnage.'), { code: 'CORRUPTION_WARPSTONE_ITEM_REQUIRED', userFacing: true });
+        const key = `warpstone-daily:${itemId}:${dayLabel.trim()}`;
+        const current = subject.extensions?.v5?.pendingCorruptionExposures || [];
+        const resolved = subject.extensions?.v5?.warpstoneDailyExposureKeys || [];
+        if (current.some(row => row.id === key) || resolved.includes(key)) throw Object.assign(new Error('Cette exposition quotidienne liée à cet objet a déjà été déclarée.'), { code: 'CORRUPTION_WARPSTONE_DUPLICATE', userFacing: true });
+        updateCorruptionCopies(draft, id, row => {
+          const extensions = row.extensions || {}, v5 = extensions.v5 || {};
+          row.extensions = { ...extensions, v5: { ...v5, pendingCorruptionExposures: [...(v5.pendingCorruptionExposures || []), {
+            id: key, sourceRuleId: 'F-L22-0139', source: `Malepierre portée : ${item.name} · ${dayLabel.trim()}`,
+            influence: 'minor', exposure: 'exposure', difficultyDR: 0, equipmentId: item.id, declaredDay: dayLabel.trim()
+          }].slice(-100) } };
+          return row;
+        });
+        return draft;
+      });
+    },
     getCorruptionMutationCatalog() {
       return cloneValue(V5_CORRUPTION_MUTATION_CATALOG);
     },
@@ -2168,6 +2191,7 @@ function resolvedCorruptionTest(participant, skillId, input) {
           gainedPoints: result.gainedPoints, pointsAfter: result.corruptionPoints, threshold: result.threshold, createdAt: Date.now() };
         updateCorruptionCopies(draft, id, row => {
           const oldV5 = row.extensions?.v5 || {};
+          const immediateSource=(oldV5.pendingCorruptionExposures||[]).find(item=>item.id===input.immediateExposureId);
           const nextPoints = result.corruptionPoints;
           const pendingCorruptionTest = result.thresholdTestRequired
             ? { id: `corruption-test:${exposureId}`, status: 'pending', sourceExposureId: exposureId, pointsAtTrigger: nextPoints, thresholdAtTrigger: result.threshold }
@@ -2175,6 +2199,7 @@ function resolvedCorruptionTest(participant, skillId, input) {
           row.extensions = { ...(row.extensions || {}), v5: { ...oldV5, corruptionPoints: nextPoints,
             corruptionExposures: [...(oldV5.corruptionExposures || []), exposure].slice(-500),
             ...(input.immediateExposureId ? { pendingCorruptionExposures: (oldV5.pendingCorruptionExposures || []).filter(row => row.id !== input.immediateExposureId) } : {}),
+            ...(immediateSource?.declaredDay ? { warpstoneDailyExposureKeys: [...new Set([...(oldV5.warpstoneDailyExposureKeys||[]), immediateSource.id])].slice(-500) } : {}),
             pendingCorruptionTest } };
           return row;
         });

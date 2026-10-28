@@ -3,7 +3,7 @@
  */
 const RULES = Object.freeze({
   'F-L11-0013': { kind: 'corruption', influence: 'minor', skillModifier: 2, label: 'Mitrailleuse Ratling' },
-  'F-L11-0014': { kind: 'corruption', influence: 'minor', label: 'Lame de malepierre' },
+  'F-L11-0014': { kind: 'warp-blade', label: 'Warp Blade' },
   'F-L11-0016': { kind: 'corruption', influence: 'moderate', label: 'Lance-feu à malepierre' },
   'F-L11-0017': { kind: 'corruption', influence: 'minor', label: 'Jezzail à malepierre' },
   'F-L11-0018': { kind: 'corruption', influence: 'minor', label: 'Pistolet à malepierre' },
@@ -14,14 +14,12 @@ const RULES = Object.freeze({
   'F-L11-0083': { kind: 'bleeding-on-wound', label: 'Pointes de dragon écharde' },
   'F-L13-0086': { kind: 'pavise-carried', protection: 3, damageFormula: 'BF+2', label: 'Pavois porté' },
   'F-L13-0087': { kind: 'pavise-planted', protection: 5, setupActions: 2, label: 'Pavois planté' },
-  'F-L22-0139': { kind: 'corruption', influence: 'minor', penetrating: true, label: 'Brise-os, éclat de malepierre' },
+  'F-L22-0139': { kind: 'warpstone-critical', influence: 'minor', penetrating: true, label: 'Brise-os, éclat de malepierre' },
   'F-L24-0008': { kind: 'felid-wound-disguise', label: 'Griffes du tigre' },
   'F-L06-1104': { kind: 'enchanted-staff', label: 'Bâton enchanté' },
   'F-L06-1105': { kind: 'wizard-robes', label: 'Robes de sorcier' },
   'F-L06-1134': { kind: 'printed-damage', label: 'Dégâts imprimés de créature' }
 });
-import { previewV5Test, selectV5Test } from './v5-roll.js';
-
 export const F2_F_RULE_IDS = Object.freeze(Object.keys(RULES));
 
 const fold = value => String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase('fr').replace(/[’']/g, ' ').replace(/[^a-z0-9]+/g, ' ').trim();
@@ -29,20 +27,20 @@ const itemRuleId = item => {
   if (RULES[item?.supplementalRuleId]) return item.supplementalRuleId;
   const id = String(item?.id || item?.baseId || '');
   const name = fold(item?.name || item?.nom || id);
-  if (/mitrailleuse ratling/.test(name)) return 'F-L11-0013';
-  if (/lance feu.*malepierre/.test(name)) return 'F-L11-0016';
-  if (/jezzail.*malepierre/.test(name)) return 'F-L11-0017';
-  if (/pistolet.*malepierre/.test(name)) return 'F-L11-0018';
+  if (/mitrailleuse ratling|ratling cannon/.test(name)) return 'F-L11-0013';
+  if (/lance feu.*malepierre|warpfire thrower/.test(name)) return 'F-L11-0016';
+  if (/jezzail.*malepierre|warplock jezzail/.test(name)) return 'F-L11-0017';
+  if (/pistolet.*malepierre|warplock pistol|warp pistol/.test(name)) return 'F-L11-0018';
   if (/lame.*bois tombe|antler hilted blade|antler hilt|fallen antler/.test(name)) return 'F-L11-0078';
   if (/lame.*bois arrache|antler.*violently|violently.*antler/.test(name)) return 'F-L11-0079';
   if (/plate.*leviathan|leviathan.*plate/.test(name)) return 'F-L11-0081';
-  if (/pointes.*dragon/.test(name)) return 'F-L11-0083';
+  if (/pointes.*dragon|shard tips/.test(name)) return 'F-L11-0083';
   if (/pavois|pavise/.test(name)) return item?.v5?.planted === true ? 'F-L13-0087' : 'F-L13-0086';
-  if (/brise os|krag breaker/.test(name)) return 'F-L22-0139';
-  if (/griffes.*tigre/.test(name)) return 'F-L24-0008';
-  if (/dague funeste|doom dagger/.test(name)) return 'F-L11-0076';
+  if (/brise os|krag breaker|rat ogre bonebreaker|warpstone shard/.test(name)) return 'F-L22-0139';
+  if (/griffes.*tigre|tiger claws/.test(name)) return 'F-L24-0008';
+  if (/dague funeste|doom dagger|fell dagger/.test(name)) return 'F-L11-0076';
   if (/baton.*enchant|enchanted staff/.test(name)) return 'F-L06-1104';
-  if (/robe.*sorcier|wizard robe/.test(name)) return 'F-L06-1105';
+  if (/robe.*sorcier|wizard s robes|wizard robe/.test(name)) return 'F-L06-1105';
   if (/warp blade|lame de malepierre/.test(name) || id.toLowerCase().includes('warp-blade')) return 'F-L11-0014';
   return null;
 };
@@ -63,7 +61,7 @@ export function previewSupplementalEquipment({ item, actor, target, hit = false,
   if (!ruleId) return null;
   const rule = RULES[ruleId];
   const hurt = Number(damage?.finalDamage) > 0;
-  const exposure = rule.kind === 'corruption' && hit && hurt ? {
+  const exposure = (rule.kind === 'corruption' && hit && hurt || rule.kind === 'warpstone-critical' && critical) ? {
     sourceRuleId: ruleId, source: rule.label, participantId: target?.id || null,
     influence: rule.influence, skillModifier: rule.skillModifier || 0,
     thresholdTestRequired: true, status: 'needs-corruption-test'
@@ -79,6 +77,11 @@ export function previewSupplementalEquipment({ item, actor, target, hit = false,
     if (context.fellDaggerSecretRoll === 1 || item?.extensions?.v5?.fellDaggerBreakNextUse === true) reminders.push('Dague funeste : poison épuisé; aucun Empoisonné sur cette utilisation. La lame se brisera à la fin de cette utilisation.');
     else if (!poisonTest || typeof poisonTest.success !== 'boolean') unresolved.push('Dague funeste : résultat du Test d’Endurance de la cible à −1 DR requis avant d’appliquer Empoisonné.');
     else if (!poisonTest.success) effects.push({ participantId: target?.id, state: 'Empoisonné', sourceRuleId: ruleId });
+  }
+  if (rule.kind === 'warp-blade' && hit && Number(damage?.finalDamage) > 1) {
+    const test = context.warpBladeEnduranceTest;
+    if (typeof test?.success !== 'boolean') unresolved.push('Warp Blade : Test de Résistance de la cible à +20 requis après plus d’une Blessure; un échec inflige Sonné.');
+    else if (!test.success) effects.push({ participantId: target?.id, state: 'Sonné', sourceRuleId: ruleId });
   }
   if(rule.kind==='poison'&&used){
     const stored=item?.extensions?.v5||{};
@@ -108,12 +111,7 @@ export function previewSupplementalEquipment({ item, actor, target, hit = false,
   if (rule.kind === 'pavise-carried') reminders.push('Pavois porté : appliquer Protectrice 3 selon le flux de bouclier choisi; Défensive, Inoffensive, Lente, Épuisante; Encombrement 4; dégâts BF+2.');
   if (rule.kind === 'pavise-planted') reminders.push('Pavois planté : 2 Actions pour le mettre en place; Protectrice 5 contre les tirs de la direction choisie à 1 yard derrière; en mêlée de face, premier Tour seulement.');
   if (rule.kind === 'felid-wound-disguise' && hit && hurt) {
-    const supplied=context.felidWoundDisguiseTest;
-    if(Number.isSafeInteger(supplied?.score)&&Number.isSafeInteger(supplied?.roll)){
-      const test=selectV5Test(previewV5Test({score:supplied.score,roll:supplied.roll,kind:'test'}),'keep');
-      if(test.success)effects.push({participantId:target?.id,disguiseAs:'grand félin',sourceRuleId:ruleId,test:{score:test.score,roll:test.roll,success:test.success,sl:test.sl}});
-      else reminders.push(`Griffes du tigre : le Test de camouflage échoue (${test.sl} DR); aucune blessure n’est masquée.`);
-    } else unresolved.push('Griffes du tigre : saisir le score et le jet d100 du Test permettant de masquer les blessures.');
+    effects.push({participantId:target?.id,disguiseAs:'grand félin',sourceRuleId:ruleId});
   }
   if (rule.kind === 'enchanted-staff' || rule.kind === 'wizard-robes') {
     const associatedDomain = fold(item?.associatedDomain || item?.v5?.associatedDomain || context.associatedDomain);
@@ -134,7 +132,7 @@ export function previewSupplementalEquipment({ item, actor, target, hit = false,
     }
   }
   if (rule.kind === 'printed-damage') reminders.push('Dégâts imprimés de créature : la valeur comprend déjà le BF approprié; ne pas ajouter de BF une seconde fois.');
-  if (rule.kind === 'corruption' && rule.penetrating) reminders.push('Brise-os : conserver Pénétrante; l’éclat de malepierre ne modifie pas les dégâts imprimés.');
+  if (rule.kind === 'warpstone-critical') reminders.push('Éclat de malepierre : conserver Pénétrante; une Blessure Critique infligée cause une exposition mineure à la Corruption. Tout objet Skaven contenant de la malepierre porté hors boîte plombée expose aussi son porteur une fois par jour (déclaration MJ dans K1).');
   return Object.freeze({ ruleId, label: rule.label, itemId: item?.id || item?.baseId || null, effects: Object.freeze(effects), exposure, casting: Object.freeze(casting), weaponDispositionUpdate,
     reminders: Object.freeze(reminders), unresolved: Object.freeze(unresolved) });
 }

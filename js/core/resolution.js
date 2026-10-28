@@ -271,6 +271,19 @@ export function normalizeResolutionInput(input = {}) {
   if (!isRecord(input)) throw new ResolutionError('Entrée de résolution invalide');
   const actor = isRecord(input.actor) ? clone(input.actor) : null;
   const action = isRecord(input.action) ? clone(input.action) : {};
+  if (/griffes du tigre|tiger claws/i.test(String(action.name || action.note || action.extensions?.equipment?.name || ''))) {
+    const brawling=(actor?.skills||[]).find(row=>/melee\s*\(brawling\)|corps.?a.?corps\s*\(bagarre\)/i.test(String(row.name||row.nom||row.sourceName||''))&&Number.isFinite(Number(row.total??row.value)));
+    if(!brawling)throw new ResolutionError('Les Griffes du tigre exigent Corps à corps (Bagarre) lié au profil.', 'SKILL_LINK_REQUIRED');
+    action.base=Number(brawling.total??brawling.value);action.attr='CC';action.extensions={...(action.extensions||{}),fiche:{...(action.extensions?.fiche||{}),skillId:brawling.id||undefined}};
+  }
+  if (/warp blade|lame de malepierre/i.test(String(action.name || action.note || action.extensions?.equipment?.name || ''))) {
+    const present = new Set((action.qualities || []).map(row => typeof row === 'string' ? row : row?.id));
+    action.qualities = [...(action.qualities || []), ...['defensive', 'entaille', 'empaleuse'].filter(id => !present.has(id))];
+  }
+  if (/warpstone shard|eclat de malepierre|éclat de malepierre/i.test(String(action.name || action.note || action.extensions?.equipment?.name || '')) &&
+      !(action.qualities || []).some(row => ['perforante', 'penetrating'].includes(typeof row === 'string' ? row : row?.id))) {
+    action.qualities = [...(action.qualities || []), 'perforante'];
+  }
   // Attaque naturelle choisie (Trait de créature) : ses dégâts calculés remplacent ceux de l'action (« imprimé » : l'action garde les siens).
   // Dégâts saisis à la main sur une action personnalisée (sans marque de bestiaire) : remplacés par la formule, le MJ en est averti.
   const typedDamage = !action.extensions?.v5?.kind && hasOwn(action, 'damage') && action.damage !== '' && Number.isFinite(Number(action.damage)) ? Number(action.damage) : null;
@@ -333,6 +346,11 @@ export function normalizeResolutionInput(input = {}) {
   if(ammunition){const compatibility=ammunitionCompatibility(weaponItem,ammunition);if(compatibility.status==='incompatible'||(compatibility.status==='manual'&&input.ammunitionArbitrated!==true))throw new ResolutionError('La compatibilité de cette munition avec cette arme doit être vérifiée', 'AMMUNITION_INCOMPATIBLE', compatibility);}
   const merged = ammunition && weaponItem ? mergeEquipmentQualities(weaponItem, ammunition) : null;
   let qualities = normalizeQualities(merged ? [...(action.qualities || []), ...equipmentQualities(ammunition)] : action.qualities || input.qualities || []);
+  const wieldedPavise=input.v5?.context?.attackWithShield===true&&actor?.equipment?.find(item=>item.id===input.v5.context.actorShieldId&&item.kind==='shield'&&/pavise|pavois/i.test(String(item.name||'')));
+  if(wieldedPavise){
+    action.damageFormula='BF +2';delete action.damage;
+    if(!qualities.some(row=>row.id==='defensive'))qualities.push({id:'defensive'});
+  }
   action.qualities = qualities;
   const resolutionId = String(input.resolutionId || input.id || defaultResolutionId(actor, action, target, baseRevision, roll));
   if (!resolutionId.trim()) throw new ResolutionError('resolutionId invalide');
@@ -382,7 +400,8 @@ export function normalizeResolutionInput(input = {}) {
     roll,
     criticalRolls: normalizeCriticalRolls(input.criticalRolls),
     attackContext: equipmentAttackContext(weaponItem,input.v5?.context||{}),
-    protectionContext: isRecord(input.protectionContext) ? clone(input.protectionContext) : {},
+    protectionContext: { ...(isRecord(input.protectionContext) ? clone(input.protectionContext) : {}),
+      ...(/warp blade|lame de malepierre/i.test(String(action.name || action.note || action.extensions?.equipment?.name || '')) ? { ignoreMetalArmour: true } : {}) },
     ...(ammunition ? { ammunitionId: ammunition.id, ...(input.ammunitionArbitrated === true ? { ammunitionArbitrated: true } : {}), ammunitionSources: merged?.sources || [] } : {}),
     criticalDeclined: Array.isArray(input.criticalDeclined) ? input.criticalDeclined.map(String) : [],
     ...(defense ? { defense } : {})
@@ -1388,7 +1407,10 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     }
   }
   const supplementalItemId=action?.extensions?.fiche?.equipmentId;
-  const supplementalItem=actor?.equipment?.find(item=>item.id===supplementalItemId)||action?.extensions?.equipment
+  const selectedSupplementalAmmo=actor?.equipment?.find(item=>item.id===normalized.ammunitionId&&item.kind==='ammunition');
+  const supplementalItem=/shard tips/i.test(String(selectedSupplementalAmmo?.name||''))?selectedSupplementalAmmo:
+    actor?.equipment?.find(item=>item.id===supplementalItemId)||action?.extensions?.equipment
+    ||selectedSupplementalAmmo
     ||(context.supplementalEquipmentRuleId?{supplementalRuleId:context.supplementalEquipmentRuleId,name:action?.name||action?.note}:action?.name||action?.note?{name:action.name||action.note}:null);
   const supplementalEquipment=previewSupplementalEquipment({item:supplementalItem,actor,target,hit,damage,critical:criticalBlock?.details||null,context,spell:context.spell||null,used:attackType(action.type)});
   const supplementalTargetConditions=(supplementalEquipment?.effects||[]).filter(row=>row.state&&row.participantId===target?.id).map((row,index)=>({id:`${normalized.resolutionId}:supplement:${index}`,key:foldKey(row.state).replace(/\s+/g,'-'),name:row.state,level:1,source:{kind:'supplement',ruleId:row.sourceRuleId,authorId:actor?.id}}));
@@ -1900,6 +1922,8 @@ export function applyResolution(preview, currentState) {
     updated.hp = Math.max(0, oldHp - previewHpLoss(preview) - (preview.tripFall?.damageLoss||0) - (preview.tripFall?.extraCriticalWounds||0));
     if(preview.lethalDeath?.targetId===updated.id){updated.hp=0;updated.extensions??={};updated.extensions.v5={...(updated.extensions.v5||{}),dead:true};}
     if(preview.tripFall){updated.extensions??={};updated.extensions.v5={...(updated.extensions.v5||{}),mounted:false};}
+    const disguise=(preview.supplementalEquipment?.effects||[]).find(row=>row.participantId===updated.id&&row.disguiseAs);
+    if(disguise){updated.extensions??={};updated.extensions.v5={...(updated.extensions.v5||{}),felidWoundDisguises:[...(updated.extensions.v5?.felidWoundDisguises||[]),{id:`${preview.resolutionId}:felid-disguise`,resolutionId:preview.resolutionId,appearance:disguise.disguiseAs,sourceRuleId:disguise.sourceRuleId,wounds:Math.max(0,Number(preview.damage?.finalDamage)||0)}].slice(-100)};}
     if (targetConditions.length) {
       const receipt = acquireV5Conditions(updated, targetConditions, { resolutionId: preview.resolutionId, authorId: preview.input.actor?.id, targetId: updated.id, round: preview.input.round, source: {} });
       if (!receipt.ready) return { status: 'manual', reason: receipt.needsInput[0].label, state: clone(currentState), resolution: clone(preview) };
