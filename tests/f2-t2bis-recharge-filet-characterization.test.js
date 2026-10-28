@@ -23,10 +23,11 @@ test('T2 bis — sortie de filet: victoire opposée, DR après le premier retire
   assert.equal(result.remainingEntangled, 1);
 });
 
-test('T2 bis — sortie de filet: échec opposé ajoute un état Empêtré', () => {
+test('T2 bis — décision MJ: échec de sortie de filet ne change rien', () => {
   const result = advanceV5NetEscape({ testSl: 0, opponentSl: 2, entangled: 1 });
   assert.equal(result.won, false);
-  assert.equal(result.addEntangledOnFailure, true);
+  assert.equal(result.addEntangledOnFailure, false);
+  assert.equal(result.remainingEntangled, 1);
 });
 
 test('T2 bis — Mancatcher à ressort: son bonus de +2 DR relève le résultat de la source', () => {
