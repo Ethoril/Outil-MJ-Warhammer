@@ -502,3 +502,11 @@ test('The Merwyrm venom path never labels another participant venom weapon (F6)'
     defense: { base: 10, roll: 95, v5: { kind: 'test' } }, v5: { kind: 'melee', context: {} } });
   assert.ok(!preview.targetConditionApplication.some(row => row.source?.ability === 'merwyrm-fanged-maw-venom'));
 });
+
+test('A profile special action copied onto another participant is refused (F7)', () => {
+  const garg = p('E0-P-910');
+  const discharge = garg.actions.find(row => row.extensions?.v5?.specialProfileAbility === 'gargantuan-electric-discharge');
+  const intruder = { ...p('E0-P-909'), id: 'intruder' };
+  assert.throws(() => normalizeResolutionInput({ actor: intruder, action: discharge, roll: 20 }), { code: 'PROFILE_ACTION_NOT_OWNED' });
+  assert.doesNotThrow(() => normalizeResolutionInput({ actor: garg, action: discharge, roll: 20 }));
+});

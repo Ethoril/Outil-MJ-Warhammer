@@ -20,7 +20,7 @@ import { isCriticalRoll, isFumbleRoll } from './roll-qualities.js';
 import { actionHasDamage, actionWeaponDamage, computeDamage, evaluateWeaponDamage, formatDamageFormula, formatWeaponDamage, strengthBonusOf } from './damage.js';
 import { normalizeQualities } from './quality-normalization.js';
 import { planNaturalAttack, inferNaturalAttackKey } from './creature-combat.js';
-import { bestiaryProfileStateImmunity, decorateBestiaryProfileAction, planBestiaryProfileAbilities } from './creature-abilities.js';
+import { bestiaryProfileStateImmunity, decorateBestiaryProfileAction, planBestiaryProfileAbilities, planBestiaryProfileAbility } from './creature-abilities.js';
 import { applyHeadCriticals } from './creature-heads.js';
 import { acquireV5Conditions,healV5Wounds } from './v5-effects.js';
 import { slExtremeLayers } from './v5-divine-effects-tests.js';
@@ -274,6 +274,9 @@ export function normalizeResolutionInput(input = {}) {
   if (!isRecord(input)) throw new ResolutionError('Entrée de résolution invalide');
   const actor = isRecord(input.actor) ? clone(input.actor) : null;
   const action = decorateBestiaryProfileAction(actor, isRecord(input.action) ? clone(input.action) : {});
+  const ownedAbility = action.extensions?.v5?.specialProfileAbility;
+  if (ownedAbility && planBestiaryProfileAbility(actor, ownedAbility).available === false)
+    throw new ResolutionError('Cette action appartient à un autre profil de bestiaire.', 'PROFILE_ACTION_NOT_OWNED');
   if (action.extensions?.v5?.specialProfileAbility === 'gargantuan-electric-discharge'
     && ((input.v5?.context?.f2h?.fatigued === true) || actor?.states?.some(row => ['extenue', 'fatigue', 'fatigued'].includes(foldKey(row.key || row.name)))))
     action.damage = 6;
