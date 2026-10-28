@@ -1481,10 +1481,10 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   // Les saisies de la décharge sont demandées par la résolution elle-même ; le plan n'en ajoute pas une seconde formulation.
   const profileAbilityUnresolved = [...profileAbilityPlans, ...targetProfileAbilityPlans].filter(plan => plan.key !== 'gargantuan-electric-discharge').flatMap(plan => plan.unresolved);
   unresolved.push(...profileAbilityUnresolved);
-  if (target) for (const row of targetConditionApplication) if (bestiaryProfileStateImmunity(target, row.key)) {
-    const index = targetConditionApplication.indexOf(row);
-    targetConditionApplication.splice(index, 1);
-    mechanicalWarnings.push({ ability: 'Résistance au feu de l’élémentaire de mer', state: row.name, reason: 'immunité de profil' });
+  // Filet pour les participants créés avant l'immunité centrale : retirer sans muter le tableau pendant son parcours.
+  if (target) for (const row of targetConditionApplication.filter(row => bestiaryProfileStateImmunity(target, row.key))) {
+    targetConditionApplication.splice(targetConditionApplication.indexOf(row), 1);
+    mechanicalWarnings.push({ ability: 'Immunité d’état du profil', state: row.name, reason: 'immunité de profil' });
   }
   if(normalized.knockoutValid===true&&hit&&location?.key==='HEAD'&&action.qualities.some(q=>(typeof q==='string'?q:q?.id)==='assommante')){
     const stunned=(target?.states||[]).filter(row=>row.key==='sonne').reduce((sum,row)=>sum+Math.max(1,Number(row.level)||1),0)+targetConditionApplication.filter(row=>row.key==='sonne').reduce((sum,row)=>sum+Math.max(1,Number(row.level)||1),0);

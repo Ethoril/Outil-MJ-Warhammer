@@ -194,6 +194,11 @@ function attackActions(attack) {
   });
 }
 
+function f2hImmunities(record) {
+  return F2_H_PROFILE_ABILITIES.filter(rule => rule.profileId === record.id && rule.immuneState)
+    .map(rule => String(rule.immuneState).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase());
+}
+
 function f2hProfileActions(record) {
   return F2_H_PROFILE_ABILITIES.filter(rule => rule.profileId === record.id && rule.specialAction).map(rule => {
     const action = rule.specialAction;
@@ -257,7 +262,8 @@ export function buildParticipantFromBestiary(id, options = {}) {
     skills, talents,
     traits: traits.map(traitText), keywords: [...(record.keywords || [])], tags: [], notes: armourReminder,
     // `extensions.v5.reminders` : rappels affichés en combat par `deriveReminders` (js/core/reminders.js) ; `notes` n'est lu par aucune carte.
-    extensions: { v5: { ...(hitMorphology ? { hitMorphology } : {}), ...(armourReminder ? { reminders: [{ id: 'armour-unresolved', text: armourReminder }] } : {}), bestiary: {
+    // Immunités d'état propres au profil (F2-H) : lues par acquireV5Conditions pour toute source, pas seulement les attaques.
+    extensions: { v5: { ...(f2hImmunities(record).length ? { immunities: { conditions: f2hImmunities(record) } } : {}), ...(hitMorphology ? { hitMorphology } : {}), ...(armourReminder ? { reminders: [{ id: 'armour-unresolved', text: armourReminder }] } : {}), bestiary: {
       id: record.id, book: record.book, page: record.page, name: record.name, edition: record.edition ?? null,
       ...(record.identity ? { identity: cloneValue(record.identity) } : {}), ...(species ? { species } : {}),
       armour: cloneValue(record.armour || {}), traitRefs: Object.fromEntries(traits.filter(trait => trait.ref).map(trait => [trait.name, trait.ref])),

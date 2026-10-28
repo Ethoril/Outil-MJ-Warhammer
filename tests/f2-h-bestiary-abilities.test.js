@@ -376,3 +376,13 @@ test('The discharge plan follows only the discharge action, never the Gargantuan
   const prompts = shock.unresolved.filter(text => /Endurance Moyenne/.test(text));
   assert.equal(prompts.length, 1, JSON.stringify(shock.unresolved));
 });
+
+test('Sea Elemental Ablaze immunity is a central condition immunity, whatever the source', async () => {
+  const { acquireV5Conditions } = await import('../js/core/v5-effects.js');
+  const sea = p('E0-P-909');
+  assert.deepEqual(sea.extensions.v5.immunities.conditions, ['enflamme']);
+  const receipt = acquireV5Conditions(sea, [{ name: 'Enflammé', level: 2, source: { kind: 'spell' } }], { resolutionId: 'fireball', round: 1 });
+  assert.ok(receipt.reminders.some(text => /Immunité/.test(text)), JSON.stringify(receipt).slice(0, 300));
+  assert.equal(receipt.acquiredInstances, 0);
+  assert.equal(p('E0-P-910').extensions.v5.immunities, undefined);
+});
