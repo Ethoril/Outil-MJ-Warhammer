@@ -21,7 +21,7 @@ export const V5_SALVO_ARTILLERY_MISFIRE_TABLE = Object.freeze([
   { min: 1, max: 4, id: 'primary-arm', label: 'Tous les servants subissent les dégâts du profil au bras principal; le dé des unités fixe les DR. La pièce est détruite.' },
   { min: 5, max: 7, id: 'random-location', label: 'Tous les servants subissent les dégâts du profil à une localisation aléatoire; le dé des unités fixe les DR. La pièce est détruite.' },
   { min: 8, max: 9, id: 'remaining-salvo-random-locations', label: 'Pour chaque point de Salve restant, tous les servants subissent les dégâts du profil à une localisation aléatoire; le dé des unités fixe les DR. La pièce est détruite.' },
-  { min: 10, max: 10, id: 'remaining-salvo-random-direction', label: 'Chaque point de Salve restant tire dans une direction aléatoire à une distance de d100 yards; les personnages sur la trajectoire font un Test de Esquive Très Difficile (−30).' }
+  { min: 10, max: 10, id: 'remaining-salvo-random-direction', label: 'Chaque point de Salve restant tire dans une direction aléatoire à une distance de d100 yards; les personnages sur la trajectoire font un Test de Esquive Très Difficile (−3 DR).' }
 ]);
 
 export const V5_FUMBLE_TABLE_VERSION = 'v5-oops-165-v1';

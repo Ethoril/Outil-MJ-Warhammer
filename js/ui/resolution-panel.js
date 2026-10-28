@@ -1576,7 +1576,7 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
     ||(testWeapon?.baseId==='weapon-armes-corps-a-corps-armes-d-hast-mancatcher-2m'?'mancatcher':null);
   if(type==='test'&&action?.attr==='F'&&testWeaponKind==='mancatcher'){
     contextField(fields,'actor','entanglementTest','Test de Force pour immobiliser avec le Mancatcher');
-    if(testWeapon.extensions?.v5?.springLoaded!==true)contextField(fields,'actor','springLoaded','Mancatcher équipé du ressort (+20)');
+    if(testWeapon.extensions?.v5?.springLoaded!==true)contextField(fields,'actor','springLoaded','Mancatcher équipé du ressort (+2 DR)');
   }
   if(type==='attack'&&(action?.qualities||[]).some(row=>(typeof row==='string'?row:row?.id)==='dispersion')){
     const current=draft.v5Context||{},range=node('label','workspace-type','Dispersion : bande choisie par le MJ'),select=document.createElement('select');

@@ -1720,7 +1720,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       if(record.amputationShockStatus==='not-occurred')continue;
       const preview=Store.previewAmputationShock?.({participantId:participant.id,criticalId:record.id});
       if(preview?.status==='deferred')continue;
-      if(preview?.status!=='duplicate'&&preview?.requirements?.length)amputationFollowups.push({participant,record,requirements:preview.requirements,shockPart:preview.shockPart});
+      if(preview?.status!=='duplicate'&&preview?.requirements?.length)amputationFollowups.push({participant,record,requirements:preview.requirements,shockPart:preview.shockPart||preview.requirements[0]?.part});
     }
     if(amputationFollowups.length){
       const section=node('section','workspace-card workspace-amputation-followups');section.setAttribute('aria-label','Chocs d’amputation à résoudre');

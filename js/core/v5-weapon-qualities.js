@@ -61,7 +61,9 @@ export function previewV5ImpaleProjectile({ qualities = [], ranged = false, crit
     const weapon = fold(`${weaponCategory || ''} ${weaponName || ''}`);
     const generic = /arbal[eè]te|crossbow/u.test(weapon) ? 'carreau'
       : /(?:^|\s)arc(?:\s|$)|bow/u.test(weapon) ? 'fleche'
-      : /poudre noire|black ?powder|ingenierie|engineering/u.test(weapon) ? 'balle' : '';
+      : /baliste|ballista/u.test(weapon) ? 'carreau'
+      : /poudre noire|black ?powder|ingenierie|engineering|canon|cannon|mitrailleuse|clattergun/u.test(weapon) ? 'balle'
+      : /lancer|thrown|javelot|javelin|flechette|dart/u.test(weapon) ? 'arme-lancee' : '';
     if (!generic || typeof weaponId !== 'string' || !weaponId)
       return blocked('Empaleuse : munition suivie ou profil d’arme permettant de déduire le projectile requis.');
     ammo = generic;
@@ -115,7 +117,7 @@ const fold = value => String(value ?? '').normalize('NFD').replace(/[\u0300-\u03
 /** Parse the catalogued V5 Inflict parameter; do not infer a state from an item name. */
 export function parseV5Inflict(value, actorStrength) {
   const text = String(value ?? '').trim();
-  const parts = text.split(/\s*,\s*/u);
+  const parts = text.split(/\s*[,;]\s*/u);
   if (parts.length > 1) {
     const parsed = parts.map(part => parseV5Inflict(part, actorStrength));
     const failed = parsed.find(row => !row.ready);
@@ -273,10 +275,12 @@ export function calculateV5ArmorPenalty({ worn = [] } = {}) {
   // Do not infer it from material/category: some Ithilmar, Dragon, and Gromril
   // entries carry no such note.
   const foldText=value=>String(value??'').normalize('NFD').replace(/[\u0300-\u036f]/gu,'').toLowerCase();
-  const stealth=active.some(row=>/(?:-1\s*dr\s+en\s+discretion|-1\s*sl\s+to\s+stealth)/u.test(foldText(row?.notes)));
+  // One penalty per marked category (mail, plate): wearing both costs -2.
+  const marked=active.map(row=>foldText(row?.notes)).filter(text=>/(?:-1\s*dr\s+en\s+discretion|-1\s*sl\s+to\s+stealth)/u.test(text));
+  const stealthCategories=new Set(marked.map(text=>/mailles|chain/u.test(text)?'mail':/plates|plate/u.test(text)?'plate':text));
   const closedHelm=active.some(row=>row?.category==='closed-helm'||row?.locations?.includes('head')&&row?.keywords?.some(word=>(typeof word==='string'?word:word?.id)==='impenetrable'));
   const perception = closedHelm ? 2 : 0;
-  return result({ stealthDr: stealth ? -1 : 0, perceptionDr: perception ? -perception : 0 });
+  return result({ stealthDr: stealthCategories.size ? -stealthCategories.size : 0, perceptionDr: perception ? -perception : 0 });
 }
 
 export function naturalWeaponDefaults({ reach, qualities, natural = true } = {}) {

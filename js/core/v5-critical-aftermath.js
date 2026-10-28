@@ -182,7 +182,7 @@ export function previewSuddenDeath(participant, {
   tableOptionEnabled = false, secondaryNpcConfirmed = false
 } = {}) {
   if (tableOptionEnabled !== true) return { status: 'disabled', ready: false, reason: 'Option Mort subite désactivée.' };
-  if (!participant?.id || participant.kind !== 'PNJ' || secondaryNpcConfirmed !== true || hasLuckTalent(participant)) {
+  if (!participant?.id || !['PNJ', 'Créature'].includes(participant.kind) || secondaryNpcConfirmed !== true || hasLuckTalent(participant)) {
     return { status: 'ineligible', ready: false, reason: 'Mort subite réservée aux PNJ secondaires sans Talent Chanceux.' };
   }
   if (Number(participant.hp) !== 0) return { status: 'ineligible', ready: false, reason: 'Mort subite disponible seulement à 0 Blessure.' };

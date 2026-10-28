@@ -130,7 +130,7 @@ function participantEffects(normalized, context, resolution = {}) {
     const reload=Number(context.weaponReload??item?.reload??item?.extensions?.v5?.reload);
     if(!Number.isInteger(reload)||reload<1)unresolved.push('Arquebuse à salve : valeur Recharge requise pour calculer les succès restants.');
     else if(!item?.id)unresolved.push('Arquebuse à salve : liez l’exemplaire d’arme pour enregistrer la progression de Recharge.');
-    else if(resolution.success===true)effects.push({type:'reload-progress',targetId:actorId,equipmentId:item?.id,successes:1,requiredSuccesses:reload*(context.crewCount===1?2:1),crewCount:context.crewCount||2});
+    else if(resolution.success===true)effects.push({type:'reload-progress',targetId:actorId,equipmentId:item?.id,successes:1+Math.max(0,Number(resolution.sl)||0),requiredSuccesses:reload*(context.crewCount===1?2:1),crewCount:context.crewCount||2});
     else reminders.push('Rechargement raté : aucun succès de Recharge ajouté.');
   }
   if (firing && isGriffonsfoot) {

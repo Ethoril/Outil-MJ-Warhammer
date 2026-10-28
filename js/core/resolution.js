@@ -520,6 +520,14 @@ export function previewHpLoss(preview) {
 }
 
 /** Resolve and compare through the same pure V5 action calculation. No random draw. */
+// Incidental damage (fumbles, detonations) has no attack roll: Weak Points and
+// Partial need one, so they are read as a non-critical hit and fall back to the
+// piece's printed AP instead of silently counting no armour at all.
+function incidentalArmour(participant, location) {
+  const guard=locationProtection(participant,{location,critical:false,ranged:false,defenseProvided:false});
+  return guard.ap??guard.baseAp??0;
+}
+
 export function previewResolution(input) {
   const initial=normalizeResolutionInput(input);
   if(initial.v5?.context?.grappleAction){
@@ -1829,7 +1837,7 @@ export function applyResolution(preview, currentState) {
     const addPending=entry=>{const rows=updated.extensions.v5.combatEffects||[];updated.extensions.v5.combatEffects=[...rows,{...entry,id:`${preview.resolutionId}:fumble:${rows.length}`}];};
     if(effect.type==='bomb-explosion-target'){
       if(JSON.stringify(live)!==JSON.stringify(effect.targetSnapshot))return {status:'stale',requiresPreview:true,state:clone(currentState),resolution:clone(preview)};
-      const damage=Math.max(0,Number(effect.damage)||0),toughness=Math.floor((Number(updated.caracs?.E)||0)/10),armour=locationProtection(updated,{location:{key:'BODY'}}).ap||0;
+      const damage=Math.max(0,Number(effect.damage)||0),toughness=Math.floor((Number(updated.caracs?.E)||0)/10),armour=incidentalArmour(updated,{key:'BODY'});
       updated.hp=Math.max(0,(Number(updated.hp)||0)-Math.max(0,damage-toughness-armour));
       const historyEntry={resolutionId:preview.resolutionId,equipmentId:preview.input.v5?.context?.bombEquipmentId||null,targetId:effect.targetId,damage,appliedDamage:Math.max(0,damage-toughness-armour),round:preview.input.round||null,source:'L13-0117'};
       if(effect.sourceActorId===updated.id){updated.extensions.v5.combatEffects=(updated.extensions.v5.combatEffects||[]).filter(row=>row.id!==effect.bombEffectId);updated.extensions.v5.bombDetonationHistory=[...(updated.extensions.v5.bombDetonationHistory||[]),historyEntry].slice(-100);}
@@ -1852,12 +1860,12 @@ export function applyResolution(preview, currentState) {
       const location=effect.location==='torse'?{key:'BODY'}:effect.location==='bras-principal'&&['left','right'].includes(effect.armSide)?{key:'ARM',side:effect.armSide}:null;
       const damage=Math.max(0,Number(effect.damage??preview.input.action?.damage)||0);
       if(!location)return {status:'manual',reason:'bras-directeur-inconnu',state:clone(currentState),resolution:clone(preview)};
-      const toughness=Math.floor((Number(updated.caracs?.E)||0)/10), armour=locationProtection(updated,{location}).ap||0;
+      const toughness=Math.floor((Number(updated.caracs?.E)||0)/10), armour=incidentalArmour(updated,location);
       updated.hp=Math.max(0,(Number(updated.hp)||0)-Math.max(0,damage-toughness-armour));
     } else if(effect.type==='salvo-hit'){
       const locationMap={head:{key:'HEAD'},body:{key:'BODY'},left:{key:'ARM',side:'left'},right:{key:'ARM',side:'right'},'left-arm':{key:'ARM',side:'left'},'right-arm':{key:'ARM',side:'right'},'left-leg':{key:'LEG',side:'left'},'right-leg':{key:'LEG',side:'right'}};
       const location=locationMap[effect.location];if(!location)return{status:'manual',reason:'salvo-hit-location-required',state:clone(currentState),resolution:clone(preview)};
-      const damage=Math.max(0,Number(effect.damage)||0)+Math.max(0,Number(effect.effectiveSL)||0),toughness=Math.floor((Number(updated.caracs?.E)||0)/10),armour=locationProtection(updated,{location}).ap||0,appliedDamage=Math.max(0,damage-toughness-armour);
+      const damage=Math.max(0,Number(effect.damage)||0)+Math.max(0,Number(effect.effectiveSL)||0),toughness=Math.floor((Number(updated.caracs?.E)||0)/10),armour=incidentalArmour(updated,location),appliedDamage=Math.max(0,damage-toughness-armour);
       updated.hp=Math.max(0,(Number(updated.hp)||0)-appliedDamage);
     } else if(effect.type==='salvo-artillery-destroyed'){
       const equipmentId=effect.equipmentId||preview.input.action?.extensions?.fiche?.equipmentId,item=updated.equipment?.find(row=>row.id===equipmentId);
@@ -1901,7 +1909,7 @@ export function applyResolution(preview, currentState) {
         if(critical.parsed?.reminders?.length)addPending({kind:'critical-follow-up',location:'ARM',reminders:critical.parsed.reminders,source:'L13-0179'});
       }
     } else if(effect.type==='hit-ally'){
-      const damage=Math.max(0,Number(effect.damage)||0), toughness=Math.floor((Number(updated.caracs?.E)||0)/10), armour=locationProtection(updated,{location:{key:'BODY'}}).ap||0;
+      const damage=Math.max(0,Number(effect.damage)||0), toughness=Math.floor((Number(updated.caracs?.E)||0)/10), armour=incidentalArmour(updated,{key:'BODY'});
       updated.hp=Math.max(0,(Number(updated.hp)||0)-Math.max(0,damage+effect.unitsRoll-toughness-armour));
     } else addPending({kind:effect.type,...effect,createdRound:preview.input.round||null});
     nextState.participants=participantListWithUpdate(nextState,updated.id,updated);

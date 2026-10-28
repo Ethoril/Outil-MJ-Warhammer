@@ -496,8 +496,9 @@ test('F2-E revue — Volley Gun Salvo 7, Recharge 4 sans astérisque remplit le 
   }
   revisions.push(shooter.equipment[0].extensions.v5.reloadState.shotsRemaining);
   assert.equal(revisions[0],0,'Salvo 7 reaches empty before this full Recharge');
+  // Reload Tests at +0 SL: one success each under the MJ rule (1 + positive SL).
   for(let i=1;i<=4;i++){
-    const preview=previewResolution({actor:shooter,action:{type:'test',base:50,note:'Arquebuse à salve',extensions:{fiche:{equipmentId:'volley'}}},roll:20,round:1,resolutionId:`volley-reload-${i}`,
+    const preview=previewResolution({actor:shooter,action:{type:'test',base:50,note:'Arquebuse à salve',extensions:{fiche:{equipmentId:'volley'}}},roll:50,round:1,resolutionId:`volley-reload-${i}`,
       v5:{kind:'test',context:{reloading:true,crewCount:2,moved:false,weaponReload:4}},baseRevision:applied.state.revision});
     assert.equal(preview.unresolved.length,0,preview.unresolved.join('; '));
     applied=run(preview,{revision:applied.state.revision,round:1,participants:applied.state.participants});shooter=applied.state.participants.find(row=>row.id==='shooter');
