@@ -351,3 +351,11 @@ test('Store application of the Immersion keeps Suffocation and the Strength 59 E
   assert.ok(after.states.some(row => row.key === 'suffocation'));
   assert.equal(after.states.find(row => row.key === 'enchevetre')?.strength, 59);
 });
+
+test('Gravelord options follow Hans Grüber whatever the Unicode form of his name (L18 p.113)', () => {
+  const nfd = planBestiaryProfileAbility({ name: 'Hans Gru\u0308ber' }, 'gravelord-variants');
+  assert.notEqual(nfd.available, false);
+  assert.match(nfd.reminders.join(' '), /Fantôme.*Banshee.*Instable.*Volonté/);
+  assert.equal(planBestiaryProfileAbilities({ name: 'Hans Gru\u0308ber' }).length, 1);
+  assert.equal(planBestiaryProfileAbility({ name: 'Wizard' }, 'gravelord-variants').available, false);
+});

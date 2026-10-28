@@ -8,12 +8,14 @@ import { F2_H_PROFILE_ABILITIES } from '../data/f2-h-profile-abilities.js';
 const BY_ID = new Map(CREATURE_ABILITIES.map(entry => [entry.id, entry]));
 const F2_H_BY_KEY = new Map(F2_H_PROFILE_ABILITIES.map(entry => [entry.key, entry]));
 
+const sameName = value => String(value ?? '').normalize('NFC').trim().toLowerCase();
+
 /** Plan d'une règle F2-H sur son profil propriétaire. Les résultats ne sont proposés que si les faits de scène sont fournis. */
 export function planBestiaryProfileAbility(participant, key, context = {}) {
   const rule = F2_H_BY_KEY.get(key);
   const profileId = participant?.profileId ?? participant?.extensions?.v5?.bestiary?.id ?? participant?.extensions?.v5?.bestiary?.profileId;
   const name = String(participant?.name ?? '').normalize('NFC').toLowerCase();
-  const scoped = rule && (rule.profileId ? profileId === rule.profileId : rule.profileName && name === rule.profileName.toLowerCase());
+  const scoped = rule && (rule.profileId ? profileId === rule.profileId : rule.profileName && name === sameName(rule.profileName));
   if (!rule || !scoped) return { key, available: false, effects: [], reminders: [], unresolved: [], receipt: { ability: rule?.label ?? key, blocked: ['profil non concerné'] } };
 
   const plan = { key, label: rule.label, available: true, effects: [], reminders: [], unresolved: [], receipt: null };
@@ -69,7 +71,7 @@ export function planBestiaryProfileAbility(participant, key, context = {}) {
 export function planBestiaryProfileAbilities(participant, context = {}) {
   return F2_H_PROFILE_ABILITIES.filter(rule => rule.profileId
     ? (participant?.profileId ?? participant?.extensions?.v5?.bestiary?.id ?? participant?.extensions?.v5?.bestiary?.profileId) === rule.profileId
-    : rule.profileName && String(participant?.name ?? '').toLowerCase() === rule.profileName.toLowerCase()
+    : rule.profileName && sameName(participant?.name) === sameName(rule.profileName)
   ).map(rule => planBestiaryProfileAbility(participant, rule.key, context));
 }
 
