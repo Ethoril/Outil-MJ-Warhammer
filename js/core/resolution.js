@@ -1488,6 +1488,10 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   }
   // Côté cible, seuls les rappels utiles à qui l'attaque (feu du Léviathan, options de Grüber) ; ses propres attaques restent à son tour.
   const DEFENSIVE_TARGET_RULES = new Set(['black-leviathan-fire', 'gravelord-variants']);
+  // Crâne volant à 0 Blessure (L18 p.107) : redevient un crâne ordinaire, appliqué seulement après confirmation du MJ.
+  const skullAtZero = targetProfileAbilityPlans.some(plan => plan.effects.some(effect => effect.transformation === 'crâne ordinaire'));
+  const skullReversion = skullAtZero && profileAbilityContext.skullReversionConfirmed === true ? { targetId: target.id } : null;
+  if (skullAtZero && !skullReversion) lassoReminders.push('Crâne inerte : à 0 Blessure, le crâne redevient un crâne ordinaire ; cochez la confirmation du MJ pour l’appliquer.');
   const profileAbilityReminders = [...profileAbilityPlans, ...targetProfileAbilityPlans.filter(plan => DEFENSIVE_TARGET_RULES.has(plan.key))].flatMap(plan => plan.reminders).concat(lassoReminders);
   // Grands félins (L23 p.87) : Frappe mortelle (V4 p.160) sur toute frappe de mêlée réussie, quelle que soit la Taille ; au plus BCC attaques en chaîne.
   const deathblow = hit && target && !replacement && actorPlan.kind === 'melee' && action.extensions?.v5?.deathblow === true
@@ -1827,6 +1831,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     weaponConditions,
     profileAbilityPlans: [...profileAbilityPlans, ...targetProfileAbilityPlans],
     deathblow,
+    skullReversion,
     championSlayerDuel: championSlayerGain ? { participantId: actor.id, targetId: target.id } : null,
     supplementalEquipment,
     weaponReload,
@@ -2019,6 +2024,7 @@ export function applyResolution(preview, currentState) {
     }
     const oldHp = Number(updated.hp) || 0;
     updated.hp = Math.max(0, oldHp - previewHpLoss(preview) - (preview.tripFall?.damageLoss||0) - (preview.tripFall?.extraCriticalWounds||0));
+    if(preview.skullReversion?.targetId===updated.id){updated.hp=0;updated.extensions??={};updated.extensions.v5={...(updated.extensions.v5||{}),dead:true,inanimateAs:'crâne ordinaire'};}
     if(preview.lethalDeath?.targetId===updated.id){updated.hp=0;updated.extensions??={};updated.extensions.v5={...(updated.extensions.v5||{}),dead:true};}
     if(preview.tripFall){updated.extensions??={};updated.extensions.v5={...(updated.extensions.v5||{}),mounted:false};}
     const disguise=(preview.supplementalEquipment?.effects||[]).find(row=>row.participantId===updated.id&&row.disguiseAs);

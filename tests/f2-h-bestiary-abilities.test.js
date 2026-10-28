@@ -551,3 +551,28 @@ test('Champion Slayer is not spent while Wulfrik already holds Momentum, and tar
     defense: { base: 10, roll: 95, v5: { kind: 'test' } }, v5: { kind: 'melee', context: {} } });
   assert.ok(!onSea.reminders.some(text => /immergé|Suffocation/.test(text)), JSON.stringify(onSea.reminders));
 });
+
+test('All three Flying Death Skull profiles revert at 0 Wounds, applied by the Store only after GM confirmation (F4, MJ 28/10)', async () => {
+  for (const id of ['E0-P-565', 'E0-P-567', 'E0-P-758']) {
+    const skull = { ...p(id), id: 'skull-' + id, name: 'Crâne ' + id, kind: 'PNJ', camp: 'ennemi', zone: 'active', hp: 3, maxHp: 3 };
+    const hero = { id: 'hero-' + id, name: 'Héros', kind: 'PJ', camp: 'pj', zone: 'active', caracs: { CC: 60, F: 40 }, skills: [], equipment: [], states: [], armor: { head: 0, body: 0, arms: 0, legs: 0 } };
+    const persistence = { async load() { return null; }, async saveAtomic() { return { ok: true }; } };
+    const store = createStore({ persistence }); await store.ready;
+    await store.addParticipant(hero); await store.addParticipant(skull);
+    const probe = d => store.previewResolution({ resolutionId: 'probe-' + id, actorId: hero.id, targetId: skull.id,
+      action: { type: 'attack', name: 'Épée', base: 60, damage: d, qualities: [] }, roll: 12, defense: { base: 10, roll: 95, v5: { kind: 'test' } }, v5: { kind: 'melee', context: {} } }).damage;
+    const shape = probe(10);
+    const exact = 3 - shape.sl + shape.be + shape.paEffectif; // amène le crâne pile à 0, sans excédent ni second critique
+    const run = (confirmed, rid) => store.previewResolution({ resolutionId: rid, actorId: hero.id, targetId: skull.id,
+      action: { type: 'attack', name: 'Épée', base: 60, damage: exact, qualities: [] }, roll: 12,
+      defense: { base: 10, roll: 95, v5: { kind: 'test' } }, v5: { kind: 'melee', context: { f2h: confirmed ? { skullReversionConfirmed: true } : {} } } });
+    const asked = run(false, 'ask-' + id);
+    assert.equal(asked.skullReversion, null, id);
+    assert.ok(asked.reminders.some(text => /Crâne inerte/.test(text)), id);
+    const confirmed = run(true, 'yes-' + id);
+    const applied = await store.applyResolution(confirmed);
+    assert.equal(applied.status, 'applied', JSON.stringify({ id, reason: applied.reason, unresolved: confirmed.unresolved, choice: confirmed.choiceRequired }));
+    const after = store.listParticipants().find(row => row.id === skull.id);
+    assert.equal(after.extensions.v5.inanimateAs, 'crâne ordinaire', id);
+  }
+});

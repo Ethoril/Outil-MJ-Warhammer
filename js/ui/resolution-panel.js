@@ -1565,6 +1565,7 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
       addCheck('fatigued', 'Gargantuan Fatigué (décharge réduite à 6 dégâts)');
       section.append(node('p', 'workspace-muted', 'Décharge : dépensez 1 Élan. Les règles de constriction de navire et les dégâts à son équipage restent des rappels.'));
     }
+    if (['E0-P-565', 'E0-P-567', 'E0-P-758'].includes(f2hTargetId)) addCheck('skullReversionConfirmed', 'MJ : à 0 Blessure, le crâne redevient un crâne ordinaire');
     if (f2hTargetId === 'E0-P-916') addChoice('fireSize', 'Feu face au Léviathan noir', [['À préciser', ''], ['Torche ou plus petit', 'torch'], ['Grand feu de joie', 'bonfire']]);
     if (f2hActorId === 'E0-P-921') {
       addCheck('targetChaosFollower', 'La cible est adepte du Chaos (Test social)');
