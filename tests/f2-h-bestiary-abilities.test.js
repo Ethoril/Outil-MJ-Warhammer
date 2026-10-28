@@ -458,3 +458,26 @@ test('Sea Elemental keeps its Ablaze immunity after spell layers rewrite its imm
   const other = acquireV5Conditions(p('E0-P-910'), [{ name: 'Enflammé', level: 1, source: { kind: 'spell' } }], { resolutionId: 'garg-fire', round: 1 });
   assert.equal(other.acquiredInstances, 1);
 });
+
+test('Escaping the Immersion also ends its Suffocation, and the death countdown is cleared (M2)', async () => {
+  const { recoverV5Condition } = await import('../js/core/v5-effects.js');
+  const source = { kind: 'bestiary-profile', ability: 'sea-elemental-immersion' };
+  const victim = { id: 'held-water', name: 'Immergé', hp: 3, maxHp: 10, caracs: { E: 30, F: 30 }, extensions: { v5: { suffocationDeathDueRound: 9 } },
+    states: [{ id: 'imm-ent', key: 'enchevetre', name: 'Enchevêtré', level: 1, strength: 59, source }, { id: 'imm-suf', key: 'suffocation', name: 'Suffocation', level: 1, source }] };
+  const escaped = recoverV5Condition(victim, 'imm-ent', { method: 'opposed-strength', test: { success: true, sl: 1 } });
+  assert.deepEqual(escaped.participant.states, []);
+  assert.equal(escaped.participant.extensions.v5.suffocationDeathDueRound, undefined);
+  const surfaced = recoverV5Condition({ ...victim, states: [victim.states[1]] }, 'imm-suf', { method: 'cause-ended', causeEnded: true });
+  assert.deepEqual(surfaced.participant.states, []);
+});
+
+test('Suffocation countdown starts on an already Unconscious victim and a stale countdown is cleared (M3)', async () => {
+  const { advanceV5Effects } = await import('../js/core/v5-effects.js');
+  const suffocating = { id: 'suf', key: 'suffocation', name: 'Suffocation', level: 1 };
+  const out = { id: 'ko', key: 'inconscient', name: 'Inconscient', level: 1 };
+  const already = advanceV5Effects({ id: 'ko-victim', name: 'KO', hp: 0, maxHp: 10, caracs: { E: 30 }, states: [suffocating, out], extensions: { v5: {} } }, { phase: 'endOfRound', round: 4 });
+  assert.equal(already.participant.extensions.v5.suffocationDeathDueRound, 7);
+  assert.ok(!already.death);
+  const stale = advanceV5Effects({ id: 'old', name: 'Ancien', hp: 5, maxHp: 10, caracs: { E: 30 }, states: [], extensions: { v5: { suffocationDeathDueRound: 4 } } }, { phase: 'endOfRound', round: 20 });
+  assert.equal(stale.participant.extensions.v5.suffocationDeathDueRound, undefined);
+});

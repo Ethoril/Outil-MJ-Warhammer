@@ -10,7 +10,7 @@ const METHODS = {
   brise: [['cool','Test de Calme'],['hiding','Un Round entier caché']], enflamme: [['athletics','Test d’Athlétisme']],
   enchevetre: [['opposed-strength','Test de Force opposé']], sonne: [['endurance','Test de Résistance'],['medical-attention','Soins reçus']],
   assourdi: [['endurance','Test de Résistance après une minute']], empoisonne: [['endurance','Test de Résistance'],['heal','Test de Guérison']],
-  aveugle: [['cause-ended','Cause disparue'],['medical-attention','Soins reçus']], inconscient: [['cause-ended','Cause disparue']]
+  aveugle: [['cause-ended','Cause disparue'],['medical-attention','Soins reçus']], inconscient: [['cause-ended','Cause disparue']], suffocation: [['cause-ended','De nouveau à l’air libre']]
 };
 export function recoveryMethodsFor(condition) {
   const key = String(condition.key || condition.name || '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[ -]+/g,'-');

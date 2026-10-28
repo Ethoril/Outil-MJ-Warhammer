@@ -234,7 +234,7 @@ export function recoverV5Condition(participant,condition,options={}) {
   else if(key==='sonne' && candidates.some(s=>s.recoveryStat==='Int')) tested(['intelligence']);
   else if(['sonne','assourdi'].includes(key)&&method==='endurance')tested(['endurance']);
   else if(key==='empoisonne')tested(['endurance','heal']);
-  else if(['aveugle','inconscient'].includes(key)&&method==='cause-ended'){
+  else if(['aveugle','inconscient','suffocation'].includes(key)&&method==='cause-ended'){
     if(options.causeEnded!==true)needs(needsInput,'causeEnded','Disparition de la cause confirmée');else amount=options.amount??Number.MAX_SAFE_INTEGER;
   }
   else if(['aveugle','sonne','hemorragique'].includes(key)&&method==='medical-attention'&&options.medicalAttention===true)amount=options.amount??1;
@@ -243,6 +243,11 @@ export function recoverV5Condition(participant,condition,options={}) {
   // Removing Unconscious with Fortune does not resolve its cause.
   if(key==='inconscient'&&method==='fortune'&&options.causeEnded!==true)reminders.push('Si sa cause persiste, Inconscient revient en fin de Round.');
   const removal=removeInstances(states,key,amount,method==='cut-silk'?state=>eligible(state)&&state.source?.ability==='cliff-spider-lasso':eligible);next.states=removal.states;
+  // Sortir de l'Immersion (L25 p.142) remet la victime à l'air : sa Suffocation part avec l'Enchevêtré.
+  if(key==='enchevetre'&&removal.removed.length&&!levels(next.states,'enchevetre')&&states.some(state=>keyOf(state)==='enchevetre'&&state.source?.ability==='sea-elemental-immersion')){
+    const air=removeInstances(next.states,'suffocation',Number.MAX_SAFE_INTEGER,state=>state.source?.ability==='sea-elemental-immersion');next.states=air.states;removal.removed.push(...air.removed);
+  }
+  if(!levels(next.states,'suffocation')&&next.extensions?.v5?.suffocationDeathDueRound!==undefined){next.extensions={...next.extensions,v5:{...next.extensions.v5}};delete next.extensions.v5.suffocationDeathDueRound;}
   if(['empoisonne','inconscient'].includes(key)&&removal.removed.length&&!levels(next.states,key)&&next.extensions?.v5?.poisonDeathDueRound!==undefined){
     next.extensions={...next.extensions,v5:{...next.extensions.v5}};delete next.extensions.v5.poisonDeathDueRound;
   }
@@ -423,9 +428,13 @@ export function advanceV5Effects(participant,transition={},inputs={}) {
         }else{
           const due=next.extensions?.v5?.suffocationDeathDueRound;
           if(Number.isSafeInteger(due)&&transition.round>=due){death=true;reminders.push('Suffocation : BE Rounds écoulés sans air, mort à confirmer par le MJ.');}
+          else if(!Number.isSafeInteger(due)){
+            const be=toughnessBonus(next,inputs.toughnessBonus,needsInput);
+            if(be!==null){next.extensions={...(next.extensions||{}),v5:{...(next.extensions?.v5||{}),suffocationDeathDueRound:transition.round+be}};reminders.push(`Suffocation : déjà Inconscient ; mort par asphyxie au Round ${transition.round+be} si rien ne change.`);}
+          }
         }
       }
-    }
+    }else if(next.extensions?.v5?.suffocationDeathDueRound!==undefined){next.extensions={...next.extensions,v5:{...next.extensions.v5}};delete next.extensions.v5.suffocationDeathDueRound;}
     if(levels(next.states,'sonne'))reminders.push('Fin de Round : Résistance +0 DR peut retirer Sonné.');
     if(poison)reminders.push('Fin de Round : Résistance peut retirer Empoisonné ; difficulté selon le poison.');
     if(levels(next.states,'brise'))reminders.push('Hors engagement : Calme en fin de Round ou Round entier caché pour retirer Brisé.');
