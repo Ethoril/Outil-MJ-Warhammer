@@ -13,7 +13,7 @@ function memory() {
   };
 }
 
-test('F2-L characterization — first PJ fiche binding adopts one spent anonymous scene balance; copies remain separate before binding', async () => {
+test('F2-L characterization — anonymous PJ scene balances stay separate until MJ resolves first fiche binding', async () => {
   const persistence = memory(), store = createStore({ persistence }); await store.ready;
   await store.addProfile({ id: 'binding-pj', name: 'PJ sans fiche', kind: 'PJ', hp: 20, maxHp: 20 });
   await store.addProfile({ id: 'binding-npc', name: 'Modèle PNJ', kind: 'PNJ', hp: 20, maxHp: 20 });
@@ -42,17 +42,25 @@ test('F2-L characterization — first PJ fiche binding adopts one spent anonymou
   await store.launchEncounter('binding-scene-b');
   const secondPj = store.listParticipants().find(row => row.profileId === 'binding-pj');
   const secondNpc = store.listParticipants().find(row => row.profileId === 'binding-npc');
+  await store.setFortune(secondPj.id, 4);
   assert.notEqual(firstPjIdentity, store.getFortune(secondPj.id).characterId,
     'PJ scene copies without a persistent identity are still independent before explicit binding');
   assert.notEqual(firstNpcIdentity, store.getFortune(secondNpc.id).characterId,
     'anonymous PNJ scene copies remain independent');
-  assert.equal(store.getFortune(secondPj.id).balance, null);
+  assert.equal(store.getFortune(secondPj.id).balance, 4);
   assert.equal(store.getFortune(secondNpc.id).balance, null);
 
-  await store.applyFicheSync([{ profileId: 'binding-pj', snapshot: ficheSnapshot('binding-fiche', { nom: 'PJ sans fiche', chance: '9' }) }]);
+  const firstBinding = [{ profileId: 'binding-pj', snapshot: ficheSnapshot('binding-fiche', { nom: 'PJ sans fiche', chance: '9' }) }];
+  await assert.rejects(store.applyFicheSync(firstBinding), /copies de ce PJ ont des soldes de Chance différents/,
+    'different independent scene balances require an explicit MJ choice');
+  assert.match(store.getFortune(secondPj.id).characterId, /^copy:/,
+    'the rejected association leaves the second copy anonymous and its balance intact');
+  assert.equal(store.getFortune(secondPj.id).balance, 4);
+  await store.setFortune(secondPj.id, 2);
+  await store.applyFicheSync(firstBinding);
   assert.equal(store.getFortune(secondPj.id).characterId, 'fiche:binding-fiche');
   assert.equal(store.getFortune(secondPj.id).balance, 2,
-    'an explicit, unique PJ binding adopts the only existing local Fortune pool from its suspended copy');
+    'after the MJ equalizes the scene copies, the explicit PJ binding preserves their spent balance');
   assert.equal(store.getFortune('binding-pj').balance, 2);
   const envelope = JSON.parse(store.getFullJSON());
   const suspendedNpc = envelope.suspendedScenes[0].participants.find(row => row.id === firstNpc.id);
