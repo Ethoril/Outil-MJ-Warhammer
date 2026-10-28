@@ -872,7 +872,8 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   const explicitWeaponTest=(context.firing===true||context.reloading===true)&&linkedFumbleWeaponIsRanged&&!socialTest
     &&(!fumbleSkillId||rangedSkill)
     &&(!action.attr||['CT','Ag'].includes(action.attr));
-  const combatFumbleTableEligible=attackType(action.type)&&!socialTest||qualifiedCombatTest||explicitWeaponTest;
+  // Lasso de soie : aucune attaque n'est lancée (L22 p.73), donc aucune maladresse de combat.
+  const combatFumbleTableEligible=action.extensions?.v5?.specialProfileAbility!=='cliff-spider-lasso'&&(attackType(action.type)&&!socialTest||qualifiedCombatTest||explicitWeaponTest);
   const combatFailure = previewCombatFailure({ normalized, roll, fumble: combatFumbleTableEligible && !success && fumbleClassification.maladresse ? fumbleClassification : null, context, hit, success, sl });
   let engagedShot=null,engagedUnresolved=[],lethalDeath=null,lethalUnresolved=[];
   if(actorPlan.kind==='ranged'&&context.targetEngaged===true&&actorTest.advantage?.net<0&&actorTest.optionId==='reverse'&&!hit){
@@ -1434,6 +1435,14 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   const effectiveProfileAbilityContext = { ...profileAbilityContext, test: action.name || action.skillName || '', critical: profileAbilityContext.wulfrikHeadCritical === true, specialAction: action.extensions?.v5?.specialProfileAbility ?? null };
   const profileAbilityPlans = planBestiaryProfileAbilities(actor, effectiveProfileAbilityContext);
   const targetProfileAbilityPlans = planBestiaryProfileAbilities(target, profileAbilityContext);
+  const lassoReminders = [];
+  // Lasso de soie (L22 p.73) : aucun jet d'attaque, seule l'Esquive +0 de la cible compte ; un Enchevêtré par DR d'échec, au moins 1 (E5/E6).
+  if (target && !replacement && action.extensions?.v5?.specialProfileAbility === 'cliff-spider-lasso') {
+    const failure = defenderTest ? (defenderTest.success ? 0 : Math.max(1, -Number(defenderTest.sl || 0))) : profileAbilityContext.cliffSpiderFailureSL;
+    if (Number.isSafeInteger(failure) && failure > 0) targetConditionApplication.push({ id: `${normalized.resolutionId}:f2h:cliff-spider`, key: 'enchevetre', name: 'Enchevêtré', level: failure, strength: Number(actor?.caracs?.F) || 45, source: { kind: 'bestiary-profile', ability: 'cliff-spider-lasso', authorId: actor?.id } });
+    else if (defenderTest?.success) lassoReminders.push('Lasso de soie : Esquive réussie, la cible échappe à la soie.');
+    else if (!defenderTest) unresolved.push('Araignée de falaise : jouer le Test d’Esquive +0 de la cible (ou saisir ses niveaux d’échec).');
+  }
   if (hit && target && !replacement) {
     const profileId = actor?.extensions?.v5?.bestiary?.id || actor?.profileId;
     const specialAbility = action.extensions?.v5?.specialProfileAbility;
@@ -1448,11 +1457,6 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
         supplementalActorConditions.push({ id: `${normalized.resolutionId}:f2h:gargantuan-fatigued`, key: 'extenue', name: 'Exténué', level: 1, source: { kind: 'bestiary-profile', ability: specialAbility, authorId: actor?.id } });
       else if (profileAbilityContext.selfEnduranceSuccess !== true)
         unresolved.push('Décharge électrique : saisir le résultat du Test d’Endurance Moyenne (+20) du Gargantuan.');
-    }
-    if (specialAbility === 'cliff-spider-lasso') {
-      const failure = profileAbilityContext.cliffSpiderFailureSL;
-      if (Number.isSafeInteger(failure) && failure > 0) targetConditionApplication.push({ id: `${normalized.resolutionId}:f2h:cliff-spider`, key: 'enchevetre', name: 'Enchevêtré', level: failure, strength: Number(actor?.caracs?.F) || 45, source: { kind: 'bestiary-profile', ability: specialAbility, authorId: actor?.id } });
-      else unresolved.push('Araignée de falaise : saisir les niveaux d’échec du Test d’Esquive pour fixer les Enchevêtrés.');
     }
     if (specialAbility === 'farmyard-beast-spit') {
       const resistance = profileAbilityContext.farmyardResistance;
@@ -1473,7 +1477,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
       targetConditionApplication.push({ id: `${normalized.resolutionId}:f2h:creature-venom`, key: 'empoisonne', name: 'Empoisonné', level: 1, recoveryDifficulty: venom?.parameter || venom?.rating || null, source: { kind: 'bestiary-profile', ability: 'merwyrm-fanged-maw-venom', authorId: actor?.id } });
     }
   }
-  const profileAbilityReminders = [...profileAbilityPlans, ...targetProfileAbilityPlans].flatMap(plan => plan.reminders);
+  const profileAbilityReminders = [...profileAbilityPlans, ...targetProfileAbilityPlans].flatMap(plan => plan.reminders).concat(lassoReminders);
   // Grands félins (L23 p.87) : Frappe mortelle (V4 p.160) sur toute frappe de mêlée réussie, quelle que soit la Taille ; au plus BCC attaques en chaîne.
   const deathblow = hit && target && !replacement && actorPlan.kind === 'melee' && action.extensions?.v5?.deathblow === true
     ? { triggered: true, maxChain: Math.floor((Number(actor?.caracs?.CC) || 0) / 10), ruleSource: 'L23 p.87, Frappe mortelle V4 p.160' } : null;

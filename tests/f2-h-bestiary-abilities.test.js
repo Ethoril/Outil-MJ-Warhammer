@@ -224,7 +224,7 @@ test('Sea Elemental immersion and Cliff Spider lasso entangle with the creature 
     defense: { base: 20, roll: 95, v5: { kind: 'test' } }, v5: { kind: 'ranged', context: { f2h: { cliffSpiderFailureSL: 2 } } } });
   const entangled = caught.targetConditionApplication.find(row => row.key === 'enchevetre');
   assert.equal(entangled?.strength, 45);
-  assert.equal(entangled?.level, 2);
+  assert.equal(entangled?.level, 7, 'one Entangled per SL of the failed Dodge (20 vs 95)');
 });
 
 test('Immersion, silk lasso and spit inflict no Wounds nor Critical, the Gargantuan bite still does', () => {
@@ -385,4 +385,17 @@ test('Sea Elemental Ablaze immunity is a central condition immunity, whatever th
   assert.ok(receipt.reminders.some(text => /Immunité/.test(text)), JSON.stringify(receipt).slice(0, 300));
   assert.equal(receipt.acquiredInstances, 0);
   assert.equal(p('E0-P-910').extensions.v5.immunities, undefined);
+});
+
+test('Silk lasso needs no attack roll: only the target Dodge decides (L22 p.73)', () => {
+  const spider = { ...p('E0-P-744'), id: 'spider-dodge', zone: 'active' };
+  const lasso = spider.actions.find(row => row.extensions?.v5?.specialProfileAbility === 'cliff-spider-lasso');
+  const target = { id: 'dodger', name: 'Esquiveur', zone: 'active', hp: 30, maxHp: 30, caracs: { E: 30 }, equipment: [], states: [] };
+  const run = (roll, dodgeRoll) => previewResolution({ resolutionId: `lasso-${roll}-${dodgeRoll}`, baseRevision: 0, actor: spider, target, action: lasso, roll,
+    defense: { base: 40, roll: dodgeRoll, v5: { kind: 'test' } }, v5: { kind: 'ranged', context: {} } });
+  const missedShot = run(99, 41);
+  assert.equal(missedShot.targetConditionApplication.find(row => row.key === 'enchevetre')?.level, 1, 'failed Dodge by 0 SL still gives one Entangled, even if the CT roll failed');
+  const dodged = run(10, 20);
+  assert.ok(!dodged.targetConditionApplication.some(row => row.key === 'enchevetre'));
+  assert.ok(dodged.reminders.some(text => /Esquive réussie/.test(text)));
 });
