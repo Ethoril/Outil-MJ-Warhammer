@@ -3,12 +3,6 @@
   "auditedAt": "2026-10-09",
   "entries": [
     {
-      "id": "inflige",
-      "effect": "Une touche inflige 1 état X à la cible (si un score de Force est indiqué, comme Empêtré 50 ou Empêtré votre Force, il sert aux Tests pour se libérer de l'état).",
-      "edition": "V5",
-      "source": "Livre de base V5 EN p.304"
-    },
-    {
       "id": "immobilisante",
       "effect": "Une touche inflige 1 état Empêtré de Force égale à celle du porteur. Tant que dure l'entrave, l'arme ne peut servir à rien d'autre ; le porteur peut y mettre fin à tout moment.",
       "edition": "V4",

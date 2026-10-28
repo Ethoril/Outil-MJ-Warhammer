@@ -32,6 +32,9 @@ test('F2-D characterization — legacy Protectrice shield requires explicit held
   assert.equal(notChosen.rating, null);
 });
 
-test('F2-D characterization — V5 Bouclier quality is not yet covered by the legacy Protectrice engine', () => {
-  assert.equal(keywordMechanicalStatus('bouclier').status, 'manual');
+test('F2-D characterization — V5 Bouclier is covered by its resolution flow, separate from legacy Protectrice', () => {
+  const status = keywordMechanicalStatus('bouclier');
+  assert.equal(status.status, 'covered');
+  assert.equal(status.engine.scope, 'resolution-quality');
+  assert.equal(status.engine.engine, 'v5-shield');
 });

@@ -3,9 +3,10 @@ import assert from 'node:assert/strict';
 import { applyResolution, previewResolution } from '../js/core/resolution.js';
 import { keywordMechanicalStatus } from '../js/core/keywords.js';
 import { ENGINES } from '../js/data/keyword-engines.js';
+import { parseV5Inflict } from '../js/core/v5-weapon-qualities.js';
 
 const fullyIntegratedQualities = [
-  'inflige', 'immobilisante', 'pistolet', 'piege-lame', 'a-enroulement',
+  'immobilisante', 'pistolet', 'piege-lame', 'a-enroulement',
   'bouclier', 'taille', 'parade', 'a-repetition', 'recharge'
 ];
 
@@ -17,9 +18,17 @@ test('T2 bis — only fully integrated clauses use the separate resolution-cover
     assert.equal(Object.hasOwn(ENGINES, id), false, `${id} coverage does not reapply a legacy engine`);
     assert.ok(status.coverageEvidence, `${id} records its implementation evidence`);
   }
-  for (const id of ['explosion', 'rapide', 'incassable', 'entaille', 'dispersion', 'salve', 'equipage', 'a-poudre-noire']) {
+  for (const id of ['explosion', 'rapide', 'incassable', 'entaille', 'dispersion', 'inflige', 'salve', 'equipage', 'a-poudre-noire']) {
     assert.equal(keywordMechanicalStatus(id).status, 'manual', `${id} still has an incomplete or externally triggered clause`);
   }
+});
+
+test('T2 bis — generic Inflige remains manual because only six state names parse', () => {
+  for (const state of ['Empêtré 50', 'À terre', 'Enflammé', 'Assourdi', 'Sonné', 'Hémorragique']) {
+    assert.equal(parseV5Inflict(state).ready, true, `${state} is currently supported`);
+  }
+  assert.equal(parseV5Inflict('Brisé').ready, false, 'the generic V5 state clause is broader than the six-state parser');
+  assert.equal(keywordMechanicalStatus('inflige').status, 'manual');
 });
 
 test('T2 bis characterization — the next Action purges resolved combat records and preserves effects with separate lifecycles', () => {

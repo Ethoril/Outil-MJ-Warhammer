@@ -15,7 +15,6 @@ export const getKeywordsStatus=()=>getReferenceStatus();
 // deliberately stay outside the legacy V4 ENGINES registry. This declaration
 // reports coverage only; it does not apply any mechanical effect.
 const RESOLUTION_QUALITY_COVERAGE=Object.freeze({
- inflige:Object.freeze({engine:'v5-inflict-condition',evidence:'tests/f2-d-weapon-qualities.test.js: F2-D catalogue and resolution coverage'}),
  immobilisante:Object.freeze({engine:'v5-entanglement',evidence:'tests/f2-d-weapon-qualities.test.js: F2-D resolution Immobilisante locks and releases the linked weapon'}),
  pistolet:Object.freeze({engine:'v5-pistol-contact',evidence:'tests/f2-d-weapon-qualities.test.js: F2-D resolution Pistolet opposed with Melee'}),
  'piege-lame':Object.freeze({engine:'v5-trap-blade',evidence:'tests/f2-d-weapon-qualities.test.js: F2-D Store Trap Blade disposition and recovery'}),
