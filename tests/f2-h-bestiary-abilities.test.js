@@ -100,7 +100,7 @@ test('Gargantuan and Black Leviathan resolve non-ship clauses while ship clauses
   });
   assert.equal(shock.effects.find(effect => effect.damage)?.damage, 10);
   assert.ok(shock.effects.some(effect => effect.state === 'sonne'));
-  assert.ok(shock.effects.some(effect => effect.state === 'fatigue'));
+  assert.ok(shock.effects.some(effect => effect.state === 'extenue'));
   const fatigued = planBestiaryProfileAbility(gargantuan, 'gargantuan-electric-discharge', { targetGrappled: true, fatigued: true, selfEnduranceSuccess: true });
   assert.equal(fatigued.effects.find(effect => effect.damage)?.damage, 6);
   assert.match(planBestiaryProfileAbility(gargantuan, 'gargantuan-ship-reminder').reminders[0], /non modélisée/);
@@ -175,7 +175,7 @@ test('Gargantuan discharge applies wound and Endurance outcomes and spends its M
   const afterActor = store.listParticipants().find(row => row.id === actor.id);
   assert.equal(afterTarget.hp, target.hp - preview.damage.finalDamage);
   assert.ok(afterTarget.states.some(row => row.key === 'sonne'));
-  assert.ok(afterActor.states.some(row => row.key === 'fatigue'));
+  assert.ok(afterActor.states.some(row => row.key === 'extenue'));
   assert.equal(afterActor.extensions.v5.hasMomentum, false);
 });
 
@@ -256,4 +256,11 @@ test('Gargantuan discharge keeps its Momentum cost even when the Gargantuan woul
   const trace = preview.momentum.find(row => row.participantId === actor.id);
   assert.equal(trace.after, false, JSON.stringify(trace.details));
   assert.ok(!trace.details.some(row => row.effect === 'gain'));
+});
+
+test('An Exhausted Gargantuan discharges for 6 Damage (L25 p.143)', () => {
+  const built = p('E0-P-910');
+  const actor = { ...built, id: 'gargantuan-tired', zone: 'active', hp: 80, maxHp: 80, states: [{ id: 'tired', key: 'extenue', name: 'Exténué', level: 1 }], extensions: { ...built.extensions, v5: { ...built.extensions.v5, hasMomentum: true } } };
+  const action = actor.actions.find(row => row.extensions?.v5?.specialProfileAbility === 'gargantuan-electric-discharge');
+  assert.equal(normalizeResolutionInput({ actor, action, roll: 23 }).action.damage, 6);
 });

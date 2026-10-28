@@ -275,7 +275,7 @@ export function normalizeResolutionInput(input = {}) {
   const actor = isRecord(input.actor) ? clone(input.actor) : null;
   const action = decorateBestiaryProfileAction(actor, isRecord(input.action) ? clone(input.action) : {});
   if (action.extensions?.v5?.specialProfileAbility === 'gargantuan-electric-discharge'
-    && ((input.v5?.context?.f2h?.fatigued === true) || actor?.states?.some(row => foldKey(row.key || row.name) === 'fatigue')))
+    && ((input.v5?.context?.f2h?.fatigued === true) || actor?.states?.some(row => ['extenue', 'fatigue', 'fatigued'].includes(foldKey(row.key || row.name)))))
     action.damage = 6;
   if (/griffes du tigre|tiger claws/i.test(String(action.name || action.note || action.extensions?.equipment?.name || ''))) {
     const brawling=(actor?.skills||[]).find(row=>[row.sourceName,row.name,row.nom].filter(Boolean).some(value=>String(value).normalize('NFD').replace(/[\u0300-\u036f]/g,'').match(/melee\s*\(brawling\)|corps.?a.?corps\s*\(bagarre\)/i))&&Number.isFinite(Number(row.total??row.value)));
@@ -1445,7 +1445,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
       else if (damage?.finalDamage > 0 && profileAbilityContext.targetEnduranceSuccess !== true)
         unresolved.push('Décharge électrique : saisir le résultat du Test d’Endurance Difficile (−10) de la cible.');
       if (profileAbilityContext.selfEnduranceSuccess === false)
-        supplementalActorConditions.push({ id: `${normalized.resolutionId}:f2h:gargantuan-fatigued`, key: 'fatigue', name: 'Fatigué', level: 1, source: { kind: 'bestiary-profile', ability: specialAbility, authorId: actor?.id } });
+        supplementalActorConditions.push({ id: `${normalized.resolutionId}:f2h:gargantuan-fatigued`, key: 'extenue', name: 'Exténué', level: 1, source: { kind: 'bestiary-profile', ability: specialAbility, authorId: actor?.id } });
       else if (profileAbilityContext.selfEnduranceSuccess !== true)
         unresolved.push('Décharge électrique : saisir le résultat du Test d’Endurance Moyenne (+20) du Gargantuan.');
     }
