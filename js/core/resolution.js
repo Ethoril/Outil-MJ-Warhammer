@@ -851,9 +851,12 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     if(opposed) opposed={...opposed,winner:'attacker',netSl:Math.max(1,Number(opposed.netSl)||0),tie:false};
     success=true;sl=Math.max(1,Number(sl)||0);
   }
+  // Décharge du Gargantuan (L25 p.143) : effet payé en Élan, sans jet d'attaque ni défense ; le coup de 10 ne reçoit aucun DR.
+  const dischargeEffect = action.extensions?.v5?.specialProfileAbility === 'gargantuan-electric-discharge';
+  if (dischargeEffect) { opposed = null; success = true; sl = 0; }
   let targetLevels = conditionLevels(target);
   const unopposedExplosion=explosionAttack&&!explosionOpposed;
-  let cannotDefend = targetLevels.has('surpris') || targetLevels.has('inconscient') || context.targetHelpless === true || context.targetCannotDefend === true;
+  let cannotDefend = dischargeEffect || targetLevels.has('surpris') || targetLevels.has('inconscient') || context.targetHelpless === true || context.targetCannotDefend === true;
   let helpless = (targetLevels.has('inconscient') || context.targetHelpless === true || context.targetCannotDefend === true)
     && (actorPlan.kind === 'melee' || (actorPlan.kind === 'ranged' && (context.pointBlank === true || context.shotRange==='point-blank')));
   let hit = helpless && !opposed ? true : opposed ? opposed.winner === 'attacker' : success;
@@ -959,7 +962,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     else if(!Number.isFinite(distance)||distance<0)scatterUnresolved.push('Déviation : saisir la distance tireur-cible en yards pour plafonner le résultat.');
     else {const rolled=dice[0]+dice[1],maximum=distance/2;scatter={directionRoll:direction,direction:['','haut-gauche','haut','haut-droite','gauche','droite','bas-gauche','bas','bas-droite'][direction],distanceRolls:[...dice],distanceYards:Math.min(rolled,maximum),rolledDistanceYards:rolled,maximumYards:maximum};}
   }
-  const criticalAttack = !NO_DAMAGE_PROFILE_ABILITIES.has(action.extensions?.v5?.specialProfileAbility) && !(context.specialAttack==='whirlwind-of-death'||hit&&['dirty-fighting','disarm','shieldsman'].includes(context.specialAttack)) && attackType(action.type) && normalized.v5.context?.silentTakedown !== true && normalized.knockoutValid!==true && success && criticalClassification.critique;
+  const criticalAttack = !dischargeEffect && !NO_DAMAGE_PROFILE_ABILITIES.has(action.extensions?.v5?.specialProfileAbility) && !(context.specialAttack==='whirlwind-of-death'||hit&&['dirty-fighting','disarm','shieldsman'].includes(context.specialAttack)) && attackType(action.type) && normalized.v5.context?.silentTakedown !== true && normalized.knockoutValid!==true && success && criticalClassification.critique;
   const criticalLocationRoll = normalized.criticalRolls?.location;
   const location = hit && attackType(action.type) ? attackLocation(normalized, roll, target) : null;
   const wulfrikHeadTableChosen = (actor?.extensions?.v5?.bestiary?.id === 'E0-P-921' || actor?.profileId === 'E0-P-921') && context.f2h?.wulfrikHeadCritical === true;

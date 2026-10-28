@@ -425,3 +425,18 @@ test('Cutting the silk ends only the lasso Entangled, after a confirmed slashing
   const cut = recoverV5Condition(victim, 'silk', { method: 'cut-silk', silkCut: true });
   assert.deepEqual(cut.participant.states.map(row => row.id), ['net']);
 });
+
+test('Gargantuan discharge needs no attack nor defence roll and deals a flat 10 without SL (L25 p.143)', () => {
+  const built = p('E0-P-910');
+  const actor = { ...built, id: 'gargantuan-flat', zone: 'active', hp: 80, maxHp: 80, extensions: { ...built.extensions, v5: { ...built.extensions.v5, hasMomentum: true } } };
+  const action = actor.actions.find(row => row.extensions?.v5?.specialProfileAbility === 'gargantuan-electric-discharge');
+  const target = { id: 'held-flat', name: 'Agrippé', zone: 'active', hp: 40, maxHp: 40, caracs: { E: 0 }, equipment: [], states: [] };
+  for (const roll of [5, 96]) {
+    const preview = previewResolution({ resolutionId: 'garg-flat-' + roll, baseRevision: 0, actor, target, action, roll,
+      v5: { kind: 'melee', context: { f2h: { targetGrappled: true, targetEnduranceSuccess: true, selfEnduranceSuccess: true } } } });
+    assert.equal(preview.hit, true, JSON.stringify(preview.unresolved));
+    assert.equal(preview.damage?.finalDamage, 10, 'no SL, no Strength Bonus, no armour on this target');
+    assert.ok(!preview.critical, 'no Critical from the roll');
+    assert.ok(!preview.unresolved.some(text => /défense/i.test(text)), JSON.stringify(preview.unresolved));
+  }
+});
