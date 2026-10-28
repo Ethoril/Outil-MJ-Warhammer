@@ -2659,7 +2659,9 @@ async function computeCoverageCategory(c) {
   if(!type || ['unimplemented','engine-effect','mj-assisted'].includes(type) || tag && !IMPLEMENTED_SPECIAL_HANDLERS.has(tag))return 'Contrat restant à réaliser';
   const measured=async(p,options,targets)=>{
     const participants=Array.from(new Map([probeCaster,probeEnemy,probeAlly,probeDaemon,...targets].map(t=>[t.id,structuredClone(t)])).values());
-    const draft={localRevision:0,combat:{round:1,participants},extensions:{v5:{}}};
+    // Conditions preloaded for other coverage probes can suppress or mask periodic outcomes.
+    const neutralParticipants=participants.map(participant=>({...participant,states:[]}));
+    const draft={localRevision:0,combat:{round:1,participants:neutralParticipants},extensions:{v5:{}}};
     const control=structuredClone(draft);
     applySpellExecution(control,{...c,name:'Sonde témoin',canonicalName:'Probe',isVortex:false,isAuxiliary:false,range:'Force Mentale mètres',target:'Spécial',treatment:'narrative',effects:{type:'narrative',aoe:c.effects.aoe,targetRule:c.effects.targetRule}},{...options,actorId:probeCaster.id,targetIds:targets.map(t=>t.id),allowUnchecked:true});
     const before=JSON.stringify(measuredSpellState(control));
