@@ -87,10 +87,10 @@ export function corruptionThresholdCheck({ currentPoints, gainedPoints, threshol
 }
 
 const normalizeSpecies = value => {
-  const species = typeof value === 'string' ? value.trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase('fr') : '';
+  const species = typeof value === 'string' ? value.trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase('fr').replace(/[-_]+/g, ' ') : '';
   if (['humain', 'human'].includes(species)) return 'human';
   if (['nain', 'dwarf'].includes(species)) return 'dwarf';
-  if (['halfling', 'halfing'].includes(species)) return 'halfling';
+  if (['halfling', 'halfing', 'halfelin'].includes(species)) return 'halfling';
   if (['elfe', 'elf', 'wood elf', 'high elf', 'sea elf', 'elfe sylvain', 'elfe haut', 'haut elfe', 'elfe marin', 'elfe des mers'].includes(species)) return 'elf';
   return null;
 };

@@ -2409,7 +2409,9 @@ function resolvedCorruptionTest(participant, skillId, input) {
       if(zone==='active'&&p.zone!=='active'&&Number(combat.round)===0&&stateExtensions?.v5?.combatInitiativeInitialized===true&&!p.extensions?.v5?.combatInitiative?.initialized)
         throw Object.assign(new Error('Un combattant activé avant le Round 1 doit recevoir son jet d’Initiative dans le dialogue de préparation.'),{code:'COMBAT_INIT_REQUIRED',userFacing:true});
       if (persistence) return api.executeCommand('move-participant', draft => {
-        const participants = (draft.combat?.participants || []).map(item => item.id === id ? { ...item, zone } : item);
+        let participants = (draft.combat?.participants || []).map(item => item.id === id ? { ...item, zone } : item);
+        // Au banc, le participant quitte sa monture et libère ses cavaliers (comme updateParticipant).
+        if (zone === 'bench') participants = dismountLinkedRiders(participants.map(item => item.id === id ? clearMountedRelation(item) : item), id);
         const remaining = (draft.combat?.order || []).filter(item => item !== id);
         const active = remaining.filter(item => participants.find(p => p.id === item)?.zone === 'active');
         const bench = remaining.filter(item => participants.find(p => p.id === item)?.zone === 'bench');
@@ -2423,6 +2425,13 @@ function resolvedCorruptionTest(participant, skillId, input) {
         return next;
       });
       p.zone = zone; if (zone === 'active' && beforeId !== null) orderMode = ORDER_MODES.MANUAL;
+      if (zone === 'bench') {
+        Object.assign(p, clearMountedRelation(p));
+        combat.participants.forEach((item, key) => {
+          if (key === id || item.extensions?.v5?.mounted !== true || item.extensions.v5.mountId !== id) return;
+          const linkedRider = clearMountedRelation(item); combat.participants.set(key, linkedRider); markDirty(`combat/participants/${key}`, linkedRider);
+        });
+      }
       const remainingOrder = combat.order.filter(xId => xId !== id);
       const activeOrder = remainingOrder.filter(xId => combat.participants.get(xId)?.zone === 'active');
       const benchOrder = remainingOrder.filter(xId => combat.participants.get(xId)?.zone === 'bench');
