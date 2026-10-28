@@ -90,3 +90,20 @@ test('T2 bis characterization — partenaire d’empoignade absent ne fait pas p
   assert.doesNotThrow(() => store.previewResolution({ actorId: 'holder', action: { type: 'test', label: 'Force', base: 40 }, roll: 35,
     v5: { kind: 'test', context: { grappleAction: 'escape', skillId: 'force' } } }));
 });
+
+test('T2 bis characterization — Test de Résistance libre pendant une empoignade ne consomme pas l’Action', async () => {
+  const store = createStore({ persistence: null, storage: null }); await store.ready;
+  const link = { id: 'prior-grapple', initiatorId: 'holder', targetId: 'held', status: 'active' };
+  const held = fighter('held', { extensions: { v5: { grapples: [link] } }, states: [
+    { id: 'held-state', key: 'enchevetre', name: 'Enchevêtré', level: 1, source: { kind: 'grapple', linkId: link.id } }
+  ] });
+  const holder = fighter('holder', { extensions: { v5: { grapples: [link] } } });
+  await store.loadFromJSON({ schemaVersion: 3, reserve: [], combat: { round: 2, currentActorId: 'held', order: ['holder', 'held'], participants: [holder, held] },
+    extensions: { v5: { combatId: 'characterize-free-test', turnIndex: 2 } }, log: [], diceLines: [] });
+  const freeTest = store.previewResolution({ actorId: 'held', targetId: 'holder', action: { type: 'test', label: 'Endurance', attr: 'E', base: 30 }, roll: 35,
+    v5: { kind: 'test', context: { skillId: 'endurance', isAction: false } } });
+  assert.notEqual(freeTest.code, 'F2_GRAPPLE_FIRST_ACTION', 'un actionized Resistance Test stays available during the actor’s Turn');
+  const declaredAction = store.previewResolution({ actorId: 'held', targetId: 'holder', action: { type: 'test', label: 'Force', attr: 'F', base: 40 }, roll: 35,
+    v5: { kind: 'test', context: { skillId: 'force', isAction: true } } });
+  assert.equal(declaredAction.code, 'F2_GRAPPLE_FIRST_ACTION', 'an explicitly declared Test Action remains subject to the grapple rule');
+});
