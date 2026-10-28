@@ -481,3 +481,15 @@ test('Suffocation countdown starts on an already Unconscious victim and a stale 
   const stale = advanceV5Effects({ id: 'old', name: 'Ancien', hp: 5, maxHp: 10, caracs: { E: 30 }, states: [], extensions: { v5: { suffocationDeathDueRound: 4 } } }, { phase: 'endOfRound', round: 20 });
   assert.equal(stale.participant.extensions.v5.suffocationDeathDueRound, undefined);
 });
+
+test('Sea Elemental spell formulas, overcast reminders and dispel range read its Strength (M4)', async () => {
+  const { spellFormulaValue } = await import('../js/core/v5-magic-effects.js');
+  const { specificOvercastReminder } = await import('../js/core/v5-magic-overcast-options.js');
+  const sea = p('E0-P-909');
+  const bf = Math.floor(sea.caracs.F / 10);
+  assert.equal(spellFormulaValue('BFM', sea), bf);
+  assert.equal(spellFormulaValue('FM', sea), sea.caracs.F);
+  assert.match(specificOvercastReminder({ reminder: '{bfm}' }, sea), new RegExp(String(bf)));
+  const garg = p('E0-P-910');
+  assert.equal(spellFormulaValue('BFM', garg), Math.floor(Number(garg.caracs.FM) / 10));
+});

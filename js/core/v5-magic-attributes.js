@@ -1,3 +1,4 @@
+import { casterCaracs } from './creature-abilities.js';
 import { magicTalentRank } from './v5-magic-talents.js';
 import { markCorruptionThresholdTest } from './v5-corruption.js';
 /**
@@ -203,8 +204,8 @@ export function previewLoreAttribute({
     };
   }
 
-  const bfm = Math.floor((Number(caster?.caracs?.FM) || 0) / 10);
-  const bi = Math.floor((Number(caster?.caracs?.Int) || 0) / 10);
+  const bfm = Math.floor((Number(casterCaracs(caster).FM) || 0) / 10);
+  const bi = Math.floor((Number(casterCaracs(caster).Int) || 0) / 10);
 
   let casterEffects = null;
   const targetEffects = new Map();

@@ -75,6 +75,14 @@ export function planBestiaryProfileAbilities(participant, context = {}) {
   ).map(rule => planBestiaryProfileAbility(participant, rule.key, context));
 }
 
+/** Caractéristiques magiques du lanceur : un Lanceur sans esprit (élémentaire de mer, L25 p.142) prend sa Force pour Int et FM, donc son BF pour BI et BFM (MJ, 28/10). */
+export function casterCaracs(participant) {
+  const caracs = participant?.caracs || {};
+  const profileId = participant?.profileId ?? participant?.extensions?.v5?.bestiary?.id ?? participant?.extensions?.v5?.bestiary?.profileId;
+  const strength = F2_H_PROFILE_ABILITIES.some(rule => rule.profileId === profileId && rule.castingCharacteristic === 'F');
+  return strength ? { ...caracs, Int: caracs.F, FM: caracs.F } : caracs;
+}
+
 /** Immunités d’état propres aux règles F2-H, à consulter par tout chemin d’acquisition d’état. */
 export function bestiaryProfileStateImmunity(participant, state) {
   return F2_H_PROFILE_ABILITIES.some(rule => rule.profileId === (participant?.profileId ?? participant?.extensions?.v5?.bestiary?.id ?? participant?.extensions?.v5?.bestiary?.profileId)

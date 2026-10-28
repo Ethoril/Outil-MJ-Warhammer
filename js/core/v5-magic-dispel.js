@@ -1,3 +1,4 @@
+import { casterCaracs } from './creature-abilities.js';
 import { uid } from './models.js';
 import { beastFormRestriction } from './v5-magic-arbitrations.js';
 import { expireSpellEffects } from './v5-magic-effects.js';
@@ -28,7 +29,7 @@ function spatialRestriction(dispeller, options) {
     return 'Saisir une distance valide en yards (zéro ou plus).';
   if (typeof options.visible !== 'boolean') return 'Saisir explicitement la visibilité du sort ou de son point ciblé.';
   if (!options.visible) return 'Le lanceur ou le point ciblé doit être visible.';
-  const range = Math.max(0, Number(dispeller?.caracs?.FM) || 0);
+  const range = Math.max(0, Number(casterCaracs(dispeller).FM) || 0);
   if (options.distance > range) return `Hors de portée de dissipation (${options.distance} yards > ${range} yards / FM).`;
   return null;
 }
