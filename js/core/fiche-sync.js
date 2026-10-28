@@ -569,7 +569,7 @@ export function applyFicheSync(draft, entries) {
           ...(health.warning ? { ficheHealthWarning: health.warning } : {}) },
         ficheSnapshot: cloneValue(updated.ficheSnapshot) };
       for (const key of ['skills', 'talents', 'equipment', 'spells', 'prayers']) if (entry.snapshot.coverage?.[key] === 'present') output[key] = cloneValue(updated[key]);
-      for (const key of ['initiative', 'movement', 'race']) if (updated[key] != null) output[key] = updated[key];
+      for (const key of ['initiative', 'movement', 'race']) if (updated[key] != null && (key !== 'movement' || entry.snapshot.movement != null)) output[key] = updated[key];
       if (entry.snapshot.coverage?.equipment === 'present') {
         output.armorLocations = cloneValue(updated.armorLocations); output.protection = cloneValue(updated.protection);
       }
@@ -577,7 +577,7 @@ export function applyFicheSync(draft, entries) {
       // S-05 : la fiche est la nouvelle base ; les couches magiques actives se recalculent dessus (jamais l'inverse).
       const magic = subject.extensions?.v5;
       if (magic?.baseCaracs || magic?.spellEffects?.length || magic?.beastForm) {
-        const rebased = rebaseMagicLayers(subject, { caracs: entry.snapshot.caracs, movement: updated.movement,
+        const rebased = rebaseMagicLayers(subject, { caracs: entry.snapshot.caracs, ...(entry.snapshot.movement != null ? { movement: updated.movement } : {}),
           ...(entry.snapshot.coverage?.equipment === 'present' ? { armor: updated.armorLocations } : {}) });
         output.caracs = rebased.caracs;
         output.extensions = { ...output.extensions, v5: rebased.extensions.v5 };

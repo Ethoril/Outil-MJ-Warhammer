@@ -20,3 +20,16 @@ test('espèce inconnue : avertissement et synchronisation partielle', () => {
   assert.equal(next.reserve[0].movement, 7); assert.equal(next.reserve[0].hp, 14);
   assert.ok(next.reserve[0].skills.length > 0);
 });
+
+test('espèce inconnue : mouvement des participants conservé avec et sans couche magique', () => {
+  const snapshot = snap('inconnue');
+  const profile = { id: 'pj', name: 'Caelel', kind: 'PJ', hp: 10, movement: 7, caracs: {}, diceLines: [] };
+  const participants = [
+    { id: 'simple', profileId: 'pj', movement: 9, M: 9, caracs: { M: 9 } },
+    { id: 'magie', profileId: 'pj', movement: 8, M: 8, caracs: { M: 8 }, extensions: { v5: { baseCaracs: { M: 8 }, spellEffects: [] } } }
+  ];
+  const result = applyFicheSync({ reserve: [profile], combat: { participants } }, [{ profileId: 'pj', charId: 'caelel', snapshot }]);
+  assert.equal(result.combat.participants[0].movement, 9);
+  assert.equal(result.combat.participants[1].movement, 8);
+  assert.equal(result.combat.participants[1].extensions.v5.baseCaracs.M, 8);
+});
