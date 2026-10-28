@@ -2021,14 +2021,23 @@ function resolvedCorruptionTest(participant, skillId, input) {
       const envelope = currentEnvelope();
       const subject = envelope.combat.participants.find(item => item.id === id) || envelope.reserve.find(item => item.id === id) || envelope.persistentCharacters.find(item => item.id === id);
       if (!subject) throw new TypeError('Personnage introuvable');
-      return { ...getV5Fate(envelope, subject), baseRevision: localRevision };
+      return { ...getV5Fate(envelope, subject), legacyResilience:subject.extensions?.legacyConversions?.v4ToV5===true, fortune:getV5Fortune(envelope,subject), baseRevision: localRevision };
     },
-    setFate(id, amount, { reason = '', baseRevision = localRevision } = {}) {
+    setFate(id, amount, { reason = '', baseRevision = localRevision, permanentResilienceLoss = false } = {}) {
       if (!Number.isSafeInteger(amount) || amount < 0 || typeof reason !== 'string' || !reason.trim()) throw new TypeError('Montant et motif MJ requis pour le Destin');
       return api.executeCommand('set-fate-v5', draft => {
+        let fortuneMaximumReducedBy=0;
         if(draft.localRevision!==baseRevision)throw Object.assign(new Error('La partie a changé. Recalculez le solde de Destin.'),{code:'V5_EFFECT_STALE',userFacing:true});
         const subject=(draft.combat?.participants||[]).find(row=>row.id===id)||(draft.reserve||[]).find(row=>row.id===id)||(draft.persistentCharacters||[]).find(row=>row.id===id);
         if(!subject)throw new TypeError('Personnage introuvable');
+        if(permanentResilienceLoss===true){
+          if(subject.extensions?.legacyConversions?.v4ToV5!==true)throw new TypeError('La perte permanente de Résilience est réservée aux profils convertis V4.');
+          const before=getV5Fate(draft,subject).permanent,fortune=getV5Fortune(draft,subject);
+          if(before===null||amount>=before)throw new TypeError('La perte permanente de Résilience doit réduire le Destin permanent connu.');
+          if(fortune.permanent===null)throw new TypeError('Initialisez la Chance permanente avant d’en réduire le maximum.');
+          fortuneMaximumReducedBy=before-amount;
+          draft=setV5Fortune(draft,subject,Math.max(0,fortune.permanent-fortuneMaximumReducedBy),{source:'mj'});
+        }
         const identity=subject.extensions?.ficheId||subject.ficheSnapshot?.charId||subject.persistentCharacterId||(subject.kind==='PJ'&&typeof subject.profileId==='string'&&subject.profileId.trim()?`profile:${subject.profileId}`:subject.id);
         const update=rows=>(rows||[]).map(row=>{
           const rowIdentity=row.extensions?.ficheId||row.ficheSnapshot?.charId||row.persistentCharacterId||(row.kind==='PJ'&&typeof row.profileId==='string'&&row.profileId.trim()?`profile:${row.profileId}`:row.kind==='PJ'&&row.id===subject.profileId?`profile:${row.id}`:row.id);
@@ -2040,7 +2049,7 @@ function resolvedCorruptionTest(participant, skillId, input) {
         draft.combat={...(draft.combat||{}),participants:update(draft.combat?.participants)};
         if(draft.activeScene)draft.activeScene={...draft.activeScene,participants:update(draft.activeScene.participants)};
         draft.suspendedScenes=(draft.suspendedScenes||[]).map(scene=>({...scene,participants:update(scene.participants)}));
-        draft.log=[{id:uid(),kind:'management',actorId:id,text:`Destin attribué/modifié manuellement : ${amount} point(s)`,detail:{kind:'set-fate-v5',amount,reason:reason.trim()}},...(draft.log||[])].slice(0,300);
+        draft.log=[{id:uid(),kind:'management',actorId:id,text:`Destin attribué/modifié manuellement : ${amount} point(s)`,detail:{kind:'set-fate-v5',amount,reason:reason.trim(),...(permanentResilienceLoss?{permanentResilienceLoss:true,fortuneMaximumReducedBy}: {})}},...(draft.log||[])].slice(0,300);
         return draft;
       });
     },

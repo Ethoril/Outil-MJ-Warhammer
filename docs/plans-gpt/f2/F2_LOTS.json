@@ -1974,9 +1974,9 @@
    "domaine": "Hors périmètre",
    "choix": "Implanter, version complète",
    "note": "",
-   "repere": "partiel",
-   "repereNote": "Import V4 explicite converti (Résilience → Destin, Détermination → Chance, Avantage → Élan). La perte permanente de Résilience qui réduit le maximum de Chance n’est pas modélisée.",
-   "preuve": "js/core/v5-legacy-conversion.js; js/core/json-profile-import.js; tests/f2-l-characterization.test.js",
+   "repere": "couvert",
+   "repereNote": "Import V4 converti; pour une perte permanente déclarée par le MJ, la baisse de Destin du profil converti réduit le maximum de Chance du même nombre, avec Undo/Redo.",
+   "preuve": "js/core/v5-legacy-conversion.js; js/core/json-profile-import.js; js/core/store.js setFate; js/ui/v5-fate-dialog.js; tests/f2-l-fate-spending.test.js",
    "question": "Implanter « Résilience et Détermination anciennes » ? Une référence à Résilience utilise Destin, une référence à Détermination utilise Chance; perdre définitivement une Résilience réduit d’un la Chance maximale dans les mêmes conditions.",
    "source": "L06 p.364 (PDF 364)"
   },
