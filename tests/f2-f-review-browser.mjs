@@ -16,10 +16,11 @@ try{
   await page.goto(`http://127.0.0.1:${server.address().port}${base}`,{waitUntil:'domcontentloaded'});
   await page.waitForFunction(()=>document.querySelector('#app-content')?.style.display==='block',{timeout:20000});
   const pavise=reference.equipment.items.find(item=>item.id==='shield-armures-bouclier-pavois-pavise');
-  const actor={id:'f-review-actor',name:'Porteur F',kind:'PJ',camp:'pj',zone:'active',hp:20,maxHp:20,caracs:{CC:60,CT:60,F:40,E:40,FM:40,Ag:40,Int:40},skills:[],talents:[],states:[],armor:{head:0,body:0,arms:0,legs:0},equipment:[pavise,{id:'antler-test',name:'Antler Hilted Blade',kind:'weapon',category:'Base',damage:'BF+4',keywords:[],extensions:{}},{id:'leviathan-test',name:'Leviathan Plate',kind:'armour',ap:2,locations:['body'],layer:'rigid',keywords:[],extensions:{}}],actions:[
+  const ratling=reference.equipment.items.find(item=>item.id==='weapon-armes-a-distance-ingenierie-mitrailleuse-ratling-skaven');
+  const actor={id:'f-review-actor',name:'Porteur F',kind:'PJ',camp:'pj',zone:'active',hp:20,maxHp:20,caracs:{CC:60,CT:60,F:40,E:40,FM:40,Ag:40,Int:40},skills:[],talents:[],states:[],armor:{head:0,body:0,arms:0,legs:0},equipment:[pavise,ratling,{id:'antler-test',name:'Antler Hilted Blade',kind:'weapon',category:'Base',damage:'BF+4',keywords:[],extensions:{}},{id:'leviathan-test',name:'Leviathan Plate',kind:'armour',ap:2,locations:['body'],layer:'rigid',keywords:[],extensions:{}}],actions:[
     {id:'antler-attack',name:'Antler Hilted Blade',type:'attack',attr:'CC',base:60,damage:4,qualities:[],extensions:{fiche:{equipmentId:'antler-test'}}},
     {id:'focus-test',name:'Focalisation (Aqshy)',type:'test',attr:'FM',base:50,extensions:{}}
-  ],extensions:{v5:{}}};
+  ],extensions:{v5:{corruptionPoints:0}}};
   const target={...actor,id:'f-review-target',name:'Cible F',camp:'ennemi',equipment:[],actions:[],extensions:{v5:{}}};
   await page.evaluate(async state=>{const {Store}=await import('/Outil-MJ-Warhammer/js/main.js');await Store.ready;await Store.loadFromJSON(state);},{schemaVersion:3,reserve:[],diceLines:[],log:[],combat:{round:1,currentActorId:actor.id,orderMode:'manual',order:[actor.id,target.id],participants:[actor,target]},extensions:{v5:{combatId:'f-review',turnIndex:1}}});
   await page.locator('#tab-combat').click();
@@ -46,5 +47,10 @@ try{
   await page.waitForFunction(()=>{const button=[...document.querySelectorAll('.workspace-pavise-setup button')].find(row=>row.textContent.includes('seconde Action'));return button&&!button.disabled;});
   await secondAction.click();
   await page.waitForFunction(()=>document.querySelector('.workspace-pavise-setup')?.textContent.includes('Planté face au north'));
+  assert.equal(await workspace.getByLabel('Objet porté contenant de la malepierre').count(),1);
+  await workspace.getByLabel('Objet porté contenant de la malepierre').selectOption(ratling.id);
+  await workspace.getByLabel('Jour déclaré par le MJ').fill('Jour navigateur');
+  await workspace.getByRole('button',{name:'Déclarer l’exposition quotidienne'}).click();
+  await page.waitForFunction(()=>document.querySelector('.workspace-corruption-panel')?.textContent.includes('Malepierre portée : Mitrailleuse Ratling Skaven · Jour navigateur'));
   assert.deepEqual(errors,[],`aucune erreur UI attendue : ${errors.join('; ')}`);
 }finally{await browser.close();await new Promise(done=>server.close(done));}
