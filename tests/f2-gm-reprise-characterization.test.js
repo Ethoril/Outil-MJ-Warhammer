@@ -5,6 +5,7 @@ import { resolveCreatureHitLocation, deriveHitMorphology } from '../js/core/v5-h
 import { buildParticipantFromBestiary } from '../js/core/bestiary-profiles.js';
 import { planMountedAttack, planMountedDodge } from '../js/core/v5-mounted-combat.js';
 import { previewResolution } from '../js/core/resolution.js';
+import { readFileSync as readSource } from 'node:fs';
 
 const l06 = JSON.parse(readFileSync(new URL('../js/data/bestiary/L06.json', import.meta.url), 'utf8')).profiles;
 
@@ -50,8 +51,28 @@ test('F2-M reprise — une défense brute d’Ag contre un cavalier reçoit le D
   const preview = previewResolution({
     actor: attacker, target: rider,
     action: { type: 'attack', attr: 'CC', base: 60, damage: 5 }, roll: 41,
-    defense: { attr: 'Ag', base: 55, roll: 75, label: 'Esquive' },
+    defense: { attr: 'Ag', base: 55, roll: 75 },
     v5: { kind: 'melee' }, v5State: { participants: [attacker, rider, mount] }
   });
   assert.ok(preview.defenderTest.advantage.disadvantage.some(row => row.id === 'mounted:dodge'));
+});
+
+test('F2-M contre-vérification — Surpris et Sonné produisent chacun un plan de chute', () => {
+  const source = readSource(new URL('../js/core/resolution.js', import.meta.url), 'utf8');
+  assert.match(source, /const eventsForConditions\s*=\s*\(keys\)\s*=>/);
+  assert.match(source, /eventsForConditions\(nextConditionKeys\)/);
+  assert.match(source, /eventsForConditions\(actorConditionKeys\)/);
+});
+
+test('F2-G contre-vérification — changer de cible efface aussi le côté de patte choisi', () => {
+  const source = readSource(new URL('../js/ui/workspace-view.js', import.meta.url), 'utf8');
+  const reset = source.slice(source.indexOf("if ('targetId' in patch)"), source.indexOf('draft.fortuneReroll=false'));
+  assert.match(reset, /'spiderLegSide'/);
+});
+
+test('F2-G contre-vérification — les victimes secondaires araignées saisissent leur côté de patte', () => {
+  const source = readSource(new URL('../js/ui/resolution-panel.js', import.meta.url), 'utf8');
+  const secondary = source.slice(source.indexOf('const secondaryHitMorphology='), source.indexOf("if(type==='test'&&action?.attr==='F'", source.indexOf('const secondaryHitMorphology=')));
+  assert.match(secondary, /spiderLegSidesById/);
+  assert.match(secondary, /Araignée/);
 });
