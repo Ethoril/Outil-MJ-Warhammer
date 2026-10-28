@@ -180,7 +180,9 @@ test('Contrôle 2.4 — les 207 identités ont des clauses lisibles, mixtes et s
 
 test('Contrôle 2.4 — dix caractéristiques déjà intégrées et magie/prière restent séparées des automatiques',()=>{
  assert.equal(coverage.items.filter(row=>row.clauses.some(clause=>clause.mode==='excluded')).length,10);
- for(const id of ['talent-bless','talent-invoke','talent-chaos-magic'])assert.ok(v5TalentCoverage(id).clauses.some(row=>row.mode==='deferred'));
+ assert.ok(v5TalentCoverage('talent-chaos-magic').clauses.some(row=>row.mode==='deferred'));
+ // Béni et Invocation : le moteur divin les prend en charge (couverture du lot espèces, 28/10) ; rappel au MJ, plus différé.
+ for(const id of ['talent-bless','talent-invoke'])assert.ok(v5TalentCoverage(id).clauses.some(row=>row.mode==='reminder'));
  assert.ok(v5TalentCoverage('talent-arcane-magic').clauses.some(row=>row.mode==='automatic'));assert.ok(v5TalentCoverage('talent-petty-magic').clauses.every(row=>row.mode==='owned'));
  assert.ok(v5TalentCoverage('talent-hardy').clauses.every(row=>row.mode==='owned'));
  assert.ok(v5TalentCoverage('talent-small').clauses.some(row=>row.mode==='assisted'));

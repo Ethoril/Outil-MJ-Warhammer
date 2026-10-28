@@ -77,8 +77,8 @@
         },
         {
           "id": "magic:1",
-          "mode": "deferred",
-          "text": "Les Bénédictions et Miracles requièrent le cadrage divin séparé.",
+          "mode": "reminder",
+          "text": "Le moteur divin contrôle l’accès aux Bénédictions du culte, les suspensions, le lancement et les effets ; les faits nécessaires restent saisis par le MJ.",
           "magicRegistry": true
         }
       ]
@@ -194,9 +194,10 @@
       "clauses": [
         {
           "id": "magic:0",
-          "mode": "deferred",
-          "text": "Bonus aux Blessures des Miracles : hors de la finalisation des sorts.",
-          "magicRegistry": true
+          "mode": "automatic",
+          "text": "Les Miracles infligeant des Blessures bénéficient automatiquement de +2 Blessures.",
+          "magicRegistry": true,
+          "executionProbe": "tests/lot3-especes-divin-coverage.test.js#Haine sacrée"
         }
       ]
     },
@@ -287,8 +288,8 @@
         },
         {
           "id": "magic:1",
-          "mode": "deferred",
-          "text": "Lancement et effets des Miracles à cadrer séparément.",
+          "mode": "reminder",
+          "text": "Le moteur divin contrôle l’accès aux Miracles connus du culte, les suspensions, le lancement et les effets ; les faits nécessaires restent saisis par le MJ.",
           "magicRegistry": true
         }
       ]

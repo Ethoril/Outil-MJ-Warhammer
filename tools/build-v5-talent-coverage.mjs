@@ -29,12 +29,23 @@ const items=snapshot.talents.entries.map(source=>{
  for(const [index,clause]of classified.clauses.entries()){
    if(clause.scope==='engine'&&clause.status==='implemented' || clause.scope==='lot3' && magicItem)continue;
    const mode=clause.scope==='narrative'?'reminder':clause.scope==='lot3'?'deferred':clause.scope==='sheet'?clause.status==='excluded'?'excluded':'owned':clause.status==='manual-approved'?'reminder':'pending';
-   clauses.push({id:'tri:'+index,mode,text:clause.text,scope:clause.scope});
+   const notes = {
+     'talent-hardy': 'À la synchronisation, +BE par rang pour les espèces reconnues ; pour un Ogre, la somme est ensuite doublée. Les transformations recalculent également Dur à cuire.',
+     'talent-large': 'La synchronisation double les Blessures de l’Ogre, Dur à cuire compris ; les transformations recalculent selon leur taille. La taille elle-même reste importée.',
+     'talent-small': 'La synchronisation calcule 2×BE + BFM pour Gnome et Skink, avec Dur à cuire ; les transformations utilisent leur propre formule de taille. Le reste de Petit reste le homebrew local.',
+     'talent-second-sight': 'Perception magique en rappel ; la perte temporaire par incident est suivie et certains sorts accordent ou modifient Seconde vue.',
+     'talent-night-vision': 'Vision nocturne ajoutée aux portées sensorielles à 20 yards ; conditions de lumière à apprécier par le MJ.'
+   };
+   clauses.push({id:'tri:'+index,mode:source.id==='talent-master-and-commander'?'assisted':mode,text:notes[source.id] || clause.text,scope:clause.scope});
  }
  if(source.id==='talent-small')clauses.push({id:'homebrew-source',mode:'reminder',text:'Source d’une autre édition ou d’un supplément : adaptation V5 à vérifier. Petit est conservé comme homebrew validé par le MJ, raccordé selon les arbitrages locaux : multiplication avant BE/PA, Frappes Mortelles supprimées, aucune migration de fiche.',scope:'source'});
  if(!clauses.length)throw Error('Talent sans traitement '+source.id);
  return {talentId:source.id,name:source.nom,family:old.family,description:source.description,source:{effectHash,reference:source.source},clauses};
 });
 const result={schemaVersion:1,ruleVersion:'catalogue-utile-v5-2026-10-10.1',sourceCatalogueVersion:snapshot.contentVersion,policy:'Traitement explicite par clause. Les rappels ne sont pas des automatismes et les contrats actifs sont vérifiés séparément.',items};
-writeFileSync('js/data/v5-talent-coverage.json',JSON.stringify(result,null,2)+'\n');
+const output=JSON.stringify(result,null,2)+'\n';
+const path='js/data/v5-talent-coverage.json';
+if(process.argv.includes('--check')) {
+ if(readFileSync(path,'utf8')!==output) { console.error('Couverture des talents à régénérer.'); process.exitCode=1; }
+} else writeFileSync(path,output);
 console.log(JSON.stringify({identities:items.length,contracts:contracts.size,modes:items.flatMap(row=>row.clauses).reduce((counts,clause)=>(counts[clause.mode]=(counts[clause.mode]||0)+1,counts),{})}));
