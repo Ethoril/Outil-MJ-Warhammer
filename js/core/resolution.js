@@ -1449,7 +1449,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     }
     if (specialAbility === 'cliff-spider-lasso') {
       const failure = profileAbilityContext.cliffSpiderFailureSL;
-      if (Number.isSafeInteger(failure) && failure > 0) targetConditionApplication.push({ id: `${normalized.resolutionId}:f2h:cliff-spider`, key: 'enchevetre', name: 'Enchevêtré', level: failure, strength: 1, source: { kind: 'bestiary-profile', ability: specialAbility, authorId: actor?.id } });
+      if (Number.isSafeInteger(failure) && failure > 0) targetConditionApplication.push({ id: `${normalized.resolutionId}:f2h:cliff-spider`, key: 'enchevetre', name: 'Enchevêtré', level: failure, strength: Number(actor?.caracs?.F) || 45, source: { kind: 'bestiary-profile', ability: specialAbility, authorId: actor?.id } });
       else unresolved.push('Araignée de falaise : saisir les niveaux d’échec du Test d’Esquive pour fixer les Enchevêtrés.');
     }
     if (specialAbility === 'farmyard-beast-spit') {
@@ -1459,7 +1459,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     }
     if (specialAbility === 'sea-elemental-immersion') {
       targetConditionApplication.push(
-        { id: `${normalized.resolutionId}:f2h:sea-elemental-entangled`, key: 'enchevetre', name: 'Enchevêtré', level: 1, source: { kind: 'bestiary-profile', ability: specialAbility, authorId: actor?.id } },
+        { id: `${normalized.resolutionId}:f2h:sea-elemental-entangled`, key: 'enchevetre', name: 'Enchevêtré', level: 1, strength: Number(actor?.caracs?.F) || 59, source: { kind: 'bestiary-profile', ability: specialAbility, authorId: actor?.id, escapeStrength: Number(actor?.caracs?.F) || 59 } },
         { id: `${normalized.resolutionId}:f2h:sea-elemental-suffocation`, key: 'suffocation', name: 'Suffocation', level: 1, source: { kind: 'bestiary-profile', ability: specialAbility, authorId: actor?.id } }
       );
     }

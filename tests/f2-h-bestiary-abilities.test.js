@@ -210,3 +210,19 @@ test('Gargantuan discharge ignores non-magical metal armour only (L25 p.143)', (
   const bite = run([piece('mail', 'Mailles')], teeth);
   assert.ok(!bite.protection.ignored.some(row => row.item.id === 'mail'), 'ordinary bites keep the armour');
 });
+
+test('Sea Elemental immersion and Cliff Spider lasso entangle with the creature Strength (L25 p.142, MJ 28/10)', () => {
+  const target = { id: 'victim', name: 'Victime', zone: 'active', hp: 30, maxHp: 30, caracs: { E: 30 }, equipment: [], states: [] };
+  const sea = { ...p('E0-P-909'), id: 'sea', zone: 'active' };
+  const immersion = sea.actions.find(row => row.extensions?.v5?.specialProfileAbility === 'sea-elemental-immersion');
+  const immersed = previewResolution({ resolutionId: 'sea-strength', baseRevision: 0, actor: sea, target, action: immersion, roll: 10,
+    defense: { base: 20, roll: 95, v5: { kind: 'test' } }, v5: { kind: 'melee', context: {} } });
+  assert.equal(immersed.targetConditionApplication.find(row => row.key === 'enchevetre')?.strength, 59);
+  const spider = { ...p('E0-P-744'), id: 'spider', zone: 'active' };
+  const lasso = spider.actions.find(row => row.extensions?.v5?.specialProfileAbility === 'cliff-spider-lasso');
+  const caught = previewResolution({ resolutionId: 'spider-strength', baseRevision: 0, actor: spider, target, action: lasso, roll: 10,
+    defense: { base: 20, roll: 95, v5: { kind: 'test' } }, v5: { kind: 'ranged', context: { f2h: { cliffSpiderFailureSL: 2 } } } });
+  const entangled = caught.targetConditionApplication.find(row => row.key === 'enchevetre');
+  assert.equal(entangled?.strength, 45);
+  assert.equal(entangled?.level, 2);
+});
