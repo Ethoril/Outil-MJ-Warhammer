@@ -6,6 +6,7 @@ import { normalizeEffects, normalizeState } from './effects.js';
 import { withMomentum } from './v5-combat-rules.js';
 import { armourProtection } from './equipment.js';
 import { isMiscastConditionLocked } from './v5-magic-miscasts.js';
+import { bestiaryProfileStateImmunity } from './creature-abilities.js';
 export const V5_EFFECT_RULE_VERSION = 'v5-effects-2026-10-09.1';
 export const V5_CONDITION_KEYS = Object.freeze(['enflamme','souille','hemorragique','aveugle','brise','assourdi','enchevetre','extenue','empoisonne','a-terre','sonne','surpris','inconscient']);
 const UNIQUE = new Set(['souille','a-terre','surpris','inconscient']);
@@ -39,7 +40,8 @@ export function assertDivineWrathConditionsKept(before,after){
 }
 const fold = value => String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim().replace(/[ -]+/g,'-');
 const keyOf = value => { const key=fold(typeof value==='string'?value:value?.key||value?.name); return ALIASES[key]||key; };
-export const isV5ConditionImmune = (participant,condition) => (participant.extensions?.v5?.immunities?.conditions||[]).some(name=>keyOf(name)===keyOf(condition));
+// Les immunités de profil F2-H sont relues ici : le recalcul des couches magiques réécrit `immunities` sans elles.
+export const isV5ConditionImmune = (participant,condition) => (participant.extensions?.v5?.immunities?.conditions||[]).some(name=>keyOf(name)===keyOf(condition)) || bestiaryProfileStateImmunity(participant,keyOf(condition));
 const levelOf = state => Math.max(1, Number(state.level)||1);
 const levels = (states,key) => states.filter(state=>keyOf(state)===key).reduce((total,state)=>total+levelOf(state),0);
 const integer = (value,label,{minimum=0,maximum=Number.MAX_SAFE_INTEGER}={}) => {

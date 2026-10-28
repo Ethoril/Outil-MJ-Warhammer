@@ -448,3 +448,13 @@ test('Gravelord options follow the imported Grüber profile E0-P-569 even under 
   assert.ok(planBestiaryProfileAbilities({ name: ' Hans Grüber ' }).some(plan => plan.key === 'gravelord-variants'));
   assert.ok(!planBestiaryProfileAbilities(p('E0-P-565')).some(plan => plan.key === 'gravelord-variants'));
 });
+
+test('Sea Elemental keeps its Ablaze immunity after spell layers rewrite its immunities (M1)', async () => {
+  const { acquireV5Conditions } = await import('../js/core/v5-effects.js');
+  const sea = p('E0-P-909');
+  const rewritten = { ...sea, extensions: { ...sea.extensions, v5: { ...sea.extensions.v5, immunities: { conditions: ['sonne'] } } } };
+  const receipt = acquireV5Conditions(rewritten, [{ name: 'Enflammé', level: 1, source: { kind: 'spell' } }], { resolutionId: 'after-layer', round: 1 });
+  assert.equal(receipt.acquiredInstances, 0);
+  const other = acquireV5Conditions(p('E0-P-910'), [{ name: 'Enflammé', level: 1, source: { kind: 'spell' } }], { resolutionId: 'garg-fire', round: 1 });
+  assert.equal(other.acquiredInstances, 1);
+});
