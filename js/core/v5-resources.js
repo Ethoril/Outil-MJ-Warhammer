@@ -285,15 +285,30 @@ export function reconcileV5ResourceBindings(before, next, entries = []) {
     if (!profile || profile.kind !== 'PJ' || !charId || entry.replaceAssociation === true || text(profile.extensions?.ficheId) || text(profile.ficheSnapshot?.charId)
       || updated?.extensions?.ficheId !== charId || profileTargets.get(profile.id)?.size !== 1 || targetProfiles.get(charId)?.size !== 1) continue;
     const fromId = 'profile:' + profile.id, toId = 'fiche:' + charId;
-    const record = registry.find(row => row.characterId === fromId);
-    if (!record || registry.some(row => row.characterId === toId)) continue;
+    if (registry.some(row => row.characterId === toId)) continue;
     const otherLinked = (before.reserve || []).some(row => row.id !== profile.id && (row.extensions?.ficheId === charId || row.ficheSnapshot?.charId === charId));
-    const conflictingCopy = priorSubjects.filter(row => row.profileId === profile.id).some(row => {
-      const identity = v5ResourceIdentity(before, row);
-      return identity && identity !== fromId && registry.some(item => item.characterId === identity);
-    });
-    if (otherLinked || conflictingCopy) continue;
-    record.characterId = toId;
+    if (otherLinked) continue;
+    // Before this explicit first binding, every non-persistent encounter copy
+    // has its own Fortune pool, including copies cloned from a PJ profile.
+    // Once the unambiguous PJ profile is bound, its live copies become one
+    // fiche-backed character. Separate pre-binding balances are never merged
+    // by assumption. Equal balances can be collapsed losslessly; differing
+    // ones require the MJ to set the intended balance on each scene copy.
+    const copyIds = new Set(priorSubjects.filter(row => row.profileId === profile.id)
+      .map(row => v5ResourceIdentity(before, row))
+      .filter(identity => identity?.startsWith('copy:')));
+    const sourceIds = new Set([fromId, ...copyIds]);
+    const sourceRecords = registry.filter(row => sourceIds.has(row.characterId));
+    if (sourceRecords.length) {
+      const balances = new Set(sourceRecords.map(row => row.fortune));
+      if (balances.size > 1) {
+        throw Object.assign(new Error('Association suspendue : les copies de ce PJ ont des soldes de Chance différents. Ouvrez chaque scène concernée, saisissez le même solde de Fortune pour ses copies, puis relancez la synchronisation.'),
+          { code: 'fiche-fortune-binding-conflict', userFacing: true });
+      }
+      const chosen = sourceRecords[0];
+      chosen.characterId = toId;
+      for (const record of sourceRecords) if (record !== chosen) registry.splice(registry.indexOf(record), 1);
+    }
   }
   return projectV5ResourceEnvelope(withRegistry(next, registry));
 }
