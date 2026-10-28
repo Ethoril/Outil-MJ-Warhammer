@@ -86,6 +86,19 @@ export function corruptionThresholdCheck({ currentPoints, gainedPoints, threshol
   return Object.freeze({ totalPoints, threshold, required: gainedPoints > 0 && totalPoints > threshold });
 }
 
+/** Mark a required threshold Test at the point any engine awards Corruption. */
+export function markCorruptionThresholdTest(participant) {
+  const v5 = participant?.extensions?.v5 || {};
+  const points = v5.corruptionPoints, E = Number(participant?.caracs?.E), FM = Number(participant?.caracs?.FM);
+  if (!Number.isSafeInteger(points) || points < 0 || !Number.isSafeInteger(E) || E < 0 || !Number.isSafeInteger(FM) || FM < 0) return participant;
+  if (v5.pendingCorruptionTest || v5.pendingCorruptionMutation || v5.pendingCorruptionCharacterLoss) return participant;
+  const threshold = calculateCorruptionThreshold({ toughnessBonus: Math.floor(E / 10), willpowerBonus: Math.floor(FM / 10),
+    pureSoul: (participant.talents || []).some(row => row?.id === 'talent-pure-soul' && row.status === 'resolved') });
+  if (points <= threshold) return participant;
+  return { ...participant, extensions: { ...(participant.extensions || {}), v5: { ...v5,
+    pendingCorruptionTest: { id: `corruption-threshold:${participant.id}:${points}:${threshold}`, status: 'pending', pointsAtTrigger: points, thresholdAtTrigger: threshold } } } };
+}
+
 const normalizeSpecies = value => {
   const species = typeof value === 'string' ? value.trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase('fr').replace(/[-_]+/g, ' ') : '';
   if (['humain', 'human'].includes(species)) return 'human';

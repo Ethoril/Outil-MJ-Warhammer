@@ -194,6 +194,11 @@ export function createV5CorruptionPanel({ Store, refresh = () => {} } = {}) {
         if (result?.status === 'stale' || result?.ok === false) throw new Error(result.error || 'La partie a changé; relisez la mutation.');
         state.mutationDescription = ''; state.receipt = 'Mutation durable enregistrée; aucun effet de table K2 n’est appliqué ici.';
       }), !state.mutationDescription.trim());
+      button(panel, 'Refuser cette mutation', () => act(async () => {
+        const result = await Store.declineCorruptionMutation(actor.id, { baseRevision: status.baseRevision });
+        if (result?.status !== 'declined') throw new Error(result.error || 'La partie a changé; relisez la mutation.');
+        state.mutationDescription = ''; state.receipt = 'Mutation refusée par le MJ; aucun point ni effet n’a été appliqué.';
+      }));
     } else if (status.pendingCharacterLoss) {
       panel.append(node('h4', '', 'Perte de personnage à arbitrer'));
       panel.append(node('p', 'workspace-field-error', 'Les limites de mutations sont dépassées. Le personnage n’est pas retiré sans décision explicite du MJ.'));

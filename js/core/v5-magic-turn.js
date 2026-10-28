@@ -8,6 +8,7 @@ import { acquireV5Conditions } from './v5-effects.js';
 import { previewV5Test, selectV5Test } from './v5-roll.js';
 import { hasArcaneMagicLore, hasLivingMagicNature, hasTargetNatureOrTrait } from './v5-magic-attributes.js';
 import { magicTalentRank,effectiveSkillScore } from './v5-magic-talents.js';
+import { markCorruptionThresholdTest } from './v5-corruption.js';
 /** Retrait atomique des couches dont le contrat annonce une fin sur événement. */
 export function endSpellEffectsOnEvent(participants,actorId,event){
  return participants.map(p=>{
@@ -463,7 +464,7 @@ export function roundSpellEffects(participants, phase, round, inputs = {}, actor
     if (spec.suffocation && target.hp === 0) Object.assign(target,acquireV5Conditions(target,['Inconscient'],{round}).participant);
     if (secondaryFailed && spec.failConditions) Object.assign(target,acquireV5Conditions(target,spec.failConditions,{round}).participant);
     // Points de Corruption sur Test raté de la clause (ex. Transformation de Tzeentch).
-    if (secondaryFailed && spec.failCorruption) target.extensions.v5.corruptionPoints=(Number(target.extensions.v5.corruptionPoints) || 0)+Number(spec.failCorruption);
+    if (secondaryFailed && spec.failCorruption) { target.extensions.v5.corruptionPoints=(Number(target.extensions.v5.corruptionPoints) || 0)+Number(spec.failCorruption); Object.assign(target,markCorruptionThresholdTest(target)); }
     if(spec.releaseAtStunned && (target.states || []).filter(s=>/sonne|stunned/.test(String(s.key || s.name).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase())).reduce((n,s)=>n+Number(s.level || 1),0)>=spec.releaseAtStunned){Object.assign(target,expireSpellEffects(target,{effectId:effect.id}).participant);target.extensions.v5.banished=true;logs.push({kind:'effect',actorId:caster.id,text:effect.spellName+' : esprit libéré après '+spec.releaseAtStunned+' Sonné.'});}
     if(phase==='expiry' && spec.suffocation)Object.assign(target,applySpellEffects(target,{spellId:effect.spellId,spellName:effect.spellName+' : enseveli',casterId:caster.id,duration:'Spécial',roundEffect:{phase:'endOfRound',suffocation:true},specialState:{suffocating:true}},{round,caster}).participant);
     if (spec.conditions) Object.assign(target,acquireV5Conditions(target,spec.conditions,{round}).participant);

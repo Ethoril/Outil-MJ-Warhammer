@@ -1,5 +1,6 @@
 import { uid } from './models.js';
 import {activeMagicTalent, prepareMiscastOptions} from './v5-magic-talents.js';
+import { markCorruptionThresholdTest } from './v5-corruption.js';
 /**
  * Moteur des Incidents Magiques (Miscasts) V5 — Lot 3.1.
  * Conforme au Cahier des charges Lot 3 et au Cadrage Magie V5.
@@ -788,6 +789,7 @@ export function applyMiscastToParticipant(participant, miscast, options = {}) {
   if (Number.isFinite(Number(details.corruptionPoints)) && Number(details.corruptionPoints) > 0) {
     const pts = activeMagicTalent(next,'sanctuary-of-the-mind') ? 0 : Number(details.corruptionPoints);
     next.extensions.v5.corruptionPoints = (Number(next.extensions.v5.corruptionPoints) || 0) + pts;
+    if (pts > 0) Object.assign(next, markCorruptionThresholdTest(next));
     reminders.push(pts?`Suivi fiche : +${pts} Point(s) de Corruption (${miscast.name}).`:'Sanctuaire de l’esprit : Corruption de l’incantation évitée.');
   }
 

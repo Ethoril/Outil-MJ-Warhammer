@@ -3,6 +3,7 @@ const clone = structuredClone;
 const record = value => value && typeof value === 'object' && !Array.isArray(value);
 const text = value => typeof value === 'string' && value.trim() ? value : null;
 const balance = value => { if (!Number.isSafeInteger(value) || value < 0) throw new TypeError('Solde de Fortune invalide'); return value; };
+import { markCorruptionThresholdTest } from './v5-corruption.js';
 
 /** Shared action/quota clock, including restarted combats and legacy saved scenes. */
 export function v5CombatActionClock(envelope) {
@@ -202,6 +203,7 @@ export function creditFortuneCorruption(envelope, participants, subject, spent) 
   for (const carrier of carriers) {
     const target = participants.find(p => p.id === carrier.id);
     target.extensions = { ...(target.extensions || {}), v5: { ...(target.extensions?.v5 || {}), corruptionPoints: total } };
+    Object.assign(target, markCorruptionThresholdTest(target));
   }
   return participants;
 }

@@ -956,8 +956,8 @@ function updateCorruptionCopies(envelope, id, transform) {
 }
 function corruptionFacts(participant) {
   const toughnessScore = Number(participant?.caracs?.E), willpowerScore = Number(participant?.caracs?.FM);
-  if (!Number.isSafeInteger(toughnessScore) || toughnessScore < 0 || toughnessScore > 100
-    || !Number.isSafeInteger(willpowerScore) || willpowerScore < 0 || willpowerScore > 100) {
+  if (!Number.isSafeInteger(toughnessScore) || toughnessScore < 0
+    || !Number.isSafeInteger(willpowerScore) || willpowerScore < 0) {
     throw Object.assign(new Error('Bonus d’Endurance et de Force Mentale connus requis pour calculer le seuil.'), { code: 'CORRUPTION_FACTS_REQUIRED', userFacing: true });
   }
   const toughnessBonus = Math.floor(toughnessScore / 10), willpowerBonus = Math.floor(willpowerScore / 10);
@@ -1043,14 +1043,20 @@ function resolvedCorruptionTest(participant, skillId, input) {
     if (v5.corruptionPoints <= facts.threshold) return { status: 'not-required', participantId: participant.id, baseRevision, threshold: facts.threshold, corruptionPoints: v5.corruptionPoints };
     const test = resolvedCorruptionTest(participant, CORRUPTION_SKILL_IDS.resistance, input || {});
     const mutations = Array.isArray(v5.corruptionMutations) ? v5.corruptionMutations : [];
-    const outcome = resolveCorruptionThresholdTest({
+    let outcome;
+    try { outcome = resolveCorruptionThresholdTest({
       success: test.success, currentPoints: v5.corruptionPoints, willpowerBonus: facts.willpowerBonus,
       species: participant.species || participant.race || v5.species || v5.bestiary?.identity?.species,
       mutationDomainRoll: input?.mutationDomainRoll, gmChosenDomain: input?.gmChosenDomain,
       physicalMutationCount: mutations.filter(row => row?.domain === 'physical').length,
       mentalMutationCount: mutations.filter(row => row?.domain === 'mental').length,
       toughnessBonus: facts.toughnessBonus
-    });
+    }); } catch (error) {
+      if (/Jet de manifestation physique\/mentale doit être compris/.test(error?.message || '') && input?.mutationDomainRoll == null) {
+        return { status: 'needs-input', participantId: participant.id, baseRevision, test, missing: ['mutationDomainRoll'] };
+      }
+      throw error;
+    }
     if (outcome.status === 'needs-gm-choice') return { status: 'needs-input', participantId: participant.id, baseRevision, test, outcome, missing: ['gmChosenDomain'] };
     if (outcome.mutation) {
       let manifestation;
@@ -2234,6 +2240,31 @@ function resolvedCorruptionTest(participant, skillId, input) {
         return draft;
       }).then(result => result?.ok === false ? { status: 'error', ok: false, error: result.error }
         : { status: 'confirmed', ok: true })
+        .catch(error => error?.code === 'CORRUPTION_STALE' ? { status: 'stale', ok: false, error: error.message } : Promise.reject(error));
+    },
+    declineCorruptionMutation(id, { baseRevision = localRevision } = {}) {
+      return Promise.resolve(api.executeCommand('decline-corruption-mutation-v5', draft => {
+        if (draft.localRevision !== baseRevision) throw Object.assign(new Error('La partie a changé. Relisez la mutation en attente.'), { code: 'CORRUPTION_STALE', userFacing: true });
+        const subject = findCorruptionSubject(draft, id);
+        if (!subject) throw new TypeError('Personnage introuvable');
+        const v5 = subject.extensions?.v5 || {};
+        if (!v5.pendingCorruptionMutation || v5.pendingCorruptionMutation.status !== 'pending') throw Object.assign(new Error('Aucune mutation en attente à refuser.'), { code: 'CORRUPTION_MUTATION_NOT_PENDING', userFacing: true });
+        const result = confirmCorruptionMutationPure({ authoritativeState: {
+          corruptionPoints: v5.corruptionPoints, toughnessBonus: corruptionFacts(subject).toughnessBonus,
+          willpowerBonus: corruptionFacts(subject).willpowerBonus, pureSoul: corruptionFacts(subject).pureSoul,
+          corruptionMutations: v5.corruptionMutations || [], pendingCorruptionMutation: v5.pendingCorruptionMutation
+        }, mutationId: 'gm-declined', confirmed: false });
+        updateCorruptionCopies(draft, id, row => {
+          const rowV5 = row.extensions?.v5 || {};
+          row.extensions = { ...(row.extensions || {}), v5: { ...rowV5, pendingCorruptionMutation: null,
+            lastCorruptionMutationDecision: { id: v5.pendingCorruptionMutation.id, status: 'declined', decidedAt: Date.now() } } };
+          return row;
+        });
+        draft.log = [{ id: uid(), kind: 'management', actorId: id, actorName: subject.name,
+          text: `${subject.name} : mutation de Corruption refusée par le MJ`,
+          detail: { kind: 'decline-corruption-mutation-v5', mutationId: v5.pendingCorruptionMutation.id } }, ...(draft.log || [])].slice(0, 300);
+        return draft;
+      })).then(result => result?.ok === false ? { status: 'error', ok: false, error: result.error } : { status: 'declined', ok: true })
         .catch(error => error?.code === 'CORRUPTION_STALE' ? { status: 'stale', ok: false, error: error.message } : Promise.reject(error));
     },
     applyCorruptionAbsolution(id, { amount, reason, baseRevision = localRevision } = {}) {
