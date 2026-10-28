@@ -30,11 +30,17 @@ export function v5ResourceIdentity(envelope, subject) {
   if (text(subject.persistentCharacterId)) return 'persistent:' + subject.persistentCharacterId;
   if ((envelope.persistentCharacters || []).some(row => row.id === subject.id)) return 'persistent:' + subject.id;
   if (text(subject.extensions?.v5?.resourceCharacterId)) return 'local:' + subject.extensions.v5.resourceCharacterId;
-  if (subject.kind === 'PJ') {
-    if (text(subject.profileId)) return 'profile:' + subject.profileId;
-    if ((envelope.reserve || []).some(row => row.id === subject.id)) return 'profile:' + subject.id;
+  // A profile is a template, not proof that every combat copy is the same
+  // persistent character. Only the reserve record itself uses profile identity;
+  // transient copies receive their own balances unless they carry a persistent ID.
+  if ((envelope.reserve || []).some(row => row.id === subject.id)) return 'profile:' + subject.id;
+  const scenes=[envelope.activeScene,...(envelope.suspendedScenes||[])].filter(record),scene=scenes.find(row=>(row.participants||[]).some(item=>item?.id===subject.id));
+  const entryId=text(subject.source?.encounterEntryId);
+  if(scene&&entryId){
+    const copies=(scene.participants||[]).filter(item=>item?.source?.encounterEntryId===entryId),ordinal=copies.findIndex(item=>item.id===subject.id);
+    if(ordinal>=0)return `copy:${scene.encounterId||scene.id}:${entryId}:${ordinal}`;
   }
-  return null;
+  return text(subject.id) ? 'copy:' + subject.id : null;
 }
 function registryOf(envelope) {
   const registry = envelope.extensions?.v5?.characterResources ?? [];
@@ -248,15 +254,14 @@ export function commitV5Resources(envelope, participants = []) {
 
 /** Keep permanent Destin debits on every durable projection of the same character. */
 export function commitV5Fate(envelope, participants = []) {
-  const before=envelope?.combat?.participants||[],changes=new Map(),profileBalances=new Map();
+  const before=envelope?.combat?.participants||[],changes=new Map();
   for(const current of participants){
     const previous=before.find(row=>row.id===current.id),oldValue=previous?.extensions?.v5?.fate??previous?.fate,newValue=current?.extensions?.v5?.fate??current?.fate;
     if(oldValue===undefined||oldValue===null||newValue===undefined||newValue===null||Number(oldValue)===Number(newValue))continue;
     const characterId=v5ResourceIdentity(envelope,current);if(characterId)changes.set(characterId,Number(newValue));
-    if(typeof current.profileId==='string'&&current.profileId.trim())profileBalances.set(current.profileId,Number(newValue));
   }
-  if(!changes.size&&!profileBalances.size)return {...envelope,combat:{...(envelope.combat||{}),participants}};
-  const update=rows=>(rows||[]).map(row=>{const characterId=v5ResourceIdentity(envelope,row),value=changes.has(characterId)?changes.get(characterId):profileBalances.get(row.id);if(value===undefined)return row;const next=clone(row);next.extensions={...(next.extensions||{}),v5:{...(next.extensions?.v5||{}),fate:value}};if(Object.hasOwn(next,'fate'))next.fate=value;return next;});
+  if(!changes.size)return {...envelope,combat:{...(envelope.combat||{}),participants}};
+  const update=rows=>(rows||[]).map(row=>{const characterId=v5ResourceIdentity(envelope,row),value=changes.get(characterId);if(value===undefined)return row;const next=clone(row);next.extensions={...(next.extensions||{}),v5:{...(next.extensions?.v5||{}),fate:value}};if(Object.hasOwn(next,'fate'))next.fate=value;return next;});
   const next={...envelope,reserve:update(envelope.reserve),persistentCharacters:update(envelope.persistentCharacters),combat:{...(envelope.combat||{}),participants:update(participants)}};
   if(envelope.activeScene)next.activeScene={...envelope.activeScene,participants:update(envelope.activeScene.participants)};
   next.suspendedScenes=recordScenes(envelope.suspendedScenes).map(scene=>({...scene,participants:update(scene.participants)}));

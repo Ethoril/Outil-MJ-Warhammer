@@ -75,7 +75,7 @@ import { refreshV5TalentEffects,previewV5FrenzyExit } from './v5-talent-actions.
 import { previewV5TalentConditions } from './v5-talents.js';
 import { normalizeEffects } from './effects.js';
 import { buildV5StoreActionInput, annotateV5StoreActionPreview, applyV5StoreAction, v5StoreActionState, v5StoreActionResult, v5StoreActionClock, commitV5StoreTalentUsages } from './v5-store-action.js';
-import { getV5Fortune, getV5Fate, consumeTemporaryFortune as consumeParticipantTempFortune, consumeTemporaryFate as consumeParticipantTempFate, projectV5Resources, projectV5ResourceEnvelope, commitV5Resources, creditFortuneCorruption, setV5Fortune, refreshV5Fortune, reconcileV5ResourceBindings } from './v5-resources.js';
+import { getV5Fortune, getV5Fate, v5ResourceIdentity, consumeTemporaryFortune as consumeParticipantTempFortune, consumeTemporaryFate as consumeParticipantTempFate, projectV5Resources, projectV5ResourceEnvelope, commitV5Resources, creditFortuneCorruption, setV5Fortune, refreshV5Fortune, reconcileV5ResourceBindings } from './v5-resources.js';
 import { acquireV5Conditions, recoverV5Condition, healV5Wounds, assertDivineWrathConditionsKept } from './v5-effects.js';
 import { decideCriticalDeath as decideV5CriticalDeath, decideImmediateCriticalDeath as decideV5ImmediateCriticalDeath, previewSuddenDeath as previewV5SuddenDeath, decideSuddenDeath as decideV5SuddenDeath, updateCriticalDeathCountdown, previewAmputationShock as previewV5AmputationShock, applyAmputationShock as applyV5AmputationShock, amputationShockRequirements } from './v5-critical-aftermath.js';
 import { encounterJournalScope, purgeEncounterJournal, purgeEncounterJournalHistory, tagNewEncounterLogs } from './encounter-journal.js';
@@ -2038,9 +2038,9 @@ function resolvedCorruptionTest(participant, skillId, input) {
           fortuneMaximumReducedBy=before-amount;
           draft=setV5Fortune(draft,subject,Math.max(0,fortune.permanent-fortuneMaximumReducedBy),{source:'mj'});
         }
-        const identity=subject.extensions?.ficheId||subject.ficheSnapshot?.charId||subject.persistentCharacterId||(subject.kind==='PJ'&&typeof subject.profileId==='string'&&subject.profileId.trim()?`profile:${subject.profileId}`:subject.id);
+        const identity=v5ResourceIdentity(draft,subject);
         const update=rows=>(rows||[]).map(row=>{
-          const rowIdentity=row.extensions?.ficheId||row.ficheSnapshot?.charId||row.persistentCharacterId||(row.kind==='PJ'&&typeof row.profileId==='string'&&row.profileId.trim()?`profile:${row.profileId}`:row.kind==='PJ'&&row.id===subject.profileId?`profile:${row.id}`:row.id);
+          const rowIdentity=v5ResourceIdentity(draft,row);
           if(row.id!==id&&rowIdentity!==identity)return row;
           const next=cloneValue(row);next.extensions={...(next.extensions||{}),v5:{...(next.extensions?.v5||{}),fate:amount}};
           if(Object.hasOwn(next,'fate'))next.fate=amount;return next;

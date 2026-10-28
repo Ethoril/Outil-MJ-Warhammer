@@ -64,8 +64,8 @@ test('F2-L: temporary Fate is spent before permanent Fate and permanent spend su
   let preview=attack('fate-temp-first');assert.equal(preview.ready,true,preview.unresolved?.join('; '));await store.applyResolution(preview);
   foe=store.listParticipants().find(row=>row.id===foeId);assert.equal(foe.extensions.v5.spellEffects[0].remainingTempFate,0);assert.equal(foe.extensions.v5.fate,1);assert.equal(store.getProfile('foe-profile').extensions.v5.fate,1);
   preview=attack('fate-permanent-second');assert.equal(preview.ready,true,preview.unresolved?.join('; '));await store.applyResolution(preview);
-  const liveFoe=store.listParticipants().find(row=>row.id===foeId);assert.equal(liveFoe.extensions.v5.fate,0);assert.equal(store.getProfile('foe-profile').extensions.v5.fate,0);
-  const reload=createStore({storage:null,persistence});await reload.ready;assert.equal(reload.getProfile('foe-profile').extensions.v5.fate,0);
+  const liveFoe=store.listParticipants().find(row=>row.id===foeId);assert.equal(liveFoe.extensions.v5.fate,0);assert.equal(store.getProfile('foe-profile').extensions.v5.fate,1,'une copie anonyme ne dépense pas le Destin du profil');
+  const reload=createStore({storage:null,persistence});await reload.ready;assert.equal(reload.getProfile('foe-profile').extensions.v5.fate,1);
 });
 
 test('F2-L: automatic Fate succeeds on an opposition and forces at least +1 DR',async()=>{
