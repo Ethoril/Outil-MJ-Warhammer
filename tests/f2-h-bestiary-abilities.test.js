@@ -510,3 +510,16 @@ test('A profile special action copied onto another participant is refused (F7)',
   assert.throws(() => normalizeResolutionInput({ actor: intruder, action: discharge, roll: 20 }), { code: 'PROFILE_ACTION_NOT_OWNED' });
   assert.doesNotThrow(() => normalizeResolutionInput({ actor: garg, action: discharge, roll: 20 }));
 });
+
+test('Head-Taker needs no hit-location roll for its Critical (F1)', () => {
+  const built = p('E0-P-921');
+  const actor = { ...built, talents: [], id: 'wulfrik-head', zone: 'active' };
+  const attack = { ...actor.actions.find(row => row.type === 'attack' && row.attr === 'CC'), base: actor.caracs.CC };
+  const preview = previewResolution({ resolutionId: 'head-taker', baseRevision: 0, actor, action: attack, roll: 11,
+    target: { id: 'head-victim', name: 'Victime', zone: 'active', hp: 40, maxHp: 40, caracs: { E: 30 }, equipment: [], states: [] },
+    defense: { base: 10, roll: 95, v5: { kind: 'test' } }, v5: { kind: 'melee', context: { f2h: { wulfrikHeadCritical: true } } } });
+  const critical = preview.critical?.details || preview.critical;
+  assert.ok(critical, 'roll 11 is a Critical');
+  assert.equal(JSON.stringify(preview.critical).includes('"needsLocation":true'), false, JSON.stringify(preview.critical).slice(0, 300));
+  assert.match(JSON.stringify(preview.critical), /HEAD|Tête/);
+});

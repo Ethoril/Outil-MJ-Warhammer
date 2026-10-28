@@ -972,7 +972,8 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   const fateCriticalLocation=CALLED_SHOT_LOCATIONS[context.fateCriticalLocation];
   if(criticalAttack&&context.fateAction==='automatic-success'&&!fateCriticalLocation)fateUnresolved.push('Destin : choisissez la localisation de la Blessure Critique.');
   const rawCriticalLocation = criticalAttack && context.fateAction==='automatic-success' && fateCriticalLocation ? criticalTableLocation({roll:null,...fateCriticalLocation},context) : criticalAttack && criticalLocationRoll != null ? criticalTableLocation(creatureLocationOf(criticalLocationRoll,target,context),context) : null;
-  const criticalLocation = wulfrikHeadTableChosen && rawCriticalLocation ? { ...rawCriticalLocation, key: 'HEAD', name: 'Tête', tableOverride: 'Wulfrik · Preneur de têtes' } : rawCriticalLocation;
+  // Preneur de têtes (L25 p.155) : la table Tête est choisie, aucun jet de localisation n'est utile.
+  const criticalLocation = wulfrikHeadTableChosen && criticalAttack ? { ...(rawCriticalLocation || criticalTableLocation({ roll: null, ...CALLED_SHOT_LOCATIONS.head }, context)), key: 'HEAD', name: 'Tête', tableOverride: 'Wulfrik · Preneur de têtes' } : rawCriticalLocation;
   const inoffensive = action.qualities.some(q => q.id === 'inoffensive') && keywordMechanicalStatus('inoffensive').status === 'covered';
   const weaponReferenceId = action.extensions?.fiche?.equipmentId || action.extensions?.equipment?.id;
   const selectedWeapon = actor?.equipment?.find(item => item.id === weaponReferenceId && item.kind === 'weapon') || null;
