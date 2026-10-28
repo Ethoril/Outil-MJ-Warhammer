@@ -6,7 +6,7 @@ import { v5ResourceIdentity } from './v5-resources.js';
 import { validateV5ReactionInput, registerV5ReactionOpportunities } from './v5-reactions.js';
 /** Bridge from the durable Store envelope to the pure V5 action transaction. */
 import { previewV5ActionCosts, prepareV5ActionState, commitV5ActionCosts } from './v5-action-costs.js';
-import { projectV5Resources, commitV5Resources, v5CombatActionClock } from './v5-resources.js';
+import { projectV5Resources, commitV5Resources, commitV5Fate, v5CombatActionClock } from './v5-resources.js';
 import { effectiveOrder } from './turn-order.js';
 import { planNaturalAttack } from './creature-combat.js';
 import { weaponHandsForParticipant } from './equipment.js';
@@ -59,6 +59,19 @@ export function buildV5StoreActionInput(envelope, raw = {}) {
   if(v5.context?.freeAttackTalent==='fast-shot')v5.extraAttack=false;
   if(v5.context?.talentAction==='stomp')v5.extraAttack=true;
   const costs = [...(v5.costs || [])];
+  const fateAction = v5.context?.fateAction;
+  // Destin laisse le MJ choisir le résultat du dé sans lancer les dés; le moteur
+  // garantit ensuite la réussite et conserve les doubles choisis pour un critique.
+  if(fateAction==='automatic-success'){
+    const chosen=Number(v5.context.fateChosenRoll);
+    if(Number.isInteger(chosen)&&chosen>=1&&chosen<=100){supplied.roll=chosen;supplied.dieRoll=chosen;supplied.enteredRoll=chosen;}
+    else {supplied.roll=50;supplied.dieRoll=50;supplied.enteredRoll=50;}
+    v5.context={...v5.context,fateChosenRoll:Number.isInteger(chosen)&&chosen>=1&&chosen<=100?chosen:null};supplied.v5=v5;
+  }
+  if (fateAction && ['cancel-attack', 'survive', 'automatic-success'].includes(fateAction)
+      && !costs.some(cost => cost.id === 'system:fate-action'))
+    costs.push({ id: 'system:fate-action', resource: 'fate', amount: 1,
+      actorId: ['cancel-attack', 'survive'].includes(fateAction) ? targetId : actorId });
   if (v5.extraAttack === true && !costs.some(cost => cost.resource === 'momentum')) costs.push({ id: 'system:extra-attack-momentum', resource: 'momentum', amount: 1 });
   const quotas=[...(v5.quotas||[])],exemptions=[...(v5.exemptions||[])],actor=state.participants.find(p=>p.id===actorId),context=v5.context||{};
   if(context.secondWeaponAttack===true){
@@ -199,6 +212,11 @@ export function buildV5StoreActionInput(envelope, raw = {}) {
     fortuneReroll, fortuneRerollRoll: hasValidReroll ? Number(rawReroll) : null, initialRollBeforeFortune, freeReroll, reverseDiceApplied, ...(reverseDiceApplied ? { reverseDice: { used: true } } : {}) };
 }
 export function annotateV5StoreActionPreview(preview, input) {
+  const fateAction = input.v5?.context?.fateAction;
+  if (fateAction) preview = { ...preview, fateAction: { action: fateAction, cost: 1, paid: input.actionCostPlan?.ready === true,
+    payerId: input.actionCostPlan?.request?.costs?.find(cost=>cost.id==='system:fate-action')?.actorId||input.actionCostPlan?.actorId,
+    ...(fateAction==='automatic-success'?{chosenRoll:input.v5?.context?.fateChosenRoll??null}:{}),
+    ...(fateAction === 'cancel-attack' ? { cancelled: true } : {}), ...(fateAction==='survive'?{removedFromEncounter:true}:{}) } };
   // Indice seulement : la faveur reste disponible jusqu'à une inversion demandée et appliquée.
   if (preview.success === false && input.v5?.reverseDice !== true && reverseDiceLayers(input.actor).length && Number.isInteger(preview.roll) && preview.roll >= 1 && preview.roll <= 100) {
     const reversed = preview.roll === 100 ? 100 : (preview.roll % 10) * 10 + Math.floor(preview.roll / 10);
@@ -281,9 +299,9 @@ export function applyV5StoreAction(preview, envelope, resolveAction) {
   return { ...committed.result, state: committed.state, actionCostReceipt: committed.receipt };
 }
 export function v5StoreActionResult(envelope, result) {
-  const next = { ...envelope, combat: { ...envelope.combat, participants: result.state.participants },
-    appliedResolutionIds: result.state.appliedResolutionIds,
-    extensions: { ...(envelope.extensions || {}), v5: { ...(envelope.extensions?.v5 || {}), actionLedger: clone(result.state.v5ActionLedger || { appliedActions: [], quotaUsage: [] }) } } };
+  const next = commitV5Fate(envelope,result.state.participants);
+  next.appliedResolutionIds=result.state.appliedResolutionIds;
+  next.extensions={...(envelope.extensions||{}),v5:{...(envelope.extensions?.v5||{}),actionLedger:clone(result.state.v5ActionLedger||{appliedActions:[],quotaUsage:[]})}};
   if(result.resolution?.talentActionChanges?.some(c=>c.patch?.initiative!=null)&&next.combat.orderMode!=='manual')next.combat.order=effectiveOrder(next.combat.participants,{mode:'initiative'});
   const resources = commitV5Resources(next, result.state.participants);
   return registerV5ReactionOpportunities(resources, result.resolution, { clock: v5StoreActionClock(envelope) });

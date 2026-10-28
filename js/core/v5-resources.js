@@ -131,7 +131,10 @@ export function getV5Fortune(envelope, subject) {
   const sourceId = subject?.ficheSnapshot?.charId;
   const sourceMatches = !subject?.extensions?.ficheId || subject.extensions.ficheId === sourceId;
   const sourceBalance = sourceMatches && Number.isSafeInteger(sourceValue) && sourceValue >= 0 ? sourceValue : null;
-  const permanent = entry?.fortune ?? null;
+  // V4 profile conversion leaves an explicit Fortune value on the imported profile. Adopt it
+  // as the initial durable balance until the character registry is materialized by a spend.
+  const legacyProfileBalance=subject?.extensions?.legacyConversions?.v4ToV5===true?subject?.extensions?.v5?.resources?.fortune:null;
+  const permanent = entry?.fortune ?? (Number.isSafeInteger(legacyProfileBalance)&&legacyProfileBalance>=0?legacyProfileBalance:null);
   const temporary = temporaryOf(envelope, subject, characterId, 'fortune');
   return { characterId, balance: permanent === null ? null : permanent + temporary, permanent, temporary, sourceBalance, initializedFrom: entry?.initializedFrom ?? null, ...(pendingWrathFortune(subject).length?{refreshLimit:1}:{}) };
 }
@@ -212,7 +215,8 @@ export function commitV5Resources(envelope, participants = []) {
     if (!Object.hasOwn(subject.extensions?.v5?.resources || {}, 'fortune')) continue;
     const value = balance(subject.extensions.v5.resources.fortune);
     const tempBefore = temporaryOf(envelope, subject, identity, 'fortune');
-    const permBefore = entry ? entry.fortune : 0;
+    const profileBalance=subject.extensions?.legacyConversions?.v4ToV5===true?subject.extensions?.v5?.resources?.fortune:null;
+    const permBefore = entry ? entry.fortune : Number.isSafeInteger(profileBalance)&&profileBalance>=0?profileBalance:0;
     const totalBefore = permBefore + tempBefore;
     if (value === totalBefore) continue;
     if (value < totalBefore) {
@@ -221,19 +225,40 @@ export function commitV5Resources(envelope, participants = []) {
       const spentPerm = spent - spentTemp;
       if (!credited.has(identity || subject.id)) { credited.add(identity || subject.id); creditFortuneCorruption(envelope, nextParticipants, nextParticipants[i], spent); }
       if (spentTemp > 0) nextParticipants.splice(0, nextParticipants.length, ...spendV5Temporary(envelope, nextParticipants, nextParticipants[i], 'fortune', spentTemp).participants);
-      if (entry) {
-        const nextPerm = balance(entry.fortune - spentPerm);
+      if (entry || identity && Number.isSafeInteger(profileBalance)) {
+        const nextPerm = balance(permBefore - spentPerm);
         if (updates.has(identity) && updates.get(identity) !== nextPerm) throw new TypeError('Soldes de Fortune contradictoires pour un personnage');
         updates.set(identity, nextPerm);
       }
-    } else if (entry) {
+    } else if (entry || identity && Number.isSafeInteger(profileBalance)) {
       const nextPerm = balance(Math.max(0, value - tempBefore));
       if (updates.has(identity) && updates.get(identity) !== nextPerm) throw new TypeError('Soldes de Fortune contradictoires pour un personnage');
       updates.set(identity, nextPerm);
     }
   }
-  for (const entry of registry) if (updates.has(entry.characterId)) entry.fortune = updates.get(entry.characterId);
+  for (const [characterId, value] of updates) {
+    const existing=registry.find(row=>row.characterId===characterId);
+    if(existing)existing.fortune=value;
+    else registry.push({characterId,fortune:value,initializedFrom:'v4-profile'});
+  }
   return projectV5ResourceEnvelope(withRegistry({ ...envelope, combat: { ...(envelope.combat || {}), participants: nextParticipants } }, registry));
+}
+
+/** Keep permanent Destin debits on every durable projection of the same character. */
+export function commitV5Fate(envelope, participants = []) {
+  const before=envelope?.combat?.participants||[],changes=new Map(),profileBalances=new Map();
+  for(const current of participants){
+    const previous=before.find(row=>row.id===current.id),oldValue=previous?.extensions?.v5?.fate??previous?.fate,newValue=current?.extensions?.v5?.fate??current?.fate;
+    if(oldValue===undefined||oldValue===null||newValue===undefined||newValue===null||Number(oldValue)===Number(newValue))continue;
+    const characterId=v5ResourceIdentity(envelope,current);if(characterId)changes.set(characterId,Number(newValue));
+    if(typeof current.profileId==='string'&&current.profileId.trim())profileBalances.set(current.profileId,Number(newValue));
+  }
+  if(!changes.size&&!profileBalances.size)return {...envelope,combat:{...(envelope.combat||{}),participants}};
+  const update=rows=>(rows||[]).map(row=>{const characterId=v5ResourceIdentity(envelope,row),value=changes.has(characterId)?changes.get(characterId):profileBalances.get(row.id);if(value===undefined)return row;const next=clone(row);next.extensions={...(next.extensions||{}),v5:{...(next.extensions?.v5||{}),fate:value}};if(Object.hasOwn(next,'fate'))next.fate=value;return next;});
+  const next={...envelope,reserve:update(envelope.reserve),persistentCharacters:update(envelope.persistentCharacters),combat:{...(envelope.combat||{}),participants:update(participants)}};
+  if(envelope.activeScene)next.activeScene={...envelope.activeScene,participants:update(envelope.activeScene.participants)};
+  next.suspendedScenes=recordScenes(envelope.suspendedScenes).map(scene=>({...scene,participants:update(scene.participants)}));
+  return next;
 }
 
 /** An explicit first PJ binding can rename its local resource identity, never infer it from a name. */

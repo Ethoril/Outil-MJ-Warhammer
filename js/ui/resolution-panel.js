@@ -36,6 +36,10 @@ import { getSpellContract, getAllSpellContracts, getContractChoiceOptions, valid
 import { getChannellingReserve } from '../core/v5-magic-channelling.js';
 import { resolveCastingSkill } from '../core/v5-magic-casting.js';
 import { DURATION_UNIT_LABELS, parseSpellDuration } from '../core/v5-magic-effects.js';
+import { isDouble } from '../core/dice.js';
+
+export const isCriticalFateRoll = value => Number.isInteger(Number(value)) && Number(value) >= 1 && Number(value) <= 100 && isDouble(Number(value));
+export const hitMorphologySelection = (override, profileMorphology) => override !== undefined ? override : profileMorphology || '';
 
 export const ACTION_TYPES = Object.freeze([
   ['attack', 'Attaque'],
@@ -836,6 +840,18 @@ function renderV5MagicResult(preview, target, draft, handlers) {
     const err = node('p', 'workspace-field-error', errText);
     err.setAttribute('role', 'alert');
     result.appendChild(err);
+    for (const need of sp.needsInput || []) if (need.field?.startsWith('mountedRide')) {
+      const [, riderId] = need.field.split(':');
+      const field = need.field.startsWith('mountedRideScore') ? 'score' : 'roll';
+      const answers = draft.magicMountedRideTests || {}, current = answers[riderId] || {};
+      const label = node('label', 'workspace-type', need.label || `${riderId} · ${field === 'roll' ? 'd100' : 'score de Chevaucher'}`);
+      const input = document.createElement('input'); input.type = 'number'; input.min = String(need.min ?? (field === 'roll' ? 1 : 0)); input.max = String(need.max ?? 100); input.value = current[field] == null ? '' : String(current[field]);
+      input.addEventListener('change', () => {
+        handlers.select({ magicMountedRideTests: { ...answers, [riderId]: { ...current, [field]: input.value === '' ? null : Number(input.value) } } });
+        handlers.calculate();
+      });
+      label.append(input); result.appendChild(label);
+    }
     return result;
   }
 
@@ -927,6 +943,22 @@ function renderV5MagicResult(preview, target, draft, handlers) {
     for (const rem of sp.reminders || []) {
       result.appendChild(node('p', 'workspace-muted', `Rappel : ${rem}`));
     }
+    for (const fall of sp.mountedFall || []) {
+      if (fall.test) result.appendChild(node('p', 'workspace-result-line', `${fall.participantId} : Chevaucher ${fall.test.roll}, ${fall.test.sl} DR · ${fall.dismount ? 'désarçonné' : 'reste en selle'}.`));
+    }
+    for (const need of sp.needsInput || []) if (need.field?.startsWith('mountedRide')) {
+      const [, riderId] = need.field.split(':');
+      const field = need.field.startsWith('mountedRideScore') ? 'score' : 'roll';
+      const rider = (sp.targets || []).find(row => row.id === riderId);
+      const answers = draft.magicMountedRideTests || {}, current = answers[riderId] || {};
+      const label = node('label', 'workspace-type', need.label || `${rider?.name || riderId} · ${field === 'roll' ? 'd100' : 'score de Chevaucher'}`);
+      const input = document.createElement('input'); input.type = 'number'; input.min = String(need.min ?? (field === 'roll' ? 1 : 0)); input.max = String(need.max ?? 100); input.value = current[field] == null ? '' : String(current[field]);
+      input.addEventListener('change', () => {
+        handlers.select({ magicMountedRideTests: { ...answers, [riderId]: { ...current, [field]: input.value === '' ? null : Number(input.value) } } });
+        handlers.calculate();
+      });
+      label.append(input); result.appendChild(label);
+    }
   }
   return result;
 }
@@ -1013,6 +1045,37 @@ function renderResult(preview, target, draft, handlers, participants=[]) {
   for(const reminder of preview.reminders || [])result.appendChild(node('p','workspace-muted',reminder));
   for(const occurrence of preview.weaponConditions?.applied || [])result.appendChild(node('p','workspace-result-line','Assommante : '+occurrence.level+' état Sonné proposé.'));
   if((preview.targetConditionApplication||[]).some(row=>row.source?.kind==='knockout'))result.appendChild(node('p','workspace-result-line','Assommer : le total de Sonné dépasse le BE; Inconscient proposé.'));
+  for (const fall of preview.mountedFall || []) {
+    const rider = participants.find(row => row.id === fall.participantId);
+    if (fall.requiredTest) {
+      result.appendChild(node('p','workspace-result-line',`${rider?.name||fall.participantId} : Test de Chevaucher ${fall.requiredTest.modifier >= 0 ? '+' : ''}${fall.requiredTest.modifier} DR requis (${fall.requiredTest.purpose}).`));
+      if (fall.opposedStrengthSize === 'mount' && fall.test?.success) {
+        const holder = fall.participantId === preview.input.actor?.id ? preview.input.target : preview.input.actor;
+        result.appendChild(node('p','workspace-muted',`Résolvez ensuite l’opposition de Force : ${rider?.name||'le cavalier'} compte à la Taille de sa monture.`));
+        const current = draft.v5Context || {}, scores = current.mountedForceScores || {}, rolls = current.mountedForceRolls || {};
+        for (const [side,person] of [['holder',holder],['rider',rider]]) {
+          if (!Number.isSafeInteger(Number(person?.caracs?.F)) || person?.caracs?.F === '' || person?.caracs?.F == null) {
+            const scoreLabel=node('label','workspace-type',`Force de ${person?.name||side} (score MJ)`),scoreInput=document.createElement('input');
+            scoreInput.type='number';scoreInput.min='0';scoreInput.max='100';scoreInput.step='1';scoreInput.value=scores[side]??'';scoreInput.setAttribute('aria-label',scoreLabel.textContent);
+            scoreInput.addEventListener('change',()=>handlers.select({v5Context:{...current,mountedForceScores:{...scores,[side]:scoreInput.value===''?undefined:Number(scoreInput.value)}}}));scoreLabel.append(scoreInput);result.append(scoreLabel);
+          }
+          const rollLabel=node('label','workspace-type',`Test de Force de ${person?.name||side} · d100`),rollInput=document.createElement('input');
+          rollInput.type='number';rollInput.min='1';rollInput.max='100';rollInput.step='1';rollInput.value=rolls[side]??'';rollInput.setAttribute('aria-label',rollLabel.textContent);
+          rollInput.addEventListener('change',()=>handlers.select({v5Context:{...current,mountedForceRolls:{...rolls,[side]:rollInput.value===''?undefined:Number(rollInput.value)}}}));rollLabel.append(rollInput);result.append(rollLabel);
+        }
+        if (fall.strengthOpposition) result.appendChild(node('p','workspace-result-line',`Opposition de Force : gagnant ${fall.strengthOpposition.winner} · DR ${fall.strengthOpposition.netSl} · Taille du cavalier ${fall.strengthOpposition.riderSize}.`));
+      }
+      const current = draft.v5Context || {};
+      for (const [field,label,min,max] of [['mountedRideScore','score de Chevaucher',0,100],['mountedRideRoll','d100',1,100]]) {
+        const skill = rider?.skills?.find(row => row.id === 'skill-43_68_65_76_61_75_63_68_65_72-base' && row.status !== 'unresolved');
+        if (field === 'mountedRideScore' && Number.isSafeInteger(skill?.total)) continue;
+        const wrap = node('label','workspace-type',`${rider?.name||fall.participantId} · ${label}`), input = document.createElement('input');
+        input.type='number'; input.min=String(min); input.max=String(max); input.step='1'; input.value=current[field] ?? ''; input.setAttribute('aria-label',wrap.textContent);
+        input.addEventListener('change',()=>handlers.select({v5Context:{...current,[field]:input.value===''?undefined:Number(input.value)}}));
+        wrap.append(input); result.append(wrap);
+      }
+    } else if (fall.dismount === true) result.appendChild(node('p','workspace-result-line',`${rider?.name||fall.participantId} : chute et démontage proposés.`));
+  }
   for (const warning of preview.unresolved || []) {
     const match = /^Talent(?: (talent-[a-z0-9-]+))? : préciser (.+)\.$/.exec(warning);
     const talentName = match?.[1] ? getReferenceCatalogue().talents.find(row=>row.id===match[1])?.nom || 'Talent' : 'Talent';
@@ -1357,7 +1420,7 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
             const value=typeof inferred==='boolean'?inferred:context[key];choice.append(new Option('À préciser',''),new Option('Oui','true'),new Option('Non','false'));choice.value=typeof value==='boolean'?String(value):'';choice.disabled=typeof inferred==='boolean';
             choice.addEventListener('change',()=>handlers.select({protectionContext:{...context,[key]:choice.value===''?undefined:choice.value==='true'}}));label.append(choice);block.append(label);
           }
-          const manual=node('label','workspace-type','PA retenus après arbitrage (facultatif)');const input=document.createElement('input');input.type='number';input.min='0';input.setAttribute('aria-label','PA retenus après arbitrage');input.value=context.manualAp ?? '';input.addEventListener('change',()=>handlers.select({protectionContext:{...context,manualAp:input.value===''?undefined:Number(input.value)}}));manual.append(input);block.append(manual);section.append(block);
+          const manual=node('label','workspace-type','PA retenus après arbitrage (requis si la zone de la créature est inconnue)');const input=document.createElement('input');input.type='number';input.min='0';input.setAttribute('aria-label','PA retenus après arbitrage');input.value=context.manualAp ?? '';input.addEventListener('change',()=>handlers.select({protectionContext:{...context,manualAp:input.value===''?undefined:Number(input.value)}}));manual.append(input);block.append(manual);section.append(block);
         }
       }
       const v5 = node('div', 'workspace-v5-context');
@@ -1435,9 +1498,37 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
     if (creatureSizeOf(actor).assumed || target && creatureSizeOf(target).assumed) v5.appendChild(node('p', 'workspace-muted', 'Taille non renseignée sur la fiche : Moyenne est la valeur supposée. Le MJ peut corriger les listes si nécessaire.'));
   };
   if (type === 'attack') sizeSelects();
+  if (type === 'attack') {
+    const current = draft.v5Context || {};
+    const actorMount = participants.find(row => row.id === actor?.extensions?.v5?.mountId);
+    const targetMount = participants.find(row => row.id === target?.extensions?.v5?.mountId);
+    const sizeChoices = current.mountedSizeChoices || {};
+    const requiredSizes = [
+      ...(actor?.extensions?.v5?.mounted === true && String(draft.v5Kind || kind.value) === 'melee' && /^cavalerie$/i.test(String(kindEquipment?.category || current.weaponTrainingGroup || '')) ? [['actorMount','Taille de la monture de l’attaquant',actorMount],['target','Taille de la cible',target]] : []),
+      ...(target?.extensions?.v5?.mounted === true && String(draft.v5Kind || kind.value) === 'melee' ? [['targetMount','Taille de la monture de la cible',targetMount],['actor','Taille de l’attaquant',actor]] : [])
+    ];
+    for (const [key,labelText,subject] of requiredSizes) {
+      if (!subject || !creatureSizeOf(subject).assumed) continue;
+      const label = node('label','workspace-type',`${labelText} · choix requis`), select = document.createElement('select');
+      select.setAttribute('aria-label',label.textContent); select.append(new Option('Choisir explicitement…',''));
+      for (const [value,text] of [['small','Petite'],['average','Moyenne'],['large','Grande'],['enormous','Énorme'],['monstrous','Monstrueuse']]) select.append(new Option(text,value));
+      select.value = sizeChoices[key] || '';
+      select.addEventListener('change',()=>handlers.select({v5Context:{...current,mountedSizeChoices:{...sizeChoices,[key]:select.value||undefined}}}));
+      label.append(select); v5.append(label);
+    }
+  }
   if (kind.value === 'melee' && type === 'attack') {
     const charge = node('label','workspace-type'); const check = document.createElement('input'); check.type='checkbox'; check.checked=draft.charging === true;
     check.addEventListener('change',()=>handlers.select({charging:check.checked})); charge.append(check,'Charge donnant Élan (distance et conditions vérifiées)'); v5.appendChild(charge);
+    const mountId = actor?.extensions?.v5?.mountId;
+    const mount = participants.find(row => row.id === mountId && row.zone === 'active');
+    if (actor?.extensions?.v5?.mounted === true && mount) {
+      const useMount = node('label','workspace-type'); const useMountCheck = document.createElement('input'); useMountCheck.type='checkbox';
+      useMountCheck.checked = draft.v5Context?.useMountStrengthBonus === true; useMountCheck.disabled = draft.charging !== true;
+      useMountCheck.setAttribute('aria-label','Employer la BF de la monture pour cette charge');
+      useMountCheck.addEventListener('change',()=>handlers.select({v5Context:{...(draft.v5Context||{}),useMountStrengthBonus:useMountCheck.checked}}));
+      useMount.append(useMountCheck,`Employer la BF de ${mount.name||mount.id} pour cette charge`); v5.appendChild(useMount);
+    }
   }
   const talentToggle = (key, text, checked) => {
     const label = node('label', 'workspace-type'); const check = document.createElement('input');
@@ -1530,6 +1621,18 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
   if(['attack','opposition'].includes(type)&&target)addTalentContext('defender',target,defense?.option);
   if(['melee','ranged'].includes(kind.value)&&type==='attack'&&hasV5Talent(actor,'talent-strike-to-stun'))contextField(talentFields,'actor','weaponImprovised','Arme improvisée (Frappe assommante)');
   if(type==='attack'){
+    const morphologyContext=draft.v5Context||{};
+    const morphologyLabel=node('label','workspace-type','Morphologie de la cible (choix du MJ)');
+    const morphologySelect=document.createElement('select');
+    morphologySelect.setAttribute('aria-label',morphologyLabel.textContent);
+    morphologySelect.append(new Option('Morphologie du profil',''),new Option('Humanoïde (forcer)','humanoid'),new Option('Quadrupède','quadruped'),new Option('Oiseau','bird'),new Option('Serpent','snake'),new Option('Araignée','spider'));
+    morphologySelect.value=hitMorphologySelection(morphologyContext.hitMorphology,target?.extensions?.v5?.hitMorphology);
+    morphologySelect.addEventListener('change',()=>handlers.select({v5Context:{...morphologyContext,hitMorphology:morphologySelect.value||undefined}}));
+    morphologyLabel.append(morphologySelect);talentFields.append(morphologyLabel);
+    const appendageLabel=node('label','workspace-type','Appendice atteint sans table propre (si applicable)');
+    const appendageInput=document.createElement('input');appendageInput.type='text';appendageInput.value=morphologyContext.hitAppendage||'';appendageInput.setAttribute('aria-label',appendageLabel.textContent);
+    appendageInput.addEventListener('change',()=>handlers.select({v5Context:{...morphologyContext,hitAppendage:appendageInput.value.trim()||undefined}}));
+    appendageLabel.append(appendageInput);talentFields.append(appendageLabel);
     contextField(talentFields,'actor','calledShot','Coup ciblé (−2 DR, hors modificateur saisi)');
     if(draft.v5Context?.calledShot){const label=node('label','workspace-type','Localisation du coup ciblé');const select=document.createElement('select');select.setAttribute('aria-label','Localisation du coup ciblé');select.append(new Option('À préciser',''));for(const [value,text] of [['head','Tête'],['body','Corps'],['leftArm','Bras gauche'],['rightArm','Bras droit'],['leftLeg','Jambe gauche'],['rightLeg','Jambe droite']])select.append(new Option(text,value));select.value=draft.v5Context?.calledShotLocation||'';select.addEventListener('change',()=>handlers.select({v5Context:{...(draft.v5Context||{}),calledShotLocation:select.value||undefined}}));label.append(select);talentFields.append(label);}
   }
@@ -1574,6 +1677,13 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
   const testWeapon=actor.equipment?.find(row=>row.id===testWeaponId);
   const testWeaponKind=testWeapon?.extensions?.v5?.entanglementKind
     ||(testWeapon?.baseId==='weapon-armes-corps-a-corps-armes-d-hast-mancatcher-2m'?'mancatcher':null);
+  const secondaryHitMorphology=(current,id,prefix)=>{
+    const person=participants.find(row=>row.id===id);if(!person)return;
+    const label=node('label','workspace-type',`${prefix}Morphologie de ${person.name||id} (choix du MJ)`),select=document.createElement('select');
+    select.setAttribute('aria-label',label.textContent);select.append(new Option('Morphologie du profil',''),new Option('Humanoïde (forcer)','humanoid'),new Option('Quadrupède','quadruped'),new Option('Oiseau','bird'),new Option('Serpent','snake'),new Option('Araignée','spider'));
+    select.value=hitMorphologySelection(current.hitMorphologiesById?.[id],person.extensions?.v5?.hitMorphology);
+    select.addEventListener('change',()=>handlers.select({v5Context:{...current,hitMorphologiesById:{...(current.hitMorphologiesById||{}),[id]:select.value||undefined}}}));label.append(select);fields.append(label);
+  };
   if(type==='test'&&action?.attr==='F'&&testWeaponKind==='mancatcher'){
     contextField(fields,'actor','entanglementTest','Test de Force pour immobiliser avec le Mancatcher');
     if(testWeapon.extensions?.v5?.springLoaded!==true)contextField(fields,'actor','springLoaded','Mancatcher équipé du ressort (+2 DR)');
@@ -1584,7 +1694,7 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
     select.value=current.spreadRangeBand||'';select.addEventListener('change',()=>handlers.select({v5Context:{...current,spreadRangeBand:select.value||undefined}}));range.append(select);fields.append(range);
     const targets=node('label','workspace-type','Dispersion : identifiants des cibles choisies (virgules)'),input=document.createElement('input');input.type='text';input.value=(current.spreadTargetIds||[]).join(', ');input.setAttribute('aria-label',targets.textContent);
     input.addEventListener('change',()=>handlers.select({v5Context:{...current,spreadTargetIds:input.value.split(',').map(value=>value.trim()).filter(Boolean)}}));targets.append(input);fields.append(targets);
-    for(const id of(current.spreadTargetIds||[]).filter(id=>id!==target?.id)){const label=node('label','workspace-type',`Dispersion · localisation d100 de ${participants.find(row=>row.id===id)?.name||id}`),die=document.createElement('input');die.type='number';die.min='1';die.max='100';die.value=current.spreadLocationRollsById?.[id]??'';die.setAttribute('aria-label',label.textContent);die.addEventListener('change',()=>handlers.select({v5Context:{...current,spreadLocationRollsById:{...(current.spreadLocationRollsById||{}),[id]:die.value===''?undefined:Number(die.value)}}}));label.append(die);fields.append(label);}
+    for(const id of(current.spreadTargetIds||[]).filter(id=>id!==target?.id)){secondaryHitMorphology(current,id,'Dispersion · ');const label=node('label','workspace-type',`Dispersion · localisation d100 de ${participants.find(row=>row.id===id)?.name||id}`),die=document.createElement('input');die.type='number';die.min='1';die.max='100';die.value=current.spreadLocationRollsById?.[id]??'';die.setAttribute('aria-label',label.textContent);die.addEventListener('change',()=>handlers.select({v5Context:{...current,spreadLocationRollsById:{...(current.spreadLocationRollsById||{}),[id]:die.value===''?undefined:Number(die.value)}}}));label.append(die);fields.append(label);}
     const spreadRating=Number((action.qualities||[]).find(row=>(typeof row==='string'?row:row?.id)==='dispersion')?.parameter)||Number(current.spreadRating)||0;
     fields.append(node('p','workspace-muted',`Bout portant : une cible, dégâts +${spreadRating}. Courte à longue : cible initiale et jusqu’à ${spreadRating} cibles visibles les plus proches; aucune paire ne dépasse ${spreadRating} yards. Extrême : mêmes cibles, dégâts −${spreadRating}. Distances et visibilité sont arbitrées par le MJ; saisissez un jet de localisation d100 pour chaque cible secondaire.`));
   }
@@ -1592,7 +1702,7 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
     const current=draft.v5Context||{},targets=node('label','workspace-type','Explosion : identifiants de toutes les cibles dans le diamètre (virgules)'),input=document.createElement('input');
     input.type='text';input.value=(current.explosionTargetIds||[]).join(', ');input.setAttribute('aria-label',targets.textContent);
     input.addEventListener('change',()=>handlers.select({v5Context:{...current,explosionTargetIds:input.value.split(',').map(value=>value.trim()).filter(Boolean)}}));targets.append(input);fields.append(targets);
-    for(const id of(current.explosionTargetIds||[]).filter(id=>id!==target?.id)){const label=node('label','workspace-type',`Explosion · localisation d100 de ${participants.find(row=>row.id===id)?.name||id}`),die=document.createElement('input');die.type='number';die.min='1';die.max='100';die.value=current.explosionLocationRollsById?.[id]??'';die.setAttribute('aria-label',label.textContent);die.addEventListener('change',()=>handlers.select({v5Context:{...current,explosionLocationRollsById:{...(current.explosionLocationRollsById||{}),[id]:die.value===''?undefined:Number(die.value)}}}));label.append(die);fields.append(label);}
+    for(const id of(current.explosionTargetIds||[]).filter(id=>id!==target?.id)){secondaryHitMorphology(current,id,'Explosion · ');const label=node('label','workspace-type',`Explosion · localisation d100 de ${participants.find(row=>row.id===id)?.name||id}`),die=document.createElement('input');die.type='number';die.min='1';die.max='100';die.value=current.explosionLocationRollsById?.[id]??'';die.setAttribute('aria-label',label.textContent);die.addEventListener('change',()=>handlers.select({v5Context:{...current,explosionLocationRollsById:{...(current.explosionLocationRollsById||{}),[id]:die.value===''?undefined:Number(die.value)}}}));label.append(die);fields.append(label);}
     contextField(fields,'actor','explosionOpposed','Exception MJ : la cible oppose normalement cette Explosion');
     fields.append(node('p','workspace-muted','Désignez toutes les cibles touchées. Par défaut, elles ne font pas d’opposition ordinaire; les dégâts ne prennent pas les DR de l’attaque.'));
   }
@@ -1656,6 +1766,28 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
   if(['test','skill','defense','opposition'].includes(type)&&(isBrokenActor(actor)||actorHasActiveGrapple)&&!draft.reactionId){
     if(action?.id?.startsWith('broken-hide:'))fields.appendChild(node('p','workspace-muted','Le Test consomme l’Action du Tour : Oui (Hide facultatif).'));
     else contextField(fields,'actor','isAction','Le Test consomme l’Action du Tour');
+  }
+  const fateBalance=person=>{const permanent=Number(person?.extensions?.v5?.fate??person?.fate);if(!Number.isSafeInteger(permanent)||permanent<0)return 0;const temporary=[person?.extensions?.v5?.spellEffects,person?.extensions?.v5?.divineEffects].flatMap(rows=>Array.isArray(rows)?rows:[]).reduce((sum,effect)=>sum+Math.max(0,Number(effect?.remainingTempFate)||0),0);return permanent+temporary;};
+  const actorFate=fateBalance(actor),targetFate=fateBalance(target);
+  if ((actorFate > 0 || targetFate > 0) && !draft.reactionId && ['attack','test','skill','opposition'].includes(type)) {
+    const current = draft.v5Context || {}, wrap = node('label','workspace-type','Dépenser 1 Destin');
+    const select = document.createElement('select'); select.setAttribute('aria-label',wrap.textContent);
+    select.append(new Option('Ne pas dépenser',''));
+    if(targetFate>0&&type==='attack')select.append(new Option('Annuler cette attaque (Destin de la cible)','cancel-attack'),new Option('Survivre et quitter la rencontre (Destin de la cible)','survive'));
+    if(actorFate>0)select.append(new Option('Réussite automatique (Destin de l’acteur)','automatic-success'));
+    select.value = current.fateAction || '';
+    select.addEventListener('change',()=>handlers.select({v5Context:{...current,fateAction:select.value||undefined}}));
+    wrap.append(select); fields.append(wrap);
+    if(current.fateAction==='automatic-success'){
+      const rollLabel=node('label','workspace-type','Résultat d100 choisi par le Destin (sans lancer les dés)'),rollInput=document.createElement('input');rollInput.type='number';rollInput.min='1';rollInput.max='100';rollInput.step='1';rollInput.value=current.fateChosenRoll??'';rollInput.setAttribute('aria-label',rollLabel.textContent);
+      rollInput.addEventListener('change',()=>handlers.select({v5Context:{...current,fateChosenRoll:rollInput.value===''?undefined:Number(rollInput.value)}}));rollLabel.append(rollInput);fields.append(rollLabel);
+    }
+    if(current.fateAction==='automatic-success'&&type==='attack'&&isCriticalFateRoll(Number(current.fateChosenRoll))){
+      const label=node('label','workspace-type','Localisation de la Blessure Critique (si le jet en inflige une)'),locationSelect=document.createElement('select');
+      locationSelect.setAttribute('aria-label',label.textContent);locationSelect.append(new Option('Choisir…',''),new Option('Tête','head'),new Option('Corps','body'),new Option('Bras gauche','leftArm'),new Option('Bras droit','rightArm'),new Option('Jambe gauche','leftLeg'),new Option('Jambe droite','rightLeg'));
+      locationSelect.value=current.fateCriticalLocation||'';locationSelect.addEventListener('change',()=>handlers.select({v5Context:{...current,fateCriticalLocation:locationSelect.value||undefined}}));label.append(locationSelect);fields.append(label);
+    }
+    fields.append(node('p','workspace-muted','Le Destin est permanent. Annuler une attaque ou survivre dépense le Destin de la cible ; la réussite automatique dépense celui de l’acteur.'));
   }
   conditionModeField(fields, 'actor');
   // Traits de sens : le moteur ne connaît ni les distances ni le mouvement, c'est le MJ qui le constate.
@@ -1888,9 +2020,12 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
   const addPenaltyFields=(role)=>{const field=role==='actor'?'v5Context':'defenseContext',current=draft[field]||{};
     for(const [key,text]of [['mounted','Esquive montée'],['confined','Espace exigu'],['status','Statut supérieur'],['proneAttack','Attaque À terre'],['belowTarget','Attaque sous la cible'],['longRange','Longue portée'],['extremeRange','Portée extrême'],['flying','Tir sous Trait Vol'],['terrainMovement','Terrain gênant le mouvement'],['critical','Blessure critique'],['amputation','Amputation']]){
       if(role==='actor'&&['belowTarget','terrainMovement'].includes(key))continue;
+      if(role==='defender'&&key==='mounted'&&target?.extensions?.v5?.mounted===true&&defense?.option?.extensions?.fiche?.skillId==='skill-45_73_71_75_69_76_65-base')continue;
       const label=node('label','workspace-type',text+(role==='defender'?' (défense)':''));const input=document.createElement('input');input.type='number';input.step='1';input.max='0';input.value=current.penalties?.[key]??'';input.setAttribute('aria-label',label.textContent);input.addEventListener('change',()=>handlers.select({[field]:{...current,penalties:{...current.penalties,[key]:input.value===''?undefined:Number(input.value)}}}));label.append(input);penalties.append(label);
     }
-  };addPenaltyFields('actor');if(target&&['attack','opposition'].includes(type))addPenaltyFields('defender');v5.append(penalties);
+  };addPenaltyFields('actor');if(target&&['attack','opposition'].includes(type))addPenaltyFields('defender');
+  if(target?.extensions?.v5?.mounted===true&&defense?.option?.extensions?.fiche?.skillId==='skill-45_73_71_75_69_76_65-base'&&draft.defenseContext?.penalties?.mounted<0)penalties.append(node('p','workspace-muted','Esquive à cheval : le Désavantage automatique remplace l’ancien modificateur manuel; les deux ne se cumulent pas.'));
+  v5.append(penalties);
   if(type==='attack'&&(actor.talents||[]).some(t=>['talent-gunner','talent-short-fuse','talent-harpooner','talent-martial-arts'].includes(t.id))&&!action.extensions?.fiche?.equipmentId){
     const current=draft.v5Context||{};const label=node('label','workspace-type','Groupe de l’arme pour les talents');const select=document.createElement('select');select.setAttribute('aria-label',label.textContent);select.append(new Option('À préciser',''));for(const value of ['Base','Bagarre','Arbalète','Poudre Noire','Ingénierie','Explosif','Explosifs'])select.append(new Option(value,value));select.value=current.weaponGroup||'';select.addEventListener('change',()=>handlers.select({v5Context:{...current,weaponGroup:select.value||undefined}}));label.append(select);v5.append(label);
     if(hasV5Talent(actor,'talent-martial-arts'))contextField(v5,'actor','weaponUnarmed','Attaque à mains nues');
@@ -2020,7 +2155,13 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
   // Arme qui frappe pour la défense (critique défensif, Riposte) : les Protections de l'attaquant peuvent en dépendre.
   if(target&&defense?.option&&type==='attack')for(const field of natureSelects(actor,()=>draft.defenseContext?.attackNature,next=>handlers.select({defenseContext:{...draft.defenseContext,attackNature:next}}),weaponAttackNature({actor:target,action:{...defense.option,type:'attack'},ranged:false})))v5.append(field);
   if(target&&['attack','opposition'].includes(type)){const support=renderSupportFields({actor:target,target:actor,participants,context:draft.defenseContext||{},prefix:'Défense — ',onContext:defenseContext=>handlers.select({defenseContext})});if(support)v5.append(support);}
-  if(current.specialAttack==='whirlwind-of-death')for(const victim of participants.filter(p=>(current.engagedIds||[]).includes(p.id)&&p.id!==target?.id)){const support=renderSupportFields({actor,target:victim,participants,onlyProtection:true,showMetal:Boolean(current.forgeAuthorIds?.length),context:current.whirlwindSupport?.[victim.id]||{},prefix:victim.name+' — ',onContext:values=>handlers.select({v5Context:{...current,whirlwindSupport:{...current.whirlwindSupport,[victim.id]:values}}})});if(support)v5.append(support);}
+  if(current.specialAttack==='whirlwind-of-death')for(const victim of participants.filter(p=>(current.engagedIds||[]).includes(p.id)&&p.id!==target?.id)){
+    const morphologyLabel=node('label','workspace-type',`Tourbillon · Morphologie de ${victim.name||victim.id} (choix du MJ)`),morphologySelect=document.createElement('select');
+    morphologySelect.setAttribute('aria-label',morphologyLabel.textContent);morphologySelect.append(new Option('Morphologie du profil',''),new Option('Humanoïde (forcer)','humanoid'),new Option('Quadrupède','quadruped'),new Option('Oiseau','bird'),new Option('Serpent','snake'),new Option('Araignée','spider'));
+    morphologySelect.value=hitMorphologySelection(current.hitMorphologiesById?.[victim.id],victim.extensions?.v5?.hitMorphology);
+    morphologySelect.addEventListener('change',()=>handlers.select({v5Context:{...current,hitMorphologiesById:{...(current.hitMorphologiesById||{}),[victim.id]:morphologySelect.value||undefined}}}));morphologyLabel.append(morphologySelect);v5.append(morphologyLabel);
+    const support=renderSupportFields({actor,target:victim,participants,onlyProtection:true,showMetal:Boolean(current.forgeAuthorIds?.length),context:current.whirlwindSupport?.[victim.id]||{},prefix:victim.name+' — ',onContext:values=>handlers.select({v5Context:{...current,whirlwindSupport:{...current.whirlwindSupport,[victim.id]:values}}})});if(support)v5.append(support);
+  }
   const measures=renderV5TalentMeasures(actor);if(measures)v5.append(measures);
   section.appendChild(v5);
     }

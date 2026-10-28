@@ -1,4 +1,5 @@
 import {createDivinePanel} from './v5-divine-panel.js';
+import {createV5CorruptionPanel} from './v5-corruption-panel.js';
 import {createV5BrokenEscapePanel,isBrokenActor} from './v5-broken-escape-panel.js';
 import {beastFormRestriction} from '../core/v5-magic-arbitrations.js';
 import { magicActionsFor } from '../core/creature-magic.js';
@@ -326,6 +327,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     draft.magicCtRoll=null;
     for (const key of MAGIC_DICE_KEYS) draft[key] = key === 'magicNoOtherTargets' ? false : null;
     draft.magicTargetTests = {};
+    draft.magicMountedRideTests = {};
     draft.magicSecondaryRolls = {};
   }
   // Autre jet de critique : ses effets repartent cochés (les cases décochées visaient l'ancien tirage).
@@ -383,6 +385,8 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     setMomentum: typeof actions.setMomentum === 'function' ? actions.setMomentum : null,
     getFortune: typeof actions.getFortune === 'function' ? actions.getFortune : null,
     editFortune: typeof actions.editFortune === 'function' ? actions.editFortune : null,
+    getFate: typeof actions.getFate === 'function' ? actions.getFate : null,
+    editFate: typeof actions.editFate === 'function' ? actions.editFate : null,
     setStates: typeof actions.setStates === 'function' ? actions.setStates : null,
     acquireStates: typeof actions.acquireStates === 'function' ? actions.acquireStates : null,
     recoverState: typeof actions.recoverState === 'function' ? actions.recoverState : null,
@@ -395,6 +399,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
   };
 
   const divinePanel=createDivinePanel({Store,refresh:()=>render()});
+  const corruptionPanel=createV5CorruptionPanel({Store,refresh:()=>render()});
   const brokenEscapePanel=createV5BrokenEscapePanel({Store,refresh:()=>render(),onPrepareHide(actorId,skillId){
     const actor=readParticipants(Store).find(row=>row.id===actorId&&row.zone==='active');if(!actor)return;
     state.space='play';state.actorChoice={id:actorId,turn:turnKey(readCombat(Store))};state.resolution=emptyResolution(actorId);state.resolution.hideSkillId=skillId;state.resolution.type='skill';state.resolution.v5Context={isAction:true,runningOrHiding:true,involvesMovement:false};
@@ -919,6 +924,10 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       fortuneButton.dataset.workspaceAction = 'edit-fortune'; fortuneButton.dataset.actorId = participant.id;
       fortuneButton.disabled = !callbacks.editFortune; body.appendChild(fortuneButton);
     }
+    if(callbacks.getFate||callbacks.editFate){
+      const fate=callbacks.getFate?.(participant.id),fateButton=button('Destin : '+(fate?.balance??'?'),'workspace-secondary',{'aria-label':'Modifier le Destin de '+participant.name,'data-focus-key':'fate-'+participant.id});
+      fateButton.dataset.workspaceAction='edit-fate';fateButton.dataset.actorId=participant.id;fateButton.disabled=!callbacks.editFate;body.appendChild(fateButton);
+    }
     for (const offer of Store.getReactionOpportunities?.(participant.id) || []) {
       const use = button('Assaut féroce : attaque supplémentaire (1 Élan)', 'workspace-secondary', {
         'aria-label': 'Utiliser Assaut féroce de ' + participant.name, 'data-focus-key': 'reaction-' + participant.id });
@@ -1370,6 +1379,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
               attributeTargets: draft.magicAttributeTargets || {},
               secondaryTargets: draft.magicSecondaryTargets || {},
               domainFacts: draft.magicSpellFacts || {},
+              mountedRideTests: draft.magicMountedRideTests || {},
               ctRoll: draft.magicCtRoll,
               secondaryRolls: { ...(draft.magicSecondaryRolls || {}), ...secondaryRolls },
               hogTier,
@@ -1626,6 +1636,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     center.appendChild(duel);
     const escapePanel=brokenEscapePanel.render(context.participants,context.actor?.id);if(escapePanel)center.appendChild(escapePanel);
     const prayers=divinePanel.render(context.actor,context.participants);if(prayers)center.appendChild(prayers);
+    const corruption=corruptionPanel.render(context.actor);if(corruption)center.appendChild(corruption);
 
     const draft = state.resolution;
     let previousWeaponAttacks = [], resolutionClock = {};
@@ -2031,6 +2042,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         break;
       }
       case 'edit-fortune': callbacks.editFortune?.(participantId); break;
+      case 'edit-fate': callbacks.editFate?.(participantId); break;
       case 'toggle-momentum': if (participant) Promise.resolve(callbacks.setMomentum?.(participantId, !hasMomentum(participant))).catch(error => { state.resolution.error = { field: 'general', message: userMessage(error, 'Élan non enregistré : réessayez.') }; render(); }); break;
       case 'adjust-hp': {
         const delta = Number(target.dataset.hpDelta);

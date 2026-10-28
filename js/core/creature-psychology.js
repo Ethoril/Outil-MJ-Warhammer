@@ -33,11 +33,13 @@ const BY_NAME = new Map(Object.entries(RULES).flatMap(([key, rule]) => rule.name
 
 /** « Fear (2) » → `{ key: 'fear', name, detail: '2' }` ; `null` si ce n'est pas un Trait de Psychologie. */
 export function parsePsychologyTrait(trait) {
-  const text = typeof trait === 'string' ? trait : trait?.name ?? trait?.nom ?? '';
+  const rawName = typeof trait === 'string' ? trait : trait?.name ?? trait?.nom ?? '';
+  const psychologyWrapper = typeof trait === 'object' && ['psychologie', 'psychology'].includes(fold(rawName));
+  const text = psychologyWrapper ? (trait?.param ?? trait?.parameter ?? '') : rawName;
   const match = /^\s*([^(]+?)\s*(?:\(\s*([^)]*)\s*\))?\s*$/.exec(String(text));
   if (!match) return null;
   const key = BY_NAME.get(fold(match[1]));
-  const detail = (match[2] ?? (typeof trait === 'object' ? trait?.param ?? trait?.rating : '') ?? '').toString().trim();
+  const detail = (match[2] ?? (!psychologyWrapper && typeof trait === 'object' ? trait?.param ?? trait?.rating : '') ?? '').toString().trim();
   return key ? { key, name: match[1].trim(), detail } : null;
 }
 

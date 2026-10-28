@@ -44,7 +44,7 @@ test('F2-L characterization — Fortune reroll charges one permanent point once 
 });
 
 test('F2-L characterization — Fate cancels a declared attack before damage and critical effects', async () => {
-  const store = await combat({ actor: participant('hero', { extensions: { v5: { fate: 1 } } }), target: participant('foe') });
+  const store = await combat({ actor: participant('hero'), target: participant('foe', { extensions: { v5: { fate: 1 } } }) });
   const preview = store.previewResolution({ actorId: 'hero', targetId: 'foe', resolutionId: 'l-fate-cancel', roll: 11,
     action: { type: 'attack', attr: 'CC', base: 90, damage: 12 }, defense: { base: 30, roll: 70, v5: { kind: 'melee' } }, attackContext: { ranged: false },
     v5: { kind: 'melee', context: { fateAction: 'cancel-attack' } } });
@@ -52,9 +52,9 @@ test('F2-L characterization — Fate cancels a declared attack before damage and
   assert.equal(preview.fateAction.action, 'cancel-attack');
   assert.equal(preview.fateAction.cancelled, true);
   assert.equal(preview.damage?.total ?? 0, 0);
-  assert.equal(preview.critical, undefined);
+  assert.equal(preview.critical, null);
   assert.equal((await store.applyResolution(preview)).status, 'applied');
-  assert.equal(store.getFate('hero').balance, 0);
+  assert.equal(store.getFate('foe').balance, 0);
   assert.equal(store.listParticipants().find(row => row.id === 'foe').hp, 20);
 });
 
@@ -64,7 +64,7 @@ test('F2-L characterization — V4 profile conversion is idempotent and maps the
   const once = convertLegacyV4Profile(legacy);
   const twice = convertLegacyV4Profile(once);
   assert.deepEqual(twice, once);
-  assert.deepEqual(once.extensions.v5, { momentum: 2, fate: 3, fortune: 4, difficultySL: 2 });
+  assert.deepEqual(once.extensions.v5, { momentum: 2, fate: 3, resources: { fortune: 4 }, difficultySL: 2 });
 });
 
 test('F2-L characterization — currency conversions use 1 crown = 20 pistoles = 240 sous and reject negatives', async () => {

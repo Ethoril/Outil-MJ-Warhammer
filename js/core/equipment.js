@@ -482,7 +482,7 @@ const shieldCoversLocation=(context,id)=>{
 const supportedConditional = id => contracts.entries.find(w=>w.id===id);
 /** Effective armour for a supplied hit context. Shield never enters permanent PA. */
 export function locationProtection(target,context={}){
- const id=locationId(context),warnings=[],manual=[],evaluatedKeywords=new Set();if(!id)return {ap:null,baseAp:null,shieldAp:0,counted:[],ignored:[],manual:['localisation-requise'],warnings};
+ const id=locationId(context),warnings=[],manual=[],evaluatedKeywords=new Set();if(!id){const override=Number(context.manualAp);if(context.manualAp!==undefined&&context.manualAp!==null&&Number.isFinite(override)&&override>=0)return {location:null,ap:override,baseAp:null,shieldAp:0,counted:[],ignored:[],manual:[],warnings,evaluatedKeywords:[],arbitrated:true};return {ap:null,baseAp:null,shieldAp:0,counted:[],ignored:[],manual:['localisation-requise'],warnings};}
  const hasEquipment=Array.isArray(target?.equipment)&&target.equipment.some(i=>i.kind==='armour'||i.kind==='shield');
  const armor=target?.armorLocations??target?.armor??{};
  const protection=hasEquipment?armourProtection(target.equipment):null;

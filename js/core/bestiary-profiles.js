@@ -4,7 +4,8 @@
  */
 import { activeReferential } from './creature-keywords.js';
 import { cloneValue, normalizeAction, uid } from './models.js';
-import { getReferenceCatalogue } from './reference-catalog.js';
+import { getReferenceCatalogue, resolveSkill, resolveTalent } from './reference-catalog.js';
+import { normalizeHitMorphology } from './v5-hit-morphology.js';
 
 export const BESTIARY_STAT_KEYS = Object.freeze(['M', 'CC', 'CT', 'F', 'E', 'I', 'Ag', 'Dex', 'Int', 'FM', 'Soc']);
 export const BESTIARY_KINDS = Object.freeze(['profile', 'template', 'pregenerated-character']);
@@ -209,17 +210,44 @@ export function buildParticipantFromBestiary(id, options = {}) {
   const wounds = isInt(record.wounds) ? record.wounds : null;
   const traits = (record.traits || []).filter(trait => isText(trait?.name));
   const { zones: armor, reminder: armourReminder } = printedArmour(record.armour, includeOptional);
+  // Keep the profile's optional hit morphology on the durable participant so combat can
+  // apply it after the ordinary hit roll. Unknown/absent forms intentionally stay unset.
+  const hitMorphology = normalizeHitMorphology(record.hitMorphology ?? record.morphology);
+  const skills = (record.skills || []).map(skill => {
+    const sourceName = skill.name;
+    const resolved = resolveSkill(skill.nameFr || sourceName);
+    const entry = resolved.status === 'resolved' ? resolved.entry : null;
+    return {
+      name: skill.nameFr || sourceName, sourceName, total: skill.value,
+      ...(entry ? { id: entry.id, group: entry.group, carac: entry.carac, status: 'resolved' } : { status: 'unresolved' })
+    };
+  });
+  const talents = (record.talents || []).map(talent => {
+    const sourceName = typeof talent === 'string' ? talent : talent.nameFr || talent.name || '';
+    const resolved = resolveTalent(sourceName);
+    const entry = resolved.status === 'resolved' ? resolved.entry : null;
+    return {
+      ...(typeof talent === 'object' ? cloneValue(talent) : {}),
+      name: entry?.nom || sourceName, sourceName,
+      rank: isInt(talent?.rank) && talent.rank > 0 ? talent.rank : 1,
+      ...(entry ? { id: entry.id, status: 'resolved' } : { status: 'unresolved' })
+    };
+  });
+  const species = record.identity?.species || record.species || null;
   return {
     id: idFactory(), name: index === null ? base : `${base} ${index}`, kind: 'Créature', camp, zone,
+    ...(species ? { species } : {}),
+    ...(record.identity ? { identity: cloneValue(record.identity) } : {}),
     initiative: record.stats.I ?? 0, hp: wounds, maxHp: wounds,
     caracs: Object.fromEntries(Object.entries(record.stats).filter(([, value]) => value !== null)),
     armor,
     actions: (record.attacks || []).filter(attack => includeOptional || !attack.optional).flatMap(attackActions),
-    skills: (record.skills || []).map(skill => ({ name: skill.nameFr || skill.name, total: skill.value })),
+    skills, talents,
     traits: traits.map(traitText), keywords: [...(record.keywords || [])], tags: [], notes: armourReminder,
     // `extensions.v5.reminders` : rappels affichés en combat par `deriveReminders` (js/core/reminders.js) ; `notes` n'est lu par aucune carte.
-    extensions: { v5: { ...(armourReminder ? { reminders: [{ id: 'armour-unresolved', text: armourReminder }] } : {}), bestiary: {
+    extensions: { v5: { ...(hitMorphology ? { hitMorphology } : {}), ...(armourReminder ? { reminders: [{ id: 'armour-unresolved', text: armourReminder }] } : {}), bestiary: {
       id: record.id, book: record.book, page: record.page, name: record.name, edition: record.edition ?? null,
+      ...(record.identity ? { identity: cloneValue(record.identity) } : {}), ...(species ? { species } : {}),
       armour: cloneValue(record.armour || {}), traitRefs: Object.fromEntries(traits.filter(trait => trait.ref).map(trait => [trait.name, trait.ref])),
       optionalTraits: (record.optionalTraits || []).map(traitText), abilityRefs: [...(record.abilities || [])], ...(record.woundsAbsent ? { woundsAbsent: true } : {}),
       // Sorts imprimés, par liste (« Petty », « Lore of X »…) : consultation seulement, ils ne sont pas dans `participant.spells` (qui ouvre la Focalisation et le choix de sort).
@@ -235,7 +263,8 @@ export function buildReserveProfileFromBestiary(id, options = {}) {
   const participant = buildParticipantFromBestiary(id, options);
   return {
     name: participant.name, kind: 'Créature', initiative: participant.initiative, hp: participant.hp ?? 0, maxHp: participant.maxHp ?? 0,
-    caracs: participant.caracs, armor: participant.armor, diceLines: participant.actions, skills: participant.skills,
+    caracs: participant.caracs, armor: participant.armor, diceLines: participant.actions, skills: participant.skills, talents: participant.talents,
+    ...(participant.species ? { species: participant.species } : {}), ...(participant.identity ? { identity: participant.identity } : {}),
     traits: participant.traits, keywords: participant.keywords, group: options.group ?? '', extensions: participant.extensions
   };
 }

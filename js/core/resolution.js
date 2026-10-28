@@ -39,8 +39,11 @@ import { applyPrayerSLCaps,getPrayerSLModifiers } from './v5-divine-prayer-caps.
 import { previewCombatFailure } from './v5-combat-fumbles.js';
 import { previewGrappleInitiation, applyGrappleInitiation, previewGrappleAction, applyGrappleAction } from './v5-grappling.js';
 import { createCriticalAftermathRecord, updateCriticalDeathCountdown } from './v5-critical-aftermath.js';
+import { creatureSizeOf } from './creature-size.js';
 import { advanceV5NetEscape, conditionalV5KnifeQualities, entanglementStrength, naturalWeaponDefaults, previewV5Blast, previewV5Fast, previewV5Hack, previewV5HookedNet, previewV5ImpaleProjectile, previewV5Inflict, previewV5Parry, previewV5PistolContact, previewV5Shield, previewV5Slash, previewV5Spread, previewV5TrapBlade, validateV5ShieldHands } from './v5-weapon-qualities.js';
 import { consumeV5WeaponShot, initialV5ReloadState } from './v5-reloading.js';
+import { appendageCriticalLocation, resolveCreatureHitLocation } from './v5-hit-morphology.js';
+import { planMountedAttack, planMountedChargeDamage, planMountedDodge, planMountedFall, resolveMountedMount, V5_RIDE_SKILL_ID } from './v5-mounted-combat.js';
 
 export { damageBreakdown, formatDamageFormula, formatWeaponDamage, describeWeaponDamage } from './damage.js';
 
@@ -414,12 +417,19 @@ function locationOf(roll) {
   const named = getLocationName(roll);
   return { roll, ...named, side: locationSide(named.name) };
 }
+function creatureLocationOf(roll, target, context = {}) {
+  const baseLocation = locationOf(roll);
+  return resolveCreatureHitLocation({ roll: baseLocation.roll, morphology: context.hitMorphology !== undefined ? context.hitMorphology : target?.extensions?.v5?.hitMorphology, baseLocation });
+}
+const criticalTableLocation = (location, context = {}) => context.hitAppendage ? appendageCriticalLocation(location, context.hitAppendage) : location;
 const CALLED_SHOT_LOCATIONS = Object.freeze({ head: { key: 'HEAD', name: 'Tête', side: null }, body: { key: 'BODY', name: 'Corps', side: null },
   leftArm: { key: 'ARM', name: 'Bras Gauche', side: 'left' }, rightArm: { key: 'ARM', name: 'Bras Droit', side: 'right' },
   leftLeg: { key: 'LEG', name: 'Jambe Gauche', side: 'left' }, rightLeg: { key: 'LEG', name: 'Jambe Droite', side: 'right' } });
-function attackLocation(normalized, roll) {
+function attackLocation(normalized, roll, target) {
   const context = normalized.v5.context || {};
-  if (context.calledShot !== true) return locationOf(reverseV5Roll(roll));
+  if (context.calledShot !== true) {
+    return creatureLocationOf(reverseV5Roll(roll), target, context);
+  }
   const selected = CALLED_SHOT_LOCATIONS[context.calledShotLocation];
   return selected ? { roll: null, ...selected, calledShot: true } : null;
 }
@@ -609,6 +619,49 @@ export function previewResolution(input) {
   normalized.qualityTalentPlan = prepared.plan;
   const actorSkillId=normalized.action?.extensions?.fiche?.skillId||normalized.v5?.context?.skillId;
   const defenderSkillId=normalized.defense?.extensions?.fiche?.skillId||normalized.defense?.v5?.context?.skillId;
+  const mountedRoster = Array.isArray(normalized.v5State?.participants) ? normalized.v5State.participants
+    : normalized.v5State?.participants && typeof normalized.v5State.participants === 'object' ? Object.values(normalized.v5State.participants) : [];
+  const withPrimary = [normalized.actor, normalized.target, ...mountedRoster].filter((row, index, all) => row && all.findIndex(candidate => candidate?.id === row.id) === index);
+  const actorMountLink = resolveMountedMount(normalized.actor, withPrimary);
+  const targetMountLink = resolveMountedMount(normalized.target, withPrimary);
+  const mountedWeapon = weaponItem || normalized.action?.extensions?.equipment || null;
+  const mountedAttackKind = inferV5Kind(normalized.action, normalized.attackContext);
+  const mountedCombatPlan = attackType(normalized.action.type) ? planMountedAttack({
+    actor: normalized.actor,
+    target: normalized.target,
+    actorMount: actorMountLink.mount,
+    targetMount: targetMountLink.mount,
+    weapon: { category: mountedWeapon?.category || normalized.v5?.context?.weaponTrainingGroup, reach: mountedWeapon?.reach || normalized.action?.reach || (!mountedWeapon && mountedAttackKind === 'melee' ? 'Courte' : undefined) },
+    kind: mountedAttackKind,
+    sizeChoices: normalized.v5?.context?.mountedSizeChoices || {}
+  }) : { active: false, advantageSources: [], disadvantageSources: [], unresolved: [] };
+  if (attackType(normalized.action.type)) {
+    normalized.v5 = { ...normalized.v5,
+      advantageSources: [...(normalized.v5?.advantageSources || []), ...mountedCombatPlan.advantageSources],
+      disadvantageSources: [...(normalized.v5?.disadvantageSources || []), ...mountedCombatPlan.disadvantageSources] };
+  }
+  const mountedDodgePlan = normalized.defense && defenderSkillId === 'skill-45_73_71_75_69_76_65-base'
+    ? planMountedDodge(normalized.target) : { disadvantageSources: [] };
+  const mountedDodge = normalized.defense && defenderSkillId === 'skill-45_73_71_75_69_76_65-base'
+    && normalized.target?.extensions?.v5?.mounted === true;
+  if (mountedDodge) {
+    // The legacy manual -2 DR is obsolete for every mounted Dodge, including
+    // riders whose resolved talent exempts them from the automatic disadvantage.
+    const context = normalized.defense.v5?.context || {};
+    if (context.penalties && Object.hasOwn(context.penalties, 'mounted')) {
+      const penalties = { ...context.penalties }; delete penalties.mounted;
+      normalized.defense = { ...normalized.defense, v5: { ...normalized.defense.v5,
+        context: { ...context, penalties } } };
+    }
+  }
+  if (normalized.defense && mountedDodgePlan.disadvantageSources.length) {
+    const existingDisadvantages = normalized.defense.v5?.disadvantageSources || [];
+    const mountedDisadvantage = mountedDodgePlan.disadvantageSources.filter(row => !existingDisadvantages.some(existing => existing.id === row.id));
+    normalized.defense = { ...normalized.defense, v5: { ...normalized.defense.v5,
+      disadvantageSources: [...existingDisadvantages, ...mountedDisadvantage] } };
+  }
+  normalized.mountedCombatPlan = mountedCombatPlan;
+  normalized.mountedDodgePlan = mountedDodgePlan;
   const attachPrayerModifiers=(subject,skillId,settings)=>{
     if(skillId!=='skill-50_72_69_e8_72_65-base'||normalized.noTestAction)return [];
     const checked=getPrayerSLModifiers(subject,normalized.prayerSLContext||{});
@@ -621,6 +674,7 @@ export function previewResolution(input) {
   const actorSocial=prepareSocial(normalized.actor,normalized.action,normalized.v5),defenderSocial=normalized.defense?prepareSocial(normalized.target,normalized.defense,normalized.defense.v5):{applies:false,needsInput:[]};
   const actorPlan = buildCombatTest(normalized);
   const defenderPlan = normalized.defense ? buildCombatTest(normalized, 'defender') : null;
+  actorPlan.unresolved.push(...mountedCombatPlan.unresolved);
   const capSocial=(plan,rule)=>{plan?.unresolved.push(...rule.needsInput.map(row=>row.label));if(!rule.applies||plan?.kind!=='test'||!plan.test?.options?.length)return;const original=plan.test,result=original.options[0].result,mods=result.details.modifiers.filter(row=>row.id!=='system:wrath-social-ceiling'),total=mods.reduce((n,row)=>n+row.amount,0)+(result.details.advantageSl||0);if(total>-3)mods.push({id:'system:wrath-social-ceiling',label:'Courroux : difficulté sociale au mieux −3 DR',amount:-3-total});plan.test=previewV5Test({score:result.score,roll:original.initialRoll,kind:result.kind,slModifiers:mods,advantageSources:original.advantage.advantage,disadvantageSources:original.advantage.disadvantage});};
   capSocial(actorPlan,actorSocial);if(defenderPlan)capSocial(defenderPlan,defenderSocial);
   if(actorSocial.applies||defenderSocial.applies)normalized.divineSocialRestrictions={...(actorSocial.applies?{actor:{ceiling:-3,sources:actorSocial.records.map(row=>({recordId:row.id,source:row.source}))}}:{}),...(defenderSocial.applies?{defender:{ceiling:-3,sources:defenderSocial.records.map(row=>({recordId:row.id,source:row.source}))}}:{})};
@@ -741,13 +795,19 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   const parrySecond=previewV5Parry({qualities:action.qualities,dualWielding:normalized.v5.context?.dualWielding===true,
     isSecondAttack:normalized.v5.context?.secondWeaponAttack===true,firstAttackHit:normalized.v5.context?.firstWeaponAttackHit===true});
   const parryUnopposed=parrySecond.secondAttackUnopposed===true;
+  const context = normalized.v5.context || {};
   let opposition = defenderTest ? resolveV5Opposition(actorTest, defenderTest) : null;
   let opposed = opposition && (!explosionAttack||explosionOpposed) && !parryUnopposed ? { mode: 'opposed', attacker: { ...actorTest },
     defender: { ...defenderTest, label: normalized.defense.label, base: normalized.defense.base, mod: defenderTest.details.totalModifier, statePenalty: defenderPlan.penalty }, netSl: opposition.netSl,
     winner: opposition.winner === 'initiator' ? 'attacker' : 'defender', tie: opposition.tie } : null;
   opposed=resolveSizeOpposition(opposed,normalized.combatPrelude?.large,actorTest,defenderTest);
+  const fateUnresolved=[];
+  if(context.fateAction==='automatic-success'){
+    if(!Number.isInteger(Number(context.fateChosenRoll))||Number(context.fateChosenRoll)<1||Number(context.fateChosenRoll)>100)fateUnresolved.push('Destin : choisissez le résultat d100 (1 à 100), sans lancer les dés.');
+    if(opposed) opposed={...opposed,winner:'attacker',netSl:Math.max(1,Number(opposed.netSl)||0),tie:false};
+    success=true;sl=Math.max(1,Number(sl)||0);
+  }
   let targetLevels = conditionLevels(target);
-  const context = normalized.v5.context || {};
   const unopposedExplosion=explosionAttack&&!explosionOpposed;
   let cannotDefend = targetLevels.has('surpris') || targetLevels.has('inconscient') || context.targetHelpless === true || context.targetCannotDefend === true;
   let helpless = (targetLevels.has('inconscient') || context.targetHelpless === true || context.targetCannotDefend === true)
@@ -818,11 +878,11 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
             else {
               enduranceTest=previewV5Test({score:toughness,roll,kind:'test'}).options[0].result;
               if(!enduranceTest.success){
-                const legRoll=Number(context.tripLegLocationRoll),legEffect=Number(context.tripLegCriticalEffectRoll),leg=Number.isInteger(legRoll)&&legRoll>=1&&legRoll<=100?locationOf(legRoll):null;
+                const legRoll=Number(context.tripLegLocationRoll),legEffect=Number(context.tripLegCriticalEffectRoll),leg=Number.isInteger(legRoll)&&legRoll>=1&&legRoll<=100?creatureLocationOf(legRoll,target,context):null;
                 if(!leg||leg.key!=='LEG')tripUnresolved.push('Chute du Croche-pied : saisir une localisation d100 de Jambe pour la Blessure Critique.');
                 if(!Number.isInteger(legEffect)||legEffect<1||legEffect>100)tripUnresolved.push('Chute du Croche-pied : saisir le d100 d’effet Critique de Jambe.');
                 if(leg&&leg.key==='LEG'&&Number.isInteger(legEffect))criticals.push(criticalDetails({effect:legEffect},leg,0));
-                if(enduranceTest.sl<=-5){const locationRoll=Number(context.tripExtraLocationRoll),effectRoll=Number(context.tripExtraCriticalEffectRoll),location=Number.isInteger(locationRoll)&&locationRoll>=1&&locationRoll<=100?locationOf(locationRoll):null;
+                if(enduranceTest.sl<=-5){const locationRoll=Number(context.tripExtraLocationRoll),effectRoll=Number(context.tripExtraCriticalEffectRoll),location=Number.isInteger(locationRoll)&&locationRoll>=1&&locationRoll<=100?creatureLocationOf(locationRoll,target,context):null;
                   if(!location)tripUnresolved.push('Chute du Croche-pied : localisation d100 supplémentaire requise pour l’Échec éclatant.');
                   if(!Number.isInteger(effectRoll)||effectRoll<1||effectRoll>100)tripUnresolved.push('Chute du Croche-pied : d100 d’effet Critique supplémentaire requis.');
                   if(location&&Number.isInteger(effectRoll))criticals.push(criticalDetails({effect:effectRoll},location,0));
@@ -856,8 +916,10 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   }
   const criticalAttack = !(context.specialAttack==='whirlwind-of-death'||hit&&['dirty-fighting','disarm','shieldsman'].includes(context.specialAttack)) && attackType(action.type) && normalized.v5.context?.silentTakedown !== true && normalized.knockoutValid!==true && success && criticalClassification.critique;
   const criticalLocationRoll = normalized.criticalRolls?.location;
-  const location = hit && attackType(action.type) ? attackLocation(normalized, roll) : null;
-  const criticalLocation = criticalAttack && criticalLocationRoll != null ? locationOf(criticalLocationRoll) : null;
+  const location = hit && attackType(action.type) ? attackLocation(normalized, roll, target) : null;
+  const fateCriticalLocation=CALLED_SHOT_LOCATIONS[context.fateCriticalLocation];
+  if(criticalAttack&&context.fateAction==='automatic-success'&&!fateCriticalLocation)fateUnresolved.push('Destin : choisissez la localisation de la Blessure Critique.');
+  const criticalLocation = criticalAttack && context.fateAction==='automatic-success' && fateCriticalLocation ? criticalTableLocation({roll:null,...fateCriticalLocation},context) : criticalAttack && criticalLocationRoll != null ? criticalTableLocation(creatureLocationOf(criticalLocationRoll,target,context),context) : null;
   const inoffensive = action.qualities.some(q => q.id === 'inoffensive') && keywordMechanicalStatus('inoffensive').status === 'covered';
   const weaponReferenceId = action.extensions?.fiche?.equipmentId || action.extensions?.equipment?.id;
   const selectedWeapon = actor?.equipment?.find(item => item.id === weaponReferenceId && item.kind === 'weapon') || null;
@@ -897,7 +959,14 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   // Preserve every protection consulted, including pieces/criticals it suppresses.
   const protectionReceipts = [];
   const unopposedAttack=unopposedExplosion||parryUnopposed;
-  const unresolved = [...(normalized.knockoutUnresolved?[normalized.knockoutUnresolved]:[]),...(normalized.destroyedWeaponUnresolved?[normalized.destroyedWeaponUnresolved]:[]),...(normalized.combatPrelude?.unresolved||[]),...(weaponTrapRecoveryConflict?['Piège-lame : conflit d’identifiant d’équipement ; l’arme lâchée ne peut pas être ramassée sans ambiguïté.']:[]),...actorPlan.unresolved, ...(unopposedAttack?[]:defenderPlan?.unresolved || []), ...actorPlan.restrictions, ...(unopposedAttack?[]:defenderPlan?.restrictions || []),...scatterUnresolved,...engagedUnresolved,...lethalUnresolved,...tripUnresolved,...combatFailure.unresolved];
+    const mountedDamageRoster = Array.isArray(normalized.v5State?.participants) ? normalized.v5State.participants
+      : normalized.v5State?.participants && typeof normalized.v5State.participants === 'object' ? Object.values(normalized.v5State.participants) : [];
+    const mountedActorRoster = [actor, ...mountedDamageRoster].filter((row, index, all) => row && all.findIndex(candidate => candidate.id === row.id) === index);
+    const mountedActorLink = resolveMountedMount(actor, mountedActorRoster);
+    const mountedChargePlan = planMountedChargeDamage({ actor, mount: mountedActorLink.mount,
+      charging: actorPlan.charging === true || normalized.v5?.charging === true || normalized.v5?.context?.charged === true,
+      useMountStrengthBonus: normalized.v5?.context?.useMountStrengthBonus === true });
+    const unresolved = [...fateUnresolved,...(normalized.knockoutUnresolved?[normalized.knockoutUnresolved]:[]),...(normalized.destroyedWeaponUnresolved?[normalized.destroyedWeaponUnresolved]:[]),...(normalized.combatPrelude?.unresolved||[]),...(weaponTrapRecoveryConflict?['Piège-lame : conflit d’identifiant d’équipement ; l’arme lâchée ne peut pas être ramassée sans ambiguïté.']:[]),...actorPlan.unresolved,...mountedChargePlan.unresolved, ...(unopposedAttack?[]:defenderPlan?.unresolved || []), ...actorPlan.restrictions, ...(unopposedAttack?[]:defenderPlan?.restrictions || []),...scatterUnresolved,...engagedUnresolved,...lethalUnresolved,...tripUnresolved,...combatFailure.unresolved];
   if (selectedWeapon?.extensions?.v5?.entanglementLocks?.length && attackType(action.type))
     unresolved.push('Entrave : cette arme est retenue par un état Empêtré actif et ne peut servir à une autre Action.');
   if(conjuredEffect?.weaponLocks?.some(row=>row.weaponKey===conjuredWeaponKey)&&attackType(action.type))
@@ -1047,7 +1116,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   const ignoredArmourFlaws=protectionTalent.proposals.filter(row=>row.op==='ignoreArmourFlaw').map(row=>row.key);
   if(frenzyDamage)supplementaryTalentPlans.push({proposals:[{op:'modifyDamage',amount:1,origins:[actor.states.find(s=>s.key==='frenzy').source]}]});
   const weaponDamage = actionWeaponDamage(action);
-  const strengthBonus = strengthBonusOf(actor?.caracs);
+  const strengthBonus = mountedChargePlan?.useMountStrengthBonus ? mountedChargePlan.strengthBonus : strengthBonusOf(actor?.caracs);
   let blastPlan=null;
   if(action.qualities.some(row=>(typeof row==='string'?row:row?.id)==='explosion')&&attackType(action.type)&&hit){
     const blastTargets=context.explosionTargetIds;
@@ -1146,7 +1215,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   }
   const hpBefore = Math.max(0, Number(target?.hp) || 0);
   const excess = damage ? Math.max(0, damage.finalDamage - hpBefore) : 0;
-  const second = !replacement && normalized.knockoutValid!==true && knownHp(target) && (excess>0||normalized.combatPrelude?.whirlwind?.active&&damage&&damage.finalDamage>=hpBefore) ? secondCritical(reverseV5Roll(roll), prepareCritical(actor,normalized.criticalRolls,normalized.v5,'attacker',inoffensive,['second']), excess * 10 + divineCriticalSeverityBonus(actor), inoffensive, location) : null;
+  const second = !replacement && normalized.knockoutValid!==true && knownHp(target) && (excess>0||normalized.combatPrelude?.whirlwind?.active&&damage&&damage.finalDamage>=hpBefore) ? secondCritical(reverseV5Roll(roll), prepareCritical(actor,normalized.criticalRolls,normalized.v5,'attacker',inoffensive,['second']), excess * 10 + divineCriticalSeverityBonus(actor), inoffensive, criticalTableLocation(location,context)) : null;
   let criticalBlock = criticalFirst || second ? { kind: 'Critique', expanded: criticalClassification.élargi,
     acharnement: false, details: criticalFirst, ...(second ? { second, excessWounds: excess } : {}),
     ...(weapon?.status === 'manual' ? { secondHint: { locationRoll: reverseV5Roll(roll), location } } : {}) } : null;
@@ -1165,7 +1234,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     combatFailure.defender=defenderFailure.fumble;combatFailure.defenderMisfire=defenderFailure.misfire;combatFailure.effects.push(...defenderFailure.effects);combatFailure.reminders.push(...defenderFailure.reminders);combatFailure.unresolved.push(...defenderFailure.unresolved);unresolved.push(...defenderFailure.unresolved);
   }
   if (!unopposedExplosion&&!parryUnopposed&&!(opposed?.winner==='defender'&&normalized.defense?.v5?.context?.specialAttack==='shieldsman')&&context.silentTakedown !== true && ['melee', 'ranged'].includes(defenderTest?.kind) && defenderTest.success && defenderCriticalClassification.critique) {
-    const critLocation = normalized.defenderCriticalRolls?.location != null ? locationOf(normalized.defenderCriticalRolls.location) : null;
+    const critLocation = normalized.defenderCriticalRolls?.location != null ? creatureLocationOf(normalized.defenderCriticalRolls.location,actor,normalized.defense?.v5?.context||{}) : null;
     const defenderRolls=prepareCritical(target,normalized.defenderCriticalRolls,normalized.defense.v5,'defender',normalized.defense.qualities.some(q=>q.id==='inoffensive'),['first']);
     const details = criticalDetails(defenderRolls, critLocation, divineCriticalSeverityBonus(target), normalized.defense.qualities.some(q => q.id === 'inoffensive'));
     const guard = critLocation ? locationProtection(actor, { location: critLocation, attackRoll: defenderTest.roll,
@@ -1207,7 +1276,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   if(riposte.proposals.some(row=>row.op==='riposte')){
     if(!knownHp(actor)||normalized.defense?.damage===undefined&&!normalized.defense?.damageFormula)unresolved.push('Riposte : Blessures de l’attaquant et dégâts de l’arme utilisée en défense requis.');
     else {
-      const loc=locationOf(reverseV5Roll(defenderTest.roll));let guard=locationProtection(actor,{location:loc,attackRoll:defenderTest.roll,critical:defenderTest.critical,ranged:false,qualities:normalized.defense.qualities,nature:defenderNature()});
+      const loc=creatureLocationOf(reverseV5Roll(defenderTest.roll),actor,normalized.defense?.v5?.context||{});let guard=locationProtection(actor,{location:loc,attackRoll:defenderTest.roll,critical:defenderTest.critical,ranged:false,qualities:normalized.defense.qualities,nature:defenderNature()});
       guard=applyAlliedShield(defenseSupport,applyForgeProtection(defenseSupport,guard));
       protectionReceipts.push(guard);unresolved.push(...guard.manual.map(x=>'Riposte : '+x));
       const riposteBonuses=evaluateV5Talents(target,{event:'damage.beforeProtection',role:'attacker',context:{kind:defenderPlan.kind,charging:false,aimed:false,weapon:{isMelee:defenderPlan.kind==='melee'},actor:{id:target.id,size:normalized.v5.targetSize},target:{id:actor.id,size:normalized.v5.actorSize},attack:{hit:true,success:defenderTest.success,usedAdvantageV5:defenderTest.advantage.net>0}}});supplementaryTalentPlans.push(riposteBonuses);unresolved.push(...riposteBonuses.unresolved.flatMap(p=>p.fields.map(f=>'Riposte : préciser '+f+'.')));
@@ -1310,6 +1379,101 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     const toughness=Number(target?.caracs?.BE??Math.floor(Number(target?.caracs?.E||0)/10));
     if(Number.isFinite(toughness)&&stunned>toughness)targetConditionApplication.push({id:`${normalized.resolutionId}:knockout:unconscious`,key:'inconscient',name:'Inconscient',level:1,source:{kind:'knockout',resolutionId:normalized.resolutionId,stunned,toughnessBonus:toughness}});
   }
+  const mountedFallPlans = [];
+  const mountedRoster = Array.isArray(normalized.v5State?.participants) ? normalized.v5State.participants
+    : normalized.v5State?.participants && typeof normalized.v5State.participants === 'object' ? Object.values(normalized.v5State.participants) : [];
+  const mountedWithPrimary = [normalized.actor, normalized.target, ...mountedRoster].filter((row, index, all) => row && all.findIndex(candidate => candidate?.id === row.id) === index);
+  const mountedRiders = mountedRoster.filter(row => row?.extensions?.v5?.mounted === true && row.extensions.v5.mountId);
+  const nextConditionKeys = new Set(targetConditionApplication.map(row => foldKey(row.key || row.name)));
+  const eventForCondition = [...nextConditionKeys].some(key => ['inconscient','unconscient','aterre','prone'].includes(key)) ? 'rider-prone'
+    : [...nextConditionKeys].some(key => ['surpris','surprised'].includes(key)) ? 'rider-surprised'
+      : [...nextConditionKeys].some(key => ['sonne','stunned'].includes(key)) ? 'rider-stunned' : null;
+  if (tripFall && target?.extensions?.v5?.mounted === true) mountedFallPlans.push({ participantId: target.id, event: 'rider-prone', ...planMountedFall({ event: 'rider-prone', fallPreventedByEquipment: context.fallPreventedByEquipment === true }) });
+  if (target?.extensions?.v5?.mounted === true && eventForCondition && !tripFall) mountedFallPlans.push({ participantId: target.id, event: eventForCondition, ...planMountedFall({ event: eventForCondition, fallPreventedByEquipment: context.fallPreventedByEquipment === true }) });
+  const heldTarget = targetConditionApplication.some(row => row.key === 'enchevetre' && row.source?.kind === 'quality'
+    && (row.source?.linkId || row.source?.weaponId || row.source?.keywordId === 'immobilisante'));
+  const explicitRestraint = context.mountedRestraint === 'anchored' || context.mountedRestraint === 'held';
+  if (target?.extensions?.v5?.mounted === true && !tripFall && (heldTarget || explicitRestraint)
+    && !mountedFallPlans.some(row => row.participantId === target.id && row.requiredTest)) {
+    const restraint = context.mountedRestraint === 'anchored' ? 'anchored' : 'held';
+    mountedFallPlans.push({ participantId: target.id, event: 'rider-restrained', restraint,
+      ...planMountedFall({ event: 'rider-restrained', restraint }) });
+  }
+  if (target?.extensions?.v5?.mounted === true && lethalDeath?.targetId === target.id && !mountedFallPlans.some(row => row.participantId === target.id)) {
+    mountedFallPlans.push({ participantId: target.id, event: 'rider-dead', ...planMountedFall({ event: 'rider-dead', fallPreventedByEquipment: context.fallPreventedByEquipment === true }) });
+  }
+  if (context.grappleDeclared === true && opposed?.winner === 'attacker' && hit && target?.extensions?.v5?.mounted === true) {
+    mountedFallPlans.push({ participantId: target.id, event: 'rider-restrained', restraint: 'held',
+      ...planMountedFall({ event: 'rider-restrained', restraint: 'held' }) });
+  }
+  if (target && mountedRiders.some(row => row.extensions.v5.mountId === target.id)) {
+    const mountEvent = [...nextConditionKeys].some(key => ['surpris','surprised'].includes(key)) ? 'mount-surprised'
+      : [...nextConditionKeys].some(key => ['inconscient','unconscient'].includes(key)) ? 'mount-unconscious'
+        : [...nextConditionKeys].some(key => ['aterre','prone'].includes(key)) ? 'mount-prone'
+          : [...nextConditionKeys].some(key => ['enchevetre','entangled'].includes(key)) ? 'mount-entangled' : null;
+    if (mountEvent) for (const rider of mountedRiders.filter(row => row.extensions.v5.mountId === target.id)) {
+      const traits = target.traits || target.profile?.traits || [];
+      mountedFallPlans.push({ participantId: rider.id, mountId: target.id, event: mountEvent,
+        ...planMountedFall({ event: mountEvent, mountTraits: traits, riderEntangled: (rider.states || []).some(row => ['enchevetre','entangled'].includes(foldKey(row.key || row.name))) }) });
+    }
+    if (lethalDeath?.targetId === target.id) for (const rider of mountedRiders.filter(row => row.extensions.v5.mountId === target.id)) {
+      mountedFallPlans.push({ participantId: rider.id, mountId: target.id, event: 'mount-dead', ...planMountedFall({ event: 'mount-dead' }) });
+    }
+  }
+  const resolveMountedFallTests = () => { for (const plan of mountedFallPlans) {
+    if (!plan.requiredTest) continue;
+    const rider = mountedWithPrimary.find(row => row?.id === plan.participantId) || mountedRoster.find(row => row.id === plan.participantId);
+    const skill = rider?.skills?.find(row => row?.id === V5_RIDE_SKILL_ID && row.status !== 'unresolved');
+    const manualScore = context.mountedRideScore;
+    const score = Number.isSafeInteger(skill?.total) ? skill.total : manualScore !== null && manualScore !== undefined && manualScore !== '' && Number.isSafeInteger(Number(manualScore)) ? Number(manualScore) : null;
+    const roll = Number(context.mountedRideRoll);
+    if (score === null || !Number.isInteger(roll) || roll < 1 || roll > 100) {
+      plan.unresolved = ['Test de Chevaucher requis : fournissez le score et le d100 du cavalier.'];
+      unresolved.push(...plan.unresolved);
+      continue;
+    }
+    plan.test = { ...selectV5Test(previewV5Test({ score, roll, kind: 'test', slModifiers: [{ id: 'mounted:fall', label: 'Désarçonnement', amount: plan.requiredTest.modifier }] }), 'keep'), skillId: V5_RIDE_SKILL_ID };
+    if (plan.dismount === 'on-failed-test' && !plan.test.success) plan.dismount = true;
+    else if (plan.dismount === 'on-failed-test') plan.dismount = false;
+    if (plan.opposedStrengthSize === 'mount' && plan.test.success) {
+      const holder = plan.participantId === normalized.actor?.id ? normalized.target : normalized.actor;
+      const holderKey = holder?.id === normalized.actor?.id ? 'holder' : 'holder';
+      const forceScores = context.mountedForceScores || {}, forceRolls = context.mountedForceRolls || {};
+      const knownScore = subject => {
+        const value = subject?.caracs?.F;
+        return value !== null && value !== undefined && value !== '' && Number.isSafeInteger(Number(value)) ? Number(value) : null;
+      };
+      const holderScore = knownScore(holder) ?? (forceScores[holderKey] !== null && forceScores[holderKey] !== undefined && forceScores[holderKey] !== '' && Number.isSafeInteger(Number(forceScores[holderKey])) ? Number(forceScores[holderKey]) : null);
+      const riderKey = plan.participantId === normalized.actor?.id ? 'rider' : 'rider';
+      const riderScore = knownScore(rider) ?? (forceScores[riderKey] !== null && forceScores[riderKey] !== undefined && forceScores[riderKey] !== '' && Number.isSafeInteger(Number(forceScores[riderKey])) ? Number(forceScores[riderKey]) : null);
+      const holderRoll = Number(forceRolls.holder), riderRoll = Number(forceRolls.rider);
+      if (holderScore === null || riderScore === null || !Number.isInteger(holderRoll) || holderRoll < 1 || holderRoll > 100 || !Number.isInteger(riderRoll) || riderRoll < 1 || riderRoll > 100) {
+        plan.unresolved = [...(plan.unresolved || []), 'Opposition de Force après Chevaucher : saisissez les deux d100 et les scores manquants.'];
+        unresolved.push(...plan.unresolved.slice(-1));
+      } else {
+        const holderTest = selectV5Test(previewV5Test({ score: holderScore, roll: holderRoll, kind: 'test' }), 'keep');
+        const riderTest = selectV5Test(previewV5Test({ score: riderScore, roll: riderRoll, kind: 'test' }), 'keep');
+        const mount = resolveMountedMount(rider, mountedWithPrimary).mount;
+        const choices = context.mountedSizeChoices || {};
+        const holderSizeValue = plan.participantId === normalized.actor?.id ? choices.target : choices.actor;
+        const mountSizeValue = plan.participantId === normalized.actor?.id ? choices.actorMount : choices.targetMount;
+        const holderSize = creatureSizeOf(holderSizeValue ? { size: holderSizeValue } : holder);
+        const mountSize = creatureSizeOf(mountSizeValue ? { size: mountSizeValue } : mount);
+        if (holderSize.assumed || mountSize.assumed) {
+          plan.unresolved = [...(plan.unresolved || []), 'Opposition de Force après Chevaucher : choisissez explicitement la taille de la monture et de son adversaire.'];
+          unresolved.push(...plan.unresolved.slice(-1));
+        } else {
+          const gap = Math.abs(holderSize.rank - mountSize.rank);
+          const sizePlan = gap ? { forceWinner: { larger: holderSize.rank > mountSize.rank ? 'attacker' : 'defender', gap } } : null;
+          const rawOpposition = resolveV5Opposition(holderTest, riderTest);
+          const sized = resolveSizeOpposition({ ...rawOpposition, winner: rawOpposition.winner === 'initiator' ? 'attacker' : 'defender' }, sizePlan, holderTest, riderTest);
+          plan.strengthOpposition = { holderId: holder?.id || null, riderId: rider.id, holderTest, riderTest,
+            winner: sized.winner === 'attacker' ? holder?.id : rider.id, netSl: sized.netSl, tie: sized.tie,
+            holderSize: holderSize.label, riderSize: mountSize.label, sizeGap: gap, sizeAutomatic: sized.sizeAutomatic === true };
+        }
+      }
+    }
+  } };
   if(context.entanglementTest===true&&success){
     const testEntanglementStrength=entanglementStrength({kind:entanglementKind,actorStrength:actor?.caracs?.F,
       explicitStrength:context.entanglementStrength??selectedWeapon?.extensions?.v5?.entanglementStrength,
@@ -1350,6 +1514,13 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   const defenderMagical=target?defenderNature().magical===true:false;
   const kept=(rows,magical)=>{const copy=[...rows];if(actor)refuseFamiliarConditions(actor,copy,magical,familiarConditionRefusals);return copy;};
   const actorConditionApplication=[...kept(activation.conditions||[],nature?.magical===true),...kept(magicFumbleStates,nature?.magical===true),...kept((defenderCritical?.application?.states||[]).map(row=>({...row,source:{...row.source,kind:'critical'}})),defenderMagical),...kept(defenderWeaponConditions.proposed,defenderMagical),...kept(blackpowderStates,false)];
+  const actorConditionKeys = new Set(actorConditionApplication.map(row => foldKey(row.key || row.name)));
+  const actorFallEvent = [...actorConditionKeys].some(key => ['inconscient','unconscient','aterre','prone'].includes(key)) ? 'rider-prone'
+    : [...actorConditionKeys].some(key => ['surpris','surprised'].includes(key)) ? 'rider-surprised'
+      : [...actorConditionKeys].some(key => ['sonne','stunned'].includes(key)) ? 'rider-stunned' : null;
+  if (actor?.extensions?.v5?.mounted === true && actorFallEvent) mountedFallPlans.push({ participantId: actor.id, event: actorFallEvent,
+    ...planMountedFall({ event: actorFallEvent, fallPreventedByEquipment: context.fallPreventedByEquipment === true }) });
+  resolveMountedFallTests();
   conditionPlan(actor,actorConditionApplication,'actor',context.blackpowderBrokenTest?context.blackpowderShooterId:target?.id);
   if(defenderCritical?.application)defenderCritical.application.states=actorConditionApplication.filter(row=>row.source?.kind==='critical');
   defenderWeaponConditions.applied=actorConditionApplication.filter(row=>row.source?.keywordId==='assommante');
@@ -1414,7 +1585,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
       const victim=(normalized.v5State?.participants||[]).find(person=>person.id===blastTarget.participantId&&person.zone==='active');
       if(!victim)continue;
       if(!knownHp(victim)){unresolved.push(`Explosion : PV actuels et maximum requis pour ${victim.name||victim.id}.`);continue;}
-      const blastLocationRoll=Number(context.explosionLocationRollsById?.[victim.id]),blastLocation=Number.isInteger(blastLocationRoll)&&blastLocationRoll>=1&&blastLocationRoll<=100?locationOf(blastLocationRoll):null;
+      const blastLocationRoll=Number(context.explosionLocationRollsById?.[victim.id]),blastLocation=Number.isInteger(blastLocationRoll)&&blastLocationRoll>=1&&blastLocationRoll<=100?creatureLocationOf(blastLocationRoll,victim,{hitMorphology:context.hitMorphologiesById?.[victim.id]}):null;
       if(!blastLocation){unresolved.push(`Explosion : choisir un jet de localisation d100 (1–100) pour ${victim.name||victim.id}.`);continue;}
       const guard=locationProtection(victim,{...normalized.protectionContext,location:blastLocation,attackRoll:roll,hitLocationRoll:blastLocationRoll,
         critical:false,ranged:nature.ranged,defenseProvided:false,qualities:action.qualities,nature});
@@ -1437,7 +1608,8 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   if(normalized.combatPrelude?.whirlwind?.active&&hit&&damage){
     for(const id of context.engagedIds.filter(id=>id!==target.id)){
       const victim=normalized.v5State.participants.find(p=>p.id===id);
-      let guard=locationProtection(victim,{...(context.whirlwindProtection?.[id]||{}),location,attackRoll:roll,hitLocationRoll:location.roll,critical:false,ranged:false,defenseProvided:false,qualities:action.qualities,nature});
+      const victimLocation=creatureLocationOf(reverseV5Roll(roll),victim,{hitMorphology:context.hitMorphologiesById?.[id]});
+      let guard=locationProtection(victim,{...(context.whirlwindProtection?.[id]||{}),location:victimLocation,attackRoll:roll,hitLocationRoll:victimLocation.roll,critical:false,ranged:false,defenseProvided:false,qualities:action.qualities,nature});
       const supportInput={...normalized,target:victim,v5:{...normalized.v5,context:{...context,...context.whirlwindSupport?.[id]}},combatPrelude:{forge:normalized.combatPrelude?.forge,alliedShield:previewAlliedShields({...normalized,target:victim,v5:{...normalized.v5,context:context.whirlwindSupport?.[id]||{}}})}};
       supplementaryTalentPlans.push(...supportInput.combatPrelude.alliedShield.plans);unresolved.push(...supportInput.combatPrelude.alliedShield.unresolved);
       guard=applyAlliedShield(supportInput,applyForgeProtection(supportInput,guard));
@@ -1449,10 +1621,10 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
       const dealt=computeDamage({weaponDamage,strengthBonus,damageBonus,sl:opposed.netSl,roll,targetToughnessBonus:Math.floor((Number(victim.caracs?.E)||0)/10),targetArmour:guard.ap,qualities:victimInput.action.qualities,damageMultiplier:small.multiplier,approvedQualities:small.approvedQualities});
       const excess=Math.max(0,dealt.finalDamage-Number(victim.hp)),enemy=victim.camp!==actor.camp;
       const rawRolls=context.whirlwindRolls?.[id]||{},settings={...normalized.v5,talentChoices:{...normalized.v5.talentChoices,...context.whirlwindChoices?.[id]}};
-      const second=enemy&&dealt.finalDamage>=Number(victim.hp)?secondCritical(reverseV5Roll(roll),prepareCritical(actor,normalizeCriticalRolls(rawRolls),settings,'attacker',inoffensive,['second']),excess*10+divineCriticalSeverityBonus(actor),inoffensive,location):null;
+      const second=enemy&&dealt.finalDamage>=Number(victim.hp)?secondCritical(reverseV5Roll(roll),prepareCritical(actor,normalizeCriticalRolls(rawRolls),settings,'attacker',inoffensive,['second']),excess*10+divineCriticalSeverityBonus(actor),inoffensive,victimLocation):null;
       if(second?.pending)unresolved.push(victim.name+' : gravité réelle du critique de Tourbillon requise.');
       const critical=second?{kind:'Critique',second,excessWounds:excess,items:criticalItems(null,second,context.whirlwindDeclined?.[id]||[])}:null;if(critical)critical.application=criticalApplication(critical.items);
-      const words=previewV5WeaponConditions({qualities:action.qualities,hit:true,location,target:victim,actor,damage:dealt,resolutionId:normalized.resolutionId+':'+id});
+      const words=previewV5WeaponConditions({qualities:action.qualities,hit:true,location:victimLocation,target:victim,actor,damage:dealt,resolutionId:normalized.resolutionId+':'+id});
       supplementaryTalentPlans.push(...(words.talentPlans||[]));unresolved.push(...words.unresolved);mechanicalWarnings.push(...words.warnings);
       if(critical?.application)refuseFamiliarConditions(victim,critical.application.states,nature?.magical===true,familiarConditionRefusals);
       const incoming=[...(critical?.application.states||[]).map(s=>({...s,source:{...s.source,kind:'critical'}})),...words.proposed];
@@ -1462,7 +1634,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
       const receipt=acquireV5Conditions(victim,reduced.states,{resolutionId:normalized.resolutionId,authorId:actor.id,targetId:id,round:normalized.round,source:{}});unresolved.push(...receipt.needsInput.map(r=>victim.name+' : '+r.label));
       let after=withMomentum({...receipt.participant,hp:Math.max(0,Number(victim.hp)-dealt.finalDamage-(critical?.application.extraWounds||0))},false);
       const exit=previewV5FrenzyExit(after,{round:normalized.round,resolutionId:normalized.resolutionId,state:normalized.v5State,clock:normalized.v5Clock});after=exit.participant;supplementaryTalentPlans.push(...exit.plans);talentUsageRequests.push(...exit.usageRequests);unresolved.push(...exit.unresolved);
-      secondaryTargets.push({participantId:id,name:victim.name,before:clone(victim),participant:after,damage:dealt,location,critical,conditions:reduced.states});
+      secondaryTargets.push({participantId:id,name:victim.name,before:clone(victim),participant:after,damage:dealt,location:victimLocation,critical,conditions:reduced.states});
     }
   }
   if(spreadPlan?.ready&&hit&&damage&&!unresolved.some(message=>message.startsWith('Dispersion :'))){
@@ -1470,7 +1642,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
       const victim=(normalized.v5State?.participants||[]).find(person=>person.id===spreadTarget.participantId&&person.zone==='active');
       if(!victim)continue;
       if(!knownHp(victim)){unresolved.push(`Dispersion : PV actuels et maximum requis pour ${victim.name||victim.id}.`);continue;}
-      const spreadLocationRoll=Number(context.spreadLocationRollsById?.[victim.id]),spreadLocation=Number.isInteger(spreadLocationRoll)&&spreadLocationRoll>=1&&spreadLocationRoll<=100?locationOf(spreadLocationRoll):null;
+      const spreadLocationRoll=Number(context.spreadLocationRollsById?.[victim.id]),spreadLocation=Number.isInteger(spreadLocationRoll)&&spreadLocationRoll>=1&&spreadLocationRoll<=100?creatureLocationOf(spreadLocationRoll,victim,{hitMorphology:context.hitMorphologiesById?.[victim.id]}):null;
       if(!spreadLocation){unresolved.push(`Dispersion : choisir un jet de localisation d100 (1–100) pour ${victim.name||victim.id}.`);continue;}
       const guard=locationProtection(victim,{...normalized.protectionContext,location:spreadLocation,attackRoll:roll,hitLocationRoll:spreadLocationRoll,
         critical:false,ranged:true,defenseProvided:false,qualities:action.qualities,nature});
@@ -1495,7 +1667,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   const declaredCombatAction=attackType(action.type)||normalized.v5?.context?.isAction===true;
   const resolvedRecordKinds=new Set(['weapon-explosion','salvo-artillery-hit','salvo-artillery-destroyed','fumble-ally-hit','misfire','critical-follow-up']);
   const consumedCombatEffects=declaredCombatAction?(actor?.extensions?.v5?.combatEffects||[]).filter(row=>row.kind==='next-action-sl'||resolvedRecordKinds.has(row.kind)).map(row=>row.id):[];
-  return {
+  const result = {
     resolutionId: normalized.resolutionId,
     baseRevision: normalized.baseRevision,
     input: normalized,
@@ -1521,6 +1693,10 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     weaponTrap,
     weaponTrapRecovery,
     shieldHands, shieldAttack,
+    mountedCombat: normalized.mountedCombatPlan?.active ? clone(normalized.mountedCombatPlan) : null,
+    mountedCharge: mountedChargePlan?.available ? clone(mountedChargePlan) : null,
+    mountedDodge: normalized.mountedDodgePlan?.disadvantageSources?.length ? clone(normalized.mountedDodgePlan) : null,
+    mountedFall: mountedFallPlans.length ? clone(mountedFallPlans) : null,
     blastPlan,
     spreadPlan,
     targetConditionApplication,actorConditionApplication,defenderWeaponConditions,familiarConditionRefusals,
@@ -1574,6 +1750,20 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
       || (OPPOSITION_TYPES.has(action.type) ? { mode: 'manual', reason: 'aucune-convention-locale-vérifiée' } : null),
     application: { status: 'pending', applied: false }
   };
+  if (normalized.v5?.context?.fateAction === 'cancel-attack' && attackType(action.type)) {
+    result.fateAction = { action: 'cancel-attack', cancelled: true };
+    result.hit = false; result.damage = null; result.critical = null; result.defenderCritical = null;
+    result.targetConditionApplication = null; result.weaponConditions = null; result.entanglement = null;
+    result.projectileLodging = null; result.hack = null; result.slash = null; result.spreadPlan = null;
+    result.secondaryTargets = []; result.lethalDeath = null; result.tripFall = null; result.trip = null;
+    result.reminders = [...result.reminders, 'Destin : attaque annulée avant Blessures et Blessures Critiques.'];
+  }
+  if(normalized.v5?.context?.fateAction==='survive'){
+    const lethal=attackType(action.type)&&target&&hit&&damage&&damage.finalDamage+(criticalBlock?.application?.extraWounds||0)>=(Number(target.hp)||0);
+    if(lethal){result.fateSurvival={participantId:target.id,removedFromEncounter:true};result.hit=false;result.damage=null;result.critical=null;result.defenderCritical=null;result.targetConditionApplication=null;result.weaponConditions=null;result.entanglement=null;result.projectileLodging=null;result.secondaryTargets=[];result.lethalDeath=null;result.reminders=[...result.reminders,'Destin : le personnage survit et quitte la rencontre.'];}
+    else result.unresolved=[...(result.unresolved||[]),'Destin : le choix Survivre exige une attaque qui mettrait la cible à 0 Blessure.'];
+  }
+  return result;
 }
 
 export const replayResolution = previewResolution;
@@ -1644,6 +1834,15 @@ export function applyResolution(preview, currentState) {
     const live = participantById(currentState, subject.id);
     if (live && JSON.stringify(live) !== JSON.stringify(subject)) return { status: 'stale', requiresPreview: true, state: clone(currentState), resolution: clone(preview) };
   }
+  // These Fate choices resolve before the attack pipeline: no hit, critical, injury,
+  // projectile, weapon, bystander or defender side effects may leak through.
+  if(preview.fateAction?.cancelled||preview.fateSurvival){
+    const next=clone(currentState);
+    if(preview.fateSurvival){const target=participantById(next,preview.targetId);if(!target)return{status:'stale',requiresPreview:true,state:clone(currentState),resolution:clone(preview)};const updated=clone(target);updated.zone='bench';next.participants=participantListWithUpdate(next,updated.id,updated);}
+    next.revision=currentState.revision+1;next.appliedResolutionIds=[...appliedIds,preview.resolutionId].slice(-MAX_APPLIED_RESOLUTION_IDS);
+    const resolution=clone(preview);resolution.application={status:'applied',applied:true,revision:next.revision};
+    return{status:'applied',state:next,resolution};
+  }
   const nextState = clone(currentState);
   const target = participantById(currentState, preview.targetId);
   const criticalEffects = preview.critical?.application || { extraWounds: 0, states: [] };
@@ -1653,12 +1852,13 @@ export function applyResolution(preview, currentState) {
   // Seuls les Sonné issus des critiques à la tête sont retirés (un Sonné d'un autre critique reste).
   let toStrip = headHit?.stripStunned ? headHit.stunnedCount : 0;
   const targetConditions = rawConditions.filter(condition => !(condition.key === 'sonne' && toStrip > 0 && toStrip--));
-  if ((preview.attack || preview.tripFall || preview.trip?.conditionApplied || preview.entanglement) && preview.targetId && (preview.damage || criticalEffects.extraWounds || targetConditions.length || headHit || preview.lethalDeath || preview.tripFall || preview.entanglement)) {
+  if ((preview.attack || preview.tripFall || preview.trip?.conditionApplied || preview.entanglement || preview.fateSurvival) && preview.targetId && (preview.damage || criticalEffects.extraWounds || targetConditions.length || headHit || preview.lethalDeath || preview.tripFall || preview.entanglement || preview.fateSurvival)) {
     if (!target) return { status: 'stale', requiresPreview: true, state: clone(currentState), resolution: clone(preview) };
     if (JSON.stringify(target) !== JSON.stringify(preview.input.target)) {
       return { status: 'stale', requiresPreview: true, state: clone(currentState), resolution: clone(preview) };
     }
     const updated = clone(target);
+    if(preview.fateSurvival)updated.zone='bench';
     if(preview.hack?.ready&&preview.hack.damage?.itemId){
       updated.extensions??={};updated.extensions.v5={...(updated.extensions.v5||{})};
       const damageByItem={...(updated.extensions.v5.armorDamageByItem||{})};
@@ -1976,6 +2176,15 @@ export function applyResolution(preview, currentState) {
       updatedLayer.frenzyFury = { ...updatedLayer.frenzyFury, lastTurnId: preview.ulricFury.turnId };
       nextState.participants = participantListWithUpdate(nextState, liveActor.id, updated);
     }
+  }
+  const mountedDismountIds = new Set((preview.mountedFall || []).filter(row => row.dismount === true).map(row => row.participantId).filter(Boolean));
+  if (preview.tripFall && preview.input.target?.extensions?.v5?.mounted === true) mountedDismountIds.add(preview.input.target.id);
+  for (const id of mountedDismountIds) {
+    const rider = participantById(nextState, id);
+    if (!rider) return { status: 'stale', requiresPreview: true, state: clone(currentState), resolution: clone(preview) };
+    const updated = clone(rider), extensions = { ...(updated.extensions || {}) }, v5 = { ...(extensions.v5 || {}) };
+    delete v5.mountId; v5.mounted = false; extensions.v5 = v5; updated.extensions = extensions;
+    nextState.participants = participantListWithUpdate(nextState, id, updated);
   }
   nextState.revision = currentState.revision + 1;
   nextState.appliedResolutionIds = [...appliedIds, preview.resolutionId].slice(-MAX_APPLIED_RESOLUTION_IDS);

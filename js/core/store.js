@@ -2,6 +2,15 @@ import {setStoreSanctifiedGround,removeStoreSanctifiedGround,enterStoreSanctifie
 import {processCombatTurnSpells,shieldAtTurnStart,previewSpellInteraction,removeExpiredSummons,endSpellEffectsOnEvent} from './v5-magic-turn.js';
 import {previewMagicMeditation,activeMagicTalent,magicTalentRank,effectiveSkillScore,baseCharacteristicScore} from './v5-magic-talents.js';
 import { previewV5Test, selectV5Test, normalizeV5Roll } from './v5-roll.js';
+import {
+  applyCorruptionAbsolution as applyCorruptionAbsolutionPure,
+  calculateCorruptionThreshold,
+  confirmCorruptionMutation as confirmCorruptionMutationPure,
+  resolveCorruptionExposure,
+  resolveCorruptionThresholdTest,
+  secretManifestationDelay
+} from './v5-corruption.js';
+import { V5_CORRUPTION_MUTATION_CATALOG, resolveCorruptionMutationSelection } from './v5-corruption-mutation-catalog.js';
 import {resoluteException} from './v5-talent-replacements.js';
 import {previewChannelling, applyChannelling} from './v5-magic-channelling.js';
 import {previewCasting, applyCasting} from './v5-magic-casting.js';
@@ -305,6 +314,8 @@ import { deriveReminders, pendingReminders, resolveReminder } from './reminders.
 import { createScene, createIntention, createSceneEvent, createSceneClock, proposeSceneEvent, resolveSceneEvent, applySceneEvent, advanceSceneClock } from './scene-events.js';
 import { sharedState, sameSharedState } from './sync-protocol.js';
 import { applyFicheSync as applyFicheSyncToDraft } from './fiche-sync.js';
+import { convertLegacyV4Profile } from './v5-legacy-conversion.js';
+import { planMountedFall, V5_RIDE_SKILL_ID } from './v5-mounted-combat.js';
 
 export const KEY = { EXTENSIONS: 'wfrp.extensions.v1', RESERVE: 'wfrp.reserve.v1', COMBAT: 'wfrp.combat.v1', LOG: 'wfrp.log.v1', DICE: 'wfrp.dice.v1', TS: 'wfrp.sync.ts.v1' };
 
@@ -356,6 +367,14 @@ function withoutCombatInitiativeResolution(extensions) {
 function freshCombatScopedV5(value, combatScopeId = uid()) {
   const { combatActions, standardTurnActions, ...v5 } = value || {};
   return { ...v5, combatScopeId, turnIndex: 1 };
+}
+function clearMountedRelation(participant) {
+  if (!participant?.extensions?.v5 || (participant.extensions.v5.mounted !== true && !participant.extensions.v5.mountId)) return participant;
+  return withV5(participant, v5 => { const { mountId, ...rest } = v5; return { ...rest, mounted: false }; });
+}
+function dismountLinkedRiders(participants, mountId) {
+  return (participants || []).map(participant => participant?.extensions?.v5?.mounted === true
+    && participant.extensions.v5.mountId === mountId ? clearMountedRelation(participant) : participant);
 }
 
 export function createStore({ storage = typeof localStorage !== 'undefined' ? localStorage : null, sync = null, persistence = null, persistenceFactory = null, contextId = 'guest', divineAuthority = 'MJ', appVersion = 'unknown', bus = null, now = () => new Date().toLocaleTimeString(), onSyncStatus = null, onLocalStatus = null, onReady = null } = {}) {
@@ -912,6 +931,136 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
     if (expected !== undefined && expected !== actual) throw Object.assign(new Error('La séance a changé pendant l’enregistrement. Votre saisie est conservée : vérifiez les données actualisées, puis réessayez.'), { code: 'LOCAL_EDIT_STALE', userFacing: true });
   }
 
+const CORRUPTION_SKILL_IDS = Object.freeze({
+  resistance: 'skill-52_e9_73_69_73_74_61_6e_63_65-base',
+  calm: 'skill-43_61_6c_6d_65-base'
+});
+const corruptionIdentity = row => row?.extensions?.ficheId || row?.ficheSnapshot?.charId || row?.persistentCharacterId || row?.id;
+function findCorruptionSubject(envelope, id) {
+  return (envelope.combat?.participants || []).find(row => row.id === id)
+    || (envelope.reserve || []).find(row => row.id === id)
+    || (envelope.persistentCharacters || []).find(row => row.id === id)
+    || null;
+}
+function updateCorruptionCopies(envelope, id, transform) {
+  const subject = findCorruptionSubject(envelope, id);
+  if (!subject) throw new TypeError('Personnage introuvable');
+  const identity = corruptionIdentity(subject);
+  const update = rows => (rows || []).map(row => row.id === id || corruptionIdentity(row) === identity ? transform(cloneValue(row)) : row);
+  envelope.reserve = update(envelope.reserve);
+  envelope.persistentCharacters = update(envelope.persistentCharacters);
+  envelope.combat = { ...(envelope.combat || {}), participants: update(envelope.combat?.participants) };
+  if (envelope.activeScene) envelope.activeScene = { ...envelope.activeScene, participants: update(envelope.activeScene.participants) };
+  envelope.suspendedScenes = (envelope.suspendedScenes || []).map(scene => ({ ...scene, participants: update(scene.participants) }));
+  return findCorruptionSubject(envelope, id);
+}
+function corruptionFacts(participant) {
+  const toughnessScore = Number(participant?.caracs?.E), willpowerScore = Number(participant?.caracs?.FM);
+  if (!Number.isSafeInteger(toughnessScore) || toughnessScore < 0 || toughnessScore > 100
+    || !Number.isSafeInteger(willpowerScore) || willpowerScore < 0 || willpowerScore > 100) {
+    throw Object.assign(new Error('Bonus d’Endurance et de Force Mentale connus requis pour calculer le seuil.'), { code: 'CORRUPTION_FACTS_REQUIRED', userFacing: true });
+  }
+  const toughnessBonus = Math.floor(toughnessScore / 10), willpowerBonus = Math.floor(willpowerScore / 10);
+  const pureSoul = (participant.talents || []).some(row => row?.id === 'talent-pure-soul' && row.status === 'resolved');
+  return { toughnessBonus, willpowerBonus, pureSoul, threshold: calculateCorruptionThreshold({ toughnessBonus, willpowerBonus, pureSoul }) };
+}
+function corruptionSkillScore(participant, skillId, input = {}) {
+  const skill = (participant.skills || []).find(row => row?.id === skillId && row.status !== 'unresolved');
+  const rawScore = skill?.total ?? skill?.value;
+  if (Number.isSafeInteger(rawScore) && rawScore >= 0 && rawScore <= 100) return { score: rawScore, scoreSource: 'resolved-skill' };
+  const score = input.manualScore;
+  if (Number.isSafeInteger(score) && score >= 0 && score <= 100 && typeof input.manualScoreReason === 'string' && input.manualScoreReason.trim()) {
+    return { score, scoreSource: 'gm-manual', scoreReason: input.manualScoreReason.trim() };
+  }
+  throw Object.assign(new Error(`Compétence ${skillId} non résolue : saisissez un score fixé par le MJ et son motif.`), { code: 'CORRUPTION_SKILL_REQUIRED', userFacing: true });
+}
+function corruptionStatusFor(participant, baseRevision, sessionId = null) {
+  const v5 = participant.extensions?.v5 || {};
+  let facts = null, thresholdError = null;
+  try { facts = corruptionFacts(participant); } catch (error) { thresholdError = error.message; }
+  return {
+    participantId: participant.id,
+    name: participant.name,
+    corruptionPoints: Number.isSafeInteger(v5.corruptionPoints) && v5.corruptionPoints >= 0 ? v5.corruptionPoints : null,
+    pointsKnown: Number.isSafeInteger(v5.corruptionPoints) && v5.corruptionPoints >= 0,
+    toughnessBonus: facts?.toughnessBonus ?? null,
+    willpowerBonus: facts?.willpowerBonus ?? null,
+    pureSoul: facts?.pureSoul ?? false,
+    threshold: facts?.threshold ?? null,
+    thresholdError,
+    species: participant.species || participant.race || v5.species || v5.bestiary?.identity?.species || null,
+    mutations: Array.isArray(v5.corruptionMutations) ? cloneValue(v5.corruptionMutations) : [],
+    mutationCatalogRecords: Array.isArray(v5.corruptionMutationCatalogRecords) ? cloneValue(v5.corruptionMutationCatalogRecords) : [],
+    pendingThresholdTest: v5.pendingCorruptionTest ? cloneValue(v5.pendingCorruptionTest) : null,
+    pendingMutation: v5.pendingCorruptionMutation ? cloneValue(v5.pendingCorruptionMutation) : null,
+    pendingCharacterLoss: v5.pendingCorruptionCharacterLoss ? cloneValue(v5.pendingCorruptionCharacterLoss) : null,
+    characterLoss: v5.corruptionCharacterLoss ? cloneValue(v5.corruptionCharacterLoss) : null,
+    corruptionSessionId: sessionId,
+    sessionExposure: sessionId ? cloneValue((v5.corruptionExposures || []).find(row => row.sessionId === sessionId) || null) : null,
+    baseRevision
+  };
+}
+function resolvedCorruptionTest(participant, skillId, input) {
+  const { score, ...scoreInfo } = corruptionSkillScore(participant, skillId, input);
+  const preview = previewV5Test({ score, roll: normalizeV5Roll(input.roll), kind: 'test' });
+    const resolved = selectV5Test(preview, 'keep');
+    return { ...resolved, scoreInfo };
+}
+  function corruptionExposurePreview(participant, input, baseRevision, sessionId) {
+    const v5 = participant.extensions?.v5 || {};
+    if (typeof sessionId !== 'string' || !sessionId) throw Object.assign(new Error('Démarrez explicitement une séance avant de résoudre la Corruption.'), { code: 'CORRUPTION_SESSION_REQUIRED', userFacing: true });
+    if ((v5.corruptionExposures || []).some(row => row?.sessionId === sessionId)) throw Object.assign(new Error('Le Test de Corruption de cette séance a déjà été résolu pour ce personnage.'), { code: 'CORRUPTION_SESSION_RESOLVED', userFacing: true });
+    if (typeof input?.declaredSources !== 'string' || !input.declaredSources.trim()) throw Object.assign(new Error('Déclarez les sources d’exposition de la séance avant de retenir la plus forte.'), { code: 'CORRUPTION_SOURCES_REQUIRED', userFacing: true });
+    if (!Number.isSafeInteger(v5.corruptionPoints) || v5.corruptionPoints < 0) {
+      throw Object.assign(new Error('Saisissez d’abord les Points de Corruption connus ; aucune valeur zéro n’est supposée.'), { code: 'CORRUPTION_POINTS_REQUIRED', userFacing: true });
+    }
+    if (v5.pendingCorruptionTest || v5.pendingCorruptionMutation || v5.pendingCorruptionCharacterLoss) {
+      throw Object.assign(new Error('Traitez la décision de Corruption en attente avant une nouvelle exposition.'), { code: 'CORRUPTION_PENDING', userFacing: true });
+    }
+    const facts = corruptionFacts(participant);
+    const { skillId, influence, exposure, roll, manualScore, manualScoreReason } = input || {};
+    const testInput = { roll, manualScore, manualScoreReason };
+    const test = resolvedCorruptionTest(participant, skillId, testInput);
+    const result = resolveCorruptionExposure({
+      currentPoints: v5.corruptionPoints, threshold: facts.threshold, influence, exposure, skillId,
+      success: test.success, sl: test.sl
+    });
+    return {
+      status: 'ready', participantId: participant.id, baseRevision,
+      sessionId,
+      input: cloneValue({ skillId, influence, exposure, roll: normalizeV5Roll(roll), manualScore, manualScoreReason, declaredSources: input?.declaredSources || '' }),
+      ...result, test: cloneValue({ ...test, ...result.test, scoreInfo: test.scoreInfo }),
+      facts: { toughnessBonus: facts.toughnessBonus, willpowerBonus: facts.willpowerBonus, pureSoul: facts.pureSoul }
+    };
+  }
+  function corruptionThresholdPreview(participant, input, baseRevision) {
+    const v5 = participant.extensions?.v5 || {};
+    if (!v5.pendingCorruptionTest || v5.pendingCorruptionTest.status !== 'pending') {
+      throw Object.assign(new Error('Aucun Test contre la mutation n’est en attente.'), { code: 'CORRUPTION_THRESHOLD_NOT_PENDING', userFacing: true });
+    }
+    if (!Number.isSafeInteger(v5.corruptionPoints) || v5.corruptionPoints < 0) throw Object.assign(new Error('Points de Corruption connus requis.'), { code: 'CORRUPTION_POINTS_REQUIRED', userFacing: true });
+    const facts = corruptionFacts(participant);
+    if (v5.corruptionPoints <= facts.threshold) return { status: 'not-required', participantId: participant.id, baseRevision, threshold: facts.threshold, corruptionPoints: v5.corruptionPoints };
+    const test = resolvedCorruptionTest(participant, CORRUPTION_SKILL_IDS.resistance, input || {});
+    const mutations = Array.isArray(v5.corruptionMutations) ? v5.corruptionMutations : [];
+    const outcome = resolveCorruptionThresholdTest({
+      success: test.success, currentPoints: v5.corruptionPoints, willpowerBonus: facts.willpowerBonus,
+      species: participant.species || participant.race || v5.species || v5.bestiary?.identity?.species,
+      mutationDomainRoll: input?.mutationDomainRoll, gmChosenDomain: input?.gmChosenDomain,
+      physicalMutationCount: mutations.filter(row => row?.domain === 'physical').length,
+      mentalMutationCount: mutations.filter(row => row?.domain === 'mental').length,
+      toughnessBonus: facts.toughnessBonus
+    });
+    if (outcome.status === 'needs-gm-choice') return { status: 'needs-input', participantId: participant.id, baseRevision, test, outcome, missing: ['gmChosenDomain'] };
+    if (outcome.mutation) {
+      let manifestation;
+      try { manifestation = secretManifestationDelay({ dice: input?.manifestationDice }); }
+      catch { return { status: 'needs-input', participantId: participant.id, baseRevision, test, outcome, missing: ['manifestationDice'] }; }
+      return { status: 'ready', participantId: participant.id, baseRevision, input: cloneValue(input), test: cloneValue(test), outcome, manifestation, threshold: facts.threshold };
+    }
+    return { status: 'ready', participantId: participant.id, baseRevision, input: cloneValue(input), test: cloneValue(test), outcome, threshold: facts.threshold };
+  }
+
   function sameValue(left, right) {
     return JSON.stringify(left ?? null) === JSON.stringify(right ?? null);
   }
@@ -1276,6 +1425,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       if (!participant) throw Object.assign(new Error('Participant introuvable'), { code: 'V5_EFFECT_STALE' });
       receipt = evaluate(participant, draft);
       if (!receipt.ready) throw Object.assign(new Error('Données requises pour l’état V5'), { code: 'V5_EFFECT_INPUT' });
+      const additionalParticipantUpdates = new Map((receipt.additionalParticipants || []).map(row => [row.id, row]));
       if (receipt.talentUsageRequests?.length) {
         const initial = v5StoreActionState(draft);
         const applied = commitV5StoreTalentUsages({ talentUsageRequests: receipt.talentUsageRequests }, { status: 'applied', state: initial }, initial);
@@ -1293,16 +1443,18 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         receipt.participant = (draft.combat?.participants || []).find(item => item.id === participantId) || receipt.participant;
       }
       return { ...draft,
-        combat: { ...draft.combat, participants: draft.combat.participants.map(item => item.id === participantId ? receipt.participant : item) },
+        combat: { ...draft.combat, participants: draft.combat.participants.map(item => item.id === participantId ? receipt.participant : additionalParticipantUpdates.get(item.id) || item) },
         log: [{ id: uid(), kind: 'effect', actorId: options.authorId || participantId, targetId: participantId,
           text: `${participant.name} · ${type === 'heal-wounds-v5' ? `${receipt.hpDelta} Blessures récupérées` : type === 'recover-condition-v5' ? `${receipt.removed.length} effet(s) retiré(s)` : `${receipt.acquiredInstances} État(s) acquis`}`,
-          detail: { ruleVersion: receipt.ruleVersion, acquiredInstances: receipt.acquiredInstances, removed: receipt.removed, reminders: receipt.reminders, hpDelta: receipt.hpDelta, ...(receipt.resourceCost ? { resourceCost: receipt.resourceCost } : {}), ...(receipt.talentPlan ? { talentPlan: receipt.talentPlan, talentUsageReceipts: receipt.talentUsageReceipts } : {}) } }, ...(draft.log || [])].slice(0, 300) };
+          detail: { ruleVersion: receipt.ruleVersion, acquiredInstances: receipt.acquiredInstances, removed: receipt.removed, reminders: receipt.reminders, hpDelta: receipt.hpDelta,
+            ...(receipt.mountedFall?.length ? { mountedFall: receipt.mountedFall } : {}), ...(receipt.resourceCost ? { resourceCost: receipt.resourceCost } : {}), ...(receipt.talentPlan ? { talentPlan: receipt.talentPlan, talentUsageReceipts: receipt.talentUsageReceipts } : {}) } }, ...(draft.log || [])].slice(0, 300) };
     })).then(result => result?.ok === false ? result : { ...receipt, status: 'applied', ok: true, persistence: result })
       .catch(error => {
         if (error.code === 'V5_EFFECT_DUPLICATE') return { status: 'duplicate', ok: true };
         if (error.code === 'V5_EFFECT_STALE') return { status: 'stale', requiresPreview: true };
         if (error.code === 'V5_EFFECT_INPUT') return { ...receipt, status: 'requires-input', baseRevision: expected,
-          requests: receipt.needsInput.map(need => ({ ...need, participantId, participantName: combat.participants.get(participantId)?.name, kind: need.field === 'recoveryTest' ? 'test' : ['transition','recoveryMethod'].includes(need.field) ? 'manual' : ['minuteElapsed','restSatisfied','engaged','fullRoundHidden','causeEnded','medicalAttention','surgery','outOfCombat','overrideRecovery'].includes(need.field) ? 'boolean' : 'integer' })) };
+          requests: receipt.needsInput.map(need => ({ ...need, participantId, participantName: need.participantName || combat.participants.get(participantId)?.name,
+            kind: need.kind || (need.field === 'recoveryTest' ? 'test' : /^mountedRideRoll/.test(need.field) ? 'd100' : ['transition','recoveryMethod'].includes(need.field) ? 'manual' : ['minuteElapsed','restSatisfied','engaged','fullRoundHidden','causeEnded','medicalAttention','surgery','outOfCombat','overrideRecovery'].includes(need.field) ? 'boolean' : 'integer') })) };
         throw error;
       });
   }
@@ -1531,12 +1683,13 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
     addProfile(p) {
       if (!canMutate()) return false;
       if (persistence) {
-        const captured = canonicalizeProfileFields(JSON.parse(JSON.stringify(p)));
+        const captured = convertLegacyV4Profile(canonicalizeProfileFields(JSON.parse(JSON.stringify(p))));
         return api.executeCommand('add-profile', draft => ({ ...draft, reserve: [...(draft.reserve || []), captured] }));
       }
       beginCommand('add-profile');
-      reserve.set(p.id, p);
-      markDirty(`reserve/${p.id}`, p);
+      const converted = convertLegacyV4Profile(p);
+      reserve.set(converted.id, converted);
+      markDirty(`reserve/${converted.id}`, converted);
       save();
       emitBus('reserve');
     },
@@ -1647,14 +1800,16 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       if (!canMutate()) return false;
       const participant = combat.participants.get(id); if (!participant) return;
       // Un participant lié par un familier passe par une commande annulable même sans persistance : l'historique des liens (commandes) ne se mêle pas à l'instantané hérité.
-      const linked = familiarLinksOf(participant).length > 0 || Boolean(participant.extensions?.v5?.familiarOf);
+      const linked = familiarLinksOf(participant).length > 0 || Boolean(participant.extensions?.v5?.familiarOf)
+        || participant.extensions?.v5?.mounted === true
+        || Array.from(combat.participants.values()).some(item => item.extensions?.v5?.mounted === true && item.extensions.v5.mountId === id);
       if (persistence || linked) return api.executeCommand('remove-participant', draft => {
         const stripLinks = item => {
           if (item.extensions?.v5?.familiarOf?.masterId === id) return withV5(item, v5 => { const { familiarOf, ...rest } = v5; return rest; });
           if (familiarLinksOf(item).some(row => row.familiarId === id)) return withV5(item, v5 => ({ ...v5, familiarLinks: v5.familiarLinks.filter(row => row.familiarId !== id) }));
           return item;
         };
-        const participants = (draft.combat?.participants || []).filter(item => item.id !== id).map(stripLinks);
+        const participants = dismountLinkedRiders((draft.combat?.participants || []).filter(item => item.id !== id).map(stripLinks), id);
         const transition = participant.zone === 'active' ? removeFromCombat({ participants: draft.combat?.participants || [], order: draft.combat?.order || [], currentActorId: draft.combat?.currentActorId, participantId: id }) : null;
         return {
           ...draft,
@@ -1668,6 +1823,11 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       const turnTransition = participant.zone === 'active' ? removeFromCombat({ participants: Array.from(combat.participants.values()), order: combat.order, currentActorId: combat.currentActorId, participantId: id }) : null;
       combat.participants.delete(id);
       combat.participants.forEach((item, key) => {
+        if (item.extensions?.v5?.mounted === true && item.extensions.v5.mountId === id) {
+          const dismounted = clearMountedRelation(item);
+          combat.participants.set(key, dismounted); markDirty(`combat/participants/${key}`, dismounted);
+          return;
+        }
         if (item.extensions?.v5?.familiarOf?.masterId !== id) return;
         const freed = withV5(item, v5 => { const { familiarOf, ...rest } = v5; return rest; });
         combat.participants.set(key, freed); markDirty(`combat/participants/${key}`, freed);
@@ -1688,11 +1848,22 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         const capturedPatch = JSON.parse(JSON.stringify(patch || {}));
         return api.executeCommand('update-participant', draft => {
           assertEditRevision(expectedLocalRevision, draft.localRevision);
-          return { ...draft, combat: { ...draft.combat, participants: (draft.combat?.participants || []).map(item => item.id === id ? momentumAfterChange(item, assertMiscastConditionsKept(item, { ...item, ...capturedPatch, ...pickBaseLayers(item, capturedPatch) })) : item) } };
+          let participants = (draft.combat?.participants || []).map(item => item.id === id ? momentumAfterChange(item, assertMiscastConditionsKept(item, { ...item, ...capturedPatch, ...pickBaseLayers(item, capturedPatch) })) : item);
+          if (capturedPatch.zone === 'bench') participants = dismountLinkedRiders(participants.map(item => item.id === id ? clearMountedRelation(item) : item), id);
+          return { ...draft, combat: { ...draft.combat, participants } };
         });
       }
       assertEditRevision(expectedLocalRevision, localRevision);
-      Object.assign(p, momentumAfterChange(p, assertMiscastConditionsKept(p, { ...p, ...patch, ...pickBaseLayers(p, patch) }))); markDirty(`combat/participants/${id}`, p); save();
+      Object.assign(p, momentumAfterChange(p, assertMiscastConditionsKept(p, { ...p, ...patch, ...pickBaseLayers(p, patch) })));
+      if (patch.zone === 'bench') {
+        const dismounted = clearMountedRelation(p);
+        Object.assign(p, dismounted);
+        combat.participants.forEach((item, key) => {
+          if (key === id || item.extensions?.v5?.mounted !== true || item.extensions.v5.mountId !== id) return;
+          const linkedRider = clearMountedRelation(item); combat.participants.set(key, linkedRider); markDirty(`combat/participants/${key}`, linkedRider);
+        });
+      }
+      markDirty(`combat/participants/${id}`, p); save();
       if ('zone' in patch) emitBus('combat'); else emitBus('combat:update', { id, patch });
     },
 
@@ -1711,6 +1882,44 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         const surprise=preventIdentifiedSurprise(participant,proposed,context.surpriseEventId);participant=surprise.participant;
         const talent = previewV5TalentConditions(participant, surprise.states, { state: v5StoreActionState(draft), clock: v5StoreActionClock(draft), actionId });
         const receipt = acquireV5Conditions(participant, talent.states, v5EffectContext(draft, { ...context, resolutionId: actionId, targetId: id }));
+        const beforeStateIds = new Set((participant.states || []).map(row => row.id).filter(Boolean));
+        const acquiredStates = (receipt.participant.states || []).filter(row => row.id && !beforeStateIds.has(row.id));
+        const normalizedKeys = new Set(acquiredStates.map(row => String(row.key || row.name || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '')));
+        const mountedFallReceipts = [], extraDismounts = new Map();
+        const checkSkittish = subject => psychologyTraits(subject).some(row => row.key === 'skittish');
+        const riders = (draft.combat?.participants || []).filter(row => row.extensions?.v5?.mounted === true && row.extensions.v5.mountId === id);
+        const riderEvent = receipt.participant.extensions?.v5?.mounted === true
+          ? normalizedKeys.has('inconscient') || normalizedKeys.has('aterre') ? 'rider-prone'
+            : normalizedKeys.has('surpris') ? 'rider-surprised' : normalizedKeys.has('sonne') ? 'rider-stunned' : null
+          : null;
+        const mountEvent = riders.length
+          ? normalizedKeys.has('inconscient') ? 'mount-unconscious' : normalizedKeys.has('aterre') ? 'mount-prone'
+            : normalizedKeys.has('surpris') ? 'mount-surprised' : normalizedKeys.has('enchevetre') ? 'mount-entangled' : null
+          : null;
+        const fallTargets = riderEvent ? [{ rider: receipt.participant, event: riderEvent, mountTraits: [] }]
+          : mountEvent ? riders.filter(rider => mountEvent !== 'mount-surprised' && mountEvent !== 'mount-entangled' || checkSkittish(participant))
+            .filter(rider => mountEvent !== 'mount-entangled' || !(rider.states || []).some(state => ['enchevetre','entangled'].includes(String(state.key || state.name || '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase())))
+            .map(rider => ({ rider, event: mountEvent, mountTraits: participant.traits || participant.profile?.traits || [] })) : [];
+        for (const { rider, event, mountTraits } of fallTargets) {
+          const plan = planMountedFall({ event, mountTraits, riderEntangled: (rider.states || []).some(state => ['enchevetre','entangled'].includes(String(state.key || state.name || '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase())), fallPreventedByEquipment: context.fallPreventedByEquipment === true });
+          if (plan.requiredTest) {
+            const skill = (rider.skills || []).find(row => row?.id === V5_RIDE_SKILL_ID && row.status !== 'unresolved');
+            const suffix = rider.id === id ? '' : ':' + rider.id;
+            const manualScore = suffix ? context[`mountedRideScore${suffix}`] : context.mountedRideScore;
+            const rideScore = Number.isSafeInteger(skill?.total) ? skill.total : manualScore !== null && manualScore !== undefined && manualScore !== '' && Number.isSafeInteger(Number(manualScore)) ? Number(manualScore) : null;
+            const rideRoll = Number(suffix ? context[`mountedRideRoll${suffix}`] : context.mountedRideRoll);
+            if (rideScore === null) receipt.needsInput.push({ field: `mountedRideScore${suffix}`, kind: 'integer', label: `${rider.name || rider.id} : score de Chevaucher` });
+            if (!Number.isInteger(rideRoll) || rideRoll < 1 || rideRoll > 100) receipt.needsInput.push({ field: `mountedRideRoll${suffix}`, kind: 'd100', label: `${rider.name || rider.id} : Test de Chevaucher d100` });
+            if (rideScore === null || !Number.isInteger(rideRoll) || rideRoll < 1 || rideRoll > 100) { receipt.ready = false; continue; }
+            plan.test = previewV5Test({ score: rideScore, roll: rideRoll, kind: 'test', slModifiers: [{ id: 'mounted:fall', label: 'Désarçonnement', amount: plan.requiredTest.modifier }] }).options[0].result;
+            if (plan.dismount === 'on-failed-test') plan.dismount = !plan.test.success;
+          }
+          mountedFallReceipts.push({ participantId: rider.id, event, ...plan });
+          if (plan.dismount === true) extraDismounts.set(rider.id, clearMountedRelation(rider));
+        }
+        if (riderEvent && mountedFallReceipts.some(row => row.dismount === true)) receipt.participant = clearMountedRelation(receipt.participant);
+        receipt.mountedFall = mountedFallReceipts;
+        receipt.additionalParticipants = [...extraDismounts.values()].filter(row => row.id !== id);
         const exit=previewV5FrenzyExit(receipt.participant,{round:draft.combat?.round,resolutionId:actionId,state:v5StoreActionState(draft),clock:v5StoreActionClock(draft)});
         receipt.participant=exit.participant;
         const resolute=resoluteException({},receipt.participant,{context},receipt.acquiredInstances);if(resolute.unresolved.length){receipt.ready=false;receipt.needsInput.push(...resolute.unresolved.map(label=>({field:'resolute',label})));}if(resolute.exceptions.length&&participant.extensions?.v5?.hasMomentum===true)receipt.participant={...receipt.participant,extensions:{...receipt.participant.extensions,v5:{...receipt.participant.extensions?.v5,hasMomentum:true}}};receipt.resoluteTest=resolute.test;
@@ -1808,6 +2017,27 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       if (!subject) throw new TypeError('Personnage introuvable');
       return { ...getV5Fate(envelope, subject), baseRevision: localRevision };
     },
+    setFate(id, amount, { reason = '', baseRevision = localRevision } = {}) {
+      if (!Number.isSafeInteger(amount) || amount < 0 || typeof reason !== 'string' || !reason.trim()) throw new TypeError('Montant et motif MJ requis pour le Destin');
+      return api.executeCommand('set-fate-v5', draft => {
+        if(draft.localRevision!==baseRevision)throw Object.assign(new Error('La partie a changé. Recalculez le solde de Destin.'),{code:'V5_EFFECT_STALE',userFacing:true});
+        const subject=(draft.combat?.participants||[]).find(row=>row.id===id)||(draft.reserve||[]).find(row=>row.id===id)||(draft.persistentCharacters||[]).find(row=>row.id===id);
+        if(!subject)throw new TypeError('Personnage introuvable');
+        const identity=subject.extensions?.ficheId||subject.ficheSnapshot?.charId||subject.persistentCharacterId||subject.id;
+        const update=rows=>(rows||[]).map(row=>{
+          const rowIdentity=row.extensions?.ficheId||row.ficheSnapshot?.charId||row.persistentCharacterId||row.id;
+          if(row.id!==id&&rowIdentity!==identity)return row;
+          const next=cloneValue(row);next.extensions={...(next.extensions||{}),v5:{...(next.extensions?.v5||{}),fate:amount}};
+          if(Object.hasOwn(next,'fate'))next.fate=amount;return next;
+        });
+        draft.reserve=update(draft.reserve);draft.persistentCharacters=update(draft.persistentCharacters);
+        draft.combat={...(draft.combat||{}),participants:update(draft.combat?.participants)};
+        if(draft.activeScene)draft.activeScene={...draft.activeScene,participants:update(draft.activeScene.participants)};
+        draft.suspendedScenes=(draft.suspendedScenes||[]).map(scene=>({...scene,participants:update(scene.participants)}));
+        draft.log=[{id:uid(),kind:'management',actorId:id,text:`Destin attribué/modifié manuellement : ${amount} point(s)`,detail:{kind:'set-fate-v5',amount,reason:reason.trim()}},...(draft.log||[])].slice(0,300);
+        return draft;
+      });
+    },
     setFortune(id, amount, options = {}) {
       const captured = cloneValue(options), expected = captured.baseRevision ?? localRevision, characterId = uid();
       return api.executeCommand('set-fortune-v5', draft => {
@@ -1818,6 +2048,240 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         if(captured.operation==='refresh')return refreshV5Fortune(draft,subject,amount,{reason:captured.reason,eventId:'fortune-refresh:'+characterId});
         return setV5Fortune(draft, subject, amount, { source: captured.source || 'mj', characterId });
       });
+    },
+    getCorruptionStatus(id) {
+      const envelope = currentEnvelope();
+      const sessionId = envelope.extensions?.v5?.talentSessionId || null;
+      const subject = findCorruptionSubject(envelope, id);
+      if (!subject) throw new TypeError('Personnage introuvable');
+      return corruptionStatusFor(subject, localRevision, sessionId);
+    },
+    getCorruptionMutationCatalog() {
+      return cloneValue(V5_CORRUPTION_MUTATION_CATALOG);
+    },
+    setCorruptionPoints(id, amount, { reason = '', baseRevision = localRevision } = {}) {
+      if (!Number.isSafeInteger(amount) || amount < 0 || typeof reason !== 'string' || !reason.trim()) throw new TypeError('Valeur entière connue et motif MJ requis');
+      return api.executeCommand('set-corruption-points-v5', draft => {
+        if (draft.localRevision !== baseRevision) throw Object.assign(new Error('La partie a changé. Relisez le solde de Corruption.'), { code: 'CORRUPTION_STALE', userFacing: true });
+        const subject = findCorruptionSubject(draft, id);
+        if (!subject) throw new TypeError('Personnage introuvable');
+        const facts = corruptionFacts(subject), current = subject.extensions?.v5 || {};
+        if (current.pendingCorruptionMutation) throw Object.assign(new Error('Confirmez ou refusez la mutation en attente avant de corriger les Points de Corruption.'), { code: 'CORRUPTION_PENDING', userFacing: true });
+        updateCorruptionCopies(draft, id, row => {
+          const v5 = row.extensions?.v5 || {};
+          const pendingTest = amount > facts.threshold ? v5.pendingCorruptionTest : null;
+          row.extensions = { ...(row.extensions || {}), v5: { ...v5, corruptionPoints: amount,
+            corruptionEntry: { kind: 'gm-fact', value: amount, reason: reason.trim(), sourceRule: 'corruption-ledger', updatedAt: Date.now() },
+            ...(pendingTest ? { pendingCorruptionTest: pendingTest } : { pendingCorruptionTest: null }) } };
+          return row;
+        });
+        draft.log = [{ id: uid(), kind: 'management', actorId: id, actorName: subject.name,
+          text: `${subject.name} : solde de Corruption connu fixé à ${amount} · décision MJ`,
+          detail: { kind: 'set-corruption-points-v5', amount, reason: reason.trim() } }, ...(draft.log || [])].slice(0, 300);
+        return draft;
+      }).catch(error => error?.code === 'CORRUPTION_STALE' ? { status: 'stale', ok: false, error: error.message } : Promise.reject(error));
+    },
+    previewCorruptionExposure(id, input = {}) {
+      const baseRevision = input.baseRevision ?? localRevision;
+      if (baseRevision !== localRevision) return { status: 'stale', baseRevision: localRevision };
+      const envelope = currentEnvelope();
+      const sessionId = envelope.extensions?.v5?.talentSessionId || null;
+      const subject = findCorruptionSubject(envelope, id);
+      if (!subject) throw new TypeError('Personnage introuvable');
+      return corruptionExposurePreview(subject, input, baseRevision, sessionId);
+    },
+    applyCorruptionExposure(id, preview) {
+      if (preview?.status !== 'ready' || preview.participantId !== id || !preview.input || !Number.isSafeInteger(preview.baseRevision)) throw new TypeError('Aperçu de Corruption prêt requis');
+      const baseRevision = preview.baseRevision, input = cloneValue(preview.input), exposureId = uid();
+      return api.executeCommand('corruption-exposure-v5', draft => {
+        if (draft.localRevision !== baseRevision) throw Object.assign(new Error('La partie a changé. Recalculez l’exposition à la Corruption.'), { code: 'CORRUPTION_STALE', userFacing: true });
+        const subject = findCorruptionSubject(draft, id);
+        if (!subject) throw new TypeError('Personnage introuvable');
+        const sessionId = draft.extensions?.v5?.talentSessionId || null;
+        const result = corruptionExposurePreview(subject, input, baseRevision, sessionId);
+        const exposure = { id: exposureId, influence: result.test.influence, kind: result.test.exposure,
+          sessionId, declaredSources: String(input.declaredSources || '').trim(),
+          skillId: result.test.skillId, roll: result.test.roll, success: result.test.success, sl: result.test.sl,
+          scoreSource: result.test.scoreInfo.scoreSource, ...(result.test.scoreInfo.scoreReason ? { scoreReason: result.test.scoreInfo.scoreReason } : {}),
+          gainedPoints: result.gainedPoints, pointsAfter: result.corruptionPoints, threshold: result.threshold, createdAt: Date.now() };
+        updateCorruptionCopies(draft, id, row => {
+          const oldV5 = row.extensions?.v5 || {};
+          const nextPoints = result.corruptionPoints;
+          const pendingCorruptionTest = result.thresholdTestRequired
+            ? { id: `corruption-test:${exposureId}`, status: 'pending', sourceExposureId: exposureId, pointsAtTrigger: nextPoints, thresholdAtTrigger: result.threshold }
+            : oldV5.pendingCorruptionTest || null;
+          row.extensions = { ...(row.extensions || {}), v5: { ...oldV5, corruptionPoints: nextPoints,
+            corruptionExposures: [...(oldV5.corruptionExposures || []), exposure].slice(-500),
+            pendingCorruptionTest } };
+          return row;
+        });
+        draft.log = [{ id: uid(), kind: 'management', actorId: id, actorName: subject.name,
+          text: `${subject.name} : exposition ${result.test.exposure === 'prolonged' ? 'prolongée' : 'simple'} à la Corruption · ${result.gainedPoints} point(s)`,
+          detail: { kind: 'corruption-exposure-v5', exposure, pendingThresholdTest: result.thresholdTestRequired } }, ...(draft.log || [])].slice(0, 300);
+        return draft;
+      }).then(result => result?.ok === false ? { status: 'error', ok: false, error: result.error }
+        : { status: 'applied', ok: true, exposureId, baseRevision: baseRevision + 1 })
+        .catch(error => error?.code === 'CORRUPTION_STALE' ? { status: 'stale', ok: false, error: error.message } : Promise.reject(error));
+    },
+    previewCorruptionThresholdTest(id, input = {}) {
+      const baseRevision = input.baseRevision ?? localRevision;
+      if (baseRevision !== localRevision) return { status: 'stale', baseRevision: localRevision };
+      const subject = findCorruptionSubject(currentEnvelope(), id);
+      if (!subject) throw new TypeError('Personnage introuvable');
+      return corruptionThresholdPreview(subject, input, baseRevision);
+    },
+    applyCorruptionThresholdTest(id, preview) {
+      if (!preview || preview.participantId !== id || !Number.isSafeInteger(preview.baseRevision)) throw new TypeError('Aperçu du Test de Corruption requis');
+      const baseRevision = preview.baseRevision, input = cloneValue(preview.input || {}), testId = uid();
+      return api.executeCommand('corruption-threshold-test-v5', draft => {
+        if (draft.localRevision !== baseRevision) throw Object.assign(new Error('La partie a changé. Recalculez le Test contre la mutation.'), { code: 'CORRUPTION_STALE', userFacing: true });
+        const subject = findCorruptionSubject(draft, id);
+        if (!subject) throw new TypeError('Personnage introuvable');
+        const result = corruptionThresholdPreview(subject, input, baseRevision);
+        if (result.status === 'needs-input') throw Object.assign(new Error('Choix MJ requis avant d’appliquer le Test de Corruption.'), { code: 'CORRUPTION_INPUT', userFacing: true });
+        const oldV5 = subject.extensions?.v5 || {};
+        let pendingMutation = null;
+        updateCorruptionCopies(draft, id, row => {
+          const v5 = row.extensions?.v5 || {};
+          if (result.status === 'not-required') {
+            row.extensions = { ...(row.extensions || {}), v5: { ...v5, pendingCorruptionTest: null,
+              lastCorruptionThresholdTest: { id: testId, status: 'not-required', threshold: result.threshold, corruptionPoints: result.corruptionPoints } } };
+          } else if (result.outcome?.status === 'deferred') {
+            row.extensions = { ...(row.extensions || {}), v5: { ...v5, pendingCorruptionTest: null,
+              lastCorruptionThresholdTest: { id: testId, status: 'deferred', roll: result.test.roll, success: true, sl: result.test.sl, threshold: result.threshold } } };
+          } else if (result.outcome?.mutation) {
+            pendingMutation = { id: `corruption-mutation:${testId}`, status: 'pending', domain: result.outcome.mutation.domain,
+              manifestation: result.manifestation, sourceTest: { roll: result.test.roll, success: false, sl: result.test.sl },
+              sourceThresholdTestId: testId };
+            row.extensions = { ...(row.extensions || {}), v5: { ...v5, pendingCorruptionTest: null,
+              pendingCorruptionMutation: pendingMutation,
+              lastCorruptionThresholdTest: { id: testId, status: 'mutation-pending', roll: result.test.roll, success: false, sl: result.test.sl, threshold: result.threshold } } };
+          } else throw Object.assign(new Error('Résultat de Test de Corruption incomplet.'), { code: 'CORRUPTION_INPUT', userFacing: true });
+          return row;
+        });
+        const status = pendingMutation ? 'mutation-pending' : result.status === 'not-required' ? 'not-required' : 'deferred';
+        draft.log = [{ id: uid(), kind: 'management', actorId: id, actorName: subject.name,
+          text: `${subject.name} : Test de seuil de Corruption · ${status}`,
+          detail: { kind: 'corruption-threshold-test-v5', testId, status, ...(pendingMutation ? { domain: pendingMutation.domain } : {}) } }, ...(draft.log || [])].slice(0, 300);
+        return draft;
+      }).then(result => result?.ok === false ? { status: 'error', ok: false, error: result.error }
+        : { status: 'applied', ok: true, resultId: testId, baseRevision: baseRevision + 1 })
+        .catch(error => error?.code === 'CORRUPTION_STALE' ? { status: 'stale', ok: false, error: error.message } : Promise.reject(error));
+    },
+    resolveObsoleteCorruptionThresholdTest(id, { baseRevision = localRevision } = {}) {
+      return api.executeCommand('resolve-obsolete-corruption-threshold-v5', draft => {
+        if (draft.localRevision !== baseRevision) throw Object.assign(new Error('La partie a changé. Relisez le seuil de Corruption.'), { code: 'CORRUPTION_STALE', userFacing: true });
+        const subject = findCorruptionSubject(draft, id);
+        if (!subject) throw new TypeError('Personnage introuvable');
+        const v5 = subject.extensions?.v5 || {};
+        if (!v5.pendingCorruptionTest || v5.pendingCorruptionTest.status !== 'pending') throw Object.assign(new Error('Aucun Test de seuil en attente.'), { code: 'CORRUPTION_THRESHOLD_NOT_PENDING', userFacing: true });
+        if (!Number.isSafeInteger(v5.corruptionPoints) || v5.corruptionPoints < 0) throw Object.assign(new Error('Points de Corruption connus requis.'), { code: 'CORRUPTION_POINTS_REQUIRED', userFacing: true });
+        const facts = corruptionFacts(subject);
+        if (v5.corruptionPoints > facts.threshold) throw Object.assign(new Error('Le solde dépasse toujours le seuil actuel ; le Test de Résistance reste requis.'), { code: 'CORRUPTION_THRESHOLD_STILL_EXCEEDED', userFacing: true });
+        updateCorruptionCopies(draft, id, row => {
+          const rowV5 = row.extensions?.v5 || {};
+          row.extensions = { ...(row.extensions || {}), v5: { ...rowV5, pendingCorruptionTest: null,
+            lastCorruptionThresholdTest: { id: rowV5.pendingCorruptionTest.id, status: 'not-required-after-threshold-change', threshold: facts.threshold, corruptionPoints: rowV5.corruptionPoints, resolvedAt: Date.now() } } };
+          return row;
+        });
+        draft.log = [{ id: uid(), kind: 'management', actorId: id, actorName: subject.name,
+          text: `${subject.name} : Test de seuil de Corruption clôturé, seuil actuel non dépassé`,
+          detail: { kind: 'resolve-obsolete-corruption-threshold-v5', threshold: facts.threshold, corruptionPoints: v5.corruptionPoints } }, ...(draft.log || [])].slice(0, 300);
+        return draft;
+      }).then(result => result?.ok === false ? { status: 'error', ok: false, error: result.error } : { status: 'resolved', ok: true })
+        .catch(error => error?.code === 'CORRUPTION_STALE' ? { status: 'stale', ok: false, error: error.message } : Promise.reject(error));
+    },
+    confirmCorruptionMutation(id, { mutationId, catalogSelection = null, compatibilityDomain = null, baseRevision = localRevision } = {}) {
+      if (!catalogSelection && (typeof mutationId !== 'string' || !mutationId.trim())) throw new TypeError('Description ou référence de mutation choisie par le MJ requise');
+      const capturedId = typeof mutationId === 'string' ? mutationId.trim() : '';
+      return api.executeCommand('confirm-corruption-mutation-v5', draft => {
+        if (draft.localRevision !== baseRevision) throw Object.assign(new Error('La partie a changé. Relisez la mutation en attente.'), { code: 'CORRUPTION_STALE', userFacing: true });
+        const subject = findCorruptionSubject(draft, id);
+        if (!subject) throw new TypeError('Personnage introuvable');
+        const v5 = subject.extensions?.v5 || {}, facts = corruptionFacts(subject);
+        const selectedCatalog = catalogSelection ? resolveCorruptionMutationSelection(catalogSelection) : null;
+        const pendingDomain = v5.pendingCorruptionMutation?.domain;
+        if (selectedCatalog?.domain && v5.pendingCorruptionMutation?.status === 'pending' && selectedCatalog.domain !== pendingDomain) {
+          throw Object.assign(new Error(`Cette table est ${selectedCatalog.domain === 'physical' ? 'physique' : 'mentale'} et ne correspond pas au domaine en attente.`), { code: 'CORRUPTION_DOMAIN_MISMATCH', userFacing: true });
+        }
+        if (selectedCatalog && !selectedCatalog.domain) {
+          if (!['physical', 'mental'].includes(compatibilityDomain)) throw Object.assign(new Error('Choisissez explicitement si cette table sans domaine correspond à la mutation physique ou mentale.'), { code: 'CORRUPTION_COMPATIBILITY_REQUIRED', userFacing: true });
+          if (v5.pendingCorruptionMutation?.status === 'pending' && compatibilityDomain !== pendingDomain) throw Object.assign(new Error('La compatibilité choisie ne correspond pas au domaine K1 en attente.'), { code: 'CORRUPTION_DOMAIN_MISMATCH', userFacing: true });
+        } else if (compatibilityDomain !== null) {
+          throw Object.assign(new Error('Un choix de compatibilité n’est pas applicable à une table dont le domaine est déjà établi.'), { code: 'CORRUPTION_COMPATIBILITY_UNEXPECTED', userFacing: true });
+        }
+        const result = confirmCorruptionMutationPure({ authoritativeState: {
+          corruptionPoints: v5.corruptionPoints, toughnessBonus: facts.toughnessBonus, willpowerBonus: facts.willpowerBonus,
+          pureSoul: facts.pureSoul, corruptionMutations: v5.corruptionMutations || [], pendingCorruptionMutation: v5.pendingCorruptionMutation
+        }, mutationId: selectedCatalog?.entryId || capturedId, confirmed: true });
+        if (result.status === 'stale') throw Object.assign(new Error('Le seuil a changé depuis le Test; recalculez le statut.'), { code: 'CORRUPTION_STALE', userFacing: true });
+        const mutation = { ...result.mutation, ...(selectedCatalog ? cloneValue(selectedCatalog) : {}),
+          description: selectedCatalog?.label || capturedId, effectsApplied: false,
+          ...(selectedCatalog && !selectedCatalog.domain ? { compatibilityDecision: { domain: compatibilityDomain, decidedBy: 'gm', decision: 'compatible-with-pending-k1-domain' } } : {}),
+          confirmation: { confirmedBy: 'gm', confirmedAt: Date.now() },
+          manifestation: cloneValue(v5.pendingCorruptionMutation.manifestation) };
+        updateCorruptionCopies(draft, id, row => {
+          const rowV5 = row.extensions?.v5 || {};
+          row.extensions = { ...(row.extensions || {}), v5: { ...rowV5, corruptionPoints: result.corruptionPoints,
+            corruptionMutations: [...(rowV5.corruptionMutations || []), mutation], pendingCorruptionMutation: null,
+            ...(result.characterLoss ? { pendingCorruptionCharacterLoss: { id: `corruption-loss:${result.mutation.id}`, status: 'pending', sourceMutationId: result.mutation.id,
+              physicalMutationCount: result.physicalMutationCount, mentalMutationCount: result.mentalMutationCount } } : {}) } };
+          return row;
+        });
+        draft.log = [{ id: uid(), kind: 'management', actorId: id, actorName: subject.name,
+          text: `${subject.name} : mutation confirmée par le MJ · ${selectedCatalog?.label || capturedId}`,
+          detail: { kind: 'confirm-corruption-mutation-v5', mutationId: result.mutation.id, domain: result.mutation.domain, characterLossPending: Boolean(result.characterLoss) } }, ...(draft.log || [])].slice(0, 300);
+        return draft;
+      }).then(result => result?.ok === false ? { status: 'error', ok: false, error: result.error }
+        : { status: 'confirmed', ok: true })
+        .catch(error => error?.code === 'CORRUPTION_STALE' ? { status: 'stale', ok: false, error: error.message } : Promise.reject(error));
+    },
+    applyCorruptionAbsolution(id, { amount, reason, baseRevision = localRevision } = {}) {
+      if (typeof reason !== 'string' || !reason.trim()) throw new TypeError('Motif de l’absolution fixé par le MJ requis');
+      return api.executeCommand('corruption-absolution-v5', draft => {
+        if (draft.localRevision !== baseRevision) throw Object.assign(new Error('La partie a changé. Relisez le solde de Corruption.'), { code: 'CORRUPTION_STALE', userFacing: true });
+        const subject = findCorruptionSubject(draft, id);
+        if (!subject) throw new TypeError('Personnage introuvable');
+        const v5 = subject.extensions?.v5 || {};
+        if (v5.pendingCorruptionMutation) throw Object.assign(new Error('Confirmez ou refusez la mutation en attente avant l’absolution.'), { code: 'CORRUPTION_PENDING', userFacing: true });
+        const result = applyCorruptionAbsolutionPure({ currentPoints: v5.corruptionPoints, amount, reason });
+        const facts = corruptionFacts(subject);
+        updateCorruptionCopies(draft, id, row => {
+          const rowV5 = row.extensions?.v5 || {};
+          row.extensions = { ...(row.extensions || {}), v5: { ...rowV5, corruptionPoints: result.corruptionPoints,
+            corruptionAbsolutions: [...(rowV5.corruptionAbsolutions || []), { ...result.absolution, id: uid(), createdAt: Date.now() }],
+            ...(result.corruptionPoints <= facts.threshold ? { pendingCorruptionTest: null } : {}) } };
+          return row;
+        });
+        draft.log = [{ id: uid(), kind: 'management', actorId: id, actorName: subject.name,
+          text: `${subject.name} : absolution de Corruption · −${amount} point(s)`,
+          detail: { kind: 'corruption-absolution-v5', amount, reason: reason.trim() } }, ...(draft.log || [])].slice(0, 300);
+        return draft;
+      }).then(result => result?.ok === false ? { status: 'error', ok: false, error: result.error }
+        : { status: 'applied', ok: true })
+        .catch(error => error?.code === 'CORRUPTION_STALE' ? { status: 'stale', ok: false, error: error.message } : Promise.reject(error));
+    },
+    decideCorruptionCharacterLoss(id, { confirmed, reason, baseRevision = localRevision } = {}) {
+      if (typeof confirmed !== 'boolean' || typeof reason !== 'string' || !reason.trim()) throw new TypeError('Décision et motif MJ requis pour la perte de personnage');
+      return api.executeCommand('decide-corruption-character-loss-v5', draft => {
+        if (draft.localRevision !== baseRevision) throw Object.assign(new Error('La partie a changé. Relisez la décision de perte.'), { code: 'CORRUPTION_STALE', userFacing: true });
+        const subject = findCorruptionSubject(draft, id);
+        if (!subject) throw new TypeError('Personnage introuvable');
+        const pending = subject.extensions?.v5?.pendingCorruptionCharacterLoss;
+        if (!pending || pending.status !== 'pending') throw Object.assign(new Error('Aucune perte de personnage à arbitrer.'), { code: 'CORRUPTION_PENDING', userFacing: true });
+        updateCorruptionCopies(draft, id, row => {
+          const v5 = row.extensions?.v5 || {};
+          row.extensions = { ...(row.extensions || {}), v5: { ...v5, pendingCorruptionCharacterLoss: null,
+            corruptionCharacterLoss: { id: pending.id, status: confirmed ? 'confirmed' : 'declined', control: confirmed ? 'gm' : null, reason: reason.trim(), decidedBy: 'gm', decidedAt: Date.now() } } };
+          return row;
+        });
+        draft.log = [{ id: uid(), kind: 'management', actorId: id, actorName: subject.name,
+          text: `${subject.name} : perte de personnage ${confirmed ? 'confirmée' : 'refusée'} par le MJ`,
+          detail: { kind: 'decide-corruption-character-loss-v5', confirmed, reason: reason.trim() } }, ...(draft.log || [])].slice(0, 300);
+        return draft;
+      }).then(result => result?.ok === false ? { status: 'error', ok: false, error: result.error }
+        : { status: confirmed ? 'confirmed' : 'declined', ok: true })
+        .catch(error => error?.code === 'CORRUPTION_STALE' ? { status: 'stale', ok: false, error: error.message } : Promise.reject(error));
     },
     healCriticalWound(participantId, criticalId) {
       return api.executeCommand('heal-critical-wound', draft => {
@@ -2048,11 +2512,29 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         plan.needsInput.push({field:'activeCombatants',label:'Au moins un combattant actif est requis pour initialiser le combat.'});
         plan.ready=false;plan.status='requires-input';
       }
+      const mountedAmbush = [];
+      if (captured.surprisedCamp) for (const rider of participants.filter(row => row.zone === 'active' && row.camp === captured.surprisedCamp && row.extensions?.v5?.mounted === true && row.extensions?.v5?.mountId)) {
+        const fall = planMountedFall({ event: 'rider-surprised' });
+        if (!fall.requiredTest) continue;
+        const skill = (rider.skills || []).find(row => row?.id === V5_RIDE_SKILL_ID && row.status !== 'unresolved');
+        const answer = captured.mountedRideTests?.[rider.id] || {};
+        const score = Number.isSafeInteger(skill?.total) ? skill.total : Number.isSafeInteger(Number(answer.score)) ? Number(answer.score) : null;
+        const roll = Number(answer.roll);
+        const entry = { participantId: rider.id, event: 'rider-surprised', ...fall };
+        if (score === null) plan.needsInput.push({ field: `mountedRideScore:${rider.id}`, kind: 'integer', min: 0, max: 100, label: `${rider.name || rider.id} : score de Chevaucher` });
+        if (!Number.isInteger(roll) || roll < 1 || roll > 100) plan.needsInput.push({ field: `mountedRideRoll:${rider.id}`, kind: 'd100', min: 1, max: 100, label: `${rider.name || rider.id} : d100 de Chevaucher (Surpris, +4 DR)` });
+        if (score !== null && Number.isInteger(roll) && roll >= 1 && roll <= 100) {
+          entry.test = selectV5Test(previewV5Test({ score, roll, kind: 'test', slModifiers: [{ id: 'mounted:fall', label: 'Surpris à cheval', amount: 4 }] }), 'keep');
+          entry.dismount = !entry.test.success;
+        } else { plan.ready = false; plan.status = 'requires-input'; }
+        mountedAmbush.push(entry);
+      }
       return {...plan,baseRevision:expected,participantIds:participants.filter(row=>row.zone==='active').map(row=>row.id),
         ...(captured.startCombat===true?{startCombat:true}:{}),
         ...(scenePreview?{scenePreview}:{}),
         ...(staging?{staging}:{}),
-        request:{diceById:captured.diceById||{},combatReflexesById:captured.combatReflexesById||{},characteristicById:captured.characteristicById||{},tieOrders:captured.tieOrders??staging?.tieOrders??{},opposedRolls:captured.opposedRolls??staging?.opposedRolls??{},tieChoices:captured.tieChoices??staging?.tieChoices??{},surprisedCamp:captured.surprisedCamp??null}};
+        mountedFall: mountedAmbush,
+        request:{diceById:captured.diceById||{},combatReflexesById:captured.combatReflexesById||{},characteristicById:captured.characteristicById||{},tieOrders:captured.tieOrders??staging?.tieOrders??{},opposedRolls:captured.opposedRolls??staging?.opposedRolls??{},tieChoices:captured.tieChoices??staging?.tieChoices??{},surprisedCamp:captured.surprisedCamp??null,mountedRideTests:captured.mountedRideTests||{}}};
     },
     previewCombatParticipantActivation(id) {
       const participant=(currentEnvelope().combat?.participants||[]).find(row=>row.id===id);
@@ -2100,6 +2582,8 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
     applyCombatInitialization(preview = {}) {
       const captured=cloneValue(preview||{}),expected=captured.baseRevision;
       if(!Number.isSafeInteger(expected)||expected!==localRevision)return {ok:false,status:'stale',requiresPreview:true};
+      const verifiedMounted = api.previewCombatInitialization({ ...captured, ...(captured.request || {}), baseRevision: expected });
+      if (!verifiedMounted.ready) return { ok: false, status: 'requires-input', needsInput: cloneValue(verifiedMounted.needsInput || []) };
       if(captured.ready!==true)return {ok:false,status:'requires-input',needsInput:cloneValue(captured.needsInput||[])};
       const current=currentEnvelope(),scenePreview=captured.scenePreview||null,staging=captured.staging||null,currentParticipants=scenePreview?.scene?.participants||staging?.scene?.participants||staging?.participants||current.combat?.participants||[],activeIds=currentParticipants.filter(row=>row.zone==='active').map(row=>row.id);
       if(captured.startCombat===true&&!activeIds.length)return {ok:false,status:'requires-input',needsInput:[{field:'activeCombatants',label:'Au moins un combattant actif est requis pour démarrer le combat.'}]};
@@ -2155,6 +2639,13 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
             if(acquired.reminders.length)log=[...acquired.reminders.map(text=>({kind:'reminder',actorId:row.id,text})),...log];
             return acquired.participant;
           });
+          const dismounted = new Set((captured.mountedFall || []).filter(row => row.event === 'rider-surprised' && row.dismount === true).map(row => row.participantId));
+          nextParticipants = nextParticipants.map(row => dismounted.has(row.id) ? clearMountedRelation(row) : row);
+          for (const fall of captured.mountedFall || []) if (fall.event === 'rider-surprised') {
+            log = [{ id: uid(), ts: Date.now(), kind: 'effect', targetId: fall.participantId,
+              text: `${nextParticipants.find(row => row.id === fall.participantId)?.name || fall.participantId} : Test de Chevaucher contre la surprise${fall.test ? ` (${fall.test.roll}, ${fall.test.sl} DR)` : ''}${fall.dismount ? ' — désarçonné' : ' — reste en selle'}`,
+              detail: { kind: 'mounted-fall', mountedFall: [cloneValue(fall)] } }, ...log].slice(0, 300);
+          }
         }
         const order=plan.order;
         const startsNewScope=staging?.kind==='launch'||staging?.kind==='restart-scene'||staging?.kind==='restart-free'||captured.startCombat===true;
@@ -4017,10 +4508,120 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       if(actor?.states?.some(row=>['brise','broken'].includes(String(row.key||row.name||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()))){const blocked=isV5BrokenEscapeActionBlocked(actor,{visibleToAnyEnemy:input.brokenEscapeFacts?.visibleToAnyEnemy,sequence:currentEnvelope().extensions?.v5?.brokenEscape?.byActorId?.[actorId]});if(blocked)return {ready:false,status:'requires-input',error:blocked==='needs-fact'?'Le MJ doit confirmer la visibilité envers tout ennemi.':'Brisé impose Move (Flee), puis Action (Sprint) tant que le personnage reste visible.',needsInput:blocked==='needs-fact'?[{field:'brokenEscapeFacts.visibleToAnyEnemy',label:'Confirmer la visibilité actuelle envers tout ennemi.'}]:[],baseRevision:localRevision};}
       const targetIds = input.targetIds || (input.targetId ? [input.targetId] : []);
       const targets = targetIds.map(id => combat.participants.get(id)).filter(Boolean);
-      return { ...previewSpellExecutionInternal(actor, contract, targets.length > 0 ? targets : (input.targets || []), {...input,magicAdventureId:stateExtensions?.v5?.magicAdventureId,fortuneByTarget:Object.fromEntries(Array.from(combat.participants.values()).map(p=>[p.id,getV5Fortune(currentEnvelope(),p).balance])),participants:Array.from(combat.participants.values()),assistant:combat.participants.get(input.assistantId),round:currentMagicRound(combat),turnKey:String(combat.round || 1)+':'+String(stateExtensions?.v5?.turnIndex || 1)}), baseRevision: localRevision };
+      const roster = Array.from(combat.participants.values());
+      const preview = previewSpellExecutionInternal(actor, contract, targets.length > 0 ? targets : (input.targets || []), {...input,magicAdventureId:stateExtensions?.v5?.magicAdventureId,fortuneByTarget:Object.fromEntries(roster.map(p=>[p.id,getV5Fortune(currentEnvelope(),p).balance])),participants:roster,assistant:combat.participants.get(input.assistantId),round:currentMagicRound(combat),turnKey:String(combat.round || 1)+':'+String(stateExtensions?.v5?.turnIndex || 1)});
+      const keyOfState = row => String(row?.key || row?.name || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]/g, '');
+      const newlyAcquired = (before, after, names) => (after?.states || []).some(state => names.has(keyOfState(state)) && !(before?.states || []).some(old => old.id && old.id === state.id));
+      const mountedFall = [];
+      const addMountedFall = row => { if (!mountedFall.some(old => old.participantId === row.participantId && old.event === row.event)) mountedFall.push(row); };
+      if (preview.ready !== false) for (const receipt of preview.targetResults || []) {
+        const before = roster.find(row => row.id === receipt.targetId), after = receipt.appliedSim?.participant || receipt.vortexParticipant;
+        if (!before || !after) continue;
+        const event = before.extensions?.v5?.mounted === true
+          ? newlyAcquired(before, after, new Set(['surpris'])) ? 'rider-surprised'
+            : newlyAcquired(before, after, new Set(['sonne'])) ? 'rider-stunned'
+              : newlyAcquired(before, after, new Set(['inconscient'])) ? 'rider-unconscious'
+                : newlyAcquired(before, after, new Set(['aterre'])) ? 'rider-prone' : null
+          : null;
+        if (event) addMountedFall({ participantId: before.id, event, ...planMountedFall({ event }) });
+        if ((receipt.kill || receipt.destroyed) && before.extensions?.v5?.mounted === true) addMountedFall({ participantId: before.id, event: 'rider-dead', ...planMountedFall({ event: 'rider-dead' }) });
+        const riders = roster.filter(row => row.extensions?.v5?.mounted === true && row.extensions.v5.mountId === before.id);
+        if (riders.length) {
+          const mountEvent = receipt.kill || receipt.destroyed ? 'mount-dead'
+            : newlyAcquired(before, after, new Set(['inconscient'])) ? 'mount-unconscious'
+            : newlyAcquired(before, after, new Set(['aterre'])) ? 'mount-prone'
+              : newlyAcquired(before, after, new Set(['surpris'])) ? 'mount-surprised'
+                : newlyAcquired(before, after, new Set(['enchevetre'])) ? 'mount-entangled' : null;
+          if (mountEvent) for (const rider of riders) {
+            const traits = before.traits || before.profile?.traits || [];
+            const riderEntangled = (rider.states || []).some(state => ['enchevetre','entangled'].includes(keyOfState(state)));
+            const fall = planMountedFall({ event: mountEvent, mountTraits: traits, riderEntangled });
+            if (fall.requiredTest || fall.falls) addMountedFall({ participantId: rider.id, mountId: before.id, event: mountEvent, ...fall });
+          }
+        }
+      }
+      if (preview.ready !== false) for (const receipt of preview.secondaryResults || []) {
+        const before = roster.find(row => row.id === receipt.targetId);
+        if (!before || !Array.isArray(receipt.conditions) || !receipt.conditions.length) continue;
+        const after = acquireV5Conditions(before, receipt.conditions).participant;
+        const event = before.extensions?.v5?.mounted === true
+          ? newlyAcquired(before, after, new Set(['surpris'])) ? 'rider-surprised'
+            : newlyAcquired(before, after, new Set(['sonne'])) ? 'rider-stunned'
+              : newlyAcquired(before, after, new Set(['inconscient'])) ? 'rider-unconscious'
+                : newlyAcquired(before, after, new Set(['aterre'])) ? 'rider-prone' : null : null;
+        if (event) addMountedFall({ participantId: before.id, event, ...planMountedFall({ event }) });
+        const riders = roster.filter(row => row.extensions?.v5?.mounted === true && row.extensions.v5.mountId === before.id);
+        if (riders.length) {
+          const mountEvent = newlyAcquired(before, after, new Set(['inconscient'])) ? 'mount-unconscious'
+            : newlyAcquired(before, after, new Set(['aterre'])) ? 'mount-prone'
+              : newlyAcquired(before, after, new Set(['surpris'])) ? 'mount-surprised'
+                : newlyAcquired(before, after, new Set(['enchevetre'])) ? 'mount-entangled' : null;
+          if (mountEvent) for (const rider of riders) {
+            const fall = planMountedFall({ event: mountEvent, mountTraits: before.traits || before.profile?.traits || [], riderEntangled: (rider.states || []).some(state => ['enchevetre','entangled'].includes(keyOfState(state))) });
+            if (fall.requiredTest || fall.falls) addMountedFall({ participantId: rider.id, mountId: before.id, event: mountEvent, ...fall });
+          }
+        }
+      }
+      if (preview.ready !== false && roster.some(row => row.extensions?.v5?.mounted === true)) {
+        try {
+          const simulatedEnvelope = cloneValue(currentEnvelope());
+          const simulationResult = applySpellExecutionInternal(simulatedEnvelope, contract, { ...input, preview });
+          if (simulationResult?.ready === false) throw new Error('Simulation d’application incomplète');
+          const simulatedRoster = simulatedEnvelope.combat?.participants || [];
+          for (const before of roster) {
+            const after = simulatedRoster.find(row => row.id === before.id);
+            if (!after) continue;
+            const riders = roster.filter(row => row.extensions?.v5?.mounted === true && row.extensions.v5.mountId === before.id);
+            const event = before.extensions?.v5?.mounted === true
+              ? after.extensions?.v5?.dead === true ? 'rider-dead'
+                : newlyAcquired(before, after, new Set(['inconscient'])) ? 'rider-unconscious'
+                  : newlyAcquired(before, after, new Set(['aterre'])) ? 'rider-prone'
+                    : newlyAcquired(before, after, new Set(['surpris'])) ? 'rider-surprised'
+                      : newlyAcquired(before, after, new Set(['sonne'])) ? 'rider-stunned' : null : null;
+            if (event) addMountedFall({ participantId: before.id, event, ...planMountedFall({ event }) });
+            const mountEvent = after.extensions?.v5?.dead === true ? 'mount-dead'
+              : newlyAcquired(before, after, new Set(['inconscient'])) ? 'mount-unconscious'
+                : newlyAcquired(before, after, new Set(['aterre'])) ? 'mount-prone'
+                  : newlyAcquired(before, after, new Set(['surpris'])) ? 'mount-surprised'
+                    : newlyAcquired(before, after, new Set(['enchevetre'])) ? 'mount-entangled' : null;
+            if (riders.length && mountEvent) for (const rider of riders) {
+              const fall = planMountedFall({ event: mountEvent, mountTraits: before.traits || before.profile?.traits || [], riderEntangled: (rider.states || []).some(state => ['enchevetre','entangled'].includes(keyOfState(state))) });
+              if (fall.requiredTest || fall.falls) addMountedFall({ participantId: rider.id, mountId: before.id, event: mountEvent, ...fall });
+            }
+          }
+        } catch {
+          preview.ready = false; preview.status = 'mounted-fall-check-required';
+          preview.error = 'Impossible de vérifier les conséquences montées de ce sort. Corrigez les données du sort avant application.';
+        }
+      }
+      const needsInput = [];
+      for (const fall of mountedFall) {
+        if (!fall.requiredTest) continue;
+        const rider = roster.find(row => row.id === fall.participantId), skill = rider?.skills?.find(row => row?.id === V5_RIDE_SKILL_ID && row.status !== 'unresolved');
+        const answer = input.mountedRideTests?.[fall.participantId] || {};
+        const score = Number.isSafeInteger(skill?.total) ? skill.total : answer.score !== '' && answer.score != null && Number.isSafeInteger(Number(answer.score)) ? Number(answer.score) : null;
+        const roll = Number(answer.roll);
+        if (score === null) needsInput.push({ field: `mountedRideScore:${fall.participantId}`, kind: 'integer', min: 0, max: 100, label: `${rider?.name || fall.participantId} : score de Chevaucher` });
+        if (!Number.isInteger(roll) || roll < 1 || roll > 100) needsInput.push({ field: `mountedRideRoll:${fall.participantId}`, kind: 'd100', min: 1, max: 100, label: `${rider?.name || fall.participantId} : d100 de Chevaucher (${fall.event}, ${fall.requiredTest.modifier >= 0 ? '+' : ''}${fall.requiredTest.modifier} DR)` });
+        if (score !== null && Number.isInteger(roll) && roll >= 1 && roll <= 100) {
+          fall.test = selectV5Test(previewV5Test({ score, roll, kind: 'test', slModifiers: [{ id: 'mounted:fall', label: 'Désarçonnement', amount: fall.requiredTest.modifier }] }), 'keep');
+          fall.dismount = !fall.test.success;
+        }
+      }
+      if (mountedFall.length) {
+        preview.mountedFall = mountedFall;
+        if (needsInput.length) { preview.ready = false; preview.status = 'requires-input'; preview.needsInput = [...(preview.needsInput || []), ...needsInput]; preview.error = 'Test de Chevaucher requis avant d’appliquer les conséquences du sort.'; }
+      }
+      return { ...preview, baseRevision: localRevision };
     },
-    applySpellExecution(contractOrId, input = {}) {
+    async applySpellExecution(contractOrId, input = {}) {
       input = cloneValue(input);
+      const mountedPreflight = api.previewSpellExecution(contractOrId, input);
+      if (mountedPreflight.status === 'mounted-fall-check-required') return { ...mountedPreflight, ok: false, status: 'requires-input' };
+      if (mountedPreflight.mountedFall?.length && mountedPreflight.needsInput?.some(need => need.field?.startsWith('mountedRide'))) {
+        return { ...mountedPreflight, ok: false, status: 'requires-input' };
+      }
+      if (mountedPreflight.mountedFall?.length) input.preview = { ...(input.preview || {}), mountedFall: cloneValue(mountedPreflight.mountedFall) };
       let execResult = null;
       const command = magicCommand('v5-spell-execution-apply', draft => {
         const contract = typeof contractOrId === 'object' && contractOrId?.id ? contractOrId : getSpellContract(contractOrId);
@@ -4031,6 +4632,14 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         if(actor?.states?.some(row=>['brise','broken'].includes(String(row.key||row.name||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()))){const blocked=isV5BrokenEscapeActionBlocked(actor,{visibleToAnyEnemy:input.brokenEscapeFacts?.visibleToAnyEnemy,sequence:draft.extensions?.v5?.brokenEscape?.byActorId?.[actorId]});if(blocked)throw Object.assign(new Error(blocked==='needs-fact'?'Le MJ doit confirmer la visibilité envers tout ennemi.':'Brisé impose Move (Flee), puis Action (Sprint) tant que le personnage reste visible.'),{userFacing:true});}
         execResult = applySpellExecutionInternal(draft, contract, input);
         if (execResult?.ready !== false) {
+          const dismounted = new Set((input.preview?.mountedFall || []).filter(row => row.dismount === true).map(row => row.participantId));
+          if (dismounted.size) draft.combat.participants = draft.combat.participants.map(row => dismounted.has(row.id) ? clearMountedRelation(row) : row);
+          for (const fall of input.preview?.mountedFall || []) {
+            const rider = draft.combat.participants.find(row => row.id === fall.participantId);
+            draft.log = [{ id: uid(), ts: Date.now(), kind: 'effect', targetId: fall.participantId,
+              text: `${rider?.name || fall.participantId} : conséquence montée du sort (${fall.event})${fall.test ? ` · Chevaucher ${fall.test.roll}, ${fall.test.sl} DR` : ''}${fall.dismount ? ' — désarçonné' : fall.falls ? ' — chute automatique' : ' — reste en selle'}`,
+              detail: { kind: 'mounted-fall', mountedFall: [cloneValue(fall)] } }, ...(draft.log || [])].slice(0, 300);
+          }
           registerNewV5Participants(beforeResources, draft);
           if(draft.extensions?.v5?.combatActions?.byActorId?.[actorId]?.kind==='aim')delete draft.extensions.v5.combatActions.byActorId[actorId];
         }
@@ -4183,7 +4792,23 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
     },
     importParsedProfiles(profiles = []) {
       const captured = cloneValue(profiles);
-      return api.executeCommand('import-text-profiles', draft => ({ ...draft, reserve: [...(draft.reserve || []), ...captured.map(profile => ({ ...canonicalizeProfileFields(profile), id: profile.id || uid(), caracs: normalizeCaracs(profile.caracs) }))] }));
+      return api.executeCommand('import-text-profiles', draft => ({ ...draft, reserve: [...(draft.reserve || []), ...captured.map(profile => convertLegacyV4Profile({ ...canonicalizeProfileFields(profile), id: profile.id || uid(), caracs: normalizeCaracs(profile.caracs) }))] }));
+    },
+
+    setMountedState(riderId, { mounted = false, mountId = null, baseRevision = localRevision } = {}) {
+      return api.executeCommand('set-mounted-state-v5', draft => {
+        if (draft.localRevision !== baseRevision) throw Object.assign(new Error('La rencontre a changé. Relisez la monture du cavalier.'), { code: 'MOUNTED_STATE_STALE', userFacing: true });
+        const participants = draft.combat?.participants || [];
+        const rider = participants.find(row => row.id === riderId);
+        if (!rider || rider.zone !== 'active') throw Object.assign(new Error('Le cavalier doit être un participant actif.'), { code: 'MOUNTED_RIDER_REQUIRED', userFacing: true });
+        if (mounted !== true) {
+          return { ...draft, combat: { ...draft.combat, participants: participants.map(row => row.id === riderId ? clearMountedRelation(row) : row) } };
+        }
+        if (typeof mountId !== 'string' || !mountId.trim() || mountId === riderId) throw Object.assign(new Error('Choisissez une monture active distincte du cavalier.'), { code: 'MOUNTED_MOUNT_REQUIRED', userFacing: true });
+        const mount = participants.find(row => row.id === mountId);
+        if (!mount || mount.zone !== 'active') throw Object.assign(new Error('La monture choisie doit être un participant actif.'), { code: 'MOUNTED_MOUNT_REQUIRED', userFacing: true });
+        return { ...draft, combat: { ...draft.combat, participants: participants.map(row => row.id === riderId ? withV5(row, v5 => ({ ...v5, mounted: true, mountId })) : row) } };
+      });
     },
 
     getFullJSON() {
