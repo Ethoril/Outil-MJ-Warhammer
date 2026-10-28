@@ -2,15 +2,23 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { applyResolution, previewResolution } from '../js/core/resolution.js';
 import { keywordMechanicalStatus } from '../js/core/keywords.js';
+import { ENGINES } from '../js/data/keyword-engines.js';
 
-const pendingStatusCandidates = [
-  'explosion', 'inflige', 'pistolet', 'piege-lame', 'a-enroulement', 'bouclier',
-  'taille', 'parade', 'a-repetition', 'recharge', 'immobilisante', 'dispersion'
+const fullyIntegratedQualities = [
+  'inflige', 'immobilisante', 'pistolet', 'piege-lame', 'a-enroulement',
+  'bouclier', 'taille', 'parade', 'a-repetition', 'recharge'
 ];
 
-test('T2 bis characterization — candidate weapon qualities still have manual status before the contract update', () => {
-  for (const id of pendingStatusCandidates) {
-    assert.equal(keywordMechanicalStatus(id).status, 'manual', `${id} has not yet been declared covered`);
+test('T2 bis — only fully integrated clauses use the separate resolution-coverage declaration', () => {
+  for (const id of fullyIntegratedQualities) {
+    const status = keywordMechanicalStatus(id);
+    assert.equal(status.status, 'covered', `${id} has a complete tested resolution/store flow`);
+    assert.equal(status.engine.scope, 'resolution-quality', `${id} is not registered as a legacy ENGINES mechanic`);
+    assert.equal(Object.hasOwn(ENGINES, id), false, `${id} coverage does not reapply a legacy engine`);
+    assert.ok(status.coverageEvidence, `${id} records its implementation evidence`);
+  }
+  for (const id of ['explosion', 'rapide', 'incassable', 'entaille', 'dispersion', 'salve', 'equipage', 'a-poudre-noire']) {
+    assert.equal(keywordMechanicalStatus(id).status, 'manual', `${id} still has an incomplete or externally triggered clause`);
   }
 });
 

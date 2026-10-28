@@ -3,6 +3,66 @@
   "auditedAt": "2026-10-09",
   "entries": [
     {
+      "id": "inflige",
+      "effect": "Une touche inflige 1 état X à la cible (si un score de Force est indiqué, comme Empêtré 50 ou Empêtré votre Force, il sert aux Tests pour se libérer de l'état).",
+      "edition": "V5",
+      "source": "Livre de base V5 EN p.304"
+    },
+    {
+      "id": "immobilisante",
+      "effect": "Une touche inflige 1 état Empêtré de Force égale à celle du porteur. Tant que dure l'entrave, l'arme ne peut servir à rien d'autre ; le porteur peut y mettre fin à tout moment.",
+      "edition": "V4",
+      "source": "Livre de base FR (V4) p.298"
+    },
+    {
+      "id": "pistolet",
+      "effect": "Peut attaquer en mêlée, sans modificateur de portée ; l'attaque peut être opposée comme une attaque de mêlée.",
+      "edition": "V5",
+      "source": "Livre de base V5 EN p.305"
+    },
+    {
+      "id": "piege-lame",
+      "effect": "Sur un Critique en défense contre une arme à lame, si votre Taille est au moins égale à celle de l'adversaire, vous pouvez piéger la lame au lieu du Critique : l'adversaire la lâche. Avec le Talent Désarmement, perdez votre Momentum pour la saisir de la main libre. Pour la briser : Test de Force Très difficile (-3 DR) + DR du Test de Corps à corps, sauf si elle est Incassable.",
+      "edition": "V5",
+      "source": "Livre de base V5 EN p.305"
+    },
+    {
+      "id": "a-enroulement",
+      "effect": "Les Tests de Corps à corps pour s'opposer à une attaque de cette arme subissent -1 DR.",
+      "edition": "V5",
+      "source": "Livre de base V5 EN p.305"
+    },
+    {
+      "id": "bouclier",
+      "effect": "En s'opposant à une attaque avec Esquive ou Corps à corps, confère +1 DR (sans cumul avec Défensive) et applique ses PA si le coup touche. Avec 2 PA ou plus, permet d'opposer les tirs avec Esquive à toute portée. Un seul bouclier compte. Porté attaché au bras ou en bandoulière, ses PA ne s'appliquent qu'à la Tête, au Corps et au Bras non directeur. En attaque, compte comme Arme improvisée (allonge Personnelle) et perd sa protection jusqu'au début du prochain Tour.",
+      "edition": "V5",
+      "source": "Livre de base V5 EN p.306"
+    },
+    {
+      "id": "taille",
+      "effect": "Chaque touche endommage de 1 point la pièce d'armure ou le bouclier frappé, avant d'appliquer les Dégâts.",
+      "edition": "V5",
+      "source": "Livre de base V5 EN p.304"
+    },
+    {
+      "id": "parade",
+      "effect": "En défense, annule la pénalité de -2 DR de la main non directrice. En combat à deux armes, si la première attaque touche, la seconde faite avec l'arme Parade ne peut pas être opposée.",
+      "edition": "V5",
+      "source": "Livre de base V5 EN p.304"
+    },
+    {
+      "id": "a-repetition",
+      "effect": "Contient X tirs ; l'arme se recharge automatiquement après chaque tir. Une fois les X tirs dépensés, il faut la recharger entièrement selon les règles normales.",
+      "edition": "V5",
+      "source": "Livre de base V5 EN p.305"
+    },
+    {
+      "id": "recharge",
+      "effect": "Une fois l'arme utilisée, il faut dépenser X Actions avant de pouvoir s'en resservir. Une arme À répétition ayant encore des tirs non utilisés demande 1 Action de moins.",
+      "edition": "V5",
+      "source": "Livre de base V5 EN p.305"
+    },
+    {
       "id": "dangereuse",
       "effect": "Tout Test raté avec un 9 sur le dé des dizaines ou des unités provoque une Maladresse.",
       "edition": "V5",
