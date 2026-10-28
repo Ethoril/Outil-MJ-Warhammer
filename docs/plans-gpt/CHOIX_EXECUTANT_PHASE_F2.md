@@ -1,3 +1,31 @@
+<!-- Décisions MJ recopiées le 28/10 ; elles priment sur les formulations historiques. -->
+
+## Contre-vérification T2 bis (28/10) — décisions du MJ
+
+- Mort subite des figurants : **les créatures (profils du bestiaire) sont éligibles** comme les PNJ secondaires (toujours jamais PJ ni Chanceux, réglage désactivé par défaut, choix du MJ).
+- Poivrière sans seconde main libre : **tire un coup puis exige une recharge complète**, comme une arme sans À répétition (L13 p.103).
+- Mortier de main qui explose au rechargement : **comme l'incident catastrophique**, Dégâts du profil à +0 DR au bras principal (plus de maximum saisi).
+- Échec d'un Test de sortie de filet : **rien ne change** (V5, L06 p.186) ; plus de +1 Empêtré.
+
+## Passe de cohérence feuille ↔ fiches ↔ outil (28/10) — décisions du MJ
+
+- La feuille « Aides de jeu » est la seule source : tout ajout ou correction passe par elle (CSV par onglet préparés pour le MJ, jamais « Importer »). Les fiches n'ont pas encore d'objets : pas d'alias d'anciens objets à prévoir.
+- **Ajouter les 8 munitions du livre de base** à l'onglet Armes à Distance (`tmp/gemini-verifs/coherence/corrections/Armes à Distance.csv`). **Flèches elfiques en lot de 12** (3 CO 12/-).
+- **Ajouter à l'onglet Talents les 6 talents de suppléments V4, convertis en V5** (Corruption contrôlée, Corruption volontaire, Disciple du Changement, Double vie, Imprégné de magie, Sort supplémentaire) ; **retirer « Bon sens » et « Vivant »** du référentiel des fiches (aucune source).
+- **Petit lot fiches** à préparer : 3 alias de talents, 5 traits de créature rangés parmi les talents, 6 compétences où `skills.json` contredit le référentiel publié.
+- **Corps à corps** : seule la spécialité Base est une compétence de base ; toutes les autres (Arme d'hast, Escrime, Cavalerie, Deux mains…) **restent avancées**, écart assumé à L06 p.112 (les fiches n'ont qu'une ligne de base). Le passage de tout le Corps à corps en base ne sera pas fait (MJ, 28/10).
+
+## Contre-vérification T3 (28/10) — décisions du MJ
+
+- Esquive montée : Désavantage **sauf Acrobaties équestres** (Trick Rider), comme le livre p.168 (la question F1 « sauf Cavalier émérite » était fausse).
+- Cavalier retenu (prise, ancré) : **un échec au Test de Chevaucher le fait tomber** (comportement actuel conservé).
+- Araignée : **pattes = jambes** (table de critiques et PA des jambes).
+- Langue pendante et Esprit solitaire : **−10 partout, comme imprimé** dans L06 V5 (y compris pour les entrées L23).
+- **Toute source de Corruption** (exposition, échecs de sort, Courroux, sorts) déclenche le Test de seuil.
+- Destin : seuls les **PJ et PNJ nommés (persistants)** répercutent leur dépense sur le profil ; les copies de profil la gardent pour elles.
+- **Conception du module de séquelles (F2-J) validée.**
+- Les 10 règles de canalisation de Winds of Magic (pages paires des Vents) restent hors F2 (magie non retenue).
+
 ## Décisions du MJ — reprise T2 bis et tranche T3 (28/10/2026)
 
 Sources : `tmp/gpt-phase-f2/CONTRE_VERIFICATION_CLAUDE_T2_BIS.md` et `tmp/gpt-phase-f2/BRIEF_T3.md`. Ces décisions priment sur les formulations historiques ci-dessous.
