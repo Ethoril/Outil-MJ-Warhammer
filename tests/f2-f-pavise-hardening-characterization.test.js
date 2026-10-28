@@ -43,6 +43,6 @@ test('pavois — Undo/Redo and combat restart keep deployment and action ledger 
   await store.redo();assert.equal(stored(store,actorId)?.status,'setting-up');
   store.nextTurn();store.nextTurn();const second=planFor(store);assert.equal(second.ready,true);await store.applyV5PaviseDeployment(second);
   assert.equal(stored(store,actorId)?.status,'planted');
-  store.restartCombat();
+  await store.restartCombat();
   assert.equal(stored(store,actorId),undefined,'Recommencer doit restaurer la scène au départ sans état installé en cours de combat');
 });

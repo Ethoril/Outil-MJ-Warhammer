@@ -36,9 +36,15 @@ try{
   await workspace.getByLabel('Direction choisie par le MJ').selectOption('north');
   await workspace.getByRole('button',{name:'Dépenser la première Action de mise en place'}).click();
   await page.waitForFunction(()=>document.querySelector('.workspace-pavise-setup')?.textContent.includes('Première Action dépensée'));
-  await page.evaluate(async()=>{const {Store}=await import('/Outil-MJ-Warhammer/js/main.js');Store.nextTurn();Store.nextTurn();});
+  const secondAction=workspace.getByRole('button',{name:'Dépenser la seconde Action au prochain Tour'});
+  assert.equal(await secondAction.isDisabled(),true,'l’action restante est désactivée après la première dépense du Tour');
+  await page.evaluate(async()=>{const {Store}=await import('/Outil-MJ-Warhammer/js/main.js');await Store.nextTurn();});
+  await page.locator('[data-workspace-select="f-review-actor"]').click();
+  await page.waitForFunction(()=>{const button=[...document.querySelectorAll('.workspace-pavise-setup button')].find(row=>row.textContent.includes('seconde Action'));return button?.disabled===true;});
+  await page.evaluate(async()=>{const {Store}=await import('/Outil-MJ-Warhammer/js/main.js');await Store.nextTurn();});
   await page.waitForFunction(()=>document.querySelector('.workspace-pavise-setup')?.textContent.includes('seconde Action au prochain Tour'));
-  await workspace.getByRole('button',{name:'Dépenser la seconde Action au prochain Tour'}).click();
+  await page.waitForFunction(()=>{const button=[...document.querySelectorAll('.workspace-pavise-setup button')].find(row=>row.textContent.includes('seconde Action'));return button&&!button.disabled;});
+  await secondAction.click();
   await page.waitForFunction(()=>document.querySelector('.workspace-pavise-setup')?.textContent.includes('Planté face au north'));
   assert.deepEqual(errors,[],`aucune erreur UI attendue : ${errors.join('; ')}`);
 }finally{await browser.close();await new Promise(done=>server.close(done));}
