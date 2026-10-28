@@ -124,12 +124,12 @@ test('blessures — Caelel : 3 + 2×4 + 3 + 4 (Dur à cuire) = 18', () => {
   assert.equal(snapshot.wounds, 18);
 });
 
-test('blessures — Dur à cuire par rang, halfelin sans BF', () => {
+test('blessures — Dur à cuire par rang, halfelin avec BF', () => {
   const totals = { F: 35, E: 42, FM: 28 };
   assert.equal(woundsMax({ totals, race: 'humain' }), 3 + 8 + 2);
   assert.equal(woundsMax({ totals, race: 'humain', talents: [{ nom: 'Dur à cuire' }, { nom: 'dur a cuire' }, { nom: 'Vision nocturne' }] }), 13 + 8);
-  assert.equal(woundsMax({ totals, race: 'halfelin' }), 8 + 2);
-  assert.equal(woundsMax({ totals, race: 'halfling' }), 10);
+  assert.equal(woundsMax({ totals, race: 'halfelin' }), 3 + 8 + 2);
+  assert.equal(woundsMax({ totals, race: 'halfling' }), 13);
 });
 
 test('fiche — données incomplètes sans plantage', () => {
@@ -140,7 +140,7 @@ test('fiche — données incomplètes sans plantage', () => {
   assert.deepEqual(vide.skills, [], 'sans caractéristique, aucune compétence utilisable');
   const sansForce = ficheSnapshot('wren', { ...caelel, carac: { ...caelel.carac, f: undefined } });
   assert.equal(sansForce.wounds, null);
-  assert.equal(ficheSnapshot('wren', { ...caelel, race: 'halfelin', carac: { ...caelel.carac, f: undefined } }).wounds, 4 * 2 + 3 + 4, 'un halfelin n’a pas besoin de F');
+  assert.equal(ficheSnapshot('wren', { ...caelel, race: 'halfelin', carac: { ...caelel.carac, f: undefined } }).wounds, null, 'un halfelin a besoin de F');
   assert.equal(sansForce.skills.some(item => item.name === 'Escalade'), false, 'Escalade dépend de F');
 });
 

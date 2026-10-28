@@ -22,8 +22,8 @@ export const FICHE_BASIC_SKILLS = Object.freeze([
   ['Subornation', 'soc'], ['Survie en extérieur', 'int']
 ].map(([name, carac]) => Object.freeze({ name, carac })));
 
-// Les halfelins n'ajoutent pas leur Bonus de Force aux Blessures (clés de la fiche, anciennes sauvegardes comprises).
-const RACES_SANS_BF = new Set(['halfelin', 'halfling']);
+// Espèces utilisant la formule locale de Blessures sans Bonus de Force.
+const RACES_SANS_BF = new Set(['gnome', 'skink', 'skink cameleon']);
 
 const number = value => (Number.isFinite(Number(value)) ? Number(value) : 0);
 const isRecord = value => value !== null && typeof value === 'object' && !Array.isArray(value);
@@ -34,23 +34,23 @@ export function normalizeName(value) {
 }
 
 /**
- * Blessures maximum (WFRP4) : BF + 2×BE + BFM, +BE par rang de « Dur à cuire ». Sans BF pour un halfelin.
- * null quand F (hors halfelin), E ou FM manque : le résultat n'est pas calculable.
+ * Blessures maximum : BF + 2×BE + BFM, +BE par rang de « Dur à cuire » ; adaptations selon espèce.
+ * null quand F (sauf espèces sans BF), E ou FM manque : le résultat n'est pas calculable.
  */
 export function woundsMax({ totals, race, talents = [] }) {
-  const sansBF = RACES_SANS_BF.has(String(race || '').toLowerCase());
+  const sansBF = RACES_SANS_BF.has(normalizeName(race).replace(/[-_]+/g, ' '));
   if (!['E', 'FM', ...(sansBF ? [] : ['F'])].every(key => Number.isFinite(totals?.[key]))) return null;
   const bonus = key => Math.floor(number(totals?.[key]) / 10);
   const hardy = (Array.isArray(talents) ? talents : []).filter(item => normalizeName(item?.nom) === 'dur a cuire').length;
   const strength = sansBF ? 0 : bonus('F');
-  return strength + 2 * bonus('E') + bonus('FM') + hardy * bonus('E');
+  return (strength + 2 * bonus('E') + bonus('FM') + hardy * bonus('E')) * (normalizeName(race) === 'ogre' ? 2 : 1);
 }
 
 /**
  * Fiche brute (`doc.data`) → ce que l'outil en retient : totaux, initiative, blessures max
  * et compétences utilisables (`name`, `carac`, `total`).
  */
-const MOVEMENT = Object.freeze({ humain: 4, 'elfe-sylvain': 5, 'haut-elfe': 5, halfelin: 4, ogre: 6, elfe: 5, halfling: 4, nain: 3 });
+const MOVEMENT = Object.freeze({ humain: 4, 'elfe sylvain': 5, 'haut elfe': 5, halfelin: 3, ogre: 6, elfe: 5, halfling: 3, nain: 3, gnome: 3, 'elfe noir': 5, 'elfe des mers': 5, skink: 6, 'skink cameleon': 6 });
 const validNumber = value => value !== null && value !== '' && typeof value !== 'boolean' && Number.isFinite(Number(value));
 const own = (object, key) => Object.hasOwn(object, key);
 const stable = value => Array.isArray(value) ? value.map(stable) : isRecord(value) ? Object.fromEntries(Object.keys(value).sort().map(key => [key, stable(value[key])])) : value;
@@ -124,13 +124,16 @@ export function ficheSnapshot(charId, fiche, metadata = {}) {
   const spells = list('sorts', 'spells');
   const prayers = list('prieres', 'prayers');
   const race = typeof raw.race === 'string' ? raw.race : '';
+  const raceKey = normalizeName(race).replace(/[-_]+/g, ' ');
+  const movement = Object.hasOwn(MOVEMENT, raceKey) ? MOVEMENT[raceKey] : null;
+  if (race && movement === null) warnings.push({ field: 'movement', code: 'unknown-species', severity: 'warning', message: `Espèce « ${race} » inconnue : saisir ou confirmer le Mouvement du profil.`, consequence: 'movement-preserved' });
   const max = coverage.talents !== 'present' ? null : woundsMax({ totals, race, talents: talentsRaw });
   if (coverage.talents !== 'present' && Object.keys(totals).length) warnings.push({ field: 'woundsMax', code: 'talents-unavailable', severity: 'warning', message: 'Talents indisponibles : maximum de Blessures antérieur conservé.', consequence: 'health-preserved' });
   const catalog = getReferenceCatalogue();
   const source = { schemaVersion: metadata.schemaVersion ?? null, revision: metadata.revision ?? null,
     resolverVersion: catalog?.contentVersion ?? catalog?.catalogVersion ?? catalog?.version ?? null };
   const snapshot = { format: 1, charId, name: typeof raw.nom === 'string' ? raw.nom.trim() : '', race,
-    source, caracs: totals, initiative: totals.I ?? null, movement: race ? MOVEMENT[race] ?? 4 : null,
+    source, caracs: totals, initiative: totals.I ?? null, movement,
     wounds: max, woundsMax: max, skills, talents: coverage.talents === 'present' ? talentResult.items : [],
     equipment: equipmentResult.items, spells, prayers, coverage, warnings };
   // `chance` is the fiche's current resource; `destin` is its maximum.
