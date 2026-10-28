@@ -404,6 +404,20 @@ export function advanceV5Effects(participant,transition={},inputs={}) {
         }
       }
     }
+    // Suffocation (V5 p.169, Immersion L25 p.142) : 1 Blessure par Round, Inconscient à 0, mort proposée au MJ après BE Rounds (MJ, 28/10).
+    if(levels(next.states,'suffocation')&&hp!==null){
+      hp=Math.max(0,hp-1);next.hp=hp;reminders.push('Suffocation : perte de 1 Blessure, sans BE ni PA.');
+      if(hp===0){
+        if(!levels(next.states,'inconscient')){
+          add([{name:'Inconscient',level:1,source:{kind:'suffocation-zero-wounds'}}]);
+          const be=toughnessBonus(next,inputs.toughnessBonus,needsInput);
+          if(be!==null){next.extensions={...(next.extensions||{}),v5:{...(next.extensions?.v5||{}),suffocationDeathDueRound:transition.round+be}};reminders.push(`Suffocation : Inconscient ; mort par asphyxie au Round ${transition.round+be} si rien ne change.`);}
+        }else{
+          const due=next.extensions?.v5?.suffocationDeathDueRound;
+          if(Number.isSafeInteger(due)&&transition.round>=due){death=true;reminders.push('Suffocation : BE Rounds écoulés sans air, mort à confirmer par le MJ.');}
+        }
+      }
+    }
     if(levels(next.states,'sonne'))reminders.push('Fin de Round : Résistance +0 DR peut retirer Sonné.');
     if(poison)reminders.push('Fin de Round : Résistance peut retirer Empoisonné ; difficulté selon le poison.');
     if(levels(next.states,'brise'))reminders.push('Hors engagement : Calme en fin de Round ou Round entier caché pour retirer Brisé.');

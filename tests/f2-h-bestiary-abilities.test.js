@@ -316,3 +316,38 @@ test('Great cat Deathblow triggers on every successful melee hit, whatever the S
   const other = { ...p('E0-P-807'), id: 'farm', zone: 'active' };
   assert.equal(run(other, other.actions.find(row => row.type === 'attack' && row.attr === 'CC'), 10).deathblow, null, 'other profiles do not have it');
 });
+
+test('Suffocation costs 1 Wound per Round, then Unconscious, then a death proposal after TB Rounds (V5 p.169, MJ 28/10)', async () => {
+  const { advanceV5Effects } = await import('../js/core/v5-effects.js');
+  const victim = { id: 'drowning', name: 'Noyé', hp: 2, maxHp: 10, caracs: { E: 30 }, states: [{ id: 'suff', key: 'suffocation', name: 'Suffocation', level: 1 }], extensions: { v5: {} } };
+  const r1 = advanceV5Effects(victim, { phase: 'endOfRound', round: 1 });
+  assert.equal(r1.participant.hp, 1);
+  const r2 = advanceV5Effects(r1.participant, { phase: 'endOfRound', round: 2 });
+  assert.equal(r2.participant.hp, 0);
+  assert.ok(r2.participant.states.some(row => row.key === 'inconscient'));
+  assert.equal(r2.participant.extensions.v5.suffocationDeathDueRound, 5);
+  assert.ok(!r2.death);
+  const r4 = advanceV5Effects(r2.participant, { phase: 'endOfRound', round: 4 });
+  assert.ok(!r4.death, 'not before TB Rounds');
+  const r5 = advanceV5Effects(r4.participant, { phase: 'endOfRound', round: 5 });
+  assert.equal(r5.death, true, 'death is proposed, the GM confirms');
+  const breathing = advanceV5Effects({ ...victim, states: [] }, { phase: 'endOfRound', round: 1 });
+  assert.equal(breathing.participant.hp, 2);
+});
+
+test('Store application of the Immersion keeps Suffocation and the Strength 59 Entangled on the victim', async () => {
+  const sea = { ...p('E0-P-909'), id: 'sea-store', camp: 'ennemi', zone: 'active' };
+  const target = { id: 'swimmer', name: 'Nageur', kind: 'PNJ', camp: 'pj', zone: 'active', hp: 20, maxHp: 20, caracs: { E: 30 }, armor: { head: 0, body: 0, arms: 0, legs: 0 }, states: [] };
+  const persistence = { async load() { return null; }, async saveAtomic() { return { ok: true }; } };
+  const store = createStore({ persistence }); await store.ready;
+  await store.addParticipant(sea); await store.addParticipant(target);
+  const action = sea.actions.find(row => row.extensions?.v5?.specialProfileAbility === 'sea-elemental-immersion');
+  const preview = store.previewResolution({ resolutionId: 'immersion-store', actorId: sea.id, targetId: target.id, action, roll: 10,
+    defense: { base: 20, roll: 95, v5: { kind: 'test' } }, v5: { kind: 'melee', context: {} } });
+  const applied = await store.applyResolution(preview);
+  assert.equal(applied.status, 'applied', JSON.stringify({ reason: applied.reason, unresolved: preview.unresolved }));
+  const after = store.listParticipants().find(row => row.id === target.id);
+  assert.equal(after.hp, 20);
+  assert.ok(after.states.some(row => row.key === 'suffocation'));
+  assert.equal(after.states.find(row => row.key === 'enchevetre')?.strength, 59);
+});
