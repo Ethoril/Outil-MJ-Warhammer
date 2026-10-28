@@ -1476,7 +1476,8 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     if (profileId === 'E0-P-004' && naturalPlan?.key === 'web' && targetConditionApplication.some(row => row.key === 'enchevetre')) {
       targetConditionApplication.push({ id: `${normalized.resolutionId}:f2h:arachnarok-web-poison`, key: 'empoisonne', name: 'Empoisonné', level: 1, source: { kind: 'bestiary-profile', ability: 'arachnarok-venom-webs', authorId: actor?.id } });
     }
-    if (action.qualities.some(row => (typeof row === 'string' ? row : row?.id) === 'venin') && damage?.finalDamage > 0) {
+    // Venin (Difficile) des crocs du Merwyrm (L25 p.145) seulement : les autres Venins passent par leur propre chemin.
+    if (profileId === 'E0-P-913' && action.qualities.some(row => (typeof row === 'string' ? row : row?.id) === 'venin') && damage?.finalDamage > 0) {
       const venom = action.qualities.find(row => (typeof row === 'string' ? row : row?.id) === 'venin');
       targetConditionApplication.push({ id: `${normalized.resolutionId}:f2h:creature-venom`, key: 'empoisonne', name: 'Empoisonné', level: 1, recoveryDifficulty: venom?.parameter || venom?.rating || null, source: { kind: 'bestiary-profile', ability: 'merwyrm-fanged-maw-venom', authorId: actor?.id } });
     }

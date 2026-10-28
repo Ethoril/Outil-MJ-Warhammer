@@ -493,3 +493,12 @@ test('Sea Elemental spell formulas, overcast reminders and dispel range read its
   const garg = p('E0-P-910');
   assert.equal(spellFormulaValue('BFM', garg), Math.floor(Number(garg.caracs.FM) / 10));
 });
+
+test('The Merwyrm venom path never labels another participant venom weapon (F6)', () => {
+  const actor = { id: 'poisoner', name: 'Empoisonneur', zone: 'active', caracs: { CC: 60, F: 40 }, skills: [], equipment: [], states: [] };
+  const preview = previewResolution({ resolutionId: 'pc-venom', baseRevision: 0, actor,
+    target: { id: 'victim-v', name: 'Victime', zone: 'active', hp: 30, maxHp: 30, caracs: { E: 30 }, equipment: [], states: [] },
+    action: { type: 'attack', name: 'Dague', base: 60, damage: 6, qualities: [{ id: 'venin', name: 'Venin', parameter: 'Difficile' }] }, roll: 10,
+    defense: { base: 10, roll: 95, v5: { kind: 'test' } }, v5: { kind: 'melee', context: {} } });
+  assert.ok(!preview.targetConditionApplication.some(row => row.source?.ability === 'merwyrm-fanged-maw-venom'));
+});
