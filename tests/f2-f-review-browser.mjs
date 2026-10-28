@@ -47,7 +47,7 @@ try{
   await page.evaluate(async()=>{const {Store}=await import('/Outil-MJ-Warhammer/js/main.js');await Store.nextTurn();});
   await page.locator('[data-workspace-select="f-review-actor"]').click();
   await page.waitForFunction(()=>{const button=[...document.querySelectorAll('.workspace-pavise-setup button')].find(row=>row.textContent.includes('seconde Action'));return button?.disabled===true;});
-  await page.evaluate(async()=>{const {Store}=await import('/Outil-MJ-Warhammer/js/main.js');await Store.nextTurn();});
+  await page.evaluate(async()=>{const {Store}=await import('/Outil-MJ-Warhammer/js/main.js');do await Store.nextTurn();while(Store.getCombat().currentActorId!=='f-review-actor');});
   await page.waitForFunction(()=>document.querySelector('.workspace-pavise-setup')?.textContent.includes('seconde Action au prochain Tour'));
   await page.waitForFunction(()=>{const button=[...document.querySelectorAll('.workspace-pavise-setup button')].find(row=>row.textContent.includes('seconde Action'));return button&&!button.disabled;});
   await secondAction.click();
