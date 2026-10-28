@@ -13,6 +13,14 @@ Sources : `tmp/gpt-phase-f2/CONTRE_VERIFICATION_CLAUDE_T2_BIS.md` et `tmp/gpt-ph
 - Mutations : 39 lignes L06, 134 lignes L17 converties en V5 et table étendue L23 selon la conception K2 validée ; compter L23 sur les pages, résumer chaque ligne dans nos mots (douze mots cités au plus), indiquer pages imprimée et PDF et faire vérifier indépendamment chaque ligne. Conversion incertaine assistée, question au MJ, sans valeur par défaut.
 - Malus durables des séquelles : F2-J en T4, pas en T3.
 
+## Choix d'exécutant — T3 (28/10/2026)
+
+- **K-SEANCE-01** : la séance de Corruption utilise l'identité de séance explicitement ouverte par le MJ avec `startTalentSession`, et non l'identité d'un combat. Le MJ déclare les sources et choisit l'exposition la plus forte ; l'outil empêche un deuxième Test de Corruption pour le personnage dans cette séance. Le classement des sources reste manuel.
+- **K-COMPTAGE-01** : L06 p.189 contient deux tables de 20 plages, soit 40 entrées et non les 39 annoncées dans le brief ; toutes les plages imprimées sont conservées. Les huit tables L17 contiennent 80 marques ; le repérage familial inclut aussi L23. La table étendue L23 et ses renvois comprennent 125 entrées (62 physiques, 10 têtes bestiales, 34 mentales, 19 Fixations).
+- **K-DOMAINE-01** : les marques L17 n'ont pas de domaine physique ou mental unique dans le catalogue. Leur association à une mutation en attente exige une compatibilité explicitement choisie par le MJ, enregistrée avec la sélection ; aucune valeur n'est présélectionnée.
+- **G-PA-01** : si une patte d'araignée ne correspond pas à une pièce d'armure identifiée, le MJ peut saisir les PA pour cette résolution ; aucune pièce n'est supposée. Le choix de table de critique d'un appendice ne remplace pas la localisation utilisée pour la protection.
+- **M-TALENT-01** : l'exception à l'Esquive montée suit la décision explicite du brief T3, Cavalier émérite, bien que L06 p.168 cite Trick Rider. Cette divergence est laissée visible pour contre-vérification.
+
 ## Contre-vérification T2 (27/10 soir) — décisions du MJ (première série)
 
 - Sortie d'un filet : **Test opposé de Force contre la Force du filet** (L06 p.186, chaque DR après le premier retire un état Empêtré supplémentaire), au lieu du cumul de DR jusqu'à la valeur de Force.

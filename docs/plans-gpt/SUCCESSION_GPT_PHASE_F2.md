@@ -1,3 +1,11 @@
+## Reprise du 28/10 — T3, passage à la contre-vérification
+
+Worktree `E:/Outil MJ Warhammer/tmp/gpt-phase-f2-worktree`, branche `gpt/phase-f2`. La contre-vérification Claude T2 bis est reprise dans `91f536c`, après les commits de caractérisation `7362805`, `441c07e`, `738b553` et `62bc456`. Suite complète avant démarrage L : 5 106/5 107, seul échec `sw.test.js` pour les six modules déjà signalés ; parcours navigateur empoignade, équipement et Salve ciblés passés. Revue indépendante ciblée des statuts F2-D, mort subite et générateur sans défaut concret trouvé. L'astérisque Poivrière doit être corrigé en amont des fiches : une régénération depuis une source sans astérisque le perdra.
+
+L, G, M et K1/K2 ont été repris et vérifiés localement ; code et tests `f8c863c`. Suite Node de gel : **5 203/5 204**, seul échec de précache ; parcours navigateur T3 vert avec les limites de fixture indiquées au rapport. Voir le bloc T3 de `RAPPORT_GPT_PHASE_F2.md`, les choix en tête de `CHOIX_EXECUTANT_PHASE_F2.md` et `REVUES_INDEPENDANTES_T3.md` pour le périmètre, les écarts et les limites. Le test de caractérisation L initial `d04993c` a été retouché : détails au rapport. Les caractérisations G/M/K sont séparées (`f160e51`, `5f32ad2`, `467001c`). La conception `f2/CONCEPTION_SEQUELLES.md` est soumise pour F2-J, sans code J. Les précédentes indications d'inachèvement L/G/M/K sont historiques.
+
+**Arrêt après T3 : contre-vérification Claude et feu vert MJ avant T4.** Ne pas fusionner, pousser, publier, modifier la version ou `sw.js`. Les modules non précachés et la limite de fixture navigateur K2 sont listés au rapport. Les sources de Corruption sont classées manuellement par le MJ. Les tables contiennent 40 entrées L06, 80 marques L17 et 125 entrées L23 avec sous-tables ; les écarts avec les anciens comptages sont documentés.
+
 # Succession — Phase F2
 
 ## T2 bis — 28/10/2026 : arrêt pour contre-vérification

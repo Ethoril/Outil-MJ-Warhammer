@@ -1,5 +1,25 @@
 # Rapport GPT - Phase F2
 
+## T3 — reprise et validation du 28/10/2026
+
+Périmètre : L, G, M et K1/K2 dans `gpt/phase-f2`. Les choix d'exécutant sont consignés en tête de `CHOIX_EXECUTANT_PHASE_F2.md` et les portées des relectures dans `REVUES_INDEPENDANTES_T3.md`. Le document de conception F2-J `f2/CONCEPTION_SEQUELLES.md` est soumis pour T4 ; aucun code J n'est livré.
+
+Code et tests : commit local `f8c863c`. Suite Node après gel, `TEMP`/`TMP` sur E: : **5 203/5 204**, seul échec `tests/sw.test.js` pour les modules non précachés ; journal `E:/Outil MJ Warhammer/tmp/gpt-phase-f2-runtime/t3-full-gel.log`. Après normalisation LF et suppression de lignes vides finales dans trois tests, leurs **20/20** tests ciblés ont été rejoués. `git diff --check` et `git diff --cached --check` sont propres.
+
+- **L** : Chance et Destin, payeurs et reçus, annulation/survie, réussite avec résultat choisi et attribution MJ ; conversion V4 idempotente et aide monétaire. Les points temporaires sont dépensés avant les permanents et les soldes durables sont propagés aux projections du personnage.
+- **G** : localisations par morphologie, override MJ par cible, table de critique d'appendice ; PA à saisir lorsque la localisation d'une patte d'araignée ne désigne pas une pièce identifiable. Les coups ciblés et humanoïdes conservent leur chemin existant.
+- **M** : lien cavalier–monture, attaque et charge, Esquive, chutes, Tests de Chevaucher, prise et opposition de Force ; raccords aux résolutions, conditions, embuscades et sorts. Le vieux −2 d'Esquive montée est retiré sans cumul. Un état legacy monté sans lien ne bloque pas une attaque ordinaire ; un lien explicitement cassé ou une clause exigeant la monture est signalé.
+- **K1** : expositions et barèmes, seuil dynamique, mutation soumise au MJ, délai secret et absolution. Les sources de séance et leur plus forte exposition sont déclarées par le MJ ; le classement n'est pas automatisé. La séance est ouverte explicitement via `startTalentSession`.
+- **K2** : catalogue, sélection et renvois reliés à la confirmation K1 atomique, provenance et choix durables. L06 contient 40 entrées imprimées malgré les 39 annoncées ; L17 contient 80 marques ; L23 contient 125 entrées avec ses sous-tables. Les règles incertaines sont assistées et aucun effet n'est déduit automatiquement d'un résumé. L17 sans domaine requiert une compatibilité explicitement choisie par le MJ.
+
+Tests hérités modifiés : seul `tests/f2-l-characterization.test.js` a été retouché après son commit initial `d04993c` : le Destin est payé par la cible de l'attaque annulée, le critique absent est `null`, et la Chance convertie utilise le registre `resources.fortune`. Ces changements de caractérisation préexistants à cette reprise sont conservés et explicités ; les autres tests hérités n'ont pas été modifiés. Les caractérisations G, M et K ont été commitées séparément en `f160e51`, `5f32ad2` et `467001c`.
+
+Le parcours `tests/f2-t3-browser.mjs` a réussi sur application et Store réels : montage/chute, morphologie et PA, Destin 100 et rechargement, exposition K1 par l'interface, confirmation K2 L06, Fixations et compatibilité L17, y compris effacement des résultats périmés. Les mutations K1 en attente pour les confirmations K2 sont des fixtures Store ; le parcours navigateur ne prouve donc pas la chaîne UI complète du Test de seuil à cette attente. Les relectures et leurs limites sont détaillées dans `REVUES_INDEPENDANTES_T3.md`.
+
+`sw.js` reste inchangé sur instruction. Les nouveaux modules JS de T3 à ajouter au précache à la publication sont : `js/core/currency.js`, `v5-corruption-mutation-catalog.js`, `v5-corruption-mutations-l06.js`, `v5-corruption.js`, `v5-hit-morphology.js`, `v5-legacy-conversion.js`, `v5-mounted-combat.js`, `js/data/v5-corruption-mutations-l17.js`, `v5-corruption-mutations-l23-audit.js`, `v5-corruption-mutations-l23.js`, `js/ui/v5-corruption-panel.js`, `v5-fate-dialog.js`. Les six modules T2 déjà signalés restent aussi à précacher. Aucun changement de version, push, fusion ou publication.
+
+**Arrêt après T3 : contre-vérification Claude puis feu vert du MJ avant T4.**
+
 ## T2 bis — reprise du 27/10, validation du 28/10/2026
 
 Source : `tmp/gpt-phase-f2/CONTRE_VERIFICATION_CLAUDE_T2.md` dans ce worktree ; les deux séries de décisions du MJ de `E:/Outil MJ Warhammer/tmp/f1-reperage/ARBITRAGES_25_10.md` sont recopiées en tête de `CHOIX_EXECUTANT_PHASE_F2.md` et priment. Les quatre corrections `baa66bb` sont conservées. Les caractérisations ont été commitées séparément avant les changements concernés du moteur.
