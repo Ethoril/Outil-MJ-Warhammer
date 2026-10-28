@@ -86,7 +86,6 @@ test('Sea Elemental immersion, fire immunity, and casting use only its profile',
   const immersed = planBestiaryProfileAbility(actor, 'sea-elemental-immersion', { entangled: true });
   assert.equal(immersed.effects[0].effect, 'suffocation');
   assert.equal(immersed.effects[0].grappleMustBeMaintained, false);
-  assert.equal(planBestiaryProfileAbility(actor, 'sea-elemental-immersion', { entangled: true, escapeTestSL: 1 }).effects[1].escaped, true);
   assert.equal(planBestiaryProfileAbility(actor, 'sea-elemental-fire-immunity').effects[0].immuneToState, 'Enflammé');
   assert.equal(bestiaryProfileStateImmunity(actor, 'enflamme'), true);
   assert.equal(planBestiaryProfileAbility(actor, 'sea-elemental-strength-casting').effects[0].castingCharacteristic, 'F');
@@ -96,7 +95,7 @@ test('Sea Elemental immersion, fire immunity, and casting use only its profile',
 test('Gargantuan and Black Leviathan resolve non-ship clauses while ship clauses remain reminders', () => {
   const gargantuan = p('E0-P-910');
   const shock = planBestiaryProfileAbility(gargantuan, 'gargantuan-electric-discharge', {
-    targetGrappled: true, targetTookWounds: true, targetEnduranceSuccess: false, selfEnduranceSuccess: false
+    targetGrappled: true, targetEnduranceSuccess: false, selfEnduranceSuccess: false
   });
   assert.equal(shock.effects.find(effect => effect.damage)?.damage, 10);
   assert.ok(shock.effects.some(effect => effect.state === 'sonne'));

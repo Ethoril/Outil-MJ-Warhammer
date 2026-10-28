@@ -29,17 +29,12 @@ export function planBestiaryProfileAbility(participant, key, context = {}) {
   }
   if (rule.outcome === 'suffocation' && context.entangled === true) {
     plan.effects.push({ effect: 'suffocation', trigger: rule.trigger, escapeTest: rule.escape, grappleMustBeMaintained: false });
-    if (Number.isInteger(context.escapeTestSL)) plan.effects.push({ escaped: context.escapeTestSL >= 0, test: 'Force opposée contre 59' });
-    else plan.unresolved.push('Immersion : saisir le résultat du Test de Force opposé pour sortir de l’Enchevêtrement.');
   }
   if (rule.immuneState) plan.effects.push({ immuneToState: rule.immuneState });
   if (rule.castingCharacteristic) plan.effects.push({ castingCharacteristic: rule.castingCharacteristic });
   if (rule.senseRangeYards) plan.reminders.push(`Détecte les proies jusqu’à ${rule.senseRangeYards} yards.`);
   if (rule.dodgeTest) {
-    if (Number.isInteger(context.targetLostBySL) && context.targetLostBySL > 0) plan.effects.push({ state: 'enchevetre', level: context.targetLostBySL, strength: 1, source: 'Lasso de soie' });
-    if (context.targetLostBySL > 0) plan.effects.push({ pullToContact: true, timing: 'même Round' });
-    if (Number.isFinite(context.cuttingDamage) && context.cuttingDamage > 5) plan.effects.push({ breakSilk: true, entanglementEnded: true });
-    plan.reminders.push(`Proies repérées jusqu’à ${rule.senseRangeYards} yards; Test d’Esquive ${rule.dodgeTest}, un Enchevêtré par niveau d’échec; ${rule.cutSilk} pour couper la soie. La portée est une aide affichée, jamais suivie.`);
+    plan.reminders.push(`Proies repérées jusqu’à ${rule.senseRangeYards} yards; Test d’Esquive ${rule.dodgeTest}, un Enchevêtré par niveau d’échec; ${rule.cutSilk} pour couper la soie (récupération « Soie coupée »). La victime est ramenée au contact dans le même Round, de toute distance ; soie coupée, l’araignée fuit vers son antre. La portée est une aide affichée, jamais suivie.`);
   }
   if (rule.bite) plan.effects.push({ attack: 'Bite', addTrait: rule.bite });
   if (rule.overrideTrait) plan.effects.push({ addTrait: rule.overrideTrait, ignoresSize: rule.ignoresSize });
@@ -48,9 +43,8 @@ export function planBestiaryProfileAbility(participant, key, context = {}) {
   if (rule.damage && context.targetGrappled === true && (context.specialAction === undefined || context.specialAction === rule.key)) {
     if (context.momentum === false) plan.unresolved.push('Décharge électrique : 1 Élan requis.');
     else plan.effects.push({ damage: context.fatigued === true ? rule.fatiguedDamage : rule.damage, ignoresArmour: rule.ignoresArmour, trigger: rule.trigger,
-      cost: rule.cost, ...(context.isShip === true ? { shipDamage: rule.shipDamage, crewDamage: context.fatigued === true ? rule.fatiguedShipCrewDamage : rule.shipCrewDamage } : {}) });
-    if (context.targetTookWounds === true && context.targetEnduranceSuccess === false) plan.effects.push({ state: 'sonne', trigger: 'échec Endurance Difficile' });
-    else if (context.targetTookWounds === true && context.targetEnduranceSuccess !== true) plan.unresolved.push('Décharge électrique : préciser la réussite du Test d’Endurance Difficile (−1 DR).');
+      cost: rule.cost });
+    if (context.targetEnduranceSuccess === false) plan.effects.push({ state: 'sonne', trigger: 'échec Endurance Difficile (−1 DR) après Blessures' });
     if (context.selfEnduranceSuccess === false) plan.effects.push({ state: 'extenue', trigger: 'échec Endurance Moyenne (+2 DR)' });
     else if (context.selfEnduranceSuccess !== true) plan.unresolved.push('Décharge électrique : Test d’Endurance Moyenne (+2 DR) du Gargantuan à saisir.');
   }
