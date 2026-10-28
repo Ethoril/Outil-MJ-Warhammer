@@ -440,3 +440,11 @@ test('Gargantuan discharge needs no attack nor defence roll and deals a flat 10 
     assert.ok(!preview.unresolved.some(text => /défense/i.test(text)), JSON.stringify(preview.unresolved));
   }
 });
+
+test('Gravelord options follow the imported Grüber profile E0-P-569 even under its "Wizard" name', () => {
+  const gruber = p('E0-P-569');
+  assert.equal(gruber.name.startsWith('Wizard') || gruber.name.startsWith('Sorcier'), true);
+  assert.ok(planBestiaryProfileAbilities(gruber).some(plan => plan.key === 'gravelord-variants'));
+  assert.ok(planBestiaryProfileAbilities({ name: ' Hans Grüber ' }).some(plan => plan.key === 'gravelord-variants'));
+  assert.ok(!planBestiaryProfileAbilities(p('E0-P-565')).some(plan => plan.key === 'gravelord-variants'));
+});

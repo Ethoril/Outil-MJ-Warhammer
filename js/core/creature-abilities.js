@@ -14,8 +14,8 @@ const sameName = value => String(value ?? '').normalize('NFC').trim().toLowerCas
 export function planBestiaryProfileAbility(participant, key, context = {}) {
   const rule = F2_H_BY_KEY.get(key);
   const profileId = participant?.profileId ?? participant?.extensions?.v5?.bestiary?.id ?? participant?.extensions?.v5?.bestiary?.profileId;
-  const name = String(participant?.name ?? '').normalize('NFC').toLowerCase();
-  const scoped = rule && (rule.profileId ? profileId === rule.profileId : rule.profileName && name === sameName(rule.profileName));
+  // Profil d'abord ; le nom ne sert qu'en repli (Grüber importé sous « Wizard », E0-P-569, ou saisi à la main).
+  const scoped = rule && ((rule.profileId && profileId === rule.profileId) || (rule.profileName && sameName(participant?.name) === sameName(rule.profileName)));
   if (!rule || !scoped) return { key, available: false, effects: [], reminders: [], unresolved: [], receipt: { ability: rule?.label ?? key, blocked: ['profil non concerné'] } };
 
   const plan = { key, label: rule.label, available: true, effects: [], reminders: [], unresolved: [], receipt: null };
@@ -70,9 +70,8 @@ export function planBestiaryProfileAbility(participant, key, context = {}) {
 
 /** Plans de toutes les capacités propres aux règles F2-H d'un participant (rappels inclus). */
 export function planBestiaryProfileAbilities(participant, context = {}) {
-  return F2_H_PROFILE_ABILITIES.filter(rule => rule.profileId
-    ? (participant?.profileId ?? participant?.extensions?.v5?.bestiary?.id ?? participant?.extensions?.v5?.bestiary?.profileId) === rule.profileId
-    : rule.profileName && sameName(participant?.name) === sameName(rule.profileName)
+  return F2_H_PROFILE_ABILITIES.filter(rule => (rule.profileId && (participant?.profileId ?? participant?.extensions?.v5?.bestiary?.id ?? participant?.extensions?.v5?.bestiary?.profileId) === rule.profileId)
+    || (rule.profileName && sameName(participant?.name) === sameName(rule.profileName))
   ).map(rule => planBestiaryProfileAbility(participant, rule.key, context));
 }
 
