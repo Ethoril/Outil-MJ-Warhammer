@@ -554,6 +554,14 @@ export function locationProtection(target,context={}){
  const conditional=conditionalArmour(target,context.nature||{});
  if(conditional.unknown.length)manual.push('PA magiques conditionnels : préciser '+conditional.unknown.map(natureTagLabel).join(', ')+'.');
  ap+=conditional.bonus;
+ // Planted pavise (Up in Arms): the declared facing and position are MJ facts.
+ // Its printed Shield 5 is a floor for the covered hit, never extra PA stacked
+ // on top of armour. The panel requires an explicit facing and attack direction.
+ const paviseFacing=context.paviseFacing, attackDirection=context.attackDirection;
+ const paviseCovered=context.pavisePlanted===true && ['north','south','east','west'].includes(paviseFacing)
+  && attackDirection===paviseFacing && Number(context.paviseDistanceYards)<=1
+  && (context.ranged===true || (context.paviseMeleeFirstTurn===true && context.ranged===false));
+ if(paviseCovered)ap=Math.max(ap,5);
  if(attackWords.includes('perforante')){const word=resolveKeyword('perforante'),source=talentQualityRegistry.qualityContracts.find(q=>q.id==='perforante');evaluatedKeywords.add('perforante');if(word?.effect!==source?.effect||word?.edition!==source?.edition||word?.source!==source?.source)manual.push('effet-non-couvert:perforante');else ap=Math.max(0,ap-2);}
  if(context.manualAp!==undefined&&context.manualAp!==null){const override=Number(context.manualAp);if(Number.isFinite(override)&&override>=0)return {location:id,ap:override,baseAp,shieldAp,counted,ignored,shield,criticalIgnored,manual:[],warnings,evaluatedKeywords:context.critical&&evaluatedKeywords.has('impenetrable')?['impenetrable']:[],arbitrated:true};}
  return {location:id,ap:manual.length?null:ap+shieldAp,baseAp,shieldAp,counted,ignored,shield,criticalIgnored,manual:[...new Set(manual)],warnings,evaluatedKeywords:[...evaluatedKeywords]};

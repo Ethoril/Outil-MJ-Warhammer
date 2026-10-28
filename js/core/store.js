@@ -903,6 +903,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         ...(preview?.slBonus ? { slBonus: preview.slBonus } : {}),
         ...(preview?.location ? { location: { roll: preview.location.roll, name: preview.location.name } } : {}),
         damage: preview?.damage || null,
+        supplementalEquipment: cloneValue(preview?.supplementalEquipment || null),
         ...(preview?.weapon ? { weapon: preview.weapon } : {}),
         critical: preview?.critical || null,
         fumble: preview?.fumble || null,
@@ -1002,20 +1003,26 @@ function corruptionStatusFor(participant, baseRevision, sessionId = null) {
     characterLoss: v5.corruptionCharacterLoss ? cloneValue(v5.corruptionCharacterLoss) : null,
     corruptionSessionId: sessionId,
     sessionExposure: sessionId ? cloneValue((v5.corruptionExposures || []).find(row => row.sessionId === sessionId) || null) : null,
+    pendingExposureSources: cloneValue(v5.pendingCorruptionExposures || []),
     baseRevision
   };
 }
 function resolvedCorruptionTest(participant, skillId, input) {
   const { score, ...scoreInfo } = corruptionSkillScore(participant, skillId, input);
-  const preview = previewV5Test({ score, roll: normalizeV5Roll(input.roll), kind: 'test' });
+  const difficultyDR=Number(input?.difficultyDR)||0;
+  if(!Number.isSafeInteger(difficultyDR)||difficultyDR < -10||difficultyDR > 10)throw new TypeError('Modificateur du Test de Corruption hors limites');
+  const preview = previewV5Test({ score, roll: normalizeV5Roll(input.roll), kind: 'test',slModifiers:difficultyDR?[{id:'corruption-source',label:'Source de Corruption',amount:difficultyDR}]:[] });
     const resolved = selectV5Test(preview, 'keep');
     return { ...resolved, scoreInfo };
 }
   function corruptionExposurePreview(participant, input, baseRevision, sessionId) {
     const v5 = participant.extensions?.v5 || {};
-    if (typeof sessionId !== 'string' || !sessionId) throw Object.assign(new Error('Démarrez explicitement une séance avant de résoudre la Corruption.'), { code: 'CORRUPTION_SESSION_REQUIRED', userFacing: true });
-    if ((v5.corruptionExposures || []).some(row => row?.sessionId === sessionId)) throw Object.assign(new Error('Le Test de Corruption de cette séance a déjà été résolu pour ce personnage.'), { code: 'CORRUPTION_SESSION_RESOLVED', userFacing: true });
-    if (typeof input?.declaredSources !== 'string' || !input.declaredSources.trim()) throw Object.assign(new Error('Déclarez les sources d’exposition de la séance avant de retenir la plus forte.'), { code: 'CORRUPTION_SOURCES_REQUIRED', userFacing: true });
+    const immediateId=typeof input?.immediateExposureId==='string'?input.immediateExposureId:null;
+    const immediate=immediateId?(v5.pendingCorruptionExposures||[]).find(row=>row.id===immediateId):null;
+    if(immediateId&&!immediate)throw Object.assign(new Error('Cette source immédiate de Corruption est absente ou déjà résolue.'),{code:'CORRUPTION_EXPOSURE_NOT_PENDING',userFacing:true});
+    if (!immediate && (typeof sessionId !== 'string' || !sessionId)) throw Object.assign(new Error('Démarrez explicitement une séance avant de résoudre la Corruption.'), { code: 'CORRUPTION_SESSION_REQUIRED', userFacing: true });
+    if (!immediate && (v5.corruptionExposures || []).some(row => row?.sessionId === sessionId)) throw Object.assign(new Error('Le Test de Corruption de cette séance a déjà été résolu pour ce personnage.'), { code: 'CORRUPTION_SESSION_RESOLVED', userFacing: true });
+    if (!immediate && (typeof input?.declaredSources !== 'string' || !input.declaredSources.trim())) throw Object.assign(new Error('Déclarez les sources d’exposition de la séance avant de retenir la plus forte.'), { code: 'CORRUPTION_SOURCES_REQUIRED', userFacing: true });
     if (!Number.isSafeInteger(v5.corruptionPoints) || v5.corruptionPoints < 0) {
       throw Object.assign(new Error('Saisissez d’abord les Points de Corruption connus ; aucune valeur zéro n’est supposée.'), { code: 'CORRUPTION_POINTS_REQUIRED', userFacing: true });
     }
@@ -1023,8 +1030,10 @@ function resolvedCorruptionTest(participant, skillId, input) {
       throw Object.assign(new Error('Traitez la décision de Corruption en attente avant une nouvelle exposition.'), { code: 'CORRUPTION_PENDING', userFacing: true });
     }
     const facts = corruptionFacts(participant);
-    const { skillId, influence, exposure, roll, manualScore, manualScoreReason } = input || {};
-    const testInput = { roll, manualScore, manualScoreReason };
+    const skillId=input?.skillId, influence=immediate?.influence||input?.influence, exposure=immediate?.exposure||input?.exposure,
+      roll=input?.roll,manualScore=input?.manualScore,manualScoreReason=input?.manualScoreReason;
+    const difficultyDR=immediate?.difficultyDR||0;
+    const testInput = { roll, manualScore, manualScoreReason,difficultyDR };
     const test = resolvedCorruptionTest(participant, skillId, testInput);
     const result = resolveCorruptionExposure({
       currentPoints: v5.corruptionPoints, threshold: facts.threshold, influence, exposure, skillId,
@@ -1032,8 +1041,9 @@ function resolvedCorruptionTest(participant, skillId, input) {
     });
     return {
       status: 'ready', participantId: participant.id, baseRevision,
-      sessionId,
-      input: cloneValue({ skillId, influence, exposure, roll: normalizeV5Roll(roll), manualScore, manualScoreReason, declaredSources: input?.declaredSources || '' }),
+      sessionId: immediate ? null : sessionId,
+      input: cloneValue({ skillId, influence, exposure, roll: normalizeV5Roll(roll), manualScore, manualScoreReason, declaredSources: input?.declaredSources || immediate?.source || '',
+        ...(immediate ? { immediateExposureId: immediate.id, sourceRuleId: immediate.sourceRuleId, source: immediate.source, difficultyDR } : {}) }),
       ...result, test: cloneValue({ ...test, ...result.test, scoreInfo: test.scoreInfo }),
       facts: { toughnessBonus: facts.toughnessBonus, willpowerBonus: facts.willpowerBonus, pureSoul: facts.pureSoul }
     };
@@ -2131,7 +2141,7 @@ function resolvedCorruptionTest(participant, skillId, input) {
     applyCorruptionExposure(id, preview) {
       if (preview?.status !== 'ready' || preview.participantId !== id || !preview.input || !Number.isSafeInteger(preview.baseRevision)) throw new TypeError('Aperçu de Corruption prêt requis');
       const baseRevision = preview.baseRevision, input = cloneValue(preview.input), exposureId = uid();
-      return api.executeCommand('corruption-exposure-v5', draft => {
+      return Promise.resolve(api.executeCommand('corruption-exposure-v5', draft => {
         if (draft.localRevision !== baseRevision) throw Object.assign(new Error('La partie a changé. Recalculez l’exposition à la Corruption.'), { code: 'CORRUPTION_STALE', userFacing: true });
         const subject = findCorruptionSubject(draft, id);
         if (!subject) throw new TypeError('Personnage introuvable');
@@ -2150,14 +2160,15 @@ function resolvedCorruptionTest(participant, skillId, input) {
             : oldV5.pendingCorruptionTest || null;
           row.extensions = { ...(row.extensions || {}), v5: { ...oldV5, corruptionPoints: nextPoints,
             corruptionExposures: [...(oldV5.corruptionExposures || []), exposure].slice(-500),
+            ...(input.immediateExposureId ? { pendingCorruptionExposures: (oldV5.pendingCorruptionExposures || []).filter(row => row.id !== input.immediateExposureId) } : {}),
             pendingCorruptionTest } };
           return row;
         });
         draft.log = [{ id: uid(), kind: 'management', actorId: id, actorName: subject.name,
-          text: `${subject.name} : exposition ${result.test.exposure === 'prolonged' ? 'prolongée' : 'simple'} à la Corruption · ${result.gainedPoints} point(s)`,
+          text: `${subject.name} : exposition ${result.test.exposure === 'prolonged' ? 'prolongée' : 'simple'} à la Corruption · ${result.gainedPoints} point(s)${input.immediateExposureId ? ` · source immédiate ${input.source || input.sourceRuleId || ''}` : ''}`,
           detail: { kind: 'corruption-exposure-v5', exposure, pendingThresholdTest: result.thresholdTestRequired } }, ...(draft.log || [])].slice(0, 300);
         return draft;
-      }).then(result => result?.ok === false ? { status: 'error', ok: false, error: result.error }
+      })).then(result => result?.ok === false ? { status: 'error', ok: false, error: result.error }
         : { status: 'applied', ok: true, exposureId, baseRevision: baseRevision + 1 })
         .catch(error => error?.code === 'CORRUPTION_STALE' ? { status: 'stale', ok: false, error: error.message } : Promise.reject(error));
     },
@@ -3930,6 +3941,20 @@ function resolvedCorruptionTest(participant, skillId, input) {
           ...v5StoreActionResult(draft, result),
           log: [resolutionLogEntry(preview, result.resolution), ...(draft.log || [])].slice(0, 300)
         },resolvedActorId);
+        const exposure = preview.supplementalEquipment?.exposure;
+        const exposureTargetId = exposure?.participantId || preview.targetId || preview.input?.target?.id || preview.input?.targetId;
+        if (exposure && exposureTargetId) updateCorruptionCopies(next, exposureTargetId, row => {
+          const extensions = row.extensions || {}, oldV5 = extensions.v5 || {};
+          const id = `${preview.resolutionId}:corruption:${exposure.sourceRuleId}`;
+          const pending = oldV5.pendingCorruptionExposures || [];
+          if (pending.some(item => item.id === id)) return row;
+          row.extensions = { ...extensions, v5: { ...oldV5, pendingCorruptionExposures: [...pending, {
+            id, sourceRuleId: exposure.sourceRuleId, source: exposure.source, influence: exposure.influence,
+            exposure: 'exposure', difficultyDR: exposure.skillModifier || 0, resolutionId: preview.resolutionId,
+            createdAt: Date.now()
+          }].slice(-100) } };
+          return row;
+        });
         if(isV5ActionUse(preview,preview.input||{})&&!commitReaction){recordV5ActionUsage(next,resolvedActorId,preview.resolutionId);const v5=next.extensions?.v5||{},rows=v5.standardTurnActions||[],weaponId=preview.input?.action?.extensions?.fiche?.equipmentId,qualityIds=(preview.input?.action?.qualities||[]).map(row=>typeof row==='string'?row:row?.id).filter(Boolean);next.extensions.v5={...v5,standardTurnActions:rows.map(row=>row.actionId===preview.resolutionId?{...row,targetId:preview.targetId||preview.input?.target?.id||preview.input?.targetId||null,weaponId:weaponId||null,qualityIds:[...new Set(qualityIds)],hit:preview.hit===true,actionType:preview.actionType}:row)};}
         const combatRoot=next.extensions?.v5||{},combatState=structuredClone(combatRoot.combatActions||{byActorId:{},receipts:[]}),owned=combatState.byActorId?.[resolvedActorId];
         if(preview.input?.v5?.context?.trip===true){const primaryId=preview.input.v5.context.tripPrimaryResolutionId;if((combatState.trippedResolutionIds||[]).includes(primaryId))throw Object.assign(new Error('Cette touche a déjà servi pour un Croche-pied.'),{userFacing:true});combatState.trippedResolutionIds=[...(combatState.trippedResolutionIds||[]),primaryId].slice(-500);}

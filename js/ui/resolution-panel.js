@@ -1437,6 +1437,15 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
             const attachedLabel=node('label','workspace-type','Bouclier attaché au bras ou en bandoulière');const attached=document.createElement('input');attached.type='checkbox';attached.checked=context.shieldAttached===true;attached.setAttribute('aria-label',attachedLabel.textContent);attached.addEventListener('change',()=>handlers.select({protectionContext:{...context,shieldAttached:attached.checked,nonDominantArmSide:attached.checked?context.nonDominantArmSide:undefined}}));attachedLabel.append(attached);block.append(attachedLabel);
             if(attached.checked){const sideLabel=node('label','workspace-type','Bras non directeur');const side=document.createElement('select');side.setAttribute('aria-label','Bras non directeur');side.append(new Option('À préciser',''),new Option('Gauche','left'),new Option('Droit','right'));side.value=context.nonDominantArmSide||'';side.addEventListener('change',()=>handlers.select({protectionContext:{...context,nonDominantArmSide:side.value||undefined}}));sideLabel.append(side);block.append(sideLabel);}
           }
+          const pavise=node('div','workspace-type');
+          const plantedLabel=node('label','workspace-type','Pavois planté après dépense de 2 Actions');const planted=document.createElement('input');planted.type='checkbox';planted.checked=context.pavisePlanted===true;planted.setAttribute('aria-label',plantedLabel.textContent);planted.addEventListener('change',()=>handlers.select({protectionContext:{...context,pavisePlanted:planted.checked,paviseMeleeFirstTurn:false}}));plantedLabel.append(planted);pavise.append(plantedLabel);
+          if(planted.checked){
+            for(const [key,labelText] of [['paviseFacing','Direction du pavois'],['attackDirection','Direction d’arrivée de l’attaque']]){const label=node('label','workspace-type',labelText);const choice=document.createElement('select');choice.setAttribute('aria-label',labelText);choice.append(new Option('À préciser',''));for(const [value,text] of [['north','Nord'],['south','Sud'],['east','Est'],['west','Ouest']])choice.append(new Option(text,value));choice.value=context[key]||'';choice.addEventListener('change',()=>handlers.select({protectionContext:{...context,[key]:choice.value||undefined}}));label.append(choice);pavise.append(label);}
+            const distance=node('label','workspace-type','Distance derrière le pavois (yards)');const yards=document.createElement('input');yards.type='number';yards.min='0';yards.max='1';yards.step='0.1';yards.value=context.paviseDistanceYards??'';yards.setAttribute('aria-label',distance.textContent);yards.addEventListener('change',()=>handlers.select({protectionContext:{...context,paviseDistanceYards:yards.value===''?undefined:Number(yards.value)}}));distance.append(yards);pavise.append(distance);
+            const melee=node('label','workspace-type','Mêlée de face pendant le premier Tour');const first=document.createElement('input');first.type='checkbox';first.checked=context.paviseMeleeFirstTurn===true;first.setAttribute('aria-label',melee.textContent);first.addEventListener('change',()=>handlers.select({protectionContext:{...context,paviseMeleeFirstTurn:first.checked}}));melee.append(first);pavise.append(melee);
+            pavise.append(node('p','workspace-muted','Ce contexte ne s’applique qu’après les 2 Actions de mise en place. Protectrice 5 remplace les PA de la localisation pour l’attaque couverte.'));
+          }
+          block.append(pavise);
           for(const [key,text] of [['shieldAvailable','Bouclier disponible ce tour'],['opposedWithShield','Défense opposée avec ce bouclier'],['ranged','Attaque à distance'],['lineOfSight','Attaquant visible']]) {
             const label=node('label','workspace-type',text);const choice=document.createElement('select');choice.setAttribute('aria-label',text);
             const protectionWeapon=action.extensions?.equipment||actor?.equipment?.find(row=>row?.id===action.extensions?.fiche?.equipmentId);
@@ -1680,6 +1689,32 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
   contextual.addEventListener('toggle', () => { draft.combatSituationOpen = contextual.open; });
   contextual.appendChild(node('summary', '', 'Circonstances des Tests'));
   const fields = node('div', 'workspace-v5-context');
+  const focusActionLabel=String(action?.name||action?.note||action?.skillName||'');
+  const linkedSupplementalItem=actor?.equipment?.find(item=>item.id===action?.extensions?.fiche?.equipmentId)||action?.extensions?.equipment;
+  if(type==='attack'&&/dague funeste|doom dagger/i.test(String(linkedSupplementalItem?.name||focusActionLabel))){
+    const current=draft.v5Context||{},label=node('label','workspace-type','Test d’Endurance de la cible à −1 DR'),select=document.createElement('select');
+    select.setAttribute('aria-label',label.textContent);select.append(new Option('À saisir',''),new Option('Réussite','true'),new Option('Échec : appliquer Empoisonné','false'));
+    select.value=typeof current.supplementalPoisonTest?.success==='boolean'?String(current.supplementalPoisonTest.success):'';
+    select.addEventListener('change',()=>handlers.select({v5Context:{...current,supplementalPoisonTest:select.value===''?undefined:{success:select.value==='true'}}}));label.append(select);fields.append(label);
+    const rollLabel=node('label','workspace-type','Jet secret du MJ (d10 à chaque utilisation)'),rollInput=document.createElement('input');rollInput.type='number';rollInput.min='1';rollInput.max='10';rollInput.step='1';rollInput.value=current.fellDaggerSecretRoll??'';rollInput.setAttribute('aria-label',rollLabel.textContent);rollInput.addEventListener('change',()=>handlers.select({v5Context:{...current,fellDaggerSecretRoll:rollInput.value===''?undefined:Number(rollInput.value)}}));rollLabel.append(rollInput);fields.append(rollLabel);
+  }
+  if(type==='attack'&&/griffes du tigre|tiger claws/i.test(String(linkedSupplementalItem?.name||focusActionLabel))){
+    const current=draft.v5Context||{},test=current.felidWoundDisguiseTest||{};
+    for(const [key,labelText,min,max] of [['score','Score du Test de camouflage (MJ)',0,100],['roll','Jet d100 du Test',1,100]]){const label=node('label','workspace-type',labelText),input=document.createElement('input');input.type='number';input.min=String(min);input.max=String(max);input.value=test[key]??'';input.setAttribute('aria-label',labelText);input.addEventListener('change',()=>handlers.select({v5Context:{...current,felidWoundDisguiseTest:{...test,[key]:input.value===''?undefined:Number(input.value)}}}));label.append(input);fields.append(label);}
+    fields.append(node('p','workspace-muted','Un Test réussi inscrit les blessures comme celles d’un grand félin; un échec conserve les blessures ordinaires. Saisir le score retenu par le MJ et le jet.'));
+  }
+  if(/focalisation/i.test(focusActionLabel)){
+    const current=draft.v5Context||{},ruleLabel=node('label','workspace-type','Objet de focalisation utilisé'),ruleSelect=document.createElement('select');
+    ruleSelect.setAttribute('aria-label',ruleLabel.textContent);ruleSelect.append(new Option('Aucun',''),new Option('Bâton du domaine (+1 DR)','F-L06-1104'),new Option('Robes de sorcier (rang choisi)','F-L06-1105'));
+    ruleSelect.value=current.focalisationSupplementRuleId||'';ruleSelect.addEventListener('change',()=>handlers.select({v5Context:{...current,focalisationSupplementRuleId:ruleSelect.value||undefined}}));ruleLabel.append(ruleSelect);fields.append(ruleLabel);
+    if(ruleSelect.value){
+      const domainLabel=node('label','workspace-type','Domaine associé à l’objet et au Test'),domainInput=document.createElement('input');domainInput.type='text';domainInput.value=current.focalisationAssociatedDomain||'';domainInput.setAttribute('aria-label',domainLabel.textContent);domainInput.addEventListener('change',()=>handlers.select({v5Context:{...current,focalisationAssociatedDomain:domainInput.value.trim()||undefined,focalisationDomain:domainInput.value.trim()||undefined}}));domainLabel.append(domainInput);fields.append(domainLabel);
+    }
+    if(ruleSelect.value){
+      const rankLabel=node('label','workspace-type','Rang de Focalisation lié à cet objet'),rankSelect=document.createElement('select');rankSelect.setAttribute('aria-label',rankLabel.textContent);for(const [value,label] of [['','À choisir'],['1','+1 DR'],['2','+2 DR'],['3','+3 DR']])rankSelect.append(new Option(label,value));rankSelect.value=String(current.focalisationFocusRank??current.focalisationRobeRank??'');rankSelect.addEventListener('change',()=>handlers.select({v5Context:{...current,focalisationFocusRank:rankSelect.value?Number(rankSelect.value):undefined,focalisationRobeRank:rankSelect.value?Number(rankSelect.value):undefined}}));rankLabel.append(rankSelect);fields.append(rankLabel);
+    }
+    fields.append(node('p','workspace-muted','Le bonus s’applique uniquement à Focalisation dans le domaine indiqué; le bâton ne réduit pas le niveau d’incantation.'));
+  }
   if(type==='attack'&&kind.value==='melee'){
     const current=draft.v5Context||{},label=node('label','workspace-type','Assommer — déclarer avant le jet et retenir ses coups'),check=document.createElement('input');
     check.type='checkbox';check.checked=current.knockout===true;check.setAttribute('aria-label',label.textContent);

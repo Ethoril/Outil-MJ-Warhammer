@@ -210,6 +210,30 @@ export function createV5CorruptionPanel({ Store, refresh = () => {} } = {}) {
           state.lossReason = ''; state.receipt = `Décision de perte ${confirmed ? 'confirmée' : 'refusée'}.`;
         }), !state.lossReason.trim());
       }
+    } else if (status.pendingExposureSources?.length) {
+      const source = status.pendingExposureSources[0];
+      panel.append(node('h4', '', 'Exposition immédiate en attente'));
+      panel.append(node('p', 'workspace-muted', `${source.source} · influence ${source.influence === 'moderate' ? 'modérée' : 'mineure'} · ${source.difficultyDR > 0 ? '+' : ''}${source.difficultyDR || 0} DR au Test. Le gain de points déclenchera ensuite le Test de seuil si le total dépasse le seuil K1.`));
+      select(panel, 'Compétence choisie par le MJ', 'skillId', SKILL_OPTIONS);
+      field(panel, 'Jet du Test de Corruption (d100)', 'exposureRoll', { min: 1, max: 100 });
+      field(panel, 'Score MJ si compétence non liée', 'manualScore', { min: 0, max: 100 });
+      field(panel, 'Motif du score manuel', 'manualScoreReason', { type: 'text' });
+      button(panel, 'Calculer l’exposition immédiate', () => act(async () => {
+        const preview = Store.previewCorruptionExposure(actor.id, { baseRevision: status.baseRevision,
+          immediateExposureId: source.id, skillId: state.skillId, roll: Number(state.exposureRoll),
+          manualScore: state.manualScore === '' ? undefined : Number(state.manualScore), manualScoreReason: state.manualScoreReason });
+        state.exposurePreview = preview;
+        if (preview.status === 'stale') throw new Error('La partie a changé; recalculez l’exposition.');
+      }), () => state.exposureRoll === '');
+      if (state.exposurePreview?.status === 'ready') {
+        const preview = state.exposurePreview;
+        panel.append(node('p', 'workspace-corruption-preview', `${preview.test.skill} ${preview.test.success ? 'réussite' : 'échec'} · ${preview.test.sl} DR · gain ${preview.gainedPoints} · total ${preview.corruptionPoints} / seuil ${preview.threshold}${preview.thresholdTestRequired ? ' · Test de seuil immédiat ensuite' : ''}`));
+        button(panel, 'Enregistrer l’exposition immédiate', () => act(async () => {
+          const result = await Store.applyCorruptionExposure(actor.id, preview);
+          if (result?.status === 'stale' || result?.ok === false) throw new Error(result.error || 'La partie a changé; recalculez l’exposition.');
+          state.exposurePreview = null; state.exposureRoll = ''; state.receipt = `Exposition enregistrée : +${preview.gainedPoints} point(s).`;
+        }));
+      }
     } else if (!status.corruptionSessionId) {
       panel.append(node('p', 'workspace-muted', 'Ouvrez une séance avant de saisir et résoudre les expositions de fin de séance.'));
     } else if (status.sessionExposure) {

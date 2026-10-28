@@ -44,6 +44,7 @@ import { advanceV5NetEscape, conditionalV5KnifeQualities, entanglementStrength, 
 import { consumeV5WeaponShot, initialV5ReloadState } from './v5-reloading.js';
 import { appendageCriticalLocation, deriveHitMorphology, resolveCreatureHitLocation } from './v5-hit-morphology.js';
 import { mountedRiderEventsFor, mountedRideAnswerFor, planMountedAttack, planMountedChargeDamage, planMountedDodge, planMountedFall, resolveMountedMount, V5_RIDE_SKILL_ID } from './v5-mounted-combat.js';
+import { previewSupplementalEquipment } from './v5-supplemental-equipment.js';
 
 export { damageBreakdown, formatDamageFormula, formatWeaponDamage, describeWeaponDamage } from './damage.js';
 
@@ -335,6 +336,14 @@ export function normalizeResolutionInput(input = {}) {
   action.qualities = qualities;
   const resolutionId = String(input.resolutionId || input.id || defaultResolutionId(actor, action, target, baseRevision, roll));
   if (!resolutionId.trim()) throw new ResolutionError('resolutionId invalide');
+  const v5Settings=isRecord(input.v5)?clone(input.v5):{};
+  const v5Context=v5Settings.context||{};
+  const actionLabel=foldKey([action.name,action.note,action.skillName,v5Context.skillName].filter(Boolean).join(' '));
+  if(/focalisation/.test(actionLabel)&&['F-L06-1104','F-L06-1105'].includes(v5Context.focalisationSupplementRuleId)){
+    const focus=previewSupplementalEquipment({item:{supplementalRuleId:v5Context.focalisationSupplementRuleId,associatedDomain:v5Context.focalisationAssociatedDomain,robeRank:v5Context.focalisationRobeRank,focusRank:v5Context.focalisationFocusRank},
+      spell:{wind:v5Context.focalisationDomain},context:{focusRank:v5Context.focalisationFocusRank}});
+    if(focus.casting.focusSL){v5Settings.slModifiers=[...(v5Settings.slModifiers||[]),{id:`supplement:${focus.ruleId}`,label:`${focus.label} · Focalisation (${v5Context.focalisationDomain})`,amount:focus.casting.focusSL}];}
+  }
   // Defender settings describe the Test actually chosen (Melee or Dodge).
   const defense = isRecord(input.defense) ? {
     ...(isRecord(input.defense.extensions) ? { extensions: clone(input.defense.extensions) } : {}),
@@ -355,7 +364,7 @@ export function normalizeResolutionInput(input = {}) {
     ...(damageReplaced ? { damageReplaced } : {}),
     ...(input.round !== undefined ? { round: input.round } : {}),
     ...(isRecord(input.prayerSLContext) ? { prayerSLContext: clone(input.prayerSLContext) } : {}),
-    v5: isRecord(input.v5) ? clone(input.v5) : {},
+    v5: v5Settings,
     ...(isRecord(input.v5State) ? { v5State: clone(input.v5State) } : {}),
     v5Clock: isRecord(input.v5Clock) ? clone(input.v5Clock) : {},
     ...(isRecord(input.authorNextTurnEnd) ? { authorNextTurnEnd: clone(input.authorNextTurnEnd) } : {}),
@@ -1378,7 +1387,13 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
       if (applies) naturalHitStates.push({ id: `${normalized.resolutionId}:natural:${naturalPlan.key}:${foldKey(effect.state)}`, key: foldKey(effect.state), name: effect.state, level: 1, source: { kind: 'creature', trait: naturalPlan.key, ...(Number.isInteger(effect.strength) ? { strength: effect.strength } : {}) } });
     }
   }
-  const targetConditionApplication = [...(criticalBlock?.application?.states || []).map(row => ({ ...clone(row), source: { ...(row.source || {}), kind: 'critical' } })), ...weaponConditions.proposed,...slashConditions,...magicHitStates,...naturalHitStates,...special.states,...(trip?.conditionApplied?[trip.targetCondition]:[]),...(tripFall?.criticalStates||[])];
+  const supplementalItemId=action?.extensions?.fiche?.equipmentId;
+  const supplementalItem=actor?.equipment?.find(item=>item.id===supplementalItemId)||action?.extensions?.equipment
+    ||(context.supplementalEquipmentRuleId?{supplementalRuleId:context.supplementalEquipmentRuleId,name:action?.name||action?.note}:action?.name||action?.note?{name:action.name||action.note}:null);
+  const supplementalEquipment=previewSupplementalEquipment({item:supplementalItem,actor,target,hit,damage,critical:criticalBlock?.details||null,context,spell:context.spell||null,used:attackType(action.type)});
+  const supplementalTargetConditions=(supplementalEquipment?.effects||[]).filter(row=>row.state&&row.participantId===target?.id).map((row,index)=>({id:`${normalized.resolutionId}:supplement:${index}`,key:foldKey(row.state).replace(/\s+/g,'-'),name:row.state,level:1,source:{kind:'supplement',ruleId:row.sourceRuleId,authorId:actor?.id}}));
+  const supplementalActorConditions=(supplementalEquipment?.effects||[]).filter(row=>row.state&&row.participantId===actor?.id).map((row,index)=>({id:`${normalized.resolutionId}:supplement:actor:${index}`,key:foldKey(row.state).replace(/\s+/g,'-'),name:row.state,level:1,source:{kind:'supplement',ruleId:row.sourceRuleId,authorId:actor?.id}}));
+  const targetConditionApplication = [...(criticalBlock?.application?.states || []).map(row => ({ ...clone(row), source: { ...(row.source || {}), kind: 'critical' } })), ...weaponConditions.proposed,...slashConditions,...magicHitStates,...naturalHitStates,...special.states,...supplementalTargetConditions,...(trip?.conditionApplied?[trip.targetCondition]:[]),...(tripFall?.criticalStates||[])];
   if(normalized.knockoutValid===true&&hit&&location?.key==='HEAD'&&action.qualities.some(q=>(typeof q==='string'?q:q?.id)==='assommante')){
     const stunned=(target?.states||[]).filter(row=>row.key==='sonne').reduce((sum,row)=>sum+Math.max(1,Number(row.level)||1),0)+targetConditionApplication.filter(row=>row.key==='sonne').reduce((sum,row)=>sum+Math.max(1,Number(row.level)||1),0);
     const toughness=Number(target?.caracs?.BE??Math.floor(Number(target?.caracs?.E||0)/10));
@@ -1524,7 +1539,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   // Chaque source est jugée sur sa propre nature (règle de l'homoncule) : l'attaque ou l'arme enchantée de l'acteur, celle du défenseur, la poudre noire.
   const defenderMagical=target?defenderNature().magical===true:false;
   const kept=(rows,magical)=>{const copy=[...rows];if(actor)refuseFamiliarConditions(actor,copy,magical,familiarConditionRefusals);return copy;};
-  const actorConditionApplication=[...kept(activation.conditions||[],nature?.magical===true),...kept(magicFumbleStates,nature?.magical===true),...kept((defenderCritical?.application?.states||[]).map(row=>({...row,source:{...row.source,kind:'critical'}})),defenderMagical),...kept(defenderWeaponConditions.proposed,defenderMagical),...kept(blackpowderStates,false)];
+  const actorConditionApplication=[...kept(activation.conditions||[],nature?.magical===true),...kept(magicFumbleStates,nature?.magical===true),...kept((defenderCritical?.application?.states||[]).map(row=>({...row,source:{...row.source,kind:'critical'}})),defenderMagical),...kept(defenderWeaponConditions.proposed,defenderMagical),...kept(blackpowderStates,false),...supplementalActorConditions];
   const actorConditionKeys = new Set(actorConditionApplication.map(row => foldKey(row.key || row.name)));
   if (actor?.extensions?.v5?.mounted === true) for (const event of mountedRiderEventsFor(actorConditionKeys)) mountedFallPlans.push({ participantId: actor.id, event,
     ...planMountedFall({ event, fallPreventedByEquipment: context.fallPreventedByEquipment === true }) });
@@ -1692,6 +1707,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     talentPlans: [normalized.qualityTalentPlan, ...(actorPlan.talentPlans || []), ...(defenderPlan?.talentPlans || []), damageTalents, beatTalents, ...(weaponConditions.talentPlans||[]), ...criticalTalentPlans, ...supplementaryTalentPlans, ...conditionTalentPlans].filter(Boolean),
     talentSLChoices: { actor: actorPlan.talentSLChoices || [], defender: defenderPlan?.talentSLChoices || [] },
     weaponConditions,
+    supplementalEquipment,
     weaponReload,
     entanglement,
     netEscape,
@@ -1710,10 +1726,10 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     blastPlan,
     spreadPlan,
     targetConditionApplication,actorConditionApplication,defenderWeaponConditions,familiarConditionRefusals,
-    reminders: [...familiarConditionRefusals.map(row => `${row.name || 'Homoncule'} : ${row.message}`),...(magicFearImmune?['Le Bœuf Reste Debout : immunité aux Tests de Peur et Terreur pour la durée.']:[]),...(fast.initiativeBonus?[`Rapide : +${fast.initiativeBonus} Initiative pour cette attaque uniquement; le MJ l’applique à son arbitrage d’ordre, sans modifier l’Initiative de fiche.`]:[]),...activation.reminders,...special.reminders,...naturalReminders,...(hit&&attackType(action.type)&&target?reactionReminders(target,nature):[]),...(hit&&target&&damage?.finalDamage>0&&(target.extensions?.v5?.spellEffects||[]).some(e=>e.specialState?.festeringWoundTest)?[`Domaine de Nurgle (D-C51) : ${target.name||target.id} subit des Blessures ; proposer au MJ de jouer le Test de Blessure Suppurée (V5 p. 180). Rien n’est appliqué par l’outil.`]:[]),...(context.silentTakedown === true ? ['Neutralisation silencieuse : Blessures égales au BF et Inconscient si victoire ; Sonné et alarme si la cible gagne. Ces conséquences restent à arbitrer.'] : [])],
+    reminders: [...familiarConditionRefusals.map(row => `${row.name || 'Homoncule'} : ${row.message}`),...(supplementalEquipment?.reminders||[]),...(supplementalEquipment?.unresolved||[]),...(magicFearImmune?['Le Bœuf Reste Debout : immunité aux Tests de Peur et Terreur pour la durée.']:[]),...(fast.initiativeBonus?[`Rapide : +${fast.initiativeBonus} Initiative pour cette attaque uniquement; le MJ l’applique à son arbitrage d’ordre, sans modifier l’Initiative de fiche.`]:[]),...activation.reminders,...special.reminders,...naturalReminders,...(hit&&attackType(action.type)&&target?reactionReminders(target,nature):[]),...(hit&&target&&damage?.finalDamage>0&&(target.extensions?.v5?.spellEffects||[]).some(e=>e.specialState?.festeringWoundTest)?[`Domaine de Nurgle (D-C51) : ${target.name||target.id} subit des Blessures ; proposer au MJ de jouer le Test de Blessure Suppurée (V5 p. 180). Rien n’est appliqué par l’outil.`]:[]),...(context.silentTakedown === true ? ['Neutralisation silencieuse : Blessures égales au BF et Inconscient si victoire ; Sonné et alarme si la cible gagne. Ces conséquences restent à arbitrer.'] : [])],
     activeEffects,talentActionChanges,secondaryTargets,
     damageReplacedByTalent: replacement ? clone(replacement) : null,defenderDamageReplacedByTalent:defenseShield.replacement||null,
-    unresolved,
+    unresolved: [...unresolved,...(supplementalEquipment?.unresolved||[])],
     weaponSkillReceipt: normalized.weaponSkillReceipt,
     defenderCritical,defenderDamage,
     actionType: action.type,
@@ -1903,6 +1919,20 @@ export function applyResolution(preview, currentState) {
       removed: false, source: { kind: 'quality', keywordId: 'empaleuse', authorId: preview.input.actor?.id } };
     if (!rows.some(row => row.id === projectile.id)) updated.extensions.v5.lodgedProjectiles = [...rows, projectile];
     nextState.participants = participantListWithUpdate(nextState, updated.id, updated);
+  }
+  if(preview.supplementalEquipment?.weaponDispositionUpdate){
+    const change=preview.supplementalEquipment.weaponDispositionUpdate,owner=participantById(nextState,preview.input.actor?.id),live=participantById(currentState,preview.input.actor?.id);
+    if(!owner||!live||JSON.stringify(live)!==JSON.stringify(preview.input.actor))return{status:'stale',requiresPreview:true,state:clone(currentState),resolution:clone(preview)};
+    const weapon=owner.equipment?.find(row=>row.id===change.itemId);
+    if(!weapon)return{status:'stale',requiresPreview:true,state:clone(currentState),resolution:clone(preview)};
+    const updated=clone(owner);updated.equipment=updated.equipment.map(row=>{
+      if(row.id!==change.itemId)return row;
+      const extensions={...(row.extensions||{})},v5={...(extensions.v5||{})};
+      if(change.weaponDisposition)v5.weaponDisposition=change.weaponDisposition;else delete v5.weaponDisposition;
+      if(change.fellDaggerBreakNextUse===true)v5.fellDaggerBreakNextUse=true;else delete v5.fellDaggerBreakNextUse;
+      extensions.v5=v5;return{...row,extensions};
+    });
+    nextState.participants=participantListWithUpdate(nextState,updated.id,updated);
   }
   if(preview.weaponTrap?.ready){
     const trap=preview.weaponTrap,holder=participantById(nextState,trap.holderId),weapon=holder?.equipment?.find(row=>row.id===trap.weaponId);
