@@ -523,3 +523,13 @@ test('Head-Taker needs no hit-location roll for its Critical (F1)', () => {
   assert.equal(JSON.stringify(preview.critical).includes('"needsLocation":true'), false, JSON.stringify(preview.critical).slice(0, 300));
   assert.match(JSON.stringify(preview.critical), /HEAD|Tête/);
 });
+
+test('The discharge warns when the target armour is a bare number it cannot sort (F3)', () => {
+  const built = p('E0-P-910');
+  const actor = { ...built, id: 'gargantuan-bare', zone: 'active', extensions: { ...built.extensions, v5: { ...built.extensions.v5, hasMomentum: true } } };
+  const action = actor.actions.find(row => row.extensions?.v5?.specialProfileAbility === 'gargantuan-electric-discharge');
+  const preview = previewResolution({ resolutionId: 'garg-bare', baseRevision: 0, actor, action, roll: 30,
+    target: { id: 'bare', name: 'PNJ', zone: 'active', hp: 40, maxHp: 40, caracs: { E: 0 }, armor: { head: 3, body: 3, arms: 3, legs: 3 }, equipment: [], states: [] },
+    v5: { kind: 'melee', context: { f2h: { targetGrappled: true, targetEnduranceSuccess: true, selfEnduranceSuccess: true } } } });
+  assert.ok(preview.reminders.some(text => /sans pièces typées/.test(text)), JSON.stringify(preview.reminders));
+});
