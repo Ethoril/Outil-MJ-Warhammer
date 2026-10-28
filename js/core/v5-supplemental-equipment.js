@@ -71,7 +71,7 @@ export function previewSupplementalEquipment({ item, actor, target, hit = false,
   const reminders = [];
   const casting = { focusSL: 0 };
   let weaponDispositionUpdate = null;
-  if (exposure) reminders.push(`${rule.label} : Test de Corruption ${rule.influence === 'moderate' ? 'modérée' : 'mineure'}${rule.skillModifier ? ` (${rule.skillModifier > 0 ? '+' : ''}${rule.skillModifier} au Test)` : ''} requis sur ${target?.name || 'la cible'}. Utilisez le suivi K1; le Test de seuil suit tout gain.`);
+  if (exposure) reminders.push(`${rule.label} : Test de Corruption ${rule.influence === 'moderate' ? 'modérée' : 'mineure'}${rule.skillModifier ? ` (${rule.skillModifier > 0 ? '+' : ''}${rule.skillModifier} DR)` : ''} requis sur ${target?.name || 'la cible'}. Utilisez le suivi K1; le Test de seuil suit tout gain.`);
   if (rule.kind === 'poison' && hit && hurt) {
     const poisonTest = context.supplementalPoisonTest;
     if (context.fellDaggerSecretRoll === 1 || item?.extensions?.v5?.fellDaggerBreakNextUse === true) reminders.push('Dague funeste : poison épuisé; aucun Empoisonné sur cette utilisation. La lame se brisera à la fin de cette utilisation.');

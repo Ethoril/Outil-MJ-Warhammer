@@ -18,7 +18,7 @@ test('F2-F — each of the 17 selected source rows has an executable supplement 
   for (const id of F2_F_RULE_IDS) assert.equal(previewSupplementalEquipment({ item: row(id), actor, target })?.ruleId, id);
 });
 
-test('F2-F — all four skaven weapon exposures use the real wounded target and retain intensity/modifier', () => {
+test('F2-F — Skaven weapon exposures use the real wounded target and converted DR modifiers', () => {
   const cases = [
     ['F-L11-0013', 'minor', 2], ['F-L11-0016', 'moderate', 0],
     ['F-L11-0017', 'minor', 0], ['F-L11-0018', 'minor', 0]
@@ -124,7 +124,7 @@ test('F2-F — linked Ratling resolution emits a K1 exposure only when it wounds
     v5: { kind: 'ranged', context: {} }, roll: 31, baseRevision: 1 });
   assert.equal(preview.supplementalEquipment?.exposure?.sourceRuleId, 'F-L11-0013');
   assert.equal(preview.supplementalEquipment.exposure.skillModifier, 2);
-  assert.ok(preview.reminders.some(line => /Test de Corruption mineure \(\+2 au Test\)/.test(line)));
+  assert.ok(preview.reminders.some(line => /Test de Corruption mineure \(\+2 DR\)/.test(line)));
 });
 
 test('F2-F — Store carries a wounded Ratling exposure into the target K1 queue and resolves it without a session', async () => {
