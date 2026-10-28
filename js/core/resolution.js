@@ -1486,7 +1486,9 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
       targetConditionApplication.push({ id: `${normalized.resolutionId}:f2h:creature-venom`, key: 'empoisonne', name: 'Empoisonné', level: 1, recoveryDifficulty: venom?.parameter || venom?.rating || null, source: { kind: 'bestiary-profile', ability: 'merwyrm-fanged-maw-venom', authorId: actor?.id } });
     }
   }
-  const profileAbilityReminders = [...profileAbilityPlans, ...targetProfileAbilityPlans].flatMap(plan => plan.reminders).concat(lassoReminders);
+  // Côté cible, seuls les rappels utiles à qui l'attaque (feu du Léviathan, options de Grüber) ; ses propres attaques restent à son tour.
+  const DEFENSIVE_TARGET_RULES = new Set(['black-leviathan-fire', 'gravelord-variants']);
+  const profileAbilityReminders = [...profileAbilityPlans, ...targetProfileAbilityPlans.filter(plan => DEFENSIVE_TARGET_RULES.has(plan.key))].flatMap(plan => plan.reminders).concat(lassoReminders);
   // Grands félins (L23 p.87) : Frappe mortelle (V4 p.160) sur toute frappe de mêlée réussie, quelle que soit la Taille ; au plus BCC attaques en chaîne.
   const deathblow = hit && target && !replacement && actorPlan.kind === 'melee' && action.extensions?.v5?.deathblow === true
     ? { triggered: true, maxChain: Math.floor((Number(actor?.caracs?.CC) || 0) / 10), ruleSource: 'L23 p.87, Frappe mortelle V4 p.160' } : null;
@@ -1668,7 +1670,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   if(normalized.combatPrelude?.targetIncomingMomentum)targetEvents.push({id:normalized.resolutionId+':slayer-charge',type:'chargeEnemy'});
   // Tueur de champions (L25 p.155) : un seul gain d'Élan par duel, consommé à l'application ; le MJ réarme pour un nouveau duel (28/10).
   const championSlayerUsed = target && !context.f2h?.championSlayerRearm && (actor?.extensions?.v5?.championSlayerDuels || []).includes(target.id);
-  const championSlayerGain = (actor?.extensions?.v5?.bestiary?.id === 'E0-P-921' || actor?.profileId === 'E0-P-921') && context.f2h?.singleCombatLeader === true && target && !championSlayerUsed;
+  const championSlayerGain = (actor?.extensions?.v5?.bestiary?.id === 'E0-P-921' || actor?.profileId === 'E0-P-921') && context.f2h?.singleCombatLeader === true && target && !championSlayerUsed && !hasMomentum(actor);
   if (championSlayerGain) actorEvents.push(event('profileMomentumGain', { profileAbility: 'wulfrik-champion-slayer' }));
   if (championSlayerUsed && context.f2h?.singleCombatLeader === true) profileAbilityReminders.push('Tueur de champions : l’Élan de ce duel est déjà gagné; réarmer seulement pour un nouveau duel.');
   if (context.outsideCombat !== true && actorPlan.charging) actorEvents.push(event('chargeEnemy'));

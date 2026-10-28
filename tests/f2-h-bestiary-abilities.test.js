@@ -298,7 +298,10 @@ test('Wulfrik Champion Slayer gains Momentum once per duel, re-armed by the GM (
   const second = gains('second');
   assert.ok(!second.momentum.find(row => row.participantId === actor.id).details.some(row => row.eventId.endsWith(':profileMomentumGain')));
   assert.ok(second.reminders.some(text => /déjà gagné/.test(text)));
-  assert.ok(gains('rearm').momentum.find(row => row.participantId === actor.id).details.some(row => row.eventId.endsWith(':profileMomentumGain')));
+  // Réarmé, le duel n'est plus marqué « déjà gagné » ; Wulfrik tient encore l'Élan du premier gain, donc rien à regagner (F10).
+  const rearmed = gains('rearm');
+  assert.ok(!rearmed.reminders.some(text => /déjà gagné/.test(text)));
+  assert.equal(rearmed.championSlayerDuel, null);
 });
 
 test('Great cat Deathblow triggers on every successful melee hit, whatever the Size (L23 p.87)', () => {
@@ -531,4 +534,20 @@ test('The discharge warns when the target armour is a bare number it cannot sort
     target: { id: 'bare', name: 'PNJ', zone: 'active', hp: 40, maxHp: 40, caracs: { E: 0 }, armor: { head: 3, body: 3, arms: 3, legs: 3 }, equipment: [], states: [] },
     v5: { kind: 'melee', context: { f2h: { targetGrappled: true, targetEnduranceSuccess: true, selfEnduranceSuccess: true } } } });
   assert.ok(preview.reminders.some(text => /sans pièces typées/.test(text)), JSON.stringify(preview.reminders));
+});
+
+test('Champion Slayer is not spent while Wulfrik already holds Momentum, and target reminders stay relevant (F10 F5)', () => {
+  const built = p('E0-P-921');
+  const actor = { ...built, talents: [], id: 'wulfrik-full', zone: 'active', extensions: { ...built.extensions, v5: { ...built.extensions.v5, hasMomentum: true } } };
+  const attack = { ...actor.actions.find(row => row.type === 'attack' && row.attr === 'CC'), base: actor.caracs.CC };
+  const full = previewResolution({ resolutionId: 'slayer-full', baseRevision: 0, actor, action: attack, roll: 15,
+    target: { id: 'champ', name: 'Champion', zone: 'active', hp: 40, maxHp: 40, caracs: { E: 30 }, equipment: [], states: [] },
+    defense: { base: 20, roll: 95, v5: { kind: 'test' } }, v5: { kind: 'melee', context: { f2h: { singleCombatLeader: true } } } });
+  assert.equal(full.championSlayerDuel, null);
+  const hero = { id: 'hero-f5', name: 'Héros', zone: 'active', caracs: { CC: 60, F: 40 }, skills: [], equipment: [], states: [] };
+  const sea = { ...p('E0-P-909'), id: 'sea-f5', zone: 'active' };
+  const onSea = previewResolution({ resolutionId: 'hit-sea', baseRevision: 0, actor: hero, target: sea,
+    action: { type: 'attack', name: 'Épée', base: 60, damage: 6, qualities: [] }, roll: 10,
+    defense: { base: 10, roll: 95, v5: { kind: 'test' } }, v5: { kind: 'melee', context: {} } });
+  assert.ok(!onSea.reminders.some(text => /immergé|Suffocation/.test(text)), JSON.stringify(onSea.reminders));
 });
