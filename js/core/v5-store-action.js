@@ -60,8 +60,13 @@ export function buildV5StoreActionInput(envelope, raw = {}) {
   if(v5.context?.talentAction==='stomp')v5.extraAttack=true;
   const costs = [...(v5.costs || [])];
   const fortuneForAdvantage=Boolean(v5.context?.fortuneForAdvantage||v5.fortuneForAdvantage||supplied.fortuneForAdvantage);
+  const fortuneAdvantageDeclarationId=v5.fortuneAdvantageDeclarationId||v5.context?.fortuneAdvantageDeclarationId||supplied.fortuneAdvantageDeclarationId;
   if(fortuneForAdvantage){
     if(!['test','skill','defense','opposition','attack','attaque'].includes(String(supplied.action?.type||'').toLowerCase()))throw new TypeError('Chance → Avantage : un Test doit être choisi avant le jet.');
+    const declaration=(envelope.extensions?.v5?.fortuneAdvantageDeclarations||[]).find(row=>row.id===fortuneAdvantageDeclarationId);
+    const identity=sourceActor?v5ResourceIdentity(envelope,sourceActor):null;
+    if(!declaration||declaration.actorId!==actorId||declaration.characterId!==identity||declaration.revision!==envelope.localRevision)throw new TypeError('Chance → Avantage : déclaration préalable du MJ requise avant le jet.');
+    supplied.fortuneAdvantageDeclarationId=fortuneAdvantageDeclarationId;
     if(!costs.some(cost=>cost.id==='system:fortune-for-advantage'))costs.push({id:'system:fortune-for-advantage',resource:'fortune',amount:1});
     v5.advantageSources=[...(v5.advantageSources||[]),{id:'fortune-spent-for-advantage',label:'1 Point de Chance dépensé avant le jet'}];
   }

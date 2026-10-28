@@ -74,7 +74,8 @@ test('counter-review: named persistent and anonymous profile copies keep indepen
   assert.equal(store.listParticipants().find(row => row.id === named.id).extensions.v5.fate, 2);
   assert.equal(store.listPersistentCharacters().find(row => row.id === 'named-character').extensions.v5.fate, 2);
   assert.equal(store.getProfile('named-pj').extensions.v5.fate, 3, 'the template remains a profile, not the persistent person');
-  const namedAdvantage = store.previewResolution({ actorId: named.id, action: { type: 'test', attr: 'CC', base: 50 }, roll: 44, v5: { kind: 'test', fortuneForAdvantage: true } });
+  const namedDeclaration=await store.declareV5FortuneAdvantage(named.id,{enabled:true,baseRevision:store.getLocalRevision()});
+  const namedAdvantage = store.previewResolution({ actorId: named.id, action: { type: 'test', attr: 'CC', base: 50 }, roll: 44, v5: { kind: 'test', fortuneForAdvantage: true,fortuneAdvantageDeclarationId:namedDeclaration.declarationId } });
   await store.applyResolution(namedAdvantage);
   assert.equal(store.getFortune(named.id).balance, 2);
   assert.equal(store.getFortune('named-character').balance, 2);
@@ -88,7 +89,8 @@ test('counter-review: named persistent and anonymous profile copies keep indepen
   await store.applyResolution(anonymousFate);
   assert.equal(store.listParticipants().find(row => row.id === anonymous.id).extensions.v5.fate, 2);
   assert.equal(store.getProfile('anonymous-template').extensions.v5.fate, 3);
-  const spendChance = store.previewResolution({ actorId: anonymous.id, action: { type: 'test', attr: 'CC', base: 50 }, roll: 44, v5: { kind: 'test', fortuneForAdvantage: true } });
+  const anonymousDeclaration=await store.declareV5FortuneAdvantage(anonymous.id,{enabled:true,baseRevision:store.getLocalRevision()});
+  const spendChance = store.previewResolution({ actorId: anonymous.id, action: { type: 'test', attr: 'CC', base: 50 }, roll: 44, v5: { kind: 'test', fortuneForAdvantage: true,fortuneAdvantageDeclarationId:anonymousDeclaration.declarationId } });
   await store.applyResolution(spendChance);
   assert.equal(store.getFortune(anonymous.id).balance, 2);
   assert.equal(store.getFortune('anonymous-template').balance, 3);

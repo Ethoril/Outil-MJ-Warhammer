@@ -976,6 +976,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       talentChoices: { ...(draft.talentChoices || {}), 'talent-beat-blade:replace-damage': draft.beatBlade === true },
       fortuneReroll: draft.fortuneReroll === true,
       fortuneForAdvantage: draft.fortuneForAdvantage === true,
+      ...(draft.fortuneForAdvantage===true&&draft.fortuneAdvantageDeclarationId?{fortuneAdvantageDeclarationId:draft.fortuneAdvantageDeclarationId}:{}),
       ...(Array.isArray(draft.fortuneRerollRolls) && draft.fortuneRerollRolls.length ? { fortuneRerollRolls: draft.fortuneRerollRolls } : {}),
       ...(draft.reverseDice === true ? { reverseDice: true } : {}),
       ...(draft.fortuneRerollRoll != null && draft.fortuneRerollRoll !== '' ? { fortuneRerollRoll: Number(draft.fortuneRerollRoll) } : {}),
@@ -990,6 +991,11 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       choice: draft.defenseChoice, context: { ...(draft.defenseContext || {}), ...(context.defense.option.extensions?.fiche?.skillId ? { skillId: context.defense.option.extensions.fiche.skillId } : {}) }, talentChoices: draft.defenseTalentChoices || {},
       advantageSources: declaredSources(draft.defenseAdvantages, 'Avantage déclaré en défense'),
       disadvantageSources: declaredSources(draft.defenseDisadvantages, 'Désavantage déclaré en défense') };
+  }
+  function clearFortuneAdvantageDraft(draft){
+    const declarationId=draft.fortuneAdvantageDeclarationId,actorId=draft.actorId;
+    if(declarationId&&typeof Store.declareV5FortuneAdvantage==='function')try{const pending=Store.declareV5FortuneAdvantage(actorId,{enabled:false,declarationId,baseRevision:Store.getLocalRevision()});if(pending?.catch)pending.catch(()=>{});}catch{}
+    draft.fortuneForAdvantage=false;draft.fortuneAdvantageDeclarationId=null;
   }
   // U-01 : une opération ponctuelle ne s'applique qu'une fois par clé (créée au rendu) ; après succès elle reste consommée
   // jusqu'à la prochaine saisie du MJ, y compris pour un second clic tardif qui trouverait la persistance déjà finie.
@@ -1047,6 +1053,27 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     },
     select(patch) {
       const draft = state.resolution;
+      if (Object.hasOwn(patch,'fortuneForAdvantage')) {
+        const enabled=patch.fortuneForAdvantage===true;
+        if(enabled===draft.fortuneForAdvantage)return;
+        if(enabled&&(String(draft.attackRoll||'').trim()||draft.preview)){
+          draft.error={field:'general',message:'Chance → Avantage doit être déclaré dans le Store avant de saisir le d100.'};render();return;
+        }
+        if(typeof Store.declareV5FortuneAdvantage!=='function'){
+          draft.error={field:'general',message:'Le Store ne peut pas enregistrer la déclaration de Chance → Avantage.'};render();return;
+        }
+        const priorDeclarationId=draft.fortuneAdvantageDeclarationId;
+        draft.busy=true;draft.error=null;render();
+        void (async()=>{
+          try{
+            const result=await Store.declareV5FortuneAdvantage(draft.actorId,{enabled,...(!enabled&&priorDeclarationId?{declarationId:priorDeclarationId}:{}),baseRevision:Store.getLocalRevision()});
+            if(result?.status!=='applied')throw new Error(result?.reason||'Déclaration de Chance → Avantage non enregistrée.');
+            draft.fortuneForAdvantage=enabled;draft.fortuneAdvantageDeclarationId=enabled?result.declarationId:null;draft.preview=null;draft.comparison=null;
+          }catch(error){draft.error={field:'general',message:userMessage(error,'Déclaration de Chance → Avantage non enregistrée.')};}
+          finally{draft.busy=false;render();}
+        })();
+        return;
+      }
       draft.magicOpSpent = {};
       if('brokenEscapeVisibility' in patch)draft.brokenEscapeVisibility=patch.brokenEscapeVisibility;
       if ('magicSpellId' in patch && patch.magicSpellId !== draft.magicSpellId) {
@@ -1061,10 +1088,11 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       for(const [key,value] of Object.entries(patch))if(/^magic[A-Z]/.test(key))draft[key]=value;
       draft.v5Choice = null; draft.defenseChoice = null;
       if ('targetId' in patch) {
+        clearFortuneAdvantageDraft(draft);
         state.targetChoice = patch.targetId;
         draft.v5Context={...(draft.v5Context||{})};for(const key of ['fateAction','fateChosenRoll','fateCriticalLocation'])delete draft.v5Context[key];
         for (const key of ['hitMorphology','hitAppendage','spiderLegSide','fallPreventedByEquipment','mountedRestraint','mountedRideTestsById','mountedRideScoresById','mountedRideRollsById']) delete draft.v5Context[key];
-        draft.fortuneReroll=false;draft.fortuneRerollRolls=[];draft.fortuneForAdvantage=false;
+        draft.fortuneReroll=false;draft.fortuneRerollRolls=[];
         draft.targetSize = null;
         draft.defenseBase = null; draft.defenseSource = null;
         draft.defenseKind = null; draft.defenseSlModifier = null;
@@ -1081,7 +1109,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         draft.magicTargetIds = patch.targetId && patch.targetId !== 'none' ? [patch.targetId] : [];
       }
       const actionChanged = 'actionKey' in patch && patch.actionKey !== draft.actionKey;
-      if (actionChanged) { draft.v5Kind = null; draft.v5SlModifier = null; draft.charging = false; draft.extraAttack = false; draft.reactionId = null; draft.reactionAction = null; draft.aimed = false; draft.beatBlade = false; draft.fortuneReroll = false; draft.fortuneRerollRoll = null;draft.fortuneRerollRolls=[];draft.fortuneForAdvantage=false; draft.reverseDice = false; draft.actorSize = null; draft.targetSize = null; draft.v5Advantages = 0; draft.v5Disadvantages = 0; draft.v5Context = {}; draft.talentChoices = {}; draft.actionKey = patch.actionKey; draft.type = null; draft.ammunitionId = ''; draft.ammunitionArbitrated = false; draft.protectionContext = {}; }
+      if (actionChanged) { clearFortuneAdvantageDraft(draft);draft.v5Kind = null; draft.v5SlModifier = null; draft.charging = false; draft.extraAttack = false; draft.reactionId = null; draft.reactionAction = null; draft.aimed = false; draft.beatBlade = false; draft.fortuneReroll = false; draft.fortuneRerollRoll = null;draft.fortuneRerollRolls=[]; draft.reverseDice = false; draft.actorSize = null; draft.targetSize = null; draft.v5Advantages = 0; draft.v5Disadvantages = 0; draft.v5Context = {}; draft.talentChoices = {}; draft.actionKey = patch.actionKey; draft.type = null; draft.ammunitionId = ''; draft.ammunitionArbitrated = false; draft.protectionContext = {}; }
       if ('protectionContext' in patch) draft.protectionContext = patch.protectionContext;
       if ('ammunitionId' in patch) draft.ammunitionId = patch.ammunitionId;
       if ('ammunitionArbitrated' in patch) draft.ammunitionArbitrated = patch.ammunitionArbitrated;
@@ -1457,6 +1485,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       try {
         if (input.defense && (input.defense.base == null || input.defense.base === '' || !Number.isInteger(Number(input.defense.base)) || Number(input.defense.base) < 0)) throw Object.assign(new ResolutionError('Saisissez un score de défense entier, supérieur ou égal à zéro.', 'INVALID_DEFENSE_SCORE'), { userFacing: true });
         input.v5 = v5Input(context, draft);
+        if(draft.fortuneAdvantageDeclarationId)input.fortuneAdvantageDeclarationId=draft.fortuneAdvantageDeclarationId;
         const combatRound=readCombat(Store).round;let currentTurnIndex=1;try{currentTurnIndex=Number(JSON.parse(Store.getFullJSON()).extensions?.v5?.turnIndex)||1;}catch{}if(Number.isSafeInteger(combatRound)&&combatRound>0){input.round=combatRound;input.v5={...input.v5,context:{...(input.v5.context||{}),currentRound:combatRound,currentTurnIndex}};}
         if (input.defense) input.defense.v5 = defenseV5Input(context, draft);
         draft.preview = Store.previewResolution(input);
@@ -1566,6 +1595,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
           draft.attackRoll = '';
           draft.defenseRoll = '';
           draft.v5Choice = null; draft.defenseChoice = null; draft.charging = false; draft.extraAttack = false; draft.reactionId = null; draft.reactionAction = null; draft.aimed = false; draft.beatBlade = false;
+          draft.fortuneForAdvantage=false;draft.fortuneAdvantageDeclarationId=null;
           if (draft.preview.v5MagicKind) resetMagicDice(draft);
           forgetAttackAnswers(draft);
           focusKey = 'roll-attack';
@@ -1955,6 +1985,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
   }
 
   function selectActor(id) {
+    if(state.resolution.actorId!==id)clearFortuneAdvantageDraft(state.resolution);
     state.actorChoice = { id, turn: turnKey(readCombat(Store)) };
     render();
   }

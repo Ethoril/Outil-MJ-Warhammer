@@ -368,6 +368,11 @@ function freshCombatScopedV5(value, combatScopeId = uid()) {
   const { combatActions, standardTurnActions, ...v5 } = value || {};
   return { ...v5, combatScopeId, turnIndex: 1 };
 }
+function clearV5FortuneAdvantageDeclaration(envelope,actorId){
+  const v5=envelope.extensions?.v5||{},rows=v5.fortuneAdvantageDeclarations||[];
+  if(!rows.some(row=>row.actorId===actorId))return envelope;
+  return {...envelope,extensions:{...(envelope.extensions||{}),v5:{...v5,fortuneAdvantageDeclarations:rows.filter(row=>row.actorId!==actorId)}}};
+}
 function clearMountedRelation(participant) {
   if (!participant?.extensions?.v5 || (participant.extensions.v5.mounted !== true && !participant.extensions.v5.mountId)) return participant;
   return withV5(participant, v5 => { const { mountId, ...rest } = v5; return { ...rest, mounted: false }; });
@@ -2022,6 +2027,24 @@ function resolvedCorruptionTest(participant, skillId, input) {
       const subject = envelope.combat.participants.find(item => item.id === id) || envelope.reserve.find(item => item.id === id) || envelope.persistentCharacters.find(item => item.id === id);
       if (!subject) throw new TypeError('Personnage introuvable');
       return { ...getV5Fate(envelope, subject), legacyResilience:subject.extensions?.legacyConversions?.v4ToV5===true, fortune:getV5Fortune(envelope,subject), baseRevision: localRevision };
+    },
+    declareV5FortuneAdvantage(actorId,{enabled=true,declarationId=null,baseRevision=localRevision}={}){
+      if(typeof actorId!=='string'||!actorId.trim())throw new TypeError('Acteur requis pour déclarer Chance → Avantage');
+      let declaration=null;
+      const saved=api.executeCommand(enabled?'declare-fortune-advantage-v5':'cancel-fortune-advantage-v5',draft=>{
+        if(draft.localRevision!==baseRevision)throw Object.assign(new Error('La partie a changé; redéclarez Chance → Avantage avant le jet.'),{code:'V5_EFFECT_STALE',userFacing:true});
+        const rows=draft.extensions?.v5?.fortuneAdvantageDeclarations||[];
+        let nextRows=rows.filter(row=>enabled?row.actorId!==actorId:declarationId?row.id!==declarationId:row.actorId!==actorId);
+        if(enabled){
+          const actor=(draft.combat?.participants||[]).find(row=>row.id===actorId);
+          if(!actor)throw new TypeError('Acteur introuvable pour déclarer Chance → Avantage');
+          declaration={id:uid(),actorId,characterId:v5ResourceIdentity(draft,actor),revision:draft.localRevision+1};
+          nextRows=[...nextRows,declaration].slice(-100);
+        }
+        draft.extensions??={};draft.extensions.v5={...(draft.extensions.v5||{}),fortuneAdvantageDeclarations:nextRows};return draft;
+      });
+      const finish=persistence=>persistence?.ok===false?{status:'error',reason:persistence.error||'Déclaration non enregistrée'}:{status:'applied',declarationId:declaration?.id||null,persistence};
+      return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
     },
     setFate(id, amount, { reason = '', baseRevision = localRevision, permanentResilienceLoss = false } = {}) {
       if (!Number.isSafeInteger(amount) || amount < 0 || typeof reason !== 'string' || !reason.trim()) throw new TypeError('Montant et motif MJ requis pour le Destin');
@@ -3903,10 +3926,10 @@ function resolvedCorruptionTest(participant, skillId, input) {
         result.state.participants = shieldAfterAttack(result.state.participants, preview, draft.combat?.round ?? 0);
         result.resolution = { ...result.resolution, actionCostReceipt: result.actionCostReceipt, talentUsageReceipts: result.talentUsageReceipts };
         semanticResult = result;
-        const next={
+        const next=clearV5FortuneAdvantageDeclaration({
           ...v5StoreActionResult(draft, result),
           log: [resolutionLogEntry(preview, result.resolution), ...(draft.log || [])].slice(0, 300)
-        };
+        },resolvedActorId);
         if(isV5ActionUse(preview,preview.input||{})&&!commitReaction){recordV5ActionUsage(next,resolvedActorId,preview.resolutionId);const v5=next.extensions?.v5||{},rows=v5.standardTurnActions||[],weaponId=preview.input?.action?.extensions?.fiche?.equipmentId,qualityIds=(preview.input?.action?.qualities||[]).map(row=>typeof row==='string'?row:row?.id).filter(Boolean);next.extensions.v5={...v5,standardTurnActions:rows.map(row=>row.actionId===preview.resolutionId?{...row,targetId:preview.targetId||preview.input?.target?.id||preview.input?.targetId||null,weaponId:weaponId||null,qualityIds:[...new Set(qualityIds)],hit:preview.hit===true,actionType:preview.actionType}:row)};}
         const combatRoot=next.extensions?.v5||{},combatState=structuredClone(combatRoot.combatActions||{byActorId:{},receipts:[]}),owned=combatState.byActorId?.[resolvedActorId];
         if(preview.input?.v5?.context?.trip===true){const primaryId=preview.input.v5.context.tripPrimaryResolutionId;if((combatState.trippedResolutionIds||[]).includes(primaryId))throw Object.assign(new Error('Cette touche a déjà servi pour un Croche-pied.'),{userFacing:true});combatState.trippedResolutionIds=[...(combatState.trippedResolutionIds||[]),primaryId].slice(-500);}
@@ -3974,10 +3997,10 @@ function resolvedCorruptionTest(participant, skillId, input) {
         result.state.participants = shieldAfterAttack(result.state.participants, simulation.preview, draft.combat?.round ?? 0);
         result.resolution = { ...result.resolution, actionCostReceipt: result.actionCostReceipt, talentUsageReceipts: result.talentUsageReceipts };
         semanticResult = result;
-        const next={
+        const next=clearV5FortuneAdvantageDeclaration({
           ...v5StoreActionResult(draft, result),
           log: [resolutionLogEntry(simulation.preview, result.resolution), ...(draft.log || [])].slice(0, 300)
-        };
+        },actorId);
         if(isV5ActionUse(simulation.preview,input)&&!commitReaction)recordV5ActionUsage(next,actorId,simulation.preview.resolutionId);
         if(isBrokenEscapeActor(commitActor))recordV5EscapeVisibility(next,actorId,input.brokenEscapeFacts?.visibleToAnyEnemy,simulation.preview.resolutionId);
         return next;
