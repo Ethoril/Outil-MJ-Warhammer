@@ -42,7 +42,7 @@ import { createCriticalAftermathRecord, updateCriticalDeathCountdown } from './v
 import { creatureSizeOf } from './creature-size.js';
 import { advanceV5NetEscape, conditionalV5KnifeQualities, entanglementStrength, naturalWeaponDefaults, previewV5Blast, previewV5Fast, previewV5Hack, previewV5HookedNet, previewV5ImpaleProjectile, previewV5Inflict, previewV5Parry, previewV5PistolContact, previewV5Shield, previewV5Slash, previewV5Spread, previewV5TrapBlade, validateV5ShieldHands } from './v5-weapon-qualities.js';
 import { consumeV5WeaponShot, initialV5ReloadState } from './v5-reloading.js';
-import { appendageCriticalLocation, resolveCreatureHitLocation } from './v5-hit-morphology.js';
+import { appendageCriticalLocation, deriveHitMorphology, resolveCreatureHitLocation } from './v5-hit-morphology.js';
 import { planMountedAttack, planMountedChargeDamage, planMountedDodge, planMountedFall, resolveMountedMount, V5_RIDE_SKILL_ID } from './v5-mounted-combat.js';
 
 export { damageBreakdown, formatDamageFormula, formatWeaponDamage, describeWeaponDamage } from './damage.js';
@@ -419,7 +419,7 @@ function locationOf(roll) {
 }
 function creatureLocationOf(roll, target, context = {}) {
   const baseLocation = locationOf(roll);
-  return resolveCreatureHitLocation({ roll: baseLocation.roll, morphology: context.hitMorphology !== undefined ? context.hitMorphology : target?.extensions?.v5?.hitMorphology, baseLocation });
+  return resolveCreatureHitLocation({ roll: baseLocation.roll, morphology: context.hitMorphology !== undefined ? context.hitMorphology : deriveHitMorphology(target), spiderLegSide: context.spiderLegSide, baseLocation });
 }
 const criticalTableLocation = (location, context = {}) => context.hitAppendage ? appendageCriticalLocation(location, context.hitAppendage) : location;
 const CALLED_SHOT_LOCATIONS = Object.freeze({ head: { key: 'HEAD', name: 'Tête', side: null }, body: { key: 'BODY', name: 'Corps', side: null },
@@ -640,9 +640,14 @@ export function previewResolution(input) {
       advantageSources: [...(normalized.v5?.advantageSources || []), ...mountedCombatPlan.advantageSources],
       disadvantageSources: [...(normalized.v5?.disadvantageSources || []), ...mountedCombatPlan.disadvantageSources] };
   }
-  const mountedDodgePlan = normalized.defense && defenderSkillId === 'skill-45_73_71_75_69_76_65-base'
+  const normalizedDefenseSkill = String(normalized.defense?.skillId || normalized.defense?.skill || normalized.defense?.name || normalized.defense?.label || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '');
+  const normalizedDefenseAttribute = String(normalized.defense?.attr || normalized.defense?.attribute || normalized.defense?.characteristic || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '');
+  const isDodgeDefense = defenderSkillId === 'skill-45_73_71_75_69_76_65-base'
+    || ['esquive', 'dodge'].includes(normalizedDefenseSkill)
+    || ['ag', 'agility', 'agilite'].includes(normalizedDefenseAttribute);
+  const mountedDodgePlan = normalized.defense && isDodgeDefense
     ? planMountedDodge(normalized.target) : { disadvantageSources: [] };
-  const mountedDodge = normalized.defense && defenderSkillId === 'skill-45_73_71_75_69_76_65-base'
+  const mountedDodge = normalized.defense && isDodgeDefense
     && normalized.target?.extensions?.v5?.mounted === true;
   if (mountedDodge) {
     // The legacy manual -2 DR is obsolete for every mounted Dodge, including
@@ -1420,13 +1425,18 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
       mountedFallPlans.push({ participantId: rider.id, mountId: target.id, event: 'mount-dead', ...planMountedFall({ event: 'mount-dead' }) });
     }
   }
+  const mountedRideParticipants = new Set(mountedFallPlans.filter(plan => plan.requiredTest).map(plan => plan.participantId));
   const resolveMountedFallTests = () => { for (const plan of mountedFallPlans) {
     if (!plan.requiredTest) continue;
     const rider = mountedWithPrimary.find(row => row?.id === plan.participantId) || mountedRoster.find(row => row.id === plan.participantId);
     const skill = rider?.skills?.find(row => row?.id === V5_RIDE_SKILL_ID && row.status !== 'unresolved');
-    const manualScore = context.mountedRideScore;
+    const riderAnswer = context.mountedRideTestsById?.[plan.participantId] || context.mountedRideTests?.[plan.participantId] || {};
+    const manualScore = riderAnswer.score ?? context.mountedRideScoresById?.[plan.participantId]
+      ?? (mountedRideParticipants.size <= 1 ? context.mountedRideScore : undefined);
     const score = Number.isSafeInteger(skill?.total) ? skill.total : manualScore !== null && manualScore !== undefined && manualScore !== '' && Number.isSafeInteger(Number(manualScore)) ? Number(manualScore) : null;
-    const roll = Number(context.mountedRideRoll);
+    const rawRideRoll = riderAnswer.roll ?? context.mountedRideRollsById?.[plan.participantId]
+      ?? (mountedRideParticipants.size <= 1 ? context.mountedRideRoll : undefined);
+    const roll = Number(rawRideRoll);
     if (score === null || !Number.isInteger(roll) || roll < 1 || roll > 100) {
       plan.unresolved = ['Test de Chevaucher requis : fournissez le score et le d100 du cavalier.'];
       unresolved.push(...plan.unresolved);
@@ -1585,7 +1595,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
       const victim=(normalized.v5State?.participants||[]).find(person=>person.id===blastTarget.participantId&&person.zone==='active');
       if(!victim)continue;
       if(!knownHp(victim)){unresolved.push(`Explosion : PV actuels et maximum requis pour ${victim.name||victim.id}.`);continue;}
-      const blastLocationRoll=Number(context.explosionLocationRollsById?.[victim.id]),blastLocation=Number.isInteger(blastLocationRoll)&&blastLocationRoll>=1&&blastLocationRoll<=100?creatureLocationOf(blastLocationRoll,victim,{hitMorphology:context.hitMorphologiesById?.[victim.id]}):null;
+      const blastLocationRoll=Number(context.explosionLocationRollsById?.[victim.id]),blastLocation=Number.isInteger(blastLocationRoll)&&blastLocationRoll>=1&&blastLocationRoll<=100?creatureLocationOf(blastLocationRoll,victim,{hitMorphology:context.hitMorphologiesById?.[victim.id],spiderLegSide:context.spiderLegSidesById?.[victim.id]}):null;
       if(!blastLocation){unresolved.push(`Explosion : choisir un jet de localisation d100 (1–100) pour ${victim.name||victim.id}.`);continue;}
       const guard=locationProtection(victim,{...normalized.protectionContext,location:blastLocation,attackRoll:roll,hitLocationRoll:blastLocationRoll,
         critical:false,ranged:nature.ranged,defenseProvided:false,qualities:action.qualities,nature});
@@ -1608,7 +1618,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   if(normalized.combatPrelude?.whirlwind?.active&&hit&&damage){
     for(const id of context.engagedIds.filter(id=>id!==target.id)){
       const victim=normalized.v5State.participants.find(p=>p.id===id);
-      const victimLocation=creatureLocationOf(reverseV5Roll(roll),victim,{hitMorphology:context.hitMorphologiesById?.[id]});
+      const victimLocation=creatureLocationOf(reverseV5Roll(roll),victim,{hitMorphology:context.hitMorphologiesById?.[id],spiderLegSide:context.spiderLegSidesById?.[id]});
       let guard=locationProtection(victim,{...(context.whirlwindProtection?.[id]||{}),location:victimLocation,attackRoll:roll,hitLocationRoll:victimLocation.roll,critical:false,ranged:false,defenseProvided:false,qualities:action.qualities,nature});
       const supportInput={...normalized,target:victim,v5:{...normalized.v5,context:{...context,...context.whirlwindSupport?.[id]}},combatPrelude:{forge:normalized.combatPrelude?.forge,alliedShield:previewAlliedShields({...normalized,target:victim,v5:{...normalized.v5,context:context.whirlwindSupport?.[id]||{}}})}};
       supplementaryTalentPlans.push(...supportInput.combatPrelude.alliedShield.plans);unresolved.push(...supportInput.combatPrelude.alliedShield.unresolved);
@@ -1642,7 +1652,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
       const victim=(normalized.v5State?.participants||[]).find(person=>person.id===spreadTarget.participantId&&person.zone==='active');
       if(!victim)continue;
       if(!knownHp(victim)){unresolved.push(`Dispersion : PV actuels et maximum requis pour ${victim.name||victim.id}.`);continue;}
-      const spreadLocationRoll=Number(context.spreadLocationRollsById?.[victim.id]),spreadLocation=Number.isInteger(spreadLocationRoll)&&spreadLocationRoll>=1&&spreadLocationRoll<=100?creatureLocationOf(spreadLocationRoll,victim,{hitMorphology:context.hitMorphologiesById?.[victim.id]}):null;
+      const spreadLocationRoll=Number(context.spreadLocationRollsById?.[victim.id]),spreadLocation=Number.isInteger(spreadLocationRoll)&&spreadLocationRoll>=1&&spreadLocationRoll<=100?creatureLocationOf(spreadLocationRoll,victim,{hitMorphology:context.hitMorphologiesById?.[victim.id],spiderLegSide:context.spiderLegSidesById?.[victim.id]}):null;
       if(!spreadLocation){unresolved.push(`Dispersion : choisir un jet de localisation d100 (1–100) pour ${victim.name||victim.id}.`);continue;}
       const guard=locationProtection(victim,{...normalized.protectionContext,location:spreadLocation,attackRoll:roll,hitLocationRoll:spreadLocationRoll,
         critical:false,ranged:true,defenseProvided:false,qualities:action.qualities,nature});

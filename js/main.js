@@ -1501,8 +1501,9 @@ const workspaceView = DOM.panels.workspace && qs('#workspace-root') ? initWorksp
               for (const live of liveActions) if (live.extensions?.fiche?.equipmentId && !patch.actions.some(action => action.id === live.id)) patch.actions.push(live);
             }
             if (Object.keys(patch).length) await awaitStore(Store.updateParticipant(id, patch, { expectedLocalRevision: Store.getLocalRevision() }), 'Participant');
-            if ((mountedChanged || mountIdChanged) && zone === 'active') await awaitStore(Store.setMountedState(id, { mounted: form.elements.mounted.checked, mountId: form.elements.mountId.value || null, baseRevision: Store.getLocalRevision() }), 'Combat monté');
-            if (fieldChanged('zone') && zone !== Store.getCombat().participants.get(id)?.zone) await moveParticipantWithInitiative(id, zone);
+            if (fieldChanged('zone') && zone === 'active' && Store.getCombat().participants.get(id)?.zone !== 'active') await moveParticipantWithInitiative(id, zone);
+            if (mountedChanged || mountIdChanged) await awaitStore(Store.setMountedState(id, { mounted: form.elements.mounted.checked, mountId: form.elements.mountId.value || null, baseRevision: Store.getLocalRevision() }), 'Combat monté');
+            if (fieldChanged('zone') && zone === 'bench' && Store.getCombat().participants.get(id)?.zone !== 'bench') await moveParticipantWithInitiative(id, zone);
             form.closest('dialog')?.close();
           } catch (error) { setBusy(false); alertError(contextMessage('Combattant non enregistré', error, 'vérifiez les champs, puis réessayez.')); }
         });

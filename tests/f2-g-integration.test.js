@@ -76,9 +76,9 @@ test('F2-G Store — pattes d’araignée acceptent les PA d’arbitrage au lieu
   const result = store.previewResolution({
     resolutionId: 'f2-g-spider-store', actorId: actor.id, targetId: target.id,
     action: { type: 'attack', base: 99, damage: 4, qualities: [] }, roll: 4,
-    v5: { kind: 'melee' }, protectionContext: { manualAp: 2 }
+    v5: { kind: 'melee', context: { spiderLegSide: 'right' } }, protectionContext: { manualAp: 2 }
   });
-  assert.deepEqual({ key: result.location.key, name: result.location.name }, { key: 'ARM', name: 'Pattes' });
+  assert.deepEqual({ key: result.location.key, name: result.location.name, side: result.location.side }, { key: 'LEG', name: 'Patte droite', side: 'right' });
   assert.equal(result.protection.ap, 2);
   assert.equal(result.unresolved.some(reason => /localisation-requise/.test(reason)), false);
 });
@@ -133,8 +133,8 @@ test('F2-G integration — table critique utilise la localisation de la morpholo
     action: { type: 'attack', base: 99, damage: 4, qualities: [] }, roll: 11, baseRevision: 1,
     criticalRolls: { location: 40, effect: 40 }
   });
-  assert.deepEqual({ key: result.location.key, name: result.location.name }, { key: 'ARM', name: 'Pattes' });
-  assert.deepEqual({ key: result.critical.details.location.key, name: result.critical.details.location.name }, { key: 'ARM', name: 'Pattes' });
+  assert.deepEqual({ key: result.location.key, name: result.location.name }, { key: 'LEG', name: 'Patte gauche' });
+  assert.deepEqual({ key: result.critical.details.location.key, name: result.critical.details.location.name }, { key: 'LEG', name: 'Patte droite' });
 });
 
 test('F2-L UI — jet de Destin 100 est reconnu comme critique (00)', () => {
@@ -157,6 +157,6 @@ test('F2-G UI — Tourbillon rend le contrôle par `engagedIds` et conserve sa v
   assert.ok(start>=0&&end>start);
   const block=source.slice(start,end);
   assert.match(block,/current\.engagedIds/);
-  assert.match(block,/hitMorphologySelection\(current\.hitMorphologiesById\?\.\[victim\.id\],victim\.extensions\?\.v5\?\.hitMorphology\)/);
+  assert.match(block,/hitMorphologySelection\(current\.hitMorphologiesById\?\.\[victim\.id\],deriveHitMorphology\(victim\)\)/);
   assert.match(block,/hitMorphologiesById:/);
 });

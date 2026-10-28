@@ -26,8 +26,15 @@ test('F2-G — serpent : limites inclusives 01–19 tête, 20–100 corps', () =
 
 test('F2-G — araignée : limites inclusives 01–09 tête, 10–79 pattes, 80–100 corps', () => {
   for (const roll of [1, 9]) assert.equal(resolveCreatureHitLocation({ roll, morphology: 'araignée', baseLocation: base('BODY', 'Corps') }).key, 'HEAD');
-  for (const roll of [10, 40, 79]) assert.equal(resolveCreatureHitLocation({ roll, morphology: 'spider', baseLocation: base('BODY', 'Corps') }).key, 'ARM');
+  for (const roll of [10, 40, 79]) assert.equal(resolveCreatureHitLocation({ roll, morphology: 'spider', baseLocation: base('BODY', 'Corps') }).key, 'LEG');
   for (const roll of [80, 100]) assert.equal(resolveCreatureHitLocation({ roll, morphology: 'spider', baseLocation: base('BODY', 'Corps') }).key, 'BODY');
+});
+
+test('F2-G — côté des pattes d’araignée conservé ou choisi par le MJ', () => {
+  const selected = resolveCreatureHitLocation({ roll: 50, morphology: 'spider', spiderLegSide: 'left', baseLocation: base('BODY', 'Corps') });
+  assert.deepEqual({ key: selected.key, name: selected.name, side: selected.side }, { key: 'LEG', name: 'Patte gauche', side: 'left' });
+  const rolled = resolveCreatureHitLocation({ roll: 15, morphology: 'spider', spiderLegSide: 'right', baseLocation: base('ARM', 'Bras Gauche') });
+  assert.deepEqual({ name: rolled.name, side: rolled.side }, { name: 'Patte gauche', side: 'left' });
 });
 
 test('F2-G — forme choisie par le MJ; valeur absente/unknown conserve le lieu humanoïde', () => {

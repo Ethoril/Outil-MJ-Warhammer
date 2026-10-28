@@ -20,6 +20,7 @@ import { hasV5Talent, V5_TALENT_IDS } from '../core/v5-talents.js';
 import { ammunitionCompatibility, equipmentAttackContext, weaponSkillGroupInfo, conjuredWeaponMetadata, weaponHandsForParticipant } from '../core/equipment.js';
 import { isBlackpowderIncidentEligible } from '../core/v5-combat-fumbles.js';
 import { previewV5Test } from '../core/v5-roll.js';
+import { deriveHitMorphology, normalizeHitMorphology } from '../core/v5-hit-morphology.js';
 /**
  * Résolution intégrée de Jouer (sans modale). Ce module ne fait que construire
  * le DOM à partir du brouillon tenu par workspace-view : toute saisie remonte
@@ -1045,6 +1046,7 @@ function renderResult(preview, target, draft, handlers, participants=[]) {
   for(const reminder of preview.reminders || [])result.appendChild(node('p','workspace-muted',reminder));
   for(const occurrence of preview.weaponConditions?.applied || [])result.appendChild(node('p','workspace-result-line','Assommante : '+occurrence.level+' état Sonné proposé.'));
   if((preview.targetConditionApplication||[]).some(row=>row.source?.kind==='knockout'))result.appendChild(node('p','workspace-result-line','Assommer : le total de Sonné dépasse le BE; Inconscient proposé.'));
+  const renderedMountedRideInputs = new Set();
   for (const fall of preview.mountedFall || []) {
     const rider = participants.find(row => row.id === fall.participantId);
     if (fall.requiredTest) {
@@ -1066,15 +1068,34 @@ function renderResult(preview, target, draft, handlers, participants=[]) {
         if (fall.strengthOpposition) result.appendChild(node('p','workspace-result-line',`Opposition de Force : gagnant ${fall.strengthOpposition.winner} · DR ${fall.strengthOpposition.netSl} · Taille du cavalier ${fall.strengthOpposition.riderSize}.`));
       }
       const current = draft.v5Context || {};
-      for (const [field,label,min,max] of [['mountedRideScore','score de Chevaucher',0,100],['mountedRideRoll','d100',1,100]]) {
+      if (!renderedMountedRideInputs.has(fall.participantId)) {
+        renderedMountedRideInputs.add(fall.participantId);
+        const rideTests = current.mountedRideTestsById || {}, riderTest = rideTests[fall.participantId] || {};
+        for (const [field,label,min,max] of [['score','score de Chevaucher',0,100],['roll','d100',1,100]]) {
         const skill = rider?.skills?.find(row => row.id === 'skill-43_68_65_76_61_75_63_68_65_72-base' && row.status !== 'unresolved');
-        if (field === 'mountedRideScore' && Number.isSafeInteger(skill?.total)) continue;
+        if (field === 'score' && Number.isSafeInteger(skill?.total)) continue;
         const wrap = node('label','workspace-type',`${rider?.name||fall.participantId} · ${label}`), input = document.createElement('input');
-        input.type='number'; input.min=String(min); input.max=String(max); input.step='1'; input.value=current[field] ?? ''; input.setAttribute('aria-label',wrap.textContent);
-        input.addEventListener('change',()=>handlers.select({v5Context:{...current,[field]:input.value===''?undefined:Number(input.value)}}));
+        input.type='number'; input.min=String(min); input.max=String(max); input.step='1'; input.value=riderTest[field] ?? ''; input.setAttribute('aria-label',wrap.textContent);
+        input.addEventListener('change',()=>handlers.select({v5Context:{...current,mountedRideTestsById:{...rideTests,[fall.participantId]:{...riderTest,[field]:input.value===''?undefined:Number(input.value)}}}}));
         wrap.append(input); result.append(wrap);
+        }
       }
     } else if (fall.dismount === true) result.appendChild(node('p','workspace-result-line',`${rider?.name||fall.participantId} : chute et démontage proposés.`));
+    if (['rider-dead','rider-unconscious','rider-prone'].includes(fall.event)) {
+      const current = draft.v5Context || {}, label = node('label','workspace-type','Équipement confirmé empêchant la chute du cavalier');
+      const input = document.createElement('input'); input.type='checkbox'; input.checked=current.fallPreventedByEquipment===true;
+      input.setAttribute('aria-label',label.textContent);
+      input.addEventListener('change',()=>handlers.select({v5Context:{...current,fallPreventedByEquipment:input.checked}}));
+      label.prepend(input); result.append(label);
+    }
+  }
+  if (target?.extensions?.v5?.mounted === true) {
+    const current = draft.v5Context || {}, label = node('label','workspace-type','Maintien en selle après une prise (choix du MJ)'), select = document.createElement('select');
+    select.setAttribute('aria-label',label.textContent);
+    select.append(new Option('Aucun maintien déclaré',''),new Option('Retenu','held'),new Option('Ancré','anchored'));
+    select.value=current.mountedRestraint || '';
+    select.addEventListener('change',()=>handlers.select({v5Context:{...current,mountedRestraint:select.value||undefined}}));
+    label.append(select); result.append(label);
   }
   for (const warning of preview.unresolved || []) {
     const match = /^Talent(?: (talent-[a-z0-9-]+))? : préciser (.+)\.$/.exec(warning);
@@ -1087,6 +1108,7 @@ function renderResult(preview, target, draft, handlers, participants=[]) {
   if (preview.choiceRequired) result.appendChild(node('p', 'workspace-muted', 'Choisissez chaque inversion facultative avant de confirmer.'));
   if (preview.weapon?.status === 'manual') result.appendChild(node('p', 'workspace-field-error', `Dégâts à arbitrer : ${preview.weapon.text}.`));
   if (preview.protection?.manual?.length) result.appendChild(node('p', 'workspace-field-error', 'Protection à préciser : renseignez les PA après arbitrage.'));
+  else if (preview.protection && preview.protection.ap === null) result.appendChild(node('p', 'workspace-field-error', 'Protection à préciser : renseignez les PA après arbitrage.'));
   if (preview.mechanicalWarnings?.length) result.appendChild(node('p', 'workspace-field-error', `Effets non validés V5 : ${preview.mechanicalWarnings.map(item => item.keywordId).join(', ')}.`));
   if (preview.critical?.details || preview.critical?.second) result.appendChild(renderCritical(preview, draft, handlers));
   for(const row of preview.secondaryTargets||[]){
@@ -1627,9 +1649,16 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
     const morphologySelect=document.createElement('select');
     morphologySelect.setAttribute('aria-label',morphologyLabel.textContent);
     morphologySelect.append(new Option('Morphologie du profil',''),new Option('Humanoïde (forcer)','humanoid'),new Option('Quadrupède','quadruped'),new Option('Oiseau','bird'),new Option('Serpent','snake'),new Option('Araignée','spider'));
-    morphologySelect.value=hitMorphologySelection(morphologyContext.hitMorphology,target?.extensions?.v5?.hitMorphology);
+    const profileMorphology=deriveHitMorphology(target);
+    morphologySelect.value=hitMorphologySelection(morphologyContext.hitMorphology,profileMorphology);
     morphologySelect.addEventListener('change',()=>handlers.select({v5Context:{...morphologyContext,hitMorphology:morphologySelect.value||undefined}}));
     morphologyLabel.append(morphologySelect);talentFields.append(morphologyLabel);
+    if(normalizeHitMorphology(morphologySelect.value||profileMorphology)==='spider'&&preview?.location?.key==='LEG'&&!preview.location.side){
+      const sideLabel=node('label','workspace-type','Côté de patte touché (choix MJ si nécessaire)'),sideSelect=document.createElement('select');
+      sideSelect.setAttribute('aria-label',sideLabel.textContent);sideSelect.append(new Option('À choisir',''),new Option('Patte gauche','left'),new Option('Patte droite','right'));
+      sideSelect.value=morphologyContext.spiderLegSide||'';sideSelect.addEventListener('change',()=>handlers.select({v5Context:{...morphologyContext,spiderLegSide:sideSelect.value||undefined}}));
+      sideLabel.append(sideSelect);talentFields.append(sideLabel);
+    }
     const appendageLabel=node('label','workspace-type','Appendice atteint sans table propre (si applicable)');
     const appendageInput=document.createElement('input');appendageInput.type='text';appendageInput.value=morphologyContext.hitAppendage||'';appendageInput.setAttribute('aria-label',appendageLabel.textContent);
     appendageInput.addEventListener('change',()=>handlers.select({v5Context:{...morphologyContext,hitAppendage:appendageInput.value.trim()||undefined}}));
@@ -1682,7 +1711,7 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
     const person=participants.find(row=>row.id===id);if(!person)return;
     const label=node('label','workspace-type',`${prefix}Morphologie de ${person.name||id} (choix du MJ)`),select=document.createElement('select');
     select.setAttribute('aria-label',label.textContent);select.append(new Option('Morphologie du profil',''),new Option('Humanoïde (forcer)','humanoid'),new Option('Quadrupède','quadruped'),new Option('Oiseau','bird'),new Option('Serpent','snake'),new Option('Araignée','spider'));
-    select.value=hitMorphologySelection(current.hitMorphologiesById?.[id],person.extensions?.v5?.hitMorphology);
+    select.value=hitMorphologySelection(current.hitMorphologiesById?.[id],deriveHitMorphology(person));
     select.addEventListener('change',()=>handlers.select({v5Context:{...current,hitMorphologiesById:{...(current.hitMorphologiesById||{}),[id]:select.value||undefined}}}));label.append(select);fields.append(label);
   };
   if(type==='test'&&action?.attr==='F'&&testWeaponKind==='mancatcher'){
@@ -2159,7 +2188,7 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
   if(current.specialAttack==='whirlwind-of-death')for(const victim of participants.filter(p=>(current.engagedIds||[]).includes(p.id)&&p.id!==target?.id)){
     const morphologyLabel=node('label','workspace-type',`Tourbillon · Morphologie de ${victim.name||victim.id} (choix du MJ)`),morphologySelect=document.createElement('select');
     morphologySelect.setAttribute('aria-label',morphologyLabel.textContent);morphologySelect.append(new Option('Morphologie du profil',''),new Option('Humanoïde (forcer)','humanoid'),new Option('Quadrupède','quadruped'),new Option('Oiseau','bird'),new Option('Serpent','snake'),new Option('Araignée','spider'));
-    morphologySelect.value=hitMorphologySelection(current.hitMorphologiesById?.[victim.id],victim.extensions?.v5?.hitMorphology);
+    morphologySelect.value=hitMorphologySelection(current.hitMorphologiesById?.[victim.id],deriveHitMorphology(victim));
     morphologySelect.addEventListener('change',()=>handlers.select({v5Context:{...current,hitMorphologiesById:{...(current.hitMorphologiesById||{}),[victim.id]:morphologySelect.value||undefined}}}));morphologyLabel.append(morphologySelect);v5.append(morphologyLabel);
     const support=renderSupportFields({actor,target:victim,participants,onlyProtection:true,showMetal:Boolean(current.forgeAuthorIds?.length),context:current.whirlwindSupport?.[victim.id]||{},prefix:victim.name+' — ',onContext:values=>handlers.select({v5Context:{...current,whirlwindSupport:{...current.whirlwindSupport,[victim.id]:values}}})});if(support)v5.append(support);
   }
@@ -2309,7 +2338,9 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
           : effectiveTarget && effects && (effects.extraWounds || effects.states.length) ? `Appliquer le critique à ${effectiveTarget.name}`
             : manual ? 'Enregistrer sans dégâts' : 'Enregistrer le résultat';
       const primary = button(label, 'workspace-primary', { 'data-focus-key': 'apply' });
-      primary.disabled = preview.choiceRequired || preview.unresolved?.length > 0 || preview.critical?.details?.pending || preview.critical?.second?.pending || preview.defenderCritical?.details?.pending || preview.defenderCritical?.details?.needsAlternative || draft.busy || !canApply || needsTarget || needsLocation || invalidCritical || preview.critical?.details?.needsAlternative || preview.critical?.second?.needsAlternative || Boolean(preview.protection?.manual?.length || preview.mechanicalWarnings?.length);
+      const missingProtection = [preview.protection, preview.critical?.details?.protection, preview.critical?.second?.protection, preview.defenderCritical?.details?.protection]
+        .some(row => row && (row.ap === null || row.manual?.length));
+      primary.disabled = preview.choiceRequired || preview.unresolved?.length > 0 || preview.critical?.details?.pending || preview.critical?.second?.pending || preview.defenderCritical?.details?.pending || preview.defenderCritical?.details?.needsAlternative || draft.busy || !canApply || needsTarget || needsLocation || invalidCritical || preview.critical?.details?.needsAlternative || preview.critical?.second?.needsAlternative || missingProtection || Boolean(preview.mechanicalWarnings?.length);
       if (needsTarget) primary.title = 'Choisissez une cible pour appliquer une attaque';
       else if (needsLocation) primary.title = 'Lancez d’abord la localisation du critique';
       else if (invalidCritical) primary.title = 'Corrigez le jet de critique';

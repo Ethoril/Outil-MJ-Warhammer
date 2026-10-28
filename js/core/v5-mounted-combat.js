@@ -6,6 +6,7 @@ const v5 = participant => participant?.extensions?.v5 || {};
 
 export const V5_RIDE_SKILL_ID = 'skill-43_68_65_76_61_75_63_68_65_72-base';
 export const V5_ROUGHRIDER_TALENT_ID = 'talent-roughrider';
+export const V5_TRICK_RIDER_TALENT_ID = 'talent-trick-rider';
 export const MOUNT_LINK_FIELD = 'mountId';
 
 /** Resolve the durable rider -> mount reference without matching by name or profile template. */
@@ -56,7 +57,7 @@ export function planMountedAttack({ actor, target, actorMount = null, targetMoun
 
   const category = fold(weapon?.category);
   const melee = kind === 'melee';
-  if (melee && actorMounted && ['cavalerie', 'cavalry'].includes(category)) {
+  if (melee && actorMounted && ['cavalerie', 'cavalry'].includes(category) && v5(actor).mountId && !isRecord(actorMount)) {
     if (!isRecord(actorMount)) plan.unresolved.push('Monture de l’attaquant montée requise pour une arme de cavalerie.');
   }
   // A legacy mounted flag can exist without a declared mount link. Keep ordinary
@@ -67,7 +68,7 @@ export function planMountedAttack({ actor, target, actorMount = null, targetMoun
   }
   if (plan.unresolved.length) return plan;
 
-  if (melee && actorMounted && ['cavalerie', 'cavalry'].includes(category)) {
+  if (melee && actorMounted && isRecord(actorMount) && ['cavalerie', 'cavalry'].includes(category)) {
     const comparison = sizeComparison(actorMount, target, sizeChoices.actorMount, sizeChoices.target);
     plan.unresolved.push(...comparison.unresolved);
     if (comparison.result === 1) plan.advantageSources.push(source('mounted:cavalry-against-smaller', 'Arme de cavalerie contre une cible plus petite que la monture'));
@@ -85,12 +86,12 @@ export function planMountedAttack({ actor, target, actorMount = null, targetMoun
   return plan;
 }
 
-/** V5 Dodge disadvantage. The MJ's F1 choice names Roughrider as the exemption. */
+/** V5 p. 168: Trick Rider is the sole mounted-Dodge exemption. */
 export function planMountedDodge(participant) {
   if (v5(participant).mounted !== true) return { disadvantageSources: [] };
-  const hasRoughrider = (Array.isArray(participant?.talents) ? participant.talents : [])
-    .some(talent => talent?.id === V5_ROUGHRIDER_TALENT_ID && talent.status === 'resolved');
-  return { disadvantageSources: hasRoughrider ? [] : [source('mounted:dodge', 'Esquive à cheval')] };
+  const hasTrickRider = (Array.isArray(participant?.talents) ? participant.talents : [])
+    .some(talent => talent?.id === V5_TRICK_RIDER_TALENT_ID && talent.status === 'resolved');
+  return { disadvantageSources: hasTrickRider ? [] : [source('mounted:dodge', 'Esquive à cheval')] };
 }
 
 /** Horse strength may replace the rider's BF only for a mounted charge, and by player choice. */

@@ -78,14 +78,16 @@ test('F2-M — attaquer le cavalier plus petit impose Désavantage sauf portée 
   assert.equal(planMountedAttack({ actor: actor('large-attacker', { size: 'large' }), target: defender, targetMount: mount, weapon: catalogWeapon('Corps à corps') }).disadvantageSources.length, 0);
 });
 
-test('F2-M — l’Esquive montée est pénalisée sauf Cavalier émérite selon la décision du MJ', () => {
+test('F2-M — l’Esquive montée est pénalisée sauf Trick Rider selon la décision du MJ', () => {
   const rider = actor('rider', { mounted: true });
   const penalty = planMountedDodge(rider);
   assert.equal(penalty.disadvantageSources.length, 1);
   assert.ok(hasSource(penalty.disadvantageSources, 'mounted:dodge'));
   assert.ok(hasSource(planMountedDodge(actor('unresolved', { mounted: true, talents: [{ id: 'talent-roughrider', status: 'unresolved' }] })).disadvantageSources, 'mounted:dodge'),
     'un talent non résolu ne donne pas l’exception');
-  assert.equal(planMountedDodge(actor('rider', { mounted: true, talents: [{ id: 'talent-roughrider', status: 'resolved' }] })).disadvantageSources.length, 0);
+  assert.equal(planMountedDodge(actor('rider', { mounted: true, talents: [{ id: 'talent-roughrider', status: 'resolved' }] })).disadvantageSources.length, 1,
+    'Cavalier émérite ne remplace pas Trick Rider');
+  assert.equal(planMountedDodge(actor('rider', { mounted: true, talents: [{ id: 'talent-trick-rider', status: 'resolved' }] })).disadvantageSources.length, 0);
   assert.equal(planMountedDodge(actor('rider')).disadvantageSources.length, 0);
 });
 
@@ -119,13 +121,13 @@ test('F2-M intégration — attaque contre cavalier applique Désavantage sur Es
   assert.equal(preview.defenderTest.details.modifiers.some(row => row.id === 'penalty:mounted'), false, 'le vieux −2 DR est remplacé, même depuis le context sauvegardé');
   assert.ok(preview.test.advantage.disadvantage.some(row => row.id === 'mounted:protected-rider'));
 
-  const exemptRider = actor('target', { mounted: true, mountId: 'horse', talents: [{ id: 'talent-roughrider', status: 'resolved' }] });
+  const exemptRider = actor('target', { mounted: true, mountId: 'horse', talents: [{ id: 'talent-trick-rider', status: 'resolved' }] });
   const exemptPreview = previewResolution({ actor: attacker, target: exemptRider,
     action: { type: 'attack', attr: 'CC', base: 60, damage: 5, extensions: { fiche: { equipmentId: dagger.id } } }, roll: 25,
     defense: { base: 55, roll: 75, label: 'Esquive', extensions: { fiche: { skillId: 'skill-45_73_71_75_69_76_65-base' } }, v5: { kind: 'test', context: { penalties: { mounted: -2 } } } },
     v5: { kind: 'melee' }, v5State: { participants: [attacker, exemptRider, mount] } });
   assert.equal(exemptPreview.defenderTest.advantage.disadvantage.some(row => row.id === 'mounted:dodge'), false,
-    'Cavalier émérite résolu garde son exemption');
+    'Trick Rider résolu garde son exemption');
   assert.equal(exemptPreview.defenderTest.details.modifiers.some(row => row.id === 'penalty:mounted'), false,
     'l’ancien −2 est retiré même lorsque le talent exempte du Désavantage automatique');
 });
@@ -145,6 +147,25 @@ test('F2-M intégration — critique défensif qui donne Sonné au cavalier réc
   assert.ok(!resolved.unresolved.some(text => /Chevaucher requis/.test(text)));
   assert.equal(resolved.mountedFall?.[0]?.test?.success, true);
   assert.equal(resolved.mountedFall?.[0]?.dismount, false);
+});
+
+test('F2-M reprise — une résolution demande un d100 distinct à chaque cavalier touché', () => {
+  const attacker = actor('a', { mounted: true, mountId: 'ma' });
+  const defender = actor('t', { mounted: true, mountId: 'mt' });
+  const mountA = horse('ma'), mountT = horse('mt');
+  const input = { actor: attacker, target: defender,
+    action: { type: 'attack', attr: 'CC', base: 60, damage: 5 }, roll: 22,
+    defense: { base: 50, roll: 33, v5: { kind: 'melee' } },
+    criticalRolls: { location: 1, effect: 20 }, defenderCriticalRolls: { location: 4, effect: 20 },
+    v5: { kind: 'melee' }, v5State: { participants: [attacker, defender, mountA, mountT] } };
+  const missing = previewResolution(input);
+  assert.deepEqual(missing.mountedFall.map(row => row.participantId).sort(), ['a', 't']);
+  assert.equal(missing.mountedFall.filter(row => row.unresolved?.some(text => /Test de Chevaucher requis/.test(text))).length, 2);
+  const answered = previewResolution({ ...input, v5: { kind: 'melee', context: {
+    mountedRideTestsById: { a: { score: 55, roll: 99 }, t: { score: 45, roll: 10 } }
+  } } });
+  assert.deepEqual(Object.fromEntries(answered.mountedFall.map(row => [row.participantId, row.test?.roll])), { t: 10, a: 99 });
+  assert.equal(answered.unresolved.some(text => /Chevaucher requis/.test(text)), false);
 });
 
 test('F2-M intégration — chute mortelle explicitement confirmée démonte le cavalier et retire le lien', () => {
@@ -272,6 +293,17 @@ test('F2-M Store — lien monté validé, conservé après rechargement, nettoya
   assert.equal(reload.listParticipants().find(row => row.id === 'rider').extensions.v5.mountId, undefined);
   const finalReload = createStore({ persistence, storage: null }); await finalReload.ready;
   assert.equal(finalReload.listParticipants().find(row => row.id === 'rider').extensions.v5.mountId, undefined);
+});
+
+test('F2-M Store — retirer un ancien lien monté reste possible depuis le banc', async () => {
+  const store = createStore({ storage: null }); await store.ready;
+  const rider = actor('rider', { mounted: true, mountId: 'horse' }); rider.zone = 'bench';
+  await store.loadFromJSON({ schemaVersion: 3, reserve: [], log: [], diceLines: [],
+    combat: { round: 0, currentActorId: null, order: [], participants: [rider, horse('horse')] } });
+  const receipt = await store.setMountedState('rider', { mounted: false });
+  assert.equal(receipt.ok, true);
+  assert.equal(store.listParticipants().find(row => row.id === 'rider').extensions.v5.mounted, false);
+  assert.equal(store.listParticipants().find(row => row.id === 'rider').extensions.v5.mountId, undefined);
 });
 
 test('F2-M Store — Psychologie (Craintif) paramétré déclenche le Test réel sur monture surprise', async () => {

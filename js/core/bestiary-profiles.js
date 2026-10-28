@@ -5,7 +5,7 @@
 import { activeReferential } from './creature-keywords.js';
 import { cloneValue, normalizeAction, uid } from './models.js';
 import { getReferenceCatalogue, resolveSkill, resolveTalent } from './reference-catalog.js';
-import { normalizeHitMorphology } from './v5-hit-morphology.js';
+import { deriveHitMorphology } from './v5-hit-morphology.js';
 
 export const BESTIARY_STAT_KEYS = Object.freeze(['M', 'CC', 'CT', 'F', 'E', 'I', 'Ag', 'Dex', 'Int', 'FM', 'Soc']);
 export const BESTIARY_KINDS = Object.freeze(['profile', 'template', 'pregenerated-character']);
@@ -212,7 +212,7 @@ export function buildParticipantFromBestiary(id, options = {}) {
   const { zones: armor, reminder: armourReminder } = printedArmour(record.armour, includeOptional);
   // Keep the profile's optional hit morphology on the durable participant so combat can
   // apply it after the ordinary hit roll. Unknown/absent forms intentionally stay unset.
-  const hitMorphology = normalizeHitMorphology(record.hitMorphology ?? record.morphology);
+  const hitMorphology = deriveHitMorphology(record);
   const skills = (record.skills || []).map(skill => {
     const sourceName = skill.name;
     const resolved = resolveSkill(skill.nameFr || sourceName);

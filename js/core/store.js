@@ -4849,10 +4849,11 @@ function resolvedCorruptionTest(participant, skillId, input) {
         if (draft.localRevision !== baseRevision) throw Object.assign(new Error('La rencontre a changé. Relisez la monture du cavalier.'), { code: 'MOUNTED_STATE_STALE', userFacing: true });
         const participants = draft.combat?.participants || [];
         const rider = participants.find(row => row.id === riderId);
-        if (!rider || rider.zone !== 'active') throw Object.assign(new Error('Le cavalier doit être un participant actif.'), { code: 'MOUNTED_RIDER_REQUIRED', userFacing: true });
+        if (!rider) throw Object.assign(new Error('Le cavalier doit être un participant de la rencontre.'), { code: 'MOUNTED_RIDER_REQUIRED', userFacing: true });
         if (mounted !== true) {
           return { ...draft, combat: { ...draft.combat, participants: participants.map(row => row.id === riderId ? clearMountedRelation(row) : row) } };
         }
+        if (rider.zone !== 'active') throw Object.assign(new Error('Le cavalier doit être un participant actif.'), { code: 'MOUNTED_RIDER_REQUIRED', userFacing: true });
         if (typeof mountId !== 'string' || !mountId.trim() || mountId === riderId) throw Object.assign(new Error('Choisissez une monture active distincte du cavalier.'), { code: 'MOUNTED_MOUNT_REQUIRED', userFacing: true });
         const mount = participants.find(row => row.id === mountId);
         if (!mount || mount.zone !== 'active') throw Object.assign(new Error('La monture choisie doit être un participant actif.'), { code: 'MOUNTED_MOUNT_REQUIRED', userFacing: true });

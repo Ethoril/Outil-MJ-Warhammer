@@ -15,11 +15,35 @@ export function normalizeHitMorphology(value) {
 }
 
 /**
+ * Resolve a creature's form from an explicit profile value first, then from
+ * durable profile/species names and keywords. Unknown values stay unresolved.
+ */
+export function deriveHitMorphology(subject) {
+  if (!subject || typeof subject !== 'object') return null;
+  const explicit = normalizeHitMorphology(subject.hitMorphology ?? subject.morphology
+    ?? subject.extensions?.v5?.hitMorphology ?? subject.profile?.hitMorphology ?? subject.profile?.morphology);
+  if (explicit) return explicit;
+  const candidates = [
+    subject.species, subject.identity?.species, subject.name, subject.nameFr,
+    subject.extensions?.v5?.bestiary?.name, subject.extensions?.v5?.bestiary?.species,
+    subject.profile?.name, subject.profile?.nameFr, subject.profile?.species,
+    ...(Array.isArray(subject.keywords) ? subject.keywords : []),
+    ...(Array.isArray(subject.profile?.keywords) ? subject.profile.keywords : [])
+  ];
+  for (const candidate of candidates) {
+    const morphology = normalizeHitMorphology(candidate);
+    // Generic humanoids preserve the ordinary table and need no durable override.
+    if (morphology && morphology !== 'humanoid') return morphology;
+  }
+  return null;
+}
+
+/**
  * Remap the ordinary humanoid location after the roll has been reversed.
  * `baseLocation` is the existing getLocationName result. A null or unknown
  * morphology deliberately preserves that result exactly.
  */
-export function resolveCreatureHitLocation({ roll, morphology, baseLocation } = {}) {
+export function resolveCreatureHitLocation({ roll, morphology, baseLocation, spiderLegSide } = {}) {
   const type = normalizeHitMorphology(morphology);
   if (!type || !baseLocation) return baseLocation || null;
   const locationRoll = Number(roll);
@@ -33,7 +57,10 @@ export function resolveCreatureHitLocation({ roll, morphology, baseLocation } = 
   if (type === 'spider') {
     if (!Number.isFinite(locationRoll) || locationRoll < 1 || locationRoll > 100) return baseLocation;
     if (locationRoll <= 9) return { ...baseLocation, key: 'HEAD', name: 'Tête', side: null };
-    if (locationRoll <= 79) return { ...baseLocation, key: 'ARM', name: 'Pattes', side: null };
+    if (locationRoll <= 79) {
+      const side = sideOf(baseLocation.name) || (spiderLegSide === 'left' || spiderLegSide === 'right' ? spiderLegSide : null);
+      return { ...baseLocation, key: 'LEG', name: side ? `Patte ${side === 'left' ? 'gauche' : 'droite'}` : 'Pattes', side };
+    }
     return { ...baseLocation, key: 'BODY', name: 'Corps', side: null };
   }
   if (type === 'quadruped' && baseLocation.key === 'ARM') {
