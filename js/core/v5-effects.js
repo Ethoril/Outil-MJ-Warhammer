@@ -222,6 +222,12 @@ export function recoverV5Condition(participant,condition,options={}) {
     }else tested(['cool']);
   }
   else if(key==='enflamme')tested(['athletics']);
+  // Lasso de l'araignée de falaise (L22 p.73) : une frappe tranchante de plus de 5 dégâts sur la soie met fin à l'Enchevêtré.
+  else if(key==='enchevetre'&&method==='cut-silk'){
+    if(!candidates.some(state=>state.source?.ability==='cliff-spider-lasso'))needs(needsInput,'recoveryMethod','Seule la soie de l’araignée de falaise se coupe ainsi');
+    else if(options.silkCut!==true)needs(needsInput,'silkCut','Frappe tranchante de plus de 5 dégâts portée sur la soie');
+    else amount=Number.MAX_SAFE_INTEGER;
+  }
   else if(key==='enchevetre')tested(['opposed-strength']);
   else if(key==='sonne' && candidates.some(s=>s.recoveryStat==='Int')) tested(['intelligence']);
   else if(['sonne','assourdi'].includes(key)&&method==='endurance')tested(['endurance']);
@@ -234,7 +240,7 @@ export function recoverV5Condition(participant,condition,options={}) {
   else needs(needsInput,'recoveryMethod','Méthode de récupération à arbitrer');
   // Removing Unconscious with Fortune does not resolve its cause.
   if(key==='inconscient'&&method==='fortune'&&options.causeEnded!==true)reminders.push('Si sa cause persiste, Inconscient revient en fin de Round.');
-  const removal=removeInstances(states,key,amount,eligible);next.states=removal.states;
+  const removal=removeInstances(states,key,amount,method==='cut-silk'?state=>eligible(state)&&state.source?.ability==='cliff-spider-lasso':eligible);next.states=removal.states;
   if(['empoisonne','inconscient'].includes(key)&&removal.removed.length&&!levels(next.states,key)&&next.extensions?.v5?.poisonDeathDueRound!==undefined){
     next.extensions={...next.extensions,v5:{...next.extensions.v5}};delete next.extensions.v5.poisonDeathDueRound;
   }

@@ -411,3 +411,17 @@ test('A Flying Death Skull brought to 0 Wounds proposes its reversion to an ordi
   const scratched = run(-20).profileAbilityPlans.find(plan => plan.key === 'flying-death-skull-zero-wounds');
   assert.deepEqual(scratched.effects, []);
 });
+
+test('Cutting the silk ends only the lasso Entangled, after a confirmed slashing blow over 5 Damage (L22 p.73)', async () => {
+  const { recoverV5Condition } = await import('../js/core/v5-effects.js');
+  const { recoveryMethodsFor } = await import('../js/ui/v5-effect-dialog.js');
+  const lasso = { id: 'silk', key: 'enchevetre', name: 'Enchevêtré', level: 3, strength: 45, source: { kind: 'bestiary-profile', ability: 'cliff-spider-lasso' } };
+  const net = { id: 'net', key: 'enchevetre', name: 'Enchevêtré', level: 1, source: { kind: 'weapon' } };
+  const victim = { id: 'caught', name: 'Pris', hp: 10, maxHp: 10, caracs: { E: 30, F: 30 }, states: [lasso, net], extensions: { v5: {} } };
+  assert.ok(recoveryMethodsFor(lasso).some(([id]) => id === 'cut-silk'));
+  assert.ok(!recoveryMethodsFor(net).some(([id]) => id === 'cut-silk'));
+  const asked = recoverV5Condition(victim, 'silk', { method: 'cut-silk' });
+  assert.ok(asked.needsInput.some(row => row.field === 'silkCut'));
+  const cut = recoverV5Condition(victim, 'silk', { method: 'cut-silk', silkCut: true });
+  assert.deepEqual(cut.participant.states.map(row => row.id), ['net']);
+});
