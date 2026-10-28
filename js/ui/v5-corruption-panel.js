@@ -108,19 +108,23 @@ export function createV5CorruptionPanel({ Store, refresh = () => {} } = {}) {
     panel.append(node('h3', '', `Corruption · ${actor.name || 'participant'}`));
     panel.append(node('p', 'workspace-muted', 'Décisions et saisies de Corruption réservées au MJ. Aucun score ou mutation n’est inventé.'));
 
-    const skavenWeapons=(actor.equipment||[]).filter(item=>item.kind==='weapon'&&/warp|skaven|ratling|jezzail|malepierre/i.test(`${item.name||''} ${item.source||''}`));
-    if(skavenWeapons.length){
+    const skavenWeapons=(actor.equipment||[]).filter(item=>item.kind==='weapon'&&/warp|skaven|ratling|jezzail|malepierre/i.test(`${item.name||''} ${item.source||''}`)).map(item=>({value:`equipment:${item.id}`,name:item.name,kind:'equipment',id:item.id}));
+    const bestiary=actor.extensions?.v5?.bestiary;
+    const warpstoneAttacks=bestiary?.book==='L22'&&bestiary?.name==='Rat Ogre Bonebreaker'?(actor.actions||[]).filter(action=>action.type==='attack'&&String(action.name||'').trim().toLocaleLowerCase('en')==='warpstone shard*').map(action=>({value:`attack:${action.id}`,name:`${bestiary.name} — ${action.name}`,kind:'attack',id:action.id})):[];
+    const warpstoneSources=[...skavenWeapons,...warpstoneAttacks];
+    if(warpstoneSources.length){
       panel.append(node('h4','','Exposition quotidienne à la malepierre (Horned Rat p.32)'));
       panel.append(node('p','workspace-muted','Le MJ déclare l’objet porté hors boîte plombée et le jour concerné. Rien ne suppose une journée écoulée; le Test immédiat et tout Test de seuil restent dans le flux K1.'));
-      const itemLabel=node('label','workspace-corruption-field');itemLabel.append(node('span','','Objet porté contenant de la malepierre'));
+      const itemLabel=node('label','workspace-corruption-field');itemLabel.append(node('span','','Objet ou attaque portée contenant de la malepierre'));
       const itemSelect=document.createElement('select');itemSelect.setAttribute('aria-label','Objet porté contenant de la malepierre');itemSelect.disabled=state.busy;itemSelect.append(new Option('À choisir',''));
-      for(const item of skavenWeapons)itemSelect.append(new Option(item.name,item.id));itemSelect.value=state.warpstoneItemId;
+      for(const source of warpstoneSources)itemSelect.append(new Option(source.name,source.value));itemSelect.value=state.warpstoneItemId;
       itemSelect.addEventListener('change',()=>{state.warpstoneItemId=itemSelect.value;refreshDynamicButtons();});itemLabel.append(itemSelect);panel.append(itemLabel);
       const dayLabel=node('label','workspace-corruption-field');dayLabel.append(node('span','','Jour déclaré par le MJ'));
       const dayInput=document.createElement('input');dayInput.type='text';dayInput.maxLength=80;dayInput.value=state.warpstoneDayLabel;dayInput.disabled=state.busy;dayInput.setAttribute('aria-label','Jour déclaré par le MJ');
       dayInput.addEventListener('input',()=>{state.warpstoneDayLabel=dayInput.value;refreshDynamicButtons();});dayLabel.append(dayInput);panel.append(dayLabel);
       button(panel,'Déclarer l’exposition quotidienne',()=>act(async()=>{
-        await Store.declareWarpstoneDailyExposure(actor.id,{itemId:state.warpstoneItemId,dayLabel:state.warpstoneDayLabel,confirmed:true,baseRevision:status.baseRevision});
+        const [sourceKind,sourceId]=state.warpstoneItemId.split(':',2);
+        await Store.declareWarpstoneDailyExposure(actor.id,{...(sourceKind==='attack'?{attackId:sourceId}:{itemId:sourceId}),dayLabel:state.warpstoneDayLabel,confirmed:true,baseRevision:status.baseRevision});
         state.warpstoneItemId='';state.warpstoneDayLabel='';state.receipt='Exposition quotidienne déclarée; le Test K1 immédiat est en attente.';
       }),()=>!state.warpstoneItemId||!state.warpstoneDayLabel.trim());
     }

@@ -2119,23 +2119,30 @@ function resolvedCorruptionTest(participant, skillId, input) {
       if (!subject) throw new TypeError('Personnage introuvable');
       return corruptionStatusFor(subject, localRevision, sessionId);
     },
-    declareWarpstoneDailyExposure(id, { itemId, dayLabel, confirmed = false, baseRevision = localRevision } = {}) {
-      if (confirmed !== true || typeof itemId !== 'string' || !itemId || typeof dayLabel !== 'string' || !dayLabel.trim() || dayLabel.length > 80)
+    declareWarpstoneDailyExposure(id, { itemId, attackId, dayLabel, confirmed = false, baseRevision = localRevision } = {}) {
+      const sourceId=itemId||attackId;
+      if (confirmed !== true || typeof sourceId !== 'string' || !sourceId || typeof dayLabel !== 'string' || !dayLabel.trim() || dayLabel.length > 80)
         throw Object.assign(new TypeError('Confirmez la journée et l’objet de malepierre porté hors boîte plombée.'), { code: 'CORRUPTION_WARPSTONE_DECLARATION_REQUIRED', userFacing: true });
       return api.executeCommand('declare-warpstone-daily-exposure-v5', draft => {
         if (draft.localRevision !== baseRevision) throw Object.assign(new Error('La partie a changé. Relisez l’exposition de malepierre.'), { code: 'CORRUPTION_STALE', userFacing: true });
         const subject = findCorruptionSubject(draft, id);
-        const item = subject?.equipment?.find(row => row.id === itemId);
-        if (!subject || !item) throw Object.assign(new TypeError('L’objet déclaré doit appartenir au personnage.'), { code: 'CORRUPTION_WARPSTONE_ITEM_REQUIRED', userFacing: true });
-        const key = `warpstone-daily:${itemId}:${dayLabel.trim()}`;
+        const candidateItem = itemId ? subject?.equipment?.find(row => row.id === itemId) : null;
+        const item = candidateItem?.kind==='weapon'&&/warp|malepierre|ratling|skaven|jezzail/i.test(`${candidateItem.name||''} ${candidateItem.source||''}`)?candidateItem:null;
+        const profile=subject?.extensions?.v5?.bestiary;
+        const attack=attackId?subject?.actions?.find(row=>row.id===attackId&&row.type==='attack'&&String(row.name||'').trim().toLocaleLowerCase('en')==='warpstone shard*'):null;
+        const profileAttack=Boolean(attack&&profile?.book==='L22'&&String(profile.name||'').trim()==='Rat Ogre Bonebreaker');
+        if (!subject || (!item && !profileAttack)) throw Object.assign(new TypeError('L’objet ou l’attaque contenant de la malepierre doit être une source réelle portée par le personnage.'), { code: 'CORRUPTION_WARPSTONE_ITEM_REQUIRED', userFacing: true });
+        const stableSourceId=item?`equipment:${item.id}`:`profile-attack:${profile.id}:${attack.id}`;
+        const sourceName=item?item.name:attack.name;
+        const key = `warpstone-daily:${id}:${stableSourceId}:${dayLabel.trim()}`;
         const current = subject.extensions?.v5?.pendingCorruptionExposures || [];
         const resolved = subject.extensions?.v5?.warpstoneDailyExposureKeys || [];
         if (current.some(row => row.id === key) || resolved.includes(key)) throw Object.assign(new Error('Cette exposition quotidienne liée à cet objet a déjà été déclarée.'), { code: 'CORRUPTION_WARPSTONE_DUPLICATE', userFacing: true });
         updateCorruptionCopies(draft, id, row => {
           const extensions = row.extensions || {}, v5 = extensions.v5 || {};
           row.extensions = { ...extensions, v5: { ...v5, pendingCorruptionExposures: [...(v5.pendingCorruptionExposures || []), {
-            id: key, sourceRuleId: 'F-L22-0139', source: `Malepierre portée : ${item.name} · ${dayLabel.trim()}`,
-            influence: 'minor', exposure: 'exposure', difficultyDR: 0, equipmentId: item.id, declaredDay: dayLabel.trim()
+            id: key, sourceRuleId: 'F-L22-0139', source: `Malepierre portée : ${sourceName} · ${dayLabel.trim()}`,
+            influence: 'minor', exposure: 'exposure', difficultyDR: 0, ...(item?{equipmentId:item.id}:{profileId:profile.id,actionId:attack.id}), declaredDay: dayLabel.trim()
           }].slice(-100) } };
           return row;
         });

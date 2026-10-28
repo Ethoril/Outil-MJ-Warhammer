@@ -5,6 +5,8 @@ import { resolve, sep, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
 import reference from '../js/data/reference-snapshot.json' with { type: 'json' };
+import L22 from '../js/data/bestiary/L22.json' with { type: 'json' };
+import { buildParticipantFromBestiary } from '../js/core/bestiary-profiles.js';
 
 const root=fileURLToPath(new URL('../',import.meta.url)),base='/Outil-MJ-Warhammer/';
 const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.json':'application/json; charset=utf-8','.svg':'image/svg+xml'};
@@ -22,7 +24,10 @@ try{
     {id:'focus-test',name:'Focalisation (Aqshy)',type:'test',attr:'FM',base:50,extensions:{}}
   ],extensions:{v5:{corruptionPoints:0}}};
   const target={...actor,id:'f-review-target',name:'Cible F',camp:'ennemi',equipment:[],actions:[],extensions:{v5:{}}};
-  await page.evaluate(async state=>{const {Store}=await import('/Outil-MJ-Warhammer/js/main.js');await Store.ready;await Store.loadFromJSON(state);},{schemaVersion:3,reserve:[],diceLines:[],log:[],combat:{round:1,currentActorId:actor.id,orderMode:'manual',order:[actor.id,target.id],participants:[actor,target]},extensions:{v5:{combatId:'f-review',turnIndex:1}}});
+  const profile=L22.profiles.find(row=>row.name==='Rat Ogre Bonebreaker');
+  const bonebreaker=buildParticipantFromBestiary(profile.id,{library:L22.profiles,idFactory:(()=>{let i=0;return()=>`bonebreaker-browser-${++i}`})()});
+  bonebreaker.id='f-bonebreaker';bonebreaker.name='Rat Ogre Bonebreaker test';bonebreaker.zone='active';bonebreaker.camp='ennemi';bonebreaker.extensions.v5.corruptionPoints=0;
+  await page.evaluate(async state=>{const {Store}=await import('/Outil-MJ-Warhammer/js/main.js');await Store.ready;await Store.loadFromJSON(JSON.stringify(state));},{schemaVersion:3,reserve:[],diceLines:[],log:[],combat:{round:1,currentActorId:actor.id,orderMode:'manual',order:[actor.id,target.id,bonebreaker.id],participants:[actor,target,bonebreaker]},extensions:{v5:{combatId:'f-review',turnIndex:1}}});
   await page.locator('#tab-combat').click();
   await page.locator('[data-action-key="antler-attack"]').click();
   const workspace=page.locator('#workspace-root');
@@ -48,9 +53,15 @@ try{
   await secondAction.click();
   await page.waitForFunction(()=>document.querySelector('.workspace-pavise-setup')?.textContent.includes('Planté face au north'));
   assert.equal(await workspace.getByLabel('Objet porté contenant de la malepierre').count(),1);
-  await workspace.getByLabel('Objet porté contenant de la malepierre').selectOption(ratling.id);
+  await workspace.getByLabel('Objet porté contenant de la malepierre').selectOption(`equipment:${ratling.id}`);
   await workspace.getByLabel('Jour déclaré par le MJ').fill('Jour navigateur');
   await workspace.getByRole('button',{name:'Déclarer l’exposition quotidienne'}).click();
   await page.waitForFunction(()=>document.querySelector('.workspace-corruption-panel')?.textContent.includes('Malepierre portée : Mitrailleuse Ratling Skaven · Jour navigateur'));
+  await page.locator('[data-workspace-select="f-bonebreaker"]').click();
+  await page.waitForFunction(()=>document.querySelector('.workspace-corruption-panel')?.textContent.includes('Rat Ogre Bonebreaker — Warpstone Shard*'));
+  await workspace.getByLabel('Objet porté contenant de la malepierre').selectOption(`attack:${bonebreaker.actions.find(row=>row.name==='Warpstone Shard*').id}`);
+  await workspace.getByLabel('Jour déclaré par le MJ').fill('Jour Bonebreaker');
+  await workspace.getByRole('button',{name:'Déclarer l’exposition quotidienne'}).click();
+  await page.waitForFunction(()=>document.querySelector('.workspace-corruption-panel')?.textContent.includes('Malepierre portée : Warpstone Shard* · Jour Bonebreaker'));
   assert.deepEqual(errors,[],`aucune erreur UI attendue : ${errors.join('; ')}`);
 }finally{await browser.close();await new Promise(done=>server.close(done));}

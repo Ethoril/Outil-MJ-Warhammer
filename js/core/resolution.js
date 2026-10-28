@@ -272,7 +272,7 @@ export function normalizeResolutionInput(input = {}) {
   const actor = isRecord(input.actor) ? clone(input.actor) : null;
   const action = isRecord(input.action) ? clone(input.action) : {};
   if (/griffes du tigre|tiger claws/i.test(String(action.name || action.note || action.extensions?.equipment?.name || ''))) {
-    const brawling=(actor?.skills||[]).find(row=>/melee\s*\(brawling\)|corps.?a.?corps\s*\(bagarre\)/i.test(String(row.name||row.nom||row.sourceName||''))&&Number.isFinite(Number(row.total??row.value)));
+    const brawling=(actor?.skills||[]).find(row=>[row.sourceName,row.name,row.nom].filter(Boolean).some(value=>String(value).normalize('NFD').replace(/[\u0300-\u036f]/g,'').match(/melee\s*\(brawling\)|corps.?a.?corps\s*\(bagarre\)/i))&&Number.isFinite(Number(row.total??row.value)));
     if(!brawling)throw new ResolutionError('Les Griffes du tigre exigent Corps à corps (Bagarre) lié au profil.', 'SKILL_LINK_REQUIRED');
     action.base=Number(brawling.total??brawling.value);action.attr='CC';action.extensions={...(action.extensions||{}),fiche:{...(action.extensions?.fiche||{}),skillId:brawling.id||undefined}};
   }

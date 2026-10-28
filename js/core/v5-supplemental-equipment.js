@@ -1,3 +1,5 @@
+import { previewV5Test, selectV5Test } from './v5-roll.js';
+
 /** F2-F: additional clauses for equipment described in supplements.
  * The equipment sheet remains authoritative for every printed profile value.
  */
@@ -61,7 +63,7 @@ export function previewSupplementalEquipment({ item, actor, target, hit = false,
   if (!ruleId) return null;
   const rule = RULES[ruleId];
   const hurt = Number(damage?.finalDamage) > 0;
-  const exposure = (rule.kind === 'corruption' && hit && hurt || rule.kind === 'warpstone-critical' && critical) ? {
+  const exposure = (rule.kind === 'corruption' && hit && hurt || rule.kind === 'warpstone-critical' && hit && hurt && critical) ? {
     sourceRuleId: ruleId, source: rule.label, participantId: target?.id || null,
     influence: rule.influence, skillModifier: rule.skillModifier || 0,
     thresholdTestRequired: true, status: 'needs-corruption-test'
@@ -80,8 +82,13 @@ export function previewSupplementalEquipment({ item, actor, target, hit = false,
   }
   if (rule.kind === 'warp-blade' && hit && Number(damage?.finalDamage) > 1) {
     const test = context.warpBladeEnduranceTest;
-    if (typeof test?.success !== 'boolean') unresolved.push('Warp Blade : Test de Résistance de la cible à +20 requis après plus d’une Blessure; un échec inflige Sonné.');
-    else if (!test.success) effects.push({ participantId: target?.id, state: 'Sonné', sourceRuleId: ruleId });
+    if (!Number.isSafeInteger(test?.score)||test.score<0||test.score>100||!Number.isSafeInteger(test?.roll)||test.roll<1||test.roll>100) unresolved.push('Warp Blade : saisir le score et le jet d100 du Test de Résistance moyen V4 (+20, converti en +2 DR V5) après plus d’une Blessure.');
+    else {
+      const preview=previewV5Test({score:test.score,roll:test.roll,slModifiers:[{id:'warp-blade-v4-average-test',label:'Test moyen V4 (+20) converti en V5',amount:2}]});
+      const enduranceTest=selectV5Test(preview,'keep');
+      if(!enduranceTest.success)effects.push({participantId:target?.id,state:'Sonné',sourceRuleId:ruleId});
+      reminders.push(`Warp Blade : Test de Résistance V5 ${enduranceTest.success?'réussi':'échoué'} (${enduranceTest.sl>=0?'+':''}${enduranceTest.sl} DR), difficulté +2 DR${enduranceTest.success?'':' ; Sonné appliqué'}.`);
+    }
   }
   if(rule.kind==='poison'&&used){
     const stored=item?.extensions?.v5||{};
@@ -133,6 +140,8 @@ export function previewSupplementalEquipment({ item, actor, target, hit = false,
   }
   if (rule.kind === 'printed-damage') reminders.push('Dégâts imprimés de créature : la valeur comprend déjà le BF approprié; ne pas ajouter de BF une seconde fois.');
   if (rule.kind === 'warpstone-critical') reminders.push('Éclat de malepierre : conserver Pénétrante; une Blessure Critique infligée cause une exposition mineure à la Corruption. Tout objet Skaven contenant de la malepierre porté hors boîte plombée expose aussi son porteur une fois par jour (déclaration MJ dans K1).');
-  return Object.freeze({ ruleId, label: rule.label, itemId: item?.id || item?.baseId || null, effects: Object.freeze(effects), exposure, casting: Object.freeze(casting), weaponDispositionUpdate,
+  const enduranceTest = rule.kind==='warp-blade'&&hit&&Number(damage?.finalDamage)>1&&Number.isSafeInteger(context.warpBladeEnduranceTest?.score)&&Number.isSafeInteger(context.warpBladeEnduranceTest?.roll)
+    ? selectV5Test(previewV5Test({score:context.warpBladeEnduranceTest.score,roll:context.warpBladeEnduranceTest.roll,slModifiers:[{id:'warp-blade-v4-average-test',label:'Test moyen V4 (+20) converti en V5',amount:2}]}),'keep') : null;
+  return Object.freeze({ ruleId, label: rule.label, itemId: item?.id || item?.baseId || null, effects: Object.freeze(effects), exposure, casting: Object.freeze(casting), enduranceTest, weaponDispositionUpdate,
     reminders: Object.freeze(reminders), unresolved: Object.freeze(unresolved) });
 }

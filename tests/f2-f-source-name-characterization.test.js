@@ -8,6 +8,7 @@ import reference from '../js/data/reference-snapshot.json' with { type: 'json' }
 import { previewSupplementalEquipment } from '../js/core/v5-supplemental-equipment.js';
 import { applyResolution, previewResolution } from '../js/core/resolution.js';
 import { createStore } from '../js/core/store.js';
+import { buildParticipantFromBestiary } from '../js/core/bestiary-profiles.js';
 
 const actor = { id: 'holder', name: 'MJ', states: [] };
 const target = { id: 'target', name: 'Cible', states: [] };
@@ -53,10 +54,12 @@ test('F source characterization: Warp Blade resolution ignores metal PA and appl
   const victim = { id: 'target', hp: 30, caracs: { E: 0 }, equipment: [metal], states: [] };
   const preview = previewResolution({ actor, target: victim,
     action: { type: 'attack', name: 'Warp Blade', base: 80, damage: 10, qualities: [] },
-    v5: { kind: 'melee', context: { warpBladeEnduranceTest: { success: false } } }, roll: 31, baseRevision: 1 });
+    v5: { kind: 'melee', context: { warpBladeEnduranceTest: { score: 40, roll: 61 } } }, roll: 31, baseRevision: 1 });
   assert.equal(preview.damage.finalDamage, 15, 'includes +5 SL without subtracting the plate PA');
   assert.deepEqual(preview.damage.activeQualities.map(row => row.id), ['defensive', 'entaille', 'empaleuse']);
   assert.ok(preview.targetConditionApplication.some(row => row.name === 'Sonné'));
+  assert.equal(preview.supplementalEquipment.enduranceTest.success,false);
+  assert.ok(preview.supplementalEquipment.enduranceTest.details.modifiers.some(row=>row.amount===2));
   assert.equal(preview.supplementalEquipment.exposure, null);
 });
 
@@ -136,16 +139,57 @@ test('F source characterization: actual Taggees Tiger Claws uses Brawling and re
   assert.equal(applied.state.participants.find(row=>row.id==='victim').extensions.v5.felidWoundDisguises[0].appearance,'grand félin');
 });
 
+test('F source characterization: the real Tiger Claws profile applies through Store', async () => {
+  const profile=L24.profiles.find(row=>row.name?.startsWith('Taggees'));
+  const actor=buildParticipantFromBestiary(profile.id,{library:L24.profiles,idFactory:()=> 'taggee-store'});
+  actor.zone='active';actor.camp='pj';
+  const claw=actor.actions.find(row=>row.name==='Tiger Claws');
+  const target={id:'cat-victim',name:'Témoin',zone:'active',camp:'ennemi',hp:30,maxHp:30,caracs:{CC:20,E:0},equipment:[],actions:[],skills:[],states:[],armor:{},extensions:{v5:{}}};
+  const store=createStore({storage:null});await store.ready;
+  await store.loadFromJSON(JSON.stringify({schemaVersion:3,reserve:[],log:[],diceLines:[],combat:{round:1,currentActorId:actor.id,order:[actor.id,target.id],participants:[actor,target]},extensions:{v5:{turnIndex:1}}}));
+  const brawling=actor.skills.find(row=>/Bagarre|Brawling/i.test(`${row.name} ${row.sourceName}`));
+  const preview=store.previewResolution({actorId:actor.id,targetId:target.id,action:{...claw,base:profile.stats.CC,qualities:[],extensions:{...claw.extensions,fiche:{skillId:brawling.id}}},defense:{type:'test',base:10,roll:90,label:'Esquive'},v5:{kind:'melee',context:{}},roll:31});
+  assert.equal(preview.input.action.base,61,'Store still routes the actual profile attack through Melee (Brawling)');
+  assert.ok(preview.supplementalEquipment.effects.some(row=>row.disguiseAs==='grand félin'));
+  const result=await store.applyResolution(preview);
+  assert.equal(result.status,'applied');
+  assert.equal(store.listParticipants().find(row=>row.id===target.id).extensions.v5.felidWoundDisguises[0].appearance,'grand félin');
+});
+
 test('F source characterization: the MJ can declare one item-linked daily Warpstone exposure into K1', async () => {
   const store=createStore({storage:null});await store.ready;
   const weapon=reference.equipment.items.find(item=>item.id==='weapon-armes-a-distance-ingenierie-mitrailleuse-ratling-skaven');
   const wearer={id:'wearer',name:'Porteur',zone:'active',hp:10,maxHp:10,caracs:{E:40,FM:40},equipment:[weapon],skills:[],states:[],extensions:{v5:{corruptionPoints:0}}};
-  await store.loadFromJSON({schemaVersion:3,reserve:[],log:[],diceLines:[],combat:{round:1,currentActorId:wearer.id,order:[wearer.id],participants:[wearer]},extensions:{v5:{turnIndex:1}}});
+  await store.loadFromJSON(JSON.stringify({schemaVersion:3,reserve:[],log:[],diceLines:[],combat:{round:1,currentActorId:wearer.id,order:[wearer.id],participants:[wearer]},extensions:{v5:{turnIndex:1}}}));
   const status=store.getCorruptionStatus(wearer.id);
   await store.declareWarpstoneDailyExposure(wearer.id,{itemId:weapon.id,dayLabel:'Jour de test',confirmed:true,baseRevision:status.baseRevision});
   const queued=store.getCorruptionStatus(wearer.id).pendingExposureSources;
   assert.equal(queued.length,1);
   assert.match(queued[0].source,/Mitrailleuse Ratling Skaven.*Jour de test/);
   assert.throws(()=>store.declareWarpstoneDailyExposure(wearer.id,{itemId:weapon.id,dayLabel:'Jour de test',confirmed:true,baseRevision:store.getCorruptionStatus(wearer.id).baseRevision}),/déjà été déclarée/);
+});
+
+test('F source characterization: the real Bonebreaker Shard attack is a stable daily exposure source with history', async () => {
+  let sequence=0;
+  const profile=L22.profiles.find(row=>row.name==='Rat Ogre Bonebreaker');
+  const bonebreaker=buildParticipantFromBestiary(profile.id,{library:L22.profiles,idFactory:()=>`bonebreaker-${++sequence}`});
+  const shard=bonebreaker.actions.find(row=>row.name==='Warpstone Shard*');
+  assert.ok(shard?.id);
+  bonebreaker.zone='active';bonebreaker.extensions.v5.corruptionPoints=0;
+  const store=createStore({storage:null});await store.ready;
+  await store.loadFromJSON(JSON.stringify({schemaVersion:3,reserve:[],log:[],diceLines:[],combat:{round:1,currentActorId:bonebreaker.id,order:[bonebreaker.id],participants:[bonebreaker]},extensions:{v5:{turnIndex:1}}}));
+  const status=store.getCorruptionStatus(bonebreaker.id);
+  await store.declareWarpstoneDailyExposure(bonebreaker.id,{attackId:shard.id,dayLabel:'Jour du profil',confirmed:true,baseRevision:status.baseRevision});
+  const queued=store.getCorruptionStatus(bonebreaker.id).pendingExposureSources;
+  assert.equal(queued.length,1);
+  assert.equal(queued[0].actionId,shard.id);
+  assert.match(queued[0].id,/E0-P-737/);
+  assert.throws(()=>store.declareWarpstoneDailyExposure(bonebreaker.id,{attackId:shard.id,dayLabel:'Jour du profil',confirmed:true,baseRevision:store.getCorruptionStatus(bonebreaker.id).baseRevision}),/déjà été déclarée/);
+  await store.undo();
+  assert.equal(store.getCorruptionStatus(bonebreaker.id).pendingExposureSources.length,0);
+  await store.redo();
+  assert.equal(store.getCorruptionStatus(bonebreaker.id).pendingExposureSources.length,1);
+  const reload=createStore({storage:null});await reload.ready;await reload.loadFromJSON(store.getFullJSON());
+  assert.equal(reload.getCorruptionStatus(bonebreaker.id).pendingExposureSources[0].actionId,shard.id);
 });
 

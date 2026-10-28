@@ -1700,10 +1700,13 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
     const rollLabel=node('label','workspace-type','Jet secret du MJ (d10 à chaque utilisation)'),rollInput=document.createElement('input');rollInput.type='number';rollInput.min='1';rollInput.max='10';rollInput.step='1';rollInput.value=current.fellDaggerSecretRoll??'';rollInput.setAttribute('aria-label',rollLabel.textContent);rollInput.addEventListener('change',()=>handlers.select({v5Context:{...current,fellDaggerSecretRoll:rollInput.value===''?undefined:Number(rollInput.value)}}));rollLabel.append(rollInput);fields.append(rollLabel);
   }
   if(type==='attack'&&/warp blade|lame de malepierre/i.test(String(linkedSupplementalItem?.name||focusActionLabel))){
-    const current=draft.v5Context||{},label=node('label','workspace-type','Test de Résistance de la cible à +20 (si >1 Blessure)'),select=document.createElement('select');
-    select.setAttribute('aria-label',label.textContent);select.append(new Option('À saisir',''),new Option('Réussite','true'),new Option('Échec : appliquer Sonné','false'));
-    select.value=typeof current.warpBladeEnduranceTest?.success==='boolean'?String(current.warpBladeEnduranceTest.success):'';
-    select.addEventListener('change',()=>handlers.select({v5Context:{...current,warpBladeEnduranceTest:select.value===''?undefined:{success:select.value==='true'}}}));label.append(select);fields.append(label);
+    const current=draft.v5Context||{},stored=current.warpBladeEnduranceTest||{};
+    const setTest=(key,value)=>{const next={...stored,[key]:value};delete next.success;if(value===undefined)delete next[key];handlers.select({v5Context:{...current,warpBladeEnduranceTest:Object.keys(next).length?next:undefined}});};
+    for(const [key,text,min] of [['score','Warp Blade : score de Résistance de la cible (Test +2 DR si >1 Blessure)',0],['roll','Warp Blade : jet d100 du Test de Résistance de la cible',1]]){
+      const label=node('label','workspace-type',text),input=document.createElement('input');input.type='number';input.min=String(min);input.max='100';input.step='1';input.value=stored[key]??'';input.setAttribute('aria-label',text);
+      input.addEventListener('change',()=>setTest(key,input.value===''?undefined:Number(input.value)));label.append(input);fields.append(label);
+    }
+    if(Number.isFinite(Number(target?.caracs?.E)))fields.append(node('p','workspace-muted',`Endurance de la cible : ${target.caracs.E} (reporter la compétence Résistance si elle figure sur la fiche).`));
     fields.append(node('p','workspace-muted','La Warp Blade ignore les PA des pièces métalliques; ses qualités Défensive, Tailleuse et Empaleuse sont imprimées dans le profil d’attaque.'));
   }
   if(type==='attack'&&/antler hilted blade|lame.*poignee de bois|lame.*poignée de bois/i.test(String(linkedSupplementalItem?.name||focusActionLabel))){
