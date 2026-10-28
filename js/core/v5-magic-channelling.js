@@ -143,6 +143,7 @@ export function calculateMagicArmorPenalty(participant, { wind = null } = {}) {
  */
 export function resolveChannellingSkill(participant, { type = 'winds', wind = null } = {}) {
   const bfm = Math.floor((Number(participant?.caracs?.FM) || 0) / 10);
+  const characteristic = participant?.extensions?.v5?.bestiary?.id === 'E0-P-909' ? 'F' : 'FM';
   const targetType = type === 'high' ? 'high' : 'winds';
 
   const highNames = ['focalisation (haute magie)', 'focalisation (qhaysh)', 'channelling (high magic)', 'focalisation haute magie'];
@@ -169,20 +170,21 @@ export function resolveChannellingSkill(participant, { type = 'winds', wind = nu
 
   if (foundSkill) {
     skillName = foundSkill.name || foundSkill.nom || skillName;
-    score = foundSkill.total ?? foundSkill.value ?? foundSkill.score ?? (baseCharacteristicScore(participant,'FM') + (Number(foundSkill.advances ?? foundSkill.adv) || 0));
+    score = foundSkill.total ?? foundSkill.value ?? foundSkill.score ?? (baseCharacteristicScore(participant,characteristic) + (Number(foundSkill.advances ?? foundSkill.adv) || 0));
   } else if (foundAction && Number.isFinite(Number(foundAction.base))) {
     skillName = foundAction.note || foundAction.name || skillName;
     score = Number(foundAction.base);
   } else {
     // Sans compétence imprimée, un Lanceur de sorts de bestiaire teste à la base de son Trait (Volonté+10) ; sinon la caractéristique brute.
-    score = creatureCastingBases(participant, { baseline: true })?.focusBase ?? baseCharacteristicScore(participant,'FM');
+    score = characteristic === 'F' ? baseCharacteristicScore(participant, 'F') + 10
+      : creatureCastingBases(participant, { baseline: true })?.focusBase ?? baseCharacteristicScore(participant,'FM');
   }
 
   return {
     skillName,
-    score: effectiveSkillScore(participant, Number(score) || 0, 'FM'),
+    score: effectiveSkillScore(participant, Number(score) || 0, characteristic),
     bfm,
-    carac: 'FM',
+    carac: characteristic,
     type: targetType,
     warning: targetType === 'winds' && new Set(skills.filter(s => targetNames.includes(fold(s.name || s.nom || s.sourceName))).map(s => Number(s.total ?? s.value ?? s.score ?? (baseCharacteristicScore(participant,'FM') + Number(s.advances ?? s.adv ?? 0))))).size > 1
       ? 'Anomalie de fiche : plusieurs valeurs de Focalisation des Vents. La compétence générique prime lorsqu’elle existe ; sinon la première valeur importée est commune à tous les Vents. Corriger la fiche avec le MJ.' : null

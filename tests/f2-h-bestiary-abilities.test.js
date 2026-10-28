@@ -1,8 +1,21 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { planBestiaryProfileAbilities, planBestiaryProfileAbility } from '../js/core/creature-abilities.js';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { decorateBestiaryProfileAction, planBestiaryProfileAbilities, planBestiaryProfileAbility } from '../js/core/creature-abilities.js';
+import { buildParticipantFromBestiary } from '../js/core/bestiary-profiles.js';
+import { normalizeResolutionInput } from '../js/core/resolution.js';
+import { previewResolution } from '../js/core/resolution.js';
+import { createStore } from '../js/core/store.js';
+import { bestiaryProfileStateImmunity } from '../js/core/creature-abilities.js';
+import { deriveHitMorphology, resolveCreatureHitLocation } from '../js/core/v5-hit-morphology.js';
 
-const p = profileId => ({ profileId, name: profileId });
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const library = ['L11', 'L18', 'L22', 'L23', 'L24', 'L25'].flatMap(book =>
+  JSON.parse(fs.readFileSync(path.join(root, 'js/data/bestiary', `${book}.json`), 'utf8')).profiles
+);
+const p = profileId => buildParticipantFromBestiary(profileId, { library, idFactory: () => `test-${profileId}` });
 
 test('F2-H weapon qualities only belong to the two named stag profiles', () => {
   const taal = planBestiaryProfileAbility(p('E0-P-001'), 'taal-woods');
@@ -11,6 +24,12 @@ test('F2-H weapon qualities only belong to the two named stag profiles', () => {
   assert.deepEqual(kurnous.effects[0].addQualities, ['Rapide', 'Empaleuse', 'Perforante']);
   assert.equal(planBestiaryProfileAbility(p('E0-P-002'), 'taal-woods').available, false);
   assert.equal(planBestiaryProfileAbility(p('E0-P-001'), 'kurnous-woods').available, false);
+  const actor = p('E0-P-002');
+  const decorated = decorateBestiaryProfileAction(actor, { name: 'Antlers', qualities: [] });
+  assert.deepEqual(decorated.qualities, ['Rapide', 'Empaleuse', 'Perforante']);
+  const resolvedAction = normalizeResolutionInput({ actor, action: actor.actions.find(action => action.name === 'Antlers'), roll: 25 }).action;
+  assert.deepEqual(resolvedAction.qualities.map(row => row.id), ['rapide', 'empaleuse', 'perforante']);
+  assert.deepEqual(decorateBestiaryProfileAction(p('E0-P-001'), { name: 'Bite', qualities: [] }).qualities, []);
 });
 
 test('Arachnarok web poison requires a web hit and the Entangled state', () => {
@@ -31,16 +50,21 @@ test('Flying Death Skull only proposes reversion at zero Wounds; ordinary profil
 });
 
 test('F2-H attacks and states are tied to their exact creature profile', () => {
-  const spider = planBestiaryProfileAbility(p('E0-P-744'), 'cliff-spider-lasso');
+  const spiderProfile = p('E0-P-744');
+  const spider = planBestiaryProfileAbility(spiderProfile, 'cliff-spider-lasso');
+  assert.ok(spiderProfile.actions.some(action => action.extensions.v5.specialProfileAbility === 'cliff-spider-lasso'));
   assert.match(spider.reminders.join(' '), /40 yards/);
-  assert.deepEqual(spider.effects[0], { attack: 'Bite', addTrait: 'Venin' });
+  assert.ok(spiderProfile.traits.some(trait => /Venom \(Challenging\)/i.test(trait)));
+  assert.deepEqual(spider.effects, []);
   assert.equal(planBestiaryProfileAbility(p('E0-P-004'), 'cliff-spider-lasso').available, false);
 
   const cat = planBestiaryProfileAbility(p('E0-P-792'), 'great-cat-deathblow');
   assert.deepEqual(cat.effects, [{ addTrait: 'Coup mortel', ignoresSize: true }]);
   assert.equal(planBestiaryProfileAbility(p('E0-P-807'), 'great-cat-deathblow').available, false);
+  assert.equal(decorateBestiaryProfileAction(p('E0-P-792'), { name: 'Claw', qualities: [] }).extensions.v5.deathblow, true);
 
   const spit = planBestiaryProfileAbility(p('E0-P-807'), 'farmyard-beast-spit');
+  assert.ok(p('E0-P-807').actions.some(action => action.extensions.v5.specialProfileAbility === 'farmyard-beast-spit'));
   assert.deepEqual(spit.effects, [{ attack: 'Crachat', rangeYards: 3, test: 'CT', onHitTest: 'Résistance +0', onFailure: 'Empoisonné' }]);
   assert.equal(planBestiaryProfileAbility(p('E0-P-792'), 'farmyard-beast-spit').available, false);
 });
@@ -55,14 +79,115 @@ test('Gargantuan ship rules stay a reminder and the living target needs to be gr
   assert.equal(planBestiaryProfileAbility(p('E0-P-916'), 'gargantuan-electric-discharge', { targetGrappled: true }).available, false);
 });
 
+test('Sea Elemental immersion, fire immunity, and casting use only its profile', () => {
+  const actor = p('E0-P-909');
+  assert.ok(actor.actions.some(action => action.extensions.v5.specialProfileAbility === 'sea-elemental-immersion'));
+  assert.deepEqual(planBestiaryProfileAbility(actor, 'sea-elemental-immersion', { entangled: false }).effects, []);
+  const immersed = planBestiaryProfileAbility(actor, 'sea-elemental-immersion', { entangled: true });
+  assert.equal(immersed.effects[0].effect, 'suffocation');
+  assert.equal(immersed.effects[0].grappleMustBeMaintained, false);
+  assert.equal(planBestiaryProfileAbility(actor, 'sea-elemental-immersion', { entangled: true, escapeTestSL: 1 }).effects[1].escaped, true);
+  assert.equal(planBestiaryProfileAbility(actor, 'sea-elemental-fire-immunity').effects[0].immuneToState, 'Enflammé');
+  assert.equal(bestiaryProfileStateImmunity(actor, 'enflamme'), true);
+  assert.equal(planBestiaryProfileAbility(actor, 'sea-elemental-strength-casting').effects[0].castingCharacteristic, 'F');
+  assert.equal(bestiaryProfileStateImmunity(p('E0-P-910'), 'enflamme'), false);
+});
+
+test('Gargantuan and Black Leviathan resolve non-ship clauses while ship clauses remain reminders', () => {
+  const gargantuan = p('E0-P-910');
+  const shock = planBestiaryProfileAbility(gargantuan, 'gargantuan-electric-discharge', {
+    targetGrappled: true, targetTookWounds: true, targetEnduranceSuccess: false, selfEnduranceSuccess: false
+  });
+  assert.equal(shock.effects.find(effect => effect.damage)?.damage, 10);
+  assert.ok(shock.effects.some(effect => effect.state === 'sonne'));
+  assert.ok(shock.effects.some(effect => effect.state === 'fatigue'));
+  const fatigued = planBestiaryProfileAbility(gargantuan, 'gargantuan-electric-discharge', { targetGrappled: true, fatigued: true, selfEnduranceSuccess: true });
+  assert.equal(fatigued.effects.find(effect => effect.damage)?.damage, 6);
+  assert.match(planBestiaryProfileAbility(gargantuan, 'gargantuan-ship-reminder').reminders[0], /non modélisée/);
+
+  const leviathan = p('E0-P-916');
+  assert.equal(planBestiaryProfileAbility(leviathan, 'black-leviathan-fire', { fireSize: 'torch' }).effects[0].mayBeScared, false);
+  assert.equal(planBestiaryProfileAbility(leviathan, 'black-leviathan-fire', { fireSize: 'bonfire' }).effects[0].mayBeScared, true);
+  assert.match(planBestiaryProfileAbility(leviathan, 'black-leviathan-ship-reminder').reminders[0], /non modélisée/);
+  assert.equal(planBestiaryProfileAbility(gargantuan, 'black-leviathan-fire', { fireSize: 'bonfire' }).available, false);
+});
+
+test('Cliff Spider profile resolves appendage hits to legs', () => {
+  const spider = p('E0-P-744');
+  assert.equal(deriveHitMorphology(spider), 'spider');
+  assert.deepEqual(resolveCreatureHitLocation({ roll: 40, morphology: deriveHitMorphology(spider), baseLocation: { key: 'ARM', name: 'Bras gauche' } }), {
+    key: 'LEG', name: 'Patte gauche', side: 'left'
+  });
+});
+
+test('F2-H resolution proposes the Farmyard Beast poison only after a failed resistance test', () => {
+  const actor = { ...p('E0-P-807'), id: 'farmyard', zone: 'active', hp: 12, maxHp: 12 };
+  const target = { id: 'target', name: 'Cible', kind: 'PNJ', camp: 'ennemi', zone: 'active', hp: 20, maxHp: 20, caracs: { E: 30 }, armor: { head: 0, body: 0, arms: 0, legs: 0 }, states: [] };
+  const action = actor.actions.find(row => row.extensions?.v5?.specialProfileAbility === 'farmyard-beast-spit');
+  const preview = previewResolution({ resolutionId: 'f2h-farmyard', baseRevision: 0, actor, target, action, roll: 10,
+    defense: { base: 20, roll: 95, v5: { kind: 'test' } }, v5: { kind: 'ranged', context: { f2h: { farmyardResistance: 'fail' } } } });
+  assert.equal(preview.hit, true);
+  assert.ok(preview.targetConditionApplication.some(row => row.key === 'empoisonne' && row.source?.ability === 'farmyard-beast-spit'));
+  assert.deepEqual(preview.unresolved, []);
+});
+
+test('Tiger Claws links the actual Taggees Brawling source skill and rejects a missing link', () => {
+  const actor = { ...p('E0-P-872'), id: 'taggees' };
+  const action = actor.actions.find(row => row.name === 'Tiger Claws');
+  const normalized = normalizeResolutionInput({ actor, action, roll: 20 });
+  assert.equal(normalized.action.base, 61);
+  assert.equal(normalized.action.attr, 'CC');
+  assert.equal(normalized.action.extensions.fiche.skillId, actor.skills.find(row => row.sourceName === 'Melee (Brawling)').id);
+  assert.throws(() => normalizeResolutionInput({ actor: { ...actor, skills: actor.skills.filter(row => row.sourceName !== 'Melee (Brawling)') }, action, roll: 20 }), { code: 'SKILL_LINK_REQUIRED' });
+});
+
+test('Store application persists Farmyard Beast poison on a failed resistance test', async () => {
+  const actor = { ...p('E0-P-807'), id: 'farmyard-store', camp: 'ennemi', zone: 'active', hp: 12, maxHp: 12 };
+  const target = { id: 'target-store', name: 'Cible', kind: 'PNJ', camp: 'pj', zone: 'active', hp: 20, maxHp: 20, caracs: { E: 30 }, armor: { head: 0, body: 0, arms: 0, legs: 0 }, states: [] };
+  const persistence = { async load() { return null; }, async saveAtomic() { return { ok: true }; } };
+  const store = createStore({ persistence }); await store.ready;
+  await store.addParticipant(actor); await store.addParticipant(target);
+  const action = actor.actions.find(row => row.extensions?.v5?.specialProfileAbility === 'farmyard-beast-spit');
+  const preview = store.previewResolution({ resolutionId: 'f2h-farmyard-store', actorId: actor.id, targetId: target.id, action, roll: 10,
+    defense: { base: 20, roll: 95, v5: { kind: 'test' } }, v5: { kind: 'ranged', context: { f2h: { farmyardResistance: 'fail' } } } });
+  assert.equal(preview.hit, true, JSON.stringify(preview.unresolved));
+  const applied = await store.applyResolution(preview);
+  assert.equal(applied.status, 'applied', applied.reason || JSON.stringify({ choiceRequired: preview.choiceRequired, choices: preview.choices, unresolved: preview.unresolved }));
+  assert.ok(store.listParticipants().find(row => row.id === target.id).states.some(row => row.key === 'empoisonne'));
+});
+
+test('Gargantuan discharge applies wound and Endurance outcomes and spends its Momentum', async () => {
+  const built = p('E0-P-910');
+  const actor = { ...built, id: 'gargantuan-store', camp: 'ennemi', zone: 'active', hp: 80, maxHp: 80, extensions: { ...built.extensions, v5: { ...built.extensions.v5, hasMomentum: true } } };
+  const target = { id: 'target-garg', name: 'Agrippé', kind: 'PNJ', camp: 'pj', zone: 'active', hp: 40, maxHp: 40, caracs: { E: 30 }, armor: { head: 0, body: 0, arms: 0, legs: 0 }, states: [] };
+  const persistence = { async load() { return null; }, async saveAtomic() { return { ok: true }; } };
+  const store = createStore({ persistence }); await store.ready;
+  await store.addParticipant(actor); await store.addParticipant(target);
+  const action = actor.actions.find(row => row.extensions?.v5?.specialProfileAbility === 'gargantuan-electric-discharge');
+  const preview = store.previewResolution({ resolutionId: 'f2h-gargantuan-discharge', actorId: actor.id, targetId: target.id, action, roll: 23,
+    defense: { base: 20, roll: 95, v5: { kind: 'test' } }, v5: { kind: 'melee', context: { f2h: { targetGrappled: true, targetEnduranceSuccess: false, selfEnduranceSuccess: false } } } });
+  assert.ok(preview.damage?.finalDamage > 0, JSON.stringify(preview.unresolved));
+  assert.equal(preview.momentum.find(row => row.participantId === actor.id)?.after, false);
+  assert.deepEqual(preview.unresolved, []);
+  const applied = await store.applyResolution(preview);
+  assert.equal(applied.status, 'applied', JSON.stringify({ reason: applied.reason, choiceRequired: preview.choiceRequired, unresolved: preview.unresolved, critical: preview.critical, protection: preview.protection, mechanicalWarnings: preview.mechanicalWarnings }));
+  const afterTarget = store.listParticipants().find(row => row.id === target.id);
+  const afterActor = store.listParticipants().find(row => row.id === actor.id);
+  assert.equal(afterTarget.hp, target.hp - preview.damage.finalDamage);
+  assert.ok(afterTarget.states.some(row => row.key === 'sonne'));
+  assert.ok(afterActor.states.some(row => row.key === 'fatigue'));
+  assert.equal(afterActor.extensions.v5.hasMomentum, false);
+});
+
 test('Merwyrm bite, Black Leviathan, Wulfrik and Gravelord remain profile-scoped', () => {
   assert.deepEqual(planBestiaryProfileAbility(p('E0-P-913'), 'merwyrm-fanged-maw-venom').effects, [
     { attack: 'Fanged Maw', addTrait: 'Venin (Difficile)' }
   ]);
+  assert.deepEqual(decorateBestiaryProfileAction(p('E0-P-913'), { name: 'Fanged Maw', qualities: [] }).qualities[0], { id: 'venin', name: 'Venin', parameter: 'Difficile' });
   assert.equal(planBestiaryProfileAbility(p('E0-P-057'), 'merwyrm-fanged-maw-venom').available, false);
   assert.ok(planBestiaryProfileAbility(p('E0-P-916'), 'black-leviathan-ship-reminder').reminders[0].includes('non modélisée'));
   assert.deepEqual(planBestiaryProfileAbility({ name: 'Hans Grüber' }, 'gravelord-variants').effects, []);
-  assert.equal(planBestiaryProfileAbility(p('E0-P-921'), 'wulfrik-head-taker', { critical: true }).effects[0].chooseHitLocation, 'tête');
+  assert.equal(planBestiaryProfileAbility(p('E0-P-921'), 'wulfrik-head-taker', { critical: true }).effects[0].chooseCriticalTable, 'Head Critical Wounds');
   assert.equal(planBestiaryProfileAbility(p('E0-P-921'), 'wulfrik-champion-slayer', { singleCombatLeader: true }).effects[0].momentum, 1);
   assert.equal(planBestiaryProfileAbility(p('E0-P-916'), 'wulfrik-head-taker', { critical: true }).available, false);
 });

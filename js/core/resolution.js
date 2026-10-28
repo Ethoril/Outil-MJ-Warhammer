@@ -20,6 +20,7 @@ import { isCriticalRoll, isFumbleRoll } from './roll-qualities.js';
 import { actionHasDamage, actionWeaponDamage, computeDamage, evaluateWeaponDamage, formatDamageFormula, formatWeaponDamage, strengthBonusOf } from './damage.js';
 import { normalizeQualities } from './quality-normalization.js';
 import { planNaturalAttack, inferNaturalAttackKey } from './creature-combat.js';
+import { bestiaryProfileStateImmunity, decorateBestiaryProfileAction, planBestiaryProfileAbilities } from './creature-abilities.js';
 import { applyHeadCriticals } from './creature-heads.js';
 import { acquireV5Conditions,healV5Wounds } from './v5-effects.js';
 import { slExtremeLayers } from './v5-divine-effects-tests.js';
@@ -270,7 +271,10 @@ const foldKey = text => String(text).normalize('NFD').replace(/[̀-ͯ]/g, '').to
 export function normalizeResolutionInput(input = {}) {
   if (!isRecord(input)) throw new ResolutionError('Entrée de résolution invalide');
   const actor = isRecord(input.actor) ? clone(input.actor) : null;
-  const action = isRecord(input.action) ? clone(input.action) : {};
+  const action = decorateBestiaryProfileAction(actor, isRecord(input.action) ? clone(input.action) : {});
+  if (action.extensions?.v5?.specialProfileAbility === 'gargantuan-electric-discharge'
+    && ((input.v5?.context?.f2h?.fatigued === true) || actor?.states?.some(row => foldKey(row.key || row.name) === 'fatigue')))
+    action.damage = 6;
   if (/griffes du tigre|tiger claws/i.test(String(action.name || action.note || action.extensions?.equipment?.name || ''))) {
     const brawling=(actor?.skills||[]).find(row=>[row.sourceName,row.name,row.nom].filter(Boolean).some(value=>String(value).normalize('NFD').replace(/[\u0300-\u036f]/g,'').match(/melee\s*\(brawling\)|corps.?a.?corps\s*\(bagarre\)/i))&&Number.isFinite(Number(row.total??row.value)));
     if(!brawling)throw new ResolutionError('Les Griffes du tigre exigent Corps à corps (Bagarre) lié au profil.', 'SKILL_LINK_REQUIRED');
@@ -355,8 +359,13 @@ export function normalizeResolutionInput(input = {}) {
   const resolutionId = String(input.resolutionId || input.id || defaultResolutionId(actor, action, target, baseRevision, roll));
   if (!resolutionId.trim()) throw new ResolutionError('resolutionId invalide');
   const v5Settings=isRecord(input.v5)?clone(input.v5):{};
-  const v5Context=v5Settings.context||{};
+  const v5Context={...(v5Settings.context||{}),...(['cliff-spider-lasso','farmyard-beast-spit'].includes(action.extensions?.v5?.specialProfileAbility)?{rangedOppositionAllowed:true}:{})};
+  v5Settings.context=v5Context;
   const actionLabel=foldKey([action.name,action.note,action.skillName,v5Context.skillName].filter(Boolean).join(' '));
+  const wulfrikSocial = (actor?.extensions?.v5?.bestiary?.id === 'E0-P-921' || actor?.profileId === 'E0-P-921')
+    && v5Context.f2h?.targetChaosFollower === true
+    && ['charme', 'charm', 'intimidation', 'commandement', 'leadership'].some(name => actionLabel.includes(name));
+  if (wulfrikSocial) v5Settings.slModifier = (Number(v5Settings.slModifier) || 0) + 1;
   if(/focalisation/.test(actionLabel)&&['F-L06-1104','F-L06-1105'].includes(v5Context.focalisationSupplementRuleId)){
     const focus=previewSupplementalEquipment({item:{supplementalRuleId:v5Context.focalisationSupplementRuleId,associatedDomain:v5Context.focalisationAssociatedDomain,robeRank:v5Context.focalisationRobeRank,focusRank:v5Context.focalisationFocusRank},
       spell:{wind:v5Context.focalisationDomain},context:{focusRank:v5Context.focalisationFocusRank}});
@@ -950,9 +959,11 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   const criticalAttack = !(context.specialAttack==='whirlwind-of-death'||hit&&['dirty-fighting','disarm','shieldsman'].includes(context.specialAttack)) && attackType(action.type) && normalized.v5.context?.silentTakedown !== true && normalized.knockoutValid!==true && success && criticalClassification.critique;
   const criticalLocationRoll = normalized.criticalRolls?.location;
   const location = hit && attackType(action.type) ? attackLocation(normalized, roll, target) : null;
+  const wulfrikHeadTableChosen = (actor?.extensions?.v5?.bestiary?.id === 'E0-P-921' || actor?.profileId === 'E0-P-921') && context.f2h?.wulfrikHeadCritical === true;
   const fateCriticalLocation=CALLED_SHOT_LOCATIONS[context.fateCriticalLocation];
   if(criticalAttack&&context.fateAction==='automatic-success'&&!fateCriticalLocation)fateUnresolved.push('Destin : choisissez la localisation de la Blessure Critique.');
-  const criticalLocation = criticalAttack && context.fateAction==='automatic-success' && fateCriticalLocation ? criticalTableLocation({roll:null,...fateCriticalLocation},context) : criticalAttack && criticalLocationRoll != null ? criticalTableLocation(creatureLocationOf(criticalLocationRoll,target,context),context) : null;
+  const rawCriticalLocation = criticalAttack && context.fateAction==='automatic-success' && fateCriticalLocation ? criticalTableLocation({roll:null,...fateCriticalLocation},context) : criticalAttack && criticalLocationRoll != null ? criticalTableLocation(creatureLocationOf(criticalLocationRoll,target,context),context) : null;
+  const criticalLocation = wulfrikHeadTableChosen && rawCriticalLocation ? { ...rawCriticalLocation, key: 'HEAD', name: 'Tête', tableOverride: 'Wulfrik · Preneur de têtes' } : rawCriticalLocation;
   const inoffensive = action.qualities.some(q => q.id === 'inoffensive') && keywordMechanicalStatus('inoffensive').status === 'covered';
   const weaponReferenceId = action.extensions?.fiche?.equipmentId || action.extensions?.equipment?.id;
   const selectedWeapon = actor?.equipment?.find(item => item.id === weaponReferenceId && item.kind === 'weapon') || null;
@@ -1248,7 +1259,8 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   }
   const hpBefore = Math.max(0, Number(target?.hp) || 0);
   const excess = damage ? Math.max(0, damage.finalDamage - hpBefore) : 0;
-  const second = !replacement && normalized.knockoutValid!==true && knownHp(target) && (excess>0||normalized.combatPrelude?.whirlwind?.active&&damage&&damage.finalDamage>=hpBefore) ? secondCritical(reverseV5Roll(roll), prepareCritical(actor,normalized.criticalRolls,normalized.v5,'attacker',inoffensive,['second']), excess * 10 + divineCriticalSeverityBonus(actor), inoffensive, criticalTableLocation(location,context)) : null;
+  const secondLocation = wulfrikHeadTableChosen && location ? { ...location, key: 'HEAD', name: 'Tête', tableOverride: 'Wulfrik · Preneur de têtes' } : criticalTableLocation(location,context);
+  const second = !replacement && normalized.knockoutValid!==true && knownHp(target) && (excess>0||normalized.combatPrelude?.whirlwind?.active&&damage&&damage.finalDamage>=hpBefore) ? secondCritical(reverseV5Roll(roll), prepareCritical(actor,normalized.criticalRolls,normalized.v5,'attacker',inoffensive,['second']), excess * 10 + divineCriticalSeverityBonus(actor), inoffensive, secondLocation) : null;
   let criticalBlock = criticalFirst || second ? { kind: 'Critique', expanded: criticalClassification.élargi,
     acharnement: false, details: criticalFirst, ...(second ? { second, excessWounds: excess } : {}),
     ...(weapon?.status === 'manual' ? { secondHint: { locationRoll: reverseV5Roll(roll), location } } : {}) } : null;
@@ -1416,6 +1428,57 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   const supplementalTargetConditions=(supplementalEquipment?.effects||[]).filter(row=>row.state&&row.participantId===target?.id).map((row,index)=>({id:`${normalized.resolutionId}:supplement:${index}`,key:foldKey(row.state).replace(/\s+/g,'-'),name:row.state,level:1,source:{kind:'supplement',ruleId:row.sourceRuleId,authorId:actor?.id}}));
   const supplementalActorConditions=(supplementalEquipment?.effects||[]).filter(row=>row.state&&row.participantId===actor?.id).map((row,index)=>({id:`${normalized.resolutionId}:supplement:actor:${index}`,key:foldKey(row.state).replace(/\s+/g,'-'),name:row.state,level:1,source:{kind:'supplement',ruleId:row.sourceRuleId,authorId:actor?.id}}));
   const targetConditionApplication = [...(criticalBlock?.application?.states || []).map(row => ({ ...clone(row), source: { ...(row.source || {}), kind: 'critical' } })), ...weaponConditions.proposed,...slashConditions,...magicHitStates,...naturalHitStates,...special.states,...supplementalTargetConditions,...(trip?.conditionApplied?[trip.targetCondition]:[]),...(tripFall?.criticalStates||[])];
+  const profileAbilityContext = isRecord(context.f2h) ? context.f2h : {};
+  const effectiveProfileAbilityContext = { ...profileAbilityContext, test: action.name || action.skillName || '', critical: profileAbilityContext.wulfrikHeadCritical === true };
+  const profileAbilityPlans = planBestiaryProfileAbilities(actor, effectiveProfileAbilityContext);
+  const targetProfileAbilityPlans = planBestiaryProfileAbilities(target, profileAbilityContext);
+  if (hit && target && !replacement) {
+    const profileId = actor?.extensions?.v5?.bestiary?.id || actor?.profileId;
+    const specialAbility = action.extensions?.v5?.specialProfileAbility;
+    if (specialAbility === 'gargantuan-electric-discharge') {
+      if (profileAbilityContext.targetGrappled !== true) unresolved.push('Décharge électrique : confirmer que la cible est toujours agrippée au début du Tour suivant.');
+      if (!hasMomentum(actor)) unresolved.push('Décharge électrique : 1 Élan disponible requis.');
+      if (damage?.finalDamage > 0 && profileAbilityContext.targetEnduranceSuccess === false)
+        targetConditionApplication.push({ id: `${normalized.resolutionId}:f2h:gargantuan-stunned`, key: 'sonne', name: 'Sonné', level: 1, source: { kind: 'bestiary-profile', ability: specialAbility, authorId: actor?.id } });
+      else if (damage?.finalDamage > 0 && profileAbilityContext.targetEnduranceSuccess !== true)
+        unresolved.push('Décharge électrique : saisir le résultat du Test d’Endurance Difficile (−10) de la cible.');
+      if (profileAbilityContext.selfEnduranceSuccess === false)
+        supplementalActorConditions.push({ id: `${normalized.resolutionId}:f2h:gargantuan-fatigued`, key: 'fatigue', name: 'Fatigué', level: 1, source: { kind: 'bestiary-profile', ability: specialAbility, authorId: actor?.id } });
+      else if (profileAbilityContext.selfEnduranceSuccess !== true)
+        unresolved.push('Décharge électrique : saisir le résultat du Test d’Endurance Moyenne (+20) du Gargantuan.');
+    }
+    if (specialAbility === 'cliff-spider-lasso') {
+      const failure = profileAbilityContext.cliffSpiderFailureSL;
+      if (Number.isSafeInteger(failure) && failure > 0) targetConditionApplication.push({ id: `${normalized.resolutionId}:f2h:cliff-spider`, key: 'enchevetre', name: 'Enchevêtré', level: failure, strength: 1, source: { kind: 'bestiary-profile', ability: specialAbility, authorId: actor?.id } });
+      else unresolved.push('Araignée de falaise : saisir les niveaux d’échec du Test d’Esquive pour fixer les Enchevêtrés.');
+    }
+    if (specialAbility === 'farmyard-beast-spit') {
+      const resistance = profileAbilityContext.farmyardResistance;
+      if (resistance === 'fail') targetConditionApplication.push({ id: `${normalized.resolutionId}:f2h:farmyard-spit`, key: 'empoisonne', name: 'Empoisonné', level: 1, source: { kind: 'bestiary-profile', ability: specialAbility, authorId: actor?.id } });
+      else if (resistance !== 'pass') unresolved.push('Crachat venimeux : saisir la réussite ou l’échec du Test de Résistance (+0 DR).');
+    }
+    if (specialAbility === 'sea-elemental-immersion') {
+      targetConditionApplication.push(
+        { id: `${normalized.resolutionId}:f2h:sea-elemental-entangled`, key: 'enchevetre', name: 'Enchevêtré', level: 1, source: { kind: 'bestiary-profile', ability: specialAbility, authorId: actor?.id } },
+        { id: `${normalized.resolutionId}:f2h:sea-elemental-suffocation`, key: 'suffocation', name: 'Suffocation', level: 1, source: { kind: 'bestiary-profile', ability: specialAbility, authorId: actor?.id } }
+      );
+    }
+    if (profileId === 'E0-P-004' && naturalPlan?.key === 'web' && targetConditionApplication.some(row => row.key === 'enchevetre')) {
+      targetConditionApplication.push({ id: `${normalized.resolutionId}:f2h:arachnarok-web-poison`, key: 'empoisonne', name: 'Empoisonné', level: 1, source: { kind: 'bestiary-profile', ability: 'arachnarok-venom-webs', authorId: actor?.id } });
+    }
+    if (action.qualities.some(row => (typeof row === 'string' ? row : row?.id) === 'venin') && damage?.finalDamage > 0) {
+      const venom = action.qualities.find(row => (typeof row === 'string' ? row : row?.id) === 'venin');
+      targetConditionApplication.push({ id: `${normalized.resolutionId}:f2h:creature-venom`, key: 'empoisonne', name: 'Empoisonné', level: 1, recoveryDifficulty: venom?.parameter || venom?.rating || null, source: { kind: 'bestiary-profile', ability: 'merwyrm-fanged-maw-venom', authorId: actor?.id } });
+    }
+  }
+  const profileAbilityReminders = [...profileAbilityPlans, ...targetProfileAbilityPlans].flatMap(plan => plan.reminders);
+  const profileAbilityUnresolved = [...profileAbilityPlans, ...targetProfileAbilityPlans].flatMap(plan => plan.unresolved);
+  unresolved.push(...profileAbilityUnresolved);
+  if (target) for (const row of targetConditionApplication) if (bestiaryProfileStateImmunity(target, row.key)) {
+    const index = targetConditionApplication.indexOf(row);
+    targetConditionApplication.splice(index, 1);
+    mechanicalWarnings.push({ ability: 'Résistance au feu de l’élémentaire de mer', state: row.name, reason: 'immunité de profil' });
+  }
   if(normalized.knockoutValid===true&&hit&&location?.key==='HEAD'&&action.qualities.some(q=>(typeof q==='string'?q:q?.id)==='assommante')){
     const stunned=(target?.states||[]).filter(row=>row.key==='sonne').reduce((sum,row)=>sum+Math.max(1,Number(row.level)||1),0)+targetConditionApplication.filter(row=>row.key==='sonne').reduce((sum,row)=>sum+Math.max(1,Number(row.level)||1),0);
     const toughness=Number(target?.caracs?.BE??Math.floor(Number(target?.caracs?.E||0)/10));
@@ -1577,8 +1640,12 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     momentum.push({ participantId: participant.id, ...previewMomentumEvents({ hasMomentum: hasMomentum(participant), events, exceptions }) });
   };
   const actorEvents = [], targetEvents = [];
-  if(normalized.combatPrelude?.targetIncomingMomentum)targetEvents.push({id:normalized.resolutionId+':slayer-charge',type:'chargeEnemy'});
   const event = (type, data = {}) => ({ id: `${normalized.resolutionId}:${type}`, type, ...data });
+  if (action.extensions?.v5?.specialProfileAbility === 'gargantuan-electric-discharge' && hasMomentum(actor))
+    actorEvents.push(event('spend', { profileAbility: 'gargantuan-electric-discharge' }));
+  if(normalized.combatPrelude?.targetIncomingMomentum)targetEvents.push({id:normalized.resolutionId+':slayer-charge',type:'chargeEnemy'});
+  if ((actor?.extensions?.v5?.bestiary?.id === 'E0-P-921' || actor?.profileId === 'E0-P-921') && context.f2h?.singleCombatLeader === true)
+    actorEvents.push(event('profileMomentumGain', { profileAbility: 'wulfrik-champion-slayer' }));
   if (context.outsideCombat !== true && actorPlan.charging) actorEvents.push(event('chargeEnemy'));
   if (context.outsideCombat !== true && actorPlan.kind === 'melee') {
     if (opposed) actorEvents.push(event(hit ? 'opposedMeleeWon' : 'opposedMeleeLost'));
@@ -1729,6 +1796,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     talentPlans: [normalized.qualityTalentPlan, ...(actorPlan.talentPlans || []), ...(defenderPlan?.talentPlans || []), damageTalents, beatTalents, ...(weaponConditions.talentPlans||[]), ...criticalTalentPlans, ...supplementaryTalentPlans, ...conditionTalentPlans].filter(Boolean),
     talentSLChoices: { actor: actorPlan.talentSLChoices || [], defender: defenderPlan?.talentSLChoices || [] },
     weaponConditions,
+    profileAbilityPlans: [...profileAbilityPlans, ...targetProfileAbilityPlans],
     supplementalEquipment,
     weaponReload,
     entanglement,
@@ -1748,7 +1816,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     blastPlan,
     spreadPlan,
     targetConditionApplication,actorConditionApplication,defenderWeaponConditions,familiarConditionRefusals,
-    reminders: [...familiarConditionRefusals.map(row => `${row.name || 'Homoncule'} : ${row.message}`),...(supplementalEquipment?.reminders||[]),...(supplementalEquipment?.unresolved||[]),...(magicFearImmune?['Le Bœuf Reste Debout : immunité aux Tests de Peur et Terreur pour la durée.']:[]),...(fast.initiativeBonus?[`Rapide : +${fast.initiativeBonus} Initiative pour cette attaque uniquement; le MJ l’applique à son arbitrage d’ordre, sans modifier l’Initiative de fiche.`]:[]),...activation.reminders,...special.reminders,...naturalReminders,...(hit&&attackType(action.type)&&target?reactionReminders(target,nature):[]),...(hit&&target&&damage?.finalDamage>0&&(target.extensions?.v5?.spellEffects||[]).some(e=>e.specialState?.festeringWoundTest)?[`Domaine de Nurgle (D-C51) : ${target.name||target.id} subit des Blessures ; proposer au MJ de jouer le Test de Blessure Suppurée (V5 p. 180). Rien n’est appliqué par l’outil.`]:[]),...(context.silentTakedown === true ? ['Neutralisation silencieuse : Blessures égales au BF et Inconscient si victoire ; Sonné et alarme si la cible gagne. Ces conséquences restent à arbitrer.'] : [])],
+    reminders: [...familiarConditionRefusals.map(row => `${row.name || 'Homoncule'} : ${row.message}`),...profileAbilityReminders,...(supplementalEquipment?.reminders||[]),...(supplementalEquipment?.unresolved||[]),...(magicFearImmune?['Le Bœuf Reste Debout : immunité aux Tests de Peur et Terreur pour la durée.']:[]),...(fast.initiativeBonus?[`Rapide : +${fast.initiativeBonus} Initiative pour cette attaque uniquement; le MJ l’applique à son arbitrage d’ordre, sans modifier l’Initiative de fiche.`]:[]),...activation.reminders,...special.reminders,...naturalReminders,...(hit&&attackType(action.type)&&target?reactionReminders(target,nature):[]),...(hit&&target&&damage?.finalDamage>0&&(target.extensions?.v5?.spellEffects||[]).some(e=>e.specialState?.festeringWoundTest)?[`Domaine de Nurgle (D-C51) : ${target.name||target.id} subit des Blessures ; proposer au MJ de jouer le Test de Blessure Suppurée (V5 p. 180). Rien n’est appliqué par l’outil.`]:[]),...(context.silentTakedown === true ? ['Neutralisation silencieuse : Blessures égales au BF et Inconscient si victoire ; Sonné et alarme si la cible gagne. Ces conséquences restent à arbitrer.'] : [])],
     activeEffects,talentActionChanges,secondaryTargets,
     damageReplacedByTalent: replacement ? clone(replacement) : null,defenderDamageReplacedByTalent:defenseShield.replacement||null,
     unresolved: [...unresolved,...(supplementalEquipment?.unresolved||[])],

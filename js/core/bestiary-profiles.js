@@ -6,6 +6,7 @@ import { activeReferential } from './creature-keywords.js';
 import { cloneValue, normalizeAction, uid } from './models.js';
 import { getReferenceCatalogue, resolveSkill, resolveTalent } from './reference-catalog.js';
 import { deriveHitMorphology } from './v5-hit-morphology.js';
+import { F2_H_PROFILE_ABILITIES } from '../data/f2-h-profile-abilities.js';
 
 export const BESTIARY_STAT_KEYS = Object.freeze(['M', 'CC', 'CT', 'F', 'E', 'I', 'Ag', 'Dex', 'Int', 'FM', 'Soc']);
 export const BESTIARY_KINDS = Object.freeze(['profile', 'template', 'pregenerated-character']);
@@ -193,6 +194,17 @@ function attackActions(attack) {
   });
 }
 
+function f2hProfileActions(record) {
+  return F2_H_PROFILE_ABILITIES.filter(rule => rule.profileId === record.id && rule.specialAction).map(rule => {
+    const action = rule.specialAction;
+    return normalizeAction({
+      name: action.name, type: 'attack', attr: action.attr, base: record.stats[action.attr] ?? '', damage: action.damage,
+      ...(action.rangeYards ? { rangeYards: action.rangeYards } : {}), qualities: [],
+      extensions: { v5: { kind: action.attr === 'CT' ? 'ranged' : 'melee', specialProfileAbility: rule.key } }
+    });
+  });
+}
+
 /**
  * Participant ordinaire d'un profil de bestiaire (valeurs imprimées, jamais recalculées : ni BF, ni Taille, ni armure ajoutés).
  * `options.library` : profils chargés (un livre ou plusieurs) ; `index` : rang d'exemplaire (suffixe du nom) ; `nameFr` : nom français ;
@@ -241,7 +253,7 @@ export function buildParticipantFromBestiary(id, options = {}) {
     initiative: record.stats.I ?? 0, hp: wounds, maxHp: wounds,
     caracs: Object.fromEntries(Object.entries(record.stats).filter(([, value]) => value !== null)),
     armor,
-    actions: (record.attacks || []).filter(attack => includeOptional || !attack.optional).flatMap(attackActions),
+    actions: [...(record.attacks || []).filter(attack => includeOptional || !attack.optional).flatMap(attackActions), ...f2hProfileActions(record)],
     skills, talents,
     traits: traits.map(traitText), keywords: [...(record.keywords || [])], tags: [], notes: armourReminder,
     // `extensions.v5.reminders` : rappels affichés en combat par `deriveReminders` (js/core/reminders.js) ; `notes` n'est lu par aucune carte.

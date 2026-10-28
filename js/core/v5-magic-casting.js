@@ -193,6 +193,7 @@ export function validateOvercastChoices(choices = {}, { availableSL = 0, maxSpen
 export function resolveCastingSkill(participant) {
   const bi = Math.floor((Number(participant?.caracs?.Int) || 0) / 10);
   const bfm = Math.floor((Number(participant?.caracs?.FM) || 0) / 10);
+  const characteristic = participant?.extensions?.v5?.bestiary?.id === 'E0-P-909' ? 'F' : 'Int';
 
   const targetNames = ['langue (magick)', 'langue (magie)', 'language (magick)', 'langue magick', 'langue magie'];
   const skills = Array.isArray(participant?.skills) ? participant.skills : [];
@@ -206,21 +207,22 @@ export function resolveCastingSkill(participant) {
 
   if (foundSkill) {
     skillName = foundSkill.name || foundSkill.nom || skillName;
-    score = foundSkill.total ?? foundSkill.value ?? foundSkill.score ?? (baseCharacteristicScore(participant,'Int') + (Number(foundSkill.advances ?? foundSkill.adv) || 0));
+    score = foundSkill.total ?? foundSkill.value ?? foundSkill.score ?? (baseCharacteristicScore(participant,characteristic) + (Number(foundSkill.advances ?? foundSkill.adv) || 0));
   } else if (foundAction && Number.isFinite(Number(foundAction.base))) {
     skillName = foundAction.note || foundAction.name || skillName;
     score = Number(foundAction.base);
   } else {
     // Sans compétence imprimée, un Lanceur de sorts de bestiaire teste à la base de son Trait (Intelligence+10) ; sinon la caractéristique brute.
-    score = creatureCastingBases(participant, { baseline: true })?.tongueBase ?? baseCharacteristicScore(participant,'Int');
+    score = characteristic === 'F' ? baseCharacteristicScore(participant, 'F') + 10
+      : creatureCastingBases(participant, { baseline: true })?.tongueBase ?? baseCharacteristicScore(participant,'Int');
   }
 
   return {
     skillName,
-    score: effectiveSkillScore(participant, Number(score) || 0, 'Int'),
+    score: effectiveSkillScore(participant, Number(score) || 0, characteristic),
     bi,
     bfm,
-    carac: 'Int'
+    carac: characteristic
   };
 }
 

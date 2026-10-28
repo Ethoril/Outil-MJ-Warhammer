@@ -11,6 +11,7 @@ import { V5_ACTIVATED_TALENTS,knownV5MartialQualities,noTestV5TalentAction }  fr
 import { computeV5WeaponReachGuide, computeV5WeaponRangeBands } from '../core/v5-talent-combat.js';
 import { inferV5Kind, hasMomentum } from '../core/v5-combat-rules.js';
 import { naturalCombatTraits, naturalAttackNeedsSize } from '../core/creature-combat.js';
+import { planBestiaryProfileAbilities } from '../core/creature-abilities.js';
 import { creatureSizeOf } from '../core/creature-size.js';
 import { carriesSense } from '../core/creature-senses.js';
 import { carriesMovement } from '../core/creature-movement.js';
@@ -1032,6 +1033,16 @@ function renderResult(preview, target, draft, handlers, participants=[]) {
   if(preview.defenderDamage)result.appendChild(node('p','workspace-result-line','Riposte : '+preview.defenderDamage.finalDamage+' Blessures sur '+(preview.input.actor?.name||'l’attaquant')));
   const effectiveTarget = participants.find(row => row.id === preview.targetId) || target;
   if (preview.attack) result.appendChild(node('p', 'workspace-result-line', `${preview.hit ? 'Touché' : 'Pas de touche'}${preview.location ? ` · ${preview.location.name}` : ''}`));
+  for (const plan of preview.profileAbilityPlans || []) {
+    if (!plan.effects?.length) continue;
+    const effects = plan.effects.map(effect => effect.state ? `État ${effect.state}`
+      : effect.addQualities ? `Qualités ${effect.addQualities.join(', ')}`
+      : effect.damage ? `${effect.damage} dégâts` : effect.transformation ? `transformation : ${effect.transformation}`
+      : effect.immuneToState ? `immunité : ${effect.immuneToState}` : effect.castingCharacteristic ? `incantation avec ${effect.castingCharacteristic}`
+      : effect.modifier ? `+${effect.modifier} au Test` : effect.addTrait ? `Trait ${effect.addTrait}${effect.ignoresSize ? ' sans restriction de Taille' : ''}` : effect.chooseCriticalTable ? `table ${effect.chooseCriticalTable}`
+      : effect.momentum ? `+${effect.momentum} Élan proposé` : effect.attack ? `${effect.attack} : ${effect.addTrait || ''}` : '').filter(Boolean);
+    if (effects.length) result.appendChild(node('p', 'workspace-result-line', `${plan.label} (${plan.receipt?.source || 'règle de profil'}) : ${effects.join(' · ')}.`));
+  }
   if (effectiveTarget && preview.damage) result.appendChild(node('p', 'workspace-result-line', `${effectiveTarget.name} : ${previewHpLoss(preview)} Blessures proposées · PV ${effectiveTarget.hp} → ${Math.max(0, Number(effectiveTarget.hp) - previewHpLoss(preview))}`));
   if (preview.actionCosts?.paid?.length) result.appendChild(node('p', 'workspace-result-line',
     'Coût proposé avant le jet : ' + preview.actionCosts.paid.map(cost => cost.resource === 'momentum' ? '1 Élan' : cost.amount + ' ' + cost.resource).join(', ')));
@@ -1513,6 +1524,53 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
     select.value = draft.v5Context?.naturalAttack || '';
     select.addEventListener('change', () => handlers.select({ v5Context: { ...(draft.v5Context || {}), naturalAttack: select.value || undefined } }));
     label.append(select); v5.appendChild(label);
+  }
+  const f2hActorId = actor?.extensions?.v5?.bestiary?.id || actor?.profileId;
+  const f2hTargetId = target?.extensions?.v5?.bestiary?.id || target?.profileId;
+  const f2hRules = [...planBestiaryProfileAbilities(actor), ...planBestiaryProfileAbilities(target)];
+  if (f2hRules.length) {
+    const section = node('details', 'workspace-v5-context-details');
+    section.append(node('summary', '', 'Règles propres au profil'));
+    for (const reminder of [...new Set(f2hRules.flatMap(plan => plan.reminders))]) section.append(node('p', 'workspace-muted', reminder));
+    const f2h = draft.v5Context?.f2h || {};
+    const setF2h = (key, value) => handlers.select({ v5Context: { ...(draft.v5Context || {}), f2h: { ...f2h, [key]: value } } });
+    const addChoice = (key, labelText, choices) => {
+      const label = node('label', 'workspace-type', labelText), select = document.createElement('select');
+      select.setAttribute('aria-label', labelText); choices.forEach(([text, value]) => select.append(new Option(text, value)));
+      select.value = f2h[key] == null ? '' : String(f2h[key]); select.addEventListener('change', () => setF2h(key, select.value === '' ? undefined : select.value === 'true' ? true : select.value === 'false' ? false : select.value));
+      label.append(select); section.append(label);
+    };
+    const addCheck = (key, labelText) => {
+      const label = node('label', 'workspace-type', labelText), check = document.createElement('input');
+      check.type = 'checkbox'; check.checked = f2h[key] === true; check.addEventListener('change', () => setF2h(key, check.checked || undefined));
+      label.append(check); section.append(label);
+    };
+    const ability = action.extensions?.v5?.specialProfileAbility;
+    if (ability === 'cliff-spider-lasso') {
+      const labelText = 'Araignée de falaise : niveaux d’échec au Test d’Esquive';
+      const label = node('label', 'workspace-type', labelText), input = document.createElement('input');
+      input.type = 'number'; input.min = '1'; input.step = '1'; input.value = f2h.cliffSpiderFailureSL ?? '';
+      input.setAttribute('aria-label', labelText); input.addEventListener('change', () => setF2h('cliffSpiderFailureSL', input.value === '' ? undefined : Number(input.value)));
+      label.append(input); section.append(label);
+    }
+    if (ability === 'farmyard-beast-spit') addChoice('farmyardResistance', 'Crachat venimeux : Test de Résistance (+0 DR)', [['À saisir', ''], ['Réussite', 'pass'], ['Échec', 'fail']]);
+    if (f2hActorId === 'E0-P-910') {
+      addCheck('targetGrappled', 'Gargantuan : cible agrippée au début de son Tour');
+      if (f2h.targetGrappled === true) {
+        addChoice('targetTookWounds', 'Le choc a-t-il infligé des Blessures ?', [['À saisir', ''], ['Oui', 'true'], ['Non', 'false']]);
+        addChoice('targetEnduranceSuccess', 'Cible : Test d’Endurance Difficile (−10)', [['À saisir', ''], ['Réussite', 'true'], ['Échec', 'false']]);
+        addChoice('selfEnduranceSuccess', 'Gargantuan : Test d’Endurance Moyenne (+20)', [['À saisir', ''], ['Réussite', 'true'], ['Échec', 'false']]);
+      }
+      addCheck('fatigued', 'Gargantuan Fatigué (décharge réduite à 6 dégâts)');
+      section.append(node('p', 'workspace-muted', 'Décharge : dépensez 1 Élan. Les règles de constriction de navire et les dégâts à son équipage restent des rappels.'));
+    }
+    if (f2hTargetId === 'E0-P-916') addChoice('fireSize', 'Feu face au Léviathan noir', [['À préciser', ''], ['Torche ou plus petit', 'torch'], ['Grand feu de joie', 'bonfire']]);
+    if (f2hActorId === 'E0-P-921') {
+      addCheck('targetChaosFollower', 'La cible est adepte du Chaos (Test social)');
+      addCheck('singleCombatLeader', 'Chef ou champion adverse en duel singulier (+1 Élan)');
+      addCheck('wulfrikHeadCritical', 'Blessure Critique : choisir la table Critique à la tête');
+    }
+    v5.append(section);
   }
   // Listes de Taille (rangs 0-6) : Battement, et toute attaque naturelle dont un effet dépend de la Taille (Attaque caudale, Piétinement, Langue).
   let sizesShown = false;
