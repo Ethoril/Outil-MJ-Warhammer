@@ -4,6 +4,7 @@ import { readFileSync } from 'node:fs';
 import { buildParticipantFromBestiary, BESTIARY_FREE_ATTACK_KEY } from '../js/core/bestiary-profiles.js';
 import { sanitizeParticipant } from '../js/core/sanitize.js';
 import { participantKeywords } from '../js/core/creature-keywords.js';
+import { F2_H_PROFILE_ABILITIES } from '../js/data/f2-h-profile-abilities.js';
 
 const library = JSON.parse(readFileSync(new URL('../js/data/bestiary/L06.json', import.meta.url), 'utf8')).profiles;
 const byName = name => library.find(profile => profile.name === name && profile.kind === 'profile');
@@ -127,7 +128,8 @@ test('B1 tous les profils de tous les livres (hors gabarits) se construisent', a
     const profiles = JSON.parse(readFileSync(new URL(`../js/data/bestiary/${file}`, import.meta.url), 'utf8')).profiles;
     for (const profile of profiles.filter(item => item.kind !== 'template')) {
       const participant = buildParticipantFromBestiary(profile.id, { library: profiles, includeOptional: true });
-      assert.equal(participant.actions.length, (profile.attacks || []).reduce((sum, attack) => sum + (attack.count > 1 ? attack.count : 1), 0), profile.id); // Q16 : « 2 Claws » = 2 actions
+      assert.equal(participant.actions.length, (profile.attacks || []).reduce((sum, attack) => sum + (attack.count > 1 ? attack.count : 1), 0)
+        + F2_H_PROFILE_ABILITIES.filter(rule => rule.profileId === profile.id && rule.specialAction).length, profile.id); // Q16 : « 2 Claws » = 2 actions ; F2-H : actions propres au profil
       assert.equal(participant.maxHp, profile.woundsAbsent ? null : profile.wounds, profile.id);
       built += 1;
     }
