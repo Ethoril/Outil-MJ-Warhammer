@@ -50,9 +50,9 @@ export function planBestiaryProfileAbility(participant, key, context = {}) {
     else plan.effects.push({ damage: context.fatigued === true ? rule.fatiguedDamage : rule.damage, ignoresArmour: rule.ignoresArmour, trigger: rule.trigger,
       cost: rule.cost, ...(context.isShip === true ? { shipDamage: rule.shipDamage, crewDamage: context.fatigued === true ? rule.fatiguedShipCrewDamage : rule.shipCrewDamage } : {}) });
     if (context.targetTookWounds === true && context.targetEnduranceSuccess === false) plan.effects.push({ state: 'sonne', trigger: 'échec Endurance Difficile' });
-    else if (context.targetTookWounds === true && context.targetEnduranceSuccess !== true) plan.unresolved.push('Décharge électrique : préciser la réussite du Test d’Endurance Difficile (−10).');
+    else if (context.targetTookWounds === true && context.targetEnduranceSuccess !== true) plan.unresolved.push('Décharge électrique : préciser la réussite du Test d’Endurance Difficile (−1 DR).');
     if (context.selfEnduranceSuccess === false) plan.effects.push({ state: 'extenue', trigger: 'échec Endurance Moyenne (+2 DR)' });
-    else if (context.selfEnduranceSuccess !== true) plan.unresolved.push('Décharge électrique : Test d’Endurance Moyenne (+20) du Gargantuan à saisir.');
+    else if (context.selfEnduranceSuccess !== true) plan.unresolved.push('Décharge électrique : Test d’Endurance Moyenne (+2 DR) du Gargantuan à saisir.');
   }
   if (rule.trait) plan.effects.push({ attack: rule.attack, addTrait: rule.trait });
   if (rule.modifier && context.targetChaosFollower === true && rule.test?.includes(context.test)) plan.effects.push({ modifier: rule.modifier, unit: 'skill points' });

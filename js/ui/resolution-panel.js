@@ -1039,7 +1039,7 @@ function renderResult(preview, target, draft, handlers, participants=[]) {
       : effect.addQualities ? `Qualités ${effect.addQualities.join(', ')}`
       : effect.damage ? `${effect.damage} dégâts` : effect.transformation ? `transformation : ${effect.transformation}`
       : effect.immuneToState ? `immunité : ${effect.immuneToState}` : effect.castingCharacteristic ? `incantation avec ${effect.castingCharacteristic}`
-      : effect.modifier ? `+${effect.modifier} au Test` : effect.addTrait ? `Trait ${effect.addTrait}${effect.ignoresSize ? ' sans restriction de Taille' : ''}` : effect.chooseCriticalTable ? `table ${effect.chooseCriticalTable}`
+      : effect.modifier ? `+${effect.modifier / 10} DR au Test (V4 +${effect.modifier})` : effect.addTrait ? `Trait ${effect.addTrait}${effect.ignoresSize ? ' sans restriction de Taille' : ''}` : effect.chooseCriticalTable ? `table ${effect.chooseCriticalTable}`
       : effect.momentum ? `+${effect.momentum} Élan proposé` : effect.attack ? `${effect.attack} : ${effect.addTrait || ''}` : '').filter(Boolean);
     if (effects.length) result.appendChild(node('p', 'workspace-result-line', `${plan.label} (${plan.receipt?.source || 'règle de profil'}) : ${effects.join(' · ')}.`));
   }
@@ -1559,8 +1559,8 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
       addCheck('targetGrappled', 'Gargantuan : cible agrippée au début de son Tour');
       if (f2h.targetGrappled === true) {
         addChoice('targetTookWounds', 'Le choc a-t-il infligé des Blessures ?', [['À saisir', ''], ['Oui', 'true'], ['Non', 'false']]);
-        addChoice('targetEnduranceSuccess', 'Cible : Test d’Endurance Difficile (−10)', [['À saisir', ''], ['Réussite', 'true'], ['Échec', 'false']]);
-        addChoice('selfEnduranceSuccess', 'Gargantuan : Test d’Endurance Moyenne (+20)', [['À saisir', ''], ['Réussite', 'true'], ['Échec', 'false']]);
+        addChoice('targetEnduranceSuccess', 'Cible : Test d’Endurance Difficile (−1 DR)', [['À saisir', ''], ['Réussite', 'true'], ['Échec', 'false']]);
+        addChoice('selfEnduranceSuccess', 'Gargantuan : Test d’Endurance Moyenne (+2 DR)', [['À saisir', ''], ['Réussite', 'true'], ['Échec', 'false']]);
       }
       addCheck('fatigued', 'Gargantuan Fatigué (décharge réduite à 6 dégâts)');
       section.append(node('p', 'workspace-muted', 'Décharge : dépensez 1 Élan. Les règles de constriction de navire et les dégâts à son équipage restent des rappels.'));

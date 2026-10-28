@@ -1456,11 +1456,11 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
       if (damage?.finalDamage > 0 && profileAbilityContext.targetEnduranceSuccess === false)
         targetConditionApplication.push({ id: `${normalized.resolutionId}:f2h:gargantuan-stunned`, key: 'sonne', name: 'Sonné', level: 1, source: { kind: 'bestiary-profile', ability: specialAbility, authorId: actor?.id } });
       else if (damage?.finalDamage > 0 && profileAbilityContext.targetEnduranceSuccess !== true)
-        unresolved.push('Décharge électrique : saisir le résultat du Test d’Endurance Difficile (−10) de la cible.');
+        unresolved.push('Décharge électrique : saisir le résultat du Test d’Endurance Difficile (−1 DR) de la cible.');
       if (profileAbilityContext.selfEnduranceSuccess === false)
         supplementalActorConditions.push({ id: `${normalized.resolutionId}:f2h:gargantuan-fatigued`, key: 'extenue', name: 'Exténué', level: 1, source: { kind: 'bestiary-profile', ability: specialAbility, authorId: actor?.id } });
       else if (profileAbilityContext.selfEnduranceSuccess !== true)
-        unresolved.push('Décharge électrique : saisir le résultat du Test d’Endurance Moyenne (+20) du Gargantuan.');
+        unresolved.push('Décharge électrique : saisir le résultat du Test d’Endurance Moyenne (+2 DR) du Gargantuan.');
     }
     if (specialAbility === 'farmyard-beast-spit') {
       const resistance = profileAbilityContext.farmyardResistance;
