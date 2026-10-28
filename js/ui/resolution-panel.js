@@ -1043,6 +1043,7 @@ function renderResult(preview, target, draft, handlers, participants=[]) {
       : effect.momentum ? `+${effect.momentum} Élan proposé` : effect.attack ? `${effect.attack} : ${effect.addTrait || ''}` : '').filter(Boolean);
     if (effects.length) result.appendChild(node('p', 'workspace-result-line', `${plan.label} (${plan.receipt?.source || 'règle de profil'}) : ${effects.join(' · ')}.`));
   }
+  if (preview.deathblow?.triggered) result.appendChild(node('p', 'workspace-result-line', `Frappe mortelle : attaque immédiate contre un autre adversaire au contact (au plus ${preview.deathblow.maxChain} ce Tour).`));
   if (effectiveTarget && preview.damage) result.appendChild(node('p', 'workspace-result-line', `${effectiveTarget.name} : ${previewHpLoss(preview)} Blessures proposées · PV ${effectiveTarget.hp} → ${Math.max(0, Number(effectiveTarget.hp) - previewHpLoss(preview))}`));
   if (preview.actionCosts?.paid?.length) result.appendChild(node('p', 'workspace-result-line',
     'Coût proposé avant le jet : ' + preview.actionCosts.paid.map(cost => cost.resource === 'momentum' ? '1 Élan' : cost.amount + ' ' + cost.resource).join(', ')));

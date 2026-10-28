@@ -1474,6 +1474,10 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     }
   }
   const profileAbilityReminders = [...profileAbilityPlans, ...targetProfileAbilityPlans].flatMap(plan => plan.reminders);
+  // Grands félins (L23 p.87) : Frappe mortelle (V4 p.160) sur toute frappe de mêlée réussie, quelle que soit la Taille ; au plus BCC attaques en chaîne.
+  const deathblow = hit && target && !replacement && actorPlan.kind === 'melee' && action.extensions?.v5?.deathblow === true
+    ? { triggered: true, maxChain: Math.floor((Number(actor?.caracs?.CC) || 0) / 10), ruleSource: 'L23 p.87, Frappe mortelle V4 p.160' } : null;
+  if (deathblow) profileAbilityReminders.push(`Frappe mortelle : le félin peut avancer à la place de sa cible et attaquer aussitôt un autre adversaire au contact (au plus ${deathblow.maxChain} fois ce Tour). Jouer cette attaque comme une nouvelle résolution.`);
   const profileAbilityUnresolved = [...profileAbilityPlans, ...targetProfileAbilityPlans].flatMap(plan => plan.unresolved);
   unresolved.push(...profileAbilityUnresolved);
   if (target) for (const row of targetConditionApplication) if (bestiaryProfileStateImmunity(target, row.key)) {
@@ -1804,6 +1808,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     talentSLChoices: { actor: actorPlan.talentSLChoices || [], defender: defenderPlan?.talentSLChoices || [] },
     weaponConditions,
     profileAbilityPlans: [...profileAbilityPlans, ...targetProfileAbilityPlans],
+    deathblow,
     championSlayerDuel: championSlayerGain ? { participantId: actor.id, targetId: target.id } : null,
     supplementalEquipment,
     weaponReload,
