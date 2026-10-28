@@ -191,3 +191,22 @@ test('Merwyrm bite, Black Leviathan, Wulfrik and Gravelord remain profile-scoped
   assert.equal(planBestiaryProfileAbility(p('E0-P-921'), 'wulfrik-champion-slayer', { singleCombatLeader: true }).effects[0].momentum, 1);
   assert.equal(planBestiaryProfileAbility(p('E0-P-916'), 'wulfrik-head-taker', { critical: true }).available, false);
 });
+
+test('Gargantuan discharge ignores non-magical metal armour only (L25 p.143)', () => {
+  const built = p('E0-P-910');
+  const actor = { ...built, id: 'gargantuan-armour', camp: 'ennemi', zone: 'active', hp: 80, maxHp: 80, extensions: { ...built.extensions, v5: { ...built.extensions.v5, hasMomentum: true } } };
+  const discharge = actor.actions.find(row => row.extensions?.v5?.specialProfileAbility === 'gargantuan-electric-discharge');
+  const teeth = actor.actions.find(row => row.name === 'Razor-sharp Teeth');
+  const piece = (id, category) => ({ id, name: id, kind: 'armour', category, ap: 3, layer: 'rigid', locations: ['head', 'body', 'rightArm', 'leftArm', 'rightLeg', 'leftLeg'], keywords: [] });
+  const run = (equipment, action) => previewResolution({ resolutionId: `garg-armour-${equipment[0].id}-${action.name}`, baseRevision: 0, actor,
+    target: { id: 'grappled', name: 'Agrippé', zone: 'active', hp: 40, maxHp: 40, caracs: { E: 0 }, equipment, states: [] },
+    action, roll: 23, defense: { base: 20, roll: 95, v5: { kind: 'test' } },
+    v5: { kind: 'melee', context: { f2h: { targetGrappled: true, targetEnduranceSuccess: true, selfEnduranceSuccess: true } } } });
+  const mail = run([piece('mail', 'Mailles')], discharge);
+  assert.ok(mail.protection.ignored.some(row => row.item.id === 'mail'), 'mail is ignored by the discharge');
+  const magic = run([piece('magic', 'Magique et Unique')], discharge);
+  assert.ok(!magic.protection.ignored.some(row => row.item.id === 'magic'), 'magical armour still protects');
+  assert.equal(magic.damage.finalDamage, mail.damage.finalDamage - 3);
+  const bite = run([piece('mail', 'Mailles')], teeth);
+  assert.ok(!bite.protection.ignored.some(row => row.item.id === 'mail'), 'ordinary bites keep the armour');
+});

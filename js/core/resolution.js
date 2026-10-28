@@ -410,7 +410,7 @@ export function normalizeResolutionInput(input = {}) {
     criticalRolls: normalizeCriticalRolls(input.criticalRolls),
     attackContext: equipmentAttackContext(weaponItem,input.v5?.context||{}),
     protectionContext: { ...(isRecord(input.protectionContext) ? clone(input.protectionContext) : {}),
-      ...(/warp blade|lame de malepierre/i.test(String(action.name || action.note || action.extensions?.equipment?.name || '')) ? { ignoreMetalArmour: true } : {}) },
+      ...(/warp blade|lame de malepierre/i.test(String(action.name || action.note || action.extensions?.equipment?.name || '')) ? { ignoreMetalArmour: true } : action.extensions?.v5?.specialProfileAbility === 'gargantuan-electric-discharge' ? { ignoreMetalArmour: 'non-magical' } : {}) },
     ...(ammunition ? { ammunitionId: ammunition.id, ...(input.ammunitionArbitrated === true ? { ammunitionArbitrated: true } : {}), ammunitionSources: merged?.sources || [] } : {}),
     criticalDeclined: Array.isArray(input.criticalDeclined) ? input.criticalDeclined.map(String) : [],
     ...(defense ? { defense } : {})
