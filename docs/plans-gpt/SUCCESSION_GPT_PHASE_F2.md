@@ -1,5 +1,13 @@
 # Succession — Phase F2
 
+## T2 bis — 28/10/2026 : arrêt pour contre-vérification
+
+Worktree `E:/Outil MJ Warhammer/tmp/gpt-phase-f2-worktree`, branche `gpt/phase-f2`. Lire la section T2 bis en tête de `RAPPORT_GPT_PHASE_F2.md`, les décisions recopiées en tête de `CHOIX_EXECUTANT_PHASE_F2.md` et `tmp/gpt-phase-f2/CONTRE_VERIFICATION_CLAUDE_T2.md`. Les anciennes réserves T2 sur Blackbriar et Salve ci-dessous sont historiques et remplacées par le détail T2 bis.
+
+Suite Node : 5 083/5 084 ; seul échec `sw.test.js` sur six modules non précachés, listés dans le rapport ; `sw.js` reste inchangé sur instruction. Les parcours navigateur D/N/I ont été rejoués sur application et Store réels, avec limites de fixtures explicitées dans le rapport. N : un lien orphelin peut rester enregistré après retrait mais ne contraint pas ; restart UI purge les liens. Empaleuse : chirurgie de balle confirmée par le MJ, talent non contrôlé automatiquement. Malus durables d’amputation reportés à F2-J.
+
+**Arrêt : contre-vérification Claude de T2 bis puis feu vert du MJ avant T3.** Aucun push, fusion, publication, version applicative ou modification `sw.js`.
+
 ## T2 — reprise et vérification du 27/10/2026
 
 Les travaux D/E/N/I et la conception K2 sont dans le worktree `E:/Outil MJ Warhammer/tmp/gpt-phase-f2-worktree`, branche `gpt/phase-f2`. Lire la section T2 du rapport `RAPPORT_GPT_PHASE_F2.md` et les choix `CHOIX_EXECUTANT_PHASE_F2.md` avant toute reprise ; ils consignent les résultats, les tests modifiés et les limites. F2-R est commité et sa contre-vérification a explicitement autorisé T2 sans correction préalable.

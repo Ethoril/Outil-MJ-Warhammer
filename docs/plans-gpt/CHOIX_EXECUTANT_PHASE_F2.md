@@ -1,3 +1,29 @@
+## Contre-vérification T2 (27/10 soir) — décisions du MJ (première série)
+
+- Sortie d'un filet : **Test opposé de Force contre la Force du filet** (L06 p.186, chaque DR après le premier retire un état Empêtré supplémentaire), au lieu du cumul de DR jusqu'à la valeur de Force.
+- Recharge (précisé par le MJ) : chaque Test réussi fait avancer la recharge de **1 + DR positifs** (réussite à +0 DR = 1, réussite à +2 DR = 3) ; un échec n'apporte rien. Remplace D-RECHARGE-01 (1 par Test réussi).
+- Salve sans astérisque : **capacité complète** rendue par la Recharge (E-SALVE-01 retenu).
+- Incident de poudre catastrophique : **Dégâts de l'arme à +0 DR, tirés du profil** (L06 p.165), pas de maximum saisi.
+- Maladresse : **table Oops seule**, d10 obligatoire (inchangé).
+- Empoignade : Blesser plafonné à 0 PV **sans critique d'excédent** ; dégâts **BF + DR − BE, sans PA** ; un double à l'initiation **garde son critique** ; quand l'initiateur se dégage, **le lien libère les deux** participants.
+
+## Contre-vérification T2 (27/10 soir) — décisions du MJ (seconde série)
+
+- Double raté 99-100 d'une hache-fusil (ou hallebarde-fusil) en mêlée, ou d'un mortier de main en rechargement : **l'accident propre de L13 prime** sur la table d'incident générique.
+- **Ajouter la table d'incident de Salve** (L13 p.126) pour l'arquebuse à salve.
+- Bolas : Empêtré et À terre **seulement sur un coup aux jambes** (L06 p.303) ; le blocage « Empêtré 35, À terre » est un bug.
+- Javelot Blackbriar : **retirer l'Inflige vide**, l'arme redevient utilisable.
+- Empaleuse au tir sans munition suivie : **projectile générique déduit de l'arme** (flèche, carreau, balle) au lieu du blocage.
+- Discrétion −1 : **seulement les pièces marquées dans le catalogue** (le catalogue fait foi, exception au livre).
+- Tromblon : **grenaille ou projectiles improvisés seulement**, pas de balles.
+- Bouclier attaché : **texte du livre**, sans les restrictions targe ajoutées par GPT.
+- Immobilisante (V4) : **garder l'automatisation** tirée du texte du catalogue.
+- Griffonsfoot neuf : **déchargé** (inchangé).
+- Malus durables d'amputation : **dans F2-J**, comme prévu.
+- Main fendue : la perte de tous les doigts déclenche **un second choc d'amputation pour la main**.
+- À faire en T2 bis : **mort subite des figurants** (réglage de table, désactivé par défaut) et **Assommer** (coup retenu à la tête avec arme Assommante).
+- **Conception K2 validée.**
+
 # Choix d'exécutant - Phase F2
 
 ## Choix d’exécutant — recharge T2
