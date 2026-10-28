@@ -1,7 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createStore } from '../js/core/store.js';
-import { createCombatEngine } from '../js/core/combat.js';
 import { ficheSnapshot } from '../js/core/fiche-sync.js';
 import { getV5Fortune } from '../js/core/v5-resources.js';
 
@@ -28,12 +27,14 @@ test('F2-L characterization — first PJ fiche binding adopts one spent anonymou
   await store.launchEncounter('binding-scene-a');
   const firstPj = store.listParticipants().find(row => row.profileId === 'binding-pj');
   const firstNpc = store.listParticipants().find(row => row.profileId === 'binding-npc');
-  await createCombatEngine(store).start();
   await store.setFortune(firstPj.id, 3);
   await store.setFortune(firstNpc.id, 3);
-  await store.acquireConditions(firstPj.id, [{ name: 'Sonné', level: 2 }], { resolutionId: 'binding-stun' });
-  await store.recoverCondition(firstPj.id, 'sonne', { method: 'fortune' });
+  const spend = store.previewResolution({ resolutionId: 'binding-spend', actorId: firstPj.id,
+    action: { type: 'test', attr: 'CC', base: 50 }, roll: 61,
+    v5: { kind: 'test', costs: [{ id: 'binding-spent-fortune', resource: 'fortune', amount: 1 }] } });
+  assert.equal((await store.applyResolution(spend)).status, 'applied');
   await store.setFortune(firstNpc.id, 2);
+  assert.equal(store.getFortune(firstPj.id).balance, 2, 'the suspended PJ pool must contain the spent point before binding');
   const firstPjIdentity = store.getFortune(firstPj.id).characterId;
   const firstNpcIdentity = store.getFortune(firstNpc.id).characterId;
 
