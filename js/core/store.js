@@ -329,6 +329,7 @@ import { sharedState, sameSharedState } from './sync-protocol.js';
 import { applyFicheSync as applyFicheSyncToDraft } from './fiche-sync.js';
 import { convertLegacyV4Profile } from './v5-legacy-conversion.js';
 import { planMountedFall, V5_RIDE_SKILL_ID } from './v5-mounted-combat.js';
+import { createAftermathState, validateAftermathState, registerWoundIncident, previewAftermathAdvance, advanceAftermathCalendar, treatWoundIncident, treatInfection, treatSurgicalIncident } from './v5-aftermath.js';
 
 export const KEY = { EXTENSIONS: 'wfrp.extensions.v1', RESERVE: 'wfrp.reserve.v1', COMBAT: 'wfrp.combat.v1', LOG: 'wfrp.log.v1', DICE: 'wfrp.dice.v1', TS: 'wfrp.sync.ts.v1' };
 
@@ -4975,6 +4976,61 @@ function resolvedCorruptionTest(participant, skillId, input) {
       });
     },
 
+    getAftermathState() {
+      const stored = currentEnvelope().extensions?.v5?.aftermathRegister;
+      return stored == null ? createAftermathState() : validateAftermathState(stored);
+    },
+    previewAftermathAdvance(input = {}) {
+      return previewAftermathAdvance(api.getAftermathState(), input);
+    },
+    _runAftermathCommand(type, operation, { participantId = null, patientWounds = null } = {}) {
+      let outcome = null;
+      const refused = new Error('aftermath operation was not applied');
+      refused.aftermathRefused = true;
+      let commit;
+      try { commit = api.executeCommand(type, draft => {
+        const extensions = draft.extensions || {};
+        const v5 = extensions.v5 || {};
+        const current = v5.aftermathRegister == null ? createAftermathState() : validateAftermathState(v5.aftermathRegister);
+        const target = participantId ? (draft.combat?.participants || []).find(row => row.id === participantId) : null;
+        if (participantId && !target) {
+          outcome = { status: 'refused', reason: 'unknown-subject', receipt: { id: null, kind: type, status: 'refused', reason: 'unknown-subject' } };
+          throw refused;
+        }
+        outcome = operation(current, target);
+        if (outcome?.receipt?.status !== 'applied' || outcome.state.revision === current.revision) throw refused;
+        const nextV5 = { ...v5, aftermathRegister: outcome.state };
+        let next = { ...draft, extensions: { ...extensions, v5: nextV5 } };
+        if (participantId && patientWounds) {
+          const healed = Number(outcome.receipt.healed) || 0;
+          const injury = Number(outcome.receipt.fumbleDamage) || 0;
+          if (healed || injury) {
+            const participants = next.combat.participants.map(row => row.id === participantId
+              ? { ...row, hp: Math.max(1, Math.min(Number(row.maxHp ?? row.hp) || row.hp, Number(row.hp) + healed - injury)) }
+              : row);
+            next = { ...next, combat: { ...next.combat, participants } };
+            outcome = { ...outcome, receipt: { ...outcome.receipt, currentWoundsAfter: participants.find(row => row.id === participantId)?.hp } };
+          }
+        }
+        return next;
+      }); } catch (error) { if (error?.aftermathRefused) return outcome; throw error; }
+      return commit?.then ? commit.then(() => outcome).catch(error => { if (error?.aftermathRefused) return outcome; throw error; }) : outcome;
+    },
+    registerAftermathIncident(input = {}) {
+      return api._runAftermathCommand('register-aftermath-incident', (state) => registerWoundIncident(state, { ...input, expectedRevision: input.expectedRevision ?? state.revision }));
+    },
+    advanceAftermathCalendar(input = {}) {
+      return api._runAftermathCommand('advance-aftermath-calendar', (state) => advanceAftermathCalendar(state, { ...input, expectedRevision: input.expectedRevision ?? state.revision }));
+    },
+    treatAftermathWound(input = {}) {
+      return api._runAftermathCommand('treat-aftermath-wound', (state, participant) => treatWoundIncident(state, { ...input, expectedRevision: input.expectedRevision ?? state.revision, participantId: participant.id, wounds: participant.hp }), { participantId: input.participantId, patientWounds: true });
+    },
+    treatAftermathInfection(input = {}) {
+      return api._runAftermathCommand('treat-aftermath-infection', (state) => treatInfection(state, { ...input, expectedRevision: input.expectedRevision ?? state.revision }));
+    },
+    treatAftermathSurgicalIncident(input = {}) {
+      return api._runAftermathCommand('treat-aftermath-surgery', (state) => treatSurgicalIncident(state, { ...input, expectedRevision: input.expectedRevision ?? state.revision }));
+    },
     getFullJSON() {
       const data = currentEnvelope();
       return JSON.stringify(data, null, 2);

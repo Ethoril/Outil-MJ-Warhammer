@@ -80,6 +80,8 @@ export function registerWoundIncident(stateValue, {
     || typeof bandaged !== 'boolean' || typeof requiresSurgery !== 'boolean') {
     throw new TypeError('identité ou faits de l’incident invalides');
   }
+  const prior = state.receipts.find(item => item.id === opId);
+  if (prior) return { state: clone(state), receipt: prior };
   if (expectedRevision !== state.revision) return result(state, receipt(state, opId, 'incident', 'refused', 'revision-conflict'));
   if (state.incidents.some(item => item.id === id)) return result(state, receipt(state, opId, 'incident', 'refused', 'incident-already-exists'));
   const next = clone(state);
@@ -134,6 +136,7 @@ export function advanceAftermathCalendar(stateValue, {
       || !Number.isSafeInteger(check.sl) || seen.has(`${check.incidentId}:${check.day}`)) {
       return refusal('invalid-or-duplicate-daily-test');
     }
+    if (check.success !== (check.sl >= 0)) return refusal('daily-test-result-conflicts-with-sl');
     seen.add(`${check.incidentId}:${check.day}`);
   }
   const next = clone(state);

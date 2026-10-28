@@ -11,6 +11,7 @@ import {
   treatWoundIncident,
   validateAftermathState
 } from '../js/core/v5-aftermath.js';
+import { createStore } from '../js/core/store.js';
 
 const register = (state, options = {}) => registerWoundIncident(state, {
   id: 'injury-1', operationId: 'register-1', expectedRevision: state.revision,
@@ -34,6 +35,14 @@ test('calendar is independent, whole-day, and counts an eight-day Imperial week'
   assert.deepEqual(aftermathDate(state), { day: 25, dayInImperialWeek: 1 });
   const fractional = advance(state, 'fractional', 0.5);
   assert.equal(fractional.receipt.reason, 'positive-whole-days-required');
+});
+
+test('incident registration is idempotent by operation identifier', () => {
+  const state = createAftermathState();
+  const first = register(state, { operationId: 'same-operation' });
+  const replay = register(first.state, { operationId: 'same-operation', id: 'different-incident' });
+  assert.deepEqual(replay.state, first.state);
+  assert.deepEqual(replay.receipt, first.receipt);
 });
 
 test('calendar preview blocks a jump that would skip an untreated wound infection test', () => {
@@ -149,4 +158,36 @@ test('surgery needs a Surgery talent and a Challenging (+0) Heal Test', () => {
   });
   assert.equal(surgery.state.incidents[0].surgeryCompleted, true);
   assert.equal(validateAftermathState(surgery.state).revision, surgery.state.revision);
+});
+
+test('Store keeps the calendar, incident and treatment in Undo/Redo and after reload', async () => {
+  let saved = null;
+  const persistence = {
+    async load() { return saved && structuredClone(saved); },
+    async saveAtomic({ state }) { saved = structuredClone(state); return { ok: true }; }
+  };
+  const store = createStore({ storage: null, persistence });
+  await store.ready;
+  await store.loadFromJSON({
+    schemaVersion: 3, reserve: [],
+    combat: { round: 0, currentActorId: null, order: [], participants: [{
+      id: 'patient', name: 'Patient', kind: 'PJ', camp: 'pj', zone: 'active', hp: 5, maxHp: 10,
+      caracs: { E: 30 }, states: [], extensions: { v5: {} }
+    }] },
+    log: [], diceLines: [], extensions: { v5: {} }
+  });
+  const registered = await store.registerAftermathIncident({ id: 'incident-a', operationId: 'register-a', participantId: 'patient' });
+  assert.equal(registered.receipt.status, 'applied');
+  const treated = await store.treatAftermathWound({ operationId: 'treat-a', incidentId: 'incident-a', participantId: 'patient', skill: 'heal', intelligenceBonus: 2, supplies: true, testSL: 1, difficultySL: 0 });
+  assert.equal(treated.receipt.healed, 3);
+  assert.equal(store.listParticipants()[0].hp, 8);
+  assert.equal(await store.undo(), true);
+  assert.equal(store.listParticipants()[0].hp, 5);
+  assert.equal(store.getAftermathState().incidents[0].treatments.length, 0);
+  assert.equal(await store.redo(), true);
+  assert.equal(store.listParticipants()[0].hp, 8);
+  const reloaded = createStore({ storage: null, persistence });
+  await reloaded.ready;
+  assert.equal(reloaded.getAftermathState().incidents[0].treatments[0].kind, 'heal');
+  assert.equal(reloaded.listParticipants()[0].hp, 8);
 });

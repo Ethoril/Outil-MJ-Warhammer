@@ -37,6 +37,7 @@ import { getSpellContract, getAllSpellContracts } from '../core/v5-spell-contrac
 import { magicGrantedActions, beastFormActions } from '../core/v5-magic-combat.js';
 import { transformationOvercastCost } from '../core/v5-magic-arbitrations.js';
 import { effectiveSupplementalEncumbrance } from '../core/v5-supplemental-equipment.js';
+import { createV5AftermathPanel } from './v5-aftermath-panel.js';
 
 export const WORKSPACE_SPACES = Object.freeze(['prepare', 'play', 'library']);
 
@@ -401,6 +402,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
 
   const divinePanel=createDivinePanel({Store,refresh:()=>render()});
   const corruptionPanel=createV5CorruptionPanel({Store,refresh:()=>render()});
+  const aftermathPanel=createV5AftermathPanel({Store,refresh:()=>render()});
   const brokenEscapePanel=createV5BrokenEscapePanel({Store,refresh:()=>render(),onPrepareHide(actorId,skillId){
     const actor=readParticipants(Store).find(row=>row.id===actorId&&row.zone==='active');if(!actor)return;
     state.space='play';state.actorChoice={id:actorId,turn:turnKey(readCombat(Store))};state.resolution=emptyResolution(actorId);state.resolution.hideSkillId=skillId;state.resolution.type='skill';state.resolution.v5Context={isAction:true,runningOrHiding:true,involvesMovement:false};
@@ -1673,6 +1675,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     const escapePanel=brokenEscapePanel.render(context.participants,context.actor?.id);if(escapePanel)center.appendChild(escapePanel);
     const prayers=divinePanel.render(context.actor,context.participants);if(prayers)center.appendChild(prayers);
     const corruption=corruptionPanel.render(context.actor);if(corruption)center.appendChild(corruption);
+    const aftermath=aftermathPanel.render(context.participants);if(aftermath)center.appendChild(aftermath);
 
     const draft = state.resolution;
     let previousWeaponAttacks = [], resolutionClock = {};
