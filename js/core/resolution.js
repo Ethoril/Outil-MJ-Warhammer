@@ -268,6 +268,8 @@ function inferredNaturalPlan(actor, action, v5) {
   return planNaturalAttack(actor, key, { ordinary, charged: context.charged ?? v5?.charging, actorSize: naturalSizes(v5).actorSize, targetSize: naturalSizes(v5).targetSize });
 }
 const foldKey = text => String(text).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+// F2-H : actions de profil qui posent des états sans infliger de dégâts ni de critique (Immersion, lasso de soie, crachat).
+const NO_DAMAGE_PROFILE_ABILITIES = new Set(['sea-elemental-immersion', 'cliff-spider-lasso', 'farmyard-beast-spit']);
 export function normalizeResolutionInput(input = {}) {
   if (!isRecord(input)) throw new ResolutionError('Entrée de résolution invalide');
   const actor = isRecord(input.actor) ? clone(input.actor) : null;
@@ -956,7 +958,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     else if(!Number.isFinite(distance)||distance<0)scatterUnresolved.push('Déviation : saisir la distance tireur-cible en yards pour plafonner le résultat.');
     else {const rolled=dice[0]+dice[1],maximum=distance/2;scatter={directionRoll:direction,direction:['','haut-gauche','haut','haut-droite','gauche','droite','bas-gauche','bas','bas-droite'][direction],distanceRolls:[...dice],distanceYards:Math.min(rolled,maximum),rolledDistanceYards:rolled,maximumYards:maximum};}
   }
-  const criticalAttack = !(context.specialAttack==='whirlwind-of-death'||hit&&['dirty-fighting','disarm','shieldsman'].includes(context.specialAttack)) && attackType(action.type) && normalized.v5.context?.silentTakedown !== true && normalized.knockoutValid!==true && success && criticalClassification.critique;
+  const criticalAttack = !NO_DAMAGE_PROFILE_ABILITIES.has(action.extensions?.v5?.specialProfileAbility) && !(context.specialAttack==='whirlwind-of-death'||hit&&['dirty-fighting','disarm','shieldsman'].includes(context.specialAttack)) && attackType(action.type) && normalized.v5.context?.silentTakedown !== true && normalized.knockoutValid!==true && success && criticalClassification.critique;
   const criticalLocationRoll = normalized.criticalRolls?.location;
   const location = hit && attackType(action.type) ? attackLocation(normalized, roll, target) : null;
   const wulfrikHeadTableChosen = (actor?.extensions?.v5?.bestiary?.id === 'E0-P-921' || actor?.profileId === 'E0-P-921') && context.f2h?.wulfrikHeadCritical === true;
@@ -1221,7 +1223,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     const targetArmour = protection.ap;
 
     // Souffle de Fumée (V5 p.357) : aucun dégât, ni ceux de l'action ni le NR.
-    if (targetArmour !== null && !mechanicalWarnings.length && naturalPlanOf(actor, normalized.v5)?.noDamage !== true)     damage = computeDamage({
+    if (targetArmour !== null && !mechanicalWarnings.length && naturalPlanOf(actor, normalized.v5)?.noDamage !== true && !NO_DAMAGE_PROFILE_ABILITIES.has(action.extensions?.v5?.specialProfileAbility))     damage = computeDamage({
       weaponDamage:blastPlan?.ready?blastPlan.targets.find(row=>row.participantId===target.id)?.damage??weaponDamage:spreadPlan?.ready?spreadPlan.targets.find(row=>row.participantId===target.id)?.damage??weaponDamage:weaponDamage,
       strengthBonus,
       damageBonus:blastPlan?.ready?0:damageBonus+magicWeaponBonus(actor,action,nature.ranged,Number(action.damage) || 0),

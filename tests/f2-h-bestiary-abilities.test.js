@@ -226,3 +226,21 @@ test('Sea Elemental immersion and Cliff Spider lasso entangle with the creature 
   assert.equal(entangled?.strength, 45);
   assert.equal(entangled?.level, 2);
 });
+
+test('Immersion, silk lasso and spit inflict no Wounds nor Critical, the Gargantuan bite still does', () => {
+  const target = { id: 'victim', name: 'Victime', zone: 'active', hp: 30, maxHp: 30, caracs: { E: 30 }, equipment: [], states: [] };
+  const run = (profileId, key, kind, f2h = {}) => {
+    const actor = { ...p(profileId), id: `actor-${profileId}`, zone: 'active' };
+    const action = key ? actor.actions.find(row => row.extensions?.v5?.specialProfileAbility === key) : actor.actions.find(row => row.name === 'Razor-sharp Teeth');
+    return previewResolution({ resolutionId: `nodmg-${profileId}-${key}`, baseRevision: 0, actor, target, action, roll: 10,
+      defense: { base: 20, roll: 95, v5: { kind: 'test' } }, v5: { kind, context: { f2h } } });
+  };
+  for (const [profileId, key, kind, f2h] of [['E0-P-909', 'sea-elemental-immersion', 'melee'], ['E0-P-744', 'cliff-spider-lasso', 'ranged', { cliffSpiderFailureSL: 1 }], ['E0-P-807', 'farmyard-beast-spit', 'ranged', { farmyardResistance: 'fail' }]]) {
+    const preview = run(profileId, key, kind, f2h);
+    assert.equal(preview.hit, true, key);
+    assert.equal(preview.damage, null, `${key} inflicts no Wounds`);
+    assert.ok(!preview.critical, `${key} triggers no Critical`);
+    assert.ok(preview.targetConditionApplication.length > 0, `${key} still applies its state`);
+  }
+  assert.ok(run('E0-P-910', null, 'melee').damage?.finalDamage > 0, 'ordinary bite keeps its damage');
+});
