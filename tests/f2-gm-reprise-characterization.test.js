@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { resolveCreatureHitLocation, deriveHitMorphology } from '../js/core/v5-hit-morphology.js';
 import { buildParticipantFromBestiary } from '../js/core/bestiary-profiles.js';
-import { mountedRiderEventsFor, planMountedAttack, planMountedDodge } from '../js/core/v5-mounted-combat.js';
+import { mountedRiderEventsFor, mountedRideAnswerFor, planMountedAttack, planMountedDodge } from '../js/core/v5-mounted-combat.js';
 import { previewResolution } from '../js/core/resolution.js';
 import { readFileSync as readSource } from 'node:fs';
 
@@ -60,15 +60,19 @@ test('F2-M reprise — une défense brute d’Ag contre un cavalier reçoit le D
 test('F2-M contre-vérification — Surpris et Sonné produisent chacun un plan de chute', () => {
   assert.deepEqual(mountedRiderEventsFor(new Set(['surpris','sonne'])), ['rider-surprised','rider-stunned']);
   const source = readSource(new URL('../js/core/resolution.js', import.meta.url), 'utf8');
-  assert.match(source, /mountedRiderEventsFor, planMountedAttack/);
+  assert.match(source, /mountedRiderEventsFor, mountedRideAnswerFor/);
   assert.match(source, /mountedRiderEventsFor\(nextConditionKeys\)/);
   assert.match(source, /mountedRiderEventsFor\(actorConditionKeys\)/);
 });
 
 test('F2-M contre-vérification — plusieurs plans exigent un d100 par événement', () => {
+  assert.deepEqual(mountedRideAnswerFor({ participantId:'rider', event:'rider-stunned', requiredPlanCount:2,
+    answersById:{rider:{score:55,roll:40}} }), {});
+  assert.deepEqual(mountedRideAnswerFor({ participantId:'rider', event:'rider-stunned', requiredPlanCount:2,
+    answersById:{rider:{'rider-stunned':{score:55,roll:71}}} }), {score:55,roll:71});
   const source = readSource(new URL('../js/core/resolution.js', import.meta.url), 'utf8');
   assert.match(source, /mountedRideAnswerFor\(\{[^}]*participantId: plan\.participantId/s);
-  assert.match(source, /mountedRideRollsById\?\.\[plan\.participantId\][^\n]*singlePlan/);
+  assert.match(source, /riderAnswer\.roll \?\? \(singlePlan \? context\.mountedRideRollsById/);
 });
 
 test('F2-G contre-vérification — changer de cible efface aussi le côté de patte choisi', () => {

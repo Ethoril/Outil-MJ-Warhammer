@@ -43,7 +43,7 @@ import { creatureSizeOf } from './creature-size.js';
 import { advanceV5NetEscape, conditionalV5KnifeQualities, entanglementStrength, naturalWeaponDefaults, previewV5Blast, previewV5Fast, previewV5Hack, previewV5HookedNet, previewV5ImpaleProjectile, previewV5Inflict, previewV5Parry, previewV5PistolContact, previewV5Shield, previewV5Slash, previewV5Spread, previewV5TrapBlade, validateV5ShieldHands } from './v5-weapon-qualities.js';
 import { consumeV5WeaponShot, initialV5ReloadState } from './v5-reloading.js';
 import { appendageCriticalLocation, deriveHitMorphology, resolveCreatureHitLocation } from './v5-hit-morphology.js';
-import { mountedRiderEventsFor, planMountedAttack, planMountedChargeDamage, planMountedDodge, planMountedFall, resolveMountedMount, V5_RIDE_SKILL_ID } from './v5-mounted-combat.js';
+import { mountedRiderEventsFor, mountedRideAnswerFor, planMountedAttack, planMountedChargeDamage, planMountedDodge, planMountedFall, resolveMountedMount, V5_RIDE_SKILL_ID } from './v5-mounted-combat.js';
 
 export { damageBreakdown, formatDamageFormula, formatWeaponDamage, describeWeaponDamage } from './damage.js';
 
@@ -1428,14 +1428,15 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     if (!plan.requiredTest) continue;
     const rider = mountedWithPrimary.find(row => row?.id === plan.participantId) || mountedRoster.find(row => row.id === plan.participantId);
     const skill = rider?.skills?.find(row => row?.id === V5_RIDE_SKILL_ID && row.status !== 'unresolved');
-    const riderAnswers = context.mountedRideTestsById?.[plan.participantId] || context.mountedRideTests?.[plan.participantId] || {};
-    const riderAnswer = riderAnswers[plan.event] || (mountedRidePlanCounts.get(plan.participantId) <= 1 ? riderAnswers : {});
-    const singlePlan = mountedRidePlanCounts.get(plan.participantId) <= 1;
+    const requiredPlanCount = mountedRidePlanCounts.get(plan.participantId) || 0;
+    const riderAnswer = mountedRideAnswerFor({ participantId: plan.participantId, event: plan.event, requiredPlanCount,
+      answersById: context.mountedRideTestsById || context.mountedRideTests || {} });
+    const singlePlan = requiredPlanCount <= 1;
     const manualScore = riderAnswer.score ?? context.mountedRideScoresById?.[plan.participantId]
       ?? (singlePlan ? context.mountedRideScore : undefined);
     const score = Number.isSafeInteger(skill?.total) ? skill.total : manualScore !== null && manualScore !== undefined && manualScore !== '' && Number.isSafeInteger(Number(manualScore)) ? Number(manualScore) : null;
-    const rawRideRoll = riderAnswer.roll ?? context.mountedRideRollsById?.[plan.participantId]
-      ?? (singlePlan ? context.mountedRideRoll : undefined);
+    const rawRideRoll = riderAnswer.roll ?? (singlePlan ? context.mountedRideRollsById?.[plan.participantId]
+      ?? context.mountedRideRoll : undefined);
     const roll = Number(rawRideRoll);
     if (score === null || !Number.isInteger(roll) || roll < 1 || roll > 100) {
       plan.unresolved = ['Test de Chevaucher requis : fournissez le score et le d100 du cavalier.'];

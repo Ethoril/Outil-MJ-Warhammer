@@ -1657,7 +1657,7 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
     morphologySelect.value=hitMorphologySelection(morphologyContext.hitMorphology,profileMorphology);
     morphologySelect.addEventListener('change',()=>handlers.select({v5Context:{...morphologyContext,hitMorphology:morphologySelect.value||undefined}}));
     morphologyLabel.append(morphologySelect);talentFields.append(morphologyLabel);
-    if(normalizeHitMorphology(morphologySelect.value||profileMorphology)==='spider'&&preview?.location?.key==='LEG'&&!preview.location.side){
+    if(normalizeHitMorphology(morphologySelect.value||profileMorphology)==='spider'&&draft.preview?.location?.key==='LEG'&&!draft.preview.location.side){
       const sideLabel=node('label','workspace-type','Côté de patte touché (choix MJ si nécessaire)'),sideSelect=document.createElement('select');
       sideSelect.setAttribute('aria-label',sideLabel.textContent);sideSelect.append(new Option('À choisir',''),new Option('Patte gauche','left'),new Option('Patte droite','right'));
       sideSelect.value=morphologyContext.spiderLegSide||'';sideSelect.addEventListener('change',()=>handlers.select({v5Context:{...morphologyContext,spiderLegSide:sideSelect.value||undefined}}));

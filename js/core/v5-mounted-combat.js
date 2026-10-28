@@ -123,6 +123,15 @@ export function mountedRiderEventsFor(keys = []) {
   ];
 }
 
+/** Legacy participant-level answers are safe only when that rider has a single Ride Test. */
+export function mountedRideAnswerFor({ participantId, event, requiredPlanCount = 1, answersById = {} } = {}) {
+  const participantAnswers = answersById?.[participantId];
+  if (!participantAnswers || typeof participantAnswers !== 'object' || Array.isArray(participantAnswers)) return {};
+  const eventAnswer = participantAnswers[event];
+  if (eventAnswer && typeof eventAnswer === 'object' && !Array.isArray(eventAnswer)) return eventAnswer;
+  return requiredPlanCount <= 1 ? participantAnswers : {};
+}
+
 /** Fall trigger and required Ride test. Applying the fall remains a Store/MJ decision. */
 export function planMountedFall({ event, restraint = null, riderEntangled = false, mountTraits = [], fallPreventedByEquipment = false } = {}) {
   if (fallPreventedByEquipment === true && ['rider-dead', 'rider-unconscious', 'rider-prone'].includes(event)) {
