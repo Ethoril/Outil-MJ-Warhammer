@@ -111,10 +111,10 @@ test('F2-C T1 — la bâtarde sans suffixe a le défaut une main et ses défauts
 });
 
 test('F2-C T1 — le malus CT conserve le modificateur de DR porté par l’action', () => {
-  const item=catalogue.items.find(row=>row.kind==='weapon'&&row.category==='Lancer');
+  const item=itemById('weapon-armes-a-distance-lancer-javelot-blackbriar-elfe-sylvain');
   const action=actionFor(item);action.extensions.v5.slModifier=2;
   const result=previewResolution({actor:actorFor(item,[]),target,action,roll:40,v5:{context:{targetHelpless:true}}});
-  assert.ok(result.unresolved.some(row=>/Inflige/.test(row)),'le catalogue attribue un Inflige vide que la source CSV ne porte pas; le blocage explicite est conservé');
+  assert.deepEqual(result.unresolved, [], 'le Javelot Blackbriar ne porte pas d’Inflige vide');
   assert.equal(result.score.mod,1);
   assert.equal(previewResolution(result.input).score.mod,1,'ré-aperçu sans cumul');
 });
@@ -197,7 +197,7 @@ test('F2-C Claude — siège et embarquée acceptent les compétences de tir ré
   const trained = { ...skillByName('Projectiles (Jet)'), id: 'jet-trained', total: 61, advances: 2 };
   for (const skills of [[low, trained], [trained, low]]) {
     const result = preview(throwing, skills, { action: actionFor(throwing) });
-    assert.ok(result.unresolved.some(row=>/Inflige/.test(row)),'le Javelot Blackbriar garde le profil réel; l’Inflige vide du snapshot reste explicitement bloquant');
+    assert.deepEqual(result.unresolved, [], 'le Javelot Blackbriar utilisable ne porte pas d’Inflige vide');
     assert.equal(result.weaponSkillReceipt.skillId, 'jet-trained', 'ordre fiche/alias ne masque pas la spécialité entraînée');
     assert.equal(result.score.base,trained.total);
   }

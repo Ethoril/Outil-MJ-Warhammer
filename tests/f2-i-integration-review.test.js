@@ -119,12 +119,23 @@ test('F2-I integration review: conditional amputation requires MJ occurrence con
  const result=await store.applyAmputationShock(confirmed);assert.equal(result.status,'applied');assert.equal(byId(store,'hero').extensions.v5.criticalAftermath[0].amputationShock.amputationOccurred,true);
 });
 
-test('F2-N boundary review: a grapple present before this Turn does impose the Force gate',async()=>{
+test('F2-N boundary review: a grapple constrains only the held participant’s Action, not other Tests',async()=>{
  const link={id:'old-grapple',initiatorId:'foe',targetId:'hero',status:'active',createdTurnId:'previous-turn'};
- const hero=person('hero',{states:[],extensions:{v5:{grapples:[link]}}}),foe=person('foe',{extensions:{v5:{grapples:[link]}}});
+ const hero=person('hero',{hp:20,states:[{id:'held-state',key:'enchevetre',name:'Enchevêtré',level:1,source:{linkId:link.id}}],extensions:{v5:{grapples:[link]}}}),foe=person('foe',{hp:20,extensions:{v5:{grapples:[link]}}});
  const{store}=await fixture([hero,foe]);
  const preview=store.previewResolution({actorId:'hero',targetId:'foe',action:{type:'skill',attr:'Ag',base:30,extensions:{fiche:{skillId:'bagarre'}}},roll:35,v5:{kind:'test',context:{isAction:false,skillId:'bagarre'}}});
- assert.equal(preview.code,'F2_GRAPPLE_FIRST_ACTION');
+ assert.notEqual(preview.code,'F2_GRAPPLE_FIRST_ACTION');
+ const action=store.previewResolution({actorId:'hero',targetId:'foe',action:{type:'skill',attr:'F',base:40,extensions:{fiche:{skillId:'force'}}},roll:35,v5:{kind:'test',context:{isAction:true,skillId:'force'}}});
+ assert.equal(action.code,'F2_GRAPPLE_FIRST_ACTION');
+});
+
+test('F2-N boundary review: la garde ne s’applique qu’au Tour du participant pris',async()=>{
+ const link={id:'old-grapple',initiatorId:'foe',targetId:'hero',status:'active',createdTurnId:'previous-turn'};
+ const hero=person('hero',{hp:20,states:[{id:'held-state',key:'enchevetre',name:'Enchevêtré',level:1,source:{linkId:link.id}}],extensions:{v5:{grapples:[link]}}}),foe=person('foe',{hp:20,extensions:{v5:{grapples:[link]}}});
+ const{store}=await fixture([hero,foe]);
+ await store.setRoundTurn(1,'foe');
+ const preview=store.previewResolution({actorId:'hero',targetId:'foe',action:{type:'skill',attr:'F',base:40,extensions:{fiche:{skillId:'force'}}},roll:35,v5:{kind:'test',context:{isAction:true,skillId:'force'}}});
+ assert.notEqual(preview.code,'F2_GRAPPLE_FIRST_ACTION');
 });
 
 test('F2-I integration review: MJ decisions for countdown persist and undo as commands',async()=>{
@@ -139,8 +150,8 @@ test('F2-I integration review: MJ decisions for countdown persist and undo as co
 
 test('F2-N boundary review: a grapple created during this Turn does not impose the start-of-Turn gate',async()=>{
  const link={id:'mid-turn-grapple',initiatorId:'foe',targetId:'hero',status:'active',createdTurnId:'f2-i-review:1:hero'};
- const hero=person('hero',{states:[],extensions:{v5:{grapples:[link]}}}),foe=person('foe',{extensions:{v5:{grapples:[link]}}});
+ const hero=person('hero',{hp:20,states:[{id:'held-state',key:'enchevetre',name:'Enchevêtré',level:1,source:{linkId:link.id}}],extensions:{v5:{grapples:[link]}}}),foe=person('foe',{hp:20,extensions:{v5:{grapples:[link]}}});
  const{store}=await fixture([hero,foe]);
- const preview=store.previewResolution({actorId:'hero',targetId:'foe',action:{type:'skill',attr:'Ag',base:30},roll:35,v5:{kind:'test',context:{isAction:false}}});
+ const preview=store.previewResolution({actorId:'hero',targetId:'foe',action:{type:'skill',attr:'F',base:40},roll:35,v5:{kind:'test',context:{isAction:true}}});
  assert.notEqual(preview.code,'F2_GRAPPLE_FIRST_ACTION');
 });

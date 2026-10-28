@@ -87,7 +87,18 @@ async function main() {
         listProfiles: () => profiles,
         listParticipants: () => Array.from(combat.participants.values()),
         getCombat: () => combat,
+        resolveDivineAccess: () => ({ allowed: false, code: 'DIVINE_DATA_REQUIRED', reason: 'Test UI.' }),
+        getDivineAccessGrants: () => [],
         getDiceLines: () => diceLines,
+        previewAmputationShock: ({ participantId, criticalId }) => {
+          const record = combat.participants.get(participantId)?.extensions?.v5?.criticalAftermath?.find(row => row.id === criticalId);
+          return record ? { status: 'requires-input', requirements: record.requirements || [] } : { status: 'blocked' };
+        },
+        async updateParticipant(id, patch) {
+          const participant = combat.participants.get(id);
+          Object.assign(participant, patch);
+          return { ok: true };
+        },
         previewResolution: input => previewResolution({ ...input, target: input.targetId ? combat.participants.get(input.targetId) : null }),
         canUndo: () => false,
         undo: () => false
@@ -200,6 +211,24 @@ async function main() {
     await page.getByRole('tab', { name: 'Préparer' }).click();
     await page.getByRole('tab', { name: 'Jouer' }).click();
     await expect(page.locator('.workspace-track .workspace-track-item')).toHaveCount(12);
+    // Le refus est disponible seulement pour une amputation conditionnelle.
+    await page.evaluate(() => {
+      const actor = window.workspaceTestData.combat.participants.get('actor-1');
+      actor.extensions ||= {}; actor.extensions.v5 ||= {};
+      actor.extensions.v5.criticalAftermath = [
+        { id: 'conditional-amputation', effectName: 'Crushed Foot', requirements: [{ part: 'toes', difficultyDR: 2, conditional: true }] },
+        { id: 'mandatory-amputation', effectName: 'Severed Finger', requirements: [{ part: 'finger', difficultyDR: 2, conditional: false }] }
+      ];
+    });
+    await rerender();
+    const amputationRows = page.locator('.workspace-critical-amputation-controls');
+    await expect(amputationRows).toHaveCount(2);
+    await expect(amputationRows.nth(1)).toContainText('Amputation imposée par la ligne critique.');
+    await expect(amputationRows.nth(1).locator('select option[value="false"]')).toHaveCount(0);
+    await amputationRows.nth(0).locator('select[aria-label^="Amputation effectivement survenue"]').selectOption('false');
+    await amputationRows.nth(0).getByRole('button', { name: 'Enregistrer le choc' }).click();
+    await expect(amputationRows).toHaveCount(1);
+    assert.equal(await page.evaluate(() => window.workspaceTestData.combat.participants.get('actor-1').extensions.v5.criticalAftermath[0].amputationShockStatus), 'not-occurred');
     await expect(page.locator('.workspace-track')).toContainText('Un nom de combattant très long');
     await expect(page.locator('.workspace-track')).not.toContainText('Aucun état');
     await expect(page.locator('[data-workspace-select="actor-1"]')).toContainText('BE 3 · PA C2 B1');

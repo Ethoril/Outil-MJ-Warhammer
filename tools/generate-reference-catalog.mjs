@@ -3,6 +3,16 @@ import { createHash } from 'node:crypto';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 const root=resolve(dirname(fileURLToPath(import.meta.url)),'..');
+const preserveEquipmentKeywordDetails = body => body
+ .replace("const params = [];", "const params = [];\n        let asterisk = false;")
+ .replace("const regex = new RegExp(`(?:^|[,;]|\\\\bou\\\\s)\\\\s*${escaped}(?=$|[\\\\s.(,;])\\\\s*([+-]?\\\\d+|\\\\([^)]*\\\\))?`, 'gu');",
+  "const regex = new RegExp(`(?:^|[,;]|\\\\bou\\\\s)\\\\s*${escaped}(?=$|[\\\\s.(,;])\\\\s*([+-]?\\\\d+|\\\\([^)]*\\\\))?(\\\\*)?`, 'gu');")
+ .replace("for (const match of folded.matchAll(regex)) {\n                matched = true;",
+  "for (const match of folded.matchAll(regex)) {\n                if (entry.id === 'inflige') {\n                    const prefix = folded.slice(0, match.index + match[0].length);\n                    const specialStart = prefix.lastIndexOf('special (');\n                    if (specialStart >= 0 && prefix.lastIndexOf(')') < specialStart) continue;\n                }\n                matched = true;\n                asterisk ||= Boolean(match[2]);")
+ .replace("const start = match.index + match[0].length - match[1].length;",
+  "const start = match.index + match[0].length - (match[2] ? 1 : 0) - match[1].length;")
+ .replace("if (matched) result.push({ id: entry.id, parameter: entry.parameter ? params.join(', ') : '' });",
+  "if (matched) result.push({ id: entry.id, parameter: entry.parameter ? params.join(', ') : '', ...(asterisk ? { asterisk: true } : {}) });");
 const source=resolve(process.argv.find(a=>a.startsWith('--source-dir='))?.slice(13)||'../ennemi-interieur-wfrp4');
 if(process.argv.includes('--equipment-only')){
  const readSource=async path=>readFile(resolve(source,path),'utf8');
@@ -29,7 +39,7 @@ if(process.argv.includes('--equipment-only')){
  next.contentVersion='references:'+hash(JSON.stringify(useful,canonical));
  await writeFile(resolve(root,'js/data/shared/fiche/equipment.js'),equipmentSource);
  const helpers=refreshSource.slice(refreshSource.indexOf('const fold ='),refreshSource.indexOf('const sources ='));
- const body=refreshSource.slice(refreshSource.indexOf('const keywordRows ='),refreshSource.indexOf('const catalogVersion =')).replaceAll('await sheet(', 'sheet(');
+ const body=preserveEquipmentKeywordDetails(refreshSource.slice(refreshSource.indexOf('const keywordRows ='),refreshSource.indexOf('const catalogVersion =')).replaceAll('await sheet(', 'sheet('));
  const sheet=` const sheet=name=>{const table=tables[name];if(!table)throw new Error('Source absente : '+name);const [headers,...rows]=table;return rows.filter(row=>row[headers.indexOf('Nom')]?.trim()).map(row=>Object.fromEntries(headers.map((key,index)=>[key,row[index]?.trim()||'']).filter(([key])=>key))) };`;
  const builder='// Generated from fiches/tools/refresh-equipment-catalog.mjs. Regenerate; do not edit.\n'+helpers+'\nexport function buildEquipmentRows(tables) {\n'+sheet+'\n'+body+'\nreturn {items,keywords};\n}\n';
  await writeFile(resolve(root,'js/data/reference-equipment-builder.js'),builder);
@@ -55,7 +65,7 @@ await writeFile(resolve(root,'js/data/reference-snapshot.json'),JSON.stringify(s
 const original=await readFile(resolve(source,'tools/refresh-equipment-catalog.mjs'),'utf8');
 sourceFiles['tools/refresh-equipment-catalog.mjs']={sha256:createHash('sha256').update(original).digest('hex')};
 const helpers=original.slice(original.indexOf('const fold ='),original.indexOf('const sources ='));
-const body=original.slice(original.indexOf('const keywordRows ='),original.indexOf('const catalogVersion =')).replaceAll('await sheet(', 'sheet(');
+const body=preserveEquipmentKeywordDetails(original.slice(original.indexOf('const keywordRows ='),original.indexOf('const catalogVersion =')).replaceAll('await sheet(', 'sheet('));
 const sheet=` const sheet=name=>{const table=tables[name];if(!table)throw new Error('Source absente : '+name);const [headers,...rows]=table;return rows.filter(row=>row[headers.indexOf('Nom')]?.trim()).map(row=>Object.fromEntries(headers.map((key,index)=>[key,row[index]?.trim()||'']).filter(([key])=>key))) };`;
 await writeFile(resolve(root,'js/data/reference-equipment-builder.js'), '// Generated from fiches/tools/refresh-equipment-catalog.mjs. Regenerate; do not edit.\n'+helpers+'\nexport function buildEquipmentRows(tables) {\n'+sheet+'\n'+body+'\nreturn {items,keywords};\n}\n');
 await writeFile(resolve(root,'js/data/reference-snapshot.json'),JSON.stringify(snapshot,null,2)+'\n');

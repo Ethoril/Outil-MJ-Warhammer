@@ -1,10 +1,13 @@
 import {
   V5_BLACKPOWDER_INCIDENT_TABLE,
   V5_COMBAT_FUMBLE_TABLE,
+  V5_SALVO_ARTILLERY_MISFIRE_TABLE,
   V5_FUMBLE_TABLE_VERSION,
   V5_MISFIRE_TABLE_VERSION
 } from '../data/v5-combat-fumbles.js';
 import { getV5CriticalEffect } from '../data/v5-crits.js';
+import { evaluateWeaponDamage, strengthBonusOf } from './damage.js';
+import { previewV5Test } from './v5-roll.js';
 
 const fold = value => String(value ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase('fr');
 const keyOf = row => typeof row === 'string' ? row : row?.id;
@@ -81,7 +84,7 @@ export function isBlackpowderIncidentEligible({ actor, action, context = {}, wea
 function participantEffects(normalized, context, resolution = {}) {
   const actorId = normalized.actor?.id;
   const targetIds = context.designatedTargetIds;
-  const item=normalized.actor?.equipment?.find(row=>row.id===normalized.action?.extensions?.fiche?.equipmentId)||normalized.action?.extensions?.equipment;
+  const item=normalized.actor?.equipment?.find(row=>row.id===normalized.action?.extensions?.fiche?.equipmentId)||normalized.action?.extensions?.equipment||normalized.actor?.equipment?.find(row=>fold(row.name)===fold(context.weaponName));
   const weaponName = fold(context.weaponName || item?.name || normalized.action?.note || normalized.action?.name);
   const isGunAxe = /hache.fusil|gun axe/.test(weaponName);
   const isGunHalberd = /hallebarde.fusil|gun halberd/.test(weaponName);
@@ -114,7 +117,8 @@ function participantEffects(normalized, context, resolution = {}) {
   if (context.reloading === true && isHandMortar && resolution.fumble===true) {
     const damage=explicitDamageMaximum(context,item,normalized.action);
     if(damage===null)unresolved.push('Mortier à main : les dégâts maximums du profil d’arme sont requis pour résoudre l’explosion du rechargement (L13-0112).');
-    else effects.push({ type: 'weapon-explosion', targetId: actorId, location:'bras-principal',damage,damageMode:'maximum',sl:0,reason: 'maladresse-au-rechargement-du-mortier-a-main', convertedFrom: 'L13-0112' });
+    else if(!['left','right'].includes(context.weaponExplosionArmSide)) unresolved.push('Mortier à main : le MJ doit indiquer le bras directeur touché (gauche ou droit).');
+    else effects.push({ type: 'weapon-explosion', targetId: actorId, location:'bras-principal',armSide:context.weaponExplosionArmSide,damage,damageMode:'maximum',sl:0,reason: 'maladresse-au-rechargement-du-mortier-a-main', convertedFrom: 'L13-0112' });
   }
   if(isVolleyGun&&context.crewCount===1){
     if(typeof context.moved!=='boolean')unresolved.push('Servant unique : le MJ doit préciser si l’arme a été déplacée pendant ce Tour (L15-0163).');
@@ -140,12 +144,17 @@ function participantEffects(normalized, context, resolution = {}) {
     const change=stockChange(normalized.actor,context,1,1,'L13-0179',unresolved);if(change)effects.push(change);
     const base=Number(context.recoilTestBase), testRoll=Number(context.recoilTestRoll);
     if(!Number.isInteger(base)||base<1||base>100||!Number.isInteger(testRoll)||testRoll<1||testRoll>100)unresolved.push('Arquebuse à salve : saisissez le Test de Résistance à +2 DR et son d100 (L13-0179).');
-    else {const sl=Math.floor(base/10)-Math.floor(testRoll/10)+2,success=testRoll<=base,astoundingFailure=!success&&sl<=-5;let armCritical=null;
+    else {
+      const modifiedBase=Math.min(100,base+20);
+      const test=previewV5Test({score:modifiedBase,roll:testRoll,kind:'test'}).options[0].result;
+      const sl=test.sl,success=test.success,astoundingFailure=!success&&sl<=-5;
+      let armCritical=null;
       if(astoundingFailure){const severity=Number(context.recoilCriticalRolls);if(!Number.isInteger(severity)||severity<1||severity>100)unresolved.push('Arquebuse à salve : le critique à l’épaule requiert un d100 sur la table critique du bras (L13-0179).');else {const tableEffect=getV5CriticalEffect('ARM',severity);armCritical={location:{key:'ARM',name:'Bras'},locationRoll:null,effectRoll:severity,effect:tableEffect,parsed:tableEffect?.parsed||null,pending:!tableEffect};if(!tableEffect)unresolved.push('Arquebuse à salve : ligne de critique du bras introuvable.');else if(tableEffect.parsed?.death)unresolved.push('Arquebuse à salve : effet mortel de la table du bras ; décision MJ explicite requise avant application.');}}
-      effects.push({type:'volley-recoil',targetId:actorId,sl,success,astoundingFailure,armCritical,convertedModifier:2});}
+      effects.push({type:'volley-recoil',targetId:actorId,sl,success,fumble:test.fumble,automatic:test.details.automatic,astoundingFailure,armCritical,convertedModifier:2});
+    }
   }
   if ((isGunAxe || isGunHalberd) && context.meleeUse === true && context.weaponLoaded === true && resolution.fumble===true) {
-    if (isGunAxe) effects.push({ type: 'weapon-discharge', targetId: actorId, location: 'torse', reason: 'hache-fusil-chargee', convertedFrom: 'L13-0109' });
+    if (isGunAxe) effects.push({ type: 'weapon-discharge', targetId: actorId, location: 'torse', damage:Number(String(item?.damage??normalized.action?.damage??0).replace(/^\+/u,'')), reason: 'hache-fusil-chargee', convertedFrom: 'L13-0109' });
     else if (!Array.isArray(targetIds) || targetIds.length === 0) unresolved.push('Hallebarde-fusil chargée : désignez les cibles derrière le porteur pour le tir de la maladresse (L13-0110).');
     else effects.push(...targetIds.map(id=>({type:'weapon-discharge',targetId:id,location:'torse',damage:normalized.action?.damage,reason:'hallebarde-fusil-chargee',convertedFrom:'L13-0110'})));
   }
@@ -188,8 +197,9 @@ function participantEffects(normalized, context, resolution = {}) {
       const reload=Number(context.weaponReload??item?.reload??item?.extensions?.v5?.reload??6);
       if(!Number.isSafeInteger(reload)||reload<1)unresolved.push('Griffonsfoot : Recharge en succès requise (L13-0108).');
       else if(resolution.success===true){
-        const before=Number(item.extensions?.v5?.griffonsfootReloadProgress)||0,done=before+1>=reload;
-        effects.push({type:'griffonsfoot-reload-progress',targetId:actorId,equipmentId:item.id,successes:1,requiredSuccesses:reload});
+        const successes=1+Math.max(0,Number(resolution.sl)||0);
+        const before=Number(item.extensions?.v5?.griffonsfootReloadProgress)||0,done=before+successes>=reload;
+        effects.push({type:'griffonsfoot-reload-progress',targetId:actorId,equipmentId:item.id,successes,requiredSuccesses:reload});
         if(done){const change=stockChange(normalized.actor,context,6,6,'L13-0108',unresolved);if(change)effects.push(change);
           if(change)effects.push({type:'griffonsfoot-reload',targetId:actorId,equipmentId:item.id,loadedCharges:6});}
       }
@@ -203,8 +213,15 @@ function participantEffects(normalized, context, resolution = {}) {
 export function previewCombatFailure({ normalized, roll, fumble, context = {}, hit = false, success = false, sl = 0 } = {}) {
   const result = { fumble: null, misfire: null, effects: [], reminders: [], unresolved: [] };
   const firearmEligible = isBlackpowderIncidentEligible({ actor: normalized?.actor, action: normalized?.action, context });
-  const isIncidentRoll = firearmEligible && (Number(roll) === 99 || Number(roll) === 100);
+  const weapon=normalized?.actor?.equipment?.find(row=>row.id===normalized?.action?.extensions?.fiche?.equipmentId)||normalized?.action?.extensions?.equipment;
+  const weaponName=fold(context.weaponName||weapon?.name||normalized?.action?.note||normalized?.action?.name);
+  const ownAccident=((/hache.fusil|gun axe|hallebarde.fusil|gun halberd/.test(weaponName)&&context.meleeUse===true)
+    ||(/mortier (?:a|de) main|hand mortar/.test(weaponName)&&context.reloading===true));
+  const isIncidentRoll = firearmEligible && !ownAccident && (Number(roll) === 99 || Number(roll) === 100);
   const isCombatFumble = Boolean(fumble);
+  const salvoQuality=weapon?.keywords?.find(row=>['salve','salvo'].includes(typeof row==='string'?row:row?.id))
+    ||normalized?.action?.qualities?.find(row=>['salve','salvo'].includes(typeof row==='string'?row:row?.id));
+  const salvoWeapon=context.isSalvo===true||Boolean(salvoQuality)||/arquebuse a salve|volley gun/.test(weaponName);
 
   if (isIncidentRoll) {
     const selected = readRoll(context.powderIncidentRoll, 'Jet d’incident de poudre');
@@ -213,15 +230,65 @@ export function previewCombatFailure({ normalized, roll, fumble, context = {}, h
     else if (selected.missing) result.unresolved.push('Incident de poudre : saisissez le résultat du d10 (1–10).');
     else {
       result.misfire.roll = selected.roll;
-      result.misfire.outcome = tableRow(V5_BLACKPOWDER_INCIDENT_TABLE, selected.roll);
-      if (result.misfire.outcome.id === 'catastrophe') {
-        const item=normalized?.actor?.equipment?.find(row=>row.id===normalized?.action?.extensions?.fiche?.equipmentId)||normalized?.action?.extensions?.equipment;
-        const maximum=Number(context.weaponDamageMaximum??item?.damageMaximum??item?.extensions?.v5?.damageMaximum??normalized?.action?.damageMaximum);
-        if(!Number.isFinite(maximum)||maximum<0)result.unresolved.push('Incident de poudre catastrophique : dégâts maximums du profil d’arme requis (V5 p. 165).');
-        else result.effects.push({ type: 'weapon-explosion', targetId: normalized?.actor?.id, location: 'bras-principal', damage:maximum, damageMode: 'maximum', sl: 0 });
-      } else {
-        result.effects.push({ type: 'weapon-misfire', targetId: normalized?.actor?.id,
-          reloadRequired: !/explos|bomb|incendiaire/.test(fold(context.weaponGroup || context.weaponName || normalized?.action?.note)), explosiveDud: /explos|bomb|incendiaire/.test(fold(context.weaponGroup || context.weaponName || normalized?.action?.note)) });
+      result.misfire.outcome=tableRow(V5_BLACKPOWDER_INCIDENT_TABLE,selected.roll);
+      const profileDamage=weapon?.damage??weapon?.damageFormula??normalized?.action?.damageFormula??normalized?.action?.damage;
+      const evaluated=evaluateWeaponDamage(profileDamage,strengthBonusOf(normalized?.actor?.caracs));
+      if(result.misfire.outcome.id==='catastrophe'){
+        if(evaluated.status!=='resolved'||evaluated.value<0)result.unresolved.push('Incident de poudre catastrophique : dégâts du profil d’arme à +0 DR requis (V5 p. 165).');
+        else if(!['left','right'].includes(context.weaponExplosionArmSide))result.unresolved.push('Incident de poudre catastrophique : le MJ doit indiquer le bras directeur touché (gauche ou droit).');
+        else result.effects.push({type:'weapon-explosion',targetId:normalized?.actor?.id,equipmentId:weapon?.id||normalized?.action?.extensions?.fiche?.equipmentId,location:'bras-principal',armSide:context.weaponExplosionArmSide,damage:evaluated.value,damageMode:'profile-at-zero-sl',sl:0});
+      } else result.effects.push({type:'weapon-misfire',targetId:normalized?.actor?.id,equipmentId:weapon?.id||normalized?.action?.extensions?.fiche?.equipmentId,
+        reloadRequired:!/explos|bomb|incendiaire/.test(fold(context.weaponGroup||context.weaponName||normalized?.action?.note)),explosiveDud:/explos|bomb|incendiaire/.test(fold(context.weaponGroup||context.weaponName||normalized?.action?.note))});
+      if(salvoWeapon){
+        const salvoRoll=readRoll(context.salvoIncidentRoll,'Jet de la table d’incident de Salve');
+        if(salvoRoll.error)result.unresolved.push(salvoRoll.error);
+        else if(salvoRoll.missing)result.unresolved.push('Incident de Salve : après avoir résolu l’incident de poudre, saisissez le résultat du second d10 (1–10).');
+        else {
+        const salvo={table:'salvo-artillery',tableVersion:'l13-salvo-artillery-126-v1',roll:salvoRoll.roll,outcome:tableRow(V5_SALVO_ARTILLERY_MISFIRE_TABLE,salvoRoll.roll)};
+        result.misfire.salvo=salvo;
+        const crewIds=Array.isArray(context.salvoCrewIds)?[...new Set(context.salvoCrewIds.filter(id=>typeof id==='string'&&id))]:[];
+        const participants=normalized?.v5State?.participants||[];
+        const crew=crewIds.map(id=>participants.find(row=>row.id===id));
+        const validCrew=crewIds.length>0&&crew.every(person=>person&&person.zone==='active');
+        const remaining=Number(context.remainingSalvo);
+        const salvoOutcome=salvo.outcome;
+        if(salvoOutcome.id!=='remaining-salvo-random-direction'&&!validCrew)result.unresolved.push('Incident de Salve : le MJ désigne les servants actifs touchés.');
+        if(evaluated.status!=='resolved'||evaluated.value<0)result.unresolved.push('Incident de Salve : dégâts du profil de l’arme requis.');
+        if(['primary-arm','random-location','remaining-salvo-random-locations'].includes(salvoOutcome.id)&&(!Number.isInteger(Number(context.salvoUnitsRoll))||Number(context.salvoUnitsRoll)<0||Number(context.salvoUnitsRoll)>9))result.unresolved.push('Incident de Salve : saisissez le dé des unités (0–9), utilisé comme DR effectifs.');
+        if(['primary-arm','random-location','remaining-salvo-random-locations'].includes(salvoOutcome.id)&&validCrew&&evaluated.status==='resolved'){
+          const hits=salvoOutcome.id==='remaining-salvo-random-locations'?remaining:1;
+          if(salvoOutcome.id==='remaining-salvo-random-locations'&&(!Number.isInteger(remaining)||remaining<1||remaining>100))result.unresolved.push('Incident de Salve : saisissez les points de Salve restants.');
+          for(const person of crew){
+            const personId=person.id;
+            for(let i=0;i<Math.max(1,hits);i++){
+              const location=salvoOutcome.id==='primary-arm'?context.salvoPrimaryArms?.[personId]:context.salvoLocations?.[personId]?.[i];
+              if(!['left','right','head','body','left-arm','right-arm','left-leg','right-leg'].includes(location))result.unresolved.push(`Incident de Salve : le MJ indique la localisation ${i+1} de ${person.name||personId}.`);
+              else if(Number.isInteger(Number(context.salvoUnitsRoll)))result.effects.push({type:'salvo-hit',targetId:personId,location,effectiveSL:Number(context.salvoUnitsRoll),damage:evaluated.value,sourceActorId:normalized?.actor?.id});
+            }
+          }
+        } else if(salvoOutcome.id==='remaining-salvo-random-direction'){
+          if(!Number.isInteger(remaining)||remaining<1||remaining>100)result.unresolved.push('Incident de Salve : saisissez les points de Salve restants.');
+          const shots=Array.isArray(context.salvoTrajectories)?context.salvoTrajectories:[];
+          for(let i=0;i<Math.max(1,remaining);i++){
+            const shot=shots[i],number=shot?.distanceRoll;
+            if(typeof shot?.direction!=='string'||!shot.direction.trim())result.unresolved.push(`Incident de Salve : indiquez la direction aléatoire du tir ${i+1}.`);
+            if(!Number.isInteger(Number(number))||Number(number)<1||Number(number)>100)result.unresolved.push(`Incident de Salve : saisissez la distance d100 en yards du tir ${i+1}.`);
+            if(shot?.personsConfirmed!==true)result.unresolved.push(`Incident de Salve : confirmez les personnes présentes (ou l’absence de personne) sur la trajectoire ${i+1}.`);
+            const targets=Array.isArray(shot?.targets)?shot.targets:[];
+            for(const targetRow of targets){
+              if(!participants.some(row=>row.id===targetRow?.participantId&&row.zone==='active')){result.unresolved.push(`Incident de Salve : le MJ désigne une personne active sur la trajectoire ${i+1}.`);continue;}
+              const dodge=targetRow.dodge||{};
+              if(!Number.isInteger(Number(dodge.base))||!Number.isInteger(Number(dodge.roll))||Number(dodge.base)<1||Number(dodge.base)>100||Number(dodge.roll)<1||Number(dodge.roll)>100){result.unresolved.push(`Incident de Salve : saisissez le seuil d’Esquive et le d100 de ${targetRow.participantId} (Très Difficile, −30) sur le tir ${i+1}.`);continue;}
+              const sl=Math.floor(Number(dodge.base)/10)-Math.floor(Number(dodge.roll)/10)-3;
+              if(!['head','body','left','right','left-arm','right-arm','left-leg','right-leg'].includes(targetRow.location))result.unresolved.push(`Incident de Salve : le MJ indique la localisation touchée de ${targetRow.participantId}.`);
+              else if(sl<0)result.effects.push({type:'salvo-hit',targetId:targetRow.participantId,location:targetRow.location,effectiveSL:0,damage:evaluated.value,sourceActorId:normalized?.actor?.id,trajectory:{direction:shot.direction,distanceYards:Number(number),dodge:{...dodge,sl}}});
+            }
+          }
+        }
+        if(!result.unresolved.length){
+          if(salvoOutcome.id!=='remaining-salvo-random-direction')result.effects.push({type:'salvo-artillery-destroyed',targetId:normalized?.actor?.id,equipmentId:weapon?.id||normalized?.action?.extensions?.fiche?.equipmentId});
+        }
+        }
       }
     }
   } else if (isCombatFumble) {
@@ -260,7 +327,9 @@ export function previewCombatFailure({ normalized, roll, fumble, context = {}, h
           else if(!Number.isInteger(Number(context.fumbleAllyUnitsRoll))||Number(context.fumbleAllyUnitsRoll)<0||Number(context.fumbleAllyUnitsRoll)>9) result.unresolved.push('Maladresse 10 : indiquez le dé des unités du jet (0–9) pour les DR de la cible tirée au sort.');
           else {
             const index=Math.floor((selection-1)*candidates.length/100);
-            result.effects.push({ type: 'hit-ally', targetId: candidates[index], selectionRoll:selection, candidateIds:candidates, unitsRoll: Number(context.fumbleAllyUnitsRoll), damage: normalized?.action?.damage, sourceActorId: normalized?.actor?.id });
+              const evaluatedDamage=evaluateWeaponDamage(normalized?.action?.damage,strengthBonusOf(normalized?.actor?.caracs));
+              if(evaluatedDamage.status!=='resolved') result.unresolved.push('Maladresse 10 : dégâts de l’attaque à confirmer (formule ou Force inconnue).');
+              else result.effects.push({ type: 'hit-ally', targetId: candidates[index], selectionRoll:selection, candidateIds:candidates, unitsRoll: Number(context.fumbleAllyUnitsRoll), damage:evaluatedDamage.value, sourceActorId: normalized?.actor?.id });
           }
         }
       }

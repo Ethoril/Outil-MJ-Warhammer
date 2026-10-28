@@ -75,10 +75,10 @@ test('F2-D — le verrou d’arme reste jusqu’au retrait du dernier niveau Emp
   const store=createStore({storage:null,persistence:io});await store.ready;
   const weapon={id:'net-weapon',kind:'weapon',name:'Filet',extensions:{v5:{entanglementLocks:['link-1']}}};
   const holder={id:'holder',kind:'PJ',camp:'allies',hp:20,maxHp:20,caracs:{F:30,E:30},skills:[],states:[],equipment:[weapon],extensions:{v5:{}}};
-  const victim={id:'victim',kind:'PNJ',camp:'foes',hp:20,maxHp:20,caracs:{F:60,E:30},skills:[],states:[{id:'condition-1',key:'enchevetre',name:'Empêtré',level:2,strength:1,source:{kind:'quality',linkId:'link-1',authorId:holder.id,weaponId:weapon.id,weaponLocked:true}}],equipment:[],extensions:{v5:{}}};
+  const victim={id:'victim',kind:'PNJ',camp:'foes',hp:20,maxHp:20,caracs:{F:60,E:30},skills:[],states:[{id:'condition-1',key:'enchevetre',name:'Empêtré',level:2,strength:30,source:{kind:'quality',entanglementKind:'wielder',linkId:'link-1',authorId:holder.id,weaponId:weapon.id,weaponLocked:true}}],equipment:[],extensions:{v5:{}}};
   await store.loadFromJSON({schemaVersion:3,reserve:[],combat:{round:1,currentActorId:victim.id,order:[holder.id,victim.id],participants:[holder,victim]},log:[],diceLines:[]});
-  const escape=(id,storeToUse=store)=>{const liveVictim=storeToUse.listParticipants().find(row=>row.id===victim.id);return storeToUse.previewResolution({actorId:victim.id,resolutionId:id,roll:20,round:1,action:{type:'test',attr:'F',base:60,label:'Force'},
-    v5:{kind:'test',context:{netEscapeConditionId:liveVictim.states[0].id,involvesMovement:false,requiresSight:false,reliesOnSight:false,usesFellowship:false}}});};
+  const escape=(id,storeToUse=store)=>{const liveVictim=storeToUse.listParticipants().find(row=>row.id===victim.id);return storeToUse.previewResolution({actorId:victim.id,resolutionId:id,roll:40,round:1,action:{type:'test',attr:'F',base:60,label:'Force'},
+    v5:{kind:'test',context:{netEscapeConditionId:liveVictim.states[0].id,netEscapeOpponentRoll:20,involvesMovement:false,requiresSight:false,reliesOnSight:false,usesFellowship:false}}});};
   let first=escape('escape-first');assert.equal(first.netEscape?.freed,true,first.unresolved.join('; '));assert.equal(first.netEscape.remainingEntangled,1);
   assert.equal((await store.applyResolution(first)).status,'applied');
   assert.equal(store.listParticipants().find(row=>row.id===holder.id).equipment[0].extensions.v5.entanglementLocks.includes('link-1'),true);
@@ -110,11 +110,11 @@ test('F2-D L11 — Filet à crochets demande le montant MJ et applique les dég�
   const restored = createStore({ storage: null, persistence: io }); await restored.ready; await restored.loadFromJSON(store.getFullJSON());
   const missingAmount=restored.previewResolution({actorId:victim.id,resolutionId:'hooked-escape-no-amount',roll:20,round:1,
     action:{type:'test',attr:'F',base:40,label:'Force'},
-    v5:{kind:'test',context:{netEscapeConditionId:state.id,involvesMovement:false,requiresSight:false,reliesOnSight:false,usesFellowship:false}}});
+    v5:{kind:'test',context:{netEscapeConditionId:state.id,netEscapeOpponentRoll:20,involvesMovement:false,requiresSight:false,reliesOnSight:false,usesFellowship:false}}});
   assert.ok(missingAmount.unresolved.some(text=>/montant de dégâts à fixer par le MJ/u.test(text)));
   const escape = restored.previewResolution({ actorId: victim.id, resolutionId: 'hooked-escape', roll: 20, round: 1,
     action: { type: 'test', attr: 'F', base: 40, label: 'Force' },
-    v5: { kind: 'test', context: { netEscapeConditionId: state.id, hookedNetDamage: 4, involvesMovement: false, requiresSight: false, reliesOnSight: false, usesFellowship: false } } });
+    v5: { kind: 'test', context: { netEscapeConditionId: state.id, netEscapeOpponentRoll:20, hookedNetDamage: 4, involvesMovement: false, requiresSight: false, reliesOnSight: false, usesFellowship: false } } });
   assert.equal(escape.netEscape.freed, true);
   assert.equal(escape.netEscape.hookedNetDamage, 4);
   const escaped = await restored.applyResolution(escape); assert.equal(escaped.status, 'applied', escaped.reason || escape.unresolved.join('; '));

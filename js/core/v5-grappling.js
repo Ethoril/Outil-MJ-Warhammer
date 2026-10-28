@@ -110,7 +110,7 @@ export function previewGrappleTurnActionGate({actor,action,skillName,alreadySpen
 
 /** Resolve a participant's declared Action during an active grapple. */
 export function previewGrappleAction({
-  actor, target, link, action, actorTest, opponentTest, resolutionId, round
+  actor, target, link, action, actorTest, opponentTest, resolutionId, round, actorIsInitiator = link?.initiatorId === actor?.id
 } = {}) {
   const unresolved = [];
   if (!isRecord(link) || link.status !== 'active' || !link.id) unresolved.push('Empoignade active requise.');
@@ -171,18 +171,23 @@ export function previewGrappleAction({
       condition: { name: 'Enchevêtré', level: 1 + Math.max(0, netSL - 1), source: { kind: 'grapple', linkId: link.id } }
     });
   } else {
-    const candidates = (actor.states || []).filter(state => state.source?.linkId === link.id
+    const actorCandidates = (actor.states || []).filter(state => state.source?.linkId === link.id
       && ['enchevetre', 'entangled'].includes(String(state.key || state.name || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()));
-    if (!candidates.length) return blocked(['L’acteur n’a aucun Enchevêtré de cette empoignade à retirer.']);
-    const levelsToRemove = Math.min(totalEntangled({ states: candidates }), 1 + Math.max(0, netSL - 1));
+    const targetCandidates = actorIsInitiator ? (target.states || []).filter(state => state.source?.linkId === link.id
+      && ['enchevetre', 'entangled'].includes(String(state.key || state.name || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase())) : [];
+    const candidates = [...actorCandidates.map(state=>({state,participantId:actor.id})),...targetCandidates.map(state=>({state,participantId:target.id}))];
+    if (!candidates.length) return blocked(['Aucun Enchevêtré de cette empoignade à retirer.']);
+    const levelsToRemove = actorIsInitiator
+      ? candidates.reduce((sum,row)=>sum+Math.max(1,Number(row.state.level)||1),0)
+      : Math.min(totalEntangled({ states: actorCandidates }), 1 + Math.max(0, netSL - 1));
     let remaining=levelsToRemove;
-    for(const state of candidates){
+    for(const {state,participantId} of candidates){
       if(remaining<=0)break;
       const amount=Math.min(Math.max(1,Number(state.level)||1),remaining);
-      base.effects.push({type:'recover-condition',targetId:actor.id,conditionId:state.id,amount});
+      base.effects.push({type:'recover-condition',targetId:participantId,conditionId:state.id,amount});
       remaining-=amount;
     }
-    base.endLink = totalEntangled({ states: candidates }) <= levelsToRemove;
+    base.endLink = actorIsInitiator || totalEntangled({ states: actorCandidates }) <= levelsToRemove;
   }
   return base;
 }
@@ -215,15 +220,18 @@ export function applyGrappleAction(plan, { actor, target, link } = {}) {
     return { status: 'applied', actor, target: receipt.participant, link: { ...appliedLink, targetConditionIds }, conditionReceipt: receipt, receipt: plan };
   }
   if (effect.type === 'recover-condition') {
-    if (actor?.id !== effect.targetId) return { status: 'stale', actor, target, link, receipt: plan };
-    let updatedActor=actor;const receipts=[];
+    let updatedActor=actor,updatedTarget=target;const receipts=[];
     for(const recovery of plan.effects.filter(row=>row.type==='recover-condition')){
-      const receipt=recoverV5Condition(updatedActor,recovery.conditionId,{method:'opposed-strength',amount:recovery.amount,test:{success:true,sl:recovery.amount}});
+      const isActor=recovery.targetId===actor?.id,isTarget=recovery.targetId===target?.id;
+      if(!isActor&&!isTarget)return { status: 'stale', actor, target, link, receipt: plan };
+      const current=isActor?updatedActor:updatedTarget;
+      const receipt=recoverV5Condition(current,recovery.conditionId,{method:'opposed-strength',amount:recovery.amount,test:{success:true,sl:recovery.amount}});
       if(!receipt.ready)return{status:'blocked',actor,target,link,conditionReceipt:receipt,receipt:plan};
-      updatedActor=receipt.participant;receipts.push(receipt);
+      if(isActor)updatedActor=receipt.participant;else updatedTarget=receipt.participant;
+      receipts.push(receipt);
     }
     const nextLink = plan.endLink ? { ...appliedLink, status: 'released', releasedAtResolutionId: plan.resolutionId } : appliedLink;
-    return { status: 'applied', actor: updatedActor, target, link: nextLink, conditionReceipts: receipts, receipt: plan };
+    return { status: 'applied', actor: updatedActor, target: updatedTarget, link: nextLink, conditionReceipts: receipts, receipt: plan };
   }
   return { status: 'unchanged', actor, target, link, receipt: plan };
 }

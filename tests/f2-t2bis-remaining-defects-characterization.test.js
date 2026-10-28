@@ -15,7 +15,7 @@ test('T2 bis characterization — pistolet au contact accepte Esquive comme oppo
     attackContext: { ranged: true, targetEngaged: true },
     defense: { type: 'skill', label: 'Esquive', attr: 'Ag', base: 40, roll: 30 },
     v5: { kind: 'ranged', context: { engaged: true } } });
-  assert.equal(preview.ready, true, JSON.stringify(preview.unresolved));
+  assert.deepEqual(preview.unresolved, []);
   assert.equal(preview.opposition?.mode, 'opposed');
 });
 
@@ -40,6 +40,25 @@ test('T2 bis characterization — Inflige atteint la cible secondaire de Dispers
     v5: { kind: 'ranged', context: { spreadTargetIds: ['primary', 'secondary'], spreadRating: 1, spreadRangeBand: 'medium', spreadLocationRollsById: { secondary: 35 } } } });
   assert.ok(spread.secondaryTargets.find(row => row.participantId === 'secondary')?.conditions.length,
     'la cible secondaire de Dispersion reçoit la proposition d’état Inflige');
+});
+
+test('T2 bis characterization — Inflige secondaire est annulé avec Bombe incendiaire et Dispersion', async () => {
+  const store = createStore({ persistence: null, storage: null }); await store.ready;
+  for (const scenario of [
+    { id: 'firebomb', qualities: [q('explosion', '4'), q('inflige', 'Enflammé')], context: { explosionTargetIds: ['primary', 'secondary'], explosionLocationRollsById: { secondary: 35 } } },
+    { id: 'spread', qualities: [q('dispersion', '1'), q('inflige', 'Sonné')], context: { spreadTargetIds: ['primary', 'secondary'], spreadRating: 1, spreadRangeBand: 'medium', spreadLocationRollsById: { secondary: 35 } } }
+  ]) {
+    const actor = fighter('thrower', { camp: 'hero' }), primary = fighter('primary'), secondary = fighter('secondary');
+    await store.loadFromJSON({ schemaVersion: 3, reserve: [], combat: { round: 1, currentActorId: 'thrower', order: ['thrower', 'primary', 'secondary'], participants: [actor, primary, secondary] }, log: [], diceLines: [] });
+    const preview = store.previewResolution({ actorId: 'thrower', targetId: 'primary', action: { type: 'attack', attr: 'CT', base: 60, damage: 8, qualities: scenario.qualities }, roll: 20,
+      v5: { kind: 'ranged', context: scenario.context } });
+    assert.deepEqual(preview.unresolved, [], `${scenario.id}: ${JSON.stringify(preview.unresolved)}`);
+    assert.equal((await store.applyResolution(preview)).status, 'applied', scenario.id);
+    const applied = store.listParticipants().find(row => row.id === 'secondary');
+    assert.ok(applied.states.some(row => row.key === (scenario.id === 'firebomb' ? 'enflamme' : 'sonne')), scenario.id);
+    await store.undo();
+    assert.deepEqual(store.listParticipants().find(row => row.id === 'secondary').states, []);
+  }
 });
 
 test('T2 bis characterization — résoudre la détonation purge son combatEffect en cours', async () => {

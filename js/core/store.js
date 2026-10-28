@@ -68,7 +68,7 @@ import { normalizeEffects } from './effects.js';
 import { buildV5StoreActionInput, annotateV5StoreActionPreview, applyV5StoreAction, v5StoreActionState, v5StoreActionResult, v5StoreActionClock, commitV5StoreTalentUsages } from './v5-store-action.js';
 import { getV5Fortune, getV5Fate, consumeTemporaryFortune as consumeParticipantTempFortune, consumeTemporaryFate as consumeParticipantTempFate, projectV5Resources, projectV5ResourceEnvelope, commitV5Resources, creditFortuneCorruption, setV5Fortune, refreshV5Fortune, reconcileV5ResourceBindings } from './v5-resources.js';
 import { acquireV5Conditions, recoverV5Condition, healV5Wounds, assertDivineWrathConditionsKept } from './v5-effects.js';
-import { decideCriticalDeath as decideV5CriticalDeath, decideImmediateCriticalDeath as decideV5ImmediateCriticalDeath, updateCriticalDeathCountdown, previewAmputationShock as previewV5AmputationShock, applyAmputationShock as applyV5AmputationShock, amputationShockRequirements } from './v5-critical-aftermath.js';
+import { decideCriticalDeath as decideV5CriticalDeath, decideImmediateCriticalDeath as decideV5ImmediateCriticalDeath, previewSuddenDeath as previewV5SuddenDeath, decideSuddenDeath as decideV5SuddenDeath, updateCriticalDeathCountdown, previewAmputationShock as previewV5AmputationShock, applyAmputationShock as applyV5AmputationShock, amputationShockRequirements } from './v5-critical-aftermath.js';
 import { encounterJournalScope, purgeEncounterJournal, purgeEncounterJournalHistory, tagNewEncounterLogs } from './encounter-journal.js';
 import { momentumAfterChange, withMomentum } from './v5-combat-rules.js';
 import { canUseV5Move } from './v5-combat-fumbles.js';
@@ -86,13 +86,23 @@ const withV5 = (participant, change) => ({ ...participant, extensions: { ...(par
 import { validatePrayerSLCaps,getPrayerSLModifiers } from './v5-divine-prayer-caps.js';
 import { previewV5BrokenEscape, isV5BrokenEscapeActionBlocked, BROKEN_ESCAPE_SOURCE, BROKEN_ESCAPE_RULE_VERSION } from './v5-broken-escape.js';
 import { previewGrappleTurnActionGate } from './v5-grappling.js';
-import { initialV5ReloadState, beginV5Reload, advanceV5Reload } from './v5-reloading.js';
+import { initialV5ReloadState, createV5ReloadState, beginV5Reload, advanceV5Reload } from './v5-reloading.js';
 import { previewV5ProjectileExtraction } from './v5-weapon-qualities.js';
 
 function grappleTurnGateBlock(envelope,input,actor){
+ if(input.v5?.context?.isAction===false||input.reactionId||input.v5?.reactionId||input.v5?.context?.reaction===true)return null;
  const clock=v5StoreActionClock(envelope);
- if(!actor||!clock.encounterId||!clock.turnId)return null;
- const priorLinks=(actor.extensions?.v5?.grapples||[]).filter(row=>row.status==='active'&&row.createdTurnId!==clock.turnId);
+ if(!actor||!clock.encounterId||!clock.turnId||envelope.combat?.currentActorId!==actor.id)return null;
+ const participants=envelope.combat?.participants||[];
+ const priorLinks=(actor.extensions?.v5?.grapples||[]).filter(row=>{
+  if(row.status!=='active'||row.createdTurnId===clock.turnId)return false;
+  const otherId=row.initiatorId===actor.id?row.targetId:row.targetId===actor.id?row.initiatorId:null;
+  const other=participants.find(item=>item.id===otherId);
+  const alive=subject=>subject&&subject.zone!=='bench'&&subject.extensions?.v5?.dead!==true&&Number(subject.hp)>0;
+  const held=participants.find(item=>item.id===row.targetId);
+  const hasLinkCondition=(held?.states||[]).some(state=>state.source?.linkId===row.id&&['enchevetre','entangled'].includes(String(state.key||state.name||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase())&&Number(state.level??1)>0);
+  return alive(actor)&&alive(other)&&alive(held)&&hasLinkCondition;
+ });
  if(!priorLinks.length)return null;
  const gateActor={...actor,extensions:{...(actor.extensions||{}),v5:{...(actor.extensions?.v5||{}),grapples:priorLinks}}};
  const skillId=input.action?.extensions?.fiche?.skillId||input.action?.v5?.context?.skillId||input.v5?.context?.skillId;
@@ -1828,7 +1838,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       const captured=cloneValue(options);
       return api.executeCommand('decide-critical-death-v5',draft=>{
         const index=(draft.combat?.participants||[]).findIndex(row=>row.id===participantId);if(index<0)throw new TypeError('Participant introuvable');
-        const result=decideV5CriticalDeath(draft.combat.participants[index],{decision,round:captured.round??draft.combat?.round});
+        const result=decideV5CriticalDeath(draft.combat.participants[index],{decision,round:draft.combat?.round});
         if(!['dead','declined'].includes(result.status))throw Object.assign(new Error(result.reason||'Confirmation MJ requise.'),{userFacing:true,code:'CRITICAL_DEATH_CONFIRMATION'});
         draft.combat.participants[index]=result.participant;return draft;
       });
@@ -1841,16 +1851,63 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         draft.combat.participants[index]=result.participant;return draft;
       });
     },
+    setSuddenDeathEnabled(enabled) {
+      if (typeof enabled !== 'boolean') throw new TypeError('Réglage Mort subite invalide');
+      return api.executeCommand('set-sudden-death-option-v5', draft => {
+        draft.extensions ??= {}; draft.extensions.v5 ??= {};
+        draft.extensions.v5.suddenDeathEnabled = enabled;
+        return draft;
+      });
+    },
+    previewSuddenDeath(participantId, secondaryNpcConfirmed = false) {
+      const snapshot = currentEnvelope();
+      const participant = snapshot.combat?.participants?.find(row => row.id === participantId);
+      if (!participant) return { status: 'blocked', ready: false, reason: 'Participant introuvable.', baseRevision: localRevision };
+      return { ...previewV5SuddenDeath(participant, { tableOptionEnabled: snapshot.extensions?.v5?.suddenDeathEnabled === true, secondaryNpcConfirmed }), baseRevision: localRevision };
+    },
+    decideSuddenDeath(participantId, outcome, { secondaryNpcConfirmed = false, baseRevision } = {}) {
+      return api.executeCommand('decide-sudden-death-v5', draft => {
+        if (baseRevision !== undefined && baseRevision !== localRevision) throw Object.assign(new Error('La partie a changé depuis l’aperçu : actualisez avant de choisir.'), { userFacing: true, code: 'SUDDEN_DEATH_STALE' });
+        if (draft.extensions?.v5?.suddenDeathEnabled !== true) throw Object.assign(new Error('Option Mort subite désactivée.'), { userFacing: true, code: 'SUDDEN_DEATH_DISABLED' });
+        const index = (draft.combat?.participants || []).findIndex(row => row.id === participantId);
+        if (index < 0) throw new TypeError('Participant introuvable');
+        const plan = previewV5SuddenDeath(draft.combat.participants[index], { tableOptionEnabled: true, secondaryNpcConfirmed });
+        const result = decideV5SuddenDeath(draft.combat.participants[index], plan, outcome);
+        if (!['dead', 'unconscious'].includes(result.status)) throw Object.assign(new Error(result.reason || 'Choix MJ requis.'), { userFacing: true, code: 'SUDDEN_DEATH_CONFIRMATION' });
+        draft.combat.participants[index] = result.participant;
+        draft.log = [{ id: uid(), kind: 'management', actorId: participantId, actorName: result.participant.name, text: `${result.participant.name} : mort subite — ${result.status === 'dead' ? 'mort' : 'inconscient'} (choix MJ)`, detail: { kind: 'sudden-death', outcome: result.status } }, ...(draft.log || [])].slice(0, 300);
+        return draft;
+      });
+    },
     previewAmputationShock(input={}) {
       const snapshot=currentEnvelope(),participant=snapshot.combat?.participants?.find(row=>row.id===input.participantId);
       if(!participant)return{status:'blocked',ready:false,reason:'Participant introuvable.',baseRevision:localRevision};
       const record=(participant.extensions?.v5?.criticalAftermath||[]).find(row=>row.id===input.criticalId);
       if(!record)return{status:'blocked',ready:false,reason:'Blessure Critique introuvable.',baseRevision:localRevision};
-      if(record.amputationShock)return{status:'duplicate',ready:false,record:cloneValue(record),baseRevision:localRevision};
-      const requirements=amputationShockRequirements(record),difficulties=[...new Set(requirements.map(row=>row.difficultyDR).filter(Number.isSafeInteger))];
+      const receipts=[...(record.amputationShock?[record.amputationShock]:[]),...(record.amputationShocks||[])];
+      const requirements=amputationShockRequirements(record).filter(row=>!receipts.some(receipt=>receipt.part===row.part&&receipt.difficultyDR===row.difficultyDR)&&(row.trigger!=='all-fingers-lost'||receipts.some(receipt=>receipt.part==='finger')));
+      const selected=input.shockPart?requirements.filter(row=>row.part===input.shockPart):requirements;
+      const deferredUntil=record.amputationShockDeferrals?.[input.shockPart||selected[0]?.part]?.untilRound;
+      if(Number.isSafeInteger(deferredUntil)&&deferredUntil>Number(snapshot.combat?.round||0))return{status:'deferred',ready:false,reason:`Réexamen au Round ${deferredUntil}.`,deferredUntil,requirements:selected,baseRevision:localRevision};
+      const difficulties=[...new Set(selected.map(row=>row.difficultyDR).filter(Number.isSafeInteger))];
+      if(!selected.length)return{status:'duplicate',ready:false,record:cloneValue(record),baseRevision:localRevision};
       if(difficulties.length!==1)return{status:'blocked',ready:false,reason:'Difficulté source d’amputation absente ou ambiguë.',baseRevision:localRevision};
       if(input.difficultyDR!==undefined&&input.difficultyDR!==difficulties[0])return{status:'blocked',ready:false,reason:'Difficulté différente de la table V5 pour cette amputation.',baseRevision:localRevision};
-      return{...previewV5AmputationShock({...input,participant,difficultyDR:difficulties[0]}),baseRevision:localRevision,requirements};
+      return{...previewV5AmputationShock({...input,participant,difficultyDR:difficulties[0]}),baseRevision:localRevision,requirements:selected};
+    },
+    deferAmputationShock(participantId,criticalId,shockPart) {
+      return api.executeCommand('defer-amputation-shock-v5',draft=>{
+        const index=(draft.combat?.participants||[]).findIndex(row=>row.id===participantId);if(index<0)throw Object.assign(new Error('Participant introuvable.'),{userFacing:true});
+        const participant=draft.combat.participants[index],aftermath=participant.extensions?.v5?.criticalAftermath||[],record=aftermath.find(row=>row.id===criticalId);
+        if(!record)throw Object.assign(new Error('Blessure Critique introuvable.'),{userFacing:true});
+        const eligible=amputationShockRequirements(record).some(row=>row.part===shockPart&&row.trigger==='all-fingers-lost');
+        const receipts=[...(record.amputationShock?[record.amputationShock]:[]),...(record.amputationShocks||[])];
+        if(!eligible||!receipts.some(receipt=>receipt.part==='finger')||receipts.some(receipt=>receipt.part===shockPart))throw Object.assign(new Error('Ce choc ne peut pas être reporté.'),{userFacing:true});
+        const untilRound=Math.max(1,Number(draft.combat?.round||0)+1);
+        draft.combat.participants[index]={...participant,extensions:{...(participant.extensions||{}),v5:{...(participant.extensions?.v5||{}),criticalAftermath:aftermath.map(row=>row.id===criticalId?{...row,amputationShockDeferrals:{...(row.amputationShockDeferrals||{}),[shockPart]:{untilRound}}}:row)}}};
+        draft.log=[{id:uid(),kind:'management',actorId:participantId,actorName:participant.name,text:`${participant.name} : choc d’amputation de la main reporté au Round ${untilRound}`,detail:{kind:'amputation-shock-deferred',criticalId,shockPart,untilRound}},...(draft.log||[])].slice(0,300);
+        return draft;
+      });
     },
     applyAmputationShock(preview={}) {
       if(preview.status==='duplicate')return Promise.resolve({status:'duplicate',record:cloneValue(preview.record)});
@@ -1864,7 +1921,8 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         if(result.status!=='applied'&&result.status!=='duplicate')throw Object.assign(new Error(result.reason||'Choc d’amputation refusé.'),{userFacing:true});
         if(result.status==='applied')draft.combat.participants[index]=result.participant;
         receipt={status:result.status,participantId:preview.participantId,criticalId:preview.criticalId,record:result.record||null};
-        draft.log=[{id:uid(),kind:'management',actorId:preview.participantId,actorName:draft.combat.participants[index].name,text:`${draft.combat.participants[index].name} : choc d’amputation appliqué · ${result.record?.amputationShock?.part||'amputation'}`,detail:{kind:'amputation-shock',receipt:cloneValue(receipt)}},...(draft.log||[])].slice(0,300);
+        const appliedPart=result.record?.amputationShocks?.at(-1)?.part||result.record?.amputationShock?.part||preview.shockPart||'amputation';
+        draft.log=[{id:uid(),kind:'management',actorId:preview.participantId,actorName:draft.combat.participants[index].name,text:`${draft.combat.participants[index].name} : choc d’amputation appliqué · ${appliedPart}`,detail:{kind:'amputation-shock',receipt:cloneValue(receipt)}},...(draft.log||[])].slice(0,300);
         return draft;
       });
       const finish=result=>result?.ok===false?{status:'error',reason:result.error}:{...receipt,persistence:result};
@@ -2069,7 +2127,11 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
             ||rebuilt.id!==staging.scene?.id&&staging.kind==='launch')throw Object.assign(new Error('La composition a changé depuis la préparation.'),{code:'COMBAT_INIT_STALE'});
           sourceScene=staging.kind==='restart-scene'?{...rebuilt,id:staging.sceneId,startedAt:staging.startedAt}:{...rebuilt,status:'active'};
         }
-        if(staging?.kind==='restart-free')sourceParticipants=(draft.combat?.participants||[]).map(item=>withMomentum({...item,hp:item.maxHp??item.hp,states:[],extensions:{...(item.extensions||{}),v5:{...(item.extensions?.v5||{}),combatInitiative:undefined}}},false));
+        if(staging?.kind==='restart-free')sourceParticipants=(draft.combat?.participants||[]).map(item=>{
+          const reset=withMomentum({...item,hp:item.maxHp??item.hp,states:[],extensions:{...(item.extensions||{}),v5:{...(item.extensions?.v5||{}),combatInitiative:undefined}}},false);
+          const extensions={...(reset.extensions||{})},v5={...(extensions.v5||{})};delete v5.grapples;extensions.v5=v5;
+          return {...reset,extensions};
+        });
         const ids=sourceParticipants.filter(row=>row.zone==='active').map(row=>row.id);
         if(captured.startCombat===true&&!ids.length)throw Object.assign(new Error('Au moins un combattant actif est requis pour démarrer le combat.'),{code:'COMBAT_INIT_INPUT',needsInput:[{field:'activeCombatants',label:'Au moins un combattant actif est requis pour démarrer le combat.'}]});
         if(!scenePreview&&JSON.stringify(ids)!==JSON.stringify(captured.participantIds||[]))throw Object.assign(new Error('Les combattants actifs ont changé depuis la préparation.'),{code:'COMBAT_INIT_STALE'});
@@ -2201,16 +2263,25 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
           participants: draft.combat?.participants || [], order,
           currentActorId: draft.combat?.currentActorId || null, round: draft.combat?.round || 0
         });
-        const fumbleReorderDue=(draft.combat?.participants||[]).some(participant=>(participant.extensions?.v5?.combatEffects||[]).some(effect=>effect.kind==='acts-last-next-round'&&Number(effect.round)===result.round));
-        if(result.round>(draft.combat?.round||0)&&(draft.extensions?.v5?.combatInitiativeInitialized||fumbleReorderDue)){
+        const fumbleEffects=(draft.combat?.participants||[]).flatMap(participant=>participant.extensions?.v5?.combatEffects||[]).filter(effect=>effect.kind==='acts-last-next-round');
+        const legacyFumble=!draft.extensions?.v5?.combatInitiativeInitialized&&fumbleEffects.length>0;
+        const fumbleReorderDue=fumbleEffects.some(effect=>Number(effect.round)===result.round);
+        const fumbleOrderBoundary=fumbleEffects.some(effect=>Number(effect.round)===result.round||Number(effect.round)===draft.combat?.round);
+        const preserveFumbleSource=legacyFumble&&fumbleEffects.some(effect=>Number(effect.round)>=Number(draft.combat?.round||0));
+        if(legacyFumble&&result.round>(draft.combat?.round||0)&&fumbleOrderBoundary){
+          result.order=effectiveOrder(draft.combat?.participants||[],{mode:draft.combat?.orderMode||ORDER_MODES.AUTOMATIC,order:draft.combat?.order||[],autoOrder:draft.extensions?.v5?.combatInitiativeResolution?.order,round:result.round});
+          result.currentActorId=result.order[0]||null;
+        }
+        else if(result.round>(draft.combat?.round||0)&&(draft.extensions?.v5?.combatInitiativeInitialized||fumbleReorderDue)){
           result.order=effectiveOrder(draft.combat?.participants||[],{mode:draft.combat?.orderMode||ORDER_MODES.AUTOMATIC,order:result.order,autoOrder:draft.extensions?.v5?.combatInitiativeResolution?.order,round:result.round});
           result.currentActorId=result.order[0]||null;
         }
         transitionResult = result;
         const realTurn = beforePosition.round > 0 && Boolean(beforePosition.currentActorId) && Boolean(result.currentActorId);
         const nextTurnIndex = realTurn ? beforePosition.turnIndex + 1 : beforePosition.turnIndex;
-        let combat = { ...draft.combat, participants: draft.combat?.participants || [], order: result.order,
+        let combat = { ...draft.combat, participants: draft.combat?.participants || [], order: preserveFumbleSource?(draft.combat?.order||result.order):result.order,
           currentActorId: result.currentActorId, round: result.round };
+        if(realTurn)combat.participants=combat.participants.map(participant=>({...participant,extensions:{...(participant.extensions||{}),v5:{...(participant.extensions?.v5||{}),combatEffects:(participant.extensions?.v5?.combatEffects||[]).filter(effect=>effect.kind!=='acts-last-next-round'||Number(effect.round)>=Number(result.round))}}}));
         if(realTurn)combat=detonateDueV5Bombs(combat,beforePosition.currentActorId,beforePosition.turnIndex);
         if(realTurn&&beforePosition.currentActorId){
           combat.participants=combat.participants.map(participant=>participant.id!==beforePosition.currentActorId?participant:{...participant,
@@ -2922,6 +2993,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         const v5 = freshCombatScopedV5(draft.extensions?.v5), ledger = v5.actionLedger;
         return { ...v5, ...(ledger ? { actionLedger: { ...ledger, quotaUsage: (ledger.quotaUsage || []).filter(row => !String(row.scopeKey || '').includes(':0:pre-combat')) } } : {}) };
       };
+      const withoutGrapples=participant=>{const updated={...participant,states:[]},extensions={...(updated.extensions||{})},v5={...(extensions.v5||{})};delete v5.grapples;extensions.v5=v5;updated.extensions=extensions;return updated;};
       return api.executeCommand('restart-combat', draft => {
         const current = draft.activeScene?.status === 'active' ? draft.activeScene : null;
         if (!current) {
@@ -2930,7 +3002,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
             extensions: { ...(draft.extensions || {}), v5: freshV5(draft) },
             combat: {
               ...draft.combat, round: 0, currentActorId: null,
-              participants: (draft.combat?.participants || []).map(item => (withMomentum({ ...item, hp: item.maxHp ?? item.hp, states: [] }, false)))
+              participants: (draft.combat?.participants || []).map(item => (withMomentum(withoutGrapples({ ...item, hp: item.maxHp ?? item.hp }), false)))
             },
             log: [{ id: uid(), ts: Date.now(), kind: 'management', text: 'Combat recommencé : PV remis au maximum.' }, ...(draft.log || [])].slice(0, 300)
           };
@@ -2940,7 +3012,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         if (!(encounter.entries || []).length) throw empty();
         const launched = freshScene(launchEncounter(encounter, { profiles: draft.reserve || [], persistentCharacters: draft.persistentCharacters || [], activeScene: null }));
         const resetV5=freshV5(draft);
-        const nextScene = { ...launched, id: current.id, startedAt: current.startedAt,
+        const nextScene = { ...launched, participants:(launched.participants||[]).map(withoutGrapples), id: current.id, startedAt: current.startedAt,
           extensions:{...(launched.extensions||{}),v5:{...(launched.extensions?.v5||{}),combatScopeId:resetV5.combatScopeId}} };
         const oldIds = new Set((current.participants || []).map(item => item?.id).filter(Boolean));
         return {
@@ -3044,6 +3116,14 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       const weapon = actor?.equipment?.find(row => row.id === input.equipmentId && row.kind === 'weapon');
       if (!actor || !weapon) return { ready: false, status: 'blocked', error: 'Choisir une arme équipée pour le rechargement.' };
       const current = weapon.extensions?.v5?.reloadState || initialV5ReloadState(weapon).state;
+      const variableRepeater=weapon.keywords?.some(row=>(typeof row==='string'?row:row?.id)==='a-repetition'&&String(row?.parameter).toLowerCase()==='variable');
+      if(variableRepeater&&!current&&input.operation==='arbitrate'){
+        const capacity=Number(input.repeaterRating),reloadSuccesses=Number(weapon.keywords?.find(row=>(typeof row==='string'?row:row?.id)==='recharge')?.parameter);
+        if(!Number.isSafeInteger(capacity)||capacity<1)return {ready:false,status:'requires-input',error:'Arbitrage Ratling : capacité entière positive requise.'};
+        const adjudicated=createV5ReloadState({repeaterRating:capacity,reloadSuccesses});
+        if(!adjudicated.ready)return {ready:false,status:'requires-input',error:'Arbitrage Ratling : capacité entière positive requise.'};
+        return {ready:true,actorId:actor.id,equipmentId:weapon.id,operation:'arbitrate',baseRevision:envelope.localRevision||0,before:null,after:adjudicated.state,result:'arbitrated',progress:null};
+      }
       if (!current) return { ready: false, status: 'requires-input', error: 'Valeurs À répétition/Recharge non interprétables; arbitrage MJ requis.' };
       let plan;
       if (input.operation === 'begin') plan = beginV5Reload(current, { expectedRevision: input.expectedWeaponRevision ?? current.revision });
@@ -3064,6 +3144,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         const actor = draft.combat?.participants?.find(row => row.id === plan.actorId);
         const weapon = actor?.equipment?.find(row => row.id === plan.equipmentId && row.kind === 'weapon');
         const live = weapon?.extensions?.v5?.reloadState || (weapon && initialV5ReloadState(weapon).state);
+        if(plan.operation==='arbitrate'&&weapon&&!live){const variable=weapon.keywords?.some(row=>(typeof row==='string'?row:row?.id)==='a-repetition'&&String(row?.parameter).toLowerCase()==='variable');if(!variable||plan.before!==null)throw Object.assign(new Error('Arbitrage de chargeur devenu invalide.'),{userFacing:true});const updated=structuredClone(actor);updated.equipment=updated.equipment.map(row=>row.id===plan.equipmentId?{...row,extensions:{...(row.extensions||{}),v5:{...(row.extensions?.v5||{}),reloadState:structuredClone(plan.after)}}}:row);draft.combat.participants=draft.combat.participants.map(row=>row.id===actor.id?updated:row);return draft;}
         if (!actor || !weapon || JSON.stringify(live) !== JSON.stringify(plan.before)) throw Object.assign(new Error('L’arme ou son état de recharge a changé; recalculez.'), { userFacing: true });
         const updated = structuredClone(actor);
         updated.equipment = updated.equipment.map(row => row.id === plan.equipmentId ? { ...row,

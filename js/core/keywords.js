@@ -17,5 +17,5 @@ export function keywordMechanicalStatus(value){
  const protectionEngine = ({perforante:'ignore-two-armour',flexible:'armour-layers',partielle:'conditional-location-armour','points-faibles':'conditional-critical-armour',impenetrable:'odd-hit-critical-immunity',protectrice:'contextual-shield-armour'})[id];
  const engine=ENGINES[id] || (protectionEngine ? {tier:1,engine:protectionEngine,scope:'protection'} : null);if(!engine)return {id,status:'manual',reason:'effet-non-automatise',word};
  if(!word||!baseline||word.effect!==baseline.effect||word.edition!==baseline.edition)return {id,status:'manual',reason:'version-effet-non-couverte',word};
- return {id,status:'covered',word,engine,effectVersion:`${contracts.sourceVersion}:${id}`,limitations:id==='empaleuse'?['Projectiles fichés et soin à gérer manuellement']:id==='inoffensive'?['Deux jets de gravité requis pour le critique']:[]};
+ return {id,status:'covered',word,engine,effectVersion:`${contracts.sourceVersion}:${id}`,limitations:id==='empaleuse'?['Extraction de balle : compétence de chirurgien confirmée par le MJ']:id==='inoffensive'?['Deux jets de gravité requis pour le critique']:[]};
 }

@@ -15,21 +15,28 @@ function parseKeywords(text) {
     for (const entry of keywords) {
         const names = [entry.name, ...entry.aliases].map(name => fold(name).replace(/\s+(?:x|\d+)$/u, '')).filter(Boolean);
         const params = [];
+        let asterisk = false;
         let matched = false;
         for (const name of names) {
             const escaped = name.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&');
-            const regex = new RegExp(`(?:^|[,;]|\\bou\\s)\\s*${escaped}(?=$|[\\s.(,;])\\s*([+-]?\\d+|\\([^)]*\\))?`, 'gu');
+            const regex = new RegExp(`(?:^|[,;]|\\bou\\s)\\s*${escaped}(?=$|[\\s.(,;])\\s*([+-]?\\d+|\\([^)]*\\))?(\\*)?`, 'gu');
             for (const match of folded.matchAll(regex)) {
+                if (entry.id === 'inflige') {
+                    const prefix = folded.slice(0, match.index + match[0].length);
+                    const specialStart = prefix.lastIndexOf('special (');
+                    if (specialStart >= 0 && prefix.lastIndexOf(')') < specialStart) continue;
+                }
                 matched = true;
+                asterisk ||= Boolean(match[2]);
                 if (entry.parameter && match[1]) {
-                    const start = match.index + match[0].length - match[1].length;
+                    const start = match.index + match[0].length - (match[2] ? 1 : 0) - match[1].length;
                     const rawParam = clean.slice(start, start + match[1].length).replace(/^\(|\)$/gu, '').trim();
                     if (rawParam && !params.includes(rawParam)) params.push(rawParam);
                 }
             }
             if (matched) break;
         }
-        if (matched) result.push({ id: entry.id, parameter: entry.parameter ? params.join(', ') : '' });
+        if (matched) result.push({ id: entry.id, parameter: entry.parameter ? params.join(', ') : '', ...(asterisk ? { asterisk: true } : {}) });
     }
     return result;
 }

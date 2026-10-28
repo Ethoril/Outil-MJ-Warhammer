@@ -41,8 +41,13 @@ test('Claude T2 — le Mortier de main du catalogue explose sur maladresse au re
   const preview = previewResolution({ resolutionId: 'mortar', actor, baseRevision: 0, round: 1, roll: 66,
     action: { id: 'x', type: 'skill', attr: 'CT', base: 20, label: 'Recharge', extensions: { fiche: { equipmentId: 'w1' } } },
     v5: { kind: 'test', context: { reloading: true, fumbleRoll: 3, weaponDamageMaximum: 12 } }, v5State: { participants: [actor] } });
-  assert.ok(preview.combatFailure?.effects?.some(effect => effect.type === 'weapon-explosion'),
-    JSON.stringify(preview.combatFailure?.effects?.map(effect => effect.type)));
+  assert.ok(preview.unresolved.some(line => /bras directeur touché/.test(line)), JSON.stringify(preview.unresolved));
+  const resolved = previewResolution({ resolutionId: 'mortar-with-arm', actor, baseRevision: 0, round: 1, roll: 66,
+    action: { id: 'x', type: 'skill', attr: 'CT', base: 20, label: 'Recharge', extensions: { fiche: { equipmentId: 'w1' } } },
+    v5: { kind: 'test', context: { reloading: true, fumbleRoll: 3, weaponDamageMaximum: 12, weaponExplosionArmSide: 'right' } },
+    v5State: { participants: [actor] } });
+  assert.ok(resolved.combatFailure?.effects?.some(effect => effect.type === 'weapon-explosion' && effect.damage === 12 && effect.armSide === 'right'),
+    JSON.stringify(resolved.combatFailure?.effects));
 });
 
 test('Claude T2 — le Couteau Bollock gagne Pointue V5 (pas Précise V4) contre une cible À Terre', () => {

@@ -236,7 +236,7 @@ test('F2-D pure proposal — ranged Empaleuse critical blocks one wound until ex
   assert.equal(previewV5ImpaleProjectile({ qualities: ['empaleuse'], ranged: true, critical: true, ammunitionId: 'opaque-19', participantId: 't' }).ready, false);
   assert.equal(previewV5ImpaleProjectile({ qualities: ['empaleuse'], ranged: true, critical: true, ammunitionId: 'opaque-19', ammunitionType: 'Balle', participantId: 't' }).lodgedProjectile.removal, 'surgery');
   assert.deepEqual(previewV5ImpaleProjectile({ qualities: ['empaleuse'], ranged: true, critical: true, ammunitionId: 'arrow-1', ammunitionType: 'Flèche', participantId: 't' }),
-    { ready: true, unresolved: [], lodgedProjectile: { participantId: 't', ammunitionId: 'arrow-1', removal: 'heal-test', healTestModifier: 0 }, healingBlocked: 1 });
+    { ready: true, unresolved: [], lodgedProjectile: { participantId: 't', ammunitionId: 'arrow-1', ammunitionType: 'fleche', removal: 'heal-test', healTestModifier: 0 }, healingBlocked: 1 });
   assert.equal(previewV5ImpaleProjectile({ qualities: ['empaleuse'], ranged: false, critical: true, ammunitionId: 'a', participantId: 't' }).healingBlocked, 0);
   assert.equal(previewV5ImpaleProjectile({ qualities: ['empaleuse'], ranged: true, critical: true }).ready, false);
   assert.deepEqual(previewV5WoundRecovery({ lodgedProjectiles: [{ id: 'arrow' }, { id: 'bullet', removed: true }], requestedWounds: 2 }),
@@ -434,12 +434,12 @@ test('F2-D pure proposal — V5 shield defense, attached coverage, ranged bounda
   assert.equal(previewV5Shield({ shield, selected: true, available: false, attackWithShield: true }).confirmed, false);
 });
 
-test('F2-D pure proposal — attached shields permit polearms; only a strapped buckler permits an off-hand zero-Enc weapon', () => {
+test('F2-D pure proposal — an attached shield permits polearms; a buckler frees the off-hand for a zero-Enc weapon', () => {
   const shield = { id: 'shield', kind: 'shield', ap: 2, keywords: ['bouclier'] };
   assert.equal(validateV5ShieldHands({ shield, weaponHands: 2, weaponEncumbrance: 2, polearm: true, attached: true }).allowed, true);
   assert.equal(validateV5ShieldHands({ shield, weaponHands: 2, weaponEncumbrance: 2, polearm: false, attached: true }).allowed, false);
   assert.equal(validateV5ShieldHands({ shield: { ...shield, ap: 1 }, weaponHands: 2, weaponEncumbrance: 2, attached: true }).allowed, false);
-  assert.equal(validateV5ShieldHands({ shield: { ...shield, ap: 1 }, weaponHands: 2, weaponEncumbrance: 2, polearm: true, attached: true }).allowed, false);
+  assert.equal(validateV5ShieldHands({ shield: { ...shield, ap: 1 }, weaponHands: 2, weaponEncumbrance: 2, polearm: true, attached: true }).allowed, true);
   const buckler = { ...shield, ap: 1 };
   assert.equal(validateV5ShieldHands({ shield: buckler, weaponHands: 1, weaponEncumbrance: 1, attached: true, offHandWeaponEncumbrance: 0 }).reason, 'buckler-free-hand');
   assert.equal(validateV5ShieldHands({ shield, weaponHands: 1, weaponEncumbrance: 1, attached: true, offHandWeaponEncumbrance: 0 }).reason, null);
@@ -483,21 +483,22 @@ test('F2-D munitions poudre — catalogue profil Tromblon accepte grenaille/impr
 });
 
 test('F2-D pure proposal — worn mail/plate and closed helm penalties apply by category only once', () => {
-  assert.deepEqual(calculateV5ArmorPenalty({ worn: [{ category: 'mail' }, { category: 'mail' }, { category: 'plate' }, { category: 'closed-helm' }] }),
-    { ready: true, unresolved: [], stealthDr: -2, perceptionDr: -2 });
+  const marked = { notes: '-1 DR en Discrétion si une ou plusieurs pièces de mailles sont portées' };
+  assert.deepEqual(calculateV5ArmorPenalty({ worn: [{ category: 'mail', ...marked }, { category: 'mail', ...marked }, { category: 'plate' }, { category: 'closed-helm' }] }),
+    { ready: true, unresolved: [], stealthDr: -1, perceptionDr: -2 });
   assert.deepEqual(calculateV5ArmorPenalty({ worn: [{ category: 'plate', worn: false }, { category: 'closed-helm', worn: false }] }),
     { ready: true, unresolved: [], stealthDr: 0, perceptionDr: 0 });
 });
 
-test('F2-D armures — pénalités Discrétion/Perception appliquées seulement aux pièces explicitement portées',()=>{
-  const mail={id:'mail',kind:'armour',category:'Mailles',locations:['body'],keywords:[]};
+test('F2-D armures — pénalités catalogue appliquées seulement aux pièces explicitement portées',()=>{
+  const mail={id:'mail',kind:'armour',category:'Mailles',locations:['body'],keywords:[],notes:'-1 DR en Discrétion si une ou plusieurs pièces de mailles sont portées'};
   const plate={id:'plate',kind:'armour',category:'Plates',locations:['body'],keywords:[]};
   const helm={id:'helm',kind:'armour',category:'Plates',locations:['head'],keywords:[q('impenetrable')]};
   const openHelm={id:'open-helm',kind:'armour',category:'Plates',locations:['head'],keywords:[q('partielle')]};
   const actor={id:'armoured-test',caracs:{Ag:40,Int:40},skills:[],states:[],equipment:[mail,plate,helm,openHelm],extensions:{v5:{}}};
   const stealth=buildCombatTest(normalizeResolutionInput({actor,roll:30,action:{type:'test',attr:'Ag',base:50,label:'Discrétion'},
     v5:{kind:'test',context:{wornArmorItemIds:['mail','plate']}}}));
-  assert.equal(stealth.test.options[0].result.details.modifiers.find(row=>row.id==='armor:stealth')?.amount,-2);
+  assert.equal(stealth.test.options[0].result.details.modifiers.find(row=>row.id==='armor:stealth')?.amount,-1);
   const perception=buildCombatTest(normalizeResolutionInput({actor,roll:30,action:{type:'test',attr:'Int',base:50,label:'Perception'},
     v5:{kind:'test',context:{wornArmorItemIds:['helm']}}}));
   assert.equal(perception.test.options[0].result.details.modifiers.find(row=>row.id==='armor:perception')?.amount,-2);
@@ -513,11 +514,11 @@ test('F2-D armures catalogue — Mailles/Plates naines et notes Gromril/Ithilmar
   const gromrilOpen=at('Gromril (nain)','Heaume ouvert'),gromrilClosed=at('Gromril (nain)','Heaume');
   const ithilmarClosed=at('Ithilmar Haut Elfe','Heaume Ithiltaen');
   assert.ok(dwarfMail&&dwarfPlate&&gromrilOpen&&gromrilClosed&&ithilmarClosed);
-  assert.deepEqual(calculateV5ArmorPenalty({worn:[dwarfMail]}).stealthDr,-1);
+  assert.deepEqual(calculateV5ArmorPenalty({worn:[dwarfMail]}).stealthDr,0);
   assert.deepEqual(calculateV5ArmorPenalty({worn:[dwarfPlate]}).stealthDr,-1);
   assert.deepEqual(calculateV5ArmorPenalty({worn:[gromrilOpen]}),{ready:true,unresolved:[],stealthDr:-1,perceptionDr:0});
   assert.deepEqual(calculateV5ArmorPenalty({worn:[gromrilClosed]}),{ready:true,unresolved:[],stealthDr:-1,perceptionDr:-2});
-  assert.deepEqual(calculateV5ArmorPenalty({worn:[ithilmarClosed]}),{ready:true,unresolved:[],stealthDr:-1,perceptionDr:-2});
+  assert.deepEqual(calculateV5ArmorPenalty({worn:[ithilmarClosed]}),{ready:true,unresolved:[],stealthDr:0,perceptionDr:-2});
 });
 
 test('F2-D pure proposal — natural weapons default to personal reach with no qualities', () => {
@@ -561,7 +562,7 @@ test('F2-D integration — Inflige is previewed, shown as applied and committed 
   assert.equal(applied.state.participants.find(row => row.id === 't').states[0].key, 'sonne');
 });
 
-test('F2-D resolution — Immobilisante locks its linked weapon until cumulative Force Tests free the target', () => {
+test('F2-D resolution — Immobilisante locks its linked weapon until opposed Force Tests remove every Empêtré', () => {
   const weapon={id:'net-1',kind:'weapon',name:'Filet lesté',keywords:[q('immobilisante','2')],extensions:{}};
   const holder={id:'holder',name:'Porteur',camp:'allies',zone:'active',hp:20,caracs:{CC:50,CT:50,F:3,E:30},skills:[],states:[],equipment:[weapon],extensions:{v5:{}}};
   const victim={id:'victim',name:'Cible',camp:'foes',zone:'active',hp:20,caracs:{CC:40,CT:40,F:30,E:30},skills:[],states:[],equipment:[],extensions:{v5:{}}};
@@ -578,10 +579,10 @@ test('F2-D resolution — Immobilisante locks its linked weapon until cumulative
   const blockedAttack=previewResolution({resolutionId:'d-net-blocked-weapon',actor:captor,target:victim,baseRevision:applied.state.revision,round:1,roll:20,
     action:{type:'attack',attr:'CT',base:50,damage:1,qualities:[],extensions:{fiche:{equipmentId:'net-1'}}},attackContext:{ranged:true},v5:{kind:'ranged'}});
   assert.ok(blockedAttack.unresolved.some(row=>row.includes('retenue par un état Empêtré')));
-  for(const [id,roll] of [['d-net-escape-1',21],['d-net-escape-2',21],['d-net-escape-3',21]]){
+  for(const [index,[id,roll]] of [['d-net-escape-1',12],['d-net-escape-2',12],['d-net-escape-3',12]].entries()){
     const escape=previewResolution({resolutionId:id,actor:entangled,baseRevision:applied.state.revision,round:1,roll,
       action:{type:'test',attr:'F',base:30,label:'Force'},v5:{kind:'test',context:{netEscapeConditionId:entangled.states[0].id,
-        involvesMovement:false,requiresSight:false,reliesOnSight:false,usesFellowship:false}}});
+        netEscapeOpponentRoll:index===0?1:30,involvesMovement:false,requiresSight:false,reliesOnSight:false,usesFellowship:false}}});
     assert.equal(escape.unresolved.length,0,escape.unresolved.join('; '));
     applied=applyResolution(escape,{revision:applied.state.revision,round:1,participants:applied.state.participants,appliedResolutionIds:applied.state.appliedResolutionIds||[]});
     assert.equal(applied.status,'applied');
@@ -693,16 +694,13 @@ test('F2-D Empaleuse — lodged projectiles block one Wound each and require sou
   assert.equal(previewV5ProjectileExtraction({projectile:participant.extensions.v5.lodgedProjectiles[1],method:'surgery',surgeryConfirmed:true}).removed,true);
 });
 
-test('F2-D pure proposal — net escape accumulates successful DR per MJ arbitration', () => {
-  const first = advanceV5NetEscape({ threshold: 5, accumulatedSl: 2, testSl: 1, success: true, entangled: 2 });
-  assert.equal(first.cumulativeSl, 3);
-  assert.equal(first.freed, false);
-  const second = advanceV5NetEscape({ threshold: 5, accumulatedSl: first.cumulativeSl, testSl: 2, success: true, entangled: 2 });
-  assert.equal(second.freed, true);
-  assert.equal(second.remainingEntangled, 1);
-  const fail = advanceV5NetEscape({ threshold: 5, accumulatedSl: 3, testSl: 0, success: false, entangled: 1 });
-  assert.equal(fail.cumulativeSl, 3);
-  assert.equal(fail.addEntangledOnFailure, true);
+test('F2-D pure proposal — net escape opposes each Test independently; SL do not accumulate', () => {
+  const lost = advanceV5NetEscape({ testSl: 0, opponentSl: 1, entangled: 2 });
+  assert.equal(lost.won, false);
+  assert.equal(lost.addEntangledOnFailure, true);
+  const won = advanceV5NetEscape({ testSl: 2, opponentSl: 0, entangled: 3 });
+  assert.equal(won.freed, true);
+  assert.equal(won.remainingEntangled, 1);
 });
 
 test('F2-D Reload/Reapter — shots use the magazine without Action counters', () => {
@@ -721,8 +719,8 @@ test('F2-D Reload — a partially filled repeater reduces the success target by 
   const begun = beginV5Reload(state);
   assert.equal(begun.state.requiredSuccesses, 2);
   assert.equal(begun.state.partialRepeater, true);
-  const progress = advanceV5Reload(begun.state, { success: true, testSl: 2 });
-  assert.equal(progress.status, 'progress', 'choix d’exécutant : un Test réussi ajoute un succès, pas ses 2 DR');
+  const progress = advanceV5Reload(begun.state, { success: true, testSl: 0 });
+  assert.equal(progress.status, 'progress', 'un Test réussi à +0 DR ajoute le succès de base');
   assert.equal(progress.state.accumulatedSuccesses, 1);
   const done = advanceV5Reload(progress.state, { success: true, testSl: 0 });
   assert.equal(done.status, 'reloaded');
@@ -730,14 +728,14 @@ test('F2-D Reload — a partially filled repeater reduces the success target by 
   assert.equal(done.state.requiresReload, false);
 });
 
-test('F2-D Reload — only a successful Test adds one success; its DR does not change progress', () => {
+test('F2-D Reload — each success adds one plus positive DR; a failed Test adds zero', () => {
   const empty = createV5ReloadState({ repeaterRating: 1, reloadSuccesses: 4 }).state;
   const used = consumeV5WeaponShot(empty).state;
   const loading = beginV5Reload(used).state;
   const failure = advanceV5Reload(loading, { success: false, testSl: 2 });
   assert.equal(failure.state.accumulatedSuccesses, 0);
   const progress = advanceV5Reload(failure.state, { success: true, testSl: 1 });
-  assert.equal(progress.state.accumulatedSuccesses, 1);
+  assert.equal(progress.state.accumulatedSuccesses, 2);
   assert.equal(progress.status, 'progress');
 });
 

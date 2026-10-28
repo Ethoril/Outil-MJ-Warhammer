@@ -69,7 +69,8 @@ export function v5ShieldDefense(normalized, catalogue = getReferenceCatalogue())
   const shield = normalized.target?.equipment?.find(item => item.kind === 'shield' && item.id === context.shieldId);
   const bouclier = shield?.keywords?.some(item => item.id === 'bouclier') === true;
   const word = shield?.keywords?.find(item => item.id === 'protectrice');
-  const rating = bouclier ? Number(shield?.ap) : word?.parameter?.trim() === '' ? null : Number(word?.parameter);
+  const shieldDamage = Number(normalized.target?.extensions?.v5?.armorDamageByItem?.[shield?.id]) || 0;
+  const rating = bouclier ? Math.max(0, Number(shield?.ap) - shieldDamage) : word?.parameter?.trim() === '' ? null : Number(word?.parameter);
   const source = catalogue.keywords.find(item => item.id === 'bouclier');
   const bouclierSourceCovered = source?.edition === 'V5' && source?.source === 'Livre de base V5 EN p.306'
     && source?.effect === "En s'opposant à une attaque avec Esquive ou Corps à corps, confère +1 DR (sans cumul avec Défensive) et applique ses PA si le coup touche. Avec 2 PA ou plus, permet d'opposer les tirs avec Esquive à toute portée. Un seul bouclier compte. Porté attaché au bras ou en bandoulière, ses PA ne s'appliquent qu'à la Tête, au Corps et au Bras non directeur. En attaque, compte comme Arme improvisée (allonge Personnelle) et perd sa protection jusqu'au début du prochain Tour.";
@@ -84,8 +85,8 @@ export function v5ShieldDefense(normalized, catalogue = getReferenceCatalogue())
   const skillId = normalized.defense?.extensions?.fiche?.skillId || normalized.defense?.v5?.context?.skillId;
   const skillName = skillId ? catalogue.skills.find(row => row.id === skillId)?.nom || '' : '';
   const defenseName = `${label} ${skillName}`.normalize('NFD').replace(/[\u0300-\u036f]/gu, '').toLowerCase();
-  const dodgeDefense = /esquive|dodge/u.test(defenseName);
-  const meleeDefense = /corps\s*a\s*corps|melee|^\s*cc\b/u.test(defenseName);
+  const dodgeDefense = /esquive|dodge|^\s*ag\s*$/u.test(defenseName);
+  const meleeDefense = /corps\s*a\s*corps|melee|^\s*cc\b|escrime|bagarre/u.test(defenseName);
   const rangedAttack = typeof normalized.attackContext?.ranged === 'boolean' ? normalized.attackContext.ranged
     : normalized.v5?.kind === 'ranged' || normalized.action?.attr === 'CT';
   const canUseV5Bonus = (dodgeDefense || meleeDefense) && (!rangedAttack || dodgeDefense && rating >= 2);
@@ -185,7 +186,7 @@ export function buildCombatTest(normalized, role = 'actor') {
     const ankle=queued.find(row=>row.kind==='twisted-ankle'&&row.location===settings.context?.legUsed
       &&Number.isSafeInteger(Number(settings.round??normalized.round))&&Number(settings.round??normalized.round)<Number(row.createdRound||0)+Number(row.rounds||0));
     if(ankle)modifiers.push({id:`fumble:twisted-ankle:${ankle.id||ankle.location}`,label:'Cheville tordue : Test utilisant la jambe affectée',amount:-1});
-    if(!defending&&queued.some(row=>row.kind==='lose-next-action'))restrictions.push('Maladresse précédente : cette Action est perdue ; terminez le Tour sans résoudre d’Action.');
+    if(declaredAction&&queued.some(row=>row.kind==='lose-next-action'))restrictions.push('Maladresse précédente : cette Action est perdue ; terminez le Tour sans résoudre d’Action.');
   }
   let extraordinaryShot=null;
   if(!defending&&settings.context?.extraordinaryShot===true){

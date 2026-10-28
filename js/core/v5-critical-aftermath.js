@@ -41,7 +41,6 @@ export function createCriticalAftermathRecord(participant, {
     participantId: participant.id,
     resolutionId,
     criticalIndex,
-    source: 'L06-V5-critical-table',
     ruleVersion: V5_CRITICAL_AFTERMATH_RULE_VERSION,
     tableVersion: V5_CRITICAL_TABLE_VERSION,
     table,
@@ -211,7 +210,7 @@ export function decideSuddenDeath(participant, plan, outcome) {
 function amputationOutcomes(value, conditional=false, found=[]) {
   if(Array.isArray(value)){for(const row of value)amputationOutcomes(row,conditional,found);return found;}
   if(!isRecord(value))return found;
-  if(value.kind==='amputation'||value.amputation===true)found.push({conditional,part:value.part||null,difficultySL:value.difficultySL});
+  if(value.kind==='amputation'||value.amputation===true)found.push({conditional:conditional||value.conditional===true,part:value.part||null,difficultySL:value.difficultySL,trigger:value.trigger||null});
   for(const [key,child] of Object.entries(value)){
     const childIsConditional=conditional||['onFailure','onSuccess','conditional','if'].includes(key);
     if(child&&typeof child==='object')amputationOutcomes(child,childIsConditional,found);
@@ -221,16 +220,25 @@ function amputationOutcomes(value, conditional=false, found=[]) {
 
 export function amputationShockRequirements(record) {
   return amputationOutcomes(record?.sequela?.durableEffects||record?.sequela?.injuries||[])
-    .map(row=>({part:row.part,difficultyDR:row.difficultySL,conditional:row.conditional}));
+    .map(row=>({part:row.part,difficultyDR:row.difficultySL,conditional:row.conditional,trigger:row.trigger}));
 }
 
-export function previewAmputationShock({ participant, criticalId, difficultyDR, test, amputationOccurred } = {}) {
+export function previewAmputationShock({ participant, criticalId, difficultyDR, test, amputationOccurred, shockPart } = {}) {
   if (!participant?.id) return { status: 'blocked', reason: 'Personnage concerné requis.' };
   if (typeof criticalId !== 'string' || !criticalId.trim()) return { status: 'blocked', reason: 'Blessure Critique d’amputation requise.' };
   const record=(participant.extensions?.v5?.[CRITICAL_AFTERMATH_FIELD]||[]).find(row=>row.id===criticalId);
   if(!record)return{status:'blocked',reason:'Blessure Critique introuvable.'};
-  const amputationKinds=amputationShockRequirements(record).map(row=>({part:row.part,difficultySL:row.difficultyDR,conditional:row.conditional}));
-  if(!amputationKinds.length)return{status:'blocked',reason:'Cette Blessure Critique ne prévoit aucune amputation.'};
+  const allKinds=amputationShockRequirements(record).map(row=>({part:row.part,difficultySL:row.difficultyDR,conditional:row.conditional,trigger:row.trigger}));
+  if(!allKinds.length)return{status:'blocked',reason:'Cette Blessure Critique ne prévoit aucune amputation.'};
+  const receipts=[...(record.amputationShock?[record.amputationShock]:[]),...(record.amputationShocks||[])];
+  let amputationKinds=allKinds.filter(row=>!receipts.some(receipt=>receipt.part===row.part&&receipt.difficultyDR===row.difficultySL));
+  amputationKinds=amputationKinds.filter(row=>row.trigger!=='all-fingers-lost'||receipts.some(receipt=>receipt.part==='finger'));
+  if(shockPart){
+    const selected=amputationKinds.filter(row=>row.part===shockPart);
+    if(!selected.length&&allKinds.some(row=>row.part===shockPart&&row.trigger==='all-fingers-lost')&&!receipts.some(receipt=>receipt.part==='finger'))return{status:'blocked',reason:'La perte de la main exige la perte préalable de tous les doigts.'};
+    amputationKinds=selected;
+  }
+  if(!amputationKinds.length)return{status:'duplicate',record:clone(record)};
   const isConditional=amputationKinds.every(row=>row.conditional);
   if(isConditional&&amputationOccurred!==true){
     if(amputationOccurred===false)return{status:'blocked',reason:'Aucune amputation n’a été confirmée pour cette Blessure Critique.'};
@@ -249,7 +257,7 @@ export function previewAmputationShock({ participant, criticalId, difficultyDR, 
     if (test.sl <= -4) states.push({ name: 'Inconscient', level: 1 });
   }
   return {
-    status: 'ready', ready: true, participantId: participant.id, criticalId, difficultyDR, amputationOccurred:true,
+    status: 'ready', ready: true, participantId: participant.id, criticalId, difficultyDR, amputationOccurred:true, shockPart:amputationKinds[0].part,
     amputatedPart:amputationKinds.find(row=>row.part)?.part||null,
     test: clone(test), states, surgeryRequired: true,
     ruleVersion: V5_CRITICAL_AFTERMATH_RULE_VERSION
@@ -257,19 +265,21 @@ export function previewAmputationShock({ participant, criticalId, difficultyDR, 
 }
 
 export function applyAmputationShock(participant, plan) {
+  const existing=(participant?.extensions?.v5?.[CRITICAL_AFTERMATH_FIELD]||[]).find(row=>row.id===plan?.criticalId);
+  if(existing&&[...(existing.amputationShock?[existing.amputationShock]:[]),...(existing.amputationShocks||[])].some(row=>row.part===plan?.shockPart&&row.difficultyDR===plan?.difficultyDR))return{status:'duplicate',participant,record:clone(existing)};
   if (!plan?.ready || plan.participantId !== participant?.id || plan.amputationOccurred!==true) return { status: 'blocked', participant, reason: plan?.reason || 'Plan de choc d’amputation invalide.' };
   const record = (participant.extensions?.v5?.[CRITICAL_AFTERMATH_FIELD] || []).find(row => row.id === plan.criticalId);
   if (!record) return { status: 'stale', participant, reason: 'Blessure Critique d’amputation introuvable.' };
-  const verified=previewAmputationShock({participant,criticalId:plan.criticalId,difficultyDR:plan.difficultyDR,test:plan.test,amputationOccurred:plan.amputationOccurred});
+  const verified=previewAmputationShock({participant,criticalId:plan.criticalId,difficultyDR:plan.difficultyDR,test:plan.test,amputationOccurred:plan.amputationOccurred,shockPart:plan.shockPart});
   if(!verified.ready||JSON.stringify(verified.states)!==JSON.stringify(plan.states))return{status:'blocked',participant,reason:verified.reason||'Le choc ne correspond pas à une amputation admissible.'};
-  if (record.amputationShock) return { status: 'duplicate', participant, record: clone(record) };
-  const context = { resolutionId: plan.criticalId, targetId: participant.id, source: { kind: 'amputation-shock', criticalId: plan.criticalId } };
+  if(verified.status==='duplicate')return{status:'duplicate',participant,record:clone(record)};
+  const context = { resolutionId: `${plan.criticalId}:amputation:${verified.amputatedPart}`, targetId: participant.id, source: { kind: 'amputation-shock', criticalId: plan.criticalId, part:verified.amputatedPart } };
   const effects = verified.states.length ? acquireV5Conditions(participant, verified.states.map(state => ({ ...state, source: context.source })), context) : { participant: clone(participant), acquiredInstances: 0 };
   const next = clone(effects.participant);
   const rows = next.extensions?.v5?.[CRITICAL_AFTERMATH_FIELD] || [];
   next.extensions ??= {};
   next.extensions.v5 = { ...(next.extensions.v5 || {}), [CRITICAL_AFTERMATH_FIELD]: rows.map(row => row.id === plan.criticalId
-    ? { ...row, amputationShock: { amputationOccurred:true,part:verified.amputatedPart,difficultyDR: plan.difficultyDR, test: clone(plan.test), acquiredStates: verified.states.map(state => state.name), surgeryRequired: true } }
+    ? (row.amputationShock ? { ...row, amputationShocks:[...(row.amputationShocks||[]), { amputationOccurred:true,part:verified.amputatedPart,difficultyDR: plan.difficultyDR, test: clone(plan.test), acquiredStates: verified.states.map(state => state.name), surgeryRequired: true }] } : { ...row, amputationShock: { amputationOccurred:true,part:verified.amputatedPart,difficultyDR: plan.difficultyDR, test: clone(plan.test), acquiredStates: verified.states.map(state => state.name), surgeryRequired: true } })
     : row) };
   return { status: 'applied', participant: next, record: next.extensions.v5[CRITICAL_AFTERMATH_FIELD].find(row => row.id === plan.criticalId) };
 }

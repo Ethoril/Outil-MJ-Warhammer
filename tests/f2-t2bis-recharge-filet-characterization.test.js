@@ -9,21 +9,29 @@ test('T2 bis — recharge: chaque réussite ajoute 1 + DR positifs, un échec aj
   const atZero = advanceV5Reload(begun, { success: true, testSl: 0 });
   assert.equal(atZero.progress.successes, 1);
   const atPlusTwo = advanceV5Reload(atZero.state, { success: true, testSl: 2 });
-  assert.equal(atPlusTwo.progress.successes, 3);
+  assert.equal(atPlusTwo.progress.successes, 4, 'the displayed progress includes both Tests: 1 + (1 + 2)');
   const failed = advanceV5Reload(atPlusTwo.state, { success: false, testSl: -1 });
-  assert.equal(failed.progress.successes, 0);
+  assert.equal(failed.progress.successes, 4, 'progress.successes is cumulative; a failed Test adds zero');
   assert.equal(failed.state.accumulatedSuccesses, 4);
 });
 
-test('T2 bis — sortie de filet: Test opposé à la Force du filet et DR après le premier réduisent les états', () => {
-  const result = advanceV5NetEscape({ actorStrength: 40, netStrength: 35, testSl: 2, netTestSl: 0, entangled: 3 });
-  assert.equal(result.opposed, true);
-  assert.equal(result.freed, false);
+test('T2 bis — sortie de filet: victoire opposée, DR après le premier retirent un Empêtré supplémentaire', () => {
+  const result = advanceV5NetEscape({ testSl: 2, opponentSl: 0, entangled: 3 });
+  assert.equal(result.won, true);
+  assert.equal(result.freed, true);
+  assert.equal(result.removedEntangled, 2);
   assert.equal(result.remainingEntangled, 1);
 });
 
 test('T2 bis — sortie de filet: échec opposé ajoute un état Empêtré', () => {
-  const result = advanceV5NetEscape({ actorStrength: 30, netStrength: 50, testSl: 0, netTestSl: 2, entangled: 1 });
-  assert.equal(result.success, false);
+  const result = advanceV5NetEscape({ testSl: 0, opponentSl: 2, entangled: 1 });
+  assert.equal(result.won, false);
   assert.equal(result.addEntangledOnFailure, true);
+});
+
+test('T2 bis — Mancatcher à ressort: son bonus de +2 DR relève le résultat de la source', () => {
+  const result = advanceV5NetEscape({ testSl: 2, opponentSl: 0, opponentBonus: 2, entangled: 2 });
+  assert.equal(result.won, true, 'égalité d’opposition remportée par l’initiateur');
+  assert.equal(result.opponentSl, 2);
+  assert.equal(result.remainingEntangled, 1);
 });

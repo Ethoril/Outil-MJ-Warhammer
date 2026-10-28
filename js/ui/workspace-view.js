@@ -1577,6 +1577,35 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
   function renderCenter(context) {
     const center = play.center;
     center.replaceChildren();
+    let suddenDeathEnabled = false;
+    try { suddenDeathEnabled = JSON.parse(Store.getFullJSON()).extensions?.v5?.suddenDeathEnabled === true; } catch {}
+    const suddenDeath = node('section', 'workspace-card workspace-sudden-death');
+    suddenDeath.setAttribute('aria-label', 'Réglage de table : mort subite des figurants');
+    suddenDeath.appendChild(rubric('Mort subite des figurants'));
+    const optionLabel = node('label', 'workspace-type', 'Activer la règle de table — désactivée par défaut');
+    const option = document.createElement('input'); option.type = 'checkbox'; option.checked = suddenDeathEnabled;
+    option.setAttribute('aria-label', 'Activer la mort subite des figurants');
+    option.addEventListener('change', async () => { option.disabled = true; try { await Store.setSuddenDeathEnabled(option.checked); render(); } catch (error) { option.disabled = false; option.checked = !option.checked; suddenDeath.appendChild(node('p', 'workspace-error', userMessage(error, 'Réglage non enregistré.'))); } });
+    optionLabel.prepend(option); suddenDeath.appendChild(optionLabel);
+    if (suddenDeathEnabled) {
+      const candidates = (context.participants || []).filter(row => row.kind === 'PNJ' && Number(row.hp) === 0 && row.extensions?.v5?.dead !== true);
+      for (const participant of candidates) {
+        const row = node('div', 'workspace-result-line'); row.appendChild(node('span', '', `${participant.name || participant.id} · 0 Blessure`));
+        const confirmLabel = node('label', 'workspace-type', 'Confirmer que c’est un PNJ secondaire');
+        const confirm = document.createElement('input'); confirm.type = 'checkbox'; confirm.setAttribute('aria-label', `${participant.name || participant.id} : confirmer PNJ secondaire`); confirmLabel.prepend(confirm); row.appendChild(confirmLabel);
+        const preview = () => Store.previewSuddenDeath(participant.id, confirm.checked);
+        const status = node('span', 'workspace-muted', 'Choix MJ requis après confirmation du statut de figurant.'); row.appendChild(status);
+        for (const [outcome, label] of [['dead', 'Choisir : mort'], ['unconscious', 'Choisir : inconscient']]) {
+          const choose = button(label, 'workspace-secondary'); choose.type = 'button'; choose.disabled = true;
+          confirm.addEventListener('change', () => { const plan = preview(); choose.disabled = !plan.ready; status.textContent = plan.ready ? 'Éligible — le MJ choisit une issue.' : plan.reason; });
+          choose.addEventListener('click', async () => { choose.disabled = true; try { const plan = preview(); if (!plan.ready) throw new Error(plan.reason); await Store.decideSuddenDeath(participant.id, outcome, { secondaryNpcConfirmed: true, baseRevision: plan.baseRevision }); render(); } catch (error) { choose.disabled = false; status.textContent = userMessage(error, 'Décision non enregistrée.'); } });
+          row.appendChild(choose);
+        }
+        suddenDeath.appendChild(row);
+      }
+      if (!candidates.length) suddenDeath.appendChild(node('p', 'workspace-muted', 'Aucun figurant à 0 Blessure à arbitrer.'));
+    }
+    center.appendChild(suddenDeath);
     if (!context.participants.length) {
       const empty = node('div', 'workspace-empty workspace-card workspace-play-empty');
       empty.appendChild(node('h2', '', 'Aucune rencontre en cours'));
@@ -1634,6 +1663,9 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         const title=node('p','workspace-result-line',`${weapon.name||weapon.id} · ${state?`${state.shotsRemaining} tir(s) restant(s)`:'chargeur non initialisé'}${state?.reloading?` · recharge ${state.accumulatedSuccesses}/${state.requiredSuccesses} succès`:''}`);wrap.appendChild(title);
         const error=node('p','workspace-error');
         const apply=async input=>{try{error.textContent='';const plan=Store.previewV5WeaponReload({actorId:context.actor.id,equipmentId:weapon.id,...input});if(!plan.ready)throw new Error(plan.error||'Rechargement à préciser.');const saved=await Store.applyV5WeaponReload(plan);if(saved?.status!=='applied')throw new Error(saved?.reason||'Rechargement non enregistré.');render();}catch(cause){error.textContent=userMessage(cause,'Rechargement non enregistré.');}};
+        if(!state&&weapon.keywords?.some(row=>(typeof row==='string'?row:row?.id)==='a-repetition'&&String(row?.parameter).toLowerCase()==='variable')){
+          const label=node('label','workspace-type','Capacité du chargeur arbitrée par le MJ '),capacity=document.createElement('input');capacity.type='number';capacity.min='1';capacity.step='1';capacity.setAttribute('aria-label',`Capacité arbitrée — ${weapon.name||weapon.id}`);const decide=button('Enregistrer l’arbitrage','workspace-primary');decide.type='button';decide.addEventListener('click',()=>{if(!capacity.value){error.textContent='Saisissez une capacité entière positive.';return;}apply({operation:'arbitrate',repeaterRating:Number(capacity.value)});});label.append(capacity);wrap.append(label,decide);
+        }
         const begin=button('Commencer la recharge','workspace-secondary');begin.type='button';begin.addEventListener('click',()=>apply({operation:'begin'}));begin.disabled=state?.reloading===true;wrap.appendChild(begin);
         if(state?.reloading){
           const select=document.createElement('select');select.setAttribute('aria-label',`Résultat du Test de recharge — ${weapon.name||weapon.id}`);select.append(new Option('Résultat du Test…',''),new Option('Réussite','success'),new Option('Échec','failure'));
@@ -1685,24 +1717,29 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     }
     const amputationFollowups=[];
     for(const participant of context.participants||[])for(const record of participant.extensions?.v5?.criticalAftermath||[]){
-      if(record.amputationShock)continue;
+      if(record.amputationShockStatus==='not-occurred')continue;
       const preview=Store.previewAmputationShock?.({participantId:participant.id,criticalId:record.id});
-      if(preview?.requirements?.length)amputationFollowups.push({participant,record,requirements:preview.requirements});
+      if(preview?.status==='deferred')continue;
+      if(preview?.status!=='duplicate'&&preview?.requirements?.length)amputationFollowups.push({participant,record,requirements:preview.requirements,shockPart:preview.shockPart});
     }
     if(amputationFollowups.length){
       const section=node('section','workspace-card workspace-amputation-followups');section.setAttribute('aria-label','Chocs d’amputation à résoudre');
       section.appendChild(rubric('Chocs d’amputation — Test de Résistance'));
       for(const item of amputationFollowups){
-        const {participant,record,requirements}=item,parts=[...new Set(requirements.map(row=>row.part).filter(Boolean))].join(', ')||'membre';
+        const {participant,record,requirements}=item,parts=[...new Set(requirements.map(row=>row.part).filter(Boolean))].join(', ')||'membre',canReject= requirements.length>0&&requirements.every(row=>row.conditional===true);
         section.appendChild(node('p','workspace-result-line',`${participant.name} · ${record.effectName} · amputation : ${parts} · Résistance ${requirements[0].difficultyDR} DR · chirurgie requise`));
         const row=node('div','workspace-critical-amputation-controls');
-        const occurrenceLabel=node('label','workspace-type','Amputation effectivement survenue'),occurrence=document.createElement('select');occurrence.setAttribute('aria-label',`Amputation effectivement survenue : ${participant.name}`);occurrence.append(new Option('À confirmer',''),new Option('Oui','true'),new Option('Non','false'));occurrenceLabel.append(occurrence);row.append(occurrenceLabel);
+        const allFingersLost=requirements.some(requirement=>requirement.trigger==='all-fingers-lost'),factLabel=allFingersLost?'Tous les doigts ont été perdus':'Amputation effectivement survenue';
+        const occurrenceLabel=node('label','workspace-type',factLabel),occurrence=document.createElement('select');occurrence.setAttribute('aria-label',`${factLabel} : ${participant.name}`);if(canReject)occurrence.append(new Option('À confirmer',''),new Option('Oui','true'),new Option('Non','false'));else{occurrence.append(new Option('Oui','true'));occurrenceLabel.append(node('span','workspace-muted','Amputation imposée par la ligne critique.'));}occurrenceLabel.append(occurrence);row.append(occurrenceLabel);
         const resultLabel=node('label','workspace-type','Test de Résistance'),result=document.createElement('select');result.setAttribute('aria-label',`Résultat du Test de Résistance : ${participant.name}`);result.append(new Option('À préciser',''),new Option('Réussite','success'),new Option('Échec','failure'));resultLabel.append(result);row.append(resultLabel);
         const slLabel=node('label','workspace-type','DR du Test'),sl=document.createElement('input');sl.type='number';sl.step='1';sl.setAttribute('aria-label',`DR du Test de Résistance : ${participant.name}`);slLabel.append(sl);row.append(slLabel);
         const apply=node('button','workspace-primary','Enregistrer le choc'),error=node('p','workspace-error');apply.type='button';apply.disabled=state.resolution.busy;apply.addEventListener('click',async()=>{
-          error.textContent='';if(!occurrence.value||!result.value||sl.value===''){error.textContent='Confirmez l’amputation et saisissez le résultat/DR du Test.';return;}
+          error.textContent='';if(occurrence.value==='false'&&!canReject){error.textContent='Cette ligne impose l’amputation; elle ne peut pas être écartée.';return;}if(occurrence.value==='false'){
+            apply.disabled=true;try{if(allFingersLost)await Store.deferAmputationShock(participant.id,record.id,item.shockPart);else{const fresh=(Store.listParticipants?.()||[]).find(row=>row.id===participant.id)||participant;const aftermath=fresh.extensions?.v5?.criticalAftermath||[];await Store.updateParticipant(participant.id,{extensions:{...(fresh.extensions||{}),v5:{...(fresh.extensions?.v5||{}),criticalAftermath:aftermath.map(row=>row.id===record.id?{...row,amputationShockStatus:'not-occurred'}:row)}}});}render();}catch(cause){error.textContent=userMessage(cause,'Absence d’amputation non enregistrée.');apply.disabled=false;}return;
+          }
+          if(!occurrence.value||!result.value||sl.value===''){error.textContent='Confirmez l’amputation et saisissez le résultat/DR du Test.';return;}
           const testSL=Number(sl.value),success=result.value==='success';if(!Number.isSafeInteger(testSL)||(success&&testSL<0)||(!success&&testSL>0)){error.textContent='La DR doit être entière, positive ou nulle en réussite, négative ou nulle en échec.';return;}
-          apply.disabled=true;try{const plan=Store.previewAmputationShock({participantId:participant.id,criticalId:record.id,amputationOccurred:occurrence.value==='true',test:{success,sl:testSL}});if(plan.status!=='ready')throw new Error(plan.reason||'Le Test de Résistance reste à préciser.');const saved=await Store.applyAmputationShock(plan);if(saved?.status!=='applied'&&saved?.status!=='duplicate')throw new Error(saved?.reason||'Choc d’amputation non enregistré.');render();}catch(cause){error.textContent=userMessage(cause,'Choc d’amputation non enregistré.');apply.disabled=false;}
+          apply.disabled=true;try{const plan=Store.previewAmputationShock({participantId:participant.id,criticalId:record.id,shockPart:item.shockPart,amputationOccurred:occurrence.value==='true',test:{success,sl:testSL}});if(plan.status!=='ready')throw new Error(plan.reason||'Le Test de Résistance reste à préciser.');const saved=await Store.applyAmputationShock(plan);if(saved?.status!=='applied'&&saved?.status!=='duplicate')throw new Error(saved?.reason||'Choc d’amputation non enregistré.');render();}catch(cause){error.textContent=userMessage(cause,'Choc d’amputation non enregistré.');apply.disabled=false;}
         });row.append(apply,error);section.append(row);
       }
       center.appendChild(section);

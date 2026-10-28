@@ -6,10 +6,31 @@ import { mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'nod
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { parseReferenceCSV } from '../js/core/reference-catalog.js';
+import { buildEquipmentRows } from '../js/data/reference-equipment-builder.js';
+import snapshot from '../js/data/reference-snapshot.json' with { type: 'json' };
 
 const repo=resolve(dirname(fileURLToPath(import.meta.url)),'..');
 const json=(path,value)=>{mkdirSync(dirname(path),{recursive:true});writeFileSync(path,JSON.stringify(value,null,2)+'\n');};
 const hash=value=>createHash('sha256').update(value).digest('hex');
+
+test('CSV équipement : conserve l’astérisque et ignore le verbe « inflige » dans la note spéciale Blackbriar',()=>{
+ const dir=join(repo,'js/data/reference-source-csv');
+ const tables={};
+ for(const name of ['Mots Clés Armes et Armures','Armes Corps à Corps','Armes à Distance','Armures'])
+  tables[name]=parseReferenceCSV(readFileSync(join(dir,`${name}.csv`),'utf8'));
+ const rebuilt=buildEquipmentRows(tables),items=rebuilt.items;
+ assert.deepEqual(items.map(({catalogVersion,...item})=>item),snapshot.equipment.items.map(({catalogVersion,...item})=>item));
+ assert.deepEqual(rebuilt.keywords,snapshot.equipment.keywords);
+ const pepperbox=items.find(item=>item.name==='Poivrière');
+ assert.ok(pepperbox.keywords.some(word=>word.id==='a-repetition'&&word.parameter==='4'&&word.asterisk===true));
+ const repeater=items.find(item=>item.name==='Arquebuse à répétition (2M)');
+ assert.ok(repeater.keywords.some(word=>word.id==='a-repetition'&&word.parameter==='4'&&!word.asterisk),'aucun astérisque n’est inventé si le CSV n’en porte pas');
+ const blackbriar=items.find(item=>item.name==='Javelot Blackbriar elfe sylvain');
+ assert.ok(blackbriar.keywords.some(word=>word.id==='empaleuse'));
+ assert.ok(!blackbriar.keywords.some(word=>word.id==='inflige'),'le verbe de la note Spécial ne constitue pas la qualité V5 Inflige');
+ assert.match(blackbriar.notes,/Spécial \(si a passé la nuit dans une terre fertile, inflige la condition Empoisonné 1/);
+});
 
 test('génération équipement-seul : préserve le snapshot non-équipement et les fichiers partagés',()=>{
  const temp=mkdtempSync(join(tmpdir(),'e27-reference-equipment-only-'));

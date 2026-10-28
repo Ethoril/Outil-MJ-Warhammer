@@ -17,6 +17,26 @@ for(const label of ['Ag','Escrime','Bagarre']) test(`T2 bis characterization —
   assert.equal(result.rating,2);
 });
 
+test('T2 bis characterization — Ag brute est Esquive pour un tir avec au moins 2 PA', () => {
+  const target={equipment:[{id:'shield',kind:'shield',ap:2,keywords:[{id:'bouclier'}]}],extensions:{v5:{}}};
+  const result=v5ShieldDefense({target,defense:{label:'Ag'},protectionContext:{shieldId:'shield',shieldAvailable:true,opposedWithShield:true},attackContext:{ranged:true}});
+  assert.equal(result.v5Bonus,true);
+  assert.equal(result.rangedDodgeAllowed,true);
+});
+
+test('T2 bis characterization — Ag brute ne permet pas d’opposer un tir avec moins de 2 PA', () => {
+  const target={equipment:[{id:'shield',kind:'shield',ap:1,keywords:[{id:'bouclier'}]}],extensions:{v5:{}}};
+  const result=v5ShieldDefense({target,defense:{label:'Ag'},protectionContext:{shieldId:'shield',shieldAvailable:true,opposedWithShield:true},attackContext:{ranged:true}});
+  assert.equal(result.v5Bonus,false);
+  assert.equal(result.rangedDodgeAllowed,false);
+});
+
+test('T2 bis characterization — Ag brute reste une défense valide contre une attaque de mêlée', () => {
+  const target={equipment:[{id:'shield',kind:'shield',ap:1,keywords:[{id:'bouclier'}]}],extensions:{v5:{}}};
+  const result=v5ShieldDefense({target,defense:{label:'Ag'},protectionContext:{shieldId:'shield',shieldAvailable:true,opposedWithShield:true},attackContext:{ranged:false}});
+  assert.equal(result.v5Bonus,true);
+});
+
 test('T2 bis characterization — PA du bouclier attaché ne couvrent que Tête, Corps et bras non directeur', () => {
   const shield={id:'shield',kind:'shield',name:'Pavois',ap:2,locations:['head','body','leftArm','rightArm','leftLeg','rightLeg'],keywords:[{id:'bouclier'}]};
   const target={equipment:[shield],extensions:{v5:{}}};
@@ -42,7 +62,6 @@ test('T2 bis characterization — décide la mort au Round courant du Store, mê
   const store=createStore({persistence,storage:null}); await store.ready;
   const participant={id:'p',name:'P',kind:'PJ',zone:'active',hp:0,maxHp:10,caracs:{BE:0},states:[{id:'u',key:'inconscient',name:'Inconscient'}],extensions:{v5:{criticalDeath:{status:'awaiting-mj',dueRound:3,toughnessBonus:0,criticalIds:['c']},criticalWounds:[{id:'c'}]}}};
   await store.loadFromJSON({schemaVersion:3,reserve:[],log:[],diceLines:[],combat:{round:2,currentActorId:'p',order:['p'],participants:[participant]},extensions:{v5:{}}});
-  const result=await store.decideCriticalDeath('p','confirm',{round:3});
-  assert.notEqual(result?.ok,false,'Round 2 du Store doit prévaloir sur options.round=3');
+  await assert.rejects(store.decideCriticalDeath('p','confirm',{round:3}),/n’a pas atteint son échéance/);
   assert.equal(store.listParticipants().find(row=>row.id==='p').extensions.v5.dead,undefined);
 });

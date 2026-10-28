@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { createStore } from '../js/core/store.js';
 import { previewResolution, applyResolution } from '../js/core/resolution.js';
 import { getReferenceCatalogue } from '../js/core/reference-catalog.js';
-import { initialV5ReloadState } from '../js/core/v5-reloading.js';
+import { initialV5ReloadState, consumeV5WeaponShot } from '../js/core/v5-reloading.js';
 
 const memory = () => { let saved = null; return { async load() { return saved && structuredClone(saved); },
   async saveAtomic({ state }) { saved = structuredClone(state); return { ok: true }; } }; };
@@ -31,14 +31,14 @@ test('F2-D Store reload — start, progress, Undo, Redo, and persistence reload 
   assert.equal((await store.applyV5WeaponReload(plan)).status, 'applied');
   assert.equal(equipped(store).extensions.v5.reloadState.reloading, true);
   plan = store.previewV5WeaponReload({ actorId: 'a', equipmentId: 'repeat-1', operation: 'progress', success: true, testSl: 2 });
-  assert.equal((await store.applyV5WeaponReload(plan)).progress.successes, 1,
-    'choix d’exécutant F2-D : un Test réussi ajoute un succès; les DR ne s’accumulent pas');
+  assert.equal((await store.applyV5WeaponReload(plan)).progress.successes, 2,
+    'un Test réussi à +2 DR ajoute 1 succès de base et 2 succès supplémentaires; la progression est plafonnée au seuil');
   assert.equal(await store.undo(), true);
   assert.equal(equipped(store).extensions.v5.reloadState.accumulatedSuccesses, 0);
   assert.equal(await store.redo(), true);
-  assert.equal(equipped(store).extensions.v5.reloadState.accumulatedSuccesses, 1);
+  assert.equal(equipped(store).extensions.v5.reloadState.accumulatedSuccesses, 2);
   const reloaded = createStore({ storage: null, persistence }); await reloaded.ready;
-  assert.equal(equipped(reloaded).extensions.v5.reloadState.accumulatedSuccesses, 1);
+  assert.equal(equipped(reloaded).extensions.v5.reloadState.accumulatedSuccesses, 2);
 });
 
 test('F2-D Store reload — partial repeater magazine reduces the success target by one', async () => {
@@ -48,6 +48,27 @@ test('F2-D Store reload — partial repeater magazine reduces the success target
   await store.updateParticipant('a', { equipment: [item] });
   const plan = store.previewV5WeaponReload({ actorId: 'a', equipmentId: 'repeat-1', operation: 'begin' });
   assert.equal(plan.after.requiredSuccesses, 2);
+});
+
+test('T2 bis — Ratling Variable: capacité arbitrée puis état de chargeur persisté, annulable et rétabli',async()=>{
+  const model=getReferenceCatalogue().items.find(row=>row.name==='Mitrailleuse Ratling Skaven');assert.ok(model);assert.equal(initialV5ReloadState(model).ready,false);
+  const persistence=memory(),store=createStore({storage:null,persistence});await store.ready;const ratling=structuredClone(model);ratling.id='ratling-1';
+  const shooter={...structuredClone(actor),equipment:[ratling]};await store.loadFromJSON({schemaVersion:3,reserve:[],combat:{round:1,currentActorId:'a',order:['a','t'],participants:[shooter,structuredClone(target)]},log:[],diceLines:[]});
+  const absent=store.previewV5WeaponReload({actorId:'a',equipmentId:'ratling-1',operation:'arbitrate',repeaterRating:0});assert.equal(absent.ready,false,'capacité absente/invalidée, pas de chargeur inventé');
+  const plan=store.previewV5WeaponReload({actorId:'a',equipmentId:'ratling-1',operation:'arbitrate',repeaterRating:6});assert.equal(plan.ready,true,plan.error);assert.equal((await store.applyV5WeaponReload(plan)).status,'applied');
+  let ratlingState=store.listParticipants().find(row=>row.id==='a').equipment[0].extensions.v5.reloadState;assert.equal(ratlingState.repeaterRating,6);assert.equal(consumeV5WeaponShot(ratlingState).state.shotsRemaining,5,'chaque tir débite une munition du chargeur arbitré');assert.equal(await store.undo(),true);assert.equal(store.listParticipants().find(row=>row.id==='a').equipment[0].extensions?.v5?.reloadState,undefined);assert.equal(await store.redo(),true);
+  const reloaded=createStore({storage:null,persistence});await reloaded.ready;assert.equal(reloaded.listParticipants().find(row=>row.id==='a').equipment[0].extensions.v5.reloadState.repeaterRating,6);
+});
+
+test('T2 bis — Poivrière: alterner main libre/occupée conserve les canons restants à travers persistence',async()=>{
+  const model=getReferenceCatalogue().items.find(row=>row.name==='Poivrière'),persistence=memory(),store=createStore({storage:null,persistence});await store.ready;const pepper=structuredClone(model);pepper.id='pepper-1';
+  const shooter={...structuredClone(actor),equipment:[pepper]};await store.loadFromJSON({schemaVersion:3,reserve:[],combat:{round:1,currentActorId:'a',order:['a','t'],participants:[shooter,structuredClone(target)]},log:[],diceLines:[]});
+  const base={actorId:'a',targetId:'t',action:{id:'pepper-attack',type:'attack',attr:'CT',base:60,damage:8,extensions:{fiche:{equipmentId:'pepper-1'}}},attackContext:{ranged:true},v5:{kind:'ranged'}};
+  let plan=store.previewResolution({...base,resolutionId:'pepper-no-hand-1',roll:23,v5:{kind:'ranged',context:{freeHandAvailable:false}}});assert.equal(plan.weaponReload.after.shotsRemaining,3);assert.equal((await store.applyResolution(plan)).status,'applied');
+  const afterFirst=store.listParticipants().find(row=>row.id==='a').equipment[0].extensions.v5.reloadState;assert.equal(afterFirst.requiresManualRotation,true);
+  const blocked=store.previewResolution({...base,resolutionId:'pepper-no-hand-2',roll:23,v5:{kind:'ranged',context:{freeHandAvailable:false}}});assert.ok(blocked.unresolved.some(row=>/préparé manuellement/.test(row)));
+  plan=store.previewResolution({...base,resolutionId:'pepper-free-hand-2',roll:23,v5:{kind:'ranged',context:{freeHandAvailable:true}}});assert.equal(plan.weaponReload.after.shotsRemaining,2);assert.equal((await store.applyResolution(plan)).status,'applied');
+  const reloaded=createStore({storage:null,persistence});await reloaded.ready;const state=reloaded.listParticipants().find(row=>row.id==='a').equipment[0].extensions.v5.reloadState;assert.equal(state.shotsRemaining,2);assert.equal(state.requiresManualRotation,false);
 });
 
 test('F2-D resolution — a fired repeater consumes one shot once and Undo restores the charge', () => {

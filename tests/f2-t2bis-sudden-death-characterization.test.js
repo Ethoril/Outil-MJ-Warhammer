@@ -1,9 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { indexedDB } from 'fake-indexeddb';
 import {
   decideSuddenDeath,
   previewSuddenDeath
 } from '../js/core/v5-critical-aftermath.js';
+import { createStore } from '../js/core/store.js';
+import { createPersistence } from '../js/core/persistence.js';
 
 const npc = (overrides = {}) => ({
   id: 'extra', name: 'Figurant', kind: 'PNJ', hp: 0, states: [],
@@ -43,4 +46,57 @@ test('T2 bis — résolution refusée sans choix explicite, morte ou inconscient
   assert.equal(unconscious.status, 'unconscious');
   assert.equal(unconscious.participant.hp, 0);
   assert.ok(unconscious.participant.states.some(state => state.key === 'inconscient'));
+});
+
+test('T2 bis — Store persiste le réglage de table et annule/rétablit les décisions par historique', async () => {
+  const store = createStore({ storage: null });
+  await store.ready;
+  await store.loadFromJSON(JSON.stringify({ schemaVersion: 3, reserve: [], combat: { round: 1, currentActorId: 'extra', order: ['extra'], participants: [npc()] }, log: [], diceLines: [], extensions: { v5: {} } }));
+  assert.equal(JSON.parse(store.getFullJSON()).extensions.v5.suddenDeathEnabled, undefined);
+  assert.equal(store.previewSuddenDeath('extra', true).status, 'disabled');
+  await store.setSuddenDeathEnabled(true);
+  assert.equal(JSON.parse(store.getFullJSON()).extensions.v5.suddenDeathEnabled, true);
+  assert.equal(store.previewSuddenDeath('extra', true).ready, true);
+  await store.decideSuddenDeath('extra', 'unconscious', { secondaryNpcConfirmed: true });
+  assert.ok(store.listParticipants()[0].states.some(state => state.key === 'inconscient'));
+  assert.equal(await store.undo(), true);
+  assert.equal(store.listParticipants()[0].states.some(state => state.key === 'inconscient'), false);
+  assert.equal(await store.redo(), true);
+  assert.ok(store.listParticipants()[0].states.some(state => state.key === 'inconscient'));
+  assert.equal(await store.undo(), true);
+  assert.equal(await store.undo(), true);
+  assert.notEqual(JSON.parse(store.getFullJSON()).extensions.v5.suddenDeathEnabled, true);
+});
+
+test('T2 bis — réglage de table survit à la fermeture et au rechargement IndexedDB', async () => {
+  const dbName = `f2-t2bis-sudden-death-${Date.now()}`;
+  const persistence = createPersistence({ indexedDB, dbName, contextId: 'sudden-death' });
+  const store = createStore({ storage: null, persistence }); await store.ready;
+  await store.loadFromJSON(JSON.stringify({ schemaVersion: 3, reserve: [], combat: { round: 1, currentActorId: 'extra', order: ['extra'], participants: [npc()] }, log: [], diceLines: [], extensions: { v5: {} } }));
+  await store.setSuddenDeathEnabled(true); await store.whenIdle(); persistence.close();
+  const reopenedPersistence = createPersistence({ indexedDB, dbName, contextId: 'sudden-death' });
+  const reloaded = createStore({ storage: null, persistence: reopenedPersistence }); await reloaded.ready;
+  assert.equal(JSON.parse(reloaded.getFullJSON()).extensions.v5.suddenDeathEnabled, true);
+  assert.equal(reloaded.previewSuddenDeath('extra', true).status, 'choice-required');
+  reopenedPersistence.close();
+});
+
+test('T2 bis — les décisions refusent une révision périmée, une option désactivée ou une cible devenue inéligible', async () => {
+  const persistence = createPersistence({ indexedDB, dbName: `f2-t2bis-sudden-stale-${Date.now()}`, contextId: 'sudden-stale' });
+  const store = createStore({ storage: null, persistence }); await store.ready;
+  await store.loadFromJSON(JSON.stringify({ schemaVersion: 3, reserve: [], combat: { round: 1, currentActorId: 'extra', order: ['extra'], participants: [npc()] }, log: [], diceLines: [], extensions: { v5: {} } }));
+  await store.setSuddenDeathEnabled(true);
+  let plan = store.previewSuddenDeath('extra', true);
+  await store.updateParticipant('extra', { notes: 'changement concurrent' });
+  await assert.rejects(store.decideSuddenDeath('extra', 'dead', { secondaryNpcConfirmed: true, baseRevision: plan.baseRevision }), /changé depuis l’aperçu/i);
+  plan = store.previewSuddenDeath('extra', true);
+  await store.setSuddenDeathEnabled(false);
+  await assert.rejects(store.decideSuddenDeath('extra', 'dead', { secondaryNpcConfirmed: true }), /désactivée/i);
+  await store.setSuddenDeathEnabled(true);
+  plan = store.previewSuddenDeath('extra', true);
+  await store.updateParticipant('extra', { talents: [{ id: 'talent-luck', name: 'Chanceux' }] });
+  await assert.rejects(store.decideSuddenDeath('extra', 'unconscious', { secondaryNpcConfirmed: true }), /Chanceux/i);
+  assert.equal(store.listParticipants()[0].extensions.v5.dead, undefined);
+  assert.equal(store.listParticipants()[0].states.some(state => state.key === 'inconscient'), false);
+  persistence.close();
 });

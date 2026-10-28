@@ -1,6 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { indexedDB } from 'fake-indexeddb';
 import { createStore } from '../js/core/store.js';
+import { createPersistence } from '../js/core/persistence.js';
 import { V5_CRIT_DATA, getV5CriticalEffect } from '../js/data/v5-crits.js';
 import {
   applyAmputationShock,
@@ -58,7 +60,9 @@ test('F2-I — chaque ligne de chaque table V5 produit une séquelle durable sé
 test('F2-I — sequelles persistantes représentatives suivent les tables imprimées L06 p.173–176',()=>{
   const get=(table,name)=>V5_CRIT_DATA[table].find(row=>row.source.printedName===name);
   assert.deepEqual(get('HEAD','Fractured Jaw').parsed.injuries,[{kind:'injury',name:'Broken Bone',severity:'minor',part:'head'}]);
-  assert.ok(get('ARM','Dislocated Shoulder').parsed.durableEffects.some(row=>row.kind==='reset-limb'&&row.extendedHealSL===6&&row.testsPerRound===1));
+  const shoulderReset=get('ARM','Dislocated Shoulder').parsed.durableEffects.find(row=>row.kind==='reset-limb');
+  assert.equal(shoulderReset.extendedHealSL,6);
+  assert.equal(shoulderReset.testsPerRound,undefined,'la fréquence par Round est imprimée pour le genou, pas pour l’épaule (L06 p.365)');
   assert.ok(get('ARM','Clean Break').parsed.durableEffects.some(row=>row.kind==='test'&&row.skill==='Endurance'&&row.difficultySL===-1&&row.onFailure==='sonne:1'));
   assert.ok(get('HEAD','Concussive Blow').parsed.durableEffects.some(row=>row.kind==='random-condition-count'&&row.condition==='sonne'&&row.dice==='1d10'));
   assert.ok(get('BODY','Spinal Cord Damage').parsed.durableEffects.some(row=>row.kind==='permanent-functional-loss'&&row.part==='legs'&&row.difficultySL===-3));
@@ -74,6 +78,37 @@ test('F2-I — sequelles persistantes représentatives suivent les tables imprim
     {kind:'condition',name:'Souillé',key:'souille',level:1}
   ]});
   assert.deepEqual(Object.fromEntries(Object.entries(V5_CRIT_DATA).map(([key,rows])=>[key,new Set(rows.map(row=>row.source.printedPage)).size])),{HEAD:1,ARM:1,BODY:1,LEG:1});
+});
+
+test('F2-I — refuser un choc sans amputation persiste et peut être annulé',async()=>{
+  let saved=null;const persistence={async load(){return saved&&structuredClone(saved);},async saveAtomic({state}){saved=structuredClone(state);return{ok:true};}};
+  const source=createCriticalAftermathRecord(person('hero'),{table:'LEG',effectRoll:110,resolutionId:'no-amputation-ui',round:1});
+  const hero={...source.participant,zone:'active'};
+  const store=createStore({storage:null,persistence});await store.ready;
+  await store.loadFromJSON({schemaVersion:3,reserve:[],combat:{round:1,currentActorId:'hero',order:['hero'],participants:[hero]},log:[],diceLines:[],extensions:{v5:{combatId:'no-amputation-ui'}}});
+  const current=store.listParticipants().find(row=>row.id==='hero');
+  await store.updateParticipant('hero',{extensions:{...current.extensions,v5:{...current.extensions.v5,criticalAftermath:current.extensions.v5.criticalAftermath.map(row=>({...row,amputationShockStatus:'not-occurred'}))}}});
+  assert.equal(store.listParticipants().find(row=>row.id==='hero').extensions.v5.criticalAftermath[0].amputationShockStatus,'not-occurred');
+  assert.equal(await store.undo(),true);
+  assert.equal(store.listParticipants().find(row=>row.id==='hero').extensions.v5.criticalAftermath[0].amputationShockStatus,undefined);
+});
+
+test('F2-I — refus d’amputation conditionnelle survit au rechargement depuis IndexedDB',async()=>{
+  const dbName=`f2-i-amputation-declined-${Date.now()}`;
+  const source=createCriticalAftermathRecord(person('hero'),{table:'LEG',effectRoll:110,resolutionId:'indexeddb-no-amputation',round:1});
+  const hero={...source.participant,zone:'active'};
+  const persistence=createPersistence({indexedDB,dbName,contextId:'amputation-ui'});
+  const store=createStore({storage:null,persistence});await store.ready;
+  await store.loadFromJSON({schemaVersion:3,reserve:[],combat:{round:1,currentActorId:'hero',order:['hero'],participants:[hero]},log:[],diceLines:[],extensions:{v5:{combatId:'indexeddb-no-amputation'}}});
+  const current=store.listParticipants().find(row=>row.id==='hero');
+  const saved=await store.updateParticipant('hero',{extensions:{...current.extensions,v5:{...current.extensions.v5,criticalAftermath:current.extensions.v5.criticalAftermath.map(row=>({...row,amputationShockStatus:'not-occurred'}))}}});
+  assert.equal(saved?.ok,true);
+  persistence.close();
+
+  const reopenedPersistence=createPersistence({indexedDB,dbName,contextId:'amputation-ui'});
+  const reloaded=createStore({storage:null,persistence:reopenedPersistence});await reloaded.ready;
+  assert.equal(reloaded.listParticipants().find(row=>row.id==='hero').extensions.v5.criticalAftermath[0].amputationShockStatus,'not-occurred');
+  reopenedPersistence.close();
 });
 
 test('F2-I — critique mortel de table reste soumis à confirmation explicite du MJ', () => {

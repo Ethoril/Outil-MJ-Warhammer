@@ -118,9 +118,9 @@ const LASTING_OUTCOMES = {
     ['Clean Break',[{kind:'drop-held-item',part:'hand'},{kind:'injury',name:'Broken Bone',severity:'minor',part:'arm'},{kind:'test',skill:'Endurance',difficultySL:-1,onFailure:'sonne:1'}]],
     ['Deep Cut',[{kind:'injury',name:'Torn Muscle',severity:'minor',part:'arm'}]],
     ['Crushed Elbow',[{kind:'drop-held-item',part:'hand'},{kind:'injury',name:'Broken Bone',severity:'major',part:'arm'}]],
-    ['Dislocated Shoulder',[{kind:'reset-limb',part:'shoulder',extendedHealSL:6,difficultySL:2,testsPerRound:1},{kind:'duration',effect:'arm-tests:-1SL',dice:'1d10',unit:'days'}]],
+    ['Dislocated Shoulder',[{kind:'reset-limb',part:'shoulder',extendedHealSL:6,difficultySL:2},{kind:'duration',effect:'arm-tests:-1SL',dice:'1d10',unit:'days'}]],
     ['Severed Finger',[{kind:'amputation',part:'finger',difficultySL:2}]],
-    ['Cleft Hand',[{kind:'amputation',part:'finger',difficultySL:-1,recurrence:'one-finger-per-round-without-medical-attention',eventualPart:'hand'}]],
+    ['Cleft Hand',[{kind:'amputation',part:'finger',difficultySL:-1,recurrence:'one-finger-per-round-without-medical-attention',eventualPart:'hand'},{kind:'amputation',part:'hand',difficultySL:-1,conditional:true,trigger:'all-fingers-lost'}]],
     ['Mauled Bicep',[{kind:'drop-held-item',part:'hand'},{kind:'injury',name:'Torn Muscle',severity:'major',part:'arm'}]],
     ['Mangled Hand',[{kind:'amputation',part:'hand',difficultySL:-2}]],
     ['Sliced Tendons',[{kind:'amputation',part:'arm-function',difficultySL:-3}]]

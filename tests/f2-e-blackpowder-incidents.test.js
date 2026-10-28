@@ -84,14 +84,16 @@ test('F2-E — une maladresse exige un résultat, puis applique la perte directe
   assert.equal(applied.state.participants.find(row=>row.id==='shooter').hp,11);
 });
 
-test('F2-E — catastrophe de poudre exige et applique les dégâts maximums au bras du tireur à +0 DR', () => {
+test('F2-E — catastrophe de poudre applique les dégâts du profil au bras du tireur à +0 DR sans maximum saisi', () => {
   const missing=previewResolution({actor,target,action:{type:'attack',base:40,damage:4,qualities:['a-poudre-noire']},v5:{kind:'ranged',context:{powderIncidentRoll:9}},roll:99,baseRevision:0});
-  assert.ok(missing.unresolved.some(row=>row.includes('dégâts maximums du profil')));
-  const preview=previewResolution({actor,target,action:{type:'attack',base:40,damage:4,qualities:['a-poudre-noire']},v5:{kind:'ranged',context:{powderIncidentRoll:9,weaponDamageMaximum:10}},roll:99,baseRevision:0});
+  assert.ok(missing.unresolved.some(row=>row.includes('bras directeur')));
+  const noSide=previewResolution({actor,target,action:{type:'attack',base:40,damage:4,qualities:['a-poudre-noire']},v5:{kind:'ranged',context:{powderIncidentRoll:9}},roll:99,baseRevision:0});
+  assert.ok(noSide.unresolved.some(row=>row.includes('bras directeur')));
+  const preview=previewResolution({actor,target,action:{type:'attack',base:40,damage:4,qualities:['a-poudre-noire']},v5:{kind:'ranged',context:{powderIncidentRoll:9,weaponExplosionArmSide:'right'}},roll:99,baseRevision:0});
   assert.equal(preview.combatFailure.misfire.outcome.id,'catastrophe');
   const applied=applyResolution(preview,{revision:0,participants:[actor,target]});
   assert.equal(applied.status,'applied');
-  assert.equal(applied.state.participants.find(row=>row.id==='shooter').hp,5, '10 dégâts maximum au bras moins 3 d’Endurance');
+  assert.equal(applied.state.participants.find(row=>row.id==='shooter').hp,11, '4 dégâts du profil à +0 DR moins 3 d’Endurance');
 });
 
 test('F2-E — les particularités V4 restent nommées, converties en DR et bloquent les données MJ manquantes', () => {
@@ -102,6 +104,15 @@ test('F2-E — les particularités V4 restent nommées, converties en DR et bloq
   const volley=previewCombatFailure({normalized:{actor,action:{type:'attack',note:'Arquebuse à salve'},resolutionId:'volley'},context:{firing:true}});
   assert.ok(volley.reminders.some(row=>row.includes('à +2 DR')));
   assert.ok(volley.reminders.some(row=>row.includes('Servant unique'))===false);
+});
+
+test('F2-E — l’accident propre d’une hache-fusil en mêlée prime sur la table de poudre au double 99/100', () => {
+  const weapon={id:'gun-axe',name:'Hache-fusil',category:'Engineering',keywords:['a-poudre-noire']};
+  const result=previewCombatFailure({normalized:{actor:{...actor,equipment:[weapon]},action:{type:'attack',note:weapon.name,extensions:{fiche:{equipmentId:weapon.id}}},resolutionId:'gun-axe-accident'},
+    roll:100,fumble:{expanded:false},context:{weaponGroup:'Engineering',meleeUse:true,weaponLoaded:true,fumbleRoll:3}});
+  assert.equal(result.misfire,null);
+  assert.equal(result.fumble.outcome.id,'weapon-damaged');
+  assert.ok(result.effects.some(row=>row.reason==='hache-fusil-chargee'));
 });
 
 test('F2-E — maladresse 10 tire au sort parmi les alliés désignés à portée', () => {
@@ -153,6 +164,9 @@ test('F2-E — échec stupéfiant de l’arquebuse à salve applique le critique
   assert.equal(effect.sl,-5);
   assert.equal(effect.armCritical.effect.name,'Choc au bras');
   assert.equal(resolved.unresolved.length,0);
+  const bonusSuccess=previewCombatFailure({normalized,context:{firing:true,crewCount:2,recoilTestBase:80,recoilTestRoll:95,blackpowderStockInitial:stock}});
+  assert.equal(bonusSuccess.effects.find(row=>row.type==='volley-recoil')?.success,true,'le seuil inclut le +20 avant de déterminer la réussite');
+  assert.equal(bonusSuccess.effects.find(row=>row.type==='volley-recoil')?.sl,1);
 });
 
 test('F2-E — critique d’épaule du servant est appliqué et inscrit dans les Blessures Critiques', () => {
@@ -252,7 +266,7 @@ test('F2-E revue — le Griffonsfoot requiert six succès de recharge avant le d
   let shooter={...actor,equipment:[weapon]},state={revision:0,round:1,participants:[shooter]};
   for(let step=1;step<=6;step++){
     const context={reloading:true,weaponReload:6,...(step===6?{blackpowderStockInitial:{confirmed:true,projectiles:6,powderCharges:6}}:{})};
-    const preview=previewResolution({actor:shooter,action:{type:'test',base:50,note:'Pistolet Griffonsfoot',extensions:{fiche:{equipmentId:weapon.id}}},roll:20,round:1,resolutionId:`griffon-reload-${step}`,
+    const preview=previewResolution({actor:shooter,action:{type:'test',base:50,note:'Pistolet Griffonsfoot',extensions:{fiche:{equipmentId:weapon.id}}},roll:50,round:1,resolutionId:`griffon-reload-${step}`,
       v5:{kind:'test',context},baseRevision:state.revision});
     assert.equal(preview.unresolved.length,0,preview.unresolved.join('; '));
     if(step<6){assert.equal(preview.combatFailure.effects.some(row=>row.type==='blackpowder-stock-change'),false);assert.equal(preview.combatFailure.effects.some(row=>row.type==='griffonsfoot-reload'),false);}
@@ -276,7 +290,7 @@ test('F2-E revue — un second cycle Griffonsfoot repart à zéro après la déc
   const afterFirstSuccess=applyResolution(firstSuccess,afterFire.state);assert.equal(afterFirstSuccess.status,'applied');
   const secondCycle=afterFirstSuccess.state.participants.find(row=>row.id==='shooter').equipment[0].extensions.v5;
   assert.deepEqual({afterDischarge:reloader.equipment[0].extensions.v5.griffonsfootReloadProgress,
-    afterOneSuccessLoaded:secondCycle.loadedCharges,afterOneSuccessProgress:secondCycle.griffonsfootReloadProgress},{afterDischarge:0,afterOneSuccessLoaded:0,afterOneSuccessProgress:1});
+    afterOneSuccessLoaded:secondCycle.loadedCharges,afterOneSuccessProgress:secondCycle.griffonsfootReloadProgress},{afterDischarge:0,afterOneSuccessLoaded:0,afterOneSuccessProgress:3});
 });
 
 test('F2-E revue — Salve convertit chaque tir antérieur du Tour canonique en −1 DR', () => {
@@ -342,7 +356,7 @@ test('F2-E — une mèche de bombe conserve son Round d’échéance et le morti
   assert.equal(appliedFuse.state.participants[0].equipment[0].extensions.v5.fuseDueRound,4);
   assert.equal(appliedFuse.state.participants[0].equipment[0].extensions.v5.bombFuseOwnerId,'shooter');
   const fumble=previewResolution({actor:shooter,action:{type:'skill',base:20,note:'Mortier à main',extensions:{fiche:{equipmentId:'mortar'}}},roll:66,round:4,
-    v5:{kind:'test',context:{fumbleRoll:1,reloading:true}},baseRevision:0});
+    v5:{kind:'test',context:{fumbleRoll:1,reloading:true,weaponExplosionArmSide:'right'}},baseRevision:0});
   const exploded=applyResolution(fumble,{revision:0,round:4,participants:[shooter]});
   assert.equal(exploded.status,'applied');
   assert.equal(exploded.state.participants[0].hp,2,'12 dégâts maximum moins 3 d’Endurance et 1 Blessure de la table de maladresse');
@@ -501,7 +515,9 @@ test('F2-E — le mortier à main en maladresse de rechargement exige les dégâ
   const normalized={actor,action:{type:'test',note:'Mortier à main',damage:4},resolutionId:'mortar-reload'};
   const missing=previewCombatFailure({normalized,fumble:{expanded:false},context:{fumbleRoll:1,reloading:true,weaponDamage:4}});
   assert.ok(missing.unresolved.some(row=>row.includes('dégâts maximums')));
-  const complete=previewCombatFailure({normalized,fumble:{expanded:false},context:{fumbleRoll:1,reloading:true,weaponDamageMaximum:12}});
+  const noSide=previewCombatFailure({normalized,fumble:{expanded:false},context:{fumbleRoll:1,reloading:true,weaponDamageMaximum:12}});
+  assert.ok(noSide.unresolved.some(row=>row.includes('bras directeur')));
+  const complete=previewCombatFailure({normalized,fumble:{expanded:false},context:{fumbleRoll:1,reloading:true,weaponDamageMaximum:12,weaponExplosionArmSide:'right'}});
   const explosion=complete.effects.find(row=>row.type==='weapon-explosion');
   assert.equal(explosion.damage,12);
   assert.equal(explosion.damageMode,'maximum');
@@ -514,4 +530,24 @@ test('F2-E — le défenseur qui fait une maladresse reçoit aussi l’effet de 
     defense:{type:'defense',label:'Esquive',base:40,roll:66,v5:{kind:'test',context:{defenderFumbleRoll:1}}},baseRevision:0});
   assert.equal(preview.combatFailure.defender.outcome.id,'minor-injury');
   assert.equal(preview.combatFailure.effects.find(row=>row.type==='wound-loss')?.targetId,'defender');
+});
+
+
+test('F2-E — l’explosion touche le bras directeur choisi et applique son armure d’inventaire', () => {
+  const armour=[
+    {id:'left',kind:'armour',name:'Brassard gauche',ap:2,layer:'mail',locations:['leftArm'],keywords:[]},
+    {id:'right',kind:'armour',name:'Brassard droit',ap:4,layer:'mail',locations:['rightArm'],keywords:[]}
+  ];
+  const resolve=side=>{
+    const mortar={id:'mortar',name:'Mortier à main',kind:'weapon',category:'Explosif',damageMaximum:12};
+    const shooter={...actor,hp:20,equipment:[...armour,mortar]};
+    const enemy={id:'enemy',camp:'foes',zone:'active',hp:20,caracs:{E:30},states:[]};
+    const participants=[shooter,enemy];
+    const preview=previewResolution({actor:shooter,target:enemy,action:{type:'attack',attr:'CT',base:20,damage:4,note:'Mortier à main',extensions:{fiche:{equipmentId:'mortar'}}},roll:66,round:1,baseRevision:0,
+      v5:{kind:'ranged',context:{fumbleRoll:1,reloading:true,weaponDamageMaximum:12,weaponExplosionArmSide:side}}});
+    assert.equal(preview.unresolved.length,0,preview.unresolved.join('; '));
+    return applyResolution(preview,{revision:0,round:1,participants}).state.participants[0].hp;
+  };
+  assert.equal(resolve('left'),12,'12 dégâts − 3 BE − 2 PA − 1 blessure Oops');
+  assert.equal(resolve('right'),14,'12 dégâts − 3 BE − 4 PA − 1 blessure Oops');
 });

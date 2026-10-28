@@ -31,6 +31,7 @@ test('F2-N intégré : trois Tours engagent, blessent sans PA, puis libèrent; U
  await store.setRoundTurn(3,'held');
  preview=store.previewResolution(input(store,{actorId:'held',targetId:'holder',skillId:'ft',defenseSkillId:'fh',roll:20,defenseRoll:70,grappleAction:'escape'}));
  assert.equal(preview.grapple.status,'ready');
+ assert.ok(preview.test.details.modifiers.some(row=>row.id==='conditions'&&row.amount===-1),'Enchevêtré applique −1 DR au Test de Force d’empoignade impliquant un mouvement');
  const appliedEscape=await store.applyResolution(preview);assert.equal(appliedEscape.status,'applied',JSON.stringify({reason:appliedEscape.reason,unresolved:preview.unresolved,grapple:preview.grapple}));
  assert.equal(person(store,'holder').extensions.v5.grapples[0].status,'released');
  assert.equal(person(store,'held').states.filter(row=>row.key==='enchevetre').reduce((n,row)=>n+row.level,0),0);
@@ -41,9 +42,39 @@ test('F2-N intégré : trois Tours engagent, blessent sans PA, puis libèrent; U
  assert.deepEqual(person(reloaded,'holder').extensions.v5.grapples,released);
 });
 
+test('F2-N intégré : quand l’initiateur se dégage, il libère aussi le participant tenu',async()=>{
+ const{store}=await fixture(),link={id:'grapple:initiator-escape',initiatorId:'holder',targetId:'held',status:'active'};
+ await store.updateParticipant('holder',{extensions:{v5:{grapples:[link]}}});
+ await store.updateParticipant('held',{states:[{id:'held-by-link',key:'enchevetre',name:'Enchevêtré',level:2,source:{kind:'grapple',linkId:link.id}}],extensions:{v5:{grapples:[link]}}});
+ await store.setRoundTurn(2,'holder');
+ const escape=input(store,{actorId:'holder',targetId:'held',skillId:'fh',defenseSkillId:'ft',roll:20,defenseRoll:70,grappleAction:'escape'});
+ const preview=store.previewResolution(escape);assert.equal(preview.grapple.status,'ready');
+ assert.equal((await store.applyResolution(preview)).status,'applied');
+ assert.equal(person(store,'holder').extensions.v5.grapples[0].status,'released');
+ assert.equal(person(store,'held').states.filter(row=>row.source?.linkId===link.id).length,0);
+});
+
+test('F2-N intégré : le double critique d’une prise réussie reste visible',async()=>{
+ const{store}=await fixture();
+ const preview=store.previewResolution(input(store,{actorId:'holder',targetId:'held',skillId:'bh',defenseSkillId:'bt',roll:22,defenseRoll:70,declared:true}));
+ assert.equal(preview.grapple.status,'grappled');
+ assert.ok(preview.critical,'l’empoignade supprime les Blessures ordinaires, pas le Coup critique du double');
+});
+
+test('F2-N intégré : recommencer un combat sans scène purge les liens d’empoignade',async()=>{
+ const{store}=await fixture(),link={id:'grapple:restart',initiatorId:'holder',targetId:'held',status:'active'};
+ await store.updateParticipant('holder',{extensions:{v5:{grapples:[link]}}});
+ await store.updateParticipant('held',{states:[{id:'held-by-link',key:'enchevetre',name:'Enchevêtré',level:1,source:{kind:'grapple',linkId:link.id}}],extensions:{v5:{grapples:[link]}}});
+ await store.restartCombat();
+ assert.equal(person(store,'holder').extensions.v5.grapples,undefined);
+ assert.equal(person(store,'held').extensions.v5.grapples,undefined);
+ assert.deepEqual(person(store,'held').states,[]);
+});
+
 test('F2-N intégré : sous empoignade, le Tour bloque une autre Action et accepte la déclaration Force',async()=>{
  const{store}=await fixture();const link={id:'grapple:preexisting',initiatorId:'holder',targetId:'held',status:'active'};
  await store.loadFromJSON({schemaVersion:3,reserve:[],combat:{round:2,currentActorId:'holder',order:['holder','held'],participants:[fighter('holder','bh','fh'),fighter('held','bt','ft')]},extensions:{v5:{combatId:'f2-n-turn-gate',turnIndex:2}},log:[],diceLines:[]});
+ await store.updateParticipant('held',{states:[{id:'held-by-link',key:'enchevetre',name:'Enchevêtré',level:1,source:{kind:'grapple',linkId:link.id}}]});
  await store.updateParticipant('holder',{extensions:{v5:{hasMomentum:false,grapples:[link]}}});
  await store.updateParticipant('held',{extensions:{v5:{hasMomentum:false,grapples:[link]}}});
  const unrelated=input(store,{actorId:'holder',targetId:'held',skillId:'bh',defenseSkillId:'bt',roll:40,defenseRoll:70});

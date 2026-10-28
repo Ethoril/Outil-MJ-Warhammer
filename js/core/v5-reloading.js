@@ -13,9 +13,11 @@ export function initialV5ReloadState(weapon) {
   const salvo = qualities.find(row => ['salve','salvo'].includes(typeof row === 'string' ? row : row?.id));
   const reload = qualities.find(row => (typeof row === 'string' ? row : row?.id) === 'recharge');
   if (!repeater && !salvo && !reload && weapon?.reload == null) return blocked('Cette arme ne porte ni À répétition, Salve ni Recharge.');
-  const repeaterRating = repeater ? Number(typeof repeater === 'string' ? NaN : repeater.parameter) : 0;
-  const salvoRating = salvo ? Number(typeof salvo === 'string' ? NaN : salvo.parameter) : 0;
   const extension=weapon?.extensions?.v5||{};
+  const rawRepeater=repeater ? (typeof repeater === 'string' ? NaN : repeater.parameter) : 0;
+  // « Variable » is deliberately resolved by the MJ per weapon instance.
+  const repeaterRating = String(rawRepeater).toLowerCase()==='variable' ? Number(extension.reloadState?.repeaterRating??extension.repeaterRating??NaN) : Number(rawRepeater);
+  const salvoRating = salvo ? Number(typeof salvo === 'string' ? NaN : salvo.parameter) : 0;
   const rawReload = reload ? (typeof reload === 'string' ? NaN : reload.parameter) : (extension.reloadRequiredSuccesses??weapon.reload);
   const markedIncremental=reload?.asterisk===true||reload?.incrementalPerSalvo===true||extension.salvoReloadMode==='incremental'||typeof rawReload==='string'&&/\*$/.test(rawReload.trim());
   const reloadSuccesses = Number(typeof rawReload==='string'?rawReload.replace(/\*\s*$/,'').trim():rawReload);
@@ -92,14 +94,14 @@ export function beginV5Reload(state, { expectedRevision = state?.revision, reloa
   return ready({ status: requiredSuccesses === 0 ? 'reloaded' : 'reloading', state: next });
 }
 
-/** Each successful extended Test adds one success; Actions and its SL do not change the count. */
+/** Each successful Test adds one base success plus its positive DR; failures add none. */
 export function advanceV5Reload(state, { success, testSl, expectedRevision = state?.revision } = {}) {
   if (!validState(state) || !integer(state.requiredSuccesses)) return blocked('Rechargement : Test de progression commencé requis.');
   if (expectedRevision !== state.revision) return ready({ status: 'stale', state: clone(state) });
   if (!state.reloading) return ready({ status: 'unavailable', reason: 'not-reloading', state: clone(state) });
   if (typeof success !== 'boolean' || !Number.isSafeInteger(Number(testSl))) return blocked('Rechargement : réussite et DR entiers requis.');
   const next = clone(state);
-  if (success) next.accumulatedSuccesses += 1;
+  if (success) next.accumulatedSuccesses += 1 + Math.max(0, Number(testSl));
   const done = next.accumulatedSuccesses >= next.requiredSuccesses;
   if (done) {
     next.reloading = false;

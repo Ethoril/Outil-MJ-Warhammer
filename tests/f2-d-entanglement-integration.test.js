@@ -33,17 +33,19 @@ test('F2-D Immobilisante Store — lock, DR cumulés, Undo et rechargement de pe
   assert.equal(participant(restored,'holder').equipment[0].extensions.v5.entanglementLocks.length,1);
 
   let victim=participant(restored,'victim');
-  for(const [index,roll] of [21,21,21].entries()){
+  for(const [index,roll] of [12,12,12].entries()){
+    if(!victim.states.length)break;
     plan=restored.previewResolution({actorId:'victim',resolutionId:`net-store-escape-${index+1}`,roll,round:1,
       action:{id:'escape',type:'test',attr:'F',base:30,label:'Force'},
-      v5:{kind:'test',context:{netEscapeConditionId:victim.states[0].id,involvesMovement:false,requiresSight:false,reliesOnSight:false,usesFellowship:false}}});
+      v5:{kind:'test',context:{netEscapeConditionId:victim.states[0].id,netEscapeOpponentRoll:index===0?1:30,involvesMovement:false,requiresSight:false,reliesOnSight:false,usesFellowship:false}}});
     assert.equal(plan.unresolved.length,0,plan.unresolved.join('; '));
     assert.equal((await restored.applyResolution(plan)).status,'applied');
     victim=participant(restored,'victim');
     if(index===0){
-      assert.equal(victim.extensions.v5.netEscapeProgress[victim.states[0].id],1);
+      assert.equal(victim.states[0].level,2,'un échec opposé ajoute Empêtré');
+      assert.equal(victim.extensions.v5.netEscapeProgress?.[victim.states[0].id],undefined,'les DR ne se cumulent plus');
       const mid=restored.getFullJSON(),afterReload=createStore({storage:null,persistence});await afterReload.ready;await afterReload.loadFromJSON(mid);
-      assert.equal(participant(afterReload,'victim').extensions.v5.netEscapeProgress[victim.states[0].id],1);
+      assert.equal(participant(afterReload,'victim').states[0].level,2);
       restored=afterReload;
     }
   }

@@ -33,7 +33,7 @@ test('E08 ordre — déplacement manuel devient l’ordre effectif sans fin de t
   assert.equal(mode.currentActorId, 'b');
 });
 
-test('F2-E — agir en dernier s’applique au prochain Round sans écraser l’ordre manuel', () => {
+test('F2-E — agir en dernier réordonne le prochain Round, même en mode manuel', () => {
   const participants=[
     {id:'fast',name:'Rapide',initiative:50,zone:'active'},
     {id:'slow',name:'Lent',initiative:80,zone:'active',extensions:{v5:{combatEffects:[{id:'late',kind:'acts-last-next-round',round:2}]}}}

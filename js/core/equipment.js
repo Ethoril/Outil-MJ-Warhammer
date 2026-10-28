@@ -471,6 +471,14 @@ const locationId=context=>{
  if(location.key==='ARM')return location.side==='left'?'leftArm':location.side==='right'?'rightArm':null;
  if(location.key==='LEG')return location.side==='left'?'leftLeg':location.side==='right'?'rightLeg':null;return null;
 };
+const shieldCoversLocation=(context,id)=>{
+ if(context.shieldAttached!==true)return true;
+ if(id==='head'||id==='body')return true;
+ if(!['leftArm','rightArm'].includes(id))return false;
+ // The rule names the off arm, so the caller must supply which side that is.
+ const offHandSide=context.nonDominantArmSide;
+ return offHandSide===id.slice(0,-3);
+};
 const supportedConditional = id => contracts.entries.find(w=>w.id===id);
 /** Effective armour for a supplied hit context. Shield never enters permanent PA. */
 export function locationProtection(target,context={}){
@@ -516,6 +524,10 @@ export function locationProtection(target,context={}){
     if(!Number.isSafeInteger(shield.ap)||shield.ap<0)manual.push('protection-bouclier-a-preciser');
     else if(context.defenseProvided===true&&typeof context.ranged==='boolean'){
      shield={...shield,ap:Math.max(0,shield.ap-(Number(target?.extensions?.v5?.armorDamageByItem?.[shield.id])||0))};shieldAp=shield.ap;
+     if(context.shieldAttached===true&&!['head','body'].includes(id)&&!shieldCoversLocation(context,id)){
+      shieldAp=0;
+      if(['leftArm','rightArm'].includes(id)&&!['left','right'].includes(context.nonDominantArmSide))manual.push('bras-non-directeur-requis:bouclier-attache');
+     }
      // V5 : 2 PA ou plus autorisent l’opposition aux tirs à toute portée,
      // sans condition de ligne de vue. La ligne de vue reste une règle V4.
      if(context.ranged===true&&shield.ap<2){shieldAp=0;manual.push('bouclier-projectile-contexte-requis');}

@@ -51,14 +51,25 @@ export function previewV5Hack({ qualities = [], hit = false, struckItemId, curre
 }
 
 /** A ranged Impale critical locks one wound until the matching projectile is removed. */
-export function previewV5ImpaleProjectile({ qualities = [], ranged = false, critical = false, ammunitionId, ammunitionType, participantId } = {}) {
+export function previewV5ImpaleProjectile({ qualities = [], ranged = false, critical = false, ammunitionId, ammunitionType, weaponId, weaponCategory, weaponName, participantId } = {}) {
   if (!has(qualities, 'empaleuse') || !ranged || !critical) return result({ lodgedProjectile: null, healingBlocked: 0 });
-  if (typeof ammunitionId !== 'string' || !ammunitionId || typeof participantId !== 'string' || !participantId)
-    return blocked('Empaleuse : cible et munition identifiées requises.');
-  const ammo = fold(ammunitionType);
-  if (!ammo) return blocked('Empaleuse : type de munition requis pour déterminer le retrait.');
+  if (typeof participantId !== 'string' || !participantId) return blocked('Empaleuse : cible identifiée requise.');
+  let sourceId = ammunitionId;
+  let ammo = fold(ammunitionType);
+  let genericProjectile = false;
+  if (!sourceId || !ammo) {
+    const weapon = fold(`${weaponCategory || ''} ${weaponName || ''}`);
+    const generic = /arbal[eè]te|crossbow/u.test(weapon) ? 'carreau'
+      : /(?:^|\s)arc(?:\s|$)|bow/u.test(weapon) ? 'fleche'
+      : /poudre noire|black ?powder|ingenierie|engineering/u.test(weapon) ? 'balle' : '';
+    if (!generic || typeof weaponId !== 'string' || !weaponId)
+      return blocked('Empaleuse : munition suivie ou profil d’arme permettant de déduire le projectile requis.');
+    ammo = generic;
+    sourceId = `generic:${weaponId}:${generic}`;
+    genericProjectile = true;
+  }
   const bullet = /\b(?:bullet|bullets|balle|balles)\b/u.test(ammo);
-  return result({ lodgedProjectile: { participantId, ammunitionId, removal: bullet ? 'surgery' : 'heal-test', healTestModifier: 0 }, healingBlocked: 1 });
+  return result({ lodgedProjectile: { participantId, ammunitionId: sourceId, ammunitionType: ammo, ...(genericProjectile ? { weaponId, genericProjectile: true } : {}), removal: bullet ? 'surgery' : 'heal-test', healTestModifier: 0 }, healingBlocked: 1 });
 }
 
 /** Each lodged projectile blocks recovery of one Wound until its own extraction. */
@@ -90,7 +101,7 @@ export function canUseV5PowderAmmunition({ weaponGroup, ammunitionType, isBlunde
     return blocked('Munitions : groupe d’arme et type de munition requis.');
   const smallOrImprovised = ['grenaille', 'projectile improvise', 'small shot', 'improvised shot'].includes(ammo);
   const bullet = ['balle', 'balles', 'bullet', 'bullets'].includes(ammo);
-  if (group === 'poudre noire' && isBlunderbuss && smallOrImprovised) return result({ allowed: true });
+  if (group === 'poudre noire' && isBlunderbuss) return result({ allowed: smallOrImprovised });
   if (bullet) return result({ allowed: true });
   return result({ allowed: false });
 }
@@ -104,6 +115,14 @@ const fold = value => String(value ?? '').normalize('NFD').replace(/[\u0300-\u03
 /** Parse the catalogued V5 Inflict parameter; do not infer a state from an item name. */
 export function parseV5Inflict(value, actorStrength) {
   const text = String(value ?? '').trim();
+  const parts = text.split(/\s*,\s*/u);
+  if (parts.length > 1) {
+    const parsed = parts.map(part => parseV5Inflict(part, actorStrength));
+    const failed = parsed.find(row => !row.ready);
+    if (failed) return failed;
+    const conditions = parsed.flatMap(row => row.conditions || (row.condition ? [row.condition] : []));
+    return result({ condition: conditions[0] || null, conditions });
+  }
   const match = text.match(/^([^()]+?)(?:\s*\(([^()]*)\)|\s+(\d{1,3}|votre force|your strength))?$/iu);
   if (!match) return blocked('Inflige : paramètre d’état invalide.');
   const rawState = fold(match[1]);
@@ -122,7 +141,8 @@ export function parseV5Inflict(value, actorStrength) {
       strength = Number(parsed[1]);
     }
   }
-  return result({ condition: { key, name: match[1].trim(), level: 1, ...(strength === null ? {} : { strength }) } });
+  const condition = { key, name: match[1].trim(), level: 1, ...(strength === null ? {} : { strength }) };
+  return result({ condition });
 }
 
 export function previewV5Inflict({ qualities = [], hit = false, actorStrength, entangling = false, itemId } = {}) {
@@ -130,9 +150,10 @@ export function previewV5Inflict({ qualities = [], hit = false, actorStrength, e
   const q = quality(qualities, 'inflige');
   const parsed = parseV5Inflict(typeof q === 'object' ? q.parameter ?? q.rating : null, actorStrength);
   if (!parsed.ready) return parsed;
-  if (parsed.condition.key === 'enchevetre' && !positiveInt(parsed.condition.strength)) return blocked('Inflige (Empêtré) : Force de l’état requise.');
-  const locksWeapon = parsed.condition.key === 'enchevetre' && entangling;
-  return result({ condition: parsed.condition, weaponLocked: Boolean(locksWeapon), lockedItemId: locksWeapon ? itemId || null : null,
+  const conditions = parsed.conditions || [parsed.condition].filter(Boolean);
+  if (conditions.some(condition => condition.key === 'enchevetre' && !positiveInt(condition.strength))) return blocked('Inflige (Empêtré) : Force de l’état requise.');
+  const locksWeapon = conditions.some(condition => condition.key === 'enchevetre') && entangling;
+  return result({ condition: conditions[0] || null, ...(conditions.length > 1 ? { conditions } : {}), weaponLocked: Boolean(locksWeapon), lockedItemId: locksWeapon ? itemId || null : null,
     release: locksWeapon ? { voluntary: true, weaponId: itemId || null } : null });
 }
 
@@ -235,7 +256,7 @@ export function validateV5ShieldHands({ shield, weaponHands, weaponEncumbrance, 
   if (!integerForHands(weaponHands) || !Number.isSafeInteger(Number(weaponEncumbrance)))
     return blocked('Bouclier : mains et Encombrement de l’arme requis.');
   const buckler = Number(shield.ap) === 1;
-  if (attached && polearm && Number(weaponHands) === 2 && !buckler) return result({ allowed: true, reason: 'shield-attached-polearm' });
+  if (attached && polearm && Number(weaponHands) === 2) return result({ allowed: true, reason: 'shield-attached-polearm' });
   if (Number(weaponHands) === 2) return result({ allowed: false, reason: 'hands-conflict' });
   if (buckler && attached && Number.isSafeInteger(Number(offHandWeaponEncumbrance)) && Number(offHandWeaponEncumbrance) === 0)
     return result({ allowed: true, reason: 'buckler-free-hand' });
@@ -247,16 +268,15 @@ function integerForHands(value) { return Number.isSafeInteger(Number(value)) && 
 
 /** Mail and plate penalties apply once per worn category, irrespective of piece count. */
 export function calculateV5ArmorPenalty({ worn = [] } = {}) {
-  const mailCategories=new Set(['mail','mailles','mailles naines']);
-  const plateCategories=new Set(['plate','plates','plates naines','gromril (nain)','ithilmar haut elfe','dragon haut elfe']);
   const active=worn.filter(row=>row?.worn!==false);
-  const categories=new Set(active.map(row=>String(row?.category||'').normalize('NFD').replace(/[\u0300-\u036f]/gu,'').toLowerCase()));
-  const mail=[...mailCategories].some(category=>categories.has(category));
-  const plate=[...plateCategories].some(category=>categories.has(category));
+  // The catalogue explicitly marks the pieces that impose the stealth penalty.
+  // Do not infer it from material/category: some Ithilmar, Dragon, and Gromril
+  // entries carry no such note.
+  const foldText=value=>String(value??'').normalize('NFD').replace(/[\u0300-\u036f]/gu,'').toLowerCase();
+  const stealth=active.some(row=>/(?:-1\s*dr\s+en\s+discretion|-1\s*sl\s+to\s+stealth)/u.test(foldText(row?.notes)));
   const closedHelm=active.some(row=>row?.category==='closed-helm'||row?.locations?.includes('head')&&row?.keywords?.some(word=>(typeof word==='string'?word:word?.id)==='impenetrable'));
-  const stealth = Number(mail) + Number(plate);
   const perception = closedHelm ? 2 : 0;
-  return result({ stealthDr: stealth ? -stealth : 0, perceptionDr: perception ? -perception : 0 });
+  return result({ stealthDr: stealth ? -1 : 0, perceptionDr: perception ? -perception : 0 });
 }
 
 export function naturalWeaponDefaults({ reach, qualities, natural = true } = {}) {
@@ -278,15 +298,17 @@ export function entanglementStrength({ kind, actorStrength, explicitStrength, sp
   return result({ strength: Number(actorStrength), testBonus: kind === 'mancatcher' && springLoaded ? 20 : 0 });
 }
 
-/** DR accumulates across escape Tests per the MJ arbitration (overriding L11 p.29). */
-export function advanceV5NetEscape({ threshold, accumulatedSl = 0, testSl, success = true, entangled = 1 } = {}) {
-  if (!positiveInt(threshold)) return blocked('Filet : indice de sortie positif requis.');
-  if (!Number.isSafeInteger(Number(accumulatedSl)) || !Number.isSafeInteger(Number(testSl))) return blocked('Filet : DR entiers cumulés requis.');
+/** Escape by winning an opposed Strength Test. SL do not accumulate across attempts (L06 p.186; MJ ruling over L11 p.29). */
+export function advanceV5NetEscape({ testSl, opponentSl, entangled = 1, opponentBonus = 0 } = {}) {
+  if (!Number.isSafeInteger(Number(testSl)) || !Number.isSafeInteger(Number(opponentSl))
+      || !Number.isSafeInteger(Number(opponentBonus))) return blocked('Filet : DR des deux Tests opposés requis.');
   if (!Number.isSafeInteger(Number(entangled)) || Number(entangled) < 1) return blocked('Filet : état Empêtré requis.');
-  const next = Number(accumulatedSl) + (success ? Number(testSl) : 0);
-  const freed = success && next >= Number(threshold);
-  return result({ freed, cumulativeSl: next, remainingEntangled: freed ? Math.max(0, Number(entangled) - 1) : Number(entangled),
-    addEntangledOnFailure: !success });
+  const actorSl = Number(testSl), sourceSl = Number(opponentSl) + Number(opponentBonus), netSl=actorSl-sourceSl;
+  const won = netSl >= 0;
+  const removed = won ? Math.min(Number(entangled), 1 + Math.max(0, netSl - 1)) : 0;
+  const remainingEntangled = Number(entangled) - removed;
+  return result({ won, freed: won, actorSl, opponentSl: sourceSl, netSl,
+    removedEntangled: removed, remainingEntangled, addEntangledOnFailure: !won });
 }
 
 /** Hooked nets deal damage when the victim struggles; the source does not specify its amount. */
