@@ -359,3 +359,20 @@ test('Gravelord options follow Hans Grüber whatever the Unicode form of his nam
   assert.equal(planBestiaryProfileAbilities({ name: 'Hans Gru\u0308ber' }).length, 1);
   assert.equal(planBestiaryProfileAbility({ name: 'Wizard' }, 'gravelord-variants').available, false);
 });
+
+test('The discharge plan follows only the discharge action, never the Gargantuan bite', () => {
+  const built = p('E0-P-910');
+  const actor = { ...built, id: 'gargantuan-bite', zone: 'active', extensions: { ...built.extensions, v5: { ...built.extensions.v5, hasMomentum: true } } };
+  const teeth = actor.actions.find(row => row.name === 'Razor-sharp Teeth');
+  const preview = previewResolution({ resolutionId: 'garg-bite-plan', baseRevision: 0, actor, action: teeth, roll: 10,
+    target: { id: 'held', name: 'Agrippé', zone: 'active', hp: 40, maxHp: 40, caracs: { E: 30 }, equipment: [], states: [] },
+    defense: { base: 20, roll: 95, v5: { kind: 'test' } }, v5: { kind: 'melee', context: { f2h: { targetGrappled: true } } } });
+  assert.ok(!preview.unresolved.some(text => /Décharge/.test(text)), JSON.stringify(preview.unresolved));
+  assert.ok(!preview.profileAbilityPlans.some(plan => plan.effects.some(effect => effect.damage)));
+  const discharge = actor.actions.find(row => row.extensions?.v5?.specialProfileAbility === 'gargantuan-electric-discharge');
+  const shock = previewResolution({ resolutionId: 'garg-discharge-plan', baseRevision: 0, actor, action: discharge, roll: 10,
+    target: { id: 'held', name: 'Agrippé', zone: 'active', hp: 40, maxHp: 40, caracs: { E: 30 }, equipment: [], states: [] },
+    defense: { base: 20, roll: 95, v5: { kind: 'test' } }, v5: { kind: 'melee', context: { f2h: { targetGrappled: true } } } });
+  const prompts = shock.unresolved.filter(text => /Endurance Moyenne/.test(text));
+  assert.equal(prompts.length, 1, JSON.stringify(shock.unresolved));
+});

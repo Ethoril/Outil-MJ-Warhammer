@@ -1431,7 +1431,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   const supplementalActorConditions=(supplementalEquipment?.effects||[]).filter(row=>row.state&&row.participantId===actor?.id).map((row,index)=>({id:`${normalized.resolutionId}:supplement:actor:${index}`,key:foldKey(row.state).replace(/\s+/g,'-'),name:row.state,level:1,source:{kind:'supplement',ruleId:row.sourceRuleId,authorId:actor?.id}}));
   const targetConditionApplication = [...(criticalBlock?.application?.states || []).map(row => ({ ...clone(row), source: { ...(row.source || {}), kind: 'critical' } })), ...weaponConditions.proposed,...slashConditions,...magicHitStates,...naturalHitStates,...special.states,...supplementalTargetConditions,...(trip?.conditionApplied?[trip.targetCondition]:[]),...(tripFall?.criticalStates||[])];
   const profileAbilityContext = isRecord(context.f2h) ? context.f2h : {};
-  const effectiveProfileAbilityContext = { ...profileAbilityContext, test: action.name || action.skillName || '', critical: profileAbilityContext.wulfrikHeadCritical === true };
+  const effectiveProfileAbilityContext = { ...profileAbilityContext, test: action.name || action.skillName || '', critical: profileAbilityContext.wulfrikHeadCritical === true, specialAction: action.extensions?.v5?.specialProfileAbility ?? null };
   const profileAbilityPlans = planBestiaryProfileAbilities(actor, effectiveProfileAbilityContext);
   const targetProfileAbilityPlans = planBestiaryProfileAbilities(target, profileAbilityContext);
   if (hit && target && !replacement) {
@@ -1478,7 +1478,8 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   const deathblow = hit && target && !replacement && actorPlan.kind === 'melee' && action.extensions?.v5?.deathblow === true
     ? { triggered: true, maxChain: Math.floor((Number(actor?.caracs?.CC) || 0) / 10), ruleSource: 'L23 p.87, Frappe mortelle V4 p.160' } : null;
   if (deathblow) profileAbilityReminders.push(`Frappe mortelle : le félin peut avancer à la place de sa cible et attaquer aussitôt un autre adversaire au contact (au plus ${deathblow.maxChain} fois ce Tour). Jouer cette attaque comme une nouvelle résolution.`);
-  const profileAbilityUnresolved = [...profileAbilityPlans, ...targetProfileAbilityPlans].flatMap(plan => plan.unresolved);
+  // Les saisies de la décharge sont demandées par la résolution elle-même ; le plan n'en ajoute pas une seconde formulation.
+  const profileAbilityUnresolved = [...profileAbilityPlans, ...targetProfileAbilityPlans].filter(plan => plan.key !== 'gargantuan-electric-discharge').flatMap(plan => plan.unresolved);
   unresolved.push(...profileAbilityUnresolved);
   if (target) for (const row of targetConditionApplication) if (bestiaryProfileStateImmunity(target, row.key)) {
     const index = targetConditionApplication.indexOf(row);

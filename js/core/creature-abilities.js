@@ -44,7 +44,8 @@ export function planBestiaryProfileAbility(participant, key, context = {}) {
   if (rule.bite) plan.effects.push({ attack: 'Bite', addTrait: rule.bite });
   if (rule.overrideTrait) plan.effects.push({ addTrait: rule.overrideTrait, ignoresSize: rule.ignoresSize });
   if (rule.rangeYards) plan.effects.push({ attack: rule.attack, rangeYards: rule.rangeYards, test: rule.test, onHitTest: rule.opposedTest, onFailure: rule.onFailure });
-  if (rule.damage && context.targetGrappled === true) {
+  // `specialAction` vaut null pour une attaque ordinaire résolue : la décharge ne suit que sa propre action.
+  if (rule.damage && context.targetGrappled === true && (context.specialAction === undefined || context.specialAction === rule.key)) {
     if (context.momentum === false) plan.unresolved.push('Décharge électrique : 1 Élan requis.');
     else plan.effects.push({ damage: context.fatigued === true ? rule.fatiguedDamage : rule.damage, ignoresArmour: rule.ignoresArmour, trigger: rule.trigger,
       cost: rule.cost, ...(context.isShip === true ? { shipDamage: rule.shipDamage, crewDamage: context.fatigued === true ? rule.fatiguedShipCrewDamage : rule.shipCrewDamage } : {}) });
