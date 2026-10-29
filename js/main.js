@@ -1,4 +1,5 @@
 import { withMomentum, momentumAfterChange } from './core/v5-combat-rules.js';
+import { hasV5Talent } from './core/v5-talents.js';
 import { APP_VERSION } from './version.js';
 import { Bus } from './ui/bus.js';
 import { DOM, qs, on } from './ui/dom.js';
@@ -21,6 +22,7 @@ import { initKeyboardShortcuts } from './ui/keyboard.js';
 import { initThemeManager } from './ui/theme.js';
 import { openV5EffectInputDialog, chooseV5RecoveryMethod, recoveryOptionsFor as normalizeV5RecoveryOptions } from './ui/v5-effect-dialog.js';
 import { openV5FortuneDialog } from './ui/v5-fortune-dialog.js';
+import { openV5FateDialog } from './ui/v5-fate-dialog.js';
 import { initWorkspaceView } from './ui/workspace-view.js';
 import { initPrepareView } from './ui/prepare-view.js';
 import { initTextImportView } from './ui/import-text-view.js';
@@ -324,19 +326,31 @@ const combatViewUI = initCombatViewUI(Store, Combat, cardUI, id => {
     goToSpace('play');
     if (!workspaceView?.openResolution(line, { roll: result.initialRoll })) showToast('Cette action a changé : choisissez son Test dans Jouer.', 'info');
   }
-});
+}, (id, zone, beforeId) => moveParticipantWithInitiative(id, zone, beforeId));
 
 initLogViewUI(Store);
 
 // Avance d'un tour, ou démarre le combat s'il n'a pas commencé. Partagé par le
 // bandeau, le raccourci N / Espace et la commande « Terminer le tour » de Jouer.
 let advancingTurn = false;
+function combatInitiativeAlreadyResolved() {
+  const envelope=JSON.parse(Store.getFullJSON()),active=(envelope.combat?.participants||[]).filter(row=>row.zone==='active');
+  return active.length>0&&envelope.extensions?.v5?.combatInitiativeInitialized===true;
+}
+async function startCombatFromButton() {
+  try {
+    const result=combatInitiativeAlreadyResolved()?await Combat.start():await openCombatInitiativeDialog({startCombat:true,title:'Démarrer le combat · Initiative'});
+    if(result?.status==='cancelled')return result;
+    await awaitStore(result,'Démarrer le combat'); return result;
+  } catch(error) { showToast(contextMessage('Combat non démarré',error,'réessayez.'),'error'); return {status:'error'}; }
+}
 async function advanceTurn() {
   if (advancingTurn) return { status: 'pending' };
   advancingTurn = true;
   try {
     const combat = Store.getCombat();
-    let result = await (combat.round > 0 ? Combat.nextTurn() : Combat.start());
+    let result = combat.round > 0 ? await Combat.nextTurn() : combatInitiativeAlreadyResolved()?await Combat.start():await openCombatInitiativeDialog({ startCombat: true, title: 'Démarrer le combat · Initiative' });
+    if (result?.status === 'cancelled') return result;
     if (result?.status === 'requires-input') result = await openV5EffectInputDialog({ pending: result,
       title: 'Terminer le tour : effets V5', getCurrentRevision: () => Store.getLocalRevision(),
       submit: (inputs, baseRevision) => Combat.nextTurn({ inputs, baseRevision }) });
@@ -370,6 +384,224 @@ async function awaitStore(operation, label = 'Opération locale') {
   if (result?.ok === false) throw typeof result.message === 'string' && result.message.trim() ? refusalError({ message: result.message }, label) : result.error || new Error(`${label} impossible.`);
   if (result === false) throw new Error(`${label} impossible.`);
   return result;
+}
+
+function openCombatInitiativeDialog({ staging = null, startCombat = false, title = 'Préparer l’initiative' } = {}) {
+  const participants = staging?.scene?.participants || staging?.participants || Store.listParticipants().filter(row => row.zone === 'active');
+  const active = participants.filter(row => row.zone === 'active');
+  if (startCombat && !active.length) { showToast('Aucun combattant actif à initialiser.', 'info'); return Promise.resolve({ status: 'cancelled' }); }
+  const state = { diceById: {}, combatReflexesById: {}, characteristicById: {}, tieOrders: { ...(staging?.tieOrders||{}) }, opposedRolls: { ...(staging?.opposedRolls||{}) }, tieChoices: { ...(staging?.tieChoices||{}) }, surprisedCamp: '', mountedRideTests: {}, preview: null };
+  for (const actor of active) {
+    const pendingReflexPreparation=actor.extensions?.v5?.combatReflexesPreparation;
+    const existingCombat=actor.extensions?.v5?.combatInitiative;
+    const saved = existingCombat?.initialized?existingCombat.characteristic:Number.isInteger(actor.caracs?.I) && actor.caracs.I >= 0 ? actor.caracs.I : !pendingReflexPreparation&&Number.isInteger(actor.initiative) && actor.initiative > 0 ? actor.initiative : null;
+    state.characteristicById[actor.id] = saved;
+    const reflex=hasV5Talent(actor,'talent-combat-reflexes'),prepared=pendingReflexPreparation;
+    if(reflex&&existingCombat?.initialized&&Array.isArray(existingCombat.dice)&&['first','second'].includes(existingCombat.choice)){
+      state.combatReflexesById[actor.id]={dice:[...existingCombat.dice],choice:existingCombat.choice};
+    }else if(reflex&&prepared?.version===1&&prepared.participantId===actor.id&&prepared.characteristic===saved){
+      state.combatReflexesById[actor.id]={dice:[...prepared.dice],choice:prepared.choice};
+    }else if(reflex){
+      state.combatReflexesById[actor.id]={dice:actor.kind==='PJ'?[null,null]:[Math.floor(Math.random()*10)+1,Math.floor(Math.random()*10)+1],choice:''};
+    }else state.diceById[actor.id] = existingCombat?.initialized?existingCombat.die:actor.kind!=='PJ'?Math.floor(Math.random()*10)+1:undefined;
+  }
+  return new Promise(resolve => {
+    let settled = false, form, mountRef;
+    const finish = result => { if (settled) return; settled = true; resolve(result); };
+    const dialog = openOverlay(title, (mount, sheet) => {
+      mountRef = mount;
+      const help = document.createElement('p'); help.className = 'muted';
+      help.textContent = 'Saisissez l’Initiative (I) et les dés des PJ. Les dés PNJ sont tirés une fois et gardés pendant les recalculs. Combat instinctif demande deux d10 et le choix explicite de l’un. À deux, une égalité se résout par Test opposé V5 ; à trois ou plus, fixez directement leur ordre.';
+      if((!staging||staging.kind!=='launch')&&Store.getOrderMode?.()==='manual'&&Store.getCombat().order.length){const note=document.createElement('p');note.className='muted';note.textContent='Un ordre manuel existe déjà : l’initialisation va le remplacer par l’ordre calculé ici.';mount.append(note);}
+      mount.append(help);
+      form = document.createElement('form'); form.addEventListener('submit', event => event.preventDefault()); mount.append(form);
+      const rows = document.createElement('div'); rows.className = 'stack';
+      const participantLabel = id => {
+        const actor = active.find(row => row.id === id); if (!actor) return id;
+        const sameName = active.filter(row => row.name === actor.name).length;
+        const duplicateNumber = sameName > 1 ? ` · ${active.filter(row => row.name === actor.name).findIndex(row => row.id === id) + 1}` : '';
+        return `${actor.name}${duplicateNumber} · ${actor.camp || 'sans camp'} · ${actor.kind}`;
+      };
+      for (const actor of active) {
+        const row = document.createElement('div'); row.className = 'card';
+        const label = document.createElement('strong'); label.textContent = `${actor.name} · ${actor.kind} · ${actor.camp || 'sans camp'}`; row.append(label);
+        row.append(inputField('I', 'characteristic', actor.id, state.characteristicById[actor.id], { min: 0, max: 100, required: true }));
+        if(hasV5Talent(actor,'talent-combat-reflexes')){
+          const preparation=actor.extensions?.v5?.combatReflexesPreparation,reflex=state.combatReflexesById[actor.id];
+          if(preparation?.version===1&&preparation.participantId===actor.id&&preparation.characteristic===state.characteristicById[actor.id]){
+            const note=document.createElement('p');note.className='muted';note.textContent=`Préparation Combat instinctif déjà choisie : ${preparation.dice.join(' / ')}, dé ${preparation.choice==='first'?'premier':'second'} (${preparation.selectedDie}). Elle sera reprise une fois.`;row.append(note);
+          }else{
+            const diceLabel=actor.kind==='PJ'?'deux d10 PJ':'deux d10 PNJ (tirés une fois)';
+            row.append(inputField(`${diceLabel} · premier`, `reflexFirst`, actor.id, reflex.dice[0], { min:1,max:10,required:true,readOnly:actor.kind!=='PJ' }));
+            row.append(inputField(`${diceLabel} · second`, `reflexSecond`, actor.id, reflex.dice[1], { min:1,max:10,required:true,readOnly:actor.kind!=='PJ' }));
+            const choiceLabel=document.createElement('label');choiceLabel.textContent='Dé choisi ';
+            const choice=document.createElement('select');choice.name=`reflexChoice:${actor.id}`;choice.required=true;
+            for(const [value,labelText] of [['','Choisir'],['first','Premier'],['second','Second']]){const option=document.createElement('option');option.value=value;option.textContent=labelText;choice.append(option);}
+            choice.value=reflex.choice;choiceLabel.append(choice);row.append(choiceLabel);
+          }
+        }else row.append(inputField(actor.kind === 'PJ' ? 'd10 PJ' : 'd10 PNJ (tiré une fois)', 'die', actor.id, state.diceById[actor.id], { min: 1, max: 10, required: true, readOnly: actor.kind !== 'PJ' }));
+        rows.append(row);
+      }
+      form.append(rows);
+      const camp = document.createElement('label'); camp.textContent = 'Camp surpris (facultatif) ';
+      const select = document.createElement('select'); select.name = 'surprisedCamp';
+      const none = document.createElement('option'); none.value = ''; none.textContent = 'Aucun'; select.append(none);
+      for (const value of [...new Set(active.map(row => row.camp).filter(Boolean))]) { const option = document.createElement('option'); option.value = value; option.textContent = value; select.append(option); }
+      select.value = state.surprisedCamp; camp.append(select); form.append(camp);
+      const tieArea = document.createElement('div'); tieArea.className = 'stack'; tieArea.dataset.tieArea = 'true'; form.append(tieArea);
+      const mountedArea = document.createElement('div'); mountedArea.className = 'stack'; form.append(mountedArea);
+      const status = document.createElement('p'); status.className = 'muted'; status.setAttribute('aria-live', 'polite'); form.append(status);
+      const calculate = document.createElement('button'); calculate.type = 'button'; calculate.className = 'primary'; calculate.textContent = 'Calculer / actualiser l’ordre'; form.append(calculate);
+      const apply = document.createElement('button'); apply.type = 'button'; apply.textContent = 'Confirmer et appliquer'; apply.hidden = true; form.append(apply);
+      const cancel = document.createElement('button'); cancel.type = 'button'; cancel.className = 'ghost'; cancel.textContent = 'Annuler'; form.append(cancel);
+      cancel.addEventListener('click', () => { sheet.close(); finish({ status: 'cancelled' }); });
+      sheet.addEventListener('close', () => finish({ status: 'cancelled' }), { once: true });
+
+      function inputField(labelText, field, id, value, options = {}) {
+        const label = document.createElement('label'); label.textContent = `${labelText} `;
+        const input = document.createElement('input'); input.type = 'number'; input.name = `${field}:${id}`; input.min = String(options.min); input.max = String(options.max);
+        input.required = options.required === true; input.readOnly = options.readOnly === true;
+        if (Number.isInteger(value)) input.value = String(value);
+        label.append(input); return label;
+      }
+      function capture() {
+        for (const actor of active) {
+          const i = form.elements.namedItem(`characteristic:${actor.id}`), die = form.elements.namedItem(`die:${actor.id}`);
+          state.characteristicById[actor.id] = i?.value === '' ? null : Number(i?.value);
+          if(hasV5Talent(actor,'talent-combat-reflexes')){
+            const first=form.elements.namedItem(`reflexFirst:${actor.id}`),second=form.elements.namedItem(`reflexSecond:${actor.id}`),choice=form.elements.namedItem(`reflexChoice:${actor.id}`);
+            const current=state.combatReflexesById[actor.id];
+            state.combatReflexesById[actor.id]={dice:[first?(first.value===''?null:Number(first.value)):current.dice[0],second?(second.value===''?null:Number(second.value)):current.dice[1]],choice:choice?.value||current.choice};
+          }else state.diceById[actor.id] = die?.value === '' ? null : Number(die?.value);
+        }
+        state.surprisedCamp = form.elements.namedItem('surprisedCamp')?.value || '';
+        for (const input of tieArea.querySelectorAll('[data-group-key]')) {
+          const key = input.dataset.groupKey;
+          if (input.dataset.kind === 'tieOrder') state.tieOrders[key] = Array.from(tieArea.querySelectorAll(`[data-group-key="${CSS.escape(key)}"][data-kind="tieOrder"][data-position]`)).sort((a,b)=>Number(a.dataset.position)-Number(b.dataset.position)).map(item=>item.value).filter(Boolean);
+          if (input.dataset.kind === 'tieChoice') state.tieChoices[key] = Array.from(tieArea.querySelectorAll(`[data-group-key="${CSS.escape(key)}"][data-kind="tieChoice"][data-position]`)).sort((a,b)=>Number(a.dataset.position)-Number(b.dataset.position)).map(item=>item.value).filter(Boolean);
+        }
+        for (const input of tieArea.querySelectorAll('[data-match-id]')) {
+          const match = input.dataset.matchId, side = input.dataset.side, rolls = state.opposedRolls[match] || {};
+          rolls[side] = input.value === '' ? null : input.type === 'number' ? Number(input.value) : input.value; state.opposedRolls[match] = rolls;
+        }
+        for (const input of mountedArea.querySelectorAll('[data-mounted-rider]')) {
+          const riderId = input.dataset.mountedRider, field = input.dataset.field;
+          const answer = state.mountedRideTests[riderId] || {};
+          answer[field] = input.value === '' ? null : Number(input.value); state.mountedRideTests[riderId] = answer;
+        }
+      }
+      const request = () => ({ staging, startCombat, ...state });
+      function recalculate() {
+        capture();
+        state.preview = Store.previewCombatInitialization(request());
+        tieArea.replaceChildren(); mountedArea.replaceChildren(); apply.hidden = !state.preview.ready;
+        for (const need of state.preview.needsInput.filter(item => item.field.startsWith('mountedRide'))) {
+          const riderId = need.field.split(':')[1], field = need.field.startsWith('mountedRideScore') ? 'score' : 'roll';
+          const rider = active.find(row => row.id === riderId), answer = state.mountedRideTests[riderId] || {};
+          const label = document.createElement('label'); label.textContent = `${need.label} `;
+          const input = document.createElement('input'); input.type = 'number'; input.min = String(need.min ?? (field === 'roll' ? 1 : 0)); input.max = String(need.max ?? 100); input.required = true;
+          input.dataset.mountedRider = riderId; input.dataset.field = field;
+          if (Number.isInteger(answer[field])) input.value = String(answer[field]);
+          label.append(input); mountedArea.append(label);
+        }
+        for (const fall of state.preview.mountedFall || []) if (fall.test) mountedArea.append(Object.assign(document.createElement('p'), { className: 'muted', textContent: `${active.find(row => row.id === fall.participantId)?.name || fall.participantId} : Chevaucher ${fall.test.roll}, ${fall.test.sl} DR${fall.dismount ? ' — désarçonné' : ' — reste en selle'}.` }));
+        for (const group of state.preview.tieGroups) {
+          const section = document.createElement('section'); section.className = 'card';
+          const heading = document.createElement('strong'); heading.textContent = `Égalité : ${group.participantIds.map(participantLabel).join(' / ')}`; section.append(heading);
+          const needsBracket = state.preview.needsInput.some(item => item.groupKey === group.key && item.field === 'tieOrder');
+          if (needsBracket) {
+            const note = document.createElement('p'); note.textContent = 'Ordre des adversaires choisi par le MJ avant les jets :'; section.append(note);
+            for (let position = 0; position < group.participantIds.length; position++) {
+              const label = document.createElement('label'); label.textContent = `Participant ${position + 1} `;
+              const select = document.createElement('select'); select.dataset.groupKey = group.key; select.dataset.kind = 'tieOrder'; select.dataset.position = String(position); select.required = true;
+              const blank = document.createElement('option'); blank.value = ''; blank.textContent = 'Choisir un participant'; select.append(blank);
+              for (const id of group.participantIds) { const option = document.createElement('option'); option.value = id; option.textContent = participantLabel(id); select.append(option); }
+              select.value = state.tieOrders[group.key]?.[position] || '';
+              label.append(select); section.append(label);
+            }
+          } else {
+            for (const match of state.preview.oppositions.filter(item => item.groupKey === group.key)) {
+              const outcome = document.createElement('p'); outcome.className = 'muted';
+              outcome.textContent = `${participantLabel(match.initiatorId)} (I ${match.initiator.score}, d100 ${match.initiator.roll}, DR ${match.initiator.sl}) contre ${participantLabel(match.opponentId)} (I ${match.opponent.score}, d100 ${match.opponent.roll}, DR ${match.opponent.sl}) · DR net ${match.netSl} · vainqueur : ${participantLabel(match.winnerId)}.`;
+              section.append(outcome);
+            }
+            for (const need of state.preview.needsInput.filter(item => item.groupKey === group.key && ['initiatorRoll', 'opponentRoll','initiatorChoice','opponentChoice','initiatorConditionPenaltyMode','opponentConditionPenaltyMode'].includes(item.field))) {
+              const who = participantLabel(need.participantId);
+              const label = document.createElement('label');
+              const rolls = state.opposedRolls[need.matchId] || {};
+              if (need.field.endsWith('Roll')) {
+                label.textContent = `${who} · d100 `;
+                const input = document.createElement('input'); input.type = 'number'; input.min = '1'; input.max = '100'; input.dataset.matchId = need.matchId; input.dataset.side = need.field; input.required = true;
+                const existing = rolls[input.dataset.side]; if (Number.isInteger(existing)) input.value = String(existing);
+                label.append(input);
+              } else if (need.field.endsWith('Choice')) {
+                label.textContent = `${who} · inversion du Test `;
+                const select = document.createElement('select'); select.dataset.matchId = need.matchId; select.dataset.side = need.field; select.required = true;
+                const blank = document.createElement('option'); blank.value = ''; blank.textContent = 'Choisir'; select.append(blank);
+                for (const id of need.optionIds || []) { const option = document.createElement('option'); option.value = id; option.textContent = id === 'reverse' ? 'Inverser le d100' : 'Garder le d100'; select.append(option); }
+                select.value = rolls[need.field] || ''; label.append(select);
+              } else if (need.field.endsWith('ConditionPenaltyMode')) {
+                label.textContent = `${who} · pénalités d’États `;
+                const select = document.createElement('select'); select.dataset.matchId = need.matchId; select.dataset.side = need.field; select.required = true;
+                const blank = document.createElement('option'); blank.value = ''; blank.textContent = 'Choisir le mode'; select.append(blank);
+                for (const [value,text] of [['sl','Appliquer les DR'],['disadvantage','Appliquer le Désavantage']]) { const option = document.createElement('option'); option.value = value; option.textContent = text; select.append(option); }
+                select.value = rolls[need.field] || ''; label.append(select);
+              }
+              section.append(label);
+            }
+            for (const need of state.preview.needsInput.filter(item => item.groupKey === group.key && item.field === 'oppositionContext')) {
+              const unresolved = document.createElement('p'); unresolved.className = 'muted'; unresolved.textContent = `${participantLabel(need.participantId)} : décision/contextuel requis — ${need.label}`; section.append(unresolved);
+            }
+            if (state.preview.needsInput.some(item => item.groupKey === group.key && item.field === 'tieChoice')) {
+              const tieNeed = state.preview.needsInput.find(item => item.groupKey === group.key && item.field === 'tieChoice');
+              const note = document.createElement('p'); note.textContent = tieNeed.direct ? 'Égalité à trois ou plus : choisissez directement l’ordre des ex aequo :' : `${participantLabel(tieNeed.winnerId)} a gagné. Choisissez l’ordre complet du groupe :`; section.append(note);
+              for (let position = 0; position < group.participantIds.length; position++) {
+                const label = document.createElement('label'); label.textContent = `Position ${position + 1} `;
+                const select = document.createElement('select'); select.dataset.groupKey = group.key; select.dataset.kind = 'tieChoice'; select.dataset.position = String(position); select.required = true;
+                const blank = document.createElement('option'); blank.value = ''; blank.textContent = 'Choisir un participant'; select.append(blank);
+                for (const id of group.participantIds) { const option = document.createElement('option'); option.value = id; option.textContent = participantLabel(id); select.append(option); }
+                select.value = state.tieChoices[group.key]?.[position] || '';
+                label.append(select); section.append(label);
+              }
+            }
+          }
+          tieArea.append(section);
+        }
+        status.textContent = state.preview.ready
+          ? `Ordre calculé : ${state.preview.order.map(id => active.find(row => row.id === id)?.name || id).join(' → ')}`
+          : `À compléter : ${state.preview.needsInput.map(item => item.field).join(', ')}`;
+      }
+      calculate.addEventListener('click', () => { try { recalculate(); } catch (error) { status.textContent = error.message; } });
+      apply.addEventListener('click', async () => {
+        try {
+          capture(); const finalPreview = Store.previewCombatInitialization(request());
+          if (!finalPreview.ready) { recalculate(); return; }
+          const result = await awaitStore(Store.applyCombatInitialization(finalPreview), 'Initiative');
+          if (result?.status === 'stale') { status.textContent = 'La partie a changé : fermez et recommencez la préparation.'; return; }
+          // Le résultat d’abord : la fermeture émet « close », qui conclurait sinon par une annulation.
+          finish(result); sheet.close();
+        } catch (error) { status.textContent = contextMessage('Initiative non appliquée', error, 'corrigez les données, puis réessayez.'); }
+      });
+      recalculate();
+    });
+    if (!dialog) finish({ status: 'cancelled' });
+  });
+}
+
+async function moveParticipantWithInitiative(id, zone, beforeId = null) {
+  try {
+    const staging=zone==='active'?Store.previewCombatParticipantActivation?.(id):null;
+    if(staging){
+      const result=await openCombatInitiativeDialog({staging,title:'Activer avant le Round 1 · Initiative'});
+      if(result?.status==='cancelled')return result;
+      await awaitStore(result,'Activation et initiative');
+      return result;
+    }
+    return await awaitStore(Store.moveParticipant(id,zone,beforeId),'Entrée en jeu');
+  } catch(error) {
+    showToast(contextMessage('Combattant non activé',error,'réessayez.'),'error');
+    return {status:'error'};
+  }
 }
 
 const reminderTransitionLabels = { endTurn: 'Fin de tour', startTurn: 'Début de tour' };
@@ -509,6 +741,11 @@ function editFortuneFor(id) {
   if (!participant) return Promise.resolve(null);
   return openV5FortuneDialog({ participantName: participant.name, fortune: Store.getFortune(id), getCurrentRevision: () => Store.getLocalRevision(), submit: (amount, options) => Store.setFortune(id, amount, options) });
 }
+function editFateFor(id) {
+  const participant=Store.getCombat().participants.get(id);
+  if(!participant)return Promise.resolve(null);
+  return openV5FateDialog({participantName:participant.name,fate:Store.getFate(id),getCurrentRevision:()=>Store.getLocalRevision(),submit:(amount,options)=>Store.setFate(id,amount,options)});
+}
 
 function recoveryOptionsFor(input = {}) {
   return normalizeV5RecoveryOptions(input, Store.getCombat().round);
@@ -545,7 +782,9 @@ function openPrepareView(encounterId = null) {
         onLaunch: async draft => {
           if (!draft.entries.length) throw userError('Ajoutez au moins un profil à la composition avant de lancer.');
           const model = await persistEncounter(draft);
-          await awaitStore(requireStoreApi('launchEncounter')(model), 'Lancement');
+          const staging = requireStoreApi('previewEncounterLaunch')(model);
+          const initialized = await openCombatInitiativeDialog({ staging, title: `Initiative · ${model.title}` });
+          if (initialized?.status === 'cancelled') return;
           dialog.close();
           goToSpace('play');
           showToast('Rencontre lancée', 'success');
@@ -575,7 +814,9 @@ async function restartCombat() {
     : 'Recommencer le combat ?\nPV remis au maximum, états retirés, round remis à zéro.';
   if (!window.confirm(message)) return false;
   try {
-    await awaitStore(requireStoreApi('restartCombat')(), 'Recommencer');
+    const staging = requireStoreApi('previewCombatRestart')();
+    const initialized = await openCombatInitiativeDialog({ staging, title: 'Recommencer · Initiative' });
+    if (initialized?.status === 'cancelled') return false;
     showToast('Combat recommencé', 'success', { label: 'Annuler', onClick: () => Store.undo() });
     return true;
   } catch (error) { showToast(contextMessage('Combat non recommencé', error, 'réessayez.'), 'error'); return false; }
@@ -597,7 +838,9 @@ const encounterListActions = {
       const encounter = Store.listEncounters?.().find(item => item.id === id);
       if (!encounter) throw new Error('Rencontre introuvable.');
       if (!encounter.entries.length) throw userError('Ajoutez au moins un profil à la composition avant de lancer.');
-      await awaitStore(requireStoreApi('launchEncounter')(id), 'Lancement');
+      const staging = requireStoreApi('previewEncounterLaunch')(id);
+      const initialized = await openCombatInitiativeDialog({ staging, title: `Initiative · ${encounter.title}` });
+      if (initialized?.status === 'cancelled') return false;
       prepareWindow?.dialog.close();
       goToSpace('play');
       showToast('Rencontre lancée', 'success');
@@ -1093,6 +1336,7 @@ const workspaceView = DOM.panels.workspace && qs('#workspace-root') ? initWorksp
       const participant = Store.getCombat().participants.get(id);
       if (!participant) return;
       openOverlay(`Modifier ${participant.name}`, (mount, dialog) => {
+        const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
         const form = document.createElement('form'); form.className = 'card';
         form.dataset.participantEditor = id;
         form.innerHTML = `
@@ -1107,6 +1351,8 @@ const workspaceView = DOM.panels.workspace && qs('#workspace-root') ? initWorksp
               <select name="camp">${Object.entries(CAMP_LABELS).map(([value, label]) => `<option value="${value}">${label}</option>`).join('')}</select>
             </label>
           </div>
+          <section class="participant-state-edit card"><h3>Combat monté</h3><label><input name="mounted" type="checkbox"> Le personnage est monté</label><label>Monture active<select name="mountId"><option value="">Choisir une monture…</option>${[...Store.getCombat().participants.values()].filter(row => row.id !== id && row.zone === 'active').map(row => `<option value="${escapeHtml(row.id)}">${escapeHtml(row.name || row.id)}</option>`).join('')}</select></label><p class="muted">Le lien cavalier-monture est conservé entre les Actions. Une fiche ancienne sans cette donnée est considérée démontée.</p></section>
+          <section class="participant-state-edit card participant-weapon-options"><h3>Armes avec choix durable</h3><p class="muted">Les mains de l’épée bâtarde suivent l’instance d’arme et sont modifiables ici.</p><div class="participant-weapon-options-list"></div></section>
           <section class="participant-state-edit card">
             <div class="row"><h3>États — arbitrage du MJ</h3><p class="muted">Cette correction manuelle remplace les états. Pour une acquisition ou une récupération selon les règles, utilisez les commandes de Jouer.</p><button type="button" class="ghost small" data-add-state>Ajouter un état</button></div>
             <div class="participant-state-list"></div>
@@ -1123,11 +1369,31 @@ const workspaceView = DOM.panels.workspace && qs('#workspace-root') ? initWorksp
         form.elements.initiative.readOnly = Boolean(participant.extensions?.ficheId);
         form.elements.zone.value = participant.zone === 'active' ? 'active' : 'bench';
         form.elements.camp.value = normalizeCamp(participant.camp, participant.kind);
+        const originalV5 = participant.extensions?.v5 || {};
+        form.elements.mounted.checked = originalV5.mounted === true;
+        form.elements.mountId.value = originalV5.mountId || '';
+        form.elements.mountId.disabled = !form.elements.mounted.checked;
+        form.elements.mounted.addEventListener('change', () => { form.elements.mountId.disabled = !form.elements.mounted.checked; });
+        const weaponHandsById = { ...(originalV5.weaponHandsByEquipmentId || {}) };
+        const weaponOptionsMount = form.querySelector('.participant-weapon-options-list');
+        const handChoices = (participant.equipment || []).filter(item => item.kind === 'weapon' && /épée bâtarde|bastard sword/i.test(item.name || ''));
+        if (!handChoices.length) form.querySelector('.participant-weapon-options').hidden = true;
+        for (const item of handChoices) {
+          const label = document.createElement('label');
+          const checkbox = document.createElement('input'); checkbox.type = 'checkbox'; checkbox.dataset.weaponHandsId = item.id;
+          checkbox.checked = weaponHandsById[item.id] === 2 || weaponHandsById[item.id] !== 1 && /\(\s*2\s*M\s*\)/i.test(item.name);
+          checkbox.setAttribute('aria-label', `${item.name} · utilisée à deux mains`);
+          label.append(checkbox, document.createTextNode(`${item.name} · utilisée à deux mains`)); weaponOptionsMount.append(label);
+        }
         // Fenêtre non modale : seuls les champs modifiés ici sont envoyés, pour ne pas
         // écraser les PV ou les états changés entre-temps par la fiche ou le tour suivant.
         const fields = ['name', 'hp', 'initiative', 'zone', 'camp'];
         const baseline = Object.fromEntries(fields.map(field => [field, form.elements[field].value]));
         const fieldChanged = field => form.elements[field].value !== baseline[field];
+        const baselineMounted = form.elements.mounted.checked;
+        const baselineMountId = form.elements.mountId.value;
+        const baselineWeaponHands = Object.fromEntries([...form.querySelectorAll('[data-weapon-hands-id]')].map(checkbox => [checkbox.dataset.weaponHandsId, String(checkbox.checked)]));
+        const weaponHandsChanged = () => [...form.querySelectorAll('[data-weapon-hands-id]')].some(checkbox => String(checkbox.checked) !== baselineWeaponHands[checkbox.dataset.weaponHandsId]);
         let actionsTouched = false;
 
         const alertError = message => {
@@ -1208,6 +1474,21 @@ const workspaceView = DOM.panels.workspace && qs('#workspace-root') ? initWorksp
             if (fieldChanged('hp')) patch.hp = Number(form.elements.hp.value) || 0;
             if (!participant.extensions?.ficheId && fieldChanged('initiative')) patch.initiative = Number(form.elements.initiative.value) || 0;
             if (fieldChanged('camp')) patch.camp = form.elements.camp.value;
+            const participantLive = Store.getCombat().participants.get(id) || participant;
+            const mountedChanged = form.elements.mounted.checked !== baselineMounted;
+            const mountIdChanged = form.elements.mountId.value !== baselineMountId;
+            const handsChanged = weaponHandsChanged();
+            if (handsChanged) {
+              const liveExtensions = participantLive.extensions || {}, liveV5 = liveExtensions.v5 || {}, nextV5 = { ...liveV5 };
+              const nextHands = { ...(liveV5.weaponHandsByEquipmentId || {}) };
+              for (const checkbox of form.querySelectorAll('[data-weapon-hands-id]')) {
+                if (String(checkbox.checked) === baselineWeaponHands[checkbox.dataset.weaponHandsId]) continue;
+                nextHands[checkbox.dataset.weaponHandsId] = checkbox.checked ? 2 : 1;
+              }
+              nextV5.weaponHandsByEquipmentId = nextHands;
+              patch.extensions = { ...liveExtensions, v5: nextV5 };
+            }
+            if ((mountedChanged || mountIdChanged) && form.elements.mounted.checked && (!form.elements.mountId.value || zone !== 'active')) throw userError('Choisissez une monture active et gardez le cavalier actif.');
             if (statesChanged()) patch.states = normalizeEffects(stateValues);
             if (actionsTouched) {
               const liveActions = Store.getCombat().participants.get(id)?.actions || [];
@@ -1221,7 +1502,9 @@ const workspaceView = DOM.panels.workspace && qs('#workspace-root') ? initWorksp
               for (const live of liveActions) if (live.extensions?.fiche?.equipmentId && !patch.actions.some(action => action.id === live.id)) patch.actions.push(live);
             }
             if (Object.keys(patch).length) await awaitStore(Store.updateParticipant(id, patch, { expectedLocalRevision: Store.getLocalRevision() }), 'Participant');
-            if (fieldChanged('zone') && zone !== Store.getCombat().participants.get(id)?.zone) await awaitStore(Store.moveParticipant(id, zone), 'Zone');
+            if (fieldChanged('zone') && zone === 'active' && Store.getCombat().participants.get(id)?.zone !== 'active') await moveParticipantWithInitiative(id, zone);
+            if (mountedChanged || mountIdChanged) await awaitStore(Store.setMountedState(id, { mounted: form.elements.mounted.checked, mountId: form.elements.mountId.value || null, baseRevision: Store.getLocalRevision() }), 'Combat monté');
+            if (fieldChanged('zone') && zone === 'bench' && Store.getCombat().participants.get(id)?.zone !== 'bench') await moveParticipantWithInitiative(id, zone);
             form.closest('dialog')?.close();
           } catch (error) { setBusy(false); alertError(contextMessage('Combattant non enregistré', error, 'vérifiez les champs, puis réessayez.')); }
         });
@@ -1245,9 +1528,11 @@ const workspaceView = DOM.panels.workspace && qs('#workspace-root') ? initWorksp
         mount.appendChild(form);
       });
     },
-    enterParticipant: id => awaitStore(Store.moveParticipant(id, 'active'), 'Entrée en jeu').catch(error => showToast(contextMessage('Entrée en jeu impossible', error, 'réessayez.'), 'error')),
+    enterParticipant: id => moveParticipantWithInitiative(id, 'active'),
     getFortune: id => Store.getFortune(id),
     editFortune: id => editFortuneFor(id),
+    getFate: id => Store.getFate(id),
+    editFate: id => editFateFor(id),
     setMomentum: (id, value) => awaitStore(Store.executeCommand('set-momentum', draft => ({ ...draft, combat: { ...draft.combat, participants: (draft.combat?.participants || []).map(participant => participant.id === id ? withMomentum(participant, value) : participant) } })), 'Élan'),
     acquireStates: (id, states, extra = {}) => resolveV5EffectOperation((inputs, baseRevision) => Store.acquireConditions(id, states, { ...(inputs[id] || {}), ...(extra.magical === true ? { magical: true } : {}), baseRevision, authorId: Store.getCombat().currentActorId || id, targetId: id, round: Store.getCombat().round }), { title: 'Ajouter un État V5' }),
     recoverState: async (id, state) => {
@@ -1262,6 +1547,22 @@ const workspaceView = DOM.panels.workspace && qs('#workspace-root') ? initWorksp
         showToast(`${Store.getProfile(id)?.name || 'Profil'} ajouté en attente`, 'success');
       } catch (error) { showToast(contextMessage('Profil non ajouté au combat', error, 'réessayez.'), 'error'); }
     },
+    addProfileToActiveCombat: async id => {
+      try {
+        const profileName=Store.getProfile(id)?.name||'Profil';
+        if(Store.getCombat().round===0&&Store.isCombatInitiativeInitialized?.()){
+          const staging=requireStoreApi('previewCombatParticipantAddition')(id);
+          const initialized=await openCombatInitiativeDialog({staging,title:`Initiative · Ajout actif de ${profileName}`});
+          if(initialized?.status==='cancelled')return false;
+          if(initialized?.status!=='applied')throw new Error(initialized?.error||initialized?.reason||'Ajout actif non enregistré.');
+          showToast(`${profileName} ajouté actif avec Initiative`, 'success');
+          return true;
+        }
+        await awaitStore(Store.addProfilesToCombat([id],{zone:'active'}),'Ajout actif au combat');
+        showToast(`${profileName} ajouté actif`, 'success');
+        return true;
+      } catch (error) { showToast(contextMessage('Profil non ajouté actif', error, 'réessayez.'), 'error'); return false; }
+    },
     applyResolution: async preview => {
       const result = await awaitStore(requireStoreApi('applyResolution')(preview), 'Résolution');
       const target = preview.input?.target;
@@ -1274,6 +1575,20 @@ const workspaceView = DOM.panels.workspace && qs('#workspace-root') ? initWorksp
           : manual ? 'Résultat enregistré — dégâts à arbitrer' : 'Résultat enregistré', 'success');
       else if (result?.status === 'duplicate') showToast('Résultat déjà appliqué', 'info');
       else if (result?.status !== 'stale') throw new Error(result?.reason || 'Résolution non appliquée.');
+      return result;
+    },
+    declareCombatAction: async input => {
+      const preview = Store.previewV5CombatAction(input);
+      if (!preview?.ready) throw new Error(preview?.unresolved?.join(' ') || preview?.needsInput?.join(' ') || 'Action de combat indisponible.');
+      const result = await awaitStore(Store.applyV5CombatAction(preview), input.kind === 'aim' ? 'Visée' : 'Action défensive');
+      if (result?.status !== 'applied') throw new Error(result?.error || result?.reason || 'Action de combat non enregistrée.');
+      showToast(input.kind === 'aim' ? 'Visée enregistrée pour la cible choisie.' : 'Action défensive enregistrée.', 'success');
+      return result;
+    },
+    declareCombatMovement: async actorId => {
+      const result = await awaitStore(Store.declareV5CombatMovement({ actorId }), 'Déplacement déclaré');
+      if (result?.status !== 'applied') throw new Error(result?.error || result?.reason || 'Déplacement non enregistré.');
+      showToast('Déplacement déclaré : la Visée est annulée et le prochain tir reçoit −1 DR.', 'success');
       return result;
     },
     renderRules: content => { renderReferenceTables('', content, { getEnvelope:()=>JSON.parse(Store.getFullJSON()) }); },
@@ -1369,7 +1684,7 @@ on(DOM.combat.fileInput, 'change', (e) => {
   reader.readAsText(file);
   e.target.value = '';
 });
-on(DOM.combat.btnStart, 'click', () => Combat.start());
+on(DOM.combat.btnStart, 'click', startCombatFromButton);
 on(DOM.combat.btnNextTurn, 'click', advanceTurn);
 on(DOM.combat.btnReset, 'click', () => { DOM.combat.results.replaceChildren(); });
 if (DOM.combat.btnEndCombat) {

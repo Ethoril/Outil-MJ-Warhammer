@@ -23,7 +23,8 @@ export function previewMomentumEvents({ hasMomentum, events = [], exceptions = [
     if (seen.has(event.id)) throw new TypeError('Événement d’Élan dupliqué');
     seen.add(event.id);
     let effect;
-    if (event.type === 'opposedMeleeWon' || event.type === 'chargeEnemy') effect = 'gain';
+    if (event.type === 'opposedMeleeWon' || event.type === 'chargeEnemy' || event.type === 'profileMomentumGain') effect = 'gain';
+    else if (event.type === 'spend') effect = 'spend';
     else if (event.type === 'opposedMeleeLost') effect = 'oppositionLost';
     else if (event.type === 'meleeTestFailed') effect = 'meleeTestFailed';
     else if (event.type === 'woundsLost') effect = count(event.amount) > 0 ? 'woundsLost' : 'none';
@@ -33,6 +34,7 @@ export function previewMomentumEvents({ hasMomentum, events = [], exceptions = [
     const before = momentum;
     const preventedBy = guards.filter(guard => guard.applies && guard.reason === effect).map(guard => guard.talentId);
     if (effect === 'gain') momentum = true;
+    else if (effect === 'spend') momentum = false;
     else if (effect !== 'none' && !preventedBy.length) momentum = false;
     trace.push({ eventId: event.id, effect, before, after: momentum, preventedBy });
   }

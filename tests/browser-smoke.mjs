@@ -61,6 +61,18 @@ async function addProfileDice(page, { base, note, damage = 1, type = 'attack' })
   await row.locator('.pf-dice-damage').fill(String(damage));
 }
 
+// Le lancement ouvre le dialogue d'initiative (F2-A) : saisir des d10 distincts (pas d'égalité), calculer l'ordre, confirmer.
+async function confirmLaunchInitiative(page) {
+  const initiative = page.locator('dialog.tool-sheet', { hasText: 'Saisissez l’Initiative' });
+  await initiative.waitFor({ state: 'visible' });
+  const characteristics = initiative.locator('input[name^="characteristic:"]:not([readonly])');
+  for (let index = 0; index < await characteristics.count(); index += 1) if (!await characteristics.nth(index).inputValue()) await characteristics.nth(index).fill('40');
+  const dice = initiative.locator('input[name^="die:"]:not([readonly])');
+  for (let index = 0; index < await dice.count(); index += 1) await dice.nth(index).fill(String(6 - index));
+  await initiative.getByRole('button', { name: 'Calculer / actualiser l’ordre' }).click();
+  await initiative.getByRole('button', { name: 'Confirmer et appliquer' }).click();
+}
+
 async function openWorkspaceSpace(page, space) {
   const tabId = { prepare: 'tab-prepare', play: 'tab-combat', library: 'tab-library' }[space];
   if (!tabId) throw new Error(`Espace inconnu: ${space}`);
@@ -247,6 +259,7 @@ async function main() {
     await zoneSelect.selectOption('active');
     await prepareOverlay.getByRole('button', { name: 'Ajouter' }).click();
     await prepareOverlay.getByRole('button', { name: 'Lancer la rencontre' }).last().click();
+    await confirmLaunchInitiative(page);
     await expect(prepareOverlay).toBeHidden();
     await openWorkspaceSpace(page, 'play');
     await expect(page.locator('.workspace-track .workspace-track-item')).toHaveCount(2);

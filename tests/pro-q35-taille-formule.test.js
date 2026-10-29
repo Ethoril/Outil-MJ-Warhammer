@@ -57,7 +57,9 @@ test('Q35 le bonus de Taille ne vaut ni pour le tir, ni pour l’attaque bonus, 
   const stegadon = buildParticipantFromBestiary('E0-P-301', { library: L07 });
   const store = await fixture(stegadon);
   const tail = attack(stegadon, 'Tail');
-  assert.equal(hit(store, tail, { kind: 'ranged' }).damage.finalDamage, fixed(store, 7), 'tir : BF+2 sans Taille');
+  const ranged=hit(store, tail, { kind: 'ranged' });
+  assert.equal(ranged.test.details.modifiers.find(row=>row.id==='size:ranged-target')?.amount,-1,'la cible sans Trait est Moyenne face au Stégadon');
+  assert.equal(ranged.damage.finalDamage, fixed(store, 7)-1, 'tir : BF+2 sans bonus de dégâts de Taille, avec −1 DR contre la cible plus petite');
   assert.equal(hit(store, tail, { extraAttack: true }).damage.finalDamage, fixed(store, 7), 'attaque bonus : sans Taille');
   assert.equal(planNaturalAttack(stegadon, 'tail').sizeBonus, 0, 'attaque naturelle choisie (bonus d’Élan) : sans Taille');
   assert.equal(planNaturalAttack(stegadon, 'tail', { ordinary: true }).sizeBonus, 5);

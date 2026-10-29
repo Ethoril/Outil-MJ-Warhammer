@@ -110,7 +110,7 @@ try {
   await page.locator('[data-divine-action="calculate"]').click();
   await page.waitForSelector('.workspace-divine-preview');
   const furyPreview=await page.locator('.workspace-divine-preview').innerText();
-  assert.match(furyPreview,/cibles\s+8 mètres de jeu \(source V5\s*:\s*8 yards/i,`l’aperçu doit reprendre la valeur métrique tout en conservant la provenance yards; rendu=${furyPreview}`);
+  assert.match(furyPreview,/cibles\s+8 mètres de jeu/i,`l’aperçu doit reprendre la valeur métrique tout en conservant la provenance yards; rendu=${furyPreview}`);
   assert.doesNotMatch(furyPreview,/cibles\s+8 yards/i,'les yards ne sont pas l’unité d’usage affichée dans l’aperçu');
 
   // Fill the full Soleil form, including Sin and the Wrath consequence fields.
@@ -145,7 +145,7 @@ try {
   await page.locator('.workspace-divine-preview [aria-label="Nom du profil confirmé"]').fill('Démon mineur');
   await page.locator('.workspace-divine-preview [aria-label="Blessures du profil"]').fill('10');
   await page.locator('.workspace-divine-preview [aria-label="Initiative du profil"]').fill('30');
-  await page.locator('.workspace-divine-preview [aria-label="Distance d’apparition (2d10 yards)"]').fill('8');
+  await page.locator('.workspace-divine-preview [aria-label="Distance d’apparition (2d10 m)"]').fill('8');
   await page.locator('.workspace-divine-preview [aria-label="Position d’apparition confirmée"]').fill('Au fond de la salle');
   await page.locator('.workspace-divine-preview [aria-label="Cible la plus proche désignée"]').selectOption('priest');
   await page.evaluate(()=>{

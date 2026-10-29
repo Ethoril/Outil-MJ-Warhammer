@@ -24,10 +24,10 @@ export function v5ActionQualityContext(normalized, qualities = normalized.action
     dualWielding:declared.dualWielding===true,silentTakedown: declared.silentTakedown, calledShot: declared.calledShot };
 }
 /** Adds and suppresses Qualities on the cloned action only, before every Test plan. */
-export function previewV5ActionQualities(input) {
+export function previewV5ActionQualities(input, { sourceQualities: effectiveSourceQualities } = {}) {
   const normalized = clone(input);
   const equipment = normalized.actor?.equipment?.find(row => row.id === normalized.action.extensions?.fiche?.equipmentId);
-  const sourceQualities = normalizeQualities([...(!normalized.action.contactImprovised?equipment?.keywords || []:[]), ...(normalized.action.sourceQualities || normalized.action.qualities)]);
+  const sourceQualities = normalizeQualities(effectiveSourceQualities||[...(!normalized.action.contactImprovised?equipment?.keywords || []:[]), ...(normalized.action.sourceQualities || normalized.action.qualities)]);
   const evaluate = qualities => evaluateV5Talents(normalized.actor, { event: 'action.before', role: 'attacker',
     context: v5ActionQualityContext(normalized, qualities), choices: normalized.v5.talentChoices || {}, includeTalents: qualityIds });
   const plan = clone(evaluate(sourceQualities));

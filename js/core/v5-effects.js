@@ -6,6 +6,7 @@ import { normalizeEffects, normalizeState } from './effects.js';
 import { withMomentum } from './v5-combat-rules.js';
 import { armourProtection } from './equipment.js';
 import { isMiscastConditionLocked } from './v5-magic-miscasts.js';
+import { bestiaryProfileStateImmunity } from './creature-abilities.js';
 export const V5_EFFECT_RULE_VERSION = 'v5-effects-2026-10-09.1';
 export const V5_CONDITION_KEYS = Object.freeze(['enflamme','souille','hemorragique','aveugle','brise','assourdi','enchevetre','extenue','empoisonne','a-terre','sonne','surpris','inconscient']);
 const UNIQUE = new Set(['souille','a-terre','surpris','inconscient']);
@@ -39,7 +40,8 @@ export function assertDivineWrathConditionsKept(before,after){
 }
 const fold = value => String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim().replace(/[ -]+/g,'-');
 const keyOf = value => { const key=fold(typeof value==='string'?value:value?.key||value?.name); return ALIASES[key]||key; };
-export const isV5ConditionImmune = (participant,condition) => (participant.extensions?.v5?.immunities?.conditions||[]).some(name=>keyOf(name)===keyOf(condition));
+// Les immunités de profil F2-H sont relues ici : le recalcul des couches magiques réécrit `immunities` sans elles.
+export const isV5ConditionImmune = (participant,condition) => (participant.extensions?.v5?.immunities?.conditions||[]).some(name=>keyOf(name)===keyOf(condition)) || bestiaryProfileStateImmunity(participant,keyOf(condition));
 const levelOf = state => Math.max(1, Number(state.level)||1);
 const levels = (states,key) => states.filter(state=>keyOf(state)===key).reduce((total,state)=>total+levelOf(state),0);
 const integer = (value,label,{minimum=0,maximum=Number.MAX_SAFE_INTEGER}={}) => {
@@ -222,11 +224,17 @@ export function recoverV5Condition(participant,condition,options={}) {
     }else tested(['cool']);
   }
   else if(key==='enflamme')tested(['athletics']);
+  // Lasso de l'araignée de falaise (L22 p.73) : une frappe tranchante de plus de 5 dégâts sur la soie met fin à l'Enchevêtré.
+  else if(key==='enchevetre'&&method==='cut-silk'){
+    if(!candidates.some(state=>state.source?.ability==='cliff-spider-lasso'))needs(needsInput,'recoveryMethod','Seule la soie de l’araignée de falaise se coupe ainsi');
+    else if(options.silkCut!==true)needs(needsInput,'silkCut','Frappe tranchante de plus de 5 dégâts portée sur la soie');
+    else amount=Number.MAX_SAFE_INTEGER;
+  }
   else if(key==='enchevetre')tested(['opposed-strength']);
   else if(key==='sonne' && candidates.some(s=>s.recoveryStat==='Int')) tested(['intelligence']);
   else if(['sonne','assourdi'].includes(key)&&method==='endurance')tested(['endurance']);
   else if(key==='empoisonne')tested(['endurance','heal']);
-  else if(['aveugle','inconscient'].includes(key)&&method==='cause-ended'){
+  else if(['aveugle','inconscient','suffocation'].includes(key)&&method==='cause-ended'){
     if(options.causeEnded!==true)needs(needsInput,'causeEnded','Disparition de la cause confirmée');else amount=options.amount??Number.MAX_SAFE_INTEGER;
   }
   else if(['aveugle','sonne','hemorragique'].includes(key)&&method==='medical-attention'&&options.medicalAttention===true)amount=options.amount??1;
@@ -234,7 +242,12 @@ export function recoverV5Condition(participant,condition,options={}) {
   else needs(needsInput,'recoveryMethod','Méthode de récupération à arbitrer');
   // Removing Unconscious with Fortune does not resolve its cause.
   if(key==='inconscient'&&method==='fortune'&&options.causeEnded!==true)reminders.push('Si sa cause persiste, Inconscient revient en fin de Round.');
-  const removal=removeInstances(states,key,amount,eligible);next.states=removal.states;
+  const removal=removeInstances(states,key,amount,method==='cut-silk'?state=>eligible(state)&&state.source?.ability==='cliff-spider-lasso':eligible);next.states=removal.states;
+  // Sortir de l'Immersion (L25 p.142) remet la victime à l'air : sa Suffocation part avec l'Enchevêtré de l'Immersion, même si un autre Enchevêtré (filet) subsiste.
+  if(key==='enchevetre'&&removal.removed.length&&!next.states.some(state=>keyOf(state)==='enchevetre'&&state.source?.ability==='sea-elemental-immersion')&&states.some(state=>keyOf(state)==='enchevetre'&&state.source?.ability==='sea-elemental-immersion')){
+    const air=removeInstances(next.states,'suffocation',Number.MAX_SAFE_INTEGER,state=>state.source?.ability==='sea-elemental-immersion');next.states=air.states;removal.removed.push(...air.removed);
+  }
+  if(!levels(next.states,'suffocation')&&next.extensions?.v5?.suffocationDeathDueRound!==undefined){next.extensions={...next.extensions,v5:{...next.extensions.v5}};delete next.extensions.v5.suffocationDeathDueRound;}
   if(['empoisonne','inconscient'].includes(key)&&removal.removed.length&&!levels(next.states,key)&&next.extensions?.v5?.poisonDeathDueRound!==undefined){
     next.extensions={...next.extensions,v5:{...next.extensions.v5}};delete next.extensions.v5.poisonDeathDueRound;
   }
@@ -404,6 +417,26 @@ export function advanceV5Effects(participant,transition={},inputs={}) {
         }
       }
     }
+    // Suffocation (V5 p.169, Immersion L25 p.142) : 1 Blessure par Round, Inconscient à 0, mort proposée au MJ après BE Rounds (MJ, 28/10).
+    // Bénédiction de Souffle (`doesNotBreathe`) : l'état reste posé mais ne coûte rien tant que la couche dure, comme l'Étouffement des sorts.
+    const breathless=(next.extensions?.v5?.divineEffects||[]).some(layer=>layer?.specialState?.doesNotBreathe===true);
+    if(levels(next.states,'suffocation')&&hp!==null&&!breathless){
+      hp=Math.max(0,hp-1);next.hp=hp;reminders.push('Suffocation : perte de 1 Blessure, sans BE ni PA.');
+      if(hp===0){
+        if(!levels(next.states,'inconscient')){
+          add([{name:'Inconscient',level:1,source:{kind:'suffocation-zero-wounds'}}]);
+          const be=toughnessBonus(next,inputs.toughnessBonus,needsInput);
+          if(be!==null){next.extensions={...(next.extensions||{}),v5:{...(next.extensions?.v5||{}),suffocationDeathDueRound:transition.round+be}};reminders.push(`Suffocation : Inconscient ; mort par asphyxie au Round ${transition.round+be} si rien ne change.`);}
+        }else{
+          const due=next.extensions?.v5?.suffocationDeathDueRound;
+          if(Number.isSafeInteger(due)&&transition.round>=due){death=true;reminders.push('Suffocation : BE Rounds écoulés sans air, mort à confirmer par le MJ.');}
+          else if(!Number.isSafeInteger(due)){
+            const be=toughnessBonus(next,inputs.toughnessBonus,needsInput);
+            if(be!==null){next.extensions={...(next.extensions||{}),v5:{...(next.extensions?.v5||{}),suffocationDeathDueRound:transition.round+be}};reminders.push(`Suffocation : déjà Inconscient ; mort par asphyxie au Round ${transition.round+be} si rien ne change.`);}
+          }
+        }
+      }
+    }else if(next.extensions?.v5?.suffocationDeathDueRound!==undefined){next.extensions={...next.extensions,v5:{...next.extensions.v5}};delete next.extensions.v5.suffocationDeathDueRound;}
     if(levels(next.states,'sonne'))reminders.push('Fin de Round : Résistance +0 DR peut retirer Sonné.');
     if(poison)reminders.push('Fin de Round : Résistance peut retirer Empoisonné ; difficulté selon le poison.');
     if(levels(next.states,'brise'))reminders.push('Hors engagement : Calme en fin de Round ou Round entier caché pour retirer Brisé.');
@@ -439,9 +472,12 @@ export function healV5Wounds(participant,amount) {
   integer(amount,'Blessures récupérées');const next=clone(participant),states=normalizeEffects(next.states);
   const hp=Number(next.hp);if(!Number.isFinite(hp)||hp<0)throw new TypeError('Blessures courantes invalides');
   if(hp===0&&levels(states,'empoisonne'))return createReceipt(participant,{...next,states},{reminders:['Empoisonné à 0 Blessure : impossible de récupérer des Blessures avant retrait du poison.']});
+  const lodged=(next.extensions?.v5?.lodgedProjectiles||[]).filter(row=>row?.removed!==true).length;
+  const blocked=Math.min(amount,lodged),effectiveAmount=amount-blocked;
   const ceiling=Number.isFinite(Number(next.maxHp))&&next.maxHp!==null?Math.max(hp,Number(next.maxHp)):Number.MAX_SAFE_INTEGER;
-  next.hp=Math.min(ceiling,hp+amount);const actual=next.hp-hp,clear=removeInstances(states,'hemorragique',actual);next.states=clear.states;
+  next.hp=Math.min(ceiling,hp+effectiveAmount);const actual=next.hp-hp,clear=removeInstances(states,'hemorragique',actual);next.states=clear.states;
   const removed=[...clear.removed];
   if(actual>0)next.states=releaseWrathWoundLocks(next.states,removed);
-  return createReceipt(participant,next,{removed});
+  return createReceipt(participant,next,{removed,...(blocked?{healingBlockedByLodgedProjectiles:blocked,
+    reminders:[`${blocked} Blessure(s) non récupérée(s) : ${blocked} projectile(s) Empaleuse restent fichés.`]}:{})});
 }

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewedAt": "2026-10-09",
+  "reviewedAt": "2026-10-28",
   "policy": "Tri par clause : fiction en rappel, valeurs/progression dans les fiches, mécanique mesurable dans le moteur. Pending signifie mécanique identifiée mais non raccordée ; ce statut ne signifie jamais narratif ni automatisé.",
   "items": [
     {
@@ -4985,6 +4985,96 @@
           "scope": "sheet",
           "status": "owned",
           "text": "Vous pouvez toujours augmenter le Savoir (Région) correspondant à la région où vous séjournez, même hors de votre carrière actuelle."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-controlled-corruption",
+      "name": "Corruption Contrôlée",
+      "source": {
+        "reference": "Power Behind the Throne Companion (V4), p. 34",
+        "effectHash": "sha256:bb7846e9be529c603e29a3fcfdf22b1e6e46fe84dd5120a950410fb051e61fba"
+      },
+      "clauses": [
+        {
+          "scope": "source",
+          "status": "unverified",
+          "text": "Source de Companion V4 présente dans la feuille ; adaptation V5 et clauses de l’ouvrage non vérifiées. Aucun effet n’est raccordé ni présumé narratif."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-wilful-corruption",
+      "name": "Corruption Volontaire",
+      "source": {
+        "reference": "Death on the Reik Companion (V4), p. 100",
+        "effectHash": "sha256:cbf782290305f580639e94118eb52b39725555d9463bf9f857603154f3090387"
+      },
+      "clauses": [
+        {
+          "scope": "source",
+          "status": "unverified",
+          "text": "Source de Companion V4 présente dans la feuille ; adaptation V5 et clauses de l’ouvrage non vérifiées. Aucun effet n’est raccordé ni présumé narratif."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-disciple-of-change",
+      "name": "Disciple du Changement",
+      "source": {
+        "reference": "Enemy in Shadows Companion (V4), p. 75",
+        "effectHash": "sha256:349bdd2788d7b0ab9c0ee3a0d4b27797bfb4f1dfdfe05b43a620c3930c03d74d"
+      },
+      "clauses": [
+        {
+          "scope": "source",
+          "status": "unverified",
+          "text": "Source de Companion V4 présente dans la feuille ; adaptation V5 et clauses de l’ouvrage non vérifiées. Aucun effet n’est raccordé ni présumé narratif."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-double-life",
+      "name": "Double Vie",
+      "source": {
+        "reference": "Enemy in Shadows Companion (V4), p. 75",
+        "effectHash": "sha256:a136fa3aa3ffd5bff88c5fc5aedf1ba1d12507ab47a4814061332f859ba73254"
+      },
+      "clauses": [
+        {
+          "scope": "source",
+          "status": "unverified",
+          "text": "Source de Companion V4 présente dans la feuille ; adaptation V5 et clauses de l’ouvrage non vérifiées. Aucun effet n’est raccordé ni présumé narratif."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-suffused-with-magic",
+      "name": "Imprégné de Magie",
+      "source": {
+        "reference": "Enemy in Shadows Companion (V4), p. 79",
+        "effectHash": "sha256:cbf1243886c2ac542076ea5b449500e7fbf84ac436ec48422595c94fc4996dd9"
+      },
+      "clauses": [
+        {
+          "scope": "source",
+          "status": "unverified",
+          "text": "Source de Companion V4 présente dans la feuille ; adaptation V5 et clauses de l’ouvrage non vérifiées. Aucun effet n’est raccordé ni présumé narratif."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-extra-spell",
+      "name": "Sort Supplémentaire",
+      "source": {
+        "reference": "Power Behind the Throne Companion (V4), p. 34",
+        "effectHash": "sha256:e1241541da71109eb8219009b6635f623f41323b2d605480806338029c882cb9"
+      },
+      "clauses": [
+        {
+          "scope": "source",
+          "status": "unverified",
+          "text": "Source de Companion V4 présente dans la feuille ; adaptation V5 et clauses de l’ouvrage non vérifiées. Aucun effet n’est raccordé ni présumé narratif."
         }
       ]
     }

@@ -8,6 +8,12 @@ import {measurePeriodicSpellOutcome} from './spell-coverage-probe.mjs';
 import {getV5Fate,getV5Fortune} from '../js/core/v5-resources.js';
 import {previewSpellInteraction} from '../js/core/v5-magic-turn.js';
 
+const args=process.argv.slice(2);if(args.some(arg=>arg!=='--check')||args.length>1)throw Error('Usage: node tools/build-v5-spell-contracts.mjs [--check]');
+const writeOrCheck=(path,content)=>{
+ if(args.includes('--check')){if(fs.readFileSync(path,'utf8')!==content)throw Error(`Sortie périmée: ${path}`);}
+ else fs.writeFileSync(path,content,'utf8');
+};
+
 const audit = JSON.parse(fs.readFileSync('docs/lot3/LOT3_AUDIT_SORTS.json', 'utf8'));
 for(const item of audit.items)if(item.name==='empête'){item.name='Tempête';if(item.source?.canonical)item.source.canonical.name='Tempête';}
 const catalogueSnapshot = JSON.parse(fs.readFileSync('js/data/reference-snapshot.json', 'utf8'));
@@ -2570,7 +2576,7 @@ const narrativeMismatches = contracts.filter(c => c.treatment !== 'narrative' &&
 console.log(`- Mismatches narrative / engine/mjInput : ${narrativeMismatches.length}`);
 
 // Sauvegarde dans js/data/v5-spell-contracts.json
-fs.writeFileSync('js/data/v5-spell-contracts.json', JSON.stringify(contracts, null, 2), 'utf8');
+writeOrCheck('js/data/v5-spell-contracts.json',JSON.stringify(contracts,null,2));
 console.log('Fichier js/data/v5-spell-contracts.json écrit avec succès.');
 
 // Import dynamique du moteur pour vérifier l'exécution réelle de chaque contrat
@@ -2653,7 +2659,9 @@ async function computeCoverageCategory(c) {
   if(!type || ['unimplemented','engine-effect','mj-assisted'].includes(type) || tag && !IMPLEMENTED_SPECIAL_HANDLERS.has(tag))return 'Contrat restant à réaliser';
   const measured=async(p,options,targets)=>{
     const participants=Array.from(new Map([probeCaster,probeEnemy,probeAlly,probeDaemon,...targets].map(t=>[t.id,structuredClone(t)])).values());
-    const draft={localRevision:0,combat:{round:1,participants},extensions:{v5:{}}};
+    // Conditions preloaded for other coverage probes can suppress or mask periodic outcomes.
+    const neutralParticipants=participants.map(participant=>({...participant,states:[]}));
+    const draft={localRevision:0,combat:{round:1,participants:neutralParticipants},extensions:{v5:{}}};
     const control=structuredClone(draft);
     applySpellExecution(control,{...c,name:'Sonde témoin',canonicalName:'Probe',isVortex:false,isAuxiliary:false,range:'Force Mentale mètres',target:'Spécial',treatment:'narrative',effects:{type:'narrative',aoe:c.effects.aoe,targetRule:c.effects.targetRule}},{...options,actorId:probeCaster.id,targetIds:targets.map(t=>t.id),allowUnchecked:true});
     const before=JSON.stringify(measuredSpellState(control));
@@ -2745,7 +2753,7 @@ matrixRows.push(
   ...reminderRows.flatMap(({ c, texts }) => texts.map(text => `| ${c.name} | ${text} |\n`))
 );
 
-fs.writeFileSync('docs/lot3/LOT3_MATRICE_CONTRATS_V5.md', matrixRows.join(''), 'utf8');
+writeOrCheck('docs/lot3/LOT3_MATRICE_CONTRATS_V5.md',matrixRows.join(''));
 console.log('Matrice docs/lot3/LOT3_MATRICE_CONTRATS_V5.md générée avec succès.');
 
 

@@ -496,3 +496,16 @@ dialog.v5-effect-dialog { inset:auto; top:50%; left:50%; right:auto; bottom:auto
 .campaign-time-dialog .v5-effect-error { white-space:pre-wrap; overflow-wrap:anywhere; }
 
 dialog.tool-sheet.campaign-time-dialog { position:fixed; inset:auto; top:50%; left:50%; right:auto; bottom:auto; transform:translate(-50%,-50%); margin:0; padding:0; width:min(640px,calc(100vw - 32px)); max-width:calc(100vw - 32px); height:auto; max-height:calc(100dvh - 32px); display:block; overflow:auto; box-sizing:border-box; border:1px solid var(--border); border-radius:var(--radius); }
+
+/* Suivi des séquelles et convalescence. */
+.workspace-aftermath { display:grid; gap:10px; min-width:0; overflow-wrap:anywhere; }
+.workspace-aftermath > h3,.workspace-aftermath h4,.workspace-aftermath p { margin:0; }
+.workspace-aftermath label { display:grid; gap:4px; min-width:0; }
+.workspace-aftermath input,.workspace-aftermath select { max-width:100%; min-width:0; box-sizing:border-box; }
+.workspace-aftermath input[type=checkbox] { width:auto; }
+.workspace-aftermath-register,.workspace-aftermath-advance,.workspace-aftermath-incident details { display:grid; gap:8px; }
+.workspace-aftermath-register summary,.workspace-aftermath-incident summary { cursor:pointer; font-weight:600; }
+.workspace-aftermath-incidents { display:grid; gap:10px; min-width:0; }
+.workspace-aftermath-check { display:grid; grid-template-columns:minmax(180px,1fr) repeat(2,minmax(80px,130px)); gap:8px; align-items:end; padding:8px 0; border-bottom:1px solid var(--line,var(--border,#8b7960)); }
+.workspace-aftermath-incident { display:grid; gap:8px; min-width:0; }
+@media(max-width:600px) { .workspace-aftermath-check { grid-template-columns:1fr 1fr; } .workspace-aftermath-check > span { grid-column:1 / -1; } }

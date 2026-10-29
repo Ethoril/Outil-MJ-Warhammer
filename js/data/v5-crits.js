@@ -80,4 +80,102 @@ export const V5_CRIT_DATA = {
     [125,'Tendon sectionné',5,{Hémorragique:2,Sonné:2,'À Terre':1},'Jambe définitivement inutilisable ; amputation très ardue −3 DR.']
   ].map(row).concat(death('Bassin fracassé'))
 };
+
+// Noms imprimés et folios du livre V5 anglais, contrôlés sur les pages physiques
+// 173–176 de « Livre de base V5 EN v2.pdf ». Les états et Blessures restent les
+// valeurs de table ci-dessus ; cette couche ajoute les séquelles durables/F2-J.
+const SOURCE_ROWS = {
+  HEAD: ['Dramatic Injury','Ear Bash','Poked Eye','Minor Cut','Rattling Blow','Black Eye','Sliced Ear','Struck Forehead','Fractured Jaw','Broken Nose','Major Eye Wound','Broken Jaw','Major Ear Wound','Concussive Blow','Smashed Teeth','Mangled Ear','Devastated Eye','Disfiguring Blow','Mangled Jaw','Shattered Skull'],
+  ARM: ['Jolted Wrist','Jarred Arm','Minor Cut','Bleeding Hand','Sprain','Torn Muscles','Wrenched Arm','Gaping Wound','Ruptured Ligament','Clean Break','Deep Cut','Crushed Elbow','Damaged Artery','Dislocated Shoulder','Severed Finger','Cleft Hand','Mauled Bicep','Mangled Hand','Sliced Tendons','Brutal Dismemberment'],
+  BODY: ['Winded','Gut Blow','Flesh Wound','Low Blow!','Twisted Back','Bruised Ribs','Wrenched Collar Bone','Ragged Wound','Cracked Ribs','Gaping Wound','Painful Cut','Pulled Back','Arterial Damage','Gut Wound','Fractured Hip','Major Chest Wound','Smashed Rib Cage','Spinal Cord Damage','Internal Bleeding','Torn Apart'],
+  LEG: ['Jabbed Toe','Lost Footing','Twisted Ankle','Minor Cut','Thigh Strike','Sprained Ankle','Twisted Knee','Bad Cut','Badly Twisted Knee','Badly Cut Toe','Ruptured Tendon','Torn Thigh','Hacked Leg','Dislocated Knee','Cracked Shin','Broken Knee','Crushed Foot','Severed Foot','Cut Tendon','Shattered Pelvis']
+};
+const lasting = rows => Object.fromEntries(rows.map(([name, effects]) => [name, effects]));
+const LASTING_OUTCOMES = {
+  HEAD: lasting([
+    ['Dramatic Injury',[{kind:'scar',part:'cheek',socialBonusSL:1,once:true}]],
+    ['Fractured Jaw',[{kind:'injury',name:'Broken Bone',severity:'minor',part:'head'}]],
+    ['Broken Nose',[{kind:'test',skill:'Endurance',difficultySL:0,onFailure:'sonne:1'}]],
+    ['Major Eye Wound',[{kind:'medical-attention-required',condition:'aveugle'}]],
+    ['Broken Jaw',[{kind:'injury',name:'Broken Bone',severity:'major',part:'head'}]],
+    ['Major Ear Wound',[{kind:'permanent-sensory-loss',part:'one-ear',sense:'hearing',secondOccurrence:'hearing-loss-both-ears'}]],
+    ['Concussive Blow',[{kind:'random-condition-count',condition:'sonne',dice:'1d10'},{kind:'duration',condition:'extenue',dice:'1d10',unit:'days'}]],
+    ['Smashed Teeth',[{kind:'amputation',part:'teeth',dice:'1d10',difficultySL:4}]],
+    ['Mangled Ear',[{kind:'amputation',part:'ear',difficultySL:2}]],
+    ['Devastated Eye',[{kind:'amputation',part:'eye',difficultySL:-1}]],
+    ['Disfiguring Blow',[{kind:'amputation',part:'eye-and-nose',difficultySL:-2}]],
+    ['Mangled Jaw',[{kind:'injury',name:'Broken Bone',severity:'major',part:'head'},{kind:'amputation',part:'tongue-and-teeth',dice:'1d10',difficultySL:-2}]]
+  ]),
+  ARM: lasting([
+    ['Jolted Wrist',[{kind:'drop-held-item',part:'hand'}]],
+    ['Jarred Arm',[{kind:'drop-held-item',part:'hand'},{kind:'temporary-limb-loss',part:'hand',duration:'1d10-TB Rounds',minimum:1}]],
+    ['Bleeding Hand',[{kind:'conditional-test',skill:'Dexterity',difficultySL:2,condition:'bleeding',onFailure:'drop-held-item'}]],
+    ['Sprain',[{kind:'injury',name:'Torn Muscle',severity:'minor',part:'arm'}]],
+    ['Torn Muscles',[{kind:'injury',name:'Torn Muscle',severity:'minor',part:'arm'}]],
+    ['Wrenched Arm',[{kind:'drop-held-item',part:'hand'},{kind:'temporary-limb-loss',part:'arm',duration:'1d10 Rounds'}]],
+    ['Gaping Wound',[{kind:'surgery-required',effect:'each-new-wound-to-arm-adds-bleeding:1'}]],
+    ['Ruptured Ligament',[{kind:'drop-held-item',part:'hand'},{kind:'injury',name:'Torn Muscle',severity:'major',part:'arm'}]],
+    ['Clean Break',[{kind:'drop-held-item',part:'hand'},{kind:'injury',name:'Broken Bone',severity:'minor',part:'arm'},{kind:'test',skill:'Endurance',difficultySL:-1,onFailure:'sonne:1'}]],
+    ['Deep Cut',[{kind:'injury',name:'Torn Muscle',severity:'minor',part:'arm'}]],
+    ['Crushed Elbow',[{kind:'drop-held-item',part:'hand'},{kind:'injury',name:'Broken Bone',severity:'major',part:'arm'}]],
+    ['Dislocated Shoulder',[{kind:'reset-limb',part:'shoulder',extendedHealSL:6,difficultySL:2},{kind:'duration',effect:'arm-tests:-1SL',dice:'1d10',unit:'days'}]],
+    ['Severed Finger',[{kind:'amputation',part:'finger',difficultySL:2}]],
+    ['Cleft Hand',[{kind:'amputation',part:'finger',difficultySL:-1,recurrence:'one-finger-per-round-without-medical-attention',eventualPart:'hand'},{kind:'amputation',part:'hand',difficultySL:-1,conditional:true,trigger:'all-fingers-lost'}]],
+    ['Mauled Bicep',[{kind:'drop-held-item',part:'hand'},{kind:'injury',name:'Torn Muscle',severity:'major',part:'arm'}]],
+    ['Mangled Hand',[{kind:'amputation',part:'hand',difficultySL:-2}]],
+    ['Sliced Tendons',[{kind:'amputation',part:'arm-function',difficultySL:-3}]]
+  ]),
+  BODY: lasting([
+    ['Winded',[{kind:'duration',effect:'suffocation',rounds:1}]],
+    ['Gut Blow',[{kind:'test',skill:'Endurance',difficultySL:2,onFailure:{kind:'compound',effects:[
+      {kind:'event',event:'vomit'},
+      {kind:'condition',name:'Sonné',key:'sonne',level:1,durationRounds:1},
+      {kind:'condition',name:'Souillé',key:'souille',level:1}
+    ]}}]],
+    ['Twisted Back',[{kind:'injury',name:'Torn Muscle',severity:'minor',part:'body'}]],
+    ['Bruised Ribs',[{kind:'duration',effect:'Ag-tests:-1SL',dice:'1d10',unit:'days'}]],
+    ['Wrenched Collar Bone',[{kind:'random-select-and-apply',part:'arm',effects:[{kind:'drop-held-item',part:'hand'},{kind:'temporary-limb-loss',part:'arm',duration:'1d10 Rounds'}]}]],
+    ['Cracked Ribs',[{kind:'injury',name:'Broken Bone',severity:'minor',part:'body'}]],
+    ['Gaping Wound',[{kind:'surgery-required',effect:'each-new-wound-to-body-adds-bleeding:1'}]],
+    ['Painful Cut',[{kind:'test',skill:'Endurance',difficultySL:-2,onFailure:'scream',onFailureAtOrBelow:-6,addCondition:'inconscient'}]],
+    ['Pulled Back',[{kind:'injury',name:'Torn Muscle',severity:'major',part:'body'}]],
+    ['Arterial Damage',[{kind:'surgery-required',effect:'each-new-body-hit-adds-bleeding:2'}]],
+    ['Gut Wound',[{kind:'disease',name:'Festering Wound'}]],
+    ['Fractured Hip',[{kind:'injury',name:'Broken Bone',severity:'minor',part:'body'},{kind:'test',skill:'Endurance',difficultySL:0,onFailure:'a-terre'}]],
+    ['Major Chest Wound',[{kind:'surgery-required',effect:'each-new-wound-to-body-adds-bleeding:2'}]],
+    ['Smashed Rib Cage',[{kind:'injury',name:'Broken Bone',severity:'major',part:'body'},{kind:'medical-attention-required',condition:'sonne'}]],
+    ['Spinal Cord Damage',[{kind:'injury',name:'Broken Bone',severity:'major',part:'body'},{kind:'permanent-functional-loss',part:'legs',difficultySL:-3,amputation:true}]],
+    ['Internal Bleeding',[{kind:'surgery-required',effect:'hemorragique-until-surgery'},{kind:'disease',name:'Blood Rot'}]]
+  ]),
+  LEG: lasting([
+    ['Twisted Ankle',[{kind:'duration',effect:'leg-tests-disadvantage',dice:'1d10-TB',unit:'Rounds',minimum:1}]],
+    ['Jabbed Toe',[{kind:'test',skill:'Endurance',difficultySL:2,onFailure:'Ag-tests-disadvantage-until-end-of-turn'}]],
+    ['Lost Footing',[{kind:'test',skill:'Athletics',difficultySL:0,onFailure:'a-terre'}]],
+    ['Thigh Strike',[{kind:'test',skill:'Endurance',difficultySL:2,onFailure:'a-terre'}]],
+    ['Sprained Ankle',[{kind:'injury',name:'Torn Muscle',severity:'minor',part:'leg'}]],
+    ['Twisted Knee',[{kind:'duration',effect:'leg-tests-disadvantage',dice:'1d10',unit:'Rounds'}]],
+    ['Bad Cut',[{kind:'test',skill:'Endurance',difficultySL:0,onFailure:'a-terre'}]],
+    ['Badly Twisted Knee',[{kind:'injury',name:'Torn Muscle',severity:'major',part:'leg'}]],
+    ['Badly Cut Toe',[{kind:'post-encounter-test',skill:'Endurance',difficultySL:0,onFailure:{kind:'amputation',part:'toe',difficultySL:2}}]],
+    ['Ruptured Tendon',[{kind:'test',skill:'Endurance',difficultySL:-2,onFailure:'inconscient'},{kind:'injury',name:'Torn Muscle',severity:'major',part:'leg'}]],
+    ['Torn Thigh',[{kind:'surgery-required',effect:'each-new-leg-wound-adds-bleeding:1'}]],
+    ['Hacked Leg',[{kind:'injury',name:'Broken Bone',severity:'minor',part:'leg'}]],
+    ['Dislocated Knee',[{kind:'reset-limb',part:'knee',extendedHealSL:6,difficultySL:2,testsPerRound:1},{kind:'duration',effect:'movement-halved',dice:'1d10',unit:'days'}]],
+    ['Cracked Shin',[{kind:'injury',name:'Broken Bone',severity:'minor',part:'leg'},{kind:'injury',name:'Torn Muscle',severity:'major',part:'leg'}]],
+    ['Broken Knee',[{kind:'injury',name:'Broken Bone',severity:'major',part:'leg'}]],
+    ['Crushed Foot',[{kind:'test',skill:'Endurance',difficultySL:2,onFailure:{kind:'compound',effects:['a-terre',{kind:'amputation',part:'toes',count:1,plusOnePerNegativeSL:true,difficultySL:2}]}},{kind:'surgery-deadline',days:'TB',effect:'lose-foot-if-surgery-not-received'}]],
+    ['Severed Foot',[{kind:'amputation',part:'foot',difficultySL:-2}]],
+    ['Cut Tendon',[{kind:'permanent-functional-loss',part:'leg',difficultySL:-3,amputation:true}]]
+  ])
+};
+const SOURCE_PAGE = { HEAD:173, ARM:174, BODY:175, LEG:176 };
+for(const [table,entries] of Object.entries(V5_CRIT_DATA)){
+  const names=SOURCE_ROWS[table];
+  if(!names||names.length!==entries.length)throw new Error(`Critical V5 ${table}: provenance PDF incomplète.`);
+  entries.forEach((entry,index)=>{
+    entry.source={book:'L06',printedPage:SOURCE_PAGE[table],printedName:names[index]};
+    const outcomes=(LASTING_OUTCOMES[table][names[index]]||[]).map(effect=>({...effect}));
+    entry.parsed={...entry.parsed,injuries:outcomes.filter(effect=>effect.kind==='injury'),durableEffects:outcomes.filter(effect=>effect.kind!=='injury'),source:entry.source};
+  });
+}
 export function getV5CriticalEffect(key, roll) { return V5_CRIT_DATA[key]?.find(entry => roll <= entry.max) || null; }

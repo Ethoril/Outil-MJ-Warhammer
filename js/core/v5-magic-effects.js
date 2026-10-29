@@ -1,3 +1,4 @@
+import { casterCaracs } from './creature-abilities.js';
 import { uid } from './models.js';
 import {revertBeastForm, calculateSapheryWard} from './v5-magic-arbitrations.js';
 import { magicTalentRank } from './v5-magic-talents.js';
@@ -21,7 +22,7 @@ import { projectDivineGear } from './v5-divine-effects-gear.js';
 export const V5_MAGIC_EFFECTS_VERSION = 'v5-magic-effects-2026-10-10.1';
 /** Expressions chiffrées déclarées par un contrat ; aucun dé et aucune interprétation de prose. */
 export function spellFormulaValue(formula,caster,sl=0){
- const stats=caster.caracs || {},values={DR:sl,...Object.fromEntries(['FM','F','E','Int','I','Soc','Ag','Dex','CT','CC','M'].map(key=>[key,Number(stats[key])])),BF:Math.floor(Number(stats.F)/10),BFM:Math.floor(Number(stats.FM)/10),BE:Math.floor(Number(stats.E)/10),BIntelligence:Math.floor(Number(stats.Int)/10),BSoc:Math.floor(Number(stats.Soc)/10),BDex:Math.floor(Number(stats.Dex)/10),BInitiative:Math.floor(Number(stats.I)/10)};
+ const stats=casterCaracs(caster),values={DR:sl,...Object.fromEntries(['FM','F','E','Int','I','Soc','Ag','Dex','CT','CC','M'].map(key=>[key,Number(stats[key])])),BF:Math.floor(Number(stats.F)/10),BFM:Math.floor(Number(stats.FM)/10),BE:Math.floor(Number(stats.E)/10),BIntelligence:Math.floor(Number(stats.Int)/10),BSoc:Math.floor(Number(stats.Soc)/10),BDex:Math.floor(Number(stats.Dex)/10),BInitiative:Math.floor(Number(stats.I)/10)};
  const expression=String(formula).replace(/\b(?:BIntelligence|BInitiative|BSoc|BDex|BFM|BF|BE|DR|FM|F|E|Int|I|Soc|Ag|Dex|CT|CC|M)\b/g,key=>String(values[key])).replace(/\s/g,'');
  if(!/^[+-]?\d+(?:\.\d+)?(?:[+*/-]\d+(?:\.\d+)?)*$/.test(expression))return NaN;
  const tokens=expression.match(/\d+(?:\.\d+)?|[+*/-]/g);let i=0;
@@ -992,7 +993,7 @@ export function resolveMagicMissile({
     throw new TypeError('Lanceur et cible requis pour resolveMagicMissile');
   }
 
-  const bfm = Math.floor((Number(caster.caracs?.FM) || 0) / 10);
+  const bfm = Math.floor((Number(casterCaracs(caster).FM) || 0) / 10);
   const spellDamage = Number(spell.damage) || 0;
   const overcast = Number(overcastDamage) || 0;
   const extra = Number(extraDamage) || 0;
@@ -1080,7 +1081,7 @@ export function resolveSpellDamage({
 
   let rawDamage = 0;
   const strFormula = String(formula || spell.damageFormula || spell.damage || '').trim();
-  const bfm = Math.floor((Number(caster?.caracs?.FM) || 0) / 10);
+  const bfm = Math.floor((Number(casterCaracs(caster).FM) || 0) / 10);
   const bf = Math.floor((Number(caster?.caracs?.F) || 0) / 10);
 
   // Évaluation de la formule

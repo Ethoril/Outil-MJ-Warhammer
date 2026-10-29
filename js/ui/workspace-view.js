@@ -1,4 +1,5 @@
 import {createDivinePanel} from './v5-divine-panel.js';
+import {createV5CorruptionPanel} from './v5-corruption-panel.js';
 import {createV5BrokenEscapePanel,isBrokenActor} from './v5-broken-escape-panel.js';
 import {beastFormRestriction} from '../core/v5-magic-arbitrations.js';
 import { magicActionsFor } from '../core/creature-magic.js';
@@ -18,7 +19,8 @@ import { isMiscastConditionLocked } from '../core/v5-magic-miscasts.js';
 import { recoveryMethodsFor } from './v5-effect-dialog.js';
 import { hasMomentum, inferV5Kind } from '../core/v5-combat-rules.js';
 import { withoutOutnumberContext } from '../core/outnumbering.js';
-import { equipmentAttackContext, locationProtection } from '../core/equipment.js';
+import { equipmentAttackContext, locationProtection, weaponSkillGroupInfo } from '../core/equipment.js';
+import { v5StoreActionClock } from '../core/v5-store-action.js';
 import { d100 } from '../core/dice.js';
 import { inferActionType, previewHpLoss, ResolutionError } from '../core/resolution.js';
 import { userMessage, userError } from './messages.js';
@@ -34,6 +36,8 @@ import { initSidePanel } from './side-panel.js';
 import { getSpellContract, getAllSpellContracts } from '../core/v5-spell-contracts.js';
 import { magicGrantedActions, beastFormActions } from '../core/v5-magic-combat.js';
 import { transformationOvercastCost } from '../core/v5-magic-arbitrations.js';
+import { effectiveSupplementalEncumbrance } from '../core/v5-supplemental-equipment.js';
+import { createV5AftermathPanel } from './v5-aftermath-panel.js';
 
 export const WORKSPACE_SPACES = Object.freeze(['prepare', 'play', 'library']);
 
@@ -303,7 +307,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       actorId, actionKey: null, externalActionId: null, type: null, attackRoll: '', defenseStat: null, defenseBase: null, defenseSource: null, defenseRoll: '', protectionContext: {}, ammunitionId: '', ammunitionArbitrated: false,
       // Critique : jets saisis, effets décochés et erreurs de saisie par champ (l'aperçu reste affiché).
       criticalInjureRoll: '', criticalInjureSecondRoll: '', criticalInjureAlternativeRoll: '', criticalInjureSecondAlternativeRoll: '', defenderCriticalSecondRoll:'',defenderCriticalSecondAlternativeRoll:'',defenderCriticalInjureSecondRoll:'',defenderCriticalInjureSecondAlternativeRoll:'',defenderCriticalInjureRoll: '', defenderCriticalInjureAlternativeRoll: '', criticalLocationRoll: '', criticalEffectRoll: '', criticalSecondRoll: '', criticalEffectAlternativeRoll: '', criticalSecondAlternativeRoll: '', criticalDeclined: [], criticalErrors: {}, defenderCriticalLocationRoll: '', defenderCriticalEffectRoll: '', defenderCriticalEffectAlternativeRoll: '', defenderCriticalDeclined: [],
-      v5Kind: null, v5SlModifier: null, v5Advantages: 0, v5Disadvantages: 0, v5Choice: null, defenseChoice: null, charging: false, extraAttack: false, reactionId: null, reactionAction: null, aimed: false, beatBlade: false, actorSize: null, targetSize: null, defenseKind: null, defenseSlModifier: null, defenseAdvantages: 0, defenseDisadvantages: 0, v5Context: {}, defenseContext: {},
+      v5Kind: null, v5SlModifier: null, v5Advantages: 0, v5Disadvantages: 0, v5Choice: null, defenseChoice: null, charging: false, extraAttack: false, reactionId: null, reactionAction: null, aimed: false, beatBlade: false, actorSize: null, targetSize: null, defenseKind: null, defenseSlModifier: null, defenseAdvantages: 0, defenseDisadvantages: 0, v5Context: {}, defenseContext: {}, combatDefensiveSkillId: '', combatAimWeaponId: '', combatAimWeaponName: '', combatAimWeaponHeldConfirmed: false, combatAimWeaponKindConfirmed: false,
       preview: null, comparison: null, error: null, busy: false, brokenEscapeVisibility:null, hideSkillId:null
     };
   }
@@ -316,7 +320,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
   const MAGIC_DICE_KEYS = ['magicFumbleLossRoll', 'magicMiscastRoll', 'magicMiscastRoll2', 'magicMajorRoll', 'magicSecondaryDurationRoll', 'magicSecondaryDamageRoll', 'magicSecondaryDistanceRoll', 'magicSecondaryLocation', 'magicResistanceRoll', 'magicVortexDirection', 'magicVortexWillpower', 'magicVortexDirectionRoll', 'magicVortexDistance', 'magicNoOtherTargets', 'magicRoll3d10', 'magicDurationAmount', 'magicDurationUnit', 'magicBurnoutRoll', 'magicCadaiTestRoll', 'magicCadaiMiscastRoll', 'magicCadaiBurnoutRoll', 'magicCadaiCorruptionRoll', 'magicCorruptionInitialRoll', 'magicExtraRoll1', 'magicExtraRoll2', 'magicExtraDuration1', 'magicExtraDuration2', 'magicExtraDamage1', 'magicExtraDamage2', 'magicExtraDistance1', 'magicExtraDistance2', 'magicExtraLocation1', 'magicExtraLocation2', 'magicDispelRoll', 'magicPersistentRestart', 'magicWardRoll'];
   // Réponses propres à une attaque (nature, d10 de Protection, Test de Calme) : jamais reportées sur la suivante.
   function forgetAttackAnswers(draft) {
-    const { attackNature, magicWardRoll, reductionCalm, ...context } = draft.v5Context || {};
+    const { attackNature, magicWardRoll, reductionCalm, trip, tripPrimaryResolutionId, athleticsSkillId, tripFallEnduranceRoll, tripLegLocationRoll, tripLegCriticalEffectRoll, tripExtraLocationRoll, tripExtraCriticalEffectRoll, tripFallWardRoll, tripFallCalmTest, secondWeaponAttack, primaryResolutionId, extraordinaryShot, extraordinaryShotDescription, extraordinaryShotDifficulty, throwingWeapon, scatterDirectionRoll, scatterDistanceRolls, shooterTargetDistanceYards, targetEngaged, engagedTargetIds, engagedTargetRoll, engagedDefensesById, confirmLethalDeath, lethalIntent, warpBladeEnduranceTest, f2h, ...context } = draft.v5Context || {};
     draft.v5Context = context;
     const { attackNature: defenseNature, ...defenseContext } = draft.defenseContext || {};
     draft.defenseContext = defenseContext;
@@ -325,6 +329,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     draft.magicCtRoll=null;
     for (const key of MAGIC_DICE_KEYS) draft[key] = key === 'magicNoOtherTargets' ? false : null;
     draft.magicTargetTests = {};
+    draft.magicMountedRideTests = {};
     draft.magicSecondaryRolls = {};
   }
   // Autre jet de critique : ses effets repartent cochés (les cases décochées visaient l'ancien tirage).
@@ -382,15 +387,22 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     setMomentum: typeof actions.setMomentum === 'function' ? actions.setMomentum : null,
     getFortune: typeof actions.getFortune === 'function' ? actions.getFortune : null,
     editFortune: typeof actions.editFortune === 'function' ? actions.editFortune : null,
+    getFate: typeof actions.getFate === 'function' ? actions.getFate : null,
+    editFate: typeof actions.editFate === 'function' ? actions.editFate : null,
     setStates: typeof actions.setStates === 'function' ? actions.setStates : null,
     acquireStates: typeof actions.acquireStates === 'function' ? actions.acquireStates : null,
     recoverState: typeof actions.recoverState === 'function' ? actions.recoverState : null,
     healCriticalWound: typeof actions.healCriticalWound === 'function' ? actions.healCriticalWound : Store.healCriticalWound?.bind(Store),
     applyResolution: typeof actions.applyResolution === 'function' ? actions.applyResolution : null,
-    addProfileToCombat: typeof actions.addProfileToCombat === 'function' ? actions.addProfileToCombat : null
+    declareCombatAction: typeof actions.declareCombatAction === 'function' ? actions.declareCombatAction : null,
+    declareCombatMovement: typeof actions.declareCombatMovement === 'function' ? actions.declareCombatMovement : null,
+    addProfileToCombat: typeof actions.addProfileToCombat === 'function' ? actions.addProfileToCombat : null,
+    addProfileToActiveCombat: typeof actions.addProfileToActiveCombat === 'function' ? actions.addProfileToActiveCombat : null
   };
 
   const divinePanel=createDivinePanel({Store,refresh:()=>render()});
+  const corruptionPanel=createV5CorruptionPanel({Store,refresh:()=>render()});
+  const aftermathPanel=createV5AftermathPanel({Store,refresh:()=>render()});
   const brokenEscapePanel=createV5BrokenEscapePanel({Store,refresh:()=>render(),onPrepareHide(actorId,skillId){
     const actor=readParticipants(Store).find(row=>row.id===actorId&&row.zone==='active');if(!actor)return;
     state.space='play';state.actorChoice={id:actorId,turn:turnKey(readCombat(Store))};state.resolution=emptyResolution(actorId);state.resolution.hideSkillId=skillId;state.resolution.type='skill';state.resolution.v5Context={isAction:true,runningOrHiding:true,involvesMovement:false};
@@ -444,7 +456,10 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     const draft = state.resolution;
     const actions = actorActions(actor);
     const keys = actions.map(actionKey);
-    if (!keys.includes(draft.actionKey)) draft.actionKey = keys[0] || null;
+    if (!keys.includes(draft.actionKey)) {
+      draft.actionKey = keys[0] || null;
+      draft.v5Kind = null; draft.v5SlModifier = null; draft.charging = false; draft.extraAttack = false; draft.reactionId = null; draft.reactionAction = null; draft.aimed = false; draft.beatBlade = false; draft.fortuneReroll = false; draft.reverseDice = false; draft.fortuneRerollRoll = null; draft.actorSize = null; draft.targetSize = null; draft.v5Advantages = 0; draft.v5Disadvantages = 0; draft.v5Context = {}; draft.talentChoices = {}; draft.type = null; draft.ammunitionId = ''; draft.ammunitionArbitrated = false; draft.protectionContext = {};
+    }
     const action = actions[keys.indexOf(draft.actionKey)] || null;
     const type = draft.type || (action && ['channelling', 'cast', 'dispel'].includes(action.type) ? action.type : (action ? inferActionType(action) : null));
 
@@ -461,7 +476,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     if (!target && state.targetChoice !== 'none' && !['skill', 'channelling'].includes(type)) {
       target = groups.adversaries[0] || others[0] || (type === 'cast' ? actor : null);
     }
-    if (draft.preview && !draft.preview.v5MagicKind && (draft.preview.targetId ?? draft.preview.input?.targetId ?? null) !== (target?.id ?? null)) { draft.preview = null; resetCritical(draft); }
+    if (draft.preview && !draft.preview.v5MagicKind && (draft.preview.engagedShot?.intendedTargetId ?? draft.preview.targetId ?? draft.preview.input?.targetId ?? null) !== (target?.id ?? null)) { draft.preview = null; resetCritical(draft); }
     // Les engagés cochés valent pour la cible où ils ont été saisis : une cible qui change sans passer par un choix les périme.
     if (draft.outnumberTargetId && draft.outnumberTargetId !== (target?.id ?? null) && draft.v5Context) draft.v5Context = withoutOutnumberContext(draft.v5Context);
     draft.outnumberTargetId = target?.id ?? null;
@@ -912,6 +927,10 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       fortuneButton.dataset.workspaceAction = 'edit-fortune'; fortuneButton.dataset.actorId = participant.id;
       fortuneButton.disabled = !callbacks.editFortune; body.appendChild(fortuneButton);
     }
+    if(callbacks.getFate||callbacks.editFate){
+      const fate=callbacks.getFate?.(participant.id),fateButton=button('Destin : '+(fate?.balance??'?'),'workspace-secondary',{'aria-label':'Modifier le Destin de '+participant.name,'data-focus-key':'fate-'+participant.id});
+      fateButton.dataset.workspaceAction='edit-fate';fateButton.dataset.actorId=participant.id;fateButton.disabled=!callbacks.editFate;body.appendChild(fateButton);
+    }
     for (const offer of Store.getReactionOpportunities?.(participant.id) || []) {
       const use = button('Assaut féroce : attaque supplémentaire (1 Élan)', 'workspace-secondary', {
         'aria-label': 'Utiliser Assaut féroce de ' + participant.name, 'data-focus-key': 'reaction-' + participant.id });
@@ -948,11 +967,20 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
   }
   function v5Input(context, draft) {
     if (draft.v5SlModifier != null && !Number.isInteger(draft.v5SlModifier)) throw userError('Le modificateur V5 doit être un nombre entier de DR.');
-    return { kind: draft.v5Kind || inferV5Kind({ ...context.action, type: context.type }, equipmentAttackContext(context.action.extensions?.equipment)),
+    const action={...context.action,type:context.type},attack=['attack','attaque'].includes(context.type);
+    const weapon=action.extensions?.equipment||context.actor?.equipment?.find(row=>row.id===action.extensions?.fiche?.equipmentId);
+    const weaponContext={...(action.extensions?.v5?.initialContext||{}),...(draft.v5Context||{})};
+    const metadataGroup=weaponSkillGroupInfo(weapon?.category,weapon);
+    const selectedGroup=!metadataGroup&&attack?weaponSkillGroupInfo(weaponContext.weaponTrainingGroup,weapon):null;
+    const attackContext=equipmentAttackContext(weapon,attack?weaponContext:{});
+    return { kind: (attack?selectedGroup?.kind:null) || draft.v5Kind || inferV5Kind(action, attackContext),
       ...(draft.v5SlModifier != null ? { slModifier: draft.v5SlModifier } : context.action.extensions?.v5?.slModifier != null ? { slModifier: context.action.extensions.v5.slModifier } : {}),
-      choice: draft.v5Choice, charging: draft.charging, context: { ...(context.action.extensions?.v5?.initialContext||{}),...(draft.v5Context||{}), ...(context.action.id?.startsWith('broken-hide:')?{isAction:true}: {}) },
+      choice: draft.v5Choice, charging: draft.charging, context: { ...weaponContext, ...(context.action.id?.startsWith('broken-hide:')?{isAction:true}: {}) },
       talentChoices: { ...(draft.talentChoices || {}), 'talent-beat-blade:replace-damage': draft.beatBlade === true },
       fortuneReroll: draft.fortuneReroll === true,
+      fortuneForAdvantage: draft.fortuneForAdvantage === true,
+      ...(draft.fortuneForAdvantage===true&&draft.fortuneAdvantageDeclarationId?{fortuneAdvantageDeclarationId:draft.fortuneAdvantageDeclarationId}:{}),
+      ...(Array.isArray(draft.fortuneRerollRolls) && draft.fortuneRerollRolls.length ? { fortuneRerollRolls: draft.fortuneRerollRolls } : {}),
       ...(draft.reverseDice === true ? { reverseDice: true } : {}),
       ...(draft.fortuneRerollRoll != null && draft.fortuneRerollRoll !== '' ? { fortuneRerollRoll: Number(draft.fortuneRerollRoll) } : {}),
       extraAttack: draft.extraAttack === true, ...(draft.reactionId ? { reactionId: draft.reactionId } : {}), aimed: draft.aimed === true,
@@ -966,6 +994,11 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       choice: draft.defenseChoice, context: { ...(draft.defenseContext || {}), ...(context.defense.option.extensions?.fiche?.skillId ? { skillId: context.defense.option.extensions.fiche.skillId } : {}) }, talentChoices: draft.defenseTalentChoices || {},
       advantageSources: declaredSources(draft.defenseAdvantages, 'Avantage déclaré en défense'),
       disadvantageSources: declaredSources(draft.defenseDisadvantages, 'Désavantage déclaré en défense') };
+  }
+  function clearFortuneAdvantageDraft(draft){
+    const declarationId=draft.fortuneAdvantageDeclarationId,actorId=draft.actorId;
+    if(declarationId&&typeof Store.declareV5FortuneAdvantage==='function')try{const pending=Store.declareV5FortuneAdvantage(actorId,{enabled:false,declarationId,baseRevision:Store.getLocalRevision()});if(pending?.catch)pending.catch(()=>{});}catch{}
+    draft.fortuneForAdvantage=false;draft.fortuneAdvantageDeclarationId=null;
   }
   // U-01 : une opération ponctuelle ne s'applique qu'une fois par clé (créée au rendu) ; après succès elle reste consommée
   // jusqu'à la prochaine saisie du MJ, y compris pour un second clic tardif qui trouverait la persistance déjà finie.
@@ -999,8 +1032,51 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
   }
 
   const resolutionHandlers = {
+    async declareCombatAction(kind, values = {}) {
+      const draft = state.resolution;
+      if (!callbacks.declareCombatAction || !draft.actorId || draft.busy) return;
+      draft.busy = true; draft.error = null; render();
+      try {
+        const result = await callbacks.declareCombatAction({ actorId: draft.actorId, kind, ...values, actionId: `combat-action:${uid()}` });
+        if (result?.status !== 'applied') throw new Error(result?.error || result?.reason || 'Action non enregistrée.');
+      } catch (error) {
+        draft.error = { field: 'general', message: userMessage(error, 'Action de combat non enregistrée.') };
+      } finally { draft.busy = false; render(); }
+    },
+    async declareCombatMovement() {
+      const draft = state.resolution;
+      if (!callbacks.declareCombatMovement || !draft.actorId || draft.busy) return;
+      draft.busy = true; draft.error = null; render();
+      try {
+        const result = await callbacks.declareCombatMovement(draft.actorId);
+        if (result?.status !== 'applied') throw new Error(result?.error || result?.reason || 'Déplacement non enregistré.');
+      } catch (error) {
+        draft.error = { field: 'general', message: userMessage(error, 'Déplacement non enregistré.') };
+      } finally { draft.busy = false; render(); }
+    },
     select(patch) {
       const draft = state.resolution;
+      if (Object.hasOwn(patch,'fortuneForAdvantage')) {
+        const enabled=patch.fortuneForAdvantage===true;
+        if(enabled===draft.fortuneForAdvantage)return;
+        if(enabled&&(String(draft.attackRoll||'').trim()||draft.preview)){
+          draft.error={field:'general',message:'Chance → Avantage doit être déclaré dans le Store avant de saisir le d100.'};render();return;
+        }
+        if(typeof Store.declareV5FortuneAdvantage!=='function'){
+          draft.error={field:'general',message:'Le Store ne peut pas enregistrer la déclaration de Chance → Avantage.'};render();return;
+        }
+        const priorDeclarationId=draft.fortuneAdvantageDeclarationId;
+        draft.busy=true;draft.error=null;render();
+        void (async()=>{
+          try{
+            const result=await Store.declareV5FortuneAdvantage(draft.actorId,{enabled,...(!enabled&&priorDeclarationId?{declarationId:priorDeclarationId}:{}),baseRevision:Store.getLocalRevision()});
+            if(result?.status!=='applied')throw new Error(result?.reason||'Déclaration de Chance → Avantage non enregistrée.');
+            draft.fortuneForAdvantage=enabled;draft.fortuneAdvantageDeclarationId=enabled?result.declarationId:null;draft.preview=null;draft.comparison=null;
+          }catch(error){draft.error={field:'general',message:userMessage(error,'Déclaration de Chance → Avantage non enregistrée.')};}
+          finally{draft.busy=false;render();}
+        })();
+        return;
+      }
       draft.magicOpSpent = {};
       if('brokenEscapeVisibility' in patch)draft.brokenEscapeVisibility=patch.brokenEscapeVisibility;
       if ('magicSpellId' in patch && patch.magicSpellId !== draft.magicSpellId) {
@@ -1011,22 +1087,32 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         draft.magicBeastKey='';draft.magicBeastTraits=[];draft.magicKadonMonster='';draft.magicKadonOther=false;draft.magicApoSteps=0;draft.magicApoCritical=false;draft.magicApoRaise=false;
         if (!('magicTargetIds' in patch)) draft.magicTargetIds = [];
       }
-      for (const key of ['v5Kind','v5SlModifier','v5Advantages','v5Disadvantages','charging','extraAttack','reactionId','aimed','beatBlade','fortuneReroll','reverseDice','fortuneRerollRoll','actorSize','targetSize','defenseKind','defenseSlModifier','defenseAdvantages','defenseDisadvantages','v5Context','defenseContext','talentChoices','defenseTalentChoices','magicChannelMode','magicChannelType','magicLore','magicFumbleLossRoll','magicMiscastRoll','magicMajorRoll','magicSecondaryDurationRoll','magicSecondaryDamageRoll','magicSecondaryDistanceRoll','magicSecondaryLocation','magicSpellId','magicArcaneArmorPoints','magicArcaneEnhancedDamage','magicArcaneChooseItem','magicArcaneTargets','magicMjChoice','magicChosenStats','magicHogTier','magicResistanceRoll','magicVortexDirection','magicVortexDistance','magicCriticalChoice','magicOvercastDamage','magicOvercastTargets','magicOvercastRange','magicOvercastDuration','magicOvercastAoe','magicOvercastSpecial','magicBeastKey','magicRoll3d10','magicTargetIds']) if (key in patch) draft[key] = patch[key];
+      for (const key of ['v5Kind','v5SlModifier','v5Advantages','v5Disadvantages','charging','extraAttack','reactionId','aimed','beatBlade','fortuneReroll','fortuneForAdvantage','fortuneRerollRolls','reverseDice','fortuneRerollRoll','actorSize','targetSize','defenseKind','defenseSlModifier','defenseAdvantages','defenseDisadvantages','v5Context','defenseContext','combatDefensiveSkillId','combatAimWeaponId','combatAimWeaponName','combatAimWeaponHeldConfirmed','combatAimWeaponKindConfirmed','talentChoices','defenseTalentChoices','magicChannelMode','magicChannelType','magicLore','magicFumbleLossRoll','magicMiscastRoll','magicMajorRoll','magicSecondaryDurationRoll','magicSecondaryDamageRoll','magicSecondaryDistanceRoll','magicSecondaryLocation','magicSpellId','magicArcaneArmorPoints','magicArcaneEnhancedDamage','magicArcaneChooseItem','magicArcaneTargets','magicMjChoice','magicChosenStats','magicHogTier','magicResistanceRoll','magicVortexDirection','magicVortexDistance','magicCriticalChoice','magicOvercastDamage','magicOvercastTargets','magicOvercastRange','magicOvercastDuration','magicOvercastAoe','magicOvercastSpecial','magicBeastKey','magicRoll3d10','magicTargetIds']) if (key in patch) draft[key] = patch[key];
       for(const [key,value] of Object.entries(patch))if(/^magic[A-Z]/.test(key))draft[key]=value;
       draft.v5Choice = null; draft.defenseChoice = null;
       if ('targetId' in patch) {
+        clearFortuneAdvantageDraft(draft);
         state.targetChoice = patch.targetId;
+        draft.v5Context={...(draft.v5Context||{})};for(const key of ['fateAction','fateChosenRoll','fateCriticalLocation','warpBladeEnduranceTest','f2h'])delete draft.v5Context[key];
+        for (const key of ['hitMorphology','hitAppendage','spiderLegSide','fallPreventedByEquipment','mountedRestraint','mountedRideTestsById','mountedRideScoresById','mountedRideRollsById']) delete draft.v5Context[key];
+        draft.fortuneReroll=false;draft.fortuneRerollRolls=[];
         draft.targetSize = null;
         draft.defenseBase = null; draft.defenseSource = null;
         draft.defenseKind = null; draft.defenseSlModifier = null;
         draft.defenseAdvantages = 0; draft.defenseDisadvantages = 0; draft.defenseContext = {};
         draft.protectionContext = {};
         // Les engagés cochés valaient pour l'ancienne cible.
-        if (draft.v5Context) draft.v5Context = withoutOutnumberContext(draft.v5Context);
+        if (draft.v5Context) {
+          draft.v5Context = withoutOutnumberContext(draft.v5Context);
+          draft.v5Context.targetEngaged = undefined; draft.v5Context.engagedTargetIds = undefined;
+          draft.v5Context.engagedTargetRoll = undefined; draft.v5Context.engagedDefensesById = undefined;
+          for(const key of ['lethalIntent','lethalTableEnabled','confirmLethalDeath'])delete draft.v5Context[key];
+          for (const key of ['trip','tripPrimaryResolutionId','athleticsSkillId','tripFallEnduranceRoll','tripLegLocationRoll','tripLegCriticalEffectRoll','tripExtraLocationRoll','tripExtraCriticalEffectRoll','tripFallWardRoll','tripFallCalmTest']) delete draft.v5Context[key];
+        }
         draft.magicTargetIds = patch.targetId && patch.targetId !== 'none' ? [patch.targetId] : [];
       }
       const actionChanged = 'actionKey' in patch && patch.actionKey !== draft.actionKey;
-      if (actionChanged) { draft.v5Kind = null; draft.v5SlModifier = null; draft.charging = false; draft.extraAttack = false; draft.reactionId = null; draft.reactionAction = null; draft.aimed = false; draft.beatBlade = false; draft.fortuneReroll = false; draft.reverseDice = false; draft.fortuneRerollRoll = null; draft.actorSize = null; draft.targetSize = null; draft.v5Advantages = 0; draft.v5Disadvantages = 0; draft.v5Context = {}; draft.talentChoices = {}; draft.actionKey = patch.actionKey; draft.type = null; draft.ammunitionId = ''; draft.ammunitionArbitrated = false; draft.protectionContext = {}; }
+      if (actionChanged) { clearFortuneAdvantageDraft(draft);draft.v5Kind = null; draft.v5SlModifier = null; draft.charging = false; draft.extraAttack = false; draft.reactionId = null; draft.reactionAction = null; draft.aimed = false; draft.beatBlade = false; draft.fortuneReroll = false; draft.fortuneRerollRoll = null;draft.fortuneRerollRolls=[]; draft.reverseDice = false; draft.actorSize = null; draft.targetSize = null; draft.v5Advantages = 0; draft.v5Disadvantages = 0; draft.v5Context = {}; draft.talentChoices = {}; draft.actionKey = patch.actionKey; draft.type = null; draft.ammunitionId = ''; draft.ammunitionArbitrated = false; draft.protectionContext = {}; }
       if ('protectionContext' in patch) draft.protectionContext = patch.protectionContext;
       if ('ammunitionId' in patch) draft.ammunitionId = patch.ammunitionId;
       if ('ammunitionArbitrated' in patch) draft.ammunitionArbitrated = patch.ammunitionArbitrated;
@@ -1329,6 +1415,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
               attributeTargets: draft.magicAttributeTargets || {},
               secondaryTargets: draft.magicSecondaryTargets || {},
               domainFacts: draft.magicSpellFacts || {},
+              mountedRideTests: draft.magicMountedRideTests || {},
               ctRoll: draft.magicCtRoll,
               secondaryRolls: { ...(draft.magicSecondaryRolls || {}), ...secondaryRolls },
               hogTier,
@@ -1401,6 +1488,8 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       try {
         if (input.defense && (input.defense.base == null || input.defense.base === '' || !Number.isInteger(Number(input.defense.base)) || Number(input.defense.base) < 0)) throw Object.assign(new ResolutionError('Saisissez un score de défense entier, supérieur ou égal à zéro.', 'INVALID_DEFENSE_SCORE'), { userFacing: true });
         input.v5 = v5Input(context, draft);
+        if(draft.fortuneAdvantageDeclarationId)input.fortuneAdvantageDeclarationId=draft.fortuneAdvantageDeclarationId;
+        const combatRound=readCombat(Store).round;let currentTurnIndex=1;try{currentTurnIndex=Number(JSON.parse(Store.getFullJSON()).extensions?.v5?.turnIndex)||1;}catch{}if(Number.isSafeInteger(combatRound)&&combatRound>0){input.round=combatRound;input.v5={...input.v5,context:{...(input.v5.context||{}),currentRound:combatRound,currentTurnIndex}};}
         if (input.defense) input.defense.v5 = defenseV5Input(context, draft);
         draft.preview = Store.previewResolution(input);
       } catch (error) {
@@ -1509,6 +1598,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
           draft.attackRoll = '';
           draft.defenseRoll = '';
           draft.v5Choice = null; draft.defenseChoice = null; draft.charging = false; draft.extraAttack = false; draft.reactionId = null; draft.reactionAction = null; draft.aimed = false; draft.beatBlade = false;
+          draft.fortuneForAdvantage=false;draft.fortuneAdvantageDeclarationId=null;
           if (draft.preview.v5MagicKind) resetMagicDice(draft);
           forgetAttackAnswers(draft);
           focusKey = 'roll-attack';
@@ -1535,6 +1625,37 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
   function renderCenter(context) {
     const center = play.center;
     center.replaceChildren();
+    let suddenDeathEnabled = false;
+    try { suddenDeathEnabled = JSON.parse(Store.getFullJSON()).extensions?.v5?.suddenDeathEnabled === true; } catch {}
+    const suddenDeath = node('section', 'workspace-card workspace-sudden-death');
+    suddenDeath.setAttribute('aria-label', 'Réglage de table : mort subite des figurants');
+    suddenDeath.appendChild(rubric('Mort subite des figurants'));
+    const optionLabel = node('label', 'workspace-type', 'Activer la règle de table — désactivée par défaut');
+    const option = document.createElement('input'); option.type = 'checkbox'; option.checked = suddenDeathEnabled;
+    option.setAttribute('aria-label', 'Activer la mort subite des figurants');
+    option.addEventListener('change', async () => { option.disabled = true; try { await Store.setSuddenDeathEnabled(option.checked); render(); } catch (error) { option.disabled = false; option.checked = !option.checked; suddenDeath.appendChild(node('p', 'workspace-error', userMessage(error, 'Réglage non enregistré.'))); } });
+    optionLabel.prepend(option); suddenDeath.appendChild(optionLabel);
+    if (suddenDeathEnabled) {
+      const candidates = (context.participants || []).filter(row => ['PNJ', 'Créature'].includes(row.kind)
+        && Number(row.hp) === 0 && row.extensions?.v5?.dead !== true
+        && !(row.states || []).some(state => state.key === 'inconscient' || state.name === 'Inconscient'));
+      for (const participant of candidates) {
+        const row = node('div', 'workspace-result-line'); row.appendChild(node('span', '', `${participant.name || participant.id} · 0 Blessure`));
+        const confirmLabel = node('label', 'workspace-type', 'Confirmer que c’est un PNJ secondaire');
+        const confirm = document.createElement('input'); confirm.type = 'checkbox'; confirm.setAttribute('aria-label', `${participant.name || participant.id} : confirmer PNJ secondaire`); confirmLabel.prepend(confirm); row.appendChild(confirmLabel);
+        const preview = () => Store.previewSuddenDeath(participant.id, confirm.checked);
+        const status = node('span', 'workspace-muted', 'Choix MJ requis après confirmation du statut de figurant.'); row.appendChild(status);
+        for (const [outcome, label] of [['dead', 'Choisir : mort'], ['unconscious', 'Choisir : inconscient']]) {
+          const choose = button(label, 'workspace-secondary'); choose.type = 'button'; choose.disabled = true;
+          confirm.addEventListener('change', () => { const plan = preview(); choose.disabled = !plan.ready; status.textContent = plan.ready ? 'Éligible — le MJ choisit une issue.' : plan.reason; });
+          choose.addEventListener('click', async () => { choose.disabled = true; try { const plan = preview(); if (!plan.ready) throw new Error(plan.reason); await Store.decideSuddenDeath(participant.id, outcome, { secondaryNpcConfirmed: true, baseRevision: plan.baseRevision }); render(); } catch (error) { choose.disabled = false; status.textContent = userMessage(error, 'Décision non enregistrée.'); } });
+          row.appendChild(choose);
+        }
+        suddenDeath.appendChild(row);
+      }
+      if (!candidates.length) suddenDeath.appendChild(node('p', 'workspace-muted', 'Aucun figurant à 0 Blessure à arbitrer.'));
+    }
+    center.appendChild(suddenDeath);
     if (!context.participants.length) {
       const empty = node('div', 'workspace-empty workspace-card workspace-play-empty');
       empty.appendChild(node('h2', '', 'Aucune rencontre en cours'));
@@ -1553,8 +1674,20 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     center.appendChild(duel);
     const escapePanel=brokenEscapePanel.render(context.participants,context.actor?.id);if(escapePanel)center.appendChild(escapePanel);
     const prayers=divinePanel.render(context.actor,context.participants);if(prayers)center.appendChild(prayers);
+    const corruption=corruptionPanel.render(context.actor);if(corruption)center.appendChild(corruption);
+    const aftermath=aftermathPanel.render(context.participants);if(aftermath)center.appendChild(aftermath);
 
     const draft = state.resolution;
+    let previousWeaponAttacks = [], resolutionClock = {};
+    try {
+      const envelope = JSON.parse(Store.getFullJSON());
+      const clockRound=envelope.combat?.round,clockTurnIndex=envelope.activeScene?.extensions?.v5?.turnIndex??envelope.extensions?.v5?.turnIndex;
+      if(Number.isSafeInteger(clockRound)&&clockRound>0)resolutionClock.currentRound=clockRound;
+      if(Number.isSafeInteger(clockTurnIndex)&&clockTurnIndex>0)resolutionClock.currentTurnIndex=clockTurnIndex;
+      const {encounterId,turnId}=v5StoreActionClock({...envelope,combat:{...(envelope.combat||{}),currentActorId:context.actor?.id}});
+      previousWeaponAttacks = (envelope.extensions?.v5?.standardTurnActions || []).filter(row => row.actorId === context.actor?.id && row.encounterId === encounterId && row.turnId === turnId && row.kind === 'action' && row.targetId)
+        .map(row => ({ ...row, weaponName: context.actor?.equipment?.find(item => item.id === row.weaponId)?.name || 'Action' }));
+    } catch { previousWeaponAttacks = []; }
     center.appendChild(renderResolutionPanel({
       draft,
       actor: context.actor,participants:context.participants,
@@ -1564,10 +1697,141 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       target: context.target,
       groups: context.groups,
       defense: context.defense,
+      previousWeaponAttacks,
+      resolutionClock,
       canCalculate: typeof Store.previewResolution === 'function' || ['channelling', 'cast', 'dispel'].includes(context.type),
       canApply: Boolean(callbacks.applyResolution || ['channelling', 'cast', 'dispel'].includes(context.type)),
+      canDeclareCombatAction: Boolean(callbacks.declareCombatAction),
+      canDeclareCombatMovement: Boolean(callbacks.declareCombatMovement),
       handlers: resolutionHandlers
     }));
+
+    const carriedPavises=(context.actor?.equipment||[]).filter(item=>item.kind==='shield'&&/pavise|pavois/i.test(item.name||item.id||''));
+    if(carriedPavises.length){
+      const deploymentPanel=node('section','workspace-card workspace-pavise-setup');deploymentPanel.setAttribute('aria-label','Mise en place du pavois');
+      deploymentPanel.appendChild(node('h3','workspace-card-title','Mise en place du pavois'));
+      for(const item of carriedPavises){
+        const deployment=context.actor?.extensions?.v5?.paviseDeploymentByItemId?.[item.id]||null,wrap=node('div','workspace-v5-context');
+        let actionAvailable=false,actionBlock='';
+        try{const envelope=JSON.parse(Store.getFullJSON()),clock=v5StoreActionClock(envelope),isCurrent=envelope.combat?.currentActorId===context.actor.id,spent=(envelope.extensions?.v5?.standardTurnActions||[]).some(row=>row.actorId===context.actor.id&&row.encounterId===clock.encounterId&&row.turnId===clock.turnId),sameTurnSecond=deployment?.actionsPaid===1&&deployment.lastTurnId===clock.turnId;
+          actionAvailable=Boolean(isCurrent&&clock.turnId&&!spent&&!sameTurnSecond);
+          if(!isCurrent)actionBlock='Le porteur doit être l’acteur courant.';else if(!clock.turnId)actionBlock='Tour non suivi : l’Action ne peut pas être dépensée.';else if(spent)actionBlock='Une Action a déjà été dépensée pendant ce Tour.';else if(sameTurnSecond)actionBlock='La seconde Action exige un Tour ultérieur.';
+        }catch{actionBlock='État de combat indisponible.';}
+        const progress=deployment?.status==='planted'?`Planté face au ${deployment.facing} · 2/2 Actions`:deployment?.actionsPaid===1?`Première Action dépensée · face au ${deployment.facing} · en attente d’un autre Tour`: 'Non planté · 0/2 Actions';
+        wrap.appendChild(node('p','workspace-result-line',`${item.name||item.id} · ${progress}`));
+        if(deployment?.status!=='planted'){
+          const label=node('label','workspace-type','Direction choisie par le MJ'),choice=document.createElement('select');choice.setAttribute('aria-label',label.textContent);choice.append(new Option('Choisir…',''));for(const [value,text] of [['north','Nord'],['south','Sud'],['east','Est'],['west','Ouest']])choice.append(new Option(text,value));choice.value=deployment?.facing||'';label.append(choice);wrap.appendChild(label);
+          const error=node('p','workspace-error'),apply=button(deployment?.actionsPaid===1?'Dépenser la seconde Action au prochain Tour':'Dépenser la première Action de mise en place','workspace-primary');apply.type='button';choice.addEventListener('change',()=>{apply.disabled=Boolean(!choice.value||!actionAvailable||state.busy||!Store);});apply.addEventListener('click',async()=>{apply.disabled=true;error.textContent='';try{const plan=Store.previewV5PaviseDeployment({actorId:context.actor.id,equipmentId:item.id,direction:choice.value});if(!plan.ready)throw new Error(plan.error||'Mise en place non disponible.');const result=await Store.applyV5PaviseDeployment(plan);if(result?.status!=='applied')throw new Error(result?.reason||'Action du pavois non enregistrée.');render();}catch(cause){error.textContent=userMessage(cause,'Action du pavois non enregistrée.');apply.disabled=false;}});apply.disabled=Boolean(!choice.value||!actionAvailable||state.busy||!Store);wrap.append(error,apply);
+          if(actionBlock)wrap.appendChild(node('p','workspace-muted',actionBlock));
+        }
+        deploymentPanel.appendChild(wrap);
+      }
+      deploymentPanel.appendChild(node('p','workspace-muted','Chaque clic dépense et journalise une Action du Tour courant. La seconde Action doit être dépensée à un Tour ultérieur; la protection n’est active qu’après les deux dépenses.'));
+      center.appendChild(deploymentPanel);
+    }
+
+    const leviathanPieces=(context.actor?.equipment||[]).filter(item=>/leviathan plate|plate de leviathan/i.test(item.name||item.id||''));
+    if(leviathanPieces.length){
+      const panel=node('section','workspace-card workspace-leviathan-encumbrance');panel.setAttribute('aria-label','Encombrement de la plate de léviathan');panel.appendChild(node('h3','workspace-card-title','Encombrement de la plate de léviathan'));
+      for(const item of leviathanPieces){const wrap=node('div','workspace-v5-context'),baseline=item.extensions?.v5?.metalEquivalentEncumbrance;
+        const effective=effectiveSupplementalEncumbrance(item,baseline);wrap.appendChild(node('p','workspace-result-line',effective===null?`${item.name} · saisissez l’Encombrement de la pièce métallique équivalente pour calculer cet objet.`:`${item.name} · métal ${baseline} · léviathan ${effective} Encombrement (−1)`));
+        const label=node('label','workspace-type','Encombrement de la pièce métallique équivalente (MJ)');const input=document.createElement('input');input.type='number';input.min='1';input.step='1';input.value=baseline??'';input.setAttribute('aria-label',label.textContent);label.append(input);wrap.appendChild(label);
+        const error=node('p','workspace-error'),save=button('Enregistrer la référence métal','workspace-primary');save.type='button';save.addEventListener('click',async()=>{save.disabled=true;error.textContent='';try{const value=Number(input.value);if(!Number.isSafeInteger(value)||value<1)throw new Error('Saisissez un Encombrement métallique entier positif.');const fresh=(Store.listParticipants?.()||[]).find(row=>row.id===context.actor.id)||context.actor;const equipment=(fresh.equipment||[]).map(row=>row.id!==item.id?row:{...row,extensions:{...(row.extensions||{}),v5:{...(row.extensions?.v5||{}),metalEquivalentEncumbrance:value}}});const result=await Store.updateParticipant(fresh.id,{equipment});if(result?.ok===false)throw new Error(result.error||'Référence non enregistrée.');render();}catch(cause){error.textContent=userMessage(cause,'Référence non enregistrée.');save.disabled=false;}});wrap.append(error,save);panel.appendChild(wrap);
+      }
+      panel.appendChild(node('p','workspace-muted','Calcul stocké sur l’objet : Encombrement de la pièce métallique équivalente moins 1. Aucun autre objet ni PA/Taille ne change.'));
+      center.appendChild(panel);
+    }
+
+    const reloadWeapons=(context.actor?.equipment||[]).filter(item=>item.kind==='weapon'&&!/griffonsfoot/i.test(item.name||'')&&item.keywords?.some(row=>['a-repetition','recharge','salve','salvo'].includes(typeof row==='string'?row:row?.id)));
+    if(reloadWeapons.length){
+      const reloadPanel=node('section','workspace-card workspace-weapon-reload');reloadPanel.setAttribute('aria-label','Rechargement des armes');
+      reloadPanel.appendChild(node('h3','workspace-card-title','Rechargement des armes'));
+      for(const weapon of reloadWeapons){
+        const state=weapon.extensions?.v5?.reloadState,wrap=node('div','workspace-v5-context');
+        const title=node('p','workspace-result-line',`${weapon.name||weapon.id} · ${state?`${state.shotsRemaining} tir(s) restant(s)`:'chargeur non initialisé'}${state?.reloading?` · recharge ${state.accumulatedSuccesses}/${state.requiredSuccesses} succès`:''}`);wrap.appendChild(title);
+        const error=node('p','workspace-error');
+        const apply=async input=>{try{error.textContent='';const plan=Store.previewV5WeaponReload({actorId:context.actor.id,equipmentId:weapon.id,...input});if(!plan.ready)throw new Error(plan.error||'Rechargement à préciser.');const saved=await Store.applyV5WeaponReload(plan);if(saved?.status!=='applied')throw new Error(saved?.reason||'Rechargement non enregistré.');render();}catch(cause){error.textContent=userMessage(cause,'Rechargement non enregistré.');}};
+        if(!state&&weapon.keywords?.some(row=>(typeof row==='string'?row:row?.id)==='a-repetition'&&String(row?.parameter).toLowerCase()==='variable')){
+          const label=node('label','workspace-type','Capacité du chargeur arbitrée par le MJ '),capacity=document.createElement('input');capacity.type='number';capacity.min='1';capacity.step='1';capacity.setAttribute('aria-label',`Capacité arbitrée — ${weapon.name||weapon.id}`);const decide=button('Enregistrer l’arbitrage','workspace-primary');decide.type='button';decide.addEventListener('click',()=>{if(!capacity.value){error.textContent='Saisissez une capacité entière positive.';return;}apply({operation:'arbitrate',repeaterRating:Number(capacity.value)});});label.append(capacity);wrap.append(label,decide);
+        }
+        const begin=button('Commencer la recharge','workspace-secondary');begin.type='button';begin.addEventListener('click',()=>apply({operation:'begin'}));begin.disabled=state?.reloading===true;wrap.appendChild(begin);
+        if(state?.reloading){
+          const select=document.createElement('select');select.setAttribute('aria-label',`Résultat du Test de recharge — ${weapon.name||weapon.id}`);select.append(new Option('Résultat du Test…',''),new Option('Réussite','success'),new Option('Échec','failure'));
+          const sl=document.createElement('input');sl.type='number';sl.step='1';sl.setAttribute('aria-label',`DR du Test de recharge — ${weapon.name||weapon.id}`);
+          const progress=button('Enregistrer le Test','workspace-primary');progress.type='button';progress.addEventListener('click',()=>{if(!select.value||sl.value===''){error.textContent='Saisissez le résultat et la DR du Test.';return;}apply({operation:'progress',success:select.value==='success',testSl:Number(sl.value),expectedWeaponRevision:state.revision});});wrap.append(select,sl,progress);
+        }
+        wrap.appendChild(error);reloadPanel.appendChild(wrap);
+      }
+      center.appendChild(reloadPanel);
+    }
+    const lodged=(context.participants||[]).flatMap(participant=>(participant.extensions?.v5?.lodgedProjectiles||[]).filter(row=>row.removed!==true).map(projectile=>({participant,projectile})));
+    if(lodged.length){
+      const panel=node('section','workspace-card workspace-impaled-projectiles');panel.setAttribute('aria-label','Projectiles fichés');
+      panel.appendChild(node('h3','workspace-card-title','Projectiles fichés — Empaleuse'));
+      for(const {participant,projectile} of lodged){
+        const wrap=node('div','workspace-v5-context');wrap.appendChild(node('p','workspace-result-line',`${participant.name||participant.id} · ${projectile.ammunitionId} · ${projectile.removal==='surgery'?'chirurgie requise':'Test de Guérison requis'} · 1 Blessure bloquée`));
+        const error=node('p','workspace-error');let surgeryConfirmed=false,skillId='',testRoll='';
+        if(projectile.removal==='surgery'){
+          const label=node('label','workspace-type','Le MJ confirme la chirurgie');const check=document.createElement('input');check.type='checkbox';check.addEventListener('change',()=>{surgeryConfirmed=check.checked;});label.prepend(check);wrap.appendChild(label);
+        }else{
+          const skills=(participant.skills||[]).filter(row=>/gu[eé]rison|heal/iu.test(row.name||row.nom||''));
+          const select=document.createElement('select');select.setAttribute('aria-label',`Compétence Guérison — ${participant.name||participant.id}`);select.append(new Option('Choisir Guérison…',''));for(const row of skills)select.append(new Option(row.name||row.nom||row.id,row.id));select.addEventListener('change',()=>{skillId=select.value;});
+          const input=document.createElement('input');input.type='number';input.min='1';input.max='100';input.step='1';input.setAttribute('aria-label',`d100 du Test de Guérison — ${participant.name||participant.id}`);input.addEventListener('input',()=>{testRoll=input.value;});wrap.append(select,input);
+        }
+        const apply=button('Enregistrer le retrait','workspace-primary');apply.type='button';apply.addEventListener('click',async()=>{try{error.textContent='';const plan=Store.previewV5ProjectileExtraction({participantId:participant.id,projectileId:projectile.id,
+            method:projectile.removal==='surgery'?'surgery':'heal-test',surgeryConfirmed,skillId,roll:testRoll===''?undefined:Number(testRoll)});if(!plan.ready)throw new Error(plan.error);const result=await Store.applyV5ProjectileExtraction(plan);if(result?.status!=='applied')throw new Error(result?.reason||'Retrait non enregistré.');render();}catch(cause){error.textContent=userMessage(cause,'Retrait non enregistré.');}});
+        wrap.append(apply,error);panel.appendChild(wrap);
+      }
+      center.appendChild(panel);
+    }
+
+    const criticalDecisions=[];
+    for(const participant of context.participants||[]){
+      const v5=participant.extensions?.v5||{};
+      for(const record of v5.criticalAftermath||[])if(record.sequela?.criticalDeath===true&&!record.deathDecision)criticalDecisions.push({kind:'table',participant,record});
+      if(['countdown','awaiting-mj'].includes(v5.criticalDeath?.status))criticalDecisions.push({kind:'countdown',participant,countdown:v5.criticalDeath});
+    }
+    if(criticalDecisions.length){
+      const section=node('section','workspace-card workspace-critical-death-decisions');section.setAttribute('aria-label','Décisions MJ sur les morts critiques');
+      section.appendChild(rubric('Décisions du MJ — mort critique'));
+      for(const item of criticalDecisions){
+        const participant=item.participant,label=item.kind==='table'?`${participant.name} · ${item.record.effectName} (${item.record.source?.printedName||item.record.table})`:`${participant.name} · décompte arrivé à l’échéance du Round ${item.countdown.dueRound}`;
+        const row=node('div','workspace-result-line');row.appendChild(node('span','',label));
+        for(const [decision,text] of [['confirm','Confirmer la mort'],['decline','Refuser la mort']]){const button=node('button','workspace-secondary',text);button.type='button';button.disabled=state.resolution.busy;button.addEventListener('click',async()=>{button.disabled=true;try{if(item.kind==='table')await Store.decideImmediateCriticalDeath(participant.id,item.record.id,decision);else await Store.decideCriticalDeath(participant.id,decision,{round:readCombat(Store).round});render();}catch(error){button.disabled=false;const message=userMessage(error,'Décision MJ non enregistrée.');section.appendChild(node('p','workspace-error',message));}});row.appendChild(button);}
+        if(item.kind==='countdown'&&item.countdown.status==='countdown')row.appendChild(node('span','workspace-muted',` — échéance Round ${item.countdown.dueRound}`));
+        section.appendChild(row);
+      }
+      center.appendChild(section);
+    }
+    const amputationFollowups=[];
+    for(const participant of context.participants||[])for(const record of participant.extensions?.v5?.criticalAftermath||[]){
+      if(record.amputationShockStatus==='not-occurred')continue;
+      const preview=Store.previewAmputationShock?.({participantId:participant.id,criticalId:record.id});
+      if(preview?.status==='deferred')continue;
+      if(preview?.status!=='duplicate'&&preview?.requirements?.length)amputationFollowups.push({participant,record,requirements:preview.requirements,shockPart:preview.shockPart||preview.requirements[0]?.part});
+    }
+    if(amputationFollowups.length){
+      const section=node('section','workspace-card workspace-amputation-followups');section.setAttribute('aria-label','Chocs d’amputation à résoudre');
+      section.appendChild(rubric('Chocs d’amputation — Test de Résistance'));
+      for(const item of amputationFollowups){
+        const {participant,record,requirements}=item,parts=[...new Set(requirements.map(row=>row.part).filter(Boolean))].join(', ')||'membre',canReject= requirements.length>0&&requirements.every(row=>row.conditional===true);
+        section.appendChild(node('p','workspace-result-line',`${participant.name} · ${record.effectName} · amputation : ${parts} · Résistance ${requirements[0].difficultyDR} DR · chirurgie requise`));
+        const row=node('div','workspace-critical-amputation-controls');
+        const allFingersLost=requirements.some(requirement=>requirement.trigger==='all-fingers-lost'),factLabel=allFingersLost?'Tous les doigts ont été perdus':'Amputation effectivement survenue';
+        const occurrenceLabel=node('label','workspace-type',factLabel),occurrence=document.createElement('select');occurrence.setAttribute('aria-label',`${factLabel} : ${participant.name}`);if(canReject)occurrence.append(new Option('À confirmer',''),new Option('Oui','true'),new Option('Non','false'));else{occurrence.append(new Option('Oui','true'));occurrenceLabel.append(node('span','workspace-muted','Amputation imposée par la ligne critique.'));}occurrenceLabel.append(occurrence);row.append(occurrenceLabel);
+        const resultLabel=node('label','workspace-type','Test de Résistance'),result=document.createElement('select');result.setAttribute('aria-label',`Résultat du Test de Résistance : ${participant.name}`);result.append(new Option('À préciser',''),new Option('Réussite','success'),new Option('Échec','failure'));resultLabel.append(result);row.append(resultLabel);
+        const slLabel=node('label','workspace-type','DR du Test'),sl=document.createElement('input');sl.type='number';sl.step='1';sl.setAttribute('aria-label',`DR du Test de Résistance : ${participant.name}`);slLabel.append(sl);row.append(slLabel);
+        const apply=node('button','workspace-primary','Enregistrer le choc'),error=node('p','workspace-error');apply.type='button';apply.disabled=state.resolution.busy;apply.addEventListener('click',async()=>{
+          error.textContent='';if(occurrence.value==='false'&&!canReject){error.textContent='Cette ligne impose l’amputation; elle ne peut pas être écartée.';return;}if(occurrence.value==='false'){
+            apply.disabled=true;try{if(allFingersLost)await Store.deferAmputationShock(participant.id,record.id,item.shockPart);else{const fresh=(Store.listParticipants?.()||[]).find(row=>row.id===participant.id)||participant;const aftermath=fresh.extensions?.v5?.criticalAftermath||[];await Store.updateParticipant(participant.id,{extensions:{...(fresh.extensions||{}),v5:{...(fresh.extensions?.v5||{}),criticalAftermath:aftermath.map(row=>row.id===record.id?{...row,amputationShockStatus:'not-occurred'}:row)}}});}render();}catch(cause){error.textContent=userMessage(cause,'Absence d’amputation non enregistrée.');apply.disabled=false;}return;
+          }
+          if(!occurrence.value||!result.value||sl.value===''){error.textContent='Confirmez l’amputation et saisissez le résultat/DR du Test.';return;}
+          const testSL=Number(sl.value),success=result.value==='success';if(!Number.isSafeInteger(testSL)||(success&&testSL<0)||(!success&&testSL>0)){error.textContent='La DR doit être entière, positive ou nulle en réussite, négative ou nulle en échec.';return;}
+          apply.disabled=true;try{const plan=Store.previewAmputationShock({participantId:participant.id,criticalId:record.id,shockPart:item.shockPart,amputationOccurred:occurrence.value==='true',test:{success,sl:testSL}});if(plan.status!=='ready')throw new Error(plan.reason||'Le Test de Résistance reste à préciser.');const saved=await Store.applyAmputationShock(plan);if(saved?.status!=='applied'&&saved?.status!=='duplicate')throw new Error(saved?.reason||'Choc d’amputation non enregistré.');render();}catch(cause){error.textContent=userMessage(cause,'Choc d’amputation non enregistré.');apply.disabled=false;}
+        });row.append(apply,error);section.append(row);
+      }
+      center.appendChild(section);
+    }
 
     if (callbacks.renderOverview) {
       const content = node('div', 'workspace-pending-content');
@@ -1612,7 +1876,11 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       add.dataset.profileId = profile.id;
       add.disabled = !callbacks.addProfileToCombat;
       if (!callbacks.addProfileToCombat) add.title = 'Action indisponible';
-      item.append(text, add);
+      const addActive=button('+ Actif', 'workspace-secondary', { 'aria-label': `Ajouter ${profile.name} actif au combat` });
+      addActive.dataset.workspaceAction='add-profile-active-to-combat';addActive.dataset.profileId=profile.id;
+      addActive.disabled=!callbacks.addProfileToActiveCombat;
+      if(!callbacks.addProfileToActiveCombat)addActive.title='Action indisponible';
+      item.append(text, add, addActive);
       list.appendChild(item);
     });
   }
@@ -1757,6 +2025,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
   }
 
   function selectActor(id) {
+    if(state.resolution.actorId!==id)clearFortuneAdvantageDraft(state.resolution);
     state.actorChoice = { id, turn: turnKey(readCombat(Store)) };
     render();
   }
@@ -1849,6 +2118,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         break;
       }
       case 'edit-fortune': callbacks.editFortune?.(participantId); break;
+      case 'edit-fate': callbacks.editFate?.(participantId); break;
       case 'toggle-momentum': if (participant) Promise.resolve(callbacks.setMomentum?.(participantId, !hasMomentum(participant))).catch(error => { state.resolution.error = { field: 'general', message: userMessage(error, 'Élan non enregistré : réessayez.') }; render(); }); break;
       case 'adjust-hp': {
         const delta = Number(target.dataset.hpDelta);
@@ -1859,6 +2129,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       }
       case 'enter-participant': callbacks.enterParticipant?.(participantId); break;
       case 'add-profile-to-combat': callbacks.addProfileToCombat?.(target.dataset.profileId); break;
+      case 'add-profile-active-to-combat': callbacks.addProfileToActiveCombat?.(target.dataset.profileId); break;
       case 'open-state-form':
         state.stateForm = state.stateForm?.participantId === participantId
           ? null

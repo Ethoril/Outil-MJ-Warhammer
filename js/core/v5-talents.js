@@ -7,6 +7,14 @@ const registry = {contracts:[...baseRegistry.contracts,...testRegistry.contracts
   sourceDescriptions:{...baseRegistry.sourceDescriptions,...testRegistry.sourceDescriptions,...qualityRegistry.sourceDescriptions,...additionalRegistry.sourceDescriptions}};
 export const V5_TALENT_CONTRACTS = Object.freeze(registry.contracts);
 export const V5_TALENT_APPROVED_OVERRIDES = Object.freeze({...qualityRegistry.approvedOverrides,...additionalRegistry.approvedOverrides});
+const quotaClock = clock => {
+  const filtered = {};
+  if (clock && typeof clock === 'object' && !Array.isArray(clock)) {
+    for (const key of ['encounterId', 'round', 'turnId', 'sessionId'])
+      if (Object.hasOwn(clock, key)) filtered[key] = clock[key];
+  }
+  return filtered;
+};
 import { getReferenceCatalogue } from './reference-catalog.js';
 import { evaluateTalentContractsV2, reduceV5ConditionProposals } from './talent-contract-v2.js';
 
@@ -33,15 +41,18 @@ export function currentV5TalentHashes(catalogue = getReferenceCatalogue()) {
       ? contract.source.effectHash : 'source-text-changed']] : []));
 }
 export function evaluateV5Talents(participant, { event, role, context, choices = {}, state, clock = {}, actionId, includeTalents, excludeTalents = [] } = {}) {
+  // The combat clock also carries UI/lifecycle fields (for example turnIndex).
+  // Talent action-cost contracts consume only the canonical quota clock.
+  const actionClock = quotaClock(clock);
   return evaluateTalentContractsV2({ contracts: registry.contracts, acquisitions: acquiredV5Talents(participant).filter(row => (!includeTalents || includeTalents.includes(row.talentId)) && !excludeTalents.includes(row.talentId)),
-    sourceHashes: currentV5TalentHashes(), event, role, context, choices, state, clock, actionId, actorId: participant?.id });
+    sourceHashes: currentV5TalentHashes(), event, role, context, choices, state, clock: actionClock, actionId, actorId: participant?.id });
 }
 /** One shared reduction for attack, defense and direct acquisition Store commands. */
 export function previewV5TalentConditions(participant, states, { state, clock = {}, actionId } = {}) {
   const keys=[...new Set(states.map(row=>row.key))];
   const plans=keys.map(key=>evaluateV5Talents(participant,{event:'condition.beforeAcquire',role:'defender',context:{condition:{id:key,instances:states.filter(row=>row.key===key).reduce((sum,row)=>sum+row.level,0)}},state,clock,actionId:actionId+':'+key}));
   const plan={ready:plans.every(row=>row.ready),proposals:plans.flatMap(row=>row.proposals),unresolved:plans.flatMap(row=>row.unresolved),trace:plans.flatMap(row=>row.trace),quotas:plans.flatMap(row=>row.quotas),costs:plans.flatMap(row=>row.costs),exemptions:plans.flatMap(row=>row.exemptions)};
-  return {plan,states:reduceV5ConditionProposals(states,plan.proposals.filter(row=>row.op==='reduceConditionAcquisition')),usageRequests:plan.quotas.length||plan.costs.length?[{actorId:participant.id,actionId,clock,costs:plan.costs,quotas:plan.quotas,exemptions:plan.exemptions}]:[]};
+  return {plan,states:reduceV5ConditionProposals(states,plan.proposals.filter(row=>row.op==='reduceConditionAcquisition')),usageRequests:plan.quotas.length||plan.costs.length?[{actorId:participant.id,actionId,clock:quotaClock(clock),costs:plan.costs,quotas:plan.quotas,exemptions:plan.exemptions}]:[]};
 }
 export function activeV5TalentEffects(participant) {
   return (participant?.states || []).filter(row => row.kind === 'talent-active'

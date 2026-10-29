@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "ruleVersion": "catalogue-utile-v5-2026-10-10.1",
-  "sourceCatalogueVersion": "references:93602871a0d1833b0c69e74f62e5318ce809b08ecea55623df5e48229cdfbb79",
+  "sourceCatalogueVersion": "references:2a2a785c6940f1ce17b014e6c2ef8baf63de67cddc34da470c2f214b940e3499",
   "policy": "Traitement explicite par clause. Les rappels ne sont pas des automatismes et les contrats actifs sont vérifiés séparément.",
   "items": [
     {
@@ -364,8 +364,8 @@
         },
         {
           "id": "magic:1",
-          "mode": "deferred",
-          "text": "Les Bénédictions et Miracles requièrent le cadrage divin séparé.",
+          "mode": "reminder",
+          "text": "Le moteur divin contrôle l’accès aux Bénédictions du culte, les suspensions, le lancement et les effets ; les faits nécessaires restent saisis par le MJ.",
           "magicRegistry": true
         }
       ]
@@ -1439,7 +1439,7 @@
         {
           "id": "tri:0",
           "mode": "owned",
-          "text": "Ajoutez une fois supplémentaire votre Bonus d’Endurance au calcul de votre maximum de Points de Blessure.",
+          "text": "À la synchronisation, +BE par rang pour les espèces reconnues ; pour un Ogre, la somme est ensuite doublée. Les transformations recalculent également Dur à cuire.",
           "scope": "sheet"
         }
       ]
@@ -2105,7 +2105,7 @@
         {
           "id": "tri:5",
           "mode": "owned",
-          "text": "Taille et maximum de Blessures importés, sans recalcul.",
+          "text": "La synchronisation double les Blessures de l’Ogre, Dur à cuire compris ; les transformations recalculent selon leur taille. La taille elle-même reste importée.",
           "scope": "sheet"
         }
       ]
@@ -2266,8 +2266,8 @@
       "clauses": [
         {
           "id": "magic:0",
-          "mode": "deferred",
-          "text": "Bonus aux Blessures des Miracles : hors de la finalisation des sorts.",
+          "mode": "automatic",
+          "text": "Les Miracles infligeant des Blessures bénéficient automatiquement de +2 Blessures.",
           "magicRegistry": true
         }
       ]
@@ -2656,8 +2656,8 @@
         },
         {
           "id": "magic:1",
-          "mode": "deferred",
-          "text": "Lancement et effets des Miracles à cadrer séparément.",
+          "mode": "reminder",
+          "text": "Le moteur divin contrôle l’accès aux Miracles connus du culte, les suspensions, le lancement et les effets ; les faits nécessaires restent saisis par le MJ.",
           "magicRegistry": true
         }
       ]
@@ -3088,7 +3088,7 @@
       "clauses": [
         {
           "id": "tri:0",
-          "mode": "reminder",
+          "mode": "assisted",
           "text": "+1 DR par rang aux Tests de Commandement à bord (leadershipRallySlModifiers) ; le fait « à bord » est confirmé par le MJ.",
           "scope": "engine"
         }
@@ -4037,7 +4037,7 @@
         {
           "id": "tri:1",
           "mode": "owned",
-          "text": "Taille et maximum de Blessures importés, sans recalcul.",
+          "text": "La synchronisation calcule 2×BE + BFM pour Gnome et Skink, avec Dur à cuire ; les transformations utilisent leur propre formule de taille. Le reste de Petit reste le homebrew local.",
           "scope": "sheet"
         },
         {
@@ -4733,7 +4733,7 @@
         {
           "id": "tri:0",
           "mode": "reminder",
-          "text": "Vous pouvez percevoir les Vents de Magie selon les règles de perception magique, p. 236.",
+          "text": "Perception magique en rappel ; la perte temporaire par incident est suivie et certains sorts accordent ou modifient Seconde vue.",
           "scope": "narrative"
         }
       ]
@@ -5591,7 +5591,7 @@
         {
           "id": "tri:0",
           "mode": "reminder",
-          "text": "Avec au moins une faible source de lumière naturelle ou équivalente, vous voyez clairement jusqu’à 20 yards ; augmentez aussi de 20 yards la portée effective d’éclairage de toute source lumineuse.",
+          "text": "Vision nocturne ajoutée aux portées sensorielles à 20 yards ; conditions de lumière à apprécier par le MJ.",
           "scope": "narrative"
         }
       ]
@@ -5677,6 +5677,114 @@
           "mode": "owned",
           "text": "Vous pouvez toujours augmenter le Savoir (Région) correspondant à la région où vous séjournez, même hors de votre carrière actuelle.",
           "scope": "sheet"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-controlled-corruption",
+      "name": "Corruption Contrôlée",
+      "family": "supplement_v4_non_verifie",
+      "description": "Les tests de Résistance contre une mutation deviennent Difficiles (−1 DR) ; à chaque mutation, tirez deux résultats et choisissez. Réservé aux adeptes de Slaanesh.",
+      "source": {
+        "effectHash": "sha256:bb7846e9be529c603e29a3fcfdf22b1e6e46fe84dd5120a950410fb051e61fba",
+        "reference": "Power Behind the Throne Companion (V4), p. 34"
+      },
+      "clauses": [
+        {
+          "id": "tri:0",
+          "mode": "pending",
+          "text": "Source de Companion V4 présente dans la feuille ; adaptation V5 et clauses de l’ouvrage non vérifiées. Aucun effet n’est raccordé ni présumé narratif.",
+          "scope": "source"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-wilful-corruption",
+      "name": "Corruption Volontaire",
+      "family": "supplement_v4_non_verifie",
+      "description": "Quand une mutation est obtenue, tirez deux fois les dés et choisissez le résultat.",
+      "source": {
+        "effectHash": "sha256:cbf782290305f580639e94118eb52b39725555d9463bf9f857603154f3090387",
+        "reference": "Death on the Reik Companion (V4), p. 100"
+      },
+      "clauses": [
+        {
+          "id": "tri:0",
+          "mode": "pending",
+          "text": "Source de Companion V4 présente dans la feuille ; adaptation V5 et clauses de l’ouvrage non vérifiées. Aucun effet n’est raccordé ni présumé narratif.",
+          "scope": "source"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-disciple-of-change",
+      "name": "Disciple du Changement",
+      "family": "supplement_v4_non_verifie",
+      "description": "Lorsqu’une mutation est obtenue, tirez deux résultats et choisissez. Talent normalement réservé aux fidèles de Tzeentch.",
+      "source": {
+        "effectHash": "sha256:349bdd2788d7b0ab9c0ee3a0d4b27797bfb4f1dfdfe05b43a620c3930c03d74d",
+        "reference": "Enemy in Shadows Companion (V4), p. 75"
+      },
+      "clauses": [
+        {
+          "id": "tri:0",
+          "mode": "pending",
+          "text": "Source de Companion V4 présente dans la feuille ; adaptation V5 et clauses de l’ouvrage non vérifiées. Aucun effet n’est raccordé ni présumé narratif.",
+          "scope": "source"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-double-life",
+      "name": "Double Vie",
+      "family": "supplement_v4_non_verifie",
+      "description": "Autorise une seconde carrière en parallèle de la carrière du Chaos ; progression et changements de carrière restent soumis à l’accord du MJ.",
+      "source": {
+        "effectHash": "sha256:a136fa3aa3ffd5bff88c5fc5aedf1ba1d12507ab47a4814061332f859ba73254",
+        "reference": "Enemy in Shadows Companion (V4), p. 75"
+      },
+      "clauses": [
+        {
+          "id": "tri:0",
+          "mode": "pending",
+          "text": "Source de Companion V4 présente dans la feuille ; adaptation V5 et clauses de l’ouvrage non vérifiées. Aucun effet n’est raccordé ni présumé narratif.",
+          "scope": "source"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-suffused-with-magic",
+      "name": "Imprégné de Magie",
+      "family": "supplement_v4_non_verifie",
+      "description": "Les sorts lancés dans un rayon égal au bonus de Force Mentale gagnent +1 DR ; plusieurs porteurs ne cumulent pas ce bonus.",
+      "source": {
+        "effectHash": "sha256:cbf1243886c2ac542076ea5b449500e7fbf84ac436ec48422595c94fc4996dd9",
+        "reference": "Enemy in Shadows Companion (V4), p. 79"
+      },
+      "clauses": [
+        {
+          "id": "tri:0",
+          "mode": "pending",
+          "text": "Source de Companion V4 présente dans la feuille ; adaptation V5 et clauses de l’ouvrage non vérifiées. Aucun effet n’est raccordé ni présumé narratif.",
+          "scope": "source"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-extra-spell",
+      "name": "Sort Supplémentaire",
+      "family": "supplement_v4_non_verifie",
+      "description": "Chaque acquisition donne un sort du Domaine de Slaanesh hors de la liste habituelle ; nécessite ce domaine et nomme le sort choisi. Réservé aux fidèles de Slaanesh.",
+      "source": {
+        "effectHash": "sha256:e1241541da71109eb8219009b6635f623f41323b2d605480806338029c882cb9",
+        "reference": "Power Behind the Throne Companion (V4), p. 34"
+      },
+      "clauses": [
+        {
+          "id": "tri:0",
+          "mode": "pending",
+          "text": "Source de Companion V4 présente dans la feuille ; adaptation V5 et clauses de l’ouvrage non vérifiées. Aucun effet n’est raccordé ni présumé narratif.",
+          "scope": "source"
         }
       ]
     }

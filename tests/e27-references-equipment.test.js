@@ -22,11 +22,11 @@ test('Références — CSV accents, virgules, guillemets et cellules sur plusieu
 });
 test('Références — identifiant explicite et paramètres conservent colonnes nommées',async()=>{
  const csv=await fetchFixture('https://example.org/?sheet=Mots%20Cl%C3%A9s%20Armes%20et%20Armures').then(r=>r.text());const words=parseKeywordCSV(csv);
- assert.equal(words.length,55);assert.equal(words.find(w=>w.id==='protectrice').edition,'V4');assert.ok(words.find(w=>w.id==='protectrice').parameter);
+ assert.equal(words.length,57);assert.equal(words.find(w=>w.id==='protectrice').edition,'V4');assert.ok(words.find(w=>w.id==='protectrice').parameter);
  assert.throws(()=>parseKeywordCSV('Nom,Effet\nTest,test'),/Colonnes/);
 });
 test('Références — instantané commun source, compétences principales et talents traduits',()=>{
- const pack=getReferenceCatalogue();assert.equal(pack.items.length,213);assert.equal(pack.talents.length,207);
+ const pack=getReferenceCatalogue();assert.equal(pack.items.length,211);assert.equal(pack.talents.length,213);
  assert.equal(pack.magic.spells.length,277);assert.equal(resolveSkill('Corps à corps (Base)').entry.carac,'cc');
  assert.equal(resolveTalent('Hardy').entry.id,resolveTalent('Dur à cuire').entry.id);
  assert.equal(resolveTalent('Magie des Arcanes (Fire)').specialization,'Aqshy');
@@ -58,6 +58,14 @@ test('Équipement — protections héritées symétriques sans objets fictifs',(
  const target={armor:{arms:2},armorLocations:{leftArm:5,rightArm:1}};
  assert.equal(locationProtection(target,{location:{key:'ARM',side:'left'}}).ap,5);
  assert.equal(locationProtection(target,{location:{key:'ARM',side:'right'}}).ap,1);
+});
+test('Équipement V5 — un bouclier conservé dans les défenses fournit ses PA V5 sur la localisation',()=>{
+ const shield={...item('v5-shield',2,['head','body','rightArm','leftArm','rightLeg','leftLeg'],'none',[{id:'bouclier',parameter:''}]),kind:'shield',category:'Bouclier'};
+ const target={equipment:[shield],armor:{head:0,body:0,arms:0,legs:0}};
+ const defense=locationProtection(target,{location:'body',shieldId:shield.id,shieldAvailable:true,opposedWithShield:true,defenseProvided:true,ranged:false});
+ assert.equal(defense.ap,2);assert.equal(defense.shieldAp,2);assert.equal(defense.manual.length,0);
+ const ranged=locationProtection(target,{location:'body',shieldId:shield.id,shieldAvailable:true,opposedWithShield:true,defenseProvided:true,ranged:true,lineOfSight:false});
+ assert.equal(ranged.ap,2,'un bouclier V5 de 2 PA s’oppose aux tirs à distance sans ligne de vue');assert.deepEqual(ranged.manual,[]);
 });
 test('Équipement — formule sûre en parité, BF39/40 et expression spéciale intacte',()=>{
  for(const formula of ['BF+4','+ BF +4','BF × 2','1d10 spécial','4'])for(const f of [39,40]){const data={carac:{f:{base:f,adv:0}}};assert.deepEqual(equipmentFormula(formula,data),sourceFormula(formula,data));}
@@ -117,7 +125,7 @@ test('Références — contenu fonctionnel stable si dates changent',async()=>{
 });
 test('Références — refresh atomique réussit avec source publique et version identique',async()=>{
  const before=getReferenceSnapshot().contentVersion;const result=await refreshReferences({fetchImpl:fetchFixture,storage:null});assert.equal(result.ok,true,result.status.error);assert.equal(getReferenceSnapshot().contentVersion,before);
- assert.equal(getReferenceStatus().error,null);assert.equal(getReferenceCatalogue().items.length,213);
+ assert.equal(getReferenceStatus().error,null);assert.equal(getReferenceCatalogue().items.length,211);
 });
 test('Références — un échec HTTP ou source incomplète conserve le dernier ensemble et date succès',async()=>{
  const before=getReferenceSnapshot(),status=getReferenceStatus();let failure=await refreshReferences({storage:null,fetchImpl:async url=>new URL(url).searchParams.get('sheet')==='Armures'?{ok:false,status:503}:fetchFixture(url)});assert.equal(failure.ok,false);assert.strictEqual(getReferenceSnapshot(),before);assert.equal(getReferenceStatus().updatedAt,status.updatedAt);assert.match(getReferenceStatus().error,/503/);

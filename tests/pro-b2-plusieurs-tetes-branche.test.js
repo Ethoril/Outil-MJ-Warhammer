@@ -23,7 +23,7 @@ async function table() {
   return store;
 }
 const bite = store => store.getCombat().participants.get('beast').actions.find(action => action.name === 'Bite');
-const input = (action, n) => ({ resolutionId: `b2-${n}`, actorId: 'beast', targetId: 'hero', roll: 5, action: clone(action), defense: { base: 10, roll: 99, v5: { kind: 'melee' } }, v5: { kind: 'melee' } });
+const input = (action, n) => ({ resolutionId: `b2-${n}`, actorId: 'beast', targetId: 'hero', roll: 5, action: clone(action), defense: { base: 10, roll: 99, v5: { kind: 'melee', context: { defenderFumbleRoll: 1 } } }, v5: { kind: 'melee' } });
 async function bitesUntilRefused(store) {
   let done = 0;
   for (let n = 0; n < 9; n += 1) {

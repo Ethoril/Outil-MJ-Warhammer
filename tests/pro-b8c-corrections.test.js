@@ -121,7 +121,7 @@ test('B8c : une tête désignée inconnue retombe sur la première tête valide'
 test('B8c : le Sonné d’un second critique hors tête reste sur l’Hydre', async () => {
   const beast = hydra();
   const store = await table([{ ...beast, hp: 100, maxHp: 100 }, human('h')], ['h', 'beast']);
-  const preview = store.previewResolution({ resolutionId: 'b8c-crit', actorId: 'h', targetId: 'beast', roll: 11, action: { type: 'attack', base: 70, attr: 'CC', damage: 5 }, defense: { base: 10, roll: 99, v5: { kind: 'melee' } }, v5: { kind: 'melee' }, criticalRolls: { location: 5, effect: 20 } });
+  const preview = store.previewResolution({ resolutionId: 'b8c-crit', actorId: 'h', targetId: 'beast', roll: 11, action: { type: 'attack', base: 70, attr: 'CC', damage: 5 }, defense: { base: 10, roll: 99, v5: { kind: 'melee', context: { defenderFumbleRoll: 1 } } }, v5: { kind: 'melee' }, criticalRolls: { location: 5, effect: 20 } });
   assert.equal(preview.critical?.details?.location?.key, 'HEAD');
   preview.targetConditionApplication.push({ key: 'sonne', name: 'Sonné', level: 1, source: { kind: 'critical' } });
   const result = await store.applyResolution(preview);

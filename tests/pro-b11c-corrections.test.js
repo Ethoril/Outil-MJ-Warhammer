@@ -100,7 +100,7 @@ test('B11c 3 : Venin et États de critique ne touchent un homoncule que d’une 
   assert.equal((await store.applyCreatureVenom('magic-swarm', 'imp')).ok, true);
   assert.ok(get(store, 'imp').states.some(state => state.key === 'empoisonne'));
   // États issus d'un critique (Coupure mineure : Hémorragique) : écartés d'un attaquant non magique, posés par un attaquant magique.
-  const strike = attackerId => ({ resolutionId: `b11c-crit-${attackerId}`, actorId: attackerId, targetId: 'imp', roll: 11, action: { type: 'attack', base: 70, attr: 'CC', damage: 5 }, defense: { base: 10, roll: 99, v5: { kind: 'melee' } }, v5: { kind: 'melee' }, criticalRolls: { location: 5, effect: 17 } });
+  const strike = attackerId => ({ resolutionId: `b11c-crit-${attackerId}`, actorId: attackerId, targetId: 'imp', roll: 11, action: { type: 'attack', base: 70, attr: 'CC', damage: 5 }, defense: { base: 10, roll: 99, v5: { kind: 'melee', context: { defenderFumbleRoll: 1 } } }, v5: { kind: 'melee' }, criticalRolls: { location: 5, effect: 17 } });
   const plainStore = await table([person('hero', { camp: 'pj', kind: 'PJ', extensions: { v5: { fate: 3 } } }), person('imp', { camp: 'neutre' }), person('foe'), person('demon', { traits: [{ name: 'Daemonic' }] })]);
   await plainStore.createFamiliar('hero', 'imp', homunculus);
   const bleedingOf = s => get(s, 'imp').states.filter(state => state.key === 'hemorragique').length;
@@ -135,7 +135,7 @@ test('B11c 3 : Venin et États de critique ne touchent un homoncule que d’une 
 
 test('B11c 3 : un Hémorragique sur un participant ordinaire n’est jamais refusé', async () => {
   const store = await table([person('hero', { camp: 'pj' }), person('foe')]);
-  const preview = store.previewResolution({ resolutionId: 'b11c-plain', actorId: 'hero', targetId: 'foe', roll: 11, action: { type: 'attack', base: 70, attr: 'CC', damage: 5 }, defense: { base: 10, roll: 99, v5: { kind: 'melee' } }, v5: { kind: 'melee' }, criticalRolls: { location: 5, effect: 17 } });
+  const preview = store.previewResolution({ resolutionId: 'b11c-plain', actorId: 'hero', targetId: 'foe', roll: 11, action: { type: 'attack', base: 70, attr: 'CC', damage: 5 }, defense: { base: 10, roll: 99, v5: { kind: 'melee', context: { defenderFumbleRoll: 1 } } }, v5: { kind: 'melee' }, criticalRolls: { location: 5, effect: 17 } });
   assert.ok(preview.targetConditionApplication.some(state => state.key === 'hemorragique'));
   assert.equal(preview.familiarConditionRefusals.length, 0);
 });
@@ -250,7 +250,7 @@ test('B11c 3 ter : qualité Magique d’un attaquant ordinaire (l’État passe)
     await store.createFamiliar('hero', 'imp', homunculus);
     return store;
   };
-  const strike = (extra = {}) => ({ resolutionId: 'b11c-quality', actorId: 'foe', targetId: 'imp', roll: 11, action: { type: 'attack', base: 70, attr: 'CC', damage: 5, ...extra }, defense: { base: 10, roll: 99, v5: { kind: 'melee' } }, v5: { kind: 'melee' }, criticalRolls: { location: 5, effect: 17 } });
+  const strike = (extra = {}) => ({ resolutionId: 'b11c-quality', actorId: 'foe', targetId: 'imp', roll: 11, action: { type: 'attack', base: 70, attr: 'CC', damage: 5, ...extra }, defense: { base: 10, roll: 99, v5: { kind: 'melee', context: { defenderFumbleRoll: 1 } } }, v5: { kind: 'melee' }, criticalRolls: { location: 5, effect: 17 } });
   const plain = (await build()).previewResolution(strike());
   assert.equal(plain.familiarConditionRefusals.length, 1);
   const magical = (await build()).previewResolution(strike({ qualities: [{ id: 'magique' }] }));

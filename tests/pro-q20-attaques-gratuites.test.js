@@ -23,7 +23,7 @@ async function fixture(beast) {
   await store.loadFromJSON(snapshot);
   return store;
 }
-const input = (action, n, extra = {}) => ({ resolutionId: `q20-${action.name}-${n}`, actorId: 'beast', targetId: 'hero', roll: 5, action: clone(action), defense: { base: 10, roll: 99, v5: { kind: 'melee' } }, v5: { kind: 'melee', ...extra } });
+const input = (action, n, extra = {}) => ({ resolutionId: `q20-${action.name}-${n}`, actorId: 'beast', targetId: 'hero', roll: 5, action: clone(action), defense: { base: 10, roll: 99, v5: { kind: 'melee', context: { defenderFumbleRoll: 1 } } }, v5: { kind: 'melee', ...extra } });
 async function attacksUntilRefused(store, actions) {
   let done = 0;
   for (const [n, action] of actions.entries()) {

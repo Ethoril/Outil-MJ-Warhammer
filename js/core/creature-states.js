@@ -22,7 +22,7 @@ const BY_NAME = new Map(Object.entries(RULES).flatMap(([key, rule]) => rule.name
 
 // Capacités propres de profil (références d'inventaire) qui se déclenchent à la mort ou à la destruction.
 const DEATH_ABILITIES = {
-  'E0-T-253': { label: 'Fin ignoble (Messy Demise)', area: 'tout engagé à trois yards', test: 'Esquive (Intermédiaire, +0 DR)', onFail: { damage: '2d10', reducedBy: ['Endurance', 'armure'], minimum: 1 }, note: 'À la mort du Squig colossal : Esquive de tout engagé à trois yards, sinon 2d10 Blessures réduites par Endurance et armure, minimum une.' },
+  'E0-T-253': { label: 'Fin ignoble (Messy Demise)', area: 'tout engagé à trois mètres', test: 'Esquive (Intermédiaire, +0 DR)', onFail: { damage: '2d10', reducedBy: ['Endurance', 'armure'], minimum: 1 }, note: 'À la mort du Squig colossal : Esquive de tout engagé à trois mètres, sinon 2d10 Blessures réduites par Endurance et armure, minimum une.' },
   'E0-T-256': { label: 'Jardin de cadavres (Garden of Corpses)', spawn: { profile: 'Zombie', count: '3d10', hostileTo: 'tout être vivant proche' }, note: 'Le colosse vaincu libère 3d10 zombies qui attaquent tout être vivant proche.' },
   'E0-T-259': { label: 'Gardien éternel (Eternal Guardian)', reform: { delay: 'd10 jours' }, note: 'L\'Élémentaire gardien tué se reconstitue en d10 jours, sauf précautions adaptées (dressage, drainage magique, corruption de la source).' },
   'E0-T-286': { label: 'Reformation instable (Unstable Reformation)', reform: { delay: '8 heures', fullWounds: true, onlyIf: 'mort causée par Instable' }, note: 'Si Inta-Dapesht « meurt » à cause d\'Instable, il se reforme après 8 heures avec toutes ses Blessures.' }

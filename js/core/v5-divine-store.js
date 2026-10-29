@@ -1320,13 +1320,13 @@ const groundsOf=state=>Array.isArray(state.extensions?.v5?.sanctifiedGrounds)?st
 export function setStoreSanctifiedGround(state,input={}){
  if(input.baseRevision!==undefined&&input.baseRevision!==state.localRevision)throw ruleError('La partie a changé : relisez les terres sanctifiées.');
  if(!text(input.label)||input.label.trim().length>120)throw ruleError('Nom du lieu requis (120 caractères au plus).');
- if(!Number.isSafeInteger(input.radiusYards)||input.radiusYards<1||input.radiusYards>30)throw ruleError('Rayon entier de 1 à 30 yards (L22 p.71).');
+ if(!Number.isSafeInteger(input.radiusYards)||input.radiusYards<1||input.radiusYards>30)throw ruleError('Rayon entier de 1 à 30 m (L22 p.71).');
  if(!Number.isSafeInteger(input.sinThreshold)||input.sinThreshold<1)throw ruleError('Seuil de Péchés fourni par le MJ : entier de 1 ou plus (la source ne le chiffre pas).');
  if(!['ablaze','barred'].includes(input.effect))throw ruleError('Effet : Enflammé tant que présent, ou franchissement impossible.');
  if(!text(input.reason))throw ruleError('Motif MJ requis.');
  const record={id:'sanctified:'+uid(),label:input.label.trim(),radiusYards:input.radiusYards,sinThreshold:input.sinThreshold,effect:input.effect,reason:input.reason.trim(),source:SRC('L22',71,'Ermites'),decidedBy:'MJ'};
  const next=clone(state);next.extensions??={};next.extensions.v5??={};next.extensions.v5.sanctifiedGrounds=[...groundsOf(next),record];
- next.log=[{id:record.id+':set',kind:'management',text:'Terre sanctifiée : '+record.label+' · '+record.radiusYards+' yards · seuil '+record.sinThreshold+' Péché(s)',detail:clone(record)},...(next.log||[])].slice(0,300);
+ next.log=[{id:record.id+':set',kind:'management',text:'Terre sanctifiée : '+record.label+' · '+record.radiusYards+' mètres · seuil '+record.sinThreshold+' Péché(s)',detail:clone(record)},...(next.log||[])].slice(0,300);
  return {ok:true,record,state:next};
 }
 export function removeStoreSanctifiedGround(state,id,input={}){

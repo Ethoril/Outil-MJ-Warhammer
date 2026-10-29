@@ -20,7 +20,7 @@ async function freshStore() {
   await store.loadFromJSON({ schemaVersion: 3, reserve: [], combat: { round: 0, order: ['beast', 'hero'], participants: [actor, hero] }, log: [], diceLines: [], extensions: { v5: {} } });
   return { store, tentacles: actor.actions.filter(action => /^Tentacles/.test(action.name)) };
 }
-const input = (action, n) => ({ resolutionId: `q38-${n}`, actorId: 'beast', targetId: 'hero', roll: 5, action: clone(action), defense: { base: 10, roll: 99, v5: { kind: 'melee' } }, v5: { kind: 'melee' } });
+const input = (action, n) => ({ resolutionId: `q38-${n}`, actorId: 'beast', targetId: 'hero', roll: 5, action: clone(action), defense: { base: 10, roll: 99, v5: { kind: 'melee', context: { defenderFumbleRoll: 1 } } }, v5: { kind: 'melee' } });
 
 test('Q38 store neuf sans rencontre : l’attaque gratuite de tentacule au Round 0 est acceptée et le quota rappelé', async () => {
   const { store, tentacles } = await freshStore();

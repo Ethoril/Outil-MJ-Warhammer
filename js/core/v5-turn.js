@@ -9,13 +9,14 @@ import { processCombatTurnSpells, shieldAtTurnStart, recurringSpellHits, roundSp
 import { advanceGameClock, createGameClock, deriveTurnPhasePlan, readCombatPosition } from './v5-game-time.js';
 import { expireDivineAtClock } from './v5-divine-store.js';
 import { resolveV5ConditionTestContext } from './v5-test-context.js';
+import { v5CombatActionClock } from './v5-resources.js';
 
 const kinds = { fireRoll: 'd10', bleedingDeathRoll: 'd10', fireCriticalRoll: 'd100', bleedingEnduranceTest: 'test', poisonEnduranceTest: 'test', recoveryTest: 'test', currentWounds: 'manual' };
 function brokenEscapeTurnGate(state){
  const actor=state.combat?.participants?.find(row=>row.id===state.combat?.currentActorId);
  const context=actor&&resolveV5ConditionTestContext(actor,{characteristic:'Ag',isAction:true,involvesMovement:true,runningOrHiding:true,requiresSight:false,reliesOnSight:false});
  if(!(context?.levels?.brise>0))return null;
- const scene=state.activeScene,encounterId=scene?.encounterId||scene?.id||state.extensions?.v5?.combatId,serial=scene?.extensions?.v5?.turnIndex??state.extensions?.v5?.turnIndex,turnId=encounterId&&actor?.id&&Number.isSafeInteger(serial)?`${scene?.id||encounterId}:${serial}:${actor.id}`:null;
+ const {encounterId,turnId}=v5CombatActionClock(state);
  if(!turnId)return {status:'requires-input',code:'BROKEN_ESCAPE_CLOCK',error:'Horloge canonique du Tour requise pour vérifier la fuite de Brisé.',needsInput:[{field:'clock.turnId',label:'Établir l’horloge canonique du Tour.'}]};
  const sequence=state.extensions?.v5?.brokenEscape?.byActorId?.[actor.id];
  if(sequence?.turnId===turnId&&sequence.factsCommitted===true&&sequence.visibleToAnyEnemy===false)return null;
@@ -32,7 +33,7 @@ export function previewV5Turn(state, { inputs = {} } = {}) {
   const prayerGate=wrathForcedPrayerGate(before,combat.currentActorId,{endingTurn:true});if(prayerGate)return {...prayerGate,baseRevision:before.localRevision||0,requests:[]};
   const brokenGate=brokenEscapeTurnGate(before);if(brokenGate)return {...brokenGate,ready:false,baseRevision:before.localRevision||0,requests:[]};
   // Le froid prend effet sur l'ordre automatique au prochain Round, jamais sur les Tours en cours.
-  const order = before.extensions?.v5?.orderRound===combat.round?effectiveOrder(combat.participants || [],{mode:'manual',order:combat.order}):effectiveOrder(combat.participants || [], { mode: combat.orderMode, order: combat.order,round:combat.round });
+  const order = before.extensions?.v5?.orderRound===combat.round?effectiveOrder(combat.participants || [],{mode:'manual',order:combat.order}):effectiveOrder(combat.participants || [], { mode: combat.orderMode, order: combat.order,autoOrder:before.extensions?.v5?.combatInitiativeResolution?.order,round:combat.round });
   const transition = nextTurn({ participants: combat.participants, order, currentActorId: combat.currentActorId, round: combat.round });
   if (!transition.currentActorId) return { status: 'idle', ready: false, baseRevision: state.localRevision || 0, requests: [] };
   const fromPosition = readCombatPosition(before);
@@ -110,7 +111,7 @@ export function previewV5Turn(state, { inputs = {} } = {}) {
       const spells=roundSpellEffects(participants,row.phase,row.round,inputs,row.actorId); participants=spells.participants; requests.push(...spells.requests); effectLogs.push(...spells.logs);
     }
   }
-  if(transition.round>combat.round){transition.order=effectiveOrder(participants,{mode:combat.orderMode,order:combat.order,round:transition.round});transition.currentActorId=transition.order[0] || null;}
+  if(transition.round>combat.round){transition.order=effectiveOrder(participants,{mode:combat.orderMode,order:combat.order,autoOrder:before.extensions?.v5?.combatInitiativeResolution?.order,round:transition.round});transition.currentActorId=transition.order[0] || null;}
   toPosition = { ...fromPosition, round: transition.round, turnIndex: turn + 1, currentActorId: transition.currentActorId };
   try { phasePlan = deriveTurnPhasePlan({ from: fromPosition, to: toPosition }); }
   catch (error) { return { status: 'clock-conflict', ready: false, baseRevision: before.localRevision || 0, requests: [], error: error.message }; }
@@ -141,6 +142,11 @@ export function previewV5Turn(state, { inputs = {} } = {}) {
     combat: { ...combat, participants, ...transition },
     log: [{ id: `v5-turn:${before.localRevision || 0}:${turn}:management`,  kind: 'management', actorId: nextActor?.id, actorName: nextActor?.name,
       text: `▶ ${transition.round !== combat.round ? `Round ${transition.round} — ` : ''}Tour de ${nextActor?.name || '—'}` }, ...effectLogs, ...(before.log || [])].slice(0, 300) };
+  const combatActions=stateAfter.extensions?.v5?.combatActions;
+  if(combatActions?.byActorId?.[nextActor?.id]?.kind==='defensive'){
+    const expired={...combatActions.byActorId};delete expired[nextActor.id];
+    stateAfter={...stateAfter,extensions:{...stateAfter.extensions,v5:{...stateAfter.extensions.v5,combatActions:{...combatActions,byActorId:expired}}}};
+  }
   const divineClock=expireDivineAtClock(stateAfter,{fromClock:clock,toClock:clockResult.clock,receipt:clockResult.receipt});
   if(!divineClock.ok)return {status:'requires-input',ready:false,baseRevision:before.localRevision||0,requests:[],error:divineClock.needsInput.map(row=>row.message).join(' '),needsInput:divineClock.needsInput};
   stateAfter=divineClock.state;

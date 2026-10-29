@@ -6,29 +6,24 @@ import { v5ResourceIdentity } from './v5-resources.js';
 import { validateV5ReactionInput, registerV5ReactionOpportunities } from './v5-reactions.js';
 /** Bridge from the durable Store envelope to the pure V5 action transaction. */
 import { previewV5ActionCosts, prepareV5ActionState, commitV5ActionCosts } from './v5-action-costs.js';
-import { projectV5Resources, commitV5Resources } from './v5-resources.js';
+import { projectV5Resources, commitV5Resources, commitV5Fate, v5CombatActionClock } from './v5-resources.js';
 import { effectiveOrder } from './turn-order.js';
 import { planNaturalAttack } from './creature-combat.js';
+import { weaponHandsForParticipant } from './equipment.js';
 import { planManyHeads, headRegistryOf, hasManyHeads, headAttackKeyOf } from './creature-heads.js';
 import { defaultResolutionId, previewResolution } from './resolution.js';
 import { FREE_REROLL_SOURCE, freeRerollLayers, consumeFreeReroll, reverseDiceLayers, consumeReverseDice } from './v5-divine-effects-conditions.js';
 import { slExtremeLayers, consumeSlExtreme } from './v5-divine-effects-tests.js';
 const clone = structuredClone;
+const quotaClock = clock => {
+  const filtered = {};
+  if (clock && typeof clock === 'object' && !Array.isArray(clock))
+    for (const key of ['encounterId', 'round', 'turnId', 'sessionId']) if (Object.hasOwn(clock, key)) filtered[key] = clock[key];
+  return filtered;
+};
 // Même lecture que attackType() de resolution.js : « attack » ou « attaque » (fiches importées).
 const isAttackType = type => ['attack', 'attaque'].includes(String(type || '').trim().toLocaleLowerCase());
-export function v5StoreActionClock(envelope) {
-  const scene = envelope.activeScene;
-  const encounterId = scene?.encounterId || scene?.id || envelope.extensions?.v5?.combatId;
-  const round = envelope.combat?.round;
-  const serial = scene?.extensions?.v5?.turnIndex ?? envelope.extensions?.v5?.turnIndex;
-  const actorId = envelope.combat?.currentActorId;
-  return {
-    ...(envelope.extensions?.v5?.talentSessionId?{sessionId:envelope.extensions.v5.talentSessionId}:{}),
-    ...(encounterId ? { encounterId } : {}),
-    ...(Number.isSafeInteger(round) && round > 0 ? { round } : {}),
-    ...(encounterId && actorId && Number.isSafeInteger(serial) && serial > 0 ? { turnId: `${scene?.id || encounterId}:${serial}:${actorId}` } : {})
-  };
-}
+export const v5StoreActionClock = v5CombatActionClock;
 export function v5StoreActionState(envelope) {
   return { revision: envelope.localRevision || 0,
     ...(Number.isSafeInteger(envelope.combat?.round) && envelope.combat.round > 0 ? { round: envelope.combat.round } : {}),
@@ -46,6 +41,7 @@ function authorNextTurnEnd(envelope, actorId) {
   return { phase: 'endOfTurn', actorId, round: combat.round + Math.floor((current + distance) / order.length), turn: serial + distance, moment: 'afterEffects' };
 }
 export function buildV5StoreActionInput(envelope, raw = {}) {
+ if(raw.reactionId&&!raw.v5?.reactionId)raw={...raw,v5:{...(raw.v5||{}),reactionId:raw.reactionId}};
  const sourceActorId=raw.actorId||raw.actor?.id,sourceActor=envelope.combat?.participants?.find(row=>row.id===sourceActorId);
  const fold=value=>String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
  const skillId=raw.action?.extensions?.fiche?.skillId||raw.v5?.context?.skillId,skill=sourceActor?.skills?.find(row=>row.id===skillId);
@@ -63,8 +59,43 @@ export function buildV5StoreActionInput(envelope, raw = {}) {
   if(v5.context?.freeAttackTalent==='fast-shot')v5.extraAttack=false;
   if(v5.context?.talentAction==='stomp')v5.extraAttack=true;
   const costs = [...(v5.costs || [])];
+  const fortuneForAdvantage=Boolean(v5.context?.fortuneForAdvantage||v5.fortuneForAdvantage||supplied.fortuneForAdvantage);
+  const fortuneAdvantageDeclarationId=v5.fortuneAdvantageDeclarationId||v5.context?.fortuneAdvantageDeclarationId||supplied.fortuneAdvantageDeclarationId;
+  if(fortuneForAdvantage){
+    if(!['test','skill','defense','opposition','attack','attaque'].includes(String(supplied.action?.type||'').toLowerCase()))throw new TypeError('Chance → Avantage : un Test doit être choisi avant le jet.');
+    const declaration=(envelope.extensions?.v5?.fortuneAdvantageDeclarations||[]).find(row=>row.id===fortuneAdvantageDeclarationId);
+    const identity=sourceActor?v5ResourceIdentity(envelope,sourceActor):null;
+    if(!declaration||declaration.actorId!==actorId||declaration.characterId!==identity||declaration.revision!==envelope.localRevision)throw new TypeError('Chance → Avantage : déclaration préalable du MJ requise avant le jet.');
+    supplied.fortuneAdvantageDeclarationId=fortuneAdvantageDeclarationId;
+    if(!costs.some(cost=>cost.id==='system:fortune-for-advantage'))costs.push({id:'system:fortune-for-advantage',resource:'fortune',amount:1});
+    v5.advantageSources=[...(v5.advantageSources||[]),{id:'fortune-spent-for-advantage',label:'1 Point de Chance dépensé avant le jet'}];
+  }
+  const fateAction = v5.context?.fateAction;
+  if(['cancel-attack','survive'].includes(fateAction)&&(!isAttackType(supplied.action?.type)||!targetId))throw new TypeError(`Destin (${fateAction}) : une attaque et sa cible sont requises.`);
+  // Destin laisse le MJ choisir le résultat du dé sans lancer les dés; le moteur
+  // garantit ensuite la réussite et conserve les doubles choisis pour un critique.
+  if(fateAction==='automatic-success'){
+    const chosen=Number(v5.context.fateChosenRoll);
+    if(Number.isInteger(chosen)&&chosen>=1&&chosen<=100){supplied.roll=chosen;supplied.dieRoll=chosen;supplied.enteredRoll=chosen;}
+    else {supplied.roll=50;supplied.dieRoll=50;supplied.enteredRoll=50;}
+    v5.context={...v5.context,fateChosenRoll:Number.isInteger(chosen)&&chosen>=1&&chosen<=100?chosen:null};supplied.v5=v5;
+  }
+  if (fateAction && ['cancel-attack', 'survive', 'automatic-success'].includes(fateAction)
+      && !costs.some(cost => cost.id === 'system:fate-action'))
+    costs.push({ id: 'system:fate-action', resource: 'fate', amount: 1,
+      actorId: ['cancel-attack', 'survive'].includes(fateAction) ? targetId : actorId });
   if (v5.extraAttack === true && !costs.some(cost => cost.resource === 'momentum')) costs.push({ id: 'system:extra-attack-momentum', resource: 'momentum', amount: 1 });
   const quotas=[...(v5.quotas||[])],exemptions=[...(v5.exemptions||[])],actor=state.participants.find(p=>p.id===actorId),context=v5.context||{};
+  if(context.secondWeaponAttack===true){
+    if(!v5.extraAttack||!['melee','ranged'].includes(v5.kind))throw new TypeError('Seconde arme : attaque supplémentaire de mêlée ou de tir requise.');
+    {
+      const primary=(envelope.extensions?.v5?.standardTurnActions||[]).find(row=>row.actionId===context.primaryResolutionId&&row.actorId===actorId&&row.encounterId===clock.encounterId&&row.turnId===clock.turnId&&row.kind==='action'&&row.weaponId);
+      const weaponId=supplied.action?.extensions?.fiche?.equipmentId,weapon=actor?.equipment?.find(item=>item.id===weaponId);
+      const firstWeapon=actor?.equipment?.find(item=>item.id===primary?.weaponId);
+      if(!primary||primary.actionType!=='attack'||primary.weaponId===weaponId||weaponHandsForParticipant(weapon,actor)!==1||weaponHandsForParticipant(firstWeapon,actor)!==1)throw new TypeError('Seconde arme : attaque précédente et deux armes différentes utilisables à une main requises.');
+      if(!quotas.some(q=>q.id==='combat:base-second-weapon'))quotas.push({id:'combat:base-second-weapon',scope:'turn',maximum:1});
+    }
+  }
   // Combat naturel (T2) : l'attaque gratuite d'un Trait de créature coûte l'Élan qu'il indique ; le Trait est exigé.
   if(context.naturalAttack){
     const natural=planNaturalAttack(actor,context.naturalAttack,{used:context.naturalUsed,count:context.tentacleCount,charged:context.charged??v5.charging,actorSize:context.actorSize??v5.actorSize,targetSize:context.targetSize??v5.targetSize});
@@ -144,29 +175,33 @@ export function buildV5StoreActionInput(envelope, raw = {}) {
       reverseDiceApplied = v5.reverseDiceApplied = true;
     }
   }
-  const fortuneReroll = Boolean(context.fortuneReroll || v5.fortuneReroll || supplied.fortuneReroll);
-  const rawReroll = context.fortuneRerollRoll ?? v5.fortuneRerollRoll ?? supplied.fortuneRerollRoll;
-  const hasValidReroll = rawReroll !== null && rawReroll !== undefined && rawReroll !== '' && Number.isInteger(Number(rawReroll)) && Number(rawReroll) >= 1 && Number(rawReroll) <= 100;
+  const rerollValues=context.fortuneRerollRolls??v5.fortuneRerollRolls??supplied.fortuneRerollRolls;
+  const legacyReroll=context.fortuneRerollRoll??v5.fortuneRerollRoll??supplied.fortuneRerollRoll;
+  const invalidRerollSequence=Array.isArray(rerollValues)&&rerollValues.some(value=>value===null||value===undefined||value===''||!Number.isInteger(Number(value))||Number(value)<1||Number(value)>100);
+  const rerollRolls=Array.isArray(rerollValues)?rerollValues.map(Number).filter(value=>Number.isInteger(value)&&value>=1&&value<=100):legacyReroll!==null&&legacyReroll!==undefined&&legacyReroll!==''&&Number.isInteger(Number(legacyReroll))&&Number(legacyReroll)>=1&&Number(legacyReroll)<=100?[Number(legacyReroll)]:[];
+  const fortuneReroll = Boolean(context.fortuneReroll || v5.fortuneReroll || supplied.fortuneReroll || rerollValues?.length);
+  const hasValidReroll=rerollRolls.length>0;
   let initialRollBeforeFortune = null, freeReroll = false;
   if (fortuneReroll) {
-    if (!costs.some(c => c.id === 'system:fortune-reroll')) {
-      costs.push({ id: 'system:fortune-reroll', resource: 'fortune', amount: 1 });
+    if (!costs.some(c => c.id?.startsWith('system:fortune-reroll'))) {
+      const chargeCount=Math.max(1,rerollRolls.length);
+      for(let index=0;index<chargeCount;index++)costs.push({id:`system:fortune-reroll:${index+1}`,resource:'fortune',amount:1});
       // Bénédiction de Chance (D4) : échec propre ou opposition perdue ; le Test d'origine est évalué avant la relance.
       // Jet d'origine absent ou invalide : impossible de savoir s'il est raté, la relance reste payante (pas d'erreur levée).
       const initialRoll = Number(supplied.roll ?? supplied.dieRoll ?? supplied.enteredRoll);
       if (freeRerollLayers(actor, { round: state.round, attack: isAttackType(supplied.action?.type) }).length && Number.isInteger(initialRoll) && initialRoll >= 1 && initialRoll <= 100) {
-        const { fortuneReroll: _context, fortuneRerollRoll: _contextRoll, ...plainContext } = context;
-        const { fortuneReroll: _supplied, fortuneRerollRoll: _suppliedRoll, ...plainSupplied } = supplied;
+        const { fortuneReroll: _context, fortuneRerollRoll: _contextRoll, fortuneRerollRolls:_contextRolls, ...plainContext } = context;
+        const { fortuneReroll: _supplied, fortuneRerollRoll: _suppliedRoll, fortuneRerollRolls:_suppliedRolls, ...plainSupplied } = supplied;
         const original = previewResolution({ ...plainSupplied, resolutionId, actorId, targetId,
           actor: supplied.actor?.id === actorId ? supplied.actor : actor, target: state.participants.find(p => p.id === targetId) || supplied.target || null,
           round: state.round ?? supplied.round, baseRevision: supplied.baseRevision ?? state.revision, v5State: state, v5Clock: clock,
-          v5: { ...v5, context: plainContext, fortuneReroll: undefined, fortuneRerollRoll: undefined } });
-        if (original.success === false || original.opposition?.winner === 'defender') { freeReroll = true; exemptions.push({ costId: 'system:fortune-reroll', sourceId: FREE_REROLL_SOURCE }); }
+          v5: { ...v5, context: plainContext, fortuneReroll: undefined, fortuneRerollRoll: undefined, fortuneRerollRolls:undefined } });
+        if (original.success === false || original.opposition?.winner === 'defender') { freeReroll = true; exemptions.push({ costId: 'system:fortune-reroll:1', sourceId: FREE_REROLL_SOURCE }); }
       }
     }
     initialRollBeforeFortune = Number(supplied.roll ?? supplied.dieRoll ?? supplied.enteredRoll);
     if (hasValidReroll) {
-      const nextRoll = Number(rawReroll);
+      const nextRoll = rerollRolls.at(-1);
       supplied.roll = nextRoll;
       if (supplied.dieRoll !== undefined) supplied.dieRoll = nextRoll;
       if (supplied.enteredRoll !== undefined) supplied.enteredRoll = nextRoll;
@@ -184,14 +219,20 @@ export function buildV5StoreActionInput(envelope, raw = {}) {
     const prepared = prepareV5ActionState(actionCostPlan, state);
     if (prepared.status === 'prepared') paid = prepared.state;
   }
+  const combatTurnIndex=envelope.activeScene?.extensions?.v5?.turnIndex??envelope.extensions?.v5?.turnIndex;
   return { ...supplied, resolutionId, actorId, targetId,
     actor: paid.participants.find(item => item.id === actorId) || supplied.actor,
     target: paid.participants.find(item => item.id === targetId) || supplied.target || null,
     round: state.round ?? supplied.round, baseRevision: supplied.baseRevision ?? state.revision,
-    v5State: paid, v5Clock: quotaClock, ...(preCombatQuota ? { preCombatQuota: quotas.filter(q => q.id.startsWith('creature:')).map(q => ({ id: q.id, maximum: q.maximum })) } : {}), authorNextTurnEnd: authorNextTurnEnd(envelope, actorId), actionCostPlan, secondaryTalentRequests, reactionValidation,
-    fortuneReroll, fortuneRerollRoll: hasValidReroll ? Number(rawReroll) : null, initialRollBeforeFortune, freeReroll, reverseDiceApplied, ...(reverseDiceApplied ? { reverseDice: { used: true } } : {}) };
+    v5State: paid, v5Clock: {...quotaClock,...(Number.isSafeInteger(combatTurnIndex)?{turnIndex:combatTurnIndex}:{})}, ...(preCombatQuota ? { preCombatQuota: quotas.filter(q => q.id.startsWith('creature:')).map(q => ({ id: q.id, maximum: q.maximum })) } : {}), authorNextTurnEnd: authorNextTurnEnd(envelope, actorId), actionCostPlan, secondaryTalentRequests, reactionValidation,
+    fortuneReroll, fortuneRerollRoll: hasValidReroll ? rerollRolls.at(-1) : null, fortuneRerollRolls:rerollRolls, invalidRerollSequence, initialRollBeforeFortune, freeReroll, reverseDiceApplied, ...(reverseDiceApplied ? { reverseDice: { used: true } } : {}) };
 }
 export function annotateV5StoreActionPreview(preview, input) {
+  const fateAction = input.v5?.context?.fateAction;
+  if (fateAction) preview = { ...preview, fateAction: { action: fateAction, cost: 1, paid: input.actionCostPlan?.ready === true,
+    payerId: input.actionCostPlan?.request?.costs?.find(cost=>cost.id==='system:fate-action')?.actorId||input.actionCostPlan?.actorId,
+    ...(fateAction==='automatic-success'?{chosenRoll:input.v5?.context?.fateChosenRoll??null}:{}),
+    ...(fateAction === 'cancel-attack' ? { cancelled: true } : {}), ...(fateAction==='survive'?{removedFromEncounter:true}:{}) } };
   // Indice seulement : la faveur reste disponible jusqu'à une inversion demandée et appliquée.
   if (preview.success === false && input.v5?.reverseDice !== true && reverseDiceLayers(input.actor).length && Number.isInteger(preview.roll) && preview.roll >= 1 && preview.roll <= 100) {
     const reversed = preview.roll === 100 ? 100 : (preview.roll % 10) * 10 + Math.floor(preview.roll / 10);
@@ -201,17 +242,19 @@ export function annotateV5StoreActionPreview(preview, input) {
   if (input.preCombatQuota?.length) preview = { ...preview, reminders: [...(preview.reminders || []), `Avant le premier Round : attaques gratuites limitées à ${input.preCombatQuota.map(q => q.maximum).join(' + ')} avant le début du combat (quota du Tour 0).`] };
   if (input.reactionValidation?.ready === false) preview ={ ...preview, unresolved: [...(preview.unresolved || []), input.reactionValidation.reason] };
   if (input.fortuneReroll) {
+    if(input.invalidRerollSequence){preview={...preview,ready:false,status:'manual',unresolved:[...(preview.unresolved||[]),'Relance de Fortune : chaque résultat doit être un entier de 1 à 100.']};}
     if (input.fortuneRerollRoll === null) {
       preview = { ...preview, unresolved: [...(preview.unresolved || []), 'Relance de Fortune : saisir le nouveau jet d100 (1 à 100).'] };
     }
     preview = { ...preview, fortuneReroll: { active: true, used: Boolean(input.fortuneRerollRoll !== null), initialRoll: input.initialRollBeforeFortune, rerollRoll: input.fortuneRerollRoll,
+      rolls:input.fortuneRerollRolls||[],
       ...(input.freeReroll ? { free: true, reminder: 'Bénédiction de Chance : relance gratuite' } : {}) } };
   }
   if(input.secondaryTalentRequests?.length){
     const plans=input.secondaryTalentRequests.map(request=>previewV5ActionCosts({...request,state:input.v5State}));
     preview={...preview,talentUsageRequests:[...(preview.talentUsageRequests||[]),...input.secondaryTalentRequests],unresolved:[...(preview.unresolved||[]),...plans.flatMap(p=>p.unresolved.map(u=>'Défense : '+u.reason))]};
   }
-  const postRequests=[];for(const[subject,settings,replaced]of[[input.actor,input.v5,preview.damageReplacedByTalent],[input.target,input.defense?.v5,preview.defenderDamageReplacedByTalent]]){const c=settings?.context||{};if(!subject||!replaced)continue;const shield=c.specialAttack==='shieldsman',catching=c.specialAttack==='disarm'&&c.catchWeapon===true;if(!shield&&!catching)continue;const request={phase:'after-result',actorId:subject.id,actionId:preview.resolutionId+':post:'+subject.id,costs:[{id:shield?'talent:shieldsman:momentum':'talent:disarm:catch',resource:'momentum',amount:1}],quotas:shield?[{id:'talent:shieldsman',scope:'round',maximum:1}]:[],exemptions:[],clock:input.v5Clock};const state=clone(input.v5State);state.participants=state.participants.map(p=>p.id===subject.id?withMomentum(p,preview.momentum.find(m=>m.participantId===p.id)?.after??p.extensions?.v5?.hasMomentum===true):p);const plan=previewV5ActionCosts({...request,state});postRequests.push(request);preview={...preview,postActionCosts:[...(preview.postActionCosts||[]),plan],unresolved:[...(preview.unresolved||[]),...plan.unresolved.map(u=>u.reason)]};}
+  const postRequests=[];for(const[subject,settings,replaced]of[[input.actor,input.v5,preview.damageReplacedByTalent],[input.target,input.defense?.v5,preview.defenderDamageReplacedByTalent]]){const c=settings?.context||{};if(!subject||!replaced)continue;const shield=c.specialAttack==='shieldsman',catching=c.specialAttack==='disarm'&&c.catchWeapon===true;if(!shield&&!catching)continue;const request={phase:'after-result',actorId:subject.id,actionId:preview.resolutionId+':post:'+subject.id,costs:[{id:shield?'talent:shieldsman:momentum':'talent:disarm:catch',resource:'momentum',amount:1}],quotas:shield?[{id:'talent:shieldsman',scope:'round',maximum:1}]:[],exemptions:[],clock:quotaClock(input.v5Clock)};const state=clone(input.v5State);state.participants=state.participants.map(p=>p.id===subject.id?withMomentum(p,preview.momentum.find(m=>m.participantId===p.id)?.after??p.extensions?.v5?.hasMomentum===true):p);const plan=previewV5ActionCosts({...request,state});postRequests.push(request);preview={...preview,postActionCosts:[...(preview.postActionCosts||[]),plan],unresolved:[...(preview.unresolved||[]),...plan.unresolved.map(u=>u.reason)]};}
   if(postRequests.length)preview={...preview,talentUsageRequests:[...(preview.talentUsageRequests||[]),...postRequests]};
   if (!input.actionCostPlan) return preview;
   const decisions = clone(preview.decisions || {});
@@ -274,9 +317,9 @@ export function applyV5StoreAction(preview, envelope, resolveAction) {
   return { ...committed.result, state: committed.state, actionCostReceipt: committed.receipt };
 }
 export function v5StoreActionResult(envelope, result) {
-  const next = { ...envelope, combat: { ...envelope.combat, participants: result.state.participants },
-    appliedResolutionIds: result.state.appliedResolutionIds,
-    extensions: { ...(envelope.extensions || {}), v5: { ...(envelope.extensions?.v5 || {}), actionLedger: clone(result.state.v5ActionLedger || { appliedActions: [], quotaUsage: [] }) } } };
+  const next = commitV5Fate(envelope,result.state.participants);
+  next.appliedResolutionIds=result.state.appliedResolutionIds;
+  next.extensions={...(envelope.extensions||{}),v5:{...(envelope.extensions?.v5||{}),actionLedger:clone(result.state.v5ActionLedger||{appliedActions:[],quotaUsage:[]})}};
   if(result.resolution?.talentActionChanges?.some(c=>c.patch?.initiative!=null)&&next.combat.orderMode!=='manual')next.combat.order=effectiveOrder(next.combat.participants,{mode:'initiative'});
   const resources = commitV5Resources(next, result.state.participants);
   return registerV5ReactionOpportunities(resources, result.resolution, { clock: v5StoreActionClock(envelope) });

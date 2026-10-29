@@ -14,6 +14,8 @@ const conditionLevels = actor => resolveV5ConditionTestContext(actor,{characteri
 const broken = actor => Number(conditionLevels(actor).brise||0)>0;
 const uncertainMovement = actor => {const levels=conditionLevels(actor);return levels.inconscient>0?'Inconscient interdit cette Action de fuite.':levels.enchevetre>0?'Enchevêtré interdit le Move.':levels.sonne>0?'Sonné réduit le Mouvement; son calcul de Sprint n’est pas raccordé.':levels.aterre>0?'À terre limite le déplacement; le redressement/ramper n’est pas raccordé.':null;};
 const fail = (reason, field) => ({ ready:false, status:'requires-input', error:reason, needsInput: field ? [{field,label:reason}] : [], unresolved:[reason] });
+/** Mouvement de base ; les séquelles (pied perdu, fracture…) le réduisent : la projection du registre fait foi quand elle existe. */
+const baseMovement = actor => Number(actor.extensions?.v5?.sequelaEffects?.movement?.effective ?? actor.caracs?.M ?? actor.M ?? actor.movement);
 const finiteInt = (v,min=0) => Number.isSafeInteger(v) && v >= min;
 const talentRank = (actor, idPattern, namePattern) => (actor?.talents || [])
   .filter(row => row?.status === 'resolved' && (idPattern.test(String(row.id || row.catalogueTalentId || '')) || (namePattern && namePattern.test(String(row.name || row.label || '')))))
@@ -60,7 +62,7 @@ export function previewV5BrokenEscape({ state, actor, actorId=actor?.id, action,
     }
     if (!['walk','run'].includes(facts.moveMode)) return fail('Choisir explicitement le mode de déplacement Flee (Walk ou Run).','facts.moveMode');
     if (typeof facts.visibleToAnyEnemyAfter !== 'boolean') return fail('Le MJ doit confirmer si le personnage reste visible après Flee.','facts.visibleToAnyEnemyAfter');
-    const moveDistance = Number(actor.caracs?.M ?? actor.M ?? actor.movement);
+    const moveDistance = baseMovement(actor);
     if (!finiteInt(moveDistance,0)) return fail('Mouvement de base inconnu; la distance Flee ne peut pas être calculée.','actor.caracs.M');
     const distance = moveDistance * (facts.moveMode === 'run' ? 4 : 2);
     return {ready:true,status:'ready',ruleVersion:BROKEN_ESCAPE_RULE_VERSION,action,actorId,turn:clone(turn),facts:clone(facts),...(engagedEscapeEffects?{engagedEscapeEffects}:{}),moveDistance:distance,moveUnit:'yards',sequenceAfter:{fleeCommitted:true,visibleToAnyEnemy:facts.visibleToAnyEnemyAfter,moveMode:facts.moveMode,moveDistance:distance},source:clone(BROKEN_ESCAPE_SOURCE)};
@@ -81,7 +83,7 @@ export function previewV5BrokenEscape({ state, actor, actorId=actor?.id, action,
     if (testPreview.choiceRequired && !['keep','reverse'].includes(choice)) return fail('Choisir le résultat du Test Athlétisme.','choice');
     const selectedChoice=testPreview.options.length===1?testPreview.options[0].id:choice;
     const test=selectV5Test(testPreview,selectedChoice);
-    const movement = Number(actor.caracs?.M ?? actor.M ?? actor.movement);
+    const movement = baseMovement(actor);
     if (!finiteInt(movement,0)) return fail('Mouvement de base inconnu; Sprint ne peut pas être calculé.','actor.caracs.M');
     const moveDistance=movement*(sequence.moveMode==='run'?4:2), sprintDistance=movement*4+test.sl;
     if (sprintDistance < 0) return {ready:false,status:'requires-input',error:'La formule source donne une distance Sprint négative; arbitrage MJ requis.',needsInput:[{field:'sprintDistance',label:'Arbitrer une distance Sprint négative.'}]};
@@ -113,7 +115,7 @@ export function previewV5FleeTalentDisengageMove({ actor, disengagedConfirmed, m
   if (disengagedConfirmed !== true) return fail('Confirmer explicitement que le Désengagement vient d’être effectué.', 'disengagedConfirmed');
   const movementBlock = uncertainMovement(actor);
   if (movementBlock) return { ready: false, status: 'blocked', error: movementBlock };
-  const movement = Number(actor.caracs?.M ?? actor.M ?? actor.movement);
+  const movement = baseMovement(actor);
   if (!finiteInt(movement, 0)) return fail('Mouvement de base inconnu.', 'actor.caracs.M');
   const extraMoveDistance = movement * (moveMode === 'walk' ? 2 : 4);
   return {

@@ -1,0 +1,66 @@
+import assert from 'node:assert/strict';
+import { createServer } from 'node:http';
+import { readFileSync, statSync } from 'node:fs';
+import { resolve, extname, sep } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { chromium } from 'playwright';
+
+const root=fileURLToPath(new URL('..',import.meta.url));
+const mime={'.js':'text/javascript; charset=utf-8','.json':'application/json','.css':'text/css; charset=utf-8'};
+const server=createServer((req,res)=>{try{const pathname=decodeURIComponent(new URL(req.url,'http://localhost').pathname);if(pathname==='/blank'){res.writeHead(200,{'Content-Type':'text/html; charset=utf-8'});res.end('<main></main>');return;}const file=resolve(root,`.${pathname==='/'?'/index.html':pathname}`);if(!file.startsWith(resolve(root)+sep)||!statSync(file).isFile())throw new Error('not found');res.writeHead(200,{'Content-Type':mime[extname(file)]||'application/octet-stream'});res.end(readFileSync(file));}catch{res.writeHead(404);res.end('Not found');}});
+await new Promise(done=>server.listen(0,'127.0.0.1',done));
+const browser=await chromium.launch({headless:true,executablePath:process.env.PLAYWRIGHT_EXECUTABLE_PATH||'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe'});
+try{
+ const page=await browser.newPage();const origin=`http://127.0.0.1:${server.address().port}`;
+ await page.goto(`${origin}/blank`);
+ await page.evaluate(async origin=>{window.renderResolutionPanel=(await import(`${origin}/js/ui/resolution-panel.js`)).renderResolutionPanel;window.calls=[];window.handlers=new Proxy({}, {get:()=> (...args)=>window.calls.push(args)});},origin);
+ const render=async ({weapon,action,draft={},withTarget=false,skills=[]})=>page.evaluate(({weapon,action,draft,withTarget,skills})=>{const actor={id:'mj',name:'MJ',caracs:{CC:40,CT:35},skills,equipment:weapon?[weapon]:[],ficheSnapshot:{skills:[],coverage:{skills:'absent'}},states:[]};const target=withTarget?{id:'target',name:'Cible',camp:'enemy',caracs:{CC:30,Ag:30},skills:[],equipment:[],states:[],hp:10,armor:{}}:null;const panel=window.renderResolutionPanel({draft,actor,participants:[actor,...(target?[target]:[])],actions:[action],actionKey:action.id,type:'attack',target,groups:{adversaries:target?[target]:[],allies:[]},defense:{options:[],value:'Ag',option:{value:'Ag',statLabel:'Ag',mod:0,v5:{kind:'test',slModifier:0}}},canCalculate:false,canApply:false,handlers:window.handlers});document.body.replaceChildren(panel);}, {weapon,action,draft,withTarget,skills});
+ const ambiguous={id:'ambiguous',kind:'weapon',name:'Objet d’ingénierie',category:'Ingénierie',source:'',range:'',hands:1,keywords:[]};
+ const action={id:'act',note:'Objet d’ingénierie',type:'attack',base:'',attr:'CC',damage:1,qualities:[],extensions:{fiche:{bindingVersion:1,equipmentId:'ambiguous',requiresLink:true}}};
+ await render({weapon:ambiguous,action});
+ await page.getByLabel('Groupe d’arme à confirmer par le MJ').selectOption('Ingénierie tir');
+ const selectPayload=await page.evaluate(()=>window.calls.at(-1)[0]);
+ assert.equal(selectPayload.v5Kind,'ranged','le choix Ingénierie tir synchronise la Nature du Test');
+ await render({weapon:ambiguous,action,draft:{v5Context:{weaponTrainingGroup:'Ingénierie tir'}},withTarget:true});
+ assert.equal(await page.getByLabel('Nature du Test').inputValue(),'ranged','la sélection détermine le contrôle Nature du Test');
+ assert.equal(await page.getByLabel('Attaque à distance').inputValue(),'true','la nature choisie alimente aussi la protection/bouclier');
+ await page.getByLabel('Augmentations de la spécialité (MJ, si la fiche ne les fournit pas)').fill('1');
+ await page.getByLabel('Augmentations de la spécialité (MJ, si la fiche ne les fournit pas)').dispatchEvent('change');
+ const advancesPayload=await page.evaluate(()=>window.calls.at(-1)[0]);
+ assert.equal(advancesPayload.v5Context.weaponAdvances,1);
+ assert.notEqual(advancesPayload.v5Context.weaponSkillScore,0,'base vide ne crée aucun score zéro sur saisie des augmentations');
+ const siege={...ambiguous,id:'siege',name:'Baliste navale',category:'Siège',keywords:[]};
+ await render({weapon:siege,action:{...action,id:'siege-action',note:siege.name,extensions:{fiche:{bindingVersion:1,equipmentId:siege.id}}}});
+ const specialty=page.getByLabel('Spécialité de tir pour cette arme (choix MJ si le catalogue ne la précise pas)');
+ const manualValue=await specialty.locator('option').evaluateAll(options=>options.find(option=>option.value.startsWith('manual:'))?.value);
+ assert.ok(manualValue,'le groupe Siège expose une liste de spécialités réelles du catalogue');
+ await specialty.selectOption(manualValue);
+ assert.ok((await page.evaluate(()=>window.calls.at(-1)[0].v5Context.weaponTrainingSpecialty)),'le choix de tir MJ est transmis au moteur');
+ const cannon={...siege,id:'powder-cannon',name:'Canon nain',keywords:[{id:'a-poudre-noire'}]};
+ await render({weapon:cannon,action:{...action,id:'powder-cannon-action',note:cannon.name,extensions:{fiche:{bindingVersion:1,equipmentId:cannon.id}}}});
+ const cannonOptions=await page.getByLabel('Spécialité de tir pour cette arme (choix MJ si le catalogue ne la précise pas)').locator('option').allTextContents();
+ assert.ok(cannonOptions.some(text=>/Poudre noire/i.test(text))&&cannonOptions.some(text=>/Ingénierie/i.test(text)),'le canon conserve les voies poudre et ingénierie');
+ assert.ok(!cannonOptions.some(text=>/^Arc(?:\s|$)/i.test(text)),'le sélecteur ne propose pas Arc pour le canon à poudre');
+ const legacyConjured={id:'legacy-conjured',note:'Arme aethyrique ancienne',type:'attack',attr:'CC',base:50,damage:4,qualities:[{id:'magique'}],extensions:{v5:{kind:'melee',materialized:true}}};
+ await render({weapon:null,action:legacyConjured});
+ assert.equal(await page.getByLabel('Groupe d’arme à confirmer par le MJ').count(),1,'une arme aethyrique matérialisée sans clé demande son groupe au MJ');
+ await render({weapon:null,action:{...legacyConjured,id:'natural-attack',note:'Dent et griffe',extensions:{v5:{kind:'melee',materialized:true}}}});
+ assert.equal(await page.getByLabel('Groupe d’arme à confirmer par le MJ').count(),0,'les attaques naturelles sans nom d’arme aethyrique restent hors du contrôle de groupe');
+ await render({weapon:{...ambiguous,id:'ascii',name:'Epee batarde (2M)',category:'Deux-Mains'},action:{...action,id:'ascii-action',extensions:{fiche:{bindingVersion:1,equipmentId:'ascii',requiresLink:true}}}});
+ assert.match(await page.locator('.workspace-muted').allTextContents().then(rows=>rows.join(' ')),/réglage durable/,'l’aperçu indique que les mains se règlent sur le participant');
+ await render({weapon:ambiguous,action,draft:{preview:{actionType:'attack',success:true,sl:0,input:{actor:{skills:[],equipment:[]},action:{extensions:{fiche:{equipmentId:ambiguous.id}}}},weaponSkillReceipt:{trained:true,group:'Base',skillId:'base',applied:['fencing-with-basic']}}}});
+ const receiptText=await page.locator('.workspace-result-line').allTextContents();
+ assert.ok(receiptText.some(text=>text.includes('compétence de base utilisée')),'le reçu distingue une utilisation entraînée de Base');
+ const skills=[{id:'arc',name:'Projectiles (Arc)',group:'Projectiles',specialization:'Arc',advances:2,total:55},{id:'base',name:'Corps à corps (Base)',group:'Corps à corps',specialization:'Base',advances:2,total:60},{id:'crossbow',name:'Projectiles (Arbalète)',group:'Projectiles',specialization:'Arbalète',advances:2,total:65}];
+ for(const [category,selected,correct] of [['Base','arc','base'],['Arbalète','arc','crossbow'],['Escrime','base','base']]){
+  const weapon={...ambiguous,id:'stale',name:'Arme',category};
+  await render({weapon,skills,action:{...action,extensions:{fiche:{bindingVersion:1,equipmentId:'stale',skillId:selected}}}});
+  await page.getByLabel('Compétence utilisée pour cette arme').selectOption(correct);
+  assert.equal((await page.evaluate(()=>window.calls.at(-1)[0].v5Context.weaponSkillId)),correct,'le lien erroné se corrige dans le panneau');
+ }
+ await render({weapon:{...ambiguous,id:'one-hand',name:'Épée bâtarde',category:'Deux-Mains'},action:{...action,extensions:{fiche:{bindingVersion:1,equipmentId:'one-hand'}}}});
+ assert.match((await page.locator('.workspace-muted').allTextContents()).join(' '),/Épée bâtarde : 1 main/);
+ const dispelLine=await page.evaluate(()=>{const action={id:'dispel-fixture',note:'Dissiper',type:'skill'};const panel=window.renderResolutionPanel({draft:{preview:{v5MagicKind:'dispel',allowed:false}},actor:{id:'mj',name:'MJ',skills:[],equipment:[],states:[]},participants:[],actions:[action],actionKey:action.id,type:'dispel',target:null,groups:{adversaries:[],allies:[]},defense:{options:[]},canCalculate:false,canApply:false,handlers:window.handlers});document.body.replaceChildren(panel);return panel.querySelector('.workspace-field-error')?.textContent||'';});
+ assert.match(dispelLine,/Dissipation impossible : Conditions de dissipation non remplies\./,'un refus de dissipation sans motif ne laisse pas une ligne rouge vide');
+ console.log('F2-C UI T1: sélecteur de correction des liens, Base explicite, attaques naturelles sans groupe et bâtarde une main vérifiés.');
+}finally{await browser.close();await new Promise(done=>server.close(done));}

@@ -21,7 +21,7 @@ test('Q8 Souffle par type — dégâts, état et zone', () => {
   const fire = breath('Fire', { F: 50, E: 40 });
   assert.equal(fire.damageFormula, '8');
   assert.deepEqual(fire.effects, [{ state: 'Enflammé', trigger: 'cible perdante' }]);
-  assert.match(fire.reminders.join(' '), /BF yards/);
+  assert.match(fire.reminders.join(' '), /BF mètres/);
   assert.equal(breath('Acid', { F: 50, E: 40 }).damageFormula, '8');
   assert.equal(breath('Acid', { F: 50, E: 60 }).damageFormula, '10');
   assert.equal(breath('Cold', { F: 50, E: 40 }).damageFormula, '7');

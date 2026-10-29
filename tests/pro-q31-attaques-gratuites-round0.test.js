@@ -22,7 +22,7 @@ async function round0Store() {
   await store.loadFromJSON(snapshot);
   return { store, tentacles: actor.actions.filter(action => /^Tentacles/.test(action.name)) };
 }
-const input = (action, n) => ({ resolutionId: `q31-${n}`, actorId: 'beast', targetId: 'hero', roll: 5, action: clone(action), defense: { base: 10, roll: 99, v5: { kind: 'melee' } }, v5: { kind: 'melee' } });
+const input = (action, n) => ({ resolutionId: `q31-${n}`, actorId: 'beast', targetId: 'hero', roll: 5, action: clone(action), defense: { base: 10, roll: 99, v5: { kind: 'melee', context: { defenderFumbleRoll: 2 } } }, v5: { kind: 'melee' } });
 
 test('Q31 Kraken au Round 0 : l’attaque gratuite de tentacule est acceptée et le quota est rappelé', async () => {
   const { store, tentacles } = await round0Store();

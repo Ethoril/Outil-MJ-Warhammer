@@ -14,8 +14,8 @@ let text='# Matrice des références et des moteurs — lot 1\n\nVersion de cont
 text+='La fiche fait autorité sur chaque exemplaire personnalisé ; Aides de jeu fait autorité sur les définitions. Les exports CSV publics ci-dessous sont les seuls documents distants lus. Aucune donnée Firestore privée de PJ n’a été chargée pour établir cette matrice. Les succès HTTP et la parité des fichiers de référence ne valent pas une recette authentifiée des cinq fiches.\n\n';
 text+='## Sources communes et preuve\n\n'+table(['Collection','Source','Statut et portée'],[
  ['Talents','Aides de jeu / Talents, gid 1096647859','206 définitions bilingues, limites, spécialisations ; alias historiques explicites copiés des fiches'],
- ['Mots clés','Aides de jeu / Mots Clés Armes et Armures, gid 1604774011','55 identifiants explicites, effets, paramètres, alias, sources et éditions'],
- ['Équipement','Aides de jeu / Armes Corps à Corps, Armes à Distance, Armures','213 modèles après transformations source des fiches, dont 8 munitions complémentaires'],
+ ['Mots clés','Aides de jeu / Mots Clés Armes et Armures, gid 1604774011',`${pack.equipment.keywords.length} identifiants explicites, effets, paramètres, alias, sources et éditions`],
+ ['Équipement','Aides de jeu / Armes Corps à Corps, Armes à Distance, Armures',`${pack.equipment.items.length} modèles après transformations source des fiches`],
  ['Compétences','referentiel-public.json + skills.json publiés par le projet fiches','299 entrées publiées, formes principales et alias source ; compétences complémentaires Lustria selon moteur source'],
  ['Sorts et miracles','Aides de jeu / Magie gid 0 / Miracles gid 1678905785','280 sorts, 15 miracles ; consultation uniquement ; sorts retirés conservés pour historique'],
  ['Fonctions partagées','js/data/shared : copie versionnée des fonctions pures source','Parité assurée par régénération et tests ; production indépendante des chemins du disque du projet source'],

@@ -3,8 +3,109 @@
 // Rien n'est écrit et rien n'est calculé ici : un rappel n'est jamais une preuve d'exécution.
 
 import { CREATURE_ABILITIES } from '../data/creature-abilities.js';
+import { F2_H_PROFILE_ABILITIES } from '../data/f2-h-profile-abilities.js';
 
 const BY_ID = new Map(CREATURE_ABILITIES.map(entry => [entry.id, entry]));
+const F2_H_BY_KEY = new Map(F2_H_PROFILE_ABILITIES.map(entry => [entry.key, entry]));
+
+const sameName = value => String(value ?? '').normalize('NFC').trim().toLowerCase();
+
+/** Plan d'une règle F2-H sur son profil propriétaire. Les résultats ne sont proposés que si les faits de scène sont fournis. */
+export function planBestiaryProfileAbility(participant, key, context = {}) {
+  const rule = F2_H_BY_KEY.get(key);
+  const profileId = participant?.profileId ?? participant?.extensions?.v5?.bestiary?.id ?? participant?.extensions?.v5?.bestiary?.profileId;
+  // Profil d'abord ; le nom ne sert qu'en repli (Grüber importé sous « Wizard », E0-P-569, ou saisi à la main).
+  const scoped = rule && ((rule.profileId && profileId === rule.profileId) || (rule.profileName && sameName(participant?.name) === sameName(rule.profileName)));
+  if (!rule || !scoped) return { key, available: false, effects: [], reminders: [], unresolved: [], receipt: { ability: rule?.label ?? key, blocked: ['profil non concerné'] } };
+
+  const plan = { key, label: rule.label, available: true, effects: [], reminders: [], unresolved: [], receipt: null };
+  if (rule.qualities) plan.effects.push({ attack: rule.attack, addQualities: rule.qualities });
+  if (rule.state === 'Empoisonné') {
+    if (context.webHit === true && context.entangled === true) plan.effects.push({ state: rule.state, trigger: 'toile de l’Arachnarok ayant Enchevêtré la cible' });
+    else if (context.webHit === true) plan.unresolved.push('Poser Enchevêtré avant de confirmer le poison de la toile.');
+  }
+  if (rule.outcome === 'crâne ordinaire') {
+    if (Number.isFinite(context.wounds) && context.wounds <= 0) plan.effects.push({ transformation: rule.outcome, requiresGmConfirmation: true });
+  }
+  if (rule.outcome === 'suffocation' && context.entangled === true) {
+    plan.effects.push({ effect: 'suffocation', trigger: rule.trigger, escapeTest: rule.escape, grappleMustBeMaintained: false });
+  }
+  if (rule.immuneState) plan.effects.push({ immuneToState: rule.immuneState });
+  if (rule.castingCharacteristic) plan.effects.push({ castingCharacteristic: rule.castingCharacteristic });
+  if (rule.senseRangeYards) plan.reminders.push(`Détecte les proies jusqu’à ${rule.senseRangeYards} m.`);
+  if (rule.dodgeTest) {
+    plan.reminders.push(`Proies repérées jusqu’à ${rule.senseRangeYards} m; Test d’Esquive ${rule.dodgeTest}, un Enchevêtré par niveau d’échec; ${rule.cutSilk} pour couper la soie (récupération « Soie coupée »). La victime est ramenée au contact dans le même Round, de toute distance ; soie coupée, l’araignée fuit vers son antre. La portée est une aide affichée, jamais suivie.`);
+  }
+  if (rule.bite) plan.effects.push({ attack: 'Bite', addTrait: rule.bite });
+  if (rule.overrideTrait) plan.effects.push({ addTrait: rule.overrideTrait, ignoresSize: rule.ignoresSize });
+  if (rule.rangeYards) plan.effects.push({ attack: rule.attack, rangeYards: rule.rangeYards, test: rule.test, onHitTest: rule.opposedTest, onFailure: rule.onFailure });
+  // `specialAction` vaut null pour une attaque ordinaire résolue : la décharge ne suit que sa propre action.
+  if (rule.damage && context.targetGrappled === true && (context.specialAction === undefined || context.specialAction === rule.key)) {
+    if (context.momentum === false) plan.unresolved.push('Décharge électrique : 1 Élan requis.');
+    else plan.effects.push({ damage: context.fatigued === true ? rule.fatiguedDamage : rule.damage, ignoresArmour: rule.ignoresArmour, trigger: rule.trigger,
+      cost: rule.cost });
+    if (context.targetEnduranceSuccess === false) plan.effects.push({ state: 'sonne', trigger: 'échec Endurance Difficile (−1 DR) après Blessures' });
+    if (context.selfEnduranceSuccess === false) plan.effects.push({ state: 'extenue', trigger: 'échec Endurance Moyenne (+2 DR)' });
+    else if (context.selfEnduranceSuccess !== true) plan.unresolved.push('Décharge électrique : Test d’Endurance Moyenne (+2 DR) du Gargantuan à saisir.');
+  }
+  if (rule.trait) plan.effects.push({ attack: rule.attack, addTrait: rule.trait });
+  if (rule.modifier && context.targetChaosFollower === true && rule.test?.includes(context.test)) plan.effects.push({ modifier: rule.modifier, unit: 'skill points' });
+  if (rule.location && context.critical === true) plan.effects.push({ chooseCriticalTable: 'Head Critical Wounds', requiresGmConfirmation: true });
+  if (rule.momentum && context.singleCombatLeader === true) plan.effects.push({ momentum: rule.momentum, requiresGmConfirmation: true });
+  if (rule.fireRequirement) {
+    if (context.fireSize === 'bonfire') plan.effects.push({ mayBeScared: true, requiresGmResolution: true });
+    else if (context.fireSize) plan.effects.push({ mayBeScared: false });
+    plan.reminders.push(`Un ${rule.fireRequirement} peut l’effrayer; des torches ne suffisent pas. ${rule.reminder}`);
+  }
+  if (rule.reminder) plan.reminders.push(rule.reminder);
+  plan.receipt = { ability: rule.label, source: `${rule.book} ${rule.source}`, effects: plan.effects.length, reminders: plan.reminders.slice(), blocked: plan.unresolved.slice() };
+  return plan;
+}
+
+/** Plans de toutes les capacités propres aux règles F2-H d'un participant (rappels inclus). */
+export function planBestiaryProfileAbilities(participant, context = {}) {
+  return F2_H_PROFILE_ABILITIES.filter(rule => (rule.profileId && (participant?.profileId ?? participant?.extensions?.v5?.bestiary?.id ?? participant?.extensions?.v5?.bestiary?.profileId) === rule.profileId)
+    || (rule.profileName && sameName(participant?.name) === sameName(rule.profileName))
+  ).map(rule => planBestiaryProfileAbility(participant, rule.key, context));
+}
+
+/** Caractéristiques magiques du lanceur : un Lanceur sans esprit (élémentaire de mer, L25 p.142) prend sa Force pour Int et FM, donc son BF pour BI et BFM (MJ, 28/10). */
+export function casterCaracs(participant) {
+  const caracs = participant?.caracs || {};
+  return castsWithStrength(participant) ? { ...caracs, Int: caracs.F, FM: caracs.F } : caracs;
+}
+
+/** Vrai pour un Lanceur sans esprit dont la Force tient lieu de FM et d'Int (incantation, Focalisation et BFM). */
+export function castsWithStrength(participant) {
+  const profileId = participant?.profileId ?? participant?.extensions?.v5?.bestiary?.id ?? participant?.extensions?.v5?.bestiary?.profileId;
+  return F2_H_PROFILE_ABILITIES.some(rule => rule.profileId === profileId && rule.castingCharacteristic === 'F');
+}
+
+/** Immunités d’état propres aux règles F2-H, à consulter par tout chemin d’acquisition d’état. */
+export function bestiaryProfileStateImmunity(participant, state) {
+  return F2_H_PROFILE_ABILITIES.some(rule => rule.profileId === (participant?.profileId ?? participant?.extensions?.v5?.bestiary?.id ?? participant?.extensions?.v5?.bestiary?.profileId)
+    && rule.immuneState && String(rule.immuneState).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase() === String(state ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase());
+}
+
+/** Add profile-scoped weapon rules before the normal quality engine calculates an attack. */
+export function decorateBestiaryProfileAction(participant, action) {
+  if (!participant || !action || typeof action !== 'object') return action;
+  const profileId = participant?.profileId ?? participant?.extensions?.v5?.bestiary?.id ?? participant?.extensions?.v5?.bestiary?.profileId;
+  const name = String(action.name ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+  const qualities = [...(Array.isArray(action.qualities) ? action.qualities : [])];
+  const add = value => {
+    const id = String(value).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+    if (!qualities.some(row => String(typeof row === 'string' ? row : row?.id ?? row?.name).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase() === id)) qualities.push(value);
+  };
+  let deathblow = false;
+  if (profileId === 'E0-P-001' && /antler|bois/.test(name)) ['Empaleuse', 'Perforante'].forEach(add);
+  if (profileId === 'E0-P-002' && /antler|bois/.test(name)) ['Rapide', 'Empaleuse', 'Perforante'].forEach(add);
+  if (profileId === 'E0-P-792') deathblow = true;
+  if (profileId === 'E0-P-913' && /fang|crocs/i.test(name)) add({ id: 'venin', name: 'Venin', parameter: 'Difficile' });
+  const specialProfileAbility = action.extensions?.v5?.specialProfileAbility;
+  if (!deathblow && qualities.length === (action.qualities || []).length && !specialProfileAbility) return action;
+  return { ...action, qualities, ...(deathblow ? { extensions: { ...(action.extensions || {}), v5: { ...(action.extensions?.v5 || {}), deathblow: true } } } : {}) };
+}
 
 /** Disposition d'une capacité (`{ id, status: 'covered' | 'reminder', by | motive, … }`) ; `null` hors périmètre. */
 export function abilityDisposition(id) {

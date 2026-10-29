@@ -2,7 +2,7 @@
 import { userMessage, userError } from './messages.js';
 import { formatV5Balance } from '../core/v5-resources.js';
 
-const BOOLEAN_FIELDS = new Set(['minuteElapsed','restSatisfied','engaged','fullRoundHidden','causeEnded','medicalAttention','surgery','outOfCombat','overrideRecovery']);
+const BOOLEAN_FIELDS = new Set(['silkCut','minuteElapsed','restSatisfied','engaged','fullRoundHidden','causeEnded','medicalAttention','surgery','outOfCombat','overrideRecovery']);
 const el = (tag, text, className = '') => { const node = document.createElement(tag); if (text != null) node.textContent = text; if (className) node.className = className; return node; };
 const METHODS = {
   'a-terre': [['stand-up','Se relever']], souille: [['clean','Se nettoyer']], extenue: [['rest','Repos adapté à la cause']],
@@ -10,11 +10,12 @@ const METHODS = {
   brise: [['cool','Test de Calme'],['hiding','Un Round entier caché']], enflamme: [['athletics','Test d’Athlétisme']],
   enchevetre: [['opposed-strength','Test de Force opposé']], sonne: [['endurance','Test de Résistance'],['medical-attention','Soins reçus']],
   assourdi: [['endurance','Test de Résistance après une minute']], empoisonne: [['endurance','Test de Résistance'],['heal','Test de Guérison']],
-  aveugle: [['cause-ended','Cause disparue'],['medical-attention','Soins reçus']], inconscient: [['cause-ended','Cause disparue']]
+  aveugle: [['cause-ended','Cause disparue'],['medical-attention','Soins reçus']], inconscient: [['cause-ended','Cause disparue']], suffocation: [['cause-ended','De nouveau à l’air libre']]
 };
 export function recoveryMethodsFor(condition) {
   const key = String(condition.key || condition.name || '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[ -]+/g,'-');
-  return METHODS[key] ? [...METHODS[key], ['fortune','Dépense d’un point de Fortune']] : [];
+  const silk = key === 'enchevetre' && condition.source?.ability === 'cliff-spider-lasso' ? [['cut-silk','Soie coupée (frappe tranchante de plus de 5 dégâts)']] : [];
+  return METHODS[key] ? [...METHODS[key], ...silk, ['fortune','Dépense d’un point de Fortune']] : [];
 }
 
 /** Map explicit recovery fields without inventing a phase or changing the chosen Round. */

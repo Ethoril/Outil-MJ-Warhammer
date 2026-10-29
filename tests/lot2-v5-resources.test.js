@@ -103,24 +103,24 @@ test('Fortune V5 — donnée de récupération manquante et État déjà absent 
   assert.equal(store.getFortune('a').balance, 1);
 });
 
-test('Fortune V5 — relance, changement/reprise, suppression et rechargement ne réinitialisent pas', async () => {
+test('Fortune V5 — copies anonymes gardent leur solde propre entre rencontres', async () => {
   const { store, persistence } = await live();
   await store.addProfile({ id: 'pj', kind: 'PJ', name: 'Même nom', hp: 10 });
   for (const id of ['a', 'b']) await store.saveEncounter({ id, entries: [{ id: id + ':entry', profileId: 'pj', zone: 'active' }] });
   await store.launchEncounter('a'); const first = store.listParticipants()[0].id; await store.setFortune(first, 3);
   await store.suspendActiveScene(); const suspended = store.listSuspendedScenes()[0].id;
   await store.launchEncounter('b'); const second = store.listParticipants()[0].id;
-  assert.notEqual(first, second); assert.equal(store.getFortune(second).balance, 3);
+  assert.notEqual(first, second); assert.equal(store.getFortune(second).balance, null, 'une copie anonyme ne récupère pas le solde d’une autre copie du profil');
   await store.setFortune(second, 1); await store.restartCombat();
   assert.equal(store.getFortune(store.listParticipants()[0].id).balance, 1);
   await store.deleteEncounter('b'); await store.resumeScene(suspended);
-  assert.equal(store.getFortune(first).balance, 1);
-  assert.equal(store.listParticipants()[0].extensions.v5.resources.fortune, 1);
+  assert.equal(store.getFortune(first).balance, 3);
+  assert.equal(store.listParticipants()[0].extensions.v5.resources.fortune, 3);
   const reloaded = createStore({ persistence }); await reloaded.ready;
-  assert.equal(reloaded.getFortune(first).balance, 1);
+  assert.equal(reloaded.getFortune(first).balance, 3);
   await reloaded.deleteEncounter('a');
   await reloaded.saveEncounter({ id: 'c', entries: [{ id: 'c:entry', profileId: 'pj', zone: 'active' }] }); await reloaded.launchEncounter('c');
-  assert.equal(reloaded.getFortune(reloaded.listParticipants()[0].id).balance, 1);
+  assert.equal(reloaded.getFortune(reloaded.listParticipants()[0].id).balance, null);
 });
 
 test('Fortune V5 — export/import, migration et document cloud conservent registre stable', async () => {

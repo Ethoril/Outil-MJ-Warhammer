@@ -23,7 +23,7 @@ test('B14 — démon appliqué : un seul participant hostile, profil confirmé, 
   assert.equal(d.camp,'ennemi');assert.equal(d.name,PROFILE.name);assert.equal(d.hp,12);assert.equal(d.maxHp,12);assert.equal(d.initiative,35);assert.equal(d.zone,'active');assert.deepEqual(d.caracs,{CC:45,F:40,E:30});assert.deepEqual(d.traits,['Démoniaque']);
   assert.deepEqual(d.actions||[],[]);assert.deepEqual(d.armor,{head:0,body:0,arms:0,legs:0});
   const link=d.extensions.v5.divineWrathSummon;assert.equal(link.kind,'demon');assert.equal(link.targetId,'ally');assert.equal(link.distanceYards,11);assert.equal(link.ownerId,'priest');assert.equal(link.resultId,'wrath:88-88');assert.equal(link.executionId,'b14-demon');
-  assert.match(d.notes,/11 yards/);assert.match(d.notes,/Derrière les caisses/);
+  assert.match(d.notes,/11 m/);assert.match(d.notes,/Derrière les caisses/);
   assert.equal(rows(store).length,before.length+1);assert.equal(priest(store).extensions.v5.divine.sin,0);
   assert.equal(snap(store).extensions.v5.divineExecutions.at(-1).wrathSummonReceipt.participantId,d.id);
 });
@@ -37,7 +37,7 @@ test('B14 — serviteur : d100, camp et comportement choisis par le MJ, un seul 
   for(const bad of[{wrathSummonDistanceRoll:0},{wrathSummonDistanceRoll:101},{wrathSummonCamp:'pj'},{wrathSummonCamp:'amis'},{wrathSummonBehavior:' '}])assert.equal(store.previewDivineExecution(BATTLE,servant(bad)).ready,false,JSON.stringify(bad));
   await go(store,servant());const made=created(store);assert.equal(made.length,1);const s=made[0];
   assert.equal(s.camp,'allie');assert.equal(s.name,'Loup blanc B14');assert.equal(s.extensions.v5.divineWrathSummon.kind,'servant');assert.equal(s.extensions.v5.divineWrathSummon.distanceYards,64);assert.equal(s.extensions.v5.divineWrathSummon.targetId,undefined);
-  assert.match(s.notes,/64 yards/);assert.match(s.notes,/réprimande/);assert.deepEqual(s.actions||[],[]);assert.equal(priest(store).extensions.v5.divine.sin,4);
+  assert.match(s.notes,/64 m/);assert.match(s.notes,/réprimande/);assert.deepEqual(s.actions||[],[]);assert.equal(priest(store).extensions.v5.divine.sin,4);
 });
 test('B14 — une réinjection client du plan ou de l’identifiant du participant est ignorée',async()=>{
   const{store}=await fixture(1);const p=store.previewDivineExecution(BATTLE,demon({wrathSummonPlan:{id:'x',profile:{name:'Dragon',wounds:999,initiative:99}}}));assert.equal(p.ready,true,p.error);

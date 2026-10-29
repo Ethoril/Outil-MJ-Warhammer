@@ -14,6 +14,7 @@ const KNOWN_ERRORS = [
   [error => error?.code === 'AMMUNITION_INCOMPATIBLE', 'Cette munition est incompatible avec l’arme choisie.'],
   [error => error?.code === 'AMMUNITION_MANUAL', 'Vérifiez explicitement la compatibilité de cette munition avec l’arme.'],
   [error => ['FICHE_SYNC_STALE','fiche-plan-stale'].includes(error?.code), 'La séance a changé depuis l’aperçu : relisez les fiches avant d’appliquer.'],
+  [error => error?.code === 'fiche-equipment-arbitration-required', 'Synchronisation suspendue : les IDs ne permettent pas d’identifier sûrement les exemplaires. L’arbitrage se fait dans la fiche externe : vérifiez les noms et IDs affichés, corrigez ou retirez les lignes selon votre décision, puis relisez les fiches.'],
   [error => error?.name === 'ResolutionError' && error.code === 'INVALID_ROLL', 'Le jet doit être un nombre de 1 à 100 (00 = 100).'],
   [error => error?.status === 'stale' || error?.code === 'RESOLUTION_STALE' || /périm/i.test(error?.message || ''), 'La partie a changé depuis le calcul : recalculez.'],
   [error => /^Fonction Store indisponible/.test(error?.message || ''), 'Cette action n’est pas disponible dans cette version.'],

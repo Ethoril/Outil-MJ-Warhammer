@@ -13,14 +13,18 @@ import {movementTestRules} from './creature-movement.js';
 import {outnumberTestRules} from './outnumbering.js';
 import {unavailableDisarmedWeapon} from './v5-talent-replacements.js';
 import {warLeaderSubstitution} from './v5-talent-situations.js';
+import {calculateV5ArmorPenalty,previewV5Parry} from './v5-weapon-qualities.js';
 import { pendingCrewSkill,sourceActive } from './v5-talent-actions.js';
-import { previewV5Test,reverseV5Roll }  from './v5-roll.js';
+import { previewV5Test,reverseV5Roll,refreshV5ResultTier }  from './v5-roll.js';
+import { previewV5PistolContact } from './v5-weapon-qualities.js';
 import { activeEngines } from './roll-qualities.js';
 import { keywordMechanicalStatus } from './keywords.js';
 import { activeV5TalentEffects } from './v5-talents.js';
-import { applyV5TalentPenaltyRules } from './v5-talent-combat.js';
+import { applyV5TalentPenaltyRules, applyV5AttackSituationModifiers } from './v5-talent-combat.js';
 import { normalizeState } from './effects.js';
 import { previewV5TalentTestModifiers, previewV5TalentSLChoices } from './v5-talent-tests.js';
+import { sequelaTestRules } from './v5-sequela-effects.js';
+import { weaponHandsForParticipant } from './equipment.js';
 export const V5_COMBAT_RULE_VERSION = 'v5-combat-2026-10-09.24.6';
 export const hasMomentum = actor => actor?.extensions?.v5?.hasMomentum === true;
 export const withMomentum = (actor, value) => {
@@ -32,6 +36,7 @@ export const withMomentum = (actor, value) => {
 export const conditionLevels = actor => {
   const levels = new Map();
   for (const [index, raw] of (actor?.states || []).entries()) {
+    if (Number(raw?.level) === 0 || (raw?.source?.source?.effectHash && !sourceActive(raw))) continue;
     const state = normalizeState(raw, index);if(['talent-active','talent-pending'].includes(state.kind))continue;
     const key = state.key.replace(/[- ]/g, '');
     levels.set(key, (levels.get(key) || 0) + state.level);
@@ -60,18 +65,48 @@ export function inferV5Kind(action = {}, attackContext = {}) {
   return action.extensions?.v5?.kind || (['attack', 'attaque'].includes(action.type)
     ? (typeof attackContext?.ranged === 'boolean' ? attackContext.ranged ? 'ranged' : 'melee' : action.attr === 'CT' ? 'ranged' : 'melee') : 'test');
 }
-/** A held, available shield explicitly chosen to oppose this attack. */
-export function v5ShieldDefense(normalized) {
+/** A held, available shield explicitly chosen to oppose this attack. `confirmed` is legacy Protectrice; `v5Bonus` is V5 Bouclier. */
+export function v5ShieldDefense(normalized, catalogue = getReferenceCatalogue()) {
   const context = normalized.protectionContext || {};
   const shield = normalized.target?.equipment?.find(item => item.kind === 'shield' && item.id === context.shieldId);
+  const bouclier = shield?.keywords?.some(item => item.id === 'bouclier') === true;
   const word = shield?.keywords?.find(item => item.id === 'protectrice');
-  const rating = word?.parameter?.trim() === '' ? null : Number(word?.parameter);
-  const contextConfirmed = Boolean(normalized.defense && shield && context.shieldAvailable === true && context.opposedWithShield === true
-    && !normalized.target?.extensions?.shieldUnavailable?.includes(shield.id) && Number.isSafeInteger(rating) && rating > 0);
-  const sourceCovered = !contextConfirmed || keywordMechanicalStatus('protectrice').status === 'covered';
+  const shieldDamage = Number(normalized.target?.extensions?.v5?.armorDamageByItem?.[shield?.id]) || 0;
+  const rating = bouclier ? Math.max(0, Number(shield?.ap) - shieldDamage) : word?.parameter?.trim() === '' ? null : Number(word?.parameter);
+  const source = catalogue.keywords.find(item => item.id === 'bouclier');
+  const bouclierSourceCovered = source?.edition === 'V5' && source?.source === 'Livre de base V5 EN p.306'
+    && source?.effect === "En s'opposant à une attaque avec Esquive ou Corps à corps, confère +1 DR (sans cumul avec Défensive) et applique ses PA si le coup touche. Avec 2 PA ou plus, permet d'opposer les tirs avec Esquive à toute portée. Un seul bouclier compte. Porté attaché au bras ou en bandoulière, ses PA ne s'appliquent qu'à la Tête, au Corps et au Bras non directeur. En attaque, compte comme Arme improvisée (allonge Personnelle) et perd sa protection jusqu'au début du prochain Tour.";
+  const validRating = Number.isSafeInteger(rating) && (bouclier ? rating >= 0 : rating > 0);
+  const plantedPavise=shield?.kind==='shield'&&normalized.target?.extensions?.v5?.paviseDeploymentByItemId?.[shield.id]?.status==='planted';
+  const contextConfirmed = Boolean(normalized.defense && shield && !plantedPavise && context.shieldAvailable === true && context.opposedWithShield === true
+    && !normalized.target?.extensions?.shieldUnavailable?.includes(shield.id) && validRating);
+  const sourceCovered = !contextConfirmed || (bouclier
+    ? bouclierSourceCovered
+    : keywordMechanicalStatus('protectrice').status === 'covered');
   const confirmed = contextConfirmed && sourceCovered;
-  return { confirmed, rangedDodgeAllowed: confirmed && rating >= 2, rating: confirmed ? rating : null,
-    unresolved: contextConfirmed && !sourceCovered ? 'Bouclier : source de Protectrice non couverte ; arbitrage MJ requis.' : null };
+  const label = normalized.defense?.label || normalized.defense?.note || '';
+  const skillId = normalized.defense?.extensions?.fiche?.skillId || normalized.defense?.v5?.context?.skillId;
+  const skillName = skillId ? catalogue.skills.find(row => row.id === skillId)?.nom || '' : '';
+  const defenseName = `${label} ${skillName}`.normalize('NFD').replace(/[\u0300-\u036f]/gu, '').toLowerCase();
+  const dodgeDefense = /esquive|dodge|^\s*ag\s*$/u.test(defenseName);
+  const meleeDefense = /corps\s*a\s*corps|melee|^\s*cc\b|escrime|bagarre/u.test(defenseName);
+  const rangedAttack = typeof normalized.attackContext?.ranged === 'boolean' ? normalized.attackContext.ranged
+    : normalized.v5?.kind === 'ranged' || normalized.action?.attr === 'CT';
+  const canUseV5Bonus = (dodgeDefense || meleeDefense) && (!rangedAttack || dodgeDefense && rating >= 2);
+  const unresolved = contextConfirmed && !sourceCovered
+    ? bouclier ? 'Bouclier V5 : source ou effet modifié ; recalcul et arbitrage MJ requis.'
+      : 'Bouclier : source de Protectrice non couverte ; arbitrage MJ requis.'
+    : contextConfirmed && bouclier && !canUseV5Bonus
+      ? rangedAttack ? 'Bouclier V5 contre un tir : Esquive et 2 PA au moins requis.'
+        : 'Bouclier V5 : opposition par Esquive ou Corps à corps requise.' : null;
+  const v5Confirmed = confirmed && bouclier && canUseV5Bonus;
+  const legacyRanged = !bouclier && rating >= 2;
+  return { confirmed: !bouclier && confirmed,
+    ...(bouclier ? { v5Bonus: v5Confirmed } : {}),
+    rangedDodgeAllowed: bouclier ? v5Confirmed && rangedAttack && rating >= 2 && dodgeDefense
+      : confirmed && legacyRanged,
+    rating: (bouclier ? v5Confirmed : confirmed) ? rating : null,
+    unresolved };
 }
 // Malice de Ranald : pendant la durée, dans tout Test opposé contre l’adversaire désigné, deux Caractéristiques du prêtre prennent
 // la valeur de l’adversaire ; la fiche ne change pas, le score du Test est décalé de l’écart lu au moment du Test.
@@ -109,7 +144,7 @@ export function buildCombatTest(normalized, role = 'actor') {
   const contact=contactWeapon(normalized,actor,action,settings);action=contact.action;
   // Talents donnés par les Traits de compagnon d'un familier animal à portée : comptés comme ceux du maître pour ce Test.
   const talentModifiers=previewV5TalentTestModifiers(withCompanionTalents(actor,normalized.v5State?.participants||[]),{action,settings,kind,role:talentRole,opponent:target});
-  const unresolved = [...contact.unresolved], restrictions = [];if(unavailableDisarmedWeapon(actor,action))restrictions.push('Cette arme a été désarmée : la récupérer avant de l’employer.');
+  const unresolved = [...(normalized.weaponSkillUnresolved||[]),...contact.unresolved], restrictions = [];if(unavailableDisarmedWeapon(actor,action))restrictions.push('Cette arme a été désarmée : la récupérer avant de l’employer.');
   if(!defending && target?.extensions?.v5?.specialStates?.tinySwarmCannotAttack && /nu[eé]e|swarm/i.test((actor.traits || []).join(' '))){
     const size=Number(settings.actorSize ?? normalized.attackContext?.actorSize);
     if(!Number.isInteger(size)||size<1||size>7)unresolved.push('Zone de Confort : Taille de la Nuée requise.');
@@ -117,6 +152,15 @@ export function buildCombatTest(normalized, role = 'actor') {
   }
   restrictions.push(...transformationRestrictions(actor,action,{defending,charging:settings.charging===true,momentum:hasMomentum(actor)}));
   const skill=getReferenceCatalogue().skills.find(s=>s.id===(action.extensions?.fiche?.skillId || settings.context?.skillId));
+  const selectedSkillId=action.extensions?.fiche?.skillId||settings.context?.skillId;
+  const fichaSkills=actor?.skills?.length?actor.skills:actor?.ficheSnapshot?.skills||[];
+  const fichaSkill=fichaSkills.find(row=>row.id===selectedSkillId);
+  const referenceSkill=skill||fichaSkill;
+  const advancedAdvances=settings.context?.advancedSkillAdvances??fichaSkill?.advances;
+  const importedSkillAction=action.extensions?.fiche?.bindingVersion===1&&Boolean(actor?.ficheSnapshot);
+  const hasSkillProgressContract=Boolean(fichaSkill||importedSkillAction||Object.hasOwn(settings.context||{},'advancedSkillAdvances'));
+  if(!['attack','attaque'].includes(String(action.type||'').toLowerCase())&&referenceSkill?.basic===false&&hasSkillProgressContract&&(advancedAdvances===undefined||advancedAdvances===null||advancedAdvances===''||!Number.isFinite(Number(advancedAdvances))||Number(advancedAdvances)<1))
+    unresolved.push(advancedAdvances===0||Number(advancedAdvances)===0?'Cette compétence avancée ne peut pas être testée sans au moins une augmentation.':'Les augmentations de cette compétence avancée ne sont pas renseignées : le MJ doit les confirmer avant le Test.');
   const familiar=(normalized.v5State?.participants || []).find(p=>p.id===settings.context?.magicAssistantId);
   const manualSupport=familiarSkillSupport(actor,familiar,skill?.nom || action.label || action.note || '',settings.context);
   const support=manualSupport.modifiers.length||manualSupport.advantages.length?manualSupport:familiarSupport(actor,normalized.v5State?.participants || [],skill?.nom || action.label || action.note || '',settings.context);
@@ -124,6 +168,42 @@ export function buildCombatTest(normalized, role = 'actor') {
   const modifiers = [...support.modifiers,...magicSkillModifiers(actor,skillLabel,{...settings.context,carac:settings.context?.carac||skill?.carac||action.attr}),
     // Clés « … adverse » du porteur opposé, et « Défense contre Tir » du défenseur visé par un tir.
     ...(target&&!defending?magicAdverseModifiers(target,skillLabel):[]),...(defending&&kind==='ranged'?magicSkillModifiers(actor,'Défense contre Tir'):[]),...(settings.slModifiers || [])];
+  if(defending&&settings.context?.offHandWeapon===true)modifiers.push({id:'quality:offhand-defense',label:'Défense avec la main non directrice',amount:-2});
+  const parryDefense=previewV5Parry({qualities:action.qualities||[],defending,offHand:settings.context?.offHandWeapon===true});
+  if(parryDefense.defensePenalty===0){const index=modifiers.findIndex(row=>row.id==='quality:offhand-defense');if(index>=0)modifiers.splice(index,1);}
+  if(!defending&&['test','skill'].includes(kind)){
+    const wornIds=Array.isArray(settings.context?.wornArmorItemIds)?settings.context.wornArmorItemIds:[];
+    const worn=actor?.equipment?.filter(item=>wornIds.includes(item.id)&&item.kind==='armour')||[];
+    if(worn.length!==new Set(wornIds).size)unresolved.push('Armure portée : sélectionner uniquement des pièces d’armure de l’inventaire actif.');
+    const armor=calculateV5ArmorPenalty({worn});
+    const foldedLabel=String(skillLabel||'').normalize('NFD').replace(/[\u0300-\u036f]/gu,'').toLowerCase();
+    if(armor.stealthDr&&/(?:discretion|furtivite)/u.test(foldedLabel))modifiers.push({id:'armor:stealth',label:'Armure portée (mailles/plates)',amount:armor.stealthDr});
+    if(armor.perceptionDr&&/perception/u.test(foldedLabel))modifiers.push({id:'armor:perception',label:'Heaume fermé porté',amount:armor.perceptionDr});
+  }
+  if(defending&&kind==='melee'&&normalized.action?.qualities?.some(row=>(typeof row==='string'?row:row?.id)==='a-enroulement'))
+    modifiers.push({id:'quality:a-enroulement',label:'Arme à enroulement adverse',amount:-1});
+  if(!defending){
+    const queued=actor?.extensions?.v5?.combatEffects||[],penalty=queued.find(row=>row.kind==='next-action-sl');
+    const declaredAction=['attack','attaque'].includes(String(action.type||'').toLowerCase())||settings.context?.isAction===true;
+    if(penalty&&declaredAction)modifiers.push({id:'fumble:next-action-sl',label:'Maladresse précédente : pénalité à la prochaine Action',amount:Number(penalty.amount)||-1});
+    const ankle=queued.find(row=>row.kind==='twisted-ankle'&&row.location===settings.context?.legUsed
+      &&Number.isSafeInteger(Number(settings.round??normalized.round))&&Number(settings.round??normalized.round)<Number(row.createdRound||0)+Number(row.rounds||0));
+    if(ankle)modifiers.push({id:`fumble:twisted-ankle:${ankle.id||ankle.location}`,label:'Cheville tordue : Test utilisant la jambe affectée',amount:-1});
+    if(declaredAction&&queued.some(row=>row.kind==='lose-next-action'))restrictions.push('Maladresse précédente : cette Action est perdue ; terminez le Tour sans résoudre d’Action.');
+  }
+  let extraordinaryShot=null;
+  if(!defending&&settings.context?.extraordinaryShot===true){
+    const activeSharpshooter=talentModifiers.penaltyRules.some(rule=>rule.origins?.some(origin=>origin.talentId==='talent-sharpshooter'));
+    const description=String(settings.context.extraordinaryShotDescription||'').trim(),difficulty=settings.context.extraordinaryShotDifficulty;
+    if(kind!=='ranged')unresolved.push('Tir extraordinaire : Test de tir requis.');
+    else if(!activeSharpshooter)unresolved.push('Tir extraordinaire : Talent Tireur d’élite acquis et actif requis.');
+    if(!description)unresolved.push('Tir extraordinaire : description MJ requise.');
+    if(!Number.isSafeInteger(difficulty)||difficulty>0)unresolved.push('Tir extraordinaire : difficulté en DR entière inférieure ou égale à zéro fixée par le MJ requise.');
+    if(kind==='ranged'&&activeSharpshooter&&description&&Number.isSafeInteger(difficulty)&&difficulty<=0){
+      modifiers.push({id:'talent:sharpshooter-extraordinary',label:'Tir extraordinaire — '+description,amount:difficulty});
+      extraordinaryShot={talentId:'talent-sharpshooter',description,difficulty};
+    }
+  }
   const suffused=magicSkillReplacement(actor,skill?.nom || action.label || action.note || '',settings.context);
   action={...action,base:suffused?.score ?? (action.extensions?.v5?.scoreIsCurrent ? action.base : effectiveSkillScore(actor,action.base,action.attr || skill?.carac))};
   // Traits de sens (Caméléon, Perturbant, Furtif, Pisteur) : appliqués quand le contexte les détermine, sinon rappel de la carte.
@@ -149,7 +229,7 @@ export function buildCombatTest(normalized, role = 'actor') {
     const defensive = defenseEngines.some(engine => engine.id === 'defensive' && !overriddenDefense.has(engine.id));
     const shieldDefense = v5ShieldDefense(normalized);
     if (shieldDefense.unresolved) unresolved.push(shieldDefense.unresolved);
-    const shield = shieldDefense.confirmed;
+    const shield = shieldDefense.v5Bonus || shieldDefense.confirmed;
     if (defensive || shield) modifiers.push({ id: 'defensive-protection', label: shield ? 'Bouclier V5 (ne cumule pas Défensive)' : 'Défensive', amount: 1 });
     for (const engine of defenseEngines) if (!overriddenDefense.has(engine.id) && engine.params.bonus < 0)
       modifiers.push({ id: `quality-${engine.id}`, label: 'Déséquilibrée', amount: engine.params.bonus });
@@ -160,6 +240,17 @@ export function buildCombatTest(normalized, role = 'actor') {
   if(!defending&&normalized.combatPrelude?.small?.scoreBonus)action={...action,base:action.base+normalized.combatPrelude.small.scoreBonus};
   const reachDefense=defending&&kind==='melee'&&settings.context?.longerWeaponDefense===true,contactTalent=reachDefense?situationPlan(normalized.actor,'in-fighter'):null;if(reachDefense&&!contactTalent?.proposals.length)modifiers.push({id:'longer-weapon-defense',label:'Arme plus longue en défense',amount:1});
   const advantages = [...(settings.advantageSources || [])], disadvantages = [...(settings.disadvantageSources || [])];
+  // Séquelles durables et temporaires (F2-J2) : une seule source, le registre de convalescence projeté sur le participant.
+  const sequelaWeapon = actor?.equipment?.find(row => row.id === (action.extensions?.fiche?.equipmentId || action.extensions?.equipment?.id)) || action.extensions?.equipment;
+  let sequelaHands = sequelaWeapon && sequelaWeapon.kind === 'weapon' ? weaponHandsForParticipant(sequelaWeapon, actor, { action, context: settings.context || {} }) : null;
+  // Action sans arme de la fiche : le marqueur (2M) du nom fait foi, comme pour les armes du catalogue.
+  if (sequelaHands == null && /\(\s*2\s*m\s*\)/i.test([sequelaWeapon?.name, action.label, action.note, action.name].filter(Boolean).join(' '))) sequelaHands = 2;
+  const sequelaShield = defending ? Boolean(v5ShieldDefense(normalized).v5Bonus || v5ShieldDefense(normalized).confirmed) : (settings.context?.attackWithShield === true || settings.context?.shieldAttached === true);
+  const sequelae = sequelaTestRules({ actor, opponent: target, skillLabel, actionLabel: action.label || action.note || '', carac: settings.context?.carac || skill?.carac || action.attr, kind, defending,
+    attack: !defending && ['attack', 'attaque'].includes(String(action.type || '').toLowerCase()), context: settings.context || {},
+    weaponHands: sequelaHands, shieldUsed: sequelaShield });
+  unresolved.push(...sequelae.unresolved); restrictions.push(...sequelae.restrictions);
+  if (sequelae.scoreDelta) action = { ...action, base: Math.max(0, action.base + sequelae.scoreDelta) };
   if (defending && kind === 'melee' && activeV5TalentEffects(actor).some(effect => effect.restriction === 'cannotOpposeWithMelee'))
     restrictions.push('Battement : la cible ne peut pas opposer Corps à corps ; Esquive reste possible.');
   if (!defending && kind === 'melee' && activeV5TalentEffects(target).some(effect => effect.advantageFilter === 'meleeAttacksAgainstTarget'))
@@ -223,6 +314,16 @@ export function buildCombatTest(normalized, role = 'actor') {
     if (targetLevels.has('aveugle') && !levels.has('aveugle')) advantages.push({ id: 'target-blinded', label: 'Cible Aveuglée' });
     if (targetLevels.has('surpris')) modifiers.push({ id: 'target-surprised', label: 'Cible Surprise', amount: 2 });
   }
+  const pistolContact=previewV5PistolContact({qualities:action.qualities||[],attack:!defending,engaged:settings.context?.targetEngaged===true,ranged:kind==='ranged'});
+  if(!defending&&kind==='ranged'&&settings.context?.targetEngaged===true&&!pistolContact.allowed)disadvantages.push({id:'target-engaged',label:'Tir sur une cible engagée'});
+  if(!defending&&kind==='test'&&action.attr==='F'&&context.entanglementTest===true){
+    const weaponId=context.entanglementWeaponId||action.extensions?.fiche?.equipmentId||action.extensions?.equipment?.id;
+    const entanglingWeapon=actor?.equipment?.find(row=>row.id===weaponId);
+    const entanglementKind=entanglingWeapon?.extensions?.v5?.entanglementKind
+      ||(entanglingWeapon?.baseId==='weapon-armes-corps-a-corps-armes-d-hast-mancatcher-2m'?'mancatcher':null);
+    if(!entanglingWeapon||entanglementKind!=='mancatcher')unresolved.push('Entrave : choisir un Mancatcher typé pour ce Test de Force.');
+    else if(context.springLoaded===true||entanglingWeapon.extensions?.v5?.springLoaded===true)modifiers.push({id:'quality:mancatcher-spring-loaded',label:'Mancatcher à ressort : +20 au Test de Force pour entraver',amount:2});
+  }
   // Different Condition penalties do not add. Like-for-like penalties select
   // the largest; a DR penalty versus inversion requires an explicit MJ ruling.
   const worstDisadvantage = [...conditionDisadvantages.values()].sort((a, b) => b.length - a.length)[0] || [];
@@ -239,11 +340,24 @@ export function buildCombatTest(normalized, role = 'actor') {
     modifiers.push({ id: `quality-${engine.id}`, label: engine.id, amount: engine.params.bonus });
   modifiers.push(...talentModifiers.slModifiers); advantages.push(...talentModifiers.advantageSources); disadvantages.push(...talentModifiers.disadvantageSources);
   unresolved.push(...talentModifiers.unresolved);
+  // Main directrice perdue : la séquelle force la règle générale de la main non directrice (même identifiant, donc Ambidextre la supprime).
+  if (sequelae.offHand?.forced) modifiers.push({ id: 'penalty:offHand', label: 'Main secondaire', amount: -2 });
   applyV5TalentPenaltyRules(modifiers,talentModifiers.penaltyRules,{kind,role:talentRole,context:settings.context||{},advantage:advantages.length-disadvantages.length,aimed:settings.aimed});
+  if(defending&&settings.context?.combatDefensiveActionBonus===2)modifiers.push({id:'combat:defensive-action',label:'Action Défensive choisie',amount:2});
+  unresolved.push(...applyV5AttackSituationModifiers(modifiers,{role:talentRole,kind,actionType:action.type,actor,target,context:settings.context||{},actorSize:settings.actorSize,targetSize:settings.targetSize,talentRules:talentModifiers.penaltyRules,advantage:advantages.length-disadvantages.length,aimed:settings.aimed}));
+  if (sequelae.offHand) {
+    // Une seule pénalité de main non directrice, quelle que soit la source ; les 100 PX de réapprentissage la réduisent.
+    const offIds = new Set(['penalty:offHand', 'quality:offhand-defense']);
+    const kept = modifiers.filter(row => offIds.has(row.id));
+    if (kept.length > 1) modifiers.splice(0, modifiers.length, ...modifiers.filter(row => !offIds.has(row.id) || row === kept[0]));
+    if (kept[0]?.amount < 0) kept[0].amount = Math.min(0, kept[0].amount + sequelae.offHand.reduction);
+  }
   if((actor.states||[]).some(s=>s.restriction==='noMomentumOrAdvantage'&&sourceActive(s)))advantages.length=0;
   // Faux de Shyish (V5 p. 247) : un Mort-vivant engagé avec le porteur n'a pas d'Avantage ; son Élan (hasMomentum) n'est pas touché.
   if(kind==='melee'&&target?.extensions?.v5?.specialStates?.scytheOfShyish){const scythe=applyScytheOfShyishRules({target:actor,isEngagedWithWielder:true,advantageSources:advantages,hasMomentum:hasMomentum(actor)});if(scythe.advantageSuppressed)advantages.splice(0,advantages.length,...scythe.allowedAdvantages);}
   if(talentModifiers.ignoreNegative){for(const row of modifiers)if(row.amount<0)row.amount=0;disadvantages.length=0;}
+  // Les pertes durables ne sont pas des pénalités d'État : aucun talent d'immunité aux États ne les efface.
+  modifiers.push(...sequelae.modifiers); advantages.push(...sequelae.advantages); disadvantages.push(...sequelae.disadvantages);
   const ignoreCritical=context.extendedTest===true && activeMagicTalent(actor,'mind-over-body')?.ignoreCriticalPenalties;
   if(Number(context.magicCriticalPenalty)<0 && !ignoreCritical)modifiers.push({id:'critical-wounds',label:'Blessures Critiques précisées par le MJ',amount:Number(context.magicCriticalPenalty)});
   if(ignoreCritical)for(const modifier of modifiers)if(modifier.id==='critical-wounds' || modifier.source?.kind==='critical')modifier.amount=0;
@@ -265,7 +379,7 @@ export function buildCombatTest(normalized, role = 'actor') {
   if(frenzy&&!defending&&kind==='melee'&&['attack','attaque'].includes(action.type)){const enemies=(normalized.v5State?.participants||[]).filter(p=>p.id!==actor.id&&p.camp!==actor.camp&&Number(p.hp)>0&&p.zone==='active'),nearest=context.nearestEnemyId||(enemies.length===1?enemies[0].id:null);if(!nearest||!enemies.some(p=>p.id===nearest)||normalized.target?.id!==nearest)restrictions.push('Frénésie : désigner et attaquer l’ennemi le plus proche.');}
   const talentSL = previewV5TalentSLChoices(withCompanionTalents(actor,normalized.v5State?.participants||[]), test, { action, settings, kind, role: talentRole, opponent: target });
   test = talentSL.test; unresolved.push(...talentSL.unresolved);
-  test={...test,options:test.options.map(o=>({...o,result:enforceMagicTestRestrictions(actor,o.result,{magical:false})}))};
+  test={...test,options:test.options.map(o=>({...o,result:refreshV5ResultTier(enforceMagicTestRestrictions(actor,o.result,{magical:false}))}))};
   return { test, crewSkill,talentPlans: [talentModifiers.plan, ...talentSL.plans,...psychology.plans,...contact.plans,...(contactTalent?[contactTalent]:[]),...(dualWhirlwind?[dualWhirlwind]:[]),...(warLeader?[{proposals:[{origins:[warLeader.source]}]}]:[])], talentSLChoices: talentSL.choiceDescriptors, kind, penalty: appliedPenalty, penaltyStates: [...relevant].filter(([, value]) => value).map(([key]) => key),
-    unresolved, restrictions, charging, qualityBonus: conditionalBonus };
+    unresolved, restrictions, charging, qualityBonus: conditionalBonus,extraordinaryShot };
 }

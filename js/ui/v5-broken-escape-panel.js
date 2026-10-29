@@ -1,4 +1,5 @@
 import {normalizeCamp} from '../core/encounters.js';
+import {v5CombatActionClock} from '../core/v5-resources.js';
 /** Interface MJ de la séquence obligatoire de Brisé (L06 p.163, 185–186).
  * Les faits restent locaux jusqu’au commit d’un reçu Store.
  */
@@ -22,10 +23,8 @@ export function renderBrokenEscapeVisibilityControl({actor,value,onChange,key='f
 const hideSkills=actor=>(actor?.skills||[]).filter(s=>s.status==='resolved'&&Number.isInteger(Number(s.total??s.value))&&/discr[eé]tion|stealth|\bhide\b/i.test(s.name||s.nom||s.sourceName||''));
 function stateOf(Store){try{return JSON.parse(Store.getFullJSON());}catch{return {};}}
 function turnOf(state){
- const enc=state.activeScene?.encounterId||state.activeScene?.id||state.extensions?.v5?.combatId;
- const serial=state.activeScene?.extensions?.v5?.turnIndex??state.extensions?.v5?.turnIndex;
- const actor=state.combat?.currentActorId;
- return {encounterId:enc,round:Number.isSafeInteger(state.combat?.round)&&state.combat.round>0?state.combat.round:null,actorId:actor,turnId:enc&&actor&&Number.isSafeInteger(serial)&&serial>0?(state.activeScene?.id||enc)+':'+serial+':'+actor:null};
+ const clock=v5CombatActionClock(state);
+ return {...clock,round:clock.round??null,actorId:state.combat?.currentActorId,turnId:clock.turnId??null};
 }
 function selectField(parent,label,value,key,options,change){
  const wrap=node('label','workspace-type',label),select=document.createElement('select');
@@ -77,11 +76,11 @@ export function createV5BrokenEscapePanel({Store,refresh=()=>{},onPrepareHide=()
   }
   box.append(node('p','workspace-broken-status','Aperçu : aucun effet appliqué.'));
   if(required==='flee'){
-   box.append(node('p','', 'Move (Flee) : '+p.moveDistance+' mètres de jeu (source V5 : '+p.moveDistance+' yards).'));
+   box.append(node('p','', 'Move (Flee) : '+p.moveDistance+' mètres de jeu.'));
   }else{
    const t=p.test||{},r=t.result||{};
    box.append(node('p','', 'Athlétisme '+(t.score??'—')+' · jet '+(r.initialRoll??'—')+(r.reversed?' inversé vers '+r.roll:'')+' · '+(r.sl??'—')+' DR (Intermédiaire +2).'));
-   box.append(node('p','', 'Move/Flee : '+p.moveDistance+' mètres de jeu (source V5 : '+p.moveDistance+' yards); Sprint supplémentaire : '+p.sprintDistance+' mètres (source V5 : '+p.sprintDistance+' yards); total : '+p.totalDistance+' mètres de jeu ('+p.totalDistance+' yards).'));
+   box.append(node('p','', 'Move/Flee : '+p.moveDistance+' mètres de jeu; Sprint supplémentaire : '+p.sprintDistance+' mètres; total : '+p.totalDistance+' mètres de jeu.'));
    if(t.preview?.choiceRequired){
     const select=document.createElement('select');select.setAttribute('aria-label','Choix du résultat Athlétisme');select.dataset.brokenEscapeChoice=id;
     select.append(new Option('Choisir le résultat',''),...t.preview.options.map(o=>new Option(o.id==='reverse'?'Inverser → '+o.result.roll:'Garder → '+o.result.roll,o.id)));
@@ -96,8 +95,8 @@ export function createV5BrokenEscapePanel({Store,refresh=()=>{},onPrepareHide=()
   const proof=node('div','workspace-broken-proof');proof.setAttribute('role','status');proof.dataset.brokenEscapeReceipt=receipt.id||receipt.executionId||'';
   proof.append(node('strong','',receipt.action==='visibility-confirmation'?'Attestation MJ enregistrée':'Reçu mécanique enregistré'));
   if(receipt.action==='visibility-confirmation')proof.append(node('p','workspace-muted',(receipt.visibleToAnyEnemy?'Visible d’au moins un ennemi':'Hors de vue de tous les ennemis')+' · fait explicite pour ce Tour · aucune Action ni distance.'));
-  else if(receipt.action==='flee')proof.append(node('p','workspace-muted','Move (Flee) : '+receipt.moveDistance+' mètres de jeu (source V5 : '+receipt.moveDistance+' yards).'));
-  else proof.append(node('p','workspace-muted','Sprint : '+receipt.sprintDistance+' mètres supplémentaires (source V5 : '+receipt.sprintDistance+' yards), '+(receipt.test?.result?.sl??'—')+' DR.'));
+  else if(receipt.action==='flee')proof.append(node('p','workspace-muted','Move (Flee) : '+receipt.moveDistance+' mètres de jeu.'));
+  else proof.append(node('p','workspace-muted','Sprint : '+receipt.sprintDistance+' mètres supplémentaires, '+(receipt.test?.result?.sl??'—')+' DR.'));
   section.append(proof);
  }
  function renderActor(actor,participants){

@@ -1,4 +1,5 @@
 import { uid } from './models.js';
+import { casterCaracs } from './creature-abilities.js';
 import {randomVortexStep,oppositeCamp} from './v5-magic-turn.js';
 import {buildParticipantFromBestiary,summonProfileLibrary} from './bestiary-profiles.js';
 import {spellObjectChoices,ARCANE_WEAPON_PROFILES} from './equipment.js';
@@ -554,9 +555,9 @@ export function vortexMovementFromDie(roll) {
 
 /**
  * Résout le déplacement et les effets d'un vortex magique (Winds of Magic pp. 20-21, Random Vortices).
- * Round de lancer : le lanceur choisit la direction et fait un Test de Force Mentale Accessible (+2 DR) — réussite : 2d10 yards dans la direction
+ * Round de lancer : le lanceur choisit la direction et fait un Test de Force Mentale Accessible (+2 DR) — réussite : 2d10 m dans la direction
  * choisie ; échec : direction aléatoire (d10 de la table, 1 = le vortex disparaît, 5 = il reste en place). Les mouvements des Rounds suivants
- * (fin du Tour du lanceur, d10 + 2d10 yards) restent suivis à la table par le MJ : le moteur ne déplace pas de pions.
+ * (fin du Tour du lanceur, d10 + 2d10 m) restent suivis à la table par le MJ : le moteur ne déplace pas de pions.
  * Propose direction et distance, puis applique les conséquences aux cibles réellement traversées (saisie MJ).
  */
 export function resolveVortexTrajectory({ contract, caster, direction, distance, targetsCrossed = [], options = {} } = {}) {
@@ -580,12 +581,12 @@ export function resolveVortexTrajectory({ contract, caster, direction, distance,
     else finalDirection = movement;
   }
 
-  const bfm = Math.max(1, Math.floor((Number(caster?.caracs?.FM) || 30) / 10));
+  const bfm = Math.max(1, Math.floor((Number(casterCaracs(caster).FM) || 30) / 10));
   const moves = vortexOutcome === null;
   const finalDistance = !moves ? 0 : distance ?? explicitMagicDie(options.distanceRoll, '2d10');
   if (moves && (!Number.isInteger(finalDistance) || finalDistance<2 || finalDistance>20)) missing.push('distanceRoll');
   if (missing.length) {
-    return { ready: false, missing, spellName: contract.name, summary: 'Vortex : saisir le Test de Force Mentale (+20), la direction choisie (réussite) ou le d10 de direction (échec), et la distance (2d10 yards).' };
+    return { ready: false, missing, spellName: contract.name, summary: 'Vortex : saisir le Test de Force Mentale (+20), la direction choisie (réussite) ou le d10 de direction (échec), et la distance (2d10 m).' };
   }
 
   if(contract.effects?.vortex)return {ready:true,trajectory:{direction:finalDirection || vortexOutcome,distance:finalDistance,radius:2*bfm,willpowerSuccess:willpower,outcome:vortexOutcome},crossedReceipts:[],summary:contract.name+' : '+(finalDirection || vortexOutcome)+', '+finalDistance+' mètres.'};
@@ -661,7 +662,7 @@ export function resolveVortexTrajectory({ contract, caster, direction, distance,
     crossedReceipts,
     summary: vortexOutcome === 'disappears' ? `Vortex ${contract.name} : direction aléatoire (1), le vortex disparaît.`
       : vortexOutcome === 'stays' ? `Vortex ${contract.name} : direction aléatoire (5), le vortex reste en place. ${targetsCrossed.length} cible(s) traversée(s).`
-      : `Vortex ${contract.name} déplacé de ${finalDistance} yards vers le ${finalDirection}${willpower ? '' : ' (direction aléatoire)'}. ${targetsCrossed.length} cible(s) traversée(s).`
+      : `Vortex ${contract.name} déplacé de ${finalDistance} m vers le ${finalDirection}${willpower ? '' : ' (direction aléatoire)'}. ${targetsCrossed.length} cible(s) traversée(s).`
   };
 }
 
@@ -672,7 +673,7 @@ export function resolveVortexTrajectory({ contract, caster, direction, distance,
 export function resolveAuxiliarySummons({ contract, caster, options = {} } = {}) {
   const auxiliaries = [];
   const cName = contract.canonicalName || contract.name;
-  const bfm = Math.max(1, Math.floor((Number(caster?.caracs?.FM) || 30) / 10));
+  const bfm = Math.max(1, Math.floor((Number(casterCaracs(caster).FM) || 30) / 10));
 
   if (contract.effects?.summonProfile) {
     const profile = BEAST_PROFILES[contract.effects.summonProfile];
@@ -1458,8 +1459,8 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
     const spellSuccess = testSuccess && (totalCastingSl >= contract.cn || (isCritical && effectiveCriticalChoice === 'total-power'));
     const surplus = spellSuccess ? Math.max(0, totalCastingSl - contract.cn) : 0;
     const availableOvercastSl = surplus + extraOvercastFromCritical + (spellSuccess && contract.domain==='high' ? magicTalentRank(actor,'high-magic') : 0);
-    const bi = Math.max(1, Math.floor((Number(actor?.caracs?.Int) || 30) / 10));
-    const bfm = Math.max(0, Math.floor(Number(actor?.caracs?.FM ?? 0) / 10));
+    const bi = Math.max(1, Math.floor((Number(casterCaracs(actor).Int) || 30) / 10));
+    const bfm = Math.max(0, Math.floor(Number(casterCaracs(actor).FM ?? 0) / 10));
     const maxOvercastSpend = bi + bfm;
     const overcastValidation = spellSuccess
       ? validateOvercastChoices(overcastChoices, { availableSL: availableOvercastSl, maxSpend: maxOvercastSpend, spell: spellForCasting })
@@ -1625,7 +1626,7 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
 
   // 5. Haute Magie : calcul du risque d'épuisement magique si surpuissant
   let burnout = null;
-  const bfm = Math.max(0, Math.floor(Number(actor?.caracs?.FM ?? 0) / 10));
+  const bfm = Math.max(0, Math.floor(Number(casterCaracs(actor).FM ?? 0) / 10));
   if (contract.domain === 'high') {
     const totalOvercastSpent = Object.values(overcastChoices).reduce((sum, v) => sum + (Number(v) || 0), 0);
     const burnoutRiskCalc = calculateBurnoutRisk({ overcastSpent: totalOvercastSpent, bfm });
@@ -2260,12 +2261,15 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
     if (effects.killAtZero && Number(target.hp) === 0) { targetReceipt.kill = true; computedSpecialState.dead=true; computedSpecialState.cannotRaiseUndead=true; }
     const computedGrantedActions = [];
     if(effects.conjureWeapon === true){
-      const profile=effects.conjureWeaponProfile ? {qualities:[],...structuredClone(effects.conjureWeaponProfile)} : ARCANE_WEAPON_PROFILES[effects.conjureWeaponKey||domainFacts.weaponKey],id='spell-weapon-'+uid();
+      const requestedWeaponKey=effects.conjureWeaponKey||domainFacts.weaponKey||null;
+      const profile=effects.conjureWeaponProfile ? {qualities:[],...structuredClone(effects.conjureWeaponProfile)} : ARCANE_WEAPON_PROFILES[requestedWeaponKey];
+      const id='spell-weapon-'+uid();
+      if(!profile)throw new Error('Profil d’arme conjurée absent : le sort ou le MJ doit préciser le profil avant de matérialiser l’action.');
       // Profil et valeur d'attaque propres au sort (ex. Poings de Gork : Corps à corps (Bagarre) 55, Arme +9).
       const score=effects.conjureWeaponScore ?? conjuredWeaponSkillScore(actor,profile.id) ?? domainFacts.weaponSkillScore;
       const qualities=[...profile.qualities.map(q=>typeof q==='string'?{id:q}:structuredClone(q)),{id:'magique'}];
       if(profile.id==='garrote')for(const q of qualities)if(q.id==='immobilisante'){q.rating=Number(actor.caracs.F);q.parameter=String(q.rating);}
-      computedGrantedActions.push({id,note:profile.name+' aethyrique',type:'attack',attr:'CC',base:score,damage:profile.damage ?? 0,damageFormula:profile.damage===null?'0':'BF'+(profile.damage?'+'+profile.damage:''),qualities,extensions:{v5:{weaponHands:profile.hands,weaponReach:profile.reach,magical:true,materialized:true}}});
+      computedGrantedActions.push({id,note:profile.name+' aethyrique',type:'attack',attr:'CC',base:score,damage:profile.damage ?? 0,damageFormula:profile.damage===null?'0':'BF'+(profile.damage?'+'+profile.damage:''),qualities,extensions:{v5:{weaponHands:profile.hands,weaponReach:profile.reach,magical:true,materialized:true,conjuredWeaponKey:profile.id||requestedWeaponKey,conjuredWeaponProfile:structuredClone(profile),...(effects.conjureWeaponScore!==undefined?{spellWeaponScoreImposed:true}:{})}}});
       targetReceipt.actions.push({kind:'conjured-weapon',profile:structuredClone(profile),score,summary:profile.name+' aethyrique : '+score+', dégâts '+(profile.damage===null?'aucun':'BF + '+profile.damage)+', '+profile.hands+' main(s), allonge '+profile.reach+'. Lance sans Charge / lance ou épée bâtarde à une main : adapter le profil conformément à p. 301.'});
       // Variantes déclarées de l'arme conjurée (ex. Dague de l'Art : BF + 8 contre Éthéré ou Corruption) : une action de plus, choisie par le MJ selon la cible.
       for(const extra of effects.extraConjuredActions || []){const base=computedGrantedActions[computedGrantedActions.length-1];computedGrantedActions.push({...structuredClone(base),id:id+':'+extra.id,note:extra.note,damage:extra.damage,damageFormula:extra.damageFormula});}
@@ -2691,8 +2695,9 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
     // A-02 : la Faux de Shyish est une couche d'effet (drapeau lu au combat, hallebarde conférée) : tout expire avec elle.
     if (specialTag === 'scythe-of-shyish') {
       computedSpecialState.scytheOfShyish = true;
+      const profile=ARCANE_WEAPON_PROFILES.halberd;
       computedGrantedActions.push({ id: 'halberd', note: 'Hallebarde Magique (Faux de Shyish)', type: 'attack', attr: 'CC', damageFormula: `BF+${bfm + 4}`,
-        reach: 'Longue', qualities: [{ id: 'magique' }, { id: 'defensive' }, { id: 'taille' }, { id: 'empaleuse' }], extensions: { v5: { kind: 'melee', weaponReach: 'Longue' } } });
+        base:conjuredWeaponSkillScore(actor,profile.id)??undefined,reach: 'Longue', qualities: [{ id: 'magique' }, { id: 'defensive' }, { id: 'taille' }, { id: 'empaleuse' }], extensions: { v5: { kind: 'melee', weaponReach: 'Longue',weaponHands:profile.hands,magical:true,conjuredWeaponKey:profile.id,conjuredWeaponProfile:structuredClone(profile) } } });
     }
 
     const hasStatMods = Object.keys(computedStatModifiers).length > 0;

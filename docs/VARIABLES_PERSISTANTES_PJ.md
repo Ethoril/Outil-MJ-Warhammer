@@ -4,12 +4,25 @@ But : préparer la phase H du plan de fin de projet (écriture en retour de l’
 
 | Variable | Emplacement dans l’outil | Source sur la fiche aujourd’hui | Modifiée par | Lot / commit |
 | --- | --- | --- | --- | --- |
+| État monté du participant | `extensions.v5.mounted` (booléen ; absent = `false`) | absent | case à cocher du MJ dans « Modifier le participant » | F2-C |
+| Mains utilisées pour une épée bâtarde | `extensions.v5.weaponHandsByEquipmentId[<equipmentId>]` (1 ou 2 ; absent = nom catalogue, notamment `(2M)`) | nom du catalogue et choix MJ | case à cocher par instance dans « Modifier le participant » | F2-C |
 | Points de Péché | `extensions.v5.divine.sin` | absente | prières, Courroux, absolution, saisie MJ | divin (P4), phase B |
 | Points de Corruption | `extensions.v5.corruptionPoints` | absente | sorts, Courroux, Larmes de Shallya… | lot 3, phase B, phase D |
+| Expositions de Corruption et arbitrages K1 | `extensions.v5.corruptionExposures[]` (avec `sessionId` issu de `extensions.v5.talentSessionId`), `corruptionAbsolutions[]`, `pendingCorruptionTest`, `lastCorruptionThresholdTest` | absents | le MJ déclare les sources et retient la plus forte ; un Test par personnage et par séance explicitement ouverte ; historique conservé à la séance suivante ; Undo/Redo et rechargement | F2-K1 |
+| Mutations de Corruption et perte de personnage à arbitrer | `extensions.v5.pendingCorruptionMutation`, `corruptionMutations[]`, `corruptionMutationCatalogRecords[]`, `pendingCorruptionCharacterLoss`, `corruptionCharacterLoss` | absents | échec du Test au-dessus du seuil ; confirmation ou refus explicite du MJ ; mutations K2 restent à traiter selon leur table | F2-K1 |
+
+Le délai secret de mutation (`pendingCorruptionMutation.manifestation.days`, tiré avec 3d10) est une donnée réservée au MJ, conservée dans l’état partagé pour permettre la reprise et le rechargement. Tout affichage destiné aux joueurs doit filtrer ce champ.
 | Culte(s) | déduit des talents Béni / Invocation (spécialisation) | talents (importés) | — | divin |
 | Points de Chance permanents | `extensions.v5.characterResources[].fortune`, clé `characterId` ; projection `extensions.v5.resources.fortune` | `chance` (initialisation explicite depuis le solde connu importé) | dépenses, corrections MJ, renouvellement explicite | existant ; B09 `af31809` |
 | Pénitences en cours et accomplies | `extensions.v5.divinePenances[]` : identité, culte, texte, source, origine, statut et clôture MJ | absente | Courroux 96–100, création et clôture MJ | phase B B10 `aa62ca0` |
 | Blessures Critiques (registre) | `extensions.v5.criticalWounds` | absente | combat, soins, Larmes de Shallya, bouton Guérir | phase A (A9, A11) |
+| Séquelles des Blessures Critiques V5 | `extensions.v5.criticalAftermath[]` : identité de table/ligne L06, localisation, source de résolution, états, blessures additionnelles, blessures permanentes et rappels de soins | absente | application d’une ligne critique V5 ; identifiant idempotent par résolution/personnage/critique | F2-I |
+| Décompte de mort par Blessures Critiques | `extensions.v5.criticalDeath` : statut, échéance, BE et identifiants des critiques déclencheurs | absente | réconciliation lors de l’application d’un critique ; annulation si seuil ou Inconscient disparaît ; confirmation ou refus explicite du MJ à l’échéance | F2-I |
+| Mort confirmée par le MJ | `extensions.v5.dead` (booléen) avec `hp = 0` | absente | moteurs de mort préexistants ; F2-B ajoute l’option létale de la table, le choix létal et la confirmation explicite du MJ contre une cible admissible sans défense | préexistant ; complément F2-B |
+
+État de combat persistant à travers sauvegarde/rechargement (sans retour vers une fiche durable) : `extensions.v5.combatActions` appartient à l’enveloppe de séance. Il contient `byActorId` (Défensive ou Visée, compétence/arme/cible, horloge), `movementByActorId`, `trippedResolutionIds` (une tentative de Croche-pied par touche) et les reçus `receipts`. Il est restauré par Undo/Redo, expire au Tour approprié et est purgé au nouveau combat.
+
+Identité de l'occurrence de combat : `extensions.v5.combatScopeId` (enveloppe et `activeScene.extensions.v5.combatScopeId` pour une scène). L'initialisation d'un nouveau combat et le redémarrage la renouvellent ; la reprise conserve celle de la scène. Quotas, Actions, Prière et Brisé partagent cette identité de Tour, avec compatibilité des anciennes sauvegardes sans ce champ. L'identité et la date de création de la scène restent conservées au redémarrage. Cette donnée de séance n'est pas destinée au retour vers la fiche.
 
 ## Complément phase B — reprise gpt/phase-b4
 
@@ -90,3 +103,39 @@ Un Exténué d’Altdorf est un État de combat ordinaire, exclu du registre. Le
 | Points de Résilience | `extensions.v5.resilience` | `resilience` de la fiche, importé comme le Destin (B10b) ; saisie du MJ si la fiche n’en porte pas | `create-familiar` (solde débité) | branchement B10, B10b ; **à réécrire côté fiche en phase H** (débit) |
 | Camp du familier d’un PJ | `camp` du participant familier (`allie`) | absente | `create-familiar` | branchement B10 |
 | Lien maître-familier, côté familier | `extensions.v5.familiarOf` : masterId, linkId, system, kind, wind, species | absente | mêmes commandes (posé et retiré avec le lien du maître) | phase E F2 |
+
+## Complément F2-J2 — séquelles durables et temporaires (29/10/2026)
+
+Aucune de ces valeurs n'est écrite vers la fiche avant la phase H. Le registre de convalescence est la seule source ; `extensions.v5.sequelaEffects` n'est qu'une projection (recalculée à chaque commande et au chargement, voir `projectV5Resources`) que lit la résolution. Les identifiants de séquelles sont stables : `<occurrence F2-I>:j2:<clé>` (`injury:n`, `dN`, `shock:n:<partie>`), jamais rapprochés par nom.
+
+| Variable | Emplacement dans l'outil | Source sur la fiche aujourd'hui | Modifiée par | Lot / commit |
+| --- | --- | --- | --- | --- |
+| Séquelles suivies (fractures, déchirures, pertes, cicatrices, étapes) | `extensions.v5.aftermathRegister.sequelae[]` : `id`, `participantId`, `incidentId`, `source.criticalId`, `kind`, `part`, `side`, `severity`, `status`, échéances (`endDay`, `partialDay`, `deadlineDay`), `immobilization`, `finalTest`, `history` | absente | commandes `openAftermathSequelae`, `setAftermathSequelaFacts`, `immobilizeAftermathFracture`, `resolveAftermathFracture`, `treatAftermathTornMuscle`… | F2-J2 |
+| Pertes définitives de parties du corps (main, bras, pied, jambe, œil, oreille, doigts, orteils, nez, dents, langue) | mêmes éléments, `kind: 'loss'`, `status: 'permanent'`, `part`, `side` (`left`/`right`), `count`, `primary` (main directrice), `relearned` (100 PX par DR de pénalité retiré) | absente (Traits/Notes libres) | confirmation du choc d'amputation F2-I puis faits saisis par le MJ ; pied sauvé ou perdu après échéance de chirurgie | F2-J2 |
+| **Perte de caractéristique (V5 p.177)** | `sequelae[]` `kind: 'characteristic-loss'` : `carac`, `requested`, `applied`, `split` (`appliedToBase`, `appliedToAdvances`, `base`, `advances` si connus), `reason`, `day` ; **information à envoyer plus tard à la fiche** : identité (clé de la caractéristique + personnage), valeur (`applied`, base d'abord puis Avancements), provenance (`id` de la séquelle, `reason`) | `caracs` de la fiche, non modifiées par l'outil | `recordAftermathCharacteristicLoss` ; ne pas la saisir deux fois si la fiche a déjà été corrigée à la main | F2-J2 |
+| Pertes de caractéristique déduites des règles (pied/jambe −10 CC et Ag, second pied −5, orteils −1 CC/Ag chacun, dents −1 Soc par paire, fracture mal soignée −10/−20 Ag, Mouvement) | calculées par `sequelaCharacteristicTotals(sequelaEffectRows(...))`, exposées par `listAftermathSequelae().characteristics[participantId]` (identité, valeur, `sources[]` avec `sourceId`) ; Mouvement effectif : `extensions.v5.sequelaEffects.movement` | `caracs`/`M` de la fiche, non modifiées | dérivées des séquelles permanentes ; les effets temporaires (fracture en cours) sont marqués `lifetime: 'temporary'` et ne se renvoient pas | F2-J2 |
+| Cicatrices impressionnantes (accord du MJ) | `sequelae[]` `kind: 'scar-decision'`, `id: scars:<participantId>`, `agreed` | absente | `decideAftermathImpressiveScars` | F2-J2 |
+| Cicatrice de duel (Coup spectaculaire) | `sequelae[]` `kind: 'scar'` ; active une fois le critique lié clos (guéri), une seule fois par personnage | absente | ouverture du suivi du critique | F2-J2 |
+| Maladie née d'un critique | `diseases[].sequelaId` (lien vers la séquelle `disease`) | absente | `registerAftermathDisease` avec `sequelaId` | F2-J2 |
+
+## Complément F2 — données durables des autres lots (29/10/2026, clôture)
+
+Aucune de ces valeurs n'est écrite vers la fiche avant la phase H. Les états de combat ordinaires (Enchevêtré, Sonné…) restent exclus. Les valeurs ci-dessous sont portées par le participant (`extensions.v5`) ou par une pièce d'équipement (`equipment[].extensions.v5`) et survivent au rechargement.
+
+| Variable | Emplacement dans l'outil | Source sur la fiche aujourd'hui | Modifiée par | Lot |
+| --- | --- | --- | --- | --- |
+| Lien cavalier ↔ monture | `extensions.v5.mountId` (côté cavalier, avec `mounted: true` ; retiré en même temps que l'état monté) | absente | sélecteur « monté » du MJ, descente forcée par une chute ou la perte de la monture | F2-M |
+| Morphologie de localisation des coups | `extensions.v5.hitMorphology` (quadrupède, oiseau, serpent, araignée) ; déduite du profil si absente | absente | choix MJ par cible, profil importé | F2-G |
+| Dégâts d'armure par pièce | `extensions.v5.armorDamageByItem[<itemId>]` (points de PA perdus) | absente | résolutions qui abîment une pièce ou un bouclier (qualités de dégâts d'armure), réparation MJ | F2-D (T2) |
+| Disposition d'une arme (lâchée, cassée) | `equipment[].extensions.v5.weaponDisposition` ; Dague funeste : `fellDaggerBreakNextUse` | absente | maladresses, secret d10 de la Dague funeste, récupération de l'arme | F2-E (T2) / F2-F |
+| État de recharge d'une arme | `equipment[].extensions.v5.reloadState`, `reloadProgress`, `loadedCharges`, `griffonsfootReloadProgress` | absente | résolutions de recharge et de tir | F2-D (T2) |
+| Réserve de poudre et de projectiles | `extensions.v5.blackpowderStock` : `projectiles`, `powderCharges`, `history[]` (200 derniers débits) | absente | débits de tir, saisie MJ | F2-E (T2) |
+| Projectiles fichés (Empaleuse) | `extensions.v5.lodgedProjectiles[]` : résolution d'origine, `removed` | absente | coup Empaleuse, extraction, soin | F2-D |
+| Progrès de sortie d'un filet | `extensions.v5.netEscapeProgress[<conditionId>]` | absente | Tests de sortie opposés | F2-D |
+| Déploiement d'un pavois | `extensions.v5.paviseDeploymentByItemId[<itemId>]` : `status` (notamment `planted`) et horloge de mise en place | absente | actions de pavois | F2-F |
+| Maquillage de blessure en griffure de grand félin | `extensions.v5.felidWoundDisguises[]` (côté victime) : résolution, apparence, blessures | absente | Griffes du tigre, case cochée par le porteur | F2-F |
+| Origine d'une poignée en bois de Grand Cerf, rang de Focalisation, rang de robes | `equipment[].extensions.v5.antlerHandleOrigin`, `focusRank`, `robeRank` | absente | saisie par résolution dans `draft.v5Context` (non persistée) ; lue sur l'objet s'il porte déjà la valeur | F2-F |
+| Déclarations quotidiennes d'exposition à la malepierre | `extensions.v5.warpstoneDailyExposureKeys[]` (500 dernières), `pendingCorruptionExposures[]` | absentes | déclaration MJ K1 | F2-F / F2-K |
+| Compte à rebours de mort par Suffocation | `extensions.v5.suffocationDeathDueRound` (Round d'échéance ; effacé quand la Suffocation tombe) | absente | fin de Round, sortie de l'Immersion | F2-H |
+| Duels déjà exploités par Wulfrik (Tueur de champions) | `extensions.v5.championSlayerDuels[]` (identifiants de cibles) | absente | application de la résolution, réarmement par le MJ | F2-H |
+| Mort subite des figurants (réglage de table) | `extensions.v5.suddenDeathEnabled` au niveau de la partie, désactivé par défaut | absente | réglage du MJ, annulable | F2-I |

@@ -21,6 +21,12 @@ export function reverseV5Roll(value) {
   const roll = normalizeV5Roll(value);
   return roll === 100 ? 100 : (roll % 10) * 10 + Math.floor(roll / 10);
 }
+/** Recompute display metadata after conditional qualities, talents or forced outcomes. */
+export function refreshV5ResultTier(result) {
+ const {sl,success}=result;
+ const resultTier=sl>=5?{id:'success-5-plus',label:'Réussite éclatante'}:sl>=3?{id:'success-3-4',label:'Réussite impressionnante'}:sl>=1?{id:'success-1-2',label:'Réussite'}:success?{id:'success-zero',label:'Réussite marginale'}:sl<=-5?{id:'failure-5-minus',label:'Échec éclatant'}:sl<=-3?{id:'failure-3-4',label:'Échec impressionnant'}:sl<=-1?{id:'failure-1-2',label:'Échec'}:{id:'failure-zero',label:'Échec marginal'};
+ return {...result,resultTier,zeroOutcome:sl===0?(success?'marginalSuccess':'marginalFailure'):null};
+}
 function sources(values, label) {
   if (!Array.isArray(values)) throw new TypeError(`${label} invalide`);
   const seen = new Set();
@@ -53,8 +59,8 @@ function evaluate({ score, roll, modifiers, advantage, kind, channellingGain }) 
   const fumble = doubled && !success;
   if (kind === 'test' && critical && !channellingGain) sl = Math.max(5, sl);
   if (kind === 'test' && fumble) sl = Math.min(-5, sl);
-  const zeroOutcome = sl === 0 ? (success ? 'marginalSuccess' : 'marginalFailure') : null;
-  return { ruleVersion: V5_TEST_RULE_VERSION, roll, score, kind, success, sl, zeroOutcome, critical, fumble,
+  const {zeroOutcome,resultTier}=refreshV5ResultTier({sl,success});
+  return { ruleVersion: V5_TEST_RULE_VERSION, roll, score, kind, success, sl, zeroOutcome, resultTier, critical, fumble,
     details: { baseSl, modifiers: modifiers.map(item => ({ ...item })), advantageSl: advantage.slModifier,
       totalModifier, beforeCriticalSl, automatic, doubled } };
 }

@@ -1,5 +1,6 @@
 import { uid } from './models.js';
 import {activeMagicTalent, prepareMiscastOptions} from './v5-magic-talents.js';
+import { markCorruptionThresholdTest } from './v5-corruption.js';
 /**
  * Moteur des Incidents Magiques (Miscasts) V5 — Lot 3.1.
  * Conforme au Cahier des charges Lot 3 et au Cadrage Magie V5.
@@ -137,18 +138,18 @@ function buildMiscastDetails({ tableKey, entry, roll, secondaryRolls = {}, bfm =
       return {
         type: 'narrative',
         rangeYards: distance,
-        summary: `Tout le lait dans un rayon de ${distance} yards tourne instantanément.`
+        summary: `Tout le lait dans un rayon de ${distance} m tourne instantanément.`
       };
     }
     if (max <= 45) {
-      // Souffle glacial : BFM yards, 1 minute (6 rounds)
+      // Souffle glacial : BFM mètres, 1 minute (6 rounds)
       const rangeYards = Math.max(1, Number(bfm) || 1);
       return {
         type: 'aura',
         rangeYards,
         duration: { value: 1, unit: 'minutes', rounds: 6 },
         testRequired: { skill: 'Résistance', slModifier: 0, failureEffect: '−1 DR aux Tests CT, Agi, Dex' },
-        summary: `Souffle glacial à ${rangeYards} yards pendant 1 minute : Test de Résistance (+0 DR) ou −1 DR.`
+        summary: `Souffle glacial à ${rangeYards} m pendant 1 minute : Test de Résistance (+0 DR) ou −1 DR.`
       };
     }
     if (max <= 50) {
@@ -165,7 +166,7 @@ function buildMiscastDetails({ tableKey, entry, roll, secondaryRolls = {}, bfm =
       return {
         type: 'narrative',
         rangeYards: distance,
-        summary: `Tout l’alcool dans un rayon de ${distance} yards devient amer et infect.`
+        summary: `Tout l’alcool dans un rayon de ${distance} m devient amer et infect.`
       };
     }
     if (max <= 60) {
@@ -277,7 +278,7 @@ function buildMiscastDetails({ tableKey, entry, roll, secondaryRolls = {}, bfm =
     };
   }
   if (max <= 15) {
-    // Poupée de chiffon : 1d10 yards, 1d10 Dégâts (ignore PA, réduit par BE), À Terre
+    // Poupée de chiffon : 1d10 m, 1d10 Dégâts (ignore PA, réduit par BE), À Terre
     const distance = die(['distance', 'distanceRoll'], 'd10');
     const damage = die(['damage', 'woundsRoll', 'wounds'], 'd10');
     return {
@@ -287,7 +288,7 @@ function buildMiscastDetails({ tableKey, entry, roll, secondaryRolls = {}, bfm =
       armorIgnored: true,
       reducedByBE: true,
       conditionsGained: ['À Terre'],
-      summary: `Projeté de ${distance} yards : ${damage} Dégâts (ignore PA, réduit par BE), puis À Terre.`
+      summary: `Projeté de ${distance} m : ${damage} Dégâts (ignore PA, réduit par BE), puis À Terre.`
     };
   }
   if (max <= 20) {
@@ -300,7 +301,7 @@ function buildMiscastDetails({ tableKey, entry, roll, secondaryRolls = {}, bfm =
     };
   }
   if (max <= 25) {
-    // Lévitation : 1d10 yards du sol pendant 1d10 minutes
+    // Lévitation : 1d10 m du sol pendant 1d10 minutes
     const distance = die(['distance', 'distanceRoll'], 'd10');
     const duration = die(['duration', 'durationRoll'], 'd10');
     return {
@@ -308,7 +309,7 @@ function buildMiscastDetails({ tableKey, entry, roll, secondaryRolls = {}, bfm =
       heightYards: distance,
       duration: { value: duration, unit: 'minutes' },
       fallAtEnd: true,
-      summary: `Flotte à ${distance} yards pendant ${duration} minute(s), puis chute.`
+      summary: `Flotte à ${distance} m pendant ${duration} minute(s), puis chute.`
     };
   }
   if (max <= 30) {
@@ -324,14 +325,14 @@ function buildMiscastDetails({ tableKey, entry, roll, secondaryRolls = {}, bfm =
     };
   }
   if (max <= 35) {
-    // Secousse du Chaos : 1d100 yards, Test Athlétisme (+2 DR) ou À Terre
+    // Secousse du Chaos : 1d100 m, Test Athlétisme (+2 DR) ou À Terre
     const distance = die('distance', 'd100');
     return {
       type: 'aoe-test',
       rangeYards: distance,
       testRequired: { skill: 'Athlétisme', slModifier: 2, failureEffect: 'À Terre' },
       conditionsGainedOnFailure: ['À Terre'],
-      summary: `Créatures à ${distance} yards : Test d’Athlétisme Accessible (+2 DR) ou À Terre.`
+      summary: `Créatures à ${distance} m : Test d’Athlétisme Accessible (+2 DR) ou À Terre.`
     };
   }
   if (max <= 40) {
@@ -431,14 +432,14 @@ function buildMiscastDetails({ tableKey, entry, roll, secondaryRolls = {}, bfm =
     };
   }
   if (max <= 90) {
-    // Voix fantomatiques : BFM yards, Test Calme (+2 DR) ou 1 Corruption
+    // Voix fantomatiques : BFM mètres, Test Calme (+2 DR) ou 1 Corruption
     const rangeYards = Math.max(1, Number(bfm) || 1);
     return {
       type: 'aoe-corruption',
       rangeYards,
       testRequired: { skill: 'Calme', slModifier: 2, failureEffect: '1 Point de Corruption' },
       corruptionOnFailure: 1,
-      summary: `Personnages à ${rangeYards} yards : Test de Calme (+2 DR) ou 1 Corruption.`
+      summary: `Personnages à ${rangeYards} m : Test de Calme (+2 DR) ou 1 Corruption.`
     };
   }
   if (max <= 95) {
@@ -462,7 +463,7 @@ function buildMiscastDetails({ tableKey, entry, roll, secondaryRolls = {}, bfm =
     headExploded: noOtherTargets,
     summary: noOtherTargets
       ? 'Aucune autre cible à portée : votre tête explose (mort immédiate) !'
-      : `Toutes les autres créatures à ${rangeYards} yards (amis comme ennemis) perdent ${damage} Blessures (sans BE/PA) et gagnent À Terre ; le lanceur n’est pas affecté.`
+      : `Toutes les autres créatures à ${rangeYards} m (amis comme ennemis) perdent ${damage} Blessures (sans BE/PA) et gagnent À Terre ; le lanceur n’est pas affecté.`
   };
 }
 
@@ -728,7 +729,7 @@ export function applyMiscastToParticipant(participant, miscast, options = {}) {
   // (D-08). Faute d'effet sur d'autres participants dans cette fonction, un rappel MJ remplace l'application ; seule la tête explosée touche le lanceur.
   const hitsOthers = details.type === 'cataclysm' && details.headExploded !== true;
   if (hitsOthers) {
-    reminders.push(`À appliquer par le MJ à chaque autre créature à ${details.rangeYards} yards (alliés compris, lanceur exclu) : ${details.woundsLost} Blessures sans BE ni PA et État À Terre.`);
+    reminders.push(`À appliquer par le MJ à chaque autre créature à ${details.rangeYards} m (alliés compris, lanceur exclu) : ${details.woundsLost} Blessures sans BE ni PA et État À Terre.`);
   }
 
   // 1. Application des États (Conditions) via acquireV5Conditions
@@ -788,6 +789,7 @@ export function applyMiscastToParticipant(participant, miscast, options = {}) {
   if (Number.isFinite(Number(details.corruptionPoints)) && Number(details.corruptionPoints) > 0) {
     const pts = activeMagicTalent(next,'sanctuary-of-the-mind') ? 0 : Number(details.corruptionPoints);
     next.extensions.v5.corruptionPoints = (Number(next.extensions.v5.corruptionPoints) || 0) + pts;
+    if (pts > 0) Object.assign(next, markCorruptionThresholdTest(next));
     reminders.push(pts?`Suivi fiche : +${pts} Point(s) de Corruption (${miscast.name}).`:'Sanctuaire de l’esprit : Corruption de l’incantation évitée.');
   }
 

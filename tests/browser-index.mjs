@@ -37,6 +37,18 @@ function startServer() {
 }
 
 // Les commandes de séance vivent dans le menu ⋯ de la barre du haut.
+// Le lancement ouvre le dialogue d'initiative (F2-A) : saisir des d10 distincts (pas d'égalité), calculer l'ordre, confirmer.
+async function confirmLaunchInitiative(page) {
+  const initiative = page.locator('dialog.tool-sheet', { hasText: 'Saisissez l’Initiative' });
+  await initiative.waitFor({ state: 'visible' });
+  const characteristics = initiative.locator('input[name^="characteristic:"]:not([readonly])');
+  for (let index = 0; index < await characteristics.count(); index += 1) if (!await characteristics.nth(index).inputValue()) await characteristics.nth(index).fill('40');
+  const dice = initiative.locator('input[name^="die:"]:not([readonly])');
+  for (let index = 0; index < await dice.count(); index += 1) await dice.nth(index).fill(String(6 - index));
+  await initiative.getByRole('button', { name: 'Calculer / actualiser l’ordre' }).click();
+  await initiative.getByRole('button', { name: 'Confirmer et appliquer' }).click();
+}
+
 async function openAppMenu(page) {
   const menu = page.locator('#app-menu');
   if (!(await menu.evaluate(element => element.matches(':popover-open')))) await page.locator('#btn-menu').click();
@@ -106,8 +118,9 @@ async function main() {
     await openAppMenu(page);
     await page.locator('#app-menu').getByRole('button', { name: 'Importer du texte' }).click();
     const readyOverlay = page.getByRole('dialog');
+    // Initiatives très écartées (Bonus 1 contre 15) : le d10 automatique des PNJ ne peut pas inverser l'ordre.
     await readyOverlay.getByRole('textbox', { name: 'Texte des profils' }).fill(
-      'Nom: Garde importé\nPV: 12\nInitiative: 30\nF: 35\nAction: Attaque | type=attack | base=40 | dégâts=BF+4\n---\nNom: Éclaireur importé\nPV: 8\nInitiative: 40\nF: 35\nAction: Attaque | type=attack | base=40 | dégâts=BF+4'
+      'Nom: Garde importé\nPV: 12\nInitiative: 10\nF: 35\nAction: Attaque | type=attack | base=40 | dégâts=BF+4\n---\nNom: Éclaireur importé\nPV: 8\nInitiative: 150\nF: 35\nAction: Attaque | type=attack | base=40 | dégâts=BF+4'
     );
     await readyOverlay.getByRole('button', { name: 'Analyser le texte' }).click();
     await expect(readyOverlay.locator('.import-text-profile').first()).toContainText('Attaque 40 · dégâts BF+4 = 7');
@@ -198,6 +211,7 @@ async function main() {
     await zoneSelect.selectOption('active');
     await prepareOverlay.getByRole('button', { name: 'Ajouter' }).click();
     await prepareOverlay.getByRole('button', { name: 'Lancer la rencontre' }).last().click();
+    await confirmLaunchInitiative(page);
     await expect(prepareOverlay).toBeHidden();
     await expect(page.locator('#toast-container')).toContainText('Rencontre lancée');
     await page.locator('#tab-combat').click();
@@ -327,9 +341,10 @@ async function main() {
     // profile names with prepared actions must remain readable at both widths.
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.locator('#tab-prepare').click();
+    // Initiatives espacées de 10 Bonus : les d10 automatiques des PNJ ne changent jamais l'ordre de la piste.
     const galleryProfiles = Array.from({ length: 15 }, (_, index) => {
       const number = String(index + 1).padStart(2, '0');
-      return `Nom: Participant de démonstration ${number} · Action préparée\nPV: ${10 + (index % 4)}\nInitiative: ${60 - index}\nF: 30\nE: 30\nAction: Attaque ${number} | type=attack | base=${35 + index} | dégâts=BF+4`;
+      return `Nom: Participant de démonstration ${number} · Action préparée\nPV: ${10 + (index % 4)}\nInitiative: ${1600 - index * 100}\nF: 30\nE: 30\nAction: Attaque ${number} | type=attack | base=${35 + index} | dégâts=BF+4`;
     });
     await openAppMenu(page);
     await page.locator('#app-menu').getByRole('button', { name: 'Importer du texte' }).click();
@@ -361,6 +376,7 @@ async function main() {
     await galleryPrepare.getByRole('button', { name: 'Fermer' }).click();
     await expect(galleryPrepare).toBeHidden();
     await page.locator('#workspace-prepare').getByRole('button', { name: 'Lancer « Galerie »' }).click();
+    await confirmLaunchInitiative(page);
     await expect(page.locator('#toast-container')).toContainText('Rencontre lancée');
     await page.locator('#tab-combat').click();
     await page.locator('#combat-banner').getByRole('button', { name: 'Commencer le combat' }).click();

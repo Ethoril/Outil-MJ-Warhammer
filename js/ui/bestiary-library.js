@@ -27,7 +27,7 @@ export function renderBestiarySheet(record, referential) {
     const armour = record.armour || {};
     line('Points de Destin imprimés', record.fatePoints);
     line('Armure', [armour.ap !== undefined ? `PA ${armour.ap}` : '', ...(armour.parts || []).map(part => `${part.name}${part.locations ? ` (${part.locations})` : ''} ${printed(part.ap)}${part.optional ? ' facultatif' : ''}`), armour.detail ? `${armourDetailNamesZones(armour.detail) ? 'zones' : 'détail'} : ${armour.detail}` : '', armour.printedTotal !== undefined ? `total imprimé ${armour.printedTotal}` : ''].filter(Boolean).join(' ; '));
-    line('Attaques', (record.attacks || []).map(attack => `${attack.count > 1 ? `${attack.count} × ` : ''}${attack.name}${attack.value !== undefined ? ` ${attack.value}` : ''}, dégâts ${attack.damage}${attack.rangeYards ? `, portée ${attack.rangeYards} yards` : ''}${attack.free ? ' (gratuite)' : ''}${attack.optional ? ' (facultative)' : ''}`).join(' ; '));
+    line('Attaques', (record.attacks || []).map(attack => `${attack.count > 1 ? `${attack.count} × ` : ''}${attack.name}${attack.value !== undefined ? ` ${attack.value}` : ''}, dégâts ${attack.damage}${attack.rangeYards ? `, portée ${attack.rangeYards} m` : ''}${attack.free ? ' (gratuite)' : ''}${attack.optional ? ' (facultative)' : ''}`).join(' ; '));
     line('Compétences', (record.skills || []).map(skill => `${skill.nameFr || skill.name} ${skill.value}`).join(', '));
     line('Compétences sans valeur imprimée', unvaluedSkillNames(record.unvaluedSkills).join(', '));
     line('Traits', (record.traits || []).map(trait => `${trait.name}${trait.param ?? trait.rating ? ` (${trait.param ?? trait.rating})` : ''}`).join(', '));

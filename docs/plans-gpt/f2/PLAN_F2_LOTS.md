@@ -117,3 +117,129 @@ L06-0301 à 0304, 0308, 0310, 0313 à 0315, 0317 à 0320, 0322 à 0331, 0333, 03
 2. Spécialités : **garder l'existant**, compléter seulement.
 3. Mutations : **tout dans F2-K, L17 converti en V5**, saisie déléguée et contre-vérifiée.
 4. Suivi hors combat : **module neuf**, indépendant de l'horloge de magie.
+
+## Exécution
+
+Complément du 25/10/2026, base `d737c5a` / 3.26.0. Le texte précédent et `F2_LOTS.json` sont conservés. Le brief autorise exclusivement l'ajout de cette section au plan ; les autres fichiers d'arbitrage ne sont pas modifiés.
+
+### Repérage actuel et méthode
+
+Le repérage règle par règle est dans [T1](../F2_REPERAGE_T1.md) (45 entrées), [T2](../F2_REPERAGE_T2.md) (69 entrées) et [T3](../F2_REPERAGE_T3.md) (80 entrées). Les preuves sont celles du code 3.26.0 ; « partielle » ne vaut pas règle terminée. Une famille conserve ses clauses non couvertes même si certains de ses membres sont déjà calculés. Les doublons conservent leur identifiant de traçabilité et partagent une implémentation et des tests.
+
+Déjà couvert : F-L06-0847 selon l'arbitrage qui impose de conserver le choix actuel des spécialités ; aucun changement de carrière ou de `suggestSkill` n'est demandé. F-L06-1134 est à préserver et à vérifier par non-régression sur la chaîne complète des profils imprimés. Le surnombre B12 couvre une partie de F-L06-0116, pas la famille entière : conserver `outnumbering.js`, les engagements MJ et leur branchement, sans second bonus. Les aides Très longue/Massive et bandes de portée restent à compléter ; exclure la mesure de distance ne les termine pas.
+
+Chaque lot : brief de code écrit par l'exécutant, sous-agent Luna codeur, tests rouges pour une raison mécanique identifiée, code, acceptation ci-dessous et suite `node --test --test-concurrency=4`. Puis autre sous-agent Luna, contexte neuf, lecture seule du diff et des pages PDF de chaque règle. Corriger et relire jusqu'à disparition des constats. La revue de l'exécutant couvre le diff entier et les interactions entre lots. Aucun lot n'est livré au seul vu des tests unitaires.
+
+Les cinq fichiers partagés à risque du brief exigent des tests de caractérisation dans un commit distinct **avant** leur changement. Fichiers de tests neufs autorisés : `tests/f2-<lot>-*.test.js`, `tests/f2-<lot>-*.mjs` et `tests/f2-<lot>-characterization.test.js`. Les tests existants mentionnés ci-dessous sont exécutés ; seuls les changements d'assertions expressément admis par les règles communes peuvent être faits et doivent être listés. Les listes de fichiers de production ci-dessous sont limitatives ; toute extension doit être justifiée ici avant son utilisation. Documentation commune autorisée : rapport F2, choix F2, briefs et reçus F2 ; variables durables dans `docs/VARIABLES_PERSISTANTES_PJ.md` quand nécessaire. Les fichiers de version restent interdits.
+
+Les commandes s'exécutent à la racine du worktree, avec `TEMP` et `TMP` dans `E:/Outil MJ Warhammer/tmp/gpt-phase-f2-runtime`, **extérieur au checkout** mais sur E:, pour les gardes de traversal. Créer `tmp/divin/`. Un reçu de recette hérité, si utilisé comme précondition du test E0, est identifié comme tel et ne prouve aucune recette F2.
+
+Contrainte de chargement découverte avant code : `tests/sw.test.js:34` exige le précache de tous les modules JS/JSON et `sw.js` est interdit par les règles communes. En T1, utiliser les modules existants autorisés plutôt que les nouveaux modules proposés : fonctions pures C dans `equipment.js`, calcul d'initiative A dans `turn-order.js`, circonstances/actions B dans `v5-combat-rules.js` et `v5-store-action.js`. Les nouveaux modules des tranches suivantes nécessiteront une clarification du périmètre du précache avant leur création ; ne pas contourner le test ni l'interdiction.
+
+### T1 - F2-C (risque élevé : sélection et résolution)
+
+**Reprise après contre-vérification Claude du 25/10 au soir.** Le code `1034dc9` n'est pas une livraison acceptée de C. Les décisions MJ recopiées dans `CHOIX_EXECUTANT_PHASE_F2.md` priment sur les anciens choix : Base0 sans Qualités, malus de tir additifs, monté durable démonté par défaut, mains de bâtarde depuis `(2M)` et coche, maîtrise des armes conjurées sauf score imposé par sort. Le brief de correction `../BRIEF_F2_C_CORRECTIONS_CLAUDE.md` définit les cas rouges et acceptations. Extension autorisée avant code : `js/core/store.js`, `js/core/models.js`, `js/main.js` pour la donnée durable et son vrai raccord UI ; `js/core/v5-spell-contracts.js` pour les métadonnées du générateur et le raccord de maîtrise, sans changer les règles/valeurs des sorts ni les JSON générés ; `docs/VARIABLES_PERSISTANTES_PJ.md` pour les nouvelles données. Caractérisation Store committée séparément avant changement. Tester les six bloquants du rapport, les alias réels du catalogue, les effets de caractéristiques, le score manuel, les voies par défaut et les vrais parcours Store/navigateur. Défenses/parades : couverture exacte à consigner si le chemin n'est pas complété. `suggestSkill` demeure conservé.
+
+- Fichiers : fonctions pures dans `js/core/equipment.js` (pas de nouveau module, contrainte précache), `js/core/fiche-sync.js`, `js/core/v5-combat-rules.js`, `js/core/resolution.js`, `js/core/v5-talent-qualities.js`, `js/ui/resolution-panel.js`, `js/ui/workspace-view.js` (raccord limité du constructeur `v5Input` au groupe/nature choisis et à l'équipement réel). L'adaptateur de qualités est ajouté avant son édition : il relit les qualités d'équipement et planifie les talents ; filtrer seulement après lui réintroduirait des effets interdits et masquerait l'usage improvisé aux talents. Le constructeur d'entrée doit utiliser le même contexte que le formulaire, y compris à la restauration du brouillon, sans dépendre uniquement d'un événement change. Le catalogue reste intact ; les variantes d'usage s'appliquent à l'action résolue, pas aux données source.
+- Préserver `suggestSkill` et les choix confirmés de la fiche. Préserver également `conjuredWeaponSkillScore` et les armes conjurées existantes ; caractériser leurs résultats avant raccordement.
+- Tests : pour chaque règle C du JSON, arme avec spécialité entraînée, spécialité à zéro, groupe absent ; score CC ou CT, qualités bénéfiques supprimées, défauts conservés. Tester arbalète/jet CT -1 DR, Ingénierie vers poudre/explosif sans malus, poudre vers Ingénierie -2 DR, tir autre groupe bloqué, sarbacane Dangereuse. Tester Fléau, escrime/Base, cavalier à pied à une/deux mains, Marteau de cavalerie, Sabre, Main gauche, bâtarde à une main. Compétence avancée zéro augmentation indisponible, une augmentation disponible. Fiche et action sans données de groupe : conserver le fonctionnement actuel ou demander la donnée manquante, ne pas inventer une maîtrise. Vérifier le reçu, l'application réelle et l'absence de mutation du catalogue.
+- Acceptation : `node --test tests/f2-c-weapon-skills.test.js tests/f2-c-characterization.test.js tests/e26-fiche-sync.test.js tests/e27-references-equipment.test.js`, puis suite complète. Parcours navigateur des choix d'armes/compétences si UI touchée.
+
+### T1 - F2-A (risque élevé : ordre et Store)
+
+- Fichiers : calcul dans `js/core/turn-order.js` (module existant, voir contrainte précache), `js/core/store.js`, `js/core/v5-turn.js`, `js/core/encounters.js`, `js/core/combat.js` si raccord du démarrage libre nécessaire (caractériser d'abord), `js/core/v5-talent-actions.js` uniquement pour raccorder Combat instinctif déjà mécanique à la nouvelle initiative, `js/main.js` (raccord du lancement UI), UI d'ouverture dans `js/ui/workspace-view.js`, `js/ui/combat-view.js`, `js/ui/combat-banner.js`.
+- Tests : 3 PNJ + 2 PJ avec dés fixés, Bonus d'Initiative ajouté une seule fois ; PJ sans jet bloque l'ouverture avec reçu MJ ; PNJ d10 bornes 1/10 ; égalité score puis Initiative, égalité persistante demande l'opposition et le choix du gagnant. Surprise seulement sur camp coché, pas sur alliés, pas de surprise si aucun camp choisi. Recommencer, annuler/rétablir, persister/recharger sans nouveau tirage ; ordre manuel, renforts et acteur courant inchangés hors ouverture.
+- Acceptation : `node --test tests/f2-a-initiative-surprise.test.js tests/f2-a-characterization.test.js tests/e08-turn-order.test.js`, puis suite complète et parcours navigateur d'ouverture du combat.
+
+### T1 - F2-B (risque élevé : contextes et cycle de Tour)
+
+**Décisions MJ du 25/10 au soir :** B-SOURCE-01 validé (+2 DR mêlée contre Surpris, +1 au tir, aucun double bonus pour la même surprise) ; B-SOURCE-02 refusé : attaquant À Terre en mêlée cumule Désavantage d'État et −1 DR du tableau. Les malus de maîtrise de C se cumulent avec les modificateurs de B ; le monté durable créé en C doit être lu plutôt que redemandé. Ces décisions remplacent les anciennes interprétations de non-cumul de l'exécutant.
+
+- Fichiers : fonctions dans les modules existants `js/core/v5-combat-rules.js`, `js/core/v5-talent-combat.js`, `js/core/resolution.js`, `js/core/v5-store-action.js`, `js/core/v5-action-costs.js`, `js/core/v5-turn.js`, `js/core/store.js`, `js/core/v5-roll.js`, `js/core/equipment.js`, `js/main.js`, `js/ui/resolution-panel.js`, `js/ui/workspace-view.js`, `docs/VARIABLES_PERSISTANTES_PJ.md` si donnée durable nouvelle. Pas de nouveau module JS (contrainte de précache ci-dessus). Le brief `../BRIEF_F2_B_EXECUTION.md` détaille les raccords réels, tests et conversion Croche-pied à 1 Élan. Contrat Tireur d'élite : modifier son entrée source/générateur seulement si nécessaire, identifier le fichier exact avant édition ; ne pas modifier un JSON généré à la main.
+- Tests : chaque ligne des six cas Tir et six cas Mêlée a un cas actif et un cas hors condition ; inclure attaques naturelles de Traits, Surpris, Enchevêtré, À Terre, couvert, taille et météo/lumière MJ. Non-cumul avec surnombre B12. Espace exigu : allonge moyenne -1, supérieure -2, case absente aucun malus. Action défensive : +2 uniquement bonne compétence et jusqu'au début du Tour suivant. Viser : +1 contre la bonne cible puis annulation après tir, mouvement, défense ou autre Action. Tir dans mêlée : Désavantage ; tirage de cible seulement sur inversion causant l'échec, parmi engagés MJ. Deux armes : conserver règle/talent existants. Sans défense : choix jet/localisation, touche automatique ; option létale inactive par défaut et mort confirmée par MJ. Déviation : direction 9/10, 2d10 bornes, plafond selon distance fournie par MJ, aide seulement. Tireur d'élite extraordinaire : difficulté MJ. Croche-pied : coût converti Élan, opposition et À Terre, manque d'Élan refusé. Reçus aux bornes des huit paliers. Allonges 4/6 yards et bandes bout portant/courte/moyenne/longue/extrême affichées, bande choisie par MJ sans position suivie.
+- Acceptation : `node --test tests/f2-b-combat-modifiers.test.js tests/f2-b-characterization.test.js tests/e12-resolution.test.js tests/e05-session-resolution.test.js`, puis suite complète et parcours navigateur des circonstances/actions/reçus.
+
+**Arrêt T1 obligatoire** : commits locaux, rapport partiel avec preuves et limites, attente de la contre-vérification Claude et du feu vert MJ. Ne pas commencer T2.
+
+### T2 - F2-D (risque élevé : mots-clés et armures)
+
+- Fichiers : `js/data/keyword-engines.js`, `js/core/keywords.js`, `js/core/roll-qualities.js`, `js/core/resolution.js`, `js/core/equipment.js`, `js/core/v5-store-action.js`, `js/ui/resolution-panel.js`, nouveaux modules de qualités/rechargement sous `js/core/v5-weapon-qualities.js` et `js/core/v5-reloading.js`.
+- Tests : positif/négatif pour chacune des 29 règles et chaque ligne des familles Parade/Piège-lame. Explosion sur cibles MJ sans DR, Rapide sans deux armes, PA retiré de la seule pièce touchée, projectile fiché bloque soin, États et libération d'arme. Parade/main secondaire/seconde attaque, Pistolet au contact, répétition et recharge par **succès**, jamais Actions. Bris/désarmement et Incassable, Enroulement, Entaille, Dispersion selon bande MJ, couteau conditionnel, boucliers, pénalités d'armure, arme naturelle et filets (forces 25/55/+20, cumul de DR pour sortir). Qualités C supprimées ne réapparaissent pas ici. Statut mécanique couvert uniquement quand toute la clause fonctionne.
+- Acceptation : `node --test tests/f2-d-weapon-qualities.test.js tests/f2-d-characterization.test.js tests/keywords.test.js tests/roll-qualities.test.js`, puis suite complète.
+
+### T2 - F2-E (risque élevé : tables et effets différés)
+
+- Fichiers : nouveaux `js/data/v5-combat-fumbles.js`, `js/core/v5-combat-fumbles.js`, `js/core/resolution.js`, `js/core/v5-store-action.js`, `js/ui/resolution-panel.js`.
+- Tests : chaque résultat de chaque table aux bornes produit les Blessures/États/pertes d'Action ou Mouvement sur le bon participant ; 99/100 avec poudre/Ingénierie/Explosif, jamais table poudre sans ces groupes. Mèche, pluie/vent MJ, six canons, hache/hallebarde chargées seulement, explosion rechargement mortier, Assourdi selon cibles MJ, mèche à 1/2 Tours même sans tir, grappin, recul et épaule via bras, servant seul/recharge doublée. Données/dés inconnus bloquent avec reçu.
+- Acceptation : `node --test tests/f2-e-blackpowder-incidents.test.js tests/f2-e-characterization.test.js tests/e12-resolution.test.js`, puis suite complète.
+
+### T2 - F2-N (risque élevé : opposition et états liés)
+
+- Fichiers : nouveau `js/core/v5-grappling.js`, `js/core/resolution.js`, `js/core/v5-effects.js`, `js/core/v5-store-action.js`, `js/ui/resolution-panel.js`.
+- Tests : déclaration avant Bagarre, victoire pose prise/Enchevêtré sans dégâts ; défaite aucun lien ; Tour suivant Force opposée ; blesser BF+DR sans PA avec localisation du jet ; immobiliser/dégager 1 + DR au-delà du premier ; perdre l'opposition ne réussit pas l'action ; scénario engager/blesser/dégager sur trois Tours, Undo/reload du lien.
+- Acceptation : `node --test tests/f2-n-grappling.test.js tests/f2-n-characterization.test.js`, puis suite complète.
+
+### T2 - F2-I (risque élevé : critiques et valeurs durables)
+
+- Fichiers : `js/core/resolution.js`, `js/core/v5-effects.js`, `js/core/v5-store-action.js`, `js/data/v5-crits.js`, nouveau `js/core/v5-critical-aftermath.js`, `js/ui/resolution-panel.js`, `docs/VARIABLES_PERSISTANTES_PJ.md`.
+- Tests : coup retenu Assommante tête, seuil Sonné > BE exact ; critiques > BE avec Inconscient, échéance BE Rounds, arrêt du décompte si critique soigné ou Inconscient retiré ; confirmation de mort indispensable ; figurant seulement, exclusion PJ/Chanceux ; choc amputation aux bornes 0/-1/-4 ; chaque ligne V5 enregistre sa séquelle durable une seule fois, Undo/reload cohérents ; second critique excédentaire et coagulation d10 restent V5. L13-0018 couvert par la même mécanique que L06-0312.
+- Acceptation : `node --test tests/f2-i-combat-death-scars.test.js tests/f2-i-characterization.test.js`, puis suite complète.
+- **Fin T2, avant T3** : concevoir et commiter le format K2 des tables de mutations, sources et conversions ; soumettre avec le rapport de tranche. Ne pas saisir les tables avant validation.
+
+### T3 - F2-L (risque élevé : ressources et idempotence)
+
+- Fichiers : `js/core/v5-resources.js`, `js/core/v5-roll.js`, `js/core/v5-store-action.js`, `js/core/fiche-sync.js`, `js/core/resolution.js`, `js/ui/resolution-panel.js`, nouveau `js/core/v5-legacy-conversion.js`, aide monétaire nouvelle `js/core/currency.js` et affichage `js/ui/fiche-details.js`.
+- Tests : Chance avant jet et relances successives coûtent chacune une fois, jamais solde négatif ; Destin annule sans dégâts/critiques, survie retire rencontre, réussite garantie/opposition +1 et localisation critique choisie ; attribution MJ ; import Résilience/Détermination, Avantage/Élan et modificateurs V4 sans double conversion ; 1 couronne = 20 pistoles = 240 sous, sommes négatives/invalides refusées. Fonctionnements actuels relance et soldes conservés.
+- Acceptation : `node --test tests/f2-l-fate-spending.test.js tests/f2-l-characterization.test.js`, puis suite complète.
+
+### T3 - F2-G (risque élevé : localisation commune)
+
+- Fichiers : nouveau `js/core/v5-hit-morphology.js`, `js/core/resolution.js`, `js/core/bestiary-profiles.js`, `js/ui/resolution-panel.js`.
+- Tests : quadrupède pattes avant/arrière, oiseau ailes, serpent tête 01-19/corps 20-100 (15 tête, 40 corps), araignée tête 01-09/pattes 10-79/corps 80-100 ; morphologie MJ prime sur profil ; humanoïde et localisation ciblée inchangés ; appendice utilise table bras.
+- Acceptation : `node --test tests/f2-g-creature-locations.test.js tests/f2-g-characterization.test.js tests/e12-resolution.test.js`, puis suite complète.
+
+### T3 - F2-M (risque élevé : cavalier et monture)
+
+- Fichiers : nouveau `js/core/v5-mounted-combat.js`, `js/core/store.js`, `js/core/resolution.js`, `js/core/v5-talent-combat.js`, `js/core/v5-store-action.js`, `js/ui/resolution-panel.js`, `js/ui/fiche-details.js`.
+- Tests : non monté inchangé ; état monté et lien cohérents après reload ; cible plus petite que monture et cas contraire ; viser cavalier/monture ; BF monture charge seulement ; Esquive Désavantage sauf talent, pas cumul avec ancien champ -2 ; chacune des chutes Mort/KO/À Terre/Surpris/Sonné/prise et monture Craintive Enchevêtrée requiert le test d'Équitation de la source. Mort soumise au MJ.
+- Acceptation : `node --test tests/f2-m-mounted-combat.test.js tests/f2-m-characterization.test.js`, puis suite complète.
+
+### T3 - F2-K1 puis K2 (risque élevé : corruption et tables durables)
+
+- Fichiers : nouveaux `js/core/v5-corruption.js`, `js/data/v5-mutations.js`, `js/ui/v5-corruption-panel.js`, `js/core/store.js`, `js/core/v5-store-action.js`, `docs/VARIABLES_PERSISTANTES_PJ.md`. Le branchement UI réel est à nommer dans le brief avant édition.
+- K1 : influence mineure/modérée/majeure aux bornes DR -1/0/1/3/4, Résistance ou Calme MJ, exposition simple/prolongée ; seuil BE+BFM recalculé et doublé Âme pure ; dépassement/test/report/perte BFM ; sélection physique/mentale par espèce ; délai secret 3d10 jours, perte de personnage proposée au MJ ; absolution montant/motif MJ ; mutation jamais imposée sans confirmation ; compteurs/mutations disponibles pour futur retour fiche.
+- K2 : après validation conception, 39 lignes L06, 134 lignes L17 converties V5 et table étendue L23 ; chaque ligne résumée et vérifiée sur sa page PDF, tests bornes et rattachement source, aucune mutation implicite par simple texte.
+- Acceptation : `node --test tests/f2-k-corruption.test.js tests/f2-k-mutations.test.js tests/f2-k-characterization.test.js`, puis suite complète. Pour K1 seul, omettre le fichier K2 non encore créé.
+- **Fin T3, avant T4** : `CONCEPTION_SEQUELLES.md` committée et soumise : données, calendrier indépendant, UI MJ, lien séquelles F2-I, migrations et persistance. Aucun code J avant validation.
+
+### T4 - F2-F (risque élevé : objets particuliers et corruption)
+
+- Fichiers : nouveau `js/core/v5-supplement-items.js`, `js/data/keyword-engines.js`, `js/core/roll-qualities.js`, `js/core/resolution.js`, `js/core/v5-magic-casting.js`, `js/ui/resolution-panel.js`.
+- Tests : chaque objet du JSON sur porteur/cible corrects et cas hors objet ; contamination Ratling/Lance-feu et armes malepierre raccordée à K sans changer aucun profil du catalogue ; bois tombé/arraché, plate, pointes, pavois porté/planté et cibles MJ ; brise-os, griffes ; bâton domaine associé et robes rangs +1/+2/+3 en Focalisation, jamais autres domaines ; non-double BF pour toutes attaques de bestiaire imprimées (F1134 déjà présente à préserver).
+- Acceptation : `node --test tests/f2-f-supplement-items.test.js tests/f2-f-characterization.test.js`, puis suite complète et parcours navigateur si catalogue/décompte touché (extension de scope préalable obligatoire).
+
+### T4 - F2-H (risque élevé : profils spécifiques)
+
+- Fichiers : `js/core/creature-abilities.js`, `js/data/creature-abilities.js`, `js/core/creature-combat.js`, `js/core/creature-states.js`, `js/core/resolution.js`, profils `js/data/bestiary/L11.json`, `L18.json`, `L22.json`, `L23.json`, `L25.json`, `js/ui/resolution-panel.js`.
+- Tests : chaque règle spécifique active sur son seul profil (et négatif sur un autre) ; bois qualités, toile et poison, crâne inerte, variantes Seigneur des tombes MJ, araignée de falaise, grand félin/crachat, élémentaire, Gargantuan/Merwyrm/Léviathan/Wulfrik. Tester les qualités et États effectifs sur résolution, pas seulement présence dans `specialRules`. Les clauses navires restent des rappels.
+- Acceptation : `node --test tests/f2-h-bestiary-abilities.test.js tests/f2-h-characterization.test.js`, puis suite complète et parcours navigateur des profils touchés.
+
+### T4 - F2-J1 puis J2 (risque élevé : suivi long et pertes permanentes)
+
+- Fichiers : nouveaux `js/core/v5-aftermath.js`, `js/ui/v5-aftermath-panel.js`, `js/core/store.js`, `js/core/resolution.js`, `js/core/v5-store-action.js`, `js/core/v5-combat-rules.js`, `js/data/v5-crits.js`, `docs/VARIABLES_PERSISTANTES_PJ.md`. Branchement du panneau à préciser dans conception validée. `v5-game-time.js` et `v5-campaign-time.js` intacts.
+- J1 : calendrier dédié, semaine de 8 jours et délais exacts, soin BI+DR une fois par incident, maladresse d10 plancher 1, animaux, chirurgie/soins malade et infection selon données MJ ; refus des doubles soins et données inconnues avec reçu. J2 : chacune des séquelles des 27 règles, délais fractures/déchirures, tests de guérison, réduction de délais, pertes et malus sur seuls Tests concernés ; critique issu I conservé après reload ; avancer calendrier finit à la date attendue sans avancer magie ; pertes de caractéristiques inscrites pour retour fiche. États et malus temporaires gouvernent la clôture.
+- Acceptation : `node --test tests/f2-j-aftermath.test.js tests/f2-j-characterization.test.js`, puis suite complète et parcours navigateur du module neuf.
+
+### Fermeture de phase
+
+Après validation des quatre tranches seulement : `node tools/run-divine-recipe.mjs`, parcours navigateur de tous les écrans touchés, rapport complet distinguant exécuté, testé, assisté MJ et limites. Aucun bump, push, merge ou publication.
+
+### Extension de raccord T1 après contre-vérification du 26/10/2026
+
+Les points 9, 14 et 20 nécessitent aussi `js/ui/card.js`, `js/core/v5-resources.js`, `js/core/v5-divine-prayer-caps.js` et `js/ui/v5-broken-escape-panel.js`. Le score de combat doit être visible sur la carte ; la lecture des mains du catalogue doit être commune au panneau et au moteur ; les consommateurs d'identité de Tour (quotas, Prière forcée, Brisé, liste d'attaques précédentes) doivent utiliser la même portée après redémarrage. Le helper commun est placé dans un module existant sans dépendance, sans créer de module à précacher. Les moteurs d'horloge de magie/campagne restent intacts. Caractérisations héritées conservées ; régressions d'intégration supplémentaires dans `tests/f2-t1-clock-consumers.test.js`, en complément des tests C/A/B et E25. Cette extension corrige T1 et n'ouvre aucun lot T2.
+
+### Reprises ciblées T1 BIS — instruction du MJ du 27/10/2026
+
+Source : `tmp/gpt-phase-f2/CONTRE_VERIFICATION_CLAUDE_T1_BIS.md`, points 1 à 7 et réponses du MJ. Fichiers autorisés : modules Store/équipement et routes UI déjà ouverts pour T1, `js/ui/card.js`, `js/ui/resolution-panel.js`, tests F2 et, par exception explicite pour le point 7, la seule infobulle Initiative de `index.html`. Aucun changement de version, de précache ni de catalogue.
+
+Contrôles : Visée par nom après normalisation ; rencontre tout au banc préparée/lancée sans démarrer le combat ; refus serveur d'un démarrage sans actif même avec aperçu altéré ; mains des armes d'hast et de jet/Fronde/entraves du catalogue ; arme aethyrique sans clé avec groupe MJ requis ; motif de refus de dissipation et badge I/ordre après édition ; ajout direct PNJ/PJ avant Round 1 avec jet/BI/égalité et annulation cohérente, renfort Round 1 conservé. Tests de régression d'abord, revue indépendante ciblée, six parcours navigateur T1 et suite `node --test --test-concurrency=4`, puis arrêt avant T2.

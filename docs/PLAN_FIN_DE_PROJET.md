@@ -69,6 +69,17 @@ Publication 3.21.0 après la phase A.
 - F1 : page de sélection pour le MJ (artifact ou écran de l’outil) : pour chaque règle non couverte, « implanter / ne pas implanter » et « règle complète / adaptée (texte de l’adaptation) », pour préserver les règles maison. Décisions enregistrées dans le dépôt.
 - F2… : lots uniquement pour les règles retenues, avec la version choisie (complète ou adaptée).
 
+## Livre de base V5 v3 (décidé le 29/10)
+
+Le MJ a tranché les 56 changements de la v3 du 27/10/2026 (51 reportés, 5 conservés ; page de décision et arbitrages dans `tmp/f1-reperage/ARBITRAGES_25_10.md`). La feuille « Aides de Jeu » est déjà à jour ; le lot outil (code, bestiaire de base, contrats de prières, tables) suit la publication de F2. Les yards du livre s'écrivent avec la même valeur en mètres.
+
+## Phase R — Ménage et refactorisation (décidée le 29/10, après F2 et la v3, avant G)
+
+Trois lots, du moins risqué au plus risqué :
+1. **Ménage du disque** : supprimer worktrees et branches déjà fusionnés, archiver dans `docs/archives/` les rapports et arbitrages encore utiles, vider le reste de `tmp/`. Liste soumise au MJ avant tout effacement.
+2. **Tests** : un fichier par domaine plutôt qu'un par passe de revue, doublons retirés ; couverture mesurée avant et après, jamais en baisse ; suite rapide et parcours navigateur séparés.
+3. **Code** : découper `store.js`, `resolution.js`, `resolution-panel.js`, `workspace-view.js` par domaine et harmoniser le style, **sans changement de comportement** ; petites étapes publiables, suite et recette vertes, contre-vérification indépendante à chaque étape.
+
 ## Passe de cohérence outil ↔ feuille source (avant G)
 
 Vérifier que tout ce qui est implanté (Talents, Traits, sorts, prières, mots-clés) concorde avec la feuille source du MJ ; lister les écarts à reporter dans la feuille (ex. Master and Commander, ajouté à part en 22/10).
@@ -85,4 +96,4 @@ Décision du MJ (21/10) : l’outil réécrira sur la fiche du site des fiches (
 
 ## Ordre et jalons
 
-A (3.21.0) → B → C (3.22.0) → D (une version par tradition ou par paire) → E (une version par bestiaire) → F (inventaire, puis sélecteurs, puis lots) → G.
+A (3.21.0) → B → C (3.22.0) → D (une version par tradition ou par paire) → E (une version par bestiaire) → F (inventaire, puis sélecteurs, puis lots) → v3 du livre de base → R (ménage et refactorisation) → passe de cohérence → G → H.

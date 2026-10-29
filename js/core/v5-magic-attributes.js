@@ -1,4 +1,6 @@
+import { casterCaracs } from './creature-abilities.js';
 import { magicTalentRank } from './v5-magic-talents.js';
+import { markCorruptionThresholdTest } from './v5-corruption.js';
 /**
  * Attributs de Domaine de Magie V5 (Lore Attributes) — Lot 3.2.
  * Conforme au Livre de base V5 EN v2 pp. 240–255 et au Cadrage Magie V5.
@@ -202,8 +204,8 @@ export function previewLoreAttribute({
     };
   }
 
-  const bfm = Math.floor((Number(caster?.caracs?.FM) || 0) / 10);
-  const bi = Math.floor((Number(caster?.caracs?.Int) || 0) / 10);
+  const bfm = Math.floor((Number(casterCaracs(caster).FM) || 0) / 10);
+  const bi = Math.floor((Number(casterCaracs(caster).Int) || 0) / 10);
 
   let casterEffects = null;
   const targetEffects = new Map();
@@ -494,6 +496,7 @@ export function applyLoreAttribute(state, preview, options = {}) {
     if (eff.corruptionGain) {
       const v5 = currentTarget.extensions?.v5 || {};
       currentTarget.extensions = { ...(currentTarget.extensions || {}), v5: { ...v5, corruptionPoints: (Number(v5.corruptionPoints) || 0) + eff.corruptionGain } };
+      Object.assign(currentTarget, markCorruptionThresholdTest(currentTarget));
     }
     if (eff.spellEffect) {
       currentTarget = applySpellEffects(currentTarget, {

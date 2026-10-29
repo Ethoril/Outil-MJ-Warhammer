@@ -6,6 +6,7 @@ import { getKeywordBySlug, getKeywordList } from './keywords.js';
 import { normalizeEquipment } from './equipment.js';
 import { parseProfileText } from './text-profile-import.js';
 import { BASE_REFERENTIAL, resolveKeyword } from './creature-keywords.js';
+import { convertLegacyV4Profile } from './v5-legacy-conversion.js';
 
 const FORMAT_VERSION = 1;
 const isRecord = value => value !== null && typeof value === 'object' && !Array.isArray(value);
@@ -328,6 +329,7 @@ function parseProfile(raw, index, referential = BASE_REFERENTIAL) {
   if (profile.equipment) { const checked = normalizeEquipment(profile.equipment); if (checked.coverage === 'invalid') errors.push({ field: 'equipment', reason: 'collection-invalide', value: checked.warnings.map(w => w.message).join('; ') }); }
   if (values.maxHp !== undefined) profile.maxHp = parseInteger(values.maxHp, 'maxHp', errors);
   if (isRecord(raw.extensions?.fiche) || typeof raw.extensions?.ficheId === 'string') profile.extensions = cloneValue(raw.extensions);
+  else if (isRecord(raw.extensions?.v4)) profile.extensions = convertLegacyV4Profile({ extensions: { v4: cloneValue(raw.extensions.v4) } }).extensions;
   if (values.armorLocations !== undefined) profile.armorLocations = normalizeArmorLocations(parseArmor(values.armorLocations, errors));
   else if (['rightArm', 'leftArm', 'rightLeg', 'leftLeg'].some(key => Object.hasOwn(profile.armor, key))) profile.armorLocations = normalizeArmorLocations(profile.armor);
   const blocking = fields.name.status !== 'found' || fields.hp.status !== 'found' || errors.length > 0;

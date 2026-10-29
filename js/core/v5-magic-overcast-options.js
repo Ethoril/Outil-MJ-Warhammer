@@ -1,3 +1,5 @@
+import { casterCaracs } from './creature-abilities.js';
+
 /**
  * Options de surpuissance propres à un sort (V5 p. 236 : « Spells may have additional options in their descriptions ») :
  * « +N DR : … » ou « pour chaque +N DR : … ». Le contrat porte `overcast.specific` ; l'interface envoie `overcastSpecific = { id: pas }`
@@ -28,7 +30,7 @@ export function resolveSpecificOvercast(contract, selection) {
 
 /** Rappel chiffré d'une option : `{pas}` = nombre de paliers, `{bfm}` = Bonus de Force Mentale du lanceur, `{total}` = pas × bfm. */
 export function specificOvercastReminder(entry, caster) {
-  const bfm = Math.floor((Number(caster?.caracs?.FM) || 0) / 10);
+  const bfm = Math.floor((Number(casterCaracs(caster).FM) || 0) / 10);
   const text = entry.reminder || entry.label;
   return text.replaceAll('{pas}', entry.steps).replaceAll('{bfm}', bfm).replaceAll('{total}', entry.steps * bfm);
 }
@@ -42,3 +44,4 @@ export function raiseTraitRating(traits, name, amount) {
   else list[index] = String(list[index]).replace(pattern, (_, rating) => `${name} (${Number(rating) + amount})`);
   return list;
 }
+

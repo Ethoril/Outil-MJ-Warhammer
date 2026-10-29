@@ -33650,7 +33650,7 @@
     "status": "rappel",
     "coveredBy": null,
     "toolRef": [
-      "js/data/reference-snapshot.json#shield-armes-corps-a-corps-bouclier-pavois-pavise",
+      "js/data/reference-snapshot.json#shield-armures-bouclier-pavois-pavise",
       "js/ui/fiche-details.js#renderFicheDetails",
       "js/ui/workspace-view.js#renderFicheDetails"
     ],
@@ -33670,7 +33670,7 @@
     "status": "rappel",
     "coveredBy": null,
     "toolRef": [
-      "js/data/reference-snapshot.json#shield-armes-corps-a-corps-bouclier-pavois-pavise",
+      "js/data/reference-snapshot.json#shield-armures-bouclier-pavois-pavise",
       "js/ui/fiche-details.js#renderFicheDetails",
       "js/ui/workspace-view.js#renderFicheDetails"
     ],

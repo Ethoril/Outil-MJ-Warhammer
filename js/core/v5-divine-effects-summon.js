@@ -132,7 +132,7 @@ export function planWrathSummon(row, input = {}, { participants = [], actorId, e
   const { profile, need: profileNeed } = normalizedWrathProfile(input.wrathSummonProfile);
   if (profileNeed) needs.push(profileNeed);
   const roll = input.wrathSummonDistanceRoll;
-  if (!Number.isSafeInteger(roll) || roll < rule.min || roll > rule.max) needs.push(need('wrathSummonDistanceRoll', `Distance en yards (${rule.dice}) : entier de ${rule.min} à ${rule.max}`));
+  if (!Number.isSafeInteger(roll) || roll < rule.min || roll > rule.max) needs.push(need('wrathSummonDistanceRoll', `Distance en mètres (${rule.dice}) : entier de ${rule.min} à ${rule.max}`));
   const position = isText(input.wrathSummonPosition) ? input.wrathSummonPosition.trim() : null;
   if (!position || position.length > TEXT_MAX) needs.push(need('wrathSummonPosition', `Position d’apparition confirmée (${TEXT_MAX} caractères au plus)`));
   const id = `divine-wrath-summon:${safe(executionId)}`;
@@ -156,7 +156,7 @@ export function planWrathSummon(row, input = {}, { participants = [], actorId, e
 
 /** Participant ordinaire du plan : valeurs du MJ seulement, ni armure ni Action inventées. */
 export function wrathSummonParticipant(plan, targetName) {
-  const notes = [`${WRATH_SUMMON_RULES[plan.resultId].label} du Courroux, apparu à ${plan.distanceYards} yards du prêtre.`, `Position : ${plan.position}.`,
+  const notes = [`${WRATH_SUMMON_RULES[plan.resultId].label} du Courroux, apparu à ${plan.distanceYards} m du prêtre.`, `Position : ${plan.position}.`,
     ...(plan.kind === 'demon' ? [`Attaque la cible la plus proche désignée : ${targetName || plan.targetId}.`] : [`Conduite : ${plan.behavior}.`])].join(' ');
   return { id: plan.id, name: plan.profile.name, kind: 'Créature', camp: plan.camp, zone: 'active', initiative: plan.profile.initiative,
     hp: plan.profile.wounds, maxHp: plan.profile.wounds, caracs: structuredClone(plan.profile.caracs || {}), armor: { head: 0, body: 0, arms: 0, legs: 0 },

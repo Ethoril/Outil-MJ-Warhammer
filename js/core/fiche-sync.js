@@ -2,7 +2,7 @@
 // Module pur : aucune E/S. La lecture des fiches est dans fiche-source.js, l'écriture
 // passe par Store.applyFicheSync (une seule commande annulable).
 import { cloneValue, normalizeAction, uid } from './models.js';
-import { normalizeEquipment, calculateArmor, armourProtection, equipmentQualities } from './equipment.js';
+import { normalizeEquipment, calculateArmor, armourProtection, equipmentQualities, weaponSkillGroupInfo } from './equipment.js';
 import { getReferenceCatalogue, resolveSkill, aggregateTalents } from './reference-catalog.js';
 import { actionHasDamage, normalizeDamageFields, strengthBonusOf } from './damage.js';
 import { rebaseMagicLayers } from './v5-magic-effects.js';
@@ -22,8 +22,8 @@ export const FICHE_BASIC_SKILLS = Object.freeze([
   ['Subornation', 'soc'], ['Survie en extérieur', 'int']
 ].map(([name, carac]) => Object.freeze({ name, carac })));
 
-// Les halfelins n'ajoutent pas leur Bonus de Force aux Blessures (clés de la fiche, anciennes sauvegardes comprises).
-const RACES_SANS_BF = new Set(['halfelin', 'halfling']);
+// Espèces utilisant la formule locale de Blessures sans Bonus de Force.
+const RACES_SANS_BF = new Set(['gnome', 'skink', 'skink cameleon']);
 
 const number = value => (Number.isFinite(Number(value)) ? Number(value) : 0);
 const isRecord = value => value !== null && typeof value === 'object' && !Array.isArray(value);
@@ -34,23 +34,23 @@ export function normalizeName(value) {
 }
 
 /**
- * Blessures maximum (WFRP4) : BF + 2×BE + BFM, +BE par rang de « Dur à cuire ». Sans BF pour un halfelin.
- * null quand F (hors halfelin), E ou FM manque : le résultat n'est pas calculable.
+ * Blessures maximum : BF + 2×BE + BFM, +BE par rang de « Dur à cuire » ; adaptations selon espèce.
+ * null quand F (sauf espèces sans BF), E ou FM manque : le résultat n'est pas calculable.
  */
 export function woundsMax({ totals, race, talents = [] }) {
-  const sansBF = RACES_SANS_BF.has(String(race || '').toLowerCase());
+  const sansBF = RACES_SANS_BF.has(normalizeName(race).replace(/[-_]+/g, ' '));
   if (!['E', 'FM', ...(sansBF ? [] : ['F'])].every(key => Number.isFinite(totals?.[key]))) return null;
   const bonus = key => Math.floor(number(totals?.[key]) / 10);
   const hardy = (Array.isArray(talents) ? talents : []).filter(item => normalizeName(item?.nom) === 'dur a cuire').length;
   const strength = sansBF ? 0 : bonus('F');
-  return strength + 2 * bonus('E') + bonus('FM') + hardy * bonus('E');
+  return (strength + 2 * bonus('E') + bonus('FM') + hardy * bonus('E')) * (normalizeName(race) === 'ogre' ? 2 : 1);
 }
 
 /**
  * Fiche brute (`doc.data`) → ce que l'outil en retient : totaux, initiative, blessures max
  * et compétences utilisables (`name`, `carac`, `total`).
  */
-const MOVEMENT = Object.freeze({ humain: 4, 'elfe-sylvain': 5, 'haut-elfe': 5, halfelin: 4, ogre: 6, elfe: 5, halfling: 4, nain: 3 });
+const MOVEMENT = Object.freeze({ humain: 4, 'elfe sylvain': 5, 'haut elfe': 5, halfelin: 3, ogre: 6, elfe: 5, halfling: 3, nain: 3, gnome: 3, 'elfe noir': 5, 'elfe des mers': 5, skink: 6, 'skink cameleon': 6 });
 const validNumber = value => value !== null && value !== '' && typeof value !== 'boolean' && Number.isFinite(Number(value));
 const own = (object, key) => Object.hasOwn(object, key);
 const stable = value => Array.isArray(value) ? value.map(stable) : isRecord(value) ? Object.fromEntries(Object.keys(value).sort().map(key => [key, stable(value[key])])) : value;
@@ -124,13 +124,16 @@ export function ficheSnapshot(charId, fiche, metadata = {}) {
   const spells = list('sorts', 'spells');
   const prayers = list('prieres', 'prayers');
   const race = typeof raw.race === 'string' ? raw.race : '';
+  const raceKey = normalizeName(race).replace(/[-_]+/g, ' ');
+  const movement = Object.hasOwn(MOVEMENT, raceKey) ? MOVEMENT[raceKey] : null;
+  if (race && movement === null) warnings.push({ field: 'movement', code: 'unknown-species', severity: 'warning', message: `Espèce « ${race} » inconnue : saisir ou confirmer le Mouvement du profil.`, consequence: 'movement-preserved' });
   const max = coverage.talents !== 'present' ? null : woundsMax({ totals, race, talents: talentsRaw });
   if (coverage.talents !== 'present' && Object.keys(totals).length) warnings.push({ field: 'woundsMax', code: 'talents-unavailable', severity: 'warning', message: 'Talents indisponibles : maximum de Blessures antérieur conservé.', consequence: 'health-preserved' });
   const catalog = getReferenceCatalogue();
   const source = { schemaVersion: metadata.schemaVersion ?? null, revision: metadata.revision ?? null,
     resolverVersion: catalog?.contentVersion ?? catalog?.catalogVersion ?? catalog?.version ?? null };
   const snapshot = { format: 1, charId, name: typeof raw.nom === 'string' ? raw.nom.trim() : '', race,
-    source, caracs: totals, initiative: totals.I ?? null, movement: race ? MOVEMENT[race] ?? 4 : null,
+    source, caracs: totals, initiative: totals.I ?? null, movement,
     wounds: max, woundsMax: max, skills, talents: coverage.talents === 'present' ? talentResult.items : [],
     equipment: equipmentResult.items, spells, prayers, coverage, warnings };
   // `chance` is the fiche's current resource; `destin` is its maximum.
@@ -288,7 +291,36 @@ const maxPatch = (subject, max, options) => {
   return health.computable ? { hp: health.new, maxHp: health.newMax } : {};
 };
 
+// IDs from the V4 catalogue whose V5 source rows moved or merged. Their old
+// instances remain playable until the MJ explicitly replaces them.
+const MOVED_EQUIPMENT_IDS = new Map([
+  ['weapon-armes-corps-a-corps-parade-brise-epee', 'weapon-armes-corps-a-corps-escrime-brise-epee'],
+  ['weapon-armes-corps-a-corps-parade-main-gauche', 'weapon-armes-corps-a-corps-escrime-main-gauche'],
+  ['weapon-armes-corps-a-corps-parade-cape', 'weapon-armes-corps-a-corps-base-cape'],
+  ['weapon-armes-corps-a-corps-parade-filet-druchii', 'weapon-armes-corps-a-corps-base-filet-druchii'],
+  ['weapon-armes-corps-a-corps-parade-filet-leste-2m', 'weapon-armes-a-distance-entraves-filet'],
+  ['weapon-armes-a-distance-lancer-bolas', 'weapon-armes-a-distance-entraves-bolas'],
+  ['weapon-armes-a-distance-poudre-noire-long-fusil-d-hochland-2m', 'weapon-armes-a-distance-ingenierie-long-fusil-d-hochland-2m'],
+  ['weapon-armes-a-distance-poudre-noire-mousquet-2m', 'weapon-armes-a-distance-poudre-noire-mousquet-a-meche-2m'],
+  ['weapon-armes-a-distance-poudre-noire-pistolet-2', 'weapon-armes-a-distance-poudre-noire-pistolet'],
+  ['weapon-armes-corps-a-corps-fleau-fleau-a-grain', 'weapon-armes-corps-a-corps-fleau-fleau-a-grain-2m'],
+  ['weapon-armes-a-distance-entraves-fouet', 'weapon-armes-corps-a-corps-fleau-fouet'],
+  ['weapon-armes-a-distance-entraves-lasso', 'weapon-armes-a-distance-entraves-lasso-2m'],
+  ['shield-armes-corps-a-corps-bouclier-bouclier-haut-elfe', 'shield-armures-bouclier-bouclier-haut-elfe'],
+  ['shield-armes-corps-a-corps-bouclier-bouclier', 'shield-armures-bouclier-bouclier'],
+  ['shield-armes-corps-a-corps-bouclier-pavois', 'shield-armures-bouclier-pavois-pavise'],
+  ['shield-armes-corps-a-corps-bouclier-targe-buckler', 'shield-armures-bouclier-targe-buckler'],
+  ['shield-armes-corps-a-corps-bouclier-bouclier-standard', 'shield-armures-bouclier-bouclier'],
+  ['shield-armes-corps-a-corps-bouclier-grand-bouclier', 'shield-armures-bouclier-grand-bouclier'],
+  ['shield-armes-corps-a-corps-bouclier-pavois-pavise', 'shield-armures-bouclier-pavois-pavise']
+]);
+
 function proposeEquipmentSkill(item, role, skills) {
+  if(item.kind==='weapon'&&String(item.category||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()==='ingenierie'){
+    const group=weaponSkillGroupInfo(item.category,item);if(!group)return '';
+    const skillName=`${group.kind==='ranged'?'Projectiles':'Corps à corps'} (Ingénierie)`,match=resolveSkill(skillName),found=(match?.entry&&findSkill(skills,match.entry.id))||findSkill(skills,skillName);
+    return found?.name||'';
+  }
   const ranged = item.kind !== 'shield' && Boolean(String(item.range || '').trim());
   const category = ({ "Arme d'Hast": 'Hast', "Armes d'Hast": 'Hast', 'Deux-Mains': 'Deux mains', 'Bouclier': 'Base', 'Poudre Noire': 'Poudre noire', 'Explosif': 'Explosifs' })[item.category] || String(item.category || '').trim();
   // Category comes from the source object, never a guessed characteristic from a weapon name.
@@ -346,12 +378,65 @@ export function planProfileSync(snapshot, profile, choices = {}) {
     collections[key] = { coverage, ...(coverage === 'present' ? collectionDiff(profile[key], snapshot[key], key === 'talents' ? row => `${row.id || row.name || row.nom}:${row.specialty || row.specialization || ''}` : undefined) : { added: [], changed: [], removed: [] }) };
     if (coverage === 'present') updated[key] = cloneValue(snapshot[key] || []);
   }
+  // A catalogue refresh can remove or rename a source row while a profile still
+  // owns an older playable instance (including V4 keywords or local edits).
+  // Keep those rows verbatim; reconciliation/conversion requires an explicit MJ action.
+  const sourceEquipment = cloneValue(snapshot.equipment || []);
+  const equipmentModelId = item => item?.baseId || item?.id;
+  const currentEquipmentIds = new Set(sourceEquipment.map(item => item.id));
+  const incomingById = new Map(sourceEquipment.map(item => [item.id, item]));
+  const oldByTargetModel = new Map();
+  for (const item of profile.equipment || []) {
+    if (currentEquipmentIds.has(item.id)) continue;
+    const targetModel = MOVED_EQUIPMENT_IDS.get(equipmentModelId(item));
+    if (targetModel) oldByTargetModel.set(targetModel, [...(oldByTargetModel.get(targetModel) || []), item]);
+  }
+  const incomingByModel = new Map();
+  for (const item of sourceEquipment) {
+    const modelId = equipmentModelId(item);
+    incomingByModel.set(modelId, [...(incomingByModel.get(modelId) || []), item]);
+  }
+  const retainedEquipmentIds = new Set();
+  const equipmentWarnings = [];
+  const conflictTargets = new Set();
+  const preserveById = new Map();
+  for (const oldItem of profile.equipment || []) {
+    const incoming = incomingById.get(oldItem.id);
+    if (incoming && equipmentModelId(oldItem) !== equipmentModelId(incoming)) {
+      preserveById.set(oldItem.id, oldItem);
+      retainedEquipmentIds.add(oldItem.id);
+      conflictTargets.add(oldItem.id);
+      equipmentWarnings.push({ field: 'equipment', code: 'moved-instance-arbitration-required', severity: 'warning',
+        message: `« ${oldItem.name || oldItem.id} » (instance ${oldItem.id}, modèle ${equipmentModelId(oldItem)}) devient « ${incoming.name || incoming.id} » (instance ${incoming.id}, modèle ${equipmentModelId(incoming)}). L’identité paraît la même mais le modèle change. Vérifiez ces deux lignes dans la fiche externe, décidez si c’est le même exemplaire ou deux objets différents, corrigez la fiche, puis relisez-la.`,
+        consequence: 'previous-values-preserved' });
+    }
+  }
+  for (const [targetModel, oldItems] of oldByTargetModel) {
+    const incoming = incomingByModel.get(targetModel) || [];
+    if (!incoming.length) continue; // An absent corresponding instance is a deliberate removal.
+    conflictTargets.add(targetModel);
+    for (const item of oldItems) retainedEquipmentIds.add(item.id);
+    equipmentWarnings.push({ field: 'equipment', code: 'moved-instance-arbitration-required', severity: 'warning',
+        message: `Ancien(s) : ${oldItems.map(item => `« ${item.name || item.id} » (instance ${item.id})`).join(', ')}. Candidat(s) V5 : ${incoming.map(item => `« ${item.name || item.id} » (instance ${item.id})`).join(', ')}. Les modèles correspondent à ${targetModel}, mais les IDs d’instance diffèrent : l’outil ne peut pas savoir s’il s’agit des mêmes objets. Vérifiez les lignes dans la fiche externe, corrigez-la selon votre décision, puis relisez-la.`,
+        consequence: 'previous-values-preserved' });
+  }
+  const nextEquipment = [];
+  for (const item of sourceEquipment) {
+    const modelId = equipmentModelId(item);
+    if (conflictTargets.has(modelId) || conflictTargets.has(item.id)) continue;
+    nextEquipment.push(cloneValue(item));
+  }
+  for (const oldItem of profile.equipment || []) if (retainedEquipmentIds.has(oldItem.id)) nextEquipment.push(cloneValue(preserveById.get(oldItem.id) || oldItem));
+  if (snapshot.coverage?.equipment === 'present') updated.equipment = nextEquipment;
   const equipmentActions = [];
   const removedActions = [];
   if (snapshot.coverage?.equipment === 'present') {
     const currentKeys = new Set();
     const adoptedIds = new Set();
-    for (const item of snapshot.equipment || []) {
+    for (const item of updated.equipment || []) {
+      // The old instance is the authoritative playable copy until the MJ replaces
+      // it explicitly. Keep its linked actions byte-for-byte and do not rebuild PA.
+      if (retainedEquipmentIds.has(item.id)) continue;
       if (!['weapon', 'shield'].includes(item.kind)) continue;
       const offensive = item.damage !== null && item.damage !== undefined && String(item.damage).trim() !== '';
       const roles = item.kind === 'shield' ? (offensive ? ['attack', 'defense'] : ['defense']) : !String(item.range || '').trim() ? ['attack', 'defense'] : ['attack'];
@@ -366,24 +451,34 @@ export function planProfileSync(snapshot, profile, choices = {}) {
         const wanted = own(equipmentLinks, key) ? equipmentLinks[key] : stored?.skillId || stored?.skillName || '';
         const skill = findSkill(availableSkills, wanted);
         const proposed = proposeEquipmentSkill(item, role, availableSkills);
+        const weaponGroup = item.kind === 'weapon' && weaponSkillGroupInfo(item.category,item);
+        const fallbackAttr = weaponGroup?.kind === 'ranged' || String(item.range || '').trim() ? 'CT' : 'CC';
+        const noSkillException = weaponGroup?.kind==='ranged'&&['arbalete','lancer','sarbacane'].includes(String(item.category||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase());
+        const fallbackCarac = item.kind === 'weapon' && !wanted && (weaponGroup?.kind==='melee'||noSkillException) ? snapshot.caracs[fallbackAttr] : null;
+        const linked = Boolean(skill) || role === 'attack' && item.kind === 'weapon' && !wanted && (weaponGroup?.kind==='melee'||noSkillException);
         const action = normalizeAction({ ...(previous || adopted || {}), id: previous?.id || adopted?.id || equipmentActionId(key),
           note: role === 'defense' ? `Parade — ${item.name}` : item.name, type: role,
-          base: skill?.total ?? '', attr: skill?.carac || 'Custom',
+          base: skill?.total ?? fallbackCarac ?? '', attr: skill?.carac || (fallbackCarac !== null ? fallbackAttr : 'Custom'),
           ...normalizeDamageFields({ damage: role === 'attack' ? item.damage : 0 }),
           qualities: equipmentQualities(item),
           extensions: { ...(previous?.extensions || adopted?.extensions || {}), fiche: { charId: snapshot.charId, equipmentId: item.id, role,
             skillId: skill?.id || null, skillName: skill?.name || '', bindingVersion: 1,
-            equipmentVersion: item.catalogVersion ?? null, requiresLink: !skill }, equipment: cloneValue(item) } });
+            syncedWeaponSkillScore: skill?.total ?? null,
+            equipmentVersion: item.catalogVersion ?? null, requiresLink: !linked }, equipment: cloneValue(item) } });
         const change = previous ? ficheFingerprint(previous) === ficheFingerprint(action) ? 'unchanged' : 'changed' : adopted ? 'adopted' : 'added';
         equipmentActions.push({ id: action.id, key, equipmentId: item.id, role, name: action.note, skill: skill?.name || '', proposed,
           requiresLink: !skill, change, adoptCandidates: allActions.filter(row => !sourceActionKey(row) && row.type === role).map(row => ({ id: row.id, name: row.note })), action });
       }
     }
-    removedActions.push(...allActions.filter(action => sourceCharIds.has(action.extensions?.fiche?.charId) && sourceActionKey(action) && !currentKeys.has(sourceActionKey(action))).map(action => ({ id: action.id, name: action.note })));
+    const retiredActions = allActions.filter(action => sourceCharIds.has(action.extensions?.fiche?.charId) && sourceActionKey(action)
+      && !currentKeys.has(sourceActionKey(action)) && retainedEquipmentIds.has(action.extensions?.fiche?.equipmentId));
+    removedActions.push(...allActions.filter(action => sourceCharIds.has(action.extensions?.fiche?.charId) && sourceActionKey(action)
+      && !currentKeys.has(sourceActionKey(action)) && !retainedEquipmentIds.has(action.extensions?.fiche?.equipmentId)).map(action => ({ id: action.id, name: action.note })));
     updated.diceLines = updated.diceLines.filter(action => !(sourceCharIds.has(action.extensions?.fiche?.charId) && sourceActionKey(action)) && !adoptedIds.has(action.id));
+    updated.diceLines.push(...retiredActions.map(cloneValue));
     updated.diceLines.push(...equipmentActions.map(row => row.action));
-    updated.armorLocations = calculateArmor(snapshot.equipment);
-    updated.protection = armourProtection(snapshot.equipment);
+    updated.armorLocations = calculateArmor(updated.equipment);
+    updated.protection = armourProtection(updated.equipment);
   }
   updated.caracs = { ...profile.caracs, ...snapshot.caracs };
   if (snapshot.initiative !== null) updated.initiative = snapshot.initiative;
@@ -395,7 +490,7 @@ export function planProfileSync(snapshot, profile, choices = {}) {
   Object.assign(updated, importFicheDurables(updated, snapshot, profile.ficheSnapshot));
   // Keep latest source status, but each excluded collection retains its previous playable data.
   updated.ficheSnapshot = cloneValue(snapshot);
-  const warnings = cloneValue(snapshot.warnings || []);
+  const warnings = [...cloneValue(snapshot.warnings || []), ...equipmentWarnings];
   if (health.warning) warnings.push({ field: 'hp', code: health.warning, severity: 'warning', ...(health.warning === 'reserve-health-normalized' ? { message: 'Ancienne réserve avec PV courants : la réserve reprend le maximum de fiche ; les Blessures subies restent conservées dans les participants et personnages persistants déjà enregistrés.' } : {}), consequence: health.warning === 'old-maximum-unknown' ? 'hp-preserved' : 'signed-wounds-preserved' });
   return { profileId: profile.id, charId: snapshot.charId, name: profile.name, caracs,
     initiative: { old: profile.initiative, new: snapshot.initiative ?? profile.initiative },
@@ -416,6 +511,8 @@ export function applyFicheSync(draft, entries) {
     const expected = entry.expectedProfileFingerprint || entry.precondition?.profileFingerprint;
     if (expected && expected !== profileSyncFingerprint(profile)) throw Object.assign(new Error('Le profil a changé depuis l’aperçu : actualisez la synchronisation.'), { code: 'fiche-plan-stale' });
     if (profile.extensions?.ficheId && profile.extensions.ficheId !== entry.snapshot.charId && entry.replaceAssociation !== true) throw Object.assign(new Error('Le remplacement du lien de fiche doit être confirmé.'), { code: 'fiche-association-conflict' });
+    const equipmentConflict = planProfileSync(entry.snapshot, profile, entry).warnings.find(warning => warning.code === 'moved-instance-arbitration-required');
+    if (equipmentConflict) throw Object.assign(new Error('La synchronisation est suspendue : une correspondance d’équipement déplacé est incertaine. Arbitrez les exemplaires dans la fiche avant de réessayer.'), { code: 'fiche-equipment-arbitration-required' });
   }
   const applied = new Set();
   for (const entry of entries || []) {
@@ -472,7 +569,7 @@ export function applyFicheSync(draft, entries) {
           ...(health.warning ? { ficheHealthWarning: health.warning } : {}) },
         ficheSnapshot: cloneValue(updated.ficheSnapshot) };
       for (const key of ['skills', 'talents', 'equipment', 'spells', 'prayers']) if (entry.snapshot.coverage?.[key] === 'present') output[key] = cloneValue(updated[key]);
-      for (const key of ['initiative', 'movement', 'race']) if (updated[key] != null) output[key] = updated[key];
+      for (const key of ['initiative', 'movement', 'race']) if (updated[key] != null && (key !== 'movement' || entry.snapshot.movement != null)) output[key] = updated[key];
       if (entry.snapshot.coverage?.equipment === 'present') {
         output.armorLocations = cloneValue(updated.armorLocations); output.protection = cloneValue(updated.protection);
       }
@@ -480,7 +577,7 @@ export function applyFicheSync(draft, entries) {
       // S-05 : la fiche est la nouvelle base ; les couches magiques actives se recalculent dessus (jamais l'inverse).
       const magic = subject.extensions?.v5;
       if (magic?.baseCaracs || magic?.spellEffects?.length || magic?.beastForm) {
-        const rebased = rebaseMagicLayers(subject, { caracs: entry.snapshot.caracs, movement: updated.movement,
+        const rebased = rebaseMagicLayers(subject, { caracs: entry.snapshot.caracs, ...(entry.snapshot.movement != null ? { movement: updated.movement } : {}),
           ...(entry.snapshot.coverage?.equipment === 'present' ? { armor: updated.armorLocations } : {}) });
         output.caracs = rebased.caracs;
         output.extensions = { ...output.extensions, v5: rebased.extensions.v5 };

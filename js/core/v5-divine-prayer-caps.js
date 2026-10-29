@@ -1,4 +1,5 @@
 import registry from '../data/v5-divine-contracts.json' with { type: 'json' };
+import { v5CombatActionClock } from './v5-resources.js';
 
 const clone = value => structuredClone(value);
 const ruleId = 'wrath:6-10:pray-sl-cap';
@@ -213,9 +214,8 @@ export function wrathPrayerBan(actor){
  return null;
 }
 export function wrathTurnPosition(state){
- const scene=state.activeScene,encounterId=scene?.encounterId||scene?.id||state.extensions?.v5?.combatId;
- const serial=scene?.extensions?.v5?.turnIndex??state.extensions?.v5?.turnIndex,actorId=state.combat?.currentActorId;
- return {encounterId:encounterId||null,turnId:encounterId&&actorId&&Number.isSafeInteger(serial)?(scene?.id||encounterId)+':'+serial+':'+actorId:null,actorId};
+ const clock=v5CombatActionClock(state);
+ return {encounterId:clock.encounterId||null,turnId:clock.turnId||null,actorId:state.combat?.currentActorId};
 }
 export function wrathActionSpent(state,actorId){
  const clock=wrathTurnPosition(state),key=JSON.stringify([clock.encounterId,clock.turnId]);
