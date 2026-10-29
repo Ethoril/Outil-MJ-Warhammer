@@ -139,6 +139,21 @@ test('F source characterization: actual Taggees Tiger Claws uses Brawling and re
   assert.equal(applied.state.participants.find(row=>row.id==='victim').extensions.v5.felidWoundDisguises[0].appearance,'grand félin');
 });
 
+test('F source characterization: Taggees Tiger Claws record no disguise unless the panel checkbox sets felidWoundDisguise', () => {
+  const profile=L24.profiles.find(row=>row.name?.startsWith('Taggees'));
+  const claw=profile.attacks.find(row=>row.name==='Tiger Claws');
+  const actor={id:'taggee',name:profile.name,caracs:profile.stats,skills:profile.skills.map(row=>({name:row.name,nameFr:row.nameFr,total:row.value})),equipment:[],states:[]};
+  const target={id:'victim',hp:30,caracs:{E:0},equipment:[],states:[]};
+  for(const context of [{},{felidWoundDisguise:false},{felidWoundDisguise:undefined}]){
+    const preview=previewResolution({actor,target,action:{type:'attack',...claw,base:profile.stats.CC,qualities:[]},defense:{type:'test',base:10,roll:90,label:'Esquive'},v5:{kind:'melee',context},roll:31,baseRevision:1});
+    assert.equal(preview.hit,true);
+    assert.ok(!preview.supplementalEquipment.effects.some(row=>row.disguiseAs),'unchecked: no disguise effect');
+    const applied=applyResolution(preview,{revision:1,participants:[actor,target],appliedResolutionIds:[]});
+    assert.equal(applied.status,'applied');
+    assert.equal(applied.state.participants.find(row=>row.id==='victim').extensions?.v5?.felidWoundDisguises,undefined);
+  }
+});
+
 test('F source characterization: the real Tiger Claws profile applies through Store', async () => {
   const profile=L24.profiles.find(row=>row.name?.startsWith('Taggees'));
   const actor=buildParticipantFromBestiary(profile.id,{library:L24.profiles,idFactory:()=> 'taggee-store'});

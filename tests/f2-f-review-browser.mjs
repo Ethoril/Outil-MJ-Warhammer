@@ -19,12 +19,13 @@ try{
   await page.waitForFunction(()=>document.querySelector('#app-content')?.style.display==='block',{timeout:20000});
   const pavise=reference.equipment.items.find(item=>item.id==='shield-armures-bouclier-pavois-pavise');
   const ratling=reference.equipment.items.find(item=>item.id==='weapon-armes-a-distance-ingenierie-mitrailleuse-ratling-skaven');
-  const actor={id:'f-review-actor',name:'Porteur F',kind:'PJ',camp:'pj',zone:'active',hp:20,maxHp:20,caracs:{CC:60,CT:60,F:40,E:40,FM:40,Ag:40,Int:40},skills:[],talents:[],states:[],armor:{head:0,body:0,arms:0,legs:0},equipment:[pavise,ratling,{id:'antler-test',name:'Antler Hilted Blade',kind:'weapon',category:'Base',damage:'BF+4',keywords:[],extensions:{}},{id:'leviathan-test',name:'Leviathan Plate',kind:'armour',ap:2,locations:['body'],layer:'rigid',keywords:[],extensions:{}}],actions:[
+  const actor={id:'f-review-actor',name:'Porteur F',kind:'PJ',camp:'pj',zone:'active',hp:20,maxHp:20,caracs:{CC:60,CT:60,F:40,E:40,FM:40,Ag:40,Int:40},skills:[{id:'brawling-test',name:'Melee (Brawling)',nameFr:'Corps à corps (Bagarre)',total:60,advances:0,characteristic:'CC'}],talents:[],states:[],armor:{head:0,body:0,arms:0,legs:0},equipment:[pavise,ratling,{id:'antler-test',name:'Antler Hilted Blade',kind:'weapon',category:'Base',damage:'BF+4',keywords:[],extensions:{}},{id:'leviathan-test',name:'Leviathan Plate',kind:'armour',ap:2,locations:['body'],layer:'rigid',keywords:[],extensions:{}}],actions:[
     {id:'antler-attack',name:'Antler Hilted Blade',type:'attack',attr:'CC',base:60,damage:4,qualities:[],extensions:{fiche:{equipmentId:'antler-test'}}},
     {id:'focus-test',name:'Focalisation (Aqshy)',type:'test',attr:'FM',base:50,extensions:{}},
+    {id:'tiger-attack',name:'Tiger Claws',type:'attack',attr:'CC',base:60,damage:4,qualities:[],extensions:{fiche:{skillId:'brawling-test'}}},
     {id:'warp-attack',name:'Warp Blade',type:'attack',attr:'CC',base:60,damage:6,qualities:[],extensions:{}}
   ],extensions:{v5:{corruptionPoints:0}}};
-  const target={...actor,id:'f-review-target',name:'Cible F',camp:'ennemi',equipment:[],actions:[],extensions:{v5:{}}};
+  const target={...actor,id:'f-review-target',name:'Cible F',camp:'ennemi',hp:200,maxHp:200,equipment:[],actions:[],extensions:{v5:{}}};
   const profile=L22.profiles.find(row=>row.name==='Rat Ogre Bonebreaker');
   const bonebreaker=buildParticipantFromBestiary(profile.id,{library:L22.profiles,idFactory:(()=>{let i=0;return()=>`bonebreaker-browser-${++i}`})()});
   bonebreaker.id='f-bonebreaker';bonebreaker.name='Rat Ogre Bonebreaker test';bonebreaker.zone='active';bonebreaker.camp='ennemi';bonebreaker.extensions.v5.corruptionPoints=0;
@@ -78,5 +79,28 @@ try{
   await workspace.getByLabel('Jour déclaré par le MJ').fill('Jour Bonebreaker');
   await workspace.getByRole('button',{name:'Déclarer l’exposition quotidienne'}).click();
   await page.waitForFunction(()=>document.querySelector('.workspace-corruption-panel')?.textContent.includes('Malepierre portée : Warpstone Shard* · Jour Bonebreaker'));
+  // Griffes du tigre : la case du panneau écrit v5.context.felidWoundDisguise ; cochée, la blessure appliquée est enregistrée comme griffure de grand félin, décochée rien n'est enregistré.
+  await page.locator('[data-workspace-select="f-review-actor"]').click();
+  await page.locator('[data-action-key="tiger-attack"]').click();
+  const disguise=workspace.getByLabel('Maquiller la blessure en griffure de grand félin');
+  assert.equal(await disguise.count(),1);
+  const strikeTiger=async()=>{
+    await workspace.getByRole('group',{name:'Adversaires'}).getByRole('button',{name:'Cible F',exact:true}).click();
+    await workspace.locator('.workspace-defense-base').fill('30');
+    await workspace.locator('[data-roll-input="defense"]').fill('34');
+    await workspace.locator('[data-roll-input="attack"]').fill('52');
+    await workspace.locator('[data-roll-input="attack"]').press('Enter');
+    // Élan acquis : l'inversion facultative des dés se tranche avant d'appliquer.
+    const keep=workspace.getByText('Conserver 52');if(await keep.count())await keep.click();
+    await workspace.getByRole('button',{name:/^Appliquer \d+ dégâts à Cible F/}).click();
+    await page.waitForFunction(()=>document.querySelector('#toast-container')?.textContent.includes('dégâts appliqués à Cible F'));
+  };
+  const disguises=()=>page.evaluate(async()=>{const {Store}=await import('/Outil-MJ-Warhammer/js/main.js');return (Store.listParticipants().find(row=>row.id==='f-review-target').extensions?.v5?.felidWoundDisguises||[]).length;});
+  await strikeTiger();
+  assert.equal(await disguises(),0,'case décochée : aucune blessure maquillée');
+  await page.locator('[data-action-key="tiger-attack"]').click();
+  await disguise.check();
+  await strikeTiger();
+  assert.equal(await disguises(),1,'case cochée : la blessure est enregistrée comme griffure de grand félin');
   assert.deepEqual(errors,[],`aucune erreur UI attendue : ${errors.join('; ')}`);
 }finally{await browser.close();await new Promise(done=>server.close(done));}

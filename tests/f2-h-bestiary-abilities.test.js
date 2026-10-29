@@ -314,6 +314,7 @@ test('Great cat Deathblow triggers on every successful melee hit, whatever the S
   assert.equal(hit.hit, true);
   assert.equal(hit.deathblow?.maxChain, Math.floor(cat.caracs.CC / 10));
   assert.ok(hit.reminders.some(text => /Frappe mortelle/.test(text)));
+  assert.ok(hit.reminders.some(text => text.includes('Chaque bond vise une créature différente, jamais deux fois la même (V4 p.160, L23 p.87)')), 'le rappel garde la règle des cibles distinctes');
   assert.equal(run(cat, claw, 99).deathblow, null, 'a miss never triggers it');
   const other = { ...p('E0-P-807'), id: 'farm', zone: 'active' };
   assert.equal(run(other, other.actions.find(row => row.type === 'attack' && row.attr === 'CC'), 10).deathblow, null, 'other profiles do not have it');
