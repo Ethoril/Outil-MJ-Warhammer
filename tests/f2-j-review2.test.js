@@ -75,7 +75,7 @@ test('2 — un patient retiré du combat ne bloque pas le calendrier ; son incid
   assert.equal((await store.archiveAftermathIncident({ operationId: 'a2', incidentId: patientIncident })).receipt.reason, 'subject-still-present');
 });
 
-test('3 — critique guéri : amputation exige la Chirurgie ; durables non gérés en J1 refusent la clôture', async () => {
+test('3 — critique guéri : amputation exige la Chirurgie ; les durables de J2 exigent leur suivi', async () => {
   const roll = Array.from({ length: 200 }, (_, i) => i + 1).find(n => getV5CriticalEffect('ARM', n)?.source?.printedName === 'Severed Finger');
   const withRecord = (table, effectRoll, id) => createCriticalAftermathRecord(base(id), { table, effectRoll, resolutionId: `res-${id}` });
   const finger = withRecord('ARM', roll, 'finger');
@@ -87,6 +87,9 @@ test('3 — critique guéri : amputation exige la Chirurgie ; durables non gér�
   assert.equal((await closeOnce('c0')).receipt.reason, 'amputation-decision-pending');
   const record = { ...finger.record, amputationShock: { amputationOccurred: true, part: 'finger' } };
   await store.updateParticipant('finger', { extensions: { v5: { ...get(store, 'finger').extensions.v5, criticalAftermath: [record] } } });
+  // J2 : la perte confirmée a son propre suivi (côté et nombre saisis par le MJ) avant que le critique puisse être déclaré guéri.
+  assert.equal((await closeOnce('c1a')).receipt.reason, 'sequelae-follow-up-not-opened');
+  assert.equal((await store.openAftermathSequelae({ operationId: 'os', incidentId, facts: { 'shock:0:finger': { side: 'left', count: 1 } } })).receipt.status, 'applied');
   assert.equal((await closeOnce('c1')).receipt.reason, 'surgery-not-completed');
   assert.equal((await store.treatAftermathSurgicalIncident({ operationId: 's', incidentId, healerId: 'surgeon', roll: 10 })).receipt.reason, 'surgery-success');
   assert.equal((await closeOnce('c2')).receipt.reason, 'critical-states-remaining', 'sans stateIds rattachés, le MJ confirme les États');
@@ -97,7 +100,7 @@ test('3 — critique guéri : amputation exige la Chirurgie ; durables non gér�
   const odd = withRecord(table, effectRoll, 'odd');
   const store2 = await setup([odd.participant]);
   const oddId = await openCritical(store2, 'odd', odd.record.id);
-  assert.equal((await store2.closeAftermathIncident({ operationId: 'c', incidentId: oddId, temporaryEffectsEnded: true })).receipt.reason, 'critical-follow-up-j2-required');
+  assert.equal((await store2.closeAftermathIncident({ operationId: 'c', incidentId: oddId, temporaryEffectsEnded: true })).receipt.reason, 'sequelae-follow-up-not-opened');
 });
 
 test('4 — une infection guérie par Guérison −1 laisse la blessure traitée (pas de réinfection)', () => {

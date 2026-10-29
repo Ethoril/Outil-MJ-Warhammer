@@ -331,6 +331,8 @@ import { applyFicheSync as applyFicheSyncToDraft } from './fiche-sync.js';
 import { convertLegacyV4Profile } from './v5-legacy-conversion.js';
 import { planMountedFall, V5_RIDE_SKILL_ID } from './v5-mounted-combat.js';
 import { createAftermathState, validateAftermathState, registerWoundIncident, previewAftermathAdvance, advanceAftermathCalendar, treatWoundIncident, treatInfection, treatSurgicalIncident, closeAftermathIncident, archiveAftermathIncident, registerDisease, careForDisease, aftermathHealer, aftermathEnduranceScore } from './v5-aftermath.js';
+import { planSequelae, openSequelae, setSequelaFacts, immobilizeFracture, unbindFracture, resolveFractureHealing, treatTornMuscle, confirmResetLimb, recordPostEncounterTest, decideSurgeryDeadline, recordRelearning, decideImpressiveScars, recordCharacteristicLoss, sequelaeOutstanding, previewSequelaeAdvance, pendingSequelaDecisions } from './v5-sequelae.js';
+import { sequelaPhase, sequelaEffectRows, sequelaCharacteristicTotals } from './v5-sequela-effects.js';
 
 export const KEY = { EXTENSIONS: 'wfrp.extensions.v1', RESERVE: 'wfrp.reserve.v1', COMBAT: 'wfrp.combat.v1', LOG: 'wfrp.log.v1', DICE: 'wfrp.dice.v1', TS: 'wfrp.sync.ts.v1' };
 
@@ -1452,7 +1454,6 @@ function resolvedCorruptionTest(participant, skillId, input) {
   }
 
   // Suivi des séquelles : exécution privée d'une opération du registre (jamais exposée comme API) et lecture du soigneur sur sa fiche.
-  const AFTERMATH_J1_DURABLE_KINDS = new Set(['drop-held-item', 'duration', 'temporary-limb-loss', 'random-condition-count', 'test', 'conditional-test', 'event', 'condition', 'compound', 'random-select-and-apply', 'surgery-required', 'amputation']);
   const absentAftermathSubjects = (state, participants) => [...new Set(state.incidents.filter(row => row.status === 'open' && !participants.some(item => item.id === row.participantId)).map(row => row.participantId))];
   /** none | pending (décision du choc non prise) | absent | occurred : une amputation confirmée exige la Chirurgie (p.178). */
   function aftermathAmputation(record) {
@@ -1466,6 +1467,14 @@ function resolvedCorruptionTest(participant, skillId, input) {
     const participant = (draft.combat?.participants || []).find(row => row.id === input.healerId);
     if (!participant) return { ok: false, reason: 'healer-required' };
     return aftermathHealer(participant, purpose, input.skillId ?? null);
+  }
+  /** Amputation vue par le suivi J2 : comme aftermathAmputation, mais aussi pour une perte posée sous condition (échec d'un Test) dans le registre F2-I. */
+  function sequelaAmputation(record) {
+    const direct = aftermathAmputation(record);
+    if (direct !== 'none' || !record || !amputationShockRequirements(record).length) return direct;
+    const shocks = [record.amputationShock, ...(record.amputationShocks || [])].filter(Boolean);
+    if (shocks.some(row => row.amputationOccurred === true)) return 'occurred';
+    return record.amputationShockStatus === 'not-occurred' ? 'absent' : 'pending';
   }
   function runAftermathCommand(type, operation) {
     let outcome = null;
@@ -5027,7 +5036,7 @@ function resolvedCorruptionTest(participant, skillId, input) {
       const state = api.getAftermathState();
       const preview = previewAftermathAdvance(state, { ...input, absentParticipantIds: absentAftermathSubjects(state, participants) });
       if (preview.status !== 'ready') return preview;
-      return { ...preview, requiredDailyChecks: preview.requiredDailyChecks.map(check => {
+      return { ...preview, sequelaEvents: previewSequelaeAdvance(state, preview.days).map(event => ({ ...event, participantName: participants.find(row => row.id === event.participantId)?.name || null })), requiredDailyChecks: preview.requiredDailyChecks.map(check => {
         const patient = participants.find(row => row.id === check.participantId);
         return { ...check, participantName: patient?.name || null, score: patient ? aftermathEnduranceScore(patient) : null };
       }) };
@@ -5135,7 +5144,7 @@ function resolvedCorruptionTest(participant, skillId, input) {
         const patient = incident && (draft.combat?.participants || []).find(row => row.id === incident.participantId);
         const record = incident?.source.kind === 'critical' ? (patient?.extensions?.v5?.criticalAftermath || []).find(row => row.id === incident.source.criticalId) : null;
         const found = aftermathHealerOf(draft, 'heal', input);
-        const outcome = treatSurgicalIncident(state, { operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, incidentId: input.incidentId, healer: found.ok ? found.healer : null, roll: input.roll, surgeryRequired: aftermathAmputation(record) === 'occurred', d10: input.d10 ?? null, wounds: Number(patient?.hp) || 0 });
+        const outcome = treatSurgicalIncident(state, { operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, incidentId: input.incidentId, healer: found.ok ? found.healer : null, roll: input.roll, surgeryRequired: aftermathAmputation(record) === 'occurred' || (record?.sequela?.durableEffects || []).some(effect => effect.kind === 'surgery-deadline'), d10: input.d10 ?? null, wounds: Number(patient?.hp) || 0 });
         if (outcome.receipt.reason === 'healer-skill-required' && found.reason) outcome.receipt.reason = found.reason;
         if (outcome.receipt.status === 'applied' && outcome.receipt.fumbleDamage) {
           outcome.afterApply = next => { const target = next.combat.participants.find(row => row.id === patient.id); target.hp = Math.max(0, Number(target.hp) - outcome.receipt.fumbleDamage); return next; };
@@ -5146,7 +5155,7 @@ function resolvedCorruptionTest(participant, skillId, input) {
     /** Critique guéri (V5 p.172, 178) : États retirés, malus temporaires terminés (MJ), chirurgie faite si exigée ou si une amputation a eu lieu. */
     closeAftermathIncident(input = {}) {
       return runAftermathCommand('close-aftermath-incident', (state, draft) => {
-        const refuse = reason => ({ status: 'refused', reason, receipt: { id: input.operationId ?? null, kind: 'close-incident', status: 'refused', reason, incidentId: input.incidentId } });
+        const refuse = (reason, details = {}) => ({ status: 'refused', reason, receipt: { id: input.operationId ?? null, kind: 'close-incident', status: 'refused', reason, incidentId: input.incidentId, ...details } });
         const incident = state.incidents.find(row => row.id === input.incidentId);
         const patient = incident && (draft.combat?.participants || []).find(row => row.id === incident.participantId);
         let statesCleared = true, wound = null, record = null, surgeryRequired = false;
@@ -5154,11 +5163,11 @@ function resolvedCorruptionTest(participant, skillId, input) {
           if (!patient) return refuse('unknown-subject');
           record = (patient.extensions?.v5?.criticalAftermath || []).find(row => row.id === incident.source.criticalId);
           if (!record) return refuse('critical-occurrence-not-found');
-          // Lésions et durables suivis en J2 : ne jamais déclarer guéri un critique qui en porte.
-          if (record.sequela?.injuries?.length) return refuse('injury-follow-up-not-available');
-          if ((record.sequela?.durableEffects || []).some(effect => !AFTERMATH_J1_DURABLE_KINDS.has(effect.kind))) return refuse('critical-follow-up-j2-required');
           const amputation = aftermathAmputation(record);
           if (amputation === 'pending') return refuse('amputation-decision-pending');
+          // Lésions, pertes et durables (J2) : un critique n'est guéri que quand chacune de ses séquelles a un suivi terminé ; l'historique et les effets permanents restent.
+          const outstanding = sequelaeOutstanding(state, incident.id, { planned: planSequelae(record), amputation: sequelaAmputation(record) });
+          if (outstanding.length) return refuse(outstanding.some(row => row.reason === 'not-opened') ? 'sequelae-follow-up-not-opened' : 'sequelae-follow-up-open', { outstanding });
           surgeryRequired = amputation === 'occurred';
           wound = (patient.extensions?.v5?.criticalWounds || []).find(row => row.id === incident.source.criticalWoundId) || null;
           if ((record.sequela?.states || []).length) {
@@ -5185,10 +5194,100 @@ function resolvedCorruptionTest(participant, skillId, input) {
         return outcome;
       });
     },
+    /** Séquelles de la convalescence (F2-J2) : suivis, phases, décisions en attente, étapes proposées par incident et pertes de caractéristique à renvoyer à la fiche. */
+    listAftermathSequelae() {
+      const state = api.getAftermathState();
+      const participants = currentEnvelope().combat?.participants || [];
+      const day = state.calendar.currentDay;
+      const incidents = state.incidents.filter(row => row.status === 'open' && row.source.kind === 'critical').map(incident => {
+        const record = (participants.find(row => row.id === incident.participantId)?.extensions?.v5?.criticalAftermath || []).find(row => row.id === incident.source.criticalId);
+        const planned = record ? planSequelae(record) : [];
+        return { incidentId: incident.id, participantId: incident.participantId, planned, needsOpening: planned.some(item => !(state.sequelae || []).some(row => row.id === item.id)),
+          outstanding: sequelaeOutstanding(state, incident.id, { planned, amputation: sequelaAmputation(record) }) };
+      });
+      const characteristics = {};
+      for (const id of new Set((state.sequelae || []).map(row => row.participantId))) {
+        const totals = sequelaCharacteristicTotals(sequelaEffectRows(state, id));
+        if (Object.keys(totals).length) characteristics[id] = totals;
+      }
+      return { day, sequelae: (state.sequelae || []).map(row => ({ ...cloneValue(row), phase: sequelaPhase(row, day) })), incidents, pending: pendingSequelaDecisions(state), characteristics };
+    },
+    openAftermathSequelae(input = {}) {
+      return runAftermathCommand('open-aftermath-sequelae', (state, draft) => {
+        const incident = state.incidents.find(row => row.id === input.incidentId);
+        const patient = incident && (draft.combat?.participants || []).find(row => row.id === incident.participantId);
+        const record = incident?.source.kind === 'critical' ? (patient?.extensions?.v5?.criticalAftermath || []).find(row => row.id === incident.source.criticalId) : null;
+        const toughnessBonus = Number.isSafeInteger(input.toughnessBonus) && input.toughnessBonus >= 0 ? input.toughnessBonus : (patient ? criticalDeathToughnessBonus(patient) : null);
+        return openSequelae(state, { operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, incidentId: input.incidentId, record, toughnessBonus, facts: input.facts || {} });
+      });
+    },
+    setAftermathSequelaFacts(input = {}) {
+      return runAftermathCommand('set-aftermath-sequela-facts', (state, draft) => {
+        const sequela = (state.sequelae || []).find(row => row.id === input.sequelaId);
+        const patient = sequela && (draft.combat?.participants || []).find(row => row.id === sequela.participantId);
+        const toughnessBonus = Number.isSafeInteger(input.toughnessBonus) && input.toughnessBonus >= 0 ? input.toughnessBonus : (patient ? criticalDeathToughnessBonus(patient) : null);
+        return setSequelaFacts(state, { operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, sequelaId: input.sequelaId, facts: input.facts || {}, toughnessBonus });
+      });
+    },
+    immobilizeAftermathFracture(input = {}) {
+      return runAftermathCommand('immobilize-aftermath-fracture', (state, draft) => {
+        const found = aftermathHealerOf(draft, 'heal', input);
+        const outcome = immobilizeFracture(state, { operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, sequelaId: input.sequelaId, healer: found.ok ? found.healer : null, roll: input.roll });
+        if (outcome.receipt.reason === 'healer-skill-required' && found.reason) outcome.receipt.reason = found.reason;
+        return outcome;
+      });
+    },
+    unbindAftermathFracture(input = {}) {
+      return runAftermathCommand('unbind-aftermath-fracture', state => unbindFracture(state, { operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, sequelaId: input.sequelaId }));
+    },
+    resolveAftermathFracture(input = {}) {
+      return runAftermathCommand('resolve-aftermath-fracture', (state, draft) => {
+        const sequela = (state.sequelae || []).find(row => row.id === input.sequelaId);
+        const patient = sequela && (draft.combat?.participants || []).find(row => row.id === sequela.participantId);
+        return resolveFractureHealing(state, { operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, sequelaId: input.sequelaId, enduranceScore: patient ? aftermathEnduranceScore(patient) : null, roll: input.roll ?? null });
+      });
+    },
+    treatAftermathTornMuscle(input = {}) {
+      return runAftermathCommand('treat-aftermath-torn-muscle', (state, draft) => {
+        const found = aftermathHealerOf(draft, 'heal', input);
+        const outcome = treatTornMuscle(state, { operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, sequelaId: input.sequelaId, healer: found.ok ? found.healer : null, roll: input.roll, difficultyDR: input.difficultyDR ?? 0 });
+        if (outcome.receipt.reason === 'healer-skill-required' && found.reason) outcome.receipt.reason = found.reason;
+        return outcome;
+      });
+    },
+    confirmAftermathResetLimb(input = {}) {
+      return runAftermathCommand('confirm-aftermath-reset-limb', state => confirmResetLimb(state, { operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, sequelaId: input.sequelaId }));
+    },
+    recordAftermathPostEncounterTest(input = {}) {
+      return runAftermathCommand('record-aftermath-post-encounter-test', (state, draft) => {
+        const sequela = (state.sequelae || []).find(row => row.id === input.sequelaId);
+        const patient = sequela && (draft.combat?.participants || []).find(row => row.id === sequela.participantId);
+        return recordPostEncounterTest(state, { operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, sequelaId: input.sequelaId, enduranceScore: patient ? aftermathEnduranceScore(patient) : null, roll: input.roll });
+      });
+    },
+    decideAftermathSurgeryDeadline(input = {}) {
+      return runAftermathCommand('decide-aftermath-surgery-deadline', state => decideSurgeryDeadline(state, { operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, sequelaId: input.sequelaId, footLost: input.footLost, side: input.side ?? null }));
+    },
+    recordAftermathRelearning(input = {}) {
+      return runAftermathCommand('record-aftermath-relearning', state => recordRelearning(state, { operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, sequelaId: input.sequelaId, hundredsOfXp: input.hundredsOfXp }));
+    },
+    decideAftermathImpressiveScars(input = {}) {
+      return runAftermathCommand('decide-aftermath-impressive-scars', (state, draft) => {
+        if (!(draft.combat?.participants || []).some(row => row.id === input.participantId)) return { status: 'refused', reason: 'unknown-subject', receipt: { id: input.operationId ?? null, kind: 'scar-decision', status: 'refused', reason: 'unknown-subject' } };
+        return decideImpressiveScars(state, { operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, participantId: input.participantId, agreed: input.agreed });
+      });
+    },
+    /** Perte de caractéristique décidée par le MJ (V5 p.177). Rien n'est écrit sur la fiche : la valeur est conservée avec sa provenance pour le retour futur. */
+    recordAftermathCharacteristicLoss(input = {}) {
+      return runAftermathCommand('record-aftermath-characteristic-loss', (state, draft) => {
+        if (!(draft.combat?.participants || []).some(row => row.id === input.participantId)) return { status: 'refused', reason: 'unknown-subject', receipt: { id: input.operationId ?? null, kind: 'characteristic-loss', status: 'refused', reason: 'unknown-subject' } };
+        return recordCharacteristicLoss(state, { operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, participantId: input.participantId, carac: input.carac, amount: input.amount, base: input.base ?? null, advances: input.advances ?? null, reason: input.reason });
+      });
+    },
     registerAftermathDisease(input = {}) {
       return runAftermathCommand('register-aftermath-disease', (state, draft) => {
         if (!(draft.combat?.participants || []).some(row => row.id === input.participantId)) return { status: 'refused', reason: 'unknown-subject', receipt: { id: input.operationId ?? null, kind: 'disease', status: 'refused', reason: 'unknown-subject' } };
-        return registerDisease(state, { id: input.id ?? `disease:${input.operationId}`, operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, participantId: input.participantId, label: input.label, durationDays: input.durationDays });
+        return registerDisease(state, { id: input.id ?? `disease:${input.operationId}`, operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, participantId: input.participantId, label: input.label, durationDays: input.durationDays, sequelaId: (state.sequelae || []).some(row => row.id === input.sequelaId && row.kind === 'disease' && row.participantId === input.participantId) ? input.sequelaId : null });
       });
     },
     careForAftermathDisease(input = {}) {
