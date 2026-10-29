@@ -330,7 +330,7 @@ import { sharedState, sameSharedState } from './sync-protocol.js';
 import { applyFicheSync as applyFicheSyncToDraft } from './fiche-sync.js';
 import { convertLegacyV4Profile } from './v5-legacy-conversion.js';
 import { planMountedFall, V5_RIDE_SKILL_ID } from './v5-mounted-combat.js';
-import { createAftermathState, validateAftermathState, registerWoundIncident, previewAftermathAdvance, advanceAftermathCalendar, treatWoundIncident, treatInfection, treatSurgicalIncident } from './v5-aftermath.js';
+import { createAftermathState, validateAftermathState, registerWoundIncident, previewAftermathAdvance, advanceAftermathCalendar, treatWoundIncident, treatInfection, treatSurgicalIncident, closeAftermathIncident, registerDisease, careForDisease, aftermathHealer, aftermathEnduranceScore } from './v5-aftermath.js';
 
 export const KEY = { EXTENSIONS: 'wfrp.extensions.v1', RESERVE: 'wfrp.reserve.v1', COMBAT: 'wfrp.combat.v1', LOG: 'wfrp.log.v1', DICE: 'wfrp.dice.v1', TS: 'wfrp.sync.ts.v1' };
 
@@ -4989,9 +4989,26 @@ function resolvedCorruptionTest(participant, skillId, input) {
       return stored == null ? createAftermathState() : validateAftermathState(stored);
     },
     previewAftermathAdvance(input = {}) {
-      return previewAftermathAdvance(api.getAftermathState(), input);
+      const preview = previewAftermathAdvance(api.getAftermathState(), input);
+      if (preview.status !== 'ready') return preview;
+      const participants = currentEnvelope().combat?.participants || [];
+      return { ...preview, requiredDailyChecks: preview.requiredDailyChecks.map(check => {
+        const patient = participants.find(row => row.id === check.participantId);
+        return { ...check, participantName: patient?.name || null, score: patient ? aftermathEnduranceScore(patient) : null };
+      }) };
     },
-    _runAftermathCommand(type, operation, { participantId = null, patientWounds = null } = {}) {
+    /** F2-I occurrences that have no incident yet: the only way (with a lost-Wounds cause) to open one. */
+    listAftermathProposals() {
+      const linked = new Set(api.getAftermathState().incidents.filter(row => row.source.kind === 'critical').map(row => `${row.participantId}:${row.source.criticalId}`));
+      return (currentEnvelope().combat?.participants || []).flatMap(participant => (participant.extensions?.v5?.criticalAftermath || [])
+        .filter(record => !linked.has(`${participant.id}:${record.id}`))
+        .map(record => ({
+          participantId: participant.id, participantName: participant.name, criticalId: record.id, criticalWoundId: record.criticalWoundId,
+          effectName: record.effectName, location: record.location,
+          requiresSurgery: (record.sequela?.durableEffects || []).some(effect => effect.kind === 'surgery-required')
+        })));
+    },
+    _runAftermathCommand(type, operation) {
       let outcome = null;
       const refused = new Error('aftermath operation was not applied');
       refused.aftermathRefused = true;
@@ -5000,44 +5017,137 @@ function resolvedCorruptionTest(participant, skillId, input) {
         const extensions = draft.extensions || {};
         const v5 = extensions.v5 || {};
         const current = v5.aftermathRegister == null ? createAftermathState() : validateAftermathState(v5.aftermathRegister);
-        const target = participantId ? (draft.combat?.participants || []).find(row => row.id === participantId) : null;
-        if (participantId && !target) {
-          outcome = { status: 'refused', reason: 'unknown-subject', receipt: { id: null, kind: type, status: 'refused', reason: 'unknown-subject' } };
-          throw refused;
-        }
-        outcome = operation(current, target);
+        outcome = operation(current, draft);
         if (outcome?.receipt?.status !== 'applied' || outcome.state.revision === current.revision) throw refused;
-        const nextV5 = { ...v5, aftermathRegister: outcome.state };
-        let next = { ...draft, extensions: { ...extensions, v5: nextV5 } };
-        if (participantId && patientWounds) {
-          const healed = Number(outcome.receipt.healed) || 0;
-          const injury = Number(outcome.receipt.fumbleDamage) || 0;
+        let next = { ...draft, extensions: { ...extensions, v5: { ...v5, aftermathRegister: outcome.state } } };
+        if (outcome.woundDelta) {
+          const { participantId, healed, injury } = outcome.woundDelta;
           if (healed || injury) {
             const participants = next.combat.participants.map(row => row.id === participantId
-              ? { ...row, hp: Math.max(1, Math.min(Number(row.maxHp ?? row.hp) || row.hp, Number(row.hp) + healed - injury)) }
+              ? { ...row, hp: Math.max(0, Math.min(Number(row.maxHp ?? row.hp) || row.hp, Number(row.hp) + healed - injury)) }
               : row);
             next = { ...next, combat: { ...next.combat, participants } };
             outcome = { ...outcome, receipt: { ...outcome.receipt, currentWoundsAfter: participants.find(row => row.id === participantId)?.hp } };
           }
         }
+        if (outcome.afterApply) next = outcome.afterApply(next);
         return next;
       }); } catch (error) { if (error?.aftermathRefused) return outcome; throw error; }
       return commit?.then ? commit.then(() => outcome).catch(error => { if (error?.aftermathRefused) return outcome; throw error; }) : outcome;
     },
     registerAftermathIncident(input = {}) {
-      return api._runAftermathCommand('register-aftermath-incident', (state) => registerWoundIncident(state, { ...input, expectedRevision: input.expectedRevision ?? state.revision }));
+      return api._runAftermathCommand('register-aftermath-incident', (state, draft) => {
+        const refuse = reason => ({ status: 'refused', reason, receipt: { id: input.operationId ?? null, kind: 'incident', status: 'refused', reason } });
+        const participant = (draft.combat?.participants || []).find(row => row.id === input.participantId);
+        if (!participant) return refuse('unknown-subject');
+        let source, requiresSurgery = false, id = input.id;
+        if (input.criticalId != null) {
+          // Lien par identifiant stable avec l'occurrence F2-I ; l'exigence de chirurgie vient de la table, jamais de la saisie.
+          const record = (participant.extensions?.v5?.criticalAftermath || []).find(row => row.id === input.criticalId);
+          if (!record) return refuse('critical-occurrence-not-found');
+          source = { kind: 'critical', criticalId: record.id, criticalWoundId: record.criticalWoundId };
+          requiresSurgery = (record.sequela?.durableEffects || []).some(effect => effect.kind === 'surgery-required');
+          id ??= `incident:${record.id}`;
+        } else if (typeof input.cause === 'string' && input.cause.trim()) {
+          // Blessures perdues sans critique : le patient doit réellement en avoir perdu.
+          if (!(Number(participant.hp) < Number(participant.maxHp))) return refuse('no-wounds-lost');
+          source = { kind: 'wounds-lost', cause: input.cause.trim() };
+          id ??= `incident:${input.operationId}`;
+        } else return refuse('incident-source-required');
+        return registerWoundIncident(state, { id, operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, participantId: participant.id, source, subjectKind: input.subjectKind, bandaged: input.bandaged, requiresSurgery });
+      });
     },
     advanceAftermathCalendar(input = {}) {
-      return api._runAftermathCommand('advance-aftermath-calendar', (state) => advanceAftermathCalendar(state, { ...input, expectedRevision: input.expectedRevision ?? state.revision }));
+      return api._runAftermathCommand('advance-aftermath-calendar', (state, draft) => {
+        const enduranceScores = {};
+        for (const incident of state.incidents) {
+          const patient = (draft.combat?.participants || []).find(row => row.id === incident.participantId);
+          const score = patient ? aftermathEnduranceScore(patient) : null;
+          if (score !== null) enduranceScores[incident.participantId] = score;
+        }
+        return advanceAftermathCalendar(state, { operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, days: input.days, dailyTests: input.dailyTests, enduranceScores });
+      });
+    },
+    /** Soigneur, compétence de la fiche et d100 : aucune réussite ni DR n'est saisi à la main. */
+    _aftermathHealer(draft, purpose, input) {
+      const participant = (draft.combat?.participants || []).find(row => row.id === input.healerId);
+      if (!participant) return { ok: false, reason: 'healer-required' };
+      return aftermathHealer(participant, purpose, input.skillId ?? null);
     },
     treatAftermathWound(input = {}) {
-      return api._runAftermathCommand('treat-aftermath-wound', (state, participant) => treatWoundIncident(state, { ...input, expectedRevision: input.expectedRevision ?? state.revision, participantId: participant.id, wounds: participant.hp }), { participantId: input.participantId, patientWounds: true });
+      return api._runAftermathCommand('treat-aftermath-wound', (state, draft) => {
+        const incident = state.incidents.find(row => row.id === input.incidentId);
+        const patient = incident && (draft.combat?.participants || []).find(row => row.id === incident.participantId);
+        const found = incident ? api._aftermathHealer(draft, incident.subjectKind === 'animal' ? 'animal-care' : 'heal', input) : { ok: false };
+        const outcome = treatWoundIncident(state, { operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, incidentId: input.incidentId, healer: found.ok ? found.healer : null, roll: input.roll, wounds: Number(patient?.hp) || 0, supplies: input.supplies, difficultyDR: input.difficultyDR ?? 0, d10: input.d10 ?? null, inCombat: input.inCombat === true });
+        if (outcome.receipt.reason === 'healer-skill-required' && found.reason) outcome.receipt.reason = found.reason;
+        if (outcome.receipt.status === 'applied') outcome.woundDelta = { participantId: patient.id, healed: outcome.receipt.healed, injury: outcome.receipt.fumbleDamage };
+        return outcome;
+      });
     },
     treatAftermathInfection(input = {}) {
-      return api._runAftermathCommand('treat-aftermath-infection', (state) => treatInfection(state, { ...input, expectedRevision: input.expectedRevision ?? state.revision }));
+      return api._runAftermathCommand('treat-aftermath-infection', (state, draft) => {
+        const incident = state.incidents.find(row => row.id === input.incidentId);
+        const found = input.remedy === true || !incident ? { ok: false } : api._aftermathHealer(draft, incident.subjectKind === 'animal' ? 'animal-care' : 'heal', input);
+        const outcome = treatInfection(state, { operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, incidentId: input.incidentId, healer: found.ok ? found.healer : null, roll: input.roll ?? null, remedy: input.remedy === true });
+        if (outcome.receipt.reason === 'healer-skill-required' && found.reason) outcome.receipt.reason = found.reason;
+        return outcome;
+      });
     },
     treatAftermathSurgicalIncident(input = {}) {
-      return api._runAftermathCommand('treat-aftermath-surgery', (state) => treatSurgicalIncident(state, { ...input, expectedRevision: input.expectedRevision ?? state.revision }));
+      return api._runAftermathCommand('treat-aftermath-surgery', (state, draft) => {
+        const found = api._aftermathHealer(draft, 'heal', input);
+        const outcome = treatSurgicalIncident(state, { operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, incidentId: input.incidentId, healer: found.ok ? found.healer : null, roll: input.roll });
+        if (outcome.receipt.reason === 'healer-skill-required' && found.reason) outcome.receipt.reason = found.reason;
+        return outcome;
+      });
+    },
+    /** Critique guéri (V5 p.172) : États retirés de la fiche, malus temporaires terminés (confirmés par le MJ), chirurgie faite. */
+    closeAftermathIncident(input = {}) {
+      return api._runAftermathCommand('close-aftermath-incident', (state, draft) => {
+        const refuse = reason => ({ status: 'refused', reason, receipt: { id: input.operationId ?? null, kind: 'close-incident', status: 'refused', reason, incidentId: input.incidentId } });
+        const incident = state.incidents.find(row => row.id === input.incidentId);
+        const patient = incident && (draft.combat?.participants || []).find(row => row.id === incident.participantId);
+        let statesCleared = true, wound = null, record = null;
+        if (incident?.source.kind === 'critical') {
+          if (!patient) return refuse('unknown-subject');
+          record = (patient.extensions?.v5?.criticalAftermath || []).find(row => row.id === incident.source.criticalId);
+          if (!record) return refuse('critical-occurrence-not-found');
+          // Les lésions (os brisé, déchirure) relèvent du suivi J2 : ne pas déclarer guéri un critique qui en porte.
+          if (record.sequela?.injuries?.length) return refuse('injury-follow-up-not-available');
+          wound = (patient.extensions?.v5?.criticalWounds || []).find(row => row.id === incident.source.criticalWoundId) || null;
+          const stateIds = new Set(wound?.stateIds || []);
+          statesCleared = !(patient.states || []).some(row => stateIds.has(row.id) && Number(row.level ?? 1) > 0);
+        }
+        const outcome = closeAftermathIncident(state, { operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, incidentId: input.incidentId, statesCleared, temporaryEffectsEnded: input.temporaryEffectsEnded === true });
+        if (outcome.receipt.status === 'applied' && wound) {
+          outcome.afterApply = next => {
+            const target = next.combat.participants.find(row => row.id === patient.id);
+            target.extensions.v5.criticalWounds = (target.extensions.v5.criticalWounds || []).filter(row => row.id !== wound.id);
+            const be = criticalDeathToughnessBonus(target);
+            if (be !== null) { const reconciled = updateCriticalDeathCountdown(target, { round: next.combat?.round, toughnessBonus: be }); if (reconciled.participant) Object.assign(target, reconciled.participant); }
+            next.log = [{ id: uid(), kind: 'management', actorId: target.id, actorName: target.name,
+              text: `${target.name} : Blessure Critique guérie (états et malus temporaires terminés) · ${record.effectName || record.id}`,
+              detail: { kind: 'heal-critical-wound', incidentId: incident.id, criticalId: record.id } }, ...(next.log || [])].slice(0, 300);
+            return next;
+          };
+        }
+        return outcome;
+      });
+    },
+    registerAftermathDisease(input = {}) {
+      return api._runAftermathCommand('register-aftermath-disease', (state, draft) => {
+        if (!(draft.combat?.participants || []).some(row => row.id === input.participantId)) return { status: 'refused', reason: 'unknown-subject', receipt: { id: input.operationId ?? null, kind: 'disease', status: 'refused', reason: 'unknown-subject' } };
+        return registerDisease(state, { id: input.id ?? `disease:${input.operationId}`, operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, participantId: input.participantId, label: input.label, durationDays: input.durationDays });
+      });
+    },
+    careForAftermathDisease(input = {}) {
+      return api._runAftermathCommand('care-aftermath-disease', (state, draft) => {
+        const found = api._aftermathHealer(draft, 'heal', input);
+        const outcome = careForDisease(state, { operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, diseaseId: input.diseaseId, healer: found.ok ? found.healer : null, roll: input.roll, difficultyDR: input.difficultyDR ?? 0, rested: input.rested === true });
+        if (outcome.receipt.reason === 'healer-skill-required' && found.reason) outcome.receipt.reason = found.reason;
+        return outcome;
+      });
     },
     getFullJSON() {
       const data = currentEnvelope();

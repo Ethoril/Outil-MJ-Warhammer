@@ -34,10 +34,10 @@ test('défaut 2 — un soin sans soigneur ni d100 est refusé, quel que soit le 
 });
 
 test('défaut 3 — une infection au jour 0 ne bloque pas un saut de trois jours dont l’aperçu liste les jours 0 à 2', () => {
-  let state = registerWoundIncident(createAftermathState(), { id: 'i1', operationId: 'r1', expectedRevision: 0, participantId: 'patient' }).state;
+  let state = registerWoundIncident(createAftermathState(), { id: 'i1', operationId: 'r1', expectedRevision: 0, participantId: 'patient', source: { kind: 'wounds-lost', cause: 'test' } }).state;
   const out = advanceAftermathCalendar(state, {
     operationId: 'jump', expectedRevision: state.revision, days: 3,
-    dailyChecks: [0, 1, 2].map(day => ({ incidentId: 'i1', day, success: day !== 0, sl: day === 0 ? -1 : 1 }))
+    dailyTests: [0, 1, 2].map(day => ({ incidentId: 'i1', day, roll: day === 0 ? 99 : 10 })), enduranceScores: { patient: 30 }
   });
   assert.equal(out.receipt.status, 'applied', `refus inattendu : ${out.receipt.reason}`);
   assert.equal(out.state.calendar.currentDay, 3);
