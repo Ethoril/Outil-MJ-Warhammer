@@ -1,3 +1,4 @@
+import { sequelaContextFields } from '../core/v5-sequela-effects.js';
 import {readDivineRejections} from '../core/v5-divine-access.js';
 import {renderSpellOptions} from './v5-spell-options.js';
 import { isBrokenActor, renderBrokenEscapeVisibilityControl } from './v5-broken-escape-panel.js';
@@ -1816,6 +1817,8 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
   const selectedNetEscape=(draft.v5Context||{}).netEscapeConditionId;
   for (const [key, label] of [['involvesMovement','Le Test implique un mouvement'],['runningOrHiding','Le Test sert à fuir ou se cacher'],['reliesOnSight','Le Test est réalisable sans voir mais repose sur la vue'],['requiresSight','Le Test est impossible sans voir'],['usesFellowship','Le Test utilise la Sociabilité']])
     if(key!=='involvesMovement'||!selectedNetEscape)contextField(fields, 'actor', key, label);
+  // Séquelles durables (F2-J2) : circonstances que l'outil ne connaît pas (zone utilisée, parole, ouïe, main directrice…), demandées au MJ.
+  for (const field of sequelaContextFields(actor)) if (!['reliesOnSight', 'requiresSight'].includes(field.key)) contextField(fields, 'actor', field.key, `Séquelle · ${field.label}`);
   const testWeaponId=action?.extensions?.fiche?.equipmentId||action?.extensions?.equipment?.id;
   const testWeapon=actor.equipment?.find(row=>row.id===testWeaponId);
   const testWeaponKind=testWeapon?.extensions?.v5?.entanglementKind
@@ -1980,6 +1983,7 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
     fields.appendChild(rubric('Circonstances de la défense'));
     for (const [key, label] of [['involvesMovement','Le Test implique un mouvement'],['runningOrHiding','Le Test sert à fuir ou se cacher'],['reliesOnSight','Le Test est réalisable sans voir mais repose sur la vue'],['requiresSight','Le Test est impossible sans voir'],['usesFellowship','Le Test utilise la Sociabilité']]) contextField(fields, 'defender', key, label);
     contextField(fields,'defender','offHandWeapon','Défense avec l’arme de la main non directrice (−2 DR sans Parade)');
+    for (const field of sequelaContextFields(target)) if (!['reliesOnSight', 'requiresSight'].includes(field.key)) contextField(fields, 'defender', field.key, `Séquelle · ${field.label}`);
     if (participants.some(person => person.id !== target.id && carriesSense(person, 'distracting'))) contextField(fields, 'defender', 'distractingInRange', 'Un Perturbant est à portée du défenseur (−2 DR, une seule fois)');
     conditionModeField(fields, 'defender');
   }
