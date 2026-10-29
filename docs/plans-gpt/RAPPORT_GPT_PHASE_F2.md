@@ -1,5 +1,7 @@
 # Rapport GPT - Phase F2
 
+> Synthèse de clôture par lot, limites acceptées et nouveaux modules : voir `docs/RAPPORT_PHASE_F2.md` (29/10/2026).
+
 ## T3 — reprise et validation du 28/10/2026
 
 Périmètre : L, G, M et K1/K2 dans `gpt/phase-f2`. Les choix d'exécutant sont consignés en tête de `CHOIX_EXECUTANT_PHASE_F2.md` et les portées des relectures dans `REVUES_INDEPENDANTES_T3.md`. Le document de conception F2-J `f2/CONCEPTION_SEQUELLES.md` est soumis pour T4 ; aucun code J n'est livré.

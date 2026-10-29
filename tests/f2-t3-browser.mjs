@@ -51,7 +51,7 @@ try{
   // L : l’action UI Destin accepte la borne 100 et l’enregistre durablement
   // dans la fiche, avec motif MJ dans le journal Store.
   await page.getByRole('button',{name:'Modifier le Destin de Cavalier T3'}).click();
-  const fate=page.getByRole('dialog');await fate.getByLabel('Points de Destin attribués').fill('100');await fate.getByLabel('Motif MJ').fill('Attribution de test T3');
+  const fate=page.getByRole('dialog');await fate.getByLabel('Nouveau solde permanent de Destin').fill('100');await fate.getByLabel('Motif MJ').fill('Attribution de test T3');
   await fate.getByRole('button',{name:'Enregistrer Destin'}).click();
   let saved=await readParticipant(actor.id);assert.equal(saved.extensions.v5.fate,100,'la valeur 100 passe le formulaire Destin et est stockée');
   let envelope=await read();assert.match(envelope.log[0].detail.reason,/Attribution de test T3/u,'motif de l’attribution Destin journalisé');

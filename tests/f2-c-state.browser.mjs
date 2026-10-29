@@ -27,6 +27,7 @@ try{
  const dialog=page.locator('[data-participant-editor="f2-hero"]');assert.equal(await dialog.isVisible(),true);
  await page.evaluate(async({id})=>{const {Store}=await import('./js/main.js');const person=Store.listParticipants().find(row=>row.id===id);await Store.updateParticipant(id,{hp:19,extensions:{...person.extensions,v5:{...person.extensions?.v5,spellEffects:[{id:'concurrent-ui',name:'Effet concurrent'}]}}});},setup);
  await dialog.getByLabel('Le personnage est monté').check();
+ await dialog.getByLabel('Monture active').selectOption('f2-foe');
  const twoHands=dialog.getByLabel('Épée bâtarde (2M) · utilisée à deux mains');
  assert.equal(await twoHands.isChecked(),true,'le nom catalogue (2M) initialise le réglage à deux mains');
  await twoHands.uncheck();
@@ -35,11 +36,12 @@ try{
  assert.deepEqual(persisted,{mounted:true,hands:1,scene:1,hp:19,effect:'concurrent-ui'});
  const afterSave=await page.evaluate(async({id,itemId})=>{const {Store}=await import('./js/main.js');const p=Store.listParticipants().find(row=>row.id===id);return {mounted:p.extensions.v5.mounted,hands:p.extensions.v5.weaponHandsByEquipmentId[itemId],hp:p.hp,effects:p.extensions.v5.spellEffects};},setup);
  assert.equal(await page.locator('#btn-undo').isDisabled(),false,'la modification du participant est annulable');
- await page.locator('#btn-undo').click();
+ // L'enregistrement fait deux commandes Store (mains puis état monté) : deux Annuler pour tout rétablir.
+ await page.locator('#btn-undo').click();await page.locator('#btn-undo').click();
  const undone=await page.evaluate(async({id,itemId})=>{const {Store}=await import('./js/main.js');const p=Store.listParticipants().find(row=>row.id===id);return {mounted:p.extensions.v5.mounted??false,hands:p.extensions.v5.weaponHandsByEquipmentId?.[itemId]??2,hp:p.hp,effects:p.extensions.v5.spellEffects};},setup);
  assert.deepEqual(undone,{mounted:false,hands:2,hp:19,effects:[{id:'concurrent-ui',name:'Effet concurrent'}]},'Undo rétablit exactement mounted/mains sans perdre la modification concurrente');
  assert.equal(await page.locator('#btn-redo').isDisabled(),false);
- await page.keyboard.press('Control+Shift+Z');
+ await page.keyboard.press('Control+Shift+Z');await page.keyboard.press('Control+Shift+Z');
  const redone=await page.evaluate(async({id,itemId})=>{const {Store}=await import('./js/main.js');const p=Store.listParticipants().find(row=>row.id===id);return {mounted:p.extensions.v5.mounted,hands:p.extensions.v5.weaponHandsByEquipmentId[itemId],hp:p.hp,effects:p.extensions.v5.spellEffects};},setup);
  assert.deepEqual(redone,{mounted:true,hands:1,hp:19,effects:[{id:'concurrent-ui',name:'Effet concurrent'}]},'Redo restaure exactement mounted/mains et garde le champ concurrent');
  await page.reload();await page.waitForSelector('#tab-combat');
@@ -132,12 +134,12 @@ try{
  if(!await calculationDetails.evaluate(element=>element.open)) await calculationDetails.locator('summary').click();
  assert.match(await calculationDetails.innerText(),/imprecise\s*:\s*−1 DR/i,'la qualité Imprécise source applique explicitement −1 DR au Test');
  const reloadStatus=await page.evaluate(async()=>{const {keywordMechanicalStatus}=await import('./js/core/keywords.js');return keywordMechanicalStatus('recharge').status;});
- assert.equal(reloadStatus,'manual','Recharge reste explicitement hors couverture automatique certifiée');
+ assert.equal(reloadStatus,'covered','Recharge est calculée depuis F2-D (v5-reloading.js)');
  const genericBefore=await page.evaluate(async({targetId})=>{const {Store}=await import('./js/main.js');return Store.listParticipants().find(row=>row.id===targetId).hp;},genericSiege);
  await genericApply.click();
  const genericAfter=await page.evaluate(async({targetId})=>{const {Store}=await import('./js/main.js');return Store.listParticipants().find(row=>row.id===targetId).hp;},genericSiege);
  assert.ok(genericAfter<genericBefore,'la Catapulte réelle applique les dégâts après le choix Projectiles (Ingénierie)');
  await page.locator('#btn-undo').click();
  assert.equal(await page.evaluate(async({targetId})=>{const {Store}=await import('./js/main.js');return Store.listParticipants().find(row=>row.id===targetId).hp;},genericSiege),genericBefore,'Undo restitue les PV après le tir de Catapulte');
- console.log('F2-C browser : Canon Nain résolu sur deux cibles MJ avec Undo/reload; Catapulte : Imprécise −1 DR vérifié, dégâts puis Undo; Recharge reste manual.');
+ console.log('F2-C browser : Canon Nain résolu sur deux cibles MJ avec Undo/reload; Catapulte : Imprécise −1 DR vérifié, dégâts puis Undo; Recharge couverte (F2-D).');
 }finally{await browser.close();await new Promise(done=>server.close(done));}

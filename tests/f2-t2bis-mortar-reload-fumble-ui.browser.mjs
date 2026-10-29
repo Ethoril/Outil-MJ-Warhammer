@@ -33,7 +33,7 @@ try{
   assert.equal(result.isFumble,true,'le test utilise une vraie maladresse de rechargement');
   assert.equal(result.unresolved.length,0,result.unresolved.join('; '));
   assert.equal(result.hasExplosion,true);
-  assert.equal(result.hasDamageMaximum,true);
+  assert.equal(result.hasDamageMaximum,false,'les dégâts du mortier viennent du profil (T2 bis) : plus de maximum à saisir');
   assert.deepEqual(result.armOptions,['','left','right'],'le champ bras directeur est rendu hors du bloc de table de maladresse');
   assert.equal(result.selectedSide,'left');
   console.log('PASS : parcours UI d’une maladresse réelle au rechargement du mortier.');

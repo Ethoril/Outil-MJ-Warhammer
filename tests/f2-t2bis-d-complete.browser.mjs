@@ -114,7 +114,7 @@ try{
   state=await read();let ratling=state.combat.participants.find(row=>row.id===actor.id).equipment.find(row=>row.id==='d-ratling');assert.equal(ratling.extensions.v5.reloadState.repeaterRating,6,'arbitrage Ratling persisté par le Store');
   await selectAttack('d-pepper-action');assert.equal(await play.getByLabel('Seconde main libre pour préparer le canon de la Poivrière').inputValue(),'','la Poivrière exige une réponse explicite');
   await play.getByLabel('Seconde main libre pour préparer le canon de la Poivrière').selectOption('false');await enterRoll(31);preview=await play.locator('.workspace-result-live').innerText();assert.match(preview,/Touché/u);await apply();
-  state=await read();let pepper=state.combat.participants.find(row=>row.id===actor.id).equipment.find(row=>row.id==='d-pepper');assert.equal(pepper.extensions.v5.reloadState.requiresManualRotation,true,'canon suivant à préparer manuellement après main occupée');
+  state=await read();let pepper=state.combat.participants.find(row=>row.id===actor.id).equipment.find(row=>row.id==='d-pepper');assert.equal(pepper.extensions.v5.reloadState.requiresReload,true,'main occupée : le tir perd À répétition et impose une recharge complète (L13 p.103, T2 bis)');
   assert.ok(await play.getByLabel('Rechargement des armes').count(),'panneau Recharge visible dans l’application');
 
   // Cas négatifs : Ratling vide/non arbitré ne propose aucune capacité inventée;
