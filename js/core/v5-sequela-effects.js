@@ -226,7 +226,7 @@ export function sequelaContextFields(participant) {
   for (const row of rows) {
     if (row.type === 'loc-dr') push(`sequelaUses:${row.loc}`, `Le Test utilise cette zone : ${row.label.split(' : ')[0]}`);
     if (row.type === 'speech-dr' || row.type === 'speech-fail') push('sequelaSpeech', 'Le Test de Langue implique la parole');
-    if (row.type === 'two-hands') { push('sequelaTwoHands', 'Le Test repose normalement sur deux mains'); push('sequelaShieldOnLostArm', 'Le bouclier est fixé au bras perdu ou immobilisé'); }
+    if (row.type === 'two-hands') { push('sequelaTwoHands', 'Le Test repose normalement sur deux mains'); push('sequelaWeaponTwoHands', 'L’arme employée exige deux mains (arc, arbalète, arme non reconnue)'); push('sequelaShieldOnLostArm', 'Le bouclier est fixé au bras perdu ou immobilisé'); }
     if (row.type === 'offhand-dr') push('sequelaOffHand', 'Test de mêlée avec l’arme de la main non directrice');
     if (row.type === 'both-ears') push('sequelaHearing', 'Le Test de Perception repose sur l’ouïe');
     if (row.type === 'smell') push('sequelaSmell', 'Le Test de Perception repose sur l’odorat');
@@ -268,6 +268,7 @@ export function sequelaTestRules({ actor, opponent = null, skillLabel = '', acti
       case 'two-hands': once(row, () => {
         if (weaponHands === 2) out.restrictions.push('Main ou bras perdu : une arme à deux mains est interdite.');
         else if (attack && weaponHands === 1) { /* arme à une main : rien */ }
+        else if (attack && weaponHands == null) { if (ask('sequelaWeaponTwoHands', 'Séquelle : préciser si l’arme employée exige deux mains (arc, arbalète, arme non reconnue).')) out.restrictions.push('Main ou bras perdu : une arme à deux mains est interdite.'); }
         else if (kind === 'test' && ask('sequelaTwoHands', 'Séquelle : préciser si le Test repose normalement sur deux mains.')) { out.disadvantages.push({ id: row.id, label: 'Main ou bras perdu (Test à deux mains)' }); out.sources.push(row.id); }
       }); break;
       case 'shield-arm': if (shieldUsed) once(row, () => { if (ask('sequelaShieldOnLostArm', 'Séquelle : préciser si le bouclier est fixé au bras perdu ou immobilisé.')) out.restrictions.push('Bras perdu : on ne peut pas y fixer de bouclier.'); }); break;

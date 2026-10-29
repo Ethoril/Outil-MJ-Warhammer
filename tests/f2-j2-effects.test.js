@@ -259,3 +259,18 @@ test('J2 effets : Obstiné n’efface pas les malus de séquelles (décision du 
   assert.equal(preview.test.details.modifiers.filter(row => row.amount < 0 && !row.id.startsWith('sequela:')).length, 0, 'les autres négatifs sont effacés');
   assert.equal(preview.test.details.totalModifier, -2, 'Obstiné a bien joué : le −3 du MJ est effacé, il ne reste que la séquelle');
 });
+
+test('J2 effets : arme à deux mains non reconnue — marqueur (2M) du nom lu, arc ou arme sans mains connues : la question est posée', async () => {
+  const bow = { id: 'bow', kind: 'weapon', name: 'Arc long', category: 'Arc', range: '50', damage: 'BF+4', qualities: [] };
+  const store = await table([loss('hand-l', 'hand', 'left', { primary: false })], { heroExtra: { equipment: [sword, bow] } });
+  const bare = (label, context = {}) => ({ resolutionId: `m-${label}-${Math.random()}`, actorId: 'hero', targetId: 'foe', action: { type: 'attack', attr: 'CC', base: 50, damage: 4, qualities: [], label }, roll: 24, defense: { base: 30, roll: 82, v5: { kind: 'melee' } }, v5: { kind: 'melee', context } });
+  const marked = store.previewResolution(bare('Espadon (2M)'));
+  assert.ok(marked.unresolved.some(text => /arme à deux mains est interdite/.test(text)), marked.unresolved.join('|'));
+  assert.ok(store.previewResolution(bare('Épée')).unresolved.some(text => /exige deux mains/.test(text)), 'sans marqueur ni arme connue : la question est posée');
+  const asked = store.previewResolution(attack(bow));
+  assert.ok(asked.unresolved.some(text => /exige deux mains/.test(text)), asked.unresolved.join('|'));
+  const yes = store.previewResolution(attack(bow, { sequelaWeaponTwoHands: true }));
+  assert.ok(yes.unresolved.some(text => /arme à deux mains est interdite/.test(text)));
+  const no = store.previewResolution(attack(bow, { sequelaWeaponTwoHands: false }));
+  assert.ok(!no.unresolved.some(text => /deux mains/.test(text)), no.unresolved.join('|'));
+});

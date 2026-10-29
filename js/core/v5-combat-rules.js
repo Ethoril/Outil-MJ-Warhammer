@@ -241,11 +241,14 @@ export function buildCombatTest(normalized, role = 'actor') {
   const reachDefense=defending&&kind==='melee'&&settings.context?.longerWeaponDefense===true,contactTalent=reachDefense?situationPlan(normalized.actor,'in-fighter'):null;if(reachDefense&&!contactTalent?.proposals.length)modifiers.push({id:'longer-weapon-defense',label:'Arme plus longue en défense',amount:1});
   const advantages = [...(settings.advantageSources || [])], disadvantages = [...(settings.disadvantageSources || [])];
   // Séquelles durables et temporaires (F2-J2) : une seule source, le registre de convalescence projeté sur le participant.
-  const sequelaWeapon = actor?.equipment?.find(row => row.id === (action.extensions?.fiche?.equipmentId || action.extensions?.equipment?.id));
+  const sequelaWeapon = actor?.equipment?.find(row => row.id === (action.extensions?.fiche?.equipmentId || action.extensions?.equipment?.id)) || action.extensions?.equipment;
+  let sequelaHands = sequelaWeapon && sequelaWeapon.kind === 'weapon' ? weaponHandsForParticipant(sequelaWeapon, actor, { action, context: settings.context || {} }) : null;
+  // Action sans arme de la fiche : le marqueur (2M) du nom fait foi, comme pour les armes du catalogue.
+  if (sequelaHands == null && /\(\s*2\s*m\s*\)/i.test([sequelaWeapon?.name, action.label, action.note, action.name].filter(Boolean).join(' '))) sequelaHands = 2;
   const sequelaShield = defending ? Boolean(v5ShieldDefense(normalized).v5Bonus || v5ShieldDefense(normalized).confirmed) : (settings.context?.attackWithShield === true || settings.context?.shieldAttached === true);
   const sequelae = sequelaTestRules({ actor, opponent: target, skillLabel, actionLabel: action.label || action.note || '', carac: settings.context?.carac || skill?.carac || action.attr, kind, defending,
     attack: !defending && ['attack', 'attaque'].includes(String(action.type || '').toLowerCase()), context: settings.context || {},
-    weaponHands: sequelaWeapon && sequelaWeapon.kind === 'weapon' ? weaponHandsForParticipant(sequelaWeapon, actor, { action, context: settings.context || {} }) : null, shieldUsed: sequelaShield });
+    weaponHands: sequelaHands, shieldUsed: sequelaShield });
   unresolved.push(...sequelae.unresolved); restrictions.push(...sequelae.restrictions);
   if (sequelae.scoreDelta) action = { ...action, base: Math.max(0, action.base + sequelae.scoreDelta) };
   if (defending && kind === 'melee' && activeV5TalentEffects(actor).some(effect => effect.restriction === 'cannotOpposeWithMelee'))
