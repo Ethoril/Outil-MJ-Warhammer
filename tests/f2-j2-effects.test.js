@@ -193,3 +193,21 @@ test('J2 effets : aucune séquelle, aucun changement ; la projection suit le reg
   assert.equal(effectiveSequelaMovement([], 4), 4);
   assert.deepEqual(sequelaEffectRows({ calendar: { currentDay: 0 }, sequelae: [], incidents: [] }, 'hero'), []);
 });
+
+test('J2 effets : le départage d’Initiative ne pose aucune question de circonstance de séquelle et ne suppose aucun malus', async () => {
+  const { prepareCombatInitiative } = await import('../js/core/turn-order.js');
+  const mirror = rows => ({ schemaVersion: 1, rows, movement: null, reminders: [] });
+  const rows = [
+    { id: 'h:two-hands', sourceId: 'h', lifetime: 'permanent', type: 'two-hands', label: 'Main perdue' },
+    { id: 'f:fingers', sourceId: 'f', lifetime: 'permanent', type: 'loc-dr', loc: 'arm:right', amount: -2, label: '2 doigts perdus' },
+    { id: 'x:eyes', sourceId: 'x', lifetime: 'permanent', type: 'both-eyes', label: 'Deux yeux perdus' },
+    { id: 'x:tear', sourceId: 'x', lifetime: 'temporary', type: 'loc-dr', loc: 'leg:left', amount: -1, label: 'Déchirure' }
+  ];
+  const mk = (id, extra = {}) => ({ id, name: id, kind: 'PNJ', camp: 'ennemi', zone: 'active', initiative: 40, hp: 10, maxHp: 10, states: [], caracs: { I: 40 }, extensions: { v5: {} }, ...extra });
+  const hurt = mk('first', { extensions: { v5: { sequelaEffects: mirror(rows) } } }), other = mk('second');
+  const group = prepareCombatInitiative([hurt, other], { diceById: { first: 4, second: 4 } }).tieGroups[0];
+  const plan = prepareCombatInitiative([hurt, other], { diceById: { first: 4, second: 4 }, tieOrders: { [group.key]: ['first', 'second'] },
+    opposedRolls: { [`${group.key}:first:second`]: { initiatorRoll: 44, opponentRoll: 60 } } });
+  assert.ok(!plan.needsInput.some(item => item.field === 'oppositionContext'), JSON.stringify(plan.needsInput));
+  assert.equal(plan.oppositions[0].initiator.modifiers?.length ?? 0, 0);
+});

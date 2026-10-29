@@ -239,7 +239,9 @@ export function sequelaTestRules({ actor, opponent = null, skillLabel = '', acti
   const language = isLanguageTest(label);
   const dodge = isDodgeTest(label) || (defending && kind === 'test' && /^ag$/i.test(String(actionLabel).trim()));
   const flag = name => context?.[name];
-  const ask = (name, text) => { if (typeof flag(name) !== 'boolean') out.unresolved.push(text); return flag(name) === true; };
+  // Test imposé sans interface de saisie (départage d'Initiative) : aucune circonstance n'est supposée, aucune question n'est posée.
+  const noInput = context?.sequelaNoCircumstanceInput === true;
+  const ask = (name, text) => { if (noInput) return false; if (typeof flag(name) !== 'boolean') out.unresolved.push(text); return flag(name) === true; };
   const used = new Set();
   const once = (row, apply) => { if (used.has(row.type + (row.loc || ''))) return; used.add(row.type + (row.loc || '')); apply(); };
   const push = (row, amount) => { out.modifiers.push({ id: `sequela:${row.id}`, label: row.label, amount }); out.sources.push(row.id); };
