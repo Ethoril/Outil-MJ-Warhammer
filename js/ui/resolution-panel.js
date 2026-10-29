@@ -1532,6 +1532,8 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
   const f2hRules = [...planBestiaryProfileAbilities(actor), ...planBestiaryProfileAbilities(target)];
   if (f2hRules.length) {
     const section = node('details', 'workspace-v5-context-details');
+    // Reste ouverte d’un rendu à l’autre, comme « Circonstances des Tests » : chaque saisie redessine le panneau.
+    section.open = draft.profileRulesOpen === true; section.addEventListener('toggle', () => { draft.profileRulesOpen = section.open; });
     section.append(node('summary', '', 'Règles propres au profil'));
     for (const reminder of [...new Set(f2hRules.flatMap(plan => plan.reminders))]) section.append(node('p', 'workspace-muted', reminder));
     const f2h = draft.v5Context?.f2h || {};
@@ -1547,7 +1549,7 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
       check.type = 'checkbox'; check.checked = f2h[key] === true; check.addEventListener('change', () => setF2h(key, check.checked || undefined));
       label.append(check); section.append(label);
     };
-    const ability = action.extensions?.v5?.specialProfileAbility;
+    const ability = action?.extensions?.v5?.specialProfileAbility;
     if (ability === 'cliff-spider-lasso') {
       const labelText = 'Araignée de falaise : niveaux d’échec au Test d’Esquive';
       const label = node('label', 'workspace-type', labelText), input = document.createElement('input');
