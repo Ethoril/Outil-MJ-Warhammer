@@ -274,3 +274,19 @@ test('J2 effets : arme à deux mains non reconnue — marqueur (2M) du nom lu, a
   const no = store.previewResolution(attack(bow, { sequelaWeaponTwoHands: false }));
   assert.ok(!no.unresolved.some(text => /deux mains/.test(text)), no.unresolved.join('|'));
 });
+
+test('J2 effets : une perte sur une partie déjà perdue (troisième oreille) peut être close « sans objet », sans effet', async () => {
+  const third = sequela('ear-3', 'hero', { kind: 'loss', part: 'ear', count: 1, status: 'needs-facts', missing: ['side'], relearned: 0 });
+  const store = await table([loss('ear-l', 'ear', 'left'), loss('ear-r', 'ear', 'right'), third]);
+  const before = store.listParticipants().find(row => row.id === 'hero').extensions.v5.sequelaEffects.rows.length;
+  assert.equal((await store.setAftermathSequelaFacts({ operationId: 'moot-1', sequelaId: 'ear-3', facts: { side: 'left' } })).receipt.reason, 'part-already-lost');
+  assert.equal((await store.setAftermathSequelaFacts({ operationId: 'moot-2', sequelaId: 'ear-3', facts: { alreadyLost: false } })).receipt.reason, 'invalid-facts');
+  assert.equal((await store.setAftermathSequelaFacts({ operationId: 'moot-3', sequelaId: 'ear-3', facts: { alreadyLost: true } })).receipt.reason, 'sequela-not-applicable');
+  const closed = store.getAftermathState().sequelae.find(row => row.id === 'ear-3');
+  assert.deepEqual([closed.status, closed.reason], ['not-applicable', 'part-already-lost']);
+  assert.equal(store.listParticipants().find(row => row.id === 'hero').extensions.v5.sequelaEffects.rows.length, before, 'aucun effet ajouté');
+  assert.equal(store.listAftermathSequelae().pending.length, 0, 'plus rien n’est en attente');
+  // Une première perte, sur un côté libre, ne peut pas être déclarée sans objet.
+  const free = await table([sequela('ear-1', 'hero', { kind: 'loss', part: 'ear', count: 1, status: 'needs-facts', missing: ['side'], relearned: 0 })]);
+  assert.equal((await free.setAftermathSequelaFacts({ operationId: 'moot-4', sequelaId: 'ear-1', facts: { alreadyLost: true } })).receipt.reason, 'invalid-facts');
+});

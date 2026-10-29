@@ -132,11 +132,13 @@ function finish(sequela, facts, toughnessBonus) {
 }
 
 function findIncident(state, incidentId) { return state.incidents.find(row => row.id === incidentId); }
+const lossGroup = sequela => UPPER.has(sequela.part) ? UPPER : LOWER.has(sequela.part) ? LOWER : new Set([sequela.part]);
 const lossCollision = (state, sequela, side) => {
   if (sequela.kind !== 'loss' || !SIDED_PARTS.has(sequela.part)) return false;
-  const group = UPPER.has(sequela.part) ? UPPER : LOWER.has(sequela.part) ? LOWER : new Set([sequela.part]);
-  return state.sequelae.some(row => row.id !== sequela.id && row.participantId === sequela.participantId && row.kind === 'loss' && row.status === 'permanent' && group.has(row.part) && row.side === side);
+  return state.sequelae.some(row => row.id !== sequela.id && row.participantId === sequela.participantId && row.kind === 'loss' && row.status === 'permanent' && lossGroup(sequela).has(row.part) && row.side === side);
 };
+/** Une perte sur un côté déjà perdu (troisième oreille, pied d'une jambe perdue) : le MJ peut la déclarer sans objet. */
+const alreadyLostAnywhere = (state, sequela) => ['left', 'right'].some(side => lossCollision(state, sequela, side));
 
 export function openSequelae(stateValue, { operationId, expectedRevision, incidentId, record, toughnessBonus = null, facts = {} } = {}) {
   const state = assertState(stateValue);
@@ -178,6 +180,14 @@ export function setSequelaFacts(stateValue, { operationId, expectedRevision, seq
   if (facts.count !== undefined && !(Number.isSafeInteger(facts.count) && facts.count >= 1)) return refusal('invalid-facts');
   if (facts.d10 !== undefined && !d10Valid(facts.d10)) return refusal('invalid-facts');
   if (facts.side !== undefined && !sideValid(facts.side)) return refusal('invalid-facts');
+  if (facts.alreadyLost !== undefined) {
+    if (facts.alreadyLost !== true || sequela.kind !== 'loss' || !alreadyLostAnywhere(state, sequela)) return refusal('invalid-facts');
+    const moot = clone(state);
+    const target = moot.sequelae.find(row => row.id === sequelaId);
+    Object.assign(target, { status: 'not-applicable', reason: 'part-already-lost', missing: [], resolvedDay: state.calendar.currentDay });
+    delete target.side;
+    return commit(moot, receipt(state, operationId, 'sequela-facts', 'applied', 'sequela-not-applicable', { sequelaId }));
+  }
   const next = clone(state);
   const index = next.sequelae.findIndex(row => row.id === sequelaId);
   const merged = finish(next.sequelae[index], { ...(sequela.side ? { side: sequela.side } : {}), ...facts }, toughnessBonus ?? sequela.toughnessBonus ?? 0);
