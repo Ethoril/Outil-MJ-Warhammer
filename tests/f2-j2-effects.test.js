@@ -246,3 +246,16 @@ test('J2 effets : Fuite, Sprint et Fuite ! lisent le Mouvement réduit par les s
   const talent = hero => previewV5FleeTalentDisengageMove({ actor: hero, disengagedConfirmed: true });
   assert.deepEqual([talent(actor()).extraMoveDistance, talent(actor(2)).extraMoveDistance], [16, 8]);
 });
+
+test('J2 effets : Obstiné n’efface pas les malus de séquelles (décision du MJ) mais efface les autres négatifs', async () => {
+  const store = await table([loss('f', 'finger', 'right', { count: 2 })], { heroExtra: { talents: [{ id: 'talent-strong-minded', status: 'resolved', rank: 1 }] } });
+  await store.startTalentSession();
+  const test = {
+    resolutionId: 'stubborn', actorId: 'hero', action: { type: 'skill', attr: 'Dex', base: 50, label: 'Crochetage', note: 'Crochetage' }, roll: 24,
+    v5: { kind: 'test', slModifier: -3, context: { isAction: false, involvesMovement: false, runningOrHiding: false, preRollTalent: 'strong-minded', 'sequelaUses:arm:right': true } }
+  };
+  const preview = store.previewResolution(test);
+  assert.deepEqual(mods(preview).map(row => row.amount), [-2], 'le malus de séquelle reste');
+  assert.equal(preview.test.details.modifiers.filter(row => row.amount < 0 && !row.id.startsWith('sequela:')).length, 0, 'les autres négatifs sont effacés');
+  assert.equal(preview.test.details.totalModifier, -2, 'Obstiné a bien joué : le −3 du MJ est effacé, il ne reste que la séquelle');
+});

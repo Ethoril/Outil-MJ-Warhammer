@@ -345,3 +345,23 @@ test('J2 — Orteil entaillé : l’orteil perdu confirmé par le choc exige aus
   assert.equal((await store.setAftermathSequelaFacts({ operationId: op(), sequelaId: lost.id, facts: { side: 'left', count: 1 } })).receipt.status, 'applied');
   assert.equal((await close(store, incidentId)).receipt.reason, 'surgery-not-completed');
 });
+
+test('J2 — décisions du MJ épinglées : l’immobilisation est un Test à part qui ne consomme pas le soin unique de Blessures ; « Major Disadvantage » = deux Désavantages', async () => {
+  const { participant, record } = wounded('patient', 'ARM', 'Clean Break');
+  const { store } = await setup([participant, healerSheet()]);
+  const incidentId = await follow(store, 'patient', record);
+  await store.openAftermathSequelae({ operationId: op(), incidentId });
+  const bone = sequelaeOf(store)[0];
+  await store.setAftermathSequelaFacts({ operationId: op(), sequelaId: bone.id, facts: { side: 'left', d10: 4 } });
+  assert.equal((await store.immobilizeAftermathFracture({ operationId: op(), sequelaId: bone.id, healerId: 'healer', roll: 20 })).receipt.reason, 'fracture-bound');
+  const incident = store.getAftermathState().incidents.find(row => row.id === incidentId);
+  assert.equal(incident.treatments.some(item => ['heal', 'animal-care'].includes(item.kind)), false, 'l’immobilisation n’est pas un soin de Blessures');
+  const heal = await store.treatAftermathWound({ operationId: op(), incidentId, healerId: 'healer', roll: 20, supplies: true });
+  assert.notEqual(heal.receipt.reason, 'treatment-already-used-for-incident');
+  const spine = wounded('spine', 'BODY', 'Spinal Cord Damage');
+  const { store: second } = await setup([spine.participant]);
+  const spineIncident = await follow(second, 'spine', spine.record);
+  await second.openAftermathSequelae({ operationId: op(), incidentId: spineIncident, facts: { 'injury:0': { d10: 3 } } });
+  const disadvantage = rowsOf(second, 'spine').find(row => row.type === 'disadvantage-carac');
+  assert.equal(disadvantage.count, 2, 'Désavantage majeur : deux Désavantages');
+});
