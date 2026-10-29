@@ -117,3 +117,26 @@ Aucune de ces valeurs n'est écrite vers la fiche avant la phase H. Le registre 
 | Cicatrices impressionnantes (accord du MJ) | `sequelae[]` `kind: 'scar-decision'`, `id: scars:<participantId>`, `agreed` | absente | `decideAftermathImpressiveScars` | F2-J2 |
 | Cicatrice de duel (Coup spectaculaire) | `sequelae[]` `kind: 'scar'` ; active une fois le critique lié clos (guéri), une seule fois par personnage | absente | ouverture du suivi du critique | F2-J2 |
 | Maladie née d'un critique | `diseases[].sequelaId` (lien vers la séquelle `disease`) | absente | `registerAftermathDisease` avec `sequelaId` | F2-J2 |
+
+## Complément F2 — données durables des autres lots (29/10/2026, clôture)
+
+Aucune de ces valeurs n'est écrite vers la fiche avant la phase H. Les états de combat ordinaires (Enchevêtré, Sonné…) restent exclus. Les valeurs ci-dessous sont portées par le participant (`extensions.v5`) ou par une pièce d'équipement (`equipment[].extensions.v5`) et survivent au rechargement.
+
+| Variable | Emplacement dans l'outil | Source sur la fiche aujourd'hui | Modifiée par | Lot |
+| --- | --- | --- | --- | --- |
+| Lien cavalier ↔ monture | `extensions.v5.mountId` (côté cavalier, avec `mounted: true` ; retiré en même temps que l'état monté) | absente | sélecteur « monté » du MJ, descente forcée par une chute ou la perte de la monture | F2-M |
+| Morphologie de localisation des coups | `extensions.v5.hitMorphology` (quadrupède, oiseau, serpent, araignée) ; déduite du profil si absente | absente | choix MJ par cible, profil importé | F2-G |
+| Dégâts d'armure par pièce | `extensions.v5.armorDamageByItem[<itemId>]` (points de PA perdus) | absente | critiques et maladresses qui abîment une pièce, réparation MJ | F2-D / F2-E |
+| Disposition d'une arme (lâchée, cassée) | `equipment[].extensions.v5.weaponDisposition` ; Dague funeste : `fellDaggerBreakNextUse` | absente | maladresses, secret d10 de la Dague funeste, récupération de l'arme | F2-E / F2-F |
+| État de recharge d'une arme | `equipment[].extensions.v5.reloadState`, `reloadProgress`, `loadedCharges`, `griffonsfootReloadProgress` | absente | résolutions de recharge et de tir | F2-D |
+| Réserve de poudre et de projectiles | `extensions.v5.blackpowderStock` : `projectiles`, `powderCharges`, `history[]` (200 derniers débits) | absente | débits de tir, saisie MJ | F2-E |
+| Projectiles fichés (Empaleuse) | `extensions.v5.lodgedProjectiles[]` : résolution d'origine, `removed` | absente | coup Empaleuse, extraction, soin | F2-D |
+| Progrès de sortie d'un filet | `extensions.v5.netEscapeProgress[<conditionId>]` | absente | Tests de sortie opposés | F2-D |
+| Déploiement d'un pavois | `extensions.v5.paviseDeploymentByItemId[<itemId>]` : `status` (`carried` / `planted`), horloge de mise en place | absente | actions de pavois | F2-F |
+| Maquillage de blessure en griffure de grand félin | `extensions.v5.felidWoundDisguises[]` (côté victime) : résolution, apparence, blessures | absente | Griffes du tigre, case cochée par le porteur | F2-F |
+| Origine d'une poignée en bois de Grand Cerf, rang de Focalisation, rang de robes | `equipment[].extensions.v5.antlerHandleOrigin`, `focusRank`, `robeRank` | absente | choix MJ dans la résolution | F2-F |
+| Déclarations quotidiennes d'exposition à la malepierre | `extensions.v5.warpstoneDailyExposureKeys[]` (500 dernières), `pendingCorruptionExposures[]` | absentes | déclaration MJ K1 | F2-F / F2-K |
+| Compte à rebours de mort par Suffocation | `extensions.v5.suffocationDeathDueRound` (Round d'échéance ; effacé quand la Suffocation tombe) | absente | fin de Round, sortie de l'Immersion | F2-H |
+| Duels déjà exploités par Wulfrik (Tueur de champions) | `extensions.v5.championSlayerDuels[]` (identifiants de cibles) | absente | application de la résolution, réarmement par le MJ | F2-H |
+| Mort subite des figurants (réglage de table) | `extensions.v5.suddenDeathEnabled` au niveau de la partie, désactivé par défaut | absente | réglage du MJ, annulable | F2-I |
+| Maquillage et autres choix de résolution | transitoires (`v5Context`), non persistés | — | — | — |
