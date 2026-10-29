@@ -283,9 +283,16 @@ export function calculateV5ArmorPenalty({ worn = [] } = {}) {
   return result({ stealthDr: stealthCategories.size ? -stealthCategories.size : 0, perceptionDr: perception ? -perception : 0 });
 }
 
-export function naturalWeaponDefaults({ reach, qualities, natural = true } = {}) {
+// Page 318 : allonge des armes naturelles selon la Taille (aide affichée, la distance n'est jamais suivie).
+const NATURAL_REACH = Object.freeze({
+  small: { key: 'personal', label: 'Personnelle' }, average: { key: 'personal', label: 'Personnelle' }, large: { key: 'personal', label: 'Personnelle' },
+  enormous: { key: 'short', label: 'Courte' }, monstrous: { key: 'average', label: 'Moyenne' }
+});
+export const naturalReachOf = sizeKey => NATURAL_REACH[sizeKey] ?? NATURAL_REACH.average;
+export function naturalWeaponDefaults({ reach, qualities, natural = true, size } = {}) {
   if (!natural) return result({ reach: reach ?? null, qualities: qualities ?? [] });
-  return result({ reach: reach || 'personal', qualities: Array.isArray(qualities) ? qualities : [],
+  // V5 v3 p.318 : Personnelle de Petite à Grande, Courte pour Énorme, Moyenne pour Monstrueuse.
+  return result({ reach: reach || naturalReachOf(size).key, qualities: Array.isArray(qualities) ? qualities : [],
     defaultsApplied: reach == null && qualities == null });
 }
 

@@ -11,7 +11,7 @@ const RULES = {
   nightVision: { fr: 'Vision nocturne', names: ['night vision', 'vision nocturne'], note: 'Vision naturelle à vingt mètres ; la lumière utile est prolongée d\'autant.' },
   stealthy: { fr: 'Furtif', names: ['stealthy', 'furtif'], note: 'Discrétion rurale à Agilité+10, ajustable par le MJ ; pas le bonus de DR de la V4.' },
   tracker: { fr: 'Pisteur', names: ['tracker', 'pisteur'], note: 'Compétence Pistage à Intelligence+10, augmentable par le MJ.' },
-  distracting: { fr: 'Perturbant', names: ['distracting', 'perturbant'], note: 'Les vivants à BE mètres subissent −2 DR généraux, une seule fois quelle que soit la multiplicité des sources.' },
+  distracting: { fr: 'Perturbant', names: ['distracting', 'perturbant'], note: 'Les ennemis vivants à BE mètres subissent −2 DR généraux, une seule fois quelle que soit la multiplicité des sources (les alliés ne sont pas touchés).' },
   chameleon: { fr: 'Caméléon', names: ['chameleon', 'cameleon'], note: 'Perception −4 DR pour le voir (−2 s\'il bouge) ; tirs contre lui −2 DR.' },
   vibrational: { fr: 'Sens vibratoires', names: ['vibrational senses', 'sens vibratoires'], note: 'Détecte les corps physiques dans quatre BI mètres et ne peut pas être Surpris.' }
 };
@@ -72,8 +72,8 @@ export function planSense(participant, key, options = {}) {
   } else if (key === 'distracting') {
     const be = bonus(participant, 'E');
     if (be === null) plan.unresolved.push('Perturbant : Endurance du participant inconnue, portée à saisir.');
-    else plan.ranges.push({ scope: 'vivants', yards: be, source: 'Bonus d\'Endurance' });
-    plan.modifiers.push({ scope: 'tous les Tests des vivants à portée', dr: -2, onceOnly: true });
+    else plan.ranges.push({ scope: 'ennemis vivants', yards: be, source: 'Bonus d\'Endurance' });
+    plan.modifiers.push({ scope: 'tous les Tests des ennemis vivants à portée', dr: -2, onceOnly: true });
     if (owned.detail) plan.reminders.push(`Perturbant (${owned.detail}) : source imprimée, sans effet de règle propre.`);
   } else if (key === 'chameleon') {
     if (typeof options.moving !== 'boolean') plan.unresolved.push('Caméléon : en mouvement ou non, à préciser.');
@@ -119,8 +119,9 @@ export function senseTestRules({ actor, opponent, participants = [], skillLabel 
     if (kind === 'ranged' && !defending) modifiers.push({ id: 'sense:chameleon-ranged', label: 'Tir contre un Caméléon', amount: -2 });
     if (/perception/.test(label) && typeof context.targetMoving === 'boolean') modifiers.push({ id: 'sense:chameleon-sight', label: `Voir un Caméléon ${context.targetMoving ? 'qui bouge' : 'immobile'}`, amount: context.targetMoving ? -2 : -4 });
   }
-  // Perturbant : seuls les vivants le subissent (ni Mort-vivant, Démoniaque, Éthéré ni Artificiel), en attaque comme en défense.
-  if (context.distractingInRange === true && isLiving(actor) && (participants || []).some(person => person?.id !== actor?.id && has(person, 'distracting'))) {
+  // Perturbant (V5 v3 p.358) : seuls les ennemis vivants le subissent (ni alliés, ni Mort-vivant, Démoniaque, Éthéré ou Artificiel), en attaque comme en défense.
+  const enemyOf = (person) => !(person?.camp && actor?.camp && person.camp === actor.camp);
+  if (context.distractingInRange === true && isLiving(actor) && (participants || []).some(person => person?.id !== actor?.id && has(person, 'distracting') && enemyOf(person))) {
     modifiers.push({ id: 'sense:distracting', label: 'Perturbant à portée (une seule fois)', amount: -2 });
   }
   let base = null;

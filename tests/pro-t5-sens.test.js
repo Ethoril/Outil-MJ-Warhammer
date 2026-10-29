@@ -48,8 +48,8 @@ test('T5 Infravision (Bête des marais) et Vision nocturne', () => {
 
 test('T5 Perturbant — portée BE yards, −2 DR une seule fois', () => {
   const plan = planSense(synthetic(['Distracting (Smell)']), 'distracting');
-  assert.deepEqual(plan.ranges, [{ scope: 'vivants', yards: 4, source: 'Bonus d\'Endurance' }]);
-  assert.deepEqual(plan.modifiers, [{ scope: 'tous les Tests des vivants à portée', dr: -2, onceOnly: true }]);
+  assert.deepEqual(plan.ranges, [{ scope: 'ennemis vivants', yards: 4, source: 'Bonus d\'Endurance' }]);
+  assert.deepEqual(plan.modifiers, [{ scope: 'tous les Tests des ennemis vivants à portée', dr: -2, onceOnly: true }]);
   const a = synthetic(['Distracting']);
   const b = synthetic(['Distracting']);
   assert.deepEqual(distractingPenalty([a, b], [3, 2]), { dr: -2, sources: 2, unresolved: false });

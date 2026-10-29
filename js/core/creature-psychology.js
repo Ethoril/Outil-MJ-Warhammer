@@ -23,7 +23,7 @@ const RULES = {
   frenzy: { fr: 'Frénésie', names: ['frenzy', 'frenesie'], note: 'Volonté pour entrer ; immunité à la Psychologie, une attaque gratuite par Round et +1 dégât ; fin sans ennemi proche, Sonné ou Inconscient, puis Exténué.' },
   hungry: { fr: 'Affamé', names: ['hungry', 'affame'], note: 'Après la mort ou l\'incapacité d\'un vivant, ou un cadavre frais : Calme +2 DR, sinon repas qui consomme le prochain Mouvement et la prochaine Action.' },
   stupid: { fr: 'Stupide', names: ['stupid', 'stupide'], note: 'Guidé par un allié non Stupide ; sinon Intelligence +4 DR au début du Round, un échec prive du Mouvement et de l\'Action.' },
-  skittish: { fr: 'Craintif', names: ['skittish', 'craintif', 'nerveux'], note: 'Magie spectaculaire visible ou bruit violent : trois Brisé ; un entraînement Magie ou Guerre apporte ses exceptions.' },
+  skittish: { fr: 'Craintif', names: ['skittish', 'craintif', 'nerveux'], note: 'Magie spectaculaire visible ou bruit violent : un Brisé ; un entraînement Magie ou Guerre apporte ses exceptions.' },
   territorial: { fr: 'Territorial', names: ['territorial'], note: 'Défend son territoire jusqu\'à la mort ; cesse normalement la poursuite à la frontière.' },
   immunePsychology: { fr: 'Immunité Psychologique', names: ['immune to psychology', 'immunite psychologique'], note: 'Ignore les règles de Psychologie ; ne garantit pas l\'immunité aux poisons à procédure similaire.' },
   fury: { fr: 'Rage', names: ['fury', 'rage'], note: 'Un Avantage : Haine des adversaires proches ; trois Avantages : Frénésie, puis perte de tout l\'Avantage.' }
@@ -164,7 +164,7 @@ export function planPsychology(participant, key, options = {}) {
       else plan.tests.push({ skill: 'Intelligence', attr: 'Int', base, dr: 4, timing: 'début du Round', onFail: 'privé de Mouvement et d\'Action' });
     }
   } else if (key === 'skittish') {
-    plan.effects.push({ trigger: 'magie spectaculaire visible ou bruit violent', conditions: [{ name: 'Brisé', level: 3 }] });
+    plan.effects.push({ trigger: 'magie spectaculaire visible ou bruit violent', conditions: [{ name: 'Brisé', level: 1 }] });
   } else if (key === 'territorial') {
     plan.effects.push({ defendsTerritory: true, stopsPursuitAtBorder: true });
   } else if (key === 'immunePsychology') {
