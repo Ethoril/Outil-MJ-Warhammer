@@ -290,3 +290,17 @@ test('J2 effets : une perte sur une partie déjà perdue (troisième oreille) pe
   const free = await table([sequela('ear-1', 'hero', { kind: 'loss', part: 'ear', count: 1, status: 'needs-facts', missing: ['side'], relearned: 0 })]);
   assert.equal((await free.setAftermathSequelaFacts({ operationId: 'moot-4', sequelaId: 'ear-1', facts: { alreadyLost: true } })).receipt.reason, 'invalid-facts');
 });
+
+test('J2 effets : dents, rappel « plus de la moitié » par espèce, strictement supérieur (Humains 16, Elfes 18, Halflings et Nains 20)', async () => {
+  const reminders = async (count, race) => (await table([loss('teeth', 'teeth', undefined, { count })], { heroExtra: race ? { race } : {} })).listParticipants().find(row => row.id === 'hero').extensions.v5.sequelaEffects.reminders.filter(text => /dents/.test(text));
+  assert.equal((await reminders(16, 'Humain')).length, 0, '16 dents : exactement la moitié, pas plus');
+  assert.equal((await reminders(17, 'Humain')).length, 1);
+  assert.equal((await reminders(18, 'Haut Elfe')).length, 0);
+  assert.equal((await reminders(19, 'Elfe sylvain')).length, 1);
+  assert.equal((await reminders(20, 'Nain')).length, 0);
+  assert.equal((await reminders(21, 'Nain')).length, 1);
+  assert.equal((await reminders(20, 'Halfling')).length, 0);
+  assert.equal((await reminders(21, 'Halfling')).length, 1);
+  assert.equal((await reminders(16)).length, 0, 'espèce inconnue : au plus 16, rien');
+  assert.match((await reminders(17))[0], /Elfes plus de 18/, 'espèce inconnue : rappel des seuils');
+});

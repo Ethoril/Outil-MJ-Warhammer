@@ -201,13 +201,25 @@ export function sequelaCharacteristicTotals(rows, { lifetime = null } = {}) {
 }
 
 /** Projection sur un participant : lignes, Mouvement effectif et rappels. Absente quand rien ne s'applique. */
+/** Dents « plus de la moitié » (p.179) selon l'espèce lue sur la fiche ; null quand l'espèce n'est pas connue. */
+export function teethLimitOf(participant) {
+  const v5 = participant?.extensions?.v5;
+  const species = fold([participant?.species, participant?.race, v5?.species, v5?.bestiary?.identity?.species, participant?.ficheSnapshot?.race].find(value => typeof value === 'string' && value.trim()) || '');
+  if (/(^|\W)(elfes?|elves|elf|haut elfe|high elf|wood elf)(\W|$)/.test(species)) return 18;
+  if (/(^|\W)(nains?|dwarfs?|dwarves|halflings?)(\W|$)/.test(species)) return 20;
+  if (/(^|\W)(humains?|humans?)(\W|$)/.test(species)) return 16;
+  return null;
+}
+
 export function sequelaMirror(register, participant) {
   if (!register || !Array.isArray(register.sequelae) || !register.sequelae.length || !participant?.id) return null;
   let rows;
   try { rows = sequelaEffectRows(register, participant.id); } catch { return null; }
   const reminders = [];
   const teeth = register.sequelae.filter(row => row.participantId === participant.id && row.kind === 'loss' && row.part === 'teeth' && row.status === 'permanent').reduce((sum, row) => sum + row.count, 0);
-  if (teeth >= 16) reminders.push('Plus de la moitié des dents perdues (Humains 16, Elfes 18, Halflings et Nains 20) : repas doublés, certains aliments quasi impossibles (narratif, p.179).');
+  // p.179 : « plus de la moitié » des dents, seuil par espèce (Humains 16, Elfes 18, Halflings et Nains 20), strictement dépassé.
+  const teethLimit = teethLimitOf(participant);
+  if (teeth > (teethLimit ?? 16)) reminders.push(`Plus de la moitié des dents perdues (${teethLimit ? `plus de ${teethLimit}` : 'Humains plus de 16, Elfes plus de 18, Halflings et Nains plus de 20 ; espèce de la fiche inconnue'}) : repas doublés, certains aliments quasi impossibles (narratif, p.179).`);
   if (register.sequelae.filter(row => row.participantId === participant.id && row.kind === 'loss' && UPPER.has(row.part) && row.status === 'permanent').length >= 2) reminders.push('Deux mains perdues : des prothèses sont nécessaires pour manipuler des objets (p.178).');
   if (!rows.length && !reminders.length) return null;
   const base = Number(participant.caracs?.M ?? participant.movement);
