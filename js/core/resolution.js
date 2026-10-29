@@ -554,12 +554,26 @@ function appendCriticalWoundRecords(participant, criticals, { resolutionId, auth
     ...present.map((detail, index) => ({ id: `${resolutionId}:crit:${participant.id}:${index}`, source,
       location: detail.location?.name ?? null, name: detail.effect?.name ?? null, effectRoll: detail.effectRoll ?? null,
       // Les acquisitions des deux critiques sont groupées : leurs États communs sont rattachés au premier enregistrement.
-      round, resolutionId, authorId, stateIds: index === 0 ? stateIds : [] }))];
+      round, resolutionId, authorId, stateIds: index === 0 ? stateIds.filter(id => !criticalStates.some(state => state.id === id)) : [] }))];
+  // Chaque critique reçoit ses propres États (par clé de la table) ; ce qui n'est rattachable à aucun reste sur le premier enregistrement.
+  const unclaimed = [...criticalStates], claimed = new Map();
   present.forEach((detail,index)=>{
     const table=detail.location?.key,effectRoll=detail.effectRoll;
     if(!table||!Number.isSafeInteger(effectRoll))return;
     const stored=createCriticalAftermathRecord(participant,{table,effectRoll,location:detail.location?.name||table,resolutionId,criticalIndex:index,authorId,round});
     if(stored.status==='applied')Object.assign(participant,stored.participant);
+    const own = [];
+    for (const wanted of stored.record?.sequela?.states || []) {
+      const at = unclaimed.findIndex(state => state.key === wanted.key);
+      if (at >= 0) own.push(unclaimed.splice(at, 1)[0].id);
+    }
+    claimed.set(index, own);
+  });
+  participant.extensions.v5.criticalWounds = participant.extensions.v5.criticalWounds.map(row => {
+    const index = present.findIndex((detail, i) => row.id === `${resolutionId}:crit:${participant.id}:${i}`);
+    if (index < 0) return row;
+    const extra = index === 0 ? unclaimed.map(state => state.id) : [];
+    return { ...row, stateIds: [...row.stateIds, ...(claimed.get(index) || []), ...extra] };
   });
   const numericCarac=value=>((typeof value==='number'||typeof value==='string'&&value.trim()!=='')&&Number.isFinite(Number(value)))?Number(value):null;
   const roundNumber=Number.isSafeInteger(round)?round:null,rawBe=numericCarac(participant.caracs?.BE),endurance=numericCarac(participant.caracs?.E),be=rawBe!==null&&Number.isSafeInteger(rawBe)&&rawBe>=0?rawBe:endurance!==null&&endurance>=0?Math.floor(endurance/10):null;

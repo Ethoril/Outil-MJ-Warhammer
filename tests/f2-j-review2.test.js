@@ -144,3 +144,62 @@ test('9 — _runAftermathCommand n’est pas une API publique du Store', async (
   assert.equal(store._runAftermathCommand, undefined);
   assert.equal(store._aftermathHealer, undefined);
 });
+
+// Décision MJ 14 : chaque critique d'une même résolution rattache ses propres stateIds.
+test('14 — deux critiques d’une même résolution : chacun ses stateIds, sans tout mettre sur le premier', async () => {
+  const { actor, baseFixtureStore } = await import('./helpers/f2-j-two-criticals.mjs');
+  const { store, preview } = await baseFixtureStore({ secondEffect: 10 });
+  const result = await store.applyResolution(preview);
+  assert.notEqual(result.status, 'manual', result.reason);
+  const foe = store.listParticipants().find(row => row.id === 'foe');
+  const [first, second] = foe.extensions.v5.criticalWounds;
+  const aftermath = foe.extensions.v5.criticalAftermath;
+  assert.ok(aftermath[0].sequela.states.length && aftermath[1].sequela.states.length, 'les deux critiques portent des États');
+  assert.ok(second.stateIds.length > 0, 'le second critique a ses propres États');
+  assert.equal(second.stateIds.filter(id => first.stateIds.includes(id)).length, 0, 'aucun État partagé');
+  const keysOf = (ids) => ids.map(id => foe.states.find(row => row.id === id)?.key);
+  for (const key of keysOf(second.stateIds)) assert.ok(aftermath[1].sequela.states.some(row => row.key === key));
+  assert.ok(actor);
+});
+
+// Décisions MJ du 29/10.
+test('10 — Talent Chirurgie (p.127) : hors combat, DR ou chiffre des unités du d100, choix explicite, 0 vaut 0', () => {
+  const state = reg(createAftermathState());
+  const surgeon = healer();
+  const treat = (operationId, extra) => treatWoundIncident(state, { operationId, expectedRevision: state.revision, incidentId: 'i1', healer: surgeon, wounds: 5, supplies: true, ...extra });
+  assert.equal(treat('a', { roll: 37 }).receipt.reason, 'surgery-talent-choice-required');
+  // Score 60, jet 37 : 6 − 3 = 3 DR ; Bonus 5 ; unités 7.
+  const sl = treat('b', { roll: 37, surgeryChoice: 'sl' });
+  const units = treat('c', { roll: 37, surgeryChoice: 'units' });
+  assert.deepEqual([sl.receipt.healed, units.receipt.healed, units.receipt.amountChoice], [8, 12, 'units']);
+  assert.equal(treat('d', { roll: 20, surgeryChoice: 'units' }).receipt.healed, 5, 'un 0 aux unités vaut 0');
+  assert.equal(treat('e', { roll: 37, inCombat: true }).receipt.healed, 8, 'en combat, le Talent ne change rien');
+  assert.equal(treatWoundIncident(state, { operationId: 'f', expectedRevision: state.revision, incidentId: 'i1', healer: healer({ hasSurgeryTalent: false }), roll: 37, wounds: 5, supplies: true }).receipt.healed, 8);
+});
+
+test('11 — maladresse d’un Test de Chirurgie : 1d10 Blessures saisi, jamais sous 1 Blessure', async () => {
+  const state = reg(createAftermathState(), { requiresSurgery: true });
+  const operate = (operationId, extra) => treatSurgicalIncident(state, { operationId, expectedRevision: state.revision, incidentId: 'i1', healer: healer(), wounds: 4, ...extra });
+  assert.equal(operate('a', { roll: 77 }).receipt.reason, 'fumble-d10-required');
+  const fumble = operate('b', { roll: 77, d10: 9 });
+  assert.deepEqual([fumble.receipt.status, fumble.receipt.fumbleDamage, fumble.receipt.currentWoundsAfter, fumble.state.incidents[0].surgeryCompleted], ['applied', 3, 1, false]);
+  const surgeon = healerSheet({ id: 'surgeon', talents: [{ id: 'talent-surgery', status: 'resolved', rank: 1 }] });
+  const { patient, record } = (() => { const stored = createCriticalAftermathRecord(base('patient', { hp: 4 }), { table: 'ARM', effectRoll: 56, resolutionId: 'res1' }); return { patient: stored.participant, record: stored.record }; })();
+  const store = await setup([patient, surgeon]);
+  const incidentId = await openCritical(store, 'patient', record.id);
+  await store.treatAftermathSurgicalIncident({ operationId: 's', incidentId, healerId: 'surgeon', roll: 77, d10: 9 });
+  assert.equal(get(store, 'patient').hp, 1);
+});
+
+test('12 — infection : un Test de Résistance par blessure non traitée et par soir, pour chaque blessure', () => {
+  let state = reg(createAftermathState());
+  state = registerWoundIncident(state, { id: 'i2', operationId: 'r2', expectedRevision: state.revision, participantId: 'p1', source: { kind: 'wounds-lost', cause: 'autre' } }).state;
+  const preview = previewAftermathAdvance(state, { days: 1, expectedRevision: state.revision });
+  assert.deepEqual(preview.requiredDailyChecks.map(row => [row.incidentId, row.day, row.difficultyDR]), [['i1', 0, 2], ['i2', 0, 2]]);
+});
+
+test('13 — Test de Guérison raté : la blessure n’est pas bandée', () => {
+  const state = reg(createAftermathState());
+  const failed = treatWoundIncident(state, { operationId: 'x', expectedRevision: state.revision, incidentId: 'i1', healer: healer({ hasSurgeryTalent: false }), roll: 90, wounds: 5, supplies: true });
+  assert.deepEqual([failed.receipt.success, failed.state.incidents[0].bandaged], [false, false]);
+});

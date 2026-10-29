@@ -48,6 +48,8 @@ try{
  await treatment.getByLabel('Compétence').selectOption({index:0});
  await treatment.getByLabel('d100',{exact:true}).fill('20');
  assert.equal(await treatment.getByLabel('Réussite').count()+await treatment.getByLabel('DR du Test de soin').count(),0,'aucun champ libre de résultat ou de réussite');
+ assert.equal(await treatment.getByLabel('Fournitures médicales disponibles').isChecked(),false,'les fournitures ne sont pas cochées par défaut');
+ await treatment.getByLabel('Fournitures médicales disponibles').check();
  await treatment.getByRole('button',{name:'Enregistrer le Test de soin'}).click();
  await page.waitForFunction(()=>/Blessure\(s\) rendue\(s\)/.test(document.querySelector('.workspace-aftermath-status')?.textContent||''));
  assert.match(await status.innerText(),/d100 20 contre 60 : réussite, 4 DR · 9 Blessure\(s\) rendue\(s\)/);
