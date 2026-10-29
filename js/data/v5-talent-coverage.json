@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "ruleVersion": "catalogue-utile-v5-2026-10-10.1",
-  "sourceCatalogueVersion": "references:2a2a785c6940f1ce17b014e6c2ef8baf63de67cddc34da470c2f214b940e3499",
+  "sourceCatalogueVersion": "references:1c2a8fff511be2d89fa0fba79760caa0fb545eb6729fcc13962ab5163e032a3c",
   "policy": "Traitement explicite par clause. Les rappels ne sont pas des automatismes et les contrats actifs sont vérifiés séparément.",
   "items": [
     {
@@ -1298,9 +1298,9 @@
       "talentId": "talent-instinctive-diction",
       "name": "Diction instinctive",
       "family": "lot3_magie_et_prieres",
-      "description": "Si vous devez effectuer un jet sur la table des Incantations imparfaites mineures, vous pouvez réduire le résultat de 20 ; sous 01, aucun effet ne se produit. Aucun effet sur les Incantations imparfaites majeures.",
+      "description": "Si vous devez effectuer un jet sur la table des Incantations imparfaites mineures, vous pouvez réduire le résultat de 20, mais seulement si le Test d'incantation ou de Focalisation a réussi ; sous 01, aucun effet ne se produit. Aucun effet sur les Incantations imparfaites majeures.",
       "source": {
-        "effectHash": "sha256:7bbf8c4f867f8366a592bc5e423302e27411ba8a9cf2e076ccd80d48399da0bd",
+        "effectHash": "sha256:9d12db01df545c7df7c5127fee316abfeb33df68b35c2f8c565801adf8f98deb",
         "reference": "Livre de base V5, p. 121 ; achat : p. 191"
       },
       "clauses": [
@@ -1568,9 +1568,9 @@
       "talentId": "talent-inspiring",
       "name": "Exaltant",
       "family": "jets_et_contextes",
-      "description": "Avantage V5 aux Tests de Commandement effectués en combat.",
+      "description": "En l’absence d’autorité reconnue, les gens se tournent naturellement vers vous en cas de crise et suivent vos ordres raisonnables. Avantage V5 aux Tests de Commandement.",
       "source": {
-        "effectHash": "sha256:cb16f5827ce8f6a372e3df7f51b47f6587a65f4d7b9b4cd0516e1b247ea96bcc",
+        "effectHash": "sha256:7e4f348eb53cbbf043f5e1e8632fcf52d5e008dfd5c57b00d2c41dd03c610edd",
         "reference": "Livre de base V5, p. 121 ; achat : p. 191"
       },
       "clauses": [
@@ -1772,9 +1772,9 @@
       "talentId": "talent-nose-for-trouble",
       "name": "Flairer les ennuis",
       "family": "jets_et_contextes",
-      "description": "Avantage V5 aux Tests d’Intuition ; vous savez généralement où trouver, dans une ville ou un village, de quoi parier, vous battre ou vous enivrer.",
+      "description": "Avantage V5 aux Tests d’Intuition liés à un danger potentiel ; vous savez généralement où trouver, dans une ville ou un village, de quoi parier, vous battre ou vous enivrer.",
       "source": {
-        "effectHash": "sha256:635e212b4a02bfd45a9c2eb6700232e8ada9f5322c26109b4a8df0eff6f139e6",
+        "effectHash": "sha256:4d192cd4f04cbb5093cacf3496298d3c7efe7fc5614a3f474ea2ed59512a008b",
         "reference": "Livre de base V5, p. 123 ; achat : p. 191"
       },
       "clauses": [
@@ -1844,9 +1844,9 @@
       "talentId": "talent-strike-to-stun",
       "name": "Frappe assommante",
       "family": "degats_et_qualites",
-      "description": "Toutes vos armes improvisées ont la Qualité Assommante (Pummel). Avec une arme Assommante, ignorez la pénalité de coup ciblé pour une neutralisation silencieuse (p. 135).",
+      "description": "Toutes vos armes improvisées ont la Qualité Assommante (Pummel). Avec une arme Assommante, bénéficiez d'un Avantage V5 aux neutralisations silencieuses (p. 135).",
       "source": {
-        "effectHash": "sha256:eacdf97f21d75376b090b13e8d0ba4216d97f6f6e45c4932abef9036802e011e",
+        "effectHash": "sha256:63ff3cb18877c92814761ddc8d6d117900f9c7e4e1a1438bb0a88f5bc4507bdc",
         "reference": "Livre de base V5, p. 127 ; achat : p. 191"
       },
       "clauses": [
@@ -2276,9 +2276,9 @@
       "talentId": "talent-aethyric-attunement",
       "name": "Harmonisation aethyrique",
       "family": "lot3_magie_et_prieres",
-      "description": "Sur la table des Incantations imparfaites mineures, lancez deux fois et choisissez le résultat. La seconde acquisition étend ce bénéfice à la table des Incantations imparfaites majeures.",
+      "description": "Sur la table des Incantations imparfaites mineures, si le Test d'incantation ou de Focalisation a réussi, lancez deux fois et choisissez le résultat. La seconde acquisition étend ce bénéfice à la table des Incantations imparfaites majeures.",
       "source": {
-        "effectHash": "sha256:09ded3a1abc23bbb89c62f9a1d96d8df16c7194b8cedc1d74e36191fbc897f95",
+        "effectHash": "sha256:fba977ac6cd16b205813beb6ec07f019f9a00adce60a9006456efc0cce2d7aef",
         "reference": "Livre de base V5, p. 114 ; achat : p. 191"
       },
       "clauses": [
@@ -3098,9 +3098,9 @@
       "talentId": "talent-fast-hands",
       "name": "Mains agiles",
       "family": "jets_et_contextes",
-      "description": "Vous pouvez divertir avec Escamotage en faisant apparaître ou disparaître de petits objets. Avantage V5 aux Tests d’Escamotage et de Corps à corps (Bagarre) pour toucher un adversaire, notamment pour un Sort de contact.",
+      "description": "Avantage V5 aux Tests d’Escamotage et de Corps à corps (Bagarre) pour toucher un adversaire, notamment pour un Sort de contact.",
       "source": {
-        "effectHash": "sha256:c0850e6d9d1109e91be1749758ee45afeabac717eb940b6ff28a17f533dbeb88",
+        "effectHash": "sha256:5fce30a70e86be6e132cc1720c20b8e44d71616eef350a7b0e7c677cde14c866",
         "reference": "Livre de base V5, p. 119 ; achat : p. 191"
       },
       "clauses": [
@@ -3260,9 +3260,9 @@
       "talentId": "talent-dual-wielder",
       "name": "Maniement de deux armes",
       "family": "actions_reactions_et_effets_actifs",
-      "description": "En combattant avec deux armes, l’attaque gratuite de la seconde arme ne vous coûte pas Momentum. Pendant ce combat à deux armes, les dagues, couteaux et armes similaires que vous maniez gagnent l’Atout Parade.",
+      "description": "En combattant avec deux armes, l’attaque de la seconde arme ne demande pas de dépenser d'Élan, mais vous devez en avoir. Pendant ce combat à deux armes, les dagues, couteaux et armes similaires que vous maniez gagnent l’Atout Parade.",
       "source": {
-        "effectHash": "sha256:a85f050fefd1b889d2e30f458d95e3c64940f7de8dddb63de21f1fff9e8fc38d",
+        "effectHash": "sha256:b68127f875cf46f4edd9b9620614b469c1dec85587b215dd1f3216924862f072",
         "reference": "Livre de base V5, p. 119 ; achat : p. 191"
       },
       "clauses": [
@@ -4160,29 +4160,29 @@
       "talentId": "talent-commanding-presence",
       "name": "Présence imposante",
       "family": "jets_et_contextes",
-      "description": "En l’absence d’autorité reconnue, les gens se tournent naturellement vers vous en cas de crise et suivent vos ordres raisonnables. Avantage V5 aux Tests de Commandement.",
+      "description": "Sur un Test de Commandement réussi en combat, choisissez les DR obtenus ou la valeur du dé des unités.",
       "source": {
-        "effectHash": "sha256:7e4f348eb53cbbf043f5e1e8632fcf52d5e008dfd5c57b00d2c41dd03c610edd",
+        "effectHash": "sha256:22dd0af647916fd0a16a623cf35aafe059d5e5cee4c7695dfea57971dd9458cd",
         "reference": "Livre de base V5, p. 117 ; achat : p. 191"
       },
       "clauses": [
         {
-          "id": "advantage-actor",
-          "contractClauseId": "advantage-actor",
-          "mode": "automatic",
-          "text": "Test : Accorde un Avantage au Test pertinent."
+          "id": "chooseSLUnits-actor",
+          "contractClauseId": "chooseSLUnits-actor",
+          "mode": "assisted",
+          "text": "Test : Choisir entre DR réussis et chiffre des unités du jet retenu (0 reste 0)."
         },
         {
-          "id": "advantage-attacker",
-          "contractClauseId": "advantage-attacker",
-          "mode": "automatic",
-          "text": "Attaque : Accorde un Avantage au Test pertinent."
+          "id": "chooseSLUnits-attacker",
+          "contractClauseId": "chooseSLUnits-attacker",
+          "mode": "assisted",
+          "text": "Attaque : Choisir entre DR réussis et chiffre des unités du jet retenu (0 reste 0)."
         },
         {
-          "id": "advantage-defender",
-          "contractClauseId": "advantage-defender",
-          "mode": "automatic",
-          "text": "Défense : Accorde un Avantage au Test pertinent."
+          "id": "chooseSLUnits-defender",
+          "contractClauseId": "chooseSLUnits-defender",
+          "mode": "assisted",
+          "text": "Défense : Choisir entre DR réussis et chiffre des unités du jet retenu (0 reste 0)."
         },
         {
           "id": "tri:3",
@@ -4448,9 +4448,9 @@
       "talentId": "talent-riposte",
       "name": "Riposte",
       "family": "actions_reactions_et_effets_actifs",
-      "description": "Si vous remportez un Test opposé en défendant au corps à corps, vous infligez des dégâts comme si vous étiez l'attaquant.",
+      "description": "Une fois par Round, si vous remportez un Test opposé en défendant au corps à corps, vous infligez des dégâts comme si vous étiez l'attaquant.",
       "source": {
-        "effectHash": "sha256:3f70ba54eec81b7e306c798ded0a9e2fd8ab656a4ca5aff974b34caf97f53f81",
+        "effectHash": "sha256:fd5c10db9648c1d0f0485bdc9a502218ac3bd33de154484f1ba8490f3d12988e",
         "reference": "Livre de base V5, p. 124 ; achat : p. 191"
       },
       "clauses": [
@@ -4934,9 +4934,9 @@
       "talentId": "talent-sprinter",
       "name": "Sprinter",
       "family": "jets_et_contextes",
-      "description": "Avantage V5 aux Tests d'Athlétisme pour courir et sauter.",
+      "description": "Avantage V5 aux Tests d'Athlétisme pour courir. À pied, vous ne subissez aucune pénalité pour vous frayer un chemin dans une foule dense.",
       "source": {
-        "effectHash": "sha256:7e3c91b96267d54d312b14ad3a3b59c7471053b2b460f537c6407a4c3da0c941",
+        "effectHash": "sha256:a3052d11db27514adc22670b2732afc422d010473b3d4dd4b6e7409a3ca8e6e9",
         "reference": "Livre de base V5, p. 126 ; achat : p. 191"
       },
       "clauses": [

@@ -46,8 +46,7 @@ export const OVERCAST_SPECIFIC = {
   'Terrifiant': [{ id: 'terror', label: 'Terreur +1 pour chaque +3 DR', cost: 3, repeat: true, kind: 'trait-rating', trait: 'Terreur', per: 1 }],
   'Voile Pourpre de Shyish': [{ id: 'fear', label: 'Peur +1 pour chaque +2 DR', cost: 2, repeat: true, kind: 'trait-rating', trait: 'Peur', per: 1 }],
   'Couronne de Flamme': [
-    { id: 'fear', label: 'Peur +1 pour chaque +2 DR', cost: 2, repeat: true, kind: 'trait-rating', trait: 'Peur', per: 1 },
-    { id: 'war-leader', label: 'Chef de guerre repris pour chaque +2 DR', cost: 2, repeat: true, kind: 'reminder', reminder: 'Chef de guerre repris {pas} fois de plus (talent temporaire à noter).' }
+    { id: 'fear', label: 'Peur +1 pour chaque +2 DR', cost: 2, repeat: true, kind: 'trait-rating', trait: 'Peur', per: 1 }
   ],
   'Arme enchantée': [{ id: 'quality', label: '1 Qualité d’arme ajoutée ou 1 Défaut retiré pour chaque +3 DR', cost: 3, repeat: true, kind: 'reminder', reminder: '{pas} Qualité(s) d’arme à ajouter ou Défaut(s) à retirer sur l’arme désignée, pendant le sort.' }],
   'Forge de Chamon': [{ id: 'quality', label: '1 Qualité ajoutée ou 1 Défaut retiré de plus pour chaque +2 DR', cost: 2, repeat: true, kind: 'reminder', reminder: '{pas} Qualité(s) ou Défaut(s) de plus à modifier sur l’objet en métal.' }],

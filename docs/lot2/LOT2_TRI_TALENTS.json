@@ -1146,13 +1146,13 @@
       "name": "Diction instinctive",
       "source": {
         "reference": "Livre de base V5, p. 121 ; achat : p. 191",
-        "effectHash": "sha256:7bbf8c4f867f8366a592bc5e423302e27411ba8a9cf2e076ccd80d48399da0bd"
+        "effectHash": "sha256:9d12db01df545c7df7c5127fee316abfeb33df68b35c2f8c565801adf8f98deb"
       },
       "clauses": [
         {
           "scope": "lot3",
           "status": "deferred",
-          "text": "Si vous devez effectuer un jet sur la table des Incantations imparfaites mineures, vous pouvez réduire le résultat de 20 ; sous 01, aucun effet ne se produit. Aucun effet sur les Incantations imparfaites majeures."
+          "text": "Si vous devez effectuer un jet sur la table des Incantations imparfaites mineures, vous pouvez réduire le résultat de 20, mais seulement si le Test d'incantation ou de Focalisation a réussi ; sous 01, aucun effet ne se produit. Aucun effet sur les Incantations imparfaites majeures."
         }
       ]
     },
@@ -1380,7 +1380,7 @@
       "name": "Exaltant",
       "source": {
         "reference": "Livre de base V5, p. 121 ; achat : p. 191",
-        "effectHash": "sha256:cb16f5827ce8f6a372e3df7f51b47f6587a65f4d7b9b4cd0516e1b247ea96bcc"
+        "effectHash": "sha256:7e4f348eb53cbbf043f5e1e8632fcf52d5e008dfd5c57b00d2c41dd03c610edd"
       },
       "clauses": [
         {
@@ -1572,7 +1572,7 @@
       "name": "Flairer les ennuis",
       "source": {
         "reference": "Livre de base V5, p. 123 ; achat : p. 191",
-        "effectHash": "sha256:635e212b4a02bfd45a9c2eb6700232e8ada9f5322c26109b4a8df0eff6f139e6"
+        "effectHash": "sha256:4d192cd4f04cbb5093cacf3496298d3c7efe7fc5614a3f474ea2ed59512a008b"
       },
       "clauses": [
         {
@@ -1638,7 +1638,7 @@
       "name": "Frappe assommante",
       "source": {
         "reference": "Livre de base V5, p. 127 ; achat : p. 191",
-        "effectHash": "sha256:eacdf97f21d75376b090b13e8d0ba4216d97f6f6e45c4932abef9036802e011e"
+        "effectHash": "sha256:63ff3cb18877c92814761ddc8d6d117900f9c7e4e1a1438bb0a88f5bc4507bdc"
       },
       "clauses": [
         {
@@ -2032,13 +2032,13 @@
       "name": "Harmonisation aethyrique",
       "source": {
         "reference": "Livre de base V5, p. 114 ; achat : p. 191",
-        "effectHash": "sha256:09ded3a1abc23bbb89c62f9a1d96d8df16c7194b8cedc1d74e36191fbc897f95"
+        "effectHash": "sha256:fba977ac6cd16b205813beb6ec07f019f9a00adce60a9006456efc0cce2d7aef"
       },
       "clauses": [
         {
           "scope": "lot3",
           "status": "deferred",
-          "text": "Sur la table des Incantations imparfaites mineures, lancez deux fois et choisissez le résultat. La seconde acquisition étend ce bénéfice à la table des Incantations imparfaites majeures."
+          "text": "Sur la table des Incantations imparfaites mineures, si le Test d'incantation ou de Focalisation a réussi, lancez deux fois et choisissez le résultat. La seconde acquisition étend ce bénéfice à la table des Incantations imparfaites majeures."
         }
       ]
     },
@@ -2705,7 +2705,7 @@
       "name": "Mains agiles",
       "source": {
         "reference": "Livre de base V5, p. 119 ; achat : p. 191",
-        "effectHash": "sha256:c0850e6d9d1109e91be1749758ee45afeabac717eb940b6ff28a17f533dbeb88"
+        "effectHash": "sha256:5fce30a70e86be6e132cc1720c20b8e44d71616eef350a7b0e7c677cde14c866"
       },
       "clauses": [
         {
@@ -2854,7 +2854,7 @@
       "name": "Maniement de deux armes",
       "source": {
         "reference": "Livre de base V5, p. 119 ; achat : p. 191",
-        "effectHash": "sha256:a85f050fefd1b889d2e30f458d95e3c64940f7de8dddb63de21f1fff9e8fc38d"
+        "effectHash": "sha256:b68127f875cf46f4edd9b9620614b469c1dec85587b215dd1f3216924862f072"
       },
       "clauses": [
         {
@@ -3633,26 +3633,26 @@
       "name": "Présence imposante",
       "source": {
         "reference": "Livre de base V5, p. 117 ; achat : p. 191",
-        "effectHash": "sha256:7e4f348eb53cbbf043f5e1e8632fcf52d5e008dfd5c57b00d2c41dd03c610edd"
+        "effectHash": "sha256:22dd0af647916fd0a16a623cf35aafe059d5e5cee4c7695dfea57971dd9458cd"
       },
       "clauses": [
         {
           "scope": "engine",
           "status": "implemented",
-          "contractClauseId": "advantage-actor",
-          "text": "test.beforeRoll · actor · grantAdvantage"
+          "contractClauseId": "chooseSLUnits-actor",
+          "text": "test.afterRoll · actor · chooseSLUnits"
         },
         {
           "scope": "engine",
           "status": "implemented",
-          "contractClauseId": "advantage-attacker",
-          "text": "test.beforeRoll · attacker · grantAdvantage"
+          "contractClauseId": "chooseSLUnits-attacker",
+          "text": "test.afterRoll · attacker · chooseSLUnits"
         },
         {
           "scope": "engine",
           "status": "implemented",
-          "contractClauseId": "advantage-defender",
-          "text": "test.beforeRoll · defender · grantAdvantage"
+          "contractClauseId": "chooseSLUnits-defender",
+          "text": "test.afterRoll · defender · chooseSLUnits"
         },
         {
           "scope": "narrative",
@@ -3883,7 +3883,7 @@
       "name": "Riposte",
       "source": {
         "reference": "Livre de base V5, p. 124 ; achat : p. 191",
-        "effectHash": "sha256:3f70ba54eec81b7e306c798ded0a9e2fd8ab656a4ca5aff974b34caf97f53f81"
+        "effectHash": "sha256:fd5c10db9648c1d0f0485bdc9a502218ac3bd33de154484f1ba8490f3d12988e"
       },
       "clauses": [
         {
@@ -4307,7 +4307,7 @@
       "name": "Sprinter",
       "source": {
         "reference": "Livre de base V5, p. 126 ; achat : p. 191",
-        "effectHash": "sha256:7e3c91b96267d54d312b14ad3a3b59c7471053b2b460f537c6407a4c3da0c941"
+        "effectHash": "sha256:a3052d11db27514adc22670b2732afc422d010473b3d4dd4b6e7409a3ca8e6e9"
       },
       "clauses": [
         {

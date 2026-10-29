@@ -5408,7 +5408,7 @@
       "status": "validated",
       "ruleVersion": "talent-v5-2026-10-09.24.5",
       "source": {
-        "effectHash": "sha256:3f70ba54eec81b7e306c798ded0a9e2fd8ab656a4ca5aff974b34caf97f53f81",
+        "effectHash": "sha256:fd5c10db9648c1d0f0485bdc9a502218ac3bd33de154484f1ba8490f3d12988e",
         "reference": "Livre de base V5, p. 124 ; achat : p. 191"
       },
       "clauses": [
@@ -6343,7 +6343,7 @@
       "ruleVersion": "v5-combat-2026-10-09.24.5",
       "source": {
         "reference": "Livre de base V5, p. 119 ; achat : p. 191",
-        "effectHash": "sha256:a85f050fefd1b889d2e30f458d95e3c64940f7de8dddb63de21f1fff9e8fc38d"
+        "effectHash": "sha256:b68127f875cf46f4edd9b9620614b469c1dec85587b215dd1f3216924862f072"
       },
       "clauses": [
         {
@@ -7359,7 +7359,7 @@
     "talent-bludgeoner": "Lorsque vous remportez le Test opposé activant l’Atout Assommante (Pummel), infligez un État Sonné supplémentaire par acquisition de ce talent. Ajoutez +1 DR par acquisition aux Tests de Force réussis pour activer cet Atout.",
     "talent-rapid-reload": "Avec une arme ayant le Défaut Rechargement, réduisez son indice de 1.",
     "talent-short-fuse": "Avec une arme explosive dotée de Blast, augmentez son indice de +1 par niveau.",
-    "talent-riposte": "Si vous remportez un Test opposé en défendant au corps à corps, vous infligez des dégâts comme si vous étiez l'attaquant.",
+    "talent-riposte": "Une fois par Round, si vous remportez un Test opposé en défendant au corps à corps, vous infligez des dégâts comme si vous étiez l'attaquant.",
     "talent-harpooner": "Sur un Critique infligé avec une arbalète, vous pouvez ajouter +10 par acquisition au jet de la table des Critiques, maximum 00. Chaque carreau fiché dans la cible grâce à l’Atout Empaleuse réduit son Mouvement de 1, minimum 1.",
     "talent-reversal": "Lors d’un Test opposé de Corps à corps, si vous êtes touché mais que votre propre Test a réussi, vous conservez votre Momentum.",
     "talent-distract": "Utilisez votre Mouvement pour un Test opposé Athlétisme, Représentation ou Escamotage contre Perception, sur une cible à 2 yards maximum. Si vous gagnez, elle perd Momentum et ne peut ni le récupérer ni effectuer de Test avec Avantage V5 jusqu’à la fin de votre prochain Tour.",
@@ -7373,7 +7373,7 @@
     "talent-fearless": "Choisissez un groupe d’ennemis : vous êtes immunisé à la Peur causée par ce groupe. Répétable avec un nouveau groupe à chaque acquisition ; une acquisition par groupe.",
     "talent-unshakeable": "Aucun Test pour résister à l'état Brisé lorsque vous êtes pris pour cible par une arme à poudre noire.",
     "talent-combat-aware": "Vous pouvez tenter un Test de Perception Intermédiaire (+0 DR) pour éviter l’État Surpris. Si le MJ aurait normalement autorisé un Test pour ignorer la Surprise dans cette situation, vous réussissez automatiquement.",
-    "talent-dual-wielder": "En combattant avec deux armes, l’attaque gratuite de la seconde arme ne vous coûte pas Momentum. Pendant ce combat à deux armes, les dagues, couteaux et armes similaires que vous maniez gagnent l’Atout Parade.",
+    "talent-dual-wielder": "En combattant avec deux armes, l’attaque de la seconde arme ne demande pas de dépenser d'Élan, mais vous devez en avoir. Pendant ce combat à deux armes, les dagues, couteaux et armes similaires que vous maniez gagnent l’Atout Parade.",
     "talent-old-salt": "Lors d’un Test réussi de Ramer ou Voile sur l’océan, utilisez au choix les DR obtenus ou le chiffre du dé des unités. Vous comptez comme deux bateliers pour l’équipage minimum nécessaire à la conduite d’un navire océanique.",
     "talent-roughrider": "Avec la compétence Chevaucher, vous dirigez votre monture pour une Action et un Mouvement sans Test. Si un Test de Chevaucher est requis, vous le faites avec Avantage V5. En poursuite montée, +1 au Mouvement de l'animal.",
     "talent-crack-the-whip": "Avec Conduite d’attelage, vous dirigez les animaux du véhicule pour une Action et un Mouvement sans Test. Si un Test de Conduite est requis, il bénéficie d’Avantage V5. En poursuite avec le véhicule, ajoutez +1 au Mouvement des animaux.",

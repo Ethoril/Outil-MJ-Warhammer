@@ -25,7 +25,7 @@ Date : 14 octobre 2026. Référence : `docs/lot3/LOT3_AUDIT_SORTS.json`, `docs/l
 | 11 | Mur de Feu | Firewall | fire (Aqshy) | 6 | (Force Mentale) mètres | ZdE (Spécial) | (Bonus de Force Mentale) Rounds | Contrat à effet calculable + Rappel | special | `sha256:0a572a92...` |
 | 12 | Tempête de Flammes | Tempête de Flammes | fire (Aqshy) | 8 | Force Mentale mètres | Spécial | Spécial | Contrat à effet calculable + Rappel | magic-missile | `sha256:bf6df7a6...` |
 | 13 | Cœurs Enflammés | Flaming Hearts | fire (Aqshy) | 5 | Vous | ZdE (Bonus de Sociabilité) mètres | Instantané | Rappel | special | `sha256:aa7cbce1...` |
-| 14 | Épée Enflammée de Rhuin | Flaming Sword of Rhuin | fire (Aqshy) | 8 | (Force Mentale) mètres | 1 épée (arme de base) | (Bonus de Force Mentale) Rounds | Contrat nécessitant des données MJ | special | `sha256:99bb3625...` |
+| 14 | Épée Enflammée de Rhuin | Flaming Sword of Rhuin | fire (Aqshy) | 8 | (Force Mentale) mètres | 1 épée | (Bonus de Force Mentale) Rounds | Contrat nécessitant des données MJ | special | `sha256:99bb3625...` |
 | 15 | Forge de Tarnus | Forge de Tarnus | fire (Aqshy) | 6 | Contact | 1 forge | Bonus de Force Mentale heures | Contrat à effet calculable + Rappel | special | `sha256:eb9d04af...` |
 | 16 | Grands Feux d’U’Zhul | Great Fires of U’Zhul | fire (Aqshy) | 12 | (Force Mentale) mètres | 1 (maximum) + ZdE (Bonus de Force Mentale) mètres | (Bonus de Force Mentale) Rounds | Contrat à effet calculable + Rappel | magic-missile | `sha256:d9f4641b...` |
 | 17 | Ignition | Ignition | fire (Aqshy) | 3 | Force Mentale mètres | 1 | Instantané | Contrat à effet calculable + Rappel | condition | `sha256:3b8e9337...` |
@@ -224,7 +224,7 @@ Date : 14 octobre 2026. Référence : `docs/lot3/LOT3_AUDIT_SORTS.json`, `docs/l
 | 210 | Bouclier anti-flèches | Arrow Shield | arcane | 3 | Vous | ZdE (Bonus de Force Mentale) mètres | Bonus de Force Mentale Rounds | Contrat à effet calculable + Rappel | special | `sha256:b5d42f97...` |
 | 211 | Chute | Drop | arcane | 1 | (Force Mentale) mètres | 1 | Instantané | Contrat nécessitant des données MJ | special | `sha256:0e2de89e...` |
 | 212 | Dôme | Dome | arcane | 7 | Vous | ZdE (Bonus de Force Mentale) mètres | (Bonus de Force Mentale) Rounds | Contrat à effet calculable | ward | `sha256:0be64639...` |
-| 213 | Effrayant | Fearsome | arcane | 3 | Vous | Vous | (Bonus de Force Mentale) Rounds | Contrat à effet calculable + Rappel | traits | `sha256:99a7c3c6...` |
+| 213 | Effrayant | Fearsome | arcane | 2 | Vous | Vous | (Bonus de Force Mentale) Rounds | Contrat à effet calculable + Rappel | traits | `sha256:99a7c3c6...` |
 | 214 | Envol | Flight | arcane | 8 | Vous | Vous | Bonus de Force Mentale Rounds | Contrat nécessitant des données MJ | special | `sha256:04283ef3...` |
 | 215 | Pont | Bridge | arcane | 4 | Force Mentale mètres | Spécial | Bonus de Force Mentale Rounds | Rappel | narrative | `sha256:47fd6a2d...` |
 | 216 | Poussée | Push | arcane | 6 | Vous | ZdE (Bonus de Force Mentale) mètres maximum | Instantané | Contrat à effet calculable + Rappel | special | `sha256:a5403479...` |
@@ -416,7 +416,7 @@ Date : 14 octobre 2026. Référence : `docs/lot3/LOT3_AUDIT_SORTS.json`, `docs/l
 
 ## Options de surpuissance propres aux sorts
 
-Options « +N DR » et « pour chaque +N DR » des descriptions (V5 p. 236 : « Spells may have additional options in their descriptions »). 46 calculées, 100 rappelées au MJ avec leur valeur chiffrée ; aucune n'est « calculée » sans exécution.
+Options « +N DR » et « pour chaque +N DR » des descriptions (V5 p. 236 : « Spells may have additional options in their descriptions »). 46 calculées, 99 rappelées au MJ avec leur valeur chiffrée ; aucune n'est « calculée » sans exécution.
 
 | Sort | Option | Coût | Statut |
 |---|---|---|---|
@@ -425,7 +425,6 @@ Options « +N DR » et « pour chaque +N DR » des descriptions (V5 p. 236 : « 
 | Colérique | Animosité, BFM jours | 4 DR | Calculée (exécutée par la sonde) |
 | Colérique | Haine, BFM semaines | 8 DR | Calculée (exécutée par la sonde) |
 | Couronne de Flamme | Peur +1 pour chaque +2 DR | 2 DR par palier | Calculée (exécutée par la sonde) |
-| Couronne de Flamme | Chef de guerre repris pour chaque +2 DR | 2 DR par palier | Rappel chiffré (non calculée) |
 | Tempête de Flammes | Diamètre +1 mètre et hauteur +2 mètres | 2 DR par palier | Rappel chiffré (non calculée) |
 | Flamme Inextinguible | Durée BFM jours | 2 DR | Calculée (exécutée par la sonde) |
 | Flamme Inextinguible | Durée BFM semaines | 4 DR | Calculée (exécutée par la sonde) |

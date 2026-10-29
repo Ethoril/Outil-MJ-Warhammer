@@ -1765,7 +1765,7 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
     if(effects.breath){
       const variant=effects.breath.variants[attributeLore],answers=options.targetTests?.[target.id] || {};
       if(!variant)return {ready:false,valid:false,status:'lore-choice-required',error:'Souffle : Domaine du lanceur requis.',contract};
-      const first=target.id===effectiveTargets[0].id,limit=first?(effects.breath.rangeBase+bfm)*overcastRangeMultiplier:Math.floor(Number(actor.caracs.I)/10)*overcastAoeMultiplier;
+      const first=target.id===effectiveTargets[0].id,limit=first?(effects.breath.rangeBase+bfm)*overcastRangeMultiplier:bfm*overcastAoeMultiplier;
       const distance=first?answers.distance:answers.fromPrimary;
       if(!Number.isFinite(distance)||distance<0||distance>limit)return {ready:false,valid:false,status:'mj-fact-required',error:'Souffle : distance déclarée hors limite ou manquante ('+limit+' mètres).',contract};
       if(!Number.isInteger(options.ctRoll)||options.ctRoll<1||options.ctRoll>100)return {ready:false,valid:false,status:'dice-required',error:'Souffle : saisir le Test de CT du lanceur (d100).',contract};

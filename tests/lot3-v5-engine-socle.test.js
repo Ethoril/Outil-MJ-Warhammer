@@ -288,7 +288,7 @@ test('Options propres au sort : chaque option calculée est exécutée ; les aut
     }
     assert.equal(resolveSpecificOvercast(contract, { [contract.overcast.specific[0].id]: 1 }).cost, contract.overcast.specific[0].cost);
   }
-  assert.deepEqual([calculated, reminders], [44, 50], `${calculated} options calculées, ${reminders} rappels (HEPG pp. 86–89 ; clauses génériques raccordées)`);
+  assert.deepEqual([calculated, reminders], [44, 49], `${calculated} options calculées, ${reminders} rappels (HEPG pp. 86–89 ; clauses génériques raccordées)`);
 });
 
 // ---- S-10 : réglages enregistrés jamais lus ----

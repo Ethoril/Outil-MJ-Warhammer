@@ -567,21 +567,13 @@
           "kind": "trait-rating",
           "trait": "Peur",
           "per": 1
-        },
-        {
-          "id": "war-leader",
-          "label": "Chef de guerre repris pour chaque +2 DR",
-          "cost": 2,
-          "repeat": true,
-          "kind": "reminder",
-          "reminder": "Chef de guerre repris {pas} fois de plus (talent temporaire à noter)."
         }
       ]
     },
     "effects": {
       "type": "traits",
       "traits": [
-        "Peur (1)"
+        "Peur (2)"
       ],
       "talents": [
         "Chef de guerre"
@@ -591,7 +583,7 @@
         "amount": 1
       }
     },
-    "reminders": "- Vous canalisez Aqshy pour invoquer une couronne de flammes inspirante autour de votre tête.\n- Vous gagnez le Trait Peur (1).\n- Vous obtenez aussi le Talent Meneur de Guerre.\n- Avec +2 DR, vous pouvez soit augmenter votre Peur de +1, soit reprendre Meneur de Guerre.\n- Tant que le sort est actif, vous bénéficiez d’un +1 DR aux Tests de Focalisation et d’Incantation avec Aqshy.",
+    "reminders": "- Vous canalisez Aqshy pour invoquer une couronne de flammes inspirante autour de votre tête.\n- Vous gagnez le Trait Peur (2).\n- Vous obtenez aussi le Talent Meneur de Guerre.\n- Avec +2 DR, vous pouvez augmenter votre Peur de +1.\n- Tant que le sort est actif, vous bénéficiez d’un +1 DR aux Tests de Focalisation et d’Incantation avec Aqshy.",
     "assistedClauses": [],
     "sharedWith": null,
     "edition": "V5 local, correspondance contrôlée",
@@ -812,7 +804,7 @@
     "type": "Aqshy - Rouge - Domaine du Feu",
     "cn": 8,
     "range": "(Force Mentale) mètres",
-    "target": "1 épée (arme de base)",
+    "target": "1 épée",
     "duration": "(Bonus de Force Mentale) Rounds",
     "sourceFingerprint": "sha256:99bb3625fce2dda048f661427667c367f9d164fbeae7d429f2bffa8ca4e3df21",
     "treatment": "engine",
@@ -844,14 +836,14 @@
       "facts": [
         {
           "key": "objectId",
-          "label": "Épée désignée (arme de base)",
+          "label": "Épée désignée",
           "type": "object",
           "weaponsOnly": true,
           "perTarget": true
         }
       ]
     },
-    "reminders": "Vous enveloppez une épée de type arme de base dans les flammes. Elle inflige BF + 6 Dégâts et gagne Dévastatrice et Magique. Chaque touche inflige 1 Enflammé. Un porteur sans Magie des Arcanes (Feu) gagne lui-même 1 Enflammé s’il commet une Maladresse avec l’épée.",
+    "reminders": "Vous enveloppez une épée dans les flammes. Elle inflige BF + 6 Dégâts et gagne Dévastatrice et Magique. Chaque touche inflige 1 Enflammé. Un porteur sans Magie des Arcanes (Feu) gagne lui-même 1 Enflammé s’il commet une Maladresse avec l’épée.",
     "assistedClauses": [],
     "sharedWith": null,
     "edition": "V5 local, correspondance contrôlée",
@@ -11112,7 +11104,7 @@
       "type": "special",
       "special": "scythe-of-shyish"
     },
-    "reminders": "Vous invoquez une hallebarde Magique infligeant BF + Bonus de Force Mentale + 4 Dégâts. Selon l’arbitrage V5 du MJ, les Morts-vivants engagés avec vous ne bénéficient pas d’Avantage aux Tests contre vous ; leur Élan reste disponible.",
+    "reminders": "Vous invoquez une hallebarde Magique infligeant BF + Bonus de Force Mentale + 4 Dégâts. Les Morts-vivants engagés avec vous ne gagnent pas d’Élan.",
     "sharedWith": null,
     "edition": "V5 local, correspondance contrôlée",
     "isBookV5": true,
@@ -13200,7 +13192,7 @@
     "domain": "arcane",
     "wind": null,
     "type": "Sort d'Arcane",
-    "cn": 3,
+    "cn": 2,
     "range": "Vous",
     "target": "Vous",
     "duration": "(Bonus de Force Mentale) Rounds",
@@ -13230,7 +13222,7 @@
         "Peur (1)"
       ]
     },
-    "reminders": "En vous recouvrant de magie, vous devenez effrayant et intimidant. Gagnez Peur 1. Pour chaque +3 DR, vous pouvez augmenter votre valeur de Peur de 1. Tests étendus de Psychologie des témoins : procédure Peur p. 183, personnes exposées désignées par le MJ.",
+    "reminders": "En vous recouvrant de magie, vous devenez effrayant et intimidant. Gagnez Peur (1). Pour chaque +3 DR, vous pouvez augmenter votre valeur de Peur de 1. Tests étendus de Psychologie des témoins : procédure Peur p. 183, personnes exposées désignées par le MJ.",
     "assistedClauses": [
       "Tests étendus de Psychologie des témoins : procédure Peur p. 183, personnes exposées désignées par le MJ."
     ],
@@ -13485,7 +13477,7 @@
       "breath": {
         "rangeBase": 20,
         "rangeBonus": "BFM",
-        "radius": "BInitiative",
+        "radius": "BFM",
         "variants": {
           "metal": {
             "damage": 4,
@@ -13537,7 +13529,7 @@
         }
       }
     },
-    "reminders": "Choisissez une cible à 20 + Bonus de Force Mentale mètres et effectuez CT (+0 DR), opposé à l’Esquive de la cible et des voisins dans Bonus d’Initiative mètres. Ceux qui ne battent pas votre résultat sont touchés. Base Bonus de Force Mentale Dégâts : Métal +4 et dommages aux objets ; Bêtes/Lumière +2 et Exténué, frappe en dernier et adversaires +1 DR en défense jusqu’au retrait de cet Exténué ; Cieux +2, ignore les PA métalliques et Sonné ; Feu +5 et Enflammé ; Mort/Vie +2 et Empoisonné ; Ombres, pas de Dégâts mais fumée et suffocation pendant Bonus de Force Mentale Rounds. Cible principale à 20+BFM mètres, voisins dans BI ; distances et visibilité déclarées par le MJ. Acide : armes/armures endommagées de 1, reçu à reporter sur la fiche. Froid : frappe en dernier et défense adverse +1 tant qu’Exténué demeure. Fumée : zone opaque et suffocation BFM Rounds.",
+    "reminders": "Choisissez une cible à 20 + Bonus de Force Mentale mètres et effectuez CT (+0 DR), opposé à l’Esquive de la cible et des voisins dans Bonus de Force Mentale mètres. Ceux qui ne battent pas votre résultat sont touchés. Base Bonus de Force Mentale Dégâts : Métal +4 et dommages aux objets ; Bêtes/Lumière +2 et Exténué, frappe en dernier et adversaires +1 DR en défense jusqu’au retrait de cet Exténué ; Cieux +2, ignore les PA métalliques et Sonné ; Feu +5 et Enflammé ; Mort/Vie +2 et Empoisonné ; Ombres, pas de Dégâts mais fumée et suffocation pendant Bonus de Force Mentale Rounds. Le lanceur est immunisé à son propre Souffle. Cible principale à 20+BFM mètres, voisins dans BI ; distances et visibilité déclarées par le MJ. Acide : armes/armures endommagées de 1, reçu à reporter sur la fiche. Froid : frappe en dernier et défense adverse +1 tant qu’Exténué demeure. Fumée : zone opaque et suffocation BFM Rounds.",
     "assistedClauses": [
       "Cible principale à 20+BFM mètres, voisins dans BI ; distances et visibilité déclarées par le MJ. Acide : armes/armures endommagées de 1, reçu à reporter sur la fiche. Froid : frappe en dernier et défense adverse +1 tant qu’Exténué demeure. Fumée : zone opaque et suffocation BFM Rounds."
     ],
@@ -14327,7 +14319,7 @@
         "assistedReminder": "Rafale brève : bougie, porte ou papiers ; aucun dégât ni état."
       }
     },
-    "reminders": "Vous créez une brève rafale de vent, mais suffisamment forte pour éteindre une bougie, faire claquer une porte ouverte ou balayer quelques pages sur le sol.",
+    "reminders": "Vous créez une brève rafale de vent, mais suffisamment forte pour éteindre une bougie, faire claquer une porte ouverte ou donner à une silhouette en cape une allure impressionnante.",
     "assistedClauses": [],
     "sharedWith": null,
     "edition": "V5 local, correspondance contrôlée",

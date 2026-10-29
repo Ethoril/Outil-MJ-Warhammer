@@ -8,7 +8,7 @@ import {getAllSpellContracts,getSpellContract} from '../js/core/v5-spell-contrac
 const base=contracts.filter(c=>!c.isTradition);
 test('Phase D — les 277 contrats d’audit sont inchangés (empreinte)',()=>{
  assert.equal(base.length,277);
- assert.equal(createHash('sha256').update(JSON.stringify(base)).digest('hex'),'0d97334b402b5e4e71a95b3a1d671ae9fcc5620406d815ecd977560b47adce21');
+ assert.equal(createHash('sha256').update(JSON.stringify(base)).digest('hex'),'8a10e72e60a3520e4daaf33925dab6804b9ee01d7013c2cc973d36ececf65ec5');
 });
 test('Phase D — ids et noms uniques sur tout le catalogue de contrats',()=>{
  const all=getAllSpellContracts();
