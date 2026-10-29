@@ -29,11 +29,13 @@ try{
   await page.evaluate(async s=>{const {Store}=await import('/Outil-MJ-Warhammer/js/main.js');await Store.ready;await Store.loadFromJSON(JSON.stringify(s));},state);
   await page.locator('#tab-combat').click();
   const workspace=page.locator('#workspace-root');
+  // Les puces de cible sont dans le groupe « Adversaires » : la liste des combattants porte des boutons du même nom.
+  const foe=name=>workspace.getByRole('group',{name:'Adversaires'}).getByRole('button',{name,exact:true});
 
   // Gargantuan : décharge, puis cible ; la section du profil et ses saisies apparaissent.
   await page.locator('[data-workspace-select="h-garg"]').click();
   await workspace.getByRole('button',{name:/Décharge électrique/}).first().click();
-  await workspace.getByRole('button',{name:'Héros H'}).first().click();
+  await foe('Héros H').click();
   await page.waitForFunction(()=>[...document.querySelectorAll('#workspace-root summary')].some(row=>row.textContent.includes('Règles propres au profil')));
   await workspace.locator('summary',{hasText:'Règles propres au profil'}).click();
   await workspace.getByLabel('Gargantuan : cible agrippée au début de son Tour').check();
@@ -43,7 +45,7 @@ try{
   // Héros contre le crâne : case de confirmation du MJ.
   await page.locator('[data-workspace-select="h-hero"]').click();
   await workspace.getByRole('button',{name:/Épée H/}).first().click();
-  await workspace.getByRole('button',{name:'Crâne H'}).first().click();
+  await foe('Crâne H').click();
   await page.waitForFunction(()=>[...document.querySelectorAll('#workspace-root summary')].some(row=>row.textContent.includes('Règles propres au profil')));
   await workspace.locator('summary',{hasText:'Règles propres au profil'}).click();
   assert.equal(await workspace.getByLabel('MJ : à 0 Blessure, le crâne redevient un crâne ordinaire').count(),1);
@@ -51,7 +53,7 @@ try{
   // Araignée : le Lasso s'ouvre sans erreur et rappelle la soie coupée.
   await page.locator('[data-workspace-select="h-spider"]').click();
   await workspace.getByRole('button',{name:/Lasso de soie/}).first().click();
-  await workspace.getByRole('button',{name:'Héros H'}).first().click();
+  await foe('Héros H').click();
   await page.waitForFunction(()=>document.querySelector('#workspace-root')?.textContent.includes('Soie coupée'));
   assert.deepEqual(errors,[],`aucune erreur UI attendue : ${errors.join('; ')}`);
   console.log('f2-h-review-browser : parcours vert');
