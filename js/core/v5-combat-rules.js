@@ -23,6 +23,8 @@ import { activeV5TalentEffects } from './v5-talents.js';
 import { applyV5TalentPenaltyRules, applyV5AttackSituationModifiers } from './v5-talent-combat.js';
 import { normalizeState } from './effects.js';
 import { previewV5TalentTestModifiers, previewV5TalentSLChoices } from './v5-talent-tests.js';
+import { sequelaTestRules } from './v5-sequela-effects.js';
+import { weaponHandsForParticipant } from './equipment.js';
 export const V5_COMBAT_RULE_VERSION = 'v5-combat-2026-10-09.24.6';
 export const hasMomentum = actor => actor?.extensions?.v5?.hasMomentum === true;
 export const withMomentum = (actor, value) => {
@@ -238,6 +240,14 @@ export function buildCombatTest(normalized, role = 'actor') {
   if(!defending&&normalized.combatPrelude?.small?.scoreBonus)action={...action,base:action.base+normalized.combatPrelude.small.scoreBonus};
   const reachDefense=defending&&kind==='melee'&&settings.context?.longerWeaponDefense===true,contactTalent=reachDefense?situationPlan(normalized.actor,'in-fighter'):null;if(reachDefense&&!contactTalent?.proposals.length)modifiers.push({id:'longer-weapon-defense',label:'Arme plus longue en défense',amount:1});
   const advantages = [...(settings.advantageSources || [])], disadvantages = [...(settings.disadvantageSources || [])];
+  // Séquelles durables et temporaires (F2-J2) : une seule source, le registre de convalescence projeté sur le participant.
+  const sequelaWeapon = actor?.equipment?.find(row => row.id === (action.extensions?.fiche?.equipmentId || action.extensions?.equipment?.id));
+  const sequelaShield = defending ? Boolean(v5ShieldDefense(normalized).v5Bonus || v5ShieldDefense(normalized).confirmed) : (settings.context?.attackWithShield === true || settings.context?.shieldAttached === true);
+  const sequelae = sequelaTestRules({ actor, opponent: target, skillLabel, actionLabel: action.label || action.note || '', carac: settings.context?.carac || skill?.carac || action.attr, kind, defending,
+    attack: !defending && ['attack', 'attaque'].includes(String(action.type || '').toLowerCase()), context: settings.context || {},
+    weaponHands: sequelaWeapon && sequelaWeapon.kind === 'weapon' ? weaponHandsForParticipant(sequelaWeapon, actor, { action, context: settings.context || {} }) : null, shieldUsed: sequelaShield });
+  unresolved.push(...sequelae.unresolved); restrictions.push(...sequelae.restrictions);
+  if (sequelae.scoreDelta) action = { ...action, base: Math.max(0, action.base + sequelae.scoreDelta) };
   if (defending && kind === 'melee' && activeV5TalentEffects(actor).some(effect => effect.restriction === 'cannotOpposeWithMelee'))
     restrictions.push('Battement : la cible ne peut pas opposer Corps à corps ; Esquive reste possible.');
   if (!defending && kind === 'melee' && activeV5TalentEffects(target).some(effect => effect.advantageFilter === 'meleeAttacksAgainstTarget'))
@@ -334,6 +344,8 @@ export function buildCombatTest(normalized, role = 'actor') {
   // Faux de Shyish (V5 p. 247) : un Mort-vivant engagé avec le porteur n'a pas d'Avantage ; son Élan (hasMomentum) n'est pas touché.
   if(kind==='melee'&&target?.extensions?.v5?.specialStates?.scytheOfShyish){const scythe=applyScytheOfShyishRules({target:actor,isEngagedWithWielder:true,advantageSources:advantages,hasMomentum:hasMomentum(actor)});if(scythe.advantageSuppressed)advantages.splice(0,advantages.length,...scythe.allowedAdvantages);}
   if(talentModifiers.ignoreNegative){for(const row of modifiers)if(row.amount<0)row.amount=0;disadvantages.length=0;}
+  // Les pertes durables ne sont pas des pénalités d'État : aucun talent d'immunité aux États ne les efface.
+  modifiers.push(...sequelae.modifiers); advantages.push(...sequelae.advantages); disadvantages.push(...sequelae.disadvantages);
   const ignoreCritical=context.extendedTest===true && activeMagicTalent(actor,'mind-over-body')?.ignoreCriticalPenalties;
   if(Number(context.magicCriticalPenalty)<0 && !ignoreCritical)modifiers.push({id:'critical-wounds',label:'Blessures Critiques précisées par le MJ',amount:Number(context.magicCriticalPenalty)});
   if(ignoreCritical)for(const modifier of modifiers)if(modifier.id==='critical-wounds' || modifier.source?.kind==='critical')modifier.amount=0;

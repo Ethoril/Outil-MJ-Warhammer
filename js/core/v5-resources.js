@@ -4,6 +4,7 @@ const record = value => value && typeof value === 'object' && !Array.isArray(val
 const text = value => typeof value === 'string' && value.trim() ? value : null;
 const balance = value => { if (!Number.isSafeInteger(value) || value < 0) throw new TypeError('Solde de Fortune invalide'); return value; };
 import { markCorruptionThresholdTest } from './v5-corruption.js';
+import { sequelaMirror } from './v5-sequela-effects.js';
 
 /** Shared action/quota clock, including restarted combats and legacy saved scenes. */
 export function v5CombatActionClock(envelope) {
@@ -158,6 +159,10 @@ export function projectV5Resources(envelope, participants = []) {
     const next = clone(subject), fortune = getV5Fortune(envelope, subject).balance;
     if (fortune !== null) next.extensions = { ...(next.extensions || {}), v5: { ...(next.extensions?.v5 || {}), resources: { ...(next.extensions?.v5?.resources || {}), fortune } } };
     else if (Object.hasOwn(next.extensions?.v5?.resources || {}, 'fortune')) delete next.extensions.v5.resources.fortune;
+    // Séquelles (F2-J2) : le registre de convalescence est la seule source, la fiche du participant n'en garde qu'une projection lue par la résolution.
+    const sequelae = sequelaMirror(envelope?.extensions?.v5?.aftermathRegister, next);
+    if (sequelae) next.extensions = { ...(next.extensions || {}), v5: { ...(next.extensions?.v5 || {}), sequelaEffects: sequelae } };
+    else if (next.extensions?.v5 && Object.hasOwn(next.extensions.v5, 'sequelaEffects')) delete next.extensions.v5.sequelaEffects;
     return next;
   });
 }
