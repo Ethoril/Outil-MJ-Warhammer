@@ -25,7 +25,8 @@ function assertState(state) {
     || !Number.isSafeInteger(state.calendar.originDay) || state.calendar.originDay < 0
     || !Number.isSafeInteger(state.calendar.currentDay) || state.calendar.currentDay < state.calendar.originDay
     || !Array.isArray(state.incidents) || !Array.isArray(state.receipts)
-    || (state.diseases !== undefined && !Array.isArray(state.diseases))) {
+    || (state.diseases !== undefined && !Array.isArray(state.diseases))
+    || (state.sequelae !== undefined && !Array.isArray(state.sequelae))) {
     throw new TypeError('registre de convalescence invalide');
   }
   const ids = new Set();
@@ -44,6 +45,10 @@ function assertState(state) {
       || !Number.isSafeInteger(disease.remainingDays) || disease.remainingDays < 0
       || !['active', 'ended'].includes(disease.status) || !Array.isArray(disease.careLog)) throw new TypeError('maladie invalide');
     ids.add(disease.id);
+  }
+  for (const sequela of state.sequelae || []) {
+    if (!sequela || !ID(sequela.id) || ids.has(sequela.id) || !ID(sequela.participantId) || !ID(sequela.kind) || !ID(sequela.status)) throw new TypeError('séquelle invalide');
+    ids.add(sequela.id);
   }
   return state;
 }
@@ -97,6 +102,7 @@ export function createAftermathState({ originDay = 0 } = {}) {
     calendar: { schemaVersion: 1, originDay, currentDay: originDay },
     incidents: [],
     diseases: [],
+    sequelae: [],
     receipts: []
   };
 }
@@ -403,7 +409,7 @@ export function closeAftermathIncident(stateValue, {
 }
 
 export function registerDisease(stateValue, {
-  id, operationId, expectedRevision, participantId, label, durationDays
+  id, operationId, expectedRevision, participantId, label, durationDays, sequelaId = null
 } = {}) {
   const state = assertState(stateValue);
   const prior = priorReceipt(state, operationId);
@@ -415,7 +421,7 @@ export function registerDisease(stateValue, {
   if (state.incidents.some(item => item.id === id) || (state.diseases || []).some(item => item.id === id)) return refusal('disease-already-exists');
   const next = clone(state);
   next.diseases ??= [];
-  next.diseases.push({ id, participantId, label: label.trim(), startDay: state.calendar.currentDay, remainingDays: durationDays, status: 'active', careLog: [] });
+  next.diseases.push({ id, participantId, label: label.trim(), startDay: state.calendar.currentDay, remainingDays: durationDays, status: 'active', careLog: [], ...(sequelaId ? { sequelaId } : {}) });
   return commit(next, receipt(state, operationId, 'disease', 'applied', 'disease-registered', { diseaseId: id }));
 }
 
@@ -472,3 +478,6 @@ export function archiveAftermathIncident(stateValue, { operationId, expectedRevi
   target.archivedDay = state.calendar.currentDay;
   return commit(next, receipt(state, operationId, 'archive-incident', 'applied', 'incident-archived', { incidentId }));
 }
+
+/** Primitives partagées avec le suivi des séquelles durables (J2) : mêmes reçus, révisions, Tests et soigneurs que J1. */
+export const aftermathKit = { assertState, receipt, result, commit, priorReceipt, runTest, testFacts, healerProblem, validRoll, validScore, ID, clone };
