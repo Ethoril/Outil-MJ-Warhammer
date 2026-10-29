@@ -473,6 +473,15 @@ test('Escaping the Immersion also ends its Suffocation, and the death countdown 
   assert.deepEqual(surfaced.participant.states, []);
 });
 
+test('Escaping the Immersion Entangled ends its Suffocation even when a net Entangled remains', async () => {
+  const { recoverV5Condition } = await import('../js/core/v5-effects.js');
+  const source = { kind: 'bestiary-profile', ability: 'sea-elemental-immersion' };
+  const victim = { id: 'held-net', name: 'Immergé', hp: 3, maxHp: 10, caracs: { E: 30, F: 30 }, extensions: { v5: {} },
+    states: [{ id: 'imm-ent', key: 'enchevetre', name: 'Enchevêtré', level: 1, strength: 59, source }, { id: 'net-ent', key: 'enchevetre', name: 'Enchevêtré', level: 1, source: { kind: 'item' } }, { id: 'imm-suf', key: 'suffocation', name: 'Suffocation', level: 1, source }] };
+  const escaped = recoverV5Condition(victim, 'imm-ent', { method: 'opposed-strength', test: { success: true, sl: 1 } });
+  assert.deepEqual(escaped.participant.states.map(state => state.id), ['net-ent']);
+});
+
 test('Suffocation countdown starts on an already Unconscious victim and a stale countdown is cleared (M3)', async () => {
   const { advanceV5Effects } = await import('../js/core/v5-effects.js');
   const suffocating = { id: 'suf', key: 'suffocation', name: 'Suffocation', level: 1 };

@@ -40,8 +40,9 @@ test('F2-F — knife, antler blades, and dragon shards propose only the source e
 
 test('F2-F — tiger claws disguise a wound from a successful Brawling attack', () => {
   const item = row('F-L24-0008');
-  const success = previewSupplementalEquipment({ item, actor, target, hit: true, damage: { finalDamage: 1 } });
+  const success = previewSupplementalEquipment({ item, actor, target, hit: true, damage: { finalDamage: 1 }, context: { felidWoundDisguise: true } });
   assert.equal(success.effects[0].disguiseAs, 'grand félin');
+  assert.equal(previewSupplementalEquipment({ item, actor, target, hit: true, damage: { finalDamage: 1 } }).effects.length, 0, 'disguise is the wielder choice, off by default');
   assert.equal(previewSupplementalEquipment({ item, actor, target, hit: false, damage: { finalDamage: 0 } }).effects.length, 0);
 });
 

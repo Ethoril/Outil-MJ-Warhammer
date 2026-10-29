@@ -1045,7 +1045,7 @@ function renderResult(preview, target, draft, handlers, participants=[]) {
       : effect.momentum ? `+${effect.momentum} Élan proposé` : effect.attack ? `${effect.attack} : ${effect.addTrait || ''}` : '').filter(Boolean);
     if (effects.length) result.appendChild(node('p', 'workspace-result-line', `${plan.label} (${plan.receipt?.source || 'règle de profil'}) : ${effects.join(' · ')}.`));
   }
-  if (preview.deathblow?.triggered) result.appendChild(node('p', 'workspace-result-line', `Frappe mortelle : attaque immédiate contre un autre adversaire au contact (au plus ${preview.deathblow.maxChain} ce Tour).`));
+  if (preview.deathblow?.triggered) result.appendChild(node('p', 'workspace-result-line', `Frappe mortelle : attaque immédiate contre un autre adversaire au contact (au plus ${preview.deathblow.maxChain} ce Tour), jamais deux fois la même créature.`));
   if (effectiveTarget && preview.damage) result.appendChild(node('p', 'workspace-result-line', `${effectiveTarget.name} : ${previewHpLoss(preview)} Blessures proposées · PV ${effectiveTarget.hp} → ${Math.max(0, Number(effectiveTarget.hp) - previewHpLoss(preview))}`));
   if (preview.actionCosts?.paid?.length) result.appendChild(node('p', 'workspace-result-line',
     'Coût proposé avant le jet : ' + preview.actionCosts.paid.map(cost => cost.resource === 'momentum' ? '1 Élan' : cost.amount + ' ' + cost.resource).join(', ')));
@@ -1776,8 +1776,11 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
   if(type==='attack'&&/antler hilted blade|lame.*poignee de bois|lame.*poignée de bois/i.test(String(linkedSupplementalItem?.name||focusActionLabel))){
     const current=draft.v5Context||{},label=node('label','workspace-type','Origine de la poignée en bois de Grand Cerf'),select=document.createElement('select');select.setAttribute('aria-label',label.textContent);select.append(new Option('À préciser',''),new Option('Bois tombé naturellement','naturally-fallen'),new Option('Bois acquis par violence','violent'));select.value=current.antlerHandleOrigin||'';select.addEventListener('change',()=>handlers.select({v5Context:{...current,antlerHandleOrigin:select.value||undefined}}));label.append(select);fields.append(label);
   }
-  if(type==='attack'&&/griffes du tigre|tiger claws/i.test(String(linkedSupplementalItem?.name||focusActionLabel)))
+  if(type==='attack'&&/griffes du tigre|tiger claws/i.test(String(linkedSupplementalItem?.name||focusActionLabel))){
     fields.append(node('p','workspace-muted','Profil Taggees : les Griffes du tigre utilisent Corps à corps (Bagarre), avec les statistiques d’une Dague. Toute Blessure infligée peut être présentée comme causée par un grand félin.'));
+    const current=draft.v5Context||{},label=node('label','workspace-type','Maquiller la blessure en griffure de grand félin'),input=document.createElement('input');input.type='checkbox';input.checked=current.felidWoundDisguise===true;input.setAttribute('aria-label',label.textContent);
+    input.addEventListener('change',()=>handlers.select({v5Context:{...current,felidWoundDisguise:input.checked||undefined}}));label.prepend(input);fields.append(label);
+  }
   if(/focalisation/i.test(focusActionLabel)){
     const current=draft.v5Context||{},ruleLabel=node('label','workspace-type','Objet de focalisation utilisé'),ruleSelect=document.createElement('select');
     ruleSelect.setAttribute('aria-label',ruleLabel.textContent);ruleSelect.append(new Option('Aucun',''),new Option('Bâton du domaine (+1 DR)','F-L06-1104'),new Option('Robes de sorcier (rang choisi)','F-L06-1105'));

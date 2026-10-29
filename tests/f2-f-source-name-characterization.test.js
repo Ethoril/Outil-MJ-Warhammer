@@ -131,7 +131,7 @@ test('F source characterization: actual Taggees Tiger Claws uses Brawling and re
   const claw=profile.attacks.find(row=>row.name==='Tiger Claws');
   const actor={id:'taggee',name:profile.name,caracs:profile.stats,skills:profile.skills.map(row=>({name:row.name,nameFr:row.nameFr,total:row.value})),equipment:[],states:[]};
   const target={id:'victim',hp:30,caracs:{E:0},equipment:[],states:[]};
-  const preview=previewResolution({actor,target,action:{type:'attack',...claw,base:profile.stats.CC,qualities:[]},defense:{type:'test',base:10,roll:90,label:'Esquive'},v5:{kind:'melee',context:{}},roll:31,baseRevision:1});
+  const preview=previewResolution({actor,target,action:{type:'attack',...claw,base:profile.stats.CC,qualities:[]},defense:{type:'test',base:10,roll:90,label:'Esquive'},v5:{kind:'melee',context:{felidWoundDisguise:true}},roll:31,baseRevision:1});
   assert.equal(preview.input.action.base,61,'use the published Melee (Brawling) skill, not WS 56');
   assert.ok(preview.supplementalEquipment.effects.some(row=>row.disguiseAs==='grand félin'));
   const applied=applyResolution(preview,{revision:1,participants:[actor,target],appliedResolutionIds:[]});
@@ -148,7 +148,7 @@ test('F source characterization: the real Tiger Claws profile applies through St
   const store=createStore({storage:null});await store.ready;
   await store.loadFromJSON(JSON.stringify({schemaVersion:3,reserve:[],log:[],diceLines:[],combat:{round:1,currentActorId:actor.id,order:[actor.id,target.id],participants:[actor,target]},extensions:{v5:{turnIndex:1}}}));
   const brawling=actor.skills.find(row=>/Bagarre|Brawling/i.test(`${row.name} ${row.sourceName}`));
-  const preview=store.previewResolution({actorId:actor.id,targetId:target.id,action:{...claw,base:profile.stats.CC,qualities:[],extensions:{...claw.extensions,fiche:{skillId:brawling.id}}},defense:{type:'test',base:10,roll:90,label:'Esquive'},v5:{kind:'melee',context:{}},roll:31});
+  const preview=store.previewResolution({actorId:actor.id,targetId:target.id,action:{...claw,base:profile.stats.CC,qualities:[],extensions:{...claw.extensions,fiche:{skillId:brawling.id}}},defense:{type:'test',base:10,roll:90,label:'Esquive'},v5:{kind:'melee',context:{felidWoundDisguise:true}},roll:31});
   assert.equal(preview.input.action.base,61,'Store still routes the actual profile attack through Melee (Brawling)');
   assert.ok(preview.supplementalEquipment.effects.some(row=>row.disguiseAs==='grand félin'));
   const result=await store.applyResolution(preview);

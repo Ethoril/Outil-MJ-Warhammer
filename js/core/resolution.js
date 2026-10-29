@@ -1513,7 +1513,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     ? { triggered: true, maxChain: Math.floor((Number(actor?.caracs?.CC) || 0) / 10), ruleSource: 'L23 p.87, Frappe mortelle V4 p.160' } : null;
   if (dischargeEffect && hit && protection && !(protection.counted || []).length && Number(protection.ap) > 0)
     profileAbilityReminders.push(`Décharge électrique : armure de la cible sans pièces typées (${protection.ap} PA) ; retirer à la main les PA de métal non magique.`);
-  if (deathblow) profileAbilityReminders.push(`Frappe mortelle : le félin peut avancer à la place de sa cible et attaquer aussitôt un autre adversaire au contact (au plus ${deathblow.maxChain} fois ce Tour). Jouer cette attaque comme une nouvelle résolution.`);
+  if (deathblow) profileAbilityReminders.push(`Frappe mortelle : le félin peut avancer à la place de sa cible et attaquer aussitôt un autre adversaire au contact (au plus ${deathblow.maxChain} fois ce Tour). Chaque bond vise une créature différente, jamais deux fois la même (V4 p.160, L23 p.87). Jouer cette attaque comme une nouvelle résolution.`);
   // Les saisies de la décharge sont demandées par la résolution elle-même ; le plan n'en ajoute pas une seconde formulation.
   const profileAbilityUnresolved = [...profileAbilityPlans, ...targetProfileAbilityPlans].filter(plan => plan.key !== 'gargantuan-electric-discharge').flatMap(plan => plan.unresolved);
   unresolved.push(...profileAbilityUnresolved);

@@ -243,8 +243,8 @@ export function recoverV5Condition(participant,condition,options={}) {
   // Removing Unconscious with Fortune does not resolve its cause.
   if(key==='inconscient'&&method==='fortune'&&options.causeEnded!==true)reminders.push('Si sa cause persiste, Inconscient revient en fin de Round.');
   const removal=removeInstances(states,key,amount,method==='cut-silk'?state=>eligible(state)&&state.source?.ability==='cliff-spider-lasso':eligible);next.states=removal.states;
-  // Sortir de l'Immersion (L25 p.142) remet la victime à l'air : sa Suffocation part avec l'Enchevêtré.
-  if(key==='enchevetre'&&removal.removed.length&&!levels(next.states,'enchevetre')&&states.some(state=>keyOf(state)==='enchevetre'&&state.source?.ability==='sea-elemental-immersion')){
+  // Sortir de l'Immersion (L25 p.142) remet la victime à l'air : sa Suffocation part avec l'Enchevêtré de l'Immersion, même si un autre Enchevêtré (filet) subsiste.
+  if(key==='enchevetre'&&removal.removed.length&&!next.states.some(state=>keyOf(state)==='enchevetre'&&state.source?.ability==='sea-elemental-immersion')&&states.some(state=>keyOf(state)==='enchevetre'&&state.source?.ability==='sea-elemental-immersion')){
     const air=removeInstances(next.states,'suffocation',Number.MAX_SAFE_INTEGER,state=>state.source?.ability==='sea-elemental-immersion');next.states=air.states;removal.removed.push(...air.removed);
   }
   if(!levels(next.states,'suffocation')&&next.extensions?.v5?.suffocationDeathDueRound!==undefined){next.extensions={...next.extensions,v5:{...next.extensions.v5}};delete next.extensions.v5.suffocationDeathDueRound;}
