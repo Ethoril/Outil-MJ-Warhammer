@@ -98,7 +98,7 @@ export function sequelaEffectRows(state, participantId) {
     if (s.kind === 'torn-muscle' && ['healing', 'severe', 'recovering'].includes(phase)) {
       const amount = s.severity === 'major' ? (phase === 'recovering' ? -1 : -2) : -1;
       const loc = s.part === 'arm' || s.part === 'leg' ? `${s.part}:${s.side}` : s.part;
-      add(s, 'loc', { lifetime: 'temporary', type: 'loc-dr', loc, amount, label: `Déchirure musculaire ${s.severity === 'major' ? 'majeure' : 'mineure'} (${sided(s.part, s.side)}) : ${amount} DR aux Tests impliquant la zone` });
+      add(s, 'loc', { lifetime: 'temporary', type: 'loc-dr', loc, amount, label: `Déchirure musculaire ${s.severity === 'major' ? 'majeure' : 'mineure'} (${sided(s.part, s.side)}) : ${amount} DR aux Tests impliquant la zone${s.severity === 'major' ? '' : ' (guérie au terme de 30 − BE jours)'}` });
       if (s.part === 'leg') add(s, 'movement', { lifetime: 'temporary', type: 'movement', mode: 'half', label: `Déchirure musculaire (jambe ${SIDE_TEXT[s.side]}) : Mouvement divisé par deux` });
     }
   }

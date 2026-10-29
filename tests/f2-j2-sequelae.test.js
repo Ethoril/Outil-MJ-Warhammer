@@ -390,3 +390,28 @@ test('J2 — maladresse de Guérison (p.170) sur l’immobilisation et le soin d
   const hurt = await second.treatAftermathTornMuscle({ operationId: op(), sequelaId: muscle.id, healerId: 'healer', roll: 99, d10: 9 });
   assert.deepEqual([hurt.receipt.reason, hurt.receipt.fumbleDamage, second.listParticipants().find(row => row.id === 'weak').hp], ['tear-heal-failed', 2, 1]);
 });
+
+test('J2 — fracture de bras : la main directrice est demandée et réduite par les règles du bras amputé ; fracture majeure sans soins : rappel ; libellé de la déchirure mineure', async () => {
+  const { sequelaAsksPrimary } = await import('../js/core/v5-sequelae.js');
+  const arm = wounded('patient', 'ARM', 'Crushed Elbow');
+  const plan = planSequelae(arm.record);
+  assert.deepEqual(plan.map(item => [item.kind, item.part, sequelaAsksPrimary(item)]), [['broken-bone', 'arm', true]]);
+  assert.equal(sequelaAsksPrimary({ kind: 'broken-bone', part: 'leg' }), false);
+  assert.equal(sequelaAsksPrimary({ kind: 'loss', part: 'hand' }), true);
+  const { store } = await setup([arm.participant, healerSheet()]);
+  const incidentId = await follow(store, 'patient', arm.record);
+  await store.openAftermathSequelae({ operationId: op(), incidentId });
+  const bone = sequelaeOf(store)[0];
+  assert.match(store.listAftermathSequelae().sequelae[0].warnings[0], /sans soins médicaux/);
+  assert.equal((await store.setAftermathSequelaFacts({ operationId: op(), sequelaId: bone.id, facts: { side: 'left', d10: 2, primary: true } })).receipt.status, 'applied');
+  assert.deepEqual(rowsOf(store, 'patient').map(row => row.type), ['two-hands', 'shield-arm', 'offhand-dr']);
+  assert.equal(rowsOf(store, 'patient').find(row => row.type === 'offhand-dr').lifetime, 'temporary');
+  // Un Test de Guérison réussi (immobilisation) vaut soins médicaux : le rappel disparaît.
+  assert.equal((await store.immobilizeAftermathFracture({ operationId: op(), sequelaId: bone.id, healerId: 'healer', roll: 20 })).receipt.reason, 'fracture-bound');
+  assert.deepEqual(store.listAftermathSequelae().sequelae[0].warnings, []);
+  const tear = wounded('tear', 'ARM', 'Torn Muscles');
+  const { store: second } = await setup([tear.participant]);
+  const tearIncident = await follow(second, 'tear', tear.record);
+  await second.openAftermathSequelae({ operationId: op(), incidentId: tearIncident, facts: { 'injury:0': { side: 'left' } } });
+  assert.match(rowsOf(second, 'tear')[0].label, /guérie au terme de 30 − BE jours/);
+});

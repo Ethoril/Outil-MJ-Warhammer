@@ -1,5 +1,5 @@
 import { aftermathDate, aftermathSkills } from '../core/v5-aftermath.js';
-import { requiredSequelaFacts } from '../core/v5-sequelae.js';
+import { requiredSequelaFacts, sequelaAsksPrimary } from '../core/v5-sequelae.js';
 import { uid } from '../core/models.js';
 
 const node = (tag, text = '') => { const element = document.createElement(tag); if (text) element.textContent = text; return element; };
@@ -61,7 +61,6 @@ const REASONS = {
   'duplicate-submission': 'Même soigneur et même d100 déjà enregistrés : enregistrement double refusé.',
   'familiar-healing': 'Un homoncule ne guérit que par guérison naturelle ou par magie.',
   'amputation-decision-pending': 'Décidez d’abord du choc d’amputation de ce critique.',
-  'critical-follow-up-j2-required': 'Ce critique laisse un effet durable dont le suivi relève de J2.',
   'subject-still-present': 'Le patient est toujours dans le combat : clôturez plutôt le suivi.'
 };
 const receiptText = receipt => {
@@ -121,7 +120,7 @@ export function createV5AftermathPanel({ Store, refresh = () => {} } = {}) {
   const SIDE_OPTIONS = [['', 'Choisir…'], ['left', 'Gauche'], ['right', 'Droit(e)']];
   const PHASE_TEXT = {
     'needs-facts': 'faits à saisir', healing: 'en guérison', 'awaiting-test': 'fin de guérison : Test à faire', healed: 'guérie', permanent: 'permanente',
-    severe: 'phase sévère', recovering: 'phase de récupération', open: 'en cours', failed: 'Test raté', resolved: 'décidée', waived: 'écartée par le MJ'
+    severe: 'phase sévère', recovering: 'phase de récupération', open: 'en cours', failed: 'Test raté', resolved: 'décidée', waived: 'écartée par le MJ', 'not-applicable': 'sans objet (partie déjà perdue)'
   };
   const LIFETIME_TEXT = { temporary: 'temporaire', permanent: 'permanent' };
 
@@ -145,7 +144,7 @@ export function createV5AftermathPanel({ Store, refresh = () => {} } = {}) {
         if (need.includes('side')) { const side = select(`Côté · ${item.label}`, `open-${item.id}-side`, SIDE_OPTIONS); box.appendChild(side.label); getters.push(facts => { if (side.input.value) facts[item.key] = { ...facts[item.key], side: side.input.value }; }); }
         if (need.includes('d10')) { const d10 = control(`1d10 de guérison · ${item.label}`, `open-${item.id}-d10`, { min: 1, max: 10 }); box.appendChild(d10.label); getters.push(facts => { if (d10.input.value !== '') facts[item.key] = { ...facts[item.key], d10: Number(d10.input.value) }; }); }
         if (need.includes('count')) { const count = control(`Nombre · ${item.label}`, `open-${item.id}-count`, { min: 1 }); box.appendChild(count.label); getters.push(facts => { if (count.input.value !== '') facts[item.key] = { ...facts[item.key], count: Number(count.input.value) }; }); }
-        if (item.kind === 'loss' && ['hand', 'arm'].includes(item.part)) { const primary = checkbox(`Main directrice · ${item.label}`, `open-${item.id}-primary`); box.appendChild(primary.label); getters.push(facts => { facts[item.key] = { ...facts[item.key], primary: primary.input.checked }; }); }
+        if (sequelaAsksPrimary(item)) { const primary = checkbox(`Main directrice · ${item.label}`, `open-${item.id}-primary`); box.appendChild(primary.label); getters.push(facts => { facts[item.key] = { ...facts[item.key], primary: primary.input.checked }; }); }
       }
       box.appendChild(button(`Ouvrir le suivi des séquelles de ${nameOf(entry.participantId)}`, () => {
         const facts = {}; for (const apply of getters) apply(facts);
@@ -169,7 +168,7 @@ export function createV5AftermathPanel({ Store, refresh = () => {} } = {}) {
     for (const sequela of overview.sequelae) {
       if (sequela.kind === 'scar-decision' || sequela.kind === 'characteristic-loss') continue;
       const card = node('article'); card.className = 'card workspace-aftermath-sequela';
-      const timing = sequela.endDay != null ? ` · fin au jour ${sequela.endDay}${sequela.partialDay != null ? ` (adoucissement au jour ${sequela.partialDay})` : ''}` : (sequela.deadlineDay != null ? ` · chirurgie avant la fin du jour ${sequela.deadlineDay}` : '');
+      const timing = sequela.endDay != null ? ` · ${sequela.kind === 'torn-muscle' && sequela.severity === 'minor' ? 'guérie au terme de 30 − BE jours, au jour' : 'fin au jour'} ${sequela.endDay}${sequela.partialDay != null ? ` (adoucissement au jour ${sequela.partialDay})` : ''}` : (sequela.deadlineDay != null ? ` · chirurgie avant la fin du jour ${sequela.deadlineDay}` : '');
       card.appendChild(node('h5', `${nameOf(sequela.participantId)} · ${sequela.label}${sequela.side ? ` (${sequela.side === 'left' ? 'gauche' : 'droit(e)'})` : ''}`));
       card.appendChild(node('p', `Séquelle ${sequela.id} · ${PHASE_TEXT[sequela.phase] || sequela.phase}${timing}${sequela.count ? ` · ${sequela.count}` : ''}`));
       const id = sequela.id;
@@ -179,10 +178,12 @@ export function createV5AftermathPanel({ Store, refresh = () => {} } = {}) {
         if (sequela.missing.includes('side')) { const side = select('Côté', `facts-${id}-side`, SIDE_OPTIONS); facts.appendChild(side.label); getters.push(f => { if (side.input.value) f.side = side.input.value; }); }
         if (sequela.missing.includes('d10')) { const d10 = control('1d10 de guérison', `facts-${id}-d10`, { min: 1, max: 10 }); facts.appendChild(d10.label); getters.push(f => { if (d10.input.value !== '') f.d10 = Number(d10.input.value); }); }
         if (sequela.missing.includes('count')) { const count = control('Nombre', `facts-${id}-count`, { min: 1 }); facts.appendChild(count.label); getters.push(f => { if (count.input.value !== '') f.count = Number(count.input.value); }); }
-        if (sequela.kind === 'loss' && ['hand', 'arm'].includes(sequela.part)) { const primary = checkbox('Main directrice', `facts-${id}-primary`); facts.appendChild(primary.label); getters.push(f => { f.primary = primary.input.checked; }); }
+        if (sequelaAsksPrimary(sequela)) { const primary = checkbox('Main directrice', `facts-${id}-primary`); facts.appendChild(primary.label); getters.push(f => { f.primary = primary.input.checked; }); }
         facts.appendChild(button('Enregistrer les faits', () => { const f = {}; for (const apply of getters) apply(f); void run(`facts-${id}`, () => Store.setAftermathSequelaFacts({ operationId: opId(), expectedRevision: revision, sequelaId: id, facts: f })); }));
+        if (sequela.kind === 'loss') facts.appendChild(button('Sans objet : partie déjà perdue', () => void run(`facts-${id}-moot`, () => Store.setAftermathSequelaFacts({ operationId: opId(), expectedRevision: revision, sequelaId: id, facts: { alreadyLost: true } }))));
         card.appendChild(facts);
       }
+      for (const warning of sequela.warnings || []) card.appendChild(node('p', warning));
       if (sequela.kind === 'broken-bone' && sequela.status === 'open') {
         const imm = sequela.immobilization || {};
         card.appendChild(node('p', `Immobilisation : ${{ none: 'aucune', bound: 'en place', unbound: `retirée au jour ${imm.unboundDay} (nouveau Test avant la fin du jour ${imm.rebindDeadline})` }[imm.state] || imm.state} · Tests : ${imm.attempts?.length || 0}`));
@@ -299,7 +300,8 @@ export function createV5AftermathPanel({ Store, refresh = () => {} } = {}) {
         healer.input.addEventListener('change', () => { delete ui.values[`${prefix}-skill`]; fill(); });
         fill();
         const roll = control('d100', `${prefix}-roll`, { min: 1, max: 100 });
-        return { elements: [healer.label, skillLabel, roll.label], values: () => ({ healerId: healer.input.value || null, skillId: skill.value || null, roll: roll.input.value === '' ? null : Number(roll.input.value) }) };
+        const d10 = control('1d10 de Blessures (maladresse seulement)', `${prefix}-d10`, { min: 1, max: 10 });
+        return { elements: [healer.label, skillLabel, roll.label, d10.label], values: () => ({ healerId: healer.input.value || null, skillId: skill.value || null, roll: roll.input.value === '' ? null : Number(roll.input.value), ...(d10.input.value === '' ? {} : { d10: Number(d10.input.value) }) }) };
       };
 
       // Avancement du calendrier : l'aperçu liste chaque Test quotidien, jour par jour.

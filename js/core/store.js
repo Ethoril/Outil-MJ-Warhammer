@@ -331,7 +331,7 @@ import { applyFicheSync as applyFicheSyncToDraft } from './fiche-sync.js';
 import { convertLegacyV4Profile } from './v5-legacy-conversion.js';
 import { planMountedFall, V5_RIDE_SKILL_ID } from './v5-mounted-combat.js';
 import { createAftermathState, validateAftermathState, registerWoundIncident, previewAftermathAdvance, advanceAftermathCalendar, treatWoundIncident, treatInfection, treatSurgicalIncident, closeAftermathIncident, archiveAftermathIncident, registerDisease, careForDisease, aftermathHealer, aftermathEnduranceScore } from './v5-aftermath.js';
-import { planSequelae, openSequelae, setSequelaFacts, immobilizeFracture, unbindFracture, resolveFractureHealing, treatTornMuscle, confirmResetLimb, recordPostEncounterTest, decideSurgeryDeadline, recordRelearning, decideImpressiveScars, recordCharacteristicLoss, sequelaeOutstanding, previewSequelaeAdvance, pendingSequelaDecisions } from './v5-sequelae.js';
+import { planSequelae, openSequelae, setSequelaFacts, immobilizeFracture, unbindFracture, resolveFractureHealing, treatTornMuscle, confirmResetLimb, recordPostEncounterTest, decideSurgeryDeadline, recordRelearning, decideImpressiveScars, recordCharacteristicLoss, sequelaeOutstanding, previewSequelaeAdvance, pendingSequelaDecisions, sequelaWarnings } from './v5-sequelae.js';
 import { sequelaPhase, sequelaEffectRows, sequelaCharacteristicTotals } from './v5-sequela-effects.js';
 
 export const KEY = { EXTENSIONS: 'wfrp.extensions.v1', RESERVE: 'wfrp.reserve.v1', COMBAT: 'wfrp.combat.v1', LOG: 'wfrp.log.v1', DICE: 'wfrp.dice.v1', TS: 'wfrp.sync.ts.v1' };
@@ -5218,7 +5218,7 @@ function resolvedCorruptionTest(participant, skillId, input) {
         const totals = sequelaCharacteristicTotals(sequelaEffectRows(state, id), { lifetime: 'permanent' });
         if (Object.keys(totals).length) characteristics[id] = totals;
       }
-      return { day, sequelae: (state.sequelae || []).map(row => ({ ...cloneValue(row), phase: sequelaPhase(row, day) })), incidents, pending: pendingSequelaDecisions(state), characteristics };
+      return { day, sequelae: (state.sequelae || []).map(row => ({ ...cloneValue(row), phase: sequelaPhase(row, day), warnings: sequelaWarnings(state, row) })), incidents, pending: pendingSequelaDecisions(state), characteristics };
     },
     openAftermathSequelae(input = {}) {
       return runAftermathCommand('open-aftermath-sequelae', (state, draft) => {

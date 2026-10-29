@@ -88,6 +88,20 @@ function missingFacts(item, facts) {
   return need;
 }
 
+/** Main directrice : demandée pour une perte de main ou de bras, et pour une fracture de bras (règles du bras amputé, p.177). */
+export const sequelaAsksPrimary = item => (item.kind === 'loss' && UPPER.has(item.part)) || (item.kind === 'broken-bone' && item.part === 'arm');
+
+/** Rappels affichés pour une séquelle suivie, sans effet automatique. */
+export function sequelaWarnings(state, sequela) {
+  const out = [];
+  if (sequela.kind === 'broken-bone' && sequela.severity === 'major' && !['healed', 'permanent'].includes(sequela.status)) {
+    const incident = findIncident(state, sequela.incidentId);
+    const attended = (incident?.treatments || []).some(item => ['heal', 'animal-care'].includes(item.kind) && item.success === true) || (sequela.immobilization?.attempts || []).some(item => item.success === true);
+    if (!attended) out.push('Fracture majeure sans soins médicaux : risque de mauvaise guérison (« peu probable de guérir correctement sans soins », p.177 ; non chiffré par le livre, aucun effet automatique).');
+  }
+  return out;
+}
+
 /** Faits à saisir pour une séquelle planifiée (côté, 1d10, nombre) : ce que le registre ne peut ni lire ni deviner. */
 export const requiredSequelaFacts = item => missingFacts(item, item.side ? { side: item.side } : {});
 
