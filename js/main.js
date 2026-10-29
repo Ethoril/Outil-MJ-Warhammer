@@ -578,7 +578,8 @@ function openCombatInitiativeDialog({ staging = null, startCombat = false, title
           if (!finalPreview.ready) { recalculate(); return; }
           const result = await awaitStore(Store.applyCombatInitialization(finalPreview), 'Initiative');
           if (result?.status === 'stale') { status.textContent = 'La partie a changé : fermez et recommencez la préparation.'; return; }
-          sheet.close(); finish(result);
+          // Le résultat d’abord : la fermeture émet « close », qui conclurait sinon par une annulation.
+          finish(result); sheet.close();
         } catch (error) { status.textContent = contextMessage('Initiative non appliquée', error, 'corrigez les données, puis réessayez.'); }
       });
       recalculate();
