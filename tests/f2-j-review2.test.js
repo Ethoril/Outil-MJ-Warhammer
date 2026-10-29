@@ -23,6 +23,10 @@ async function setup(participants) {
   return store;
 }
 const get = (store, id) => store.listParticipants().find(row => row.id === id);
+const openCritical = async (store, participantId, criticalId) => {
+  await store.registerAftermathIncident({ operationId: `c-${participantId}`, participantId, criticalId });
+  return store.getAftermathState().incidents.at(-1).id;
+};
 const open = async (store, participantId = 'patient') => {
   await store.registerAftermathIncident({ operationId: `r-${participantId}`, participantId, cause: 'combat' });
   return store.getAftermathState().incidents.at(-1).id;
@@ -46,12 +50,12 @@ test('1a — le soin passe par healV5Wounds : projectile fiché, Empoisonné à 
 
 test('1b — encadré p.170 : le soin de Blessures consommé, un autre Test retire encore des Hémorragiques', async () => {
   const bleeding = [1, 2, 3, 4].map(n => ({ id: `b${n}`, key: 'hemorragique', name: 'Hémorragique', level: 1 }));
-  const store = await setup([base('patient', { hp: 20, maxHp: 20, states: bleeding }), healerSheet()]);
+  const store = await setup([base('patient', { hp: 15, maxHp: 20, states: bleeding }), healerSheet()]);
   const incidentId = await open(store);
   await store.treatAftermathWound({ operationId: 'h1', incidentId, healerId: 'healer', roll: 90, supplies: true });
   const again = await store.treatAftermathWound({ operationId: 'h2', incidentId, healerId: 'healer', roll: 20, supplies: true, bleedingOnly: true });
   assert.equal(again.receipt.status, 'applied');
-  assert.equal(get(store, 'patient').hp, 20, 'aucune Blessure rendue une seconde fois');
+  assert.equal(get(store, 'patient').hp, 15, 'aucune Blessure rendue une seconde fois');
   assert.equal(get(store, 'patient').states.filter(row => row.key === 'hemorragique').length, 0, '9 Blessures auraient été rendues : les 4 Hémorragiques partent');
 });
 
@@ -77,21 +81,22 @@ test('3 — critique guéri : amputation exige la Chirurgie ; durables non gér�
   const finger = withRecord('ARM', roll, 'finger');
   const surgeon = healerSheet({ id: 'surgeon', talents: [{ id: 'talent-surgery', status: 'resolved', rank: 1 }] });
   const store = await setup([finger.participant, surgeon]);
-  const incidentId = await open(store, 'finger');
-  const closeOnce = (operationId) => store.closeAftermathIncident({ operationId, incidentId, temporaryEffectsEnded: true });
+  const incidentId = await openCritical(store, 'finger', finger.record.id);
+  const closeOnce = (operationId, extra = {}) => store.closeAftermathIncident({ operationId, incidentId, temporaryEffectsEnded: true, ...extra });
   // La création de l'incident ne connaît pas encore l'amputation : sa décision est en attente.
   assert.equal((await closeOnce('c0')).receipt.reason, 'amputation-decision-pending');
   const record = { ...finger.record, amputationShock: { amputationOccurred: true, part: 'finger' } };
   await store.updateParticipant('finger', { extensions: { v5: { ...get(store, 'finger').extensions.v5, criticalAftermath: [record] } } });
   assert.equal((await closeOnce('c1')).receipt.reason, 'surgery-not-completed');
   assert.equal((await store.treatAftermathSurgicalIncident({ operationId: 's', incidentId, healerId: 'surgeon', roll: 10 })).receipt.reason, 'surgery-success');
-  assert.equal((await closeOnce('c2')).receipt.reason, 'critical-healed');
+  assert.equal((await closeOnce('c2')).receipt.reason, 'critical-states-remaining', 'sans stateIds rattachés, le MJ confirme les États');
+  assert.equal((await closeOnce('c3', { statesConfirmed: true })).receipt.reason, 'critical-healed');
   // Durables non gérés : reset-limb (Épaule disloquée), medical-attention-required, surgery-deadline…
   const unsupported = Array.from({ length: 200 }, (_, i) => i + 1).map(n => ['ARM', n]).filter(([table, n]) => (getV5CriticalEffect(table, n)?.parsed?.durableEffects || []).some(e => ['reset-limb', 'medical-attention-required', 'surgery-deadline', 'permanent-functional-loss', 'scar', 'disease'].includes(e.kind)));
   const [table, effectRoll] = unsupported[0] || ['LEG', 110];
   const odd = withRecord(table, effectRoll, 'odd');
   const store2 = await setup([odd.participant]);
-  const oddId = await open(store2, 'odd');
+  const oddId = await openCritical(store2, 'odd', odd.record.id);
   assert.equal((await store2.closeAftermathIncident({ operationId: 'c', incidentId: oddId, temporaryEffectsEnded: true })).receipt.reason, 'critical-follow-up-j2-required');
 });
 

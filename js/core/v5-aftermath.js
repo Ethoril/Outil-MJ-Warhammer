@@ -32,7 +32,7 @@ function assertState(state) {
   for (const incident of state.incidents) {
     if (!incident || !ID(incident.id) || ids.has(incident.id) || !ID(incident.participantId) || !validSource(incident.source)
       || !Number.isSafeInteger(incident.injuryDay) || incident.injuryDay < state.calendar.originDay
-      || !['open', 'closed'].includes(incident.status) || typeof incident.bandaged !== 'boolean'
+      || !['open', 'closed', 'archived'].includes(incident.status) || typeof incident.bandaged !== 'boolean'
       || typeof incident.requiresSurgery !== 'boolean' || typeof incident.surgeryCompleted !== 'boolean'
       || !['person', 'animal'].includes(incident.subjectKind)
       || typeof incident.infection !== 'boolean' || !Array.isArray(incident.dailyChecks)
@@ -42,7 +42,7 @@ function assertState(state) {
   for (const disease of state.diseases || []) {
     if (!disease || !ID(disease.id) || ids.has(disease.id) || !ID(disease.participantId) || !ID(disease.label)
       || !Number.isSafeInteger(disease.remainingDays) || disease.remainingDays < 0
-      || !['active', 'ended'].includes(disease.status) || !Array.isArray(disease.careDays)) throw new TypeError('maladie invalide');
+      || !['active', 'ended'].includes(disease.status) || !Array.isArray(disease.careLog)) throw new TypeError('maladie invalide');
     ids.add(disease.id);
   }
   return state;
@@ -81,6 +81,11 @@ function runTest(score, roll, amount, id, label) {
   return previewV5Test({ score, roll, kind: 'test', slModifiers }).options[0].result;
 }
 const testFacts = test => ({ roll: test.roll, score: test.score, success: test.success, sl: test.sl, fumble: test.fumble, critical: test.critical });
+/** Same healer, same d100 on the same incident right after the last applied operation of that kind: a double click. */
+const isDoubleSubmission = (state, kind, incidentId, healerId, roll) => {
+  const last = state.receipts.at(-1);
+  return Boolean(last) && last.status === 'applied' && last.kind === kind && last.incidentId === incidentId && last.healerId === healerId && last.roll === roll;
+};
 const validScore = score => Number.isSafeInteger(score) && score >= 0;
 const validRoll = roll => Number.isInteger(roll) && roll >= 1 && roll <= 100;
 
@@ -154,6 +159,8 @@ export function aftermathEnduranceScore(participant) {
   return Number.isFinite(value) && value >= 0 ? Math.floor(value) : null;
 }
 
+/** A usable healer: a sheet skill with an Advance (Heal and Animal Care are Advanced skills). */
+const healerProblem = (healer, skills) => (!validHealer(healer, skills) ? 'healer-skill-required' : (healer.advances >= 1 ? null : 'heal-advance-required'));
 function validHealer(healer, skills) {
   return healer && ID(healer.participantId) && skills.includes(healer.skill) && validScore(healer.score)
     && Number.isSafeInteger(healer.intelligenceBonus) && healer.intelligenceBonus >= 0;
@@ -185,22 +192,25 @@ export function registerWoundIncident(stateValue, {
   return commit(next, receipt(state, opId, 'incident', 'applied', 'incident-registered', { incidentId: id, source }));
 }
 
-const advanceRefusal = (state, reason) => ({ status: 'refused', reason, fromDay: state.calendar.currentDay, toDay: null, requiredDailyChecks: [] });
+const advanceRefusal = (state, reason) => ({ status: 'refused', reason, fromDay: state.calendar.currentDay, toDay: null, requiredDailyChecks: [], absentIncidents: [] });
 
 /**
  * Every Endurance Test (+2 DR) an advance would require, day by day. A test after the first one of an incident only
  * counts if the incident is not infected by then, so it is flagged `conditional`: the MJ rolls it, the engine ignores it
  * when an earlier day already caused the infection.
  */
-export function previewAftermathAdvance(stateValue, { days, expectedRevision } = {}) {
+export function previewAftermathAdvance(stateValue, { days, expectedRevision, absentParticipantIds = [] } = {}) {
   const state = assertState(stateValue);
   if (expectedRevision !== state.revision) return advanceRefusal(state, 'revision-conflict');
   if (!Number.isSafeInteger(days) || days < 1) return advanceRefusal(state, 'positive-whole-days-required');
   const toDay = state.calendar.currentDay + days;
   if (!Number.isSafeInteger(toDay)) return advanceRefusal(state, 'calendar-overflow');
   const requiredDailyChecks = [];
+  const absentIncidents = [];
   for (const incident of state.incidents) {
-    if (incident.status !== 'open' || incident.bandaged || incident.infection) continue;
+    if (incident.status !== 'open') continue;
+    if (absentParticipantIds.includes(incident.participantId)) { absentIncidents.push({ incidentId: incident.id, participantId: incident.participantId }); continue; }
+    if (incident.bandaged || incident.infection) continue;
     const first = Math.max(state.calendar.currentDay, incident.injuryDay);
     for (let day = first; day < toDay; day += 1) {
       requiredDailyChecks.push({
@@ -209,16 +219,16 @@ export function previewAftermathAdvance(stateValue, { days, expectedRevision } =
       });
     }
   }
-  return { status: 'ready', fromDay: state.calendar.currentDay, toDay, days, requiredDailyChecks };
+  return { status: 'ready', fromDay: state.calendar.currentDay, toDay, days, requiredDailyChecks, absentIncidents };
 }
 
 export function advanceAftermathCalendar(stateValue, {
-  operationId, expectedRevision, days, dailyTests = [], enduranceScores = {}
+  operationId, expectedRevision, days, dailyTests = [], enduranceScores = {}, absentParticipantIds = []
 } = {}) {
   const state = assertState(stateValue);
   const prior = priorReceipt(state, operationId);
   if (prior) return { state: clone(state), receipt: prior };
-  const preview = previewAftermathAdvance(state, { days, expectedRevision });
+  const preview = previewAftermathAdvance(state, { days, expectedRevision, absentParticipantIds });
   const refusal = (reason, details = {}) => result(state, receipt(state, operationId, 'advance-calendar', 'refused', reason, details));
   if (preview.status !== 'ready') return refusal(preview.reason);
   if (!Array.isArray(dailyTests) || !enduranceScores || typeof enduranceScores !== 'object') throw new TypeError('Tests quotidiens invalides');
@@ -257,12 +267,12 @@ export function advanceAftermathCalendar(stateValue, {
     if (!disease.remainingDays) disease.status = 'ended';
   }
   return commit(next, receipt(state, operationId, 'advance-calendar', 'applied', 'calendar-advanced', {
-    fromDay: preview.fromDay, toDay: preview.toDay, days, processedDailyChecks: processed, ignoredDailyTests: ignored
+    fromDay: preview.fromDay, toDay: preview.toDay, days, processedDailyChecks: processed, ignoredDailyTests: ignored, absentIncidents: preview.absentIncidents
   }));
 }
 
 export function treatWoundIncident(stateValue, {
-  operationId, expectedRevision, incidentId, healer, roll, wounds = 0, supplies = false, difficultyDR = 0, d10 = null, inCombat = false
+  operationId, expectedRevision, incidentId, healer, roll, wounds = 0, supplies = false, difficultyDR = 0, d10 = null, inCombat = false, bleedingOnly = false, surgeryChoice = null
 } = {}) {
   const state = assertState(stateValue);
   const prior = priorReceipt(state, operationId);
@@ -272,8 +282,12 @@ export function treatWoundIncident(stateValue, {
   const incident = state.incidents.find(item => item.id === incidentId);
   if (!incident) return refusal('unknown-incident');
   if (incident.status !== 'open') return refusal('incident-closed');
-  if (incident.treatments.some(item => ['heal', 'animal-care'].includes(item.kind))) return refusal('treatment-already-used-for-incident');
-  if (!validHealer(healer, ['heal', 'animal-care'])) return refusal('healer-skill-required');
+  const woundHealUsed = incident.treatments.some(item => ['heal', 'animal-care'].includes(item.kind));
+  if (typeof bleedingOnly !== 'boolean') return refusal('invalid-test-facts');
+  // V5 p.170 : le soin de Blessures est unique par incident, mais le même Test retire encore un Hémorragique par Blessure qu'il aurait rendue.
+  if (bleedingOnly && !woundHealUsed) return refusal('wound-heal-not-used-yet');
+  if (!bleedingOnly && woundHealUsed) return refusal('treatment-already-used-for-incident');
+  { const problem = healerProblem(healer, ['heal', 'animal-care']); if (problem) return refusal(problem); }
   if ((incident.subjectKind === 'animal' && healer.skill !== 'animal-care')
     || (incident.subjectKind === 'person' && healer.skill !== 'heal')) return refusal('wrong-skill-for-subject');
   if (supplies !== true) return refusal('medical-supplies-required');
@@ -282,18 +296,23 @@ export function treatWoundIncident(stateValue, {
   if (inCombat && difficultyDR > 0) return refusal('combat-heal-cannot-be-easier-than-challenging');
   const test = runTest(healer.score, roll, difficultyDR, 'aftermath:heal-difficulty', 'Difficulté du soin');
   if (test.fumble && d10 === null) return refusal('fumble-d10-required');
-  const healed = test.success ? healer.intelligenceBonus + test.sl : 0;
+  // Talent Chirurgie (p.127) : hors combat, le soigneur choisit les DR ou le chiffre des unités du d100 (un 0 vaut 0).
+  const talentChoice = healer.hasSurgeryTalent === true && !inCombat && test.success;
+  if (talentChoice && !['sl', 'units'].includes(surgeryChoice)) return refusal('surgery-talent-choice-required');
+  const gained = talentChoice && surgeryChoice === 'units' ? roll % 10 : test.sl;
+  const planned = test.success ? healer.intelligenceBonus + gained : 0;
+  const healed = bleedingOnly ? 0 : planned;
   const fumbleDamage = test.fumble ? Math.min(d10, Math.max(0, wounds - 1)) : 0;
   const treatment = {
-    operationId, day: state.calendar.currentDay, kind: healer.skill, healerId: healer.participantId, skillId: healer.skillId,
-    ...testFacts(test), difficultyDR, inCombat, healed, fumbleDamage, d10: test.fumble ? d10 : null
+    operationId, day: state.calendar.currentDay, kind: bleedingOnly ? 'bleeding-care' : healer.skill, healerId: healer.participantId, skillId: healer.skillId,
+    ...testFacts(test), difficultyDR, inCombat, bleedingOnly, amountChoice: talentChoice ? surgeryChoice : null, healed, bleedingToRemove: bleedingOnly ? planned : 0, fumbleDamage, d10: test.fumble ? d10 : null
   };
   const next = clone(state);
   const target = next.incidents.find(item => item.id === incidentId);
   target.treatments.push(treatment);
   if (test.success) target.bandaged = true;
   return commit(next, receipt(state, operationId, 'treatment', 'applied', test.fumble ? 'healing-fumble' : (test.success ? 'healing-success' : 'healing-failed'), {
-    incidentId, skill: healer.skill, healerId: healer.participantId, ...testFacts(test), healed, fumbleDamage, currentWoundsAfter: wounds - fumbleDamage
+    incidentId, skill: healer.skill, healerId: healer.participantId, ...testFacts(test), healed, amountChoice: talentChoice ? surgeryChoice : null, bleedingOnly, bleedingToRemove: bleedingOnly ? planned : 0, fumbleDamage, currentWoundsAfter: wounds - fumbleDamage
   }));
 }
 
@@ -308,10 +327,11 @@ export function treatInfection(stateValue, {
   const incident = state.incidents.find(item => item.id === incidentId);
   if (!incident) return refusal('unknown-incident');
   if (!incident.infection) return refusal('no-infection-to-treat');
+  if (!remedy && isDoubleSubmission(state, 'infection-treatment', incidentId, healer?.participantId, roll)) return refusal('duplicate-submission');
   if (typeof remedy !== 'boolean') return refusal('invalid-remedy-or-test');
   let test = null;
   if (!remedy) {
-    if (!validHealer(healer, ['heal', 'animal-care'])) return refusal('healer-skill-required');
+    { const problem = healerProblem(healer, ['heal', 'animal-care']); if (problem) return refusal(problem); }
     if (!validRoll(roll)) return refusal('invalid-test-facts');
     test = runTest(healer.score, roll, -1, 'aftermath:infection-difficulty', 'Infection (Guérison −1 DR)');
   }
@@ -319,14 +339,16 @@ export function treatInfection(stateValue, {
   const next = clone(state);
   const target = next.incidents.find(item => item.id === incidentId);
   if (cured) target.infection = false;
+  // Soignée par un Test de Guérison, la blessure est traitée : pas de nouvelle infection le lendemain (p.171).
+  if (test?.success) target.bandaged = true;
   target.treatments.push({ operationId, day: state.calendar.currentDay, kind: 'infection', remedy, healerId: healer?.participantId ?? null, ...(test ? testFacts(test) : {}), cured });
   return commit(next, receipt(state, operationId, 'infection-treatment', 'applied', remedy ? 'adapted-remedy-applied' : (cured ? 'successful-heal-minus-one' : 'infection-treatment-failed'), {
-    incidentId, ...(test ? testFacts(test) : {})
+    incidentId, healerId: healer?.participantId ?? null, ...(test ? testFacts(test) : {})
   }));
 }
 
 export function treatSurgicalIncident(stateValue, {
-  operationId, expectedRevision, incidentId, healer, roll
+  operationId, expectedRevision, incidentId, healer, roll, surgeryRequired = false, d10 = null, wounds = 0
 } = {}) {
   const state = assertState(stateValue);
   const prior = priorReceipt(state, operationId);
@@ -336,16 +358,21 @@ export function treatSurgicalIncident(stateValue, {
   const incident = state.incidents.find(item => item.id === incidentId);
   if (!incident) return refusal('unknown-incident');
   if (incident.status !== 'open') return refusal('incident-closed');
-  if (!incident.requiresSurgery || incident.surgeryCompleted) return refusal('surgery-not-required');
-  if (!validHealer(healer, ['heal'])) return refusal('healer-skill-required');
+  const surgeryDone = incident.treatments.some(item => item.kind === 'surgery' && item.succeeded === true);
+  if (!(incident.requiresSurgery || surgeryRequired === true) || surgeryDone) return refusal('surgery-not-required');
+  { const problem = healerProblem(healer, ['heal']); if (problem) return refusal(problem); }
   if (healer.hasSurgeryTalent !== true) return refusal('surgery-talent-required');
-  if (!validRoll(roll)) return refusal('invalid-test-facts');
+  if (!validRoll(roll) || !Number.isSafeInteger(wounds) || wounds < 0 || (d10 !== null && (!Number.isSafeInteger(d10) || d10 < 1 || d10 > 10))) return refusal('invalid-test-facts');
+  if (isDoubleSubmission(state, 'surgery', incidentId, healer.participantId, roll)) return refusal('duplicate-submission');
   const test = runTest(healer.score, roll, 0, 'aftermath:surgery-difficulty', 'Chirurgie (Guérison +0 DR)');
+  // Maladresse : comme un soin (p.170), 1d10 Blessures sans descendre sous 1.
+  if (test.fumble && d10 === null) return refusal('fumble-d10-required');
+  const fumbleDamage = test.fumble ? Math.min(d10, Math.max(0, wounds - 1)) : 0;
   const next = clone(state);
   const target = next.incidents.find(item => item.id === incidentId);
-  target.surgeryCompleted = test.success;
-  target.treatments.push({ operationId, day: state.calendar.currentDay, kind: 'surgery', healerId: healer.participantId, skillId: healer.skillId, ...testFacts(test), succeeded: test.success });
-  return commit(next, receipt(state, operationId, 'surgery', 'applied', test.success ? 'surgery-success' : 'surgery-failed', { incidentId, ...testFacts(test) }));
+  if (test.success) target.surgeryCompleted = true;
+  target.treatments.push({ operationId, day: state.calendar.currentDay, kind: 'surgery', healerId: healer.participantId, skillId: healer.skillId, ...testFacts(test), succeeded: test.success, fumbleDamage, d10: test.fumble ? d10 : null });
+  return commit(next, receipt(state, operationId, 'surgery', 'applied', test.success ? 'surgery-success' : (test.fumble ? 'surgery-fumble' : 'surgery-failed'), { incidentId, healerId: healer.participantId, ...testFacts(test), fumbleDamage, currentWoundsAfter: wounds - fumbleDamage }));
 }
 
 /**
@@ -353,7 +380,7 @@ export function treatSurgicalIncident(stateValue, {
  * ended) come from the Store/MJ as booleans; the register itself still has to be clean: surgery done, no infection.
  */
 export function closeAftermathIncident(stateValue, {
-  operationId, expectedRevision, incidentId, statesCleared = true, temporaryEffectsEnded = false
+  operationId, expectedRevision, incidentId, statesCleared = true, temporaryEffectsEnded = false, surgeryRequired = false
 } = {}) {
   const state = assertState(stateValue);
   const prior = priorReceipt(state, operationId);
@@ -363,7 +390,8 @@ export function closeAftermathIncident(stateValue, {
   const incident = state.incidents.find(item => item.id === incidentId);
   if (!incident) return refusal('unknown-incident');
   if (incident.status !== 'open') return refusal('incident-closed');
-  if (!incident.surgeryCompleted) return refusal('surgery-not-completed');
+  const surgeryDone = incident.treatments.some(item => item.kind === 'surgery' && item.succeeded === true);
+  if ((incident.requiresSurgery || surgeryRequired === true) && !surgeryDone) return refusal('surgery-not-completed');
   if (incident.infection) return refusal('infection-still-active');
   if (incident.source.kind === 'critical' && statesCleared !== true) return refusal('critical-states-remaining');
   if (incident.source.kind === 'critical' && temporaryEffectsEnded !== true) return refusal('temporary-effects-not-confirmed');
@@ -387,7 +415,7 @@ export function registerDisease(stateValue, {
   if (state.incidents.some(item => item.id === id) || (state.diseases || []).some(item => item.id === id)) return refusal('disease-already-exists');
   const next = clone(state);
   next.diseases ??= [];
-  next.diseases.push({ id, participantId, label: label.trim(), startDay: state.calendar.currentDay, remainingDays: durationDays, status: 'active', careDays: [] });
+  next.diseases.push({ id, participantId, label: label.trim(), startDay: state.calendar.currentDay, remainingDays: durationDays, status: 'active', careLog: [] });
   return commit(next, receipt(state, operationId, 'disease', 'applied', 'disease-registered', { diseaseId: id }));
 }
 
@@ -407,21 +435,40 @@ export function careForDisease(stateValue, {
   const disease = (state.diseases || []).find(item => item.id === diseaseId);
   if (!disease) return refusal('unknown-disease');
   if (disease.status !== 'active') return refusal('disease-ended');
-  if (!validHealer(healer, ['heal'])) return refusal('healer-skill-required');
-  if (!(healer.advances >= 1)) return refusal('heal-advance-required');
+  { const problem = healerProblem(healer, ['heal']); if (problem) return refusal(problem); }
   if (!validRoll(roll) || !Number.isSafeInteger(difficultyDR) || typeof rested !== 'boolean') return refusal('invalid-test-facts');
-  if (disease.careDays.includes(state.calendar.currentDay)) return refusal('care-already-recorded-today');
+  const today = state.calendar.currentDay;
+  if (disease.careLog.some(row => row.day === today && row.healerId === healer.participantId)) return refusal('care-already-recorded-today');
   const test = runTest(healer.score, roll, difficultyDR, 'aftermath:disease-care', 'Soins quotidiens (Guérison +0 DR)');
   const next = clone(state);
   const target = next.diseases.find(item => item.id === diseaseId);
-  target.careDays.push(state.calendar.currentDay);
-  if (rested) {
+  // Chaque soigneur fait son Test de protection ; le jour de maladie gagné par le repos ne l'est qu'une fois par jour.
+  const restGained = rested && !disease.careLog.some(row => row.day === today && row.rested);
+  target.careLog.push({ day: today, healerId: healer.participantId, rested });
+  if (restGained) {
     target.remainingDays = Math.max(0, target.remainingDays - 1);
     if (!target.remainingDays) target.status = 'ended';
   }
   const carerProtected = test.success;
   const othersProtected = test.success ? Math.max(0, test.sl - 1) : 0;
   return commit(next, receipt(state, operationId, 'disease-care', 'applied', carerProtected ? 'carer-protected' : 'carer-not-protected', {
-    diseaseId, healerId: healer.participantId, ...testFacts(test), carerProtected, othersProtected, rested, remainingDays: target.remainingDays
+    diseaseId, healerId: healer.participantId, ...testFacts(test), carerProtected, othersProtected, rested, restGained, remainingDays: target.remainingDays
   }));
+}
+
+/** Archive the incident of a patient who left the combat: the history stays, no Test is expected any more. */
+export function archiveAftermathIncident(stateValue, { operationId, expectedRevision, incidentId } = {}) {
+  const state = assertState(stateValue);
+  const prior = priorReceipt(state, operationId);
+  if (prior) return { state: clone(state), receipt: prior };
+  const refusal = reason => result(state, receipt(state, operationId, 'archive-incident', 'refused', reason, { incidentId }));
+  if (expectedRevision !== state.revision) return refusal('revision-conflict');
+  const incident = state.incidents.find(item => item.id === incidentId);
+  if (!incident) return refusal('unknown-incident');
+  if (incident.status !== 'open') return refusal('incident-closed');
+  const next = clone(state);
+  const target = next.incidents.find(item => item.id === incidentId);
+  target.status = 'archived';
+  target.archivedDay = state.calendar.currentDay;
+  return commit(next, receipt(state, operationId, 'archive-incident', 'applied', 'incident-archived', { incidentId }));
 }

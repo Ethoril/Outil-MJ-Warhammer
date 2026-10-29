@@ -330,7 +330,7 @@ import { sharedState, sameSharedState } from './sync-protocol.js';
 import { applyFicheSync as applyFicheSyncToDraft } from './fiche-sync.js';
 import { convertLegacyV4Profile } from './v5-legacy-conversion.js';
 import { planMountedFall, V5_RIDE_SKILL_ID } from './v5-mounted-combat.js';
-import { createAftermathState, validateAftermathState, registerWoundIncident, previewAftermathAdvance, advanceAftermathCalendar, treatWoundIncident, treatInfection, treatSurgicalIncident, closeAftermathIncident, registerDisease, careForDisease, aftermathHealer, aftermathEnduranceScore } from './v5-aftermath.js';
+import { createAftermathState, validateAftermathState, registerWoundIncident, previewAftermathAdvance, advanceAftermathCalendar, treatWoundIncident, treatInfection, treatSurgicalIncident, closeAftermathIncident, archiveAftermathIncident, registerDisease, careForDisease, aftermathHealer, aftermathEnduranceScore } from './v5-aftermath.js';
 
 export const KEY = { EXTENSIONS: 'wfrp.extensions.v1', RESERVE: 'wfrp.reserve.v1', COMBAT: 'wfrp.combat.v1', LOG: 'wfrp.log.v1', DICE: 'wfrp.dice.v1', TS: 'wfrp.sync.ts.v1' };
 
@@ -1449,6 +1449,40 @@ function resolvedCorruptionTest(participant, skillId, input) {
   function diceLinesFromProfile(prof, participantId) {
     return (Array.isArray(prof.diceLines) ? prof.diceLines : [])
       .map(template => ({ ...JSON.parse(JSON.stringify(template)), id: uid(), participantId, extensions: { ...template.extensions, profileActionId: template.id } }));
+  }
+
+  // Suivi des séquelles : exécution privée d'une opération du registre (jamais exposée comme API) et lecture du soigneur sur sa fiche.
+  const AFTERMATH_J1_DURABLE_KINDS = new Set(['drop-held-item', 'duration', 'temporary-limb-loss', 'random-condition-count', 'test', 'conditional-test', 'event', 'condition', 'compound', 'random-select-and-apply', 'surgery-required', 'amputation']);
+  const absentAftermathSubjects = (state, participants) => [...new Set(state.incidents.filter(row => row.status === 'open' && !participants.some(item => item.id === row.participantId)).map(row => row.participantId))];
+  /** none | pending (décision du choc non prise) | absent | occurred : une amputation confirmée exige la Chirurgie (p.178). */
+  function aftermathAmputation(record) {
+    if (!record || !(record.sequela?.durableEffects || []).some(effect => effect.kind === 'amputation')) return 'none';
+    const shocks = [record.amputationShock, ...(record.amputationShocks || [])].filter(Boolean);
+    if (shocks.some(row => row.amputationOccurred === true)) return 'occurred';
+    return record.amputationShockStatus === 'not-occurred' ? 'absent' : 'pending';
+  }
+  /** Soigneur, compétence de la fiche et d100 : aucune réussite ni DR n'est saisi à la main. */
+  function aftermathHealerOf(draft, purpose, input) {
+    const participant = (draft.combat?.participants || []).find(row => row.id === input.healerId);
+    if (!participant) return { ok: false, reason: 'healer-required' };
+    return aftermathHealer(participant, purpose, input.skillId ?? null);
+  }
+  function runAftermathCommand(type, operation) {
+    let outcome = null;
+    const refused = new Error('aftermath operation was not applied');
+    refused.aftermathRefused = true;
+    let commit;
+    try { commit = api.executeCommand(type, draft => {
+      const extensions = draft.extensions || {};
+      const v5 = extensions.v5 || {};
+      const current = v5.aftermathRegister == null ? createAftermathState() : validateAftermathState(v5.aftermathRegister);
+      outcome = operation(current, draft);
+      if (outcome?.receipt?.status !== 'applied' || outcome.state.revision === current.revision) throw refused;
+      let next = { ...draft, extensions: { ...extensions, v5: { ...v5, aftermathRegister: outcome.state } } };
+      if (outcome.afterApply) next = outcome.afterApply(next);
+      return next;
+    }); } catch (error) { if (error?.aftermathRefused) return outcome; throw error; }
+    return commit?.then ? commit.then(() => outcome).catch(error => { if (error?.aftermathRefused) return outcome; throw error; }) : outcome;
   }
 
   function commitV5Effect(type, participantId, evaluate, supplied = {}) {
@@ -4989,9 +5023,10 @@ function resolvedCorruptionTest(participant, skillId, input) {
       return stored == null ? createAftermathState() : validateAftermathState(stored);
     },
     previewAftermathAdvance(input = {}) {
-      const preview = previewAftermathAdvance(api.getAftermathState(), input);
-      if (preview.status !== 'ready') return preview;
       const participants = currentEnvelope().combat?.participants || [];
+      const state = api.getAftermathState();
+      const preview = previewAftermathAdvance(state, { ...input, absentParticipantIds: absentAftermathSubjects(state, participants) });
+      if (preview.status !== 'ready') return preview;
       return { ...preview, requiredDailyChecks: preview.requiredDailyChecks.map(check => {
         const patient = participants.find(row => row.id === check.participantId);
         return { ...check, participantName: patient?.name || null, score: patient ? aftermathEnduranceScore(patient) : null };
@@ -5008,35 +5043,8 @@ function resolvedCorruptionTest(participant, skillId, input) {
           requiresSurgery: (record.sequela?.durableEffects || []).some(effect => effect.kind === 'surgery-required')
         })));
     },
-    _runAftermathCommand(type, operation) {
-      let outcome = null;
-      const refused = new Error('aftermath operation was not applied');
-      refused.aftermathRefused = true;
-      let commit;
-      try { commit = api.executeCommand(type, draft => {
-        const extensions = draft.extensions || {};
-        const v5 = extensions.v5 || {};
-        const current = v5.aftermathRegister == null ? createAftermathState() : validateAftermathState(v5.aftermathRegister);
-        outcome = operation(current, draft);
-        if (outcome?.receipt?.status !== 'applied' || outcome.state.revision === current.revision) throw refused;
-        let next = { ...draft, extensions: { ...extensions, v5: { ...v5, aftermathRegister: outcome.state } } };
-        if (outcome.woundDelta) {
-          const { participantId, healed, injury } = outcome.woundDelta;
-          if (healed || injury) {
-            const participants = next.combat.participants.map(row => row.id === participantId
-              ? { ...row, hp: Math.max(0, Math.min(Number(row.maxHp ?? row.hp) || row.hp, Number(row.hp) + healed - injury)) }
-              : row);
-            next = { ...next, combat: { ...next.combat, participants } };
-            outcome = { ...outcome, receipt: { ...outcome.receipt, currentWoundsAfter: participants.find(row => row.id === participantId)?.hp } };
-          }
-        }
-        if (outcome.afterApply) next = outcome.afterApply(next);
-        return next;
-      }); } catch (error) { if (error?.aftermathRefused) return outcome; throw error; }
-      return commit?.then ? commit.then(() => outcome).catch(error => { if (error?.aftermathRefused) return outcome; throw error; }) : outcome;
-    },
     registerAftermathIncident(input = {}) {
-      return api._runAftermathCommand('register-aftermath-incident', (state, draft) => {
+      return runAftermathCommand('register-aftermath-incident', (state, draft) => {
         const refuse = reason => ({ status: 'refused', reason, receipt: { id: input.operationId ?? null, kind: 'incident', status: 'refused', reason } });
         const participant = (draft.combat?.participants || []).find(row => row.id === input.participantId);
         if (!participant) return refuse('unknown-subject');
@@ -5058,68 +5066,110 @@ function resolvedCorruptionTest(participant, skillId, input) {
       });
     },
     advanceAftermathCalendar(input = {}) {
-      return api._runAftermathCommand('advance-aftermath-calendar', (state, draft) => {
+      return runAftermathCommand('advance-aftermath-calendar', (state, draft) => {
+        const participants = draft.combat?.participants || [];
         const enduranceScores = {};
         for (const incident of state.incidents) {
-          const patient = (draft.combat?.participants || []).find(row => row.id === incident.participantId);
+          const patient = participants.find(row => row.id === incident.participantId);
           const score = patient ? aftermathEnduranceScore(patient) : null;
           if (score !== null) enduranceScores[incident.participantId] = score;
         }
-        return advanceAftermathCalendar(state, { operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, days: input.days, dailyTests: input.dailyTests, enduranceScores });
+        return advanceAftermathCalendar(state, { operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, days: input.days, dailyTests: input.dailyTests, enduranceScores, absentParticipantIds: absentAftermathSubjects(state, participants) });
       });
     },
-    /** Soigneur, compétence de la fiche et d100 : aucune réussite ni DR n'est saisi à la main. */
-    _aftermathHealer(draft, purpose, input) {
-      const participant = (draft.combat?.participants || []).find(row => row.id === input.healerId);
-      if (!participant) return { ok: false, reason: 'healer-required' };
-      return aftermathHealer(participant, purpose, input.skillId ?? null);
+    /** Patient retiré du combat : l'incident est archivé, l'historique reste, plus aucun Test n'est attendu. */
+    archiveAftermathIncident(input = {}) {
+      return runAftermathCommand('archive-aftermath-incident', (state, draft) => {
+        const incident = state.incidents.find(row => row.id === input.incidentId);
+        if (incident && (draft.combat?.participants || []).some(row => row.id === incident.participantId)) return { status: 'refused', reason: 'subject-still-present', receipt: { id: input.operationId ?? null, kind: 'archive-incident', status: 'refused', reason: 'subject-still-present', incidentId: input.incidentId } };
+        return archiveAftermathIncident(state, { operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, incidentId: input.incidentId });
+      });
     },
     treatAftermathWound(input = {}) {
-      return api._runAftermathCommand('treat-aftermath-wound', (state, draft) => {
+      return runAftermathCommand('treat-aftermath-wound', (state, draft) => {
         const incident = state.incidents.find(row => row.id === input.incidentId);
         const patient = incident && (draft.combat?.participants || []).find(row => row.id === incident.participantId);
-        const found = incident ? api._aftermathHealer(draft, incident.subjectKind === 'animal' ? 'animal-care' : 'heal', input) : { ok: false };
-        const outcome = treatWoundIncident(state, { operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, incidentId: input.incidentId, healer: found.ok ? found.healer : null, roll: input.roll, wounds: Number(patient?.hp) || 0, supplies: input.supplies, difficultyDR: input.difficultyDR ?? 0, d10: input.d10 ?? null, inCombat: input.inCombat === true });
+        const refuse = reason => ({ status: 'refused', reason, receipt: { id: input.operationId ?? null, kind: 'treatment', status: 'refused', reason, incidentId: input.incidentId } });
+        // Un homoncule ne guérit que par guérison naturelle ou par magie : ni Soin ni médecine.
+        if (patient && !previewFamiliarHealing(patient, { kind: 'heal' }).ok) return refuse('familiar-healing');
+        const found = incident ? aftermathHealerOf(draft, incident.subjectKind === 'animal' ? 'animal-care' : 'heal', input) : { ok: false };
+        const outcome = treatWoundIncident(state, { operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, incidentId: input.incidentId, healer: found.ok ? found.healer : null, roll: input.roll, wounds: Number(patient?.hp) || 0, supplies: input.supplies, difficultyDR: input.difficultyDR ?? 0, d10: input.d10 ?? null, inCombat: input.inCombat === true, bleedingOnly: input.bleedingOnly === true, surgeryChoice: input.surgeryChoice ?? null });
         if (outcome.receipt.reason === 'healer-skill-required' && found.reason) outcome.receipt.reason = found.reason;
-        if (outcome.receipt.status === 'applied') outcome.woundDelta = { participantId: patient.id, healed: outcome.receipt.healed, injury: outcome.receipt.fumbleDamage };
+        if (outcome.receipt.status === 'applied') {
+          const receipt = outcome.receipt;
+          // Même chemin que les autres soins : Empaleuse fiché, Empoisonné à 0, plafond de Blessures, Hémorragiques retirés par Blessure rendue.
+          outcome.afterApply = next => {
+            const target = next.combat.participants.find(row => row.id === patient.id);
+            const planned = receipt.bleedingOnly ? receipt.bleedingToRemove : receipt.healed;
+            if (planned > 0) {
+              const hpBefore = target.hp;
+              const ceilingProbe = receipt.bleedingOnly ? { ...target, maxHp: Number(target.hp) + planned + 1 } : target;
+              const healing = healV5Wounds(ceilingProbe, planned);
+              target.states = healing.participant.states;
+              if (!receipt.bleedingOnly) { target.hp = healing.participant.hp; target.extensions = healing.participant.extensions; }
+              receipt.healed = receipt.bleedingOnly ? 0 : healing.hpDelta;
+              receipt.bleedingRemoved = healing.removed.length;
+              if (healing.healingBlockedByLodgedProjectiles) receipt.healingBlockedByLodgedProjectiles = healing.healingBlockedByLodgedProjectiles;
+              if (receipt.bleedingOnly) target.hp = hpBefore;
+            }
+            if (receipt.fumbleDamage) target.hp = Math.max(0, Number(target.hp) - receipt.fumbleDamage);
+            receipt.currentWoundsAfter = target.hp;
+            return next;
+          };
+        }
         return outcome;
       });
     },
     treatAftermathInfection(input = {}) {
-      return api._runAftermathCommand('treat-aftermath-infection', (state, draft) => {
+      return runAftermathCommand('treat-aftermath-infection', (state, draft) => {
         const incident = state.incidents.find(row => row.id === input.incidentId);
-        const found = input.remedy === true || !incident ? { ok: false } : api._aftermathHealer(draft, incident.subjectKind === 'animal' ? 'animal-care' : 'heal', input);
+        const found = input.remedy === true || !incident ? { ok: false } : aftermathHealerOf(draft, incident.subjectKind === 'animal' ? 'animal-care' : 'heal', input);
         const outcome = treatInfection(state, { operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, incidentId: input.incidentId, healer: found.ok ? found.healer : null, roll: input.roll ?? null, remedy: input.remedy === true });
         if (outcome.receipt.reason === 'healer-skill-required' && found.reason) outcome.receipt.reason = found.reason;
         return outcome;
       });
     },
     treatAftermathSurgicalIncident(input = {}) {
-      return api._runAftermathCommand('treat-aftermath-surgery', (state, draft) => {
-        const found = api._aftermathHealer(draft, 'heal', input);
-        const outcome = treatSurgicalIncident(state, { operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, incidentId: input.incidentId, healer: found.ok ? found.healer : null, roll: input.roll });
+      return runAftermathCommand('treat-aftermath-surgery', (state, draft) => {
+        const incident = state.incidents.find(row => row.id === input.incidentId);
+        const patient = incident && (draft.combat?.participants || []).find(row => row.id === incident.participantId);
+        const record = incident?.source.kind === 'critical' ? (patient?.extensions?.v5?.criticalAftermath || []).find(row => row.id === incident.source.criticalId) : null;
+        const found = aftermathHealerOf(draft, 'heal', input);
+        const outcome = treatSurgicalIncident(state, { operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, incidentId: input.incidentId, healer: found.ok ? found.healer : null, roll: input.roll, surgeryRequired: aftermathAmputation(record) === 'occurred', d10: input.d10 ?? null, wounds: Number(patient?.hp) || 0 });
         if (outcome.receipt.reason === 'healer-skill-required' && found.reason) outcome.receipt.reason = found.reason;
+        if (outcome.receipt.status === 'applied' && outcome.receipt.fumbleDamage) {
+          outcome.afterApply = next => { const target = next.combat.participants.find(row => row.id === patient.id); target.hp = Math.max(0, Number(target.hp) - outcome.receipt.fumbleDamage); return next; };
+        }
         return outcome;
       });
     },
-    /** Critique guéri (V5 p.172) : États retirés de la fiche, malus temporaires terminés (confirmés par le MJ), chirurgie faite. */
+    /** Critique guéri (V5 p.172, 178) : États retirés, malus temporaires terminés (MJ), chirurgie faite si exigée ou si une amputation a eu lieu. */
     closeAftermathIncident(input = {}) {
-      return api._runAftermathCommand('close-aftermath-incident', (state, draft) => {
+      return runAftermathCommand('close-aftermath-incident', (state, draft) => {
         const refuse = reason => ({ status: 'refused', reason, receipt: { id: input.operationId ?? null, kind: 'close-incident', status: 'refused', reason, incidentId: input.incidentId } });
         const incident = state.incidents.find(row => row.id === input.incidentId);
         const patient = incident && (draft.combat?.participants || []).find(row => row.id === incident.participantId);
-        let statesCleared = true, wound = null, record = null;
-        if (incident?.source.kind === 'critical') {
+        let statesCleared = true, wound = null, record = null, surgeryRequired = false;
+        if (incident?.status === 'open' && incident.source.kind === 'critical') {
           if (!patient) return refuse('unknown-subject');
           record = (patient.extensions?.v5?.criticalAftermath || []).find(row => row.id === incident.source.criticalId);
           if (!record) return refuse('critical-occurrence-not-found');
-          // Les lésions (os brisé, déchirure) relèvent du suivi J2 : ne pas déclarer guéri un critique qui en porte.
+          // Lésions et durables suivis en J2 : ne jamais déclarer guéri un critique qui en porte.
           if (record.sequela?.injuries?.length) return refuse('injury-follow-up-not-available');
+          if ((record.sequela?.durableEffects || []).some(effect => !AFTERMATH_J1_DURABLE_KINDS.has(effect.kind))) return refuse('critical-follow-up-j2-required');
+          const amputation = aftermathAmputation(record);
+          if (amputation === 'pending') return refuse('amputation-decision-pending');
+          surgeryRequired = amputation === 'occurred';
           wound = (patient.extensions?.v5?.criticalWounds || []).find(row => row.id === incident.source.criticalWoundId) || null;
-          const stateIds = new Set(wound?.stateIds || []);
-          statesCleared = !(patient.states || []).some(row => stateIds.has(row.id) && Number(row.level ?? 1) > 0);
+          if ((record.sequela?.states || []).length) {
+            // Un enregistrement sans stateIds (ancien ou non rattaché) n'est jamais validé tout seul : le MJ confirme.
+            if (wound?.stateIds?.length) {
+              const stateIds = new Set(wound.stateIds);
+              statesCleared = !(patient.states || []).some(row => stateIds.has(row.id) && Number(row.level ?? 1) > 0);
+            } else statesCleared = input.statesConfirmed === true;
+          }
         }
-        const outcome = closeAftermathIncident(state, { operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, incidentId: input.incidentId, statesCleared, temporaryEffectsEnded: input.temporaryEffectsEnded === true });
+        const outcome = closeAftermathIncident(state, { operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, incidentId: input.incidentId, statesCleared, temporaryEffectsEnded: input.temporaryEffectsEnded === true, surgeryRequired });
         if (outcome.receipt.status === 'applied' && wound) {
           outcome.afterApply = next => {
             const target = next.combat.participants.find(row => row.id === patient.id);
@@ -5136,14 +5186,14 @@ function resolvedCorruptionTest(participant, skillId, input) {
       });
     },
     registerAftermathDisease(input = {}) {
-      return api._runAftermathCommand('register-aftermath-disease', (state, draft) => {
+      return runAftermathCommand('register-aftermath-disease', (state, draft) => {
         if (!(draft.combat?.participants || []).some(row => row.id === input.participantId)) return { status: 'refused', reason: 'unknown-subject', receipt: { id: input.operationId ?? null, kind: 'disease', status: 'refused', reason: 'unknown-subject' } };
         return registerDisease(state, { id: input.id ?? `disease:${input.operationId}`, operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, participantId: input.participantId, label: input.label, durationDays: input.durationDays });
       });
     },
     careForAftermathDisease(input = {}) {
-      return api._runAftermathCommand('care-aftermath-disease', (state, draft) => {
-        const found = api._aftermathHealer(draft, 'heal', input);
+      return runAftermathCommand('care-aftermath-disease', (state, draft) => {
+        const found = aftermathHealerOf(draft, 'heal', input);
         const outcome = careForDisease(state, { operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, diseaseId: input.diseaseId, healer: found.ok ? found.healer : null, roll: input.roll, difficultyDR: input.difficultyDR ?? 0, rested: input.rested === true });
         if (outcome.receipt.reason === 'healer-skill-required' && found.reason) outcome.receipt.reason = found.reason;
         return outcome;
