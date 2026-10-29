@@ -226,3 +226,23 @@ test('J2 effets : « à renvoyer à la fiche » ne contient que le permanent, av
   assert.equal(combat.CC.amount, -15);
   assert.deepEqual(combat.CC.sources.map(source => [source.sourceId, source.lifetime, source.amount]), [['foot', 'permanent', -10], ['frac', 'temporary', -5]]);
 });
+
+test('J2 effets : Fuite, Sprint et Fuite ! lisent le Mouvement réduit par les séquelles', async () => {
+  const { previewV5BrokenEscape, previewV5FleeTalentDisengageMove } = await import('../js/core/v5-broken-escape.js');
+  const actor = (movement, extra = {}) => ({ ...person('hero'), states: [{ id: 'b1', key: 'brise', name: 'Brisé', level: 1 }],
+    skills: [{ id: 'ath', name: 'Athlétisme', carac: 'Ag', status: 'resolved', total: 55 }],
+    talents: [{ id: 'talent-flee', name: 'Fuite !', status: 'resolved', rank: 1 }],
+    extensions: { v5: movement === undefined ? {} : { sequelaEffects: { schemaVersion: 1, rows: [], movement: { base: 4, effective: movement }, reminders: [] } } }, ...extra });
+  const turn = { encounterId: 'e', turnId: 't', round: 1 };
+  const facts = { visibleToAnyEnemy: true, engagedEnemyIds: [], moveMode: 'run', visibleToAnyEnemyAfter: true };
+  const flee = (hero) => previewV5BrokenEscape({ actor: hero, action: 'flee', facts, turn });
+  assert.equal(flee(actor()).moveDistance, 16, 'sans séquelle : 4 × M');
+  assert.equal(flee(actor(2)).moveDistance, 8, 'pied perdu : M 2 × 4');
+  const sprint = hero => previewV5BrokenEscape({ actor: hero, action: 'sprint', facts: { visibleToAnyEnemyAfter: false }, turn, roll: 10, sequence: { fleeCommitted: true, visibleToAnyEnemy: true, moveMode: 'run' } });
+  const whole = sprint(actor()), reduced = sprint(actor(2));
+  assert.equal(whole.ready, true, JSON.stringify(whole.error || whole.needsInput));
+  assert.equal(whole.moveDistance - reduced.moveDistance, 8);
+  assert.equal(reduced.sprintDistance, whole.sprintDistance - 8);
+  const talent = hero => previewV5FleeTalentDisengageMove({ actor: hero, disengagedConfirmed: true });
+  assert.deepEqual([talent(actor()).extraMoveDistance, talent(actor(2)).extraMoveDistance], [16, 8]);
+});
