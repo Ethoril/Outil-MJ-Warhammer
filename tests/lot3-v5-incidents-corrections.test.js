@@ -57,7 +57,7 @@ test('L-07 — V5 p. 238 : deux jets explicites, 91–100 relancés, sans modifi
   const base = { actorId: 'mage', severity: 'MINOR', roll: 93 };
   assert.equal(store.previewMiscast(base).ready, false);
   assert.equal(store.previewMiscast({ ...base, secondaryRolls: { additionalRolls: [92, 85] } }).ready, false);
-  const p = store.previewMiscast({ ...base, modifier: 1, secondaryRolls: { additionalRolls: [50, 85] } });
+  const p = store.previewMiscast({ ...base, modifier: 1, secondaryRolls: { additionalRolls: [70, 85] } });
   assert.equal(p.ready, true); assert.equal(p.details.results.length, 2);
   assert.deepEqual(p.details.results.map(r => r.modifier), [0, 0]);
   await store.applyMiscast(p, { actorId: 'mage' });
@@ -68,9 +68,9 @@ test('L-07 — V5 p. 238 : deux jets explicites, 91–100 relancés, sans modifi
 
 test('L-07 — V5 p. 238 : les dés de durée de chaque sous-incident sont indépendants', async () => {
   const store = await combat(wizard());
-  const input = { severity: 'MINOR', roll: 93, secondaryRolls: { additionalRolls: [3, 68] } };
+  const input = { severity: 'MINOR', roll: 93, secondaryRolls: { additionalRolls: [3, 48] } };
   assert.equal(store.previewMiscast(input).ready, false);
-  const p = store.previewMiscast({ ...input, secondaryRolls: { additionalRolls: [3, 68], additionalSecondaryRolls: [{ duration: 2 }, { duration: 4 }] } });
+  const p = store.previewMiscast({ ...input, secondaryRolls: { additionalRolls: [3, 48], additionalSecondaryRolls: [{ duration: 2 }, { duration: 4 }] } });
   assert.equal(p.ready, true); assert.deepEqual(p.details.results.map(r => r.details.duration.value), [2, 4]);
 });
 

@@ -49,8 +49,8 @@ test('Focalisation — maladresse sans dés : perte et incident à saisir, jamai
   const empty = previewChannelling(wizard(), { type: 'winds', roll: 99 });
   assert.deepEqual(empty.missing, ['miscastRoll'], 'Sans réserve, seule la table d’incident demande un dé');
 
-  const complete = previewChannelling(mage, { type: 'winds', roll: 99, lossRoll: 2, miscastRoll: 28 });
-  assert.equal(complete.miscast.modifiedRoll, 48);
+  const complete = previewChannelling(mage, { type: 'winds', roll: 99, lossRoll: 2, miscastRoll: 48 });
+  assert.equal(complete.miscast.modifiedRoll, 68);
   assert.equal(complete.ready, true);
 });
 
@@ -77,7 +77,7 @@ test('Incantation — double ou maladresse sans jet d’incident : ready:false',
 test('Incidents — chaque dé secondaire utilisé par le résultat est exigé', () => {
   const cases = [
     ['MINOR', 3, ['duration']], ['MINOR', 28, ['strength']], ['MINOR', 38, ['distance']], ['MINOR', 53, ['distance']],
-    ['MINOR', 63, ['duration']], ['MINOR', 68, ['duration']], ['MINOR', 73, ['duration']], ['MINOR', 98, ['majorRoll']],
+    ['MINOR', 63, ['duration']], ['MINOR', 48, ['duration']], ['MINOR', 73, ['duration']], ['MINOR', 98, ['majorRoll']],
     ['MAJOR', 3, ['duration']], ['MAJOR', 8, ['duration']], ['MAJOR', 13, ['distance', 'damage']], ['MAJOR', 18, ['duration']],
     ['MAJOR', 23, ['distance', 'duration']], ['MAJOR', 28, ['damage']], ['MAJOR', 33, ['distance']], ['MAJOR', 38, ['duration']],
     ['MAJOR', 43, ['duration', 'location']], ['MAJOR', 48, ['duration']], ['MAJOR', 53, ['duration']], ['MAJOR', 63, ['duration']],

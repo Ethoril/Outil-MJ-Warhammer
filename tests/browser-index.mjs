@@ -563,7 +563,7 @@ async function main() {
     await expect(criticalLog).toContainText('Effets appliqués : +2 Blessures, Sonné 1');
     await expect(criticalLog).toContainText('Effets appliqués : +3 Blessures, Hémorragique 2, Sonné 1');
     await expect(criticalLog).toContainText('À arbitrer : Fracture mineure.');
-    await expect(criticalLog).toContainText('À arbitrer : Résistance −2 DR ; échec : crier ; échec à −6 DR ou moins : Inconscient.');
+    await expect(criticalLog).toContainText('À arbitrer : Résistance −2 DR ; échec : crier ; échec à −5 DR ou moins : Inconscient.');
     await expect(criticalLog).not.toContainText('[object Object]');
 
     await openAppMenu(page);

@@ -84,9 +84,9 @@ test('Incidents V5 — Couverture des bornes des tables Mineure et Majeure', () 
   assert.equal(minorMin.name, 'Langue maladroite');
   assert.equal(minorMin.max, 5);
 
-  const minorMid = lookupMiscastEntry('MINOR', 48);
+  const minorMid = lookupMiscastEntry('MINOR', 68);
   assert.equal(minorMid.name, 'Rupture');
-  assert.equal(minorMid.max, 50);
+  assert.equal(minorMid.max, 70);
 
   const minorMax = lookupMiscastEntry('MINOR', 100);
   assert.equal(minorMax.name, 'Chaos en cascade');
@@ -115,7 +115,7 @@ test('Incidents V5 — Diction instinctive (-20 sur jet Mineur, <= 0 aucun effet
   assert.equal(cancelledMinor.effectiveSeverity, 'NONE');
   assert.match(cancelledMinor.cancelReason, /diction instinctive/i);
 
-  // 2. Jet Mineur 45 avec Diction instinctive : 45 - 20 = 25 -> Délié (max 25)
+  // 2. Jet Mineur 45 avec Diction instinctive : 45 - 20 = 25 -> Rébellion intestinale en v3 (max 25)
   const reducedMinor = resolveMiscast({
     severity: 'MINOR',
     roll: 45,
@@ -123,7 +123,7 @@ test('Incidents V5 — Diction instinctive (-20 sur jet Mineur, <= 0 aucun effet
   });
   assert.equal(reducedMinor.cancelled, false);
   assert.equal(reducedMinor.finalRoll, 25);
-  assert.equal(reducedMinor.name, 'Délié');
+  assert.equal(reducedMinor.name, 'Rébellion intestinale');
 
   // 3. Jet Majeur avec Diction instinctive : aucun effet réducteur sur table Majeure
   const majorNoEffect = resolveMiscast({

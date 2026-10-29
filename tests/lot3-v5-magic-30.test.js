@@ -605,7 +605,7 @@ test('Lancement V5 — règle de table sans ingrédients, talent acquis et influ
   // 1. Ingrédient sur incident Mineur : annule complètement l'incident
   const withIngredient = previewCasting(wizard, spell, {
     roll: 77, // Maladresse
-    miscastRoll: 50,
+    miscastRoll: 70,
     ingredient: true
   });
   assert.equal(withIngredient.fumble, true);

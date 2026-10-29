@@ -97,18 +97,18 @@ function buildMiscastDetails({ tableKey, entry, roll, secondaryRolls = {}, bfm =
       };
     }
     if (max <= 20) {
+      // Délié
+      return {
+        type: 'narrative',
+        summary: 'Vos boucles et lacets se défont ; équipement et armures peuvent tomber ou glisser.'
+      };
+    }
+    if (max <= 25) {
       // Rébellion intestinale : Souillé
       return {
         type: 'condition',
         conditionsGained: ['Souillé'],
         summary: 'Gagnez Souillé.'
-      };
-    }
-    if (max <= 25) {
-      // Délié
-      return {
-        type: 'narrative',
-        summary: 'Vos boucles et lacets se défont ; équipement et armures peuvent tomber ou glisser.'
       };
     }
     if (max <= 30) {
@@ -153,11 +153,13 @@ function buildMiscastDetails({ tableKey, entry, roll, secondaryRolls = {}, bfm =
       };
     }
     if (max <= 50) {
-      // Rupture : 1 Hémorragique
+      // Hurlement intérieur : 1 Assourdi pendant 1d10 Rounds
+      const duration = die('duration', 'd10');
       return {
         type: 'condition',
-        conditionsGained: ['Hémorragique'],
-        summary: 'Gagnez 1 Hémorragique.'
+        conditionsGained: ['Assourdi'],
+        duration: { value: duration, unit: 'rounds' },
+        summary: `Gagnez 1 Assourdi pendant ${duration} Round(s).`
       };
     }
     if (max <= 55) {
@@ -191,13 +193,11 @@ function buildMiscastDetails({ tableKey, entry, roll, secondaryRolls = {}, bfm =
       };
     }
     if (max <= 70) {
-      // Hurlement intérieur : 1 Assourdi pendant 1d10 Rounds
-      const duration = die('duration', 'd10');
+      // Rupture : 1 Hémorragique
       return {
         type: 'condition',
-        conditionsGained: ['Assourdi'],
-        duration: { value: duration, unit: 'rounds' },
-        summary: `Gagnez 1 Assourdi pendant ${duration} Round(s).`
+        conditionsGained: ['Hémorragique'],
+        summary: 'Gagnez 1 Hémorragique.'
       };
     }
     if (max <= 75) {

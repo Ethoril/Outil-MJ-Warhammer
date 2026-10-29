@@ -12,7 +12,7 @@ const person=(store,id)=>store.listParticipants().find(p=>p.id===id);
 
 test('Sans ingrédients : un ancien flag conserve l’incident et ses États réels, Undo exact',async()=>{
  const store=await combat(wizard(),wizard('enemy',{camp:'ennemi'}));
- await store.applySpellExecution('Carreau',{actorId:'mage',targetIds:['enemy'],roll:77,miscastRoll:50,ingredient:true});
+ await store.applySpellExecution('Carreau',{actorId:'mage',targetIds:['enemy'],roll:77,miscastRoll:70,ingredient:true});
  assert.equal(person(store,'enemy').hp,30);assert.ok(person(store,'mage').states.some(s=>s.key==='hemorragique'));await store.undo();assert.deepEqual(person(store,'mage').states,[]);
 });
 test('Talents canoniques : Diction, Harmonisation et Bénédiction nécessitent une acquisition résolue',()=>{

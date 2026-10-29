@@ -1,4 +1,4 @@
-// Livre de base V5 EN v2, pp. 238–239. Résumés français pour consultation.
+// Livre de base V5 EN v3, pp. 238–239. Résumés français pour consultation.
 // Les conséquences ne sont pas appliquées automatiquement par ces tables.
 export const MAGIC_DATA = {
   "MINOR": [
@@ -19,13 +19,13 @@ export const MAGIC_DATA = {
     },
     {
       "max": 20,
-      "name": "Rébellion intestinale",
-      "eff": "Vous vous souillez : gagnez Souillé."
+      "name": "Délié",
+      "eff": "Vos boucles et lacets se défont ; ceintures, sacs, équipement et armures peuvent tomber ou glisser."
     },
     {
       "max": 25,
-      "name": "Délié",
-      "eff": "Vos boucles et lacets se défont ; ceintures, sacs, équipement et armures peuvent tomber ou glisser."
+      "name": "Rébellion intestinale",
+      "eff": "Vous vous souillez : gagnez Souillé."
     },
     {
       "max": 30,
@@ -49,8 +49,8 @@ export const MAGIC_DATA = {
     },
     {
       "max": 50,
-      "name": "Rupture",
-      "eff": "Votre nez, vos yeux et vos oreilles saignent : gagnez 1 Hémorragique."
+      "name": "Hurlement intérieur",
+      "eff": "Gagnez 1 Assourdi pendant 1d10 Rounds."
     },
     {
       "max": 55,
@@ -69,8 +69,8 @@ export const MAGIC_DATA = {
     },
     {
       "max": 70,
-      "name": "Hurlement intérieur",
-      "eff": "Gagnez 1 Assourdi pendant 1d10 Rounds."
+      "name": "Rupture",
+      "eff": "Votre nez, vos yeux et vos oreilles saignent : gagnez 1 Hémorragique."
     },
     {
       "max": 75,

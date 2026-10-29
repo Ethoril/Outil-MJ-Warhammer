@@ -124,7 +124,7 @@ test('WoM p. 98 — Lames Azurées : aucun fait de Protection implicite aux troi
 });
 
 test('V5 magie / WoM p. 136 — vortex : surpuissance dégâts, Critique et fin d’invisibilité gardent la chaîne normale',async()=>{
- const {store}=await fixture();await store.applySpellEffects('mage',{spellId:'invisibility-proof',durationRounds:99,casterId:'mage',specialState:{endsOnAttackOrNoise:true}});const p=await execute(store,'Tempête Magmatique',{roll:11,criticalChoice:'critical-wound',miscastRoll:50,willpowerSuccess:true,direction:'E',distanceRoll:10,overcastChoices:{damage:2}});const r=p.targetResults.find(r=>r.targetId==='foe');assert.ok(r.criticalWoundTriggered);assert.equal(subject(store,'foe').extensions.v5.criticalWounds.length,1);assert.ok(!subject(store,'mage').extensions.v5.spellEffects.some(e=>e.spellId==='invisibility-proof'));assert.equal(subject(store,'foe').hp,186);
+ const {store}=await fixture();await store.applySpellEffects('mage',{spellId:'invisibility-proof',durationRounds:99,casterId:'mage',specialState:{endsOnAttackOrNoise:true}});const p=await execute(store,'Tempête Magmatique',{roll:11,criticalChoice:'critical-wound',miscastRoll:70,willpowerSuccess:true,direction:'E',distanceRoll:10,overcastChoices:{damage:2}});const r=p.targetResults.find(r=>r.targetId==='foe');assert.ok(r.criticalWoundTriggered);assert.equal(subject(store,'foe').extensions.v5.criticalWounds.length,1);assert.ok(!subject(store,'mage').extensions.v5.spellEffects.some(e=>e.spellId==='invisibility-proof'));assert.equal(subject(store,'foe').hp,186);
  const i=input('Tempête Magmatique',{sl:30,willpowerSuccess:true,direction:'E',distance:-1});assert.equal(store.previewSpellExecution(cFor('Tempête Magmatique').id,i).ready,false);
 });
 
