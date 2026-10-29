@@ -320,7 +320,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
   const MAGIC_DICE_KEYS = ['magicFumbleLossRoll', 'magicMiscastRoll', 'magicMiscastRoll2', 'magicMajorRoll', 'magicSecondaryDurationRoll', 'magicSecondaryDamageRoll', 'magicSecondaryDistanceRoll', 'magicSecondaryLocation', 'magicResistanceRoll', 'magicVortexDirection', 'magicVortexWillpower', 'magicVortexDirectionRoll', 'magicVortexDistance', 'magicNoOtherTargets', 'magicRoll3d10', 'magicDurationAmount', 'magicDurationUnit', 'magicBurnoutRoll', 'magicCadaiTestRoll', 'magicCadaiMiscastRoll', 'magicCadaiBurnoutRoll', 'magicCadaiCorruptionRoll', 'magicCorruptionInitialRoll', 'magicExtraRoll1', 'magicExtraRoll2', 'magicExtraDuration1', 'magicExtraDuration2', 'magicExtraDamage1', 'magicExtraDamage2', 'magicExtraDistance1', 'magicExtraDistance2', 'magicExtraLocation1', 'magicExtraLocation2', 'magicDispelRoll', 'magicPersistentRestart', 'magicWardRoll'];
   // Réponses propres à une attaque (nature, d10 de Protection, Test de Calme) : jamais reportées sur la suivante.
   function forgetAttackAnswers(draft) {
-    const { attackNature, magicWardRoll, reductionCalm, trip, tripPrimaryResolutionId, athleticsSkillId, tripFallEnduranceRoll, tripLegLocationRoll, tripLegCriticalEffectRoll, tripExtraLocationRoll, tripExtraCriticalEffectRoll, tripFallWardRoll, tripFallCalmTest, secondWeaponAttack, primaryResolutionId, extraordinaryShot, extraordinaryShotDescription, extraordinaryShotDifficulty, throwingWeapon, scatterDirectionRoll, scatterDistanceRolls, shooterTargetDistanceYards, targetEngaged, engagedTargetIds, engagedTargetRoll, engagedDefensesById, confirmLethalDeath, lethalIntent, ...context } = draft.v5Context || {};
+    const { attackNature, magicWardRoll, reductionCalm, trip, tripPrimaryResolutionId, athleticsSkillId, tripFallEnduranceRoll, tripLegLocationRoll, tripLegCriticalEffectRoll, tripExtraLocationRoll, tripExtraCriticalEffectRoll, tripFallWardRoll, tripFallCalmTest, secondWeaponAttack, primaryResolutionId, extraordinaryShot, extraordinaryShotDescription, extraordinaryShotDifficulty, throwingWeapon, scatterDirectionRoll, scatterDistanceRolls, shooterTargetDistanceYards, targetEngaged, engagedTargetIds, engagedTargetRoll, engagedDefensesById, confirmLethalDeath, lethalIntent, warpBladeEnduranceTest, f2h, ...context } = draft.v5Context || {};
     draft.v5Context = context;
     const { attackNature: defenseNature, ...defenseContext } = draft.defenseContext || {};
     draft.defenseContext = defenseContext;
@@ -1093,7 +1093,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       if ('targetId' in patch) {
         clearFortuneAdvantageDraft(draft);
         state.targetChoice = patch.targetId;
-        draft.v5Context={...(draft.v5Context||{})};for(const key of ['fateAction','fateChosenRoll','fateCriticalLocation'])delete draft.v5Context[key];
+        draft.v5Context={...(draft.v5Context||{})};for(const key of ['fateAction','fateChosenRoll','fateCriticalLocation','warpBladeEnduranceTest','f2h'])delete draft.v5Context[key];
         for (const key of ['hitMorphology','hitAppendage','spiderLegSide','fallPreventedByEquipment','mountedRestraint','mountedRideTestsById','mountedRideScoresById','mountedRideRollsById']) delete draft.v5Context[key];
         draft.fortuneReroll=false;draft.fortuneRerollRolls=[];
         draft.targetSize = null;

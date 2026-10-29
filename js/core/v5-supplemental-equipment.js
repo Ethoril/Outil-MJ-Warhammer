@@ -58,7 +58,7 @@ export function effectiveSupplementalEncumbrance(item, metalEquivalentEncumbranc
  * Resolve the supplement clause for one linked item. This function never edits
  * catalogue data and never invents a secondary roll or a GM decision.
  */
-export function previewSupplementalEquipment({ item, actor, target, hit = false, damage = null, critical = null, context = {}, spell = null, used = false } = {}) {
+export function previewSupplementalEquipment({ item, actor, target, hit = false, damage = null, critical = null, context = {}, spell = null, used = false, melee = true } = {}) {
   const ruleId = itemRuleId(item);
   if (!ruleId) return null;
   const rule = RULES[ruleId];
@@ -80,9 +80,10 @@ export function previewSupplementalEquipment({ item, actor, target, hit = false,
     else if (!poisonTest || typeof poisonTest.success !== 'boolean') unresolved.push('Dague funeste : résultat du Test d’Endurance de la cible à −1 DR requis avant d’appliquer Empoisonné.');
     else if (!poisonTest.success) effects.push({ participantId: target?.id, state: 'Empoisonné', sourceRuleId: ruleId });
   }
-  if (rule.kind === 'warp-blade' && hit && Number(damage?.finalDamage) > 1) {
+  // L11 p.94 : seule une frappe en mêlée impose le Test ; la décharge à distance du Warlock n'en impose pas.
+  if (rule.kind === 'warp-blade' && melee && hit && Number(damage?.finalDamage) > 1) {
     const test = context.warpBladeEnduranceTest;
-    if (!Number.isSafeInteger(test?.score)||test.score<0||test.score>100||!Number.isSafeInteger(test?.roll)||test.roll<1||test.roll>100) unresolved.push('Warp Blade : saisir le score et le jet d100 du Test de Résistance moyen V4 (+20, converti en +2 DR V5) après plus d’une Blessure.');
+    if (!Number.isSafeInteger(test?.score)||test.score<0||!Number.isSafeInteger(test?.roll)||test.roll<1||test.roll>100) unresolved.push('Warp Blade : saisir le score et le jet d100 du Test de Résistance moyen V4 (+20, converti en +2 DR V5) après plus d’une Blessure.');
     else {
       const preview=previewV5Test({score:test.score,roll:test.roll,slModifiers:[{id:'warp-blade-v4-average-test',label:'Test moyen V4 (+20) converti en V5',amount:2}]});
       const enduranceTest=selectV5Test(preview,'keep');

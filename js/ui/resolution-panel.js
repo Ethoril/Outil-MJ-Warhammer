@@ -1766,7 +1766,7 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
     const current=draft.v5Context||{},stored=current.warpBladeEnduranceTest||{};
     const setTest=(key,value)=>{const next={...stored,[key]:value};delete next.success;if(value===undefined)delete next[key];handlers.select({v5Context:{...current,warpBladeEnduranceTest:Object.keys(next).length?next:undefined}});};
     for(const [key,text,min] of [['score','Warp Blade : score de Résistance de la cible (Test +2 DR si >1 Blessure)',0],['roll','Warp Blade : jet d100 du Test de Résistance de la cible',1]]){
-      const label=node('label','workspace-type',text),input=document.createElement('input');input.type='number';input.min=String(min);input.max='100';input.step='1';input.value=stored[key]??'';input.setAttribute('aria-label',text);
+      const label=node('label','workspace-type',text),input=document.createElement('input');input.type='number';input.min=String(min);if(key==='roll')input.max='100';input.step='1';input.value=stored[key]??'';input.setAttribute('aria-label',text);
       input.addEventListener('change',()=>setTest(key,input.value===''?undefined:Number(input.value)));label.append(input);fields.append(label);
     }
     if(Number.isFinite(Number(target?.caracs?.E)))fields.append(node('p','workspace-muted',`Endurance de la cible : ${target.caracs.E} (reporter la compétence Résistance si elle figure sur la fiche).`));
