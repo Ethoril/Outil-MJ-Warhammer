@@ -37,6 +37,18 @@ function startServer() {
 }
 
 // Les commandes de séance vivent dans le menu ⋯ de la barre du haut.
+// Le lancement ouvre le dialogue d'initiative (F2-A) : saisir des d10 distincts (pas d'égalité), calculer l'ordre, confirmer.
+async function confirmLaunchInitiative(page) {
+  const initiative = page.locator('dialog.tool-sheet', { hasText: 'Saisissez l’Initiative' });
+  await initiative.waitFor({ state: 'visible' });
+  const characteristics = initiative.locator('input[name^="characteristic:"]:not([readonly])');
+  for (let index = 0; index < await characteristics.count(); index += 1) if (!await characteristics.nth(index).inputValue()) await characteristics.nth(index).fill('40');
+  const dice = initiative.locator('input[name^="die:"]:not([readonly])');
+  for (let index = 0; index < await dice.count(); index += 1) await dice.nth(index).fill(String(6 - index));
+  await initiative.getByRole('button', { name: 'Calculer / actualiser l’ordre' }).click();
+  await initiative.getByRole('button', { name: 'Confirmer et appliquer' }).click();
+}
+
 async function openAppMenu(page) {
   const menu = page.locator('#app-menu');
   if (!(await menu.evaluate(element => element.matches(':popover-open')))) await page.locator('#btn-menu').click();
@@ -106,8 +118,9 @@ async function main() {
     await openAppMenu(page);
     await page.locator('#app-menu').getByRole('button', { name: 'Importer du texte' }).click();
     const readyOverlay = page.getByRole('dialog');
+    // Initiatives très écartées (Bonus 1 contre 15) : le d10 automatique des PNJ ne peut pas inverser l'ordre.
     await readyOverlay.getByRole('textbox', { name: 'Texte des profils' }).fill(
-      'Nom: Garde importé\nPV: 12\nInitiative: 30\nF: 35\nAction: Attaque | type=attack | base=40 | dégâts=BF+4\n---\nNom: Éclaireur importé\nPV: 8\nInitiative: 40\nF: 35\nAction: Attaque | type=attack | base=40 | dégâts=BF+4'
+      'Nom: Garde importé\nPV: 12\nInitiative: 10\nF: 35\nAction: Attaque | type=attack | base=40 | dégâts=BF+4\n---\nNom: Éclaireur importé\nPV: 8\nInitiative: 150\nF: 35\nAction: Attaque | type=attack | base=40 | dégâts=BF+4'
     );
     await readyOverlay.getByRole('button', { name: 'Analyser le texte' }).click();
     await expect(readyOverlay.locator('.import-text-profile').first()).toContainText('Attaque 40 · dégâts BF+4 = 7');
@@ -198,6 +211,7 @@ async function main() {
     await zoneSelect.selectOption('active');
     await prepareOverlay.getByRole('button', { name: 'Ajouter' }).click();
     await prepareOverlay.getByRole('button', { name: 'Lancer la rencontre' }).last().click();
+    await confirmLaunchInitiative(page);
     await expect(prepareOverlay).toBeHidden();
     await expect(page.locator('#toast-container')).toContainText('Rencontre lancée');
     await page.locator('#tab-combat').click();
@@ -239,10 +253,17 @@ async function main() {
     await peer.goto(`http://127.0.0.1:${port}/index.html`);
     await expect(peer.locator('#app-content')).toBeVisible();
     await peer.locator('#tab-combat').click();
-    await peer.locator('.workspace-sheet-actor').getByRole('button', { name: /\+1 PV pour/ }).click();
-    await expect(peer.locator('.workspace-sheet-actor')).toContainText('PV 9/8');
+    // Les PV sont plafonnés au maximum (choix du MJ du 25/10) : la modification se prouve par −1.
+    await peer.locator('.workspace-sheet-actor').getByRole('button', { name: /−1 PV pour/ }).click();
+    await expect(peer.locator('.workspace-sheet-actor')).toContainText('PV 7/8');
     await peer.close();
     assert.equal(await page.locator('.workspace-track').textContent(), trackBeforeApply, 'calculer ne doit modifier aucun PV');
+    // Le Garde importé n'a pas de CC : la défense en mêlée est requise (L06) ; elle se saisit en valeur libre, jet raté sans maladresse.
+    await expect(resolution.locator('.workspace-result')).toContainText('Jet de défense requis pour l’opposition de Corps à corps.');
+    await expect(resolution.getByRole('button', { name: /^Appliquer \d+ dégâts à Garde importé$/ })).toBeDisabled();
+    await resolution.locator('.workspace-defense-base').fill('30');
+    await resolution.locator('[data-roll-input="defense"]').fill('34');
+    await resolution.locator('[data-roll-input="defense"]').press('Enter');
     await resolution.getByRole('button', { name: /^Appliquer \d+ dégâts à Garde importé$/ }).click();
     await expect(page.locator('#toast-container')).toContainText(/\d+ dégâts appliqués à Garde importé/);
     await expect(page.locator('[data-workspace-select]').filter({ hasText: 'Garde importé' })).toContainText('PV 3/12');
@@ -266,13 +287,13 @@ async function main() {
     assert.ok(savePath, 'la sauvegarde réelle doit être téléchargeable');
     await page.locator('#file-input').setInputFiles(savePath);
     await expect(page.locator('#toast-container')).toContainText('Sauvegarde chargée avec succès');
-    await page.locator('.workspace-sheet-actor').getByRole('button', { name: /\+1 PV pour/ }).click();
-    await expect(page.locator('.workspace-sheet-actor')).toContainText('PV 9/8');
+    await page.locator('.workspace-sheet-actor').getByRole('button', { name: /−1 PV pour/ }).click();
+    await expect(page.locator('.workspace-sheet-actor')).toContainText('PV 7/8');
     await page.reload();
     await expect(page.locator('#app-content')).toBeVisible();
     await page.locator('#tab-combat').click();
     await expect(page.locator('#workspace-play')).toBeVisible();
-    await expect(page.locator('.workspace-track')).toContainText('PV 9/8');
+    await expect(page.locator('.workspace-track')).toContainText('PV 7/8');
     await page.locator('#tab-prepare').click();
     await expect(page.locator('#workspace-prepare')).toContainText('Éclaireur importé');
     await expect(page.locator('#workspace-prepare')).toContainText('PV 8');
@@ -320,9 +341,10 @@ async function main() {
     // profile names with prepared actions must remain readable at both widths.
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.locator('#tab-prepare').click();
+    // Initiatives espacées de 10 Bonus : les d10 automatiques des PNJ ne changent jamais l'ordre de la piste.
     const galleryProfiles = Array.from({ length: 15 }, (_, index) => {
       const number = String(index + 1).padStart(2, '0');
-      return `Nom: Participant de démonstration ${number} · Action préparée\nPV: ${10 + (index % 4)}\nInitiative: ${60 - index}\nF: 30\nAction: Attaque ${number} | type=attack | base=${35 + index} | dégâts=BF+4`;
+      return `Nom: Participant de démonstration ${number} · Action préparée\nPV: ${10 + (index % 4)}\nInitiative: ${1600 - index * 100}\nF: 30\nE: 30\nAction: Attaque ${number} | type=attack | base=${35 + index} | dégâts=BF+4`;
     });
     await openAppMenu(page);
     await page.locator('#app-menu').getByRole('button', { name: 'Importer du texte' }).click();
@@ -354,6 +376,7 @@ async function main() {
     await galleryPrepare.getByRole('button', { name: 'Fermer' }).click();
     await expect(galleryPrepare).toBeHidden();
     await page.locator('#workspace-prepare').getByRole('button', { name: 'Lancer « Galerie »' }).click();
+    await confirmLaunchInitiative(page);
     await expect(page.locator('#toast-container')).toContainText('Rencontre lancée');
     await page.locator('#tab-combat').click();
     await page.locator('#combat-banner').getByRole('button', { name: 'Commencer le combat' }).click();
@@ -412,10 +435,16 @@ async function main() {
 
     // E16 : choisir une cible parmi les quinze dans la piste, calculer sans
     // appliquer (aucun PV ne bouge), puis appliquer exactement ce résultat.
+    // La défense en mêlée est requise : valeur libre 30 et jet 34, un échec simple (DR +0) qui ne change pas les dégâts attendus.
+    const fillDefense = async panel => {
+      await panel.locator('.workspace-defense-base').fill('30');
+      await panel.locator('[data-roll-input="defense"]').fill('34');
+    };
     const trackTexts = () => page.locator('.workspace-track .workspace-track-item').evaluateAll(items => items.map(item => item.textContent));
     await page.locator('.workspace-resolution [data-focus-key^="target-"]').filter({ hasText: 'Participant de démonstration 03' }).click();
     await expect(page.locator('.workspace-sheet-target')).toContainText('Participant de démonstration 03');
     const galleryResolution = page.locator('.workspace-resolution');
+    await fillDefense(galleryResolution);
     await galleryResolution.locator('[data-roll-input="attack"]').fill('1');
     await galleryResolution.locator('[data-roll-input="attack"]').press('Enter');
     await expect(galleryResolution.locator('.workspace-result')).toBeVisible();
@@ -442,64 +471,99 @@ async function main() {
     await comparisonRows.nth(1).getByRole('button', { name: `Choisir ${chosenName}` }).click();
     await expect(comparisonRows).toHaveCount(0);
     await expect(page.locator('.workspace-sheet-target')).toContainText(chosenName);
+    // La comparaison ne porte que sur l'attaque : l'aperçu choisi attend encore la défense de la cible (mêlée).
+    await expect(galleryResolution.locator('.workspace-result')).toContainText('Jet de défense requis pour l’opposition de Corps à corps.');
+    await fillDefense(galleryResolution);
+    await galleryResolution.locator('[data-roll-input="defense"]').press('Enter');
     const applyChosen = galleryResolution.locator('[data-focus-key="apply"]');
     await expect(applyChosen).toContainText(`à ${chosenName}`);
-    // Aperçu périmé : la cible change après le calcul (ici −1 PV sur sa fiche,
-    // voir le rapport pour le second onglet) ; rien n'est appliqué.
-    await page.locator('.workspace-sheet-target').getByRole('button', { name: `−1 PV pour ${chosenName}` }).click();
+    // La cible choisie (PV 2, 10 dégâts) passe sous zéro, localisation déjà tirée par l'attaque : la gravité du critique d'excédent doit être jouée avant que « Appliquer » s'active.
+    await expect(applyChosen).toBeDisabled();
+    await galleryResolution.locator('[data-roll-input="critical-second"]').fill('55');
+    await galleryResolution.locator('[data-roll-input="critical-second"]').press('Enter');
+    await expect(applyChosen).toBeEnabled();
+    // Aperçu périmé : la cible change après le calcul (ici −1 PV sur sa fiche).
+    // L'appli compare la révision de la partie à celle du calcul : l'aperçu est écarté avec un
+    // message et rien n'est appliqué. Le rejet vient soit du clic sur « Appliquer », soit du
+    // recalcul différé (200 ms) après la sortie d'un champ de critique : les deux se valent ici.
     const trackBeforeStale = await trackTexts();
-    await applyChosen.click();
-    await expect(galleryResolution.locator('[role="alert"]')).toHaveText('La partie a changé depuis le calcul : recalculez.');
+    await page.locator('.workspace-sheet-target').getByRole('button', { name: `−1 PV pour ${chosenName}` }).click();
+    const trackAfterManual = await trackTexts();
+    assert.equal(trackAfterManual.filter((text, index) => text !== trackBeforeStale[index]).length, 1, 'seul le −1 PV manuel change la piste');
+    if (await applyChosen.count()) await applyChosen.click({ timeout: 1000 }).catch(() => {});
+    await expect(galleryResolution.locator('[role="alert"]')).toHaveText('La partie a changé depuis la comparaison : recalculez les conséquences avant de choisir.');
+    await expect(applyChosen).toHaveCount(0);
     await page.waitForTimeout(200);
-    assert.deepEqual(await trackTexts(), trackBeforeStale, 'un aperçu périmé ne doit rien appliquer');
+    assert.deepEqual(await trackTexts(), trackAfterManual, 'un aperçu périmé ne doit rien appliquer');
 
     // Coup critique réel : localisation puis gravité saisies, PV − dégâts − Blessures cochées,
-    // état ajouté puis fusionné au critique suivant, journal lisible.
-    await page.locator('.workspace-resolution [data-focus-key^="target-"]').filter({ hasText: 'Participant de démonstration 03' }).click();
+    // état ajouté puis fusionné au critique suivant, journal lisible. Tables V5 : le coup qui
+    // fait passer la cible sous zéro ajoute un critique d'excédent (+10 par Blessure en trop),
+    // avec son propre jet de gravité ; il remplace l'ancien Acharnement.
+    const critTarget = 'Participant de démonstration 04';
+    await page.locator('.workspace-resolution [data-focus-key^="target-"]').filter({ hasText: critTarget }).click();
     const gallerySheet = page.locator('.workspace-sheet-target');
     const galleryHp = async () => Number((await gallerySheet.locator('.workspace-sheet-hp').textContent()).match(/PV\s*(−?\d+)/)[1].replace('−', '-'));
-    // Scénario déterministe : 1er coup à 1 PV (sans Acharnement), 2e coup sous zéro (Acharnement, +10).
-    const strikeCritical = async (roll, { directApply = false, severity } = {}) => {
+    // Scénario déterministe : 1er coup sans excédent (PV 13), 2e coup sous zéro (critique d'excédent).
+    const strikeCritical = async (roll, { directApply = false, severity, gravity, wounds, secondGravity = null } = {}) => {
+      await fillDefense(galleryResolution);
       await galleryResolution.locator('[data-roll-input="attack"]').fill(roll);
       await galleryResolution.locator('[data-roll-input="attack"]').press('Enter');
       await galleryResolution.locator('[data-roll-input="critical-location"]').fill('57');
       await galleryResolution.locator('[data-roll-input="critical-location"]').press('Enter');
-      await galleryResolution.locator('[data-roll-input="critical-effect"]').fill('55');
       const button = galleryResolution.locator('[data-focus-key="apply"]');
       if (directApply) {
-        // Gravité tapée sans Entrée puis clic direct : ce premier clic recalcule et montre
-        // le critique, il n'applique rien avec l'ancien aperçu.
+        // « Appliquer » reste désactivé tant que la gravité manque : un premier tirage validé (Entrée) l'active,
+        // puis un autre tirage est tapé sans Entrée et suivi d'un clic direct. Ce clic recalcule et montre
+        // le nouveau critique, il n'applique rien avec l'ancien aperçu.
+        await galleryResolution.locator('[data-roll-input="critical-effect"]').fill('70');
+        await galleryResolution.locator('[data-roll-input="critical-effect"]').press('Enter');
+        await expect(galleryResolution.locator('.workspace-result')).toContainText('70 → « Blessure béante »');
+        await expect(button).toBeEnabled();
+        await galleryResolution.locator('[data-roll-input="critical-effect"]').fill(gravity);
         const untouched = await galleryHp();
         await button.click();
         await page.waitForTimeout(300);
         assert.equal(await galleryHp(), untouched, 'un jet de critique tapé ne doit pas être ignoré par « Appliquer »');
       } else {
+        await galleryResolution.locator('[data-roll-input="critical-effect"]').fill(gravity);
         await galleryResolution.locator('[data-roll-input="critical-effect"]').press('Enter');
       }
       await expect(galleryResolution.locator('.workspace-result')).toContainText(severity);
+      if (secondGravity) {
+        await expect(galleryResolution.locator('.workspace-result')).toContainText('Critique d’excédent');
+        await galleryResolution.locator('[data-roll-input="critical-second"]').fill(secondGravity);
+        await galleryResolution.locator('[data-roll-input="critical-second"]').press('Enter');
+      } else {
+        await expect(galleryResolution.locator('[data-roll-input="critical-second"]')).toHaveCount(0);
+      }
+      await expect(galleryResolution.getByRole('checkbox', { name: wounds })).toBeChecked();
       const loss = Number((await button.textContent()).match(/Appliquer (\d+) dégâts/)[1]);
-      await expect(galleryResolution.getByRole('checkbox', { name: '+3 Blessures' })).toBeChecked();
       const before = await galleryHp();
       await button.click();
       // Le toast annonce la même perte que le bouton : dégâts + Blessures du critique.
-      await expect(page.locator('#toast-container')).toContainText(`${loss} dégâts appliqués à Participant de démonstration 03`);
-      await expect.poll(galleryHp).toBe(before - loss);
-      assert.ok(loss >= 3, 'les 3 Blessures du critique sont comptées dans la perte de PV');
+      await expect(page.locator('#toast-container')).toContainText(`${loss} dégâts appliqués à ${critTarget}`);
+      // Les PV ne passent plus sous zéro : l'excédent part dans le critique d'excédent.
+      await expect.poll(galleryHp).toBe(Math.max(0, before - loss));
+      assert.ok(loss >= 3, 'les Blessures du critique sont comptées dans la perte de PV');
     };
-    await strikeCritical('11', { severity: '55 → « Côtes fracturées »' });
+    await strikeCritical('11', { directApply: true, gravity: '65', severity: '65 → « Côtes fracturées »', wounds: '+2 Blessures' });
     await expect(gallerySheet.locator('.workspace-state-chip').filter({ hasText: 'Sonné' })).toHaveCount(1);
-    await strikeCritical('22', { directApply: true, severity: '55 + 10 = 65 → « Entaille douloureuse »' });
-    // Même état déjà présent : un seul jeton, niveau augmenté.
-    await expect(gallerySheet.locator('.workspace-state-chip').filter({ hasText: 'Sonné' })).toHaveCount(1);
-    await expect(gallerySheet.locator('.workspace-state-chip').filter({ hasText: 'Sonné' })).toContainText('Sonné 2');
+    await strikeCritical('22', { gravity: '75', severity: '75 → « Entaille douloureuse »', wounds: '+3 Blessures', secondGravity: '10' });
+    // États V5 : chaque acquisition garde son occurrence (auteur, source) ; Sonné s'additionne par
+    // instances, un jeton par occurrence au lieu d'un jeton unique de niveau 2.
+    const sonneChips = gallerySheet.locator('.workspace-state-chip').filter({ hasText: 'Sonné' });
+    await expect(sonneChips).toHaveCount(2);
+    await expect(gallerySheet.locator('.workspace-state-chip').filter({ hasText: 'Hémorragique 2' })).toHaveCount(1);
     await page.locator('.workspace-side').getByRole('tab', { name: 'Journal' }).click();
     const criticalLog = page.locator('#workspace-side-panel-log');
-    await expect(criticalLog).toContainText('Critique : localisation 57 → Corps · gravité 55 → Côtes fracturées');
-    await expect(criticalLog).toContainText('Critique : localisation 57 → Corps · gravité 55 + 10 = 65 → Entaille douloureuse');
-    await expect(criticalLog).toContainText('Effets appliqués : +3 Blessures, Sonné 1');
+    await expect(criticalLog).toContainText('Critique : localisation 57 → Corps · gravité 65 → Côtes fracturées');
+    await expect(criticalLog).toContainText('Critique : localisation 57 → Corps · gravité 75 → Entaille douloureuse');
+    await expect(criticalLog).toContainText('Critique d’excédent : Bras Gauche · gravité 10 + 10 = 20 → Choc au bras');
+    await expect(criticalLog).toContainText('Effets appliqués : +2 Blessures, Sonné 1');
     await expect(criticalLog).toContainText('Effets appliqués : +3 Blessures, Hémorragique 2, Sonné 1');
-    await expect(criticalLog).toContainText('À arbitrer : Fracture (Mineure)');
-    await expect(criticalLog).toContainText('À arbitrer : Test Rés ou Inconscient');
+    await expect(criticalLog).toContainText('À arbitrer : Fracture mineure.');
+    await expect(criticalLog).toContainText('À arbitrer : Résistance −2 DR ; échec : crier ; échec à −6 DR ou moins : Inconscient.');
     await expect(criticalLog).not.toContainText('[object Object]');
 
     await openAppMenu(page);
