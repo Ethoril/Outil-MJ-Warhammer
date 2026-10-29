@@ -42,12 +42,20 @@ test('J2 effets : une main perdue interdit l’arme à deux mains et donne le D�
   assert.equal(no.test.advantage.disadvantage.length, 0);
 });
 
-test('J2 effets : main directrice perdue, −2 DR avec l’arme de l’autre main, réduit de 1 DR par 100 PX', async () => {
+test('J2 effets : main directrice perdue, une seule pénalité de main non directrice (règle générale), réduite de 1 DR par 100 PX', async () => {
+  const offHand = preview => (preview.test?.details?.modifiers || []).filter(row => /offHand|offhand/.test(row.id)).map(row => row.amount);
   const store = await table([loss('hand-r', 'hand', 'right', { primary: true })], { heroExtra: { equipment: [sword] } });
-  assert.deepEqual(mods(store.previewResolution(attack(sword, { sequelaOffHand: true, sequelaTwoHands: false }))).map(row => row.amount), [-2]);
-  assert.deepEqual(mods(store.previewResolution(attack(sword, { sequelaOffHand: false }))).map(row => row.amount), []);
+  assert.deepEqual(offHand(store.previewResolution(attack(sword, { sequelaOffHand: true, sequelaTwoHands: false }))), [-2]);
+  assert.deepEqual(offHand(store.previewResolution(attack(sword, { sequelaOffHand: false }))), []);
   const relearned = await table([loss('hand-r', 'hand', 'right', { primary: true, relearned: 1 })], { heroExtra: { equipment: [sword] } });
-  assert.deepEqual(mods(relearned.previewResolution(attack(sword, { sequelaOffHand: true }))).map(row => row.amount), [-1]);
+  assert.deepEqual(offHand(relearned.previewResolution(attack(sword, { sequelaOffHand: true }))), [-1]);
+  // Pas de second malus : la case générale « main secondaire » cochée en plus ne cumule pas, et les 100 PX la réduisent aussi.
+  assert.deepEqual(offHand(store.previewResolution(attack(sword, { sequelaOffHand: true, penalties: { offHand: -2 } }))), [-2]);
+  assert.deepEqual(offHand(relearned.previewResolution(attack(sword, { penalties: { offHand: -2 } }))), [-1]);
+  assert.ok(!mods(store.previewResolution(attack(sword, { sequelaOffHand: true }))).some(row => row.amount === -2));
+  // Ambidextre supprime la pénalité, même séquelle.
+  const ambi = await table([loss('hand-r', 'hand', 'right', { primary: true })], { heroExtra: { equipment: [sword], talents: [{ id: 'talent-ambidextrous', name: 'Ambidextre', status: 'resolved', rank: 1 }] } });
+  assert.deepEqual(offHand(ambi.previewResolution(attack(sword, { sequelaOffHand: true }))).filter(amount => amount < 0), []);
 });
 
 test('J2 effets : bras perdu, bouclier impossible ; doigts : −1 DR par doigt, quatre doigts valent une main', async () => {

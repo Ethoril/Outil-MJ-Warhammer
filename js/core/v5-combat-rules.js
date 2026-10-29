@@ -337,9 +337,18 @@ export function buildCombatTest(normalized, role = 'actor') {
     modifiers.push({ id: `quality-${engine.id}`, label: engine.id, amount: engine.params.bonus });
   modifiers.push(...talentModifiers.slModifiers); advantages.push(...talentModifiers.advantageSources); disadvantages.push(...talentModifiers.disadvantageSources);
   unresolved.push(...talentModifiers.unresolved);
+  // Main directrice perdue : la séquelle force la règle générale de la main non directrice (même identifiant, donc Ambidextre la supprime).
+  if (sequelae.offHand?.forced) modifiers.push({ id: 'penalty:offHand', label: 'Main secondaire', amount: -2 });
   applyV5TalentPenaltyRules(modifiers,talentModifiers.penaltyRules,{kind,role:talentRole,context:settings.context||{},advantage:advantages.length-disadvantages.length,aimed:settings.aimed});
   if(defending&&settings.context?.combatDefensiveActionBonus===2)modifiers.push({id:'combat:defensive-action',label:'Action Défensive choisie',amount:2});
   unresolved.push(...applyV5AttackSituationModifiers(modifiers,{role:talentRole,kind,actionType:action.type,actor,target,context:settings.context||{},actorSize:settings.actorSize,targetSize:settings.targetSize,talentRules:talentModifiers.penaltyRules,advantage:advantages.length-disadvantages.length,aimed:settings.aimed}));
+  if (sequelae.offHand) {
+    // Une seule pénalité de main non directrice, quelle que soit la source ; les 100 PX de réapprentissage la réduisent.
+    const offIds = new Set(['penalty:offHand', 'quality:offhand-defense']);
+    const kept = modifiers.filter(row => offIds.has(row.id));
+    if (kept.length > 1) modifiers.splice(0, modifiers.length, ...modifiers.filter(row => !offIds.has(row.id) || row === kept[0]));
+    if (kept[0]?.amount < 0) kept[0].amount = Math.min(0, kept[0].amount + sequelae.offHand.reduction);
+  }
   if((actor.states||[]).some(s=>s.restriction==='noMomentumOrAdvantage'&&sourceActive(s)))advantages.length=0;
   // Faux de Shyish (V5 p. 247) : un Mort-vivant engagé avec le porteur n'a pas d'Avantage ; son Élan (hasMomentum) n'est pas touché.
   if(kind==='melee'&&target?.extensions?.v5?.specialStates?.scytheOfShyish){const scythe=applyScytheOfShyishRules({target:actor,isEngagedWithWielder:true,advantageSources:advantages,hasMomentum:hasMomentum(actor)});if(scythe.advantageSuppressed)advantages.splice(0,advantages.length,...scythe.allowedAdvantages);}

@@ -140,7 +140,7 @@ export function sequelaEffectRows(state, participantId) {
     const primary = asHand.find(row => row.primary);
     if (primary) {
       const penalty = Math.max(0, 2 - (primary.relearned || 0));
-      if (penalty) add(primary.sequela, 'offhand', { lifetime: primary.lifetime, type: 'offhand-dr', amount: -penalty, label: `Main directrice perdue : −${penalty} DR aux Tests de mêlée avec l’arme de l’autre main` });
+      add(primary.sequela, 'offhand', { lifetime: primary.lifetime, type: 'offhand-dr', amount: -penalty, label: `Main directrice perdue : règle de la main non directrice (−${penalty} DR après réapprentissage)` });
     }
   }
 
@@ -232,7 +232,7 @@ export function sequelaContextFields(participant) {
  * précisions manquantes et variation du score. Une circonstance que l'outil ne connaît pas est demandée au MJ, jamais devinée.
  */
 export function sequelaTestRules({ actor, opponent = null, skillLabel = '', actionLabel = '', carac = null, kind = 'test', defending = false, attack = false, context = {}, weaponHands = null, shieldUsed = false } = {}) {
-  const out = { modifiers: [], advantages: [], disadvantages: [], restrictions: [], unresolved: [], scoreDelta: 0, sources: [] };
+  const out = { modifiers: [], advantages: [], disadvantages: [], restrictions: [], unresolved: [], scoreDelta: 0, sources: [], offHand: null };
   const rows = sequelaRows(actor);
   const label = `${skillLabel} ${actionLabel}`;
   const key = normalizeCarac(carac);
@@ -260,7 +260,11 @@ export function sequelaTestRules({ actor, opponent = null, skillLabel = '', acti
         else if (kind === 'test' && ask('sequelaTwoHands', 'Séquelle : préciser si le Test repose normalement sur deux mains.')) { out.disadvantages.push({ id: row.id, label: 'Main ou bras perdu (Test à deux mains)' }); out.sources.push(row.id); }
       }); break;
       case 'shield-arm': if (shieldUsed) once(row, () => { if (ask('sequelaShieldOnLostArm', 'Séquelle : préciser si le bouclier est fixé au bras perdu ou immobilisé.')) out.restrictions.push('Bras perdu : on ne peut pas y fixer de bouclier.'); }); break;
-      case 'offhand-dr': if (kind === 'melee' && ask('sequelaOffHand', 'Séquelle : préciser si le Test de mêlée emploie l’arme de la main non directrice.')) push(row, row.amount); break;
+      // Une seule source pour la main non directrice : la séquelle force la règle générale `offHand` (Ambidextre la supprime) et les 100 PX la réduisent.
+      case 'offhand-dr': if (kind === 'melee') {
+        const general = defending ? flag('offHandWeapon') === true : Number(context?.penalties?.offHand) < 0;
+        if (general || ask('sequelaOffHand', 'Séquelle : préciser si le Test de mêlée emploie l’arme de la main non directrice.')) { out.offHand = { forced: !general, reduction: 2 + row.amount }; out.sources.push(row.id); }
+      } break;
       case 'no-dodge': if (dodge) out.restrictions.push(row.label); break;
       case 'dodge-athletics-disadvantage': if (dodge || isAthleticsTest(label)) { out.disadvantages.push({ id: row.id, label: 'Pied/jambe perdu' }); out.sources.push(row.id); } break;
       case 'both-eyes': if (kind === 'test') {
