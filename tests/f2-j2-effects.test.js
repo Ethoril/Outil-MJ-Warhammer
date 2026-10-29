@@ -211,3 +211,18 @@ test('J2 effets : le départage d’Initiative ne pose aucune question de circon
   assert.ok(!plan.needsInput.some(item => item.field === 'oppositionContext'), JSON.stringify(plan.needsInput));
   assert.equal(plan.oppositions[0].initiator.modifiers?.length ?? 0, 0);
 });
+
+test('J2 effets : « à renvoyer à la fiche » ne contient que le permanent, avec la provenance de chaque effet', async () => {
+  const fracture = (side = 'right') => sequela('frac', 'hero', { kind: 'broken-bone', part: 'leg', side, severity: 'minor', status: 'open', durationDays: 40, endDay: 40, immobilization: { state: 'none', waiver: false, attempts: [] } });
+  const only = await table([fracture()]);
+  assert.deepEqual(only.listAftermathSequelae().characteristics, {}, 'une fracture de jambe en cours ne se renvoie pas à la fiche');
+  assert.deepEqual(Object.keys(sequelaCharacteristicTotals(sequelaEffectRows(only.getAftermathState(), 'hero'))), ['CC', 'Ag'], 'le combat, lui, applique la fracture');
+  const both = await table([loss('foot', 'foot', 'left'), fracture('right')]);
+  const sheet = both.listAftermathSequelae().characteristics.hero;
+  assert.deepEqual(Object.fromEntries(Object.entries(sheet).map(([key, value]) => [key, value.amount])), { CC: -10, Ag: -10 });
+  assert.ok(Object.values(sheet).every(entry => entry.sources.every(source => source.sourceId === 'foot' && source.lifetime === 'permanent')));
+  // Au combat, les deux jambes comptent (−15) : la part temporaire garde la fracture pour source.
+  const combat = sequelaCharacteristicTotals(sequelaEffectRows(both.getAftermathState(), 'hero'));
+  assert.equal(combat.CC.amount, -15);
+  assert.deepEqual(combat.CC.sources.map(source => [source.sourceId, source.lifetime, source.amount]), [['foot', 'permanent', -10], ['frac', 'temporary', -5]]);
+});

@@ -5207,7 +5207,7 @@ function resolvedCorruptionTest(participant, skillId, input) {
       });
       const characteristics = {};
       for (const id of new Set((state.sequelae || []).map(row => row.participantId))) {
-        const totals = sequelaCharacteristicTotals(sequelaEffectRows(state, id));
+        const totals = sequelaCharacteristicTotals(sequelaEffectRows(state, id), { lifetime: 'permanent' });
         if (Object.keys(totals).length) characteristics[id] = totals;
       }
       return { day, sequelae: (state.sequelae || []).map(row => ({ ...cloneValue(row), phase: sequelaPhase(row, day) })), incidents, pending: pendingSequelaDecisions(state), characteristics };

@@ -106,16 +106,25 @@ export function sequelaEffectRows(state, participantId) {
   // Jambes et pieds : Mouvement, Capacité de Combat/Agilité, Désavantage Esquive/Athlétisme, Esquive interdite (p.178).
   const lost = [...lowerSides.values()];
   if (lost.length) {
-    const lifetime = lost.every(row => row.lifetime === 'temporary') ? 'temporary' : 'permanent';
+    // Les pertes définitives et les fractures en cours se cumulent au combat, mais seul le permanent se renvoie à la fiche : chaque ligne garde sa provenance.
+    const permanent = [...lowerSides].filter(([, row]) => row.lifetime === 'permanent');
+    const temporary = [...lowerSides].filter(([, row]) => row.lifetime === 'temporary');
+    const penaltyOf = entries => entries.length ? 10 + (entries.length >= 2 ? 5 : 0) - entries.reduce((sum, [side]) => sum + (toes.get(side) || 0), 0) : 0;
     const second = lost.length >= 2;
-    const source = lost[0].sequela;
-    const toesOnLost = [...lowerSides.keys()].reduce((sum, side) => sum + (toes.get(side) || 0), 0);
-    const footPenalty = (10 + (second ? 5 : 0)) - toesOnLost;
+    const main = (permanent[0] || temporary[0])[1];
+    const lifetime = main.lifetime;
+    const source = main.sequela;
+    const footPenalty = penaltyOf([...lowerSides]);
+    const permanentPenalty = penaltyOf(permanent);
     add(source, 'foot-movement', { lifetime, type: 'movement', mode: second ? 'one' : 'half-up', label: second ? 'Deux pieds ou jambes perdus : Mouvement 1' : 'Pied ou jambe perdu : Mouvement divisé par deux (arrondi au-dessus)' });
-    add(source, 'foot-cc', { lifetime, type: 'char', carac: 'CC', amount: -footPenalty, label: `Pied/jambe perdu : Capacité de Combat −${footPenalty}` });
-    add(source, 'foot-ag', { lifetime, type: 'char', carac: 'Ag', amount: -footPenalty, label: `Pied/jambe perdu : Agilité −${footPenalty}` });
+    for (const carac of ['CC', 'Ag']) {
+      const name = carac === 'CC' ? 'foot-cc' : 'foot-ag', text = carac === 'CC' ? 'Capacité de Combat' : 'Agilité';
+      add(source, name, { lifetime, type: 'char', carac, amount: -(permanent.length ? permanentPenalty : footPenalty), label: `Pied/jambe perdu : ${text} −${permanent.length ? permanentPenalty : footPenalty}` });
+      if (permanent.length && temporary.length && footPenalty > permanentPenalty) add(temporary[0][1].sequela, `${name}-temporary`, { lifetime: 'temporary', type: 'char', carac, amount: -(footPenalty - permanentPenalty), label: `Jambe fracturée en plus d’un pied perdu : ${text} −${footPenalty - permanentPenalty} (temporaire)` });
+    }
     add(source, 'foot-dodge', { lifetime, type: 'dodge-athletics-disadvantage', label: 'Pied/jambe perdu : Désavantage aux Tests d’Esquive et d’Athlétisme' });
-    if (lost.some(row => row.leg)) add(source, 'no-dodge', { lifetime, type: 'no-dodge', label: 'Jambe perdue : l’Esquive est impossible' });
+    const legEntry = [...permanent, ...temporary].find(([, row]) => row.leg);
+    if (legEntry) add(legEntry[1].sequela, 'no-dodge', { lifetime: legEntry[1].lifetime, type: 'no-dodge', label: 'Jambe perdue : l’Esquive est impossible' });
   }
   // Orteils : −1 CC/Ag chacun ; sur un pied ensuite perdu, la pénalité du pied est réduite d'autant (ci-dessus), le total reste 10.
   for (const [side, count] of toes) {
