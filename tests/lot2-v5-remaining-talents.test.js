@@ -59,6 +59,8 @@ test('Maniement de deux armes : seconde attaque exonérée une fois par Tour, Pa
  const primary=store.previewResolution(melee('dual-primary',{action:{type:'attack',base:60,attr:'CC',damage:5,extensions:{fiche:{equipmentId:'main'}}}}));assert.equal((await store.applyResolution(primary)).status,'applied');
  await store.updateParticipant('a',{extensions:{v5:{hasMomentum:false}}});
  const raw=melee('dual',{action:{type:'attack',base:60,attr:'CC',damage:5,extensions:{fiche:{equipmentId:'dagger'}}},v5:{kind:'melee',extraAttack:true,context:{freeAttackTalent:'dual-wielder',dualWielding:true,secondWeaponAttack:true,weaponDagger:true,primaryResolutionId:'dual-primary'}}});
+ assert.equal(store.previewResolution(raw).actionCosts.ready,false,'V5 v3 p.119 : sans Élan, pas d’attaque de seconde arme');
+ await store.updateParticipant('a',{extensions:{v5:{hasMomentum:true}}});
  const p=store.previewResolution(raw);assert.equal(p.actionCosts.ready,true);assert.equal(p.actionCosts.paid.length,0);assert.ok(p.input.action.qualities.some(q=>q.id==='parade'));assert.equal((await store.applyResolution(p)).status,'applied');assert.equal(store.previewResolution({...raw,resolutionId:'another'}).actionCosts.ready,false);
 });
 

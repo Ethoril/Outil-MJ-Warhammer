@@ -20,7 +20,7 @@ import { previewV5PistolContact } from './v5-weapon-qualities.js';
 import { activeEngines } from './roll-qualities.js';
 import { keywordMechanicalStatus } from './keywords.js';
 import { activeV5TalentEffects } from './v5-talents.js';
-import { applyV5TalentPenaltyRules, applyV5AttackSituationModifiers } from './v5-talent-combat.js';
+import { applyV5TalentPenaltyRules, applyV5AttackSituationModifiers, computeV5WeaponRangeBands } from './v5-talent-combat.js';
 import { normalizeState } from './effects.js';
 import { previewV5TalentTestModifiers, previewV5TalentSLChoices } from './v5-talent-tests.js';
 import { sequelaTestRules } from './v5-sequela-effects.js';
@@ -29,10 +29,13 @@ export const V5_COMBAT_RULE_VERSION = 'v5-combat-2026-10-09.24.6';
 export const hasMomentum = actor => actor?.extensions?.v5?.hasMomentum === true;
 export const withMomentum = (actor, value) => {
   const frenzy=(actor.states||[]).some(s=>s.key==='frenzy'&&sourceActive(s));
-  const restricted=(actor.states||[]).some(s=>sourceActive(s)&&(s.restriction==='noMomentumOrAdvantage'||s.restriction==='cannotGainMomentum'&&!frenzy&&actor.extensions?.v5?.hasMomentum!==true));
+  // Livre de base V5 v3 p.183 : sous la Peur, l'Élan est perdu et ne se regagne pas.
+  const restricted=(actor.states||[]).some(s=>sourceActive(s)&&(s.restriction==='noMomentumOrAdvantage'||s.restriction==='cannotGainMomentum'&&!frenzy));
   if(value&&restricted)return withMomentum(actor,false);
   return !value&&actor.extensions?.v5?.hasMomentum===undefined?actor:({...actor,extensions:{...(actor.extensions||{}),v5:{...(actor.extensions?.v5||{}),hasMomentum:Boolean(value)}}});
 };
+/** Un participant qui vient d'acquérir une restriction de Peur perd l'Élan qu'il avait. */
+export const loseMomentumUnderFear = actor => hasMomentum(actor)&&(actor.states||[]).some(s=>s.restriction==='cannotGainMomentum'&&sourceActive(s))?withMomentum(actor,false):actor;
 export const conditionLevels = actor => {
   const levels = new Map();
   for (const [index, raw] of (actor?.states || []).entries()) {
@@ -59,7 +62,7 @@ export function acquiredConditionInstances(actor, proposed = []) {
 export function momentumAfterChange(before, after) {
   const previous = conditionLevels(before), current = conditionLevels(after);
   const acquired = [...current].some(([key, level]) => key !== 'blesse' && level > (previous.get(key) || 0));
-  return Number(after.hp) < Number(before.hp) || acquired ? withMomentum(after, false) : after;
+  return loseMomentumUnderFear(Number(after.hp) < Number(before.hp) || acquired ? withMomentum(after, false) : after);
 }
 export function inferV5Kind(action = {}, attackContext = {}) {
   return action.extensions?.v5?.kind || (['attack', 'attaque'].includes(action.type)
@@ -303,8 +306,10 @@ export function buildCombatTest(normalized, role = 'actor') {
   }
   if (levels.has('souille') && !ignoreConditions) {
     const fellowship = kind !== 'test' ? false : action.attr === 'Soc' ? true : context.usesFellowship;
-    if (fellowship == null) unresolved.push('Préciser si le Test utilise la Sociabilité.');
+    if (fellowship == null && context.festeringWounds !== true) unresolved.push('Préciser si le Test utilise la Sociabilité.');
     if (fellowship) conditionDisadvantages.set('besmirched', [{ id: 'besmirched', label: 'Souillé' }]);
+    // V5 v3 p.185 : Désavantage aussi aux Tests d'Endurance contre les Plaies purulentes (le MJ le déclare ; l'outil ne tient pas de Test quotidien).
+    else if (kind === 'test' && context.festeringWounds === true) conditionDisadvantages.set('besmirched', [{ id: 'besmirched', label: 'Souillé (Plaies purulentes)' }]);
   }
   if(!defending&&(actor.states||[]).some(s=>s.key==='glorious-spent'&&sourceActive(s))&&levels.has('sonne')&&context.mandatoryTest!==true&&context.freeAttackTalent!=='glorious-demise')restrictions.push('Fin glorieuse : aucune Action au prochain Tour tant que Sonné.');
   if (levels.has('inconscient')&&!(normalized.combatPrelude?.immediate?.glorious&&!defending)) restrictions.push('Un combattant Inconscient ne peut pas agir ou se défendre.');
@@ -315,7 +320,8 @@ export function buildCombatTest(normalized, role = 'actor') {
     if (targetLevels.has('surpris')) modifiers.push({ id: 'target-surprised', label: 'Cible Surprise', amount: 2 });
   }
   const pistolContact=previewV5PistolContact({qualities:action.qualities||[],attack:!defending,engaged:settings.context?.targetEngaged===true,ranged:kind==='ranged'});
-  if(!defending&&kind==='ranged'&&settings.context?.targetEngaged===true&&!pistolContact.allowed)disadvantages.push({id:'target-engaged',label:'Tir sur une cible engagée'});
+  // Livre de base V5 v3 p.165 : un tir contre un adversaire engagé avec le tireur se résout comme une mêlée et ne compte pas comme un tir dans la mêlée.
+  if(!defending&&kind==='ranged'&&settings.context?.targetEngaged===true&&settings.context?.engagedWithShooter!==true&&!pistolContact.allowed)disadvantages.push({id:'target-engaged',label:'Tir sur une cible engagée'});
   if(!defending&&kind==='test'&&action.attr==='F'&&context.entanglementTest===true){
     const weaponId=context.entanglementWeaponId||action.extensions?.fiche?.equipmentId||action.extensions?.equipment?.id;
     const entanglingWeapon=actor?.equipment?.find(row=>row.id===weaponId);
@@ -344,7 +350,12 @@ export function buildCombatTest(normalized, role = 'actor') {
   if (sequelae.offHand?.forced) modifiers.push({ id: 'penalty:offHand', label: 'Main secondaire', amount: -2 });
   applyV5TalentPenaltyRules(modifiers,talentModifiers.penaltyRules,{kind,role:talentRole,context:settings.context||{},advantage:advantages.length-disadvantages.length,aimed:settings.aimed});
   if(defending&&settings.context?.combatDefensiveActionBonus===2)modifiers.push({id:'combat:defensive-action',label:'Action Défensive choisie',amount:2});
-  unresolved.push(...applyV5AttackSituationModifiers(modifiers,{role:talentRole,kind,actionType:action.type,actor,target,context:settings.context||{},actorSize:settings.actorSize,targetSize:settings.targetSize,talentRules:talentModifiers.penaltyRules,advantage:advantages.length-disadvantages.length,aimed:settings.aimed}));
+  unresolved.push(...applyV5AttackSituationModifiers(modifiers,{role:talentRole,kind,actionType:action.type,actor,target,context:settings.context||{},actorSize:settings.actorSize,targetSize:settings.targetSize,talentRules:talentModifiers.penaltyRules,advantage:advantages.length-disadvantages.length,aimed:settings.aimed,rangeBands:kind==='ranged'&&!defending?computeV5WeaponRangeBands(settings.context?.weaponRangeYards??(actor.equipment?.find(item=>item.id===action.extensions?.fiche?.equipmentId)||action.extensions?.equipment)?.range??action.range,actor):null}));
+  // À répétition (V5 v3 p.305) : deux tirs sur la même cible à −1 DR en une seule Action ; chaque tir est un Test, le second est gratuit (repeaterSecondShot).
+  if (!defending && kind === 'ranged' && ['attack', 'attaque'].includes(action.type) && settings.context?.repeaterDoubleShot === true) {
+    if (!(action.qualities || []).some(row => (typeof row === 'string' ? row : row?.id) === 'a-repetition')) unresolved.push('Tir double : une arme À répétition est requise (V5 p.305).');
+    else modifiers.push({ id: 'quality:repeater-double', label: 'À répétition : tir double', amount: -1 });
+  }
   if (sequelae.offHand) {
     // Une seule pénalité de main non directrice, quelle que soit la source ; les 100 PX de réapprentissage la réduisent.
     const offIds = new Set(['penalty:offHand', 'quality:offhand-defense']);

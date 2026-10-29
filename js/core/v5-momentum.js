@@ -7,9 +7,11 @@ const count = value => {
   if (!Number.isInteger(value) || value < 0) throw new TypeError('Quantité d’événement invalide');
   return value;
 };
-const LOSS_REASONS = new Set(['oppositionLost', 'meleeTestFailed', 'woundsLost', 'conditionAcquired', 'combatPause', 'combatEnd']);
-export function previewMomentumEvents({ hasMomentum, events = [], exceptions = [] } = {}) {
+// Peur (V5 v3 p.183) : l'Élan est perdu à l'instant où la Peur s'installe et ne se regagne pas tant qu'elle dure.
+const LOSS_REASONS = new Set(['oppositionLost', 'meleeTestFailed', 'woundsLost', 'conditionAcquired', 'fearAcquired', 'combatPause', 'combatEnd']);
+export function previewMomentumEvents({ hasMomentum, events = [], exceptions = [], frightened = false } = {}) {
   let momentum = bool(hasMomentum, 'Élan');
+  bool(frightened, 'Peur');
   if (!Array.isArray(events) || !Array.isArray(exceptions)) throw new TypeError('Événements d’Élan invalides');
   const guards = exceptions.map(item => {
     if (!item || !LOSS_REASONS.has(item.reason) || typeof item.talentId !== 'string' || !item.talentId.trim()) throw new TypeError('Exception d’Élan invalide');
@@ -26,6 +28,7 @@ export function previewMomentumEvents({ hasMomentum, events = [], exceptions = [
     if (event.type === 'opposedMeleeWon' || event.type === 'chargeEnemy' || event.type === 'profileMomentumGain') effect = 'gain';
     else if (event.type === 'spend') effect = 'spend';
     else if (event.type === 'opposedMeleeLost') effect = 'oppositionLost';
+    else if (event.type === 'fearAcquired') effect = 'fearAcquired';
     else if (event.type === 'meleeTestFailed') effect = 'meleeTestFailed';
     else if (event.type === 'woundsLost') effect = count(event.amount) > 0 ? 'woundsLost' : 'none';
     else if (event.type === 'conditionAcquired') effect = count(event.instances) > 0 ? 'conditionAcquired' : 'none';
@@ -33,7 +36,7 @@ export function previewMomentumEvents({ hasMomentum, events = [], exceptions = [
     else throw new TypeError('Événement d’Élan non couvert');
     const before = momentum;
     const preventedBy = guards.filter(guard => guard.applies && guard.reason === effect).map(guard => guard.talentId);
-    if (effect === 'gain') momentum = true;
+    if (effect === 'gain') momentum = frightened ? false : true;
     else if (effect === 'spend') momentum = false;
     else if (effect !== 'none' && !preventedBy.length) momentum = false;
     trace.push({ eventId: event.id, effect, before, after: momentum, preventedBy });
@@ -41,10 +44,11 @@ export function previewMomentumEvents({ hasMomentum, events = [], exceptions = [
   return { before: hasMomentum, after: momentum, details: trace };
 }
 /** Cost waivers and other ability quotas are separate; this checks only the Momentum payment quota. */
-export function previewMomentumCost({ hasMomentum, paidExtraAttackUsedThisTurn, extraAttack = false, waived = false } = {}) {
+export function previewMomentumCost({ hasMomentum, paidExtraAttackUsedThisTurn, extraAttack = false, waived = false, requiresMomentum = false } = {}) {
   bool(hasMomentum, 'Élan'); bool(paidExtraAttackUsedThisTurn, 'Quota de dépense');
-  bool(extraAttack, 'Attaque supplémentaire'); bool(waived, 'Exemption');
-  const allowed = waived || (hasMomentum && (!extraAttack || !paidExtraAttackUsedThisTurn));
+  bool(extraAttack, 'Attaque supplémentaire'); bool(waived, 'Exemption'); bool(requiresMomentum, 'Élan exigé');
+  // Exemption de coût qui exige tout de même d'avoir de l'Élan (Maniement de deux armes, V5 v3 p.119).
+  const allowed = waived ? (!requiresMomentum || hasMomentum) : (hasMomentum && (!extraAttack || !paidExtraAttackUsedThisTurn));
   return { allowed, reason: allowed ? null : !hasMomentum ? 'requiresMomentum' : 'paidExtraAttackLimit',
     cost: allowed && !waived ? 'loseMomentum' : null,
     nextMomentum: allowed && !waived ? false : hasMomentum,

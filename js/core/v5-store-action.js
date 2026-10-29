@@ -151,7 +151,14 @@ export function buildV5StoreActionInput(envelope, raw = {}) {
   if(context.talentAction==='martial-arts')quotas.push({id:'talent:martial-arts-choice',scope:'turn',maximum:1});
   if(v5.extraAttack&&context.freeAttackTalent==='dual-wielder'){
     if(!acquiredV5Talents(actor).some(t=>t.talentId==='talent-dual-wielder')||!currentV5TalentHashes()['talent-dual-wielder']?.startsWith('sha256:')||context.dualWielding!==true||context.secondWeaponAttack!==true||v5.kind!=='melee')throw new TypeError('Maniement de deux armes : seconde arme en mêlée requise.');
-    quotas.push({id:'talent:dual-wielder-second-weapon',scope:'turn',maximum:1});for(const cost of costs.filter(c=>c.resource==='momentum'))exemptions.push({costId:cost.id,sourceId:'talent-dual-wielder'});
+    quotas.push({id:'talent:dual-wielder-second-weapon',scope:'turn',maximum:1});
+    // V5 v3 p.119 : l'attaque de seconde arme ne dépense pas d'Élan, mais il faut en avoir ; sans Élan l'exemption tombe et le coût d'Élan bloque l'action.
+    if(actor.extensions?.v5?.hasMomentum===true)for(const cost of costs.filter(c=>c.resource==='momentum'))exemptions.push({costId:cost.id,sourceId:'talent-dual-wielder'});
+  }
+  // À répétition (V5 v3 p.305) : le second tir du tir double est un Test gratuit de la même Action ; un seul par Tour, aucun Élan.
+  if(v5.extraAttack&&context.freeAttackTalent==='repeater-double'){
+    if(context.repeaterDoubleShot!==true||context.repeaterSecondShot!==true||v5.kind!=='ranged'||![...(supplied.action?.qualities||[]),...(actor.equipment?.find(row=>row.id===supplied.action?.extensions?.fiche?.equipmentId)?.keywords||[])].some(row=>(typeof row==='string'?row:row?.id)==='a-repetition'))throw new TypeError('Tir double À répétition : second tir d’une arme À répétition requis.');
+    quotas.push({id:'weapon:repeater-double-second-shot',scope:'turn',maximum:1});for(const cost of costs.filter(c=>c.resource==='momentum'))exemptions.push({costId:cost.id,sourceId:'weapon-repeater'});
   }
   if(context.talentAction==='shield-ally'){costs.push({id:'talent:shieldsman:momentum',resource:'momentum',amount:1});quotas.push({id:'talent:shieldsman',scope:'round',maximum:1});}
   if(context.talentAction==='overcome-fear'){const active=(actor.states||[]).find(s=>s.key==='fear-of-talent'&&s.id===context.fearEffectId&&sourceActive(s));if(active)quotas.push({id:'talent:frightening:control',scope:active.mode==='sl'?'round':'turn',maximum:1});}

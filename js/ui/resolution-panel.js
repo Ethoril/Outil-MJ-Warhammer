@@ -1818,7 +1818,7 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
       check.addEventListener('change',()=>{const ids=(current.wornArmorItemIds||[]).filter(id=>id!==item.id);if(check.checked)ids.push(item.id);handlers.select({v5Context:{...current,wornArmorItemIds:ids}});});label.append(check,item.name+' porté');fields.append(label);}
   }
   const selectedNetEscape=(draft.v5Context||{}).netEscapeConditionId;
-  for (const [key, label] of [['involvesMovement','Le Test implique un mouvement'],['runningOrHiding','Le Test sert à fuir ou se cacher'],['reliesOnSight','Le Test est réalisable sans voir mais repose sur la vue'],['requiresSight','Le Test est impossible sans voir'],['usesFellowship','Le Test utilise la Sociabilité']])
+  for (const [key, label] of [['involvesMovement','Le Test implique un mouvement'],['runningOrHiding','Le Test sert à fuir ou se cacher'],['reliesOnSight','Le Test est réalisable sans voir mais repose sur la vue'],['requiresSight','Le Test est impossible sans voir'],['usesFellowship','Le Test utilise la Sociabilité'],['festeringWounds','Test d’Endurance contre les Plaies purulentes (Souillé : Désavantage)']])
     if(key!=='involvesMovement'||!selectedNetEscape)contextField(fields, 'actor', key, label);
   // Séquelles durables (F2-J2) : circonstances que l'outil ne connaît pas (zone utilisée, parole, ouïe, main directrice…), demandées au MJ.
   for (const field of sequelaContextFields(actor)) if (!['reliesOnSight', 'requiresSight'].includes(field.key)) contextField(fields, 'actor', field.key, `Séquelle · ${field.label}`);
@@ -1954,7 +1954,7 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
   if (carriesMovement(actor, 'marine')) contextField(fields, 'actor', 'inWater', 'La Créature marine est dans l’eau');
   contextField(fields,'actor','blackpowderBrokenTest','Calme contre un tir À Poudre noire');
   if(draft.v5Context?.blackpowderBrokenTest){const current=draft.v5Context,wrap=node('label','workspace-type','Auteur du tir À Poudre noire'),select=document.createElement('select');select.setAttribute('aria-label',wrap.textContent);select.append(new Option('Choisir',''));for(const shooter of participants.filter(p=>p.id!==actor.id))select.append(new Option(shooter.name,shooter.id));select.value=current.blackpowderShooterId||'';select.addEventListener('change',()=>handlers.select({v5Context:{...current,blackpowderShooterId:select.value||undefined}}));wrap.append(select);fields.append(wrap);}
-  if (kind.value === 'ranged' && target) { contextField(fields, 'actor', 'rangedOppositionAllowed', 'Tir opposé : exception vérifiée par le MJ'); contextField(fields, 'actor', 'pointBlank', 'Tir à bout portant'); }
+  if (kind.value === 'ranged' && target) { contextField(fields, 'actor', 'rangedOppositionAllowed', 'Tir opposé par Esquive confirmé par le MJ (tireur à moins de Bonus d’Initiative mètres de la cible, ou bouclier de 2 PA ou plus)'); contextField(fields, 'actor', 'pointBlank', 'Tir à bout portant'); }
   if (type === 'attack' && target) contextField(fields, 'actor', 'targetHelpless', 'Cible sans défense : situation vérifiée par le MJ');
   // Surnombre (L06 p. 167, BR-16) : le moteur ne suit pas l'engagement, le MJ coche les engagés avec la cible de chaque côté.
   if (type === 'attack' && kind.value === 'melee' && target && target.id !== actor.id) {
@@ -1984,7 +1984,7 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
   }
   if (['attack', 'opposition'].includes(type) && target) {
     fields.appendChild(rubric('Circonstances de la défense'));
-    for (const [key, label] of [['involvesMovement','Le Test implique un mouvement'],['runningOrHiding','Le Test sert à fuir ou se cacher'],['reliesOnSight','Le Test est réalisable sans voir mais repose sur la vue'],['requiresSight','Le Test est impossible sans voir'],['usesFellowship','Le Test utilise la Sociabilité']]) contextField(fields, 'defender', key, label);
+    for (const [key, label] of [['involvesMovement','Le Test implique un mouvement'],['runningOrHiding','Le Test sert à fuir ou se cacher'],['reliesOnSight','Le Test est réalisable sans voir mais repose sur la vue'],['requiresSight','Le Test est impossible sans voir'],['usesFellowship','Le Test utilise la Sociabilité'],['festeringWounds','Test d’Endurance contre les Plaies purulentes (Souillé : Désavantage)']]) contextField(fields, 'defender', key, label);
     contextField(fields,'defender','offHandWeapon','Défense avec l’arme de la main non directrice (−2 DR sans Parade)');
     for (const field of sequelaContextFields(target)) if (!['reliesOnSight', 'requiresSight'].includes(field.key)) contextField(fields, 'defender', field.key, `Séquelle · ${field.label}`);
     if (participants.some(person => person.id !== target.id && carriesSense(person, 'distracting'))) contextField(fields, 'defender', 'distractingInRange', 'Un Perturbant est à portée du défenseur (−2 DR, une seule fois)');
@@ -1997,7 +1997,16 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
       const rangedWeapon = actor?.equipment?.find(item => item?.id === action.extensions?.fiche?.equipmentId) || action.extensions?.equipment || (rangedWeapons.length === 1 ? rangedWeapons[0] : null);
       const rangeBands = computeV5WeaponRangeBands(draft.v5Context?.weaponRangeYards ?? rangedWeapon?.range ?? action.range, actor);
       choiceField(fields, 'shotRange', 'Bande de portée choisie par le MJ', [['point-blank','Bout portant'],['short','Courte'],['medium','Moyenne'],['long','Longue'],['extreme','Extrême']]);
-      if (rangeBands) fields.appendChild(node('p', 'workspace-muted', `Bandes dérivées de la portée imprimée (${rangeBands.printedYards} m) : Bout portant ≤ ${rangeBands.pointBlankYards} m (+2 DR) · Courte ≤ ${rangeBands.shortYards} m (+1 DR) · Moyenne ≤ ${rangeBands.mediumYards} m (0 DR) · Longue ≤ ${rangeBands.longYards} m (−1 DR) · Extrême ≤ ${rangeBands.extremeYards} m (−2 DR).`));
+      if (rangeBands) fields.appendChild(node('p', 'workspace-muted', `Bandes dérivées de la portée imprimée (${rangeBands.printedYards} m) : ${rangeBands.pointBlankYards === null ? 'Pas de bout portant (portée courte de 4 m ou moins)' : `Bout portant ≤ ${rangeBands.pointBlankYards} m (+2 DR)`} · Courte ≤ ${rangeBands.shortYards} m (+1 DR) · Moyenne ≤ ${rangeBands.mediumYards} m (0 DR) · Longue ≤ ${rangeBands.longYards} m (−1 DR) · Extrême ≤ ${rangeBands.extremeYards} m (−2 DR).`));
+      if ((rangedWeapon?.keywords || []).some(row => (typeof row === 'string' ? row : row?.id) === 'a-repetition')) {
+        contextField(fields, 'actor', 'repeaterDoubleShot', 'À répétition : tir double (deux tirs sur la même cible à −1 DR, une seule Action)');
+        if (draft.v5Context?.repeaterDoubleShot === true) {
+          const second = node('label', 'workspace-type'), secondBox = document.createElement('input'); secondBox.type = 'checkbox'; secondBox.checked = draft.v5Context?.freeAttackTalent === 'repeater-double';
+          secondBox.setAttribute('aria-label', 'Second tir du tir double (gratuit, sans Élan)');
+          secondBox.addEventListener('change', () => { const current = draft.v5Context || {}; handlers.select({ extraAttack: secondBox.checked, v5Context: { ...current, repeaterSecondShot: secondBox.checked ? true : undefined, freeAttackTalent: secondBox.checked ? 'repeater-double' : undefined } }); });
+          second.append(secondBox, 'Second tir du tir double (gratuit, sans Élan)'); fields.appendChild(second);
+        }
+      }
       choiceField(fields, 'weather', 'Météo', [['normal','Aucune pénalité'],['fog','Brouillard (−1 DR)'],['rain-wind','Pluie ou vent (−2 DR)'],['extreme','Météo extrême (−3 DR)']]);
       choiceField(fields, 'lighting', 'Lumière', [['normal','Aucune pénalité'],['fog','Faible lumière (−1 DR)'],['dim','Pénombre (−1 DR)'],['dark','Noir total (−3 DR)']]);
       fields.appendChild(node('p', 'workspace-muted', 'Météo et lumière partagent une seule ligne du tableau : seule la pénalité la plus sévère s’applique. La portée est un choix du MJ; l’application ne suit pas la distance.'));
@@ -2039,6 +2048,7 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
         fields.appendChild(node('p','workspace-muted','Le reçu conserve les dés, la distance obtenue et le plafond; le pion n’est pas déplacé automatiquement. Pour un résultat aux pieds du tireur ou de la cible, aucun repère de distance n’est requis.'));
       }
       contextField(fields, 'actor', 'targetEngaged', 'La cible est engagée au corps à corps (Désavantage au tir)');
+      contextField(fields, 'actor', 'engagedWithShooter', 'La cible est engagée avec le tireur (le tir se résout comme une mêlée : Corps à corps opposé, pas de Désavantage de tir dans la mêlée)');
       if (draft.v5Context?.targetEngaged === true && target) {
         const current = draft.v5Context || {}, engagedIds = new Set(current.engagedTargetIds || [target.id]); engagedIds.add(target.id);
         fields.appendChild(node('p', 'workspace-muted', 'Cochez les combattants effectivement engagés, alliés compris. Le jet de choix est saisi une fois et reste stable au recalcul.'));
