@@ -5144,7 +5144,7 @@ function resolvedCorruptionTest(participant, skillId, input) {
         const patient = incident && (draft.combat?.participants || []).find(row => row.id === incident.participantId);
         const record = incident?.source.kind === 'critical' ? (patient?.extensions?.v5?.criticalAftermath || []).find(row => row.id === incident.source.criticalId) : null;
         const found = aftermathHealerOf(draft, 'heal', input);
-        const outcome = treatSurgicalIncident(state, { operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, incidentId: input.incidentId, healer: found.ok ? found.healer : null, roll: input.roll, surgeryRequired: aftermathAmputation(record) === 'occurred' || (record?.sequela?.durableEffects || []).some(effect => effect.kind === 'surgery-deadline'), d10: input.d10 ?? null, wounds: Number(patient?.hp) || 0 });
+        const outcome = treatSurgicalIncident(state, { operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, incidentId: input.incidentId, healer: found.ok ? found.healer : null, roll: input.roll, surgeryRequired: sequelaAmputation(record) === 'occurred' || (record?.sequela?.durableEffects || []).some(effect => effect.kind === 'surgery-deadline'), d10: input.d10 ?? null, wounds: Number(patient?.hp) || 0 });
         if (outcome.receipt.reason === 'healer-skill-required' && found.reason) outcome.receipt.reason = found.reason;
         if (outcome.receipt.status === 'applied' && outcome.receipt.fumbleDamage) {
           outcome.afterApply = next => { const target = next.combat.participants.find(row => row.id === patient.id); target.hp = Math.max(0, Number(target.hp) - outcome.receipt.fumbleDamage); return next; };
@@ -5168,7 +5168,8 @@ function resolvedCorruptionTest(participant, skillId, input) {
           // Lésions, pertes et durables (J2) : un critique n'est guéri que quand chacune de ses séquelles a un suivi terminé ; l'historique et les effets permanents restent.
           const outstanding = sequelaeOutstanding(state, incident.id, { planned: planSequelae(record), amputation: sequelaAmputation(record) });
           if (outstanding.length) return refuse(outstanding.some(row => row.reason === 'not-opened') ? 'sequelae-follow-up-not-opened' : 'sequelae-follow-up-open', { outstanding });
-          surgeryRequired = amputation === 'occurred';
+          // Toute amputation exige la Chirurgie (p.178), y compris les pertes fonctionnelles et les pertes conditionnelles confirmées.
+          surgeryRequired = sequelaAmputation(record) === 'occurred';
           wound = (patient.extensions?.v5?.criticalWounds || []).find(row => row.id === incident.source.criticalWoundId) || null;
           if ((record.sequela?.states || []).length) {
             // Un enregistrement sans stateIds (ancien ou non rattaché) n'est jamais validé tout seul : le MJ confirme.

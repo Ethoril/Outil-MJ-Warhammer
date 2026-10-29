@@ -319,3 +319,29 @@ test('J2 — l’aperçu d’avancement annonce les fins de guérison et les éc
   assert.deepEqual(store.getAftermathState(), stateBefore, 'l’aperçu ne change pas le registre');
   assert.deepEqual(store.previewAftermathAdvance({ days: 5, expectedRevision: stateBefore.revision }).sequelaEvents, []);
 });
+
+test('J2 — toute amputation exige la Chirurgie (p.178) : tendon sectionné et Moelle épinière, comme les amputations directes', async () => {
+  const tendon = wounded('patient', 'LEG', 'Cut Tendon', { amputationShock: { amputationOccurred: true, part: 'leg', difficultyDR: -3 } });
+  const surgeon = healerSheet({ id: 'surgeon', talents: [{ id: 'talent-surgery', status: 'resolved', rank: 1 }] });
+  const { store } = await setup([tendon.participant, surgeon]);
+  const incidentId = await follow(store, 'patient', tendon.record);
+  await store.openAftermathSequelae({ operationId: op(), incidentId });
+  const leg = sequelaeOf(store).find(row => row.kind === 'loss' && row.part === 'leg');
+  assert.equal((await store.setAftermathSequelaFacts({ operationId: op(), sequelaId: leg.id, facts: { side: 'left' } })).receipt.status, 'applied');
+  assert.equal((await close(store, incidentId)).receipt.reason, 'surgery-not-completed');
+  assert.equal((await store.treatAftermathSurgicalIncident({ operationId: op(), incidentId, healerId: 'surgeon', roll: 10 })).receipt.reason, 'surgery-success');
+  assert.equal((await close(store, incidentId)).receipt.reason, 'critical-healed');
+});
+
+test('J2 — Orteil entaillé : l’orteil perdu confirmé par le choc exige aussi la Chirurgie avant la clôture', async () => {
+  const toe = wounded('patient', 'LEG', 'Badly Cut Toe', { amputationShock: { amputationOccurred: true, part: 'toe', difficultyDR: 2 } });
+  const surgeon = healerSheet({ id: 'surgeon', talents: [{ id: 'talent-surgery', status: 'resolved', rank: 1 }] });
+  const { store } = await setup([toe.participant, surgeon]);
+  const incidentId = await follow(store, 'patient', toe.record);
+  await store.openAftermathSequelae({ operationId: op(), incidentId });
+  const test = sequelaeOf(store).find(row => row.kind === 'post-encounter-test');
+  await store.recordAftermathPostEncounterTest({ operationId: op(), sequelaId: test.id, roll: 90 });
+  const lost = sequelaeOf(store).find(row => row.kind === 'loss' && row.part === 'toe');
+  assert.equal((await store.setAftermathSequelaFacts({ operationId: op(), sequelaId: lost.id, facts: { side: 'left', count: 1 } })).receipt.status, 'applied');
+  assert.equal((await close(store, incidentId)).receipt.reason, 'surgery-not-completed');
+});
