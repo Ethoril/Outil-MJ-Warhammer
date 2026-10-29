@@ -21,7 +21,8 @@ try{
   const ratling=reference.equipment.items.find(item=>item.id==='weapon-armes-a-distance-ingenierie-mitrailleuse-ratling-skaven');
   const actor={id:'f-review-actor',name:'Porteur F',kind:'PJ',camp:'pj',zone:'active',hp:20,maxHp:20,caracs:{CC:60,CT:60,F:40,E:40,FM:40,Ag:40,Int:40},skills:[],talents:[],states:[],armor:{head:0,body:0,arms:0,legs:0},equipment:[pavise,ratling,{id:'antler-test',name:'Antler Hilted Blade',kind:'weapon',category:'Base',damage:'BF+4',keywords:[],extensions:{}},{id:'leviathan-test',name:'Leviathan Plate',kind:'armour',ap:2,locations:['body'],layer:'rigid',keywords:[],extensions:{}}],actions:[
     {id:'antler-attack',name:'Antler Hilted Blade',type:'attack',attr:'CC',base:60,damage:4,qualities:[],extensions:{fiche:{equipmentId:'antler-test'}}},
-    {id:'focus-test',name:'Focalisation (Aqshy)',type:'test',attr:'FM',base:50,extensions:{}}
+    {id:'focus-test',name:'Focalisation (Aqshy)',type:'test',attr:'FM',base:50,extensions:{}},
+    {id:'warp-attack',name:'Warp Blade',type:'attack',attr:'CC',base:60,damage:6,qualities:[],extensions:{}}
   ],extensions:{v5:{corruptionPoints:0}}};
   const target={...actor,id:'f-review-target',name:'Cible F',camp:'ennemi',equipment:[],actions:[],extensions:{v5:{}}};
   const profile=L22.profiles.find(row=>row.name==='Rat Ogre Bonebreaker');
@@ -32,6 +33,20 @@ try{
   await page.locator('[data-action-key="antler-attack"]').click();
   const workspace=page.locator('#workspace-root');
   assert.equal(await workspace.getByLabel('Origine de la poignée en bois de Grand Cerf').count(),1);
+  // Warp Blade : score et d100 du Test de Résistance saisis dans le panneau, gardés d’un rendu à l’autre, oubliés au changement de cible.
+  await page.locator('[data-action-key="warp-attack"]').click();
+  const foe=name=>workspace.getByRole('group',{name:'Adversaires'}).getByRole('button',{name,exact:true});
+  await foe('Cible F').click();
+  const warpScore=workspace.getByLabel('Warp Blade : score de Résistance de la cible (Test +2 DR si >1 Blessure)',{exact:true});
+  const warpRoll=workspace.getByLabel('Warp Blade : jet d100 du Test de Résistance de la cible',{exact:true});
+  await warpScore.fill('110');await warpScore.press('Tab');
+  await warpRoll.fill('61');await warpRoll.press('Tab');
+  await page.waitForFunction(()=>document.querySelector('[aria-label="Warp Blade : jet d100 du Test de Résistance de la cible"]')?.value==='61');
+  assert.equal(await warpScore.inputValue(),'110','un score V5 au-delà de 100 reste saisi');
+  assert.equal(await warpScore.getAttribute('max'),null,'le score n’est pas plafonné à 100');
+  await foe('Rat Ogre Bonebreaker test').click();await foe('Cible F').click();
+  await page.waitForFunction(()=>document.querySelector('[aria-label="Warp Blade : jet d100 du Test de Résistance de la cible"]')?.value==='');
+  assert.equal(await warpScore.inputValue(),'','les réponses de l’ancienne cible sont oubliées');
   await page.locator('[data-action-key="focus-test"]').click();
   assert.equal(await workspace.getByLabel('Objet de focalisation utilisé').count(),1);
   assert.equal(await workspace.getByText('Le bonus s’applique uniquement à Focalisation dans le domaine indiqué; le bâton ne réduit pas le niveau d’incantation.',{exact:true}).count(),1);
