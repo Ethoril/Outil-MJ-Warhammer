@@ -8,7 +8,7 @@ import { createCriticalAftermathRecord } from '../js/core/v5-critical-aftermath.
 import { getV5CriticalEffect } from '../js/data/v5-crits.js';
 
 // Parcours navigateur F2-J2 : une fracture issue d'un critique appliqué par l'interface, son Test d'immobilisation, l'avancement du calendrier jusqu'à la guérison,
-// puis une main perdue confirmée dans le registre F2-I : arme à deux mains refusée et circonstance demandée dans la résolution.
+// puis une main perdue confirmée dans le registre F2-I : arme à deux mains refusée, main directrice cochée et pénalité vérifiée dans la résolution, Undo/Redo.
 const root=fileURLToPath(new URL('../',import.meta.url)),base='/Outil-MJ-Warhammer/';
 const types={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.json':'application/json','.svg':'image/svg+xml','.webmanifest':'application/manifest+json'};
 const server=createServer((req,res)=>{try{const pathname=decodeURIComponent(new URL(req.url,'http://localhost').pathname);assert.ok(pathname.startsWith(base));const path=resolve(root,pathname.slice(base.length)||'index.html');assert.ok(path.startsWith(resolve(root)+sep)&&statSync(path).isFile());res.writeHead(200,{'Content-Type':types[extname(path)]||'application/octet-stream','Cache-Control':'no-store'});res.end(readFileSync(path));}catch{res.writeHead(404);res.end('Not found');}});
@@ -101,12 +101,34 @@ try{
  await combat.getByText(/une arme à deux mains est interdite/).first().waitFor();
  await combat.locator('[data-action-key="epee"]').click();await combat.getByRole('combobox',{name:'Nature du Test'}).selectOption('melee');
  await combat.getByRole('textbox',{name:'Attaque (CC 55)'}).fill('30');await combat.getByRole('button',{name:'Calculer'}).click();
- await combat.getByLabel(/Séquelle · Test de mêlée avec l’arme de la main non directrice/).first().waitFor();
+ const offHandField=combat.getByLabel(/Séquelle · Test de mêlée avec l’arme de la main non directrice/).first();await offHandField.waitFor();
  assert.equal(await combat.getByText(/une arme à deux mains est interdite/).count(),0,'l’épée à une main est permise');
+ // La main directrice perdue : la circonstance est réellement cochée, et la règle générale de la main secondaire (−2 DR, une seule fois) apparaît dans la résolution.
+ assert.equal(await combat.getByText(/Main secondaire/).count(),0,'aucune pénalité tant que la circonstance n’est pas précisée');
+ await offHandField.selectOption('true');
+ await combat.getByRole('textbox',{name:'Attaque (CC 55)'}).fill('30');await combat.getByRole('button',{name:'Calculer'}).click();
+ await combat.getByText(/Main secondaire/).first().waitFor({state:'attached'});
+ assert.equal(await combat.getByLabel(/Séquelle · Test de mêlée avec l’arme de la main non directrice/).first().inputValue(),'true','la case est bien cochée');
+ const offHandLines=await combat.getByText(/Main secondaire/).allTextContents();
+ assert.ok(offHandLines.some(text=>/−2|-2/.test(text)),`pénalité −2 DR attendue : ${offHandLines.join(' | ')}`);
+ await combat.getByLabel(/Attaque avec la main secondaire/).check();
+ await combat.getByRole('button',{name:'Calculer'}).click();
+ const doubled=(await combat.getByText(/Main secondaire/).allTextContents()).filter(text=>/−4|-4/.test(text)||(text.match(/Main secondaire/g)||[]).length>1);
+ assert.deepEqual(doubled,[],'la case générale cochée en plus ne double pas la pénalité');
+ assert.ok((await combat.getByText(/Main secondaire/).allTextContents()).some(text=>/−2 DR/.test(text)),'toujours −2 DR, une seule pénalité');
+ await combat.getByLabel(/Attaque avec la main secondaire/).uncheck();
 
  // 7. Undo/Redo et rechargement : les séquelles, leurs échéances et la projection suivent.
  const count=async()=>((await read()).extensions.v5.aftermathRegister.sequelae||[]).length;
  const before=await count();assert.equal(before,2);
+ // Undo/Redo : annuler la clôture du critique rouvre l'incident sans toucher aux séquelles, rétablir la referme.
+ const incidentStatus=async()=>(await read()).extensions.v5.aftermathRegister.incidents.map(row=>row.status).sort().join(',');
+ assert.match(await incidentStatus(),/closed/);
+ await page.locator('#btn-undo').click();
+ assert.doesNotMatch(await incidentStatus(),/closed/,'Undo rouvre l’incident clos');assert.equal(await count(),2,'les séquelles ne bougent pas avec Undo');
+ await page.locator('#btn-menu').click();await page.locator('#btn-redo').click();
+ assert.match(await incidentStatus(),/closed/,'Redo referme l’incident');assert.equal(await count(),2);
+ assert.equal((await participant('manchot')).extensions.v5.sequelaEffects.rows.some(row=>row.type==='two-hands'),true,'la projection suit Undo/Redo');
  await page.reload({waitUntil:'domcontentloaded'});await page.waitForFunction(()=>document.querySelector('#app-content')?.style.display==='block',{timeout:20000});
  const persisted=await page.evaluate(async()=>{const{Store}=await import('/Outil-MJ-Warhammer/js/main.js');await Store.ready;return JSON.parse(Store.getFullJSON());});
  assert.equal(persisted.extensions.v5.aftermathRegister.sequelae.length,2,'les séquelles survivent au rechargement');
