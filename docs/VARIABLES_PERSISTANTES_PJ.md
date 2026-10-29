@@ -134,7 +134,7 @@ Aucune de ces valeurs n'est écrite vers la fiche avant la phase H. Les états d
 | Progrès de sortie d'un filet | `extensions.v5.netEscapeProgress[<conditionId>]` | absente | Tests de sortie opposés | F2-D |
 | Déploiement d'un pavois | `extensions.v5.paviseDeploymentByItemId[<itemId>]` : `status` (notamment `planted`) et horloge de mise en place | absente | actions de pavois | F2-F |
 | Maquillage de blessure en griffure de grand félin | `extensions.v5.felidWoundDisguises[]` (côté victime) : résolution, apparence, blessures | absente | Griffes du tigre, case cochée par le porteur | F2-F |
-| Origine d'une poignée en bois de Grand Cerf, rang de Focalisation, rang de robes | `equipment[].extensions.v5.antlerHandleOrigin`, `focusRank`, `robeRank` | absente | choix MJ dans la résolution | F2-F |
+| Origine d'une poignée en bois de Grand Cerf, rang de Focalisation, rang de robes | `equipment[].extensions.v5.antlerHandleOrigin`, `focusRank`, `robeRank` | absente | saisie par résolution dans `draft.v5Context` (non persistée) ; lue sur l'objet s'il porte déjà la valeur | F2-F |
 | Déclarations quotidiennes d'exposition à la malepierre | `extensions.v5.warpstoneDailyExposureKeys[]` (500 dernières), `pendingCorruptionExposures[]` | absentes | déclaration MJ K1 | F2-F / F2-K |
 | Compte à rebours de mort par Suffocation | `extensions.v5.suffocationDeathDueRound` (Round d'échéance ; effacé quand la Suffocation tombe) | absente | fin de Round, sortie de l'Immersion | F2-H |
 | Duels déjà exploités par Wulfrik (Tueur de champions) | `extensions.v5.championSlayerDuels[]` (identifiants de cibles) | absente | application de la résolution, réarmement par le MJ | F2-H |
