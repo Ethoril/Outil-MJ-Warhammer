@@ -201,17 +201,17 @@ try {
   // Conditions have fully accessible contextual selectors; legacy modifiers need a conscious DR choice.
   const contexts = await setup({ states: [{ name: 'Brisé', level: 1 }, { name: 'Enchevêtré', level: 1 }, { name: 'Aveuglé', level: 1 }] }); const x = contexts.page;
   await panel(x).locator('[data-action-key="search"]').click(); await panel(x).locator('[data-broken-escape-visibility="resolution"]').selectOption('false'); await enterRolls(x, 23);
-  await panel(x).getByText('Circonstances des Tests', { exact: true }).click(); await panel(x).getByLabel('Le Test consomme l’Action du Tour', { exact: true }).selectOption('false'); await panel(x).getByText('Circonstances des Tests', { exact: true }).click(); await enterRolls(x, 23);
+  await panel(x).getByText('Circonstances des Tests', { exact: true }).evaluate(el => { el.closest('details').open = true; }); await panel(x).getByLabel('Le Test consomme l’Action du Tour', { exact: true }).selectOption('false'); await panel(x).getByText('Circonstances des Tests', { exact: true }).evaluate(el => { el.closest('details').open = true; }); await enterRolls(x, 23);
   await expect(panel(x)).toContainText('Préciser si le Test implique un mouvement'); await expect(applyButton(x)).toBeDisabled();
-  await panel(x).getByText('Circonstances des Tests', { exact: true }).click();
+  await panel(x).getByText('Circonstances des Tests', { exact: true }).evaluate(el => { el.closest('details').open = true; });
   for (const name of ['Le Test consomme l’Action du Tour','Le Test implique un mouvement','Le Test sert à fuir ou se cacher','Le Test est réalisable sans voir mais repose sur la vue']) {
     await panel(x).getByLabel(name, { exact: true }).selectOption('false');
-    await panel(x).getByText('Circonstances des Tests', { exact: true }).click();
+    await panel(x).getByText('Circonstances des Tests', { exact: true }).evaluate(el => { el.closest('details').open = true; });
   }
   await enterRolls(x, 23); await expect(applyButton(x)).toBeEnabled();
   await panel(x).locator('[data-action-key="legacy"]').click();
   for (const name of ['Le Test consomme l’Action du Tour','Le Test implique un mouvement','Le Test sert à fuir ou se cacher','Le Test est réalisable sans voir mais repose sur la vue']) {
-    await panel(x).getByText('Circonstances des Tests', { exact: true }).click();
+    await panel(x).getByText('Circonstances des Tests', { exact: true }).evaluate(el => { el.closest('details').open = true; });
     await panel(x).getByLabel(name, { exact: true }).selectOption('false');
   }
   await enterRolls(x, 23);
