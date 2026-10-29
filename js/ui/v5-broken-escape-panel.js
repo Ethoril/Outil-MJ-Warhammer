@@ -76,11 +76,11 @@ export function createV5BrokenEscapePanel({Store,refresh=()=>{},onPrepareHide=()
   }
   box.append(node('p','workspace-broken-status','Aperçu : aucun effet appliqué.'));
   if(required==='flee'){
-   box.append(node('p','', 'Move (Flee) : '+p.moveDistance+' mètres de jeu (source V5 : '+p.moveDistance+' yards).'));
+   box.append(node('p','', 'Move (Flee) : '+p.moveDistance+' mètres de jeu.'));
   }else{
    const t=p.test||{},r=t.result||{};
    box.append(node('p','', 'Athlétisme '+(t.score??'—')+' · jet '+(r.initialRoll??'—')+(r.reversed?' inversé vers '+r.roll:'')+' · '+(r.sl??'—')+' DR (Intermédiaire +2).'));
-   box.append(node('p','', 'Move/Flee : '+p.moveDistance+' mètres de jeu (source V5 : '+p.moveDistance+' yards); Sprint supplémentaire : '+p.sprintDistance+' mètres (source V5 : '+p.sprintDistance+' yards); total : '+p.totalDistance+' mètres de jeu ('+p.totalDistance+' yards).'));
+   box.append(node('p','', 'Move/Flee : '+p.moveDistance+' mètres de jeu; Sprint supplémentaire : '+p.sprintDistance+' mètres; total : '+p.totalDistance+' mètres de jeu.'));
    if(t.preview?.choiceRequired){
     const select=document.createElement('select');select.setAttribute('aria-label','Choix du résultat Athlétisme');select.dataset.brokenEscapeChoice=id;
     select.append(new Option('Choisir le résultat',''),...t.preview.options.map(o=>new Option(o.id==='reverse'?'Inverser → '+o.result.roll:'Garder → '+o.result.roll,o.id)));
@@ -95,8 +95,8 @@ export function createV5BrokenEscapePanel({Store,refresh=()=>{},onPrepareHide=()
   const proof=node('div','workspace-broken-proof');proof.setAttribute('role','status');proof.dataset.brokenEscapeReceipt=receipt.id||receipt.executionId||'';
   proof.append(node('strong','',receipt.action==='visibility-confirmation'?'Attestation MJ enregistrée':'Reçu mécanique enregistré'));
   if(receipt.action==='visibility-confirmation')proof.append(node('p','workspace-muted',(receipt.visibleToAnyEnemy?'Visible d’au moins un ennemi':'Hors de vue de tous les ennemis')+' · fait explicite pour ce Tour · aucune Action ni distance.'));
-  else if(receipt.action==='flee')proof.append(node('p','workspace-muted','Move (Flee) : '+receipt.moveDistance+' mètres de jeu (source V5 : '+receipt.moveDistance+' yards).'));
-  else proof.append(node('p','workspace-muted','Sprint : '+receipt.sprintDistance+' mètres supplémentaires (source V5 : '+receipt.sprintDistance+' yards), '+(receipt.test?.result?.sl??'—')+' DR.'));
+  else if(receipt.action==='flee')proof.append(node('p','workspace-muted','Move (Flee) : '+receipt.moveDistance+' mètres de jeu.'));
+  else proof.append(node('p','workspace-muted','Sprint : '+receipt.sprintDistance+' mètres supplémentaires, '+(receipt.test?.result?.sl??'—')+' DR.'));
   section.append(proof);
  }
  function renderActor(actor,participants){

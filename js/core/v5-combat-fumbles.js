@@ -172,7 +172,7 @@ function participantEffects(normalized, context, resolution = {}) {
   if (firing && isMatchlock && !lit) unresolved.push('Arme à mèche : consacrez d’abord une Action à allumer la mèche (L13-0107).');
   if (context.lightFuseAction===true && isAttack) unresolved.push('Mèche : allumer la mèche consomme une Action distincte ; cette Action ne peut pas aussi déclarer une attaque.');
   if (context.largeBullet === true && firing) {
-    if (!Array.isArray(targetIds) || !targetIds.length) unresolved.push('Gros projectile : le MJ doit désigner le tireur et les cibles dans un rayon de deux yards (L13-0116).');
+    if (!Array.isArray(targetIds) || !targetIds.length) unresolved.push('Gros projectile : le MJ doit désigner le tireur et les cibles dans un rayon de deux mètres (L13-0116).');
     else reminders.push('Gros projectile (conversion V5 de L13-0116) : chaque cible désignée effectue un Test de Résistance à +0 DR ; un échec applique Assourdi. Les distances restent sous désignation du MJ.');
   }
   if (context.crewCount === 1 && isVolleyGun) reminders.push('Servant unique (conversion V5 de L15-0163) : aucun malus au tir, recharge doublée en succès, déplacement interdit.');
@@ -270,7 +270,7 @@ export function previewCombatFailure({ normalized, roll, fumble, context = {}, h
           for(let i=0;i<Math.max(1,remaining);i++){
             const shot=shots[i],number=shot?.distanceRoll;
             if(typeof shot?.direction!=='string'||!shot.direction.trim())result.unresolved.push(`Incident de Salve : indiquez la direction aléatoire du tir ${i+1}.`);
-            if(!Number.isInteger(Number(number))||Number(number)<1||Number(number)>100)result.unresolved.push(`Incident de Salve : saisissez la distance d100 en yards du tir ${i+1}.`);
+            if(!Number.isInteger(Number(number))||Number(number)<1||Number(number)>100)result.unresolved.push(`Incident de Salve : saisissez la distance d100 en mètres du tir ${i+1}.`);
             if(shot?.personsConfirmed!==true)result.unresolved.push(`Incident de Salve : confirmez les personnes présentes (ou l’absence de personne) sur la trajectoire ${i+1}.`);
             const targets=Array.isArray(shot?.targets)?shot.targets:[];
             for(const targetRow of targets){

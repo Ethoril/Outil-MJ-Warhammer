@@ -24,8 +24,8 @@ const hasState=(person,...keys)=>(person?.states||[]).some((row,index)=>{
 });
 export function computeV5WeaponReachGuide(rawReach){
  const key=foldState(rawReach);
- if(key==='treslongue'||key==='verylong')return {key:'very-long',label:'Très longue',engagementYards:4,text:'Allonge Très longue : permet d’engager jusqu’à 4 yards au lieu de 2 (aide MJ, distance non suivie).'};
- if(key==='massive'||key==='considerable')return {key:'massive',label:'Massive',engagementYards:6,text:'Allonge Massive : permet d’engager jusqu’à 6 yards (aide MJ, distance non suivie).'};
+ if(key==='treslongue'||key==='verylong')return {key:'very-long',label:'Très longue',engagementYards:4,text:'Allonge Très longue : permet d’engager jusqu’à 4 m au lieu de 2 (aide MJ, distance non suivie).'};
+ if(key==='massive'||key==='considerable')return {key:'massive',label:'Massive',engagementYards:6,text:'Allonge Massive : permet d’engager jusqu’à 6 m (aide MJ, distance non suivie).'};
  return null;
 }
 export function computeV5WeaponRangeBands(rawRange,actor=null){

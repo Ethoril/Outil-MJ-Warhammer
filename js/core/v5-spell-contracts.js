@@ -555,9 +555,9 @@ export function vortexMovementFromDie(roll) {
 
 /**
  * Résout le déplacement et les effets d'un vortex magique (Winds of Magic pp. 20-21, Random Vortices).
- * Round de lancer : le lanceur choisit la direction et fait un Test de Force Mentale Accessible (+2 DR) — réussite : 2d10 yards dans la direction
+ * Round de lancer : le lanceur choisit la direction et fait un Test de Force Mentale Accessible (+2 DR) — réussite : 2d10 m dans la direction
  * choisie ; échec : direction aléatoire (d10 de la table, 1 = le vortex disparaît, 5 = il reste en place). Les mouvements des Rounds suivants
- * (fin du Tour du lanceur, d10 + 2d10 yards) restent suivis à la table par le MJ : le moteur ne déplace pas de pions.
+ * (fin du Tour du lanceur, d10 + 2d10 m) restent suivis à la table par le MJ : le moteur ne déplace pas de pions.
  * Propose direction et distance, puis applique les conséquences aux cibles réellement traversées (saisie MJ).
  */
 export function resolveVortexTrajectory({ contract, caster, direction, distance, targetsCrossed = [], options = {} } = {}) {
@@ -586,7 +586,7 @@ export function resolveVortexTrajectory({ contract, caster, direction, distance,
   const finalDistance = !moves ? 0 : distance ?? explicitMagicDie(options.distanceRoll, '2d10');
   if (moves && (!Number.isInteger(finalDistance) || finalDistance<2 || finalDistance>20)) missing.push('distanceRoll');
   if (missing.length) {
-    return { ready: false, missing, spellName: contract.name, summary: 'Vortex : saisir le Test de Force Mentale (+20), la direction choisie (réussite) ou le d10 de direction (échec), et la distance (2d10 yards).' };
+    return { ready: false, missing, spellName: contract.name, summary: 'Vortex : saisir le Test de Force Mentale (+20), la direction choisie (réussite) ou le d10 de direction (échec), et la distance (2d10 m).' };
   }
 
   if(contract.effects?.vortex)return {ready:true,trajectory:{direction:finalDirection || vortexOutcome,distance:finalDistance,radius:2*bfm,willpowerSuccess:willpower,outcome:vortexOutcome},crossedReceipts:[],summary:contract.name+' : '+(finalDirection || vortexOutcome)+', '+finalDistance+' mètres.'};
@@ -662,7 +662,7 @@ export function resolveVortexTrajectory({ contract, caster, direction, distance,
     crossedReceipts,
     summary: vortexOutcome === 'disappears' ? `Vortex ${contract.name} : direction aléatoire (1), le vortex disparaît.`
       : vortexOutcome === 'stays' ? `Vortex ${contract.name} : direction aléatoire (5), le vortex reste en place. ${targetsCrossed.length} cible(s) traversée(s).`
-      : `Vortex ${contract.name} déplacé de ${finalDistance} yards vers le ${finalDirection}${willpower ? '' : ' (direction aléatoire)'}. ${targetsCrossed.length} cible(s) traversée(s).`
+      : `Vortex ${contract.name} déplacé de ${finalDistance} m vers le ${finalDirection}${willpower ? '' : ' (direction aléatoire)'}. ${targetsCrossed.length} cible(s) traversée(s).`
   };
 }
 

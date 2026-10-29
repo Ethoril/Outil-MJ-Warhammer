@@ -63,7 +63,7 @@ test('Q41 Points de Destin imprimés (Brunner L04 p.111, Gotrek L16 p.79) gardé
     const { renderBestiarySheet } = await import('../js/ui/bestiary-library.js');
     const text = renderBestiarySheet(byId('E0-P-179'), { terms: new Map() }).textContent;
     assert.match(text, /Points de Destin imprimés : 2/);
-    assert.match(text, /portée 10 yards/);
+    assert.match(text, /portée 10 m/);
   } finally {
     if (previous === undefined) delete globalThis.document; else globalThis.document = previous;
   }

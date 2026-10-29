@@ -53,7 +53,7 @@ test('F2-H attacks and states are tied to their exact creature profile', () => {
   const spiderProfile = p('E0-P-744');
   const spider = planBestiaryProfileAbility(spiderProfile, 'cliff-spider-lasso');
   assert.ok(spiderProfile.actions.some(action => action.extensions.v5.specialProfileAbility === 'cliff-spider-lasso'));
-  assert.match(spider.reminders.join(' '), /40 yards/);
+  assert.match(spider.reminders.join(' '), /40 m/);
   assert.ok(spiderProfile.traits.some(trait => /Venom \(Challenging\)/i.test(trait)));
   assert.deepEqual(spider.effects, []);
   assert.equal(planBestiaryProfileAbility(p('E0-P-004'), 'cliff-spider-lasso').available, false);

@@ -61,7 +61,7 @@ export function buildFamiliarBlock(createElement, participant, participants = []
     range.className = 'tiny btn-familiar-range';
     range.dataset.linkId = link.id;
     range.dataset.inRange = link.inRange === true ? 'true' : 'false';
-    range.textContent = link.inRange === true ? 'À portée (4 yards)' : 'Hors de portée';
+    range.textContent = link.inRange === true ? 'À portée (4 m)' : 'Hors de portée';
     range.title = 'Bascule la portée du familier animal : hors de portée, ses talents de compagnon et son soutien sont suspendus';
     block.appendChild(range);
     const death = createElement('button');

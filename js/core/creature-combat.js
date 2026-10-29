@@ -23,7 +23,7 @@ const RULES = {
   web: { fr: 'Toile', names: ['web', 'toile'], onHit: 'Enchevêtré', entangleFromDetail: true, note: 'Une touche donne un Enchevêtré dont la Force est la valeur du Trait.' },
   chill: { fr: 'Étreinte glaciale', names: ['chill grasp', 'etreinte glaciale'], cost: MOMENTUM, test: 'CC', opposed: 'Esquive ou Corps à corps', direct: '1d10+DR', magical: true, note: 'CC opposée ; 1d10 + DR Blessures directes ; attaque magique.' },
   breath: { fr: 'Souffle', names: ['breath', 'souffle'], area: true, test: 'CT', fallbackTest: 30, opposed: 'Esquive', magical: true, note: 'Attaque gratuite de zone, portée 20 + BE ; CT (ou 30 si absente) ; Esquive par cible ; l\'émetteur résiste à son propre souffle.' },
-  vomit: { fr: 'Vomissement', names: ['vomit', 'vomissement'], area: true, test: 'CT', opposed: 'Esquive', costsAction: true, note: 'Consomme Mouvement et Action s\'il commence engagé ; CT +4 DR contre l\'Esquive de chaque cible à deux yards ; dégâts BE+4, Sonné, objets dégradés ; délai de douze heures.' },
+  vomit: { fr: 'Vomissement', names: ['vomit', 'vomissement'], area: true, test: 'CT', opposed: 'Esquive', costsAction: true, note: 'Consomme Mouvement et Action s\'il commence engagé ; CT +4 DR contre l\'Esquive de chaque cible à deux mètres ; dégâts BE+4, Sonné, objets dégradés ; délai de douze heures.' },
   howl: { fr: 'Hurlement fantomatique', names: ['ghostly howl', 'hurlement fantomatique'], cost: MOMENTUM, oncePerTurn: true, area: true, note: 'Vivants à portée : trois Assourdi, d10 Blessures directes, Calme +2 DR ou Brisé ; critiques à la tête.' },
   gaze: { fr: 'Regard pétrifiant', names: ['petrifying gaze', 'regard petrifiant'], cost: MOMENTUM, test: 'CT', opposed: 'Initiative', note: 'CT opposée à l\'Initiative (ou Langue Magique du mage) ; Sonné selon la marge, pétrification à six DR.' }
 };
@@ -128,7 +128,7 @@ export function planNaturalAttack(participant, key, options = {}) {
     const type = BREATH_TYPES[BREATH_BY_NAME.get(printedType) ?? BREATH_BY_NAME.get(printedType.split(/[\s-]+/)[0])];
     if (!type) plan.unresolved.push(`Souffle${owned.detail ? ` (${owned.detail})` : ''} : type absent des cas du livre de base (p.357), dégâts et états à arbitrer à la main.`);
     else if (!type.names.includes(printedType)) plan.reminders.push(`Précision du profil : ${owned.detail}.`);
-    plan.reminders.push('Zone : la cible vue à 20 + BE yards et toutes les créatures à BF yards autour d\'elle ; un seul jet de l\'attaquant, opposé à chaque cible.');
+    plan.reminders.push('Zone : la cible vue à 20 + BE mètres et toutes les créatures à BF mètres autour d\'elle ; un seul jet de l\'attaquant, opposé à chaque cible.');
     if (type) {
       plan.reminders.push(`Souffle de ${type.fr}${type.add === undefined ? '' : ` : dégâts B${type.stat === 'F' ? 'F' : 'E'}+${type.add}`}.`);
       if (type.reminder) plan.reminders.push(type.reminder);

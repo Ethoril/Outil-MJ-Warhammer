@@ -37,7 +37,7 @@ try{
  const panel=page.locator('[data-broken-escape-panel]');await panel.waitFor({state:'visible'});let actor=actorPanel();
  await choose(actor,'Visibilité par rapport aux ennemis','true');await choose(actor,'Ennemis engagés avec ce personnage','none');await choose(actor,'Déplacement Flee','walk');await choose(actor,'Visibilité après cette étape','true');
  await actor.getByRole('button',{name:'Calculer l’aperçu',exact:true}).click();
- let preview=actor.locator('[data-broken-escape-preview="priest"]');await preview.waitFor({state:'visible'});await assert.doesNotReject(async()=>assert.match(await preview.innerText(),/Aperçu : aucun effet appliqué/));assert.match(await preview.innerText(),/Move \(Flee\)/);assert.match(await preview.innerText(),/8 mètres.*8 yards/);
+ let preview=actor.locator('[data-broken-escape-preview="priest"]');await preview.waitFor({state:'visible'});await assert.doesNotReject(async()=>assert.match(await preview.innerText(),/Aperçu : aucun effet appliqué/));assert.match(await preview.innerText(),/Move \(Flee\)/);assert.match(await preview.innerText(),/Move \(Flee\) : 8 mètres de jeu/);
  const before=await state();assert.equal((before.extensions?.v5?.actionLedger?.quotaUsage||[]).length,0,'Calculer reste pur et ne débite pas le Move');assert.equal(before.combat.participants.find(row=>row.id==='priest').states.find(row=>row.key==='brise').level,1);
  for(const [width,theme] of [[1440,'dark'],[1440,'light'],[390,'dark'],[390,'light']])await view(width,theme);
  await actor.getByRole('button',{name:'Appliquer Move (Flee)',exact:true}).click();
@@ -46,7 +46,7 @@ try{
  check('Le geste Calculer présente Move(Flee) et la distance; l’aperçu n’écrit rien. Appliquer enregistre une fois le Move et son reçu.');
  actor=actorPanel();await choose(actor,'Visibilité par rapport aux ennemis','true');await choose(actor,'Visibilité après cette étape','false');await actor.getByLabel('Jet d’Athlétisme pour Sprint',{exact:true}).fill('23');
  await actor.getByRole('button',{name:'Calculer l’aperçu',exact:true}).click();preview=actor.locator('[data-broken-escape-preview="priest"]');await preview.waitFor({state:'visible'});
- let sprintText=await preview.innerText();assert.match(sprintText,/Aperçu : aucun effet appliqué/);assert.match(sprintText,/Athlétisme 60/);assert.match(sprintText,/6 DR/);assert.match(sprintText,/Sprint supplémentaire : 22 mètres \((?:source V5 : )?22 yards\); total : 30 mètres de jeu \(30 yards\)/);
+ let sprintText=await preview.innerText();assert.match(sprintText,/Aperçu : aucun effet appliqué/);assert.match(sprintText,/Athlétisme 60/);assert.match(sprintText,/6 DR/);assert.match(sprintText,/Sprint supplémentaire : 22 mètres; total : 30 mètres de jeu\./);
  assert.match(await actor.innerText(),/Round 1 · Tour de Prêtresse/,'l’en-tête de Tour est lisible et ne montre pas la clé interne');assert.doesNotMatch(await actor.innerText(),/qa-broken-browser|DIV-03|moteur partagé|Aperçu pur/i,'aucune clé ou jargon interne ne fuit dans le panneau');
  const beforeSprint=await state();assert.equal(beforeSprint.extensions.v5.actionLedger.quotaUsage.filter(row=>row.actorId==='priest'&&row.quotaId==='system:turn-action'&&row.used>0).length,0,'Sprint aperçu ne dépense pas encore Action');
  for(const [width,theme] of [[1440,'dark'],[1440,'light'],[390,'dark'],[390,'light']])await view(width,theme);

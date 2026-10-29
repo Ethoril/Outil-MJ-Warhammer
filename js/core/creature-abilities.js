@@ -32,9 +32,9 @@ export function planBestiaryProfileAbility(participant, key, context = {}) {
   }
   if (rule.immuneState) plan.effects.push({ immuneToState: rule.immuneState });
   if (rule.castingCharacteristic) plan.effects.push({ castingCharacteristic: rule.castingCharacteristic });
-  if (rule.senseRangeYards) plan.reminders.push(`Détecte les proies jusqu’à ${rule.senseRangeYards} yards.`);
+  if (rule.senseRangeYards) plan.reminders.push(`Détecte les proies jusqu’à ${rule.senseRangeYards} m.`);
   if (rule.dodgeTest) {
-    plan.reminders.push(`Proies repérées jusqu’à ${rule.senseRangeYards} yards; Test d’Esquive ${rule.dodgeTest}, un Enchevêtré par niveau d’échec; ${rule.cutSilk} pour couper la soie (récupération « Soie coupée »). La victime est ramenée au contact dans le même Round, de toute distance ; soie coupée, l’araignée fuit vers son antre. La portée est une aide affichée, jamais suivie.`);
+    plan.reminders.push(`Proies repérées jusqu’à ${rule.senseRangeYards} m; Test d’Esquive ${rule.dodgeTest}, un Enchevêtré par niveau d’échec; ${rule.cutSilk} pour couper la soie (récupération « Soie coupée »). La victime est ramenée au contact dans le même Round, de toute distance ; soie coupée, l’araignée fuit vers son antre. La portée est une aide affichée, jamais suivie.`);
   }
   if (rule.bite) plan.effects.push({ attack: 'Bite', addTrait: rule.bite });
   if (rule.overrideTrait) plan.effects.push({ addTrait: rule.overrideTrait, ignoresSize: rule.ignoresSize });

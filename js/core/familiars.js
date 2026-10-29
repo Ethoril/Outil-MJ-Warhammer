@@ -2,7 +2,7 @@
  * Familiers (lot F2, conception : docs/plans-gpt/CONCEPTION_FAMILIERS.md). Module pur : rien ne s'écrit seul.
  * Deux systèmes distincts : homoncule (Winds of Magic) et animal (Archives of the Empire 3), ouverts à tous.
  * Le lien est durable côté maître (`extensions.v5.familiarLinks[]`) et côté familier (`extensions.v5.familiarOf`) ;
- * la portée de 4 yards d'un animal est un booléen `inRange` posé par le MJ, jamais calculé.
+ * la portée de 4 m d'un animal est un booléen `inRange` posé par le MJ, jamais calculé.
  */
 import { familiarSkillSupport } from './v5-magic-talents.js';
 import { hasV5Talent } from './v5-talents.js';
@@ -233,7 +233,7 @@ export function familiarReminders(participant) {
     return rows;
   }
   return [
-    'Télépathie animale à 4 yards, limitée par l’Intelligence du familier.', 'Messager : jusqu’à Intelligence miles.',
+    'Télépathie animale à 4 m, limitée par l’Intelligence du familier.', 'Messager : jusqu’à Intelligence miles.',
     'Invisibilité 1 fois par jour (quota non suivi par l’application).', 'Corruption réciproque : l’exposition de l’un fait tester l’autre.',
     'À la mort du maître, le familier subit le même sort.'
   ];

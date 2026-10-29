@@ -19,7 +19,7 @@ export function previewTalentReplacement(n,{hit,test,opposed,damage,location,qua
   if(!unresolved.length){damage=null;changes.push({participantId:n.target.id,add:[state('disarmed','Désarmé : '+c.disarmDistance+' pieds, '+c.disarmDirection,{equipmentId:c.disarmedWeaponId,heldBy:c.catchWeapon===true?n.actor.id:null,distanceFeet:c.disarmDistance,direction:c.disarmDirection})]});reminders.push('L’arme désarmée ne peut plus être employée avant sa récupération.');}
  }
  if(id==='shieldsman'){
-  if(!opposed||opposed.winner!=='attacker'||c.shieldAvailable!==true||!Number.isFinite(c.pushDistance)||c.pushDistance<0||c.pushDistance>2)unresolved.push('Porte-bouclier : bouclier disponible, opposition gagnée et recul entre 0 et 2 yards requis.');
+  if(!opposed||opposed.winner!=='attacker'||c.shieldAvailable!==true||!Number.isFinite(c.pushDistance)||c.pushDistance<0||c.pushDistance>2)unresolved.push('Porte-bouclier : bouclier disponible, opposition gagnée et recul entre 0 et 2 m requis.');
   if(!unresolved.length){damage=null;changes.push({participantId:n.target.id,add:[state('pushed','Repoussé et Désengagé',{distanceYards:c.pushDistance,opponentId:n.actor.id})]});}
  }
  const replacement=unresolved.length?null:{op:'replaceDamage',name:id==='dirty-fighting'?'Combat déloyal : Coup bas':id==='disarm'?'Désarmer':'Porte-bouclier : repousser',origins:origin?[origin]:[]};

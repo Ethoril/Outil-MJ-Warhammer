@@ -312,7 +312,7 @@ export const PSYCHOLOGY_SOURCES=Object.freeze([
  {ids:['C0-L15-004'],name:'Rune of Daunting',steps:[FMJ({ratingFact:'runeCount',scope:'self'}),R('Arme dégainée : indice de Peur égal au nombre de runes, ou majoration d’un indice déjà possédé.')]},
  {ids:['C0-L15-005'],name:'Rune of Courage',steps:[M('Tests de Psychologie par rune',1,'psychology')]},
  {ids:['C0-L15-006'],name:'Rune of the Valiant',steps:[M('Volonté par rune',1,'FM')]},
- {ids:['C0-L15-007'],name:'Rune of Hearth and Home',steps:[R('À 25 yards de l’Enclume : le résultat de Calme est considéré comme 01 jusqu’à la fin du prochain Round.')]},
+ {ids:['C0-L15-007'],name:'Rune of Hearth and Home',steps:[R('À 25 m de l’Enclume : le résultat de Calme est considéré comme 01 jusqu’à la fin du prochain Round.')]},
  {ids:['C0-L16-001'],name:'Master Rune of Dismay',steps:[M('Tous les Tests des ennemis non immunisés, 1 Round',-1,'enemies')]},
  {ids:['C0-L17-001'],name:'Incident : The Horror',steps:[B(-2,1)]},
  {ids:['C0-L17-002'],name:'Stoicism de Hysh',steps:[M('Tests de Calme de Psychologie (obligatoires quand possible)',2,'psychology')]},

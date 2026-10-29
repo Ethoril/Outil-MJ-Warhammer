@@ -190,7 +190,7 @@ export function magicalSenseReceipts(caster,participants,options={}){
    const range=effectiveSkillScore(observer,skill?.total ?? skill?.value ?? skill?.score ?? baseCharacteristicScore(observer,'I'),'I');
    const fact=options.senseFacts?.[observer.id];
    const detected=Number.isFinite(fact?.distance) ? fact.distance>=0 && fact.distance<=range : null;
-   return {observerId:observer.id,range,detected,direction:detected?fact.direction || 'direction approximative à préciser':null,summary:detected===null?observer.name+' : Perception de la Magie, lancement détectable à '+range+' yards (distance à préciser).':detected?observer.name+' détecte un lancement ; '+(fact.direction || 'direction approximative à préciser')+' ; magie non identifiée.':observer.name+' : lancement hors portée de Perception de la Magie.'};
+   return {observerId:observer.id,range,detected,direction:detected?fact.direction || 'direction approximative à préciser':null,summary:detected===null?observer.name+' : Perception de la Magie, lancement détectable à '+range+' mètres (distance à préciser).':detected?observer.name+' détecte un lancement ; '+(fact.direction || 'direction approximative à préciser')+' ; magie non identifiée.':observer.name+' : lancement hors portée de Perception de la Magie.'};
  });
 }
 export function familiarSkillSupport(actor,assistant,skill,context={}){

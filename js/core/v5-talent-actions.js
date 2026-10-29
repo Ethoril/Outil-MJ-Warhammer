@@ -80,7 +80,7 @@ export function previewV5TalentActivation(normalized,actorTest,opposed){
   if(selected==='distract'){
     if(![groupOf('Athlétisme'),groupOf('Représentation'),groupOf('Escamotage')].includes(skillGroup(skill)))unresolved.push('Distraire : Athlétisme, Représentation ou Escamotage requis.');
     const defenseSkill=normalized.defense?.extensions?.fiche?.skillId??normalized.defense?.v5?.context?.skillId;
-    if(!target||target.id===actor.id||context.withinTwoYards!==true||defenseSkill!==idOf('Perception')||!opposed)unresolved.push('Distraire : cible distincte à deux yards maximum et opposition de Perception requises.');
+    if(!target||target.id===actor.id||context.withinTwoYards!==true||defenseSkill!==idOf('Perception')||!opposed)unresolved.push('Distraire : cible distincte à deux mètres maximum et opposition de Perception requises.');
     if(!unresolved.length&&opposed.winner==='attacker'){
       const active=effect('distracted','Distrait',target,{restriction:'noMomentumOrAdvantage'});if(active)changes.push({participantId:target.id,removeKeys:['distracted'],add:[active],momentum:false});
     }

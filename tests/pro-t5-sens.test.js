@@ -43,7 +43,7 @@ test('T5 Infravision (Bête des marais) et Vision nocturne', () => {
   assert.equal(plan.available, true);
   const night = planSense(synthetic(['Night Vision']), 'nightVision');
   assert.deepEqual(night.ranges, [{ scope: 'vision nocturne', yards: 20 }]);
-  assert.match(night.receipt.ranges[0], /20 yards/);
+  assert.match(night.receipt.ranges[0], /20 m/);
 });
 
 test('T5 Perturbant — portée BE yards, −2 DR une seule fois', () => {

@@ -117,7 +117,7 @@ export function previewSupplementalEquipment({ item, actor, target, hit = false,
   }
   if (rule.kind === 'encumbrance-reduction') reminders.push('Encombrement de cette pièce : −1 par rapport à la pièce de plate métallique correspondante; PA et Taille inchangés.');
   if (rule.kind === 'pavise-carried') reminders.push('Pavois porté : appliquer Protectrice 3 selon le flux de bouclier choisi; Défensive, Inoffensive, Lente, Épuisante; Encombrement 4; dégâts BF+2.');
-  if (rule.kind === 'pavise-planted') reminders.push('Pavois planté : 2 Actions pour le mettre en place; Protectrice 5 contre les tirs de la direction choisie à 1 yard derrière; en mêlée de face, premier Tour seulement.');
+  if (rule.kind === 'pavise-planted') reminders.push('Pavois planté : 2 Actions pour le mettre en place; Protectrice 5 contre les tirs de la direction choisie à 1 m derrière; en mêlée de face, premier Tour seulement.');
   if (rule.kind === 'felid-wound-disguise' && hit && hurt && context.felidWoundDisguise === true) {
     effects.push({participantId:target?.id,disguiseAs:'grand félin',sourceRuleId:ruleId});
   }

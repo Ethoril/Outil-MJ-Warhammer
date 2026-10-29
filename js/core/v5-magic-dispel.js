@@ -26,11 +26,11 @@ const refused = (actionType, reason, context = {}) => ({
 
 function spatialRestriction(dispeller, options) {
   if (typeof options.distance !== 'number' || !Number.isFinite(options.distance) || options.distance < 0)
-    return 'Saisir une distance valide en yards (zéro ou plus).';
+    return 'Saisir une distance valide en mètres (zéro ou plus).';
   if (typeof options.visible !== 'boolean') return 'Saisir explicitement la visibilité du sort ou de son point ciblé.';
   if (!options.visible) return 'Le lanceur ou le point ciblé doit être visible.';
   const range = Math.max(0, Number(casterCaracs(dispeller).FM) || 0);
-  if (options.distance > range) return `Hors de portée de dissipation (${options.distance} yards > ${range} yards / FM).`;
+  if (options.distance > range) return `Hors de portée de dissipation (${options.distance} m > ${range} m / FM).`;
   return null;
 }
 

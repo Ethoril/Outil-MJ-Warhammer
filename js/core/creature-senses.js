@@ -8,12 +8,12 @@ const fold = value => String(value ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '
 
 const RULES = {
   darkVision: { fr: 'Infravision', names: ['dark vision', 'infravision'], note: 'Voit l\'obscurité comme en plein jour.' },
-  nightVision: { fr: 'Vision nocturne', names: ['night vision', 'vision nocturne'], note: 'Vision naturelle à vingt yards ; la lumière utile est prolongée d\'autant.' },
+  nightVision: { fr: 'Vision nocturne', names: ['night vision', 'vision nocturne'], note: 'Vision naturelle à vingt mètres ; la lumière utile est prolongée d\'autant.' },
   stealthy: { fr: 'Furtif', names: ['stealthy', 'furtif'], note: 'Discrétion rurale à Agilité+10, ajustable par le MJ ; pas le bonus de DR de la V4.' },
   tracker: { fr: 'Pisteur', names: ['tracker', 'pisteur'], note: 'Compétence Pistage à Intelligence+10, augmentable par le MJ.' },
-  distracting: { fr: 'Perturbant', names: ['distracting', 'perturbant'], note: 'Les vivants à BE yards subissent −2 DR généraux, une seule fois quelle que soit la multiplicité des sources.' },
+  distracting: { fr: 'Perturbant', names: ['distracting', 'perturbant'], note: 'Les vivants à BE mètres subissent −2 DR généraux, une seule fois quelle que soit la multiplicité des sources.' },
   chameleon: { fr: 'Caméléon', names: ['chameleon', 'cameleon'], note: 'Perception −4 DR pour le voir (−2 s\'il bouge) ; tirs contre lui −2 DR.' },
-  vibrational: { fr: 'Sens vibratoires', names: ['vibrational senses', 'sens vibratoires'], note: 'Détecte les corps physiques dans quatre BI yards et ne peut pas être Surpris.' }
+  vibrational: { fr: 'Sens vibratoires', names: ['vibrational senses', 'sens vibratoires'], note: 'Détecte les corps physiques dans quatre BI mètres et ne peut pas être Surpris.' }
 };
 
 const BY_NAME = new Map(Object.entries(RULES).flatMap(([key, rule]) => rule.names.map(name => [name, key])));
@@ -92,7 +92,7 @@ export function planSense(participant, key, options = {}) {
 
 /**
  * Perturbant : le malus de −2 DR ne s'applique qu'une fois, quel que soit le nombre de sources à portée.
- * `distances` : distances (yards) entre la cible et chaque source ; `sources` : participants porteurs.
+ * `distances` : distances (mètres) entre la cible et chaque source ; `sources` : participants porteurs.
  */
 export function distractingPenalty(sources, distances) {
   const list = Array.isArray(sources) ? sources : [];
@@ -140,7 +140,7 @@ function receiptOf(plan) {
   return {
     ability: plan.label,
     skills: plan.skills.map(skill => `${skill.skill} ${skill.value}`),
-    ranges: plan.ranges.map(range => `${range.scope} ${range.yards} yards`),
+    ranges: plan.ranges.map(range => `${range.scope} ${range.yards} m`),
     modifiers: plan.modifiers.map(modifier => `${modifier.scope} ${modifier.dr > 0 ? '+' : ''}${modifier.dr} DR`),
     blocked: plan.unresolved.slice()
   };
