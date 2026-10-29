@@ -1476,6 +1476,13 @@ function resolvedCorruptionTest(participant, skillId, input) {
     if (shocks.some(row => row.amputationOccurred === true)) return 'occurred';
     return record.amputationShockStatus === 'not-occurred' ? 'absent' : 'pending';
   }
+  /** Maladresse d'un Test de Guérison du suivi des séquelles : les Blessures perdues sont retirées au patient (p.170). */
+  function withHealingFumble(outcome, patient) {
+    if (patient && outcome.receipt.status === 'applied' && outcome.receipt.fumbleDamage) {
+      outcome.afterApply = next => { const target = next.combat.participants.find(row => row.id === patient.id); target.hp = Math.max(0, Number(target.hp) - outcome.receipt.fumbleDamage); return next; };
+    }
+    return outcome;
+  }
   function runAftermathCommand(type, operation) {
     let outcome = null;
     const refused = new Error('aftermath operation was not applied');
@@ -5233,9 +5240,11 @@ function resolvedCorruptionTest(participant, skillId, input) {
     immobilizeAftermathFracture(input = {}) {
       return runAftermathCommand('immobilize-aftermath-fracture', (state, draft) => {
         const found = aftermathHealerOf(draft, 'heal', input);
-        const outcome = immobilizeFracture(state, { operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, sequelaId: input.sequelaId, healer: found.ok ? found.healer : null, roll: input.roll });
+        const sequela = (state.sequelae || []).find(row => row.id === input.sequelaId);
+        const patient = sequela && (draft.combat?.participants || []).find(row => row.id === sequela.participantId);
+        const outcome = immobilizeFracture(state, { operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, sequelaId: input.sequelaId, healer: found.ok ? found.healer : null, roll: input.roll, d10: input.d10 ?? null, wounds: Number(patient?.hp) || 0 });
         if (outcome.receipt.reason === 'healer-skill-required' && found.reason) outcome.receipt.reason = found.reason;
-        return outcome;
+        return withHealingFumble(outcome, patient);
       });
     },
     unbindAftermathFracture(input = {}) {
@@ -5251,9 +5260,11 @@ function resolvedCorruptionTest(participant, skillId, input) {
     treatAftermathTornMuscle(input = {}) {
       return runAftermathCommand('treat-aftermath-torn-muscle', (state, draft) => {
         const found = aftermathHealerOf(draft, 'heal', input);
-        const outcome = treatTornMuscle(state, { operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, sequelaId: input.sequelaId, healer: found.ok ? found.healer : null, roll: input.roll, difficultyDR: input.difficultyDR ?? 0 });
+        const sequela = (state.sequelae || []).find(row => row.id === input.sequelaId);
+        const patient = sequela && (draft.combat?.participants || []).find(row => row.id === sequela.participantId);
+        const outcome = treatTornMuscle(state, { operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, sequelaId: input.sequelaId, healer: found.ok ? found.healer : null, roll: input.roll, difficultyDR: input.difficultyDR ?? 0, d10: input.d10 ?? null, wounds: Number(patient?.hp) || 0 });
         if (outcome.receipt.reason === 'healer-skill-required' && found.reason) outcome.receipt.reason = found.reason;
-        return outcome;
+        return withHealingFumble(outcome, patient);
       });
     },
     confirmAftermathResetLimb(input = {}) {

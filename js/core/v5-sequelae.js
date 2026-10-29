@@ -14,6 +14,9 @@ const UPPER = new Set(['hand', 'arm']);
 const LOWER = new Set(['foot', 'leg']);
 const d10Valid = value => Number.isSafeInteger(value) && value >= 1 && value <= 10;
 const sideValid = side => side === 'left' || side === 'right';
+/** Maladresse de Guérison (p.170) : 1d10 Blessures pour le patient, sans descendre sous 1. */
+const fumbleFactsValid = (d10, wounds) => (d10 === null || d10Valid(d10)) && Number.isSafeInteger(wounds) && wounds >= 0;
+const healingFumbleDamage = (test, d10, wounds) => test.fumble ? Math.min(d10, Math.max(0, wounds - 1)) : 0;
 
 const TEXT = { hand: 'main', arm: 'bras', foot: 'pied', leg: 'jambe', ear: 'oreille', eye: 'œil', finger: 'doigt(s)', toe: 'orteil(s)', teeth: 'dents', nose: 'nez', tongue: 'langue' };
 
@@ -192,7 +195,7 @@ const immobilizationWindow = (sequela, day) => {
 };
 
 /** p.177 : un Test de Guérison dans la semaine (+2 DR, +0 si majeure) immobilise la fracture et dispense du Test final tant qu'elle reste attachée. */
-export function immobilizeFracture(stateValue, { operationId, expectedRevision, sequelaId, healer, roll } = {}) {
+export function immobilizeFracture(stateValue, { operationId, expectedRevision, sequelaId, healer, roll, d10 = null, wounds = 0 } = {}) {
   const state = assertState(stateValue);
   const prior = priorReceipt(state, operationId);
   if (prior) return { state: clone(state), receipt: prior };
@@ -203,15 +206,17 @@ export function immobilizeFracture(stateValue, { operationId, expectedRevision, 
   if (sequelaPhase(sequela, state.calendar.currentDay) !== 'healing') return refusal('fracture-not-healing');
   { const reason = immobilizationWindow(sequela, state.calendar.currentDay); if (reason) return refusal(reason); }
   { const problem = healerProblem(healer, ['heal']); if (problem) return refusal(problem); }
-  if (!validRoll(roll)) return refusal('invalid-test-facts');
+  if (!validRoll(roll) || !fumbleFactsValid(d10, wounds)) return refusal('invalid-test-facts');
   const dr = sequela.severity === 'major' ? 0 : 2;
   const test = runTest(healer.score, roll, dr, 'aftermath:immobilization', 'Immobilisation (Guérison)');
+  if (test.fumble && d10 === null) return refusal('fumble-d10-required');
+  const fumbleDamage = healingFumbleDamage(test, d10, wounds);
   const next = clone(state);
   const target = next.sequelae.find(row => row.id === sequelaId);
   const day = state.calendar.currentDay;
-  target.immobilization.attempts.push({ day, healerId: healer.participantId, ...testFacts(test), difficultyDR: dr });
+  target.immobilization.attempts.push({ day, healerId: healer.participantId, ...testFacts(test), difficultyDR: dr, fumbleDamage, d10: test.fumble ? d10 : null });
   if (test.success) { target.immobilization.state = 'bound'; target.immobilization.waiver = true; target.immobilization.boundDay = day; }
-  return commit(next, receipt(state, operationId, 'immobilization', 'applied', test.success ? 'fracture-bound' : 'immobilization-failed', { sequelaId, healerId: healer.participantId, difficultyDR: dr, ...testFacts(test) }));
+  return commit(next, receipt(state, operationId, 'immobilization', 'applied', test.success ? 'fracture-bound' : 'immobilization-failed', { sequelaId, healerId: healer.participantId, difficultyDR: dr, ...testFacts(test), fumbleDamage }));
 }
 
 /** Le bandage est retiré : un nouveau Test de Guérison dans la journée est nécessaire pour éviter le Test d'Endurance final. */
@@ -261,7 +266,7 @@ export function resolveFractureHealing(stateValue, { operationId, expectedRevisi
 }
 
 /** p.177 : un Test de Guérison réussi raccourcit une déchirure mineure de 1 jour plus 1 par DR après le premier, une seule fois. */
-export function treatTornMuscle(stateValue, { operationId, expectedRevision, sequelaId, healer, roll, difficultyDR = 0 } = {}) {
+export function treatTornMuscle(stateValue, { operationId, expectedRevision, sequelaId, healer, roll, difficultyDR = 0, d10 = null, wounds = 0 } = {}) {
   const state = assertState(stateValue);
   const prior = priorReceipt(state, operationId);
   if (prior) return { state: clone(state), receipt: prior };
@@ -273,18 +278,20 @@ export function treatTornMuscle(stateValue, { operationId, expectedRevision, seq
   if (sequelaPhase(sequela, state.calendar.currentDay) !== 'healing') return refusal('tear-not-healing');
   if (sequela.healTest) return refusal('muscle-heal-already-used');
   { const problem = healerProblem(healer, ['heal']); if (problem) return refusal(problem); }
-  if (!validRoll(roll) || !Number.isSafeInteger(difficultyDR)) return refusal('invalid-test-facts');
+  if (!validRoll(roll) || !Number.isSafeInteger(difficultyDR) || !fumbleFactsValid(d10, wounds)) return refusal('invalid-test-facts');
   const test = runTest(healer.score, roll, difficultyDR, 'aftermath:muscle-heal', 'Soin d’une déchirure (Guérison)');
+  if (test.fumble && d10 === null) return refusal('fumble-d10-required');
+  const fumbleDamage = healingFumbleDamage(test, d10, wounds);
   const reduction = test.success ? 1 + Math.max(0, test.sl - 1) : 0;
   const next = clone(state);
   const target = next.sequelae.find(row => row.id === sequelaId);
-  target.history.push({ operationId, day: state.calendar.currentDay, kind: 'muscle-heal', healerId: healer.participantId, ...testFacts(test), difficultyDR, reduction });
+  target.history.push({ operationId, day: state.calendar.currentDay, kind: 'muscle-heal', healerId: healer.participantId, ...testFacts(test), difficultyDR, reduction, fumbleDamage, d10: test.fumble ? d10 : null });
   if (test.success) {
     target.healTest = { day: state.calendar.currentDay, reduction };
     target.reducedDays = reduction;
     target.endDay = Math.max(target.startDay, target.endDay - reduction);
   }
-  return commit(next, receipt(state, operationId, 'muscle-heal', 'applied', test.success ? 'tear-shortened' : 'tear-heal-failed', { sequelaId, healerId: healer.participantId, difficultyDR, reduction, endDay: target.endDay, ...testFacts(test) }));
+  return commit(next, receipt(state, operationId, 'muscle-heal', 'applied', test.success ? 'tear-shortened' : 'tear-heal-failed', { sequelaId, healerId: healer.participantId, difficultyDR, reduction, endDay: target.endDay, ...testFacts(test), fumbleDamage }));
 }
 
 /** Épaule ou genou remis en place : le Test de Guérison étendu se joue à la table, le MJ confirme son aboutissement. */

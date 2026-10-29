@@ -95,7 +95,7 @@ test('J2 — fracture : hors délai, pas d’immobilisation ; bandage retiré sa
   await store.openAftermathSequelae({ operationId: op(), incidentId, facts: { 'injury:0': { side: 'right', d10: 1 } } });
   const bone = sequelaeOf(store)[0];
   assert.equal(bone.endDay, 31);
-  assert.equal((await store.immobilizeAftermathFracture({ operationId: op(), sequelaId: bone.id, healerId: 'healer', roll: 99 })).receipt.reason, 'immobilization-failed' === 'x' ? '' : 'immobilization-failed');
+  assert.equal((await store.immobilizeAftermathFracture({ operationId: op(), sequelaId: bone.id, healerId: 'healer', roll: 97 })).receipt.reason, 'immobilization-failed' === 'x' ? '' : 'immobilization-failed');
   await advance(store, 9);
   assert.equal((await store.immobilizeAftermathFracture({ operationId: op(), sequelaId: bone.id, healerId: 'healer', roll: 10 })).receipt.reason, 'immobilization-window-passed', 'plus d’une semaine de 8 jours après la fracture');
   await advance(store, 22);
@@ -364,4 +364,29 @@ test('J2 — décisions du MJ épinglées : l’immobilisation est un Test à pa
   await second.openAftermathSequelae({ operationId: op(), incidentId: spineIncident, facts: { 'injury:0': { d10: 3 } } });
   const disadvantage = rowsOf(second, 'spine').find(row => row.type === 'disadvantage-carac');
   assert.equal(disadvantage.count, 2, 'Désavantage majeur : deux Désavantages');
+});
+
+test('J2 — maladresse de Guérison (p.170) sur l’immobilisation et le soin de déchirure : 1d10 saisi, jamais sous 1 Blessure', async () => {
+  const hpOf = store => store.listParticipants().find(row => row.id === 'patient').hp;
+  const bone = wounded('patient', 'ARM', 'Clean Break');
+  const { store } = await setup([bone.participant, healerSheet()]);
+  const incidentId = await follow(store, 'patient', bone.record);
+  await store.openAftermathSequelae({ operationId: op(), incidentId });
+  const fracture = sequelaeOf(store)[0];
+  await store.setAftermathSequelaFacts({ operationId: op(), sequelaId: fracture.id, facts: { side: 'left', d10: 4 } });
+  assert.equal((await store.immobilizeAftermathFracture({ operationId: op(), sequelaId: fracture.id, healerId: 'healer', roll: 99 })).receipt.reason, 'fumble-d10-required');
+  assert.equal((await store.immobilizeAftermathFracture({ operationId: op(), sequelaId: fracture.id, healerId: 'healer', roll: 99, d10: 11 })).receipt.reason, 'invalid-test-facts');
+  const fumbled = await store.immobilizeAftermathFracture({ operationId: op(), sequelaId: fracture.id, healerId: 'healer', roll: 99, d10: 7 });
+  assert.deepEqual([fumbled.receipt.reason, fumbled.receipt.fumbleDamage, hpOf(store)], ['immobilization-failed', 7, 13]);
+  assert.equal(sequelaeOf(store)[0].immobilization.attempts.at(-1).d10, 7, 'la maladresse est conservée dans l’historique du Test');
+  // Peu de Blessures : on ne descend jamais sous 1.
+  const tear = wounded('weak', 'ARM', 'Torn Muscles');
+  tear.participant.hp = 3;
+  const { store: second } = await setup([tear.participant, healerSheet()]);
+  const tearIncident = await follow(second, 'weak', tear.record);
+  await second.openAftermathSequelae({ operationId: op(), incidentId: tearIncident, facts: { 'injury:0': { side: 'left' } } });
+  const muscle = sequelaeOf(second)[0];
+  assert.equal((await second.treatAftermathTornMuscle({ operationId: op(), sequelaId: muscle.id, healerId: 'healer', roll: 99 })).receipt.reason, 'fumble-d10-required');
+  const hurt = await second.treatAftermathTornMuscle({ operationId: op(), sequelaId: muscle.id, healerId: 'healer', roll: 99, d10: 9 });
+  assert.deepEqual([hurt.receipt.reason, hurt.receipt.fumbleDamage, second.listParticipants().find(row => row.id === 'weak').hp], ['tear-heal-failed', 2, 1]);
 });
