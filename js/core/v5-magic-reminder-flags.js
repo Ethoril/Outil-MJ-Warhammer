@@ -3,6 +3,7 @@
  * affiché à l'exécution du sort. Un drapeau absent d'ici doit être lu par le moteur : le test « tout drapeau écrit est lu »
  * (tests/lot3-v5-engine-socle.test.js) échoue sinon. Sources : V5 pp. 242-255, WoM pp. 20-23 et sorts, HEPG pp. 80-89.
  */
+import { casterCaracs } from './creature-abilities.js';
 const signed = value => (Number(value) > 0 ? '+' : '') + value;
 
 export const REMINDER_FLAGS = Object.freeze({
@@ -20,7 +21,7 @@ export const REMINDER_FLAGS = Object.freeze({
 /** Rappels des drapeaux présents dans un contrat (au premier niveau de `effects` et dans `healing`, `summon`, `mjInput`). */
 export function reminderFlagTexts(contract, caster) {
   const effects = contract?.effects || {};
-  const bfm = Math.floor((Number(caster?.caracs?.FM) || 0) / 10);
+  const bfm = Math.floor((Number(casterCaracs(caster).FM) || 0) / 10);
   const texts = [];
   for (const [key, value] of Object.entries({ ...(effects.healing || {}), ...(effects.summon || {}), ...(effects.mjInput || {}), ...effects })) {
     if (REMINDER_FLAGS[key] && value !== false && value != null) texts.push(REMINDER_FLAGS[key](value, { contract, bfm }));

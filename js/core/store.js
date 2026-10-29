@@ -1,4 +1,5 @@
 import {setStoreSanctifiedGround,removeStoreSanctifiedGround,enterStoreSanctifiedGround,leaveStoreSanctifiedGround,previewStoreDivineNavalEvent,applyStoreDivineNavalEvent,startStoreDivineDailyWrath,waiveStoreDivineDailyWrathDay,closeStoreDivineDailyWrath,getStoreDivineDailyWrathStatus,setStoreDivineRelic,removeStoreDivineRelic,previewStoreDivineSinEvent,applyStoreDivineSinEvent,getDivineSinEvents,getDivineSinReminders,previewStoreDivineAbsolution,applyStoreDivineAbsolution,returnStoreDivineJudgment,decideStoreDivineJudgmentRejection,createStoreDivinePenance,completeStoreDivinePenance,getDivinePenanceExamples,previewStoreDivineWrathRecovery,applyStoreDivineWrathRecovery,previewStoreDivine,applyStoreDivine,setStoreDivineSin,endStoreDivinePrayer,finalizeDivineState,expireDivineAtPhases,expireDivineAtClock,getDivineContract,getAllDivineContracts,getStoreDivineAccessGrants,createStoreDivineAccessGrant,revokeStoreDivineAccessGrant,resolveStoreDivineAccess} from './v5-divine-store.js';
+import { casterCaracs } from './creature-abilities.js';
 import {processCombatTurnSpells,shieldAtTurnStart,previewSpellInteraction,removeExpiredSummons,endSpellEffectsOnEvent} from './v5-magic-turn.js';
 import {previewMagicMeditation,activeMagicTalent,magicTalentRank,effectiveSkillScore,baseCharacteristicScore} from './v5-magic-talents.js';
 import { previewV5Test, selectV5Test, normalizeV5Roll } from './v5-roll.js';
@@ -4140,7 +4141,7 @@ function resolvedCorruptionTest(participant, skillId, input) {
     previewMiscast(input = {}) {
       const actorId = input.actorId || input.actor?.id || combat.currentActorId;
       const participant = (combat.participants.get(actorId)) || Array.from(combat.participants.values())[0];
-      const bfm = input.bfm !== undefined ? input.bfm : Math.floor((Number(participant?.caracs?.FM) || 0) / 10);
+      const bfm = input.bfm !== undefined ? input.bfm : Math.floor((Number(casterCaracs(participant).FM) || 0) / 10);
       return previewMiscast({ ...input, bfm, participant });
     },
     applyMiscast(preview, options = {}) {

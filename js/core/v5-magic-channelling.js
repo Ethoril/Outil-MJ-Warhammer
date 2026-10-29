@@ -1,4 +1,5 @@
 import {enforceMagicTestRestrictions} from './v5-magic-talents.js';
+import { casterCaracs, castsWithStrength } from './creature-abilities.js';
 import { beastFormRestriction } from './v5-magic-arbitrations.js';
 import { prepareMagicOptions, magicTalentRank, applyMagicAttempt, magicTurnKey, effectiveSkillScore, baseCharacteristicScore, activeMagicTalent } from './v5-magic-talents.js';
 /**
@@ -143,7 +144,7 @@ export function calculateMagicArmorPenalty(participant, { wind = null } = {}) {
  */
 export function resolveChannellingSkill(participant, { type = 'winds', wind = null } = {}) {
   // Élémentaire de mer (L25 p.142) : la Force remplace FM, BF compris (MJ, 28/10).
-  const characteristic = participant?.extensions?.v5?.bestiary?.id === 'E0-P-909' ? 'F' : 'FM';
+  const characteristic = castsWithStrength(participant) ? 'F' : 'FM';
   const bfm = Math.floor((Number(participant?.caracs?.[characteristic]) || 0) / 10);
   const targetType = type === 'high' ? 'high' : 'winds';
 
@@ -512,7 +513,7 @@ export function applyChannellingPause(target, preview, options = {}) {
 export function previewChannellingInterruption(participant, options = {}) {
   const currentReserve = getChannellingReserve(participant);
   if(options.distraction===true && activeMagicTalent(participant,'eye-of-the-storm'))return {actionType:'channelling-interruption',ready:true,success:true,newReserve:currentReserve,summary:'Œil de la tempête : cette distraction n’interrompt pas la Focalisation.'};
-  const fm = Number(participant?.caracs?.FM) || 0;
+  const fm = Number(casterCaracs(participant).FM) || 0;
   const bfm = Math.floor(fm / 10);
   const skills = Array.isArray(participant?.skills) ? participant.skills : [];
   const foundSkill = skills.find(s => /calme|cool/i.test(s.name || s.nom || ''));

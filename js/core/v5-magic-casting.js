@@ -1,3 +1,4 @@
+import { castsWithStrength } from './creature-abilities.js';
 import {enforceMagicTestRestrictions} from './v5-magic-talents.js';
 import { beastFormRestriction } from './v5-magic-arbitrations.js';
 import { prepareMagicOptions, magicTalentRank, applyMagicAttempt, magicTurnKey, effectiveSkillScore, baseCharacteristicScore, activeMagicTalent, suffusedCastingBonus, castingTalent } from './v5-magic-talents.js';
@@ -192,7 +193,7 @@ export function validateOvercastChoices(choices = {}, { availableSL = 0, maxSpen
  */
 export function resolveCastingSkill(participant) {
   // Élémentaire de mer (L25 p.142) : la Force remplace Int et FM, BF compris pour BI et BFM (MJ, 28/10).
-  const strengthCaster = participant?.extensions?.v5?.bestiary?.id === 'E0-P-909';
+  const strengthCaster = castsWithStrength(participant);
   const bf = Math.floor((Number(participant?.caracs?.F) || 0) / 10);
   const bi = strengthCaster ? bf : Math.floor((Number(participant?.caracs?.Int) || 0) / 10);
   const bfm = strengthCaster ? bf : Math.floor((Number(participant?.caracs?.FM) || 0) / 10);

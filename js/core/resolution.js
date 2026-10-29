@@ -1443,7 +1443,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   const effectiveProfileAbilityContext = { ...profileAbilityContext, test: action.name || action.skillName || '', critical: profileAbilityContext.wulfrikHeadCritical === true, specialAction: action.extensions?.v5?.specialProfileAbility ?? null };
   const profileAbilityPlans = planBestiaryProfileAbilities(actor, effectiveProfileAbilityContext);
   // Blessures restantes de la cible après ce coup : déclenchent les règles « à 0 Blessure » des profils (crâne volant, L18 p.107).
-  const targetProfileAbilityPlans = planBestiaryProfileAbilities(target, { ...profileAbilityContext, ...(hit && damage && knownHp(target) ? { wounds: hpBefore - damage.finalDamage } : {}) });
+  const targetProfileAbilityPlans = planBestiaryProfileAbilities(target, { ...profileAbilityContext, ...(hit && damage && knownHp(target) ? { wounds: hpBefore - damage.finalDamage - (Number(criticalBlock?.application?.extraWounds) || 0) } : {}) });
   const lassoReminders = [];
   // Lasso de soie (L22 p.73) : aucun jet d'attaque, seule l'Esquive +0 de la cible compte ; un Enchevêtré par DR d'échec, au moins 1 (E5/E6).
   if (target && !replacement && action.extensions?.v5?.specialProfileAbility === 'cliff-spider-lasso') {

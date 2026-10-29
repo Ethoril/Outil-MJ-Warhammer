@@ -576,3 +576,28 @@ test('All three Flying Death Skull profiles revert at 0 Wounds, applied by the S
     assert.equal(after.extensions.v5.inanimateAs, 'crâne ordinaire', id);
   }
 });
+
+test('Sea Elemental channelling interruption, miscast reminders and casting skill read its Strength, by profileId too (final H review)', async () => {
+  const { previewChannellingInterruption, resolveChannellingSkill } = await import('../js/core/v5-magic-channelling.js');
+  const { reminderFlagTexts } = await import('../js/core/v5-magic-reminder-flags.js');
+  const { casterCaracs, castsWithStrength } = await import('../js/core/creature-abilities.js');
+  const sea = p('E0-P-909');
+  const bare = { id: 'bare-sea', profileId: 'E0-P-909', caracs: { ...sea.caracs }, skills: [], talents: [], extensions: { v5: {} } };
+  assert.equal(castsWithStrength(bare), true, 'profileId alone is enough');
+  assert.equal(castsWithStrength(p('E0-P-910')), false);
+  assert.equal(casterCaracs(bare).FM, sea.caracs.F);
+  assert.equal(resolveChannellingSkill(bare).carac, 'F');
+  assert.equal(resolveChannellingSkill(bare).bfm, Math.floor(sea.caracs.F / 10));
+  const interruption = previewChannellingInterruption(sea, { score: 50, roll: 10 });
+  assert.notEqual(interruption.ready, false);
+  assert.doesNotThrow(() => reminderFlagTexts({ effects: {} }, sea));
+});
+
+test('Suffocation costs nothing while a breath blessing lasts (final H review)', async () => {
+  const { advanceV5Effects } = await import('../js/core/v5-effects.js');
+  const victim = { id: 'blessed', name: 'Béni', hp: 2, maxHp: 10, caracs: { E: 30 }, states: [{ id: 'suff', key: 'suffocation', name: 'Suffocation', level: 1 }],
+    extensions: { v5: { divineEffects: [{ id: 'breath', specialState: { doesNotBreathe: true } }] } } };
+  const r1 = advanceV5Effects(victim, { phase: 'endOfRound', round: 1 });
+  assert.equal(r1.participant.hp, 2);
+  assert.ok(r1.participant.states.some(row => row.key === 'suffocation'), 'the state stays for when the blessing ends');
+});

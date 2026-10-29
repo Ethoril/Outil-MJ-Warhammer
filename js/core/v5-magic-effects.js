@@ -1081,7 +1081,7 @@ export function resolveSpellDamage({
 
   let rawDamage = 0;
   const strFormula = String(formula || spell.damageFormula || spell.damage || '').trim();
-  const bfm = Math.floor((Number(caster?.caracs?.FM) || 0) / 10);
+  const bfm = Math.floor((Number(casterCaracs(caster).FM) || 0) / 10);
   const bf = Math.floor((Number(caster?.caracs?.F) || 0) / 10);
 
   // Évaluation de la formule

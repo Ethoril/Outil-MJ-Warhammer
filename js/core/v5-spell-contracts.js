@@ -1,4 +1,5 @@
 import { uid } from './models.js';
+import { casterCaracs } from './creature-abilities.js';
 import {randomVortexStep,oppositeCamp} from './v5-magic-turn.js';
 import {buildParticipantFromBestiary,summonProfileLibrary} from './bestiary-profiles.js';
 import {spellObjectChoices,ARCANE_WEAPON_PROFILES} from './equipment.js';
@@ -580,7 +581,7 @@ export function resolveVortexTrajectory({ contract, caster, direction, distance,
     else finalDirection = movement;
   }
 
-  const bfm = Math.max(1, Math.floor((Number(caster?.caracs?.FM) || 30) / 10));
+  const bfm = Math.max(1, Math.floor((Number(casterCaracs(caster).FM) || 30) / 10));
   const moves = vortexOutcome === null;
   const finalDistance = !moves ? 0 : distance ?? explicitMagicDie(options.distanceRoll, '2d10');
   if (moves && (!Number.isInteger(finalDistance) || finalDistance<2 || finalDistance>20)) missing.push('distanceRoll');
@@ -672,7 +673,7 @@ export function resolveVortexTrajectory({ contract, caster, direction, distance,
 export function resolveAuxiliarySummons({ contract, caster, options = {} } = {}) {
   const auxiliaries = [];
   const cName = contract.canonicalName || contract.name;
-  const bfm = Math.max(1, Math.floor((Number(caster?.caracs?.FM) || 30) / 10));
+  const bfm = Math.max(1, Math.floor((Number(casterCaracs(caster).FM) || 30) / 10));
 
   if (contract.effects?.summonProfile) {
     const profile = BEAST_PROFILES[contract.effects.summonProfile];
@@ -1458,8 +1459,8 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
     const spellSuccess = testSuccess && (totalCastingSl >= contract.cn || (isCritical && effectiveCriticalChoice === 'total-power'));
     const surplus = spellSuccess ? Math.max(0, totalCastingSl - contract.cn) : 0;
     const availableOvercastSl = surplus + extraOvercastFromCritical + (spellSuccess && contract.domain==='high' ? magicTalentRank(actor,'high-magic') : 0);
-    const bi = Math.max(1, Math.floor((Number(actor?.caracs?.Int) || 30) / 10));
-    const bfm = Math.max(0, Math.floor(Number(actor?.caracs?.FM ?? 0) / 10));
+    const bi = Math.max(1, Math.floor((Number(casterCaracs(actor).Int) || 30) / 10));
+    const bfm = Math.max(0, Math.floor(Number(casterCaracs(actor).FM ?? 0) / 10));
     const maxOvercastSpend = bi + bfm;
     const overcastValidation = spellSuccess
       ? validateOvercastChoices(overcastChoices, { availableSL: availableOvercastSl, maxSpend: maxOvercastSpend, spell: spellForCasting })
@@ -1625,7 +1626,7 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
 
   // 5. Haute Magie : calcul du risque d'épuisement magique si surpuissant
   let burnout = null;
-  const bfm = Math.max(0, Math.floor(Number(actor?.caracs?.FM ?? 0) / 10));
+  const bfm = Math.max(0, Math.floor(Number(casterCaracs(actor).FM ?? 0) / 10));
   if (contract.domain === 'high') {
     const totalOvercastSpent = Object.values(overcastChoices).reduce((sum, v) => sum + (Number(v) || 0), 0);
     const burnoutRiskCalc = calculateBurnoutRisk({ overcastSpent: totalOvercastSpent, bfm });

@@ -418,7 +418,9 @@ export function advanceV5Effects(participant,transition={},inputs={}) {
       }
     }
     // Suffocation (V5 p.169, Immersion L25 p.142) : 1 Blessure par Round, Inconscient à 0, mort proposée au MJ après BE Rounds (MJ, 28/10).
-    if(levels(next.states,'suffocation')&&hp!==null){
+    // Bénédiction de Souffle (`doesNotBreathe`) : l'état reste posé mais ne coûte rien tant que la couche dure, comme l'Étouffement des sorts.
+    const breathless=(next.extensions?.v5?.divineEffects||[]).some(layer=>layer?.specialState?.doesNotBreathe===true);
+    if(levels(next.states,'suffocation')&&hp!==null&&!breathless){
       hp=Math.max(0,hp-1);next.hp=hp;reminders.push('Suffocation : perte de 1 Blessure, sans BE ni PA.');
       if(hp===0){
         if(!levels(next.states,'inconscient')){
