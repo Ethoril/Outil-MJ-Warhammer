@@ -1302,7 +1302,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
             const isAllyOnlySpell = ['hand-of-glory', 'shield-of-saphery', 'twist-of-fate', 'hunters-moons', 'timewarp', 'ox-stands'].includes(contract?.effects?.special);
             const isAllyExcludingCaster = contract?.effects?.special === 'monstrous-regiment';
             let defaultTargets;
-            if(contract?.effects?.excludeCaster){defaultTargets=[Store.listParticipants().find(p=>p.id!==context.actor.id&&p.zone==='active')?.id].filter(Boolean);}
+            if(contract?.effects?.excludeCaster){defaultTargets=[(context.target&&context.target.id!==context.actor.id?context.target:Store.listParticipants().find(p=>p.id!==context.actor.id&&p.zone==='active'))?.id].filter(Boolean);}
             else if (isSelfSpell) {
               defaultTargets = [context.actor.id];
             } else if (isAllyExcludingCaster) {

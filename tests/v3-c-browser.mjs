@@ -87,6 +87,18 @@ try {
   await page.locator('#workspace-root [data-action-key="claw"]').click();
   await page.locator('#workspace-root').getByLabel('Type d’action').selectOption('attack');
   assert.ok(await page.locator('#workspace-root').getByLabel(/Attaque gratuite de Grim/u).count() >= 1, 'case Grim présente');
+  // 4. Souffle : la cible choisie dans l'espace de travail reste la cible cochée par défaut (jamais le lanceur).
+  await load(fixture());
+  await page.locator('#workspace-root [data-workspace-select="a"]').click();
+  await page.locator('#workspace-root').locator('[data-focus-key="target-m"]').click();
+  await page.locator('#workspace-root').getByLabel('Type d’action').selectOption('cast');
+  const spellSelect = page.locator('#workspace-root').getByLabel(/Sort/u).first();
+  await spellSelect.selectOption({ label: 'Souffle · NI 6 (arcane)' });
+  const box = page.locator('#workspace-root details.workspace-v5-context-details', { hasText: 'Cibles multiples' });
+  await box.locator('summary').click();
+  assert.equal(await box.getByLabel('Cible du sort : Fauve').isChecked(), true, 'la cible choisie reste cochée');
+  assert.equal(await box.getByLabel('Cible du sort : Orque').isChecked(), false);
+  assert.equal(await box.getByLabel('Cible du sort : Mage').isChecked(), false, 'le lanceur n’est pas coché');
   assert.deepEqual(errors, []);
   console.log('v3-C navigateur : OK');
 } finally { await browser.close(); server.close(); }

@@ -8,9 +8,17 @@ test('v3 Souffle (p.243) : le lanceur est immunisé à son propre Souffle, il ne
   const contract = getSpellContract('Souffle');
   const caster = { id: 'mage', camp: 'pj' }, foe = { id: 'foe', camp: 'ennemi' };
   assert.equal(validateSpellTargets(contract, caster, [foe]).valid, true);
-  const own = validateSpellTargets(contract, caster, [foe, caster]);
+  const own = validateSpellTargets(contract, caster, [caster]);
   assert.equal(own.valid, false);
   assert.equal(own.status, 'invalid-target-admissibility');
+});
+
+test('v3 Souffle : le lanceur parmi les voisins de la zone est ignoré, seul il est refusé', async () => {
+  const { previewSpellExecution } = await import('../js/core/v5-spell-contracts.js');
+  const person = (id, camp) => ({ id, name: id, camp, hp: 20, maxHp: 20, zone: 'active', caracs: { FM: 50, Int: 50, E: 30, F: 30 }, skills: [{ name: 'Focalisation', total: 60 }, { name: 'Langue (Magick)', total: 60 }], states: [], equipment: [], talents: [], extensions: { v5: {} } });
+  const mage = person('mage', 'pj'), foe = person('foe', 'ennemi');
+  assert.equal(previewSpellExecution(mage, 'Souffle', [foe, mage], {}).status, previewSpellExecution(mage, 'Souffle', [foe], {}).status, 'même résultat avec ou sans le lanceur dans la zone');
+  assert.equal(previewSpellExecution(mage, 'Souffle', [mage], {}).status, 'invalid-target-admissibility');
 });
 
 test('v3 Diction instinctive et Harmonie aethyrique (p.121, p.114) : refusées après un Test raté, appliquées après une réussite', async () => {

@@ -1275,6 +1275,11 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
     }
   }
 
+  // Souffle (p.243) : le lanceur est immunisé ; parmi les voisins de la zone il est ignoré, seul comme cible il est refusé plus bas.
+  if (effects.breath && effects.excludeCaster && actor?.id && effectiveTargets.some(t => t.id === actor.id) && effectiveTargets.some(t => t.id !== actor.id)) {
+    effectiveTargets = effectiveTargets.filter(t => t.id !== actor.id);
+  }
+
   // Invocations génériques : la couche (fin à l’aube, mort du lanceur) est portée par le lanceur, la zone n’est pas suivie.
   if (effects.summon?.profile || effects.summon?.profiles) effectiveTargets = [actor];
   // D-C40 (MJ, 22/10) : sans le profil imprimé de la créature invoquée, le sort est refusé.

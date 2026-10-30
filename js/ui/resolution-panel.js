@@ -351,7 +351,7 @@ function magicTargetIdsOf(draft, contract, actor, target, participants) {
   if (Array.isArray(draft.magicTargetIds) && draft.magicTargetIds.length) return draft.magicTargetIds;
   const isSelfSpell = /^vous$/i.test((contract?.target || '').trim()) || /^vous$/i.test((contract?.range || '').trim());
   const isAllyOnlySpell = ['hand-of-glory', 'shield-of-saphery', 'twist-of-fate', 'hunters-moons', 'timewarp', 'ox-stands'].includes(contract?.effects?.special);
-  if(contract?.effects?.excludeCaster)return [participants.find(p=>p.id!==actor.id&&p.zone==='active')?.id].filter(Boolean);
+  if(contract?.effects?.excludeCaster)return [(target&&target.id!==actor.id?target:participants.find(p=>p.id!==actor.id&&p.zone==='active'))?.id].filter(Boolean);
   if (isSelfSpell) return [actor.id];
   if (contract?.effects?.special === 'monstrous-regiment') {
     const firstAlly = participants.find(p => p.id !== actor.id && p.camp === actor.camp);
@@ -634,7 +634,7 @@ function renderV5MagicContext({ actor, participants = [], target, type, draft, h
       const isAllyOnlySpell = ['hand-of-glory', 'shield-of-saphery', 'twist-of-fate', 'hunters-moons', 'timewarp', 'ox-stands'].includes(contract?.effects?.special);
       const isAllyExcludingCaster = contract?.effects?.special === 'monstrous-regiment';
       let defaultTargets;
-      if(contract?.effects?.excludeCaster){defaultTargets=[participants.find(p=>p.id!==actor.id&&p.zone==='active')?.id].filter(Boolean);}
+      if(contract?.effects?.excludeCaster){defaultTargets=[(target&&target.id!==actor.id?target:participants.find(p=>p.id!==actor.id&&p.zone==='active'))?.id].filter(Boolean);}
       else if (isSelfSpell) {
         defaultTargets = [actor.id];
       } else if (isAllyExcludingCaster) {
