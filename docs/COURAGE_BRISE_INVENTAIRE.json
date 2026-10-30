@@ -383,7 +383,7 @@
     "mechanic": "Après avoir charmé le groupe, Commandement peut retirer ses États Brisé.",
     "currentStatus": "assisted",
     "evidence": [
-      "tests/lot2-v5-remaining-talents.test.js:70"
+      "tests/unit/combat/talents-v5.test.js:1867"
     ],
     "proposedAutomation": "Préserver le préalable Charme et les destinataires déjà tracés.",
     "risk": "moyen",
@@ -413,7 +413,7 @@
     "mechanic": "Les alliés influencés utilisent Commandement au lieu de Calme contre Peur ; effet suspendu si le meneur meurt ou devient Brisé, Inconscient ou effrayé.",
     "currentStatus": "assisted",
     "evidence": [
-      "tests/lot2-v5-remaining-talents.test.js:71"
+      "tests/unit/combat/talents-v5.test.js:1868"
     ],
     "proposedAutomation": "Garder auteur, alliés influencés et fin de bataille identifiés.",
     "risk": "moyen",

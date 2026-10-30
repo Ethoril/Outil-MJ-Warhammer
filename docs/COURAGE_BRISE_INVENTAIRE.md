@@ -35,9 +35,9 @@ Statuts : engine = clause calculée ; assisted = calcul limité à un circuit ou
 | C0-L06-023 | L06 p. 120 | Fuite ! : poursuite | engine | js/data/v5-talent-coverage.json:1982 |
 | C0-L06-024 | L06 p. 120 | Fuite ! : Mouvement supplémentaire | absent | js/data/v5-talent-coverage.json:1982 |
 | C0-L06-025 | L06 p. 120 | Fuite ! : Brisé | absent | js/core/v5-broken-escape.js:31 |
-| C0-L06-026 | L06 p. 124 | Orateur | assisted | tests/lot2-v5-remaining-talents.test.js:70 |
+| C0-L06-026 | L06 p. 124 | Orateur | assisted | tests/unit/combat/talents-v5.test.js:1867 |
 | C0-L06-027 | L06 p. 128 | Inébranlable | assisted | js/data/v5-talent-coverage.json:2498 |
-| C0-L06-028 | L06 p. 128 | Seigneur de guerre | assisted | tests/lot2-v5-remaining-talents.test.js:71 |
+| C0-L06-028 | L06 p. 128 | Seigneur de guerre | assisted | tests/unit/combat/talents-v5.test.js:1868 |
 | C0-L06-029 | L06 p. 356 | Trait Peureux / Afraid | reminder | js/core/v5-talent-psychology.js:6 |
 | C0-L06-030 | L06 p. 356 | Trait Belliqueux | reminder | js/core/v5-talent-psychology.js:55 |
 | C0-L06-031 | L06 p. 356 | Trait Bestial | reminder | js/core/v5-magic-arbitrations.js:24 |
