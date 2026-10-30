@@ -2736,7 +2736,7 @@
     {
       "id": "divine:miracle:taal:tooth-and-claw",
       "catalogueEntry": null,
-      "v5Summary": "Le texte imprimé dit « Their attacks are Magical » : portée exacte (attaques de ces Traits ou toutes) ambiguë.",
+      "v5Summary": "V5 v3 : Traits Morsure et Magique, plus de Trait Arme (BF+4). La portée exacte du Trait Magique (attaques de ces Traits ou toutes) reste lue comme toutes les attaques de mêlée (arbitrage MJ). Mains nues plus Inoffensives : clause manuelle, le moteur ne marque pas les mains nues Inoffensives.",
       "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
@@ -2856,7 +2856,7 @@
     {
       "id": "divine:miracle:ulric:hoarfrost-s-chill",
       "catalogueEntry": null,
-      "v5Summary": "Cible imprimée « AoE (Fellowship yards) » sans « Bonus », contrairement aux autres zones; la grammaire params n'a pas de zone en caractéristique entière, encodée en special. Niveau de Peur non précisé : Peur (1) retenue (arbitrage MJ, comme Masque mortuaire).",
+      "v5Summary": "Cible imprimée « AoE (Fellowship yards) » sans « Bonus », contrairement aux autres zones; la grammaire params n'a pas de zone en caractéristique entière, encodée en special. Peur (2) imprimée en v3 (l’ancien arbitrage Peur (1) du 21/10 ne s’applique plus) ; la perte d’Élan remplace la perte d’Avantage.",
       "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
@@ -15733,7 +15733,7 @@
         {
           "type": "grant-trait",
           "traits": [
-            "Peur (1)"
+            "Peur (2)"
           ],
           "duration": {
             "value": null,
@@ -15749,14 +15749,14 @@
       ],
       "labels": {
         "canonicalName": "Death Mask",
-        "effect": "Le visage du prêtre devient cadavérique et il gagne le Trait Peur (Fear). Les morts-vivants n’en sont pas immunisés, quels que soient leurs Talents, Traits (Construct compris) ou autres effets.",
+        "effect": "Le visage du prêtre devient cadavérique et il gagne le Trait Peur (2). Les morts-vivants n’en sont pas immunisés, quels que soient leurs Talents, Traits (Construct compris) ou autres effets.",
         "sourceStatus": "V5 base source checked"
       },
       "clauses": [
         {
           "id": "fear",
           "mode": "engine",
-          "text": "Le prêtre gagne Peur (Fear) pendant la durée.",
+          "text": "Le prêtre gagne Peur (2) pendant la durée.",
           "sourceRef": "v5-death-mask"
         },
         {
@@ -19591,7 +19591,7 @@
         "duration": {
           "kind": "characteristic-bonus",
           "characteristic": "Soc",
-          "unit": "rounds"
+          "unit": "minutes"
         }
       },
       "extensions": [
@@ -19630,7 +19630,7 @@
           "duration": {
             "value": null,
             "sourceParameter": "params.duration",
-            "unit": "rounds",
+            "unit": "minutes",
             "requiresResolvedExpiry": true
           }
         },
@@ -19646,7 +19646,7 @@
           "duration": {
             "value": null,
             "sourceParameter": "params.duration",
-            "unit": "rounds",
+            "unit": "minutes",
             "requiresResolvedExpiry": true
           }
         }
@@ -25507,7 +25507,7 @@
         "specialization": "Taal"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": "Le texte imprimé dit « Their attacks are Magical » : portée exacte (attaques de ces Traits ou toutes) ambiguë.",
+      "sourceDelta": "V5 v3 : Traits Morsure et Magique, plus de Trait Arme (BF+4). La portée exacte du Trait Magique (attaques de ces Traits ou toutes) reste lue comme toutes les attaques de mêlée (arbitrage MJ). Mains nues plus Inoffensives : clause manuelle, le moteur ne marque pas les mains nues Inoffensives.",
       "params": {
         "range": {
           "kind": "self"
@@ -25557,11 +25557,6 @@
               "id": "bite",
               "name": "Morsure",
               "damageFormula": "BF+3"
-            },
-            {
-              "id": "weapon",
-              "name": "Arme",
-              "damageFormula": "BF+4"
             }
           ],
           "duration": {
@@ -25585,7 +25580,7 @@
       "targetRules": [],
       "labels": {
         "canonicalName": "Tooth and Claw",
-        "effect": "Vous gagnez les Traits de créature Morsure (Bonus de Force + 3) et Arme (Bonus de Force + 4); vos attaques sont Magiques.",
+        "effect": "Vous gagnez les Traits de créature Morsure (Bonus de Force + 3) et Magique ; vos attaques à mains nues ne sont plus Inoffensives.",
         "sourceStatus": "V5 base source checked"
       },
       "clauses": [
@@ -25596,15 +25591,15 @@
           "sourceRef": "v5-tooth-and-claw"
         },
         {
-          "id": "weapon",
+          "id": "magical",
           "mode": "engine",
-          "text": "Trait Arme (Bonus de Force + 4) pendant la durée.",
+          "text": "Trait Magique : les attaques de mêlée du prêtre sont Magiques (arbitrage MJ : toutes les attaques de mêlée, pas le tir).",
           "sourceRef": "v5-tooth-and-claw"
         },
         {
-          "id": "magical",
-          "mode": "engine",
-          "text": "Les attaques de mêlée du prêtre sont Magiques (arbitrage MJ : toutes les attaques de mêlée, pas le tir).",
+          "id": "unarmed-damaging",
+          "mode": "manual",
+          "text": "Pendant la durée, les attaques à mains nues du prêtre ne comptent plus comme Inoffensives (Undamaging) : à appliquer au jet.",
           "sourceRef": "v5-tooth-and-claw"
         }
       ],
@@ -26488,7 +26483,7 @@
         "specialization": "Ulric"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": "Cible imprimée « AoE (Fellowship yards) » sans « Bonus », contrairement aux autres zones; la grammaire params n'a pas de zone en caractéristique entière, encodée en special. Niveau de Peur non précisé : Peur (1) retenue (arbitrage MJ, comme Masque mortuaire).",
+      "sourceDelta": "Cible imprimée « AoE (Fellowship yards) » sans « Bonus », contrairement aux autres zones; la grammaire params n'a pas de zone en caractéristique entière, encodée en special. Peur (2) imprimée en v3 (l’ancien arbitrage Peur (1) du 21/10 ne s’applique plus) ; la perte d’Élan remplace la perte d’Avantage.",
       "params": {
         "range": {
           "kind": "self"
@@ -26534,7 +26529,7 @@
         {
           "type": "grant-trait",
           "traits": [
-            "Peur (1)"
+            "Peur (2)"
           ],
           "appliesTo": "caster",
           "duration": {
@@ -26551,20 +26546,20 @@
       ],
       "labels": {
         "canonicalName": "Hoarfrost's Chill",
-        "effect": "Votre regard prend un éclat bleu acier et l'air se refroidit autour de vous. Vous causez la Peur (p.183). Toutes les créatures de la zone, vous excepté, perdent leur Avantage au début de chaque Round.",
+        "effect": "Votre regard prend un éclat bleu acier et l'air se refroidit autour de vous. Vous causez la Peur (2) (p.183). Toutes les créatures de la zone, vous excepté, perdent leur Élan au début de chaque Round.",
         "sourceStatus": "V5 base source checked"
       },
       "clauses": [
         {
           "id": "fear",
           "mode": "engine",
-          "text": "Le prêtre cause la Peur (règle p.183) pendant la durée.",
+          "text": "Le prêtre cause la Peur (2) (règle p.183) pendant la durée.",
           "sourceRef": "v5-hoarfrost-s-chill"
         },
         {
-          "id": "advantage-loss",
+          "id": "momentum-loss",
           "mode": "manual",
-          "text": "Au début de chaque Round, toutes les créatures de la zone sauf le prêtre perdent leur Avantage.",
+          "text": "Au début de chaque Round, toutes les créatures de la zone sauf le prêtre perdent leur Élan.",
           "sourceRef": "v5-hoarfrost-s-chill"
         },
         {
@@ -26581,7 +26576,7 @@
         },
         {
           "field": "area-targets",
-          "label": "Créatures présentes dans la zone (perte d’Avantage au début de chaque Round)."
+          "label": "Créatures présentes dans la zone (perte d’Élan au début de chaque Round)."
         }
       ]
     },
@@ -26921,6 +26916,18 @@
           }
         },
         {
+          "type": "condition",
+          "key": "Stunned",
+          "level": 1,
+          "when": {
+            "fact": "judgement",
+            "label": "verdict MJ : cible faible, lâche ou fourbe (sinon la cible est épargnée et le prêtre subit l’effet)"
+          },
+          "duration": {
+            "unit": "instant"
+          }
+        },
+        {
           "type": "direct-damage",
           "dice": {
             "count": 1,
@@ -26942,7 +26949,7 @@
       "targetRules": [],
       "labels": {
         "canonicalName": "The Snow King's Judgement",
-        "effect": "Le sang et la moelle de la cible gèlent : elle subit 1d10 Blessures sans Bonus d'Endurance ni Points d'Armure, plus 1 Blessure par DR. Si le MJ juge que la cible n'est ni faible, ni lâche, ni fourbe, c'est vous qui subissez l'effet.",
+        "effect": "Le sang et la moelle de la cible gèlent : elle subit 1d10 Blessures sans Bonus d'Endurance ni Points d'Armure et reçoit l'état Sonné, plus 1 Blessure par DR. Si le MJ juge que la cible n'est ni faible, ni lâche, ni fourbe, c'est vous qui subissez l'effet.",
         "sourceStatus": "V5 base source checked"
       },
       "clauses": [
@@ -26950,6 +26957,18 @@
           "id": "damage",
           "mode": "engine",
           "text": "1d10 Blessures ignorant Bonus d'Endurance et PA, +1 Blessure par DR.",
+          "sourceRef": "v5-the-snow-king-s-judgement"
+        },
+        {
+          "id": "stunned",
+          "mode": "engine",
+          "text": "La cible jugée faible, lâche ou fourbe reçoit l'état Sonné.",
+          "sourceRef": "v5-the-snow-king-s-judgement"
+        },
+        {
+          "id": "redirect-stunned",
+          "mode": "manual",
+          "text": "Si le prêtre subit l'effet à la place de la cible, il reçoit aussi l'état Sonné : à poser à la main.",
           "sourceRef": "v5-the-snow-king-s-judgement"
         },
         {
@@ -28111,5 +28130,5 @@
       "needsInput": []
     }
   ],
-  "sourceFingerprint": "sha256:41a18f996c5ba3aeb66093365821a2016e4f876582c667b0a1631e6d029b0bec"
+  "sourceFingerprint": "sha256:85af0e56ee91cfc641ee48167c5512bc5b0b78d4e832de56bfbf580d77ae77f5"
 }

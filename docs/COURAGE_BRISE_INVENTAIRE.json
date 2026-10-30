@@ -754,8 +754,8 @@
     "sourceBook": "L06",
     "printedPage": 223,
     "label": "Masque mortuaire",
-    "summaryFr": "Peur du prêtre applicable aussi aux morts-vivants malgré leurs immunités ; indice non précisé dans ce passage.",
-    "mechanic": "Peur du prêtre applicable aussi aux morts-vivants malgré leurs immunités ; indice non précisé dans ce passage.",
+    "summaryFr": "Peur (2) du prêtre applicable aussi aux morts-vivants malgré leurs immunités (indice chiffré par le livre de base V5 v3).",
+    "mechanic": "Peur (2) du prêtre applicable aussi aux morts-vivants malgré leurs immunités (indice chiffré par le livre de base V5 v3).",
     "currentStatus": "reminder",
     "evidence": [
       "js/data/v5-divine-contracts.json:14726"

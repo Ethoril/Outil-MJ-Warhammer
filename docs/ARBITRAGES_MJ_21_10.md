@@ -25,7 +25,7 @@ Ces décisions s’imposent aux lots des phases B à E de `docs/PLAN_FIN_DE_PROJ
 - Q08, Q09, Q10, Q15, Q17, Q20 divergences de suppléments (Belliqueux, Hurlement spectral, À Sang-froid, Terreur à deux tailles, attributs de sort, conventions V4) : **V5 partout**, termes V4 (Avantage, %) convertis en V5.
 - Q11, Q14 : vérifications visuelles de tableaux et de formulation, à faire par l’exécutant (pas d’arbitrage).
 - Q12 Poisoned Whispers : **BFM Rounds**, Test quotidien en **rappel**.
-- Q13, Q19 indices non chiffrés : **saisie MJ** ; les indices fixés pour des prières (Masque mortuaire, Givre d’Ulric) ne servent pas de défaut ailleurs.
+- Q13, Q19 indices non chiffrés : **saisie MJ** ; les indices fixés pour des prières (Masque mortuaire, Givre d’Ulric) ne servent pas de défaut ailleurs. **Mis à jour le 29/10/2026 :** le livre de base V5 v3 chiffre ces deux indices (Peur (2)) ; l’ancien arbitrage Peur (1) est remplacé pour ces deux prières seulement, la règle « saisie MJ » des autres sources reste inchangée.
 - Q16 monture Brisée : **fin de Round, V5**.
 - Q18 sous-systèmes (moral de masse, séquelles psychologiques, rançonnement, rancunes, drogues) : **aucun**, hors de la granularité voulue.
 

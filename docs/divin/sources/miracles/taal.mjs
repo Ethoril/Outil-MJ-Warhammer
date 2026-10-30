@@ -1,4 +1,4 @@
-/* Miracles de Taal, livre de base V5 EN v2 p.227-228 (imprimées). Transcription vérifiée au PDF; texte reformulé. */
+/* Miracles de Taal, livre de base V5 EN v2 p.227-228 (imprimées); Dent et griffe alignée sur la v3 du 27/10/2026. Transcription vérifiée au PDF; texte reformulé. */
 export const cult = 'Taal';
 const soc = { characteristic: 'Soc' };
 const range = { kind: 'characteristic', ...soc, unit: 'yards' };
@@ -118,21 +118,21 @@ export const miracles = [
     name: 'Dent et griffe',
     canonicalName: 'Tooth and Claw',
     printedPage: 228,
-    summary: 'Vous gagnez les Traits de créature Morsure (Bonus de Force + 3) et Arme (Bonus de Force + 4); vos attaques sont Magiques.',
+    summary: 'Vous gagnez les Traits de créature Morsure (Bonus de Force + 3) et Magique ; vos attaques à mains nues ne sont plus Inoffensives.',
     params: { range: self, targets: self, duration: felRounds },
     status: 'assisted',
     effect: null,
     effects: [
-      { type: 'grant-actions', actions: [{ id: 'bite', name: 'Morsure', damageFormula: 'BF+3' }, { id: 'weapon', name: 'Arme', damageFormula: 'BF+4' }] },
+      { type: 'grant-actions', actions: [{ id: 'bite', name: 'Morsure', damageFormula: 'BF+3' }] },
       { type: 'weapon-bonus', magical: true }
     ],
     targetRules: [],
     needsInput: [],
     clauses: [
       { id: 'bite', mode: 'engine', text: 'Trait Morsure (Bonus de Force + 3) pendant la durée.' },
-      { id: 'weapon', mode: 'engine', text: 'Trait Arme (Bonus de Force + 4) pendant la durée.' },
-      { id: 'magical', mode: 'engine', text: 'Les attaques de mêlée du prêtre sont Magiques (arbitrage MJ : toutes les attaques de mêlée, pas le tir).' }
+      { id: 'magical', mode: 'engine', text: 'Trait Magique : les attaques de mêlée du prêtre sont Magiques (arbitrage MJ : toutes les attaques de mêlée, pas le tir).' },
+      { id: 'unarmed-damaging', mode: 'manual', text: 'Pendant la durée, les attaques à mains nues du prêtre ne comptent plus comme Inoffensives (Undamaging) : à appliquer au jet.' }
     ],
-    sourceDelta: 'Le texte imprimé dit « Their attacks are Magical » : portée exacte (attaques de ces Traits ou toutes) ambiguë.'
+    sourceDelta: 'V5 v3 : Traits Morsure et Magique, plus de Trait Arme (BF+4). La portée exacte du Trait Magique (attaques de ces Traits ou toutes) reste lue comme toutes les attaques de mêlée (arbitrage MJ). Mains nues plus Inoffensives : clause manuelle, le moteur ne marque pas les mains nues Inoffensives.'
   }
 ];

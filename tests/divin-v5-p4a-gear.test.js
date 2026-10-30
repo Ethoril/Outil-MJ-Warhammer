@@ -81,14 +81,14 @@ test('registre : les six types T4 ont un gestionnaire et refusent un contrat mal
   assert.deepEqual(effectNeeds({ type: 'weapon-bonus', magical: true }, { input: {} }), []);
 });
 
-test('Masque mortuaire : Peur (1) projeté dans temporaryTraits et l’alias traits, retiré à l’expiration', async () => {
+test('Masque mortuaire : Peur (2) projeté dans temporaryTraits et l’alias traits, retiré à l’expiration', async () => {
   const store = await fixture({ cult: 'Morr' });
   assert.equal(getDivineContract(MASK).status, 'assisted');
   const result = await cast(store, MASK);
   assert.ok(result.receipt.reminders.some(text => /morts-vivants ne sont pas immunisés/.test(text)), 'l’immunité des morts-vivants reste un rappel');
   let priest = person(store, 'priest');
-  assert.deepEqual(priest.traits, ['Vigilant', 'Peur (1)']);
-  assert.deepEqual(priest.extensions.v5.temporaryTraits, ['Peur (1)']);
+  assert.deepEqual(priest.traits, ['Vigilant', 'Peur (2)']);
+  assert.deepEqual(priest.extensions.v5.temporaryTraits, ['Peur (2)']);
   assert.deepEqual(priest.extensions.v5.baseTraits, ['Vigilant']);
   await toRoundEnd(store);
   priest = person(store, 'priest');
@@ -105,18 +105,18 @@ test('Masque mortuaire : fin par le MJ, Undo, Redo et rechargement gardent l’a
   await store.endDivinePrayer(executionId, { reason: 'Fin décidée par le MJ' });
   assert.deepEqual(person(store, 'priest').traits, ['Vigilant']);
   await store.undo();
-  assert.deepEqual(person(store, 'priest').traits, ['Vigilant', 'Peur (1)']);
+  assert.deepEqual(person(store, 'priest').traits, ['Vigilant', 'Peur (2)']);
   await store.redo();
   assert.deepEqual(person(store, 'priest').traits, ['Vigilant']);
   await store.undo();
   const reload = createStore({ persistence: store.persistence, storage: null }); await reload.ready;
   const priest = person(reload, 'priest');
-  assert.deepEqual(priest.traits, ['Vigilant', 'Peur (1)']);
+  assert.deepEqual(priest.traits, ['Vigilant', 'Peur (2)']);
   assert.deepEqual(priest.traits, [...new Set([...priest.extensions.v5.baseTraits, ...priest.extensions.v5.temporaryTraits])]);
 });
 
 test('Trait divin et trait de sort identiques : cumul refusé (DIV-05) ; un trait différent passe', async () => {
-  const store = await fixture({ cult: 'Morr', priest: { extensions: { v5: { divine: { sin: 0 }, spellEffects: [{ id: 'spell-1', spellName: 'Sort', traits: ['Peur (1)'] }] } } } });
+  const store = await fixture({ cult: 'Morr', priest: { extensions: { v5: { divine: { sin: 0 }, spellEffects: [{ id: 'spell-1', spellName: 'Sort', traits: ['Peur (2)'] }] } } } });
   const blocked = store.previewDivineExecution(MASK, input());
   assert.equal(blocked.ready, false);
   assert.match(blocked.error, /DIV-05/);
@@ -134,7 +134,7 @@ test('Grâce de Ranald : Ag +10, étiquette de talent et Chute féline injecté 
   assert.equal(ally.caracs.Ag, 50);
   assert.deepEqual(layers(store, 'ally').find(row => row.grantedTalents).grantedTalents, [{ id: 'talent-catfall', rank: 1, name: 'Chute féline' }]);
   assert.ok(acquiredV5Talents(ally).some(row => row.talentId === 'talent-catfall' && row.rank === 1), 'le talent à contrat mécanique est réellement acquis');
-  await toRoundEnd(store);
+  assert.equal((await store.advanceCampaignTime({ seconds: 3600, reason: 'Fin de la durée' })).status, 'applied');
   const after = person(store, 'ally');
   assert.equal(after.caracs.Ag, 40);
   assert.ok(!acquiredV5Talents(after).some(row => row.talentId === 'talent-catfall'));
@@ -232,14 +232,14 @@ test('Morsure de l’hiver : dégâts +DR sur la hache désignée, Exténué sur
   assert.ok(getDivineContract(WINTER).clauses.filter(row => row.mode !== 'engine').some(row => /Hémorragique/.test(row.text)), 'Hémorragique reste un rappel');
 });
 
-test('Dent et griffe : Morsure et Arme matérialisées, bonus Magique en mêlée seulement, retirés par la fin de prière, Undo', async () => {
+test('Dent et griffe : Morsure matérialisée (v3 : plus de Trait Arme), bonus Magique en mêlée seulement, retirés par la fin de prière, Undo', async () => {
   const store = await fixture({ cult: 'Taal', priest: { caracs: { CC: 40, CT: 40, F: 40, E: 30, I: 40, Ag: 40, Dex: 40, Int: 50, FM: 50, Soc: 60, M: 4 }, actions: [{ ...hammerAction }] } });
   const result = await cast(store, TOOTH);
   let priest = person(store, 'priest');
   const gained = priest.actions.filter(row => row.extensions?.v5?.divineEffectId);
-  assert.deepEqual(gained.map(row => [row.note, row.damageFormula, row.attr, row.type]), [['Morsure', 'BF+3', 'CC', 'attack'], ['Arme', 'BF+4', 'CC', 'attack']]);
+  assert.deepEqual(gained.map(row => [row.note, row.damageFormula, row.attr, row.type]), [['Morsure', 'BF+3', 'CC', 'attack']]);
   assert.ok(gained.every(row => row.base === 40 && row.id.startsWith('divine-action:')));
-  assert.equal(priest.actions.length, 3, 'l’action de fiche est conservée');
+  assert.equal(priest.actions.length, 2, 'l’action de fiche est conservée');
   assert.equal(magicWeaponNature(priest, gained[0], false).magical, true);
   assert.deepEqual(magicWeaponNature(priest, gained[0], true), {}, 'aucun bonus Magique au tir');
   assert.equal(magicWeaponNature(priest, hammerAction, false).magical, true, 'toutes les attaques de mêlée sont Magiques');
@@ -248,12 +248,12 @@ test('Dent et griffe : Morsure et Arme matérialisées, bonus Magique en mêlée
   assert.deepEqual(priest.actions.map(row => row.id), ['hammer-attack']);
   assert.equal(priest.extensions.v5.weaponBonuses, undefined);
   await store.undo();
-  assert.equal(person(store, 'priest').actions.filter(row => row.extensions?.v5?.divineEffectId).length, 2);
+  assert.equal(person(store, 'priest').actions.filter(row => row.extensions?.v5?.divineEffectId).length, 1);
   await store.redo();
   assert.equal(person(store, 'priest').actions.length, 1);
   await store.undo();
   const reload = createStore({ persistence: store.persistence, storage: null }); await reload.ready;
-  assert.deepEqual(person(reload, 'priest').actions.filter(row => row.extensions?.v5?.divineEffectId).map(row => row.note), ['Morsure', 'Arme']);
+  assert.deepEqual(person(reload, 'priest').actions.filter(row => row.extensions?.v5?.divineEffectId).map(row => row.note), ['Morsure']);
 });
 
 test('Dent et griffe : la projection ne duplique pas les actions et expire avec la durée', async () => {
@@ -261,7 +261,7 @@ test('Dent et griffe : la projection ne duplique pas les actions et expire avec 
   await cast(store, TOOTH);
   const copy = clone(person(store, 'priest'));
   projectDivineGear(copy); projectDivineGear(copy);
-  assert.equal(copy.actions.length, 2);
+  assert.equal(copy.actions.length, 1);
   await toRoundEnd(store);
   assert.deepEqual(person(store, 'priest').actions, []);
   assert.equal(magicGrantedActions(person(store, 'priest')).length, 0);

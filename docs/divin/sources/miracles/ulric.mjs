@@ -1,4 +1,4 @@
-/* Miracles d'Ulric, livre de base V5 EN v2 p.228 (imprimée). Transcription vérifiée au PDF; texte reformulé.
+/* Miracles d'Ulric, livre de base V5 EN v2 p.228 (imprimée); Frisson du givre et Jugement du Roi de la neige alignés sur la v3 du 27/10/2026. Transcription vérifiée au PDF; texte reformulé.
    Distincts des 7 miracles optionnels d'Ulric de Power Behind the Throne Companion (hors périmètre). */
 export const cult = 'Ulric';
 const soc = { characteristic: 'Soc' };
@@ -13,22 +13,22 @@ export const miracles = [
     name: 'Frisson du givre',
     canonicalName: 'Hoarfrost\'s Chill',
     printedPage: 228,
-    summary: 'Votre regard prend un éclat bleu acier et l\'air se refroidit autour de vous. Vous causez la Peur (p.183). Toutes les créatures de la zone, vous excepté, perdent leur Avantage au début de chaque Round.',
+    summary: 'Votre regard prend un éclat bleu acier et l\'air se refroidit autour de vous. Vous causez la Peur (2) (p.183). Toutes les créatures de la zone, vous excepté, perdent leur Élan au début de chaque Round.',
     params: { range: self, targets: { kind: 'special' }, duration: felRounds },
     status: 'assisted',
     effect: null,
-    effects: [{ type: 'grant-trait', traits: ['Peur (1)'], appliesTo: 'caster' }],
+    effects: [{ type: 'grant-trait', traits: ['Peur (2)'], appliesTo: 'caster' }],
     targetRules: ['all-in-area-except-priest'],
     needsInput: [
       { id: 'area-radius', text: 'Rayon de la zone : le livre indique « Fellowship yards » (Sociabilité entière, non le Bonus); valeur à confirmer par le MJ.' },
-      { id: 'area-targets', text: 'Créatures présentes dans la zone (perte d’Avantage au début de chaque Round).' }
+      { id: 'area-targets', text: 'Créatures présentes dans la zone (perte d’Élan au début de chaque Round).' }
     ],
     clauses: [
-      { id: 'fear', mode: 'engine', text: 'Le prêtre cause la Peur (règle p.183) pendant la durée.' },
-      { id: 'advantage-loss', mode: 'manual', text: 'Au début de chaque Round, toutes les créatures de la zone sauf le prêtre perdent leur Avantage.' },
+      { id: 'fear', mode: 'engine', text: 'Le prêtre cause la Peur (2) (règle p.183) pendant la durée.' },
+      { id: 'momentum-loss', mode: 'manual', text: 'Au début de chaque Round, toutes les créatures de la zone sauf le prêtre perdent leur Élan.' },
       { id: 'end', mode: 'engine', text: 'Fin des effets après Bonus de Sociabilité rounds.' }
     ],
-    sourceDelta: 'Cible imprimée « AoE (Fellowship yards) » sans « Bonus », contrairement aux autres zones; la grammaire params n\'a pas de zone en caractéristique entière, encodée en special. Niveau de Peur non précisé : Peur (1) retenue (arbitrage MJ, comme Masque mortuaire).'
+    sourceDelta: 'Cible imprimée « AoE (Fellowship yards) » sans « Bonus », contrairement aux autres zones; la grammaire params n\'a pas de zone en caractéristique entière, encodée en special. Peur (2) imprimée en v3 (l’ancien arbitrage Peur (1) du 21/10 ne s’applique plus) ; la perte d’Élan remplace la perte d’Avantage.'
   },
   {
     name: 'Hurlement du loup',
@@ -75,10 +75,11 @@ export const miracles = [
     name: 'Jugement du Roi de la neige',
     canonicalName: 'The Snow King\'s Judgement',
     printedPage: 228,
-    summary: 'Le sang et la moelle de la cible gèlent : elle subit 1d10 Blessures sans Bonus d\'Endurance ni Points d\'Armure, plus 1 Blessure par DR. Si le MJ juge que la cible n\'est ni faible, ni lâche, ni fourbe, c\'est vous qui subissez l\'effet.',
+    summary: 'Le sang et la moelle de la cible gèlent : elle subit 1d10 Blessures sans Bonus d\'Endurance ni Points d\'Armure et reçoit l\'état Sonné, plus 1 Blessure par DR. Si le MJ juge que la cible n\'est ni faible, ni lâche, ni fourbe, c\'est vous qui subissez l\'effet.',
     params: { range, targets: one, duration: { kind: 'instant' } },
     status: 'assisted', effect: null,
     effects: [{ type: 'direct-damage', dice: { count: 1, sides: 10 }, perSuccessLevel: 1, requiresFact: { field: 'judgement', onFalse: 'skip', label: 'verdict MJ : cible faible, lâche ou fourbe (sinon la cible est épargnée et le prêtre subit l’effet)' } },
+      { type: 'condition', key: 'Stunned', level: 1, when: { fact: 'judgement', label: 'verdict MJ : cible faible, lâche ou fourbe (sinon la cible est épargnée et le prêtre subit l’effet)' } },
       { type: 'direct-damage', dice: { count: 1, sides: 10 }, perSuccessLevel: 1, appliesTo: 'caster', casterWhen: { field: 'judgement', label: 'verdict MJ : cible faible, lâche ou fourbe', value: false, match: 'any' } }],
     targetRules: [],
     needsInput: [
@@ -87,6 +88,8 @@ export const miracles = [
     ],
     clauses: [
       { id: 'damage', mode: 'engine', text: '1d10 Blessures ignorant Bonus d\'Endurance et PA, +1 Blessure par DR.' },
+      { id: 'stunned', mode: 'engine', text: 'La cible jugée faible, lâche ou fourbe reçoit l\'état Sonné.' },
+      { id: 'redirect-stunned', mode: 'manual', text: 'Si le prêtre subit l\'effet à la place de la cible, il reçoit aussi l\'état Sonné : à poser à la main.' },
       { id: 'redirect', mode: 'engine', text: 'Si la cible n\'est ni faible, ni lâche, ni fourbe (verdict MJ), elle est épargnée et le prêtre subit le même effet (même jet de dégâts).' },
       { id: 'haine-sacree', mode: 'engine', text: 'Dégâts de miracle : +2 si le prêtre a le talent Haine sacrée (déclencheur « miracle inflige des Blessures »).' }
     ]

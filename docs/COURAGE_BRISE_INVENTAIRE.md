@@ -306,7 +306,7 @@ Méthode : balayage lexical livre par livre avec `pdftotext` (Git) sur `L18` (`P
 - **C0-Q16** : Up in Arms L13 p.106 donne récupération de la monture sur son Tour ; L06 p.186 impose la fin du Round. Choisir le moment et la formule Équitation avant adaptation.
 - **C0-Q17** : Portées en caractéristiques entières, pourcentages V4 et Avantage : adapter explicitement les nouvelles règles aux conventions V5, en conservant les décisions divines existantes.
 - **C0-Q18** : Moral de masse, séquelles psychologiques, rançonnement des PJ, rancunes et drogues sont des sous-systèmes à arbitrer ; un bouton générique d’État n’en démontre aucune automatisation.
-- **C0-Q19** : Masque mortuaire et Givre d’Ulric ne précisent pas l’indice de Peur ; les contrats divins possèdent déjà leurs décisions MJ. Ne pas en déduire l’indice de toutes les autres sources.
+- **C0-Q19** : Masque mortuaire et Givre d’Ulric ne précisaient pas l’indice de Peur en v2 ; le livre de base V5 v3 le chiffre (Peur (2)) et les contrats divins le suivent depuis le 29/10/2026. Ne pas en déduire l’indice de toutes les autres sources.
 - **C0-Q20** : À Sang-froid : Avantage de Calme dans L06 p.357, inversion dans L09 p.46. Quelle règle utiliser pour les profils du supplément ?
 
 ## Validation et portée
