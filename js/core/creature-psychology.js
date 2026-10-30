@@ -12,7 +12,7 @@ const fold = value => String(value ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '
 const RULES = {
   fear: { fr: 'Peur', names: ['fear', 'peur'], note: 'Peur surnaturelle (indice un si omis) ; le Trait demande de dépasser l\'indice, contrairement au chapitre Psychologie.' },
   terror: { fr: 'Terreur', names: ['terror', 'terreur'], note: 'Premier contact : Psychologie ou Brisé égal à l\'indice plus chaque DR négatif ; Peur de même indice ensuite, quel que soit le résultat.' },
-  afraid: { fr: 'Effrayé', names: ['afraid', 'effraye'], note: 'Peur de la cible nommée ; interdit de gagner de l\'Élan et l\'avantage de mêlée de la source jusqu\'au seuil.' },
+  afraid: { fr: 'Effrayé', names: ['afraid', 'effraye'], note: 'Peur (2) de la cible nommée ; interdit de gagner de l\'Élan et l\'avantage de mêlée de la source jusqu\'au seuil.' },
   animosity: { fr: 'Animosité', names: ['animosity', 'animosite'], note: 'Calme pour se retenir, sinon opposition sociale ou physique à la cible ; +1 DR de Sociabilité contre elle.' },
   prejudice: { fr: 'Préjugé', names: ['prejudice', 'prejuge'], note: 'Aversion envers la cible, selon les règles sociales du socle V4 ; sans effet de règle propre ici.' },
   hatred: { fr: 'Haine', names: ['hatred', 'haine'], note: 'Calme pour se retenir, sinon attaque prioritaire du groupe ; +1 DR en mêlée et au tir contre lui ; immunité à sa Peur et à son Intimidation, pas à sa Terreur.' },
@@ -58,12 +58,6 @@ const ratingOf = detail => {
   const value = Number.parseInt(String(detail), 10);
   return Number.isSafeInteger(value) && value >= 1 ? value : null;
 };
-/** Indice de Peur d'une créature redoutée : saisi par le MJ, sinon celui de son Trait Peur (un si omis) ; `null` sans Peur. */
-function fearRatingOf(source, entered) {
-  if (Number.isSafeInteger(entered) && entered >= 1) return entered;
-  const fear = traitsOf(source).find(trait => trait.key === 'fear');
-  return fear ? ratingOf(fear.detail) ?? 1 : null;
-}
 const bookOf = participant => participant?.extensions?.v5?.bestiary?.book ?? null;
 const hasMomentum = participant => participant?.extensions?.v5?.hasMomentum === true;
 const NAMES = { hatred: ['hatred', 'haine'], animosity: ['animosity', 'animosite'], prejudice: ['prejudice', 'prejuge'], afraid: ['afraid', 'effraye'] };
@@ -97,10 +91,9 @@ export function planPsychology(participant, key, options = {}) {
   } else if (key === 'afraid') {
     const source = options.source;
     if (!source) plan.unresolved.push('Effrayé : créature redoutée à désigner.');
-    else if (!fearRatingOf(source, options.rating)) plan.unresolved.push('Effrayé : la créature redoutée n\'a pas de Peur imprimée, indice à saisir.');
     else {
-      // Livre de base, Afraid : Peur de la cible, tant que les DR ne valent pas son indice de Peur.
-      const rating = fearRatingOf(source, options.rating);
+      // Livre de base V5 v3 p.356, Afraid : la créature a Peur (2) de la cible, quel que soit l'indice de Peur de celle-ci.
+      const rating = 2;
       const preview = previewGenericFearEncounter({ author: source, target: participant, rating, sourceKind: 'afraid', sourceLabel: `Effrayé (${source.name ?? source.id})`, encounterId, resolutionId: `afraid:${source.id}:${participant.id}` });
       plan.states.push(...preview.addedStates);
       plan.unresolved.push(...preview.unresolved);

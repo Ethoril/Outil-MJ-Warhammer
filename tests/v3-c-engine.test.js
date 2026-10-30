@@ -109,3 +109,16 @@ test('v3 Morsure (p.356) : BF+3 sans valeur imprimée, valeur imprimée gardée 
   assert.equal(planNaturalAttack(beast([]), 'bite', { ordinary: true }).damageFormula, 'imprimé', 'attaque déduite du nom, sans Trait : valeur imprimée');
   assert.equal(planNaturalAttack(beast(['Bite'], { caracs: {} }), 'bite').available, false, 'Force inconnue : saisie MJ');
 });
+
+test('v3 Peur : Taille agressive Peur (2), Effrayé Peur (2), indice non chiffré hors profil V5 = saisie MJ', async () => {
+  const { previewGenericFearEncounter } = await import('../js/core/v5-talent-psychology.js');
+  const { planPsychology } = await import('../js/core/creature-psychology.js');
+  const mk = (id, camp, traits = []) => ({ id, name: id, camp, hp: 20, traits, states: [], caracs: { F: 40, E: 40, FM: 40 }, extensions: { v5: {} } });
+  const size = previewGenericFearEncounter({ author: mk('big', 'ennemi'), target: mk('pj', 'pj'), sourceKind: 'v5-size', actorSize: 5, targetSize: 3, aggressive: true });
+  assert.equal(size.addedStates[0].rating, 2);
+  const afraid = planPsychology(mk('a', 'pj', ['Afraid (Orcs)']), 'afraid', { source: mk('o', 'ennemi', ['Fear (4)']) });
+  assert.equal(afraid.states[0].rating, 2);
+  const unrated = previewGenericFearEncounter({ author: mk('x', 'ennemi'), target: mk('pj', 'pj'), sourceKind: 'trait' });
+  assert.equal(unrated.ready, false);
+  assert.ok(unrated.needsInput.some(row => row.field === 'rating'), 'indice non chiffré : saisie MJ');
+});

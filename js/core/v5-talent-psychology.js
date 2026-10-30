@@ -41,7 +41,7 @@ export function previewGenericFearEncounter({author,target,rating,sourceKind='tr
  if(sourceKind==='v5-size'){
   if(aggressive!==true)return{ready:false,needsInput:[{field:'aggressive',label:'Grande taille V5 : attitude agressive confirmée requise.'}],unresolved:['Grande taille V5 : attitude agressive confirmée requise.'],addedStates:[]};
   if(!Number.isSafeInteger(actorSize)||!Number.isSafeInteger(targetSize)||actorSize<=targetSize)return{ready:false,needsInput:[{field:'sizes',label:'Catégories de Taille explicites avec créature plus grande requises.'}],unresolved:['Catégories de Taille explicites avec créature plus grande requises.'],addedStates:[]};
-  effectiveRating=1;
+  effectiveRating=2; // V5 v3 p.360 : les créatures agressives causent Peur (2) aux plus petites
  }else if(sourceKind==='afraid'&&effectiveRating===undefined){
   effectiveRating=0;
  }

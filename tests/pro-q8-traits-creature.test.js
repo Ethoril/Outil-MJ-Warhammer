@@ -78,13 +78,13 @@ test('Q8 Artificiel — toutes ses attaques sont Magiques (moteur de nature d\'a
   assert.equal(weaponAttackNature({ actor: golem, action: {}, ranged: false, declared: { magical: false } }).magical, false);
 });
 
-test('Q8 Effrayé — Peur au niveau de l\'indice de Peur de la cible', () => {
+test('Q8 Effrayé (v3 p.356) — Peur (2) de la cible, quel que soit son indice de Peur', () => {
   const afraid = make(['Afraid (Orcs)'], { camp: 'pj' });
   const plan = planPsychology(afraid, 'afraid', { source: make(['Fear (3)'], { id: 'o', camp: 'monstres' }) });
-  assert.equal(plan.states[0].rating, 3);
-  assert.equal(planPsychology(afraid, 'afraid', { source: make(['Fear'], { id: 'o', camp: 'monstres' }) }).states[0].rating, 1);
-  assert.equal(planPsychology(afraid, 'afraid', { source: make([], { id: 'o', camp: 'monstres' }), rating: 2 }).states[0].rating, 2);
-  const none = planPsychology(afraid, 'afraid', { source: make([], { id: 'o', camp: 'monstres' }) });
+  assert.equal(plan.states[0].rating, 2);
+  assert.equal(planPsychology(afraid, 'afraid', { source: make(['Fear'], { id: 'o', camp: 'monstres' }) }).states[0].rating, 2);
+  assert.equal(planPsychology(afraid, 'afraid', { source: make([], { id: 'o', camp: 'monstres' }) }).states[0].rating, 2, 'la cible n’a pas besoin d’une Peur imprimée');
+  const none = planPsychology(afraid, 'afraid');
   assert.equal(none.available, false);
   assert.deepEqual(none.states, []);
 });
