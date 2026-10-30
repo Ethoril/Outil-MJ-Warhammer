@@ -5,3 +5,7 @@ Une assertion n'est retirée que si une assertion équivalente (même entrée, m
 ## R2-1 — données et outils
 
 Aucun doublon retiré (5 471 tests avant, 5 471 après).
+
+## R2-2 — créatures
+
+Aucun doublon retiré (5 471 tests avant, 5 471 après).

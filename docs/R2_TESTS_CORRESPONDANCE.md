@@ -78,4 +78,70 @@ Ancien fichier `tests/<nom>.test.js` → nouveau fichier `tests/unit/<cible>.tes
 | `tests/v3-a-reference.test.js` | `tests/unit/donnees/corrections-v3-et-registre-sorts.test.js` | 6 | 18 |
 | `tests/v3-a-tables.test.js` | `tests/unit/donnees/corrections-v3-et-registre-sorts.test.js` | 2 | 18 |
 
+## R2-2 — créatures
+
+| Ancien fichier | Nouveau fichier | Tests avant | Tests après (cible) |
+|---|---|---|---|
+| `tests/b12-surnombre.test.js` | `tests/unit/creatures/branchement-store.test.js` | 16 | 132 |
+| `tests/pro-b1-taille-branchee.test.js` | `tests/unit/creatures/branchement-store.test.js` | 4 | 132 |
+| `tests/pro-b10-creation-familier.test.js` | `tests/unit/creatures/branchement-store.test.js` | 3 | 132 |
+| `tests/pro-b10b-destin-resilience-fiches.test.js` | `tests/unit/creatures/branchement-store.test.js` | 4 | 132 |
+| `tests/pro-b11-familiers-services.test.js` | `tests/unit/creatures/branchement-store.test.js` | 4 | 132 |
+| `tests/pro-b11c-corrections.test.js` | `tests/unit/creatures/branchement-store.test.js` | 14 | 132 |
+| `tests/pro-b2-library.test.js` | `tests/unit/creatures/branchement-store.test.js` | 4 | 132 |
+| `tests/pro-b2-plusieurs-tetes-branche.test.js` | `tests/unit/creatures/branchement-store.test.js` | 6 | 132 |
+| `tests/pro-b3-regeneration-branchee.test.js` | `tests/unit/creatures/branchement-store.test.js` | 7 | 132 |
+| `tests/pro-b4-psychologie-branchee.test.js` | `tests/unit/creatures/branchement-store.test.js` | 5 | 132 |
+| `tests/pro-b4c-corrections.test.js` | `tests/unit/creatures/branchement-store.test.js` | 7 | 132 |
+| `tests/pro-b5-sens-branches.test.js` | `tests/unit/creatures/branchement-store.test.js` | 6 | 132 |
+| `tests/pro-b6-deplacement-branche.test.js` | `tests/unit/creatures/branchement-store.test.js` | 3 | 132 |
+| `tests/pro-b7-etats-branches.test.js` | `tests/unit/creatures/branchement-store.test.js` | 3 | 132 |
+| `tests/pro-b8-magie-capacites-branchees.test.js` | `tests/unit/creatures/branchement-store.test.js` | 2 | 132 |
+| `tests/pro-b8c-corrections.test.js` | `tests/unit/creatures/branchement-store.test.js` | 9 | 132 |
+| `tests/pro-b9-slann-branche.test.js` | `tests/unit/creatures/branchement-store.test.js` | 5 | 132 |
+| `tests/pro-f2-familiers.test.js` | `tests/unit/creatures/branchement-store.test.js` | 11 | 132 |
+| `tests/pro-q19-familiers-nettoyage.test.js` | `tests/unit/creatures/branchement-store.test.js` | 6 | 132 |
+| `tests/pro-q9-liens-familiers.test.js` | `tests/unit/creatures/branchement-store.test.js` | 4 | 132 |
+| `tests/pro-s1-slann.test.js` | `tests/unit/creatures/branchement-store.test.js` | 9 | 132 |
+| `tests/pro-q16-attaques-multiples.test.js` | `tests/unit/creatures/capacites-et-combat-naturel.test.js` | 4 | 179 |
+| `tests/pro-q17-rappels-visibles.test.js` | `tests/unit/creatures/capacites-et-combat-naturel.test.js` | 7 | 179 |
+| `tests/pro-q18-attaques-naturelles.test.js` | `tests/unit/creatures/capacites-et-combat-naturel.test.js` | 7 | 179 |
+| `tests/pro-q20-attaques-gratuites.test.js` | `tests/unit/creatures/capacites-et-combat-naturel.test.js` | 6 | 179 |
+| `tests/pro-q21-tailles-attaques-naturelles.test.js` | `tests/unit/creatures/capacites-et-combat-naturel.test.js` | 3 | 179 |
+| `tests/pro-q22-rappels-carte.test.js` | `tests/unit/creatures/capacites-et-combat-naturel.test.js` | 5 | 179 |
+| `tests/pro-q30-formule-v5-defaut.test.js` | `tests/unit/creatures/capacites-et-combat-naturel.test.js` | 5 | 179 |
+| `tests/pro-q31-attaques-gratuites-round0.test.js` | `tests/unit/creatures/capacites-et-combat-naturel.test.js` | 2 | 179 |
+| `tests/pro-q35-taille-formule.test.js` | `tests/unit/creatures/capacites-et-combat-naturel.test.js` | 7 | 179 |
+| `tests/pro-q37-competences-sans-valeur.test.js` | `tests/unit/creatures/capacites-et-combat-naturel.test.js` | 4 | 179 |
+| `tests/pro-q38-code.test.js` | `tests/unit/creatures/capacites-et-combat-naturel.test.js` | 4 | 179 |
+| `tests/pro-q4-traits-attaques.test.js` | `tests/unit/creatures/capacites-et-combat-naturel.test.js` | 4 | 179 |
+| `tests/pro-q42-defauts-mineurs.test.js` | `tests/unit/creatures/capacites-et-combat-naturel.test.js` | 3 | 179 |
+| `tests/pro-q6-armure.test.js` | `tests/unit/creatures/capacites-et-combat-naturel.test.js` | 7 | 179 |
+| `tests/pro-q8-traits-creature.test.js` | `tests/unit/creatures/capacites-et-combat-naturel.test.js` | 7 | 179 |
+| `tests/pro-t1-natures.test.js` | `tests/unit/creatures/capacites-et-combat-naturel.test.js` | 7 | 179 |
+| `tests/pro-t10-taille.test.js` | `tests/unit/creatures/capacites-et-combat-naturel.test.js` | 8 | 179 |
+| `tests/pro-t11-gabarits.test.js` | `tests/unit/creatures/capacites-et-combat-naturel.test.js` | 5 | 179 |
+| `tests/pro-t12-capacites-propres.test.js` | `tests/unit/creatures/capacites-et-combat-naturel.test.js` | 5 | 179 |
+| `tests/pro-t2-combat-naturel.test.js` | `tests/unit/creatures/capacites-et-combat-naturel.test.js` | 11 | 179 |
+| `tests/pro-t3-etats-continus.test.js` | `tests/unit/creatures/capacites-et-combat-naturel.test.js` | 11 | 179 |
+| `tests/pro-t4-deplacement.test.js` | `tests/unit/creatures/capacites-et-combat-naturel.test.js` | 11 | 179 |
+| `tests/pro-t5-sens.test.js` | `tests/unit/creatures/capacites-et-combat-naturel.test.js` | 8 | 179 |
+| `tests/pro-t6-psychologie.test.js` | `tests/unit/creatures/capacites-et-combat-naturel.test.js` | 15 | 179 |
+| `tests/pro-t7-magie-creatures.test.js` | `tests/unit/creatures/capacites-et-combat-naturel.test.js` | 9 | 179 |
+| `tests/pro-t8-regeneration.test.js` | `tests/unit/creatures/capacites-et-combat-naturel.test.js` | 7 | 179 |
+| `tests/pro-t9-plusieurs-tetes.test.js` | `tests/unit/creatures/capacites-et-combat-naturel.test.js` | 7 | 179 |
+| `tests/f2-g-characterization.test.js` | `tests/unit/creatures/morphologie-et-capacites-bestiaire.test.js` | 2 | 77 |
+| `tests/f2-g-creature-locations.test.js` | `tests/unit/creatures/morphologie-et-capacites-bestiaire.test.js` | 7 | 77 |
+| `tests/f2-g-integration.test.js` | `tests/unit/creatures/morphologie-et-capacites-bestiaire.test.js` | 13 | 77 |
+| `tests/f2-gm-reprise-characterization.test.js` | `tests/unit/creatures/morphologie-et-capacites-bestiaire.test.js` | 9 | 77 |
+| `tests/f2-h-bestiary-abilities.test.js` | `tests/unit/creatures/morphologie-et-capacites-bestiaire.test.js` | 44 | 77 |
+| `tests/f2-h-characterization.test.js` | `tests/unit/creatures/morphologie-et-capacites-bestiaire.test.js` | 2 | 77 |
+| `tests/pro-k1-keywords.test.js` | `tests/unit/creatures/mots-cles-et-natures.test.js` | 6 | 30 |
+| `tests/pro-k2-characterization.test.js` | `tests/unit/creatures/mots-cles-et-natures.test.js` | 2 | 30 |
+| `tests/pro-k2-keyword-referential.test.js` | `tests/unit/creatures/mots-cles-et-natures.test.js` | 4 | 30 |
+| `tests/pro-k3-keywords-carried.test.js` | `tests/unit/creatures/mots-cles-et-natures.test.js` | 5 | 30 |
+| `tests/pro-k4-characterization.test.js` | `tests/unit/creatures/mots-cles-et-natures.test.js` | 2 | 30 |
+| `tests/pro-k4-specializations.test.js` | `tests/unit/creatures/mots-cles-et-natures.test.js` | 8 | 30 |
+| `tests/pro-k5-targets.test.js` | `tests/unit/creatures/mots-cles-et-natures.test.js` | 3 | 30 |
+
 `tests/meta.test.js` : reste en place jusqu'à R2-13 ; il parcourt désormais `tests/` récursivement (même seuil, mêmes assertions).

@@ -1,17 +1,332 @@
-import test from 'node:test';
+import test, { describe } from 'node:test';
 import assert from 'node:assert/strict';
-import fs from 'node:fs';
+import { previewResolution, normalizeResolutionInput } from '../../../js/core/resolution.js';
+import { appendageCriticalLocation, normalizeHitMorphology, resolveCreatureHitLocation, deriveHitMorphology } from '../../../js/core/v5-hit-morphology.js';
+import fs, { readFileSync, readFileSync as readSource } from 'node:fs';
+import { buildParticipantFromBestiary } from '../../../js/core/bestiary-profiles.js';
+import { createStore } from '../../../js/core/store.js';
+import { hitMorphologySelection, isCriticalFateRoll } from '../../../js/ui/resolution-panel.js';
+import { mountedRiderEventsFor, mountedRideAnswerFor, planMountedAttack, planMountedDodge } from '../../../js/core/v5-mounted-combat.js';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { decorateBestiaryProfileAction, planBestiaryProfileAbilities, planBestiaryProfileAbility } from '../js/core/creature-abilities.js';
-import { buildParticipantFromBestiary } from '../js/core/bestiary-profiles.js';
-import { normalizeResolutionInput } from '../js/core/resolution.js';
-import { previewResolution } from '../js/core/resolution.js';
-import { createStore } from '../js/core/store.js';
-import { bestiaryProfileStateImmunity } from '../js/core/creature-abilities.js';
-import { deriveHitMorphology, resolveCreatureHitLocation } from '../js/core/v5-hit-morphology.js';
+import { decorateBestiaryProfileAction, planBestiaryProfileAbilities, planBestiaryProfileAbility, bestiaryProfileStateImmunity } from '../../../js/core/creature-abilities.js';
 
-const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+describe('morphologie des créatures — caractérisation', () => {
+const actor = { id: 'attacker', states: [] };
+const target = { id: 'target', hp: 10, caracs: { E: 35 }, armor: { head: 2, body: 1, arms: 2, legs: 2 }, states: [] };
+
+test('F2-G characterization — humanoid location and key remain the current reversed-d100 result', () => {
+  const result = previewResolution({
+    actor, target, action: { type: 'attack', base: 60, damage: 4, qualities: [] },
+    roll: 54, baseRevision: 1
+  });
+  assert.deepEqual({ roll: result.location.roll, key: result.location.key, name: result.location.name, side: result.location.side }, {
+    roll: 45, key: 'BODY', name: 'Corps', side: null
+  });
+});
+
+test('F2-G characterization — explicitly targeted location keeps its current exact result', () => {
+  const result = previewResolution({
+    actor, target, action: { type: 'attack', base: 90, damage: 4, qualities: [] },
+    v5: { kind: 'ranged', context: { calledShot: true, calledShotLocation: 'rightLeg' } },
+    roll: 54, baseRevision: 1
+  });
+  assert.deepEqual({ roll: result.location.roll, key: result.location.key, name: result.location.name, side: result.location.side, calledShot: result.location.calledShot }, {
+    roll: null, key: 'LEG', name: 'Jambe Droite', side: 'right', calledShot: true
+  });
+});
+});
+
+describe('localisations des créatures', () => {
+const base = (key, name) => ({ roll: 40, key, name, side: /gauche/i.test(name) ? 'left' : /droit/i.test(name) ? 'right' : null });
+
+test('F2-G — quadrupède : bras et jambes deviennent pattes avant et arrière', () => {
+  assert.equal(resolveCreatureHitLocation({ morphology: 'quadrupède', baseLocation: base('ARM', 'Bras Gauche') }).name, 'Patte avant gauche');
+  assert.equal(resolveCreatureHitLocation({ morphology: 'quadruped', baseLocation: base('LEG', 'Jambe Droite') }).name, 'Patte arrière droite');
+  assert.equal(resolveCreatureHitLocation({ morphology: 'quadruped', baseLocation: base('HEAD', 'Tête') }).key, 'HEAD');
+});
+
+test('F2-G — oiseaux : bras devient aile en conservant le côté et la table ARM', () => {
+  const wing = resolveCreatureHitLocation({ morphology: 'oiseau', baseLocation: base('ARM', 'Bras Droit') });
+  assert.deepEqual({ key: wing.key, side: wing.side, name: wing.name }, { key: 'ARM', side: 'right', name: 'Aile droite' });
+});
+
+test('F2-G — serpent : limites inclusives 01–19 tête, 20–100 corps', () => {
+  for (const roll of [1, 15, 19]) assert.equal(resolveCreatureHitLocation({ roll, morphology: 'serpent', baseLocation: base('BODY', 'Corps') }).key, 'HEAD');
+  for (const roll of [20, 40, 100]) assert.equal(resolveCreatureHitLocation({ roll, morphology: 'snake', baseLocation: base('BODY', 'Corps') }).key, 'BODY');
+});
+
+test('F2-G — araignée : limites inclusives 01–09 tête, 10–79 pattes, 80–100 corps', () => {
+  for (const roll of [1, 9]) assert.equal(resolveCreatureHitLocation({ roll, morphology: 'araignée', baseLocation: base('BODY', 'Corps') }).key, 'HEAD');
+  for (const roll of [10, 40, 79]) assert.equal(resolveCreatureHitLocation({ roll, morphology: 'spider', baseLocation: base('BODY', 'Corps') }).key, 'LEG');
+  for (const roll of [80, 100]) assert.equal(resolveCreatureHitLocation({ roll, morphology: 'spider', baseLocation: base('BODY', 'Corps') }).key, 'BODY');
+});
+
+test('F2-G — côté des pattes d’araignée conservé ou choisi par le MJ', () => {
+  const selected = resolveCreatureHitLocation({ roll: 50, morphology: 'spider', spiderLegSide: 'left', baseLocation: base('BODY', 'Corps') });
+  assert.deepEqual({ key: selected.key, name: selected.name, side: selected.side }, { key: 'LEG', name: 'Patte gauche', side: 'left' });
+  const rolled = resolveCreatureHitLocation({ roll: 15, morphology: 'spider', spiderLegSide: 'right', baseLocation: base('ARM', 'Bras Gauche') });
+  assert.deepEqual({ name: rolled.name, side: rolled.side }, { name: 'Patte gauche', side: 'left' });
+});
+
+test('F2-G — forme choisie par le MJ; valeur absente/unknown conserve le lieu humanoïde', () => {
+  assert.equal(normalizeHitMorphology('serpent'), 'snake');
+  assert.deepEqual(resolveCreatureHitLocation({ roll: 15, morphology: 'quadruped', baseLocation: base('ARM', 'Bras Gauche') }), {
+    ...base('ARM', 'Bras Gauche'), name: 'Patte avant gauche'
+  });
+  const humanoid = base('ARM', 'Bras Gauche');
+  assert.equal(resolveCreatureHitLocation({ roll: 15, morphology: null, baseLocation: humanoid }), humanoid);
+  assert.equal(resolveCreatureHitLocation({ roll: 15, morphology: 'chimera', baseLocation: humanoid }), humanoid);
+});
+
+test('F2-G — appendice sans table dédiée utilise la table de critique du bras', () => {
+  assert.deepEqual(appendageCriticalLocation(base('BODY', 'Queue'), 'Queue'), {
+    ...base('BODY', 'Queue'), key: 'ARM', appendageCriticalTable: 'ARM'
+  });
+});
+});
+
+describe('morphologie des créatures — intégration', () => {
+const library = JSON.parse(readFileSync(new URL('../../../js/data/bestiary/L06.json', import.meta.url), 'utf8')).profiles;
+const memoryPersistence = () => { let state = null; return { async load() { return state && structuredClone(state); }, async saveAtomic({ state: next }) { state = structuredClone(next); return { ok: true }; } }; };
+
+test('F2-G integration — la morphologie configurée sur un profil est transmise à la résolution', () => {
+  const human = library.find(profile => profile.kind === 'profile' && profile.name === 'Human');
+  const configured = { ...human, hitMorphology: 'snake' };
+  const participant = buildParticipantFromBestiary(configured.id, { library: [configured] });
+  assert.equal(participant.extensions.v5.hitMorphology, 'snake');
+  const result = previewResolution({
+    actor: { id: 'attacker', states: [] }, target: participant,
+    action: { type: 'attack', base: 90, damage: 4, qualities: [] }, roll: 4, baseRevision: 1
+  });
+  assert.equal(result.location.roll, 40);
+  assert.deepEqual({ key: result.location.key, name: result.location.name }, { key: 'BODY', name: 'Corps' });
+});
+
+test('F2-G integration — profil humanoïde réel et morphologie absente conservent le lieu existant', () => {
+  const human = library.find(profile => profile.kind === 'profile' && profile.name === 'Human');
+  assert.ok(human, 'profil Human réel du catalogue L06 attendu');
+  const participant = buildParticipantFromBestiary(human.id, { library });
+  assert.equal(participant.extensions.v5.hitMorphology, undefined);
+  const arm = { roll: 30, key: 'ARM', name: 'Bras Gauche', side: 'left' };
+  assert.equal(resolveCreatureHitLocation({ roll: 30, morphology: participant.extensions.v5.hitMorphology, baseLocation: arm }), arm);
+});
+
+test('F2-G integration — forme explicite du profil remplace toute déduction de nom et garde le participant intact', () => {
+  const human = library.find(profile => profile.kind === 'profile' && profile.name === 'Human');
+  const configured = { ...human, morphology: 'quadrupède' };
+  const participant = buildParticipantFromBestiary(configured.id, { library: [configured] });
+  assert.equal(participant.extensions.v5.hitMorphology, 'quadruped');
+  const foreleg = resolveCreatureHitLocation({ roll: 30, morphology: participant.extensions.v5.hitMorphology, baseLocation: { roll: 30, key: 'ARM', name: 'Bras Droit', side: 'right' } });
+  assert.equal(foreleg.name, 'Patte avant droite');
+});
+
+test('F2-G integration — le choix MJ prime sur la morphologie du profil', () => {
+  const human = library.find(profile => profile.kind === 'profile' && profile.name === 'Human');
+  const configured = { ...human, hitMorphology: 'quadruped' };
+  const participant = buildParticipantFromBestiary(configured.id, { library: [configured] });
+  const result = previewResolution({
+    actor: { id: 'attacker', states: [] }, target: participant,
+    action: { type: 'attack', base: 99, damage: 4, qualities: [] },
+    v5: { kind: 'melee', context: { hitMorphology: 'snake' } }, roll: 91, baseRevision: 1
+  });
+  assert.deepEqual({ key: result.location.key, name: result.location.name }, { key: 'HEAD', name: 'Tête' });
+});
+
+test('F2-G integration — le choix humanoïde explicite neutralise la morphologie du profil', () => {
+  const human = library.find(profile => profile.kind === 'profile' && profile.name === 'Human');
+  const configured = { ...human, hitMorphology: 'snake' };
+  const participant = buildParticipantFromBestiary(configured.id, { library: [configured] });
+  const result = previewResolution({
+    actor: { id: 'attacker', states: [] }, target: participant,
+    action: { type: 'attack', base: 99, damage: 4, qualities: [] },
+    v5: { kind: 'melee', context: { hitMorphology: 'humanoid' } }, roll: 4, baseRevision: 1
+  });
+  assert.equal(result.location.key, 'ARM');
+  assert.equal(result.location.name, 'Bras Droit');
+});
+
+test('F2-G Store — pattes d’araignée acceptent les PA d’arbitrage au lieu de bloquer', async () => {
+  const store = createStore({ persistence: memoryPersistence() });
+  await store.ready;
+  const actor = { id: 'attacker', name: 'Attaquant', kind: 'PJ', camp: 'pj', zone: 'active', hp: 20, maxHp: 20, caracs: { CC: 60, F: 30, E: 30 }, skills: [], states: [], equipment: [] };
+  const target = { ...buildParticipantFromBestiary(library.find(profile => profile.name === 'Human').id, { library }), id: 'spider', zone: 'active', hp: 10, maxHp: 10, extensions: { v5: { hitMorphology: 'spider' } } };
+  await store.addParticipant(actor);
+  await store.addParticipant(target);
+  const result = store.previewResolution({
+    resolutionId: 'f2-g-spider-store', actorId: actor.id, targetId: target.id,
+    action: { type: 'attack', base: 99, damage: 4, qualities: [] }, roll: 4,
+    v5: { kind: 'melee', context: { spiderLegSide: 'right' } }, protectionContext: { manualAp: 2 }
+  });
+  assert.deepEqual({ key: result.location.key, name: result.location.name, side: result.location.side }, { key: 'LEG', name: 'Patte droite', side: 'right' });
+  assert.equal(result.protection.ap, 2);
+  assert.equal(result.unresolved.some(reason => /localisation-requise/.test(reason)), false);
+});
+
+test('F2-G integration — app. sans table propre choisit ARM pour les critiques', () => {
+  const result = previewResolution({
+    actor: { id: 'attacker', states: [] }, target: { id: 'target', hp: 5, maxHp: 5, caracs: { E: 20 }, armor: { head: 0, body: 2, arms: 0, legs: 0 }, states: [] },
+    action: { type: 'attack', base: 99, damage: 8, qualities: [] },
+    v5: { kind: 'melee', context: { hitAppendage: 'Queue' } }, roll: 77, baseRevision: 1,
+    criticalRolls: { location: 30, effect: 40 }
+  });
+  assert.equal(result.location.key, 'BODY');
+  assert.equal(result.location.name, 'Corps');
+  assert.equal(result.protection.location, 'body');
+  assert.equal(result.critical.details.location.key, 'ARM');
+  assert.equal(result.critical.details.location.name, 'Queue');
+  assert.equal(result.critical.details.location.appendageCriticalTable, 'ARM');
+});
+
+test('F2-G integration — morphologie MJ par cible secondaire passe au Store pour Dispersion', async () => {
+  const store = createStore({ persistence: memoryPersistence() }); await store.ready;
+  const actor = { id: 'attacker', name: 'Attaquant', kind: 'PJ', camp: 'pj', zone: 'active', hp: 20, maxHp: 20, caracs: { CC: 60, CT: 60, F: 30, E: 30 }, skills: [], states: [], equipment: [] };
+  const main = { ...buildParticipantFromBestiary(library.find(profile => profile.name === 'Human').id, { library }), id: 'main', zone: 'active', hp: 50, maxHp: 50 };
+  const secondary = { ...main, id: 'secondary', name: 'Cible secondaire', extensions: { v5: { hitMorphology: 'quadruped' } } };
+  await store.addParticipant(actor); await store.addParticipant(main); await store.addParticipant(secondary);
+  const preview = store.previewResolution({
+    resolutionId: 'f2-g-secondary-morphology', actorId: actor.id, targetId: main.id,
+    action: { type: 'attack', attr: 'CT', base: 99, damage: 4, qualities: ['dispersion'] }, roll: 54,
+    v5: { kind: 'ranged', context: { spreadRangeBand: 'short', spreadRating: 1, spreadTargetIds: ['main','secondary'], spreadLocationRollsById: { secondary: 15 }, hitMorphologiesById: { secondary: 'snake' } } },
+    protectionContext: { manualAp: 0 }
+  });
+  const secondaryHit = preview.secondaryTargets.find(row => row.participantId === secondary.id);
+  assert.equal(secondaryHit.location.key, 'HEAD');
+  assert.equal(secondaryHit.location.name, 'Tête');
+});
+
+test('F2-G Store — morphologie choisie pour la victime engagée gouverne le Tourbillon', async () => {
+  const store=createStore({persistence:memoryPersistence()});await store.ready;
+  const actor={id:'a',profileId:'a',name:'Attaquant',kind:'PJ',camp:'pj',zone:'active',hp:40,maxHp:40,caracs:{CC:60,F:40,E:30,Ag:40,I:40},skills:[],states:[],armor:{head:0,body:0,arms:0,legs:0},talents:[{id:'talent-whirlwind-of-death',status:'resolved',rank:1}],extensions:{v5:{resourceCharacterId:'test-a',hasMomentum:false}}};
+  const main={id:'b',profileId:'b',name:'Cible principale',kind:'PNJ',camp:'ennemi',zone:'active',hp:40,maxHp:40,caracs:{E:30},armor:{head:0,body:0,arms:0,legs:0},states:[],extensions:{v5:{}}};
+  const spider={...main,id:'spider',profileId:'spider',name:'Araignée',extensions:{v5:{hitMorphology:'spider'}}};
+  await store.loadFromJSON({schemaVersion:3,reserve:[],extensions:{v5:{combatId:'f2-g-whirlwind',turnIndex:1}},combat:{round:1,currentActorId:'a',order:['a','b','spider'],participants:[actor,main,spider]},diceLines:[],log:[]});
+  await store.setFortune('a',1);
+  const preview=store.previewResolution({resolutionId:'f2-g-whirlwind-secondary',actorId:'a',targetId:'b',action:{type:'attack',base:60,attr:'CC',damage:5},roll:11,defense:{base:30,roll:82,v5:{kind:'melee'}},v5:{kind:'melee',context:{specialAttack:'whirlwind-of-death',engagedIds:['b','spider'],allEngagedIncluded:true,hitMorphologiesById:{spider:'snake'}}}});
+  const secondary=preview.secondaryTargets.find(row=>row.participantId==='spider');
+  assert.deepEqual({key:secondary.location.key,name:secondary.location.name},{key:'HEAD',name:'Tête'});
+});
+
+test('F2-G integration — table critique utilise la localisation de la morphologie araignée', () => {
+  const result = previewResolution({
+    actor: { id: 'attacker', states: [] }, target: { id: 'spider', hp: 20, maxHp: 20, caracs: { E: 20 }, armor: { head: 0, body: 0, arms: 0, legs: 0 }, states: [], extensions: { v5: { hitMorphology: 'spider' } } },
+    action: { type: 'attack', base: 99, damage: 4, qualities: [] }, roll: 11, baseRevision: 1,
+    criticalRolls: { location: 40, effect: 40 }
+  });
+  assert.deepEqual({ key: result.location.key, name: result.location.name }, { key: 'LEG', name: 'Patte gauche' });
+  assert.deepEqual({ key: result.critical.details.location.key, name: result.critical.details.location.name }, { key: 'LEG', name: 'Patte droite' });
+});
+
+test('F2-L UI — jet de Destin 100 est reconnu comme critique (00)', () => {
+  assert.equal(isCriticalFateRoll(100), true);
+  assert.equal(isCriticalFateRoll(11), true);
+  assert.equal(isCriticalFateRoll(98), false);
+  assert.equal(isCriticalFateRoll(0), false);
+});
+
+test('F2-G UI — la sélection par cible secondaire montre le profil mais garde la priorité du MJ', () => {
+  assert.equal(hitMorphologySelection(undefined,'snake'),'snake');
+  assert.equal(hitMorphologySelection('humanoid','snake'),'humanoid');
+  assert.equal(hitMorphologySelection('spider','quadruped'),'spider');
+});
+
+test('F2-G UI — Tourbillon rend le contrôle par `engagedIds` et conserve sa valeur dans le contexte', () => {
+  const source=readFileSync(new URL('../../../js/ui/resolution-panel.js',import.meta.url),'utf8');
+  const start=source.indexOf("if(current.specialAttack==='whirlwind-of-death')");
+  const end=source.indexOf('const measures=renderV5TalentMeasures',start);
+  assert.ok(start>=0&&end>start);
+  const block=source.slice(start,end);
+  assert.match(block,/current\.engagedIds/);
+  assert.match(block,/hitMorphologySelection\(current\.hitMorphologiesById\?\.\[victim\.id\],deriveHitMorphology\(victim\)\)/);
+  assert.match(block,/hitMorphologiesById:/);
+});
+});
+
+describe('reprise morphologie et monture — caractérisation', () => {
+const l06 = JSON.parse(readFileSync(new URL('../../../js/data/bestiary/L06.json', import.meta.url), 'utf8')).profiles;
+
+test('F2-G reprise — le profil réel Araignée géante fournit sa morphologie via le mot-clé', () => {
+  const spider = buildParticipantFromBestiary('E0-P-076', { library: l06 });
+  assert.equal(deriveHitMorphology(spider), 'spider');
+  const result = previewResolution({
+    actor: { id: 'attacker', states: [] }, target: spider,
+    action: { type: 'attack', base: 90, damage: 4, qualities: [] }, roll: 4, baseRevision: 1
+  });
+  assert.equal(result.location.key, 'LEG');
+});
+
+test('F2-G reprise — les pattes d’araignée utilisent la localisation des jambes', () => {
+  const location = resolveCreatureHitLocation({
+    roll: 50,
+    morphology: 'araignee',
+    baseLocation: { roll: 50, key: 'BODY', name: 'Corps', side: null }
+  });
+  assert.equal(location.key, 'LEG');
+  assert.equal(location.name, 'Pattes');
+});
+
+test('F2-M reprise — Esquive montée est défavorisée sauf Trick Rider', () => {
+  const mounted = { extensions: { v5: { mounted: true } }, talents: [] };
+  const trickRider = { ...mounted, talents: [{ id: 'talent-trick-rider', status: 'resolved' }] };
+  assert.deepEqual(planMountedDodge(mounted).disadvantageSources.map(row => row.id), ['mounted:dodge']);
+  assert.deepEqual(planMountedDodge(trickRider).disadvantageSources, []);
+});
+
+test('F2-M reprise — une ancienne monture sans mountId ne bloque pas l’attaque de cavalerie', () => {
+  const rider = { id: 'rider', extensions: { v5: { mounted: true } } };
+  const plan = planMountedAttack({ actor: rider, target: { id: 'target' }, weapon: { category: 'Cavalerie' } });
+  assert.equal(plan.active, true);
+  assert.deepEqual(plan.unresolved, []);
+  assert.deepEqual(plan.advantageSources, []);
+});
+
+test('F2-M reprise — une défense brute d’Ag contre un cavalier reçoit le Désavantage', () => {
+  const attacker = { id: 'attacker', states: [] };
+  const rider = { id: 'rider', name: 'Cavalier', extensions: { v5: { mounted: true, mountId: 'horse' } }, states: [] };
+  const mount = { id: 'horse', name: 'Cheval', zone: 'active', kind: 'Créature', size: 'large', states: [] };
+  const preview = previewResolution({
+    actor: attacker, target: rider,
+    action: { type: 'attack', attr: 'CC', base: 60, damage: 5 }, roll: 41,
+    defense: { attr: 'Ag', base: 55, roll: 75 },
+    v5: { kind: 'melee' }, v5State: { participants: [attacker, rider, mount] }
+  });
+  assert.ok(preview.defenderTest.advantage.disadvantage.some(row => row.id === 'mounted:dodge'));
+});
+
+test('F2-M contre-vérification — Surpris et Sonné produisent chacun un plan de chute', () => {
+  assert.deepEqual(mountedRiderEventsFor(new Set(['surpris','sonne'])), ['rider-surprised','rider-stunned']);
+  const source = readSource(new URL('../../../js/core/resolution.js', import.meta.url), 'utf8');
+  assert.match(source, /mountedRiderEventsFor, mountedRideAnswerFor/);
+  assert.match(source, /mountedRiderEventsFor\(nextConditionKeys\)/);
+  assert.match(source, /mountedRiderEventsFor\(actorConditionKeys\)/);
+});
+
+test('F2-M contre-vérification — plusieurs plans exigent un d100 par événement', () => {
+  assert.deepEqual(mountedRideAnswerFor({ participantId:'rider', event:'rider-stunned', requiredPlanCount:2,
+    answersById:{rider:{score:55,roll:40}} }), {});
+  assert.deepEqual(mountedRideAnswerFor({ participantId:'rider', event:'rider-stunned', requiredPlanCount:2,
+    answersById:{rider:{'rider-stunned':{score:55,roll:71}}} }), {score:55,roll:71});
+  const source = readSource(new URL('../../../js/core/resolution.js', import.meta.url), 'utf8');
+  assert.match(source, /mountedRideAnswerFor\(\{[^}]*participantId: plan\.participantId/s);
+  assert.match(source, /riderAnswer\.roll \?\? \(singlePlan \? context\.mountedRideRollsById/);
+});
+
+test('F2-G contre-vérification — changer de cible efface aussi le côté de patte choisi', () => {
+  const source = readSource(new URL('../../../js/ui/workspace-view.js', import.meta.url), 'utf8');
+  const reset = source.slice(source.indexOf("if ('targetId' in patch)"), source.indexOf('draft.fortuneReroll=false'));
+  assert.match(reset, /'spiderLegSide'/);
+});
+
+test('F2-G contre-vérification — les victimes secondaires araignées saisissent leur côté de patte', () => {
+  const source = readSource(new URL('../../../js/ui/resolution-panel.js', import.meta.url), 'utf8');
+  const secondary = source.slice(source.indexOf('const secondaryHitMorphology='), source.indexOf("if(type==='test'&&action?.attr==='F'", source.indexOf('const secondaryHitMorphology=')));
+  assert.match(secondary, /spiderLegSidesById/);
+  assert.match(secondary, /Araignée/);
+});
+});
+
+describe('capacités du bestiaire', () => {
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
 const library = ['L11', 'L18', 'L22', 'L23', 'L24', 'L25'].flatMap(book =>
   JSON.parse(fs.readFileSync(path.join(root, 'js/data/bestiary', `${book}.json`), 'utf8')).profiles
 );
@@ -265,8 +580,8 @@ test('An Exhausted Gargantuan discharges for 6 Damage (L25 p.143)', () => {
 });
 
 test('Sea Elemental casts and channels with Strength, its BF standing for BI and BFM (MJ 28/10)', async () => {
-  const { resolveCastingSkill } = await import('../js/core/v5-magic-casting.js');
-  const { resolveChannellingSkill } = await import('../js/core/v5-magic-channelling.js');
+  const { resolveCastingSkill } = await import('../../../js/core/v5-magic-casting.js');
+  const { resolveChannellingSkill } = await import('../../../js/core/v5-magic-channelling.js');
   const sea = p('E0-P-909');
   const bf = Math.floor(sea.caracs.F / 10);
   const cast = resolveCastingSkill(sea);
@@ -321,7 +636,7 @@ test('Great cat Deathblow triggers on every successful melee hit, whatever the S
 });
 
 test('Suffocation costs 1 Wound per Round, then Unconscious, then a death proposal after TB Rounds (V5 p.169, MJ 28/10)', async () => {
-  const { advanceV5Effects } = await import('../js/core/v5-effects.js');
+  const { advanceV5Effects } = await import('../../../js/core/v5-effects.js');
   const victim = { id: 'drowning', name: 'Noyé', hp: 2, maxHp: 10, caracs: { E: 30 }, states: [{ id: 'suff', key: 'suffocation', name: 'Suffocation', level: 1 }], extensions: { v5: {} } };
   const r1 = advanceV5Effects(victim, { phase: 'endOfRound', round: 1 });
   assert.equal(r1.participant.hp, 1);
@@ -381,7 +696,7 @@ test('The discharge plan follows only the discharge action, never the Gargantuan
 });
 
 test('Sea Elemental Ablaze immunity is a central condition immunity, whatever the source', async () => {
-  const { acquireV5Conditions } = await import('../js/core/v5-effects.js');
+  const { acquireV5Conditions } = await import('../../../js/core/v5-effects.js');
   const sea = p('E0-P-909');
   assert.deepEqual(sea.extensions.v5.immunities.conditions, ['enflamme']);
   const receipt = acquireV5Conditions(sea, [{ name: 'Enflammé', level: 2, source: { kind: 'spell' } }], { resolutionId: 'fireball', round: 1 });
@@ -416,8 +731,8 @@ test('A Flying Death Skull brought to 0 Wounds proposes its reversion to an ordi
 });
 
 test('Cutting the silk ends only the lasso Entangled, after a confirmed slashing blow over 5 Damage (L22 p.73)', async () => {
-  const { recoverV5Condition } = await import('../js/core/v5-effects.js');
-  const { recoveryMethodsFor } = await import('../js/ui/v5-effect-dialog.js');
+  const { recoverV5Condition } = await import('../../../js/core/v5-effects.js');
+  const { recoveryMethodsFor } = await import('../../../js/ui/v5-effect-dialog.js');
   const lasso = { id: 'silk', key: 'enchevetre', name: 'Enchevêtré', level: 3, strength: 45, source: { kind: 'bestiary-profile', ability: 'cliff-spider-lasso' } };
   const net = { id: 'net', key: 'enchevetre', name: 'Enchevêtré', level: 1, source: { kind: 'weapon' } };
   const victim = { id: 'caught', name: 'Pris', hp: 10, maxHp: 10, caracs: { E: 30, F: 30 }, states: [lasso, net], extensions: { v5: {} } };
@@ -453,7 +768,7 @@ test('Gravelord options follow the imported Grüber profile E0-P-569 even under 
 });
 
 test('Sea Elemental keeps its Ablaze immunity after spell layers rewrite its immunities (M1)', async () => {
-  const { acquireV5Conditions } = await import('../js/core/v5-effects.js');
+  const { acquireV5Conditions } = await import('../../../js/core/v5-effects.js');
   const sea = p('E0-P-909');
   const rewritten = { ...sea, extensions: { ...sea.extensions, v5: { ...sea.extensions.v5, immunities: { conditions: ['sonne'] } } } };
   const receipt = acquireV5Conditions(rewritten, [{ name: 'Enflammé', level: 1, source: { kind: 'spell' } }], { resolutionId: 'after-layer', round: 1 });
@@ -463,7 +778,7 @@ test('Sea Elemental keeps its Ablaze immunity after spell layers rewrite its imm
 });
 
 test('Escaping the Immersion also ends its Suffocation, and the death countdown is cleared (M2)', async () => {
-  const { recoverV5Condition } = await import('../js/core/v5-effects.js');
+  const { recoverV5Condition } = await import('../../../js/core/v5-effects.js');
   const source = { kind: 'bestiary-profile', ability: 'sea-elemental-immersion' };
   const victim = { id: 'held-water', name: 'Immergé', hp: 3, maxHp: 10, caracs: { E: 30, F: 30 }, extensions: { v5: { suffocationDeathDueRound: 9 } },
     states: [{ id: 'imm-ent', key: 'enchevetre', name: 'Enchevêtré', level: 1, strength: 59, source }, { id: 'imm-suf', key: 'suffocation', name: 'Suffocation', level: 1, source }] };
@@ -475,7 +790,7 @@ test('Escaping the Immersion also ends its Suffocation, and the death countdown 
 });
 
 test('Escaping the Immersion Entangled ends its Suffocation even when a net Entangled remains', async () => {
-  const { recoverV5Condition } = await import('../js/core/v5-effects.js');
+  const { recoverV5Condition } = await import('../../../js/core/v5-effects.js');
   const source = { kind: 'bestiary-profile', ability: 'sea-elemental-immersion' };
   const victim = { id: 'held-net', name: 'Immergé', hp: 3, maxHp: 10, caracs: { E: 30, F: 30 }, extensions: { v5: {} },
     states: [{ id: 'imm-ent', key: 'enchevetre', name: 'Enchevêtré', level: 1, strength: 59, source }, { id: 'net-ent', key: 'enchevetre', name: 'Enchevêtré', level: 1, source: { kind: 'item' } }, { id: 'imm-suf', key: 'suffocation', name: 'Suffocation', level: 1, source }] };
@@ -484,7 +799,7 @@ test('Escaping the Immersion Entangled ends its Suffocation even when a net Enta
 });
 
 test('Suffocation countdown starts on an already Unconscious victim and a stale countdown is cleared (M3)', async () => {
-  const { advanceV5Effects } = await import('../js/core/v5-effects.js');
+  const { advanceV5Effects } = await import('../../../js/core/v5-effects.js');
   const suffocating = { id: 'suf', key: 'suffocation', name: 'Suffocation', level: 1 };
   const out = { id: 'ko', key: 'inconscient', name: 'Inconscient', level: 1 };
   const already = advanceV5Effects({ id: 'ko-victim', name: 'KO', hp: 0, maxHp: 10, caracs: { E: 30 }, states: [suffocating, out], extensions: { v5: {} } }, { phase: 'endOfRound', round: 4 });
@@ -495,8 +810,8 @@ test('Suffocation countdown starts on an already Unconscious victim and a stale 
 });
 
 test('Sea Elemental spell formulas, overcast reminders and dispel range read its Strength (M4)', async () => {
-  const { spellFormulaValue } = await import('../js/core/v5-magic-effects.js');
-  const { specificOvercastReminder } = await import('../js/core/v5-magic-overcast-options.js');
+  const { spellFormulaValue } = await import('../../../js/core/v5-magic-effects.js');
+  const { specificOvercastReminder } = await import('../../../js/core/v5-magic-overcast-options.js');
   const sea = p('E0-P-909');
   const bf = Math.floor(sea.caracs.F / 10);
   assert.equal(spellFormulaValue('BFM', sea), bf);
@@ -588,9 +903,9 @@ test('All three Flying Death Skull profiles revert at 0 Wounds, applied by the S
 });
 
 test('Sea Elemental channelling interruption, miscast reminders and casting skill read its Strength, by profileId too (final H review)', async () => {
-  const { previewChannellingInterruption, resolveChannellingSkill } = await import('../js/core/v5-magic-channelling.js');
-  const { reminderFlagTexts } = await import('../js/core/v5-magic-reminder-flags.js');
-  const { casterCaracs, castsWithStrength } = await import('../js/core/creature-abilities.js');
+  const { previewChannellingInterruption, resolveChannellingSkill } = await import('../../../js/core/v5-magic-channelling.js');
+  const { reminderFlagTexts } = await import('../../../js/core/v5-magic-reminder-flags.js');
+  const { casterCaracs, castsWithStrength } = await import('../../../js/core/creature-abilities.js');
   const sea = p('E0-P-909');
   const bare = { id: 'bare-sea', profileId: 'E0-P-909', caracs: { ...sea.caracs }, skills: [], talents: [], extensions: { v5: {} } };
   assert.equal(castsWithStrength(bare), true, 'profileId alone is enough');
@@ -604,10 +919,61 @@ test('Sea Elemental channelling interruption, miscast reminders and casting skil
 });
 
 test('Suffocation costs nothing while a breath blessing lasts (final H review)', async () => {
-  const { advanceV5Effects } = await import('../js/core/v5-effects.js');
+  const { advanceV5Effects } = await import('../../../js/core/v5-effects.js');
   const victim = { id: 'blessed', name: 'Béni', hp: 2, maxHp: 10, caracs: { E: 30 }, states: [{ id: 'suff', key: 'suffocation', name: 'Suffocation', level: 1 }],
     extensions: { v5: { divineEffects: [{ id: 'breath', specialState: { doesNotBreathe: true } }] } } };
   const r1 = advanceV5Effects(victim, { phase: 'endOfRound', round: 1 });
   assert.equal(r1.participant.hp, 2);
   assert.ok(r1.participant.states.some(row => row.key === 'suffocation'), 'the state stays for when the blessing ends');
+});
+});
+
+describe('capacités du bestiaire — caractérisation', () => {
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
+const profile = (book, id) => {
+  const data = JSON.parse(fs.readFileSync(path.join(root, 'js/data/bestiary', `${book}.json`), 'utf8'));
+  return data.profiles.find(entry => entry.id === id);
+};
+
+test('F2-H characterization anchors the selected real profiles and their source pages', () => {
+  const cases = [
+    ['L11', 'E0-P-001', 'Great Stag', 10],
+    ['L11', 'E0-P-002', 'The River’S Shadow', 10],
+    ['L11', 'E0-P-004', 'Arachnarok Spider', 13],
+    ['L18', 'E0-P-565', 'Flying Death Skulls', 117],
+    ['L18', 'E0-P-567', 'Flying Death-Ier Skulls', 117],
+    ['L22', 'E0-P-744', 'Cliff Spider', 73],
+    ['L23', 'E0-P-792', 'Great Cats', 87],
+    ['L23', 'E0-P-807', 'The Farmyard Beasts', 106],
+    ['L25', 'E0-P-909', 'Sea Elemental', 142],
+    ['L25', 'E0-P-910', 'Gargantuan', 143],
+    ['L25', 'E0-P-913', 'Merwyrm', 145],
+    ['L25', 'E0-P-916', 'Black Leviathan', 147],
+    ['L25', 'E0-P-921', 'Wulfrik Sarl Champion', 155]
+  ];
+  for (const [book, id, name, page] of cases) {
+    const item = profile(book, id);
+    assert.ok(item, `${book} ${id} exists`);
+    assert.equal(item.name, name);
+    assert.equal(item.book, book);
+    assert.equal(item.page, page);
+    assert.equal(item.kind, 'profile');
+  }
+});
+
+test('paired profiles remain distinguishable for profile-scoped abilities', () => {
+  const taal = profile('L11', 'E0-P-001');
+  const kurnous = profile('L11', 'E0-P-002');
+  const webSpider = profile('L11', 'E0-P-004');
+  const ordinarySpider = profile('L22', 'E0-P-744');
+  const skull = profile('L18', 'E0-P-565');
+  const fireSkull = profile('L18', 'E0-P-567');
+
+  assert.deepEqual(taal.specialRules, ["Taal's Own Blades"]);
+  assert.deepEqual(kurnous.specialRules, ["Kurnous' Own Blades"]);
+  assert.ok(webSpider.specialRules.includes('Vicious Webs'));
+  assert.equal(ordinarySpider.specialRules, undefined);
+  assert.equal(skull.specialRules, undefined);
+  assert.ok(fireSkull.specialRules.includes('Flaming Dangerous'));
+});
 });
