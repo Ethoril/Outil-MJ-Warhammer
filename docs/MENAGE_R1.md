@@ -257,3 +257,14 @@ git branch -D gpt/phase-f0b
 
 # claude/v3-a, v3-b, v3-c : fusionnées par la 3.28.0, même procédure que les worktrees fusionnés (dossiers réels)
 ```
+
+## Décisions du MJ et exécution (30/10/2026, matin)
+
+Décisions prises par sélecteur : retirer tous les worktrees fusionnés sauf `divin-v5` et `lot2-combat-v5` ; `gpt/phase-f0b` : branche gardée, worktree retiré ; `glm/inv-B0` et `glm/inv-D0a` abandonnées ; reste de `tmp/` supprimé sauf `phase-r` et `divin`, `E:/tmp-node` vidé après la phase R.
+
+Exécuté :
+- 22 jonctions `node_modules` retirées par `cmd /c rmdir` (sans `/s`) avant tout retrait ; `node_modules` de `lot2-combat-v5` (cible de `divin-v5`) et du dépôt principal vérifiés intacts avant et après.
+- 46 worktrees retirés (`git worktree remove --force --force`, puis `git worktree prune`). Restent : dépôt principal, `divin-v5`, `lot2-combat-v5`, `tmp/phase-r-worktree`.
+- Branches supprimées : toutes les fusionnées (`git branch -d`), plus `glm/inv-B0` et `glm/inv-D0a` (`-D`). Restent : `main`, `codex/divin-v5`, `codex/lot2-talents-v5`, `claude/phase-r`, `gpt/phase-f0b`.
+- `tmp/` : 4,4 Go → 157 Mo. Gardés : `phase-r`, `phase-r-worktree`, `divin` (manifeste et reçus de recette), `suivi-pro.ps1` (outil de suivi des agents cité dans la mémoire).
+- Non supprimés car verrouillés par un processus : `tmp/gpt-phase-f2-worktree` (dossier vide, répertoire courant d'un ancien shell) et quatre `hsperfdata_arnot` de JVM (émulateurs Firebase) dans `gpt-phase-b-runtime`, `gpt-phase-b2-runtime`, `gpt-phase-b4-runtime`, `gpt-test-temp`. À supprimer après un redémarrage.
