@@ -480,3 +480,43 @@ Note : les sept chaînes `evidence` de `js/core/keywords.js` (immobilisante, pis
 | `tests/phase-c-c02-engaged-flee.test.js` | `tests/unit/combat/initiative-et-tours.test.js` | 4 | 147 |
 
 Note : `tests/phase-c-c06-coverage.test.js` lit désormais `./unit/combat/initiative-et-tours.test.js` à la place de `phase-c-c02-engaged-flee.test.js`.
+
+## R2-10 — combat C
+
+| Ancien fichier | Nouveau fichier | Tests avant | Tests après (cible) |
+|---|---|---|---|
+| `tests/dice.test.js` | `tests/unit/combat/jets-et-defense.test.js` | 5 | 171 |
+| `tests/e06-combat-integration.test.js` | `tests/unit/combat/jets-et-defense.test.js` | 3 | 171 |
+| `tests/e06-effects-quality.test.js` | `tests/unit/combat/jets-et-defense.test.js` | 7 | 171 |
+| `tests/e12-resolution.test.js` | `tests/unit/combat/jets-et-defense.test.js` | 8 | 171 |
+| `tests/e18-combat-engine.test.js` | `tests/unit/combat/jets-et-defense.test.js` | 22 | 171 |
+| `tests/e23-defense-options.test.js` | `tests/unit/combat/jets-et-defense.test.js` | 3 | 171 |
+| `tests/f2-b-characterization.test.js` | `tests/unit/combat/jets-et-defense.test.js` | 6 | 171 |
+| `tests/f2-b-combat-actions.test.js` | `tests/unit/combat/jets-et-defense.test.js` | 21 | 171 |
+| `tests/f2-b-combat-modifiers.test.js` | `tests/unit/combat/jets-et-defense.test.js` | 15 | 171 |
+| `tests/f2-t2bis-salvo-incident-integration.test.js` | `tests/unit/combat/jets-et-defense.test.js` | 6 | 171 |
+| `tests/keywords.test.js` | `tests/unit/combat/jets-et-defense.test.js` | 5 | 171 |
+| `tests/lot2-v5-foundation.test.js` | `tests/unit/combat/jets-et-defense.test.js` | 36 | 171 |
+| `tests/roll-qualities.test.js` | `tests/unit/combat/jets-et-defense.test.js` | 12 | 171 |
+| `tests/states.test.js` | `tests/unit/combat/jets-et-defense.test.js` | 5 | 171 |
+| `tests/v3-b-combat.test.js` | `tests/unit/combat/jets-et-defense.test.js` | 17 | 171 |
+| `tests/phase-c-c01-fear-terror.test.js` | `tests/unit/combat/psychologie-et-talents-de-groupe.test.js` | 4 | 38 |
+| `tests/phase-c-c03-rally-mount.test.js` | `tests/unit/combat/psychologie-et-talents-de-groupe.test.js` | 7 | 38 |
+| `tests/phase-c-c04-intimidation-traits.test.js` | `tests/unit/combat/psychologie-et-talents-de-groupe.test.js` | 8 | 38 |
+| `tests/phase-c-c05-supplements.test.js` | `tests/unit/combat/psychologie-et-talents-de-groupe.test.js` | 8 | 38 |
+| `tests/phase-c-c06-coverage.test.js` | `tests/unit/combat/psychologie-et-talents-de-groupe.test.js` | 3 | 38 |
+| `tests/pro-q10b-master-and-commander.test.js` | `tests/unit/combat/psychologie-et-talents-de-groupe.test.js` | 4 | 38 |
+| `tests/pro-q23-maitre-a-bord-moteur.test.js` | `tests/unit/combat/psychologie-et-talents-de-groupe.test.js` | 4 | 38 |
+| `tests/lot2-talent-contract-v2.test.js` | `tests/unit/combat/talents-v5.test.js` | 19 | 344 |
+| `tests/lot2-talent-contracts.test.js` | `tests/unit/combat/talents-v5.test.js` | 26 | 344 |
+| `tests/lot2-v5-24-control.test.js` | `tests/unit/combat/talents-v5.test.js` | 32 | 344 |
+| `tests/lot2-v5-24-qualities.test.js` | `tests/unit/combat/talents-v5.test.js` | 19 | 344 |
+| `tests/lot2-v5-24-tests.test.js` | `tests/unit/combat/talents-v5.test.js` | 47 | 344 |
+| `tests/lot2-v5-action-costs.test.js` | `tests/unit/combat/talents-v5.test.js` | 14 | 344 |
+| `tests/lot2-v5-control.test.js` | `tests/unit/combat/talents-v5.test.js` | 7 | 344 |
+| `tests/lot2-v5-effects.test.js` | `tests/unit/combat/talents-v5.test.js` | 51 | 344 |
+| `tests/lot2-v5-reactions.test.js` | `tests/unit/combat/talents-v5.test.js` | 7 | 344 |
+| `tests/lot2-v5-remaining-talents.test.js` | `tests/unit/combat/talents-v5.test.js` | 110 | 344 |
+| `tests/lot2-v5-talents-integration.test.js` | `tests/unit/combat/talents-v5.test.js` | 12 | 344 |
+
+Note : `tests/phase-c-c06-coverage.test.js` lit désormais `./initiative-et-tours.test.js` (C02) et `./psychologie-et-talents-de-groupe.test.js` (C01, C03, C04, C05). `docs/COURAGE_BRISE_INVENTAIRE.{json,md}` : les deux références à `lot2-v5-remaining-talents.test.js:70/71` pointent vers `talents-v5.test.js:1867/1868`.

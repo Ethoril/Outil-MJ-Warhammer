@@ -39,3 +39,7 @@ Aucun doublon retiré (les 55 originaux : 483 tests, les 7 cibles : 483 ; la sui
 ## R2-9 — combat B
 
 Aucun doublon retiré (les 16 originaux : 187 tests, les 2 cibles : 187 ; la suite complète garde donc le même total qu'avant l'étape).
+
+## R2-10 — combat C
+
+Aucun doublon retiré (les 33 originaux : 553 tests, les 3 cibles : 553 ; la suite complète garde donc le même total qu'avant l'étape).
