@@ -57,3 +57,19 @@ test('v3 Pause de Focalisation (p.236) : Test de Focalisation Accessible (+2 DR)
   assert.equal(sea.ready, true);
   assert.equal(sea.score, 70, 'élémentaire de mer : sans compétence imprimée, Force + 10 (comme la Focalisation)');
 });
+
+test('v3 attribut des Bêtes (p.245) : le lanceur gagne l’Élan, les ennemis vivants perdent le leur (alliés, morts-vivants et Peur exclus)', async () => {
+  const { createStore } = await import('../js/core/store.js');
+  const person = (id, camp, extra = {}) => ({ id, name: id, kind: camp === 'pj' ? 'PJ' : 'PNJ', camp, hp: 20, maxHp: 20, zone: 'active', init: 40, caracs: { CC: 40, F: 30, E: 30, FM: 50, Int: 40, I: 40, Ag: 40 }, skills: [], talents: [], states: [], equipment: [], extensions: { v5: { hasMomentum: true } }, ...extra });
+  const store = createStore(); await store.ready;
+  const people = [person('mage', 'pj', { extensions: { v5: { hasMomentum: false } } }), person('ally', 'pj'), person('orc', 'ennemi'), person('zombie', 'ennemi', { tags: ['Mort-vivant'] })];
+  await store.loadFromJSON({ schemaVersion: 3, reserve: [], combat: { round: 1, currentActorId: 'mage', order: people.map(p => p.id), participants: people }, diceLines: [], log: [], extensions: { v5: { turnIndex: 1 } } });
+  const preview = store.previewLoreAttribute({ casterId: 'mage', lore: 'beasts', spell: { cn: 6 } });
+  await store.applyLoreAttribute(preview, { casterId: 'mage', cn: 6 });
+  const has = id => store.listParticipants().find(p => p.id === id).extensions.v5.hasMomentum;
+  assert.equal(has('mage'), true, 'le lanceur gagne l’Élan');
+  assert.equal(has('orc'), false, 'l’ennemi vivant perd l’Élan');
+  assert.equal(has('ally'), true, 'un allié le garde');
+  assert.equal(has('zombie'), true, 'un ennemi non vivant n’est pas touché');
+  assert.ok(!(store.listParticipants().find(p => p.id === 'mage').traits || []).includes('Peur (1)'), 'plus de Peur (1)');
+});

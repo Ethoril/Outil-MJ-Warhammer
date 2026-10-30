@@ -205,12 +205,14 @@ test('Effets V5 — Soins magiques : dans la limite de Bmax et réduction d’é
 // 2. LES 8 ATTRIBUTS DE DOMAINE V5 + HAUTE MAGIE (v5-magic-attributes.js)
 // ============================================================================
 
-test('Attributs V5 — Bêtes (Ghur) : Peur (1) pendant BFM Rounds', () => {
-  const caster = createParticipant('caster-1', 'Chaman', { caracs: { FM: 58 } }); // BFM = 5
-  const preview = previewLoreAttribute({ lore: 'beasts', caster });
+test('Attributs V5 — Bêtes (Ghur) v3 p.245 : le lanceur gagne l’Élan, les ennemis vivants le perdent', () => {
+  const caster = createParticipant('caster-1', 'Chaman', { caracs: { FM: 58 } });
+  const preview = previewLoreAttribute({ lore: 'beasts', caster, spell: { cn: 6 } });
 
-  assert.equal(preview.casterEffects.trait, 'Peur (1)');
-  assert.equal(preview.casterEffects.durationRounds, 5);
+  assert.equal(preview.casterEffects.grantMomentum, true);
+  assert.equal(preview.casterEffects.enemiesLoseMomentum, true);
+  assert.equal(preview.casterEffects.radius, 6);
+  assert.equal(preview.casterEffects.trait, undefined, 'plus de Peur (1)');
 });
 
 test('Attributs V5 — Mort (Shyish) : 1 état Exténué sur cible vivante (max 1)', () => {

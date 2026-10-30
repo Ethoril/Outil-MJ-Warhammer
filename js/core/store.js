@@ -66,6 +66,7 @@ import {
   getSpellContract,
   getContractChoiceOptions,
   validateSpellTargets,
+  isHostileTarget,
   validateSpellFingerprint,
   previewSpellExecution as previewSpellExecutionInternal,
   applySpellExecution as applySpellExecutionInternal
@@ -4406,7 +4407,7 @@ function resolvedCorruptionTest(participant, skillId, input) {
         const casterId = options.casterId || preview.casterId || combat.currentActorId;
         const caster = participants.find(p => p.id === casterId);
         const targets = participants.filter(p => (options.targetIds || []).includes(p.id));
-        const res = applyLoreAttributeInternal(draft, preview, { ...options, caster, targets });
+        const res = applyLoreAttributeInternal(draft, preview, { ...options, caster, targets, enemies: options.enemies || participants.filter(p => isHostileTarget(caster, p)) });
         for (const [id, updated] of res.updatedParticipants.entries()) {
           const idx = participants.findIndex(p => p.id === id);
           if (idx !== -1) participants[idx] = updated;

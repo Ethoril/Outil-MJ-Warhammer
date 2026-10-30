@@ -189,7 +189,7 @@ test('Durée — la surpuissance de durée s’applique aussi à Main de Gloire,
   assert.equal(mj.durationRounds, 36);
 });
 
-test('Durée — attribut des Ombres : la durée du sort protégé suit le palier de durée, l’attribut des Bêtes garde ses BFM Rounds', () => {
+test('Durée — attribut des Ombres : la durée du sort protégé suit le palier de durée (les Bêtes v3 ne portent plus de durée)', () => {
   const caster = wizard();
   const apply = (lore, multiplier) => {
     const preview = previewLoreAttribute({ caster, targets: [], lore, spell: { name: 'Protection', effects:{ward:7}, duration: '2 Rounds' } });
@@ -198,7 +198,6 @@ test('Durée — attribut des Ombres : la durée du sort protégé suit le palie
   };
   assert.equal(apply('shadow', 1).durationRounds, 2);
   assert.equal(apply('shadow', 2).durationRounds, 4);
-  assert.equal(apply('beasts', 2).durationRounds, 4, 'BFM (4) Rounds, non multipliés');
 });
 
 const caster = (extra = {}) => wizard('mage', { fortune: 2, ...extra });

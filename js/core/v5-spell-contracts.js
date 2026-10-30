@@ -3713,7 +3713,7 @@ export function applySpellExecution(draft, contractOrId, input = {}) {
     const effectTargets=new Map([...preview.lorePreview.targetEffects].filter(([id])=>eligible.some(p=>p.id===id)));
     const lore={...preview.lorePreview,targetEffects:new Map([...effectTargets].map(([id,e])=>[id,{...e,extraDirectWounds:0}]))};
     const caster=participants.find(p=>p.id===actor.id);
-    const receipt=applyLoreAttribute(draft,lore,{caster,targets:eligible,round:currentRound,spellId:contract.id,cn:contract.cn,castExecutionId:opKey,duration:contract.duration,overcastDurationMultiplier:preview.overcast?.durationMultiplier});
+    const receipt=applyLoreAttribute(draft,lore,{caster,targets:eligible,enemies:participants.filter(p=>isHostileTarget(actor,p)),round:currentRound,spellId:contract.id,cn:contract.cn,castExecutionId:opKey,duration:contract.duration,overcastDurationMultiplier:preview.overcast?.durationMultiplier});
     for(const [id,next] of receipt.updatedParticipants){const index=participants.findIndex(p=>p.id===id);participants[index]=next;}
   }
   // 7. Appliquer les conséquences d'un vortex sur les cibles traversées
