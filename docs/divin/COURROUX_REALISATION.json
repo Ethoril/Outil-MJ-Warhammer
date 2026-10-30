@@ -13,25 +13,25 @@
    "status": "automatisé",
    "lot": "B01",
    "commit": "5cf5b4f",
-   "proof": "tests/divin-v5-b1-zero-sin.test.js"
+   "proof": "tests/unit/divin/moteur-et-store.test.js"
   },
   "l06-218-sin-trigger": {
    "status": "automatisé",
    "lot": "B01",
    "commit": "5cf5b4f",
-   "proof": "tests/divin-v5-b1-zero-sin.test.js"
+   "proof": "tests/unit/divin/moteur-et-store.test.js"
   },
   "l06-218-wrath-roll-plus10": {
    "status": "automatisé",
    "lot": "B01",
    "commit": "5cf5b4f",
-   "proof": "tests/divin-v5-b1-zero-sin.test.js"
+   "proof": "tests/unit/divin/moteur-et-store.test.js"
   },
   "l06-218-sin-decrement": {
    "status": "automatisé",
    "lot": "B01",
    "commit": "5cf5b4f",
-   "proof": "tests/divin-v5-b1-zero-sin.test.js"
+   "proof": "tests/unit/divin/moteur-et-store.test.js"
   },
   "l06-218-gm-discretionary": {
    "status": "rappel",
@@ -111,7 +111,7 @@
    "status": "automatisé",
    "lot": "B06",
    "commit": "97c1839",
-   "proof": "tests/divin-v5-b6-skills.test.js"
+   "proof": "tests/unit/divin/moteur-et-store.test.js"
   },
   "l06-218-wrath-31-35": {
    "status": "automatisé",
@@ -129,7 +129,7 @@
    "status": "automatisé",
    "lot": "B07",
    "commit": "cbc552e",
-   "proof": "tests/divin-v5-b7-allies.test.js"
+   "proof": "tests/unit/divin/moteur-et-store.test.js"
   },
   "l06-218-wrath-46-50": {
    "status": "automatisé",
@@ -147,7 +147,7 @@
    "status": "automatisé",
    "lot": "B06",
    "commit": "97c1839",
-   "proof": "tests/divin-v5-b6-skills.test.js"
+   "proof": "tests/unit/divin/moteur-et-store.test.js"
   },
   "l06-218-wrath-61-65": {
    "status": "automatisé",
@@ -207,7 +207,7 @@
    "status": "automatisé",
    "lot": "B08",
    "commit": "ab59a17",
-   "proof": "tests/divin-v5-b8-access.test.js"
+   "proof": "tests/unit/divin/moteur-et-store.test.js"
   },
   "l06-219-wrath-111-115": {
    "status": "automatisé",
@@ -219,7 +219,7 @@
    "status": "automatisé",
    "lot": "B08",
    "commit": "ab59a17",
-   "proof": "tests/divin-v5-b8-access.test.js"
+   "proof": "tests/unit/divin/moteur-et-store.test.js"
   },
   "l06-219-wrath-121-125": {
    "status": "automatisé",
@@ -355,7 +355,7 @@
    "status": "automatisé",
    "lot": "B08",
    "commit": "ab59a17",
-   "proof": "tests/divin-v5-b8-access.test.js"
+   "proof": "tests/unit/divin/moteur-et-store.test.js"
   },
   "l04-018-lose-the-loot": {
    "status": "exclu",
@@ -366,7 +366,7 @@
    "status": "automatisé",
    "lot": "B02",
    "commit": "7d2691a",
-   "proof": "tests/divin-v5-b2-elf-cults.test.js"
+   "proof": "tests/unit/divin/moteur-et-store.test.js"
   },
   "l10-020-shrine-sin-removal": {
    "status": "assisté",
@@ -510,7 +510,7 @@
    "status": "automatisé",
    "lot": "B08",
    "commit": "ab59a17",
-   "proof": "tests/divin-v5-b8-access.test.js"
+   "proof": "tests/unit/divin/moteur-et-store.test.js"
   },
   "l25-091-stromfels-mood-sin": {
    "status": "assisté",

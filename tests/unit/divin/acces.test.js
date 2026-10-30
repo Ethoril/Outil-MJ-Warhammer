@@ -1,7 +1,86 @@
-import test from 'node:test';
+import test, { describe } from 'node:test';
 import assert from 'node:assert/strict';
-import registry from '../js/data/v5-divine-contracts.json' with { type: 'json' };
+import registry from '../../../js/data/v5-divine-contracts.json' with { type: 'json' };
+import { resolveDivineAccess, createDivineAccessGrant, revokeDivineAccessGrant, consumeDivineAccessGrant } from '../../../js/core/v5-divine-access.js';
+import { createSyncSession, normalizeRemoteDocument } from '../../../js/core/sync-session.js';
+import { validateSyncDocument } from '../../../js/core/sync-protocol.js';
+import { sanitizeMagicEnvelope } from '../../../js/core/sanitize.js';
+import { migrateSnapshot } from '../../../js/core/migrations.js';
+import { createStore } from '../../../js/core/store.js';
 
+describe('accès exact par sujet', () => {
+const blessing=registry.contracts.find(row=>row.id==='divine:blessing:myrmidia:battle');
+const conscience=registry.contracts.find(row=>row.id==='divine:blessing:myrmidia:conscience');
+const miracle=registry.contracts.find(row=>row.id==='divine:miracle:bouclier-de-myrmidia');
+const talent=contract=>({id:contract.requiredTalent.id,status:'resolved',rank:1,specialization:contract.requiredTalent.specialization});
+const actor={id:'a',kind:'PJ',talents:[],prayers:[]};
+const grant=(contract=blessing,overrides={})=>({id:'g',actorId:'a',subjectKey:'fiche:one',tradition:contract.requiredTalent.specialization,prayerId:contract.id,scope:'once',sceneId:null,reason:'Motif précis',decisionId:'DIV-02',createdBy:'MJ',commandId:'c1',status:'active',createdRevision:1,...overrides});
+const current=rows=>({schemaVersion:1,grants:rows});
+
+test('accès exact par sujet, prière, culte et portée',()=>{
+ const valid=grant();assert.equal(resolveDivineAccess(current([valid]),{actor,subjectKey:'fiche:one',contract:blessing}).access.allowed,true);
+ for(const bad of [grant(blessing,{subjectKey:'fiche:two'}),grant(blessing,{tradition:'Ulric'}),grant(conscience,{prayerId:conscience.id}),grant(blessing,{status:'revoked',revokedRevision:2,revokedReason:'Fin'})])
+  assert.equal(resolveDivineAccess(current([bad]),{actor,subjectKey:'fiche:one',contract:blessing}).access.allowed,false);
+ const scene=grant(blessing,{scope:'scene',sceneId:'s'});
+ assert.equal(resolveDivineAccess(current([scene]),{actor,subjectKey:'fiche:one',contract:blessing,activeScene:{id:'s',status:'active'}}).access.allowed,true);
+ assert.equal(resolveDivineAccess(current([grant(blessing,{scope:'scene',actorId:'old',sceneId:'s'})]),{actor,subjectKey:'fiche:one',contract:blessing,activeScene:{id:'s',status:'active'}}).access.allowed,true);
+ assert.equal(resolveDivineAccess(current([scene]),{actor,subjectKey:'fiche:one',contract:blessing,activeScene:{id:'s',status:'suspended'}}).access.allowed,false);
+});
+
+test('une grant once non consommée suit le sujet stable au-delà de son actorId de création',()=>{
+ const unused=grant(blessing,{actorId:'actor-previous-session',scope:'once'});
+ const resolved=resolveDivineAccess(current([unused]),{actor:{...actor,id:'actor-new-session'},subjectKey:'fiche:one',contract:blessing}).access;
+ assert.equal(resolved.allowed,true,'une utilisation est liée au sujet; seul le scope scene est limité à actorId et sceneId');
+ assert.equal(resolved.scope,'once');
+});
+
+test('une grant scène suit le même sujet stable dans la scène active après remplacement de participant',()=>{
+ const sceneGrant=grant(blessing,{actorId:'actor-before-reimport',scope:'scene',sceneId:'scene-one'});
+ const resolved=resolveDivineAccess(current([sceneGrant]),{actor:{...actor,id:'actor-after-reimport'},subjectKey:'fiche:one',
+  contract:blessing,activeScene:{id:'scene-one',status:'active'}}).access;
+ assert.equal(resolved.allowed,true);
+ assert.equal(resolveDivineAccess(current([sceneGrant]),{actor:{...actor,id:'actor-after-reimport'},subjectKey:'fiche:one',
+  contract:blessing,activeScene:{id:'scene-two',status:'active'}}).access.allowed,false);
+});
+
+test('fiche prioritaire; Béni ouvre les bénédictions du culte, Invoke exige miracle acquis',()=>{
+ const blessed={...actor,talents:[talent(blessing)],prayers:[]};
+ const sheet=resolveDivineAccess(current([grant()]),{actor:blessed,subjectKey:'fiche:one',contract:conscience}).access;
+ assert.equal(sheet.allowed,true);assert.equal(sheet.mode,'sheet');
+ const invoker={...actor,talents:[talent(miracle)],prayers:[]};
+ assert.equal(resolveDivineAccess(current([]),{actor:invoker,subjectKey:'fiche:one',contract:miracle}).access.allowed,false);
+ invoker.prayers=[{status:'resolved',nom:miracle.catalogueName||miracle.name}];
+ assert.equal(resolveDivineAccess(current([]),{actor:invoker,subjectKey:'fiche:one',contract:miracle}).access.mode,'sheet');
+});
+
+test('transitions once idempotentes, motivées et immuables',()=>{
+ const empty=current([]),created=createDivineAccessGrant(empty,{actorId:'a',subjectKey:'fiche:one',contract:blessing,scope:'once',reason:'Motif précis',revision:2,id:'g2',commandId:'c2'});
+ assert.equal(created.ok,true);assert.equal(created.state.grants[0].status,'active');assert.deepEqual(empty.grants,[]);
+ assert.equal(createDivineAccessGrant(empty,{actorId:'a',subjectKey:'fiche:one',contract:blessing,scope:'once',reason:' ',revision:2,id:'g3'}).ok,false);
+ const consumed=consumeDivineAccessGrant(created.state,{grantId:'g2',executionId:'e1',revision:3,commandId:'c4'});assert.equal(consumed.ok,true);assert.equal(consumed.grant.status,'consumed');
+ assert.equal(consumeDivineAccessGrant(consumed.state,{grantId:'g2',executionId:'e2',revision:4}).ok,false);
+ const revoked=revokeDivineAccessGrant(created.state,{grantId:'g2',reason:'Fin',revision:4,commandId:'c6'});assert.equal(revoked.ok,true);assert.equal(revoked.grant.status,'revoked');
+});
+
+test('grant actif mal formé ou incohérent ne donne aucun accès',()=>{
+ for(const bad of [grant(blessing,{reason:undefined}),grant(blessing,{consumedBy:'old-execution'}),grant(blessing,{scope:'scene',sceneId:null})])
+  assert.equal(resolveDivineAccess(current([bad]),{actor,subjectKey:'fiche:one',contract:blessing,activeScene:{id:'s',status:'active'}}).access.allowed,false);
+});
+
+test('réconciliation offline E05 n’accepte qu’un des deux commits once concurrents',async()=>{
+ const {createSyncDocument,createOperation,applyOperation}=await import('../../../js/core/sync-protocol.js');
+ const created=createDivineAccessGrant(current([]),{actorId:'a',subjectKey:'fiche:one',contract:blessing,scope:'once',reason:'Deux répliques',revision:4,id:'shared-once'});
+ const base=createSyncDocument({schemaVersion:3,extensions:{v5:{divineAccess:created.state}}},{revision:7});
+ const a=consumeDivineAccessGrant(created.state,{grantId:'shared-once',executionId:'client-a',revision:5});
+ const b=consumeDivineAccessGrant(created.state,{grantId:'shared-once',executionId:'client-b',revision:5});
+ assert.equal(a.ok,true);assert.equal(b.ok,true,'chaque réplique peut calculer son état local pendant la coupure');
+ const first=applyOperation(base,createOperation({deviceId:'device-a',sequence:1,baseRevision:7,state:{schemaVersion:3,extensions:{v5:{divineAccess:a.state}}}}));
+ const second=applyOperation(first.document,createOperation({deviceId:'device-b',sequence:1,baseRevision:7,state:{schemaVersion:3,extensions:{v5:{divineAccess:b.state}}}}));
+ assert.equal(first.status,'applied');assert.equal(second.status,'conflict');
+});
+});
+
+describe('accès — contrôle indépendant (E3)', () => {
 const blessing = id => registry.contracts.find(row => row.id === id);
 const battle = blessing('divine:blessing:myrmidia:battle');
 const conscience = blessing('divine:blessing:myrmidia:conscience');
@@ -25,8 +104,8 @@ const grant = (contract, overrides = {}) => ({
   status: 'active', createdRevision: 1,
   ...overrides
 });
-const resolver = async () => (await import('../js/core/v5-divine-access.js')).resolveDivineAccess;
-const accessApi = () => import('../js/core/v5-divine-access.js');
+const resolver = async () => (await import('../../../js/core/v5-divine-access.js')).resolveDivineAccess;
+const accessApi = () => import('../../../js/core/v5-divine-access.js');
 
 function actor(id = 'priest', { access = false, learned = false, skill = 60 } = {}) {
   return {
@@ -41,7 +120,7 @@ function actor(id = 'priest', { access = false, learned = false, skill = 60 } = 
   };
 }
 async function divineStore({ access = false, learned = false, skill = 60, persistence } = {}) {
-  const { createStore } = await import('../js/core/store.js');
+  const { createStore } = await import('../../../js/core/store.js');
   const store = createStore({ ...(persistence ? { persistence } : {}) });
   await store.ready;
   const priest = actor('priest', { access, learned, skill });
@@ -317,7 +396,7 @@ test('E3 indépendant — refus de persistance atomique ne publie ni effet ni co
 });
 
 test('E3 indépendant — migration sans grants initialise un registre vide sans changer les données source', async () => {
-  const { migrateSnapshot } = await import('../js/core/migrations.js');
+  const { migrateSnapshot } = await import('../../../js/core/migrations.js');
   const old = { schemaVersion: 3, reserve: [], diceLines: [], log: [],
     combat: { round: 0, order: [], participants: [] },
     extensions: { v5: { turnIndex: 0, unrelated: { keep: true } } }
@@ -397,4 +476,171 @@ test('E3 indépendant — blocked V4 et contrat falsifié restent refusés même
   const forged = structuredClone(battle);
   forged.effects = [{ type: 'characteristic-modifier', characteristic: 'CC', value: 999 }];
   assert.equal(store.previewDivineExecution(forged, prayerInput(45)).ready, false);
+});
+});
+
+describe('accès — codec de synchronisation', () => {
+const persistence = {
+  async load() { return { schemaVersion: 3, reserve: [], combat: { round: 0, order: [], participants: [] } }; },
+  async saveAtomic() {},
+  async readSession() { return { protocolVersion: 3, sequence: 0, baseRevision: 0 }; },
+  async listOutbox() { return []; }
+};
+
+test('remote RTDB supprime grants:[] seulement: le décodeur restaure le registre vide sans assouplir les imports locaux', async () => {
+  let adopted = null;
+  const session = createSyncSession({
+    persistence,
+    deviceId: 'codec-test',
+    transport: {
+      async read() {
+        return { revision: 0, receipts: {}, state: {
+          schemaVersion: 3,
+          extensions: { v5: { divineAccess: { schemaVersion: 1 } } }
+        } };
+      },
+      async transaction() { throw new Error('not used'); }
+    },
+    onRemoteState(state) { adopted = state; }
+  });
+  await session.open();
+  assert.deepEqual(adopted?.extensions?.v5?.divineAccess, { schemaVersion: 1, grants: [] });
+  const malformed = { schemaVersion: 3, extensions: { v5: { divineAccess: { schemaVersion: 1 } } } };
+  assert.throws(() => validateSyncDocument({ revision: 0, receipts: {}, state: malformed }), /Registre de dérogations divines mal formé/);
+  assert.throws(() => sanitizeMagicEnvelope(malformed), /Registre de dérogations divines mal formé/);
+  assert.throws(() => normalizeRemoteDocument({ revision: 0, receipts: {}, state: {
+    schemaVersion: 3, extensions: { v5: { divineAccess: { schemaVersion: 1, unexpected: true } } }
+  } }), /Registre de dérogations divines mal formé/);
+});
+
+test('codec sync — ne crée pas de registre divin absent dans une racine vide', () => {
+  assert.deepEqual(normalizeRemoteDocument({ revision: 0, state: {}, receipts: {} }), {
+    revision: 0, state: {}, receipts: {}
+  });
+  assert.deepEqual(sanitizeMagicEnvelope({}), {});
+  assert.deepEqual(sanitizeMagicEnvelope({ extensions: { v5: {} } }), { extensions: { v5: {} } });
+  assert.throws(() => normalizeRemoteDocument({ revision: 0, receipts: {}, state: {
+    schemaVersion: 3,
+    extensions: { v5: { divineAccess: { schemaVersion: 1, grants: [], unexpected: true } } }
+  } }), /Registre de dérogations divines mal formé/);
+});
+
+test('migration applicative — initialise le registre sur un snapshot complet, pas sur une racine protocole vide', () => {
+  const source = {
+    schemaVersion: 3,
+    reserve: [],
+    combat: { round: 0, order: [], participants: [] },
+    extensions: { v5: { unrelated: { keep: true } } }
+  };
+  const before = structuredClone(source);
+  const migrated = migrateSnapshot(source).data;
+  assert.deepEqual(source, before);
+  assert.deepEqual(migrated.extensions.v5.divineAccess, { schemaVersion: 1, grants: [] });
+  assert.deepEqual(migrated.extensions.v5.unrelated, { keep: true });
+  assert.deepEqual(normalizeRemoteDocument({ revision: 0, state: {}, receipts: {} }).state, {});
+});
+
+test('RTDB-omitted sceneId:null is restored for once/durable rows only at the remote boundary', () => {
+  const base = {
+    actorId: 'a', subjectKey: 'fiche:a', tradition: 'Myrmidia', prayerId: 'p',
+    reason: 'Motif', decisionId: 'DIV-02', createdBy: 'MJ', createdRevision: 1
+  };
+  const grants = [
+    { ...base, id: 'once-active', scope: 'once', status: 'active' },
+    { ...base, id: 'durable-active', scope: 'durable', status: 'active' },
+    { ...base, id: 'once-consumed', scope: 'once', status: 'consumed', consumedBy: 'execution', consumedRevision: 2 },
+    { ...base, id: 'durable-revoked', scope: 'durable', status: 'revoked', revokedRevision: 2, revokedReason: 'Fin' },
+    { ...base, id: 'scene-active', scope: 'scene', status: 'active', sceneId: 'scene-1' }
+  ];
+  const raw = { revision: 2, receipts: {}, state: {
+    schemaVersion: 3,
+    extensions: { v5: { divineAccess: { schemaVersion: 1, grants } } }
+  } };
+  const decoded = normalizeRemoteDocument(raw);
+  const normalized = decoded.state.extensions.v5.divineAccess.grants;
+  assert.deepEqual(normalized.slice(0, 4).map(row => row.sceneId), [null, null, null, null]);
+  assert.equal(normalized[4].sceneId, 'scene-1');
+  assert.throws(() => validateSyncDocument(raw), /Entrée de dérogation divine invalide/);
+  const invalidScene = structuredClone(raw);
+  invalidScene.state.extensions.v5.divineAccess.grants[4].sceneId = undefined;
+  delete invalidScene.state.extensions.v5.divineAccess.grants[4].sceneId;
+  assert.throws(() => normalizeRemoteDocument(invalidScene), /Entrée de dérogation divine invalide/);
+});
+});
+
+describe('accès — codec de synchronisation, contrôle indépendant', () => {
+const emptyRoot = { revision: 0, state: {}, receipts: {} };
+const stateWithoutRegistry = {
+  schemaVersion: 3,
+  reserve: [],
+  combat: { round: 0, order: [], participants: [] }
+};
+const doc = state => ({ revision: 0, receipts: {}, state });
+
+test('E05 codec indépendant — root absent ou vide ne crée pas extensions/divineAccess', () => {
+  assert.deepEqual(normalizeRemoteDocument(null), emptyRoot);
+  assert.deepEqual(normalizeRemoteDocument({}), emptyRoot);
+  assert.deepEqual(normalizeRemoteDocument(doc({})), emptyRoot);
+  const decoded = normalizeRemoteDocument(doc(stateWithoutRegistry));
+  assert.deepEqual(decoded.state, stateWithoutRegistry,
+    'un état partagé sans registre n’acquiert aucun accès par normalisation');
+  assert.equal(Object.hasOwn(decoded.state, 'extensions'), false);
+  const existingV5 = normalizeRemoteDocument(doc({
+    ...stateWithoutRegistry,
+    extensions: { v5: { turnIndex: 0, unrelated: { keep: true } } }
+  }));
+  assert.deepEqual(existingV5.state.extensions.v5, { turnIndex: 0, unrelated: { keep: true } },
+    'un registre absent reste absent même au milieu d’extensions V5 déjà présentes');
+});
+
+test('E3 indépendant — la migration réelle Store initialise un registre vide et préserve les extensions', async () => {
+  const old = {
+    schemaVersion: 3, reserve: [], diceLines: [], log: [],
+    combat: { round: 0, order: [], participants: [] },
+    extensions: { v5: { turnIndex: 0, unrelated: { keep: true } } }
+  };
+  const before = structuredClone(old);
+  const migrated = migrateSnapshot(old).data;
+  assert.deepEqual(old, before, 'la migration de snapshot ne modifie pas sa source');
+  assert.deepEqual(migrated.extensions.v5.divineAccess, { schemaVersion: 1, grants: [] });
+  assert.deepEqual(migrated.extensions.v5.unrelated, { keep: true });
+  const store = createStore();
+  await store.ready;
+  await store.loadFromJSON(old);
+  const actualStoreSnapshot = JSON.parse(store.getFullJSON());
+  assert.deepEqual(actualStoreSnapshot.extensions.v5.divineAccess, { schemaVersion: 1, grants: [] },
+    'le chemin réel de chargement Store applique la migration; ce n’est pas une réparation du codec remote');
+});
+
+test('E05 codec indépendant — seul le tableau vide omis par RTDB est restauré au registre explicite', () => {
+  const raw = doc({
+    ...stateWithoutRegistry,
+    extensions: { v5: { divineAccess: { schemaVersion: 1 } } }
+  });
+  const decoded = normalizeRemoteDocument(raw);
+  assert.deepEqual(decoded.state.extensions.v5.divineAccess, { schemaVersion: 1, grants: [] });
+  assert.throws(() => validateSyncDocument(raw), /Registre de dérogations divines mal formé/,
+    'la validation de protocole ordinaire ne doit pas adopter la réparation remote RTDB');
+  assert.throws(() => sanitizeMagicEnvelope(raw.state), /Registre de dérogations divines mal formé/,
+    'l’import/local sanitation reste strict');
+});
+
+test('E05 codec indépendant — formes malformed de registre explicite sont refusées sans les remplacer par un tableau vide', () => {
+  const malformed = [
+    null,
+    [],
+    { schemaVersion: 2, grants: [] },
+    { schemaVersion: 1, grants: null },
+    { schemaVersion: 1, grants: [], unexpected: true },
+    { schemaVersion: 1, grants: [{}] }
+  ];
+  for (const registry of malformed) {
+    const raw = doc({
+      ...stateWithoutRegistry,
+      extensions: { v5: { divineAccess: registry } }
+    });
+    assert.throws(() => normalizeRemoteDocument(raw), /Registre de dérogations divines mal formé|Entrée de dérogation divine invalide/,
+      `la forme invalide ${JSON.stringify(registry)} ne doit pas être réparée`);
+  }
+});
 });

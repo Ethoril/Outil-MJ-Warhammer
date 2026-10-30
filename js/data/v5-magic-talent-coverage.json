@@ -197,7 +197,7 @@
           "mode": "automatic",
           "text": "Les Miracles infligeant des Blessures bénéficient automatiquement de +2 Blessures.",
           "magicRegistry": true,
-          "executionProbe": "tests/lot3-especes-divin-coverage.test.js#Haine sacrée"
+          "executionProbe": "tests/unit/divin/prieres-benedictions.test.js#Haine sacrée"
         }
       ]
     },

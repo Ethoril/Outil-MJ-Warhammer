@@ -248,3 +248,73 @@ Ancien fichier `tests/<nom>.test.js` → nouveau fichier `tests/unit/<cible>.tes
 | `tests/lot3-v5-transformations-verification.test.js` | `tests/unit/magie/transformations-et-formes.test.js` | 7 | 62 |
 | `tests/lot3-v5-verification-9.test.js` | `tests/unit/magie/transformations-et-formes.test.js` | 6 | 62 |
 | `tests/p4c-char-magic.test.js` | `tests/unit/magie/transformations-et-formes.test.js` | 22 | 62 |
+
+## R2-5 — divin A
+
+| Ancien fichier | Nouveau fichier | Tests avant | Tests après (cible) |
+|---|---|---|---|
+| `tests/divin-v5-access.test.js` | `tests/unit/divin/acces.test.js` | 7 | 30 |
+| `tests/divin-v5-access-independent.test.js` | `tests/unit/divin/acces.test.js` | 15 | 30 |
+| `tests/divin-v5-access-sync-codec.test.js` | `tests/unit/divin/acces.test.js` | 4 | 30 |
+| `tests/divin-v5-access-sync-codec-independent.test.js` | `tests/unit/divin/acces.test.js` | 4 | 30 |
+| `tests/divin-v5-audit.test.js` | `tests/unit/divin/audit-et-sources.test.js` | 11 | 75 |
+| `tests/divin-v5-audit-independent.test.js` | `tests/unit/divin/audit-et-sources.test.js` | 25 | 75 |
+| `tests/divin-v5-b0-corpus.test.js` | `tests/unit/divin/audit-et-sources.test.js` | 1 | 75 |
+| `tests/divin-v5-b19-coverage.test.js` | `tests/unit/divin/audit-et-sources.test.js` | 3 | 75 |
+| `tests/divin-v5-calendar-source-independent.test.js` | `tests/unit/divin/audit-et-sources.test.js` | 4 | 75 |
+| `tests/divin-v5-clauses-independent.test.js` | `tests/unit/divin/audit-et-sources.test.js` | 9 | 75 |
+| `tests/divin-v5-e0-independent.test.js` | `tests/unit/divin/audit-et-sources.test.js` | 5 | 75 |
+| `tests/divin-v5-e0-provenance.test.js` | `tests/unit/divin/audit-et-sources.test.js` | 2 | 75 |
+| `tests/divin-v5-eagle-summary-dev.test.js` | `tests/unit/divin/audit-et-sources.test.js` | 1 | 75 |
+| `tests/divin-v5-hospice-source-independent.test.js` | `tests/unit/divin/audit-et-sources.test.js` | 4 | 75 |
+| `tests/divin-v5-source-crosscheck.test.js` | `tests/unit/divin/audit-et-sources.test.js` | 6 | 75 |
+| `tests/divin-v5-strictures-independent.test.js` | `tests/unit/divin/audit-et-sources.test.js` | 4 | 75 |
+| `tests/divin-v5-blessings-cults.test.js` | `tests/unit/divin/catalogue-et-miracles.test.js` | 52 | 116 |
+| `tests/divin-v5-catalogue.test.js` | `tests/unit/divin/catalogue-et-miracles.test.js` | 6 | 116 |
+| `tests/divin-v5-miracles-b-archives3.test.js` | `tests/unit/divin/catalogue-et-miracles.test.js` | 10 | 116 |
+| `tests/divin-v5-miracles-b-deft.test.js` | `tests/unit/divin/catalogue-et-miracles.test.js` | 11 | 116 |
+| `tests/divin-v5-miracles-b-pbtt-lustria.test.js` | `tests/unit/divin/catalogue-et-miracles.test.js` | 5 | 116 |
+| `tests/divin-v5-miracles-manann-morr-ranald.test.js` | `tests/unit/divin/catalogue-et-miracles.test.js` | 6 | 116 |
+| `tests/divin-v5-miracles-rhya-shallya-sigmar.test.js` | `tests/unit/divin/catalogue-et-miracles.test.js` | 7 | 116 |
+| `tests/divin-v5-miracles-taal-ulric-verena.test.js` | `tests/unit/divin/catalogue-et-miracles.test.js` | 7 | 116 |
+| `tests/divin-v5-ranged-sans-portee.test.js` | `tests/unit/divin/catalogue-et-miracles.test.js` | 1 | 116 |
+| `tests/divin-v5-wave-b-loader.test.js` | `tests/unit/divin/catalogue-et-miracles.test.js` | 11 | 116 |
+| `tests/divin-v5-a1-sans-peur.test.js` | `tests/unit/divin/moteur-et-store.test.js` | 2 | 145 |
+| `tests/divin-v5-a10-chance-opposition.test.js` | `tests/unit/divin/moteur-et-store.test.js` | 5 | 145 |
+| `tests/divin-v5-a12-char-ordre.test.js` | `tests/unit/divin/moteur-et-store.test.js` | 13 | 145 |
+| `tests/divin-v5-a4-devotion.test.js` | `tests/unit/divin/moteur-et-store.test.js` | 1 | 145 |
+| `tests/divin-v5-a7-enjeux.test.js` | `tests/unit/divin/moteur-et-store.test.js` | 7 | 145 |
+| `tests/divin-v5-b1-characterization.test.js` | `tests/unit/divin/moteur-et-store.test.js` | 4 | 145 |
+| `tests/divin-v5-b1-zero-sin.test.js` | `tests/unit/divin/moteur-et-store.test.js` | 6 | 145 |
+| `tests/divin-v5-b2-elf-cults.test.js` | `tests/unit/divin/moteur-et-store.test.js` | 7 | 145 |
+| `tests/divin-v5-b6-skills.test.js` | `tests/unit/divin/moteur-et-store.test.js` | 11 | 145 |
+| `tests/divin-v5-b7-allies.test.js` | `tests/unit/divin/moteur-et-store.test.js` | 16 | 145 |
+| `tests/divin-v5-b8-access.test.js` | `tests/unit/divin/moteur-et-store.test.js` | 21 | 145 |
+| `tests/divin-v5-control.test.js` | `tests/unit/divin/moteur-et-store.test.js` | 16 | 145 |
+| `tests/divin-v5-engine.test.js` | `tests/unit/divin/moteur-et-store.test.js` | 14 | 145 |
+| `tests/divin-v5-store.test.js` | `tests/unit/divin/moteur-et-store.test.js` | 13 | 145 |
+| `tests/divin-v5-up-in-arms.test.js` | `tests/unit/divin/moteur-et-store.test.js` | 9 | 145 |
+| `tests/divin-v5-p5-attaque-rapide.test.js` | `tests/unit/divin/prieres-benedictions.test.js` | 4 | 100 |
+| `tests/divin-v5-p5-bountiful-fortune.test.js` | `tests/unit/divin/prieres-benedictions.test.js` | 3 | 100 |
+| `tests/divin-v5-p5-chance.test.js` | `tests/unit/divin/prieres-benedictions.test.js` | 10 | 100 |
+| `tests/divin-v5-p5-crush-the-weak.test.js` | `tests/unit/divin/prieres-benedictions.test.js` | 3 | 100 |
+| `tests/divin-v5-p5-droiture.test.js` | `tests/unit/divin/prieres-benedictions.test.js` | 5 | 100 |
+| `tests/divin-v5-p5-en-bon-ordre.test.js` | `tests/unit/divin/prieres-benedictions.test.js` | 2 | 100 |
+| `tests/divin-v5-p5-fureur-ulric.test.js` | `tests/unit/divin/prieres-benedictions.test.js` | 5 | 100 |
+| `tests/divin-v5-p5-heed-not-the-witch.test.js` | `tests/unit/divin/prieres-benedictions.test.js` | 2 | 100 |
+| `tests/divin-v5-p5-interactions.test.js` | `tests/unit/divin/prieres-benedictions.test.js` | 6 | 100 |
+| `tests/divin-v5-p5-larmes-shallya.test.js` | `tests/unit/divin/prieres-benedictions.test.js` | 6 | 100 |
+| `tests/divin-v5-p5-mischief.test.js` | `tests/unit/divin/prieres-benedictions.test.js` | 3 | 100 |
+| `tests/divin-v5-p5-protection.test.js` | `tests/unit/divin/prieres-benedictions.test.js` | 4 | 100 |
+| `tests/divin-v5-p5-sauvagerie.test.js` | `tests/unit/divin/prieres-benedictions.test.js` | 9 | 100 |
+| `tests/divin-v5-p5-sauvagerie-consume.test.js` | `tests/unit/divin/prieres-benedictions.test.js` | 3 | 100 |
+| `tests/divin-v5-p5-sauvagerie-spell.test.js` | `tests/unit/divin/prieres-benedictions.test.js` | 3 | 100 |
+| `tests/divin-v5-p5-souffle.test.js` | `tests/unit/divin/prieres-benedictions.test.js` | 4 | 100 |
+| `tests/divin-v5-p5-tenacite.test.js` | `tests/unit/divin/prieres-benedictions.test.js` | 4 | 100 |
+| `tests/divin-v5-p5-terrain.test.js` | `tests/unit/divin/prieres-benedictions.test.js` | 3 | 100 |
+| `tests/divin-v5-p5-wolf-bite.test.js` | `tests/unit/divin/prieres-benedictions.test.js` | 2 | 100 |
+| `tests/divin-v5-r25-asphyxie.test.js` | `tests/unit/divin/prieres-benedictions.test.js` | 2 | 100 |
+| `tests/lot3-especes-divin-coverage.test.js` | `tests/unit/divin/prieres-benedictions.test.js` | 12 | 100 |
+| `tests/v3-a-prayers.test.js` | `tests/unit/divin/prieres-benedictions.test.js` | 5 | 100 |
+
+`lot3-especes-divin-coverage` ne devient pas un `describe` : ses 12 tests viennent de l’`import` de `tests/divin-v5-p4a-damage.test.js` (toujours à la racine de `tests/` jusqu’à R2-7), conservé en tête de `divin/prieres-benedictions` ; l’ancre « Haine sacrée » de `executionProbe` (`js/data/v5-magic-talent-coverage.json`) pointe désormais vers ce fichier. R2-7 devra remplacer cet `import` quand `p4a-damage` sera fusionné.

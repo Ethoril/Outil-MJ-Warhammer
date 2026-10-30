@@ -441,7 +441,7 @@ test('H-07 : toute clause moteur a une sonde exécutée et une référence dans 
   for (const item of coverage.items) for (const clause of item.clauses.filter(c => ['automatic', 'assisted'].includes(c.mode))) {
     const key = `${item.talentId}/${clause.id}`;
     if(clauses.has(key))assert.equal(clause.executionProbe, 'tests/unit/magie/catalogue-et-couverture.test.js#'+key);
-    else {const [file,anchor]=clause.executionProbe.split('#');assert.ok(file.startsWith('tests/unit/magie/')||file.startsWith('tests/lot3-'));assert.ok(readFileSync(new URL('../../../'+file,import.meta.url),'utf8').includes(anchor),'Sonde absente : '+key);}
+    else {const [file,anchor]=clause.executionProbe.split('#');assert.ok(file.startsWith('tests/unit/magie/')||file.startsWith('tests/lot3-')||file.startsWith('tests/unit/divin/'));assert.ok(readFileSync(new URL('../../../'+file,import.meta.url),'utf8').includes(anchor),'Sonde absente : '+key);}
   }
 });
 test('H-08 — V5 p. 236, D-17 : Seconde vue en zone saturée reste un rappel MJ', () => {
