@@ -105,7 +105,7 @@ export const miracles = [
     ],
     targetRules: ['ally'],
     needsInput: [
-      { id: 'allies-in-area', text: 'Alliés présents dans la zone (Bonus de Sociabilité yards).' },
+      { id: 'allies-in-area', text: 'Alliés présents dans la zone (Bonus de Sociabilité mètres).' },
       { id: 'broken-conditions', text: 'États Brisé à retirer chez chaque allié.' }
     ],
     clauses: [
@@ -146,7 +146,7 @@ export const miracles = [
     effects: [{ type: 'ordinary-damage', fixed: 5 }, { type: 'condition', key: 'Stunned', level: 1, when: { fact: 'willpowerFailed', label: 'a échoué à son Test de Volonté Intermédiaire (+0)' } }],
     targetRules: [],
     needsInput: [
-      { id: 'area-targets', text: 'Créatures dans la zone (Bonus de Sociabilité yards), alliés compris : « anyone affected ».' },
+      { id: 'area-targets', text: 'Créatures dans la zone (Bonus de Sociabilité mètres), alliés compris : « anyone affected ».' },
       { id: 'location', text: 'Localisation de la touche de chaque cible (d100, ou localisation choisie par le MJ) : les PA de la Localisation s\'appliquent.' },
       { id: 'willpower-test', text: 'Test de Volonté Intermédiaire (+0) de chaque cible ; échec = un État Étourdi.' }
     ],

@@ -40,12 +40,12 @@ export const MAGIC_DATA = {
     {
       "max": 40,
       "name": "Lait caillé",
-      "eff": "Tout le lait dans un rayon de 1d100 yards tourne instantanément."
+      "eff": "Tout le lait dans un rayon de 1d100 m tourne instantanément."
     },
     {
       "max": 45,
       "name": "Souffle glacial",
-      "eff": "Pendant 1 minute, les personnes à BFM yards font un Test de Résistance (+0 DR). Échec : −1 DR aux Tests de CT, Agilité et Dextérité jusqu’à leur sortie de la zone."
+      "eff": "Pendant 1 minute, les personnes à BFM mètres font un Test de Résistance (+0 DR). Échec : −1 DR aux Tests de CT, Agilité et Dextérité jusqu’à leur sortie de la zone."
     },
     {
       "max": 50,
@@ -55,7 +55,7 @@ export const MAGIC_DATA = {
     {
       "max": 55,
       "name": "Malédiction de la sobriété",
-      "eff": "Tout l’alcool dans un rayon de 1d100 yards devient amer et infect."
+      "eff": "Tout l’alcool dans un rayon de 1d100 m devient amer et infect."
     },
     {
       "max": 60,
@@ -117,7 +117,7 @@ export const MAGIC_DATA = {
     {
       "max": 15,
       "name": "Poupée de chiffon",
-      "eff": "Vous êtes projeté de 1d10 yards dans une direction aléatoire : 1d10 Dégâts à l’atterrissage, ignorant les PA mais réduits par le BE, puis À Terre."
+      "eff": "Vous êtes projeté de 1d10 m dans une direction aléatoire : 1d10 Dégâts à l’atterrissage, ignorant les PA mais réduits par le BE, puis À Terre."
     },
     {
       "max": 20,
@@ -127,7 +127,7 @@ export const MAGIC_DATA = {
     {
       "max": 25,
       "name": "Lévitation",
-      "eff": "Vous flottez à 1d10 yards du sol pendant 1d10 minutes. On peut vous déplacer de force ; magie ou ailes permettent aussi de bouger, mais vous revenez sinon à cette position. À la fin, appliquez les règles de chute."
+      "eff": "Vous flottez à 1d10 m du sol pendant 1d10 minutes. On peut vous déplacer de force ; magie ou ailes permettent aussi de bouger, mais vous revenez sinon à cette position. À la fin, appliquez les règles de chute."
     },
     {
       "max": 30,
@@ -137,7 +137,7 @@ export const MAGIC_DATA = {
     {
       "max": 35,
       "name": "Secousse du Chaos",
-      "eff": "Toutes les créatures à 1d100 yards font un Test d’Athlétisme Accessible (+2 DR) ou gagnent À Terre."
+      "eff": "Toutes les créatures à 1d100 m font un Test d’Athlétisme Accessible (+2 DR) ou gagnent À Terre."
     },
     {
       "max": 40,
@@ -192,7 +192,7 @@ export const MAGIC_DATA = {
     {
       "max": 90,
       "name": "Voix fantomatiques",
-      "eff": "Le lanceur et tous les personnages à BFM yards font un Test de Calme Accessible (+2 DR) ou gagnent 1 Point de Corruption."
+      "eff": "Le lanceur et tous les personnages à BFM mètres font un Test de Calme Accessible (+2 DR) ou gagnent 1 Point de Corruption."
     },
     {
       "max": 95,
@@ -202,7 +202,7 @@ export const MAGIC_DATA = {
     {
       "max": 9007199254740991,
       "name": "Contre-réaction aethyrique",
-      "eff": "Tous les personnages à BFM yards, alliés et ennemis, perdent 1d10 Blessures sans réduction par BE/PA et gagnent À Terre. S’il n’y a aucune autre cible à portée, votre tête explose : mort immédiate."
+      "eff": "Tous les personnages à BFM mètres, alliés et ennemis, perdent 1d10 Blessures sans réduction par BE/PA et gagnent À Terre. S’il n’y a aucune autre cible à portée, votre tête explose : mort immédiate."
     }
   ]
 };

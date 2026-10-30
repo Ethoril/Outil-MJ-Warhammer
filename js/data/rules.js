@@ -176,7 +176,7 @@ export const RULES = [
           "Les bonus et pénalités provenant de plusieurs sorts ne se cumulent pas : gardez le meilleur bonus et le pire malus pour chaque effet. Bénédiction de Lileath : le cumul autorisé dépend du talent du lanceur. Chaque Protection ainsi admise fait son propre d10 ; une seule réussite annule les dégâts.",
           "Les effets temporaires modifient le participant dans l’outil et expirent selon le sort ; ils ne réécrivent pas la fiche source. Un État reçu suit sa récupération normale sauf si le sort précise une durée ou une suppression.",
           "Armure portée : −1 DR par PA de la localisation la plus protégée aux Tests de Focalisation et d’incantation. L’armure non portée ne compte pas. Exceptions : métal pour Chamon, cuir pour Ghur. Les PA donnés par les sorts et l’armure naturelle n’imposent pas cette pénalité.",
-          "Dissipation pendant le lancer : une réaction par Round, avec Langue (Magick) connue, à portée FM yards. Saisissez distance et visibilité ; leur absence bloque la dissipation. Opposez les DR du dissipateur aux seuls DR du Test d’incantation ; l’égalité revient au lanceur. Un dissipateur à DR négatifs compte pour 0 DR et n’augmente jamais les DR du lanceur. Si le lanceur gagne, ajoutez sa réserve aux DR nets, puis vérifiez le NI et recalculez l’excédent et la surpuissance.",
+          "Dissipation pendant le lancer : une réaction par Round, avec Langue (Magick) connue, à portée FM mètres. Saisissez distance et visibilité ; leur absence bloque la dissipation. Opposez les DR du dissipateur aux seuls DR du Test d’incantation ; l’égalité revient au lanceur. Un dissipateur à DR négatifs compte pour 0 DR et n’augmente jamais les DR du lanceur. Si le lanceur gagne, ajoutez sa réserve aux DR nets, puis vérifiez le NI et recalculez l’excédent et la surpuissance.",
           "Dissipation d’un sort persistant : Action et Test étendu de Langue (Magick) (+0 DR), objectif égal au NI du sort. Dissiper son propre sort donne +1 DR.",
           "Une durée plus courte se déclare lors du lancer. Une fois actif, le sort ne peut être arrêté avant terme que par dissipation, sauf exception explicite. Force irrésistible interdit la dissipation ; les méditations de talents ne sont pas dissipables.",
           "1 Round = 10 secondes. Un effet exprimé en Rounds expire à la fin du tour de son auteur. L’expiration retire ses couches temporaires sans restaurer un ancien état complet ni guérir les Blessures reçues depuis.",
@@ -228,7 +228,7 @@ export const RULES = [
       }
     ],
     "source": "Livre de base V5 EN v2, pp. 235–255 et 325–327 ; Haute Magie : High Elf Player’s Guide v2, pp. 83–89 ; arbitrages de la table des 9, 10 et 11 octobre 2026 ; Apothéose Verdoyante : Winds of Magic, p. 89",
-    "tablesIntro": "Lancez 1d100 et appliquez les modificateurs de l’incident. Les distances en yards et miles reprennent les unités du livre source."
+    "tablesIntro": "Lancez 1d100 et appliquez les modificateurs de l’incident. Les distances en mètres et miles reprennent les unités du livre source."
   },
   {
     id: 'psychologie',

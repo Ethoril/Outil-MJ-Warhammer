@@ -162,7 +162,7 @@
     },
     {
       "id": "blessing-scaling",
-      "text": "Par tranche de +2 DR, choisir portée +6 yards, +1 cible ou durée +6 rounds; options répétables; une durée instantanée ne peut pas être prolongée.",
+      "text": "Par tranche de +2 DR, choisir portée +6 m, +1 cible ou durée +6 rounds; options répétables; une durée instantanée ne peut pas être prolongée.",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -523,7 +523,7 @@
       "min": 88,
       "max": 88,
       "label": "Interférence démoniaque",
-      "reminder": "Un démon inférieur apparaît à 2d10 yards et attaque la cible la plus proche.",
+      "reminder": "Un démon inférieur apparaît à 2d10 m et attaque la cible la plus proche.",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -688,7 +688,7 @@
       "min": 141,
       "max": 145,
       "label": "Prouvez votre valeur",
-      "reminder": "Un Serviteur divin apparaît à 1d100 yards et agit selon le dieu.",
+      "reminder": "Un Serviteur divin apparaît à 1d100 m et agit selon le dieu.",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -12969,7 +12969,7 @@
         {
           "id": "area",
           "mode": "manual",
-          "text": "Zone centrée sur le prêtre, de rayon égal au Bonus de Volonté en yards (convention V5 des zones).",
+          "text": "Zone centrée sur le prêtre, de rayon égal au Bonus de Volonté en mètres (convention V5 des zones).",
           "sourceRef": "v5-in-good-order"
         },
         {
@@ -12982,7 +12982,7 @@
       "needsInput": [
         {
           "field": "allies-in-area",
-          "label": "Quels alliés sont dans la zone (Bonus de Volonté yards autour du prêtre) ?"
+          "label": "Quels alliés sont dans la zone (Bonus de Volonté mètres autour du prêtre) ?"
         },
         {
           "field": "fleeing",
@@ -13098,14 +13098,14 @@
         {
           "id": "range",
           "mode": "manual",
-          "text": "Portée : Volonté en yards (caractéristique entière).",
+          "text": "Portée : Volonté en mètres (caractéristique entière).",
           "sourceRef": "v5-know-your-enemy"
         }
       ],
       "needsInput": [
         {
           "field": "enemy",
-          "label": "Quel ennemi est visé, dans la portée de Volonté yards ?"
+          "label": "Quel ennemi est visé, dans la portée de Volonté mètres ?"
         }
       ],
       "catalogueEntry": {
@@ -13238,7 +13238,7 @@
       "needsInput": [
         {
           "field": "allies-in-area",
-          "label": "Quels alliés sont dans la zone (Bonus de Volonté yards autour du prêtre), prêtre compris ?"
+          "label": "Quels alliés sont dans la zone (Bonus de Volonté mètres autour du prêtre), prêtre compris ?"
         },
         {
           "field": "broken-attempts",
@@ -13508,7 +13508,7 @@
         {
           "id": "myrmidians",
           "mode": "manual",
-          "text": "Cible « See text » : tous les Myrmidiens à portée, sans plafond ; le MJ désigne ceux qui sont à 36 yards ou moins.",
+          "text": "Cible « See text » : tous les Myrmidiens à portée, sans plafond ; le MJ désigne ceux qui sont à 36 m ou moins.",
           "sourceRef": "v5-shieldmaiden-s-devotion"
         },
         {
@@ -13520,14 +13520,14 @@
         {
           "id": "duration",
           "mode": "engine",
-          "text": "Durée : 4 Rounds (+4 Rounds par tranche de +2 DR) ; portée 36 yards (+36 par tranche).",
+          "text": "Durée : 4 Rounds (+4 Rounds par tranche de +2 DR) ; portée 36 m (+36 par tranche).",
           "sourceRef": "v5-shieldmaiden-s-devotion"
         }
       ],
       "needsInput": [
         {
           "field": "myrmidians",
-          "label": "Quels Myrmidiens sont à portée (36 yards) ?"
+          "label": "Quels Myrmidiens sont à portée (36 m) ?"
         }
       ],
       "catalogueEntry": {
@@ -13666,7 +13666,7 @@
         {
           "id": "allies",
           "mode": "manual",
-          "text": "Cible « See text » : tous les alliés à portée, sans plafond ; le MJ désigne ceux qui sont à 24 yards ou moins.",
+          "text": "Cible « See text » : tous les alliés à portée, sans plafond ; le MJ désigne ceux qui sont à 24 m ou moins.",
           "sourceRef": "v5-skill-of-combat"
         },
         {
@@ -13679,7 +13679,7 @@
       "needsInput": [
         {
           "field": "allies-in-range",
-          "label": "Quels alliés sont à portée (24 yards) ?"
+          "label": "Quels alliés sont à portée (24 m) ?"
         }
       ],
       "catalogueEntry": {
@@ -14205,7 +14205,7 @@
         },
         {
           "field": "goods",
-          "label": "Quel lot de marchandises est visé, et est-il en ligne de vue et à portée (Sociabilité yards) ?"
+          "label": "Quel lot de marchandises est visé, et est-il en ligne de vue et à portée (Sociabilité mètres) ?"
         },
         {
           "field": "direction",
@@ -14724,7 +14724,7 @@
       ],
       "labels": {
         "canonicalName": "Becalm",
-        "effect": "Le vent déserte les voiles d’un navire en vue : il est totalement encalminé. Une zone de calme de Sociabilité yards de rayon l’entoure malgré la tempête ; si une autre propulsion (rames) est utilisée, la zone suit le navire. +2 DR : portée, cibles ou durée augmentées de leur valeur initiale.",
+        "effect": "Le vent déserte les voiles d’un navire en vue : il est totalement encalminé. Une zone de calme de Sociabilité mètres de rayon l’entoure malgré la tempête ; si une autre propulsion (rames) est utilisée, la zone suit le navire. +2 DR : portée, cibles ou durée augmentées de leur valeur initiale.",
         "sourceStatus": "V5 base source checked"
       },
       "clauses": [
@@ -14737,7 +14737,7 @@
         {
           "id": "calm-zone",
           "mode": "manual",
-          "text": "Zone de calme de Sociabilité yards autour du navire, malgré tempête et mer agitée ; elle suit le navire s’il avance par une autre propulsion.",
+          "text": "Zone de calme de Sociabilité mètres autour du navire, malgré tempête et mer agitée ; elle suit le navire s’il avance par une autre propulsion.",
           "sourceRef": "v5-becalm"
         },
         {
@@ -15375,11 +15375,11 @@
       "effects": [],
       "targetRules": [],
       "targetNotes": [
-        "étendue d’eau d’au moins 10 yards de large"
+        "étendue d’eau d’au moins 10 m de large"
       ],
       "labels": {
         "canonicalName": "Waterwalk",
-        "effect": "Le prêtre traverse l’eau libre comme un sol solide, uniquement sur une étendue d’au moins 10 yards de large ; une étendue plus petite est trop éloignée du domaine de Manann.",
+        "effect": "Le prêtre traverse l’eau libre comme un sol solide, uniquement sur une étendue d’au moins 10 m de large ; une étendue plus petite est trop éloignée du domaine de Manann.",
         "sourceStatus": "V5 base source checked"
       },
       "clauses": [
@@ -15392,14 +15392,14 @@
         {
           "id": "min-width",
           "mode": "manual",
-          "text": "Ne fonctionne que sur une étendue d’au moins 10 yards de large.",
+          "text": "Ne fonctionne que sur une étendue d’au moins 10 m de large.",
           "sourceRef": "v5-waterwalk"
         }
       ],
       "needsInput": [
         {
           "field": "water-width",
-          "label": "L’étendue d’eau fait-elle au moins 10 yards de large ?"
+          "label": "L’étendue d’eau fait-elle au moins 10 m de large ?"
         }
       ]
     },
@@ -16207,14 +16207,14 @@
       ],
       "labels": {
         "canonicalName": "Portal's Threshold",
-        "effect": "Le prêtre trace au sol une ligne de 8 yards maximum en psalmodiant ; un portail d’ombre indistinct apparaît. Les créatures Mort-vivant doivent réussir un Test de Calme Intermédiaire (+0 DR) pour la franchir ; celles qui sont à la fois Mort-vivant et Construct ne le peuvent pas.",
+        "effect": "Le prêtre trace au sol une ligne de 8 m maximum en psalmodiant ; un portail d’ombre indistinct apparaît. Les créatures Mort-vivant doivent réussir un Test de Calme Intermédiaire (+0 DR) pour la franchir ; celles qui sont à la fois Mort-vivant et Construct ne le peuvent pas.",
         "sourceStatus": "V5 base source checked"
       },
       "clauses": [
         {
           "id": "line-length",
           "mode": "manual",
-          "text": "Ligne tracée au sol de 8 yards au plus.",
+          "text": "Ligne tracée au sol de 8 m au plus.",
           "sourceRef": "v5-portal-s-threshold"
         },
         {
@@ -16239,7 +16239,7 @@
       "needsInput": [
         {
           "field": "line",
-          "label": "Tracé et longueur de la ligne (8 yards maximum)."
+          "label": "Tracé et longueur de la ligne (8 m maximum)."
         },
         {
           "field": "sunrise",
@@ -17497,7 +17497,7 @@
       "needsInput": [
         {
           "field": "area",
-          "label": "Quelles créatures sont dans la zone (Bonus d’Agilité yards autour du prêtre) ?"
+          "label": "Quelles créatures sont dans la zone (Bonus d’Agilité mètres autour du prêtre) ?"
         }
       ]
     },
@@ -18459,7 +18459,7 @@
       "needsInput": [
         {
           "field": "allies",
-          "label": "Quels alliés sont dans la zone (Sociabilité yards autour du prêtre) et aucun n’est de Statut Argent ou Or ?"
+          "label": "Quels alliés sont dans la zone (Sociabilité mètres autour du prêtre) et aucun n’est de Statut Argent ou Or ?"
         }
       ]
     },
@@ -19408,7 +19408,7 @@
       "needsInput": [
         {
           "field": "cat-position",
-          "label": "Où apparaît le chat et jusqu’où le prêtre peut-il le diriger (portée Sociabilité yards) ?"
+          "label": "Où apparaît le chat et jusqu’où le prêtre peut-il le diriger (portée Sociabilité mètres) ?"
         },
         {
           "field": "perception",
@@ -20152,7 +20152,7 @@
       "targetRules": [],
       "labels": {
         "canonicalName": "Rhya's Demand",
-        "effect": "Le prêtre chante des harmonies subtiles qui tirent des profondeurs de la terre le ressentiment de ceux qui n’ont pas remercié Rhya. Tout humanoïde à Bonus de Sociabilité yards qui n’a pas fait de sacrifice à Rhya (ou à une divinité ou un esprit de la nature en bons termes avec son culte, comme Isha ou Taal) depuis le dernier équinoxe de printemps perd 1 Blessure (+1 par DR) et gagne un État Fatigué. Si cinq individus ou plus sont touchés, le sol dans la zone devient stérile pendant d10 ans.",
+        "effect": "Le prêtre chante des harmonies subtiles qui tirent des profondeurs de la terre le ressentiment de ceux qui n’ont pas remercié Rhya. Tout humanoïde à Bonus de Sociabilité mètres qui n’a pas fait de sacrifice à Rhya (ou à une divinité ou un esprit de la nature en bons termes avec son culte, comme Isha ou Taal) depuis le dernier équinoxe de printemps perd 1 Blessure (+1 par DR) et gagne un État Fatigué. Si cinq individus ou plus sont touchés, le sol dans la zone devient stérile pendant d10 ans.",
         "sourceStatus": "V4 EN (crédits p.3 : Warhammer Fantasy Roleplay 4th Edition, © Games Workshop 2023) supplement L02 source checked"
       },
       "clauses": [
@@ -20184,7 +20184,7 @@
       "needsInput": [
         {
           "field": "humanoids",
-          "label": "Humanoïdes présents dans la zone (Bonus de Sociabilité yards)."
+          "label": "Humanoïdes présents dans la zone (Bonus de Sociabilité mètres)."
         },
         {
           "field": "sacrifice",
@@ -20310,7 +20310,7 @@
       "needsInput": [
         {
           "field": "feature",
-          "label": "Quel élément naturel (champ, mare, roncier…) abrite l’esprit, et est-il à moins de 4 yards ?"
+          "label": "Quel élément naturel (champ, mare, roncier…) abrite l’esprit, et est-il à moins de 4 m ?"
         },
         {
           "field": "task",
@@ -20437,7 +20437,7 @@
       "needsInput": [
         {
           "field": "flock",
-          "label": "Quel troupeau, quelle harde ou quelle meute est visé, et est-il à portée (Sociabilité yards) ?"
+          "label": "Quel troupeau, quelle harde ou quelle meute est visé, et est-il à portée (Sociabilité mètres) ?"
         },
         {
           "field": "command",
@@ -20821,7 +20821,7 @@
         {
           "id": "area",
           "mode": "assisted",
-          "text": "Zone centrée sur vous, de rayon égal au Bonus de Sociabilité en yards.",
+          "text": "Zone centrée sur vous, de rayon égal au Bonus de Sociabilité en mètres.",
           "sourceRef": "v5-rhya-s-children"
         },
         {
@@ -22393,7 +22393,7 @@
         {
           "id": "area",
           "mode": "assisted",
-          "text": "Zone centrée sur vous, de rayon égal au Bonus de Sociabilité en yards.",
+          "text": "Zone centrée sur vous, de rayon égal au Bonus de Sociabilité en mètres.",
           "sourceRef": "v5-heed-not-the-witch"
         },
         {
@@ -22670,7 +22670,7 @@
         {
           "id": "area",
           "mode": "assisted",
-          "text": "Zone centrée sur vous, de rayon égal au Bonus de Sociabilité en yards.",
+          "text": "Zone centrée sur vous, de rayon égal au Bonus de Sociabilité en mètres.",
           "sourceRef": "v5-soulfire"
         }
       ],
@@ -22817,7 +22817,7 @@
         {
           "id": "targeting",
           "mode": "manual",
-          "text": "Zone visible et à portée (Bonus de Sociabilité en yards au maximum pour la zone) contenant des ennemis aux yeux de Sigmar.",
+          "text": "Zone visible et à portée (Bonus de Sociabilité en mètres au maximum pour la zone) contenant des ennemis aux yeux de Sigmar.",
           "sourceRef": "v5-twin-tailed-comet"
         },
         {
@@ -23006,7 +23006,7 @@
         {
           "id": "area",
           "mode": "assisted",
-          "text": "Zone centrée sur vous, de rayon égal au Bonus de Sociabilité en yards.",
+          "text": "Zone centrée sur vous, de rayon égal au Bonus de Sociabilité en mètres.",
           "sourceRef": "v5-vanquish-the-unrighteous"
         },
         {
@@ -23129,7 +23129,7 @@
       "targetRules": [],
       "labels": {
         "canonicalName": "Absolute Purity",
-        "effect": "D’un cri à Solkan, une vague de flammes purificatrices balaie Bonus de Sociabilité yards autour du prêtre. Tout ce qui a un Trait Mort-vivant, Démon ou Lanceur de sorts, tout Point de Péché ou de Corruption, ou un Talent de Magie Arcane, du Chaos ou Mineure, subit 1d10 Blessures sans TB ni PA, y compris le prêtre, ses alliés et les passants.",
+        "effect": "D’un cri à Solkan, une vague de flammes purificatrices balaie Bonus de Sociabilité mètres autour du prêtre. Tout ce qui a un Trait Mort-vivant, Démon ou Lanceur de sorts, tout Point de Péché ou de Corruption, ou un Talent de Magie Arcane, du Chaos ou Mineure, subit 1d10 Blessures sans TB ni PA, y compris le prêtre, ses alliés et les passants.",
         "sourceStatus": "V4 EN (crédits p.3 : Warhammer Fantasy Roleplay 4th Edition, © Games Workshop 2023) supplement L02 source checked"
       },
       "clauses": [
@@ -23148,7 +23148,7 @@
         {
           "id": "area",
           "mode": "assisted",
-          "text": "Zone centrée sur le prêtre, de rayon égal à son Bonus de Sociabilité en yards.",
+          "text": "Zone centrée sur le prêtre, de rayon égal à son Bonus de Sociabilité en mètres.",
           "sourceRef": "v5-absolute-purity"
         },
         {
@@ -23300,7 +23300,7 @@
       "needsInput": [
         {
           "field": "target",
-          "label": "Quelle créature est la cible, et est-elle à portée (Bonus de Sociabilité yards) ?"
+          "label": "Quelle créature est la cible, et est-elle à portée (Bonus de Sociabilité mètres) ?"
         },
         {
           "field": "damage-roll",
@@ -23544,7 +23544,7 @@
       "targetRules": [],
       "labels": {
         "canonicalName": "Fury of the Righteous Sun",
-        "effect": "Le prêtre implore Solkan d’une illumination totale : une lumière aveuglante tombe du soleil. Tout ce qui se trouve à Bonus de Sociabilité yards reçoit autant d’États Aveuglé que son Bonus de Sociabilité. La lumière brûlante agit aussi comme un projectile magique de Dégâts +2 sur tout ce qu’elle touche.",
+        "effect": "Le prêtre implore Solkan d’une illumination totale : une lumière aveuglante tombe du soleil. Tout ce qui se trouve à Bonus de Sociabilité mètres reçoit autant d’États Aveuglé que son Bonus de Sociabilité. La lumière brûlante agit aussi comme un projectile magique de Dégâts +2 sur tout ce qu’elle touche.",
         "sourceStatus": "V4 EN (crédits p.3 : Warhammer Fantasy Roleplay 4th Edition, © Games Workshop 2023) supplement L02 source checked"
       },
       "clauses": [
@@ -23563,7 +23563,7 @@
         {
           "id": "area",
           "mode": "assisted",
-          "text": "Zone de rayon égal au Bonus de Sociabilité en yards ; centre à portée Bonus de Sociabilité yards.",
+          "text": "Zone de rayon égal au Bonus de Sociabilité en mètres ; centre à portée Bonus de Sociabilité mètres.",
           "sourceRef": "v5-fury-of-the-righteous-sun"
         },
         {
@@ -23582,7 +23582,7 @@
       "needsInput": [
         {
           "field": "area-center",
-          "label": "Point central de la zone dans la portée (Bonus de Sociabilité yards)."
+          "label": "Point central de la zone dans la portée (Bonus de Sociabilité mètres)."
         },
         {
           "field": "targets-in-area",
@@ -23716,7 +23716,7 @@
       "needsInput": [
         {
           "field": "targets",
-          "label": "Quelles 3 cibles sont visées, et sont-elles à moins de 4 yards ?"
+          "label": "Quelles 3 cibles sont visées, et sont-elles à moins de 4 m ?"
         },
         {
           "field": "time-effects",
@@ -23809,7 +23809,7 @@
       "targetRules": [],
       "labels": {
         "canonicalName": "Still the Winds",
-        "effect": "Le prêtre supplie les Dieux de la Loi de calmer les Vents de Magie. Pendant la durée, dans la zone de Bonus de Sociabilité yards : toute magie est dissipée, les objets magiques perdent temporairement leurs qualités magiques, et les Tests d’Incantation et de Canalisation échouent automatiquement. La Seconde Vue montre des Vents inertes dans la zone.",
+        "effect": "Le prêtre supplie les Dieux de la Loi de calmer les Vents de Magie. Pendant la durée, dans la zone de Bonus de Sociabilité mètres : toute magie est dissipée, les objets magiques perdent temporairement leurs qualités magiques, et les Tests d’Incantation et de Canalisation échouent automatiquement. La Seconde Vue montre des Vents inertes dans la zone.",
         "sourceStatus": "V4 EN (crédits p.3 : Warhammer Fantasy Roleplay 4th Edition, © Games Workshop 2023) supplement L02 source checked"
       },
       "clauses": [
@@ -23853,7 +23853,7 @@
       "needsInput": [
         {
           "field": "area-center",
-          "label": "Point central de la zone dans la portée (Bonus de Sociabilité yards)."
+          "label": "Point central de la zone dans la portée (Bonus de Sociabilité mètres)."
         },
         {
           "field": "magic-in-area",
@@ -24078,7 +24078,7 @@
       "targetRules": [],
       "labels": {
         "canonicalName": "Earthshudder",
-        "effect": "Le prêtre invoque Taal trois fois et lève les bras : le Seigneur de la Nature fait gronder le tonnerre et trembler le sol. Chaque cible à moins de Bonus de Sociabilité yards d’un point visé doit réussir un Test d’Athlétisme Difficult (-10) ou gagne l’État À terre. Les structures artificielles dans la zone subissent 1d10 + DR dégâts.",
+        "effect": "Le prêtre invoque Taal trois fois et lève les bras : le Seigneur de la Nature fait gronder le tonnerre et trembler le sol. Chaque cible à moins de Bonus de Sociabilité mètres d’un point visé doit réussir un Test d’Athlétisme Difficult (-10) ou gagne l’État À terre. Les structures artificielles dans la zone subissent 1d10 + DR dégâts.",
         "sourceStatus": "WFRP 4e édition, Cubicle 7, mise à jour du 23 janvier 2025 supplement L04 source checked"
       },
       "clauses": [
@@ -24098,7 +24098,7 @@
       "needsInput": [
         {
           "field": "point",
-          "label": "Quel point de la portée est visé (centre de la zone, Bonus de Sociabilité yards) ?"
+          "label": "Quel point de la portée est visé (centre de la zone, Bonus de Sociabilité mètres) ?"
         },
         {
           "field": "targets",
@@ -24326,7 +24326,7 @@
       "needsInput": [
         {
           "field": "beasts",
-          "label": "Quelles créatures de Trait Bestial sont dans la zone (Sociabilité yards autour du prêtre), aucune souillée par le Chaos ?"
+          "label": "Quelles créatures de Trait Bestial sont dans la zone (Sociabilité mètres autour du prêtre), aucune souillée par le Chaos ?"
         },
         {
           "field": "attack",
@@ -24939,7 +24939,7 @@
       "targetRules": [],
       "labels": {
         "canonicalName": "Animal Instincts",
-        "effect": "Pendant la durée, la cible touchée gagne le talent Sens aiguisé (un sens au choix) à +1. Si elle se repose, elle se réveille d'elle-même dès qu'une menace s'approche à moins de sa valeur de Perception en yards.",
+        "effect": "Pendant la durée, la cible touchée gagne le talent Sens aiguisé (un sens au choix) à +1. Si elle se repose, elle se réveille d'elle-même dès qu'une menace s'approche à moins de sa valeur de Perception en mètres.",
         "sourceStatus": "V5 base source checked"
       },
       "clauses": [
@@ -24952,7 +24952,7 @@
         {
           "id": "rest-awakening",
           "mode": "manual",
-          "text": "En repos, la cible se réveille automatiquement si une menace entre à moins de Perception yards.",
+          "text": "En repos, la cible se réveille automatiquement si une menace entre à moins de Perception mètres.",
           "sourceRef": "v5-animal-instincts"
         },
         {
@@ -24973,7 +24973,7 @@
         },
         {
           "field": "threat",
-          "label": "Ce qui compte comme une menace approchant à moins de Perception yards (décision MJ)."
+          "label": "Ce qui compte comme une menace approchant à moins de Perception mètres (décision MJ)."
         }
       ]
     },
@@ -25082,7 +25082,7 @@
         {
           "id": "animal-placement",
           "mode": "manual",
-          "text": "L'animal apparaît à portée (Sociabilité yards) : la position saisie est notée sur la créature, le MJ la place.",
+          "text": "L'animal apparaît à portée (Sociabilité mètres) : la position saisie est notée sur la créature, le MJ la place.",
           "sourceRef": "v5-king-of-the-wild"
         },
         {
@@ -25105,7 +25105,7 @@
         },
         {
           "field": "animal-position",
-          "label": "Position d'apparition de l'animal dans la portée (Sociabilité yards)."
+          "label": "Position d'apparition de l'animal dans la portée (Sociabilité mètres)."
         }
       ]
     },
@@ -25470,11 +25470,11 @@
       "needsInput": [
         {
           "field": "area-center",
-          "label": "Point central de la zone dans la portée (Sociabilité yards)."
+          "label": "Point central de la zone dans la portée (Sociabilité mètres)."
         },
         {
           "field": "area-targets",
-          "label": "Créatures présentes dans la zone (rayon Bonus de Sociabilité yards)."
+          "label": "Créatures présentes dans la zone (rayon Bonus de Sociabilité mètres)."
         }
       ]
     },
@@ -26212,7 +26212,7 @@
       "needsInput": [
         {
           "field": "allies-in-area",
-          "label": "Alliés présents dans la zone (Bonus de Sociabilité yards)."
+          "label": "Alliés présents dans la zone (Bonus de Sociabilité mètres)."
         },
         {
           "field": "broken-conditions",
@@ -26442,7 +26442,7 @@
       "needsInput": [
         {
           "field": "area-targets",
-          "label": "Créatures dans la zone (Bonus de Sociabilité yards), alliés compris : « anyone affected »."
+          "label": "Créatures dans la zone (Bonus de Sociabilité mètres), alliés compris : « anyone affected »."
         },
         {
           "field": "location",
@@ -26695,7 +26695,7 @@
         {
           "id": "wolf-placement",
           "mode": "manual",
-          "text": "Le loup apparaît à portée (Sociabilité yards) : le MJ place la créature.",
+          "text": "Le loup apparaît à portée (Sociabilité mètres) : le MJ place la créature.",
           "sourceRef": "v5-howl-of-the-wolf"
         },
         {
@@ -26714,7 +26714,7 @@
       "needsInput": [
         {
           "field": "wolf-position",
-          "label": "Position d'apparition du loup dans la portée (Sociabilité yards), notée par le MJ."
+          "label": "Position d'apparition du loup dans la portée (Sociabilité mètres), notée par le MJ."
         },
         {
           "field": "wolf-targets",
@@ -27132,7 +27132,7 @@
       "needsInput": [
         {
           "field": "ally",
-          "label": "Allié ciblé dans la portée (Sociabilité yards)."
+          "label": "Allié ciblé dans la portée (Sociabilité mètres)."
         }
       ]
     },
@@ -28130,5 +28130,5 @@
       "needsInput": []
     }
   ],
-  "sourceFingerprint": "sha256:85af0e56ee91cfc641ee48167c5512bc5b0b78d4e832de56bfbf580d77ae77f5"
+  "sourceFingerprint": "sha256:0e3fbf09fb0e2144f7cbef29b97d035daa29f24eb24cb113e23c2607f418924f"
 }

@@ -13,7 +13,7 @@ export const miracles = [
     name: 'Instincts animaux',
     canonicalName: 'Animal Instincts',
     printedPage: 227,
-    summary: 'Pendant la durée, la cible touchée gagne le talent Sens aiguisé (un sens au choix) à +1. Si elle se repose, elle se réveille d\'elle-même dès qu\'une menace s\'approche à moins de sa valeur de Perception en yards.',
+    summary: 'Pendant la durée, la cible touchée gagne le talent Sens aiguisé (un sens au choix) à +1. Si elle se repose, elle se réveille d\'elle-même dès qu\'une menace s\'approche à moins de sa valeur de Perception en mètres.',
     params: { range: { kind: 'special' }, targets: one, duration: felHours },
     status: 'assisted',
     effect: null,
@@ -22,11 +22,11 @@ export const miracles = [
     needsInput: [
       { id: 'range-touch', text: 'Portée « Toucher » : contact avec la cible à confirmer par le MJ.' },
       { id: 'acute-sense', text: 'Sens choisi pour Sens aiguisé (un seul).' },
-      { id: 'threat', text: 'Ce qui compte comme une menace approchant à moins de Perception yards (décision MJ).' }
+      { id: 'threat', text: 'Ce qui compte comme une menace approchant à moins de Perception mètres (décision MJ).' }
     ],
     clauses: [
       { id: 'acute-sense-plus-1', mode: 'assisted', text: 'La cible gagne +1 au talent Sens aiguisé pour le sens choisi (talent temporaire).' },
-      { id: 'rest-awakening', mode: 'manual', text: 'En repos, la cible se réveille automatiquement si une menace entre à moins de Perception yards.' },
+      { id: 'rest-awakening', mode: 'manual', text: 'En repos, la cible se réveille automatiquement si une menace entre à moins de Perception mètres.' },
       { id: 'end', mode: 'engine', text: 'Fin des effets au terme de la durée (Bonus de Sociabilité heures).' }
     ],
     sourceDelta: 'Portée imprimée « Touch » : la grammaire params n\'a pas de contact, encodée en special.'
@@ -42,11 +42,11 @@ export const miracles = [
     targetRules: [],
     needsInput: [
       { id: 'environment', text: 'Environnement du lieu : le MJ choisit parmi les six bêtes du bestiaire (sanglier, chien, rat géant, araignée géante, cheval, loup) celle qui convient.' },
-      { id: 'animal-position', text: 'Position d\'apparition de l\'animal dans la portée (Sociabilité yards).' }
+      { id: 'animal-position', text: 'Position d\'apparition de l\'animal dans la portée (Sociabilité mètres).' }
     ],
     clauses: [
       { id: 'summon-animal', mode: 'engine', text: 'Le moteur crée l\'animal choisi par le MJ dans la liste fermée des six bêtes du bestiaire (pp.325-327), avec son profil de base, du camp du prêtre et contrôlé par le MJ.' },
-      { id: 'animal-placement', mode: 'manual', text: 'L\'animal apparaît à portée (Sociabilité yards) : la position saisie est notée sur la créature, le MJ la place.' },
+      { id: 'animal-placement', mode: 'manual', text: 'L\'animal apparaît à portée (Sociabilité mètres) : la position saisie est notée sur la créature, le MJ la place.' },
       { id: 'obedience', mode: 'manual', text: 'L\'animal agit selon les désirs du prêtre pendant toute la durée : le MJ joue l\'animal en suivant les souhaits du prêtre.' },
       { id: 'end', mode: 'engine', text: 'Durée de Bonus de Sociabilité minutes (horloge de campagne) ; à l\'échéance, ou à la fin de la prière, l\'animal disparaît (arbitrage MJ : le livre est muet).' }
     ],
@@ -105,8 +105,8 @@ export const miracles = [
     effects: [{ type: 'condition', key: 'Entangled', level: 1, strengthFrom: { kind: 'characteristic', characteristic: 'Soc', target: 'source' } }],
     targetRules: [],
     needsInput: [
-      { id: 'area-center', text: 'Point central de la zone dans la portée (Sociabilité yards).' },
-      { id: 'area-targets', text: 'Créatures présentes dans la zone (rayon Bonus de Sociabilité yards).' }
+      { id: 'area-center', text: 'Point central de la zone dans la portée (Sociabilité mètres).' },
+      { id: 'area-targets', text: 'Créatures présentes dans la zone (rayon Bonus de Sociabilité mètres).' }
     ],
     clauses: [
       { id: 'entangled', mode: 'engine', text: 'Chaque cible de la zone gagne l\'État Entangled avec une Force égale à la Sociabilité du prêtre (valeur entière, pas le Bonus).' },

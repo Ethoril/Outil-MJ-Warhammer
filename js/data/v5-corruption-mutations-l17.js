@@ -7,8 +7,8 @@ const winds = [
   {
     wind: 'Hysh', page: 58, entries: [
       ['Vulnerability to Darkness', 'Dans les zones obscures, Canalisation (Hysh) et Magick subissent −1 DR.'],
-      ['Aura of Light', 'Dans un rayon de 20 yards, chaque source lumineuse éclaire +2 yards; les manifestations suivantes renforcent cet effet.'],
-      ['Autoluminescent', 'Il émet une lueur douce et voit à 2 yards dans le noir; chaque manifestation ajoute 2 yards. Cette lumière permanente rend ses déplacements presque impossibles à dissimuler, s’atténue pendant son sommeil et ne neutralise pas Vulnerability to Darkness.'],
+      ['Aura of Light', 'Dans un rayon de 20 m, chaque source lumineuse éclaire +2 m; les manifestations suivantes renforcent cet effet.'],
+      ['Autoluminescent', 'Il émet une lueur douce et voit à 2 m dans le noir; chaque manifestation ajoute 2 m. Cette lumière permanente rend ses déplacements presque impossibles à dissimuler, s’atténue pendant son sommeil et ne neutralise pas Vulnerability to Darkness.'],
       ['Stoicism', 'Il doit tenter de résister à la Psychologie même s’il ne le souhaite pas; +2 DR aux tests de Sang-froid contre Psychologie.'],
       ['Enlightened Condescension', 'Son arrogance lui impose −10 à sa Sociabilité initiale.'],
       ['White Eyes', 'Il gagne 3 Aveuglé; après guérison, ses iris sont blancs et il subit −1 DR aux tests de Sociabilité.'],
@@ -40,7 +40,7 @@ const winds = [
       ['Whiff of Ghyran', 'Il dégage une odeur de terre humide, de pousses vertes et d’herbe coupée.'],
       ['Ghyran Face', 'Peau verdâtre et yeux émeraude pénalisent tous les tests fondés sur la Sociabilité (−1 DR).'],
       ['Vulnerability to Fire', 'Les dégâts subis des piles d’État En flammes augmentent de 1.'],
-      ['Catalyst', 'Dans 10 yards, incubation et durée des maladies sont doublées; les aliments non conservés se gâtent deux fois plus vite.'],
+      ['Catalyst', 'Dans 10 m, incubation et durée des maladies sont doublées; les aliments non conservés se gâtent deux fois plus vite.'],
       ['Aura of Growth', 'Après un séjour prolongé au même endroit, la flore y prospère; +1 DR aux tests de Survie en extérieur pour trouver de la nourriture.'],
       ['Nemophilist', 'Il acquiert le Trait de créature Arboricole.'],
       ['Mark of Ghyran', 'Une rune de Ghyran apparaît sur le corps; le texte accorde Suffuse with Ghyran.']
@@ -69,7 +69,7 @@ const winds = [
       ['Disturbing Eyes', 'Il gagne ou améliore Vision nocturne; ses yeux sombres pénalisent la Sociabilité de −1 DR.'],
       ['Wilful Shadow', 'Son ombre bouge seule et inquiète; Sociabilité −1 DR et talent Menacing.'],
       ['Cipher', 'Ses traits deviennent génériques et lui confèrent Beneath Notice.'],
-      ['Flicker', 'Les flammes vacillent; réussir Force Mentale Difficile (−1 DR) éteint une petite flamme jusqu’à 20 yards (ex. lanterne).'],
+      ['Flicker', 'Les flammes vacillent; réussir Force Mentale Difficile (−1 DR) éteint une petite flamme jusqu’à 20 m (ex. lanterne).'],
       ['Phantasmal', 'En opposant Magick ou Esquive à une attaque, réussir avec doubles accorde Ward (9) et Instable pendant le bonus de Force Mentale en rounds.'],
       ['Mark of Ulgu', 'Une rune d’Ulgu apparaît sur le corps; le texte accorde Suffuse with Ulgu.']
     ]
@@ -79,7 +79,7 @@ const winds = [
       ['Skeletal Frame', 'Ses muscles se flétrissent; Force −5.'],
       ['Cataracts', 'Un voile blanc couvre ses yeux sans l’aveugler; regard inquiétant et tests de Sociabilité −1 DR.'],
       ['Cold Dead Hand', 'Son toucher répugne aux non-membres de l’Ordre Améthyste; tests de Sociabilité impliquant contact tactile −1 DR.'],
-      ['Curse of Age', 'Toute créature née dans un rayon égal à sa Force Mentale en yards vieillit accélérément et ne vit que les trois quarts de sa durée normale.'],
+      ['Curse of Age', 'Toute créature née dans un rayon égal à sa Force Mentale en mètres vieillit accélérément et ne vit que les trois quarts de sa durée normale.'],
       ['Voice of the Dead', 'Sa voix devient un murmure rauque impossible à crier; tests d’incantation −1 DR.'],
       ['Grave Stench', 'Son odeur attire les charognards; en nature, si le personnage est à proximité, les échecs remarquables ou fumbles du groupe peuvent attirer des charognards plus gros et agressifs. Sociabilité −1 DR avec ceux qui le sentent.'],
       ['Grim Determination', 'Exténué ne pénalise plus ses tests de Magick et de canalisation.'],
@@ -97,7 +97,7 @@ const winds = [
       ['Aquaphobic', 'Sang-froid Moyenne (+2 DR) est requis pour traverser une grande étendue d’eau ou poser le pied sur un bateau.'],
       ['Pyromania', 'Sans contempler un feu une heure par jour, difficulté par défaut des tests de Force Mentale et Intelligence augmente d’un degré, jusqu’à Très Difficile (−3 DR); retour normal dès reprise.'],
       ['Bright Skin', 'Des motifs lumineux sous la peau s’intensifient avec l’émotion; Discrétion fondée sur la vue −1 DR.'],
-      ['Feed the Fire', 'À 4 yards d’une pile d’État En flammes (y compris la sienne), les dégâts de cette pile augmentent de 1.'],
+      ['Feed the Fire', 'À 4 m d’une pile d’État En flammes (y compris la sienne), les dégâts de cette pile augmentent de 1.'],
       ['Fire Resistant', 'Bonus d’Endurance doublé pour calculer les dégâts du feu, des États En flammes et des souffles.'],
       ['Mark of Aqshy', 'Une rune d’Aqshy apparaît sur le corps; le texte accorde Suffuse with Aqshy.']
     ]
@@ -110,9 +110,9 @@ const winds = [
       ['Dirty', 'La saleté l’attire et il ne parvient jamais à se laver complètement.'],
       ['Hairy', 'Sa pilosité repousse vite; sans vêtement adapté, il ne subit pas de pénalité aux tests d’Endurance contre le Froid, mais paraît disgracieux.'],
       ['Feral', 'Ongles et dents s’allongent; son apparence sauvage impose −1 DR aux tests de Sociabilité.'],
-      ['Musk', 'À 5 yards, tests de Sociabilité avec les personnages de statut Or pénalisés de −1 DR.'],
+      ['Musk', 'À 5 m, tests de Sociabilité avec les personnages de statut Or pénalisés de −1 DR.'],
       ['Hunter’s Instincts', '+1 DR avec Survie en extérieur pour chasser ou pêcher.'],
-      ['Small Friends', 'Petits animaux inoffensifs apparaissent inopportunément; cela peut survenir quand un membre du groupe fait un fumble de Sociabilité à 20 yards.'],
+      ['Small Friends', 'Petits animaux inoffensifs apparaissent inopportunément; cela peut survenir quand un membre du groupe fait un fumble de Sociabilité à 20 m.'],
       ['Mark of Ghur', 'Une rune de Ghur apparaît sur le corps; le texte accorde Suffuse with Ghur.']
     ]
   }

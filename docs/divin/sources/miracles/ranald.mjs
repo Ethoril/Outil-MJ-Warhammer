@@ -26,7 +26,7 @@ export const miracles = [
   effects: [{ type: 'summon-creature', appliesTo: 'caster', kind: 'sensor', name: 'Chat', traits: ['Invulnérable'] }],
   targetRules: ['prêtre uniquement'],
   needsInput: [
-   { id: 'cat-position', text: 'Où apparaît le chat et jusqu’où le prêtre peut-il le diriger (portée Sociabilité yards) ?' },
+   { id: 'cat-position', text: 'Où apparaît le chat et jusqu’où le prêtre peut-il le diriger (portée Sociabilité mètres) ?' },
    { id: 'perception', text: 'Ce que le chat perçoit, communiqué au joueur par le MJ.' },
    { id: 'priest-vulnerable', text: 'Le prêtre ne perçoit rien par ses propres sens pendant la durée.' }
   ],

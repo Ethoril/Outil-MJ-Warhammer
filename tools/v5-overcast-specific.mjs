@@ -51,17 +51,17 @@ export const OVERCAST_SPECIFIC = {
   'Arme enchantée': [{ id: 'quality', label: '1 Qualité d’arme ajoutée ou 1 Défaut retiré pour chaque +3 DR', cost: 3, repeat: true, kind: 'reminder', reminder: '{pas} Qualité(s) d’arme à ajouter ou Défaut(s) à retirer sur l’arme désignée, pendant le sort.' }],
   'Forge de Chamon': [{ id: 'quality', label: '1 Qualité ajoutée ou 1 Défaut retiré de plus pour chaque +2 DR', cost: 2, repeat: true, kind: 'reminder', reminder: '{pas} Qualité(s) ou Défaut(s) de plus à modifier sur l’objet en métal.' }],
   'Chute': [{ id: 'dexterity', label: '−1 DR au Test de Dextérité de la cible pour chaque +2 DR', cost: 2, repeat: true, kind: 'secondary-sl', per: -1 }],
-  'Pont': [{ id: 'size', label: 'Longueur ou largeur +BFM yards pour chaque +2 DR', cost: 2, repeat: true, kind: 'reminder', reminder: 'Longueur ou largeur du pont augmentée de {total} yards ({pas} × BFM {bfm}).' }],
-  'Déplacement d’objet': [{ id: 'distance', label: 'Distance +BFM yards pour chaque +2 DR', cost: 2, repeat: true, kind: 'reminder', reminder: 'Distance de déplacement augmentée de {total} yards ({pas} × BFM {bfm}).' }],
+  'Pont': [{ id: 'size', label: 'Longueur ou largeur +BFM mètres pour chaque +2 DR', cost: 2, repeat: true, kind: 'reminder', reminder: 'Longueur ou largeur du pont augmentée de {total} mètres ({pas} × BFM {bfm}).' }],
+  'Déplacement d’objet': [{ id: 'distance', label: 'Distance +BFM mètres pour chaque +2 DR', cost: 2, repeat: true, kind: 'reminder', reminder: 'Distance de déplacement augmentée de {total} mètres ({pas} × BFM {bfm}).' }],
   'Attaques en chaine': [{ id: 'chain', label: '1 cible de plus dans la chaîne pour chaque +2 DR', cost: 2, repeat: true, kind: 'chain-limit', per:1 }],
-  'Poussée': [{ id: 'push', label: 'Repoussé de BFM yards de plus pour chaque +2 DR', cost: 2, repeat: true, kind: 'reminder', reminder: 'Repoussé de {total} yards de plus ({pas} × BFM {bfm}).' }],
+  'Poussée': [{ id: 'push', label: 'Repoussé de BFM mètres de plus pour chaque +2 DR', cost: 2, repeat: true, kind: 'reminder', reminder: 'Repoussé de {total} mètres de plus ({pas} × BFM {bfm}).' }],
   'Extinction de l\'Âme': [
     { id: 'dust', label: '+3 DR : les corps tués tombent en poussière', cost: 3, kind: 'reminder', reminder: 'Les corps des cibles tuées tombent en poussière.' },
     { id: 'fury', label: '+7 DR : fureur de Khaine (portée et zone doublées, dégâts +11, Yenlui sombre)', cost: 7, kind: 'damage-base', value: 11, reminder: 'Portée et zone doublées ; le lanceur gagne Yenlui (sombre).' }
   ],
   'Bouclier de Saphery': [
     { id: 'ward', label: 'Protection améliorée de 1 pour chaque +3 DR', cost: 3, repeat: true, kind: 'ward-improve', per: 1 },
-    { id: 'range', label: '+4 DR : portée réduite à la moitié de la Volonté en yards', cost: 4, kind: 'reminder', reminder: 'La portée devient la moitié de la Volonté en yards.' }
+    { id: 'range', label: '+4 DR : portée réduite à la moitié de la Volonté en mètres', cost: 4, kind: 'reminder', reminder: 'La portée devient la moitié de la Volonté en mètres.' }
   ],
   'Bannissement Majeur': [
     { id: 'dispel', label: '+1 DR aux Tests de dissipation gratuits pour chaque +1 DR', cost: 1, repeat: true, kind: 'reminder', reminder: 'Bonus de +{pas} DR aux Tests de dissipation gratuits du sort ; familles de sorts désignées par le MJ.' },
@@ -73,7 +73,7 @@ export const OVERCAST_SPECIFIC = {
     { id: 'exempt', label: '+8 DR : alliés exemptés (Test de Corps à corps Intermédiaire +0 DR)', cost: 8, kind: 'reminder', reminder: 'Test de Corps à corps Intermédiaire (+0 DR) : les alliés sont exemptés des effets.' }
   ],
   'Drain de Magie': [
-    { id: 'wide', label: '+5 DR : zone portée à la Volonté en yards, alliés exemptés (Test d’Intelligence Difficile −1 DR)', cost: 5, kind: 'reminder', reminder: 'Zone portée à la Volonté en yards ; Test d’Intelligence Difficile (−1 DR) pour exempter les alliés.' },
+    { id: 'wide', label: '+5 DR : zone portée à la Volonté en mètres, alliés exemptés (Test d’Intelligence Difficile −1 DR)', cost: 5, kind: 'reminder', reminder: 'Zone portée à la Volonté en mètres ; Test d’Intelligence Difficile (−1 DR) pour exempter les alliés.' },
     { id: 'blessings', label: '+7 DR : Bénédictions et Miracles persistants dissipés, Yenlui lumineux', cost: 7, kind: 'reminder', reminder: 'Bénédictions et Miracles persistants dissipés ; le lanceur gagne Yenlui (lumineux).' },
     { id: 'items', label: '+10 DR : objets magiques et Protections inertes, lanceurs privés de magie 24 h', cost: 10, kind: 'reminder', reminder: 'Les objets magiques perdent leurs pouvoirs, les Protections sont annulées ; les lanceurs qui ratent le Test de Focalisation Intermédiaire (+0 DR) perdent toute magie 24 h.' }
   ],
@@ -90,7 +90,7 @@ export const OVERCAST_SPECIFIC = {
     { id: 'range', label: '+8 DR : portée portée à l’Intelligence en miles', cost: 8, kind: 'reminder', reminder: 'Portée portée à l’Intelligence en miles.' }
   ],
   'Tempête': [
-    { id: 'cool', label: '+4 DR : Test de Calme pour bouger, chute des volants, CT −3 DR', cost: 4, kind: 'reminder', reminder: 'Test de Calme Intermédiaire (+0 DR) pour se déplacer ; les volants qui le ratent tombent de 50 yards par Round ; Tests de CT à −3 DR.' },
+    { id: 'cool', label: '+4 DR : Test de Calme pour bouger, chute des volants, CT −3 DR', cost: 4, kind: 'reminder', reminder: 'Test de Calme Intermédiaire (+0 DR) pour se déplacer ; les volants qui le ratent tombent de 50 m par Round ; Tests de CT à −3 DR.' },
     { id: 'machines', label: '+5 DR : projectile +15 par Round contre bâtiments et machines de guerre', cost: 5, kind: 'reminder', reminder: 'Chaque Round, projectile magique de dégâts +15 contre les bâtiments et machines de guerre de la zone.' },
     { id: 'exempt', label: '+8 DR : alliés exemptés (Test d’Initiative Intermédiaire +0 DR)', cost: 8, kind: 'reminder', reminder: 'Test d’Initiative Intermédiaire (+0 DR) : les alliés sont exemptés des effets.' }
   ],

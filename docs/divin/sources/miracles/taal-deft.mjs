@@ -27,13 +27,13 @@ export const miracles = [
   },
   {
     name: 'Tremblement de terre', canonicalName: 'Earthshudder', printedPage: 88,
-    summary: 'Le prêtre invoque Taal trois fois et lève les bras : le Seigneur de la Nature fait gronder le tonnerre et trembler le sol. Chaque cible à moins de Bonus de Sociabilité yards d’un point visé doit réussir un Test d’Athlétisme Difficult (-10) ou gagne l’État À terre. Les structures artificielles dans la zone subissent 1d10 + DR dégâts.',
+    summary: 'Le prêtre invoque Taal trois fois et lève les bras : le Seigneur de la Nature fait gronder le tonnerre et trembler le sol. Chaque cible à moins de Bonus de Sociabilité mètres d’un point visé doit réussir un Test d’Athlétisme Difficult (-10) ou gagne l’État À terre. Les structures artificielles dans la zone subissent 1d10 + DR dégâts.',
     params: { range: soc('characteristic', 'yards'), targets: area(), duration: { kind: 'instant' } },
     status: 'assisted',
     effects: [{ type: 'condition', key: 'Prone', level: 1, when: { fact: 'athleticsFailed', label: 'a échoué à son Test d’Athlétisme Difficult (-10 en V4, -1 DR en V5)' } }],
     targetRules: [],
     needsInput: [
-      { id: 'point', text: 'Quel point de la portée est visé (centre de la zone, Bonus de Sociabilité yards) ?' },
+      { id: 'point', text: 'Quel point de la portée est visé (centre de la zone, Bonus de Sociabilité mètres) ?' },
       { id: 'targets', text: 'Quelles créatures sont dans la zone et quel est le résultat de leur Test d’Athlétisme Difficult (-10) ?' },
       { id: 'structures', text: 'Quelles structures artificielles sont dans la zone (1d10 + DR dégâts chacune) ?' }
     ],
@@ -65,7 +65,7 @@ export const miracles = [
     status: 'manual', effect: null,
     targetRules: ['Trait Bestial', 'ni mutant ni Chaos'],
     needsInput: [
-      { id: 'beasts', text: 'Quelles créatures de Trait Bestial sont dans la zone (Sociabilité yards autour du prêtre), aucune souillée par le Chaos ?' },
+      { id: 'beasts', text: 'Quelles créatures de Trait Bestial sont dans la zone (Sociabilité mètres autour du prêtre), aucune souillée par le Chaos ?' },
       { id: 'attack', text: 'Un personnage a-t-il attaqué les animaux (fin de l’effet sur eux) ?' }
     ],
     clauses: [

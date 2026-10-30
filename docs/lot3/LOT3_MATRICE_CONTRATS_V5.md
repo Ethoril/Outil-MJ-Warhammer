@@ -453,7 +453,7 @@ Options « +N DR » et « pour chaque +N DR » des descriptions (V5 p. 236 : « 
 | Malédiction d'Attraction des Flèches | +6 DR : localisation choisie par le tireur (Test de CT Intermédiaire +0 DR) | 6 DR | Calculée (exécutée par la sonde) |
 | Impasse | +6 DR : bonus de Pierre-Vent, cercle ou jonction annulé, Yenlui lumineux | 6 DR | Rappel chiffré (non calculée) |
 | Impasse | +9 DR : contrôle du Flux magique d’un Foyer arcanique annulé, Yenlui lumineux | 9 DR | Rappel chiffré (non calculée) |
-| Drain de Magie | +5 DR : zone portée à la Volonté en yards, alliés exemptés (Test d’Intelligence Difficile −1 DR) | 5 DR | Calculée (exécutée par la sonde) |
+| Drain de Magie | +5 DR : zone portée à la Volonté en mètres, alliés exemptés (Test d’Intelligence Difficile −1 DR) | 5 DR | Calculée (exécutée par la sonde) |
 | Drain de Magie | +7 DR : Bénédictions et Miracles persistants dissipés, Yenlui lumineux | 7 DR | Rappel chiffré (non calculée) |
 | Drain de Magie | +10 DR : objets magiques et Protections inertes, lanceurs privés de magie 24 h | 10 DR | Rappel chiffré (non calculée) |
 | Convocation Ardente | +5 DR : dégâts +6 au 2 e Round, puis +1 par Round, Yenlui sombre | 5 DR | Calculée (exécutée par la sonde) |
@@ -468,7 +468,7 @@ Options « +N DR » et « pour chaque +N DR » des descriptions (V5 p. 236 : « 
 | Œil Invisible | +4 DR : l’œil gagne Sens de la magie, Seconde vue et Vision dans le noir | 4 DR | Calculée (exécutée par la sonde) |
 | Œil Invisible | +8 DR : portée portée à l’Intelligence en miles | 8 DR | Calculée (exécutée par la sonde) |
 | Bouclier de Saphery | Protection améliorée de 1 pour chaque +3 DR | 3 DR par palier | Calculée (exécutée par la sonde) |
-| Bouclier de Saphery | +4 DR : portée réduite à la moitié de la Volonté en yards | 4 DR | Calculée (exécutée par la sonde) |
+| Bouclier de Saphery | +4 DR : portée réduite à la moitié de la Volonté en mètres | 4 DR | Calculée (exécutée par la sonde) |
 | Extinction de l'Âme | +3 DR : les corps tués tombent en poussière | 3 DR | Rappel chiffré (non calculée) |
 | Extinction de l'Âme | +7 DR : fureur de Khaine (portée et zone doublées, dégâts +11, Yenlui sombre) | 7 DR | Calculée (exécutée par la sonde) |
 | Tempête | +4 DR : Test de Calme pour bouger, chute des volants, CT −3 DR | 4 DR | Calculée (exécutée par la sonde) |
@@ -506,10 +506,10 @@ Options « +N DR » et « pour chaque +N DR » des descriptions (V5 p. 236 : « 
 | Attaques en chaine | 1 cible de plus dans la chaîne pour chaque +2 DR | 2 DR par palier | Calculée (exécutée par la sonde) |
 | Chute | −1 DR au Test de Dextérité de la cible pour chaque +2 DR | 2 DR par palier | Calculée (exécutée par la sonde) |
 | Effrayant | Peur +1 pour chaque +3 DR | 3 DR par palier | Calculée (exécutée par la sonde) |
-| Pont | Longueur ou largeur +BFM yards pour chaque +2 DR | 2 DR par palier | Rappel chiffré (non calculée) |
-| Poussée | Repoussé de BFM yards de plus pour chaque +2 DR | 2 DR par palier | Rappel chiffré (non calculée) |
+| Pont | Longueur ou largeur +BFM mètres pour chaque +2 DR | 2 DR par palier | Rappel chiffré (non calculée) |
+| Poussée | Repoussé de BFM mètres de plus pour chaque +2 DR | 2 DR par palier | Rappel chiffré (non calculée) |
 | Terrifiant | Terreur +1 pour chaque +3 DR | 3 DR par palier | Calculée (exécutée par la sonde) |
-| Déplacement d’objet | Distance +BFM yards pour chaque +2 DR | 2 DR par palier | Rappel chiffré (non calculée) |
+| Déplacement d’objet | Distance +BFM mètres pour chaque +2 DR | 2 DR par palier | Rappel chiffré (non calculée) |
 | Horreurs Noires | Peur de l’ombre +1, maximum 4 | 2 DR par palier | Rappel chiffré (non calculée) |
 | Poches Profondes | Encombrement +1 | 2 DR par palier | Rappel chiffré (non calculée) |
 | Ailes Grises | Téléportation +100 m | 2 DR par palier | Rappel chiffré (non calculée) |
@@ -526,7 +526,7 @@ Options « +N DR » et « pour chaque +N DR » des descriptions (V5 p. 236 : « 
 | Déflagration mentale | +9 DR : « Le Grand Niveleur » | 9 DR | Rappel chiffré (non calculée) |
 | Apothéose (Slann) | Slann, +2 DR : Peur +1 | 2 DR par palier | Rappel chiffré (non calculée) |
 | Destruction des Arcanes (Slann) | Slann, +5 DR : une destruction de plus | 5 DR par palier | Rappel chiffré (non calculée) |
-| Drain de Magie (Slann) | +5 DR : zone portée à la Volonté en yards, alliés exemptés (Test d’Intelligence Difficile −1 DR) | 5 DR | Calculée (exécutée par la sonde) |
+| Drain de Magie (Slann) | +5 DR : zone portée à la Volonté en mètres, alliés exemptés (Test d’Intelligence Difficile −1 DR) | 5 DR | Calculée (exécutée par la sonde) |
 | Drain de Magie (Slann) | +7 DR : Bénédictions et Miracles persistants dissipés, Yenlui lumineux | 7 DR | Rappel chiffré (non calculée) |
 | Drain de Magie (Slann) | +10 DR : objets magiques et Protections inertes, lanceurs privés de magie 24 h | 10 DR | Rappel chiffré (non calculée) |
 | Drain de Magie (Slann) | Slann, +4 DR : drainer la magie environnementale | 4 DR par palier | Rappel chiffré (non calculée) |

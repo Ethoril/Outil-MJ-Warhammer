@@ -19,7 +19,7 @@ const slExtension = { id: 'sl-extension', mode: 'assisted', text: 'Par tranche d
 export const miracles = [
  {
   name: 'Pureté absolue', canonicalName: 'Absolute Purity', printedPage: 55,
-  summary: 'D’un cri à Solkan, une vague de flammes purificatrices balaie Bonus de Sociabilité yards autour du prêtre. Tout ce qui a un Trait Mort-vivant, Démon ou Lanceur de sorts, tout Point de Péché ou de Corruption, ou un Talent de Magie Arcane, du Chaos ou Mineure, subit 1d10 Blessures sans TB ni PA, y compris le prêtre, ses alliés et les passants.',
+  summary: 'D’un cri à Solkan, une vague de flammes purificatrices balaie Bonus de Sociabilité mètres autour du prêtre. Tout ce qui a un Trait Mort-vivant, Démon ou Lanceur de sorts, tout Point de Péché ou de Corruption, ou un Talent de Magie Arcane, du Chaos ou Mineure, subit 1d10 Blessures sans TB ni PA, y compris le prêtre, ses alliés et les passants.',
   params: { range: { kind: 'self' }, targets: area, duration: { kind: 'instant' } },
   status: 'assisted', effect: null,
   effects: [{ type: 'direct-damage', dice: { count: 1, sides: 10 }, targetFilter: { traits: ['Mort-vivant', 'Démon', 'Lanceur de sorts'], fact: 'impure', label: 'impure : Péché, Corruption ou Talent de Magie Arcane, du Chaos ou Mineure (fait MJ)' } }],
@@ -32,7 +32,7 @@ export const miracles = [
   clauses: [
    { id: 'damage', mode: 'engine', text: 'Chaque cible affectée subit 1d10 Blessures, sans Bonus d’Endurance ni PA.' },
    { id: 'who-is-hit', mode: 'assisted', text: 'Seules sont touchées les créatures impures (Traits Mort-vivant, Démon ou Lanceur de sorts lus sur la fiche ; sinon Péché ou Corruption, Talent de Magie Arcane, du Chaos ou Mineure, fait saisi par le MJ) ; le prêtre, ses alliés et les passants le sont aussi s’ils répondent à ces critères.' },
-   { id: 'area', mode: 'assisted', text: 'Zone centrée sur le prêtre, de rayon égal à son Bonus de Sociabilité en yards.' },
+   { id: 'area', mode: 'assisted', text: 'Zone centrée sur le prêtre, de rayon égal à son Bonus de Sociabilité en mètres.' },
    purity
   ],
   sourceDelta: delta + ' Le moteur filtre les cibles : Traits Mort-vivant, Démon ou Lanceur de sorts lus sur la fiche, sinon fait MJ « impure » (Péché, Corruption, Talent de Magie Arcane, du Chaos ou Mineure) ; une cible déclarée non impure est ignorée.'
@@ -45,7 +45,7 @@ export const miracles = [
   effects: [{ type: 'ordinary-damage', dice: { count: 1, sides: 10 }, bonusFrom: 'FM', ignoreAp: true }],
   targetRules: [],
   needsInput: [
-   { id: 'target', text: 'Quelle créature est la cible, et est-elle à portée (Bonus de Sociabilité yards) ?' },
+   { id: 'target', text: 'Quelle créature est la cible, et est-elle à portée (Bonus de Sociabilité mètres) ?' },
    { id: 'damage-roll', text: 'Jet de 1d10 ; le Bonus de Volonté du prêtre s’y ajoute.' }
   ],
   clauses: [
@@ -74,20 +74,20 @@ export const miracles = [
  },
  {
   name: 'Fureur du soleil vertueux', canonicalName: 'Fury of the Righteous Sun', printedPage: 55,
-  summary: 'Le prêtre implore Solkan d’une illumination totale : une lumière aveuglante tombe du soleil. Tout ce qui se trouve à Bonus de Sociabilité yards reçoit autant d’États Aveuglé que son Bonus de Sociabilité. La lumière brûlante agit aussi comme un projectile magique de Dégâts +2 sur tout ce qu’elle touche.',
+  summary: 'Le prêtre implore Solkan d’une illumination totale : une lumière aveuglante tombe du soleil. Tout ce qui se trouve à Bonus de Sociabilité mètres reçoit autant d’États Aveuglé que son Bonus de Sociabilité. La lumière brûlante agit aussi comme un projectile magique de Dégâts +2 sur tout ce qu’elle touche.',
   params: { range: soc('characteristic-bonus', 'yards'), targets: area, duration: { kind: 'instant' } },
   status: 'assisted', effect: null,
   effects: [{ type: 'condition', key: 'Blinded', level: 1, strengthFrom: { kind: 'characteristic-bonus', characteristic: 'Soc' } }],
   targetRules: [],
   needsInput: [
-   { id: 'area-center', text: 'Point central de la zone dans la portée (Bonus de Sociabilité yards).' },
+   { id: 'area-center', text: 'Point central de la zone dans la portée (Bonus de Sociabilité mètres).' },
    { id: 'targets-in-area', text: 'Créatures présentes dans la zone, alliés compris.' },
    { id: 'missile-damage', text: 'Dégâts du projectile magique (Dégâts +2) contre chaque créature touchée.' }
   ],
   clauses: [
    { id: 'blinded', mode: 'engine', text: 'Chaque créature de la zone gagne un nombre d’États Aveuglé égal au Bonus de Sociabilité du prêtre.' },
    { id: 'missile', mode: 'manual', text: 'La lumière agit comme un projectile magique de Dégâts +2 sur tout ce qu’elle touche.' },
-   { id: 'area', mode: 'assisted', text: 'Zone de rayon égal au Bonus de Sociabilité en yards ; centre à portée Bonus de Sociabilité yards.' },
+   { id: 'area', mode: 'assisted', text: 'Zone de rayon égal au Bonus de Sociabilité en mètres ; centre à portée Bonus de Sociabilité mètres.' },
    purity
   ],
   sourceDelta: delta + ' « Magic missile with Damage of +2 » : mécanique de projectile magique V4 non convertie (dés, PA, TB non précisés), laissée au MJ. Le livre ne précise pas si la zone est centrée sur le prêtre ou sur un point visé à portée : lue comme un point à portée.'
@@ -99,7 +99,7 @@ export const miracles = [
   status: 'manual', effect: null,
   targetRules: [],
   needsInput: [
-   { id: 'targets', text: 'Quelles 3 cibles sont visées, et sont-elles à moins de 4 yards ?' },
+   { id: 'targets', text: 'Quelles 3 cibles sont visées, et sont-elles à moins de 4 m ?' },
    { id: 'time-effects', text: 'Effets du temps en cours à suspendre (saignements, États, projectiles en vol).' }
   ],
   clauses: [
@@ -111,12 +111,12 @@ export const miracles = [
  },
  {
   name: 'Apaisez les vents', canonicalName: 'Still the Winds', printedPage: 55,
-  summary: 'Le prêtre supplie les Dieux de la Loi de calmer les Vents de Magie. Pendant la durée, dans la zone de Bonus de Sociabilité yards : toute magie est dissipée, les objets magiques perdent temporairement leurs qualités magiques, et les Tests d’Incantation et de Canalisation échouent automatiquement. La Seconde Vue montre des Vents inertes dans la zone.',
+  summary: 'Le prêtre supplie les Dieux de la Loi de calmer les Vents de Magie. Pendant la durée, dans la zone de Bonus de Sociabilité mètres : toute magie est dissipée, les objets magiques perdent temporairement leurs qualités magiques, et les Tests d’Incantation et de Canalisation échouent automatiquement. La Seconde Vue montre des Vents inertes dans la zone.',
   params: { range: soc('characteristic-bonus', 'yards'), targets: area, duration: rounds },
   status: 'manual', effect: null,
   targetRules: [],
   needsInput: [
-   { id: 'area-center', text: 'Point central de la zone dans la portée (Bonus de Sociabilité yards).' },
+   { id: 'area-center', text: 'Point central de la zone dans la portée (Bonus de Sociabilité mètres).' },
    { id: 'magic-in-area', text: 'Sorts, objets magiques et lanceurs présents dans la zone.' }
   ],
   clauses: [

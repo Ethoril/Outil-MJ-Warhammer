@@ -45,8 +45,8 @@ test('F2-K2 L17 — flagged source details, conversion proposals, and assisted q
     assert.ok(entry.conversion.justification.length > 20);
     assert.ok(entry.questionsMJ[0].includes(entry.nom));
   };
-  includes('Hysh', 2, '20 yards', '+2 yards');
-  includes('Hysh', 3, '2 yards', 'ajoute 2 yards');
+  includes('Hysh', 2, '20 m', '+2 m');
+  includes('Hysh', 3, '2 m', 'ajoute 2 m');
   includes('Hysh', 5, '−10');
   includes('Hysh', 6, '3 Aveuglé', '−1 DR');
   includes('Hysh', 8, '+1 DR');
@@ -64,7 +64,7 @@ test('F2-K2 L17 — flagged source details, conversion proposals, and assisted q
   includes('Ghyran', 1, 'taillés chaque jour', 'repoussent dans la journée');
   assert.ok(row('Ghyran', 1).conversion.valeurSource.includes('Trim each day'));
   includes('Ghyran', 6, 'augmentent de 1');
-  includes('Ghyran', 7, '10 yards', 'doublées');
+  includes('Ghyran', 7, '10 m', 'doublées');
   includes('Ghyran', 8, '+1 DR');
   includes('Ghyran', 5, 'tous les tests fondés sur la Sociabilité');
   assert.ok(row('Ghyran', 5).conversion.valeurSource.includes('all Fellowship-based Tests'));
@@ -86,7 +86,7 @@ test('F2-K2 L17 — flagged source details, conversion proposals, and assisted q
   includes('Ulgu', 4, '−1 DR');
   includes('Ulgu', 5, 'Vision nocturne', '−1 DR');
   includes('Ulgu', 6, '−1 DR', 'Menacing');
-  includes('Ulgu', 8, '−1 DR', '20 yards');
+  includes('Ulgu', 8, '−1 DR', '20 m');
   assert.ok(row('Ulgu', 8).conversion.valeurSource.includes('−10'));
   includes('Ulgu', 9, 'Ward (9)', 'bonus de Force Mentale');
   includes('Shyish', 1, 'Force −5');
@@ -110,7 +110,7 @@ test('F2-K2 L17 — flagged source details, conversion proposals, and assisted q
   assert.ok(row('Shyish', 8).conversion.valeurSource.includes('Moderate Exposure'));
   assert.ok(row('Shyish', 8).conversion.valeurSource.includes('Fumble causes Moderate Exposure'));
   includes('Shyish', 9, 'Taille Petite ou plus', '1 Blessure');
-  includes('Shyish', 4, 'rayon égal à sa Force Mentale en yards', 'trois quarts');
+  includes('Shyish', 4, 'rayon égal à sa Force Mentale en mètres', 'trois quarts');
   assert.ok(row('Shyish', 4).conversion.valeurSource.includes('Willpower yards'));
   includes('Aqshy', 3, '+2 DR');
   includes('Aqshy', 4, 'Exposition au froid');
@@ -118,7 +118,7 @@ test('F2-K2 L17 — flagged source details, conversion proposals, and assisted q
   includes('Aqshy', 6, 'une heure', '−3 DR');
   assert.ok(row('Aqshy', 6).conversion.valeurSource.includes('−30'));
   includes('Aqshy', 7, '−1 DR');
-  includes('Aqshy', 8, '4 yards', 'augmentent de 1');
+  includes('Aqshy', 8, '4 m', 'augmentent de 1');
   includes('Aqshy', 9, 'feu', 'souffles');
   includes('Aqshy', 1, 'forme de flammes', 'chaleur et lumière réelles', 'sans le blesser');
   assert.ok(row('Aqshy', 1).conversion.formulationSource.includes('flame-shaped'));
@@ -132,9 +132,9 @@ test('F2-K2 L17 — flagged source details, conversion proposals, and assisted q
   includes('Ghur', 3, 'espace clos', 'grande ville');
   includes('Ghur', 5, 'Endurance', 'Froid');
   includes('Ghur', 6, '−1 DR');
-  includes('Ghur', 7, '−1 DR', '5 yards');
+  includes('Ghur', 7, '−1 DR', '5 m');
   includes('Ghur', 8, '+1 DR');
-  includes('Ghur', 9, 'fumble de Sociabilité', '20 yards');
+  includes('Ghur', 9, 'fumble de Sociabilité', '20 m');
 });
 
 test('F2-K2 L17 — individual F2 references are separated from ambiguous family reference', () => {

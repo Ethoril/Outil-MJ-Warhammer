@@ -4837,10 +4837,10 @@
       "specific": [
         {
           "id": "wide",
-          "label": "+5 DR : zone portée à la Volonté en yards, alliés exemptés (Test d’Intelligence Difficile −1 DR)",
+          "label": "+5 DR : zone portée à la Volonté en mètres, alliés exemptés (Test d’Intelligence Difficile −1 DR)",
           "cost": 5,
           "kind": "contract-rule",
-          "reminder": "Zone portée à la Volonté en yards ; Test d’Intelligence Difficile (−1 DR) pour exempter les alliés."
+          "reminder": "Zone portée à la Volonté en mètres ; Test d’Intelligence Difficile (−1 DR) pour exempter les alliés."
         },
         {
           "id": "blessings",
@@ -5467,10 +5467,10 @@
         },
         {
           "id": "range",
-          "label": "+4 DR : portée réduite à la moitié de la Volonté en yards",
+          "label": "+4 DR : portée réduite à la moitié de la Volonté en mètres",
           "cost": 4,
           "kind": "contract-rule",
-          "reminder": "La portée devient la moitié de la Volonté en yards."
+          "reminder": "La portée devient la moitié de la Volonté en mètres."
         }
       ]
     },
@@ -5603,7 +5603,7 @@
           "label": "+4 DR : Test de Calme pour bouger, chute des volants, CT −3 DR",
           "cost": 4,
           "kind": "contract-rule",
-          "reminder": "Test de Calme Intermédiaire (+0 DR) pour se déplacer ; les volants qui le ratent tombent de 50 yards par Round ; Tests de CT à −3 DR."
+          "reminder": "Test de Calme Intermédiaire (+0 DR) pour se déplacer ; les volants qui le ratent tombent de 50 m par Round ; Tests de CT à −3 DR."
         },
         {
           "id": "machines",
@@ -13312,11 +13312,11 @@
       "specific": [
         {
           "id": "size",
-          "label": "Longueur ou largeur +BFM yards pour chaque +2 DR",
+          "label": "Longueur ou largeur +BFM mètres pour chaque +2 DR",
           "cost": 2,
           "repeat": true,
           "kind": "reminder",
-          "reminder": "Longueur ou largeur du pont augmentée de {total} yards ({pas} × BFM {bfm})."
+          "reminder": "Longueur ou largeur du pont augmentée de {total} mètres ({pas} × BFM {bfm})."
         }
       ]
     },
@@ -13368,11 +13368,11 @@
       "specific": [
         {
           "id": "push",
-          "label": "Repoussé de BFM yards de plus pour chaque +2 DR",
+          "label": "Repoussé de BFM mètres de plus pour chaque +2 DR",
           "cost": 2,
           "repeat": true,
           "kind": "reminder",
-          "reminder": "Repoussé de {total} yards de plus ({pas} × BFM {bfm})."
+          "reminder": "Repoussé de {total} mètres de plus ({pas} × BFM {bfm})."
         }
       ]
     },
@@ -13984,11 +13984,11 @@
       "specific": [
         {
           "id": "distance",
-          "label": "Distance +BFM yards pour chaque +2 DR",
+          "label": "Distance +BFM mètres pour chaque +2 DR",
           "cost": 2,
           "repeat": true,
           "kind": "reminder",
-          "reminder": "Distance de déplacement augmentée de {total} yards ({pas} × BFM {bfm})."
+          "reminder": "Distance de déplacement augmentée de {total} mètres ({pas} × BFM {bfm})."
         }
       ]
     },
@@ -21906,10 +21906,10 @@
       "specific": [
         {
           "id": "wide",
-          "label": "+5 DR : zone portée à la Volonté en yards, alliés exemptés (Test d’Intelligence Difficile −1 DR)",
+          "label": "+5 DR : zone portée à la Volonté en mètres, alliés exemptés (Test d’Intelligence Difficile −1 DR)",
           "cost": 5,
           "kind": "contract-rule",
-          "reminder": "Zone portée à la Volonté en yards ; Test d’Intelligence Difficile (−1 DR) pour exempter les alliés."
+          "reminder": "Zone portée à la Volonté en mètres ; Test d’Intelligence Difficile (−1 DR) pour exempter les alliés."
         },
         {
           "id": "blessings",

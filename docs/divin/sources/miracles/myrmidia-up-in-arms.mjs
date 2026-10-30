@@ -56,14 +56,14 @@ export const miracles = [
     effects: [{ type: 'special-state', orderlyDisengage: true }],
     targetRules: [],
     needsInput: [
-      { id: 'allies-in-area', text: 'Quels alliés sont dans la zone (Bonus de Volonté yards autour du prêtre) ?' },
+      { id: 'allies-in-area', text: 'Quels alliés sont dans la zone (Bonus de Volonté mètres autour du prêtre) ?' },
       { id: 'fleeing', text: 'Quel allié rompt le combat (Fuite) et combien d’ennemis Engagés a-t-il ?' }
     ],
     clauses: [
       { id: 'orderly-disengage', mode: 'engine', text: 'Les alliés désignés portent « En bon ordre » : Désengagement sans Élan ni attaque gratuite adverse (à appliquer par le MJ, le moteur ne gère pas le Désengagement).' },
       { id: 'flee-exemption', mode: 'manual', text: 'Quand un allié de la zone fuit, les adversaires Engagés ne gagnent pas l’Élan et n’ont pas l’attaque de Mêlée gratuite (p.163).' },
       { id: 'broken-from-fleeing', mode: 'manual', text: 'Le fuyard gagne quand même 1 État Brisé par ennemi Engagé (p.163) ; seul le Désengagement n’est pas concerné.' },
-      { id: 'area', mode: 'manual', text: 'Zone centrée sur le prêtre, de rayon égal au Bonus de Volonté en yards (convention V5 des zones).' },
+      { id: 'area', mode: 'manual', text: 'Zone centrée sur le prêtre, de rayon égal au Bonus de Volonté en mètres (convention V5 des zones).' },
       { id: 'duration', mode: 'manual', text: 'Durée : Bonus de Volonté en Rounds.' }
     ],
     sourceDelta: 'Aucun type d’effet ne supprime l’Élan ou l’attaque gratuite de l’adversaire : contrat manuel. La zone imprimée est « Willpower yards » (caractéristique entière) : lue en Bonus de Volonté, convention V5 du livre de base pour les zones (écart V4 documenté, décision MJ). L’« avantage » V4 devient l’Élan ; le Brisé de fuite, nouveau en V5, n’est pas annulé (décision MJ). Le Désengagement (p.163) reste hors du texte. ' + v4Unit
@@ -75,12 +75,12 @@ export const miracles = [
     status: 'manual',
     targetRules: [],
     needsInput: [
-      { id: 'enemy', text: 'Quel ennemi est visé, dans la portée de Volonté yards ?' }
+      { id: 'enemy', text: 'Quel ennemi est visé, dans la portée de Volonté mètres ?' }
     ],
     clauses: [
       { id: 'reveal-profile', mode: 'manual', text: 'Le MJ révèle les caractéristiques, les Traits, les compétences et les Talents de l’ennemi visé.' },
       { id: 'gm-secrets', mode: 'manual', text: 'Le MJ garde la main sur ce qui reste secret (identité, malédictions cachées).' },
-      { id: 'range', mode: 'manual', text: 'Portée : Volonté en yards (caractéristique entière).' }
+      { id: 'range', mode: 'manual', text: 'Portée : Volonté en mètres (caractéristique entière).' }
     ],
     sourceDelta: 'Révélation d’information, sans effet moteur : contrat manuel. Portée imprimée « Willpower yards » conservée en caractéristique entière (convention V5 pour les portées ; le catalogue disait Bonus, décision MJ). Étendue : caractéristiques, Traits, compétences, Talents ; Blessures actuelles, Chance et équipement ne sont pas inclus (décision MJ). ' + v4Unit
   },
@@ -93,7 +93,7 @@ export const miracles = [
     effects: [{ type: 'grant-immunity', conditions: ['Brisé'] }],
     targetRules: [],
     needsInput: [
-      { id: 'allies-in-area', text: 'Quels alliés sont dans la zone (Bonus de Volonté yards autour du prêtre), prêtre compris ?' },
+      { id: 'allies-in-area', text: 'Quels alliés sont dans la zone (Bonus de Volonté mètres autour du prêtre), prêtre compris ?' },
       { id: 'broken-attempts', text: 'Quelle source tente de donner l’État Brisé (Terreur, Fuite, autre) pendant la durée ?' }
     ],
     clauses: [
@@ -129,13 +129,13 @@ export const miracles = [
     effects: [{ type: 'grant-talent', talents: [{ id: 'talent-fearless', name: 'Sans peur', rank: 1 }], specializationFrom: 'input' }],
     targetRules: ['ally', 'within-range'],
     needsInput: [
-      { id: 'myrmidians', text: 'Quels Myrmidiens sont à portée (36 yards) ?' }
+      { id: 'myrmidians', text: 'Quels Myrmidiens sont à portée (36 m) ?' }
     ],
     clauses: [
       { id: 'fearless-enemy', mode: 'engine', text: 'Chaque Myrmidien désigné gagne le Talent Sans peur [Ennemi] contre l’ennemi saisi par le prêtre au lancement, le même pour tous, pendant la durée ; sans ennemi saisi, le lancement est refusé.' },
-      { id: 'myrmidians', mode: 'manual', text: 'Cible « See text » : tous les Myrmidiens à portée, sans plafond ; le MJ désigne ceux qui sont à 36 yards ou moins.' },
+      { id: 'myrmidians', mode: 'manual', text: 'Cible « See text » : tous les Myrmidiens à portée, sans plafond ; le MJ désigne ceux qui sont à 36 m ou moins.' },
       { id: 'fear-only', mode: 'manual', text: 'En V5 (p.119) le Talent protège de la Peur du groupe choisi, non de sa Terreur ni de l’Intimidation.' },
-      { id: 'duration', mode: 'engine', text: 'Durée : 4 Rounds (+4 Rounds par tranche de +2 DR) ; portée 36 yards (+36 par tranche).' }
+      { id: 'duration', mode: 'engine', text: 'Durée : 4 Rounds (+4 Rounds par tranche de +2 DR) ; portée 36 m (+36 par tranche).' }
     ],
     sourceDelta: 'Le Talent Sans peur du moteur est posé avec une spécialisation saisie par le prêtre à chaque lancement (grant-talent, specializationFrom input) : sans elle le lancement est refusé, car un Sans peur [Ennemi] sans spécialisation ne s’applique à aucun ennemi (fait manquant talent.specialization, talent-contract-v2). Un seul ennemi choisi par le prêtre au lancement, pour tous (décision MJ). « Individu précis » n’existe pas en V5 (groupe d’ennemis) : lecture MJ, la saisie est un texte libre. Cible « See text » : tous les Myrmidiens à portée, sans plafond (ciblage ally/within-range comme Compétence Martiale). Les alliés perdent la protection V4 contre la Terreur de l’ennemi choisi. ' + v4Unit
   },
@@ -147,12 +147,12 @@ export const miracles = [
     effects: [{ type: 'characteristic-modifier', characteristic: 'CC', value: 10 }, { type: 'characteristic-modifier', characteristic: 'CT', value: 10 }],
     targetRules: ['ally', 'within-range'],
     needsInput: [
-      { id: 'allies-in-range', text: 'Quels alliés sont à portée (24 yards) ?' }
+      { id: 'allies-in-range', text: 'Quels alliés sont à portée (24 m) ?' }
     ],
     clauses: [
       { id: 'weapon-skill', mode: 'engine', text: 'Chaque allié désigné gagne +10 en Capacité de Combat (type characteristic-modifier).' },
       { id: 'ballistic-skill', mode: 'engine', text: 'Chaque allié désigné gagne +10 en Capacité de Tir (type characteristic-modifier).' },
-      { id: 'allies', mode: 'manual', text: 'Cible « See text » : tous les alliés à portée, sans plafond ; le MJ désigne ceux qui sont à 24 yards ou moins.' },
+      { id: 'allies', mode: 'manual', text: 'Cible « See text » : tous les alliés à portée, sans plafond ; le MJ désigne ceux qui sont à 24 m ou moins.' },
       { id: 'duration', mode: 'engine', text: 'Durée : 4 Rounds (+4 Rounds par tranche de +2 DR).' }
     ],
     sourceDelta: 'Le +10 porte sur les caractéristiques, comme les Bénédictions de Bataille et de la Chasse (p.221) : aucune conversion (décision MJ : +10 CC et +10 CT, non +1 DR). Cumul avec ces Bénédictions selon les règles de cumul établies (DIV-05) ; la p.217 n’interdit que le cumul d’une même prière. Portée et cible : yards sources lus comme mètres de jeu (DIV-03), tous les alliés à portée.'

@@ -72,17 +72,17 @@ export const miracles = [
  },
  {
   name: 'Seuil du Portail', canonicalName: "Portal's Threshold", printedPage: 223,
-  summary: 'Le prêtre trace au sol une ligne de 8 yards maximum en psalmodiant ; un portail d’ombre indistinct apparaît. Les créatures Mort-vivant doivent réussir un Test de Calme Intermédiaire (+0 DR) pour la franchir ; celles qui sont à la fois Mort-vivant et Construct ne le peuvent pas.',
+  summary: 'Le prêtre trace au sol une ligne de 8 m maximum en psalmodiant ; un portail d’ombre indistinct apparaît. Les créatures Mort-vivant doivent réussir un Test de Calme Intermédiaire (+0 DR) pour la franchir ; celles qui sont à la fois Mort-vivant et Construct ne le peuvent pas.',
   params: { range: { kind: 'touch' }, targets: { kind: 'special' }, duration: { kind: 'special', label: 'Until sunrise' } },
   status: 'manual', effect: null,
   targetRules: ['Trait Mort-vivant', 'Mort-vivant et Construct : franchissement impossible'],
   needsInput: [
-   { id: 'line', text: 'Tracé et longueur de la ligne (8 yards maximum).' },
+   { id: 'line', text: 'Tracé et longueur de la ligne (8 m maximum).' },
    { id: 'sunrise', text: 'Heure du lever du soleil qui met fin au miracle.' },
    { id: 'cool-tests', text: 'Résultat du Test de Calme de chaque Mort-vivant qui tente de franchir la ligne.' }
   ],
   clauses: [
-   { id: 'line-length', mode: 'manual', text: 'Ligne tracée au sol de 8 yards au plus.' },
+   { id: 'line-length', mode: 'manual', text: 'Ligne tracée au sol de 8 m au plus.' },
    { id: 'undead-cool', mode: 'manual', text: 'Une créature Mort-vivant réussit un Test de Calme Intermédiaire (+0 DR) pour franchir la ligne.' },
    { id: 'construct-undead-blocked', mode: 'manual', text: 'Une créature à la fois Mort-vivant et Construct ne peut pas franchir la ligne.' },
    { id: 'expiry', mode: 'manual', text: 'Le miracle dure jusqu’au lever du soleil.' }

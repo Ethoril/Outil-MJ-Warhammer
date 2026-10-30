@@ -41,12 +41,12 @@ export const miracles = [
       overrides: { caracs: { CC: 45, FM: 35 }, size: 'large', traits: ['Magique', 'Frénésie'], recomputeWounds: true } }],
     targetRules: [],
     needsInput: [
-      { id: 'wolf-position', text: 'Position d\'apparition du loup dans la portée (Sociabilité yards), notée par le MJ.' },
+      { id: 'wolf-position', text: 'Position d\'apparition du loup dans la portée (Sociabilité mètres), notée par le MJ.' },
       { id: 'wolf-targets', text: 'Ennemis visés par le loup : le MJ joue le loup et choisit ses cibles.' }
     ],
     clauses: [
       { id: 'summon-wolf', mode: 'engine', text: 'Le moteur crée le loup blanc (Serviteur divin mineur) : participant du camp du prêtre, contrôlé par le MJ, avec le profil du Loup du bestiaire (p.327) et les valeurs du miracle (CC 45, Volonté 35, Morsure +6, Frénésie, Magique, Taille Grande, Blessures par la formule des créatures de Taille Grande).' },
-      { id: 'wolf-placement', mode: 'manual', text: 'Le loup apparaît à portée (Sociabilité yards) : le MJ place la créature.' },
+      { id: 'wolf-placement', mode: 'manual', text: 'Le loup apparaît à portée (Sociabilité mètres) : le MJ place la créature.' },
       { id: 'wolf-combat', mode: 'manual', text: 'Le loup combat les ennemis du prêtre pendant la durée ; le MJ le joue (arbitrage MJ : contrôlé par le MJ).' },
       { id: 'end', mode: 'engine', text: 'Le loup disparaît à la fin de la durée (Bonus de Sociabilité rounds), à l\'expiration ou à la fin manuelle de la prière, ou à la mort du prêtre.' }
     ],
@@ -105,7 +105,7 @@ export const miracles = [
     effects: [{ type: 'grant-talent', talents: [{ id: 'talent-frenzy', rank: 1 }] }, { type: 'frenzy-fury' }],
     targetRules: ['ally'],
     needsInput: [
-      { id: 'ally', text: 'Allié ciblé dans la portée (Sociabilité yards).' }
+      { id: 'ally', text: 'Allié ciblé dans la portée (Sociabilité mètres).' }
     ],
     clauses: [
       { id: 'free-frenzy', mode: 'manual', text: 'Test de Frénésie gratuit à chaque Tour de l\'allié pendant la durée (règle p.184).' },
