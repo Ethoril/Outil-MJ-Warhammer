@@ -563,3 +563,39 @@ Note : `tests/phase-c-c06-coverage.test.js` lit désormais `./initiative-et-tour
 | `tests/f2-j2-sequelae.test.js` | `tests/unit/sequelles/sequelles-mort-critiques.test.js` | 19 | 109 |
 | `tests/f2-t2bis-split-hand-second-shock-characterization.test.js` | `tests/unit/sequelles/sequelles-mort-critiques.test.js` | 1 | 109 |
 | `tests/f2-t2bis-sudden-death-characterization.test.js` | `tests/unit/sequelles/sequelles-mort-critiques.test.js` | 6 | 109 |
+
+## R2-12 — stockage : IndexedDB factice, sync, store, migrations
+
+| Ancien fichier | Nouveau fichier | Tests avant | Tests après (cible) |
+|---|---|---|---|
+| `tests/e04-migrations-persistence.test.js` | `tests/unit/stockage/migrations-persistance.test.js` | 13 | 19 |
+| `tests/e04-store-integration.test.js` | `tests/unit/stockage/migrations-persistance.test.js` | 6 | 19 |
+| `tests/e01.test.js` | `tests/unit/stockage/store-commandes-historique.test.js` | 2 | 68 |
+| `tests/e07-commands-history.test.js` | `tests/unit/stockage/store-commandes-historique.test.js` | 6 | 68 |
+| `tests/e07-store-integration.test.js` | `tests/unit/stockage/store-commandes-historique.test.js` | 5 | 68 |
+| `tests/e10-models.test.js` | `tests/unit/stockage/store-commandes-historique.test.js` | 5 | 68 |
+| `tests/e11-e13-encounters-closure.test.js` | `tests/unit/stockage/store-commandes-historique.test.js` | 5 | 68 |
+| `tests/e11-store-core.test.js` | `tests/unit/stockage/store-commandes-historique.test.js` | 5 | 68 |
+| `tests/e14-reminders.test.js` | `tests/unit/stockage/store-commandes-historique.test.js` | 3 | 68 |
+| `tests/e15-scene-events.test.js` | `tests/unit/stockage/store-commandes-historique.test.js` | 5 | 68 |
+| `tests/e21-encounter-list.test.js` | `tests/unit/stockage/store-commandes-historique.test.js` | 6 | 68 |
+| `tests/e25-restart-combat.test.js` | `tests/unit/stockage/store-commandes-historique.test.js` | 10 | 68 |
+| `tests/lot2-store-integration.test.js` | `tests/unit/stockage/store-commandes-historique.test.js` | 7 | 68 |
+| `tests/store.test.js` | `tests/unit/stockage/store-commandes-historique.test.js` | 7 | 68 |
+| `tests/ux.test.js` | `tests/unit/stockage/store-commandes-historique.test.js` | 2 | 68 |
+| `tests/auth-errors.test.js` | `tests/unit/stockage/sync-cloud.test.js` | 2 | 126 |
+| `tests/cloud-v2-empty-reserve.test.js` | `tests/unit/stockage/sync-cloud.test.js` | 7 | 126 |
+| `tests/core-races.test.js` | `tests/unit/stockage/sync-cloud.test.js` | 7 | 126 |
+| `tests/e02-sync.test.js` | `tests/unit/stockage/sync-cloud.test.js` | 6 | 126 |
+| `tests/e03-access.test.js` | `tests/unit/stockage/sync-cloud.test.js` | 3 | 126 |
+| `tests/e05-firebase-rules.test.js` | `tests/unit/stockage/sync-cloud.test.js` | 1 | 126 |
+| `tests/e05-session-resolution.test.js` | `tests/unit/stockage/sync-cloud.test.js` | 3 | 126 |
+| `tests/e05-session-review.test.js` | `tests/unit/stockage/sync-cloud.test.js` | 6 | 126 |
+| `tests/e05-sync-protocol.test.js` | `tests/unit/stockage/sync-cloud.test.js` | 9 | 126 |
+| `tests/e05-sync-session.test.js` | `tests/unit/stockage/sync-cloud.test.js` | 7 | 126 |
+| `tests/fiches-pj-source-cloud.test.js` | `tests/unit/stockage/sync-cloud.test.js` | 6 | 126 |
+| `tests/gaps.test.js` | `tests/unit/stockage/sync-cloud.test.js` | 23 | 126 |
+| `tests/lot2-v5-25-acceptance.test.js` | `tests/unit/stockage/sync-cloud.test.js` | 7 | 126 |
+| `tests/lot2-v5-25-shared-state.test.js` | `tests/unit/stockage/sync-cloud.test.js` | 4 | 126 |
+| `tests/p4c-char-sync.test.js` | `tests/unit/stockage/sync-cloud.test.js` | 35 | 126 |
+

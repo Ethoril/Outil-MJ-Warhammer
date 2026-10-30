@@ -47,3 +47,8 @@ Aucun doublon retiré (les 33 originaux : 553 tests, les 3 cibles : 553 ; la sui
 ## R2-11 — séquelles, Corruption, référentiel
 
 Aucun doublon retiré (les 38 originaux : 324 tests, les 4 cibles : 324 ; la suite complète garde donc le même total qu'avant l'étape).
+
+## R2-12 — stockage : IndexedDB factice, sync, store, migrations
+
+Aucun doublon retiré (les 30 originaux : 213 tests, les 3 cibles : 213 ; la suite complète garde donc le même total qu'avant l'étape).
+
