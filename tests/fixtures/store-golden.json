@@ -1,0 +1,4730 @@
+{
+ "persistence": {
+  "keys": [
+   "executeCommand/2",
+   "batch/1",
+   "addProfile/1",
+   "updateProfile/2",
+   "applyFicheSync/1",
+   "removeProfile/1",
+   "clearReserve/0",
+   "duplicateProfile/1",
+   "listProfiles/0",
+   "getProfile/1",
+   "addParticipant/1",
+   "removeParticipant/1",
+   "updateParticipant/2",
+   "acquireConditions/2",
+   "advanceCampaignTime/1",
+   "advanceTalentMinutes/1",
+   "startTalentSession/0",
+   "getFortune/1",
+   "getFate/1",
+   "declareV5FortuneAdvantage/1",
+   "setFate/2",
+   "setFortune/2",
+   "getCorruptionStatus/1",
+   "declareWarpstoneDailyExposure/1",
+   "getCorruptionMutationCatalog/0",
+   "setCorruptionPoints/2",
+   "previewCorruptionExposure/1",
+   "applyCorruptionExposure/2",
+   "previewCorruptionThresholdTest/1",
+   "applyCorruptionThresholdTest/2",
+   "resolveObsoleteCorruptionThresholdTest/1",
+   "confirmCorruptionMutation/1",
+   "declineCorruptionMutation/1",
+   "applyCorruptionAbsolution/1",
+   "decideCorruptionCharacterLoss/1",
+   "healCriticalWound/2",
+   "decideCriticalDeath/2",
+   "decideImmediateCriticalDeath/3",
+   "setSuddenDeathEnabled/1",
+   "previewSuddenDeath/1",
+   "decideSuddenDeath/2",
+   "previewAmputationShock/0",
+   "deferAmputationShock/3",
+   "applyAmputationShock/0",
+   "recoverCondition/2",
+   "healWounds/2",
+   "moveParticipant/2",
+   "listParticipants/0",
+   "setRoundTurn/2",
+   "rebuildOrder/0",
+   "getEffectiveOrder/0",
+   "getOrderMode/0",
+   "isCombatInitiativeInitialized/0",
+   "previewEncounterLaunch/1",
+   "previewCombatRestart/0",
+   "previewCombatInitialization/0",
+   "previewCombatParticipantActivation/1",
+   "previewCombatParticipantAddition/1",
+   "applyCombatInitialization/0",
+   "setOrderMode/0",
+   "moveInOrder/1",
+   "insertReinforcement/1",
+   "nextTurn/0",
+   "consumeTurnSelection/0",
+   "usesPersistence/0",
+   "getCombat/0",
+   "getReserve/0",
+   "getDiceLines/0",
+   "getLog/0",
+   "addDiceLine/1",
+   "updateDiceLine/2",
+   "removeDiceLine/1",
+   "duplicateDiceLine/1",
+   "importFromReserve/1",
+   "addProfilesToCombat/1",
+   "exportToReserve/0",
+   "canUndo/0",
+   "canRedo/0",
+   "getHistory/0",
+   "captureSnapshot/0",
+   "undo/0",
+   "redo/0",
+   "log/1",
+   "clearLog/0",
+   "resetCombat/0",
+   "getLocalRevision/0",
+   "listEncounters/0",
+   "saveEncounter/1",
+   "deleteEncounter/1",
+   "duplicateEncounter/1",
+   "setEncounterEntry/2",
+   "getKeywordReferential/0",
+   "addCreatureKeyword/1",
+   "linkFamiliar/2",
+   "createFamiliar/2",
+   "unlinkFamiliar/2",
+   "setFamiliarRange/3",
+   "resolveFamiliarDeath/2",
+   "applyRegeneration/2",
+   "applyCreaturePsychology/2",
+   "applySwarmEndOfRound/1",
+   "applyCreatureVenom/2",
+   "setHeadState/3",
+   "setSlannAboard/2",
+   "applySlannContemplation/2",
+   "listPersistentCharacters/0",
+   "savePersistentCharacter/1",
+   "deletePersistentCharacter/1",
+   "getActiveScene/0",
+   "listSuspendedScenes/0",
+   "launchEncounter/1",
+   "restartCombat/0",
+   "addImprovisedParticipant/1",
+   "suspendActiveScene/0",
+   "resumeScene/1",
+   "getReactionOpportunities/1",
+   "confirmBrokenEscapeVisibility/0",
+   "previewV5ProjectileExtraction/0",
+   "applyV5ProjectileExtraction/1",
+   "previewV5PaviseDeployment/0",
+   "applyV5PaviseDeployment/1",
+   "previewV5WeaponReload/0",
+   "applyV5WeaponReload/1",
+   "previewBrokenEscape/0",
+   "applyBrokenEscape/1",
+   "previewResolution/0",
+   "previewV5CombatAction/0",
+   "declareV5CombatMovement/0",
+   "applyV5CombatAction/1",
+   "applyResolution/1",
+   "simulateAction/0",
+   "applySimulation/1",
+   "getSimulationState/0",
+   "discardSimulation/1",
+   "previewChannelling/0",
+   "applyChannelling/1",
+   "previewCasting/1",
+   "applyCasting/1",
+   "previewMiscast/0",
+   "applyMiscast/1",
+   "previewBurnout/0",
+   "applyBurnout/1",
+   "previewBurnoutRecovery/0",
+   "applyBurnoutRecovery/1",
+   "rerollCorruptionWithCadai/0",
+   "activateMindOverBody/1",
+   "startMagicAdventure/0",
+   "applyMagicMeditation/0",
+   "getCadaiRunes/0",
+   "deployCadaiRune/0",
+   "consumeCadaiRune/0",
+   "previewDispelCasting/1",
+   "applyDispelCasting/1",
+   "previewDispelPersistent/1",
+   "applyDispelPersistent/1",
+   "applySpellEffects/2",
+   "expireSpellEffects/1",
+   "consumeTemporaryFortune/1",
+   "consumeTemporaryFate/1",
+   "previewLoreAttribute/0",
+   "applyLoreAttribute/1",
+   "previewBeastForm/1",
+   "applyBeastForm/2",
+   "revertBeastForm/1",
+   "previewVerdantApotheosis/0",
+   "applyVerdantApotheosis/1",
+   "previewDaemonbane/1",
+   "applyDaemonbane/2",
+   "restoreDaemonbaneMaxHp/0",
+   "listDaemonbaneReductions/0",
+   "previewHandOfGlory/0",
+   "applyHandOfGlory/0",
+   "getHighMagicExecutions/0",
+   "getDivineAccessGrants/0",
+   "resolveDivineAccess/2",
+   "grantDivineAccess/2",
+   "revokeDivineAccessGrant/1",
+   "getDivineContract/1",
+   "getAllDivineContracts/0",
+   "canManageDivinePenances/0",
+   "getDivinePenanceExamples/0",
+   "createDivinePenance/1",
+   "completeDivinePenance/2",
+   "previewDivineAbsolution/0",
+   "applyDivineAbsolution/0",
+   "setSanctifiedGround/0",
+   "removeSanctifiedGround/1",
+   "enterSanctifiedGround/2",
+   "leaveSanctifiedGround/2",
+   "applyDivineNavalEvent/0",
+   "previewDivineNavalEvent/0",
+   "getDivineDailyWrathStatus/2",
+   "startDivineDailyWrath/1",
+   "waiveDivineDailyWrathDay/2",
+   "closeDivineDailyWrath/2",
+   "setDivineRelic/1",
+   "removeDivineRelic/2",
+   "getDivineSinEvents/0",
+   "getDivineSinReminders/0",
+   "previewDivineSinEvent/0",
+   "applyDivineSinEvent/0",
+   "returnDivineJudgment/2",
+   "decideDivineJudgmentRejection/2",
+   "previewDivineWrathRecovery/0",
+   "applyDivineWrathRecovery/0",
+   "previewDivineExecution/1",
+   "applyDivineExecution/1",
+   "endDivinePrayer/1",
+   "setDivineSin/2",
+   "getSpellContract/1",
+   "getContractChoiceOptions/1",
+   "validateSpellTargets/2",
+   "validateSpellFingerprint/2",
+   "previewSpellExecution/1",
+   "applySpellExecution/1",
+   "previewSpellInteraction/0",
+   "applySpellInteraction/0",
+   "getReminders/0",
+   "getParticipantReminders/1",
+   "resolveParticipantReminder/3",
+   "listReminderChoices/0",
+   "resolveReminder/2",
+   "saveReminderDecision/0",
+   "createIntention/1",
+   "createSceneEvent/1",
+   "saveSceneEvent/1",
+   "deleteSceneEvent/1",
+   "createSceneClock/1",
+   "saveSceneClock/1",
+   "deleteSceneClock/1",
+   "proposeSceneEvent/1",
+   "previewSceneEvent/1",
+   "applySceneEvent/1",
+   "resolveSceneEvent/1",
+   "advanceSceneClock/1",
+   "importParsedProfiles/0",
+   "setMountedState/1",
+   "getAftermathState/0",
+   "previewAftermathAdvance/0",
+   "listAftermathProposals/0",
+   "registerAftermathIncident/0",
+   "advanceAftermathCalendar/0",
+   "archiveAftermathIncident/0",
+   "treatAftermathWound/0",
+   "treatAftermathInfection/0",
+   "treatAftermathSurgicalIncident/0",
+   "closeAftermathIncident/0",
+   "listAftermathSequelae/0",
+   "openAftermathSequelae/0",
+   "setAftermathSequelaFacts/0",
+   "immobilizeAftermathFracture/0",
+   "unbindAftermathFracture/0",
+   "resolveAftermathFracture/0",
+   "treatAftermathTornMuscle/0",
+   "confirmAftermathResetLimb/0",
+   "recordAftermathPostEncounterTest/0",
+   "decideAftermathSurgeryDeadline/0",
+   "recordAftermathRelearning/0",
+   "decideAftermathImpressiveScars/0",
+   "recordAftermathCharacteristicLoss/0",
+   "registerAftermathDisease/0",
+   "careForAftermathDisease/0",
+   "getFullJSON/0",
+   "listRestorePoints/0",
+   "previewRestorePoint/1",
+   "restorePoint/1",
+   "previewImport/1",
+   "loadFromJSON/1",
+   "retryHydration/0",
+   "switchContext/1",
+   "whenIdle/0",
+   "detachSync/0",
+   "resolveSyncRemote/1",
+   "resolveSyncLocal/1",
+   "exportSyncConflict/0",
+   "importGuestSnapshot/1",
+   "attachSync/1",
+   "ready/object"
+  ],
+  "entries": [
+   {
+    "label": "addProfile gobelin",
+    "result": "4062edaf750fb807",
+    "state": "78ef64704b12574e"
+   },
+   {
+    "label": "addProfile garde",
+    "result": "4062edaf750fb807",
+    "state": "b6c4ae814c3fefe0"
+   },
+   {
+    "label": "addProfile héros",
+    "result": "4062edaf750fb807",
+    "state": "9f651cbf6d4c6c01"
+   },
+   {
+    "label": "updateProfile",
+    "result": "4062edaf750fb807",
+    "state": "6bde7522950b29e4"
+   },
+   {
+    "label": "duplicateProfile",
+    "result": "0f7d52c75e67041d",
+    "state": "6bde7522950b29e4"
+   },
+   {
+    "label": "listProfiles",
+    "result": "588b9f0398fed656",
+    "state": "87f78ef61b940323"
+   },
+   {
+    "label": "getProfile",
+    "result": "701bdd88d8962fc1",
+    "state": "87f78ef61b940323"
+   },
+   {
+    "label": "removeProfile",
+    "result": "4062edaf750fb807",
+    "state": "cbdd460a7e1fba67"
+   },
+   {
+    "label": "importParsedProfiles",
+    "result": "4062edaf750fb807",
+    "state": "4bbf7d9f820ef82e"
+   },
+   {
+    "label": "getReserve",
+    "result": "8d6d5c0567d6c067",
+    "state": "4bbf7d9f820ef82e"
+   },
+   {
+    "label": "addParticipant hero",
+    "result": "4062edaf750fb807",
+    "state": "4e353456f115f33f"
+   },
+   {
+    "label": "addParticipant mage",
+    "result": "4062edaf750fb807",
+    "state": "ee0818f4209c72a4"
+   },
+   {
+    "label": "addParticipant gob1",
+    "result": "4062edaf750fb807",
+    "state": "680bc929475e5ab9"
+   },
+   {
+    "label": "addParticipant gob2",
+    "result": "4062edaf750fb807",
+    "state": "ac5ff0e1c2291d77"
+   },
+   {
+    "label": "addParticipant banc",
+    "result": "4062edaf750fb807",
+    "state": "85fe89af94c93288"
+   },
+   {
+    "label": "listParticipants",
+    "result": "0b06cdc4eb21017a",
+    "state": "85fe89af94c93288"
+   },
+   {
+    "label": "updateParticipant",
+    "result": "4062edaf750fb807",
+    "state": "183730199d4892aa"
+   },
+   {
+    "label": "acquireConditions",
+    "result": "10b860de61ad5fa7",
+    "state": "497ac2fef2cc3df0"
+   },
+   {
+    "label": "recoverCondition",
+    "result": "49e8064edb6d2461",
+    "state": "497ac2fef2cc3df0"
+   },
+   {
+    "label": "healWounds",
+    "result": "9e148d443389d08b",
+    "state": "6fb5e31982ddaf50"
+   },
+   {
+    "label": "moveParticipant",
+    "result": "4062edaf750fb807",
+    "state": "0afd6b4bf3b35779"
+   },
+   {
+    "label": "rebuildOrder",
+    "result": "4062edaf750fb807",
+    "state": "9114cfb62c6cff7c"
+   },
+   {
+    "label": "getEffectiveOrder",
+    "result": "1df57e39de819717",
+    "state": "9114cfb62c6cff7c"
+   },
+   {
+    "label": "getOrderMode",
+    "result": "214f1adae32ccc38",
+    "state": "9114cfb62c6cff7c"
+   },
+   {
+    "label": "setOrderMode",
+    "result": "4062edaf750fb807",
+    "state": "c3a330708172a135"
+   },
+   {
+    "label": "moveInOrder",
+    "result": "fcbcf165908dd18a",
+    "state": "c3a330708172a135"
+   },
+   {
+    "label": "insertReinforcement",
+    "result": "fcbcf165908dd18a",
+    "state": "c3a330708172a135"
+   },
+   {
+    "label": "isCombatInitiativeInitialized",
+    "result": "fcbcf165908dd18a",
+    "state": "c3a330708172a135"
+   },
+   {
+    "label": "previewCombatInitialization",
+    "result": "1328c3bbfefdfb3c",
+    "state": "c3a330708172a135"
+   },
+   {
+    "label": "applyCombatInitialization",
+    "result": "485cdec427283572",
+    "state": "c3a330708172a135"
+   },
+   {
+    "label": "setRoundTurn",
+    "result": "4062edaf750fb807",
+    "state": "e6bfb2ce92645492"
+   },
+   {
+    "label": "nextTurn 1",
+    "result": "4062edaf750fb807",
+    "state": "7757d82ccb40fa31"
+   },
+   {
+    "label": "nextTurn 2",
+    "result": "4062edaf750fb807",
+    "state": "451ab3738db9bb51"
+   },
+   {
+    "label": "nextTurn 3",
+    "result": "4062edaf750fb807",
+    "state": "638f8a62a96e6b29"
+   },
+   {
+    "label": "consumeTurnSelection",
+    "result": "fcbcf165908dd18a",
+    "state": "638f8a62a96e6b29"
+   },
+   {
+    "label": "getCombat",
+    "result": "23e3e2e3da6f332d",
+    "state": "638f8a62a96e6b29"
+   },
+   {
+    "label": "removeParticipant",
+    "result": "4062edaf750fb807",
+    "state": "6ead2cbe69ef3aa6"
+   },
+   {
+    "label": "addImprovisedParticipant",
+    "error": "Error: Aucune scène active",
+    "state": "6ead2cbe69ef3aa6"
+   },
+   {
+    "label": "setMountedState",
+    "result": "4062edaf750fb807",
+    "state": "bc0fff862567606c"
+   },
+   {
+    "label": "advanceCampaignTime",
+    "result": "df15551f98bb14b0",
+    "state": "8ec97b6909fa6081"
+   },
+   {
+    "label": "advanceTalentMinutes",
+    "result": "bc485e89b59c4675",
+    "state": "b679a10e9e299e38"
+   },
+   {
+    "label": "startTalentSession",
+    "result": "4062edaf750fb807",
+    "state": "5a1e565f00af0a38"
+   },
+   {
+    "label": "addDiceLine",
+    "result": "4062edaf750fb807",
+    "state": "3cb86d76195560b6"
+   },
+   {
+    "label": "updateDiceLine",
+    "result": "4062edaf750fb807",
+    "state": "4d47af917048c8ff"
+   },
+   {
+    "label": "duplicateDiceLine",
+    "result": "0f7d52c75e67041d",
+    "state": "4d47af917048c8ff"
+   },
+   {
+    "label": "getDiceLines",
+    "result": "d0e8487b04fef465",
+    "state": "d2d87dd06974c2e9"
+   },
+   {
+    "label": "removeDiceLine",
+    "result": "4062edaf750fb807",
+    "state": "acc556f7dbb2dd47"
+   },
+   {
+    "label": "log",
+    "result": "4062edaf750fb807",
+    "state": "21853d92cb194235"
+   },
+   {
+    "label": "getLog",
+    "result": "efa7f3ca9b6d2c3e",
+    "state": "21853d92cb194235"
+   },
+   {
+    "label": "clearLog",
+    "result": "4062edaf750fb807",
+    "state": "d4591a49ebe5801b"
+   },
+   {
+    "label": "setFortune",
+    "result": "4062edaf750fb807",
+    "state": "5b30b470891c2a51"
+   },
+   {
+    "label": "setFate",
+    "result": "4062edaf750fb807",
+    "state": "fbbafc2570ed9e9a"
+   },
+   {
+    "label": "getFortune",
+    "result": "50d0f637652a514b",
+    "state": "fbbafc2570ed9e9a"
+   },
+   {
+    "label": "getFate",
+    "result": "0b80a9c166781e5a",
+    "state": "fbbafc2570ed9e9a"
+   },
+   {
+    "label": "consumeTemporaryFortune",
+    "result": "0489eb59918462f9",
+    "state": "0b069d5492ae4f19"
+   },
+   {
+    "label": "previewResolution",
+    "result": "3c6049f0dda70a45",
+    "state": "0b069d5492ae4f19"
+   },
+   {
+    "label": "applyResolution",
+    "result": "c83484b7cdb4f20e",
+    "state": "0b069d5492ae4f19"
+   },
+   {
+    "label": "simulateAction",
+    "result": "a363f87b913df6cf",
+    "state": "0b069d5492ae4f19"
+   },
+   {
+    "label": "getSimulationState",
+    "result": "796934b81a687eab",
+    "state": "0b069d5492ae4f19"
+   },
+   {
+    "label": "discardSimulation",
+    "error": "TypeError: Simulation invalide",
+    "state": "0b069d5492ae4f19"
+   },
+   {
+    "label": "previewV5CombatAction",
+    "result": "ebfbe564e5de0bb0",
+    "state": "0b069d5492ae4f19"
+   },
+   {
+    "label": "getReactionOpportunities",
+    "result": "4f53cda18c2baa0c",
+    "state": "0b069d5492ae4f19"
+   },
+   {
+    "label": "healCriticalWound",
+    "error": "TypeError: Blessure Critique introuvable",
+    "state": "0b069d5492ae4f19"
+   },
+   {
+    "label": "previewSuddenDeath",
+    "result": "6bb0ea50aad8e6f3",
+    "state": "0b069d5492ae4f19"
+   },
+   {
+    "label": "setSuddenDeathEnabled",
+    "result": "4062edaf750fb807",
+    "state": "b2c414d81ddf9edb"
+   },
+   {
+    "label": "setCorruptionPoints",
+    "result": "4062edaf750fb807",
+    "state": "f434cf72fbfef552"
+   },
+   {
+    "label": "getCorruptionStatus",
+    "result": "a5dbc5f999a6cbaf",
+    "state": "f434cf72fbfef552"
+   },
+   {
+    "label": "previewCorruptionExposure",
+    "result": "28efd3645f028de6",
+    "state": "f434cf72fbfef552"
+   },
+   {
+    "label": "applyCorruptionExposure",
+    "result": "be846c7cf8447a7a",
+    "state": "13dfcec693c5ddff"
+   },
+   {
+    "label": "getCorruptionMutationCatalog",
+    "result": "8527a891e2241369",
+    "state": "13dfcec693c5ddff"
+   },
+   {
+    "label": "declareWarpstoneDailyExposure",
+    "error": "TypeError: Confirmez la journée et l’objet de malepierre porté hors boîte plombée.",
+    "state": "13dfcec693c5ddff"
+   },
+   {
+    "label": "previewCorruptionThresholdTest",
+    "error": "Error: Aucun Test contre la mutation n’est en attente.",
+    "state": "13dfcec693c5ddff"
+   },
+   {
+    "label": "applyCorruptionAbsolution",
+    "error": "TypeError: Motif de l’absolution fixé par le MJ requis",
+    "state": "13dfcec693c5ddff"
+   },
+   {
+    "label": "getSpellContract",
+    "result": "29bb4e1c3204ca1f",
+    "state": "13dfcec693c5ddff"
+   },
+   {
+    "label": "previewChannelling",
+    "result": "6771e88cc0ede469",
+    "state": "13dfcec693c5ddff"
+   },
+   {
+    "label": "previewCasting",
+    "result": "a5fb426109d3aeea",
+    "state": "13dfcec693c5ddff"
+   },
+   {
+    "label": "applyCasting",
+    "result": "4062edaf750fb807",
+    "state": "5c242bb96ab6e0a6"
+   },
+   {
+    "label": "previewMiscast",
+    "result": "2728f96df6b40e9d",
+    "state": "5c242bb96ab6e0a6"
+   },
+   {
+    "label": "previewBurnout",
+    "result": "d422c5735d7be9bb",
+    "state": "5c242bb96ab6e0a6"
+   },
+   {
+    "label": "getCadaiRunes",
+    "result": "e3eb16a1ab34e4fe",
+    "state": "5c242bb96ab6e0a6"
+   },
+   {
+    "label": "previewDispelCasting",
+    "result": "c3cd03f0fac83d42",
+    "state": "5c242bb96ab6e0a6"
+   },
+   {
+    "label": "applySpellEffects",
+    "result": "4062edaf750fb807",
+    "state": "ecbeefa459e731dc"
+   },
+   {
+    "label": "expireSpellEffects",
+    "result": "4062edaf750fb807",
+    "state": "0939c3384d31baf7"
+   },
+   {
+    "label": "previewLoreAttribute",
+    "result": "66c0ef9f7e73e1ac",
+    "state": "0939c3384d31baf7"
+   },
+   {
+    "label": "getHighMagicExecutions",
+    "result": "4f53cda18c2baa0c",
+    "state": "0939c3384d31baf7"
+   },
+   {
+    "label": "previewSpellInteraction",
+    "result": "0002f9e17702818f",
+    "state": "0939c3384d31baf7"
+   },
+   {
+    "label": "getAllDivineContracts",
+    "result": "968076be2e38cf89",
+    "state": "0939c3384d31baf7"
+   },
+   {
+    "label": "getDivineAccessGrants",
+    "result": "4f53cda18c2baa0c",
+    "state": "0939c3384d31baf7"
+   },
+   {
+    "label": "resolveDivineAccess",
+    "result": "39d4c8733bf212a4",
+    "state": "0939c3384d31baf7"
+   },
+   {
+    "label": "setSanctifiedGround",
+    "result": "84d8c3cd0fb852d0",
+    "state": "0ed4be9662b06432"
+   },
+   {
+    "label": "removeSanctifiedGround",
+    "error": "Error: Terre sanctifiée introuvable.",
+    "state": "0ed4be9662b06432"
+   },
+   {
+    "label": "getDivineDailyWrathStatus",
+    "result": "74234e98afe7498f",
+    "state": "0ed4be9662b06432"
+   },
+   {
+    "label": "getDivineSinEvents",
+    "result": "39ada4d61eb76fa8",
+    "state": "0ed4be9662b06432"
+   },
+   {
+    "label": "getDivineSinReminders",
+    "result": "642e77df0ca4c571",
+    "state": "0ed4be9662b06432"
+   },
+   {
+    "label": "previewDivineSinEvent",
+    "result": "f296741d71cee441",
+    "state": "0ed4be9662b06432"
+   },
+   {
+    "label": "previewDivineAbsolution",
+    "result": "e1b50d13bfd96d87",
+    "state": "0ed4be9662b06432"
+   },
+   {
+    "label": "previewDivineWrathRecovery",
+    "result": "c32cddfd8e8d00ef",
+    "state": "0ed4be9662b06432"
+   },
+   {
+    "label": "previewDivineNavalEvent",
+    "result": "b6a329c0ca3d5c98",
+    "state": "0ed4be9662b06432"
+   },
+   {
+    "label": "setDivineSin",
+    "result": "4062edaf750fb807",
+    "state": "02ca2af28f7cf8a3"
+   },
+   {
+    "label": "canManageDivinePenances",
+    "result": "b5bea41b6c623f7c",
+    "state": "02ca2af28f7cf8a3"
+   },
+   {
+    "label": "getDivinePenanceExamples",
+    "result": "8527a891e2241369",
+    "state": "02ca2af28f7cf8a3"
+   },
+   {
+    "label": "setDivineRelic",
+    "result": "f7126970dcac3d2b",
+    "state": "c7362dad8d6f6d65"
+   },
+   {
+    "label": "getAftermathState",
+    "result": "5c857e39bacc20b3",
+    "state": "c7362dad8d6f6d65"
+   },
+   {
+    "label": "registerAftermathIncident",
+    "result": "c70ca27f861f45a5",
+    "state": "c7362dad8d6f6d65"
+   },
+   {
+    "label": "listAftermathSequelae",
+    "result": "951fa5295f3690ac",
+    "state": "c7362dad8d6f6d65"
+   },
+   {
+    "label": "listAftermathProposals",
+    "result": "4f53cda18c2baa0c",
+    "state": "c7362dad8d6f6d65"
+   },
+   {
+    "label": "previewAftermathAdvance",
+    "result": "2622d06aa276345c",
+    "state": "c7362dad8d6f6d65"
+   },
+   {
+    "label": "advanceAftermathCalendar",
+    "result": "6d126f53c29ffd3b",
+    "state": "c0ad3d0901254d01"
+   },
+   {
+    "label": "saveEncounter",
+    "result": "4062edaf750fb807",
+    "state": "c9bcde5b0130c4cb"
+   },
+   {
+    "label": "listEncounters",
+    "result": "faa03fcf5bd51791",
+    "state": "c9bcde5b0130c4cb"
+   },
+   {
+    "label": "duplicateEncounter",
+    "result": "4062edaf750fb807",
+    "state": "8c295390777ba4e3"
+   },
+   {
+    "label": "setEncounterEntry",
+    "result": "4062edaf750fb807",
+    "state": "f6115971c9d179dc"
+   },
+   {
+    "label": "previewEncounterLaunch",
+    "result": "26b217bb3661e57a",
+    "state": "f6115971c9d179dc"
+   },
+   {
+    "label": "launchEncounter",
+    "result": "4062edaf750fb807",
+    "state": "0ae4ef07e94dff6e"
+   },
+   {
+    "label": "suspendActiveScene",
+    "result": "4062edaf750fb807",
+    "state": "23e8170bb2a1f0b5"
+   },
+   {
+    "label": "getActiveScene",
+    "result": "74234e98afe7498f",
+    "state": "23e8170bb2a1f0b5"
+   },
+   {
+    "label": "listSuspendedScenes",
+    "result": "1b381b9f7a06df42",
+    "state": "23e8170bb2a1f0b5"
+   },
+   {
+    "label": "createSceneClock",
+    "result": "d8a8c9ae2d5a10b2",
+    "state": "23e8170bb2a1f0b5"
+   },
+   {
+    "label": "saveSceneEvent",
+    "error": "Error: Aucune scène active",
+    "state": "23e8170bb2a1f0b5"
+   },
+   {
+    "label": "savePersistentCharacter",
+    "result": "4062edaf750fb807",
+    "state": "cf564e6cc9005dd5"
+   },
+   {
+    "label": "listPersistentCharacters",
+    "result": "9ba265d8187cb1e3",
+    "state": "cf564e6cc9005dd5"
+   },
+   {
+    "label": "deletePersistentCharacter",
+    "result": "4062edaf750fb807",
+    "state": "fcfea2dbad24032b"
+   },
+   {
+    "label": "deleteEncounter",
+    "result": "4062edaf750fb807",
+    "state": "350e1a314fd53356"
+   },
+   {
+    "label": "previewCombatRestart",
+    "result": "258945e951b73f79",
+    "state": "350e1a314fd53356"
+   },
+   {
+    "label": "restartCombat",
+    "error": "Error: Aucun combat à recommencer",
+    "state": "350e1a314fd53356"
+   },
+   {
+    "label": "getKeywordReferential",
+    "result": "c6ea1527c86303e8",
+    "state": "350e1a314fd53356"
+   },
+   {
+    "label": "addCreatureKeyword",
+    "result": "b7c77de0deac2ab8",
+    "state": "350e1a314fd53356"
+   },
+   {
+    "label": "getReminders",
+    "result": "4f53cda18c2baa0c",
+    "state": "350e1a314fd53356"
+   },
+   {
+    "label": "listReminderChoices",
+    "result": "4f53cda18c2baa0c",
+    "state": "350e1a314fd53356"
+   },
+   {
+    "label": "canUndo",
+    "result": "b5bea41b6c623f7c",
+    "state": "350e1a314fd53356"
+   },
+   {
+    "label": "captureSnapshot",
+    "result": "0f7d52c75e67041d",
+    "state": "350e1a314fd53356"
+   },
+   {
+    "label": "updateParticipant avant undo",
+    "result": "0f7d52c75e67041d",
+    "state": "350e1a314fd53356"
+   },
+   {
+    "label": "undo",
+    "result": "b5bea41b6c623f7c",
+    "state": "7c4326f141917f14"
+   },
+   {
+    "label": "canRedo",
+    "result": "b5bea41b6c623f7c",
+    "state": "7c4326f141917f14"
+   },
+   {
+    "label": "redo",
+    "result": "b5bea41b6c623f7c",
+    "state": "221b980058a6229b"
+   },
+   {
+    "label": "getHistory",
+    "result": "f310c6d7dadcc440",
+    "state": "221b980058a6229b"
+   },
+   {
+    "label": "executeCommand",
+    "result": "4062edaf750fb807",
+    "state": "7a28aaf7a889fe63"
+   },
+   {
+    "label": "batch",
+    "result": "0f7d52c75e67041d",
+    "state": "7a28aaf7a889fe63"
+   },
+   {
+    "label": "getLocalRevision",
+    "result": "02d20bbd7e394ad5",
+    "state": "5d5550d5a349e0d7"
+   },
+   {
+    "label": "getFullJSON",
+    "result": "ad5a5a44a7e01b3c",
+    "state": "5d5550d5a349e0d7"
+   },
+   {
+    "label": "previewImport",
+    "result": "395e3ec97bb7246e",
+    "state": "5d5550d5a349e0d7"
+   },
+   {
+    "label": "previewImport invalide",
+    "error": "SyntaxError: Expected property name or '}' in JSON at position 1 (line 1 column 2)",
+    "state": "5d5550d5a349e0d7"
+   },
+   {
+    "label": "resetCombat",
+    "result": "4062edaf750fb807",
+    "state": "51d3328fdec4a445"
+   },
+   {
+    "label": "clearReserve",
+    "result": "4062edaf750fb807",
+    "state": "7151bde960ff3c24"
+   },
+   {
+    "label": "loadFromJSON",
+    "result": "bb096a7e00d7aa70",
+    "state": "9a41619e2546dc7d"
+   },
+   {
+    "label": "loadFromJSON invalide",
+    "error": "MigrationError: Enveloppe de sauvegarde invalide",
+    "state": "9a41619e2546dc7d"
+   },
+   {
+    "label": "listRestorePoints",
+    "result": "4f53cda18c2baa0c",
+    "state": "9a41619e2546dc7d"
+   },
+   {
+    "label": "usesPersistence",
+    "result": "b5bea41b6c623f7c",
+    "state": "9a41619e2546dc7d"
+   },
+   {
+    "label": "whenIdle",
+    "result": "65d0cffc354d7db0",
+    "state": "9a41619e2546dc7d"
+   },
+   {
+    "label": "sweep addProfile",
+    "error": "SyntaxError: \"undefined\" is not valid JSON",
+    "state": "9a41619e2546dc7d"
+   },
+   {
+    "label": "sweep updateProfile",
+    "result": "0f7d52c75e67041d",
+    "state": "9a41619e2546dc7d"
+   },
+   {
+    "label": "sweep applyFicheSync",
+    "result": "4692962246347ffa",
+    "state": "9a41619e2546dc7d"
+   },
+   {
+    "label": "sweep removeProfile",
+    "result": "0f7d52c75e67041d",
+    "state": "9a41619e2546dc7d"
+   },
+   {
+    "label": "sweep clearReserve",
+    "result": "4062edaf750fb807",
+    "state": "1e6dd6ac9d09dda8"
+   },
+   {
+    "label": "sweep duplicateProfile",
+    "result": "0f7d52c75e67041d",
+    "state": "1e6dd6ac9d09dda8"
+   },
+   {
+    "label": "sweep listProfiles",
+    "result": "4f53cda18c2baa0c",
+    "state": "1e6dd6ac9d09dda8"
+   },
+   {
+    "label": "sweep getProfile",
+    "result": "74234e98afe7498f",
+    "state": "1e6dd6ac9d09dda8"
+   },
+   {
+    "label": "sweep addParticipant",
+    "error": "SyntaxError: \"undefined\" is not valid JSON",
+    "state": "1e6dd6ac9d09dda8"
+   },
+   {
+    "label": "sweep removeParticipant",
+    "result": "0f7d52c75e67041d",
+    "state": "1e6dd6ac9d09dda8"
+   },
+   {
+    "label": "sweep updateParticipant",
+    "result": "0f7d52c75e67041d",
+    "state": "1e6dd6ac9d09dda8"
+   },
+   {
+    "label": "sweep acquireConditions",
+    "result": "2c97889f54fcd745",
+    "state": "1e6dd6ac9d09dda8"
+   },
+   {
+    "label": "sweep advanceCampaignTime",
+    "error": "TypeError: Commande de temps de campagne invalide",
+    "state": "1e6dd6ac9d09dda8"
+   },
+   {
+    "label": "sweep advanceTalentMinutes",
+    "error": "TypeError: Durée de campagne positive en secondes entières requise",
+    "state": "1e6dd6ac9d09dda8"
+   },
+   {
+    "label": "sweep startTalentSession",
+    "result": "4062edaf750fb807",
+    "state": "151b79c5c82a6db8"
+   },
+   {
+    "label": "sweep getFortune",
+    "error": "TypeError: Personnage introuvable",
+    "state": "151b79c5c82a6db8"
+   },
+   {
+    "label": "sweep getFate",
+    "error": "TypeError: Personnage introuvable",
+    "state": "151b79c5c82a6db8"
+   },
+   {
+    "label": "sweep declareV5FortuneAdvantage",
+    "error": "TypeError: Acteur requis pour déclarer Chance → Avantage",
+    "state": "151b79c5c82a6db8"
+   },
+   {
+    "label": "sweep setFate",
+    "error": "TypeError: Montant et motif MJ requis pour le Destin",
+    "state": "151b79c5c82a6db8"
+   },
+   {
+    "label": "sweep setFortune",
+    "error": "TypeError: Personnage introuvable",
+    "state": "151b79c5c82a6db8"
+   },
+   {
+    "label": "sweep getCorruptionStatus",
+    "error": "TypeError: Personnage introuvable",
+    "state": "151b79c5c82a6db8"
+   },
+   {
+    "label": "sweep declareWarpstoneDailyExposure",
+    "error": "TypeError: Confirmez la journée et l’objet de malepierre porté hors boîte plombée.",
+    "state": "151b79c5c82a6db8"
+   },
+   {
+    "label": "sweep getCorruptionMutationCatalog",
+    "result": "707e8642b24313ae",
+    "state": "151b79c5c82a6db8"
+   },
+   {
+    "label": "sweep setCorruptionPoints",
+    "error": "TypeError: Valeur entière connue et motif MJ requis",
+    "state": "151b79c5c82a6db8"
+   },
+   {
+    "label": "sweep previewCorruptionExposure",
+    "error": "TypeError: Personnage introuvable",
+    "state": "151b79c5c82a6db8"
+   },
+   {
+    "label": "sweep applyCorruptionExposure",
+    "error": "TypeError: Aperçu de Corruption prêt requis",
+    "state": "151b79c5c82a6db8"
+   },
+   {
+    "label": "sweep previewCorruptionThresholdTest",
+    "error": "TypeError: Personnage introuvable",
+    "state": "151b79c5c82a6db8"
+   },
+   {
+    "label": "sweep applyCorruptionThresholdTest",
+    "error": "TypeError: Aperçu du Test de Corruption requis",
+    "state": "151b79c5c82a6db8"
+   },
+   {
+    "label": "sweep resolveObsoleteCorruptionThresholdTest",
+    "error": "TypeError: Personnage introuvable",
+    "state": "151b79c5c82a6db8"
+   },
+   {
+    "label": "sweep confirmCorruptionMutation",
+    "error": "TypeError: Description ou référence de mutation choisie par le MJ requise",
+    "state": "151b79c5c82a6db8"
+   },
+   {
+    "label": "sweep declineCorruptionMutation",
+    "error": "TypeError: Personnage introuvable",
+    "state": "151b79c5c82a6db8"
+   },
+   {
+    "label": "sweep applyCorruptionAbsolution",
+    "error": "TypeError: Motif de l’absolution fixé par le MJ requis",
+    "state": "151b79c5c82a6db8"
+   },
+   {
+    "label": "sweep decideCorruptionCharacterLoss",
+    "error": "TypeError: Décision et motif MJ requis pour la perte de personnage",
+    "state": "151b79c5c82a6db8"
+   },
+   {
+    "label": "sweep healCriticalWound",
+    "error": "TypeError: Participant introuvable",
+    "state": "151b79c5c82a6db8"
+   },
+   {
+    "label": "sweep decideCriticalDeath",
+    "error": "TypeError: Participant introuvable",
+    "state": "151b79c5c82a6db8"
+   },
+   {
+    "label": "sweep decideImmediateCriticalDeath",
+    "error": "TypeError: Participant introuvable",
+    "state": "151b79c5c82a6db8"
+   },
+   {
+    "label": "sweep setSuddenDeathEnabled",
+    "error": "TypeError: Réglage Mort subite invalide",
+    "state": "151b79c5c82a6db8"
+   },
+   {
+    "label": "sweep previewSuddenDeath",
+    "result": "99fd0be673c45201",
+    "state": "151b79c5c82a6db8"
+   },
+   {
+    "label": "sweep decideSuddenDeath",
+    "error": "TypeError: Participant introuvable",
+    "state": "151b79c5c82a6db8"
+   },
+   {
+    "label": "sweep previewAmputationShock",
+    "result": "99fd0be673c45201",
+    "state": "151b79c5c82a6db8"
+   },
+   {
+    "label": "sweep deferAmputationShock",
+    "error": "Error: Participant introuvable.",
+    "state": "151b79c5c82a6db8"
+   },
+   {
+    "label": "sweep applyAmputationShock",
+    "result": "e0040670d32541c6",
+    "state": "151b79c5c82a6db8"
+   },
+   {
+    "label": "sweep recoverCondition",
+    "result": "2c97889f54fcd745",
+    "state": "151b79c5c82a6db8"
+   },
+   {
+    "label": "sweep healWounds",
+    "result": "2c97889f54fcd745",
+    "state": "151b79c5c82a6db8"
+   },
+   {
+    "label": "sweep moveParticipant",
+    "result": "0f7d52c75e67041d",
+    "state": "151b79c5c82a6db8"
+   },
+   {
+    "label": "sweep listParticipants",
+    "result": "4f53cda18c2baa0c",
+    "state": "151b79c5c82a6db8"
+   },
+   {
+    "label": "sweep setRoundTurn",
+    "result": "4062edaf750fb807",
+    "state": "347fb9b8e6ecdf51"
+   },
+   {
+    "label": "sweep rebuildOrder",
+    "result": "4062edaf750fb807",
+    "state": "a0806c51b7fae34d"
+   },
+   {
+    "label": "sweep getEffectiveOrder",
+    "result": "4f53cda18c2baa0c",
+    "state": "a0806c51b7fae34d"
+   },
+   {
+    "label": "sweep getOrderMode",
+    "result": "73d805be762751aa",
+    "state": "a0806c51b7fae34d"
+   },
+   {
+    "label": "sweep isCombatInitiativeInitialized",
+    "result": "fcbcf165908dd18a",
+    "state": "a0806c51b7fae34d"
+   },
+   {
+    "label": "sweep previewEncounterLaunch",
+    "error": "Error: Rencontre introuvable",
+    "state": "a0806c51b7fae34d"
+   },
+   {
+    "label": "sweep previewCombatRestart",
+    "result": "325a4077f5e784dd",
+    "state": "a0806c51b7fae34d"
+   },
+   {
+    "label": "sweep previewCombatInitialization",
+    "result": "3fa139e928fbf2e0",
+    "state": "a0806c51b7fae34d"
+   },
+   {
+    "label": "sweep previewCombatParticipantActivation",
+    "error": "Error: Combattant introuvable",
+    "state": "a0806c51b7fae34d"
+   },
+   {
+    "label": "sweep previewCombatParticipantAddition",
+    "result": "74234e98afe7498f",
+    "state": "a0806c51b7fae34d"
+   },
+   {
+    "label": "sweep applyCombatInitialization",
+    "result": "485cdec427283572",
+    "state": "a0806c51b7fae34d"
+   },
+   {
+    "label": "sweep setOrderMode",
+    "result": "4062edaf750fb807",
+    "state": "f81b9b0337cb30cf"
+   },
+   {
+    "label": "sweep moveInOrder",
+    "result": "fcbcf165908dd18a",
+    "state": "f81b9b0337cb30cf"
+   },
+   {
+    "label": "sweep insertReinforcement",
+    "result": "fcbcf165908dd18a",
+    "state": "f81b9b0337cb30cf"
+   },
+   {
+    "label": "sweep nextTurn",
+    "result": "4062edaf750fb807",
+    "state": "e0f4a786ffc59e42"
+   },
+   {
+    "label": "sweep consumeTurnSelection",
+    "result": "fcbcf165908dd18a",
+    "state": "e0f4a786ffc59e42"
+   },
+   {
+    "label": "sweep usesPersistence",
+    "result": "b5bea41b6c623f7c",
+    "state": "e0f4a786ffc59e42"
+   },
+   {
+    "label": "sweep getCombat",
+    "result": "cd7ef776426d87ff",
+    "state": "e0f4a786ffc59e42"
+   },
+   {
+    "label": "sweep getReserve",
+    "result": "1f722262a9334201",
+    "state": "e0f4a786ffc59e42"
+   },
+   {
+    "label": "sweep getDiceLines",
+    "result": "7f0c11c74ddb9a87",
+    "state": "e0f4a786ffc59e42"
+   },
+   {
+    "label": "sweep getLog",
+    "result": "fde3fb97fadecb7c",
+    "state": "e0f4a786ffc59e42"
+   },
+   {
+    "label": "sweep addDiceLine",
+    "error": "SyntaxError: \"undefined\" is not valid JSON",
+    "state": "e0f4a786ffc59e42"
+   },
+   {
+    "label": "sweep updateDiceLine",
+    "result": "0f7d52c75e67041d",
+    "state": "e0f4a786ffc59e42"
+   },
+   {
+    "label": "sweep removeDiceLine",
+    "result": "0f7d52c75e67041d",
+    "state": "e0f4a786ffc59e42"
+   },
+   {
+    "label": "sweep duplicateDiceLine",
+    "result": "0f7d52c75e67041d",
+    "state": "e0f4a786ffc59e42"
+   },
+   {
+    "label": "sweep importFromReserve",
+    "result": "4062edaf750fb807",
+    "state": "e66372d66b10e16e"
+   },
+   {
+    "label": "sweep addProfilesToCombat",
+    "error": "Error: Aucun profil à ajouter",
+    "state": "e66372d66b10e16e"
+   },
+   {
+    "label": "sweep exportToReserve",
+    "result": "31a3ddcc9b1235fe",
+    "state": "e69b8b9c04134396"
+   },
+   {
+    "label": "sweep canUndo",
+    "result": "b5bea41b6c623f7c",
+    "state": "e69b8b9c04134396"
+   },
+   {
+    "label": "sweep canRedo",
+    "result": "fcbcf165908dd18a",
+    "state": "e69b8b9c04134396"
+   },
+   {
+    "label": "sweep getHistory",
+    "result": "909b84f51e296e19",
+    "state": "e69b8b9c04134396"
+   },
+   {
+    "label": "sweep captureSnapshot",
+    "result": "0f7d52c75e67041d",
+    "state": "e69b8b9c04134396"
+   },
+   {
+    "label": "sweep undo",
+    "result": "b5bea41b6c623f7c",
+    "state": "f0938d6b9e5b6542"
+   },
+   {
+    "label": "sweep redo",
+    "result": "b5bea41b6c623f7c",
+    "state": "9ef326ceb30580a4"
+   },
+   {
+    "label": "sweep log",
+    "result": "0f7d52c75e67041d",
+    "state": "9ef326ceb30580a4"
+   },
+   {
+    "label": "sweep clearLog",
+    "result": "4062edaf750fb807",
+    "state": "b26831d07d68244c"
+   },
+   {
+    "label": "sweep resetCombat",
+    "result": "4062edaf750fb807",
+    "state": "8bef85d633f5d726"
+   },
+   {
+    "label": "sweep getLocalRevision",
+    "result": "c75cb66ae28d8ebc",
+    "state": "8bef85d633f5d726"
+   },
+   {
+    "label": "sweep listEncounters",
+    "result": "41ccf949e9e0f8b0",
+    "state": "8bef85d633f5d726"
+   },
+   {
+    "label": "sweep saveEncounter",
+    "result": "4062edaf750fb807",
+    "state": "3fd0f7f28356102f"
+   },
+   {
+    "label": "sweep deleteEncounter",
+    "error": "TypeError: Cannot read properties of undefined (reading 'id')",
+    "state": "3fd0f7f28356102f"
+   },
+   {
+    "label": "sweep duplicateEncounter",
+    "error": "Error: Rencontre introuvable",
+    "state": "3fd0f7f28356102f"
+   },
+   {
+    "label": "sweep setEncounterEntry",
+    "error": "Error: Rencontre introuvable",
+    "state": "3fd0f7f28356102f"
+   },
+   {
+    "label": "sweep getKeywordReferential",
+    "result": "a34b50554e16d3fa",
+    "state": "3fd0f7f28356102f"
+   },
+   {
+    "label": "sweep addCreatureKeyword",
+    "result": "b7c77de0deac2ab8",
+    "state": "3fd0f7f28356102f"
+   },
+   {
+    "label": "sweep linkFamiliar",
+    "result": "ab4a9fd4052d6d11",
+    "state": "3fd0f7f28356102f"
+   },
+   {
+    "label": "sweep createFamiliar",
+    "result": "ab4a9fd4052d6d11",
+    "state": "3fd0f7f28356102f"
+   },
+   {
+    "label": "sweep unlinkFamiliar",
+    "result": "da54d55cf134566d",
+    "state": "3fd0f7f28356102f"
+   },
+   {
+    "label": "sweep setFamiliarRange",
+    "result": "3e22de28bea39f4a",
+    "state": "3fd0f7f28356102f"
+   },
+   {
+    "label": "sweep resolveFamiliarDeath",
+    "result": "8f0bad8618a08993",
+    "state": "3fd0f7f28356102f"
+   },
+   {
+    "label": "sweep applyRegeneration",
+    "result": "3dae9aa8bef26a6e",
+    "state": "3fd0f7f28356102f"
+   },
+   {
+    "label": "sweep applyCreaturePsychology",
+    "result": "dce93024cffd7860",
+    "state": "3fd0f7f28356102f"
+   },
+   {
+    "label": "sweep applySwarmEndOfRound",
+    "result": "d299ef6a696a5fb2",
+    "state": "3fd0f7f28356102f"
+   },
+   {
+    "label": "sweep applyCreatureVenom",
+    "result": "b4777bd585121ab2",
+    "state": "3fd0f7f28356102f"
+   },
+   {
+    "label": "sweep setHeadState",
+    "result": "ac7cba615529dde6",
+    "state": "3fd0f7f28356102f"
+   },
+   {
+    "label": "sweep setSlannAboard",
+    "result": "aef88699a33c9b1d",
+    "state": "3fd0f7f28356102f"
+   },
+   {
+    "label": "sweep applySlannContemplation",
+    "result": "c67a93f9b3071fcd",
+    "state": "3fd0f7f28356102f"
+   },
+   {
+    "label": "sweep listPersistentCharacters",
+    "result": "4f53cda18c2baa0c",
+    "state": "3fd0f7f28356102f"
+   },
+   {
+    "label": "sweep savePersistentCharacter",
+    "result": "4062edaf750fb807",
+    "state": "5a0f478027407ea2"
+   },
+   {
+    "label": "sweep deletePersistentCharacter",
+    "result": "4062edaf750fb807",
+    "state": "fc64691a64ea733b"
+   },
+   {
+    "label": "sweep getActiveScene",
+    "result": "74234e98afe7498f",
+    "state": "fc64691a64ea733b"
+   },
+   {
+    "label": "sweep listSuspendedScenes",
+    "result": "4f53cda18c2baa0c",
+    "state": "fc64691a64ea733b"
+   },
+   {
+    "label": "sweep launchEncounter",
+    "error": "Error: Rencontre introuvable",
+    "state": "fc64691a64ea733b"
+   },
+   {
+    "label": "sweep restartCombat",
+    "error": "Error: Aucun combat à recommencer",
+    "state": "fc64691a64ea733b"
+   },
+   {
+    "label": "sweep addImprovisedParticipant",
+    "error": "Error: Aucune scène active",
+    "state": "fc64691a64ea733b"
+   },
+   {
+    "label": "sweep suspendActiveScene",
+    "error": "Error: Aucune scène active",
+    "state": "fc64691a64ea733b"
+   },
+   {
+    "label": "sweep resumeScene",
+    "error": "Error: Scène suspendue introuvable",
+    "state": "fc64691a64ea733b"
+   },
+   {
+    "label": "sweep getReactionOpportunities",
+    "result": "4f53cda18c2baa0c",
+    "state": "fc64691a64ea733b"
+   },
+   {
+    "label": "sweep confirmBrokenEscapeVisibility",
+    "result": "b7d3ad04c3a38476",
+    "state": "fc64691a64ea733b"
+   },
+   {
+    "label": "sweep previewV5ProjectileExtraction",
+    "result": "9f96e934df2e496e",
+    "state": "fc64691a64ea733b"
+   },
+   {
+    "label": "sweep applyV5ProjectileExtraction",
+    "result": "d9b450db3f743780",
+    "state": "fc64691a64ea733b"
+   },
+   {
+    "label": "sweep previewV5PaviseDeployment",
+    "result": "9b91c7a6c883b7ce",
+    "state": "fc64691a64ea733b"
+   },
+   {
+    "label": "sweep applyV5PaviseDeployment",
+    "result": "01393f71bbecd60b",
+    "state": "fc64691a64ea733b"
+   },
+   {
+    "label": "sweep previewV5WeaponReload",
+    "result": "cd5ea59291f567b6",
+    "state": "fc64691a64ea733b"
+   },
+   {
+    "label": "sweep applyV5WeaponReload",
+    "result": "4824b913cbcdc391",
+    "state": "fc64691a64ea733b"
+   },
+   {
+    "label": "sweep previewBrokenEscape",
+    "result": "f69a0b5e78c04bf2",
+    "state": "fc64691a64ea733b"
+   },
+   {
+    "label": "sweep applyBrokenEscape",
+    "error": "Error: Aperçu de fuite absent ou modifié; recalculez.",
+    "state": "fc64691a64ea733b"
+   },
+   {
+    "label": "sweep previewResolution",
+    "error": "ResolutionError: Le résultat d100 doit être compris entre 1 et 100",
+    "state": "fc64691a64ea733b"
+   },
+   {
+    "label": "sweep previewV5CombatAction",
+    "result": "b10c5f5fe1162238",
+    "state": "fc64691a64ea733b"
+   },
+   {
+    "label": "sweep declareV5CombatMovement",
+    "result": "d46deb443d3fb7b4",
+    "state": "fc64691a64ea733b"
+   },
+   {
+    "label": "sweep applyV5CombatAction",
+    "result": "cc4acc34cb24c32b",
+    "state": "fc64691a64ea733b"
+   },
+   {
+    "label": "sweep applyResolution",
+    "error": "TypeError: Cannot read properties of undefined (reading 'input')",
+    "state": "fc64691a64ea733b"
+   },
+   {
+    "label": "sweep simulateAction",
+    "error": "TypeError: Action de simulation requise",
+    "state": "fc64691a64ea733b"
+   },
+   {
+    "label": "sweep applySimulation",
+    "error": "TypeError: Cannot read properties of undefined (reading 'preview')",
+    "state": "fc64691a64ea733b"
+   },
+   {
+    "label": "sweep getSimulationState",
+    "result": "cb49068cae7874d2",
+    "state": "fc64691a64ea733b"
+   },
+   {
+    "label": "sweep discardSimulation",
+    "error": "TypeError: Simulation invalide",
+    "state": "fc64691a64ea733b"
+   },
+   {
+    "label": "sweep previewChannelling",
+    "error": "TypeError: Cannot read properties of undefined (reading 'extensions')",
+    "state": "fc64691a64ea733b"
+   },
+   {
+    "label": "sweep applyChannelling",
+    "error": "TypeError: Cannot read properties of undefined (reading 'input')",
+    "state": "fc64691a64ea733b"
+   },
+   {
+    "label": "sweep previewCasting",
+    "error": "TypeError: Cannot read properties of undefined (reading 'extensions')",
+    "state": "fc64691a64ea733b"
+   },
+   {
+    "label": "sweep applyCasting",
+    "error": "TypeError: Cannot read properties of undefined (reading 'input')",
+    "state": "fc64691a64ea733b"
+   },
+   {
+    "label": "sweep previewMiscast",
+    "result": "98e06f6de7237d0a",
+    "state": "fc64691a64ea733b"
+   },
+   {
+    "label": "sweep applyMiscast",
+    "error": "TypeError: Aperçu d’incident incomplet",
+    "state": "fc64691a64ea733b"
+   },
+   {
+    "label": "sweep previewBurnout",
+    "result": "da2e5fdfa5bda0f3",
+    "state": "fc64691a64ea733b"
+   },
+   {
+    "label": "sweep applyBurnout",
+    "error": "TypeError: Aperçu d’épuisement incomplet ou non prêt",
+    "state": "fc64691a64ea733b"
+   },
+   {
+    "label": "sweep previewBurnoutRecovery",
+    "result": "e01bb46312ad74df",
+    "state": "fc64691a64ea733b"
+   },
+   {
+    "label": "sweep applyBurnoutRecovery",
+    "error": "TypeError: Annulation d’épuisement impossible ou invalide",
+    "state": "fc64691a64ea733b"
+   },
+   {
+    "label": "sweep rerollCorruptionWithCadai",
+    "error": "Error: Acteur introuvable.",
+    "state": "fc64691a64ea733b"
+   },
+   {
+    "label": "sweep activateMindOverBody",
+    "error": "Error: Contemplation active et rang 3 requis.",
+    "state": "fc64691a64ea733b"
+   },
+   {
+    "label": "sweep startMagicAdventure",
+    "result": "4062edaf750fb807",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep applyMagicMeditation",
+    "error": "Error: Acteur introuvable.",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep getCadaiRunes",
+    "result": "e3eb16a1ab34e4fe",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep deployCadaiRune",
+    "error": "Error: Participant introuvable dans le combat",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep consumeCadaiRune",
+    "error": "Error: Participant introuvable dans le combat",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep previewDispelCasting",
+    "result": "83dec0a4607b90fa",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep applyDispelCasting",
+    "error": "TypeError: Cannot read properties of undefined (reading 'dispellerId')",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep previewDispelPersistent",
+    "error": "TypeError: Dissipateur requis",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep applyDispelPersistent",
+    "error": "TypeError: Cannot read properties of undefined (reading 'baseRevision')",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep applySpellEffects",
+    "error": "Error: Participant introuvable dans le combat",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep expireSpellEffects",
+    "error": "Error: Participant introuvable dans le combat",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep consumeTemporaryFortune",
+    "error": "Error: Participant introuvable dans le combat",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep consumeTemporaryFate",
+    "error": "Error: Participant introuvable dans le combat",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep previewLoreAttribute",
+    "result": "a18a13058bc5251a",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep applyLoreAttribute",
+    "error": "TypeError: Cannot read properties of undefined (reading 'casterId')",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep previewBeastForm",
+    "error": "TypeError: Lanceur et profil de bête requis",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep applyBeastForm",
+    "error": "Error: Participant introuvable dans le combat",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep revertBeastForm",
+    "error": "Error: Participant introuvable dans le combat",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep previewVerdantApotheosis",
+    "result": "734b4728061fc8a5",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep applyVerdantApotheosis",
+    "error": "TypeError: Aperçu d’Apothéose Verdoyante invalide",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep previewDaemonbane",
+    "error": "TypeError: Lanceur et cible requis pour previewDaemonbane",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep applyDaemonbane",
+    "error": "Error: Participant démon introuvable",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep restoreDaemonbaneMaxHp",
+    "error": "Error: Aucune Blessure maximale divisée à restaurer.",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep listDaemonbaneReductions",
+    "result": "4f53cda18c2baa0c",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep previewHandOfGlory",
+    "result": "df2ba75425f29c44",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep applyHandOfGlory",
+    "error": "TypeError: Aperçu de Main de Gloire invalide",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep getHighMagicExecutions",
+    "result": "4f53cda18c2baa0c",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep getDivineAccessGrants",
+    "result": "4f53cda18c2baa0c",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep resolveDivineAccess",
+    "result": "f868e0882c7f25ec",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep grantDivineAccess",
+    "result": "6b7b766851af871f",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep revokeDivineAccessGrant",
+    "result": "4837740505bed92b",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep getDivineContract",
+    "result": "74234e98afe7498f",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep getAllDivineContracts",
+    "result": "314a8cec4fd7c7a2",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep canManageDivinePenances",
+    "result": "b5bea41b6c623f7c",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep getDivinePenanceExamples",
+    "result": "bb91a1d8929aa131",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep createDivinePenance",
+    "error": "Error: Fiche de pénitence introuvable.",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep completeDivinePenance",
+    "error": "Error: Pénitence introuvable.",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep previewDivineAbsolution",
+    "result": "7ab1910076dacda8",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep applyDivineAbsolution",
+    "error": "Error: Aperçu d’absolution requis.",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep setSanctifiedGround",
+    "error": "Error: Nom du lieu requis (120 caractères au plus).",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep removeSanctifiedGround",
+    "error": "Error: Terre sanctifiée introuvable.",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep enterSanctifiedGround",
+    "error": "Error: Terre sanctifiée introuvable.",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep leaveSanctifiedGround",
+    "error": "Error: Terre sanctifiée introuvable.",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep applyDivineNavalEvent",
+    "error": "Error: Événement naval inconnu.",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep previewDivineNavalEvent",
+    "result": "b6a329c0ca3d5c98",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep getDivineDailyWrathStatus",
+    "result": "74234e98afe7498f",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep startDivineDailyWrath",
+    "error": "Error: Personnage introuvable.",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep waiveDivineDailyWrathDay",
+    "error": "Error: Suivi quotidien introuvable.",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep closeDivineDailyWrath",
+    "error": "Error: Suivi quotidien introuvable.",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep setDivineRelic",
+    "error": "Error: Personnage introuvable.",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep removeDivineRelic",
+    "error": "Error: Relique introuvable.",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep getDivineSinEvents",
+    "result": "39ada4d61eb76fa8",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep getDivineSinReminders",
+    "result": "642e77df0ca4c571",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep previewDivineSinEvent",
+    "result": "f296741d71cee441",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep applyDivineSinEvent",
+    "error": "Error: Événement de Péché inconnu.",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep returnDivineJudgment",
+    "error": "Error: Jugement divin introuvable.",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep decideDivineJudgmentRejection",
+    "error": "Error: Jugement divin introuvable.",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep previewDivineWrathRecovery",
+    "result": "1d8c6e61f8364b42",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep applyDivineWrathRecovery",
+    "error": "Error: L’aperçu de récupération a été modifié : recalculez.",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep previewDivineExecution",
+    "result": "4362485889dfc977",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep applyDivineExecution",
+    "error": "Error: Calculez cette prière avant de l’appliquer.",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep endDivinePrayer",
+    "error": "Error: Indiquez la raison de la fin de cette prière.",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep setDivineSin",
+    "error": "Error: Le total de Péchés doit être un entier positif ou nul.",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep getSpellContract",
+    "result": "74234e98afe7498f",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep getContractChoiceOptions",
+    "result": "4f53cda18c2baa0c",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep validateSpellTargets",
+    "result": "ef2e1ea31b0fd2cf",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep validateSpellFingerprint",
+    "result": "4a8bc553c49a93a5",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep previewSpellExecution",
+    "error": "TypeError: Cannot read properties of null (reading 'id')",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep applySpellExecution",
+    "error": "TypeError: Cannot read properties of null (reading 'id')",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep previewSpellInteraction",
+    "result": "27eaa50f0f0e2ec1",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep applySpellInteraction",
+    "result": "9a1506f4e135197e",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep getReminders",
+    "result": "4f53cda18c2baa0c",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep getParticipantReminders",
+    "result": "4f53cda18c2baa0c",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep resolveParticipantReminder",
+    "error": "TypeError: Décision de rappel invalide",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep listReminderChoices",
+    "result": "4f53cda18c2baa0c",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep resolveReminder",
+    "result": "fcbcf165908dd18a",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep saveReminderDecision",
+    "result": "fcbcf165908dd18a",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep createIntention",
+    "error": "SceneEventError: id requis",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep createSceneEvent",
+    "error": "SceneEventError: condition structurée requise",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep saveSceneEvent",
+    "error": "Error: Aucune scène active",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep deleteSceneEvent",
+    "error": "Error: Aucune scène active",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep createSceneClock",
+    "error": "SceneEventError: clockId requis",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep saveSceneClock",
+    "error": "Error: Aucune scène active",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep deleteSceneClock",
+    "error": "Error: Aucune scène active",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep proposeSceneEvent",
+    "result": "3f9eccb654a72c1a",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep previewSceneEvent",
+    "result": "77381638708272d1",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep applySceneEvent",
+    "result": "a5d07454836cc031",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep resolveSceneEvent",
+    "error": "Error: Aucune scène active",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep advanceSceneClock",
+    "error": "Error: Aucune scène active",
+    "state": "f786968e5715a28d"
+   },
+   {
+    "label": "sweep importParsedProfiles",
+    "result": "4062edaf750fb807",
+    "state": "dd07b664fa686bab"
+   },
+   {
+    "label": "sweep setMountedState",
+    "error": "Error: Le cavalier doit être un participant de la rencontre.",
+    "state": "dd07b664fa686bab"
+   },
+   {
+    "label": "sweep getAftermathState",
+    "result": "e4cbd96d6211d8c8",
+    "state": "dd07b664fa686bab"
+   },
+   {
+    "label": "sweep previewAftermathAdvance",
+    "result": "b4c1c197d75c5cfa",
+    "state": "dd07b664fa686bab"
+   },
+   {
+    "label": "sweep listAftermathProposals",
+    "result": "4f53cda18c2baa0c",
+    "state": "dd07b664fa686bab"
+   },
+   {
+    "label": "sweep registerAftermathIncident",
+    "result": "8c740bf10b0d28b3",
+    "state": "dd07b664fa686bab"
+   },
+   {
+    "label": "sweep advanceAftermathCalendar",
+    "error": "TypeError: identifiant d’opération requis",
+    "state": "dd07b664fa686bab"
+   },
+   {
+    "label": "sweep archiveAftermathIncident",
+    "error": "TypeError: identifiant d’opération requis",
+    "state": "dd07b664fa686bab"
+   },
+   {
+    "label": "sweep treatAftermathWound",
+    "error": "TypeError: identifiant d’opération requis",
+    "state": "dd07b664fa686bab"
+   },
+   {
+    "label": "sweep treatAftermathInfection",
+    "error": "TypeError: identifiant d’opération requis",
+    "state": "dd07b664fa686bab"
+   },
+   {
+    "label": "sweep treatAftermathSurgicalIncident",
+    "error": "TypeError: identifiant d’opération requis",
+    "state": "dd07b664fa686bab"
+   },
+   {
+    "label": "sweep closeAftermathIncident",
+    "error": "TypeError: identifiant d’opération requis",
+    "state": "dd07b664fa686bab"
+   },
+   {
+    "label": "sweep listAftermathSequelae",
+    "result": "5ca6fee45cab712a",
+    "state": "dd07b664fa686bab"
+   },
+   {
+    "label": "sweep openAftermathSequelae",
+    "error": "TypeError: identifiant d’opération requis",
+    "state": "dd07b664fa686bab"
+   },
+   {
+    "label": "sweep setAftermathSequelaFacts",
+    "error": "TypeError: identifiant d’opération requis",
+    "state": "dd07b664fa686bab"
+   },
+   {
+    "label": "sweep immobilizeAftermathFracture",
+    "error": "TypeError: identifiant d’opération requis",
+    "state": "dd07b664fa686bab"
+   },
+   {
+    "label": "sweep unbindAftermathFracture",
+    "error": "TypeError: identifiant d’opération requis",
+    "state": "dd07b664fa686bab"
+   },
+   {
+    "label": "sweep resolveAftermathFracture",
+    "error": "TypeError: identifiant d’opération requis",
+    "state": "dd07b664fa686bab"
+   },
+   {
+    "label": "sweep treatAftermathTornMuscle",
+    "error": "TypeError: identifiant d’opération requis",
+    "state": "dd07b664fa686bab"
+   },
+   {
+    "label": "sweep confirmAftermathResetLimb",
+    "error": "TypeError: identifiant d’opération requis",
+    "state": "dd07b664fa686bab"
+   },
+   {
+    "label": "sweep recordAftermathPostEncounterTest",
+    "error": "TypeError: identifiant d’opération requis",
+    "state": "dd07b664fa686bab"
+   },
+   {
+    "label": "sweep decideAftermathSurgeryDeadline",
+    "error": "TypeError: identifiant d’opération requis",
+    "state": "dd07b664fa686bab"
+   },
+   {
+    "label": "sweep recordAftermathRelearning",
+    "error": "TypeError: identifiant d’opération requis",
+    "state": "dd07b664fa686bab"
+   },
+   {
+    "label": "sweep decideAftermathImpressiveScars",
+    "result": "af73cf7dc1298c8a",
+    "state": "dd07b664fa686bab"
+   },
+   {
+    "label": "sweep recordAftermathCharacteristicLoss",
+    "result": "ad63e90df06e2328",
+    "state": "dd07b664fa686bab"
+   },
+   {
+    "label": "sweep registerAftermathDisease",
+    "result": "4a083ff60b02e5f7",
+    "state": "dd07b664fa686bab"
+   },
+   {
+    "label": "sweep careForAftermathDisease",
+    "error": "TypeError: identifiant d’opération requis",
+    "state": "dd07b664fa686bab"
+   },
+   {
+    "label": "sweep getFullJSON",
+    "result": "ba6d034d3cdf38ad",
+    "state": "dd07b664fa686bab"
+   },
+   {
+    "label": "sweep listRestorePoints",
+    "result": "4f53cda18c2baa0c",
+    "state": "dd07b664fa686bab"
+   },
+   {
+    "label": "sweep previewRestorePoint",
+    "error": "TypeError: restore id invalide",
+    "state": "dd07b664fa686bab"
+   },
+   {
+    "label": "sweep restorePoint",
+    "error": "TypeError: restore id invalide",
+    "state": "dd07b664fa686bab"
+   },
+   {
+    "label": "sweep previewImport",
+    "error": "MigrationError: Enveloppe de sauvegarde invalide",
+    "state": "dd07b664fa686bab"
+   },
+   {
+    "label": "sweep loadFromJSON",
+    "error": "MigrationError: Enveloppe de sauvegarde invalide",
+    "state": "dd07b664fa686bab"
+   },
+   {
+    "label": "sweep whenIdle",
+    "result": "65d0cffc354d7db0",
+    "state": "dd07b664fa686bab"
+   }
+  ]
+ },
+ "storage": {
+  "keys": [
+   "executeCommand/2",
+   "batch/1",
+   "addProfile/1",
+   "updateProfile/2",
+   "applyFicheSync/1",
+   "removeProfile/1",
+   "clearReserve/0",
+   "duplicateProfile/1",
+   "listProfiles/0",
+   "getProfile/1",
+   "addParticipant/1",
+   "removeParticipant/1",
+   "updateParticipant/2",
+   "acquireConditions/2",
+   "advanceCampaignTime/1",
+   "advanceTalentMinutes/1",
+   "startTalentSession/0",
+   "getFortune/1",
+   "getFate/1",
+   "declareV5FortuneAdvantage/1",
+   "setFate/2",
+   "setFortune/2",
+   "getCorruptionStatus/1",
+   "declareWarpstoneDailyExposure/1",
+   "getCorruptionMutationCatalog/0",
+   "setCorruptionPoints/2",
+   "previewCorruptionExposure/1",
+   "applyCorruptionExposure/2",
+   "previewCorruptionThresholdTest/1",
+   "applyCorruptionThresholdTest/2",
+   "resolveObsoleteCorruptionThresholdTest/1",
+   "confirmCorruptionMutation/1",
+   "declineCorruptionMutation/1",
+   "applyCorruptionAbsolution/1",
+   "decideCorruptionCharacterLoss/1",
+   "healCriticalWound/2",
+   "decideCriticalDeath/2",
+   "decideImmediateCriticalDeath/3",
+   "setSuddenDeathEnabled/1",
+   "previewSuddenDeath/1",
+   "decideSuddenDeath/2",
+   "previewAmputationShock/0",
+   "deferAmputationShock/3",
+   "applyAmputationShock/0",
+   "recoverCondition/2",
+   "healWounds/2",
+   "moveParticipant/2",
+   "listParticipants/0",
+   "setRoundTurn/2",
+   "rebuildOrder/0",
+   "getEffectiveOrder/0",
+   "getOrderMode/0",
+   "isCombatInitiativeInitialized/0",
+   "previewEncounterLaunch/1",
+   "previewCombatRestart/0",
+   "previewCombatInitialization/0",
+   "previewCombatParticipantActivation/1",
+   "previewCombatParticipantAddition/1",
+   "applyCombatInitialization/0",
+   "setOrderMode/0",
+   "moveInOrder/1",
+   "insertReinforcement/1",
+   "nextTurn/0",
+   "consumeTurnSelection/0",
+   "usesPersistence/0",
+   "getCombat/0",
+   "getReserve/0",
+   "getDiceLines/0",
+   "getLog/0",
+   "addDiceLine/1",
+   "updateDiceLine/2",
+   "removeDiceLine/1",
+   "duplicateDiceLine/1",
+   "importFromReserve/1",
+   "addProfilesToCombat/1",
+   "exportToReserve/0",
+   "canUndo/0",
+   "canRedo/0",
+   "getHistory/0",
+   "captureSnapshot/0",
+   "undo/0",
+   "redo/0",
+   "log/1",
+   "clearLog/0",
+   "resetCombat/0",
+   "getLocalRevision/0",
+   "listEncounters/0",
+   "saveEncounter/1",
+   "deleteEncounter/1",
+   "duplicateEncounter/1",
+   "setEncounterEntry/2",
+   "getKeywordReferential/0",
+   "addCreatureKeyword/1",
+   "linkFamiliar/2",
+   "createFamiliar/2",
+   "unlinkFamiliar/2",
+   "setFamiliarRange/3",
+   "resolveFamiliarDeath/2",
+   "applyRegeneration/2",
+   "applyCreaturePsychology/2",
+   "applySwarmEndOfRound/1",
+   "applyCreatureVenom/2",
+   "setHeadState/3",
+   "setSlannAboard/2",
+   "applySlannContemplation/2",
+   "listPersistentCharacters/0",
+   "savePersistentCharacter/1",
+   "deletePersistentCharacter/1",
+   "getActiveScene/0",
+   "listSuspendedScenes/0",
+   "launchEncounter/1",
+   "restartCombat/0",
+   "addImprovisedParticipant/1",
+   "suspendActiveScene/0",
+   "resumeScene/1",
+   "getReactionOpportunities/1",
+   "confirmBrokenEscapeVisibility/0",
+   "previewV5ProjectileExtraction/0",
+   "applyV5ProjectileExtraction/1",
+   "previewV5PaviseDeployment/0",
+   "applyV5PaviseDeployment/1",
+   "previewV5WeaponReload/0",
+   "applyV5WeaponReload/1",
+   "previewBrokenEscape/0",
+   "applyBrokenEscape/1",
+   "previewResolution/0",
+   "previewV5CombatAction/0",
+   "declareV5CombatMovement/0",
+   "applyV5CombatAction/1",
+   "applyResolution/1",
+   "simulateAction/0",
+   "applySimulation/1",
+   "getSimulationState/0",
+   "discardSimulation/1",
+   "previewChannelling/0",
+   "applyChannelling/1",
+   "previewCasting/1",
+   "applyCasting/1",
+   "previewMiscast/0",
+   "applyMiscast/1",
+   "previewBurnout/0",
+   "applyBurnout/1",
+   "previewBurnoutRecovery/0",
+   "applyBurnoutRecovery/1",
+   "rerollCorruptionWithCadai/0",
+   "activateMindOverBody/1",
+   "startMagicAdventure/0",
+   "applyMagicMeditation/0",
+   "getCadaiRunes/0",
+   "deployCadaiRune/0",
+   "consumeCadaiRune/0",
+   "previewDispelCasting/1",
+   "applyDispelCasting/1",
+   "previewDispelPersistent/1",
+   "applyDispelPersistent/1",
+   "applySpellEffects/2",
+   "expireSpellEffects/1",
+   "consumeTemporaryFortune/1",
+   "consumeTemporaryFate/1",
+   "previewLoreAttribute/0",
+   "applyLoreAttribute/1",
+   "previewBeastForm/1",
+   "applyBeastForm/2",
+   "revertBeastForm/1",
+   "previewVerdantApotheosis/0",
+   "applyVerdantApotheosis/1",
+   "previewDaemonbane/1",
+   "applyDaemonbane/2",
+   "restoreDaemonbaneMaxHp/0",
+   "listDaemonbaneReductions/0",
+   "previewHandOfGlory/0",
+   "applyHandOfGlory/0",
+   "getHighMagicExecutions/0",
+   "getDivineAccessGrants/0",
+   "resolveDivineAccess/2",
+   "grantDivineAccess/2",
+   "revokeDivineAccessGrant/1",
+   "getDivineContract/1",
+   "getAllDivineContracts/0",
+   "canManageDivinePenances/0",
+   "getDivinePenanceExamples/0",
+   "createDivinePenance/1",
+   "completeDivinePenance/2",
+   "previewDivineAbsolution/0",
+   "applyDivineAbsolution/0",
+   "setSanctifiedGround/0",
+   "removeSanctifiedGround/1",
+   "enterSanctifiedGround/2",
+   "leaveSanctifiedGround/2",
+   "applyDivineNavalEvent/0",
+   "previewDivineNavalEvent/0",
+   "getDivineDailyWrathStatus/2",
+   "startDivineDailyWrath/1",
+   "waiveDivineDailyWrathDay/2",
+   "closeDivineDailyWrath/2",
+   "setDivineRelic/1",
+   "removeDivineRelic/2",
+   "getDivineSinEvents/0",
+   "getDivineSinReminders/0",
+   "previewDivineSinEvent/0",
+   "applyDivineSinEvent/0",
+   "returnDivineJudgment/2",
+   "decideDivineJudgmentRejection/2",
+   "previewDivineWrathRecovery/0",
+   "applyDivineWrathRecovery/0",
+   "previewDivineExecution/1",
+   "applyDivineExecution/1",
+   "endDivinePrayer/1",
+   "setDivineSin/2",
+   "getSpellContract/1",
+   "getContractChoiceOptions/1",
+   "validateSpellTargets/2",
+   "validateSpellFingerprint/2",
+   "previewSpellExecution/1",
+   "applySpellExecution/1",
+   "previewSpellInteraction/0",
+   "applySpellInteraction/0",
+   "getReminders/0",
+   "getParticipantReminders/1",
+   "resolveParticipantReminder/3",
+   "listReminderChoices/0",
+   "resolveReminder/2",
+   "saveReminderDecision/0",
+   "createIntention/1",
+   "createSceneEvent/1",
+   "saveSceneEvent/1",
+   "deleteSceneEvent/1",
+   "createSceneClock/1",
+   "saveSceneClock/1",
+   "deleteSceneClock/1",
+   "proposeSceneEvent/1",
+   "previewSceneEvent/1",
+   "applySceneEvent/1",
+   "resolveSceneEvent/1",
+   "advanceSceneClock/1",
+   "importParsedProfiles/0",
+   "setMountedState/1",
+   "getAftermathState/0",
+   "previewAftermathAdvance/0",
+   "listAftermathProposals/0",
+   "registerAftermathIncident/0",
+   "advanceAftermathCalendar/0",
+   "archiveAftermathIncident/0",
+   "treatAftermathWound/0",
+   "treatAftermathInfection/0",
+   "treatAftermathSurgicalIncident/0",
+   "closeAftermathIncident/0",
+   "listAftermathSequelae/0",
+   "openAftermathSequelae/0",
+   "setAftermathSequelaFacts/0",
+   "immobilizeAftermathFracture/0",
+   "unbindAftermathFracture/0",
+   "resolveAftermathFracture/0",
+   "treatAftermathTornMuscle/0",
+   "confirmAftermathResetLimb/0",
+   "recordAftermathPostEncounterTest/0",
+   "decideAftermathSurgeryDeadline/0",
+   "recordAftermathRelearning/0",
+   "decideAftermathImpressiveScars/0",
+   "recordAftermathCharacteristicLoss/0",
+   "registerAftermathDisease/0",
+   "careForAftermathDisease/0",
+   "getFullJSON/0",
+   "listRestorePoints/0",
+   "previewRestorePoint/1",
+   "restorePoint/1",
+   "previewImport/1",
+   "loadFromJSON/1",
+   "retryHydration/0",
+   "switchContext/1",
+   "whenIdle/0",
+   "detachSync/0",
+   "resolveSyncRemote/1",
+   "resolveSyncLocal/1",
+   "exportSyncConflict/0",
+   "importGuestSnapshot/1",
+   "attachSync/1",
+   "ready/object"
+  ],
+  "entries": [
+   {
+    "label": "addProfile gobelin",
+    "result": "0f7d52c75e67041d",
+    "state": "9d1a768a7477d166"
+   },
+   {
+    "label": "addProfile garde",
+    "result": "0f7d52c75e67041d",
+    "state": "21c7fe5856f93bff"
+   },
+   {
+    "label": "addProfile héros",
+    "result": "0f7d52c75e67041d",
+    "state": "9ce9cfc2a2207cb9"
+   },
+   {
+    "label": "updateProfile",
+    "result": "0f7d52c75e67041d",
+    "state": "3f454d67814d4956"
+   },
+   {
+    "label": "duplicateProfile",
+    "result": "0f7d52c75e67041d",
+    "state": "84d5f3aab7e0ba42"
+   },
+   {
+    "label": "listProfiles",
+    "result": "1767f612992539ff",
+    "state": "84d5f3aab7e0ba42"
+   },
+   {
+    "label": "getProfile",
+    "result": "64ce38576444f8c1",
+    "state": "84d5f3aab7e0ba42"
+   },
+   {
+    "label": "removeProfile",
+    "result": "0f7d52c75e67041d",
+    "state": "fcf7c27dad6a29ec"
+   },
+   {
+    "label": "importParsedProfiles",
+    "result": "cf155999ed0f4be6",
+    "state": "56bd459ab6d1368a"
+   },
+   {
+    "label": "getReserve",
+    "result": "f0049106115c8147",
+    "state": "56bd459ab6d1368a"
+   },
+   {
+    "label": "addParticipant hero",
+    "result": "0f7d52c75e67041d",
+    "state": "1c253f6e5edb9dcd"
+   },
+   {
+    "label": "addParticipant mage",
+    "result": "0f7d52c75e67041d",
+    "state": "4857e8b23e7ef8c3"
+   },
+   {
+    "label": "addParticipant gob1",
+    "result": "0f7d52c75e67041d",
+    "state": "ace2fb755360ccff"
+   },
+   {
+    "label": "addParticipant gob2",
+    "result": "0f7d52c75e67041d",
+    "state": "3555e344e52e2a9c"
+   },
+   {
+    "label": "addParticipant banc",
+    "result": "0f7d52c75e67041d",
+    "state": "55a9b224c19b36bb"
+   },
+   {
+    "label": "listParticipants",
+    "result": "987d16b1083d9c81",
+    "state": "55a9b224c19b36bb"
+   },
+   {
+    "label": "updateParticipant",
+    "result": "0f7d52c75e67041d",
+    "state": "5743e9c2a229545c"
+   },
+   {
+    "label": "acquireConditions",
+    "result": "19b9c17f6203e730",
+    "state": "a8b138b7f2d29e71"
+   },
+   {
+    "label": "recoverCondition",
+    "result": "9cb772e65f8ca733",
+    "state": "a8b138b7f2d29e71"
+   },
+   {
+    "label": "healWounds",
+    "result": "95843a44c199f5e3",
+    "state": "99aa3ad417c89944"
+   },
+   {
+    "label": "moveParticipant",
+    "result": "0f7d52c75e67041d",
+    "state": "f262afb06d2bb689"
+   },
+   {
+    "label": "rebuildOrder",
+    "result": "0f7d52c75e67041d",
+    "state": "f262afb06d2bb689"
+   },
+   {
+    "label": "getEffectiveOrder",
+    "result": "1df57e39de819717",
+    "state": "f262afb06d2bb689"
+   },
+   {
+    "label": "getOrderMode",
+    "result": "214f1adae32ccc38",
+    "state": "f262afb06d2bb689"
+   },
+   {
+    "label": "setOrderMode",
+    "result": "b5bea41b6c623f7c",
+    "state": "4c585718349e000a"
+   },
+   {
+    "label": "moveInOrder",
+    "result": "fcbcf165908dd18a",
+    "state": "4c585718349e000a"
+   },
+   {
+    "label": "insertReinforcement",
+    "result": "fcbcf165908dd18a",
+    "state": "4c585718349e000a"
+   },
+   {
+    "label": "isCombatInitiativeInitialized",
+    "result": "fcbcf165908dd18a",
+    "state": "4c585718349e000a"
+   },
+   {
+    "label": "previewCombatInitialization",
+    "result": "59829c216117e1e7",
+    "state": "4c585718349e000a"
+   },
+   {
+    "label": "applyCombatInitialization",
+    "result": "485cdec427283572",
+    "state": "4c585718349e000a"
+   },
+   {
+    "label": "setRoundTurn",
+    "result": "0f7d52c75e67041d",
+    "state": "4891e456aa2debd5"
+   },
+   {
+    "label": "nextTurn 1",
+    "result": "e56028f54103a5da",
+    "state": "68daed4e9d012ae3"
+   },
+   {
+    "label": "nextTurn 2",
+    "result": "5453d758e18633b1",
+    "state": "c9ba4c2c9e9d73a1"
+   },
+   {
+    "label": "nextTurn 3",
+    "result": "4cd59b4d3e4700f3",
+    "state": "bbff558c0055afad"
+   },
+   {
+    "label": "consumeTurnSelection",
+    "result": "fcbcf165908dd18a",
+    "state": "bbff558c0055afad"
+   },
+   {
+    "label": "getCombat",
+    "result": "23e3e2e3da6f332d",
+    "state": "bbff558c0055afad"
+   },
+   {
+    "label": "removeParticipant",
+    "result": "0f7d52c75e67041d",
+    "state": "72bfce55bdcff956"
+   },
+   {
+    "label": "addImprovisedParticipant",
+    "error": "Error: Aucune scène active",
+    "state": "72bfce55bdcff956"
+   },
+   {
+    "label": "setMountedState",
+    "result": "a9335778c975cc39",
+    "state": "4a1e0ff89154568b"
+   },
+   {
+    "label": "advanceCampaignTime",
+    "result": "ad9f079b8dea65a4",
+    "state": "4a1e0ff89154568b"
+   },
+   {
+    "label": "advanceTalentMinutes",
+    "result": "ad9f079b8dea65a4",
+    "state": "4a1e0ff89154568b"
+   },
+   {
+    "label": "startTalentSession",
+    "result": "a9335778c975cc39",
+    "state": "6da64f05db1b7df6"
+   },
+   {
+    "label": "addDiceLine",
+    "result": "0f7d52c75e67041d",
+    "state": "df54b64c17982db0"
+   },
+   {
+    "label": "updateDiceLine",
+    "result": "0f7d52c75e67041d",
+    "state": "ef242b1bc85fffbd"
+   },
+   {
+    "label": "duplicateDiceLine",
+    "result": "0f7d52c75e67041d",
+    "state": "cd3618ecb5f71b8d"
+   },
+   {
+    "label": "getDiceLines",
+    "result": "0e77b42357765ac0",
+    "state": "cd3618ecb5f71b8d"
+   },
+   {
+    "label": "removeDiceLine",
+    "result": "0f7d52c75e67041d",
+    "state": "ba388d9e59ac8dbc"
+   },
+   {
+    "label": "log",
+    "result": "a9335778c975cc39",
+    "state": "982655533c2a89e2"
+   },
+   {
+    "label": "getLog",
+    "result": "a052287097b50aac",
+    "state": "982655533c2a89e2"
+   },
+   {
+    "label": "clearLog",
+    "result": "b5bea41b6c623f7c",
+    "state": "2549e7791c46dbbf"
+   },
+   {
+    "label": "setFortune",
+    "result": "f916496b2fea09b8",
+    "state": "d3932efc4338aff5"
+   },
+   {
+    "label": "setFate",
+    "result": "c89f52d25206cb75",
+    "state": "01c4dfe4458c4103"
+   },
+   {
+    "label": "getFortune",
+    "result": "cb00566077410260",
+    "state": "01c4dfe4458c4103"
+   },
+   {
+    "label": "getFate",
+    "result": "bd465fef367aba56",
+    "state": "01c4dfe4458c4103"
+   },
+   {
+    "label": "consumeTemporaryFortune",
+    "result": "0489eb59918462f9",
+    "state": "2aa1d7090b7e6a41"
+   },
+   {
+    "label": "previewResolution",
+    "result": "f0199d70eece1357",
+    "state": "2aa1d7090b7e6a41"
+   },
+   {
+    "label": "applyResolution",
+    "error": "Error: Jet de défense requis pour l’opposition de Corps à corps.",
+    "state": "2aa1d7090b7e6a41"
+   },
+   {
+    "label": "simulateAction",
+    "result": "3c180856683f91b7",
+    "state": "2aa1d7090b7e6a41"
+   },
+   {
+    "label": "getSimulationState",
+    "result": "e5ed2b91321d84a4",
+    "state": "2aa1d7090b7e6a41"
+   },
+   {
+    "label": "discardSimulation",
+    "error": "TypeError: Simulation invalide",
+    "state": "2aa1d7090b7e6a41"
+   },
+   {
+    "label": "previewV5CombatAction",
+    "result": "47da219cbea9799c",
+    "state": "2aa1d7090b7e6a41"
+   },
+   {
+    "label": "getReactionOpportunities",
+    "result": "4f53cda18c2baa0c",
+    "state": "2aa1d7090b7e6a41"
+   },
+   {
+    "label": "healCriticalWound",
+    "error": "TypeError: Blessure Critique introuvable",
+    "state": "2aa1d7090b7e6a41"
+   },
+   {
+    "label": "previewSuddenDeath",
+    "result": "a0ae5cad99f9a51d",
+    "state": "2aa1d7090b7e6a41"
+   },
+   {
+    "label": "setSuddenDeathEnabled",
+    "result": "0cd0374175725e74",
+    "state": "320037de88530c80"
+   },
+   {
+    "label": "setCorruptionPoints",
+    "error": "TypeError: api.executeCommand(...).catch is not a function",
+    "state": "1812f62eeb62fa0d"
+   },
+   {
+    "label": "getCorruptionStatus",
+    "result": "05aee5a99e3221bd",
+    "state": "1812f62eeb62fa0d"
+   },
+   {
+    "label": "previewCorruptionExposure",
+    "result": "5cc68a194288f306",
+    "state": "1812f62eeb62fa0d"
+   },
+   {
+    "label": "applyCorruptionExposure",
+    "result": "7681acaa36577727",
+    "state": "c15439fca2300e58"
+   },
+   {
+    "label": "getCorruptionMutationCatalog",
+    "result": "8527a891e2241369",
+    "state": "c15439fca2300e58"
+   },
+   {
+    "label": "declareWarpstoneDailyExposure",
+    "error": "TypeError: Confirmez la journée et l’objet de malepierre porté hors boîte plombée.",
+    "state": "c15439fca2300e58"
+   },
+   {
+    "label": "previewCorruptionThresholdTest",
+    "error": "Error: Aucun Test contre la mutation n’est en attente.",
+    "state": "c15439fca2300e58"
+   },
+   {
+    "label": "applyCorruptionAbsolution",
+    "error": "TypeError: Motif de l’absolution fixé par le MJ requis",
+    "state": "c15439fca2300e58"
+   },
+   {
+    "label": "getSpellContract",
+    "result": "29bb4e1c3204ca1f",
+    "state": "c15439fca2300e58"
+   },
+   {
+    "label": "previewChannelling",
+    "result": "11a340182d135a36",
+    "state": "c15439fca2300e58"
+   },
+   {
+    "label": "previewCasting",
+    "result": "fe59eb008ba67c34",
+    "state": "c15439fca2300e58"
+   },
+   {
+    "label": "applyCasting",
+    "result": "725eb0746f2e386e",
+    "state": "483e9fc0ec6f1e69"
+   },
+   {
+    "label": "previewMiscast",
+    "result": "2728f96df6b40e9d",
+    "state": "483e9fc0ec6f1e69"
+   },
+   {
+    "label": "previewBurnout",
+    "result": "d422c5735d7be9bb",
+    "state": "483e9fc0ec6f1e69"
+   },
+   {
+    "label": "getCadaiRunes",
+    "result": "e3eb16a1ab34e4fe",
+    "state": "483e9fc0ec6f1e69"
+   },
+   {
+    "label": "previewDispelCasting",
+    "result": "c3cd03f0fac83d42",
+    "state": "483e9fc0ec6f1e69"
+   },
+   {
+    "label": "applySpellEffects",
+    "result": "d4f8d5f50137ce9f",
+    "state": "7434b3d2474ec9de"
+   },
+   {
+    "label": "expireSpellEffects",
+    "result": "037e957f1c721219",
+    "state": "56b34cdffe19cc72"
+   },
+   {
+    "label": "previewLoreAttribute",
+    "result": "bb83800446bdb011",
+    "state": "56b34cdffe19cc72"
+   },
+   {
+    "label": "getHighMagicExecutions",
+    "result": "4f53cda18c2baa0c",
+    "state": "56b34cdffe19cc72"
+   },
+   {
+    "label": "previewSpellInteraction",
+    "result": "cb2595ba0ca2746c",
+    "state": "56b34cdffe19cc72"
+   },
+   {
+    "label": "getAllDivineContracts",
+    "result": "968076be2e38cf89",
+    "state": "56b34cdffe19cc72"
+   },
+   {
+    "label": "getDivineAccessGrants",
+    "result": "4f53cda18c2baa0c",
+    "state": "56b34cdffe19cc72"
+   },
+   {
+    "label": "resolveDivineAccess",
+    "result": "39d4c8733bf212a4",
+    "state": "56b34cdffe19cc72"
+   },
+   {
+    "label": "setSanctifiedGround",
+    "result": "dd8c44c110b08169",
+    "state": "d147deca87e0983b"
+   },
+   {
+    "label": "removeSanctifiedGround",
+    "error": "Error: Terre sanctifiée introuvable.",
+    "state": "d147deca87e0983b"
+   },
+   {
+    "label": "getDivineDailyWrathStatus",
+    "result": "74234e98afe7498f",
+    "state": "d147deca87e0983b"
+   },
+   {
+    "label": "getDivineSinEvents",
+    "result": "39ada4d61eb76fa8",
+    "state": "d147deca87e0983b"
+   },
+   {
+    "label": "getDivineSinReminders",
+    "result": "642e77df0ca4c571",
+    "state": "d147deca87e0983b"
+   },
+   {
+    "label": "previewDivineSinEvent",
+    "result": "f296741d71cee441",
+    "state": "d147deca87e0983b"
+   },
+   {
+    "label": "previewDivineAbsolution",
+    "result": "2c6712c41bedc9f4",
+    "state": "d147deca87e0983b"
+   },
+   {
+    "label": "previewDivineWrathRecovery",
+    "result": "83b16a94482a34da",
+    "state": "d147deca87e0983b"
+   },
+   {
+    "label": "previewDivineNavalEvent",
+    "result": "b6a329c0ca3d5c98",
+    "state": "d147deca87e0983b"
+   },
+   {
+    "label": "setDivineSin",
+    "result": "9cdb9139c053c62d",
+    "state": "542f29d57b00bd98"
+   },
+   {
+    "label": "canManageDivinePenances",
+    "result": "b5bea41b6c623f7c",
+    "state": "542f29d57b00bd98"
+   },
+   {
+    "label": "getDivinePenanceExamples",
+    "result": "8527a891e2241369",
+    "state": "542f29d57b00bd98"
+   },
+   {
+    "label": "setDivineRelic",
+    "result": "4d027063fd00cba4",
+    "state": "60a0e6d29854f693"
+   },
+   {
+    "label": "getAftermathState",
+    "result": "5c857e39bacc20b3",
+    "state": "60a0e6d29854f693"
+   },
+   {
+    "label": "registerAftermathIncident",
+    "result": "c70ca27f861f45a5",
+    "state": "60a0e6d29854f693"
+   },
+   {
+    "label": "listAftermathSequelae",
+    "result": "951fa5295f3690ac",
+    "state": "60a0e6d29854f693"
+   },
+   {
+    "label": "listAftermathProposals",
+    "result": "4f53cda18c2baa0c",
+    "state": "60a0e6d29854f693"
+   },
+   {
+    "label": "previewAftermathAdvance",
+    "result": "2622d06aa276345c",
+    "state": "60a0e6d29854f693"
+   },
+   {
+    "label": "advanceAftermathCalendar",
+    "result": "6d126f53c29ffd3b",
+    "state": "9636d7ed987ba3ba"
+   },
+   {
+    "label": "saveEncounter",
+    "result": "58022c000a04ea3f",
+    "state": "34506c2a7884ad14"
+   },
+   {
+    "label": "listEncounters",
+    "result": "faa03fcf5bd51791",
+    "state": "34506c2a7884ad14"
+   },
+   {
+    "label": "duplicateEncounter",
+    "result": "58022c000a04ea3f",
+    "state": "c7da1176bf4ad5bf"
+   },
+   {
+    "label": "setEncounterEntry",
+    "result": "58022c000a04ea3f",
+    "state": "bc6958e030531d47"
+   },
+   {
+    "label": "previewEncounterLaunch",
+    "result": "dfa8f1b105f2ae38",
+    "state": "bc6958e030531d47"
+   },
+   {
+    "label": "launchEncounter",
+    "result": "55ad026a79812e82",
+    "state": "f14cf166dad81be8"
+   },
+   {
+    "label": "suspendActiveScene",
+    "result": "cf155999ed0f4be6",
+    "state": "9f1e5e68cc8af2f0"
+   },
+   {
+    "label": "getActiveScene",
+    "result": "74234e98afe7498f",
+    "state": "9f1e5e68cc8af2f0"
+   },
+   {
+    "label": "listSuspendedScenes",
+    "result": "414d582c3dd758cb",
+    "state": "9f1e5e68cc8af2f0"
+   },
+   {
+    "label": "createSceneClock",
+    "result": "d8a8c9ae2d5a10b2",
+    "state": "9f1e5e68cc8af2f0"
+   },
+   {
+    "label": "saveSceneEvent",
+    "error": "Error: Aucune scène active",
+    "state": "9f1e5e68cc8af2f0"
+   },
+   {
+    "label": "savePersistentCharacter",
+    "result": "cf155999ed0f4be6",
+    "state": "8a79ba29863727ca"
+   },
+   {
+    "label": "listPersistentCharacters",
+    "result": "9ba265d8187cb1e3",
+    "state": "8a79ba29863727ca"
+   },
+   {
+    "label": "deletePersistentCharacter",
+    "result": "cf155999ed0f4be6",
+    "state": "c724221916c7ac96"
+   },
+   {
+    "label": "deleteEncounter",
+    "result": "cf155999ed0f4be6",
+    "state": "02716aaca4d5f084"
+   },
+   {
+    "label": "previewCombatRestart",
+    "result": "70d0e9db300c0605",
+    "state": "02716aaca4d5f084"
+   },
+   {
+    "label": "restartCombat",
+    "error": "Error: Aucun combat à recommencer",
+    "state": "02716aaca4d5f084"
+   },
+   {
+    "label": "getKeywordReferential",
+    "result": "c6ea1527c86303e8",
+    "state": "02716aaca4d5f084"
+   },
+   {
+    "label": "addCreatureKeyword",
+    "result": "b7c77de0deac2ab8",
+    "state": "02716aaca4d5f084"
+   },
+   {
+    "label": "getReminders",
+    "result": "4f53cda18c2baa0c",
+    "state": "02716aaca4d5f084"
+   },
+   {
+    "label": "listReminderChoices",
+    "result": "4f53cda18c2baa0c",
+    "state": "02716aaca4d5f084"
+   },
+   {
+    "label": "canUndo",
+    "result": "b5bea41b6c623f7c",
+    "state": "02716aaca4d5f084"
+   },
+   {
+    "label": "captureSnapshot",
+    "result": "0f7d52c75e67041d",
+    "state": "02716aaca4d5f084"
+   },
+   {
+    "label": "updateParticipant avant undo",
+    "result": "0f7d52c75e67041d",
+    "state": "02716aaca4d5f084"
+   },
+   {
+    "label": "undo",
+    "result": "b5bea41b6c623f7c",
+    "state": "3b80916b36bb21e6"
+   },
+   {
+    "label": "canRedo",
+    "result": "b5bea41b6c623f7c",
+    "state": "3b80916b36bb21e6"
+   },
+   {
+    "label": "redo",
+    "result": "b5bea41b6c623f7c",
+    "state": "89852d88ca228eee"
+   },
+   {
+    "label": "getHistory",
+    "result": "d5f0355599c4989d",
+    "state": "89852d88ca228eee"
+   },
+   {
+    "label": "executeCommand",
+    "result": "cf155999ed0f4be6",
+    "state": "4d1e67d07e96146a"
+   },
+   {
+    "label": "batch",
+    "result": "0f7d52c75e67041d",
+    "state": "5c9df3fabc50bbda"
+   },
+   {
+    "label": "getLocalRevision",
+    "result": "e29c9c180c6279b0",
+    "state": "5c9df3fabc50bbda"
+   },
+   {
+    "label": "getFullJSON",
+    "result": "2e4cfbdafb77adf7",
+    "state": "5c9df3fabc50bbda"
+   },
+   {
+    "label": "previewImport",
+    "result": "3f5b8fb8302bf4f6",
+    "state": "5c9df3fabc50bbda"
+   },
+   {
+    "label": "previewImport invalide",
+    "error": "SyntaxError: Expected property name or '}' in JSON at position 1 (line 1 column 2)",
+    "state": "5c9df3fabc50bbda"
+   },
+   {
+    "label": "resetCombat",
+    "result": "0f7d52c75e67041d",
+    "state": "fb13ebf8881ae2f2"
+   },
+   {
+    "label": "clearReserve",
+    "result": "0f7d52c75e67041d",
+    "state": "afabd56bb40f4bb6"
+   },
+   {
+    "label": "loadFromJSON",
+    "result": "bb096a7e00d7aa70",
+    "state": "b6d0509b1c912d5a"
+   },
+   {
+    "label": "loadFromJSON invalide",
+    "error": "MigrationError: Enveloppe de sauvegarde invalide",
+    "state": "b6d0509b1c912d5a"
+   },
+   {
+    "label": "listRestorePoints",
+    "result": "4f53cda18c2baa0c",
+    "state": "b6d0509b1c912d5a"
+   },
+   {
+    "label": "usesPersistence",
+    "result": "fcbcf165908dd18a",
+    "state": "b6d0509b1c912d5a"
+   },
+   {
+    "label": "whenIdle",
+    "result": "07891df578f1d4d3",
+    "state": "b6d0509b1c912d5a"
+   },
+   {
+    "label": "sweep addProfile",
+    "error": "TypeError: Profil requis",
+    "state": "b6d0509b1c912d5a"
+   },
+   {
+    "label": "sweep updateProfile",
+    "result": "0f7d52c75e67041d",
+    "state": "b6d0509b1c912d5a"
+   },
+   {
+    "label": "sweep applyFicheSync",
+    "result": "4692962246347ffa",
+    "state": "b6d0509b1c912d5a"
+   },
+   {
+    "label": "sweep removeProfile",
+    "result": "0f7d52c75e67041d",
+    "state": "b6d0509b1c912d5a"
+   },
+   {
+    "label": "sweep clearReserve",
+    "result": "0f7d52c75e67041d",
+    "state": "dc403c23c7d59e35"
+   },
+   {
+    "label": "sweep duplicateProfile",
+    "result": "0f7d52c75e67041d",
+    "state": "dc403c23c7d59e35"
+   },
+   {
+    "label": "sweep listProfiles",
+    "result": "4f53cda18c2baa0c",
+    "state": "dc403c23c7d59e35"
+   },
+   {
+    "label": "sweep getProfile",
+    "result": "74234e98afe7498f",
+    "state": "dc403c23c7d59e35"
+   },
+   {
+    "label": "sweep addParticipant",
+    "error": "TypeError: Cannot read properties of undefined (reading 'id')",
+    "state": "dc403c23c7d59e35"
+   },
+   {
+    "label": "sweep removeParticipant",
+    "result": "0f7d52c75e67041d",
+    "state": "dc403c23c7d59e35"
+   },
+   {
+    "label": "sweep updateParticipant",
+    "result": "0f7d52c75e67041d",
+    "state": "dc403c23c7d59e35"
+   },
+   {
+    "label": "sweep acquireConditions",
+    "result": "2c97889f54fcd745",
+    "state": "dc403c23c7d59e35"
+   },
+   {
+    "label": "sweep advanceCampaignTime",
+    "error": "TypeError: Commande de temps de campagne invalide",
+    "state": "dc403c23c7d59e35"
+   },
+   {
+    "label": "sweep advanceTalentMinutes",
+    "error": "TypeError: Durée de campagne positive en secondes entières requise",
+    "state": "dc403c23c7d59e35"
+   },
+   {
+    "label": "sweep startTalentSession",
+    "result": "956aa1a63eb40a26",
+    "state": "81635d7ade372da6"
+   },
+   {
+    "label": "sweep getFortune",
+    "error": "TypeError: Personnage introuvable",
+    "state": "81635d7ade372da6"
+   },
+   {
+    "label": "sweep getFate",
+    "error": "TypeError: Personnage introuvable",
+    "state": "81635d7ade372da6"
+   },
+   {
+    "label": "sweep declareV5FortuneAdvantage",
+    "error": "TypeError: Acteur requis pour déclarer Chance → Avantage",
+    "state": "81635d7ade372da6"
+   },
+   {
+    "label": "sweep setFate",
+    "error": "TypeError: Montant et motif MJ requis pour le Destin",
+    "state": "81635d7ade372da6"
+   },
+   {
+    "label": "sweep setFortune",
+    "error": "TypeError: Personnage introuvable",
+    "state": "81635d7ade372da6"
+   },
+   {
+    "label": "sweep getCorruptionStatus",
+    "error": "TypeError: Personnage introuvable",
+    "state": "81635d7ade372da6"
+   },
+   {
+    "label": "sweep declareWarpstoneDailyExposure",
+    "error": "TypeError: Confirmez la journée et l’objet de malepierre porté hors boîte plombée.",
+    "state": "81635d7ade372da6"
+   },
+   {
+    "label": "sweep getCorruptionMutationCatalog",
+    "result": "707e8642b24313ae",
+    "state": "81635d7ade372da6"
+   },
+   {
+    "label": "sweep setCorruptionPoints",
+    "error": "TypeError: Valeur entière connue et motif MJ requis",
+    "state": "81635d7ade372da6"
+   },
+   {
+    "label": "sweep previewCorruptionExposure",
+    "error": "TypeError: Personnage introuvable",
+    "state": "81635d7ade372da6"
+   },
+   {
+    "label": "sweep applyCorruptionExposure",
+    "error": "TypeError: Aperçu de Corruption prêt requis",
+    "state": "81635d7ade372da6"
+   },
+   {
+    "label": "sweep previewCorruptionThresholdTest",
+    "error": "TypeError: Personnage introuvable",
+    "state": "81635d7ade372da6"
+   },
+   {
+    "label": "sweep applyCorruptionThresholdTest",
+    "error": "TypeError: Aperçu du Test de Corruption requis",
+    "state": "81635d7ade372da6"
+   },
+   {
+    "label": "sweep resolveObsoleteCorruptionThresholdTest",
+    "error": "TypeError: Personnage introuvable",
+    "state": "81635d7ade372da6"
+   },
+   {
+    "label": "sweep confirmCorruptionMutation",
+    "error": "TypeError: Description ou référence de mutation choisie par le MJ requise",
+    "state": "81635d7ade372da6"
+   },
+   {
+    "label": "sweep declineCorruptionMutation",
+    "error": "TypeError: Personnage introuvable",
+    "state": "81635d7ade372da6"
+   },
+   {
+    "label": "sweep applyCorruptionAbsolution",
+    "error": "TypeError: Motif de l’absolution fixé par le MJ requis",
+    "state": "81635d7ade372da6"
+   },
+   {
+    "label": "sweep decideCorruptionCharacterLoss",
+    "error": "TypeError: Décision et motif MJ requis pour la perte de personnage",
+    "state": "81635d7ade372da6"
+   },
+   {
+    "label": "sweep healCriticalWound",
+    "error": "TypeError: Participant introuvable",
+    "state": "81635d7ade372da6"
+   },
+   {
+    "label": "sweep decideCriticalDeath",
+    "error": "TypeError: Participant introuvable",
+    "state": "81635d7ade372da6"
+   },
+   {
+    "label": "sweep decideImmediateCriticalDeath",
+    "error": "TypeError: Participant introuvable",
+    "state": "81635d7ade372da6"
+   },
+   {
+    "label": "sweep setSuddenDeathEnabled",
+    "error": "TypeError: Réglage Mort subite invalide",
+    "state": "81635d7ade372da6"
+   },
+   {
+    "label": "sweep previewSuddenDeath",
+    "result": "79d6e691f955b18d",
+    "state": "81635d7ade372da6"
+   },
+   {
+    "label": "sweep decideSuddenDeath",
+    "error": "TypeError: Participant introuvable",
+    "state": "81635d7ade372da6"
+   },
+   {
+    "label": "sweep previewAmputationShock",
+    "result": "79d6e691f955b18d",
+    "state": "81635d7ade372da6"
+   },
+   {
+    "label": "sweep deferAmputationShock",
+    "error": "Error: Participant introuvable.",
+    "state": "81635d7ade372da6"
+   },
+   {
+    "label": "sweep applyAmputationShock",
+    "result": "e0040670d32541c6",
+    "state": "81635d7ade372da6"
+   },
+   {
+    "label": "sweep recoverCondition",
+    "result": "2c97889f54fcd745",
+    "state": "81635d7ade372da6"
+   },
+   {
+    "label": "sweep healWounds",
+    "result": "2c97889f54fcd745",
+    "state": "81635d7ade372da6"
+   },
+   {
+    "label": "sweep moveParticipant",
+    "result": "0f7d52c75e67041d",
+    "state": "81635d7ade372da6"
+   },
+   {
+    "label": "sweep listParticipants",
+    "result": "4f53cda18c2baa0c",
+    "state": "81635d7ade372da6"
+   },
+   {
+    "label": "sweep setRoundTurn",
+    "result": "0f7d52c75e67041d",
+    "state": "8bfe8681c433e87c"
+   },
+   {
+    "label": "sweep rebuildOrder",
+    "result": "0f7d52c75e67041d",
+    "state": "8bfe8681c433e87c"
+   },
+   {
+    "label": "sweep getEffectiveOrder",
+    "result": "4f53cda18c2baa0c",
+    "state": "8bfe8681c433e87c"
+   },
+   {
+    "label": "sweep getOrderMode",
+    "result": "73d805be762751aa",
+    "state": "8bfe8681c433e87c"
+   },
+   {
+    "label": "sweep isCombatInitiativeInitialized",
+    "result": "fcbcf165908dd18a",
+    "state": "8bfe8681c433e87c"
+   },
+   {
+    "label": "sweep previewEncounterLaunch",
+    "error": "Error: Rencontre introuvable",
+    "state": "8bfe8681c433e87c"
+   },
+   {
+    "label": "sweep previewCombatRestart",
+    "result": "952f62cc9e23c1a9",
+    "state": "8bfe8681c433e87c"
+   },
+   {
+    "label": "sweep previewCombatInitialization",
+    "result": "92eb5f2b23cc52fd",
+    "state": "8bfe8681c433e87c"
+   },
+   {
+    "label": "sweep previewCombatParticipantActivation",
+    "error": "Error: Combattant introuvable",
+    "state": "8bfe8681c433e87c"
+   },
+   {
+    "label": "sweep previewCombatParticipantAddition",
+    "result": "74234e98afe7498f",
+    "state": "8bfe8681c433e87c"
+   },
+   {
+    "label": "sweep applyCombatInitialization",
+    "result": "485cdec427283572",
+    "state": "8bfe8681c433e87c"
+   },
+   {
+    "label": "sweep setOrderMode",
+    "result": "b5bea41b6c623f7c",
+    "state": "f0221ca8a82ed9b9"
+   },
+   {
+    "label": "sweep moveInOrder",
+    "result": "fcbcf165908dd18a",
+    "state": "f0221ca8a82ed9b9"
+   },
+   {
+    "label": "sweep insertReinforcement",
+    "result": "fcbcf165908dd18a",
+    "state": "f0221ca8a82ed9b9"
+   },
+   {
+    "label": "sweep nextTurn",
+    "result": "956aa1a63eb40a26",
+    "state": "929725036fb96bef"
+   },
+   {
+    "label": "sweep consumeTurnSelection",
+    "result": "b5bea41b6c623f7c",
+    "state": "929725036fb96bef"
+   },
+   {
+    "label": "sweep usesPersistence",
+    "result": "fcbcf165908dd18a",
+    "state": "929725036fb96bef"
+   },
+   {
+    "label": "sweep getCombat",
+    "result": "cd7ef776426d87ff",
+    "state": "929725036fb96bef"
+   },
+   {
+    "label": "sweep getReserve",
+    "result": "1f722262a9334201",
+    "state": "929725036fb96bef"
+   },
+   {
+    "label": "sweep getDiceLines",
+    "result": "739ee1b8aac1f676",
+    "state": "929725036fb96bef"
+   },
+   {
+    "label": "sweep getLog",
+    "result": "16923793f94c9416",
+    "state": "929725036fb96bef"
+   },
+   {
+    "label": "sweep addDiceLine",
+    "result": "0f7d52c75e67041d",
+    "state": "d5b30fdda6cda499"
+   },
+   {
+    "label": "sweep updateDiceLine",
+    "result": "0f7d52c75e67041d",
+    "state": "d5b30fdda6cda499"
+   },
+   {
+    "label": "sweep removeDiceLine",
+    "result": "0f7d52c75e67041d",
+    "state": "d5b30fdda6cda499"
+   },
+   {
+    "label": "sweep duplicateDiceLine",
+    "result": "0f7d52c75e67041d",
+    "state": "d5b30fdda6cda499"
+   },
+   {
+    "label": "sweep importFromReserve",
+    "result": "0f7d52c75e67041d",
+    "state": "44af7182ea57a3c0"
+   },
+   {
+    "label": "sweep addProfilesToCombat",
+    "error": "Error: Aucun profil à ajouter",
+    "state": "44af7182ea57a3c0"
+   },
+   {
+    "label": "sweep exportToReserve",
+    "result": "90583140073c565b",
+    "state": "42f3cbd07352a4d0"
+   },
+   {
+    "label": "sweep canUndo",
+    "result": "b5bea41b6c623f7c",
+    "state": "42f3cbd07352a4d0"
+   },
+   {
+    "label": "sweep canRedo",
+    "result": "fcbcf165908dd18a",
+    "state": "42f3cbd07352a4d0"
+   },
+   {
+    "label": "sweep getHistory",
+    "result": "3eba080cf14d7328",
+    "state": "42f3cbd07352a4d0"
+   },
+   {
+    "label": "sweep captureSnapshot",
+    "result": "0f7d52c75e67041d",
+    "state": "42f3cbd07352a4d0"
+   },
+   {
+    "label": "sweep undo",
+    "result": "b5bea41b6c623f7c",
+    "state": "64ccdb67577d9ec3"
+   },
+   {
+    "label": "sweep redo",
+    "result": "b5bea41b6c623f7c",
+    "state": "b899b36c82270bd7"
+   },
+   {
+    "label": "sweep log",
+    "result": "0f7d52c75e67041d",
+    "state": "b899b36c82270bd7"
+   },
+   {
+    "label": "sweep clearLog",
+    "result": "b5bea41b6c623f7c",
+    "state": "82da451e5737c9e4"
+   },
+   {
+    "label": "sweep resetCombat",
+    "result": "0f7d52c75e67041d",
+    "state": "8d769b6be3354371"
+   },
+   {
+    "label": "sweep getLocalRevision",
+    "result": "7a61b53701befdae",
+    "state": "8d769b6be3354371"
+   },
+   {
+    "label": "sweep listEncounters",
+    "result": "d392b3d0838045e4",
+    "state": "8d769b6be3354371"
+   },
+   {
+    "label": "sweep saveEncounter",
+    "result": "956aa1a63eb40a26",
+    "state": "63ab95f9913d7ab3"
+   },
+   {
+    "label": "sweep deleteEncounter",
+    "error": "TypeError: Cannot read properties of undefined (reading 'id')",
+    "state": "63ab95f9913d7ab3"
+   },
+   {
+    "label": "sweep duplicateEncounter",
+    "error": "Error: Rencontre introuvable",
+    "state": "63ab95f9913d7ab3"
+   },
+   {
+    "label": "sweep setEncounterEntry",
+    "error": "Error: Rencontre introuvable",
+    "state": "63ab95f9913d7ab3"
+   },
+   {
+    "label": "sweep getKeywordReferential",
+    "result": "a34b50554e16d3fa",
+    "state": "63ab95f9913d7ab3"
+   },
+   {
+    "label": "sweep addCreatureKeyword",
+    "result": "b7c77de0deac2ab8",
+    "state": "63ab95f9913d7ab3"
+   },
+   {
+    "label": "sweep linkFamiliar",
+    "result": "ab4a9fd4052d6d11",
+    "state": "63ab95f9913d7ab3"
+   },
+   {
+    "label": "sweep createFamiliar",
+    "result": "ab4a9fd4052d6d11",
+    "state": "63ab95f9913d7ab3"
+   },
+   {
+    "label": "sweep unlinkFamiliar",
+    "result": "da54d55cf134566d",
+    "state": "63ab95f9913d7ab3"
+   },
+   {
+    "label": "sweep setFamiliarRange",
+    "result": "3e22de28bea39f4a",
+    "state": "63ab95f9913d7ab3"
+   },
+   {
+    "label": "sweep resolveFamiliarDeath",
+    "result": "8f0bad8618a08993",
+    "state": "63ab95f9913d7ab3"
+   },
+   {
+    "label": "sweep applyRegeneration",
+    "result": "3dae9aa8bef26a6e",
+    "state": "63ab95f9913d7ab3"
+   },
+   {
+    "label": "sweep applyCreaturePsychology",
+    "result": "dce93024cffd7860",
+    "state": "63ab95f9913d7ab3"
+   },
+   {
+    "label": "sweep applySwarmEndOfRound",
+    "result": "d299ef6a696a5fb2",
+    "state": "63ab95f9913d7ab3"
+   },
+   {
+    "label": "sweep applyCreatureVenom",
+    "result": "b4777bd585121ab2",
+    "state": "63ab95f9913d7ab3"
+   },
+   {
+    "label": "sweep setHeadState",
+    "result": "ac7cba615529dde6",
+    "state": "63ab95f9913d7ab3"
+   },
+   {
+    "label": "sweep setSlannAboard",
+    "result": "aef88699a33c9b1d",
+    "state": "63ab95f9913d7ab3"
+   },
+   {
+    "label": "sweep applySlannContemplation",
+    "result": "c67a93f9b3071fcd",
+    "state": "63ab95f9913d7ab3"
+   },
+   {
+    "label": "sweep listPersistentCharacters",
+    "result": "4f53cda18c2baa0c",
+    "state": "63ab95f9913d7ab3"
+   },
+   {
+    "label": "sweep savePersistentCharacter",
+    "result": "956aa1a63eb40a26",
+    "state": "e0385685b43913c6"
+   },
+   {
+    "label": "sweep deletePersistentCharacter",
+    "result": "956aa1a63eb40a26",
+    "state": "6c45790aa3cb7586"
+   },
+   {
+    "label": "sweep getActiveScene",
+    "result": "74234e98afe7498f",
+    "state": "6c45790aa3cb7586"
+   },
+   {
+    "label": "sweep listSuspendedScenes",
+    "result": "4f53cda18c2baa0c",
+    "state": "6c45790aa3cb7586"
+   },
+   {
+    "label": "sweep launchEncounter",
+    "error": "Error: Rencontre introuvable",
+    "state": "6c45790aa3cb7586"
+   },
+   {
+    "label": "sweep restartCombat",
+    "error": "Error: Aucun combat à recommencer",
+    "state": "6c45790aa3cb7586"
+   },
+   {
+    "label": "sweep addImprovisedParticipant",
+    "error": "Error: Aucune scène active",
+    "state": "6c45790aa3cb7586"
+   },
+   {
+    "label": "sweep suspendActiveScene",
+    "error": "Error: Aucune scène active",
+    "state": "6c45790aa3cb7586"
+   },
+   {
+    "label": "sweep resumeScene",
+    "error": "Error: Scène suspendue introuvable",
+    "state": "6c45790aa3cb7586"
+   },
+   {
+    "label": "sweep getReactionOpportunities",
+    "result": "4f53cda18c2baa0c",
+    "state": "6c45790aa3cb7586"
+   },
+   {
+    "label": "sweep confirmBrokenEscapeVisibility",
+    "result": "b7d3ad04c3a38476",
+    "state": "6c45790aa3cb7586"
+   },
+   {
+    "label": "sweep previewV5ProjectileExtraction",
+    "result": "9f96e934df2e496e",
+    "state": "6c45790aa3cb7586"
+   },
+   {
+    "label": "sweep applyV5ProjectileExtraction",
+    "result": "d9b450db3f743780",
+    "state": "6c45790aa3cb7586"
+   },
+   {
+    "label": "sweep previewV5PaviseDeployment",
+    "result": "9b91c7a6c883b7ce",
+    "state": "6c45790aa3cb7586"
+   },
+   {
+    "label": "sweep applyV5PaviseDeployment",
+    "result": "01393f71bbecd60b",
+    "state": "6c45790aa3cb7586"
+   },
+   {
+    "label": "sweep previewV5WeaponReload",
+    "result": "cd5ea59291f567b6",
+    "state": "6c45790aa3cb7586"
+   },
+   {
+    "label": "sweep applyV5WeaponReload",
+    "result": "4824b913cbcdc391",
+    "state": "6c45790aa3cb7586"
+   },
+   {
+    "label": "sweep previewBrokenEscape",
+    "result": "f69a0b5e78c04bf2",
+    "state": "6c45790aa3cb7586"
+   },
+   {
+    "label": "sweep applyBrokenEscape",
+    "error": "Error: Aperçu de fuite absent ou modifié; recalculez.",
+    "state": "6c45790aa3cb7586"
+   },
+   {
+    "label": "sweep previewResolution",
+    "error": "ResolutionError: Le résultat d100 doit être compris entre 1 et 100",
+    "state": "6c45790aa3cb7586"
+   },
+   {
+    "label": "sweep previewV5CombatAction",
+    "result": "f6058f81054f39d6",
+    "state": "6c45790aa3cb7586"
+   },
+   {
+    "label": "sweep declareV5CombatMovement",
+    "result": "d46deb443d3fb7b4",
+    "state": "6c45790aa3cb7586"
+   },
+   {
+    "label": "sweep applyV5CombatAction",
+    "result": "cc4acc34cb24c32b",
+    "state": "6c45790aa3cb7586"
+   },
+   {
+    "label": "sweep applyResolution",
+    "error": "TypeError: Cannot read properties of undefined (reading 'input')",
+    "state": "6c45790aa3cb7586"
+   },
+   {
+    "label": "sweep simulateAction",
+    "error": "TypeError: Action de simulation requise",
+    "state": "6c45790aa3cb7586"
+   },
+   {
+    "label": "sweep applySimulation",
+    "error": "TypeError: Cannot read properties of undefined (reading 'preview')",
+    "state": "6c45790aa3cb7586"
+   },
+   {
+    "label": "sweep getSimulationState",
+    "result": "0624322cbe628090",
+    "state": "6c45790aa3cb7586"
+   },
+   {
+    "label": "sweep discardSimulation",
+    "error": "TypeError: Simulation invalide",
+    "state": "6c45790aa3cb7586"
+   },
+   {
+    "label": "sweep previewChannelling",
+    "error": "TypeError: Cannot read properties of undefined (reading 'extensions')",
+    "state": "6c45790aa3cb7586"
+   },
+   {
+    "label": "sweep applyChannelling",
+    "error": "TypeError: Cannot read properties of undefined (reading 'input')",
+    "state": "6c45790aa3cb7586"
+   },
+   {
+    "label": "sweep previewCasting",
+    "error": "TypeError: Cannot read properties of undefined (reading 'extensions')",
+    "state": "6c45790aa3cb7586"
+   },
+   {
+    "label": "sweep applyCasting",
+    "error": "TypeError: Cannot read properties of undefined (reading 'input')",
+    "state": "6c45790aa3cb7586"
+   },
+   {
+    "label": "sweep previewMiscast",
+    "result": "98e06f6de7237d0a",
+    "state": "6c45790aa3cb7586"
+   },
+   {
+    "label": "sweep applyMiscast",
+    "error": "TypeError: Aperçu d’incident incomplet",
+    "state": "6c45790aa3cb7586"
+   },
+   {
+    "label": "sweep previewBurnout",
+    "result": "da2e5fdfa5bda0f3",
+    "state": "6c45790aa3cb7586"
+   },
+   {
+    "label": "sweep applyBurnout",
+    "error": "TypeError: Aperçu d’épuisement incomplet ou non prêt",
+    "state": "6c45790aa3cb7586"
+   },
+   {
+    "label": "sweep previewBurnoutRecovery",
+    "result": "fd10f3dec52e7445",
+    "state": "6c45790aa3cb7586"
+   },
+   {
+    "label": "sweep applyBurnoutRecovery",
+    "error": "TypeError: Annulation d’épuisement impossible ou invalide",
+    "state": "6c45790aa3cb7586"
+   },
+   {
+    "label": "sweep rerollCorruptionWithCadai",
+    "error": "Error: Acteur introuvable.",
+    "state": "6c45790aa3cb7586"
+   },
+   {
+    "label": "sweep activateMindOverBody",
+    "error": "Error: Contemplation active et rang 3 requis.",
+    "state": "6c45790aa3cb7586"
+   },
+   {
+    "label": "sweep startMagicAdventure",
+    "result": "956aa1a63eb40a26",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep applyMagicMeditation",
+    "error": "Error: Acteur introuvable.",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep getCadaiRunes",
+    "result": "e3eb16a1ab34e4fe",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep deployCadaiRune",
+    "error": "Error: Participant introuvable dans le combat",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep consumeCadaiRune",
+    "error": "Error: Participant introuvable dans le combat",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep previewDispelCasting",
+    "result": "83dec0a4607b90fa",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep applyDispelCasting",
+    "error": "TypeError: Cannot read properties of undefined (reading 'dispellerId')",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep previewDispelPersistent",
+    "error": "TypeError: Dissipateur requis",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep applyDispelPersistent",
+    "error": "TypeError: Cannot read properties of undefined (reading 'baseRevision')",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep applySpellEffects",
+    "error": "Error: Participant introuvable dans le combat",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep expireSpellEffects",
+    "error": "Error: Participant introuvable dans le combat",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep consumeTemporaryFortune",
+    "error": "Error: Participant introuvable dans le combat",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep consumeTemporaryFate",
+    "error": "Error: Participant introuvable dans le combat",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep previewLoreAttribute",
+    "result": "0ffcf10ec87afcf0",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep applyLoreAttribute",
+    "error": "TypeError: Cannot read properties of undefined (reading 'casterId')",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep previewBeastForm",
+    "error": "TypeError: Lanceur et profil de bête requis",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep applyBeastForm",
+    "error": "Error: Participant introuvable dans le combat",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep revertBeastForm",
+    "error": "Error: Participant introuvable dans le combat",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep previewVerdantApotheosis",
+    "result": "e6e2e3c47e8733ff",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep applyVerdantApotheosis",
+    "error": "TypeError: Aperçu d’Apothéose Verdoyante invalide",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep previewDaemonbane",
+    "error": "TypeError: Lanceur et cible requis pour previewDaemonbane",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep applyDaemonbane",
+    "error": "Error: Participant démon introuvable",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep restoreDaemonbaneMaxHp",
+    "error": "Error: Aucune Blessure maximale divisée à restaurer.",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep listDaemonbaneReductions",
+    "result": "4f53cda18c2baa0c",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep previewHandOfGlory",
+    "result": "2b5160e9d88aa12a",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep applyHandOfGlory",
+    "error": "TypeError: Aperçu de Main de Gloire invalide",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep getHighMagicExecutions",
+    "result": "4f53cda18c2baa0c",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep getDivineAccessGrants",
+    "result": "4f53cda18c2baa0c",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep resolveDivineAccess",
+    "result": "f868e0882c7f25ec",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep grantDivineAccess",
+    "result": "6b7b766851af871f",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep revokeDivineAccessGrant",
+    "result": "4837740505bed92b",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep getDivineContract",
+    "result": "74234e98afe7498f",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep getAllDivineContracts",
+    "result": "314a8cec4fd7c7a2",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep canManageDivinePenances",
+    "result": "b5bea41b6c623f7c",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep getDivinePenanceExamples",
+    "result": "bb91a1d8929aa131",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep createDivinePenance",
+    "error": "Error: Fiche de pénitence introuvable.",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep completeDivinePenance",
+    "error": "Error: Pénitence introuvable.",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep previewDivineAbsolution",
+    "result": "1bd671b2d8208d1c",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep applyDivineAbsolution",
+    "error": "Error: Aperçu d’absolution requis.",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep setSanctifiedGround",
+    "error": "Error: Nom du lieu requis (120 caractères au plus).",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep removeSanctifiedGround",
+    "error": "Error: Terre sanctifiée introuvable.",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep enterSanctifiedGround",
+    "error": "Error: Terre sanctifiée introuvable.",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep leaveSanctifiedGround",
+    "error": "Error: Terre sanctifiée introuvable.",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep applyDivineNavalEvent",
+    "error": "Error: Événement naval inconnu.",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep previewDivineNavalEvent",
+    "result": "b6a329c0ca3d5c98",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep getDivineDailyWrathStatus",
+    "result": "74234e98afe7498f",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep startDivineDailyWrath",
+    "error": "Error: Personnage introuvable.",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep waiveDivineDailyWrathDay",
+    "error": "Error: Suivi quotidien introuvable.",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep closeDivineDailyWrath",
+    "error": "Error: Suivi quotidien introuvable.",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep setDivineRelic",
+    "error": "Error: Personnage introuvable.",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep removeDivineRelic",
+    "error": "Error: Relique introuvable.",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep getDivineSinEvents",
+    "result": "39ada4d61eb76fa8",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep getDivineSinReminders",
+    "result": "642e77df0ca4c571",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep previewDivineSinEvent",
+    "result": "f296741d71cee441",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep applyDivineSinEvent",
+    "error": "Error: Événement de Péché inconnu.",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep returnDivineJudgment",
+    "error": "Error: Jugement divin introuvable.",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep decideDivineJudgmentRejection",
+    "error": "Error: Jugement divin introuvable.",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep previewDivineWrathRecovery",
+    "result": "0b4a78e8c2879b3b",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep applyDivineWrathRecovery",
+    "error": "Error: L’aperçu de récupération a été modifié : recalculez.",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep previewDivineExecution",
+    "result": "4362485889dfc977",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep applyDivineExecution",
+    "error": "Error: Calculez cette prière avant de l’appliquer.",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep endDivinePrayer",
+    "error": "Error: Indiquez la raison de la fin de cette prière.",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep setDivineSin",
+    "error": "Error: Le total de Péchés doit être un entier positif ou nul.",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep getSpellContract",
+    "result": "74234e98afe7498f",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep getContractChoiceOptions",
+    "result": "4f53cda18c2baa0c",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep validateSpellTargets",
+    "result": "ef2e1ea31b0fd2cf",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep validateSpellFingerprint",
+    "result": "4a8bc553c49a93a5",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep previewSpellExecution",
+    "error": "TypeError: Cannot read properties of null (reading 'id')",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep applySpellExecution",
+    "error": "TypeError: Cannot read properties of null (reading 'id')",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep previewSpellInteraction",
+    "result": "2607845f0b410235",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep applySpellInteraction",
+    "result": "f323bf09ddbbb5e0",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep getReminders",
+    "result": "4f53cda18c2baa0c",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep getParticipantReminders",
+    "result": "4f53cda18c2baa0c",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep resolveParticipantReminder",
+    "error": "TypeError: Décision de rappel invalide",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep listReminderChoices",
+    "result": "4f53cda18c2baa0c",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep resolveReminder",
+    "result": "fcbcf165908dd18a",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep saveReminderDecision",
+    "result": "fcbcf165908dd18a",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep createIntention",
+    "error": "SceneEventError: id requis",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep createSceneEvent",
+    "error": "SceneEventError: condition structurée requise",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep saveSceneEvent",
+    "error": "Error: Aucune scène active",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep deleteSceneEvent",
+    "error": "Error: Aucune scène active",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep createSceneClock",
+    "error": "SceneEventError: clockId requis",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep saveSceneClock",
+    "error": "Error: Aucune scène active",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep deleteSceneClock",
+    "error": "Error: Aucune scène active",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep proposeSceneEvent",
+    "result": "3f9eccb654a72c1a",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep previewSceneEvent",
+    "result": "77381638708272d1",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep applySceneEvent",
+    "error": "Error: Aucune scène active",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep resolveSceneEvent",
+    "error": "Error: Aucune scène active",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep advanceSceneClock",
+    "error": "Error: Aucune scène active",
+    "state": "68ae9a8715f4d0e9"
+   },
+   {
+    "label": "sweep importParsedProfiles",
+    "result": "956aa1a63eb40a26",
+    "state": "7c6c1286fcc7c96e"
+   },
+   {
+    "label": "sweep setMountedState",
+    "error": "Error: Le cavalier doit être un participant de la rencontre.",
+    "state": "7c6c1286fcc7c96e"
+   },
+   {
+    "label": "sweep getAftermathState",
+    "result": "e4cbd96d6211d8c8",
+    "state": "7c6c1286fcc7c96e"
+   },
+   {
+    "label": "sweep previewAftermathAdvance",
+    "result": "b4c1c197d75c5cfa",
+    "state": "7c6c1286fcc7c96e"
+   },
+   {
+    "label": "sweep listAftermathProposals",
+    "result": "4f53cda18c2baa0c",
+    "state": "7c6c1286fcc7c96e"
+   },
+   {
+    "label": "sweep registerAftermathIncident",
+    "result": "8c740bf10b0d28b3",
+    "state": "7c6c1286fcc7c96e"
+   },
+   {
+    "label": "sweep advanceAftermathCalendar",
+    "error": "TypeError: identifiant d’opération requis",
+    "state": "7c6c1286fcc7c96e"
+   },
+   {
+    "label": "sweep archiveAftermathIncident",
+    "error": "TypeError: identifiant d’opération requis",
+    "state": "7c6c1286fcc7c96e"
+   },
+   {
+    "label": "sweep treatAftermathWound",
+    "error": "TypeError: identifiant d’opération requis",
+    "state": "7c6c1286fcc7c96e"
+   },
+   {
+    "label": "sweep treatAftermathInfection",
+    "error": "TypeError: identifiant d’opération requis",
+    "state": "7c6c1286fcc7c96e"
+   },
+   {
+    "label": "sweep treatAftermathSurgicalIncident",
+    "error": "TypeError: identifiant d’opération requis",
+    "state": "7c6c1286fcc7c96e"
+   },
+   {
+    "label": "sweep closeAftermathIncident",
+    "error": "TypeError: identifiant d’opération requis",
+    "state": "7c6c1286fcc7c96e"
+   },
+   {
+    "label": "sweep listAftermathSequelae",
+    "result": "5ca6fee45cab712a",
+    "state": "7c6c1286fcc7c96e"
+   },
+   {
+    "label": "sweep openAftermathSequelae",
+    "error": "TypeError: identifiant d’opération requis",
+    "state": "7c6c1286fcc7c96e"
+   },
+   {
+    "label": "sweep setAftermathSequelaFacts",
+    "error": "TypeError: identifiant d’opération requis",
+    "state": "7c6c1286fcc7c96e"
+   },
+   {
+    "label": "sweep immobilizeAftermathFracture",
+    "error": "TypeError: identifiant d’opération requis",
+    "state": "7c6c1286fcc7c96e"
+   },
+   {
+    "label": "sweep unbindAftermathFracture",
+    "error": "TypeError: identifiant d’opération requis",
+    "state": "7c6c1286fcc7c96e"
+   },
+   {
+    "label": "sweep resolveAftermathFracture",
+    "error": "TypeError: identifiant d’opération requis",
+    "state": "7c6c1286fcc7c96e"
+   },
+   {
+    "label": "sweep treatAftermathTornMuscle",
+    "error": "TypeError: identifiant d’opération requis",
+    "state": "7c6c1286fcc7c96e"
+   },
+   {
+    "label": "sweep confirmAftermathResetLimb",
+    "error": "TypeError: identifiant d’opération requis",
+    "state": "7c6c1286fcc7c96e"
+   },
+   {
+    "label": "sweep recordAftermathPostEncounterTest",
+    "error": "TypeError: identifiant d’opération requis",
+    "state": "7c6c1286fcc7c96e"
+   },
+   {
+    "label": "sweep decideAftermathSurgeryDeadline",
+    "error": "TypeError: identifiant d’opération requis",
+    "state": "7c6c1286fcc7c96e"
+   },
+   {
+    "label": "sweep recordAftermathRelearning",
+    "error": "TypeError: identifiant d’opération requis",
+    "state": "7c6c1286fcc7c96e"
+   },
+   {
+    "label": "sweep decideAftermathImpressiveScars",
+    "result": "af73cf7dc1298c8a",
+    "state": "7c6c1286fcc7c96e"
+   },
+   {
+    "label": "sweep recordAftermathCharacteristicLoss",
+    "result": "ad63e90df06e2328",
+    "state": "7c6c1286fcc7c96e"
+   },
+   {
+    "label": "sweep registerAftermathDisease",
+    "result": "4a083ff60b02e5f7",
+    "state": "7c6c1286fcc7c96e"
+   },
+   {
+    "label": "sweep careForAftermathDisease",
+    "error": "TypeError: identifiant d’opération requis",
+    "state": "7c6c1286fcc7c96e"
+   },
+   {
+    "label": "sweep getFullJSON",
+    "result": "0d329c77938b41f9",
+    "state": "7c6c1286fcc7c96e"
+   },
+   {
+    "label": "sweep listRestorePoints",
+    "result": "4f53cda18c2baa0c",
+    "state": "7c6c1286fcc7c96e"
+   },
+   {
+    "label": "sweep previewRestorePoint",
+    "error": "Error: Points de restauration indisponibles",
+    "state": "7c6c1286fcc7c96e"
+   },
+   {
+    "label": "sweep restorePoint",
+    "error": "Error: Points de restauration indisponibles",
+    "state": "7c6c1286fcc7c96e"
+   },
+   {
+    "label": "sweep previewImport",
+    "error": "MigrationError: Enveloppe de sauvegarde invalide",
+    "state": "7c6c1286fcc7c96e"
+   },
+   {
+    "label": "sweep loadFromJSON",
+    "error": "MigrationError: Enveloppe de sauvegarde invalide",
+    "state": "7c6c1286fcc7c96e"
+   },
+   {
+    "label": "sweep whenIdle",
+    "result": "07891df578f1d4d3",
+    "state": "7c6c1286fcc7c96e"
+   }
+  ]
+ }
+}
