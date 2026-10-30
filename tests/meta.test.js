@@ -29,7 +29,8 @@ test('package.json — le script de test découvre les fichiers, il ne les énum
 });
 
 test('package.json — tous les fichiers de tests/ seraient donc exécutés', () => {
-  const fichiers = readdirSync(join(racine, 'tests')).filter(f => f.endsWith('.test.js'));
+  const fichiers = readdirSync(join(racine, 'tests'), { recursive: true })
+    .filter(f => f.endsWith('.test.js')).map(f => f.split('\\').join('/'));
   assert.ok(fichiers.length >= 8,
     `Seuls ${fichiers.length} fichiers de test trouvés — un fichier a-t-il été supprimé ?`);
   // Ce test ne peut pas vérifier qu'ils ont tourné ; il documente le compte attendu
