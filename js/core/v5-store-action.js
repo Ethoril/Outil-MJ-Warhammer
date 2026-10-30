@@ -1,5 +1,6 @@
 import {wrathPrayerBan,wrathForcedPrayerGate,validateWrathRounds} from './v5-divine-prayer-caps.js';
 import {withMomentum} from './v5-combat-rules.js';
+import { psychologyTraits } from './creature-psychology.js';
 import { acquiredV5Talents,currentV5TalentHashes } from './v5-talents.js';
 import { sourceActive } from './v5-talent-actions.js';
 import { v5ResourceIdentity } from './v5-resources.js';
@@ -154,6 +155,12 @@ export function buildV5StoreActionInput(envelope, raw = {}) {
     quotas.push({id:'talent:dual-wielder-second-weapon',scope:'turn',maximum:1});
     // V5 v3 p.119 : l'attaque de seconde arme ne dépense pas d'Élan, mais il faut en avoir ; sans Élan l'exemption tombe et le coût d'Élan bloque l'action.
     if(actor.extensions?.v5?.hasMomentum===true)for(const cost of costs.filter(c=>c.resource==='momentum'))exemptions.push({costId:cost.id,sourceId:'talent-dual-wielder'});
+  }
+  // Trait Grim (V5 v3 p.358) : l'attaque gratuite ne fait pas perdre l'Élan, mais la créature doit en avoir ; Trait optionnel, actif seulement s'il est retenu sur le participant.
+  if(v5.extraAttack&&context.freeAttackTalent==='grim'){
+    if(!psychologyTraits(actor).some(t=>t.key==='grim'))throw new TypeError('Grim : Trait non retenu sur ce participant.');
+    quotas.push({id:'trait:grim-free-attack',scope:'turn',maximum:1});
+    if(actor.extensions?.v5?.hasMomentum===true)for(const cost of costs.filter(c=>c.resource==='momentum'))exemptions.push({costId:cost.id,sourceId:'trait-grim'});
   }
   // À répétition (V5 v3 p.305) : le second tir du tir double est un Test gratuit de la même Action ; un seul par Tour, aucun Élan.
   if(v5.extraAttack&&context.freeAttackTalent==='repeater-double'){

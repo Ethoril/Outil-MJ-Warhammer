@@ -73,3 +73,26 @@ test('v3 attribut des Bêtes (p.245) : le lanceur gagne l’Élan, les ennemis v
   assert.equal(has('zombie'), true, 'un ennemi non vivant n’est pas touché');
   assert.ok(!(store.listParticipants().find(p => p.id === 'mage').traits || []).includes('Peur (1)'), 'plus de Peur (1)');
 });
+
+test('v3 Trait Grim (p.358) : l’attaque gratuite ne fait pas perdre l’Élan mais en exige un ; Trait non retenu refusé', async () => {
+  const { createStore } = await import('../js/core/store.js');
+  const person = (id, extra = {}) => ({ id, name: id, kind: id === 'a' ? 'PJ' : 'PNJ', camp: id === 'a' ? 'pj' : 'ennemi', zone: 'active', hp: 40, maxHp: 40, init: 40,
+    caracs: { CC: 60, CT: 40, F: 40, E: 40, Ag: 40, I: 40, Int: 40, FM: 40, Dex: 40, Soc: 40, M: 4 }, skills: [], talents: [], states: [], equipment: [], extensions: { v5: { hasMomentum: true } }, ...extra });
+  const run = async (traits, momentum) => {
+    const store = createStore({ storage: null }); await store.ready;
+    await store.loadFromJSON({ schemaVersion: 3, reserve: [], log: [], diceLines: [], extensions: { v5: { combatId: 'v3c-grim', turnIndex: 1 } },
+      combat: { round: 1, currentActorId: 'a', order: ['a', 'b'], participants: [person('a', { traits, extensions: { v5: { hasMomentum: momentum } } }), person('b')] } });
+    const input = { resolutionId: 'grim-free', actorId: 'a', targetId: 'b', roll: 25, action: { type: 'attack', attr: 'CC', base: 60, damage: 5 },
+      defense: { base: 35, roll: 80, v5: { kind: 'melee', choice: 'keep' } }, v5: { kind: 'melee', choice: 'keep', extraAttack: true, context: { freeAttackTalent: 'grim' } } };
+    return { store, input };
+  };
+  const withGrim = await run(['Grim'], true);
+  const ok = withGrim.store.previewResolution(withGrim.input);
+  assert.equal(ok.actionCosts.ready, true);
+  assert.equal(ok.actionCosts.paid.length, 0, 'aucun Élan dépensé');
+  assert.equal(ok.actionCosts.waived.length, 1);
+  const noMomentum = await run(['Grim'], false);
+  assert.equal(noMomentum.store.previewResolution(noMomentum.input).actionCosts.ready, false, 'sans Élan, pas d’attaque gratuite');
+  const notRetained = await run([], true);
+  assert.throws(() => notRetained.store.previewResolution(notRetained.input), /Grim/);
+});

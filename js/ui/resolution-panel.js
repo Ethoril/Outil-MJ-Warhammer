@@ -12,6 +12,7 @@ import { V5_ACTIVATED_TALENTS,knownV5MartialQualities,noTestV5TalentAction }  fr
 import { computeV5WeaponReachGuide, computeV5WeaponRangeBands } from '../core/v5-talent-combat.js';
 import { inferV5Kind, hasMomentum } from '../core/v5-combat-rules.js';
 import { naturalCombatTraits, naturalAttackNeedsSize } from '../core/creature-combat.js';
+import { psychologyTraits } from '../core/creature-psychology.js';
 import { planBestiaryProfileAbilities } from '../core/creature-abilities.js';
 import { creatureSizeOf } from '../core/creature-size.js';
 import { carriesSense } from '../core/creature-senses.js';
@@ -2184,6 +2185,9 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
   }
   if(type==='attack'&&hasV5Talent(actor,'talent-dual-wielder')){
     contextField(v5,'actor','dualWielding','Combat avec deux armes');contextField(v5,'actor','weaponDagger','Arme utilisée : dague ou couteau (arbitrage MJ)');contextField(v5,'actor','secondWeaponAttack','Attaque avec la seconde arme');const label=node('label','workspace-type'),check=document.createElement('input');check.type='checkbox';check.checked=current.freeAttackTalent==='dual-wielder';check.setAttribute('aria-label','Attaque de seconde arme sans Élan');check.addEventListener('change',()=>handlers.select({extraAttack:check.checked,v5Context:{...current,freeAttackTalent:check.checked?'dual-wielder':undefined}}));label.append(check,'Attaque de seconde arme sans Élan');v5.append(label);
+  }
+  if(type==='attack'&&psychologyTraits(actor).some(t=>t.key==='grim')){
+    const label=node('label','workspace-type'),check=document.createElement('input');check.type='checkbox';check.checked=current.freeAttackTalent==='grim';check.setAttribute('aria-label','Attaque gratuite de Grim : sans perdre l’Élan');check.addEventListener('change',()=>handlers.select({extraAttack:check.checked,v5Context:{...current,freeAttackTalent:check.checked?'grim':undefined}}));label.append(check,'Attaque gratuite de Grim : sans perdre l’Élan (il faut en avoir)');v5.append(label);
   }
   const penalties=node('details','workspace-v5-context-details');penalties.append(node('summary','','Pénalités de situation en DR'));
   const addPenaltyFields=(role)=>{const field=role==='actor'?'v5Context':'defenseContext',current=draft[field]||{};
