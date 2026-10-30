@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "ruleVersion": "catalogue-utile-v5-2026-10-10.1",
-  "sourceCatalogueVersion": "references:1c2a8fff511be2d89fa0fba79760caa0fb545eb6729fcc13962ab5163e032a3c",
+  "sourceCatalogueVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
   "policy": "Traitement explicite par clause. Les rappels ne sont pas des automatismes et les contrats actifs sont vérifiés séparément.",
   "items": [
     {
@@ -1136,9 +1136,9 @@
       "talentId": "talent-sword-dancing",
       "name": "Danse des épées",
       "family": "actions_reactions_et_effets_actifs",
-      "description": "Apprenez Ritual of Cleansing. Chaque technique supplémentaire coûte 100 PX × nombre de techniques déjà connues. Pour une technique, faites un Test de Corps à corps (À deux mains) et atteignez son seuil de DR ; échec : perdez votre Élan (Momentum) ; échec stupéfiant : table Oops! en plus. Difficulté : Yenlui équilibré/lumineux, (+0) ; sombre, Très difficile (−3 DR). Techniques : Cleansing (1 DR), rituel de plusieurs minutes pour déplacer Yenlui vers lumineux au lever du soleil ou sombre au coucher ; Phoenix (1), lancer de l'épée hors engagement à Bonus de Force + Bonus de Force Mentale yards, dégâts de l'arme et Pénétrante, +1 yard et +1 dégât par DR obtenu au Test ; Sun (1), +1 niveau de War Leader pendant Bonus de Force Mentale Rounds, chaque DR obtenu au Test ajoute un niveau ou un Round ; Frost (1), ignorez 1 PA pendant Bonus de Capacité de Combat Rounds, +10 aux jets de Blessure critique par DR obtenu au Test ; Storm (1), opposez les tirs avec Corps à corps (À deux mains) pendant Bonus d'Initiative Rounds, +1 Round par DR obtenu au Test ; Rain (2), +1 DR à Esquive pendant Bonus d'Agilité Rounds, chaque DR obtenu au Test ajoute +1 DR à Esquive et un Round ; Shadows of Loec (2), déplacement jusqu'à DR × Mouvement yards (minimum 5), terrain normal, ennemis auparavant engagés : Initiative (+0) ou Surpris ; Hawk (3), cible à une distance maximale de votre Bonus de Force Mentale en yards : Résistance (−1 DR) ou 10 + DR dégâts ignorant PA mais pas Bonus d'Endurance et 2 états Assourdi, +1 yard et +1 cible par DR obtenu au Test ; Falling Water (3), une attaque contre chaque ennemi engagé à portée de l'arme, trois contre ceux avec Swarm ; Final Stroke (4), cible : Esquive Très difficile (−3 DR) ou coup inévitable à +4 dégâts, +1 dégât par DR obtenu au Test.",
+      "description": "Apprenez Ritual of Cleansing. Chaque technique supplémentaire coûte 100 PX × nombre de techniques déjà connues. Pour une technique, faites un Test de Corps à corps (À deux mains) et atteignez son seuil de DR ; échec : perdez votre Élan (Momentum) ; échec stupéfiant : table Oops! en plus. Difficulté : Yenlui équilibré/lumineux, (+0) ; sombre, Très difficile (−3 DR). Techniques : Cleansing (1 DR), rituel de plusieurs minutes pour déplacer Yenlui vers lumineux au lever du soleil ou sombre au coucher ; Phoenix (1), lancer de l'épée hors engagement à Bonus de Force + Bonus de Force Mentale mètres, dégâts de l'arme et Pénétrante, +1 mètre et +1 dégât par DR obtenu au Test ; Sun (1), +1 niveau de War Leader pendant Bonus de Force Mentale Rounds, chaque DR obtenu au Test ajoute un niveau ou un Round ; Frost (1), ignorez 1 PA pendant Bonus de Capacité de Combat Rounds, +10 aux jets de Blessure critique par DR obtenu au Test ; Storm (1), opposez les tirs avec Corps à corps (À deux mains) pendant Bonus d'Initiative Rounds, +1 Round par DR obtenu au Test ; Rain (2), +1 DR à Esquive pendant Bonus d'Agilité Rounds, chaque DR obtenu au Test ajoute +1 DR à Esquive et un Round ; Shadows of Loec (2), déplacement jusqu'à DR × Mouvement mètres (minimum 5), terrain normal, ennemis auparavant engagés : Initiative (+0) ou Surpris ; Hawk (3), cible à une distance maximale de votre Bonus de Force Mentale en mètres : Résistance (−1 DR) ou 10 + DR dégâts ignorant PA mais pas Bonus d'Endurance et 2 états Assourdi, +1 mètre et +1 cible par DR obtenu au Test ; Falling Water (3), une attaque contre chaque ennemi engagé à portée de l'arme, trois contre ceux avec Swarm ; Final Stroke (4), cible : Esquive Très difficile (−3 DR) ou coup inévitable à +4 dégâts, +1 dégât par DR obtenu au Test.",
       "source": {
-        "effectHash": "sha256:b7db0bb3c3c6bd59a41c665ac237221b2c1a9b5dac002d2c07a085db07af0c08",
+        "effectHash": "sha256:e02cc99adb027ab7ae18464b6732e9d1577f65f740ee30204baf3a79928b6eb5",
         "reference": "High Elf Player’s Guide (V4), p. 68–69"
       },
       "clauses": [
@@ -1334,9 +1334,9 @@
       "talentId": "talent-distract",
       "name": "Distraire",
       "family": "actions_reactions_et_effets_actifs",
-      "description": "Utilisez votre Mouvement pour un Test opposé Athlétisme, Représentation ou Escamotage contre Perception, sur une cible à 2 yards maximum. Si vous gagnez, elle perd Momentum et ne peut ni le récupérer ni effectuer de Test avec Avantage V5 jusqu’à la fin de votre prochain Tour.",
+      "description": "Utilisez votre Mouvement pour un Test opposé Athlétisme, Représentation ou Escamotage contre Perception, sur une cible à 2 mètres maximum. Si vous gagnez, elle perd Momentum et ne peut ni le récupérer ni effectuer de Test avec Avantage V5 jusqu’à la fin de votre prochain Tour.",
       "source": {
-        "effectHash": "sha256:2718922efad5c492a1c3be37109914dcc28b10a9ee7dde0f8fe1e9b06abfc97a",
+        "effectHash": "sha256:27aaa611d7506f5cc387e34336aa2391a737e46597976e4a486371b5294e4b4e",
         "reference": "Livre de base V5, p. 118 ; achat : p. 191"
       },
       "clauses": [
@@ -1700,9 +1700,9 @@
       "talentId": "talent-forgefire",
       "name": "Feu de forge",
       "family": "actions_reactions_et_effets_actifs",
-      "description": "Tant que vous êtes Engagé, vos armes de Corps à corps et celles de vos alliés à Bonus de Force Mentale yards gagnent l’Atout Pénétrante. Si une arme l’est déjà, ses attaques ignorent 1 PA supplémentaire d’armure métallique.",
+      "description": "Tant que vous êtes Engagé, vos armes de Corps à corps et celles de vos alliés à Bonus de Force Mentale mètres gagnent l’Atout Pénétrante. Si une arme l’est déjà, ses attaques ignorent 1 PA supplémentaire d’armure métallique.",
       "source": {
-        "effectHash": "sha256:78a453736157410796964193628d1167546b35a7306203cb3e9b92cc6c1f380b",
+        "effectHash": "sha256:afcd11899c0f100bcaf8026cb9b01eedf3e41920ae1651e2474dcbd3ff808e6d",
         "reference": "Dwarf Player’s Guide (V4), p. 79"
       },
       "clauses": [
@@ -2012,9 +2012,9 @@
       "talentId": "talent-kingsguard",
       "name": "Garde royal",
       "family": "actions_reactions_et_effets_actifs",
-      "description": "Les attaques ennemies contre un allié situé à 2 yards ou moins de vous subissent −1 DR par acquisition. Aucun effet sur les attaques contre vous-même ni lorsque vous souffrez d’un état.",
+      "description": "Les attaques ennemies contre un allié situé à 2 mètres ou moins de vous subissent −1 DR par acquisition. Aucun effet sur les attaques contre vous-même ni lorsque vous souffrez d’un état.",
       "source": {
-        "effectHash": "sha256:cec2ac64c4d8721b33a6c353136b0c0497ee4d622ef20eff72a1edb0875013ee",
+        "effectHash": "sha256:005120694ec39c27f29a59a80c9a487f78d2c9e8e93ff008116c008e98ad7601",
         "reference": "Dwarf Player’s Guide (V4), p. 80"
       },
       "clauses": [
@@ -2468,9 +2468,9 @@
       "talentId": "talent-suffuse-with",
       "name": "Imprégné",
       "family": "lot3_magie_et_prieres",
-      "description": "Les sorts réussis du domaine associé au Vent, lancés à 8 yards ou moins de vous, gagnent +1 DR ; ce bonus ne se cumule pas avec d'autres porteurs du même Vent. Votre Focalisation de ce Vent remplace : Aqshy, Force Mentale pour entrer en Frénésie, dont vous pouvez bénéficier ; Azyr, Perception ; Chamon, Évaluation ; Ghur, Emprise sur les animaux et Savoir (Bêtes) ; Ghyran, Savoir (Plantes, Animaux, Herbes) et Soin aux animaux ; Hysh, Recherche ; Shyish, Intimidation ; Ulgu, Discrétion. Les personnes ayant Seconde vue perçoivent le Vent autour de vous.",
+      "description": "Les sorts réussis du domaine associé au Vent, lancés à 8 mètres ou moins de vous, gagnent +1 DR ; ce bonus ne se cumule pas avec d'autres porteurs du même Vent. Votre Focalisation de ce Vent remplace : Aqshy, Force Mentale pour entrer en Frénésie, dont vous pouvez bénéficier ; Azyr, Perception ; Chamon, Évaluation ; Ghur, Emprise sur les animaux et Savoir (Bêtes) ; Ghyran, Savoir (Plantes, Animaux, Herbes) et Soin aux animaux ; Hysh, Recherche ; Shyish, Intimidation ; Ulgu, Discrétion. Les personnes ayant Seconde vue perçoivent le Vent autour de vous.",
       "source": {
-        "effectHash": "sha256:91da30b698fc8a25083c99344a715e107280bb7a211a08e6b6498749076d3cc6",
+        "effectHash": "sha256:1373da14558115d7242b1ba36eeda2c0b6db355b08f57b73e603d3d8e1c1137c",
         "reference": "Winds of Magic (V4), p. 186"
       },
       "clauses": [
@@ -3866,9 +3866,9 @@
       "talentId": "talent-soul-pact",
       "name": "Pacte de l’âme",
       "family": "lot3_magie_et_prieres",
-      "description": "Réservé aux Elfes. Chaque achat conclut un autre pacte ; l'entité exige des sacrifices croissants pour protéger corps et âme du Dhar. Sur un sort de Magie noire qui inflige des dégâts avec des DR au-delà de son NI, dépensez 3 DR pour un effet de votre pacte, compatible avec les effets de surincantation : Hekarti, un coup supplémentaire au corps de dégâts égaux au NI de base ignorant les PA, ou ignorez Incantations imparfaites et gain de Corruption pendant 1d10 Tours ; Slaanesh, 3 cibles à une distance maximale de votre Bonus de Force Mentale en yards font un Test de Calme Difficile (−2 DR), puis celles qui échouent doivent le réussir avant toute action hostile contre vous pendant 2d10 Rounds, sinon elles deviennent Surprises ; Tzeentch, appliquez un résultat de Incantation imparfaite mineure à une autre créature à une distance maximale de votre Bonus de Force Mentale en yards ; démon non aligné, gagnez le Trait Daemonic 8+ jusqu'au Round suivant.",
+      "description": "Réservé aux Elfes. Chaque achat conclut un autre pacte ; l'entité exige des sacrifices croissants pour protéger corps et âme du Dhar. Sur un sort de Magie noire qui inflige des dégâts avec des DR au-delà de son NI, dépensez 3 DR pour un effet de votre pacte, compatible avec les effets de surincantation : Hekarti, un coup supplémentaire au corps de dégâts égaux au NI de base ignorant les PA, ou ignorez Incantations imparfaites et gain de Corruption pendant 1d10 Tours ; Slaanesh, 3 cibles à une distance maximale de votre Bonus de Force Mentale en mètres font un Test de Calme Difficile (−2 DR), puis celles qui échouent doivent le réussir avant toute action hostile contre vous pendant 2d10 Rounds, sinon elles deviennent Surprises ; Tzeentch, appliquez un résultat de Incantation imparfaite mineure à une autre créature à une distance maximale de votre Bonus de Force Mentale en mètres ; démon non aligné, gagnez le Trait Daemonic 8+ jusqu'au Round suivant.",
       "source": {
-        "effectHash": "sha256:fa0dff0ddde945d9f5188032795890afc02b937eb2d890f9e95224157c6d725f",
+        "effectHash": "sha256:39b9f54c73fc14b1957ac81b4e46c213d0e264fd161eda3bc7adedecc8895240",
         "reference": "Temple of Spite (édition non nommée, compatible V5), p. 63–64"
       },
       "clauses": [
@@ -3920,16 +3920,16 @@
       "talentId": "talent-step-aside",
       "name": "Pas de côté",
       "family": "actions_reactions_et_effets_actifs",
-      "description": "Après une défense réussie avec Esquive, vous pouvez vous déplacer jusqu'à 2 yards et ne plus être engagé. Les adversaires n'obtiennent pas d'attaque gratuite.",
+      "description": "Après une défense réussie avec Esquive, vous pouvez vous déplacer jusqu'à 2 mètres et ne plus être engagé. Les adversaires n'obtiennent pas d'attaque gratuite.",
       "source": {
-        "effectHash": "sha256:88b4150b6b23bcb9057ef77c8976196704afad3d7fca363e8106474a18318b93",
+        "effectHash": "sha256:30933b0453083e6bc9899d6cdf49abb07d90f0d6a75a1801910c7f6989ac0a87",
         "reference": "Livre de base V5, p. 126 ; achat : p. 191"
       },
       "clauses": [
         {
           "id": "tri:0",
           "mode": "reminder",
-          "text": "Après une défense réussie avec Esquive, vous pouvez vous déplacer jusqu'à 2 yards et ne plus être engagé. Les adversaires n'obtiennent pas d'attaque gratuite.",
+          "text": "Après une défense réussie avec Esquive, vous pouvez vous déplacer jusqu'à 2 mètres et ne plus être engagé. Les adversaires n'obtiennent pas d'attaque gratuite.",
           "scope": "narrative"
         }
       ]
@@ -3956,9 +3956,9 @@
       "talentId": "talent-magical-sense",
       "name": "Perception de la Magie",
       "family": "lot3_magie_et_prieres",
-      "description": "Vous détectez immédiatement tout lancement de sort à une distance en yards égale à votre Perception, avec seulement sa direction approximative, sans identifier la magie. Si vous avez Seconde vue ou percevez autrement les Vents, Avantage V5 aux Tests pour discerner leurs mouvements ou variations.",
+      "description": "Vous détectez immédiatement tout lancement de sort à une distance en mètres égale à votre Perception, avec seulement sa direction approximative, sans identifier la magie. Si vous avez Seconde vue ou percevez autrement les Vents, Avantage V5 aux Tests pour discerner leurs mouvements ou variations.",
       "source": {
-        "effectHash": "sha256:55deb6f2d600741fb3773358fece2d2bdc2b48400ff4961adcf1c97324fdaac0",
+        "effectHash": "sha256:26644129eb0800170c0d778b583fc38efc6bc78f214731bfc1bd0b1e9e02e598",
         "reference": "Livre de base V5, p. 122 ; achat : p. 191"
       },
       "clauses": [
@@ -4136,9 +4136,9 @@
       "talentId": "talent-shieldsman",
       "name": "Porte-bouclier",
       "family": "actions_reactions_et_effets_actifs",
-      "description": "Une fois par Round, avec un bouclier, perdez Momentum pour : donner le bonus de PA du bouclier à un allié adjacent sans bouclier ; ou, après avoir remporté un Test opposé de Corps à corps en attaque ou défense, renoncer aux dégâts pour repousser l'adversaire jusqu'à 2 yards directement et ne plus être engagé.",
+      "description": "Une fois par Round, avec un bouclier, perdez Momentum pour : donner le bonus de PA du bouclier à un allié adjacent sans bouclier ; ou, après avoir remporté un Test opposé de Corps à corps en attaque ou défense, renoncer aux dégâts pour repousser l'adversaire jusqu'à 2 mètres directement et ne plus être engagé.",
       "source": {
-        "effectHash": "sha256:5bd45a5e7183a73f942314df805b6678a1ad1132c4e021fa1403c13f9fcc295f",
+        "effectHash": "sha256:0ed8c503eb060d16805cee918e7bd359c2fa0e45d387dd410fe63eabcd36ded8",
         "reference": "Livre de base V5, p. 125 ; achat : p. 191"
       },
       "clauses": [
@@ -5582,9 +5582,9 @@
       "talentId": "talent-night-vision",
       "name": "Vision nocturne",
       "family": "aides_contextuelles",
-      "description": "Avec au moins une faible source de lumière naturelle ou équivalente, vous voyez clairement jusqu’à 20 yards ; augmentez aussi de 20 yards la portée effective d’éclairage de toute source lumineuse.",
+      "description": "Avec au moins une faible source de lumière naturelle ou équivalente, vous voyez clairement jusqu’à 20 mètres ; augmentez aussi de 20 mètres la portée effective d’éclairage de toute source lumineuse.",
       "source": {
-        "effectHash": "sha256:7c8dea068a4a725e3b0b1361c9b7c6d3fedafe61f5facc77629b9946d393fe35",
+        "effectHash": "sha256:93796773176010e36edde071453228b81fb3814ea043a124a531cbbedecc1902",
         "reference": "Livre de base V5, p. 123 ; achat : p. 191"
       },
       "clauses": [

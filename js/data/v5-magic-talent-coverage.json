@@ -104,7 +104,7 @@
       "name": "Danse des épées",
       "status": "validated",
       "source": {
-        "effectHash": "sha256:b7db0bb3c3c6bd59a41c665ac237221b2c1a9b5dac002d2c07a085db07af0c08"
+        "effectHash": "sha256:e02cc99adb027ab7ae18464b6732e9d1577f65f740ee30204baf3a79928b6eb5"
       },
       "clauses": [
         {
@@ -246,7 +246,7 @@
       "name": "Imprégné",
       "status": "validated",
       "source": {
-        "effectHash": "sha256:91da30b698fc8a25083c99344a715e107280bb7a211a08e6b6498749076d3cc6"
+        "effectHash": "sha256:1373da14558115d7242b1ba36eeda2c0b6db355b08f57b73e603d3d8e1c1137c"
       },
       "clauses": [
         {
@@ -511,7 +511,7 @@
       "name": "Pacte de l’âme",
       "status": "validated",
       "source": {
-        "effectHash": "sha256:fa0dff0ddde945d9f5188032795890afc02b937eb2d890f9e95224157c6d725f"
+        "effectHash": "sha256:39b9f54c73fc14b1957ac81b4e46c213d0e264fd161eda3bc7adedecc8895240"
       },
       "clauses": [
         {
@@ -527,7 +527,7 @@
       "name": "Perception de la Magie",
       "status": "validated",
       "source": {
-        "effectHash": "sha256:55deb6f2d600741fb3773358fece2d2bdc2b48400ff4961adcf1c97324fdaac0"
+        "effectHash": "sha256:26644129eb0800170c0d778b583fc38efc6bc78f214731bfc1bd0b1e9e02e598"
       },
       "clauses": [
         {

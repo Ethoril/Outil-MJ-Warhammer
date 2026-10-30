@@ -5606,7 +5606,7 @@
       "status": "validated",
       "ruleVersion": "talent-v5-2026-10-09.24.5",
       "source": {
-        "effectHash": "sha256:2718922efad5c492a1c3be37109914dcc28b10a9ee7dde0f8fe1e9b06abfc97a",
+        "effectHash": "sha256:27aaa611d7506f5cc387e34336aa2391a737e46597976e4a486371b5294e4b4e",
         "reference": "Livre de base V5, p. 118 ; achat : p. 191"
       },
       "clauses": [
@@ -5919,7 +5919,7 @@
       "status": "validated",
       "ruleVersion": "talent-v5-2026-10-09.24.5",
       "source": {
-        "effectHash": "sha256:cec2ac64c4d8721b33a6c353136b0c0497ee4d622ef20eff72a1edb0875013ee",
+        "effectHash": "sha256:005120694ec39c27f29a59a80c9a487f78d2c9e8e93ff008116c008e98ad7601",
         "reference": "Dwarf Player’s Guide (V4), p. 80"
       },
       "clauses": [
@@ -6810,7 +6810,7 @@
       "ruleVersion": "talent-v5-2026-10-09.24.5",
       "source": {
         "reference": "Livre de base V5, p. 125 ; achat : p. 191",
-        "effectHash": "sha256:5bd45a5e7183a73f942314df805b6678a1ad1132c4e021fa1403c13f9fcc295f"
+        "effectHash": "sha256:0ed8c503eb060d16805cee918e7bd359c2fa0e45d387dd410fe63eabcd36ded8"
       },
       "clauses": [
         {
@@ -6896,7 +6896,7 @@
       "ruleVersion": "talent-v5-2026-10-09.24.5",
       "source": {
         "reference": "Dwarf Player’s Guide (V4), p. 79",
-        "effectHash": "sha256:78a453736157410796964193628d1167546b35a7306203cb3e9b92cc6c1f380b"
+        "effectHash": "sha256:afcd11899c0f100bcaf8026cb9b01eedf3e41920ae1651e2474dcbd3ff808e6d"
       },
       "clauses": [
         {
@@ -7362,13 +7362,13 @@
     "talent-riposte": "Une fois par Round, si vous remportez un Test opposé en défendant au corps à corps, vous infligez des dégâts comme si vous étiez l'attaquant.",
     "talent-harpooner": "Sur un Critique infligé avec une arbalète, vous pouvez ajouter +10 par acquisition au jet de la table des Critiques, maximum 00. Chaque carreau fiché dans la cible grâce à l’Atout Empaleuse réduit son Mouvement de 1, minimum 1.",
     "talent-reversal": "Lors d’un Test opposé de Corps à corps, si vous êtes touché mais que votre propre Test a réussi, vous conservez votre Momentum.",
-    "talent-distract": "Utilisez votre Mouvement pour un Test opposé Athlétisme, Représentation ou Escamotage contre Perception, sur une cible à 2 yards maximum. Si vous gagnez, elle perd Momentum et ne peut ni le récupérer ni effectuer de Test avec Avantage V5 jusqu’à la fin de votre prochain Tour.",
+    "talent-distract": "Utilisez votre Mouvement pour un Test opposé Athlétisme, Représentation ou Escamotage contre Perception, sur une cible à 2 mètres maximum. Si vous gagnez, elle perd Momentum et ne peut ni le récupérer ni effectuer de Test avec Avantage V5 jusqu’à la fin de votre prochain Tour.",
     "talent-frenzy": "À votre Tour, réussir un Test de Force Mentale déclenche la Frénésie : immunité aux autres Psychologies, une attaque de Corps à corps gratuite supplémentaire par Round et +1 Dégât à toutes les attaques de Corps à corps. Obligation d’avancer vers l’ennemi le plus proche et de l’attaquer, sans autre emploi de l’Action ou du Mouvement. Fin lorsque tous les ennemis proches sont vaincus, ou si vous êtes Sonné ou Inconscient ; vous gagnez alors 1 état Exténué.",
     "talent-strong-minded": "Une fois par séance, avant un Test, vous pouvez choisir de le faire sans aucun modificateur négatif.",
     "talent-battle-rage": "Si un autre effet vous permet d’entrer en Frénésie, vous le faites sans Test. Lorsque vous quittez la Frénésie, vous ne recevez pas d’État Exténué.",
     "talent-feint": "En attaquant en Corps à corps, si vous avez Momentum et que votre adversaire ne l’a pas, forcez-le à se défendre avec Intuition plutôt qu’une autre Compétence ou Caractéristique.",
     "talent-slayer": "Si une créature de Taille supérieure à la vôtre vous Charge, vous gagnez automatiquement Momentum.",
-    "talent-kingsguard": "Les attaques ennemies contre un allié situé à 2 yards ou moins de vous subissent −1 DR par acquisition. Aucun effet sur les attaques contre vous-même ni lorsque vous souffrez d’un état.",
+    "talent-kingsguard": "Les attaques ennemies contre un allié situé à 2 mètres ou moins de vous subissent −1 DR par acquisition. Aucun effet sur les attaques contre vous-même ni lorsque vous souffrez d’un état.",
     "talent-flagellant": "Vous ne ressentez pas la douleur et ignorez les pénalités des Blessures critiques, sauf celles des amputations. Si un autre effet vous donne accès à la Frénésie, vous pouvez y entrer sans Test chaque fois que vous subissez une Blessure.",
     "talent-fearless": "Choisissez un groupe d’ennemis : vous êtes immunisé à la Peur causée par ce groupe. Répétable avec un nouveau groupe à chaque acquisition ; une acquisition par groupe.",
     "talent-unshakeable": "Aucun Test pour résister à l'état Brisé lorsque vous êtes pris pour cible par une arme à poudre noire.",
@@ -7387,9 +7387,9 @@
     "talent-war-leader": "Les alliés influencés par votre Commandement en bataille peuvent utiliser votre Commandement plutôt que leur Calme contre la Peur jusqu'à la fin de la bataille. L'effet cesse à votre mort ou pendant vos états Brisé, Inconscient ou Peur.",
     "talent-dirty-fighting": "Après un Coup ciblé au Corps avec une frappe à mains nues qui inflige des Blessures, vous pouvez renoncer aux Dégâts normaux pour infliger la Blessure critique Low Blow ! (Coup bas), qui inflige 1 Blessure et 1 État Sonné (p. 175).",
     "talent-disarm": "Comme attaquant en Corps à corps, si vous obtenez au moins +4 DR, renoncez aux Dégâts pour désarmer : l’arme vole de 1d10 pieds dans une direction aléatoire. Vous pouvez perdre Momentum pour l’attraper au vol. Inefficace contre une cible désarmée, attachée à son arme ou plus grande que vous.",
-    "talent-shieldsman": "Une fois par Round, avec un bouclier, perdez Momentum pour : donner le bonus de PA du bouclier à un allié adjacent sans bouclier ; ou, après avoir remporté un Test opposé de Corps à corps en attaque ou défense, renoncer aux dégâts pour repousser l'adversaire jusqu'à 2 yards directement et ne plus être engagé.",
+    "talent-shieldsman": "Une fois par Round, avec un bouclier, perdez Momentum pour : donner le bonus de PA du bouclier à un allié adjacent sans bouclier ; ou, après avoir remporté un Test opposé de Corps à corps en attaque ou défense, renoncer aux dégâts pour repousser l'adversaire jusqu'à 2 mètres directement et ne plus être engagé.",
     "talent-resolute": "Lorsque vous gagnez un état, un Test de Calme Intermédiaire (+0 DR) réussi permet de conserver votre Momentum.",
-    "talent-forgefire": "Tant que vous êtes Engagé, vos armes de Corps à corps et celles de vos alliés à Bonus de Force Mentale yards gagnent l’Atout Pénétrante. Si une arme l’est déjà, ses attaques ignorent 1 PA supplémentaire d’armure métallique.",
+    "talent-forgefire": "Tant que vous êtes Engagé, vos armes de Corps à corps et celles de vos alliés à Bonus de Force Mentale mètres gagnent l’Atout Pénétrante. Si une arme l’est déjà, ses attaques ignorent 1 PA supplémentaire d’armure métallique.",
     "talent-frightening": "Vous causez Peur 1, ou Peur 2 si vous êtes de taille Grande. Chaque ennemi doit accumuler autant de réussites à un Test étendu de Psychologie que votre indice de Peur, avec un Test par Tour. Jusque-là, il ne peut gagner de Momentum et vos attaques de Corps à corps contre lui bénéficient d’Avantage V5.",
     "talent-cardsharp": "Lors d’un Test opposé de Pari, si votre jet est un double, vous pouvez relancer le jet de l’adversaire ; cela annule également tout bénéfice qu’il aurait obtenu avec Escamotage.",
     "talent-large": "Vous êtes de taille Grande. Points de Blessure = 2 × (Bonus de Force + 2 × Bonus d’Endurance + Bonus de Force Mentale). Vos attaques normales de Corps à corps infligent des dégâts supplémentaires égaux à votre Bonus de Force ; ce bonus de Taille ne s’applique ni aux attaques à distance, ni aux attaques gratuites ou supplémentaires. Un adversaire plus petit subit −2 DR s’il utilise Corps à corps pour se défendre contre vous, quelle que soit la différence de catégories. Si vous êtes agressif, vous provoquez la Peur chez les créatures plus petites. Vous pouvez quitter le Corps à corps avec des adversaires plus petits sans désengagement. En Force opposée, vous gagnez automatiquement avec au moins deux catégories d’écart ; avec une seule, le plus petit doit obtenir un Critique pour pouvoir comparer les DR. Pour déterminer si vous êtes en infériorité numérique, vous comptez comme deux créatures ; cela ne double pas votre contribution lorsque vous attaquez en surnombre des créatures plus petites. Contre un adversaire plus petit, vous pouvez perdre votre Élan (Momentum) pour une attaque gratuite de Piétinement : Corps à corps (Bagarre), dégâts égaux à votre Bonus de Force.",
