@@ -635,7 +635,7 @@ test('Lancement V5 — règle de table sans ingrédients, talent acquis et influ
 
   // 4. Diction instinctive : réduit de 20 le jet Mineur
   const withDiction = previewCasting({...wizard,talents:[{id:'talent-instinctive-diction',status:'resolved',rank:1}]}, spell, {
-    roll: 77,
+    roll: 33,
     miscastRoll: 35,
     instinctiveDiction: true
   });
@@ -645,7 +645,7 @@ test('Lancement V5 — règle de table sans ingrédients, talent acquis et influ
 
   // 5. Diction instinctive ramenant le jet sous 01 : annule l'incident
   const withDictionCancel = previewCasting({...wizard,talents:[{id:'talent-instinctive-diction',status:'resolved',rank:1}]}, spell, {
-    roll: 77,
+    roll: 33,
     miscastRoll: 15,
     instinctiveDiction: true
   });

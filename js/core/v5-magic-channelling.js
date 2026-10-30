@@ -318,7 +318,7 @@ export function previewChannelling(participant, options = {}) {
       isHighMagic: targetType === 'high',
       secondaryRolls: options.secondaryRolls,
       hasIngredient: false,
-      instinctiveDiction: Boolean(options.instinctiveDiction),
+      instinctiveDiction: Boolean(options.instinctiveDiction), testSucceeded: false,
     attunementRank: options.attunementRank, miscastRoll2: options.miscastRoll2, miscastChoice: options.miscastChoice,
       corruptingInfluence: Boolean(options.corruptingInfluence),
       majorRoll: options.majorRoll
@@ -553,7 +553,7 @@ export function previewChannellingInterruption(participant, options = {}) {
       isHighMagic: currentReserve.type === 'high',
       secondaryRolls: options.secondaryRolls,
       hasIngredient: false,
-      instinctiveDiction: Boolean(options.instinctiveDiction),
+      instinctiveDiction: Boolean(options.instinctiveDiction), testSucceeded: false,
     attunementRank: options.attunementRank, miscastRoll2: options.miscastRoll2, miscastChoice: options.miscastChoice,
       corruptingInfluence: Boolean(options.corruptingInfluence),
       majorRoll: options.majorRoll

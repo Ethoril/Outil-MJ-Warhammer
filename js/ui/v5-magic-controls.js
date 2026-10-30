@@ -39,9 +39,9 @@ export function renderMagicControls({actor,participants,type,draft,handlers,targ
  field('magicAssistantId','Familier assistant','select',[['','Aucun'],...participants.filter(p=>p.id!==actor.id&&(magicTalentRank(p,'animal-assistant')||magicTalentRank(p,'magical-assistant'))).map(p=>[p.id,p.name])]);
  if(draft.magicAssistantId)field('magicAssistantLinked','Familier lié à ce lanceur, aide possible','checkbox');
  if((actor.extensions?.v5?.spellEffects || []).some(e=>e.magicTalentId==='talent-sanctuary-of-the-mind' && e.magicTalentRank>=3)){const input=field('magicYenluiPenalty','Pénalité de Yenlui (DR négatifs)');input.min='-100';input.max='0';}
- if(magicTalentRank(actor,'instinctive-diction'))field('magicInstinctiveDiction','Diction instinctive : réduire le jet mineur de 20','checkbox');
+ if(magicTalentRank(actor,'instinctive-diction'))field('magicInstinctiveDiction','Diction instinctive : réduire le jet mineur de 20 (Test réussi seulement)','checkbox');
  if(magicTalentRank(actor,'aethyric-attunement')){
-  field('magicMiscastRoll2','Harmonisation : second jet d’incident (1d100)');
+  field('magicMiscastRoll2','Harmonisation : second jet d’incident (1d100, Test réussi seulement)');
   field('magicMiscastChoice','Harmonisation : résultat retenu','select',[['','Choisir'],['first','Premier'],['second','Second']]);
  }
  // L-07 (V5 p. 238) : les deux jets supplémentaires de l'incident 91-95, saisis par le MJ, avec leurs dés secondaires.

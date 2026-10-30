@@ -1481,6 +1481,7 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
         corruptingInfluence: Boolean(effectiveCorruptingInfluence),
         hasIngredient: Boolean(effectiveIngredient),
         instinctiveDiction: Boolean(effectiveInstinctiveDiction),
+        testSucceeded: testSuccess,
         isHighMagic: contract.domain === 'high',
         bfm,
         secondaryRolls: effectiveSecondaryRolls,

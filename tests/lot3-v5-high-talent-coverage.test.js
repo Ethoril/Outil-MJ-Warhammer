@@ -71,7 +71,7 @@ probe('magic-defiance', 'magic:1', 'Dwarf Player’s Guide p. 80', async () => {
 });
 probe('instinctive-diction', 'magic:0', 'V5 p. 121', async () => {
   const store = await combat(wizard('mage', { talents: [talent('instinctive-diction')] }));
-  const input = { actorId: 'mage', roll: 77, miscastRoll: 15, instinctiveDiction: true };
+  const input = { actorId: 'mage', roll: 33, miscastRoll: 15, instinctiveDiction: true };
   assert.equal(store.previewCasting(getSpellContract('Carreau'), input).miscast, null);
   await store.updateParticipant('mage', { extensions: { v5: { specialStates: { forbidMitigation: true } } } });
   assert.equal(store.previewCasting(getSpellContract('Carreau'), input).miscast.name, 'Distraction');

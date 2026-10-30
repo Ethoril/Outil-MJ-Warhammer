@@ -253,7 +253,7 @@ function resolveMiscastWithMitigations(tableKey, rawRoll, modifier, options = {}
     corruptingInfluence: Boolean(options.corruptingInfluence),
     slannMishapMaster: options.slannMishapMaster === true,
     hasIngredient: false,
-    instinctiveDiction: Boolean(options.instinctiveDiction),
+    instinctiveDiction: Boolean(options.instinctiveDiction), testSucceeded: options.testSucceeded,
     attunementRank: options.attunementRank, miscastRoll2: options.miscastRoll2, miscastChoice: options.miscastChoice,
     isHighMagic: Boolean(options.isHighMagic),
     usedTalent: options.usedTalent,
@@ -368,8 +368,8 @@ function previewPreparedCasting(participant, spell, options) {
     totalCastingSl = testSl;
 
     if (fumble) {
-      // Maladresse d’incantation : jet Mineur
-      miscast = resolveMiscastWithMitigations(options.forceMajorMiscast?'MAJOR':'MINOR', options.miscastRoll, 0, miscastContext);
+      // Maladresse d’incantation : jet Mineur (Test raté : ni Diction instinctive ni Harmonie aethyrique)
+      miscast = resolveMiscastWithMitigations(options.forceMajorMiscast?'MAJOR':'MINOR', options.miscastRoll, 0, { ...miscastContext, testSucceeded: false });
     }
   } else {
     // Le test a réussi : on ajoute la réserve appropriée
@@ -377,7 +377,7 @@ function previewPreparedCasting(participant, spell, options) {
 
     if (critical && !isPetty) {
       // Double réussi au lancer : déclenche un incident Mineur (sauf sorts mineurs)
-      miscast = resolveMiscastWithMitigations(options.forceMajorMiscast?'MAJOR':'MINOR', options.miscastRoll, 0, miscastContext);
+      miscast = resolveMiscastWithMitigations(options.forceMajorMiscast?'MAJOR':'MINOR', options.miscastRoll, 0, { ...miscastContext, testSucceeded: true });
 
       // Choix d'effet critique
       criticalChoice = options.criticalChoice || null;
