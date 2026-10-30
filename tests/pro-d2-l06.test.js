@@ -29,7 +29,7 @@ test('D2 : valeurs imprimées du Sanglier, du Troll et du Dragon, relues sur les
   const dragon = byName('Dragon');
   assert.equal(dragon.wounds, 104);
   assert.deepEqual(dragon.traits.find(t => t.name === 'Fly'), { name: 'Fly', rating: '80', ref: 'E0-T-023' });
-  assert.deepEqual(dragon.attacks.map(a => a.damage), [16, 9, 8]);
+  assert.deepEqual(dragon.attacks.map(a => a.damage), [22, 9, 8]);
 });
 
 test('D2 : les natures (Mort-vivant, Démoniaque, Construct) sont des Traits liés à l’inventaire', () => {
@@ -47,8 +47,8 @@ test('D2 : les natures (Mort-vivant, Démoniaque, Construct) sont des Traits li�
 
 test('D2 : gabarits en modificateurs signés (cases vides = aucun modificateur)', () => {
   assert.deepEqual(byName('Soldier').modifiers, { CC: 10, F: 10, E: 10, FM: 10 });
-  assert.deepEqual(byName('Commander').modifiers, { CC: 20, CT: 20, F: 20, E: 10, I: 20, Ag: 10, FM: 20, Soc: 15 });
-  assert.deepEqual(byName('Spellcaster Lord').modifiers, { CC: 10, I: 20, Ag: 15, Int: 20, FM: 20, Soc: 10 });
+  assert.deepEqual(byName('Commander').modifiers, { CC: 30, CT: 30, F: 20, E: 20, I: 30, Ag: 20, FM: 30, Soc: 15 });
+  assert.deepEqual(byName('Spellcaster Lord').modifiers, { CC: 10, I: 20, Ag: 15, Int: 20, FM: 30, Soc: 10 });
   assert.equal(byName('Soldier').stats, undefined);
 });
 

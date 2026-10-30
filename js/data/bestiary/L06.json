@@ -253,7 +253,7 @@
      "value": 30,
      "damage": 9,
      "optional": true,
-     "rangeYards": 50,
+     "rangeYards": 40,
      "qualities": [
       "Impale",
       "Reload 1"
@@ -356,7 +356,7 @@
     {
      "name": "Longbow and Elf Arrows",
      "value": 45,
-     "damage": 7,
+     "damage": 8,
      "optional": true,
      "rangeYards": 70,
      "qualities": [
@@ -1058,10 +1058,6 @@
     }
    ],
    "traits": [
-    {
-     "name": "Fear",
-     "ref": "E0-T-022"
-    },
     {
      "name": "Hungry",
      "ref": "E0-T-029"
@@ -1828,6 +1824,10 @@
    ],
    "optionalTraits": [
     {
+     "name": "Grim",
+     "ref": "E0-T-026"
+    },
+    {
      "name": "Size",
      "param": "Enormous or Monstrous",
      "ref": "E0-T-045"
@@ -2075,7 +2075,7 @@
     {
      "name": "Claws",
      "value": 70,
-     "damage": 16
+     "damage": 22
     },
     {
      "name": "Bite",
@@ -2132,6 +2132,10 @@
     }
    ],
    "optionalTraits": [
+    {
+     "name": "Grim",
+     "ref": "E0-T-026"
+    },
     {
      "name": "Immunity",
      "param": "Any",
@@ -2320,7 +2324,7 @@
     {
      "name": "Hand Weapon",
      "value": 35,
-     "damage": 16
+     "damage": 22
     }
    ],
    "skills": [
@@ -2343,6 +2347,10 @@
     }
    ],
    "optionalTraits": [
+    {
+     "name": "Grim",
+     "ref": "E0-T-026"
+    },
     {
      "name": "Hungry",
      "ref": "E0-T-029"
@@ -2411,7 +2419,7 @@
     {
      "name": "Talons",
      "value": 60,
-     "damage": 14,
+     "damage": 19,
      "qualities": [
       "Fast"
      ]
@@ -2463,6 +2471,10 @@
     {
      "name": "Bestial",
      "ref": "E0-T-005"
+    },
+    {
+     "name": "Grim",
+     "ref": "E0-T-026"
     },
     {
      "name": "Immune to Psychology",
@@ -2520,7 +2532,7 @@
     {
      "name": "Claws",
      "value": 60,
-     "damage": 14
+     "damage": 19
     },
     {
      "name": "Bite",
@@ -2573,6 +2585,10 @@
     }
    ],
    "optionalTraits": [
+    {
+     "name": "Grim",
+     "ref": "E0-T-026"
+    },
     {
      "name": "Hatred",
      "param": "Predators",
@@ -2782,6 +2798,10 @@
     {
      "name": "Frenzy",
      "ref": "E0-T-024"
+    },
+    {
+     "name": "Grim",
+     "ref": "E0-T-026"
     },
     {
      "name": "Hungry",
@@ -3321,6 +3341,7 @@
     },
     {
      "name": "Fear",
+     "rating": "2",
      "ref": "E0-T-022"
     },
     {
@@ -3421,6 +3442,7 @@
     },
     {
      "name": "Fear",
+     "rating": "2",
      "ref": "E0-T-022"
     },
     {
@@ -3538,6 +3560,7 @@
     },
     {
      "name": "Fear",
+     "rating": "2",
      "ref": "E0-T-022"
     },
     {
@@ -3645,6 +3668,7 @@
     },
     {
      "name": "Fear",
+     "rating": "2",
      "ref": "E0-T-022"
     },
     {
@@ -4025,6 +4049,7 @@
     },
     {
      "name": "Fear",
+     "rating": "2",
      "ref": "E0-T-022"
     },
     {
@@ -4035,6 +4060,10 @@
     {
      "name": "Frenzy",
      "ref": "E0-T-024"
+    },
+    {
+     "name": "Grim",
+     "ref": "E0-T-026"
     },
     {
      "name": "Hungry",
@@ -4208,6 +4237,10 @@
     {
      "name": "Frenzy",
      "ref": "E0-T-024"
+    },
+    {
+     "name": "Grim",
+     "ref": "E0-T-026"
     },
     {
      "name": "Territorial",
@@ -4570,6 +4603,10 @@
     {
      "name": "Frenzy",
      "ref": "E0-T-024"
+    },
+    {
+     "name": "Grim",
+     "ref": "E0-T-026"
     },
     {
      "name": "Infected",
@@ -4967,6 +5004,7 @@
     },
     {
      "name": "Fear",
+     "rating": "3",
      "ref": "E0-T-022"
     },
     {
@@ -5087,6 +5125,7 @@
     },
     {
      "name": "Fear",
+     "rating": "2",
      "ref": "E0-T-022"
     },
     {
@@ -5673,17 +5712,17 @@
    "physicalPage": 353,
    "kind": "template",
    "blockKey": "L06:353:1",
-   "name": "Leader",
-   "nameFr": "Meneur",
+   "name": "Lieutenant",
+   "nameFr": "Lieutenant",
    "modifiers": {
-    "CC": 15,
-    "CT": 15,
-    "F": 15,
-    "E": 15,
-    "I": 15,
-    "Ag": 15,
-    "FM": 15,
-    "Soc": 5
+    "CC": 20,
+    "CT": 20,
+    "F": 20,
+    "E": 20,
+    "I": 20,
+    "Ag": 20,
+    "FM": 20,
+    "Soc": 10
    },
    "skills": [
     {
@@ -5768,13 +5807,13 @@
    "name": "Commander",
    "nameFr": "Commandant",
    "modifiers": {
-    "CC": 20,
-    "CT": 20,
+    "CC": 30,
+    "CT": 30,
     "F": 20,
-    "E": 10,
-    "I": 20,
-    "Ag": 10,
-    "FM": 20,
+    "E": 20,
+    "I": 30,
+    "Ag": 20,
+    "FM": 30,
     "Soc": 15
    },
    "skills": [
@@ -5954,7 +5993,7 @@
     "I": 20,
     "Ag": 15,
     "Int": 20,
-    "FM": 20,
+    "FM": 30,
     "Soc": 10
    },
    "skills": [
@@ -6181,20 +6220,20 @@
    "nameFr": "Ungrakk — Seigneur-bête gor (Commandant)",
    "stats": {
     "M": 5,
-    "CC": 55,
-    "CT": 50,
+    "CC": 65,
+    "CT": 60,
     "F": 55,
-    "E": 50,
-    "I": 50,
-    "Ag": 45,
-    "Dex": 20,
+    "E": 60,
+    "I": 60,
+    "Ag": 55,
+    "Dex": 35,
     "Int": 20,
-    "FM": 50,
+    "FM": 60,
     "Soc": 25
    },
-   "wounds": 20,
+   "wounds": 23,
    "armour": {
-    "toughnessBonus": 5,
+    "toughnessBonus": 6,
     "parts": [
      {
       "name": "Medium Armour",
@@ -6205,12 +6244,12 @@
    "attacks": [
     {
      "name": "Hand Weapon",
-     "value": 75,
+     "value": 85,
      "damage": 9
     },
     {
      "name": "Horns",
-     "value": 55,
+     "value": 65,
      "damage": 9,
      "free": "charge"
     }
@@ -6219,12 +6258,12 @@
     {
      "name": "Cool",
      "nameFr": "Calme",
-     "value": 70
+     "value": 80
     },
     {
      "name": "Dodge",
      "nameFr": "Esquive",
-     "value": 65
+     "value": 75
     },
     {
      "name": "Intimidate",
@@ -6234,27 +6273,27 @@
     {
      "name": "Leadership",
      "nameFr": "Commandement",
-     "value": 50
+     "value": 55
     },
     {
      "name": "Lore (Warfare)",
      "nameFr": "Savoir (Guerre)",
-     "value": 40
+     "value": 55
     },
     {
      "name": "Melee (Basic)",
      "nameFr": "Corps à corps (Base)",
-     "value": 75
+     "value": 85
     },
     {
      "name": "Melee (Two-Handed)",
      "nameFr": "Corps à corps (Deux mains)",
-     "value": 75
+     "value": 85
     },
     {
      "name": "Perception",
      "nameFr": "Perception",
-     "value": 70
+     "value": 80
     }
    ],
    "traits": [

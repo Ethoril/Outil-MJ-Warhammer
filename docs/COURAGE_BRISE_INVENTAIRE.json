@@ -544,8 +544,8 @@
     "sourceBook": "L06",
     "printedPage": 361,
     "label": "Trait Craintif / Skittish",
-    "summaryFr": "Trait Craintif / Skittish : Effet magique spectaculaire visible ou bruit violent : trois États Brisé.",
-    "mechanic": "Effet magique spectaculaire visible ou bruit violent : trois États Brisé.",
+    "summaryFr": "Trait Craintif / Skittish : Effet magique spectaculaire visible ou bruit violent : 1 État Brisé (v3 p.361).",
+    "mechanic": "Effet magique spectaculaire visible ou bruit violent : 1 État Brisé (v3 p.361).",
     "currentStatus": "reminder",
     "evidence": [
       "js/core/v5-magic-arbitrations.js:24"

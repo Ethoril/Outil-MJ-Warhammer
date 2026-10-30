@@ -7,7 +7,7 @@ import { JUSTIFIED_Q34 } from '../tools/lib/bestiary-justified.mjs';
 const profile = (book, id) => JSON.parse(readFileSync(`js/data/bestiary/${book}.json`, 'utf8')).profiles.find(item => item.id === id);
 
 // L06 p.330 : « Bite: (70/+9) Lose Momentum to make this Free Attack, Penetrating Tail: (70/+8) … » — la qualité de la ligne précédente précède le nom suivant.
-const DRAGON_ATTACKS = 'Attacks Claws: (70/+16) Bite: (70/+9) Lose Momentum to make this Free Attack, Penetrating Tail: (70/+8) Lose Momentum to make this Free Attack Armour';
+const DRAGON_ATTACKS = 'Attacks Claws: (70/+22) Bite: (70/+9) Lose Momentum to make this Free Attack, Penetrating Tail: (70/+8) Lose Momentum to make this Free Attack Armour';
 
 test('Q34a : le contrôle lit « Penetrating Tail » comme la qualité puis l\'attaque Tail', () => {
   const dragon = profile('L06', 'E0-P-082');
@@ -16,7 +16,7 @@ test('Q34a : le contrôle lit « Penetrating Tail » comme la qualité puis l\'a
 });
 
 test('Q34a : une attaque réellement absente reste signalée malgré les suffixes', () => {
-  const dragon = { ...profile('L06', 'E0-P-082'), attacks: [{ name: 'Claws', damage: 16 }, { name: 'Bite', damage: 9 }] };
+  const dragon = { ...profile('L06', 'E0-P-082'), attacks: [{ name: 'Claws', damage: 22 }, { name: 'Bite', damage: 9 }] };
   assert.deepEqual(formatGaps(dragon, DRAGON_ATTACKS, new Set(), new Set()).attacks, ['Penetrating Tail (70/+8)']);
 });
 
