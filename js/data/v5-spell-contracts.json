@@ -13474,6 +13474,7 @@
     },
     "effects": {
       "type": "special",
+      "excludeCaster": true,
       "breath": {
         "rangeBase": 20,
         "rangeBonus": "BFM",
