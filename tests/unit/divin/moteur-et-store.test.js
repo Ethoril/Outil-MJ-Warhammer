@@ -12,7 +12,7 @@ import DIVINE_REGISTRY from '../../../js/data/v5-divine-contracts.json' with { t
 import registry from '../../../js/data/v5-divine-contracts.json' with { type: 'json' };
 import { previewResolution } from '../../../js/core/resolution.js';
 import { magicSkillModifiers } from '../../../js/core/v5-magic-talents.js';
-import { BATTLE, fixture, priest, snap, input, person } from '../../divin-v5-b5-fixture.mjs';
+import { BATTLE, fixture, priest, snap, input, person } from '../../helpers/divin-b5-fixture.mjs';
 import * as access from '../../../js/core/v5-divine-access.js';
 import { calculateEffectiveMagicAP } from '../../../js/core/v5-magic-effects.js';
 import { acquireV5Conditions } from '../../../js/core/v5-effects.js';

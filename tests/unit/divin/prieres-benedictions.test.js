@@ -9,8 +9,6 @@ import { availableV5TalentActions } from '../../../js/core/v5-talent-actions.js'
 import { encounter, contracts, cast, subject, level, endTurn } from '../../helpers/lot3-domain-fixture.js';
 import { acquireV5Conditions } from '../../../js/core/v5-effects.js';
 import { effectTypes } from '../../../js/core/v5-divine-grammar.js';
-// Haine sacrée : cette recette exerce réellement le bonus des Miracles et son absence sans talent.
-import '../../divin-v5-p4a-damage.test.js';
 
 const clone = value => structuredClone(value);
 const CRUSH = 'divine:miracle:ulric:crush-the-weak';

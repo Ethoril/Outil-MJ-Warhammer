@@ -7,7 +7,7 @@
    "status": "assisté",
    "lot": "B17",
    "commit": "575d4d0",
-   "proof": "tests/divin-v5-b17-sin-events.test.js"
+   "proof": "tests/unit/divin/peche-destin-possessions.test.js"
   },
   "l06-217-fumble-wrath": {
    "status": "automatisé",
@@ -37,43 +37,43 @@
    "status": "rappel",
    "lot": "B17",
    "commit": "575d4d0",
-   "proof": "tests/divin-v5-b17-sin-events.test.js"
+   "proof": "tests/unit/divin/peche-destin-possessions.test.js"
   },
   "l06-217-cult-commandements": {
    "status": "rappel",
    "lot": "B17",
    "commit": "575d4d0",
-   "proof": "tests/divin-v5-b17-sin-events.test.js"
+   "proof": "tests/unit/divin/peche-destin-possessions.test.js"
   },
   "l06-220-petty-concerns": {
    "status": "assisté",
    "lot": "B17",
    "commit": "575d4d0",
-   "proof": "tests/divin-v5-b17-sin-events.test.js"
+   "proof": "tests/unit/divin/peche-destin-possessions.test.js"
   },
   "l06-219-absolution": {
    "status": "automatisé",
    "lot": "B16",
    "commit": "1e6b3fd",
-   "proof": "tests/divin-v5-b16-absolution.test.js"
+   "proof": "tests/unit/divin/peche-destin-possessions.test.js"
   },
   "l06-219-penance-definition": {
    "status": "automatisé",
    "lot": "B10",
    "commit": "aa62ca0",
-   "proof": "tests/divin-v5-b10-penance.test.js"
+   "proof": "tests/unit/divin/peche-destin-possessions.test.js"
   },
   "l06-219-cult-penances": {
    "status": "automatisé",
    "lot": "B10",
    "commit": "aa62ca0",
-   "proof": "tests/divin-v5-b10-penance.test.js"
+   "proof": "tests/unit/divin/peche-destin-possessions.test.js"
   },
   "l06-219-divine-servants": {
    "status": "assisté",
    "lot": "B14",
    "commit": "e11ec42",
-   "proof": "tests/divin-v5-b14-summons.test.js"
+   "proof": "tests/unit/divin/peche-destin-possessions.test.js"
   },
   "l06-218-wrath-01-05": {
    "status": "automatisé",
@@ -183,7 +183,7 @@
    "status": "assisté",
    "lot": "B14",
    "commit": "e11ec42",
-   "proof": "tests/divin-v5-b14-summons.test.js"
+   "proof": "tests/unit/divin/peche-destin-possessions.test.js"
   },
   "l06-218-wrath-89-95": {
    "status": "automatisé",
@@ -195,7 +195,7 @@
    "status": "automatisé",
    "lot": "B10",
    "commit": "aa62ca0",
-   "proof": "tests/divin-v5-b10-penance.test.js"
+   "proof": "tests/unit/divin/peche-destin-possessions.test.js"
   },
   "l06-219-wrath-101-105": {
    "status": "automatisé",
@@ -213,7 +213,7 @@
    "status": "automatisé",
    "lot": "B11",
    "commit": "ee9ef18",
-   "proof": "tests/divin-v5-b11-possessions.test.js"
+   "proof": "tests/unit/divin/peche-destin-possessions.test.js"
   },
   "l06-219-wrath-116-120": {
    "status": "automatisé",
@@ -225,7 +225,7 @@
    "status": "automatisé",
    "lot": "B09",
    "commit": "af31809",
-   "proof": "tests/divin-v5-b9-fortune.test.js"
+   "proof": "tests/unit/divin/peche-destin-possessions.test.js"
   },
   "l06-219-wrath-126-130": {
    "status": "automatisé",
@@ -243,37 +243,37 @@
    "status": "automatisé",
    "lot": "B13",
    "commit": "e6e4b89",
-   "proof": "tests/divin-v5-b13-rejection.test.js"
+   "proof": "tests/unit/divin/peche-destin-possessions.test.js"
   },
   "l06-219-wrath-141-145": {
    "status": "assisté",
    "lot": "B14",
    "commit": "e11ec42",
-   "proof": "tests/divin-v5-b14-summons.test.js"
+   "proof": "tests/unit/divin/peche-destin-possessions.test.js"
   },
   "l06-219-wrath-146-150": {
    "status": "automatisé",
    "lot": "B13",
    "commit": "e6e4b89",
-   "proof": "tests/divin-v5-b13-rejection.test.js"
+   "proof": "tests/unit/divin/peche-destin-possessions.test.js"
   },
   "l06-219-wrath-151-plus": {
    "status": "assisté",
    "lot": "B15",
    "commit": "7e1529c",
-   "proof": "tests/divin-v5-b15-fate.test.js"
+   "proof": "tests/unit/divin/peche-destin-possessions.test.js"
   },
   "l06-229-shackles-of-truth": {
    "status": "rappel",
    "lot": "B17",
    "commit": "575d4d0",
-   "proof": "tests/divin-v5-b17-sin-events.test.js"
+   "proof": "tests/unit/divin/peche-destin-possessions.test.js"
   },
   "l06-229-sword-of-justice": {
    "status": "assisté",
    "lot": "B17",
    "commit": "575d4d0",
-   "proof": "tests/divin-v5-b17-sin-events.test.js"
+   "proof": "tests/unit/divin/peche-destin-possessions.test.js"
   },
   "l06-195-ranalds-wrath-event": {
    "status": "exclu",
@@ -319,37 +319,37 @@
    "status": "assisté",
    "lot": "B17",
    "commit": "575d4d0",
-   "proof": "tests/divin-v5-b17-sin-events.test.js"
+   "proof": "tests/unit/divin/peche-destin-possessions.test.js"
   },
   "l02-018-temple-event": {
    "status": "assisté",
    "lot": "B17",
    "commit": "575d4d0",
-   "proof": "tests/divin-v5-b17-sin-events.test.js"
+   "proof": "tests/unit/divin/peche-destin-possessions.test.js"
   },
   "l02-046-handrich-profit-sin": {
    "status": "assisté",
    "lot": "B17",
    "commit": "575d4d0",
-   "proof": "tests/divin-v5-b17-sin-events.test.js"
+   "proof": "tests/unit/divin/peche-destin-possessions.test.js"
   },
   "l02-047-shake-on-it-break-sin": {
    "status": "assisté",
    "lot": "B17",
    "commit": "575d4d0",
-   "proof": "tests/divin-v5-b17-sin-events.test.js"
+   "proof": "tests/unit/divin/peche-destin-possessions.test.js"
   },
   "l02-051-khaine-strictures-penances": {
    "status": "rappel",
    "lot": "B17",
    "commit": "575d4d0",
-   "proof": "tests/divin-v5-b17-sin-events.test.js"
+   "proof": "tests/unit/divin/peche-destin-possessions.test.js"
   },
   "l02-053-solkan-strictures-penances": {
    "status": "rappel",
    "lot": "B17",
    "commit": "575d4d0",
-   "proof": "tests/divin-v5-b17-sin-events.test.js"
+   "proof": "tests/unit/divin/peche-destin-possessions.test.js"
   },
   "l02-055-solkan-purity-gate": {
    "status": "automatisé",
@@ -372,13 +372,13 @@
    "status": "assisté",
    "lot": "B17",
    "commit": "575d4d0",
-   "proof": "tests/divin-v5-b17-sin-events.test.js"
+   "proof": "tests/unit/divin/peche-destin-possessions.test.js"
   },
   "l13-070-myrmidia-strictures": {
    "status": "rappel",
    "lot": "B17",
    "commit": "575d4d0",
-   "proof": "tests/divin-v5-b17-sin-events.test.js"
+   "proof": "tests/unit/divin/peche-destin-possessions.test.js"
   },
   "l13-079-vindicte-vengeresse": {
    "status": "exclu",
@@ -394,13 +394,13 @@
    "status": "assisté",
    "lot": "B17",
    "commit": "575d4d0",
-   "proof": "tests/divin-v5-b17-sin-events.test.js"
+   "proof": "tests/unit/divin/peche-destin-possessions.test.js"
   },
   "l18-049-ulric-omens": {
    "status": "rappel",
    "lot": "B17",
    "commit": "575d4d0",
-   "proof": "tests/divin-v5-b17-sin-events.test.js"
+   "proof": "tests/unit/divin/peche-destin-possessions.test.js"
   },
   "corpus-negative-sweep": {
    "status": "exclu",
@@ -411,62 +411,62 @@
    "status": "rappel",
    "lot": "B17",
    "commit": "575d4d0",
-   "proof": "tests/divin-v5-b17-sin-events.test.js"
+   "proof": "tests/unit/divin/peche-destin-possessions.test.js"
   },
   "l19-112-ulric-penance": {
    "status": "automatisé",
    "lot": "B10",
    "commit": "aa62ca0",
-   "proof": "tests/divin-v5-b10-penance.test.js"
+   "proof": "tests/unit/divin/peche-destin-possessions.test.js"
   },
   "l20-027-cult-strictures": {
    "status": "rappel",
    "lot": "B17",
    "commit": "575d4d0",
-   "proof": "tests/divin-v5-b17-sin-events.test.js"
+   "proof": "tests/unit/divin/peche-destin-possessions.test.js"
   },
   "l20-219-penance-endeavour": {
    "status": "automatisé",
    "lot": "B16",
    "commit": "1e6b3fd",
-   "proof": "tests/divin-v5-b16-absolution.test.js"
+   "proof": "tests/unit/divin/peche-destin-possessions.test.js"
   },
   "l21-006-shrine-pilgrimage": {
    "status": "automatisé",
    "lot": "B10",
    "commit": "aa62ca0",
-   "proof": "tests/divin-v5-b10-penance.test.js"
+   "proof": "tests/unit/divin/peche-destin-possessions.test.js"
   },
   "l21-007-relic-wrath-modifier": {
    "status": "automatisé",
    "lot": "B18",
    "commit": "6084194",
-   "proof": "tests/divin-v5-b18-supplements.test.js"
+   "proof": "tests/unit/divin/peche-destin-possessions.test.js"
   },
   "l21-007-shining-rock-sin": {
    "status": "assisté",
    "lot": "B17",
    "commit": "575d4d0",
-   "proof": "tests/divin-v5-b17-sin-events.test.js"
+   "proof": "tests/unit/divin/peche-destin-possessions.test.js"
   },
   "l21-013-shrine-desecration": {
    "status": "assisté",
    "lot": "B17",
    "commit": "575d4d0",
-   "proof": "tests/divin-v5-b17-sin-events.test.js"
+   "proof": "tests/unit/divin/peche-destin-possessions.test.js"
   },
   "l22-039-daily-wrath-tome": {
    "status": "assisté",
    "lot": "B18",
    "commit": "6084194",
-   "proof": "tests/divin-v5-b18-supplements.test.js",
+   "proof": "tests/unit/divin/peche-destin-possessions.test.js",
    "note": "assisté : suivi MJ sur horloge"
   },
   "l22-071-sanctified-ground": {
    "status": "assisté",
    "lot": "B18",
    "commit": "6084194",
-   "proof": "tests/divin-v5-b18-supplements.test.js",
+   "proof": "tests/unit/divin/peche-destin-possessions.test.js",
    "note": "assisté : seuil MJ, effets canoniques"
   },
   "l23-064-ranald-npc": {
@@ -478,33 +478,33 @@
    "status": "rappel",
    "lot": "B17",
    "commit": "575d4d0",
-   "proof": "tests/divin-v5-b17-sin-events.test.js"
+   "proof": "tests/unit/divin/peche-destin-possessions.test.js"
   },
   "l25-083-manann-strictures": {
    "status": "rappel",
    "lot": "B17",
    "commit": "575d4d0",
-   "proof": "tests/divin-v5-b17-sin-events.test.js"
+   "proof": "tests/unit/divin/peche-destin-possessions.test.js"
   },
   "l25-087-manann-overuse": {
    "status": "assisté",
    "lot": "B18",
    "commit": "6084194",
-   "proof": "tests/divin-v5-b18-supplements.test.js",
+   "proof": "tests/unit/divin/peche-destin-possessions.test.js",
    "note": "assisté : faits navals fournis"
   },
   "l25-087-blessed-voyage-sin": {
    "status": "assisté",
    "lot": "B18",
    "commit": "6084194",
-   "proof": "tests/divin-v5-b18-supplements.test.js",
+   "proof": "tests/unit/divin/peche-destin-possessions.test.js",
    "note": "assisté : dés explicites"
   },
   "l25-089-stromfels-penances": {
    "status": "automatisé",
    "lot": "B10",
    "commit": "aa62ca0",
-   "proof": "tests/divin-v5-b10-penance.test.js"
+   "proof": "tests/unit/divin/peche-destin-possessions.test.js"
   },
   "l25-091-stromfels-access": {
    "status": "automatisé",
@@ -516,7 +516,7 @@
    "status": "assisté",
    "lot": "B18",
    "commit": "6084194",
-   "proof": "tests/divin-v5-b18-supplements.test.js",
+   "proof": "tests/unit/divin/peche-destin-possessions.test.js",
    "note": "assisté : jet de table + Péchés"
   },
   "l26-045-secular-code": {
@@ -528,7 +528,7 @@
    "status": "assisté",
    "lot": "B17",
    "commit": "575d4d0",
-   "proof": "tests/divin-v5-b17-sin-events.test.js"
+   "proof": "tests/unit/divin/peche-destin-possessions.test.js"
   }
  }
 }

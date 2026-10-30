@@ -25,3 +25,9 @@ Aucun doublon retiré (suite : 5 471 tests avant, 5 471 après ; les 63 originau
 ## R2-6 — divin B
 
 Aucun doublon retiré (suite : 5 471 tests avant, 5 471 après ; les 30 originaux : 367 tests, les 4 cibles : 367). Les candidats du plan (e4-runtime / e4-context et leurs -independent, wrath-conditions -dev / -independent, brise-flee-sprint / broken-escape-dev, simulation-independent) ont des entrées ou des valeurs attendues différentes (données d’états, assertions supplémentaires, chemins Store ou moteur distincts) : conservés.
+
+## R2-7 — divin C
+
+Un doublon d'exécution retiré : `lot3-especes-divin-coverage` (fusionné en R2-5 dans `tests/unit/divin/prieres-benedictions.test.js`) importait `divin-v5-p4a-damage.test.js`, ce qui exécutait ses 12 tests une seconde fois dans la suite. L'import est supprimé ; les 12 tests ne s'exécutent plus qu'une fois, dans le describe « P4a — dégâts directs » de `tests/unit/divin/effets-degats-conditions.test.js` (dont « Haine sacrée : +2 Blessures si le prêtre a le talent, rien sans lui », ancre de l'`executionProbe`). Aucune assertion perdue : ce sont les mêmes 12 tests, exécutés une fois au lieu de deux. Suite : 5 471 tests avant, 5 459 après.
+
+Autres candidats du plan (p4b-damage / p4b-damage-real, p4b-gear / p4b-gear-real, p4b-conditions / -real, p4b-tests / -real) : entrées ou valeurs attendues différentes (contrats génériques d'essai contre miracles réels, Peur (1) contre Peur (2)) ; conservés, les 366 tests des 34 originaux sont repris (65 + 51 + 68 + 41 + 141).

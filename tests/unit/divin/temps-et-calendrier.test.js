@@ -4,7 +4,7 @@ import { createStore } from '../../../js/core/store.js';
 import { createGameClock, advanceGameClock, deriveTurnPhasePlan, readCombatPosition, reconcileGameClockPosition, validateGameClock } from '../../../js/core/v5-game-time.js';
 import * as divine from '../../../js/core/v5-divine-store.js';
 import { getAllDivineContracts } from '../../../js/core/v5-divine-store.js';
-import { fixture, snap, priest, input, BATTLE } from '../../divin-v5-b5-fixture.mjs';
+import { fixture, snap, priest, input, BATTLE } from '../../helpers/divin-b5-fixture.mjs';
 import { createCombatEngine } from '../../../js/core/combat.js';
 import { applySpellEffects } from '../../../js/core/v5-magic-effects.js';
 import { applyBeastForm, BEAST_PROFILES } from '../../../js/core/v5-magic-arbitrations.js';

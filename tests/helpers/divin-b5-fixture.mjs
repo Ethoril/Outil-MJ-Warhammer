@@ -1,4 +1,4 @@
-import {createStore} from '../js/core/store.js';
+import {createStore} from '../../js/core/store.js';
 export const BATTLE='divine:blessing:myrmidia:battle',clone=structuredClone;
 export const person=(id,sin=1)=>({id,name:id,kind:'PJ',camp:'pj',zone:'active',initiative:60,hp:20,maxHp:30,caracs:{CC:40,CT:40,F:30,E:40,I:40,Ag:40,Dex:40,Int:50,FM:50,Soc:60,M:4},armor:{head:0,body:0,arms:0,legs:0},states:[],skills:[{id:'pray',name:'Prière',status:'resolved',carac:'Soc',total:60},{id:'cool',name:'Calme',status:'resolved',carac:'FM',total:50}],talents:[{id:'talent-bless',status:'resolved',rank:1,specialization:'Myrmidia'}],extensions:{v5:{divine:{sin}}}});
 export const snap=store=>{const value=JSON.parse(store.getFullJSON());delete value.exportedAt;return value;};

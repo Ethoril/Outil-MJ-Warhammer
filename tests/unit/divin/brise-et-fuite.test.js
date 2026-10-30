@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { createStore } from '../../../js/core/store.js';
 import { createGameClock } from '../../../js/core/v5-game-time.js';
 import { getDivineContract, getAllDivineContracts, expireDivineAtPhases } from '../../../js/core/v5-divine-store.js';
-import { fixture, priest, snap, input, BATTLE, impose } from '../../divin-v5-b5-fixture.mjs';
+import { fixture, priest, snap, input, BATTLE, impose } from '../../helpers/divin-b5-fixture.mjs';
 import { previewV5Turn } from '../../../js/core/v5-turn.js';
 import { v5StoreActionClock, buildV5StoreActionInput } from '../../../js/core/v5-store-action.js';
 import { createCombatEngine } from '../../../js/core/combat.js';

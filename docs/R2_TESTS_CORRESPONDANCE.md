@@ -353,3 +353,45 @@ Ancien fichier `tests/<nom>.test.js` → nouveau fichier `tests/unit/<cible>.tes
 | `tests/divin-v5-e5-independent.test.js` | `tests/unit/divin/temps-et-calendrier.test.js` | 18 | 117 |
 | `tests/divin-v5-e5-technical.test.js` | `tests/unit/divin/temps-et-calendrier.test.js` | 8 | 117 |
 | `tests/divin-v5-game-time.test.js` | `tests/unit/divin/temps-et-calendrier.test.js` | 5 | 117 |
+
+## R2-7 — divin C
+
+| Ancien fichier | Nouveau fichier | Tests avant | Tests après (cible) |
+|---|---|---|---|
+| `tests/divin-v5-p4a-conditions.test.js` | `tests/unit/divin/effets-degats-conditions.test.js` | 14 | 65 |
+| `tests/divin-v5-p4a-damage.test.js` | `tests/unit/divin/effets-degats-conditions.test.js` | 12 | 65 |
+| `tests/divin-v5-p4b-conditions.test.js` | `tests/unit/divin/effets-degats-conditions.test.js` | 13 | 65 |
+| `tests/divin-v5-p4b-conditions-real.test.js` | `tests/unit/divin/effets-degats-conditions.test.js` | 7 | 65 |
+| `tests/divin-v5-p4b-damage.test.js` | `tests/unit/divin/effets-degats-conditions.test.js` | 12 | 65 |
+| `tests/divin-v5-p4b-damage-real.test.js` | `tests/unit/divin/effets-degats-conditions.test.js` | 7 | 65 |
+| `tests/divin-v5-p4a-gear.test.js` | `tests/unit/divin/effets-equipement-tests.test.js` | 22 | 51 |
+| `tests/divin-v5-p4b-gear.test.js` | `tests/unit/divin/effets-equipement-tests.test.js` | 4 | 51 |
+| `tests/divin-v5-p4b-gear-real.test.js` | `tests/unit/divin/effets-equipement-tests.test.js` | 5 | 51 |
+| `tests/divin-v5-p4b-tests.test.js` | `tests/unit/divin/effets-equipement-tests.test.js` | 13 | 51 |
+| `tests/divin-v5-p4b-tests-real.test.js` | `tests/unit/divin/effets-equipement-tests.test.js` | 7 | 51 |
+| `tests/divin-v5-p4a-socle.test.js` | `tests/unit/divin/effets-socle-et-formulaire.test.js` | 12 | 68 |
+| `tests/divin-v5-p4b-socle.test.js` | `tests/unit/divin/effets-socle-et-formulaire.test.js` | 10 | 68 |
+| `tests/divin-v5-p4c-contracts.test.js` | `tests/unit/divin/effets-socle-et-formulaire.test.js` | 11 | 68 |
+| `tests/divin-v5-p4c-extras.test.js` | `tests/unit/divin/effets-socle-et-formulaire.test.js` | 8 | 68 |
+| `tests/divin-v5-p4d-implicit-target.test.js` | `tests/unit/divin/effets-socle-et-formulaire.test.js` | 15 | 68 |
+| `tests/divin-v5-t5-form-model.test.js` | `tests/unit/divin/effets-socle-et-formulaire.test.js` | 12 | 68 |
+| `tests/divin-v5-p4c-summon.test.js` | `tests/unit/divin/invocations.test.js` | 41 | 41 |
+| `tests/divin-v5-b9-characterization.test.js` | `tests/unit/divin/peche-destin-possessions.test.js` | 3 | 141 |
+| `tests/divin-v5-b9-fortune.test.js` | `tests/unit/divin/peche-destin-possessions.test.js` | 10 | 141 |
+| `tests/divin-v5-b10-characterization.test.js` | `tests/unit/divin/peche-destin-possessions.test.js` | 3 | 141 |
+| `tests/divin-v5-b10-penance.test.js` | `tests/unit/divin/peche-destin-possessions.test.js` | 13 | 141 |
+| `tests/divin-v5-b11-characterization.test.js` | `tests/unit/divin/peche-destin-possessions.test.js` | 3 | 141 |
+| `tests/divin-v5-b11-possessions.test.js` | `tests/unit/divin/peche-destin-possessions.test.js` | 15 | 141 |
+| `tests/divin-v5-b13-characterization.test.js` | `tests/unit/divin/peche-destin-possessions.test.js` | 3 | 141 |
+| `tests/divin-v5-b13-rejection.test.js` | `tests/unit/divin/peche-destin-possessions.test.js` | 16 | 141 |
+| `tests/divin-v5-b14-characterization.test.js` | `tests/unit/divin/peche-destin-possessions.test.js` | 3 | 141 |
+| `tests/divin-v5-b14-summons.test.js` | `tests/unit/divin/peche-destin-possessions.test.js` | 13 | 141 |
+| `tests/divin-v5-b15-fate.test.js` | `tests/unit/divin/peche-destin-possessions.test.js` | 11 | 141 |
+| `tests/divin-v5-b16-absolution.test.js` | `tests/unit/divin/peche-destin-possessions.test.js` | 11 | 141 |
+| `tests/divin-v5-b17-sin-events.test.js` | `tests/unit/divin/peche-destin-possessions.test.js` | 10 | 141 |
+| `tests/divin-v5-b18-ground-naval.test.js` | `tests/unit/divin/peche-destin-possessions.test.js` | 8 | 141 |
+| `tests/divin-v5-b18-supplements.test.js` | `tests/unit/divin/peche-destin-possessions.test.js` | 12 | 141 |
+| `tests/divin-v5-crit-registry.test.js` | `tests/unit/divin/peche-destin-possessions.test.js` | 7 | 141 |
+| `tests/divin-v5-b5-fixture.mjs` | `tests/helpers/divin-b5-fixture.mjs` | (aide) | (aide) |
+
+Note : `tests/unit/divin/prieres-benedictions.test.js` (R2-5) n'importe plus `divin-v5-p4a-damage` (retiré, voir `R2_TESTS_DOUBLONS.md`) ; l'ancre « Haine sacrée » de `js/data/v5-magic-talent-coverage.json` pointe vers `tests/unit/divin/effets-degats-conditions.test.js`.

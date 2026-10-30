@@ -1,17 +1,18 @@
-import test, { after } from 'node:test';
+import test, { after, describe } from 'node:test';
 import assert from 'node:assert/strict';
-import { createStore } from '../js/core/store.js';
-import { createCombatEngine } from '../js/core/combat.js';
-import { createGameClock } from '../js/core/v5-game-time.js';
-import { getDivineContract, getAllDivineContracts, sweepDivineSummons } from '../js/core/v5-divine-store.js';
-import registry from '../js/data/v5-divine-contracts.json' with { type: 'json' };
-import { effectHandlers, validateEffect, effectNeeds } from '../js/core/v5-divine-effect-handlers.js';
-import { DIVINE_SUMMON_ENABLED, setDivineSummonEnabled } from '../js/core/v5-divine-effects-summon.js';
-import { SUMMON_BEAST_KEYS, buildBeastSummonProfile } from '../js/data/divine-summon-profiles.js';
-import { effectTypes } from '../js/core/v5-divine-grammar.js';
-import { applyOperation, sameSharedState } from '../js/core/sync-protocol.js';
-import { normalizeRemoteDocument } from '../js/core/sync-session.js';
+import { createStore } from '../../../js/core/store.js';
+import { createCombatEngine } from '../../../js/core/combat.js';
+import { createGameClock } from '../../../js/core/v5-game-time.js';
+import { getDivineContract, getAllDivineContracts, sweepDivineSummons } from '../../../js/core/v5-divine-store.js';
+import registry from '../../../js/data/v5-divine-contracts.json' with { type: 'json' };
+import { effectHandlers, validateEffect, effectNeeds } from '../../../js/core/v5-divine-effect-handlers.js';
+import { DIVINE_SUMMON_ENABLED, setDivineSummonEnabled } from '../../../js/core/v5-divine-effects-summon.js';
+import { SUMMON_BEAST_KEYS, buildBeastSummonProfile } from '../../../js/data/divine-summon-profiles.js';
+import { effectTypes } from '../../../js/core/v5-divine-grammar.js';
+import { applyOperation, sameSharedState } from '../../../js/core/sync-protocol.js';
+import { normalizeRemoteDocument } from '../../../js/core/sync-session.js';
 
+describe('P4c — invocations', () => {
 // P4c B1 : invocations divines (couche `summon-creature` sur le prêtre + participant ordinaire créé dans la même commande).
 // Contrats synthétiques : aucun miracle livré n'invoque encore (B2).
 const clone = value => structuredClone(value);
@@ -194,7 +195,7 @@ test('duplicate : un deuxième apply du même aperçu ne recrée rien ; la garde
 });
 
 test('moteur pur : duplicate au 2e apply, et un participant déjà présent sous le même id n’est pas recréé', async () => {
-  const { applyDivineExecution, previewDivineExecution } = await import('../js/core/v5-divine-engine.js');
+  const { applyDivineExecution, previewDivineExecution } = await import('../../../js/core/v5-divine-engine.js');
   const { store } = await fixture();
   const state = stateOf(store), contract = getDivineContract(WOLF);
   const engineInput = { ...input(), executionId: 'exec-pure-1', round: 1, sourceFingerprint: registry.sourceFingerprint };
@@ -215,7 +216,7 @@ test('moteur pur : duplicate au 2e apply, et un participant déjà présent sous
 });
 
 test('identifiants : seuls [A-Za-z0-9:_-] même avec une exécution aux caractères exotiques', async () => {
-  const { applyDivineExecution } = await import('../js/core/v5-divine-engine.js');
+  const { applyDivineExecution } = await import('../../../js/core/v5-divine-engine.js');
   const { store } = await fixture();
   const result = applyDivineExecution(stateOf(store), getDivineContract(WOLF), { ...input(), executionId: 'prière 1/é', round: 1, sourceFingerprint: registry.sourceFingerprint });
   assert.equal(result.ready, true, result.error);
@@ -683,4 +684,5 @@ test('poids : la créature, son lien, sa couche et le reçu restent compacts (li
   assert.ok(size(wolf.extensions.v5.divineSummon) < 300);
   assert.ok(size(layersOf(store)[0]) < 2500, `couche : ${size(layersOf(store)[0])} octets`);
   assert.ok(size(result.receipt.effectReceipts) < 600);
+});
 });
