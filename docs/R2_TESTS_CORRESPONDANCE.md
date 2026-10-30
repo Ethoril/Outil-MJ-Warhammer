@@ -599,3 +599,11 @@ Note : `tests/phase-c-c06-coverage.test.js` lit désormais `./initiative-et-tour
 | `tests/lot2-v5-25-shared-state.test.js` | `tests/unit/stockage/sync-cloud.test.js` | 4 | 126 |
 | `tests/p4c-char-sync.test.js` | `tests/unit/stockage/sync-cloud.test.js` | 35 | 126 |
 
+
+## R2-13 — finalisation
+
+| Ancien fichier | Nouveau fichier | Tests avant | Tests après (cible) |
+|---|---|---|---|
+| `tests/meta.test.js` | `tests/unit/donnees/meta-package.test.js` | 2 | 2 |
+
+Plus aucun `tests/*.test.js` à la racine : 525 fichiers d’origine regroupés en 53 fichiers sous `tests/unit/`.

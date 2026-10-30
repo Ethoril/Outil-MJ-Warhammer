@@ -52,3 +52,7 @@ Aucun doublon retiré (les 38 originaux : 324 tests, les 4 cibles : 324 ; la sui
 
 Aucun doublon retiré (les 30 originaux : 213 tests, les 3 cibles : 213 ; la suite complète garde donc le même total qu'avant l'étape).
 
+
+## R2-8 à R2-13 — bilan
+
+Aucun doublon retiré après R2-7. Total de la suite : 5 471 tests avant la phase R, 5 459 après (les 12 tests P4a qui s’exécutaient deux fois, voir R2-7).

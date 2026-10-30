@@ -86,10 +86,13 @@ npm test
 ```
 `node --test` découvre lui-même les fichiers de `tests/` : ne pas les énumérer à la main,
 la liste a déjà été oubliée trois fois, masquant jusqu'à vingt tests dont un en échec.
+Les tests unitaires sont rangés par domaine dans `tests/unit/<domaine>/` (combat, magie, divin,
+créatures, séquelles, corruption, référentiel, stockage, données) ; les parcours navigateur
+(`tests/*.mjs`) se lancent à part avec `npm run test:browser-all`.
 
 Pour ne rejouer qu'un fichier :
 ```bash
-node --test tests/damage.test.js
+node --test tests/unit/combat/degats-et-armures.test.js
 ```
 
 ---

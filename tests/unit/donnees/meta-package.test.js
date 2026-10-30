@@ -12,7 +12,7 @@ import { readFileSync, readdirSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const racine = join(dirname(fileURLToPath(import.meta.url)), '..');
+const racine = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 const pkg = JSON.parse(readFileSync(join(racine, 'package.json'), 'utf8'));
 
 test('package.json — le script de test découvre les fichiers, il ne les énumère pas', () => {

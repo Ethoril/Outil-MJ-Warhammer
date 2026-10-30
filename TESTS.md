@@ -353,13 +353,13 @@ Cible : **Renaut**, BE 3, armure Corps 2. Régler la ligne de jet sur `Dég. 6`,
 À lancer avant la passe manuelle : si ça échoue, inutile d'aller plus loin.
 
 ```bash
-npm test        # ou : node --test tests/
+npm test        # ou : node --test
 ```
 
 | # | Attendu |
 |---|---|
 | 13.1 | Tous les tests passent, **sans `npm install` préalable** — le lanceur de Node suffit, zéro dépendance |
-| 13.2 | Couverture : `dice.test.js`, `states.test.js`, `damage.test.js` |
+| 13.2 | Couverture : `tests/unit/combat/jets-et-defense.test.js` (dés, états), `tests/unit/combat/degats-et-armures.test.js` (dégâts) |
 | 13.3 | Console vide de tout avertissement de dépréciation |
 
 ---
