@@ -1,0 +1,1502 @@
+[
+ {
+  "id": "F-L01-0364",
+  "raison": "combat: tir de barrage"
+ },
+ {
+  "id": "F-L01-0394",
+  "raison": "artillerie de siège"
+ },
+ {
+  "id": "F-L08-0101",
+  "raison": "miracle/sort (Vol du Phénix)"
+ },
+ {
+  "id": "F-L12-0057",
+  "raison": "artillerie"
+ },
+ {
+  "id": "F-L12-0058",
+  "raison": "artillerie"
+ },
+ {
+  "id": "F-L12-0059",
+  "raison": "artillerie"
+ },
+ {
+  "id": "F-L12-0060",
+  "raison": "munition d'artillerie"
+ },
+ {
+  "id": "F-L12-0061",
+  "raison": "munition d'artillerie"
+ },
+ {
+  "id": "F-L13-0102",
+  "raison": "arme/combat: immobilisation"
+ },
+ {
+  "id": "F-L13-0107",
+  "raison": "combat: arme à mèche"
+ },
+ {
+  "id": "F-L13-0117",
+  "raison": "artillerie/explosif"
+ },
+ {
+  "id": "F-L13-0161",
+  "raison": "structures: couvert/siège"
+ },
+ {
+  "id": "F-L13-0230",
+  "raison": "combat: Avantage"
+ },
+ {
+  "id": "F-L13-0231",
+  "raison": "combat: Avantage"
+ },
+ {
+  "id": "F-L13-0232",
+  "raison": "combat: Avantage"
+ },
+ {
+  "id": "F-L13-0234",
+  "raison": "combat: Avantage"
+ },
+ {
+  "id": "F-L15-0147",
+  "raison": "arme/incident"
+ },
+ {
+  "id": "F-L15-0165",
+  "raison": "véhicule aérien/bombes"
+ },
+ {
+  "id": "F-L15-0177",
+  "raison": "arme/artillerie"
+ },
+ {
+  "id": "F-L25-0121",
+  "raison": "artillerie"
+ },
+ {
+  "id": "F-L25-0127",
+  "raison": "munitions d'artillerie"
+ },
+ {
+  "id": "F-L26-0108",
+  "raison": "munitions d'artillerie"
+ },
+ {
+  "id": "F-L26-0116",
+  "raison": "artillerie"
+ },
+ {
+  "id": "F-L17-0078",
+  "raison": "Vents de magie et mutations"
+ },
+ {
+  "id": "F-L25-0029",
+  "raison": "mutation"
+ },
+ {
+  "id": "F-L12-0021",
+  "raison": "arme de jet/venin"
+ },
+ {
+  "id": "F-L16-0178",
+  "raison": "magie: animation d'idole"
+ },
+ {
+  "id": "F-L25-0418",
+  "raison": "bestiaire"
+ },
+ {
+  "id": "F-L25-0421",
+  "raison": "bestiaire"
+ },
+ {
+  "id": "F-L25-0428",
+  "raison": "bestiaire"
+ },
+ {
+  "id": "F-L04-0016",
+  "raison": "prière/Péché"
+ },
+ {
+  "id": "F-L04-0251",
+  "raison": "prière/Courroux"
+ },
+ {
+  "id": "F-L11-0006",
+  "raison": "miracle"
+ },
+ {
+  "id": "F-L25-0454",
+  "raison": "miracle"
+ },
+ {
+  "id": "F-L25-0456",
+  "raison": "miracle"
+ },
+ {
+  "id": "F-L25-0459",
+  "raison": "miracle"
+ },
+ {
+  "id": "F-L25-0460",
+  "raison": "miracle"
+ },
+ {
+  "id": "F-L25-0463",
+  "raison": "miracle"
+ },
+ {
+  "id": "F-L25-0464",
+  "raison": "miracle"
+ },
+ {
+  "id": "F-L25-0465",
+  "raison": "miracle"
+ },
+ {
+  "id": "F-L25-0315",
+  "raison": "humeur de Manann (lien miracles)"
+ },
+ {
+  "id": "F-L24-0039",
+  "raison": "talent"
+ },
+ {
+  "id": "F-L25-0043",
+  "raison": "talent Chant"
+ },
+ {
+  "id": "F-L07-0111",
+  "raison": "Vents/nœuds de magie"
+ },
+ {
+  "id": "F-L07-0120",
+  "raison": "nœuds de magie"
+ },
+ {
+  "id": "F-L15-0050",
+  "raison": "véhicule aérien"
+ },
+ {
+  "id": "F-L06-1023",
+  "raison": "encombrement générique"
+ },
+ {
+  "id": "F-L06-1070",
+  "raison": "combat: bouclier"
+ },
+ {
+  "id": "F-L06-1074",
+  "raison": "armure"
+ },
+ {
+  "id": "F-L06-1078",
+  "raison": "encombrement/mains"
+ },
+ {
+  "id": "F-L06-1087",
+  "raison": "véhicules"
+ },
+ {
+  "id": "F-L06-1088",
+  "raison": "véhicules/Mouvement"
+ },
+ {
+  "id": "F-L01-0063",
+  "raison": "arme"
+ },
+ {
+  "id": "F-L01-0064",
+  "raison": "arme"
+ },
+ {
+  "id": "F-L01-0065",
+  "raison": "arme"
+ },
+ {
+  "id": "F-L01-0066",
+  "raison": "arme"
+ },
+ {
+  "id": "F-L01-0067",
+  "raison": "arme"
+ },
+ {
+  "id": "F-L01-0068",
+  "raison": "arme"
+ },
+ {
+  "id": "F-L01-0069",
+  "raison": "arme"
+ },
+ {
+  "id": "F-L01-0070",
+  "raison": "arme"
+ },
+ {
+  "id": "F-L01-0071",
+  "raison": "munition"
+ },
+ {
+  "id": "F-L01-0072",
+  "raison": "munition"
+ },
+ {
+  "id": "F-L01-0073",
+  "raison": "munition"
+ },
+ {
+  "id": "F-L01-0074",
+  "raison": "armure"
+ },
+ {
+  "id": "F-L01-0078",
+  "raison": "combat"
+ },
+ {
+  "id": "F-L01-0079",
+  "raison": "arme"
+ },
+ {
+  "id": "F-L01-0081",
+  "raison": "arme"
+ },
+ {
+  "id": "F-L01-0082",
+  "raison": "encombrement/charge"
+ },
+ {
+  "id": "F-L02-0151",
+  "raison": "armure"
+ },
+ {
+  "id": "F-L02-0174",
+  "raison": "armure"
+ },
+ {
+  "id": "F-L03-0056",
+  "raison": "armes"
+ },
+ {
+  "id": "F-L03-0059",
+  "raison": "flèche/combat"
+ },
+ {
+  "id": "F-L03-0060",
+  "raison": "flèche/combat"
+ },
+ {
+  "id": "F-L09-0120",
+  "raison": "créature/dressage (véhicule tiré)"
+ },
+ {
+  "id": "F-L10-0034",
+  "raison": "arme"
+ },
+ {
+  "id": "F-L10-0041",
+  "raison": "arme"
+ },
+ {
+  "id": "F-L10-0042",
+  "raison": "munition"
+ },
+ {
+  "id": "F-L11-0024",
+  "raison": "créatures/restes"
+ },
+ {
+  "id": "F-L15-0117",
+  "raison": "arme"
+ },
+ {
+  "id": "F-L15-0118",
+  "raison": "arme"
+ },
+ {
+  "id": "F-L15-0120",
+  "raison": "arme"
+ },
+ {
+  "id": "F-L15-0121",
+  "raison": "arme à poudre"
+ },
+ {
+  "id": "F-L15-0127",
+  "raison": "éclairage/visibilité combat"
+ },
+ {
+  "id": "F-L15-0128",
+  "raison": "runes/combat"
+ },
+ {
+  "id": "F-L20-0028",
+  "raison": "arme"
+ },
+ {
+  "id": "F-L20-0031",
+  "raison": "arme"
+ },
+ {
+  "id": "F-L21-0039",
+  "raison": "arme"
+ },
+ {
+  "id": "F-L22-0001",
+  "raison": "combat monté"
+ },
+ {
+  "id": "F-L22-0005",
+  "raison": "Corruption"
+ },
+ {
+  "id": "F-L22-0048",
+  "raison": "arme"
+ },
+ {
+  "id": "F-L22-0054",
+  "raison": "arme"
+ },
+ {
+  "id": "F-L22-0055",
+  "raison": "arme"
+ },
+ {
+  "id": "F-L22-0056",
+  "raison": "arme"
+ },
+ {
+  "id": "F-L22-0057",
+  "raison": "arme"
+ },
+ {
+  "id": "F-L22-0060",
+  "raison": "arme"
+ },
+ {
+  "id": "F-L22-0063",
+  "raison": "arme"
+ },
+ {
+  "id": "F-L22-0064",
+  "raison": "arme"
+ },
+ {
+  "id": "F-L22-0065",
+  "raison": "arme"
+ },
+ {
+  "id": "F-L22-0067",
+  "raison": "arme"
+ },
+ {
+  "id": "F-L22-0068",
+  "raison": "arme"
+ },
+ {
+  "id": "F-L22-0069",
+  "raison": "munition"
+ },
+ {
+  "id": "F-L22-0070",
+  "raison": "munition"
+ },
+ {
+  "id": "F-L25-0039",
+  "raison": "Augure/Corruption"
+ },
+ {
+  "id": "F-L25-0040",
+  "raison": "Augure"
+ },
+ {
+  "id": "F-L25-0056",
+  "raison": "sel sacré/prière"
+ },
+ {
+  "id": "F-L25-0448",
+  "raison": "arme malepierre"
+ },
+ {
+  "id": "F-L25-0450",
+  "raison": "artillerie malefoudre"
+ },
+ {
+  "id": "F-L01-0190",
+  "raison": "règle générique armes magiques"
+ },
+ {
+  "id": "F-L02-0250",
+  "raison": "familier"
+ },
+ {
+  "id": "F-L02-0268",
+  "raison": "talents animaux"
+ },
+ {
+  "id": "F-L02-0303",
+  "raison": "sorts/Ghur"
+ },
+ {
+  "id": "F-L02-0315",
+  "raison": "sorts/Chamon"
+ },
+ {
+  "id": "F-L07-0002",
+  "raison": "apprentissage de sort"
+ },
+ {
+  "id": "F-L07-0004",
+  "raison": "véhicule aérien"
+ },
+ {
+  "id": "F-L14-0038",
+  "raison": "arme de jet"
+ },
+ {
+  "id": "F-L16-0156",
+  "raison": "artillerie"
+ },
+ {
+  "id": "F-L16-0158",
+  "raison": "Talent/Corruption"
+ },
+ {
+  "id": "F-L17-0042",
+  "raison": "présage/Augure"
+ },
+ {
+  "id": "F-L17-0050",
+  "raison": "présage"
+ },
+ {
+  "id": "F-L17-0053",
+  "raison": "Augure"
+ },
+ {
+  "id": "F-L17-0265",
+  "raison": "mémorisation de sorts"
+ },
+ {
+  "id": "F-L17-0295",
+  "raison": "sorts/familier"
+ },
+ {
+  "id": "F-L20-0011",
+  "raison": "sorts du Feu"
+ },
+ {
+  "id": "F-L21-0064",
+  "raison": "arme vs morts-vivants"
+ },
+ {
+  "id": "F-L23-0216",
+  "raison": "talent/sorts"
+ },
+ {
+  "id": "F-L25-0005",
+  "raison": "magie Ghur"
+ },
+ {
+  "id": "F-L25-0006",
+  "raison": "magie Aqshy"
+ },
+ {
+  "id": "F-L25-0008",
+  "raison": "magie Ghyran"
+ },
+ {
+  "id": "F-L08-0033",
+  "raison": "artillerie"
+ },
+ {
+  "id": "F-L13-0144",
+  "raison": "monture"
+ },
+ {
+  "id": "F-L14-0045",
+  "raison": "véhicules"
+ },
+ {
+  "id": "F-L14-0046",
+  "raison": "véhicules"
+ },
+ {
+  "id": "F-L14-0088",
+  "raison": "véhicules"
+ },
+ {
+  "id": "F-L14-0089",
+  "raison": "véhicules"
+ },
+ {
+  "id": "F-L14-0095",
+  "raison": "véhicules"
+ },
+ {
+  "id": "F-L25-0196",
+  "raison": "poursuite"
+ },
+ {
+  "id": "F-L06-0281",
+  "raison": "saut/mouvement"
+ },
+ {
+  "id": "F-L01-0417",
+  "raison": "combat/terrain de bataille"
+ },
+ {
+  "id": "F-L15-0178",
+  "raison": "véhicules"
+ },
+ {
+  "id": "F-L15-0183",
+  "raison": "véhicules"
+ },
+ {
+  "id": "F-L15-0197",
+  "raison": "véhicules"
+ },
+ {
+  "id": "F-L15-0199",
+  "raison": "véhicules"
+ },
+ {
+  "id": "F-L15-0227",
+  "raison": "arme/torpille"
+ },
+ {
+  "id": "F-L23-0043",
+  "raison": "véhicules"
+ },
+ {
+  "id": "F-L23-0045",
+  "raison": "véhicules"
+ },
+ {
+  "id": "F-L23-0053",
+  "raison": "véhicules"
+ },
+ {
+  "id": "F-L01-0363",
+  "raison": "combat"
+ },
+ {
+  "id": "F-L01-0375",
+  "raison": "combat/bestiaire"
+ },
+ {
+  "id": "F-L09-0229",
+  "raison": "Haine (psychologie)"
+ },
+ {
+  "id": "F-L13-0118",
+  "raison": "arme, Enchevêtré"
+ },
+ {
+  "id": "F-L13-0171",
+  "raison": "effondrement, doute véhicule"
+ },
+ {
+  "id": "F-L13-0189",
+  "raison": "combat"
+ },
+ {
+  "id": "F-L13-0224",
+  "raison": "Avantage (combat)"
+ },
+ {
+  "id": "F-L13-0227",
+  "raison": "Avantage (combat)"
+ },
+ {
+  "id": "F-L13-0235",
+  "raison": "Avantage (combat)"
+ },
+ {
+  "id": "F-L16-0044",
+  "raison": "Esquive (combat)"
+ },
+ {
+  "id": "F-L16-0048",
+  "raison": "modificateurs d'attaque dans l'ombre"
+ },
+ {
+  "id": "F-L16-0059",
+  "raison": "modificateurs de tir"
+ },
+ {
+  "id": "F-L16-0072",
+  "raison": "Destin, dégâts"
+ },
+ {
+  "id": "F-L21-0028",
+  "raison": "Corruption, Enflammé"
+ },
+ {
+  "id": "F-L21-0032",
+  "raison": "véhicule/créature"
+ },
+ {
+  "id": "F-L21-0037",
+  "raison": "créature"
+ },
+ {
+  "id": "F-L22-0212",
+  "raison": "créature"
+ },
+ {
+  "id": "F-L06-0031",
+  "raison": "Destin"
+ },
+ {
+  "id": "F-L06-0033",
+  "raison": "Destin"
+ },
+ {
+  "id": "F-L07-0260",
+  "raison": "désorientation, doute"
+ },
+ {
+  "id": "F-L26-0189",
+  "raison": "états/blessures, doute"
+ },
+ {
+  "id": "F-L12-0001",
+  "raison": "Animosité"
+ },
+ {
+  "id": "F-L18-0038",
+  "raison": "créature"
+ },
+ {
+  "id": "F-L18-0039",
+  "raison": "créature"
+ },
+ {
+  "id": "F-L18-0043",
+  "raison": "créature"
+ },
+ {
+  "id": "F-L18-0046",
+  "raison": "combat/sort"
+ },
+ {
+  "id": "F-L18-0047",
+  "raison": "créature"
+ },
+ {
+  "id": "F-L25-0417",
+  "raison": "créature"
+ },
+ {
+  "id": "F-L25-0427",
+  "raison": "créature"
+ },
+ {
+  "id": "F-L04-0034",
+  "raison": "prière/culte"
+ },
+ {
+  "id": "F-L04-0248",
+  "raison": "prière/culte"
+ },
+ {
+  "id": "F-L08-0250",
+  "raison": "Corruption"
+ },
+ {
+  "id": "F-L25-0457",
+  "raison": "miracle"
+ },
+ {
+  "id": "F-L06-0016",
+  "raison": "combat, obscurité"
+ },
+ {
+  "id": "F-L06-0019",
+  "raison": "règle générique de Test"
+ },
+ {
+  "id": "F-L06-0023",
+  "raison": "règle générique de Test"
+ },
+ {
+  "id": "F-L06-0045",
+  "raison": "règle générique de Test"
+ },
+ {
+  "id": "F-L06-0851",
+  "raison": "doute, natation/noyade"
+ },
+ {
+  "id": "F-L06-1025",
+  "raison": "encombrement"
+ },
+ {
+  "id": "F-L06-1026",
+  "raison": "encombrement"
+ },
+ {
+  "id": "F-L06-1028",
+  "raison": "encombrement"
+ },
+ {
+  "id": "F-L06-1083",
+  "raison": "état Enchevêtré"
+ },
+ {
+  "id": "F-L06-1105",
+  "raison": "magie"
+ },
+ {
+  "id": "F-L06-1115",
+  "raison": "arme, Enflammé"
+ },
+ {
+  "id": "F-L01-0086",
+  "raison": "doute"
+ },
+ {
+  "id": "F-L02-0147",
+  "raison": "armure"
+ },
+ {
+  "id": "F-L02-0178",
+  "raison": "armure/tir"
+ },
+ {
+  "id": "F-L02-0179",
+  "raison": "dégradation d'armure"
+ },
+ {
+  "id": "F-L04-0092",
+  "raison": "combat/asphyxie"
+ },
+ {
+  "id": "F-L11-0048",
+  "raison": "talent, critiques"
+ },
+ {
+  "id": "F-L11-0049",
+  "raison": "Souffle, Enflammé"
+ },
+ {
+  "id": "F-L11-0053",
+  "raison": "armure, Enflammé"
+ },
+ {
+  "id": "F-L11-0058",
+  "raison": "Frénésie"
+ },
+ {
+  "id": "F-L11-0059",
+  "raison": "arme magique, Enflammé"
+ },
+ {
+  "id": "F-L11-0066",
+  "raison": "arme improvisée"
+ },
+ {
+  "id": "F-L21-0043",
+  "raison": "Corruption"
+ },
+ {
+  "id": "F-L22-0009",
+  "raison": "combat"
+ },
+ {
+  "id": "F-L22-0030",
+  "raison": "arme, incident"
+ },
+ {
+  "id": "F-L22-0047",
+  "raison": "véhicule/arme"
+ },
+ {
+  "id": "F-L23-0262",
+  "raison": "Corruption"
+ },
+ {
+  "id": "F-L06-0924",
+  "raison": "magie"
+ },
+ {
+  "id": "F-L02-0255",
+  "raison": "bestiaire"
+ },
+ {
+  "id": "F-L02-0290",
+  "raison": "magie"
+ },
+ {
+  "id": "F-L07-0270",
+  "raison": "magie"
+ },
+ {
+  "id": "F-L10-0058",
+  "raison": "créature"
+ },
+ {
+  "id": "F-L12-0137",
+  "raison": "magie"
+ },
+ {
+  "id": "F-L12-0201",
+  "raison": "créature/Traits"
+ },
+ {
+  "id": "F-L17-0051",
+  "raison": "défense"
+ },
+ {
+  "id": "F-L17-0259",
+  "raison": "sort, Corruption"
+ },
+ {
+  "id": "F-L17-0279",
+  "raison": "arme, combat"
+ },
+ {
+  "id": "F-L17-0322",
+  "raison": "Corruption"
+ },
+ {
+  "id": "F-L17-0326",
+  "raison": "magie"
+ },
+ {
+  "id": "F-L17-0338",
+  "raison": "magie"
+ },
+ {
+  "id": "F-L17-0353",
+  "raison": "magie/Corruption"
+ },
+ {
+  "id": "F-L17-0354",
+  "raison": "magie"
+ },
+ {
+  "id": "F-L17-0360",
+  "raison": "sort"
+ },
+ {
+  "id": "F-L19-0013",
+  "raison": "magie"
+ },
+ {
+  "id": "F-L19-0014",
+  "raison": "magie"
+ },
+ {
+  "id": "F-L19-0016",
+  "raison": "magie"
+ },
+ {
+  "id": "F-L21-0009",
+  "raison": "magie"
+ },
+ {
+  "id": "F-L22-0080",
+  "raison": "Corruption"
+ },
+ {
+  "id": "F-L22-0084",
+  "raison": "magie"
+ },
+ {
+  "id": "F-L23-0259",
+  "raison": "Corruption"
+ },
+ {
+  "id": "F-L02-0084",
+  "raison": "talent"
+ },
+ {
+  "id": "F-L14-0040",
+  "raison": "prière"
+ },
+ {
+  "id": "F-L06-1133",
+  "raison": "bestiaire"
+ },
+ {
+  "id": "F-L15-0015",
+  "raison": "création, Destin, États"
+ },
+ {
+  "id": "F-L13-0207",
+  "raison": "poursuite"
+ },
+ {
+  "id": "F-L13-0210",
+  "raison": "poursuite"
+ },
+ {
+  "id": "F-L13-0212",
+  "raison": "poursuite"
+ },
+ {
+  "id": "F-L13-0216",
+  "raison": "poursuite"
+ },
+ {
+  "id": "F-L13-0217",
+  "raison": "poursuite"
+ },
+ {
+  "id": "F-L13-0218",
+  "raison": "poursuite"
+ },
+ {
+  "id": "F-L13-0219",
+  "raison": "poursuite"
+ },
+ {
+  "id": "F-L13-0220",
+  "raison": "poursuite"
+ },
+ {
+  "id": "F-L06-0164",
+  "raison": "chute (dégâts)"
+ },
+ {
+  "id": "F-L06-0165",
+  "raison": "chute (dégâts)"
+ },
+ {
+  "id": "F-L06-0166",
+  "raison": "chute (critique)"
+ },
+ {
+  "id": "F-L06-0282",
+  "raison": "chute"
+ },
+ {
+  "id": "F-L06-0167",
+  "raison": "asphyxie"
+ },
+ {
+  "id": "F-L04-0384",
+  "raison": "créature"
+ },
+ {
+  "id": "F-L07-0250",
+  "raison": "bestiaire"
+ },
+ {
+  "id": "F-L10-0018",
+  "raison": "créature"
+ },
+ {
+  "id": "F-L10-0029",
+  "raison": "Corruption"
+ },
+ {
+  "id": "F-L15-0182",
+  "raison": "blessures/critiques"
+ },
+ {
+  "id": "F-L15-0187",
+  "raison": "véhicule"
+ },
+ {
+  "id": "F-L16-0028",
+  "raison": "Corruption"
+ },
+ {
+  "id": "F-L22-0193",
+  "raison": "véhicule"
+ },
+ {
+  "id": "F-L23-0025",
+  "raison": "monture"
+ },
+ {
+  "id": "F-L23-0034",
+  "raison": "monture"
+ },
+ {
+  "id": "F-L23-0035",
+  "raison": "monture"
+ },
+ {
+  "id": "F-L13-0242",
+  "raison": "tir (combat)"
+ },
+ {
+  "id": "F-L13-0248",
+  "raison": "talent"
+ },
+ {
+  "id": "F-L26-0231",
+  "raison": "combat de fosse"
+ },
+ {
+  "id": "F-L01-0353",
+  "raison": "Mass battle (Puissance/Plan)"
+ },
+ {
+  "id": "F-L01-0370",
+  "raison": "Mass battle (Puissance/Plan)"
+ },
+ {
+  "id": "F-L01-0410",
+  "raison": "Mass battle (Puissance/Plan)"
+ },
+ {
+  "id": "F-L01-0414",
+  "raison": "Mass battle (Puissance/Plan)"
+ },
+ {
+  "id": "F-L11-0010",
+  "raison": "Arme/combat"
+ },
+ {
+  "id": "F-L11-0076",
+  "raison": "Arme/combat"
+ },
+ {
+  "id": "F-L13-0091",
+  "raison": "Arme/combat"
+ },
+ {
+  "id": "F-L13-0273",
+  "raison": "Arme/combat"
+ },
+ {
+  "id": "F-L24-0002",
+  "raison": "Arme/combat"
+ },
+ {
+  "id": "F-L12-0050",
+  "raison": "Arme/combat"
+ },
+ {
+  "id": "F-L07-0176",
+  "raison": "Arme/combat"
+ },
+ {
+  "id": "F-L06-1031",
+  "raison": "Arme/combat"
+ },
+ {
+  "id": "F-L07-0063",
+  "raison": "Arme/combat"
+ },
+ {
+  "id": "F-L22-0015",
+  "raison": "Arme/combat"
+ },
+ {
+  "id": "F-L22-0017",
+  "raison": "Arme/combat"
+ },
+ {
+  "id": "F-L22-0020",
+  "raison": "Arme/combat"
+ },
+ {
+  "id": "F-L22-0029",
+  "raison": "Arme/combat"
+ },
+ {
+  "id": "F-L22-0039",
+  "raison": "Arme/combat"
+ },
+ {
+  "id": "F-L22-0041",
+  "raison": "Arme/combat"
+ },
+ {
+  "id": "F-L22-0074",
+  "raison": "Arme/combat"
+ },
+ {
+  "id": "F-L06-0911",
+  "raison": "Arme/combat"
+ },
+ {
+  "id": "F-L17-0063",
+  "raison": "Arme/combat"
+ },
+ {
+  "id": "F-L17-0281",
+  "raison": "Arme/combat"
+ },
+ {
+  "id": "F-L16-0152",
+  "raison": "Arme/combat"
+ },
+ {
+  "id": "F-L12-0205",
+  "raison": "Arme/combat"
+ },
+ {
+  "id": "F-L08-0008",
+  "raison": "Arme/combat"
+ },
+ {
+  "id": "F-L10-0025",
+  "raison": "Arme/combat"
+ },
+ {
+  "id": "F-L02-0153",
+  "raison": "Arme/combat"
+ },
+ {
+  "id": "F-L06-1027",
+  "raison": "Arme/combat"
+ },
+ {
+  "id": "F-L22-0136",
+  "raison": "Créature/bestiaire"
+ },
+ {
+  "id": "F-L22-0143",
+  "raison": "Créature/bestiaire"
+ },
+ {
+  "id": "F-L23-0266",
+  "raison": "Créature/bestiaire"
+ },
+ {
+  "id": "F-L12-0031",
+  "raison": "Créature/bestiaire"
+ },
+ {
+  "id": "F-L12-0211",
+  "raison": "Créature/bestiaire"
+ },
+ {
+  "id": "F-L16-0174",
+  "raison": "Créature/bestiaire"
+ },
+ {
+  "id": "F-L16-0175",
+  "raison": "Créature/bestiaire"
+ },
+ {
+  "id": "F-L25-0443",
+  "raison": "Créature/bestiaire"
+ },
+ {
+  "id": "F-L07-0053",
+  "raison": "Créature/bestiaire"
+ },
+ {
+  "id": "F-L17-0287",
+  "raison": "Créature/bestiaire"
+ },
+ {
+  "id": "F-L17-0034",
+  "raison": "Créature/bestiaire"
+ },
+ {
+  "id": "F-L06-0500",
+  "raison": "Mutations"
+ },
+ {
+  "id": "F-L23-0260",
+  "raison": "Corruption"
+ },
+ {
+  "id": "F-L01-0332",
+  "raison": "Corruption"
+ },
+ {
+  "id": "F-L22-0010",
+  "raison": "Corruption"
+ },
+ {
+  "id": "F-L12-0170",
+  "raison": "Corruption"
+ },
+ {
+  "id": "F-L12-0180",
+  "raison": "Corruption"
+ },
+ {
+  "id": "F-L17-0001",
+  "raison": "Corruption"
+ },
+ {
+  "id": "F-L17-0188",
+  "raison": "Corruption"
+ },
+ {
+  "id": "F-L10-0049",
+  "raison": "Corruption"
+ },
+ {
+  "id": "F-L20-0035",
+  "raison": "Corruption"
+ },
+ {
+  "id": "F-L23-0258",
+  "raison": "Corruption"
+ },
+ {
+  "id": "F-L07-0044",
+  "raison": "Corruption"
+ },
+ {
+  "id": "F-L17-0174",
+  "raison": "Corruption"
+ },
+ {
+  "id": "F-L26-0254",
+  "raison": "Corruption"
+ },
+ {
+  "id": "F-L26-0027",
+  "raison": "Magie/sorts/dissipation"
+ },
+ {
+  "id": "F-L12-0086",
+  "raison": "Magie/sorts/dissipation"
+ },
+ {
+  "id": "F-L08-0189",
+  "raison": "Magie/sorts/dissipation"
+ },
+ {
+  "id": "F-L07-0088",
+  "raison": "Magie/sorts/dissipation"
+ },
+ {
+  "id": "F-L17-0038",
+  "raison": "Magie/sorts/dissipation"
+ },
+ {
+  "id": "F-L06-1104",
+  "raison": "Magie/sorts/dissipation"
+ },
+ {
+  "id": "F-L01-0265",
+  "raison": "Magie/sorts/dissipation"
+ },
+ {
+  "id": "F-L01-0286",
+  "raison": "Magie/sorts/dissipation"
+ },
+ {
+  "id": "F-L01-0288",
+  "raison": "Magie/sorts/dissipation"
+ },
+ {
+  "id": "F-L01-0290",
+  "raison": "Magie/sorts/dissipation"
+ },
+ {
+  "id": "F-L01-0291",
+  "raison": "Magie/sorts/dissipation"
+ },
+ {
+  "id": "F-L01-0292",
+  "raison": "Magie/sorts/dissipation"
+ },
+ {
+  "id": "F-L01-0293",
+  "raison": "Magie/sorts/dissipation"
+ },
+ {
+  "id": "F-L01-0283",
+  "raison": "Magie/sorts/dissipation"
+ },
+ {
+  "id": "F-L01-0284",
+  "raison": "Magie/sorts/dissipation"
+ },
+ {
+  "id": "F-L01-0298",
+  "raison": "Magie/sorts/dissipation"
+ },
+ {
+  "id": "F-L02-0305",
+  "raison": "Magie/sorts/dissipation"
+ },
+ {
+  "id": "F-L02-0318",
+  "raison": "Magie/sorts/dissipation"
+ },
+ {
+  "id": "F-L02-0321",
+  "raison": "Magie/sorts/dissipation"
+ },
+ {
+  "id": "F-L02-0324",
+  "raison": "Magie/sorts/dissipation"
+ },
+ {
+  "id": "F-L07-0041",
+  "raison": "Magie/sorts/dissipation"
+ },
+ {
+  "id": "F-L07-0042",
+  "raison": "Magie/sorts/dissipation"
+ },
+ {
+  "id": "F-L07-0049",
+  "raison": "Magie/sorts/dissipation"
+ },
+ {
+  "id": "F-L09-0138",
+  "raison": "Magie/sorts/dissipation"
+ },
+ {
+  "id": "F-L10-0043",
+  "raison": "Magie/sorts/dissipation"
+ },
+ {
+  "id": "F-L08-0166",
+  "raison": "Magie/sorts/dissipation"
+ },
+ {
+  "id": "F-L12-0098",
+  "raison": "Magie/sorts/dissipation"
+ },
+ {
+  "id": "F-L12-0167",
+  "raison": "Magie/sorts/dissipation"
+ },
+ {
+  "id": "F-L12-0169",
+  "raison": "Magie/sorts/dissipation"
+ },
+ {
+  "id": "F-L14-0015",
+  "raison": "Magie/sorts/dissipation"
+ },
+ {
+  "id": "F-L17-0057",
+  "raison": "Magie/sorts/dissipation"
+ },
+ {
+  "id": "F-L17-0170",
+  "raison": "Magie/sorts/dissipation"
+ },
+ {
+  "id": "F-L17-0172",
+  "raison": "Magie/sorts/dissipation"
+ },
+ {
+  "id": "F-L17-0173",
+  "raison": "Magie/sorts/dissipation"
+ },
+ {
+  "id": "F-L17-0235",
+  "raison": "Magie/sorts/dissipation"
+ },
+ {
+  "id": "F-L17-0251",
+  "raison": "Magie/sorts/dissipation"
+ },
+ {
+  "id": "F-L17-0253",
+  "raison": "Magie/sorts/dissipation"
+ },
+ {
+  "id": "F-L17-0254",
+  "raison": "Magie/sorts/dissipation"
+ },
+ {
+  "id": "F-L17-0255",
+  "raison": "Magie/sorts/dissipation"
+ },
+ {
+  "id": "F-L17-0257",
+  "raison": "Magie/sorts/dissipation"
+ },
+ {
+  "id": "F-L17-0258",
+  "raison": "Magie/sorts/dissipation"
+ },
+ {
+  "id": "F-L17-0262",
+  "raison": "Magie/sorts/dissipation"
+ },
+ {
+  "id": "F-L17-0263",
+  "raison": "Magie/sorts/dissipation"
+ },
+ {
+  "id": "F-L17-0264",
+  "raison": "Magie/sorts/dissipation"
+ },
+ {
+  "id": "F-L17-0269",
+  "raison": "Magie/sorts/dissipation"
+ },
+ {
+  "id": "F-L20-0008",
+  "raison": "Magie/sorts/dissipation"
+ },
+ {
+  "id": "F-L20-0014",
+  "raison": "Magie/sorts/dissipation"
+ },
+ {
+  "id": "F-L24-0021",
+  "raison": "Magie/sorts/dissipation"
+ },
+ {
+  "id": "F-L08-0025",
+  "raison": "Magie/sorts/dissipation"
+ },
+ {
+  "id": "F-L14-0126",
+  "raison": "Magie/sorts/dissipation"
+ },
+ {
+  "id": "F-L14-0043",
+  "raison": "Prière/Destin/talent"
+ },
+ {
+  "id": "F-L16-0148",
+  "raison": "Prière/Destin/talent"
+ },
+ {
+  "id": "F-L17-0142",
+  "raison": "Prière/Destin/talent"
+ },
+ {
+  "id": "F-L06-0024",
+  "raison": "Test générique"
+ },
+ {
+  "id": "F-L13-0205",
+  "raison": "Poursuite"
+ },
+ {
+  "id": "F-L13-0208",
+  "raison": "Poursuite"
+ },
+ {
+  "id": "F-L13-0211",
+  "raison": "Poursuite"
+ },
+ {
+  "id": "F-L13-0215",
+  "raison": "Poursuite"
+ },
+ {
+  "id": "F-L15-0204",
+  "raison": "Véhicule"
+ },
+ {
+  "id": "F-L15-0134",
+  "raison": "Défense/couvert"
+ },
+ {
+  "id": "F-L15-0137",
+  "raison": "Défense/couvert"
+ }
+]

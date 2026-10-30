@@ -1,0 +1,211 @@
+{
+ "changements": [
+  {
+   "n": 1,
+   "onglet": "Talents",
+   "cellule": "B154",
+   "ligne": "Présence imposante (Commanding Presence)",
+   "ancienne": "En l’absence d’autorité reconnue, les gens se tournent naturellement vers vous en cas de crise et suivent vos ordres raisonnables. Avantage V5 aux Tests de Commandement.",
+   "nouvelle": "Sur un Test de Commandement réussi en combat, choisissez les DR obtenus ou la valeur du dé des unités."
+  },
+  {
+   "n": 1,
+   "onglet": "Talents",
+   "cellule": "B64",
+   "ligne": "Exaltant (Inspiring)",
+   "ancienne": "Avantage V5 aux Tests de Commandement effectués en combat.",
+   "nouvelle": "En l’absence d’autorité reconnue, les gens se tournent naturellement vers vous en cas de crise et suivent vos ordres raisonnables. Avantage V5 aux Tests de Commandement."
+  },
+  {
+   "n": 2,
+   "onglet": "Talents",
+   "cellule": "B181",
+   "ligne": "Sprinter (Sprinter)",
+   "ancienne": "Avantage V5 aux Tests d'Athlétisme pour courir et sauter.",
+   "nouvelle": "Avantage V5 aux Tests d'Athlétisme pour courir. À pied, vous ne subissez aucune pénalité pour vous frayer un chemin dans une foule dense."
+  },
+  {
+   "n": 3,
+   "onglet": "Talents",
+   "cellule": "B71",
+   "ligne": "Flairer les ennuis (Nose for Trouble)",
+   "ancienne": "Avantage V5 aux Tests d’Intuition ; vous savez généralement où trouver, dans une ville ou un village, de quoi parier, vous battre ou vous enivrer.",
+   "nouvelle": "Avantage V5 aux Tests d’Intuition liés à un danger potentiel ; vous savez généralement où trouver, dans une ville ou un village, de quoi parier, vous battre ou vous enivrer."
+  },
+  {
+   "n": 4,
+   "onglet": "Talents",
+   "cellule": "B52",
+   "ligne": "Diction instinctive (Instinctive Diction)",
+   "ancienne": "Si vous devez effectuer un jet sur la table des Incantations imparfaites mineures, vous pouvez réduire le résultat de 20 ; sous 01, aucun effet ne se produit. Aucun effet sur les Incantations imparfaites majeures.",
+   "nouvelle": "Si vous devez effectuer un jet sur la table des Incantations imparfaites mineures, vous pouvez réduire le résultat de 20, mais seulement si le Test d'incantation ou de Focalisation a réussi ; sous 01, aucun effet ne se produit. Aucun effet sur les Incantations imparfaites majeures."
+  },
+  {
+   "n": 5,
+   "onglet": "Talents",
+   "cellule": "B87",
+   "ligne": "Harmonisation aethyrique (Aethyric Attunement)",
+   "ancienne": "Sur la table des Incantations imparfaites mineures, lancez deux fois et choisissez le résultat. La seconde acquisition étend ce bénéfice à la table des Incantations imparfaites majeures.",
+   "nouvelle": "Sur la table des Incantations imparfaites mineures, si le Test d'incantation ou de Focalisation a réussi, lancez deux fois et choisissez le résultat. La seconde acquisition étend ce bénéfice à la table des Incantations imparfaites majeures."
+  },
+  {
+   "n": 6,
+   "onglet": "Talents",
+   "cellule": "B118",
+   "ligne": "Mains agiles (Fast Hands)",
+   "ancienne": "Vous pouvez divertir avec Escamotage en faisant apparaître ou disparaître de petits objets. Avantage V5 aux Tests d’Escamotage et de Corps à corps (Bagarre) pour toucher un adversaire, notamment pour un Sort de contact.",
+   "nouvelle": "Avantage V5 aux Tests d’Escamotage et de Corps à corps (Bagarre) pour toucher un adversaire, notamment pour un Sort de contact."
+  },
+  {
+   "n": 7,
+   "onglet": "Talents",
+   "cellule": "B73",
+   "ligne": "Frappe assommante (Strike to Stun)",
+   "ancienne": "Toutes vos armes improvisées ont la Qualité Assommante (Pummel). Avec une arme Assommante, ignorez la pénalité de coup ciblé pour une neutralisation silencieuse (p. 135).",
+   "nouvelle": "Toutes vos armes improvisées ont la Qualité Assommante (Pummel). Avec une arme Assommante, bénéficiez d'un Avantage V5 aux neutralisations silencieuses (p. 135)."
+  },
+  {
+   "n": 8,
+   "onglet": "Talents",
+   "cellule": "B164",
+   "ligne": "Riposte (Riposte)",
+   "ancienne": "Si vous remportez un Test opposé en défendant au corps à corps, vous infligez des dégâts comme si vous étiez l'attaquant.",
+   "nouvelle": "Une fois par Round, si vous remportez un Test opposé en défendant au corps à corps, vous infligez des dégâts comme si vous étiez l'attaquant."
+  },
+  {
+   "n": 9,
+   "onglet": "Talents",
+   "cellule": "B123",
+   "ligne": "Maniement de deux armes (Dual Wielder)",
+   "ancienne": "En combattant avec deux armes, l’attaque gratuite de la seconde arme ne vous coûte pas Momentum. Pendant ce combat à deux armes, les dagues, couteaux et armes similaires que vous maniez gagnent l’Atout Parade.",
+   "nouvelle": "En combattant avec deux armes, l’attaque de la seconde arme ne demande pas de dépenser d'Élan, mais vous devez en avoir. Pendant ce combat à deux armes, les dagues, couteaux et armes similaires que vous maniez gagnent l’Atout Parade."
+  },
+  {
+   "n": 10,
+   "onglet": "Magie",
+   "cellule": "G218",
+   "ligne": "Souffle",
+   "ancienne": "Choisissez une cible à 20 + Bonus de Force Mentale mètres et effectuez CT (+0 DR), opposé à l’Esquive de la cible et des voisins dans Bonus d’Initiative mètres. Ceux qui ne battent pas votre résultat sont touchés. Base Bonus de Force Mentale Dégâts : Métal +4 et dommages aux objets ; Bêtes/Lumière +2 et Exténué, frappe en dernier et adversaires +1 DR en défense jusqu’au retrait de cet Exténué ; Cieux +2, ignore les PA métalliques et Sonné ; Feu +5 et Enflammé ; Mort/Vie +2 et Empoisonné ; Ombres, pas de Dégâts mais fumée et suffocation pendant Bonus de Force Mentale Rounds.",
+   "nouvelle": "Choisissez une cible à 20 + Bonus de Force Mentale mètres et effectuez CT (+0 DR), opposé à l’Esquive de la cible et des voisins dans Bonus de Force Mentale mètres. Ceux qui ne battent pas votre résultat sont touchés. Base Bonus de Force Mentale Dégâts : Métal +4 et dommages aux objets ; Bêtes/Lumière +2 et Exténué, frappe en dernier et adversaires +1 DR en défense jusqu’au retrait de cet Exténué ; Cieux +2, ignore les PA métalliques et Sonné ; Feu +5 et Enflammé ; Mort/Vie +2 et Empoisonné ; Ombres, pas de Dégâts mais fumée et suffocation pendant Bonus de Force Mentale Rounds. Le lanceur est immunisé à son propre Souffle."
+  },
+  {
+   "n": 11,
+   "onglet": "Magie",
+   "cellule": "G208",
+   "ligne": "Attaques en chaine",
+   "ancienne": "Un projectile magique +4 frappe la première cible. S’il inflige plus de Blessures réelles que son BE, il passe à la cible la plus proche à Bonus de Force Mentale mètres de la précédente, en perdant 1 Dégât par rebond. Jusqu’à Bonus de Force Mentale rebonds sont permis, plus un par +2 DR. Si les Blessures infligées sont égales ou inférieures au BE, la chaîne s’arrête.",
+   "nouvelle": "Un projectile magique +4 frappe la première cible. Il inflige 1 Dégât de moins à la 2e cible, puis encore 1 de moins à la 3e. Jusqu’à Bonus de Force Mentale rebonds sont permis, plus un par +2 DR. Le rebond suivant n’a lieu que si les Blessures infligées dépassent le BE de la 2e cible, vers une cible à Bonus de Force Mentale mètres de la 2e. Si les Blessures infligées sont égales ou inférieures au BE, la chaîne s’arrête."
+  },
+  {
+   "n": 12,
+   "onglet": "Magie",
+   "cellule": "C213",
+   "ligne": "Effrayant",
+   "ancienne": "3",
+   "nouvelle": "2"
+  },
+  {
+   "n": 12,
+   "onglet": "Magie",
+   "cellule": "G213",
+   "ligne": "Effrayant",
+   "ancienne": "En vous recouvrant de magie, vous devenez effrayant et intimidant. Gagnez Peur 1. Pour chaque +3 DR, vous pouvez augmenter votre valeur de Peur de 1.",
+   "nouvelle": "En vous recouvrant de magie, vous devenez effrayant et intimidant. Gagnez Peur (1). Pour chaque +3 DR, vous pouvez augmenter votre valeur de Peur de 1."
+  },
+  {
+   "n": 13,
+   "onglet": "Magie",
+   "cellule": "G10",
+   "ligne": "Couronne de Flamme",
+   "ancienne": "- Vous canalisez Aqshy pour invoquer une couronne de flammes inspirante autour de votre tête.\n- Vous gagnez le Trait Peur (1).\n- Vous obtenez aussi le Talent Meneur de Guerre.\n- Avec +2 DR, vous pouvez soit augmenter votre Peur de +1, soit reprendre Meneur de Guerre.\n- Tant que le sort est actif, vous bénéficiez d’un +1 DR aux Tests de Focalisation et d’Incantation avec Aqshy.",
+   "nouvelle": "- Vous canalisez Aqshy pour invoquer une couronne de flammes inspirante autour de votre tête.\n- Vous gagnez le Trait Peur (2).\n- Vous obtenez aussi le Talent Meneur de Guerre.\n- Avec +2 DR, vous pouvez augmenter votre Peur de +1.\n- Tant que le sort est actif, vous bénéficiez d’un +1 DR aux Tests de Focalisation et d’Incantation avec Aqshy."
+  },
+  {
+   "n": 14,
+   "onglet": "Magie",
+   "cellule": "E14",
+   "ligne": "Épée Enflammée de Rhuin",
+   "ancienne": "1 épée (arme de base)",
+   "nouvelle": "1 épée"
+  },
+  {
+   "n": 14,
+   "onglet": "Magie",
+   "cellule": "G14",
+   "ligne": "Épée Enflammée de Rhuin",
+   "ancienne": "Vous enveloppez une épée de type arme de base dans les flammes. Elle inflige BF + 6 Dégâts et gagne Dévastatrice et Magique. Chaque touche inflige 1 Enflammé. Un porteur sans Magie des Arcanes (Feu) gagne lui-même 1 Enflammé s’il commet une Maladresse avec l’épée.",
+   "nouvelle": "Vous enveloppez une épée dans les flammes. Elle inflige BF + 6 Dégâts et gagne Dévastatrice et Magique. Chaque touche inflige 1 Enflammé. Un porteur sans Magie des Arcanes (Feu) gagne lui-même 1 Enflammé s’il commet une Maladresse avec l’épée."
+  },
+  {
+   "n": 15,
+   "onglet": "Magie",
+   "cellule": "G234",
+   "ligne": "Coup de vent",
+   "ancienne": "Vous créez une brève rafale de vent, mais suffisamment forte pour éteindre une bougie, faire claquer une porte ouverte ou balayer quelques pages sur le sol.",
+   "nouvelle": "Vous créez une brève rafale de vent, mais suffisamment forte pour éteindre une bougie, faire claquer une porte ouverte ou donner à une silhouette en cape une allure impressionnante."
+  },
+  {
+   "n": 16,
+   "onglet": "Magie",
+   "cellule": "G182",
+   "ligne": "La Faux de Shyish",
+   "ancienne": "Vous invoquez une hallebarde Magique infligeant BF + Bonus de Force Mentale + 4 Dégâts. Selon l’arbitrage V5 du MJ, les Morts-vivants engagés avec vous ne bénéficient pas d’Avantage aux Tests contre vous ; leur Élan reste disponible.",
+   "nouvelle": "Vous invoquez une hallebarde Magique infligeant BF + Bonus de Force Mentale + 4 Dégâts. Les Morts-vivants engagés avec vous ne gagnent pas d’Élan."
+  },
+  {
+   "n": 23,
+   "onglet": "Mots Clés Armes et Armures",
+   "cellule": "B4",
+   "ligne": "À répétition X",
+   "ancienne": "Contient X tirs ; l'arme se recharge automatiquement après chaque tir. Une fois les X tirs dépensés, il faut la recharger entièrement selon les règles normales.",
+   "nouvelle": "Contient X tirs ; l'arme se recharge automatiquement après chaque tir. Une fois les X tirs dépensés, il faut la recharger entièrement selon les règles normales. Permet de tirer deux fois sur la même cible avec −1 DR, en une seule Action."
+  }
+ ],
+ "non_appliques": [
+  {
+   "n": 17,
+   "onglet": "Magie",
+   "raison": "Aucune ligne « Attribut du domaine des Bêtes » dans l'onglet (Maître des Bêtes et Bête Indomptée sont des sorts sans rapport)."
+  },
+  {
+   "n": 18,
+   "onglet": "Miracles",
+   "raison": "Ligne Masque mortuaire absente : l'onglet ne contient que 16 miracles de Myrmidia."
+  },
+  {
+   "n": 19,
+   "onglet": "Miracles",
+   "raison": "Givre d'Ulric absent (onglet = Myrmidia seulement)."
+  },
+  {
+   "n": 20,
+   "onglet": "Miracles",
+   "raison": "Grâce de Ranald absente (onglet = Myrmidia seulement)."
+  },
+  {
+   "n": 21,
+   "onglet": "Miracles",
+   "raison": "Dent et griffe absente (onglet = Myrmidia seulement)."
+  },
+  {
+   "n": 22,
+   "onglet": "Miracles",
+   "raison": "Jugement du Roi des neiges absent (onglet = Myrmidia seulement)."
+  },
+  {
+   "n": 24,
+   "onglet": "Armes Corps à Corps",
+   "raison": "Arme improvisée (ligne 29) : colonnes Catégorie, Nom, Prix, Disponibilité, Allonge, Dégâts, Atouts et Défauts ; aucune colonne de description ou note."
+  },
+  {
+   "n": 5,
+   "onglet": "Talents",
+   "raison": "Partiel : le mot « accumuler » n'existe pas dans la cellule actuelle ; seule la condition de réussite est ajoutée (inclus dans les changements)."
+  },
+  {
+   "n": 10,
+   "onglet": "Magie",
+   "raison": "Partiel : aucune ligne Fumée/Smoke séparée ; Ombres est traité dans la cellule Souffle (inclus)."
+  }
+ ]
+}

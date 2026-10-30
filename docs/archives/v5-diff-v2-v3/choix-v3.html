@@ -1,0 +1,256 @@
+<title>Livre de base V5 v3</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya+Sans+SC:wght@500;700&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Mise en page : une colonne de fiches de décision, barre d'état collante, filtres par thème. */
+:root{
+  --bg:#f3f4f1; --surface:#ffffff; --fg:#1f2522; --muted:#5d6661; --line:#d9ddd7;
+  --accent:#8a6a1f; --accent-ink:#ffffff; --accent-soft:#f3ead3;
+  --keep:#3f5f7a; --keep-soft:#e3ebf2; --adapt:#6b4f8a; --adapt-soft:#ece5f3; --apply:#2f6b45; --apply-soft:#e1efe6;
+  --warn:#9b3d2e; --warn-soft:#f6e3df;
+  --f-display:"Alegreya Sans SC","Alegreya Sans",system-ui,sans-serif;
+  --f-body:"Alegreya Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#161a18; --surface:#1e2421; --fg:#e6e9e5; --muted:#9aa49e; --line:#333b37;
+  --accent:#d2ad55; --accent-ink:#1a1608; --accent-soft:#332a14;
+  --keep:#8fb2cf; --keep-soft:#1f2c37; --adapt:#bba2d8; --adapt-soft:#2a2236; --apply:#7fc79a; --apply-soft:#1b2e22;
+  --warn:#ea8f7d; --warn-soft:#3a201b; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#161a18; --surface:#1e2421; --fg:#e6e9e5; --muted:#9aa49e; --line:#333b37;
+  --accent:#d2ad55; --accent-ink:#1a1608; --accent-soft:#332a14;
+  --keep:#8fb2cf; --keep-soft:#1f2c37; --adapt:#bba2d8; --adapt-soft:#2a2236; --apply:#7fc79a; --apply-soft:#1b2e22;
+  --warn:#ea8f7d; --warn-soft:#3a201b; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:16px/1.5 var(--f-body);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 48px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.wrap{max-width:860px;margin:0 auto}
+header.intro{padding-block:28px 12px;display:grid;gap:8px}
+h1{font:700 2rem/1.1 var(--f-display);letter-spacing:.02em;margin:0;text-wrap:balance}
+.lede{margin:0;color:var(--muted);max-width:65ch}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.9rem;color:var(--muted);margin:4px 0 0;padding:0;list-style:none}
+.legend b{color:var(--fg)}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:10px;border-bottom:1px solid var(--line);display:grid;gap:8px}
+.progress{display:flex;align-items:center;gap:12px;flex-wrap:wrap;font-variant-numeric:tabular-nums}
+.meter{flex:1 1 160px;height:6px;background:var(--line);border-radius:3px;overflow:hidden;min-width:120px}
+.meter i{display:block;height:100%;background:var(--accent);width:0;transition:width .3s}
+.status{font-size:.85rem;color:var(--muted)}
+.filters{display:flex;gap:6px;flex-wrap:wrap}
+.filters button{font:500 .85rem var(--f-body);border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:999px;padding:3px 11px;cursor:pointer}
+.filters button[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.filters button:focus-visible,.choice button:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+section.theme{margin-top:28px}
+section.theme>h2{font:700 1.2rem var(--f-display);letter-spacing:.04em;margin:0 0 4px;color:var(--accent)}
+section.theme>p{margin:0 0 12px;color:var(--muted);font-size:.92rem;max-width:70ch}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:14px 16px;display:grid;gap:8px;margin-bottom:10px;border-left:4px solid var(--line)}
+.card[data-choice="apply"]{border-left-color:var(--apply)}
+.card[data-choice="keep"]{border-left-color:var(--keep)}
+.card[data-choice="adapt"]{border-left-color:var(--adapt)}
+.card-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 10px}
+.card h3{font:700 1.05rem var(--f-body);margin:0;flex:1 1 260px;min-width:0}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{font:600 .72rem var(--f-mono);padding:2px 7px;border-radius:4px;background:var(--bg);color:var(--muted);border:1px solid var(--line);white-space:nowrap}
+.chip.warn{background:var(--warn-soft);color:var(--warn);border-color:transparent}
+.diff{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;font-size:.95rem;margin:0}
+.diff dt{font:600 .75rem var(--f-mono);color:var(--muted);padding-top:3px;text-transform:uppercase;letter-spacing:.05em}
+.diff dd{margin:0;min-width:0}
+.diff dd.v3{font-weight:500}
+.tool{font-size:.92rem;color:var(--muted);margin:0}
+.tool b{color:var(--fg);font-weight:600}
+.conflict{font-size:.9rem;background:var(--warn-soft);color:var(--warn);padding:6px 10px;border-radius:4px;margin:0}
+.choice{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.choice button{font:600 .88rem var(--f-body);border:1px solid var(--line);background:var(--bg);color:var(--fg);border-radius:4px;padding:5px 12px;cursor:pointer}
+.choice button[data-v="apply"][aria-pressed="true"]{background:var(--apply-soft);border-color:var(--apply);color:var(--apply)}
+.choice button[data-v="keep"][aria-pressed="true"]{background:var(--keep-soft);border-color:var(--keep);color:var(--keep)}
+.choice button[data-v="adapt"][aria-pressed="true"]{background:var(--adapt-soft);border-color:var(--adapt);color:var(--adapt)}
+.choice .saved{font-size:.8rem;color:var(--muted);margin-left:auto}
+textarea{width:100%;min-height:2.4em;font:inherit;font-size:.92rem;border:1px solid var(--line);border-radius:4px;background:var(--bg);color:var(--fg);padding:6px 8px;resize:vertical}
+details.info{margin-top:28px;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:12px 16px}
+details.info summary{font:700 1.05rem var(--f-display);cursor:pointer;color:var(--accent)}
+details.info ul{margin:10px 0 0;padding-left:20px;font-size:.92rem;display:grid;gap:4px}
+.offline{font-size:.85rem;color:var(--warn)}
+@media (max-width:520px){h1{font-size:1.6rem}.diff{grid-template-columns:1fr}.diff dt{padding-top:6px}}
+@media (prefers-reduced-motion:reduce){.meter i{transition:none}}
+</style>
+
+<div class="wrap">
+<header class="intro">
+  <h1>Livre de base V5 : passage à la v3</h1>
+  <p class="lede">Chaque fiche compare la v2 (celle que suit l'outil) à la v3 du 27 octobre 2026, vérifiée page par page sur les deux PDF. Choisissez pour chacune : reporter la v3, garder ce que fait l'outil, ou adapter (précisez dans la note). Les réponses s'enregistrent toutes seules ; Claude les lit directement ici.</p>
+  <ul class="legend">
+    <li><b>Feuille</b> : se corrige dans votre feuille Google, puis l'outil la réimporte</li>
+    <li><b>Code</b> : moteur de l'outil</li>
+    <li><b>Bestiaire</b> : profils de créatures</li>
+    <li><b>Données</b> : tables et contrats saisis dans l'outil</li>
+  </ul>
+  <p class="lede" style="font-size:.9rem">Distances en mètres, selon votre convention (même valeur que les yards du livre).</p>
+</header>
+
+<div class="bar">
+  <div class="progress"><strong id="count">0 / 0 décidées</strong><span class="meter" aria-hidden="true"><i id="meter"></i></span><span class="status" id="status">Connexion…</span></div>
+  <div class="filters" id="filters" role="group" aria-label="Filtrer"></div>
+</div>
+
+<main id="list"></main>
+
+<details class="info" id="info">
+  <summary>Sans décision à prendre (déjà conforme, hors outil ou sans effet)</summary>
+  <ul id="info-list"></ul>
+</details>
+</div>
+
+<script>
+const THEMES=[
+ {id:'armes',name:'Armes et tir',intro:'Surtout des valeurs de votre feuille (onglets Armes). Le tir double de Répétition et le bout portant touchent aussi le moteur.'},
+ {id:'combat',name:'Règles de combat',intro:'Moteur de résolution : Élan, Peur, tir dans la mêlée, défense.'},
+ {id:'talents',name:'Talents',intro:'Texte dans votre feuille (onglet Talents), effet dans les contrats de talents de l’outil. Présence imposante et Inspirant échangent une partie de leurs effets.'},
+ {id:'magie',name:'Magie et sorts',intro:'Sorts dans la feuille (onglet Magie) ; incidents et Focalisation dans le moteur.'},
+ {id:'prieres',name:'Prières',intro:'Contrats de prières saisis dans l’outil depuis la v2. Deux d’entre eux contredisent un arbitrage du 21/10.'},
+ {id:'creatures',name:'Créatures et bestiaire',intro:'Règle de Taille, Traits et profils du bestiaire de base (L06).'},
+ {id:'fiches',name:'Hors outil : projet des fiches',intro:'À reporter éventuellement dans ennemi-interieur-wfrp4, rien à faire dans l’outil.'}
+];
+const ITEMS=[
+ // Armes et tir
+ {id:'arcs',t:'armes',p:'303',h:'Arcs : dégâts fixes, sans Bonus de Force',v2:'Arc +BF+4 · Arc long +BF+4 · Arc court +BF+3',v3:'Arc +7 · Arc long +8 (Dévastatrice) · Arc court +6',tool:'La feuille (Armes à distance) porte les formules +BF. Le profil d’elfe du bestiaire passe aussi de +7 à +8 à l’arc long (p.320).',por:'Feuille, bestiaire',eff:'faible'},
+ {id:'arbaletes',t:'armes',p:'303',h:'Arbalètes : portée réduite',v2:'Arbalète 50 m · Arbalète lourde 60 m',v3:'Arbalète 40 m · Arbalète lourde 50 m',tool:'Feuille (Armes à distance) et arbalète optionnelle des elfes au bestiaire (p.320). Les portées ne servent qu’aux aides affichées.',por:'Feuille, bestiaire',eff:'faible'},
+ {id:'blast',t:'armes',p:'303',h:'Explosifs et tromblon : rayon d’Explosion',v2:'Bombe Explosion 5 · Incendiaire 4 · Tromblon 3',v3:'Bombe Explosion 10 · Incendiaire 6 · Tromblon 2',tool:'Valeurs de la feuille (Armes à distance).',por:'Feuille',eff:'faible'},
+ {id:'munitions-poudre',t:'armes',p:'302',h:'Munitions à poudre : le bonus d’Explosion change de ligne',v2:'Grenaille et poudre : Explosion +1 · Munitions improvisées : —',v3:'Grenaille et poudre : — · Munitions improvisées : Explosion −1',tool:'La feuille porte la version v2 (grenaille Explosion +1).',por:'Feuille',eff:'faible'},
+ {id:'bout-portant',t:'armes',p:'302',h:'Pas de bout portant pour les armes à portée courte de 4 m ou moins',v2:'Bout portant = 4 m pour toute arme.',v3:'Une arme dont la portée courte vaut 4 m ou moins n’a pas de bout portant (+2 DR perdu). Touche surtout les armes de jet à faible Force.',tool:'Le bout portant est fixé à 4 m pour toutes les armes (aide affichée, le MJ coche).',por:'Code',eff:'faible'},
+ {id:'repetition',t:'armes',p:'305',h:'Répétition : tir double en une Action',v2:'Recharge automatique après chaque tir.',v3:'Ajout : permet de tirer deux fois sur la même cible avec −1 DR, en une seule Action.',tool:'Aucun tir double : un tir par Test.',por:'Code, feuille',eff:'moyen'},
+ {id:'improvisee',t:'armes',p:'301',h:'Arme improvisée : pommeau et crosse cités',v2:'Profil +BF+1, Déséquilibrée, Inoffensive.',v3:'Même profil ; une note précise que chaises, tabourets, pommeaux d’épée et crosses d’armes à feu sont des armes improvisées.',tool:'Profil identique dans la feuille ; seule la note manque.',por:'Feuille (texte)',eff:'faible'},
+ // Combat
+ {id:'surpris-tir',t:'combat',p:'166',h:'Cible Surprise : +2 DR aussi au tir',v2:'+1 DR (tir et mêlée).',v3:'+2 DR, au tir comme en mêlée.',tool:'Mêlée déjà à +2 DR (votre arbitrage du 25/10). Tir encore à +1 DR.',por:'Code',eff:'faible'},
+ {id:'tir-engage',t:'combat',p:'165',h:'Tirer sur un adversaire engagé avec le tireur',v2:'La cible peut opposer n’importe quelle compétence de mêlée.',v3:'Se résout comme une attaque de mêlée : compétence de tir du tireur contre compétence de mêlée de la cible ; ne compte pas comme un tir dans la mêlée.',tool:'Désavantage « tir sur cible engagée » sauf Pistolet, et défense de mêlée réservée au Pistolet.',por:'Code',eff:'fort'},
+ {id:'esquive-tir',t:'combat',p:'165',h:'Esquiver un tir',v2:'Esquive seulement à bout portant.',v3:'Esquive si le tireur est à moins de Bonus d’Initiative mètres, ou à toute portée avec un bouclier de 2 PA ou plus.',tool:'Le MJ confirme que l’Esquive est permise ; le bouclier de 2 PA est déjà reconnu. Seule l’aide affichée change.',por:'Code (aide)',eff:'faible'},
+ {id:'peur-elan',t:'combat',p:'183',h:'Peur : l’Élan est perdu tout de suite',v2:'Sous la Peur, on ne peut pas gagner d’Élan.',v3:'Sous la Peur, on perd son Élan et on ne peut pas en regagner.',tool:'Un personnage Effrayé qui avait de l’Élan le garde.',por:'Code',eff:'moyen'},
+ {id:'psycho-debut',t:'combat',p:'183',h:'Tests de psychologie en début de Tour',v2:'Moment non précisé.',v3:'Les Tests de psychologie se font au début du Tour, avant de choisir Mouvement et Action.',tool:'À vérifier dans le moteur de Tour.',por:'Code (vérification)',eff:'faible'},
+ {id:'riposte',t:'combat',p:'124',h:'Riposte : une fois par Round',v2:'Chaque victoire en défense de mêlée.',v3:'Une fois par Round, après une victoire en défense de mêlée.',tool:'Aucune limite par Round.',por:'Code, feuille',eff:'moyen'},
+ {id:'ambidextre',t:'combat',p:'119',h:'Combat à deux armes (talent) : il faut avoir de l’Élan',v2:'Pas besoin de perdre de l’Élan pour l’attaque de la seconde arme.',v3:'Pas besoin d’en dépenser, mais il faut en avoir.',tool:'L’attaque gratuite passe même sans Élan.',por:'Code, feuille',eff:'faible'},
+ {id:'esquive-melee',t:'combat',p:'164',h:'Esquive en mêlée : maladresse et critique',v2:'Pas d’encadré.',v3:'Nouvel encadré : esquiver en mêlée ne donne pas d’Élan ni ne compte comme victoire de mêlée ; une maladresse vaut −5 DR, un critique +5 DR.',tool:'Pas d’Élan sur Esquive : déjà conforme. L’équivalence maladresse/critique en ±5 DR est à vérifier.',por:'Code (vérification)',eff:'faible'},
+ {id:'maladresse-oppose',t:'combat',p:'165',h:'Maladresse en Test opposé : encadré supprimé',v2:'Exemple : une maladresse peut quand même gagner le Test opposé.',v3:'Encadré retiré, sans remplacement.',tool:'La maladresse vient du Test raté, quel que soit le vainqueur de l’opposition (comportement v2).',por:'Code (vérification)',eff:'faible'},
+ {id:'souille',t:'combat',p:'185',h:'Souillé : Désavantage contre les Plaies purulentes',v2:'Désavantage aux Tests de Sociabilité.',v3:'Aussi Désavantage aux Tests d’Endurance contre les Plaies purulentes.',tool:'Pas de Test quotidien de Plaies purulentes (bloc maladies « ne pas implanter » du 25/10).',por:'Rien, sauf si le bloc maladies est rouvert',eff:'faible'},
+ {id:'coupure',t:'combat',p:'367',h:'Coupure douloureuse : seuil de l’échec spectaculaire',v2:'Échec spectaculaire à −6 DR : Inconscient.',v3:'−5 DR, aligné sur la règle générale.',tool:'Table des critiques de l’outil : −6 DR.',por:'Données',eff:'faible'},
+ // Talents
+ {id:'presence-inspirant',t:'talents',p:'117, 121',h:'Présence imposante et Inspirant échangent leurs effets',v2:'Présence imposante : respect, on vous suit en crise, Avantage aux Tests de Commandement. Inspirant : Avantage aux Tests de Commandement en combat.',v3:'Présence imposante : sur un Test de Commandement réussi en combat, choisir les DR ou le chiffre des unités du dé. Inspirant : autorité naturelle en crise, Avantage à tous les Tests de Commandement.',tool:'Présence imposante = Avantage au Commandement ; Inspirant = Avantage en combat seulement. Le choix « DR ou unités » existe déjà (pour Jambes solides).',por:'Feuille, code',eff:'moyen'},
+ {id:'jambes-solides',t:'talents',p:'127',h:'Jambes solides : réécrit',v2:'Sprint et saut : choisir les DR ou le chiffre des unités.',v3:'Avantage en Athlétisme pour sauter ; chute volontaire : distance comptée 1 m de moins. Le choix « DR ou unités » passe à Présence imposante.',tool:'Contrat « DR ou unités » ; l’effet sur les chutes n’existe pas.',por:'Feuille, code',eff:'moyen'},
+ {id:'sprinter',t:'talents',p:'126',h:'Sprinter : la course seulement, et la foule',v2:'Avantage en Athlétisme pour courir et sauter.',v3:'Pour courir seulement ; à pied, aucune pénalité pour se frayer un chemin dans une foule dense.',tool:'Avantage sur « course ou saut ».',por:'Feuille, code',eff:'faible'},
+ {id:'flair',t:'talents',p:'123',h:'Flair pour les ennuis : face à un danger seulement',v2:'Avantage à tous les Tests d’Intuition.',v3:'Avantage aux Tests d’Intuition liés à un danger potentiel.',tool:'Avantage sans condition. Il faudrait une case « danger potentiel », comme la case « en combat ».',por:'Feuille, code',eff:'faible'},
+ {id:'diction',t:'talents',p:'121',h:'Diction instinctive : seulement après un Test réussi',v2:'−20 sur la table des incidents mineurs.',v3:'−20 seulement si le Test d’incantation ou de Focalisation a réussi.',tool:'Option cochée par le MJ, sans vérifier la réussite.',por:'Code, feuille',eff:'faible'},
+ {id:'harmonie',t:'talents',p:'114',h:'Harmonie aethyrique : seulement après un Test réussi',v2:'Deux jets sur la table des incidents mineurs.',v3:'Seulement si le Test d’incantation ou de Focalisation a réussi.',tool:'Deux jets sans condition de réussite.',por:'Code, feuille',eff:'moyen'},
+ {id:'mains-agiles',t:'talents',p:'119',h:'Mains agiles : phrase de divertissement retirée',v2:'Peut divertir en faisant apparaître ou disparaître de petits objets.',v3:'Phrase supprimée ; l’Avantage en Escamotage et Bagarre reste.',tool:'Effet conforme ; la feuille garde la phrase.',por:'Feuille (texte)',eff:'faible'},
+ {id:'frappe-assommante',t:'talents',p:'127',h:'Frappe assommante : texte aligné sur la mise hors de combat silencieuse',v2:'Arme Assommante : ignorer la pénalité de coup ciblé.',v3:'Avantage aux mises hors de combat silencieuses.',tool:'Le moteur donne déjà l’Avantage (votre arbitrage du 9/10) ; seule la feuille garde l’ancien texte.',por:'Feuille (texte)',eff:'faible'},
+ // Magie
+ {id:'pause-focal',t:'magie',p:'236',h:'Garder la réserve de Focalisation : Test de Focalisation',v2:'Test d’Endurance Moyen (+2 DR) à chaque Tour.',v3:'Test de Focalisation Moyen (+2 DR).',tool:'L’outil demande un Test d’Endurance.',por:'Code',eff:'faible'},
+ {id:'incidents-mineurs',t:'magie',p:'238',h:'Incidents mineurs : quatre lignes permutées',v2:'16-20 Rébellion intestinale · 21-25 Délié · 46-50 Rupture · 66-70 Hurlement',v3:'16-20 Délié · 21-25 Rébellion intestinale · 46-50 Hurlement · 66-70 Rupture (textes identiques)',tool:'Table de l’outil dans l’ordre v2.',por:'Données',eff:'faible'},
+ {id:'souffle',t:'magie',p:'243',h:'Souffle : zone en Bonus de Force Mentale, lanceur immunisé',v2:'Esquive des voisins dans Bonus d’Initiative mètres.',v3:'Dans Bonus de Force Mentale mètres ; ajout : le lanceur est immunisé à son propre Souffle.',tool:'Feuille (Magie) en version v2.',por:'Feuille',eff:'faible'},
+ {id:'chaine',t:'magie',p:'243',h:'Attaque en chaîne : rebonds reformulés',v2:'−1 Dégât à chaque rebond ; jusqu’à BFM rebonds ; +1 cible par +2 DR.',v3:'−1 sur la 2e cible, encore −1 sur la 3e ; BFM rebonds plus un par +2 DR ; le rebond suivant seulement si les Blessures dépassent le BE de la 2e cible.',tool:'Feuille et contrat de sort proches de la v3 (la chaîne s’arrête déjà si Blessures ≤ BE).',por:'Feuille, données',eff:'faible'},
+ {id:'effroi',t:'magie',p:'244',h:'Effroi : NI 3 → 2',v2:'NI 3, « gagnez Peur 1 ».',v3:'NI 2, Peur (1).',tool:'Feuille : NI 3.',por:'Feuille',eff:'faible'},
+ {id:'attribut-betes',t:'magie',p:'245',h:'Attribut du domaine des Bêtes : l’Élan remplace la Peur',v2:'Vous pouvez causer la Peur pendant BFM Rounds.',v3:'Vous gagnez de l’Élan, et tous les ennemis vivants à NI mètres perdent le leur.',tool:'Peur (1) pendant BFM Rounds ; aucun effet d’Élan.',por:'Code',eff:'moyen'},
+ {id:'faux-shyish',t:'magie',p:'247',h:'Faux de Shyish : les morts-vivants ne gagnent pas d’Élan',v2:'Les morts-vivants engagés ne reçoivent pas d’Avantage.',v3:'Ils ne gagnent pas d’Élan.',tool:'Votre arbitrage V5 : pas d’Avantage, Élan conservé.',conflict:'La v3 contredit votre arbitrage : elle vise précisément l’Élan.',por:'Feuille, code',eff:'faible'},
+ {id:'couronne',t:'magie',p:'248',h:'Couronne de flammes : Peur (2), plus de second Meneur de guerre',v2:'Meneur de guerre et Peur ; +2 DR : Peur +1 ou reprendre Meneur de guerre.',v3:'Meneur de guerre et Peur (2) ; +2 DR : Peur +1 seulement.',tool:'Feuille en version v2 (Peur (1)).',por:'Feuille',eff:'faible'},
+ {id:'rhuin',t:'magie',p:'248',h:'Épée flamboyante de Rhuin : toute épée',v2:'Cible : une épée (arme de base).',v3:'Cible : une épée.',tool:'Feuille : « épée de type arme de base ».',por:'Feuille',eff:'faible'},
+ {id:'tzeentch',t:'magie',p:'260',h:'Trahison de Tzeentch : simplifiée',v2:'Animosité (Alliés), sans transfert d’Avantage ; Test de Calme Difficile (−2 DR) sur critique ou cible l’allié le plus proche.',v3:'Les cibles gagnent Haine (Amis et alliés), rien d’autre.',tool:'Sort de Chaos non repéré dans la feuille : à confirmer.',por:'Feuille ou données',eff:'faible'},
+ {id:'fantasmagorie',t:'magie',p:'260',h:'Fantasmagorie : les cibles peuvent se distraire',v2:'« Les cibles ne se distraient pas entre elles. »',v3:'Phrase supprimée.',tool:'Non repéré dans la feuille : à confirmer.',por:'Feuille',eff:'faible'},
+ {id:'rafale',t:'magie',p:'241',h:'Rafale (Petite magie) : exemple changé',v2:'… ou faire tomber quelques pages.',v3:'… ou donner à une silhouette en cape une allure impressionnante.',tool:'Texte de feuille, aucun effet mécanique.',por:'Feuille (texte)',eff:'faible'},
+ // Prières
+ {id:'masque',t:'prieres',p:'223',h:'Masque mortuaire : Peur (2)',v2:'Vous gagnez Peur (sans indice).',v3:'Peur (2).',tool:'Peur (1), par votre arbitrage du 21/10 (indice non chiffré).',conflict:'Le livre chiffre maintenant l’indice : 2. Votre arbitrage portait sur l’absence d’indice.',por:'Données',eff:'faible'},
+ {id:'givre',t:'prieres',p:'228',h:'Givre d’Ulric : Peur (2), et l’Élan au lieu de l’Avantage',v2:'Vous causez la Peur ; les ennemis perdent leur Avantage au début de chaque Round.',v3:'Peur (2) ; ils perdent leur Élan.',tool:'Peur (1) par arbitrage ; libellé « perdent leur Avantage ».',conflict:'Même cas que Masque mortuaire pour l’indice de Peur.',por:'Données',eff:'faible'},
+ {id:'ranald',t:'prieres',p:'225',h:'Grâce de Ranald : durée en minutes',v2:'Bonus de Sociabilité Rounds.',v3:'Bonus de Sociabilité minutes.',tool:'Durée en Rounds.',por:'Données',eff:'faible'},
+ {id:'dent-griffe',t:'prieres',p:'228',h:'Dent et griffe (Taal) : Morsure, Magique, mains nues dangereuses',v2:'Traits Morsure (BF+3) et Arme (BF+4), attaques Magiques.',v3:'Traits Morsure et Magique ; vos attaques à mains nues ne sont plus Inoffensives. Plus de Trait Arme (BF+4).',tool:'Deux attaques : Morsure BF+3 et Arme BF+4.',por:'Données',eff:'moyen'},
+ {id:'roi-neiges',t:'prieres',p:'228',h:'Jugement du Roi des neiges : Sonné',v2:'… ignorant BE et PA.',v3:'… et inflige l’état Sonné.',tool:'Dégâts directs 1d10 + DR, pas de Sonné.',por:'Données',eff:'faible'},
+ // Créatures
+ {id:'taille',t:'creatures',p:'360',h:'Taille : bonus de dégâts relevé pour Énorme et Monstrueuse',v2:'Énorme +BF · Monstrueuse +2×BF',v3:'Énorme +2×BF · Monstrueuse +3×BF',tool:'Règle de Taille en version v2. Les profils imprimés incluent déjà ce bonus (fiche suivante).',por:'Code',eff:'faible'},
+ {id:'grands-monstres',t:'creatures',p:'330-333',h:'Grands monstres : dégâts imprimés relevés',v2:'Dragon griffes +16 · Géant +16 · Griffon serres +14 · Manticore griffes +14',v3:'Dragon +22 · Géant +22 · Griffon +19 · Manticore +19 (Morsure et Queue inchangées)',tool:'Bestiaire de base en version v2.',por:'Bestiaire',eff:'faible'},
+ {id:'grim',t:'creatures',p:'358, 328-346',h:'Trait Sinistre (Grim) : nouvelle définition, 9 créatures',v2:'Trait sans l’effet ci-dessous ; absent de ces profils.',v3:'Ajout : la créature n’a pas à perdre son Élan pour ses attaques gratuites, mais doit en avoir. Trait optionnel ajouté à pieuvre des marais, dragon, géant, griffon, manticore, troll, vampire, varghulf, minotaure.',tool:'Aucun Trait Sinistre, ni dans le bestiaire ni dans le moteur.',por:'Code, bestiaire',eff:'moyen'},
+ {id:'morsure',t:'creatures',p:'356',h:'Morsure : dégâts fixes BF+3',v2:'Les dégâts valent l’indice du Trait et incluent le BF.',v3:'Dégâts BF+3, sans indice.',tool:'Dégâts = indice imprimé (par exemple « Morsure +6 »). Attention : les profils gardent leurs indices imprimés.',por:'Code, bestiaire',eff:'moyen'},
+ {id:'indices-peur',t:'creatures',p:'339-350, 356, 360',h:'Indices de Peur explicites : 2, ou 3',v2:'« Peur » sans indice (1 par défaut).',v3:'Squelette, zombie, loup funeste, fantôme, vampire, démonette : Peur (2) · sanguinaire : Peur (3) · Taille agressive : Peur (2) · Effrayé : Peur (2) de la cible.',tool:'Peur (1) par défaut ; votre arbitrage C0 : indice non chiffré = saisie du MJ.',por:'Bestiaire, code',eff:'moyen'},
+ {id:'ogre',t:'creatures',p:'324',h:'Ogre : Trait Peur retiré',v2:'Ogre avec le Trait Peur.',v3:'Plus de Trait Peur propre ; la règle de Taille s’applique (Peur (2) s’il est agressif).',tool:'Ogre avec Peur sans indice. Cohérent avec votre choix du 26/10 (Taille Grande V5).',por:'Bestiaire',eff:'faible'},
+ {id:'ombrageux',t:'creatures',p:'361',h:'Ombrageux : +1 Brisé au lieu de +3',v2:'+3 états Brisé.',v3:'+1 état Brisé.',tool:'L’outil pose trois Brisé.',por:'Code',eff:'faible'},
+ {id:'ulgu',t:'creatures',p:'323, 362',h:'Nouveau Trait Imprégné d’Ulgu, porté par le gnome',v2:'Absent.',v3:'Avantage à la Focalisation (Ulgu) à 8 m ou moins ; Focalisation (Ulgu) peut remplacer Discrétion.',tool:'Aucun Trait de ce type ; le gnome n’a que Haine et Vision nocturne.',por:'Code, bestiaire',eff:'moyen'},
+ {id:'gabarits',t:'creatures',p:'353',h:'Gabarits Meneur (devient Lieutenant), Commandant, Seigneur lanceur',v2:'Meneur +15 partout, Soc +5 · Commandant CC/CT/I/FM +20, E/Ag +10 · Seigneur lanceur FM +20',v3:'Lieutenant +20 partout, Soc +10 · Commandant CC/CT/I/FM +30, E/Ag +20 (F et Soc inchangés) · Seigneur lanceur FM +30',tool:'Gabarits du bestiaire en version v2.',por:'Bestiaire',eff:'faible'},
+ {id:'ungrakk',t:'creatures',p:'355',h:'Ungrakk (exemple de Commandant) : profil relevé',v2:'CC 55, CT 50, E 50, I 50, Ag 45, FM 50, B 20.',v3:'CC 65, CT 60, E 60, I 60, Ag 55, FM 60, B 23 ; compétences +10 ; Dextérité 35 imprimée (à vérifier).',tool:'Profil v2 au bestiaire.',por:'Bestiaire',eff:'faible'},
+ {id:'allonge',t:'creatures',p:'318',h:'Armes naturelles : allonge selon la Taille',v2:'Allonge Personnelle.',v3:'Personnelle de Petite à Grande, Courte pour Énorme, Moyenne pour Monstrueuse.',tool:'Les allonges sont une aide affichée (votre arbitrage du 25/10) ; seul l’affichage changerait.',por:'Code (affichage)',eff:'faible'},
+ {id:'perturbant',t:'creatures',p:'358',h:'Perturbant : les ennemis vivants',v2:'Toutes les cibles vivantes.',v3:'Tous les ennemis vivants (les alliés ne sont plus touchés).',tool:'« Les vivants à BE mètres » sans distinction.',por:'Code',eff:'faible'},
+ // Fiches
+ {id:'carrieres',t:'fiches',p:'46-96, 377',h:'Dotations de carrière et Navigation',v2:'Agitateur : Jeu · Chasseur de primes : calotte de cuir · Flagellant : Arme lourde (fléau) · Mineur : Arme lourde (pioche) · Colporteur : 8d20 sous · Exterminateur : arbalète ou lance · Tueur de dragons : grande hache naine · Sergent : Arme (au choix) · Navigation (Int) sur la feuille de synthèse',v3:'Divertissement (Discours) · coiffe de cuir · fléau d’armes · pioche à deux mains · 8d10 sous · arbalète seule · grande hache · sans Arme (au choix) · Navigation (I)',tool:'Rien dans l’outil : carrières et caractéristiques de compétence vivent dans le projet des fiches.',por:'Projet des fiches',eff:'faible'}
+];
+const INFO=[
+ 'Seuil des réussites et échecs spectaculaires à ±5 DR (p.143, 159, 175, 182) : l’outil utilise déjà 5.',
+ 'Round de 10 secondes par défaut (p.161) : déjà la convention de l’outil.',
+ 'Élan gagné en remportant un Test opposé de mêlée (p.168) : déjà le cas.',
+ 'Avantage et Désavantage s’annulent un pour un (p.130) : déjà le cas.',
+ 'Deux armes une fois par Round (p.167) : l’outil limite déjà à une fois par Tour.',
+ 'Un seul soin par incident et par patient (p.170) : couvert par le suivi des séquelles en cours (F2-J1).',
+ 'Marteau ardent de Sigmar et Morsure de l’hiver (p.227-228) : reformulés avec Inflige (Enflammé / Exténué), même effet que l’outil.',
+ 'Sagesse de la chouette (p.229), Incantation critique (p.235) : reformulations sans effet.',
+ 'Unusual Learning (p.201) : restriction de niveaux levée ; le bloc « entre deux aventures » n’est pas implanté (décision du 25/10).',
+ 'Table des talents aléatoires (p.23) : absente de l’outil.',
+ 'Marque de Slaanesh (p.359) : liste de talents modifiée ; l’outil s’en tient au profil imprimé.',
+ 'Terreur 3 → Terreur (3), D100 → d100, date d’édition, coquilles et déplacements de mise en page.',
+ 'Résumé de Gemini : plusieurs erreurs relevées (Reversal au lieu de Riposte, Sixième sens au lieu de Flair pour les ennuis, table des incidents de tir déjà en v2, Brisé inchangé, Lieutenant +10 en Sociabilité et non en Blessures, bombe ×2 et non ×10). Les fiches ci-dessus suivent le texte des PDF.'
+];
+const LABELS={apply:'Reporter la v3',keep:'Garder l’actuel',adapt:'Adapter'};
+let decisions={}, db=null, filter='todo';
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function render(){
+  const list=$('#list'); list.innerHTML='';
+  for(const th of THEMES){
+    const items=ITEMS.filter(it=>it.t===th.id&&(filter==='all'||(filter==='todo'?!decisions[it.id]?.choix:filter===th.id)));
+    if(!items.length) continue;
+    const sec=document.createElement('section'); sec.className='theme';
+    sec.innerHTML=`<h2>${esc(th.name)}</h2><p>${esc(th.intro)}</p>`;
+    for(const it of items) sec.appendChild(card(it));
+    list.appendChild(sec);
+  }
+  if(!list.children.length) list.innerHTML='<p class="lede" style="margin-top:24px">Toutes les fiches de ce filtre sont décidées.</p>';
+  const done=ITEMS.filter(it=>decisions[it.id]?.choix).length;
+  $('#count').textContent=`${done} / ${ITEMS.length} décidées`;
+  $('#meter').style.width=`${Math.round(100*done/ITEMS.length)}%`;
+  renderFilters();
+}
+function card(it){
+  const d=decisions[it.id]||{};
+  const el=document.createElement('article'); el.className='card'; el.dataset.choice=d.choix||'';
+  el.innerHTML=`<div class="card-head"><h3>${esc(it.h)}</h3><div class="chips"><span class="chip">p.${esc(it.p)}</span><span class="chip">${esc(it.por)}</span><span class="chip">effort ${esc(it.eff)}</span>${it.conflict?'<span class="chip warn">contredit un arbitrage</span>':''}</div></div>
+  <dl class="diff"><dt>v2</dt><dd>${esc(it.v2)}</dd><dt>v3</dt><dd class="v3">${esc(it.v3)}</dd></dl>
+  <p class="tool"><b>Dans l’outil :</b> ${esc(it.tool)}</p>
+  ${it.conflict?`<p class="conflict">${esc(it.conflict)}</p>`:''}
+  <div class="choice" role="group" aria-label="Décision">${Object.entries(LABELS).map(([v,l])=>`<button type="button" data-v="${v}" aria-pressed="${d.choix===v}">${l}</button>`).join('')}<span class="saved"></span></div>
+  <textarea id="note-${it.id}" aria-label="Note pour ${esc(it.h)}" placeholder="${d.choix==='adapt'?'Décrivez l’adaptation…':'Note (facultative)'}">${esc(d.note||'')}</textarea>`;
+  el.querySelectorAll('.choice button').forEach(b=>b.addEventListener('click',()=>save(it.id,{choix:d.choix===b.dataset.v?null:b.dataset.v},el)));
+  const ta=el.querySelector('textarea'); let timer;
+  ta.addEventListener('input',()=>{clearTimeout(timer);timer=setTimeout(()=>save(it.id,{note:ta.value},el,true),700);});
+  return el;
+}
+async function save(id,patch,el,quiet){
+  const next={...(decisions[id]||{}),...patch,at:new Date().toISOString()};
+  decisions[id]=next;
+  const tag=el.querySelector('.saved');
+  if(!quiet) render();
+  if(!db){ if(tag) tag.textContent='Non enregistré (hors ligne)'; return; }
+  try{ await db.collection('decisions').doc(id).set(next); const t=document.querySelector(`#note-${CSS.escape(id)}`)?.closest('.card')?.querySelector('.saved'); if(t) t.textContent='Enregistré'; }
+  catch(e){ const t=document.querySelector(`#note-${CSS.escape(id)}`)?.closest('.card')?.querySelector('.saved'); if(t) t.textContent='Échec de l’enregistrement, réessayez'; }
+}
+function renderFilters(){
+  const f=$('#filters'); const todo=ITEMS.filter(it=>!decisions[it.id]?.choix).length;
+  const opts=[['todo',`À décider (${todo})`],['all','Toutes'],...THEMES.map(t=>[t.id,t.name])];
+  f.innerHTML=opts.map(([v,l])=>`<button type="button" data-f="${v}" aria-pressed="${filter===v}">${esc(l)}</button>`).join('');
+  f.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{filter=b.dataset.f;render();}));
+}
+$('#info-list').innerHTML=INFO.map(s=>`<li>${esc(s)}</li>`).join('');
+render();
+(async()=>{
+  try{ db=await window.claude?.use?.('db'); }catch{ db=null; }
+  if(!db){ $('#status').textContent='Enregistrement indisponible ici : ouvrez la page connecté à claude.ai.'; $('#status').className='offline'; return; }
+  $('#status').textContent='Enregistrement automatique';
+  db.collection('decisions').onSnapshot(snap=>{
+    const active=document.activeElement?.tagName==='TEXTAREA'?document.activeElement.id:null;
+    for(const doc of snap.docs){ decisions[doc.id]={...doc.data()}; }
+    if(!active) render();
+  },()=>{ $('#status').textContent='Connexion perdue : rechargez la page.'; $('#status').className='offline'; });
+})();
+</script>
