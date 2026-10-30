@@ -1,27 +1,17 @@
+import { test, describe } from 'node:test';
+import { declaredAnswers, declaredFacts, declaredTarget, declared5BAnswers, declared5BFacts, declared5BTarget, fixtureBlade } from '../../helpers/lot3-declared-answers.js';
+import assert from 'node:assert/strict';
+import { getSpellContract, getAllSpellContracts, getContractChoiceOptions, validateSpellTargets, resolveVortexTrajectory, resolveAuxiliarySummons, buildFicheFollowUpReceipt, validateElvenArcaneRequirements, previewSpellExecution, applySpellExecution } from '../../../js/core/v5-spell-contracts.js';
+import { parseSpellDuration } from '../../../js/core/v5-magic-effects.js';
+import { acquireV5Conditions } from '../../../js/core/v5-effects.js';
+import { createStore } from '../../../js/core/store.js';
+
+describe('contrats des 277 sorts et Magie Elfique', () => {
 // Attentes WoM actualisées selon pp. 89, 134, 137, 146–149 le 13/10/2026.
 /**
  * Suite de tests Phase 3.4 — Suppléments, 30 sorts elfiques, vortex & saisies MJ
  * Conforme au Cahier des charges Lot 3 et au Cadrage Magie V5.
  */
-
-import { test } from 'node:test';
-import {declaredAnswers,declaredFacts,declaredTarget,declared5BAnswers,declared5BFacts,declared5BTarget,fixtureBlade} from './helpers/lot3-declared-answers.js';
-import assert from 'node:assert/strict';
-import {
-  getSpellContract,
-  getAllSpellContracts,
-  getContractChoiceOptions,
-  validateSpellTargets,
-  resolveVortexTrajectory,
-  resolveAuxiliarySummons,
-  buildFicheFollowUpReceipt,
-  validateElvenArcaneRequirements,
-  previewSpellExecution,
-  applySpellExecution
-} from '../js/core/v5-spell-contracts.js';
-import { parseSpellDuration } from '../js/core/v5-magic-effects.js';
-import { acquireV5Conditions } from '../js/core/v5-effects.js';
-import { createStore } from '../js/core/store.js';
 
 // ============================================================================
 // 1. COUVERTURE INTÉGRALE DES 277 IDENTITÉS DE L'AUDIT (doublons D-21 retirés selon le cadrage du 11 octobre)
@@ -1195,7 +1185,4 @@ test('Troisième Contrôle Codex P1 #2, P1 #3, P1 #4 & P2 : Main de Gloire (+6 D
   await store.expireSpellEffects('mage', { currentRound: 10 });
   assert.equal(store.getFortune('mage').balance, 0, 'Après expiration, le solde de Chance revient à sa valeur permanente (0)');
 });
-
-
-
-
+});

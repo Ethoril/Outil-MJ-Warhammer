@@ -145,3 +145,69 @@ Ancien fichier `tests/<nom>.test.js` → nouveau fichier `tests/unit/<cible>.tes
 | `tests/pro-k5-targets.test.js` | `tests/unit/creatures/mots-cles-et-natures.test.js` | 3 | 30 |
 
 `tests/meta.test.js` : reste en place jusqu'à R2-13 ; il parcourt désormais `tests/` récursivement (même seuil, mêmes assertions).
+
+## R2-3 — magie A (contrats, traditions, catalogue, preuves lot3)
+
+| Ancien fichier | Nouveau fichier | Tests avant | Tests après (cible) |
+|---|---|---|---|
+| `tests/lot3-removed-spells.test.js` | `tests/unit/magie/catalogue-et-couverture.test.js` | 3 | 116 |
+| `tests/lot3-v5-catalogue-lileath.test.js` | `tests/unit/magie/catalogue-et-couverture.test.js` | 3 | 116 |
+| `tests/lot3-v5-catalogue-parity.test.js` | `tests/unit/magie/catalogue-et-couverture.test.js` | 7 | 116 |
+| `tests/lot3-v5-cloture.test.js` | `tests/unit/magie/catalogue-et-couverture.test.js` | 9 | 116 |
+| `tests/lot3-v5-high-talent-coverage.test.js` | `tests/unit/magie/catalogue-et-couverture.test.js` | 26 | 116 |
+| `tests/lot3-v5-relecture2-catalogue.test.js` | `tests/unit/magie/catalogue-et-couverture.test.js` | 16 | 116 |
+| `tests/lot3-v5-relecture2-coverage.test.js` | `tests/unit/magie/catalogue-et-couverture.test.js` | 5 | 116 |
+| `tests/lot3-v5-relecture2-magic.test.js` | `tests/unit/magie/catalogue-et-couverture.test.js` | 9 | 116 |
+| `tests/lot3-v5-relecture2-spells.test.js` | `tests/unit/magie/catalogue-et-couverture.test.js` | 11 | 116 |
+| `tests/lot3-v5-relecture2-state.test.js` | `tests/unit/magie/catalogue-et-couverture.test.js` | 6 | 116 |
+| `tests/lot3-v5-reliquats.test.js` | `tests/unit/magie/catalogue-et-couverture.test.js` | 11 | 116 |
+| `tests/lot3-v5-retours-catalogue.test.js` | `tests/unit/magie/catalogue-et-couverture.test.js` | 10 | 116 |
+| `tests/lot3-v5-magic-34.test.js` | `tests/unit/magie/contrats-277-et-elfique.test.js` | 16 | 16 |
+| `tests/lot3-v5-contrats-catalogue-beasts.test.js` | `tests/unit/magie/contrats-catalogue.test.js` | 28 | 385 |
+| `tests/lot3-v5-contrats-catalogue-death.test.js` | `tests/unit/magie/contrats-catalogue.test.js` | 48 | 385 |
+| `tests/lot3-v5-contrats-catalogue-fire.test.js` | `tests/unit/magie/contrats-catalogue.test.js` | 46 | 385 |
+| `tests/lot3-v5-contrats-catalogue-heavens.test.js` | `tests/unit/magie/contrats-catalogue.test.js` | 54 | 385 |
+| `tests/lot3-v5-contrats-catalogue-life.test.js` | `tests/unit/magie/contrats-catalogue.test.js` | 50 | 385 |
+| `tests/lot3-v5-contrats-catalogue-light.test.js` | `tests/unit/magie/contrats-catalogue.test.js` | 56 | 385 |
+| `tests/lot3-v5-contrats-catalogue-metal.test.js` | `tests/unit/magie/contrats-catalogue.test.js` | 54 | 385 |
+| `tests/lot3-v5-contrats-catalogue-shadow.test.js` | `tests/unit/magie/contrats-catalogue.test.js` | 49 | 385 |
+| `tests/lot3-v5-contrats-arcanes.test.js` | `tests/unit/magie/contrats-domaines.test.js` | 58 | 207 |
+| `tests/lot3-v5-contrats-betes.test.js` | `tests/unit/magie/contrats-domaines.test.js` | 13 | 207 |
+| `tests/lot3-v5-contrats-cieux.test.js` | `tests/unit/magie/contrats-domaines.test.js` | 8 | 207 |
+| `tests/lot3-v5-contrats-feu.test.js` | `tests/unit/magie/contrats-domaines.test.js` | 15 | 207 |
+| `tests/lot3-v5-contrats-lumiere.test.js` | `tests/unit/magie/contrats-domaines.test.js` | 14 | 207 |
+| `tests/lot3-v5-contrats-metal.test.js` | `tests/unit/magie/contrats-domaines.test.js` | 10 | 207 |
+| `tests/lot3-v5-contrats-mineurs.test.js` | `tests/unit/magie/contrats-domaines.test.js` | 32 | 207 |
+| `tests/lot3-v5-contrats-mort.test.js` | `tests/unit/magie/contrats-domaines.test.js` | 11 | 207 |
+| `tests/lot3-v5-contrats-ombres.test.js` | `tests/unit/magie/contrats-domaines.test.js` | 14 | 207 |
+| `tests/lot3-v5-contrats-vie.test.js` | `tests/unit/magie/contrats-domaines.test.js` | 12 | 207 |
+| `tests/lot3-v5-retours-lot1.test.js` | `tests/unit/magie/contrats-domaines.test.js` | 10 | 207 |
+| `tests/lot3-v5-retours-lot2.test.js` | `tests/unit/magie/contrats-domaines.test.js` | 10 | 207 |
+| `tests/lot3-v5-contrats-elfiques.test.js` | `tests/unit/magie/contrats-elfiques-et-vents.test.js` | 42 | 203 |
+| `tests/lot3-v5-contrats-haute-magie.test.js` | `tests/unit/magie/contrats-elfiques-et-vents.test.js` | 44 | 203 |
+| `tests/lot3-v5-contrats-winds-of-magic.test.js` | `tests/unit/magie/contrats-elfiques-et-vents.test.js` | 82 | 203 |
+| `tests/lot3-v5-retours-lot3.test.js` | `tests/unit/magie/contrats-elfiques-et-vents.test.js` | 6 | 203 |
+| `tests/lot3-v5-retours-lot4.test.js` | `tests/unit/magie/contrats-elfiques-et-vents.test.js` | 13 | 203 |
+| `tests/lot3-v5-retours-lot5a.test.js` | `tests/unit/magie/contrats-elfiques-et-vents.test.js` | 8 | 203 |
+| `tests/lot3-v5-retours-lot5b.test.js` | `tests/unit/magie/contrats-elfiques-et-vents.test.js` | 8 | 203 |
+| `tests/lot3-v5-magic-33.test.js` | `tests/unit/magie/contrats-livre-v5.test.js` | 25 | 25 |
+| `tests/p4d-magic-summon-fuzz.test.js` | `tests/unit/magie/traditions-et-invocations.test.js` | 1 | 368 |
+| `tests/p4d-magic-summon-turn.test.js` | `tests/unit/magie/traditions-et-invocations.test.js` | 13 | 368 |
+| `tests/pro-b3-invocations.test.js` | `tests/unit/magie/traditions-et-invocations.test.js` | 4 | 368 |
+| `tests/pro-d1-characterization.test.js` | `tests/unit/magie/traditions-et-invocations.test.js` | 3 | 368 |
+| `tests/pro-d12-grande-gueule.test.js` | `tests/unit/magie/traditions-et-invocations.test.js` | 30 | 368 |
+| `tests/pro-d13-petite-waaagh.test.js` | `tests/unit/magie/traditions-et-invocations.test.js` | 32 | 368 |
+| `tests/pro-d14-grande-waaagh.test.js` | `tests/unit/magie/traditions-et-invocations.test.js` | 34 | 368 |
+| `tests/pro-d15-lustria-haute-magie.test.js` | `tests/unit/magie/traditions-et-invocations.test.js` | 18 | 368 |
+| `tests/pro-d16-magie-elfique.test.js` | `tests/unit/magie/traditions-et-invocations.test.js` | 64 | 368 |
+| `tests/pro-d19-colleges-complements.test.js` | `tests/unit/magie/traditions-et-invocations.test.js` | 25 | 368 |
+| `tests/pro-d2-magie-naturelle.test.js` | `tests/unit/magie/traditions-et-invocations.test.js` | 24 | 368 |
+| `tests/pro-d3-magie-naturelle-aote3.test.js` | `tests/unit/magie/traditions-et-invocations.test.js` | 21 | 368 |
+| `tests/pro-d4-sorcellerie.test.js` | `tests/unit/magie/traditions-et-invocations.test.js` | 23 | 368 |
+| `tests/pro-d5-demonologie.test.js` | `tests/unit/magie/traditions-et-invocations.test.js` | 13 | 368 |
+| `tests/pro-d6-necromancie.test.js` | `tests/unit/magie/traditions-et-invocations.test.js` | 16 | 368 |
+| `tests/pro-d7-attributs-characterization.test.js` | `tests/unit/magie/traditions-et-invocations.test.js` | 10 | 368 |
+| `tests/pro-d7-nurgle.test.js` | `tests/unit/magie/traditions-et-invocations.test.js` | 12 | 368 |
+| `tests/pro-d8-slaanesh.test.js` | `tests/unit/magie/traditions-et-invocations.test.js` | 10 | 368 |
+| `tests/pro-d9-tzeentch.test.js` | `tests/unit/magie/traditions-et-invocations.test.js` | 11 | 368 |
+| `tests/pro-q7-demon-expiration.test.js` | `tests/unit/magie/traditions-et-invocations.test.js` | 4 | 368 |

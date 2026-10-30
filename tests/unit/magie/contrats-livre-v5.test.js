@@ -1,18 +1,13 @@
+import { test, describe } from 'node:test';
+import assert from 'node:assert/strict';
+import { getSpellContract, getAllSpellContracts, validateSpellFingerprint, previewSpellExecution, applySpellExecution } from '../../../js/core/v5-spell-contracts.js';
+import { createStore } from '../../../js/core/store.js';
+
+describe('contrats du livre de base V5', () => {
 /**
  * Suite de tests Phase 3.3 — Sorts du Livre V5 (116 contrats contrôlés)
  * Conforme au Cahier des charges Lot 3 et au Cadrage Magie V5.
  */
-
-import { test } from 'node:test';
-import assert from 'node:assert/strict';
-import {
-  getSpellContract,
-  getAllSpellContracts,
-  validateSpellFingerprint,
-  previewSpellExecution,
-  applySpellExecution
-} from '../js/core/v5-spell-contracts.js';
-import { createStore } from '../js/core/store.js';
 
 // ============================================================================
 // 1. VÉRIFICATION DES 116 CONTRATS V5
@@ -1304,6 +1299,4 @@ test('Second Contrôle Codex Complément P1 : Validation du nombre de cibles (ba
   assert.equal(daemonbaneOnDaemon.valid, true);
   assert.equal(daemonbaneOnDaemon.ready, true);
 });
-
-
-
+});

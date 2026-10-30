@@ -16,7 +16,7 @@
           "mode": "assisted",
           "text": "Familier lié et aide possible confirmés : Avantage V5 en Focalisation, Langue (Magick), Survie en extérieur ou Perception de nature magique. Choix explicite d’inversion.",
           "magicRegistry": true,
-          "executionProbe": "tests/lot3-v5-high-talent-coverage.test.js#talent-animal-assistant/magic:0"
+          "executionProbe": "tests/unit/magie/catalogue-et-couverture.test.js#talent-animal-assistant/magic:0"
         }
       ]
     },
@@ -33,7 +33,7 @@
           "mode": "assisted",
           "text": "Familier lié et aide possible confirmés : +2 DR aux Tests concernés de Focalisation, Langue (Magick), Savoir (Magie) et Recherche magique ; aucun Avantage supplémentaire.",
           "magicRegistry": true,
-          "executionProbe": "tests/lot3-v5-high-talent-coverage.test.js#talent-magical-assistant/magic:0"
+          "executionProbe": "tests/unit/magie/catalogue-et-couverture.test.js#talent-magical-assistant/magic:0"
         }
       ]
     },
@@ -50,7 +50,7 @@
           "mode": "automatic",
           "text": "Tout Test de Focalisation Qhaysh, réussi ou non : +1 DR par rang ; gain de réserve seulement sur réussite.",
           "magicRegistry": true,
-          "executionProbe": "tests/lot3-v5-high-talent-coverage.test.js#talent-lileath-s-blessing/magic:0"
+          "executionProbe": "tests/unit/magie/catalogue-et-couverture.test.js#talent-lileath-s-blessing/magic:0"
         },
         {
           "id": "magic:1",
@@ -134,14 +134,14 @@
           "mode": "assisted",
           "text": "Un d100 et un choix par cible pour inverser les Tests secondaires de résistance aux effets de sort.",
           "magicRegistry": true,
-          "executionProbe": "tests/lot3-v5-high-talent-coverage.test.js#talent-magic-defiance/magic:0"
+          "executionProbe": "tests/unit/magie/catalogue-et-couverture.test.js#talent-magic-defiance/magic:0"
         },
         {
           "id": "magic:1",
           "mode": "assisted",
           "text": "Annuler un sort affectant la cible : 1 Chance, une fois par aventure explicitement commencée ; paiement et quota réversibles et persistants.",
           "magicRegistry": true,
-          "executionProbe": "tests/lot3-v5-high-talent-coverage.test.js#talent-magic-defiance/magic:1"
+          "executionProbe": "tests/unit/magie/catalogue-et-couverture.test.js#talent-magic-defiance/magic:1"
         }
       ]
     },
@@ -158,7 +158,7 @@
           "mode": "assisted",
           "text": "Choix de réduction de 20 du jet Mineur, seulement pour le talent acquis ; résultat sous 1 annulé ; interdictions d’atténuation prioritaires.",
           "magicRegistry": true,
-          "executionProbe": "tests/lot3-v5-high-talent-coverage.test.js#talent-instinctive-diction/magic:0"
+          "executionProbe": "tests/unit/magie/catalogue-et-couverture.test.js#talent-instinctive-diction/magic:0"
         }
       ]
     },
@@ -214,7 +214,7 @@
           "mode": "assisted",
           "text": "Deux jets d’incident et choix explicite ; Mineur au rang 1, Majeur au rang 2. Aucun dé ou choix implicite.",
           "magicRegistry": true,
-          "executionProbe": "tests/lot3-v5-high-talent-coverage.test.js#talent-aethyric-attunement/magic:0"
+          "executionProbe": "tests/unit/magie/catalogue-et-couverture.test.js#talent-aethyric-attunement/magic:0"
         }
       ]
     },
@@ -231,7 +231,7 @@
           "mode": "automatic",
           "text": "Surplus de Haute Magie réussi : +1 DR par rang disponible pour la surpuissance ; plafond BI + BFM conservé.",
           "magicRegistry": true,
-          "executionProbe": "tests/lot3-v5-high-talent-coverage.test.js#talent-high-magic/magic:0"
+          "executionProbe": "tests/unit/magie/catalogue-et-couverture.test.js#talent-high-magic/magic:0"
         },
         {
           "id": "magic:1",
@@ -254,21 +254,21 @@
           "mode": "assisted",
           "text": "Source canonique du Vent et distance réelle saisie, au plus 8 yards : +1 DR à un sort déjà réussi, sans cumul entre auras.",
           "magicRegistry": true,
-          "executionProbe": "tests/lot3-v5-high-talent-coverage.test.js#talent-suffuse-with/magic:0"
+          "executionProbe": "tests/unit/magie/catalogue-et-couverture.test.js#talent-suffuse-with/magic:0"
         },
         {
           "id": "magic:1",
           "mode": "assisted",
           "text": "Choix de substitution de la compétence autorisée pour le Vent par Focalisation commune.",
           "magicRegistry": true,
-          "executionProbe": "tests/lot3-v5-high-talent-coverage.test.js#talent-suffuse-with/magic:1"
+          "executionProbe": "tests/unit/magie/catalogue-et-couverture.test.js#talent-suffuse-with/magic:1"
         },
         {
           "id": "magic:2",
           "mode": "assisted",
           "text": "Aqshy donne accès à Frénésie et permet de remplacer la FM du Test d’entrée par Focalisation ; aucun remplacement FM ordinaire. Les autres Vents substituent seulement les compétences listées. Le Vent perceptible par Seconde vue reste un rappel descriptif.",
           "magicRegistry": true,
-          "executionProbe": "tests/lot3-v5-cloture.test.js#talent-suffuse-with/magic:2"
+          "executionProbe": "tests/unit/magie/catalogue-et-couverture.test.js#talent-suffuse-with/magic:2"
         }
       ]
     },
@@ -307,21 +307,21 @@
           "mode": "assisted",
           "text": "Contemplation, Test de Prière et tous les d10 de durée saisis ; effet temporaire et expiration.",
           "magicRegistry": true,
-          "executionProbe": "tests/lot3-v5-high-talent-coverage.test.js#talent-mind-over-body/magic:0"
+          "executionProbe": "tests/unit/magie/catalogue-et-couverture.test.js#talent-mind-over-body/magic:0"
         },
         {
           "id": "magic:1",
           "mode": "automatic",
           "text": "Pendant la contemplation : immunité aux États explicitement liés à la douleur ; au rang 2, immunité Aveuglé.",
           "magicRegistry": true,
-          "executionProbe": "tests/lot3-v5-high-talent-coverage.test.js#talent-mind-over-body/magic:1"
+          "executionProbe": "tests/unit/magie/catalogue-et-couverture.test.js#talent-mind-over-body/magic:1"
         },
         {
           "id": "magic:2",
           "mode": "assisted",
           "text": "Rang 3 : dépenser 1 Chance pendant la contemplation pour ignorer les pénalités de Blessures Critiques des Tests étendus désignés par le MJ, sans supprimer les blessures (adaptation V5 locale de Resolve, HEPG p.101).",
           "magicRegistry": true,
-          "executionProbe": "tests/lot3-v5-high-talent-coverage.test.js#talent-mind-over-body/magic:2"
+          "executionProbe": "tests/unit/magie/catalogue-et-couverture.test.js#talent-mind-over-body/magic:2"
         },
         {
           "id": "magic:3",
@@ -344,7 +344,7 @@
           "mode": "assisted",
           "text": "Action gratuite de lancer NI ≤ 5 : talent et Élan requis, Élan consommé et aucun autre Test magique pendant ce Tour. Verrou levé au prochain Tour.",
           "magicRegistry": true,
-          "executionProbe": "tests/lot3-v5-high-talent-coverage.test.js#talent-war-wizard/magic:0"
+          "executionProbe": "tests/unit/magie/catalogue-et-couverture.test.js#talent-war-wizard/magic:0"
         }
       ]
     },
@@ -361,7 +361,7 @@
           "mode": "automatic",
           "text": "Attributs Feu/Lumière : immunité par acquisition canonique du Domaine correspondant ; un simple nom libre n’active aucun effet.",
           "magicRegistry": true,
-          "executionProbe": "tests/lot3-v5-high-talent-coverage.test.js#talent-arcane-magic/magic:0"
+          "executionProbe": "tests/unit/magie/catalogue-et-couverture.test.js#talent-arcane-magic/magic:0"
         },
         {
           "id": "magic:1",
@@ -466,7 +466,7 @@
           "mode": "assisted",
           "text": "Heure de méditation et Test de Prière +2 DR ; réussite conservée comme rappel de passage de Yenlui à Lumineux, sans écriture dans la fiche.",
           "magicRegistry": true,
-          "executionProbe": "tests/lot3-v5-high-talent-coverage.test.js#talent-cadai-meditation/magic:0"
+          "executionProbe": "tests/unit/magie/catalogue-et-couverture.test.js#talent-cadai-meditation/magic:0"
         }
       ]
     },
@@ -483,14 +483,14 @@
           "mode": "assisted",
           "text": "Contemplation, Test de Prière et dés de durée explicites ; interruption par distraction désignée ignorée au rang 1.",
           "magicRegistry": true,
-          "executionProbe": "tests/lot3-v5-high-talent-coverage.test.js#talent-eye-of-the-storm/magic:0"
+          "executionProbe": "tests/unit/magie/catalogue-et-couverture.test.js#talent-eye-of-the-storm/magic:0"
         },
         {
           "id": "magic:1",
           "mode": "automatic",
           "text": "Rang 2 actif : pénalités Exténué ignorées pour Focalisation et incantation.",
           "magicRegistry": true,
-          "executionProbe": "tests/lot3-v5-high-talent-coverage.test.js#talent-eye-of-the-storm/magic:1"
+          "executionProbe": "tests/unit/magie/catalogue-et-couverture.test.js#talent-eye-of-the-storm/magic:1"
         },
         {
           "id": "magic:2",
@@ -535,14 +535,14 @@
           "mode": "assisted",
           "text": "Au lancement, rappel automatique des observateurs canoniques et portée égale à leur Perception ; distance et direction à préciser par le MJ, sans identification de la magie.",
           "magicRegistry": true,
-          "executionProbe": "tests/lot3-v5-high-talent-coverage.test.js#talent-magical-sense/magic:0"
+          "executionProbe": "tests/unit/magie/catalogue-et-couverture.test.js#talent-magical-sense/magic:0"
         },
         {
           "id": "magic:1",
           "mode": "assisted",
           "text": "Perception d’un mouvement de magie avec perception des Vents confirmée : Avantage V5 et choix de d100.",
           "magicRegistry": true,
-          "executionProbe": "tests/lot3-v5-high-talent-coverage.test.js#talent-magical-sense/magic:1"
+          "executionProbe": "tests/unit/magie/catalogue-et-couverture.test.js#talent-magical-sense/magic:1"
         }
       ]
     },
@@ -559,7 +559,7 @@
           "mode": "automatic",
           "text": "Hors Puissance totale, réduit de 3 les DR d’un sort pour cette cible avant vérification de son NI ; ne pénalise pas les autres cibles.",
           "magicRegistry": true,
-          "executionProbe": "tests/lot3-v5-high-talent-coverage.test.js#talent-magic-resistance/magic:0"
+          "executionProbe": "tests/unit/magie/catalogue-et-couverture.test.js#talent-magic-resistance/magic:0"
         },
         {
           "id": "magic:1",
@@ -572,7 +572,7 @@
           "mode": "automatic",
           "text": "D-07 : contre Puissance totale, NI ignoré et −3 DR aux seuls effets de la cible résistante.",
           "magicRegistry": true,
-          "executionProbe": "tests/lot3-v5-cloture.test.js#talent-magic-resistance/magic:2"
+          "executionProbe": "tests/unit/magie/catalogue-et-couverture.test.js#talent-magic-resistance/magic:2"
         }
       ]
     },
@@ -589,21 +589,21 @@
           "mode": "assisted",
           "text": "Contemplation, Prière et dés de durée explicites ; expiration.",
           "magicRegistry": true,
-          "executionProbe": "tests/lot3-v5-high-talent-coverage.test.js#talent-sanctuary-of-the-mind/magic:0"
+          "executionProbe": "tests/unit/magie/catalogue-et-couverture.test.js#talent-sanctuary-of-the-mind/magic:0"
         },
         {
           "id": "magic:1",
           "mode": "automatic",
           "text": "Rang 1 actif : Corruption produite par les incidents d’incantation évitée ; rang 2 : +1 DR Recherche.",
           "magicRegistry": true,
-          "executionProbe": "tests/lot3-v5-high-talent-coverage.test.js#talent-sanctuary-of-the-mind/magic:1"
+          "executionProbe": "tests/unit/magie/catalogue-et-couverture.test.js#talent-sanctuary-of-the-mind/magic:1"
         },
         {
           "id": "magic:2",
           "mode": "assisted",
           "text": "Rang 3 actif : ignore seulement la pénalité de Yenlui identifiée, en conservant les autres malus.",
           "magicRegistry": true,
-          "executionProbe": "tests/lot3-v5-high-talent-coverage.test.js#talent-sanctuary-of-the-mind/magic:2"
+          "executionProbe": "tests/unit/magie/catalogue-et-couverture.test.js#talent-sanctuary-of-the-mind/magic:2"
         }
       ]
     },
