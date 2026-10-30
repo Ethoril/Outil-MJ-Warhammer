@@ -48,7 +48,7 @@ test('D2 : les natures (Mort-vivant, Démoniaque, Construct) sont des Traits li�
 test('D2 : gabarits en modificateurs signés (cases vides = aucun modificateur)', () => {
   assert.deepEqual(byName('Soldier').modifiers, { CC: 10, F: 10, E: 10, FM: 10 });
   assert.deepEqual(byName('Commander').modifiers, { CC: 30, CT: 30, F: 20, E: 20, I: 30, Ag: 20, FM: 30, Soc: 15 });
-  assert.deepEqual(byName('Spellcaster Lord').modifiers, { CC: 10, I: 20, Ag: 15, Int: 20, FM: 30, Soc: 10 });
+  assert.deepEqual(byName('Spellcaster Lord').modifiers, { CC: 10, I: 20, Ag: 15, Int: 30, FM: 20, Soc: 10 });
   assert.equal(byName('Soldier').stats, undefined);
 });
 

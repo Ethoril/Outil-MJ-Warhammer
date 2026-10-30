@@ -3339,11 +3339,20 @@
     },
     {
       "talentId": "talent-sprinter",
-      "field": "runningOrJumping",
-      "label": "Le Test sert à courir ou sauter",
+      "field": "running",
+      "label": "Le Test sert à courir",
       "type": "boolean",
       "skillGroupIds": [
         "skill-group-41_74_68_6c_e9_74_69_73_6d_65"
+      ]
+    },
+    {
+      "talentId": "talent-nose-for-trouble",
+      "field": "potentialDanger",
+      "label": "Le Test d’Intuition est lié à un danger potentiel",
+      "type": "boolean",
+      "skillGroupIds": [
+        "skill-group-49_6e_74_75_69_74_69_6f_6e"
       ]
     },
     {
@@ -3365,7 +3374,7 @@
       ]
     },
     {
-      "talentId": "talent-inspiring",
+      "talentId": "talent-commanding-presence",
       "field": "inCombat",
       "label": "Le Test de Commandement est effectué en combat",
       "type": "boolean",

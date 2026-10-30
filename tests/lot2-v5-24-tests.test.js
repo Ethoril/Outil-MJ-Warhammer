@@ -314,3 +314,12 @@ test('2.4 literal zero choice remains successful in durable result, reload, undo
   assert.equal(reloaded.getLog()[0].detail.test.success, true);
   assert.equal(reloaded.getLog()[0].detail.test.zeroOutcome, 'marginalSuccess');
 });
+
+test('v3 : les cases de contexte affichées suivent les contrats (Sprinter, Flair, Présence imposante, Exaltant)', () => {
+  const fields = (id, name) => applicableV5TalentTestFields(actor([id]), skill(name)).map(item => [item.field, item.label]);
+  assert.deepEqual(fields('sprinter', 'Athlétisme'), [['running', 'Le Test sert à courir']]);
+  assert.deepEqual(fields('nose-for-trouble', 'Intuition'), [['potentialDanger', 'Le Test d’Intuition est lié à un danger potentiel']]);
+  assert.deepEqual(fields('commanding-presence', 'Commandement'), [['inCombat', 'Le Test de Commandement est effectué en combat']]);
+  assert.deepEqual(fields('inspiring', 'Commandement'), []);
+  assert.deepEqual(fields('sprinter', 'Pari'), []);
+});

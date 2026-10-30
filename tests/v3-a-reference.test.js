@@ -49,3 +49,10 @@ test('v3 sorts : Effroi NI 2, Couronne Peur (2), Rhuin toute épée, Faux sans �
   assert.match(spell('Souffle').desc, /voisins dans Bonus de Force Mentale mètres/);
   assert.match(spell('Coup de vent').desc, /silhouette en cape/);
 });
+
+test('v3 Souffle : la note du contrat dit aussi Bonus de Force Mentale', async () => {
+  const { getSpellContract } = await import('../js/core/v5-spell-contracts.js');
+  const contract = getSpellContract('Souffle');
+  assert.doesNotMatch(JSON.stringify(contract), /voisins dans BI\b/);
+  assert.match(JSON.stringify(contract.assistedClauses), /voisins dans BFM mètres/);
+});

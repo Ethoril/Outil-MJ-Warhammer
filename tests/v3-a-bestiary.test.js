@@ -20,7 +20,7 @@ test('v3 gabarits : Lieutenant, Commandant et Seigneur lanceur', () => {
   assert.equal(lieutenant.nameFr, 'Lieutenant');
   assert.deepEqual(lieutenant.modifiers, { CC: 20, CT: 20, F: 20, E: 20, I: 20, Ag: 20, FM: 20, Soc: 10 });
   assert.deepEqual(profile('Commander').modifiers, { CC: 30, CT: 30, F: 20, E: 20, I: 30, Ag: 20, FM: 30, Soc: 15 });
-  assert.equal(profile('Spellcaster Lord').modifiers.FM, 30);
+  assert.deepEqual(profile('Spellcaster Lord').modifiers, { CC: 10, I: 20, Ag: 15, Int: 30, FM: 20, Soc: 10 });
 });
 
 test('v3 Ungrakk : profil p.355, Dextérité 35 imprimée', () => {
