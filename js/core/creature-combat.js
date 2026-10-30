@@ -91,7 +91,7 @@ const isZoo =participant => participant?.extensions?.v5?.bestiary?.book === 'L11
 
 /**
  * Plan d'une capacité de combat naturel. `options` : `charged` (Charge faite), `actorSize` / `targetSize` (rangs de Taille 0-6),
- * `momentum` (le MJ confirme qu'il reste de l'Élan), `used` (nombre d'utilisations déjà faites ce Tour), `ordinary` (attaque ordinaire de
+ * `printedValue` (l'attaque ordinaire porte un chiffre imprimé, gardé), `momentum` (le MJ confirme qu'il reste de l'Élan), `used` (nombre d'utilisations déjà faites ce Tour), `ordinary` (attaque ordinaire de
  * mêlée, ni gratuite ni bonus : le bonus de Taille V5 s'ajoute pour les livres V4, voir `sizeBonus` du plan).
  * Rend `{ available, costs, quota, damageFormula, effects, unresolved, reminders, receipt }`.
  */
@@ -110,8 +110,8 @@ export function planNaturalAttack(participant, key, options = {}) {
     // Livres V4 : « Bite +9 » est le total imprimé, Bonus de Force compris, donc la Valeur du Trait.
     if (/^\d+$/.test(detail) || (/^\+\s*\d+$/.test(detail) && !isV5Book(participant))) plan.damageFormula = detail.replace(/\D/g, '');
     else if (plus && bonus !== null) plan.damageFormula = `${bonus + Number(plus[1])}`;
-    // Livre de base V5 v3 p.356 : Morsure sans valeur imprimée = BF+3 ; un profil V5 garde sa valeur imprimée, comme une attaque ordinaire déduite du nom.
-    else if (!owned.inferred && !isV5Book(participant) && key === 'bite' && !detail) {
+    // Livre de base V5 v3 p.356 : Morsure sans aucune valeur imprimée (Trait ou attaque « Bite 6 ») = BF+3 ; un profil V5 garde sa valeur imprimée, comme une attaque ordinaire déduite du nom.
+    else if (!owned.inferred && !options.printedValue && !isV5Book(participant) && key === 'bite' && !detail) {
       if (bonus === null) plan.unresolved.push('Morsure : Force du participant inconnue, dégâts BF+3 à saisir.');
       else plan.damageFormula = `${bonus + 3}`;
     } else plan.damageFormula = 'imprimé';

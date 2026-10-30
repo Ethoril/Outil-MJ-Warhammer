@@ -266,7 +266,7 @@ function inferredNaturalPlan(actor, action, v5) {
   if (!key) return null;
   const context = v5?.context || {};
   const ordinary = v5?.kind !== 'ranged' && v5?.extraAttack !== true && !context.freeAttackTalent && !action.extensions?.v5?.freeAttack;
-  return planNaturalAttack(actor, key, { ordinary, charged: context.charged ?? v5?.charging, actorSize: naturalSizes(v5).actorSize, targetSize: naturalSizes(v5).targetSize });
+  return planNaturalAttack(actor, key, { ordinary, printedValue: /\d+\s*$/.test(String(action?.name ?? '')) || (hasOwn(action, 'damage') && action.damage !== '' && action.damage !== null && Number.isFinite(Number(action.damage))), charged: context.charged ?? v5?.charging, actorSize: naturalSizes(v5).actorSize, targetSize: naturalSizes(v5).targetSize });
 }
 const foldKey = text => String(text).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 // F2-H : actions de profil qui posent des états sans infliger de dégâts ni de critique (Immersion, lasso de soie, crachat).

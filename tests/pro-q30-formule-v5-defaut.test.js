@@ -35,7 +35,8 @@ test('Q30 Morsure « Strength Bonus + 1 » : BF + 1 ; sans valeur au Trait, BF+3
   assert.equal(planNaturalAttack(beast(['Bite (Strength Bonus + 1)']), 'bite').damageFormula, '6');
   assert.equal(planNaturalAttack(beast(['Bite']), 'bite').damageFormula, '8');
   const store = await fixture(beast(['Bite']));
-  assert.equal(hit(store, 'bare', { name: 'Bite', damage: 6 }), hit(store, 'bare-fixed', { name: 'Fixed', damage: 8 }), 'BF 5 + 3');
+  assert.equal(hit(store, 'bare', { name: 'Bite' }), hit(store, 'bare-fixed', { name: 'Fixed', damage: 8 }), 'BF 5 + 3 sans chiffre imprimé');
+  assert.equal(hit(store, 'bare-printed', { name: 'Bite', damage: 6 }), hit(store, 'bare-printed-fixed', { name: 'Fixed', damage: 6 }), 'chiffre imprimé gardé, même avec le Trait sans valeur');
 });
 
 test('Q30 Queue : l’attaque ordinaire prend BF+2 sans choisir l’Attaque naturelle ; une arme garde ses dégâts', async () => {
