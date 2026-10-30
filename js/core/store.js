@@ -93,7 +93,7 @@ import { hasManyHeads, headRegistryOf, applyHeadCritical, restoreHead, HEAD_STAT
 import { planPsychology, psychologyTraits } from './creature-psychology.js';
 import { planSwarm, planStateOnWound } from './creature-states.js';
 import { isSlann, contemplationOutcome } from './slann.js';
-const withV5 = (participant, change) => ({ ...participant, extensions: { ...(participant.extensions || {}), v5: change(participant.extensions?.v5 || {}) } });
+
 import { previewV5BrokenEscape, isV5BrokenEscapeActionBlocked, BROKEN_ESCAPE_SOURCE, BROKEN_ESCAPE_RULE_VERSION } from './v5-broken-escape.js';
 import { initialV5ReloadState, createV5ReloadState, beginV5Reload, advanceV5Reload } from './v5-reloading.js';
 import { previewV5ProjectileExtraction } from './v5-weapon-qualities.js';
@@ -158,68 +158,17 @@ import { sequelaPhase, sequelaEffectRows, sequelaCharacteristicTotals } from './
 
 export const KEY = { EXTENSIONS: 'wfrp.extensions.v1', RESERVE: 'wfrp.reserve.v1', COMBAT: 'wfrp.combat.v1', LOG: 'wfrp.log.v1', DICE: 'wfrp.dice.v1', TS: 'wfrp.sync.ts.v1' };
 
-function newV5ParticipantOrder(before, participants) {
-  const combat = before.combat;
-  if (before.extensions?.v5?.combatInitiativeInitialized) return insertParticipantsByInitiative(combat, participants);
-  if (!combat?.round || before.extensions?.v5?.orderRound !== combat.round || combat.orderMode === ORDER_MODES.MANUAL) return null;
-  return insertParticipantsByInitiative(combat, participants);
-}
-function registerNewV5Participants(before, next) {
-  const oldIds = new Set((before.combat?.participants || []).filter(participant => participant.zone === 'active').map(participant => participant.id));
-  if (!(next.combat?.participants || []).some(participant => participant.zone === 'active' && !oldIds.has(participant.id))) return;
-  if(before.extensions?.v5?.combatInitiativeInitialized){
-    // Une invocation qui apparaît après le tirage du Round 0 est un PNJ nouveau :
-    // son initiative doit être tirée immédiatement (d10 + Bonus d'Initiative),
-    // puis il rejoint l'ordre au rang correspondant. Les arrivées ordinaires
-    // conservent leur comportement de renfort.
-    if (before.combat?.round === 0) {
-      for (const participant of next.combat.participants || []) {
-        if (participant.zone !== 'active' || oldIds.has(participant.id)) continue;
-        const v5 = participant.extensions?.v5 || {};
-        const summoned = v5.summonedBySpellId || v5.divineSummon || v5.divineWrathSummon;
-        const characteristic = Number.isInteger(participant.caracs?.I) ? participant.caracs.I : participant.initiative;
-        if (!summoned || !Number.isInteger(characteristic) || characteristic < 0) continue;
-        const die = Math.floor(Math.random() * 10) + 1;
-        participant.extensions = { ...(participant.extensions || {}), v5: { ...v5,
-          combatInitiative: { die, characteristic, characteristicSource: Number.isInteger(participant.caracs?.I) ? 'caracs.I' : 'initiative',
-            bonus: Math.floor(characteristic / 10), score: die + Math.floor(characteristic / 10), initialized: true, summoned: true }
-        } };
-      }
-    }
-    const resolved=before.extensions?.v5?.combatInitiativeResolution||{},canonical={...before.combat,order:resolved.order||before.combat?.order||[]};
-    const automatic=insertParticipantsByInitiative(canonical,next.combat.participants);
-    const actual=before.combat?.orderMode===ORDER_MODES.MANUAL?insertParticipantsByInitiative(before.combat,next.combat.participants):automatic;
-    const byId=new Map((next.combat.participants||[]).map(row=>[row.id,row]));
-    const bench=(next.combat.order||[]).filter(id=>byId.get(id)?.zone==='bench'&&!actual.includes(id));
-    next.combat.order=[...actual,...bench];
-    next.extensions={...(next.extensions||{}),v5:{...(next.extensions?.v5||{}),combatInitiativeInitialized:true,combatInitiativeResolution:{...resolved,order:automatic}}};
-    return;
-  }
-  const order = newV5ParticipantOrder(before, next.combat.participants);
-  if (order) next.combat.order = order;
-}
-function withoutCombatInitiativeResolution(extensions) {
-  const next={...(extensions||{})},v5={...(extensions?.v5||{})};
-  delete v5.combatInitiativeInitialized; delete v5.combatInitiativeResolution; delete v5.orderRound;
-  next.v5=v5; return next;
-}
-function freshCombatScopedV5(value, combatScopeId = uid()) {
-  const { combatActions, standardTurnActions, ...v5 } = value || {};
-  return { ...v5, combatScopeId, turnIndex: 1 };
-}
-function clearV5FortuneAdvantageDeclaration(envelope,actorId){
-  const v5=envelope.extensions?.v5||{},rows=v5.fortuneAdvantageDeclarations||[];
-  if(!rows.some(row=>row.actorId===actorId))return envelope;
-  return {...envelope,extensions:{...(envelope.extensions||{}),v5:{...v5,fortuneAdvantageDeclarations:rows.filter(row=>row.actorId!==actorId)}}};
-}
-function clearMountedRelation(participant) {
-  if (!participant?.extensions?.v5 || (participant.extensions.v5.mounted !== true && !participant.extensions.v5.mountId)) return participant;
-  return withV5(participant, v5 => { const { mountId, ...rest } = v5; return { ...rest, mounted: false }; });
-}
-function dismountLinkedRiders(participants, mountId) {
-  return (participants || []).map(participant => participant?.extensions?.v5?.mounted === true
-    && participant.extensions.v5.mountId === mountId ? clearMountedRelation(participant) : participant);
-}
+import {
+  withV5,
+  newV5ParticipantOrder,
+  registerNewV5Participants,
+  withoutCombatInitiativeResolution,
+  freshCombatScopedV5,
+  clearV5FortuneAdvantageDeclaration,
+  clearMountedRelation,
+  dismountLinkedRiders
+} from './store/participant-registry.js';
+
 
 export function createStore({ storage = typeof localStorage !== 'undefined' ? localStorage : null, sync = null, persistence = null, persistenceFactory = null, contextId = 'guest', divineAuthority = 'MJ', appVersion = 'unknown', bus = null, now = () => new Date().toLocaleTimeString(), onSyncStatus = null, onLocalStatus = null, onReady = null } = {}) {
   const CLIENT_ID = (typeof crypto !== 'undefined' && crypto.randomUUID) ? crypto.randomUUID() : uid();
