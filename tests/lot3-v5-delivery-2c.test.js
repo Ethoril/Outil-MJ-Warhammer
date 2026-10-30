@@ -86,26 +86,30 @@ const zombieAttack = (store, { actorId = 'zombie', targetId = 'mage' } = {}) => 
   defense: { base: 40, roll: 85, v5: { kind: 'melee', choice: 'keep' } } });
 const withUndead = () => [wizard('mage'), wizard('zombie', { camp: 'ennemi', tags: ['Mort-vivant'] }), wizard('brigand', { camp: 'ennemi' })];
 
-test('A-02 Faux de Shyish — drapeau porté par un effet de sort qui expire ; Mort-vivant engagé sans Avantage, Élan conservé', async () => {
-  const store = await combat(...withUndead());
-  const before = zombieAttack(store);
-  assert.equal(before.test.advantage.advantage.length, 1, 'sans Faux : Avantage d’Élan du Mort-vivant');
+test('A-02 Faux de Shyish (v3) — drapeau porté par un effet de sort qui expire ; Mort-vivant engagé ne gagne pas d’Élan, garde Avantage et Élan déjà acquis', async () => {
+  const noMomentum = id => wizard(id, { camp: 'ennemi', tags: ['Mort-vivant'], extensions: { v5: { hasMomentum: false } } });
+  const store = await combat(wizard('mage'), noMomentum('zombie'), wizard('brigand', { camp: 'ennemi', extensions: { v5: { hasMomentum: false } } }));
+  const gain = (id, targetId = 'mage') => zombieAttack(store, { actorId: id, targetId }).momentum.find(row => row.participantId === id)?.after;
+  assert.equal(gain('zombie'), true, 'sans Faux : le Mort-vivant gagne l’Élan en gagnant l’opposition');
   await store.applySpellExecution('La Faux de Shyish', { actorId: 'mage', targetIds: ['mage'], sl: 12 });
   const mage = person(store, 'mage');
   const effect = mage.extensions.v5.spellEffects.find(e => e.spellName === 'La Faux de Shyish');
   assert.ok(effect, 'effet de sort créé');
   assert.equal(effect.expiresAtRound, 1 + 4, 'BFM Rounds');
   assert.equal(mage.extensions.v5.scytheOfShyishActive, undefined, 'plus de drapeau à plat jamais relu');
-  const attack = zombieAttack(store);
-  assert.equal(attack.test.advantage.advantage.length, 0, 'le Mort-vivant attaquant n’a plus d’Avantage');
-  assert.equal(person(store, 'zombie').extensions.v5.hasMomentum, true, 'Élan conservé');
-  const defence = store.previewResolution({ actorId: 'mage', targetId: 'zombie', action: { type: 'attack', attr: 'CC', base: 60, damageFormula: 'BF+4' }, roll: 25, v5: { kind: 'melee', choice: 'keep' },
-    defense: { base: 40, roll: 85, v5: { kind: 'melee', choice: 'keep' } } });
-  assert.equal(defence.defenderTest.advantage.advantage.length, 0, 'le Mort-vivant qui défend contre le porteur non plus');
-  const living = zombieAttack(store, { actorId: 'brigand' });
-  assert.equal(living.test.advantage.advantage.length, 1, 'un vivant garde son Avantage');
-  const expired = await store.expireSpellEffects('mage', { currentRound: 99 });
-  assert.equal(zombieAttack(store).test.advantage.advantage.length, 1, 'après expiration, l’Avantage revient');
+  assert.equal(gain('zombie'), false, 'le Mort-vivant engagé ne gagne pas d’Élan');
+  assert.equal(gain('brigand'), true, 'un vivant gagne l’Élan');
+  assert.equal(gain('mage', 'zombie'), true, 'le porteur gagne l’Élan');
+  const defence = store.previewResolution({ actorId: 'mage', targetId: 'zombie', action: { type: 'attack', attr: 'CC', base: 60, damageFormula: 'BF+4' }, roll: 85, v5: { kind: 'melee', choice: 'keep' },
+    defense: { base: 40, roll: 25, v5: { kind: 'melee', choice: 'keep' } } });
+  assert.equal(defence.momentum.find(row => row.participantId === 'zombie').after, false, 'le Mort-vivant qui défend avec succès ne gagne pas non plus d’Élan');
+  const armed = await combat(wizard('mage'), wizard('zombie', { camp: 'ennemi', tags: ['Mort-vivant'] }));
+  await armed.applySpellExecution('La Faux de Shyish', { actorId: 'mage', targetIds: ['mage'], sl: 12 });
+  const kept = zombieAttack(armed);
+  assert.equal(kept.test.advantage.advantage.length, 1, 'l’Avantage lié à l’Élan déjà possédé n’est plus supprimé');
+  assert.equal(person(armed, 'zombie').extensions.v5.hasMomentum, true, 'Élan déjà acquis conservé');
+  await armed.expireSpellEffects('mage', { currentRound: 99 });
+  assert.equal(zombieAttack(armed).momentum.find(row => row.participantId === 'zombie').after, true);
 });
 
 test('A-02 Faux de Shyish — hallebarde Magique BF + BFM + 4 conférée, retirée à l’expiration', async () => {

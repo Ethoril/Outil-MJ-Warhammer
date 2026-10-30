@@ -9,9 +9,11 @@ const count = value => {
 };
 // Peur (V5 v3 p.183) : l'Élan est perdu à l'instant où la Peur s'installe et ne se regagne pas tant qu'elle dure.
 const LOSS_REASONS = new Set(['oppositionLost', 'meleeTestFailed', 'woundsLost', 'conditionAcquired', 'combatPause', 'combatEnd']);
-export function previewMomentumEvents({ hasMomentum, events = [], exceptions = [], frightened = false } = {}) {
+// gainBlocked : le participant ne peut pas gagner d'Élan (Faux de Shyish, V5 v3 p.247) mais garde celui qu'il a.
+export function previewMomentumEvents({ hasMomentum, events = [], exceptions = [], frightened = false, gainBlocked = false } = {}) {
   let momentum = bool(hasMomentum, 'Élan');
   bool(frightened, 'Peur');
+  bool(gainBlocked, 'Gain bloqué');
   if (!Array.isArray(events) || !Array.isArray(exceptions)) throw new TypeError('Événements d’Élan invalides');
   const guards = exceptions.map(item => {
     if (!item || !LOSS_REASONS.has(item.reason) || typeof item.talentId !== 'string' || !item.talentId.trim()) throw new TypeError('Exception d’Élan invalide');
@@ -35,7 +37,7 @@ export function previewMomentumEvents({ hasMomentum, events = [], exceptions = [
     else throw new TypeError('Événement d’Élan non couvert');
     const before = momentum;
     const preventedBy = guards.filter(guard => guard.applies && guard.reason === effect).map(guard => guard.talentId);
-    if (effect === 'gain') momentum = frightened ? false : true;
+    if (effect === 'gain') momentum = frightened ? false : gainBlocked ? momentum : true;
     else if (effect === 'spend') momentum = false;
     else if (effect !== 'none' && !preventedBy.length) momentum = false;
     trace.push({ eventId: event.id, effect, before, after: momentum, preventedBy });

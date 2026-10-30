@@ -819,9 +819,9 @@ export function testSapheryWard(roll1d10, calculatedWard) {
 
 /**
  * Application des règles de la Faux de Shyish en combat.
- * RÈGLE CONFIRMÉE :
- * - Les Morts-vivants engagés au corps à corps contre le porteur ne peuvent pas bénéficier d'Avantage V5 à leurs tests.
- * - N'annule pas leur Élan (Momentum).
+ * RÈGLE (livre de base V5 EN v3, p.247) :
+ * - Les Morts-vivants engagés avec le porteur ne gagnent pas d'Élan (Momentum) ; l'Élan déjà acquis et l'Avantage restent.
+ * - Remplace l'arbitrage v2 du MJ (« pas d'Avantage, Élan conservé »).
  */
 export function applyScytheOfShyishRules({
   target,
@@ -834,14 +834,16 @@ export function applyScytheOfShyishRules({
 
   if (isTargetUndeadCandidate && isEngagedWithWielder) {
     return {
-      advantageSuppressed: true,
-      allowedAdvantages: [], // Avantage neutralisé contre le porteur
-      momentumPreserved: Boolean(hasMomentum), // L'Élan reste conservé
-      summary: 'Faux de Shyish : Mort-vivant engagé privé d’Avantage V5. Son Élan reste intact.'
+      momentumGainBlocked: true, // aucun gain d'Élan contre le porteur
+      advantageSuppressed: false,
+      allowedAdvantages: advantageSources,
+      momentumPreserved: Boolean(hasMomentum), // l'Élan déjà acquis reste
+      summary: 'Faux de Shyish : Mort-vivant engagé, il ne gagne pas d’Élan.'
     };
   }
 
   return {
+    momentumGainBlocked: false,
     advantageSuppressed: false,
     allowedAdvantages: advantageSources,
     momentumPreserved: Boolean(hasMomentum),

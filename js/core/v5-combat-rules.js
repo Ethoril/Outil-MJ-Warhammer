@@ -1,5 +1,4 @@
 import {enforceMagicTestRestrictions,activeMagicTalent} from './v5-magic-talents.js';
-import {applyScytheOfShyishRules} from './v5-magic-arbitrations.js';
 import {transformationRestrictions} from './v5-magic-combat.js';
 import {getReferenceCatalogue} from './reference-catalog.js';
 import {familiarSupport,withCompanionTalents} from './familiars.js';
@@ -367,8 +366,6 @@ export function buildCombatTest(normalized, role = 'actor') {
     if (kept[0]?.amount < 0) kept[0].amount = Math.min(0, kept[0].amount + sequelae.offHand.reduction);
   }
   if((actor.states||[]).some(s=>s.restriction==='noMomentumOrAdvantage'&&sourceActive(s)))advantages.length=0;
-  // Faux de Shyish (V5 p. 247) : un Mort-vivant engagé avec le porteur n'a pas d'Avantage ; son Élan (hasMomentum) n'est pas touché.
-  if(kind==='melee'&&target?.extensions?.v5?.specialStates?.scytheOfShyish){const scythe=applyScytheOfShyishRules({target:actor,isEngagedWithWielder:true,advantageSources:advantages,hasMomentum:hasMomentum(actor)});if(scythe.advantageSuppressed)advantages.splice(0,advantages.length,...scythe.allowedAdvantages);}
   if(talentModifiers.ignoreNegative){for(const row of modifiers)if(row.amount<0)row.amount=0;disadvantages.length=0;}
   // Les pertes durables ne sont pas des pénalités d'État : aucun talent d'immunité aux États ne les efface.
   modifiers.push(...sequelae.modifiers); advantages.push(...sequelae.advantages); disadvantages.push(...sequelae.disadvantages);

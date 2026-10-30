@@ -29,6 +29,7 @@ import {divineSocialRestriction} from './v5-divine-access.js';
 import { previewV5Test,selectV5Test, resolveV5Opposition, reverseV5Roll,refreshV5ResultTier } from './v5-roll.js';
 import { buildV5RollDecision } from './v5-decision.js';
 import { previewMomentumEvents } from './v5-momentum.js';
+import { applyScytheOfShyishRules } from './v5-magic-arbitrations.js';
 import { buildCombatTest, hasMomentum, withMomentum, loseMomentumUnderFear, isFrightened, conditionLevels, inferV5Kind,v5ShieldDefense, V5_COMBAT_RULE_VERSION } from './v5-combat-rules.js';
 import { evaluateV5Talents, previewV5TalentConditions, currentV5TalentHashes, V5_TALENT_IDS } from './v5-talents.js';
 import { getV5CriticalEffect, V5_CRITICAL_TABLE_VERSION } from '../data/v5-crits.js';
@@ -1690,9 +1691,12 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   if(defenderCritical?.application)defenderCritical.application.states=actorConditionApplication.filter(row=>row.source?.kind==='critical');
   defenderWeaponConditions.applied=actorConditionApplication.filter(row=>row.source?.keywordId==='assommante');
   const momentum = [];
-  const planMomentum = (participant, events, exceptions=[]) => {
+  // Faux de Shyish (V5 v3 p.247) : le Mort-vivant en mêlée avec le porteur ne gagne pas d'Élan.
+  const scytheBlocksGain = (participant, other) => (actorPlan.kind === 'melee' || defenderPlan?.kind === 'melee') && other?.extensions?.v5?.specialStates?.scytheOfShyish === true
+    && applyScytheOfShyishRules({ target: participant, isEngagedWithWielder: true }).momentumGainBlocked;
+  const planMomentum = (participant, events, exceptions=[], other = null) => {
     if (!participant?.id) return;
-    momentum.push({ participantId: participant.id, ...previewMomentumEvents({ hasMomentum: hasMomentum(participant), events, exceptions, frightened: isFrightened(participant) }) });
+    momentum.push({ participantId: participant.id, ...previewMomentumEvents({ hasMomentum: hasMomentum(participant), events, exceptions, frightened: isFrightened(participant), gainBlocked: scytheBlocksGain(participant, other) }) });
   };
   const actorEvents = [], targetEvents = [];
   const event = (type, data = {}) => ({ id: `${normalized.resolutionId}:${type}`, type, ...data });
@@ -1719,7 +1723,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   actorEvents.push(event('conditionAcquired', { instances: conditionChanges.actor?.acquiredInstances || 0 }));
   const reversal=evaluateV5Talents(target,{event:'momentum.beforeLoss',role:'defender',context:{kind:defenderPlan?.kind||'none',test:{success:defenderTest?.success||false},attack:{hit:Boolean(hit&&attackType(action.type))}}});supplementaryTalentPlans.push(reversal);
   const resoluteActor=resoluteException(normalized,conditionChanges.actor?.participant||actor,normalized.v5,conditionChanges.actor?.acquiredInstances||0),resoluteTarget=resoluteException(normalized,conditionChanges.target?.participant||target,normalized.defense?.v5,conditionChanges.target?.acquiredInstances||0);supplementaryTalentPlans.push(...resoluteActor.plans,...resoluteTarget.plans);unresolved.push(...resoluteActor.unresolved,...resoluteTarget.unresolved);
-  planMomentum(actor, actorEvents,resoluteActor.exceptions);if(slash.momentumSpent){const change=momentum.find(row=>row.participantId===actor?.id);if(change){change.after=false;change.details=[...(change.details||[]),{eventId:normalized.resolutionId+':entaille-spend',effect:'spend',before:true,after:false,preventedBy:[]}];}} planMomentum(target, targetEvents,[...resoluteTarget.exceptions,...reversal.proposals.filter(x=>x.op==='preventMomentumLoss').map(x=>({reason:x.key,talentId:x.origins[0].talentId,applies:true}))]);
+  planMomentum(actor, actorEvents,resoluteActor.exceptions,target);if(slash.momentumSpent){const change=momentum.find(row=>row.participantId===actor?.id);if(change){change.after=false;change.details=[...(change.details||[]),{eventId:normalized.resolutionId+':entaille-spend',effect:'spend',before:true,after:false,preventedBy:[]}];}} planMomentum(target, targetEvents,[...resoluteTarget.exceptions,...reversal.proposals.filter(x=>x.op==='preventMomentumLoss').map(x=>({reason:x.key,talentId:x.origins[0].talentId,applies:true}))],actor);
   if(weaponTrap?.disposition==='caught'){
     const change=momentum.find(row=>row.participantId===target?.id);
     if(!change?.after)unresolved.push('Piège-lame : un Élan doit être disponible après le Test de défense pour saisir l’arme.');

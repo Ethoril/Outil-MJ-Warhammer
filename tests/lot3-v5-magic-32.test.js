@@ -507,7 +507,7 @@ test('Arbitrages V5 — Bouclier de Saphery : pas de plancher, seuil <= 1 réuss
   assert.equal(w9.automaticSuccess, true);
 });
 
-test('Arbitrages V5 — Faux de Shyish : Morts-vivants engagés privés d’Avantage V5, Élan conservé', () => {
+test('Arbitrages V5 — Faux de Shyish (v3) : Morts-vivants engagés ne gagnent pas d’Élan, Avantage non supprimé', () => {
   const undeadEngaged = applyScytheOfShyishRules({
     isUndead: true,
     isEngagedWithWielder: true,
@@ -515,9 +515,10 @@ test('Arbitrages V5 — Faux de Shyish : Morts-vivants engagés privés d’Avan
     hasMomentum: true
   });
 
-  assert.equal(undeadEngaged.advantageSuppressed, true);
-  assert.deepEqual(undeadEngaged.allowedAdvantages, [], 'Avantage neutralisé contre le porteur');
-  assert.equal(undeadEngaged.momentumPreserved, true, 'L’Élan reste intact !');
+  assert.equal(undeadEngaged.momentumGainBlocked, true, 'aucun gain d’Élan');
+  assert.equal(undeadEngaged.advantageSuppressed, false, 'l’Avantage n’est plus supprimé (v2)');
+  assert.deepEqual(undeadEngaged.allowedAdvantages, [{ id: 'adv-1' }, { id: 'adv-2' }]);
+  assert.equal(undeadEngaged.momentumPreserved, true, 'l’Élan déjà acquis reste');
 
   const livingEngaged = applyScytheOfShyishRules({
     isUndead: false,
@@ -526,7 +527,7 @@ test('Arbitrages V5 — Faux de Shyish : Morts-vivants engagés privés d’Avan
     hasMomentum: true
   });
 
-  assert.equal(livingEngaged.advantageSuppressed, false, 'Cible vivante conserve ses Avantages');
+  assert.equal(livingEngaged.momentumGainBlocked, false, 'Cible vivante gagne l’Élan');
 });
 
 // ============================================================================

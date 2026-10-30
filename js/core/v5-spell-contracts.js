@@ -404,7 +404,7 @@ export function previewScytheOfShyish(caster) {
   return {
     spellName: 'La Faux de Shyish',
     casterId: caster?.id,
-    summary: 'La Faux de Shyish : hallebarde Magique (BF + BFM + 4) invoquée. Les Morts-vivants engagés contre le porteur sont privés d’Avantage V5 (Élan conservé).',
+    summary: 'La Faux de Shyish : hallebarde Magique (BF + BFM + 4) invoquée. Les Morts-vivants engagés avec le porteur ne gagnent pas d’Élan.',
     ready: true
   };
 }
