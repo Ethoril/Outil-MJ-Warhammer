@@ -224,6 +224,25 @@ function resolveReserveLoss(reserveSl, options, miscastContext) {
   return { lossRoll, actualLoss, miscast, missing };
 }
 
+/** Modificateurs communs d'un Test de Focalisation (gain comme pause, p.236) : difficulté, pénalité d'armure, Bénédiction de Lileath, modificateurs fournis. */
+function focalisationModifiers(participant, options, targetType, extra = []) {
+  const armorContext = calculateMagicArmorPenalty(participant, { wind: options.wind });
+  const armorPenalty = armorContext.penalty;
+
+  const difficultyModifier = Number(options.slModifier) || 0; // standard +0 DR
+  const extraModifiers = Array.isArray(options.slModifiers) ? options.slModifiers : [];
+  // HEPG p. 83 : Bénédiction de Lileath, +1 DR par niveau aux Tests de Focalisation (Qhaysh), réussis ou non.
+  const lileath = targetType === 'high' ? magicTalentRank(participant, 'lileath-s-blessing') : 0;
+  const slModifiers = [
+    ...(difficultyModifier !== 0 ? [{ id: 'difficulty', label: 'Difficulté', amount: difficultyModifier }] : []),
+    ...(armorPenalty !== 0 ? [{ id: 'armor', label: 'Pénalité d’armure', amount: armorPenalty }] : []),
+    ...(lileath > 0 ? [{ id: 'lileath-s-blessing', label: 'Bénédiction de Lileath', amount: lileath }] : []),
+    ...extra,
+    ...extraModifiers
+  ];
+  return { armorPenalty, armorContext, slModifiers };
+}
+
 /**
  * Prévisualisation d'une Action de Focalisation V5.
  * Pure et déterministe, SANS MUTATION D'ÉTAT.
@@ -249,19 +268,7 @@ export function previewChannelling(participant, options = {}) {
   const score = Number.isFinite(Number(options.score)) ? Number(options.score) : skill.score;
   const bfm = Number.isFinite(Number(options.bfm)) ? Number(options.bfm) : skill.bfm;
 
-  const armorContext = calculateMagicArmorPenalty(participant, { wind: options.wind });
-  const armorPenalty = armorContext.penalty;
-
-  const difficultyModifier = Number(options.slModifier) || 0; // standard +0 DR
-  const extraModifiers = Array.isArray(options.slModifiers) ? options.slModifiers : [];
-  // HEPG p. 83 : Bénédiction de Lileath, +1 DR par niveau aux Tests de Focalisation (Qhaysh), réussis ou non.
-  const lileath = targetType === 'high' ? magicTalentRank(participant, 'lileath-s-blessing') : 0;
-  const slModifiers = [
-    ...(difficultyModifier !== 0 ? [{ id: 'difficulty', label: 'Difficulté', amount: difficultyModifier }] : []),
-    ...(armorPenalty !== 0 ? [{ id: 'armor', label: 'Pénalité d’armure', amount: armorPenalty }] : []),
-    ...(lileath > 0 ? [{ id: 'lileath-s-blessing', label: 'Bénédiction de Lileath', amount: lileath }] : []),
-    ...extraModifiers
-  ];
+  const { armorPenalty, armorContext, slModifiers } = focalisationModifiers(participant, options, targetType);
 
   if (options.roll === undefined || options.roll === null) {
     return {
@@ -444,13 +451,17 @@ export function previewChannellingPause(participant, options = {}) {
   // La Focalisation du type de la réserve ; l'élémentaire de mer la lit sur sa Force (resolveChannellingSkill).
   const score = Number.isFinite(Number(options.score)) ? Number(options.score) : resolveChannellingSkill(participant, { type: currentReserve.type === 'high' ? 'high' : 'winds', wind: options.wind }).score;
 
-  const slModifiers = [{ id: 'pause-difficulty', label: 'Accessible (+2 DR)', amount: 2 },...(options.slModifiers || [])];
+  // Test de Focalisation (p.236) : mêmes modificateurs que le gain, plus l'Accessible (+2 DR).
+  const pauseType = currentReserve.type === 'high' ? 'high' : 'winds';
+  const { armorPenalty, slModifiers } = focalisationModifiers(participant, options, pauseType, [{ id: 'pause-difficulty', label: 'Accessible (+2 DR)', amount: 2 }]);
 
   if (options.roll === undefined || options.roll === null) {
     return {
       actionType: 'channelling-pause',
       currentReserve,
       score,
+      armorPenalty,
+      slModifiers,
       missing: ['roll'],
       ready: false
     };
@@ -461,9 +472,11 @@ export function previewChannellingPause(participant, options = {}) {
     score,
     roll,
     kind: 'test',
-    slModifiers
+    slModifiers,
+    advantageSources: options.advantageSources || [],
+    disadvantageSources: options.disadvantageSources || []
   });
-  const selectedTest = enforceMagicTestRestrictions(participant,selectV5Test(testPreview,'keep'),{magical:false});
+  const selectedTest = enforceMagicTestRestrictions(participant,selectV5Test(testPreview,'keep'));
   const success = selectedTest.success;
   const newReserve = success ? currentReserve : { type: null, sl: 0 };
 
@@ -471,6 +484,8 @@ export function previewChannellingPause(participant, options = {}) {
     actionType: 'channelling-pause',
     currentReserve,
     score,
+    armorPenalty,
+    slModifiers,
     roll,
     test: selectedTest,
     success,

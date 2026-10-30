@@ -58,6 +58,26 @@ test('v3 Pause de Focalisation (p.236) : Test de Focalisation Accessible (+2 DR)
   assert.equal(sea.score, 70, 'élémentaire de mer : sans compétence imprimée, Force + 10 (comme la Focalisation)');
 });
 
+test('v3 Pause de Focalisation : mêmes modificateurs que la Focalisation (armure, Lileath, avantage fourni, restrictions magiques)', async () => {
+  const { previewChannellingPause, previewChannelling } = await import('../js/core/v5-magic-channelling.js');
+  const mage = { id: 'm', name: 'm', caracs: { Int: 54, FM: 52, E: 38 }, equipment: [], states: [], wornArmorLocations: { body: 3 },
+    skills: [{ name: 'Focalisation', total: 70 }, { name: 'Focalisation (Haute Magie)', total: 70 }],
+    extensions: { v5: { channelling: { type: 'winds', sl: 6 } } } };
+  const pause = previewChannellingPause(mage, { roll: 60 });
+  assert.equal(pause.armorPenalty, -3);
+  assert.equal(pause.test.sl, 0, 'Accessible +2 DR, armure −3 DR sur 7 − 6 = 1');
+  assert.deepEqual(pause.slModifiers.map(row => row.id), ['armor', 'pause-difficulty']);
+  assert.equal(previewChannelling(mage, { roll: 60 }).armorPenalty, pause.armorPenalty, 'même pénalité que la Focalisation');
+  const lileath = { ...mage, wornArmorLocations: {}, talents: [{ id: 'talent-lileath-s-blessing', status: 'resolved', rank: 2 }], extensions: { v5: { channelling: { type: 'high', sl: 6 } } } };
+  const ids = preview => preview.test.details.modifiers.map(row => row.id);
+  assert.ok(ids(previewChannelling(lileath, { roll: 60, type: 'high' })).includes('lileath-s-blessing'), 'contrôle : la Focalisation applique Lileath');
+  assert.ok(ids(previewChannellingPause(lileath, { roll: 60 })).includes('lileath-s-blessing'), 'la pause aussi');
+  const advantaged = previewChannellingPause({ ...mage, wornArmorLocations: {} }, { roll: 60, advantageSources: [{ id: 'place', label: 'Lieu saturé' }] });
+  assert.ok(advantaged.test.advantage.advantage.some(row => row.id === 'place'), 'Avantage fourni pris en compte');
+  const capricious = previewChannellingPause({ ...mage, wornArmorLocations: {}, extensions: { v5: { channelling: { type: 'winds', sl: 6 }, specialStates: { forceFumbleOnDoubles: true } } } }, { roll: 33 });
+  assert.equal(capricious.success, false, 'restriction magique de la Fortune Capricieuse, comme à la Focalisation');
+});
+
 test('v3 attribut des Bêtes (p.245) : le lanceur gagne l’Élan, les ennemis vivants perdent le leur (alliés, morts-vivants et Peur exclus)', async () => {
   const { createStore } = await import('../js/core/store.js');
   const person = (id, camp, extra = {}) => ({ id, name: id, kind: camp === 'pj' ? 'PJ' : 'PNJ', camp, hp: 20, maxHp: 20, zone: 'active', init: 40, caracs: { CC: 40, F: 30, E: 30, FM: 50, Int: 40, I: 40, Ag: 40 }, skills: [], talents: [], states: [], equipment: [], extensions: { v5: { hasMomentum: true } }, ...extra });
