@@ -456,10 +456,10 @@ export function applyLoreAttribute(state, preview, options = {}) {
   if (casterEffects && options.caster) {
     const caster = structuredClone(options.caster);
     if (casterEffects.lore === 'beasts') {
-      // Le lanceur gagne l'Élan (sauf Peur) ; les ennemis vivants fournis par l'appelant (camp hostile) perdent le leur.
+      // Le lanceur gagne l'Élan (sauf Peur) ; les ennemis vivants fournis par l'appelant (camp hostile, ni banc ni morts) perdent le leur.
       updatedParticipants.set(caster.id, withMomentum(caster, true));
       for (const enemy of options.enemies || []) {
-        if (enemy.id === caster.id || !hasLivingMagicNature(enemy) || !(Number(enemy.hp) > 0)) continue;
+        if (enemy.id === caster.id || enemy.zone === 'bench' || enemy.extensions?.v5?.dead === true || !hasLivingMagicNature(enemy) || !(Number(enemy.hp) > 0)) continue;
         updatedParticipants.set(enemy.id, withMomentum(structuredClone(updatedParticipants.get(enemy.id) || enemy), false));
       }
     } else if (casterEffects.lore === 'heavens') {
