@@ -1,7 +1,7 @@
 /**
  * Clauses de sorts que le moteur ne calcule pas : chaque drapeau écrit par un contrat (`contract.effects`) y a son rappel chiffré,
  * affiché à l'exécution du sort. Un drapeau absent d'ici doit être lu par le moteur : le test « tout drapeau écrit est lu »
- * (tests/lot3-v5-engine-socle.test.js) échoue sinon. Sources : V5 pp. 242-255, WoM pp. 20-23 et sorts, HEPG pp. 80-89.
+ * (tests/unit/magie/lancement-focalisation.test.js) échoue sinon. Sources : V5 pp. 242-255, WoM pp. 20-23 et sorts, HEPG pp. 80-89.
  */
 import { casterCaracs } from './creature-abilities.js';
 const signed = value => (Number(value) > 0 ? '+' : '') + value;

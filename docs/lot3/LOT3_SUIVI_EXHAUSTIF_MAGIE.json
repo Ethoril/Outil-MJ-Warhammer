@@ -334,7 +334,7 @@
     },
     {
       "id": "T-L",
-      "file": "tests/lot3-v5-lileath-wiring.test.js",
+      "file": "tests/unit/magie/effets-et-arbitrages.test.js",
       "passed": 6,
       "scope": "cumul des couches/rang lanceur/expiration et Store"
     },
@@ -78456,7 +78456,7 @@
       "references": [
         "N-12"
       ],
-      "proof": "HEPG p.83 ; tests/lot3-v5-engine-socle.test.js (rang 2, score 60/jet 75 : −1 DR devient +1), tests/unit/magie/catalogue-et-couverture.test.js et tests/lot3-v5-lileath-wiring.test.js.",
+      "proof": "HEPG p.83 ; tests/unit/magie/lancement-focalisation.test.js (rang 2, score 60/jet 75 : −1 DR devient +1), tests/unit/magie/catalogue-et-couverture.test.js et tests/unit/magie/effets-et-arbitrages.test.js.",
       "executed": true,
       "tested": true,
       "notVerified": "Acquisition et affichage dans la fiche PJ non exercés ; les tests couvrent le moteur et le catalogue local.",
@@ -78476,7 +78476,7 @@
       "registryMode": "reminder",
       "status": "conforme",
       "references": [],
-      "proof": "HEPG p. 83 ; tests/lot3-v5-lileath-wiring.test.js : six tests, trois sources, rang du lanceur, cible non habilitante, expiration, PA/modificateurs et Store réels.",
+      "proof": "HEPG p. 83 ; tests/unit/magie/effets-et-arbitrages.test.js : six tests, trois sources, rang du lanceur, cible non habilitante, expiration, PA/modificateurs et Store réels.",
       "executed": true,
       "tested": true,
       "notVerified": "Autres protections/compositions et interface non exercées.",
@@ -79527,7 +79527,7 @@
       "resolution": {
         "date": "2026-10-13",
         "status": "conforme",
-        "proof": "tests/lot3-v5-engine-socle.test.js : Focalisation échouée avec Lileath rang 2 ; tests/unit/magie/catalogue-et-couverture.test.js : description et cache. HEPG p.83.",
+        "proof": "tests/unit/magie/lancement-focalisation.test.js : Focalisation échouée avec Lileath rang 2 ; tests/unit/magie/catalogue-et-couverture.test.js : description et cache. HEPG p.83.",
         "limits": "Acquisition et affichage dans la fiche PJ hors de cette recette."
       }
     }

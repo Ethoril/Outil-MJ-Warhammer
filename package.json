@@ -20,7 +20,7 @@
     "test:lot2-25-cloud": "powershell -NoProfile -ExecutionPolicy Bypass -File tests/run-lot2-v5-25-emulators.ps1",
     "test:lot2-25-browser": "node tests/lot2-v5-25-browser-runner.mjs",
     "test:magic-browser": "node tests/browser-magic-v5-smoke.mjs",
-    "test:magic-finalization": "node --test tests/lot3-v5-finalization.test.js",
+    "test:magic-finalization": "node --test tests/unit/magie/lancement-focalisation.test.js",
     "test:magic-cloud": "powershell -NoProfile -ExecutionPolicy Bypass -File tests/run-lot2-v5-25-emulators.ps1 -TestScript tests/lot3-v5-35-cloud-browser.mjs",
     "build:magic-local": "node tools/build-lot3-local-release.mjs",
     "test:magic-release": "node tests/lot3-v5-35-release-browser.mjs",

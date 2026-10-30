@@ -211,3 +211,40 @@ Ancien fichier `tests/<nom>.test.js` → nouveau fichier `tests/unit/<cible>.tes
 | `tests/pro-d8-slaanesh.test.js` | `tests/unit/magie/traditions-et-invocations.test.js` | 10 | 368 |
 | `tests/pro-d9-tzeentch.test.js` | `tests/unit/magie/traditions-et-invocations.test.js` | 11 | 368 |
 | `tests/pro-q7-demon-expiration.test.js` | `tests/unit/magie/traditions-et-invocations.test.js` | 4 | 368 |
+
+## R2-4 — magie B (moteur : lancement, incidents, effets, transformations)
+
+| Ancien fichier | Nouveau fichier | Tests avant | Tests après (cible) |
+|---|---|---|---|
+| `tests/lot3-v5-audit-confrontation.test.js` | `tests/unit/magie/effets-et-arbitrages.test.js` | 15 | 163 |
+| `tests/lot3-v5-audit-natures-import.test.js` | `tests/unit/magie/effets-et-arbitrages.test.js` | 8 | 163 |
+| `tests/lot3-v5-delivery-2a.test.js` | `tests/unit/magie/effets-et-arbitrages.test.js` | 16 | 163 |
+| `tests/lot3-v5-delivery-2a-corrections.test.js` | `tests/unit/magie/effets-et-arbitrages.test.js` | 17 | 163 |
+| `tests/lot3-v5-delivery-2a-final.test.js` | `tests/unit/magie/effets-et-arbitrages.test.js` | 7 | 163 |
+| `tests/lot3-v5-delivery-2b.test.js` | `tests/unit/magie/effets-et-arbitrages.test.js` | 20 | 163 |
+| `tests/lot3-v5-delivery-2b-verification.test.js` | `tests/unit/magie/effets-et-arbitrages.test.js` | 10 | 163 |
+| `tests/lot3-v5-delivery-2c.test.js` | `tests/unit/magie/effets-et-arbitrages.test.js` | 16 | 163 |
+| `tests/lot3-v5-integration-commands.test.js` | `tests/unit/magie/effets-et-arbitrages.test.js` | 19 | 163 |
+| `tests/lot3-v5-integration-rules.test.js` | `tests/unit/magie/effets-et-arbitrages.test.js` | 2 | 163 |
+| `tests/lot3-v5-integration-sanitize.test.js` | `tests/unit/magie/effets-et-arbitrages.test.js` | 4 | 163 |
+| `tests/lot3-v5-lileath-wiring.test.js` | `tests/unit/magie/effets-et-arbitrages.test.js` | 6 | 163 |
+| `tests/lot3-v5-magic-32.test.js` | `tests/unit/magie/effets-et-arbitrages.test.js` | 23 | 163 |
+| `tests/lot3-v5-dispel-corrections.test.js` | `tests/unit/magie/incidents-dissipation-haute-magie.test.js` | 22 | 85 |
+| `tests/lot3-v5-dispel-integration.test.js` | `tests/unit/magie/incidents-dissipation-haute-magie.test.js` | 7 | 85 |
+| `tests/lot3-v5-high-corrections.test.js` | `tests/unit/magie/incidents-dissipation-haute-magie.test.js` | 8 | 85 |
+| `tests/lot3-v5-high-wiring.test.js` | `tests/unit/magie/incidents-dissipation-haute-magie.test.js` | 6 | 85 |
+| `tests/lot3-v5-incidents-corrections.test.js` | `tests/unit/magie/incidents-dissipation-haute-magie.test.js` | 13 | 85 |
+| `tests/lot3-v5-incidents-wiring.test.js` | `tests/unit/magie/incidents-dissipation-haute-magie.test.js` | 15 | 85 |
+| `tests/lot3-v5-magic-31.test.js` | `tests/unit/magie/incidents-dissipation-haute-magie.test.js` | 14 | 85 |
+| `tests/lot3-v5-engine-socle.test.js` | `tests/unit/magie/lancement-focalisation.test.js` | 28 | 105 |
+| `tests/lot3-v5-explicit-dice.test.js` | `tests/unit/magie/lancement-focalisation.test.js` | 11 | 105 |
+| `tests/lot3-v5-finalization.test.js` | `tests/unit/magie/lancement-focalisation.test.js` | 25 | 105 |
+| `tests/lot3-v5-magic-30.test.js` | `tests/unit/magie/lancement-focalisation.test.js` | 21 | 105 |
+| `tests/lot3-v5-magic-spell-wiring.test.js` | `tests/unit/magie/lancement-focalisation.test.js` | 2 | 105 |
+| `tests/lot3-v5-turn-spells.test.js` | `tests/unit/magie/lancement-focalisation.test.js` | 8 | 105 |
+| `tests/v3-c-engine.test.js` | `tests/unit/magie/lancement-focalisation.test.js` | 10 | 105 |
+| `tests/lot3-v5-arcane-unforgiving.test.js` | `tests/unit/magie/transformations-et-formes.test.js` | 10 | 62 |
+| `tests/lot3-v5-transformations.test.js` | `tests/unit/magie/transformations-et-formes.test.js` | 17 | 62 |
+| `tests/lot3-v5-transformations-verification.test.js` | `tests/unit/magie/transformations-et-formes.test.js` | 7 | 62 |
+| `tests/lot3-v5-verification-9.test.js` | `tests/unit/magie/transformations-et-formes.test.js` | 6 | 62 |
+| `tests/p4c-char-magic.test.js` | `tests/unit/magie/transformations-et-formes.test.js` | 22 | 62 |

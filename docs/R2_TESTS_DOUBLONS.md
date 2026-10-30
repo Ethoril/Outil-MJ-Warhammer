@@ -13,3 +13,7 @@ Aucun doublon retiré (5 471 tests avant, 5 471 après).
 ## R2-3 — magie A
 
 Aucun doublon retiré (5 471 tests avant, 5 471 après).
+
+## R2-4 — magie B
+
+Aucun doublon retiré (5 471 tests avant, 5 471 après).

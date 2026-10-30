@@ -57,7 +57,7 @@
           "mode": "automatic",
           "text": "Bonus de sorts : nombre de sources positives conservées augmenté du rang, pour caractéristiques, PA et DR de Tests ; pire malus conservé.",
           "magicRegistry": true,
-          "executionProbe": "tests/lot3-v5-lileath-wiring.test.js#H-05"
+          "executionProbe": "tests/unit/magie/effets-et-arbitrages.test.js#H-05"
         }
       ]
     },
