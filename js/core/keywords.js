@@ -15,13 +15,13 @@ export const getKeywordsStatus=()=>getReferenceStatus();
 // deliberately stay outside the legacy V4 ENGINES registry. This declaration
 // reports coverage only; it does not apply any mechanical effect.
 const RESOLUTION_QUALITY_COVERAGE=Object.freeze({
- immobilisante:Object.freeze({engine:'v5-entanglement',evidence:'tests/f2-d-weapon-qualities.test.js: F2-D resolution Immobilisante locks and releases the linked weapon'}),
- pistolet:Object.freeze({engine:'v5-pistol-contact',evidence:'tests/f2-d-weapon-qualities.test.js: F2-D resolution Pistolet opposed with Melee'}),
- 'piege-lame':Object.freeze({engine:'v5-trap-blade',evidence:'tests/f2-d-weapon-qualities.test.js: F2-D Store Trap Blade disposition and recovery'}),
- 'a-enroulement':Object.freeze({engine:'v5-wrap-defense',evidence:'tests/f2-d-weapon-qualities.test.js: F2-D resolution Wrap applies the opposing Melee penalty'}),
- bouclier:Object.freeze({engine:'v5-shield',evidence:'tests/f2-d-weapon-qualities.test.js: F2-D shield defense, attack suspension, and hand constraints'}),
- taille:Object.freeze({engine:'v5-armor-wear',evidence:'tests/f2-d-weapon-qualities.test.js: F2-D Store persists armor and shield wear'}),
- parade:Object.freeze({engine:'v5-parry',evidence:'tests/f2-d-weapon-qualities.test.js: F2-D resolution off-hand defense and second attack'}),
+ immobilisante:Object.freeze({engine:'v5-entanglement',evidence:'tests/unit/combat/qualites-darmes.test.js: F2-D resolution — Immobilisante locks its linked weapon until opposed Force Tests remove every Empêtré'}),
+ pistolet:Object.freeze({engine:'v5-pistol-contact',evidence:'tests/unit/combat/qualites-darmes.test.js: F2-D resolution — an engaged Pistolet may be opposed with Melee, while a non-Pistolet still needs authorization'}),
+ 'piege-lame':Object.freeze({engine:'v5-trap-blade',evidence:'tests/unit/combat/qualites-darmes.test.js: F2-D Piège-lame Store — critique remplace, lâche, bloque puis permet un ramassage confirmé et annulable'}),
+ 'a-enroulement':Object.freeze({engine:'v5-wrap-defense',evidence:'tests/unit/combat/qualites-darmes.test.js: F2-D integration — Enroulement penalizes a melee opposition, but not a ranged defense'}),
+ bouclier:Object.freeze({engine:'v5-shield',evidence:'tests/unit/combat/qualites-darmes.test.js: F2-D pure proposal — V5 shield defense, attached coverage, ranged boundary and attack suspension'}),
+ taille:Object.freeze({engine:'v5-armor-wear',evidence:'tests/unit/combat/qualites-darmes.test.js: F2-D Store — Taille peut frapper le bouclier choisi et persiste sa dégradation'}),
+ parade:Object.freeze({engine:'v5-parry',evidence:'tests/unit/combat/qualites-darmes.test.js: F2-D pure proposal — Parade handles off-hand defense and second attack separately'}),
  'a-repetition':Object.freeze({engine:'v5-repeater-magazine',evidence:'F-L06-1057 covered; durable reload state consumes shots in resolution'}),
  recharge:Object.freeze({engine:'v5-reload-progress',evidence:'F-L06-1064 covered; Store persists reload progress and restores the magazine'})
 });

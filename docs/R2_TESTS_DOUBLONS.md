@@ -31,3 +31,7 @@ Aucun doublon retiré (suite : 5 471 tests avant, 5 471 après ; les 30 originau
 Un doublon d'exécution retiré : `lot3-especes-divin-coverage` (fusionné en R2-5 dans `tests/unit/divin/prieres-benedictions.test.js`) importait `divin-v5-p4a-damage.test.js`, ce qui exécutait ses 12 tests une seconde fois dans la suite. L'import est supprimé ; les 12 tests ne s'exécutent plus qu'une fois, dans le describe « P4a — dégâts directs » de `tests/unit/divin/effets-degats-conditions.test.js` (dont « Haine sacrée : +2 Blessures si le prêtre a le talent, rien sans lui », ancre de l'`executionProbe`). Aucune assertion perdue : ce sont les mêmes 12 tests, exécutés une fois au lieu de deux. Suite : 5 471 tests avant, 5 459 après.
 
 Autres candidats du plan (p4b-damage / p4b-damage-real, p4b-gear / p4b-gear-real, p4b-conditions / -real, p4b-tests / -real) : entrées ou valeurs attendues différentes (contrats génériques d'essai contre miracles réels, Peur (1) contre Peur (2)) ; conservés, les 366 tests des 34 originaux sont repris (65 + 51 + 68 + 41 + 141).
+
+## R2-8 — combat A
+
+Aucun doublon retiré (les 55 originaux : 483 tests, les 7 cibles : 483 ; la suite complète garde donc le même total qu'avant l'étape).

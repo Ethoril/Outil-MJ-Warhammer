@@ -395,3 +395,65 @@ Ancien fichier `tests/<nom>.test.js` → nouveau fichier `tests/unit/<cible>.tes
 | `tests/divin-v5-b5-fixture.mjs` | `tests/helpers/divin-b5-fixture.mjs` | (aide) | (aide) |
 
 Note : `tests/unit/divin/prieres-benedictions.test.js` (R2-5) n'importe plus `divin-v5-p4a-damage` (retiré, voir `R2_TESTS_DOUBLONS.md`) ; l'ancre « Haine sacrée » de `js/data/v5-magic-talent-coverage.json` pointe vers `tests/unit/divin/effets-degats-conditions.test.js`.
+
+## R2-8 — combat A
+
+| Ancien fichier | Nouveau fichier | Tests avant | Tests après (cible) |
+|---|---|---|---|
+| `tests/f2-c-review-characterization.test.js` | `tests/unit/combat/chance-destin-fortune.test.js` | 2 | 65 |
+| `tests/f2-l-characterization.test.js` | `tests/unit/combat/chance-destin-fortune.test.js` | 4 | 65 |
+| `tests/f2-l-destin-chance-characterization.test.js` | `tests/unit/combat/chance-destin-fortune.test.js` | 3 | 65 |
+| `tests/f2-l-destin-counterreview.test.js` | `tests/unit/combat/chance-destin-fortune.test.js` | 3 | 65 |
+| `tests/f2-l-fate-spending.test.js` | `tests/unit/combat/chance-destin-fortune.test.js` | 10 | 65 |
+| `tests/f2-l-fortune-advantage-order.test.js` | `tests/unit/combat/chance-destin-fortune.test.js` | 2 | 65 |
+| `tests/f2-l-fortune-condition-binding-integration.test.js` | `tests/unit/combat/chance-destin-fortune.test.js` | 1 | 65 |
+| `tests/f2-l-fortune-first-binding-characterization.test.js` | `tests/unit/combat/chance-destin-fortune.test.js` | 1 | 65 |
+| `tests/lot2-v5-23-control.test.js` | `tests/unit/combat/chance-destin-fortune.test.js` | 21 | 65 |
+| `tests/lot2-v5-resources.test.js` | `tests/unit/combat/chance-destin-fortune.test.js` | 13 | 65 |
+| `tests/p5-char-fortune-reroll.test.js` | `tests/unit/combat/chance-destin-fortune.test.js` | 5 | 65 |
+| `tests/f2-c-characterization.test.js` | `tests/unit/combat/competences-darmes.test.js` | 2 | 50 |
+| `tests/f2-c-claude-regressions.test.js` | `tests/unit/combat/competences-darmes.test.js` | 21 | 50 |
+| `tests/f2-c-weapon-skills.test.js` | `tests/unit/combat/competences-darmes.test.js` | 27 | 50 |
+| `tests/e22-criticals.test.js` | `tests/unit/combat/critiques.test.js` | 12 | 29 |
+| `tests/f2-i-characterization.test.js` | `tests/unit/combat/critiques.test.js` | 2 | 29 |
+| `tests/p5-char-critical-injure.test.js` | `tests/unit/combat/critiques.test.js` | 15 | 29 |
+| `tests/damage.test.js` | `tests/unit/combat/degats-et-armures.test.js` | 9 | 58 |
+| `tests/e19-damage-formulas.test.js` | `tests/unit/combat/degats-et-armures.test.js` | 23 | 58 |
+| `tests/f2-t2bis-damage-characterization.test.js` | `tests/unit/combat/degats-et-armures.test.js` | 4 | 58 |
+| `tests/lot2-combat.test.js` | `tests/unit/combat/degats-et-armures.test.js` | 22 | 58 |
+| `tests/f2-claude-f2r.test.js` | `tests/unit/combat/equipement-et-supplements.test.js` | 2 | 70 |
+| `tests/f2-d-blast-integration.test.js` | `tests/unit/combat/equipement-et-supplements.test.js` | 2 | 70 |
+| `tests/f2-d-entanglement-integration.test.js` | `tests/unit/combat/equipement-et-supplements.test.js` | 2 | 70 |
+| `tests/f2-d-final-clauses.test.js` | `tests/unit/combat/equipement-et-supplements.test.js` | 6 | 70 |
+| `tests/f2-d-shield-defense.test.js` | `tests/unit/combat/equipement-et-supplements.test.js` | 6 | 70 |
+| `tests/f2-f-characterization.test.js` | `tests/unit/combat/equipement-et-supplements.test.js` | 2 | 70 |
+| `tests/f2-f-counterreview-characterization.test.js` | `tests/unit/combat/equipement-et-supplements.test.js` | 2 | 70 |
+| `tests/f2-f-final-review.test.js` | `tests/unit/combat/equipement-et-supplements.test.js` | 4 | 70 |
+| `tests/f2-f-pavise-hardening-characterization.test.js` | `tests/unit/combat/equipement-et-supplements.test.js` | 4 | 70 |
+| `tests/f2-f-review-characterization.test.js` | `tests/unit/combat/equipement-et-supplements.test.js` | 5 | 70 |
+| `tests/f2-f-source-name-characterization.test.js` | `tests/unit/combat/equipement-et-supplements.test.js` | 13 | 70 |
+| `tests/f2-f-supplemental-equipment.test.js` | `tests/unit/combat/equipement-et-supplements.test.js` | 14 | 70 |
+| `tests/f2-t2bis-equipment-characterization.test.js` | `tests/unit/combat/equipement-et-supplements.test.js` | 6 | 70 |
+| `tests/f2-t2bis-filet-opposition-integration.test.js` | `tests/unit/combat/equipement-et-supplements.test.js` | 2 | 70 |
+| `tests/f2-d-reloading-integration.test.js` | `tests/unit/combat/poudre-et-rechargement.test.js` | 14 | 76 |
+| `tests/f2-e-blackpowder-incidents.test.js` | `tests/unit/combat/poudre-et-rechargement.test.js` | 40 | 76 |
+| `tests/f2-e-characterization.test.js` | `tests/unit/combat/poudre-et-rechargement.test.js` | 2 | 76 |
+| `tests/f2-t2bis-blackpowder-decisions-characterization.test.js` | `tests/unit/combat/poudre-et-rechargement.test.js` | 4 | 76 |
+| `tests/f2-t2bis-poudre-salve-decisions-repro.test.js` | `tests/unit/combat/poudre-et-rechargement.test.js` | 9 | 76 |
+| `tests/f2-t2bis-recharge-filet-characterization.test.js` | `tests/unit/combat/poudre-et-rechargement.test.js` | 4 | 76 |
+| `tests/f2-t2bis-volley-recoil-roll-characterization.test.js` | `tests/unit/combat/poudre-et-rechargement.test.js` | 3 | 76 |
+| `tests/f2-claude-t2.test.js` | `tests/unit/combat/qualites-darmes.test.js` | 5 | 135 |
+| `tests/f2-claude-t2bis.test.js` | `tests/unit/combat/qualites-darmes.test.js` | 8 | 135 |
+| `tests/f2-d-characterization.test.js` | `tests/unit/combat/qualites-darmes.test.js` | 3 | 135 |
+| `tests/f2-d-weapon-qualities.test.js` | `tests/unit/combat/qualites-darmes.test.js` | 50 | 135 |
+| `tests/f2-t2bis-assommer-store-characterization.test.js` | `tests/unit/combat/qualites-darmes.test.js` | 6 | 135 |
+| `tests/f2-t2bis-empaleuse-characterization.test.js` | `tests/unit/combat/qualites-darmes.test.js` | 2 | 135 |
+| `tests/f2-t2bis-empaleuse-store-integration.test.js` | `tests/unit/combat/qualites-darmes.test.js` | 1 | 135 |
+| `tests/f2-t2bis-four-reported-defects-characterization.test.js` | `tests/unit/combat/qualites-darmes.test.js` | 5 | 135 |
+| `tests/f2-t2bis-keyword-status-characterization.test.js` | `tests/unit/combat/qualites-darmes.test.js` | 4 | 135 |
+| `tests/f2-t2bis-remaining-defects-characterization.test.js` | `tests/unit/combat/qualites-darmes.test.js` | 8 | 135 |
+| `tests/f2-t2bis-reported-defects-characterization.test.js` | `tests/unit/combat/qualites-darmes.test.js` | 10 | 135 |
+| `tests/f2-t2bis-store-journal-characterization.test.js` | `tests/unit/combat/qualites-darmes.test.js` | 1 | 135 |
+| `tests/lot2-v5-keyword-talents.test.js` | `tests/unit/combat/qualites-darmes.test.js` | 32 | 135 |
+
+Note : les sept chaînes `evidence` de `js/core/keywords.js` (immobilisante, pistolet, piege-lame, a-enroulement, bouclier, taille, parade) pointent vers `tests/unit/combat/qualites-darmes.test.js` avec le nom exact du test cité.

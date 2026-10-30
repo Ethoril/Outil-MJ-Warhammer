@@ -1,12 +1,207 @@
-import test from 'node:test';
+import test, { describe } from 'node:test';
 import assert from 'node:assert/strict';
-import { previewResolution, applyResolution } from '../js/core/resolution.js';
-import { previewCombatFailure, isBlackpowderIncidentEligible, previewV5BlackpowderResources, previewV5BombFuse, canUseV5Move } from '../js/core/v5-combat-fumbles.js';
-import { V5_BLACKPOWDER_INCIDENT_TABLE, V5_COMBAT_FUMBLE_TABLE } from '../js/data/v5-combat-fumbles.js';
-import { createStore } from '../js/core/store.js';
-import { initialV5ReloadState, beginV5Reload, advanceV5Reload } from '../js/core/v5-reloading.js';
-import { getReferenceCatalogue } from '../js/core/reference-catalog.js';
+import { createStore } from '../../../js/core/store.js';
+import { previewResolution, applyResolution } from '../../../js/core/resolution.js';
+import { getReferenceCatalogue } from '../../../js/core/reference-catalog.js';
+import { initialV5ReloadState, consumeV5WeaponShot, beginV5Reload, advanceV5Reload, createV5ReloadState } from '../../../js/core/v5-reloading.js';
+import { previewCombatFailure, isBlackpowderIncidentEligible, previewV5BlackpowderResources, previewV5BombFuse, canUseV5Move } from '../../../js/core/v5-combat-fumbles.js';
+import { V5_BLACKPOWDER_INCIDENT_TABLE, V5_COMBAT_FUMBLE_TABLE } from '../../../js/data/v5-combat-fumbles.js';
+import { advanceV5NetEscape } from '../../../js/core/v5-weapon-qualities.js';
+import { previewV5Test } from '../../../js/core/v5-roll.js';
 
+describe('Rechargement (intégration)', () => {
+const memory = () => { let saved = null; return { async load() { return saved && structuredClone(saved); },
+  async saveAtomic({ state }) { saved = structuredClone(state); return { ok: true }; } }; };
+const weapon = { id: 'repeat-1', kind: 'weapon', name: 'Arme à répétition de test', category: 'Poudre noire', damage: '+4',
+  range: '50', keywords: [{ id: 'a-repetition', parameter: '3' }, { id: 'recharge', parameter: '3' }], extensions: {} };
+const actor = { id: 'a', name: 'A', camp: 'pj', kind: 'PJ', zone: 'active', hp: 20, maxHp: 20,
+  caracs: { CC: 50, CT: 60, F: 30, E: 30 }, skills: [], states: [], equipment: [structuredClone(weapon)], armor: {},
+  extensions: { v5: { hasMomentum: false } } };
+const target = { ...structuredClone(actor), id: 't', name: 'T', camp: 'foe', equipment: [] };
+async function fixture() {
+  const persistence = memory(), store = createStore({ storage: null, persistence }); await store.ready;
+  await store.loadFromJSON({ schemaVersion: 3, reserve: [], combat: { round: 1, currentActorId: 'a', order: ['a', 't'], participants: [structuredClone(actor), structuredClone(target)] }, log: [], diceLines: [] });
+  return { store, persistence };
+}
+const equipped = store => store.listParticipants().find(row => row.id === 'a').equipment[0];
+
+test('F2-D Store reload — start, progress, Undo, Redo, and persistence reload preserve weapon state', async () => {
+  const { store, persistence } = await fixture();
+  const item = equipped(store); item.extensions.v5 = { reloadState: { revision: 1, repeaterRating: 3, shotsRemaining: 2,
+    reloadSuccesses: 3, accumulatedSuccesses: 0, reloading: false, requiresReload: false } };
+  await store.updateParticipant('a', { equipment: [item] });
+  let plan = store.previewV5WeaponReload({ actorId: 'a', equipmentId: 'repeat-1', operation: 'begin' });
+  assert.equal(plan.ready, true, plan.error);
+  assert.equal(plan.after.requiredSuccesses, 2, 'un tir conservé réduit la recharge de 3 à 2 succès');
+  assert.equal((await store.applyV5WeaponReload(plan)).status, 'applied');
+  assert.equal(equipped(store).extensions.v5.reloadState.reloading, true);
+  plan = store.previewV5WeaponReload({ actorId: 'a', equipmentId: 'repeat-1', operation: 'progress', success: true, testSl: 2 });
+  assert.equal((await store.applyV5WeaponReload(plan)).progress.successes, 2,
+    'un Test réussi à +2 DR ajoute 1 succès de base et 2 succès supplémentaires; la progression est plafonnée au seuil');
+  assert.equal(await store.undo(), true);
+  assert.equal(equipped(store).extensions.v5.reloadState.accumulatedSuccesses, 0);
+  assert.equal(await store.redo(), true);
+  assert.equal(equipped(store).extensions.v5.reloadState.accumulatedSuccesses, 2);
+  const reloaded = createStore({ storage: null, persistence }); await reloaded.ready;
+  assert.equal(equipped(reloaded).extensions.v5.reloadState.accumulatedSuccesses, 2);
+});
+
+test('F2-D Store reload — partial repeater magazine reduces the success target by one', async () => {
+  const { store } = await fixture();
+  const item = equipped(store); item.extensions.v5 = { reloadState: { revision: 1, repeaterRating: 3, shotsRemaining: 2,
+    reloadSuccesses: 3, accumulatedSuccesses: 0, reloading: false, requiresReload: false } };
+  await store.updateParticipant('a', { equipment: [item] });
+  const plan = store.previewV5WeaponReload({ actorId: 'a', equipmentId: 'repeat-1', operation: 'begin' });
+  assert.equal(plan.after.requiredSuccesses, 2);
+});
+
+test('T2 bis — Ratling Variable: capacité arbitrée puis état de chargeur persisté, annulable et rétabli',async()=>{
+  const model=getReferenceCatalogue().items.find(row=>row.name==='Mitrailleuse Ratling Skaven');assert.ok(model);assert.equal(initialV5ReloadState(model).ready,false);
+  const persistence=memory(),store=createStore({storage:null,persistence});await store.ready;const ratling=structuredClone(model);ratling.id='ratling-1';
+  const shooter={...structuredClone(actor),equipment:[ratling]};await store.loadFromJSON({schemaVersion:3,reserve:[],combat:{round:1,currentActorId:'a',order:['a','t'],participants:[shooter,structuredClone(target)]},log:[],diceLines:[]});
+  const absent=store.previewV5WeaponReload({actorId:'a',equipmentId:'ratling-1',operation:'arbitrate',repeaterRating:0});assert.equal(absent.ready,false,'capacité absente/invalidée, pas de chargeur inventé');
+  const plan=store.previewV5WeaponReload({actorId:'a',equipmentId:'ratling-1',operation:'arbitrate',repeaterRating:6});assert.equal(plan.ready,true,plan.error);assert.equal((await store.applyV5WeaponReload(plan)).status,'applied');
+  let ratlingState=store.listParticipants().find(row=>row.id==='a').equipment[0].extensions.v5.reloadState;assert.equal(ratlingState.repeaterRating,6);assert.equal(consumeV5WeaponShot(ratlingState).state.shotsRemaining,5,'chaque tir débite une munition du chargeur arbitré');assert.equal(await store.undo(),true);assert.equal(store.listParticipants().find(row=>row.id==='a').equipment[0].extensions?.v5?.reloadState,undefined);assert.equal(await store.redo(),true);
+  const reloaded=createStore({storage:null,persistence});await reloaded.ready;assert.equal(reloaded.listParticipants().find(row=>row.id==='a').equipment[0].extensions.v5.reloadState.repeaterRating,6);
+});
+
+test('T2 bis — Poivrière: un tir main libre puis main occupée impose la recharge complète persistante',async()=>{
+  const model=getReferenceCatalogue().items.find(row=>row.name==='Poivrière'),persistence=memory(),store=createStore({storage:null,persistence});await store.ready;const pepper=structuredClone(model);pepper.id='pepper-1';
+  const shooter={...structuredClone(actor),equipment:[pepper]};await store.loadFromJSON({schemaVersion:3,reserve:[],combat:{round:1,currentActorId:'a',order:['a','t'],participants:[shooter,structuredClone(target)]},log:[],diceLines:[]});
+  const base={actorId:'a',targetId:'t',action:{id:'pepper-attack',type:'attack',attr:'CT',base:60,damage:8,extensions:{fiche:{equipmentId:'pepper-1'}}},attackContext:{ranged:true},v5:{kind:'ranged'}};
+  let plan=store.previewResolution({...base,resolutionId:'pepper-free-hand-1',roll:23,v5:{kind:'ranged',context:{freeHandAvailable:true}}});assert.equal(plan.weaponReload.after.shotsRemaining,3);assert.equal((await store.applyResolution(plan)).status,'applied');
+  const afterFirst=store.listParticipants().find(row=>row.id==='a').equipment[0].extensions.v5.reloadState;assert.equal(afterFirst.requiresReload,false);
+  plan=store.previewResolution({...base,resolutionId:'pepper-no-hand-2',roll:23,v5:{kind:'ranged',context:{freeHandAvailable:false}}});assert.equal(plan.weaponReload.after.shotsRemaining,0);assert.equal(plan.weaponReload.after.requiresReload,true);assert.equal((await store.applyResolution(plan)).status,'applied');
+  const blocked=store.previewResolution({...base,resolutionId:'pepper-free-hand-3',roll:23,v5:{kind:'ranged',context:{freeHandAvailable:true}}});assert.ok(blocked.unresolved.some(row=>/rechargée/.test(row)));
+  const reloaded=createStore({storage:null,persistence});await reloaded.ready;const state=reloaded.listParticipants().find(row=>row.id==='a').equipment[0].extensions.v5.reloadState;assert.equal(state.shotsRemaining,0);assert.equal(state.requiresReload,true);assert.equal(state.requiresManualRotation,false);
+});
+
+test('F2-D resolution — a fired repeater consumes one shot once and Undo restores the charge', () => {
+  const shooter = structuredClone(actor), victim = structuredClone(target);
+  const preview = previewResolution({ resolutionId: 'f2-d-repeater-shot', actor: shooter, target: victim, baseRevision: 0, round: 1, roll: 23,
+    action: { id: 'repeater-attack', type: 'attack', attr: 'CT', base: 60, damage: 4, qualities: [{ id: 'a-repetition', parameter: '3' }],
+      extensions: { fiche: { equipmentId: 'repeat-1' } } }, v5: { kind: 'ranged' }, attackContext: { ranged: true } });
+  assert.equal(preview.weaponReload.after.shotsRemaining, 2);
+  const applied = applyResolution(preview, { revision: 0, round: 1, participants: [shooter, victim], appliedResolutionIds: [] });
+  assert.equal(applied.status, 'applied');
+  assert.equal(applied.state.participants.find(row => row.id === 'a').equipment[0].extensions.v5.reloadState.shotsRemaining, 2);
+  assert.equal(applyResolution(preview, applied.state).status, 'duplicate');
+});
+
+test('F2-D Store resolution — shot consumption is undoable and survives a later persistence reload', async () => {
+  const { store, persistence } = await fixture();
+  const input = { actorId: 'a', targetId: 't', resolutionId: 'f2-d-store-repeater-shot', roll: 23,
+    action: { id: 'repeater-attack', type: 'attack', attr: 'CT', base: 60, damage: 4,
+      qualities: [{ id: 'a-repetition', parameter: '3' }], extensions: { fiche: { equipmentId: 'repeat-1' } } },
+    attackContext: { ranged: true }, v5: { kind: 'ranged' } };
+  const preview = store.previewResolution(input);
+  assert.equal(preview.weaponReload.after.shotsRemaining, 2);
+  assert.equal((await store.applyResolution(preview)).status, 'applied');
+  assert.equal(equipped(store).extensions.v5.reloadState.shotsRemaining, 2);
+  assert.equal(await store.undo(), true);
+  assert.equal(equipped(store).extensions?.v5?.reloadState, undefined);
+  assert.equal((await store.applyResolution(store.previewResolution(input))).status, 'applied');
+  const reloaded = createStore({ storage: null, persistence }); await reloaded.ready;
+  assert.equal(equipped(reloaded).extensions.v5.reloadState.shotsRemaining, 2);
+});
+
+test('F2-D reload characterization — an À répétition action without an owned equipment row must request input, not throw', () => {
+  const shooter = { ...structuredClone(actor), equipment: [] }, victim = structuredClone(target);
+  const input = { resolutionId: 'f2-d-unlinked-repeater', actor: shooter, target: victim, baseRevision: 0, round: 1, roll: 23,
+    action: { id: 'virtual-repeat', type: 'attack', attr: 'CT', base: 60, damage: 4,
+      qualities: [{ id: 'a-repetition', parameter: '3' }], extensions: {} }, v5: { kind: 'ranged' }, attackContext: { ranged: true } };
+  let preview;
+  assert.doesNotThrow(() => { preview = previewResolution(input); });
+  assert.ok(preview.unresolved.some(row => /équipement|arme.*identifi|recharg/i.test(row)), JSON.stringify(preview.unresolved));
+});
+
+test('F2-D reload characterization — action.extensions.equipment without a persistent inventory link is handled safely', () => {
+  const shooter = { ...structuredClone(actor), equipment: [] }, victim = structuredClone(target);
+  const input = { resolutionId: 'f2-d-embedded-repeater', actor: shooter, target: victim, baseRevision: 0, round: 1, roll: 23,
+    action: { id: 'embedded-repeat', type: 'attack', attr: 'CT', base: 60, damage: 4,
+      qualities: [{ id: 'a-repetition', parameter: '3' }], extensions: { equipment: structuredClone(weapon) } },
+    v5: { kind: 'ranged' }, attackContext: { ranged: true } };
+  let preview;
+  assert.doesNotThrow(() => { preview = previewResolution(input); });
+  assert.ok(preview.unresolved.some(row => /équipement|arme.*identifi|recharg/i.test(row)), JSON.stringify(preview.unresolved));
+});
+
+test('F2-D reload — action.extensions.equipment resolves to the persistent copy by id', () => {
+  const shooter = structuredClone(actor), victim = structuredClone(target);
+  const preview = previewResolution({ resolutionId: 'f2-d-embedded-linked-repeater', actor: shooter, target: victim, baseRevision: 0, round: 1, roll: 23,
+    action: { id: 'embedded-linked-repeat', type: 'attack', attr: 'CT', base: 60, damage: 4,
+      qualities: [{ id: 'a-repetition', parameter: '3' }], extensions: { equipment: structuredClone(weapon) } },
+    v5: { kind: 'ranged' }, attackContext: { ranged: true } });
+  assert.equal(preview.weaponReload.equipmentId, 'repeat-1');
+  assert.equal(preview.weaponReload.after.shotsRemaining, 2);
+});
+
+test('F2-D reload — an official repeated crossbow profile initializes from its catalogue qualities', () => {
+  const official = getReferenceCatalogue().items.find(row => row.name === 'Arbalète à Répétition Druchii');
+  assert.ok(official);
+  const initialized = initialV5ReloadState(official);
+  assert.equal(initialized.ready, true, JSON.stringify(initialized));
+  assert.equal(initialized.state.repeaterRating, 3);
+  assert.equal(initialized.state.reloadSuccesses, 9);
+});
+
+test('F2-D reload — a weapon with Recharge but no À répétition still needs a reload after firing', () => {
+  const shooter = structuredClone(actor), victim = structuredClone(target);
+  shooter.equipment[0].keywords = [{ id: 'recharge', parameter: '2' }];
+  const preview = previewResolution({ resolutionId: 'f2-d-single-reload', actor: shooter, target: victim, baseRevision: 0, round: 1, roll: 23,
+    action: { id: 'single-shot', type: 'attack', attr: 'CT', base: 60, damage: 4, qualities: [{ id: 'recharge', parameter: '2' }],
+      extensions: { fiche: { equipmentId: 'repeat-1' } } }, v5: { kind: 'ranged' }, attackContext: { ranged: true } });
+  assert.equal(preview.weaponReload.after.repeaterRating, 0);
+  assert.equal(preview.weaponReload.after.requiresReload, true);
+});
+
+test('F2-D Store reload — a stale preview is refused after the weapon changes', async () => {
+  const { store } = await fixture();
+  const item = equipped(store); item.extensions.v5 = { reloadState: { revision: 1, repeaterRating: 3, shotsRemaining: 2,
+    reloadSuccesses: 3, accumulatedSuccesses: 0, reloading: false, requiresReload: false } };
+  await store.updateParticipant('a', { equipment: [item] });
+  const plan = store.previewV5WeaponReload({ actorId: 'a', equipmentId: 'repeat-1', operation: 'begin' });
+  await store.updateParticipant('a', { notes: 'mutation concurrente' });
+  await assert.rejects(store.applyV5WeaponReload(plan), /partie a changé|arme ou son état/iu);
+});
+
+test('F2-D Empaleuse resolution — explicit ammunition type lodges bullet/arrow and Undo keeps it atomic', () => {
+  for (const [ammoName, expectedMethod] of [['Balles et poudre', 'surgery'], ['Flèches', 'heal-test']]) {
+    const shooter=structuredClone(actor),victim={...structuredClone(target),hp:10,maxHp:10};
+    shooter.equipment[0].keywords=[{id:'empaleuse'}];
+    shooter.equipment.push({id:'ammo-'+expectedMethod,kind:'ammunition',name:ammoName,category:expectedMethod==='surgery'?'Poudre noire':'Arc',keywords:[]});
+    shooter.equipment[0].category=expectedMethod==='surgery'?'Poudre noire':'Arc';
+    const preview=previewResolution({resolutionId:'f2-d-impale-'+expectedMethod,actor:shooter,target:victim,baseRevision:0,round:1,roll:11,
+      ammunitionId:'ammo-'+expectedMethod,criticalRolls:{location:2,effect:80},
+      action:{id:'impale',type:'attack',attr:'CT',base:60,damage:4,qualities:[{id:'empaleuse'}],extensions:{fiche:{equipmentId:'repeat-1'}}},
+      v5:{kind:'ranged'},attackContext:{ranged:true}});
+    assert.equal(preview.projectileLodging.removal,expectedMethod);
+    const applied=applyResolution(preview,{revision:0,round:1,participants:[shooter,victim],appliedResolutionIds:[]});
+    assert.equal(applied.status,'applied');
+    const targetAfter=applied.state.participants.find(row=>row.id==='t');
+    assert.equal(targetAfter.extensions.v5.lodgedProjectiles[0].ammunitionId,'ammo-'+expectedMethod);
+  }
+});
+
+test('F2-D Empaleuse Store extraction — confirmed removal is persisted, undoable and reloaded', async () => {
+  const {store,persistence}=await fixture(),victim=structuredClone(target);
+  victim.skills=[{id:'heal',name:'Guérison',total:50}];
+  victim.extensions.v5.lodgedProjectiles=[{id:'lodge-arrow',participantId:'t',ammunitionId:'arrow-7',removal:'heal-test',removed:false}];
+  await store.updateParticipant('t',{extensions:victim.extensions,skills:victim.skills});
+  const plan=store.previewV5ProjectileExtraction({participantId:'t',projectileId:'lodge-arrow',method:'heal-test',skillId:'heal',roll:11});
+  assert.equal(plan.ready,true,plan.error);
+  await store.applyV5ProjectileExtraction(plan);
+  assert.equal(store.listParticipants().find(row=>row.id==='t').extensions.v5.lodgedProjectiles[0].removed,true);
+  assert.equal(await store.undo(),true);
+  assert.equal(store.listParticipants().find(row=>row.id==='t').extensions.v5.lodgedProjectiles[0].removed,false);
+  const freshPlan=store.previewV5ProjectileExtraction({participantId:'t',projectileId:'lodge-arrow',method:'heal-test',skillId:'heal',roll:11});
+  await store.applyV5ProjectileExtraction(freshPlan);
+  const reloaded=createStore({storage:null,persistence});await reloaded.ready;
+  assert.equal(reloaded.listParticipants().find(row=>row.id==='t').extensions.v5.lodgedProjectiles[0].removed,true);
+});
+});
+
+describe('Incidents de poudre noire', () => {
 const actor = { id: 'shooter', name: 'Tireur', hp: 12, caracs: { E: 30 }, armor: { arms: 0, body: 0 }, states: [], equipment: [] };
 const target = { id: 'target', name: 'Cible', hp: 12, caracs: { E: 30 }, states: [] };
 
@@ -531,7 +726,6 @@ test('F2-E — le défenseur qui fait une maladresse reçoit aussi l’effet de 
   assert.equal(preview.combatFailure.effects.find(row=>row.type==='wound-loss')?.targetId,'defender');
 });
 
-
 test('F2-E — l’explosion touche le bras directeur choisi et applique son armure d’inventaire', () => {
   const armour=[
     {id:'left',kind:'armour',name:'Brassard gauche',ap:2,layer:'mail',locations:['leftArm'],keywords:[]},
@@ -549,4 +743,307 @@ test('F2-E — l’explosion touche le bras directeur choisi et applique son arm
   };
   assert.equal(resolve('left'),12,'12 dégâts − 3 BE − 2 PA − 1 blessure Oops');
   assert.equal(resolve('right'),14,'12 dégâts − 3 BE − 4 PA − 1 blessure Oops');
+});
+});
+
+describe('Armes à poudre (caractérisation)', () => {
+test('F2-E caractérisation — la maladresse de combat est signalée sans table de résultat', () => {
+  const preview = previewResolution({
+    actor: { id: 'shooter', name: 'Tireur', states: [] },
+    target: { id: 'target', name: 'Cible', hp: 12, caracs: { E: 30 }, states: [] },
+    action: { id: 'shot', type: 'attack', base: 45, damage: 4, qualities: [] },
+    v5: { kind: 'ranged' },
+    roll: 100,
+    baseRevision: 0
+  });
+
+  assert.equal(preview.success, false);
+  assert.deepEqual(preview.fumble, { expanded: false });
+  assert.equal(preview.damage, null, 'une attaque ratée ne produit pas de dégâts');
+  assert.equal(preview.fumbleResult, undefined, 'aucun résultat de table de maladresse n’est encore fourni');
+  assert.equal(preview.powderIncident, undefined, 'aucun incident de poudre n’est encore fourni');
+});
+
+test('F2-E caractérisation — l’incident de poudre n’est pas implicite dans une maladresse', () => {
+  const preview = previewResolution({
+    actor: { id: 'shooter', name: 'Tireur', states: [] },
+    target: { id: 'target', name: 'Cible', hp: 12, caracs: { E: 30 }, states: [] },
+    action: {
+      id: 'powder-shot', type: 'attack', base: 45, damage: 4,
+      qualities: ['a-poudre-noire']
+    },
+    v5: { kind: 'ranged' },
+    roll: 100,
+    baseRevision: 0
+  });
+
+  assert.deepEqual(preview.fumble, { expanded: false });
+  assert.equal(preview.powderIncident, undefined, 'le marqueur À Poudre noire ne tire pas seul une table d’incident');
+});
+});
+
+describe('Poudre noire (décisions)', () => {
+const actor = { id: 'shooter', equipment: [] };
+const base = (weapon, action = {}) => ({
+  normalized: { actor, action: { type: 'attack', note: weapon, ...action } },
+  roll: 99,
+  context: { weaponName: weapon, powderIncidentRoll: 9, weaponExplosionArmSide: 'right' }
+});
+
+test('T2 bis — catastrophe de poudre : dégâts d’arme au profil à +0 DR, sans valeur maximum parallèle', () => {
+  const preview = previewCombatFailure({
+    ...base('Pistolet', { damage: 7, extensions: { equipment: { damage: 7 } } }),
+    context: { weaponName: 'Pistolet', weaponGroup: 'Poudre noire', powderIncidentRoll: 9, weaponExplosionArmSide: 'right' }
+  });
+  assert.deepEqual(preview.unresolved, []);
+  const explosion = preview.effects.find(effect => effect.type === 'weapon-explosion');
+  assert.ok(explosion, 'la catastrophe produit une explosion');
+  assert.equal(explosion.damage, 7, 'le profil +7 est utilisé à +0 DR');
+  assert.equal(explosion.damageMode, 'profile-at-zero-sl');
+  assert.equal(explosion.sl, 0);
+});
+
+test('T2 bis — le double raté 99/100 du mortier de main pendant le rechargement privilégie son accident propre', () => {
+  for (const roll of [99, 100]) {
+    const preview = previewCombatFailure({
+      ...base('Mortier de main', { type: 'test', damage: 4 }),
+      fumble: { expanded: false },
+      roll,
+      context: { weaponName: 'Mortier de main', weaponGroup: 'Engineering', reloading: true, weaponDamageMaximum: 12,
+        weaponExplosionArmSide: 'right', fumbleRoll: 1, powderIncidentRoll: 1 }
+    });
+    assert.deepEqual(preview.unresolved, []);
+    assert.equal(preview.misfire, null, 'ne pas résoudre d’abord la table générique Misfire');
+    assert.ok(preview.effects.some(effect => effect.reason === 'maladresse-au-rechargement-du-mortier-a-main'));
+  }
+});
+
+test('T2 bis — le double raté 99/100 de la hache-fusil en mêlée privilégie la décharge propre', () => {
+  for (const roll of [99, 100]) {
+    const preview = previewCombatFailure({
+      ...base('Hache-fusil', { type: 'attack', damage: 6 }),
+      fumble: { expanded: false },
+      roll,
+      context: { weaponName: 'Hache-fusil', weaponGroup: 'Poudre noire', meleeUse: true, weaponLoaded: true,
+        fumbleRoll: 2, powderIncidentRoll: 1 }
+    });
+    assert.deepEqual(preview.unresolved, []);
+    assert.equal(preview.misfire, null);
+    assert.ok(preview.effects.some(effect => effect.reason === 'hache-fusil-chargee'));
+  }
+});
+
+test('T2 bis — l’incident d’une arme Salve utilise la table dédiée d10 de L13 p.126', () => {
+  const expected = [
+    'primary-arm', 'primary-arm', 'primary-arm', 'primary-arm',
+    'random-location', 'random-location', 'random-location',
+    'remaining-salvo-random-locations', 'remaining-salvo-random-locations',
+    'remaining-salvo-random-direction'
+  ];
+  for (let roll = 1; roll <= 10; roll++) {
+    const preview = previewCombatFailure({
+      ...base('Arquebuse à salve'),
+      normalized: { actor:{...actor,equipment:[{id:'salvo',name:'Arquebuse à salve',kind:'weapon',damage:4,keywords:[{id:'salve',parameter:'4'},{id:'a-poudre-noire'}]}]}, action:{type:'attack',note:'Arquebuse à salve',extensions:{fiche:{equipmentId:'salvo'}}} },
+      context: { weaponName: 'Arquebuse à salve', weaponGroup: 'Engineering',
+        remainingSalvo: 3, powderIncidentRoll: 1, salvoIncidentRoll: roll }
+    });
+    assert.equal(preview.misfire?.outcome?.id, 'misfire', `incident générique d10 1, Salve d10 ${roll}`);
+    assert.equal(preview.misfire?.salvo?.table, 'salvo-artillery', `d10 Salve ${roll}`);
+    assert.equal(preview.misfire?.salvo?.outcome?.id, expected[roll - 1], `d10 Salve ${roll}`);
+  }
+});
+});
+
+describe('Poudre et salves (décisions)', () => {
+const catalogue = getReferenceCatalogue();
+const actor = { id:'shooter', name:'Tireur', camp:'pj', hp:20, caracs:{CT:60,E:30}, states:[], skills:[], equipment:[], extensions:{v5:{}} };
+
+test('T2 bis reprise — Mortier de main (2M): accident au rechargement = profil à +0 DR au bras principal', () => {
+  const weapon = catalogue.items.find(row => row.name === 'Mortier de main (2M)');
+  assert.ok(weapon);
+  const preview = previewCombatFailure({
+    normalized:{actor:{...actor,equipment:[weapon]},action:{type:'test',note:weapon.name,damage:weapon.damage,extensions:{fiche:{equipmentId:weapon.id}}}},
+    fumble:{expanded:false},roll:99,
+    context:{weaponName:weapon.name,weaponGroup:weapon.category,reloading:true,fumbleRoll:1,powderIncidentRoll:1,weaponExplosionArmSide:'right'}
+  });
+  assert.deepEqual(preview.unresolved,[]);
+  const explosion=preview.effects.find(effect=>effect.reason==='maladresse-au-rechargement-du-mortier-a-main');
+  assert.ok(explosion);
+  assert.equal(explosion.damageMode,'profile-at-zero-sl');
+  assert.equal(explosion.damage,7);
+  assert.equal(explosion.location,'bras-principal');
+  assert.equal(explosion.sl,0);
+});
+
+test('T2 bis reprise — Salve lignes 8–9 avec zéro coup restant se résout et détruit la pièce', () => {
+  for (const roll of [8,9]) {
+    const weapon={id:'salvo',name:'Salve sans nom canonique',kind:'weapon',category:'Ingénierie',damage:4,keywords:[{id:'salve',parameter:'4'},{id:'a-poudre-noire'}]};
+    const preview=previewCombatFailure({normalized:{actor:{...actor,equipment:[weapon]},action:{type:'attack',note:weapon.name,extensions:{fiche:{equipmentId:weapon.id}}},v5State:{participants:[{id:'shooter',zone:'active'}]}},roll:99,
+      context:{weaponName:weapon.name,weaponGroup:'Ingénierie',powderIncidentRoll:1,salvoIncidentRoll:roll,remainingSalvo:0}});
+    assert.deepEqual(preview.unresolved,[],`d10 Salve ${roll}`);
+    assert.ok(preview.effects.some(effect=>effect.type==='salvo-artillery-destroyed'),`d10 Salve ${roll}`);
+  }
+});
+
+test('T2 bis reprise — Salve ligne 10 avec zéro coup restant se résout sans trajectoire', () => {
+  const weapon={id:'salvo',name:'Salve sans nom canonique',kind:'weapon',category:'Ingénierie',damage:4,keywords:[{id:'salve',parameter:'4'},{id:'a-poudre-noire'}]};
+  const preview=previewCombatFailure({normalized:{actor:{...actor,equipment:[weapon]},action:{type:'attack',note:weapon.name,extensions:{fiche:{equipmentId:weapon.id}}},v5State:{participants:[{id:'shooter',zone:'active'}]}},roll:99,
+    context:{weaponName:weapon.name,weaponGroup:'Ingénierie',powderIncidentRoll:1,salvoIncidentRoll:10,remainingSalvo:0}});
+  assert.deepEqual(preview.unresolved,[]);
+  assert.equal(preview.effects.filter(effect=>effect.type==='salvo-hit').length,0);
+});
+
+test('T2 bis reprise — catastrophe générique détruit aussi l’arme qui explose', () => {
+  const weapon={id:'gun-1',name:'Pistolet de test',kind:'weapon',category:'Poudre noire',damage:4,keywords:[{id:'a-poudre-noire'}]};
+  const shooter={...actor,equipment:[weapon]};
+  const target={id:'foe',camp:'enemy',hp:20,caracs:{E:30},states:[],equipment:[]};
+  const preview=previewResolution({actor:shooter,target,action:{type:'attack',attr:'CT',base:40,damage:4,note:weapon.name,extensions:{fiche:{equipmentId:weapon.id}},qualities:['a-poudre-noire']},roll:99,v5:{kind:'ranged',context:{powderIncidentRoll:9,weaponExplosionArmSide:'right'}},baseRevision:0});
+  const applied=applyResolution(preview,{revision:0,participants:[shooter,target]});
+  assert.equal(applied.status,'applied');
+  assert.equal(applied.state.participants[0].equipment[0].extensions.v5.destroyed,true);
+});
+
+test('T2 bis reprise — esquive V5 de la ligne 10 réussit automatiquement sur 01–05', () => {
+  const weapon={id:'salvo',name:'Salve sans nom canonique',kind:'weapon',category:'Ingénierie',damage:4,keywords:[{id:'salve',parameter:'4'},{id:'a-poudre-noire'}]};
+  const victim={id:'victim',name:'Cible',zone:'active',hp:20,caracs:{E:30},states:[]};
+  const makePreview=roll=>previewCombatFailure({normalized:{actor:{...actor,equipment:[weapon]},action:{type:'attack',note:weapon.name,extensions:{fiche:{equipmentId:weapon.id}}},v5State:{participants:[{id:'shooter',zone:'active'},victim]}},roll:99,
+    context:{weaponName:weapon.name,weaponGroup:'Ingénierie',powderIncidentRoll:1,salvoIncidentRoll:10,remainingSalvo:1,
+      salvoTrajectories:[{direction:'nord',distanceRoll:20,personsConfirmed:true,targets:[{participantId:'victim',location:'body',dodge:{base:10,roll}}]}]}});
+  const autoSuccess=makePreview(5),ordinaryFailure=makePreview(6);
+  assert.deepEqual(autoSuccess.unresolved,[]);
+  assert.equal(autoSuccess.effects.some(effect=>effect.type==='salvo-hit'),false);
+  assert.equal(ordinaryFailure.effects.some(effect=>effect.type==='salvo-hit'),true);
+});
+
+test('T2 bis reprise — Poivrière main occupée tire puis requiert une recharge complète', () => {
+  const weapon={...structuredClone(catalogue.items.find(row=>row.name==='Poivrière')),id:'pepperbox-1'};
+  const shooter={...actor,equipment:[weapon]};
+  const target={id:'foe',name:'Cible',camp:'enemy',hp:20,caracs:{E:30},states:[],armor:{},equipment:[]};
+  const preview=previewResolution({actor:shooter,target,action:{type:'attack',attr:'CT',base:60,damage:8,extensions:{fiche:{equipmentId:weapon.id}}},roll:20,attackContext:{ranged:true},v5:{kind:'ranged',context:{freeHandAvailable:false}}});
+  assert.deepEqual(preview.unresolved,[]);
+  assert.equal(preview.weaponReload.after.requiresReload,true);
+  assert.equal(preview.weaponReload.after.requiresManualRotation,false);
+  assert.equal(preview.weaponReload.after.shotsRemaining,0);
+});
+
+test('T2 bis reprise — un critical-follow-up est consommé par l’Action suivante', () => {
+  const shooter={...actor,extensions:{v5:{combatEffects:[{id:'critical-follow-up-1',kind:'critical-follow-up',location:'ARM',reminders:['finir le suivi']}]}}};
+  const target={id:'foe',name:'Cible',camp:'enemy',hp:20,caracs:{E:30},states:[],armor:{},equipment:[]};
+  const preview=previewResolution({actor:shooter,target,action:{type:'attack',attr:'CC',base:60,damage:4},roll:20,defense:{type:'skill',attr:'CC',base:40,roll:50,label:'Corps à corps',v5:{kind:'melee',context:{}}},v5:{kind:'melee'},baseRevision:0});
+  assert.deepEqual(preview.consumedCombatEffects,['critical-follow-up-1']);
+  const applied=applyResolution(preview,{revision:0,participants:[shooter,target]});
+  assert.deepEqual(applied.state.participants[0].extensions.v5.combatEffects,[]);
+});
+
+test('T2 bis reprise — le Test opposé du filet conserve une Force publiée de 8', () => {
+  const victim={...actor,id:'victim',states:[{id:'net-condition',key:'enchevetre',level:1,strength:3,source:{authorId:'holder',entanglementKind:'wielder'}}]};
+  const holder={id:'holder',caracs:{F:8},states:[],extensions:{v5:{}}};
+  const preview=previewResolution({actor:victim,action:{type:'test',attr:'F',base:40},roll:20,v5:{kind:'test',context:{netEscapeConditionId:'net-condition',netEscapeOpponentRoll:20}},v5State:{participants:[victim,holder]},baseRevision:0});
+  assert.equal(preview.netEscape.opposition.sourceScore,8);
+});
+
+test('T2 bis reprise — un choix d’empoignade orphelin bloque la résolution ordinaire', () => {
+  const shooter={...actor};
+  const target={id:'foe',name:'Cible',camp:'enemy',hp:20,caracs:{E:30},states:[],armor:{},equipment:[]};
+  const preview=previewResolution({actor:shooter,target,action:{type:'attack',attr:'CC',base:60,damage:4},roll:20,
+    defense:{type:'skill',attr:'CC',base:40,roll:50,label:'Corps à corps',v5:{kind:'melee',context:{}}},
+    v5:{kind:'melee',context:{grappleAction:'break-free'}},baseRevision:0});
+  assert.ok(preview.unresolved.some(row=>/lien actif requis/.test(row)));
+});
+});
+
+describe('Rechargement et filet (caractérisation)', () => {
+test('T2 bis — recharge: chaque réussite ajoute 1 + DR positifs, un échec ajoute zéro', () => {
+  const initial = createV5ReloadState({ repeaterRating: 0, reloadSuccesses: 5 }).state;
+  const begun = { ...initial, reloading: true, requiresReload: true, requiredSuccesses: 5 };
+  const atZero = advanceV5Reload(begun, { success: true, testSl: 0 });
+  assert.equal(atZero.progress.successes, 1);
+  const atPlusTwo = advanceV5Reload(atZero.state, { success: true, testSl: 2 });
+  assert.equal(atPlusTwo.progress.successes, 4, 'the displayed progress includes both Tests: 1 + (1 + 2)');
+  const failed = advanceV5Reload(atPlusTwo.state, { success: false, testSl: -1 });
+  assert.equal(failed.progress.successes, 4, 'progress.successes is cumulative; a failed Test adds zero');
+  assert.equal(failed.state.accumulatedSuccesses, 4);
+});
+
+test('T2 bis — sortie de filet: victoire opposée, DR après le premier retirent un Empêtré supplémentaire', () => {
+  const result = advanceV5NetEscape({ testSl: 2, opponentSl: 0, entangled: 3 });
+  assert.equal(result.won, true);
+  assert.equal(result.freed, true);
+  assert.equal(result.removedEntangled, 2);
+  assert.equal(result.remainingEntangled, 1);
+});
+
+test('T2 bis — décision MJ: échec de sortie de filet ne change rien', () => {
+  const result = advanceV5NetEscape({ testSl: 0, opponentSl: 2, entangled: 1 });
+  assert.equal(result.won, false);
+  assert.equal(result.addEntangledOnFailure, false);
+  assert.equal(result.remainingEntangled, 1);
+});
+
+test('T2 bis — Mancatcher à ressort: son bonus de +2 DR relève le résultat de la source', () => {
+  const result = advanceV5NetEscape({ testSl: 2, opponentSl: 0, opponentBonus: 2, entangled: 2 });
+  assert.equal(result.won, true, 'égalité d’opposition remportée par l’initiateur');
+  assert.equal(result.opponentSl, 2);
+  assert.equal(result.remainingEntangled, 1);
+});
+});
+
+describe('Jet de recul de salve (caractérisation)', () => {
+const normalized = {
+  actor: { id: 'gunner', extensions: { v5: {} } },
+  action: { type: 'attack', note: 'Arquebuse à salve' },
+  resolutionId: 'volley-recoil-roll-characterization'
+};
+
+function recoil(base, roll) {
+  const result = previewCombatFailure({
+    normalized,
+    context: {
+      firing: true,
+      crewCount: 2,
+      weaponName: 'Arquebuse à salve',
+      recoilTestBase: base,
+      recoilTestRoll: roll,
+      recoilCriticalRolls: 20,
+      blackpowderStockInitial: { confirmed: true, projectiles: 1, powderCharges: 1 }
+    }
+  });
+  return { result, effect: result.effects.find(row => row.type === 'volley-recoil') };
+}
+
+test('T2 bis caractérisation — le recul reprend les automatiques V5 01–05 et 96–100', () => {
+  const automaticOutcomes = [];
+  for (const roll of [1, 2, 3, 4, 5]) {
+    const { effect } = recoil(1, roll);
+    const v5 = previewV5Test({ score: 1, roll, slModifiers:[{id:'salvo-recoil',label:'Résistance (+2 DR)',amount:2}] }).options[0].result;
+    assert.equal(v5.details.automatic, 'success');
+    automaticOutcomes.push({ roll, actual: [effect.success, effect.sl], expected: [v5.success, v5.sl] });
+  }
+
+  for (const roll of [96, 97, 98, 99, 100]) {
+    const { effect } = recoil(80, roll); // Résistance +20 atteint 100.
+    const v5 = previewV5Test({ score: 80, roll, slModifiers:[{id:'salvo-recoil',label:'Résistance (+2 DR)',amount:2}] }).options[0].result;
+    assert.equal(v5.details.automatic, 'failure');
+    automaticOutcomes.push({ roll, actual: [effect.success, effect.sl, effect.astoundingFailure], expected: [v5.success, v5.sl, v5.sl <= -5] });
+  }
+  assert.deepEqual(automaticOutcomes.filter(row => JSON.stringify(row.actual) !== JSON.stringify(row.expected)), []);
+});
+
+test('T2 bis caractérisation — un double raté 99 ou 100 donne un fumble à -5 DR au recul', () => {
+  const doubleOutcomes = [];
+  for (const roll of [99, 100]) {
+    const { effect } = recoil(80, roll);
+    const v5 = previewV5Test({ score: 80, roll, slModifiers:[{id:'salvo-recoil',label:'Résistance (+2 DR)',amount:2}] }).options[0].result;
+    assert.equal(v5.fumble, true);
+    assert.equal(v5.sl, -5);
+    doubleOutcomes.push({ roll, actual: [effect.success, effect.sl, effect.astoundingFailure, Boolean(effect.armCritical)], expected: [false, -5, true, true] });
+  }
+  assert.deepEqual(doubleOutcomes.filter(row => JSON.stringify(row.actual) !== JSON.stringify(row.expected)), []);
+});
+
+test('T2 bis caractérisation — le recul applique +2 DR même si la Résistance dépasse 80', () => {
+  const {effect}=recoil(90,90);
+  assert.equal(effect.sl,2);
+  assert.equal(effect.success,true);
+});
 });
