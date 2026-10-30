@@ -520,3 +520,46 @@ Note : `tests/phase-c-c06-coverage.test.js` lit désormais `./unit/combat/initia
 | `tests/lot2-v5-talents-integration.test.js` | `tests/unit/combat/talents-v5.test.js` | 12 | 344 |
 
 Note : `tests/phase-c-c06-coverage.test.js` lit désormais `./initiative-et-tours.test.js` (C02) et `./psychologie-et-talents-de-groupe.test.js` (C01, C03, C04, C05). `docs/COURAGE_BRISE_INVENTAIRE.{json,md}` : les deux références à `lot2-v5-remaining-talents.test.js:70/71` pointent vers `talents-v5.test.js:1867/1868`.
+
+## R2-11 — séquelles, Corruption, référentiel
+
+| Ancien fichier | Nouveau fichier | Tests avant | Tests après (cible) |
+|---|---|---|---|
+| `tests/f2-claude-t3.test.js` | `tests/unit/corruption/corruption-mutations.test.js` | 4 | 52 |
+| `tests/f2-k-characterization.test.js` | `tests/unit/corruption/corruption-mutations.test.js` | 2 | 52 |
+| `tests/f2-k-corruption.test.js` | `tests/unit/corruption/corruption-mutations.test.js` | 17 | 52 |
+| `tests/f2-k-l17-mutations.test.js` | `tests/unit/corruption/corruption-mutations.test.js` | 5 | 52 |
+| `tests/f2-k-l23-mutations.test.js` | `tests/unit/corruption/corruption-mutations.test.js` | 4 | 52 |
+| `tests/f2-k-mutations.test.js` | `tests/unit/corruption/corruption-mutations.test.js` | 4 | 52 |
+| `tests/f2-k-store.test.js` | `tests/unit/corruption/corruption-mutations.test.js` | 7 | 52 |
+| `tests/f2-k1-reprise-characterization.test.js` | `tests/unit/corruption/corruption-mutations.test.js` | 3 | 52 |
+| `tests/f2-k2-catalog-integration.test.js` | `tests/unit/corruption/corruption-mutations.test.js` | 6 | 52 |
+| `tests/e26-fiche-sync.test.js` | `tests/unit/referentiel/fiches-et-catalogue.test.js` | 21 | 123 |
+| `tests/e27-reference-generator.test.js` | `tests/unit/referentiel/fiches-et-catalogue.test.js` | 2 | 123 |
+| `tests/e27-references-equipment.test.js` | `tests/unit/referentiel/fiches-et-catalogue.test.js` | 29 | 123 |
+| `tests/especes-coverage-check.test.js` | `tests/unit/referentiel/fiches-et-catalogue.test.js` | 3 | 123 |
+| `tests/especes-sync.test.js` | `tests/unit/referentiel/fiches-et-catalogue.test.js` | 3 | 123 |
+| `tests/fiche-core-v3.test.js` | `tests/unit/referentiel/fiches-et-catalogue.test.js` | 10 | 123 |
+| `tests/fiches-pj-control.test.js` | `tests/unit/referentiel/fiches-et-catalogue.test.js` | 19 | 123 |
+| `tests/lot1-final-control.test.js` | `tests/unit/referentiel/fiches-et-catalogue.test.js` | 12 | 123 |
+| `tests/lot1-journal-provenance.test.js` | `tests/unit/referentiel/fiches-et-catalogue.test.js` | 1 | 123 |
+| `tests/lot2-fiche-v5.test.js` | `tests/unit/referentiel/fiches-et-catalogue.test.js` | 2 | 123 |
+| `tests/lot2-reference-refresh.test.js` | `tests/unit/referentiel/fiches-et-catalogue.test.js` | 3 | 123 |
+| `tests/lot2-v5-rule-data.test.js` | `tests/unit/referentiel/fiches-et-catalogue.test.js` | 18 | 123 |
+| `tests/e16-e17-simulation-import.test.js` | `tests/unit/referentiel/import-profils.test.js` | 4 | 40 |
+| `tests/e20-profile-actions.test.js` | `tests/unit/referentiel/import-profils.test.js` | 8 | 40 |
+| `tests/e24-json-profile-import.test.js` | `tests/unit/referentiel/import-profils.test.js` | 16 | 40 |
+| `tests/pro-b1-participant.test.js` | `tests/unit/referentiel/import-profils.test.js` | 12 | 40 |
+| `tests/f2-claude-t2bis-sudden-death.test.js` | `tests/unit/sequelles/sequelles-mort-critiques.test.js` | 2 | 109 |
+| `tests/f2-i-combat-death-scars.test.js` | `tests/unit/sequelles/sequelles-mort-critiques.test.js` | 11 | 109 |
+| `tests/f2-i-critical-replacement-characterization.test.js` | `tests/unit/sequelles/sequelles-mort-critiques.test.js` | 1 | 109 |
+| `tests/f2-i-integration-review.test.js` | `tests/unit/sequelles/sequelles-mort-critiques.test.js` | 13 | 109 |
+| `tests/f2-j-aftermath.test.js` | `tests/unit/sequelles/sequelles-mort-critiques.test.js` | 13 | 109 |
+| `tests/f2-j-characterization.test.js` | `tests/unit/sequelles/sequelles-mort-critiques.test.js` | 1 | 109 |
+| `tests/f2-j-review-characterization.test.js` | `tests/unit/sequelles/sequelles-mort-critiques.test.js` | 3 | 109 |
+| `tests/f2-j-review2.test.js` | `tests/unit/sequelles/sequelles-mort-critiques.test.js` | 14 | 109 |
+| `tests/f2-j-store.test.js` | `tests/unit/sequelles/sequelles-mort-critiques.test.js` | 7 | 109 |
+| `tests/f2-j2-effects.test.js` | `tests/unit/sequelles/sequelles-mort-critiques.test.js` | 18 | 109 |
+| `tests/f2-j2-sequelae.test.js` | `tests/unit/sequelles/sequelles-mort-critiques.test.js` | 19 | 109 |
+| `tests/f2-t2bis-split-hand-second-shock-characterization.test.js` | `tests/unit/sequelles/sequelles-mort-critiques.test.js` | 1 | 109 |
+| `tests/f2-t2bis-sudden-death-characterization.test.js` | `tests/unit/sequelles/sequelles-mort-critiques.test.js` | 6 | 109 |
