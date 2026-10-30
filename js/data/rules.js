@@ -157,7 +157,7 @@ export const RULES = [
       {
         "h4": "4. Interruptions et incantations imparfaites V5",
         "ul": [
-          "Pause de Focalisation : à chaque Tour, un Test de Résistance Accessible (+2 DR) conserve la réserve ; un échec la fait perdre.",
+          "Pause de Focalisation : à chaque Tour, un Test de Focalisation Accessible (+2 DR) conserve la réserve ; un échec la fait perdre.",
           "Dégâts ou État subi pendant la Focalisation : Test de Calme Difficile (−2 DR). Échec : perdez 1d10 DR de réserve et faites un jet Mineur avec +10 par DR effectivement perdu.",
           "Maladresse de Focalisation : perdez 1d10 DR de réserve, puis jet Mineur avec +10 par DR effectivement perdu. Une réserve ne descend pas sous zéro.",
           "Maladresse d’incantation : jet Mineur. Les DR de réserve ne permettent pas d’éviter la maladresse.",

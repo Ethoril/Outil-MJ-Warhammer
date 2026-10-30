@@ -40,3 +40,20 @@ test('v3 Diction instinctive : l’incident d’une maladresse de lancement n’
   const loss = previewChannelling(mage, { type: 'winds', roll: 99, lossRoll: 1, miscastRoll: 15, instinctiveDiction: true });
   assert.equal(loss.miscast?.modifier, 10, 'Focalisation ratée : seul le +10 par DR perdu s’applique, pas −20');
 });
+
+test('v3 Pause de Focalisation (p.236) : Test de Focalisation Accessible (+2 DR), plus de Résistance', async () => {
+  const { previewChannellingPause } = await import('../js/core/v5-magic-channelling.js');
+  const mage = { id: 'm', name: 'm', caracs: { Int: 54, FM: 52, E: 38 }, equipment: [], states: [],
+    skills: [{ name: 'Focalisation', total: 70 }, { name: 'Focalisation (Haute Magie)', total: 30 }, { name: 'Résistance', total: 30 }],
+    extensions: { v5: { channelling: { type: 'winds', sl: 6 } } } };
+  const winds = previewChannellingPause(mage, { roll: 60 });
+  assert.equal(winds.score, 70, 'la Focalisation remplace la Résistance');
+  assert.equal(winds.success, true);
+  assert.equal(winds.test.sl, 3, 'Accessible : +2 DR sur 7 − 6 = 1');
+  const high = previewChannellingPause({ ...mage, extensions: { v5: { channelling: { type: 'high', sl: 6 } } } }, { roll: 60 });
+  assert.equal(high.score, 30, 'réserve de Haute Magie : Focalisation (Haute Magie)');
+  assert.equal(high.success, false);
+  const sea = previewChannellingPause({ ...mage, profileId: 'E0-P-909', skills: [], caracs: { F: 60, FM: 10 } }, { roll: 99 });
+  assert.equal(sea.ready, true);
+  assert.equal(sea.score, 70, 'élémentaire de mer : sans compétence imprimée, Force + 10 (comme la Focalisation)');
+});

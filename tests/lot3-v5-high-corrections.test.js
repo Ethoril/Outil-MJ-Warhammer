@@ -74,7 +74,7 @@ test('H-04 — HEPG p. 105 : Exténué ignoré seulement en Focalisation et Inca
   const store = await combat(actor);
   assert.equal(store.previewChannelling({ actorId: 'mage', roll: 25 }).test.sl, 4);
   assert.equal(store.previewCasting(getSpellContract('Carreau'), { actorId: 'mage', roll: 25 }).test.sl, 4);
-  assert.equal(store.previewChannelling({ actorId: 'mage', mode: 'pause', roll: 25 }).test.sl, 1);
+  assert.equal(store.previewChannelling({ actorId: 'mage', mode: 'pause', roll: 25 }).test.sl, 4, 'pause (v3 : Test de Focalisation Accessible +2 DR) : Exténué toujours appliqué');
   assert.equal(store.previewChannelling({ actorId: 'mage', mode: 'interruption', roll: 25 }).test.sl, -1);
 });
 

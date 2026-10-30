@@ -405,7 +405,7 @@ function renderV5MagicContext({ actor, participants = [], target, type, draft, h
     v5.prepend(rubric('Focalisation V5'));
     selectField('magicChannelMode', 'Mode de Focalisation', [
       ['channel', 'Accumuler (Focalisation +0 DR)'],
-      ['pause', 'Pause de focalisation (Résistance Accessible +2 DR)'],
+      ['pause', 'Pause de focalisation (Focalisation Accessible +2 DR)'],
       ['interruption', 'Test d’interruption (Calme Difficile −2 DR)']
     ], draft.magicChannelMode || 'channel');
     selectField('magicChannelType', 'Type de Focalisation', [

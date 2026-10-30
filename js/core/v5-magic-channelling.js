@@ -436,15 +436,13 @@ export function applyChannelling(target, preview, options = {}) {
 
 /**
  * Pause de Focalisation :
- * À chaque Tour, Test de Résistance Accessible (+2 DR) pour conserver la réserve.
+ * À chaque Tour, Test de Focalisation Accessible (+2 DR) pour conserver la réserve (V5 v3 p.236 ; la v2 demandait Résistance).
  * Échec = réserve perdue (sl: 0).
  */
 export function previewChannellingPause(participant, options = {}) {
   const currentReserve = getChannellingReserve(participant);
-  const endurance = Number(participant?.caracs?.E) || 0;
-  const skills = Array.isArray(participant?.skills) ? participant.skills : [];
-  const foundSkill = skills.find(s => ['resistance', 'endurance'].includes(fold(s.name || s.nom || s.sourceName)));
-  const score = Number.isFinite(Number(options.score)) ? Number(options.score) : effectiveSkillScore(participant,foundSkill?.total ?? foundSkill?.value ?? foundSkill?.score ?? baseCharacteristicScore(participant,'E'),'E');
+  // La Focalisation du type de la réserve ; l'élémentaire de mer la lit sur sa Force (resolveChannellingSkill).
+  const score = Number.isFinite(Number(options.score)) ? Number(options.score) : resolveChannellingSkill(participant, { type: currentReserve.type === 'high' ? 'high' : 'winds', wind: options.wind }).score;
 
   const slModifiers = [{ id: 'pause-difficulty', label: 'Accessible (+2 DR)', amount: 2 },...(options.slModifiers || [])];
 

@@ -76,7 +76,7 @@ test('L-07 — V5 p. 238 : les dés de durée de chaque sous-incident sont indé
 
 test('L-08/L-09 — V5 p. 236/p. 128 : pause exacte, journal correct, Mage de guerre disponible', async () => {
   const store = await combat(wizard('mage', { talents: [talent('war-wizard')], skills: [
-    ...wizard().skills, { name: "Résistance à l'alcool", total: 90 }, { name: ' Résistance ', total: 20 }
+    { name: 'Langue (Magick)', total: 60 }, { name: 'Focalisation', total: 20 }, { name: 'Focalisation (Haute Magie)', total: 60 }, { name: 'Résistance', total: 90 }
   ] }), wizard('enemy', { camp: 'ennemi' }));
   const p = store.previewChannelling({ actorId: 'mage', mode: 'pause', roll: 55 });
   assert.equal(p.score, 20); assert.equal(p.success, false);
