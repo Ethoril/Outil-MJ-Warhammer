@@ -318,3 +318,38 @@ Ancien fichier `tests/<nom>.test.js` → nouveau fichier `tests/unit/<cible>.tes
 | `tests/v3-a-prayers.test.js` | `tests/unit/divin/prieres-benedictions.test.js` | 5 | 100 |
 
 `lot3-especes-divin-coverage` ne devient pas un `describe` : ses 12 tests viennent de l’`import` de `tests/divin-v5-p4a-damage.test.js` (toujours à la racine de `tests/` jusqu’à R2-7), conservé en tête de `divin/prieres-benedictions` ; l’ancre « Haine sacrée » de `executionProbe` (`js/data/v5-magic-talent-coverage.json`) pointe désormais vers ce fichier. R2-7 devra remplacer cet `import` quand `p4a-damage` sera fusionné.
+
+## R2-6 — divin B
+
+| Ancien fichier | Nouveau fichier | Tests avant | Tests après (cible) |
+|---|---|---|---|
+| `tests/divin-v5-a5-morsure-sort.test.js` | `tests/unit/divin/brise-et-fuite.test.js` | 2 | 58 |
+| `tests/divin-v5-b14-recovery-characterization.test.js` | `tests/unit/divin/brise-et-fuite.test.js` | 1 | 58 |
+| `tests/divin-v5-b5-characterization.test.js` | `tests/unit/divin/brise-et-fuite.test.js` | 4 | 58 |
+| `tests/divin-v5-b5-prayer-bans.test.js` | `tests/unit/divin/brise-et-fuite.test.js` | 20 | 58 |
+| `tests/divin-v5-brise-flee-sprint-independent.test.js` | `tests/unit/divin/brise-et-fuite.test.js` | 22 | 58 |
+| `tests/divin-v5-broken-escape-dev.test.js` | `tests/unit/divin/brise-et-fuite.test.js` | 2 | 58 |
+| `tests/divin-v5-broken-escape-simulation-independent.test.js` | `tests/unit/divin/brise-et-fuite.test.js` | 7 | 58 |
+| `tests/divin-v5-a11-critiques-fiche.test.js` | `tests/unit/divin/courroux.test.js` | 3 | 127 |
+| `tests/divin-v5-b3-damage.test.js` | `tests/unit/divin/courroux.test.js` | 10 | 127 |
+| `tests/divin-v5-wrath-calendar-independent.test.js` | `tests/unit/divin/courroux.test.js` | 72 | 127 |
+| `tests/divin-v5-wrath-conditions-dev.test.js` | `tests/unit/divin/courroux.test.js` | 5 | 127 |
+| `tests/divin-v5-wrath-conditions-independent.test.js` | `tests/unit/divin/courroux.test.js` | 15 | 127 |
+| `tests/divin-v5-wrath-lessons-dev.test.js` | `tests/unit/divin/courroux.test.js` | 3 | 127 |
+| `tests/divin-v5-wrath-lessons-independent.test.js` | `tests/unit/divin/courroux.test.js` | 19 | 127 |
+| `tests/divin-v5-a6-indice-inversion.test.js` | `tests/unit/divin/etats-et-contexte.test.js` | 6 | 65 |
+| `tests/divin-v5-a8-rappel-attaque-rapide.test.js` | `tests/unit/divin/etats-et-contexte.test.js` | 2 | 65 |
+| `tests/divin-v5-a9-etats-critiques.test.js` | `tests/unit/divin/etats-et-contexte.test.js` | 3 | 65 |
+| `tests/divin-v5-b4-characterization.test.js` | `tests/unit/divin/etats-et-contexte.test.js` | 5 | 65 |
+| `tests/divin-v5-b4-states.test.js` | `tests/unit/divin/etats-et-contexte.test.js` | 20 | 65 |
+| `tests/divin-v5-e4-context.test.js` | `tests/unit/divin/etats-et-contexte.test.js` | 6 | 65 |
+| `tests/divin-v5-e4-context-independent.test.js` | `tests/unit/divin/etats-et-contexte.test.js` | 9 | 65 |
+| `tests/divin-v5-e4-runtime.test.js` | `tests/unit/divin/etats-et-contexte.test.js` | 5 | 65 |
+| `tests/divin-v5-e4-runtime-independent.test.js` | `tests/unit/divin/etats-et-contexte.test.js` | 9 | 65 |
+| `tests/divin-v5-a2-cibles-superflues.test.js` | `tests/unit/divin/temps-et-calendrier.test.js` | 4 | 117 |
+| `tests/divin-v5-b12-characterization.test.js` | `tests/unit/divin/temps-et-calendrier.test.js` | 3 | 117 |
+| `tests/divin-v5-b12-mornings.test.js` | `tests/unit/divin/temps-et-calendrier.test.js` | 20 | 117 |
+| `tests/divin-v5-campaign-independent.test.js` | `tests/unit/divin/temps-et-calendrier.test.js` | 59 | 117 |
+| `tests/divin-v5-e5-independent.test.js` | `tests/unit/divin/temps-et-calendrier.test.js` | 18 | 117 |
+| `tests/divin-v5-e5-technical.test.js` | `tests/unit/divin/temps-et-calendrier.test.js` | 8 | 117 |
+| `tests/divin-v5-game-time.test.js` | `tests/unit/divin/temps-et-calendrier.test.js` | 5 | 117 |

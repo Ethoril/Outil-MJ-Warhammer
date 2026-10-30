@@ -79,33 +79,33 @@
    "status": "automatisé",
    "lot": "B03",
    "commit": "69030fd",
-   "proof": "tests/divin-v5-b3-damage.test.js",
+   "proof": "tests/unit/divin/courroux.test.js",
    "note": "inaccessible en jeu (arbitrage Q12) : lecture source conservée, aucun parcours de Calme annoncé"
   },
   "l06-218-wrath-06-10": {
    "status": "automatisé",
    "lot": "B05",
    "commit": "39e85cc",
-   "proof": "tests/divin-v5-b5-prayer-bans.test.js",
+   "proof": "tests/unit/divin/brise-et-fuite.test.js",
    "note": "inaccessible par une Prière ordinaire (arbitrage Q12) ; plafond historique conservé"
   },
   "l06-218-wrath-11-15": {
    "status": "automatisé",
    "lot": "B05",
    "commit": "39e85cc",
-   "proof": "tests/divin-v5-b5-prayer-bans.test.js"
+   "proof": "tests/unit/divin/brise-et-fuite.test.js"
   },
   "l06-218-wrath-16-20": {
    "status": "automatisé",
    "lot": "B04",
    "commit": "e681603",
-   "proof": "tests/divin-v5-b4-states.test.js"
+   "proof": "tests/unit/divin/etats-et-contexte.test.js"
   },
   "l06-218-wrath-21-25": {
    "status": "automatisé",
    "lot": "B05",
    "commit": "39e85cc",
-   "proof": "tests/divin-v5-b5-prayer-bans.test.js"
+   "proof": "tests/unit/divin/brise-et-fuite.test.js"
   },
   "l06-218-wrath-26-30": {
    "status": "automatisé",
@@ -117,13 +117,13 @@
    "status": "automatisé",
    "lot": "B05",
    "commit": "39e85cc",
-   "proof": "tests/divin-v5-b5-prayer-bans.test.js"
+   "proof": "tests/unit/divin/brise-et-fuite.test.js"
   },
   "l06-218-wrath-36-40": {
    "status": "automatisé",
    "lot": "B03",
    "commit": "69030fd",
-   "proof": "tests/divin-v5-b3-damage.test.js"
+   "proof": "tests/unit/divin/courroux.test.js"
   },
   "l06-218-wrath-41-45": {
    "status": "automatisé",
@@ -135,13 +135,13 @@
    "status": "automatisé",
    "lot": "B05",
    "commit": "39e85cc",
-   "proof": "tests/divin-v5-b5-prayer-bans.test.js"
+   "proof": "tests/unit/divin/brise-et-fuite.test.js"
   },
   "l06-218-wrath-51-55": {
    "status": "automatisé",
    "lot": "B03",
    "commit": "69030fd",
-   "proof": "tests/divin-v5-b3-damage.test.js"
+   "proof": "tests/unit/divin/courroux.test.js"
   },
   "l06-218-wrath-56-60": {
    "status": "automatisé",
@@ -153,31 +153,31 @@
    "status": "automatisé",
    "lot": "B04",
    "commit": "e681603",
-   "proof": "tests/divin-v5-b4-states.test.js"
+   "proof": "tests/unit/divin/etats-et-contexte.test.js"
   },
   "l06-218-wrath-66-70": {
    "status": "automatisé",
    "lot": "B04",
    "commit": "e681603",
-   "proof": "tests/divin-v5-b4-states.test.js"
+   "proof": "tests/unit/divin/etats-et-contexte.test.js"
   },
   "l06-218-wrath-71-75": {
    "status": "automatisé",
    "lot": "B03",
    "commit": "69030fd",
-   "proof": "tests/divin-v5-b3-damage.test.js"
+   "proof": "tests/unit/divin/courroux.test.js"
   },
   "l06-218-wrath-76-80": {
    "status": "automatisé",
    "lot": "B05",
    "commit": "39e85cc",
-   "proof": "tests/divin-v5-b5-prayer-bans.test.js"
+   "proof": "tests/unit/divin/brise-et-fuite.test.js"
   },
   "l06-218-wrath-81-87": {
    "status": "automatisé",
    "lot": "B03",
    "commit": "69030fd",
-   "proof": "tests/divin-v5-b3-damage.test.js"
+   "proof": "tests/unit/divin/courroux.test.js"
   },
   "l06-218-wrath-88": {
    "status": "assisté",
@@ -189,7 +189,7 @@
    "status": "automatisé",
    "lot": "B04",
    "commit": "e681603",
-   "proof": "tests/divin-v5-b4-states.test.js"
+   "proof": "tests/unit/divin/etats-et-contexte.test.js"
   },
   "l06-218-wrath-96-100": {
    "status": "automatisé",
@@ -201,7 +201,7 @@
    "status": "automatisé",
    "lot": "B04",
    "commit": "e681603",
-   "proof": "tests/divin-v5-b4-states.test.js"
+   "proof": "tests/unit/divin/etats-et-contexte.test.js"
   },
   "l06-219-wrath-106-110": {
    "status": "automatisé",
@@ -231,13 +231,13 @@
    "status": "automatisé",
    "lot": "B04",
    "commit": "e681603",
-   "proof": "tests/divin-v5-b4-states.test.js"
+   "proof": "tests/unit/divin/etats-et-contexte.test.js"
   },
   "l06-219-wrath-131-135": {
    "status": "automatisé",
    "lot": "B12",
    "commit": "ac61364",
-   "proof": "tests/divin-v5-b12-mornings.test.js"
+   "proof": "tests/unit/divin/temps-et-calendrier.test.js"
   },
   "l06-219-wrath-136-140": {
    "status": "automatisé",
