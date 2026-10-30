@@ -18,7 +18,7 @@ import { ENGINES } from '../../../js/data/keyword-engines.js';
 import { spawnSync } from 'node:child_process';
 import { computeDamage } from '../../../js/core/damage.js';
 
-describe('Qualités d\'armes T2', () => {
+describe('Qualités des armes T2', () => {
 // Contre-vérification T2 (Claude) : Taille sans pièce touchée, Mortier de main du
 // catalogue, qualités conditionnelles V5 du Couteau Bollock, refus de mort limité à un épisode.
 
@@ -90,7 +90,7 @@ test('Claude T2 — un refus de mort ne vaut que pour un épisode : un nouvel In
 });
 });
 
-describe('Qualités d\'armes T2bis', () => {
+describe('Qualités des armes T2bis', () => {
 // Contre-vérification T2 bis (Claude) : armure d'inventaire des dégâts incidents,
 // Discrétion par catégorie marquée, Empaleuse des armes de jet et de siège, Bolas « ; »,
 // recharge de l'arquebuse à salve, cible absente, créatures en mort subite, report de la main fendue.
@@ -228,7 +228,7 @@ test('F2-D characterization — V5 Bouclier is covered by its resolution flow, s
 });
 });
 
-describe('Qualités d\'armes', () => {
+describe('Qualités des armes', () => {
 const q = (id, parameter = '') => ({ id, parameter });
 
 test('F2-D pure proposal — Explosion uses only GM targets, omits SL damage, keeps Conditions', () => {

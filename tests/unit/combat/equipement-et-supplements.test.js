@@ -582,7 +582,7 @@ test('F2-F review — planting the real pavise consumes two Actions on separate 
 });
 });
 
-describe('Noms de source de l\'équipement', () => {
+describe('Noms de source des équipements', () => {
 const actor = { id: 'holder', name: 'MJ', states: [] };
 const target = { id: 'target', name: 'Cible', states: [] };
 const clause = name => previewSupplementalEquipment({ item: { name }, actor, target, hit: true, damage: { finalDamage: 2 }, used: true, context: {} });

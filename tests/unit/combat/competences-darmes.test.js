@@ -12,7 +12,7 @@ import { getSpellContract } from '../../../js/core/v5-spell-contracts.js';
 import { magicGrantedActions } from '../../../js/core/v5-magic-combat.js';
 import divineGearHandlers from '../../../js/core/v5-divine-effects-gear.js';
 
-describe('Compétences d\'armes (caractérisation)', () => {
+describe('Compétences des armes (caractérisation)', () => {
 const target = { id: 'target', hp: 20, caracs: { E: 30 }, states: [] };
 const ficheWeapon = {
   id: 'sword-instance', kind: 'weapon', name: 'Épée de fiche', category: 'Arme de base',
@@ -67,7 +67,7 @@ test('F2-C caractérisation — une arme conjurée conserve son calcul de compé
 });
 });
 
-describe('Compétences d\'armes (régressions)', () => {
+describe('Compétences des armes (régressions)', () => {
 const catalogue = getReferenceCatalogue();
 const target = { id: 'target', hp: 20, caracs: { E: 30 }, states: [] };
 const fixture = JSON.parse(readFileSync(new URL('../../fixtures/fiche-caelel.json', import.meta.url), 'utf8'));
@@ -489,7 +489,7 @@ test('F2-C Claude — la Faux de Shyish produit une hallebarde contrôlée sans 
 });
 });
 
-describe('Compétences d\'armes', () => {
+describe('Compétences des armes', () => {
 const referenceItem = id => structuredClone(getReferenceCatalogue().items.find(item => item.id === id));
 const file = JSON.parse(readFileSync(new URL('../../fixtures/fiche-caelel.json', import.meta.url), 'utf8'));
 const target = { id: 'target', hp: 20, caracs: { E: 30 }, states: [] };
