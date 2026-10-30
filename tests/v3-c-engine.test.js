@@ -96,3 +96,16 @@ test('v3 Trait Grim (p.358) : l’attaque gratuite ne fait pas perdre l’Élan 
   const notRetained = await run([], true);
   assert.throws(() => notRetained.store.previewResolution(notRetained.input), /Grim/);
 });
+
+test('v3 Morsure (p.356) : BF+3 sans valeur imprimée, valeur imprimée gardée (Trait avec valeur, profil V5, attaque déduite du nom)', async () => {
+  const { planNaturalAttack } = await import('../js/core/creature-combat.js');
+  const beast = (traits, extra = {}) => ({ id: 'b', name: 'Bête', caracs: { F: 50, E: 40 }, traits, extensions: { v5: {} }, ...extra });
+  assert.equal(planNaturalAttack(beast(['Morsure']), 'bite').damageFormula, '8', 'BF 5 + 3');
+  assert.equal(planNaturalAttack(beast(['Bite']), 'bite').damageFormula, '8');
+  assert.equal(planNaturalAttack(beast(['Bite (7)']), 'bite').damageFormula, '7', 'valeur imprimée du Trait');
+  assert.equal(planNaturalAttack(beast(['Bite']), 'bite', { ordinary: true }).damageFormula, '8');
+  const v5Profile = beast(['Bite'], { extensions: { v5: { bestiary: { edition: 'V5' } } } });
+  assert.equal(planNaturalAttack(v5Profile, 'bite').damageFormula, 'imprimé', 'profil V5 : valeur imprimée');
+  assert.equal(planNaturalAttack(beast([]), 'bite', { ordinary: true }).damageFormula, 'imprimé', 'attaque déduite du nom, sans Trait : valeur imprimée');
+  assert.equal(planNaturalAttack(beast(['Bite'], { caracs: {} }), 'bite').available, false, 'Force inconnue : saisie MJ');
+});
