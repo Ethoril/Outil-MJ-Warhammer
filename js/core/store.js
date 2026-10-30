@@ -80,7 +80,7 @@ import { getV5Fortune, getV5Fate, v5ResourceIdentity, consumeTemporaryFortune as
 import { acquireV5Conditions, recoverV5Condition, healV5Wounds, assertDivineWrathConditionsKept } from './v5-effects.js';
 import { decideCriticalDeath as decideV5CriticalDeath, decideImmediateCriticalDeath as decideV5ImmediateCriticalDeath, previewSuddenDeath as previewV5SuddenDeath, decideSuddenDeath as decideV5SuddenDeath, updateCriticalDeathCountdown, previewAmputationShock as previewV5AmputationShock, applyAmputationShock as applyV5AmputationShock, amputationShockRequirements } from './v5-critical-aftermath.js';
 import { encounterJournalScope, purgeEncounterJournal, purgeEncounterJournalHistory, tagNewEncounterLogs } from './encounter-journal.js';
-import { momentumAfterChange, withMomentum } from './v5-combat-rules.js';
+import { momentumAfterChange, withMomentum, loseMomentumUnderFear } from './v5-combat-rules.js';
 import { canUseV5Move } from './v5-combat-fumbles.js';
 import { advanceGameClock, campaignDurationSeconds, createGameClock, deriveTurnPhasePlan, readCombatPosition, reconcileGameClockPosition } from './v5-game-time.js';
 import { advanceCampaignSnapshot } from './v5-campaign-time.js';
@@ -3548,7 +3548,7 @@ function resolvedCorruptionTest(participant, skillId, input) {
       if (!additions.size) return { ok: false, reason: 'no-target', message: [...new Set(blocked)].join(' ') || `${label} : aucune cible à affecter (alliée, immunisée ou rencontre déjà subie).` };
       const names = targets.filter(item => additions.has(item.id)).map(item => item.name || item.id);
       const result = api.executeCommand('creature-psychology', draft => ({ ...draft,
-        combat: { ...draft.combat, participants: (draft.combat?.participants || []).map(item => (additions.has(item.id) ? { ...item, states: [...(item.states || []), ...additions.get(item.id)] } : item)) },
+        combat: { ...draft.combat, participants: (draft.combat?.participants || []).map(item => (additions.has(item.id) ? loseMomentumUnderFear({ ...item, states: [...(item.states || []), ...additions.get(item.id)] }) : item)) },
         log: [{ id: uid(), kind: 'effect', actorId: sourceId, targetId: options.targetId || null,
           text: `${source.name} · ${label} : Test de Calme demandé à ${names.join(', ')}`,
           detail: { kind: 'creature-psychology', key, targetIds: [...additions.keys()] } }, ...(draft.log || [])].slice(0, 300) }));

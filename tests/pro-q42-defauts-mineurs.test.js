@@ -56,8 +56,8 @@ test('Q42 dégâts d’une action personnalisée remplacés par la formule : rap
   const stegadon = buildParticipantFromBestiary('E0-P-301', { library: L07 });
   const store = await fixture(stegadon);
   const custom = hit(store, { name: 'Tail', damage: 3 });
-  assert.equal(custom.damage.finalDamage, hit(store, { name: 'Fixe', damage: 12 }).damage.finalDamage);
-  assert.ok(custom.reminders.some(text => /Dégâts de l’action \(3\) remplacés par la formule V5 du Trait \(12\)/.test(text)), JSON.stringify(custom.reminders));
+  assert.equal(custom.damage.finalDamage, hit(store, { name: 'Fixe', damage: 17 }).damage.finalDamage);
+  assert.ok(custom.reminders.some(text => /Dégâts de l’action \(3\) remplacés par la formule V5 du Trait \(17\)/.test(text)), JSON.stringify(custom.reminders));
   const tail = { ...stegadon.actions.find(action => action.name === 'Tail'), base: 60 };
   assert.ok(!hit(store, tail).reminders.some(text => /remplacés par la formule/.test(text)));
 });

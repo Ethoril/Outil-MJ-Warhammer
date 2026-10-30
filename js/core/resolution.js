@@ -29,7 +29,7 @@ import {divineSocialRestriction} from './v5-divine-access.js';
 import { previewV5Test,selectV5Test, resolveV5Opposition, reverseV5Roll,refreshV5ResultTier } from './v5-roll.js';
 import { buildV5RollDecision } from './v5-decision.js';
 import { previewMomentumEvents } from './v5-momentum.js';
-import { buildCombatTest, hasMomentum, withMomentum, conditionLevels, inferV5Kind,v5ShieldDefense, V5_COMBAT_RULE_VERSION } from './v5-combat-rules.js';
+import { buildCombatTest, hasMomentum, withMomentum, loseMomentumUnderFear, isFrightened, conditionLevels, inferV5Kind,v5ShieldDefense, V5_COMBAT_RULE_VERSION } from './v5-combat-rules.js';
 import { evaluateV5Talents, previewV5TalentConditions, currentV5TalentHashes, V5_TALENT_IDS } from './v5-talents.js';
 import { getV5CriticalEffect, V5_CRITICAL_TABLE_VERSION } from '../data/v5-crits.js';
 import { previewV5ActionQualities, v5ActionQualityContext, previewV5WeaponConditions, v5QualityMechanicalStatus } from './v5-talent-qualities.js';
@@ -399,6 +399,7 @@ export function normalizeResolutionInput(input = {}) {
     v5: v5Settings,
     ...(isRecord(input.v5State) ? { v5State: clone(input.v5State) } : {}),
     v5Clock: isRecord(input.v5Clock) ? clone(input.v5Clock) : {},
+    riposteSpent: input.riposteSpent === true,
     ...(isRecord(input.authorNextTurnEnd) ? { authorNextTurnEnd: clone(input.authorNextTurnEnd) } : {}),
     defenderCriticalRolls: normalizeCriticalRolls(input.defenderCriticalRolls),
     defenderCriticalDeclined: Array.isArray(input.defenderCriticalDeclined) ? input.defenderCriticalDeclined.map(String) : [],
@@ -840,6 +841,8 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   };
   const magicFlags=actor?.extensions?.v5?.specialStates,psychologyKind=normalized.v5.context?.psychologyKind;
   const magicFearImmune=magicFlags?.fearTerrorImmunity && ['fear','terror'].includes(psychologyKind) || magicFlags?.fearImmune && (psychologyKind==='fear' || psychologyKind==='terror' && magicFlags?.terrorAsFear);
+  // Livre de base V5 v3 p.183 : les Tests de psychologie se font au début du Tour, avant le Mouvement et l'Action.
+  const psychologyTestReminder=!normalized.defense&&((psychologyKind&&psychologyKind!=='none')||['overcome-fear','overcome-terror','hatred','vice'].includes(normalized.v5.context?.talentAction))?['Test de psychologie : à faire au début du Tour, avant de choisir Mouvement et Action (V5 p.183).']:[];
   if(magicFearImmune)actorTest={...actorTest,success:true,sl:Math.max(0,actorTest.sl),fumble:false,critical:false};
   const extremeLayer = normalized.noTestAction ? null : slExtremeLayers(actor)[0];
   const slExtreme = extremeLayer ? { before: actorTest.sl, after: actorTest.success ? Math.max(actorTest.sl, extremeLayer.slExtreme.magnitude) : Math.min(actorTest.sl, -extremeLayer.slExtreme.magnitude) } : null;
@@ -896,7 +899,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   const combatFumbleTableEligible=action.extensions?.v5?.specialProfileAbility!=='cliff-spider-lasso'&&(attackType(action.type)&&!socialTest||qualifiedCombatTest||explicitWeaponTest);
   const combatFailure = previewCombatFailure({ normalized, roll, fumble: combatFumbleTableEligible && !success && fumbleClassification.maladresse ? fumbleClassification : null, context, hit, success, sl });
   let engagedShot=null,engagedUnresolved=[],lethalDeath=null,lethalUnresolved=[];
-  if(actorPlan.kind==='ranged'&&context.targetEngaged===true&&actorTest.advantage?.net<0&&actorTest.optionId==='reverse'&&!hit){
+  if(actorPlan.kind==='ranged'&&context.targetEngaged===true&&context.engagedWithShooter!==true&&actorTest.advantage?.net<0&&actorTest.optionId==='reverse'&&!hit){
     const ordinaryPlan=previewV5Test({score:actorTest.score,roll:normalized.roll,kind:actorTest.kind,slModifiers:actorTest.details.modifiers,advantageSources:actorTest.advantage.advantage,disadvantageSources:actorTest.advantage.disadvantage.filter(row=>row.id!=='target-engaged')}),ordinary=selectV5Test(ordinaryPlan,ordinaryPlan.options[0].id);
     const wouldHit=defenderTest?resolveV5Opposition(ordinary,defenderTest).winner==='initiator':ordinary.success;
     if(wouldHit){
@@ -1113,6 +1116,8 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
         unresolved.push('Poivrière : le canon tiré doit être préparé manuellement avant le prochain tir; confirmez que la seconde main est libre (L13 p.103).');
       else {
         const consumed = consumeV5WeaponShot(current);
+        // V5 v3 p.305 : le premier tir d'un tir double réserve les deux munitions (le second, gratuit, n'en consomme qu'une).
+        if (context.repeaterDoubleShot === true && context.repeaterSecondShot !== true && current.repeaterRating > 0 && current.shotsRemaining < 2) unresolved.push('Tir double À répétition : deux tirs restants sont requis dans l’arme (V5 p.305).');
         if (consumed.status !== 'shot') unresolved.push('À répétition : l’arme doit être rechargée avant un nouveau tir.');
         else {
           const after=consumed.state;
@@ -1167,7 +1172,10 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   if (!explosionAttack && !parryUnopposed && attackType(action.type) && actorPlan.kind === 'ranged' && normalized.defense && context.rangedOppositionAllowed !== true
     && !(defenderPlan.kind === 'test' && v5ShieldDefense(normalized).rangedDodgeAllowed)
     && !allowsPistolContactDodge
-    && !(pistolContact.allowed && defenderPlan.kind === 'melee')) unresolved.push('Confirmer la règle autorisant cette défense contre un tir.');
+    && !((pistolContact.allowed || context.engagedWithShooter === true) && defenderPlan.kind === 'melee')) {
+    const initiativeBonus = Math.floor(Number(target?.caracs?.I) / 10);
+    unresolved.push(`Confirmer la règle autorisant cette défense contre un tir : Esquive si le tireur est à moins de Bonus d’Initiative mètres${Number.isFinite(initiativeBonus) ? ` (${initiativeBonus} m)` : ''}, ou à toute portée avec un bouclier de 2 PA ou plus ; adversaire engagé avec le tireur : Corps à corps (V5 p.165).`);
+  }
   if (Number(actor?.hp) < 0 || Number(target?.hp) < 0) unresolved.push('PV historiques négatifs : migration explicite à 0 requise avant une action V5.');
   action.qualities = magicWeaponQualities(actor,action,normalized.v5.kind==='ranged');
   const allQualities = [...action.qualities, ...(normalized.defense?.qualities || [])];
@@ -1342,7 +1350,11 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   let defenderDamage=null;
   const riposte=evaluateV5Talents(target,{event:'damage.beforeProtection',role:'defender',context:{kind:defenderPlan?.kind||'none',oppositionWon:opposed?.winner==='defender'}});
   supplementaryTalentPlans.push(riposte);
-  if(riposte.proposals.some(row=>row.op==='riposte')){
+  // Livre de base V5 v3 p.124 : une seule Riposte par Round (quota `talent:riposte` du registre, étendue Round, lu par le Store avant l'aperçu).
+  const riposteSpent=normalized.riposteSpent===true;
+  const riposteDue=riposte.proposals.some(row=>row.op==='riposte')&&!riposteSpent;
+  const riposteReminders=riposteSpent&&riposte.proposals.some(row=>row.op==='riposte')?['Riposte : déjà utilisée ce Round (une fois par Round, V5 p.124).']:[];
+  if(riposteDue){
     if(!knownHp(actor)||normalized.defense?.damage===undefined&&!normalized.defense?.damageFormula)unresolved.push('Riposte : Blessures de l’attaquant et dégâts de l’arme utilisée en défense requis.');
     else {
       const loc=creatureLocationOf(reverseV5Roll(defenderTest.roll),actor,normalized.defense?.v5?.context||{});let guard=locationProtection(actor,{location:loc,attackRoll:defenderTest.roll,critical:defenderTest.critical,ranged:false,qualities:normalized.defense.qualities,nature:defenderNature()});
@@ -1361,7 +1373,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     defenderCritical={...(defenderCritical||{kind:'Critique',targetId:actor.id,details:null}),second:extra,excessWounds:riposteExcess};
     defenderCritical.items=criticalItems(defenderCritical.details,extra,normalized.defenderCriticalDeclined);defenderCritical.application=criticalApplication(defenderCritical.items);
   }
-  if(!defenseShield.replacement&&riposte.proposals.some(p=>p.op==='riposte')&&defenderDamage===null&&!unresolved.some(s=>s.startsWith('Riposte :')))unresolved.push('Riposte : dégâts de l’arme à arbitrer.');
+  if(!defenseShield.replacement&&riposteDue&&defenderDamage===null&&!unresolved.some(s=>s.startsWith('Riposte :')))unresolved.push('Riposte : dégâts de l’arme à arbitrer.');
   const weaponConditions = previewV5WeaponConditions({ qualities: action.qualities, hit: attackType(action.type) && hit,
     location, target, actor, damage, resolutionId: normalized.resolutionId, replaced: Boolean(replacement) });
   const hookedNetSource=weaponSource?.extensions?.v5?.hookedNet===true||context.hookedNet===true;
@@ -1680,7 +1692,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   const momentum = [];
   const planMomentum = (participant, events, exceptions=[]) => {
     if (!participant?.id) return;
-    momentum.push({ participantId: participant.id, ...previewMomentumEvents({ hasMomentum: hasMomentum(participant), events, exceptions }) });
+    momentum.push({ participantId: participant.id, ...previewMomentumEvents({ hasMomentum: hasMomentum(participant), events, exceptions, frightened: isFrightened(participant) }) });
   };
   const actorEvents = [], targetEvents = [];
   const event = (type, data = {}) => ({ id: `${normalized.resolutionId}:${type}`, type, ...data });
@@ -1867,12 +1879,12 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     blastPlan,
     spreadPlan,
     targetConditionApplication,actorConditionApplication,defenderWeaponConditions,familiarConditionRefusals,
-    reminders: [...familiarConditionRefusals.map(row => `${row.name || 'Homoncule'} : ${row.message}`),...profileAbilityReminders,...(supplementalEquipment?.reminders||[]),...(supplementalEquipment?.unresolved||[]),...(magicFearImmune?['Le Bœuf Reste Debout : immunité aux Tests de Peur et Terreur pour la durée.']:[]),...(fast.initiativeBonus?[`Rapide : +${fast.initiativeBonus} Initiative pour cette attaque uniquement; le MJ l’applique à son arbitrage d’ordre, sans modifier l’Initiative de fiche.`]:[]),...activation.reminders,...special.reminders,...naturalReminders,...(hit&&attackType(action.type)&&target?reactionReminders(target,nature):[]),...(hit&&target&&damage?.finalDamage>0&&(target.extensions?.v5?.spellEffects||[]).some(e=>e.specialState?.festeringWoundTest)?[`Domaine de Nurgle (D-C51) : ${target.name||target.id} subit des Blessures ; proposer au MJ de jouer le Test de Blessure Suppurée (V5 p. 180). Rien n’est appliqué par l’outil.`]:[]),...(context.silentTakedown === true ? ['Neutralisation silencieuse : Blessures égales au BF et Inconscient si victoire ; Sonné et alarme si la cible gagne. Ces conséquences restent à arbitrer.'] : [])],
+    reminders: [...familiarConditionRefusals.map(row => `${row.name || 'Homoncule'} : ${row.message}`),...psychologyTestReminder,...riposteReminders,...profileAbilityReminders,...(supplementalEquipment?.reminders||[]),...(supplementalEquipment?.unresolved||[]),...(magicFearImmune?['Le Bœuf Reste Debout : immunité aux Tests de Peur et Terreur pour la durée.']:[]),...(fast.initiativeBonus?[`Rapide : +${fast.initiativeBonus} Initiative pour cette attaque uniquement; le MJ l’applique à son arbitrage d’ordre, sans modifier l’Initiative de fiche.`]:[]),...activation.reminders,...special.reminders,...naturalReminders,...(hit&&attackType(action.type)&&target?reactionReminders(target,nature):[]),...(hit&&target&&damage?.finalDamage>0&&(target.extensions?.v5?.spellEffects||[]).some(e=>e.specialState?.festeringWoundTest)?[`Domaine de Nurgle (D-C51) : ${target.name||target.id} subit des Blessures ; proposer au MJ de jouer le Test de Blessure Suppurée (V5 p. 180). Rien n’est appliqué par l’outil.`]:[]),...(context.silentTakedown === true ? ['Neutralisation silencieuse : Blessures égales au BF et Inconscient si victoire ; Sonné et alarme si la cible gagne. Ces conséquences restent à arbitrer.'] : [])],
     activeEffects,talentActionChanges,secondaryTargets,
     damageReplacedByTalent: replacement ? clone(replacement) : null,defenderDamageReplacedByTalent:defenseShield.replacement||null,
     unresolved: [...unresolved,...(supplementalEquipment?.unresolved||[])],
     weaponSkillReceipt: normalized.weaponSkillReceipt,
-    defenderCritical,defenderDamage,
+    defenderCritical,defenderDamage,riposteUsed:riposteDue&&defenderDamage&&!defenseShield.replacement?{participantId:target.id}:null,
     actionType: action.type,
     attack: attackType(action.type),
     ulricFury: furyDue&&furyValid?{turnId:furyTurnId}:null,
@@ -1886,7 +1898,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     trip,
     tripFall,
     extraordinaryShot:actorPlan.extraordinaryShot||null,
-    reachGuide:actorPlan.kind==='melee'?computeV5WeaponReachGuide(naturalWeaponDefaults({reach:context.weaponReach||(actor?.equipment?.find(item=>item.id===action?.extensions?.fiche?.equipmentId)||action?.extensions?.equipment)?.reach||action?.reach,qualities:action?.qualities,natural:Boolean(naturalPlan||inferredNatural)}).reach):null,
+    reachGuide:actorPlan.kind==='melee'?computeV5WeaponReachGuide(naturalWeaponDefaults({reach:context.weaponReach||(actor?.equipment?.find(item=>item.id===action?.extensions?.fiche?.equipmentId)||action?.extensions?.equipment)?.reach||action?.reach,qualities:action?.qualities,natural:Boolean(naturalPlan||inferredNatural),size:creatureSizeOf(actor).key}).reach):null,
     rangeBands:actorPlan.kind==='ranged'?computeV5WeaponRangeBands(context.weaponRangeYards??(actor?.equipment?.find(item=>item.id===action?.extensions?.fiche?.equipmentId)||action?.extensions?.equipment)?.range??action?.range,actor):null,
     sl,
     resultTier: actorTest.resultTier,
@@ -2230,7 +2242,7 @@ export function applyResolution(preview, currentState) {
   for(const change of preview.talentActionChanges||[]){
     const live=participantById(nextState,change.participantId);if(!live)return{status:'stale',requiresPreview:true,state:clone(currentState),resolution:clone(preview)};
     let updated={...clone(live),...clone(change.patch||{}),states:[...(live.states||[]).filter(s=>!change.removeKeys?.includes(s.key)&&!change.removeIds?.includes(s.id)),...(change.add||[])]};
-    if(typeof change.momentum==='boolean')updated=withMomentum(updated,change.momentum);nextState.participants=participantListWithUpdate(nextState,live.id,updated);
+    if(typeof change.momentum==='boolean')updated=withMomentum(updated,change.momentum);updated=loseMomentumUnderFear(updated);nextState.participants=participantListWithUpdate(nextState,live.id,updated);
   }
   for(const effect of preview.combatFailure?.effects||[]){
     const live=participantById(nextState,effect.targetId);if(!live)return{status:'stale',requiresPreview:true,state:clone(currentState),resolution:clone(preview)};

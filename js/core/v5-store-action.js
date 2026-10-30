@@ -151,7 +151,17 @@ export function buildV5StoreActionInput(envelope, raw = {}) {
   if(context.talentAction==='martial-arts')quotas.push({id:'talent:martial-arts-choice',scope:'turn',maximum:1});
   if(v5.extraAttack&&context.freeAttackTalent==='dual-wielder'){
     if(!acquiredV5Talents(actor).some(t=>t.talentId==='talent-dual-wielder')||!currentV5TalentHashes()['talent-dual-wielder']?.startsWith('sha256:')||context.dualWielding!==true||context.secondWeaponAttack!==true||v5.kind!=='melee')throw new TypeError('Maniement de deux armes : seconde arme en mêlée requise.');
-    quotas.push({id:'talent:dual-wielder-second-weapon',scope:'turn',maximum:1});for(const cost of costs.filter(c=>c.resource==='momentum'))exemptions.push({costId:cost.id,sourceId:'talent-dual-wielder'});
+    quotas.push({id:'talent:dual-wielder-second-weapon',scope:'turn',maximum:1});
+    // V5 v3 p.119 : l'attaque de seconde arme ne dépense pas d'Élan, mais il faut en avoir ; sans Élan l'exemption tombe et le coût d'Élan bloque l'action.
+    if(actor.extensions?.v5?.hasMomentum===true)for(const cost of costs.filter(c=>c.resource==='momentum'))exemptions.push({costId:cost.id,sourceId:'talent-dual-wielder'});
+  }
+  // À répétition (V5 v3 p.305) : le second tir du tir double est un Test gratuit de la même Action ; un seul par Tour, aucun Élan.
+  if(v5.extraAttack&&context.freeAttackTalent==='repeater-double'){
+    if(context.repeaterDoubleShot!==true||context.repeaterSecondShot!==true||v5.kind!=='ranged'||![...(supplied.action?.qualities||[]),...(actor.equipment?.find(row=>row.id===supplied.action?.extensions?.fiche?.equipmentId)?.keywords||[])].some(row=>(typeof row==='string'?row:row?.id)==='a-repetition'))throw new TypeError('Tir double À répétition : second tir d’une arme À répétition requis.');
+    // Le second tir suit un premier tir du même Tour, avec la même arme, sur la même cible.
+    const firstShot=(envelope.extensions?.v5?.standardTurnActions||[]).find(row=>row.actionId===context.primaryResolutionId&&row.actorId===actorId&&row.encounterId===clock.encounterId&&row.turnId===clock.turnId&&row.kind==='action'&&row.actionType==='attack');
+    if(!firstShot||firstShot.weaponId!==supplied.action?.extensions?.fiche?.equipmentId||firstShot.targetId!==targetId)throw new TypeError('Tir double À répétition : un premier tir de ce Tour, avec la même arme et sur la même cible, est requis.');
+    quotas.push({id:'weapon:repeater-double-second-shot',scope:'turn',maximum:1});for(const cost of costs.filter(c=>c.resource==='momentum'))exemptions.push({costId:cost.id,sourceId:'weapon-repeater'});
   }
   if(context.talentAction==='shield-ally'){costs.push({id:'talent:shieldsman:momentum',resource:'momentum',amount:1});quotas.push({id:'talent:shieldsman',scope:'round',maximum:1});}
   if(context.talentAction==='overcome-fear'){const active=(actor.states||[]).find(s=>s.key==='fear-of-talent'&&s.id===context.fearEffectId&&sourceActive(s));if(active)quotas.push({id:'talent:frightening:control',scope:active.mode==='sl'?'round':'turn',maximum:1});}
@@ -220,7 +230,9 @@ export function buildV5StoreActionInput(envelope, raw = {}) {
     if (prepared.status === 'prepared') paid = prepared.state;
   }
   const combatTurnIndex=envelope.activeScene?.extensions?.v5?.turnIndex??envelope.extensions?.v5?.turnIndex;
-  return { ...supplied, resolutionId, actorId, targetId,
+  // Riposte (V5 v3 p.124) : une fois par Round ; l'usage est inscrit au registre des quotas par la demande « après résultat » de l'aperçu.
+  const riposteSpent=targetId?previewV5ActionCosts({phase:'after-result',actorId:targetId,actionId:resolutionId+':riposte-check',costs:[],quotas:[{id:'talent:riposte',scope:'round',maximum:1}],exemptions:[],clock:quotaClock,state:paid}).unresolved.length>0:false;
+  return { ...supplied, resolutionId, actorId, targetId, riposteSpent,
     actor: paid.participants.find(item => item.id === actorId) || supplied.actor,
     target: paid.participants.find(item => item.id === targetId) || supplied.target || null,
     round: state.round ?? supplied.round, baseRevision: supplied.baseRevision ?? state.revision,
@@ -254,7 +266,7 @@ export function annotateV5StoreActionPreview(preview, input) {
     const plans=input.secondaryTalentRequests.map(request=>previewV5ActionCosts({...request,state:input.v5State}));
     preview={...preview,talentUsageRequests:[...(preview.talentUsageRequests||[]),...input.secondaryTalentRequests],unresolved:[...(preview.unresolved||[]),...plans.flatMap(p=>p.unresolved.map(u=>'Défense : '+u.reason))]};
   }
-  const postRequests=[];for(const[subject,settings,replaced]of[[input.actor,input.v5,preview.damageReplacedByTalent],[input.target,input.defense?.v5,preview.defenderDamageReplacedByTalent]]){const c=settings?.context||{};if(!subject||!replaced)continue;const shield=c.specialAttack==='shieldsman',catching=c.specialAttack==='disarm'&&c.catchWeapon===true;if(!shield&&!catching)continue;const request={phase:'after-result',actorId:subject.id,actionId:preview.resolutionId+':post:'+subject.id,costs:[{id:shield?'talent:shieldsman:momentum':'talent:disarm:catch',resource:'momentum',amount:1}],quotas:shield?[{id:'talent:shieldsman',scope:'round',maximum:1}]:[],exemptions:[],clock:quotaClock(input.v5Clock)};const state=clone(input.v5State);state.participants=state.participants.map(p=>p.id===subject.id?withMomentum(p,preview.momentum.find(m=>m.participantId===p.id)?.after??p.extensions?.v5?.hasMomentum===true):p);const plan=previewV5ActionCosts({...request,state});postRequests.push(request);preview={...preview,postActionCosts:[...(preview.postActionCosts||[]),plan],unresolved:[...(preview.unresolved||[]),...plan.unresolved.map(u=>u.reason)]};}
+  const postRequests=[];if(preview.riposteUsed&&input.v5State)postRequests.push({phase:'after-result',actorId:preview.riposteUsed.participantId,actionId:preview.resolutionId+':post:riposte',costs:[],quotas:[{id:'talent:riposte',scope:'round',maximum:1}],exemptions:[],clock:quotaClock(input.v5Clock)});for(const[subject,settings,replaced]of[[input.actor,input.v5,preview.damageReplacedByTalent],[input.target,input.defense?.v5,preview.defenderDamageReplacedByTalent]]){const c=settings?.context||{};if(!subject||!replaced)continue;const shield=c.specialAttack==='shieldsman',catching=c.specialAttack==='disarm'&&c.catchWeapon===true;if(!shield&&!catching)continue;const request={phase:'after-result',actorId:subject.id,actionId:preview.resolutionId+':post:'+subject.id,costs:[{id:shield?'talent:shieldsman:momentum':'talent:disarm:catch',resource:'momentum',amount:1}],quotas:shield?[{id:'talent:shieldsman',scope:'round',maximum:1}]:[],exemptions:[],clock:quotaClock(input.v5Clock)};const state=clone(input.v5State);state.participants=state.participants.map(p=>p.id===subject.id?withMomentum(p,preview.momentum.find(m=>m.participantId===p.id)?.after??p.extensions?.v5?.hasMomentum===true):p);const plan=previewV5ActionCosts({...request,state});postRequests.push(request);preview={...preview,postActionCosts:[...(preview.postActionCosts||[]),plan],unresolved:[...(preview.unresolved||[]),...plan.unresolved.map(u=>u.reason)]};}
   if(postRequests.length)preview={...preview,talentUsageRequests:[...(preview.talentUsageRequests||[]),...postRequests]};
   if (!input.actionCostPlan) return preview;
   const decisions = clone(preview.decisions || {});

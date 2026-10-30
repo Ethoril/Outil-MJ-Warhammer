@@ -6,8 +6,8 @@ import { createGameClock } from '../js/core/v5-game-time.js';
 import { buildParticipantFromBestiary } from '../js/core/bestiary-profiles.js';
 import { planNaturalAttack, inferNaturalAttackKey } from '../js/core/creature-combat.js';
 
-// Q35, décisions (3) et (4) du MJ du 24/10 : livres V4 = formule V5 du Trait + bonus de Taille V5 (Livre de base p.360 : Grande/Énorme +BF,
-// Monstrueuse +2 BF, mêlée seulement : ni tir, ni attaque gratuite, ni attaque bonus) ; livre V5 : chiffre imprimé gardé (Taille incluse).
+// Q35, décisions (3) et (4) du MJ du 24/10 : livres V4 = formule V5 du Trait + bonus de Taille V5 (Livre de base V5 v3 p.360 : Grande +BF, Énorme +2 BF,
+// Monstrueuse +3 BF, mêlée seulement : ni tir, ni attaque gratuite, ni attaque bonus) ; livre V5 : chiffre imprimé gardé (Taille incluse).
 const clone = value => structuredClone(value);
 // Comme le chargeur de l'outil : l'édition du livre est recopiée sur chaque profil.
 const lib = book => { const file = JSON.parse(readFileSync(`js/data/bestiary/${book}.json`, 'utf8')); return file.profiles.map(profile => ({ ...profile, edition: file.edition })); };
@@ -29,18 +29,18 @@ const hit = (store, action, v5 = {}) => store.previewResolution({ resolutionId: 
 const fixed = (store, damage) => hit(store, { name: 'Fixed', damage }).damage.finalDamage;
 const attack = (participant, name) => ({ ...participant.actions.find(action => action.name === name), base: 60 });
 
-test('Q35 Stégadon L07 : Queue 12 (BF 5 + 2 + Énorme +5), Morsure 9 + 5', async () => {
+test('Q35 Stégadon L07 : Queue 17 (BF 5 + 2 + Énorme +10), Morsure 9 + 10', async () => {
   const stegadon = buildParticipantFromBestiary('E0-P-301', { library: L07 });
   const store = await fixture(stegadon);
-  assert.equal(hit(store, attack(stegadon, 'Tail')).damage.finalDamage, fixed(store, 12));
-  assert.equal(hit(store, attack(stegadon, 'Bite')).damage.finalDamage, fixed(store, 14), 'Bite +9 = Valeur 9 (livre V4), Taille +5');
+  assert.equal(hit(store, attack(stegadon, 'Tail')).damage.finalDamage, fixed(store, 17));
+  assert.equal(hit(store, attack(stegadon, 'Bite')).damage.finalDamage, fixed(store, 19), 'Bite +9 = Valeur 9 (livre V4), Taille +10 (v3)');
   assert.equal(hit(store, attack(stegadon, 'Trampling Feet')).damage.finalDamage, fixed(store, 10), 'arme : dégâts imprimés');
 });
 
-test('Q35 Wyverne L11 : Queue 14 ; Ripperdactyl L07 : Queue 8', async () => {
+test('Q35 Wyverne L11 : Queue 20 ; Ripperdactyl L07 : Queue 8', async () => {
   const wyvern = buildParticipantFromBestiary('E0-P-019', { library: L11 });
   const wyvernStore = await fixture(wyvern);
-  assert.equal(hit(wyvernStore, attack(wyvern, 'Tail')).damage.finalDamage, fixed(wyvernStore, 14), 'BF 6 + 2 + 6');
+  assert.equal(hit(wyvernStore, attack(wyvern, 'Tail')).damage.finalDamage, fixed(wyvernStore, 20), 'BF 6 + 2 + 12 (Énorme, v3)');
   const ripper = buildParticipantFromBestiary('E0-P-299', { library: L07 });
   const ripperStore = await fixture(ripper);
   assert.equal(hit(ripperStore, attack(ripper, 'Tail')).damage.finalDamage, fixed(ripperStore, 8), 'BF 3 + 2 + Grande +3');
@@ -62,7 +62,7 @@ test('Q35 le bonus de Taille ne vaut ni pour le tir, ni pour l’attaque bonus, 
   assert.equal(ranged.damage.finalDamage, fixed(store, 7)-1, 'tir : BF+2 sans bonus de dégâts de Taille, avec −1 DR contre la cible plus petite');
   assert.equal(hit(store, tail, { extraAttack: true }).damage.finalDamage, fixed(store, 7), 'attaque bonus : sans Taille');
   assert.equal(planNaturalAttack(stegadon, 'tail').sizeBonus, 0, 'attaque naturelle choisie (bonus d’Élan) : sans Taille');
-  assert.equal(planNaturalAttack(stegadon, 'tail', { ordinary: true }).sizeBonus, 5);
+  assert.equal(planNaturalAttack(stegadon, 'tail', { ordinary: true }).sizeBonus, 10);
   const kraken = buildParticipantFromBestiary('E0-P-488', { library: lib('L14') });
   assert.equal(planNaturalAttack(kraken, 'tentacles', { ordinary: true }).sizeBonus, 0, 'Tentacules : attaque gratuite');
 });
@@ -84,7 +84,7 @@ test('Q35 L09 et L10 sont des livres V5 (« 5th Edition », Games Workshop 2026)
   const { execFileSync } = await import('node:child_process');
   execFileSync(process.execPath, ['tools/list-v5-natural-gaps.mjs', 'tmp/divin/ecarts-q35-test.json']);
   const { gaps } = JSON.parse(readFileSync('tmp/divin/ecarts-q35-test.json', 'utf8'));
-  assert.ok(gaps.some(gap => gap.id === 'E0-P-322' && gap.attack === 'Tail' && gap.printed === 8 && gap.formulaPlusSize === 20));
+  assert.ok(gaps.some(gap => gap.id === 'E0-P-322' && gap.attack === 'Tail' && gap.printed === 8 && gap.formulaPlusSize === 26));
 });
 
 test('Q35 Cornes en attaque ordinaire : la Charge du Trait est demandée', async () => {

@@ -2,6 +2,7 @@
 // Module pur : lit la catégorie du participant et rend le barème du livre (bonus de dégâts en mêlée, poids au surnombre,
 // écart avec un adversaire, Blessures sur demande). Rien ne s'écrit ; l'échelle à sept crans est celle du moteur (Petite 2 … Monstrueuse 6).
 import { creatureWounds } from './v5-magic-arbitrations.js';
+import { naturalReachOf } from './v5-weapon-qualities.js';
 
 const fold = value => String(value ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/\s+/g, ' ').trim();
 
@@ -21,10 +22,10 @@ const SIZE_TABLE = Object.freeze({
   small: { damage: 'none', weight: 1 },
   average: { damage: 'none', weight: 1 },
   large: { damage: 'bf', weight: 2 },
-  enormous: { damage: 'bf', weight: 3 },
-  monstrous: { damage: 'twiceBf', weight: 4 }
+  enormous: { damage: 'twiceBf', weight: 3 },
+  monstrous: { damage: 'thriceBf', weight: 4 }
 });
-const NOTE = 'Taille V5 (p. 360) : bonus de dégâts en mêlée Grande/Énorme +BF, Monstrueuse +2 BF (ni tir, ni attaque gratuite, ni attaque bonus) ; poids au surnombre 1, 1, 2, 3, 4 ; un profil de PNJ imprimé inclut déjà ces dégâts.';
+const NOTE = 'Taille V5 v3 (p. 360) : bonus de dégâts en mêlée Grande +BF, Énorme +2 BF, Monstrueuse +3 BF (ni tir, ni attaque gratuite, ni attaque bonus) ; poids au surnombre 1, 1, 2, 3, 4 ; un profil de PNJ imprimé inclut déjà ces dégâts.';
 const SMALL_NOTE = 'Petit : lecture V5 du livre (dégâts normaux) ; le Petit homebrew V4 local reste géré à part, sans migration.';
 
 const traitText = trait => (typeof trait === 'string' ? trait : trait?.name ?? trait?.nom ?? '');
@@ -65,14 +66,15 @@ export function planCreatureSize(participant, options = {}) {
   const size = creatureSizeOf(participant);
   const row = SIZE_TABLE[size.key];
   const printed = options.printedProfile !== false;
-  const plan = { key: 'size', label: LABEL, available: false, size, damage: { kind: row.damage, bonus: 0, included: printed }, outnumberWeight: row.weight, versus: null, wounds: null, unresolved: [], reminders: [NOTE] };
+  const plan = { key: 'size', label: LABEL, available: false, size, damage: { kind: row.damage, bonus: 0, included: printed }, outnumberWeight: row.weight, naturalReach: naturalReachOf(size.key), versus: null, wounds: null, unresolved: [], reminders: [NOTE] };
   if (size.assumed) plan.reminders.push('Taille : aucune catégorie imprimée, Moyenne supposée.');
   if (size.key === 'small') plan.reminders.push(SMALL_NOTE);
+  plan.reminders.push(`Armes naturelles : allonge ${plan.naturalReach.label} (Taille ${size.label}, V5 p. 318), sauf allonge imprimée.`);
 
   if (!printed && row.damage !== 'none') {
     const bf = bonusForce(participant);
     if (bf === null) plan.unresolved.push('Taille : Force requise pour le bonus de dégâts.');
-    else plan.damage.bonus = row.damage === 'twiceBf' ? 2 * bf : bf;
+    else plan.damage.bonus = (row.damage === 'thriceBf' ? 3 : row.damage === 'twiceBf' ? 2 : 1) * bf;
   }
   if (options.opponent) {
     const other = creatureSizeOf(options.opponent);
