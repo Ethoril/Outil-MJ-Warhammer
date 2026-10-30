@@ -50,9 +50,11 @@ export function applyV5AttackSituationModifiers(modifiers,{role,kind,actionType,
   const ar=Number.isSafeInteger(actorSize)?actorSize:creatureSizeOf(actor).rank,tr=Number.isSafeInteger(targetSize)?targetSize:creatureSizeOf(target).rank;
   add('size:ranged-target','Taille de la cible',tr===6?2:tr>ar?1:tr<ar?-1:0);
   const bands={'point-blank':2,short:1,medium:0,long:-1,extreme:-2};
-  const noPointBlank=rangeBands&&rangeBands.pointBlankYards===null;
+  // V5 v3 p.165 : un tir contre un adversaire engagé avec le tireur se résout comme une mêlée, sans modificateur de portée.
+  const asMelee=context.engagedWithShooter===true;
+  const noPointBlank=!asMelee&&rangeBands&&rangeBands.pointBlankYards===null;
   if(noPointBlank&&(context.shotRange==='point-blank'||context.pointBlank===true))unresolved.push('Cette arme n’a pas de bout portant (portée courte de 4 m ou moins) : choisir une autre bande.');
-  if(context.shotRange!==undefined){if(!Object.hasOwn(bands,context.shotRange))unresolved.push('Bande de portée MJ invalide.');else if(!(noPointBlank&&context.shotRange==='point-blank'))add('range:'+context.shotRange,'Bande de portée choisie par le MJ',bands[context.shotRange]);}
+  if(context.shotRange!==undefined&&!asMelee){if(!Object.hasOwn(bands,context.shotRange))unresolved.push('Bande de portée MJ invalide.');else if(!(noPointBlank&&context.shotRange==='point-blank'))add('range:'+context.shotRange,'Bande de portée choisie par le MJ',bands[context.shotRange]);}
   const surprised=hasState(target,'surpris','surprised');
   if(surprised)add('target:surprised-ranged','Cible Surprise au tir',2);
   if(context.aimedTargetId===target?.id)add('aim:target','Visée contre la cible désignée',1);

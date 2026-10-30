@@ -8,7 +8,7 @@ const count = value => {
   return value;
 };
 // Peur (V5 v3 p.183) : l'Élan est perdu à l'instant où la Peur s'installe et ne se regagne pas tant qu'elle dure.
-const LOSS_REASONS = new Set(['oppositionLost', 'meleeTestFailed', 'woundsLost', 'conditionAcquired', 'fearAcquired', 'combatPause', 'combatEnd']);
+const LOSS_REASONS = new Set(['oppositionLost', 'meleeTestFailed', 'woundsLost', 'conditionAcquired', 'combatPause', 'combatEnd']);
 export function previewMomentumEvents({ hasMomentum, events = [], exceptions = [], frightened = false } = {}) {
   let momentum = bool(hasMomentum, 'Élan');
   bool(frightened, 'Peur');
@@ -28,7 +28,6 @@ export function previewMomentumEvents({ hasMomentum, events = [], exceptions = [
     if (event.type === 'opposedMeleeWon' || event.type === 'chargeEnemy' || event.type === 'profileMomentumGain') effect = 'gain';
     else if (event.type === 'spend') effect = 'spend';
     else if (event.type === 'opposedMeleeLost') effect = 'oppositionLost';
-    else if (event.type === 'fearAcquired') effect = 'fearAcquired';
     else if (event.type === 'meleeTestFailed') effect = 'meleeTestFailed';
     else if (event.type === 'woundsLost') effect = count(event.amount) > 0 ? 'woundsLost' : 'none';
     else if (event.type === 'conditionAcquired') effect = count(event.instances) > 0 ? 'conditionAcquired' : 'none';

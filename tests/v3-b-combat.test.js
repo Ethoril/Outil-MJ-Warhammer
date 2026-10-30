@@ -30,12 +30,15 @@ test('v3-B surpris-tir — cible Surprise : +2 DR au tir (p.166)', () => {
 });
 
 test('v3-B tir-engage — un tir contre un adversaire engagé avec le tireur se résout comme une mêlée (p.165)', () => {
-  const engaged = ranged({ defense: meleeDefense, context: { targetEngaged: true, engagedWithShooter: true } });
+  const engaged = ranged({ defense: meleeDefense, qualities: [q('pistolet')], context: { targetEngaged: true, engagedWithShooter: true } });
   assert.equal(engaged.test.advantage.disadvantage.some(row => row.id === 'target-engaged'), false, 'ne compte pas comme un tir dans la mêlée');
   assert.equal(engaged.unresolved.some(row => refusal.test(row)), false, 'Corps à corps opposé sans confirmation MJ');
   assert.equal(engaged.opposition?.mode, 'opposed');
-  const alone = ranged({ defense: meleeDefense, context: { engagedWithShooter: true } });
+  const alone = ranged({ defense: meleeDefense, qualities: [q('pistolet')], context: { engagedWithShooter: true } });
   assert.equal(alone.unresolved.some(row => refusal.test(row)), false);
+  assert.equal(ranged({ defense: meleeDefense, context: { engagedWithShooter: true } }).unresolved.some(row => /Pistolet/.test(row)), true, 'sans Pistolet : refusé');
+  const noRange = ranged({ defense: meleeDefense, qualities: [q('pistolet')], context: { engagedWithShooter: true, shotRange: 'point-blank', weaponRangeYards: 20 } });
+  assert.equal(mods(noRange)['range:point-blank'], undefined, 'résolu comme une mêlée : aucun modificateur de portée');
   // Tir dans une mêlée dont le tireur ne fait pas partie : Désavantage, défense de mêlée toujours refusée.
   const intoMelee = ranged({ defense: meleeDefense, context: { targetEngaged: true } });
   assert.equal(intoMelee.test.advantage.disadvantage.some(row => row.id === 'target-engaged'), true);
@@ -108,13 +111,17 @@ test('v3-B repetition — le second tir est une attaque gratuite sans Élan, une
   assert.equal(first.ready, true, JSON.stringify(first.unresolved));
   assert.equal((await store.applyResolution(first)).status, 'applied');
   const second = store.previewResolution({ ...base('rep-2'), v5: { kind: 'ranged', extraAttack: true,
-    context: { repeaterDoubleShot: true, repeaterSecondShot: true, freeAttackTalent: 'repeater-double' } } });
+    context: { repeaterDoubleShot: true, repeaterSecondShot: true, freeAttackTalent: 'repeater-double', primaryResolutionId: 'rep-1' } } });
   assert.equal(second.actionCosts.ready, true, JSON.stringify(second.actionCosts));
   assert.equal(second.actionCosts.paid.length, 0, 'aucun Élan dépensé pour le second tir');
   assert.equal((await store.applyResolution(second)).status, 'applied');
   const third = store.previewResolution({ ...base('rep-3'), v5: { kind: 'ranged', extraAttack: true,
-    context: { repeaterDoubleShot: true, repeaterSecondShot: true, freeAttackTalent: 'repeater-double' } } });
+    context: { repeaterDoubleShot: true, repeaterSecondShot: true, freeAttackTalent: 'repeater-double', primaryResolutionId: 'rep-1' } } });
   assert.equal(third.actionCosts.ready, false, 'un seul second tir par Tour');
+  // Sans premier tir correspondant, ou sur une autre cible : refusé.
+  const orphan = { ...base('rep-4'), v5: { kind: 'ranged', extraAttack: true, context: { repeaterDoubleShot: true, repeaterSecondShot: true, freeAttackTalent: 'repeater-double', primaryResolutionId: 'absent' } } };
+  assert.throws(() => store.previewResolution(orphan), /premier tir/);
+  assert.throws(() => store.previewResolution({ ...orphan, targetId: 'a', v5: { ...orphan.v5, context: { ...orphan.v5.context, primaryResolutionId: 'rep-1' } } }), /premier tir|cible/);
 });
 
 test('v3-B peur-elan — sous la Peur, l’Élan est perdu et ne se regagne pas (p.183)', async () => {
@@ -123,8 +130,6 @@ test('v3-B peur-elan — sous la Peur, l’Élan est perdu et ne se regagne pas 
   assert.equal(hasMomentum(withMomentum(afraid, true)), false, 'pas de regain');
   assert.equal(hasMomentum(loseMomentumUnderFear(afraid)), false, 'l’Élan possédé est perdu');
   assert.equal(hasMomentum(loseMomentumUnderFear(subject('b', { extensions: { v5: { hasMomentum: true } } }))), true, 'sans Peur, rien ne change');
-  // Événement pur : acquérir la Peur retire l’Élan.
-  assert.equal(previewMomentumEvents({ hasMomentum: true, events: [{ id: 'e', type: 'fearAcquired' }] }).after, false);
   assert.equal(previewMomentumEvents({ hasMomentum: false, frightened: true, events: [{ id: 'e', type: 'opposedMeleeWon' }] }).after, false);
   assert.equal(previewMomentumEvents({ hasMomentum: false, events: [{ id: 'e', type: 'opposedMeleeWon' }] }).after, true);
   // Store : la Peur d’une créature retire l’Élan déjà possédé.
@@ -211,9 +216,14 @@ test('v3-B esquive-melee — l’Esquive en mêlée : ±5 DR sur maladresse et c
   assert.equal(dodgeWins.opposition.winner, 'attacker', 'maladresse de l’attaquant à −3 DR contre −5 DR : l’attaquant gagne');
   const won = run(70, 22);
   assert.equal(won.hit, false);
-  const dodgerMomentum = won.momentum.find(row => row.participantId === 'b');
-  assert.equal(dodgerMomentum?.after ?? true, true, 'gagner par Esquive ne donne pas d’Élan et n’en retire pas');
-  assert.equal(dodgerMomentum?.details?.some(row => row.effect === 'gain') ?? false, false);
+  const bare = previewResolution({ actor: subject('a'), target: subject('b', { extensions: { v5: { hasMomentum: false } } }), action: { type: 'attack', attr: 'CC', base: 60, damage: 4 }, roll: 70,
+    defense: { type: 'skill', label: 'Esquive', attr: 'Ag', base: 40, roll: 22 }, v5: { kind: 'melee', choice: 'keep' } });
+  assert.equal(bare.hit, false, 'l’Esquive remporte l’opposition');
+  const dodger = bare.momentum.find(row => row.participantId === 'b');
+  assert.ok(dodger, 'le défenseur a une trace d’Élan');
+  assert.equal(dodger.before, false);
+  assert.equal(dodger.after, false, 'gagner par Esquive ne donne pas d’Élan');
+  assert.equal(dodger.details.some(row => row.effect === 'gain'), false);
 });
 
 test('v3-B maladresse-oppose — la maladresse de mêlée ne change pas les DR : le Test opposé se résout normalement (p.130)', () => {
@@ -229,6 +239,8 @@ test('v3-B souille — Désavantage aux Tests d’Endurance contre les Plaies pu
   const endurance = context => previewResolution({ actor: soiled, roll: 30, action: { type: 'skill', attr: 'E', base: 40, label: 'Endurance' }, v5: { kind: 'test', context } });
   const festering = endurance({ festeringWounds: true });
   assert.equal(festering.test.advantage.disadvantage.some(row => row.id === 'besmirched'), true);
+  const notEndurance = previewResolution({ actor: soiled, roll: 30, action: { type: 'skill', attr: 'Int', base: 40, label: 'Intuition' }, v5: { kind: 'test', context: { festeringWounds: true, usesFellowship: false } } });
+  assert.equal(notEndurance.test.advantage.disadvantage.some(row => row.id === 'besmirched'), false, 'seulement un Test d’Endurance');
   const other = endurance({ usesFellowship: false });
   assert.equal(other.test.advantage.disadvantage.some(row => row.id === 'besmirched'), false);
   const clean = previewResolution({ actor: subject('a'), roll: 30, action: { type: 'skill', attr: 'E', base: 40, label: 'Endurance' }, v5: { kind: 'test', context: { festeringWounds: true } } });
@@ -243,6 +255,10 @@ test('v3-B perturbant — seuls les ennemis vivants subissent −2 DR (p.358)', 
   assert.equal(rules(hero).some(row => row.id === 'sense:distracting' && row.amount === -2), true);
   assert.equal(rules(ally).length, 0, 'un allié du Perturbant n’est pas touché');
   assert.match(planSense(owner, 'distracting').reminders.join(' '), /ennemis vivants/);
+  const neutral = subject('n', { camp: 'neutre' });
+  assert.equal(rules(neutral).length, 0, 'un camp neutre n’est pas un ennemi');
+  const campless = subject('c', { camp: undefined });
+  assert.match(rules(campless).find(row => row.id === 'sense:distracting')?.label || '', /camp inconnu/, 'camp absent : ennemi supposé, avec rappel');
 });
 
 test('v3-B allonge — armes naturelles : Personnelle jusqu’à Grande, Courte pour Énorme, Moyenne pour Monstrueuse (p.318)', () => {

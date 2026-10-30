@@ -220,7 +220,7 @@ export function previewGhostlyHowl({author,targets,damageRoll,calmTests,round}={
  }
  return{ready:true,calmModifier:2,author:withMomentum(author,false),participants,needsInput:[],unresolved:[],addedStates:[]};
 }
-/** Craintif / Skittish : 3 Brisé devant un effet magique visible ou un bruit violent, sauf dressage adapté. */
+/** Craintif / Skittish : 1 Brisé (V5 v3 p.361) devant un effet magique visible ou un bruit violent, sauf dressage adapté. */
 export function previewSkittishReaction({subject,trigger,visible=true,training=null,isolatedVoice=false,round}={}){
  if(!subject)return intFail('Créature requise.','subject');
  if(!['magic','noise'].includes(trigger))return intFail('Déclencheur explicite requis : effet magique ou bruit violent.','trigger');

@@ -28,9 +28,10 @@ const gun = { id: 'gun', kind: 'weapon', name: 'Arquebuse à répétition d’es
     accumulatedSuccesses: 0, reloading: false, requiresReload: false } } } };
 const shotAction = { id: 'shot', note: 'Tir à répétition', type: 'attack', attr: 'CT', base: 60, damage: 4, qualities: [{ id: 'a-repetition', parameter: '3' }],
   extensions: { fiche: { equipmentId: 'gun' } } };
+const pistolAction = { ...shotAction, id: 'pshot', note: 'Tir au pistolet', qualities: [...shotAction.qualities, { id: 'pistolet' }] };
 const fixture = () => ({ schemaVersion: 3, reserve: [], diceLines: [], log: [], extensions: { v5: { combatId: 'v3-b-browser', turnIndex: 1 } },
   combat: { round: 1, currentActorId: 'a', order: ['a', 'b', 'm'], participants: [
-    person('a', 'Aline', 'pj', { equipment: [gun], actions: [shotAction], extensions: { v5: { hasMomentum: true } } }),
+    person('a', 'Aline', 'pj', { equipment: [gun], actions: [shotAction, pistolAction], extensions: { v5: { hasMomentum: true } } }),
     person('b', 'Garde', 'ennemi'),
     person('m', 'Monstre', 'ennemi', { traits: ['Fear (1)'] })
   ] } });
@@ -51,13 +52,14 @@ try {
     const groups = play.locator('.workspace-v5-choice-group');
     for (let i = 0; i < await groups.count(); i++) { const radio = groups.nth(i).locator('input[type="radio"]').first(); if (await radio.isEnabled()) await radio.check(); }
   };
-  const calculate = async () => { await play.getByRole('button', { name: 'Calculer', exact: true }).click(); await play.locator('.workspace-result-live').waitFor(); await settleChoices(); };
-  const prepareShot = async () => {
+  const calculate = async () => { await play.getByRole('button', { name: 'Calculer', exact: true }).click(); await play.locator('.workspace-result-live').waitFor(); await page.waitForTimeout(400); await settleChoices(); await page.waitForTimeout(200); };
+  const prepareShot = async (id = 'shot') => {
     await play.locator('[data-workspace-select="a"]').click();
-    await play.locator('[data-action-key="shot"]').click();
+    await play.locator(`[data-action-key="${id}"]`).click();
     await play.getByLabel('Type d’action').selectOption('attack');
     await play.getByLabel('Nature du Test').selectOption('ranged');
   };
+  const noDefense = async () => { const roll = play.locator('[data-roll-input="defense"]'); if (await roll.count()) await roll.fill(''); };
   const details = async () => { await play.getByText('Détail des calculs et règles').click(); return play.locator('.workspace-v5-calculations').innerText(); };
 
   // 1. Tir sur un adversaire engagé avec le tireur : se résout comme une mêlée, sans Désavantage de tir dans la mêlée (p.165).
@@ -67,6 +69,7 @@ try {
   await play.locator('[data-roll-input="attack"]').fill('31');
   await calculate();
   assert.match(await details(), /1 Désavantage/u, 'tir dans une mêlée : Désavantage affiché');
+  await prepareShot('pshot');
   await play.getByLabel(/La cible est engagée avec le tireur/u).selectOption('true');
   await play.getByLabel(/Défense de Garde : caractéristique ou jet/u).selectOption('CC');
   await play.locator('[data-roll-input="defense"]').fill('45');
@@ -78,6 +81,7 @@ try {
   // 2. Tir double À répétition : −1 DR, deux munitions consommées en deux tirs d'une seule Action (p.305).
   await load(fixture());
   await prepareShot();
+  await noDefense();
   await play.getByLabel(/À répétition : tir double/u).selectOption('true');
   await play.locator('[data-roll-input="attack"]').fill('31');
   await calculate();
@@ -91,8 +95,9 @@ try {
   let state = await read();
   assert.equal(state.combat.participants.find(row => row.id === 'a').equipment[0].extensions.v5.reloadState.shotsRemaining, 2, 'premier tir : une munition');
   await prepareShot();
+  await noDefense();
   await play.getByLabel(/À répétition : tir double/u).selectOption('true');
-  await play.getByLabel('Second tir du tir double (gratuit, sans Élan)').check();
+  await play.getByLabel(/Premier tir du tir double/u).selectOption({ index: 1 });
   await play.locator('[data-roll-input="attack"]').fill('31');
   await calculate();
   await apply();

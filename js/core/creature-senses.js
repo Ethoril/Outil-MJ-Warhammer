@@ -120,9 +120,13 @@ export function senseTestRules({ actor, opponent, participants = [], skillLabel 
     if (/perception/.test(label) && typeof context.targetMoving === 'boolean') modifiers.push({ id: 'sense:chameleon-sight', label: `Voir un Caméléon ${context.targetMoving ? 'qui bouge' : 'immobile'}`, amount: context.targetMoving ? -2 : -4 });
   }
   // Perturbant (V5 v3 p.358) : seuls les ennemis vivants le subissent (ni alliés, ni Mort-vivant, Démoniaque, Éthéré ou Artificiel), en attaque comme en défense.
-  const enemyOf = (person) => !(person?.camp && actor?.camp && person.camp === actor.camp);
-  if (context.distractingInRange === true && isLiving(actor) && (participants || []).some(person => person?.id !== actor?.id && has(person, 'distracting') && enemyOf(person))) {
-    modifiers.push({ id: 'sense:distracting', label: 'Perturbant à portée (une seule fois)', amount: -2 });
+  // Camp absent : supposé ennemi (rappel dans le libellé) ; un participant « neutre » n'est l'ennemi de personne (le camp « neutre » est aussi celui des créatures de bestiaire non encore placées : leur Perturbant touche les autres camps).
+  const campOf = person => String(person?.camp ?? person?.side ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
+  const unknownCamp = person => !campOf(person) || !campOf(actor);
+  const enemyOf = person => unknownCamp(person) || (campOf(person) !== campOf(actor) && !['neutre', 'neutral'].includes(campOf(actor)));
+  const sources = (participants || []).filter(person => person?.id !== actor?.id && has(person, 'distracting') && enemyOf(person));
+  if (context.distractingInRange === true && isLiving(actor) && sources.length) {
+    modifiers.push({ id: 'sense:distracting', label: sources.every(unknownCamp) ? 'Perturbant à portée (une seule fois ; camp inconnu, supposé ennemi)' : 'Perturbant à portée (une seule fois)', amount: -2 });
   }
   let base = null;
   // Furtif ne vaut que pour Discrétion (Rurale), pas Urbaine ni Souterrains.

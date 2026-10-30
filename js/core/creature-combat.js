@@ -115,7 +115,7 @@ export function planNaturalAttack(participant, key, options = {}) {
     if (bonus === null) plan.unresolved.push(`${rule.fr} : Force du participant inconnue, dégâts BF${rule.bf ? `+${rule.bf}` : ''} à saisir.`);
     else plan.damageFormula = `${bonus + rule.bf}`;
   }
-  // Livre de base V5 p.360 : Grande/Énorme +BF, Monstrueuse +2 BF, en mêlée seulement. Un livre V5 l'imprime déjà.
+  // Livre de base V5 p.360 : Grande +BF, Énorme +2 BF, Monstrueuse +3 BF (V5 v3), en mêlée seulement. Un livre V5 l'imprime déjà.
   if (rule.sizeBonus && options.ordinary === true && !isV5Book(participant)) {
     const sizePlan = planCreatureSize(participant, { printedProfile: false });
     plan.sizeBonus = sizePlan.damage.bonus;

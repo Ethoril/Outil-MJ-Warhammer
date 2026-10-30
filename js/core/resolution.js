@@ -29,7 +29,7 @@ import {divineSocialRestriction} from './v5-divine-access.js';
 import { previewV5Test,selectV5Test, resolveV5Opposition, reverseV5Roll,refreshV5ResultTier } from './v5-roll.js';
 import { buildV5RollDecision } from './v5-decision.js';
 import { previewMomentumEvents } from './v5-momentum.js';
-import { buildCombatTest, hasMomentum, withMomentum, loseMomentumUnderFear, conditionLevels, inferV5Kind,v5ShieldDefense, V5_COMBAT_RULE_VERSION } from './v5-combat-rules.js';
+import { buildCombatTest, hasMomentum, withMomentum, loseMomentumUnderFear, isFrightened, conditionLevels, inferV5Kind,v5ShieldDefense, V5_COMBAT_RULE_VERSION } from './v5-combat-rules.js';
 import { evaluateV5Talents, previewV5TalentConditions, currentV5TalentHashes, V5_TALENT_IDS } from './v5-talents.js';
 import { getV5CriticalEffect, V5_CRITICAL_TABLE_VERSION } from '../data/v5-crits.js';
 import { previewV5ActionQualities, v5ActionQualityContext, previewV5WeaponConditions, v5QualityMechanicalStatus } from './v5-talent-qualities.js';
@@ -399,6 +399,7 @@ export function normalizeResolutionInput(input = {}) {
     v5: v5Settings,
     ...(isRecord(input.v5State) ? { v5State: clone(input.v5State) } : {}),
     v5Clock: isRecord(input.v5Clock) ? clone(input.v5Clock) : {},
+    riposteSpent: input.riposteSpent === true,
     ...(isRecord(input.authorNextTurnEnd) ? { authorNextTurnEnd: clone(input.authorNextTurnEnd) } : {}),
     defenderCriticalRolls: normalizeCriticalRolls(input.defenderCriticalRolls),
     defenderCriticalDeclined: Array.isArray(input.defenderCriticalDeclined) ? input.defenderCriticalDeclined.map(String) : [],
@@ -1349,9 +1350,8 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   let defenderDamage=null;
   const riposte=evaluateV5Talents(target,{event:'damage.beforeProtection',role:'defender',context:{kind:defenderPlan?.kind||'none',oppositionWon:opposed?.winner==='defender'}});
   supplementaryTalentPlans.push(riposte);
-  // Livre de base V5 v3 p.124 : une seule Riposte par Round (suivie sur le défenseur, par numéro de Round).
-  const riposteRound=Number.isSafeInteger(normalized.round)?normalized.round:null;
-  const riposteSpent=riposteRound!==null&&target?.extensions?.v5?.riposteRound===riposteRound;
+  // Livre de base V5 v3 p.124 : une seule Riposte par Round (quota `talent:riposte` du registre, étendue Round, lu par le Store avant l'aperçu).
+  const riposteSpent=normalized.riposteSpent===true;
   const riposteDue=riposte.proposals.some(row=>row.op==='riposte')&&!riposteSpent;
   const riposteReminders=riposteSpent&&riposte.proposals.some(row=>row.op==='riposte')?['Riposte : déjà utilisée ce Round (une fois par Round, V5 p.124).']:[];
   if(riposteDue){
@@ -1692,7 +1692,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   const momentum = [];
   const planMomentum = (participant, events, exceptions=[]) => {
     if (!participant?.id) return;
-    momentum.push({ participantId: participant.id, ...previewMomentumEvents({ hasMomentum: hasMomentum(participant), events, exceptions }) });
+    momentum.push({ participantId: participant.id, ...previewMomentumEvents({ hasMomentum: hasMomentum(participant), events, exceptions, frightened: isFrightened(participant) }) });
   };
   const actorEvents = [], targetEvents = [];
   const event = (type, data = {}) => ({ id: `${normalized.resolutionId}:${type}`, type, ...data });
@@ -1884,7 +1884,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     damageReplacedByTalent: replacement ? clone(replacement) : null,defenderDamageReplacedByTalent:defenseShield.replacement||null,
     unresolved: [...unresolved,...(supplementalEquipment?.unresolved||[])],
     weaponSkillReceipt: normalized.weaponSkillReceipt,
-    defenderCritical,defenderDamage,riposteUsed:riposteDue&&defenderDamage&&!defenseShield.replacement?{participantId:target.id,round:riposteRound}:null,
+    defenderCritical,defenderDamage,riposteUsed:riposteDue&&defenderDamage&&!defenseShield.replacement?{participantId:target.id}:null,
     actionType: action.type,
     attack: attackType(action.type),
     ulricFury: furyDue&&furyValid?{turnId:furyTurnId}:null,
@@ -2157,12 +2157,6 @@ export function applyResolution(preview, currentState) {
     appendCriticalWoundRecords(updated, [preview.defenderCritical?.details, preview.defenderCritical?.second],
       { resolutionId: preview.resolutionId, authorId: preview.input.target?.id, round: preview.input.round, beforeStates: liveActor.states || [] });
     nextState.participants = participantListWithUpdate(nextState, updated.id, updated);
-  }
-  if(preview.riposteUsed?.round!=null){
-    const live=participantById(nextState,preview.riposteUsed.participantId);
-    if(!live)return{status:'stale',requiresPreview:true,state:clone(currentState),resolution:clone(preview)};
-    const updated=clone(live);updated.extensions??={};updated.extensions.v5={...(updated.extensions.v5||{}),riposteRound:preview.riposteUsed.round};
-    nextState.participants=participantListWithUpdate(nextState,updated.id,updated);
   }
   if(preview.netEscape){
     const escape=preview.netEscape,live=participantById(nextState,escape.participantId);

@@ -35,7 +35,8 @@ export const withMomentum = (actor, value) => {
   return !value&&actor.extensions?.v5?.hasMomentum===undefined?actor:({...actor,extensions:{...(actor.extensions||{}),v5:{...(actor.extensions?.v5||{}),hasMomentum:Boolean(value)}}});
 };
 /** Un participant qui vient d'acquérir une restriction de Peur perd l'Élan qu'il avait. */
-export const loseMomentumUnderFear = actor => hasMomentum(actor)&&(actor.states||[]).some(s=>s.restriction==='cannotGainMomentum'&&sourceActive(s))?withMomentum(actor,false):actor;
+export const isFrightened = actor => !(actor.states||[]).some(s=>s.key==='frenzy'&&sourceActive(s))&&(actor.states||[]).some(s=>s.restriction==='cannotGainMomentum'&&sourceActive(s));
+export const loseMomentumUnderFear = actor => hasMomentum(actor)&&isFrightened(actor)?withMomentum(actor,false):actor;
 export const conditionLevels = actor => {
   const levels = new Map();
   for (const [index, raw] of (actor?.states || []).entries()) {
@@ -306,10 +307,10 @@ export function buildCombatTest(normalized, role = 'actor') {
   }
   if (levels.has('souille') && !ignoreConditions) {
     const fellowship = kind !== 'test' ? false : action.attr === 'Soc' ? true : context.usesFellowship;
-    if (fellowship == null && context.festeringWounds !== true) unresolved.push('Préciser si le Test utilise la Sociabilité.');
+    if (fellowship == null && !(action.attr === 'E' && context.festeringWounds === true)) unresolved.push('Préciser si le Test utilise la Sociabilité.');
     if (fellowship) conditionDisadvantages.set('besmirched', [{ id: 'besmirched', label: 'Souillé' }]);
     // V5 v3 p.185 : Désavantage aussi aux Tests d'Endurance contre les Plaies purulentes (le MJ le déclare ; l'outil ne tient pas de Test quotidien).
-    else if (kind === 'test' && context.festeringWounds === true) conditionDisadvantages.set('besmirched', [{ id: 'besmirched', label: 'Souillé (Plaies purulentes)' }]);
+    else if (kind === 'test' && action.attr === 'E' && context.festeringWounds === true) conditionDisadvantages.set('besmirched', [{ id: 'besmirched', label: 'Souillé (Plaies purulentes)' }]);
   }
   if(!defending&&(actor.states||[]).some(s=>s.key==='glorious-spent'&&sourceActive(s))&&levels.has('sonne')&&context.mandatoryTest!==true&&context.freeAttackTalent!=='glorious-demise')restrictions.push('Fin glorieuse : aucune Action au prochain Tour tant que Sonné.');
   if (levels.has('inconscient')&&!(normalized.combatPrelude?.immediate?.glorious&&!defending)) restrictions.push('Un combattant Inconscient ne peut pas agir ou se défendre.');
@@ -319,6 +320,8 @@ export function buildCombatTest(normalized, role = 'actor') {
     if (targetLevels.has('aveugle') && !levels.has('aveugle')) advantages.push({ id: 'target-blinded', label: 'Cible Aveuglée' });
     if (targetLevels.has('surpris')) modifiers.push({ id: 'target-surprised', label: 'Cible Surprise', amount: 2 });
   }
+  // V5 p.165 : on ne tire engagé qu'avec une arme Pistolet.
+  if(!defending&&kind==='ranged'&&settings.context?.engagedWithShooter===true&&!(action.qualities||[]).some(row=>(typeof row==='string'?row:row?.id)==='pistolet'))unresolved.push('Tir sur un adversaire engagé avec le tireur : seule une arme Pistolet permet de tirer en étant engagé (V5 p.165).');
   const pistolContact=previewV5PistolContact({qualities:action.qualities||[],attack:!defending,engaged:settings.context?.targetEngaged===true,ranged:kind==='ranged'});
   // Livre de base V5 v3 p.165 : un tir contre un adversaire engagé avec le tireur se résout comme une mêlée et ne compte pas comme un tir dans la mêlée.
   if(!defending&&kind==='ranged'&&settings.context?.targetEngaged===true&&settings.context?.engagedWithShooter!==true&&!pistolContact.allowed)disadvantages.push({id:'target-engaged',label:'Tir sur une cible engagée'});

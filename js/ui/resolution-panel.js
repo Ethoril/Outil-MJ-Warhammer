@@ -1818,7 +1818,7 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
       check.addEventListener('change',()=>{const ids=(current.wornArmorItemIds||[]).filter(id=>id!==item.id);if(check.checked)ids.push(item.id);handlers.select({v5Context:{...current,wornArmorItemIds:ids}});});label.append(check,item.name+' porté');fields.append(label);}
   }
   const selectedNetEscape=(draft.v5Context||{}).netEscapeConditionId;
-  for (const [key, label] of [['involvesMovement','Le Test implique un mouvement'],['runningOrHiding','Le Test sert à fuir ou se cacher'],['reliesOnSight','Le Test est réalisable sans voir mais repose sur la vue'],['requiresSight','Le Test est impossible sans voir'],['usesFellowship','Le Test utilise la Sociabilité'],['festeringWounds','Test d’Endurance contre les Plaies purulentes (Souillé : Désavantage)']])
+  for (const [key, label] of [['involvesMovement','Le Test implique un mouvement'],['runningOrHiding','Le Test sert à fuir ou se cacher'],['reliesOnSight','Le Test est réalisable sans voir mais repose sur la vue'],['requiresSight','Le Test est impossible sans voir'],['usesFellowship','Le Test utilise la Sociabilité'],...(action?.attr==='E'?[['festeringWounds','Test d’Endurance contre les Plaies purulentes (Souillé : Désavantage)']]:[])])
     if(key!=='involvesMovement'||!selectedNetEscape)contextField(fields, 'actor', key, label);
   // Séquelles durables (F2-J2) : circonstances que l'outil ne connaît pas (zone utilisée, parole, ouïe, main directrice…), demandées au MJ.
   for (const field of sequelaContextFields(actor)) if (!['reliesOnSight', 'requiresSight'].includes(field.key)) contextField(fields, 'actor', field.key, `Séquelle · ${field.label}`);
@@ -1984,7 +1984,7 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
   }
   if (['attack', 'opposition'].includes(type) && target) {
     fields.appendChild(rubric('Circonstances de la défense'));
-    for (const [key, label] of [['involvesMovement','Le Test implique un mouvement'],['runningOrHiding','Le Test sert à fuir ou se cacher'],['reliesOnSight','Le Test est réalisable sans voir mais repose sur la vue'],['requiresSight','Le Test est impossible sans voir'],['usesFellowship','Le Test utilise la Sociabilité'],['festeringWounds','Test d’Endurance contre les Plaies purulentes (Souillé : Désavantage)']]) contextField(fields, 'defender', key, label);
+    for (const [key, label] of [['involvesMovement','Le Test implique un mouvement'],['runningOrHiding','Le Test sert à fuir ou se cacher'],['reliesOnSight','Le Test est réalisable sans voir mais repose sur la vue'],['requiresSight','Le Test est impossible sans voir'],['usesFellowship','Le Test utilise la Sociabilité'],...(defense?.option?.value==='E'?[['festeringWounds','Test d’Endurance contre les Plaies purulentes (Souillé : Désavantage)']]:[])]) contextField(fields, 'defender', key, label);
     contextField(fields,'defender','offHandWeapon','Défense avec l’arme de la main non directrice (−2 DR sans Parade)');
     for (const field of sequelaContextFields(target)) if (!['reliesOnSight', 'requiresSight'].includes(field.key)) contextField(fields, 'defender', field.key, `Séquelle · ${field.label}`);
     if (participants.some(person => person.id !== target.id && carriesSense(person, 'distracting'))) contextField(fields, 'defender', 'distractingInRange', 'Un Perturbant est à portée du défenseur (−2 DR, une seule fois)');
@@ -2001,10 +2001,13 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
       if ((rangedWeapon?.keywords || []).some(row => (typeof row === 'string' ? row : row?.id) === 'a-repetition')) {
         contextField(fields, 'actor', 'repeaterDoubleShot', 'À répétition : tir double (deux tirs sur la même cible à −1 DR, une seule Action)');
         if (draft.v5Context?.repeaterDoubleShot === true) {
-          const second = node('label', 'workspace-type'), secondBox = document.createElement('input'); secondBox.type = 'checkbox'; secondBox.checked = draft.v5Context?.freeAttackTalent === 'repeater-double';
-          secondBox.setAttribute('aria-label', 'Second tir du tir double (gratuit, sans Élan)');
-          secondBox.addEventListener('change', () => { const current = draft.v5Context || {}; handlers.select({ extraAttack: secondBox.checked, v5Context: { ...current, repeaterSecondShot: secondBox.checked ? true : undefined, freeAttackTalent: secondBox.checked ? 'repeater-double' : undefined } }); });
-          second.append(secondBox, 'Second tir du tir double (gratuit, sans Élan)'); fields.appendChild(second);
+          const firstShots = previousWeaponAttacks.filter(row => row.weaponId === rangedWeapon?.id && row.targetId === target.id && row.actionType === 'attack');
+          const second = node('label', 'workspace-type', 'Premier tir du tir double (le tir actuel est alors le second, gratuit et sans Élan)'), secondSelect = document.createElement('select');
+          secondSelect.setAttribute('aria-label', second.textContent); secondSelect.append(new Option('Premier tir (ou choisir le tir déjà appliqué…)', ''));
+          for (const row of firstShots) secondSelect.append(new Option(`${row.weaponName || 'Tir'} · ${row.hit ? 'touche' : 'raté'}`, row.actionId));
+          secondSelect.value = draft.v5Context?.primaryResolutionId || '';
+          secondSelect.addEventListener('change', () => { const current = draft.v5Context || {}, chosen = secondSelect.value; handlers.select({ extraAttack: Boolean(chosen), v5Context: { ...current, primaryResolutionId: chosen || undefined, repeaterSecondShot: chosen ? true : undefined, freeAttackTalent: chosen ? 'repeater-double' : undefined } }); });
+          second.appendChild(secondSelect); fields.appendChild(second);
         }
       }
       choiceField(fields, 'weather', 'Météo', [['normal','Aucune pénalité'],['fog','Brouillard (−1 DR)'],['rain-wind','Pluie ou vent (−2 DR)'],['extreme','Météo extrême (−3 DR)']]);
@@ -2049,7 +2052,7 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
       }
       contextField(fields, 'actor', 'targetEngaged', 'La cible est engagée au corps à corps (Désavantage au tir)');
       contextField(fields, 'actor', 'engagedWithShooter', 'La cible est engagée avec le tireur (le tir se résout comme une mêlée : Corps à corps opposé, pas de Désavantage de tir dans la mêlée)');
-      if (draft.v5Context?.targetEngaged === true && target) {
+      if (draft.v5Context?.targetEngaged === true && draft.v5Context?.engagedWithShooter !== true && target) {
         const current = draft.v5Context || {}, engagedIds = new Set(current.engagedTargetIds || [target.id]); engagedIds.add(target.id);
         fields.appendChild(node('p', 'workspace-muted', 'Cochez les combattants effectivement engagés, alliés compris. Le jet de choix est saisi une fois et reste stable au recalcul.'));
         for (const person of participants.filter(row => row.zone === 'active' && row.id !== actor.id)) {
