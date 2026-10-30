@@ -5,6 +5,7 @@
   "scripts": {
     "test": "node --test",
     "test:browser": "node tests/browser-smoke.mjs",
+    "test:browser-all": "node tools/run-browser-journeys.mjs",
     "test:fiches-browser": "node tests/fiches-pj-browser.mjs",
     "test:firebase-v3": "node tests/firebase-rules-v3-emulator.mjs",
     "test:references-browser": "node tests/browser-references-smoke.mjs",
