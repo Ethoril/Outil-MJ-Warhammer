@@ -34,13 +34,13 @@ export const miracles = [
  },
  {
   name: 'Exigence de Rhya', canonicalName: "Rhya's Demand", printedPage: 74,
-  summary: 'Le prêtre chante des harmonies subtiles qui tirent des profondeurs de la terre le ressentiment de ceux qui n’ont pas remercié Rhya. Tout humanoïde à Bonus de Sociabilité yards qui n’a pas fait de sacrifice à Rhya (ou à une divinité ou un esprit de la nature en bons termes avec son culte, comme Isha ou Taal) depuis le dernier équinoxe de printemps perd 1 Blessure (+1 par DR) et gagne un État Fatigué. Si cinq individus ou plus sont touchés, le sol dans la zone devient stérile pendant d10 ans.',
+  summary: 'Le prêtre chante des harmonies subtiles qui tirent des profondeurs de la terre le ressentiment de ceux qui n’ont pas remercié Rhya. Tout humanoïde à Bonus de Sociabilité mètres qui n’a pas fait de sacrifice à Rhya (ou à une divinité ou un esprit de la nature en bons termes avec son culte, comme Isha ou Taal) depuis le dernier équinoxe de printemps perd 1 Blessure (+1 par DR) et gagne un État Fatigué. Si cinq individus ou plus sont touchés, le sol dans la zone devient stérile pendant d10 ans.',
   params: { range: { kind: 'self' }, targets: area, duration: { kind: 'instant' } },
   status: 'assisted', effect: null,
   effects: [{ type: 'condition', key: 'Fatigued', level: 1 }, { type: 'direct-damage', fixed: 1, perSuccessLevel: 1, requiresFact: { field: 'humanoid', label: 'humanoïde touché (sans sacrifice à Rhya ni à une puissance de la nature alliée depuis le dernier équinoxe de printemps)' } }],
   targetRules: [],
   needsInput: [
-   { id: 'humanoids', text: 'Humanoïdes présents dans la zone (Bonus de Sociabilité yards).' },
+   { id: 'humanoids', text: 'Humanoïdes présents dans la zone (Bonus de Sociabilité mètres).' },
    { id: 'sacrifice', text: 'Pour chaque humanoïde : a-t-il fait un sacrifice à Rhya ou à une puissance de la nature alliée depuis le dernier équinoxe de printemps ?' },
    { id: 'barren-years', text: 'Si cinq individus ou plus sont touchés : jet de d10 années de stérilité.' }
   ],
@@ -59,7 +59,7 @@ export const miracles = [
   status: 'manual', effect: null,
   targetRules: ['élément naturel pouvant abriter un esprit'],
   needsInput: [
-   { id: 'feature', text: 'Quel élément naturel (champ, mare, roncier…) abrite l’esprit, et est-il à moins de 4 yards ?' },
+   { id: 'feature', text: 'Quel élément naturel (champ, mare, roncier…) abrite l’esprit, et est-il à moins de 4 m ?' },
    { id: 'task', text: 'Quelle tâche est demandée à l’esprit (sans enfreindre les interdits de Rhya) ?' },
    { id: 'sun-limit', text: 'Prochain lever ou coucher du soleil (le premier des deux) : fin de la durée.' }
   ],
@@ -78,7 +78,7 @@ export const miracles = [
   status: 'manual', effect: null,
   targetRules: ['animaux domestiques'],
   needsInput: [
-   { id: 'flock', text: 'Quel troupeau, quelle harde ou quelle meute est visé, et est-il à portée (Sociabilité yards) ?' },
+   { id: 'flock', text: 'Quel troupeau, quelle harde ou quelle meute est visé, et est-il à portée (Sociabilité mètres) ?' },
    { id: 'command', text: 'Quel ordre le prêtre donne-t-il (calmer, agiter, débandade, sommeil, attaque, observer) ?' }
   ],
   clauses: [

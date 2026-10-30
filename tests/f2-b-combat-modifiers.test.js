@@ -55,9 +55,9 @@ test('F2-B — six circonstances de Tir sont additives et portent uniquement sur
   const preview = attack({ target: subject('b',{states:[{key:'surpris',level:1}]}), context: { penalties: { cover: -1 },
     shotRange: 'point-blank', weather:'rain-wind', lighting:'dim', movedBeforeRangedAttack:true, aimedTargetId: 'b' } });
   assert.deepEqual(preview.unresolved, []);
-  assert.equal(delta(preview), 0, 'bout portant +2, couvert -1, météo/lumière au niveau −2, mouvement −1, Surpris +1, Visée +1');
+  assert.equal(delta(preview), 1, 'bout portant +2, couvert -1, météo/lumière au niveau −2, mouvement −1, Surpris +2 (v3), Visée +1');
   assert.deepEqual(mods(preview), { 'penalty:cover': -1, 'range:point-blank': 2, 'weather-light:ranged': -2,
-    'movement:ranged': -1, 'target:surprised-ranged': 1, 'aim:target': 1 });
+    'movement:ranged': -1, 'target:surprised-ranged': 2, 'aim:target': 1 });
   assert.equal(preview.defenderTest, null);
   const severe=attack({context:{weather:'rain-wind',lighting:'dark'}});
   assert.equal(mods(severe)['weather-light:ranged'],-3,'une seule pénalité environnementale au niveau le plus sévère');

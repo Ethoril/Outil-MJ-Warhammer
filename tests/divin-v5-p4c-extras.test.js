@@ -94,9 +94,9 @@ test('Dévotion de la Guerrière : le formulaire expose le champ « Ennemi visé
 test('non-régression : un autre grant-talent (Grâce de Ranald, Chute féline) s’injecte sans saisie de spécialisation', async () => {
   assert.equal(getDivineContract(GRACE).effects.find(effect => effect.type === 'grant-talent').specializationFrom, undefined);
   const store = await fixture();
-  await cast(store, GRACE, { targetIds: ['ally'], facts: { targets: { ally: { ally: true, withinTouch: true } } }, expiry: expiry(6) });
+  await cast(store, GRACE, { targetIds: ['ally'], facts: { targets: { ally: { ally: true, withinTouch: true } } } });
   assert.deepEqual(talentRows(injected(store, 'ally')), [['talent-catfall', undefined, 1, true]]);
-  for (let i = 0; i < 40 && injected(store, 'ally').length; i++) await store.nextTurn();
+  await store.advanceCampaignTime({ seconds: 3600, reason: 'Fin de la durée en minutes (v3)' });
   assert.deepEqual(injected(store, 'ally'), []);
 });
 

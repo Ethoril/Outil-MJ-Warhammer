@@ -60,7 +60,7 @@ export const miracles = [
   targetRules: ['lot de marchandises en ligne de vue', 'hors des biens du prêtre'],
   needsInput: [
    { id: 'gossip-test', text: 'Résultat du Test de Commérage Difficile (−10) ayant repéré le lieu acheteur ou vendeur.' },
-   { id: 'goods', text: 'Quel lot de marchandises est visé, et est-il en ligne de vue et à portée (Sociabilité yards) ?' },
+   { id: 'goods', text: 'Quel lot de marchandises est visé, et est-il en ligne de vue et à portée (Sociabilité mètres) ?' },
    { id: 'direction', text: 'Disponibilité augmentée ou diminuée d’un niveau ?' }
   ],
   clauses: [

@@ -113,14 +113,14 @@ test('C04 — Immunité à la Psychologie, Nuée, Marque de Slaanesh (L06-034/03
   assert.equal(isPsychologyImmune(mark, { kind: 'terror' }), false);
 });
 
-test('C04 — Craintif / Skittish (L06-037/040, L13-006, L23-001, L26-004) : 3 Brisé sauf dressage adapté', () => {
+test('C04 — Craintif / Skittish (L06-037/040, L13-006, L23-001, L26-004) : 1 Brisé (v3) sauf dressage adapté', () => {
   const horse = person('h', { traits: ['Craintif'] });
   const magic = previewSkittishReaction({ subject: horse, trigger: 'magic', visible: true, round: 1 });
-  assert.equal(levelOf(magic.participant, 'brise'), 3);
-  assert.equal(levelOf(previewSkittishReaction({ subject: horse, trigger: 'noise', round: 1 }).participant, 'brise'), 3);
+  assert.equal(levelOf(magic.participant, 'brise'), 1);
+  assert.equal(levelOf(previewSkittishReaction({ subject: horse, trigger: 'noise', round: 1 }).participant, 'brise'), 1);
   assert.equal(levelOf(previewSkittishReaction({ subject: horse, trigger: 'magic', training: 'Magie', round: 1 }).participant, 'brise'), 0);
   assert.equal(levelOf(previewSkittishReaction({ subject: horse, trigger: 'noise', training: 'Guerre', round: 1 }).participant, 'brise'), 0);
-  assert.equal(levelOf(previewSkittishReaction({ subject: horse, trigger: 'magic', training: 'Guerre', round: 1 }).participant, 'brise'), 3);
+  assert.equal(levelOf(previewSkittishReaction({ subject: horse, trigger: 'magic', training: 'Guerre', round: 1 }).participant, 'brise'), 1);
   assert.equal(levelOf(previewSkittishReaction({ subject: horse, trigger: 'noise', isolatedVoice: true, round: 1 }).participant, 'brise'), 0);
   assert.equal(previewSkittishReaction({ subject: horse, trigger: undefined, round: 1 }).ready, false);
   assert.equal(levelOf(previewSkittishReaction({ subject: person('x'), trigger: 'magic', round: 1 }).participant, 'brise'), 0);

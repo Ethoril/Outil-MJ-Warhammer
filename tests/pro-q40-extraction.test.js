@@ -83,7 +83,7 @@ test('Q40 : options qui modifient le profil gardées en note (Great Wolf, Griffo
 
 test('Q40 L06 : le paragraphe d\'ambiance qui suit les Traits facultatifs n\'en fait pas partie (Bog Octopus p.328)', () => {
   const octopus = byId(load('L06'), 'E0-P-079');
-  assert.deepEqual(names(octopus.optionalTraits), ['Size', 'Territorial']);
+  assert.deepEqual(names(octopus.optionalTraits), ['Grim', 'Size', 'Territorial']);
 });
 
 // ---- Contrôle de complétude : les trois angles morts de Q40, sur des blocs imprimés réduits à l'essentiel ----

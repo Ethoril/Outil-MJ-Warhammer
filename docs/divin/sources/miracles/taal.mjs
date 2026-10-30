@@ -1,4 +1,4 @@
-/* Miracles de Taal, livre de base V5 EN v2 p.227-228 (imprimées). Transcription vérifiée au PDF; texte reformulé. */
+/* Miracles de Taal, livre de base V5 EN v2 p.227-228 (imprimées); Dent et griffe alignée sur la v3 du 27/10/2026. Transcription vérifiée au PDF; texte reformulé. */
 export const cult = 'Taal';
 const soc = { characteristic: 'Soc' };
 const range = { kind: 'characteristic', ...soc, unit: 'yards' };
@@ -13,7 +13,7 @@ export const miracles = [
     name: 'Instincts animaux',
     canonicalName: 'Animal Instincts',
     printedPage: 227,
-    summary: 'Pendant la durée, la cible touchée gagne le talent Sens aiguisé (un sens au choix) à +1. Si elle se repose, elle se réveille d\'elle-même dès qu\'une menace s\'approche à moins de sa valeur de Perception en yards.',
+    summary: 'Pendant la durée, la cible touchée gagne le talent Sens aiguisé (un sens au choix) à +1. Si elle se repose, elle se réveille d\'elle-même dès qu\'une menace s\'approche à moins de sa valeur de Perception en mètres.',
     params: { range: { kind: 'special' }, targets: one, duration: felHours },
     status: 'assisted',
     effect: null,
@@ -22,11 +22,11 @@ export const miracles = [
     needsInput: [
       { id: 'range-touch', text: 'Portée « Toucher » : contact avec la cible à confirmer par le MJ.' },
       { id: 'acute-sense', text: 'Sens choisi pour Sens aiguisé (un seul).' },
-      { id: 'threat', text: 'Ce qui compte comme une menace approchant à moins de Perception yards (décision MJ).' }
+      { id: 'threat', text: 'Ce qui compte comme une menace approchant à moins de Perception mètres (décision MJ).' }
     ],
     clauses: [
       { id: 'acute-sense-plus-1', mode: 'assisted', text: 'La cible gagne +1 au talent Sens aiguisé pour le sens choisi (talent temporaire).' },
-      { id: 'rest-awakening', mode: 'manual', text: 'En repos, la cible se réveille automatiquement si une menace entre à moins de Perception yards.' },
+      { id: 'rest-awakening', mode: 'manual', text: 'En repos, la cible se réveille automatiquement si une menace entre à moins de Perception mètres.' },
       { id: 'end', mode: 'engine', text: 'Fin des effets au terme de la durée (Bonus de Sociabilité heures).' }
     ],
     sourceDelta: 'Portée imprimée « Touch » : la grammaire params n\'a pas de contact, encodée en special.'
@@ -42,11 +42,11 @@ export const miracles = [
     targetRules: [],
     needsInput: [
       { id: 'environment', text: 'Environnement du lieu : le MJ choisit parmi les six bêtes du bestiaire (sanglier, chien, rat géant, araignée géante, cheval, loup) celle qui convient.' },
-      { id: 'animal-position', text: 'Position d\'apparition de l\'animal dans la portée (Sociabilité yards).' }
+      { id: 'animal-position', text: 'Position d\'apparition de l\'animal dans la portée (Sociabilité mètres).' }
     ],
     clauses: [
       { id: 'summon-animal', mode: 'engine', text: 'Le moteur crée l\'animal choisi par le MJ dans la liste fermée des six bêtes du bestiaire (pp.325-327), avec son profil de base, du camp du prêtre et contrôlé par le MJ.' },
-      { id: 'animal-placement', mode: 'manual', text: 'L\'animal apparaît à portée (Sociabilité yards) : la position saisie est notée sur la créature, le MJ la place.' },
+      { id: 'animal-placement', mode: 'manual', text: 'L\'animal apparaît à portée (Sociabilité mètres) : la position saisie est notée sur la créature, le MJ la place.' },
       { id: 'obedience', mode: 'manual', text: 'L\'animal agit selon les désirs du prêtre pendant toute la durée : le MJ joue l\'animal en suivant les souhaits du prêtre.' },
       { id: 'end', mode: 'engine', text: 'Durée de Bonus de Sociabilité minutes (horloge de campagne) ; à l\'échéance, ou à la fin de la prière, l\'animal disparaît (arbitrage MJ : le livre est muet).' }
     ],
@@ -105,8 +105,8 @@ export const miracles = [
     effects: [{ type: 'condition', key: 'Entangled', level: 1, strengthFrom: { kind: 'characteristic', characteristic: 'Soc', target: 'source' } }],
     targetRules: [],
     needsInput: [
-      { id: 'area-center', text: 'Point central de la zone dans la portée (Sociabilité yards).' },
-      { id: 'area-targets', text: 'Créatures présentes dans la zone (rayon Bonus de Sociabilité yards).' }
+      { id: 'area-center', text: 'Point central de la zone dans la portée (Sociabilité mètres).' },
+      { id: 'area-targets', text: 'Créatures présentes dans la zone (rayon Bonus de Sociabilité mètres).' }
     ],
     clauses: [
       { id: 'entangled', mode: 'engine', text: 'Chaque cible de la zone gagne l\'État Entangled avec une Force égale à la Sociabilité du prêtre (valeur entière, pas le Bonus).' },
@@ -118,21 +118,21 @@ export const miracles = [
     name: 'Dent et griffe',
     canonicalName: 'Tooth and Claw',
     printedPage: 228,
-    summary: 'Vous gagnez les Traits de créature Morsure (Bonus de Force + 3) et Arme (Bonus de Force + 4); vos attaques sont Magiques.',
+    summary: 'Vous gagnez les Traits de créature Morsure (Bonus de Force + 3) et Magique ; vos attaques à mains nues ne sont plus Inoffensives.',
     params: { range: self, targets: self, duration: felRounds },
     status: 'assisted',
     effect: null,
     effects: [
-      { type: 'grant-actions', actions: [{ id: 'bite', name: 'Morsure', damageFormula: 'BF+3' }, { id: 'weapon', name: 'Arme', damageFormula: 'BF+4' }] },
+      { type: 'grant-actions', actions: [{ id: 'bite', name: 'Morsure', damageFormula: 'BF+3' }] },
       { type: 'weapon-bonus', magical: true }
     ],
     targetRules: [],
     needsInput: [],
     clauses: [
       { id: 'bite', mode: 'engine', text: 'Trait Morsure (Bonus de Force + 3) pendant la durée.' },
-      { id: 'weapon', mode: 'engine', text: 'Trait Arme (Bonus de Force + 4) pendant la durée.' },
-      { id: 'magical', mode: 'engine', text: 'Les attaques de mêlée du prêtre sont Magiques (arbitrage MJ : toutes les attaques de mêlée, pas le tir).' }
+      { id: 'magical', mode: 'engine', text: 'Trait Magique : les attaques de mêlée du prêtre sont Magiques (arbitrage MJ : toutes les attaques de mêlée, pas le tir).' },
+      { id: 'unarmed-damaging', mode: 'manual', text: 'Pendant la durée, les attaques à mains nues du prêtre ne comptent plus comme Inoffensives (Undamaging) : à appliquer au jet.' }
     ],
-    sourceDelta: 'Le texte imprimé dit « Their attacks are Magical » : portée exacte (attaques de ces Traits ou toutes) ambiguë.'
+    sourceDelta: 'V5 v3 : Traits Morsure et Magique, plus de Trait Arme (BF+4). La portée exacte du Trait Magique (attaques de ces Traits ou toutes) reste lue comme toutes les attaques de mêlée (arbitrage MJ). Mains nues plus Inoffensives : clause manuelle, le moteur ne marque pas les mains nues Inoffensives.'
   }
 ];

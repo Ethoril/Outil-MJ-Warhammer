@@ -49,7 +49,7 @@ test('contrats : six miracles assistés, les clauses restantes sont celles qui n
   assert.deepEqual(getDivineContract(ICE).effects.map(row => row.type), ['ordinary-damage', 'condition']);
   assert.deepEqual(getDivineContract(DEMAND).effects.map(row => row.type), ['condition', 'direct-damage']);
   assert.deepEqual(getDivineContract(COMET).effects.map(row => row.appliesTo), [undefined, 'caster']);
-  assert.deepEqual(getDivineContract(JUDGEMENT).effects.map(row => row.appliesTo), [undefined, 'caster']);
+  assert.deepEqual(getDivineContract(JUDGEMENT).effects.map(row => row.appliesTo), [undefined, undefined, 'caster']);
   assert.deepEqual(remaining(FIST), ['no-sin-corruption', 'solkan-purity']);
   assert.deepEqual(remaining(ICE), []);
   assert.ok(!remaining(COMET).includes('backfire') && !remaining(JUDGEMENT).includes('redirect') && !remaining(DEMAND).includes('wounds'));
@@ -105,9 +105,12 @@ test('Jugement du Roi de la neige : cible épargnée et retour sur le prêtre si
   const refused = await fixture('Ulric', [fighter('target')]);
   await cast(refused, JUDGEMENT, input(['target'], { damageRoll: 4 }, { target: { judgement: false } }));
   assert.deepEqual([person(refused, 'target').hp, person(refused, 'priest').hp], [20, 20 - 6]);
+  const stunned = who => (who.states || []).some(state => state.key === 'sonne' || state.name === 'Sonné');
+  assert.equal(stunned(person(refused, 'target')), false, 'v3 : cible épargnée, pas de Sonné');
   const judged = await fixture('Ulric', [fighter('target')], { talents: talents('Ulric') });
   await cast(judged, JUDGEMENT, input(['target'], { damageRoll: 4 }, { target: { judgement: true } }));
   assert.deepEqual([person(judged, 'target').hp, person(judged, 'priest').hp], [20 - 8, 20], 'Haine sacrée sur la cible, jamais sur le prêtre');
+  assert.equal(stunned(person(judged, 'target')), true, 'v3 : la cible jugée reçoit Sonné');
   const selfStruck = await fixture('Ulric', [fighter('target')], { talents: talents('Ulric') });
   await cast(selfStruck, JUDGEMENT, input(['target'], { damageRoll: 4 }, { target: { judgement: false } }));
   assert.equal(person(selfStruck, 'priest').hp, 20 - 6, 'pas de Haine sacrée sur le retour');

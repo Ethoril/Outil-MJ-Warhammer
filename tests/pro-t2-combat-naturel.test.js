@@ -94,7 +94,7 @@ test('T2 plan d\'un Trait absent, Morsure à dégâts imprimés, armes V4, rappe
   assert.equal(absent.available, false);
   assert.match(absent.unresolved[0], /Trait absent/);
   const bite = planNaturalAttack(synthetic(['Bite']), 'bite');
-  assert.equal(bite.damageFormula, 'imprimé');
+  assert.equal(bite.damageFormula, `${Math.floor(Number(synthetic([]).caracs.F) / 10) + 3}`, 'v3 p.356 : Morsure sans valeur = BF+3');
   assert.equal(bite.costs.length, 1);
   assert.equal(planNaturalAttack(synthetic(['Bite']), 'bite', { momentum: false }).available, false);
   assert.equal(planV4NaturalWeapon(synthetic(['Claws +6'])).damageFormula, 'imprimé');

@@ -38,19 +38,25 @@ export function computeV5WeaponRangeBands(rawRange,actor=null){
   else if(sb&&Number.isFinite(Number(actor?.caracs?.F)))printedYards=Math.floor(Number(actor.caracs.F)/10)*(sb[1]?Number(sb[1]):1);
  }
  if(!(printedYards>0))return null;
- return {printedYards,pointBlankYards:4,shortYards:printedYards/2,mediumYards:printedYards,longYards:printedYards*2,extremeYards:printedYards*3};
+ // Livre de base V5 v3 p.302 : une portée courte de 4 m ou moins supprime le bout portant.
+ const shortYards=printedYards/2;
+ return {printedYards,pointBlankYards:shortYards>4?4:null,shortYards,mediumYards:printedYards,longYards:printedYards*2,extremeYards:printedYards*3};
 }
 /** L06 p.166 modifiers belong to the attack Test, even when a resolution also contains a defense. */
-export function applyV5AttackSituationModifiers(modifiers,{role,kind,actionType,actor,target,context={},actorSize,targetSize,talentRules=[],advantage=0,aimed=false}={}){
+export function applyV5AttackSituationModifiers(modifiers,{role,kind,actionType,actor,target,context={},actorSize,targetSize,talentRules=[],advantage=0,aimed=false,rangeBands=null}={}){
  if(role!=='attacker'||!['attack','attaque'].includes(actionType)||!['melee','ranged'].includes(kind))return [];
  const situationStart=modifiers.length,unresolved=[],add=(id,label,amount)=>{if(amount)modifiers.push({id,label,amount});};
  if(kind==='ranged'){
   const ar=Number.isSafeInteger(actorSize)?actorSize:creatureSizeOf(actor).rank,tr=Number.isSafeInteger(targetSize)?targetSize:creatureSizeOf(target).rank;
   add('size:ranged-target','Taille de la cible',tr===6?2:tr>ar?1:tr<ar?-1:0);
   const bands={'point-blank':2,short:1,medium:0,long:-1,extreme:-2};
-  if(context.shotRange!==undefined){if(!Object.hasOwn(bands,context.shotRange))unresolved.push('Bande de portée MJ invalide.');else add('range:'+context.shotRange,'Bande de portée choisie par le MJ',bands[context.shotRange]);}
+  // V5 v3 p.165 : un tir contre un adversaire engagé avec le tireur se résout comme une mêlée, sans modificateur de portée.
+  const asMelee=context.engagedWithShooter===true;
+  const noPointBlank=!asMelee&&rangeBands&&rangeBands.pointBlankYards===null;
+  if(noPointBlank&&(context.shotRange==='point-blank'||context.pointBlank===true))unresolved.push('Cette arme n’a pas de bout portant (portée courte de 4 m ou moins) : choisir une autre bande.');
+  if(context.shotRange!==undefined&&!asMelee){if(!Object.hasOwn(bands,context.shotRange))unresolved.push('Bande de portée MJ invalide.');else if(!(noPointBlank&&context.shotRange==='point-blank'))add('range:'+context.shotRange,'Bande de portée choisie par le MJ',bands[context.shotRange]);}
   const surprised=hasState(target,'surpris','surprised');
-  if(surprised)add('target:surprised-ranged','Cible Surprise au tir',1);
+  if(surprised)add('target:surprised-ranged','Cible Surprise au tir',2);
   if(context.aimedTargetId===target?.id)add('aim:target','Visée contre la cible désignée',1);
   const prone=hasState(target,'aterre','prone');
   if(Number(context.penalties?.cover)<0||Number(context.penalties?.targetProne)<0||context.cover===true||prone){const key=Number(context.penalties?.targetProne)<0||prone?'targetProne':'cover';const amount=Math.min(-1,Number(context.penalties?.cover)||0,Number(context.penalties?.targetProne)||0);add('penalty:'+key,key==='targetProne'?'Tir sur une cible À Terre':'Couvert',amount);}

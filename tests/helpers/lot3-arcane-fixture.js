@@ -20,7 +20,7 @@ export const sourceCases=[
  ['Dome',244,7,'Vous','ZdE Bonus de Force Mentale mètres','Bonus de Force Mentale Rounds'],
  ['Drop',244,1,'Force Mentale mètres','1','Instantané'],
  ['Entangle',244,3,'Bonus de Force Mentale mètres','1','Bonus de Force Mentale Rounds'],
- ['Fearsome',244,3,'Vous','Vous','Bonus de Force Mentale Rounds'],
+ ['Fearsome',244,2,'Vous','Vous','Bonus de Force Mentale Rounds'],
  ['Flight',244,8,'Vous','Vous','Bonus de Force Mentale Rounds'],
  ['Magic Shield',244,4,'Vous','Vous','Bonus de Force Mentale Rounds'],
  ['Move Object',244,4,'Force Mentale mètres','1','1 Round'],

@@ -52,7 +52,7 @@ export const CREATURE_ABILITIES = Object.freeze([
     "id": "E0-T-102",
     "book": "L11",
     "name": "Piercing Cry",
-    "summaryFr": "En charge, deux Avantages pour cri gratuit ; ennemis dans BE yards : Volonté −20 ou Sonné.",
+    "summaryFr": "En charge, deux Avantages pour cri gratuit ; ennemis dans BE mètres : Volonté −20 ou Sonné.",
     "status": "reminder",
     "motive": "Modifie un coût d'Élan ou une attaque gratuite hors des attaques gratuites automatisées : suivi à la main, sans règle de coût propre dans le moteur."
   },
@@ -228,7 +228,7 @@ export const CREATURE_ABILITIES = Object.freeze([
     "id": "E0-T-124",
     "book": "L11",
     "name": "Rotten Stench",
-    "summaryFr": "Vivants dans BE yards : −10 général, non cumulatif entre mêmes odeurs.",
+    "summaryFr": "Vivants dans BE mètres : −10 général, non cumulatif entre mêmes odeurs.",
     "status": "reminder",
     "motive": "Aura, zone ou filtre d'espèces : la portée et les cibles concernées se décident en scène, le moteur ne cartographie pas les distances."
   },
@@ -372,7 +372,7 @@ export const CREATURE_ABILITIES = Object.freeze([
     "id": "E0-T-142",
     "book": "L11",
     "name": "Vibrational Senses",
-    "summaryFr": "Détecte les corps physiques dans quatre BI yards et empêche Surpris.",
+    "summaryFr": "Détecte les corps physiques dans quatre BI mètres et empêche Surpris.",
     "status": "covered",
     "by": "T5 Sens vibratoires"
   },
@@ -548,7 +548,7 @@ export const CREATURE_ABILITIES = Object.freeze([
     "id": "E0-T-175",
     "book": "L07",
     "name": "Blood Hungry Spore Cloud",
-    "summaryFr": "Mouvement d’un sang-chaud assez grand à un yard : nuage cinq yards pendant 2d10 Rounds ; Endurance −10 ou Hémorragique, risque de maladie propre.",
+    "summaryFr": "Mouvement d’un sang-chaud assez grand à un mètre : nuage cinq mètres pendant 2d10 Rounds ; Endurance −10 ou Hémorragique, risque de maladie propre.",
     "status": "reminder",
     "motive": "Condition appliquée sous un test propre (Sonné, Empoisonné, Hémorragique, Enflammé, maladie) : le test et la durée sont rappelés, la condition se pose à la main."
   },
@@ -604,7 +604,7 @@ export const CREATURE_ABILITIES = Object.freeze([
     "id": "E0-T-182",
     "book": "L07",
     "name": "Odour Attack — Blot Toad",
-    "summaryFr": "Sang-froids dans 1d10 yards : Endurance ou Nausée 1d10 heures ; sang-chauds exempts.",
+    "summaryFr": "Sang-froids dans 1d10 m : Endurance ou Nausée 1d10 heures ; sang-chauds exempts.",
     "status": "reminder",
     "motive": "Condition appliquée sous un test propre (Sonné, Empoisonné, Hémorragique, Enflammé, maladie) : le test et la durée sont rappelés, la condition se pose à la main."
   },
@@ -684,7 +684,7 @@ export const CREATURE_ABILITIES = Object.freeze([
     "id": "E0-T-192",
     "book": "L07",
     "name": "Toxic Bile — Troglodon",
-    "summaryFr": "Bile à quinze yards donnant Enflammé aux touchés ; cartouche d’attaque à préciser.",
+    "summaryFr": "Bile à quinze mètres donnant Enflammé aux touchés ; cartouche d’attaque à préciser.",
     "status": "reminder",
     "motive": "Condition appliquée sous un test propre (Sonné, Empoisonné, Hémorragique, Enflammé, maladie) : le test et la durée sont rappelés, la condition se pose à la main."
   },
@@ -820,7 +820,7 @@ export const CREATURE_ABILITIES = Object.freeze([
     "id": "E0-T-253",
     "book": "L21",
     "name": "Messy Demise",
-    "summaryFr": "À la mort d’un Squig colossal, tout engagé à trois yards fait un Test d’Esquive Intermédiaire (+0 DR) sinon 2d10 Blessures réduites par Endurance et armure, minimum une.",
+    "summaryFr": "À la mort d’un Squig colossal, tout engagé à trois mètres fait un Test d’Esquive Intermédiaire (+0 DR) sinon 2d10 Blessures réduites par Endurance et armure, minimum une.",
     "status": "covered",
     "by": "T3 Déclencheurs de mort"
   },
@@ -836,7 +836,7 @@ export const CREATURE_ABILITIES = Object.freeze([
     "id": "E0-T-255",
     "book": "L21",
     "name": "Suffused with Death",
-    "summaryFr": "Dans les 80 yards du colosse, les sorts de la Mort et de la Nécromancie gagnent +1 DR ; ceux de Ghyran, Hysh et Azyr subissent −10 (−1 DR en V5).",
+    "summaryFr": "Dans les 80 m du colosse, les sorts de la Mort et de la Nécromancie gagnent +1 DR ; ceux de Ghyran, Hysh et Azyr subissent −10 (−1 DR en V5).",
     "status": "reminder",
     "motive": "Effet de magie propre à la créature : sorts et miracles se jouent par leurs services, cette variante n'a pas de contrat et reste un rappel."
   },
@@ -876,7 +876,7 @@ export const CREATURE_ABILITIES = Object.freeze([
     "id": "E0-T-260",
     "book": "L19",
     "name": "Howl of the Great Beast",
-    "summaryFr": "À son Tour, pour un Élan, hurlement en attaque gratuite : vivants à Initiative yards, trois Assourdi et Test de Calme Difficile sinon trois Brisé ; qui réussit une fois n’y est plus soumis durant la rencontre. Termes V4 convertis en V5 au lot de l’implantation (±10 → ±1 DR, Avantage → Élan).",
+    "summaryFr": "À son Tour, pour un Élan, hurlement en attaque gratuite : vivants à Initiative mètres, trois Assourdi et Test de Calme Difficile sinon trois Brisé ; qui réussit une fois n’y est plus soumis durant la rencontre. Termes V4 convertis en V5 au lot de l’implantation (±10 → ±1 DR, Avantage → Élan).",
     "status": "covered",
     "by": "T2 Hurlement"
   },
@@ -1036,7 +1036,7 @@ export const CREATURE_ABILITIES = Object.freeze([
     "id": "E0-T-280",
     "book": "L26",
     "name": "Hallucinogen",
-    "summaryFr": "Musc hallucinogène : à deux yards (plus sous le vent), Test de Volonté Facile (+20) sinon un Sonné par niveau d’échec.",
+    "summaryFr": "Musc hallucinogène : à deux mètres (plus sous le vent), Test de Volonté Facile (+20) sinon un Sonné par niveau d’échec.",
     "status": "reminder",
     "motive": "Condition appliquée sous un test propre (Sonné, Empoisonné, Hémorragique, Enflammé, maladie) : le test et la durée sont rappelés, la condition se pose à la main."
   },

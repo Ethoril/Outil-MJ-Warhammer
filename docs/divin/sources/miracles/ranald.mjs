@@ -1,4 +1,4 @@
-// Miracles de Ranald — Livre de base V5 EN v2, pages imprimées 224-225.
+// Miracles de Ranald — Livre de base V5 EN v2, pages imprimées 224-225 (Grâce de Ranald alignée sur la v3 du 27/10/2026).
 export const cult = 'Ranald';
 
 export const miracles = [
@@ -26,7 +26,7 @@ export const miracles = [
   effects: [{ type: 'summon-creature', appliesTo: 'caster', kind: 'sensor', name: 'Chat', traits: ['Invulnérable'] }],
   targetRules: ['prêtre uniquement'],
   needsInput: [
-   { id: 'cat-position', text: 'Où apparaît le chat et jusqu’où le prêtre peut-il le diriger (portée Sociabilité yards) ?' },
+   { id: 'cat-position', text: 'Où apparaît le chat et jusqu’où le prêtre peut-il le diriger (portée Sociabilité mètres) ?' },
    { id: 'perception', text: 'Ce que le chat perçoit, communiqué au joueur par le MJ.' },
    { id: 'priest-vulnerable', text: 'Le prêtre ne perçoit rien par ses propres sens pendant la durée.' }
   ],
@@ -60,7 +60,7 @@ export const miracles = [
  {
   name: 'Grâce de Ranald', canonicalName: "Ranald's Grace", printedPage: 225,
   summary: 'La cible gagne +10 en Agilité, +10 en Discrétion (Stealth) et le Talent Chute féline (Catfall) +1 pendant la durée.',
-  params: { range: { kind: 'touch' }, targets: { kind: 'count', value: 1 }, duration: { kind: 'characteristic-bonus', characteristic: 'Soc', unit: 'rounds' } },
+  params: { range: { kind: 'touch' }, targets: { kind: 'count', value: 1 }, duration: { kind: 'characteristic-bonus', characteristic: 'Soc', unit: 'minutes' } },
   status: 'assisted',
   effect: null,
   effects: [

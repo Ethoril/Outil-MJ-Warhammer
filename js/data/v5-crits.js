@@ -50,7 +50,7 @@ export const V5_CRIT_DATA = {
     [55,'Clavicule tordue',2,{},'Tirer un bras ; lâcher l’objet ; bras inutilisable 1d10 Rounds.'],
     [60,'Chairs déchirées',2,{Hémorragique:2}], [65,'Côtes fracturées',2,{Sonné:1},'Fracture mineure.'],
     [70,'Blessure béante',3,{Hémorragique:3},'Sans chirurgie, toute nouvelle perte de Blessures au corps ajoute Hémorragique 1.'],
-    [75,'Entaille douloureuse',3,{Hémorragique:2,Sonné:1},'Résistance −2 DR ; échec : crier ; échec à −6 DR ou moins : Inconscient.'],
+    [75,'Entaille douloureuse',3,{Hémorragique:2,Sonné:1},'Résistance −2 DR ; échec : crier ; échec à −5 DR ou moins : Inconscient.'],
     [80,'Dos froissé',3,{Sonné:1},'Déchirure majeure.'],
     [85,'Dégâts artériels',3,{Hémorragique:4},'Sans chirurgie, chaque nouveau dégât au corps ajoute Hémorragique 2.'],
     [90,'Blessure au ventre',4,{Hémorragique:2},'Blessure purulente.'],
@@ -82,7 +82,7 @@ export const V5_CRIT_DATA = {
 };
 
 // Noms imprimés et folios du livre V5 anglais, contrôlés sur les pages physiques
-// 173–176 de « Livre de base V5 EN v2.pdf ». Les états et Blessures restent les
+// 173–176 de « Livre de base V5 EN v3.pdf ». Les états et Blessures restent les
 // valeurs de table ci-dessus ; cette couche ajoute les séquelles durables/F2-J.
 const SOURCE_ROWS = {
   HEAD: ['Dramatic Injury','Ear Bash','Poked Eye','Minor Cut','Rattling Blow','Black Eye','Sliced Ear','Struck Forehead','Fractured Jaw','Broken Nose','Major Eye Wound','Broken Jaw','Major Ear Wound','Concussive Blow','Smashed Teeth','Mangled Ear','Devastated Eye','Disfiguring Blow','Mangled Jaw','Shattered Skull'],
@@ -137,7 +137,7 @@ const LASTING_OUTCOMES = {
     ['Wrenched Collar Bone',[{kind:'random-select-and-apply',part:'arm',effects:[{kind:'drop-held-item',part:'hand'},{kind:'temporary-limb-loss',part:'arm',duration:'1d10 Rounds'}]}]],
     ['Cracked Ribs',[{kind:'injury',name:'Broken Bone',severity:'minor',part:'body'}]],
     ['Gaping Wound',[{kind:'surgery-required',effect:'each-new-wound-to-body-adds-bleeding:1'}]],
-    ['Painful Cut',[{kind:'test',skill:'Endurance',difficultySL:-2,onFailure:'scream',onFailureAtOrBelow:-6,addCondition:'inconscient'}]],
+    ['Painful Cut',[{kind:'test',skill:'Endurance',difficultySL:-2,onFailure:'scream',onFailureAtOrBelow:-5,addCondition:'inconscient'}]],
     ['Pulled Back',[{kind:'injury',name:'Torn Muscle',severity:'major',part:'body'}]],
     ['Arterial Damage',[{kind:'surgery-required',effect:'each-new-body-hit-adds-bleeding:2'}]],
     ['Gut Wound',[{kind:'disease',name:'Festering Wound'}]],

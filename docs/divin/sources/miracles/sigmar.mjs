@@ -32,7 +32,7 @@ export const miracles = [
     needsInput: [{ id: 'spell-target', text: 'Le sort lancé vise-t-il quelqu’un ou un lieu dans la zone ?' }],
     clauses: [
       { id: 'casting-penalty', mode: 'engine', text: 'Le moteur applique -2 DR au Test d’Incantation d’un sort dont les cibles incluent au moins un participant désigné de la zone (une seule fois, quel que soit le nombre de porteurs) ; un sort visant un simple lieu de la zone sans participant reste à l’appréciation du MJ.' },
-      { id: 'area', mode: 'assisted', text: 'Zone centrée sur vous, de rayon égal au Bonus de Sociabilité en yards.' },
+      { id: 'area', mode: 'assisted', text: 'Zone centrée sur vous, de rayon égal au Bonus de Sociabilité en mètres.' },
       { id: 'duration', mode: 'engine', text: 'Durée : Bonus de Sociabilité en rounds.' }
     ],
     sourceDelta: 'Le livre ne précise pas si un sort lancé depuis l’intérieur de la zone vers l’extérieur est pénalisé ; la zone suit le prêtre, le MJ redésigne les participants porteurs si besoin.'
@@ -66,7 +66,7 @@ export const miracles = [
       { id: 'area-damage', mode: 'engine', text: 'Toutes les cibles de la zone subissent 1d10 Blessures ignorant le BE et les PA (dégâts directs non gérés par le moteur).' },
       { id: 'ablaze-daemon-undead', mode: 'engine', text: 'Les cibles ayant le Trait Daemon ou Undead gagnent aussi un État Enflammé.' },
       { id: 'sl-extra', mode: 'engine', text: 'Pour chaque DR, +1 Blessure supplémentaire à tout orque, gobelin, mort-vivant ou serviteur des Puissances de la Ruine.' },
-      { id: 'area', mode: 'assisted', text: 'Zone centrée sur vous, de rayon égal au Bonus de Sociabilité en yards.' }
+      { id: 'area', mode: 'assisted', text: 'Zone centrée sur vous, de rayon égal au Bonus de Sociabilité en mètres.' }
     ],
     sourceDelta: 'Le gain est « par SL » imprimé, alors que la règle générale des miracles compte par tranche de +2 DR pour portée, cibles et durée; traité comme gain de dégâts distinct, explicitement écrit. Non précisé : les alliés dans la zone sont-ils touchés.'
   },
@@ -81,7 +81,7 @@ export const miracles = [
     targetRules: [],
     needsInput: [{ id: 'target-area', text: 'Zone visée, en ligne de vue et à portée.' }, { id: 'outdoors', text: 'La zone est-elle en extérieur ?' }, { id: 'sigmar-foes', text: 'Ennemis de Sigmar présents dans la zone (arbitrage MJ); sinon le prêtre est frappé.' }, { id: 'invalid-creatures', text: 'Créatures invalides exclues (notion non définie par la source).' }, { id: 'damage-roll', text: 'Jet de 1d10 + DR.' }],
     clauses: [
-      { id: 'targeting', mode: 'manual', text: 'Zone visible et à portée (Bonus de Sociabilité en yards au maximum pour la zone) contenant des ennemis aux yeux de Sigmar.' },
+      { id: 'targeting', mode: 'manual', text: 'Zone visible et à portée (Bonus de Sociabilité en mètres au maximum pour la zone) contenant des ennemis aux yeux de Sigmar.' },
       { id: 'outdoors-only', mode: 'manual', text: 'La zone ciblée doit être en extérieur.' },
       { id: 'area-damage', mode: 'engine', text: 'Tout ce qui est dans la zone, sauf créatures invalides, subit 1d10 + DR Blessures ignorant BE et PA.' },
       { id: 'ablaze', mode: 'engine', text: 'Chaque créature touchée reçoit un État Enflammé.' },
@@ -101,7 +101,7 @@ export const miracles = [
       { id: 'hatred', mode: 'engine', text: 'Les alliés gagnent la Haine envers orques, gobelins, morts-vivants et alliés du Chaos (règle de Haine, p.184) : une ligne de Haine par groupe.' },
       { id: 'hatred-kill', mode: 'manual', text: 'Après avoir tué un tel ennemi, la Haine donne +2 DR aux Tests de combat au lieu de +1.' },
       { id: 'priest-counted', mode: 'manual', text: 'Le prêtre n’est pas expressément exclu ni inclus parmi les alliés : à trancher, rappel au MJ.' },
-      { id: 'area', mode: 'assisted', text: 'Zone centrée sur vous, de rayon égal au Bonus de Sociabilité en yards.' },
+      { id: 'area', mode: 'assisted', text: 'Zone centrée sur vous, de rayon égal au Bonus de Sociabilité en mètres.' },
       { id: 'duration', mode: 'engine', text: 'Durée : Bonus de Sociabilité en rounds.' }
     ],
     sourceDelta: 'Le livre dit « alliés choisis » dans le texte mais la cible imprimée est la zone entière; le prêtre est-il compté n’est pas précisé.'

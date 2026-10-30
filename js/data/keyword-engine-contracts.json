@@ -46,7 +46,7 @@
     },
     {
       "id": "a-repetition",
-      "effect": "Contient X tirs ; l'arme se recharge automatiquement après chaque tir. Une fois les X tirs dépensés, il faut la recharger entièrement selon les règles normales.",
+      "effect": "Contient X tirs ; l'arme se recharge automatiquement après chaque tir. Une fois les X tirs dépensés, il faut la recharger entièrement selon les règles normales. Permet de tirer deux fois sur la même cible avec −1 DR, en une seule Action.",
       "edition": "V5",
       "source": "Livre de base V5 EN p.305"
     },

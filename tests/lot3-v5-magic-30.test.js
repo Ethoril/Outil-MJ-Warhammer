@@ -244,17 +244,17 @@ test('Focalisation V5 — maladresse : perte de 1d10 DR plafonnée, réserve 0 n
   assert.equal(previewPartial.miscast.modifiedRoll, 90);
 });
 
-test('Focalisation V5 — pause de focalisation : Résistance Accessible (+2 DR), échec vide la réserve', () => {
-  const wizard = createWizardParticipant(); // Résistance score 45
+test('Focalisation V5 — pause de focalisation : Focalisation Accessible (+2 DR) (v3 p.236), échec vide la réserve', () => {
+  const wizard = createWizardParticipant(); // Focalisation score 60
   const withReserve = setChannellingReserve(wizard, { type: 'winds', sl: 10 });
 
-  // Réussite au test de pause : roll 40 sur score 45 + 2 DR -> réussite
+  // Réussite au test de pause : roll 40 sur score 60 + 2 DR -> réussite
   const pauseSuccess = previewChannellingPause(withReserve, { roll: 40 });
   assert.equal(pauseSuccess.success, true);
   assert.equal(pauseSuccess.newReserve.sl, 10, 'La réserve est conservée');
 
-  // Échec au test de pause : roll 70 sur score 45 + 2 DR -> DR = 4 - 7 + 2 = -1 -> échec !
-  const pauseFailure = previewChannellingPause(withReserve, { roll: 70 });
+  // Échec au test de pause : roll 90 sur score 60 + 2 DR -> DR = 6 - 9 + 2 = -1 -> échec !
+  const pauseFailure = previewChannellingPause(withReserve, { roll: 90 });
   assert.equal(pauseFailure.success, false);
   assert.equal(pauseFailure.newReserve.sl, 0, 'La réserve est perdue');
 
@@ -605,7 +605,7 @@ test('Lancement V5 — règle de table sans ingrédients, talent acquis et influ
   // 1. Ingrédient sur incident Mineur : annule complètement l'incident
   const withIngredient = previewCasting(wizard, spell, {
     roll: 77, // Maladresse
-    miscastRoll: 50,
+    miscastRoll: 70,
     ingredient: true
   });
   assert.equal(withIngredient.fumble, true);
@@ -635,7 +635,7 @@ test('Lancement V5 — règle de table sans ingrédients, talent acquis et influ
 
   // 4. Diction instinctive : réduit de 20 le jet Mineur
   const withDiction = previewCasting({...wizard,talents:[{id:'talent-instinctive-diction',status:'resolved',rank:1}]}, spell, {
-    roll: 77,
+    roll: 33,
     miscastRoll: 35,
     instinctiveDiction: true
   });
@@ -645,7 +645,7 @@ test('Lancement V5 — règle de table sans ingrédients, talent acquis et influ
 
   // 5. Diction instinctive ramenant le jet sous 01 : annule l'incident
   const withDictionCancel = previewCasting({...wizard,talents:[{id:'talent-instinctive-diction',status:'resolved',rank:1}]}, spell, {
-    roll: 77,
+    roll: 33,
     miscastRoll: 15,
     instinctiveDiction: true
   });

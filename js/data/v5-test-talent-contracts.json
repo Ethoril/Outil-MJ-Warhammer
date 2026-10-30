@@ -473,7 +473,7 @@
       "status": "validated",
       "ruleVersion": "talent-v5-2026-10-09.24",
       "source": {
-        "effectHash": "sha256:c0850e6d9d1109e91be1749758ee45afeabac717eb940b6ff28a17f533dbeb88",
+        "effectHash": "sha256:5fce30a70e86be6e132cc1720c20b8e44d71616eef350a7b0e7c677cde14c866",
         "reference": "Livre de base V5, p. 119 ; achat : p. 191"
       },
       "clauses": [
@@ -1317,66 +1317,105 @@
       "status": "validated",
       "ruleVersion": "talent-v5-2026-10-09.24",
       "source": {
-        "effectHash": "sha256:7e4f348eb53cbbf043f5e1e8632fcf52d5e008dfd5c57b00d2c41dd03c610edd",
+        "effectHash": "sha256:22dd0af647916fd0a16a623cf35aafe059d5e5cee4c7695dfea57971dd9458cd",
         "reference": "Livre de base V5, p. 117 ; achat : p. 191"
       },
       "clauses": [
         {
-          "id": "advantage-actor",
-          "event": "test.beforeRoll",
+          "id": "chooseSLUnits-actor",
+          "event": "test.afterRoll",
           "role": "actor",
           "when": [
             {
               "field": "skillGroupId",
               "op": "eq",
               "value": "skill-group-43_6f_6d_6d_61_6e_64_65_6d_65_6e_74"
+            },
+            {
+              "field": "inCombat",
+              "op": "eq",
+              "value": true
+            },
+            {
+              "field": "test.success",
+              "op": "eq",
+              "value": true
             }
           ],
           "effects": [
             {
-              "op": "grantAdvantage",
+              "op": "chooseSLUnits",
               "stackGroup": "talent-commanding-presence",
               "stack": "unique"
             }
-          ]
+          ],
+          "choice": {
+            "id": "talent-commanding-presence:sl"
+          }
         },
         {
-          "id": "advantage-attacker",
-          "event": "test.beforeRoll",
+          "id": "chooseSLUnits-attacker",
+          "event": "test.afterRoll",
           "role": "attacker",
           "when": [
             {
               "field": "skillGroupId",
               "op": "eq",
               "value": "skill-group-43_6f_6d_6d_61_6e_64_65_6d_65_6e_74"
+            },
+            {
+              "field": "inCombat",
+              "op": "eq",
+              "value": true
+            },
+            {
+              "field": "test.success",
+              "op": "eq",
+              "value": true
             }
           ],
           "effects": [
             {
-              "op": "grantAdvantage",
+              "op": "chooseSLUnits",
               "stackGroup": "talent-commanding-presence",
               "stack": "unique"
             }
-          ]
+          ],
+          "choice": {
+            "id": "talent-commanding-presence:sl"
+          }
         },
         {
-          "id": "advantage-defender",
-          "event": "test.beforeRoll",
+          "id": "chooseSLUnits-defender",
+          "event": "test.afterRoll",
           "role": "defender",
           "when": [
             {
               "field": "skillGroupId",
               "op": "eq",
               "value": "skill-group-43_6f_6d_6d_61_6e_64_65_6d_65_6e_74"
+            },
+            {
+              "field": "inCombat",
+              "op": "eq",
+              "value": true
+            },
+            {
+              "field": "test.success",
+              "op": "eq",
+              "value": true
             }
           ],
           "effects": [
             {
-              "op": "grantAdvantage",
+              "op": "chooseSLUnits",
               "stackGroup": "talent-commanding-presence",
               "stack": "unique"
             }
-          ]
+          ],
+          "choice": {
+            "id": "talent-commanding-presence:sl"
+          }
         }
       ]
     },
@@ -1989,7 +2028,7 @@
       "status": "validated",
       "ruleVersion": "talent-v5-2026-10-09.24",
       "source": {
-        "effectHash": "sha256:635e212b4a02bfd45a9c2eb6700232e8ada9f5322c26109b4a8df0eff6f139e6",
+        "effectHash": "sha256:4d192cd4f04cbb5093cacf3496298d3c7efe7fc5614a3f474ea2ed59512a008b",
         "reference": "Livre de base V5, p. 123 ; achat : p. 191"
       },
       "clauses": [
@@ -2002,6 +2041,11 @@
               "field": "skillGroupId",
               "op": "eq",
               "value": "skill-group-49_6e_74_75_69_74_69_6f_6e"
+            },
+            {
+              "field": "potentialDanger",
+              "op": "eq",
+              "value": true
             }
           ],
           "effects": [
@@ -2021,6 +2065,11 @@
               "field": "skillGroupId",
               "op": "eq",
               "value": "skill-group-49_6e_74_75_69_74_69_6f_6e"
+            },
+            {
+              "field": "potentialDanger",
+              "op": "eq",
+              "value": true
             }
           ],
           "effects": [
@@ -2040,6 +2089,11 @@
               "field": "skillGroupId",
               "op": "eq",
               "value": "skill-group-49_6e_74_75_69_74_69_6f_6e"
+            },
+            {
+              "field": "potentialDanger",
+              "op": "eq",
+              "value": true
             }
           ],
           "effects": [
@@ -2217,7 +2271,7 @@
       "status": "validated",
       "ruleVersion": "talent-v5-2026-10-09.24",
       "source": {
-        "effectHash": "sha256:7e3c91b96267d54d312b14ad3a3b59c7471053b2b460f537c6407a4c3da0c941",
+        "effectHash": "sha256:a3052d11db27514adc22670b2732afc422d010473b3d4dd4b6e7409a3ca8e6e9",
         "reference": "Livre de base V5, p. 126 ; achat : p. 191"
       },
       "clauses": [
@@ -2232,7 +2286,7 @@
               "value": "skill-group-41_74_68_6c_e9_74_69_73_6d_65"
             },
             {
-              "field": "runningOrJumping",
+              "field": "running",
               "op": "eq",
               "value": true
             }
@@ -2256,7 +2310,7 @@
               "value": "skill-group-41_74_68_6c_e9_74_69_73_6d_65"
             },
             {
-              "field": "runningOrJumping",
+              "field": "running",
               "op": "eq",
               "value": true
             }
@@ -2280,7 +2334,7 @@
               "value": "skill-group-41_74_68_6c_e9_74_69_73_6d_65"
             },
             {
-              "field": "runningOrJumping",
+              "field": "running",
               "op": "eq",
               "value": true
             }
@@ -2472,7 +2526,7 @@
       "status": "validated",
       "ruleVersion": "talent-v5-2026-10-09.24",
       "source": {
-        "effectHash": "sha256:cb16f5827ce8f6a372e3df7f51b47f6587a65f4d7b9b4cd0516e1b247ea96bcc",
+        "effectHash": "sha256:7e4f348eb53cbbf043f5e1e8632fcf52d5e008dfd5c57b00d2c41dd03c610edd",
         "reference": "Livre de base V5, p. 121 ; achat : p. 191"
       },
       "clauses": [
@@ -2485,11 +2539,6 @@
               "field": "skillGroupId",
               "op": "eq",
               "value": "skill-group-43_6f_6d_6d_61_6e_64_65_6d_65_6e_74"
-            },
-            {
-              "field": "inCombat",
-              "op": "eq",
-              "value": true
             }
           ],
           "effects": [
@@ -2509,11 +2558,6 @@
               "field": "skillGroupId",
               "op": "eq",
               "value": "skill-group-43_6f_6d_6d_61_6e_64_65_6d_65_6e_74"
-            },
-            {
-              "field": "inCombat",
-              "op": "eq",
-              "value": true
             }
           ],
           "effects": [
@@ -2533,11 +2577,6 @@
               "field": "skillGroupId",
               "op": "eq",
               "value": "skill-group-43_6f_6d_6d_61_6e_64_65_6d_65_6e_74"
-            },
-            {
-              "field": "inCombat",
-              "op": "eq",
-              "value": true
             }
           ],
           "effects": [
@@ -3226,7 +3265,7 @@
     "talent-cat-tongued": "Avantage V5 aux Tests de Charme effectués pour mentir de façon convaincante.",
     "talent-public-speaker": "Vous rassemblez aisément une foule et pouvez généralement évaluer son humeur et ses motivations. Avantage V5 aux Tests de Charme pour influencer un groupe. Après l’avoir charmé ainsi, vous pouvez employer Commandement pour l’inciter à agir, retirer ses états Brisé ou l’influencer autrement.",
     "talent-scale-sheer-surface": "Avantage V5 aux Tests d'Escalade. Vous pouvez tenter de grimper des surfaces apparemment impossibles (glace, parois lisses, poteaux graissés…), avec une difficulté imposée au maximum Très difficile (−3 DR).",
-    "talent-fast-hands": "Vous pouvez divertir avec Escamotage en faisant apparaître ou disparaître de petits objets. Avantage V5 aux Tests d’Escamotage et de Corps à corps (Bagarre) pour toucher un adversaire, notamment pour un Sort de contact.",
+    "talent-fast-hands": "Avantage V5 aux Tests d’Escamotage et de Corps à corps (Bagarre) pour toucher un adversaire, notamment pour un Sort de contact.",
     "talent-linguistics": "Avantage V5 aux Tests de Langue. Chaque Augmentation d’une spécialisation de Langue coûte toujours 50 PX, quel que soit le nombre déjà acquis. Ne s’applique qu’aux langues servant à communiquer, jamais à Langue (Magick).",
     "talent-resistant": "Choisissez une menace. Une fois par séance, avant de lancer un Test pour lui résister, vous pouvez le réussir automatiquement ; Avantage V5 à tous les autres Tests de résistance à cette menace durant la session. Répétable avec une nouvelle menace, une fois par choix.",
     "talent-dicer": "Avantage V5 à tous vos Tests de Pari.",
@@ -3234,7 +3273,7 @@
     "talent-strong-swimmer": "Avantage V5 aux Tests de Natation ; +2 DR aux poursuites à la nage.",
     "talent-dealmaker": "Avantage V5 aux Tests de Marchandage ; vous savez généralement quand une offre est vraiment définitive.",
     "talent-field-dressing": "Avantage V5 aux Tests de Guérison. Vous fabriquez facilement des attelles ou bandages simples avec des matériaux ordinaires.",
-    "talent-commanding-presence": "En l’absence d’autorité reconnue, les gens se tournent naturellement vers vous en cas de crise et suivent vos ordres raisonnables. Avantage V5 aux Tests de Commandement.",
+    "talent-commanding-presence": "Sur un Test de Commandement réussi en combat, choisissez les DR obtenus ou la valeur du dé des unités.",
     "talent-orientation": "Avantage V5 aux Tests d’Orientation. Vous connaissez automatiquement le nord à partir des étoiles, arbres ou autres signes familiers que vous apercevez.",
     "talent-gregarious": "Avantage V5 aux Tests de Ragot ; vous savez généralement où trouver les lieux d’échange de rumeurs dans une agglomération.",
     "talent-bookish": "Avantage V5 à tous vos Tests de Recherche.",
@@ -3243,13 +3282,13 @@
     "talent-super-numerate": "Avantage V5 aux Tests d'Évaluation. Vous calculez sans outil et mesurez précisément le temps écoulé tant que vous restez conscient.",
     "talent-roughrider": "Avec la compétence Chevaucher, vous dirigez votre monture pour une Action et un Mouvement sans Test. Si un Test de Chevaucher est requis, vous le faites avec Avantage V5. En poursuite montée, +1 au Mouvement de l'animal.",
     "talent-crack-the-whip": "Avec Conduite d’attelage, vous dirigez les animaux du véhicule pour une Action et un Mouvement sans Test. Si un Test de Conduite est requis, il bénéficie d’Avantage V5. En poursuite avec le véhicule, ajoutez +1 au Mouvement des animaux.",
-    "talent-nose-for-trouble": "Avantage V5 aux Tests d’Intuition ; vous savez généralement où trouver, dans une ville ou un village, de quoi parier, vous battre ou vous enivrer.",
+    "talent-nose-for-trouble": "Avantage V5 aux Tests d’Intuition liés à un danger potentiel ; vous savez généralement où trouver, dans une ville ou un village, de quoi parier, vous battre ou vous enivrer.",
     "talent-pilot": "Avantage V5 aux Tests de Ramer et de Voile.",
     "talent-tunnel-fighter": "Avantage V5 aux Tests de Discrétion (Souterraine). Vous estimez facilement la distance parcourue sous terre et approximativement la profondeur sous la surface.",
-    "talent-sprinter": "Avantage V5 aux Tests d'Athlétisme pour courir et sauter.",
+    "talent-sprinter": "Avantage V5 aux Tests d'Athlétisme pour courir. À pied, vous ne subissez aucune pénalité pour vous frayer un chemin dans une foule dense.",
     "talent-catfall": "Toute chute compte comme volontaire : vous pouvez effectuer un Test d’Athlétisme pour réduire les Dégâts. Avantage V5 aux Tests d’Athlétisme effectués pendant la chute.",
     "talent-panhandle": "Avantage V5 aux Tests de Charme pour mendier, y compris pendant une Activité Revenu. Vous savez généralement où trouver un abri urbain sûr mais inconfortable pour dormir.",
-    "talent-inspiring": "Avantage V5 aux Tests de Commandement effectués en combat.",
+    "talent-inspiring": "En l’absence d’autorité reconnue, les gens se tournent naturellement vers vous en cas de crise et suivent vos ordres raisonnables. Avantage V5 aux Tests de Commandement.",
     "talent-iron-will": "Avantage V5 aux Tests de Calme pour résister à l’influence d’autrui, qu’elle provienne d’un Test de Sociabilité ou de la magie.",
     "talent-contortionist": "Vous pouvez vous glisser dans des ouvertures normalement difficiles ou impossibles, à l’appréciation du MJ. Avantage V5 aux Tests d’Athlétisme pour vous libérer de liens.",
     "talent-carouser": "Une consommation modérée d’alcool n’a pas d’effet négatif ; un Test de Résistance à l’alcool n’est requis qu’en cas d’excès. Avantage V5 à ces Tests et aux Tests de Résistance contre le poison.",
@@ -3300,11 +3339,20 @@
     },
     {
       "talentId": "talent-sprinter",
-      "field": "runningOrJumping",
-      "label": "Le Test sert à courir ou sauter",
+      "field": "running",
+      "label": "Le Test sert à courir",
       "type": "boolean",
       "skillGroupIds": [
         "skill-group-41_74_68_6c_e9_74_69_73_6d_65"
+      ]
+    },
+    {
+      "talentId": "talent-nose-for-trouble",
+      "field": "potentialDanger",
+      "label": "Le Test d’Intuition est lié à un danger potentiel",
+      "type": "boolean",
+      "skillGroupIds": [
+        "skill-group-49_6e_74_75_69_74_69_6f_6e"
       ]
     },
     {
@@ -3326,7 +3374,7 @@
       ]
     },
     {
-      "talentId": "talent-inspiring",
+      "talentId": "talent-commanding-presence",
       "field": "inCombat",
       "label": "Le Test de Commandement est effectué en combat",
       "type": "boolean",

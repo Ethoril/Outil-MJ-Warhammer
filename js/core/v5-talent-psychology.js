@@ -2,7 +2,7 @@ import{evaluateV5Talents,hasV5Talent,acquiredV5Talents,currentV5TalentHashes,pre
 import{getReferenceCatalogue}from'./reference-catalog.js';
 import{situationPlan,activeSource}from'./v5-talent-situations.js';
 import{acquireV5Conditions,recoverV5Condition,previewDeliciousExcruciation}from'./v5-effects.js';
-import{withMomentum}from'./v5-combat-rules.js';
+import{withMomentum,loseMomentumUnderFear}from'./v5-combat-rules.js';
 import{resolveV5Opposition}from'./v5-roll.js';
 import{willpowerBase}from'./creature-natures.js';
 import{activeReferential,keywordMatches,participantKeywords,specializationMatches,traitTargetMatches}from'./creature-keywords.js';
@@ -41,7 +41,7 @@ export function previewGenericFearEncounter({author,target,rating,sourceKind='tr
  if(sourceKind==='v5-size'){
   if(aggressive!==true)return{ready:false,needsInput:[{field:'aggressive',label:'Grande taille V5 : attitude agressive confirmée requise.'}],unresolved:['Grande taille V5 : attitude agressive confirmée requise.'],addedStates:[]};
   if(!Number.isSafeInteger(actorSize)||!Number.isSafeInteger(targetSize)||actorSize<=targetSize)return{ready:false,needsInput:[{field:'sizes',label:'Catégories de Taille explicites avec créature plus grande requises.'}],unresolved:['Catégories de Taille explicites avec créature plus grande requises.'],addedStates:[]};
-  effectiveRating=1;
+  effectiveRating=2; // V5 v3 p.360 : les créatures agressives causent Peur (2) aux plus petites
  }else if(sourceKind==='afraid'&&effectiveRating===undefined){
   effectiveRating=0;
  }
@@ -116,7 +116,7 @@ export function resolveGenericTerrorTest({actor,terrorEffectId,test,encounterId=
   nextParticipant=receipt.participant;
   brokenAdded=reduced.states.reduce((sum,s)=>sum+(s.level||1),0);
  }
- return{ready:true,passed:test.success,brokenAdded,followUpFearRating:effect.rating,participant:nextParticipant};
+ return{ready:true,passed:test.success,brokenAdded,followUpFearRating:effect.rating,participant:loseMomentumUnderFear(nextParticipant)};
 }
 export const PSYCHOLOGY_ACTIONS=[{id:'large-fear',owner:'large',name:'Grande taille : Peur',noTest:true},{id:'frightening',owner:'frightening',name:'Effrayant : rencontrer les adversaires',noTest:true},{id:'hatred',owner:'hatred',name:'Haine : se retenir',skill:'Calme',attr:'FM'},{id:'vice',owner:'vice',name:'Vice : résister ou mettre fin à l’excès',skill:'Calme',attr:'FM'},{id:'vice-exhausted',owner:'vice',name:'Vice : excès jusqu’à l’insensibilité',noTest:true},{id:'satisfy-vice',owner:'vice',name:'Vice : satisfaction confirmée',noTest:true}];
 export function fearAction(subject){return(subject.states||[]).some(s=>s.key==='fear-of-talent'&&activeSource(s))?{id:'activate:overcome-fear',note:'Effrayant : surmonter la Peur',type:'skill',attr:'FM',base:subject.skills?.find(s=>s.id===calmId()&&s.status==='resolved')?.total??willpowerBase(subject).value,mod:0,qualities:[],extensions:{fiche:{skillId:calmId()},v5:{kind:'test',initialContext:{talentAction:'overcome-fear',psychologyKind:'fear'}}}}:null;}
@@ -220,14 +220,14 @@ export function previewGhostlyHowl({author,targets,damageRoll,calmTests,round}={
  }
  return{ready:true,calmModifier:2,author:withMomentum(author,false),participants,needsInput:[],unresolved:[],addedStates:[]};
 }
-/** Craintif / Skittish : 3 Brisé devant un effet magique visible ou un bruit violent, sauf dressage adapté. */
+/** Craintif / Skittish : 1 Brisé (V5 v3 p.361) devant un effet magique visible ou un bruit violent, sauf dressage adapté. */
 export function previewSkittishReaction({subject,trigger,visible=true,training=null,isolatedVoice=false,round}={}){
  if(!subject)return intFail('Créature requise.','subject');
  if(!['magic','noise'].includes(trigger))return intFail('Déclencheur explicite requis : effet magique ou bruit violent.','trigger');
  const skittish=hasTrait(subject,/craintif|skittish/i);
  const spared=!skittish||trigger==='magic'&&(visible===false||training==='Magie')||trigger==='noise'&&(training==='Guerre'||isolatedVoice===true);
  if(spared)return{ready:true,reacted:false,participant:subject,needsInput:[],unresolved:[]};
- const receipt=acquireV5Conditions(subject,[{name:'Brisé',level:3,source:{kind:'skittish'}}],{round});
+ const receipt=acquireV5Conditions(subject,[{name:'Brisé',level:1,source:{kind:'skittish'}}],{round});
  return{ready:true,reacted:true,participant:receipt.participant,needsInput:[],unresolved:[]};
 }
 /** Animosité : supplantée dès qu'une Peur ou une Terreur est active. */
@@ -398,7 +398,7 @@ export function previewPsychologySource(sourceId,{author,targets=[],overcast=0,v
    for(const p of pool(s)){
     const preview=(s.k==='fear'?previewGenericFearEncounter:previewGenericTerrorEncounter)({author,target:p,rating,sourceKind:'spell',sourceId,sourceLabel:`${entry.name} (${rating})`,encounterId,resolutionId:`${sourceId}:${s.k}`,ignorePsychologyImmunity:s.ignorePsychologyImmunity});
     if(!preview.ready){for(const n of preview.needsInput)stop(n.field,n.label);continue;}
-    if(preview.addedStates.length){swap(p,{...p,states:[...(p.states||[]),...preview.addedStates]});out.addedStates.push(...preview.addedStates);}
+    if(preview.addedStates.length){swap(p,loseMomentumUnderFear({...p,states:[...(p.states||[]),...preview.addedStates]}));out.addedStates.push(...preview.addedStates);}
    }
    continue;
   }

@@ -25,7 +25,7 @@ Date : 14 octobre 2026. Référence : `docs/lot3/LOT3_AUDIT_SORTS.json`, `docs/l
 | 11 | Mur de Feu | Firewall | fire (Aqshy) | 6 | (Force Mentale) mètres | ZdE (Spécial) | (Bonus de Force Mentale) Rounds | Contrat à effet calculable + Rappel | special | `sha256:0a572a92...` |
 | 12 | Tempête de Flammes | Tempête de Flammes | fire (Aqshy) | 8 | Force Mentale mètres | Spécial | Spécial | Contrat à effet calculable + Rappel | magic-missile | `sha256:bf6df7a6...` |
 | 13 | Cœurs Enflammés | Flaming Hearts | fire (Aqshy) | 5 | Vous | ZdE (Bonus de Sociabilité) mètres | Instantané | Rappel | special | `sha256:aa7cbce1...` |
-| 14 | Épée Enflammée de Rhuin | Flaming Sword of Rhuin | fire (Aqshy) | 8 | (Force Mentale) mètres | 1 épée (arme de base) | (Bonus de Force Mentale) Rounds | Contrat nécessitant des données MJ | special | `sha256:99bb3625...` |
+| 14 | Épée Enflammée de Rhuin | Flaming Sword of Rhuin | fire (Aqshy) | 8 | (Force Mentale) mètres | 1 épée | (Bonus de Force Mentale) Rounds | Contrat nécessitant des données MJ | special | `sha256:99bb3625...` |
 | 15 | Forge de Tarnus | Forge de Tarnus | fire (Aqshy) | 6 | Contact | 1 forge | Bonus de Force Mentale heures | Contrat à effet calculable + Rappel | special | `sha256:eb9d04af...` |
 | 16 | Grands Feux d’U’Zhul | Great Fires of U’Zhul | fire (Aqshy) | 12 | (Force Mentale) mètres | 1 (maximum) + ZdE (Bonus de Force Mentale) mètres | (Bonus de Force Mentale) Rounds | Contrat à effet calculable + Rappel | magic-missile | `sha256:d9f4641b...` |
 | 17 | Ignition | Ignition | fire (Aqshy) | 3 | Force Mentale mètres | 1 | Instantané | Contrat à effet calculable + Rappel | condition | `sha256:3b8e9337...` |
@@ -224,7 +224,7 @@ Date : 14 octobre 2026. Référence : `docs/lot3/LOT3_AUDIT_SORTS.json`, `docs/l
 | 210 | Bouclier anti-flèches | Arrow Shield | arcane | 3 | Vous | ZdE (Bonus de Force Mentale) mètres | Bonus de Force Mentale Rounds | Contrat à effet calculable + Rappel | special | `sha256:b5d42f97...` |
 | 211 | Chute | Drop | arcane | 1 | (Force Mentale) mètres | 1 | Instantané | Contrat nécessitant des données MJ | special | `sha256:0e2de89e...` |
 | 212 | Dôme | Dome | arcane | 7 | Vous | ZdE (Bonus de Force Mentale) mètres | (Bonus de Force Mentale) Rounds | Contrat à effet calculable | ward | `sha256:0be64639...` |
-| 213 | Effrayant | Fearsome | arcane | 3 | Vous | Vous | (Bonus de Force Mentale) Rounds | Contrat à effet calculable + Rappel | traits | `sha256:99a7c3c6...` |
+| 213 | Effrayant | Fearsome | arcane | 2 | Vous | Vous | (Bonus de Force Mentale) Rounds | Contrat à effet calculable + Rappel | traits | `sha256:99a7c3c6...` |
 | 214 | Envol | Flight | arcane | 8 | Vous | Vous | Bonus de Force Mentale Rounds | Contrat nécessitant des données MJ | special | `sha256:04283ef3...` |
 | 215 | Pont | Bridge | arcane | 4 | Force Mentale mètres | Spécial | Bonus de Force Mentale Rounds | Rappel | narrative | `sha256:47fd6a2d...` |
 | 216 | Poussée | Push | arcane | 6 | Vous | ZdE (Bonus de Force Mentale) mètres maximum | Instantané | Contrat à effet calculable + Rappel | special | `sha256:a5403479...` |
@@ -416,7 +416,7 @@ Date : 14 octobre 2026. Référence : `docs/lot3/LOT3_AUDIT_SORTS.json`, `docs/l
 
 ## Options de surpuissance propres aux sorts
 
-Options « +N DR » et « pour chaque +N DR » des descriptions (V5 p. 236 : « Spells may have additional options in their descriptions »). 46 calculées, 100 rappelées au MJ avec leur valeur chiffrée ; aucune n'est « calculée » sans exécution.
+Options « +N DR » et « pour chaque +N DR » des descriptions (V5 p. 236 : « Spells may have additional options in their descriptions »). 46 calculées, 99 rappelées au MJ avec leur valeur chiffrée ; aucune n'est « calculée » sans exécution.
 
 | Sort | Option | Coût | Statut |
 |---|---|---|---|
@@ -425,7 +425,6 @@ Options « +N DR » et « pour chaque +N DR » des descriptions (V5 p. 236 : « 
 | Colérique | Animosité, BFM jours | 4 DR | Calculée (exécutée par la sonde) |
 | Colérique | Haine, BFM semaines | 8 DR | Calculée (exécutée par la sonde) |
 | Couronne de Flamme | Peur +1 pour chaque +2 DR | 2 DR par palier | Calculée (exécutée par la sonde) |
-| Couronne de Flamme | Chef de guerre repris pour chaque +2 DR | 2 DR par palier | Rappel chiffré (non calculée) |
 | Tempête de Flammes | Diamètre +1 mètre et hauteur +2 mètres | 2 DR par palier | Rappel chiffré (non calculée) |
 | Flamme Inextinguible | Durée BFM jours | 2 DR | Calculée (exécutée par la sonde) |
 | Flamme Inextinguible | Durée BFM semaines | 4 DR | Calculée (exécutée par la sonde) |
@@ -454,7 +453,7 @@ Options « +N DR » et « pour chaque +N DR » des descriptions (V5 p. 236 : « 
 | Malédiction d'Attraction des Flèches | +6 DR : localisation choisie par le tireur (Test de CT Intermédiaire +0 DR) | 6 DR | Calculée (exécutée par la sonde) |
 | Impasse | +6 DR : bonus de Pierre-Vent, cercle ou jonction annulé, Yenlui lumineux | 6 DR | Rappel chiffré (non calculée) |
 | Impasse | +9 DR : contrôle du Flux magique d’un Foyer arcanique annulé, Yenlui lumineux | 9 DR | Rappel chiffré (non calculée) |
-| Drain de Magie | +5 DR : zone portée à la Volonté en yards, alliés exemptés (Test d’Intelligence Difficile −1 DR) | 5 DR | Calculée (exécutée par la sonde) |
+| Drain de Magie | +5 DR : zone portée à la Volonté en mètres, alliés exemptés (Test d’Intelligence Difficile −1 DR) | 5 DR | Calculée (exécutée par la sonde) |
 | Drain de Magie | +7 DR : Bénédictions et Miracles persistants dissipés, Yenlui lumineux | 7 DR | Rappel chiffré (non calculée) |
 | Drain de Magie | +10 DR : objets magiques et Protections inertes, lanceurs privés de magie 24 h | 10 DR | Rappel chiffré (non calculée) |
 | Convocation Ardente | +5 DR : dégâts +6 au 2 e Round, puis +1 par Round, Yenlui sombre | 5 DR | Calculée (exécutée par la sonde) |
@@ -469,7 +468,7 @@ Options « +N DR » et « pour chaque +N DR » des descriptions (V5 p. 236 : « 
 | Œil Invisible | +4 DR : l’œil gagne Sens de la magie, Seconde vue et Vision dans le noir | 4 DR | Calculée (exécutée par la sonde) |
 | Œil Invisible | +8 DR : portée portée à l’Intelligence en miles | 8 DR | Calculée (exécutée par la sonde) |
 | Bouclier de Saphery | Protection améliorée de 1 pour chaque +3 DR | 3 DR par palier | Calculée (exécutée par la sonde) |
-| Bouclier de Saphery | +4 DR : portée réduite à la moitié de la Volonté en yards | 4 DR | Calculée (exécutée par la sonde) |
+| Bouclier de Saphery | +4 DR : portée réduite à la moitié de la Volonté en mètres | 4 DR | Calculée (exécutée par la sonde) |
 | Extinction de l'Âme | +3 DR : les corps tués tombent en poussière | 3 DR | Rappel chiffré (non calculée) |
 | Extinction de l'Âme | +7 DR : fureur de Khaine (portée et zone doublées, dégâts +11, Yenlui sombre) | 7 DR | Calculée (exécutée par la sonde) |
 | Tempête | +4 DR : Test de Calme pour bouger, chute des volants, CT −3 DR | 4 DR | Calculée (exécutée par la sonde) |
@@ -507,10 +506,10 @@ Options « +N DR » et « pour chaque +N DR » des descriptions (V5 p. 236 : « 
 | Attaques en chaine | 1 cible de plus dans la chaîne pour chaque +2 DR | 2 DR par palier | Calculée (exécutée par la sonde) |
 | Chute | −1 DR au Test de Dextérité de la cible pour chaque +2 DR | 2 DR par palier | Calculée (exécutée par la sonde) |
 | Effrayant | Peur +1 pour chaque +3 DR | 3 DR par palier | Calculée (exécutée par la sonde) |
-| Pont | Longueur ou largeur +BFM yards pour chaque +2 DR | 2 DR par palier | Rappel chiffré (non calculée) |
-| Poussée | Repoussé de BFM yards de plus pour chaque +2 DR | 2 DR par palier | Rappel chiffré (non calculée) |
+| Pont | Longueur ou largeur +BFM mètres pour chaque +2 DR | 2 DR par palier | Rappel chiffré (non calculée) |
+| Poussée | Repoussé de BFM mètres de plus pour chaque +2 DR | 2 DR par palier | Rappel chiffré (non calculée) |
 | Terrifiant | Terreur +1 pour chaque +3 DR | 3 DR par palier | Calculée (exécutée par la sonde) |
-| Déplacement d’objet | Distance +BFM yards pour chaque +2 DR | 2 DR par palier | Rappel chiffré (non calculée) |
+| Déplacement d’objet | Distance +BFM mètres pour chaque +2 DR | 2 DR par palier | Rappel chiffré (non calculée) |
 | Horreurs Noires | Peur de l’ombre +1, maximum 4 | 2 DR par palier | Rappel chiffré (non calculée) |
 | Poches Profondes | Encombrement +1 | 2 DR par palier | Rappel chiffré (non calculée) |
 | Ailes Grises | Téléportation +100 m | 2 DR par palier | Rappel chiffré (non calculée) |
@@ -527,7 +526,7 @@ Options « +N DR » et « pour chaque +N DR » des descriptions (V5 p. 236 : « 
 | Déflagration mentale | +9 DR : « Le Grand Niveleur » | 9 DR | Rappel chiffré (non calculée) |
 | Apothéose (Slann) | Slann, +2 DR : Peur +1 | 2 DR par palier | Rappel chiffré (non calculée) |
 | Destruction des Arcanes (Slann) | Slann, +5 DR : une destruction de plus | 5 DR par palier | Rappel chiffré (non calculée) |
-| Drain de Magie (Slann) | +5 DR : zone portée à la Volonté en yards, alliés exemptés (Test d’Intelligence Difficile −1 DR) | 5 DR | Calculée (exécutée par la sonde) |
+| Drain de Magie (Slann) | +5 DR : zone portée à la Volonté en mètres, alliés exemptés (Test d’Intelligence Difficile −1 DR) | 5 DR | Calculée (exécutée par la sonde) |
 | Drain de Magie (Slann) | +7 DR : Bénédictions et Miracles persistants dissipés, Yenlui lumineux | 7 DR | Rappel chiffré (non calculée) |
 | Drain de Magie (Slann) | +10 DR : objets magiques et Protections inertes, lanceurs privés de magie 24 h | 10 DR | Rappel chiffré (non calculée) |
 | Drain de Magie (Slann) | Slann, +4 DR : drainer la magie environnementale | 4 DR par palier | Rappel chiffré (non calculée) |

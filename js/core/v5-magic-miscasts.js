@@ -97,18 +97,18 @@ function buildMiscastDetails({ tableKey, entry, roll, secondaryRolls = {}, bfm =
       };
     }
     if (max <= 20) {
+      // Délié
+      return {
+        type: 'narrative',
+        summary: 'Vos boucles et lacets se défont ; équipement et armures peuvent tomber ou glisser.'
+      };
+    }
+    if (max <= 25) {
       // Rébellion intestinale : Souillé
       return {
         type: 'condition',
         conditionsGained: ['Souillé'],
         summary: 'Gagnez Souillé.'
-      };
-    }
-    if (max <= 25) {
-      // Délié
-      return {
-        type: 'narrative',
-        summary: 'Vos boucles et lacets se défont ; équipement et armures peuvent tomber ou glisser.'
       };
     }
     if (max <= 30) {
@@ -153,11 +153,13 @@ function buildMiscastDetails({ tableKey, entry, roll, secondaryRolls = {}, bfm =
       };
     }
     if (max <= 50) {
-      // Rupture : 1 Hémorragique
+      // Hurlement intérieur : 1 Assourdi pendant 1d10 Rounds
+      const duration = die('duration', 'd10');
       return {
         type: 'condition',
-        conditionsGained: ['Hémorragique'],
-        summary: 'Gagnez 1 Hémorragique.'
+        conditionsGained: ['Assourdi'],
+        duration: { value: duration, unit: 'rounds' },
+        summary: `Gagnez 1 Assourdi pendant ${duration} Round(s).`
       };
     }
     if (max <= 55) {
@@ -191,13 +193,11 @@ function buildMiscastDetails({ tableKey, entry, roll, secondaryRolls = {}, bfm =
       };
     }
     if (max <= 70) {
-      // Hurlement intérieur : 1 Assourdi pendant 1d10 Rounds
-      const duration = die('duration', 'd10');
+      // Rupture : 1 Hémorragique
       return {
         type: 'condition',
-        conditionsGained: ['Assourdi'],
-        duration: { value: duration, unit: 'rounds' },
-        summary: `Gagnez 1 Assourdi pendant ${duration} Round(s).`
+        conditionsGained: ['Hémorragique'],
+        summary: 'Gagnez 1 Hémorragique.'
       };
     }
     if (max <= 75) {
@@ -478,6 +478,7 @@ function buildMiscastDetails({ tableKey, entry, roll, secondaryRolls = {}, bfm =
  * @param {boolean} [options.corruptingInfluence=false] - Convertit Mineur en Majeur
  * Les options historiques d’ingrédient sont ignorées.
  * @param {boolean} [options.instinctiveDiction=false] - -20 sur jet Mineur (si <= 0, annulé)
+ * @param {boolean} [options.testSucceeded] - V5 v3 (p.121, p.114) : `false` = Test d'incantation ou de Focalisation raté, Diction instinctive et Harmonie aethyrique ne s'appliquent pas
  * @param {boolean} [options.isHighMagic=false] - Règle spéciale Haute Magie (Marque de la magie -> burnout)
  * @param {number} [options.bfm=0] - BFM du lanceur (pour portées, champs, etc.)
  * @param {Object} [options.secondaryRolls={}] - Tirages secondaires fournis (duration, damage, distance, etc.)
@@ -487,7 +488,9 @@ export function resolveMiscast(options = {}) {
   if (options.participant) options = prepareMiscastOptions(options.participant, options);
   const slannLowered = options.severity === 'MAJOR' && options.slannMishapMaster === true;
   const initialSeverity = options.severity === 'MAJOR' && !slannLowered ? 'MAJOR' : 'MINOR';
-  if (Number(options.attunementRank) >= (initialSeverity==='MAJOR' || options.corruptingInfluence ? 2 : 1) && !options.attunementResolved) {
+  // Livre de base V5 v3 : les deux talents n'agissent que sur un Test réussi ; `undefined` = incident saisi hors d'un Test (choix du MJ).
+  const mitigationRefused = options.testSucceeded === false;
+  if (!mitigationRefused && Number(options.attunementRank) >= (initialSeverity==='MAJOR' || options.corruptingInfluence ? 2 : 1) && !options.attunementResolved) {
     const first=resolveMiscast({...options,attunementResolved:true});
     if(options.miscastRoll2==null || !['first','second'].includes(options.miscastChoice)) return {...first,ready:false,choicesRequired:'attunement',summary:'Harmonisation aethyrique : saisir le second jet et choisir le résultat.'};
     const second=resolveMiscast({...options,roll:normalizeV5Roll(options.miscastRoll2),attunementResolved:true});
@@ -518,7 +521,7 @@ export function resolveMiscast(options = {}) {
   const isHighMagic = Boolean(options.isHighMagic);
   const corruptingInfluence = Boolean(options.corruptingInfluence);
   const hasIngredient = false; // Règle de table : aucun ingrédient ni atténuation associée.
-  const instinctiveDiction = Boolean(options.instinctiveDiction);
+  const instinctiveDiction = Boolean(options.instinctiveDiction) && !mitigationRefused;
   const baseModifier = Number(options.modifier) || 0;
   const secondaryRolls = secondaryRollsInput;
   const missing = [];
@@ -651,6 +654,7 @@ export function resolveMiscast(options = {}) {
     cancelled: false,
     cancelReason: null,
     slannLowered,
+    mitigationRefused: mitigationRefused && (Boolean(options.instinctiveDiction) || Number(options.attunementRank) > 0),
     entry,
     name: entry.name,
     description: entry.eff,

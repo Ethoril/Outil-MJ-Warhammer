@@ -73,7 +73,7 @@ test('H-05 — exécution réelle d’Écorce : le rang du lanceur est enregistr
   const find = id => store.listParticipants().find(p => p.id === id);
   for (const id of ['blessed', 'plain']) await store.applySpellEffects(id, layer('old-' + id, 'someone', { E: 10 }), { caster: person('someone') });
   for (const id of ['blessed', 'plain']) {
-    await store.applySpellExecution('Écorce', { actorId: 'mage', targetIds: [id], roll: 11, attributeActive: false, miscastRoll: 50 });
+    await store.applySpellExecution('Écorce', { actorId: 'mage', targetIds: [id], roll: 11, attributeActive: false, miscastRoll: 70 });
     await store.updateParticipant('mage', { extensions: { v5: { ...find('mage').extensions.v5, channelling: { type: 'winds', sl: 10 }, magicAttemptTurn: undefined } } });
   }
   const own = find('plain').extensions.v5.spellEffects.find(effect => effect.spellName === 'Écorce');

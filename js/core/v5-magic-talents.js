@@ -65,7 +65,7 @@ export function prepareMagicOptions(actor, kind, options={}, spell = null) {
   if (kind === 'casting' && isTalentDrained(actor, spell, options)) throw ruleError('Drain de puissance : le Talent employé pour lancer ce sort est inutilisable.');
   if(kind==='casting' && (actor.extensions?.v5?.miscastEffects || []).some(e=>e.type==='restriction' && (e.restrictions || []).some(r=>/langue|verbal/i.test(r))))throw ruleError('Incident magique : utilisation de Langue (Magick) interdite pendant la durée indiquée.');
   const assistant=options.assistant;
-  const slModifiers=[...magicSkillModifiers(actor,kind==='casting'?'Langue (Magick)':kind==='pause'?'Résistance':kind==='interruption'?'Calme':'Focalisation'),...(options.slModifiers || []),...(Number(options.yenluiPenalty)<0 ? [{id:'yenlui',label:'Yenlui',amount:Number(options.yenluiPenalty)}]:[])], advantageSources=[...(options.advantageSources || [])];
+  const slModifiers=[...magicSkillModifiers(actor,kind==='casting'?'Langue (Magick)':kind==='pause'?'Focalisation':kind==='interruption'?'Calme':'Focalisation'),...(options.slModifiers || []),...(Number(options.yenluiPenalty)<0 ? [{id:'yenlui',label:'Yenlui',amount:Number(options.yenluiPenalty)}]:[])], advantageSources=[...(options.advantageSources || [])];
   if (['casting','channelling'].includes(kind) && assistant && options.assistantLinked === true && assistant.id !== actor.id) {
     if (magicTalentRank(assistant,'magical-assistant')) slModifiers.push({id:'magical-assistant',label:'Assistant magique',amount:2});
     else if (magicTalentRank(assistant,'animal-assistant')) advantageSources.push({id:'animal-assistant',label:'Assistant animal'});

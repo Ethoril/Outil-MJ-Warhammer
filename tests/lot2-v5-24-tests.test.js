@@ -103,9 +103,9 @@ test('2.4 consolidated ranks remain one advantage; distinct applicable talents s
 
 for (const [talent, name] of [
   ['dicer','Pari'],['menacing','Intimidation'],['strong-swimmer','Natation'],['dealmaker','Marchandage'],
-  ['field-dressing','Guérison'],['commanding-presence','Commandement'],['orientation','Orientation'],
+  ['field-dressing','Guérison'],['inspiring','Commandement'],['orientation','Orientation'],
   ['gregarious','Ragot'],['bookish','Recherche'],['briber','Subornation'],['trapper','Piégeage'],
-  ['super-numerate','Évaluation'],['roughrider','Chevaucher'],['crack-the-whip',"Conduite d'attelage"],['nose-for-trouble','Intuition'],
+  ['super-numerate','Évaluation'],['roughrider','Chevaucher'],['crack-the-whip',"Conduite d'attelage"],
   ['pilot','Voile (Barge)'],['tunnel-fighter','Discrétion (Souterrains)']
 ]) test('2.4 simple acquired ' + talent + ' covers its canonical skill and excludes another', () => {
   assert.equal(build([talent], name).test.advantage.net, 1);
@@ -113,14 +113,23 @@ for (const [talent, name] of [
 });
 
 for (const [talent, name, field] of [
-  ['sprinter','Athlétisme','runningOrJumping'],['catfall','Athlétisme','falling'],['panhandle','Charme','begging'],
-  ['inspiring','Commandement','inCombat'],['iron-will','Calme','resistingInfluence'],['contortionist','Athlétisme','escapingBonds'],
+  ['sprinter','Athlétisme','running'],['nose-for-trouble','Intuition','potentialDanger'],['catfall','Athlétisme','falling'],['panhandle','Charme','begging'],
+  ['iron-will','Calme','resistingInfluence'],['contortionist','Athlétisme','escapingBonds'],
   ['carouser','Résistance','resistingPoisonOrAlcohol']
 ]) test('2.4 conditional ' + talent + ' requires its declared purpose only for relevant skill', () => {
   assert.equal(build([talent], name, { context: { [field]: true } }).test.advantage.net, 1);
   assert.equal(build([talent], name, { context: { [field]: false } }).test.advantage.net, 0);
   assert.ok(build([talent], name).unresolved.some(text => text.includes(field)));
   assert.equal(build([talent], 'Pari').unresolved.length, 0);
+});
+
+test('2.4 v3 Commanding Presence offers DR or units only on a successful combat Command Test', () => {
+  const ok = build(['commanding-presence'], 'Commandement', { context: { inCombat: true } }, { roll: 41 });
+  assert.equal(ok.test.advantage.net, 0, 'plus d’Avantage : l’effet a été échangé avec Exaltant');
+  assert.equal(ok.talentSLChoices.length, 1);
+  assert.equal(build(['commanding-presence'], 'Commandement', { context: { inCombat: false } }, { roll: 41 }).talentSLChoices.length, 0);
+  assert.equal(build(['commanding-presence'], 'Commandement', { context: { inCombat: true } }, { roll: 98 }).talentSLChoices.length, 0);
+  assert.equal(build(['commanding-presence'], 'Pari', { context: { inCombat: true } }, { roll: 41 }).talentSLChoices.length, 0);
 });
 
 test('2.4 Resistant compares selected acquired threat; automatic session success stays manual', () => {
@@ -304,4 +313,13 @@ test('2.4 literal zero choice remains successful in durable result, reload, undo
   assert.equal(reloaded.getLog()[0].detail.sl, 0);
   assert.equal(reloaded.getLog()[0].detail.test.success, true);
   assert.equal(reloaded.getLog()[0].detail.test.zeroOutcome, 'marginalSuccess');
+});
+
+test('v3 : les cases de contexte affichées suivent les contrats (Sprinter, Flair, Présence imposante, Exaltant)', () => {
+  const fields = (id, name) => applicableV5TalentTestFields(actor([id]), skill(name)).map(item => [item.field, item.label]);
+  assert.deepEqual(fields('sprinter', 'Athlétisme'), [['running', 'Le Test sert à courir']]);
+  assert.deepEqual(fields('nose-for-trouble', 'Intuition'), [['potentialDanger', 'Le Test d’Intuition est lié à un danger potentiel']]);
+  assert.deepEqual(fields('commanding-presence', 'Commandement'), [['inCombat', 'Le Test de Commandement est effectué en combat']]);
+  assert.deepEqual(fields('inspiring', 'Commandement'), []);
+  assert.deepEqual(fields('sprinter', 'Pari'), []);
 });

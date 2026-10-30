@@ -245,7 +245,7 @@ test('Contrôle indépendant — la table de Courroux respecte les lignes V5 exa
     [56,60,'Je ne vous aiderai pas',/-1 DR à une compétence/],
     [71,75,'Que sacrifierez-vous ?',/Difficile \(-1 DR\)/],
     [81,87,'Purifiez la chair',/Difficile \(-2 DR\)/],
-    [88,88,'Interférence démoniaque',/2d10 yards/],
+    [88,88,'Interférence démoniaque',/2d10 m/],
     [151,null,'Rendez des comptes',/Point de Destin/]
   ];
   for (const [min,max,label,reminder] of expected) {

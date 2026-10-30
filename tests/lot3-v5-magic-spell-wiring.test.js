@@ -19,7 +19,7 @@ const find = (store, id) => store.listParticipants().find(p => p.id === id);
 test('H-06 — Puissance totale : Résistance à la Magie ne fait plus échouer la cible sous le NI, −3 DR aux effets', async () => {
   const mage = person('mage', { extensions: { v5: { hasMomentum: true, channelling: { type: 'winds', sl: 0 } } } });
   const store = await combat(mage, person('resistant', { talents: [talent('magic-resistance')] }), person('plain'));
-  const input = { actorId: 'mage', targetIds: ['resistant', 'plain'], roll: 11, criticalChoice: 'total-power', miscastRoll: 50, overcastChoices: { targets: 1 }, attributeActive: false };
+  const input = { actorId: 'mage', targetIds: ['resistant', 'plain'], roll: 11, criticalChoice: 'total-power', miscastRoll: 70, overcastChoices: { targets: 1 }, attributeActive: false };
   const p = store.previewSpellExecution('Carreau', input);
   assert.equal(p.ready, true, p.error);
   assert.equal(p.castingPreview.critical, true); assert.equal(p.castingPreview.totalCastingSl, 5);

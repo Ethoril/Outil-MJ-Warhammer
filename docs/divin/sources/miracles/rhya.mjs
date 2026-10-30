@@ -15,7 +15,7 @@ export const miracles = [
     needsInput: [outdoorsNeed, { id: 'living-creatures', text: 'Créatures vivantes présentes dans la zone et leurs déplacements (information MJ).' }],
     clauses: [
       outdoors,
-      { id: 'area', mode: 'assisted', text: 'Zone centrée sur vous, de rayon égal au Bonus de Sociabilité en yards.' },
+      { id: 'area', mode: 'assisted', text: 'Zone centrée sur vous, de rayon égal au Bonus de Sociabilité en mètres.' },
       { id: 'sense-living', mode: 'manual', text: 'Le prêtre sent la présence et le passage de toutes les créatures vivantes dans la zone pendant la durée.' },
       { id: 'duration', mode: 'engine', text: 'Durée : Bonus de Sociabilité en rounds.' }
     ]

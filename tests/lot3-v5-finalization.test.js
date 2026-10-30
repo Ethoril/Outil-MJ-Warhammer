@@ -12,16 +12,16 @@ const person=(store,id)=>store.listParticipants().find(p=>p.id===id);
 
 test('Sans ingrédients : un ancien flag conserve l’incident et ses États réels, Undo exact',async()=>{
  const store=await combat(wizard(),wizard('enemy',{camp:'ennemi'}));
- await store.applySpellExecution('Carreau',{actorId:'mage',targetIds:['enemy'],roll:77,miscastRoll:50,ingredient:true});
+ await store.applySpellExecution('Carreau',{actorId:'mage',targetIds:['enemy'],roll:77,miscastRoll:70,ingredient:true});
  assert.equal(person(store,'enemy').hp,30);assert.ok(person(store,'mage').states.some(s=>s.key==='hemorragique'));await store.undo();assert.deepEqual(person(store,'mage').states,[]);
 });
 test('Talents canoniques : Diction, Harmonisation et Bénédiction nécessitent une acquisition résolue',()=>{
  const base=wizard();assert.equal(magicTalentRank({...base,talents:[{name:'Diction instinctive'}]},'instinctive-diction'),0);
  const w={...base,talents:[talent('instinctive-diction'),talent('aethyric-attunement'),talent('lileath-s-blessing',2)]};
  const p=previewChannelling(w,{type:'high',roll:25});assert.equal(p.gain,11);
- const spell=getSpellContract('Carreau');const missing=previewCasting(w,spell,{roll:77,miscastRoll:50});assert.equal(missing.ready,false);
- const chosen=previewCasting(w,spell,{roll:77,miscastRoll:50,miscastRoll2:15,miscastChoice:'second',instinctiveDiction:true});assert.equal(chosen.ready,true);assert.equal(chosen.miscast,null);
- assert.equal(previewCasting(base,spell,{roll:77,miscastRoll:15,instinctiveDiction:true}).miscast.name,'Distraction');
+ const spell=getSpellContract('Carreau');const missing=previewCasting(w,spell,{roll:33,miscastRoll:50});assert.equal(missing.ready,false);
+ const chosen=previewCasting(w,spell,{roll:33,miscastRoll:50,miscastRoll2:15,miscastChoice:'second',instinctiveDiction:true});assert.equal(chosen.ready,true);assert.equal(chosen.miscast,null);
+ assert.equal(previewCasting(base,spell,{roll:33,miscastRoll:15,instinctiveDiction:true}).miscast.name,'Distraction');
 });
 test('Assistant animal inverse facultativement ; Assistant magique donne +2 DR sans Avantage supplémentaire',()=>{
  const w=wizard(),animal=wizard('animal',{talents:[talent('animal-assistant')]}),magic=wizard('familiar',{talents:[talent('magical-assistant'),talent('animal-assistant')]});

@@ -68,11 +68,13 @@ test('Arcanes — V5 p. 244 : objet 1+DR final, distance +BFM payée, opposition
  const fractional=spellInput(row,{sl:12,roll:undefined,domainFacts:{objectSentient:false,objectDimension:3.5},targetTests:{foe:{objectId:'blade'}}});assert.equal(store.previewSpellExecution(contractFor(row[0]).id,fractional).ready,true,'V5 p. 244 : une dimension réelle en mètres peut être décimale');
  const e=subject(store,'foe').extensions.v5.spellEffects.find(e=>e.spellId===contractFor(row[0]).id),input={effectId:e.id,targetId:'foe',kind:'opposed-move',roll:25,opponentRoll:95};assert.equal(store.previewSpellInteraction({...input,opponentRoll:undefined}).ready,false);assert.match(store.previewSpellInteraction(input).summary,/objet déplacé/);assert.match(store.previewSpellInteraction({...input,roll:95,opponentRoll:25}).summary,/retenu/);
 });
-test('Arcanes — V5 p. 243 : les huit Souffles, cible voisine limitée par BI et choix de Domaine obligatoire',async()=>{
+test('Arcanes — V5 p. 243 : les huit Souffles, cible voisine limitée par BFM et choix de Domaine obligatoire',async()=>{
  const row=rowFor('Breath'),bonuses={metal:4,beasts:2,light:2,heavens:2,fire:5,death:2,life:2,shadow:0};
  for(const [lore,bonus] of Object.entries(bonuses)){
   const {store}=await encounter({mage:{talents:[{id:'talent-arcane-magic',status:'resolved',specialization:lore,rank:1}]}});const p=await execute(store,row,{chosenLore:lore,targetTests:{foe:{distance:26,opposeBreath:false}},ctRoll:25});assert.equal(p.targetResults[0].damage?.rawDamage||0,lore==='shadow'?0:6+bonus);
-  assert.equal(store.previewSpellExecution(contractFor(row[0]).id,spellInput(row,{sl:12,roll:undefined,chosenLore:lore,targetIds:['foe','mage'],targetTests:{foe:{distance:26,opposeBreath:false},mage:{fromPrimary:6,opposeBreath:false}}})).ready,false);
+  const withCaster=store.previewSpellExecution(contractFor(row[0]).id,spellInput(row,{sl:12,roll:undefined,chosenLore:lore,targetIds:['foe','mage'],targetTests:{foe:{distance:26,opposeBreath:false},mage:{fromPrimary:60,opposeBreath:false}}}));
+  assert.equal(withCaster.targetResults.some(r=>r.targetId==='mage'),false,'v3 : le lanceur parmi les voisins est ignoré (immunisé), pas refusé');
+  assert.equal(store.previewSpellExecution(contractFor(row[0]).id,spellInput(row,{sl:12,roll:undefined,chosenLore:lore,targetIds:['mage'],targetTests:{mage:{fromPrimary:60,opposeBreath:false}}})).ready,false);
  }
  const {store}=await encounter({mage:{talents:[{id:'talent-arcane-magic',status:'resolved',specialization:'Feu',rank:1},{id:'talent-arcane-magic',status:'resolved',specialization:'Cieux',rank:1}]}});assert.equal(store.previewSpellExecution(contractFor(row[0]).id,spellInput(row,{chosenLore:undefined})).ready,false);
 });

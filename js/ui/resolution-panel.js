@@ -12,6 +12,7 @@ import { V5_ACTIVATED_TALENTS,knownV5MartialQualities,noTestV5TalentAction }  fr
 import { computeV5WeaponReachGuide, computeV5WeaponRangeBands } from '../core/v5-talent-combat.js';
 import { inferV5Kind, hasMomentum } from '../core/v5-combat-rules.js';
 import { naturalCombatTraits, naturalAttackNeedsSize } from '../core/creature-combat.js';
+import { psychologyTraits } from '../core/creature-psychology.js';
 import { planBestiaryProfileAbilities } from '../core/creature-abilities.js';
 import { creatureSizeOf } from '../core/creature-size.js';
 import { carriesSense } from '../core/creature-senses.js';
@@ -350,7 +351,7 @@ function magicTargetIdsOf(draft, contract, actor, target, participants) {
   if (Array.isArray(draft.magicTargetIds) && draft.magicTargetIds.length) return draft.magicTargetIds;
   const isSelfSpell = /^vous$/i.test((contract?.target || '').trim()) || /^vous$/i.test((contract?.range || '').trim());
   const isAllyOnlySpell = ['hand-of-glory', 'shield-of-saphery', 'twist-of-fate', 'hunters-moons', 'timewarp', 'ox-stands'].includes(contract?.effects?.special);
-  if(contract?.effects?.excludeCaster)return [participants.find(p=>p.id!==actor.id&&p.zone==='active')?.id].filter(Boolean);
+  if(contract?.effects?.excludeCaster)return [(target&&target.id!==actor.id?target:participants.find(p=>p.id!==actor.id&&p.zone==='active'))?.id].filter(Boolean);
   if (isSelfSpell) return [actor.id];
   if (contract?.effects?.special === 'monstrous-regiment') {
     const firstAlly = participants.find(p => p.id !== actor.id && p.camp === actor.camp);
@@ -405,7 +406,7 @@ function renderV5MagicContext({ actor, participants = [], target, type, draft, h
     v5.prepend(rubric('Focalisation V5'));
     selectField('magicChannelMode', 'Mode de Focalisation', [
       ['channel', 'Accumuler (Focalisation +0 DR)'],
-      ['pause', 'Pause de focalisation (Résistance Accessible +2 DR)'],
+      ['pause', 'Pause de focalisation (Focalisation Accessible +2 DR)'],
       ['interruption', 'Test d’interruption (Calme Difficile −2 DR)']
     ], draft.magicChannelMode || 'channel');
     selectField('magicChannelType', 'Type de Focalisation', [
@@ -633,7 +634,7 @@ function renderV5MagicContext({ actor, participants = [], target, type, draft, h
       const isAllyOnlySpell = ['hand-of-glory', 'shield-of-saphery', 'twist-of-fate', 'hunters-moons', 'timewarp', 'ox-stands'].includes(contract?.effects?.special);
       const isAllyExcludingCaster = contract?.effects?.special === 'monstrous-regiment';
       let defaultTargets;
-      if(contract?.effects?.excludeCaster){defaultTargets=[participants.find(p=>p.id!==actor.id&&p.zone==='active')?.id].filter(Boolean);}
+      if(contract?.effects?.excludeCaster){defaultTargets=[(target&&target.id!==actor.id?target:participants.find(p=>p.id!==actor.id&&p.zone==='active'))?.id].filter(Boolean);}
       else if (isSelfSpell) {
         defaultTargets = [actor.id];
       } else if (isAllyExcludingCaster) {
@@ -1818,7 +1819,7 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
       check.addEventListener('change',()=>{const ids=(current.wornArmorItemIds||[]).filter(id=>id!==item.id);if(check.checked)ids.push(item.id);handlers.select({v5Context:{...current,wornArmorItemIds:ids}});});label.append(check,item.name+' porté');fields.append(label);}
   }
   const selectedNetEscape=(draft.v5Context||{}).netEscapeConditionId;
-  for (const [key, label] of [['involvesMovement','Le Test implique un mouvement'],['runningOrHiding','Le Test sert à fuir ou se cacher'],['reliesOnSight','Le Test est réalisable sans voir mais repose sur la vue'],['requiresSight','Le Test est impossible sans voir'],['usesFellowship','Le Test utilise la Sociabilité']])
+  for (const [key, label] of [['involvesMovement','Le Test implique un mouvement'],['runningOrHiding','Le Test sert à fuir ou se cacher'],['reliesOnSight','Le Test est réalisable sans voir mais repose sur la vue'],['requiresSight','Le Test est impossible sans voir'],['usesFellowship','Le Test utilise la Sociabilité'],...(action?.attr==='E'?[['festeringWounds','Test d’Endurance contre les Plaies purulentes (Souillé : Désavantage)']]:[])])
     if(key!=='involvesMovement'||!selectedNetEscape)contextField(fields, 'actor', key, label);
   // Séquelles durables (F2-J2) : circonstances que l'outil ne connaît pas (zone utilisée, parole, ouïe, main directrice…), demandées au MJ.
   for (const field of sequelaContextFields(actor)) if (!['reliesOnSight', 'requiresSight'].includes(field.key)) contextField(fields, 'actor', field.key, `Séquelle · ${field.label}`);
@@ -1954,7 +1955,7 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
   if (carriesMovement(actor, 'marine')) contextField(fields, 'actor', 'inWater', 'La Créature marine est dans l’eau');
   contextField(fields,'actor','blackpowderBrokenTest','Calme contre un tir À Poudre noire');
   if(draft.v5Context?.blackpowderBrokenTest){const current=draft.v5Context,wrap=node('label','workspace-type','Auteur du tir À Poudre noire'),select=document.createElement('select');select.setAttribute('aria-label',wrap.textContent);select.append(new Option('Choisir',''));for(const shooter of participants.filter(p=>p.id!==actor.id))select.append(new Option(shooter.name,shooter.id));select.value=current.blackpowderShooterId||'';select.addEventListener('change',()=>handlers.select({v5Context:{...current,blackpowderShooterId:select.value||undefined}}));wrap.append(select);fields.append(wrap);}
-  if (kind.value === 'ranged' && target) { contextField(fields, 'actor', 'rangedOppositionAllowed', 'Tir opposé : exception vérifiée par le MJ'); contextField(fields, 'actor', 'pointBlank', 'Tir à bout portant'); }
+  if (kind.value === 'ranged' && target) { contextField(fields, 'actor', 'rangedOppositionAllowed', 'Tir opposé par Esquive confirmé par le MJ (tireur à moins de Bonus d’Initiative mètres de la cible, ou bouclier de 2 PA ou plus)'); contextField(fields, 'actor', 'pointBlank', 'Tir à bout portant'); }
   if (type === 'attack' && target) contextField(fields, 'actor', 'targetHelpless', 'Cible sans défense : situation vérifiée par le MJ');
   // Surnombre (L06 p. 167, BR-16) : le moteur ne suit pas l'engagement, le MJ coche les engagés avec la cible de chaque côté.
   if (type === 'attack' && kind.value === 'melee' && target && target.id !== actor.id) {
@@ -1984,7 +1985,7 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
   }
   if (['attack', 'opposition'].includes(type) && target) {
     fields.appendChild(rubric('Circonstances de la défense'));
-    for (const [key, label] of [['involvesMovement','Le Test implique un mouvement'],['runningOrHiding','Le Test sert à fuir ou se cacher'],['reliesOnSight','Le Test est réalisable sans voir mais repose sur la vue'],['requiresSight','Le Test est impossible sans voir'],['usesFellowship','Le Test utilise la Sociabilité']]) contextField(fields, 'defender', key, label);
+    for (const [key, label] of [['involvesMovement','Le Test implique un mouvement'],['runningOrHiding','Le Test sert à fuir ou se cacher'],['reliesOnSight','Le Test est réalisable sans voir mais repose sur la vue'],['requiresSight','Le Test est impossible sans voir'],['usesFellowship','Le Test utilise la Sociabilité'],...(defense?.option?.value==='E'?[['festeringWounds','Test d’Endurance contre les Plaies purulentes (Souillé : Désavantage)']]:[])]) contextField(fields, 'defender', key, label);
     contextField(fields,'defender','offHandWeapon','Défense avec l’arme de la main non directrice (−2 DR sans Parade)');
     for (const field of sequelaContextFields(target)) if (!['reliesOnSight', 'requiresSight'].includes(field.key)) contextField(fields, 'defender', field.key, `Séquelle · ${field.label}`);
     if (participants.some(person => person.id !== target.id && carriesSense(person, 'distracting'))) contextField(fields, 'defender', 'distractingInRange', 'Un Perturbant est à portée du défenseur (−2 DR, une seule fois)');
@@ -1997,7 +1998,19 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
       const rangedWeapon = actor?.equipment?.find(item => item?.id === action.extensions?.fiche?.equipmentId) || action.extensions?.equipment || (rangedWeapons.length === 1 ? rangedWeapons[0] : null);
       const rangeBands = computeV5WeaponRangeBands(draft.v5Context?.weaponRangeYards ?? rangedWeapon?.range ?? action.range, actor);
       choiceField(fields, 'shotRange', 'Bande de portée choisie par le MJ', [['point-blank','Bout portant'],['short','Courte'],['medium','Moyenne'],['long','Longue'],['extreme','Extrême']]);
-      if (rangeBands) fields.appendChild(node('p', 'workspace-muted', `Bandes dérivées de la portée imprimée (${rangeBands.printedYards} m) : Bout portant ≤ ${rangeBands.pointBlankYards} m (+2 DR) · Courte ≤ ${rangeBands.shortYards} m (+1 DR) · Moyenne ≤ ${rangeBands.mediumYards} m (0 DR) · Longue ≤ ${rangeBands.longYards} m (−1 DR) · Extrême ≤ ${rangeBands.extremeYards} m (−2 DR).`));
+      if (rangeBands) fields.appendChild(node('p', 'workspace-muted', `Bandes dérivées de la portée imprimée (${rangeBands.printedYards} m) : ${rangeBands.pointBlankYards === null ? 'Pas de bout portant (portée courte de 4 m ou moins)' : `Bout portant ≤ ${rangeBands.pointBlankYards} m (+2 DR)`} · Courte ≤ ${rangeBands.shortYards} m (+1 DR) · Moyenne ≤ ${rangeBands.mediumYards} m (0 DR) · Longue ≤ ${rangeBands.longYards} m (−1 DR) · Extrême ≤ ${rangeBands.extremeYards} m (−2 DR).`));
+      if ((rangedWeapon?.keywords || []).some(row => (typeof row === 'string' ? row : row?.id) === 'a-repetition')) {
+        contextField(fields, 'actor', 'repeaterDoubleShot', 'À répétition : tir double (deux tirs sur la même cible à −1 DR, une seule Action)');
+        if (draft.v5Context?.repeaterDoubleShot === true) {
+          const firstShots = previousWeaponAttacks.filter(row => row.weaponId === rangedWeapon?.id && row.targetId === target.id && row.actionType === 'attack');
+          const second = node('label', 'workspace-type', 'Premier tir du tir double (le tir actuel est alors le second, gratuit et sans Élan)'), secondSelect = document.createElement('select');
+          secondSelect.setAttribute('aria-label', second.textContent); secondSelect.append(new Option('Premier tir (ou choisir le tir déjà appliqué…)', ''));
+          for (const row of firstShots) secondSelect.append(new Option(`${row.weaponName || 'Tir'} · ${row.hit ? 'touche' : 'raté'}`, row.actionId));
+          secondSelect.value = draft.v5Context?.primaryResolutionId || '';
+          secondSelect.addEventListener('change', () => { const current = draft.v5Context || {}, chosen = secondSelect.value; handlers.select({ extraAttack: Boolean(chosen), v5Context: { ...current, primaryResolutionId: chosen || undefined, repeaterSecondShot: chosen ? true : undefined, freeAttackTalent: chosen ? 'repeater-double' : undefined } }); });
+          second.appendChild(secondSelect); fields.appendChild(second);
+        }
+      }
       choiceField(fields, 'weather', 'Météo', [['normal','Aucune pénalité'],['fog','Brouillard (−1 DR)'],['rain-wind','Pluie ou vent (−2 DR)'],['extreme','Météo extrême (−3 DR)']]);
       choiceField(fields, 'lighting', 'Lumière', [['normal','Aucune pénalité'],['fog','Faible lumière (−1 DR)'],['dim','Pénombre (−1 DR)'],['dark','Noir total (−3 DR)']]);
       fields.appendChild(node('p', 'workspace-muted', 'Météo et lumière partagent une seule ligne du tableau : seule la pénalité la plus sévère s’applique. La portée est un choix du MJ; l’application ne suit pas la distance.'));
@@ -2039,7 +2052,8 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
         fields.appendChild(node('p','workspace-muted','Le reçu conserve les dés, la distance obtenue et le plafond; le pion n’est pas déplacé automatiquement. Pour un résultat aux pieds du tireur ou de la cible, aucun repère de distance n’est requis.'));
       }
       contextField(fields, 'actor', 'targetEngaged', 'La cible est engagée au corps à corps (Désavantage au tir)');
-      if (draft.v5Context?.targetEngaged === true && target) {
+      contextField(fields, 'actor', 'engagedWithShooter', 'La cible est engagée avec le tireur (le tir se résout comme une mêlée : Corps à corps opposé, pas de Désavantage de tir dans la mêlée)');
+      if (draft.v5Context?.targetEngaged === true && draft.v5Context?.engagedWithShooter !== true && target) {
         const current = draft.v5Context || {}, engagedIds = new Set(current.engagedTargetIds || [target.id]); engagedIds.add(target.id);
         fields.appendChild(node('p', 'workspace-muted', 'Cochez les combattants effectivement engagés, alliés compris. Le jet de choix est saisi une fois et reste stable au recalcul.'));
         for (const person of participants.filter(row => row.zone === 'active' && row.id !== actor.id)) {
@@ -2171,6 +2185,9 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
   }
   if(type==='attack'&&hasV5Talent(actor,'talent-dual-wielder')){
     contextField(v5,'actor','dualWielding','Combat avec deux armes');contextField(v5,'actor','weaponDagger','Arme utilisée : dague ou couteau (arbitrage MJ)');contextField(v5,'actor','secondWeaponAttack','Attaque avec la seconde arme');const label=node('label','workspace-type'),check=document.createElement('input');check.type='checkbox';check.checked=current.freeAttackTalent==='dual-wielder';check.setAttribute('aria-label','Attaque de seconde arme sans Élan');check.addEventListener('change',()=>handlers.select({extraAttack:check.checked,v5Context:{...current,freeAttackTalent:check.checked?'dual-wielder':undefined}}));label.append(check,'Attaque de seconde arme sans Élan');v5.append(label);
+  }
+  if(type==='attack'&&psychologyTraits(actor).some(t=>t.key==='grim')){
+    const label=node('label','workspace-type'),check=document.createElement('input');check.type='checkbox';check.checked=current.freeAttackTalent==='grim';check.setAttribute('aria-label','Attaque gratuite de Grim : sans perdre l’Élan');check.addEventListener('change',()=>handlers.select({extraAttack:check.checked,v5Context:{...current,freeAttackTalent:check.checked?'grim':undefined}}));label.append(check,'Attaque gratuite de Grim : sans perdre l’Élan (il faut en avoir ; une seule par Tour, limite posée par l’outil, le livre p.358 n’en pose pas)');v5.append(label);
   }
   const penalties=node('details','workspace-v5-context-details');penalties.append(node('summary','','Pénalités de situation en DR'));
   const addPenaltyFields=(role)=>{const field=role==='actor'?'v5Context':'defenseContext',current=draft[field]||{};

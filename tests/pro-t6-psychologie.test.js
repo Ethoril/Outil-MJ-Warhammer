@@ -119,7 +119,7 @@ test('T6 Affamé et Stupide — tests sur déclencheur', () => {
 });
 
 test('T6 Craintif, Territorial, Immunité Psychologique, Rage', () => {
-  assert.deepEqual(planPsychology(make(['Skittish']), 'skittish').effects[0].conditions, [{ name: 'Brisé', level: 3 }]);
+  assert.deepEqual(planPsychology(make(['Skittish']), 'skittish').effects[0].conditions, [{ name: 'Brisé', level: 1 }]);
   assert.equal(planPsychology(make(['Territorial']), 'territorial').effects[0].defendsTerritory, true);
   assert.deepEqual(planPsychology(make(['Immune to Psychology']), 'immunePsychology').effects, [{ immuneToPsychology: true }]);
   assert.equal(planPsychology(make(['Fury']), 'fury').effects[0].advantageThresholds.length, 2);

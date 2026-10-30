@@ -33,8 +33,8 @@ test('R2-08 : Couronne de Flamme donne +1 DR à la Focalisation avec wind UI',()
  const a=actor('mage',{extensions:{v5:{spellEffects:[{id:'crown',spellName:'Couronne de Flamme',loreTestBonus:{lore:'fire',amount:1}}]}}});
  assert.equal(prepareMagicOptions(a,'channelling',{wind:'Aqshy',roll:25}).slModifiers.find(m=>m.id==='spell-lore-bonus')?.amount,1);
 });
-test('R2-09 : La Fortune est Capricieuse ne transforme pas une Pause en maladresse',()=>{
- const p=previewChannellingPause(actor('mage',{extensions:{v5:{channelling:{type:'winds',sl:5},specialStates:{forceFumbleOnDoubles:true}}}}),{roll:22});assert.equal(p.success,true);assert.equal(p.reserveLost,false);
+test('R2-09 : La Fortune est Capricieuse fait échouer une Pause (Test de Focalisation magique en v3 : la réserve est perdue)',()=>{
+ const p=previewChannellingPause(actor('mage',{extensions:{v5:{channelling:{type:'winds',sl:5},specialStates:{forceFumbleOnDoubles:true}}}}),{roll:22});assert.equal(p.success,false);assert.equal(p.reserveLost,true);assert.equal(p.test.fumble,true);
 });
 test('R2-16 : le nom du cuir ne dispense pas une armure de métal de la pénalité de Ghur',()=>{
  const a=actor('mage',{equipment:[{id:'ap',kind:'armour',name:'Cuir trompeur',material:'metal',layer:'rigid',ap:3,locations:['body'],equipped:true}]});assert.equal(calculateMagicArmorPenalty(a,{wind:'Ghur'}).penalty,-3);

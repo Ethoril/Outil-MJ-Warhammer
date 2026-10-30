@@ -9,6 +9,7 @@ import { markCorruptionThresholdTest } from './v5-corruption.js';
 
 import { acquireV5Conditions, healV5Wounds } from './v5-effects.js';
 import { applySpellEffects } from './v5-magic-effects.js';
+import { withMomentum } from './v5-combat-rules.js';
 import { previewV5Test, selectV5Test } from './v5-roll.js';
 import { armorMaterial, wornArmourPieces } from './v5-armor-material.js';
 import { keywordMatches, participantKeywords, resolveKeyword } from './creature-keywords.js';
@@ -222,13 +223,15 @@ export function previewLoreAttribute({
 
   switch (activeLore) {
     case 'beasts': {
-      // Bêtes (Ghur) : le lanceur peut causer Peur (1) pendant BFM Rounds
+      // Bêtes (Ghur, V5 v3 p.245) : le lanceur gagne l'Élan, tous les ennemis vivants à NI mètres perdent le leur (distances non suivies : le MJ ajuste)
+      const radius = Number(spell.cn) || null;
       casterEffects = {
         type: 'lore-attribute-beasts',
         lore: 'beasts',
-        trait: 'Peur (1)',
-        durationRounds: bfm,
-        summary: `Le lanceur cause Peur (1) pendant ${bfm} Rounds.`
+        grantMomentum: true,
+        enemiesLoseMomentum: true,
+        radius,
+        summary: `Le lanceur gagne l’Élan ; les ennemis vivants à ${radius ?? 'NI'} mètres perdent le leur.`
       };
       break;
     }
@@ -453,15 +456,12 @@ export function applyLoreAttribute(state, preview, options = {}) {
   if (casterEffects && options.caster) {
     const caster = structuredClone(options.caster);
     if (casterEffects.lore === 'beasts') {
-      // Gain Peur (1)
-      const res = applySpellEffects(caster, {
-        spellId: 'lore-attribute-beasts',
-        spellName: 'Attribut Domaine des Bêtes',
-        traits: ['Peur (1)'],
-        duration: casterEffects.durationRounds,
-        cn:options.cn,castExecutionId:options.castExecutionId,casterId:caster.id
-      }, { ...options, overcastDurationMultiplier: 1 }); // BFM Rounds propres à l'attribut, pas la durée du sort
-      updatedParticipants.set(caster.id, res.participant);
+      // Le lanceur gagne l'Élan (sauf Peur) ; les ennemis vivants fournis par l'appelant (camp hostile, ni banc ni morts) perdent le leur.
+      updatedParticipants.set(caster.id, withMomentum(caster, true));
+      for (const enemy of options.enemies || []) {
+        if (enemy.id === caster.id || enemy.zone === 'bench' || enemy.extensions?.v5?.dead === true || !hasLivingMagicNature(enemy) || !(Number(enemy.hp) > 0)) continue;
+        updatedParticipants.set(enemy.id, withMomentum(structuredClone(updatedParticipants.get(enemy.id) || enemy), false));
+      }
     } else if (casterEffects.lore === 'heavens') {
       const res=applySpellEffects(caster,{spellId:options.spellId || 'lore-attribute-heavens',spellName:'Attribut des Cieux',tempFortunePoints:casterEffects.gainFortune,duration:'Spéciale',expiresAtNextTurnOf:caster.id,appliedAtTurnSerial:options.turnSerial ?? 0,cn:options.cn,castExecutionId:options.castExecutionId,casterId:caster.id},{...options,overcastDurationMultiplier:1});
       updatedParticipants.set(caster.id,res.participant);

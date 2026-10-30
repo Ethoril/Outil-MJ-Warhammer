@@ -24,7 +24,7 @@ test('T10 taille du participant : Trait, sinon champ du profil, sinon Moyenne su
 });
 
 test('T10 barème de la page 360 : bonus de dégâts en mêlée et poids au surnombre', () => {
-  const rows = [['Size (Small)', 'none', 1], ['Size (Average)', 'none', 1], ['Size (Large)', 'bf', 2], ['Size (Enormous)', 'bf', 3], ['Size (Monstrous)', 'twiceBf', 4]];
+  const rows = [['Size (Small)', 'none', 1], ['Size (Average)', 'none', 1], ['Size (Large)', 'bf', 2], ['Size (Enormous)', 'twiceBf', 3], ['Size (Monstrous)', 'thriceBf', 4]];
   for (const [trait, kind, weight] of rows) {
     const plan = planCreatureSize(creature([trait]));
     assert.equal(plan.damage.kind, kind, trait);
@@ -37,7 +37,7 @@ test('T10 profil imprimé : dégâts déjà inclus, rien n’est ajouté ; sans 
   assert.equal(printed.damage.included, true);
   assert.equal(printed.damage.bonus, 0);
   const built = planCreatureSize(creature(['Size (Monstrous)']), { printedProfile: false });
-  assert.equal(built.damage.bonus, 10);
+  assert.equal(built.damage.bonus, 15, 'Monstrueuse +3 BF (v3)');
   assert.equal(planCreatureSize(creature(['Size (Large)']), { printedProfile: false }).damage.bonus, 5);
   const noForce = planCreatureSize(creature(['Size (Large)'], { caracs: {} }), { printedProfile: false });
   assert.equal(noForce.available, false);

@@ -241,7 +241,7 @@ test('C01 — Q03, Q04, Q08, Q13, Q19 : Effrayant distinct (par Tour), Petit pr�
   assert.equal(missingTerrorRating.ready, false);
   assert.ok(missingTerrorRating.needsInput.some((n) => n.field === 'rating'));
 
-  // Taille V5 générique sans homebrew Petit (C0-L06-036, Q04, Q08) : 2 écarts de taille causent Peur (1), pas Terreur
+  // Taille V5 générique sans homebrew Petit (C0-L06-036, Q04, Q08) : 2 écarts de taille causent Peur (2) (V5 v3), pas Terreur
   const sizeFearV5 = previewGenericFearEncounter({
     author,
     target: victim,
@@ -253,7 +253,7 @@ test('C01 — Q03, Q04, Q08, Q13, Q19 : Effrayant distinct (par Tour), Petit pr�
   });
   assert.equal(sizeFearV5.ready, true);
   assert.equal(sizeFearV5.addedStates[0].key, 'fear-of-talent');
-  assert.equal(sizeFearV5.addedStates[0].rating, 1);
+  assert.equal(sizeFearV5.addedStates[0].rating, 2, 'V5 v3 p.360 : Peur (2)');
 
   // Masque mortuaire (C0-L06-051) avec indice MJ saisi : affecte même un mort-vivant grâce à ignoreUndeadImmunity
   const undeadTarget = subject('u', [], { camp: 'ennemi', traits: ['Mort-vivant', 'Immunité à la Psychologie'] });

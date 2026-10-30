@@ -404,7 +404,7 @@ export function previewScytheOfShyish(caster) {
   return {
     spellName: 'La Faux de Shyish',
     casterId: caster?.id,
-    summary: 'La Faux de Shyish : hallebarde Magique (BF + BFM + 4) invoquée. Les Morts-vivants engagés contre le porteur sont privés d’Avantage V5 (Élan conservé).',
+    summary: 'La Faux de Shyish : hallebarde Magique (BF + BFM + 4) invoquée. Les Morts-vivants engagés avec le porteur ne gagnent pas d’Élan.',
     ready: true
   };
 }
@@ -1275,6 +1275,11 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
     }
   }
 
+  // Souffle (p.243) : le lanceur est immunisé ; parmi les voisins de la zone il est ignoré, seul comme cible il est refusé plus bas.
+  if (effects.breath && effects.excludeCaster && actor?.id && effectiveTargets.some(t => t.id === actor.id) && effectiveTargets.some(t => t.id !== actor.id)) {
+    effectiveTargets = effectiveTargets.filter(t => t.id !== actor.id);
+  }
+
   // Invocations génériques : la couche (fin à l’aube, mort du lanceur) est portée par le lanceur, la zone n’est pas suivie.
   if (effects.summon?.profile || effects.summon?.profiles) effectiveTargets = [actor];
   // D-C40 (MJ, 22/10) : sans le profil imprimé de la créature invoquée, le sort est refusé.
@@ -1481,6 +1486,7 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
         corruptingInfluence: Boolean(effectiveCorruptingInfluence),
         hasIngredient: Boolean(effectiveIngredient),
         instinctiveDiction: Boolean(effectiveInstinctiveDiction),
+        testSucceeded: testSuccess,
         isHighMagic: contract.domain === 'high',
         bfm,
         secondaryRolls: effectiveSecondaryRolls,
@@ -1765,7 +1771,7 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
     if(effects.breath){
       const variant=effects.breath.variants[attributeLore],answers=options.targetTests?.[target.id] || {};
       if(!variant)return {ready:false,valid:false,status:'lore-choice-required',error:'Souffle : Domaine du lanceur requis.',contract};
-      const first=target.id===effectiveTargets[0].id,limit=first?(effects.breath.rangeBase+bfm)*overcastRangeMultiplier:Math.floor(Number(actor.caracs.I)/10)*overcastAoeMultiplier;
+      const first=target.id===effectiveTargets[0].id,limit=first?(effects.breath.rangeBase+bfm)*overcastRangeMultiplier:bfm*overcastAoeMultiplier;
       const distance=first?answers.distance:answers.fromPrimary;
       if(!Number.isFinite(distance)||distance<0||distance>limit)return {ready:false,valid:false,status:'mj-fact-required',error:'Souffle : distance déclarée hors limite ou manquante ('+limit+' mètres).',contract};
       if(!Number.isInteger(options.ctRoll)||options.ctRoll<1||options.ctRoll>100)return {ready:false,valid:false,status:'dice-required',error:'Souffle : saisir le Test de CT du lanceur (d100).',contract};
@@ -3712,7 +3718,7 @@ export function applySpellExecution(draft, contractOrId, input = {}) {
     const effectTargets=new Map([...preview.lorePreview.targetEffects].filter(([id])=>eligible.some(p=>p.id===id)));
     const lore={...preview.lorePreview,targetEffects:new Map([...effectTargets].map(([id,e])=>[id,{...e,extraDirectWounds:0}]))};
     const caster=participants.find(p=>p.id===actor.id);
-    const receipt=applyLoreAttribute(draft,lore,{caster,targets:eligible,round:currentRound,spellId:contract.id,cn:contract.cn,castExecutionId:opKey,duration:contract.duration,overcastDurationMultiplier:preview.overcast?.durationMultiplier});
+    const receipt=applyLoreAttribute(draft,lore,{caster,targets:eligible,enemies:participants.filter(p=>isHostileTarget(actor,p)),round:currentRound,spellId:contract.id,cn:contract.cn,castExecutionId:opKey,duration:contract.duration,overcastDurationMultiplier:preview.overcast?.durationMultiplier});
     for(const [id,next] of receipt.updatedParticipants){const index=participants.findIndex(p=>p.id===id);participants[index]=next;}
   }
   // 7. Appliquer les conséquences d'un vortex sur les cibles traversées

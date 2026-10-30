@@ -11,7 +11,7 @@
       "status": "validated",
       "ruleVersion": "talent-v5-2026-10-09.3",
       "source": {
-        "effectHash": "sha256:eacdf97f21d75376b090b13e8d0ba4216d97f6f6e45c4932abef9036802e011e",
+        "effectHash": "sha256:63ff3cb18877c92814761ddc8d6d117900f9c7e4e1a1438bb0a88f5bc4507bdc",
         "reference": "Livre de base V5, p. 127 ; achat : p. 191"
       },
       "clauses": [
@@ -91,7 +91,7 @@
     }
   ],
   "sourceDescriptions": {
-    "talent-strike-to-stun": "Toutes vos armes improvisées ont la Qualité Assommante (Pummel). Avec une arme Assommante, ignorez la pénalité de coup ciblé pour une neutralisation silencieuse (p. 135)."
+    "talent-strike-to-stun": "Toutes vos armes improvisées ont la Qualité Assommante (Pummel). Avec une arme Assommante, bénéficiez d'un Avantage V5 aux neutralisations silencieuses (p. 135)."
   },
   "qualityContracts": [
     {
@@ -141,7 +141,7 @@
   "approvedOverrides": {
     "talent-strike-to-stun": {
       "decision": "MJ, 9 octobre 2026 : harmoniser la procédure de neutralisation silencieuse selon Livre V5 p.135.",
-      "publicDescription": "Toutes vos armes improvisées ont la Qualité Assommante (Pummel). Avec une arme Assommante, ignorez la pénalité de coup ciblé pour une neutralisation silencieuse (p. 135).",
+      "publicDescription": "Toutes vos armes improvisées ont la Qualité Assommante (Pummel). Avec une arme Assommante, bénéficiez d'un Avantage V5 aux neutralisations silencieuses (p. 135).",
       "correctedDescription": "Toutes vos armes improvisées ont Assommante. Pour une neutralisation silencieuse hors combat contre une cible inconsciente du danger, vous avez Avantage au Test opposé Corps à corps/Résistance. Cette procédure n’est pas un Coup ciblé ; ses conséquences spéciales restent à arbitrer.",
       "reference": "Livre de base V5, p.127 et p.135 : renvoi au Coup ciblé à clarifier ; procédure p.135 retenue par le MJ pour cet incrément."
     }

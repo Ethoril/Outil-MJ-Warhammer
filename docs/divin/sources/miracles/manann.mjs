@@ -4,7 +4,7 @@ export const cult = 'Manann';
 export const miracles = [
  {
   name: 'Encalminé', canonicalName: 'Becalm', printedPage: 222,
-  summary: 'Le vent déserte les voiles d’un navire en vue : il est totalement encalminé. Une zone de calme de Sociabilité yards de rayon l’entoure malgré la tempête ; si une autre propulsion (rames) est utilisée, la zone suit le navire. +2 DR : portée, cibles ou durée augmentées de leur valeur initiale.',
+  summary: 'Le vent déserte les voiles d’un navire en vue : il est totalement encalminé. Une zone de calme de Sociabilité mètres de rayon l’entoure malgré la tempête ; si une autre propulsion (rames) est utilisée, la zone suit le navire. +2 DR : portée, cibles ou durée augmentées de leur valeur initiale.',
   params: { range: { kind: 'characteristic-bonus', characteristic: 'Soc', unit: 'miles' }, targets: { kind: 'count', value: 1 }, duration: { kind: 'fixed', value: 1, unit: 'hours' } },
   status: 'manual', effect: null,
   targetRules: ['navire à voile', 'en ligne de vue du prêtre'],
@@ -15,7 +15,7 @@ export const miracles = [
   ],
   clauses: [
    { id: 'becalmed', mode: 'manual', text: 'Le navire cible est totalement encalminé pendant 1 heure.' },
-   { id: 'calm-zone', mode: 'manual', text: 'Zone de calme de Sociabilité yards autour du navire, malgré tempête et mer agitée ; elle suit le navire s’il avance par une autre propulsion.' },
+   { id: 'calm-zone', mode: 'manual', text: 'Zone de calme de Sociabilité mètres autour du navire, malgré tempête et mer agitée ; elle suit le navire s’il avance par une autre propulsion.' },
    { id: 'sl-extension', mode: 'assisted', text: 'Par tranche de +2 DR : ajouter portée, cibles ou durée égales à la valeur initiale.' }
   ],
   sourceDelta: 'Portée en miles : unité absente de la grammaire params (yards/rounds/minutes/hours), unit \'miles\' utilisée, à valider côté générateur. La zone est imprimée « Fellowship yards » (sans « Bonus », contrairement à la portée) : lue comme la Sociabilité entière, non son Bonus.'
@@ -101,16 +101,16 @@ export const miracles = [
  },
  {
   name: 'Marcher sur les eaux', canonicalName: 'Waterwalk', printedPage: 223,
-  summary: 'Le prêtre traverse l’eau libre comme un sol solide, uniquement sur une étendue d’au moins 10 yards de large ; une étendue plus petite est trop éloignée du domaine de Manann.',
+  summary: 'Le prêtre traverse l’eau libre comme un sol solide, uniquement sur une étendue d’au moins 10 m de large ; une étendue plus petite est trop éloignée du domaine de Manann.',
   params: { range: { kind: 'self' }, targets: { kind: 'self' }, duration: { kind: 'characteristic-bonus', characteristic: 'Soc', unit: 'minutes' } },
   status: 'manual', effect: null,
-  targetRules: ['étendue d’eau d’au moins 10 yards de large'],
+  targetRules: ['étendue d’eau d’au moins 10 m de large'],
   needsInput: [
-   { id: 'water-width', text: 'L’étendue d’eau fait-elle au moins 10 yards de large ?' }
+   { id: 'water-width', text: 'L’étendue d’eau fait-elle au moins 10 m de large ?' }
   ],
   clauses: [
    { id: 'walk', mode: 'manual', text: 'Le prêtre se déplace sur l’eau comme sur un sol ferme pendant la durée.' },
-   { id: 'min-width', mode: 'manual', text: 'Ne fonctionne que sur une étendue d’au moins 10 yards de large.' }
+   { id: 'min-width', mode: 'manual', text: 'Ne fonctionne que sur une étendue d’au moins 10 m de large.' }
   ]
  }
 ];

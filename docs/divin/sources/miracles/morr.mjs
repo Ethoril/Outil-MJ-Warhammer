@@ -1,20 +1,20 @@
-// Miracles de Morr — Livre de base V5 EN v2, page imprimée 223.
+// Miracles de Morr — Livre de base V5 EN v2, page imprimée 223 (Masque mortuaire aligné sur la v3 du 27/10/2026).
 export const cult = 'Morr';
 
 export const miracles = [
  {
   name: 'Masque mortuaire', canonicalName: 'Death Mask', printedPage: 223,
-  summary: 'Le visage du prêtre devient cadavérique et il gagne le Trait Peur (Fear). Les morts-vivants n’en sont pas immunisés, quels que soient leurs Talents, Traits (Construct compris) ou autres effets.',
+  summary: 'Le visage du prêtre devient cadavérique et il gagne le Trait Peur (2). Les morts-vivants n’en sont pas immunisés, quels que soient leurs Talents, Traits (Construct compris) ou autres effets.',
   params: { range: { kind: 'self' }, targets: { kind: 'self' }, duration: { kind: 'characteristic-bonus', characteristic: 'Soc', unit: 'rounds' } },
   status: 'assisted',
   effect: null,
-  effects: [{ type: 'grant-trait', traits: ['Peur (1)'] }],
+  effects: [{ type: 'grant-trait', traits: ['Peur (2)'] }],
   targetRules: ['prêtre uniquement'],
   needsInput: [
    { id: 'fear-resolution', text: 'Quelles créatures doivent résister à la Peur, et les morts-vivants présents ignorent-ils bien leur immunité ?' }
   ],
   clauses: [
-   { id: 'fear', mode: 'engine', text: 'Le prêtre gagne Peur (Fear) pendant la durée.' },
+   { id: 'fear', mode: 'engine', text: 'Le prêtre gagne Peur (2) pendant la durée.' },
    { id: 'undead-not-immune', mode: 'manual', text: 'Les morts-vivants ne sont pas immunisés contre cette Peur, malgré tout Talent, Trait ou effet.' }
   ]
  },
@@ -72,17 +72,17 @@ export const miracles = [
  },
  {
   name: 'Seuil du Portail', canonicalName: "Portal's Threshold", printedPage: 223,
-  summary: 'Le prêtre trace au sol une ligne de 8 yards maximum en psalmodiant ; un portail d’ombre indistinct apparaît. Les créatures Mort-vivant doivent réussir un Test de Calme Intermédiaire (+0 DR) pour la franchir ; celles qui sont à la fois Mort-vivant et Construct ne le peuvent pas.',
+  summary: 'Le prêtre trace au sol une ligne de 8 m maximum en psalmodiant ; un portail d’ombre indistinct apparaît. Les créatures Mort-vivant doivent réussir un Test de Calme Intermédiaire (+0 DR) pour la franchir ; celles qui sont à la fois Mort-vivant et Construct ne le peuvent pas.',
   params: { range: { kind: 'touch' }, targets: { kind: 'special' }, duration: { kind: 'special', label: 'Until sunrise' } },
   status: 'manual', effect: null,
   targetRules: ['Trait Mort-vivant', 'Mort-vivant et Construct : franchissement impossible'],
   needsInput: [
-   { id: 'line', text: 'Tracé et longueur de la ligne (8 yards maximum).' },
+   { id: 'line', text: 'Tracé et longueur de la ligne (8 m maximum).' },
    { id: 'sunrise', text: 'Heure du lever du soleil qui met fin au miracle.' },
    { id: 'cool-tests', text: 'Résultat du Test de Calme de chaque Mort-vivant qui tente de franchir la ligne.' }
   ],
   clauses: [
-   { id: 'line-length', mode: 'manual', text: 'Ligne tracée au sol de 8 yards au plus.' },
+   { id: 'line-length', mode: 'manual', text: 'Ligne tracée au sol de 8 m au plus.' },
    { id: 'undead-cool', mode: 'manual', text: 'Une créature Mort-vivant réussit un Test de Calme Intermédiaire (+0 DR) pour franchir la ligne.' },
    { id: 'construct-undead-blocked', mode: 'manual', text: 'Une créature à la fois Mort-vivant et Construct ne peut pas franchir la ligne.' },
    { id: 'expiry', mode: 'manual', text: 'Le miracle dure jusqu’au lever du soleil.' }

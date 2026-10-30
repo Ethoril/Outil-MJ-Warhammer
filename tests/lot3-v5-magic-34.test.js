@@ -603,13 +603,13 @@ test('Contrôle Codex P1 #3 : Les incidents de focalisation, d’interruption et
   assert.equal(mageAfterUndo1.states.length, 0);
   assert.equal(mageAfterUndo1.extensions.v5.magic.reserve.sl, 5);
 
-  // 2. Interruption de focalisation échouée (mode: 'interruption', roll 90 sur Calme Difficile, lossRoll 3 -> +30, miscastRoll 18 + 30 = 48 -> Rupture : 1 Hémorragique)
+  // 2. Interruption de focalisation échouée (mode: 'interruption', roll 90 sur Calme Difficile, lossRoll 3 -> +30, miscastRoll 38 + 30 = 68 -> Rupture : 1 Hémorragique)
   const intPrev = store.previewChannelling({
     actorId: 'mage',
     mode: 'interruption',
     roll: 90,
     lossRoll: 3,
-    miscastRoll: 18
+    miscastRoll: 38
   });
   assert.equal(intPrev.interrupted, true);
   assert.equal(intPrev.miscast.name, 'Rupture');

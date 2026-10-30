@@ -84,7 +84,7 @@ export const miracles = [
     effects: [{ type: 'test-modifier', modifiers: { 'Résistance': { base: 2, perGroup: { size: 10, add: 1 } }, 'Calme': { base: 2, perGroup: { size: 10, add: 1 } } } }],
     targetRules: ['ally', 'ni Statut Argent ni Or'],
     needsInput: [
-      { id: 'allies', text: 'Quels alliés sont dans la zone (Sociabilité yards autour du prêtre) et aucun n’est de Statut Argent ou Or ?' }
+      { id: 'allies', text: 'Quels alliés sont dans la zone (Sociabilité mètres autour du prêtre) et aucun n’est de Statut Argent ou Or ?' }
     ],
     clauses: [
       { id: 'endurance-cool', mode: 'engine', text: 'Chaque allié affecté gagne +2 DR aux Tests d’Endurance et de Calme.' },

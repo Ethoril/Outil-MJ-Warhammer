@@ -83,7 +83,7 @@ export const miracles = [
     status: 'manual', effect: null,
     targetRules: [],
     needsInput: [
-      { id: 'area', text: 'Quelles créatures sont dans la zone (Bonus d’Agilité yards autour du prêtre) ?' }
+      { id: 'area', text: 'Quelles créatures sont dans la zone (Bonus d’Agilité mètres autour du prêtre) ?' }
     ],
     clauses: [
       { id: 'masked-sound', mode: 'manual', text: 'Dans la zone, les créatures n’entendent que le bruit de fond normal : les pas, les chiens et les sons soudains passent inaperçus.' }

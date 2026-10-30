@@ -571,7 +571,7 @@
       "book": "L06",
       "page": 358,
       "kind": "trait",
-      "summaryFr": "En fin de Tour sans Élan, la créature en gagne.",
+      "summaryFr": "En fin de Tour sans Élan, la créature en gagne. V5 v3 : elle n’a pas à perdre son Élan pour ses attaques gratuites, mais doit en avoir.",
       "mechanic": [
         "endTurn",
         "momentum"
@@ -1020,7 +1020,7 @@
       "book": "L06",
       "page": 361,
       "kind": "trait",
-      "summaryFr": "Magie spectaculaire visible ou bruit violent donne trois Brisé ; entraînement Magie/Guerre apporte ses exceptions.",
+      "summaryFr": "Magie spectaculaire visible ou bruit violent donne 1 Brisé (v3 p.361) ; entraînement Magie/Guerre apporte ses exceptions.",
       "mechanic": [
         "factsMJ",
         "broken"

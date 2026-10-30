@@ -55,7 +55,7 @@ test('statuts P4b T4 : cinq miracles assistés (clause moteur), deux promus en i
   assert.equal(getDivineContract(CHILL).effects[0].appliesTo, 'caster');
   assert.deepEqual(getDivineContract(VANQUISH).effects[0].talents.map(row => row.specialization), ['Orques', 'Gobelins', 'Morts-vivants', 'Associés au Chaos']);
   assert.ok(getDivineContract(VANQUISH).clauses.some(row => row.id === 'hatred-kill' && row.mode === 'manual'), 'bonus de +2 DR reste un rappel');
-  assert.ok(getDivineContract(CHILL).clauses.some(row => row.id === 'advantage-loss' && row.mode === 'manual'), 'perte d’Avantage reste un rappel');
+  assert.ok(getDivineContract(CHILL).clauses.some(row => row.id === 'momentum-loss' && row.mode === 'manual'), 'perte d’Élan reste un rappel');
 });
 
 test('Appel à la Fureur et Inspirant : Frénésie et Coude-à-coude posés sur la cible puis retirés', async () => {
@@ -92,10 +92,10 @@ test('Vaincre les impies : quatre lignes de Haine sur la cible, rappel du bonus 
   assert.equal(injected(person(store, 'ally')).length, 0);
 });
 
-test('Frisson du givre : Peur (1) sur le prêtre seul, même si la cible est un autre participant', async () => {
+test('Frisson du givre : Peur (2) sur le prêtre seul, même si la cible est un autre participant', async () => {
   const store = await fixture('Ulric');
   await cast(store, CHILL, { targetIds: ['priest', 'ally'], facts: { targets: { priest: { withinRange: true }, ally: { withinRange: true } } } });
-  assert.deepEqual(person(store, 'priest').traits, ['Vigilant', 'Peur (1)']);
+  assert.deepEqual(person(store, 'priest').traits, ['Vigilant', 'Peur (2)']);
   assert.deepEqual(person(store, 'ally').traits, ['Vigilant']);
   await toRoundEnd(store);
   assert.deepEqual(person(store, 'priest').traits, ['Vigilant']);
