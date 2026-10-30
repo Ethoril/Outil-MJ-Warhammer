@@ -35,3 +35,7 @@ Autres candidats du plan (p4b-damage / p4b-damage-real, p4b-gear / p4b-gear-real
 ## R2-8 — combat A
 
 Aucun doublon retiré (les 55 originaux : 483 tests, les 7 cibles : 483 ; la suite complète garde donc le même total qu'avant l'étape).
+
+## R2-9 — combat B
+
+Aucun doublon retiré (les 16 originaux : 187 tests, les 2 cibles : 187 ; la suite complète garde donc le même total qu'avant l'étape).

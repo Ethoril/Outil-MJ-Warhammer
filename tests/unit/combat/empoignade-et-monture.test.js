@@ -1,14 +1,72 @@
-import test from 'node:test';
+import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
-import { createStore } from '../js/core/store.js';
-import { applyResolution, previewResolution } from '../js/core/resolution.js';
-import { getReferenceCatalogue } from '../js/core/reference-catalog.js';
-import { fixture as spellFixture, input as spellInput, contractFor } from './helpers/lot3-catalogue-fixture.js';
-import {
-  resolveMountedMount, planMountedAttack, planMountedDodge,
-  planMountedChargeDamage, planMountedFall
-} from '../js/core/v5-mounted-combat.js';
+import { createStore } from '../../../js/core/store.js';
+import { previewResolution, applyResolution } from '../../../js/core/resolution.js';
+import { getReferenceCatalogue } from '../../../js/core/reference-catalog.js';
+import { fixture as spellFixture, input as spellInput, contractFor } from '../../helpers/lot3-catalogue-fixture.js';
+import { resolveMountedMount, planMountedAttack, planMountedDodge, planMountedChargeDamage, planMountedFall } from '../../../js/core/v5-mounted-combat.js';
+import { acquireV5Conditions, recoverV5Condition } from '../../../js/core/v5-effects.js';
+import { applyGrappleAction, applyGrappleInitiation, previewGrappleAction, previewGrappleInitiation, previewGrappleTurnActionGate, V5_GRAPPLING_RULE_VERSION } from '../../../js/core/v5-grappling.js';
 
+describe('Monture caractérisation', () => {
+const clone = value => structuredClone(value);
+
+const person = (id, extra = {}) => ({
+  id, name: id, kind: 'PJ', camp: id === 'rider' ? 'pj' : 'ennemi', zone: 'active', initiative: 50,
+  hp: 20, maxHp: 20,
+  caracs: { CC: 50, CT: 40, F: 30, E: 40, I: 40, Ag: 40, Dex: 30, Int: 30, FM: 30, Soc: 30, M: 4 },
+  skills: [], talents: [], equipment: [], traits: [], states: [],
+  armor: { head: 0, body: 0, arms: 0, legs: 0 },
+  extensions: { v5: { hasMomentum: false } },
+  ...extra
+});
+
+function memoryPersistence() {
+  let saved = null;
+  return {
+    async load() { return saved && clone(saved); },
+    async saveAtomic({ state }) { saved = clone(state); return { ok: true }; },
+    read() { return saved && clone(saved); }
+  };
+}
+
+test('F2-M caractérisation — la pénalité Esquive montée manuelle reste portée par la défense', () => {
+  const preview = previewResolution({
+    actor: person('attacker'), target: person('rider'), roll: 25,
+    action: { type: 'attack', attr: 'CC', base: 50, damage: 4 },
+    defense: { base: 40, roll: 70, label: 'Esquive', v5: { kind: 'test', context: { penalties: { mounted: -2 } } } },
+    v5: { kind: 'melee' }
+  });
+  const penalty = preview.defenderTest.details.modifiers.find(row => row.id === 'penalty:mounted');
+  assert.equal(penalty?.amount, -2);
+  assert.equal(preview.test.details.modifiers.some(row => row.id === 'penalty:mounted'), false,
+    'la pénalité de monture ne doit pas fuiter sur le Test de l’attaquant');
+});
+
+test('F2-M caractérisation — le marqueur monté existant survit à update, persistance et rechargement', async () => {
+  const persistence = memoryPersistence();
+  const store = createStore({ persistence, storage: null });
+  await store.ready;
+  await store.loadFromJSON({
+    schemaVersion: 3, reserve: [], log: [], diceLines: [],
+    extensions: { v5: { combatId: 'f2-m-characterization', turnIndex: 1 } },
+    combat: { round: 1, currentActorId: 'rider', order: ['rider', 'mount'], participants: [
+      person('rider', { extensions: { v5: { hasMomentum: false, mounted: true } } }),
+      person('mount', { kind: 'Créature', camp: 'pj', size: 'large' })
+    ] }
+  });
+
+  assert.equal(store.listParticipants().find(row => row.id === 'rider').extensions.v5.mounted, true);
+  assert.equal((await store.updateParticipant('rider', { initiative: 51 })).ok, true);
+  assert.equal(persistence.read().combat.participants.find(row => row.id === 'rider').extensions.v5.mounted, true);
+
+  const reloaded = createStore({ persistence, storage: null });
+  await reloaded.ready;
+  assert.equal(reloaded.listParticipants().find(row => row.id === 'rider').extensions.v5.mounted, true);
+});
+});
+
+describe('Combat monté', () => {
 const actor = (id, { size = 'average', strength = 40, mounted = false, mountId, talents = [], states = [] } = {}) => ({
   id, name: id, kind: 'PJ', camp: id === 'attacker' ? 'pj' : 'ennemi', zone: 'active', size,
   hp: 20, maxHp: 20, caracs: { CC: 60, CT: 40, F: strength, E: 40, I: 40, Ag: 40, Dex: 30, Int: 30, FM: 30, Soc: 30, M: 4 },
@@ -369,4 +427,351 @@ test('F2-M sort — état Sonné prévu bloque l’application sans Chevaucher, 
   assert.equal(store.listParticipants().find(row => row.id === 'foe').extensions.v5.mounted, false);
   assert.equal(store.listParticipants().find(row => row.id === 'foe').extensions.v5.mountId, undefined);
   assert.ok(store.listParticipants().find(row => row.id === 'foe').states.some(row => row.key === 'sonne'));
+});
+});
+
+describe('Empoignade caractérisation', () => {
+test('F2-N caractérisation — Enchevêtré est un état V5 cumulable et sa récupération attend une opposition de Force', () => {
+  const participant = { id: 'cible', name: 'Cible', states: [] };
+  const first = acquireV5Conditions(participant, [{ name: 'Enchevêtré', level: 1, source: { kind: 'weapon', id: 'filet' } }]);
+
+  assert.equal(participant.states.length, 0, 'l’acquisition travaille sur une copie');
+  assert.equal(first.participant.states.find(state => state.key === 'enchevetre')?.level, 1);
+
+  const second = acquireV5Conditions(first.participant, [{ name: 'Enchevêtré', level: 2, source: { kind: 'grapple', id: 'empoignade' } }]);
+  assert.equal(second.participant.states.filter(state => state.key === 'enchevetre').reduce((sum, state) => sum + state.level, 0), 3);
+
+  const missingTest = recoverV5Condition(second.participant, 'enchevetre', { method: 'opposed-strength' });
+  assert.ok(missingTest.needsInput.some(item => item.field === 'recoveryTest'), 'la sortie réclame le résultat du Test opposé');
+  assert.equal(missingTest.participant.states.filter(state => state.key === 'enchevetre').reduce((sum, state) => sum + state.level, 0), 3);
+
+  const passedTest = recoverV5Condition(second.participant, 'enchevetre', {
+    method: 'opposed-strength',
+    test: { success: true, sl: 2 }
+  });
+  assert.equal(passedTest.participant.states.filter(state => state.key === 'enchevetre').reduce((sum, state) => sum + state.level, 0), 1, 'les DR retirent autant de niveaux que le Test en a obtenu');
+});
+
+test('F2-N caractérisation — sans déclaration, une Bagarre reste une attaque ordinaire', async () => {
+  const { previewResolution } = await import('../../../js/core/resolution.js');
+  const preview = previewResolution({
+    actor: { id: 'attaquant', name: 'Attaquant', states: [] },
+    target: { id: 'cible', name: 'Cible', hp: 12, states: [] },
+    action: { id: 'bagarre', type: 'attack', base: 50, damage: 4, qualities: [] },
+    v5: { kind: 'melee' },
+    roll: 25,
+    baseRevision: 0
+  });
+
+  assert.equal(preview.success, true);
+  assert.ok(preview.damage, 'sans déclaration, l’attaque suit le chemin ordinaire');
+  assert.equal(preview.grapple, undefined, 'aucune déclaration ne déclenche de prise');
+});
+});
+
+describe('Empoignade garde préparatoire', () => {
+const participant = (id, F = 40, states = []) => ({ id, name: id, hp: 20, maxHp: 20, caracs: { F, E: 30 }, states });
+const attack = (winner = 'attacker') => ({
+  attack: true, hit: winner === 'attacker', unresolved: [],
+  opposition: { mode: 'opposed', winner, netSl: winner === 'attacker' ? 2 : -2 }
+});
+const link = (overrides = {}) => ({
+  id: 'grapple:entry-1', resolutionId: 'entry-1', initiatorId: 'holder', targetId: 'held',
+  status: 'active', ruleVersion: V5_GRAPPLING_RULE_VERSION, targetConditionIds: ['grapple-state'], ...overrides
+});
+const stateLevel = person => person.states
+  .filter(row => row.key === 'enchevetre')
+  .reduce((sum, row) => sum + row.level, 0);
+
+test('F2-N garde préparatoire — première Action sous prise : Test de Force déclaré avant tout autre Action',()=>{
+  const held=participant('held');held.extensions={v5:{grapples:[link()]}};
+  assert.equal(previewGrappleTurnActionGate({actor:held,action:'damage',skillName:'Force'}).allowed,true);
+  assert.match(previewGrappleTurnActionGate({actor:held,action:'damage',skillName:'Corps à corps'}).unresolved.join(' '),/première Action.*Force/);
+  assert.match(previewGrappleTurnActionGate({actor:held,action:'attack',skillName:'Force',alreadySpentAction:true}).unresolved.join(' '),/avant toute autre Action/);
+  assert.equal(previewGrappleTurnActionGate({actor:participant('free'),action:'attack',skillName:'Corps à corps'}).required,false);
+});
+
+test('F2-N — déclaration avant le jet : victoire crée une prise persistante et Enchevêtré sans dégâts', () => {
+  const actor = participant('holder');
+  const target = participant('held');
+  assert.deepEqual(previewGrappleInitiation({ actor, target, declared: false }), { ruleVersion: V5_GRAPPLING_RULE_VERSION, handled: false });
+
+  const plan = previewGrappleInitiation({
+    actor, target, declared: true, eligibleBrawling: true, attack: attack(), resolutionId: 'entry-1', round: 1
+  });
+  assert.equal(plan.ready, true);
+  assert.equal(plan.won, true);
+  assert.equal(plan.suppressOrdinaryDamage, true);
+  assert.equal(plan.targetCondition.level, 1);
+  assert.equal(plan.targetCondition.source.linkId, plan.link.id);
+
+  const applied = applyGrappleInitiation(plan, target);
+  assert.equal(applied.status, 'applied');
+  assert.equal(stateLevel(applied.participant), 1);
+  assert.equal(applied.participant.hp, target.hp);
+  assert.equal(applied.link.targetConditionIds.length, 1);
+  assert.equal(applied.participant.states[0].source.linkId, applied.link.id);
+  assert.deepEqual(JSON.parse(JSON.stringify(applied.link)), applied.link, 'identité du lien sérialisable pour la sauvegarde');
+  assert.equal(applyGrappleInitiation(plan, applied.participant).status, 'duplicate');
+});
+
+test('F2-N — l’échec ou une déclaration inadmissible ne crée aucun lien', () => {
+  const actor = participant('holder');
+  const target = participant('held');
+  const failed = previewGrappleInitiation({
+    actor, target, declared: true, eligibleBrawling: true, attack: attack('defender'), resolutionId: 'miss-1'
+  });
+  assert.equal(failed.status, 'opposition-lost');
+  assert.equal(failed.link, null);
+  assert.equal(failed.targetCondition, null);
+
+  const inadmissible = previewGrappleInitiation({
+    actor, target, declared: true, eligibleBrawling: false, attack: attack(), resolutionId: 'armed-1'
+  });
+  assert.equal(inadmissible.ready, false);
+  assert.match(inadmissible.unresolved.join(' '), /Bagarre/);
+  assert.equal(applyGrappleInitiation(inadmissible, target).participant, target);
+});
+
+test('F2-N — Test de Force gagné blesse de BF + DR - BE, ignore les PA et localise avec le jet', () => {
+  const plan = previewGrappleAction({
+    actor: participant('holder', 45), target: participant('held'), link: link(), action: 'damage',
+    actorTest: { roll: 23, success: true, sl: 4 }, opponentTest: { roll: 72, success: true, sl: 1 },
+    resolutionId: 'damage-1', round: 2
+  });
+  assert.equal(plan.ready, true);
+  assert.deepEqual(plan.effects[0], {
+    type: 'damage', targetId: 'held', amount: 4, armourApplied: false,
+    strengthBonus: 4, toughnessBonus: 3, netSL: 3,
+    location: { roll: 32, name: 'Bras Droit', key: 'ARM' }
+  });
+  assert.equal(applyGrappleAction(plan, { actor: participant('holder', 45), target: participant('held'), link: link() }).damage.amount, 4);
+});
+
+test('F2-N — Bonus d’Endurance absent bloque les Blessures au lieu de les sous-calculer',()=>{
+  const plan=previewGrappleAction({actor:participant('holder',40),target:{id:'held',states:[],caracs:{}},link:link(),action:'damage',actorTest:{roll:23,sl:2},opponentTest:{sl:0},resolutionId:'unknown-be'});
+  assert.equal(plan.ready,false);assert.match(plan.unresolved.join(' '),/Bonus d’Endurance/);
+});
+
+test('F2-N — immobiliser ajoute un niveau, puis un par DR au-delà du premier', () => {
+  const actor = participant('holder');
+  const target = participant('held');
+  const originalLink = link();
+  const plan = previewGrappleAction({
+    actor, target, link: originalLink, action: 'immobilize',
+    actorTest: { roll: 40, success: true, sl: 3 }, opponentTest: { roll: 55, success: true, sl: 0 },
+    resolutionId: 'hold-1', round: 2
+  });
+  assert.equal(plan.effects[0].condition.level, 3);
+  assert.equal(stateLevel(target), 0, 'l’aperçu ne mute pas le participant');
+
+  const applied = applyGrappleAction(plan, { actor, target, link: originalLink });
+  assert.equal(applied.status, 'applied');
+  assert.equal(stateLevel(applied.target), 3);
+  assert.equal(applied.link.targetConditionIds.length, 2);
+  assert.equal(stateLevel(target), 0);
+  assert.equal(applyGrappleAction(plan, { actor, target: applied.target, link: applied.link }).status, 'duplicate');
+});
+
+test('F2-N — dégagement retire 1 + DR après le premier uniquement de l’Enchevêtré de cette prise', () => {
+  const target = participant('held', 40, [
+    { id: 'grapple-state', key: 'enchevetre', name: 'Enchevêtré', level: 3, source: { kind: 'grapple', linkId: 'grapple:entry-1' } },
+    { id: 'net-state', key: 'enchevetre', name: 'Enchevêtré', level: 2, source: { kind: 'net' } }
+  ]);
+  const holder = participant('holder');
+  const active = link();
+  const plan = previewGrappleAction({
+    actor: target, target: holder, link: active, action: 'escape',
+    actorTest: { roll: 34, success: true, sl: 3 }, opponentTest: { roll: 77, success: true, sl: 1 },
+    resolutionId: 'escape-1', round: 3
+  });
+  assert.equal(plan.effects[0].amount, 2);
+  assert.equal(plan.endLink, false, 'un niveau appartenant au lien subsiste');
+
+  const result = applyGrappleAction(plan, { actor: target, target: holder, link: active });
+  assert.equal(stateLevel(result.actor), 3, 'un niveau du lien et deux niveaux étrangers subsistent');
+  assert.equal(result.actor.states.find(row => row.id === 'net-state').level, 2, 'une entrave étrangère n’est pas retirée');
+  assert.equal(result.link.status, 'active');
+});
+
+test('F2-N — dégagement retire les niveaux de toutes les occurrences liées avant de libérer la prise',()=>{
+  const holder=participant('holder',40,[
+    {id:'grapple-state-a',key:'enchevetre',name:'Enchevêtré',level:1,source:{kind:'grapple',linkId:'grapple:entry-1'}},
+    {id:'foreign',key:'enchevetre',name:'Enchevêtré',level:2,source:{kind:'net'}},
+    {id:'grapple-state-b',key:'enchevetre',name:'Enchevêtré',level:2,source:{kind:'grapple',linkId:'grapple:entry-1'}}
+  ]),opponent=participant('held'),active=link({targetConditionIds:['grapple-state-a','grapple-state-b']});
+  const plan=previewGrappleAction({actor:holder,target:opponent,link:active,action:'escape',actorTest:{roll:34,sl:4},opponentTest:{sl:0},resolutionId:'escape-all',round:3});
+  assert.deepEqual(plan.effects.map(row=>[row.conditionId,row.amount]),[['grapple-state-a',1],['grapple-state-b',2]]);
+  assert.equal(plan.endLink,true);
+  const result=applyGrappleAction(plan,{actor:holder,target:opponent,link:active});
+  assert.equal(result.link.status,'released');assert.equal(stateLevel(result.actor),2);
+  assert.deepEqual(result.actor.states.map(row=>row.id),['foreign']);
+});
+
+test('F2-N caractérisation T2 bis — le dégagement de l’initiateur libère aussi le partenaire lié',()=>{
+  const holder=participant('holder',40,[
+    {id:'holder-grapple-state',key:'enchevetre',name:'Enchevêtré',level:1,source:{kind:'grapple',linkId:'grapple:entry-1'}}
+  ]);
+  const held=participant('held',40,[
+    {id:'held-grapple-state',key:'enchevetre',name:'Enchevêtré',level:2,source:{kind:'grapple',linkId:'grapple:entry-1'}}
+  ]);
+  const active=link({targetConditionIds:['held-grapple-state']});
+  const plan=previewGrappleAction({actor:holder,target:held,link:active,action:'escape',
+    actorTest:{roll:34,success:true,sl:2},opponentTest:{sl:0},resolutionId:'holder-escape',round:3});
+  assert.equal(plan.endLink,true);
+  const result=applyGrappleAction(plan,{actor:holder,target:held,link:active});
+  assert.equal(result.link.status,'released');
+  assert.equal(stateLevel(result.actor),0,'l’initiateur est libéré');
+  assert.equal(stateLevel(result.target),0,'le partenaire est libéré par la clôture du même lien');
+});
+
+test('F2-N — perdre l’opposition laisse lien, Blessures et États inchangés', () => {
+  const actor = participant('holder');
+  const target = participant('held', 40, [{ id: 'grapple-state', key: 'enchevetre', level: 2, source: { kind: 'grapple', linkId: 'grapple:entry-1' } }]);
+  const active = link();
+  const before = structuredClone({ actor, target, active });
+  const plan = previewGrappleAction({
+    actor, target, link: active, action: 'immobilize',
+    actorTest: { roll: 80, success: false, sl: -3 }, opponentTest: { roll: 20, success: true, sl: 2 },
+    resolutionId: 'lose-1', round: 2
+  });
+  assert.equal(plan.won, false);
+  assert.deepEqual(plan.effects, []);
+  const result = applyGrappleAction(plan, { actor, target, link: active });
+  assert.deepEqual(structuredClone({ actor: result.actor, target: result.target }), { actor: before.actor, target: before.target });
+  assert.equal(result.link.status, 'active');
+  assert.deepEqual(result.link.targetConditionIds, before.active.targetConditionIds);
+  assert.ok(result.link.appliedActionIds.includes('lose-1'), 'la tentative est journalisable sans réussir l’action choisie');
+});
+
+test('F2-N — scénario sur trois Tours : engager, blesser, se dégager', () => {
+  const holder = participant('holder', 40);
+  let held = participant('held', 30);
+  const entry = previewGrappleInitiation({
+    actor: holder, target: held, declared: true, eligibleBrawling: true,
+    attack: attack(), resolutionId: 'three-turn-entry', round: 1
+  });
+  const acquired = applyGrappleInitiation(entry, held);
+  held = acquired.participant;
+  let currentLink = acquired.link;
+  assert.equal(stateLevel(held), 1);
+
+  const injury = previewGrappleAction({
+    actor: holder, target: held, link: currentLink, action: 'damage',
+    actorTest: { roll: 43, success: true, sl: 3 }, opponentTest: { roll: 55, success: true, sl: 1 },
+    resolutionId: 'three-turn-damage', round: 2
+  });
+  assert.equal(injury.effects[0].amount, 3);
+  assert.equal(injury.effects[0].armourApplied, false);
+  assert.equal(injury.effects[0].toughnessBonus,3);
+
+  const escape = previewGrappleAction({
+    actor: held, target: holder, link: currentLink, action: 'escape',
+    actorTest: { roll: 40, success: true, sl: 2 }, opponentTest: { roll: 50, success: true, sl: 0 },
+    resolutionId: 'three-turn-escape', round: 3
+  });
+  const released = applyGrappleAction(escape, { actor: held, target: holder, link: currentLink });
+  held = released.actor;
+  currentLink = released.link;
+  assert.equal(stateLevel(held), 0);
+  assert.equal(currentLink.status, 'released');
+  assert.equal(JSON.parse(JSON.stringify({ held, currentLink })).currentLink.status, 'released');
+});
+
+test('F2-N — entrée sans jet ou Action sans opposition est bloquée sans mutation', () => {
+  const missing = previewGrappleInitiation({ actor: participant('holder'), target: participant('held'), declared: true, eligibleBrawling: true });
+  assert.equal(missing.ready, false);
+  assert.ok(missing.unresolved.some(message => /Test opposé/.test(message)));
+
+  const noOpposition = previewGrappleAction({ actor: participant('holder'), target: participant('held'), link: link(), action: 'damage', resolutionId: 'none' });
+  assert.equal(noOpposition.ready, false);
+  assert.ok(noOpposition.unresolved.some(message => /résultat du Test de Force opposé/.test(message)));
+});
+});
+
+describe('Empoignade intégration', () => {
+const clone=structuredClone;
+const memory=()=>{let saved;return{async load(){return saved&&clone(saved);},async saveAtomic({state}){saved=clone(state);return{ok:true};}};};
+const fighter=(id,bagarre,force)=>({id,name:id,kind:'PJ',camp:id==='holder'?'pj':'npc',zone:'active',hp:20,maxHp:20,caracs:{CC:50,F:40,E:30,Ag:30},states:[],skills:[{id:bagarre,name:'Bagarre',total:50},{id:force,name:'Force',total:40}],equipment:[],armor:{head:0,body:0,arms:0,legs:0},extensions:{v5:{hasMomentum:false}}});
+const person=(store,id)=>store.listParticipants().find(row=>row.id===id);
+const input=(store,{actorId,targetId,skillId,roll,defenseRoll,declared=false,grappleAction,defenseSkillId})=>({actorId,targetId,action:{id:`act-${skillId}`,type:'attack',attr:'CC',base:50,damage:4,extensions:{fiche:{skillId}}},roll,defense:{type:'skill',attr:'CC',base:50,roll:defenseRoll,label:'Bagarre',v5:{kind:'melee',choice:'keep',context:{skillId:defenseSkillId}}},v5:{kind:'melee',choice:'keep',context:{skillId,grappleDeclared:declared||undefined,grappleAction}}});
+async function fixture(){
+ const persistence=memory(),store=createStore({storage:null,persistence});await store.ready;
+ await store.loadFromJSON({schemaVersion:3,reserve:[],combat:{round:1,currentActorId:'holder',order:['holder','held'],participants:[fighter('holder','bh','fh'),fighter('held','bt','ft')]},log:[],diceLines:[]});
+ return{store,persistence};
+}
+
+test('F2-N intégré : trois Tours engagent, blessent sans PA, puis libèrent; Undo, Redo et reload gardent le lien',async()=>{
+ const{store,persistence}=await fixture();
+ let preview=store.previewResolution(input(store,{actorId:'holder',targetId:'held',skillId:'bh',defenseSkillId:'bt',roll:25,defenseRoll:70,declared:true}));
+ assert.equal(preview.grapple.status,'grappled');
+ const appliedEntry=await store.applyResolution(preview);assert.equal(appliedEntry.status,'applied',JSON.stringify({reason:appliedEntry.reason,unresolved:preview.unresolved,grapple:preview.grapple}));
+ let held=person(store,'held'),holder=person(store,'holder');
+ assert.equal(held.states.filter(row=>row.key==='enchevetre').reduce((n,row)=>n+row.level,0),1);
+ assert.equal(held.hp,20,'prise sans Blessures ordinaires');
+ assert.equal(holder.extensions.v5.grapples[0].status,'active');
+ await store.setRoundTurn(2,'holder');
+ preview=store.previewResolution(input(store,{actorId:'holder',targetId:'held',skillId:'fh',defenseSkillId:'ft',roll:30,defenseRoll:70,grappleAction:'damage'}));
+ assert.equal(preview.grapple.status,'ready');
+ assert.equal(preview.damage,null,'les dégâts armés ne s’appliquent pas dans l’empoignade');
+ const appliedDamage=await store.applyResolution(preview);assert.equal(appliedDamage.status,'applied',JSON.stringify({reason:appliedDamage.reason,unresolved:preview.unresolved,grapple:preview.grapple}));
+ assert.equal(person(store,'held').hp,13,'BF 4 + 6 DR - BE 3, sans PA');
+ await store.setRoundTurn(3,'held');
+ preview=store.previewResolution(input(store,{actorId:'held',targetId:'holder',skillId:'ft',defenseSkillId:'fh',roll:20,defenseRoll:70,grappleAction:'escape'}));
+ assert.equal(preview.grapple.status,'ready');
+ assert.ok(preview.test.details.modifiers.some(row=>row.id==='conditions'&&row.amount===-1),'Enchevêtré applique −1 DR au Test de Force d’empoignade impliquant un mouvement');
+ const appliedEscape=await store.applyResolution(preview);assert.equal(appliedEscape.status,'applied',JSON.stringify({reason:appliedEscape.reason,unresolved:preview.unresolved,grapple:preview.grapple}));
+ assert.equal(person(store,'holder').extensions.v5.grapples[0].status,'released');
+ assert.equal(person(store,'held').states.filter(row=>row.key==='enchevetre').reduce((n,row)=>n+row.level,0),0);
+ const released=clone(person(store,'holder').extensions.v5.grapples);
+ assert.equal(await store.undo(),true);assert.equal(person(store,'holder').extensions.v5.grapples[0].status,'active');
+ assert.equal(await store.redo(),true);assert.deepEqual(person(store,'holder').extensions.v5.grapples,released);
+ const reloaded=createStore({storage:null,persistence});await reloaded.ready;
+ assert.deepEqual(person(reloaded,'holder').extensions.v5.grapples,released);
+});
+
+test('F2-N intégré : quand l’initiateur se dégage, il libère aussi le participant tenu',async()=>{
+ const{store}=await fixture(),link={id:'grapple:initiator-escape',initiatorId:'holder',targetId:'held',status:'active'};
+ await store.updateParticipant('holder',{extensions:{v5:{grapples:[link]}}});
+ await store.updateParticipant('held',{states:[{id:'held-by-link',key:'enchevetre',name:'Enchevêtré',level:2,source:{kind:'grapple',linkId:link.id}}],extensions:{v5:{grapples:[link]}}});
+ await store.setRoundTurn(2,'holder');
+ const escape=input(store,{actorId:'holder',targetId:'held',skillId:'fh',defenseSkillId:'ft',roll:20,defenseRoll:70,grappleAction:'escape'});
+ const preview=store.previewResolution(escape);assert.equal(preview.grapple.status,'ready');
+ assert.equal((await store.applyResolution(preview)).status,'applied');
+ assert.equal(person(store,'holder').extensions.v5.grapples[0].status,'released');
+ assert.equal(person(store,'held').states.filter(row=>row.source?.linkId===link.id).length,0);
+});
+
+test('F2-N intégré : le double critique d’une prise réussie reste visible',async()=>{
+ const{store}=await fixture();
+ const preview=store.previewResolution(input(store,{actorId:'holder',targetId:'held',skillId:'bh',defenseSkillId:'bt',roll:22,defenseRoll:70,declared:true}));
+ assert.equal(preview.grapple.status,'grappled');
+ assert.ok(preview.critical,'l’empoignade supprime les Blessures ordinaires, pas le Coup critique du double');
+});
+
+test('F2-N intégré : recommencer un combat sans scène purge les liens d’empoignade',async()=>{
+ const{store}=await fixture(),link={id:'grapple:restart',initiatorId:'holder',targetId:'held',status:'active'};
+ await store.updateParticipant('holder',{extensions:{v5:{grapples:[link]}}});
+ await store.updateParticipant('held',{states:[{id:'held-by-link',key:'enchevetre',name:'Enchevêtré',level:1,source:{kind:'grapple',linkId:link.id}}],extensions:{v5:{grapples:[link]}}});
+ await store.restartCombat();
+ assert.equal(person(store,'holder').extensions.v5.grapples,undefined);
+ assert.equal(person(store,'held').extensions.v5.grapples,undefined);
+ assert.deepEqual(person(store,'held').states,[]);
+});
+
+test('F2-N intégré : sous empoignade, le Tour bloque une autre Action et accepte la déclaration Force',async()=>{
+ const{store}=await fixture();const link={id:'grapple:preexisting',initiatorId:'holder',targetId:'held',status:'active'};
+ await store.loadFromJSON({schemaVersion:3,reserve:[],combat:{round:2,currentActorId:'holder',order:['holder','held'],participants:[fighter('holder','bh','fh'),fighter('held','bt','ft')]},extensions:{v5:{combatId:'f2-n-turn-gate',turnIndex:2}},log:[],diceLines:[]});
+ await store.updateParticipant('held',{states:[{id:'held-by-link',key:'enchevetre',name:'Enchevêtré',level:1,source:{kind:'grapple',linkId:link.id}}]});
+ await store.updateParticipant('holder',{extensions:{v5:{hasMomentum:false,grapples:[link]}}});
+ await store.updateParticipant('held',{extensions:{v5:{hasMomentum:false,grapples:[link]}}});
+ const unrelated=input(store,{actorId:'holder',targetId:'held',skillId:'bh',defenseSkillId:'bt',roll:40,defenseRoll:70});
+ const blocked=store.previewResolution(unrelated);
+ assert.equal(blocked.ready,false);assert.equal(blocked.code,'F2_GRAPPLE_FIRST_ACTION');
+ const force=input(store,{actorId:'holder',targetId:'held',skillId:'fh',defenseSkillId:'ft',roll:30,defenseRoll:70,grappleAction:'damage'});
+ assert.equal(store.previewResolution(force).grapple?.status,'ready');
+ const spent=await store.applyResolution(store.previewResolution(force));assert.equal(spent.status,'applied');
+ assert.ok(person(store,'held').hp<20,'le Test Force déclaré applique les Blessures d’empoignade');
+ assert.equal(await store.undo(),true);assert.equal(person(store,'held').hp,20,'Undo annule les dégâts du Test imposé');
+});
 });

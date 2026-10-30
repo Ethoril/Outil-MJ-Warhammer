@@ -457,3 +457,26 @@ Note : `tests/unit/divin/prieres-benedictions.test.js` (R2-5) n'importe plus `di
 | `tests/lot2-v5-keyword-talents.test.js` | `tests/unit/combat/qualites-darmes.test.js` | 32 | 135 |
 
 Note : les sept chaînes `evidence` de `js/core/keywords.js` (immobilisante, pistolet, piege-lame, a-enroulement, bouclier, taille, parade) pointent vers `tests/unit/combat/qualites-darmes.test.js` avec le nom exact du test cité.
+
+## R2-9 — combat B
+
+| Ancien fichier | Nouveau fichier | Tests avant | Tests après (cible) |
+|---|---|---|---|
+| `tests/f2-m-characterization.test.js` | `tests/unit/combat/empoignade-et-monture.test.js` | 2 | 40 |
+| `tests/f2-m-mounted-combat.test.js` | `tests/unit/combat/empoignade-et-monture.test.js` | 19 | 40 |
+| `tests/f2-n-characterization.test.js` | `tests/unit/combat/empoignade-et-monture.test.js` | 2 | 40 |
+| `tests/f2-n-grappling.test.js` | `tests/unit/combat/empoignade-et-monture.test.js` | 12 | 40 |
+| `tests/f2-n-grappling-integration.test.js` | `tests/unit/combat/empoignade-et-monture.test.js` | 5 | 40 |
+| `tests/e08-turn-order.test.js` | `tests/unit/combat/initiative-et-tours.test.js` | 6 | 147 |
+| `tests/f2-a-characterization.test.js` | `tests/unit/combat/initiative-et-tours.test.js` | 6 | 147 |
+| `tests/f2-a-initiative-surprise.test.js` | `tests/unit/combat/initiative-et-tours.test.js` | 36 | 147 |
+| `tests/f2-claude-t1-ter.test.js` | `tests/unit/combat/initiative-et-tours.test.js` | 2 | 147 |
+| `tests/f2-t1-bis-regressions.test.js` | `tests/unit/combat/initiative-et-tours.test.js` | 8 | 147 |
+| `tests/f2-t1-clock-consumers.test.js` | `tests/unit/combat/initiative-et-tours.test.js` | 2 | 147 |
+| `tests/f2-t2bis-critical-characterization.test.js` | `tests/unit/combat/initiative-et-tours.test.js` | 6 | 147 |
+| `tests/lot2-v5-turn.test.js` | `tests/unit/combat/initiative-et-tours.test.js` | 7 | 147 |
+| `tests/p4c-char-turns.test.js` | `tests/unit/combat/initiative-et-tours.test.js` | 69 | 147 |
+| `tests/phase-c-c02-characterization.test.js` | `tests/unit/combat/initiative-et-tours.test.js` | 1 | 147 |
+| `tests/phase-c-c02-engaged-flee.test.js` | `tests/unit/combat/initiative-et-tours.test.js` | 4 | 147 |
+
+Note : `tests/phase-c-c06-coverage.test.js` lit désormais `./unit/combat/initiative-et-tours.test.js` à la place de `phase-c-c02-engaged-flee.test.js`.

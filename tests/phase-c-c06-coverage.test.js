@@ -49,6 +49,7 @@ test('C06 — chaque lot C03 et C04 a son fichier de tests et le plan ne mention
   const known = new Set(inventory.map((e) => e.id));
   for (const id of plan.match(/C0-L\d+-\d+/g)) assert.ok(known.has(id), `${id} inconnu de l’inventaire`);
   for (const file of ['c01-fear-terror', 'c02-engaged-flee', 'c03-rally-mount', 'c04-intimidation-traits', 'c05-supplements']) {
-    assert.ok(read(`./phase-c-${file}.test.js`).length > 0, file);
+    const path = file === 'c02-engaged-flee' ? './unit/combat/initiative-et-tours.test.js' : `./phase-c-${file}.test.js`;
+    assert.ok(read(path).length > 0, file);
   }
 });
