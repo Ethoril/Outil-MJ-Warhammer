@@ -3449,6 +3449,9 @@
                 "success": true,
                 "sl": 4,
                 "zeroOutcome": null,
+                "resultTier": {
+                  "label": "Réussite impressionnante"
+                },
                 "critical": false,
                 "fumble": false,
                 "details": {
@@ -3480,6 +3483,9 @@
                 "success": false,
                 "sl": -3,
                 "zeroOutcome": null,
+                "resultTier": {
+                  "label": "Échec impressionnant"
+                },
                 "critical": false,
                 "fumble": false,
                 "details": {
@@ -5699,6 +5705,9 @@
                 "success": true,
                 "sl": 4,
                 "zeroOutcome": null,
+                "resultTier": {
+                  "label": "Réussite impressionnante"
+                },
                 "critical": false,
                 "fumble": false,
                 "details": {
@@ -5730,6 +5739,9 @@
                 "success": false,
                 "sl": -3,
                 "zeroOutcome": null,
+                "resultTier": {
+                  "label": "Échec impressionnant"
+                },
                 "critical": false,
                 "fumble": false,
                 "details": {

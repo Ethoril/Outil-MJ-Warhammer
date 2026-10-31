@@ -10,10 +10,10 @@
     "registeredTalentClauses": 53,
     "contextClauses": 1,
     "spellStatusCounts": {
-      "conforme": 147,
+      "conforme": 145,
       "anomalie": 0,
       "donnée MJ nécessaire": 49,
-      "rappel": 81,
+      "rappel": 83,
       "hors périmètre": 0,
       "non vérifié": 0
     },
@@ -27,10 +27,10 @@
     },
     "byFamily": {
       "Domaine V5": {
-        "conforme": 45,
+        "conforme": 44,
         "anomalie": 0,
         "donnée MJ nécessaire": 9,
-        "rappel": 14,
+        "rappel": 15,
         "hors périmètre": 0,
         "non vérifié": 0
       },
@@ -67,10 +67,10 @@
         "non vérifié": 0
       },
       "mineurs elfiques": {
-        "conforme": 1,
+        "conforme": 0,
         "anomalie": 0,
         "donnée MJ nécessaire": 0,
-        "rappel": 5,
+        "rappel": 6,
         "hors périmètre": 0,
         "non vérifié": 0
       },
@@ -93,7 +93,7 @@
     },
     "byMatrixTreatment": {
       "calculable": {
-        "conforme": 147,
+        "conforme": 145,
         "anomalie": 0,
         "donnée MJ nécessaire": 0,
         "rappel": 0,
@@ -112,7 +112,7 @@
         "conforme": 0,
         "anomalie": 0,
         "donnée MJ nécessaire": 0,
-        "rappel": 81,
+        "rappel": 83,
         "hors périmètre": 0,
         "non vérifié": 0
       }
@@ -201,18 +201,18 @@
     "retoursLot1": {
       "identities": 68,
       "statuses": {
-        "conforme": 45,
-        "donnée MJ nécessaire": 9,
-        "rappel": 14
+        "conforme": 44,
+        "rappel": 15,
+        "donnée MJ nécessaire": 9
       },
       "tests": 10
     },
     "lot3": {
       "identities": 30,
       "statuses": {
-        "conforme": 19,
+        "conforme": 18,
         "donnée MJ nécessaire": 3,
-        "rappel": 8
+        "rappel": 9
       },
       "tests": 86,
       "sourcePages": [
@@ -227,10 +227,10 @@
       "timedIdentities": 20
     },
     "spells": {
-      "conforme": 147,
+      "conforme": 145,
       "anomalie": 0,
       "donnée MJ nécessaire": 49,
-      "rappel": 81,
+      "rappel": 83,
       "hors périmètre": 0,
       "non vérifié": 0
     },
@@ -2817,7 +2817,7 @@
             },
             "states": [],
             "traits": [
-              "Peur (1)"
+              "Peur (2)"
             ]
           },
           {
@@ -2853,8 +2853,7 @@
           "special"
         ],
         "specificOvercasts": [
-          "fear",
-          "war-leader"
+          "fear"
         ],
         "factsRequired": []
       },
@@ -3783,8 +3782,8 @@
       "domain": "Feu",
       "source": "V5 p. 248",
       "sourceRead": true,
-      "matrixTreatment": "calculable",
-      "status": "conforme",
+      "matrixTreatment": "rappel",
+      "status": "rappel",
       "references": [
         "V-41",
         "V-54"
@@ -4113,7 +4112,7 @@
       "references": [
         "V-30"
       ],
-      "clauses": "Corrigé le 12/10/2026 : NI 8, portée (Force Mentale) mètres, cible 1 épée (arme de base), durée (Bonus de Force Mentale) Rounds. DR final avant surpuissance. Clauses assistées : Désignations/faits explicitement saisis ; absence ou incompatibilité bloque le calcul.",
+      "clauses": "Corrigé le 12/10/2026 : NI 8, portée (Force Mentale) mètres, cible 1 épée, durée (Bonus de Force Mentale) Rounds. DR final avant surpuissance. Clauses assistées : Désignations/faits explicitement saisis ; absence ou incompatibilité bloque le calcul.",
       "proof": "V5 p. 248 relue ; tests/unit/magie/contrats-domaines.test.js ; aperçu/application Store, persistance et Undo. Reçu reproductible : LOT3_PREUVES_CONTRATS_LOT1.json#spell-audit-1e4f079ac6045233dc67.",
       "notVerified": "Hors automatisation : Désignations/faits explicitement saisis ; absence ou incompatibilité bloque le calcul. Les scénarios ne certifient pas toutes les situations d’une session ; aucune écriture de fiche permanente.",
       "observed": {
@@ -4431,7 +4430,7 @@
         "contract": {
           "cn": 8,
           "range": "(Force Mentale) mètres",
-          "target": "1 épée (arme de base)",
+          "target": "1 épée",
           "duration": "(Bonus de Force Mentale) Rounds"
         }
       }
@@ -48391,8 +48390,8 @@
       "domain": "elven-petty",
       "source": "HEPG p. 80",
       "sourceRead": true,
-      "matrixTreatment": "calculable",
-      "status": "conforme",
+      "matrixTreatment": "rappel",
+      "status": "rappel",
       "references": [
         "W-09"
       ],
@@ -50002,7 +50001,7 @@
               },
               {
                 "kind": "scythe",
-                "summary": "La Faux de Shyish : hallebarde Magique (BF + BFM + 4) invoquée. Les Morts-vivants engagés contre le porteur sont privés d’Avantage V5 (Élan conservé)."
+                "summary": "La Faux de Shyish : hallebarde Magique (BF + BFM + 4) invoquée. Les Morts-vivants engagés avec le porteur ne gagnent pas d’Élan."
               }
             ]
           }
@@ -51650,6 +51649,9 @@
                 "success": true,
                 "sl": 4,
                 "zeroOutcome": null,
+                "resultTier": {
+                  "label": "Réussite impressionnante"
+                },
                 "critical": false,
                 "fumble": false,
                 "details": {
@@ -51681,6 +51683,9 @@
                 "success": false,
                 "sl": -3,
                 "zeroOutcome": null,
+                "resultTier": {
+                  "label": "Échec impressionnant"
+                },
                 "critical": false,
                 "fumble": false,
                 "details": {
@@ -58693,7 +58698,7 @@
       "matrixTreatment": "calculable",
       "status": "conforme",
       "references": [],
-      "clauses": "Corrigé le 12/10/2026 : NI 3, portée Vous, cible Vous, durée (Bonus de Force Mentale) Rounds. DR final avant surpuissance. Clauses assistées : Tests étendus de Psychologie des témoins : procédure Peur p. 183, personnes exposées désignées par le MJ.",
+      "clauses": "Corrigé le 12/10/2026 : NI 2, portée Vous, cible Vous, durée (Bonus de Force Mentale) Rounds. DR final avant surpuissance. Clauses assistées : Tests étendus de Psychologie des témoins : procédure Peur p. 183, personnes exposées désignées par le MJ.",
       "proof": "V5 p. 244 relue ; tests/unit/magie/contrats-domaines.test.js ; aperçu/application Store, persistance et Undo. Reçu reproductible : LOT3_PREUVES_CONTRATS_LOT2.json#spell-audit-f4793a46d544b047664e.",
       "notVerified": "Hors automatisation : Tests étendus de Psychologie des témoins : procédure Peur p. 183, personnes exposées désignées par le MJ. Les scénarios ne certifient pas toutes les situations d’une session ; aucune écriture de fiche permanente.",
       "observed": {
@@ -58994,7 +58999,7 @@
           "Tests étendus de Psychologie des témoins : procédure Peur p. 183, personnes exposées désignées par le MJ."
         ],
         "contract": {
-          "cn": 3,
+          "cn": 2,
           "range": "Vous",
           "target": "Vous",
           "duration": "(Bonus de Force Mentale) Rounds"
@@ -60296,9 +60301,9 @@
       "references": [
         "V-18"
       ],
-      "clauses": "Corrigé le 12/10/2026 : NI 6, portée Spécial, cible Spécial, durée Instantané. DR final avant surpuissance. Clauses assistées : Cible principale à 20+BFM mètres, voisins dans BI ; distances et visibilité déclarées par le MJ. Acide : armes/armures endommagées de 1, reçu à reporter sur la fiche. Froid : frappe en dernier et défense adverse +1 tant qu’Exténué demeure. Fumée : zone opaque et suffocation BFM Rounds. Froid : +1 DR à la défense adverse calculé ; frappe en dernier dans l’ordre automatique du prochain Round. Ordre manuel, séquence de gestes hors Tours, géométrie aérienne/fumée : MJ.",
+      "clauses": "Corrigé le 12/10/2026 : NI 6, portée Spécial, cible Spécial, durée Instantané. DR final avant surpuissance. Clauses assistées : Cible principale à 20+BFM mètres, voisins dans BFM mètres ; distances et visibilité déclarées par le MJ. Acide : armes/armures endommagées de 1, reçu à reporter sur la fiche. Froid : frappe en dernier et défense adverse +1 tant qu’Exténué demeure. Fumée : zone opaque et suffocation BFM Rounds. Froid : +1 DR à la défense adverse calculé ; frappe en dernier dans l’ordre automatique du prochain Round. Ordre manuel, séquence de gestes hors Tours, géométrie aérienne/fumée : MJ.",
       "proof": "V5 p. 243 relue ; tests/unit/magie/contrats-domaines.test.js ; aperçu/application Store, persistance et Undo. Reçu reproductible : LOT3_PREUVES_CONTRATS_LOT2.json#spell-audit-aab091ac8e2ef3e58f83.",
-      "notVerified": "Hors automatisation : Cible principale à 20+BFM mètres, voisins dans BI ; distances et visibilité déclarées par le MJ. Acide : armes/armures endommagées de 1, reçu à reporter sur la fiche. Froid : frappe en dernier et défense adverse +1 tant qu’Exténué demeure. Fumée : zone opaque et suffocation BFM Rounds. Froid : +1 DR à la défense adverse calculé ; frappe en dernier dans l’ordre automatique du prochain Round. Ordre manuel, séquence de gestes hors Tours, géométrie aérienne/fumée : MJ. Les scénarios ne certifient pas toutes les situations d’une session ; aucune écriture de fiche permanente.",
+      "notVerified": "Hors automatisation : Cible principale à 20+BFM mètres, voisins dans BFM mètres ; distances et visibilité déclarées par le MJ. Acide : armes/armures endommagées de 1, reçu à reporter sur la fiche. Froid : frappe en dernier et défense adverse +1 tant qu’Exténué demeure. Fumée : zone opaque et suffocation BFM Rounds. Froid : +1 DR à la défense adverse calculé ; frappe en dernier dans l’ordre automatique du prochain Round. Ordre manuel, séquence de gestes hors Tours, géométrie aérienne/fumée : MJ. Les scénarios ne certifient pas toutes les situations d’une session ; aucune écriture de fiche permanente.",
       "observed": {
         "ready": true,
         "targets": [
@@ -60313,7 +60318,7 @@
               },
               {
                 "kind": "mj-input",
-                "summary": "Cible principale à 20+BFM mètres, voisins dans BI ; distances et visibilité déclarées par le MJ. Acide : armes/armures endommagées de 1, reçu à reporter sur la fiche. Froid : frappe en dernier et défense adverse +1 tant qu’Exténué demeure. Fumée : zone opaque et suffocation BFM Rounds."
+                "summary": "Cible principale à 20+BFM mètres, voisins dans BFM mètres ; distances et visibilité déclarées par le MJ. Acide : armes/armures endommagées de 1, reçu à reporter sur la fiche. Froid : frappe en dernier et défense adverse +1 tant qu’Exténué demeure. Fumée : zone opaque et suffocation BFM Rounds."
               },
               {
                 "kind": "effects",
@@ -60622,7 +60627,7 @@
         "date": "2026-10-12",
         "testFile": "tests/unit/magie/contrats-domaines.test.js",
         "assistedReasons": [
-          "Cible principale à 20+BFM mètres, voisins dans BI ; distances et visibilité déclarées par le MJ. Acide : armes/armures endommagées de 1, reçu à reporter sur la fiche. Froid : frappe en dernier et défense adverse +1 tant qu’Exténué demeure. Fumée : zone opaque et suffocation BFM Rounds.",
+          "Cible principale à 20+BFM mètres, voisins dans BFM mètres ; distances et visibilité déclarées par le MJ. Acide : armes/armures endommagées de 1, reçu à reporter sur la fiche. Froid : frappe en dernier et défense adverse +1 tant qu’Exténué demeure. Fumée : zone opaque et suffocation BFM Rounds.",
           "Froid : +1 DR à la défense adverse calculé ; frappe en dernier dans l’ordre automatique du prochain Round. Ordre manuel, séquence de gestes hors Tours, géométrie aérienne/fumée : MJ."
         ],
         "contract": {
@@ -77923,6 +77928,9 @@
                 "success": true,
                 "sl": 4,
                 "zeroOutcome": null,
+                "resultTier": {
+                  "label": "Réussite impressionnante"
+                },
                 "critical": false,
                 "fumble": false,
                 "details": {
@@ -77954,6 +77962,9 @@
                 "success": false,
                 "sl": -3,
                 "zeroOutcome": null,
+                "resultTier": {
+                  "label": "Échec impressionnant"
+                },
                 "critical": false,
                 "fumble": false,
                 "details": {
@@ -80323,9 +80334,9 @@
       "publicCsvSha256": "485e842dc14244c8cec6e48460042f490823f99c8c654d6df311924e9f936611"
     },
     "matrix": {
-      "calculated": 147,
+      "calculated": 145,
       "mj": 49,
-      "reminder": 81
+      "reminder": 83
     },
     "scope": "26 points et décisions de règle ; cas nommés testés, aucune certification de tous les scénarios de campagne."
   },

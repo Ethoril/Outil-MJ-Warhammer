@@ -8,5 +8,5 @@ const hashes=()=>Object.fromEntries(files.map(p=>[p,createHash('sha256').update(
 fs.mkdirSync('tmp/lot3',{recursive:true});const runs=[];
 for(let pass=1;pass<=2;pass++){for(const file of commands){console.log('GENERATION '+pass+' '+file);const out=execFileSync(process.execPath,[file],{encoding:'utf8',maxBuffer:20*1024*1024,timeout:180000});fs.writeFileSync('tmp/lot3/cloture-generation-'+pass+'-'+file.split('/').at(-1)+'.log',out);}runs.push(hashes());}
 assert.deepEqual(runs[1],runs[0],'Deux générations doivent être identiques octet à octet');
-assert.equal(JSON.parse(fs.readFileSync('js/data/v5-spell-contracts.json')).length,277);
-fs.writeFileSync('tmp/lot3/cloture-generation-receipt.json',JSON.stringify({passed:true,passes:2,commands,files:runs[1],contracts:277},null,2)+'\n');console.log('Deux générations identiques : '+files.length+' fichiers, 277 contrats.');
+assert.equal(JSON.parse(fs.readFileSync('js/data/v5-spell-contracts.json')).length,400);
+fs.writeFileSync('tmp/lot3/cloture-generation-receipt.json',JSON.stringify({passed:true,passes:2,commands,files:runs[1],contracts:400},null,2)+'\n');console.log('Deux générations identiques : '+files.length+' fichiers, 400 contrats.');

@@ -292,7 +292,7 @@
           },
           "states": [],
           "traits": [
-            "Peur (1)"
+            "Peur (2)"
           ]
         },
         {
@@ -317,7 +317,7 @@
         }
       ],
       "assisted": [],
-      "reminders": "- Vous canalisez Aqshy pour invoquer une couronne de flammes inspirante autour de votre tête.\n- Vous gagnez le Trait Peur (1).\n- Vous obtenez aussi le Talent Meneur de Guerre.\n- Avec +2 DR, vous pouvez soit augmenter votre Peur de +1, soit reprendre Meneur de Guerre.\n- Tant que le sort est actif, vous bénéficiez d’un +1 DR aux Tests de Focalisation et d’Incantation avec Aqshy.",
+      "reminders": "- Vous canalisez Aqshy pour invoquer une couronne de flammes inspirante autour de votre tête.\n- Vous gagnez le Trait Peur (2).\n- Vous obtenez aussi le Talent Meneur de Guerre.\n- Avec +2 DR, vous pouvez augmenter votre Peur de +1.\n- Tant que le sort est actif, vous bénéficiez d’un +1 DR aux Tests de Focalisation et d’Incantation avec Aqshy.",
       "status": "conforme"
     },
     {
@@ -462,7 +462,7 @@
         "Chaque allié peut entreprendre son Test de Frénésie ; choix du joueur/MJ, pas un état automatique."
       ],
       "reminders": "Votre voix résonne d’Aqshy. Les alliés dans la zone perdent tous leurs États Brisé et Exténué et peuvent tenter un Test de Frénésie. Chaque allié peut entreprendre son Test de Frénésie ; choix du joueur/MJ, pas un état automatique.",
-      "status": "conforme"
+      "status": "rappel"
     },
     {
       "id": "spell-audit-1e4f079ac6045233dc67",
@@ -529,7 +529,7 @@
         }
       ],
       "assisted": [],
-      "reminders": "Vous enveloppez une épée de type arme de base dans les flammes. Elle inflige BF + 6 Dégâts et gagne Dévastatrice et Magique. Chaque touche inflige 1 Enflammé. Un porteur sans Magie des Arcanes (Feu) gagne lui-même 1 Enflammé s’il commet une Maladresse avec l’épée.",
+      "reminders": "Vous enveloppez une épée dans les flammes. Elle inflige BF + 6 Dégâts et gagne Dévastatrice et Magique. Chaque touche inflige 1 Enflammé. Un porteur sans Magie des Arcanes (Feu) gagne lui-même 1 Enflammé s’il commet une Maladresse avec l’épée.",
       "status": "donnée MJ nécessaire"
     },
     {
@@ -3988,7 +3988,7 @@
             },
             {
               "kind": "scythe",
-              "summary": "La Faux de Shyish : hallebarde Magique (BF + BFM + 4) invoquée. Les Morts-vivants engagés contre le porteur sont privés d’Avantage V5 (Élan conservé)."
+              "summary": "La Faux de Shyish : hallebarde Magique (BF + BFM + 4) invoquée. Les Morts-vivants engagés avec le porteur ne gagnent pas d’Élan."
             }
           ]
         }
@@ -4037,7 +4037,7 @@
         }
       ],
       "assisted": [],
-      "reminders": "Vous invoquez une hallebarde Magique infligeant BF + Bonus de Force Mentale + 4 Dégâts. Selon l’arbitrage V5 du MJ, les Morts-vivants engagés avec vous ne bénéficient pas d’Avantage aux Tests contre vous ; leur Élan reste disponible.",
+      "reminders": "Vous invoquez une hallebarde Magique infligeant BF + Bonus de Force Mentale + 4 Dégâts. Les Morts-vivants engagés avec vous ne gagnent pas d’Élan.",
       "status": "conforme"
     },
     {
@@ -5306,10 +5306,10 @@
     }
   ],
   "statuses": {
-    "conforme": 45,
+    "conforme": 44,
     "anomalie": 0,
     "donnée MJ nécessaire": 9,
-    "rappel": 14,
+    "rappel": 15,
     "hors périmètre": 0,
     "non vérifié": 0
   }

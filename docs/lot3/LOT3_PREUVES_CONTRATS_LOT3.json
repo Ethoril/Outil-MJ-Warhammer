@@ -2042,7 +2042,7 @@
       ],
       "assisted": [],
       "reminders": "Votre toucher apaise l’esprit du sujet : \n - Supprime les effets de Préjugé, Animosité, Peur et Frénésie. \n - Un Test de Sociabilité (+0) est requis pour que le sort fonctionne.",
-      "status": "conforme"
+      "status": "rappel"
     },
     {
       "id": "spell-audit-dbb6a347c2fadbee05a1",
@@ -2361,10 +2361,10 @@
     }
   ],
   "statuses": {
-    "conforme": 19,
+    "conforme": 18,
     "anomalie": 0,
     "donnée MJ nécessaire": 3,
-    "rappel": 8,
+    "rappel": 9,
     "hors périmètre": 0,
     "non vérifié": 0
   }

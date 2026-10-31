@@ -391,7 +391,7 @@
             },
             {
               "kind": "mj-input",
-              "summary": "Cible principale à 20+BFM mètres, voisins dans BI ; distances et visibilité déclarées par le MJ. Acide : armes/armures endommagées de 1, reçu à reporter sur la fiche. Froid : frappe en dernier et défense adverse +1 tant qu’Exténué demeure. Fumée : zone opaque et suffocation BFM Rounds."
+              "summary": "Cible principale à 20+BFM mètres, voisins dans BFM mètres ; distances et visibilité déclarées par le MJ. Acide : armes/armures endommagées de 1, reçu à reporter sur la fiche. Froid : frappe en dernier et défense adverse +1 tant qu’Exténué demeure. Fumée : zone opaque et suffocation BFM Rounds."
             },
             {
               "kind": "effects",
@@ -459,9 +459,9 @@
         }
       ],
       "assisted": [
-        "Cible principale à 20+BFM mètres, voisins dans BI ; distances et visibilité déclarées par le MJ. Acide : armes/armures endommagées de 1, reçu à reporter sur la fiche. Froid : frappe en dernier et défense adverse +1 tant qu’Exténué demeure. Fumée : zone opaque et suffocation BFM Rounds."
+        "Cible principale à 20+BFM mètres, voisins dans BFM mètres ; distances et visibilité déclarées par le MJ. Acide : armes/armures endommagées de 1, reçu à reporter sur la fiche. Froid : frappe en dernier et défense adverse +1 tant qu’Exténué demeure. Fumée : zone opaque et suffocation BFM Rounds."
       ],
-      "reminders": "Choisissez une cible à 20 + Bonus de Force Mentale mètres et effectuez CT (+0 DR), opposé à l’Esquive de la cible et des voisins dans Bonus d’Initiative mètres. Ceux qui ne battent pas votre résultat sont touchés. Base Bonus de Force Mentale Dégâts : Métal +4 et dommages aux objets ; Bêtes/Lumière +2 et Exténué, frappe en dernier et adversaires +1 DR en défense jusqu’au retrait de cet Exténué ; Cieux +2, ignore les PA métalliques et Sonné ; Feu +5 et Enflammé ; Mort/Vie +2 et Empoisonné ; Ombres, pas de Dégâts mais fumée et suffocation pendant Bonus de Force Mentale Rounds. Cible principale à 20+BFM mètres, voisins dans BI ; distances et visibilité déclarées par le MJ. Acide : armes/armures endommagées de 1, reçu à reporter sur la fiche. Froid : frappe en dernier et défense adverse +1 tant qu’Exténué demeure. Fumée : zone opaque et suffocation BFM Rounds.",
+      "reminders": "Choisissez une cible à 20 + Bonus de Force Mentale mètres et effectuez CT (+0 DR), opposé à l’Esquive de la cible et des voisins dans Bonus de Force Mentale mètres. Ceux qui ne battent pas votre résultat sont touchés. Base Bonus de Force Mentale Dégâts : Métal +4 et dommages aux objets ; Bêtes/Lumière +2 et Exténué, frappe en dernier et adversaires +1 DR en défense jusqu’au retrait de cet Exténué ; Cieux +2, ignore les PA métalliques et Sonné ; Feu +5 et Enflammé ; Mort/Vie +2 et Empoisonné ; Ombres, pas de Dégâts mais fumée et suffocation pendant Bonus de Force Mentale Rounds. Le lanceur est immunisé à son propre Souffle. Cible principale à 20+BFM mètres, voisins dans BFM mètres ; distances et visibilité déclarées par le MJ. Acide : armes/armures endommagées de 1, reçu à reporter sur la fiche. Froid : frappe en dernier et défense adverse +1 tant qu’Exténué demeure. Fumée : zone opaque et suffocation BFM Rounds.",
       "status": "donnée MJ nécessaire"
     },
     {
@@ -1157,7 +1157,7 @@
       "assisted": [
         "Tests étendus de Psychologie des témoins : procédure Peur p. 183, personnes exposées désignées par le MJ."
       ],
-      "reminders": "En vous recouvrant de magie, vous devenez effrayant et intimidant. Gagnez Peur 1. Pour chaque +3 DR, vous pouvez augmenter votre valeur de Peur de 1. Tests étendus de Psychologie des témoins : procédure Peur p. 183, personnes exposées désignées par le MJ.",
+      "reminders": "En vous recouvrant de magie, vous devenez effrayant et intimidant. Gagnez Peur (1). Pour chaque +3 DR, vous pouvez augmenter votre valeur de Peur de 1. Tests étendus de Psychologie des témoins : procédure Peur p. 183, personnes exposées désignées par le MJ.",
       "status": "conforme"
     },
     {
@@ -2455,7 +2455,7 @@
         }
       ],
       "assisted": [],
-      "reminders": "Vous créez une brève rafale de vent, mais suffisamment forte pour éteindre une bougie, faire claquer une porte ouverte ou balayer quelques pages sur le sol.",
+      "reminders": "Vous créez une brève rafale de vent, mais suffisamment forte pour éteindre une bougie, faire claquer une porte ouverte ou donner à une silhouette en cape une allure impressionnante.",
       "status": "rappel"
     },
     {

@@ -40,9 +40,9 @@ Remplacement final des descriptions par V5 déjà décidé, hors cette livraison
 
 | Matrice des 277 | Après 5A historique | Catalogue et retours du 14 octobre |
 | --- | ---: | ---: |
-| Calculables | 143 | 147 |
+| Calculables | 143 | 145 |
 | Données MJ | 57 | 49 |
-| Rappels | 77 | 81 |
+| Rappels | 77 | 83 |
 | Restant à réaliser | 0 | 0 |
 
 Options propres : **44 calculées / 50 assistées**. Les variations réconcilient branches mesurables, faits utiles et anciens effets inventés ; aucune identité supprimée. Union des preuves des lots 1–5B : **277 uniques**, vérifiée par identifiant, dont 58 de ce lot et un recouvrement avec le lot 4.
