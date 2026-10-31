@@ -54,11 +54,13 @@ try {
   await page.getByRole('tab', { name: 'Jouer' }).click();
   const bench = page.locator('.workspace-bench');
   check(await bench.count() === 1, 'la rubrique « En attente » est affichée');
-  check(await bench.locator('.actor-reminder').count() === 1, 'le rappel du participant au banc est affiché');
-  check(/Armure imprimée/.test(await bench.locator('.actor-reminder').first().innerText()), 'le texte est celui du rappel d’armure');
-  await bench.locator('.btn-reminder[data-decision="resolve"]').click();
+  // Les rappels de Traits (Régénération, Increvable, Infecté : T3/T8, 23/10) s'ajoutent à celui de l'armure : on cible l'armure.
+  const armour = bench.locator('.actor-reminder', { hasText: 'Armure imprimée' });
+  check(await armour.count() === 1, 'le rappel d’armure du participant au banc est affiché');
+  check(/Armure imprimée/.test(await armour.first().innerText()), 'le texte est celui du rappel d’armure');
+  await armour.locator('.btn-reminder[data-decision="resolve"]').click();
   await page.waitForTimeout(100);
-  check(await page.locator('.workspace-bench .actor-reminder').count() === 0, '« Fait » retire le rappel');
+  check(await page.locator('.workspace-bench .actor-reminder', { hasText: 'Armure imprimée' }).count() === 0, '« Fait » retire le rappel d’armure');
   check(pageErrors.length === 0, 'aucune erreur de page (' + (pageErrors[0] || 'rien') + ')');
   await context.close();
 } finally {
