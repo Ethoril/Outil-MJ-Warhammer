@@ -2062,7 +2062,7 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
     check.checked=current.freeAttackTalent==='grim';
     check.setAttribute('aria-label','Attaque gratuite de Grim : sans perdre l’Élan');
     check.addEventListener('change',()=>handlers.select({extraAttack:check.checked,v5Context:{...current,freeAttackTalent:check.checked?'grim':undefined}}));
-    label.append(check,'Attaque gratuite de Grim : sans perdre l’Élan (il faut en avoir ; une seule par Tour, limite posée par l’outil, le livre p.358 n’en pose pas)');
+    label.append(check,'Attaque gratuite de Grim : sans perdre l’Élan (il faut en avoir ; sans limite par Tour)');
     v5.append(label);
   }
   const penalties=node('details','workspace-v5-context-details');

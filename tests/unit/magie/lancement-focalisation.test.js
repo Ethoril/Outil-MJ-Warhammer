@@ -1807,6 +1807,22 @@ test('v3 Trait Grim (p.358) : l’attaque gratuite ne fait pas perdre l’Élan 
   assert.throws(() => notRetained.store.previewResolution(notRetained.input), /Grim/);
 });
 
+test('v3 Trait Grim (p.358) : aucune limite par Tour, plusieurs attaques gratuites tant que la créature a de l’Élan (MJ 31/10)', async () => {
+  const { createStore } = await import('../../../js/core/store.js');
+  const person = (id, extra = {}) => ({ id, name: id, kind: id === 'a' ? 'PJ' : 'PNJ', camp: id === 'a' ? 'pj' : 'ennemi', zone: 'active', hp: 400, maxHp: 400, init: 40,
+    caracs: { CC: 60, CT: 40, F: 40, E: 40, Ag: 40, I: 40, Int: 40, FM: 40, Dex: 40, Soc: 40, M: 4 }, skills: [], talents: [], states: [], equipment: [], extensions: { v5: { hasMomentum: true } }, ...extra });
+  const store = createStore({ storage: null }); await store.ready;
+  await store.loadFromJSON({ schemaVersion: 3, reserve: [], log: [], diceLines: [], extensions: { v5: { combatId: 'v3c-grim-n', turnIndex: 1 } },
+    combat: { round: 1, currentActorId: 'a', order: ['a', 'b'], participants: [person('a', { traits: ['Grim'] }), person('b')] } });
+  const input = id => ({ resolutionId: id, actorId: 'a', targetId: 'b', roll: 25, action: { type: 'attack', attr: 'CC', base: 60, damage: 5 },
+    defense: { base: 35, roll: 80, v5: { kind: 'melee', choice: 'keep' } }, v5: { kind: 'melee', choice: 'keep', extraAttack: true, context: { freeAttackTalent: 'grim' } } });
+  for (const id of ['grim-1', 'grim-2', 'grim-3']) {
+    const preview = store.previewResolution(input(id));
+    assert.equal(preview.actionCosts.ready, true, id);
+    assert.equal((await store.applyResolution(preview)).status, 'applied', id);
+  }
+});
+
 test('v3 Morsure (p.356) : BF+3 sans valeur imprimée, valeur imprimée gardée (Trait avec valeur, profil V5, attaque déduite du nom)', async () => {
   const { planNaturalAttack } = await import('../../../js/core/creature-combat.js');
   const beast = (traits, extra = {}) => ({ id: 'b', name: 'Bête', caracs: { F: 50, E: 40 }, traits, extensions: { v5: {} }, ...extra });
