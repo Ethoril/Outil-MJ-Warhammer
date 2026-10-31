@@ -11,7 +11,7 @@ const RULES = {
   nightVision: { fr: 'Vision nocturne', names: ['night vision', 'vision nocturne'], note: 'Vision naturelle à vingt mètres ; la lumière utile est prolongée d\'autant.' },
   stealthy: { fr: 'Furtif', names: ['stealthy', 'furtif'], note: 'Discrétion rurale à Agilité+10, ajustable par le MJ ; pas le bonus de DR de la V4.' },
   tracker: { fr: 'Pisteur', names: ['tracker', 'pisteur'], note: 'Compétence Pistage à Intelligence+10, augmentable par le MJ.' },
-  distracting: { fr: 'Perturbant', names: ['distracting', 'perturbant'], note: 'Les ennemis vivants à BE mètres subissent −2 DR généraux, une seule fois quelle que soit la multiplicité des sources (les alliés ne sont pas touchés).' },
+  distracting: { fr: 'Perturbant', names: ['distracting', 'perturbant'], note: 'Les ennemis vivants (tout participant vivant hors du camp du Perturbant, neutres compris) à BE mètres subissent −2 DR généraux, une seule fois quelle que soit la multiplicité des sources (les participants de son camp ne sont pas touchés).' },
   chameleon: { fr: 'Caméléon', names: ['chameleon', 'cameleon'], note: 'Perception −4 DR pour le voir (−2 s\'il bouge) ; tirs contre lui −2 DR.' },
   vibrational: { fr: 'Sens vibratoires', names: ['vibrational senses', 'sens vibratoires'], note: 'Détecte les corps physiques dans quatre BI mètres et ne peut pas être Surpris.' }
 };
@@ -120,10 +120,10 @@ export function senseTestRules({ actor, opponent, participants = [], skillLabel 
     if (/perception/.test(label) && typeof context.targetMoving === 'boolean') modifiers.push({ id: 'sense:chameleon-sight', label: `Voir un Caméléon ${context.targetMoving ? 'qui bouge' : 'immobile'}`, amount: context.targetMoving ? -2 : -4 });
   }
   // Perturbant (V5 v3 p.358) : seuls les ennemis vivants le subissent (ni alliés, ni Mort-vivant, Démoniaque, Éthéré ou Artificiel), en attaque comme en défense.
-  // Camp absent : supposé ennemi (rappel dans le libellé) ; un participant « neutre » n'est l'ennemi de personne (le camp « neutre » est aussi celui des créatures de bestiaire non encore placées : leur Perturbant touche les autres camps).
+  // Camp absent : supposé ennemi (rappel dans le libellé) ; tout participant hors du camp du Perturbant est touché, « neutre » compris (MJ 31/10) ; un Perturbant neutre touche donc tous les non-neutres, pas les neutres (son propre camp).
   const campOf = person => String(person?.camp ?? person?.side ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
   const unknownCamp = person => !campOf(person) || !campOf(actor);
-  const enemyOf = person => unknownCamp(person) || (campOf(person) !== campOf(actor) && !['neutre', 'neutral'].includes(campOf(actor)));
+  const enemyOf = person => unknownCamp(person) || campOf(person) !== campOf(actor);
   const sources = (participants || []).filter(person => person?.id !== actor?.id && has(person, 'distracting') && enemyOf(person));
   if (context.distractingInRange === true && isLiving(actor) && sources.length) {
     modifiers.push({ id: 'sense:distracting', label: sources.every(unknownCamp) ? 'Perturbant à portée (une seule fois ; camp inconnu, supposé ennemi)' : 'Perturbant à portée (une seule fois)', amount: -2 });

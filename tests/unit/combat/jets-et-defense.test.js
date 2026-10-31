@@ -2129,7 +2129,11 @@ test('v3-B perturbant — seuls les ennemis vivants subissent −2 DR (p.358)', 
   assert.equal(rules(ally).length, 0, 'un allié du Perturbant n’est pas touché');
   assert.match(planSense(owner, 'distracting').reminders.join(' '), /ennemis vivants/);
   const neutral = subject('n', { camp: 'neutre' });
-  assert.equal(rules(neutral).length, 0, 'un camp neutre n’est pas un ennemi');
+  assert.equal(rules(neutral).some(row => row.id === 'sense:distracting' && row.amount === -2), true, 'un participant neutre est touché par un Perturbant d’un autre camp (MJ 31/10)');
+  const neutralOwner = subject('nm', { camp: 'neutre', traits: ['Distracting'] });
+  const neutralRules = actor => senseTestRules({ actor, opponent: neutralOwner, participants: [neutralOwner, hero, neutral], context: { distractingInRange: true } }).modifiers;
+  assert.equal(neutralRules(hero).some(row => row.id === 'sense:distracting'), true, 'un Perturbant neutre touche les non-neutres');
+  assert.equal(neutralRules(neutral).length, 0, 'un Perturbant neutre ne touche pas les neutres (son camp)');
   const campless = subject('c', { camp: undefined });
   assert.match(rules(campless).find(row => row.id === 'sense:distracting')?.label || '', /camp inconnu/, 'camp absent : ennemi supposé, avec rappel');
 });
