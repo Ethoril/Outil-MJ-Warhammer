@@ -1,6 +1,6 @@
-# Outil MJ — Warhammer (v3.28.0)
+# Outil MJ — Warhammer (v3.29.0)
 
-Application web progressive (PWA) d’assistance au Maître de Jeu pour **Warhammer**, avec combat **V5** et fiches importées. Version 3.28.0 : la v3 du livre de base V5 (27/10/2026) devient la référence, selon les choix du MJ : arcs à dégâts fixes, portées des arbalètes, explosions, tir double À répétition, Surpris à +2 DR au tir, tir sur un adversaire engagé, la Peur retire l'Élan, Riposte une fois par Round, Taille (Énorme +2×BF, Monstrueuse +3×BF), talents Présence imposante, Exaltant, Sprinter, Flair pour les ennuis, Diction instinctive et Harmonie aethyrique, Faux de Shyish, attribut des Bêtes, Souffle, pause de Focalisation, prières de Masque mortuaire, Givre d'Ulric, Grâce de Ranald, Dent et griffe, Jugement du Roi des neiges, bestiaire de base (grands monstres, gabarits Lieutenant et Commandant, Grim, Morsure, indices de Peur) ; distances en mètres partout.
+Application web progressive (PWA) d’assistance au Maître de Jeu pour **Warhammer**, avec combat **V5** et fiches importées. Version 3.29.0 : ménage interne sans changement de comportement — tests regroupés par domaine (`tests/unit/`), parcours navigateur à part (`npm run test:browser-all`), gros fichiers du moteur et de l'interface découpés en modules et remis à une instruction par ligne.
 
 Le [rapport de recette du lot 2](docs/lot2/LOT2_RECETTE_2_5.md) décrit le périmètre livré, les contrôles et les limites. Les effets narratifs restent des rappels, les valeurs de progression appartiennent aux fiches et la magie/les prières automatisées restent au lot 3.
 

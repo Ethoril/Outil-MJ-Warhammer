@@ -80,6 +80,8 @@ Trois lots, du moins risqué au plus risqué :
 2. **Tests** : un fichier par domaine plutôt qu'un par passe de revue, doublons retirés ; couverture mesurée avant et après, jamais en baisse ; suite rapide et parcours navigateur séparés.
 3. **Code** : découper `store.js`, `resolution.js`, `resolution-panel.js`, `workspace-view.js` par domaine et harmoniser le style, **sans changement de comportement** ; petites étapes publiables, suite et recette vertes, contre-vérification indépendante à chaque étape.
 
+**État au 31/10 (3.29.0)** : R1, R2 et R3 (phases 1 à 3) faits, sans changement de comportement. Reportés : lots à accesseurs et découpes à fermeture forte de R3. Détail : `docs/RAPPORT_PHASE_R.md`.
+
 ## Passe de cohérence outil ↔ feuille source (avant G)
 
 Vérifier que tout ce qui est implanté (Talents, Traits, sorts, prières, mots-clés) concorde avec la feuille source du MJ ; lister les écarts à reporter dans la feuille (ex. Master and Commander, ajouté à part en 22/10).
