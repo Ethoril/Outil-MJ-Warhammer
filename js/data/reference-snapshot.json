@@ -25804,6 +25804,12 @@
     "sources": {
       "spells": "https://docs.google.com/spreadsheets/d/1SCnAJCthdto7ROjovuyDYmz4y9GJBBLfThuYNmYR_Cs/gviz/tq?tqx=out:csv&sheet=Magie",
       "miracles": "https://docs.google.com/spreadsheets/d/1SCnAJCthdto7ROjovuyDYmz4y9GJBBLfThuYNmYR_Cs/gviz/tq?tqx=out:csv&sheet=Miracles"
+    },
+    "sourceNormalization": {
+      "publicCsvSha256": "a48090cf24032036ef91bb52637d347256f7c6e4787bd04ebdc3da3fa0741006",
+      "status": "local-v5-mirror",
+      "date": "2026-10-31",
+      "miraclesCsvSha256": "f14581cde7534082ac7babe67f0497e11a8352ff75c93bd23e9046ff025e4f73"
     }
   },
   "sourceManifest": [

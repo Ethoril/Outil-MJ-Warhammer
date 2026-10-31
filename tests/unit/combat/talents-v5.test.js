@@ -41,7 +41,7 @@ test('2.3 real contracts — cinq identités traçables, cinq validées, descrip
   assert.equal(registry.contracts.length,5);
   assert.equal(registry.contracts.filter(item=>item.status==='validated').length,5);
   for(const item of registry.contracts){assert.equal(validateTalentContractV2(item),true);assert.equal(item.source.effectHash,sourceHashes[item.talentId]);assert.equal(hash(registry.sourceDescriptions[item.talentId]),item.source.effectHash);}
-  assert.equal(getReferenceCatalogue().talents.length,213);
+  assert.equal(getReferenceCatalogue().talents.length,214);
   assert.equal(contract('talent-beat-blade').status,'validated');
 });
 
@@ -503,8 +503,8 @@ test('Contrôle 2.4 — Dur à cuire et dix bonus de caractéristiques ne sont j
  const p=ctx.store.previewResolution(hitInput(ctx,'control24-no-double'));assert.equal((await ctx.store.applyResolution(p)).status,'applied');const after=person(ctx,ctx.actorId);assert.equal(after.maxHp,before.maxHp);assert.deepEqual(after.caracs,before.caracs);
 });
 
-test('Contrôle 2.4 — les 213 identités distinguent couverture vérifiée et sources V4 en attente',()=>{
- const catalogue=getReferenceCatalogue();assert.equal(coverage.items.length,213);assert.equal(new Set(coverage.items.map(row=>row.talentId)).size,213);
+test('Contrôle 2.4 — les 214 identités distinguent couverture vérifiée et sources V4 en attente',()=>{
+ const catalogue=getReferenceCatalogue();assert.equal(coverage.items.length,214);assert.equal(new Set(coverage.items.map(row=>row.talentId)).size,214);
  assert.deepEqual(coverage.items.filter(row=>row.family==='supplement_v4_non_verifie').map(row=>row.talentId).sort(),[...unverifiedSourceV4TalentIds].sort());
  for(const row of catalogue.talents){const item=v5TalentCoverage(row.id);assert.ok(item.clauses.length>0);for(const clause of item.clauses){assert.ok(['automatic','assisted','reminder','excluded','deferred','owned','pending'].includes(clause.mode));assert.ok(clause.text?.trim());}
    if(unverifiedSourceV4TalentIds.includes(row.id)){assert.equal(item.status,'sourceUnverified');assert.ok(item.clauses.every(clause=>clause.mode==='pending'));assert.ok(!item.clauses.some(clause=>['automatic','assisted'].includes(clause.mode)));}

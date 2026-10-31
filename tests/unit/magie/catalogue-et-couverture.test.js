@@ -33,8 +33,8 @@ import { normalizeArmorLocations } from '../../../js/core/equipment.js';
 
 describe('sorts retirés du catalogue', () => {
 const removed=['Couronne de Flammes','L’Or des fous','Fauche-démon'];
-test('Sorts retirés — catalogue embarqué limité aux 277 entrées actives',()=>{
- assert.equal(snapshot.magic.spells.length,277);
+test('Sorts retirés — catalogue embarqué limité aux 400 entrées actives',()=>{
+ assert.equal(snapshot.magic.spells.length,400);
  assert.equal(snapshot.magic.spells.some(s=>s.retired||removed.includes(s.nom)),false);
  for(const name of ['Couronne de Flamme','Or des fous','Fléau des Démons'])assert.ok(snapshot.magic.spells.some(s=>s.nom===name));
 });
@@ -48,10 +48,10 @@ test('Sorts retirés — une actualisation respecte les suppressions et conserve
  previous.spells.find(s=>s.nom==='Couronne de Flamme').aliases=['Alias actif de recette'];
  previous.spells.push(...removed.map(nom=>({nom,type:'Recette',cn:1,desc:'Sort absent de la source',retired:true})));
  const next=buildMagicReferences(tables,previous);
- assert.equal(next.spells.length,277);
+ assert.equal(next.spells.length,400);
  assert.equal(next.spells.some(s=>removed.includes(s.nom)||s.retired),false);
  assert.ok(next.spells.find(s=>s.nom==='Couronne de Flamme').aliases.includes('Alias actif de recette'));
- assert.equal(previous.spells.length,280);
+ assert.equal(previous.spells.length,403);
 });
 test('Sorts retirés — un ancien cache plus récent ne réintroduit pas les entrées supprimées',async()=>{
  const original=globalThis.localStorage,data=structuredClone(snapshot);
@@ -61,7 +61,7 @@ test('Sorts retirés — un ancien cache plus récent ne réintroduit pas les en
  try{
   const refs=await import('../../../js/core/reference-catalog.js?lot3-removed-cache');
   assert.equal(refs.getReferenceStatus().source,'instantané local (dépôt)');
-  assert.equal(refs.getReferenceCatalogue().magic.spells.length,277);
+  assert.equal(refs.getReferenceCatalogue().magic.spells.length,400);
   assert.equal(refs.getReferenceCatalogue().magic.spells.some(s=>removed.includes(s.nom)),false);
  }finally{if(original===undefined)delete globalThis.localStorage;else globalThis.localStorage=original;}
 });
@@ -75,11 +75,11 @@ describe('catalogue — Lileath et cache de références', () => {
 
 test('D-21 annulée — ni Silence (Arcane) ni Arc coruscant : Silence garde la version d’Ulgu, l’Arc de T’Essla la sienne', () => {
   const spells = getReferenceCatalogue().magic.spells;
-  assert.equal(spells.length, 277);
+  assert.equal(spells.length, 400);
   assert.equal(getAllSpellContracts().filter(c => !c.isTradition).length, 277);
   for (const name of ['Silence (Arcane)', 'Arc coruscant', 'Coruscating Arc']) {
-    assert.equal(spells.some(s => s.nom === name), false, name);
-    // Phase D (Q15) : « Silence (Arcane) » de Winds of Magic est un contrat de tradition distinct (aucune identité du catalogue public).
+    // Phase D (Q15) : « Silence (Arcane) » de Winds of Magic est un contrat de tradition distinct ; depuis la feuille du 31/10 il figure au catalogue sous sa propre identité, une seule fois, jamais fusionné à Silence.
+    assert.equal(spells.filter(s => s.nom === name).length, name === 'Silence (Arcane)' ? 1 : 0, name);
     if (name === 'Silence (Arcane)') { assert.equal(getSpellContract(name).isTradition, true); assert.notEqual(getSpellContract(name).id, getSpellContract('Silence').id); } else assert.equal(getSpellContract(name), null, name);
   }
   assert.equal(spells.find(s => s.nom === 'Silence').type, "Uglu - Gris - Domaine de l'Ombre");
@@ -111,11 +111,20 @@ test('Lileath — le catalogue public dit « tout Test de Focalisation (Qhaysh) 
 });
 });
 
-describe('catalogue V5 — parité des 277 identités', () => {
+describe('catalogue V5 — parité des 400 identités', () => {
 const read=p=>readFile(new URL('../../../'+p,import.meta.url),'utf8');
-test('Catalogue V5 — 277 identités : NI, portée, cible et durée correspondent aux contrats exécutés',()=>{
- assert.equal(snapshot.magic.spells.length,277);
+test('Catalogue V5 — 400 identités : NI, portée, cible et durée correspondent aux contrats exécutés',()=>{
+ assert.equal(snapshot.magic.spells.length,400);
  for(const s of snapshot.magic.spells){const c=getSpellContract(s.nom);assert.ok(c,s.nom);assert.equal(s.cn,c.cn,s.nom+' NI');for(const [field,key] of [['portee','range'],['cible','target'],['duree','duration']])assert.equal(norm(s[field]),norm(c[key]),s.nom+' '+field);}
+});
+test('Catalogue V5 — chaque sort du catalogue (livre de base et suppléments) est apparié à un seul contrat et n’apparaît qu’une fois dans le choix de sorts',()=>{
+ const contracts=getAllSpellContracts();
+ assert.equal(contracts.length,snapshot.magic.spells.length);
+ assert.equal(new Set(contracts.map(c=>c.id)).size,contracts.length);
+ assert.equal(new Set(contracts.map(c=>c.name)).size,contracts.length);
+ const used=new Set();
+ for(const s of snapshot.magic.spells){const c=getSpellContract(s.nom);assert.ok(c,s.nom);assert.equal(c.name,s.nom);assert.ok(!used.has(c.id),'contrat apparié deux fois : '+s.nom);used.add(c.id);}
+ assert.equal(used.size,contracts.length);
 });
 test('Catalogue V5 — les tolérances ne masquent ni Bonus/caractéristique, ni unités, ni maximum',()=>{
  assert.equal(norm('(Moitié de Force Mentale) mètres'),norm('½ FM mètres'));
@@ -458,7 +467,7 @@ for(const [name,pattern] of clauses)test('R2-24/25 '+name+' : description et rap
 test('R2-24 : respiration, durée de Sonné et communication animale',()=>{assert.match(text('Ombres Étrangleuses'),/besoin de respirer[^]*169/);assert.match(text('Filet d’Amyntok'),/ne peut pas perdre.*Sonné/);assert.doesNotMatch(text('Langue des Bêtes'),/Langage \(Bataille\)/);assert.match(text('Carreau'),/Dégâts \+4/);});
 test('R2-25 : libellés HEPG V5, eau de l’Esprit du Foyer et Toile 40',()=>{for(const n of ['Apothéose','Destruction des Arcanes','Glamour de Teclis','Convocation Ardente'])assert.doesNotMatch(text(n),/Difficile \(\+0\)|Moyen \(\+2 DR\)/);assert.doesNotMatch(getSpellContract('Esprit du Foyer').effects.summon.destroyedByWater || '',/^$/);assert.equal(getSpellContract('Toucher doré').overcast.options.includes('duration'),true);});
 test('R2-26 : Tempête nom et canonicalName, anciennes fiches/couches/reçus migrés, id conservé',()=>{const c=getSpellContract('Tempête');assert.ok(c);assert.equal(c.id,'spell-audit-1e7a5eaec18c122bde64');assert.equal(c.canonicalName,'Tempête');assert.equal(snapshot.magic.spells.some(s=>s.nom==='empête'),false);const p=sanitizeParticipant(actor('mage',{spells:[{id:c.id,name:'empête'}],extensions:{v5:{spellEffects:[{id:'layer',spellId:c.id,spellName:'empête'}]}}}));assert.equal(p.spells[0].name,'Tempête');assert.equal(p.extensions.v5.spellEffects[0].spellName,'Tempête');const e=sanitizeMagicEnvelope({extensions:{v5:{highMagicExecutions:[{id:'x',actorId:'mage',spellId:c.id,spellName:'empête'}]}}});assert.equal(e.extensions.v5.highMagicExecutions[0].spellName,'Tempête');});
-test('R2-parité : chiffres de Protection/dégâts/durée des descriptions repris dans les reminders',()=>{const numbers=s=>[...String(s).matchAll(/Protection\s*\(?\d\+?|\+\d+\s*(?:PA|Dégâts)|\d+\s*(?:Dégâts|Rounds?|minutes?|heures?|jours?|semaines?|mois)/g)].map(m=>m[0].replace(/[()+\s]/g,'').replace(/Rounds?/, 'Round'));for(const s of snapshot.magic.spells){const c=getSpellContract(s.nom);for(const n of numbers(s.desc))assert.ok(numbers(c.reminders).includes(n),s.nom+' : rappel '+n);}});
+test('R2-parité : chiffres de Protection/dégâts/durée des descriptions repris dans les reminders',()=>{const numbers=s=>[...String(s).matchAll(/Protection\s*\(?\d\+?|\+\d+\s*(?:PA|Dégâts)|\d+\s*(?:Dégâts|Rounds?|minutes?|heures?|jours?|semaines?|mois)/g)].map(m=>m[0].replace(/[()+\s]/g,'').replace(/Rounds?/, 'Round'));for(const s of snapshot.magic.spells){const c=getSpellContract(s.nom);if(c.isTradition)continue;for(const n of numbers(s.desc))assert.ok(numbers(c.reminders).includes(n),s.nom+' : rappel '+n);}});
 });
 
 describe('couverture des états déclaratifs et classes de contrats', () => {

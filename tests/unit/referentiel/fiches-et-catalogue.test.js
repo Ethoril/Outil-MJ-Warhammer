@@ -582,8 +582,8 @@ test('Références — identifiant explicite et paramètres conservent colonnes 
  assert.throws(()=>parseKeywordCSV('Nom,Effet\nTest,test'),/Colonnes/);
 });
 test('Références — instantané commun source, compétences principales et talents traduits',()=>{
- const pack=getReferenceCatalogue();assert.equal(pack.items.length,211);assert.equal(pack.talents.length,213);
- assert.equal(pack.magic.spells.length,277);assert.equal(resolveSkill('Corps à corps (Base)').entry.carac,'cc');
+ const pack=getReferenceCatalogue();assert.equal(pack.items.length,211);assert.equal(pack.talents.length,214);
+ assert.equal(pack.magic.spells.length,400);assert.equal(resolveSkill('Corps à corps (Base)').entry.carac,'cc');
  assert.equal(resolveTalent('Hardy').entry.id,resolveTalent('Dur à cuire').entry.id);
  assert.equal(resolveTalent('Magie des Arcanes (Fire)').specialization,'Aqshy');
  assert.equal(resolveSkill('Nom approchant inconnu').status,'unknown');
@@ -1439,10 +1439,10 @@ for (const [date, expected] of [['2026-10-07T10:00:00.000Z', 'instantané local 
   });
 }
 
-test('Lot2 références — 213 identités et empreintes de descriptions actualisées dans l’inventaire portable', async () => {
+test('Lot2 références — 214 identités et empreintes de descriptions actualisées dans l’inventaire portable', async () => {
   const inventory = JSON.parse(await readFile(new URL('../../../docs/lot2/LOT2_INVENTAIRE_TALENTS.json', import.meta.url), 'utf8'));
-  assert.equal(snapshot.talents.entries.length, 213);
-  assert.equal(inventory.items.length, 213);
+  assert.equal(snapshot.talents.entries.length, 214);
+  assert.equal(inventory.items.length, 214);
   const byId = new Map(snapshot.talents.entries.map(item => [item.id, item]));
   for (const item of inventory.items) {
     assert.ok(byId.has(item.talentId));
