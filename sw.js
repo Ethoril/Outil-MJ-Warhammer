@@ -206,6 +206,7 @@ const ASSETS_TO_CACHE = [
   './js/ui/resolution-panel/dom.js',
   './js/ui/resolution-panel/critical.js',
   './js/ui/resolution-panel/magic.js',
+  './js/ui/resolution-panel/result.js',
   './js/ui/v5-magic-controls.js',
   './js/ui/v5-spell-options.js',
   './js/ui/v5-effect-dialog.js',
