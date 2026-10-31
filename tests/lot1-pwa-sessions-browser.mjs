@@ -90,7 +90,7 @@ try {
   for (const value of ['version-historique', 'fleche-1', '2 PA', 'Maille historique', 'Précise historique', 'Édition historique', 'Effet conservé']) assert.ok(journal.includes(value), value);
   assert.equal(await page.locator('#qa-journal img').count(), 0, 'historical source strings remain escaped');
   await page.locator('#qa-journal').evaluate(node => node.remove());
-  assert.equal(seeded.profile.maxHp, 18); assert.equal(seeded.profile.hp, 18, 'reserve is a full-health template'); assert.equal(seeded.keywords, 55);
+  assert.equal(seeded.profile.maxHp, 18); assert.equal(seeded.profile.hp, 18, 'reserve is a full-health template'); assert.equal(seeded.keywords, 57);
   assert.ok(seeded.caches.includes(cacheName));
   assert.equal(await page.getByRole('button', { name: 'Actualiser', exact: true }).count(), 0, 'first installation offers no inactive update button');
   await pwaContext.setOffline(true); await page.reload();
@@ -103,14 +103,20 @@ try {
     const result = await Store.applyFicheSync([{ profileId: 'pwa-pj', charId: 'caelel', snapshot: ficheSnapshot('caelel', fixture) }]);
     return { profile: Store.getProfile('pwa-pj'), keywords: getReferenceCatalogue().keywords.length, before, after: Store.getLocalRevision(), changed: result.changed, controlled: !!navigator.serviceWorker.controller };
   }, fixture);
-  assert.deepEqual(offline.profile, seeded.profile); assert.equal(offline.keywords, 55); assert.equal(offline.changed, false); assert.equal(offline.before, offline.after); assert.ok(offline.controlled);
+  assert.deepEqual(offline.profile, seeded.profile); assert.equal(offline.keywords, 57); assert.equal(offline.changed, false); assert.equal(offline.before, offline.after); assert.ok(offline.controlled);
   await pwaContext.setOffline(false); updateWorker = true;
   await page.evaluate(async () => { await caches.open('qa-obsolete-cache'); const registration = await navigator.serviceWorker.getRegistration(); await registration.update(); });
   await page.waitForFunction(async () => !!(await navigator.serviceWorker.getRegistration())?.waiting);
   const revision = offline.after;
   await page.waitForFunction(() => document.querySelector('#local-status')?.dataset.status === 'saved');
   await page.getByRole('button', { name: 'Actualiser', exact: true }).click();
-  await page.waitForFunction(async ({ current, next }) => (await caches.keys()).includes(next) && !(await caches.keys()).includes(current), { current: cacheName, next: updatedCacheName });
+  // The update reloads the page: poll from Node so that the navigation cannot end the wait early.
+  for (let attempt = 0; ; attempt++) {
+    const keys = await page.evaluate(() => caches.keys()).catch(() => null);
+    if (keys && keys.includes(updatedCacheName) && !keys.includes(cacheName) && !keys.includes('qa-obsolete-cache')) break;
+    assert.ok(attempt < 150, 'the explicit update replaces the old caches');
+    await page.waitForTimeout(100);
+  }
   await page.waitForFunction(() => document.querySelector('#app-content')?.style.display === 'block');
   const updated = await page.evaluate(async () => { const { Store } = await import('/js/main.js'); await Store.ready; return { profile: Store.getProfile('pwa-pj'), revision: Store.getLocalRevision(), caches: await caches.keys() }; });
   assert.deepEqual(updated.profile, seeded.profile); assert.equal(updated.revision, revision); assert.equal(updated.caches.includes('qa-obsolete-cache'), false); assert.deepEqual(errors, []);
