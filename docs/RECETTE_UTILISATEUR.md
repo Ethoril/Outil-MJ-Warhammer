@@ -409,10 +409,10 @@ Ce parcours guidé permet au MJ de vérifier pas à pas, à la table dans l’on
   Attendu : toute distance est en mètres, même valeur qu’en yards (50 yards deviennent 50 m).
   Remarques :
 
-- [ ] G-DEC-8 · Pénitence imposée par le Courroux (libellé à trancher)
+- [ ] G-DEC-8 · Pénitence imposée par le Courroux (libellé clarifié)
   1. Obtenir un résultat 96-100 sur la table du Courroux.
-  2. Lire le champ « Pénitence imposée par le Courroux (facultatif : suivi sur la fiche) » et tenter d’appliquer sans le remplir.
-  Attendu : l’application est refusée tant que le texte de la pénitence est vide (le moteur exige de savoir quelle pénitence est imposée ; seul son suivi sur la fiche est facultatif, décision B-C20). Dire si le libellé « facultatif » doit être reformulé.
+  2. Lire le champ « Pénitence imposée par le Courroux (à définir ; son suivi sur la fiche est facultatif) » et tenter d’appliquer sans le remplir.
+  Attendu : l’application est refusée tant que le texte de la pénitence est vide (le moteur exige de savoir quelle pénitence est imposée ; seul son suivi sur la fiche est facultatif, décision B-C20). Le libellé précise que la pénitence est à définir et que seul son suivi est facultatif.
   Remarques :
 
 ## Limites connues
