@@ -50,7 +50,7 @@ export const miracles = [
    { id: 'wounds', mode: 'engine', text: 'Chaque humanoïde touché perd 1 Blessure, +1 par DR obtenu au Test de Prière (perte fixe, sans BE ni PA).' },
    { id: 'barren', mode: 'manual', text: 'Si cinq individus ou plus sont touchés, rien ne pousse plus dans la zone pendant d10 ans.' }
   ],
-  sourceDelta: delta + ' La zone est « Area of Effect » sans taille en en-tête ; le texte donne Bonus de Sociabilité yards pour les victimes, puis « Fellowship Yards » (sans Bonus) pour le sol stérile : lu comme la même zone, à confirmer. La perte de 1 Blessure +1 par DR est une perte fixe : direct-damage à valeur fixe (fixed 1, +1 par DR), sans dés ; le fait « humanoïde sans sacrifice » est saisi pour chaque cible.'
+  sourceDelta: delta + ' La zone est « Area of Effect » sans taille en en-tête ; le texte donne Bonus de Sociabilité mètres pour les victimes, puis « Sociabilité mètres » (sans Bonus) pour le sol stérile : lu comme la même zone, à confirmer. La perte de 1 Blessure +1 par DR est une perte fixe : direct-damage à valeur fixe (fixed 1, +1 par DR), sans dés ; le fait « humanoïde sans sacrifice » est saisi pour chaque cible.'
  },
  {
   name: 'Domination de Rhya', canonicalName: "Rhya's Dominion", printedPage: 74,

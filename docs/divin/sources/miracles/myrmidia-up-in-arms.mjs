@@ -66,7 +66,7 @@ export const miracles = [
       { id: 'area', mode: 'manual', text: 'Zone centrée sur le prêtre, de rayon égal au Bonus de Volonté en mètres (convention V5 des zones).' },
       { id: 'duration', mode: 'manual', text: 'Durée : Bonus de Volonté en Rounds.' }
     ],
-    sourceDelta: 'Aucun type d’effet ne supprime l’Élan ou l’attaque gratuite de l’adversaire : contrat manuel. La zone imprimée est « Willpower yards » (caractéristique entière) : lue en Bonus de Volonté, convention V5 du livre de base pour les zones (écart V4 documenté, décision MJ). L’« avantage » V4 devient l’Élan ; le Brisé de fuite, nouveau en V5, n’est pas annulé (décision MJ). Le Désengagement (p.163) reste hors du texte. ' + v4Unit
+    sourceDelta: 'Aucun type d’effet ne supprime l’Élan ou l’attaque gratuite de l’adversaire : contrat manuel. La zone imprimée est « Willpower mètres » (caractéristique entière) : lue en Bonus de Volonté, convention V5 du livre de base pour les zones (écart V4 documenté, décision MJ). L’« avantage » V4 devient l’Élan ; le Brisé de fuite, nouveau en V5, n’est pas annulé (décision MJ). Le Désengagement (p.163) reste hors du texte. ' + v4Unit
   },
   {
     name: 'Connaître son Ennemi', canonicalName: 'Know Your Enemy', printedPage: 79,
@@ -82,7 +82,7 @@ export const miracles = [
       { id: 'gm-secrets', mode: 'manual', text: 'Le MJ garde la main sur ce qui reste secret (identité, malédictions cachées).' },
       { id: 'range', mode: 'manual', text: 'Portée : Volonté en mètres (caractéristique entière).' }
     ],
-    sourceDelta: 'Révélation d’information, sans effet moteur : contrat manuel. Portée imprimée « Willpower yards » conservée en caractéristique entière (convention V5 pour les portées ; le catalogue disait Bonus, décision MJ). Étendue : caractéristiques, Traits, compétences, Talents ; Blessures actuelles, Chance et équipement ne sont pas inclus (décision MJ). ' + v4Unit
+    sourceDelta: 'Révélation d’information, sans effet moteur : contrat manuel. Portée imprimée « Willpower mètres » conservée en caractéristique entière (convention V5 pour les portées ; le catalogue disait Bonus, décision MJ). Étendue : caractéristiques, Traits, compétences, Talents ; Blessures actuelles, Chance et équipement ne sont pas inclus (décision MJ). ' + v4Unit
   },
   {
     name: 'Sur un Terrain Mortel', canonicalName: 'On Deadly Ground', printedPage: 79,
@@ -101,7 +101,7 @@ export const miracles = [
       { id: 'existing-broken', mode: 'engine', text: 'Les États Brisé déjà acquis restent : seule l’acquisition est empêchée.' },
       { id: 'duration-unattested', mode: 'manual', text: 'Durée : Bonus de Volonté en Rounds, valeur NON ATTESTÉE par la page 79 (voir l’écart).' }
     ],
-    sourceDelta: 'Effet grant-immunity : Brisé refusé à l’acquisition pour les cibles désignées. Page 79 : portée « Self », cible « You », et la ligne Durée contient « Allies within AoE (Willpower yards) » sans aucune durée (la cible a glissé dans la ligne Durée). Durée non attestée, retenue en Bonus de Volonté en Rounds comme En Bon Ordre et le catalogue (décision MJ) ; zone lue en Bonus de Volonté (convention V5 des zones, décision MJ). Le prêtre est bénéficiaire ; les Brisé déjà acquis restent. Aucun erratum trouvé dans les 17 livres du corpus. ' + v4Unit
+    sourceDelta: 'Effet grant-immunity : Brisé refusé à l’acquisition pour les cibles désignées. Page 79 : portée « Self », cible « You », et la ligne Durée contient « Allies within AoE (Willpower mètres) » sans aucune durée (la cible a glissé dans la ligne Durée). Durée non attestée, retenue en Bonus de Volonté en Rounds comme En Bon Ordre et le catalogue (décision MJ) ; zone lue en Bonus de Volonté (convention V5 des zones, décision MJ). Le prêtre est bénéficiaire ; les Brisé déjà acquis restent. Aucun erratum trouvé dans les 17 livres du corpus. ' + v4Unit
   },
   {
     name: 'Attaque Rapide', canonicalName: 'Quick Strike', printedPage: 79,

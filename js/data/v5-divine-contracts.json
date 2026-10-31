@@ -1323,7 +1323,7 @@
         "duree": "(Bonus de Sociabilité) Rounds",
         "effet": "Vos Prières passionnées incitent Myrmidia à protéger vos alliés avec des filaments de lumière vive et scintillante, repoussant les frappes ennemies. Toutes les cibles affectées gagnent +1 PA à toutes les Localisations."
       },
-      "v5Summary": "Écart de paramètres : l’entrée catalogue utilise mètres et Bonus d’Intelligence; V5 utilise Sociabilité en yards et son Bonus pour les cibles.",
+      "v5Summary": "Écart de paramètres : l’entrée catalogue utilise mètres et Bonus d’Intelligence; V5 utilise Sociabilité en mètres et son Bonus pour les cibles.",
       "status": "implemented",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
@@ -1470,7 +1470,7 @@
         "duree": "Bonus de Force Mentale en Rounds",
         "effet": "Sachant que la situation est désespérée, vous priez pour que vos forces ne souffrent pas d'une déroute catastrophique. Tant que le miracle est actif, vos alliés peuvent rompre le combat sans permettre à l'ennemi d'en profiter pour attaquer gratuitement ou obtenir un avantage."
       },
-      "v5Summary": "Aucun type d’effet ne supprime l’Élan ou l’attaque gratuite de l’adversaire : contrat manuel. La zone imprimée est « Willpower yards » (caractéristique entière) : lue en Bonus de Volonté, convention V5 du livre de base pour les zones (écart V4 documenté, décision MJ). L’« avantage » V4 devient l’Élan ; le Brisé de fuite, nouveau en V5, n’est pas annulé (décision MJ). Le Désengagement (p.163) reste hors du texte. Page 79 (V4) : yards sources lues comme mètres de jeu, sans conversion (DIV-03).",
+      "v5Summary": "Aucun type d’effet ne supprime l’Élan ou l’attaque gratuite de l’adversaire : contrat manuel. La zone imprimée est « Willpower mètres » (caractéristique entière) : lue en Bonus de Volonté, convention V5 du livre de base pour les zones (écart V4 documenté, décision MJ). L’« avantage » V4 devient l’Élan ; le Brisé de fuite, nouveau en V5, n’est pas annulé (décision MJ). Le Désengagement (p.163) reste hors du texte. Page 79 (V4) : yards sources lues comme mètres de jeu, sans conversion (DIV-03).",
       "status": "assisted",
       "source": {
         "document": "Up in arms.pdf",
@@ -1491,7 +1491,7 @@
         "duree": "Instantané",
         "effet": "Vous appelez Myrmidia à vous informer des forces et faiblesses d'un ennemi proche. Le MJ doit vous permettre d’examiner le profil, les traits, compétences et talents de la cible."
       },
-      "v5Summary": "Révélation d’information, sans effet moteur : contrat manuel. Portée imprimée « Willpower yards » conservée en caractéristique entière (convention V5 pour les portées ; le catalogue disait Bonus, décision MJ). Étendue : caractéristiques, Traits, compétences, Talents ; Blessures actuelles, Chance et équipement ne sont pas inclus (décision MJ). Page 79 (V4) : yards sources lues comme mètres de jeu, sans conversion (DIV-03).",
+      "v5Summary": "Révélation d’information, sans effet moteur : contrat manuel. Portée imprimée « Willpower mètres » conservée en caractéristique entière (convention V5 pour les portées ; le catalogue disait Bonus, décision MJ). Étendue : caractéristiques, Traits, compétences, Talents ; Blessures actuelles, Chance et équipement ne sont pas inclus (décision MJ). Page 79 (V4) : yards sources lues comme mètres de jeu, sans conversion (DIV-03).",
       "status": "manual",
       "source": {
         "document": "Up in arms.pdf",
@@ -1512,7 +1512,7 @@
         "duree": "Bonus de Force Mentale en Rounds",
         "effet": "Sachant que la victoire ne peut être obtenue que si vos forces tiennent bon, vous appelez Myrmidia pour bannir toute idée de retraite dans l'esprit de vos alliés. Tant que le miracle est actif, vos alliés ne reçoivent pas la Condition Brisé."
       },
-      "v5Summary": "Effet grant-immunity : Brisé refusé à l’acquisition pour les cibles désignées. Page 79 : portée « Self », cible « You », et la ligne Durée contient « Allies within AoE (Willpower yards) » sans aucune durée (la cible a glissé dans la ligne Durée). Durée non attestée, retenue en Bonus de Volonté en Rounds comme En Bon Ordre et le catalogue (décision MJ) ; zone lue en Bonus de Volonté (convention V5 des zones, décision MJ). Le prêtre est bénéficiaire ; les Brisé déjà acquis restent. Aucun erratum trouvé dans les 17 livres du corpus. Page 79 (V4) : yards sources lues comme mètres de jeu, sans conversion (DIV-03).",
+      "v5Summary": "Effet grant-immunity : Brisé refusé à l’acquisition pour les cibles désignées. Page 79 : portée « Self », cible « You », et la ligne Durée contient « Allies within AoE (Willpower mètres) » sans aucune durée (la cible a glissé dans la ligne Durée). Durée non attestée, retenue en Bonus de Volonté en Rounds comme En Bon Ordre et le catalogue (décision MJ) ; zone lue en Bonus de Volonté (convention V5 des zones, décision MJ). Le prêtre est bénéficiaire ; les Brisé déjà acquis restent. Aucun erratum trouvé dans les 17 livres du corpus. Page 79 (V4) : yards sources lues comme mètres de jeu, sans conversion (DIV-03).",
       "status": "assisted",
       "source": {
         "document": "Up in arms.pdf",
@@ -2256,7 +2256,7 @@
     {
       "id": "divine:miracle:rhya:rhya-s-demand",
       "catalogueEntry": null,
-      "v5Summary": "Texte V4 : Succès (SL) lus comme DR, difficultés V4 conservées telles quelles, sans conversion V5. La zone est « Area of Effect » sans taille en en-tête ; le texte donne Bonus de Sociabilité yards pour les victimes, puis « Fellowship Yards » (sans Bonus) pour le sol stérile : lu comme la même zone, à confirmer. La perte de 1 Blessure +1 par DR est une perte fixe : direct-damage à valeur fixe (fixed 1, +1 par DR), sans dés ; le fait « humanoïde sans sacrifice » est saisi pour chaque cible.",
+      "v5Summary": "Texte V4 : Succès (SL) lus comme DR, difficultés V4 conservées telles quelles, sans conversion V5. La zone est « Area of Effect » sans taille en en-tête ; le texte donne Bonus de Sociabilité mètres pour les victimes, puis « Sociabilité mètres » (sans Bonus) pour le sol stérile : lu comme la même zone, à confirmer. La perte de 1 Blessure +1 par DR est une perte fixe : direct-damage à valeur fixe (fixed 1, +1 par DR), sans dés ; le fait « humanoïde sans sacrifice » est saisi pour chaque cible.",
       "status": "assisted",
       "source": {
         "document": "Archives of the Empire 3.pdf",
@@ -2451,7 +2451,7 @@
     {
       "id": "divine:miracle:sigmar:twin-tailed-comet",
       "catalogueEntry": null,
-      "v5Summary": "Ambigu : « invalid creatures » n’est défini nulle part dans le passage; le « SL » ajouté aux dégâts est le DR du jet de prière; la zone « maximum » est lue comme un rayon plafonné au Bonus de Sociabilité en yards.",
+      "v5Summary": "Ambigu : « invalid creatures » n’est défini nulle part dans le passage; le « SL » ajouté aux dégâts est le DR du jet de prière; la zone « maximum » est lue comme un rayon plafonné au Bonus de Sociabilité en mètres.",
       "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
@@ -12009,7 +12009,7 @@
         "specialization": "Myrmidia"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": "Écart de paramètres : l’entrée catalogue utilise mètres et Bonus d’Intelligence; V5 utilise Sociabilité en yards et son Bonus pour les cibles.",
+      "sourceDelta": "Écart de paramètres : l’entrée catalogue utilise mètres et Bonus d’Intelligence; V5 utilise Sociabilité en mètres et son Bonus pour les cibles.",
       "params": {
         "range": {
           "kind": "characteristic",
@@ -12880,7 +12880,7 @@
         "specialization": "Myrmidia"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": "Aucun type d’effet ne supprime l’Élan ou l’attaque gratuite de l’adversaire : contrat manuel. La zone imprimée est « Willpower yards » (caractéristique entière) : lue en Bonus de Volonté, convention V5 du livre de base pour les zones (écart V4 documenté, décision MJ). L’« avantage » V4 devient l’Élan ; le Brisé de fuite, nouveau en V5, n’est pas annulé (décision MJ). Le Désengagement (p.163) reste hors du texte. Page 79 (V4) : yards sources lues comme mètres de jeu, sans conversion (DIV-03).",
+      "sourceDelta": "Aucun type d’effet ne supprime l’Élan ou l’attaque gratuite de l’adversaire : contrat manuel. La zone imprimée est « Willpower mètres » (caractéristique entière) : lue en Bonus de Volonté, convention V5 du livre de base pour les zones (écart V4 documenté, décision MJ). L’« avantage » V4 devient l’Élan ; le Brisé de fuite, nouveau en V5, n’est pas annulé (décision MJ). Le Désengagement (p.163) reste hors du texte. Page 79 (V4) : yards sources lues comme mètres de jeu, sans conversion (DIV-03).",
       "params": {
         "range": {
           "kind": "self"
@@ -13027,7 +13027,7 @@
         "specialization": "Myrmidia"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": "Révélation d’information, sans effet moteur : contrat manuel. Portée imprimée « Willpower yards » conservée en caractéristique entière (convention V5 pour les portées ; le catalogue disait Bonus, décision MJ). Étendue : caractéristiques, Traits, compétences, Talents ; Blessures actuelles, Chance et équipement ne sont pas inclus (décision MJ). Page 79 (V4) : yards sources lues comme mètres de jeu, sans conversion (DIV-03).",
+      "sourceDelta": "Révélation d’information, sans effet moteur : contrat manuel. Portée imprimée « Willpower mètres » conservée en caractéristique entière (convention V5 pour les portées ; le catalogue disait Bonus, décision MJ). Étendue : caractéristiques, Traits, compétences, Talents ; Blessures actuelles, Chance et équipement ne sont pas inclus (décision MJ). Page 79 (V4) : yards sources lues comme mètres de jeu, sans conversion (DIV-03).",
       "params": {
         "range": {
           "kind": "characteristic",
@@ -13146,7 +13146,7 @@
         "specialization": "Myrmidia"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": "Effet grant-immunity : Brisé refusé à l’acquisition pour les cibles désignées. Page 79 : portée « Self », cible « You », et la ligne Durée contient « Allies within AoE (Willpower yards) » sans aucune durée (la cible a glissé dans la ligne Durée). Durée non attestée, retenue en Bonus de Volonté en Rounds comme En Bon Ordre et le catalogue (décision MJ) ; zone lue en Bonus de Volonté (convention V5 des zones, décision MJ). Le prêtre est bénéficiaire ; les Brisé déjà acquis restent. Aucun erratum trouvé dans les 17 livres du corpus. Page 79 (V4) : yards sources lues comme mètres de jeu, sans conversion (DIV-03).",
+      "sourceDelta": "Effet grant-immunity : Brisé refusé à l’acquisition pour les cibles désignées. Page 79 : portée « Self », cible « You », et la ligne Durée contient « Allies within AoE (Willpower mètres) » sans aucune durée (la cible a glissé dans la ligne Durée). Durée non attestée, retenue en Bonus de Volonté en Rounds comme En Bon Ordre et le catalogue (décision MJ) ; zone lue en Bonus de Volonté (convention V5 des zones, décision MJ). Le prêtre est bénéficiaire ; les Brisé déjà acquis restent. Aucun erratum trouvé dans les 17 livres du corpus. Page 79 (V4) : yards sources lues comme mètres de jeu, sans conversion (DIV-03).",
       "params": {
         "range": {
           "kind": "self"
@@ -20085,7 +20085,7 @@
         "specialization": "Rhya"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": "Texte V4 : Succès (SL) lus comme DR, difficultés V4 conservées telles quelles, sans conversion V5. La zone est « Area of Effect » sans taille en en-tête ; le texte donne Bonus de Sociabilité yards pour les victimes, puis « Fellowship Yards » (sans Bonus) pour le sol stérile : lu comme la même zone, à confirmer. La perte de 1 Blessure +1 par DR est une perte fixe : direct-damage à valeur fixe (fixed 1, +1 par DR), sans dés ; le fait « humanoïde sans sacrifice » est saisi pour chaque cible.",
+      "sourceDelta": "Texte V4 : Succès (SL) lus comme DR, difficultés V4 conservées telles quelles, sans conversion V5. La zone est « Area of Effect » sans taille en en-tête ; le texte donne Bonus de Sociabilité mètres pour les victimes, puis « Sociabilité mètres » (sans Bonus) pour le sol stérile : lu comme la même zone, à confirmer. La perte de 1 Blessure +1 par DR est une perte fixe : direct-damage à valeur fixe (fixed 1, +1 par DR), sans dés ; le fait « humanoïde sans sacrifice » est saisi pour chaque cible.",
       "params": {
         "range": {
           "kind": "self"
@@ -22718,7 +22718,7 @@
         "specialization": "Sigmar"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": "Ambigu : « invalid creatures » n’est défini nulle part dans le passage; le « SL » ajouté aux dégâts est le DR du jet de prière; la zone « maximum » est lue comme un rayon plafonné au Bonus de Sociabilité en yards.",
+      "sourceDelta": "Ambigu : « invalid creatures » n’est défini nulle part dans le passage; le « SL » ajouté aux dégâts est le DR du jet de prière; la zone « maximum » est lue comme un rayon plafonné au Bonus de Sociabilité en mètres.",
       "params": {
         "range": {
           "kind": "characteristic",
@@ -28130,5 +28130,5 @@
       "needsInput": []
     }
   ],
-  "sourceFingerprint": "sha256:9cb77acfb13c578ed357d3c6f875094b7a582351fdbd5ba038e4bc310d367acf"
+  "sourceFingerprint": "sha256:746b347f9a1adcb1f094359c66ba0f8ef4e0f5a0d452965231f6155b52bcbd56"
 }

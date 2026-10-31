@@ -87,7 +87,7 @@ export const miracles = [
       { id: 'ablaze', mode: 'engine', text: 'Chaque créature touchée reçoit un État Enflammé.' },
       { id: 'backfire', mode: 'engine', text: 'Sans ennemi à frapper (aucune cible désignée n’est un ennemi de Sigmar, fait MJ par cible), Sigmar frappe le prêtre à la place : mêmes dégâts et même État Enflammé sur lui.' }
     ],
-    sourceDelta: 'Ambigu : « invalid creatures » n’est défini nulle part dans le passage; le « SL » ajouté aux dégâts est le DR du jet de prière; la zone « maximum » est lue comme un rayon plafonné au Bonus de Sociabilité en yards.'
+    sourceDelta: 'Ambigu : « invalid creatures » n’est défini nulle part dans le passage; le « SL » ajouté aux dégâts est le DR du jet de prière; la zone « maximum » est lue comme un rayon plafonné au Bonus de Sociabilité en mètres.'
   },
   {
     name: 'Vaincre les impies', canonicalName: 'Vanquish the Unrighteous', printedPage: 227,
