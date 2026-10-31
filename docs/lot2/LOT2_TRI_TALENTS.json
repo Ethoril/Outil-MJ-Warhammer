@@ -530,6 +530,21 @@
       ]
     },
     {
+      "talentId": "talent-chanty",
+      "name": "Chant marin",
+      "source": {
+        "reference": "Sea of Claws (V4), p. 63",
+        "effectHash": "sha256:b3872336254c53a5de96f23f9f6b19cb532938772fb4d0ede295abba2274cf33"
+      },
+      "clauses": [
+        {
+          "scope": "narrative",
+          "status": "reminder",
+          "text": "Chaque acquisition permet d’apprendre un nouveau chant de marin (liste p. 67). Placez-vous à portée de voix du plus grand nombre possible de membres de l’équipage et réussissez un Test de Divertissement (Chant) : après 30 secondes, le chant affecte tout l’équipage pendant 3 minutes plus 1 minute par DR. Tant que vous chantez, votre seule action de combat possible est l’Esquive ; d’autres actions, comme des Tests de Perception ou de Calme, restent à la discrétion du MJ. Le chant prend fin si vous subissez des dégâts ou échouez à un Test opposé. Un seul chant par quart."
+        }
+      ]
+    },
+    {
       "talentId": "talent-berserk-charge",
       "name": "Charge berserk",
       "source": {

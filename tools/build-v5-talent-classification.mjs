@@ -34,7 +34,7 @@ const completedMechanics={
 };
 const pending={};delete completedMechanics['liquid-fortification'];
 
-const narrativeIds=['stone-soup','animal-affinity','kingpin','shadow','detect-artefact','river-guide','secret-identity','beneath-notice','lip-reading','read-write','hunter-s-eye','step-aside','fisherman','etiquette','second-sight','acute-sense','sixth-sense','night-vision','holy-visions'];
+const narrativeIds=['chanty','stone-soup','animal-affinity','kingpin','shadow','detect-artefact','river-guide','secret-identity','beneath-notice','lip-reading','read-write','hunter-s-eye','step-aside','fisherman','etiquette','second-sight','acute-sense','sixth-sense','night-vision','holy-visions'];
 const sheetIds=['pure-soul','luck','concoct','sturdy','criminal','doomed','embezzle','magnum-opus','wealthy','noble-blood','pharmacist','well-prepared','ancestral-grudge','blood-of-aenarion','uncouth-uranai','fleet-footed','seasoned-traveller','hardy'];
 const mixedSheet={
  artistic:'Achats d’Art hors carrière et nouvelles formes d’art.',craftsman:'Achats de Métier hors carrière et spécialités.',savant:'Spécialité de Savoir possédée, une acquisition par spécialité.',linguistics:'Langues de communication et coût des Augmentations dans la fiche.',

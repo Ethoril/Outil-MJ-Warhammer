@@ -7,12 +7,12 @@ Le tri est effectué par clause. Les effets mesurables utilisent le moteur, avec
 | Traitement principal | Talents |
 | --- | ---: |
 | Clauses raccordées au moteur | 132 |
-| Entièrement narratifs | 19 |
+| Entièrement narratifs | 20 |
 | Entièrement gérés par les fiches, hors bonus ci-dessous | 18 |
 | Bonus de caractéristiques exclus | 10 |
 | Magie, prières et effets magiques réservés au lot 3 | 28 |
 | Sources V4 non vérifiées, en attente | 6 |
-| Total | 213 |
+| Total | 214 |
 
 Ces catégories sont exclusives. Les talents mixtes conservent aussi leurs rappels et valeurs de fiche : 52 talents ont des clauses narratives et 38 des clauses de fiche, dont dix exclusions. Six entrées ajoutées depuis les Companions V4 restent non vérifiées et en attente d’adaptation V5 ; aucun effet mécanique ou narratif n’est présumé. Les bonus temporaires F/E de Fortification liquide sont également exclus. Les 382 clauses de contrat comprennent 277 automatiques et 105 assistées. Aucun talent mécanique déjà trié dans le périmètre 2.4 ne reste en attente.
 
@@ -38,7 +38,7 @@ La neutralisation silencieuse p. 135 conserve volontairement ses conséquences m
 
 Les 166 talents du livre V5 ont l’audit de source existant ; les 39 références de suppléments ne sont pas toutes vérifiées dans leur ouvrage. Petit est un homebrew validé par le MJ. Les contrats épinglent les textes publics et les arbitrages autorisés ; une source modifiée suspend sa contribution. [Audit des sources](ECARTS_LIVRE_V5_AIDES_DE_JEU.md).
 
-## Détail des 213 identités
+## Détail des 214 identités
 
 Les traitements mixtes sont visibles dans les colonnes. Les clauses, identités et empreintes exactes figurent dans [le tri JSON](LOT2_TRI_TALENTS.json). Cette page et la couverture affichée par l’interface sont générées depuis ce même tri.
 
@@ -68,6 +68,7 @@ Les traitements mixtes sont visibles dans les colonnes. Les clauses, identités 
 | Caïd | Rappel narratif | Rappel narratif : Criminel ne fait plus naître les soupçons des représentants de la loi et ne vous interdit plus certaines Carrières. La plupart des autres criminels vous respectent, sauf ceux suffisamment préparés qui visent votre position. |
 | Cavalier émérite | Moteur raccordé + Rappel narratif | 4 clause(s) de Tests, combat ou calcul de situation épinglées et raccordées. Rappel narratif : Action/Mouvement de la monture sans Test ; mouvement décidé par le MJ. |
 | Chanceux | Fiche | Fiche : +1 au maximum de points de Chance par acquisition, jusqu’à +3 avec trois acquisitions. |
+| Chant marin | Rappel narratif | Rappel narratif : Chaque acquisition permet d’apprendre un nouveau chant de marin (liste p. 67). Placez-vous à portée de voix du plus grand nombre possible de membres de l’équipage et réussissez un Test de Divertissement (Chant) : après 30 secondes, le chant affecte tout l’équipage pendant 3 minutes plus 1 minute par DR. Tant que vous chantez, votre seule action de combat possible est l’Esquive ; d’autres actions, comme des Tests de Perception ou de Calme, restent à la discrétion du MJ. Le chant prend fin si vous subissez des dégâts ou échouez à un Test opposé. Un seul chant par quart. |
 | Charge berserk | Moteur raccordé | 1 clause(s) de Tests, combat ou calcul de situation épinglées et raccordées. |
 | Chat de gouttière | Moteur raccordé + Rappel narratif | 3 clause(s) de Tests, combat ou calcul de situation épinglées et raccordées. Rappel narratif : Trajet le plus rapide ou le plus discret dans une ville connue. |
 | Chirurgie | Moteur raccordé + Rappel narratif | 3 clause(s) de Tests, combat ou calcul de situation épinglées et raccordées. Rappel narratif : Soigner les critiques exigeant Chirurgie selon leurs clauses de soins. |

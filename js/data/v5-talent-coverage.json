@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "ruleVersion": "catalogue-utile-v5-2026-10-10.1",
-  "sourceCatalogueVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+  "sourceCatalogueVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
   "policy": "Traitement explicite par clause. Les rappels ne sont pas des automatismes et les contrats actifs sont vérifiés séparément.",
   "items": [
     {
@@ -601,6 +601,24 @@
           "mode": "owned",
           "text": "+1 au maximum de points de Chance par acquisition, jusqu’à +3 avec trois acquisitions.",
           "scope": "sheet"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-chanty",
+      "name": "Chant marin",
+      "family": "aides_contextuelles",
+      "description": "Chaque acquisition permet d’apprendre un nouveau chant de marin (liste p. 67). Placez-vous à portée de voix du plus grand nombre possible de membres de l’équipage et réussissez un Test de Divertissement (Chant) : après 30 secondes, le chant affecte tout l’équipage pendant 3 minutes plus 1 minute par DR. Tant que vous chantez, votre seule action de combat possible est l’Esquive ; d’autres actions, comme des Tests de Perception ou de Calme, restent à la discrétion du MJ. Le chant prend fin si vous subissez des dégâts ou échouez à un Test opposé. Un seul chant par quart.",
+      "source": {
+        "effectHash": "sha256:b3872336254c53a5de96f23f9f6b19cb532938772fb4d0ede295abba2274cf33",
+        "reference": "Sea of Claws (V4), p. 63"
+      },
+      "clauses": [
+        {
+          "id": "tri:0",
+          "mode": "reminder",
+          "text": "Chaque acquisition permet d’apprendre un nouveau chant de marin (liste p. 67). Placez-vous à portée de voix du plus grand nombre possible de membres de l’équipage et réussissez un Test de Divertissement (Chant) : après 30 secondes, le chant affecte tout l’équipage pendant 3 minutes plus 1 minute par DR. Tant que vous chantez, votre seule action de combat possible est l’Esquive ; d’autres actions, comme des Tests de Perception ou de Calme, restent à la discrétion du MJ. Le chant prend fin si vous subissez des dégâts ou échouez à un Test opposé. Un seul chant par quart.",
+          "scope": "narrative"
         }
       ]
     },

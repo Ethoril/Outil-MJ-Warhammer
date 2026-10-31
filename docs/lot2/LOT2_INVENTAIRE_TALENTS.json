@@ -2,16 +2,16 @@
   "format": "lot2-talent-inventory-draft",
   "schemaVersion": 1,
   "createdAt": "2026-10-08",
-  "coverage": "213 identités : 207 précédemment triées ; six entrées ajoutées depuis les Companions V4 restent non vérifiées et en attente d’adaptation V5. Aucune couverture mécanique n’est présumée.",
+  "coverage": "214 identités : 208 précédemment triées ; six entrées ajoutées depuis les Companions V4 restent non vérifiées et en attente d’adaptation V5. Aucune couverture mécanique n’est présumée.",
   "selection": "Catalogue utile complet, PJ actuels prioritaires",
   "rulePolicy": "Système jouable unique V5. Conversion des descriptions assurée par le MJ à la source Aides de jeu ; le moteur applique les contrats V5 publiés et validés.",
-  "sourceCatalogueVersion": "sha256:8b8c564e94c435ad68372861dda93188ff199b7235844751e5465134dff2ef64",
+  "sourceCatalogueVersion": "sha256:f9bf34fbfaca105f09edc776b2e36084f96dd92b00609c8e1348c2ce9b1f5949",
   "sourceCataloguePath": "js/data/reference-snapshot.json (Talents) et js/data/reference-source-csv/Talents.csv",
   "referenceCorePdf": "Livre de base V5 EN v2.pdf (livre personnel, hors dépôt)",
   "counts": {
     "jets_et_contextes": 64,
     "hors_perimetre_bonus_caracteristique_fiche": 10,
-    "aides_contextuelles": 19,
+    "aides_contextuelles": 20,
     "progression_ou_hors_resolution": 14,
     "degats_et_qualites": 17,
     "actions_reactions_et_effets_actifs": 40,
@@ -1992,6 +1992,20 @@
       "clauses": []
     },
     {
+      "talentId": "talent-chanty",
+      "name": "Chant marin",
+      "englishName": "Chanty",
+      "specializationLabel": null,
+      "purchaseLimit": "Bonus d’Intelligence",
+      "source": "Sea of Claws (V4), p. 63",
+      "sourceEffectSha256": "b3872336254c53a5de96f23f9f6b19cb532938772fb4d0ede295abba2274cf33",
+      "family": "aides_contextuelles",
+      "status": "aides_contextuelles",
+      "priorityEvidence": null,
+      "livePjPriority": "a_calculer_depuis_snapshots_importes",
+      "clauses": []
+    },
+    {
       "talentId": "talent-fast-hands",
       "name": "Mains agiles",
       "englishName": "Fast Hands",
@@ -3475,12 +3489,12 @@
   "sourceNormalization": {
     "owner": "MJ dans le référentiel source",
     "targetRuleset": "V5",
-    "inventoryState": "213 identities : 207 précédemment triées, plus six entrées des Companions V4 importées le 28 octobre 2026 ; ces six sources restent non vérifiées et en attente d’adaptation V5.",
+    "inventoryState": "214 identities : 208 précédemment triées (dont Chant marin, ajouté à la feuille le 31 octobre 2026), plus six entrées des Companions V4 importées le 28 octobre 2026 ; ces six sources restent non vérifiées et en attente d’adaptation V5.",
     "runtimeConversion": false,
     "legacyCombatAdvantageCounter": false,
     "bibliographyEditionIsNotMechanic": "Une source V4 peut documenter une description adaptée V5 ; vérifier la clause publiée et son contrat, pas seulement la bibliographie.",
     "activation": "Empreinte d’effet source conforme au contrat V5 validé.",
-    "publicCsvSha256": "374903bb253489ae4fc37815cd179fe082b83d71e2b861640da04c7fc6f62e21"
+    "publicCsvSha256": "691604a920bf7a7e541309f4d1596869babcdd9049bb1b47ee0d30e0a606c70b"
   },
   "commonRules": {
     "source": "Convention du MJ précisée dans ce chat le 8 octobre 2026",
