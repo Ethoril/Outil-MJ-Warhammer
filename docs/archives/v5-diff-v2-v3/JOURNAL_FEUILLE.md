@@ -28,3 +28,10 @@ Prières (Masque mortuaire, Givre d'Ulric, Grâce de Ranald, Dent et griffe, Jug
 
 ## Yards → mètres (30/10, Claude)
 Talents B45, B54, B68, B79, B94, B142, B144, B146, B153, B204 ; Mots Clés B7, B8, B13, E13, B19, E19. Anciennes valeurs : `YARDS_FEUILLE.json` (champ `old`). Relecture : aucune cellule ne contient plus « yard » dans ces deux onglets.
+
+## 31/10/2026 — passe de cohérence outil ↔ feuille (décisions du MJ)
+
+- **Vocabulaire V5** (78 cellules, Magie et Miracles) : Volonté → Force Mentale, Charisme → Sociabilité (accord « la Sociabilité ») partout hors noms propres (Volonté de fer, Volonté inébranlable, « à volonté » inchangés) ; dans Portée/Cible/Durée de Magie : FM → Force Mentale, Toucher → Contact, Zone → ZdE, ½ / ÷ 2 → Moitié de, Instant/Instantanée → Instantané, Spéciale → Spécial. Liste exacte : `tmp/coherence/ecriture/corrections-appliquees.json`.
+- **123 sorts des suppléments ajoutés** en fin d'onglet Magie (lignes 279 à 401) : domaines peaux-vertes, Magie naturelle, Hoeth, Haute Magie, Magie de la mer, Vaul, Sorcellerie, Arcane, Nécromancie, Démonologie, dieux du Chaos, plus 4 variantes Slann en lignes séparées. Descriptions réécrites pour les joueurs (Gemini), relues et contrôlées (aucun nombre perdu hors références de livres). Source : `tmp/coherence/ecriture/sorts-feuille.json`.
+- Vérifié par ré-export : seules les cellules prévues ont changé ; les 278 lignes d'origine sont intactes.
+- Boucliers : rien écrit (la règle d'attaque est déjà dans le mot-clé Bouclier ; l'outil ajoute la précision à l'import).
