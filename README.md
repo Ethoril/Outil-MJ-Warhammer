@@ -1,6 +1,6 @@
-# Outil MJ — Warhammer (v3.29.0)
+# Outil MJ — Warhammer (v3.30.0)
 
-Application web progressive (PWA) d’assistance au Maître de Jeu pour **Warhammer**, avec combat **V5** et fiches importées. Version 3.29.0 : ménage interne sans changement de comportement — tests regroupés par domaine (`tests/unit/`), parcours navigateur à part (`npm run test:browser-all`), gros fichiers du moteur et de l'interface découpés en modules et remis à une instruction par ligne.
+Application web progressive (PWA) d’assistance au Maître de Jeu pour **Warhammer**, avec combat **V5** et fiches importées. Version 3.30.0 : arbitrages du MJ du 31/10 (Œil de la tempête sur la pause de Focalisation, Grim sans limite par Tour, Perturbant touche les neutres, textes en mètres) et feuille « Aides de jeu » réimportée : vocabulaire V5 (Force Mentale, Sociabilité), 123 sorts de suppléments au catalogue (400 sorts), talent Chant marin en rappel, mots-clés de secours complétés.
 
 Le [rapport de recette du lot 2](docs/lot2/LOT2_RECETTE_2_5.md) décrit le périmètre livré, les contrôles et les limites. Les effets narratifs restent des rappels, les valeurs de progression appartiennent aux fiches et la magie/les prières automatisées restent au lot 3.
 
