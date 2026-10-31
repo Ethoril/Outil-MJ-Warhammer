@@ -38,5 +38,3 @@ export function outcomePill(label, success, sl) {
   return node('span', `workspace-outcome ${success ? 'is-success' : 'is-failure'}`, `${label} : ${success ? 'Réussite' : 'Échec'} · DR ${signed(sl)}`);
 }
 
-if (typeof globalThis !== 'undefined') globalThis.signed = signed;
-
