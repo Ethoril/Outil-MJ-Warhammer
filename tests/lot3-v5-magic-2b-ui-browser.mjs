@@ -207,7 +207,7 @@ try {
     await origin().selectOption('true'); await page.waitForTimeout(250);
     await page.fill('input[aria-label="Protection magique : résultat du d10"]', '3'); await page.waitForTimeout(150);
     await calc(page, 25);
-    await page.locator('button', { hasText: /^Appliquer/ }).first().click(); await page.waitForTimeout(500);
+    await page.locator('button[data-focus-key="apply"]', { hasText: /^Appliquer/ }).click(); await page.waitForTimeout(500);
     await page.click('[data-action-key="bow-enemy-1"]'); await page.waitForTimeout(300);
     assert.equal(await origin().inputValue(), '', 'la nature de l’attaque précédente est oubliée');
     assert.equal(await page.inputValue('input[aria-label="Protection magique : résultat du d10"]'), '', 'le d10 précédent est oublié');
@@ -587,13 +587,12 @@ try {
   {
     const { page, context, errors } = await open('cast');
     await pickSpell(page, 'Couronne de Flamme');
-    const fear = page.locator('[data-focus-key="magic-specific-fear"]'), war = page.locator('[data-focus-key="magic-specific-war-leader"]');
-    await fear.scrollIntoViewIfNeeded(); await fear.fill('1'); await war.fill('1'); await page.waitForTimeout(300);
-    assert.equal(await war.inputValue(), '1');
+    const fear = page.locator('[data-focus-key="magic-specific-fear"]');
+    // Livre de base V5 v3 : seule la Peur est une option de surpuissance propre (0539fdb) ; le Meneur de Guerre n'est plus un palier.
+    assert.equal(await page.locator('[data-focus-key="magic-specific-war-leader"]').count(), 0);
+    await fear.scrollIntoViewIfNeeded(); await fear.fill('1'); await page.waitForTimeout(300);
     await calc(page, 5);
-    assert.equal(await fear.inputValue(), '1', 'la première option propre reste saisie');
-    assert.equal(await war.inputValue(), '1');
-    assert.match(await page.locator('.workspace-magic-result').innerText(), /Chef de guerre repris 1 fois/, 'le Chef de guerre est rappelé');
+    assert.equal(await fear.inputValue(), '1', 'l’option propre reste saisie');
     await page.click('[data-focus-key="apply"]'); await page.waitForTimeout(500);
     assert.match(JSON.stringify(await page.evaluate(() => window.__TEST__.Store.listParticipants().find(p => p.id === 'mage-1').extensions.v5.spellEffects)), /Peur/, 'la Peur choisie en premier est appliquée');
     assert.deepEqual(errors, []); await context.close();
