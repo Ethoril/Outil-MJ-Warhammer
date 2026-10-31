@@ -758,12 +758,12 @@
    },
    {
     "label": "previewDivineAbsolution",
-    "result": "e1b50d13bfd96d87",
+    "result": "24943b8703321873",
     "state": "0ed4be9662b06432"
    },
    {
     "label": "previewDivineWrathRecovery",
-    "result": "c32cddfd8e8d00ef",
+    "result": "5c89bb0c55739565",
     "state": "0ed4be9662b06432"
    },
    {
@@ -1908,7 +1908,7 @@
    },
    {
     "label": "sweep getAllDivineContracts",
-    "result": "314a8cec4fd7c7a2",
+    "result": "c43e4b5683e198bc",
     "state": "f786968e5715a28d"
    },
    {
@@ -1933,7 +1933,7 @@
    },
    {
     "label": "sweep previewDivineAbsolution",
-    "result": "7ab1910076dacda8",
+    "result": "e2af1eea593805c7",
     "state": "f786968e5715a28d"
    },
    {
@@ -2033,7 +2033,7 @@
    },
    {
     "label": "sweep previewDivineWrathRecovery",
-    "result": "1d8c6e61f8364b42",
+    "result": "98ea477b2f85efcf",
     "state": "f786968e5715a28d"
    },
    {
@@ -3122,12 +3122,12 @@
    },
    {
     "label": "previewDivineAbsolution",
-    "result": "2c6712c41bedc9f4",
+    "result": "2b247d24fdda33d6",
     "state": "d147deca87e0983b"
    },
    {
     "label": "previewDivineWrathRecovery",
-    "result": "83b16a94482a34da",
+    "result": "47f9d7e4d176c95b",
     "state": "d147deca87e0983b"
    },
    {
@@ -4272,7 +4272,7 @@
    },
    {
     "label": "sweep getAllDivineContracts",
-    "result": "314a8cec4fd7c7a2",
+    "result": "c43e4b5683e198bc",
     "state": "68ae9a8715f4d0e9"
    },
    {
@@ -4297,7 +4297,7 @@
    },
    {
     "label": "sweep previewDivineAbsolution",
-    "result": "1bd671b2d8208d1c",
+    "result": "6ff53ee124a055b4",
     "state": "68ae9a8715f4d0e9"
    },
    {
@@ -4397,7 +4397,7 @@
    },
    {
     "label": "sweep previewDivineWrathRecovery",
-    "result": "0b4a78e8c2879b3b",
+    "result": "865655aa264ba666",
     "state": "68ae9a8715f4d0e9"
    },
    {
