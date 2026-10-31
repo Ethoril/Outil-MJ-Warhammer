@@ -76,7 +76,7 @@ try{
  assert.ok(powderOption,'le catalogue expose Projectiles (Poudre noire)');
  await specialty.selectOption(powderOption);
  await page.locator('[data-focus-key="target-f2-siege-target"]').click();
- const rangedException=page.getByLabel('Tir opposé : exception vérifiée par le MJ');
+ const rangedException=page.getByLabel('Tir opposé par Esquive confirmé par le MJ');
  const rangedDetails=page.locator('details').filter({has:rangedException});
  if(await rangedDetails.count()&&!await rangedDetails.evaluate(el=>el.open)) await rangedDetails.locator('summary').click();
  await rangedException.selectOption('true');
@@ -120,7 +120,7 @@ try{
  assert.ok(engineeringOption,'la liste MJ propose une spécialité Projectiles non Poudre noire');
  await genericSpecialty.selectOption(engineeringOption);
  await page.locator('[data-focus-key="target-f2-generic-target"]').click();
- const genericException=page.getByLabel('Tir opposé : exception vérifiée par le MJ'),genericDetails=page.locator('details').filter({has:genericException});
+ const genericException=page.getByLabel('Tir opposé par Esquive confirmé par le MJ'),genericDetails=page.locator('details').filter({has:genericException});
  if(await genericDetails.count()&&!await genericDetails.evaluate(el=>el.open)) await genericDetails.locator('summary').click();
  await genericException.selectOption('true');
  await page.locator('[data-roll-input="attack"]').fill('01');
