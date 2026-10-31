@@ -55,7 +55,7 @@ try {
   check(await sizeLists({ ...beast, natural: 'stomp' }) === 2, 'Piétinement : exactement 2 listes de Taille');
   check(await sizeLists({ ...beast, natural: 'tongue' }) === 2, 'Langue : exactement 2 listes de Taille');
   check(await sizeLists({ ...beast, natural: 'tail' }) === 2, 'Attaque caudale : exactement 2 listes de Taille');
-  check(await sizeLists({ ...beast, natural: 'bite' }) === 0, 'Morsure : aucune liste de Taille');
+  check(await sizeLists({ ...beast, natural: 'bite' }) === 2, 'Morsure : exactement 2 listes de Taille (bonus de Taille V5, Q35 337131b)');
   check(await sizeLists({ ...beast, natural: 'stomp', large: true }) === 2, 'Piétinement et talent Grand : toujours 2 listes');
   check(await sizeLists({ ...beast, natural: 'bite', large: true }) === 2, 'talent Grand seul : 2 listes');
   check(pageErrors.length === 0, 'aucune erreur de page (' + (pageErrors[0] || 'rien') + ')');
