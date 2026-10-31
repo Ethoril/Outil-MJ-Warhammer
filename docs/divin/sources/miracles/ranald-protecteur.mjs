@@ -91,7 +91,7 @@ export const miracles = [
       { id: 'crowd-scaling', mode: 'engine', text: '+1 DR supplémentaire par tranche de 10 personnes dans la foule (taille saisie par le MJ).' },
       { id: 'status-exclusion', mode: 'manual', text: 'Les personnages de Statut Argent ou Or ne sont pas affectés.' }
     ],
-    sourceDelta: 'Zone imprimée « Fellowship yards » (sans « Bonus ») : lue comme la Sociabilité entière. Le livre ne précise pas si la foule compte uniquement les alliés ou toute personne présente, ni si le +1 DR par 10 se calcule sur le nombre total ou sur les tranches complètes (lecture : tranches complètes). Lecture retenue (non confirmée par le MJ) : la foule compte toute personne présente, saisie par le MJ (crowdSize), et le bonus vaut 2 + 1 par tranche complète de 10 ; « Endurance » est normalisé en Résistance.'
+    sourceDelta: 'Zone imprimée « Sociabilité mètres » (sans « Bonus ») : lue comme la Sociabilité entière. Le livre ne précise pas si la foule compte uniquement les alliés ou toute personne présente, ni si le +1 DR par 10 se calcule sur le nombre total ou sur les tranches complètes (lecture : tranches complètes). Lecture retenue (non confirmée par le MJ) : la foule compte toute personne présente, saisie par le MJ (crowdSize), et le bonus vaut 2 + 1 par tranche complète de 10 ; « Endurance » est normalisé en Résistance.'
   },
   {
     name: 'Sous ma protection', canonicalName: 'Under My Protection', printedPage: 25,

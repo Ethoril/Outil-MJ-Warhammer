@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceFingerprint": "sha256:50001e4a091d9e91a774972730379d0518a360176e05419a6773bd7a0aa0c15f",
+  "sourceFingerprint": "sha256:9cb77acfb13c578ed357d3c6f875094b7a582351fdbd5ba038e4bc310d367acf",
   "counts": {
     "blessings": 60,
     "miracles": 15,
@@ -22749,7 +22749,7 @@
       "needsInput": [
         {
           "field": "area-radius",
-          "label": "Rayon de la zone : le livre indique « Fellowship yards » (Sociabilité entière, non le Bonus); valeur à confirmer par le MJ."
+          "label": "Rayon de la zone : le livre indique « Sociabilité mètres » (Sociabilité entière, non le Bonus); valeur à confirmer par le MJ."
         },
         {
           "field": "area-targets",

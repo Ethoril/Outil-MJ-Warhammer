@@ -40,7 +40,7 @@ export const miracles = [
       { id: 'listen', mode: 'manual', text: 'Le prêtre entend clairement les échanges ou bruits de la cible à portée, même derrière un mur ou en pièce scellée.' },
       { id: 'whisper', mode: 'manual', text: 'Le prêtre peut aussi murmurer des paroles que la cible entend.' }
     ],
-    sourceDelta: 'Portée imprimée « Fellowship yards » (sans « Bonus ») : lue comme la Sociabilité entière, non son Bonus.'
+    sourceDelta: 'Portée imprimée « Sociabilité mètres » (sans « Bonus ») : lue comme la Sociabilité entière, non son Bonus.'
   },
   {
     name: 'Longue portée', canonicalName: 'Long Reach', printedPage: 18,

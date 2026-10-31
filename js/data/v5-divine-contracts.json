@@ -1701,7 +1701,7 @@
     {
       "id": "divine:miracle:manann:becalm",
       "catalogueEntry": null,
-      "v5Summary": "Portée en miles : unité absente de la grammaire params (yards/rounds/minutes/hours), unit 'miles' utilisée, à valider côté générateur. La zone est imprimée « Fellowship yards » (sans « Bonus », contrairement à la portée) : lue comme la Sociabilité entière, non son Bonus.",
+      "v5Summary": "Portée en miles : unité absente de la grammaire params (yards/rounds/minutes/hours), unit 'miles' utilisée, à valider côté générateur. La zone est imprimée « Sociabilité mètres » (sans « Bonus », contrairement à la portée) : lue comme la Sociabilité entière, non son Bonus.",
       "status": "manual",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
@@ -1911,7 +1911,7 @@
     {
       "id": "divine:miracle:ranald:distant-sounds",
       "catalogueEntry": null,
-      "v5Summary": "Portée imprimée « Fellowship yards » (sans « Bonus ») : lue comme la Sociabilité entière, non son Bonus.",
+      "v5Summary": "Portée imprimée « Sociabilité mètres » (sans « Bonus ») : lue comme la Sociabilité entière, non son Bonus.",
       "status": "manual",
       "source": {
         "document": "Deft Steps Light Fingers.pdf",
@@ -2061,7 +2061,7 @@
     {
       "id": "divine:miracle:ranald:rally-round",
       "catalogueEntry": null,
-      "v5Summary": "Zone imprimée « Fellowship yards » (sans « Bonus ») : lue comme la Sociabilité entière. Le livre ne précise pas si la foule compte uniquement les alliés ou toute personne présente, ni si le +1 DR par 10 se calcule sur le nombre total ou sur les tranches complètes (lecture : tranches complètes). Lecture retenue (non confirmée par le MJ) : la foule compte toute personne présente, saisie par le MJ (crowdSize), et le bonus vaut 2 + 1 par tranche complète de 10 ; « Endurance » est normalisé en Résistance.",
+      "v5Summary": "Zone imprimée « Sociabilité mètres » (sans « Bonus ») : lue comme la Sociabilité entière. Le livre ne précise pas si la foule compte uniquement les alliés ou toute personne présente, ni si le +1 DR par 10 se calcule sur le nombre total ou sur les tranches complètes (lecture : tranches complètes). Lecture retenue (non confirmée par le MJ) : la foule compte toute personne présente, saisie par le MJ (crowdSize), et le bonus vaut 2 + 1 par tranche complète de 10 ; « Endurance » est normalisé en Résistance.",
       "status": "assisted",
       "source": {
         "document": "Deft Steps Light Fingers.pdf",
@@ -2586,7 +2586,7 @@
     {
       "id": "divine:miracle:taal:earthshudder",
       "catalogueEntry": null,
-      "v5Summary": "Portée imprimée « Fellowship yards » (sans « Bonus ») : lue comme la Sociabilité entière ; zone en Bonus de Sociabilité yards. Le Test d’Athlétisme de chaque cible reste joué hors moteur : le MJ saisit son résultat (fait par cible) et le moteur pose À terre en cas d’échec. Difficulté Difficult (-10) imprimée en pourcentage (4e édition), affichée -1 DR (conversion par défaut, non confirmée). Le livre ne dit pas si « SL » est le DR du Test de Prière (lu ainsi).",
+      "v5Summary": "Portée imprimée « Sociabilité mètres » (sans « Bonus ») : lue comme la Sociabilité entière ; zone en Bonus de Sociabilité mètres. Le Test d’Athlétisme de chaque cible reste joué hors moteur : le MJ saisit son résultat (fait par cible) et le moteur pose À terre en cas d’échec. Difficulté Difficult (-10) imprimée en pourcentage (4e édition), affichée -1 DR (conversion par défaut, non confirmée). Le livre ne dit pas si « SL » est le DR du Test de Prière (lu ainsi).",
       "status": "assisted",
       "source": {
         "document": "Deft Steps Light Fingers.pdf",
@@ -2616,7 +2616,7 @@
     {
       "id": "divine:miracle:taal:pax-of-taal",
       "catalogueEntry": null,
-      "v5Summary": "Zone imprimée « Fellowship yards » (sans « Bonus ») : lue comme la Sociabilité entière. « Twisted by Chaos » : le livre ne définit pas la liste des créatures touchées (mutants, bêtes du Chaos…), le MJ tranche.",
+      "v5Summary": "Zone imprimée « Sociabilité mètres » (sans « Bonus ») : lue comme la Sociabilité entière. « Twisted by Chaos » : le livre ne définit pas la liste des créatures touchées (mutants, bêtes du Chaos…), le MJ tranche.",
       "status": "manual",
       "source": {
         "document": "Deft Steps Light Fingers.pdf",
@@ -2856,7 +2856,7 @@
     {
       "id": "divine:miracle:ulric:hoarfrost-s-chill",
       "catalogueEntry": null,
-      "v5Summary": "Cible imprimée « AoE (Fellowship yards) » sans « Bonus », contrairement aux autres zones; la grammaire params n'a pas de zone en caractéristique entière, encodée en special. Peur (2) imprimée en v3 (l’ancien arbitrage Peur (1) du 21/10 ne s’applique plus) ; la perte d’Élan remplace la perte d’Avantage.",
+      "v5Summary": "Cible imprimée « AoE (Sociabilité mètres) » sans « Bonus », contrairement aux autres zones; la grammaire params n'a pas de zone en caractéristique entière, encodée en special. Peur (2) imprimée en v3 (l’ancien arbitrage Peur (1) du 21/10 ne s’applique plus) ; la perte d’Élan remplace la perte d’Avantage.",
       "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
@@ -14671,7 +14671,7 @@
         "specialization": "Manann"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": "Portée en miles : unité absente de la grammaire params (yards/rounds/minutes/hours), unit 'miles' utilisée, à valider côté générateur. La zone est imprimée « Fellowship yards » (sans « Bonus », contrairement à la portée) : lue comme la Sociabilité entière, non son Bonus.",
+      "sourceDelta": "Portée en miles : unité absente de la grammaire params (yards/rounds/minutes/hours), unit 'miles' utilisée, à valider côté générateur. La zone est imprimée « Sociabilité mètres » (sans « Bonus », contrairement à la portée) : lue comme la Sociabilité entière, non son Bonus.",
       "params": {
         "range": {
           "kind": "characteristic-bonus",
@@ -17088,7 +17088,7 @@
         "specialization": "Ranald"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": "Portée imprimée « Fellowship yards » (sans « Bonus ») : lue comme la Sociabilité entière, non son Bonus.",
+      "sourceDelta": "Portée imprimée « Sociabilité mètres » (sans « Bonus ») : lue comme la Sociabilité entière, non son Bonus.",
       "params": {
         "range": {
           "kind": "characteristic",
@@ -18354,7 +18354,7 @@
         "specialization": "Ranald"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": "Zone imprimée « Fellowship yards » (sans « Bonus ») : lue comme la Sociabilité entière. Le livre ne précise pas si la foule compte uniquement les alliés ou toute personne présente, ni si le +1 DR par 10 se calcule sur le nombre total ou sur les tranches complètes (lecture : tranches complètes). Lecture retenue (non confirmée par le MJ) : la foule compte toute personne présente, saisie par le MJ (crowdSize), et le bonus vaut 2 + 1 par tranche complète de 10 ; « Endurance » est normalisé en Résistance.",
+      "sourceDelta": "Zone imprimée « Sociabilité mètres » (sans « Bonus ») : lue comme la Sociabilité entière. Le livre ne précise pas si la foule compte uniquement les alliés ou toute personne présente, ni si le +1 DR par 10 se calcule sur le nombre total ou sur les tranches complètes (lecture : tranches complètes). Lecture retenue (non confirmée par le MJ) : la foule compte toute personne présente, saisie par le MJ (crowdSize), et le bonus vaut 2 + 1 par tranche complète de 10 ; « Endurance » est normalisé en Résistance.",
       "params": {
         "range": {
           "kind": "self"
@@ -24017,7 +24017,7 @@
         "specialization": "Taal"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": "Portée imprimée « Fellowship yards » (sans « Bonus ») : lue comme la Sociabilité entière ; zone en Bonus de Sociabilité yards. Le Test d’Athlétisme de chaque cible reste joué hors moteur : le MJ saisit son résultat (fait par cible) et le moteur pose À terre en cas d’échec. Difficulté Difficult (-10) imprimée en pourcentage (4e édition), affichée -1 DR (conversion par défaut, non confirmée). Le livre ne dit pas si « SL » est le DR du Test de Prière (lu ainsi).",
+      "sourceDelta": "Portée imprimée « Sociabilité mètres » (sans « Bonus ») : lue comme la Sociabilité entière ; zone en Bonus de Sociabilité mètres. Le Test d’Athlétisme de chaque cible reste joué hors moteur : le MJ saisit son résultat (fait par cible) et le moteur pose À terre en cas d’échec. Difficulté Difficult (-10) imprimée en pourcentage (4e édition), affichée -1 DR (conversion par défaut, non confirmée). Le livre ne dit pas si « SL » est le DR du Test de Prière (lu ainsi).",
       "params": {
         "range": {
           "kind": "characteristic",
@@ -24248,7 +24248,7 @@
         "specialization": "Taal"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": "Zone imprimée « Fellowship yards » (sans « Bonus ») : lue comme la Sociabilité entière. « Twisted by Chaos » : le livre ne définit pas la liste des créatures touchées (mutants, bêtes du Chaos…), le MJ tranche.",
+      "sourceDelta": "Zone imprimée « Sociabilité mètres » (sans « Bonus ») : lue comme la Sociabilité entière. « Twisted by Chaos » : le livre ne définit pas la liste des créatures touchées (mutants, bêtes du Chaos…), le MJ tranche.",
       "params": {
         "range": {
           "kind": "self"
@@ -26483,7 +26483,7 @@
         "specialization": "Ulric"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": "Cible imprimée « AoE (Fellowship yards) » sans « Bonus », contrairement aux autres zones; la grammaire params n'a pas de zone en caractéristique entière, encodée en special. Peur (2) imprimée en v3 (l’ancien arbitrage Peur (1) du 21/10 ne s’applique plus) ; la perte d’Élan remplace la perte d’Avantage.",
+      "sourceDelta": "Cible imprimée « AoE (Sociabilité mètres) » sans « Bonus », contrairement aux autres zones; la grammaire params n'a pas de zone en caractéristique entière, encodée en special. Peur (2) imprimée en v3 (l’ancien arbitrage Peur (1) du 21/10 ne s’applique plus) ; la perte d’Élan remplace la perte d’Avantage.",
       "params": {
         "range": {
           "kind": "self"
@@ -26572,7 +26572,7 @@
       "needsInput": [
         {
           "field": "area-radius",
-          "label": "Rayon de la zone : le livre indique « Fellowship yards » (Sociabilité entière, non le Bonus); valeur à confirmer par le MJ."
+          "label": "Rayon de la zone : le livre indique « Sociabilité mètres » (Sociabilité entière, non le Bonus); valeur à confirmer par le MJ."
         },
         {
           "field": "area-targets",
@@ -28130,5 +28130,5 @@
       "needsInput": []
     }
   ],
-  "sourceFingerprint": "sha256:50001e4a091d9e91a774972730379d0518a360176e05419a6773bd7a0aa0c15f"
+  "sourceFingerprint": "sha256:9cb77acfb13c578ed357d3c6f875094b7a582351fdbd5ba038e4bc310d367acf"
 }

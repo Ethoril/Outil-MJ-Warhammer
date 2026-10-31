@@ -18,7 +18,7 @@ export const miracles = [
    { id: 'calm-zone', mode: 'manual', text: 'Zone de calme de Sociabilité mètres autour du navire, malgré tempête et mer agitée ; elle suit le navire s’il avance par une autre propulsion.' },
    { id: 'sl-extension', mode: 'assisted', text: 'Par tranche de +2 DR : ajouter portée, cibles ou durée égales à la valeur initiale.' }
   ],
-  sourceDelta: 'Portée en miles : unité absente de la grammaire params (yards/rounds/minutes/hours), unit \'miles\' utilisée, à valider côté générateur. La zone est imprimée « Fellowship yards » (sans « Bonus », contrairement à la portée) : lue comme la Sociabilité entière, non son Bonus.'
+  sourceDelta: 'Portée en miles : unité absente de la grammaire params (yards/rounds/minutes/hours), unit \'miles\' utilisée, à valider côté générateur. La zone est imprimée « Sociabilité mètres » (sans « Bonus », contrairement à la portée) : lue comme la Sociabilité entière, non son Bonus.'
  },
  {
   name: 'Visage de l’homme noyé', canonicalName: "Drowned Man's Face", printedPage: 222,

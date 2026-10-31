@@ -20,7 +20,7 @@ export const miracles = [
     effects: [{ type: 'grant-trait', traits: ['Peur (2)'], appliesTo: 'caster' }],
     targetRules: ['all-in-area-except-priest'],
     needsInput: [
-      { id: 'area-radius', text: 'Rayon de la zone : le livre indique « Fellowship yards » (Sociabilité entière, non le Bonus); valeur à confirmer par le MJ.' },
+      { id: 'area-radius', text: 'Rayon de la zone : le livre indique « Sociabilité mètres » (Sociabilité entière, non le Bonus); valeur à confirmer par le MJ.' },
       { id: 'area-targets', text: 'Créatures présentes dans la zone (perte d’Élan au début de chaque Round).' }
     ],
     clauses: [
@@ -28,7 +28,7 @@ export const miracles = [
       { id: 'momentum-loss', mode: 'manual', text: 'Au début de chaque Round, toutes les créatures de la zone sauf le prêtre perdent leur Élan.' },
       { id: 'end', mode: 'engine', text: 'Fin des effets après Bonus de Sociabilité rounds.' }
     ],
-    sourceDelta: 'Cible imprimée « AoE (Fellowship yards) » sans « Bonus », contrairement aux autres zones; la grammaire params n\'a pas de zone en caractéristique entière, encodée en special. Peur (2) imprimée en v3 (l’ancien arbitrage Peur (1) du 21/10 ne s’applique plus) ; la perte d’Élan remplace la perte d’Avantage.'
+    sourceDelta: 'Cible imprimée « AoE (Sociabilité mètres) » sans « Bonus », contrairement aux autres zones; la grammaire params n\'a pas de zone en caractéristique entière, encodée en special. Peur (2) imprimée en v3 (l’ancien arbitrage Peur (1) du 21/10 ne s’applique plus) ; la perte d’Élan remplace la perte d’Avantage.'
   },
   {
     name: 'Hurlement du loup',

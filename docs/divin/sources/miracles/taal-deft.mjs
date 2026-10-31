@@ -41,7 +41,7 @@ export const miracles = [
       { id: 'athletics-test', mode: 'engine', text: 'Chaque cible dans la zone fait un Test d’Athlétisme Difficult (-10) ; échec : elle gagne l’État À terre.' },
       { id: 'structure-damage', mode: 'manual', text: 'Chaque structure artificielle dans la zone subit 1d10 + DR dégâts (les éléments naturels ne sont pas touchés).' }
     ],
-    sourceDelta: 'Portée imprimée « Fellowship yards » (sans « Bonus ») : lue comme la Sociabilité entière ; zone en Bonus de Sociabilité yards. Le Test d’Athlétisme de chaque cible reste joué hors moteur : le MJ saisit son résultat (fait par cible) et le moteur pose À terre en cas d’échec. Difficulté Difficult (-10) imprimée en pourcentage (4e édition), affichée -1 DR (conversion par défaut, non confirmée). Le livre ne dit pas si « SL » est le DR du Test de Prière (lu ainsi).'
+    sourceDelta: 'Portée imprimée « Sociabilité mètres » (sans « Bonus ») : lue comme la Sociabilité entière ; zone en Bonus de Sociabilité mètres. Le Test d’Athlétisme de chaque cible reste joué hors moteur : le MJ saisit son résultat (fait par cible) et le moteur pose À terre en cas d’échec. Difficulté Difficult (-10) imprimée en pourcentage (4e édition), affichée -1 DR (conversion par défaut, non confirmée). Le livre ne dit pas si « SL » est le DR du Test de Prière (lu ainsi).'
   },
   {
     name: 'Festin de la nature', canonicalName: "Nature's Repast", printedPage: 88,
@@ -73,7 +73,7 @@ export const miracles = [
       { id: 'chaos-immune', mode: 'manual', text: 'Les créatures déformées par le Chaos ne sont pas affectées.' },
       { id: 'broken-by-attack', mode: 'manual', text: 'Si un personnage attaque les animaux, l’effet sur eux est brisé.' }
     ],
-    sourceDelta: 'Zone imprimée « Fellowship yards » (sans « Bonus ») : lue comme la Sociabilité entière. « Twisted by Chaos » : le livre ne définit pas la liste des créatures touchées (mutants, bêtes du Chaos…), le MJ tranche.'
+    sourceDelta: 'Zone imprimée « Sociabilité mètres » (sans « Bonus ») : lue comme la Sociabilité entière. « Twisted by Chaos » : le livre ne définit pas la liste des créatures touchées (mutants, bêtes du Chaos…), le MJ tranche.'
   },
   {
     name: 'Patte déchirante', canonicalName: 'Rending Paw', printedPage: 88,
