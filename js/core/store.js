@@ -266,7 +266,10 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
 
   function shieldAfterAttack(participants, preview, round) {
     const actorId = preview?.actorId || preview?.input?.actor?.id;
-    if(['attack','attaque'].includes(preview?.input?.action?.type)){participants=endSpellEffectsOnEvent(participants,actorId,'attack');if(preview.targetId)participants=endSpellEffectsOnEvent(participants,preview.targetId,'incoming-attack');}
+    if(['attack','attaque'].includes(preview?.input?.action?.type)){
+      participants=endSpellEffectsOnEvent(participants,actorId,'attack');
+      if(preview.targetId)participants=endSpellEffectsOnEvent(participants,preview.targetId,'incoming-attack');
+    }
     const equipmentId = preview?.shieldAttack?.confirmed ? preview.shieldAttack.shieldId
       : preview?.input?.action?.extensions?.fiche?.equipmentId;
     if (!preview?.attack || !equipmentId) return participants;
@@ -948,7 +951,10 @@ function resolvedCorruptionTest(participant, skillId, input) {
     const state = currentEnvelope();
     return syncSession.enqueue({ state, localState: state })
       .then(() => syncSession.flush({ localState: currentEnvelope() }))
-      .catch(error => { reportSyncStatus('error'); return { ok: false, error }; });
+      .catch(error => {
+        reportSyncStatus('error');
+        return { ok: false, error };
+      });
   }
 
   function queuePersistenceSave(updates = {}, restore = null, stateOverride = null, { includeOperation = true } = {}) {
@@ -1248,7 +1254,11 @@ function resolvedCorruptionTest(participant, skillId, input) {
   /** Maladresse d'un Test de Guérison du suivi des séquelles : les Blessures perdues sont retirées au patient (p.170). */
   function withHealingFumble(outcome, patient) {
     if (patient && outcome.receipt.status === 'applied' && outcome.receipt.fumbleDamage) {
-      outcome.afterApply = next => { const target = next.combat.participants.find(row => row.id === patient.id); target.hp = Math.max(0, Number(target.hp) - outcome.receipt.fumbleDamage); return next; };
+      outcome.afterApply = next => {
+        const target = next.combat.participants.find(row => row.id === patient.id);
+        target.hp = Math.max(0, Number(target.hp) - outcome.receipt.fumbleDamage);
+        return next;
+      };
     }
     return outcome;
   }
@@ -1266,8 +1276,14 @@ function resolvedCorruptionTest(participant, skillId, input) {
       let next = { ...draft, extensions: { ...extensions, v5: { ...v5, aftermathRegister: outcome.state } } };
       if (outcome.afterApply) next = outcome.afterApply(next);
       return next;
-    }); } catch (error) { if (error?.aftermathRefused) return outcome; throw error; }
-    return commit?.then ? commit.then(() => outcome).catch(error => { if (error?.aftermathRefused) return outcome; throw error; }) : outcome;
+    }); } catch (error) {
+      if (error?.aftermathRefused) return outcome;
+      throw error;
+    }
+    return commit?.then ? commit.then(() => outcome).catch(error => {
+      if (error?.aftermathRefused) return outcome;
+      throw error;
+    }) : outcome;
   }
 
   function commitV5Effect(type, participantId, evaluate, supplied = {}) {
@@ -1328,11 +1344,16 @@ function resolvedCorruptionTest(participant, skillId, input) {
   // Same numbering as duplicateProfile: « Gobelin », « Gobelin 2 », « Gobelin 3 »…
   function uniqueName(name, usedNames) {
     if (!usedNames.has(name)) return name;
-    let baseName = name; const match = name.match(/^(.*?)(\s\d+)?$/); if (match && match[2]) baseName = match[1];
+    let baseName = name;
+    const match = name.match(/^(.*?)(\s\d+)?$/);
+    if (match && match[2]) baseName = match[1];
     let maxNum = 0;
     for (const other of usedNames) {
       if (other === baseName) maxNum = Math.max(maxNum, 1);
-      else if (other.startsWith(baseName + ' ')) { const s = other.substring(baseName.length + 1); if (/^\d+$/.test(s)) maxNum = Math.max(maxNum, parseInt(s)); }
+      else if (other.startsWith(baseName + ' ')) {
+        const s = other.substring(baseName.length + 1);
+        if (/^\d+$/.test(s)) maxNum = Math.max(maxNum, parseInt(s));
+      }
     }
     return `${baseName} ${maxNum + 1}`;
   }
@@ -1467,7 +1488,9 @@ function resolvedCorruptionTest(participant, skillId, input) {
               localRevision = nextRevision;
               pendingProtocolState = Boolean(persistedState.syncPending);
               applyDataToState(after, { includeLog: true, includeHistory: false });
-              emitBus('reserve'); emitBus('combat'); emitBus('log');
+              emitBus('reserve');
+              emitBus('combat');
+              emitBus('log');
               if (!protocolReady) {
                 // The v2 session may still be opening (or offline).  Keep a
                 // durable replay marker so reconciliation cannot adopt a
@@ -1504,7 +1527,9 @@ function resolvedCorruptionTest(participant, skillId, input) {
           localRevision = nextRevision;
           applyDataToState(after, { includeLog: true, includeHistory: false });
           const persisted = save(true);
-          emitBus('reserve'); emitBus('combat'); emitBus('log');
+          emitBus('reserve');
+          emitBus('combat');
+          emitBus('log');
           return persisted;
         } catch (error) {
           historyState = previousHistory;
@@ -1551,7 +1576,8 @@ function resolvedCorruptionTest(participant, skillId, input) {
     },
     updateProfile(id, patch, { propagate = false, expectedLocalRevision } = {}) {
       if (!canMutate()) return false;
-      const p = reserve.get(id); if (!p) return;
+      const p = reserve.get(id);
+      if (!p) return;
       if (persistence) {
         const capturedPatch = canonicalizeProfileFields(JSON.parse(JSON.stringify(patch || {})));
         return api.executeCommand('update-profile', draft => {
@@ -1583,12 +1609,17 @@ function resolvedCorruptionTest(participant, skillId, input) {
         for (const part of combat.participants.values()) if (part.profileId === id) {
           Object.assign(part, { name: patch.name ?? part.name, kind: patch.kind ?? part.kind, initiative: patch.initiative ?? part.initiative, maxHp: patch.hp ?? part.maxHp });
           if (isMagicBased(part)) Object.assign(part, rebaseMagicLayers(part, { caracs: patch.caracs, armor: patch.armor }));
-          else { if (patch.caracs) part.caracs = cloneValue(patch.caracs); if (patch.armor) part.armor = cloneValue(patch.armor); }
+          else {
+            if (patch.caracs) part.caracs = cloneValue(patch.caracs);
+            if (patch.armor) part.armor = cloneValue(patch.armor);
+          }
           for (const key of FICHE_DATA_FIELDS) if (Object.hasOwn(patch, key)) part[key] = cloneValue(patch[key]);
           markDirty(`combat/participants/${part.id}`, part);
         }
       }
-      save(); emitBus('reserve'); if (propagate) emitBus('combat');
+      save();
+      emitBus('reserve');
+      if (propagate) emitBus('combat');
     },
     // Une commande conserve les Blessures subies au delta de maximum, sans modifier les états ni le tour.
     applyFicheSync(entries, { expectedLocalRevision } = {}) {
@@ -1599,7 +1630,11 @@ function resolvedCorruptionTest(participant, skillId, input) {
       // Rien à changer : pas de commande, donc pas d'entrée d'historique.
       const probe = JSON.parse(JSON.stringify(currentEnvelope()));
       if (applyFicheSyncToDraft(probe, captured) === probe) return { ok: true, changed: false };
-      return api.executeCommand('sync-fiches', draft => { assertRevision(draft.localRevision); const next = applyFicheSyncToDraft(draft, captured); return reconcileV5ResourceBindings(draft, next, captured); });
+      return api.executeCommand('sync-fiches', draft => {
+        assertRevision(draft.localRevision);
+        const next = applyFicheSyncToDraft(draft, captured);
+        return reconcileV5ResourceBindings(draft, next, captured);
+      });
     },
     removeProfile(id) {
       if (!canMutate()) return false;
@@ -1607,7 +1642,10 @@ function resolvedCorruptionTest(participant, skillId, input) {
       if (persistence) return api.executeCommand('remove-profile', draft => ({ ...draft, reserve: (draft.reserve || []).filter(item => item.id !== id) }));
       beginCommand('remove-profile');
       recordSnapshot('delete-profile');
-      reserve.delete(id); markDirty(`reserve/${id}`, null); save(); emitBus('reserve');
+      reserve.delete(id);
+      markDirty(`reserve/${id}`, null);
+      save();
+      emitBus('reserve');
     },
     clearReserve() {
       if (!canMutate()) return false;
@@ -1618,16 +1656,26 @@ function resolvedCorruptionTest(participant, skillId, input) {
       }));
       beginCommand('clear-reserve');
       recordSnapshot('clear-reserve');
-      const count = reserve.size; reserve.clear(); markDirty('reserve', null); save(); emitBus('reserve');
+      const count = reserve.size;
+      reserve.clear();
+      markDirty('reserve', null);
+      save();
+      emitBus('reserve');
       this.log(`Réserve: supprimé ${count} profil(s)`);
     },
     duplicateProfile(id) {
-      const p = reserve.get(id); if (!p) return;
-      let baseName = p.name; const match = p.name.match(/^(.*?)(\s\d+)?$/); if (match && match[2]) baseName = match[1];
+      const p = reserve.get(id);
+      if (!p) return;
+      let baseName = p.name;
+      const match = p.name.match(/^(.*?)(\s\d+)?$/);
+      if (match && match[2]) baseName = match[1];
       let maxNum = 0;
       for (const other of reserve.values()) {
         if (other.name === baseName) maxNum = Math.max(maxNum, 1);
-        else if (other.name.startsWith(baseName + " ")) { const s = other.name.substring(baseName.length + 1); if (!isNaN(s)) maxNum = Math.max(maxNum, parseInt(s)); }
+        else if (other.name.startsWith(baseName + " ")) {
+          const s = other.name.substring(baseName.length + 1);
+          if (!isNaN(s)) maxNum = Math.max(maxNum, parseInt(s));
+        }
       }
       const newProfile = new Profile({ ...p, id: uid(), name: `${baseName} ${maxNum + 1}`, armor: { ...p.armor }, caracs: { ...p.caracs }, diceLines: p.diceLines });
       this.addProfile(newProfile);
@@ -1650,18 +1698,26 @@ function resolvedCorruptionTest(participant, skillId, input) {
         });
       }
       beginCommand('add-participant');
-      combat.participants.set(p.id, p); markDirty(`combat/participants/${p.id}`, p); this.rebuildOrder(); save(); emitBus('combat');
+      combat.participants.set(p.id, p);
+      markDirty(`combat/participants/${p.id}`, p);
+      this.rebuildOrder();
+      save();
+      emitBus('combat');
     },
     removeParticipant(id) {
       if (!canMutate()) return false;
-      const participant = combat.participants.get(id); if (!participant) return;
+      const participant = combat.participants.get(id);
+      if (!participant) return;
       // Un participant lié par un familier passe par une commande annulable même sans persistance : l'historique des liens (commandes) ne se mêle pas à l'instantané hérité.
       const linked = familiarLinksOf(participant).length > 0 || Boolean(participant.extensions?.v5?.familiarOf)
         || participant.extensions?.v5?.mounted === true
         || Array.from(combat.participants.values()).some(item => item.extensions?.v5?.mounted === true && item.extensions.v5.mountId === id);
       if (persistence || linked) return api.executeCommand('remove-participant', draft => {
         const stripLinks = item => {
-          if (item.extensions?.v5?.familiarOf?.masterId === id) return withV5(item, v5 => { const { familiarOf, ...rest } = v5; return rest; });
+          if (item.extensions?.v5?.familiarOf?.masterId === id) return withV5(item, v5 => {
+            const { familiarOf, ...rest } = v5;
+            return rest;
+          });
           if (familiarLinksOf(item).some(row => row.familiarId === id)) return withV5(item, v5 => ({ ...v5, familiarLinks: v5.familiarLinks.filter(row => row.familiarId !== id) }));
           return item;
         };
@@ -1681,25 +1737,36 @@ function resolvedCorruptionTest(participant, skillId, input) {
       combat.participants.forEach((item, key) => {
         if (item.extensions?.v5?.mounted === true && item.extensions.v5.mountId === id) {
           const dismounted = clearMountedRelation(item);
-          combat.participants.set(key, dismounted); markDirty(`combat/participants/${key}`, dismounted);
+          combat.participants.set(key, dismounted);
+          markDirty(`combat/participants/${key}`, dismounted);
           return;
         }
         if (item.extensions?.v5?.familiarOf?.masterId !== id) return;
-        const freed = withV5(item, v5 => { const { familiarOf, ...rest } = v5; return rest; });
-        combat.participants.set(key, freed); markDirty(`combat/participants/${key}`, freed);
+        const freed = withV5(item, v5 => {
+          const { familiarOf, ...rest } = v5;
+          return rest;
+        });
+        combat.participants.set(key, freed);
+        markDirty(`combat/participants/${key}`, freed);
       });
       combat.order = turnTransition ? turnTransition.order : combat.order.filter(x => x !== id);
       if (turnTransition) combat.currentActorId = turnTransition.currentActorId;
       else if (combat.currentActorId === id) combat.currentActorId = null;
       if (turnTransition && combat.currentActorId) turnSelectionPending = true;
-      markDirty(`combat/participants/${id}`, null); markDirty('combat/meta', { round: combat.round, currentActorId: combat.currentActorId, order: combat.order });
+      markDirty(`combat/participants/${id}`, null);
+      markDirty('combat/meta', { round: combat.round, currentActorId: combat.currentActorId, order: combat.order });
       cleanupDiceLinesForParticipants([id]);
-      log.forEach(entry => { if (entry?.actorId === id && !entry.actorName) entry.actorName = participant.name; if (entry?.targetId === id && !entry.targetName) entry.targetName = participant.name; });
-      save(); emitBus('combat');
+      log.forEach(entry => {
+        if (entry?.actorId === id && !entry.actorName) entry.actorName = participant.name;
+        if (entry?.targetId === id && !entry.targetName) entry.targetName = participant.name;
+      });
+      save();
+      emitBus('combat');
     },
     updateParticipant(id, patch, { expectedLocalRevision } = {}) {
       if (!canMutate()) return false;
-      const p = combat.participants.get(id); if (!p) return;
+      const p = combat.participants.get(id);
+      if (!p) return;
       if (persistence) {
         const capturedPatch = JSON.parse(JSON.stringify(patch || {}));
         return api.executeCommand('update-participant', draft => {
@@ -1716,10 +1783,13 @@ function resolvedCorruptionTest(participant, skillId, input) {
         Object.assign(p, dismounted);
         combat.participants.forEach((item, key) => {
           if (key === id || item.extensions?.v5?.mounted !== true || item.extensions.v5.mountId !== id) return;
-          const linkedRider = clearMountedRelation(item); combat.participants.set(key, linkedRider); markDirty(`combat/participants/${key}`, linkedRider);
+          const linkedRider = clearMountedRelation(item);
+          combat.participants.set(key, linkedRider);
+          markDirty(`combat/participants/${key}`, linkedRider);
         });
       }
-      markDirty(`combat/participants/${id}`, p); save();
+      markDirty(`combat/participants/${id}`, p);
+      save();
       if ('zone' in patch) emitBus('combat'); else emitBus('combat:update', { id, patch });
     },
 
@@ -1735,7 +1805,8 @@ function resolvedCorruptionTest(participant, skillId, input) {
         const proposed = normalizeEffects(captured).map((row, index) => ({ ...row,
           key: row.key === 'stunned' ? 'sonne' : row.key,
           level: typeof captured[index] === 'object' && captured[index]?.level !== undefined ? captured[index].level : row.level }));
-        const surprise=preventIdentifiedSurprise(participant,proposed,context.surpriseEventId);participant=surprise.participant;
+        const surprise=preventIdentifiedSurprise(participant,proposed,context.surpriseEventId);
+        participant=surprise.participant;
         const talent = previewV5TalentConditions(participant, surprise.states, { state: v5StoreActionState(draft), clock: v5StoreActionClock(draft), actionId });
         const receipt = acquireV5Conditions(participant, talent.states, v5EffectContext(draft, { ...context, resolutionId: actionId, targetId: id }));
         const beforeStateIds = new Set((participant.states || []).map(row => row.id).filter(Boolean));
@@ -1766,7 +1837,10 @@ function resolvedCorruptionTest(participant, skillId, input) {
             const rideRoll = Number(suffix ? context[`mountedRideRoll${suffix}`] : context.mountedRideRoll);
             if (rideScore === null) receipt.needsInput.push({ field: `mountedRideScore${suffix}`, kind: 'integer', label: `${rider.name || rider.id} : score de Chevaucher` });
             if (!Number.isInteger(rideRoll) || rideRoll < 1 || rideRoll > 100) receipt.needsInput.push({ field: `mountedRideRoll${suffix}`, kind: 'd100', label: `${rider.name || rider.id} : Test de Chevaucher d100` });
-            if (rideScore === null || !Number.isInteger(rideRoll) || rideRoll < 1 || rideRoll > 100) { receipt.ready = false; continue; }
+            if (rideScore === null || !Number.isInteger(rideRoll) || rideRoll < 1 || rideRoll > 100) {
+              receipt.ready = false;
+              continue;
+            }
             plan.test = previewV5Test({ score: rideScore, roll: rideRoll, kind: 'test', slModifiers: [{ id: 'mounted:fall', label: 'Désarçonnement', amount: plan.requiredTest.modifier }] }).options[0].result;
             if (plan.dismount === 'on-failed-test') plan.dismount = !plan.test.success;
           }
@@ -1778,8 +1852,17 @@ function resolvedCorruptionTest(participant, skillId, input) {
         receipt.additionalParticipants = [...extraDismounts.values()].filter(row => row.id !== id);
         const exit=previewV5FrenzyExit(receipt.participant,{round:draft.combat?.round,resolutionId:actionId,state:v5StoreActionState(draft),clock:v5StoreActionClock(draft)});
         receipt.participant=exit.participant;
-        const resolute=resoluteException({},receipt.participant,{context},receipt.acquiredInstances);if(resolute.unresolved.length){receipt.ready=false;receipt.needsInput.push(...resolute.unresolved.map(label=>({field:'resolute',label})));}if(resolute.exceptions.length&&participant.extensions?.v5?.hasMomentum===true)receipt.participant={...receipt.participant,extensions:{...receipt.participant.extensions,v5:{...receipt.participant.extensions?.v5,hasMomentum:true}}};receipt.resoluteTest=resolute.test;
-        if(exit.unresolved.length){receipt.ready=false;receipt.needsInput.push(...exit.unresolved.map(label=>({field:'frenzyExit',label})));}
+        const resolute=resoluteException({},receipt.participant,{context},receipt.acquiredInstances);
+        if(resolute.unresolved.length){
+          receipt.ready=false;
+          receipt.needsInput.push(...resolute.unresolved.map(label=>({field:'resolute',label})));
+        }
+        if(resolute.exceptions.length&&participant.extensions?.v5?.hasMomentum===true)receipt.participant={...receipt.participant,extensions:{...receipt.participant.extensions,v5:{...receipt.participant.extensions?.v5,hasMomentum:true}}};
+        receipt.resoluteTest=resolute.test;
+        if(exit.unresolved.length){
+          receipt.ready=false;
+          receipt.needsInput.push(...exit.unresolved.map(label=>({field:'frenzyExit',label})));
+        }
         receipt.talentPlan = talent.plan;
         receipt.talentUsageRequests = talent.usageRequests.length||exit.usageRequests.length ? [...talent.usageRequests,...exit.usageRequests] : [{ actorId: id, actionId, costs: [], quotas: [], exemptions: [], clock: v5StoreActionClock(draft) }];
         if (!talent.plan.ready) {
@@ -1886,7 +1969,9 @@ function resolvedCorruptionTest(participant, skillId, input) {
           declaration={id:uid(),actorId,characterId:v5ResourceIdentity(draft,actor),revision:draft.localRevision+1};
           nextRows=[...nextRows,declaration].slice(-100);
         }
-        draft.extensions??={};draft.extensions.v5={...(draft.extensions.v5||{}),fortuneAdvantageDeclarations:nextRows};return draft;
+        draft.extensions??={};
+        draft.extensions.v5={...(draft.extensions.v5||{}),fortuneAdvantageDeclarations:nextRows};
+        return draft;
       });
       const finish=persistence=>persistence?.ok===false?{status:'error',reason:persistence.error||'Déclaration non enregistrée'}:{status:'applied',declarationId:declaration?.id||null,persistence};
       return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
@@ -1910,10 +1995,13 @@ function resolvedCorruptionTest(participant, skillId, input) {
         const update=rows=>(rows||[]).map(row=>{
           const rowIdentity=v5ResourceIdentity(draft,row);
           if(row.id!==id&&rowIdentity!==identity)return row;
-          const next=cloneValue(row);next.extensions={...(next.extensions||{}),v5:{...(next.extensions?.v5||{}),fate:amount}};
-          if(Object.hasOwn(next,'fate'))next.fate=amount;return next;
+          const next=cloneValue(row);
+          next.extensions={...(next.extensions||{}),v5:{...(next.extensions?.v5||{}),fate:amount}};
+          if(Object.hasOwn(next,'fate'))next.fate=amount;
+          return next;
         });
-        draft.reserve=update(draft.reserve);draft.persistentCharacters=update(draft.persistentCharacters);
+        draft.reserve=update(draft.reserve);
+        draft.persistentCharacters=update(draft.persistentCharacters);
         draft.combat={...(draft.combat||{}),participants:update(draft.combat?.participants)};
         if(draft.activeScene)draft.activeScene={...draft.activeScene,participants:update(draft.activeScene.participants)};
         draft.suspendedScenes=(draft.suspendedScenes||[]).map(scene=>({...scene,participants:update(scene.participants)}));
@@ -2232,7 +2320,11 @@ function resolvedCorruptionTest(participant, skillId, input) {
         const critical = records.find(row => row.id === criticalId);
         if (!critical) throw new TypeError('Blessure Critique introuvable');
         participant.extensions.v5.criticalWounds = records.filter(row => row.id !== criticalId);
-        const be=criticalDeathToughnessBonus(participant);if(be!==null){const reconciled=updateCriticalDeathCountdown(participant,{round:draft.combat?.round,toughnessBonus:be});if(reconciled.participant)Object.assign(participant,reconciled.participant);}
+        const be=criticalDeathToughnessBonus(participant);
+        if(be!==null){
+          const reconciled=updateCriticalDeathCountdown(participant,{round:draft.combat?.round,toughnessBonus:be});
+          if(reconciled.participant)Object.assign(participant,reconciled.participant);
+        }
         draft.log = [{ id: uid(), kind: 'management', actorId: participantId, actorName: participant.name,
           text: `${participant.name} : Blessure Critique guérie manuellement · ${critical.name || criticalId}`,
           detail: { kind: 'heal-critical-wound', critical: cloneValue(critical) } }, ...(draft.log || [])].slice(0, 300);
@@ -2242,24 +2334,29 @@ function resolvedCorruptionTest(participant, skillId, input) {
     decideCriticalDeath(participantId, decision, options = {}) {
       const captured=cloneValue(options);
       return api.executeCommand('decide-critical-death-v5',draft=>{
-        const index=(draft.combat?.participants||[]).findIndex(row=>row.id===participantId);if(index<0)throw new TypeError('Participant introuvable');
+        const index=(draft.combat?.participants||[]).findIndex(row=>row.id===participantId);
+        if(index<0)throw new TypeError('Participant introuvable');
         const result=decideV5CriticalDeath(draft.combat.participants[index],{decision,round:draft.combat?.round});
         if(!['dead','declined'].includes(result.status))throw Object.assign(new Error(result.reason||'Confirmation MJ requise.'),{userFacing:true,code:'CRITICAL_DEATH_CONFIRMATION'});
-        draft.combat.participants[index]=result.participant;return draft;
+        draft.combat.participants[index]=result.participant;
+        return draft;
       });
     },
     decideImmediateCriticalDeath(participantId, criticalId, decision) {
       return api.executeCommand('decide-immediate-critical-death-v5',draft=>{
-        const index=(draft.combat?.participants||[]).findIndex(row=>row.id===participantId);if(index<0)throw new TypeError('Participant introuvable');
+        const index=(draft.combat?.participants||[]).findIndex(row=>row.id===participantId);
+        if(index<0)throw new TypeError('Participant introuvable');
         const result=decideV5ImmediateCriticalDeath(draft.combat.participants[index],{criticalId,decision});
         if(!['dead','declined'].includes(result.status))throw Object.assign(new Error(result.reason||'Confirmation MJ requise.'),{userFacing:true,code:'CRITICAL_DEATH_CONFIRMATION'});
-        draft.combat.participants[index]=result.participant;return draft;
+        draft.combat.participants[index]=result.participant;
+        return draft;
       });
     },
     setSuddenDeathEnabled(enabled) {
       if (typeof enabled !== 'boolean') throw new TypeError('Réglage Mort subite invalide');
       return api.executeCommand('set-sudden-death-option-v5', draft => {
-        draft.extensions ??= {}; draft.extensions.v5 ??= {};
+        draft.extensions ??= {};
+        draft.extensions.v5 ??= {};
         draft.extensions.v5.suddenDeathEnabled = enabled;
         return draft;
       });
@@ -2302,7 +2399,8 @@ function resolvedCorruptionTest(participant, skillId, input) {
     },
     deferAmputationShock(participantId,criticalId,shockPart) {
       return api.executeCommand('defer-amputation-shock-v5',draft=>{
-        const index=(draft.combat?.participants||[]).findIndex(row=>row.id===participantId);if(index<0)throw Object.assign(new Error('Participant introuvable.'),{userFacing:true});
+        const index=(draft.combat?.participants||[]).findIndex(row=>row.id===participantId);
+        if(index<0)throw Object.assign(new Error('Participant introuvable.'),{userFacing:true});
         const participant=draft.combat.participants[index],aftermath=participant.extensions?.v5?.criticalAftermath||[],record=aftermath.find(row=>row.id===criticalId);
         if(!record)throw Object.assign(new Error('Blessure Critique introuvable.'),{userFacing:true});
         const eligible=amputationShockRequirements(record).some(row=>row.part===shockPart&&row.trigger==='all-fingers-lost');
@@ -2321,7 +2419,8 @@ function resolvedCorruptionTest(participant, skillId, input) {
       let receipt;
       const saved=api.executeCommand('apply-amputation-shock-v5',draft=>{
         if(draft.localRevision!==preview.baseRevision)throw Object.assign(new Error('La partie a changé; recalculez le choc d’amputation.'),{code:'V5_AMPUTATION_STALE',userFacing:true});
-        const index=(draft.combat?.participants||[]).findIndex(row=>row.id===preview.participantId);if(index<0)throw Object.assign(new Error('Participant introuvable.'),{userFacing:true});
+        const index=(draft.combat?.participants||[]).findIndex(row=>row.id===preview.participantId);
+        if(index<0)throw Object.assign(new Error('Participant introuvable.'),{userFacing:true});
         const result=applyV5AmputationShock(draft.combat.participants[index],preview);
         if(result.status!=='applied'&&result.status!=='duplicate')throw Object.assign(new Error(result.reason||'Choc d’amputation refusé.'),{userFacing:true});
         if(result.status==='applied')draft.combat.participants[index]=result.participant;
@@ -2346,7 +2445,8 @@ function resolvedCorruptionTest(participant, skillId, input) {
 
     moveParticipant(id, zone, beforeId = null) {
       if (!canMutate()) return false;
-      const p = combat.participants.get(id); if (!p) return;
+      const p = combat.participants.get(id);
+      if (!p) return;
       if(zone==='active'&&p.zone!=='active'&&Number(combat.round)===0&&stateExtensions?.v5?.combatInitiativeInitialized===true&&!p.extensions?.v5?.combatInitiative?.initialized)
         throw Object.assign(new Error('Un combattant activé avant le Round 1 doit recevoir son jet d’Initiative dans le dialogue de préparation.'),{code:'COMBAT_INIT_REQUIRED',userFacing:true});
       if (persistence) return api.executeCommand('move-participant', draft => {
@@ -2365,12 +2465,15 @@ function resolvedCorruptionTest(participant, skillId, input) {
         if(zone==='active'&&draft.extensions?.v5?.combatInitiativeInitialized)registerNewV5Participants(draft,next);
         return next;
       });
-      p.zone = zone; if (zone === 'active' && beforeId !== null) orderMode = ORDER_MODES.MANUAL;
+      p.zone = zone;
+      if (zone === 'active' && beforeId !== null) orderMode = ORDER_MODES.MANUAL;
       if (zone === 'bench') {
         Object.assign(p, clearMountedRelation(p));
         combat.participants.forEach((item, key) => {
           if (key === id || item.extensions?.v5?.mounted !== true || item.extensions.v5.mountId !== id) return;
-          const linkedRider = clearMountedRelation(item); combat.participants.set(key, linkedRider); markDirty(`combat/participants/${key}`, linkedRider);
+          const linkedRider = clearMountedRelation(item);
+          combat.participants.set(key, linkedRider);
+          markDirty(`combat/participants/${key}`, linkedRider);
         });
       }
       const remainingOrder = combat.order.filter(xId => xId !== id);
@@ -2381,7 +2484,10 @@ function resolvedCorruptionTest(participant, skillId, input) {
       else if (zone === 'active' && beforeId === null && orderMode !== ORDER_MODES.MANUAL) targetArr.splice(initiativeIndex(targetArr, id, Array.from(combat.participants.values())), 0, id);
       else targetArr.push(id);
       combat.order = [...activeOrder, ...benchOrder];
-      markDirty(`combat/participants/${id}`, p); markDirty('combat/meta', { round: combat.round, currentActorId: combat.currentActorId, order: combat.order, orderMode }); save(); emitBus('combat');
+      markDirty(`combat/participants/${id}`, p);
+      markDirty('combat/meta', { round: combat.round, currentActorId: combat.currentActorId, order: combat.order, orderMode });
+      save();
+      emitBus('combat');
     },
 
     // Ordered participants first, then those outside the order (bench after a
@@ -2396,11 +2502,22 @@ function resolvedCorruptionTest(participant, skillId, input) {
     setRoundTurn(round, currentActorId) {
       if (!canMutate()) return false;
       if (persistence) return api.executeCommand('set-round-turn', draft => {
-        let next={ ...draft, combat: { ...draft.combat, round, currentActorId } };if(round>(draft.combat?.round||0))next.combat=detonateDueV5Bombs(next.combat,draft.combat?.currentActorId,Number(draft.extensions?.v5?.turnIndex)||0);reconcileCriticalDeathForRound(next,round);return next;
+        let next={ ...draft, combat: { ...draft.combat, round, currentActorId } };
+        if(round>(draft.combat?.round||0))next.combat=detonateDueV5Bombs(next.combat,draft.combat?.currentActorId,Number(draft.extensions?.v5?.turnIndex)||0);
+        reconcileCriticalDeathForRound(next,round);
+        return next;
       });
-      beginCommand('set-round-turn');const oldRound=combat.round||0,oldActorId=combat.currentActorId; combat.round = round; combat.currentActorId = currentActorId;
-      if(round>oldRound){const next=detonateDueV5Bombs({participants:Array.from(combat.participants.values())},oldActorId,Number(stateExtensions?.v5?.turnIndex)||0);for(const participant of next.participants)combat.participants.set(participant.id,participant);}
-      const participants=Array.from(combat.participants.values());reconcileCriticalDeathForRound({combat:{participants}},round);for(const participant of participants)combat.participants.set(participant.id,participant);
+      beginCommand('set-round-turn');
+      const oldRound=combat.round||0,oldActorId=combat.currentActorId;
+      combat.round = round;
+      combat.currentActorId = currentActorId;
+      if(round>oldRound){
+        const next=detonateDueV5Bombs({participants:Array.from(combat.participants.values())},oldActorId,Number(stateExtensions?.v5?.turnIndex)||0);
+        for(const participant of next.participants)combat.participants.set(participant.id,participant);
+      }
+      const participants=Array.from(combat.participants.values());
+      reconcileCriticalDeathForRound({combat:{participants}},round);
+      for(const participant of participants)combat.participants.set(participant.id,participant);
       const clock = stateExtensions?.v5?.gameClock;
       if (clock) {
         const reconciled = reconcileGameClockPosition(clock, readCombatPosition(currentEnvelope()));
@@ -2409,7 +2526,9 @@ function resolvedCorruptionTest(participant, skillId, input) {
           v5: { ...(stateExtensions.v5 || {}), gameClock: reconciled.clock }
         };
       }
-      markDirty('combat/meta', { round: combat.round, currentActorId: combat.currentActorId, order: combat.order }); save(); emitBus('combat');
+      markDirty('combat/meta', { round: combat.round, currentActorId: combat.currentActorId, order: combat.order });
+      save();
+      emitBus('combat');
     },
     rebuildOrder() {
       if (persistence) return api.executeCommand('rebuild-order', draft => {
@@ -2424,7 +2543,10 @@ function resolvedCorruptionTest(participant, skillId, input) {
       if(stateExtensions?.v5?.combatInitiativeInitialized){
         orderMode=ORDER_MODES.AUTOMATIC;
         combat.order=effectiveOrder(Array.from(combat.participants.values()),{mode:ORDER_MODES.AUTOMATIC,order:combat.order,autoOrder:stateExtensions.v5.combatInitiativeResolution?.order,round:combat.round});
-        markDirty('combat/meta',{round:combat.round,currentActorId:combat.currentActorId,order:combat.order,orderMode});save();emitBus('combat');return;
+        markDirty('combat/meta',{round:combat.round,currentActorId:combat.currentActorId,order:combat.order,orderMode});
+        save();
+        emitBus('combat');
+        return;
       }
       setOrderByInitiative();
       markDirty('combat/meta', { round: combat.round, currentActorId: combat.currentActorId, order: combat.order });
@@ -2460,7 +2582,8 @@ function resolvedCorruptionTest(participant, skillId, input) {
       const plan=prepareCombatInitiative(participants,{...staging,...captured,tieOrders:captured.tieOrders??staging?.tieOrders,opposedRolls:captured.opposedRolls??staging?.opposedRolls,tieChoices:captured.tieChoices??staging?.tieChoices});
       if(captured.startCombat===true&&!participants.some(row=>row?.zone==='active')){
         plan.needsInput.push({field:'activeCombatants',label:'Au moins un combattant actif est requis pour initialiser le combat.'});
-        plan.ready=false;plan.status='requires-input';
+        plan.ready=false;
+        plan.status='requires-input';
       }
       const mountedAmbush = [];
       if (captured.surprisedCamp) for (const rider of participants.filter(row => row.zone === 'active' && row.camp === captured.surprisedCamp && row.extensions?.v5?.mounted === true && row.extensions?.v5?.mountId)) {
@@ -2476,7 +2599,10 @@ function resolvedCorruptionTest(participant, skillId, input) {
         if (score !== null && Number.isInteger(roll) && roll >= 1 && roll <= 100) {
           entry.test = selectV5Test(previewV5Test({ score, roll, kind: 'test', slModifiers: [{ id: 'mounted:fall', label: 'Surpris à cheval', amount: 4 }] }), 'keep');
           entry.dismount = !entry.test.success;
-        } else { plan.ready = false; plan.status = 'requires-input'; }
+        } else {
+          plan.ready = false;
+          plan.status = 'requires-input';
+        }
         mountedAmbush.push(entry);
       }
       return {...plan,baseRevision:expected,participantIds:participants.filter(row=>row.zone==='active').map(row=>row.id),
@@ -2510,7 +2636,8 @@ function resolvedCorruptionTest(participant, skillId, input) {
       const current=currentEnvelope(),profiles=new Map((current.reserve||[]).map(row=>[row.id,row]));
       let participant,profile=null;
       if(typeof participantOrProfileId==='string'){
-        profile=profiles.get(participantOrProfileId);if(!profile)throw new Error('Profil introuvable');
+        profile=profiles.get(participantOrProfileId);
+        if(!profile)throw new Error('Profil introuvable');
         const names=new Set((current.combat?.participants||[]).map(row=>row.name));
         participant=participantFromProfile(profile,{name:uniqueName(profile.name,names),zone:'active'});
       }else{
@@ -2524,7 +2651,10 @@ function resolvedCorruptionTest(participant, skillId, input) {
         const key=(group.participantIds||[]).join('|');
         if(group.bracketOrder?.length)tieOrders[key]=[...group.bracketOrder];
         if(group.chosenOrder?.length)tieChoices[key]=[...group.chosenOrder];
-        for(const match of group.matches||[]){const matchId=`${key}:${match.initiatorId}:${match.opponentId}`;opposedRolls[matchId]={initiatorRoll:match.initiatorRoll,opponentRoll:match.opponentRoll,...(match.initiatorOptionId?{initiatorChoice:match.initiatorOptionId}:{}),...(match.opponentOptionId?{opponentChoice:match.opponentOptionId}:{}),...(match.initiatorConditionPenaltyMode?{initiatorConditionPenaltyMode:match.initiatorConditionPenaltyMode}:{}),...(match.opponentConditionPenaltyMode?{opponentConditionPenaltyMode:match.opponentConditionPenaltyMode}:{})};}
+        for(const match of group.matches||[]){
+          const matchId=`${key}:${match.initiatorId}:${match.opponentId}`;
+          opposedRolls[matchId]={initiatorRoll:match.initiatorRoll,opponentRoll:match.opponentRoll,...(match.initiatorOptionId?{initiatorChoice:match.initiatorOptionId}:{}),...(match.opponentOptionId?{opponentChoice:match.opponentOptionId}:{}),...(match.initiatorConditionPenaltyMode?{initiatorConditionPenaltyMode:match.initiatorConditionPenaltyMode}:{}),...(match.opponentConditionPenaltyMode?{opponentConditionPenaltyMode:match.opponentConditionPenaltyMode}:{})};
+        }
       }
       return {kind:'add-active-participant-pre-round',participant,profileId:profile?.id||participant.profileId||null,
         participantDiceLines:profile?diceLinesFromProfile(profile,participant.id):[],baseRevision:localRevision,participants,tieOrders,opposedRolls,tieChoices};
@@ -2555,7 +2685,8 @@ function resolvedCorruptionTest(participant, skillId, input) {
           const liveScene=draft.activeScene?.status==='active'?draft.activeScene:null;
           if(staging.kind==='launch'&&liveScene)throw Object.assign(new Error('Une scène est déjà active.'),{code:'COMBAT_INIT_STALE'});
           if(staging.kind==='restart-scene'&&(!liveScene||liveScene.id!==staging.sceneId||liveScene.encounterId!==staging.encounterId))throw Object.assign(new Error('La scène a changé depuis la préparation.'),{code:'COMBAT_INIT_STALE'});
-          let index=0;const prefix=staging.kind==='launch'?'launch':'restart';
+          let index=0;
+          const prefix=staging.kind==='launch'?'launch':'restart';
           const rebuilt=launchEncounter(encounter,{profiles:draft.reserve||[],persistentCharacters:draft.persistentCharacters||[],activeScene:null,now:null,idFactory:()=>`f2a:${prefix}:${encounter.id}:${expected}:${index++}`});
           if(JSON.stringify(rebuilt.participants.map(row=>row.id))!==JSON.stringify((staging.scene?.participants||[]).map(row=>row.id))
             ||rebuilt.id!==staging.scene?.id&&staging.kind==='launch')throw Object.assign(new Error('La composition a changé depuis la préparation.'),{code:'COMBAT_INIT_STALE'});
@@ -2563,7 +2694,9 @@ function resolvedCorruptionTest(participant, skillId, input) {
         }
         if(staging?.kind==='restart-free')sourceParticipants=(draft.combat?.participants||[]).map(item=>{
           const reset=withMomentum({...item,hp:item.maxHp??item.hp,states:[],extensions:{...(item.extensions||{}),v5:{...(item.extensions?.v5||{}),combatInitiative:undefined}}},false);
-          const extensions={...(reset.extensions||{})},v5={...(extensions.v5||{})};delete v5.grapples;extensions.v5=v5;
+          const extensions={...(reset.extensions||{})},v5={...(extensions.v5||{})};
+          delete v5.grapples;
+          extensions.v5=v5;
           return {...reset,extensions};
         });
         const ids=sourceParticipants.filter(row=>row.zone==='active').map(row=>row.id);
@@ -2654,7 +2787,8 @@ function resolvedCorruptionTest(participant, skillId, input) {
       combat.order = result.order;
       combat.currentActorId = result.currentActorId;
       markDirty('combat/meta', { round: combat.round, currentActorId: combat.currentActorId, order: combat.order, orderMode });
-      save(); emitBus('combat');
+      save();
+      emitBus('combat');
       return true;
     },
     moveInOrder(id, beforeId = null) {
@@ -2667,7 +2801,8 @@ function resolvedCorruptionTest(participant, skillId, input) {
       orderMode = ORDER_MODES.MANUAL;
       combat.order = moveInOrder(combat.order, id, beforeId);
       markDirty('combat/meta', { round: combat.round, currentActorId: combat.currentActorId, order: combat.order, orderMode });
-      save(); emitBus('combat');
+      save();
+      emitBus('combat');
       return true;
     },
     insertReinforcement(id) {
@@ -2680,7 +2815,8 @@ function resolvedCorruptionTest(participant, skillId, input) {
       orderMode = ORDER_MODES.MANUAL;
       combat.order = insertReinforcement(combat.order, id, combat.currentActorId);
       markDirty('combat/meta', { round: combat.round, currentActorId: combat.currentActorId, order: combat.order, orderMode });
-      save(); emitBus('combat');
+      save();
+      emitBus('combat');
       return true;
     },
     nextTurn() {
@@ -2732,7 +2868,8 @@ function resolvedCorruptionTest(participant, skillId, input) {
         let v5 = extensions.v5 || {};
         let activeScene = draft.activeScene;
         let clock = v5.gameClock || createGameClock(draft);
-        const fromClock=cloneValue(clock);let clockReceipt=null;
+        const fromClock=cloneValue(clock);
+        let clockReceipt=null;
         if (JSON.stringify(clock.combat) !== JSON.stringify(beforePosition))
           throw Object.assign(new Error('La projection de l’horloge est décalée du combat canonique.'), { code: 'V5_CLOCK_POSITION_CONFLICT' });
         let phases = [];
@@ -2795,26 +2932,40 @@ function resolvedCorruptionTest(participant, skillId, input) {
         return api.executeCommand('add-dice-line', draft => ({ ...draft, diceLines: [...(draft.diceLines || []), new DiceLine(captured)] }));
       }
       beginCommand('add-dice-line');
-      const newLine = new DiceLine(dl); diceLines.push(newLine); markDirty(`diceLines/${newLine.id}`, newLine); save(); emitBus('combat');
+      const newLine = new DiceLine(dl);
+      diceLines.push(newLine);
+      markDirty(`diceLines/${newLine.id}`, newLine);
+      save();
+      emitBus('combat');
     },
     updateDiceLine(id, patch, noRender = false) {
       if (!canMutate()) return false;
-      const i = diceLines.findIndex(x => x.id === id); if (i < 0) return;
+      const i = diceLines.findIndex(x => x.id === id);
+      if (i < 0) return;
       if (persistence) {
         const capturedPatch = JSON.parse(JSON.stringify(patch || {}));
         return api.executeCommand('update-dice-line', draft => ({ ...draft, diceLines: (draft.diceLines || []).map(item => item.id === id ? { ...item, ...capturedPatch } : item) }));
       }
-      beginCommand('update-dice-line'); Object.assign(diceLines[i], patch); markDirty(`diceLines/${id}`, diceLines[i]); save(); if (!noRender) emitBus('combat');
+      beginCommand('update-dice-line');
+      Object.assign(diceLines[i], patch);
+      markDirty(`diceLines/${id}`, diceLines[i]);
+      save();
+      if (!noRender) emitBus('combat');
     },
     removeDiceLine(id) {
       if (!canMutate()) return false;
       beginCommand('remove-dice-line');
       if (!diceLines.some(item => item.id === id)) return;
       if (persistence) return api.executeCommand('remove-dice-line', draft => ({ ...draft, diceLines: (draft.diceLines || []).filter(item => item.id !== id) }));
-      recordSnapshot('delete-dice-line'); diceLines = diceLines.filter(x => x.id !== id); markDirty(`diceLines/${id}`, null); save(); emitBus('combat');
+      recordSnapshot('delete-dice-line');
+      diceLines = diceLines.filter(x => x.id !== id);
+      markDirty(`diceLines/${id}`, null);
+      save();
+      emitBus('combat');
     },
     duplicateDiceLine(id) {
-      const src = diceLines.find(x => x.id === id); if (!src) return;
+      const src = diceLines.find(x => x.id === id);
+      if (!src) return;
       this.addDiceLine(new DiceLine({ ...src, id: uid() }));
     },
 
@@ -2826,7 +2977,8 @@ function resolvedCorruptionTest(participant, skillId, input) {
         const participants = [...(draft.combat?.participants || [])];
         const lines = [...(draft.diceLines || [])];
         for (const id of selectedIds) {
-          const prof = profiles.get(id); if (!prof) continue;
+          const prof = profiles.get(id);
+          if (!prof) continue;
           const participant = participantFromProfile(prof);
           participants.push(participant);
           lines.push(...diceLinesFromProfile(prof, participant.id));
@@ -2842,7 +2994,8 @@ function resolvedCorruptionTest(participant, skillId, input) {
       beginCommand('import-reserve');
       this.batch(() => {
         selectedIds.forEach(id => {
-          const prof = reserve.get(id); if (!prof) return;
+          const prof = reserve.get(id);
+          if (!prof) return;
           const p = new Participant({
             profileId: prof.id, name: prof.name, kind: prof.kind,
             initiative: prof.initiative, hp: prof.hp, maxHp: prof.maxHp ?? prof.hp,
@@ -2927,13 +3080,17 @@ function resolvedCorruptionTest(participant, skillId, input) {
             const candidates = (draft.persistentCharacters || []).filter(character => copy.persistentCharacterId
               ? character.id === copy.persistentCharacterId
               : character.profileId === profile.id || character.extensions?.ficheId === profile.extensions.ficheId);
-            if (candidates.length !== 1) { missing.add(profile.name); continue; }
+            if (candidates.length !== 1) {
+              missing.add(profile.name);
+              continue;
+            }
             const character = candidates[0];
             if (conflicted.has(character.id)) continue;
             const current = { ...character, hp: copy.hp, maxHp: copy.maxHp, states: cloneValue(copy.states || []) };
             const previous = updatedPersistent.get(character.id);
             if (previous && !sameValue({ hp: previous.hp, maxHp: previous.maxHp, states: previous.states }, { hp: current.hp, maxHp: current.maxHp, states: current.states })) {
-              updatedPersistent.delete(character.id); conflicted.add(character.id);
+              updatedPersistent.delete(character.id);
+              conflicted.add(character.id);
               conflicts.add(`Santé de ${character.name || profile.name} non reportée : plusieurs états de participants liés sont différents. Choisissez l’état à conserver.`);
             } else updatedPersistent.set(character.id, current);
           }
@@ -2974,9 +3131,15 @@ function resolvedCorruptionTest(participant, skillId, input) {
             historyState = transition.history;
             localRevision = nextRevision;
             try { applyDataToState(state, { includeLog: true, includeHistory: false }); }
-            catch (error) { historyState = beforeHistory; localRevision = beforeRevision; throw error; }
+            catch (error) {
+              historyState = beforeHistory;
+              localRevision = beforeRevision;
+              throw error;
+            }
             lastSnapshot = null;
-            emitBus('reserve'); emitBus('combat'); emitBus('log');
+            emitBus('reserve');
+            emitBus('combat');
+            emitBus('log');
             if (operationQueued) {
               pendingProtocolState = false;
               syncSession.flush({ localState: currentEnvelope() }).catch(() => reportSyncStatus('error'));
@@ -2996,7 +3159,9 @@ function resolvedCorruptionTest(participant, skillId, input) {
           localRevision = nextRevision;
           applyDataToState(state, { includeLog: true, includeHistory: false });
           save(true);
-          emitBus('reserve'); emitBus('combat'); emitBus('log');
+          emitBus('reserve');
+          emitBus('combat');
+          emitBus('log');
           return true;
         };
         if (!persistence) return applyUndo();
@@ -3035,7 +3200,9 @@ function resolvedCorruptionTest(participant, skillId, input) {
           historyState = transition.history;
           localRevision = nextRevision;
           applyDataToState(state, { includeLog: true, includeHistory: false });
-          emitBus('reserve'); emitBus('combat'); emitBus('log');
+          emitBus('reserve');
+          emitBus('combat');
+          emitBus('log');
           if (operationQueued) {
             pendingProtocolState = false;
             syncSession.flush({ localState: currentEnvelope() }).catch(() => reportSyncStatus('error'));
@@ -3055,7 +3222,9 @@ function resolvedCorruptionTest(participant, skillId, input) {
         localRevision = nextRevision;
         applyDataToState(state, { includeLog: true, includeHistory: false });
         save(true);
-        emitBus('reserve'); emitBus('combat'); emitBus('log');
+        emitBus('reserve');
+        emitBus('combat');
+        emitBus('log');
         return true;
       };
       if (!persistence) return applyRedo();
@@ -3115,7 +3284,12 @@ function resolvedCorruptionTest(participant, skillId, input) {
     clearLog() {
       if (!canMutate()) return false;
       if (persistence) return api.executeCommand('clear-log', draft => ({ ...draft, log: [] }), { recordHistory: false });
-      beginCommand('clear-log'); recordSnapshot('clear-log'); log = []; save(); emitBus('log'); return true;
+      beginCommand('clear-log');
+      recordSnapshot('clear-log');
+      log = [];
+      save();
+      emitBus('log');
+      return true;
     },
     resetCombat() {
       if (!canMutate()) return false;
@@ -3132,7 +3306,9 @@ function resolvedCorruptionTest(participant, skillId, input) {
       combat = { round: 0, currentActorId: null, order: [], participants: new Map() };
       stateExtensions=withoutCombatInitiativeResolution(stateExtensions);
       markDirty('combat', { meta: { round: 0, currentActorId: null, order: [] }, participants: null });
-      save(); this.log('Combat terminé.'); emitBus('combat');
+      save();
+      this.log('Combat terminé.');
+      emitBus('combat');
     },
 
     getLocalRevision() { return localRevision; },
@@ -3227,7 +3403,10 @@ function resolvedCorruptionTest(participant, skillId, input) {
       const result = api.executeCommand('unlink-familiar', draft => ({ ...draft, combat: { ...draft.combat, participants: (draft.combat?.participants || []).map(item => {
         if (item.id === masterId) return withV5(item, v5 => ({ ...v5, familiarLinks: (v5.familiarLinks || []).filter(row => row.id !== linkId) }));
         if (item.id === link.familiarId && item.extensions?.v5?.familiarOf?.linkId === linkId) {
-          const freed = withV5(item, v5 => { const { familiarOf, ...rest } = v5; return rest; });
+          const freed = withV5(item, v5 => {
+            const { familiarOf, ...rest } = v5;
+            return rest;
+          });
           // Le camp d'avant la création (familier d'un PJ passé PNJ allié) est rendu.
           return link.creation?.campBefore !== undefined ? { ...freed, camp: link.creation.campBefore } : freed;
         }
@@ -3434,8 +3613,20 @@ function resolvedCorruptionTest(participant, skillId, input) {
         const v5 = freshCombatScopedV5(draft.extensions?.v5), ledger = v5.actionLedger;
         return { ...v5, ...(ledger ? { actionLedger: { ...ledger, quotaUsage: (ledger.quotaUsage || []).filter(row => !String(row.scopeKey || '').includes(':0:pre-combat')) } } : {}) };
       };
-      const withoutGrapples=participant=>{const updated={...participant,states:[]},extensions={...(updated.extensions||{})},v5={...(extensions.v5||{})};delete v5.grapples;extensions.v5=v5;updated.extensions=extensions;return updated;};
-      const withoutPaviseDeployments=participant=>{const updated={...participant},extensions={...(updated.extensions||{})},v5={...(extensions.v5||{})};delete v5.paviseDeploymentByItemId;extensions.v5=v5;updated.extensions=extensions;return updated;};
+      const withoutGrapples=participant=>{
+        const updated={...participant,states:[]},extensions={...(updated.extensions||{})},v5={...(extensions.v5||{})};
+        delete v5.grapples;
+        extensions.v5=v5;
+        updated.extensions=extensions;
+        return updated;
+      };
+      const withoutPaviseDeployments=participant=>{
+        const updated={...participant},extensions={...(updated.extensions||{})},v5={...(extensions.v5||{})};
+        delete v5.paviseDeploymentByItemId;
+        extensions.v5=v5;
+        updated.extensions=extensions;
+        return updated;
+      };
       return api.executeCommand('restart-combat', draft => {
         const current = draft.activeScene?.status === 'active' ? draft.activeScene : null;
         if (!current) {
@@ -3491,8 +3682,15 @@ function resolvedCorruptionTest(participant, skillId, input) {
         const v5={...(draft.extensions?.v5||{})},proof=scene.extensions?.v5?.combatInitiativeResolution;
         if(scene.extensions?.v5?.combatScopeId)v5.combatScopeId=scene.extensions.v5.combatScopeId;
         else delete v5.combatScopeId;
-        if(proof){v5.combatInitiativeInitialized=true;v5.combatInitiativeResolution=proof;}
-        else {delete v5.combatInitiativeInitialized;delete v5.combatInitiativeResolution;delete v5.orderRound;}
+        if(proof){
+          v5.combatInitiativeInitialized=true;
+          v5.combatInitiativeResolution=proof;
+        }
+        else {
+          delete v5.combatInitiativeInitialized;
+          delete v5.combatInitiativeResolution;
+          delete v5.orderRound;
+        }
         return {
           ...draft,
           extensions:{...(draft.extensions||{}),v5},
@@ -3514,20 +3712,29 @@ function resolvedCorruptionTest(participant, skillId, input) {
       input=structuredClone(input);
       if(input.reactionId&&!input.v5?.reactionId)input.v5={...(input.v5||{}),reactionId:input.reactionId};
       const actorForAction=snapshot.combat?.participants?.find(row=>row.id===(input.actorId||input.actor?.id));
-      const grappleGate=grappleTurnGateBlock(snapshot,input,actorForAction);if(grappleGate)return {...grappleGate,baseRevision:localRevision,input:structuredClone(input)};
+      const grappleGate=grappleTurnGateBlock(snapshot,input,actorForAction);
+      if(grappleGate)return {...grappleGate,baseRevision:localRevision,input:structuredClone(input)};
       // A named target that is no longer in the encounter must be refused, not crash the test builder.
       if(input.targetId&&!input.target&&!snapshot.combat?.participants?.some(row=>row.id===input.targetId))return {ready:false,status:'requires-input',code:'TARGET_NOT_FOUND',error:'Cible introuvable : elle a quitté la rencontre.',unresolved:['Cible introuvable : elle a quitté la rencontre.'],baseRevision:localRevision,input:structuredClone(input)};
       if(input.v5?.context?.trip===true){
         const context=input.v5.context,actor=snapshot.combat?.participants?.find(row=>row.id===(input.actorId||input.actor?.id)),target=snapshot.combat?.participants?.find(row=>row.id===(input.targetId||input.target?.id)),clock=v5StoreActionClock(snapshot),primary=(snapshot.extensions?.v5?.standardTurnActions||[]).find(row=>row.actionId===context.tripPrimaryResolutionId&&row.actorId===actor?.id&&row.targetId===target?.id&&row.hit===true&&row.actionType==='attack'&&row.turnId===clock.turnId&&row.encounterId===clock.encounterId),skill=target?.skills?.find(row=>row.id===context.athleticsSkillId&&/athlet/i.test(String(row.name||row.nom||'').normalize('NFD').replace(/[\u0300-\u036f]/g,''))),knownSkill=Number(skill?.total??skill?.value),declaredSkill=Number(context.athleticsScore),force=Number(actor?.caracs?.F),declaredForce=Number(context.forceScore);
         const athleticsScore=Number.isFinite(knownSkill)?knownSkill:context.athleticsScoreConfirmed===true&&Number.isFinite(declaredSkill)?declaredSkill:null,forceScore=Number.isFinite(force)?force:context.forceScoreConfirmed===true&&Number.isFinite(declaredForce)?declaredForce:null;
-        const missing=[];if(!actor||!target)missing.push('Choisir l’attaquant et la cible du Croche-pied.');if(!primary)missing.push('Croche-pied : une touche appliquée de cet attaquant sur cette cible pendant ce Tour est requise.');else if(!primary.qualityIds?.includes('croche-pied'))missing.push('Croche-pied : l’attaque appliquée doit provenir d’une arme portant l’atout Croche-pied.');if((snapshot.extensions?.v5?.combatActions?.trippedResolutionIds||[]).includes(context.tripPrimaryResolutionId))missing.push('Croche-pied : cette touche a déjà été utilisée.');if(forceScore===null)missing.push('Croche-pied : Force absente ; confirmer la caractéristique du MJ.');if(athleticsScore===null)missing.push('Croche-pied : Athlétisme absent ; confirmer le score de la cible par le MJ.');
+        const missing=[];
+        if(!actor||!target)missing.push('Choisir l’attaquant et la cible du Croche-pied.');
+        if(!primary)missing.push('Croche-pied : une touche appliquée de cet attaquant sur cette cible pendant ce Tour est requise.');else if(!primary.qualityIds?.includes('croche-pied'))missing.push('Croche-pied : l’attaque appliquée doit provenir d’une arme portant l’atout Croche-pied.');
+        if((snapshot.extensions?.v5?.combatActions?.trippedResolutionIds||[]).includes(context.tripPrimaryResolutionId))missing.push('Croche-pied : cette touche a déjà été utilisée.');
+        if(forceScore===null)missing.push('Croche-pied : Force absente ; confirmer la caractéristique du MJ.');
+        if(athleticsScore===null)missing.push('Croche-pied : Athlétisme absent ; confirmer le score de la cible par le MJ.');
         if(missing.length)return {ready:false,status:'requires-input',error:missing[0],unresolved:missing,baseRevision:localRevision,input};
         input.action={...(input.action||{}),type:'opposition',attr:'F',base:forceScore,label:'Force',extensions:{...(input.action?.extensions||{}),fiche:{...(input.action?.extensions?.fiche||{}),skillId:null}}};
         input.defense={...(input.defense||{}),base:athleticsScore,label:'Athlétisme',v5:{...(input.defense?.v5||{}),kind:'test',context:{...(input.defense?.v5?.context||{}),...(skill?.id?{skillId:skill.id}:{})}}};
         input.v5={...input.v5,kind:'test',context:{...input.v5.context,isAction:false},costs:[...(input.v5.costs||[]).filter(row=>row.id!=='combat:trip:momentum'),{id:'combat:trip:momentum',resource:'momentum',amount:1}]};
       }
       const reactionCandidate=Boolean(input.v5?.reactionId||input.reactionId),ordinaryIntent=!reactionCandidate&&(isV5ActionUse(null,input)||['attack','attaque'].includes(input.action?.type)),freeAttackCandidate=input.v5?.extraAttack===true&&['divine-free-attack','reaction-strike','glorious-demise','frenzy'].includes(input.v5?.context?.freeAttackTalent);
-      if(ordinaryIntent&&!freeAttackCandidate){const block=ordinaryActionAfterCombatActionBlock(snapshot,actorForAction?.id);if(block)return {...block,baseRevision:localRevision,input:structuredClone(input)};}
+      if(ordinaryIntent&&!freeAttackCandidate){
+        const block=ordinaryActionAfterCombatActionBlock(snapshot,actorForAction?.id);
+        if(block)return {...block,baseRevision:localRevision,input:structuredClone(input)};
+      }
       const combatAction=combatActionState(snapshot).byActorId?.[actorForAction?.id],clockNow=v5StoreActionClock(snapshot),activeCombatAction=combatAction&&combatAction.encounterId===clockNow.encounterId&&(combatAction.kind==='aim'||combatAction.turnId===clockNow.turnId)?combatAction:null;
       if(['attack','attaque'].includes(String(input.action?.type||'').toLocaleLowerCase())&&actorForAction?.id&&clockNow.turnId&&clockNow.encounterId){
         const weaponId=input.action?.extensions?.fiche?.equipmentId||input.action?.extensions?.equipment?.id;
@@ -3536,11 +3743,19 @@ function resolvedCorruptionTest(participant, skillId, input) {
       }
       if(input.v5?.context)delete input.v5.context.aimedTargetId;
       if(activeCombatAction?.kind==='aim'&&input.v5?.kind==='ranged'&&input.targetId===activeCombatAction.targetId&&(activeCombatAction.weaponId?input.action?.extensions?.fiche?.equipmentId===activeCombatAction.weaponId:String(input.action?.name||input.action?.nom||input.action?.note||'').trim().toLowerCase()===String(activeCombatAction.weaponName||'').trim().toLowerCase())){input.v5={...input.v5,context:{...(input.v5.context||{}),aimedTargetId:activeCombatAction.targetId}};}
-      const movement=combatActionState(snapshot).movementByActorId?.[actorForAction?.id];if(movement&&movement.turnId===clockNow.turnId&&movement.encounterId===clockNow.encounterId&&input.v5?.kind==='ranged')input.v5={...input.v5,context:{...(input.v5.context||{}),movedBeforeRangedAttack:true}};
+      const movement=combatActionState(snapshot).movementByActorId?.[actorForAction?.id];
+      if(movement&&movement.turnId===clockNow.turnId&&movement.encounterId===clockNow.encounterId&&input.v5?.kind==='ranged')input.v5={...input.v5,context:{...(input.v5.context||{}),movedBeforeRangedAttack:true}};
       const defenseId=input.targetId||input.defense?.actorId,defensive=combatActionState(snapshot).byActorId?.[defenseId];
-      if(defensive?.kind==='defensive'&&defensive.encounterId===clockNow.encounterId){const skillId=input.defense?.extensions?.fiche?.skillId||input.defense?.v5?.context?.skillId;if(skillId===defensive.skillId){input.defense={...input.defense,v5:{...(input.defense.v5||{}),context:{...(input.defense.v5?.context||{}),combatDefensiveActionBonus:2}}};}}
+      if(defensive?.kind==='defensive'&&defensive.encounterId===clockNow.encounterId){
+        const skillId=input.defense?.extensions?.fiche?.skillId||input.defense?.v5?.context?.skillId;
+        if(skillId===defensive.skillId){input.defense={...input.defense,v5:{...(input.defense.v5||{}),context:{...(input.defense.v5?.context||{}),combatDefensiveActionBonus:2}}};}
+      }
       if(combatReflexesAlreadyInitialized(snapshot,input))return {ready:false,status:'requires-input',error:combatReflexesAlreadyDeterminedMessage,unresolved:[combatReflexesAlreadyDeterminedMessage],baseRevision:localRevision,input:structuredClone(input)};
-      let prepared;try{prepared=buildV5StoreActionInput(snapshot,input);}catch(error){if(!(error instanceof TypeError)||!error.message.startsWith('Seconde arme :'))throw error;return {ready:false,status:'requires-input',error:error.message,unresolved:[error.message],baseRevision:localRevision,input};}
+      let prepared;
+      try{prepared=buildV5StoreActionInput(snapshot,input);}catch(error){
+        if(!(error instanceof TypeError)||!error.message.startsWith('Seconde arme :'))throw error;
+        return {ready:false,status:'requires-input',error:error.message,unresolved:[error.message],baseRevision:localRevision,input};
+      }
       const actorId=prepared.actor?.id||prepared.actorId||input.actorId, escape=snapshot.extensions?.v5?.brokenEscape?.byActorId?.[actorId];
       const escapeActor=snapshot.combat?.participants?.find(row=>row.id===actorId);
       const reaction=hasV5ReactionOpportunity(prepared);
@@ -3553,26 +3768,49 @@ function resolvedCorruptionTest(participant, skillId, input) {
       if(classificationBlock)return {...classificationBlock,baseRevision:localRevision,input:structuredClone(input)};
       prepared.prayerSLContext={sceneId:snapshot.activeScene?.status==='active'?snapshot.activeScene.id:null,round:snapshot.combat?.round};
       const actor=snapshot.combat?.participants?.find(row=>row.id===actorId);
-      if(actor){const needs=prayerCapClockNeeds(actor,snapshot,`combat.participants.${actor.id}`);if(needs.length)return {ready:false,status:'requires-input',error:needs[0].message,needsInput:needs,unresolved:needs.map(row=>row.message),baseRevision:localRevision};}
+      if(actor){
+        const needs=prayerCapClockNeeds(actor,snapshot,`combat.participants.${actor.id}`);
+        if(needs.length)return {ready:false,status:'requires-input',error:needs[0].message,needsInput:needs,unresolved:needs.map(row=>row.message),baseRevision:localRevision};
+      }
       const defenderSkillId=prepared.defense?.extensions?.fiche?.skillId||prepared.defense?.v5?.context?.skillId
         ||input.defense?.extensions?.fiche?.skillId||input.defense?.v5?.context?.skillId;
       if(defenderSkillId==='skill-50_72_69_e8_72_65-base'){
         const defenderId=prepared.target?.id||prepared.targetId||input.targetId;
         const defender=snapshot.combat?.participants?.find(row=>row.id===defenderId);
-        if(defender){const needs=prayerCapClockNeeds(defender,snapshot,`combat.participants.${defender.id}`);if(needs.length)return {ready:false,status:'requires-input',error:needs[0].message,needsInput:needs,unresolved:needs.map(row=>row.message),baseRevision:localRevision};}
+        if(defender){
+          const needs=prayerCapClockNeeds(defender,snapshot,`combat.participants.${defender.id}`);
+          if(needs.length)return {ready:false,status:'requires-input',error:needs[0].message,needsInput:needs,unresolved:needs.map(row=>row.message),baseRevision:localRevision};
+        }
       }
       const preview=annotateV5StoreActionPreview(buildResolutionPreview(prepared), prepared);
       if(preview.grapple?.link&&clockNow.turnId)preview.grapple.link.createdTurnId=clockNow.turnId;
-      if(!reaction&&ordinaryIntent&&!canonicalFreeAttack(preview,input)){const block=ordinaryActionAfterCombatActionBlock(snapshot,actorForAction?.id);if(block)return {...block,baseRevision:localRevision,input:structuredClone(input)};}
-      if(!reaction&&isV5ActionUse(preview,input)){const actionBlock=brokenEscapeActionBlock(snapshot,actorId);if(actionBlock)return {...actionBlock,baseRevision:localRevision,input:structuredClone(input)};}
-      if(!reaction&&preview.attack===true){const actionBlock=brokenEscapeActionBlock(snapshot,actorId);if(actionBlock)return {...actionBlock,baseRevision:localRevision,input:structuredClone(input)};}
+      if(!reaction&&ordinaryIntent&&!canonicalFreeAttack(preview,input)){
+        const block=ordinaryActionAfterCombatActionBlock(snapshot,actorForAction?.id);
+        if(block)return {...block,baseRevision:localRevision,input:structuredClone(input)};
+      }
+      if(!reaction&&isV5ActionUse(preview,input)){
+        const actionBlock=brokenEscapeActionBlock(snapshot,actorId);
+        if(actionBlock)return {...actionBlock,baseRevision:localRevision,input:structuredClone(input)};
+      }
+      if(!reaction&&preview.attack===true){
+        const actionBlock=brokenEscapeActionBlock(snapshot,actorId);
+        if(actionBlock)return {...actionBlock,baseRevision:localRevision,input:structuredClone(input)};
+      }
       return {...preview,ready:(preview.unresolved||[]).length===0,input:{...(preview.input||prepared),brokenEscapeFacts:structuredClone(input.brokenEscapeFacts)}};
     },
     previewV5CombatAction(input={}){
       const snapshot=currentEnvelope(),actorId=input.actorId||snapshot.combat?.currentActorId,actor=snapshot.combat?.participants?.find(row=>row.id===actorId),clock=v5StoreActionClock(snapshot);
-      const needsInput=[];if(!['aim','defensive'].includes(input.kind))needsInput.push('Choisir Visée ou Défensive.');
+      const needsInput=[];
+      if(!['aim','defensive'].includes(input.kind))needsInput.push('Choisir Visée ou Défensive.');
       if(!actor||actor.zone!=='active'||actorId!==snapshot.combat?.currentActorId)needsInput.push('L’Action doit viser le combattant actif du Tour.');
-      let aimWeapon=null;let aimWeaponRanged=false;if(input.kind==='aim'&&actor){aimWeapon=actor.equipment?.find(item=>item.id===input.weaponId&&item.kind==='weapon');const label=String(aimWeapon?.category||'')+' '+String(aimWeapon?.name||'');aimWeaponRanged=Boolean(aimWeapon&&((String(aimWeapon.range||'').trim())||aimWeapon.ranged===true||/distance|projectile|arc |arbal[eè]te|fronde|armes?.?à.?feu/i.test(label)));if(!aimWeapon&&!(typeof input.weaponName==='string'&&input.weaponName.trim()&&input.rangedWeaponConfirmed===true))needsInput.push('Choisir une arme à distance équipée ou déclarer explicitement au MJ la nature et le nom de l’arme.');else if(aimWeapon&&!aimWeaponRanged&&input.rangedWeaponConfirmed!==true)needsInput.push('Confirmer explicitement que l’arme choisie est à distance (portée numérique inconnue).');else if(input.rangedWeaponHeldConfirmed!==true)needsInput.push('Confirmer que l’arme à distance choisie est en main.');}
+      let aimWeapon=null;
+      let aimWeaponRanged=false;
+      if(input.kind==='aim'&&actor){
+        aimWeapon=actor.equipment?.find(item=>item.id===input.weaponId&&item.kind==='weapon');
+        const label=String(aimWeapon?.category||'')+' '+String(aimWeapon?.name||'');
+        aimWeaponRanged=Boolean(aimWeapon&&((String(aimWeapon.range||'').trim())||aimWeapon.ranged===true||/distance|projectile|arc |arbal[eè]te|fronde|armes?.?à.?feu/i.test(label)));
+        if(!aimWeapon&&!(typeof input.weaponName==='string'&&input.weaponName.trim()&&input.rangedWeaponConfirmed===true))needsInput.push('Choisir une arme à distance équipée ou déclarer explicitement au MJ la nature et le nom de l’arme.');else if(aimWeapon&&!aimWeaponRanged&&input.rangedWeaponConfirmed!==true)needsInput.push('Confirmer explicitement que l’arme choisie est à distance (portée numérique inconnue).');else if(input.rangedWeaponHeldConfirmed!==true)needsInput.push('Confirmer que l’arme à distance choisie est en main.');
+      }
       if(input.kind==='aim'&&!snapshot.combat?.participants?.some(row=>row.id===input.targetId&&row.zone==='active'))needsInput.push('Choisir une cible active pour la Visée.');
       if(input.kind==='defensive'&&(!input.skillId||!actor?.skills?.some(skill=>skill.id===input.skillId)))needsInput.push('Choisir une compétence défensive possédée.');
       const spent=standardV5ActionSpent(snapshot,actorId,clock)||Boolean(combatActionBlock(snapshot,actorId));
@@ -3582,15 +3820,21 @@ function resolvedCorruptionTest(participant, skillId, input) {
     declareV5CombatMovement(input={}){
       const snapshot=currentEnvelope(),actorId=input.actorId||snapshot.combat?.currentActorId,clock=v5StoreActionClock(snapshot),actor=snapshot.combat?.participants?.find(row=>row.id===actorId);
       if(!actor||actor.zone!=='active'||actorId!==snapshot.combat?.currentActorId)return {status:'blocked',reason:'Le déplacement doit être déclaré pour l’acteur du Tour courant.'};
-      const movement=canUseV5Move(actor.extensions?.v5?.combatEffects||[]);if(!movement.ready)return {status:'blocked',reason:movement.reason};
+      const movement=canUseV5Move(actor.extensions?.v5?.combatEffects||[]);
+      if(!movement.ready)return {status:'blocked',reason:movement.reason};
       const saved=api.executeCommand('v5-combat-movement-declared',draft=>{
         if(draft.localRevision!==snapshot.localRevision||v5StoreActionClock(draft).turnId!==clock.turnId)throw Object.assign(new Error('Le Tour a changé; redéclarez le déplacement.'),{userFacing:true});
-        const live=draft.combat?.participants?.find(row=>row.id===actorId);const liveMovement=canUseV5Move(live?.extensions?.v5?.combatEffects||[]);if(!liveMovement.ready)throw Object.assign(new Error(liveMovement.reason),{userFacing:true,code:'V5_MOVE_LOST'});
+        const live=draft.combat?.participants?.find(row=>row.id===actorId);
+        const liveMovement=canUseV5Move(live?.extensions?.v5?.combatEffects||[]);
+        if(!liveMovement.ready)throw Object.assign(new Error(liveMovement.reason),{userFacing:true,code:'V5_MOVE_LOST'});
         const root=draft.extensions?.v5||{},state=structuredClone(root.combatActions||{byActorId:{},receipts:[]}),movement={actorId,encounterId:clock.encounterId,turnId:clock.turnId,round:clock.round};
-        state.movementByActorId??={};state.movementByActorId[actorId]=movement;
+        state.movementByActorId??={};
+        state.movementByActorId[actorId]=movement;
         if(state.byActorId?.[actorId]?.kind==='aim')delete state.byActorId[actorId];
         state.receipts=[...(state.receipts||[]),{id:`movement:${actorId}:${clock.turnId}`,kind:'movement-declared',...movement}].slice(-300);
-        draft.extensions??={};draft.extensions.v5={...root,combatActions:state};return draft;
+        draft.extensions??={};
+        draft.extensions.v5={...root,combatActions:state};
+        return draft;
       });
       return saved&&typeof saved.then==='function'?saved.then(result=>result?.ok===false?{status:'error',reason:result.error}:{status:'applied',actorId,clock,persistence:result}):{status:'applied',actorId,clock,persistence:saved};
     },
@@ -3602,10 +3846,15 @@ function resolvedCorruptionTest(participant, skillId, input) {
         const now=v5StoreActionClock(draft),actor=draft.combat?.participants?.find(row=>row.id===actorId);
         if(draft.localRevision!==captured.baseRevision||now.turnId!==clock.turnId||now.encounterId!==clock.encounterId)throw Object.assign(new Error('Le Tour a changé; recalculez l’Action.'),{userFacing:true});
         if(!actor||draft.combat?.currentActorId!==actorId||standardV5ActionSpent(draft,actorId,now)||combatActionBlock(draft,actorId))throw Object.assign(new Error('Une Action a déjà été dépensée ou le Tour ne correspond plus.'),{userFacing:true});
-        const root=draft.extensions?.v5||{},state=structuredClone(root.combatActions||{byActorId:{},receipts:[]});state.byActorId??={};
+        const root=draft.extensions?.v5||{},state=structuredClone(root.combatActions||{byActorId:{},receipts:[]});
+        state.byActorId??={};
         state.byActorId[actorId]={actorId,kind:captured.kind,targetId:captured.targetId,skillId:captured.skillId,weaponId:captured.weaponId||null,weaponName:captured.weaponName||null,rangedWeaponConfirmed:captured.rangedWeaponConfirmed===true,rangedWeaponHeldConfirmed:captured.rangedWeaponHeldConfirmed===true,turnId:now.turnId,encounterId:now.encounterId,round:now.round,actionId:captured.actionId};
-        receipt={id:captured.actionId,kind:captured.kind,actorId,targetId:captured.targetId,skillId:captured.skillId,weaponId:captured.weaponId||null,weaponName:captured.weaponName||null,rangedWeaponConfirmed:captured.rangedWeaponConfirmed===true,rangedWeaponHeldConfirmed:captured.rangedWeaponHeldConfirmed===true,clock:now};state.receipts=[...(state.receipts||[]),receipt].slice(-300);
-        draft.extensions??={};draft.extensions.v5={...root,combatActions:state};recordV5ActionUsage(draft,actorId,captured.actionId);return draft;
+        receipt={id:captured.actionId,kind:captured.kind,actorId,targetId:captured.targetId,skillId:captured.skillId,weaponId:captured.weaponId||null,weaponName:captured.weaponName||null,rangedWeaponConfirmed:captured.rangedWeaponConfirmed===true,rangedWeaponHeldConfirmed:captured.rangedWeaponHeldConfirmed===true,clock:now};
+        state.receipts=[...(state.receipts||[]),receipt].slice(-300);
+        draft.extensions??={};
+        draft.extensions.v5={...root,combatActions:state};
+        recordV5ActionUsage(draft,actorId,captured.actionId);
+        return draft;
       });
       const finish=result=>result?.ok===false?{status:'error',reason:result.error}:{status:'applied',receipt,persistence:result};
       return saved&&typeof saved.then==='function'?saved.then(finish):Promise.resolve(finish(saved));
@@ -3614,16 +3863,23 @@ function resolvedCorruptionTest(participant, skillId, input) {
       const preview = cloneValue(supplied);
       const actorId=preview.input?.actor?.id||preview.input?.actorId||preview.actorId||preview.input?.source?.id;
       const snapshot=currentEnvelope(),escapeActor=snapshot.combat?.participants?.find(row=>row.id===actorId),escape=snapshot.extensions?.v5?.brokenEscape?.byActorId?.[actorId];
-      const grappleGate=grappleTurnGateBlock(snapshot,preview.input||{},escapeActor);if(grappleGate)return Promise.resolve({status:'manual',reason:grappleGate.error,code:grappleGate.code});
+      const grappleGate=grappleTurnGateBlock(snapshot,preview.input||{},escapeActor);
+      if(grappleGate)return Promise.resolve({status:'manual',reason:grappleGate.error,code:grappleGate.code});
       const ordinaryIntent=(isV5ActionUse(preview,preview.input||{})||['attack','attaque'].includes(preview.input?.action?.type))&&!canonicalFreeAttack(preview,preview.input||{});
       if(combatReflexesAlreadyInitialized(snapshot,preview.input||{}))return Promise.resolve({status:'manual',reason:combatReflexesAlreadyDeterminedMessage});
       const guardPrepared=buildV5StoreActionInput(snapshot,preview.input||{}),reaction=hasV5ReactionOpportunity(guardPrepared);
-      if(!reaction&&ordinaryIntent){const block=ordinaryActionAfterCombatActionBlock(snapshot,actorId);if(block)return Promise.resolve({status:'manual',reason:block.error,code:block.code});}
+      if(!reaction&&ordinaryIntent){
+        const block=ordinaryActionAfterCombatActionBlock(snapshot,actorId);
+        if(block)return Promise.resolve({status:'manual',reason:block.error,code:block.code});
+      }
       if(!reaction&&!isExplicitV5NonAction(preview,preview.input||{})&&escapeActor?.states?.some(row=>['brise','broken'].includes(String(row.key||row.name||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()))){
         const blocked=isV5BrokenEscapeActionBlocked(escapeActor,{visibleToAnyEnemy:preview.input?.brokenEscapeFacts?.visibleToAnyEnemy,sequence:escape});
         if(blocked)throw new Error(blocked==='needs-fact'?'Le MJ doit confirmer la visibilité envers tout ennemi.':'Brisé impose Move (Flee), puis Action (Sprint) tant que le personnage reste visible.');
         throwBrokenEscapeActionClassification(brokenEscapeActionClassificationBlock(escapeActor,preview,preview.input||{}));
-        if(isV5ActionUse(preview,preview.input||{})){const actionBlock=brokenEscapeActionBlock(snapshot,actorId);if(actionBlock)throw Object.assign(new Error(actionBlock.error),{userFacing:true,code:actionBlock.code});}
+        if(isV5ActionUse(preview,preview.input||{})){
+          const actionBlock=brokenEscapeActionBlock(snapshot,actorId);
+          if(actionBlock)throw Object.assign(new Error(actionBlock.error),{userFacing:true,code:actionBlock.code});
+        }
       }
       let semanticResult = null;
       const commit = api.executeCommand('apply-resolution', draft => {
@@ -3631,12 +3887,21 @@ function resolvedCorruptionTest(participant, skillId, input) {
         if(combatReflexesAlreadyInitialized(draft,preview.input||{}))throw Object.assign(new Error(combatReflexesAlreadyDeterminedMessage),{code:'RESOLUTION_MANUAL'});
 
         const commitPrepared=buildV5StoreActionInput(draft,preview.input||{}),commitReaction=hasV5ReactionOpportunity(commitPrepared),commitActor=draft.combat?.participants?.find(row=>row.id===actorId);
-        if(!commitReaction&&ordinaryIntent){const block=ordinaryActionAfterCombatActionBlock(draft,actorId);if(block)throw Object.assign(new Error(block.error),{code:'RESOLUTION_MANUAL'});}
+        if(!commitReaction&&ordinaryIntent){
+          const block=ordinaryActionAfterCombatActionBlock(draft,actorId);
+          if(block)throw Object.assign(new Error(block.error),{code:'RESOLUTION_MANUAL'});
+        }
         if(!commitReaction)throwBrokenEscapeActionClassification(brokenEscapeActionClassificationBlock(commitActor,preview,preview.input||{}));
-        if(!commitReaction&&isV5ActionUse(preview,preview.input||{})){const actionBlock=brokenEscapeActionBlock(draft,actorId);if(actionBlock)throw Object.assign(new Error(actionBlock.error),{userFacing:true,code:actionBlock.code});}
+        if(!commitReaction&&isV5ActionUse(preview,preview.input||{})){
+          const actionBlock=brokenEscapeActionBlock(draft,actorId);
+          if(actionBlock)throw Object.assign(new Error(actionBlock.error),{userFacing:true,code:actionBlock.code});
+        }
         let result;
         try { result = applyV5StoreAction(preview, draft, state => applyActionResolution(preview, state)); }
-        catch (error) { error.code = error.code || 'RESOLUTION_INVALID'; throw error; }
+        catch (error) {
+          error.code = error.code || 'RESOLUTION_INVALID';
+          throw error;
+        }
         if (result.status === 'duplicate') {
           const error = new Error('Résultat déjà appliqué');
           error.code = 'RESOLUTION_DUPLICATE';
@@ -3669,14 +3934,23 @@ function resolvedCorruptionTest(participant, skillId, input) {
           }].slice(-100) } };
           return row;
         });
-        if(isV5ActionUse(preview,preview.input||{})&&!commitReaction){recordV5ActionUsage(next,resolvedActorId,preview.resolutionId);const v5=next.extensions?.v5||{},rows=v5.standardTurnActions||[],weaponId=preview.input?.action?.extensions?.fiche?.equipmentId,qualityIds=(preview.input?.action?.qualities||[]).map(row=>typeof row==='string'?row:row?.id).filter(Boolean);next.extensions.v5={...v5,standardTurnActions:rows.map(row=>row.actionId===preview.resolutionId?{...row,targetId:preview.targetId||preview.input?.target?.id||preview.input?.targetId||null,weaponId:weaponId||null,qualityIds:[...new Set(qualityIds)],hit:preview.hit===true,actionType:preview.actionType}:row)};}
+        if(isV5ActionUse(preview,preview.input||{})&&!commitReaction){
+          recordV5ActionUsage(next,resolvedActorId,preview.resolutionId);
+          const v5=next.extensions?.v5||{},rows=v5.standardTurnActions||[],weaponId=preview.input?.action?.extensions?.fiche?.equipmentId,qualityIds=(preview.input?.action?.qualities||[]).map(row=>typeof row==='string'?row:row?.id).filter(Boolean);
+          next.extensions.v5={...v5,standardTurnActions:rows.map(row=>row.actionId===preview.resolutionId?{...row,targetId:preview.targetId||preview.input?.target?.id||preview.input?.targetId||null,weaponId:weaponId||null,qualityIds:[...new Set(qualityIds)],hit:preview.hit===true,actionType:preview.actionType}:row)};
+        }
         const combatRoot=next.extensions?.v5||{},combatState=structuredClone(combatRoot.combatActions||{byActorId:{},receipts:[]}),owned=combatState.byActorId?.[resolvedActorId];
-        if(preview.input?.v5?.context?.trip===true){const primaryId=preview.input.v5.context.tripPrimaryResolutionId;if((combatState.trippedResolutionIds||[]).includes(primaryId))throw Object.assign(new Error('Cette touche a déjà servi pour un Croche-pied.'),{userFacing:true});combatState.trippedResolutionIds=[...(combatState.trippedResolutionIds||[]),primaryId].slice(-500);}
+        if(preview.input?.v5?.context?.trip===true){
+          const primaryId=preview.input.v5.context.tripPrimaryResolutionId;
+          if((combatState.trippedResolutionIds||[]).includes(primaryId))throw Object.assign(new Error('Cette touche a déjà servi pour un Croche-pied.'),{userFacing:true});
+          combatState.trippedResolutionIds=[...(combatState.trippedResolutionIds||[]),primaryId].slice(-500);
+        }
         if(owned?.kind==='aim'&&(preview.attack===true||preview.input?.v5?.context?.isAction===true||preview.input?.v5?.context?.movedBeforeRangedAttack===true))delete combatState.byActorId[resolvedActorId];
         if(combatState.byActorId?.[actorId]?.kind==='aim'&&preview.input?.v5?.kind==='ranged'&&preview.input?.targetId===combatState.byActorId[actorId].targetId&&preview.attack===true)delete combatState.byActorId[actorId];
         const defendedActorId=preview.targetId||preview.input?.target?.id||preview.input?.targetId;
         if(preview.defenderTest&&combatState.byActorId?.[defendedActorId]?.kind==='aim')delete combatState.byActorId[defendedActorId];
-        next.extensions??={};next.extensions.v5={...combatRoot,combatActions:combatState};
+        next.extensions??={};
+        next.extensions.v5={...combatRoot,combatActions:combatState};
         if(!reaction&&!isExplicitV5NonAction(preview,preview.input||{})&&escapeActor?.states?.some(row=>['brise','broken'].includes(String(row.key||row.name||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase())))recordV5EscapeVisibility(next,actorId,preview.input?.brokenEscapeFacts?.visibleToAnyEnemy,preview.resolutionId);
         return next;
       });
@@ -3697,22 +3971,34 @@ function resolvedCorruptionTest(participant, skillId, input) {
       const prepared=buildV5StoreActionInput(envelope,input);
       const owner=prepared.actor?.id||prepared.actorId||input.actorId,person=envelope.combat?.participants?.find(row=>row.id===owner),sequence=envelope.extensions?.v5?.brokenEscape?.byActorId?.[owner];
       const reaction=hasV5ReactionOpportunity(prepared),freeTest=isExplicitV5NonAction(null,input);
-      if(isBrokenEscapeActor(person)&&!reaction&&!freeTest){const blocked=isV5BrokenEscapeActionBlocked(person,{visibleToAnyEnemy:input.brokenEscapeFacts?.visibleToAnyEnemy,sequence});if(blocked)return {ready:false,status:'requires-input',error:blocked==='needs-fact'?'Le MJ doit confirmer la visibilité envers tout ennemi.':'Brisé impose Move (Flee), puis Action (Sprint) tant que le personnage reste visible.',sourceState};}
+      if(isBrokenEscapeActor(person)&&!reaction&&!freeTest){
+        const blocked=isV5BrokenEscapeActionBlocked(person,{visibleToAnyEnemy:input.brokenEscapeFacts?.visibleToAnyEnemy,sequence});
+        if(blocked)return {ready:false,status:'requires-input',error:blocked==='needs-fact'?'Le MJ doit confirmer la visibilité envers tout ennemi.':'Brisé impose Move (Flee), puis Action (Sprint) tant que le personnage reste visible.',sourceState};
+      }
       const classificationBlock=!reaction?brokenEscapeActionClassificationBlock(person,null,input):null;
       if(classificationBlock)return {...classificationBlock,sourceState};
       const simulation = simulateAction(prepared.v5State, prepared);
       if (simulation.preview) simulation.preview = annotateV5StoreActionPreview(simulation.preview, prepared);
       simulation.sourceState = sourceState;
-      if(isBrokenEscapeActor(person)&&!reaction&&isV5ActionUse(simulation.preview,input)){const actionBlock=brokenEscapeActionBlock(envelope,owner);if(actionBlock)return {...actionBlock,mode:'simulation',sourceState,preview:simulation.preview};}
+      if(isBrokenEscapeActor(person)&&!reaction&&isV5ActionUse(simulation.preview,input)){
+        const actionBlock=brokenEscapeActionBlock(envelope,owner);
+        if(actionBlock)return {...actionBlock,mode:'simulation',sourceState,preview:simulation.preview};
+      }
       return simulation;
     },
     applySimulation(supplied) {
       const simulation=cloneValue(supplied),input=simulation.preview?.input||{},actorId=input.actor?.id||input.actorId,env=currentEnvelope(),actor=env.combat?.participants?.find(row=>row.id===actorId),sequence=env.extensions?.v5?.brokenEscape?.byActorId?.[actorId];
       if(combatReflexesAlreadyInitialized(env,input))throw Object.assign(new Error(combatReflexesAlreadyDeterminedMessage),{userFacing:true,code:'COMBAT_REFLEXES_ALREADY_DETERMINED'});
       const prepared=buildV5StoreActionInput(env,input),reaction=hasV5ReactionOpportunity(prepared),freeTest=isExplicitV5NonAction(simulation.preview,input);
-      if(isBrokenEscapeActor(actor)&&!reaction&&!freeTest){const blocked=isV5BrokenEscapeActionBlocked(actor,{visibleToAnyEnemy:input.brokenEscapeFacts?.visibleToAnyEnemy,sequence});if(blocked)throw new Error(blocked==='needs-fact'?'Le MJ doit confirmer la visibilité envers tout ennemi.':'Brisé impose Move (Flee), puis Action (Sprint) tant que le personnage reste visible.');}
+      if(isBrokenEscapeActor(actor)&&!reaction&&!freeTest){
+        const blocked=isV5BrokenEscapeActionBlocked(actor,{visibleToAnyEnemy:input.brokenEscapeFacts?.visibleToAnyEnemy,sequence});
+        if(blocked)throw new Error(blocked==='needs-fact'?'Le MJ doit confirmer la visibilité envers tout ennemi.':'Brisé impose Move (Flee), puis Action (Sprint) tant que le personnage reste visible.');
+      }
       if(!reaction)throwBrokenEscapeActionClassification(brokenEscapeActionClassificationBlock(actor,simulation.preview,input));
-      if(isBrokenEscapeActor(actor)&&!reaction&&isV5ActionUse(simulation.preview,input)){const actionBlock=brokenEscapeActionBlock(env,actorId);if(actionBlock)throw Object.assign(new Error(actionBlock.error),{userFacing:true,code:actionBlock.code});}
+      if(isBrokenEscapeActor(actor)&&!reaction&&isV5ActionUse(simulation.preview,input)){
+        const actionBlock=brokenEscapeActionBlock(env,actorId);
+        if(actionBlock)throw Object.assign(new Error(actionBlock.error),{userFacing:true,code:actionBlock.code});
+      }
       let semanticResult = null;
       // applyActionSimulation has already executed the pure resolution. Passing
       // result.resolution back through applyResolution would apply it twice and
@@ -3721,7 +4007,10 @@ function resolvedCorruptionTest(participant, skillId, input) {
       const commit = api.executeCommand('apply-simulation', draft => {
         const commitPrepared=buildV5StoreActionInput(draft,input),commitReaction=hasV5ReactionOpportunity(commitPrepared),commitActor=draft.combat?.participants?.find(row=>row.id===actorId);
         if(!commitReaction)throwBrokenEscapeActionClassification(brokenEscapeActionClassificationBlock(commitActor,simulation.preview,input));
-        if(isBrokenEscapeActor(commitActor)&&!commitReaction&&isV5ActionUse(simulation.preview,input)){const actionBlock=brokenEscapeActionBlock(draft,actorId);if(actionBlock)throw Object.assign(new Error(actionBlock.error),{userFacing:true,code:actionBlock.code});}
+        if(isBrokenEscapeActor(commitActor)&&!commitReaction&&isV5ActionUse(simulation.preview,input)){
+          const actionBlock=brokenEscapeActionBlock(draft,actorId);
+          if(actionBlock)throw Object.assign(new Error(actionBlock.error),{userFacing:true,code:actionBlock.code});
+        }
         const result = applyV5StoreAction(simulation.preview, draft, state => applyActionSimulation(simulation, state));
         if (result.status === 'duplicate') {
           const error = new Error('Simulation déjà appliquée');
@@ -3759,7 +4048,8 @@ function resolvedCorruptionTest(participant, skillId, input) {
     discardSimulation(simulation) { return discardSimulation(simulation); },
     previewChannelling(input = {}) {
       const actorId = input.actorId || input.actor?.id || combat.currentActorId;
-      const blocked=combatActionBlock(currentEnvelope(),actorId);if(blocked)return {...blocked,allowed:false,unresolved:[blocked.error]};
+      const blocked=combatActionBlock(currentEnvelope(),actorId);
+      if(blocked)return {...blocked,allowed:false,unresolved:[blocked.error]};
       const participant = (combat.participants.get(actorId)) || Array.from(combat.participants.values())[0];
       return {...previewChannelling(participant, {...input,assistant:combat.participants.get(input.assistantId),turnKey:String(combat.round || 1)+':'+String(stateExtensions?.v5?.turnIndex || 1)}),input:structuredClone(input),baseRevision:localRevision};
     },
@@ -3769,7 +4059,8 @@ function resolvedCorruptionTest(participant, skillId, input) {
     },
     previewCasting(spell, input = {}) {
       const actorId = input.actorId || input.actor?.id || combat.currentActorId;
-      const blocked=combatActionBlock(currentEnvelope(),actorId);if(blocked)return {...blocked,allowed:false,unresolved:[blocked.error]};
+      const blocked=combatActionBlock(currentEnvelope(),actorId);
+      if(blocked)return {...blocked,allowed:false,unresolved:[blocked.error]};
       const participant = (combat.participants.get(actorId)) || Array.from(combat.participants.values())[0];
       return {...previewCasting(participant, spell, {...input,assistant:combat.participants.get(input.assistantId),turnKey:String(combat.round || 1)+':'+String(stateExtensions?.v5?.turnIndex || 1)}),input:structuredClone(input),baseRevision:localRevision};
     },
@@ -3807,7 +4098,8 @@ function resolvedCorruptionTest(participant, skillId, input) {
     rerollCorruptionWithCadai(input={}){
       input = cloneValue(input);
       return magicCommand('v5-cadai-corruption',draft=>{
-        const participants=draft.combat?.participants || [],i=participants.findIndex(p=>p.id===input.actorId);if(i<0)throw new Error('Acteur introuvable.');
+        const participants=draft.combat?.participants || [],i=participants.findIndex(p=>p.id===input.actorId);
+        if(i<0)throw new Error('Acteur introuvable.');
         // HEPG p. 84 : la Corruption doit découler d'une exécution réelle de Haute Magie de cet acteur ; un jet de Corruption ne se relance qu'une fois.
         const executions=draft.extensions?.v5?.highMagicExecutions || [],e=executions.findIndex(row=>row.id===input.castExecutionId && row.actorId===input.actorId);
         if(e<0)throw new Error('Relance de Corruption : exécution de Haute Magie de ce lanceur introuvable.');
@@ -3815,10 +4107,13 @@ function resolvedCorruptionTest(participant, skillId, input) {
         const actor=participants[i],spell=getSpellContract(executions[e].spellId);
         const reroll=previewCadaiCorruptionReroll(actor,{spell,castExecutionId:input.castExecutionId,accessible:input.accessible,firstRoll:input.firstRoll,reroll:input.reroll,slModifier:Number(input.slModifier || 0),alreadyRerolled:executions[e].rerolledCorruption.includes(corruptionId)});
         if(!reroll.ready)throw Object.assign(new Error(reroll.error),{userFacing:true});
-        const paid=consumeCadaiRune(actor,{purpose:'corruption'});if(!paid.success)throw new Error(paid.reason);
-        participants[i]=paid.participant;participants[i].extensions.v5.lastCadaiCorruption={firstRoll:reroll.firstRoll,reroll:reroll.reroll,test:reroll.test,slModifier:reroll.slModifier,castExecutionId:input.castExecutionId,corruptionId,remaining:paid.remaining};
+        const paid=consumeCadaiRune(actor,{purpose:'corruption'});
+        if(!paid.success)throw new Error(paid.reason);
+        participants[i]=paid.participant;
+        participants[i].extensions.v5.lastCadaiCorruption={firstRoll:reroll.firstRoll,reroll:reroll.reroll,test:reroll.test,slModifier:reroll.slModifier,castExecutionId:input.castExecutionId,corruptionId,remaining:paid.remaining};
         draft.extensions.v5.highMagicExecutions=executions.map((row,index)=>index===e?{...row,rerolledCorruption:[...row.rerolledCorruption,corruptionId]}:row);
-        draft.log=[{id:uid(),kind:'magic',ts:Date.now(),text:'Rune des Cadai : Test de Corruption relancé '+reroll.firstRoll+' → '+reroll.reroll+' ; '+reroll.test.sl+' DR, '+(reroll.test.success?'réussite':'échec')+'. Conséquences d’exposition à reporter sur la fiche.'},...(draft.log || [])];return draft;
+        draft.log=[{id:uid(),kind:'magic',ts:Date.now(),text:'Rune des Cadai : Test de Corruption relancé '+reroll.firstRoll+' → '+reroll.reroll+' ; '+reroll.test.sl+' DR, '+(reroll.test.success?'réussite':'échec')+'. Conséquences d’exposition à reporter sur la fiche.'},...(draft.log || [])];
+        return draft;
       }, input);
     },
     activateMindOverBody(actorId, options = {}){
@@ -3827,26 +4122,48 @@ function resolvedCorruptionTest(participant, skillId, input) {
         const effect=activeMagicTalent(actor,'mind-over-body');
         if(!effect || effect.magicTalentRank<3 || magicTalentRank(actor,'mind-over-body')<3)throw new Error('Contemplation active et rang 3 requis.');
         if(effect.ignoreCriticalPenalties)throw new Error('Blessures critiques déjà ignorées pour cette contemplation.');
-        const fortune=getV5Fortune(draft,actor).balance;if(fortune==null || fortune<1)throw new Error('Un Point de Chance initialisé est requis.');
-        const before=structuredClone(draft);actor.extensions.v5.resources={...(actor.extensions.v5.resources || {}),fortune:fortune-1};effect.ignoreCriticalPenalties=true;
-        const paid=commitV5Resources(before,participants);draft.extensions=paid.extensions;draft.combat.participants=paid.combat.participants;
-        draft.log=[{id:uid(),kind:'magic',ts:Date.now(),text:'L’esprit sur le corps : 1 Chance dépensée ; pénalités de Blessures Critiques ignorées pendant cette contemplation. Les blessures restent présentes.'},...(draft.log || [])];return projectV5ResourceEnvelope(draft);
+        const fortune=getV5Fortune(draft,actor).balance;
+        if(fortune==null || fortune<1)throw new Error('Un Point de Chance initialisé est requis.');
+        const before=structuredClone(draft);
+        actor.extensions.v5.resources={...(actor.extensions.v5.resources || {}),fortune:fortune-1};
+        effect.ignoreCriticalPenalties=true;
+        const paid=commitV5Resources(before,participants);
+        draft.extensions=paid.extensions;
+        draft.combat.participants=paid.combat.participants;
+        draft.log=[{id:uid(),kind:'magic',ts:Date.now(),text:'L’esprit sur le corps : 1 Chance dépensée ; pénalités de Blessures Critiques ignorées pendant cette contemplation. Les blessures restent présentes.'},...(draft.log || [])];
+        return projectV5ResourceEnvelope(draft);
       }, options);
     },
-    startMagicAdventure(options = {}){return magicCommand('v5-magic-adventure',draft=>{draft.extensions ??={};draft.extensions.v5 ??={};draft.extensions.v5.magicAdventureId=uid();return draft;}, options);},
+    startMagicAdventure(options = {}){return magicCommand('v5-magic-adventure',draft=>{
+      draft.extensions ??={};
+      draft.extensions.v5 ??={};
+      draft.extensions.v5.magicAdventureId=uid();
+      return draft;
+    }, options);},
     applyMagicMeditation(input={}){
       input = cloneValue(input);
       return magicCommand('v5-magic-meditation',draft=>{
-        const participants=draft.combat?.participants || [],index=participants.findIndex(p=>p.id===input.actorId);if(index<0)throw new Error('Acteur introuvable.');
-        const needs=prayerCapClockNeeds(participants[index],draft,`combat.participants.${input.actorId}`);if(needs.length)throw Object.assign(new Error(needs[0].message),{userFacing:true,needsInput:needs});
+        const participants=draft.combat?.participants || [],index=participants.findIndex(p=>p.id===input.actorId);
+        if(index<0)throw new Error('Acteur introuvable.');
+        const needs=prayerCapClockNeeds(participants[index],draft,`combat.participants.${input.actorId}`);
+        if(needs.length)throw Object.assign(new Error(needs[0].message),{userFacing:true,needsInput:needs});
         input.prayerSLContext={sceneId:draft.activeScene?.status==='active'?draft.activeScene.id:null,round:draft.combat?.round};
-        const preview=previewMagicMeditation(participants[index],input);if(!preview.ready)throw new Error(preview.error);
+        const preview=previewMagicMeditation(participants[index],input);
+        if(!preview.ready)throw new Error(preview.error);
         if(preview.success){
-          if(preview.yenlui){participants[index].extensions ??={};participants[index].extensions.v5 ??={};participants[index].extensions.v5.yenlui=preview.yenlui;}
-          else {participants[index]=expireParticipantSpellEffects(participants[index],{spellId:input.talentId}).participant;participants[index]=applyParticipantSpellEffects(participants[index],preview.effect,{round:currentMagicRound(draft.combat)}).participant;}
+          if(preview.yenlui){
+            participants[index].extensions ??={};
+            participants[index].extensions.v5 ??={};
+            participants[index].extensions.v5.yenlui=preview.yenlui;
+          }
+          else {
+            participants[index]=expireParticipantSpellEffects(participants[index],{spellId:input.talentId}).participant;
+            participants[index]=applyParticipantSpellEffects(participants[index],preview.effect,{round:currentMagicRound(draft.combat)}).participant;
+          }
         }
         const slTrace=preview.prayerSLAdjustment?` · Courroux « Pensez à vos actes » : ${preview.prayerSLAdjustment.rawSL} DR bruts → ${preview.prayerSLAdjustment.effectiveSL} DR appliqués (plafond +0, huit jours impériaux)`:'';
-        draft.log=[{id:uid(),ts:Date.now(),kind:'magic',text:input.name+' : '+(preview.success?'méditation réussie':'échec')+' ; jet '+input.roll+' ; '+preview.test.sl+' DR'+slTrace},...(draft.log || [])];return draft;
+        draft.log=[{id:uid(),ts:Date.now(),kind:'magic',text:input.name+' : '+(preview.success?'méditation réussie':'échec')+' ; jet '+input.roll+' ; '+preview.test.sl+' DR'+slTrace},...(draft.log || [])];
+        return draft;
       }, input);
     },
     getCadaiRunes(actorId = null) {
@@ -3861,7 +4178,11 @@ function resolvedCorruptionTest(participant, skillId, input) {
         const participants = draft.combat?.participants || [];
         const index = participants.findIndex(p => p.id === actorId);
         if (index === -1) throw new Error('Participant introuvable dans le combat');
-        if(input.reset){participants[index].extensions ??={};participants[index].extensions.v5 ??={};participants[index].extensions.v5.cadaiRunes={deployed:0,max:Math.floor((Number(participants[index].caracs?.FM)||0)/10)};}
+        if(input.reset){
+          participants[index].extensions ??={};
+          participants[index].extensions.v5 ??={};
+          participants[index].extensions.v5.cadaiRunes={deployed:0,max:Math.floor((Number(participants[index].caracs?.FM)||0)/10)};
+        }
         else {
           if(input.conditionsConfirmed!==true)throw new Error('Lire/Écrire, matériel et conditions de déploiement requis.');
           const skill=(participants[index].skills || []).find(row=>/savoir.*magie|lore.*magic/i.test(row.name || row.nom || ''));
@@ -3896,7 +4217,8 @@ function resolvedCorruptionTest(participant, skillId, input) {
     },
     previewDispelCasting(castingPreview, input = {}) {
       const dispellerId = input.dispellerId || input.actorId || combat.currentActorId;
-      const blocked=combatActionBlock(currentEnvelope(),dispellerId);if(blocked)return {...blocked,allowed:false,unresolved:[blocked.error]};
+      const blocked=combatActionBlock(currentEnvelope(),dispellerId);
+      if(blocked)return {...blocked,allowed:false,unresolved:[blocked.error]};
       const dispeller = (combat.participants.get(dispellerId)) || Array.from(combat.participants.values())[0];
       const round = input.round !== undefined ? input.round : currentMagicRound(combat);
       return previewDispelCasting(dispeller, castingPreview, { turnKey: `${round}:${stateExtensions?.v5?.turnIndex ?? 1}`, round, ...input });
@@ -3906,7 +4228,8 @@ function resolvedCorruptionTest(participant, skillId, input) {
     },
     previewDispelPersistent(persistentEffect, input = {}) {
       const dispellerId = input.dispellerId || input.actorId || combat.currentActorId;
-      const blocked=combatActionBlock(currentEnvelope(),dispellerId);if(blocked)return {...blocked,allowed:false,unresolved:[blocked.error]};
+      const blocked=combatActionBlock(currentEnvelope(),dispellerId);
+      if(blocked)return {...blocked,allowed:false,unresolved:[blocked.error]};
       const dispeller = (combat.participants.get(dispellerId)) || Array.from(combat.participants.values())[0];
       return previewDispelPersistent(dispeller, persistentEffect, input);
     },
@@ -3989,7 +4312,8 @@ function resolvedCorruptionTest(participant, skillId, input) {
       }), baseRevision: localRevision };
     },
     applyLoreAttribute(preview, options = {}) {
-      preview = structuredClone(preview); options = cloneValue(options);
+      preview = structuredClone(preview);
+      options = cloneValue(options);
       return magicCommand('v5-lore-attribute-apply', draft => {
         const participants = draft.combat?.participants || [];
         const casterId = options.casterId || preview.casterId || combat.currentActorId;
@@ -4010,7 +4334,8 @@ function resolvedCorruptionTest(participant, skillId, input) {
       return { ...previewBeastForm(caster, beastProfile, input), baseRevision: localRevision };
     },
     applyBeastForm(casterId, beastProfile, options = {}) {
-      beastProfile = cloneValue(beastProfile); options = cloneValue(options);
+      beastProfile = cloneValue(beastProfile);
+      options = cloneValue(options);
       const targetId = casterId || combat.currentActorId;
       return magicCommand('v5-beast-form-apply', draft => {
         const participants = draft.combat?.participants || [];
@@ -4045,7 +4370,8 @@ function resolvedCorruptionTest(participant, skillId, input) {
       }), baseRevision: localRevision };
     },
     applyVerdantApotheosis(preview, options = {}) {
-      preview = structuredClone(preview); options = cloneValue(options);
+      preview = structuredClone(preview);
+      options = cloneValue(options);
       return magicCommand('v5-verdant-apotheosis-apply', draft => {
         const participants = draft.combat?.participants || [];
         const targetCorpses = participants.filter(p => preview.results.some(r => r.corpseId === p.id));
@@ -4065,7 +4391,8 @@ function resolvedCorruptionTest(participant, skillId, input) {
       return { ...previewDaemonbane({ caster, target, ...input }), baseRevision: localRevision };
     },
     applyDaemonbane(targetId, preview, options = {}) {
-      preview = structuredClone(preview); options = cloneValue(options);
+      preview = structuredClone(preview);
+      options = cloneValue(options);
       return magicCommand('v5-daemonbane-apply', draft => {
         const participants = draft.combat?.participants || [];
         const index = participants.findIndex(p => p.id === targetId);
@@ -4105,7 +4432,9 @@ function resolvedCorruptionTest(participant, skillId, input) {
       }), baseRevision: localRevision };
     },
     applyHandOfGlory(targetIds = [], preview, options = {}) {
-      targetIds = [...targetIds]; preview = structuredClone(preview); options = cloneValue(options);
+      targetIds = [...targetIds];
+      preview = structuredClone(preview);
+      options = cloneValue(options);
       return magicCommand('v5-hand-of-glory-apply', draft => {
         const participants = draft.combat?.participants || [];
         const targets = participants.filter(p => targetIds.includes(p.id));
@@ -4134,77 +4463,185 @@ function resolvedCorruptionTest(participant, skillId, input) {
     canManageDivinePenances: divineApi.canManageDivinePenances,
     getDivinePenanceExamples: divineApi.getDivinePenanceExamples,
     async createDivinePenance(actorId,input={}){
-      if(divineAuthority!=='MJ')throw new Error('Seul le MJ peut créer une pénitence.');const captured=cloneValue(input),expected=captured.baseRevision??localRevision;let transition;
-      const saved=api.executeCommand('divine-penance-create',draft=>{transition=createStoreDivinePenance(draft,actorId,{...captured,baseRevision:expected});return transition.state;});const finish=result=>result?.ok===false?result:{ok:true,status:transition.status,record:transition.record};return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
+      if(divineAuthority!=='MJ')throw new Error('Seul le MJ peut créer une pénitence.');
+      const captured=cloneValue(input),expected=captured.baseRevision??localRevision;
+      let transition;
+      const saved=api.executeCommand('divine-penance-create',draft=>{
+        transition=createStoreDivinePenance(draft,actorId,{...captured,baseRevision:expected});
+        return transition.state;
+      });
+      const finish=result=>result?.ok===false?result:{ok:true,status:transition.status,record:transition.record};
+      return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
     },
     async completeDivinePenance(actorId,id,input={}){
-      if(divineAuthority!=='MJ')throw new Error('Seul le MJ peut clôturer une pénitence.');const captured=cloneValue(input),expected=captured.baseRevision??localRevision;
-      const initial=completeStoreDivinePenance(currentEnvelope(),actorId,id,{...captured,baseRevision:expected});if(initial.status==='duplicate')return {ok:true,status:'duplicate',record:initial.record};let transition;
-      const saved=api.executeCommand('divine-penance-complete',draft=>{transition=completeStoreDivinePenance(draft,actorId,id,{...captured,baseRevision:expected});return transition.state;});const finish=result=>result?.ok===false?result:{ok:true,status:transition.status,record:transition.record};return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
+      if(divineAuthority!=='MJ')throw new Error('Seul le MJ peut clôturer une pénitence.');
+      const captured=cloneValue(input),expected=captured.baseRevision??localRevision;
+      const initial=completeStoreDivinePenance(currentEnvelope(),actorId,id,{...captured,baseRevision:expected});
+      if(initial.status==='duplicate')return {ok:true,status:'duplicate',record:initial.record};
+      let transition;
+      const saved=api.executeCommand('divine-penance-complete',draft=>{
+        transition=completeStoreDivinePenance(draft,actorId,id,{...captured,baseRevision:expected});
+        return transition.state;
+      });
+      const finish=result=>result?.ok===false?result:{ok:true,status:transition.status,record:transition.record};
+      return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
     },
     previewDivineAbsolution: divineApi.previewDivineAbsolution,
     applyDivineAbsolution: divineApi.applyDivineAbsolution,
     async setSanctifiedGround(input={}){
-      if(divineAuthority!=='MJ')throw new Error('Seul le MJ peut poser une terre sanctifiée.');const captured=cloneValue(input),expected=captured.baseRevision??localRevision;let transition;
-      const saved=api.executeCommand('divine-ground-set',draft=>{transition=setStoreSanctifiedGround(draft,{...captured,baseRevision:expected});return transition.state;});const finish=result=>result?.ok===false?result:{ok:true,record:transition.record};return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
+      if(divineAuthority!=='MJ')throw new Error('Seul le MJ peut poser une terre sanctifiée.');
+      const captured=cloneValue(input),expected=captured.baseRevision??localRevision;
+      let transition;
+      const saved=api.executeCommand('divine-ground-set',draft=>{
+        transition=setStoreSanctifiedGround(draft,{...captured,baseRevision:expected});
+        return transition.state;
+      });
+      const finish=result=>result?.ok===false?result:{ok:true,record:transition.record};
+      return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
     },
     async removeSanctifiedGround(id,input={}){
-      if(divineAuthority!=='MJ')throw new Error('Seul le MJ peut retirer une terre sanctifiée.');const captured=cloneValue(input),expected=captured.baseRevision??localRevision;let transition;
-      const saved=api.executeCommand('divine-ground-remove',draft=>{transition=removeStoreSanctifiedGround(draft,id,{...captured,baseRevision:expected});return transition.state;});const finish=result=>result?.ok===false?result:{ok:true};return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
+      if(divineAuthority!=='MJ')throw new Error('Seul le MJ peut retirer une terre sanctifiée.');
+      const captured=cloneValue(input),expected=captured.baseRevision??localRevision;
+      let transition;
+      const saved=api.executeCommand('divine-ground-remove',draft=>{
+        transition=removeStoreSanctifiedGround(draft,id,{...captured,baseRevision:expected});
+        return transition.state;
+      });
+      const finish=result=>result?.ok===false?result:{ok:true};
+      return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
     },
     async enterSanctifiedGround(participantId,id,input={}){
-      if(divineAuthority!=='MJ')throw new Error('Seul le MJ peut résoudre l’entrée sur une terre sanctifiée.');const captured=cloneValue(input),expected=captured.baseRevision??localRevision;let transition;
-      const saved=api.executeCommand('divine-ground-enter',draft=>{transition=enterStoreSanctifiedGround(draft,participantId,id,{...captured,baseRevision:expected});return transition.state;});const finish=result=>result?.ok===false?result:{ok:true,affected:transition.affected,outcome:transition.outcome};return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
+      if(divineAuthority!=='MJ')throw new Error('Seul le MJ peut résoudre l’entrée sur une terre sanctifiée.');
+      const captured=cloneValue(input),expected=captured.baseRevision??localRevision;
+      let transition;
+      const saved=api.executeCommand('divine-ground-enter',draft=>{
+        transition=enterStoreSanctifiedGround(draft,participantId,id,{...captured,baseRevision:expected});
+        return transition.state;
+      });
+      const finish=result=>result?.ok===false?result:{ok:true,affected:transition.affected,outcome:transition.outcome};
+      return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
     },
     async leaveSanctifiedGround(participantId,id,input={}){
-      if(divineAuthority!=='MJ')throw new Error('Seul le MJ peut résoudre la sortie d’une terre sanctifiée.');const captured=cloneValue(input),expected=captured.baseRevision??localRevision;let transition;
-      const saved=api.executeCommand('divine-ground-leave',draft=>{transition=leaveStoreSanctifiedGround(draft,participantId,id,{...captured,baseRevision:expected});return transition.state;});const finish=result=>result?.ok===false?result:{ok:true};return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
+      if(divineAuthority!=='MJ')throw new Error('Seul le MJ peut résoudre la sortie d’une terre sanctifiée.');
+      const captured=cloneValue(input),expected=captured.baseRevision??localRevision;
+      let transition;
+      const saved=api.executeCommand('divine-ground-leave',draft=>{
+        transition=leaveStoreSanctifiedGround(draft,participantId,id,{...captured,baseRevision:expected});
+        return transition.state;
+      });
+      const finish=result=>result?.ok===false?result:{ok:true};
+      return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
     },
     async applyDivineNavalEvent(input={}){
-      if(divineAuthority!=='MJ')throw new Error('Seul le MJ peut enregistrer un événement naval.');const captured=cloneValue(input),expected=captured.baseRevision??localRevision;let transition;
-      const saved=api.executeCommand('divine-naval-event',draft=>{transition=applyStoreDivineNavalEvent(draft,{...captured,baseRevision:expected});return transition.state;});const finish=result=>result?.ok===false?result:{ok:true,record:transition.record};return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
+      if(divineAuthority!=='MJ')throw new Error('Seul le MJ peut enregistrer un événement naval.');
+      const captured=cloneValue(input),expected=captured.baseRevision??localRevision;
+      let transition;
+      const saved=api.executeCommand('divine-naval-event',draft=>{
+        transition=applyStoreDivineNavalEvent(draft,{...captured,baseRevision:expected});
+        return transition.state;
+      });
+      const finish=result=>result?.ok===false?result:{ok:true,record:transition.record};
+      return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
     },
     previewDivineNavalEvent: divineApi.previewDivineNavalEvent,
     getDivineDailyWrathStatus: divineApi.getDivineDailyWrathStatus,
     async startDivineDailyWrath(actorId,input={}){
-      if(divineAuthority!=='MJ')throw new Error('Seul le MJ peut ouvrir ce suivi.');const captured=cloneValue(input),expected=captured.baseRevision??localRevision;let transition;
-      const saved=api.executeCommand('divine-daily-wrath-start',draft=>{transition=startStoreDivineDailyWrath(draft,actorId,{...captured,baseRevision:expected});return transition.state;});const finish=result=>result?.ok===false?result:{ok:true,record:transition.record};return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
+      if(divineAuthority!=='MJ')throw new Error('Seul le MJ peut ouvrir ce suivi.');
+      const captured=cloneValue(input),expected=captured.baseRevision??localRevision;
+      let transition;
+      const saved=api.executeCommand('divine-daily-wrath-start',draft=>{
+        transition=startStoreDivineDailyWrath(draft,actorId,{...captured,baseRevision:expected});
+        return transition.state;
+      });
+      const finish=result=>result?.ok===false?result:{ok:true,record:transition.record};
+      return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
     },
     async waiveDivineDailyWrathDay(actorId,id,input={}){
-      if(divineAuthority!=='MJ')throw new Error('Seul le MJ peut écarter un jour.');const captured=cloneValue(input),expected=captured.baseRevision??localRevision;let transition;
-      const saved=api.executeCommand('divine-daily-wrath-waive',draft=>{transition=waiveStoreDivineDailyWrathDay(draft,actorId,id,{...captured,baseRevision:expected});return transition.state;});const finish=result=>result?.ok===false?result:{ok:true,record:transition.record};return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
+      if(divineAuthority!=='MJ')throw new Error('Seul le MJ peut écarter un jour.');
+      const captured=cloneValue(input),expected=captured.baseRevision??localRevision;
+      let transition;
+      const saved=api.executeCommand('divine-daily-wrath-waive',draft=>{
+        transition=waiveStoreDivineDailyWrathDay(draft,actorId,id,{...captured,baseRevision:expected});
+        return transition.state;
+      });
+      const finish=result=>result?.ok===false?result:{ok:true,record:transition.record};
+      return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
     },
     async closeDivineDailyWrath(actorId,id,input={}){
-      if(divineAuthority!=='MJ')throw new Error('Seul le MJ peut clore ce suivi.');const captured=cloneValue(input),expected=captured.baseRevision??localRevision;let transition;
-      const saved=api.executeCommand('divine-daily-wrath-close',draft=>{transition=closeStoreDivineDailyWrath(draft,actorId,id,{...captured,baseRevision:expected});return transition.state;});const finish=result=>result?.ok===false?result:{ok:true,record:transition.record};return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
+      if(divineAuthority!=='MJ')throw new Error('Seul le MJ peut clore ce suivi.');
+      const captured=cloneValue(input),expected=captured.baseRevision??localRevision;
+      let transition;
+      const saved=api.executeCommand('divine-daily-wrath-close',draft=>{
+        transition=closeStoreDivineDailyWrath(draft,actorId,id,{...captured,baseRevision:expected});
+        return transition.state;
+      });
+      const finish=result=>result?.ok===false?result:{ok:true,record:transition.record};
+      return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
     },
     async setDivineRelic(actorId,input={}){
-      if(divineAuthority!=='MJ')throw new Error('Seul le MJ peut poser une relique.');const captured=cloneValue(input),expected=captured.baseRevision??localRevision;let transition;
-      const saved=api.executeCommand('divine-relic-set',draft=>{transition=setStoreDivineRelic(draft,actorId,{...captured,baseRevision:expected});return transition.state;});const finish=result=>result?.ok===false?result:{ok:true,record:transition.record};return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
+      if(divineAuthority!=='MJ')throw new Error('Seul le MJ peut poser une relique.');
+      const captured=cloneValue(input),expected=captured.baseRevision??localRevision;
+      let transition;
+      const saved=api.executeCommand('divine-relic-set',draft=>{
+        transition=setStoreDivineRelic(draft,actorId,{...captured,baseRevision:expected});
+        return transition.state;
+      });
+      const finish=result=>result?.ok===false?result:{ok:true,record:transition.record};
+      return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
     },
     async removeDivineRelic(actorId,id,input={}){
-      if(divineAuthority!=='MJ')throw new Error('Seul le MJ peut retirer une relique.');const captured=cloneValue(input),expected=captured.baseRevision??localRevision;let transition;
-      const saved=api.executeCommand('divine-relic-remove',draft=>{transition=removeStoreDivineRelic(draft,actorId,id,{...captured,baseRevision:expected});return transition.state;});const finish=result=>result?.ok===false?result:{ok:true};return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
+      if(divineAuthority!=='MJ')throw new Error('Seul le MJ peut retirer une relique.');
+      const captured=cloneValue(input),expected=captured.baseRevision??localRevision;
+      let transition;
+      const saved=api.executeCommand('divine-relic-remove',draft=>{
+        transition=removeStoreDivineRelic(draft,actorId,id,{...captured,baseRevision:expected});
+        return transition.state;
+      });
+      const finish=result=>result?.ok===false?result:{ok:true};
+      return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
     },
     getDivineSinEvents: divineApi.getDivineSinEvents,
     getDivineSinReminders: divineApi.getDivineSinReminders,
     previewDivineSinEvent: divineApi.previewDivineSinEvent,
     async applyDivineSinEvent(input={}){
-      if(divineAuthority!=='MJ')throw new Error('Seul le MJ peut exécuter un événement de Péché.');const captured=cloneValue(input),expected=captured.baseRevision??localRevision;let transition;
-      const saved=api.executeCommand('divine-sin-event',draft=>{transition=applyStoreDivineSinEvent(draft,{...captured,baseRevision:expected});return transition.state;});const finish=result=>result?.ok===false?result:{ok:true,record:transition.record};return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
+      if(divineAuthority!=='MJ')throw new Error('Seul le MJ peut exécuter un événement de Péché.');
+      const captured=cloneValue(input),expected=captured.baseRevision??localRevision;
+      let transition;
+      const saved=api.executeCommand('divine-sin-event',draft=>{
+        transition=applyStoreDivineSinEvent(draft,{...captured,baseRevision:expected});
+        return transition.state;
+      });
+      const finish=result=>result?.ok===false?result:{ok:true,record:transition.record};
+      return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
     },
     async returnDivineJudgment(actorId,id,input={}){
-      if(divineAuthority!=='MJ')throw new Error('Seul le MJ peut décider le retour après le Jugement dernier.');const captured=cloneValue(input),expected=captured.baseRevision??localRevision;let transition;
-      const saved=api.executeCommand('divine-judgment-return',draft=>{transition=returnStoreDivineJudgment(draft,actorId,id,{...captured,baseRevision:expected});return transition.state;});const finish=result=>result?.ok===false?result:{ok:true,status:transition.status,record:transition.record};return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
+      if(divineAuthority!=='MJ')throw new Error('Seul le MJ peut décider le retour après le Jugement dernier.');
+      const captured=cloneValue(input),expected=captured.baseRevision??localRevision;
+      let transition;
+      const saved=api.executeCommand('divine-judgment-return',draft=>{
+        transition=returnStoreDivineJudgment(draft,actorId,id,{...captured,baseRevision:expected});
+        return transition.state;
+      });
+      const finish=result=>result?.ok===false?result:{ok:true,status:transition.status,record:transition.record};
+      return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
     },
     async decideDivineJudgmentRejection(actorId,id,input={}){
-      if(divineAuthority!=='MJ')throw new Error('Seul le MJ peut confirmer ou refuser le rejet.');const captured=cloneValue(input),expected=captured.baseRevision??localRevision;let transition;
-      const saved=api.executeCommand('divine-judgment-rejection',draft=>{transition=decideStoreDivineJudgmentRejection(draft,actorId,id,{...captured,baseRevision:expected});return transition.state;});const finish=result=>result?.ok===false?result:{ok:true,status:transition.status,record:transition.record};return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
+      if(divineAuthority!=='MJ')throw new Error('Seul le MJ peut confirmer ou refuser le rejet.');
+      const captured=cloneValue(input),expected=captured.baseRevision??localRevision;
+      let transition;
+      const saved=api.executeCommand('divine-judgment-rejection',draft=>{
+        transition=decideStoreDivineJudgmentRejection(draft,actorId,id,{...captured,baseRevision:expected});
+        return transition.state;
+      });
+      const finish=result=>result?.ok===false?result:{ok:true,status:transition.status,record:transition.record};
+      return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
     },
     previewDivineWrathRecovery(input={}) {
       const envelope=currentEnvelope(),actorId=input.actorId,actor=envelope.combat?.participants?.find(row=>row.id===actorId);
-      const spent=combatActionBlock(envelope,actorId);if(spent)return {...spent,baseRevision:localRevision};
-      const block=brokenEscapeActionBlock(envelope,actorId);if(block)return block;
+      const spent=combatActionBlock(envelope,actorId);
+      if(spent)return {...spent,baseRevision:localRevision};
+      const block=brokenEscapeActionBlock(envelope,actorId);
+      if(block)return block;
       if(isBrokenEscapeActor(actor)){
         const visible=input.brokenEscapeFacts?.visibleToAnyEnemy;
         if(typeof visible!=='boolean'||isV5BrokenEscapeActionBlocked(actor,{visibleToAnyEnemy:visible,sequence:envelope.extensions?.v5?.brokenEscape?.byActorId?.[actorId]}))return {ready:false,status:'blocked',error:'Brisé : résoudre Flee/Sprint et confirmer la visibilité avant cette Prière.'};
@@ -4214,11 +4651,19 @@ function resolvedCorruptionTest(participant, skillId, input) {
     applyDivineWrathRecovery: divineApi.applyDivineWrathRecovery,
     previewDivineExecution(identifier,input={}) {
       const envelope=currentEnvelope(),actorId=input.actorId||envelope.combat?.currentActorId,actor=envelope.combat?.participants?.find(row=>row.id===actorId),sequence=envelope.extensions?.v5?.brokenEscape?.byActorId?.[actorId];
-      const actionSpent=combatActionBlock(envelope,actorId);if(actionSpent)return {...actionSpent,baseRevision:localRevision};
-      const actionBlock=brokenEscapeActionBlock(envelope,actorId);if(actionBlock)return {...actionBlock,baseRevision:localRevision};
+      const actionSpent=combatActionBlock(envelope,actorId);
+      if(actionSpent)return {...actionSpent,baseRevision:localRevision};
+      const actionBlock=brokenEscapeActionBlock(envelope,actorId);
+      if(actionBlock)return {...actionBlock,baseRevision:localRevision};
       const brise=actor?.states?.some(row=>['brise','broken'].includes(String(row.key||row.name||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()));
-      if(brise){const fact=input.brokenEscapeFacts?.visibleToAnyEnemy;if(typeof fact!=='boolean')return {ready:false,status:'requires-input',error:'Le MJ doit confirmer la visibilité actuelle envers tout ennemi.',needsInput:[{field:'brokenEscapeFacts.visibleToAnyEnemy',label:'Confirmer la visibilité actuelle envers tout ennemi.'}],baseRevision:localRevision};
-       const blocked=isV5BrokenEscapeActionBlocked(actor,{visibleToAnyEnemy:fact,sequence});if(blocked)return {ready:false,status:'blocked',error:'Brisé impose Move (Flee), puis Action (Sprint) tant que le personnage reste visible.',baseRevision:localRevision};const actionBlock=brokenEscapeActionBlock(envelope,actorId);if(actionBlock)return {...actionBlock,baseRevision:localRevision};}
+      if(brise){
+        const fact=input.brokenEscapeFacts?.visibleToAnyEnemy;
+        if(typeof fact!=='boolean')return {ready:false,status:'requires-input',error:'Le MJ doit confirmer la visibilité actuelle envers tout ennemi.',needsInput:[{field:'brokenEscapeFacts.visibleToAnyEnemy',label:'Confirmer la visibilité actuelle envers tout ennemi.'}],baseRevision:localRevision};
+       const blocked=isV5BrokenEscapeActionBlocked(actor,{visibleToAnyEnemy:fact,sequence});
+       if(blocked)return {ready:false,status:'blocked',error:'Brisé impose Move (Flee), puis Action (Sprint) tant que le personnage reste visible.',baseRevision:localRevision};
+       const actionBlock=brokenEscapeActionBlock(envelope,actorId);
+       if(actionBlock)return {...actionBlock,baseRevision:localRevision};
+      }
       return previewStoreDivine(envelope,identifier,input);
     },
     applyDivineExecution: divineApi.applyDivineExecution,
@@ -4253,10 +4698,15 @@ function resolvedCorruptionTest(participant, skillId, input) {
     previewSpellExecution(contractOrId, input = {}) {
       const contract = typeof contractOrId === 'object' && contractOrId?.id ? contractOrId : getSpellContract(contractOrId);
       const actorId = input.actorId || input.casterId || combat.currentActorId;
-      const actionSpent=combatActionBlock(currentEnvelope(),actorId);if(actionSpent)return {...actionSpent,baseRevision:localRevision};
+      const actionSpent=combatActionBlock(currentEnvelope(),actorId);
+      if(actionSpent)return {...actionSpent,baseRevision:localRevision};
       const actor = (combat.participants.get(actorId)) || Array.from(combat.participants.values())[0];
-      const actionBlock=brokenEscapeActionBlock(currentEnvelope(),actorId);if(actionBlock)return {...actionBlock,baseRevision:localRevision};
-      if(actor?.states?.some(row=>['brise','broken'].includes(String(row.key||row.name||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()))){const blocked=isV5BrokenEscapeActionBlocked(actor,{visibleToAnyEnemy:input.brokenEscapeFacts?.visibleToAnyEnemy,sequence:currentEnvelope().extensions?.v5?.brokenEscape?.byActorId?.[actorId]});if(blocked)return {ready:false,status:'requires-input',error:blocked==='needs-fact'?'Le MJ doit confirmer la visibilité envers tout ennemi.':'Brisé impose Move (Flee), puis Action (Sprint) tant que le personnage reste visible.',needsInput:blocked==='needs-fact'?[{field:'brokenEscapeFacts.visibleToAnyEnemy',label:'Confirmer la visibilité actuelle envers tout ennemi.'}]:[],baseRevision:localRevision};}
+      const actionBlock=brokenEscapeActionBlock(currentEnvelope(),actorId);
+      if(actionBlock)return {...actionBlock,baseRevision:localRevision};
+      if(actor?.states?.some(row=>['brise','broken'].includes(String(row.key||row.name||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()))){
+        const blocked=isV5BrokenEscapeActionBlocked(actor,{visibleToAnyEnemy:input.brokenEscapeFacts?.visibleToAnyEnemy,sequence:currentEnvelope().extensions?.v5?.brokenEscape?.byActorId?.[actorId]});
+        if(blocked)return {ready:false,status:'requires-input',error:blocked==='needs-fact'?'Le MJ doit confirmer la visibilité envers tout ennemi.':'Brisé impose Move (Flee), puis Action (Sprint) tant que le personnage reste visible.',needsInput:blocked==='needs-fact'?[{field:'brokenEscapeFacts.visibleToAnyEnemy',label:'Confirmer la visibilité actuelle envers tout ennemi.'}]:[],baseRevision:localRevision};
+      }
       const targetIds = input.targetIds || (input.targetId ? [input.targetId] : []);
       const targets = targetIds.map(id => combat.participants.get(id)).filter(Boolean);
       const roster = Array.from(combat.participants.values());
@@ -4341,7 +4791,8 @@ function resolvedCorruptionTest(participant, skillId, input) {
             }
           }
         } catch {
-          preview.ready = false; preview.status = 'mounted-fall-check-required';
+          preview.ready = false;
+          preview.status = 'mounted-fall-check-required';
           preview.error = 'Impossible de vérifier les conséquences montées de ce sort. Corrigez les données du sort avant application.';
         }
       }
@@ -4361,7 +4812,12 @@ function resolvedCorruptionTest(participant, skillId, input) {
       }
       if (mountedFall.length) {
         preview.mountedFall = mountedFall;
-        if (needsInput.length) { preview.ready = false; preview.status = 'requires-input'; preview.needsInput = [...(preview.needsInput || []), ...needsInput]; preview.error = 'Test de Chevaucher requis avant d’appliquer les conséquences du sort.'; }
+        if (needsInput.length) {
+          preview.ready = false;
+          preview.status = 'requires-input';
+          preview.needsInput = [...(preview.needsInput || []), ...needsInput];
+          preview.error = 'Test de Chevaucher requis avant d’appliquer les conséquences du sort.';
+        }
       }
       return { ...preview, baseRevision: localRevision };
     },
@@ -4378,9 +4834,14 @@ function resolvedCorruptionTest(participant, skillId, input) {
         const contract = typeof contractOrId === 'object' && contractOrId?.id ? contractOrId : getSpellContract(contractOrId);
         const beforeResources=structuredClone(draft);
         const actorId=input.actorId||input.casterId||draft.combat?.currentActorId,actor=draft.combat?.participants?.find(row=>row.id===actorId);
-        const actionSpent=combatActionBlock(draft,actorId);if(actionSpent)throw Object.assign(new Error(actionSpent.error),{userFacing:true,code:actionSpent.code});
-        const actionBlock=brokenEscapeActionBlock(draft,actorId);if(actionBlock)throw Object.assign(new Error(actionBlock.error),{userFacing:true,code:actionBlock.code});
-        if(actor?.states?.some(row=>['brise','broken'].includes(String(row.key||row.name||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()))){const blocked=isV5BrokenEscapeActionBlocked(actor,{visibleToAnyEnemy:input.brokenEscapeFacts?.visibleToAnyEnemy,sequence:draft.extensions?.v5?.brokenEscape?.byActorId?.[actorId]});if(blocked)throw Object.assign(new Error(blocked==='needs-fact'?'Le MJ doit confirmer la visibilité envers tout ennemi.':'Brisé impose Move (Flee), puis Action (Sprint) tant que le personnage reste visible.'),{userFacing:true});}
+        const actionSpent=combatActionBlock(draft,actorId);
+        if(actionSpent)throw Object.assign(new Error(actionSpent.error),{userFacing:true,code:actionSpent.code});
+        const actionBlock=brokenEscapeActionBlock(draft,actorId);
+        if(actionBlock)throw Object.assign(new Error(actionBlock.error),{userFacing:true,code:actionBlock.code});
+        if(actor?.states?.some(row=>['brise','broken'].includes(String(row.key||row.name||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()))){
+          const blocked=isV5BrokenEscapeActionBlocked(actor,{visibleToAnyEnemy:input.brokenEscapeFacts?.visibleToAnyEnemy,sequence:draft.extensions?.v5?.brokenEscape?.byActorId?.[actorId]});
+          if(blocked)throw Object.assign(new Error(blocked==='needs-fact'?'Le MJ doit confirmer la visibilité envers tout ennemi.':'Brisé impose Move (Flee), puis Action (Sprint) tant que le personnage reste visible.'),{userFacing:true});
+        }
         execResult = applySpellExecutionInternal(draft, contract, input);
         if (execResult?.ready !== false) {
           const dismounted = new Set((input.preview?.mountedFall || []).filter(row => row.dismount === true).map(row => row.participantId));
@@ -4404,7 +4865,10 @@ function resolvedCorruptionTest(participant, skillId, input) {
           draft.extensions.v5.characterResources=committed.extensions?.v5?.characterResources || [];
           draft.combat.participants=draft.combat.participants.map(p=>paid.some(row=>row.id===p.id)?committed.combat.participants.find(row=>row.id===p.id):p);
         }
-        if(execResult?.ready!==false){const tracked=recordV5ActionUsage(draft,actorId,input.preview?.executionId||input.preview?.actionId||`spell:${contract.id}:${draft.localRevision}`);if(!tracked.ok)throw Object.assign(new Error(tracked.reason),{userFacing:true});}
+        if(execResult?.ready!==false){
+          const tracked=recordV5ActionUsage(draft,actorId,input.preview?.executionId||input.preview?.actionId||`spell:${contract.id}:${draft.localRevision}`);
+          if(!tracked.ok)throw Object.assign(new Error(tracked.reason),{userFacing:true});
+        }
         return projectV5ResourceEnvelope(draft);
       }, input, input.preview);
       const result = persisted => persisted?.ok === false ? persisted : execResult;
@@ -4504,20 +4968,30 @@ function resolvedCorruptionTest(participant, skillId, input) {
       const commit = api.executeCommand('apply-scene-event', draft => {
         const scene = draft.activeScene;
         if (!scene) {
-          const error = new Error('Aucune scène active'); error.code = 'SCENE_EVENT_INVALID'; throw error;
+          const error = new Error('Aucune scène active');
+          error.code = 'SCENE_EVENT_INVALID';
+          throw error;
         }
         if (options.baseRevision !== undefined && options.baseRevision !== draft.localRevision) {
-          const error = new Error('Scène périmée'); error.code = 'SCENE_EVENT_STALE'; throw error;
+          const error = new Error('Scène périmée');
+          error.code = 'SCENE_EVENT_STALE';
+          throw error;
         }
         if (options.sceneRevision !== undefined && options.sceneRevision !== (scene.revision ?? null)) {
-          const error = new Error('Aperçu de scène périmé'); error.code = 'SCENE_EVENT_STALE'; throw error;
+          const error = new Error('Aperçu de scène périmé');
+          error.code = 'SCENE_EVENT_STALE';
+          throw error;
         }
         const result = applySceneEvent(scene, event, { manual: Boolean(options.confirmed || options.manual) });
         if (result.status === 'duplicate') {
-          const error = new Error('Occurrence déjà résolue'); error.code = 'SCENE_EVENT_DUPLICATE'; throw error;
+          const error = new Error('Occurrence déjà résolue');
+          error.code = 'SCENE_EVENT_DUPLICATE';
+          throw error;
         }
         if (result.status !== 'applied') {
-          const error = new Error('Condition de scène non satisfaite'); error.code = 'SCENE_EVENT_NOT_ELIGIBLE'; throw error;
+          const error = new Error('Condition de scène non satisfaite');
+          error.code = 'SCENE_EVENT_NOT_ELIGIBLE';
+          throw error;
         }
         semanticResult = result;
         return { ...draft, activeScene: result.scene };
@@ -4657,7 +5131,11 @@ function resolvedCorruptionTest(participant, skillId, input) {
         if (!persistence) {
           recordSnapshot('import-replace');
           applyDataToState(preview.data, { includeLog: true });
-          save(true); emitBus('reserve'); emitBus('combat'); emitBus('log'); this.log('📂 Données chargées.');
+          save(true);
+          emitBus('reserve');
+          emitBus('combat');
+          emitBus('log');
+          this.log('📂 Données chargées.');
           return preview.report;
         }
         // L’import remplaçant suit la même commande atomique que les gestes
@@ -4765,13 +5243,17 @@ function resolvedCorruptionTest(participant, skillId, input) {
     applyDataToState({ reserve: [], combat: {}, log: [], diceLines: [] }, { includeLog: true });
     // Clear the previous context immediately while the new IDB context loads.
     if (bus && bus.emit) {
-      bus.emit('reserve'); bus.emit('combat'); bus.emit('log');
+      bus.emit('reserve');
+      bus.emit('combat');
+      bus.emit('log');
     }
     persistence = persistenceFactory(contextId);
     hydrationInFlight = hydratePersistence().finally(() => { hydrationInFlight = null; });
     return hydrationInFlight.then(result => {
       if (result?.ok && bus && bus.emit) {
-        bus.emit('reserve'); bus.emit('combat'); bus.emit('log');
+        bus.emit('reserve');
+        bus.emit('combat');
+        bus.emit('log');
       }
       return result;
     });
@@ -4953,7 +5435,9 @@ function resolvedCorruptionTest(participant, skillId, input) {
                 localRevision = nextLocalRevision;
                 applyDataToState(nextData);
                 if (bus && bus.emit) {
-                  bus.emit('reserve'); bus.emit('combat'); bus.emit('log');
+                  bus.emit('reserve');
+                  bus.emit('combat');
+                  bus.emit('log');
                 }
               }
             };
