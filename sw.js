@@ -34,6 +34,7 @@ const ASSETS_TO_CACHE = [
   './js/core/store/critical-death.js',
   './js/core/store/participant-registry.js',
   './js/core/store/api-divine.js',
+  './js/core/store/api-aftermath.js',
   './js/core/creature-keywords.js',
   './js/core/creature-combat.js',
   './js/core/creature-states.js',
