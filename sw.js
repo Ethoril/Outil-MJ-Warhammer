@@ -161,6 +161,7 @@ const ASSETS_TO_CACHE = [
   './js/core/history.js',
   './js/core/reminders.js',
   './js/core/resolution.js',
+  './js/core/resolution/describe.js',
   './js/core/criticals.js',
   './js/core/scene-events.js',
   './js/core/encounters.js',
