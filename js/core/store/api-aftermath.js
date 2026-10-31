@@ -97,7 +97,10 @@ export function createAftermathApi({ api, currentEnvelope, absentAftermathSubjec
               const ceilingProbe = receipt.bleedingOnly ? { ...target, maxHp: Number(target.hp) + planned + 1 } : target;
               const healing = healV5Wounds(ceilingProbe, planned);
               target.states = healing.participant.states;
-              if (!receipt.bleedingOnly) { target.hp = healing.participant.hp; target.extensions = healing.participant.extensions; }
+              if (!receipt.bleedingOnly) {
+                target.hp = healing.participant.hp;
+                target.extensions = healing.participant.extensions;
+              }
               receipt.healed = receipt.bleedingOnly ? 0 : healing.hpDelta;
               receipt.bleedingRemoved = healing.removed.length;
               if (healing.healingBlockedByLodgedProjectiles) receipt.healingBlockedByLodgedProjectiles = healing.healingBlockedByLodgedProjectiles;
@@ -129,7 +132,11 @@ export function createAftermathApi({ api, currentEnvelope, absentAftermathSubjec
         const outcome = treatSurgicalIncident(state, { operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, incidentId: input.incidentId, healer: found.ok ? found.healer : null, roll: input.roll, surgeryRequired: sequelaAmputation(record) === 'occurred' || (record?.sequela?.durableEffects || []).some(effect => effect.kind === 'surgery-deadline'), d10: input.d10 ?? null, wounds: Number(patient?.hp) || 0 });
         if (outcome.receipt.reason === 'healer-skill-required' && found.reason) outcome.receipt.reason = found.reason;
         if (outcome.receipt.status === 'applied' && outcome.receipt.fumbleDamage) {
-          outcome.afterApply = next => { const target = next.combat.participants.find(row => row.id === patient.id); target.hp = Math.max(0, Number(target.hp) - outcome.receipt.fumbleDamage); return next; };
+          outcome.afterApply = next => {
+            const target = next.combat.participants.find(row => row.id === patient.id);
+            target.hp = Math.max(0, Number(target.hp) - outcome.receipt.fumbleDamage);
+            return next;
+          };
         }
         return outcome;
       });
@@ -167,7 +174,10 @@ export function createAftermathApi({ api, currentEnvelope, absentAftermathSubjec
             const target = next.combat.participants.find(row => row.id === patient.id);
             target.extensions.v5.criticalWounds = (target.extensions.v5.criticalWounds || []).filter(row => row.id !== wound.id);
             const be = criticalDeathToughnessBonus(target);
-            if (be !== null) { const reconciled = updateCriticalDeathCountdown(target, { round: next.combat?.round, toughnessBonus: be }); if (reconciled.participant) Object.assign(target, reconciled.participant); }
+            if (be !== null) {
+              const reconciled = updateCriticalDeathCountdown(target, { round: next.combat?.round, toughnessBonus: be });
+              if (reconciled.participant) Object.assign(target, reconciled.participant);
+            }
             next.log = [{ id: uid(), kind: 'management', actorId: target.id, actorName: target.name,
               text: `${target.name} : Blessure Critique guérie (états et malus temporaires terminés) · ${record.effectName || record.id}`,
               detail: { kind: 'heal-critical-wound', incidentId: incident.id, criticalId: record.id } }, ...(next.log || [])].slice(0, 300);

@@ -213,21 +213,30 @@ export function profileSummary(profile, {
   edit.dataset.profileId = profile.id;
   edit.disabled = !canEdit;
   if (!canEdit) edit.title = 'Action indisponible';
-  if (onEdit) edit.addEventListener('click', event => { event.stopPropagation(); onEdit(profile.id); });
+  if (onEdit) edit.addEventListener('click', event => {
+    event.stopPropagation();
+    onEdit(profile.id);
+  });
   // The controller may omit editing when the current Store is read-only.
   actions.appendChild(edit);
   if (canDuplicate) {
     const duplicate = button('Dupliquer', 'workspace-secondary', { 'aria-label': `Dupliquer ${profileName}`, 'data-focus-key': `duplicate-profile-${profile.id}` });
     duplicate.dataset.workspaceAction = 'duplicate-profile';
     duplicate.dataset.profileId = profile.id;
-    if (onDuplicate) duplicate.addEventListener('click', event => { event.stopPropagation(); onDuplicate(profile.id); });
+    if (onDuplicate) duplicate.addEventListener('click', event => {
+      event.stopPropagation();
+      onDuplicate(profile.id);
+    });
     actions.appendChild(duplicate);
   }
   if (canRemove) {
     const remove = button('Supprimer', 'workspace-secondary', { 'aria-label': `Supprimer ${profileName}`, 'data-focus-key': `remove-profile-${profile.id}` });
     remove.dataset.workspaceAction = 'remove-profile';
     remove.dataset.profileId = profile.id;
-    if (onRemove) remove.addEventListener('click', event => { event.stopPropagation(); onRemove(profile.id); });
+    if (onRemove) remove.addEventListener('click', event => {
+      event.stopPropagation();
+      onRemove(profile.id);
+    });
     actions.appendChild(remove);
   }
   card.append(title, meta);

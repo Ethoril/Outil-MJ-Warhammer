@@ -19,12 +19,18 @@ export function createV5CombatActionsApi({ api, currentEnvelope, issuedBrokenEsc
       const seq=envelope.extensions?.v5?.brokenEscape?.byActorId?.[actorId];
       const sameTurn=seq?.turnId===clock.turnId;
       if(actionUsed&&!(sameTurn&&seq?.fleeCommitted))return {ready:false,status:'blocked',code:'DIV-BROKEN-MIDTURN-01',needsInput:[{field:'decision.DIV-BROKEN-MIDTURN-01',label:'Décision MJ explicite requise pour cette occurrence; ce fait de visibilité ne la remplace pas.'}],error:'DIV-BROKEN-MIDTURN-01 : confirmer hors vue ne résout pas une Action déjà dépensée.'};
-      let receipt;const saved=api.executeCommand('v5-broken-escape-visibility',draft=>{
+      let receipt;
+      const saved=api.executeCommand('v5-broken-escape-visibility',draft=>{
         if(draft.localRevision!==envelope.localRevision)throw Object.assign(new Error('La partie a changé; recalculez le fait de visibilité.'),{userFacing:true});
-        const root=draft.extensions?.v5||{},state=structuredClone(root.brokenEscape||{byActorId:{},receipts:[]});state.byActorId??={};
-        const previous=sameTurn?(state.byActorId[actorId]||{}):{};state.byActorId[actorId]={...previous,actorId,turnId:clock.turnId,visibleToAnyEnemy,factsCommitted:true,fleeCommitted:previous.fleeCommitted===true,sprintCommitted:previous.sprintCommitted===true};
+        const root=draft.extensions?.v5||{},state=structuredClone(root.brokenEscape||{byActorId:{},receipts:[]});
+        state.byActorId??={};
+        const previous=sameTurn?(state.byActorId[actorId]||{}):{};
+        state.byActorId[actorId]={...previous,actorId,turnId:clock.turnId,visibleToAnyEnemy,factsCommitted:true,fleeCommitted:previous.fleeCommitted===true,sprintCommitted:previous.sprintCommitted===true};
         receipt={id:`visibility:${actorId}:${clock.turnId}:${visibleToAnyEnemy?'visible':'hidden'}`,actorId,action:'visibility-confirmation',turn:clock,visibleToAnyEnemy,source:'explicit-gm',sourceRuleVersion:BROKEN_ESCAPE_RULE_VERSION};
-        state.receipts=[...(state.receipts||[]),receipt].slice(-300);draft.extensions??={};draft.extensions.v5={...root,brokenEscape:state};return draft;
+        state.receipts=[...(state.receipts||[]),receipt].slice(-300);
+        draft.extensions??={};
+        draft.extensions.v5={...root,brokenEscape:state};
+        return draft;
       });
       const finish=result=>result?.ok===false?{status:'error',error:result.error}: {status:'applied',receipt,persistence:result};
       return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
@@ -46,25 +52,30 @@ export function createV5CombatActionsApi({ api, currentEnvelope, issuedBrokenEsc
         removalReceipt:{method:result.method,...(test?{test:{roll:test.roll,score:test.score,success:test.success,sl:test.sl}}:{}),...(input.surgeryConfirmed?{surgeryConfirmed:true}:{})}}};
     },
     applyV5ProjectileExtraction(supplied) {
-      const plan=cloneValue(supplied);if(!plan?.ready)return Promise.resolve({status:'blocked',reason:'Recalculer l’extraction avant application.'});
+      const plan=cloneValue(supplied);
+      if(!plan?.ready)return Promise.resolve({status:'blocked',reason:'Recalculer l’extraction avant application.'});
       const saved=api.executeCommand('v5-projectile-extraction',draft=>{
         if((draft.localRevision||0)!==plan.baseRevision)throw Object.assign(new Error('La partie a changé; recalculez l’extraction.'),{userFacing:true});
         const participant=draft.combat?.participants?.find(row=>row.id===plan.participantId),live=participant?.extensions?.v5?.lodgedProjectiles?.find(row=>row.id===plan.projectileId);
         if(!live||JSON.stringify(live)!==JSON.stringify(plan.before))throw Object.assign(new Error('Le projectile fiché a changé; recalculez l’extraction.'),{userFacing:true});
-        const updated=structuredClone(participant);updated.extensions.v5.lodgedProjectiles=updated.extensions.v5.lodgedProjectiles.map(row=>row.id===plan.projectileId?structuredClone(plan.after):row);
-        draft.combat.participants=draft.combat.participants.map(row=>row.id===participant.id?updated:row);return draft;
+        const updated=structuredClone(participant);
+        updated.extensions.v5.lodgedProjectiles=updated.extensions.v5.lodgedProjectiles.map(row=>row.id===plan.projectileId?structuredClone(plan.after):row);
+        draft.combat.participants=draft.combat.participants.map(row=>row.id===participant.id?updated:row);
+        return draft;
       });
       return Promise.resolve(saved).then(result=>result?.ok===false?{status:'error',reason:result.error}:{status:'applied',participantId:plan.participantId,projectileId:plan.projectileId,persistence:result});
     },
     previewV5PaviseDeployment(input = {}) {
       const plan=previewV5PaviseDeploymentFrom(currentEnvelope(),input);
       if(!plan.ready)return plan;
-      plan.previewId=uid();issuedPaviseDeploymentPreviews.set(plan.previewId,JSON.stringify(plan));
+      plan.previewId=uid();
+      issuedPaviseDeploymentPreviews.set(plan.previewId,JSON.stringify(plan));
       while(issuedPaviseDeploymentPreviews.size>100)issuedPaviseDeploymentPreviews.delete(issuedPaviseDeploymentPreviews.keys().next().value);
       return plan;
     },
     applyV5PaviseDeployment(supplied) {
-      const plan=cloneValue(supplied);if(!plan?.ready)return Promise.resolve({status:'blocked',reason:plan?.error||'Aperçu de mise en place requis.'});
+      const plan=cloneValue(supplied);
+      if(!plan?.ready)return Promise.resolve({status:'blocked',reason:plan?.error||'Aperçu de mise en place requis.'});
       if(!plan.previewId||issuedPaviseDeploymentPreviews.get(plan.previewId)!==JSON.stringify(plan))return Promise.resolve({status:'blocked',reason:'Aperçu de mise en place absent ou modifié; recalculez.'});
       const actionId=`pavise-setup:${plan.equipmentId}:${plan.turnId}`;
       const saved=api.executeCommand('v5-pavise-deployment',draft=>{
@@ -73,13 +84,18 @@ export function createV5CombatActionsApi({ api, currentEnvelope, issuedBrokenEsc
         if(!checked.ready||checked.step!==plan.step||checked.turnId!==plan.turnId||checked.baseRevision!==plan.baseRevision||JSON.stringify(checked.before)!==JSON.stringify(plan.before))throw Object.assign(new Error(checked.error||'Le plan de mise en place est altéré ou périmé; recalculez.'),{userFacing:true});
         const actor=draft.combat?.participants?.find(row=>row.id===checked.actorId),after=checked.step===1?{status:'setting-up',actionsPaid:1,facing:checked.direction,lastTurnId:checked.turnId,startedAt:Date.now()}
           :{status:'planted',actionsPaid:2,facing:checked.direction,lastTurnId:checked.turnId,plantedAt:Date.now()};
-        actor.extensions??={};actor.extensions.v5??={};actor.extensions.v5.paviseDeploymentByItemId={...(actor.extensions.v5.paviseDeploymentByItemId||{}),[plan.equipmentId]:after};
+        actor.extensions??={};
+        actor.extensions.v5??={};
+        actor.extensions.v5.paviseDeploymentByItemId={...(actor.extensions.v5.paviseDeploymentByItemId||{}),[plan.equipmentId]:after};
         draft.combat.participants=draft.combat.participants.map(row=>row.id===actor.id?actor:row);
         recordV5ActionUsage(draft,actor.id,actionId);
         draft.log=[{id:uid(),kind:'management',actorId:actor.id,actorName:actor.name,text:`${actor.name||actor.id} : Action ${checked.step}/2 de mise en place du Pavois`,detail:{kind:'v5-pavise-deployment',equipmentId:plan.equipmentId,after} },...(draft.log||[])].slice(0,300);
         return draft;
       });
-      return Promise.resolve(saved).then(result=>{issuedPaviseDeploymentPreviews.delete(plan.previewId);return result?.ok===false?{status:'error',reason:result.error}:{status:'applied',step:plan.step,statusText:plan.step===2?'planted':'setting-up'};});
+      return Promise.resolve(saved).then(result=>{
+        issuedPaviseDeploymentPreviews.delete(plan.previewId);
+        return result?.ok===false?{status:'error',reason:result.error}:{status:'applied',step:plan.step,statusText:plan.step===2?'planted':'setting-up'};
+      });
     },
     previewV5WeaponReload(input = {}) {
       const envelope = currentEnvelope(), actor = envelope.combat?.participants?.find(row => row.id === input.actorId);
@@ -114,7 +130,14 @@ export function createV5CombatActionsApi({ api, currentEnvelope, issuedBrokenEsc
         const actor = draft.combat?.participants?.find(row => row.id === plan.actorId);
         const weapon = actor?.equipment?.find(row => row.id === plan.equipmentId && row.kind === 'weapon');
         const live = weapon?.extensions?.v5?.reloadState || (weapon && initialV5ReloadState(weapon).state);
-        if(plan.operation==='arbitrate'&&weapon&&!live){const variable=weapon.keywords?.some(row=>(typeof row==='string'?row:row?.id)==='a-repetition'&&String(row?.parameter).toLowerCase()==='variable');if(!variable||plan.before!==null)throw Object.assign(new Error('Arbitrage de chargeur devenu invalide.'),{userFacing:true});const updated=structuredClone(actor);updated.equipment=updated.equipment.map(row=>row.id===plan.equipmentId?{...row,extensions:{...(row.extensions||{}),v5:{...(row.extensions?.v5||{}),reloadState:structuredClone(plan.after)}}}:row);draft.combat.participants=draft.combat.participants.map(row=>row.id===actor.id?updated:row);return draft;}
+        if(plan.operation==='arbitrate'&&weapon&&!live){
+          const variable=weapon.keywords?.some(row=>(typeof row==='string'?row:row?.id)==='a-repetition'&&String(row?.parameter).toLowerCase()==='variable');
+          if(!variable||plan.before!==null)throw Object.assign(new Error('Arbitrage de chargeur devenu invalide.'),{userFacing:true});
+          const updated=structuredClone(actor);
+          updated.equipment=updated.equipment.map(row=>row.id===plan.equipmentId?{...row,extensions:{...(row.extensions||{}),v5:{...(row.extensions?.v5||{}),reloadState:structuredClone(plan.after)}}}:row);
+          draft.combat.participants=draft.combat.participants.map(row=>row.id===actor.id?updated:row);
+          return draft;
+        }
         if (!actor || !weapon || JSON.stringify(live) !== JSON.stringify(plan.before)) throw Object.assign(new Error('L’arme ou son état de recharge a changé; recalculez.'), { userFacing: true });
         const updated = structuredClone(actor);
         updated.equipment = updated.equipment.map(row => row.id === plan.equipmentId ? { ...row,
@@ -142,7 +165,8 @@ export function createV5CombatActionsApi({ api, currentEnvelope, issuedBrokenEsc
         value.baseRevision = envelope.localRevision || 0;
         value.actionId = `broken-escape:${input.actorId}:${clock.turnId}:${input.action}`;
         value.facts = structuredClone(input.facts);
-        const proof=JSON.stringify(value);issuedBrokenEscapePreviews.set(value.actionId,proof);
+        const proof=JSON.stringify(value);
+        issuedBrokenEscapePreviews.set(value.actionId,proof);
         while(issuedBrokenEscapePreviews.size>100)issuedBrokenEscapePreviews.delete(issuedBrokenEscapePreviews.keys().next().value);
       }
       return value;
@@ -156,7 +180,8 @@ export function createV5CombatActionsApi({ api, currentEnvelope, issuedBrokenEsc
       const saved=api.executeCommand('v5-broken-escape',draft=>{
         const clock=v5StoreActionClock(draft),key=clock.encounterId&&clock.turnId?JSON.stringify([clock.encounterId,clock.turnId]):null;
         if(draft.localRevision!==plan.baseRevision||JSON.stringify(clock)!==JSON.stringify(plan.turn))throw Object.assign(new Error('La partie ou le Tour a changé; recalculez la fuite.'),{userFacing:true});
-        const actor=draft.combat?.participants?.find(row=>row.id===actorId&&row.zone==='active');if(!actor)throw new Error('Personnage de fuite absent.');
+        const actor=draft.combat?.participants?.find(row=>row.id===actorId&&row.zone==='active');
+        if(!actor)throw new Error('Personnage de fuite absent.');
         const root=draft.extensions?.v5||{},ledger=structuredClone(root.actionLedger||{appliedActions:[],quotaUsage:[]}),quotaId=plan.action==='flee'?'system:turn-move':'system:turn-action';
         const old=ledger.quotaUsage.find(row=>row.actorId===actorId&&row.quotaId===quotaId&&row.scope==='turn'&&row.scopeKey===key);
         if(old?.used)throw Object.assign(new Error('Quota de Tour déjà dépensé; recalcul requis.'),{userFacing:true});
@@ -171,24 +196,34 @@ export function createV5CombatActionsApi({ api, currentEnvelope, issuedBrokenEsc
           for(const enemyId of fx.engagedEnemyIds||[]){
             const foe=draft.combat?.participants?.find(row=>row.id===enemyId&&row.zone==='active');
             if(!foe)continue;
-            foe.extensions??={};foe.extensions.v5??={};
+            foe.extensions??={};
+            foe.extensions.v5??={};
             foe.extensions.v5.hasMomentum=(fx.momentumRetainedEnemyIds||[]).includes(enemyId);
           }
           if(Number(fx.addedBrokenCount)>0){
             actor.states=[...(actor.states||[]),{id:`${plan.actionId}:broken-engaged`,key:'brise',name:'Brisé',level:fx.addedBrokenCount,source:structuredClone(BROKEN_ESCAPE_SOURCE)}];
-            actor.extensions??={};actor.extensions.v5??={};actor.extensions.v5.hasMomentum=false;
+            actor.extensions??={};
+            actor.extensions.v5??={};
+            actor.extensions.v5.hasMomentum=false;
           }
         }
         if(old)old.used=1;else ledger.quotaUsage.push({actorId,quotaId,scope:'turn',scopeKey:key,used:1});
-        ledger.appliedActions??=[];ledger.appliedActions.push({actionId:plan.actionId,actorId,encounterId:clock.encounterId||null});
+        ledger.appliedActions??=[];
+        ledger.appliedActions.push({actionId:plan.actionId,actorId,encounterId:clock.encounterId||null});
         const current=plan.action==='flee'?{...plan.sequenceAfter,fleeCommitted:true,sprintCommitted:false,turnId:clock.turnId,startedAtRevision:draft.localRevision+1}:plan.action==='sprint'?{...plan.sequenceAfter,fleeCommitted:true,sprintCommitted:true,turnId:clock.turnId}:seq;
-        seqs.byActorId??={};if(plan.action!=='hide')seqs.byActorId[actorId]=current;
+        seqs.byActorId??={};
+        if(plan.action!=='hide')seqs.byActorId[actorId]=current;
         receipt={id:plan.actionId,actorId,action:plan.action,turn:structuredClone(clock),facts:{...structuredClone(plan.facts),...(plan.action==='flee'?{engagementConfirmation:{confirmed:true,enemyCount:(plan.facts.engagedEnemyIds||[]).length}}:{})},...(plan.engagedEscapeEffects?{engagedEscapeEffects:structuredClone(plan.engagedEscapeEffects)}:{}),test:plan.test?structuredClone(plan.test):null,moveDistance:plan.moveDistance,sprintDistance:plan.sprintDistance??null,totalDistance:plan.totalDistance??plan.moveDistance,source:structuredClone(BROKEN_ESCAPE_SOURCE),ruleVersion:BROKEN_ESCAPE_RULE_VERSION};
         seqs.receipts=[...(seqs.receipts||[]),receipt].slice(-300);
-        draft.extensions??={};draft.extensions.v5={...root,actionLedger:ledger,brokenEscape:seqs};
+        draft.extensions??={};
+        draft.extensions.v5={...root,actionLedger:ledger,brokenEscape:seqs};
         return draft;
       });
-      const finish=result=>{if(result?.ok===false)return {status:'error',reason:result.error||'Écriture refusée; état inchangé.'};issuedBrokenEscapePreviews.delete(plan.actionId);return {status:'applied',receipt,persistence:result};};
+      const finish=result=>{
+        if(result?.ok===false)return {status:'error',reason:result.error||'Écriture refusée; état inchangé.'};
+        issuedBrokenEscapePreviews.delete(plan.actionId);
+        return {status:'applied',receipt,persistence:result};
+      };
       return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
     },
   };

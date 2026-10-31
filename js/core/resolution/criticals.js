@@ -91,7 +91,10 @@ export function criticalItems(first, second, declined) {
 export function criticalApplication(items) {
   const application = { extraWounds: 0, states: [] };
   items.filter(item => item.applied).forEach(item => {
-    if (item.kind === 'wounds') { application.extraWounds += item.amount; return; }
+    if (item.kind === 'wounds') {
+      application.extraWounds += item.amount;
+      return;
+    }
     application.states.push(clone(item.condition || { key: item.key, name: item.name, level: item.level }));
   });
   return application;
@@ -134,7 +137,10 @@ export function appendCriticalWoundRecords(participant, criticals, { resolutionI
   });
   const numericCarac=value=>((typeof value==='number'||typeof value==='string'&&value.trim()!=='')&&Number.isFinite(Number(value)))?Number(value):null;
   const roundNumber=Number.isSafeInteger(round)?round:null,rawBe=numericCarac(participant.caracs?.BE),endurance=numericCarac(participant.caracs?.E),be=rawBe!==null&&Number.isSafeInteger(rawBe)&&rawBe>=0?rawBe:endurance!==null&&endurance>=0?Math.floor(endurance/10):null;
-  if(roundNumber!==null&&be!==null){const countdown=updateCriticalDeathCountdown(participant,{round:roundNumber,toughnessBonus:be});if(countdown.participant)Object.assign(participant,countdown.participant);}
+  if(roundNumber!==null&&be!==null){
+    const countdown=updateCriticalDeathCountdown(participant,{round:roundNumber,toughnessBonus:be});
+    if(countdown.participant)Object.assign(participant,countdown.participant);
+  }
 }
 
 /** Perte de PV proposée par un aperçu : dégâts de l'arme + Blessures en plus des critiques cochés. */

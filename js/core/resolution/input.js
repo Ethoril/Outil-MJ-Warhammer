@@ -83,7 +83,9 @@ export function normalizeResolutionInput(input = {}) {
   if (/griffes du tigre|tiger claws/i.test(String(action.name || action.note || action.extensions?.equipment?.name || ''))) {
     const brawling=(actor?.skills||[]).find(row=>[row.sourceName,row.name,row.nom].filter(Boolean).some(value=>String(value).normalize('NFD').replace(/[\u0300-\u036f]/g,'').match(/melee\s*\(brawling\)|corps.?a.?corps\s*\(bagarre\)/i))&&Number.isFinite(Number(row.total??row.value)));
     if(!brawling)throw new ResolutionError('Les Griffes du tigre exigent Corps à corps (Bagarre) lié au profil.', 'SKILL_LINK_REQUIRED');
-    action.base=Number(brawling.total??brawling.value);action.attr='CC';action.extensions={...(action.extensions||{}),fiche:{...(action.extensions?.fiche||{}),skillId:brawling.id||undefined}};
+    action.base=Number(brawling.total??brawling.value);
+    action.attr='CC';
+    action.extensions={...(action.extensions||{}),fiche:{...(action.extensions?.fiche||{}),skillId:brawling.id||undefined}};
   }
   if (/warp blade|lame de malepierre/i.test(String(action.name || action.note || action.extensions?.equipment?.name || ''))) {
     const present = new Set((action.qualities || []).map(row => typeof row === 'string' ? row : row?.id));
@@ -99,11 +101,15 @@ export function normalizeResolutionInput(input = {}) {
   let damageReplaced = null;
   const replaceDamage = formula => {
     if (typedDamage !== null && typedDamage !== Number(formula)) damageReplaced = `Dégâts de l’action (${typedDamage}) remplacés par la formule V5 du Trait (${Number(formula)}) ; saisissez une attaque d’arme pour garder les vôtres.`;
-    action.damage = Number(formula); delete action.damageFormula;
+    action.damage = Number(formula);
+    delete action.damageFormula;
   };
   const natural = naturalPlanOf(actor, input.v5);
   if (natural && /^\d+$/.test(String(natural.damageFormula))) replaceDamage(natural.damageFormula);
-  else if (natural?.noDamage) { action.damage = 0; delete action.damageFormula; }
+  else if (natural?.noDamage) {
+    action.damage = 0;
+    delete action.damageFormula;
+  }
   else if (!natural) {
     const inferred = inferredNaturalPlan(actor, action, input.v5);
     if (inferred && /^\d+$/.test(String(inferred.damageFormula))) replaceDamage(inferred.damageFormula);
@@ -152,12 +158,16 @@ export function normalizeResolutionInput(input = {}) {
   const weaponItem = input.v5?.context?.attackWithShield === true ? action.extensions?.equipment : selectedEquipment;
   const ammunition = actor?.equipment?.find(item => item.id === input.ammunitionId && item.kind === 'ammunition');
   if(input.ammunitionId && !ammunition) throw new ResolutionError('Munition déclarée introuvable', 'AMMUNITION_NOT_FOUND');
-  if(ammunition){const compatibility=ammunitionCompatibility(weaponItem,ammunition);if(compatibility.status==='incompatible'||(compatibility.status==='manual'&&input.ammunitionArbitrated!==true))throw new ResolutionError('La compatibilité de cette munition avec cette arme doit être vérifiée', 'AMMUNITION_INCOMPATIBLE', compatibility);}
+  if(ammunition){
+    const compatibility=ammunitionCompatibility(weaponItem,ammunition);
+    if(compatibility.status==='incompatible'||(compatibility.status==='manual'&&input.ammunitionArbitrated!==true))throw new ResolutionError('La compatibilité de cette munition avec cette arme doit être vérifiée', 'AMMUNITION_INCOMPATIBLE', compatibility);
+  }
   const merged = ammunition && weaponItem ? mergeEquipmentQualities(weaponItem, ammunition) : null;
   let qualities = normalizeQualities(merged ? [...(action.qualities || []), ...equipmentQualities(ammunition)] : action.qualities || input.qualities || []);
   const wieldedPavise=input.v5?.context?.attackWithShield===true&&actor?.equipment?.find(item=>item.id===input.v5.context.actorShieldId&&item.kind==='shield'&&/pavise|pavois/i.test(String(item.name||'')));
   if(wieldedPavise){
-    action.damageFormula='BF +2';delete action.damage;
+    action.damageFormula='BF +2';
+    delete action.damage;
     if(!qualities.some(row=>row.id==='defensive'))qualities.push({id:'defensive'});
   }
   action.qualities = qualities;
@@ -236,7 +246,10 @@ export function normalizeCriticalRolls(raw) {
   read('secondEffect', 'secondEffect');
   read('effectAlternative', 'effectAlternative');
   read('secondEffectAlternative', 'secondEffectAlternative');
-  read('injureEffect', 'injureEffect');read('injureSecondEffect','injureSecondEffect');read('injureEffectAlternative','injureEffectAlternative');read('injureSecondEffectAlternative','injureSecondEffectAlternative');
+  read('injureEffect', 'injureEffect');
+  read('injureSecondEffect','injureSecondEffect');
+  read('injureEffectAlternative','injureEffectAlternative');
+  read('injureSecondEffectAlternative','injureSecondEffectAlternative');
   return out;
 }
 

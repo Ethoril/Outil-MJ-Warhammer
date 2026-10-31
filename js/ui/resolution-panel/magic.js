@@ -176,8 +176,10 @@ export function renderV5MagicContext({ actor, participants = [], target, type, d
     const addCheck = (box, key, lbl, checked = Boolean(draft[key]), onChange = value => handlers.select({ [key]: value })) => {
       const wrap = node('label', 'workspace-type workspace-recipient-check');
       const chk = document.createElement('input');
-      chk.type = 'checkbox'; chk.checked = checked;
-      chk.setAttribute('aria-label', lbl); chk.dataset.focusKey = key;
+      chk.type = 'checkbox';
+      chk.checked = checked;
+      chk.setAttribute('aria-label', lbl);
+      chk.dataset.focusKey = key;
       chk.addEventListener('change', () => onChange(chk.checked));
       wrap.append(chk, ` ${lbl}`);
       box.appendChild(wrap);
@@ -185,7 +187,10 @@ export function renderV5MagicContext({ actor, participants = [], target, type, d
     const addNum = (box, key, lbl, min = 0, max = 100) => {
       const wrap = node('label', 'workspace-type', lbl);
       const inp = document.createElement('input');
-      inp.type = 'number'; inp.min = String(min); inp.max = String(max); inp.step = '1';
+      inp.type = 'number';
+      inp.min = String(min);
+      inp.max = String(max);
+      inp.step = '1';
       inp.value = draft[key] ?? '';
       inp.setAttribute('aria-label', lbl);
       inp.dataset.focusKey = key;
@@ -194,7 +199,10 @@ export function renderV5MagicContext({ actor, participants = [], target, type, d
       box.appendChild(wrap);
       return inp;
     };
-    if(movementOnly){addNum(specificBox,'magicVortexDirectionRoll','Tempête : direction aléatoire d10 (sans Test de FM)',1,10);addNum(specificBox,'magicVortexDistance','Tempête : déplacement 2d10 mètres',2,20);}
+    if(movementOnly){
+      addNum(specificBox,'magicVortexDirectionRoll','Tempête : direction aléatoire d10 (sans Test de FM)',1,10);
+      addNum(specificBox,'magicVortexDistance','Tempête : déplacement 2d10 mètres',2,20);
+    }
     if (isVortexSpell && !movementOnly) {
       // Vortex aléatoire (Winds of Magic p. 20) : direction choisie + Test de Force Mentale Accessible (+2 DR) ; en cas d'échec, d10 de direction.
       const compassLabel = node('label', 'workspace-type', 'Vortex : direction choisie par le lanceur');
@@ -352,20 +360,29 @@ export function renderArcaneFields(draft, actor, target, participants, handlers)
   const armorPoints = Number(draft.magicArcaneArmorPoints) || 0;
   const amountLabel = node('label', 'workspace-type', 'PA à détruire (1 DR chacun)');
   const amount = document.createElement('input');
-  amount.type = 'number'; amount.min = '0'; amount.max = '20'; amount.step = '1';
-  amount.value = armorPoints; amount.dataset.focusKey = 'magic-arcane-armor-points';
+  amount.type = 'number';
+  amount.min = '0';
+  amount.max = '20';
+  amount.step = '1';
+  amount.value = armorPoints;
+  amount.dataset.focusKey = 'magic-arcane-armor-points';
   amount.addEventListener('input', () => {
     const points = amount.value === '' ? 0 : Number(amount.value);
     const targets = Object.fromEntries(Object.entries(draft.magicArcaneTargets || {}).map(([id, facts]) =>
       [id, { ...facts, armorDamageLocations: (facts.armorDamageLocations || []).slice(0, Math.max(0, points)) }]));
     handlers.select({ magicArcaneArmorPoints: points, magicArcaneTargets: targets });
   });
-  amountLabel.appendChild(amount); box.appendChild(amountLabel);
+  amountLabel.appendChild(amount);
+  box.appendChild(amountLabel);
   for (const [key, label] of [['magicArcaneEnhancedDamage', 'Dégâts : 1 par PA porté (+8 DR)'], ['magicArcaneChooseItem', 'Choisir l’objet magique (+3 DR, Test de Dextérité +2 DR)']]) {
     const wrap = node('label', 'workspace-type workspace-arcane-toggle');
-    const input = document.createElement('input'); input.type = 'checkbox'; input.checked = Boolean(draft[key]);
-    input.dataset.focusKey = key; input.addEventListener('change', () => handlers.select({ [key]: input.checked }));
-    wrap.append(input, ` ${label}`); box.appendChild(wrap);
+    const input = document.createElement('input');
+    input.type = 'checkbox';
+    input.checked = Boolean(draft[key]);
+    input.dataset.focusKey = key;
+    input.addEventListener('change', () => handlers.select({ [key]: input.checked }));
+    wrap.append(input, ` ${label}`);
+    box.appendChild(wrap);
   }
   const cost = armorPoints + (draft.magicArcaneEnhancedDamage ? 8 : 0) + (draft.magicArcaneChooseItem ? 3 : 0);
   box.appendChild(node('p', 'workspace-muted', `Surpuissance à dépenser : ${cost} DR. Les tirages aléatoires sont renseignés par le MJ.`));
@@ -376,22 +393,27 @@ export function renderArcaneFields(draft, actor, target, participants, handlers)
     box.appendChild(node('p', 'workspace-result-line', person.name));
     for (let index = 0; index < Math.min(20, armorPoints); index++) {
       const label = node('label', 'workspace-type', `PA ${index + 1} : localisation tirée au sort`);
-      const select = document.createElement('select'); select.dataset.focusKey = `magic-arcane-armor-${person.id}-${index}`;
+      const select = document.createElement('select');
+      select.dataset.focusKey = `magic-arcane-armor-${person.id}-${index}`;
       select.appendChild(new Option('Sélectionner le résultat', ''));
       for (const [id, name] of ARCANE_ARMOR_LOCATIONS) select.appendChild(new Option(name, id));
       select.value = facts.armorDamageLocations?.[index] || '';
       select.addEventListener('change', () => {
         const values = Array.from({ length: armorPoints }, (_, i) => facts.armorDamageLocations?.[i] || '');
-        values[index] = select.value; update({ armorDamageLocations: values });
+        values[index] = select.value;
+        update({ armorDamageLocations: values });
       });
-      label.appendChild(select); box.appendChild(label);
+      label.appendChild(select);
+      box.appendChild(label);
     }
     const presentLabel = node('label', 'workspace-type', 'Objet magique porté');
-    const present = document.createElement('select'); present.dataset.focusKey = `magic-arcane-item-present-${person.id}`;
+    const present = document.createElement('select');
+    present.dataset.focusKey = `magic-arcane-item-present-${person.id}`;
     [['', 'À préciser'], ['none', 'Aucun'], ['present', 'Présent']].forEach(([value, text]) => present.appendChild(new Option(text, value)));
     present.value = facts.magicItemPresent === true ? 'present' : facts.magicItemPresent === false ? 'none' : '';
     present.addEventListener('change', () => update({ magicItemPresent: present.value === 'present' ? true : present.value === 'none' ? false : null }));
-    presentLabel.appendChild(present); box.appendChild(presentLabel);
+    presentLabel.appendChild(present);
+    box.appendChild(presentLabel);
     if (facts.magicItemPresent) {
       for (const [key, text, numeric] of [
         ['focalisationRoll', 'Test de Focalisation (Haute Magie), 1d100', true],
@@ -399,11 +421,18 @@ export function renderArcaneFields(draft, actor, target, participants, handlers)
         ...(draft.magicArcaneChooseItem ? [['dexterityRoll', 'Test de Dextérité (+2 DR), 1d100', true], ['chosenMagicItem', 'Objet magique choisi', false]] : [])
       ]) {
         const label = node('label', 'workspace-type', text);
-        const input = document.createElement('input'); input.type = numeric ? 'number' : 'text';
-        if (numeric) { input.min = '1'; input.max = '100'; input.step = '1'; }
-        input.value = facts[key] ?? ''; input.dataset.focusKey = `magic-arcane-${key}-${person.id}`;
+        const input = document.createElement('input');
+        input.type = numeric ? 'number' : 'text';
+        if (numeric) {
+          input.min = '1';
+          input.max = '100';
+          input.step = '1';
+        }
+        input.value = facts[key] ?? '';
+        input.dataset.focusKey = `magic-arcane-${key}-${person.id}`;
         input.addEventListener('input', () => update({ [key]: numeric ? (input.value === '' ? null : Number(input.value)) : input.value }));
-        label.appendChild(input); box.appendChild(label);
+        label.appendChild(input);
+        box.appendChild(label);
       }
     }
   }
@@ -523,12 +552,17 @@ export function renderV5MagicResult(preview, target, draft, handlers) {
       const field = need.field.startsWith('mountedRideScore') ? 'score' : 'roll';
       const answers = draft.magicMountedRideTests || {}, current = answers[riderId] || {};
       const label = node('label', 'workspace-type', need.label || `${riderId} · ${field === 'roll' ? 'd100' : 'score de Chevaucher'}`);
-      const input = document.createElement('input'); input.type = 'number'; input.min = String(need.min ?? (field === 'roll' ? 1 : 0)); input.max = String(need.max ?? 100); input.value = current[field] == null ? '' : String(current[field]);
+      const input = document.createElement('input');
+      input.type = 'number';
+      input.min = String(need.min ?? (field === 'roll' ? 1 : 0));
+      input.max = String(need.max ?? 100);
+      input.value = current[field] == null ? '' : String(current[field]);
       input.addEventListener('change', () => {
         handlers.select({ magicMountedRideTests: { ...answers, [riderId]: { ...current, [field]: input.value === '' ? null : Number(input.value) } } });
         handlers.calculate();
       });
-      label.append(input); result.appendChild(label);
+      label.append(input);
+      result.appendChild(label);
     }
     return result;
   }
@@ -630,12 +664,17 @@ export function renderV5MagicResult(preview, target, draft, handlers) {
       const rider = (sp.targets || []).find(row => row.id === riderId);
       const answers = draft.magicMountedRideTests || {}, current = answers[riderId] || {};
       const label = node('label', 'workspace-type', need.label || `${rider?.name || riderId} · ${field === 'roll' ? 'd100' : 'score de Chevaucher'}`);
-      const input = document.createElement('input'); input.type = 'number'; input.min = String(need.min ?? (field === 'roll' ? 1 : 0)); input.max = String(need.max ?? 100); input.value = current[field] == null ? '' : String(current[field]);
+      const input = document.createElement('input');
+      input.type = 'number';
+      input.min = String(need.min ?? (field === 'roll' ? 1 : 0));
+      input.max = String(need.max ?? 100);
+      input.value = current[field] == null ? '' : String(current[field]);
       input.addEventListener('change', () => {
         handlers.select({ magicMountedRideTests: { ...answers, [riderId]: { ...current, [field]: input.value === '' ? null : Number(input.value) } } });
         handlers.calculate();
       });
-      label.append(input); result.appendChild(label);
+      label.append(input);
+      result.appendChild(label);
     }
   }
   return result;

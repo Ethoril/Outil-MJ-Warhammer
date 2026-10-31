@@ -44,8 +44,11 @@ export function registerNewV5Participants(before, next) {
 }
 export function withoutCombatInitiativeResolution(extensions) {
   const next={...(extensions||{})},v5={...(extensions?.v5||{})};
-  delete v5.combatInitiativeInitialized; delete v5.combatInitiativeResolution; delete v5.orderRound;
-  next.v5=v5; return next;
+  delete v5.combatInitiativeInitialized;
+  delete v5.combatInitiativeResolution;
+  delete v5.orderRound;
+  next.v5=v5;
+  return next;
 }
 export function freshCombatScopedV5(value, combatScopeId = uid()) {
   const { combatActions, standardTurnActions, ...v5 } = value || {};
@@ -58,7 +61,10 @@ export function clearV5FortuneAdvantageDeclaration(envelope,actorId){
 }
 export function clearMountedRelation(participant) {
   if (!participant?.extensions?.v5 || (participant.extensions.v5.mounted !== true && !participant.extensions.v5.mountId)) return participant;
-  return withV5(participant, v5 => { const { mountId, ...rest } = v5; return { ...rest, mounted: false }; });
+  return withV5(participant, v5 => {
+    const { mountId, ...rest } = v5;
+    return { ...rest, mounted: false };
+  });
 }
 export function dismountLinkedRiders(participants, mountId) {
   return (participants || []).map(participant => participant?.extensions?.v5?.mounted === true

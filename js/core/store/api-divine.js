@@ -44,10 +44,15 @@ export function createDivineApi({ api, currentEnvelope, divineAuthority }) {
     getDivinePenanceExamples(){return getDivinePenanceExamples();},
     previewDivineAbsolution(input={}) {return previewStoreDivineAbsolution(currentEnvelope(),input);},
     applyDivineAbsolution(input={}) {
-      const captured=cloneValue(input);let execution;
+      const captured=cloneValue(input);
+      let execution;
       if(['absolution','gm-wrath'].includes(captured.preview?.input?.absolution?.kind)&&divineAuthority!=='MJ')throw new Error('Seul le MJ peut décider cette absolution ou ce Courroux.');
-      const saved=api.executeCommand('v5-divine-absolution',draft=>{execution=applyStoreDivineAbsolution(draft,captured);return execution.state;});
-      const finish=result=>result?.ok===false?result:{...execution,ok:true};return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
+      const saved=api.executeCommand('v5-divine-absolution',draft=>{
+        execution=applyStoreDivineAbsolution(draft,captured);
+        return execution.state;
+      });
+      const finish=result=>result?.ok===false?result:{...execution,ok:true};
+      return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
     },
     previewDivineNavalEvent(input={}){return previewStoreDivineNavalEvent(currentEnvelope(),input);},
     getDivineDailyWrathStatus(actorId,id){return getStoreDivineDailyWrathStatus(currentEnvelope(),actorId,id);},
@@ -55,10 +60,12 @@ export function createDivineApi({ api, currentEnvelope, divineAuthority }) {
     getDivineSinReminders(){return getDivineSinReminders();},
     previewDivineSinEvent(input={}){return previewStoreDivineSinEvent(currentEnvelope(),input);},
     applyDivineWrathRecovery(input={}) {
-      const captured=cloneValue(input);let execution;
+      const captured=cloneValue(input);
+      let execution;
       const saved=api.executeCommand('v5-divine-wrath-recovery',draft=>{
         const actorId=captured.preview?.input?.actorId,actor=draft.combat?.participants?.find(row=>row.id===actorId),visible=captured.preview?.input?.brokenEscapeFacts?.visibleToAnyEnemy;
-        const spent=combatActionBlock(draft,actorId);if(spent)throw Object.assign(new Error(spent.error),{userFacing:true,code:spent.code});
+        const spent=combatActionBlock(draft,actorId);
+        if(spent)throw Object.assign(new Error(spent.error),{userFacing:true,code:spent.code});
         const block=brokenEscapeActionBlock(draft,actorId);
         if(block||isBrokenEscapeActor(actor)&&(typeof visible!=='boolean'||isV5BrokenEscapeActionBlocked(actor,{visibleToAnyEnemy:visible,sequence:draft.extensions?.v5?.brokenEscape?.byActorId?.[actorId]})))throw Object.assign(new Error('Brisé : Prière de récupération indisponible pour ce Tour.'),{userFacing:true});
         execution=applyStoreDivineWrathRecovery(draft,captured);
@@ -68,21 +75,34 @@ export function createDivineApi({ api, currentEnvelope, divineAuthority }) {
         if(isBrokenEscapeActor(execution.state.combat.participants.find(row=>row.id===actorId)))recordV5EscapeVisibility(execution.state,actorId,visible,execution.executionId);
         return execution.state;
       });
-      const finish=result=>result?.ok===false?result:{...execution,ok:true};return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
+      const finish=result=>result?.ok===false?result:{...execution,ok:true};
+      return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
     },
     applyDivineExecution(identifier,input={}) {
-      input=cloneValue(input);let execution;
+      input=cloneValue(input);
+      let execution;
       const saved=api.executeCommand('v5-divine-prayer',draft=>{
         const actorId=input.preview?.input?.actorId||input.preview?.input?.actor?.id||draft.combat?.currentActorId,actor=draft.combat?.participants?.find(row=>row.id===actorId),brise=actor?.states?.some(row=>['brise','broken'].includes(String(row.key||row.name||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()));
-        const actionSpent=combatActionBlock(draft,actorId);if(actionSpent)throw Object.assign(new Error(actionSpent.error),{userFacing:true,code:actionSpent.code});
-        const actionBlock=brokenEscapeActionBlock(draft,actorId);if(actionBlock)throw Object.assign(new Error(actionBlock.error),{userFacing:true,code:actionBlock.code});
+        const actionSpent=combatActionBlock(draft,actorId);
+        if(actionSpent)throw Object.assign(new Error(actionSpent.error),{userFacing:true,code:actionSpent.code});
+        const actionBlock=brokenEscapeActionBlock(draft,actorId);
+        if(actionBlock)throw Object.assign(new Error(actionBlock.error),{userFacing:true,code:actionBlock.code});
         const visibility=input.brokenEscapeFacts?.visibleToAnyEnemy??input.preview?.input?.brokenEscapeFacts?.visibleToAnyEnemy;
-        if(brise){if(typeof visibility!=='boolean')throw Object.assign(new Error('Le MJ doit confirmer la visibilité actuelle envers tout ennemi.'),{userFacing:true});const blocked=isV5BrokenEscapeActionBlocked(actor,{visibleToAnyEnemy:visibility,sequence:draft.extensions?.v5?.brokenEscape?.byActorId?.[actorId]});if(blocked)throw Object.assign(new Error('Brisé impose Move (Flee), puis Action (Sprint) tant que le personnage reste visible.'),{userFacing:true});const actionBlock=brokenEscapeActionBlock(draft,actorId);if(actionBlock)throw Object.assign(new Error(actionBlock.error),{userFacing:true,code:actionBlock.code});}
+        if(brise){
+          if(typeof visibility!=='boolean')throw Object.assign(new Error('Le MJ doit confirmer la visibilité actuelle envers tout ennemi.'),{userFacing:true});
+          const blocked=isV5BrokenEscapeActionBlocked(actor,{visibleToAnyEnemy:visibility,sequence:draft.extensions?.v5?.brokenEscape?.byActorId?.[actorId]});
+          if(blocked)throw Object.assign(new Error('Brisé impose Move (Flee), puis Action (Sprint) tant que le personnage reste visible.'),{userFacing:true});
+          const actionBlock=brokenEscapeActionBlock(draft,actorId);
+          if(actionBlock)throw Object.assign(new Error(actionBlock.error),{userFacing:true,code:actionBlock.code});
+        }
         execution=applyStoreDivine(draft,identifier,input);
         if (execution?.ready && execution.state) registerNewV5Participants(draft, execution.state);
-        if(execution?.ready&&execution.state){const executionId=execution.executionId||input.preview?.executionId||`prayer:${identifier}:${execution.state.localRevision}`,tracked=recordV5ActionUsage(execution.state,actorId,executionId);if(!tracked.ok)throw Object.assign(new Error(tracked.reason),{userFacing:true});
+        if(execution?.ready&&execution.state){
+          const executionId=execution.executionId||input.preview?.executionId||`prayer:${identifier}:${execution.state.localRevision}`,tracked=recordV5ActionUsage(execution.state,actorId,executionId);
+          if(!tracked.ok)throw Object.assign(new Error(tracked.reason),{userFacing:true});
           if(execution.state.extensions?.v5?.combatActions?.byActorId?.[actorId]?.kind==='aim')delete execution.state.extensions.v5.combatActions.byActorId[actorId];
-          if((execution.state.combat?.participants||[]).find(row=>row.id===actorId)?.states?.some(row=>['brise','broken'].includes(String(row.key||row.name||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase())))recordV5EscapeVisibility(execution.state,actorId,visibility,executionId);}
+          if((execution.state.combat?.participants||[]).find(row=>row.id===actorId)?.states?.some(row=>['brise','broken'].includes(String(row.key||row.name||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase())))recordV5EscapeVisibility(execution.state,actorId,visibility,executionId);
+        }
         return execution.state;
       });
       const finish=result=>result?.ok===false?result:{...execution,ok:true};

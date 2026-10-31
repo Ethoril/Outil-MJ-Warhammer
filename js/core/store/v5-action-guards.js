@@ -29,7 +29,8 @@ export function grappleTurnGateBlock(envelope,input,actor){
  return gate.required&&!gate.allowed?{ready:false,status:'requires-input',code:'F2_GRAPPLE_FIRST_ACTION',error:gate.unresolved[0],unresolved:gate.unresolved}:null;
 }
 export function prayerCapClockNeeds(participant, snapshot, path='participant'){
- const check=validatePrayerSLCaps(participant,{clock:snapshot?.extensions?.v5?.gameClock||null});if(!check.ok)return check.needsInput;
+ const check=validatePrayerSLCaps(participant,{clock:snapshot?.extensions?.v5?.gameClock||null});
+ if(!check.ok)return check.needsInput;
  if(check.caps.length){
   const clock=snapshot?.extensions?.v5?.gameClock;
   if(!clock||!Number.isSafeInteger(clock.campaignSeconds))return [{path:`${path}.extensions.v5.divineEffects`,message:'Horloge absente : la sanction de Prière ne peut pas être vérifiée.'}];
@@ -41,8 +42,10 @@ export function prayerCapClockNeeds(participant, snapshot, path='participant'){
  return lesson.ok?[]:lesson.needsInput.map(row=>({path:`${path}.${row.path}`,message:row.message}));
 }
 export function recordV5ActionUsage(envelope,actorId,actionId){
- const clock=v5StoreActionClock(envelope);if(!clock.encounterId||!clock.turnId||envelope.combat?.currentActorId!==actorId)return {ok:true,tracked:false};
- envelope.extensions??={};envelope.extensions.v5??={};
+ const clock=v5StoreActionClock(envelope);
+ if(!clock.encounterId||!clock.turnId||envelope.combat?.currentActorId!==actorId)return {ok:true,tracked:false};
+ envelope.extensions??={};
+ envelope.extensions.v5??={};
  const rows=envelope.extensions.v5.standardTurnActions||[];
  if(!rows.some(row=>row.actionId===actionId))envelope.extensions.v5.standardTurnActions=[...rows,{actorId,actionId,encounterId:clock.encounterId,round:clock.round,turnId:clock.turnId,kind:'action'}].slice(-500);
  return {ok:true,clock};
@@ -70,11 +73,13 @@ export function combatActionBlock(envelope,actorId){
   ?{ready:false,status:'blocked',code:'F2_COMBAT_ACTION_SPENT',error:'Une Action de combat spéciale a déjà été dépensée pendant ce Tour.'}:null;
 }
 export function ordinaryActionAfterCombatActionBlock(envelope,actorId){
- const block=combatActionBlock(envelope,actorId);return block?{...block,error:'Visée ou Défensive a déjà consommé l’Action de ce Tour.'}:null;
+ const block=combatActionBlock(envelope,actorId);
+ return block?{...block,error:'Visée ou Défensive a déjà consommé l’Action de ce Tour.'}:null;
 }
 export function combatMagicActionStore(api,actorId){
  return {...api,executeCommand(type,mutator,options){return api.executeCommand(type,draft=>{
-  const block=combatActionBlock(draft,actorId);if(block)throw Object.assign(new Error(block.error),{userFacing:true,code:block.code});
+  const block=combatActionBlock(draft,actorId);
+  if(block)throw Object.assign(new Error(block.error),{userFacing:true,code:block.code});
   const next=mutator(draft)||draft;
   if(next.extensions?.v5?.combatActions?.byActorId?.[actorId]?.kind==='aim')delete next.extensions.v5.combatActions.byActorId[actorId];
   recordV5ActionUsage(next,actorId,`${type}:${next.localRevision}`);
@@ -111,16 +116,26 @@ export function brokenEscapeActionBlock(envelope,actorId){
 }
 export function detonateDueV5Bombs(combat, completedActorId, completedTurnIndex){
  if(!Number.isSafeInteger(completedTurnIndex)||completedTurnIndex<1||!Array.isArray(combat?.participants))return combat;
- let changed=false;const participants=combat.participants.map(participant=>{
+ let changed=false;
+ const participants=combat.participants.map(participant=>{
   const due=[],equipment=(participant.equipment||[]).map(item=>{
-   const v5=item.extensions?.v5||{};if(v5.bombFuse!==true)return item;
+   const v5=item.extensions?.v5||{};
+   if(v5.bombFuse!==true)return item;
    const ownerId=v5.bombFuseOwnerId;
    // New fuses count activations of their bearer. Legacy snapshots retain the
    // old global-index fallback so migration never advances a fuse silently.
-   if(ownerId){if(participant.id!==completedActorId)return item;const remaining=Number(v5.fuseTurnsRemaining);if(!Number.isSafeInteger(remaining)||remaining<1)return item;
-    if(remaining>1){changed=true;return {...item,extensions:{...(item.extensions||{}),v5:{...v5,fuseTurnsRemaining:remaining-1}}};}
+   if(ownerId){
+     if(participant.id!==completedActorId)return item;
+     const remaining=Number(v5.fuseTurnsRemaining);
+     if(!Number.isSafeInteger(remaining)||remaining<1)return item;
+    if(remaining>1){
+      changed=true;
+      return {...item,extensions:{...(item.extensions||{}),v5:{...v5,fuseTurnsRemaining:remaining-1}}};
+    }
    } else if(Number(v5.fuseDueTurnIndex)>completedTurnIndex)return item;
-   due.push(item);changed=true;return {...item,extensions:{...(item.extensions||{}),v5:{...v5,fuseLit:false,bombFuse:false,fuseDueRound:null,fuseDueTurnIndex:null,bombFuseOwnerId:null,fuseTurnsRemaining:null,bombDetonatedTurnIndex:completedTurnIndex}}};
+   due.push(item);
+   changed=true;
+   return {...item,extensions:{...(item.extensions||{}),v5:{...v5,fuseLit:false,bombFuse:false,fuseDueRound:null,fuseDueTurnIndex:null,bombFuseOwnerId:null,fuseTurnsRemaining:null,bombDetonatedTurnIndex:completedTurnIndex}}};
   });
   if(!due.length){return equipment.some((row,index)=>row!==(participant.equipment||[])[index])?{...participant,equipment}:participant;}
   const rows=participant.extensions?.v5?.combatEffects||[];
@@ -158,7 +173,8 @@ export function recordV5EscapeVisibility(envelope,actorId,visibleToAnyEnemy,sour
  if(typeof visibleToAnyEnemy!=='boolean')return;
  const clock=v5StoreActionClock(envelope),root=envelope.extensions?.v5||{},escape=structuredClone(root.brokenEscape||{byActorId:{},receipts:[]});
  escape.receipts=[...(escape.receipts||[]),{id:`visibility:${sourceId}`,actorId,visibleToAnyEnemy,turn:clock,source:'explicit-gm',committedAtRevision:(envelope.localRevision||0)+1}].slice(-300);
- envelope.extensions??={};envelope.extensions.v5={...root,brokenEscape:escape};
+ envelope.extensions??={};
+ envelope.extensions.v5={...root,brokenEscape:escape};
 }
 export const isMagicBased = p => Boolean(p?.extensions?.v5?.baseCaracs || p?.extensions?.v5?.spellEffects?.length || p?.extensions?.v5?.divineEffects?.length || p?.extensions?.v5?.beastForm);
 export function clearSessionClairvoyance(participant) {

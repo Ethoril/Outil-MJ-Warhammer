@@ -92,7 +92,8 @@ export function renderCritical(preview, draft, handlers, defending = false) {
   const errors = draft.criticalErrors || {};
   const block = node('div', 'workspace-critical');
   const title = defending ? 'Critique défensif sur l’attaquant' : 'Blessures critiques sur la cible';
-  block.setAttribute('role', 'group'); block.setAttribute('aria-label', title);
+  block.setAttribute('role', 'group');
+  block.setAttribute('aria-label', title);
   block.appendChild(rubric(title));
   const appendPart = (part, kind, label) => {
     if (!part) return;
@@ -121,14 +122,28 @@ export function renderCritical(preview, draft, handlers, defending = false) {
       const draftKey=CRITICAL_ROLL_KEYS[field];
       block.appendChild(rollField({field:'injure-'+(defending?'defender-':'')+kind,label:'Frappe blessante : deuxième gravité au choix',value:draft[draftKey]||'',error:'',handlers,disabled:draft.busy,critical:field}));
       if((defending?preview.input.defense?.qualities:preview.input.action.qualities)?.some(q=>q.id==='inoffensive')){
-        const alt=field+'Alternative';block.appendChild(rollField({field:'injure-alt-'+(defending?'defender-':'')+kind,label:'Inoffensive : autre dé de la deuxième paire',value:draft[CRITICAL_ROLL_KEYS[alt]]||'',error:'',handlers,disabled:draft.busy,critical:alt}));
+        const alt=field+'Alternative';
+        block.appendChild(rollField({field:'injure-alt-'+(defending?'defender-':'')+kind,label:'Inoffensive : autre dé de la deuxième paire',value:draft[CRITICAL_ROLL_KEYS[alt]]||'',error:'',handlers,disabled:draft.busy,critical:alt}));
       }
-      const label=node('label','workspace-type','Frappe blessante : gravité retenue');const choice=document.createElement('select');choice.setAttribute('aria-label','Frappe blessante : gravité retenue ('+(defending?'défense, '+kind:kind)+')');choice.append(new Option('Choisir',''),new Option('Premier résultat','false'),new Option('Deuxième résultat','true'));
-      const current=draft[defending?'defenseTalentChoices':'talentChoices']?.['injure:'+kind];choice.value=typeof current==='boolean'?String(current):'';
-      choice.addEventListener('change',()=>handlers.criticalChoose(defending?'defender':'actor','injure:'+kind,choice.value===''?undefined:choice.value==='true'));label.append(choice);block.append(label);
+      const label=node('label','workspace-type','Frappe blessante : gravité retenue');
+      const choice=document.createElement('select');
+      choice.setAttribute('aria-label','Frappe blessante : gravité retenue ('+(defending?'défense, '+kind:kind)+')');
+      choice.append(new Option('Choisir',''),new Option('Premier résultat','false'),new Option('Deuxième résultat','true'));
+      const current=draft[defending?'defenseTalentChoices':'talentChoices']?.['injure:'+kind];
+      choice.value=typeof current==='boolean'?String(current):'';
+      choice.addEventListener('change',()=>handlers.criticalChoose(defending?'defender':'actor','injure:'+kind,choice.value===''?undefined:choice.value==='true'));
+      label.append(choice);
+      block.append(label);
     }
     if(pinned.some(p=>p.op==='modifyCriticalRoll')){
-      const label=node('label','workspace-type');const check=document.createElement('input');check.type='checkbox';check.setAttribute('aria-label','Harponneur : augmenter la gravité');check.checked=draft.talentChoices?.harpooner===true;check.addEventListener('change',()=>handlers.criticalChoose('actor','harpooner',check.checked));label.append(check,'Harponneur : +10 par acquisition (d100 plafonné à 100)');block.append(label);
+      const label=node('label','workspace-type');
+      const check=document.createElement('input');
+      check.type='checkbox';
+      check.setAttribute('aria-label','Harponneur : augmenter la gravité');
+      check.checked=draft.talentChoices?.harpooner===true;
+      check.addEventListener('change',()=>handlers.criticalChoose('actor','harpooner',check.checked));
+      label.append(check,'Harponneur : +10 par acquisition (d100 plafonné à 100)');
+      block.append(label);
     }
     if (part.effect) block.appendChild(criticalEffectLine(part));
     for (const item of critical.items.filter(item => item.crit === kind)) block.appendChild(criticalItemBox(
@@ -153,9 +168,13 @@ export function renderV5Decisions(preview, draft, handlers) {
     for (const option of decision.options) {
       const card = node('label', 'workspace-v5-choice');
       if (option.id === selected) card.classList.add('is-selected');
-      const radio = document.createElement('input'); radio.type = 'radio'; radio.name = `v5-choice-${role}`;
-      radio.value = option.id; radio.checked = option.id === selected || !decision.choiceRequired;
-      radio.disabled = draft.busy || !decision.choiceRequired; radio.dataset.focusKey = `v5-choice-${role}-${option.id}`;
+      const radio = document.createElement('input');
+      radio.type = 'radio';
+      radio.name = `v5-choice-${role}`;
+      radio.value = option.id;
+      radio.checked = option.id === selected || !decision.choiceRequired;
+      radio.disabled = draft.busy || !decision.choiceRequired;
+      radio.dataset.focusKey = `v5-choice-${role}-${option.id}`;
       radio.addEventListener('change', () => handlers.chooseV5(role, option.id));
       const summary = option.summary;
       const text = node('div', 'workspace-v5-choice-text');
@@ -166,7 +185,8 @@ export function renderV5Decisions(preview, draft, handlers) {
       if (summary.importantEffects.length) text.appendChild(node('span', '', summary.importantEffects.join(' · ')));
       text.appendChild(node('span', 'workspace-muted', 'Coût : aucun'));
       if (decision.recommendation?.optionId === option.id) text.appendChild(node('span', 'workspace-v5-recommendation', `Conseil : ${decision.recommendation.label}`));
-      card.append(radio, text); cards.appendChild(card);
+      card.append(radio, text);
+      cards.appendChild(card);
     }
     group.appendChild(cards);
     if (decision.equivalentKnownWounds) group.appendChild(node('p', 'workspace-muted', 'Même nombre de Blessures connu : comparez les autres conséquences.'));

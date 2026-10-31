@@ -1,7 +1,10 @@
 import { formatDamageFormula, formatWeaponDamage } from '../damage.js';
 
 export const hasOwn = (value, key) => Object.prototype.hasOwnProperty.call(value, key);
-export const signedValue = value => { const number = Number(value) || 0; return number < 0 ? `−${Math.abs(number)}` : `+${number}`; };
+export const signedValue = value => {
+  const number = Number(value) || 0;
+  return number < 0 ? `−${Math.abs(number)}` : `+${number}`;
+};
 export const knownHp = actor => actor?.hp !== null && actor?.hp !== undefined && actor?.hp !== '' && Number.isFinite(Number(actor.hp));
 export const DETAIL_TYPE_LABELS = { attack: 'Attaque', skill: 'Compétence', defense: 'Défense', opposition: 'Opposition' };
 

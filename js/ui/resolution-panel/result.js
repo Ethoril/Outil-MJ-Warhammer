@@ -21,12 +21,18 @@ export function renderResult(preview, target, draft, handlers, participants=[]) 
   for(const choice of Object.entries(preview.talentSLChoices || {}).flatMap(([role,choices])=>choices.map(row=>({...row,role})))){
     const role=choice.role || 'actor', draftKey=role==='defender'?'defenseTalentChoices':'talentChoices';
     const label=node('label','workspace-type',choice.label+' · '+(role==='defender'?'défense':'Test')+' · '+(choice.optionId==='keep'?'jet conservé':'jet inversé'));
-    const select=document.createElement('select');select.setAttribute('aria-label',choice.label+' : DR ou unités ('+(role==='defender'?'défenseur':'acteur')+', '+(choice.optionId==='keep'?'jet conservé':'jet inversé')+')');
+    const select=document.createElement('select');
+    select.setAttribute('aria-label',choice.label+' : DR ou unités ('+(role==='defender'?'défenseur':'acteur')+', '+(choice.optionId==='keep'?'jet conservé':'jet inversé')+')');
     select.dataset.focusKey='talent-sl-'+role+'-'+choice.key;
     select.append(new Option('Choisir après réussite',''),new Option('Conserver '+choice.sl+' DR','false'),new Option('Retenir '+choice.units+' (unités)','true'));
-    const value=draft[draftKey]?.[choice.key];select.value=typeof value==='boolean'?String(value):'';
-    select.addEventListener('change',()=>{handlers.select({[draftKey]:{...(draft[draftKey]||{}),[choice.key]:select.value===''?undefined:select.value==='true'}});handlers.calculate();});
-    label.append(select);result.append(label);
+    const value=draft[draftKey]?.[choice.key];
+    select.value=typeof value==='boolean'?String(value):'';
+    select.addEventListener('change',()=>{
+      handlers.select({[draftKey]:{...(draft[draftKey]||{}),[choice.key]:select.value===''?undefined:select.value==='true'}});
+      handlers.calculate();
+    });
+    label.append(select);
+    result.append(label);
   }
   const pills = node('div', 'workspace-result-pills');
   pills.appendChild(outcomePill(ROLL_LABELS[preview.actionType] || 'Jet', preview.success, preview.sl));
@@ -37,9 +43,17 @@ export function renderResult(preview, target, draft, handlers, participants=[]) 
   if(preview.combatFailure?.fumble?.outcome)result.appendChild(node('p','workspace-result-line',`Maladresse ${preview.combatFailure.fumble.roll} : ${preview.combatFailure.fumble.outcome.label}`));
   if(preview.combatFailure?.misfire?.outcome)result.appendChild(node('p','workspace-result-line',`Incident de poudre ${preview.combatFailure.misfire.roll} : ${preview.combatFailure.misfire.outcome.label}`));
   if(preview.combatFailure?.misfire?.salvo?.outcome)result.appendChild(node('p','workspace-result-line',`Incident de Salve ${preview.combatFailure.misfire.salvo.roll} : ${preview.combatFailure.misfire.salvo.outcome.label}`));
-  if(preview.netEscape?.opposition){const o=preview.netEscape.opposition;result.appendChild(node('p','workspace-result-line',`Sortie de filet : Force ${o.actorSl} DR contre la source ${o.sourceSl} DR (jet ${o.sourceRoll}, Force ${o.sourceScore}${o.springLoaded?' +2 DR du Mancatcher à ressort':''}) · DR nets ${o.netSl} · ${preview.netEscape.freed?'opposition gagnée':'opposition perdue'}.`));}
+  if(preview.netEscape?.opposition){
+    const o=preview.netEscape.opposition;
+    result.appendChild(node('p','workspace-result-line',`Sortie de filet : Force ${o.actorSl} DR contre la source ${o.sourceSl} DR (jet ${o.sourceRoll}, Force ${o.sourceScore}${o.springLoaded?' +2 DR du Mancatcher à ressort':''}) · DR nets ${o.netSl} · ${preview.netEscape.freed?'opposition gagnée':'opposition perdue'}.`));
+  }
   for(const line of preview.combatFailure?.reminders||[])result.appendChild(node('p','workspace-result-line',line));
-  if(preview.grapple){const effect=preview.grapple.effects?.[0];let text;if(preview.grapple.status==='grappled')text='Empoignade engagée : Enchevêtré, sans dégâts d’attaque.';else if(preview.grapple.status==='opposition-lost')text='Empoignade : opposition perdue, aucun lien créé.';else if(preview.grapple.unresolved?.length)text=preview.grapple.unresolved.join(' ');else if(effect?.type==='damage')text=`Empoignade : ${effect.amount} Blessures sans PA à la localisation ${effect.location?.name||'déterminée par le jet'}.`;else if(effect?.type==='acquire-condition')text=`Empoignade : Enchevêtré augmente de ${effect.condition.level}.`;else if(effect?.type==='recover-condition')text=`Empoignade : retrait de ${effect.amount} niveau(s) d’Enchevêtré.`;else text=`Empoignade : ${preview.grapple.action||'action'}${preview.grapple.won?' réussie':' échouée'}.`;result.appendChild(node('p',preview.grapple.ready?'workspace-result-line':'workspace-field-error',text));}
+  if(preview.grapple){
+    const effect=preview.grapple.effects?.[0];
+    let text;
+    if(preview.grapple.status==='grappled')text='Empoignade engagée : Enchevêtré, sans dégâts d’attaque.';else if(preview.grapple.status==='opposition-lost')text='Empoignade : opposition perdue, aucun lien créé.';else if(preview.grapple.unresolved?.length)text=preview.grapple.unresolved.join(' ');else if(effect?.type==='damage')text=`Empoignade : ${effect.amount} Blessures sans PA à la localisation ${effect.location?.name||'déterminée par le jet'}.`;else if(effect?.type==='acquire-condition')text=`Empoignade : Enchevêtré augmente de ${effect.condition.level}.`;else if(effect?.type==='recover-condition')text=`Empoignade : retrait de ${effect.amount} niveau(s) d’Enchevêtré.`;else text=`Empoignade : ${preview.grapple.action||'action'}${preview.grapple.won?' réussie':' échouée'}.`;
+    result.appendChild(node('p',preview.grapple.ready?'workspace-result-line':'workspace-field-error',text));
+  }
   if(preview.engagedShot){
     const chosen=participants.find(row=>row.id===preview.engagedShot.selectedTargetId)?.name||target?.name||'combattant choisi';
     result.appendChild(node('p','workspace-result-line',`Tir contre des combattants engagés : déviation vers ${chosen} (d100 ${preview.engagedShot.roll}). La résolution ci-dessous porte sur cette cible.`));
@@ -95,7 +109,8 @@ export function renderResult(preview, target, draft, handlers, participants=[]) 
   if (preview.actionCosts?.paid?.length) result.appendChild(node('p', 'workspace-result-line',
     'Coût proposé avant le jet : ' + preview.actionCosts.paid.map(cost => cost.resource === 'momentum' ? '1 Élan' : cost.amount + ' ' + cost.resource).join(', ')));
   if (preview.damageReplacedByTalent) result.appendChild(node('p', 'workspace-result-line', preview.damageReplacedByTalent.name||'Battement : 0 Blessure ; toutes les conséquences du critique remplacé sont supprimées. Esquive reste possible.'));
-  if(preview.defenderDamageReplacedByTalent)result.append(node('p','workspace-result-line',preview.defenderDamageReplacedByTalent.name));for(const plan of preview.postActionCosts||[])result.append(node('p','workspace-result-line','Coût après le résultat : '+plan.paid.map(c=>c.amount+' Élan').join(', ')));
+  if(preview.defenderDamageReplacedByTalent)result.append(node('p','workspace-result-line',preview.defenderDamageReplacedByTalent.name));
+  for(const plan of preview.postActionCosts||[])result.append(node('p','workspace-result-line','Coût après le résultat : '+plan.paid.map(c=>c.amount+' Élan').join(', ')));
   const reductions = (preview.talentPlans || []).flatMap(plan => plan.proposals || []).filter(proposal => proposal.op === 'reduceConditionAcquisition');
   if (reductions.length) result.appendChild(node('p', 'workspace-result-line', 'Mâchoires d’acier : un Sonné évité, premier usage de cette rencontre.'));
   for (const change of preview.momentum || []) {
@@ -117,12 +132,26 @@ export function renderResult(preview, target, draft, handlers, participants=[]) 
         for (const [side,person] of [['holder',holder],['rider',rider]]) {
           if (!Number.isSafeInteger(Number(person?.caracs?.F)) || person?.caracs?.F === '' || person?.caracs?.F == null) {
             const scoreLabel=node('label','workspace-type',`Force de ${person?.name||side} (score MJ)`),scoreInput=document.createElement('input');
-            scoreInput.type='number';scoreInput.min='0';scoreInput.max='100';scoreInput.step='1';scoreInput.value=scores[side]??'';scoreInput.setAttribute('aria-label',scoreLabel.textContent);
-            scoreInput.addEventListener('change',()=>handlers.select({v5Context:{...current,mountedForceScores:{...scores,[side]:scoreInput.value===''?undefined:Number(scoreInput.value)}}}));scoreLabel.append(scoreInput);result.append(scoreLabel);
+            scoreInput.type='number';
+            scoreInput.min='0';
+            scoreInput.max='100';
+            scoreInput.step='1';
+            scoreInput.value=scores[side]??'';
+            scoreInput.setAttribute('aria-label',scoreLabel.textContent);
+            scoreInput.addEventListener('change',()=>handlers.select({v5Context:{...current,mountedForceScores:{...scores,[side]:scoreInput.value===''?undefined:Number(scoreInput.value)}}}));
+            scoreLabel.append(scoreInput);
+            result.append(scoreLabel);
           }
           const rollLabel=node('label','workspace-type',`Test de Force de ${person?.name||side} · d100`),rollInput=document.createElement('input');
-          rollInput.type='number';rollInput.min='1';rollInput.max='100';rollInput.step='1';rollInput.value=rolls[side]??'';rollInput.setAttribute('aria-label',rollLabel.textContent);
-          rollInput.addEventListener('change',()=>handlers.select({v5Context:{...current,mountedForceRolls:{...rolls,[side]:rollInput.value===''?undefined:Number(rollInput.value)}}}));rollLabel.append(rollInput);result.append(rollLabel);
+          rollInput.type='number';
+          rollInput.min='1';
+          rollInput.max='100';
+          rollInput.step='1';
+          rollInput.value=rolls[side]??'';
+          rollInput.setAttribute('aria-label',rollLabel.textContent);
+          rollInput.addEventListener('change',()=>handlers.select({v5Context:{...current,mountedForceRolls:{...rolls,[side]:rollInput.value===''?undefined:Number(rollInput.value)}}}));
+          rollLabel.append(rollInput);
+          result.append(rollLabel);
         }
         if (fall.strengthOpposition) result.appendChild(node('p','workspace-result-line',`Opposition de Force : gagnant ${fall.strengthOpposition.winner} · DR ${fall.strengthOpposition.netSl} · Taille du cavalier ${fall.strengthOpposition.riderSize}.`));
       }
@@ -136,18 +165,27 @@ export function renderResult(preview, target, draft, handlers, participants=[]) 
         if (field === 'score' && Number.isSafeInteger(skill?.total)) continue;
         const eventLabel = fall.event === 'rider-surprised' ? 'Surpris' : fall.event === 'rider-stunned' ? 'Sonné' : fall.event;
         const wrap = node('label','workspace-type',`${rider?.name||fall.participantId} · ${label} (${eventLabel})`), input = document.createElement('input');
-        input.type='number'; input.min=String(min); input.max=String(max); input.step='1'; input.value=riderTest[field] ?? ''; input.setAttribute('aria-label',wrap.textContent);
+        input.type='number';
+        input.min=String(min);
+        input.max=String(max);
+        input.step='1';
+        input.value=riderTest[field] ?? '';
+        input.setAttribute('aria-label',wrap.textContent);
         input.addEventListener('change',()=>handlers.select({v5Context:{...current,mountedRideTestsById:{...rideTests,[fall.participantId]:rideTestCount===1?{...riderTest,[field]:input.value===''?undefined:Number(input.value)}:{...riderTests,[fall.event]:{...riderTest,[field]:input.value===''?undefined:Number(input.value)}}}}}));
-        wrap.append(input); result.append(wrap);
+        wrap.append(input);
+        result.append(wrap);
         }
       }
     } else if (fall.dismount === true) result.appendChild(node('p','workspace-result-line',`${rider?.name||fall.participantId} : chute et démontage proposés.`));
     if (['rider-dead','rider-unconscious','rider-prone'].includes(fall.event)) {
       const current = draft.v5Context || {}, label = node('label','workspace-type','Équipement confirmé empêchant la chute du cavalier');
-      const input = document.createElement('input'); input.type='checkbox'; input.checked=current.fallPreventedByEquipment===true;
+      const input = document.createElement('input');
+      input.type='checkbox';
+      input.checked=current.fallPreventedByEquipment===true;
       input.setAttribute('aria-label',label.textContent);
       input.addEventListener('change',()=>handlers.select({v5Context:{...current,fallPreventedByEquipment:input.checked}}));
-      label.prepend(input); result.append(label);
+      label.prepend(input);
+      result.append(label);
     }
   }
   if (target?.extensions?.v5?.mounted === true) {
@@ -156,7 +194,8 @@ export function renderResult(preview, target, draft, handlers, participants=[]) 
     select.append(new Option('Aucun maintien déclaré',''),new Option('Retenu','held'),new Option('Ancré','anchored'));
     select.value=current.mountedRestraint || '';
     select.addEventListener('change',()=>handlers.select({v5Context:{...current,mountedRestraint:select.value||undefined}}));
-    label.append(select); result.append(label);
+    label.append(select);
+    result.append(label);
   }
   for (const warning of preview.unresolved || []) {
     const match = /^Talent(?: (talent-[a-z0-9-]+))? : préciser (.+)\.$/.exec(warning);
@@ -177,8 +216,35 @@ export function renderResult(preview, target, draft, handlers, participants=[]) 
     if(row.critical?.second){
       const injure=hasV5Talent(preview.input.actor,'talent-strike-to-injure'),inoffensive=row.damage.isInoffensive;
       const fields=[['secondEffect','Gravité du critique : '+row.name],...(inoffensive?[['secondEffectAlternative','Seconde gravité Inoffensive : '+row.name]]:[]),...(injure?[['injureSecondEffect','Autre gravité Frappe blessante : '+row.name],...(inoffensive?[['injureSecondEffectAlternative','Autre seconde gravité Inoffensive : '+row.name]]:[])]:[])];
-      for(const[key,text]of fields){const label=node('label','workspace-type',text),input=document.createElement('input');input.type='number';input.min='1';input.max='100';input.value=draft.v5Context?.whirlwindRolls?.[row.participantId]?.[key]??'';input.setAttribute('aria-label',text);const update=()=>{const value=Number(input.value);if(Number.isInteger(value)&&value>=1&&value<=100)handlers.situationalCritical(row.participantId,key,value);};input.addEventListener('change',update);input.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();update();}});label.append(input);result.append(label);}
-      if(injure){const text='Frappe blessante : gravité à retenir pour '+row.name,label=node('label','workspace-type',text),select=document.createElement('select');select.setAttribute('aria-label',text);select.append(new Option('Choisir',''),new Option('Première gravité','false'),new Option('Autre gravité','true'));const value=draft.v5Context?.whirlwindChoices?.[row.participantId]?.['injure:second'];select.value=typeof value==='boolean'?String(value):'';select.addEventListener('change',()=>{if(select.value)handlers.situationalCriticalChoose(row.participantId,'injure:second',select.value==='true');});label.append(select);result.append(label);}
+      for(const[key,text]of fields){
+        const label=node('label','workspace-type',text),input=document.createElement('input');
+        input.type='number';
+        input.min='1';
+        input.max='100';
+        input.value=draft.v5Context?.whirlwindRolls?.[row.participantId]?.[key]??'';
+        input.setAttribute('aria-label',text);
+        const update=()=>{
+          const value=Number(input.value);
+          if(Number.isInteger(value)&&value>=1&&value<=100)handlers.situationalCritical(row.participantId,key,value);
+        };
+        input.addEventListener('change',update);
+        input.addEventListener('keydown',e=>{if(e.key==='Enter'){
+          e.preventDefault();
+          update();
+        }});
+        label.append(input);
+        result.append(label);
+      }
+      if(injure){
+        const text='Frappe blessante : gravité à retenir pour '+row.name,label=node('label','workspace-type',text),select=document.createElement('select');
+        select.setAttribute('aria-label',text);
+        select.append(new Option('Choisir',''),new Option('Première gravité','false'),new Option('Autre gravité','true'));
+        const value=draft.v5Context?.whirlwindChoices?.[row.participantId]?.['injure:second'];
+        select.value=typeof value==='boolean'?String(value):'';
+        select.addEventListener('change',()=>{if(select.value)handlers.situationalCriticalChoose(row.participantId,'injure:second',select.value==='true');});
+        label.append(select);
+        result.append(label);
+      }
       if(row.critical.second.effect)result.append(criticalEffectLine(row.critical.second));
     }
   }
@@ -211,8 +277,12 @@ export function renderResult(preview, target, draft, handlers, participants=[]) 
   for (const [role, subject] of [['Acteur',preview.input.actor],['Défenseur',preview.input.target]]) {
     const rows=acquiredV5TalentCoverage(subject);
     if(!rows.length)continue;
-    const details=node('details','workspace-talent-coverage');details.append(node('summary','',role+' : traitement des talents acquis'));
-    for(const row of rows){details.append(node('strong','',row.name||row.talentId));for(const clause of row.clauses)details.append(node('p','workspace-muted',V5_TALENT_TREATMENT_LABELS[clause.mode]+' · '+clause.text));}
+    const details=node('details','workspace-talent-coverage');
+    details.append(node('summary','',role+' : traitement des talents acquis'));
+    for(const row of rows){
+      details.append(node('strong','',row.name||row.talentId));
+      for(const clause of row.clauses)details.append(node('p','workspace-muted',V5_TALENT_TREATMENT_LABELS[clause.mode]+' · '+clause.text));
+    }
     calculations.append(details);
   }
   result.appendChild(calculations);
@@ -260,4 +330,26 @@ export function renderComparison(entries, handlers, busy) {
  * @param {boolean} options.canApply
  * @param {object} options.handlers select, input, roll, calculate, compare, choose, apply, cancel
  */
-export function renderDivineSocialFacts(subject,draft,handlers,{defending=false}={}){const checked=readDivineRejections(subject),cults=[...new Set(checked.records.filter(row=>row.kind==='permanent'||row.stage<2).map(row=>row.cult))];if(!cults.length)return null;const key=defending?'defenseContext':'v5Context',context=draft[key]||{},box=node('div','workspace-divine-social');box.append(node('p','workspace-muted',(defending?'Défenseur':'Auteur')+' : une interaction avec un membre du culte est au mieux Très Difficile (−3 DR), sans amélioration positive au-dessus de ce seuil. Source L06 p.219.'));for(const cult of cults){const text=(defending?'Défenseur · ':'')+'L’interaction concerne un membre de '+cult,label=node('label','workspace-type',text),select=document.createElement('select');select.setAttribute('aria-label',text);select.append(new Option('À préciser',''),new Option('Oui','true'),new Option('Non','false'));select.value=typeof context.divineCultMembership?.[cult]==='boolean'?String(context.divineCultMembership[cult]):'';select.addEventListener('change',()=>handlers.select({[key]:{...context,divineCultMembership:{...context.divineCultMembership,[cult]:select.value===''?undefined:select.value==='true'}}}));label.append(select);box.append(label);}const text=(defending?'Défenseur · ':'')+'Ce Test est une interaction sociale',label=node('label','workspace-type',text),select=document.createElement('select');select.setAttribute('aria-label',text);select.append(new Option('Selon la compétence choisie',''),new Option('Oui','true'));select.value=context.socialInteraction===true?'true':'';select.addEventListener('change',()=>handlers.select({[key]:{...context,socialInteraction:select.value==='true'?true:undefined}}));label.append(select);box.append(label);return box;}
+export function renderDivineSocialFacts(subject,draft,handlers,{defending=false}={}){
+  const checked=readDivineRejections(subject),cults=[...new Set(checked.records.filter(row=>row.kind==='permanent'||row.stage<2).map(row=>row.cult))];
+  if(!cults.length)return null;
+  const key=defending?'defenseContext':'v5Context',context=draft[key]||{},box=node('div','workspace-divine-social');
+  box.append(node('p','workspace-muted',(defending?'Défenseur':'Auteur')+' : une interaction avec un membre du culte est au mieux Très Difficile (−3 DR), sans amélioration positive au-dessus de ce seuil. Source L06 p.219.'));
+  for(const cult of cults){
+    const text=(defending?'Défenseur · ':'')+'L’interaction concerne un membre de '+cult,label=node('label','workspace-type',text),select=document.createElement('select');
+    select.setAttribute('aria-label',text);
+    select.append(new Option('À préciser',''),new Option('Oui','true'),new Option('Non','false'));
+    select.value=typeof context.divineCultMembership?.[cult]==='boolean'?String(context.divineCultMembership[cult]):'';
+    select.addEventListener('change',()=>handlers.select({[key]:{...context,divineCultMembership:{...context.divineCultMembership,[cult]:select.value===''?undefined:select.value==='true'}}}));
+    label.append(select);
+    box.append(label);
+  }
+  const text=(defending?'Défenseur · ':'')+'Ce Test est une interaction sociale',label=node('label','workspace-type',text),select=document.createElement('select');
+  select.setAttribute('aria-label',text);
+  select.append(new Option('Selon la compétence choisie',''),new Option('Oui','true'));
+  select.value=context.socialInteraction===true?'true':'';
+  select.addEventListener('change',()=>handlers.select({[key]:{...context,socialInteraction:select.value==='true'?true:undefined}}));
+  label.append(select);
+  box.append(label);
+  return box;
+}
