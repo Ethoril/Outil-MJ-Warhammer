@@ -33,13 +33,13 @@
     "name": "Carreau barbelé",
     "slug": "carreau-barbele",
     "hasRating": false,
-    "effect": "Si la cible subit des Dégâts : Test d'Esquive Intermédiaire (+0 DR), sinon elle est ancrée : À Terre et traînée de 1d10 yards vers le tireur pendant son Round. Retirer le carreau : Test Difficile (-2 DR), +1 Blessure."
+    "effect": "Si la cible subit des Dégâts : Test d'Esquive Intermédiaire (+0 DR), sinon elle est ancrée : À Terre et traînée de 1d10 mètres vers le tireur pendant son Round. Retirer le carreau : Test Difficile (-2 DR), +1 Blessure."
   },
   {
     "name": "Croche-pied",
     "slug": "croche-pied",
     "hasRating": false,
-    "effect": "Après avoir touché, vous pouvez dépenser 2 Avantage pour un Test opposé Force contre Athlétisme. Si vous l'emportez, la cible subit l'état À Terre (un cavalier chute d'abord de 2 yards)."
+    "effect": "Après avoir touché, vous pouvez dépenser 2 Avantage pour un Test opposé Force contre Athlétisme. Si vous l'emportez, la cible subit l'état À Terre (un cavalier chute d'abord de 2 mètres)."
   },
   {
     "name": "Dangereuse",
@@ -69,7 +69,7 @@
     "name": "Dispersion X",
     "slug": "dispersion",
     "hasRating": true,
-    "effect": "Bout portant : 1 cible, Dégâts +X. Portée courte à longue : la cible plus les X créatures visibles les plus proches, sans deux cibles à plus de X yards l'une de l'autre. Portée extrême : même sélection, Dégâts -X."
+    "effect": "Bout portant : 1 cible, Dégâts +X. Portée courte à longue : la cible plus les X créatures visibles les plus proches, sans deux cibles à plus de X mètres l'une de l'autre. Portée extrême : même sélection, Dégâts -X."
   },
   {
     "name": "Empaleuse",
@@ -105,7 +105,7 @@
     "name": "Explosion X",
     "slug": "explosion",
     "hasRating": true,
-    "effect": "Chaque personnage à X mètres ou moins du point touché subit DR + Dégâts de l'arme et les états qu'elle inflige."
+    "effect": "Cible tous les personnages dans un diamètre de X mètres ; ne peut normalement pas être opposé. Inflige les Dégâts de l'arme (sans le DR, mais Dévastatrice peut utiliser le dé des unités) et les états de l'arme."
   },
   {
     "name": "Flexible",
@@ -273,7 +273,7 @@
     "name": "Recharge X",
     "slug": "recharge",
     "hasRating": true,
-    "effect": "Recharger demande un Test étendu de Projectiles (groupe de l'arme) totalisant X DR ; une interruption remet la progression à zéro."
+    "effect": "Une fois l'arme utilisée, il faut dépenser X Actions avant de pouvoir s'en resservir. Une arme À répétition ayant encore des tirs non utilisés demande 1 Action de moins."
   },
   {
     "name": "Renforcée",
@@ -328,5 +328,17 @@
     "slug": "volumineux",
     "hasRating": false,
     "effect": "+1 Encombrement ; vêtements et armures portés restent à Enc 1. Normalement pas pour les petits objets."
+  },
+  {
+    "name": "Bouclier",
+    "slug": "bouclier",
+    "hasRating": false,
+    "effect": "En s'opposant à une attaque avec Esquive ou Corps à corps, confère +1 DR (sans cumul avec Défensive) et applique ses PA si le coup touche. Avec 2 PA ou plus, permet d'opposer les tirs avec Esquive à toute portée. Un seul bouclier compte. Porté attaché au bras ou en bandoulière, ses PA ne s'appliquent qu'à la Tête, au Corps et au Bras non directeur. En attaque, compte comme Arme improvisée (allonge Personnelle) et perd sa protection jusqu'au début du prochain Tour."
+  },
+  {
+    "name": "Inflige X",
+    "slug": "inflige",
+    "hasRating": true,
+    "effect": "Une touche inflige 1 état X à la cible (si un score de Force est indiqué, comme Empêtré 50 ou Empêtré votre Force, il sert aux Tests pour se libérer de l'état)."
   }
 ]
