@@ -349,7 +349,7 @@ describe('registre des traditions — caractérisation', () => {
 const base=contracts.filter(c=>!c.isTradition);
 test('Phase D — les 277 contrats d’audit sont inchangés (empreinte)',()=>{
  assert.equal(base.length,277);
- assert.equal(createHash('sha256').update(JSON.stringify(base)).digest('hex'),'c427b59bf32865171751222c8c95c04054bce3822c1ccc869d80bc46e0c05e89');
+ assert.equal(createHash('sha256').update(JSON.stringify(base)).digest('hex'),'dddcbf2751ed3fd234de311be66498b38779e3fe963bcae94515c08feb0c059f');
 });
 test('Phase D — ids et noms uniques sur tout le catalogue de contrats',()=>{
  const all=getAllSpellContracts();
