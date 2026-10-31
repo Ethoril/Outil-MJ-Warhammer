@@ -53,11 +53,13 @@ try {
 
   await page.getByRole('tab', { name: 'Jouer' }).click();
   const sheet = page.locator('.workspace-actor-sheet.workspace-sheet-actor');
-  check(await sheet.locator('.actor-reminder').count() === 1, 'le rappel du participant est affiché sur la fiche du personnage actif');
-  check(/Armure imprimée/.test(await sheet.locator('.actor-reminder').first().innerText()), 'le texte est celui du rappel d’armure');
-  await sheet.locator('.btn-reminder[data-decision="resolve"]').click();
+  // Les rappels de Traits (Régénération, Increvable, Infecté : T3/T8, 23/10) s'ajoutent à celui de l'armure : on cible l'armure.
+  const armour = sheet.locator('.actor-reminder', { hasText: 'Armure imprimée' });
+  check(await armour.count() === 1, 'le rappel d’armure du participant est affiché sur la fiche du personnage actif');
+  check(/Armure imprimée/.test(await armour.first().innerText()), 'le texte est celui du rappel d’armure');
+  await armour.locator('.btn-reminder[data-decision="resolve"]').click();
   await page.waitForTimeout(100);
-  check(await page.locator('.workspace-actor-sheet .actor-reminder').count() === 0, '« Fait » retire le rappel');
+  check(await page.locator('.workspace-actor-sheet .actor-reminder', { hasText: 'Armure imprimée' }).count() === 0, '« Fait » retire le rappel d’armure');
 
   const titles = await page.evaluate(async ({ base }) => {
     const { renderFicheDetails } = await import(base + '/js/ui/fiche-details.js');
