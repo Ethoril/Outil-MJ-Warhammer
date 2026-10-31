@@ -21,7 +21,12 @@ const server = createServer(async (req, res) => {
     res.writeHead(200, { 'Content-Type': types[extname(path)] || 'text/plain' }); res.end(await readFile(path));
   } catch { res.writeHead(404); res.end('Not found'); }
 });
-await new Promise(done => server.listen(0, '127.0.0.1', done));
+// Chromium refuse les ports « dangereux » (6666, 6665-6669, 6000, 10080…) : on retire un port tant qu'il n'est pas au-dessus de la liste.
+for (;;) {
+  await new Promise(done => server.listen(0, '127.0.0.1', done));
+  if (server.address().port > 10080) break;
+  await new Promise(done => server.close(done));
+}
 const url = 'http://127.0.0.1:' + server.address().port;
 const browser = await chromium.launch({ headless: true, executablePath: process.env.PLAYWRIGHT_EXECUTABLE_PATH || (process.platform === 'win32' ? 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe' : undefined) });
 try {
