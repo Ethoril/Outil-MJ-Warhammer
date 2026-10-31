@@ -1,4 +1,4 @@
-import { node, rubric, outcomePill } from './dom.js';
+import { node, rubric, outcomePill, signed } from './dom.js';
 import { getSpellContract, getAllSpellContracts, getContractChoiceOptions } from '../../core/v5-spell-contracts.js';
 import { getChannellingReserve } from '../../core/v5-magic-channelling.js';
 import { renderMagicControls, renderSpellRecipientControls } from '../v5-magic-controls.js';

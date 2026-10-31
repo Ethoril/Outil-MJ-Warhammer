@@ -1,4 +1,4 @@
-import { node, button, rubric, outcomePill } from './dom.js';
+import { node, button, rubric, outcomePill, signed, minusSigned } from './dom.js';
 import { renderV5Decisions, renderCritical, criticalEffectLine } from './critical.js';
 import { renderV5MagicResult } from './magic.js';
 import { formatDamageFormula, previewHpLoss } from '../../core/resolution.js';

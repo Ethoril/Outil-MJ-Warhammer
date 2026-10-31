@@ -49,7 +49,7 @@ export const ACTION_TYPES = Object.freeze([
 ]);
 export { minusSigned, signed } from './resolution-panel/dom.js';
 import { ROLL_LABELS, renderResult, renderComparison, renderDivineSocialFacts } from './resolution-panel/result.js';
-import { node, button, chip, rubric, outcomePill } from './resolution-panel/dom.js';
+import { node, button, chip, rubric, outcomePill, signed } from './resolution-panel/dom.js';
 import { renderV5MagicContext } from './resolution-panel/magic.js';
 
 /** Stable key of an action within the actor's list (dice lines may lack an id). */
