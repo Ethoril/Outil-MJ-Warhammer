@@ -123,7 +123,8 @@ export function previewResolution(input) {
   if(weaponSkillPreview.receipt?.applied.includes('improvised-weapon-profile')){
     initial.action={...initial.action,contactImprovised:true,sourceQualities:weaponSkillPreview.action.sourceQualities};
   }
-  const prelude=previewV5CombatPrelude(initial);initial.combatPrelude=prelude;
+  const prelude=previewV5CombatPrelude(initial);
+  initial.combatPrelude=prelude;
   const prepared = previewV5ActionQualities(initial,weaponSkillPreview.receipt?{sourceQualities:weaponSkillPreview.action.qualities}:undefined);
   const normalized = prepared.normalized;
   if(weaponItem?.extensions?.v5?.destroyed===true)normalized.destroyedWeaponUnresolved='Arme détruite : elle ne peut pas être utilisée.';
@@ -165,7 +166,10 @@ export function previewResolution(input) {
     const sources=weaponSkill.receipt?.applied?.filter(id=>id==='ballistic-skill-minus-1-dr'||id==='powder-skill-engineering-minus-2-dr')||[];
     const applied=new Set(normalized.v5.weaponSkillModifierSources||[]);
     const fresh=sources.filter(id=>!applied.has(id));
-    if(fresh.length){normalized.v5.slModifier=(Number(normalized.v5.slModifier??normalized.action.extensions?.v5?.slModifier)||0)+weaponSkill.slModifier;normalized.v5.weaponSkillModifierSources=[...applied,...fresh];}
+    if(fresh.length){
+      normalized.v5.slModifier=(Number(normalized.v5.slModifier??normalized.action.extensions?.v5?.slModifier)||0)+weaponSkill.slModifier;
+      normalized.v5.weaponSkillModifierSources=[...applied,...fresh];
+    }
   }
   normalized.qualityTalentPlan = prepared.plan;
   const actorSkillId=normalized.action?.extensions?.fiche?.skillId||normalized.v5?.context?.skillId;
@@ -205,7 +209,8 @@ export function previewResolution(input) {
     // riders whose resolved talent exempts them from the automatic disadvantage.
     const context = normalized.defense.v5?.context || {};
     if (context.penalties && Object.hasOwn(context.penalties, 'mounted')) {
-      const penalties = { ...context.penalties }; delete penalties.mounted;
+      const penalties = { ...context.penalties };
+      delete penalties.mounted;
       normalized.defense = { ...normalized.defense, v5: { ...normalized.defense.v5,
         context: { ...context, penalties } } };
     }
@@ -226,13 +231,28 @@ export function previewResolution(input) {
   };
   const actorPrayerNeeds=attachPrayerModifiers(normalized.actor,actorSkillId,normalized.v5);
   const defenderPrayerNeeds=normalized.defense?attachPrayerModifiers(normalized.target,defenderSkillId,normalized.defense.v5):[];
-  const prepareSocial=(subject,action,settings)=>{if(normalized.noTestAction)return {applies:false,needsInput:[]};const rule=divineSocialRestriction(subject,action,settings);if(rule.applies){const modifier=settings.slModifier??action.extensions?.v5?.slModifier??0;if(Number.isInteger(modifier))settings.slModifier=Math.min(-3,modifier);}return rule;};
+  const prepareSocial=(subject,action,settings)=>{
+    if(normalized.noTestAction)return {applies:false,needsInput:[]};
+    const rule=divineSocialRestriction(subject,action,settings);
+    if(rule.applies){
+      const modifier=settings.slModifier??action.extensions?.v5?.slModifier??0;
+      if(Number.isInteger(modifier))settings.slModifier=Math.min(-3,modifier);
+    }
+    return rule;
+  };
   const actorSocial=prepareSocial(normalized.actor,normalized.action,normalized.v5),defenderSocial=normalized.defense?prepareSocial(normalized.target,normalized.defense,normalized.defense.v5):{applies:false,needsInput:[]};
   const actorPlan = buildCombatTest(normalized);
   const defenderPlan = normalized.defense ? buildCombatTest(normalized, 'defender') : null;
   actorPlan.unresolved.push(...mountedCombatPlan.unresolved);
-  const capSocial=(plan,rule)=>{plan?.unresolved.push(...rule.needsInput.map(row=>row.label));if(!rule.applies||plan?.kind!=='test'||!plan.test?.options?.length)return;const original=plan.test,result=original.options[0].result,mods=result.details.modifiers.filter(row=>row.id!=='system:wrath-social-ceiling'),total=mods.reduce((n,row)=>n+row.amount,0)+(result.details.advantageSl||0);if(total>-3)mods.push({id:'system:wrath-social-ceiling',label:'Courroux : difficulté sociale au mieux −3 DR',amount:-3-total});plan.test=previewV5Test({score:result.score,roll:original.initialRoll,kind:result.kind,slModifiers:mods,advantageSources:original.advantage.advantage,disadvantageSources:original.advantage.disadvantage});};
-  capSocial(actorPlan,actorSocial);if(defenderPlan)capSocial(defenderPlan,defenderSocial);
+  const capSocial=(plan,rule)=>{
+    plan?.unresolved.push(...rule.needsInput.map(row=>row.label));
+    if(!rule.applies||plan?.kind!=='test'||!plan.test?.options?.length)return;
+    const original=plan.test,result=original.options[0].result,mods=result.details.modifiers.filter(row=>row.id!=='system:wrath-social-ceiling'),total=mods.reduce((n,row)=>n+row.amount,0)+(result.details.advantageSl||0);
+    if(total>-3)mods.push({id:'system:wrath-social-ceiling',label:'Courroux : difficulté sociale au mieux −3 DR',amount:-3-total});
+    plan.test=previewV5Test({score:result.score,roll:original.initialRoll,kind:result.kind,slModifiers:mods,advantageSources:original.advantage.advantage,disadvantageSources:original.advantage.disadvantage});
+  };
+  capSocial(actorPlan,actorSocial);
+  if(defenderPlan)capSocial(defenderPlan,defenderSocial);
   if(actorSocial.applies||defenderSocial.applies)normalized.divineSocialRestrictions={...(actorSocial.applies?{actor:{ceiling:-3,sources:actorSocial.records.map(row=>({recordId:row.id,source:row.source}))}}:{}),...(defenderSocial.applies?{defender:{ceiling:-3,sources:defenderSocial.records.map(row=>({recordId:row.id,source:row.source}))}}:{})};
   actorPlan.unresolved.push(...actorPrayerNeeds);
   if(defenderPlan)defenderPlan.unresolved.push(...defenderPrayerNeeds);
@@ -242,8 +262,12 @@ export function previewResolution(input) {
     const options=[];
     for(const option of plan.test.options||[]){
       const capped=applyPrayerSLCaps(subject,option.result);
-      if(!capped.ok){plan.unresolved.push(...capped.needsInput.map(row=>row.message));continue;}
-      byOption.set(option.id,capped.caps);options.push({...option,result:capped.test});
+      if(!capped.ok){
+        plan.unresolved.push(...capped.needsInput.map(row=>row.message));
+        continue;
+      }
+      byOption.set(option.id,capped.caps);
+      options.push({...option,result:capped.test});
     }
     if(options.length===plan.test.options.length)plan.test={...plan.test,options};
     return byOption;
@@ -274,7 +298,11 @@ export function previewResolution(input) {
       eligibleBrawling:unarmed&&actorPlan.kind==='melee'&&/(bagarre|brawling)/.test(skillName),
       attack:{opposition:result.opposition,hit:result.hit,unresolved:result.unresolved},resolutionId:normalized.resolutionId,round:normalized.round});
     result.unresolved.push(...(result.grapple.unresolved||[]));
-    if(result.grapple.ready&&result.grapple.won){result.grapple.suppressOrdinaryDamage=true;result.damage=null;result.targetConditionApplication=[];}
+    if(result.grapple.ready&&result.grapple.won){
+      result.grapple.suppressOrdinaryDamage=true;
+      result.damage=null;
+      result.targetConditionApplication=[];
+    }
   }else if(activeGrapple&&grappleContext.grappleAction){
     const actorIsInitiator=activeGrapple.initiatorId===normalized.actor?.id;
     const actorSkill=normalized.actor?.skills?.find(row=>row.id===(normalized.action?.extensions?.fiche?.skillId||grappleContext.skillId));
@@ -287,15 +315,22 @@ export function previewResolution(input) {
     }else{
       const plan=previewGrappleAction({actor:normalized.actor,target:normalized.target,link:activeGrapple,action:grappleContext.grappleAction,
         actorIsInitiator,actorTest:{roll:actorTest.roll,sl:actorTest.sl,success:actorTest.success},opponentTest:{roll:defenderTest?.roll,sl:defenderTest?.sl,success:defenderTest?.success},resolutionId:normalized.resolutionId,round:normalized.round});
-      result.grapple={...plan,actorIsInitiator};result.unresolved.push(...(plan.unresolved||[]));
-      if(plan.ready){result.grapple.suppressOrdinaryDamage=true;result.damage=null;result.critical=null;result.targetConditionApplication=[];}
+      result.grapple={...plan,actorIsInitiator};
+      result.unresolved.push(...(plan.unresolved||[]));
+      if(plan.ready){
+        result.grapple.suppressOrdinaryDamage=true;
+        result.damage=null;
+        result.critical=null;
+        result.targetConditionApplication=[];
+      }
     }
   }else if(grappleContext.grappleAction){
     result.grapple={status:'blocked',ready:false,unresolved:['Empoignade : le lien actif requis pour cette Action n’existe plus.']};
     result.unresolved.push(...result.grapple.unresolved);
   }
   const adjustmentFor=(byOption,test)=>{
-    const caps=byOption.get(test.optionId)||[];return caps.length?{rawSL:caps[0].rawSL,effectiveSL:caps[0].effectiveSL,caps}:null;
+    const caps=byOption.get(test.optionId)||[];
+    return caps.length?{rawSL:caps[0].rawSL,effectiveSL:caps[0].effectiveSL,caps}:null;
   };
   const actorPrayerAdjustment=adjustmentFor(actorPrayerCaps,actorTest);
   const defenderPrayerAdjustment=defenderTest?adjustmentFor(defenderPrayerCaps,defenderTest):null;
@@ -326,12 +361,15 @@ export function previewResolution(input) {
 
 function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defenderTest, weaponTrapRecovery=null,weaponTrapRecoveryConflict=false) {
   let { actor, action, target } = normalized;
-  const criticalTalentPlans=[];const supplementaryTalentPlans=[...(normalized.combatPrelude?.plans||[])];
+  const criticalTalentPlans=[];
+  const supplementaryTalentPlans=[...(normalized.combatPrelude?.plans||[])];
   const criticalReady=[];
   const defenseSupport={...normalized,actor:target,target:actor,v5:normalized.defense?.v5||{},combatPrelude:{forge:normalized.combatPrelude?.defenderForge,alliedShield:normalized.combatPrelude?.defenderShield}};
   const prepareCritical=(subject,rolls,settings,role,inoffensive,parts)=>{
     const result=prepareV5TalentCriticalRolls(subject,rolls,{settings,role,inoffensive,parts,context:{...v5ActionQualityContext(role==='attacker'?normalized:{...normalized,actor:target,target:actor,action:{...normalized.defense,type:'attack'},v5:normalized.defense.v5}),kind:role==='attacker'?actorPlan.kind:defenderPlan?.kind}});
-    criticalTalentPlans.push(result.plan);criticalReady.push(...result.unresolved);return result.rolls;
+    criticalTalentPlans.push(result.plan);
+    criticalReady.push(...result.unresolved);
+    return result.rolls;
   };
   const magicFlags=actor?.extensions?.v5?.specialStates,psychologyKind=normalized.v5.context?.psychologyKind;
   const magicFearImmune=magicFlags?.fearTerrorImmunity && ['fear','terror'].includes(psychologyKind) || magicFlags?.fearImmune && (psychologyKind==='fear' || psychologyKind==='terror' && magicFlags?.terrorAsFear);
@@ -341,7 +379,8 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   const extremeLayer = normalized.noTestAction ? null : slExtremeLayers(actor)[0];
   const slExtreme = extremeLayer ? { before: actorTest.sl, after: actorTest.success ? Math.max(actorTest.sl, extremeLayer.slExtreme.magnitude) : Math.min(actorTest.sl, -extremeLayer.slExtreme.magnitude) } : null;
   if (slExtreme) actorTest = { ...actorTest, sl: slExtreme.after };
-  actorTest=refreshV5ResultTier(actorTest);if(defenderTest)defenderTest=refreshV5ResultTier(defenderTest);
+  actorTest=refreshV5ResultTier(actorTest);
+  if(defenderTest)defenderTest=refreshV5ResultTier(defenderTest);
   let roll = actorTest.roll, targetScore = actorTest.score, success = actorTest.success, sl = actorTest.sl;
   const penalties = { value: actorPlan.penalty, names: actorPlan.penaltyStates };
   const slBonus = actorTest.details.modifiers.filter(item => item.id.startsWith('quality-')).reduce((sum, item) => sum + item.amount, 0);
@@ -363,11 +402,16 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   if(context.fateAction==='automatic-success'){
     if(!Number.isInteger(Number(context.fateChosenRoll))||Number(context.fateChosenRoll)<1||Number(context.fateChosenRoll)>100)fateUnresolved.push('Destin : choisissez le résultat d100 (1 à 100), sans lancer les dés.');
     if(opposed) opposed={...opposed,winner:'attacker',netSl:Math.max(1,Number(opposed.netSl)||0),tie:false};
-    success=true;sl=Math.max(1,Number(sl)||0);
+    success=true;
+    sl=Math.max(1,Number(sl)||0);
   }
   // Décharge du Gargantuan (L25 p.143) : effet payé en Élan, sans jet d'attaque ni défense ; le coup de 10 ne reçoit aucun DR.
   const dischargeEffect = action.extensions?.v5?.specialProfileAbility === 'gargantuan-electric-discharge';
-  if (dischargeEffect) { opposed = null; success = true; sl = 0; }
+  if (dischargeEffect) {
+    opposed = null;
+    success = true;
+    sl = 0;
+  }
   let targetLevels = conditionLevels(target);
   const unopposedExplosion=explosionAttack&&!explosionOpposed;
   let cannotDefend = dischargeEffect || targetLevels.has('surpris') || targetLevels.has('inconscient') || context.targetHelpless === true || context.targetCannotDefend === true;
@@ -407,12 +451,20 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
         if((!selectedDefense||!validDefense)&&normalized.defense)engagedUnresolved.push('Tir engagé : fournir le Test de défense de la cible tirée au sort.');
         else {
           const intendedTargetId=normalized.target?.id||null;
-          normalized={...normalized,target:selected,targetId:selected?.id||null,defense:selectedDefense};target=selected;
-          actorTest=ordinary;roll=actorTest.roll;targetScore=actorTest.score;success=actorTest.success;sl=actorTest.sl;doubled=actorTest.details.doubled;
-          criticalClassification=isCriticalRoll(roll,doubled,action.qualities);fumbleClassification=isFumbleRoll(roll,doubled,action.qualities);
+          normalized={...normalized,target:selected,targetId:selected?.id||null,defense:selectedDefense};
+          target=selected;
+          actorTest=ordinary;
+          roll=actorTest.roll;
+          targetScore=actorTest.score;
+          success=actorTest.success;
+          sl=actorTest.sl;
+          doubled=actorTest.details.doubled;
+          criticalClassification=isCriticalRoll(roll,doubled,action.qualities);
+          fumbleClassification=isFumbleRoll(roll,doubled,action.qualities);
           defenderPlan=selectedDefense?buildCombatTest(normalized,'defender'):null;
           defenderTest=selectedDefense?selectV5Test(defenderPlan.test,selectedDefense.v5?.choice||defenderPlan.test.options[0].id):null;
-          targetLevels=conditionLevels(target);cannotDefend=targetLevels.has('surpris')||targetLevels.has('inconscient')||context.targetHelpless===true||context.targetCannotDefend===true;
+          targetLevels=conditionLevels(target);
+          cannotDefend=targetLevels.has('surpris')||targetLevels.has('inconscient')||context.targetHelpless===true||context.targetCannotDefend===true;
           helpless=(targetLevels.has('inconscient')||context.targetHelpless===true||context.targetCannotDefend===true)&&(actorPlan.kind==='melee'||(actorPlan.kind==='ranged'&&(context.pointBlank===true||context.shotRange==='point-blank')));
           opposition=defenderTest?resolveV5Opposition(actorTest,defenderTest):null;
           opposed=opposition?{mode:'opposed',attacker:{...actorTest},defender:{...defenderTest,label:selectedDefense.label,base:selectedDefense.base,mod:defenderTest.details.totalModifier,statePenalty:defenderPlan.penalty},netSl:opposition.netSl,winner:opposition.winner==='initiator'?'attacker':'defender',tie:opposition.tie}:null;
@@ -422,7 +474,8 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
       }
     }
   }
-  let trip=null,tripFall=null,tripUnresolved=[];const tripSelected=context.trip===true&&opposed?.winner==='attacker';
+  let trip=null,tripFall=null,tripUnresolved=[];
+  const tripSelected=context.trip===true&&opposed?.winner==='attacker';
   if(context.trip===true&&opposed){
     if(!tripSelected)trip={winner:opposed.winner,conditionApplied:false,costId:'combat:trip:momentum'};
     else {
@@ -433,7 +486,8 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
         else {
           const rawDamage=Math.max(0,6-tb),fallProtection=previewMagicProtection(target,rawDamage,{wardRoll:context.tripFallWardRoll,nature:{fall:true},calm:context.tripFallCalmTest||null});
           if(!fallProtection.ready)tripUnresolved.push('Chute du Croche-pied : '+(fallProtection.error||'Protection de chute à résoudre.'));
-          const damageLoss=fallProtection.ready?fallProtection.amount:0,criticals=[];let enduranceTest=null;
+          const damageLoss=fallProtection.ready?fallProtection.amount:0,criticals=[];
+          let enduranceTest=null;
           if(fallProtection.ready&&damageLoss>tb){
             const roll=Number(context.tripFallEnduranceRoll);
             if(!Number.isInteger(roll)||roll<1||roll>100)tripUnresolved.push('Chute du Croche-pied : Test d’Endurance +0 requis (d100).');
@@ -444,7 +498,8 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
                 if(!leg||leg.key!=='LEG')tripUnresolved.push('Chute du Croche-pied : saisir une localisation d100 de Jambe pour la Blessure Critique.');
                 if(!Number.isInteger(legEffect)||legEffect<1||legEffect>100)tripUnresolved.push('Chute du Croche-pied : saisir le d100 d’effet Critique de Jambe.');
                 if(leg&&leg.key==='LEG'&&Number.isInteger(legEffect))criticals.push(criticalDetails({effect:legEffect},leg,0));
-                if(enduranceTest.sl<=-5){const locationRoll=Number(context.tripExtraLocationRoll),effectRoll=Number(context.tripExtraCriticalEffectRoll),location=Number.isInteger(locationRoll)&&locationRoll>=1&&locationRoll<=100?creatureLocationOf(locationRoll,target,context):null;
+                if(enduranceTest.sl<=-5){
+                  const locationRoll=Number(context.tripExtraLocationRoll),effectRoll=Number(context.tripExtraCriticalEffectRoll),location=Number.isInteger(locationRoll)&&locationRoll>=1&&locationRoll<=100?creatureLocationOf(locationRoll,target,context):null;
                   if(!location)tripUnresolved.push('Chute du Croche-pied : localisation d100 supplémentaire requise pour l’Échec éclatant.');
                   if(!Number.isInteger(effectRoll)||effectRoll<1||effectRoll>100)tripUnresolved.push('Chute du Croche-pied : d100 d’effet Critique supplémentaire requis.');
                   if(location&&Number.isInteger(effectRoll))criticals.push(criticalDetails({effect:effectRoll},location,0));
@@ -474,7 +529,10 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     else if(direction===9||direction===10)scatter={directionRoll:direction,direction:direction===9?'aux pieds du tireur':'aux pieds de la cible',distanceYards:0};
     else if(!Array.isArray(dice)||dice.length!==2||dice.some(value=>!Number.isInteger(value)||value<1||value>10))scatterUnresolved.push('Déviation : saisir les deux dés de distance d10.');
     else if(!Number.isFinite(distance)||distance<0)scatterUnresolved.push('Déviation : saisir la distance tireur-cible en mètres pour plafonner le résultat.');
-    else {const rolled=dice[0]+dice[1],maximum=distance/2;scatter={directionRoll:direction,direction:['','haut-gauche','haut','haut-droite','gauche','droite','bas-gauche','bas','bas-droite'][direction],distanceRolls:[...dice],distanceYards:Math.min(rolled,maximum),rolledDistanceYards:rolled,maximumYards:maximum};}
+    else {
+      const rolled=dice[0]+dice[1],maximum=distance/2;
+      scatter={directionRoll:direction,direction:['','haut-gauche','haut','haut-droite','gauche','droite','bas-gauche','bas','bas-droite'][direction],distanceRolls:[...dice],distanceYards:Math.min(rolled,maximum),rolledDistanceYards:rolled,maximumYards:maximum};
+    }
   }
   const criticalAttack = !dischargeEffect && !NO_DAMAGE_PROFILE_ABILITIES.has(action.extensions?.v5?.specialProfileAbility) && !(context.specialAttack==='whirlwind-of-death'||hit&&['dirty-fighting','disarm','shieldsman'].includes(context.specialAttack)) && attackType(action.type) && normalized.v5.context?.silentTakedown !== true && normalized.knockoutValid!==true && success && criticalClassification.critique;
   const criticalLocationRoll = normalized.criticalRolls?.location;
@@ -736,7 +794,10 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
       hack=protection.ap===null?{ready:false,unresolved:['Taille : PA effectifs de la localisation à préciser avant réduction.']}
         :!pieceAvailable?{ready:false,unresolved:[],none:true}
         :previewV5Hack({qualities:action.qualities,hit:true,struckItemId,currentAp:struck?.ap});
-      if(hack.none){hack=null;if(protection.ap>0)mechanicalWarnings.push({keywordId:'taille',reason:'taille-aucune-piece-identifiable'});}
+      if(hack.none){
+        hack=null;
+        if(protection.ap>0)mechanicalWarnings.push({keywordId:'taille',reason:'taille-aucune-piece-identifiable'});
+      }
       else if(!hack.ready)unresolved.push(...hack.unresolved);
       else {
         protection={...protection,ap:Math.max(0,protection.ap-1),...(struck.kind==='shield'?{shieldAp:Math.max(0,(protection.shieldAp||0)-1)}:{})};
@@ -761,7 +822,11 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     if(damage&&blastPlan?.ready){damage={...damage,activeQualities:action.qualities,explosionUnitsDie:action.qualities.some(row=>(typeof row==='string'?row:row?.id)==='devastatrice')?roll%10:0};}
   }
 
-  const special=previewTalentReplacement(normalized,{hit,test:actorTest,opposed,damage,location,qualityContext:v5ActionQualityContext(normalized)});damage=special.damage;if(special.replacement)replacement=special.replacement;supplementaryTalentPlans.push(...special.plans);unresolved.push(...special.unresolved);
+  const special=previewTalentReplacement(normalized,{hit,test:actorTest,opposed,damage,location,qualityContext:v5ActionQualityContext(normalized)});
+  damage=special.damage;
+  if(special.replacement)replacement=special.replacement;
+  supplementaryTalentPlans.push(...special.plans);
+  unresolved.push(...special.unresolved);
 
   let magicProtection=null;
   if(damage && target){
@@ -781,7 +846,10 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
       critical: true, qualities: action.qualities, nature });
     protectionReceipts.push(guard);
     if (guard.criticalIgnored) criticalFirst = null;
-    else { criticalFirst.protection = guard; unresolved.push(...guard.manual.map(reason => `Protection du critique : ${reason}`)); }
+    else {
+      criticalFirst.protection = guard;
+      unresolved.push(...guard.manual.map(reason => `Protection du critique : ${reason}`));
+    }
   }
   const hpBefore = Math.max(0, Number(target?.hp) || 0);
   const excess = damage ? Math.max(0, damage.finalDamage - hpBefore) : 0;
@@ -802,7 +870,12 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   if(attackType(action.type)&&!unopposedExplosion&&!parryUnopposed&&defenderTest&&!defenderTest.success&&defenderFumbleClassification?.maladresse){
     const defenderContext=normalized.defense?.v5?.context||{};
     const defenderFailure=previewCombatFailure({normalized:{...normalized,actor:target,target:actor,action:{...normalized.defense,type:'attack'},resolutionId:`${normalized.resolutionId}:defender`},roll:defenderTest.roll,fumble:defenderFumbleClassification,context:{...defenderContext,fumbleRoll:defenderContext.defenderFumbleRoll??defenderContext.fumbleRoll},hit:false});
-    combatFailure.defender=defenderFailure.fumble;combatFailure.defenderMisfire=defenderFailure.misfire;combatFailure.effects.push(...defenderFailure.effects);combatFailure.reminders.push(...defenderFailure.reminders);combatFailure.unresolved.push(...defenderFailure.unresolved);unresolved.push(...defenderFailure.unresolved);
+    combatFailure.defender=defenderFailure.fumble;
+    combatFailure.defenderMisfire=defenderFailure.misfire;
+    combatFailure.effects.push(...defenderFailure.effects);
+    combatFailure.reminders.push(...defenderFailure.reminders);
+    combatFailure.unresolved.push(...defenderFailure.unresolved);
+    unresolved.push(...defenderFailure.unresolved);
   }
   if (!unopposedExplosion&&!parryUnopposed&&!(opposed?.winner==='defender'&&normalized.defense?.v5?.context?.specialAttack==='shieldsman')&&context.silentTakedown !== true && ['melee', 'ranged'].includes(defenderTest?.kind) && defenderTest.success && defenderCriticalClassification.critique) {
     const critLocation = normalized.defenderCriticalRolls?.location != null ? creatureLocationOf(normalized.defenderCriticalRolls.location,actor,normalized.defense?.v5?.context||{}) : null;
@@ -813,7 +886,10 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
       nature: defenderNature() }) : null;
     if (guard) protectionReceipts.push(guard);
     if (!guard?.criticalIgnored) {
-      if (guard) { details.protection = guard; unresolved.push(...guard.manual.map(reason => `Protection du critique défensif : ${reason}`)); }
+      if (guard) {
+        details.protection = guard;
+        unresolved.push(...guard.manual.map(reason => `Protection du critique défensif : ${reason}`));
+      }
       const trapContext=normalized.defense?.v5?.context||{},trapChoice=trapContext.trapBladeChoice===true;
       if(trapChoice&&!['blade','other'].includes(trapContext.opponentWeaponType))unresolved.push('Piège-lame : confirmer que l’arme adverse est une lame avant le choix.');
       const hasDisarmTalent=(target?.talents||[]).some(row=>(typeof row==='string'?row:row?.id||row?.talentId)==='talent-disarm');
@@ -851,21 +927,32 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   if(riposteDue){
     if(!knownHp(actor)||normalized.defense?.damage===undefined&&!normalized.defense?.damageFormula)unresolved.push('Riposte : Blessures de l’attaquant et dégâts de l’arme utilisée en défense requis.');
     else {
-      const loc=creatureLocationOf(reverseV5Roll(defenderTest.roll),actor,normalized.defense?.v5?.context||{});let guard=locationProtection(actor,{location:loc,attackRoll:defenderTest.roll,critical:defenderTest.critical,ranged:false,qualities:normalized.defense.qualities,nature:defenderNature()});
+      const loc=creatureLocationOf(reverseV5Roll(defenderTest.roll),actor,normalized.defense?.v5?.context||{});
+      let guard=locationProtection(actor,{location:loc,attackRoll:defenderTest.roll,critical:defenderTest.critical,ranged:false,qualities:normalized.defense.qualities,nature:defenderNature()});
       guard=applyAlliedShield(defenseSupport,applyForgeProtection(defenseSupport,guard));
-      protectionReceipts.push(guard);unresolved.push(...guard.manual.map(x=>'Riposte : '+x));
-      const riposteBonuses=evaluateV5Talents(target,{event:'damage.beforeProtection',role:'attacker',context:{kind:defenderPlan.kind,charging:false,aimed:false,weapon:{isMelee:defenderPlan.kind==='melee'},actor:{id:target.id,size:normalized.v5.targetSize},target:{id:actor.id,size:normalized.v5.actorSize},attack:{hit:true,success:defenderTest.success,usedAdvantageV5:defenderTest.advantage.net>0}}});supplementaryTalentPlans.push(riposteBonuses);unresolved.push(...riposteBonuses.unresolved.flatMap(p=>p.fields.map(f=>'Riposte : préciser '+f+'.')));
+      protectionReceipts.push(guard);
+      unresolved.push(...guard.manual.map(x=>'Riposte : '+x));
+      const riposteBonuses=evaluateV5Talents(target,{event:'damage.beforeProtection',role:'attacker',context:{kind:defenderPlan.kind,charging:false,aimed:false,weapon:{isMelee:defenderPlan.kind==='melee'},actor:{id:target.id,size:normalized.v5.targetSize},target:{id:actor.id,size:normalized.v5.actorSize},attack:{hit:true,success:defenderTest.success,usedAdvantageV5:defenderTest.advantage.net>0}}});
+      supplementaryTalentPlans.push(riposteBonuses);
+      unresolved.push(...riposteBonuses.unresolved.flatMap(p=>p.fields.map(f=>'Riposte : préciser '+f+'.')));
       const riposteBonus=riposteBonuses.proposals.filter(p=>p.op==='modifyDamage').reduce((sum,p)=>sum+p.amount,0)+((target.states||[]).some(s=>s.key==='frenzy'&&sourceActive(s))?1:0);
       if(guard.ap!==null)defenderDamage={location:loc,protection:guard,...computeDamage({weaponDamage:actionWeaponDamage(normalized.defense),strengthBonus:strengthBonusOf(target?.caracs),damageBonus:riposteBonus,sl:-opposed.netSl,roll:defenderTest.roll,targetToughnessBonus:Math.floor((Number(actor?.caracs?.E)||0)/10),targetArmour:guard.ap,qualities:normalized.defense.qualities,damageMultiplier:normalized.combatPrelude?.small?.defenderMultiplier||1,approvedQualities:normalized.combatPrelude?.small?.defenderApprovedQualities||[]})};
     }
   }
-  const defenseShield=normalized.defense?.v5?.context?.specialAttack==='shieldsman'?previewTalentReplacement({...normalized,actor:target,target:actor,action:{...normalized.defense,type:'attack'},v5:normalized.defense.v5},{hit:opposed?.winner==='defender',test:defenderTest,opposed:opposed?{...opposed,winner:opposed.winner==='defender'?'attacker':'defender'}:null,damage:defenderDamage,location:defenderDamage?.location,qualityContext:{}}):{plans:[],unresolved:[],changes:[],reminders:[]};supplementaryTalentPlans.push(...defenseShield.plans);unresolved.push(...defenseShield.unresolved);if(defenseShield.replacement){defenderDamage=null;defenderCritical=null;}
+  const defenseShield=normalized.defense?.v5?.context?.specialAttack==='shieldsman'?previewTalentReplacement({...normalized,actor:target,target:actor,action:{...normalized.defense,type:'attack'},v5:normalized.defense.v5},{hit:opposed?.winner==='defender',test:defenderTest,opposed:opposed?{...opposed,winner:opposed.winner==='defender'?'attacker':'defender'}:null,damage:defenderDamage,location:defenderDamage?.location,qualityContext:{}}):{plans:[],unresolved:[],changes:[],reminders:[]};
+  supplementaryTalentPlans.push(...defenseShield.plans);
+  unresolved.push(...defenseShield.unresolved);
+  if(defenseShield.replacement){
+    defenderDamage=null;
+    defenderCritical=null;
+  }
   const riposteExcess=defenderDamage&&knownHp(actor)?Math.max(0,defenderDamage.finalDamage-Number(actor.hp)):0;
   if(riposteExcess>0){
     const rolls=prepareCritical(target,normalized.defenderCriticalRolls,normalized.defense.v5,'defender',normalized.defense.qualities.some(q=>q.id==='inoffensive'),['second']);
     const extra=secondCritical(reverseV5Roll(defenderTest.roll),rolls,riposteExcess*10+divineCriticalSeverityBonus(target),normalized.defense.qualities.some(q=>q.id==='inoffensive'),defenderDamage.location);
     defenderCritical={...(defenderCritical||{kind:'Critique',targetId:actor.id,details:null}),second:extra,excessWounds:riposteExcess};
-    defenderCritical.items=criticalItems(defenderCritical.details,extra,normalized.defenderCriticalDeclined);defenderCritical.application=criticalApplication(defenderCritical.items);
+    defenderCritical.items=criticalItems(defenderCritical.details,extra,normalized.defenderCriticalDeclined);
+    defenderCritical.application=criticalApplication(defenderCritical.items);
   }
   if(!defenseShield.replacement&&riposteDue&&defenderDamage===null&&!unresolved.some(s=>s.startsWith('Riposte :')))unresolved.push('Riposte : dégâts de l’arme à arbitrer.');
   const weaponConditions = previewV5WeaponConditions({ qualities: action.qualities, hit: attackType(action.type) && hit,
@@ -915,7 +1002,8 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   unresolved.push(...weaponConditions.unresolved);
   mechanicalWarnings.push(...weaponConditions.warnings);
   const defenderWeaponConditions=previewV5WeaponConditions({qualities:normalized.defense?.qualities||[],hit:Boolean(defenderDamage),location:defenderDamage?.location,target:actor,actor:target,damage:defenderDamage,resolutionId:normalized.resolutionId+':riposte'});
-  unresolved.push(...defenderWeaponConditions.unresolved);mechanicalWarnings.push(...defenderWeaponConditions.warnings);
+  unresolved.push(...defenderWeaponConditions.unresolved);
+  mechanicalWarnings.push(...defenderWeaponConditions.warnings);
   supplementaryTalentPlans.push(...(defenderWeaponConditions.talentPlans||[]));
   const blackpowderStates=[];
   if(context.blackpowderBrokenTest===true){
@@ -924,7 +1012,11 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     if(actorSkillId!=='skill-43_61_6c_6d_65-base'||normalized.defense)unresolved.push('À Poudre noire : Test de Calme non opposé requis.');
     const shooter=(normalized.v5State?.participants||[]).find(p=>p.id===context.blackpowderShooterId);
     if(!shooter||shooter.id===actor.id)unresolved.push('À Poudre noire : désigner l’auteur du tir subi, même si le tir a raté.');
-    if(shooter){const extra=evaluateV5Talents(shooter,{event:'condition.beforeAcquire',role:'attacker',context:{blackpowderBrokenTest:true,test:{success:actorTest.success},condition:{id:'brise'}}});supplementaryTalentPlans.push(extra);if(!actorTest.success&&word.status==='covered')blackpowderStates.push({id:normalized.resolutionId+':blackpowder:broken',key:'brise',name:'Brisé',level:1+extra.proposals.filter(p=>p.op==='increaseConditionAcquisition').reduce((sum,p)=>sum+p.amount,0),source:{kind:'quality',keywordId:'a-poudre-noire',authorId:shooter.id}});}
+    if(shooter){
+      const extra=evaluateV5Talents(shooter,{event:'condition.beforeAcquire',role:'attacker',context:{blackpowderBrokenTest:true,test:{success:actorTest.success},condition:{id:'brise'}}});
+      supplementaryTalentPlans.push(extra);
+      if(!actorTest.success&&word.status==='covered')blackpowderStates.push({id:normalized.resolutionId+':blackpowder:broken',key:'brise',name:'Brisé',level:1+extra.proposals.filter(p=>p.op==='increaseConditionAcquisition').reduce((sum,p)=>sum+p.amount,0),source:{kind:'quality',keywordId:'a-poudre-noire',authorId:shooter.id}});
+    }
   }
   unresolved.push(...criticalReady);
   const magicHitStates = hit && attackType(action.type) && target && !replacement ? magicWeaponHitConditions(actor, action, nature.ranged, damage?.finalDamage || 0).map(row => ({ id: `${normalized.resolutionId}:magic-weapon:${row.name}`, key: row.name.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase(), name: row.name, level: 1, source: { kind: 'magic-weapon', spellName: row.spellName } })) : [];
@@ -1168,11 +1260,17 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   conditionPlan(target, targetConditionApplication, 'target', actor?.id);
   if (criticalBlock?.application) criticalBlock.application.states = targetConditionApplication.filter(row => row.source?.kind !== 'quality');
   weaponConditions.applied = targetConditionApplication.filter(row => row.source?.kind === 'quality');
-  const activation=previewV5TalentActivation(normalized,actorTest,opposed);supplementaryTalentPlans.push(activation.plan);unresolved.push(...activation.unresolved);
+  const activation=previewV5TalentActivation(normalized,actorTest,opposed);
+  supplementaryTalentPlans.push(activation.plan);
+  unresolved.push(...activation.unresolved);
   const magicFumbleStates=!actorTest.success&&fumbleClassification.maladresse&&!replacement?magicWeaponFumbleConditions(actor,action,nature.ranged).filter(row=>!(row.exceptLore&&hasArcaneMagicLore(actor,row.exceptLore))).map(row=>({id:`${normalized.resolutionId}:magic-weapon-fumble:${row.name}`,key:row.name.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase(),name:row.name,level:1,source:{kind:'magic-weapon',spellName:row.spellName}})):[];
   // Chaque source est jugée sur sa propre nature (règle de l'homoncule) : l'attaque ou l'arme enchantée de l'acteur, celle du défenseur, la poudre noire.
   const defenderMagical=target?defenderNature().magical===true:false;
-  const kept=(rows,magical)=>{const copy=[...rows];if(actor)refuseFamiliarConditions(actor,copy,magical,familiarConditionRefusals);return copy;};
+  const kept=(rows,magical)=>{
+    const copy=[...rows];
+    if(actor)refuseFamiliarConditions(actor,copy,magical,familiarConditionRefusals);
+    return copy;
+  };
   const actorConditionApplication=[...kept(activation.conditions||[],nature?.magical===true),...kept(magicFumbleStates,nature?.magical===true),...kept((defenderCritical?.application?.states||[]).map(row=>({...row,source:{...row.source,kind:'critical'}})),defenderMagical),...kept(defenderWeaponConditions.proposed,defenderMagical),...kept(blackpowderStates,false),...supplementalActorConditions];
   const actorConditionKeys = new Set(actorConditionApplication.map(row => foldKey(row.key || row.name)));
   if (actor?.extensions?.v5?.mounted === true) for (const event of mountedRiderEventsFor(actorConditionKeys)) mountedFallPlans.push({ participantId: actor.id, event,
@@ -1214,39 +1312,71 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   targetEvents.push(event('conditionAcquired', { instances: conditionChanges.target?.acquiredInstances || 0 }));
   actorEvents.push(event('woundsLost', { amount: Math.min(Math.max(0, Number(actor?.hp) || 0), (defenderCritical?.application.extraWounds || 0)+(defenderDamage?.finalDamage||0)) }));
   actorEvents.push(event('conditionAcquired', { instances: conditionChanges.actor?.acquiredInstances || 0 }));
-  const reversal=evaluateV5Talents(target,{event:'momentum.beforeLoss',role:'defender',context:{kind:defenderPlan?.kind||'none',test:{success:defenderTest?.success||false},attack:{hit:Boolean(hit&&attackType(action.type))}}});supplementaryTalentPlans.push(reversal);
-  const resoluteActor=resoluteException(normalized,conditionChanges.actor?.participant||actor,normalized.v5,conditionChanges.actor?.acquiredInstances||0),resoluteTarget=resoluteException(normalized,conditionChanges.target?.participant||target,normalized.defense?.v5,conditionChanges.target?.acquiredInstances||0);supplementaryTalentPlans.push(...resoluteActor.plans,...resoluteTarget.plans);unresolved.push(...resoluteActor.unresolved,...resoluteTarget.unresolved);
-  planMomentum(actor, actorEvents,resoluteActor.exceptions,target);if(slash.momentumSpent){const change=momentum.find(row=>row.participantId===actor?.id);if(change){change.after=false;change.details=[...(change.details||[]),{eventId:normalized.resolutionId+':entaille-spend',effect:'spend',before:true,after:false,preventedBy:[]}];}} planMomentum(target, targetEvents,[...resoluteTarget.exceptions,...reversal.proposals.filter(x=>x.op==='preventMomentumLoss').map(x=>({reason:x.key,talentId:x.origins[0].talentId,applies:true}))],actor);
+  const reversal=evaluateV5Talents(target,{event:'momentum.beforeLoss',role:'defender',context:{kind:defenderPlan?.kind||'none',test:{success:defenderTest?.success||false},attack:{hit:Boolean(hit&&attackType(action.type))}}});
+  supplementaryTalentPlans.push(reversal);
+  const resoluteActor=resoluteException(normalized,conditionChanges.actor?.participant||actor,normalized.v5,conditionChanges.actor?.acquiredInstances||0),resoluteTarget=resoluteException(normalized,conditionChanges.target?.participant||target,normalized.defense?.v5,conditionChanges.target?.acquiredInstances||0);
+  supplementaryTalentPlans.push(...resoluteActor.plans,...resoluteTarget.plans);
+  unresolved.push(...resoluteActor.unresolved,...resoluteTarget.unresolved);
+  planMomentum(actor, actorEvents,resoluteActor.exceptions,target);
+  if(slash.momentumSpent){
+    const change=momentum.find(row=>row.participantId===actor?.id);
+    if(change){
+      change.after=false;
+      change.details=[...(change.details||[]),{eventId:normalized.resolutionId+':entaille-spend',effect:'spend',before:true,after:false,preventedBy:[]}];
+    }
+  }
+  planMomentum(target, targetEvents,[...resoluteTarget.exceptions,...reversal.proposals.filter(x=>x.op==='preventMomentumLoss').map(x=>({reason:x.key,talentId:x.origins[0].talentId,applies:true}))],actor);
   if(weaponTrap?.disposition==='caught'){
     const change=momentum.find(row=>row.participantId===target?.id);
     if(!change?.after)unresolved.push('Piège-lame : un Élan doit être disponible après le Test de défense pour saisir l’arme.');
-    else{change.after=false;change.details=[...(change.details||[]),{eventId:normalized.resolutionId+':trap-blade-catch',effect:'spend',before:true,after:false,preventedBy:[]}];}
+    else{
+      change.after=false;
+      change.details=[...(change.details||[]),{eventId:normalized.resolutionId+':trap-blade-catch',effect:'spend',before:true,after:false,preventedBy:[]}];
+    }
   }
 
-  const bolt=lodgedHarpoon(normalized,criticalFirst,hit);supplementaryTalentPlans.push(...bolt.plans);
-  const talentActionChanges=[...activation.changes,...special.changes,...defenseShield.changes,...bolt.changes,...finishImmediateAttack(normalized)];const situationAfter=previewSituationAfter(normalized,actorTest);talentActionChanges.push(...situationAfter.changes);supplementaryTalentPlans.push(...situationAfter.plans);
-  for(const[subject,settings]of[[actor,normalized.v5],[target,normalized.defense?.v5]])if(subject){const active=(subject.states||[]).filter(s=>s.key==='debate'&&sourceActive(s));
-    if(active.length){supplementaryTalentPlans.push({proposals:[{op:'activeDebate',origins:active.map(s=>s.source)}]});if(attackType(action.type)||settings?.context?.importantProblem===true)talentActionChanges.push({participantId:subject.id,removeIds:active.map(s=>s.id)});}}
+  const bolt=lodgedHarpoon(normalized,criticalFirst,hit);
+  supplementaryTalentPlans.push(...bolt.plans);
+  const talentActionChanges=[...activation.changes,...special.changes,...defenseShield.changes,...bolt.changes,...finishImmediateAttack(normalized)];
+  const situationAfter=previewSituationAfter(normalized,actorTest);
+  talentActionChanges.push(...situationAfter.changes);
+  supplementaryTalentPlans.push(...situationAfter.plans);
+  for(const[subject,settings]of[[actor,normalized.v5],[target,normalized.defense?.v5]])if(subject){
+    const active=(subject.states||[]).filter(s=>s.key==='debate'&&sourceActive(s));
+    if(active.length){
+      supplementaryTalentPlans.push({proposals:[{op:'activeDebate',origins:active.map(s=>s.source)}]});
+      if(attackType(action.type)||settings?.context?.importantProblem===true)talentActionChanges.push({participantId:subject.id,removeIds:active.map(s=>s.id)});
+    }
+  }
 
-  const healingPlan=evaluateV5Talents(actor,{event:'healing.afterTest',role:'actor',context:{recoveryTest:context.recoveryTest===true&&!attackType(action.type)},choices:normalized.v5.talentChoices||{}});supplementaryTalentPlans.push(healingPlan);
+  const healingPlan=evaluateV5Talents(actor,{event:'healing.afterTest',role:'actor',context:{recoveryTest:context.recoveryTest===true&&!attackType(action.type)},choices:normalized.v5.talentChoices||{}});
+  supplementaryTalentPlans.push(healingPlan);
   unresolved.push(...healingPlan.unresolved.flatMap(p=>p.fields.map(f=>'Robuste : préciser '+f+'.')));
   if(context.recoveryTest===true&&!attackType(action.type)){
     if(!Number.isSafeInteger(context.recoveredWounds)||context.recoveredWounds<0)unresolved.push('Récupération : nombre normal de Blessures rendues par le Test requis.');
-    else{const amount=context.recoveredWounds+healingPlan.proposals.filter(p=>p.op==='modifyHealing').reduce((sum,p)=>sum+p.amount,0),healing=healV5Wounds(actor,amount);
+    else{
+      const amount=context.recoveredWounds+healingPlan.proposals.filter(p=>p.op==='modifyHealing').reduce((sum,p)=>sum+p.amount,0),healing=healV5Wounds(actor,amount);
       const altered=healing.participant.states.filter(s=>JSON.stringify(s)!==JSON.stringify((actor.states||[]).find(old=>old.id===s.id))),removed=(actor.states||[]).filter(s=>!healing.participant.states.some(after=>after.id===s.id&&JSON.stringify(after)===JSON.stringify(s))).map(s=>s.id);
-      talentActionChanges.push({participantId:actor.id,patch:{hp:healing.participant.hp},removeIds:removed,add:altered});activation.reminders.push('Récupération après Test : '+healing.hpDelta+' Blessure(s) effectivement rendue(s).',...healing.reminders);
+      talentActionChanges.push({participantId:actor.id,patch:{hp:healing.participant.hp},removeIds:removed,add:altered});
+      activation.reminders.push('Récupération après Test : '+healing.hpDelta+' Blessure(s) effectivement rendue(s).',...healing.reminders);
     }
   }
   for(const[role,participant]of[['actor',actor],['target',target]]){
-    if(!participant)continue;const predicted=conditionChanges[role]?.participant||participant;
+    if(!participant)continue;
+    const predicted=conditionChanges[role]?.participant||participant;
     const exit=previewV5FrenzyExit(predicted,{round:normalized.round,resolutionId:normalized.resolutionId,state:normalized.v5State,clock:normalized.v5Clock,nearbyEnemiesDefeated:role==='actor'&&normalized.v5.context?.talentAction==='end-frenzy'&&normalized.v5.context.nearbyEnemiesDefeated===true});
-    supplementaryTalentPlans.push(...exit.plans);talentUsageRequests.push(...exit.usageRequests);unresolved.push(...exit.unresolved);
+    supplementaryTalentPlans.push(...exit.plans);
+    talentUsageRequests.push(...exit.usageRequests);
+    unresolved.push(...exit.unresolved);
     if(exit.ended)talentActionChanges.push({participantId:participant.id,removeKeys:['frenzy'],add:exit.participant.states.filter(s=>!predicted.states.some(before=>before.id===s.id))});
   }
   const secondaryTargets=[];
   const secondaryInflictConditions=(victim,damageDealt,locationValue,resolutionKey)=>{
     const inflictResult=previewV5Inflict({qualities:action.qualities,hit:true,actorStrength:actor?.caracs?.F});
-    if(!inflictResult.ready){unresolved.push(...inflictResult.unresolved);return [];}
+    if(!inflictResult.ready){
+      unresolved.push(...inflictResult.unresolved);
+      return [];
+    }
     const conditions=inflictResult.conditions||[inflictResult.condition].filter(Boolean);
     return conditions.map((condition,index)=>({id:`${resolutionKey}:quality:inflige${index?`:${index}`:''}`,...condition,
       source:{kind:'quality',keywordId:'inflige',authorId:actor?.id}}));
@@ -1255,12 +1385,19 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     for(const blastTarget of blastPlan.targets.filter(row=>row.participantId!==target?.id)){
       const victim=(normalized.v5State?.participants||[]).find(person=>person.id===blastTarget.participantId&&person.zone==='active');
       if(!victim)continue;
-      if(!knownHp(victim)){unresolved.push(`Explosion : PV actuels et maximum requis pour ${victim.name||victim.id}.`);continue;}
+      if(!knownHp(victim)){
+        unresolved.push(`Explosion : PV actuels et maximum requis pour ${victim.name||victim.id}.`);
+        continue;
+      }
       const blastLocationRoll=Number(context.explosionLocationRollsById?.[victim.id]),blastLocation=Number.isInteger(blastLocationRoll)&&blastLocationRoll>=1&&blastLocationRoll<=100?creatureLocationOf(blastLocationRoll,victim,{hitMorphology:context.hitMorphologiesById?.[victim.id],spiderLegSide:context.spiderLegSidesById?.[victim.id]}):null;
-      if(!blastLocation){unresolved.push(`Explosion : choisir un jet de localisation d100 (1–100) pour ${victim.name||victim.id}.`);continue;}
+      if(!blastLocation){
+        unresolved.push(`Explosion : choisir un jet de localisation d100 (1–100) pour ${victim.name||victim.id}.`);
+        continue;
+      }
       const guard=locationProtection(victim,{...normalized.protectionContext,location:blastLocation,attackRoll:roll,hitLocationRoll:blastLocationRoll,
         critical:false,ranged:nature.ranged,defenseProvided:false,qualities:action.qualities,nature});
-      protectionReceipts.push(guard);unresolved.push(...guard.manual.map(message=>`${victim.name||victim.id} : ${message}`));
+      protectionReceipts.push(guard);
+      unresolved.push(...guard.manual.map(message=>`${victim.name||victim.id} : ${message}`));
       if(guard.ap===null)continue;
       const dealt=computeDamage({weaponDamage:blastTarget.damage,strengthBonus,damageBonus:0,sl:0,roll,
         targetToughnessBonus:Math.floor((Number(victim.caracs?.E)||0)/10),targetArmour:guard.ap,qualities:action.qualities.filter(row=>(typeof row==='string'?row:row?.id)!=='devastatrice'),
@@ -1268,10 +1405,13 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
       if(dealt)Object.assign(dealt,{activeQualities:action.qualities,explosionUnitsDie:action.qualities.some(row=>(typeof row==='string'?row:row?.id)==='devastatrice')?roll%10:0});
       const words=previewV5WeaponConditions({qualities:action.qualities.filter(row=>(typeof row==='string'?row:row?.id)!=='inflige'),hit:true,location:blastLocation,target:victim,actor,damage:dealt,resolutionId:`${normalized.resolutionId}:${victim.id}`});
       words.proposed.push(...secondaryInflictConditions(victim,dealt,blastLocation,`${normalized.resolutionId}:${victim.id}`));
-      unresolved.push(...words.unresolved);mechanicalWarnings.push(...words.warnings);
+      unresolved.push(...words.unresolved);
+      mechanicalWarnings.push(...words.warnings);
       let after=clone(victim);
-      if(words.proposed.length){const receipt=acquireV5Conditions(after,words.proposed,{resolutionId:normalized.resolutionId,authorId:actor.id,targetId:victim.id,round:normalized.round,source:{}});
-        if(!receipt.ready)unresolved.push(...receipt.needsInput.map(row=>`${victim.name||victim.id} : ${row.label}`));else after=receipt.participant;}
+      if(words.proposed.length){
+        const receipt=acquireV5Conditions(after,words.proposed,{resolutionId:normalized.resolutionId,authorId:actor.id,targetId:victim.id,round:normalized.round,source:{}});
+        if(!receipt.ready)unresolved.push(...receipt.needsInput.map(row=>`${victim.name||victim.id} : ${row.label}`));else after=receipt.participant;
+      }
       after.hp=Math.max(0,(Number(after.hp)||0)-dealt.finalDamage);
       secondaryTargets.push({participantId:victim.id,name:victim.name,before:clone(victim),participant:after,damage:dealt,location:blastLocation,critical:null,conditions:words.proposed});
     }
@@ -1282,29 +1422,46 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
       const victimLocation=creatureLocationOf(reverseV5Roll(roll),victim,{hitMorphology:context.hitMorphologiesById?.[id],spiderLegSide:context.spiderLegSidesById?.[id]});
       let guard=locationProtection(victim,{...(context.whirlwindProtection?.[id]||{}),location:victimLocation,attackRoll:roll,hitLocationRoll:victimLocation.roll,critical:false,ranged:false,defenseProvided:false,qualities:action.qualities,nature});
       const supportInput={...normalized,target:victim,v5:{...normalized.v5,context:{...context,...context.whirlwindSupport?.[id]}},combatPrelude:{forge:normalized.combatPrelude?.forge,alliedShield:previewAlliedShields({...normalized,target:victim,v5:{...normalized.v5,context:context.whirlwindSupport?.[id]||{}}})}};
-      supplementaryTalentPlans.push(...supportInput.combatPrelude.alliedShield.plans);unresolved.push(...supportInput.combatPrelude.alliedShield.unresolved);
+      supplementaryTalentPlans.push(...supportInput.combatPrelude.alliedShield.plans);
+      unresolved.push(...supportInput.combatPrelude.alliedShield.unresolved);
       guard=applyAlliedShield(supportInput,applyForgeProtection(supportInput,guard));
-      protectionReceipts.push(guard);unresolved.push(...guard.manual.map(message=>victim.name+' : '+message));
+      protectionReceipts.push(guard);
+      unresolved.push(...guard.manual.map(message=>victim.name+' : '+message));
       if(guard.ap===null)continue;
-      const victimInput={...normalized,target:victim,action:{...action,qualities:action.qualities.filter(q=>!q.talentOrigins?.some(o=>o.talentId==='talent-small'))},defense:undefined,v5:{...normalized.v5,targetSize:context.whirlwindSizes?.[id]}};const small=previewSmall(victimInput);supplementaryTalentPlans.push(...small.plans);unresolved.push(...small.unresolved);approvedHomebrewQualities.push(...small.approvedQualities);
+      const victimInput={...normalized,target:victim,action:{...action,qualities:action.qualities.filter(q=>!q.talentOrigins?.some(o=>o.talentId==='talent-small'))},defense:undefined,v5:{...normalized.v5,targetSize:context.whirlwindSizes?.[id]}};
+      const small=previewSmall(victimInput);
+      supplementaryTalentPlans.push(...small.plans);
+      unresolved.push(...small.unresolved);
+      approvedHomebrewQualities.push(...small.approvedQualities);
       const unsupported=victimInput.action.qualities.filter(q=>!small.approvedQualities.includes(q.id)&&Object.hasOwn(ENGINES,q.id)&&(keywordMechanicalStatus(q.id).status!=='covered'||['target-score-bonus','add-units-die'].includes(ENGINES[q.id].engine)));
-      mechanicalWarnings.push(...unsupported.map(q=>({keywordId:q.id,reason:'description-mecanique-v5-requise-hors-comparaison-petit',participantId:victim.id})));if(unsupported.length)continue;
+      mechanicalWarnings.push(...unsupported.map(q=>({keywordId:q.id,reason:'description-mecanique-v5-requise-hors-comparaison-petit',participantId:victim.id})));
+      if(unsupported.length)continue;
       const dealt=computeDamage({weaponDamage,strengthBonus,damageBonus,sl:opposed.netSl,roll,targetToughnessBonus:Math.floor((Number(victim.caracs?.E)||0)/10),targetArmour:guard.ap,qualities:victimInput.action.qualities,damageMultiplier:small.multiplier,approvedQualities:small.approvedQualities});
       const excess=Math.max(0,dealt.finalDamage-Number(victim.hp)),enemy=victim.camp!==actor.camp;
       const rawRolls=context.whirlwindRolls?.[id]||{},settings={...normalized.v5,talentChoices:{...normalized.v5.talentChoices,...context.whirlwindChoices?.[id]}};
       const second=enemy&&dealt.finalDamage>=Number(victim.hp)?secondCritical(reverseV5Roll(roll),prepareCritical(actor,normalizeCriticalRolls(rawRolls),settings,'attacker',inoffensive,['second']),excess*10+divineCriticalSeverityBonus(actor),inoffensive,victimLocation):null;
       if(second?.pending)unresolved.push(victim.name+' : gravité réelle du critique de Tourbillon requise.');
-      const critical=second?{kind:'Critique',second,excessWounds:excess,items:criticalItems(null,second,context.whirlwindDeclined?.[id]||[])}:null;if(critical)critical.application=criticalApplication(critical.items);
+      const critical=second?{kind:'Critique',second,excessWounds:excess,items:criticalItems(null,second,context.whirlwindDeclined?.[id]||[])}:null;
+      if(critical)critical.application=criticalApplication(critical.items);
       const words=previewV5WeaponConditions({qualities:action.qualities,hit:true,location:victimLocation,target:victim,actor,damage:dealt,resolutionId:normalized.resolutionId+':'+id});
-      supplementaryTalentPlans.push(...(words.talentPlans||[]));unresolved.push(...words.unresolved);mechanicalWarnings.push(...words.warnings);
+      supplementaryTalentPlans.push(...(words.talentPlans||[]));
+      unresolved.push(...words.unresolved);
+      mechanicalWarnings.push(...words.warnings);
       if(critical?.application)refuseFamiliarConditions(victim,critical.application.states,nature?.magical===true,familiarConditionRefusals);
       const incoming=[...(critical?.application.states||[]).map(s=>({...s,source:{...s.source,kind:'critical'}})),...words.proposed];
       refuseFamiliarConditions(victim,incoming,nature?.magical===true,familiarConditionRefusals);
       const reduced=previewV5TalentConditions(victim,incoming,{state:normalized.v5State,clock:normalized.v5Clock,actionId:normalized.resolutionId+':condition:'+id});
-      conditionTalentPlans.push(reduced.plan);talentUsageRequests.push(...reduced.usageRequests);unresolved.push(...reduced.plan.unresolved.flatMap(r=>r.fields.map(f=>victim.name+' : préciser '+f)));
-      const receipt=acquireV5Conditions(victim,reduced.states,{resolutionId:normalized.resolutionId,authorId:actor.id,targetId:id,round:normalized.round,source:{}});unresolved.push(...receipt.needsInput.map(r=>victim.name+' : '+r.label));
+      conditionTalentPlans.push(reduced.plan);
+      talentUsageRequests.push(...reduced.usageRequests);
+      unresolved.push(...reduced.plan.unresolved.flatMap(r=>r.fields.map(f=>victim.name+' : préciser '+f)));
+      const receipt=acquireV5Conditions(victim,reduced.states,{resolutionId:normalized.resolutionId,authorId:actor.id,targetId:id,round:normalized.round,source:{}});
+      unresolved.push(...receipt.needsInput.map(r=>victim.name+' : '+r.label));
       let after=withMomentum({...receipt.participant,hp:Math.max(0,Number(victim.hp)-dealt.finalDamage-(critical?.application.extraWounds||0))},false);
-      const exit=previewV5FrenzyExit(after,{round:normalized.round,resolutionId:normalized.resolutionId,state:normalized.v5State,clock:normalized.v5Clock});after=exit.participant;supplementaryTalentPlans.push(...exit.plans);talentUsageRequests.push(...exit.usageRequests);unresolved.push(...exit.unresolved);
+      const exit=previewV5FrenzyExit(after,{round:normalized.round,resolutionId:normalized.resolutionId,state:normalized.v5State,clock:normalized.v5Clock});
+      after=exit.participant;
+      supplementaryTalentPlans.push(...exit.plans);
+      talentUsageRequests.push(...exit.usageRequests);
+      unresolved.push(...exit.unresolved);
       secondaryTargets.push({participantId:id,name:victim.name,before:clone(victim),participant:after,damage:dealt,location:victimLocation,critical,conditions:reduced.states});
     }
   }
@@ -1312,29 +1469,42 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     for(const spreadTarget of spreadPlan.targets.filter(row=>row.participantId!==target?.id&&!secondaryTargets.some(existing=>existing.participantId===row.participantId))){
       const victim=(normalized.v5State?.participants||[]).find(person=>person.id===spreadTarget.participantId&&person.zone==='active');
       if(!victim)continue;
-      if(!knownHp(victim)){unresolved.push(`Dispersion : PV actuels et maximum requis pour ${victim.name||victim.id}.`);continue;}
+      if(!knownHp(victim)){
+        unresolved.push(`Dispersion : PV actuels et maximum requis pour ${victim.name||victim.id}.`);
+        continue;
+      }
       const spreadLocationRoll=Number(context.spreadLocationRollsById?.[victim.id]),spreadLocation=Number.isInteger(spreadLocationRoll)&&spreadLocationRoll>=1&&spreadLocationRoll<=100?creatureLocationOf(spreadLocationRoll,victim,{hitMorphology:context.hitMorphologiesById?.[victim.id],spiderLegSide:context.spiderLegSidesById?.[victim.id]}):null;
-      if(!spreadLocation){unresolved.push(`Dispersion : choisir un jet de localisation d100 (1–100) pour ${victim.name||victim.id}.`);continue;}
+      if(!spreadLocation){
+        unresolved.push(`Dispersion : choisir un jet de localisation d100 (1–100) pour ${victim.name||victim.id}.`);
+        continue;
+      }
       const guard=locationProtection(victim,{...normalized.protectionContext,location:spreadLocation,attackRoll:roll,hitLocationRoll:spreadLocationRoll,
         critical:false,ranged:true,defenseProvided:false,qualities:action.qualities,nature});
-      protectionReceipts.push(guard);unresolved.push(...guard.manual.map(message=>`${victim.name||victim.id} : ${message}`));
+      protectionReceipts.push(guard);
+      unresolved.push(...guard.manual.map(message=>`${victim.name||victim.id} : ${message}`));
       if(guard.ap===null)continue;
       const dealt=computeDamage({weaponDamage:spreadTarget.damage,strengthBonus,damageBonus:damageBonus+magicWeaponBonus(actor,action,nature.ranged,Number(action.damage)||0),
         sl:opposed?opposed.netSl:sl,roll,targetToughnessBonus:Math.floor((Number(victim.caracs?.E)||0)/10),targetArmour:guard.ap,
         qualities:action.qualities,damageMultiplier:normalized.combatPrelude?.small?.multiplier||1,approvedQualities:normalized.combatPrelude?.small?.approvedQualities||[]});
       const secondaryWords=previewV5WeaponConditions({qualities:action.qualities.filter(row=>(typeof row==='string'?row:row?.id)!=='inflige'),hit:true,location:spreadLocation,target:victim,actor,damage:dealt,resolutionId:`${normalized.resolutionId}:${victim.id}`});
       secondaryWords.proposed.push(...secondaryInflictConditions(victim,dealt,spreadLocation,`${normalized.resolutionId}:${victim.id}`));
-      unresolved.push(...secondaryWords.unresolved);mechanicalWarnings.push(...secondaryWords.warnings);
+      unresolved.push(...secondaryWords.unresolved);
+      mechanicalWarnings.push(...secondaryWords.warnings);
       const after=clone(victim);
-      if(secondaryWords.proposed.length){const receipt=acquireV5Conditions(after,secondaryWords.proposed,{resolutionId:normalized.resolutionId,authorId:actor.id,targetId:victim.id,round:normalized.round,source:{}});
-        if(!receipt.ready)unresolved.push(...receipt.needsInput.map(row=>`${victim.name||victim.id} : ${row.label}`));else Object.assign(after,receipt.participant);}
+      if(secondaryWords.proposed.length){
+        const receipt=acquireV5Conditions(after,secondaryWords.proposed,{resolutionId:normalized.resolutionId,authorId:actor.id,targetId:victim.id,round:normalized.round,source:{}});
+        if(!receipt.ready)unresolved.push(...receipt.needsInput.map(row=>`${victim.name||victim.id} : ${row.label}`));else Object.assign(after,receipt.participant);
+      }
       after.hp=Math.max(0,(Number(after.hp)||0)-dealt.finalDamage);
       secondaryTargets.push({participantId:victim.id,name:victim.name,before:clone(victim),participant:after,damage:dealt,location:spreadLocation,critical:null,conditions:secondaryWords.proposed});
     }
   }
 
   unresolved.push(...criticalReady);
-  if(actorPlan.crewSkill){talentActionChanges.push({participantId:actor.id,removeIds:[actorPlan.crewSkill.id]});supplementaryTalentPlans.push({proposals:[{op:'substituteCrewSkill',origins:[actorPlan.crewSkill.source]}]});}
+  if(actorPlan.crewSkill){
+    talentActionChanges.push({participantId:actor.id,removeIds:[actorPlan.crewSkill.id]});
+    supplementaryTalentPlans.push({proposals:[{op:'substituteCrewSkill',origins:[actorPlan.crewSkill.source]}]});
+  }
   const declaredCombatAction=attackType(action.type)||normalized.v5?.context?.isAction===true;
   const resolvedRecordKinds=new Set(['weapon-explosion','salvo-artillery-hit','salvo-artillery-destroyed','fumble-ally-hit','misfire','critical-follow-up']);
   const consumedCombatEffects=declaredCombatAction?(actor?.extensions?.v5?.combatEffects||[]).filter(row=>row.kind==='next-action-sl'||resolvedRecordKinds.has(row.kind)).map(row=>row.id):[];
@@ -1428,17 +1598,45 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   };
   if (normalized.v5?.context?.fateAction === 'cancel-attack' && attackType(action.type)) {
     result.fateAction = { action: 'cancel-attack', cancelled: true };
-    result.hit = false; result.damage = null; result.critical = null; result.defenderCritical = null;
-    result.targetConditionApplication = null; result.weaponConditions = null; result.entanglement = null;
-    result.projectileLodging = null; result.hack = null; result.slash = null; result.spreadPlan = null;
-    result.secondaryTargets = []; result.lethalDeath = null; result.tripFall = null; result.trip = null;
+    result.hit = false;
+    result.damage = null;
+    result.critical = null;
+    result.defenderCritical = null;
+    result.targetConditionApplication = null;
+    result.weaponConditions = null;
+    result.entanglement = null;
+    result.projectileLodging = null;
+    result.hack = null;
+    result.slash = null;
+    result.spreadPlan = null;
+    result.secondaryTargets = [];
+    result.lethalDeath = null;
+    result.tripFall = null;
+    result.trip = null;
     result.reminders = [...result.reminders, 'Destin : attaque annulée avant Blessures et Blessures Critiques.'];
   }
   if(normalized.v5?.context?.fateAction==='survive'){
     const deathResult=criticalBlock?.details?.parsed?.death===true||criticalBlock?.second?.parsed?.death===true;
     const lethal=attackType(action.type)&&target&&hit&&(deathResult||lethalDeath?.targetId===target.id);
-    if(lethal){result.fateSurvival={participantId:target.id,removedFromEncounter:true};result.hit=false;result.damage=null;result.critical=null;result.defenderCritical=null;result.targetConditionApplication=null;result.weaponConditions=null;result.entanglement=null;result.projectileLodging=null;result.secondaryTargets=[];result.lethalDeath=null;result.reminders=[...result.reminders,'Destin : le personnage échappe à la mort et quitte la rencontre.'];}
-    else {result.unresolved=[...(result.unresolved||[]),'Destin : Survivre exige une attaque infligeant un résultat mortel confirmé (un total à 0 Blessure ne suffit pas).'];result.ready=false;result.status='manual';}
+    if(lethal){
+      result.fateSurvival={participantId:target.id,removedFromEncounter:true};
+      result.hit=false;
+      result.damage=null;
+      result.critical=null;
+      result.defenderCritical=null;
+      result.targetConditionApplication=null;
+      result.weaponConditions=null;
+      result.entanglement=null;
+      result.projectileLodging=null;
+      result.secondaryTargets=[];
+      result.lethalDeath=null;
+      result.reminders=[...result.reminders,'Destin : le personnage échappe à la mort et quitte la rencontre.'];
+    }
+    else {
+      result.unresolved=[...(result.unresolved||[]),'Destin : Survivre exige une attaque infligeant un résultat mortel confirmé (un total à 0 Blessure ne suffit pas).'];
+      result.ready=false;
+      result.status='manual';
+    }
   }
   return result;
 }
@@ -1491,7 +1689,10 @@ export function applyResolution(preview, currentState) {
   }
   // Re-read only the contractual Qualities used by this preview. Editorial
   // reminders remain manual; changing an unrelated reference never invalidates it.
-  for(const receipt of(preview.mechanics||[]).filter(r=>r.status==='homebrew-covered')){const live=v5QualityMechanicalStatus(receipt.id);if(live.word?.effect!==receipt.effect||live.word?.edition!==receipt.edition||live.word?.source!==receipt.source)return{status:'manual',reason:'Qualité de Petit modifiée : recalcul requis.',state:clone(currentState),resolution:clone(preview)};}
+  for(const receipt of(preview.mechanics||[]).filter(r=>r.status==='homebrew-covered')){
+    const live=v5QualityMechanicalStatus(receipt.id);
+    if(live.word?.effect!==receipt.effect||live.word?.edition!==receipt.edition||live.word?.source!==receipt.source)return{status:'manual',reason:'Qualité de Petit modifiée : recalcul requis.',state:clone(currentState),resolution:clone(preview)};
+  }
   for (const receipt of (preview.mechanics || []).filter(row => row.status === 'covered')) {
     const live = v5QualityMechanicalStatus(receipt.id);
     if (live.status !== 'covered' || live.effectVersion !== receipt.effectVersion || live.engine?.engine !== receipt.engine
@@ -1515,9 +1716,17 @@ export function applyResolution(preview, currentState) {
   // projectile, weapon, bystander or defender side effects may leak through.
   if(preview.fateAction?.cancelled||preview.fateSurvival){
     const next=clone(currentState);
-    if(preview.fateSurvival){const target=participantById(next,preview.targetId);if(!target)return{status:'stale',requiresPreview:true,state:clone(currentState),resolution:clone(preview)};const updated=clone(target);updated.zone='bench';next.participants=participantListWithUpdate(next,updated.id,updated);}
-    next.revision=currentState.revision+1;next.appliedResolutionIds=[...appliedIds,preview.resolutionId].slice(-MAX_APPLIED_RESOLUTION_IDS);
-    const resolution=clone(preview);resolution.application={status:'applied',applied:true,revision:next.revision};
+    if(preview.fateSurvival){
+      const target=participantById(next,preview.targetId);
+      if(!target)return{status:'stale',requiresPreview:true,state:clone(currentState),resolution:clone(preview)};
+      const updated=clone(target);
+      updated.zone='bench';
+      next.participants=participantListWithUpdate(next,updated.id,updated);
+    }
+    next.revision=currentState.revision+1;
+    next.appliedResolutionIds=[...appliedIds,preview.resolutionId].slice(-MAX_APPLIED_RESOLUTION_IDS);
+    const resolution=clone(preview);
+    resolution.application={status:'applied',applied:true,revision:next.revision};
     return{status:'applied',state:next,resolution};
   }
   const nextState = clone(currentState);
@@ -1537,7 +1746,8 @@ export function applyResolution(preview, currentState) {
     const updated = clone(target);
     if(preview.fateSurvival)updated.zone='bench';
     if(preview.hack?.ready&&preview.hack.damage?.itemId){
-      updated.extensions??={};updated.extensions.v5={...(updated.extensions.v5||{})};
+      updated.extensions??={};
+      updated.extensions.v5={...(updated.extensions.v5||{})};
       const damageByItem={...(updated.extensions.v5.armorDamageByItem||{})};
       damageByItem[preview.hack.damage.itemId]=(Number(damageByItem[preview.hack.damage.itemId])||0)+preview.hack.damage.amount;
       updated.extensions.v5.armorDamageByItem=damageByItem;
@@ -1548,11 +1758,25 @@ export function applyResolution(preview, currentState) {
     }
     const oldHp = Number(updated.hp) || 0;
     updated.hp = Math.max(0, oldHp - previewHpLoss(preview) - (preview.tripFall?.damageLoss||0) - (preview.tripFall?.extraCriticalWounds||0));
-    if(preview.skullReversion?.targetId===updated.id){updated.hp=0;updated.extensions??={};updated.extensions.v5={...(updated.extensions.v5||{}),dead:true,inanimateAs:'crâne ordinaire'};}
-    if(preview.lethalDeath?.targetId===updated.id){updated.hp=0;updated.extensions??={};updated.extensions.v5={...(updated.extensions.v5||{}),dead:true};}
-    if(preview.tripFall){updated.extensions??={};updated.extensions.v5={...(updated.extensions.v5||{}),mounted:false};}
+    if(preview.skullReversion?.targetId===updated.id){
+      updated.hp=0;
+      updated.extensions??={};
+      updated.extensions.v5={...(updated.extensions.v5||{}),dead:true,inanimateAs:'crâne ordinaire'};
+    }
+    if(preview.lethalDeath?.targetId===updated.id){
+      updated.hp=0;
+      updated.extensions??={};
+      updated.extensions.v5={...(updated.extensions.v5||{}),dead:true};
+    }
+    if(preview.tripFall){
+      updated.extensions??={};
+      updated.extensions.v5={...(updated.extensions.v5||{}),mounted:false};
+    }
     const disguise=(preview.supplementalEquipment?.effects||[]).find(row=>row.participantId===updated.id&&row.disguiseAs);
-    if(disguise){updated.extensions??={};updated.extensions.v5={...(updated.extensions.v5||{}),felidWoundDisguises:[...(updated.extensions.v5?.felidWoundDisguises||[]),{id:`${preview.resolutionId}:felid-disguise`,resolutionId:preview.resolutionId,appearance:disguise.disguiseAs,sourceRuleId:disguise.sourceRuleId,wounds:Math.max(0,Number(preview.damage?.finalDamage)||0)}].slice(-100)};}
+    if(disguise){
+      updated.extensions??={};
+      updated.extensions.v5={...(updated.extensions.v5||{}),felidWoundDisguises:[...(updated.extensions.v5?.felidWoundDisguises||[]),{id:`${preview.resolutionId}:felid-disguise`,resolutionId:preview.resolutionId,appearance:disguise.disguiseAs,sourceRuleId:disguise.sourceRuleId,wounds:Math.max(0,Number(preview.damage?.finalDamage)||0)}].slice(-100)};
+    }
     if (targetConditions.length) {
       const receipt = acquireV5Conditions(updated, targetConditions, { resolutionId: preview.resolutionId, authorId: preview.input.actor?.id, targetId: updated.id, round: preview.input.round, source: {} });
       if (!receipt.ready) return { status: 'manual', reason: receipt.needsInput[0].label, state: clone(currentState), resolution: clone(preview) };
@@ -1566,7 +1790,9 @@ export function applyResolution(preview, currentState) {
   if (preview.projectileLodging && preview.targetId) {
     const live = participantById(nextState, preview.targetId);
     if (!live) return { status: 'stale', requiresPreview: true, state: clone(currentState), resolution: clone(preview) };
-    const updated = clone(live); updated.extensions ??= {}; updated.extensions.v5 ??= {};
+    const updated = clone(live);
+    updated.extensions ??= {};
+    updated.extensions.v5 ??= {};
     const rows = updated.extensions.v5.lodgedProjectiles || [];
     const projectile = { ...clone(preview.projectileLodging), id: `${preview.resolutionId}:projectile`, resolutionId: preview.resolutionId,
       removed: false, source: { kind: 'quality', keywordId: 'empaleuse', authorId: preview.input.actor?.id } };
@@ -1578,12 +1804,14 @@ export function applyResolution(preview, currentState) {
     if(!owner||!live||JSON.stringify(live)!==JSON.stringify(preview.input.actor))return{status:'stale',requiresPreview:true,state:clone(currentState),resolution:clone(preview)};
     const weapon=owner.equipment?.find(row=>row.id===change.itemId);
     if(!weapon)return{status:'stale',requiresPreview:true,state:clone(currentState),resolution:clone(preview)};
-    const updated=clone(owner);updated.equipment=updated.equipment.map(row=>{
+    const updated=clone(owner);
+    updated.equipment=updated.equipment.map(row=>{
       if(row.id!==change.itemId)return row;
       const extensions={...(row.extensions||{})},v5={...(extensions.v5||{})};
       if(change.weaponDisposition)v5.weaponDisposition=change.weaponDisposition;else delete v5.weaponDisposition;
       if(change.fellDaggerBreakNextUse===true)v5.fellDaggerBreakNextUse=true;else delete v5.fellDaggerBreakNextUse;
-      extensions.v5=v5;return{...row,extensions};
+      extensions.v5=v5;
+      return{...row,extensions};
     });
     nextState.participants=participantListWithUpdate(nextState,updated.id,updated);
   }
@@ -1593,17 +1821,22 @@ export function applyResolution(preview, currentState) {
     if(trap.catch){
       const recipient=participantById(nextState,trap.defenderId);
       if(!recipient||recipient.equipment?.some(row=>row.id===trap.weaponId))return{status:'stale',requiresPreview:true,state:clone(currentState),resolution:clone(preview)};
-      const updatedHolder=clone(holder);updatedHolder.equipment=updatedHolder.equipment.filter(row=>row.id!==trap.weaponId);
+      const updatedHolder=clone(holder);
+      updatedHolder.equipment=updatedHolder.equipment.filter(row=>row.id!==trap.weaponId);
       nextState.participants=participantListWithUpdate(nextState,updatedHolder.id,updatedHolder);
       const updatedRecipient=clone(participantById(nextState,recipient.id)),item=clone(weapon);
-      const extensions={...(item.extensions||{})},v5={...(extensions.v5||{})};delete v5.weaponDisposition;
+      const extensions={...(item.extensions||{})},v5={...(extensions.v5||{})};
+      delete v5.weaponDisposition;
       if(trap.disposition==='broken')v5.weaponDisposition='broken';
       v5.weaponTrap={resolutionId:preview.resolutionId,defenderId:trap.defenderId,caughtBy:trap.defenderId,previousHolderId:trap.holderId};
       if(trap.disposition==='broken')v5.weaponTrap.broken=true;
-      extensions.v5=v5;item.extensions=extensions;updatedRecipient.equipment=[...(updatedRecipient.equipment||[]),item];
+      extensions.v5=v5;
+      item.extensions=extensions;
+      updatedRecipient.equipment=[...(updatedRecipient.equipment||[]),item];
       nextState.participants=participantListWithUpdate(nextState,updatedRecipient.id,updatedRecipient);
     }else{
-      const updated=clone(holder);updated.equipment=updated.equipment.map(row=>row.id!==trap.weaponId?row:{...row,extensions:{...(row.extensions||{}),v5:{...(row.extensions?.v5||{}),
+      const updated=clone(holder);
+      updated.equipment=updated.equipment.map(row=>row.id!==trap.weaponId?row:{...row,extensions:{...(row.extensions||{}),v5:{...(row.extensions?.v5||{}),
         weaponDisposition:trap.disposition,weaponTrap:{resolutionId:preview.resolutionId,defenderId:trap.defenderId,broken:trap.disposition==='broken',caughtBy:null}}}});
       nextState.participants=participantListWithUpdate(nextState,updated.id,updated);
     }
@@ -1613,10 +1846,24 @@ export function applyResolution(preview, currentState) {
     const item=owner?.equipment?.find(row=>row.id===recovery.weaponId);
     if(!owner||!recipient||!item||item.extensions?.v5?.weaponDisposition!=='dropped'||JSON.stringify(item)!==JSON.stringify(recovery.before)
       ||recovery.fromParticipantId!==recovery.toParticipantId&&recipient.equipment?.some(row=>row.id===recovery.weaponId))return{status:'stale',requiresPreview:true,state:clone(currentState),resolution:clone(preview)};
-    const restored=clone(item),extensions={...(restored.extensions||{})},v5={...(extensions.v5||{})};delete v5.weaponDisposition;
-    v5.weaponTrap={...(v5.weaponTrap||{}),recoveredBy:recovery.toParticipantId,recoveredAtResolutionId:preview.resolutionId};extensions.v5=v5;restored.extensions=extensions;
-    if(recovery.fromParticipantId===recovery.toParticipantId){const updated=clone(owner);updated.equipment=updated.equipment.map(row=>row.id===recovery.weaponId?restored:row);nextState.participants=participantListWithUpdate(nextState,updated.id,updated);}
-    else{const updatedOwner=clone(owner);updatedOwner.equipment=updatedOwner.equipment.filter(row=>row.id!==recovery.weaponId);nextState.participants=participantListWithUpdate(nextState,updatedOwner.id,updatedOwner);const updatedRecipient=clone(participantById(nextState,recipient.id));updatedRecipient.equipment=[...(updatedRecipient.equipment||[]),restored];nextState.participants=participantListWithUpdate(nextState,updatedRecipient.id,updatedRecipient);}
+    const restored=clone(item),extensions={...(restored.extensions||{})},v5={...(extensions.v5||{})};
+    delete v5.weaponDisposition;
+    v5.weaponTrap={...(v5.weaponTrap||{}),recoveredBy:recovery.toParticipantId,recoveredAtResolutionId:preview.resolutionId};
+    extensions.v5=v5;
+    restored.extensions=extensions;
+    if(recovery.fromParticipantId===recovery.toParticipantId){
+      const updated=clone(owner);
+      updated.equipment=updated.equipment.map(row=>row.id===recovery.weaponId?restored:row);
+      nextState.participants=participantListWithUpdate(nextState,updated.id,updated);
+    }
+    else{
+      const updatedOwner=clone(owner);
+      updatedOwner.equipment=updatedOwner.equipment.filter(row=>row.id!==recovery.weaponId);
+      nextState.participants=participantListWithUpdate(nextState,updatedOwner.id,updatedOwner);
+      const updatedRecipient=clone(participantById(nextState,recipient.id));
+      updatedRecipient.equipment=[...(updatedRecipient.equipment||[]),restored];
+      nextState.participants=participantListWithUpdate(nextState,updatedRecipient.id,updatedRecipient);
+    }
   }
   if (preview.entanglement?.linkId && preview.targetId) {
     const victim=participantById(nextState,preview.targetId);
@@ -1627,7 +1874,8 @@ export function applyResolution(preview, currentState) {
       if(preview.entanglement.conjuredEffectId){
         const effect=holder?.extensions?.v5?.spellEffects?.find(row=>row.id===preview.entanglement.conjuredEffectId);
         if(!holder||!effect)return{status:'stale',requiresPreview:true,state:clone(currentState),resolution:clone(preview)};
-        const updated=clone(holder);updated.extensions.v5.spellEffects=updated.extensions.v5.spellEffects.map(row=>row.id===effect.id?{...row,
+        const updated=clone(holder);
+        updated.extensions.v5.spellEffects=updated.extensions.v5.spellEffects.map(row=>row.id===effect.id?{...row,
           weaponLocks:[...(row.weaponLocks||[]).filter(lock=>lock.linkId!==preview.entanglement.linkId),{linkId:preview.entanglement.linkId,weaponKey:preview.entanglement.weaponId}]}:row);
         nextState.participants=participantListWithUpdate(nextState,updated.id,updated);
       } else {
@@ -1659,9 +1907,11 @@ export function applyResolution(preview, currentState) {
     const escape=preview.netEscape,live=participantById(nextState,escape.participantId);
     const condition=live?.states?.find(row=>row.id===escape.conditionId);
     if(!live||!condition||JSON.stringify(condition)!==JSON.stringify(escape.before))return{status:'stale',requiresPreview:true,state:clone(currentState),resolution:clone(preview)};
-    const updated=clone(live);updated.states=updated.states.flatMap(row=>row.id!==escape.conditionId?[row]:escape.after?[escape.after]:[]);
+    const updated=clone(live);
+    updated.states=updated.states.flatMap(row=>row.id!==escape.conditionId?[row]:escape.after?[escape.after]:[]);
     if(escape.hookedNetDamage>0)updated.hp=Math.max(0,(Number(updated.hp)||0)-escape.hookedNetDamage);
-    updated.extensions??={};updated.extensions.v5={...(updated.extensions.v5||{}),netEscapeProgress:{...(updated.extensions.v5?.netEscapeProgress||{})}};
+    updated.extensions??={};
+    updated.extensions.v5={...(updated.extensions.v5||{}),netEscapeProgress:{...(updated.extensions.v5?.netEscapeProgress||{})}};
     if(escape.afterProgress===null)delete updated.extensions.v5.netEscapeProgress[escape.conditionId];
     else updated.extensions.v5.netEscapeProgress[escape.conditionId]=escape.afterProgress;
     nextState.participants=participantListWithUpdate(nextState,updated.id,updated);
@@ -1670,13 +1920,15 @@ export function applyResolution(preview, currentState) {
       if(escape.conjuredEffectId){
         const effect=holder?.extensions?.v5?.spellEffects?.find(row=>row.id===escape.conjuredEffectId);
         if(!holder||!effect)return{status:'stale',requiresPreview:true,state:clone(currentState),resolution:clone(preview)};
-        const unlocked=clone(holder);unlocked.extensions.v5.spellEffects=unlocked.extensions.v5.spellEffects.map(row=>row.id===effect.id?{...row,
+        const unlocked=clone(holder);
+        unlocked.extensions.v5.spellEffects=unlocked.extensions.v5.spellEffects.map(row=>row.id===effect.id?{...row,
           weaponLocks:(row.weaponLocks||[]).filter(lock=>lock.linkId!==condition.source?.linkId)}:row);
         nextState.participants=participantListWithUpdate(nextState,unlocked.id,unlocked);
       } else {
         const weapon=holder?.equipment?.find(row=>row.id===escape.weaponId);
         if(!holder||!weapon)return{status:'stale',requiresPreview:true,state:clone(currentState),resolution:clone(preview)};
-        const unlocked=clone(holder);unlocked.equipment=unlocked.equipment.map(row=>row.id===weapon.id?{...row,extensions:{...(row.extensions||{}),v5:{...(row.extensions?.v5||{}),
+        const unlocked=clone(holder);
+        unlocked.equipment=unlocked.equipment.map(row=>row.id===weapon.id?{...row,extensions:{...(row.extensions||{}),v5:{...(row.extensions?.v5||{}),
           entanglementLocks:(row.extensions?.v5?.entanglementLocks||[]).filter(id=>id!==condition.source?.linkId)}}}:row);
         nextState.participants=participantListWithUpdate(nextState,unlocked.id,unlocked);
       }
@@ -1688,7 +1940,8 @@ export function applyResolution(preview, currentState) {
     const condition=victim?.states?.find(row=>row.id===release.condition.id);
     if(!holder||!victim||(!weapon&&!effect)||!condition||JSON.stringify(condition)!==JSON.stringify(release.condition)
       ||(weapon?!(weapon.extensions?.v5?.entanglementLocks||[]).includes(release.linkId):!(effect.weaponLocks||[]).some(lock=>lock.linkId===release.linkId)))return{status:'stale',requiresPreview:true,state:clone(currentState),resolution:clone(preview)};
-    const updatedVictim=clone(victim);updatedVictim.states=updatedVictim.states.filter(row=>row.id!==condition.id);
+    const updatedVictim=clone(victim);
+    updatedVictim.states=updatedVictim.states.filter(row=>row.id!==condition.id);
     nextState.participants=participantListWithUpdate(nextState,updatedVictim.id,updatedVictim);
     const updatedHolder=clone(participantById(nextState,release.holderId));
     if(effect)updatedHolder.extensions.v5.spellEffects=updatedHolder.extensions.v5.spellEffects.map(row=>row.id===effect.id?{...row,weaponLocks:(row.weaponLocks||[]).filter(lock=>lock.linkId!==release.linkId)}:row);
@@ -1701,11 +1954,19 @@ export function applyResolution(preview, currentState) {
     let actor=participantById(nextState,actorId),victim=participantById(nextState,targetId);
     if(!actor||!victim)return{status:'stale',requiresPreview:true,state:clone(currentState),resolution:clone(preview)};
     if(preview.grapple.won&&preview.grapple.link){
-      const applied=applyGrappleInitiation(preview.grapple,victim);victim=clone(applied.participant);
+      const applied=applyGrappleInitiation(preview.grapple,victim);
+      victim=clone(applied.participant);
       const link={...applied.link,appliedActionIds:[preview.resolutionId]};
-      const attach=subject=>{const updated=clone(subject);updated.extensions??={};updated.extensions.v5={...(updated.extensions.v5||{}),grapples:[...(updated.extensions.v5?.grapples||[]).filter(row=>row.id!==link.id),link]};return updated;};
-      actor=attach(actor);victim=attach(victim);
-      nextState.participants=participantListWithUpdate(nextState,victim.id,victim);nextState.participants=participantListWithUpdate(nextState,actor.id,actor);
+      const attach=subject=>{
+        const updated=clone(subject);
+        updated.extensions??={};
+        updated.extensions.v5={...(updated.extensions.v5||{}),grapples:[...(updated.extensions.v5?.grapples||[]).filter(row=>row.id!==link.id),link]};
+        return updated;
+      };
+      actor=attach(actor);
+      victim=attach(victim);
+      nextState.participants=participantListWithUpdate(nextState,victim.id,victim);
+      nextState.participants=participantListWithUpdate(nextState,actor.id,actor);
     }
   }else if(preview.grapple?.ready&&preview.grapple?.linkId){
     const actorId=preview.input.actor?.id,targetId=preview.input.target?.id;
@@ -1714,12 +1975,20 @@ export function applyResolution(preview, currentState) {
     if(!actor||!victim||!link)return{status:'stale',requiresPreview:true,state:clone(currentState),resolution:clone(preview)};
     const applied=applyGrappleAction(preview.grapple,{actor,target:victim,link});
     if(applied.status==='stale'||applied.status==='blocked')return{status:'stale',requiresPreview:true,state:clone(currentState),resolution:clone(preview)};
-    actor=clone(applied.actor||actor);victim=clone(applied.target||victim);
+    actor=clone(applied.actor||actor);
+    victim=clone(applied.target||victim);
     if(applied.damage){victim.hp=Math.max(0,(Number(victim.hp)||0)-applied.damage.amount);}
     const nextLink=applied.link;
-    const replace=subject=>{const updated=clone(subject);updated.extensions??={};updated.extensions.v5={...(updated.extensions.v5||{}),grapples:(updated.extensions.v5?.grapples||[]).map(row=>row.id===nextLink.id?nextLink:row)};return updated;};
-    actor=replace(actor);victim=replace(victim);
-    nextState.participants=participantListWithUpdate(nextState,actor.id,actor);nextState.participants=participantListWithUpdate(nextState,victim.id,victim);
+    const replace=subject=>{
+      const updated=clone(subject);
+      updated.extensions??={};
+      updated.extensions.v5={...(updated.extensions.v5||{}),grapples:(updated.extensions.v5?.grapples||[]).map(row=>row.id===nextLink.id?nextLink:row)};
+      return updated;
+    };
+    actor=replace(actor);
+    victim=replace(victim);
+    nextState.participants=participantListWithUpdate(nextState,actor.id,actor);
+    nextState.participants=participantListWithUpdate(nextState,victim.id,victim);
   }
   if (preview.activeEffects?.length) {
     const live = participantById(nextState, preview.targetId);
@@ -1727,36 +1996,68 @@ export function applyResolution(preview, currentState) {
     const updated = { ...clone(live), states: [...(live.states || []), ...clone(preview.activeEffects)] };
     nextState.participants = participantListWithUpdate(nextState, live.id, updated);
   }
-  for(const row of preview.secondaryTargets||[]){const live=participantById(nextState,row.participantId);if(!live||JSON.stringify(live)!==JSON.stringify(row.before))return{status:'stale',requiresPreview:true,state:clone(currentState),resolution:clone(preview)};const secondaryUpdated=clone(row.participant);appendCriticalWoundRecords(secondaryUpdated,[row.critical?.second],{resolutionId:preview.resolutionId,authorId:preview.input.actor?.id,round:preview.input.round,beforeStates:live.states||[]});nextState.participants=participantListWithUpdate(nextState,live.id,secondaryUpdated);}
+  for(const row of preview.secondaryTargets||[]){
+    const live=participantById(nextState,row.participantId);
+    if(!live||JSON.stringify(live)!==JSON.stringify(row.before))return{status:'stale',requiresPreview:true,state:clone(currentState),resolution:clone(preview)};
+    const secondaryUpdated=clone(row.participant);
+    appendCriticalWoundRecords(secondaryUpdated,[row.critical?.second],{resolutionId:preview.resolutionId,authorId:preview.input.actor?.id,round:preview.input.round,beforeStates:live.states||[]});
+    nextState.participants=participantListWithUpdate(nextState,live.id,secondaryUpdated);
+  }
   for (const change of preview.momentum || []) {
     const live = participantById(nextState, change.participantId);
     if (live) nextState.participants = participantListWithUpdate(nextState, live.id, withMomentum(live, change.after));
   }
   if (preview.championSlayerDuel) {
     const live = participantById(nextState, preview.championSlayerDuel.participantId);
-    if (live) { const updated = clone(live); updated.extensions ??= {}; updated.extensions.v5 = { ...(updated.extensions.v5 || {}), championSlayerDuels: [...new Set([...(updated.extensions.v5?.championSlayerDuels || []), preview.championSlayerDuel.targetId])].slice(-50) }; nextState.participants = participantListWithUpdate(nextState, live.id, updated); }
+    if (live) {
+      const updated = clone(live);
+      updated.extensions ??= {};
+      updated.extensions.v5 = { ...(updated.extensions.v5 || {}), championSlayerDuels: [...new Set([...(updated.extensions.v5?.championSlayerDuels || []), preview.championSlayerDuel.targetId])].slice(-50) };
+      nextState.participants = participantListWithUpdate(nextState, live.id, updated);
+    }
   }
   for(const change of preview.talentActionChanges||[]){
-    const live=participantById(nextState,change.participantId);if(!live)return{status:'stale',requiresPreview:true,state:clone(currentState),resolution:clone(preview)};
+    const live=participantById(nextState,change.participantId);
+    if(!live)return{status:'stale',requiresPreview:true,state:clone(currentState),resolution:clone(preview)};
     let updated={...clone(live),...clone(change.patch||{}),states:[...(live.states||[]).filter(s=>!change.removeKeys?.includes(s.key)&&!change.removeIds?.includes(s.id)),...(change.add||[])]};
-    if(typeof change.momentum==='boolean')updated=withMomentum(updated,change.momentum);updated=loseMomentumUnderFear(updated);nextState.participants=participantListWithUpdate(nextState,live.id,updated);
+    if(typeof change.momentum==='boolean')updated=withMomentum(updated,change.momentum);
+    updated=loseMomentumUnderFear(updated);
+    nextState.participants=participantListWithUpdate(nextState,live.id,updated);
   }
   for(const effect of preview.combatFailure?.effects||[]){
-    const live=participantById(nextState,effect.targetId);if(!live)return{status:'stale',requiresPreview:true,state:clone(currentState),resolution:clone(preview)};
-    let updated=clone(live);updated.extensions??={};updated.extensions.v5={...(updated.extensions.v5||{})};
-    const addPending=entry=>{const rows=updated.extensions.v5.combatEffects||[];updated.extensions.v5.combatEffects=[...rows,{...entry,id:`${preview.resolutionId}:fumble:${rows.length}`}];};
+    const live=participantById(nextState,effect.targetId);
+    if(!live)return{status:'stale',requiresPreview:true,state:clone(currentState),resolution:clone(preview)};
+    let updated=clone(live);
+    updated.extensions??={};
+    updated.extensions.v5={...(updated.extensions.v5||{})};
+    const addPending=entry=>{
+      const rows=updated.extensions.v5.combatEffects||[];
+      updated.extensions.v5.combatEffects=[...rows,{...entry,id:`${preview.resolutionId}:fumble:${rows.length}`}];
+    };
     if(effect.type==='bomb-explosion-target'){
       if(JSON.stringify(live)!==JSON.stringify(effect.targetSnapshot))return {status:'stale',requiresPreview:true,state:clone(currentState),resolution:clone(preview)};
       const damage=Math.max(0,Number(effect.damage)||0),toughness=Math.floor((Number(updated.caracs?.E)||0)/10),armour=incidentalArmour(updated,{key:'BODY'});
       updated.hp=Math.max(0,(Number(updated.hp)||0)-Math.max(0,damage-toughness-armour));
       const historyEntry={resolutionId:preview.resolutionId,equipmentId:preview.input.v5?.context?.bombEquipmentId||null,targetId:effect.targetId,damage,appliedDamage:Math.max(0,damage-toughness-armour),round:preview.input.round||null,source:'L13-0117'};
-      if(effect.sourceActorId===updated.id){updated.extensions.v5.combatEffects=(updated.extensions.v5.combatEffects||[]).filter(row=>row.id!==effect.bombEffectId);updated.extensions.v5.bombDetonationHistory=[...(updated.extensions.v5.bombDetonationHistory||[]),historyEntry].slice(-100);}
-      else {const source=participantById(nextState,effect.sourceActorId);if(source){const bombActor=clone(source);bombActor.extensions??={};bombActor.extensions.v5={...(bombActor.extensions.v5||{}),combatEffects:(bombActor.extensions.v5.combatEffects||[]).filter(row=>row.id!==effect.bombEffectId),bombDetonationHistory:[...(bombActor.extensions.v5.bombDetonationHistory||[]),historyEntry].slice(-100)};nextState.participants=participantListWithUpdate(nextState,bombActor.id,bombActor);}}
+      if(effect.sourceActorId===updated.id){
+        updated.extensions.v5.combatEffects=(updated.extensions.v5.combatEffects||[]).filter(row=>row.id!==effect.bombEffectId);
+        updated.extensions.v5.bombDetonationHistory=[...(updated.extensions.v5.bombDetonationHistory||[]),historyEntry].slice(-100);
+      }
+      else {
+        const source=participantById(nextState,effect.sourceActorId);
+        if(source){
+          const bombActor=clone(source);
+          bombActor.extensions??={};
+          bombActor.extensions.v5={...(bombActor.extensions.v5||{}),combatEffects:(bombActor.extensions.v5.combatEffects||[]).filter(row=>row.id!==effect.bombEffectId),bombDetonationHistory:[...(bombActor.extensions.v5.bombDetonationHistory||[]),historyEntry].slice(-100)};
+          nextState.participants=participantListWithUpdate(nextState,bombActor.id,bombActor);
+        }
+      }
     }
     else if(effect.type==='blackpowder-stock-change'){
       const before=updated.extensions.v5.blackpowderStock;
       if(effect.initialized?Boolean(before):!before||before.projectiles!==effect.before.projectiles||before.powderCharges!==effect.before.powderCharges)return {status:'stale',requiresPreview:true,state:clone(currentState),resolution:clone(preview)};
-      const history=before?.history||[];updated.extensions.v5.blackpowderStock={version:1,...effect.after,history:[...history,{resolutionId:preview.resolutionId,source:effect.source,before:effect.before,after:effect.after,debits:effect.debits,round:preview.input.round||null}].slice(-200)};
+      const history=before?.history||[];
+      updated.extensions.v5.blackpowderStock={version:1,...effect.after,history:[...history,{resolutionId:preview.resolutionId,source:effect.source,before:effect.before,after:effect.after,debits:effect.debits,round:preview.input.round||null}].slice(-200)};
     }
     else if(effect.type==='wound-loss')updated.hp=Math.max(0,(Number(updated.hp)||0)-effect.amount);
     else if(effect.type==='condition')updated.states=[...(updated.states||[]),{...effect.condition,source:{kind:'fumble',resolutionId:preview.resolutionId,authorId:preview.input.actor?.id}}];
@@ -1777,14 +2078,16 @@ export function applyResolution(preview, currentState) {
       updated.hp=Math.max(0,(Number(updated.hp)||0)-Math.max(0,damage-toughness-armour));
     } else if(effect.type==='salvo-hit'){
       const locationMap={head:{key:'HEAD'},body:{key:'BODY'},left:{key:'ARM',side:'left'},right:{key:'ARM',side:'right'},'left-arm':{key:'ARM',side:'left'},'right-arm':{key:'ARM',side:'right'},'left-leg':{key:'LEG',side:'left'},'right-leg':{key:'LEG',side:'right'}};
-      const location=locationMap[effect.location];if(!location)return{status:'manual',reason:'salvo-hit-location-required',state:clone(currentState),resolution:clone(preview)};
+      const location=locationMap[effect.location];
+      if(!location)return{status:'manual',reason:'salvo-hit-location-required',state:clone(currentState),resolution:clone(preview)};
       const damage=Math.max(0,Number(effect.damage)||0)+Math.max(0,Number(effect.effectiveSL)||0),toughness=Math.floor((Number(updated.caracs?.E)||0)/10),armour=incidentalArmour(updated,location),appliedDamage=Math.max(0,damage-toughness-armour);
       updated.hp=Math.max(0,(Number(updated.hp)||0)-appliedDamage);
     } else if(effect.type==='salvo-artillery-destroyed'){
       const equipmentId=effect.equipmentId||preview.input.action?.extensions?.fiche?.equipmentId,item=updated.equipment?.find(row=>row.id===equipmentId);
       if(item)updated.equipment=updated.equipment.map(row=>row.id===equipmentId?{...row,extensions:{...(row.extensions||{}),v5:{...(row.extensions?.v5||{}),destroyed:true,misfire:{resolutionId:preview.resolutionId,table:'salvo-artillery'}}}}:row);
     } else if(effect.type==='griffonsfoot-discharge'){
-      const equipmentId=effect.equipmentId;const item=updated.equipment?.find(row=>row.id===equipmentId);
+      const equipmentId=effect.equipmentId;
+      const item=updated.equipment?.find(row=>row.id===equipmentId);
       if(item)updated.equipment=updated.equipment.map(row=>row.id===equipmentId?{...row,extensions:{...(row.extensions||{}),v5:{...(row.extensions?.v5||{}),loadedCharges:0,griffonsfootReloadProgress:0,griffonsfootReloadRequiredSuccesses:Number(row.keywords?.find(quality=>(typeof quality==='string'?quality:quality?.id)==='recharge')?.parameter)||6,griffonsfootReloading:true,lastDischargeResolutionId:preview.resolutionId}}}:row);
       addPending({kind:'griffonsfoot-reload',projectiles:effect.ammoRequired,powderRequired:true});
     } else if(effect.type==='griffonsfoot-reload-progress'){
@@ -1792,10 +2095,12 @@ export function applyResolution(preview, currentState) {
       const progress=Math.min(effect.requiredSuccesses,(Number(v5.griffonsfootReloadProgress)||0)+effect.successes),done=progress>=effect.requiredSuccesses;
       updated.equipment=(updated.equipment||[]).map(row=>row.id===effect.equipmentId?{...row,extensions:{...(row.extensions||{}),v5:{...(row.extensions?.v5||{}),griffonsfootReloadProgress:progress,griffonsfootReloadRequiredSuccesses:effect.requiredSuccesses,griffonsfootReloading:!done}}}:row);
     } else if(effect.type==='griffonsfoot-reload'){
-      const equipmentId=effect.equipmentId;updated.equipment=(updated.equipment||[]).map(row=>row.id===equipmentId?{...row,extensions:{...(row.extensions||{}),v5:{...(row.extensions?.v5||{}),loadedCharges:6,lastReloadResolutionId:preview.resolutionId}}}:row);
+      const equipmentId=effect.equipmentId;
+      updated.equipment=(updated.equipment||[]).map(row=>row.id===equipmentId?{...row,extensions:{...(row.extensions||{}),v5:{...(row.extensions?.v5||{}),loadedCharges:6,lastReloadResolutionId:preview.resolutionId}}}:row);
       updated.extensions.v5.combatEffects=(updated.extensions.v5.combatEffects||[]).filter(row=>row.kind!=='griffonsfoot-reload');
     } else if(effect.type==='reload-progress'){
-      const equipmentId=effect.equipmentId;updated.equipment=(updated.equipment||[]).map(row=>{
+      const equipmentId=effect.equipmentId;
+      updated.equipment=(updated.equipment||[]).map(row=>{
         if(row.id!==equipmentId)return row;
         const before=Number(row.extensions?.v5?.reloadProgress)||0,progress=Math.min(effect.requiredSuccesses,before+effect.successes);
         const done=progress>=effect.requiredSuccesses;
@@ -1839,7 +2144,15 @@ export function applyResolution(preview, currentState) {
         reloaded: preview.weaponReload.after.requiresReload!==true&&!preview.weaponReload.after.reloading } } } : item);
     nextState.participants = participantListWithUpdate(nextState, updated.id, updated);
   }
-  if(preview.consumedCombatEffects?.length&&preview.input.actor?.id){const live=participantById(nextState,preview.input.actor.id);if(live){const updated=clone(live);updated.extensions??={};updated.extensions.v5={...(updated.extensions.v5||{}),combatEffects:(updated.extensions.v5?.combatEffects||[]).filter(row=>!preview.consumedCombatEffects.includes(row.id))};nextState.participants=participantListWithUpdate(nextState,updated.id,updated);}}
+  if(preview.consumedCombatEffects?.length&&preview.input.actor?.id){
+    const live=participantById(nextState,preview.input.actor.id);
+    if(live){
+      const updated=clone(live);
+      updated.extensions??={};
+      updated.extensions.v5={...(updated.extensions.v5||{}),combatEffects:(updated.extensions.v5?.combatEffects||[]).filter(row=>!preview.consumedCombatEffects.includes(row.id))};
+      nextState.participants=participantListWithUpdate(nextState,updated.id,updated);
+    }
+  }
   for(const p of Array.isArray(nextState.participants)?nextState.participants:Object.values(nextState.participants))nextState.participants=participantListWithUpdate(nextState,p.id,refreshV5TalentEffects(p,{round:preview.input.round,resolutionId:preview.resolutionId}));
   // Coup Critique infligé par l'attaquant (cible principale ou secondaire) ou par le défenseur : les couches divines « consumeOn: critical » (Sauvagerie) prennent fin dans la même commande.
   if (preview.attack) {
@@ -1881,7 +2194,10 @@ export function applyResolution(preview, currentState) {
     const rider = participantById(nextState, id);
     if (!rider) return { status: 'stale', requiresPreview: true, state: clone(currentState), resolution: clone(preview) };
     const updated = clone(rider), extensions = { ...(updated.extensions || {}) }, v5 = { ...(extensions.v5 || {}) };
-    delete v5.mountId; v5.mounted = false; extensions.v5 = v5; updated.extensions = extensions;
+    delete v5.mountId;
+    v5.mounted = false;
+    extensions.v5 = v5;
+    updated.extensions = extensions;
     nextState.participants = participantListWithUpdate(nextState, id, updated);
   }
   nextState.revision = currentState.revision + 1;
