@@ -154,3 +154,15 @@ Page de décision : https://claude.ai/artifact/3g61EkX3SAhorWeqXjSGZn (copie des
 - Mouvement divisé par deux : **arrondi au-dessus partout** (pied, déchirure, fracture).
 - Immobiliser une fracture est un **Test à part** : il ne consomme pas le soin unique de Blessures de l'incident.
 - Appliqués sans question (lecture du livre) : dents perdues, seuil « plus de la moitié » par espèce, strictement supérieur ; maladresse de Guérison (1d10, pas sous 1 Blessure) sur tout Test de Guérison J2 ; déchirure mineure guérie au terme de 30−BE jours, signalé au MJ.
+
+## Décisions du MJ du 31/10 (questions du rapport de phase R)
+
+1. **Peur sans indice chiffré** : Peur (1) par défaut, comme le livre v3 p.358 (remplace l'arbitrage C0 du 21/10 pour ce cas) ; la valeur reste corrigeable à la main.
+2. **Œil de la tempête** : s'applique aussi à la pause de Focalisation (Test de Focalisation, p.236), comme aux autres Focalisations.
+3. **Grim** : plus de limite d'une attaque gratuite par Tour ; autant que la règle en déclenche.
+4. **Attribut des Bêtes** : gardé tel quel (tous les ennemis vivants actifs, sans liste décochable ; distances non suivies).
+5. **Morsure** : règle gardée (valeur imprimée prioritaire, BF+3 seulement sans aucun chiffre).
+6. **Perturbant** : les participants « neutres » sont touchés ; un Perturbant touche tout le monde sauf son propre camp.
+7. **« yards » des citations du bestiaire** (`sourceText`) : convertis en mètres, même valeur (50 yards → 50 m).
+8. **Documents lot3** : régénérés depuis les données v3, assertion de `tools/check-lot3-generation.mjs` remise à jour.
+9. **Suite de R3** (lots à accesseurs, découpes à fermeture forte) : arrêtée.
