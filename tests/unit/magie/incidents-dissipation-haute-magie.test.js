@@ -381,14 +381,21 @@ test('H-03 — HEPG pp. 85/86, V5 p. 237 : Focalisation secondaire des Arcanes p
   assert.equal(q.targetResults[0].arcaneUnforgiving.focalisationTest.sl, -4);
 });
 
-test('H-04 — HEPG p. 105 : Exténué ignoré seulement en Focalisation et Incantation', async () => {
+test('H-04 — HEPG p. 105 : Exténué ignoré en Focalisation, pause de Focalisation et Incantation, pas en Calme', async () => {
   const actor = wizard({ states: [{ name: 'Exténué', level: 2 }], extensions: { v5: { channelling: { type: 'high', sl: 20 },
     spellEffects: [{ id: 'eye', spellId: 'talent-eye-of-the-storm', magicTalentId: 'talent-eye-of-the-storm', magicTalentRank: 2 }] } } });
   const store = await combat(actor);
   assert.equal(store.previewChannelling({ actorId: 'mage', roll: 25 }).test.sl, 4);
   assert.equal(store.previewCasting(getSpellContract('Carreau'), { actorId: 'mage', roll: 25 }).test.sl, 4);
-  assert.equal(store.previewChannelling({ actorId: 'mage', mode: 'pause', roll: 25 }).test.sl, 4, 'pause (v3 : Test de Focalisation Accessible +2 DR) : Exténué toujours appliqué');
+  assert.equal(store.previewChannelling({ actorId: 'mage', mode: 'pause', roll: 25 }).test.sl, 6, 'pause (Test de Focalisation, v3 p.236) : Œil de la tempête ignore Exténué comme pour les autres Focalisations (MJ 31/10)');
   assert.equal(store.previewChannelling({ actorId: 'mage', mode: 'interruption', roll: 25 }).test.sl, -1);
+});
+
+test('H-04 — Œil de la tempête rang 1 : la pause de Focalisation garde la pénalité d’Exténué', async () => {
+  const actor = wizard({ states: [{ name: 'Exténué', level: 2 }], extensions: { v5: { channelling: { type: 'high', sl: 20 },
+    spellEffects: [{ id: 'eye', spellId: 'talent-eye-of-the-storm', magicTalentId: 'talent-eye-of-the-storm', magicTalentRank: 1 }] } } });
+  const store = await combat(actor);
+  assert.equal(store.previewChannelling({ actorId: 'mage', mode: 'pause', roll: 25 }).test.sl, 4);
 });
 
 test('H-01 — HEPG p. 84 : rune de Focalisation high consommée sur échec, Undo exact', async () => {

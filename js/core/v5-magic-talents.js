@@ -72,7 +72,7 @@ export function prepareMagicOptions(actor, kind, options={}, spell = null) {
   }
   const levels=new Map();for(const state of actor.states || []){const key=fold(state.key || state.name);levels.set(key,(levels.get(key)||0)+Number(state.level || 1));}
   if(['casting','channelling','dispel'].includes(kind) && (levels.has('inconscient') || levels.has('surpris')))throw ruleError('Inconscient ou Surpris : Test magique indisponible.');
-  const ignoreFatigue=['casting','channelling'].includes(kind) && Number(activeMagicTalent(actor,'eye-of-the-storm')?.magicTalentRank)>=2;
+  const ignoreFatigue=['casting','channelling','pause'].includes(kind) && Number(activeMagicTalent(actor,'eye-of-the-storm')?.magicTalentRank)>=2;
   const mental=['casting','channelling','dispel','interruption'].includes(kind);
   if(flags?.clarityOfThought && mental)for(let i=slModifiers.length-1;i>=0;i--)if(slModifiers[i].amount<0 && /psychology|mental.?mutation|mutation.?mental/i.test(slModifiers[i].id))slModifiers.splice(i,1);
   const penalty=Math.max(flags?.clarityOfThought && mental?0:levels.get('sonne')||0,ignoreFatigue?0:levels.get('extenue')||0,levels.get('empoisonne')||0);
