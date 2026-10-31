@@ -589,7 +589,7 @@ test('Dissipation — aperçu sans jet : ready:false et jet listé', () => {
 });
 
 test('Statique — aucun Math.random dans l’interface magique ni dans le tour V5', () => {
-  for (const path of ['../../../js/ui/workspace-view.js', '../../../js/ui/resolution-panel.js', '../../../js/ui/v5-magic-controls.js', '../../../js/core/v5-turn.js', '../../../js/core/v5-magic-turn.js']) {
+  for (const path of ['../../../js/ui/workspace-view.js', '../../../js/ui/resolution-panel.js', '../../../js/ui/workspace/helpers.js', '../../../js/ui/resolution-panel/critical.js', '../../../js/ui/resolution-panel/dom.js', '../../../js/ui/resolution-panel/magic.js', '../../../js/ui/resolution-panel/result.js', '../../../js/ui/v5-magic-controls.js', '../../../js/core/v5-turn.js', '../../../js/core/v5-magic-turn.js']) {
     assert.doesNotMatch(readFileSync(new URL(path, import.meta.url), 'utf8'), /Math.random/, path);
   }
 });
