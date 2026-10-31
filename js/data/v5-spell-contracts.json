@@ -17321,9 +17321,9 @@
         }
       ]
     },
-    "reminders": "Une brindille de moins de vingt centimètres devient une dague Magique ; contre un adversaire Éthéré ou Corrompu, elle inflige BF + 8. Deux attaques sont créées : la dague ordinaire (BF + 2) et la variante BF + 8 à employer contre une cible portant le Trait Éthéré ou Corruption (tout degré). Maintien après la durée : Test de Focalisation Intermédiaire (+0 DR) à chaque Round suivant, saisi par le MJ. Le bâtonnet est un rappel narratif, jamais une exigence.",
+    "reminders": "Une brindille de moins de vingt centimètres devient une dague Magique ; contre un adversaire Éthéré ou Corrompu, elle inflige BF + 8 Dégâts. Deux attaques sont créées : la dague ordinaire (BF + 2 Dégâts) et la variante BF + 8 Dégâts à employer contre une cible portant le Trait Éthéré ou Corruption (tout degré). Maintien après la durée : Test de Focalisation Intermédiaire (+0 DR) à chaque Round suivant, saisi par le MJ. Le bâtonnet est un rappel narratif, jamais une exigence.",
     "assistedClauses": [
-      "Deux attaques sont créées : la dague ordinaire (BF + 2) et la variante BF + 8 à employer contre une cible portant le Trait Éthéré ou Corruption (tout degré). Maintien après la durée : Test de Focalisation Intermédiaire (+0 DR) à chaque Round suivant, saisi par le MJ. Le bâtonnet est un rappel narratif, jamais une exigence."
+      "Deux attaques sont créées : la dague ordinaire (BF + 2 Dégâts) et la variante BF + 8 Dégâts à employer contre une cible portant le Trait Éthéré ou Corruption (tout degré). Maintien après la durée : Test de Focalisation Intermédiaire (+0 DR) à chaque Round suivant, saisi par le MJ. Le bâtonnet est un rappel narratif, jamais une exigence."
     ],
     "sharedWith": null,
     "sourceBook": "L02",
@@ -17551,9 +17551,9 @@
         "resistanceMaladiesEtPoisonsDR": 1
       }
     },
-    "reminders": "Un sachet d’herbes pourpres porté au cou : +1 DR en Calme contre les effets surnaturels (Peur et Terreur des Morts-vivants et des démons comprises) et +1 DR en Résistance contre maladies et empoisonnement. Durée : une semaine plus une par DR du Test d’incantation (donnée saisie par le MJ). Le sachet de peau de petit animal est un rappel narratif.",
+    "reminders": "Un sachet d’herbes pourpres porté au cou : +1 DR en Calme contre les effets surnaturels (Peur et Terreur des Morts-vivants et des démons comprises) et +1 DR en Résistance contre maladies et empoisonnement. Durée : 1 semaine plus 1 semaine supplémentaire par DR du Test d’incantation (donnée saisie par le MJ). Le sachet de peau de petit animal est un rappel narratif.",
     "assistedClauses": [
-      "Durée : une semaine plus une par DR du Test d’incantation (donnée saisie par le MJ). Le sachet de peau de petit animal est un rappel narratif."
+      "Durée : 1 semaine plus 1 semaine supplémentaire par DR du Test d’incantation (donnée saisie par le MJ). Le sachet de peau de petit animal est un rappel narratif."
     ],
     "sharedWith": null,
     "sourceBook": "L02",
@@ -17642,7 +17642,7 @@
     "effects": {
       "type": "narrative"
     },
-    "reminders": "Un charme de chance : au fil des heures vous trouvez des pièces égarées, 1d10 sous de cuivre au total à la fin du sort. Gain de 1d10 sous de cuivre à l’échéance, reçu de bourse à reporter par le MJ ; durée tirée aux dés saisie par le MJ.",
+    "reminders": "Un charme de chance : au fil des 1d10 heures vous trouvez des pièces égarées, 1d10 sous de cuivre au total à la fin du sort. Gain de 1d10 sous de cuivre à l’échéance, reçu de bourse à reporter par le MJ ; durée tirée aux dés saisie par le MJ.",
     "assistedClauses": [
       "Gain de 1d10 sous de cuivre à l’échéance, reçu de bourse à reporter par le MJ ; durée tirée aux dés saisie par le MJ."
     ],
@@ -20534,7 +20534,7 @@
         }
       ]
     },
-    "reminders": "Le Chaman pince les doigts ; une grande main verte descend du ciel pour pincer la cible, qui doit gagner un Test de Force opposé à Force 80 pour s’en libérer ; sinon elle subit un coup de 10 au corps puis est lâchée de 2d10 mètres. Opposition : jet d100 de la main (Force 80) et jet d100 de la cible, saisis. Cible prise : dégâts 10 à la localisation Corps puis chute de 2d10 mètres (dégâts de chute à jouer par le MJ). Cible qui gagne l’opposition : aucun effet.",
+    "reminders": "Le Chaman pince les doigts ; une grande main verte descend du ciel pour pincer la cible, qui doit gagner un Test de Force opposé à Force 80 pour s’en libérer ; sinon elle subit 10 Dégâts à la localisation Corps puis est lâchée de 2d10 mètres. Opposition : jet d100 de la main (Force 80) et jet d100 de la cible, saisis. Cible prise : dégâts 10 à la localisation Corps puis chute de 2d10 mètres (dégâts de chute à jouer par le MJ). Cible qui gagne l’opposition : aucun effet.",
     "assistedClauses": [
       "Opposition : jet d100 de la main (Force 80) et jet d100 de la cible, saisis. Cible prise : dégâts 10 à la localisation Corps puis chute de 2d10 mètres (dégâts de chute à jouer par le MJ). Cible qui gagne l’opposition : aucun effet."
     ],
@@ -21149,9 +21149,9 @@
       },
       "conjureWeaponScore": 55
     },
-    "reminders": "Les poings noueux du Chaman grossissent et durcissent comme du fer : il doit lâcher ce qu’il tient et ne peut attaquer qu’à mains nues, avec Corps à corps (Bagarre) 55 et Arme (Poings) +9. Attaque créée : Corps à corps (Bagarre) 55, dégâts BF + 9. Les objets tenus sont lâchés par le MJ (rappel). Les poings sont comptés « Magique » comme toute arme conjurée du moteur (précision du moteur, pas du livre).",
+    "reminders": "Les poings noueux du Chaman grossissent et durcissent comme du fer : il doit lâcher ce qu’il tient et ne peut attaquer qu’à mains nues, avec Corps à corps (Bagarre) 55 et Arme (Poings) +9. Attaque créée : Corps à corps (Bagarre) 55, dégâts BF + 9 Dégâts. Les objets tenus sont lâchés par le MJ (rappel). Les poings sont comptés « Magique » comme toute arme conjurée du moteur (précision du moteur, pas du livre).",
     "assistedClauses": [
-      "Attaque créée : Corps à corps (Bagarre) 55, dégâts BF + 9. Les objets tenus sont lâchés par le MJ (rappel). Les poings sont comptés « Magique » comme toute arme conjurée du moteur (précision du moteur, pas du livre)."
+      "Attaque créée : Corps à corps (Bagarre) 55, dégâts BF + 9 Dégâts. Les objets tenus sont lâchés par le MJ (rappel). Les poings sont comptés « Magique » comme toute arme conjurée du moteur (précision du moteur, pas du livre)."
     ],
     "sharedWith": null,
     "sourceBook": "L12",
@@ -21210,7 +21210,7 @@
       },
       "facts": []
     },
-    "reminders": "Le Chaman hurle au ciel en agitant les mains ; Gork répond d’un pied qui écrase tout : les cibles de la zone tombent À Terre et reçoivent un coup de 8 qui ignore les Points d’Armure, ou 4 avec un Test d’Esquive Difficile (−1 DR) réussi. À Terre dans tous les cas ; localisation aléatoire, Points d’Armure ignorés ; Esquive Difficile (−1 DR) saisie.",
+    "reminders": "Le Chaman hurle au ciel en agitant les mains ; Gork répond d’un pied qui écrase tout : les cibles de la zone tombent À Terre et reçoivent 8 Dégâts qui ignorent les Points d’Armure, ou 4 avec un Test d’Esquive Difficile (−1 DR) réussi. À Terre dans tous les cas ; localisation aléatoire, Points d’Armure ignorés ; Esquive Difficile (−1 DR) saisie.",
     "assistedClauses": [
       "À Terre dans tous les cas ; localisation aléatoire, Points d’Armure ignorés ; Esquive Difficile (−1 DR) saisie."
     ],
@@ -21365,7 +21365,7 @@
         }
       ]
     },
-    "reminders": "Le Chaman implore Mork de protéger ses alliés : pour chaque DR du Test d’incantation, un Orque, Gobelin ou Hobgobelin allié à portée reçoit une Protection de 10+ ; une Protection existante s’améliore d’un cran. Une Protection déjà possédée est améliorée de 1, sans jamais dépasser 7+ ; au plus autant de cibles que de DR du Test (limite à vérifier par le MJ). L12 inclut les Hobgobelins, Lustria (L07 p. 183) seulement les Orques et Gobelins : L12 fait foi.",
+    "reminders": "Le Chaman implore Mork de protéger ses alliés : pour chaque DR du Test d’incantation, un Orque, Gobelin ou Hobgobelin allié à portée reçoit une Protection (10+) ; une Protection existante s’améliore d’un cran. Une Protection déjà possédée est améliorée de 1, sans jamais dépasser 7+ ; au plus autant de cibles que de DR du Test (limite à vérifier par le MJ). L12 inclut les Hobgobelins, Lustria (L07 p. 183) seulement les Orques et Gobelins : L12 fait foi.",
     "assistedClauses": [
       "Une Protection déjà possédée est améliorée de 1, sans jamais dépasser 7+ ; au plus autant de cibles que de DR du Test (limite à vérifier par le MJ). L12 inclut les Hobgobelins, Lustria (L07 p. 183) seulement les Orques et Gobelins : L12 fait foi."
     ],
@@ -21491,9 +21491,9 @@
         "failCondition": "À Terre"
       }
     },
-    "reminders": "Vous faites trembler une colline ou une montagne : ceux qui s’y trouvent réussissent un Test d’Athlétisme Très difficile (−3 DR) au début de leur Round, sinon ils ne peuvent ni agir ni se déplacer et tombent À Terre. Créatures sur le relief désignées par le MJ ; échec : ni action ni déplacement ce Round (rappel) et À Terre. Chaque Round de durée ajouté par surpuissance : la colline peut être déplacée de Bonus de Force Mentale mètres, les créatures sur sa trajectoire réussissent un Test d’Athlétisme Accessible (+2 DR) ou subissent 10 dégâts à une localisation de corps au hasard (jets joués par le MJ).",
+    "reminders": "Vous faites trembler une colline ou une montagne : ceux qui s’y trouvent réussissent un Test d’Athlétisme Très difficile (−3 DR) au début de leur Round, sinon ils ne peuvent ni agir ni se déplacer et tombent À Terre. Créatures sur le relief désignées par le MJ ; échec : ni action ni déplacement ce Round (rappel) et À Terre. Chaque Round de durée ajouté par surpuissance : la colline peut être déplacée de Bonus de Force Mentale mètres, les créatures sur sa trajectoire réussissent un Test d’Athlétisme Accessible (+2 DR) ou subissent 10 Dégâts à une localisation de corps au hasard (jets joués par le MJ).",
     "assistedClauses": [
-      "Créatures sur le relief désignées par le MJ ; échec : ni action ni déplacement ce Round (rappel) et À Terre. Chaque Round de durée ajouté par surpuissance : la colline peut être déplacée de Bonus de Force Mentale mètres, les créatures sur sa trajectoire réussissent un Test d’Athlétisme Accessible (+2 DR) ou subissent 10 dégâts à une localisation de corps au hasard (jets joués par le MJ)."
+      "Créatures sur le relief désignées par le MJ ; échec : ni action ni déplacement ce Round (rappel) et À Terre. Chaque Round de durée ajouté par surpuissance : la colline peut être déplacée de Bonus de Force Mentale mètres, les créatures sur sa trajectoire réussissent un Test d’Athlétisme Accessible (+2 DR) ou subissent 10 Dégâts à une localisation de corps au hasard (jets joués par le MJ)."
     ],
     "sharedWith": null,
     "sourceBook": "L07",
@@ -21572,7 +21572,7 @@
         }
       ]
     },
-    "reminders": "Le Slann fait déferler les énergies de la terre le long d’une ligne de force géomantique : quiconque s’y trouve réussit un Test d’Endurance Difficile (−2 DR) ou subit 15 dégâts au corps (Bonus d’Endurance déduit, Points d’Armure ignorés). Slann seulement. La vague peut être envoyée dans la direction choisie jusqu’au nexus suivant ; les créatures sur la ligne sont désignées par le MJ.",
+    "reminders": "Le Slann fait déferler les énergies de la terre le long d’une ligne de force géomantique : quiconque s’y trouve réussit un Test d’Endurance Difficile (−2 DR) ou subit 15 Dégâts au corps (Bonus d’Endurance déduit, Points d’Armure ignorés). Slann seulement. La vague peut être envoyée dans la direction choisie jusqu’au nexus suivant ; les créatures sur la ligne sont désignées par le MJ.",
     "assistedClauses": [
       "Slann seulement. La vague peut être envoyée dans la direction choisie jusqu’au nexus suivant ; les créatures sur la ligne sont désignées par le MJ."
     ],
@@ -21664,7 +21664,7 @@
         }
       }
     },
-    "reminders": "Le Slann fait s’effondrer un bâtiment, un mur ou un pont non fortifié, réduit en gravats (terrain Difficile) ; ceux qui s’y trouvent réussissent un Test d’Esquive Difficile (−2 DR) ou subissent 20 dégâts au corps et sont ensevelis. Slann seulement. Ensevelis : Suffocation (V5 p. 181, jouée par le MJ). Cibles supplémentaires (surpuissance) : les plus proches de la première ; le sol entre elles s’ouvre en crevasse de 2 mètres sur 4 de profondeur, dégâts de chute après un Test d’Esquive Intermédiaire (+0 DR) (échec marginal : accroché au bord).",
+    "reminders": "Le Slann fait s’effondrer un bâtiment, un mur ou un pont non fortifié, réduit en gravats (terrain Difficile) ; ceux qui s’y trouvent réussissent un Test d’Esquive Difficile (−2 DR) ou subissent 20 Dégâts au corps et sont ensevelis. Slann seulement. Ensevelis : Suffocation (V5 p. 181, jouée par le MJ). Cibles supplémentaires (surpuissance) : les plus proches de la première ; le sol entre elles s’ouvre en crevasse de 2 mètres sur 4 de profondeur, dégâts de chute après un Test d’Esquive Intermédiaire (+0 DR) (échec marginal : accroché au bord).",
     "assistedClauses": [
       "Slann seulement. Ensevelis : Suffocation (V5 p. 181, jouée par le MJ). Cibles supplémentaires (surpuissance) : les plus proches de la première ; le sol entre elles s’ouvre en crevasse de 2 mètres sur 4 de profondeur, dégâts de chute après un Test d’Esquive Intermédiaire (+0 DR) (échec marginal : accroché au bord)."
     ],
@@ -21746,7 +21746,7 @@
         "conditionsOnly": true
       }
     },
-    "reminders": "Le Slann dirige une explosion d’énergie mentale contre ses ennemis : Dégâts égaux à son Bonus d’Intelligence + 6 (+6 contre Démoniaques et Morts-vivants), Bonus d’Endurance déduit mais pas l’armure ; Test d’Intelligence Accessible (+2 DR) ou Sonné. Slann seulement. Ennemis de la zone seulement.",
+    "reminders": "Le Slann dirige une explosion d’énergie mentale contre ses ennemis : Dégâts égaux à son Bonus d’Intelligence + 6 (+6 Dégâts contre Démoniaques et Morts-vivants), Bonus d’Endurance déduit mais pas l’armure ; Test d’Intelligence Accessible (+2 DR) ou Sonné. Slann seulement. Ennemis de la zone seulement.",
     "assistedClauses": [
       "Slann seulement. Ennemis de la zone seulement."
     ],
@@ -23677,7 +23677,7 @@
         }
       }
     },
-    "reminders": "Vous jetez des enchantements protecteurs sur une zone, un mot de passe pouvant exempter des cibles : oubli des 24 dernières heures, pureté (dégâts égaux à mutations × 6, démons interdits), surveillance, ou vérité (aucun mensonge). Sacrifice : Test de Recherche prolongé (rappel, voir ci-dessous). Sacrifice : Test de Recherche prolongé Difficile (−1 DR) jusqu’à 20 DR. Ne peut être lancé qu’une fois sur une zone donnée ; renouvelable avant l’expiration par un Test d’incantation de NI 0 (même zone, durée et effets). Un mot de passe désigné exempte des cibles.",
+    "reminders": "Vous jetez des enchantements protecteurs sur une zone, un mot de passe pouvant exempter des cibles : oubli des dernières 24 heures, pureté (dégâts égaux à mutations × 6, démons interdits), surveillance, ou vérité (aucun mensonge). Sacrifice : Test de Recherche prolongé (rappel, voir ci-dessous). Sacrifice : Test de Recherche prolongé Difficile (−1 DR) jusqu’à 20 DR. Ne peut être lancé qu’une fois sur une zone donnée ; renouvelable avant l’expiration par un Test d’incantation de NI 0 (même zone, durée et effets). Un mot de passe désigné exempte des cibles.",
     "assistedClauses": [
       "Sacrifice : Test de Recherche prolongé (rappel, voir ci-dessous). Sacrifice : Test de Recherche prolongé Difficile (−1 DR) jusqu’à 20 DR. Ne peut être lancé qu’une fois sur une zone donnée ; renouvelable avant l’expiration par un Test d’incantation de NI 0 (même zone, durée et effets). Un mot de passe désigné exempte des cibles."
     ],

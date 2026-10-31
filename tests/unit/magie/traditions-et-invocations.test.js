@@ -709,7 +709,7 @@ test('Déracinement des montagnes — Athlétisme −3 DR : raté = À Terre, r�
   const {store}=await encounter();await cast(store,c,{targetTests:{foe:{resistanceRoll:roll,roll}}});
   assert.equal(level(subject(store,'foe'),'À Terre'),fallen,'jet '+roll);
  }
- assert.equal(c.overcast.specific.find(o=>o.id==='avalanche').cost,5);assert.match(c.reminders,/10 dégâts/);
+ assert.equal(c.overcast.specific.find(o=>o.id==='avalanche').cost,5);assert.match(c.reminders,/10 Dégâts/);
 });
 test('Ligne de terre — 15 dégâts au corps sur Endurance −2 DR ratée, Points d’Armure ignorés ; nexus exigé',async()=>{
  const c=getSpellContract('Ligne de terre');
