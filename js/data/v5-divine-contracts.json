@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "generatorVersion": "divine-contracts-0.4.0",
-  "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+  "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
   "sourceManifest": {
-    "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-    "miraclesCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
+    "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+    "miraclesCsvSha256": "f14581cde7534082ac7babe67f0497e11a8352ff75c93bd23e9046ff025e4f73",
     "v5EnglishBaseSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
     "authoritativeEdition": "V5 EN",
     "complementCorpusSha256": "b25c3f8ae5515eb8fabf4e710829fa2f6dda6971da4e752978523ad9c6ab3a75",
@@ -1486,7 +1486,7 @@
       "id": "divine:miracle:connaitre-son-ennemi",
       "catalogueEntry": {
         "nom": "Connaître son Ennemi",
-        "portee": "Bonus de Volonté en mètres",
+        "portee": "Bonus de Force Mentale en mètres",
         "cible": "1",
         "duree": "Instantané",
         "effet": "Vous appelez Myrmidia à vous informer des forces et faiblesses d'un ennemi proche. Le MJ doit vous permettre d’examiner le profil, les traits, compétences et talents de la cible."
@@ -1508,7 +1508,7 @@
       "catalogueEntry": {
         "nom": "Sur un Terrain Mortel",
         "portee": "Soi-même",
-        "cible": "Alliés dans la zone d'effet (Bonus de Volonté en mètres)",
+        "cible": "Alliés dans la zone d'effet (Bonus de Force Mentale en mètres)",
         "duree": "Bonus de Force Mentale en Rounds",
         "effet": "Sachant que la victoire ne peut être obtenue que si vos forces tiennent bon, vous appelez Myrmidia pour bannir toute idée de retraite dans l'esprit de vos alliés. Tant que le miracle est actif, vos alliés ne reçoivent pas la Condition Brisé."
       },
@@ -3038,7 +3038,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -3151,7 +3151,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -3254,7 +3254,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -3367,7 +3367,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -3478,7 +3478,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -3591,7 +3591,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -3705,7 +3705,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -3818,7 +3818,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -3930,7 +3930,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -4043,7 +4043,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -4156,7 +4156,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -4274,7 +4274,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -4381,7 +4381,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -4493,7 +4493,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -4606,7 +4606,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -4717,7 +4717,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -4831,7 +4831,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -4938,7 +4938,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -5051,7 +5051,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -5164,7 +5164,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -5267,7 +5267,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -5380,7 +5380,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -5491,7 +5491,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -5604,7 +5604,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -5717,7 +5717,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -5829,7 +5829,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -5932,7 +5932,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -6045,7 +6045,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -6141,7 +6141,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -6254,7 +6254,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -6342,7 +6342,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -6454,7 +6454,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -6557,7 +6557,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -6653,7 +6653,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -6766,7 +6766,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -6854,7 +6854,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -6961,7 +6961,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -7074,7 +7074,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -7187,7 +7187,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -7300,7 +7300,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -7413,7 +7413,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -7526,7 +7526,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -7640,7 +7640,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -7753,7 +7753,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -7865,7 +7865,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -7968,7 +7968,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -8081,7 +8081,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -8194,7 +8194,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -8312,7 +8312,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -8425,7 +8425,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -8538,7 +8538,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -8651,7 +8651,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -8764,7 +8764,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -8882,7 +8882,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -8989,7 +8989,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -9092,7 +9092,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -9205,7 +9205,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -9316,7 +9316,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -9430,7 +9430,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -9543,7 +9543,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -9665,7 +9665,7 @@
           "section": "Bénédiction de Charisme",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -9787,7 +9787,7 @@
           "section": "Bénédiction de Chance",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -9907,7 +9907,7 @@
           "section": "Bénédiction de Vigueur",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -10029,7 +10029,7 @@
           "section": "Bénédiction de Protection",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -10151,7 +10151,7 @@
           "section": "Bénédiction de Sagesse",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -10273,7 +10273,7 @@
           "section": "Bénédiction de Vivacité",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -10395,7 +10395,7 @@
           "section": "Bénédiction de Bataille",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -10526,7 +10526,7 @@
           "section": "Bénédiction de Conscience",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -10647,7 +10647,7 @@
           "section": "Bénédiction de Courage",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -10778,7 +10778,7 @@
           "section": "Bénédiction de Vigueur",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -10909,7 +10909,7 @@
           "section": "Bénédiction de Puissance",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -11040,7 +11040,7 @@
           "section": "Bénédiction de Ténacité",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -11165,7 +11165,7 @@
           "section": "Bénédiction de Bataille",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -11287,7 +11287,7 @@
           "section": "Bénédiction de Souffle",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -11408,7 +11408,7 @@
           "section": "Bénédiction de Courage",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -11530,7 +11530,7 @@
           "section": "Bénédiction de Vigueur",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -11652,7 +11652,7 @@
           "section": "Bénédiction de Sauvagerie",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -11779,7 +11779,7 @@
           "section": "Bénédiction de Ténacité",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596"
+        "catalogueSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -11871,9 +11871,9 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "catalogueCsvSha256": "f14581cde7534082ac7babe67f0497e11a8352ff75c93bd23e9046ff025e4f73",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
       "catalogueEntry": {
@@ -11990,9 +11990,9 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "catalogueCsvSha256": "f14581cde7534082ac7babe67f0497e11a8352ff75c93bd23e9046ff025e4f73",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
       "catalogueEntry": {
@@ -12106,9 +12106,9 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "catalogueCsvSha256": "f14581cde7534082ac7babe67f0497e11a8352ff75c93bd23e9046ff025e4f73",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
       "catalogueEntry": {
@@ -12225,9 +12225,9 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "catalogueCsvSha256": "f14581cde7534082ac7babe67f0497e11a8352ff75c93bd23e9046ff025e4f73",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
       "catalogueEntry": {
@@ -12341,9 +12341,9 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "catalogueCsvSha256": "f14581cde7534082ac7babe67f0497e11a8352ff75c93bd23e9046ff025e4f73",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
       "catalogueEntry": {
@@ -12493,9 +12493,9 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "catalogueCsvSha256": "f14581cde7534082ac7babe67f0497e11a8352ff75c93bd23e9046ff025e4f73",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
       "catalogueEntry": {
@@ -12595,9 +12595,9 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "catalogueCsvSha256": "f14581cde7534082ac7babe67f0497e11a8352ff75c93bd23e9046ff025e4f73",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07"
       },
       "requiredTalent": {
@@ -12737,9 +12737,9 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "catalogueCsvSha256": "f14581cde7534082ac7babe67f0497e11a8352ff75c93bd23e9046ff025e4f73",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07"
       },
       "requiredTalent": {
@@ -12868,9 +12868,9 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "catalogueCsvSha256": "f14581cde7534082ac7babe67f0497e11a8352ff75c93bd23e9046ff025e4f73",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07"
       },
       "requiredTalent": {
@@ -13015,9 +13015,9 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "catalogueCsvSha256": "f14581cde7534082ac7babe67f0497e11a8352ff75c93bd23e9046ff025e4f73",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07"
       },
       "requiredTalent": {
@@ -13110,7 +13110,7 @@
       ],
       "catalogueEntry": {
         "nom": "Connaître son Ennemi",
-        "portee": "Bonus de Volonté en mètres",
+        "portee": "Bonus de Force Mentale en mètres",
         "cible": "1",
         "duree": "Instantané",
         "effet": "Vous appelez Myrmidia à vous informer des forces et faiblesses d'un ennemi proche. Le MJ doit vous permettre d’examiner le profil, les traits, compétences et talents de la cible."
@@ -13134,9 +13134,9 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "catalogueCsvSha256": "f14581cde7534082ac7babe67f0497e11a8352ff75c93bd23e9046ff025e4f73",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07"
       },
       "requiredTalent": {
@@ -13248,7 +13248,7 @@
       "catalogueEntry": {
         "nom": "Sur un Terrain Mortel",
         "portee": "Soi-même",
-        "cible": "Alliés dans la zone d'effet (Bonus de Volonté en mètres)",
+        "cible": "Alliés dans la zone d'effet (Bonus de Force Mentale en mètres)",
         "duree": "Bonus de Force Mentale en Rounds",
         "effet": "Sachant que la victoire ne peut être obtenue que si vos forces tiennent bon, vous appelez Myrmidia pour bannir toute idée de retraite dans l'esprit de vos alliés. Tant que le miracle est actif, vos alliés ne reçoivent pas la Condition Brisé."
       }
@@ -13271,9 +13271,9 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "catalogueCsvSha256": "f14581cde7534082ac7babe67f0497e11a8352ff75c93bd23e9046ff025e4f73",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07"
       },
       "requiredTalent": {
@@ -13409,9 +13409,9 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "catalogueCsvSha256": "f14581cde7534082ac7babe67f0497e11a8352ff75c93bd23e9046ff025e4f73",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07"
       },
       "requiredTalent": {
@@ -13556,9 +13556,9 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "catalogueCsvSha256": "f14581cde7534082ac7babe67f0497e11a8352ff75c93bd23e9046ff025e4f73",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07"
       },
       "requiredTalent": {
@@ -13708,9 +13708,9 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "catalogueCsvSha256": "f14581cde7534082ac7babe67f0497e11a8352ff75c93bd23e9046ff025e4f73",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07"
       },
       "requiredTalent": {
@@ -13842,8 +13842,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
         "sourceBookId": "L02",
         "sourceDocument": "Archives of the Empire 3.pdf",
@@ -13958,8 +13958,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
         "sourceBookId": "L02",
         "sourceDocument": "Archives of the Empire 3.pdf",
@@ -14090,8 +14090,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
         "sourceBookId": "L02",
         "sourceDocument": "Archives of the Empire 3.pdf",
@@ -14231,8 +14231,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
         "sourceBookId": "L02",
         "sourceDocument": "Archives of the Empire 3.pdf",
@@ -14382,8 +14382,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
         "sourceBookId": "L02",
         "sourceDocument": "Archives of the Empire 3.pdf",
@@ -14517,8 +14517,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
         "sourceBookId": "L02",
         "sourceDocument": "Archives of the Empire 3.pdf",
@@ -14660,8 +14660,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
       "requiredTalent": {
@@ -14780,8 +14780,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
       "requiredTalent": {
@@ -14929,8 +14929,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
       "requiredTalent": {
@@ -15045,8 +15045,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
       "requiredTalent": {
@@ -15146,8 +15146,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
       "requiredTalent": {
@@ -15319,8 +15319,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
       "requiredTalent": {
@@ -15421,8 +15421,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "975555bd937144d8e99236be2b38aa8b96bf06ac4072523c30c187e6504a0554",
         "sourceBookId": "L07",
         "sourceDocument": "Lustria EN.pdf",
@@ -15546,8 +15546,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "975555bd937144d8e99236be2b38aa8b96bf06ac4072523c30c187e6504a0554",
         "sourceBookId": "L07",
         "sourceDocument": "Lustria EN.pdf",
@@ -15676,8 +15676,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
       "requiredTalent": {
@@ -15791,8 +15791,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
       "requiredTalent": {
@@ -15922,8 +15922,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
       "requiredTalent": {
@@ -16037,8 +16037,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
       "requiredTalent": {
@@ -16147,8 +16147,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
       "requiredTalent": {
@@ -16269,8 +16269,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
       "requiredTalent": {
@@ -16410,8 +16410,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
         "sourceDocument": "Deft Steps Light Fingers.pdf",
@@ -16524,8 +16524,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
         "sourceDocument": "Deft Steps Light Fingers.pdf",
@@ -16632,8 +16632,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
         "sourceDocument": "Deft Steps Light Fingers.pdf",
@@ -16746,8 +16746,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
         "sourceDocument": "Deft Steps Light Fingers.pdf",
@@ -16850,8 +16850,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
         "sourceDocument": "Deft Steps Light Fingers.pdf",
@@ -16962,8 +16962,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
         "sourceDocument": "Deft Steps Light Fingers.pdf",
@@ -17074,8 +17074,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
         "sourceDocument": "Deft Steps Light Fingers.pdf",
@@ -17184,8 +17184,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
         "sourceDocument": "Deft Steps Light Fingers.pdf",
@@ -17302,8 +17302,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
         "sourceDocument": "Deft Steps Light Fingers.pdf",
@@ -17421,8 +17421,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
         "sourceDocument": "Deft Steps Light Fingers.pdf",
@@ -17520,8 +17520,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
         "sourceDocument": "Deft Steps Light Fingers.pdf",
@@ -17639,8 +17639,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
         "sourceDocument": "Deft Steps Light Fingers.pdf",
@@ -17743,8 +17743,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
         "sourceDocument": "Deft Steps Light Fingers.pdf",
@@ -17878,8 +17878,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
         "sourceDocument": "Deft Steps Light Fingers.pdf",
@@ -17995,8 +17995,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
         "sourceDocument": "Deft Steps Light Fingers.pdf",
@@ -18117,8 +18117,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
         "sourceDocument": "Deft Steps Light Fingers.pdf",
@@ -18221,8 +18221,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
         "sourceDocument": "Deft Steps Light Fingers.pdf",
@@ -18340,8 +18340,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
         "sourceDocument": "Deft Steps Light Fingers.pdf",
@@ -18482,8 +18482,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
         "sourceDocument": "Deft Steps Light Fingers.pdf",
@@ -18608,8 +18608,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
         "sourceDocument": "Deft Steps Light Fingers.pdf",
@@ -18724,8 +18724,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
         "sourceDocument": "Deft Steps Light Fingers.pdf",
@@ -18848,8 +18848,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
         "sourceDocument": "Deft Steps Light Fingers.pdf",
@@ -18964,8 +18964,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
         "sourceDocument": "Deft Steps Light Fingers.pdf",
@@ -19082,8 +19082,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
         "sourceDocument": "Deft Steps Light Fingers.pdf",
@@ -19191,8 +19191,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
       "requiredTalent": {
@@ -19298,8 +19298,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
       "requiredTalent": {
@@ -19438,8 +19438,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
       "requiredTalent": {
@@ -19568,8 +19568,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
       "requiredTalent": {
@@ -19706,8 +19706,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
       "requiredTalent": {
@@ -19840,8 +19840,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
       "requiredTalent": {
@@ -19955,8 +19955,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
         "sourceBookId": "L02",
         "sourceDocument": "Archives of the Empire 3.pdf",
@@ -20071,8 +20071,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
         "sourceBookId": "L02",
         "sourceDocument": "Archives of the Empire 3.pdf",
@@ -20214,8 +20214,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
         "sourceBookId": "L02",
         "sourceDocument": "Archives of the Empire 3.pdf",
@@ -20340,8 +20340,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
         "sourceBookId": "L02",
         "sourceDocument": "Archives of the Empire 3.pdf",
@@ -20463,8 +20463,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
         "sourceBookId": "L02",
         "sourceDocument": "Archives of the Empire 3.pdf",
@@ -20589,8 +20589,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
         "sourceBookId": "L02",
         "sourceDocument": "Archives of the Empire 3.pdf",
@@ -20749,8 +20749,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
       "requiredTalent": {
@@ -20866,8 +20866,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
       "requiredTalent": {
@@ -20965,8 +20965,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
       "requiredTalent": {
@@ -21088,8 +21088,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
       "requiredTalent": {
@@ -21213,8 +21213,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
       "requiredTalent": {
@@ -21344,8 +21344,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
       "requiredTalent": {
@@ -21447,8 +21447,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
       "requiredTalent": {
@@ -21582,8 +21582,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
       "requiredTalent": {
@@ -21702,8 +21702,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
       "requiredTalent": {
@@ -21808,8 +21808,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
       "requiredTalent": {
@@ -21920,8 +21920,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
       "requiredTalent": {
@@ -22054,8 +22054,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
       "requiredTalent": {
@@ -22156,8 +22156,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
       "requiredTalent": {
@@ -22310,8 +22310,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
       "requiredTalent": {
@@ -22428,8 +22428,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
       "requiredTalent": {
@@ -22566,8 +22566,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
       "requiredTalent": {
@@ -22707,8 +22707,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
       "requiredTalent": {
@@ -22886,8 +22886,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
       "requiredTalent": {
@@ -23049,8 +23049,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
         "sourceBookId": "L02",
         "sourceDocument": "Archives of the Empire 3.pdf",
@@ -23200,8 +23200,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
         "sourceBookId": "L02",
         "sourceDocument": "Archives of the Empire 3.pdf",
@@ -23329,8 +23329,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
         "sourceBookId": "L02",
         "sourceDocument": "Archives of the Empire 3.pdf",
@@ -23469,8 +23469,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
         "sourceBookId": "L02",
         "sourceDocument": "Archives of the Empire 3.pdf",
@@ -23615,8 +23615,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
         "sourceBookId": "L02",
         "sourceDocument": "Archives of the Empire 3.pdf",
@@ -23745,8 +23745,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
         "sourceBookId": "L02",
         "sourceDocument": "Archives of the Empire 3.pdf",
@@ -23882,8 +23882,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
         "sourceDocument": "Deft Steps Light Fingers.pdf",
@@ -24003,8 +24003,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
         "sourceDocument": "Deft Steps Light Fingers.pdf",
@@ -24128,8 +24128,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
         "sourceDocument": "Deft Steps Light Fingers.pdf",
@@ -24234,8 +24234,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
         "sourceDocument": "Deft Steps Light Fingers.pdf",
@@ -24352,8 +24352,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
         "sourceDocument": "Deft Steps Light Fingers.pdf",
@@ -24463,8 +24463,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
         "sourceDocument": "Deft Steps Light Fingers.pdf",
@@ -24592,8 +24592,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
         "sourceDocument": "Deft Steps Light Fingers.pdf",
@@ -24752,8 +24752,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
         "sourceDocument": "Deft Steps Light Fingers.pdf",
@@ -24864,8 +24864,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
       "requiredTalent": {
@@ -24995,8 +24995,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
       "requiredTalent": {
@@ -25127,8 +25127,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
       "requiredTalent": {
@@ -25260,8 +25260,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
       "requiredTalent": {
@@ -25377,8 +25377,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
       "requiredTalent": {
@@ -25496,8 +25496,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
       "requiredTalent": {
@@ -25623,8 +25623,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "df27ea115b6368e5185492a64ebf34691aa99ed9f5e7b0fcdfc33120bcb49427",
         "sourceBookId": "L18",
         "sourceDocument": "WFRP_Power_Behind_the_Throne_Companion.pdf",
@@ -25733,8 +25733,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "df27ea115b6368e5185492a64ebf34691aa99ed9f5e7b0fcdfc33120bcb49427",
         "sourceBookId": "L18",
         "sourceDocument": "WFRP_Power_Behind_the_Throne_Companion.pdf",
@@ -25864,8 +25864,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "df27ea115b6368e5185492a64ebf34691aa99ed9f5e7b0fcdfc33120bcb49427",
         "sourceBookId": "L18",
         "sourceDocument": "WFRP_Power_Behind_the_Throne_Companion.pdf",
@@ -25974,8 +25974,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "df27ea115b6368e5185492a64ebf34691aa99ed9f5e7b0fcdfc33120bcb49427",
         "sourceBookId": "L18",
         "sourceDocument": "WFRP_Power_Behind_the_Throne_Companion.pdf",
@@ -26097,8 +26097,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "df27ea115b6368e5185492a64ebf34691aa99ed9f5e7b0fcdfc33120bcb49427",
         "sourceBookId": "L18",
         "sourceDocument": "WFRP_Power_Behind_the_Throne_Companion.pdf",
@@ -26238,8 +26238,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "df27ea115b6368e5185492a64ebf34691aa99ed9f5e7b0fcdfc33120bcb49427",
         "sourceBookId": "L18",
         "sourceDocument": "WFRP_Power_Behind_the_Throne_Companion.pdf",
@@ -26340,8 +26340,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "df27ea115b6368e5185492a64ebf34691aa99ed9f5e7b0fcdfc33120bcb49427",
         "sourceBookId": "L18",
         "sourceDocument": "WFRP_Power_Behind_the_Throne_Companion.pdf",
@@ -26472,8 +26472,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
       "requiredTalent": {
@@ -26598,8 +26598,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
       "requiredTalent": {
@@ -26740,8 +26740,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
       "requiredTalent": {
@@ -26844,8 +26844,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
       "requiredTalent": {
@@ -27013,8 +27013,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
       "requiredTalent": {
@@ -27154,8 +27154,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
       "requiredTalent": {
@@ -27310,8 +27310,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
       "requiredTalent": {
@@ -27419,8 +27419,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
       "requiredTalent": {
@@ -27538,8 +27538,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
       "requiredTalent": {
@@ -27670,8 +27670,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
       "requiredTalent": {
@@ -27821,8 +27821,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
       "requiredTalent": {
@@ -27941,8 +27941,8 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
-        "catalogueSnapshotVersion": "references:a41fb3a54491d8a0f991af005795a09f017de23687df343f08d36b51d6d71c3d",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
+        "catalogueSnapshotVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
       "requiredTalent": {
@@ -28101,7 +28101,7 @@
         "section": "Haine sacrée"
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "6ffd8494a4c045f1eb32c85c7ac804509707c9a7734808283550e7bb97dab596",
+        "referenceSnapshotSha256": "31277e69de96951d812b0067dd50a3aae79978d236286bab23583f7a48102c1d",
         "talentId": "talent-holy-hatred",
         "description": "Lorsqu’un Miracle inflige des Blessures, vous pouvez infliger +2 Blessures."
       },
@@ -28130,5 +28130,5 @@
       "needsInput": []
     }
   ],
-  "sourceFingerprint": "sha256:746b347f9a1adcb1f094359c66ba0f8ef4e0f5a0d452965231f6155b52bcbd56"
+  "sourceFingerprint": "sha256:ecdead94bb32d34eba53ae73e960ae4809966e4856bccbd5e1ac7d936495b9df"
 }
