@@ -5487,7 +5487,7 @@
         }
       }
     },
-    "reminders": "Vous invoquez un champ protecteur étincelant autour de vos alliés. Les cibles amies dans la zone d'effet gagnent le Trait de Créature Protection 9+. Chaque fois que vous lancez un autre sort de Haute Magie, améliorez ce Trait de Protection de 1.\nSurpuissance :\n• Pour chaque +3 DR, améliorez encore le Trait de Protection de 1.\n• +4 DR : Modifiez la portée du sort à la moitié de votre Volonté en mètres.",
+    "reminders": "Vous invoquez un champ protecteur étincelant autour de vos alliés. Les cibles amies dans la zone d'effet gagnent le Trait de Créature Protection 9+. Chaque fois que vous lancez un autre sort de Haute Magie, améliorez ce Trait de Protection de 1.\nSurpuissance :\n• Pour chaque +3 DR, améliorez encore le Trait de Protection de 1.\n• +4 DR : Modifiez la portée du sort à la moitié de votre Force Mentale en mètres.",
     "assistedClauses": [],
     "sharedWith": null,
     "edition": "Supplément elfe, adaptation V5 requise",
@@ -5764,7 +5764,7 @@
         }
       ]
     },
-    "reminders": "Vous ouvrez les chemins entre les mondes à vos alliés. Les cibles amies gagnent le Trait de Créature Éthérée, et leur Mouvement est doublé.\nSurpuissance :\n• +5 DR : La durée du sort passe à un nombre de minutes égal à votre Bonus d’Intelligence si vous réussissez un Test de Volonté Difficile (−2 DR).\n• +8 DR : Les cibles présentes sur un nexus géomantique approprié peuvent emprunter les Chemins des Anciens pour rejoindre instantanément un autre nexus. Vous décidez du nexus de destination, sans limitation de distance. Nexus de géomancie et destination des Voies des Anciens : reçus MJ, absence de carte.",
+    "reminders": "Vous ouvrez les chemins entre les mondes à vos alliés. Les cibles amies gagnent le Trait de Créature Éthérée, et leur Mouvement est doublé.\nSurpuissance :\n• +5 DR : La durée du sort passe à un nombre de minutes égal à votre Bonus d’Intelligence si vous réussissez un Test de Force Mentale Difficile (−2 DR).\n• +8 DR : Les cibles présentes sur un nexus géomantique approprié peuvent emprunter les Chemins des Anciens pour rejoindre instantanément un autre nexus. Vous décidez du nexus de destination, sans limitation de distance. Nexus de géomancie et destination des Voies des Anciens : reçus MJ, absence de carte.",
     "assistedClauses": [
       "Nexus de géomancie et destination des Voies des Anciens : reçus MJ, absence de carte."
     ],
@@ -6300,7 +6300,7 @@
         }
       }
     },
-    "reminders": "Vous provoquez chez un animal domestique un retour à l’état sauvage et agressif. \n - Le MJ décide s’il fuit vers la nature ou attaque son ancien maître. \n - Le Test de Charmer Animal ne peut pas l’apprivoiser, mais seulement l’apaiser. \n - Un cavalier doit réussir un Test de Monter Difficile (−2 DR) ou être désarçonné. \n Avec +4 DR, vous pouvez affecter un humain, qui peut résister avec un Test de Volonté Difficile (−1 DR). S’il échoue, il se transforme partiellement en bête : \n - Il pousse des cris sauvages et perd la parole. \n - Chaque round, il agit selon un jet de 1d10 : \n • 1-3 : Distrait (grattage, défécation, etc.) \n • 4-6 : Paniqué (court dans une direction aléatoire, percute des obstacles, attaque au hasard) \n • 7-9 : Amical (rit, danse, rampe vers le plus proche) \n • 10 : Enragé (provoque Peur (1) à ceux qui l’entendent, sauf aux Mages des Bêtes). \n - L’effet dure jusqu’à être dissipé par magie Animal domestique fuit ou attaque son ancien maître selon MJ ; Charme Animal dissuade mais ne dompte pas ; cavalier Chevaucher −2 ou projeté. +4 DR : humain résiste FM −1 ; poils et parole perdue ; d10 chaque Round : 1–3 distrait, 4–6 panique direction aléatoire, 7–9 amical, 10 enragé et Peur 1 sauf mages Bêtes. Les deux effets jusqu’à dissipation ; comportement et tours spatiaux : reçus MJ.",
+    "reminders": "Vous provoquez chez un animal domestique un retour à l’état sauvage et agressif. \n - Le MJ décide s’il fuit vers la nature ou attaque son ancien maître. \n - Le Test de Charmer Animal ne peut pas l’apprivoiser, mais seulement l’apaiser. \n - Un cavalier doit réussir un Test de Monter Difficile (−2 DR) ou être désarçonné. \n Avec +4 DR, vous pouvez affecter un humain, qui peut résister avec un Test de Force Mentale Difficile (−1 DR). S’il échoue, il se transforme partiellement en bête : \n - Il pousse des cris sauvages et perd la parole. \n - Chaque round, il agit selon un jet de 1d10 : \n • 1-3 : Distrait (grattage, défécation, etc.) \n • 4-6 : Paniqué (court dans une direction aléatoire, percute des obstacles, attaque au hasard) \n • 7-9 : Amical (rit, danse, rampe vers le plus proche) \n • 10 : Enragé (provoque Peur (1) à ceux qui l’entendent, sauf aux Mages des Bêtes). \n - L’effet dure jusqu’à être dissipé par magie Animal domestique fuit ou attaque son ancien maître selon MJ ; Charme Animal dissuade mais ne dompte pas ; cavalier Chevaucher −2 ou projeté. +4 DR : humain résiste FM −1 ; poils et parole perdue ; d10 chaque Round : 1–3 distrait, 4–6 panique direction aléatoire, 7–9 amical, 10 enragé et Peur 1 sauf mages Bêtes. Les deux effets jusqu’à dissipation ; comportement et tours spatiaux : reçus MJ.",
     "assistedClauses": [
       "Animal domestique fuit ou attaque son ancien maître selon MJ ; Charme Animal dissuade mais ne dompte pas ; cavalier Chevaucher −2 ou projeté. +4 DR : humain résiste FM −1 ; poils et parole perdue ; d10 chaque Round : 1–3 distrait, 4–6 panique direction aléatoire, 7–9 amical, 10 enragé et Peur 1 sauf mages Bêtes. Les deux effets jusqu’à dissipation ; comportement et tours spatiaux : reçus MJ."
     ],
@@ -7063,7 +7063,7 @@
         "casterWinsTies": true
       }
     },
-    "reminders": "Vous vous métamorphosez en bête monstrueuse : \n - La créature est Grande ou Énorme (choisie par le MJ) : \n → Mage d'Ambre ou Elfe : Demi-gryph, Dragon, Hippogryph, Aigle Géant, Griffon. \n → Chamane Homme-Bête, Sorcier du Chaos, Sorcière : Manticore, Hydre, Jabberslythe, Vouivre. \n - Vous conservez votre Intelligence et Volonté, mais remplacez toutes vos autres Caractéristiques, Compétences et Talents par ceux du monstre. \n - Vous ne pouvez pas lancer de sorts sous cette forme. \n - Pour chaque +4 DR : \n → Ajoutez un Trait de Créature optionnel, ou \n → Transformez quelqu'un d'autre (contact, Test Opposé de Volonté pour les cibles réticentes). Monstre Grande ou Énorme choisi par MJ. Conserve Int et FM ; autres caractéristiques, compétences et talents remplacés par profil. Pas d’incantation. +4 DR : un trait optionnel ou autre cible de Contact ; FM opposée si non consentante. Profil, taille, compétences manquantes, cible et dés requis ; profil saisi incomplet interdit.",
+    "reminders": "Vous vous métamorphosez en bête monstrueuse : \n - La créature est Grande ou Énorme (choisie par le MJ) : \n → Mage d'Ambre ou Elfe : Demi-gryph, Dragon, Hippogryph, Aigle Géant, Griffon. \n → Chamane Homme-Bête, Sorcier du Chaos, Sorcière : Manticore, Hydre, Jabberslythe, Vouivre. \n - Vous conservez votre Intelligence et Force Mentale, mais remplacez toutes vos autres Caractéristiques, Compétences et Talents par ceux du monstre. \n - Vous ne pouvez pas lancer de sorts sous cette forme. \n - Pour chaque +4 DR : \n → Ajoutez un Trait de Créature optionnel, ou \n → Transformez quelqu'un d'autre (contact, Test Opposé de Force Mentale pour les cibles réticentes). Monstre Grande ou Énorme choisi par MJ. Conserve Int et FM ; autres caractéristiques, compétences et talents remplacés par profil. Pas d’incantation. +4 DR : un trait optionnel ou autre cible de Contact ; FM opposée si non consentante. Profil, taille, compétences manquantes, cible et dés requis ; profil saisi incomplet interdit.",
     "assistedClauses": [
       "Monstre Grande ou Énorme choisi par MJ. Conserve Int et FM ; autres caractéristiques, compétences et talents remplacés par profil. Pas d’incantation. +4 DR : un trait optionnel ou autre cible de Contact ; FM opposée si non consentante. Profil, taille, compétences manquantes, cible et dés requis ; profil saisi incomplet interdit."
     ],
@@ -7112,7 +7112,7 @@
       },
       "damageReductionCalmTest": true
     },
-    "reminders": "Une auréole d’ambre affaiblit et dévie les attaques non magiques : \n - Test de Calme (+0) à chaque attaque subie. \n - Réduit les Dégâts de votre Bonus de Volonté + DR. \n - Si les Dégâts sont réduits à 0 : \n → Attaques à distance : touchent une cible aléatoire à 2 mètres de vous. \n → Attaques au corps à corps : sont renvoyées sur l’attaquant (il ne peut pas s’opposer). Chaque frappe non magique : Calme +0 ; réussite réduit dégâts de BFM +DR du Calme. Si réduits à zéro : tir vers une cible aléatoire à 2 mètres, mêlée renvoyée sur attaquant sans opposition. Redirection et nouvelle cible : reçus MJ ; réduction calculée.",
+    "reminders": "Une auréole d’ambre affaiblit et dévie les attaques non magiques : \n - Test de Calme (+0) à chaque attaque subie. \n - Réduit les Dégâts de votre Bonus de Force Mentale + DR. \n - Si les Dégâts sont réduits à 0 : \n → Attaques à distance : touchent une cible aléatoire à 2 mètres de vous. \n → Attaques au corps à corps : sont renvoyées sur l’attaquant (il ne peut pas s’opposer). Chaque frappe non magique : Calme +0 ; réussite réduit dégâts de BFM +DR du Calme. Si réduits à zéro : tir vers une cible aléatoire à 2 mètres, mêlée renvoyée sur attaquant sans opposition. Redirection et nouvelle cible : reçus MJ ; réduction calculée.",
     "assistedClauses": [
       "Chaque frappe non magique : Calme +0 ; réussite réduit dégâts de BFM +DR du Calme. Si réduits à zéro : tir vers une cible aléatoire à 2 mètres, mêlée renvoyée sur attaquant sans opposition. Redirection et nouvelle cible : reçus MJ ; réduction calculée."
     ],
@@ -9510,7 +9510,7 @@
         }
       }
     },
-    "reminders": "Vous insufflez à la cible clarté et détermination, lui accordant +2 DR aux Tests pour résister à la Séduction et à l’Intimidation. \n Si vous lancez ce Sort sur vous-même, vous pouvez choisir à la place de recevoir +2 DR aux Tests de Charisme, à condition de ne dire que la vérité. \n Le Collège Lumineux désapprouve cette seconde utilisation, la considérant comme une forme de glamour. Variante Charme +2 réservée au lanceur et à la vérité ; aucun cumul des deux formulations. Pertinence du Test et vérité : MJ.",
+    "reminders": "Vous insufflez à la cible clarté et détermination, lui accordant +2 DR aux Tests pour résister à la Séduction et à l’Intimidation. \n Si vous lancez ce Sort sur vous-même, vous pouvez choisir à la place de recevoir +2 DR aux Tests de Sociabilité, à condition de ne dire que la vérité. \n Le Collège Lumineux désapprouve cette seconde utilisation, la considérant comme une forme de glamour. Variante Charme +2 réservée au lanceur et à la vérité ; aucun cumul des deux formulations. Pertinence du Test et vérité : MJ.",
     "assistedClauses": [
       "Variante Charme +2 réservée au lanceur et à la vérité ; aucun cumul des deux formulations. Pertinence du Test et vérité : MJ."
     ],
@@ -10444,7 +10444,7 @@
         }
       ]
     },
-    "reminders": "Vous tentez d’expulser un fantôme, spectre, démon mineur ou bête démoniaque. Si vous remportez un Test Opposé de Volonté/Froideur, la cible est renvoyée dans son royaume d’origine. Exclut Spectre majeur/Grand Démon ; admissibilité déclarée. Bannissement sans dégâts, pas destruction ; réinvocation possible.",
+    "reminders": "Vous tentez d’expulser un fantôme, spectre, démon mineur ou bête démoniaque. Si vous remportez un Test Opposé de Force Mentale/Froideur, la cible est renvoyée dans son royaume d’origine. Exclut Spectre majeur/Grand Démon ; admissibilité déclarée. Bannissement sans dégâts, pas destruction ; réinvocation possible.",
     "assistedClauses": [
       "Exclut Spectre majeur/Grand Démon ; admissibilité déclarée. Bannissement sans dégâts, pas destruction ; réinvocation possible."
     ],
@@ -11013,7 +11013,7 @@
         "assistedReminder": "Objet/personne/animal propre ; surface de diamètre BFM mètres."
       }
     },
-    "reminders": "Vous retirez toute saleté d’un objet, d’une personne ou d’un animal, le laissant parfaitement propre. \n Si lancé sur une surface, il nettoie une zone de Bonus de Volonté mètres de diamètre. Objets et surfaces désignés ; aucune mutation d’inventaire.",
+    "reminders": "Vous retirez toute saleté d’un objet, d’une personne ou d’un animal, le laissant parfaitement propre. \n Si lancé sur une surface, il nettoie une zone de Bonus de Force Mentale mètres de diamètre. Objets et surfaces désignés ; aucune mutation d’inventaire.",
     "assistedClauses": [
       "Objets et surfaces désignés ; aucune mutation d’inventaire."
     ],
@@ -16280,7 +16280,7 @@
         }
       }
     },
-    "reminders": "Vous altérez l’apparence d’une cible. \n Les cibles non consentantes peuvent résister avec un Test opposé de Force Mentale. \n • Choisissez un des effets suivants : \n 1. Augmente ou réduit l’Attractivité, modifiant le Charisme de +/-10. \n 2. La cible semble morte, même en cas d’inspection minutieuse. Elle peut encore entendre et voir, mais ne peut ni parler ni bouger. \n 3. La cible devient méconnaissable aux yeux de ceux qui la connaissent. Un Test de Force Mentale peut être tenté pour se faire reconnaître volontairement. Apparence réelle choisie par MJ, sens préservés dans le mode mort. Reconnaissance FM des proches déclarés.",
+    "reminders": "Vous altérez l’apparence d’une cible. \n Les cibles non consentantes peuvent résister avec un Test opposé de Force Mentale. \n • Choisissez un des effets suivants : \n 1. Augmente ou réduit l’Attractivité, modifiant la Sociabilité de +/-10. \n 2. La cible semble morte, même en cas d’inspection minutieuse. Elle peut encore entendre et voir, mais ne peut ni parler ni bouger. \n 3. La cible devient méconnaissable aux yeux de ceux qui la connaissent. Un Test de Force Mentale peut être tenté pour se faire reconnaître volontairement. Apparence réelle choisie par MJ, sens préservés dans le mode mort. Reconnaissance FM des proches déclarés.",
     "assistedClauses": [
       "Apparence réelle choisie par MJ, sens préservés dans le mode mort. Reconnaissance FM des proches déclarés."
     ],
@@ -16855,7 +16855,7 @@
         "endsOnSuccess": true
       }
     },
-    "reminders": "Vous contraignez un ennemi à changer d’allégeance. \n • Si la cible échoue à un Test opposé de Force Mentale, elle vous considère comme un allié et traite ses anciens alliés comme des ennemis. \n • À chaque fois qu’elle est incitée à attaquer un ancien allié, elle peut tenter un Test de Calme Intermédiaire (+0) pour briser l’enchantement. \n • La cible ne suivra pas d’instructions suicidaires. \n • Si ce Sort est lancé sur une cible neutre, vous gagnez +2 DR à tous les Tests basés sur le Charisme effectués avec cette cible. \n • Ce Sort n’a aucun effet sur les cibles amicales. Ennemi FM opposée ; ordres suicidaires refusés ; chaque attaque d’ancien allié permet Calme +0 pour rompre. Neutre : bonus +2DR du lanceur seulement contre lui. Alliés sans effet, relations et ordres MJ.",
+    "reminders": "Vous contraignez un ennemi à changer d’allégeance. \n • Si la cible échoue à un Test opposé de Force Mentale, elle vous considère comme un allié et traite ses anciens alliés comme des ennemis. \n • À chaque fois qu’elle est incitée à attaquer un ancien allié, elle peut tenter un Test de Calme Intermédiaire (+0) pour briser l’enchantement. \n • La cible ne suivra pas d’instructions suicidaires. \n • Si ce Sort est lancé sur une cible neutre, vous gagnez +2 DR à tous les Tests basés sur la Sociabilité effectués avec cette cible. \n • Ce Sort n’a aucun effet sur les cibles amicales. Ennemi FM opposée ; ordres suicidaires refusés ; chaque attaque d’ancien allié permet Calme +0 pour rompre. Neutre : bonus +2DR du lanceur seulement contre lui. Alliés sans effet, relations et ordres MJ.",
     "assistedClauses": [
       "Ennemi FM opposée ; ordres suicidaires refusés ; chaque attaque d’ancien allié permet Calme +0 pour rompre. Neutre : bonus +2DR du lanceur seulement contre lui. Alliés sans effet, relations et ordres MJ."
     ],

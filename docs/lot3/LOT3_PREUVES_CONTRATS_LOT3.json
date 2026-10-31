@@ -1029,7 +1029,7 @@
         }
       ],
       "assisted": [],
-      "reminders": "Vous invoquez un champ protecteur étincelant autour de vos alliés. Les cibles amies dans la zone d'effet gagnent le Trait de Créature Protection 9+. Chaque fois que vous lancez un autre sort de Haute Magie, améliorez ce Trait de Protection de 1.\nSurpuissance :\n• Pour chaque +3 DR, améliorez encore le Trait de Protection de 1.\n• +4 DR : Modifiez la portée du sort à la moitié de votre Volonté en mètres.",
+      "reminders": "Vous invoquez un champ protecteur étincelant autour de vos alliés. Les cibles amies dans la zone d'effet gagnent le Trait de Créature Protection 9+. Chaque fois que vous lancez un autre sort de Haute Magie, améliorez ce Trait de Protection de 1.\nSurpuissance :\n• Pour chaque +3 DR, améliorez encore le Trait de Protection de 1.\n• +4 DR : Modifiez la portée du sort à la moitié de votre Force Mentale en mètres.",
       "status": "conforme"
     },
     {
@@ -1259,7 +1259,7 @@
       "assisted": [
         "Nexus de géomancie et destination des Voies des Anciens : reçus MJ, absence de carte."
       ],
-      "reminders": "Vous ouvrez les chemins entre les mondes à vos alliés. Les cibles amies gagnent le Trait de Créature Éthérée, et leur Mouvement est doublé.\nSurpuissance :\n• +5 DR : La durée du sort passe à un nombre de minutes égal à votre Bonus d’Intelligence si vous réussissez un Test de Volonté Difficile (−2 DR).\n• +8 DR : Les cibles présentes sur un nexus géomantique approprié peuvent emprunter les Chemins des Anciens pour rejoindre instantanément un autre nexus. Vous décidez du nexus de destination, sans limitation de distance. Nexus de géomancie et destination des Voies des Anciens : reçus MJ, absence de carte.",
+      "reminders": "Vous ouvrez les chemins entre les mondes à vos alliés. Les cibles amies gagnent le Trait de Créature Éthérée, et leur Mouvement est doublé.\nSurpuissance :\n• +5 DR : La durée du sort passe à un nombre de minutes égal à votre Bonus d’Intelligence si vous réussissez un Test de Force Mentale Difficile (−2 DR).\n• +8 DR : Les cibles présentes sur un nexus géomantique approprié peuvent emprunter les Chemins des Anciens pour rejoindre instantanément un autre nexus. Vous décidez du nexus de destination, sans limitation de distance. Nexus de géomancie et destination des Voies des Anciens : reçus MJ, absence de carte.",
       "status": "conforme"
     },
     {
@@ -1413,7 +1413,7 @@
       "assisted": [
         "Exclut Spectre majeur/Grand Démon ; admissibilité déclarée. Bannissement sans dégâts, pas destruction ; réinvocation possible."
       ],
-      "reminders": "Vous tentez d’expulser un fantôme, spectre, démon mineur ou bête démoniaque. Si vous remportez un Test Opposé de Volonté/Froideur, la cible est renvoyée dans son royaume d’origine. Exclut Spectre majeur/Grand Démon ; admissibilité déclarée. Bannissement sans dégâts, pas destruction ; réinvocation possible.",
+      "reminders": "Vous tentez d’expulser un fantôme, spectre, démon mineur ou bête démoniaque. Si vous remportez un Test Opposé de Force Mentale/Froideur, la cible est renvoyée dans son royaume d’origine. Exclut Spectre majeur/Grand Démon ; admissibilité déclarée. Bannissement sans dégâts, pas destruction ; réinvocation possible.",
       "status": "donnée MJ nécessaire"
     },
     {
@@ -2278,7 +2278,7 @@
       "assisted": [
         "Objets et surfaces désignés ; aucune mutation d’inventaire."
       ],
-      "reminders": "Vous retirez toute saleté d’un objet, d’une personne ou d’un animal, le laissant parfaitement propre. \n Si lancé sur une surface, il nettoie une zone de Bonus de Volonté mètres de diamètre. Objets et surfaces désignés ; aucune mutation d’inventaire.",
+      "reminders": "Vous retirez toute saleté d’un objet, d’une personne ou d’un animal, le laissant parfaitement propre. \n Si lancé sur une surface, il nettoie une zone de Bonus de Force Mentale mètres de diamètre. Objets et surfaces désignés ; aucune mutation d’inventaire.",
       "status": "rappel"
     },
     {
