@@ -85,10 +85,14 @@ async function main() {
     });
     await page.locator('#tab-combat').click();
     const sheet=page.locator('.workspace-sheet-actor');await expect(sheet).toBeVisible();
-    const hp=async()=>sheet.locator('.workspace-sheet-hp').innerText();
-    const before=await sheet.innerText();
-    await sheet.getByRole('button',{name:/−1 PV pour/}).click();await expect.poll(()=>sheet.innerText()).not.toBe(before);
-    await sheet.getByRole('button',{name:/\+1 PV pour/}).click();await expect.poll(()=>sheet.innerText()).toBe(before);
+    const toggle=page.locator('[data-circumstances-toggle]');
+    for(const open of [true,false]) {
+      const drawer=page.locator('.workspace-resolution-drawer');
+      if(await drawer.isVisible()!==open) await toggle.click();
+      const before=await sheet.innerText();
+      await sheet.getByRole('button',{name:/−1 PV pour/}).click();await expect.poll(()=>sheet.innerText()).not.toBe(before);
+      await sheet.getByRole('button',{name:/\+1 PV pour/}).click();await expect.poll(()=>sheet.innerText()).toBe(before);
+    }
     assert.deepEqual(errors,[]);console.log('C14 : PV −1 et +1 sur grande rencontre');
   } finally { await browser.close(); await new Promise(resolve => server.close(resolve)); }
 }
