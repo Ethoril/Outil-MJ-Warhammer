@@ -78,9 +78,14 @@ export function createDivinePanel({Store,refresh,onRollChange=()=>{}}){
   if(invalid)input.setAttribute('aria-invalid','true');
   wrap.append(input,help);container.append(wrap);return input;
  }
+ function anchorTarget(panel,anchor){
+  const key=focusKey(anchor);
+  return panel.querySelector('[data-focus-key="'+key+'"]') || panel.querySelector('[data-focus-key="divine-'+anchor+'"]')
+    || (anchor==='extensions' ? panel.querySelector('[data-focus-key^="divine-choice-"]') : null);
+ }
  function focusAnchor(panel,anchor){
-  const key=focusKey(anchor);const target=panel.querySelector('[data-focus-key="'+key+'"]')||panel.querySelector('[data-focus-key="divine-'+anchor+'"]');
-  if(target){target.scrollIntoView?.({block:'center'});target.focus();}
+  const target=anchorTarget(panel,anchor);
+  if(target){for(let parent=target.parentElement;parent;parent=parent.parentElement)if(parent.tagName==='DETAILS')parent.open=true;target.scrollIntoView?.({block:'center'});target.focus();}
  }
  const errorText=error=>error?.userFacing?error.message:(error?.message||'Commande divine non appliquée.');
  async function run(work){if(state.busy)return;state.busy=true;state.error='';refresh();try{await work();}catch(error){state.error=errorText(error);}finally{state.busy=false;refresh();}}
@@ -495,7 +500,7 @@ export function createDivinePanel({Store,refresh,onRollChange=()=>{}}){
     const box=node('div','workspace-divine-needs');box.append(node('p','workspace-rubric','À fournir avant d’appliquer'));const list=node('ul');
     for(const missing of needs){
      const item=node('li');
-     if(missing.anchor){const link=node('button','workspace-divine-need-link',missing.label);link.type='button';link.addEventListener('click',()=>focusAnchor(panel,missing.anchor));item.append(link);}
+     if(missing.anchor){const link=node('button','workspace-divine-need-link',missing.label);link.type='button';link.dataset.needAnchor=missing.anchor;link.addEventListener('click',()=>focusAnchor(panel,missing.anchor));item.append(link);}
      else item.textContent=missing.label;
      list.append(item);
     }
@@ -587,6 +592,7 @@ export function createDivinePanel({Store,refresh,onRollChange=()=>{}}){
   }
   if(state.error){const message=node('p','workspace-field-error',state.error);message.setAttribute('role','alert');content.append(message);}
   renderConfirmationButtons(panel);
+  for(const link of panel.querySelectorAll('[data-need-anchor]')) if(!anchorTarget(panel,link.dataset.needAnchor)) link.replaceWith(document.createTextNode(link.textContent));
   return panel;
  }};
 }

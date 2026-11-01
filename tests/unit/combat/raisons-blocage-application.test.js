@@ -54,3 +54,19 @@ test('C19 : seule la Protection identifiée est proposée à ignorer, jamais un 
   assert.deepEqual(reasons.filter(row => row.ignorable).map(row => row.ignorable), ['divine-protection']);
   assert.equal(applicationBlockingReasons(null, { attackRoll: '' }, true, { requiresRoll: true })[0].ignorable, undefined);
 });
+
+test('C17 : les raisons déclarent une cible ou explicitement l’absence de champ', () => {
+  const cases = [
+    [null, { busy: true, attackRoll: '' }, false, { requiresRoll: true }],
+    [{ ready: false, error: 'Erreur' }, {}, true],
+    [{ v5MagicKind: 'cast', ready: false, miscast: {}, spellPreview: { valid: false } }, {}, true],
+    [{ choiceRequired: true, attack: true, unresolved: ['Test de Calme de l’attaquant', 'Tir engagé : Test de défense', 'Jet de défense', 'Autre'], critical: { details: { pending: true, needsAlternative: true, needsLocation: true } }, protection: { ap: null }, mechanicalWarnings: ['Avertissement'] }, { criticalErrors: { jet: 'invalide' } }, true]
+  ];
+  const allowed = new Set(['attack-roll', 'magic-miscast', 'protection-calm', 'engaged-defense', 'defense-roll', 'critical-pending', 'critical-alternative', 'target', 'critical-location', 'protection']);
+  const reasons = cases.flatMap(args => applicationBlockingReasons(...args));
+  for (const reason of reasons) {
+    assert.ok(reason.focus ? allowed.has(reason.focus) && !reason.withoutField : reason.withoutField === true, reason.text);
+  }
+  assert.ok(reasons.some(reason => reason.withoutField));
+  assert.ok(reasons.some(reason => reason.focus));
+});

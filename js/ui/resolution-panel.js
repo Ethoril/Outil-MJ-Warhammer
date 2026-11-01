@@ -41,16 +41,17 @@ export const hitMorphologySelection = (override, profileMorphology) => override 
 export function applicationBlockingReasons(preview, draft, canApply, preflight = {}) {
   const reasons = [];
   const add = (condition, text, focus) => { if (condition) reasons.push({ text, focus }); };
+  const finish = () => reasons.map(reason => reason.focus ? reason : { ...reason, withoutField: true });
   if (draft.busy) reasons.push({ text: 'Calcul en cours', silent: true });
   add(!canApply, 'Application indisponible dans cet écran');
   if (!preview) {
     add(preflight.requiresRoll && !validRoll(draft.attackRoll), `Jet de ${preflight.actorName || 'l’attaquant'} à saisir (d100)`, 'attack-roll');
-    return reasons;
+    return finish();
   }
   if (preview.ready === false && !preview.v5MagicKind && (!Array.isArray(preview.unresolved) || !preview.unresolved.length)) {
     const text = preview.error || (preview.needsInput || []).map(row => row.label || row.message).filter(Boolean).join(' ');
     if (text) reasons.push({ text });
-    if (!Array.isArray(preview.unresolved)) return reasons;
+    if (!Array.isArray(preview.unresolved)) return finish();
   }
   if (preview.v5MagicKind) {
     const invalid = preview.v5MagicKind === 'cast' && (preview.spellPreview?.fingerprintCheck?.valid === false || preview.spellPreview?.valid === false || (preview.castPreview?.spellSuccess && preview.spellPreview?.ready === false));
@@ -58,7 +59,7 @@ export function applicationBlockingReasons(preview, draft, canApply, preflight =
     add(incident && incident.initialRoll == null && !incident.cancelled, 'Jet d’incident magique à saisir (d100)', 'magic-miscast');
     add(invalid, 'Vérifiez les éléments requis pour le sort');
     add(preview.ready === false, 'Complétez les éléments requis pour la magie');
-    return reasons;
+    return finish();
   }
   add(preview.choiceRequired, 'Choisissez le résultat à appliquer');
   for (const text of preview.unresolved || []) reasons.push({ text, focus: /Calme.*attaquant/i.test(text) ? 'protection-calm' : /Tir engagé.*Test de défense/i.test(text) ? 'engaged-defense' : /jet de défense/i.test(text) ? 'defense-roll' : undefined, ...(/^Bénédiction de Protection :/.test(text) ? { ignorable: 'divine-protection' } : {}) });
@@ -73,7 +74,7 @@ export function applicationBlockingReasons(preview, draft, canApply, preflight =
     const detail = typeof warning === 'string' ? warning : [warning?.keywordId || warning?.ability, warning?.reason].filter(Boolean).join(' : ');
     reasons.push({ text: detail || 'Complétez les éléments mécaniques requis' });
   }
-  return reasons;
+  return finish();
 }
 
 export const ACTION_TYPES = Object.freeze([
