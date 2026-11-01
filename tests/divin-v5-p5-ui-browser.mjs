@@ -56,12 +56,13 @@ try {
   await page.setContent('<main><div id="mount"></div></main>');
   await page.evaluate(async ({ moduleUrl }) => {
     const { renderResolutionPanel } = await import(moduleUrl);
+    const { previewResolution } = await import('/js/core/resolution.js');
     // Rend le panneau avec un harnais minimal et enregistre les appels de handlers dans window.__calls.
     window.__render = spec => {
       document.querySelector('#mount').textContent = '';
       const calls = [];
       const handlers = {
-        select: payload => calls.push({ kind: 'select', payload }),
+        select: payload => { calls.push({ kind: 'select', payload }); if (spec.interactive && payload.v5Context) window.__render({ ...spec, calm: payload.v5Context.protectionCalm }); },
         input: (key, value) => calls.push({ kind: 'input', key, value }),
         roll: () => {}, calculate: () => {}, compare: () => {}, choose: () => {}, apply: () => {}, cancel: () => {}
       };
@@ -76,7 +77,7 @@ try {
       if (spec.targetDivine) target.extensions = { v5: { divineEffects: [{ id: 'l1', attackDeterrent: { skill: 'Calme', slBonus: 2, ...(spec.passedActor ? { passedAttackerIds: ['actor'] } : {}), ...(spec.passedOther ? { passedAttackerIds: ['other'] } : {}) } }] } };
       const actions = [{ id: 'a1', type: 'attack', attr: 'CC', note: 'Attaque', base: 50, damage: 5 }];
       const section = renderResolutionPanel({
-        draft: { v5Context: {} },
+        draft: { v5Context: { protectionCalm: spec.calm }, ...(spec.interactive ? { preview: previewResolution({ actor, target, action: actions[0], roll: 20, attackContext: { ranged: true }, v5: { kind: 'ranged', context: { protectionCalm: spec.calm } } }) } : {}) },
         actor,
         participants: [actor, target],
         actions,
@@ -97,6 +98,15 @@ try {
   const calmSelect = page.locator(`select[aria-label="${CALM_LABEL}"]`);
   const reverseCheckbox = page.locator(`input[type="checkbox"][aria-label="${REVERSE_LABEL}"]`);
   const lastCall = () => page.evaluate(() => window.__calls[window.__calls.length - 1]);
+
+  await page.evaluate(() => window.__render({ actorCamp: 'ennemi', targetCamp: 'pj', targetDivine: true, interactive: true }));
+  const applyButton = page.locator('[data-focus-key="apply"]');
+  const reason = page.getByRole('button', { name: /saisir le Test de Calme/ });
+  check(await applyButton.isDisabled() && await reason.count() === 1, 'C1 : la saisie manquante est expliquée près du bouton');
+  await reason.click();
+  check(await calmSelect.evaluate(el => document.activeElement === el) && await calmSelect.getAttribute('aria-required') === 'true', 'C1 : le motif dirige vers le champ obligatoire');
+  await calmSelect.selectOption('pass');
+  check(await applyButton.isEnabled(), 'C1 : la réussite active l’application (' + await applyButton.getAttribute('title') + ')');
 
   // a) Attaque d’un ennemi sur une cible porteuse d’une couche attackDeterrent.
   await page.evaluate(() => window.__render({ actorCamp: 'ennemi', targetCamp: 'pj', targetDivine: true }));
