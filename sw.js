@@ -1,4 +1,4 @@
-const CACHE_NAME = 'wfrp-cache-v3.33.0';
+const CACHE_NAME = 'wfrp-cache-v3.33.1';
 
 const ASSETS_TO_CACHE = [
   './',
@@ -262,7 +262,9 @@ const ASSETS_TO_CACHE = [
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(ASSETS_TO_CACHE);
+      // « reload » contourne le cache HTTP : une copie jugée fraîche d'un module ancien
+      // se mêlerait sinon aux modules récents et l'outil ne démarrerait plus.
+      return cache.addAll(ASSETS_TO_CACHE.map(url => new Request(url, { cache: 'reload' })));
     }).then(() => {
       // First installation has no waiting replacement to activate.
       if (!self.registration.active) return;
