@@ -6,6 +6,7 @@ import { join, normalize, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
 import { expect } from 'playwright/test';
+import { closeU1Drawer } from './helpers/u1-drawer.mjs';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const mime = { '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.html': 'text/html; charset=utf-8', '.json': 'application/json' };
@@ -565,6 +566,8 @@ async function main() {
     await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
     await page.screenshot({ path: join(tmpdir(), 'mj-workspace-900.png'), fullPage: true });
     await page.evaluate(() => document.documentElement.removeAttribute('data-theme'));
+    // U1 : le tiroir ouvert à 1440 px devient superposé à 900 px ; on le ferme avant de changer d'espace.
+    await closeU1Drawer(page);
 
     await page.getByRole('tab', { name: 'Bibliothèque' }).click();
     await page.getByRole('searchbox', { name: 'Rechercher dans la bibliothèque' }).fill('très long');

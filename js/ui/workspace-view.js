@@ -1269,7 +1269,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
           // Les clés admises proviennent exclusivement des champs de critique rendus.
           const key = roll.key;
           const person = key?.startsWith('defender') ? context.target : context.actor;
-          if (person && person.kind !== 'PJ' && key && !String(draft[key] ?? '').trim()) draft[key] = String(d100());
+          if (person && person.kind !== 'PJ' && key && !String(draft[key] ?? '').trim()) { forgetDeclined(draft, key); draft[key] = String(d100()); }
           continue;
         }
         const person = roll.field === 'attack' ? context.actor : roll.field === 'defense' ? context.target : context.participants?.find(row => row.id === roll.personId);
@@ -1287,8 +1287,8 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
           if (key && !String(draft[key] ?? '').trim()) { draft[key] = String(d100()); ordinaryRollChanged = true; }
         }
       }
-      draft.v5Choice = null; draft.defenseChoice = null;
-      if (ordinaryRollChanged) { resetCritical(draft); draft.preview = null; }
+      // Comme criticalRoll : un dé de critique ou de magie ne remet pas en cause le résultat choisi.
+      if (ordinaryRollChanged) { draft.v5Choice = null; draft.defenseChoice = null; resetCritical(draft); draft.preview = null; }
       draft.comparison = null; draft.error = null;
       resolutionHandlers.calculate();
     },
@@ -2537,7 +2537,8 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     if (event.key !== 'Escape' || event.defaultPrevented || dialogOpen || (event.composedPath?.() || []).some(node => node.matches?.('dialog, [role="dialog"]'))) return;
     const drawer = refs.root.querySelector('.workspace-resolution-drawer:not([hidden])');
     const toggle = refs.root.querySelector('[data-circumstances-toggle]');
-    if (!drawer || !toggle) return;
+    // Tiroir réellement affiché (onglet Jouer) et aucun menu en surimpression.
+    if (!drawer || !toggle || !drawer.getClientRects().length || pressDocument.querySelector?.(':popover-open')) return;
     event.preventDefault();
     toggle.click();
     toggle.focus();

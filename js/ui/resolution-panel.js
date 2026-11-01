@@ -563,6 +563,7 @@ export function renderResolutionPanel(options) {
         scoreInput.type='number';
         scoreInput.min='0';
         scoreInput.value=current.weaponSkillScore??(hasActionScore?Number(action.base):'');
+        scoreInput.dataset.defaultValue=hasActionScore?String(Number(action.base)):'';
         scoreInput.setAttribute('aria-label',score.textContent);
         scoreInput.addEventListener('change',()=>handlers.select({v5Context:{...current,weaponSkillScore:scoreInput.value===''?undefined:Number(scoreInput.value)}}));
         score.append(scoreInput);
@@ -703,6 +704,7 @@ export function renderResolutionPanel(options) {
             choice.append(new Option('À préciser',''),new Option('Oui','true'),new Option('Non','false'));
             choice.value=typeof value==='boolean'?String(value):'';
             choice.disabled=typeof inferred==='boolean';
+            if(choice.disabled)choice.dataset.defaultValue=choice.value;
             choice.addEventListener('change',()=>handlers.select({protectionContext:{...context,[key]:choice.value===''?undefined:choice.value==='true'}}));
             label.append(choice);
             block.append(label);
@@ -3146,8 +3148,9 @@ function arrangeResolutionSteps(section, { actionBlock, targetBlock, rolls, comm
   drawer.addEventListener('input', refreshSummary);
   drawer.addEventListener('change', refreshSummary);
   refreshSummary();
-  const setOpen = open => {
-    draft.circumstancesOpen = open;
+  // Seul un geste du MJ mémorise l'état : le défaut reste réévalué à chaque changement de type.
+  const setOpen = (open, remember = true) => {
+    if (remember) draft.circumstancesOpen = open;
     drawer.hidden = !open;
     backdrop.hidden = !open;
     toggle.setAttribute('aria-expanded', String(open));
@@ -3159,7 +3162,9 @@ function arrangeResolutionSteps(section, { actionBlock, targetBlock, rolls, comm
   section.addEventListener('keydown', event => {
     if (event.key === 'Escape' && !drawer.hidden) { setOpen(false); toggle.focus(); }
   });
-  setOpen(draft.circumstancesOpen ?? type === 'attack');
+  // Ouvert par défaut quel que soit le type, car la zone « Test V5 » qu'il remplace était toujours visible ;
+  // sauf sur petit écran, où il recouvrirait tout le panneau.
+  setOpen(draft.circumstancesOpen ?? !globalThis.matchMedia?.('(max-width: 900px)').matches, false);
   const circumstancesLine = node('div', 'workspace-inline-actions workspace-circumstances-line');
   circumstancesLine.append(toggle, summary);
   rollsStep.appendChild(circumstancesLine);
