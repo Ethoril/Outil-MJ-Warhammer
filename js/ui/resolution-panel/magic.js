@@ -5,6 +5,7 @@ import { renderMagicControls, renderSpellRecipientControls } from '../v5-magic-c
 import { renderSpellOptions } from '../v5-spell-options.js';
 import { ARCANE_ARMOR_LOCATIONS } from '../../core/v5-magic-arcane-unforgiving.js';
 import { DURATION_UNIT_LABELS, parseSpellDuration } from '../../core/v5-magic-effects.js';
+import { d100 } from '../../core/dice.js';
 export function missingMagicDice(preview) {
   if (!preview) return false;
   return [preview.missing, preview.spellPreview?.missing, preview.castPreview?.missing, preview.castPreview?.miscast?.missingSecondaryDice, preview.miscast?.missingSecondaryDice]
@@ -72,6 +73,15 @@ export function renderV5MagicContext({ actor, participants = [], target, type, d
     if (['magicMiscastRoll', 'magicMajorRoll'].includes(key) || key === 'magicSecondaryDistanceRoll' && isMiscastDistanceD100(incident?.table, incident?.entry?.max)) { input.dataset.npcRollKey = key; input.dataset.npcRollOwner = 'actor'; }
     input.addEventListener('input', () => handlers.input(key, input.value === '' ? null : Number(input.value)));
     label.appendChild(input);
+    if (['magicMiscastRoll', 'magicMajorRoll'].includes(key)) {
+      const roll = node('button', 'workspace-secondary', 'Lancer');
+      roll.type = 'button';
+      roll.addEventListener('click', () => {
+        input.value = String(d100());
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+      });
+      label.appendChild(roll);
+    }
     v5.appendChild(label);
     return input;
   };
@@ -202,6 +212,15 @@ export function renderV5MagicContext({ actor, participants = [], target, type, d
       if (['magicMiscastRoll', 'magicMajorRoll'].includes(key) || key === 'magicSecondaryDistanceRoll' && isMiscastDistanceD100(incident?.table, incident?.entry?.max)) { inp.dataset.npcRollKey = key; inp.dataset.npcRollOwner = 'actor'; }
       inp.addEventListener('input', () => handlers.input(key, inp.value === '' ? null : Number(inp.value)));
       wrap.appendChild(inp);
+      if (['magicMiscastRoll', 'magicMajorRoll'].includes(key)) {
+        const roll = node('button', 'workspace-secondary', 'Lancer');
+        roll.type = 'button';
+        roll.addEventListener('click', () => {
+          inp.value = String(d100());
+          inp.dispatchEvent(new Event('input', { bubbles: true }));
+        });
+        wrap.appendChild(roll);
+      }
       box.appendChild(wrap);
       return inp;
     };

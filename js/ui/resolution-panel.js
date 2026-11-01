@@ -54,6 +54,8 @@ export function applicationBlockingReasons(preview, draft, canApply, preflight =
   }
   if (preview.v5MagicKind) {
     const invalid = preview.v5MagicKind === 'cast' && (preview.spellPreview?.fingerprintCheck?.valid === false || preview.spellPreview?.valid === false || (preview.castPreview?.spellSuccess && preview.spellPreview?.ready === false));
+    const incident = preview.castPreview?.miscast || preview.miscast;
+    add(incident && incident.initialRoll == null && !incident.cancelled, 'Jet d’incident magique à saisir (d100)', 'magic-miscast');
     add(invalid, 'Vérifiez les éléments requis pour le sort');
     add(preview.ready === false, 'Complétez les éléments requis pour la magie');
     return reasons;
@@ -3021,6 +3023,8 @@ export function renderResolutionPanel(options) {
     live.appendChild(renderResult(preview, target, draft, handlers, participants));
     const defenseRoll = section.querySelector?.('[data-roll-input="defense"]');
     if (defenseRoll) defenseRoll.dataset.blockingField = 'defense-roll';
+    const miscastRoll = section.querySelector?.('[data-focus-key="magicMiscastRoll"]');
+    if (miscastRoll) miscastRoll.dataset.blockingField = 'magic-miscast';
     const criticalPending = live.querySelector?.('[data-roll-input="critical-effect"], [data-roll-input="critical-second"], [data-roll-input="defender-critical-effect"]');
     if (criticalPending) criticalPending.dataset.blockingField = 'critical-pending';
     const criticalAlternative = live.querySelector?.('[data-roll-input="critical-effect-alternative"], [data-roll-input="critical-second-alternative"], [data-roll-input="defender-critical-effect-alternative"]');
