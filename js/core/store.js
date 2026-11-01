@@ -137,7 +137,7 @@ import {
 import { Profile, Participant, DiceLine, uid, cloneValue, normalizeCaracs, canonicalizeProfileFields, normalizeFicheFields, FICHE_DATA_FIELDS } from './models.js';
 import { sanitizeArray, sanitizeProfile, sanitizeParticipant, sanitizeMagicEnvelope } from './sanitize.js';
 import { migrateSnapshot, migrateLegacyStorage, CURRENT_SCHEMA_VERSION } from './migrations.js';
-import { createStateCommand } from './commands.js';
+import { createStateCommand, createCompactStateCommand, applyStateChanges } from './commands.js';
 import { createHistory, recordCommand, canUndo as historyCanUndo, canRedo as historyCanRedo, undo as historyUndo, redo as historyRedo, historySnapshot, markExternalBoundary } from './history.js';
 import { ORDER_MODES, effectiveOrder, moveInOrder, insertReinforcement, insertParticipantsByInitiative, setOrderMode as computeOrderMode, nextTurn as computeNextTurn, removeFromCombat, prepareCombatInitiative } from './turn-order.js';
 import { createEncounter, normalizeEncounter, setEncounterEntry, removeEncounterEntry, duplicateEncounter, launchEncounter, addImprovisedParticipant, suspendScene, resumeScene } from './encounters.js';
@@ -1491,9 +1491,9 @@ function resolvedCorruptionTest(participant, skillId, input) {
         // state commands.  Keeping them outside the structured history means a
         // profile edit followed by a log entry still undoes the profile edit in
         // one gesture, and a local log never consumes a shared revision.
-        const baseHistory = purgeScope ? purgeEncounterJournalHistory(historyState, purgeScope) : historyState;
+        const baseHistory = purgeScope ? purgeEncounterJournalHistory(historyState, purgeScope, before) : historyState;
         const nextHistory = recordHistory
-          ? recordCommand(baseHistory, createStateCommand({
+          ? recordCommand(baseHistory, (JSON.stringify(before).length + JSON.stringify(after).length > 200000 ? createCompactStateCommand : createStateCommand)({
             id: `${CLIENT_ID}:command:${nextRevision}`,
             type,
             baseRevision,
@@ -3174,9 +3174,14 @@ function resolvedCorruptionTest(participant, skillId, input) {
           const nextRevision = localRevision + 1;
           const beforeHistory = historyState;
           const beforeRevision = localRevision;
-          const state = preserveLocalStateDuringHistory(JSON.parse(JSON.stringify(transition.command.inverse.state)));
+          const current = currentEnvelope();
+          const state = preserveLocalStateDuringHistory(transition.command.data?.compactState === 1
+            ? applyStateChanges(current, transition.command.inverse.changes)
+            : JSON.parse(JSON.stringify(transition.command.inverse.state)));
           state.localRevision = nextRevision;
-          const sharedChanged = hasSharedStateChange(transition.command.result.state, transition.command.inverse.state);
+          const sharedChanged = transition.command.data?.compactState === 1
+            ? hasSharedStateChange(current, state)
+            : hasSharedStateChange(transition.command.result.state, transition.command.inverse.state);
           const protocolReady = Boolean(syncSession && syncSessionReady);
           const operationQueued = protocolReady && sharedChanged;
           const persistState = { ...state, history: transition.history, ...(!protocolReady && syncSession && sharedChanged ? { syncPending: true } : {}) };
@@ -3243,9 +3248,14 @@ function resolvedCorruptionTest(participant, skillId, input) {
         const transition = historyRedo(historyState);
         if (!transition.command) return false;
         const nextRevision = localRevision + 1;
-        const state = preserveLocalStateDuringHistory(JSON.parse(JSON.stringify(transition.command.result.state)));
+        const current = currentEnvelope();
+        const state = preserveLocalStateDuringHistory(transition.command.data?.compactState === 1
+          ? applyStateChanges(current, transition.command.result.changes)
+          : JSON.parse(JSON.stringify(transition.command.result.state)));
         state.localRevision = nextRevision;
-        const sharedChanged = hasSharedStateChange(transition.command.inverse.state, transition.command.result.state);
+        const sharedChanged = transition.command.data?.compactState === 1
+          ? hasSharedStateChange(current, state)
+          : hasSharedStateChange(transition.command.inverse.state, transition.command.result.state);
         const protocolReady = Boolean(syncSession && syncSessionReady);
         const operationQueued = protocolReady && sharedChanged;
         const persistState = { ...state, history: transition.history, ...(!protocolReady && syncSession && sharedChanged ? { syncPending: true } : {}) };

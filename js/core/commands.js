@@ -75,6 +75,42 @@ export function createStateCommand({ id, type, baseRevision = 0, before, after, 
   });
 }
 
+/** Compact reversible changes for large state commands. The independently maintained journal is excluded. */
+export function createCompactStateCommand({ id, type, baseRevision = 0, before, after } = {}) {
+  const forward = [], backward = [];
+  function walk(a, b, path) {
+    if (JSON.stringify(a) === JSON.stringify(b)) return;
+    if (a && b && typeof a === 'object' && typeof b === 'object'
+      && Array.isArray(a) === Array.isArray(b)
+      && (!Array.isArray(a) || a.length === b.length)) {
+      for (const key of new Set([...Object.keys(a), ...Object.keys(b)])) {
+        if (!path.length && ['history', 'log', 'localRevision'].includes(key)) continue;
+        if (!hasOwn(a, key)) { forward.push({ path: [...path, key], value: clone(b[key]) }); backward.push({ path: [...path, key], remove: true }); }
+        else if (!hasOwn(b, key)) { forward.push({ path: [...path, key], remove: true }); backward.push({ path: [...path, key], value: clone(a[key]) }); }
+        else walk(a[key], b[key], [...path, key]);
+      }
+    } else {
+      forward.push({ path, value: clone(b) }); backward.push({ path, value: clone(a) });
+    }
+  }
+  walk(before, after, []);
+  return createCommand({ id, type, baseRevision, data: { compactState: 1 }, result: { changes: forward }, inverse: { changes: backward } });
+}
+
+export function applyStateChanges(state, changes) {
+  const result = clone(state);
+  for (const change of changes) {
+    let parent = result;
+    for (const key of change.path.slice(0, -1)) {
+      if (!parent || typeof parent !== 'object' || !hasOwn(parent, key)) throw new CommandError('Chemin d’historique introuvable', 'INVALID_HISTORY_PATH');
+      parent = parent[key];
+    }
+    const key = change.path.at(-1);
+    if (change.remove) delete parent[key]; else safeSet(parent, key, clone(change.value));
+  }
+  return result;
+}
+
 /**
  * Apply a command through an injected pure handler. The handler receives clones;
  * an exception therefore cannot partially mutate the caller state.

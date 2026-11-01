@@ -1,3 +1,23 @@
+import { applyStateChanges, createCompactStateCommand } from './commands.js';
+
+/** Visit both sides of compact history entries using the current state as anchor. */
+function visitHistory(history, current, visit) {
+  for (const [key, direction] of [['past', 'inverse'], ['future', 'result']]) {
+    let cursor = current;
+    const entries = history?.[key] || [];
+    for (let i = entries.length - 1; i >= 0; i--) {
+      const command = entries[i];
+      const compact = command.data?.compactState === 1;
+      const other = compact ? applyStateChanges(cursor, command[direction].changes) : command[direction]?.state;
+      if (!other) continue;
+      const before = direction === 'inverse' ? other : cursor;
+      const after = direction === 'inverse' ? cursor : other;
+      visit(command, before, after, key, i);
+      cursor = other;
+    }
+  }
+}
+
 /** Journal ownership uses stable encounter/scene IDs, never display names. */
 export function encounterJournalScope(state, encounterId) {
   if (typeof encounterId !== 'string' || !encounterId.trim()) throw new TypeError('Identifiant de rencontre requis');
@@ -17,6 +37,9 @@ export function encounterJournalScope(state, encounterId) {
     collect(command.result?.state);
     collect(command.inverse?.state);
   }
+  visitHistory(state?.history, state, (command, before, after) => {
+    if (command.data?.compactState === 1) { collect(before); collect(after); }
+  });
   return { encounterId, sceneIds: [...sceneIds], participantIds: [...participantIds] };
 }
 
@@ -50,11 +73,20 @@ export function purgeEncounterJournal(state, scope) {
     appliedResolutionIds: (state.appliedResolutionIds || []).filter(id => !removed.has(id)) };
 }
 
-export function purgeEncounterJournalHistory(history, scope) {
+export function purgeEncounterJournalHistory(history, scope, currentState = null) {
   const clean = command => ({ ...command,
     result: command.result?.state ? { ...command.result, state: purgeEncounterJournal(command.result.state, scope) } : command.result,
     inverse: command.inverse?.state ? { ...command.inverse, state: purgeEncounterJournal(command.inverse.state, scope) } : command.inverse });
-  return { ...history, past: history.past.map(clean), future: history.future.map(clean) };
+  const result = { ...history, past: history.past.map(clean), future: history.future.map(clean) };
+  if (currentState) visitHistory(history, currentState, (command, before, after, key, i) => {
+    if (command.data?.compactState !== 1) return;
+    result[key][i] = createCompactStateCommand({ id: command.id, type: command.type, baseRevision: command.baseRevision,
+      before: purgeEncounterJournal(before, scope), after: purgeEncounterJournal(after, scope) });
+  });
+  else if ([...history.past, ...history.future].some(command => command.data?.compactState === 1)) {
+    throw new Error('État courant requis pour purger un historique compact.');
+  }
+  return result;
 }
 
 /** Attach ownership to new receipts, including end-of-turn and management logs. */
