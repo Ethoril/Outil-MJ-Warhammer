@@ -40,6 +40,9 @@ export function renderResult(preview, target, draft, handlers, participants=[]) 
   if (preview.fumble) pills.appendChild(node('span', 'workspace-outcome is-critical', 'Maladresse de l’attaquant'));
   if (preview.defenderFumble) pills.appendChild(node('span', 'workspace-outcome is-critical', 'Maladresse du défenseur'));
   result.appendChild(pills);
+  if (preview.attack && preview.success === false && preview.hit && preview.opposition?.mode === 'opposed' && preview.opposition.winner === 'attacker') {
+    result.appendChild(node('p', 'workspace-result-line', `Attaque ratée (DR ${signed(preview.sl)}), mais Test opposé gagné : touché.`));
+  }
   if(preview.combatFailure?.fumble?.outcome)result.appendChild(node('p','workspace-result-line',`Maladresse ${preview.combatFailure.fumble.roll} : ${preview.combatFailure.fumble.outcome.label}`));
   if(preview.combatFailure?.misfire?.outcome)result.appendChild(node('p','workspace-result-line',`Incident de poudre ${preview.combatFailure.misfire.roll} : ${preview.combatFailure.misfire.outcome.label}`));
   if(preview.combatFailure?.misfire?.salvo?.outcome)result.appendChild(node('p','workspace-result-line',`Incident de Salve ${preview.combatFailure.misfire.salvo.roll} : ${preview.combatFailure.misfire.salvo.outcome.label}`));
