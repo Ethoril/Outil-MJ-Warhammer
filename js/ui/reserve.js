@@ -270,10 +270,10 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
     const existing = id ? Store.getProfile(id) : null;
     const cults = (existing?.talents || []).filter(row => ['talent-bless', 'talent-invoke'].includes(row.id)).map(row => row.specialization || row.specialty).filter(Boolean);
     if (data.cult && cults.length && !cults.some(cult => normalizeSearchText(cult) === normalizeSearchText(data.cult))) {
-      showToast(`Culte différent des talents de culte : ${cults.join(', ')}.`, 'error');
-      if (submit) submit.disabled = false;
-      return;
+      // Signalé sans bloquer : le MJ garde la main sur la fiche, comme à l'import.
+      showToast(`Culte différent des talents de culte : ${cults.join(', ')}.`, 'warning');
     }
+    if (!data.cult && !existing?.cult) delete data.cult;
     const picked = keywordPicker?.getValue() || { keywords: [], keywordExclusions: [] };
     if (picked.keywords.length || picked.keywordExclusions.length || existing?.keywords || existing?.keywordExclusions) Object.assign(data, picked);
     if (existing?.extensions?.ficheId) {

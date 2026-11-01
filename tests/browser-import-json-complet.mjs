@@ -81,6 +81,15 @@ async function main() {
     assert.equal(copied.culte, 'Ulric');
     assert.deepEqual(copied.prieres, priest.prieres);
     assert.deepEqual(copied.talents, priest.talents);
+    // Lot 3 (contre-vérification) : un culte différent des talents est signalé sans bloquer l'enregistrement.
+    await edit.locator('[name=cult]').fill('Sigmar');
+    await edit.locator('[name=notes]').fill('culte à revoir');
+    await page.locator('#btn-submit-form').click();
+    await expect(page.locator('#toast-container')).toContainText('Culte différent des talents de culte');
+    await expect(edit).toBeHidden();
+    await page.locator('#workspace-prepare').getByRole('button', { name: `Modifier ${priest.nom}` }).click();
+    await expect(edit.locator('[name=cult]')).toHaveValue('Sigmar');
+    await expect(edit.locator('[name=notes]')).toHaveValue('culte à revoir');
     await edit.getByRole('button', { name: 'Fermer' }).click();
 
     // 4. La bibliothèque montre la fiche du profil : talents et prières.
