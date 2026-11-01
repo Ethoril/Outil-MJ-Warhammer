@@ -22,7 +22,7 @@ try{
     document.body.replaceChildren(panel);
     const fuse=panel.querySelector('[aria-label="Délai de la mèche en Tours du porteur"]');
     if(!fuse)failures.push('délai de bombe UI absent');
-    else{fuse.value='2';fuse.dispatchEvent(new Event('input',{bubbles:true}));const payload=window.calls.at(-1)?.[0]?.v5Context||{};if(payload.currentRound!==4||payload.currentTurnIndex!==11)failures.push(`pose bombe ne transmet pas Round/Tour de l’horloge: ${JSON.stringify(payload)}`);}
+    else{window.calls.length=0;fuse.value='2';fuse.dispatchEvent(new Event('input',{bubbles:true}));const payload=window.calls.findLast(call=>call[0]?.v5Context)?.[0]?.v5Context||{};if(payload.currentRound!==4||payload.currentTurnIndex!==11)failures.push(`pose bombe ne transmet pas Round/Tour de l’horloge: ${JSON.stringify(payload)}`);}
     if(!panel.textContent.includes('Délai de la mèche en Tours du porteur'))failures.push('libellé utilise Rounds au lieu de Tours du porteur');
 
     const ally={id:'ally',name:'Allié',camp:'PJ',zone:'active',hp:12,caracs:{E:30},equipment:[],skills:[],states:[]};
@@ -39,7 +39,7 @@ try{
     if(!panel.textContent.includes('Salve : −2 DR'))failures.push('UI does not show the same-Tour cumulative Salve penalty in DR');
     const crew=panel.querySelector('[aria-label="Nombre de servants"]');
     if(!crew||crew.tagName!=='INPUT'||crew.type!=='number'||crew.min!=='1')failures.push('effectif UI devrait accepter tout nombre positif de servants sans plafond inventé');
-    else{crew.value='3';crew.dispatchEvent(new Event('input',{bubbles:true}));const payload=window.calls.at(-1)?.[0]?.v5Context||{};if(payload.crewCount!==3)failures.push(`UI ne transmet pas 3 servants: ${JSON.stringify(payload)}`);}
+    else{window.calls.length=0;crew.value='3';crew.dispatchEvent(new Event('input',{bubbles:true}));const payload=window.calls.findLast(call=>call[0]?.v5Context)?.[0]?.v5Context||{};if(payload.crewCount!==3)failures.push(`UI ne transmet pas 3 servants: ${JSON.stringify(payload)}`);}
     return failures;
   });
   assert.deepEqual(findings,[],'E UI review reproductions');

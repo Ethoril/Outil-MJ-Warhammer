@@ -27,7 +27,7 @@ try{
   assert.equal(await ammo.count(),1,'la munition reste un choix facultatif si le stock est représenté dans l’inventaire');
   assert.equal(await ammo.inputValue(),'','aucune munition n’est présélectionnée');
   assert.equal(await ammo.locator('option').first().textContent(),'Aucune munition ajoutée');
-  assert.equal(await page.evaluate(()=>window.calls.length),0,'le panneau n’impose ni ne choisit de munition');
+  assert.equal(await page.evaluate(()=>window.calls.filter(call=>call[0] && Object.hasOwn(call[0],'ammunitionId')).length),0,'le panneau n’impose ni ne choisit de munition');
   assert.equal(await page.getByText('Protection et bouclier pour cette attaque').count(),1,'le flux de résolution du tir demeure disponible');
   console.log('PASS : UI du tir Empaleuse, munition non sélectionnée et choix facultatif vérifiés.');
 }finally{await browser.close();server.close();}

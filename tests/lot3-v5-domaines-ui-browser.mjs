@@ -1,3 +1,4 @@
+import {chooseBoolean} from './helpers/confirmation.mjs';
 import { openU1Settings, clickU1Magic } from './helpers/u1-drawer.mjs';
 import assert from 'node:assert/strict';
 import {createServer} from 'node:http';
@@ -38,7 +39,7 @@ try{
   await choose(c.id);
   const who=/^Vous$/i.test(c.target)?'Mage':'Cible';
   for(const f of c.effects.facts){const label=f.label+(f.perTarget?' — '+who:'');const control=page.getByLabel(label,{exact:true});
-   if(f.type==='boolean')await control.selectOption(String(f.expected??true));
+   if(f.type==='boolean')await chooseBoolean(control,String(f.expected??true));
    else if(f.type==='select')await control.selectOption(f.options[0][0]);
    else if(f.type==='object'){assert.equal(await control.evaluate(e=>e.tagName),'SELECT');assert.equal(await control.locator('option[value="absent"]').count(),0);await control.selectOption('blade');}
    else await control.fill(String(f.min??0));

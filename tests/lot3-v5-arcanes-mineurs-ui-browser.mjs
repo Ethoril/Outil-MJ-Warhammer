@@ -23,7 +23,7 @@ try{
   await choose(c.id);const who=/^Vous$/i.test(c.target)?'Mage':'Cible';
   for(const f of c.effects.facts){const control=page.getByLabel(f.label+(f.perTarget?' — '+who:''),{exact:true});
    if(await control.count()===0)continue;
-   if(f.type==='boolean')await control.selectOption(String(f.expected??true));
+   if(f.type==='boolean')await chooseBoolean(control,String(f.expected??true));
    else if(f.type==='select')await control.selectOption(f.options[0][0]);
    else if(f.type==='object')await control.selectOption('blade');
    else await control.fill(f.type==='text'?'Rat local':String(f.min??1));facts++;

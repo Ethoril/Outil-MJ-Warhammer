@@ -290,6 +290,7 @@ test('counter-review UI: Chance → Avantage is locked after a d100 is entered o
     prepend(...items) { this.children.unshift(...items); }
     setAttribute(name, value) { this.attributes[name] = value; }
     addEventListener(name, handler) { this.listeners[name] = handler; }
+    querySelectorAll() { return []; }
   }
   globalThis.document = { createElement: tag => new Element(tag) };
   globalThis.Option = class { constructor(text, value) { this.text = text; this.value = value; } };

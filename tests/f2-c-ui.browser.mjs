@@ -23,7 +23,7 @@ try{
  assert.equal(selectPayload.v5Kind,'ranged','le choix Ingénierie tir synchronise la Nature du Test');
  await render({weapon:ambiguous,action,draft:{v5Context:{weaponTrainingGroup:'Ingénierie tir'}},withTarget:true});
  assert.equal(await page.getByLabel('Nature du Test').inputValue(),'ranged','la sélection détermine le contrôle Nature du Test');
- assert.equal(await page.getByLabel('Attaque à distance').inputValue(),'true','la nature choisie alimente aussi la protection/bouclier');
+ assert.equal(await page.getByLabel('Attaque à distance').locator('button').first().getAttribute('aria-pressed'),'true','la nature choisie alimente aussi la protection/bouclier');
  await page.getByLabel('Augmentations de la spécialité (MJ, si la fiche ne les fournit pas)').fill('1');
  await page.getByLabel('Augmentations de la spécialité (MJ, si la fiche ne les fournit pas)').dispatchEvent('change');
  const advancesPayload=await page.evaluate(()=>window.calls.at(-1)[0]);
