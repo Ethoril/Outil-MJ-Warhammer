@@ -70,7 +70,10 @@ export function createKeywordPicker({ container, store, subject = {}, onChange =
     for (const id of state.explicit.filter(item => !exclusions.includes(item))) chips.append(chip(ref.terms.get(id).nameFr, { title: describeKeyword(id, ref), onRemove: () => { keywords = keywords.filter(item => item !== id && resolveKeyword(item, ref)?.id !== id); render(); emit(); } }));
     for (const entry of state.derived.filter(item => !state.explicit.includes(item.id))) chips.append(chip(ref.terms.get(entry.id).nameFr, { derived: true, title: `Déduit (${{ race: 'race', trait: 'Trait de nature', tag: 'ancien tag', flag: 'nature' }[entry.from]}) : ${describeKeyword(entry.id, ref)}`, removeLabel: 'Écarter le mot-clé déduit', onRemove: () => { exclusions = [...exclusions, entry.id]; render(); emit(); } }));
     for (const id of exclusions) if (ref.terms.has(id)) { const restore = el('button', `Rétablir ${ref.terms.get(id).nameFr}`, 'ghost tiny'); restore.type = 'button'; restore.onclick = () => { exclusions = exclusions.filter(item => item !== id); render(); emit(); }; chips.append(restore); }
-    datalist.replaceChildren(...[...ref.terms.values()].flatMap(term => [term.nameFr, ...term.aliases]).map(label => new Option(label)));
+    datalist.replaceChildren(...keywordTree(ref).map(term => {
+      const option = new Option(term.depth ? `${'— '.repeat(term.depth)}${term.nameFr}` : term.nameFr, term.nameFr);
+      return option;
+    }));
   };
   const add = text => {
     const ref = referential(), found = resolveKeyword(text, ref);

@@ -35,6 +35,10 @@ try {
   page.on('pageerror', error => errors.push(error.message));
   await page.goto(url + '/qa-keywords');
   await page.waitForFunction(() => window.ready === true);
+  const options = await page.locator('datalist option').evaluateAll(rows => rows.map(row => row.value));
+  const names = await page.evaluate(() => [...window.store.getKeywordReferential().terms.values()].map(term => term.nameFr));
+  assert.equal(new Set(options).size, options.length, 'chaque libellé proposé est unique');
+  assert.deepEqual([...options].sort(), [...names].sort(), 'seuls les noms français sont proposés');
   const chips = () => page.locator('.keyword-chip').allInnerTexts();
   // Mot-clé déduit d'un Trait de nature, visible et écartable.
   assert.match((await chips()).join('|'), /Mort-vivant/);
