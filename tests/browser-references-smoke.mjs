@@ -14,6 +14,12 @@ try{
  await page.route('https://docs.google.com/**',route=>route.fulfill({status:503,body:'Unavailable'}));
  await page.goto(url+'/qa-reference');
  await page.evaluate(async()=>{const module=await import('/js/ui/rules-view.js');module.renderReferenceTables();});
+ for (const [id, label] of [['v5-jets','Jets'],['v5-elan','Élan'],['v5-critiques','critiques'],['v5-etats','États']]) {
+   await page.locator(`[data-rule-target="${id}"]`).click();
+   const rule = page.locator(`[data-rule-id="${id}"]`);
+   assert.equal(await rule.getAttribute('open'), '');
+   assert.match((await rule.locator('summary').first().innerText()).toLocaleLowerCase(), new RegExp(label.toLocaleLowerCase()));
+ }
  await page.locator('.rules-search').fill('Hardy');await page.waitForFunction(()=>document.querySelector('.rules-list').textContent.includes('Dur à cuire'));
  assert.match(await page.locator('.rules-list').innerText(),/Dur à cuire/);
  await page.locator('.rules-search').fill('Impact');assert.match(await page.locator('.rules-list').innerText(),/Percutante/);

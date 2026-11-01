@@ -2,7 +2,7 @@ import { qs, escapeHtml } from './dom.js';
 import { normalizeSearchText } from '../core/sanitize.js';
 import { RULES } from '../data/rules.js';
 import { V5_CRIT_DATA as CRIT_DATA } from '../data/v5-crits.js';
-import { V5_RULES } from '../data/v5-rules.js';
+import { V5_RULES, V5_RULE_SHORTCUTS } from '../data/v5-rules.js';
 import { MAGIC_DATA } from '../data/magic.js';
 import { getKeywordList, getKeywordsStatus, keywordMechanicalStatus } from '../core/keywords.js';
 import { getReferenceCatalogue, getReferenceSnapshot, refreshReferences } from '../core/reference-catalog.js';
@@ -138,7 +138,7 @@ function updateRulesList(term, root = qs('#panel-rules')) {
   let matchCount = 0;
   let html = '';
 
-  html += `<div class="card"><strong>Repères V5</strong><div class="row rules-v5-shortcuts">${['Jets','Élan','Critiques','États'].map(label => `<button type="button" class="ghost small" data-rule-filter="${label}">${label}</button>`).join('')}</div><p class="muted">Tests, Élan, Blessures et tables de critiques du livre V5. Les talents conservent leur source Aides de jeu.</p></div>`;
+  html += `<div class="card"><strong>Repères V5</strong><div class="row rules-v5-shortcuts">${Object.entries(V5_RULE_SHORTCUTS).map(([label, id]) => `<button type="button" class="ghost small" data-rule-target="${id}">${label}</button>`).join('')}</div><p class="muted">Tests, Élan, Blessures et tables de critiques du livre V5. Les talents conservent leur source Aides de jeu.</p></div>`;
   // 1. BLOC MOTS-CLÉS D'ARMES ET D'ARMURES (§13.2, §13.7)
   const keywords = getKeywordList();
   const status = getKeywordsStatus();
@@ -206,7 +206,7 @@ function updateRulesList(term, root = qs('#panel-rules')) {
       const isOpen = Boolean(cleanTerm);
 
       html += `<div class="card rule-block">`;
-      html += `<details ${isOpen ? 'open' : ''}>`;
+      html += `<details data-rule-id="${escapeHtml(block.id || '')}" ${isOpen ? 'open' : ''}>`;
       const key = `rule:${favoriteKey(block.title)}`;
       html += `<summary class="row"><span>${escapeHtml(block.title)}</span><button type="button" class="rule-favorite ghost" data-favorite-key="${escapeHtml(key)}" aria-label="Favori">${favorites.has(key) ? '★' : '☆'}</button></summary>`;
       html += `<div class="rule-content">${block.source ? `<p class="muted">V5 · ${escapeHtml(block.source)}</p>` : `<p class="muted">Aide historique locale · source et édition à confirmer.</p>`}`;
@@ -250,7 +250,13 @@ function updateRulesList(term, root = qs('#panel-rules')) {
   listContainer.innerHTML = html;
 
   listContainer.querySelector('[data-talents-imported]')?.addEventListener('click',()=>{settings.onlyImported=!settings.onlyImported;referenceContexts.set(root,settings);updateRulesList(term,root);});
-  listContainer.querySelectorAll('[data-rule-filter]').forEach(button => button.addEventListener('click', () => { const input = root.querySelector('.rules-search'); input.value = button.dataset.ruleFilter; updateRulesList(input.value, root); input.focus(); }));
+  listContainer.querySelectorAll('[data-rule-target]').forEach(button => button.addEventListener('click', () => {
+    const id = button.dataset.ruleTarget;
+    const input = root.querySelector('.rules-search');
+    if (input.value) { input.value = ''; updateRulesList('', root); }
+    const details = root.querySelector(`[data-rule-id="${id}"]`);
+    if (details) { details.open = true; details.scrollIntoView({ block: 'start' }); details.querySelector('summary')?.focus(); }
+  }));
   listContainer.querySelectorAll('.rule-favorite').forEach(button => {
     button.addEventListener('click', event => {
       event.preventDefault(); event.stopPropagation();

@@ -17,19 +17,20 @@ const corruptionOutcomes = key => {
     return `Réussite à ${label} : ${band.points} point${band.points > 1 ? 's' : ''} de Corruption.`;
   })];
 };
+export const V5_RULE_SHORTCUTS = Object.freeze({ Jets: 'v5-jets', Élan: 'v5-elan', Critiques: 'v5-critiques', États: 'v5-etats' });
 export const V5_RULES = [
-  { title:'Jets et opposition V5', source:'Livre de base V5 EN, p. 130–131', sections:[
+  { id:'v5-jets', title:'Jets et opposition V5', source:'Livre de base V5 EN, p. 130–131', sections:[
     { h4:'Résoudre un Test', ol:['Comparer le d100 au score de la compétence ou caractéristique.', 'DR de base : dizaine du score moins dizaine du jet.', 'Ajouter les modificateurs de DR de difficulté, d’équipement et d’États. Un DR positif réussit ; un DR négatif échoue.', 'À 0 DR : réussite marginale (+0) si le jet est inférieur ou égal au score, sinon échec marginal (−0).'], pAfter:'01–05 réussissent toujours ; 96–100 échouent toujours, avec au moins un résultat marginal.' },
     { h4:'Avantage et Désavantage', p:'Annuler les sources 1 pour 1. Un Avantage restant permet d’inverser les chiffres pour améliorer le jet ; un Désavantage restant impose l’inversion si elle le dégrade. Chaque source restante après la première ajoute +1 ou −1 DR.', example:'3 Avantages et 1 Désavantage : inversion favorable facultative et +1 DR. Sur 44, le double reste inchangé et le +1 DR s’applique.' },
     { h4:'Opposition', p:'Le plus haut DR gagne, même si les deux Tests ont échoué. Le DR net est la différence. À égalité, l’initiateur gagne ; en combat, l’attaquant.' },
     { h4:'Doubles', p:'Sur un Test général : une réussite double vaut au moins +5 DR, un échec double au plus −5 DR. En mêlée ou au tir, le double donne un Coup critique ou une Maladresse sans remplacer les DR de combat.' }
   ] },
-  { title:'Combat et Élan V5', source:'Livre de base V5 EN, p. 163–168 ; précisions du MJ', sections:[
+  { id:'v5-elan', title:'Combat et Élan V5', source:'Livre de base V5 EN, p. 163–168 ; précisions du MJ', sections:[
     { h4:'Attaquer et défendre', p:'Une attaque de mêlée oppose les Tests. Un tir réussit sur son propre Test. Un tir ne peut normalement pas être opposé par Corps à corps ; les exceptions (v3, p. 165) : l’Esquive est permise si le tireur est à moins de Bonus d’Initiative mètres, ou à toute portée avec un bouclier de 2 PA ou plus ; tirer sur un adversaire engagé avec le tireur se résout comme une attaque de mêlée (sa compétence de tir opposée à la compétence de mêlée de la cible) et ne compte pas comme un tir dans la mêlée.' },
     { h4:'Élan', p:'État binaire, commun aux PJ et PNJ. Une victoire opposée en Corps à corps, en attaque ou défense, donne Élan. Une Charge remplissant ses conditions le donne avant le Test. Élan accorde Avantage aux Tests de Corps à corps.' },
     { h4:'Perdre ou dépenser Élan', p:'Échec en Corps à corps, opposition perdue, Blessures effectivement perdues, acquisition effective d’un État, pause ou fin de combat font perdre Élan. Une seule dépense d’Élan pour une attaque supplémentaire par Tour, même si Élan est regagné. Exemptions et quotas propres aux talents se vérifient séparément.' }
   ] },
-  { title:'Localisation, Blessures et critiques V5', source:'Livre de base V5 EN, p. 164–176', sections:[
+  { id:'v5-critiques', title:'Localisation, Blessures et critiques V5', source:'Livre de base V5 EN, p. 164–176', sections:[
     { h4:'Localisation de la touche', p:'Inverser le jet final après Avantage ou Désavantage. La localisation des dégâts ordinaires reste distincte de celle d’un critique.', table:[{jet:'01–09',loc:'Tête'},{jet:'10–24',loc:'Bras gauche'},{jet:'25–44',loc:'Bras droit'},{jet:'45–79',loc:'Corps'},{jet:'80–89',loc:'Jambe gauche'},{jet:'90–00',loc:'Jambe droite'}] },
     { h4:'Dégâts et Blessures', p:'Dégâts = arme + DR ; en mêlée, utiliser le DR net de l’opposition. Retirer le Bonus d’Endurance et les PA de la zone. Une touche inflige au moins 1 Blessure, sauf règle particulière comme Inoffensive. Les Blessures courantes ne descendent jamais sous 0.' },
     { h4:'Critique du jet', p:'Un Test de Corps à corps ou de Tir réussi avec un double inflige un critique, y compris en défense et même si l’opposition est perdue. Tirer une nouvelle localisation au d100, puis la gravité au d100 sur sa table. Résoudre aussi l’attaque normalement.' },
@@ -39,7 +40,7 @@ export const V5_RULES = [
     {id:'table-head-crit',title:'Critiques à la Tête',type:'crit',key:'HEAD'}, {id:'table-arm-crit',title:'Critiques au Bras',type:'crit',key:'ARM'},
     {id:'table-body-crit',title:'Critiques au Corps',type:'crit',key:'BODY'}, {id:'table-leg-crit',title:'Critiques à la Jambe',type:'crit',key:'LEG'}
   ] },
-  { title:'États V5 : effets, cumul et récupération', source:'Livre de base V5 EN, p. 184–187', sections:[
+  { id:'v5-etats', title:'États V5 : effets, cumul et récupération', source:'Livre de base V5 EN, p. 184–187', sections:[
     {h4:'Cumuler les pénalités',p:'Les occurrences d’un même État cumulent leur pénalité. Entre États différents, retenir la plus forte pénalité applicable. L’acquisition d’un État fait perdre Élan ; être déjà affecté n’interdit pas d’en regagner, sauf règle particulière.'},
     {h4:'Sonné, Exténué, Empoisonné',ul:['Chaque occurrence impose −1 DR à tous les Tests.','Sonné : à la fin du Round, Résistance +0 DR pour retirer une occurrence et une autre par DR au-delà du premier ; après retrait complet, Exténué si absent. Au-delà du BE en occurrences, devenir Inconscient.','Exténué : repos selon sa cause ; quelques minutes pour reprendre son souffle, une nuit pour un effort long, ou disparition de la circonstance.','Empoisonné : perte de 1 Blessure par occurrence en fin de Round ; récupération par Résistance selon le poison. Après disparition, Exténué 1. À 0 Blessure, guérison impossible tant que le poison persiste.']},
     {h4:'Aveuglé et Assourdi',ul:['Aveuglé : aucun tir ni tâche nécessitant de voir ; Désavantage en mêlée et aux tâches reposant sur la vue. Les attaques de mêlée contre vous ont Avantage, sauf adversaire également Aveuglé. Normalement retirer une occurrence à la fin de votre Tour ; blessure ou poison peuvent prolonger.','Assourdi : paroles incompréhensibles sans Lire sur les lèvres ; Résistance +0 DR toutes les minutes (6 Rounds), pas chaque Tour.']},
