@@ -170,6 +170,7 @@ try {
   assert.equal(await prepareDialog.locator('.encounter-composition li').count(), 2, 'l’éditeur conserve les deux entrées avec des UID distincts');
   await prepareDialog.getByRole('button', { name: 'Lancer la rencontre' }).click();
   const callbackDialog = page.locator('dialog.tool-sheet'); await callbackDialog.waitFor({ state: 'visible' });
+  await callbackDialog.locator('select[name="surprisedCamp"]').waitFor({ state: 'visible' });
   assert.deepEqual(await callbackDialog.locator('select[name="surprisedCamp"] option').evaluateAll(options => options.map(option => option.value).sort()), ['', 'ennemi', 'pj']);
   await callbackDialog.locator('input[name^="die:"]:not([readonly])').fill('6');
   await callbackDialog.getByRole('button', { name: 'Calculer / actualiser l’ordre' }).click();

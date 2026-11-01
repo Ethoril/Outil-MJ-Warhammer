@@ -258,6 +258,7 @@ try {
   // Croche-pied sur cible montée après la touche appliquée
   await openU1TurnActions(combat);
   await combat.getByRole('combobox', { name: 'Attaque réussie déjà appliquée ce Tour' }).selectOption({ index: 1 });
+  assert.equal(await combat.locator('.workspace-combat-actions').evaluate(el => el.open), true, 'les actions du Tour restent ouvertes après sélection');
   await combat.getByRole('combobox', { name: 'Athlétisme de Garde' }).selectOption('skill-41_74_68_6c_e9_74_69_73_6d_65-base');
   await combat.getByRole('button', { name: 'Préparer le Croche-pied' }).click();
   await combat.getByRole('spinbutton', { name: 'Test d’Endurance de Garde (d100, si perte après protection > BE)' }).fill('20');

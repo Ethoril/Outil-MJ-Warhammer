@@ -60,6 +60,32 @@ try {
   assert.equal(await page.getByLabel('Type d’action', { exact: true }).inputValue(), 'test');
   await page.getByLabel('Type d’action', { exact: true }).selectOption('attack');
   await page.getByRole('button', { name: 'Test…', exact: true }).click();
+  const order = await page.locator('.workspace-resolution').evaluate(el => [...el.children].filter(child => child.matches('.workspace-resolution-step, .workspace-resolution-footer, .workspace-resolution-drawer')).map(child => child.className));
+  assert.equal(order.length, 5);
+  assert.ok(order.slice(0, 3).every(name => name.includes('workspace-resolution-step')) && order[3].includes('workspace-resolution-footer') && order[4].includes('workspace-resolution-drawer'), 'ordre clavier : étapes, pied, tiroir');
+  const footer = page.locator('.workspace-resolution-footer');
+  assert.equal(await footer.locator('[data-focus-key="cancel-preview"]').textContent(), 'Effacer');
+  assert.equal(await footer.locator('[data-focus-key="apply"]').count(), 1, 'Appliquer est présent avant calcul');
+  assert.equal(await footer.locator('[data-focus-key="apply"]').isDisabled(), true, 'Appliquer est désactivé avant calcul');
+  assert.match(await footer.innerText(), /Jet de Garde/, 'le jet principal est le préalable connu');
+  assert.doesNotMatch(await footer.innerText(), /Jet de défense|Test de Calme/, 'aucune conséquence n’est inventée avant un jet exploitable');
+  assert.match(await page.locator('.workspace-result-live').innerText(), /Saisissez les jets puis Entrée/, 'le résultat explique ce qui est attendu');
+  const beforePreflight = await page.evaluate(() => (() => { const state = JSON.parse(window.__u1.store.getFullJSON()); delete state.exportedAt; return { state, revision: window.__u1.store.getLocalRevision() }; })());
+  await page.evaluate(() => { window.__u1.originalRandom = Math.random; window.__u1.preflightDraws = 0; Math.random = () => { window.__u1.preflightDraws++; return 0.34; }; });
+  await page.locator('[data-roll-input="attack"]').fill('34');
+  assert.match(await footer.innerText(), /Test de Calme/, 'le moteur indique la Protection manquante');
+  assert.match(await footer.innerText(), /Jet de défense/, 'le moteur indique la défense manquante');
+  assert.equal(await page.evaluate(() => window.__u1.preflightDraws), 0, 'aucun dé n’est lancé par la vérification');
+  assert.equal(await page.evaluate(() => window.__u1.view.getViewState().resolution.preview), null, 'la vérification n’affiche pas de résultat anticipé');
+  assert.deepEqual(await page.evaluate(() => (() => { const state = JSON.parse(window.__u1.store.getFullJSON()); delete state.exportedAt; return { state, revision: window.__u1.store.getLocalRevision() }; })()), beforePreflight, 'la vérification ne modifie pas le Store');
+  await page.evaluate(() => { Math.random = window.__u1.originalRandom; });
+  await page.locator('[data-circumstances-toggle]').click();
+  await footer.getByRole('button', { name: /Test de Calme/ }).click();
+  assert.equal(await page.locator('.workspace-resolution-drawer').isVisible(), true, 'le lien ouvre le tiroir');
+  assert.equal(await page.getByLabel('Test de Calme de l’attaquant (Bénédiction de Protection)', { exact: true }).evaluate(el => document.activeElement === el), true, 'le lien donne le focus au Test de Calme');
+  assert.match(await page.locator('.workspace-result-live').innerText(), /En attente du jet de défense/, 'le texte suit la saisie sans recalcul');
+  assert.doesNotMatch(await footer.innerText(), /Jet de Garde/, 'le pied retire le jet renseigné');
+  await page.locator('[data-roll-input="attack"]').fill('');
   const bulk = page.getByRole('button', { name: 'Lancer tous les dés des PNJ', exact: true });
   assert.equal(await bulk.isEnabled(), true);
   await page.evaluate(() => { window.__u1.originalRandom = Math.random; Math.random = () => 0.34; });
@@ -121,9 +147,30 @@ try {
     }
   });
   await page.locator('[data-focus-key="target-none"]').click();
+  await page.locator('[data-roll-input="attack"]').fill('34');
+  assert.match(await footer.innerText(), /Choisissez une cible/, 'l’absence de cible est signalée par le moteur');
+  await page.locator('[data-roll-input="attack"]').fill('');
   assert.match(await toggle.textContent(), /1 active/, 'changer de cible ne transforme pas un avantage saisi en valeur par défaut');
   await page.locator('[data-focus-key="target-pj"]').click();
   assert.match(await toggle.textContent(), /1 active/, 'le compteur conserve l’avantage au retour à la cible');
+  await page.evaluate(() => {
+    const draft=window.__u1.view.getViewState().resolution;
+    window.__u1.savedDraft=structuredClone(draft);
+    const original=window.__u1.store.previewResolution.bind(window.__u1.store);window.__u1.originalPreview=original;window.__u1.store.previewResolution=input=>{const p=original(input);window.__u1.lastPreflight=p;return p;};
+    Object.assign(draft,{ attackRoll:'18', defenseRoll:'', v5Kind:'ranged', v5Choice:null, v5Advantages:0, v5Disadvantages:0, v5Context:{} });
+    window.__u1.view.render();
+  });
+  assert.doesNotMatch(await footer.innerText(), /Jet de défense requis/, 'une défense non exigée par le moteur n’est pas annoncée');
+  await page.evaluate(() => {
+    const draft=window.__u1.view.getViewState().resolution;
+    Object.assign(draft,{ attackRoll:'18', defenseRoll:'30', defenseBase:50, v5Kind:'ranged', v5Choice:'reverse', v5Advantages:0, v5Disadvantages:0,
+      v5Context:{ targetEngaged:true, engagedTargetIds:['pj','npc2'], engagedTargetRoll:80 } });
+    window.__u1.view.render();
+  });
+  assert.match(await footer.innerText(), /Tir engagé.*Test de défense/, JSON.stringify(await page.evaluate(() => ({ test:window.__u1.lastPreflight?.test, hit:window.__u1.lastPreflight?.hit, engaged:window.__u1.lastPreflight?.engagedShot }))));
+  await footer.getByRole('button', { name: /Tir engagé.*Test de défense/ }).click();
+  assert.equal(await page.getByLabel('Jet de défense d100 de Bandit', { exact: true }).evaluate(el => document.activeElement === el), true, 'le lien vise la défense engagée concernée');
+  await page.evaluate(() => { const draft=window.__u1.view.getViewState().resolution; for(const key of Object.keys(draft))delete draft[key];Object.assign(draft,window.__u1.savedDraft);window.__u1.store.previewResolution=window.__u1.originalPreview;window.__u1.view.render(); });
   await page.getByLabel('Nature du Test', { exact: true }).selectOption('ranged');
   const engaged = page.getByLabel('La cible est engagée au corps à corps (Désavantage au tir)', { exact: true });
   await engaged.selectOption('true');
@@ -200,6 +247,11 @@ try {
   const presetTalent = page.getByLabel('Activation de talent', { exact: true });
   assert.equal(await presetTalent.inputValue(), 'frenzy');
   assert.equal(await presetTalent.getAttribute('data-default-value'), 'frenzy', 'le réglage initial de l’action constitue le défaut');
+  await page.evaluate(() => { const draft=window.__u1.view.getViewState().resolution; draft.preview={ ready:false, status:'blocked', error:'Blocage de contrôle', targetId:'pj', baseRevision:window.__u1.store.getLocalRevision() }; window.__u1.view.render(); });
+  assert.match(await page.locator('.workspace-result-live').innerText(), /Blocage de contrôle/);
+  assert.equal(await page.locator('.workspace-resolution-footer [data-focus-key="apply"]').count(), 1, 'un blocage précoce conserve Appliquer dans le pied');
+  assert.equal(await page.locator('.workspace-resolution-footer [data-focus-key="apply"]').isDisabled(), true);
+  assert.match(await page.locator('.workspace-resolution-footer').innerText(), /Blocage de contrôle/, 'le pied reprend le motif du moteur');
   assert.deepEqual(errors, []);
   console.log('U1 : tiroir ouvert en attaque, rail, conservation et Échap vérifiés dans le vrai Workspace.');
 } finally {

@@ -272,6 +272,13 @@ async function main() {
     // Contextual rules must show real reference content and remain reachable
     // from the same session before returning to Jouer.
     await page.locator('#tab-combat').click();
+    const drawer = page.locator('.workspace-resolution-drawer');
+    if (await drawer.isVisible()) {
+      await page.keyboard.press('Escape');
+      await expect(drawer).toBeHidden();
+      await page.locator('[data-circumstances-toggle]').click();
+      await expect(drawer).toBeVisible();
+    }
     await page.locator('.workspace-side').getByRole('tab', { name: 'Règles' }).click();
     await expect(page.locator('#workspace-play')).toBeVisible();
     await expect(page.locator('.workspace-side')).toContainText('Sonné');
@@ -514,7 +521,8 @@ async function main() {
     assert.equal(trackAfterManual.filter((text, index) => text !== trackBeforeStale[index]).length, 1, 'seul le −1 PV manuel change la piste');
     if (await applyChosen.count()) await applyChosen.click({ timeout: 1000 }).catch(() => {});
     await expect(galleryResolution.locator('[role="alert"]')).toHaveText('La partie a changé depuis la comparaison : recalculez les conséquences avant de choisir.');
-    await expect(applyChosen).toHaveCount(0);
+    await expect(applyChosen).toBeDisabled();
+    await expect(applyChosen).toHaveText('Appliquer');
     await page.waitForTimeout(200);
     assert.deepEqual(await trackTexts(), trackAfterManual, 'un aperçu périmé ne doit rien appliquer');
 

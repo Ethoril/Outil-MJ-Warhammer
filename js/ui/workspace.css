@@ -521,14 +521,14 @@ dialog.tool-sheet.campaign-time-dialog { position:fixed; inset:auto; top:50%; le
 
 /* Le tiroir remplace temporairement la largeur du panneau latéral sans modifier son état. */
 .workspace-play-grid { position: relative; }
-.workspace-resolution-drawer { position: fixed; top: 72px; right: calc(max(0px, (100vw - 1600px) / 2) + clamp(16px, 2vw, 24px) + 44px); z-index: 4; box-sizing: border-box; width: 300px; max-height: calc(100vh - 88px); overflow: auto; display: grid; gap: 10px; align-content: start; padding: 14px; background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius); }
+.workspace-resolution-drawer { position: fixed; top: 72px; right: var(--circumstances-right, 60px); z-index: 4; box-sizing: border-box; width: 300px; max-height: calc(100vh - 88px); overflow: auto; display: grid; gap: 10px; align-content: start; padding: 14px; background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius); }
 .workspace-resolution-drawer[hidden], .workspace-circumstances-backdrop[hidden] { display: none; }
 .workspace-circumstances-heading { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
 .workspace-circumstances-heading h4 { margin: 0; color: var(--accent-text); }
 .workspace-circumstances-backdrop { display: none; }
 @media (min-width: 901px) {
   .workspace-play-grid:has(.workspace-resolution-drawer:not([hidden])) { grid-template-columns: 248px minmax(0, 1fr) 344px; }
-  .workspace-play-grid:has(.workspace-resolution-drawer:not([hidden])) .workspace-side { width: 44px; justify-self: end; grid-template-rows: auto; }
+  .workspace-play-grid:has(.workspace-resolution-drawer:not([hidden])) .workspace-side { position: sticky; top: 72px; z-index: 5; width: 44px; justify-self: end; grid-template-rows: auto; }
 }
 @media (max-width: 900px) {
   .workspace-resolution-drawer { position: fixed; top: 0; bottom: 0; right: 0; width: min(360px, 90vw); max-height: none; z-index: 101; border-radius: 0; }

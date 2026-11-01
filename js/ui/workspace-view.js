@@ -918,7 +918,58 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     }
   }
 
+  // Une seule construction alimente le calcul et la vérification des blocages.
+  function buildResolutionInput(context, draft) {
+    const input = {
+      actor: context.actor,
+      action: { ...context.action, type: context.type },
+      targetId: context.target?.id || null,
+      roll: String(draft.attackRoll).trim(), protectionContext: draft.protectionContext, ammunitionId: draft.ammunitionId, ammunitionArbitrated: draft.ammunitionArbitrated
+    };
+    if(isBrokenActor(context.actor)&&typeof draft.brokenEscapeVisibility==='boolean')input.brokenEscapeFacts={visibleToAnyEnemy:draft.brokenEscapeVisibility};
+    if (['attack','opposition'].includes(context.type) && context.target && String(draft.defenseRoll).trim()) {
+      input.defense = { extensions:context.defense.option.extensions,attr:context.defense.option.attr,roll: String(draft.defenseRoll).trim(), base: draft.defenseBase, mod: context.defense.option.mod || 0, qualities: context.defense.option.qualities || [], damage:context.defense.option.damage,damageFormula:context.defense.option.damageFormula, label: context.defense.option.statLabel };
+    }
+    // Seuls les jets de critique valides partent au moteur ; les autres montrent l'erreur sous leur champ.
+    const criticalRolls = {};
+    draft.criticalErrors = {};
+    Object.entries(CRITICAL_ERROR_FIELDS).forEach(([key, name]) => {
+      const raw = String(draft[key]).trim();
+      if (!raw) return;
+      if (validRoll(raw)) criticalRolls[name] = raw;
+      else draft.criticalErrors[name] = criticalRollError();
+    });
+    if (Object.keys(criticalRolls).length) input.criticalRolls = criticalRolls;
+    if (draft.criticalDeclined.length) input.criticalDeclined = [...draft.criticalDeclined];
+    const defenderCriticalRolls = {};
+    for (const [key, name] of Object.entries(DEFENDER_CRITICAL_FIELDS)) {
+      const raw = String(draft[key] || '').trim();
+      if (!raw) continue;
+      if (validRoll(raw)) defenderCriticalRolls[name] = raw;
+      else draft.criticalErrors[`defender${name === 'location' ? 'Location' : name === 'effectAlternative' ? 'EffectAlternative' : 'Effect'}`] = criticalRollError();
+    }
+    input.defenderCriticalRolls = defenderCriticalRolls;
+    input.defenderCriticalDeclined = [...draft.defenderCriticalDeclined];
+    if (input.defense && (input.defense.base == null || input.defense.base === '' || !Number.isInteger(Number(input.defense.base)) || Number(input.defense.base) < 0)) throw Object.assign(new ResolutionError('Saisissez un score de défense entier, supérieur ou égal à zéro.', 'INVALID_DEFENSE_SCORE'), { userFacing: true });
+    input.v5 = v5Input(context, draft);
+    if(draft.fortuneAdvantageDeclarationId)input.fortuneAdvantageDeclarationId=draft.fortuneAdvantageDeclarationId;
+    const combatRound=readCombat(Store).round;
+    let currentTurnIndex=1;
+    try{currentTurnIndex=Number(JSON.parse(Store.getFullJSON()).extensions?.v5?.turnIndex)||1;}catch{}
+    if(Number.isSafeInteger(combatRound)&&combatRound>0){
+      input.round=combatRound;
+      input.v5={...input.v5,context:{...(input.v5.context||{}),currentRound:combatRound,currentTurnIndex}};
+    }
+    if (input.defense) input.defense.v5 = defenseV5Input(context, draft);
+    return input;
+  }
+
   const resolutionHandlers = {
+    preflight(context) {
+      const draft = state.resolution;
+      if (draft.busy || ['channelling','cast','dispel'].includes(context.type) || typeof Store.previewResolution !== 'function' || !validRoll(draft.attackRoll)) return null;
+      try { return Store.previewResolution(buildResolutionInput(context, structuredClone(draft))); } catch { return null; }
+    },
     async declareCombatAction(kind, values = {}) {
       const draft = state.resolution;
       if (!callbacks.declareCombatAction || !draft.actorId || draft.busy) return;
@@ -1600,50 +1651,10 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         return;
       }
       if (typeof Store.previewResolution !== 'function') return;
-      const input = {
-        actor: context.actor,
-        action: { ...context.action, type: context.type },
-        targetId: context.target?.id || null,
-        roll: String(draft.attackRoll).trim(), protectionContext: draft.protectionContext, ammunitionId: draft.ammunitionId, ammunitionArbitrated: draft.ammunitionArbitrated
-      };
-      if(isBrokenActor(context.actor)&&typeof draft.brokenEscapeVisibility==='boolean')input.brokenEscapeFacts={visibleToAnyEnemy:draft.brokenEscapeVisibility};
-      if (['attack','opposition'].includes(context.type) && context.target && String(draft.defenseRoll).trim()) {
-        input.defense = { extensions:context.defense.option.extensions,attr:context.defense.option.attr,roll: String(draft.defenseRoll).trim(), base: draft.defenseBase, mod: context.defense.option.mod || 0, qualities: context.defense.option.qualities || [], damage:context.defense.option.damage,damageFormula:context.defense.option.damageFormula, label: context.defense.option.statLabel };
-      }
-      // Seuls les jets de critique valides partent au moteur ; les autres montrent l'erreur sous leur champ.
-      const criticalRolls = {};
-      draft.criticalErrors = {};
-      Object.entries(CRITICAL_ERROR_FIELDS).forEach(([key, name]) => {
-        const raw = String(draft[key]).trim();
-        if (!raw) return;
-        if (validRoll(raw)) criticalRolls[name] = raw;
-        else draft.criticalErrors[name] = criticalRollError();
-      });
-      if (Object.keys(criticalRolls).length) input.criticalRolls = criticalRolls;
-      if (draft.criticalDeclined.length) input.criticalDeclined = [...draft.criticalDeclined];
-      const defenderCriticalRolls = {};
-      for (const [key, name] of Object.entries(DEFENDER_CRITICAL_FIELDS)) {
-        const raw = String(draft[key] || '').trim();
-        if (!raw) continue;
-        if (validRoll(raw)) defenderCriticalRolls[name] = raw;
-        else draft.criticalErrors[`defender${name === 'location' ? 'Location' : name === 'effectAlternative' ? 'EffectAlternative' : 'Effect'}`] = criticalRollError();
-      }
-      input.defenderCriticalRolls = defenderCriticalRolls;
-      input.defenderCriticalDeclined = [...draft.defenderCriticalDeclined];
       draft.error = null;
       draft.comparison = null;
       try {
-        if (input.defense && (input.defense.base == null || input.defense.base === '' || !Number.isInteger(Number(input.defense.base)) || Number(input.defense.base) < 0)) throw Object.assign(new ResolutionError('Saisissez un score de défense entier, supérieur ou égal à zéro.', 'INVALID_DEFENSE_SCORE'), { userFacing: true });
-        input.v5 = v5Input(context, draft);
-        if(draft.fortuneAdvantageDeclarationId)input.fortuneAdvantageDeclarationId=draft.fortuneAdvantageDeclarationId;
-        const combatRound=readCombat(Store).round;
-        let currentTurnIndex=1;
-        try{currentTurnIndex=Number(JSON.parse(Store.getFullJSON()).extensions?.v5?.turnIndex)||1;}catch{}
-        if(Number.isSafeInteger(combatRound)&&combatRound>0){
-          input.round=combatRound;
-          input.v5={...input.v5,context:{...(input.v5.context||{}),currentRound:combatRound,currentTurnIndex}};
-        }
-        if (input.defense) input.defense.v5 = defenseV5Input(context, draft);
+        const input = buildResolutionInput(context, draft);
         draft.preview = Store.previewResolution(input);
       } catch (error) {
         draft.preview = null;
@@ -2345,12 +2356,26 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     return { grid, track, center, side };
   })();
 
+  function alignCircumstancesDrawer() {
+    const view = pressDocument.defaultView;
+    const drawer = play.center.querySelector('.workspace-resolution-drawer');
+    if (!view || !drawer || view.innerWidth <= 900) return;
+    const rail = play.side.element.getBoundingClientRect();
+    if (rail.width > 0) drawer.style.setProperty('--circumstances-right', `${Math.max(0, view.innerWidth - rail.left)}px`);
+  }
+  const onWorkspaceResize = () => {
+    if (!play.grid.isConnected) { pressDocument.defaultView?.removeEventListener('resize', onWorkspaceResize); return; }
+    alignCircumstancesDrawer();
+  };
+  pressDocument.defaultView?.addEventListener('resize', onWorkspaceResize);
+
   function renderPlay() {
     const context = playContext();
     renderTrack(context);
     renderCenter(context);
     const drawer = play.center.querySelector('.workspace-resolution-drawer');
     play.side.setTemporaryCollapsed(Boolean(drawer && !drawer.hidden));
+    alignCircumstancesDrawer();
   }
 
   function renderLibrary() {
@@ -2504,10 +2529,12 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
 
   refs.root.addEventListener('workspace-circumstances-toggle', event => {
     play.side.setTemporaryCollapsed(Boolean(event.detail?.open));
+    alignCircumstancesDrawer();
   });
 
   pressDocument.addEventListener('keydown', event => {
-    if (event.key !== 'Escape' || event.defaultPrevented || pressDocument.querySelector('dialog[open]')) return;
+    const dialogOpen = [...(pressDocument.querySelectorAll?.('dialog[open], [role="dialog"]') || [])].some(dialog => dialog.getClientRects().length > 0);
+    if (event.key !== 'Escape' || event.defaultPrevented || dialogOpen || (event.composedPath?.() || []).some(node => node.matches?.('dialog, [role="dialog"]'))) return;
     const drawer = refs.root.querySelector('.workspace-resolution-drawer:not([hidden])');
     const toggle = refs.root.querySelector('[data-circumstances-toggle]');
     if (!drawer || !toggle) return;

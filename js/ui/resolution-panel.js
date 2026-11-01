@@ -33,15 +33,25 @@ import { actionHasDamage } from '../core/damage.js';
 import { qualityLabel } from '../core/quality-normalization.js';
 import { resolveCastingSkill } from '../core/v5-magic-casting.js';
 import { isDouble } from '../core/dice.js';
+import { validRoll } from './workspace/helpers.js';
 
 export const isCriticalFateRoll = value => Number.isInteger(Number(value)) && Number(value) >= 1 && Number(value) <= 100 && isDouble(Number(value));
 export const hitMorphologySelection = (override, profileMorphology) => override !== undefined ? override : profileMorphology || '';
 
-export function applicationBlockingReasons(preview, draft, canApply) {
+export function applicationBlockingReasons(preview, draft, canApply, preflight = {}) {
   const reasons = [];
   const add = (condition, text, focus) => { if (condition) reasons.push({ text, focus }); };
   if (draft.busy) reasons.push({ text: 'Calcul en cours', silent: true });
   add(!canApply, 'Application indisponible dans cet écran');
+  if (!preview) {
+    add(preflight.requiresRoll && !validRoll(draft.attackRoll), `Jet de ${preflight.actorName || 'l’attaquant'} à saisir (d100)`, 'attack-roll');
+    return reasons;
+  }
+  if (preview.ready === false && !preview.v5MagicKind && (!Array.isArray(preview.unresolved) || !preview.unresolved.length)) {
+    const text = preview.error || (preview.needsInput || []).map(row => row.label || row.message).filter(Boolean).join(' ');
+    if (text) reasons.push({ text });
+    if (!Array.isArray(preview.unresolved)) return reasons;
+  }
   if (preview.v5MagicKind) {
     const invalid = preview.v5MagicKind === 'cast' && (preview.spellPreview?.fingerprintCheck?.valid === false || preview.spellPreview?.valid === false || (preview.castPreview?.spellSuccess && preview.spellPreview?.ready === false));
     add(invalid, 'Vérifiez les éléments requis pour le sort');
@@ -49,7 +59,7 @@ export function applicationBlockingReasons(preview, draft, canApply) {
     return reasons;
   }
   add(preview.choiceRequired, 'Choisissez le résultat à appliquer');
-  for (const text of preview.unresolved || []) reasons.push({ text, focus: /Calme.*attaquant/i.test(text) ? 'protection-calm' : /jet de défense/i.test(text) ? 'defense-roll' : undefined });
+  for (const text of preview.unresolved || []) reasons.push({ text, focus: /Calme.*attaquant/i.test(text) ? 'protection-calm' : /Tir engagé.*Test de défense/i.test(text) ? 'engaged-defense' : /jet de défense/i.test(text) ? 'defense-roll' : undefined });
   const criticals = [preview.critical?.details, preview.critical?.second, preview.defenderCritical?.details];
   add(criticals.some(row => row?.pending), 'Complétez le jet de critique', 'critical-pending');
   add(criticals.some(row => row?.needsAlternative), 'Choisissez une alternative pour le critique', 'critical-alternative');
@@ -301,8 +311,10 @@ export function renderResolutionPanel(options) {
     if (canDeclareCombatAction || canDeclareCombatMovement) {
       const combatActions = node('details', 'workspace-resolution-row workspace-combat-actions');
       combatActions.open = Boolean(turnActionsState.get(draft));
-      combatActions.appendChild(node('summary', 'workspace-chip', 'Actions du Tour…'));
-      combatActions.addEventListener('toggle', () => { turnActionsState.set(draft, combatActions.open); });
+      const turnSummary = node('summary', 'workspace-chip', 'Actions du Tour…');
+      turnSummary.addEventListener('click', () => { turnActionsState.set(draft, !combatActions.open); });
+      combatActions.appendChild(turnSummary);
+      combatActions.addEventListener('toggle', () => { if (combatActions.isConnected) turnActionsState.set(draft, combatActions.open); });
       combatActions.appendChild(node('p', 'workspace-muted', 'Mouvement narratif non observable automatiquement : indiquez-le quand il a lieu. La réorganisation des combattants ne constitue pas un déplacement.'));
       if (canDeclareCombatMovement) {
         const move = button('Déclarer un déplacement effectué', 'workspace-secondary', { 'data-focus-key': 'declare-movement' });
@@ -1863,6 +1875,9 @@ export function renderResolutionPanel(options) {
             rollInput.min='1';
             rollInput.max='100';
             rollInput.value=defense.roll??'';
+            const defenseIds=current.engagedTargetIds || [target.id], defenseDie=Number(current.engagedTargetRoll);
+            const selectedId=Number.isInteger(defenseDie)&&defenseDie>=1&&defenseDie<=100 ? defenseIds[Math.floor((defenseDie-1)*defenseIds.length/100)] : null;
+            if(selectedId===person.id){if(!String(rollInput.value).trim())rollInput.dataset.blockingField='engaged-defense';else if(!String(baseInput.value).trim())baseInput.dataset.blockingField='engaged-defense';}
             rollInput.disabled = draft.busy;
             rollInput.setAttribute('aria-label',rollLabel.textContent);
             const saveDefense = () => {
@@ -2918,6 +2933,59 @@ export function renderResolutionPanel(options) {
   }
   if (draft.comparison) live.appendChild(renderComparison(draft.comparison, handlers, draft.busy));
   const preview = draft.preview;
+  if (!preview) {
+    const attackInput = rolls.querySelector?.('[data-roll-input="attack"]');
+    const defenseInput = rolls.querySelector?.('[data-roll-input="defense"]');
+    const calmInput = section.querySelector?.('[data-blocking-field="protection-calm"]');
+    if (attackInput) attackInput.dataset.blockingField = 'attack-roll';
+    if (defenseInput) defenseInput.dataset.blockingField = 'defense-roll';
+    const waiting = draft.comparison ? null : node('p', 'workspace-muted workspace-result-waiting');
+    if (waiting) live.appendChild(waiting);
+    const apply = node('div', 'workspace-inline-actions workspace-resolution-commands');
+    const primary = button('Appliquer', 'workspace-primary', { 'data-focus-key': 'apply' });
+    primary.disabled = true;
+    const clear = button('Effacer', 'workspace-ghost', { 'data-focus-key': 'cancel-preview', 'aria-label': 'Annuler le résultat calculé' });
+    clear.disabled = draft.busy;
+    clear.addEventListener('click', () => handlers.cancel());
+    apply.append(primary, clear);
+    live.appendChild(apply);
+    const block = node('div', 'workspace-field-error');
+    block.appendChild(node('p', '', 'À saisir avant d’appliquer :'));
+    const list = node('ul'); block.appendChild(list); live.appendChild(block);
+    const previouslyRequired = new Set();
+    const refreshPending = () => {
+      const preliminary = canCalculate && validRoll(draft.attackRoll) ? handlers.preflight?.({ actor, action, type, target, defense }) || null : null;
+      const reasons = applicationBlockingReasons(preliminary, draft, canApply, { requiresRoll: Boolean(attackInput), actorName: actor.name }).filter(reason => !reason.silent);
+      if (waiting) waiting.textContent = !validRoll(draft.attackRoll) ? 'Saisissez les jets puis Entrée.'
+        : !preliminary ? 'Calculez pour vérifier les saisies nécessaires.'
+          : reasons.some(reason => reason.focus === 'defense-roll') ? `En attente du jet de défense de ${target?.name || 'la cible'}.`
+            : 'Appuyez sur Calculer ou Entrée.';
+      primary.title = reasons.map(reason => reason.text).join('\n') || 'Calculez le résultat avant de l’appliquer.';
+      block.hidden = !reasons.length;
+      if (list.replaceChildren) list.replaceChildren(); else list.textContent = '';
+      for (const field of previouslyRequired) field.removeAttribute('aria-required');
+      previouslyRequired.clear();
+      for (const reason of reasons) {
+        const item = node('li');
+        const field = reason.focus && section.querySelector?.(`[data-blocking-field="${reason.focus}"]`);
+        if (field) {
+          if (['INPUT', 'SELECT', 'TEXTAREA'].includes(field.tagName)) { field.setAttribute('aria-required', 'true'); previouslyRequired.add(field); }
+          const link = button(reason.text, 'workspace-ghost');
+          link.addEventListener('click', () => {
+            if (field.closest('.workspace-resolution-drawer')?.hidden) section.querySelector('[data-circumstances-toggle]')?.click();
+            for (let parent = field.parentElement; parent; parent = parent.parentElement) if (parent.tagName === 'DETAILS') parent.open = true;
+            field.scrollIntoView({ block: 'center' }); field.focus();
+          });
+          item.appendChild(link);
+        } else item.textContent = reason.text;
+        list.appendChild(item);
+      }
+    };
+    rolls.addEventListener('input', refreshPending);
+    drawer.addEventListener('input', refreshPending);
+    drawer.addEventListener('change', refreshPending);
+    refreshPending();
+  }
   const earlyBlockedPreview = Boolean(preview && !preview.v5MagicKind && preview.ready === false
     && ['blocked','requires-input'].includes(preview.status) && !Array.isArray(preview.unresolved));
   if (earlyBlockedPreview) {
@@ -2930,12 +2998,23 @@ export function renderResolutionPanel(options) {
       const detail = need.label || need.message;
       if (detail && detail !== message) live.appendChild(node('p', 'workspace-muted', detail));
     }
-    const cancel = button('Annuler', 'workspace-ghost', { 'data-focus-key': 'cancel-preview', 'aria-label': 'Annuler le résultat calculé' });
+    const cancel = button('Effacer', 'workspace-ghost', { 'data-focus-key': 'cancel-preview', 'aria-label': 'Annuler le résultat calculé' });
     cancel.disabled = draft.busy;
     cancel.addEventListener('click', () => handlers.cancel());
     const commands = node('div', 'workspace-inline-actions workspace-resolution-commands');
-    commands.appendChild(cancel);
+    const blockedApply = button('Appliquer', 'workspace-primary', { 'data-focus-key': 'apply' });
+    blockedApply.disabled = true;
+    blockedApply.title = message;
+    commands.append(blockedApply, cancel);
     live.appendChild(commands);
+    const reasons = applicationBlockingReasons(preview, draft, canApply).filter(reason => !reason.silent);
+    if (reasons.length) {
+      const block = node('div', 'workspace-field-error');
+      block.appendChild(node('p', '', 'À saisir avant d’appliquer :'));
+      const list = node('ul');
+      for (const reason of reasons) list.appendChild(node('li', '', reason.text));
+      block.appendChild(list); live.appendChild(block);
+    }
   } else if (preview) {
     live.appendChild(renderResult(preview, target, draft, handlers, participants));
     const defenseRoll = section.querySelector?.('[data-roll-input="defense"]');
@@ -2992,7 +3071,7 @@ export function renderResolutionPanel(options) {
         : ((preview.spellPreview?.dispelReaction ? preview.spellPreview.spellSuccess : preview.castPreview?.spellSuccess) ? 'Appliquer le sort' : preview.spellPreview?.dispelled ? 'Enregistrer la dissipation' : 'Enregistrer l’incantation ratée');
       const primary = button(magicLabel, 'workspace-primary', { 'data-focus-key': 'apply' });
       primary.addEventListener('click', () => handlers.apply());
-      const cancel = button('Annuler', 'workspace-ghost', { 'data-focus-key': 'cancel-preview', 'aria-label': 'Annuler le résultat calculé' });
+      const cancel = button('Effacer', 'workspace-ghost', { 'data-focus-key': 'cancel-preview', 'aria-label': 'Annuler le résultat calculé' });
       cancel.disabled = draft.busy;
       cancel.addEventListener('click', () => handlers.cancel());
       apply.append(primary, cancel);
@@ -3009,7 +3088,7 @@ export function renderResolutionPanel(options) {
             : manual ? 'Enregistrer sans dégâts' : 'Enregistrer le résultat';
       const primary = button(label, 'workspace-primary', { 'data-focus-key': 'apply' });
       primary.addEventListener('click', () => handlers.apply());
-      const cancel = button('Annuler', 'workspace-ghost', { 'data-focus-key': 'cancel-preview', 'aria-label': 'Annuler le résultat calculé' });
+      const cancel = button('Effacer', 'workspace-ghost', { 'data-focus-key': 'cancel-preview', 'aria-label': 'Annuler le résultat calculé' });
       cancel.disabled = draft.busy;
       cancel.addEventListener('click', () => handlers.cancel());
       apply.append(primary, cancel);
@@ -3063,6 +3142,7 @@ function arrangeResolutionSteps(section, { actionBlock, targetBlock, rolls, comm
     const missing = reasons ? [...reasons.querySelectorAll('li')].map(item => item.textContent.trim()) : [];
     summary.textContent = [...labels, ...missing].join(' · ') || 'Aucune circonstance active.';
   };
+  rolls.addEventListener('input', refreshSummary);
   drawer.addEventListener('input', refreshSummary);
   drawer.addEventListener('change', refreshSummary);
   refreshSummary();

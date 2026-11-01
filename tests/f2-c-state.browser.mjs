@@ -42,7 +42,10 @@ try{
  const undone=await page.evaluate(async({id,itemId})=>{const {Store}=await import('./js/main.js');const p=Store.listParticipants().find(row=>row.id===id);return {mounted:p.extensions.v5.mounted??false,hands:p.extensions.v5.weaponHandsByEquipmentId?.[itemId]??2,hp:p.hp,effects:p.extensions.v5.spellEffects};},setup);
  assert.deepEqual(undone,{mounted:false,hands:2,hp:19,effects:[{id:'concurrent-ui',name:'Effet concurrent'}]},'Undo rétablit exactement mounted/mains sans perdre la modification concurrente');
  assert.equal(await page.locator('#btn-redo').isDisabled(),false);
- await page.keyboard.press('Control+Shift+Z');await page.keyboard.press('Control+Shift+Z');
+ await page.keyboard.press('Control+Shift+Z');
+ await page.waitForFunction(async({id,itemId})=>{const {Store}=await import('./js/main.js');return Store.listParticipants().find(row=>row.id===id)?.extensions?.v5?.weaponHandsByEquipmentId?.[itemId]===1;},setup);
+ await page.keyboard.press('Control+Shift+Z');
+ await page.waitForFunction(async({id})=>{const {Store}=await import('./js/main.js');return Store.listParticipants().find(row=>row.id===id)?.extensions?.v5?.mounted===true;},setup);
  const redone=await page.evaluate(async({id,itemId})=>{const {Store}=await import('./js/main.js');const p=Store.listParticipants().find(row=>row.id===id);return {mounted:p.extensions.v5.mounted,hands:p.extensions.v5.weaponHandsByEquipmentId[itemId],hp:p.hp,effects:p.extensions.v5.spellEffects};},setup);
  assert.deepEqual(redone,{mounted:true,hands:1,hp:19,effects:[{id:'concurrent-ui',name:'Effet concurrent'}]},'Redo restaure exactement mounted/mains et garde le champ concurrent');
  await page.reload();await page.waitForSelector('#tab-combat');

@@ -178,7 +178,7 @@ try {
   await enterRolls(c, 23, 22); await expect(panel(c).getByText('Critique défensif sur l’attaquant', { exact: true })).toHaveCount(0);
   // Defender invalid numbers cannot be rounded or silently treated as no sources.
   await panel(c).getByLabel('Avantages supplémentaires de défense', { exact: true }).fill('-1'); await c.keyboard.press('Tab'); await panel(c).getByRole('button', { name: 'Calculer', exact: true }).click();
-  await expect(panel(c).getByRole('alert')).toContainText('entier entre 0 et 100'); await expect(applyButton(c)).toHaveCount(0);
+  await expect(panel(c).getByRole('alert')).toContainText('entier entre 0 et 100'); await expect(applyButton(c)).toBeDisabled();
   await panel(c).getByLabel('Avantages supplémentaires de défense', { exact: true }).fill('0'); await c.keyboard.press('Tab');
   // A non-double normal hit also demands the separate excess critical, using an uncapped +10 per lost wound beyond zero.
   await c.evaluate(async () => { await window.lot2UI.store.updateParticipant('target', { hp: 1 }); });
@@ -326,7 +326,7 @@ try {
 
   // An old decision cannot silently acquire the new combat revision when a radio, critical field, or apply is used.
   const staleChoice=await setup();const s=staleChoice.page;await defenseCC(s);await enterRolls(s,61,73);
-  await s.evaluate(()=>window.lot2UI.store.updateParticipant('target',{hp:11}));await panel(s).locator('input[name="v5-choice-actor"][value="keep"]').click();await expect(panel(s).getByRole('alert')).toContainText('La partie a changé depuis la comparaison');await expect(applyButton(s)).toHaveCount(0);assert.equal(await participantHP(s,'target'),11);
+  await s.evaluate(()=>window.lot2UI.store.updateParticipant('target',{hp:11}));await panel(s).locator('input[name="v5-choice-actor"][value="keep"]').click();await expect(panel(s).getByRole('alert')).toContainText('La partie a changé depuis la comparaison');await expect(applyButton(s)).toBeDisabled();assert.equal(await participantHP(s,'target'),11);
   await panel(s).getByRole('button',{name:'Calculer',exact:true}).click();await panel(s).locator('input[name="v5-choice-actor"][value="keep"]').check();await expect(applyButton(s)).toBeEnabled();await staleChoice.context.close();
 
   assert.deepEqual(errors, [], 'No JS runtime error in any interaction');

@@ -48,3 +48,8 @@ test('les valeurs déjà renseignées sont comparées aux défauts déclarés d�
   ];
   assert.equal(countActiveCircumstances(circumstanceControls({ querySelectorAll: () => elements })), 2);
 });
+import { applicationBlockingReasons } from '../../../js/ui/resolution-panel.js';
+test('un blocage du moteur reste visible même si sa liste détaillée est vide', () => {
+  const preview = { ready: false, status: 'blocked', error: 'Blocage moteur', unresolved: [] };
+  assert.ok(applicationBlockingReasons(preview, { criticalErrors: {} }, true).some(reason => reason.text === 'Blocage moteur'));
+});
