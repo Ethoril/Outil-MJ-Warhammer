@@ -3376,6 +3376,9 @@ function resolvedCorruptionTest(participant, skillId, input) {
         if (additions.length) {
           const { added, ...updated } = addProfilesToDraft(next, additions);
           next = updated;
+          if (Number(draft.combat?.round) === 0 && additions.some(item => item.zone === 'active') && draft.extensions?.v5?.combatInitiativeInitialized === true) {
+            next.extensions = { ...next.extensions, v5: { ...next.extensions.v5, combatInitiativeInitialized: false } };
+          }
           if (Number(draft.combat?.round) > 0) {
             const order = insertParticipantsByInitiative(draft.combat, next.combat.participants);
             next.combat = { ...next.combat, order };

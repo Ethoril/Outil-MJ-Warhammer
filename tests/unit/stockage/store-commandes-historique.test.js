@@ -1462,3 +1462,22 @@ test('recette G : une occurrence proposée ne réalerte pas après rechargement'
   assert.equal(alerts.length, 1);
   assert.equal(store.previewSceneEvent(store.getActiveScene().events[0]).status, 'proposed');
 });
+
+test('recette G : un ajout avant le premier Round rend l’initiative incomplète', async () => {
+  let saved = null;
+  const persistence = { async load() { return saved; }, async saveAtomic({ state }) { saved = structuredClone(state); return { ok: true }; } };
+  const store = createStore({ persistence }); await store.ready;
+  await store.addProfile({ id: 'rg-zero-a', name: 'A', kind: 'PJ', hp: 10, initiative: 40, caracs: { I: 40 } });
+  await store.addProfile({ id: 'rg-zero-b', name: 'B', kind: 'PNJ', hp: 10, initiative: 30, caracs: { I: 30 } });
+  await store.saveEncounter({ id: 'rg-zero', entries: [{ id: 'rg-zero-e1', profileId: 'rg-zero-a', zone: 'active', camp: 'pj' }] });
+  await store.launchEncounter('rg-zero');
+  const old = store.listParticipants()[0];
+  await store.applyCombatInitialization(store.previewCombatInitialization({ diceById: { [old.id]: 5 } }));
+  assert.equal(store.isCombatInitiativeInitialized(), true);
+  const encounter = store.listEncounters().find(row => row.id === 'rg-zero');
+  encounter.entries.push({ id: 'rg-zero-e2', profileId: 'rg-zero-b', quantity: 1, zone: 'active', camp: 'ennemi' });
+  await store.saveEncounter(encounter);
+  assert.equal(store.isCombatInitiativeInitialized(), false);
+  assert.equal(store.listParticipants().find(row => row.id === old.id).extensions.v5.combatInitiative.die, 5);
+  assert.equal(store.previewCombatInitialization().ready, false);
+});
