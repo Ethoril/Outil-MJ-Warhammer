@@ -3329,7 +3329,16 @@ function resolvedCorruptionTest(participant, skillId, input) {
           const count = Math.max(0, entry.quantity - (oldEntries.get(entry.id)?.quantity || 0));
           return Array.from({ length: count }, () => ({ id: entry.profileId, zone: entry.zone, camp: entry.camp, entryId: entry.id }));
         });
-        if (additions.length) { const { added, ...updated } = addProfilesToDraft(next, additions); next = updated; }
+        if (additions.length) {
+          const { added, ...updated } = addProfilesToDraft(next, additions);
+          next = updated;
+          if (Number(draft.combat?.round) > 0) {
+            const order = insertParticipantsByInitiative(draft.combat, next.combat.participants);
+            next.combat = { ...next.combat, order };
+            const resolution = next.extensions?.v5?.combatInitiativeResolution;
+            if (resolution) next.extensions = { ...next.extensions, v5: { ...next.extensions.v5, combatInitiativeResolution: { ...resolution, order } } };
+          }
+        }
         return next;
       });
     },

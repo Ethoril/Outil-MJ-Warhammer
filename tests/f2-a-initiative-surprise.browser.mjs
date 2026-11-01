@@ -190,6 +190,8 @@ try {
   await editDialog.getByLabel('Profil').selectOption('rg-reinforcement');
   await editDialog.getByRole('button', { name: 'Ajouter', exact: true }).click();
   await page.waitForFunction(async () => { const { Store } = await import('/Outil-MJ-Warhammer/js/main.js'); return Store.listParticipants().some(row => row.profileId === 'rg-reinforcement'); });
+  const insertion = await page.evaluate(async () => { const { Store } = await import('/Outil-MJ-Warhammer/js/main.js'); const combat = Store.getCombat(); return { order: Store.getEffectiveOrder(), current: combat.currentActorId, added: Store.listParticipants().find(row => row.profileId === 'rg-reinforcement').id }; });
+  assert.equal(insertion.order.indexOf(insertion.added), insertion.order.indexOf(insertion.current) + 1, 'renfort sans initiative initialisée inséré par le mécanisme existant, après le combattant courant');
   await page.keyboard.press('Escape');
   await page.locator('#tab-combat').click();
   assert.ok(await page.locator('.actor-card').filter({ hasText: 'Renfort recette' }).count() >= 1);
