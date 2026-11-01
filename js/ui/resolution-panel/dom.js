@@ -121,6 +121,24 @@ export function circumstanceControls(root) {
       occurrences.set(stem, index + 1);
       const value = element.type === 'select-multiple'
         ? JSON.stringify([...element.selectedOptions].map(option => option.value)) : element.value;
-      return { element, key: `${stem}:${index}`, label: label || 'Réglage', type: element.type, value, checked: element.checked };
+      const defaultValue = element.dataset.defaultValue ?? (element.type === 'select-multiple' ? '[]' : element.tagName === 'SELECT' ? element.options?.[0]?.value ?? '' : element.defaultValue ?? '');
+      return { element, key: `${stem}:${index}`, label: label || 'Réglage', type: element.type, value, defaultValue, checked: element.checked };
     });
+}
+
+/** Jets disponibles dont le combattant est un PNJ et qui ne sont pas déjà saisis. */
+export function emptyNpcRolls(rolls) {
+  return rolls.filter(roll => roll.owner === 'PNJ' && !roll.disabled && String(roll.value ?? '').trim() === '');
+}
+
+/** Multiplication d’infortune : relancer les résultats de 91 à 100. */
+export function rollMisfortuneDie(die) {
+  let value;
+  do { value = die(); } while (value >= 91);
+  return value;
+}
+
+/** Plages des incidents dont la distance utilise un d100, selon la table active. */
+export function isMiscastDistanceD100(table, max) {
+  return table === 'MINOR' && (max === 40 || max === 55) || table === 'MAJOR' && max === 35;
 }

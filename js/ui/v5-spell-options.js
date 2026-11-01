@@ -72,12 +72,13 @@ export function renderSpellOptions({ actor, participants, contract, draft, handl
     return push(label);
   };
 
-  const spellField=(key,text,{who=null,type='number',choices=null,min=0,max=100}={})=>{
+  const spellField=(key,text,{who=null,type='number',choices=null,min=0,max=100,die=false}={})=>{
     const data=who?draft.magicTargetTests?.[who.id] || {}:draft.magicSpellFacts || {},label=node('label','workspace-type',text+(who?' — '+who.name:''));
     const control=document.createElement(choices?'select':'input');control.setAttribute('aria-label',label.textContent);control.dataset.focusKey='wom-'+(who?.id || 'caster')+'-'+key;
     const change=value=>{const current=who?draft.magicTargetTests?.[who.id] || {}:draft.magicSpellFacts || {},field=who?'magicTargetTests':'magicSpellFacts',next=who?{...draft.magicTargetTests,[who.id]:{...current,[key]:value}}:{...current,[key]:value};if(choices || /^mini[1-3]Direction$/.test(key))handlers.select({[field]:next});else handlers.input(field,next);};
     if(choices){control.append(new Option('À renseigner',''));for(const [v,t] of choices)control.append(new Option(t,v));control.value=data[key]===undefined?'':String(data[key]);control.addEventListener('change',()=>change(control.value===''?undefined:type==='boolean'?control.value==='true':control.value));}
     else{control.type=type;control.min=min;control.max=max;control.value=data[key] ?? '';control.addEventListener('input',()=>change(control.value===''?undefined:type==='number'?Number(control.value):control.value));}
+    if (die) { control.dataset.npcRollKey = who ? 'magicTargetTests' : 'magicSpellFacts'; control.dataset.npcRollField = key; if (who) control.dataset.npcRollOwnerId = who.id; }
     label.append(control);push(label);
   };
   if(special==='verdant-apotheosis')for(const who of participants.filter(p=>targetIds.includes(p.id)))spellField('decapitated','Cadavre décapité',{who,type:'boolean',choices:[['false','Non'],['true','Oui']]});
@@ -86,7 +87,7 @@ export function renderSpellOptions({ actor, participants, contract, draft, handl
     for(const who of participants.filter(p=>targetIds.includes(p.id))){
       if(vortex.throw){spellField('throwDirection','Thorsen : direction aléatoire de projection (d8)',{who,min:1,max:8});spellField('collision','Thorsen : collision solide ou créature',{who,type:'boolean',choices:[['true','Oui'],['false','Non']]});if(draft.magicTargetTests?.[who.id]?.collision && wardDiceCount(who))spellField('collisionWardRoll','Thorsen : d10 des Protections contre collision',{who,type:'text'});}
       if(vortex.suffocation)spellField('inside','Cendres : encore dans le nuage après le déplacement',{who,type:'boolean',choices:[['true','Oui'],['false','Non']]});
-      if(draft.magicOvercastSpecific?.sun){spellField('sunTouched','Soleil Violet : contact avec la sphère',{who,type:'boolean',choices:[['true','Oui'],['false','Non']]});if(draft.magicTargetTests?.[who.id]?.sunTouched)spellField('calmRoll','Soleil Violet : Calme contre la mort (d100)',{who,min:1,max:100});}
+      if(draft.magicOvercastSpecific?.sun){spellField('sunTouched','Soleil Violet : contact avec la sphère',{who,type:'boolean',choices:[['true','Oui'],['false','Non']]});if(draft.magicTargetTests?.[who.id]?.sunTouched)spellField('calmRoll','Soleil Violet : Calme contre la mort (d100)',{who,min:1,max:100,die:true});}
     }
     if(draft.magicOvercastSpecific?.mini && draft.magicVortexDistance!=null && Number(draft.magicVortexDistance)<=8){
       for(let i=1;i<=Math.min(3,draft.magicOvercastSpecific.mini);i++){
@@ -104,7 +105,7 @@ export function renderSpellOptions({ actor, participants, contract, draft, handl
     checkField('magicTargetTests','Tenter '+optionalTest.label+' — '+person.name,{checked:data()[optionalTest.choiceKey]===true,focusKey:'magic-optional-'+person.id,onChange:yes=>change({[optionalTest.choiceKey]:yes})});
     if(data()[optionalTest.choiceKey]){
       const label=node('label','workspace-type',optionalTest.label+' : d100 — '+person.name),input=document.createElement('input');
-      input.type='number';input.min='1';input.max='100';input.value=data()[optionalTest.rollField] ?? '';input.setAttribute('aria-label',label.textContent);input.dataset.focusKey='magic-optional-roll-'+person.id;
+      input.type='number';input.min='1';input.max='100';input.value=data()[optionalTest.rollField] ?? '';input.setAttribute('aria-label',label.textContent);input.dataset.focusKey='magic-optional-roll-'+person.id;input.dataset.npcRollKey='magicTargetTests';input.dataset.npcRollField=optionalTest.rollField;input.dataset.npcRollOwnerId=person.id;
       input.addEventListener('input',()=>handlers.input('magicTargetTests',{...draft.magicTargetTests,[person.id]:{...data(),[optionalTest.rollField]:input.value===''?undefined:Number(input.value)}}));label.append(input);push(label);
     }
   }
@@ -132,6 +133,8 @@ export function renderSpellOptions({ actor, participants, contract, draft, handl
       input.type = spec.type === 'number' ? 'number' : 'text'; input.value = current[spec.key] ?? '';
       if (spec.type === 'number') { input.min=String(spec.min ?? 0); if(spec.max!==undefined)input.max=String(spec.max); input.step=spec.integer===false?'any':'1'; }
       input.setAttribute('aria-label',spec.label); input.dataset.focusKey='magic-fact-'+spec.key+(spec.targetId?'-'+spec.targetId:'');
+      const d100Facts = ['optionRoll_locations','optionRoll_wide','optionRoll_exempt','optionRoll_items','optionRoll_duration','opposedActorRoll','opponentRoll'];
+      if (d100Facts.includes(spec.key)) { input.dataset.npcRollKey = spec.targetId ? 'magicTargetTests' : 'magicSpellFacts'; input.dataset.npcRollField = spec.key; if (spec.targetId) input.dataset.npcRollOwnerId = spec.targetId; }
       input.addEventListener('input',()=>change(input.value === '' ? undefined : spec.type === 'number' ? Number(input.value) : input.value));
       label.append(input); push(label);
     }
@@ -140,16 +143,16 @@ export function renderSpellOptions({ actor, participants, contract, draft, handl
   const baseEffects=contract?.effects || {},selectedEffects={...baseEffects,...baseEffects.factModes?.values[draft.magicSpellFacts?.[baseEffects.factModes?.fact]]};
   for(const who of participants.filter(p=>targetIds.includes(p.id))){
     const test=selectedEffects.primarySecondaryTests?(who.id===targetIds[0]?selectedEffects.primarySecondaryTests.primary:selectedEffects.primarySecondaryTests.others):selectedEffects.secondaryTest;
-    if(test && (!test.whenFact || draft.magicTargetTests?.[who.id]?.[test.whenFact]===true) && !draft.magicTargetTests?.[who.id]?.[test.skipWhenFact])spellField(test.rollField || 'resistanceRoll','Sort : '+test.skill+' ('+(test.modifierSl || 0)+' DR, d100)',{who,min:1,max:100});
-    if(selectedEffects.attitudeModifiers && isHostileTarget(actor,who))spellField('fearRoll','Cor : Peur (Calme, d100)',{who,min:1,max:100});
-    if(selectedEffects.followupTest){const t=selectedEffects.followupTest;spellField(t.rollField,'Sort : second '+t.skill+' ('+t.modifierSl+' DR, d100) si premier échec',{who,min:1,max:100});}
+    if(test && (!test.whenFact || draft.magicTargetTests?.[who.id]?.[test.whenFact]===true) && !draft.magicTargetTests?.[who.id]?.[test.skipWhenFact])spellField(test.rollField || 'resistanceRoll','Sort : '+test.skill+' ('+(test.modifierSl || 0)+' DR, d100)',{who,min:1,max:100,die:true});
+    if(selectedEffects.attitudeModifiers && isHostileTarget(actor,who))spellField('fearRoll','Cor : Peur (Calme, d100)',{who,min:1,max:100,die:true});
+    if(selectedEffects.followupTest){const t=selectedEffects.followupTest;spellField(t.rollField,'Sort : second '+t.skill+' ('+t.modifierSl+' DR, d100) si premier échec',{who,min:1,max:100,die:true});}
     if(selectedEffects.permanentStatDice)for(const [key,field] of Object.entries(selectedEffects.permanentStatDice))spellField(field,'Vieillissement : perte permanente de '+key+' (d10) si Calme raté',{who,min:1,max:10});
-    if(Object.entries(baseEffects.optionRules || {}).some(([id,r])=>r.immediateSuffocation && draft.magicOvercastSpecific?.[id] && (draft.magicSpellFacts?.['optionTargets_'+id] || []).includes(who.id)))spellField('optionResistanceRoll','Suffocation : Force Mentale (d100)',{who,min:1,max:100});
+    if(Object.entries(baseEffects.optionRules || {}).some(([id,r])=>r.immediateSuffocation && draft.magicOvercastSpecific?.[id] && (draft.magicSpellFacts?.['optionTargets_'+id] || []).includes(who.id)))spellField('optionResistanceRoll','Suffocation : Force Mentale (d100)',{who,min:1,max:100,die:true});
   }
   const opposition=selectedEffects.opposedTest,opposedTargets=opposition?participants.filter(p=>targetIds.includes(p.id) && (!opposition.whenFact || draft.magicTargetTests?.[p.id]?.[opposition.whenFact]===true)):[];
   if(opposedTargets.length){
-    if(!factFields.some(f=>f.key==='opposedActorRoll'))spellField('opposedActorRoll','Opposition : Force Mentale du lanceur (d100)',{min:1,max:100});
-    for(const who of opposedTargets)if(!factFields.some(f=>f.key==='opponentRoll'&&f.targetId===who.id))spellField('opponentRoll','Opposition : '+opposition.targetSkill+' de la cible (d100)',{who,min:1,max:100});
+    if(!factFields.some(f=>f.key==='opposedActorRoll'))spellField('opposedActorRoll','Opposition : Force Mentale du lanceur (d100)',{min:1,max:100,die:true});
+    for(const who of opposedTargets)if(!factFields.some(f=>f.key==='opponentRoll'&&f.targetId===who.id))spellField('opponentRoll','Opposition : '+opposition.targetSkill+' de la cible (d100)',{who,min:1,max:100,die:true});
   }
   const active = participants.flatMap(p => (p.extensions?.v5?.spellEffects || []).filter(e=>e.spellId===contract?.id).map(e=>({owner:p,e})));
   if (active.length && handlers.magicSpellInteraction) {
@@ -213,7 +216,7 @@ export function renderSpellOptions({ actor, participants, contract, draft, handl
       for(const person of participants.filter(p=>p.id!==active.find(item=>item.e.id===current.effectId)?.owner.id)){
         const label=node('label','workspace-recipient-check'),input=document.createElement('input');input.type='checkbox';input.checked=(current.targetIds || []).includes(person.id);input.setAttribute('aria-label',(burst?'Explosion : créature ':'Sang corrosif : engagé ')+person.name);input.addEventListener('change',()=>change({targetIds:input.checked?[...new Set([...(current.targetIds || []),person.id])]:(current.targetIds || []).filter(id=>id!==person.id)}));label.append(input,' '+person.name);details.append(label);
         if(input.checked)for(const [field,text] of [['locationRoll','Localisation d100'],['wardRoll','Protection d10'],...(current.kind==='death-burst'?[['distance','Explosion : distance (m)']]:[])]){
-          const l=node('label','workspace-type',text+' — '+person.name),i=document.createElement('input');i.type=field==='wardRoll'?'text':'number';i.value=current.targetTests?.[person.id]?.[field] ?? '';i.setAttribute('aria-label',l.textContent);i.dataset.focusKey='blood-'+person.id+'-'+field;i.addEventListener('input',()=>{const latest=draft.magicInteraction || {};handlers.input('magicInteraction',{...latest,targetTests:{...latest.targetTests,[person.id]:{...latest.targetTests?.[person.id],[field]:field==='wardRoll'?i.value:i.value===''?undefined:Number(i.value)}}});});l.append(i);details.append(l);
+          const l=node('label','workspace-type',text+' — '+person.name),i=document.createElement('input');i.type=field==='wardRoll'?'text':'number';i.value=current.targetTests?.[person.id]?.[field] ?? '';i.setAttribute('aria-label',l.textContent);if(field==='locationRoll'){const source=active.find(item=>item.e.id===current.effectId)?.owner;if(source){i.dataset.npcRollKey='magicInteractionTargetTests';i.dataset.npcRollField=field;i.dataset.npcRollSubjectId=person.id;i.dataset.npcRollOwnerId=source.id;}}i.dataset.focusKey='blood-'+person.id+'-'+field;i.addEventListener('input',()=>{const latest=draft.magicInteraction || {};handlers.input('magicInteraction',{...latest,targetTests:{...latest.targetTests,[person.id]:{...latest.targetTests?.[person.id],[field]:field==='wardRoll'?i.value:i.value===''?undefined:Number(i.value)}}});});l.append(i);details.append(l);
         }
       }
     }
@@ -246,6 +249,13 @@ export function renderSpellOptions({ actor, participants, contract, draft, handl
       const label=node('label','workspace-type',text), input=document.createElement('input');input.type=key==='wardRoll'?'text':'number';input.min='1';input.max=String(max);input.value=Array.isArray(current[key])?current[key].join(' '):current[key] ?? '';input.setAttribute('aria-label',text);
       if(key==='wardRoll')input.placeholder='Un d10 par Protection, séparés par des espaces';
       input.dataset.focusKey='magic-clause-'+key;
+      if (['roll', 'opponentRoll', 'locationRoll'].includes(key)) {
+        const spec = current.kind === 'move' ? e?.specialState?.moveTest : e?.triggered;
+        const casterRoll = ['control','opposed-move','grapple','summon-attack','worm'].includes(current.kind) || spec?.testActor === 'caster';
+        const unrepresentedCreature = ['worm', 'summon-attack'].includes(current.kind) && key !== 'opponentRoll';
+        const ownerId = unrepresentedCreature ? null : key === 'opponentRoll' ? current.targetId : key === 'locationRoll' || casterRoll ? e?.casterId : current.targetId;
+        if (ownerId || unrepresentedCreature) { input.dataset.npcRollKey = 'magicInteraction'; input.dataset.npcRollField = key; if (ownerId) input.dataset.npcRollOwnerId = ownerId; else input.dataset.npcRollCreature = 'true'; }
+      }
       input.addEventListener('input',()=>handlers.input('magicInteraction',{...draft.magicInteraction,[key]:key==='wardRoll'?input.value:input.value===''?undefined:Number(input.value)}));label.append(input);details.append(label);
     }
     const button=node('button','workspace-secondary','Résoudre la clause du sort');button.type='button';button.disabled=!current.effectId || !current.targetId || !current.kind || draft.busy;

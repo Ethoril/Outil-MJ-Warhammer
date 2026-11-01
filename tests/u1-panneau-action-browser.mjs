@@ -43,6 +43,17 @@ try {
     if (!view.openResolution({ ...action, participantId: 'npc', targetId: 'pj' })) throw new Error('résolution indisponible');
     window.__u1 = { view, store };
   });
+  const bulk = page.getByRole('button', { name: 'Lancer tous les dés des PNJ', exact: true });
+  assert.equal(await bulk.isEnabled(), true);
+  await page.evaluate(() => { window.__u1.originalRandom = Math.random; Math.random = () => 0.34; });
+  await bulk.click();
+  await page.evaluate(() => { Math.random = window.__u1.originalRandom; });
+  const attackRoll = page.locator('[data-roll-input="attack"]');
+  const defenseRoll = page.locator('[data-roll-input="defense"]');
+  assert.match(await attackRoll.inputValue(), /^(?:[1-9]|[1-9][0-9]|100)$/);
+  assert.equal(await defenseRoll.inputValue(), '', 'le jet PJ reste vide');
+  assert.equal(await bulk.isDisabled(), true, 'aucun autre dé PNJ vide');
+  await attackRoll.fill('');
   const drawer = page.locator('.workspace-resolution-drawer');
   const toggle = page.locator('[data-circumstances-toggle]');
   assert.equal(await drawer.isVisible(), true, 'le tiroir est ouvert par défaut en attaque');
@@ -87,10 +98,30 @@ try {
   assert.match(await toggle.textContent(), /1 active/);
   assert.equal(await drawer.isVisible(), true, 'le tiroir reste ouvert après nouveau rendu');
   assert.equal(await page.locator('[data-focus-key="v5Advantages"]').inputValue(), '1');
+  await page.evaluate(async () => {
+    for (const person of [{ id: 'npc2', name: 'Bandit', kind: 'PNJ' }, { id: 'pj2', name: 'Dagmar', kind: 'PJ' }]) {
+      await window.__u1.store.addParticipant({ ...person, zone: 'active', camp: 'pj', hp: 20, maxHp: 20, caracs: { CC: 40, CT: 40, F: 40, E: 40, Ag: 40, FM: 40 }, skills: [], equipment: [], states: [], actions: [], extensions: { v5: {} } });
+    }
+  });
+  await page.locator('[data-focus-key="target-none"]').click();
+  assert.match(await toggle.textContent(), /1 active/, 'changer de cible ne transforme pas un avantage saisi en valeur par défaut');
+  await page.locator('[data-focus-key="target-pj"]').click();
+  assert.match(await toggle.textContent(), /1 active/, 'le compteur conserve l’avantage au retour à la cible');
   await page.getByLabel('Nature du Test', { exact: true }).selectOption('ranged');
   const engaged = page.getByLabel('La cible est engagée au corps à corps (Désavantage au tir)', { exact: true });
   await engaged.selectOption('true');
+  await page.getByLabel('Engagé avec la cible : Bandit', { exact: true }).check();
+  await page.getByLabel('Engagé avec la cible : Dagmar', { exact: true }).check();
+  const npcEngaged = page.getByLabel('Jet de défense d100 de Bandit', { exact: true });
+  const pjEngaged = page.getByLabel('Jet de défense d100 de Dagmar', { exact: true });
+  await page.locator('[data-roll-input="attack"]').fill('35');
+  await bulk.click();
+  assert.equal(await page.locator('[data-roll-input="attack"]').inputValue(), '35', 'un jet déjà saisi est conservé');
+  assert.match(await npcEngaged.inputValue(), /^(?:[1-9]|[1-9][0-9]|100)$/);
+  assert.equal(await pjEngaged.inputValue(), '', 'la défense engagée PJ reste vide');
   const selectionRoll = page.getByLabel('Jet d100 pour désigner le combattant touché', { exact: true });
+  await selectionRoll.fill('');
+  await selectionRoll.dispatchEvent('change');
   const countBeforeRoll = Number((await toggle.textContent()).match(/\d+/)[0]);
   await selectionRoll.fill('61');
   await selectionRoll.dispatchEvent('change');
@@ -123,6 +154,34 @@ try {
       await page.screenshot({ path: resolve(root, 'captures', `u1-${width}-${theme}.png`) });
     }
   }
+  await page.getByLabel('Test de Calme de l’attaquant (Bénédiction de Protection)', { exact: true }).selectOption('pass');
+  await page.locator('.workspace-resolution-drawer').getByRole('button', { name: 'Fermer', exact: true }).click();
+  await page.locator('[data-roll-input="attack"]').fill('33');
+  await page.locator('[data-roll-input="defense"]').fill('99');
+  await page.getByRole('button', { name: 'Calculer', exact: true }).click();
+  const criticalLocation = page.locator('[data-roll-input="critical-location"]');
+  assert.equal(await criticalLocation.isVisible(), true, 'un critique ouvre son dé de localisation');
+  assert.equal(await bulk.isEnabled(), true, 'le dé de critique PNJ vide est proposé');
+  await bulk.click();
+  assert.match(await criticalLocation.inputValue(), /^(?:[1-9]|[1-9][0-9]|100)$/);
+  assert.equal(await page.locator('[data-roll-input="attack"]').inputValue(), '33');
+  assert.equal(await page.locator('[data-roll-input="defense"]').inputValue(), '99');
+  await page.locator('[data-roll-input="attack"]').fill('34');
+  await page.locator('[data-roll-input="defense"]').fill('81');
+  await page.getByRole('button', { name: 'Calculer', exact: true }).click();
+  const apply = page.locator('[data-focus-key="apply"]');
+  assert.equal(await apply.isEnabled(), true, 'la résolution renseignée peut être appliquée : '+await apply.getAttribute('title'));
+  const logBefore = await page.evaluate(() => window.__u1.store.getLog().length);
+  await apply.click();
+  await page.waitForFunction(before => window.__u1.store.getLog().length > before, logBefore);
+  await page.evaluate(async () => {
+    const action = { id: 'preset', type: 'skill', note: 'Frénésie préparée', attr: 'FM', base: 40, extensions: { v5: { initialContext: { talentAction: 'frenzy' } } } };
+    await window.__u1.store.updateParticipant('npc', { talents: [{ id: 'talent-frenzy', status: 'resolved', rank: 1 }], actions: [action] });
+    if (!window.__u1.view.openResolution({ ...action, participantId: 'npc', targetId: 'pj' })) throw new Error('résolution préréglée indisponible');
+  });
+  const presetTalent = page.getByLabel('Activation de talent', { exact: true });
+  assert.equal(await presetTalent.inputValue(), 'frenzy');
+  assert.equal(await presetTalent.getAttribute('data-default-value'), 'frenzy', 'le réglage initial de l’action constitue le défaut');
   assert.deepEqual(errors, []);
   console.log('U1 : tiroir ouvert en attaque, rail, conservation et Échap vérifiés dans le vrai Workspace.');
 } finally {

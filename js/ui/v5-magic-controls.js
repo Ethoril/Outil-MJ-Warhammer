@@ -1,3 +1,4 @@
+import { isMiscastDistanceD100 } from './resolution-panel/dom.js';
 import {magicTalentRank} from '../core/v5-magic-talents.js';
 import {getCadaiRunes,getBurnoutStatus} from '../core/v5-magic-high.js';
 import {wardDiceCount,targetNatureTags,natureTagLabel,spellAttackNature,DEDUCED_TAGS} from '../core/v5-magic-combat.js';
@@ -17,6 +18,9 @@ export function renderMagicControls({actor,participants,type,draft,handlers,targ
   const input=document.createElement(kind==='select'?'select':'input');input.setAttribute('aria-label',label);input.dataset.focusKey=key;
   if(kind==='select'){for(const [value,text] of options)input.append(new Option(text,value));input.value=draft[key] ?? options[0]?.[0] ?? '';}
   else {input.type=kind;if(kind==='checkbox')input.checked=Boolean(draft[key]);else {input.value=draft[key] ?? '';if(kind==='number'){input.min='1';input.max='100';input.step='1';}}}
+  const actorDice = ['magicMiscastRoll2','magicBurnoutRoll','magicMeditationRoll','magicRuneKnowledgeRoll','magicCadaiTestRoll','magicCadaiMiscastRoll','magicCadaiBurnoutRoll','magicCorruptionInitialRoll','magicCadaiCorruptionRoll'];
+  if (actorDice.includes(key)) input.dataset.npcRollKey = key;
+  if (key === 'magicDispelRoll' && draft.magicDispellerId) { input.dataset.npcRollKey = key; input.dataset.npcRollOwnerId = draft.magicDispellerId; }
   input.addEventListener(kind==='number'||kind==='text'?'input':'change',()=>{const value=kind==='checkbox'?input.checked:kind==='number'?input.value===''?null:Number(input.value):input.value;if(kind==='number'||kind==='text')handlers.input(key,value);else handlers.select({[key]:value});});if(kind==='checkbox')line.prepend(input);else line.append(input);box.append(line);return input;
  };
  // D-18 : distance et visibilité sont toujours saisies, sans valeur par défaut (visibilité à trois états).
@@ -49,10 +53,13 @@ export function renderMagicControls({actor,participants,type,draft,handlers,targ
  const firstMiscast=Number(draft.magicMiscastRoll);
  if(extraMissing.length||draft.magicExtraRoll1!=null||draft.magicExtraRoll2!=null||firstMiscast>=91&&firstMiscast<=95){
   for(const n of [1,2]){
-   const roll=field('magicExtraRoll'+n,'Incident 91-95 : jet supplémentaire n° '+n+' (1d100, de 1 à 90)');roll.max='90';
+   const roll=field('magicExtraRoll'+n,'Incident 91-95 : jet supplémentaire n° '+n+' (1d100, de 1 à 90)');roll.max='90';roll.dataset.npcRollKey='magicExtraRoll'+n;
    field('magicExtraDuration'+n,'Jet supplémentaire n° '+n+' : dé de durée / États (1d10 ou 2d10)');
    field('magicExtraDamage'+n,'Jet supplémentaire n° '+n+' : dé de dégâts (1d10)');
-   field('magicExtraDistance'+n,'Jet supplémentaire n° '+n+' : dé de distance (1d10 ou 1d100)');
+   const distance=field('magicExtraDistance'+n,'Jet supplémentaire n° '+n+' : dé de distance (1d10 ou 1d100)');
+   const extra=Number(draft['magicExtraRoll'+n]);
+   const max=extra>=36&&extra<=40?40:extra>=51&&extra<=55?55:null;
+   if(isMiscastDistanceD100('MINOR',max))distance.dataset.npcRollKey='magicExtraDistance'+n;
    field('magicExtraLocation'+n,'Jet supplémentaire n° '+n+' : membre gelé','select',[['','—'],['Bras principal','Bras principal'],['Bras secondaire','Bras secondaire'],['Jambe gauche','Jambe gauche'],['Jambe droite','Jambe droite']]);
   }
   if(extraMissing.length){const note=document.createElement('p');note.className='workspace-muted';note.dataset.magicExtraMissing='true';note.textContent=missingDiceText(extraMissing);box.append(note);}
@@ -167,7 +174,7 @@ export function renderSpellRecipientControls({actor,participants,contract,draft,
  const note=text=>{const p=document.createElement('p');p.className='workspace-muted';p.textContent=text;box.append(p);};
  const perTargetNumber=(p,key,title,min=0,max=999)=>{
   const label=document.createElement('label');label.className='workspace-type';label.textContent=title+' — '+p.name;
-  const input=document.createElement('input');input.type='number';input.min=String(min);input.max=String(max);input.step=key==='distance'||key==='fromPrimary'?'any':'1';input.value=draft.magicTargetTests?.[p.id]?.[key] ?? '';input.setAttribute('aria-label',label.textContent);input.dataset.focusKey='magic-target-'+key+'-'+p.id;
+  const input=document.createElement('input');input.type='number';input.min=String(min);input.max=String(max);input.step=key==='distance'||key==='fromPrimary'?'any':'1';input.value=draft.magicTargetTests?.[p.id]?.[key] ?? '';input.setAttribute('aria-label',label.textContent);input.dataset.focusKey='magic-target-'+key+'-'+p.id;if(key==='dodgeRoll'){input.dataset.npcRollKey='magicTargetTests';input.dataset.npcRollField=key;input.dataset.npcRollOwnerId=p.id;}
   input.addEventListener('input',()=>handlers.input('magicTargetTests',{...draft.magicTargetTests,[p.id]:{...draft.magicTargetTests?.[p.id],[key]:input.value===''?undefined:Number(input.value)}}));label.append(input);box.append(label);
  };
  const ordered=(targetIds || draft.magicTargetIds || []).map(id=>participants.find(p=>p.id===id)).filter(Boolean);

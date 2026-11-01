@@ -38,3 +38,13 @@ test('une sélection multiple prend en compte toutes les options choisies', () =
   assert.equal(control.value, '["a","b"]');
   assert.equal(countActiveCircumstances([{ ...control, defaultValue: '["a"]' }]), 1);
 });
+
+test('les valeurs déjà renseignées sont comparées aux défauts déclarés dès le premier rendu', () => {
+  const base = { name: '', id: '', getAttribute: () => 'Réglage', closest: () => null };
+  const elements = [
+    { ...base, tagName: 'INPUT', type: 'number', dataset: { defaultValue: '2' }, value: '3', defaultValue: '' },
+    { ...base, tagName: 'SELECT', type: 'select-one', dataset: {}, options: [{ value: '' }, { value: 'true' }], value: 'true' },
+    { ...base, tagName: 'INPUT', type: 'number', dataset: { defaultValue: '2' }, value: '2', defaultValue: '' }
+  ];
+  assert.equal(countActiveCircumstances(circumstanceControls({ querySelectorAll: () => elements })), 2);
+});

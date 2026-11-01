@@ -1,4 +1,4 @@
-import { node, rubric, outcomePill, signed } from './dom.js';
+import { node, rubric, outcomePill, signed, isMiscastDistanceD100 } from './dom.js';
 import { getSpellContract, getAllSpellContracts, getContractChoiceOptions } from '../../core/v5-spell-contracts.js';
 import { getChannellingReserve } from '../../core/v5-magic-channelling.js';
 import { renderMagicControls, renderSpellRecipientControls } from '../v5-magic-controls.js';
@@ -65,8 +65,11 @@ export function renderV5MagicContext({ actor, participants = [], target, type, d
     if (min !== null) input.min = String(min);
     if (max !== null) input.max = String(max);
     input.value = value ?? '';
+    input.dataset.defaultValue = key === 'v5SlModifier' ? '0' : '';
     input.setAttribute('aria-label', labelText);
     input.dataset.focusKey = key;
+    const incident = draft.preview?.castPreview?.miscast || draft.preview?.miscast;
+    if (['magicMiscastRoll', 'magicMajorRoll'].includes(key) || key === 'magicSecondaryDistanceRoll' && isMiscastDistanceD100(incident?.table, incident?.entry?.max)) { input.dataset.npcRollKey = key; input.dataset.npcRollOwner = 'actor'; }
     input.addEventListener('input', () => handlers.input(key, input.value === '' ? null : Number(input.value)));
     label.appendChild(input);
     v5.appendChild(label);
@@ -121,6 +124,7 @@ export function renderV5MagicContext({ actor, participants = [], target, type, d
     const spellSelect = document.createElement('select');
     spellSelect.setAttribute('aria-label', 'Sort à lancer');
     spellSelect.dataset.focusKey = 'magic-spell';
+    spellSelect.dataset.defaultValue = defaultMagicSpellId({}, actor);
     if (actorSpells.length) {
       const grpActor = document.createElement('optgroup');
       grpActor.label = `Sorts de ${actor.name}`;
@@ -194,6 +198,8 @@ export function renderV5MagicContext({ actor, participants = [], target, type, d
       inp.value = draft[key] ?? '';
       inp.setAttribute('aria-label', lbl);
       inp.dataset.focusKey = key;
+      const incident = draft.preview?.castPreview?.miscast || draft.preview?.miscast;
+      if (['magicMiscastRoll', 'magicMajorRoll'].includes(key) || key === 'magicSecondaryDistanceRoll' && isMiscastDistanceD100(incident?.table, incident?.entry?.max)) { inp.dataset.npcRollKey = key; inp.dataset.npcRollOwner = 'actor'; }
       inp.addEventListener('input', () => handlers.input(key, inp.value === '' ? null : Number(inp.value)));
       wrap.appendChild(inp);
       box.appendChild(wrap);
@@ -283,6 +289,9 @@ export function renderV5MagicContext({ actor, participants = [], target, type, d
       if(contract?.effects?.secondaryTest || contract?.effects?.mjInput?.resistanceTest){
       const resInp = addOvercastNum('magicResistanceRoll', 'Jet de résistance / test secondaire (Soc / End / Résistance, 1d100)', 1, 100);
       resInp.dataset.action = 'set-magic-resistance-roll';
+      const testActor = contract?.effects?.secondaryTest?.actor;
+      const subjectId = testActor === 'caster' ? actor.id : testActor === 'target' && magicTargetIds.length === 1 ? magicTargetIds[0] : null;
+      if (subjectId) { resInp.dataset.npcRollKey = 'magicResistanceRoll'; resInp.dataset.npcRollOwnerId = subjectId; }
       }
     }
     addCheck(overcastBox, 'magicUnmemorized', 'Sort lancé depuis un grimoire sans être mémorisé (surpuissance interdite)');
@@ -365,6 +374,7 @@ export function renderArcaneFields(draft, actor, target, participants, handlers)
   amount.max = '20';
   amount.step = '1';
   amount.value = armorPoints;
+  amount.dataset.defaultValue = '0';
   amount.dataset.focusKey = 'magic-arcane-armor-points';
   amount.addEventListener('input', () => {
     const points = amount.value === '' ? 0 : Number(amount.value);
@@ -430,6 +440,7 @@ export function renderArcaneFields(draft, actor, target, participants, handlers)
         }
         input.value = facts[key] ?? '';
         input.dataset.focusKey = `magic-arcane-${key}-${person.id}`;
+        if (numeric) { input.dataset.npcRollKey = 'magicArcaneTargets'; input.dataset.npcRollField = key; input.dataset.npcRollSubjectId = person.id; }
         input.addEventListener('input', () => update({ [key]: numeric ? (input.value === '' ? null : Number(input.value)) : input.value }));
         label.appendChild(input);
         box.appendChild(label);
@@ -557,6 +568,7 @@ export function renderV5MagicResult(preview, target, draft, handlers) {
       input.min = String(need.min ?? (field === 'roll' ? 1 : 0));
       input.max = String(need.max ?? 100);
       input.value = current[field] == null ? '' : String(current[field]);
+      if (field === 'roll') { input.dataset.npcRollKey = 'magicMountedRideTests'; input.dataset.npcRollOwnerId = riderId; }
       input.addEventListener('change', () => {
         handlers.select({ magicMountedRideTests: { ...answers, [riderId]: { ...current, [field]: input.value === '' ? null : Number(input.value) } } });
         handlers.calculate();
@@ -669,6 +681,7 @@ export function renderV5MagicResult(preview, target, draft, handlers) {
       input.min = String(need.min ?? (field === 'roll' ? 1 : 0));
       input.max = String(need.max ?? 100);
       input.value = current[field] == null ? '' : String(current[field]);
+      if (field === 'roll') { input.dataset.npcRollKey = 'magicMountedRideTests'; input.dataset.npcRollOwnerId = riderId; }
       input.addEventListener('change', () => {
         handlers.select({ magicMountedRideTests: { ...answers, [riderId]: { ...current, [field]: input.value === '' ? null : Number(input.value) } } });
         handlers.calculate();

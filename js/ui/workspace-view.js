@@ -33,6 +33,7 @@ import { renderSilhouette } from './silhouette.js';
 import { buildParticipantReminders } from '../core/reminders.js';
 import { renderResolutionPanel, actionKey, minusSigned, defenseOptions, defaultDefenseValue } from './resolution-panel.js';
 import { initSidePanel } from './side-panel.js';
+import { rollMisfortuneDie } from './resolution-panel/dom.js';
 import { getSpellContract, getAllSpellContracts } from '../core/v5-spell-contracts.js';
 import { magicGrantedActions, beastFormActions } from '../core/v5-magic-combat.js';
 import { transformationOvercastCost } from '../core/v5-magic-arbitrations.js';
@@ -1128,6 +1129,115 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       draft.comparison = null;
       draft.error = null;
       render();
+    },
+    rollEngaged(personId) {
+      const draft = state.resolution;
+      const all = { ...(draft.v5Context?.engagedDefensesById || {}) };
+      const defense = all[personId] || { base: null, label: 'Esquive', v5: { kind: 'test', choice: 'keep' } };
+      all[personId] = { ...defense, roll: d100() };
+      draft.v5Context = { ...(draft.v5Context || {}), engagedDefensesById: all };
+      draft.v5Choice = null; draft.defenseChoice = null;
+      resetCritical(draft);
+      draft.preview = null; draft.comparison = null; draft.error = null;
+      render();
+    },
+    rollAll(rolls) {
+      const context = playContext();
+      const draft = state.resolution;
+      let ordinaryRollChanged = false;
+      for (const roll of rolls) {
+        if (roll.field === 'magic') {
+          const summonedCreature = roll.creature === true && roll.key === 'magicInteraction' && ['worm', 'summon-attack'].includes(draft.magicInteraction?.kind);
+          const person = summonedCreature ? { kind: 'PNJ' } : context.participants.find(row => row.id === roll.personId);
+          if (!person || person.kind === 'PJ') continue;
+          if (roll.key === 'fortuneRerollRolls') {
+            if (!(draft.fortuneRerollRolls || []).length) draft.fortuneRerollRolls = [d100()];
+          } else if (roll.key === 'magicMountedRideTests') {
+            const answers = { ...(draft.magicMountedRideTests || {}) }, current = answers[person.id] || {};
+            if (current.roll == null || String(current.roll).trim() === '') {
+              answers[person.id] = { ...current, roll: d100() };
+              draft.magicMountedRideTests = answers;
+            }
+          } else if (['spreadLocationRollsById', 'explosionLocationRollsById'].includes(roll.key) && roll.subjectId) {
+            const v5 = { ...(draft.v5Context || {}) }, values = { ...(v5[roll.key] || {}) };
+            if (values[roll.subjectId] == null || String(values[roll.subjectId]).trim() === '') { values[roll.subjectId] = d100(); v5[roll.key] = values; draft.v5Context = v5; }
+          } else if (['salvoDistance', 'salvoDodge'].includes(roll.key) && /^\d+$/.test(roll.subjectId || '')) {
+            const v5 = { ...(draft.v5Context || {}) }, shots = [...(v5.salvoTrajectories || [])], index = Number(roll.subjectId), shot = { ...(shots[index] || {}) };
+            if (roll.key === 'salvoDistance' && (shot.distanceRoll == null || String(shot.distanceRoll).trim() === '')) shot.distanceRoll = d100();
+            if (roll.key === 'salvoDodge') shot.targets = (shot.targets || []).map(row => {
+              if (row.participantId !== person.id || (row.dodge?.roll != null && String(row.dodge.roll).trim() !== '')) return row;
+              return { ...row, dodge: { ...(row.dodge || {}), roll: d100() } };
+            });
+            shots[index] = shot; v5.salvoTrajectories = shots; draft.v5Context = v5;
+          } else if (roll.key === 'contextValue' && roll.property) {
+            const v5 = { ...(draft.v5Context || {}) };
+            if (v5[roll.property] == null || String(v5[roll.property]).trim() === '') { v5[roll.property] = d100(); draft.v5Context = v5; }
+          } else if (roll.key === 'trapBladeStrengthTest') {
+            const defense = { ...(draft.defenseContext || {}) }, test = { ...(defense.trapBladeStrengthTest || {}) };
+            if (test.roll == null || String(test.roll).trim() === '') { test.roll = d100(); defense.trapBladeStrengthTest = test; draft.defenseContext = defense; }
+          } else if (roll.key === 'warpBladeEnduranceTest') {
+            const v5 = { ...(draft.v5Context || {}) }, test = { ...(v5.warpBladeEnduranceTest || {}) };
+            if (test.roll == null || String(test.roll).trim() === '') { test.roll = d100(); delete test.success; v5.warpBladeEnduranceTest = test; draft.v5Context = v5; }
+          } else if (roll.key === 'deafenedTests') {
+            const v5 = { ...(draft.v5Context || {}) }, tests = { ...(v5.deafenedTests || {}) }, test = { ...(tests[person.id] || {}) };
+            if (test.roll == null || String(test.roll).trim() === '') { test.roll = d100(); tests[person.id] = test; v5.deafenedTests = tests; draft.v5Context = v5; }
+          } else if (roll.key === 'magicInteraction' && roll.property) {
+            const interaction = { ...(draft.magicInteraction || {}) };
+            if (interaction[roll.property] == null || String(interaction[roll.property]).trim() === '') { interaction[roll.property] = d100(); draft.magicInteraction = interaction; }
+          } else if (roll.key === 'magicInteractionTargetTests' && roll.property && roll.subjectId) {
+            const interaction = { ...(draft.magicInteraction || {}) }, tests = { ...(interaction.targetTests || {}) }, result = { ...(tests[roll.subjectId] || {}) };
+            if (result[roll.property] == null || String(result[roll.property]).trim() === '') { result[roll.property] = d100(); tests[roll.subjectId] = result; interaction.targetTests = tests; draft.magicInteraction = interaction; }
+          } else if (roll.key === 'magicArcaneTargets' && roll.property && roll.subjectId) {
+            const answers = { ...(draft.magicArcaneTargets || {}) }, current = answers[roll.subjectId] || {};
+            if (current[roll.property] == null || String(current[roll.property]).trim() === '') {
+              answers[roll.subjectId] = { ...current, [roll.property]: d100() };
+              draft.magicArcaneTargets = answers;
+            }
+          } else if (roll.key === 'magicTargetTests' && roll.property) {
+            const answers = { ...(draft.magicTargetTests || {}) }, current = answers[person.id] || {};
+            if (current[roll.property] == null || String(current[roll.property]).trim() === '') {
+              answers[person.id] = { ...current, [roll.property]: d100() };
+              draft.magicTargetTests = answers;
+            }
+          } else if (roll.key === 'magicSpellFacts' && roll.property) {
+            const facts = { ...(draft.magicSpellFacts || {}) };
+            if (facts[roll.property] == null || String(facts[roll.property]).trim() === '') {
+              facts[roll.property] = d100();
+              draft.magicSpellFacts = facts;
+            }
+          } else if (['magicExtraRoll1', 'magicExtraRoll2'].includes(roll.key) && !String(draft[roll.key] ?? '').trim()) {
+            draft[roll.key] = rollMisfortuneDie(d100);
+          } else if (['magicMiscastRoll', 'magicMajorRoll', 'magicResistanceRoll', 'magicSecondaryDistanceRoll', 'magicExtraDistance1', 'magicExtraDistance2', 'magicMiscastRoll2', 'magicBurnoutRoll', 'magicDispelRoll', 'magicMeditationRoll', 'magicRuneKnowledgeRoll', 'magicCadaiTestRoll', 'magicCadaiMiscastRoll', 'magicCadaiBurnoutRoll', 'magicCorruptionInitialRoll', 'magicCadaiCorruptionRoll'].includes(roll.key) && !String(draft[roll.key] ?? '').trim()) {
+            draft[roll.key] = d100();
+          }
+          continue;
+        }
+        if (roll.field === 'critical') {
+          // Les clés admises proviennent exclusivement des champs de critique rendus.
+          const key = roll.key;
+          const person = key?.startsWith('defender') ? context.target : context.actor;
+          if (person && person.kind !== 'PJ' && key && !String(draft[key] ?? '').trim()) draft[key] = String(d100());
+          continue;
+        }
+        const person = roll.field === 'attack' ? context.actor : roll.field === 'defense' ? context.target : context.participants?.find(row => row.id === roll.personId);
+        if (!person || person.kind === 'PJ') continue;
+        if (roll.field === 'engaged') {
+          const all = { ...(draft.v5Context?.engagedDefensesById || {}) };
+          const defense = all[person.id] || { base: null, label: 'Esquive', v5: { kind: 'test', choice: 'keep' } };
+          if (defense.roll == null || String(defense.roll).trim() === '') {
+            all[person.id] = { ...defense, roll: d100() };
+            ordinaryRollChanged = true;
+            draft.v5Context = { ...(draft.v5Context || {}), engagedDefensesById: all };
+          }
+        } else {
+          const key = roll.field === 'attack' ? 'attackRoll' : roll.field === 'defense' ? 'defenseRoll' : null;
+          if (key && !String(draft[key] ?? '').trim()) { draft[key] = String(d100()); ordinaryRollChanged = true; }
+        }
+      }
+      draft.v5Choice = null; draft.defenseChoice = null;
+      if (ordinaryRollChanged) { resetCritical(draft); draft.preview = null; }
+      draft.comparison = null; draft.error = null;
+      resolutionHandlers.calculate();
     },
     // Saisie d'un jet de critique : alimente le brouillon sans vider l'aperçu ni re-rendre
     // (aucune frappe perdue) ; seule une erreur affichée sous le champ est retirée.

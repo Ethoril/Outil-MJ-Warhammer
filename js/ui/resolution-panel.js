@@ -79,7 +79,7 @@ import { ROLL_LABELS, renderResult, renderComparison, renderDivineSocialFacts } 
 import { node, button, chip, rubric, outcomePill, signed } from './resolution-panel/dom.js';
 import { renderV5MagicContext } from './resolution-panel/magic.js';
 import { rollField, renderElapsedTime } from './resolution-panel/critical.js';
-import { circumstanceGroup, countActiveCircumstances, circumstanceControls } from './resolution-panel/dom.js';
+import { circumstanceGroup, countActiveCircumstances, circumstanceControls, emptyNpcRolls } from './resolution-panel/dom.js';
 
 /** Stable key of an action within the actor's list (dice lines may lack an id). */
 export function actionKey(action, index) {
@@ -128,7 +128,7 @@ function qualityNames(action = {}) {
 }
 
 export function renderResolutionPanel(options) {
-  const { draft, actor, participants=[], actions, actionKey: selectedKey, type, target, groups, defense, previousWeaponAttacks=[], resolutionClock={}, canCalculate, canApply, canDeclareCombatAction=false, canDeclareCombatMovement=false, handlers, _defaultProbe=false } = options;
+  const { draft, actor, participants=[], actions, actionKey: selectedKey, type, target, groups, defense, previousWeaponAttacks=[], resolutionClock={}, canCalculate, canApply, canDeclareCombatAction=false, canDeclareCombatMovement=false, handlers } = options;
   const fuseClock={currentRound:resolutionClock.currentRound??draft?.round,currentTurnIndex:resolutionClock.currentTurnIndex??draft?.v5Clock?.turnIndex};
   const section = node('section', 'workspace-resolution workspace-card');
   section.setAttribute('aria-labelledby', 'workspace-resolution-title');
@@ -145,6 +145,7 @@ export function renderResolutionPanel(options) {
   const closeDrawer = button('Fermer', 'workspace-secondary');
   heading.appendChild(closeDrawer);
   drawer.append(heading, node('p', 'workspace-muted', 'Ce qui est coché entre dans le calcul.'));
+  const engagedRolls = [];
   const fieldGroups = {};
   for (const [key, label] of [['required','Obligatoire'], ['combat','Combat'], ['defense',target ? `Défense de ${target.name}` : 'Défense'], ['fortune','Avantage et Fortune'], ['talents','Talents'], ['weapon','Arme et munitions'], ['magic','Magie'], ['lethal','Issue létale']]) {
     const group = node('section', `workspace-circumstances-group is-${key}`);
@@ -379,6 +380,7 @@ export function renderResolutionPanel(options) {
                 input.min=String(min);
                 input.max=String(max);
                 input.value=draft.v5Context?.[key]??'';
+                if(max===100){input.dataset.npcRollKey='contextValue';input.dataset.npcRollField=key;input.dataset.npcRollOwnerId=(key==='tripFallEnduranceRoll'?target:actor).id;}
                 input.setAttribute('aria-label',text);
                 input.addEventListener('change',()=>handlers.select({v5Context:{...(draft.v5Context||{}),[key]:input.value===''?null:Number(input.value)}}));
                 label.append(input);
@@ -471,6 +473,8 @@ export function renderResolutionPanel(options) {
           select.append(new Option(`${ref.nom}${owned?` · ${owned.advances??'augmentations inconnues'} augmentation(s)`:' · choix explicite MJ'}`,owned?`skill:${owned.id}`:`manual:${ref.specialization}`));
         }
         select.value=linked?`skill:${linked.id}`:currentReference?`manual:${currentReference.specialization}`:'';
+        const defaultLinked = skills.find(row => row.id === action.extensions?.fiche?.skillId);
+        select.dataset.defaultValue = defaultLinked ? `skill:${defaultLinked.id}` : '';
         select.addEventListener('change',()=>{
           if(select.value.startsWith('skill:')){
             const row=skills.find(skill=>skill.id===select.value.slice(6));
@@ -493,6 +497,7 @@ export function renderResolutionPanel(options) {
           select.append(new Option(`${skill.name} · ${advances}`,skill.id));
         });
         select.value=selectedSkill;
+        select.dataset.defaultValue=action.extensions?.fiche?.skillId||'';
         select.addEventListener('change',()=>handlers.select({v5Context:{...current,weaponSkillId:select.value||undefined}}));
         label.append(select);
         fieldGroups.weapon.content.append(label);
@@ -743,6 +748,7 @@ export function renderResolutionPanel(options) {
         sl.min='0';
         sl.max='20';
         sl.value=calm?.sl??0;
+        sl.dataset.defaultValue='0';
         sl.setAttribute('aria-label','DR du Test de Calme');
         const update=()=>handlers.select({v5Context:{...draft.v5Context,reductionCalm:select.value===''?undefined:{success:select.value==='pass',sl:Number(sl.value)||0}}});
         select.addEventListener('change',update);
@@ -811,7 +817,7 @@ export function renderResolutionPanel(options) {
         label.append(select);
         addCircumstance('magic-context', label);
       }
-  const numberField = (key, label, value, minimum = null) => {
+  const numberField = (key, label, value, minimum = null, defaultValue = '') => {
     const caption = node('label', 'workspace-type', label);
     const input = document.createElement('input');
     input.type = 'number';
@@ -823,6 +829,7 @@ export function renderResolutionPanel(options) {
     input.value = value ?? '';
     input.setAttribute('aria-label', label);
     input.dataset.focusKey = key;
+    input.dataset.defaultValue = String(defaultValue ?? '');
     input.addEventListener('change', () => handlers.select({ [key]: input.value === '' ? null : Number(input.value) }));
     caption.appendChild(input);
     addCircumstance(key, caption);
@@ -836,13 +843,14 @@ export function renderResolutionPanel(options) {
   kind.value = selectedKind || draft.v5Kind || inferV5Kind({ ...action, type }, equipmentAttackContext(kindEquipment,type==='attack'?draft.v5Context||{}:{}));
   kind.setAttribute('aria-label','Nature du Test');
   kind.dataset.focusKey='v5-kind';
+  kind.dataset.defaultValue = inferV5Kind({ ...action, type }, equipmentAttackContext(kindEquipment, {}));
   kind.addEventListener('change', () => handlers.select({ v5Kind: kind.value }));
   kindLabel.appendChild(kind);
   addCircumstance('v5-kind', kindLabel);
-  numberField('v5SlModifier', 'Modificateur V5 (DR)', draft.v5SlModifier ?? action.extensions?.v5?.slModifier ?? (action.mod ? null : 0));
+  numberField('v5SlModifier', 'Modificateur V5 (DR)', draft.v5SlModifier ?? action.extensions?.v5?.slModifier ?? (action.mod ? null : 0), null, action.extensions?.v5?.slModifier ?? (action.mod ? null : 0));
   if (action.mod && draft.v5SlModifier == null && action.extensions?.v5?.slModifier == null) v5.appendChild(node('p','workspace-field-error',`Ancien modificateur de seuil ${signed(action.mod)} : saisissez les DR V5 retenus.`));
-  numberField('v5Advantages','Sources supplémentaires d’Avantage',draft.v5Advantages || 0,0);
-  numberField('v5Disadvantages','Sources de Désavantage',draft.v5Disadvantages || 0,0);
+  numberField('v5Advantages','Sources supplémentaires d’Avantage',draft.v5Advantages || 0,0,0);
+  numberField('v5Disadvantages','Sources de Désavantage',draft.v5Disadvantages || 0,0,0);
   // Attaque naturelle d'un Trait de créature (Langue, Souffle, Cornes…) : posée dans le contexte, lue par la résolution et le Store.
   const naturalTraits = type === 'attack' ? naturalCombatTraits(actor).filter(trait => trait.key !== 'v4-weapon') : [];
   if (naturalTraits.length) {
@@ -930,6 +938,7 @@ export function renderResolutionPanel(options) {
       const person = key === 'actorSize' ? actor : target;
       const size = creatureSizeOf(person);
       select.value = draft[key] == null ? String(size.rank) : String(draft[key]);
+      select.dataset.defaultValue = String(size.rank);
       select.setAttribute('aria-label', labelText);
       select.dataset.focusKey = key;
       select.addEventListener('change', () => handlers.select({ [key]: select.value === '' ? null : Number(select.value) }));
@@ -1008,6 +1017,7 @@ export function renderResolutionPanel(options) {
     const input=document.createElement('input');
     input.type='text';
     input.value=(draft.fortuneRerollRolls||[]).join(', ');
+    input.dataset.npcRollKey='fortuneRerollRolls';
     input.setAttribute('aria-label',label.textContent);
     input.addEventListener('change',()=>handlers.select({fortuneRerollRolls:input.value.split(',').map(value=>value.trim()).filter(Boolean).map(Number)}));
     label.append(input);
@@ -1036,13 +1046,14 @@ export function renderResolutionPanel(options) {
     select.append(new Option('Corps à corps','melee'),new Option('Esquive / autre Test','test'));
     select.value=draft.defenseKind || defense.option.v5?.kind || (defense.option.value === 'Ag' || /esquive|dodge/i.test(defense.option.statLabel) ? 'test' : 'melee');
     select.dataset.focusKey='defense-kind';
+    select.dataset.defaultValue = defense.option.v5?.kind || (defense.option.value === 'Ag' || /esquive|dodge/i.test(defense.option.statLabel) ? 'test' : 'melee');
     select.setAttribute('aria-label','Nature de la défense');
     select.addEventListener('change',()=>handlers.select({defenseKind:select.value}));
     label.appendChild(select);
     addCircumstance('defense-kind', label);
-    numberField('defenseSlModifier','Modificateur V5 de défense (DR)',draft.defenseSlModifier ?? defense.option.v5?.slModifier ?? (defense.option.mod ? null : 0));
-    numberField('defenseAdvantages','Avantages supplémentaires de défense',draft.defenseAdvantages || 0,0);
-    numberField('defenseDisadvantages','Désavantages de défense',draft.defenseDisadvantages || 0,0);
+    numberField('defenseSlModifier','Modificateur V5 de défense (DR)',draft.defenseSlModifier ?? defense.option.v5?.slModifier ?? (defense.option.mod ? null : 0), null, defense.option.v5?.slModifier ?? (defense.option.mod ? null : 0));
+    numberField('defenseAdvantages','Avantages supplémentaires de défense',draft.defenseAdvantages || 0,0,0);
+    numberField('defenseDisadvantages','Désavantages de défense',draft.defenseDisadvantages || 0,0,0);
   }
   const contextField = (container, role, key, label) => {
     const contextKey = role === 'actor' ? 'v5Context' : 'defenseContext';
@@ -1051,6 +1062,7 @@ export function renderResolutionPanel(options) {
     const select = document.createElement('select');
     select.setAttribute('aria-label', `${label}${role === 'defender' ? ' (défense)' : ''}`);
     select.dataset.focusKey = `${role}-${key}`;
+    select.dataset.defaultValue = '';
     select.append(new Option('À préciser', ''), new Option('Oui', 'true'), new Option('Non', 'false'));
     select.value = typeof current[key] === 'boolean' ? String(current[key]) : '';
     select.addEventListener('change', () => handlers.select({ [contextKey]: { ...current, [key]: select.value === '' ? undefined : select.value === 'true' } }));
@@ -1064,6 +1076,7 @@ export function renderResolutionPanel(options) {
     const current = draft.v5Context || {}, caption = node('label', 'workspace-type', label), select = document.createElement('select');
     select.setAttribute('aria-label', label);
     select.dataset.focusKey = `actor-${key}`;
+    select.dataset.defaultValue = '';
     select.append(new Option('À préciser', ''));
     for (const [value, text] of options) select.append(new Option(text, value));
     select.value = current[key] == null ? '' : String(current[key]);
@@ -1080,6 +1093,7 @@ export function renderResolutionPanel(options) {
     const select = document.createElement('select');
     select.setAttribute('aria-label', `Pénalité retenue entre États mixtes${role === 'defender' ? ' (défense)' : ''}`);
     select.dataset.focusKey = `${role}-condition-penalty-mode`;
+    select.dataset.defaultValue = '';
     select.append(new Option('À préciser si nécessaire', ''), new Option('Pénalité en DR', 'sl'), new Option('Désavantage', 'disadvantage'));
     select.value = current.conditionPenaltyMode || '';
     select.addEventListener('change', () => handlers.select({ [contextKey]: { ...current, conditionPenaltyMode: select.value || undefined } }));
@@ -1100,6 +1114,7 @@ export function renderResolutionPanel(options) {
     select.append(new Option('À préciser',''),new Option('Test de caractéristique (aucune compétence)','none'));
     for(const skill of getReferenceCatalogue().skills)select.append(new Option(skill.nom||skill.name||skill.id,skill.id));
     select.value=skillId||'';
+    select.dataset.defaultValue=importedSkill||'';
     select.disabled=Boolean(importedSkill);
     select.addEventListener('change',()=>handlers.select({[contextKey]:{...current,skillId:select.value||undefined}}));
     label.append(select);
@@ -1216,7 +1231,7 @@ export function renderResolutionPanel(options) {
       const label=node('label','workspace-type',text),input=document.createElement('input');
       input.type='number';
       input.min=String(min);
-      if(key==='roll')input.max='100';
+      if(key==='roll'){input.max='100';if(target){input.dataset.npcRollKey='warpBladeEnduranceTest';input.dataset.npcRollOwnerId=target.id;}}
       input.step='1';
       input.value=stored[key]??'';
       input.setAttribute('aria-label',text);
@@ -1378,6 +1393,7 @@ export function renderResolutionPanel(options) {
     select.setAttribute('aria-label',label.textContent);
     select.append(new Option('Morphologie du profil',''),new Option('Humanoïde (forcer)','humanoid'),new Option('Quadrupède','quadruped'),new Option('Oiseau','bird'),new Option('Serpent','snake'),new Option('Araignée','spider'));
     select.value=hitMorphologySelection(current.hitMorphologiesById?.[id],deriveHitMorphology(person));
+    select.dataset.defaultValue=hitMorphologySelection(undefined,deriveHitMorphology(person));
     select.addEventListener('change',()=>handlers.select({v5Context:{...current,hitMorphologiesById:{...(current.hitMorphologiesById||{}),[id]:select.value||undefined}}}));
     label.append(select);
     fields.append(label);
@@ -1417,6 +1433,7 @@ export function renderResolutionPanel(options) {
       die.min='1';
       die.max='100';
       die.value=current.spreadLocationRollsById?.[id]??'';
+      die.dataset.npcRollKey='spreadLocationRollsById';die.dataset.npcRollSubjectId=id;
       die.setAttribute('aria-label',label.textContent);
       die.addEventListener('change',()=>handlers.select({v5Context:{...current,spreadLocationRollsById:{...(current.spreadLocationRollsById||{}),[id]:die.value===''?undefined:Number(die.value)}}}));
       label.append(die);
@@ -1440,6 +1457,7 @@ export function renderResolutionPanel(options) {
       die.min='1';
       die.max='100';
       die.value=current.explosionLocationRollsById?.[id]??'';
+      die.dataset.npcRollKey='explosionLocationRollsById';die.dataset.npcRollSubjectId=id;
       die.setAttribute('aria-label',label.textContent);
       die.addEventListener('change',()=>handlers.select({v5Context:{...current,explosionLocationRollsById:{...(current.explosionLocationRollsById||{}),[id]:die.value===''?undefined:Number(die.value)}}}));
       label.append(die);
@@ -1502,6 +1520,7 @@ export function renderResolutionPanel(options) {
       rollInput.max='100';
       rollInput.step='1';
       rollInput.value=current.netEscapeOpponentRoll??'';
+      if(sourceActor){rollInput.dataset.npcRollKey='contextValue';rollInput.dataset.npcRollField='netEscapeOpponentRoll';rollInput.dataset.npcRollOwnerId=sourceActor.id;}
       rollInput.setAttribute('aria-label',rollLabel.textContent);
       rollInput.addEventListener('change',()=>handlers.select({v5Context:{...current,netEscapeOpponentRoll:rollInput.value===''?undefined:Number(rollInput.value)}}));
       rollLabel.append(rollInput);
@@ -1813,6 +1832,7 @@ export function renderResolutionPanel(options) {
             rollInput.min='1';
             rollInput.max='100';
             rollInput.value=defense.roll??'';
+            rollInput.disabled = draft.busy;
             rollInput.setAttribute('aria-label',rollLabel.textContent);
             const saveDefense = () => {
               const all = { ...(draft.v5Context?.engagedDefensesById || {}) };
@@ -1825,7 +1845,16 @@ export function renderResolutionPanel(options) {
             kindLabel.appendChild(kindSelect);
             baseLabel.appendChild(baseInput);
             rollLabel.appendChild(rollInput);
-            fields.append(kindLabel,baseLabel,rollLabel);
+            const rollWrap = node('div', 'workspace-roll');
+            rollWrap.prepend(node('span', `workspace-roll-owner ${person.kind === 'PJ' ? 'is-pj' : 'is-npc'}`, person.kind === 'PJ' ? 'PJ' : 'PNJ'));
+            const rollButton = button('Lancer', 'workspace-secondary', { 'aria-label': `Lancer le d100 : Jet de défense de ${person.name}` });
+            rollButton.disabled = draft.busy;
+            rollButton.addEventListener('click', () => handlers.rollEngaged(person.id));
+            rollInput.dataset.focusKey = `engaged-defense-roll-${person.id}`;
+            rollInput.addEventListener('keydown', event => { if (event.key === 'Enter') { event.preventDefault(); saveDefense(); handlers.calculate(); } });
+            rollWrap.append(rollLabel, rollButton);
+            engagedRolls.push({ element: rollWrap, input: rollInput, person });
+            fields.append(kindLabel,baseLabel);
           }
         }
         const rollLabel = node('label','workspace-type','Jet d100 pour désigner le combattant touché');
@@ -1834,6 +1863,7 @@ export function renderResolutionPanel(options) {
         roll.min='1';
         roll.max='100';
         roll.value=current.engagedTargetRoll??'';
+        roll.dataset.npcRollKey='contextValue';roll.dataset.npcRollField='engagedTargetRoll';
         roll.setAttribute('aria-label',rollLabel.textContent);
         roll.addEventListener('change',()=>handlers.select({v5Context:{...(draft.v5Context||{}),engagedTargetRoll:roll.value===''?null:Number(roll.value)}}));
         rollLabel.appendChild(roll);
@@ -1930,7 +1960,8 @@ export function renderResolutionPanel(options) {
       v5.append(label);
     }
   }
-  const current={...(action.extensions?.v5?.initialContext||{}),...(draft.v5Context||{})};
+  const initialContext=action.extensions?.v5?.initialContext||{};
+  const current={...initialContext,...(draft.v5Context||{})};
   if(['frightening','large-fear','stomp','large-disengage'].includes(current.talentAction)||naturalAttackNeedsSize(draft.v5Context?.naturalAttack)||['disarm'].includes(current.specialAttack)||hasV5Talent(actor,'talent-large')||hasV5Talent(target,'talent-large')||hasV5Talent(actor,'talent-small')||hasV5Talent(target,'talent-small')||current.specialAttack==='whirlwind-of-death'&&participants.some(p=>(current.engagedIds||[]).includes(p.id)&&hasV5Talent(p,'talent-small'))){if(!sizesShown)sizeSelects();}
   const talentOptions = fieldGroups.talents.content;
   if(current.talentAction==='frenzy' && magicTalentRank(actor,'suffuse-with','Aqshy')){
@@ -1938,6 +1969,7 @@ export function renderResolutionPanel(options) {
     select.setAttribute('aria-label',label.textContent);
     select.append(new Option('Force Mentale','FM'),new Option('Focalisation (Aqshy)','Aqshy'));
     select.value=current.magicSuffusedWind==='Aqshy'?'Aqshy':'FM';
+    select.dataset.defaultValue=String(initialContext.magicSuffusedWind==='Aqshy'?'Aqshy':'FM');
     select.addEventListener('change',()=>handlers.select({v5Context:{...current,magicSuffusedWind:select.value==='Aqshy'?'Aqshy':null}}));
     label.append(select);
     talentOptions.append(label);
@@ -1952,6 +1984,7 @@ export function renderResolutionPanel(options) {
     for(const row of activations)select.append(new Option(V5_ACTIVATED_TALENTS[row.id],row.id.slice(7)));
     if((actor.states||[]).some(s=>s.key==='frenzy'))select.append(new Option('Terminer la Frénésie','end-frenzy'));
     select.value=current.talentAction||'none';
+    select.dataset.defaultValue=String(initialContext.talentAction||'none');
     select.addEventListener('change',()=>handlers.select({v5Context:{...current,talentAction:select.value}}));
     label.append(select);
     talentOptions.append(label);
@@ -1963,6 +1996,7 @@ export function renderResolutionPanel(options) {
       input.min='0';
       input.max='200';
       input.value=current.crewRangedBase??'';
+      input.dataset.defaultValue=String(initialContext.crewRangedBase??'');
       input.setAttribute('aria-label',label.textContent);
       input.addEventListener('change',()=>handlers.select({v5Context:{...current,crewRangedBase:input.value===''?undefined:Number(input.value)}}));
       label.append(input);
@@ -1975,6 +2009,7 @@ export function renderResolutionPanel(options) {
       input.max=String(max);
       input.step='1';
       input.value=current[key]??'';
+      input.dataset.defaultValue=String(initialContext[key]??'');
       input.setAttribute('aria-label',label);
       input.addEventListener('change',()=>handlers.select({v5Context:{...current,[key]:input.value===''?undefined:Number(input.value)}}));
       wrap.append(input);
@@ -1988,6 +2023,7 @@ export function renderResolutionPanel(options) {
       select.setAttribute('aria-label',wrap.textContent);
       select.append(new Option('Choisir',''),new Option('Tours','turn'),new Option('Minutes','minute'));
       select.value=current.convictionUnit||'';
+      select.dataset.defaultValue=String(initialContext.convictionUnit||'');
       select.addEventListener('change',()=>handlers.select({v5Context:{...current,convictionUnit:select.value||undefined}}));
       wrap.append(select);
       talentOptions.append(wrap);
@@ -1999,6 +2035,7 @@ export function renderResolutionPanel(options) {
       select.append(new Option('Choisir',''));
       for(const id of knownV5MartialQualities(actor))select.append(new Option(qualityLabel({id}),id));
       select.value=current.martialQuality||'';
+      select.dataset.defaultValue=String(initialContext.martialQuality||'');
       select.addEventListener('change',()=>handlers.select({v5Context:{...current,martialQuality:select.value||undefined}}));
       wrap.append(select);
       talentOptions.append(wrap);
@@ -2012,6 +2049,7 @@ export function renderResolutionPanel(options) {
       select.setAttribute('aria-label',wrap.textContent);
       select.append(new Option('Choisir',''),new Option('Premier d10','first'),new Option('Deuxième d10','second'));
       select.value=current.initiativeChoice||'';
+      select.dataset.defaultValue=String(initialContext.initiativeChoice||'');
       select.addEventListener('change',()=>handlers.select({v5Context:{...current,initiativeChoice:select.value||undefined}}));
       wrap.append(select);
       talentOptions.append(wrap);
@@ -2036,6 +2074,7 @@ export function renderResolutionPanel(options) {
     if(hasV5Talent(actor,'talent-strong-minded'))select.append(new Option('Obstiné : ignorer les modificateurs négatifs','strong-minded'));
     if(hasV5Talent(actor,'talent-resistant'))select.append(new Option('Résistance : réussite automatique','resistant'));
     select.value=current.preRollTalent||'none';
+    select.dataset.defaultValue=String(initialContext.preRollTalent||'none');
     select.addEventListener('change',()=>handlers.select({v5Context:{...current,preRollTalent:select.value}}));
     label.append(select);
     talentOptions.append(label);
@@ -2049,6 +2088,7 @@ export function renderResolutionPanel(options) {
     select.append(new Option('Choisir',''));
     for(const p of participants.filter(p=>p.camp!==actor.camp&&Number(p.hp)>0))select.append(new Option(p.name,p.id));
     select.value=current.nearestEnemyId||'';
+    select.dataset.defaultValue=String(initialContext.nearestEnemyId||'');
     select.addEventListener('change',()=>handlers.select({v5Context:{...current,nearestEnemyId:select.value||undefined}}));
     label.append(select);
     talentOptions.append(label);
@@ -2118,6 +2158,7 @@ export function renderResolutionPanel(options) {
       input.min='0';
       input.step='1';
       input.value=current.recoveredWounds??'';
+      input.dataset.defaultValue=String(initialContext.recoveredWounds??'');
       input.setAttribute('aria-label',wrap.textContent);
       input.addEventListener('change',()=>handlers.select({v5Context:{...current,recoveredWounds:input.value===''?undefined:Number(input.value)}}));
       wrap.append(input);
@@ -2241,6 +2282,7 @@ export function renderResolutionPanel(options) {
         input.min=String(min);
         input.max=String(max);
         input.value=values.trapBladeStrengthTest?.[key]??'';
+        if(key==='roll'&&target){input.dataset.npcRollKey='trapBladeStrengthTest';input.dataset.npcRollOwnerId=target.id;}
         input.setAttribute('aria-label',label);
         input.addEventListener('change',()=>handlers.select({defenseContext:{...values,trapBladeStrengthTest:{...(values.trapBladeStrengthTest||{}),[key]:input.value===''?undefined:Number(input.value)}}}));
         wrap.append(input);
@@ -2359,6 +2401,7 @@ export function renderResolutionPanel(options) {
       input.max=String(max);
       input.step='1';
       input.value=current[key]??'';
+      if(key==='fumbleAllySelectionRoll'){input.dataset.npcRollKey='contextValue';input.dataset.npcRollField=key;}
       input.setAttribute('aria-label',label);
       input.dataset.focusKey=key;
       input.addEventListener('input',()=>handlers.select({v5Context:{...current,[key]:input.value===''?undefined:Number(input.value)}}));
@@ -2479,6 +2522,7 @@ export function renderResolutionPanel(options) {
               input.max=String(max);
             }
             input.value=old[field]??'';
+            if(field==='distanceRoll'){input.dataset.npcRollKey='salvoDistance';input.dataset.npcRollSubjectId=String(i);}
             input.setAttribute('aria-label',label);
             input.addEventListener('input',()=>setShot({[field]:type==='number'?(input.value===''?undefined:Number(input.value)):input.value}));
             wrap.append(input);
@@ -2518,6 +2562,7 @@ export function renderResolutionPanel(options) {
                 input.min=String(min);
                 input.max=String(max);
                 input.value=existing.dodge?.[key]??'';
+                if(key==='roll'){input.dataset.npcRollKey='salvoDodge';input.dataset.npcRollOwnerId=person.id;input.dataset.npcRollSubjectId=String(i);}
                 input.setAttribute('aria-label',`${person.name||person.id} — ${label} (−30)`);
                 input.addEventListener('input',()=>setShot({targets:targets.map(row=>row.participantId===person.id?{...row,dodge:{...(row.dodge||{}),[key]:input.value===''?undefined:Number(input.value)}}:row)}));
                 line.append(input);
@@ -2566,6 +2611,7 @@ export function renderResolutionPanel(options) {
       input.max=String(max);
       input.step='1';
       input.value=current[key]??'';
+      if(['recoilTestRoll','recoilCriticalRolls'].includes(key)){input.dataset.npcRollKey='contextValue';input.dataset.npcRollField=key;input.dataset.npcRollOwnerId=actor.id;}
       input.setAttribute('aria-label',label);
       input.addEventListener('input',()=>handlers.select({v5Context:{...current,...(key==='fuseTurns'?fuseClock:{}),[key]:input.value===''?undefined:Number(input.value)}}));
       wrap.append(input);
@@ -2687,6 +2733,7 @@ export function renderResolutionPanel(options) {
         input.max=String(max);
         input.step='1';
         input.value=current.deafenedTests?.[id]?.[field]??'';
+        if(field==='roll'){input.dataset.npcRollKey='deafenedTests';input.dataset.npcRollOwnerId=id;}
         input.setAttribute('aria-label',row.textContent);
         input.addEventListener('input',()=>handlers.select({v5Context:{...current,deafenedTests:{...(current.deafenedTests||{}),[id]:{...(current.deafenedTests?.[id]||{}),[field]:input.value===''?undefined:Number(input.value)}}}}));
         row.append(input);
@@ -2795,6 +2842,23 @@ export function renderResolutionPanel(options) {
     const isPlayer = participant.kind === 'PJ';
     roll.prepend(node('span', `workspace-roll-owner ${isPlayer ? 'is-pj' : 'is-npc'}`, isPlayer ? 'PJ' : 'PNJ'));
   }
+  for (const item of engagedRolls) rolls.appendChild(item.element);
+  const eligibleRolls = () => emptyNpcRolls([...(section.querySelectorAll?.('[data-npc-roll-key]') || [])].map(input => {
+    const creature = input.dataset.npcRollCreature === 'true';
+    const person = creature ? null : input.dataset.npcRollOwnerId ? participants.find(row => row.id === input.dataset.npcRollOwnerId) : actor;
+    return { field: 'magic', key: input.dataset.npcRollKey, property: input.dataset.npcRollField, subjectId: input.dataset.npcRollSubjectId, personId: person?.id, creature, owner: person?.kind === 'PJ' ? 'PJ' : 'PNJ', value: input.value, disabled: input.disabled || (!person && !creature) };
+  }).concat([...(section.querySelectorAll?.('[data-critical-draft-key]') || [])].map(input => ({ field: 'critical', key: input.dataset.criticalDraftKey, owner: (input.dataset.rollOwner === 'defender' ? target : actor)?.kind === 'PJ' ? 'PJ' : 'PNJ', value: input.value, disabled: input.disabled || !(input.dataset.rollOwner === 'defender' ? target : actor) })).concat([...engagedRolls.map(({ input, person }) => ({ field: 'engaged', personId: person.id, owner: person.kind === 'PJ' ? 'PJ' : 'PNJ', value: input.value, disabled: input.disabled })), ...[['attack', actor], ['defense', target]].map(([field, person]) => {
+    const input = rolls.querySelector?.(`[data-roll-input="${field}"]`);
+    return { field, owner: person?.kind === 'PJ' ? 'PJ' : 'PNJ', value: input?.value, disabled: !input || input.disabled || !person };
+  })])));
+  const rollAll = button('Lancer tous les dés des PNJ', 'workspace-secondary', { 'data-focus-key': 'roll-all-npc' });
+  const refreshRollAll = () => {
+    rollAll.disabled = draft.busy || !canCalculate || !eligibleRolls().length;
+    rollAll.title = draft.busy ? 'Résolution en cours.' : !canCalculate ? 'Action indisponible.' : !eligibleRolls().length ? 'Aucun dé de PNJ vide à lancer.' : 'Lancer les dés de PNJ encore vides puis calculer.';
+  };
+  rollAll.addEventListener('click', () => handlers.rollAll(eligibleRolls()));
+  section.addEventListener('input', refreshRollAll);
+  rolls.prepend(rollAll);
   section.append(rolls, node('p', 'workspace-roll-hint', 'Dés lancés à la table : tapez le résultat dans la case, puis Entrée.'));
   section.lastChild.id = 'workspace-roll-hint';
 
@@ -2923,22 +2987,15 @@ export function renderResolutionPanel(options) {
     }
   }
   section.appendChild(live);
-  let defaults = null;
-  if (!_defaultProbe && section.querySelectorAll) {
-    const defaultDraft = { actorId: actor.id, attackRoll: '', defenseRoll: '', v5Context: {}, defenseContext: {}, protectionContext: {}, criticalErrors: {}, criticalDeclined: [], defenderCriticalDeclined: [], magicTargetTests: {}, magicMountedRideTests: {}, magicSecondaryRolls: {} };
-    const reference = renderResolutionPanel({ ...options, draft: defaultDraft, _defaultProbe: true });
-    defaults = reference.querySelector('.workspace-resolution-drawer');
-  }
-  const contextKey = JSON.stringify([actor.id, selectedKey, type, target?.id || null]);
-  arrangeResolutionSteps(section, { actionBlock, targetBlock, rolls, commands, live, draft, type, drawer, settings, closeDrawer, fieldGroups, defaults, contextKey });
+  refreshRollAll();
+  arrangeResolutionSteps(section, { actionBlock, targetBlock, rolls, commands, live, draft, type, drawer, settings, closeDrawer, fieldGroups });
   return section;
 }
 
 // Organise les contrôles déjà construits sans modifier leurs gestionnaires ni leurs valeurs.
 const otherSettingsState = new WeakMap();
-const conditionalDefaults = new WeakMap();
 
-function arrangeResolutionSteps(section, { actionBlock, targetBlock, rolls, commands, live, draft, type, drawer, settings, closeDrawer, fieldGroups, defaults, contextKey }) {
+function arrangeResolutionSteps(section, { actionBlock, targetBlock, rolls, commands, live, draft, type, drawer, settings, closeDrawer, fieldGroups }) {
   if (!section.insertBefore) return;
   const step = title => {
     const block = node('section', 'workspace-resolution-step');
@@ -2965,16 +3022,8 @@ function arrangeResolutionSteps(section, { actionBlock, targetBlock, rolls, comm
   const backdrop = node('div', 'workspace-circumstances-backdrop');
   const toggle = button('Circonstances', 'workspace-secondary', { 'data-circumstances-toggle': '', 'data-focus-key': 'circumstances-toggle', 'aria-controls': drawer.id });
   const summary = node('p', 'workspace-muted workspace-circumstances-summary');
-  const initial = new Map((defaults ? circumstanceControls(defaults) : []).map(control => [control.key, control.value]));
-  if (!conditionalDefaults.has(draft)) conditionalDefaults.set(draft, new Map());
-  const contexts = conditionalDefaults.get(draft);
-  if (!contexts.has(contextKey)) contexts.set(contextKey, new Map());
-  const conditional = contexts.get(contextKey);
   const refreshSummary = () => {
-    const controls = circumstanceControls(drawer).map(control => {
-      if (!initial.has(control.key) && !conditional.has(control.key)) conditional.set(control.key, control.value);
-      return { ...control, defaultValue: initial.get(control.key) ?? conditional.get(control.key) ?? '' };
-    });
+    const controls = circumstanceControls(drawer);
     const active = controls.filter(control => control.type === 'checkbox' || control.type === 'radio'
       ? control.checked : String(control.value ?? '') !== String(control.defaultValue));
     const count = countActiveCircumstances(controls);

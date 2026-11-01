@@ -19,6 +19,10 @@ export function rollField({ field, label, value, error, handlers, disabled, crit
   input.maxLength = 3;
   input.value = value;
   input.dataset.rollInput = field;
+  if (critical) {
+    input.dataset.criticalDraftKey = CRITICAL_ROLL_KEYS[critical];
+    input.dataset.rollOwner = critical.startsWith('defender') ? 'defender' : 'actor';
+  }
   input.dataset.focusKey = `roll-${field}`;
   input.disabled = disabled;
   input.setAttribute('aria-describedby', error ? `workspace-roll-hint ${id}-error` : 'workspace-roll-hint');
