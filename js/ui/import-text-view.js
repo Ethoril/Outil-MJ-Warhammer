@@ -16,7 +16,17 @@ const REASON_LABELS = {
   'liste-attendue': 'liste attendue',
   'objet-attendu': 'objet { … } attendu',
   'booleen-attendu': 'vrai ou faux attendu',
-  'mot-cle-inconnu': 'mot-clé absent du référentiel (utiliser un terme existant ou le faire ajouter par le MJ)'
+  'mot-cle-inconnu': 'mot-clé absent du référentiel (utiliser un terme existant ou le faire ajouter par le MJ)',
+  'talent-inconnu': 'talent absent du référentiel',
+  'competence-inconnue': 'compétence absente du référentiel',
+  'sort-inconnu': 'sort absent du référentiel',
+  'priere-inconnue': 'prière absente du référentiel',
+  'objet-inconnu': 'objet absent du catalogue d’équipement',
+  'objet-ambigu': 'objet ambigu : précisez la catégorie',
+  'trait-inconnu': 'Trait absent du référentiel',
+  'taille-inconnue': 'Taille inconnue',
+  'specialisation-manquante': 'spécialisation manquante',
+  doublon: 'en double'
 };
 const FIELD_LABELS = { name: 'Nom', kind: 'Type', group: 'Groupe', hp: 'PV', initiative: 'Initiative', notes: 'Notes', tags: 'Mots-clés', keywords: 'Mots-clés de créature', keywordExclusions: 'Mots-clés retirés', base: 'valeur', mod: 'modificateur', valeurs: 'valeur' };
 const MISSING_LABELS = { name: 'nom manquant', hp: 'PV manquants' };
@@ -64,7 +74,7 @@ function reviewItems(parsed) {
     const item = (lines, text) => `${who}${at(lines) ? `, ${at(lines)}` : ''} : ${text}`;
     return [
       ...Object.entries(block.fields).filter(([, value]) => value.status === 'missing').map(([field]) => item([], MISSING_LABELS[field] || `${fieldLabel(field)} manquant`)),
-      ...block.errors.map(error => item(error.line, `${REASON_LABELS[error.reason] || 'valeur à vérifier'} (${fieldLabel(error.field) || 'texte'}${error.value ? ` « ${error.value} »` : ''})`)),
+      ...block.errors.map(error => error.message ? item(error.line, error.message) : item(error.line, `${REASON_LABELS[error.reason] || 'valeur à vérifier'} (${fieldLabel(error.field) || 'texte'}${error.value ? ` « ${error.value} »` : ''})`)),
       ...block.ambiguities.map(ambiguity => item(ambiguity.lines || ambiguity.line, `${REASON_LABELS[ambiguity.reason] || 'valeur ambiguë'} (${fieldLabel(ambiguity.field)})`)),
       ...block.unknownQualities.map(quality => item(quality.line, `qualité inconnue « ${quality.value} » (action ${quality.action})`))
     ];
@@ -86,6 +96,17 @@ function profilePreview(profile) {
   row('Tags', (profile.tags || []).join(', '));
   row('Notes', profile.notes);
   row('Favori', profile.favorite ? 'oui' : '');
+  // Ce que le JSON apporte au-delà des jets : compétences formées, talents, sorts, prières, équipement, Traits et ressources.
+  const names = list => (list || []).map(entry => entry.nom || entry.name).filter(Boolean);
+  const v5 = profile.extensions?.v5 || {};
+  row('Compétences', (profile.skills || []).filter(skill => skill.advances > 0).map(skill => `${skill.name} ${shown(skill.total)}`).join(', '));
+  row('Talents', (profile.talents || []).map(talent => `${talent.name || talent.nom}${talent.rank > 1 ? ` ×${talent.rank}` : ''}`).join(', '));
+  row('Traits', (profile.extensions?.traits || []).join(', '));
+  row('Sorts', names(profile.spells).join(', '));
+  row('Prières', names(profile.prayers).join(', '));
+  row('Équipement', names(profile.equipment).join(', '));
+  row('Ressources', [['Fortune', profile.ficheSnapshot?.resources?.fortune], ['Destin', v5.fate], ['Résilience', v5.resilience], ['Corruption', v5.corruptionPoints], ['Péchés', v5.divine?.sin]]
+    .filter(([, value]) => Number.isInteger(value)).map(([label, value]) => `${label} ${value}`).join(' · '));
   card.appendChild(list);
   if (profile.actions?.length) {
     const actions = document.createElement('ul');

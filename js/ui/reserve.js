@@ -8,11 +8,13 @@ import { renderFicheDetails } from './fiche-details.js';
 import { resolveKeyword } from '../core/reference-catalog.js';
 import { contextMessage } from './messages.js';
 import { createKeywordPicker } from './keyword-picker.js';
+import { exportProfilesJson } from '../core/json-profile-export.js';
 
 export function initReserveUI(Store, { onSaved = () => {} } = {}) {
   const formTitle = qs('#form-title');
   const btnSubmit = qs('#btn-submit-form');
   const btnCancel = qs('#btn-cancel-edit');
+  const btnCopyJson = qs('#btn-copy-profile-json');
   const settle = (operation, label = 'Opération') => Promise.resolve(operation).then(result => { if (result === false || result?.ok === false) throw result?.error || new Error(`${label} impossible.`); return result; }).catch(error => showToast(contextMessage(`${label} impossible`, error, 'réessayez.'), 'error'));
 
   function ensureProfileFields() {
@@ -189,7 +191,7 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
     f.querySelector('#form-dice-list').innerHTML = '';
     (p.diceLines || p.actions || []).forEach(dl => addProfileDiceRow(dl));
 
-    formTitle.textContent = "Modifier le profil"; btnSubmit.textContent = "Modifier"; btnCancel.style.display = 'inline-block';
+    formTitle.textContent = "Modifier le profil"; btnSubmit.textContent = "Modifier"; btnCancel.style.display = 'inline-block'; if (btnCopyJson) btnCopyJson.style.display = 'inline-block';
     f.scrollIntoView({ behavior: "smooth" });
   }
 
@@ -208,10 +210,18 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
     DOM.reserve.form.querySelector('[name=favorite]').checked = false;
     DOM.reserve.form.querySelector('[name=propagate]').checked = false;
     const diceList = DOM.reserve.form.querySelector('#form-dice-list'); if (diceList) diceList.innerHTML = '';
-    formTitle.textContent = "Nouveau profil"; btnSubmit.textContent = "Ajouter"; btnCancel.style.display = 'none';
+    formTitle.textContent = "Nouveau profil"; btnSubmit.textContent = "Ajouter"; btnCancel.style.display = 'none'; if (btnCopyJson) btnCopyJson.style.display = 'none';
   }
 
   on(btnCancel, 'click', resetForm);
+
+  // Le profil enregistré (pas les cases en cours de saisie) au format de « Créer depuis un JSON ».
+  on(btnCopyJson, 'click', async () => {
+    const profile = Store.getProfile(DOM.reserve.form.querySelector('[name=id]').value);
+    if (!profile) return;
+    try { await navigator.clipboard.writeText(exportProfilesJson(profile)); showToast('Profil copié en JSON', 'success'); }
+    catch (error) { showToast(contextMessage('Copie impossible', error, 'autorisez l’accès au presse-papiers, puis réessayez.'), 'error'); }
+  });
 
   on(DOM.reserve.form, 'submit', async (e) => {
     e.preventDefault(); const submit = btnSubmit; if (submit) submit.disabled = true; const fd = new FormData(DOM.reserve.form);
