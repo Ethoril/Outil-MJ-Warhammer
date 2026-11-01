@@ -144,7 +144,7 @@ import { createEncounter, normalizeEncounter, setEncounterEntry, removeEncounter
 import { previewResolution as buildResolutionPreview, applyResolution as applyActionResolution } from './resolution.js';
 import { simulateAction, applySimulation as applyActionSimulation, discardSimulation } from './simulation.js';
 import { deriveReminders, pendingReminders, resolveReminder } from './reminders.js';
-import { createScene, createIntention, createSceneEvent, createSceneClock, proposeSceneEvent, resolveSceneEvent, applySceneEvent, advanceSceneClock } from './scene-events.js';
+import { createScene, createIntention, createSceneEvent, createSceneClock, proposeSceneEvent, newlyProposedSceneEvents, resolveSceneEvent, applySceneEvent, advanceSceneClock } from './scene-events.js';
 import { sharedState, sameSharedState } from './sync-protocol.js';
 import { applyFicheSync as applyFicheSyncToDraft } from './fiche-sync.js';
 import { convertLegacyV4Profile } from './v5-legacy-conversion.js';
@@ -169,6 +169,7 @@ import { createV5CombatActionsApi } from './store/api-v5-combat-actions.js';
 
 
 export function createStore({ storage = typeof localStorage !== 'undefined' ? localStorage : null, sync = null, persistence = null, persistenceFactory = null, contextId = 'guest', divineAuthority = 'MJ', appVersion = 'unknown', bus = null, now = () => new Date().toLocaleTimeString(), onSyncStatus = null, onLocalStatus = null, onReady = null } = {}) {
+  const seenSceneEventOccurrences = new Set();
   const CLIENT_ID = (typeof crypto !== 'undefined' && crypto.randomUUID) ? crypto.randomUUID() : uid();
 
   let reserve = new Map();
@@ -1511,6 +1512,7 @@ function resolvedCorruptionTest(participant, skillId, input) {
               localRevision = nextRevision;
               pendingProtocolState = Boolean(persistedState.syncPending);
               applyDataToState(after, { includeLog: true, includeHistory: false });
+              for (const proposal of newlyProposedSceneEvents(before.activeScene, after.activeScene, seenSceneEventOccurrences)) emitBus('scene:event-proposed', proposal);
               emitBus('reserve');
               emitBus('combat');
               emitBus('log');
@@ -1549,6 +1551,7 @@ function resolvedCorruptionTest(participant, skillId, input) {
           historyState = nextHistory;
           localRevision = nextRevision;
           applyDataToState(after, { includeLog: true, includeHistory: false });
+          for (const proposal of newlyProposedSceneEvents(before.activeScene, after.activeScene, seenSceneEventOccurrences)) emitBus('scene:event-proposed', proposal);
           const persisted = save(true);
           emitBus('reserve');
           emitBus('combat');
@@ -5007,7 +5010,7 @@ function resolvedCorruptionTest(participant, skillId, input) {
           throw error;
         }
         semanticResult = result;
-        return { ...draft, activeScene: result.scene };
+        return { ...draft, activeScene: result.scene, log: [{ id: uid(), ts: Date.now(), kind: 'management', text: `Événement appliqué : ${event.id}${result.result.note ? ` · ${result.result.note}` : ''}`, detail: { kind: 'scene-event', occurrenceId: result.occurrenceId } }, ...(draft.log || [])].slice(0, 300) };
       });
       return Promise.resolve(commit).then(persisted => {
         if (persisted?.ok === false) return { status: 'error', reason: 'Événement non sauvegardé' };

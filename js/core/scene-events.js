@@ -85,6 +85,24 @@ export function proposeSceneEvent(scene, event, options = {}) {
   return { status: 'proposed', evaluation, event: clone(event), consequence: clone(event.consequence) };
 }
 
+/** Report newly true automatic occurrences once, without applying them. */
+export function newlyProposedSceneEvents(before, after, seen = new Set()) {
+  if (!after) return [];
+  const previous = before?.id === after.id ? before : null;
+  const found = [];
+  for (const event of after.events || []) {
+    if (event.condition?.type === 'manual') continue;
+    const proposal = proposeSceneEvent(after, event);
+    if (proposal.status !== 'proposed' || seen.has(proposal.evaluation.occurrenceId)) continue;
+    const oldEvent = previous?.events?.find(item => item.id === event.id);
+    const oldProposal = oldEvent && proposeSceneEvent(previous, oldEvent);
+    if (oldProposal?.status === 'proposed' && oldProposal.evaluation.occurrenceId === proposal.evaluation.occurrenceId) continue;
+    seen.add(proposal.evaluation.occurrenceId);
+    found.push(proposal);
+  }
+  return found;
+}
+
 /** Mark one occurrence resolved exactly once, without executing its consequence. */
 export function resolveSceneEvent(scene, event) {
   const evaluation = evaluateSceneEvent(scene, event, { manual: true });

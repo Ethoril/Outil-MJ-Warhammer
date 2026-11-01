@@ -1138,6 +1138,8 @@ function openRemindersView() {
 // « À traiter » de Jouer : rappels en attente et événements proposés, rien sinon.
 // L'aperçu d'un événement survit aux re-rendus de la vue (clé : id de l'événement).
 const sceneEventPreviews = new Map();
+const sceneEventAlerts = new Set();
+Bus.on('scene:event-proposed', proposal => { sceneEventAlerts.add(proposal.evaluation.occurrenceId); });
 const TURN_REMINDER_KINDS = ['endTurn', 'startTurn'];
 function renderWorkspaceOverview(content) {
   if (!content) return;
@@ -1168,7 +1170,22 @@ function renderWorkspaceOverview(content) {
     const proposal = Store.previewSceneEvent?.(event, { manual: true });
     if (proposal?.status !== 'proposed') return;
     const row = document.createElement('div'); row.className = 'workspace-pending-row';
-    const label = document.createElement('span'); label.textContent = readableSceneEvent(event, scene); row.appendChild(label);
+    const alerting = sceneEventAlerts.has(proposal.evaluation.occurrenceId);
+    const label = document.createElement('span'); label.textContent = `${alerting ? 'Condition remplie : ' : ''}${readableSceneEvent(event, scene)}`; row.appendChild(label);
+    if (alerting) {
+      const summary = document.createElement('p'); summary.className = 'muted';
+      summary.textContent = `Conséquence proposée : ${sceneEventParts(event, scene).consequenceText}`;
+      row.append(summary, smallButton('Appliquer', async () => {
+        const current = Store.previewSceneEvent(event);
+        const result = await Store.applySceneEvent(event, { baseRevision: current.baseRevision, sceneRevision: current.sceneRevision, confirmed: true });
+        if (result?.status !== 'applied') throw userError('Événement non appliqué : actualisez la conséquence.');
+        sceneEventAlerts.delete(proposal.evaluation.occurrenceId);
+        showToast('Conséquence appliquée', 'success');
+        renderWorkspaceOverview(content);
+      }), smallButton('Plus tard', async () => { sceneEventAlerts.delete(proposal.evaluation.occurrenceId); renderWorkspaceOverview(content); }));
+      content.appendChild(row);
+      return;
+    }
     const preview = sceneEventPreviews.get(event.id);
     if (!preview) {
       row.appendChild(smallButton('Voir la conséquence', async () => {
@@ -1238,6 +1255,7 @@ function openEventsView() {
     if (scene.events.length) scene.events.forEach(item => valueInput.appendChild(new Option(`Événement : ${item.id}`, item.id)));
     const chooser = document.createElement('p'); chooser.className = 'muted'; chooser.textContent = 'Les listes affichent les noms ; les identifiants restent internes.'; form.appendChild(chooser);
     const previewMount = document.createElement('div'); previewMount.className = 'scene-event-preview';
+    const eventList = document.createElement('div');
     const showPreview = (eventModel, preview) => {
       previewMount.replaceChildren();
       const box = document.createElement('div'); box.className = 'card';
@@ -1267,6 +1285,7 @@ function openEventsView() {
           ? awaitStore(Store.saveSceneEvent(eventModel), 'Événement')
           : awaitStore(requireStoreApi('executeCommand')('create-scene-event', draft => ({ ...draft, activeScene: { ...draft.activeScene, events: [...(draft.activeScene?.events || []), eventModel] } })), 'Événement');
         await saved;
+        renderEventList();
         const preview = await requireStoreApi('previewSceneEvent')(eventModel, { manual: true });
         showPreview(eventModel, preview); showToast('Événement enregistré : vérifiez l’aperçu avant de l’appliquer', 'info');
       } catch (error) { showToast(contextMessage('Événement non enregistré', error, 'vérifiez l’identifiant, la condition et la cible.'), 'error'); } finally { submit.disabled = false; }
@@ -1294,14 +1313,44 @@ function openEventsView() {
       const advance = document.createElement('button'); advance.type = 'button'; advance.className = 'ghost small'; advance.textContent = '+1';
       advance.addEventListener('click', async () => { advance.disabled = true; try { await awaitStore(requireStoreApi('advanceSceneClock')(clock.id, 1), 'Jauge'); showToast(`Jauge ${clock.id} avancée`, 'success'); } catch (error) { advance.disabled = false; showToast(contextMessage('Jauge non avancée', error, 'réessayez.'), 'error'); } }); row.appendChild(advance); mount.appendChild(row);
     });
-    if (!scene.events.length) { const empty = document.createElement('p'); empty.textContent = 'Aucun événement structuré dans cette séance.'; mount.appendChild(empty); return; }
-    scene.events.forEach(event => {
-      const proposal = proposeSceneEvent(scene, event, { manual: event.condition?.type === 'manual' });
+    mount.appendChild(eventList);
+    function renderEventList() {
+      const current = Store.getActiveScene();
+      scene.events = current?.events || [];
+      eventList.replaceChildren();
+      if (!scene.events.length) { const empty = document.createElement('p'); empty.textContent = 'Aucun événement structuré dans cette séance.'; eventList.appendChild(empty); return; }
+      scene.events.forEach(event => {
+      const proposal = Store.previewSceneEvent(event, { manual: event.condition?.type === 'manual' });
       const row = document.createElement('div'); row.className = 'card';
-      const label = document.createElement('p'); label.textContent = `${event.id} · ${sceneStatusLabels[proposal.status] || 'À vérifier'}`; row.appendChild(label);
-      if (proposal.status === 'proposed') { const resolve = document.createElement('button'); resolve.type = 'button'; resolve.textContent = 'Voir la conséquence'; resolve.addEventListener('click', async () => { resolve.disabled = true; try { const preview = await requireStoreApi('previewSceneEvent')(event, { manual: true }); showPreview(event, preview); } catch (error) { showToast(contextMessage('Aperçu impossible', error, 'réessayez.'), 'error'); } finally { resolve.disabled = false; } }); row.appendChild(resolve); }
-      mount.appendChild(row);
-    });
+      const label = document.createElement('p'); label.textContent = `${readableSceneEvent(event, current)} · ${sceneStatusLabels[proposal.status] || 'À vérifier'}`; row.appendChild(label);
+      const open = document.createElement('button'); open.type = 'button'; open.textContent = 'Ouvrir';
+      open.addEventListener('click', () => showPreview(event, Store.previewSceneEvent(event, { manual: true })));
+      const edit = document.createElement('button'); edit.type = 'button'; edit.textContent = 'Modifier';
+      edit.addEventListener('click', () => {
+        form.elements.id.value = event.id;
+        conditionSelect.value = event.condition.type;
+        consequenceSelect.value = event.consequence.type;
+        refreshFields();
+        valueInput.value = event.condition.participantId || (event.condition.occurrenceId || '').replace(`${scene.id}:`, '').replace(/:once$/, '');
+        roundInput.value = event.condition.round ?? '';
+        hpInput.value = event.condition.hp ?? '';
+        targetSelect.value = event.consequence.participantId || event.consequence.clockId || '';
+        textInput.value = event.consequence.text || event.consequence.name || event.consequence.clockId || '';
+        amountInput.value = event.consequence.level ?? event.consequence.amount ?? 1;
+        durationInput.value = event.consequence.duration ?? '';
+        form.elements.recurring.checked = event.recurring;
+        form.scrollIntoView({ block: 'start' });
+        form.elements.id.focus();
+      });
+      const remove = document.createElement('button'); remove.type = 'button'; remove.textContent = 'Supprimer';
+      const confirm = document.createElement('button'); confirm.type = 'button'; confirm.textContent = 'Confirmer la suppression'; confirm.hidden = true;
+      remove.addEventListener('click', () => { confirm.hidden = false; });
+      confirm.addEventListener('click', async () => { try { await awaitStore(Store.deleteSceneEvent(event.id), 'Suppression'); renderEventList(); } catch (error) { showToast(userMessage(error, 'Suppression impossible.'), 'error'); } });
+      row.append(open, edit, remove, confirm);
+      eventList.appendChild(row);
+      });
+    }
+    renderEventList();
   });
 }
 

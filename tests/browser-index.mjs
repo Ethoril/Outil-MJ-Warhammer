@@ -431,7 +431,29 @@ async function main() {
     await page.locator('#workspace-events').click();
     eventsOverlay = page.getByRole('dialog');
     await expect(eventsOverlay).toContainText('horloge-recette · 1/3');
+    const hpTarget = await page.evaluate(async () => { const { Store } = await import('/js/main.js'); return Store.listParticipants()[0]; });
+    const hpEventForm = eventsOverlay.locator('form').filter({ hasText: 'Créer un événement structuré' });
+    await hpEventForm.locator('[name=id]').fill('evt-seuil-recette');
+    await hpEventForm.locator('[name=condition]').selectOption('hpBelow');
+    await hpEventForm.locator('[name=value]').selectOption(hpTarget.id);
+    await hpEventForm.locator('[name=hp]').fill(String(hpTarget.hp));
+    await hpEventForm.locator('[name=consequence]').selectOption('note');
+    await hpEventForm.locator('[name=text]').fill('Le garde appelle à l’aide');
+    await hpEventForm.getByRole('button', { name: 'Enregistrer et prévisualiser' }).click();
+    const hpEventRow = eventsOverlay.locator('.card').filter({ hasText: 'Le garde appelle à l’aide' }).last();
+    await hpEventRow.getByRole('button', { name: 'Ouvrir' }).click();
+    await expect(eventsOverlay.locator('.scene-event-preview')).toContainText('Le garde appelle à l’aide');
+    await hpEventRow.getByRole('button', { name: 'Modifier' }).click();
+    await expect(hpEventForm.locator('[name=text]')).toHaveValue('Le garde appelle à l’aide');
+    await hpEventForm.locator('[name=text]').fill('Le garde appelle ses alliés');
+    await hpEventForm.getByRole('button', { name: 'Enregistrer et prévisualiser' }).click();
     await eventsOverlay.getByRole('button', { name: 'Fermer' }).click();
+    await page.evaluate(async id => { const { Store } = await import('/js/main.js'); const actor = Store.listParticipants().find(row => row.id === id); await Store.updateParticipant(id, { hp: actor.hp - 1 }); }, hpTarget.id);
+    const alertRow = page.locator('.workspace-pending-row').filter({ hasText: 'Condition remplie' }).filter({ hasText: 'Le garde appelle ses alliés' });
+    await expect(alertRow).toBeVisible();
+    await alertRow.getByRole('button', { name: 'Appliquer', exact: true }).click();
+    await expect(page.locator('#toast-container')).toContainText('Conséquence appliquée');
+    assert.ok(await page.evaluate(async () => { const { Store } = await import('/js/main.js'); return Store.getLog().some(row => JSON.stringify(row).includes('Le garde appelle ses alliés')); }));
 
     // E16 : choisir une cible parmi les quinze dans la piste, calculer sans
     // appliquer (aucun PV ne bouge), puis appliquer exactement ce résultat.
