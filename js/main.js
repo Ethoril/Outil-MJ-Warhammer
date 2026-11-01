@@ -688,6 +688,7 @@ function openOverlay(title, build, { nested = false } = {}) {
   const active = document.activeElement;
   const opener = previous && (!active || previous.contains(active)) ? previous.returnFocus : focusMemo(active);
   if (!nested) previous?.close({ restoreFocus: false });
+  else if (previous) previous.inert = true;
 
   const dialog = document.createElement('dialog');
   dialog.className = 'tool-sheet';
@@ -712,11 +713,12 @@ function openOverlay(title, build, { nested = false } = {}) {
   close.addEventListener('click', () => dialog.close());
   document.body.appendChild(dialog);
   openSheet = dialog;
-  try { build(mount, dialog); } catch (error) { dialog.remove(); openSheet = null; throw error; }
+  try { build(mount, dialog); } catch (error) { dialog.remove(); if (nested && previous) previous.inert = false; openSheet = nested ? previous : null; throw error; }
   dialog.show();
   (mount.querySelector('[autofocus]') || Array.from(mount.querySelectorAll(FOCUSABLE)).find(item => !item.disabled && item.checkVisibility()) || close).focus();
   dialog.addEventListener('close', () => {
     dialog.remove();
+    if (nested && previous) previous.inert = false;
     if (openSheet === dialog) openSheet = nested && previous?.isConnected ? previous : null;
     if (!restoreFocus) return;
     // Une commande du menu ⋯ n'est plus visible : le focus revient au bouton du menu.
