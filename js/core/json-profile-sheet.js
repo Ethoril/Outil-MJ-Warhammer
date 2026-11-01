@@ -167,7 +167,8 @@ function parseEquipment(value, ref, errors, tools) {
     out.push(cloneValue(count === 1 ? item : { ...item, id: `${item.baseId}:${count}` }));
   };
   for (const item of Array.isArray(value) ? value : []) {
-    if (isRecord(item) && typeof item.id === 'string') { out.push(cloneValue(item)); continue; }
+    // Objet complet { id, kind, name, … } (export d'un objet hors catalogue) ; avec `nom`, c'est un nom à chercher.
+    if (isRecord(item) && typeof item.id === 'string' && !Object.keys(item).some(name => tools.normKey(name) === 'nom')) { out.push(cloneValue(item)); continue; }
     const read = readItem(item, ITEM_KEYS, tools, 'équipement', errors);
     if (!read) continue;
     const matches = byName.get(strict(read.name)) || [];
@@ -213,8 +214,13 @@ function parseTraits(value, size, ref, errors, tools) {
  * Seule la forme interne reconnaissable des sauvegardes est reprise telle quelle : objets `{ id | baseId, … }` (talents, compétences, équipement)
  * et objets `{ nom }` sous la clé anglaise (sorts, prières). Tout le reste passe par la même validation que les clés françaises.
  */
-const isInternalItem = (key, item, spelled) => isRecord(item)
-  && (key === 'spells' || key === 'prayers' ? !spelled[key] && typeof item.nom === 'string' : typeof item.id === 'string' || typeof item.baseId === 'string');
+const isInternalItem = (key, item, spelled, tools) => {
+  if (!isRecord(item)) return false;
+  if (key === 'spells' || key === 'prayers') return !spelled[key] && typeof item.nom === 'string';
+  // Champs internes (`name`, pas `nom`) et clé anglaise : sous une clé française ou avec `nom`, l'élément est validé.
+  if (spelled[key] || Object.keys(item).some(name => tools.normKey(name) === 'nom')) return false;
+  return typeof item.id === 'string' || typeof item.baseId === 'string';
+};
 
 /**
  * Données de fiche d'un profil JSON. `input` : valeurs lues (clés canoniques `skills`, `talents`, `traits`, `size`, `spells`, `prayers`,
@@ -227,8 +233,8 @@ export function buildProfileSheet(input, { caracs, name, hp, hasArmor, spelled }
   const pending = {};
   for (const key of lists) {
     if (!Array.isArray(input[key])) { pending[key] = input[key]; continue; }
-    kept[key] = input[key].filter(item => isInternalItem(key, item, spelled));
-    pending[key] = input[key].filter(item => !isInternalItem(key, item, spelled));
+    kept[key] = input[key].filter(item => isInternalItem(key, item, spelled, tools));
+    pending[key] = input[key].filter(item => !isInternalItem(key, item, spelled, tools));
   }
   const french = lists.filter(key => input[key] !== undefined && (Array.isArray(input[key]) ? pending[key].length : true) && !(Array.isArray(input[key]) && !input[key].length));
   const numbers = ['fortune', 'fate', 'resilience', 'corruption', 'sin'].filter(key => input[key] !== undefined && input[key] !== null);
@@ -270,7 +276,21 @@ export function buildProfileSheet(input, { caracs, name, hp, hasArmor, spelled }
   if (Object.keys(links).length) plan = planProfileSync(snapshot, base, { equipmentLinks: links });
   const updated = plan.updated;
   for (const row of plan.equipmentActions) if (row.action.base === '' && row.role === 'attack') errors.push({ field: 'équipement', reason: 'arme-sans-base', value: row.name, message: `Arme « ${row.name} » : aucune compétence liée avec une base (ajoutez la compétence de l’arme dans competences, avec sa caractéristique).` });
-  for (const key of lists) if (snapshot.coverage?.[key] === 'present') result.fields[key] = [...cloneValue(updated[key]), ...cloneValue(kept[key] || [])];
+  for (const key of lists) if (snapshot.coverage?.[key] === 'present') {
+    const rows = cloneValue(updated[key]);
+    // Les éléments internes reprennent leur place d'origine parmi les éléments validés.
+    const original = Array.isArray(input[key]) ? input[key] : [];
+    for (const item of kept[key] || []) {
+      const twin = key === 'talents' ? rows.find(row => row.id === item.id && (row.specialization || null) === (item.specialization || null)) : null;
+      if (twin) {
+        twin.rank = Math.max(twin.rank || 1, item.rank || 1);
+        errors.push({ field: 'talents', reason: 'doublon', value: item.name || item.id, message: `Talent en double : « ${item.name || item.id} » (texte et forme interne) ; rang le plus haut gardé.` });
+        continue;
+      }
+      rows.splice(Math.min(original.indexOf(item), rows.length), 0, cloneValue(item));
+    }
+    result.fields[key] = rows;
+  }
   result.fields.ficheSnapshot = cloneValue(updated.ficheSnapshot);
   // Pas d'identité de fiche : chaque copie en combat garde ses propres ressources, comme un profil sans fiche (les jets d'équipement portent leur identifiant).
   result.fields.ficheSnapshot.charId = '';

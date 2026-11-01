@@ -176,6 +176,30 @@ describe('Import JSON : clés françaises, alias et clés anglaises', () => {
     assert.ok(profile.talents.some(talent => talent.id === 'talent-hardy'), 'objet interne repris');
   });
 
+  test('la forme interne n’est reconnue que sous la clé anglaise et avec ses champs internes ; un id ne dispense pas de la validation', () => {
+    const talent = importOne(JSON.stringify({ ...base, talents: [{ id: 't1', nom: 'Combat instincif' }] }));
+    assert.match(warningsOf(talent).join(' | '), /Talent inconnu : « Combat instincif » — vouliez-vous « Combat instinctif »/);
+    const skill = importOne(JSON.stringify({ ...base, competences: [{ id: 's', nom: 'Priere', avances: 2 }] }));
+    assert.match(warningsOf(skill).join(' | '), /Compétence inconnue : « Priere » — vouliez-vous « Prière »/);
+    const ok = importOne(JSON.stringify({ ...base, talents: [{ id: 't1', nom: 'Combat instinctif' }] }));
+    assert.ok(ok.profiles[0].talents.some(row => row.id === 'talent-combat-reflexes'), 'résolu, pas brut');
+    const equipment = importOne(JSON.stringify({ ...base, equipement: [{ id: 'x', baseId: 'y', nom: 'Arbalete (2M)' }] }));
+    assert.match(warningsOf(equipment).join(' | '), /Objet inconnu : « Arbalete \(2M\) »/);
+  });
+
+  test('un talent donné en texte et en forme interne est fusionné (rang le plus haut) et signalé', () => {
+    const result = importOne(JSON.stringify({ ...base, talents: ['Dur à cuire', { id: 'talent-hardy', name: 'Dur à cuire', rank: 2, status: 'resolved' }] }));
+    const rows = result.profiles[0].talents.filter(row => row.id === 'talent-hardy');
+    assert.equal(rows.length, 1);
+    assert.equal(rows[0].rank, 2);
+    assert.match(warningsOf(result).join(' | '), /Talent en double : « Dur à cuire »/);
+  });
+
+  test('une liste mixte garde son ordre d’origine', () => {
+    const result = importOne(JSON.stringify({ ...base, spells: [{ nom: 'Maison' }, 'Purification', { nom: 'Autre maison' }, 'Brise-os'] }));
+    assert.deepEqual(result.profiles[0].spells.map(spell => spell.nom), ['Maison', 'Purification', 'Autre maison', 'Brise-os']);
+  });
+
   test('une clé française et sa clé anglaise ensemble sont signalées', () => {
     const result = importOne(JSON.stringify({ ...base, competences: ['Prière'], skills: [], sorts: ['Purification'], spells: [{ nom: 'Purification' }] }));
     assert.deepEqual(result.errors.map(error => error.reason), ['cles-concurrentes', 'cles-concurrentes']);
