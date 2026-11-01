@@ -207,10 +207,11 @@ test('JSON — l’exemple complet est prêt et remplit chaque case', () => {
   const [halberd, crossbow, dodge, skill] = profile.actions;
   assert.deepEqual([halberd.name, halberd.note, halberd.type, halberd.base, halberd.mod, halberd.damage, halberd.damageFormula], ['Hallebarde', 'Hallebarde', 'attack', 45, 0, 4, 'BF+4']);
   assert.deepEqual(halberd.qualities, [{ id: 'percutante', name: 'Percutante' }]);
-  assert.deepEqual([crossbow.damage, 'damageFormula' in crossbow, crossbow.mod, crossbow.valuesX, crossbow.capacity], [9, false, -10, null, null]);
+  // Modificateurs en DR V5 (C8) : jamais l'ancien seuil `mod`.
+  assert.deepEqual([crossbow.damage, 'damageFormula' in crossbow, crossbow.mod, crossbow.extensions.v5.slModifier, crossbow.valuesX, crossbow.capacity], [9, false, 0, -1, null, null]);
   assert.deepEqual(crossbow.qualities, [{ id: 'recharge', name: 'Recharge X', rating: 1 }]);
   assert.deepEqual([dodge.type, dodge.base, 'damage' in dodge, dodge.valuesX, dodge.capacity], ['defense', 38, false, null, null]);
-  assert.deepEqual([skill.type, skill.mod], ['skill', 10]);
+  assert.deepEqual([skill.type, skill.mod, skill.extensions.v5.slModifier], ['skill', 0, 1]);
 });
 
 test('JSON — qualité avec valeur, formule de dégâts, caracs supplémentaires', () => {

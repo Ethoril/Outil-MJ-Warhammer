@@ -1,7 +1,7 @@
 {
   "format": "outil-mj-profil",
   "version": 1,
-  "_propositions": "Cas d’essai de la correction de l’import JSON. Clés françaises proposées en plus du format actuel : competences [{nom, avances}], talents [{nom, specialisation, rang}], sorts [nom], prieres [nom], fortune, destin, resilience, corruption, peches.",
+  "_note": "Profils de recette complets, importables tels quels (voir docs/IMPORT_PROFILS_JSON.md) : competences [{nom, avances}], talents [{nom, specialisation, rang}], sorts [nom], prieres [nom], fortune, destin, resilience, corruption, peches.",
   "profils": [
     {
       "nom": "Recette Prêtre de Ulric",

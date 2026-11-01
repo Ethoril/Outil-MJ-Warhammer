@@ -1,0 +1,13 @@
+{
+  "format": "outil-mj-profil",
+  "version": 1,
+  "nom": "Recette Archer",
+  "type": "PNJ",
+  "groupe": "Recette",
+  "pv": 12,
+  "initiative": 45,
+  "caracteristiques": { "CC": 35, "CT": 50, "F": 35, "E": 35, "I": 45, "Ag": 45, "Dex": 40, "Int": 35, "FM": 35, "Soc": 30 },
+  "competences": [{ "nom": "Projectiles (Arc)", "avances": 10 }],
+  "equipement": ["Arc elfique (2M)", "Arc d'Anirain Haut Elfe", "Arbalète (2M)", "Calotte de cuir"],
+  "notes": "G-ARM-2 : arc elfique, arc d'Anirain et arbalète du catalogue d'équipement (les trois jets viennent de l'équipement)."
+}

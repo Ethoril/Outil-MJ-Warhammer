@@ -1,0 +1,946 @@
+{
+ "status": "ready",
+ "profiles": [
+  {
+   "name": "Recette PJ Alpha",
+   "kind": "PJ",
+   "group": "Recette",
+   "hp": 14,
+   "initiative": 45,
+   "caracs": {
+    "CC": 50,
+    "CT": 35,
+    "F": 35,
+    "E": 35,
+    "I": 45,
+    "Ag": 35,
+    "Dex": 35,
+    "Int": 35,
+    "FM": 35,
+    "Soc": 30
+   },
+   "armor": {
+    "head": 1,
+    "body": 2,
+    "arms": 1,
+    "legs": 1
+   },
+   "tags": [],
+   "notes": "Initiative 45 comme Beta : égalité au Test opposé d’Initiative (G-INI-2). Deux armes à une main (G-ATT-6).",
+   "favorite": false,
+   "actions": [
+    {
+     "name": "Épée",
+     "note": "Épée",
+     "type": "attack",
+     "base": 50,
+     "mod": 0,
+     "damage": 4,
+     "damageFormula": "BF+4",
+     "qualities": [
+      {
+       "id": "pointue",
+       "name": "Pointue"
+      }
+     ],
+     "valuesX": null,
+     "capacity": null
+    },
+    {
+     "name": "Dague (main secondaire)",
+     "note": "Dague (main secondaire)",
+     "type": "attack",
+     "base": 45,
+     "mod": 0,
+     "damage": 2,
+     "damageFormula": "BF+2",
+     "qualities": [
+      {
+       "id": "parade",
+       "name": "Parade"
+      }
+     ],
+     "valuesX": null,
+     "capacity": null
+    },
+    {
+     "name": "Esquive",
+     "note": "Esquive",
+     "type": "defense",
+     "base": 35,
+     "mod": 0,
+     "qualities": [],
+     "valuesX": null,
+     "capacity": null
+    },
+    {
+     "name": "Calme",
+     "note": "Calme",
+     "type": "skill",
+     "base": 35,
+     "mod": 0,
+     "qualities": [],
+     "valuesX": null,
+     "capacity": null
+    }
+   ]
+  },
+  {
+   "name": "Recette PJ Beta",
+   "kind": "PJ",
+   "group": "Recette",
+   "hp": 12,
+   "initiative": 45,
+   "caracs": {
+    "CC": 45,
+    "CT": 35,
+    "F": 35,
+    "E": 35,
+    "I": 45,
+    "Ag": 35,
+    "Dex": 35,
+    "Int": 35,
+    "FM": 35,
+    "Soc": 30
+   },
+   "armor": {
+    "head": 0,
+    "body": 1,
+    "arms": 0,
+    "legs": 0
+   },
+   "tags": [],
+   "notes": "Même Initiative qu’Alpha.",
+   "favorite": false,
+   "actions": [
+    {
+     "name": "Épée courte",
+     "note": "Épée courte",
+     "type": "attack",
+     "base": 45,
+     "mod": 0,
+     "damage": 3,
+     "damageFormula": "BF+3",
+     "qualities": [],
+     "valuesX": null,
+     "capacity": null
+    },
+    {
+     "name": "Esquive",
+     "note": "Esquive",
+     "type": "defense",
+     "base": 35,
+     "mod": 0,
+     "qualities": [],
+     "valuesX": null,
+     "capacity": null
+    }
+   ]
+  },
+  {
+   "name": "Recette Milicien 1",
+   "kind": "PNJ",
+   "group": "Recette",
+   "hp": 11,
+   "initiative": 35,
+   "caracs": {
+    "CC": 38,
+    "CT": 35,
+    "F": 35,
+    "E": 35,
+    "I": 35,
+    "Ag": 35,
+    "Dex": 35,
+    "Int": 35,
+    "FM": 35,
+    "Soc": 30
+   },
+   "armor": {
+    "head": 0,
+    "body": 1,
+    "arms": 0,
+    "legs": 0
+   },
+   "tags": [
+    "humain"
+   ],
+   "notes": "",
+   "favorite": false,
+   "actions": [
+    {
+     "name": "Lance",
+     "note": "Lance",
+     "type": "attack",
+     "base": 38,
+     "mod": 0,
+     "damage": 3,
+     "damageFormula": "BF+3",
+     "qualities": [],
+     "valuesX": null,
+     "capacity": null
+    },
+    {
+     "name": "Esquive",
+     "note": "Esquive",
+     "type": "defense",
+     "base": 33,
+     "mod": 0,
+     "qualities": [],
+     "valuesX": null,
+     "capacity": null
+    }
+   ],
+   "keywords": [
+    "humain"
+   ]
+  },
+  {
+   "name": "Recette Milicien 2",
+   "kind": "PNJ",
+   "group": "Recette",
+   "hp": 11,
+   "initiative": 35,
+   "caracs": {
+    "CC": 38,
+    "CT": 35,
+    "F": 35,
+    "E": 35,
+    "I": 35,
+    "Ag": 35,
+    "Dex": 35,
+    "Int": 35,
+    "FM": 35,
+    "Soc": 30
+   },
+   "armor": {
+    "head": 0,
+    "body": 1,
+    "arms": 0,
+    "legs": 0
+   },
+   "tags": [
+    "humain"
+   ],
+   "notes": "",
+   "favorite": false,
+   "actions": [
+    {
+     "name": "Lance",
+     "note": "Lance",
+     "type": "attack",
+     "base": 38,
+     "mod": 0,
+     "damage": 3,
+     "damageFormula": "BF+3",
+     "qualities": [],
+     "valuesX": null,
+     "capacity": null
+    },
+    {
+     "name": "Esquive",
+     "note": "Esquive",
+     "type": "defense",
+     "base": 33,
+     "mod": 0,
+     "qualities": [],
+     "valuesX": null,
+     "capacity": null
+    }
+   ],
+   "keywords": [
+    "humain"
+   ]
+  },
+  {
+   "name": "Recette Milicien 3",
+   "kind": "PNJ",
+   "group": "Recette",
+   "hp": 11,
+   "initiative": 35,
+   "caracs": {
+    "CC": 38,
+    "CT": 35,
+    "F": 35,
+    "E": 35,
+    "I": 35,
+    "Ag": 35,
+    "Dex": 35,
+    "Int": 35,
+    "FM": 35,
+    "Soc": 30
+   },
+   "armor": {
+    "head": 0,
+    "body": 1,
+    "arms": 0,
+    "legs": 0
+   },
+   "tags": [
+    "humain"
+   ],
+   "notes": "",
+   "favorite": false,
+   "actions": [
+    {
+     "name": "Lance",
+     "note": "Lance",
+     "type": "attack",
+     "base": 38,
+     "mod": 0,
+     "damage": 3,
+     "damageFormula": "BF+3",
+     "qualities": [],
+     "valuesX": null,
+     "capacity": null
+    },
+    {
+     "name": "Esquive",
+     "note": "Esquive",
+     "type": "defense",
+     "base": 33,
+     "mod": 0,
+     "qualities": [],
+     "valuesX": null,
+     "capacity": null
+    }
+   ],
+   "keywords": [
+    "humain"
+   ]
+  },
+  {
+   "name": "Recette Armurier",
+   "kind": "PNJ",
+   "group": "Recette",
+   "hp": 16,
+   "initiative": 40,
+   "caracs": {
+    "CC": 55,
+    "CT": 55,
+    "F": 35,
+    "E": 35,
+    "I": 40,
+    "Ag": 35,
+    "Dex": 35,
+    "Int": 35,
+    "FM": 35,
+    "Soc": 30
+   },
+   "armor": {
+    "head": 2,
+    "body": 2,
+    "arms": 2,
+    "legs": 2
+   },
+   "tags": [],
+   "notes": "Une arme par Qualité des parcours G-ARM : Pointue, Imprécise, Taille, Entaille, Pistolet, À répétition, Explosion, Dispersion, poudre noire, Recharge. Filet à crochets : cocher la confirmation MJ dans la résolution (G-ARM-7). Arcs elfiques et d’Anirain : voir « Ce que l’import JSON ne porte pas ».",
+   "favorite": false,
+   "actions": [
+    {
+     "name": "Épée Pointue",
+     "note": "Épée Pointue",
+     "type": "attack",
+     "base": 55,
+     "mod": 0,
+     "damage": 4,
+     "damageFormula": "BF+4",
+     "qualities": [
+      {
+       "id": "pointue",
+       "name": "Pointue"
+      }
+     ],
+     "valuesX": null,
+     "capacity": null
+    },
+    {
+     "name": "Dague Imprécise",
+     "note": "Dague Imprécise",
+     "type": "attack",
+     "base": 55,
+     "mod": 0,
+     "damage": 2,
+     "damageFormula": "BF+2",
+     "qualities": [
+      {
+       "id": "imprecise",
+       "name": "Imprécise"
+      }
+     ],
+     "valuesX": null,
+     "capacity": null
+    },
+    {
+     "name": "Fleuret Pointue et Imprécise",
+     "note": "Fleuret Pointue et Imprécise",
+     "type": "attack",
+     "base": 55,
+     "mod": 0,
+     "damage": 3,
+     "damageFormula": "BF+3",
+     "qualities": [
+      {
+       "id": "pointue",
+       "name": "Pointue"
+      },
+      {
+       "id": "imprecise",
+       "name": "Imprécise"
+      }
+     ],
+     "valuesX": null,
+     "capacity": null
+    },
+    {
+     "name": "Hache à Taille",
+     "note": "Hache à Taille",
+     "type": "attack",
+     "base": 55,
+     "mod": 0,
+     "damage": 5,
+     "damageFormula": "BF+5",
+     "qualities": [
+      {
+       "id": "taille",
+       "name": "Taille"
+      }
+     ],
+     "valuesX": null,
+     "capacity": null
+    },
+    {
+     "name": "Cimeterre à Entaille",
+     "note": "Cimeterre à Entaille",
+     "type": "attack",
+     "base": 55,
+     "mod": 0,
+     "damage": 4,
+     "damageFormula": "BF+4",
+     "qualities": [
+      {
+       "id": "entaille",
+       "name": "Entaille X",
+       "rating": 1
+      }
+     ],
+     "valuesX": null,
+     "capacity": null
+    },
+    {
+     "name": "Pistolet à poudre",
+     "note": "Pistolet à poudre",
+     "type": "attack",
+     "base": 55,
+     "mod": 0,
+     "damage": 9,
+     "qualities": [
+      {
+       "id": "pistolet",
+       "name": "Pistolet"
+      },
+      {
+       "id": "a-poudre-noire",
+       "name": "À Poudre noire"
+      },
+      {
+       "id": "recharge",
+       "name": "Recharge X",
+       "rating": 1
+      }
+     ],
+     "valuesX": null,
+     "capacity": null
+    },
+    {
+     "name": "Arquebuse à répétition",
+     "note": "Arquebuse à répétition",
+     "type": "attack",
+     "base": 55,
+     "mod": 0,
+     "damage": 9,
+     "qualities": [
+      {
+       "id": "a-repetition",
+       "name": "À répétition X",
+       "rating": 2
+      },
+      {
+       "id": "a-poudre-noire",
+       "name": "À Poudre noire"
+      },
+      {
+       "id": "recharge",
+       "name": "Recharge X",
+       "rating": 1
+      }
+     ],
+     "valuesX": null,
+     "capacity": null
+    },
+    {
+     "name": "Arbalète",
+     "note": "Arbalète",
+     "type": "attack",
+     "base": 55,
+     "mod": 0,
+     "damage": 9,
+     "qualities": [
+      {
+       "id": "recharge",
+       "name": "Recharge X",
+       "rating": 1
+      }
+     ],
+     "valuesX": null,
+     "capacity": null
+    },
+    {
+     "name": "Bombe",
+     "note": "Bombe",
+     "type": "attack",
+     "base": 55,
+     "mod": 0,
+     "damage": 8,
+     "qualities": [
+      {
+       "id": "explosion",
+       "name": "Explosion X",
+       "rating": 3
+      }
+     ],
+     "valuesX": null,
+     "capacity": null
+    },
+    {
+     "name": "Tromblon",
+     "note": "Tromblon",
+     "type": "attack",
+     "base": 55,
+     "mod": 0,
+     "damage": 8,
+     "qualities": [
+      {
+       "id": "dispersion",
+       "name": "Dispersion X",
+       "rating": 3
+      },
+      {
+       "id": "a-poudre-noire",
+       "name": "À Poudre noire"
+      },
+      {
+       "id": "recharge",
+       "name": "Recharge X",
+       "rating": 1
+      }
+     ],
+     "valuesX": null,
+     "capacity": null
+    },
+    {
+     "name": "Filet à crochets",
+     "note": "Filet à crochets",
+     "type": "attack",
+     "base": 55,
+     "mod": 0,
+     "damage": 0,
+     "qualities": [
+      {
+       "id": "immobilisante",
+       "name": "Immobilisante"
+      }
+     ],
+     "valuesX": null,
+     "capacity": null
+    }
+   ]
+  },
+  {
+   "name": "Recette Tireur",
+   "kind": "PJ",
+   "group": "Recette",
+   "hp": 13,
+   "initiative": 50,
+   "caracs": {
+    "CC": 40,
+    "CT": 60,
+    "F": 35,
+    "E": 35,
+    "I": 50,
+    "Ag": 45,
+    "Dex": 35,
+    "Int": 35,
+    "FM": 35,
+    "Soc": 30
+   },
+   "armor": {
+    "head": 0,
+    "body": 1,
+    "arms": 0,
+    "legs": 0
+   },
+   "tags": [],
+   "notes": "Tireur pour Viser, tir sur cible engagée, Rechargement (G-ATT-2, G-ATT-5, G-ARM-5).",
+   "favorite": false,
+   "actions": [
+    {
+     "name": "Arc long",
+     "note": "Arc long",
+     "type": "attack",
+     "base": 60,
+     "mod": 0,
+     "damage": 9,
+     "qualities": [
+      {
+       "id": "precise",
+       "name": "Précise"
+      }
+     ],
+     "valuesX": null,
+     "capacity": null
+    },
+    {
+     "name": "Pistolet",
+     "note": "Pistolet",
+     "type": "attack",
+     "base": 55,
+     "mod": 0,
+     "damage": 9,
+     "qualities": [
+      {
+       "id": "pistolet",
+       "name": "Pistolet"
+      },
+      {
+       "id": "a-poudre-noire",
+       "name": "À Poudre noire"
+      },
+      {
+       "id": "recharge",
+       "name": "Recharge X",
+       "rating": 1
+      }
+     ],
+     "valuesX": null,
+     "capacity": null
+    },
+    {
+     "name": "Épée courte",
+     "note": "Épée courte",
+     "type": "attack",
+     "base": 35,
+     "mod": 0,
+     "damage": 3,
+     "damageFormula": "BF+3",
+     "qualities": [],
+     "valuesX": null,
+     "capacity": null
+    },
+    {
+     "name": "Esquive",
+     "note": "Esquive",
+     "type": "defense",
+     "base": 45,
+     "mod": 0,
+     "qualities": [],
+     "valuesX": null,
+     "capacity": null
+    }
+   ]
+  },
+  {
+   "name": "Recette Lutteur",
+   "kind": "PNJ",
+   "group": "Recette",
+   "hp": 15,
+   "initiative": 38,
+   "caracs": {
+    "CC": 55,
+    "CT": 35,
+    "F": 45,
+    "E": 35,
+    "I": 40,
+    "Ag": 35,
+    "Dex": 35,
+    "Int": 35,
+    "FM": 35,
+    "Soc": 30
+   },
+   "armor": {
+    "head": 0,
+    "body": 0,
+    "arms": 0,
+    "legs": 0
+   },
+   "tags": [],
+   "notes": "Empoignade à mains nues (G-EMP-1, G-EMP-2).",
+   "favorite": false,
+   "actions": [
+    {
+     "name": "Bagarre",
+     "note": "Bagarre",
+     "type": "attack",
+     "base": 55,
+     "mod": 0,
+     "damage": 0,
+     "damageFormula": "BF",
+     "qualities": [],
+     "valuesX": null,
+     "capacity": null
+    },
+    {
+     "name": "Esquive",
+     "note": "Esquive",
+     "type": "defense",
+     "base": 35,
+     "mod": 0,
+     "qualities": [],
+     "valuesX": null,
+     "capacity": null
+    }
+   ]
+  },
+  {
+   "name": "Recette Cavalier",
+   "kind": "PJ",
+   "group": "Recette",
+   "hp": 15,
+   "initiative": 45,
+   "caracs": {
+    "CC": 50,
+    "CT": 35,
+    "F": 40,
+    "E": 35,
+    "I": 45,
+    "Ag": 45,
+    "Dex": 35,
+    "Int": 35,
+    "FM": 35,
+    "Soc": 30
+   },
+   "armor": {
+    "head": 1,
+    "body": 2,
+    "arms": 1,
+    "legs": 1
+   },
+   "tags": [],
+   "notes": "Monture : ajouter « Cheval de guerre lourd » du bestiaire (L23) en Actif, puis Modifier le cavalier (G-MON-1, G-MON-2).",
+   "favorite": false,
+   "actions": [
+    {
+     "name": "Lance",
+     "note": "Lance",
+     "type": "attack",
+     "base": 50,
+     "mod": 0,
+     "damage": 4,
+     "damageFormula": "BF+4",
+     "qualities": [],
+     "valuesX": null,
+     "capacity": null
+    },
+    {
+     "name": "Chevaucher",
+     "note": "Chevaucher",
+     "type": "skill",
+     "base": 45,
+     "mod": 0,
+     "qualities": [],
+     "valuesX": null,
+     "capacity": null
+    },
+    {
+     "name": "Esquive",
+     "note": "Esquive",
+     "type": "defense",
+     "base": 45,
+     "mod": 0,
+     "qualities": [],
+     "valuesX": null,
+     "capacity": null
+    }
+   ]
+  },
+  {
+   "name": "Recette Figurant",
+   "kind": "PNJ",
+   "group": "Recette",
+   "hp": 6,
+   "initiative": 30,
+   "caracs": {
+    "CC": 30,
+    "CT": 35,
+    "F": 35,
+    "E": 25,
+    "I": 40,
+    "Ag": 35,
+    "Dex": 35,
+    "Int": 35,
+    "FM": 35,
+    "Soc": 30
+   },
+   "armor": {
+    "head": 0,
+    "body": 0,
+    "arms": 0,
+    "legs": 0
+   },
+   "tags": [],
+   "notes": "PNJ secondaire à peu de Blessures : mort subite des figurants, critiques à répétition (G-CRI-4).",
+   "favorite": false,
+   "actions": [
+    {
+     "name": "Gourdin",
+     "note": "Gourdin",
+     "type": "attack",
+     "base": 30,
+     "mod": 0,
+     "damage": 2,
+     "damageFormula": "BF+2",
+     "qualities": [],
+     "valuesX": null,
+     "capacity": null
+    }
+   ]
+  },
+  {
+   "name": "Recette Lent (Initiative 20)",
+   "kind": "PNJ",
+   "group": "Recette",
+   "hp": 11,
+   "initiative": 20,
+   "caracs": {
+    "CC": 35,
+    "CT": 35,
+    "F": 35,
+    "E": 35,
+    "I": 20,
+    "Ag": 35,
+    "Dex": 35,
+    "Int": 35,
+    "FM": 35,
+    "Soc": 30
+   },
+   "armor": {
+    "head": 0,
+    "body": 0,
+    "arms": 0,
+    "legs": 0
+   },
+   "tags": [],
+   "notes": "G-DIV-18 : combattant d’Initiative 20 qui n’a pas encore joué.",
+   "favorite": false,
+   "actions": [
+    {
+     "name": "Gourdin",
+     "note": "Gourdin",
+     "type": "attack",
+     "base": 35,
+     "mod": 0,
+     "damage": 2,
+     "damageFormula": "BF+2",
+     "qualities": [],
+     "valuesX": null,
+     "capacity": null
+    }
+   ]
+  },
+  {
+   "name": "Recette Rapide (Initiative 60)",
+   "kind": "PNJ",
+   "group": "Recette",
+   "hp": 11,
+   "initiative": 60,
+   "caracs": {
+    "CC": 35,
+    "CT": 35,
+    "F": 35,
+    "E": 35,
+    "I": 60,
+    "Ag": 35,
+    "Dex": 35,
+    "Int": 35,
+    "FM": 35,
+    "Soc": 30
+   },
+   "armor": {
+    "head": 0,
+    "body": 0,
+    "arms": 0,
+    "legs": 0
+   },
+   "tags": [],
+   "notes": "G-DIV-18 : renfort d’Initiative 60 (rang déjà dépassé). Initiative 35 : un Milicien ; 50 : le Tireur.",
+   "favorite": false,
+   "actions": [
+    {
+     "name": "Gourdin",
+     "note": "Gourdin",
+     "type": "attack",
+     "base": 35,
+     "mod": 0,
+     "damage": 2,
+     "damageFormula": "BF+2",
+     "qualities": [],
+     "valuesX": null,
+     "capacity": null
+    }
+   ]
+  },
+  {
+   "name": "Recette Cobaye",
+   "kind": "PJ",
+   "group": "Recette",
+   "hp": 30,
+   "initiative": 40,
+   "caracs": {
+    "CC": 40,
+    "CT": 35,
+    "F": 35,
+    "E": 45,
+    "I": 40,
+    "Ag": 35,
+    "Dex": 35,
+    "Int": 35,
+    "FM": 40,
+    "Soc": 30
+   },
+   "armor": {
+    "head": 0,
+    "body": 0,
+    "arms": 0,
+    "legs": 0
+   },
+   "tags": [],
+   "notes": "Cible robuste et sans armure : localisation, critiques, amputation, séquelles, convalescence (G-CRI-1 à G-CRI-7).",
+   "favorite": false,
+   "actions": [
+    {
+     "name": "Poings",
+     "note": "Poings",
+     "type": "attack",
+     "base": 40,
+     "mod": 0,
+     "damage": 0,
+     "damageFormula": "BF",
+     "qualities": [],
+     "valuesX": null,
+     "capacity": null
+    },
+    {
+     "name": "Esquive",
+     "note": "Esquive",
+     "type": "defense",
+     "base": 35,
+     "mod": 0,
+     "qualities": [],
+     "valuesX": null,
+     "capacity": null
+    }
+   ]
+  }
+ ],
+ "errors": [],
+ "unknownQualities": []
+}

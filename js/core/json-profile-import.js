@@ -7,6 +7,7 @@ import { normalizeEquipment } from './equipment.js';
 import { parseProfileText } from './text-profile-import.js';
 import { BASE_REFERENTIAL, resolveKeyword } from './creature-keywords.js';
 import { convertLegacyV4Profile } from './v5-legacy-conversion.js';
+import { buildProfileSheet } from './json-profile-sheet.js';
 
 const FORMAT_VERSION = 1;
 const isRecord = value => value !== null && typeof value === 'object' && !Array.isArray(value);
@@ -25,12 +26,13 @@ const PROFILE_KEYS = {
   tags: ['tags', 'motscles'], notes: ['notes'], favorite: ['favori', 'favorite'],
   actions: ['jets', 'actions', 'dicelines'], maxHp: ['maxhp'], armorLocations: ['armorlocations'],
   keywords: ['keywords', 'motsclescreature', 'creaturekeywords'], keywordExclusions: ['keywordexclusions', 'motsclesexclus'],
-  skills: ['skills'], talents: ['talents'], equipment: ['equipment'], spells: ['spells'], prayers: ['prayers'],
-  ficheSnapshot: ['fichesnapshot'], protection: ['protection'], movement: ['movement'], race: ['race']
+  skills: ['competences', 'skills'], talents: ['talents'], equipment: ['equipement', 'equipment'], spells: ['sorts', 'spells'], prayers: ['prieres', 'prayers'],
+  traits: ['traits'], size: ['taille', 'size'], fortune: ['fortune', 'chance'], fate: ['destin', 'fate'], resilience: ['resilience'], corruption: ['corruption'], sin: ['peches', 'sin'],
+  ficheSnapshot: ['fichesnapshot'], protection: ['protection'], movement: ['mouvement', 'movement'], race: ['espece', 'race']
 };
 const PROFILE_IGNORED = ['id', 'extensions', 'participantid', 'targetid', 'attr', 'format', 'version', 'profils', 'profiles'];
 const ACTION_KEYS = {
-  name: ['nom', 'note', 'name', 'label'], type: ['type'], base: ['score', 'base', 'valeur'], mod: ['mod', 'modificateur'],
+  name: ['nom', 'note', 'name', 'label'], type: ['type'], base: ['score', 'base', 'valeur'], mod: ['mod', 'modificateur'], dr: ['dr', 'modificateurdr', 'slmodifier'],
   damage: ['degats', 'damage'], damageFormula: ['damageformula'], qualities: ['qualites', 'qualities', 'motscles'],
   valuesX: ['x', 'valeurx', 'valuesx', 'valuex', 'xvalues'], capacity: ['capacite', 'capacity', 'munitions']
 };
@@ -219,6 +221,11 @@ function parseAction(raw, number, errors, unknownQualities) {
   else if (values.base === undefined || values.base === null) { errors.push({ field: `${label} · score`, reason: 'champ-manquant', value: '' }); action.base = null; }
   else action.base = parseInteger(values.base, `${label} · score`, errors);
   action.mod = values.mod === undefined || values.mod === null ? 0 : parseInteger(values.mod, `${label} · modificateur`, errors) ?? 0;
+  // Modificateur de V5, en DR (palier de réussite) : il se lit sur le jet comme celui de l'éditeur.
+  if (values.dr !== undefined && values.dr !== null && values.dr !== '') {
+    const modifier = parseInteger(values.dr, `${label} · DR`, errors);
+    if (modifier !== null) action.extensions = { ...(action.extensions || {}), v5: { ...(action.extensions?.v5 || {}), slModifier: modifier } };
+  }
   // `degats` : entier ou formule (`BF+4`, `1d10`) ; une sauvegarde peut donner la formule à part (`damageFormula`).
   const formula = typeof values.damageFormula === 'string' && values.damageFormula.trim() ? values.damageFormula : null;
   const damage = values.damage;
@@ -321,15 +328,29 @@ function parseProfile(raw, index, referential = BASE_REFERENTIAL) {
     hp: hp !== null || (values.hp !== undefined && values.hp !== null) ? { status: 'found', value: hp, lines: [] } : { status: 'missing', value: null, lines: [] }
   };
   const profile = { name: name || null, kind, group, hp, initiative, caracs, armor: parseArmor(values.armor, errors), tags, notes, favorite, actions };
+  const hasArmor = values.armor !== undefined || values.armorLocations !== undefined;
+  // Talents, compétences, sorts, prières, équipement, Traits et ressources à la forme de l'outil : ils passent par la voie des fiches.
+  const keys = Object.keys(raw).map(normKey);
+  const spelled = { skills: keys.includes('competences'), spells: keys.includes('sorts'), prayers: keys.includes('prieres'), equipment: keys.includes('equipement') };
+  const sheet = buildProfileSheet(values, { caracs, name: name || 'Profil', hp, hasArmor, spelled }, errors, { readRecord, parseInteger, normKey, shown: shownValue });
   for (const key of FICHE_DATA_FIELDS) if (values[key] !== undefined && key !== 'keywords' && key !== 'keywordExclusions') {
-    if (['skills', 'talents', 'equipment', 'spells', 'prayers'].includes(key) && !Array.isArray(values[key])) errors.push({ field: key, reason: 'liste-attendue', value: shownValue(values[key]) });
-    else profile[key] = cloneValue(values[key]);
+    if (['skills', 'talents', 'equipment', 'spells', 'prayers'].includes(key) && !Array.isArray(values[key])) { if (!sheet) errors.push({ field: key, reason: 'liste-attendue', value: shownValue(values[key]) }); }
+    else if (!(sheet && Object.hasOwn(sheet.fields, key))) profile[key] = cloneValue(values[key]);
+  }
+  if (sheet) {
+    Object.assign(profile, sheet.fields);
+    if (sheet.armor) profile.armor = sheet.armor;
+    profile.actions.push(...sheet.actions);
   }
   for (const key of ['keywords', 'keywordExclusions']) if (values[key] !== undefined) profile[key] = parseKeywordList(values[key], key, errors, referential);
-  if (profile.equipment) { const checked = normalizeEquipment(profile.equipment); if (checked.coverage === 'invalid') errors.push({ field: 'equipment', reason: 'collection-invalide', value: checked.warnings.map(w => w.message).join('; ') }); }
+  if (profile.equipment && !(sheet && Object.hasOwn(sheet.fields, 'equipment'))) { const checked = normalizeEquipment(profile.equipment); if (checked.coverage === 'invalid') errors.push({ field: 'equipment', reason: 'collection-invalide', value: checked.warnings.map(w => w.message).join('; ') }); }
   if (values.maxHp !== undefined) profile.maxHp = parseInteger(values.maxHp, 'maxHp', errors);
   if (isRecord(raw.extensions?.fiche) || typeof raw.extensions?.ficheId === 'string') profile.extensions = cloneValue(raw.extensions);
   else if (isRecord(raw.extensions?.v4)) profile.extensions = convertLegacyV4Profile({ extensions: { v4: cloneValue(raw.extensions.v4) } }).extensions;
+  if (sheet && (sheet.traits?.length || Object.keys(sheet.v5).length)) {
+    const extensions = profile.extensions || {};
+    profile.extensions = { ...extensions, ...(sheet.traits?.length ? { traits: sheet.traits } : {}), ...(Object.keys(sheet.v5).length ? { v5: { ...(extensions.v5 || {}), ...sheet.v5 } } : {}) };
+  }
   if (values.armorLocations !== undefined) profile.armorLocations = normalizeArmorLocations(parseArmor(values.armorLocations, errors));
   else if (['rightArm', 'leftArm', 'rightLeg', 'leftLeg'].some(key => Object.hasOwn(profile.armor, key))) profile.armorLocations = normalizeArmorLocations(profile.armor);
   const blocking = fields.name.status !== 'found' || fields.hp.status !== 'found' || errors.length > 0;
@@ -390,9 +411,9 @@ export const PROFILE_JSON_EXAMPLE = JSON.stringify({
   notes: 'Patrouille le pont de nuit.\nSonne l’alarme à la première blessure.',
   favori: true,
   jets: [
-    { nom: 'Hallebarde', type: 'attaque', score: 45, mod: 0, degats: 'BF+4', qualites: ['Percutante'] },
-    { nom: 'Arbalète', type: 'attaque', score: 35, mod: -10, degats: 9, qualites: ['Recharge 1'] },
+    { nom: 'Hallebarde', type: 'attaque', score: 45, degats: 'BF+4', qualites: ['Percutante'] },
+    { nom: 'Arbalète', type: 'attaque', score: 35, dr: -1, degats: 9, qualites: ['Recharge 1'] },
     { nom: 'Esquive', type: 'défense', score: 38 },
-    { nom: 'Intimidation', type: 'compétence', score: 25, mod: 10 }
+    { nom: 'Intimidation', type: 'compétence', score: 25, dr: 1 }
   ]
 }, null, 2);
