@@ -183,6 +183,18 @@ try {
   assert.equal(await page.locator('dialog.tool-sheet').count(), 0, 'Démarrer après le lancement initialisé ne redemande aucun jet');
   const afterEncounterStart = await page.evaluate(async id => { const { Store } = await import('/Outil-MJ-Warhammer/js/main.js'); const combat = Store.getCombat(); return { round: combat.round, die: combat.participants.get(id)?.extensions?.v5?.combatInitiative?.die, sceneId: Store.getActiveScene()?.id }; }, launchNpc.id);
   assert.deepEqual(afterEncounterStart, { round: 1, die: launchDie, sceneId: launchedScene.id }, 'Démarrer conserve scène et d10 capturé au lancement');
+  await page.evaluate(async () => { const { Store } = await import('/Outil-MJ-Warhammer/js/main.js'); await Store.addProfile({ id: 'rg-reinforcement', name: 'Renfort recette', kind: 'PNJ', hp: 8, initiative: 35, caracs: { I: 35 } }); });
+  await page.locator('#tab-prepare').click();
+  await page.locator(`#workspace-prepare [data-workspace-action="edit-encounter"][data-encounter-id="${launchedScene.encounterId}"]`).click();
+  const editDialog = page.locator('dialog.tool-sheet');
+  await editDialog.getByLabel('Profil').selectOption('rg-reinforcement');
+  await editDialog.getByRole('button', { name: 'Ajouter', exact: true }).click();
+  await page.waitForFunction(async () => { const { Store } = await import('/Outil-MJ-Warhammer/js/main.js'); return Store.listParticipants().some(row => row.profileId === 'rg-reinforcement'); });
+  await page.keyboard.press('Escape');
+  await page.locator('#tab-combat').click();
+  assert.ok(await page.locator('.actor-card').filter({ hasText: 'Renfort recette' }).count() >= 1);
+  await page.evaluate(async () => { const { Store } = await import('/Outil-MJ-Warhammer/js/main.js'); await Store.undo(); });
+  assert.equal(await page.evaluate(async () => { const { Store } = await import('/Outil-MJ-Warhammer/js/main.js'); return Store.listParticipants().some(row => row.profileId === 'rg-reinforcement'); }), false);
   await page.evaluate(() => { Math.random = window.__f2OriginalRandom; delete window.__f2OriginalRandom; });
   await page.locator('#tab-prepare').click();
   await page.locator('#workspace-prepare [data-workspace-action="suspend-scene"]').click();

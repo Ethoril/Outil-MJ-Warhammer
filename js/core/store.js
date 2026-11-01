@@ -1228,6 +1228,29 @@ function resolvedCorruptionTest(participant, skillId, input) {
       .map(template => ({ ...JSON.parse(JSON.stringify(template)), id: uid(), participantId, extensions: { ...template.extensions, profileActionId: template.id } }));
   }
 
+  function addProfilesToDraft(draft, additions) {
+    const profiles = new Map((draft.reserve || []).map(profile => [profile.id, profile]));
+    const participants = [...(draft.combat?.participants || [])];
+    const lines = [...(draft.diceLines || [])];
+    const usedNames = new Set(participants.map(item => item.name));
+    const zoneOf = new Map(participants.map(item => [item.id, item.zone]));
+    const active = (draft.combat?.order || []).filter(id => zoneOf.get(id) === 'active');
+    const rest = (draft.combat?.order || []).filter(id => zoneOf.get(id) !== 'active');
+    const automatic = (draft.combat?.orderMode || orderMode) !== ORDER_MODES.MANUAL;
+    const added = [];
+    for (const addition of additions) {
+      const prof = profiles.get(addition.id);
+      if (!prof) continue;
+      const participant = participantFromProfile(prof, { name: uniqueName(prof.name, usedNames), zone: addition.zone, ...(addition.camp ? { camp: addition.camp } : {}), ...(addition.entryId ? { source: { profileId: prof.id, encounterEntryId: addition.entryId } } : {}) });
+      usedNames.add(participant.name);
+      participants.push(participant);
+      lines.push(...diceLinesFromProfile(prof, participant.id));
+      if (addition.zone === 'active') active.splice(automatic ? initiativeIndex(active, participant.id, participants) : active.length, 0, participant.id);
+      added.push(participant.name);
+    }
+    return { ...draft, combat: { ...draft.combat, participants, order: [...active, ...rest] }, diceLines: lines, added };
+  }
+
   // Suivi des séquelles : exécution privée d'une opération du registre (jamais exposée comme API) et lecture du soigneur sur sa fiche.
   const absentAftermathSubjects = (state, participants) => [...new Set(state.incidents.filter(row => row.status === 'open' && !participants.some(item => item.id === row.participantId)).map(row => row.participantId))];
   /** none | pending (décision du choc non prise) | absent | occurred : une amputation confirmée exige la Chirurgie (p.178). */
@@ -3032,31 +3055,10 @@ function resolvedCorruptionTest(participant, skillId, input) {
       if(targetZone==='active'&&Number(combat.round)===0&&stateExtensions?.v5?.combatInitiativeInitialized===true)
         throw Object.assign(new Error('Un profil ajouté directement actif avant le Round 1 doit recevoir son jet d’Initiative dans le dialogue de préparation.'),{code:'COMBAT_INIT_REQUIRED',userFacing:true});
       return api.executeCommand('add-profiles-to-combat', draft => {
-        const profiles = new Map((draft.reserve || []).map(profile => [profile.id, profile]));
-        const participants = [...(draft.combat?.participants || [])];
-        const lines = [...(draft.diceLines || [])];
-        const usedNames = new Set(participants.map(item => item.name));
-        const zoneOf = new Map(participants.map(item => [item.id, item.zone]));
-        const active = (draft.combat?.order || []).filter(id => zoneOf.get(id) === 'active');
-        const rest = (draft.combat?.order || []).filter(id => zoneOf.get(id) !== 'active');
-        const automatic = (draft.combat?.orderMode || orderMode) !== ORDER_MODES.MANUAL;
-        const added = [];
-        for (const id of selectedIds) {
-          const prof = profiles.get(id);
-          // Profil supprimé entre le contrôle et l'exécution de la commande en file.
-          if (!prof) continue;
-          const participant = participantFromProfile(prof, { name: uniqueName(prof.name, usedNames), zone: targetZone });
-          usedNames.add(participant.name);
-          participants.push(participant);
-          lines.push(...diceLinesFromProfile(prof, participant.id));
-          if (targetZone === 'active') active.splice(automatic ? initiativeIndex(active, participant.id, participants) : active.length, 0, participant.id);
-          added.push(participant.name);
-        }
+        const { added, ...next } = addProfilesToDraft(draft, selectedIds.map(id => ({ id, zone: targetZone })));
         if (!added.length) throw new Error('Aucun profil à ajouter');
         return {
-          ...draft,
-          combat: { ...draft.combat, participants, order: [...active, ...rest] },
-          diceLines: lines,
+          ...next,
           log: [{ id: uid(), ts: Date.now(), kind: 'management', text: `Combat: ajouté ${added.join(', ')} (${targetZone === 'active' ? 'en jeu' : 'en attente'})` }, ...(draft.log || [])].slice(0, 300)
         };
       });
@@ -3315,7 +3317,18 @@ function resolvedCorruptionTest(participant, skillId, input) {
     listEncounters() { return cloneValue(encounters); },
     saveEncounter(input) {
       const model = normalizeEncounter(input);
-      return api.executeCommand('save-encounter', draft => ({ ...draft, encounters: [...(draft.encounters || []).filter(item => item.id !== model.id), model] }));
+      return api.executeCommand('save-encounter', draft => {
+        let next = { ...draft, encounters: [...(draft.encounters || []).filter(item => item.id !== model.id), model] };
+        if (draft.activeScene?.encounterId !== model.id) return next;
+        const previous = (draft.encounters || []).find(item => item.id === model.id);
+        const oldEntries = new Map((previous?.entries || []).map(entry => [entry.id, entry]));
+        const additions = model.entries.flatMap(entry => {
+          const count = Math.max(0, entry.quantity - (oldEntries.get(entry.id)?.quantity || 0));
+          return Array.from({ length: count }, () => ({ id: entry.profileId, zone: entry.zone, camp: entry.camp, entryId: entry.id }));
+        });
+        if (additions.length) { const { added, ...updated } = addProfilesToDraft(next, additions); next = updated; }
+        return next;
+      });
     },
     deleteEncounter(id) {
       return api.executeCommand('delete-encounter', draft => {

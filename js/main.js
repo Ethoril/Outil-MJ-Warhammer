@@ -762,6 +762,9 @@ async function persistEncounter(draft) {
   model.status = stored?.status || 'prepared';
   if (prepareWindow) prepareWindow.encounterId = model.id;
   await awaitStore(requireStoreApi('saveEncounter')(model), 'Rencontre');
+  if (Store.getActiveScene()?.encounterId === model.id && stored?.entries.some(entry => !model.entries.some(next => next.id === entry.id) || model.entries.find(next => next.id === entry.id).quantity < entry.quantity)) {
+    showToast('Retiré de la rencontre, toujours présent dans le combat en cours', 'info');
+  }
   return model;
 }
 

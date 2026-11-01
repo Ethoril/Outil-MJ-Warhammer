@@ -1383,3 +1383,26 @@ test('Store — Historique structuré (Lot 10.4)', () => {
   assert.equal(log[0].detail.Roll, 35);
 });
 });
+
+test('recette G : save active encounter adds entries atomically and undo preserves combat state', async () => {
+  let saved = null;
+  const persistence = { async load() { return saved; }, async saveAtomic({ state }) { saved = structuredClone(state); return { ok: true }; } };
+  const store = createStore({ persistence });
+  await store.ready;
+  await store.addProfile({ id: 'rg-a', name: 'A', kind: 'PJ', hp: 12, initiative: 50 });
+  await store.addProfile({ id: 'rg-b', name: 'B', kind: 'PNJ', hp: 10, initiative: 30 });
+  await store.saveEncounter({ id: 'rg-enc', entries: [{ id: 'rg-e1', profileId: 'rg-a', zone: 'active', camp: 'pj' }] });
+  await store.launchEncounter('rg-enc');
+  const first = store.listParticipants()[0];
+  await store.updateParticipant(first.id, { hp: 4 });
+  const model = store.listEncounters().find(e => e.id === 'rg-enc');
+  model.entries.push({ id: 'rg-e2', profileId: 'rg-b', quantity: 1, zone: 'active', camp: 'ennemi' });
+  await store.saveEncounter(model);
+  assert.equal(store.listParticipants().length, 2);
+  assert.equal(store.listParticipants().find(p => p.id === first.id).hp, 4);
+  assert.equal(store.listParticipants().find(p => p.profileId === 'rg-b').camp, 'ennemi');
+  await store.undo();
+  assert.equal(store.listParticipants().length, 1);
+  assert.equal(store.listParticipants()[0].hp, 4);
+  assert.equal(store.listEncounters().find(e => e.id === 'rg-enc').entries.length, 1);
+});
