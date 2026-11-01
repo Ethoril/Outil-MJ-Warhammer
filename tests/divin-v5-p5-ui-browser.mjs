@@ -64,7 +64,7 @@ try {
       const handlers = {
         select: payload => { calls.push({ kind: 'select', payload }); if (spec.interactive && payload.v5Context) window.__render({ ...spec, calm: payload.v5Context.protectionCalm }); },
         input: (key, value) => calls.push({ kind: 'input', key, value }),
-        roll: () => {}, calculate: () => {}, compare: () => {}, choose: () => {}, apply: () => {}, cancel: () => {}
+        roll: () => {}, calculate: () => {}, compare: () => {}, choose: () => {}, apply: () => calls.push({ kind: 'apply' }), cancel: () => {}
       };
       const actor = { id: 'actor', name: 'Attaquant', camp: spec.actorCamp, caracs: { CC: 50, Ag: 40, E: 40, F: 40 } };
       if (spec.actorDivine || spec.actorQuick) {
@@ -107,6 +107,8 @@ try {
   check(await calmSelect.evaluate(el => document.activeElement === el) && await calmSelect.getAttribute('aria-required') === 'true', 'C1 : le motif dirige vers le champ obligatoire');
   await calmSelect.selectOption('pass');
   check(await applyButton.isEnabled(), 'C1 : la réussite active l’application (' + await applyButton.getAttribute('title') + ')');
+  await applyButton.click();
+  check((await lastCall())?.kind === 'apply', 'C1 : le bouton actif transmet la demande d’application');
 
   // a) Attaque d’un ennemi sur une cible porteuse d’une couche attackDeterrent.
   await page.evaluate(() => window.__render({ actorCamp: 'ennemi', targetCamp: 'pj', targetDivine: true }));

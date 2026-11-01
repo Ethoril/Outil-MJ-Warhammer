@@ -680,7 +680,7 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
         const select=document.createElement('select');
         select.setAttribute('aria-label','Test de Calme de l’attaquant (Bénédiction de Protection)');
         select.dataset.blockingField = 'protection-calm';
-        if (!draft.v5Context?.protectionCalm) {
+        if (type === 'attack') {
           label.append(document.createTextNode(' *'));
           select.setAttribute('aria-required', 'true');
         }
