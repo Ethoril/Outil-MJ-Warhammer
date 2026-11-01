@@ -88,7 +88,7 @@ export function initPrepareView({ mount, hosted = false, Store = null, encounter
     state.draft.entries.forEach(entry => {
       const item = document.createElement('li');
       const profile = profiles().find(candidate => candidate.id === entry.profileId);
-      item.textContent = `${profile?.name || 'Profil supprimé'} ×${entry.quantity} · ${CAMP_LABELS[normalizeCamp(entry.camp, profile?.kind)]} · ${entry.zone === 'active' ? 'actif' : 'en attente'}`;
+      item.textContent = `${profile?.name || 'Profil supprimé'} ×${entry.quantity} · ${CAMP_LABELS[entry.camp] || CAMP_LABELS[normalizeCamp(entry.camp, profile?.kind)]} · ${entry.zone === 'active' ? 'actif' : 'en attente'}`;
       const remove = document.createElement('button'); remove.type = 'button'; remove.textContent = 'Retirer'; remove.addEventListener('click', () => { state.draft = removeEncounterEntry(state.draft, entry.id); void emit(); render(); });
       item.append(' ', remove); list.appendChild(item);
     });

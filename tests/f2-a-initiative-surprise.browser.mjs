@@ -157,6 +157,11 @@ try {
   await prepareDialog.getByLabel('Profil').selectOption('f2a-profile-pj');
   assert.equal(await prepareDialog.getByLabel('Camp').inputValue(), 'pj');
   assert.equal(await prepareDialog.getByLabel('Zone').inputValue(), 'active');
+  await prepareDialog.getByLabel('Camp').selectOption('allie');
+  await prepareDialog.getByLabel('Profil').selectOption('f2a-profile-npc');
+  await prepareDialog.getByLabel('Profil').selectOption('f2a-profile-pj');
+  assert.equal(await prepareDialog.getByLabel('Camp').inputValue(), 'allie', 'un camp choisi manuellement reste sélectionné');
+  await prepareDialog.getByLabel('Camp').selectOption('pj');
   await prepareDialog.getByRole('button', { name: 'Ajouter', exact: true }).click();
   const titleInput = prepareDialog.getByLabel('Titre'); await titleInput.fill('Via préparation'); await titleInput.dispatchEvent('change');
   const compositionText = await prepareDialog.locator('.encounter-composition').innerText();
