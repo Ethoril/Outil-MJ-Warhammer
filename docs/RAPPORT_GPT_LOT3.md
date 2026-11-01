@@ -13,8 +13,8 @@
 - **C16 — `532f5ad`** : `tests/recette-g-c16-browser.mjs` reproduisait une attaque ratée gagnant l’opposition avec dégâts proposés. L’écran explique désormais ce résultat ; le moteur reste inchangé.
 - **C17 — partiel** : le lien du Test de Calme après Calculer a été vérifié avec tiroir fermé ; C12 ajoute un lien pour le jet d’incident. Le parcours divin existant `tests/divin-v5-t5-browser.mjs` vérifie aussi le focus sur un jet de dégâts de prière et passe. Les autres raisons sans cible et le cas exact du MJ restent à inventorier.
 - **C18 — non implémenté** : le parcours de reproduction préparé échoue parce que « Tir à bout portant » reste un sélecteur, sans groupe de boutons Oui / Non.
-- **C19 — non implémenté** : le moteur refuse lui-même les aperçus à `unresolved`, dont le Test de Calme manquant. Un filtrage de la seule liste d’interface ne suffit pas ; voir `QUESTIONS_GPT.md`.
-- **C20 — non commencé** ; le nombre de clics demandé reste à mesurer. Les profils de recette ne contiennent pas de clé `culte`/`cult` malgré ce qu’indique le brief.
+- **C19 — `9bf97b4`** : Protection peut être ignorée explicitement pour l’action ; son Test de Calme n’est ni demandé ni réputé réussi, et le journal porte la décision. Le choix est effacé au changement de cible ou d’action. `tests/recette-g-c19-browser.mjs`, `tests/unit/divin/prieres-benedictions.test.js` et `tests/unit/combat/raisons-blocage-application.test.js` couvrent le moteur, le journal et le parcours ; les autres raisons sont inventoriées ci-dessous.
+- **C20 — réalisé (commit du lot C20) : le profil porte un culte importable/exportable et les sept prêtres sont renseignés. Les défauts de parole et de portée, le dé de Prière et le lancement PNJ ont été ajoutés. Les champs de Péchés et de pénitence sont masqués lorsque le culte est exempt, les Péchés nuls et aucune pénitence en cours. Pour Protection de Myrmidia sur un allié : avant, 10 gestes ; après, 7 gestes. Comptage reproductible : ouverture du panneau, chaque choix de liste et chaque case valent un geste, ainsi que le clic Calculer et le clic Appliquer ; avant, la saisie manuelle du dé compte un geste, après le clic Lancer en compte un. Le parcours `tests/recette-g-c20-browser.mjs` couvre les 7 gestes, application et Undo.
 
 ## Vérifications
 
@@ -27,9 +27,9 @@
 
 - **C13** : un parcours synthétique conserve `true`, puis `false`, puis `undefined` dans le brouillon pour « Tir à bout portant ». Il ne reproduit pas le blocage. Le MJ précise : arc elfique et message exigeant un pistolet. Le code associe ce message à « cible engagée avec le tireur », champ distinct ; le MJ indique qu’il avait été sur Oui, puis probablement sur Non. Un essai avec son archer et son arc elfique conserve bien les deux Non et retire le message avant et après Calculer.
 - **C17** : le lien du Test de Calme après Calculer ouvre et focalise correctement dans le parcours synthétique ; le MJ se souvient d’un problème lié à un prêtre, sans autre précision. D’autres raisons ne disposent pas de cible explicite et restent à inventorier.
-- **C19** : `applyResolution` refuse tout aperçu contenant une entrée `unresolved` ; Protection ajoute cette entrée si le Test de Calme manque. Filtrer uniquement les raisons affichées ne rend donc pas l’action applicable. Il faut décider d’un mécanisme explicite qui respecte la décision du MJ sans inventer une réussite ni modifier silencieusement la règle ; l’instruction du brief demande de signaler cette dépendance.
+- **C19** : résolu pour Protection par la décision explicite du MJ ; l’inventaire des autres blocages est conservé ci-dessous.
 - **C15** : la sauvegarde fournie se charge ici ; si un autre fichier échoue, conserver celui-ci et le message exact pour reproduction.
-- **C20** : le brief indique que les profils de prêtres contiennent `culte`/`cult`, mais aucune de ces clés n’est présente dans `docs/recette/profils-recette-complets.json` ni documentée dans `docs/IMPORT_PROFILS_JSON.md` à la base. Les talents spécialisés indiquent les cultes ; leur reprise dans les exemples et le modèle reste à réaliser et vérifier.
+- **C20** : les sept cultes ajoutés aux profils correspondent aux spécialisations de leurs talents ; une incohérence à l’import est signalée.
 
 ## Contre-vérification Claude (06f676c)
 

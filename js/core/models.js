@@ -129,7 +129,7 @@ export function canonicalizeProfileFields(raw) {
 }
 
 // Fields that must survive every profile/participant projection and import.
-export const FICHE_DATA_FIELDS = Object.freeze(['armorLocations', 'protection', 'skills', 'talents', 'equipment', 'spells', 'prayers', 'ficheSnapshot', 'movement', 'race', 'keywords', 'keywordExclusions']);
+export const FICHE_DATA_FIELDS = Object.freeze(['armorLocations', 'protection', 'skills', 'talents', 'equipment', 'spells', 'prayers', 'ficheSnapshot', 'movement', 'race', 'cult', 'keywords', 'keywordExclusions']);
 export const ARMOR_LOCATION_IDS = Object.freeze(['head', 'body', 'rightArm', 'leftArm', 'rightLeg', 'leftLeg']);
 export function normalizeArmorLocations(armor = {}) {
   const a = isRecord(armor) ? armor : {};

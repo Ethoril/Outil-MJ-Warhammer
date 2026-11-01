@@ -2900,13 +2900,14 @@ export function renderResolutionPanel(options) {
   }).concat([...(section.querySelectorAll?.('[data-critical-draft-key]') || [])].map(input => ({ field: 'critical', key: input.dataset.criticalDraftKey, owner: (input.dataset.rollOwner === 'defender' ? target : actor)?.kind === 'PJ' ? 'PJ' : 'PNJ', value: input.value, disabled: input.disabled || !(input.dataset.rollOwner === 'defender' ? target : actor) })).concat([...engagedRolls.map(({ input, person }) => ({ field: 'engaged', personId: person.id, owner: person.kind === 'PJ' ? 'PJ' : 'PNJ', value: input.value, disabled: input.disabled })), ...[['attack', actor], ['defense', target]].map(([field, person]) => {
     const input = rolls.querySelector?.(`[data-roll-input="${field}"]`);
     return { field, owner: person?.kind === 'PJ' ? 'PJ' : 'PNJ', value: input?.value, disabled: !input || input.disabled || !person };
-  })])));
+  })])).concat(handlers.npcPrayerRoll?.(actor) ? [{ field: 'divine', owner: 'PNJ', value: '', disabled: false }] : []));
   const rollAll = button('Lancer tous les dés des PNJ', 'workspace-secondary', { 'data-focus-key': 'roll-all-npc' });
   const refreshRollAll = () => {
-    rollAll.disabled = draft.busy || !canCalculate || !eligibleRolls().length;
-    rollAll.title = draft.busy ? 'Résolution en cours.' : !canCalculate ? 'Action indisponible.' : !eligibleRolls().length ? 'Aucun dé de PNJ vide à lancer.' : 'Lancer les dés de PNJ encore vides puis calculer.';
+    rollAll.disabled = draft.busy || (!canCalculate && !handlers.npcPrayerRoll?.(actor)) || !eligibleRolls().length;
+    rollAll.title = draft.busy ? 'Résolution en cours.' : !canCalculate && !handlers.npcPrayerRoll?.(actor) ? 'Action indisponible.' : !eligibleRolls().length ? 'Aucun dé de PNJ vide à lancer.' : 'Lancer les dés de PNJ encore vides puis calculer.';
   };
   rollAll.addEventListener('click', () => handlers.rollAll(eligibleRolls()));
+  rollAll.addEventListener('refresh-npc-rolls', refreshRollAll);
   section.addEventListener('input', refreshRollAll);
   rolls.prepend(rollAll);
   section.append(rolls, node('p', 'workspace-roll-hint', 'Dés lancés à la table : tapez le résultat dans la case, puis Entrée.'));

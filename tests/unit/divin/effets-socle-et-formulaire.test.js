@@ -9,7 +9,7 @@ import registry from '../../../js/data/v5-divine-contracts.json' with { type: 'j
 import { previewDivineExecution, applyDivineExecution } from '../../../js/core/v5-divine-engine.js';
 import { effectTypes, calendarDurationUnits, paramKinds, paramUnits, targetRuleFacts, targetRuleFactFields } from '../../../js/core/v5-divine-grammar.js';
 import { effectHandlers, validateEffect, effectNeeds, progressionError, hasImplicitCasterTarget } from '../../../js/core/v5-divine-effect-handlers.js';
-import { buildDivineForm, emptyDivineForm, setFieldValue, toEngineInput, classifyNeeds, targetFactFields, describeEffectResult, summonLayerLabel, describeDivineForm, FACT_FIELDS, extensionFields, fieldValue, formWarnings, summarizeExecution, deadlineLines, prayerDurationRounds, buildExpiry, formatCampaignTime, sourceText } from '../../../js/ui/v5-divine-form-model.js';
+import { defaultDivineSelection, confirmRangeByDefault, buildDivineForm, emptyDivineForm, setFieldValue, toEngineInput, classifyNeeds, targetFactFields, describeEffectResult, summonLayerLabel, describeDivineForm, FACT_FIELDS, extensionFields, fieldValue, formWarnings, summarizeExecution, deadlineLines, prayerDurationRounds, buildExpiry, formatCampaignTime, sourceText } from '../../../js/ui/v5-divine-form-model.js';
 import { buildCombatTest } from '../../../js/core/v5-combat-rules.js';
 
 const clone = value => structuredClone(value);
@@ -1223,4 +1223,21 @@ test('de bout en bout : Feu de l’âme, Secours de Rhya et Marteau enflammé de
   const bonus = people(hammer.store).find(row => row.id === 'priest').extensions.v5.weaponBonuses.find(row => row.equipmentId);
   assert.equal(bonus.equipmentId, 'ham-1');
 });
+});
+
+test('C20 : la portée est confirmée par défaut et reste modifiable', () => {
+  const form = emptyDivineForm();
+  confirmRangeByDefault(form, 'ally');
+  assert.equal(toEngineInput(form, { targetIds: ['ally'] }).facts.targets.ally.withinRange, true);
+  const field = { kind: 'tri', path: ['facts', 'ally', 'withinRange'] };
+  assert.equal(fieldValue(form, field), 'true');
+  setFieldValue(form, field, 'false');
+  confirmRangeByDefault(form, 'ally');
+  assert.equal(toEngineInput(form, { targetIds: ['ally'] }).facts.targets.ally.withinRange, false);
+});
+
+test('C20 : culte de fiche et parole sont les valeurs proposées', () => {
+  const contracts = [{id:'a',type:'blessing',deity:'Sigmar'},{id:'b',type:'blessing',deity:'Myrmidia'}];
+  assert.deepEqual(defaultDivineSelection({cult:'myrmidia'}, contracts),{cult:'Myrmidia',contractId:'b',canSpeak:true});
+  assert.deepEqual(defaultDivineSelection({}, contracts),{cult:'',contractId:'a',canSpeak:true});
 });

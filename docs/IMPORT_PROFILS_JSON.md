@@ -38,6 +38,7 @@ Les clés ignorent la casse, les accents, les espaces, les tirets et les soulign
 | `taille` | `size` | « Petite », « Moyenne », « Grande », « Énorme », « Monstrueuse » (ajoute le Trait « Taille (…) ») | absent | — |
 | `sorts` | `spells` (forme interne) | liste de noms de sorts du référentiel de Magie | absent | — (fiche) |
 | `prieres` | `prayers` (forme interne) | liste de noms de Miracles du référentiel divin | absent | — (fiche) |
+| `culte` | `cult` | texte correspondant au culte du profil ; s'il est renseigné avec des talents de culte, il doit correspondre à l'un d'eux | absent | Culte |
 | `equipement` | `equipment` (forme interne) | liste d’objets du catalogue d’équipement, par nom | absent | — (fiche) |
 | `fortune` | `chance` | entier ≥ 0 | absent | Fortune (Chance) de départ |
 | `destin` | `fate` | entier ≥ 0 | absent | Destin |

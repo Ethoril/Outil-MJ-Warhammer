@@ -182,7 +182,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     addProfileToActiveCombat: typeof actions.addProfileToActiveCombat === 'function' ? actions.addProfileToActiveCombat : null
   };
 
-  const divinePanel=createDivinePanel({Store,refresh:()=>render()});
+  const divinePanel=createDivinePanel({Store,refresh:()=>render(),onRollChange:()=>refs.root.querySelector('[data-focus-key="roll-all-npc"]')?.dispatchEvent(new Event('refresh-npc-rolls'))});
   const corruptionPanel=createV5CorruptionPanel({Store,refresh:()=>render()});
   const aftermathPanel=createV5AftermathPanel({Store,refresh:()=>render()});
   const brokenEscapePanel=createV5BrokenEscapePanel({Store,refresh:()=>render(),onPrepareHide(actorId,skillId){
@@ -969,6 +969,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
   }
 
   const resolutionHandlers = {
+    npcPrayerRoll(actor) { return divinePanel.needsNpcRoll(actor); },
     ignoreCondition(id) {
       if (id !== 'divine-protection') return;
       const draft = state.resolution;
@@ -1214,6 +1215,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       const draft = state.resolution;
       let ordinaryRollChanged = false;
       for (const roll of rolls) {
+        if (roll.field === 'divine') { divinePanel.rollNpc(context.actor); continue; }
         if (roll.field === 'magic') {
           const summonedCreature = roll.creature === true && roll.key === 'magicInteraction' && ['worm', 'summon-attack'].includes(draft.magicInteraction?.kind);
           const person = summonedCreature ? { kind: 'PNJ' } : context.participants.find(row => row.id === roll.personId);
@@ -1305,7 +1307,8 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       // Comme criticalRoll : un dé de critique ou de magie ne remet pas en cause le résultat choisi.
       if (ordinaryRollChanged) { draft.v5Choice = null; draft.defenseChoice = null; resetCritical(draft); draft.preview = null; }
       draft.comparison = null; draft.error = null;
-      resolutionHandlers.calculate();
+      if (rolls.length && rolls.every(roll => roll.field === 'divine')) render();
+      else resolutionHandlers.calculate();
     },
     // Saisie d'un jet de critique : alimente le brouillon sans vider l'aperçu ni re-rendre
     // (aucune frappe perdue) ; seule une erreur affichée sous le champ est retirée.

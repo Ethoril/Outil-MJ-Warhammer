@@ -6,7 +6,8 @@ import {divineSinPolicy} from '../core/v5-divine-engine.js';
 import {defaultFirstMorningAt} from '../core/v5-game-time.js';
 import {resolveV5ConditionTestContext} from '../core/v5-test-context.js';
 import {isBrokenActor,renderBrokenEscapeVisibilityControl} from './v5-broken-escape-panel.js';
-import {emptyDivineForm,buildDivineForm,toEngineInput,buildExpiry,isSelfTargeted,classifyNeeds,describeEffectResult,summonLayerLabel,summarizeExecution,deadlineLines,formatCampaignTime,fieldValue,setFieldValue,focusKey} from './v5-divine-form-model.js';
+import {d100} from '../core/dice.js';
+import {emptyDivineForm,defaultDivineSelection,confirmRangeByDefault,buildDivineForm,toEngineInput,buildExpiry,isSelfTargeted,classifyNeeds,describeEffectResult,summonLayerLabel,summarizeExecution,deadlineLines,formatCampaignTime,fieldValue,setFieldValue,focusKey} from './v5-divine-form-model.js';
 const node=(tag,klass,text)=>{const el=document.createElement(tag);if(klass)el.className=klass;if(text!==undefined)el.textContent=text;return el;};
 const clone=value=>structuredClone(value);
 const labels={implemented:'Effet calculable',assisted:'Effets calculés + rappels MJ',manual:'Effet assisté / rappel MJ',blocked:'Source ou arbitrage requis'};
@@ -27,9 +28,9 @@ function resolvedParamText(value){
  if(value.unit==='touch')return 'Contact';
  return unitText(value.value,value.unit);
 }
-export function createDivinePanel({Store,refresh}){
+export function createDivinePanel({Store,refresh,onRollChange=()=>{}}){
  let state={actorId:null,open:false,cult:'',targetIds:[],form:emptyDivineForm(),lastReceipt:null,choices:{range:0,targets:0,duration:0,effect:0}};
- function reset(actor){state={actorId:actor.id,open:state.open,cult:'',contractId:getAllDivineContracts().find(row=>row.type==='blessing')?.id,targetIds:[],form:emptyDivineForm(),lastReceipt:null,choices:{range:0,targets:0,duration:0,effect:0},sinEdit:actor.extensions?.v5?.divine?.sin??'',sinReason:'',corruptionEdit:actor.extensions?.v5?.corruptionPoints??'',corruptionReason:'',roll:'',wrathRoll:'',wrathDurationRoll:'',wrathConsequence:'',expiryPhase:'',canSpeak:null,accessScope:'',accessReason:'',revokeReason:'',conditionPenaltyMode:'',conditionPenaltyReason:'',testOptionId:'',brokenEscapeVisibility:null,preview:null,busy:false,error:''};}
+ function reset(actor){state={actorId:actor.id,open:state.open,...defaultDivineSelection(actor,getAllDivineContracts()),targetIds:[],form:emptyDivineForm(),lastReceipt:null,choices:{range:0,targets:0,duration:0,effect:0},sinEdit:actor.extensions?.v5?.divine?.sin??'',sinReason:'',corruptionEdit:actor.extensions?.v5?.corruptionPoints??'',corruptionReason:'',roll:'',wrathRoll:'',wrathDurationRoll:'',wrathConsequence:'',expiryPhase:'',accessScope:'',accessReason:'',revokeReason:'',conditionPenaltyMode:'',conditionPenaltyReason:'',testOptionId:'',brokenEscapeVisibility:null,preview:null,busy:false,error:''};}
  function change(key,value){state[key]=value;if(key!=='testOptionId')state.testOptionId='';state.preview=null;state.error='';refresh();}
  function changeWrath(key,value){state[key]=value;state.preview=state.preview?{...state.preview,ready:false}:null;state.error='';refresh();}
  function invalidateEditedForm(input){
@@ -51,7 +52,7 @@ export function createDivinePanel({Store,refresh}){
  function field(container,label,key,{type='number',min=0,max=null}={}){
   const wrap=node('label','workspace-type',label),input=node('input');input.type=type;if(type==='number'){input.min=min;input.step='1';if(max!==null)input.max=max;}
   input.setAttribute('aria-label',label);input.dataset.focusKey='divine-'+key;input.value=state[key]??'';
-  input.addEventListener('input',()=>{state[key]=input.value;if(key.startsWith('wrathRecovery')&&state.recoveryPreview)state.recoveryPreview={...state.recoveryPreview,ready:false};if(!key.startsWith('wrath'))state.testOptionId='';state.preview=key.startsWith('wrath')&&state.preview?{...state.preview,ready:false}:null;state.error='';invalidateEditedForm(input);});
+  input.addEventListener('input',()=>{state[key]=input.value;if(key.startsWith('wrathRecovery')&&state.recoveryPreview)state.recoveryPreview={...state.recoveryPreview,ready:false};if(!key.startsWith('wrath'))state.testOptionId='';state.preview=key.startsWith('wrath')&&state.preview?{...state.preview,ready:false}:null;state.error='';invalidateEditedForm(input);if(key==='roll')onRollChange();});
   wrap.append(input);container.append(wrap);return input;
  }
  function select(container,label,value,options,handler,key){
@@ -306,27 +307,31 @@ export function createDivinePanel({Store,refresh}){
   }
   content.append(box);
  }
- return {render(actor,participants=[]){
+ return {
+ needsNpcRoll(actor){return state.open && state.actorId===actor?.id && actor?.kind!=='PJ' && !String(state.roll||'').trim();},
+ rollNpc(actor){if(this.needsNpcRoll(actor)){state.roll=String(d100());state.preview=null;state.error='';}},
+ render(actor,participants=[]){
   if(!actor)return null;if(state.actorId!==actor.id)reset(actor);
   const allContracts=getAllDivineContracts().filter(row=>['blessing','miracle'].includes(row.type));
   const cults=[...new Set(allContracts.map(row=>row.deity).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'fr'));
   const contracts=state.cult?allContracts.filter(row=>row.deity===state.cult):allContracts;
   const contract=contracts.find(row=>row.id===state.contractId)||contracts[0];if(!contract)return null;
   const panel=node('details','workspace-card workspace-divine');panel.dataset.divinePanel='';panel.open=state.open;
-  panel.addEventListener('toggle',()=>{state.open=panel.open;});
+  panel.addEventListener('toggle',()=>{if(state.open!==panel.open){state.open=panel.open;refresh();}});
   for(const type of ['input','change','click'])panel.addEventListener(type,()=>{if(panel.open)state.open=true;},true);
   panel.append(node('summary','workspace-rubric','Prières divines · '+actor.name));
   const content=node('div','workspace-divine-content');panel.append(content);
   if(cults.length>1)select(content,'Culte',state.cult,[['','Tous les cultes'],...cults.map(cult=>[cult,cult])],value=>{state.cult=value;state.targetIds=[];state.form=emptyDivineForm();state.lastReceipt=null;state.choices={range:0,targets:0,duration:0,effect:0};state.accessScope='';state.accessReason='';change('contractId',(value?allContracts.filter(row=>row.deity===value):allContracts)[0]?.id);},'cult');
   select(content,'Prière divine',contract.id,contracts.map(row=>[row.id,row.name+(row.type==='blessing'&&row.deity?' ('+row.deity+')':'')+(row.aspect?' ['+row.aspect+']':'')+' · '+(labels[row.status]||row.status)]),value=>{state.targetIds=[];state.form=emptyDivineForm();state.lastReceipt=null;state.choices={range:0,targets:0,duration:0,effect:0};state.accessScope='';state.accessReason='';change('contractId',value);},'prayer');
   content.append(node('p','workspace-muted',(labels[contract.status]||contract.status)+' · '+(contract.deity||'Culte à préciser')+(contract.aspect?' · Aspect : '+contract.aspect:'')));
-  content.append(node('p','',contract.labels?.effect||''));penanceControls(content,actor,contract.deity);supplementControls(content,actor,contract.deity,participants);
+  const concerned = !divineSinPolicy(contract).exempt || Number(actor.extensions?.v5?.divine?.sin) > 0 || (actor.extensions?.v5?.divinePenances || []).some(row => row.status === 'open');
+  content.append(node('p','',contract.labels?.effect||''));if(concerned)penanceControls(content,actor,contract.deity);supplementControls(content,actor,contract.deity,participants);
   if(contract.sourceDelta&&contract.status!=='blocked')content.append(node('p','workspace-muted','La règle V5 est présentée ici ; le texte du catalogue de consultation doit encore être actualisé.'));
   if(contract.status!=='blocked')content.append(node('p','workspace-muted',`Portée : ${paramText(contract.params?.range,actor)} · Cibles : ${paramText(contract.params?.targets,actor)} · Durée : ${paramText(contract.params?.duration,actor)}`));
   const source=contract.source;
   const sourceLabel=source?.document?`${source.document}${source.edition?' · '+source.edition:''}${source.printedPage?' · p. '+[].concat(source.printedPage).join(', '):''}`:'Source originale non retrouvée';
   content.append(node('p','workspace-muted','Source : '+sourceLabel+(source?.sourceStatus==='found-adaptation-blocked'?' · adaptation V4 retrouvée, contrat V5 bloqué jusqu’à arbitrage.':'')));
-  if(divineSinPolicy(contract).exempt){
+  if(!concerned){
    content.append(node('p','workspace-muted',`${contract.deity} : culte elfe exempt du Péché et du Courroux (Guide des Hauts Elfes, p. 99).`));
   }else{
    const sin=node('details','workspace-v5-context-details');sin.append(node('summary','','Péchés : '+(actor.extensions?.v5?.divine?.sin??'à renseigner')));if(state.sinOpen)sin.open=true;sin.addEventListener('toggle',()=>{state.sinOpen=sin.open;});content.append(sin);
@@ -417,8 +422,11 @@ export function createDivinePanel({Store,refresh}){
   content.append(accessBox);  const form=node('div','workspace-resolution-row');content.append(form);
   const brokenVisibility=renderBrokenEscapeVisibilityControl({actor,value:state.brokenEscapeVisibility,onChange:value=>{state.brokenEscapeVisibility=value;state.preview=null;state.error='';refresh();},key:'prayer'});if(brokenVisibility)form.append(brokenVisibility);
   select(form,'Le personnage peut prononcer la prière',state.canSpeak===null?'':String(state.canSpeak),[['','À préciser'],['true','Oui'],['false','Non']],value=>change('canSpeak',value===''?null:value==='true'),'voice');
-  field(form,'Jet de Prière (d100)','roll',{min:1,max:100});
+  const prayerRoll=field(form,'Jet de Prière (d100)','roll',{min:1,max:100});
+  const rollPrayer=node('button','workspace-secondary','Lancer');rollPrayer.type='button';rollPrayer.setAttribute('aria-label','Lancer le jet de Prière');
+  rollPrayer.addEventListener('click',()=>{prayerRoll.value=String(d100());prayerRoll.dispatchEvent(new Event('input',{bubbles:true}));});prayerRoll.parentElement.append(rollPrayer);
   const effectTargets=isSelfTargeted(contract)?[actor]:participants.filter(row=>row.zone==='active'&&state.targetIds.includes(row.id));
+  for (const target of effectTargets) confirmRangeByDefault(state.form, target.id);
   const model=buildDivineForm(contract,{actor,targets:effectTargets,participants,form:state.form,choices:state.choices}),descr=model.descr;
   const needs=state.preview&&!state.preview.ready?classifyNeeds(state.preview.needsInput||[],{targets:effectTargets,fields:model.effectFields}):[];
   const blocking=new Set(needs.map(row=>row.anchor).filter(Boolean));

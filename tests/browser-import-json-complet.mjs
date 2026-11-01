@@ -71,12 +71,14 @@ async function main() {
     await page.locator('#workspace-prepare').getByRole('button', { name: `Modifier ${priest.nom}` }).click();
     const edit = page.getByRole('dialog');
     await expect(edit.locator('[name=hp]')).toHaveValue(String(priest.pv));
+    await expect(edit.locator('[name=cult]')).toHaveValue('Ulric');
     await expect(edit.locator('[name=hp]')).not.toHaveAttribute('readonly', '');
     await context.grantPermissions(['clipboard-read', 'clipboard-write'], { origin: `http://127.0.0.1:${port}` }).catch(() => {});
     await edit.getByRole('button', { name: 'Copier en JSON' }).click();
     await expect(page.locator('#toast-container')).toContainText('Profil copié en JSON');
     const copied = JSON.parse(await page.evaluate(() => navigator.clipboard.readText()));
     assert.equal(copied.nom, priest.nom);
+    assert.equal(copied.culte, 'Ulric');
     assert.deepEqual(copied.prieres, priest.prieres);
     assert.deepEqual(copied.talents, priest.talents);
     await edit.getByRole('button', { name: 'Fermer' }).click();

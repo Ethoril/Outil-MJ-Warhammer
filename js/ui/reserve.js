@@ -24,7 +24,7 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
     const meta = document.createElement('div');
     meta.id = 'form-profile-meta';
     meta.style.cssText = 'display:grid; gap:6px; margin:10px 0;';
-    meta.innerHTML = '<label>Tags <small class="muted">(séparés par des virgules)</small><input name="tags" placeholder="chef, gobelin, magie"></label><label>Notes<textarea name="notes" rows="2" placeholder="Repères et consignes"></textarea></label><label style="display:flex; gap:6px; align-items:center;"><input type="checkbox" name="favorite"> Profil favori</label><label style="display:flex; gap:6px; align-items:center;"><input type="checkbox" name="propagate"> Mettre à jour les exemplaires en cours (PV max et fiche, sans toucher aux PV actuels ni aux états)</label>';
+    meta.innerHTML = '<label>Culte<input name="cult" placeholder="Myrmidia"></label><label>Tags <small class="muted">(séparés par des virgules)</small><input name="tags" placeholder="chef, gobelin, magie"></label><label>Notes<textarea name="notes" rows="2" placeholder="Repères et consignes"></textarea></label><label style="display:flex; gap:6px; align-items:center;"><input type="checkbox" name="favorite"> Profil favori</label><label style="display:flex; gap:6px; align-items:center;"><input type="checkbox" name="propagate"> Mettre à jour les exemplaires en cours (PV max et fiche, sans toucher aux PV actuels ni aux états)</label>';
     const actions = DOM.reserve.form.querySelector('.actions');
     DOM.reserve.form.insertBefore(meta, actions);
   }
@@ -176,6 +176,7 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
     f.querySelector('[name=id]').value = p.id; f.querySelector('[name=name]').value = p.name;
     f.querySelector('[name=kind]').value = p.kind; f.querySelector('[name=initiative]').value = p.initiative; f.querySelector('[name=hp]').value = p.hp;
     f.querySelector('[name=group]').value = p.group || '';
+    f.querySelector('[name=cult]').value = p.cult || '';
     f.querySelector('[name=tags]').value = normalizeTags(p.tags).join(', ');
     f.querySelector('[name=notes]').value = p.notes || '';
     f.querySelector('[name=favorite]').checked = Boolean(p.favorite);
@@ -265,8 +266,14 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
     }
 
     const id = fd.get('id');
-    const data = { name: fd.get('name'), kind: fd.get('kind'), initiative: Number(fd.get('initiative') || 0), hp: Number(fd.get('hp') || 0), group: (fd.get('group') || '').trim(), tags: normalizeTags(fd.get('tags')), notes: String(fd.get('notes') || ''), favorite: fd.get('favorite') === 'on', caracs, armor, armorLocations, diceLines };
+    const data = { name: fd.get('name'), kind: fd.get('kind'), initiative: Number(fd.get('initiative') || 0), hp: Number(fd.get('hp') || 0), group: (fd.get('group') || '').trim(), cult: String(fd.get('cult') || '').trim(), tags: normalizeTags(fd.get('tags')), notes: String(fd.get('notes') || ''), favorite: fd.get('favorite') === 'on', caracs, armor, armorLocations, diceLines };
     const existing = id ? Store.getProfile(id) : null;
+    const cults = (existing?.talents || []).filter(row => ['talent-bless', 'talent-invoke'].includes(row.id)).map(row => row.specialization || row.specialty).filter(Boolean);
+    if (data.cult && cults.length && !cults.some(cult => normalizeSearchText(cult) === normalizeSearchText(data.cult))) {
+      showToast(`Culte différent des talents de culte : ${cults.join(', ')}.`, 'error');
+      if (submit) submit.disabled = false;
+      return;
+    }
     const picked = keywordPicker?.getValue() || { keywords: [], keywordExclusions: [] };
     if (picked.keywords.length || picked.keywordExclusions.length || existing?.keywords || existing?.keywordExclusions) Object.assign(data, picked);
     if (existing?.extensions?.ficheId) {

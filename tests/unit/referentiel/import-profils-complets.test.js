@@ -375,3 +375,28 @@ describe('Référentiel des Traits de l’import', () => {
     assert.deepEqual([...missing], []);
   });
 });
+
+test('C20 : le culte du profil est importé, exporté et transmis au combattant', async () => {
+  const raw = { nom: 'Prêtre', type: 'PNJ', pv: 12, culte: 'Myrmidia', talents: [{ nom: 'Béni', specialisation: 'Myrmidia', rang: 1 }] };
+  for (const key of ['culte', 'cult']) {
+    const input = { ...raw }; if (key === 'cult') { input.cult = input.culte; delete input.culte; }
+    const parsed = parseProfileJson(JSON.stringify(input));
+    assert.equal(parsed.status, 'ready'); assert.equal(parsed.profiles[0].cult, 'Myrmidia');
+    const { store, byName } = await intoCombat(JSON.stringify(input));
+    assert.equal(byName('Prêtre').cult, 'Myrmidia');
+    assert.equal(exportProfileJson(store.listProfiles()[0]).culte, 'Myrmidia');
+    assert.equal(parseProfileJson(JSON.stringify(exportProfileJson(store.listProfiles()[0]))).profiles[0].cult, 'Myrmidia');
+  }
+});
+
+test('C20 : les sept prêtres déclarent le culte de leurs talents', () => {
+  const priests = parseProfileJson(COMPLETS).profiles.filter(p => p.name.startsWith('Recette Prêtre de '));
+  assert.equal(priests.length, 7);
+  for (const priest of priests) {
+    const cults = priest.talents.filter(t => ['talent-bless', 'talent-invoke'].includes(t.id)).map(t => t.specialization);
+    assert.ok(cults.length); assert.ok(cults.every(cult => cult === priest.cult), priest.name);
+  }
+  const mismatch = parseProfileJson(JSON.stringify({ nom: 'Prêtre', pv: 12, culte: 'Sigmar', talents: [{ nom: 'Béni', specialisation: 'Myrmidia', rang: 1 }] }));
+  assert.equal(mismatch.status, 'needs-review');
+  assert.ok(mismatch.errors.some(row => row.reason === 'culte-talent-incoherent'));
+});

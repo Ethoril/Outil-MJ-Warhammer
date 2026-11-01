@@ -20,6 +20,16 @@ const NUMERIC_KINDS = new Set(['fixed', 'count', 'characteristic', 'characterist
 
 /** Brouillon vide : tous les nombres sont des chaînes (champs <input>), les faits des chaînes 'true' | 'false' | ''. */
 export const emptyDivineForm = () => ({ damageRoll: '', damageRolls: {}, removals: {}, healCount: '', weaponId: '', weaponClassConfirmed: false, expiryRounds: '', facts: {} });
+export function defaultDivineSelection(actor, contracts) {
+  const fold = value => String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+  const cult = contracts.find(row => actor?.cult && fold(row.deity) === fold(actor.cult))?.deity || '';
+  return { cult, contractId: contracts.find(row => row.type === 'blessing' && (!cult || row.deity === cult))?.id, canSpeak: true };
+}
+export function confirmRangeByDefault(form, targetId) {
+  form.facts ??= {};
+  form.facts[targetId] ??= {};
+  if (!Object.hasOwn(form.facts[targetId], 'withinRange')) form.facts[targetId].withinRange = 'true';
+}
 
 /** Texte de source : « Livre de base V5 EN, p. 227 ». */
 export function sourceText(contract) {

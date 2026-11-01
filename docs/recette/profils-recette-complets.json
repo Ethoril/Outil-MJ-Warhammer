@@ -5,6 +5,7 @@
   "profils": [
     {
       "nom": "Recette Prêtre de Ulric",
+      "culte": "Ulric",
       "type": "PNJ",
       "groupe": "Recette",
       "pv": 14,
@@ -63,6 +64,7 @@
     },
     {
       "nom": "Recette Prêtre de Ranald",
+      "culte": "Ranald",
       "type": "PNJ",
       "groupe": "Recette",
       "pv": 14,
@@ -138,6 +140,7 @@
     },
     {
       "nom": "Recette Prêtre de Myrmidia",
+      "culte": "Myrmidia",
       "type": "PNJ",
       "groupe": "Recette",
       "pv": 14,
@@ -198,6 +201,7 @@
     },
     {
       "nom": "Recette Prêtre de Sigmar",
+      "culte": "Sigmar",
       "type": "PNJ",
       "groupe": "Recette",
       "pv": 14,
@@ -249,6 +253,7 @@
     },
     {
       "nom": "Recette Prêtre de Shallya",
+      "culte": "Shallya",
       "type": "PNJ",
       "groupe": "Recette",
       "pv": 14,
@@ -300,6 +305,7 @@
     },
     {
       "nom": "Recette Prêtre de Manann",
+      "culte": "Manann",
       "type": "PNJ",
       "groupe": "Recette",
       "pv": 14,
@@ -351,6 +357,7 @@
     },
     {
       "nom": "Recette Prêtre de Taal",
+      "culte": "Taal",
       "type": "PNJ",
       "groupe": "Recette",
       "pv": 14,

@@ -93,6 +93,7 @@ export function exportProfileJson(profile) {
     ...(profile.keywords?.length ? { keywords: [...profile.keywords] } : {}), ...(profile.keywordExclusions?.length ? { keywordExclusions: [...profile.keywordExclusions] } : {}),
     ...(skills.length ? { competences: skills } : {}), ...(talents.length ? { talents } : {}), ...(traits.length ? { traits } : {}),
     ...(profile.spells?.length ? { sorts: namesOf(profile.spells) } : {}), ...(profile.prayers?.length ? { prieres: namesOf(profile.prayers) } : {}),
+    ...(typeof profile.cult === 'string' ? { culte: profile.cult } : {}),
     ...(profile.equipment?.length ? { equipement: exportEquipment(profile, catalogue) } : {}),
     ...(Number.isInteger(fortune) ? { fortune } : {}), ...(Number.isInteger(fate) ? { destin: fate } : {}),
     ...(Number.isInteger(v5.resilience) ? { resilience: v5.resilience } : {}), ...(Number.isInteger(v5.corruptionPoints) ? { corruption: v5.corruptionPoints } : {}),

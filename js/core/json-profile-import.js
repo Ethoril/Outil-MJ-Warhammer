@@ -28,7 +28,7 @@ const PROFILE_KEYS = {
   keywords: ['keywords', 'motsclescreature', 'creaturekeywords'], keywordExclusions: ['keywordexclusions', 'motsclesexclus'],
   skills: ['competences', 'skills'], talents: ['talents'], equipment: ['equipement', 'equipment'], spells: ['sorts', 'spells'], prayers: ['prieres', 'prayers'],
   traits: ['traits'], size: ['taille', 'size'], fortune: ['fortune', 'chance'], fate: ['destin', 'fate'], resilience: ['resilience'], corruption: ['corruption'], sin: ['peches', 'sin'],
-  ficheSnapshot: ['fichesnapshot'], protection: ['protection'], movement: ['mouvement', 'movement'], race: ['espece', 'race']
+  ficheSnapshot: ['fichesnapshot'], protection: ['protection'], movement: ['mouvement', 'movement'], race: ['espece', 'race'], cult: ['culte', 'cult']
 };
 const PROFILE_IGNORED = ['id', 'extensions', 'participantid', 'targetid', 'attr', 'format', 'version', 'profils', 'profiles'];
 const ACTION_KEYS = {
@@ -330,6 +330,7 @@ function parseProfile(raw, index, referential = BASE_REFERENTIAL) {
   const profile = { name: name || null, kind, group, hp, initiative, caracs, armor: parseArmor(values.armor, errors), tags, notes, favorite, actions };
   // Espèce (texte) et Mouvement (entier ≥ 0) sont contrôlés avant d'être repris.
   if (values.race !== undefined && typeof values.race !== 'string') { errors.push({ field: 'espèce', reason: 'texte-attendu', value: shownValue(values.race) }); delete values.race; }
+  if (values.cult !== undefined && typeof values.cult !== 'string') { errors.push({ field: 'culte', reason: 'texte-attendu', value: shownValue(values.cult) }); delete values.cult; }
   if (values.movement !== undefined) { const moved = parseInteger(values.movement, 'mouvement', errors, { min: 0 }); if (moved === null) delete values.movement; else values.movement = moved; }
   const hasArmor = values.armor !== undefined || values.armorLocations !== undefined;
   // Talents, compétences, sorts, prières, équipement, Traits et ressources à la forme de l'outil : ils passent par la voie des fiches.
@@ -349,6 +350,9 @@ function parseProfile(raw, index, referential = BASE_REFERENTIAL) {
     if (sheet.armor) profile.armor = sheet.armor;
     profile.actions.push(...sheet.actions);
   }
+  const cults = (profile.talents || []).filter(row => ['talent-bless', 'talent-invoke'].includes(row.id)).map(row => row.specialization || row.specialty).filter(Boolean);
+  if (profile.cult && cults.length && !cults.some(cult => normKey(cult) === normKey(profile.cult)))
+    errors.push({ field: 'culte', reason: 'culte-talent-incoherent', value: profile.cult, message: `Culte « ${profile.cult} » différent des talents de culte : ${cults.join(', ')}.` });
   for (const key of ['keywords', 'keywordExclusions']) if (values[key] !== undefined) profile[key] = parseKeywordList(values[key], key, errors, referential);
   if (profile.equipment && !(sheet && Object.hasOwn(sheet.fields, 'equipment'))) { const checked = normalizeEquipment(profile.equipment); if (checked.coverage === 'invalid') errors.push({ field: 'equipment', reason: 'collection-invalide', value: checked.warnings.map(w => w.message).join('; ') }); }
   if (values.maxHp !== undefined) profile.maxHp = parseInteger(values.maxHp, 'maxHp', errors);
