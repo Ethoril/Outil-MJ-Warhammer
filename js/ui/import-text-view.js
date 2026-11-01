@@ -27,6 +27,8 @@ const REASON_LABELS = {
   'taille-inconnue': 'Taille inconnue',
   'specialisation-manquante': 'spécialisation manquante',
   doublon: 'en double',
+  'caracteristique-manquante': 'caractéristique manquante',
+  'arme-sans-base': 'arme sans compétence liée',
   'cles-concurrentes': 'deux clés pour le même champ'
 };
 const FIELD_LABELS = { name: 'Nom', kind: 'Type', group: 'Groupe', hp: 'PV', initiative: 'Initiative', notes: 'Notes', tags: 'Mots-clés', keywords: 'Mots-clés de créature', keywordExclusions: 'Mots-clés retirés', base: 'valeur', mod: 'modificateur', valeurs: 'valeur' };

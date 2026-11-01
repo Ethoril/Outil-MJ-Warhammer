@@ -180,6 +180,16 @@ describe('Import JSON : clés françaises, alias et clés anglaises', () => {
     assert.match(result.errors[0].message, /« competences » et « skills »/);
   });
 
+  test('compétence ou arme sans caractéristique pour calculer sa base : signalé', () => {
+    const missing = importOne(JSON.stringify({ nom: 'Sans FM', pv: 10, caracteristiques: { CC: 40 }, competences: [{ nom: 'Prière', avances: 10 }, { nom: 'Calme', avances: 5 }] }));
+    const text = warningsOf(missing).join(' | ');
+    assert.match(text, /Caractéristique Soc manquante pour la compétence « Prière »/);
+    assert.match(text, /Caractéristique FM manquante pour la compétence « Calme »/);
+    assert.equal(missing.status, 'needs-review');
+    const weapon = importOne(JSON.stringify({ nom: 'Archer sans compétence', pv: 10, caracteristiques: { CC: 40, CT: 40 }, equipement: ['Arc elfique (2M)'] }));
+    assert.match(warningsOf(weapon).join(' | '), /Arme « Arc elfique \(2M\) » : aucune compétence liée avec une base/);
+  });
+
   test('rang, doublons de talent et talents sans spécialisation', () => {
     const result = importOne(JSON.stringify({ ...base, talents: ['Combat instinctif', { nom: 'Combat instinctif', rang: 2 }, 'Béni'] }));
     assert.equal(result.profiles[0].talents.find(item => item.id === 'talent-combat-reflexes').rank, 3);

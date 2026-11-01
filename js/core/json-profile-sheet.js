@@ -49,6 +49,8 @@ const NAMED_KEYS = { name: ['nom', 'name'] };
 const ITEM_KEYS = { name: ['nom', 'name'], category: ['categorie', 'category'] };
 const TRAIT_KEYS = { name: ['nom', 'name'], value: ['valeur', 'value', 'rating', 'x'] };
 const BASIC_SKILLS = new Set(FICHE_BASIC_SKILLS.map(skill => skill.name));
+const CARAC_UPPER = { cc: 'CC', ct: 'CT', f: 'F', e: 'E', i: 'I', ag: 'Ag', dex: 'Dex', int: 'Int', fm: 'FM', soc: 'Soc' };
+const BASIC_CARACS = new Map(FICHE_BASIC_SKILLS.map(skill => [skill.name, CARAC_UPPER[skill.carac]]));
 const CARAC_LOWER = { CC: 'cc', CT: 'ct', F: 'f', E: 'e', I: 'i', Ag: 'ag', Dex: 'dex', Int: 'int', FM: 'fm', Soc: 'soc' };
 const SIZE_WORDS_SHOWN = 'Petite, Moyenne, Grande, Énorme, Monstrueuse';
 
@@ -113,7 +115,7 @@ function parseTalents(value, ref, errors, tools) {
   return [...merged.values()].flatMap(row => Array.from({ length: row.rank }, () => ({ nom: row.nom })));
 }
 
-function parseSkills(value, ref, errors, tools) {
+function parseSkills(value, ref, caracs, errors, tools) {
   const basic = {};
   const advanced = [];
   const seen = new Set();
@@ -125,6 +127,9 @@ function parseSkills(value, ref, errors, tools) {
     const found = resolveSkill(read.name, { owned: true });
     if (found.status === 'unknown') errors.push({ field: 'compétences', reason: 'competence-inconnue', value: read.name, message: unknownMessage('Compétence inconnue', read.name, ref.skills) });
     const nom = found.entry && found.status === 'resolved' ? found.entry.nom : read.name;
+    // Sans sa caractéristique, la fiche écarte la compétence : le total ne se calcule pas.
+    const carac = BASIC_CARACS.get(nom) || (found.entry?.carac && CARAC_UPPER[found.entry.carac]) || null;
+    if (carac && !Number.isFinite(caracs[carac])) errors.push({ field: 'compétences', reason: 'caracteristique-manquante', value: nom, message: `Caractéristique ${carac} manquante pour la compétence « ${nom} » : ajoutez-la dans caracteristiques.` });
     if (seen.has(fold(nom))) { errors.push({ field: 'compétences', reason: 'doublon', value: nom, message: `Compétence en double : « ${nom} ».` }); continue; }
     seen.add(fold(nom));
     if (BASIC_SKILLS.has(nom)) basic[nom] = advances; else advanced.push({ nom, adv: advances });
@@ -240,7 +245,7 @@ export function buildProfileSheet(input, { caracs, name, hp, hasArmor, spelled }
   // Une liste non écrite à la forme française (ou brute) n'est pas touchée : couverture « absente » de la fiche.
   const fiche = { nom: name, race: '', carac: Object.fromEntries(Object.entries(CARAC_LOWER).filter(([key]) => Number.isFinite(caracs[key])).map(([key, lower]) => [lower, { base: caracs[key], adv: 0 }])) };
   const at = key => french.includes(key);
-  if (at('skills')) { const skills = parseSkills(pending.skills, ref, errors, tools); fiche.skillsBasic = skills.basic; fiche.skillsAdvanced = skills.advanced; }
+  if (at('skills')) { const skills = parseSkills(pending.skills, ref, caracs, errors, tools); fiche.skillsBasic = skills.basic; fiche.skillsAdvanced = skills.advanced; }
   if (at('talents')) fiche.talentsAcq = parseTalents(pending.talents, ref, errors, tools);
   if (at('spells')) fiche.sorts = parseNames(pending.spells, 'sorts', 'Sort inconnu', ref.spells, errors, tools);
   if (at('prayers')) fiche.prieres = parseNames(pending.prayers, 'prières', 'Prière inconnue', ref.prayers, errors, tools);
@@ -259,6 +264,7 @@ export function buildProfileSheet(input, { caracs, name, hp, hasArmor, spelled }
   const links = Object.fromEntries(plan.equipmentActions.filter(row => row.proposed).map(row => [row.key, row.proposed]));
   if (Object.keys(links).length) plan = planProfileSync(snapshot, base, { equipmentLinks: links });
   const updated = plan.updated;
+  for (const row of plan.equipmentActions) if (row.action.base === '' && row.role === 'attack') errors.push({ field: 'équipement', reason: 'arme-sans-base', value: row.name, message: `Arme « ${row.name} » : aucune compétence liée avec une base (ajoutez la compétence de l’arme dans competences, avec sa caractéristique).` });
   for (const key of lists) if (snapshot.coverage?.[key] === 'present') result.fields[key] = [...cloneValue(updated[key]), ...cloneValue(kept[key] || [])];
   result.fields.ficheSnapshot = cloneValue(updated.ficheSnapshot);
   // Pas d'identité de fiche : chaque copie en combat garde ses propres ressources, comme un profil sans fiche (les jets d'équipement portent leur identifiant).
