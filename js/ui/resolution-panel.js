@@ -204,7 +204,7 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
 
   // Cible
   const targetBlock = node('div', 'workspace-resolution-row');
-  targetBlock.appendChild(rubric('Cible'));
+  targetBlock.appendChild(rubric(draft.preview?.attack && !draft.preview.targetId ? 'Cible *' : 'Cible'));
   const targetChips = node('div', 'workspace-chip-list');
   [['Adversaires', groups.adversaries], ['Alliés', groups.allies]].forEach(([label, list]) => {
     if (!list.length) return;
@@ -2813,6 +2813,11 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
         const item = node('li');
         const field = reason.focus && (section.querySelector?.(`[data-blocking-field="${reason.focus}"]`) || live.querySelector?.(`[data-blocking-field="${reason.focus}"]`));
         if (field) {
+          if (['INPUT', 'SELECT', 'TEXTAREA'].includes(field.tagName)) {
+            field.setAttribute('aria-required', 'true');
+            const caption = field.closest?.('label') || (field.id && (section.querySelector?.(`label[for="${field.id}"]`) || live.querySelector?.(`label[for="${field.id}"]`)));
+            if (caption && !caption.textContent.trim().endsWith('*')) caption.append(' *');
+          }
           const link = button(reason.text, 'workspace-ghost');
           link.addEventListener('click', () => { field.scrollIntoView({ block: 'center' }); field.focus(); });
           item.appendChild(link);
