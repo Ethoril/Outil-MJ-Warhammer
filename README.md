@@ -1,6 +1,6 @@
-# Outil MJ — Warhammer (v3.30.1)
+# Outil MJ — Warhammer (v3.31.0)
 
-Application web progressive (PWA) d’assistance au Maître de Jeu pour **Warhammer**, avec combat **V5** et fiches importées. Version 3.30.1 : libellé de la pénitence du Courroux clarifié (texte à définir, suivi sur la fiche facultatif) ; rappels des sorts de suppléments alignés sur la feuille du MJ ; guide de recette du MJ mis à jour (56 parcours) ; parcours navigateur tous verts.
+Application web progressive (PWA) d’assistance au Maître de Jeu pour **Warhammer**, avec combat **V5** et fiches importées. Version 3.31.0 : l'import JSON de profils porte tout le profil (talents, Traits, compétences, sorts, prières, Destin, Résilience, Fortune, Corruption, Péchés, équipement du catalogue), signale tout nom ou champ inconnu avec une suggestion, et le bouton « Copier en JSON » permet l'aller-retour ; profils de recette prêts dans docs/recette/.
 
 Le [rapport de recette du lot 2](docs/lot2/LOT2_RECETTE_2_5.md) décrit le périmètre livré, les contrôles et les limites. Les effets narratifs restent des rappels, les valeurs de progression appartiennent aux fiches et la magie/les prières automatisées restent au lot 3.
 
