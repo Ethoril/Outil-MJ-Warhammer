@@ -214,7 +214,7 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
     group.appendChild(node('span', 'workspace-chip-group-label', label));
     list.forEach(participant => {
       const item = chip(participant.name, { pressed: participant.id === target?.id, key: `target-${participant.id}` });
-      if (!targetChips.querySelector('[data-blocking-field="target"]')) item.dataset.blockingField = 'target';
+      if (!targetChips.querySelector?.('[data-blocking-field="target"]')) item.dataset.blockingField = 'target';
       item.classList.add('combatant-name');
       item.addEventListener('click', () => handlers.select({ targetId: participant.id }));
       group.appendChild(item);
@@ -2787,17 +2787,17 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
     live.appendChild(commands);
   } else if (preview) {
     live.appendChild(renderResult(preview, target, draft, handlers, participants));
-    const defenseRoll = section.querySelector('[data-roll-input="defense"]');
+    const defenseRoll = section.querySelector?.('[data-roll-input="defense"]');
     if (defenseRoll) defenseRoll.dataset.blockingField = 'defense-roll';
-    const criticalPending = live.querySelector('[data-roll-input="critical-effect"], [data-roll-input="critical-second"], [data-roll-input="defender-critical-effect"]');
+    const criticalPending = live.querySelector?.('[data-roll-input="critical-effect"], [data-roll-input="critical-second"], [data-roll-input="defender-critical-effect"]');
     if (criticalPending) criticalPending.dataset.blockingField = 'critical-pending';
-    const criticalAlternative = live.querySelector('[data-roll-input="critical-effect-alternative"], [data-roll-input="critical-second-alternative"], [data-roll-input="defender-critical-effect-alternative"]');
+    const criticalAlternative = live.querySelector?.('[data-roll-input="critical-effect-alternative"], [data-roll-input="critical-second-alternative"], [data-roll-input="defender-critical-effect-alternative"]');
     if (criticalAlternative) criticalAlternative.dataset.blockingField = 'critical-alternative';
-    const locationField = live.querySelector(preview.critical?.details?.needsLocation ? '[data-roll-input="critical-location"]' : '[data-roll-input="defender-critical-location"]');
+    const locationField = live.querySelector?.(preview.critical?.details?.needsLocation ? '[data-roll-input="critical-location"]' : '[data-roll-input="defender-critical-location"]');
     if (locationField && (preview.critical?.details?.needsLocation || preview.defenderCritical?.details?.needsLocation)) {
       locationField.dataset.blockingField = 'critical-location';
       locationField.setAttribute('aria-required', 'true');
-      const caption = live.querySelector(`label[for="${locationField.id}"]`);
+      const caption = live.querySelector?.(`label[for="${locationField.id}"]`);
       if (caption) caption.append(' *');
     }
     const apply = node('div', 'workspace-inline-actions workspace-resolution-commands');
@@ -2811,7 +2811,7 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
       const list = node('ul');
       for (const reason of reasons) {
         const item = node('li');
-        const field = reason.focus && (section.querySelector(`[data-blocking-field="${reason.focus}"]`) || live.querySelector(`[data-blocking-field="${reason.focus}"]`));
+        const field = reason.focus && (section.querySelector?.(`[data-blocking-field="${reason.focus}"]`) || live.querySelector?.(`[data-blocking-field="${reason.focus}"]`));
         if (field) {
           const link = button(reason.text, 'workspace-ghost');
           link.addEventListener('click', () => { field.scrollIntoView({ block: 'center' }); field.focus(); });
