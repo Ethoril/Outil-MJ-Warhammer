@@ -6,6 +6,8 @@ import { parseProfileJson, PROFILE_JSON_EXAMPLE } from '../../../js/core/json-pr
 import { exportProfileJson, exportProfilesJson } from '../../../js/core/json-profile-export.js';
 import { resolveSkill, resolveTalent } from '../../../js/core/reference-catalog.js';
 import { resolveDivineAccess } from '../../../js/core/v5-divine-access.js';
+import { readdirSync } from 'node:fs';
+import { CREATURE_TRAIT_NAMES } from '../../../js/data/creature-trait-names.js';
 import registry from '../../../js/data/v5-divine-contracts.json' with { type: 'json' };
 
 const read = path => readFileSync(new URL(`../../../${path}`, import.meta.url), 'utf8');
@@ -280,6 +282,7 @@ describe('Import JSON : noms inconnus signalés avec le nom le plus proche', () 
 describe('Export → import : le profil revient identique', () => {
   /** Ce qui compte dans un profil du Store, sans identifiants ni lien de fiche tiré au sort. */
   const essence = profile => JSON.parse(JSON.stringify({
+    movement: profile.movement, race: profile.race, protection: profile.protection,
     name: profile.name, kind: profile.kind, group: profile.group, hp: profile.maxHp, initiative: profile.initiative, caracs: profile.caracs, armor: profile.armor, armorLocations: profile.armorLocations,
     tags: profile.tags, notes: profile.notes, favorite: profile.favorite, keywords: profile.keywords, keywordExclusions: profile.keywordExclusions,
     skills: (profile.skills || []).map(({ id, name, total, advances, status }) => ({ id, name, total, advances, status })),
@@ -288,7 +291,7 @@ describe('Export → import : le profil revient identique', () => {
     equipment: (profile.equipment || []).map(item => item.id), traits: profile.extensions?.traits,
     v5: { fate: profile.extensions?.v5?.fate, resilience: profile.extensions?.v5?.resilience, corruption: profile.extensions?.v5?.corruptionPoints, sin: profile.extensions?.v5?.divine?.sin },
     fortune: profile.ficheSnapshot?.resources?.fortune,
-    actions: (profile.diceLines || []).map(({ note, type, base, damage, damageFormula, qualities, extensions }) => ({ note, type, base, damage, damageFormula, qualities, slModifier: extensions?.v5?.slModifier, linked: Boolean(extensions?.fiche?.equipmentId) }))
+    actions: (profile.diceLines || []).map(({ note, type, base, damage, damageFormula, qualities, extensions }) => ({ note, type, base, damage, damageFormula, qualities, slModifier: extensions?.v5?.slModifier, linked: Boolean(extensions?.fiche?.equipmentId), extensions: JSON.parse(JSON.stringify(extensions || {}).replace(/json-[a-z0-9]+/g, 'json')) }))
   }));
 
   async function roundTrip(text) {
@@ -316,7 +319,7 @@ describe('Export → import : le profil revient identique', () => {
   });
 
   test('un profil avec équipement, Traits, Taille et DR sur un jet', async () => {
-    const text = JSON.stringify({ nom: 'Géant sur mesure', type: 'Créature', pv: 40, caracteristiques: { CC: 50, CT: 30, F: 60, E: 60, FM: 30, Ag: 30, Soc: 20 }, traits: ['Peur (2)', 'Grim'], taille: 'Énorme',
+    const text = JSON.stringify({ nom: 'Géant sur mesure', type: 'Créature', espece: 'ogre', mouvement: 6, pv: 40, caracteristiques: { CC: 50, CT: 30, F: 60, E: 60, FM: 30, Ag: 30, Soc: 20 }, traits: ['Peur (2)', 'Grim'], taille: 'Énorme',
       competences: [{ nom: 'Projectiles (Arc)', avances: 5 }], equipement: ['Arc elfique (2M)', 'Calotte de cuir', 'Calotte de cuir', { nom: 'Plastron', categorie: 'Plates' }], fortune: 1,
       jets: [{ nom: 'Massue', type: 'attaque', score: 50, degats: 'BF+4', qualites: ['Percutante', 'Recharge 2'], dr: -1 }, { nom: 'Rugissement', type: 'compétence', score: 40 }] });
     const [[before], [after]] = await roundTrip(text);
@@ -332,5 +335,19 @@ describe('Export → import : le profil revient identique', () => {
     assert.ok(result.profiles[0].actions.every(action => !action.mod));
     assert.ok(result.profiles[0].actions.some(action => Number.isInteger(action.extensions?.v5?.slModifier)));
     assert.equal(exportProfileJson({ ...result.profiles[0], diceLines: result.profiles[0].actions }).jets.length, 4);
+  });
+});
+
+describe('Référentiel des Traits de l’import', () => {
+  test('tous les Traits des livres du bestiaire sont connus (sinon régénérer js/data/creature-trait-names.js)', () => {
+    const known = new Set(CREATURE_TRAIT_NAMES);
+    const dir = new URL('../../../js/data/bestiary/', import.meta.url);
+    const missing = new Set();
+    for (const file of readdirSync(dir).filter(name => /^L\d+\.json$/.test(name))) {
+      for (const profile of JSON.parse(readFileSync(new URL(file, dir), 'utf8')).profiles) {
+        for (const trait of [...(profile.traits || []), ...(profile.optionalTraits || [])]) if (trait?.name && !known.has(trait.name)) missing.add(`${file} : ${trait.name}`);
+      }
+    }
+    assert.deepEqual([...missing], []);
   });
 });
