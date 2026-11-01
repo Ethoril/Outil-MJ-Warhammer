@@ -11,7 +11,7 @@ Un profil (personnage) peut être créé en collant du JSON, sans passer par les
 
 La racine est un profil `{ … }`, une liste de profils `[ … ]`, ou `{ "profils": [ … ] }` (alias `profiles`). Les clés `"format": "outil-mj-profil"` et `"version": 1` sont facultatives ; une version supérieure à 1 est refusée (« Version de format inconnue »).
 
-Les clés ignorent la casse, les accents, les espaces, les tirets et les soulignés : `"Caractéristiques"` = `"caracteristiques"`, `"pv_max"` = `"pvmax"`. Les clés anglaises d’un fichier de sauvegarde sont des alias acceptés (`skills`, `talents`, `equipment`, `spells`, `prayers`, `race`, `movement`, `protection`, `ficheSnapshot`, `armorLocations`) : sous leur clé anglaise, ces listes gardent la forme interne des sauvegardes et sont reprises **telles quelles, sans contrôle des noms**. Pour être validés contre les référentiels, les noms s’écrivent sous les clés françaises ci-dessous (`competences`, `sorts`, `prieres`, `equipement`, et `talents` en textes ou en objets `{ nom, … }`). `id`, `extensions`, `participantId`, `targetId` et `attr` sont ignorés sans avertissement : chaque import crée un profil neuf.
+Les clés ignorent la casse, les accents, les espaces, les tirets et les soulignés : `"Caractéristiques"` = `"caracteristiques"`, `"pv_max"` = `"pvmax"`. Les clés anglaises d’un fichier de sauvegarde sont des alias acceptés (`skills`, `talents`, `equipment`, `spells`, `prayers`, `race`, `movement`, `protection`, `ficheSnapshot`, `armorLocations`) : sous leur clé anglaise, seule la **forme interne** des sauvegardes est reprise telle quelle (objets `{ "id": …, … }` pour talents, compétences et équipement, objets `{ "nom": … }` pour sorts et prières). Tout autre élément (texte, objet `{ name, rank }`…) est validé comme sous les clés françaises. Écrire ensemble une clé française et sa clé anglaise (`competences` et `skills`…) est signalé. `id`, `extensions`, `participantId`, `targetId` et `attr` sont ignorés sans avertissement : chaque import crée un profil neuf.
 
 ## Profil
 
@@ -170,7 +170,7 @@ Talent inconnu : « Oeil de la tempete » — vouliez-vous « Œil de la tempêt
 Objet ambigu : « Plastron » existe en Cuir bouilli, Mailles, Plates — ajoutez { "nom": "Plastron", "categorie": "…" }.
 ```
 
-Si le profil est créé malgré tout, un talent, une compétence, un sort ou une prière inconnus restent sur le profil à l’état « à vérifier » (comme sur une fiche) ; un objet inconnu n’est pas ajouté. Les noms de talents et de compétences suivent les accents du référentiel ; ceux des sorts, prières et objets ignorent la casse et l’apostrophe typographique. Une **clé inconnue** (dans le profil, une compétence, un talent…) est signalée « champ inconnu ».
+Si le profil est créé malgré tout, un talent, une compétence, un sort ou une prière inconnus restent sur le profil à l’état « à vérifier » (comme sur une fiche) ; un objet inconnu n’est pas ajouté. Les noms de talents et de compétences suivent les accents du référentiel ; ceux des sorts, prières et objets ignorent la casse et l’apostrophe typographique. Une **clé inconnue** (dans le profil, une compétence, un talent, un Trait…) est signalée « champ inconnu ». Sont aussi signalés : une compétence dont la caractéristique manque dans `caracteristiques` (son total ne se calcule pas), une arme du catalogue sans compétence liée ayant une base, une spécialisation donnée à un talent qui n’en a pas, une `taille` écartée parce que les `traits` en donnent déjà une, un `mouvement` ou une `espece` invalides. L’outil ne peut pas dire si une spécialisation libre (« Magie des Arcanes (Zzz) ») existe : elle est reprise telle quelle.
 
 ### Exemple de personnage de fiche
 
@@ -196,7 +196,7 @@ Si le profil est créé malgré tout, un talent, une compétence, un sort ou une
 
 ## Aller-retour : « Copier en JSON »
 
-Dans l’éditeur d’un profil existant (Modifier le profil), le bouton **Copier en JSON** place dans le presse-papiers le profil enregistré, dans ce format ; le coller dans « Créer depuis un JSON » recrée un profil identique (talents et rangs, compétences, sorts, prières, équipement, Traits, ressources, jets avec leurs qualités et leur DR). Les liens de fiche, les identifiants et les réglages de séance ne sont pas exportés.
+Dans l’éditeur d’un profil existant (Modifier le profil), le bouton **Copier en JSON** place dans le presse-papiers le profil enregistré, dans ce format ; le coller dans « Créer depuis un JSON » recrée un profil identique (talents et rangs, compétences, sorts, prières, équipement, Traits, ressources, jets avec leurs qualités et leur DR). Un profil importé n’a pas d’identité de fiche : chaque copie en combat garde sa propre Fortune, sa Corruption et ses effets. Les liens de fiche, les identifiants et les réglages de séance ne sont pas exportés.
 
 ## Exemple minimal
 
