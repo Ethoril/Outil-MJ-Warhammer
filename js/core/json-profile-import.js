@@ -332,6 +332,10 @@ function parseProfile(raw, index, referential = BASE_REFERENTIAL) {
   // Talents, compétences, sorts, prières, équipement, Traits et ressources à la forme de l'outil : ils passent par la voie des fiches.
   const keys = Object.keys(raw).map(normKey);
   const spelled = { skills: keys.includes('competences'), spells: keys.includes('sorts'), prayers: keys.includes('prieres'), equipment: keys.includes('equipement') };
+  // Une clé française et sa clé anglaise ensemble : deux écritures du même champ.
+  for (const [french, english] of [['competences', 'skills'], ['sorts', 'spells'], ['prieres', 'prayers'], ['equipement', 'equipment']]) {
+    if (keys.includes(french) && keys.includes(english)) errors.push({ field: french, reason: 'cles-concurrentes', value: '', message: `« ${french} » et « ${english} » sont deux écritures du même champ : gardez-en une seule.` });
+  }
   const sheet = buildProfileSheet(values, { caracs, name: name || 'Profil', hp, hasArmor, spelled }, errors, { readRecord, parseInteger, normKey, shown: shownValue });
   for (const key of FICHE_DATA_FIELDS) if (values[key] !== undefined && key !== 'keywords' && key !== 'keywordExclusions') {
     if (['skills', 'talents', 'equipment', 'spells', 'prayers'].includes(key) && !Array.isArray(values[key])) { if (!sheet) errors.push({ field: key, reason: 'liste-attendue', value: shownValue(values[key]) }); }

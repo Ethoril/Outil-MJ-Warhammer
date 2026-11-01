@@ -151,12 +151,33 @@ describe('Import JSON : clés françaises, alias et clés anglaises', () => {
     assert.deepEqual(strip(english.profiles[0]), strip(profile));
   });
 
-  test('les listes écrites sous leurs clés anglaises (sauvegardes) sont reprises telles quelles, sans validation', () => {
-    const data = { ...base, talents: [{ id: 'talent-eye-of-the-storm', name: 'Œil de la tempête', status: 'resolved', rank: 2 }, { name: 'Dur à cuire', rank: 2 }], skills: [], spells: [{ nom: 'Sort maison' }], prayers: [{ nom: 'Prière maison' }] };
+  test('les listes écrites sous leurs clés anglaises (sauvegardes) sont reprises telles quelles quand elles ont la forme interne', () => {
+    const data = { ...base, talents: [{ id: 'talent-eye-of-the-storm', name: 'Œil de la tempête', status: 'resolved', rank: 2 }, { id: 'talent-hardy', name: 'Dur à cuire', status: 'resolved', rank: 2 }], skills: [], spells: [{ nom: 'Sort maison' }], prayers: [{ nom: 'Prière maison' }] };
     const result = importOne(JSON.stringify(data));
     assert.deepEqual(warningsOf(result), []);
     for (const field of ['talents', 'skills', 'spells', 'prayers']) assert.deepEqual(result.profiles[0][field], data[field], field);
     assert.equal(result.profiles[0].ficheSnapshot, undefined);
+  });
+
+  test('sous les clés anglaises, seule la forme interne reconnaissable est reprise ; le reste est validé comme sous les clés françaises', () => {
+    const result = importOne(JSON.stringify({ ...base, spells: ['Purification', 'Brise os'], prayers: ['Morsure du louf', { nom: 'Prière maison' }], talents: ['Combat instinctif', { name: 'Oeil de la tempete', rank: 2 }, { id: 'talent-hardy', name: 'Dur à cuire', rank: 1, status: 'resolved' }], skills: [{ name: 'Priere', advances: 3 }, 7, ''] }));
+    const text = warningsOf(result).join(' | ');
+    assert.match(text, /Sort inconnu : « Brise os » — vouliez-vous « Brise-os »/);
+    assert.match(text, /Prière inconnue : « Morsure du louf » — vouliez-vous « Morsure du loup »/);
+    assert.match(text, /Talent inconnu : « Oeil de la tempete » — vouliez-vous « Œil de la tempête »/);
+    assert.match(text, /Compétence inconnue : « Priere »/);
+    assert.equal(result.errors.filter(error => error.field === 'compétences' && error.reason === 'texte-attendu').length, 2, 'élément numérique et élément vide signalés');
+    const profile = result.profiles[0];
+    assert.ok(profile.spells.some(spell => spell.nom === 'Purification'));
+    assert.ok(profile.prayers.some(prayer => prayer.nom === 'Prière maison'), 'objet { nom } repris tel quel');
+    assert.ok(profile.talents.some(talent => talent.id === 'talent-combat-reflexes'), 'la chaîne en tête de liste n’est pas perdue');
+    assert.ok(profile.talents.some(talent => talent.id === 'talent-hardy'), 'objet interne repris');
+  });
+
+  test('une clé française et sa clé anglaise ensemble sont signalées', () => {
+    const result = importOne(JSON.stringify({ ...base, competences: ['Prière'], skills: [], sorts: ['Purification'], spells: [{ nom: 'Purification' }] }));
+    assert.deepEqual(result.errors.map(error => error.reason), ['cles-concurrentes', 'cles-concurrentes']);
+    assert.match(result.errors[0].message, /« competences » et « skills »/);
   });
 
   test('rang, doublons de talent et talents sans spécialisation', () => {

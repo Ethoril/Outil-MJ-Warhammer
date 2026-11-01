@@ -68,7 +68,11 @@ function referentials() {
 
 /** Un élément de liste : texte « Nom » ou objet ; les alias de clés sont lus par `readRecord`. */
 function readItem(item, table, tools, field, errors) {
-  if (typeof item === 'string') return item.trim() ? { name: item.trim() } : null;
+  if (typeof item === 'string') {
+    if (item.trim()) return { name: item.trim() };
+    errors.push({ field, reason: 'texte-attendu', value: '', message: `${field} : élément vide.` });
+    return null;
+  }
   if (!isRecord(item)) { errors.push({ field, reason: 'texte-attendu', value: tools.shown(item) }); return null; }
   const { values, unknown } = tools.readRecord(item, table);
   unknown.forEach(key => errors.push({ field: `${field} · ${key}`, reason: 'champ-inconnu', value: '' }));
@@ -196,21 +200,27 @@ function parseTraits(value, size, ref, errors, tools) {
 }
 
 /**
- * Une liste écrite à la française (`competences`, `sorts`, `prieres`, `equipement`) est validée et passe par la fiche ; sous sa clé anglaise
- * (`skills`, `spells`, `prayers`, `equipment`) elle reste la forme interne des sauvegardes, reprise telle quelle. `talents` s'écrit des deux
- * façons : textes et objets { nom, … } sont français, les objets internes { id, name, rank, … } sont repris tels quels.
+ * Seule la forme interne reconnaissable des sauvegardes est reprise telle quelle : objets `{ id | baseId, … }` (talents, compétences, équipement)
+ * et objets `{ nom }` sous la clé anglaise (sorts, prières). Tout le reste passe par la même validation que les clés françaises.
  */
-const frenchTalents = (list, tools) => Array.isArray(list) && list.length > 0
-  && list.every(item => typeof item === 'string' || (isRecord(item) && Object.keys(item).some(key => ['nom', 'specialisation', 'rang'].includes(tools.normKey(key)))));
+const isInternalItem = (key, item, spelled) => isRecord(item)
+  && (key === 'spells' || key === 'prayers' ? !spelled[key] && typeof item.nom === 'string' : typeof item.id === 'string' || typeof item.baseId === 'string');
 
 /**
  * Données de fiche d'un profil JSON. `input` : valeurs lues (clés canoniques `skills`, `talents`, `traits`, `size`, `spells`, `prayers`,
  * `equipment`, `fortune`, `fate`, `resilience`, `corruption`, `sin`). `spelled` : listes écrites sous leur clé française. Rend null quand
- * rien de tout cela n'est écrit à la forme française.
+ * rien de tout cela n'est écrit à valider.
  */
 export function buildProfileSheet(input, { caracs, name, hp, hasArmor, spelled }, errors, tools) {
   const lists = ['skills', 'talents', 'spells', 'prayers', 'equipment'];
-  const french = lists.filter(key => input[key] !== undefined && (key === 'talents' ? frenchTalents(input[key], tools) : spelled[key]));
+  const kept = {};
+  const pending = {};
+  for (const key of lists) {
+    if (!Array.isArray(input[key])) { pending[key] = input[key]; continue; }
+    kept[key] = input[key].filter(item => isInternalItem(key, item, spelled));
+    pending[key] = input[key].filter(item => !isInternalItem(key, item, spelled));
+  }
+  const french = lists.filter(key => input[key] !== undefined && (Array.isArray(input[key]) ? pending[key].length : true) && !(Array.isArray(input[key]) && !input[key].length));
   const numbers = ['fortune', 'fate', 'resilience', 'corruption', 'sin'].filter(key => input[key] !== undefined && input[key] !== null);
   const traitsGiven = input.traits !== undefined || (input.size !== undefined && input.size !== null && input.size !== '');
   if (!french.length && !numbers.length && !traitsGiven) return null;
@@ -230,11 +240,11 @@ export function buildProfileSheet(input, { caracs, name, hp, hasArmor, spelled }
   // Une liste non écrite à la forme française (ou brute) n'est pas touchée : couverture « absente » de la fiche.
   const fiche = { nom: name, race: '', carac: Object.fromEntries(Object.entries(CARAC_LOWER).filter(([key]) => Number.isFinite(caracs[key])).map(([key, lower]) => [lower, { base: caracs[key], adv: 0 }])) };
   const at = key => french.includes(key);
-  if (at('skills')) { const skills = parseSkills(input.skills, ref, errors, tools); fiche.skillsBasic = skills.basic; fiche.skillsAdvanced = skills.advanced; }
-  if (at('talents')) fiche.talentsAcq = parseTalents(input.talents, ref, errors, tools);
-  if (at('spells')) fiche.sorts = parseNames(input.spells, 'sorts', 'Sort inconnu', ref.spells, errors, tools);
-  if (at('prayers')) fiche.prieres = parseNames(input.prayers, 'prières', 'Prière inconnue', ref.prayers, errors, tools);
-  if (at('equipment')) fiche.equipment = parseEquipment(input.equipment, ref, errors, tools);
+  if (at('skills')) { const skills = parseSkills(pending.skills, ref, errors, tools); fiche.skillsBasic = skills.basic; fiche.skillsAdvanced = skills.advanced; }
+  if (at('talents')) fiche.talentsAcq = parseTalents(pending.talents, ref, errors, tools);
+  if (at('spells')) fiche.sorts = parseNames(pending.spells, 'sorts', 'Sort inconnu', ref.spells, errors, tools);
+  if (at('prayers')) fiche.prieres = parseNames(pending.prayers, 'prières', 'Prière inconnue', ref.prayers, errors, tools);
+  if (at('equipment')) fiche.equipment = parseEquipment(pending.equipment, ref, errors, tools);
   if (fortune !== null) fiche.chance = String(fortune);
   if (fate !== null) fiche.destin = String(fate);
   if (resilience !== null) fiche.resilience = String(resilience);
@@ -249,7 +259,7 @@ export function buildProfileSheet(input, { caracs, name, hp, hasArmor, spelled }
   const links = Object.fromEntries(plan.equipmentActions.filter(row => row.proposed).map(row => [row.key, row.proposed]));
   if (Object.keys(links).length) plan = planProfileSync(snapshot, base, { equipmentLinks: links });
   const updated = plan.updated;
-  for (const key of lists) if (snapshot.coverage?.[key] === 'present') result.fields[key] = cloneValue(updated[key]);
+  for (const key of lists) if (snapshot.coverage?.[key] === 'present') result.fields[key] = [...cloneValue(updated[key]), ...cloneValue(kept[key] || [])];
   result.fields.ficheSnapshot = cloneValue(updated.ficheSnapshot);
   // Pas d'identité de fiche : chaque copie en combat garde ses propres ressources, comme un profil sans fiche (les jets d'équipement portent leur identifiant).
   result.fields.ficheSnapshot.charId = '';

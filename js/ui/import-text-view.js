@@ -26,7 +26,8 @@ const REASON_LABELS = {
   'trait-inconnu': 'Trait absent du référentiel',
   'taille-inconnue': 'Taille inconnue',
   'specialisation-manquante': 'spécialisation manquante',
-  doublon: 'en double'
+  doublon: 'en double',
+  'cles-concurrentes': 'deux clés pour le même champ'
 };
 const FIELD_LABELS = { name: 'Nom', kind: 'Type', group: 'Groupe', hp: 'PV', initiative: 'Initiative', notes: 'Notes', tags: 'Mots-clés', keywords: 'Mots-clés de créature', keywordExclusions: 'Mots-clés retirés', base: 'valeur', mod: 'modificateur', valeurs: 'valeur' };
 const MISSING_LABELS = { name: 'nom manquant', hp: 'PV manquants' };
