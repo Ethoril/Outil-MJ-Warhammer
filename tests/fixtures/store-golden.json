@@ -55,6 +55,7 @@
    "getOrderMode/0",
    "isCombatInitiativeInitialized/0",
    "previewEncounterLaunch/1",
+   "previewEncounterEdit/1",
    "previewCombatRestart/0",
    "previewCombatInitialization/0",
    "previewCombatParticipantActivation/1",
@@ -1287,6 +1288,11 @@
     "state": "a0806c51b7fae34d"
    },
    {
+    "label": "sweep previewEncounterEdit",
+    "result": "74234e98afe7498f",
+    "state": "a0806c51b7fae34d"
+   },
+   {
     "label": "sweep previewCombatRestart",
     "result": "325a4077f5e784dd",
     "state": "a0806c51b7fae34d"
@@ -2419,6 +2425,7 @@
    "getOrderMode/0",
    "isCombatInitiativeInitialized/0",
    "previewEncounterLaunch/1",
+   "previewEncounterEdit/1",
    "previewCombatRestart/0",
    "previewCombatInitialization/0",
    "previewCombatParticipantActivation/1",
@@ -3648,6 +3655,11 @@
    {
     "label": "sweep previewEncounterLaunch",
     "error": "Error: Rencontre introuvable",
+    "state": "8bfe8681c433e87c"
+   },
+   {
+    "label": "sweep previewEncounterEdit",
+    "result": "74234e98afe7498f",
     "state": "8bfe8681c433e87c"
    },
    {

@@ -2603,6 +2603,7 @@ function resolvedCorruptionTest(participant, skillId, input) {
       return {scene,baseRevision:localRevision,encounterId:encounter.id,kind:'launch'};
     },
     previewEncounterEdit(input) {
+      if (!activeScene || Number(combat.round) <= 0) return null;
       const model = normalizeEncounter(input);
       const draft = currentEnvelope();
       if (draft.activeScene?.encounterId !== model.id || Number(draft.combat?.round) <= 0) return null;
