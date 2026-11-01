@@ -7,7 +7,7 @@ Cette recette vérifie l’application locale en mode invité. Elle ne déploie 
 Depuis la racine du projet :
 
 ```sh
-python3 -m http.server 8765 --bind 127.0.0.1
+python -m http.server 8765 --bind 127.0.0.1
 ```
 
 Ouvrir `http://127.0.0.1:8765/` dans Chrome. `localhost:8765` et `127.0.0.1:8765` sont deux origines distinctes et ne partagent pas leur stockage local. Pour une recette manuelle reproductible, rester sur une seule des deux adresses.

@@ -66,12 +66,12 @@ Outil-MJ-Warhammer/
 L'application est construite en HTML5 / ES Modules natifs sans bundler complexe.
 
 ### 1. Démarrer un serveur HTTP local
-Vous pouvez utiliser n'importe quel serveur HTTP statique (par exemple `npx serve`, `python3 -m http.server`, ou l'extension Live Server de VSCode) :
+Vous pouvez utiliser n'importe quel serveur HTTP statique (par exemple `npx serve`, `python -m http.server`, ou l'extension Live Server de VSCode) :
 
 ```bash
 npx serve .
 # Ou
-python3 -m http.server 8080
+python -m http.server 8080
 ```
 Ouvrez ensuite `http://localhost:8080` dans votre navigateur.
 
