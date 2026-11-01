@@ -539,3 +539,8 @@ dialog.tool-sheet.campaign-time-dialog { position:fixed; inset:auto; top:50%; le
 .workspace-circumstances-group h5 { margin: 0; color: var(--accent-text); font-family: var(--font-text); font-size: 15px; }
 .workspace-circumstances-group.is-required { padding: 8px; border: 2px solid var(--accent); border-radius: var(--radius); background: var(--bg); }
 .workspace-circumstances-summary { margin: 0; font-size: 14px; }
+
+.workspace-action-menu { display: flex; flex-wrap: wrap; gap: .35rem; padding: .5rem; border: 1px solid var(--border); border-radius: .5rem; background: var(--bg); }
+.workspace-action-menu[hidden], .workspace-action-type[hidden] { display: none; }
+.workspace-combat-actions > summary { display: inline-block; cursor: pointer; list-style: none; }
+.workspace-combat-actions > summary::-webkit-details-marker { display: none; }

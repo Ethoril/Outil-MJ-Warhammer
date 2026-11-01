@@ -1,4 +1,4 @@
-import { openU1Settings } from './helpers/u1-drawer.mjs';
+import { openU1Settings, openU1Types } from './helpers/u1-drawer.mjs';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
 import { readFileSync, statSync } from 'node:fs';
@@ -37,7 +37,7 @@ try{
   const read=async()=>page.evaluate(async()=>{const{Store}=await import('/Outil-MJ-Warhammer/js/main.js');await Store.ready;return JSON.parse(Store.getFullJSON());});
   const play=page.locator('#workspace-root');
   const chooseAction=async id=>{const button=play.locator(`[data-action-key="${id}"]`);await button.waitFor();await button.click();await openU1Settings(play);};
-  const selectAttack=async id=>{await chooseAction(id);await play.getByLabel('Type d’action').selectOption('attack');if(id==='d-inflict-action')await play.getByLabel('Nature du Test').selectOption('melee');};
+  const selectAttack=async id=>{await chooseAction(id);await openU1Types(play);await play.getByLabel('Type d’action').selectOption('attack');if(id==='d-inflict-action')await play.getByLabel('Nature du Test').selectOption('melee');};
   const openProtection=async()=>{const summary=play.getByText('Protection et bouclier pour cette attaque');if(!(await summary.evaluate(el=>el.closest('details')?.open)))await summary.click();};
   const settleChoices=async()=>{const groups=play.locator('.workspace-v5-choice-group');for(let i=0;i<await groups.count();i++){const radio=groups.nth(i).locator('input[type="radio"]').first();if(await radio.isEnabled())await radio.check();}};
   const calculate=async()=>{await play.getByRole('button',{name:'Calculer',exact:true}).click();await play.locator('.workspace-result-live').waitFor();await settleChoices();};
@@ -81,7 +81,7 @@ try{
   const netAction={id:'d-net-escape',note:'Sortir du filet',type:'test',attr:'F',base:50,damage:null,qualities:[]};
   const netActor={...structuredClone(actor),actions:[...actor.actions,netAction],states:[{id:'d-net-state',key:'enchevetre',name:'Empêtré',level:2,strength:35,source:{hookedNet:true,authorId:target.id,escapeStrength:35}}]};
   await load(combat(netActor,structuredClone(targetBase)));await chooseAction('d-net-escape');
-  const actionType=play.getByLabel('Type d’action');assert.equal(await actionType.locator('option[value="test"]').count(),1,'le formulaire réel offre le type Test');await actionType.selectOption('test');
+  await openU1Types(play);const actionType=play.getByLabel('Type d’action');assert.equal(await actionType.locator('option[value="test"]').count(),1,'le formulaire réel offre le type Test');await actionType.selectOption('test');
   const openCircumstances=async()=>{const summary=play.getByText('Circonstances des Tests');if(!(await summary.evaluate(el=>el.closest('details')?.open)))await summary.click();};
   await openCircumstances();await play.getByLabel('Sortie d’entrave : état Empêtré').selectOption('d-net-state');await openCircumstances();
   await enterRoll(20);let netPreview=await play.locator('.workspace-result-live').innerText();assert.match(netPreview,/Filet : saisir le jet d100 du Test opposé de Force de la source/u,'l’évasion ne s’applique pas sans le jet opposé du filet');

@@ -1,4 +1,4 @@
-import { openU1Settings, closeU1Drawer } from './helpers/u1-drawer.mjs';
+import { openU1Settings, closeU1Drawer, openU1Types } from './helpers/u1-drawer.mjs';
 /** Recette indépendante Playwright pour Flee/Sprint Brisé: gestes visibles, preview, persistence et quatre vues. */
 import assert from 'node:assert/strict';
 import {createServer} from 'node:http';
@@ -86,7 +86,7 @@ try{
  check('Une attaque ordinaire Brisé avec visibilité absente ou visible reçoit un refus accessible; aucun résultat de Test fictif, aucune application et aucune mutation.');
  // Le choix Action/Test libre doit être explicite pour une compétence Brisé après Sprint.
  await openU1Settings(resolution);await resolution.locator('[data-broken-escape-visibility="resolution"]').selectOption('false');await closeU1Drawer(page);
- await resolution.locator('[data-focus-key="action-type"]').selectOption('skill');await openU1Settings(resolution);await resolution.locator('.workspace-v5-context-details').first().evaluate(el=>{el.open=true;});
+ await openU1Types(resolution);await resolution.locator('[data-focus-key="action-type"]').selectOption('skill');await openU1Settings(resolution);await resolution.locator('.workspace-v5-context-details').first().evaluate(el=>{el.open=true;});
  const skillActionField=resolution.locator('[data-focus-key="actor-isAction"]');receipt.hideToSkillClassification={present:await skillActionField.count()===1,disabled:await skillActionField.isDisabled(),value:await skillActionField.inputValue()};assert.equal(receipt.hideToSkillClassification.present,true,'Après Hide puis blade → Compétence, le choix de classification doit réapparaître.');assert.equal(receipt.hideToSkillClassification.disabled,false,'Une compétence générique doit laisser choisir Action/Test libre.');assert.equal(receipt.hideToSkillClassification.value,'','Une compétence générique non classée reste à préciser.');
  await resolution.locator('[data-focus-key="actor-runningOrHiding"]').selectOption('false');await closeU1Drawer(page);
  await resolution.locator('[data-roll-input="attack"]').fill('23');

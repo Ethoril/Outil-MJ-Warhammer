@@ -1,4 +1,4 @@
-import { openU1Settings } from './helpers/u1-drawer.mjs';
+import { openU1Settings, openU1Types } from './helpers/u1-drawer.mjs';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
 import { readFileSync, statSync } from 'node:fs';
@@ -42,7 +42,7 @@ try{
  assert.equal(preview.weaponSkillReceipt.group,'Ingénierie','le libellé visuel Ingénierie tir ne devient pas une spécialité inventée');
  assert.equal(preview.weaponSkillReceipt.trained,true);
  await page.evaluate(async()=>{const actor=window.f2Workspace.store.listParticipants().find(row=>row.id==='actor');await window.f2Workspace.store.updateParticipant('actor',{actions:actor.actions.map(action=>({...action,extensions:{...action.extensions,fiche:{...action.extensions.fiche,requiresLink:false}}}))});});
- await page.getByLabel('Type d’action').selectOption('skill');
+ await openU1Types(page);await page.getByLabel('Type d’action').selectOption('skill');
  await panel.locator('[data-roll-input="attack"]').fill('30');
  await panel.getByRole('button',{name:'Calculer',exact:true}).click();
  const generic=await page.evaluate(()=>window.f2Workspace.view.getViewState().resolution.preview);

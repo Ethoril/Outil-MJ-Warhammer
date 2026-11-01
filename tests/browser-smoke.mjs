@@ -1,3 +1,4 @@
+import { openU1Types } from './helpers/u1-drawer.mjs';
 import { testFicheReserveEditor } from './fiches-pj-reserve-browser.mjs';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
@@ -273,7 +274,7 @@ async function main() {
     const resolution = page.locator('.workspace-resolution');
     const action = resolution.getByRole('button', { name: /Épée de recette.*48/ }).first();
     await expect(action).toHaveAttribute('aria-pressed', 'true');
-    await expect(resolution.getByRole('combobox', { name: 'Type d’action' })).toHaveValue('attack');
+    await openU1Types(resolution);await expect(resolution.getByRole('combobox', { name: 'Type d’action' })).toHaveValue('attack');
     // The V5 melee opposition requires the defender's chosen Test and roll.
     await resolution.locator('[data-focus-key="defense-stat"]').selectOption('CC');
     await resolution.locator('[data-roll-input="attack"]').fill('42');

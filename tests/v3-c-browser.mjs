@@ -1,4 +1,4 @@
-import { openU1Settings } from './helpers/u1-drawer.mjs';
+import { openU1Settings, openU1Types } from './helpers/u1-drawer.mjs';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
 import { readFileSync, statSync } from 'node:fs';
@@ -86,13 +86,13 @@ try {
   // L'interface propose la case de l'attaque gratuite de Grim.
   await page.locator('#workspace-root [data-workspace-select="m"]').click();
   await page.locator('#workspace-root [data-action-key="claw"]').click();
-  await page.locator('#workspace-root').getByLabel('Type d’action').selectOption('attack');
+  await openU1Types(page);await page.locator('#workspace-root').getByLabel('Type d’action').selectOption('attack');
   assert.ok(await page.locator('#workspace-root').getByLabel(/Attaque gratuite de Grim/u).count() >= 1, 'case Grim présente');
   // 4. Souffle : la cible choisie dans l'espace de travail reste la cible cochée par défaut (jamais le lanceur).
   await load(fixture());
   await page.locator('#workspace-root [data-workspace-select="a"]').click();
   await page.locator('#workspace-root').locator('[data-focus-key="target-m"]').click();
-  await page.locator('#workspace-root').getByLabel('Type d’action').selectOption('cast');
+  await openU1Types(page);await page.locator('#workspace-root').getByLabel('Type d’action').selectOption('cast');
   await openU1Settings(page);
   const spellSelect = page.locator('#workspace-root').getByLabel(/Sort/u).first();
   await spellSelect.selectOption({ label: 'Souffle · NI 6 (arcane)' });

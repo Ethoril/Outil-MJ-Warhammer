@@ -1,4 +1,4 @@
-import { openU1Settings } from './helpers/u1-drawer.mjs';
+import { openU1Settings, clickU1Magic } from './helpers/u1-drawer.mjs';
 import assert from 'node:assert/strict';
 import {createServer} from 'node:http';
 import {readFile} from 'node:fs/promises';
@@ -14,7 +14,7 @@ const browser=await chromium.launch({headless:true,executablePath:process.env.PL
 const page=await browser.newPage({viewport:{width:1440,height:1000},serviceWorkers:'block'}),errors=[];page.on('pageerror',e=>{errors.push(e.message);console.log('Erreur de page : '+e.message);});
 const choose=async(name,active='',allies=false)=>{
  await page.goto('http://127.0.0.1:'+server.address().port+'/harness?active='+encodeURIComponent(active)+(allies?'&allies=1':''));await page.waitForFunction(()=>window.ready);
- await page.click('[data-action-key="v5-magic:cast"]');await openU1Settings(page);await page.locator('[data-focus-key="magic-spell"]').selectOption(await page.evaluate(n=>window.__TEST__.getSpellContract(n).id,name));
+ await clickU1Magic(page, 'cast');await openU1Settings(page);await page.locator('[data-focus-key="magic-spell"]').selectOption(await page.evaluate(n=>window.__TEST__.getSpellContract(n).id,name));
 };
 let facts=0,clauses=0;
 try{

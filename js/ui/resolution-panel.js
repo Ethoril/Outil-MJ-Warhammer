@@ -127,6 +127,9 @@ function qualityNames(action = {}) {
   return (action.qualities || []).map(quality => qualityLabel(quality)).filter(Boolean);
 }
 
+const testMenuState = new WeakMap();
+const turnActionsState = new WeakMap();
+
 export function renderResolutionPanel(options) {
   const { draft, actor, participants=[], actions, actionKey: selectedKey, type, target, groups, defense, previousWeaponAttacks=[], resolutionClock={}, canCalculate, canApply, canDeclareCombatAction=false, canDeclareCombatMovement=false, handlers } = options;
   const fuseClock={currentRound:resolutionClock.currentRound??draft?.round,currentTurnIndex:resolutionClock.currentTurnIndex??draft?.v5Clock?.turnIndex};
@@ -212,6 +215,7 @@ export function renderResolutionPanel(options) {
   if (!actions.length) actionChips.appendChild(node('p', 'workspace-muted', 'Aucune action préparée : ajoutez-en une avec « Modifier ».'));
   actions.forEach((action, index) => {
     const key = actionKey(action, index);
+    if (['channelling','cast','dispel'].includes(action.type)) return;
     const qualities = qualityNames(action);
     const item = chip('', { pressed: key === selectedKey, key: `action-${key}`, attrs: { 'data-action-key': key } });
     item.append(node('span', '', actionLabel(action)));
@@ -221,17 +225,42 @@ export function renderResolutionPanel(options) {
     actionChips.appendChild(item);
   });
   actionBlock.appendChild(actionChips);
-  if (actions.length) {
-    const typeLabel = node('label', 'workspace-type');
+  {
+    const typeLabel = node('label', 'workspace-type workspace-action-type');
     typeLabel.append('Type');
     const select = document.createElement('select');
     select.dataset.focusKey = 'action-type';
     select.setAttribute('aria-label', 'Type d’action');
-    ACTION_TYPES.forEach(([value, label]) => select.appendChild(new Option(label, value)));
+    ACTION_TYPES.forEach(([value, label]) => { const option = new Option(label, value); if (['channelling','cast','dispel'].includes(value)) option.hidden = true; select.appendChild(option); });
     select.value = type || 'skill';
     select.addEventListener('change', () => handlers.select({ type: select.value }));
     typeLabel.appendChild(select);
-    actionBlock.appendChild(typeLabel);
+    const testButton = button('Test…', 'workspace-chip', { 'data-test-menu': '', 'aria-controls': 'workspace-test-menu', 'aria-expanded': 'false' });
+    testButton.disabled = !actions.length;
+    typeLabel.id = 'workspace-test-menu';
+    typeLabel.hidden = !testMenuState.get(draft);
+    testButton.setAttribute('aria-expanded', String(!typeLabel.hidden));
+    testButton.addEventListener('click', () => { typeLabel.hidden = !typeLabel.hidden; testMenuState.set(draft, !typeLabel.hidden); testButton.setAttribute('aria-expanded', String(!typeLabel.hidden)); if (!typeLabel.hidden) select.focus(); });
+    actionChips.append(testButton, typeLabel);
+    const magicButton = button('Sort, prière, Corruption…', 'workspace-chip', { 'data-magic-menu': '', 'aria-controls': 'workspace-magic-menu', 'aria-expanded': 'false' });
+    const menu = node('div', 'workspace-action-menu'); menu.id = 'workspace-magic-menu'; menu.hidden = true;
+    magicButton.addEventListener('click', () => { menu.hidden = !menu.hidden; magicButton.setAttribute('aria-expanded', String(!menu.hidden)); });
+    for (const [magicType, label] of [['channelling','Focalisation V5'],['cast','Incantation V5'],['dispel','Dissipation persistante V5']]) {
+      const found = actions.findIndex(action => action.type === magicType);
+      const attrs = found < 0 ? {} : { 'data-action-key': actionKey(actions[found], found) };
+      const item = button(label, 'workspace-secondary', attrs);
+      item.disabled = !actions.length;
+      item.addEventListener('click', () => handlers.select(found < 0 ? { type: magicType } : { actionKey: actionKey(actions[found], found) }));
+      menu.appendChild(item);
+    }
+    const menuStatus = node('p', 'workspace-muted'); menuStatus.setAttribute('role', 'status');
+    for (const [key, label] of [['prayer','Prière'],['corruption','Corruption']]) {
+      const item = button(label, 'workspace-secondary');
+      item.addEventListener('click', () => { const detail = { panel: key, opened: false }; section.dispatchEvent(new CustomEvent('workspace-open-secondary', { bubbles: true, detail })); menuStatus.textContent = detail.opened ? '' : `${label} indisponible pour ce participant.`; });
+      menu.appendChild(item);
+    }
+    menu.appendChild(menuStatus);
+    actionChips.append(magicButton, menu);
   }
   section.appendChild(actionBlock);
 
@@ -270,8 +299,10 @@ export function renderResolutionPanel(options) {
     const action = actions.find((item, index) => actionKey(item, index) === selectedKey) || actions[0];
 
     if (canDeclareCombatAction || canDeclareCombatMovement) {
-      const combatActions = node('section', 'workspace-resolution-row workspace-combat-actions');
-      combatActions.appendChild(rubric('Actions du Tour'));
+      const combatActions = node('details', 'workspace-resolution-row workspace-combat-actions');
+      combatActions.open = Boolean(turnActionsState.get(draft));
+      combatActions.appendChild(node('summary', 'workspace-chip', 'Actions du Tour…'));
+      combatActions.addEventListener('toggle', () => { turnActionsState.set(draft, combatActions.open); });
       combatActions.appendChild(node('p', 'workspace-muted', 'Mouvement narratif non observable automatiquement : indiquez-le quand il a lieu. La réorganisation des combattants ne constitue pas un déplacement.'));
       if (canDeclareCombatMovement) {
         const move = button('Déclarer un déplacement effectué', 'workspace-secondary', { 'data-focus-key': 'declare-movement' });

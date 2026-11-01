@@ -1,4 +1,4 @@
-import { openU1Settings } from './helpers/u1-drawer.mjs';
+import { openU1Settings, openU1Types } from './helpers/u1-drawer.mjs';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
 import { readFileSync, statSync } from 'node:fs';
@@ -57,7 +57,7 @@ try {
   const prepareShot = async (id = 'shot') => {
     await play.locator('[data-workspace-select="a"]').click();
     await play.locator(`[data-action-key="${id}"]`).click();
-    await play.getByLabel('Type d’action').selectOption('attack');
+    await openU1Types(play);await play.getByLabel('Type d’action').selectOption('attack');
     await openU1Settings(play);
     await play.getByLabel('Nature du Test').selectOption('ranged');
   };

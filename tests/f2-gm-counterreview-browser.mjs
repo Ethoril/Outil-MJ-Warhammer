@@ -1,3 +1,4 @@
+import { openU1Types } from './helpers/u1-drawer.mjs';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
 import { readFileSync, statSync } from 'node:fs';
@@ -39,7 +40,7 @@ try {
   await page.locator('#tab-combat').click();
   await page.locator('[data-action-key="gm-ui-attack"]').click();
   const workspace = page.locator('#workspace-root');
-  await workspace.getByLabel('Type d’action').selectOption('attack');
+  await openU1Types(workspace);await workspace.getByLabel('Type d’action').selectOption('attack');
   assert.equal(await workspace.getByLabel('Morphologie de la cible (choix du MJ)').count(), 1);
   assert.deepEqual(errors, [], `la résolution réelle doit s’ouvrir sans ReferenceError: ${errors.join('; ')}`);
 } finally {

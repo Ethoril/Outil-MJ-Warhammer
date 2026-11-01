@@ -1,4 +1,4 @@
-import { openU1Settings } from './helpers/u1-drawer.mjs';
+import { openU1Settings, openU1TurnActions } from './helpers/u1-drawer.mjs';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
 import { readFileSync, statSync } from 'node:fs';
@@ -47,6 +47,8 @@ try {
   const combat = page.locator('#workspace-root'), actorCard = combat.locator('[data-workspace-select="a"]');
   const openResolutionSettings = async () => openU1Settings(combat);
   await actorCard.click();
+  assert.equal(await combat.locator('.workspace-combat-actions').evaluate(el => el.open), false, 'les Actions du Tour sont repliées au départ');
+  await openU1TurnActions(combat);
   await combat.getByRole('combobox', { name: /Arme de tir tenue pour viser Garde/ }).selectOption('bow');
   await combat.getByRole('checkbox', { name: 'Je confirme que cette arme est tenue en main' }).check();
   await combat.getByRole('button', { name: 'Viser Garde' }).click();
@@ -67,6 +69,7 @@ try {
 
   await page.evaluate(async state => { const { Store } = await import('/Outil-MJ-Warhammer/js/main.js'); await Store.loadFromJSON(state); }, fixture());
   await actorCard.click();
+  await openU1TurnActions(combat);
   await combat.getByRole('combobox', { name: 'Compétence choisie pour l’Action défensive' }).selectOption('dodge');
   await combat.getByRole('button', { name: 'Déclarer l’Action défensive' }).click();
   await page.waitForFunction(async () => {
@@ -148,6 +151,7 @@ try {
 
   await page.evaluate(async state => { const { Store } = await import('/Outil-MJ-Warhammer/js/main.js'); await Store.loadFromJSON(state); }, fixture());
   await actorCard.click();
+  await openU1TurnActions(combat);
   await combat.getByRole('combobox', { name: 'Compétence choisie pour l’Action défensive' }).selectOption('dodge');
   await combat.getByRole('button', { name: 'Déclarer l’Action défensive' }).click();
   await page.waitForFunction(async () => { const { Store } = await import('/Outil-MJ-Warhammer/js/main.js'); return JSON.parse(Store.getFullJSON()).extensions?.v5?.combatActions?.byActorId?.a?.kind === 'defensive'; });
@@ -252,6 +256,7 @@ try {
   });
 
   // Croche-pied sur cible montée après la touche appliquée
+  await openU1TurnActions(combat);
   await combat.getByRole('combobox', { name: 'Attaque réussie déjà appliquée ce Tour' }).selectOption({ index: 1 });
   await combat.getByRole('combobox', { name: 'Athlétisme de Garde' }).selectOption('skill-41_74_68_6c_e9_74_69_73_6d_65-base');
   await combat.getByRole('button', { name: 'Préparer le Croche-pied' }).click();

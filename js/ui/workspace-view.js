@@ -52,6 +52,8 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
   if (!Store) throw new TypeError('workspace-view nécessite Store');
 
   const refs = createShell(mount, { showNavigation });
+  const secondaryOpen = new Map();
+  const secondaryDirty = new Set();
   const state = {
     space: 'prepare',
     // Explicit target for the current actor: null = default, 'none' or an id.
@@ -1910,11 +1912,21 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     }));
 
     const prayers=divinePanel.render(context.actor,context.participants);
-    if(prayers)center.appendChild(prayers);
+    if(prayers){prayers.dataset.secondaryPanel='prayer';if((context.actor?.extensions?.v5?.divineJudgments||[]).some(row=>row.status==='departed'))prayers.open=true;center.appendChild(prayers);}
     const corruption=corruptionPanel.render(context.actor);
-    if(corruption)center.appendChild(corruption);
+    if(corruption){
+      const id=`corruption:${context.actor.id}`, details=node('details','workspace-card workspace-secondary-panel');
+      details.dataset.secondaryPanel='corruption';
+      let pending=false;
+      try { const status=Store.getCorruptionStatus?.(context.actor.id); pending=Boolean(status?.pendingThresholdTest || status?.pendingMutation || status?.pendingCharacterLoss || status?.pendingExposureSources?.length); } catch { pending=true; }
+      details.open=Boolean(secondaryOpen.get(id) || secondaryDirty.has(id) || pending);
+      details.append(node('summary','','Corruption'),corruption);
+      details.addEventListener('toggle',()=>secondaryOpen.set(id,details.open));
+      for(const event of ['input','change'])details.addEventListener(event,()=>secondaryDirty.add(id),true);
+      center.appendChild(details);
+    }
     const aftermath=aftermathPanel.render(context.participants);
-    if(aftermath)center.appendChild(aftermath);
+    if(aftermath){const details=node('details','workspace-card workspace-secondary-panel');details.open=true;details.append(node('summary','','Suites de combat'),aftermath);center.appendChild(details);}
 
     const carriedPavises=(context.actor?.equipment||[]).filter(item=>item.kind==='shield'&&/pavise|pavois/i.test(item.name||item.id||''));
     if(carriedPavises.length){
@@ -2480,6 +2492,15 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         render();
       });
   }
+
+  refs.root.addEventListener('workspace-open-secondary', event => {
+    const panel = refs.root.querySelector(`[data-secondary-panel="${event.detail?.panel}"]`);
+    if (!panel) return;
+    event.detail.opened = true;
+    if (panel.tagName === 'DETAILS') panel.open = true;
+    panel.scrollIntoView({ block: 'start', behavior: 'auto' });
+    panel.querySelector('summary, input, select, button')?.focus({ preventScroll: true });
+  });
 
   refs.root.addEventListener('workspace-circumstances-toggle', event => {
     play.side.setTemporaryCollapsed(Boolean(event.detail?.open));

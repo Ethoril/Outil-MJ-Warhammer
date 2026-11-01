@@ -1,4 +1,4 @@
-import { openU1Settings } from './helpers/u1-drawer.mjs';
+import { openU1Settings, clickU1Magic } from './helpers/u1-drawer.mjs';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
 import { existsSync } from 'node:fs';
@@ -107,7 +107,7 @@ async function open(scenario, { w = '', t = 'mage-1', extra = '' } = {}) {
   return { page, context, errors };
 }
 async function pickSpell(page, name) {
-  await page.click('[data-action-key="v5-magic:cast"]');
+  await clickU1Magic(page, 'cast');
   await openU1Settings(page);
   await page.waitForSelector('[data-focus-key="magic-spell"]');
   await page.selectOption('[data-focus-key="magic-spell"]', await page.evaluate(n => window.__TEST__.getSpellContract(n).id, name));
@@ -390,7 +390,7 @@ try {
   {
     const { page, context, errors } = await open('cast', { w: 'Robe scintillante@enemy-1>enemy-1' });
     await page.evaluate(() => window.__TEST__.Store.applySpellEffects('enemy-1', { id: 'meditation-1', spellId: 'talent-eye-of-the-storm', magicTalentId: 'talent-eye-of-the-storm', duration: '1 heure' }));
-    await page.click('[data-action-key="v5-magic:dispel"]');
+    await clickU1Magic(page, 'dispel');
     const effect = page.getByLabel('Sort persistant à dissiper', { exact: true });
     await effect.waitFor();
     const options = await effect.locator('option').allInnerTexts();
@@ -454,7 +454,7 @@ try {
     const { page, context, errors } = await open('cast');
     const runes = () => page.evaluate(() => window.__TEST__.Store.getCadaiRunes('mage-1').deployed);
     await page.evaluate(async () => { const store = window.__TEST__.Store, mage = store.listParticipants().find(p => p.id === 'mage-1'); await store.updateParticipant('mage-1', { extensions: { ...mage.extensions, v5: { ...mage.extensions.v5, channelling: { sl: 30, type: 'high' }, cadaiRunes: { deployed: 2, max: 5 } } } }); });
-    await page.click('[data-action-key="v5-magic:channelling"]'); await page.click('[data-action-key="v5-magic:cast"]');
+    await clickU1Magic(page, 'channelling'); await clickU1Magic(page, 'cast');
     await pickSpell(page, 'Carreau');
     await page.getByLabel('Consommer une rune pour relancer', { exact: true }).check();
     await page.getByLabel('Rune visible et à portée de bras', { exact: true }).check();
@@ -564,7 +564,7 @@ try {
   }
   {
     const { page, context, errors } = await open('cast', { extra: '&x=' + encodeURIComponent(JSON.stringify({ talents: [{ id: 'talent-magic-defiance', status: 'resolved', rank: 1 }] })) });
-    await page.click('[data-action-key="v5-magic:cast"]');
+    await clickU1Magic(page, 'cast');
     await page.evaluate(() => { window.__TEST__.calls = { adventure: 0 }; const original = window.__TEST__.Store.startMagicAdventure; window.__TEST__.Store.startMagicAdventure = (...args) => { window.__TEST__.calls.adventure++; return original.apply(window.__TEST__.Store, args); }; window.__TEST__.delayMs = 20; });
     const button = page.getByRole('button', { name: 'Commencer une nouvelle aventure (Défiance magique)', exact: true }); await button.scrollIntoViewIfNeeded();
     const rect = await button.boundingBox(), x = rect.x + rect.width / 2, y = rect.y + rect.height / 2;

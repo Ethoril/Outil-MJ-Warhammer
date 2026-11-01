@@ -1,4 +1,4 @@
-import { openU1Settings, closeU1Drawer } from './helpers/u1-drawer.mjs';
+import { openU1Settings, closeU1Drawer, clickU1Magic } from './helpers/u1-drawer.mjs';
 import assert from 'node:assert/strict';
 import {createServer} from 'node:http';
 import {readFile,writeFile,mkdir} from 'node:fs/promises';
@@ -12,7 +12,7 @@ const server=createServer(async(req,res)=>{try{const url=new URL(req.url,'http:/
 await new Promise(ok=>server.listen(0,'127.0.0.1',ok));
 const browser=await chromium.launch({headless:true,executablePath:'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe'}),page=await browser.newPage({viewport:{width:1440,height:1080},serviceWorkers:'block'}),errors=[],receipts=[];
 page.on('pageerror',e=>errors.push(e.message));const origin='http://127.0.0.1:'+server.address().port,field=text=>page.getByLabel(text,{exact:true});let facts=0;
-const choose=async name=>{await page.goto(origin+'/harness');await page.waitForFunction(()=>window.ready);if(page.viewportSize().width<=900)await closeU1Drawer(page);await page.click('[data-action-key="v5-magic:cast"]');await openU1Settings(page);await page.locator('[data-focus-key="magic-spell"]').selectOption(contracts.find(c=>c.name===name).id);};
+const choose=async name=>{await page.goto(origin+'/harness');await page.waitForFunction(()=>window.ready);if(page.viewportSize().width<=900)await closeU1Drawer(page);await clickU1Magic(page, 'cast');await openU1Settings(page);await page.locator('[data-focus-key="magic-spell"]').selectOption(contracts.find(c=>c.name===name).id);};
 const optionLabel=o=>o.label+' ('+o.cost+' DR'+(o.repeat?' par palier':'')+')';
 const escape=s=>s.replace(/[.*+?^$(){}|[\]\\]/g,'\\$&');
 try{

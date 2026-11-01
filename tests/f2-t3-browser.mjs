@@ -1,3 +1,4 @@
+import { openU1Types } from './helpers/u1-drawer.mjs';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
 import { readFileSync, statSync } from 'node:fs';
@@ -40,7 +41,7 @@ try{
   // G : l’attaque s’ouvre avec la morphologie du profil réel, le choix MJ est
   // modifiable dans la résolution et le critique conserve la localisation adaptée.
   const action=page.locator(`[data-action-key="${attack.id}"]`);await action.waitFor();await action.click();
-  const workspace=page.locator('#workspace-root');await workspace.getByLabel('Type d’action').selectOption('attack');
+  const workspace=page.locator('#workspace-root');await openU1Types(workspace);await workspace.getByLabel('Type d’action').selectOption('attack');
   const morphology=workspace.getByLabel('Morphologie de la cible (choix du MJ)');assert.equal(await morphology.inputValue(),'quadruped','la cible quadrupède expose sa morphologie issue du profil');
   // Vérifier le calcul complet via le Store réel (la preview UI n’est pas
   // calculable tant que les choix de défense ne sont pas tous renseignés).
@@ -60,6 +61,9 @@ try{
 
   // K1 : le panneau Corruption est rendu dans l’espace de jeu et pilote une
   // exposition réelle avec un d100 maximal; le Store conserve le résultat.
+  await page.locator('[data-magic-menu]').click();
+  await page.locator('#workspace-magic-menu').getByRole('button',{name:'Corruption',exact:true}).click();
+  assert.equal(await page.locator('[data-secondary-panel="corruption"]').evaluate(el=>el.open),true,'le menu ouvre le panneau Corruption');
   const panel=page.locator('[data-v5-corruption-panel="t3-rider"]');await panel.waitFor();
   await panel.getByRole('button',{name:'Démarrer une séance'}).click();
   await panel.getByLabel('Sources d’exposition déclarées (une par ligne)').fill('Artefact profane T3');

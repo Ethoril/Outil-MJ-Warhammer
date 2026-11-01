@@ -43,6 +43,23 @@ try {
     if (!view.openResolution({ ...action, participantId: 'npc', targetId: 'pj' })) throw new Error('résolution indisponible');
     window.__u1 = { view, store };
   });
+  assert.equal(await page.getByRole('button', { name: 'Sort, prière, Corruption…', exact: true }).count(), 1, 'le menu des actions magiques est présent');
+  const magicMenu = page.getByRole('button', { name: 'Sort, prière, Corruption…', exact: true });
+  await magicMenu.click();
+  assert.equal(await magicMenu.getAttribute('aria-expanded'), 'true');
+  for (const name of ['Focalisation V5', 'Incantation V5', 'Dissipation persistante V5', 'Prière', 'Corruption']) assert.equal(await page.locator('#workspace-magic-menu').getByRole('button', { name, exact: true }).isVisible(), true);
+  const prayer = page.locator('[data-secondary-panel="prayer"]');
+  assert.equal(await prayer.evaluate(el => el.open), false, 'prière repliée au départ');
+  await page.locator('#workspace-magic-menu').getByRole('button', { name: 'Prière', exact: true }).click();
+  assert.equal(await prayer.evaluate(el => el.open), true, 'le menu ouvre le panneau de prière existant');
+  await prayer.locator(':scope > summary').click();
+  await magicMenu.click();
+  await page.getByRole('button', { name: 'Test…', exact: true }).click();
+  assert.equal(await page.getByLabel('Type d’action', { exact: true }).isVisible(), true);
+  await page.getByLabel('Type d’action', { exact: true }).selectOption('test');
+  assert.equal(await page.getByLabel('Type d’action', { exact: true }).inputValue(), 'test');
+  await page.getByLabel('Type d’action', { exact: true }).selectOption('attack');
+  await page.getByRole('button', { name: 'Test…', exact: true }).click();
   const bulk = page.getByRole('button', { name: 'Lancer tous les dés des PNJ', exact: true });
   assert.equal(await bulk.isEnabled(), true);
   await page.evaluate(() => { window.__u1.originalRandom = Math.random; Math.random = () => 0.34; });
@@ -149,6 +166,7 @@ try {
   mkdirSync(resolve(root, 'captures'), { recursive: true });
   for (const width of [1440, 900]) {
     await page.setViewportSize({ width, height: 900 });
+    await page.locator('.workspace-resolution').evaluate(el => el.scrollIntoView({ block: 'start' }));
     for (const theme of ['light', 'dark']) {
       await page.evaluate(value => { document.documentElement.dataset.theme = value; }, theme);
       await page.screenshot({ path: resolve(root, 'captures', `u1-${width}-${theme}.png`) });

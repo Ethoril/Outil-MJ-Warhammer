@@ -1,4 +1,4 @@
-import { openU1Settings } from './helpers/u1-drawer.mjs';
+import { openU1Settings, clickU1Magic } from './helpers/u1-drawer.mjs';
 import { readFileSync } from 'node:fs';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
@@ -221,7 +221,7 @@ try {
   await page.waitForSelector('.workspace-resolution');
 
   // 1. Focalisation V5 via les vrais contrôles DOM du panneau de résolution
-  await page.click('[data-action-key="v5-magic:channelling"]');
+  await clickU1Magic(page, 'channelling');
   await openU1Settings(page);
   await page.waitForSelector('.workspace-v5-magic');
 
@@ -253,7 +253,7 @@ try {
   assert.match(updatedBadge, new RegExp(`${reserveAfterChannel} DR`), 'Le badge UI doit refléter la réserve créditée');
 
   // 2. Incantation V5 d'un projectile magique (Carreau) via les contrôles UI
-  await page.click('[data-action-key="v5-magic:cast"]');
+  await clickU1Magic(page, 'cast');
   await page.waitForSelector('[data-focus-key="magic-spell"]');
   await page.selectOption('[data-focus-key="magic-spell"]', 'spell-audit-f44d90e9c50d6dafb769');
 
@@ -300,7 +300,7 @@ try {
 
   // 2b. Reproduction UI d'un lancement critique réussi (jet 22, incident Mineur 15 -> Distraction) :
   // Dégâts appliqués à la cible + réserve consommée + incident Distraction (Surpris) appliqué au lanceur
-  await page.click('[data-action-key="v5-magic:cast"]');
+  await clickU1Magic(page, 'cast');
   // S-09 : option propre au sort (Effrayant, +3 DR par palier de Peur) et case « grimoire non mémorisé » ; paliers 13 et 18 acceptés.
   await page.selectOption('[data-focus-key="magic-spell"]', 'spell-audit-f4793a46d544b047664e');
   {const summary=page.getByText('Surpuissance & Paramètres du sort',{exact:true});if(!await summary.evaluate(el=>el.parentElement.open))await summary.click();}
@@ -380,7 +380,7 @@ try {
   assert.equal(stateAfterUndo.mageStatesCount, 0, 'Undo doit retirer l’état Surpris du lanceur');
 
   // 4. Forme bestiale — Jade et expiration par minutes depuis l'UI
-  await page.click('[data-action-key="v5-magic:cast"]');
+  await clickU1Magic(page, 'cast');
   await page.selectOption('[data-focus-key="magic-spell"]', 'spell-audit-44d3e9b3a2c7a6e5cef2');
   await page.click('[data-focus-key="target-mage-1"]');
   {const summary=page.getByText('Surpuissance & Paramètres du sort',{exact:true});if(!await summary.evaluate(el=>el.parentElement.open))await summary.click();}
@@ -403,7 +403,7 @@ try {
   assert.equal(beastActive.durationMinutes, 40, 'La durée de Forme bestiale doit être Endurance (40) minutes');
 
   // Le profil animal masque l’incantation : ouvrir la gestion magique restante.
-  await page.click('[data-action-key="v5-magic:dispel"]');
+  await clickU1Magic(page, 'dispel');
   // Avancer de 40 minutes par le formulaire commun de temps de campagne.
   await page.click('[data-focus-key="advance-minutes-btn"]');
   const campaignDialog = page.getByRole('dialog', { name: 'Temps de campagne' });
@@ -424,7 +424,7 @@ try {
   assert.equal(beastExpired.caracF, 30, 'La Force d’origine du mage (30) doit être restaurée à l’expiration');
 
   // 4b. Saisie MJ d’option de contrat (Goût de Feu) et choix des 4 caractéristiques (Main de Gloire) dans le DOM
-  await page.click('[data-action-key="v5-magic:cast"]');
+  await clickU1Magic(page, 'cast');
   await page.selectOption('[data-focus-key="magic-spell"]', 'spell-audit-9064959bae55a503f97d');
   await page.waitForSelector('[data-focus-key="magic-fact-catalogueMode"]');
   await page.fill('[data-roll-input="attack"]', '15');
@@ -441,7 +441,7 @@ try {
   await page.click('[data-focus-key="apply"]');
 
   // Main de Gloire : sélection de 4 caractéristiques incluant I et Ag dans le DOM
-  await page.click('[data-action-key="v5-magic:cast"]');
+  await clickU1Magic(page, 'cast');
   await page.selectOption('[data-focus-key="magic-spell"]', 'spell-audit-1c1dcaf3632d91591839');
   {const summary=page.getByText('Surpuissance & Paramètres du sort',{exact:true});if(!await summary.evaluate(el=>el.parentElement.open))await summary.click();}
   await page.waitForSelector('[data-focus-key="magic-chosen-stat-I"]');
@@ -458,7 +458,7 @@ try {
     'Main de Gloire à 4 caractéristiques doit être refusée sans 6 DR de surpuissance (P1 #2)');
 
   // Constituer une réserve de Haute Magie via l’UI pour payer réellement les 6 DR de surpuissance
-  await page.click('[data-action-key="v5-magic:channelling"]');
+  await clickU1Magic(page, 'channelling');
   await page.waitForSelector('[data-focus-key="magicChannelType"]');
   await page.selectOption('[data-focus-key="magicChannelType"]', 'high');
   await page.fill('[data-roll-input="attack"]', '25');
@@ -470,7 +470,7 @@ try {
   assert.equal(highReserve?.type, 'high', 'La réserve doit être de type Haute Magie');
   assert.ok((highReserve?.sl ?? 0) >= 3, 'La réserve de Haute Magie doit couvrir le manque de surpuissance');
 
-  await page.click('[data-action-key="v5-magic:cast"]');
+  await clickU1Magic(page, 'cast');
   await page.selectOption('[data-focus-key="magic-spell"]', 'spell-audit-1c1dcaf3632d91591839');
   const detailsOpen = await page.evaluate(() => [...document.querySelectorAll('.workspace-v5-context-details')].find(el=>el.querySelector('summary')?.textContent==='Surpuissance & Paramètres du sort')?.open === true);
   if (!detailsOpen) {const summary=page.getByText('Surpuissance & Paramètres du sort',{exact:true});if(!await summary.evaluate(el=>el.parentElement.open))await summary.click();}
@@ -526,7 +526,7 @@ try {
     }
   }
   const beforeArcane = await arcaneState();
-  await page.click('[data-action-key="v5-magic:cast"]');
+  await clickU1Magic(page, 'cast');
   await page.selectOption('[data-focus-key="magic-spell"]', arcaneId);
   await chooseArcaneEnemy();
   await page.fill('[data-roll-input="attack"]', '05');
@@ -557,7 +557,7 @@ try {
   await page.click('#test-undo');
   assert.deepEqual(await arcaneState(), beforeArcane, 'Undo restaure PV, PA, réserve et reçu inventaire');
 
-  await page.click('[data-action-key="v5-magic:cast"]');
+  await clickU1Magic(page, 'cast');
   await page.selectOption('[data-focus-key="magic-spell"]', arcaneId);
   await chooseArcaneEnemy();
   await page.fill('[data-focus-key="magic-arcane-armor-points"]', '0');
@@ -570,13 +570,13 @@ try {
   await page.click('[data-focus-key="calculate"]');
   assert.equal(await page.isDisabled('[data-focus-key="apply"]'), true, 'Palier +8 refusé avec un surplus insuffisant');
 
-  await page.click('[data-action-key="v5-magic:channelling"]');
+  await clickU1Magic(page, 'channelling');
   await page.selectOption('[data-focus-key="magicChannelType"]', 'high');
   await page.fill('[data-roll-input="attack"]', '25');
   await page.click('[data-focus-key="calculate"]');
   await page.click('[data-focus-key="apply"]');
   const fullBefore = await arcaneState();
-  await page.click('[data-action-key="v5-magic:cast"]');
+  await clickU1Magic(page, 'cast');
   await page.selectOption('[data-focus-key="magic-spell"]', arcaneId);
   await chooseArcaneEnemy();
   await page.fill('[data-focus-key="magic-arcane-armor-points"]', '0');
@@ -594,7 +594,7 @@ try {
   await page.click('#test-undo');
   assert.deepEqual(await arcaneState(), fullBefore);
 
-  await page.click('[data-action-key="v5-magic:cast"]');
+  await clickU1Magic(page, 'cast');
   await page.selectOption('[data-focus-key="magic-spell"]', arcaneId);
   await chooseArcaneEnemy();
   await page.uncheck('[data-focus-key="magicArcaneEnhancedDamage"]');
@@ -630,12 +630,12 @@ try {
 
   // New talent/rune and persistent-dispel controls, desktop and mobile mixed-target gestures.
   await page.evaluate(async()=>{const store=window.__TEST__.Store;const mage=store.listParticipants().find(p=>p.id==='mage-1');const enemy=store.listParticipants().find(p=>p.id==='enemy-1');const ally={...structuredClone(mage),id:'ally-1',name:'Allié de recette',init:30};mage.extensions.v5={channelling:{sl:0,type:null}};mage.caracs.FM=50;mage.talents=[{id:'talent-high-magic',status:'resolved',rank:1}];mage.skills=[{name:'Focalisation',total:60},{name:'Focalisation (Haute Magie)',total:60},{name:'Langue (Magick)',total:60},{name:'Savoir (Magie)',total:60}];await store.loadFromJSON({schemaVersion:3,reserve:[],combat:{round:1,currentActorId:mage.id,order:[mage.id,enemy.id,ally.id],participants:[mage,enemy,ally]},diceLines:[],log:[],extensions:{v5:{turnIndex:1}}});window.__TEST__.view.render();});
-  await page.click('[data-action-key="v5-magic:channelling"]');await page.fill('[data-focus-key="magicRuneKnowledgeRoll"]','25');await page.check('[data-focus-key="magicRuneMaterials"]');await page.getByRole('button',{name:'Déployer une rune (1 Round)',exact:true}).click();await page.waitForFunction(()=>window.__TEST__.Store.getCadaiRunes('mage-1').deployed===1);
-  await page.click('[data-action-key="v5-magic:cast"]');// HEPG p. 84 : la rune ne sert qu'à un sort de Haute Magie (Apothéose), pas à Carreau.
+  await clickU1Magic(page, 'channelling');await page.fill('[data-focus-key="magicRuneKnowledgeRoll"]','25');await page.check('[data-focus-key="magicRuneMaterials"]');await page.getByRole('button',{name:'Déployer une rune (1 Round)',exact:true}).click();await page.waitForFunction(()=>window.__TEST__.Store.getCadaiRunes('mage-1').deployed===1);
+  await clickU1Magic(page, 'cast');// HEPG p. 84 : la rune ne sert qu'à un sort de Haute Magie (Apothéose), pas à Carreau.
   const apotheoseId=await page.evaluate(async()=>{const {getSpellContract}=await import('/js/core/v5-spell-contracts.js');return getSpellContract('Apothéose').id;});await page.selectOption('[data-focus-key="magic-spell"]',apotheoseId);await page.check('[data-focus-key="magicUseCadaiRune"]');await page.check('[data-focus-key="magicCadaiAccessible"]');await page.fill('[data-focus-key="magicCadaiTestRoll"]','85');await page.fill('[data-roll-input="attack"]','25');await page.click('[data-focus-key="calculate"]');assert.equal(await page.isDisabled('[data-focus-key="apply"]'),false,await page.textContent('.workspace-magic-result'));await page.click('[data-focus-key="apply"]');await page.waitForFunction(()=>window.__TEST__.Store.getCadaiRunes('mage-1').deployed===0);await page.click('#test-undo');assert.equal(await page.evaluate(()=>window.__TEST__.Store.getCadaiRunes('mage-1').deployed),1);
   await page.evaluate(async()=>{await window.__TEST__.Store.applySpellEffects('ally-1',{id:'ui-dispel',spellId:'ui-dispel',spellName:'Sort persistant de recette',casterId:'mage-1',cn:4,castExecutionId:'ui-dispel-group',duration:'10 Rounds',statModifiers:{Ag:20}});window.__TEST__.view.render();});
-  await page.click('[data-action-key="v5-magic:dispel"]');await page.selectOption('[data-focus-key="magicPersistentId"]','ui-dispel');await page.fill('[data-focus-key="magicPersistentDistance"]','10');await page.selectOption('[data-focus-key="magicPersistentVisible"]','true');await page.fill('[data-roll-input="attack"]','25');await page.click('[data-focus-key="calculate"]');assert.equal(await page.isDisabled('[data-focus-key="apply"]'),false,await page.textContent('.workspace-magic-result'));await page.click('[data-focus-key="apply"]');await page.waitForFunction(()=>!window.__TEST__.Store.listParticipants().find(p=>p.id==='ally-1').extensions.v5.spellEffects.some(e=>e.id==='ui-dispel'));await page.click('#test-undo');assert.equal(await page.evaluate(()=>window.__TEST__.Store.listParticipants().find(p=>p.id==='ally-1').extensions.v5.spellEffects.some(e=>e.id==='ui-dispel')),true);
-  await page.setViewportSize({width:390,height:844});await page.locator('.workspace-resolution-drawer').getByRole('button',{name:'Fermer',exact:true}).click();await page.click('[data-action-key="v5-magic:cast"]');await openU1Settings(page);const fireId=await page.evaluate(async()=>{const {getSpellContract}=await import('/js/core/v5-spell-contracts.js');return getSpellContract('Tête Brûlante').id;});await page.selectOption('[data-focus-key="magic-spell"]',fireId);for(const id of ['ally-1','enemy-1']){const input=page.locator('[data-focus-key="magic-target-'+id+'"]');const details=page.locator('details.workspace-v5-context-details').filter({has:input});if(!await details.evaluate(el=>el.open))await details.locator('summary').click();await input.check();}assert.equal(await page.isChecked('[data-focus-key="magic-target-ally-1"]'),true);assert.equal(await page.isChecked('[data-focus-key="magic-target-enemy-1"]'),true);await page.screenshot({path:join(TMP_DIR,'magic-v5-mixed-targets-mobile.png'),fullPage:true});await page.setViewportSize({width:1440,height:900});
+  await clickU1Magic(page, 'dispel');await page.selectOption('[data-focus-key="magicPersistentId"]','ui-dispel');await page.fill('[data-focus-key="magicPersistentDistance"]','10');await page.selectOption('[data-focus-key="magicPersistentVisible"]','true');await page.fill('[data-roll-input="attack"]','25');await page.click('[data-focus-key="calculate"]');assert.equal(await page.isDisabled('[data-focus-key="apply"]'),false,await page.textContent('.workspace-magic-result'));await page.click('[data-focus-key="apply"]');await page.waitForFunction(()=>!window.__TEST__.Store.listParticipants().find(p=>p.id==='ally-1').extensions.v5.spellEffects.some(e=>e.id==='ui-dispel'));await page.click('#test-undo');assert.equal(await page.evaluate(()=>window.__TEST__.Store.listParticipants().find(p=>p.id==='ally-1').extensions.v5.spellEffects.some(e=>e.id==='ui-dispel')),true);
+  await page.setViewportSize({width:390,height:844});await page.locator('.workspace-resolution-drawer').getByRole('button',{name:'Fermer',exact:true}).click();await clickU1Magic(page, 'cast');await openU1Settings(page);const fireId=await page.evaluate(async()=>{const {getSpellContract}=await import('/js/core/v5-spell-contracts.js');return getSpellContract('Tête Brûlante').id;});await page.selectOption('[data-focus-key="magic-spell"]',fireId);for(const id of ['ally-1','enemy-1']){const input=page.locator('[data-focus-key="magic-target-'+id+'"]');const details=page.locator('details.workspace-v5-context-details').filter({has:input});if(!await details.evaluate(el=>el.open))await details.locator('summary').click();await input.check();}assert.equal(await page.isChecked('[data-focus-key="magic-target-ally-1"]'),true);assert.equal(await page.isChecked('[data-focus-key="magic-target-enemy-1"]'),true);await page.screenshot({path:join(TMP_DIR,'magic-v5-mixed-targets-mobile.png'),fullPage:true});await page.setViewportSize({width:1440,height:900});
 
   // 5. Vérification réelle du Service Worker et du rechargement hors ligne
   await page.goto(baseUrl, { waitUntil: 'networkidle' });
