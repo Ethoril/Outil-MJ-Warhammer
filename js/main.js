@@ -389,7 +389,6 @@ async function awaitStore(operation, label = 'Opération locale') {
 function openCombatInitiativeDialog({ staging = null, startCombat = false, title = 'Préparer l’initiative' } = {}) {
   const participants = staging?.scene?.participants || staging?.participants || Store.listParticipants().filter(row => row.zone === 'active');
   const active = participants.filter(row => row.zone === 'active');
-  if (startCombat && !active.length) { showToast('Aucun combattant actif à initialiser.', 'info'); return Promise.resolve({ status: 'cancelled' }); }
   const state = { diceById: {}, combatReflexesById: {}, characteristicById: {}, tieOrders: { ...(staging?.tieOrders||{}) }, opposedRolls: { ...(staging?.opposedRolls||{}) }, tieChoices: { ...(staging?.tieChoices||{}) }, surprisedCamp: '', mountedRideTests: {}, preview: null };
   for (const actor of active) {
     const pendingReflexPreparation=actor.extensions?.v5?.combatReflexesPreparation;
@@ -448,6 +447,7 @@ function openCombatInitiativeDialog({ staging = null, startCombat = false, title
       const none = document.createElement('option'); none.value = ''; none.textContent = 'Aucun'; select.append(none);
       for (const value of [...new Set(active.map(row => row.camp).filter(Boolean))]) { const option = document.createElement('option'); option.value = value; option.textContent = value; select.append(option); }
       select.value = state.surprisedCamp; camp.append(select); form.append(camp);
+      if (!active.length) { select.disabled = true; select.title = 'Aucun combattant actif : passez-les en Actif dans la rencontre'; }
       const tieArea = document.createElement('div'); tieArea.className = 'stack'; tieArea.dataset.tieArea = 'true'; form.append(tieArea);
       const mountedArea = document.createElement('div'); mountedArea.className = 'stack'; form.append(mountedArea);
       const status = document.createElement('p'); status.className = 'muted'; status.setAttribute('aria-live', 'polite'); form.append(status);
@@ -567,7 +567,7 @@ function openCombatInitiativeDialog({ staging = null, startCombat = false, title
           }
           tieArea.append(section);
         }
-        status.textContent = state.preview.ready
+        status.textContent = !active.length ? 'Aucun combattant actif : passez-les en Actif dans la rencontre' : state.preview.ready
           ? `Ordre calculé : ${state.preview.order.map(id => active.find(row => row.id === id)?.name || id).join(' → ')}`
           : `À compléter : ${state.preview.needsInput.map(item => item.field).join(', ')}`;
       }

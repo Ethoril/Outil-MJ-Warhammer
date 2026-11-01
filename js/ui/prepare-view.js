@@ -3,7 +3,8 @@ import { userMessage } from './messages.js';
 
 const noop = () => {};
 // Camp proposé selon le type du profil (Créature et types inconnus : ennemi).
-const KIND_CAMPS = { PJ: 'pj', 'Créature': 'ennemi', PNJ: 'neutre' };
+const KIND_CAMPS = { PJ: 'pj', 'Créature': 'ennemi', PNJ: 'ennemi' };
+export const defaultEncounterCamp = kind => KIND_CAMPS[kind] || 'ennemi';
 
 function makeField(label, value, type = 'text') {
   const wrapper = document.createElement('label'); wrapper.textContent = label;
@@ -62,13 +63,13 @@ export function initPrepareView({ mount, hosted = false, Store = null, encounter
     profiles().forEach(profile => select.append(new Option(`${profile.name} (${profile.kind || 'Créature'})`, profile.id)));
     const quantity = makeField('Quantité', 1, 'number'); quantity.input.min = '1'; quantity.input.max = '99';
     const camp = makeSelect('Camp', Object.entries(CAMP_LABELS), 'neutre');
-    const zone = makeSelect('Zone', [['bench', 'En attente'], ['active', 'Actif']], 'bench');
+    const zone = makeSelect('Zone', [['bench', 'En attente'], ['active', 'Actif']], 'active');
     // Le camp suit le type du profil choisi, sauf s'il a été choisi à la main.
     let campChosen = false;
     camp.input.addEventListener('change', () => { campChosen = true; });
     select.addEventListener('change', () => {
       const profile = profiles().find(candidate => candidate.id === select.value);
-      if (profile && !campChosen) camp.input.value = KIND_CAMPS[profile.kind] || 'ennemi';
+      if (profile && !campChosen) camp.input.value = defaultEncounterCamp(profile.kind);
     });
     const addButton = document.createElement('button'); addButton.type = 'button'; addButton.textContent = 'Ajouter';
     addButton.addEventListener('click', () => {

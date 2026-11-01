@@ -151,12 +151,12 @@ try {
   await page.locator('#workspace-play [data-workspace-action="begin-encounter"]').click();
   const prepareDialog = page.locator('dialog.tool-sheet'); await prepareDialog.waitFor({ state: 'visible' });
   await prepareDialog.getByLabel('Profil').selectOption('f2a-profile-npc');
-  await prepareDialog.getByLabel('Camp').selectOption('ennemi');
-  await prepareDialog.getByLabel('Zone').selectOption('active');
+  assert.equal(await prepareDialog.getByLabel('Camp').inputValue(), 'ennemi');
+  assert.equal(await prepareDialog.getByLabel('Zone').inputValue(), 'active');
   await prepareDialog.getByRole('button', { name: 'Ajouter', exact: true }).click();
   await prepareDialog.getByLabel('Profil').selectOption('f2a-profile-pj');
-  await prepareDialog.getByLabel('Camp').selectOption('pj');
-  await prepareDialog.getByLabel('Zone').selectOption('active');
+  assert.equal(await prepareDialog.getByLabel('Camp').inputValue(), 'pj');
+  assert.equal(await prepareDialog.getByLabel('Zone').inputValue(), 'active');
   await prepareDialog.getByRole('button', { name: 'Ajouter', exact: true }).click();
   const titleInput = prepareDialog.getByLabel('Titre'); await titleInput.fill('Via préparation'); await titleInput.dispatchEvent('change');
   const compositionText = await prepareDialog.locator('.encounter-composition').innerText();
@@ -165,6 +165,7 @@ try {
   assert.equal(await prepareDialog.locator('.encounter-composition li').count(), 2, 'l’éditeur conserve les deux entrées avec des UID distincts');
   await prepareDialog.getByRole('button', { name: 'Lancer la rencontre' }).click();
   const callbackDialog = page.locator('dialog.tool-sheet'); await callbackDialog.waitFor({ state: 'visible' });
+  assert.deepEqual(await callbackDialog.locator('select[name="surprisedCamp"] option').evaluateAll(options => options.map(option => option.value).sort()), ['', 'ennemi', 'pj']);
   await callbackDialog.locator('input[name^="die:"]:not([readonly])').fill('6');
   await callbackDialog.getByRole('button', { name: 'Calculer / actualiser l’ordre' }).click();
   await callbackDialog.getByRole('button', { name: 'Confirmer et appliquer' }).click();
@@ -391,6 +392,10 @@ try {
   await page.locator('#workspace-prepare [data-workspace-action="launch-encounter"][data-encounter-id="f2a-all-bench"]').click();
   const benchDialog=page.locator('dialog.tool-sheet');await benchDialog.waitFor({state:'visible'});
   assert.equal(await benchDialog.locator('input[name^="die:"]').count(),0,'tout le banc ne demande aucun dé actif');
+  assert.equal(await benchDialog.locator('select[name="surprisedCamp"]').isDisabled(), true);
+  assert.match(await benchDialog.innerText(), /Aucun combattant actif : passez-les en Actif dans la rencontre/);
+  await benchDialog.getByRole('button',{name:'Calculer / actualiser l’ordre'}).click();
+  assert.match(await benchDialog.innerText(), /Aucun combattant actif : passez-les en Actif dans la rencontre/);
   await benchDialog.getByRole('button',{name:'Confirmer et appliquer'}).click();
   const allBench=await page.evaluate(async()=>{const {Store}=await import('/Outil-MJ-Warhammer/js/main.js');return Store.getActiveScene();});
   assert.equal(allBench.title,'Rencontre tout au banc');assert.equal(allBench.participants[0].zone,'bench');
