@@ -1,0 +1,1035 @@
+{
+  "format": "outil-mj-profil",
+  "version": 1,
+  "_propositions": "Cas d’essai de la correction de l’import JSON. Clés françaises proposées en plus du format actuel : competences [{nom, avances}], talents [{nom, specialisation, rang}], sorts [nom], prieres [nom], fortune, destin, resilience, corruption, peches.",
+  "profils": [
+    {
+      "nom": "Recette Prêtre de Ulric",
+      "type": "PNJ",
+      "groupe": "Recette",
+      "pv": 14,
+      "initiative": 40,
+      "caracteristiques": {
+        "CC": 40,
+        "CT": 35,
+        "F": 35,
+        "E": 35,
+        "I": 40,
+        "Ag": 35,
+        "Dex": 35,
+        "Int": 40,
+        "FM": 50,
+        "Soc": 70
+      },
+      "armure": {
+        "tete": 0,
+        "corps": 1,
+        "bras": 0,
+        "jambes": 0
+      },
+      "competences": [
+        {
+          "nom": "Prière",
+          "avances": 20
+        }
+      ],
+      "talents": [
+        {
+          "nom": "Béni",
+          "specialisation": "Ulric"
+        },
+        {
+          "nom": "Invocation",
+          "specialisation": "Ulric"
+        }
+      ],
+      "prieres": [
+        "Morsure du loup",
+        "Hurlement de bataille",
+        "Écraser les faibles",
+        "Engourdissement",
+        "Cœur du loup",
+        "Muscles givrés",
+        "Tempête de glace",
+        "Frisson du givre",
+        "Hurlement du loup",
+        "Peau de loup d'hiver",
+        "Jugement du Roi de la neige",
+        "Fureur d'Ulric",
+        "Morsure de l'hiver"
+      ],
+      "peches": 0,
+      "notes": "G-DIV-3, 5, 6, 11, 17 (Hurlement du loup), G-DEC-8 (Courroux : 0 Péché au départ)."
+    },
+    {
+      "nom": "Recette Prêtre de Ranald",
+      "type": "PNJ",
+      "groupe": "Recette",
+      "pv": 14,
+      "initiative": 40,
+      "caracteristiques": {
+        "CC": 40,
+        "CT": 35,
+        "F": 35,
+        "E": 35,
+        "I": 40,
+        "Ag": 35,
+        "Dex": 35,
+        "Int": 40,
+        "FM": 50,
+        "Soc": 70
+      },
+      "armure": {
+        "tete": 0,
+        "corps": 1,
+        "bras": 0,
+        "jambes": 0
+      },
+      "competences": [
+        {
+          "nom": "Prière",
+          "avances": 20
+        }
+      ],
+      "talents": [
+        {
+          "nom": "Béni",
+          "specialisation": "Ranald"
+        },
+        {
+          "nom": "Invocation",
+          "specialisation": "Ranald"
+        }
+      ],
+      "prieres": [
+        "Fortune généreuse",
+        "Crise de confiance",
+        "Forcer la main du hasard",
+        "Empathie parfaite",
+        "Le Maître du jeu",
+        "Faire monter les enjeux",
+        "Sons lointains",
+        "Longue portée",
+        "Perdre le butin",
+        "Le silence règne",
+        "Visage de pauvre",
+        "Se sortir d’affaire par la parole",
+        "La pression retombe",
+        "Retour à l’envoyeur",
+        "Lutte des classes",
+        "Libère ton esprit",
+        "Moment de clarté",
+        "Tous ensemble",
+        "Sous ma protection",
+        "Le pigeon idéal",
+        "Embobiner",
+        "Un mensonge presque divin",
+        "Malice de Ranald",
+        "Visage oublié",
+        "Invitation",
+        "Yeux de chat",
+        "Que la chance persiste",
+        "Grâce de Ranald",
+        "Riche, pauvre, mendiant, voleur",
+        "Vous ne m’avez pas vu, n’est-ce pas ?"
+      ],
+      "peches": 0,
+      "notes": "G-DIV-4, 7, 9, 14, 17 (Yeux de chat)."
+    },
+    {
+      "nom": "Recette Prêtre de Myrmidia",
+      "type": "PNJ",
+      "groupe": "Recette",
+      "pv": 14,
+      "initiative": 40,
+      "caracteristiques": {
+        "CC": 40,
+        "CT": 35,
+        "F": 35,
+        "E": 35,
+        "I": 40,
+        "Ag": 35,
+        "Dex": 35,
+        "Int": 40,
+        "FM": 50,
+        "Soc": 70
+      },
+      "armure": {
+        "tete": 0,
+        "corps": 1,
+        "bras": 0,
+        "jambes": 0
+      },
+      "competences": [
+        {
+          "nom": "Prière",
+          "avances": 20
+        }
+      ],
+      "talents": [
+        {
+          "nom": "Béni",
+          "specialisation": "Myrmidia"
+        },
+        {
+          "nom": "Invocation",
+          "specialisation": "Myrmidia"
+        }
+      ],
+      "prieres": [
+        "Appel à la Fureur",
+        "Bouclier de Myrmidia",
+        "Inspirant",
+        "Lance de Myrmidia",
+        "Œil de l’aigle",
+        "Soleil flamboyant",
+        "Commander la Légion",
+        "Effrayer l'Ennemi",
+        "En Bon Ordre",
+        "Connaître son Ennemi",
+        "Sur un Terrain Mortel",
+        "Attaque Rapide",
+        "Dévotion de la Guerrière",
+        "Compétence Martiale",
+        "Vindicte Vengeresse"
+      ],
+      "peches": 0,
+      "notes": "G-DIV-1, 4, 10, 12, 15, 17 (Œil de l’aigle)."
+    },
+    {
+      "nom": "Recette Prêtre de Sigmar",
+      "type": "PNJ",
+      "groupe": "Recette",
+      "pv": 14,
+      "initiative": 40,
+      "caracteristiques": {
+        "CC": 40,
+        "CT": 35,
+        "F": 35,
+        "E": 35,
+        "I": 40,
+        "Ag": 35,
+        "Dex": 35,
+        "Int": 40,
+        "FM": 50,
+        "Soc": 70
+      },
+      "armure": {
+        "tete": 0,
+        "corps": 1,
+        "bras": 0,
+        "jambes": 0
+      },
+      "competences": [
+        {
+          "nom": "Prière",
+          "avances": 20
+        }
+      ],
+      "talents": [
+        {
+          "nom": "Béni",
+          "specialisation": "Sigmar"
+        },
+        {
+          "nom": "Invocation",
+          "specialisation": "Sigmar"
+        }
+      ],
+      "prieres": [
+        "Flambeau de Vertu",
+        "N’écoutez point la Sorcière",
+        "Marteau ardent de Sigmar",
+        "Feu de l’âme",
+        "Comète à Deux Queues",
+        "Vaincre les impies"
+      ],
+      "peches": 0,
+      "notes": "G-DIV-8 (N’écoutez point la Sorcière), 1."
+    },
+    {
+      "nom": "Recette Prêtre de Shallya",
+      "type": "PNJ",
+      "groupe": "Recette",
+      "pv": 14,
+      "initiative": 40,
+      "caracteristiques": {
+        "CC": 40,
+        "CT": 35,
+        "F": 35,
+        "E": 35,
+        "I": 40,
+        "Ag": 35,
+        "Dex": 35,
+        "Int": 40,
+        "FM": 50,
+        "Soc": 70
+      },
+      "armure": {
+        "tete": 0,
+        "corps": 1,
+        "bras": 0,
+        "jambes": 0
+      },
+      "competences": [
+        {
+          "nom": "Prière",
+          "avances": 20
+        }
+      ],
+      "talents": [
+        {
+          "nom": "Béni",
+          "specialisation": "Shallya"
+        },
+        {
+          "nom": "Invocation",
+          "specialisation": "Shallya"
+        }
+      ],
+      "prieres": [
+        "Endurance de l’anachorète",
+        "Baume pour un esprit blessé",
+        "Amère catharsis",
+        "Martyr",
+        "Larmes de Shallya",
+        "Innocence immaculée"
+      ],
+      "peches": 0,
+      "notes": "G-DIV-13 (Larmes de Shallya)."
+    },
+    {
+      "nom": "Recette Prêtre de Manann",
+      "type": "PNJ",
+      "groupe": "Recette",
+      "pv": 14,
+      "initiative": 40,
+      "caracteristiques": {
+        "CC": 40,
+        "CT": 35,
+        "F": 35,
+        "E": 35,
+        "I": 40,
+        "Ag": 35,
+        "Dex": 35,
+        "Int": 40,
+        "FM": 50,
+        "Soc": 70
+      },
+      "armure": {
+        "tete": 0,
+        "corps": 1,
+        "bras": 0,
+        "jambes": 0
+      },
+      "competences": [
+        {
+          "nom": "Prière",
+          "avances": 20
+        }
+      ],
+      "talents": [
+        {
+          "nom": "Béni",
+          "specialisation": "Manann"
+        },
+        {
+          "nom": "Invocation",
+          "specialisation": "Manann"
+        }
+      ],
+      "prieres": [
+        "Encalminé",
+        "Visage de l’homme noyé",
+        "Vents favorables",
+        "Générosité de Manann",
+        "Mer déchaînée",
+        "Marcher sur les eaux"
+      ],
+      "peches": 0,
+      "notes": "G-DIV-2 (Bénédiction de Souffle)."
+    },
+    {
+      "nom": "Recette Prêtre de Taal",
+      "type": "PNJ",
+      "groupe": "Recette",
+      "pv": 14,
+      "initiative": 40,
+      "caracteristiques": {
+        "CC": 40,
+        "CT": 35,
+        "F": 35,
+        "E": 35,
+        "I": 40,
+        "Ag": 35,
+        "Dex": 35,
+        "Int": 40,
+        "FM": 50,
+        "Soc": 70
+      },
+      "armure": {
+        "tete": 0,
+        "corps": 1,
+        "bras": 0,
+        "jambes": 0
+      },
+      "competences": [
+        {
+          "nom": "Prière",
+          "avances": 20
+        }
+      ],
+      "talents": [
+        {
+          "nom": "Béni",
+          "specialisation": "Taal"
+        },
+        {
+          "nom": "Invocation",
+          "specialisation": "Taal"
+        }
+      ],
+      "prieres": [
+        "Cœur d’aurochs",
+        "Tremblement de terre",
+        "Festin de la nature",
+        "Paix de Taal",
+        "Patte déchirante",
+        "Bénédiction de la rivière",
+        "Vent sauvage",
+        "Voie de la nature",
+        "Instincts animaux",
+        "Roi de la Nature",
+        "Bondissant comme un cerf",
+        "Seigneur de la Chasse",
+        "Enchevêtrement",
+        "Dent et griffe"
+      ],
+      "peches": 0,
+      "notes": "G-DIV-17 (Roi de la Nature), 3."
+    },
+    {
+      "nom": "Recette Sorcier du Feu",
+      "type": "PNJ",
+      "groupe": "Recette",
+      "pv": 12,
+      "initiative": 40,
+      "caracteristiques": {
+        "CC": 40,
+        "CT": 35,
+        "F": 35,
+        "E": 35,
+        "I": 40,
+        "Ag": 35,
+        "Dex": 35,
+        "Int": 55,
+        "FM": 55,
+        "Soc": 40
+      },
+      "armure": {
+        "tete": 0,
+        "corps": 0,
+        "bras": 0,
+        "jambes": 0
+      },
+      "competences": [
+        {
+          "nom": "Langue (Magick)",
+          "avances": 20
+        },
+        {
+          "nom": "Focalisation",
+          "avances": 20
+        },
+        {
+          "nom": "Calme",
+          "avances": 10
+        },
+        {
+          "nom": "Savoir (Magie)",
+          "avances": 10
+        }
+      ],
+      "talents": [
+        {
+          "nom": "Magie des Arcanes",
+          "specialisation": "Feu"
+        }
+      ],
+      "sorts": [
+        "Purification",
+        "Égide d’Aqshy",
+        "Corps de Feu",
+        "Tête Brûlante",
+        "Ignition",
+        "Flamme Captivante",
+        "Mur de Feu"
+      ],
+      "notes": "G-MAG-1, 3, 5 (sorts à durée : Purification, Égide d’Aqshy, Mur de Feu), G-DIV-8 (lanceur visé par N’écoutez point la Sorcière)."
+    },
+    {
+      "nom": "Recette Sorcier des Suppléments",
+      "type": "PNJ",
+      "groupe": "Recette",
+      "pv": 12,
+      "initiative": 40,
+      "caracteristiques": {
+        "CC": 40,
+        "CT": 35,
+        "F": 35,
+        "E": 35,
+        "I": 40,
+        "Ag": 35,
+        "Dex": 35,
+        "Int": 55,
+        "FM": 55,
+        "Soc": 40
+      },
+      "armure": {
+        "tete": 0,
+        "corps": 0,
+        "bras": 0,
+        "jambes": 0
+      },
+      "competences": [
+        {
+          "nom": "Langue (Magick)",
+          "avances": 20
+        },
+        {
+          "nom": "Focalisation",
+          "avances": 20
+        },
+        {
+          "nom": "Calme",
+          "avances": 10
+        }
+      ],
+      "talents": [
+        {
+          "nom": "Magie des Arcanes",
+          "specialisation": "Grande Gueule"
+        },
+        {
+          "nom": "Magie des Arcanes",
+          "specialisation": "Magie naturelle"
+        }
+      ],
+      "sorts": [
+        "Brise-os",
+        "Gloutonneur",
+        "Dague de l’Art"
+      ],
+      "notes": "G-MAG-2 (Brise-os, Gloutonneur, Dague de l’Art ; Déracinement des montagnes est à la Haute Magie)."
+    },
+    {
+      "nom": "Recette Haut Mage",
+      "type": "PNJ",
+      "groupe": "Recette",
+      "pv": 12,
+      "initiative": 40,
+      "caracteristiques": {
+        "CC": 40,
+        "CT": 35,
+        "F": 35,
+        "E": 35,
+        "I": 40,
+        "Ag": 35,
+        "Dex": 35,
+        "Int": 55,
+        "FM": 55,
+        "Soc": 40
+      },
+      "armure": {
+        "tete": 0,
+        "corps": 0,
+        "bras": 0,
+        "jambes": 0
+      },
+      "competences": [
+        {
+          "nom": "Langue (Magick)",
+          "avances": 20
+        },
+        {
+          "nom": "Focalisation (Qhaysh)",
+          "avances": 20
+        },
+        {
+          "nom": "Savoir (Magie)",
+          "avances": 20
+        },
+        {
+          "nom": "Calme",
+          "avances": 10
+        }
+      ],
+      "talents": [
+        {
+          "nom": "Haute Magie"
+        }
+      ],
+      "sorts": [
+        "Déracinement des montagnes",
+        "Drain de Magie",
+        "Tempête",
+        "Apothéose"
+      ],
+      "notes": "G-MAG-2 (Déracinement des montagnes), G-MAG-4 (Haute Magie, runes des Cadai)."
+    },
+    {
+      "nom": "Recette Mage des Bêtes",
+      "type": "PNJ",
+      "groupe": "Recette",
+      "pv": 12,
+      "initiative": 40,
+      "caracteristiques": {
+        "CC": 40,
+        "CT": 35,
+        "F": 35,
+        "E": 35,
+        "I": 40,
+        "Ag": 35,
+        "Dex": 35,
+        "Int": 55,
+        "FM": 55,
+        "Soc": 40
+      },
+      "armure": {
+        "tete": 0,
+        "corps": 0,
+        "bras": 0,
+        "jambes": 0
+      },
+      "competences": [
+        {
+          "nom": "Langue (Magick)",
+          "avances": 20
+        },
+        {
+          "nom": "Focalisation",
+          "avances": 20
+        },
+        {
+          "nom": "Calme",
+          "avances": 10
+        }
+      ],
+      "talents": [
+        {
+          "nom": "Magie des Arcanes",
+          "specialisation": "Bête"
+        }
+      ],
+      "sorts": [
+        "Forme bestiale",
+        "Serres d’Ambre",
+        "Transe d’Ambre",
+        "Langue des Bêtes",
+        "Yeux de la Meute"
+      ],
+      "notes": "G-DEC-6 (attribut de Domaine des Bêtes)."
+    },
+    {
+      "nom": "Recette Mage de la Mort",
+      "type": "PNJ",
+      "groupe": "Recette",
+      "pv": 12,
+      "initiative": 40,
+      "caracteristiques": {
+        "CC": 40,
+        "CT": 35,
+        "F": 35,
+        "E": 35,
+        "I": 40,
+        "Ag": 35,
+        "Dex": 35,
+        "Int": 55,
+        "FM": 55,
+        "Soc": 40
+      },
+      "armure": {
+        "tete": 0,
+        "corps": 0,
+        "bras": 0,
+        "jambes": 0
+      },
+      "competences": [
+        {
+          "nom": "Langue (Magick)",
+          "avances": 20
+        },
+        {
+          "nom": "Focalisation",
+          "avances": 20
+        },
+        {
+          "nom": "Calme",
+          "avances": 10
+        }
+      ],
+      "talents": [
+        {
+          "nom": "Magie des Arcanes",
+          "specialisation": "Mort"
+        }
+      ],
+      "sorts": [
+        "La Faux de Shyish",
+        "Mort rapide",
+        "Derniers Mots"
+      ],
+      "notes": "G-DEC-6 (La Faux de Shyish) : cible, un Squelette ou Zombie du bestiaire (L06) engagé."
+    },
+    {
+      "nom": "Recette Mage Œil de la tempête",
+      "type": "PNJ",
+      "groupe": "Recette",
+      "pv": 12,
+      "initiative": 40,
+      "caracteristiques": {
+        "CC": 40,
+        "CT": 35,
+        "F": 35,
+        "E": 35,
+        "I": 40,
+        "Ag": 35,
+        "Dex": 35,
+        "Int": 55,
+        "FM": 55,
+        "Soc": 40
+      },
+      "armure": {
+        "tete": 0,
+        "corps": 0,
+        "bras": 0,
+        "jambes": 0
+      },
+      "competences": [
+        {
+          "nom": "Langue (Magick)",
+          "avances": 20
+        },
+        {
+          "nom": "Focalisation",
+          "avances": 20
+        },
+        {
+          "nom": "Calme",
+          "avances": 10
+        }
+      ],
+      "talents": [
+        {
+          "nom": "Magie des Arcanes",
+          "specialisation": "Feu"
+        },
+        {
+          "nom": "Œil de la tempête",
+          "rang": 2
+        }
+      ],
+      "sorts": [
+        "Purification",
+        "Tête Brûlante"
+      ],
+      "notes": "G-DEC-2 : Œil de la tempête rang 2 ; poser l’état Exténué sur le lanceur."
+    },
+    {
+      "nom": "Recette Maître de familier",
+      "type": "PNJ",
+      "groupe": "Recette",
+      "pv": 12,
+      "initiative": 40,
+      "caracteristiques": {
+        "CC": 40,
+        "CT": 35,
+        "F": 35,
+        "E": 35,
+        "I": 40,
+        "Ag": 35,
+        "Dex": 35,
+        "Int": 55,
+        "FM": 55,
+        "Soc": 40
+      },
+      "armure": {
+        "tete": 0,
+        "corps": 0,
+        "bras": 0,
+        "jambes": 0
+      },
+      "competences": [
+        {
+          "nom": "Langue (Magick)",
+          "avances": 20
+        },
+        {
+          "nom": "Focalisation",
+          "avances": 20
+        },
+        {
+          "nom": "Calme",
+          "avances": 10
+        }
+      ],
+      "talents": [
+        {
+          "nom": "Magie des Arcanes",
+          "specialisation": "Vie"
+        }
+      ],
+      "sorts": [],
+      "notes": "G-BES-6 : Destin 2 pour le point sacrifié ; ajouter un petit animal du bestiaire (chat, corbeau…) allié en Actif.",
+      "destin": 2,
+      "resilience": 1
+    },
+    {
+      "nom": "Recette Combat instinctif",
+      "type": "PJ",
+      "groupe": "Recette",
+      "pv": 14,
+      "initiative": 45,
+      "caracteristiques": {
+        "CC": 40,
+        "CT": 35,
+        "F": 35,
+        "E": 35,
+        "I": 40,
+        "Ag": 35,
+        "Dex": 35,
+        "Int": 35,
+        "FM": 35,
+        "Soc": 30
+      },
+      "armure": {
+        "tete": 0,
+        "corps": 1,
+        "bras": 0,
+        "jambes": 0
+      },
+      "notes": "G-INI-2 : deux d10 d’Initiative.",
+      "competences": [
+        {
+          "nom": "Esquive",
+          "avances": 5
+        }
+      ],
+      "talents": [
+        {
+          "nom": "Combat instinctif"
+        }
+      ]
+    },
+    {
+      "nom": "Recette Deux armes",
+      "type": "PJ",
+      "groupe": "Recette",
+      "pv": 14,
+      "initiative": 42,
+      "caracteristiques": {
+        "CC": 40,
+        "CT": 35,
+        "F": 35,
+        "E": 35,
+        "I": 40,
+        "Ag": 35,
+        "Dex": 35,
+        "Int": 35,
+        "FM": 35,
+        "Soc": 30
+      },
+      "armure": {
+        "tete": 0,
+        "corps": 1,
+        "bras": 0,
+        "jambes": 0
+      },
+      "notes": "G-ATT-6 (le talent dispense du coût en Élan de la seconde arme).",
+      "talents": [
+        {
+          "nom": "Maniement de deux armes"
+        }
+      ],
+      "jets": [
+        {
+          "nom": "Épée",
+          "type": "attaque",
+          "score": 45,
+          "degats": "BF+4"
+        },
+        {
+          "nom": "Dague",
+          "type": "attaque",
+          "score": 45,
+          "degats": "BF+2",
+          "qualites": [
+            "Parade"
+          ]
+        }
+      ]
+    },
+    {
+      "nom": "Recette Cavalier émérite",
+      "type": "PJ",
+      "groupe": "Recette",
+      "pv": 14,
+      "initiative": 42,
+      "caracteristiques": {
+        "CC": 40,
+        "CT": 35,
+        "F": 35,
+        "E": 35,
+        "I": 40,
+        "Ag": 45,
+        "Dex": 35,
+        "Int": 35,
+        "FM": 35,
+        "Soc": 30
+      },
+      "armure": {
+        "tete": 0,
+        "corps": 1,
+        "bras": 0,
+        "jambes": 0
+      },
+      "notes": "G-MON-2 : l’Esquive montée ne prend pas le Désavantage automatique.",
+      "competences": [
+        {
+          "nom": "Chevaucher",
+          "avances": 15
+        }
+      ],
+      "talents": [
+        {
+          "nom": "Cavalier émérite"
+        }
+      ]
+    },
+    {
+      "nom": "Recette Chirurgien",
+      "type": "PJ",
+      "groupe": "Recette",
+      "pv": 14,
+      "initiative": 42,
+      "caracteristiques": {
+        "CC": 40,
+        "CT": 35,
+        "F": 35,
+        "E": 35,
+        "I": 40,
+        "Ag": 35,
+        "Dex": 35,
+        "Int": 50,
+        "FM": 35,
+        "Soc": 30
+      },
+      "armure": {
+        "tete": 0,
+        "corps": 1,
+        "bras": 0,
+        "jambes": 0
+      },
+      "notes": "G-CRI-6, G-CRI-7 : Chirurgie + Guérison.",
+      "competences": [
+        {
+          "nom": "Guérison",
+          "avances": 20
+        }
+      ],
+      "talents": [
+        {
+          "nom": "Chirurgie"
+        }
+      ]
+    },
+    {
+      "nom": "Recette Fortune et Destin",
+      "type": "PJ",
+      "groupe": "Recette",
+      "pv": 14,
+      "initiative": 42,
+      "caracteristiques": {
+        "CC": 40,
+        "CT": 35,
+        "F": 35,
+        "E": 35,
+        "I": 40,
+        "Ag": 35,
+        "Dex": 35,
+        "Int": 35,
+        "FM": 35,
+        "Soc": 30
+      },
+      "armure": {
+        "tete": 0,
+        "corps": 1,
+        "bras": 0,
+        "jambes": 0
+      },
+      "notes": "G-DES-1 à 4 : Fortune (Chance) 3, Destin 2, Résilience 1.",
+      "fortune": 3,
+      "destin": 2,
+      "resilience": 1
+    },
+    {
+      "nom": "Recette Corrompu",
+      "type": "PJ",
+      "groupe": "Recette",
+      "pv": 14,
+      "initiative": 42,
+      "caracteristiques": {
+        "CC": 40,
+        "CT": 35,
+        "F": 35,
+        "E": 40,
+        "I": 40,
+        "Ag": 35,
+        "Dex": 35,
+        "Int": 35,
+        "FM": 40,
+        "Soc": 30
+      },
+      "armure": {
+        "tete": 0,
+        "corps": 1,
+        "bras": 0,
+        "jambes": 0
+      },
+      "notes": "G-COR-1 à 4 : 8 Points de Corruption, E 40 (BE 4), FM 40 (BFM 4).",
+      "corruption": 8
+    },
+    {
+      "nom": "Recette Âme pure",
+      "type": "PJ",
+      "groupe": "Recette",
+      "pv": 14,
+      "initiative": 42,
+      "caracteristiques": {
+        "CC": 40,
+        "CT": 35,
+        "F": 35,
+        "E": 40,
+        "I": 40,
+        "Ag": 35,
+        "Dex": 35,
+        "Int": 35,
+        "FM": 40,
+        "Soc": 30
+      },
+      "armure": {
+        "tete": 0,
+        "corps": 1,
+        "bras": 0,
+        "jambes": 0
+      },
+      "notes": "G-COR-2 : seuil de Corruption doublé par Âme pure.",
+      "corruption": 8,
+      "talents": [
+        {
+          "nom": "Âme pure"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,650 @@
+{
+  "format": "outil-mj-profil",
+  "version": 1,
+  "profils": [
+    {
+      "nom": "Recette PJ Alpha",
+      "type": "PJ",
+      "groupe": "Recette",
+      "pv": 14,
+      "initiative": 45,
+      "caracteristiques": {
+        "CC": 50,
+        "CT": 35,
+        "F": 35,
+        "E": 35,
+        "I": 45,
+        "Ag": 35,
+        "Dex": 35,
+        "Int": 35,
+        "FM": 35,
+        "Soc": 30
+      },
+      "armure": {
+        "tete": 1,
+        "corps": 2,
+        "bras": 1,
+        "jambes": 1
+      },
+      "notes": "Initiative 45 comme Beta : égalité au Test opposé d’Initiative (G-INI-2). Deux armes à une main (G-ATT-6).",
+      "jets": [
+        {
+          "nom": "Épée",
+          "type": "attaque",
+          "score": 50,
+          "degats": "BF+4",
+          "qualites": [
+            "Pointue"
+          ]
+        },
+        {
+          "nom": "Dague (main secondaire)",
+          "type": "attaque",
+          "score": 45,
+          "degats": "BF+2",
+          "qualites": [
+            "Parade"
+          ]
+        },
+        {
+          "nom": "Esquive",
+          "type": "défense",
+          "score": 35
+        },
+        {
+          "nom": "Calme",
+          "type": "compétence",
+          "score": 35
+        }
+      ]
+    },
+    {
+      "nom": "Recette PJ Beta",
+      "type": "PJ",
+      "groupe": "Recette",
+      "pv": 12,
+      "initiative": 45,
+      "caracteristiques": {
+        "CC": 45,
+        "CT": 35,
+        "F": 35,
+        "E": 35,
+        "I": 45,
+        "Ag": 35,
+        "Dex": 35,
+        "Int": 35,
+        "FM": 35,
+        "Soc": 30
+      },
+      "armure": {
+        "tete": 0,
+        "corps": 1,
+        "bras": 0,
+        "jambes": 0
+      },
+      "notes": "Même Initiative qu’Alpha.",
+      "jets": [
+        {
+          "nom": "Épée courte",
+          "type": "attaque",
+          "score": 45,
+          "degats": "BF+3"
+        },
+        {
+          "nom": "Esquive",
+          "type": "défense",
+          "score": 35
+        }
+      ]
+    },
+    {
+      "nom": "Recette Milicien 1",
+      "type": "PNJ",
+      "groupe": "Recette",
+      "pv": 11,
+      "initiative": 35,
+      "caracteristiques": {
+        "CC": 38,
+        "CT": 35,
+        "F": 35,
+        "E": 35,
+        "I": 35,
+        "Ag": 35,
+        "Dex": 35,
+        "Int": 35,
+        "FM": 35,
+        "Soc": 30
+      },
+      "armure": {
+        "tete": 0,
+        "corps": 1,
+        "bras": 0,
+        "jambes": 0
+      },
+      "keywords": [
+        "Humain"
+      ],
+      "tags": [
+        "humain"
+      ],
+      "jets": [
+        {
+          "nom": "Lance",
+          "type": "attaque",
+          "score": 38,
+          "degats": "BF+3"
+        },
+        {
+          "nom": "Esquive",
+          "type": "défense",
+          "score": 33
+        }
+      ]
+    },
+    {
+      "nom": "Recette Milicien 2",
+      "type": "PNJ",
+      "groupe": "Recette",
+      "pv": 11,
+      "initiative": 35,
+      "caracteristiques": {
+        "CC": 38,
+        "CT": 35,
+        "F": 35,
+        "E": 35,
+        "I": 35,
+        "Ag": 35,
+        "Dex": 35,
+        "Int": 35,
+        "FM": 35,
+        "Soc": 30
+      },
+      "armure": {
+        "tete": 0,
+        "corps": 1,
+        "bras": 0,
+        "jambes": 0
+      },
+      "keywords": [
+        "Humain"
+      ],
+      "tags": [
+        "humain"
+      ],
+      "jets": [
+        {
+          "nom": "Lance",
+          "type": "attaque",
+          "score": 38,
+          "degats": "BF+3"
+        },
+        {
+          "nom": "Esquive",
+          "type": "défense",
+          "score": 33
+        }
+      ]
+    },
+    {
+      "nom": "Recette Milicien 3",
+      "type": "PNJ",
+      "groupe": "Recette",
+      "pv": 11,
+      "initiative": 35,
+      "caracteristiques": {
+        "CC": 38,
+        "CT": 35,
+        "F": 35,
+        "E": 35,
+        "I": 35,
+        "Ag": 35,
+        "Dex": 35,
+        "Int": 35,
+        "FM": 35,
+        "Soc": 30
+      },
+      "armure": {
+        "tete": 0,
+        "corps": 1,
+        "bras": 0,
+        "jambes": 0
+      },
+      "keywords": [
+        "Humain"
+      ],
+      "tags": [
+        "humain"
+      ],
+      "jets": [
+        {
+          "nom": "Lance",
+          "type": "attaque",
+          "score": 38,
+          "degats": "BF+3"
+        },
+        {
+          "nom": "Esquive",
+          "type": "défense",
+          "score": 33
+        }
+      ]
+    },
+    {
+      "nom": "Recette Armurier",
+      "type": "PNJ",
+      "groupe": "Recette",
+      "pv": 16,
+      "initiative": 40,
+      "caracteristiques": {
+        "CC": 55,
+        "CT": 55,
+        "F": 35,
+        "E": 35,
+        "I": 40,
+        "Ag": 35,
+        "Dex": 35,
+        "Int": 35,
+        "FM": 35,
+        "Soc": 30
+      },
+      "armure": {
+        "tete": 2,
+        "corps": 2,
+        "bras": 2,
+        "jambes": 2
+      },
+      "notes": "Une arme par Qualité des parcours G-ARM : Pointue, Imprécise, Taille, Entaille, Pistolet, À répétition, Explosion, Dispersion, poudre noire, Recharge. Filet à crochets : cocher la confirmation MJ dans la résolution (G-ARM-7). Arcs elfiques et d’Anirain : voir « Ce que l’import JSON ne porte pas ».",
+      "jets": [
+        {
+          "nom": "Épée Pointue",
+          "type": "attaque",
+          "score": 55,
+          "degats": "BF+4",
+          "qualites": [
+            "Pointue"
+          ]
+        },
+        {
+          "nom": "Dague Imprécise",
+          "type": "attaque",
+          "score": 55,
+          "degats": "BF+2",
+          "qualites": [
+            "Imprécise"
+          ]
+        },
+        {
+          "nom": "Fleuret Pointue et Imprécise",
+          "type": "attaque",
+          "score": 55,
+          "degats": "BF+3",
+          "qualites": [
+            "Pointue",
+            "Imprécise"
+          ]
+        },
+        {
+          "nom": "Hache à Taille",
+          "type": "attaque",
+          "score": 55,
+          "degats": "BF+5",
+          "qualites": [
+            "Taille"
+          ]
+        },
+        {
+          "nom": "Cimeterre à Entaille",
+          "type": "attaque",
+          "score": 55,
+          "degats": "BF+4",
+          "qualites": [
+            "Entaille 1"
+          ]
+        },
+        {
+          "nom": "Pistolet à poudre",
+          "type": "attaque",
+          "score": 55,
+          "degats": 9,
+          "qualites": [
+            "Pistolet",
+            "À Poudre noire",
+            "Recharge 1"
+          ]
+        },
+        {
+          "nom": "Arquebuse à répétition",
+          "type": "attaque",
+          "score": 55,
+          "degats": 9,
+          "qualites": [
+            "À répétition 2",
+            "À Poudre noire",
+            "Recharge 1"
+          ]
+        },
+        {
+          "nom": "Arbalète",
+          "type": "attaque",
+          "score": 55,
+          "degats": 9,
+          "qualites": [
+            "Recharge 1"
+          ]
+        },
+        {
+          "nom": "Bombe",
+          "type": "attaque",
+          "score": 55,
+          "degats": 8,
+          "qualites": [
+            "Explosion 3"
+          ]
+        },
+        {
+          "nom": "Tromblon",
+          "type": "attaque",
+          "score": 55,
+          "degats": 8,
+          "qualites": [
+            "Dispersion 3",
+            "À Poudre noire",
+            "Recharge 1"
+          ]
+        },
+        {
+          "nom": "Filet à crochets",
+          "type": "attaque",
+          "score": 55,
+          "degats": 0,
+          "qualites": [
+            "Immobilisante"
+          ]
+        }
+      ]
+    },
+    {
+      "nom": "Recette Tireur",
+      "type": "PJ",
+      "groupe": "Recette",
+      "pv": 13,
+      "initiative": 50,
+      "caracteristiques": {
+        "CC": 40,
+        "CT": 60,
+        "F": 35,
+        "E": 35,
+        "I": 50,
+        "Ag": 45,
+        "Dex": 35,
+        "Int": 35,
+        "FM": 35,
+        "Soc": 30
+      },
+      "armure": {
+        "tete": 0,
+        "corps": 1,
+        "bras": 0,
+        "jambes": 0
+      },
+      "notes": "Tireur pour Viser, tir sur cible engagée, Rechargement (G-ATT-2, G-ATT-5, G-ARM-5).",
+      "jets": [
+        {
+          "nom": "Arc long",
+          "type": "attaque",
+          "score": 60,
+          "degats": 9,
+          "qualites": [
+            "Précise"
+          ]
+        },
+        {
+          "nom": "Pistolet",
+          "type": "attaque",
+          "score": 55,
+          "degats": 9,
+          "qualites": [
+            "Pistolet",
+            "À Poudre noire",
+            "Recharge 1"
+          ]
+        },
+        {
+          "nom": "Épée courte",
+          "type": "attaque",
+          "score": 35,
+          "degats": "BF+3"
+        },
+        {
+          "nom": "Esquive",
+          "type": "défense",
+          "score": 45
+        }
+      ]
+    },
+    {
+      "nom": "Recette Lutteur",
+      "type": "PNJ",
+      "groupe": "Recette",
+      "pv": 15,
+      "initiative": 38,
+      "caracteristiques": {
+        "CC": 55,
+        "CT": 35,
+        "F": 45,
+        "E": 35,
+        "I": 40,
+        "Ag": 35,
+        "Dex": 35,
+        "Int": 35,
+        "FM": 35,
+        "Soc": 30
+      },
+      "armure": {
+        "tete": 0,
+        "corps": 0,
+        "bras": 0,
+        "jambes": 0
+      },
+      "notes": "Empoignade à mains nues (G-EMP-1, G-EMP-2).",
+      "jets": [
+        {
+          "nom": "Bagarre",
+          "type": "attaque",
+          "score": 55,
+          "degats": "BF"
+        },
+        {
+          "nom": "Esquive",
+          "type": "défense",
+          "score": 35
+        }
+      ]
+    },
+    {
+      "nom": "Recette Cavalier",
+      "type": "PJ",
+      "groupe": "Recette",
+      "pv": 15,
+      "initiative": 45,
+      "caracteristiques": {
+        "CC": 50,
+        "CT": 35,
+        "F": 40,
+        "E": 35,
+        "I": 45,
+        "Ag": 45,
+        "Dex": 35,
+        "Int": 35,
+        "FM": 35,
+        "Soc": 30
+      },
+      "armure": {
+        "tete": 1,
+        "corps": 2,
+        "bras": 1,
+        "jambes": 1
+      },
+      "notes": "Monture : ajouter « Cheval de guerre lourd » du bestiaire (L23) en Actif, puis Modifier le cavalier (G-MON-1, G-MON-2).",
+      "jets": [
+        {
+          "nom": "Lance",
+          "type": "attaque",
+          "score": 50,
+          "degats": "BF+4"
+        },
+        {
+          "nom": "Chevaucher",
+          "type": "compétence",
+          "score": 45
+        },
+        {
+          "nom": "Esquive",
+          "type": "défense",
+          "score": 45
+        }
+      ]
+    },
+    {
+      "nom": "Recette Figurant",
+      "type": "PNJ",
+      "groupe": "Recette",
+      "pv": 6,
+      "initiative": 30,
+      "caracteristiques": {
+        "CC": 30,
+        "CT": 35,
+        "F": 35,
+        "E": 25,
+        "I": 40,
+        "Ag": 35,
+        "Dex": 35,
+        "Int": 35,
+        "FM": 35,
+        "Soc": 30
+      },
+      "armure": {
+        "tete": 0,
+        "corps": 0,
+        "bras": 0,
+        "jambes": 0
+      },
+      "notes": "PNJ secondaire à peu de Blessures : mort subite des figurants, critiques à répétition (G-CRI-4).",
+      "jets": [
+        {
+          "nom": "Gourdin",
+          "type": "attaque",
+          "score": 30,
+          "degats": "BF+2"
+        }
+      ]
+    },
+    {
+      "nom": "Recette Lent (Initiative 20)",
+      "type": "PNJ",
+      "groupe": "Recette",
+      "pv": 11,
+      "initiative": 20,
+      "caracteristiques": {
+        "CC": 35,
+        "CT": 35,
+        "F": 35,
+        "E": 35,
+        "I": 20,
+        "Ag": 35,
+        "Dex": 35,
+        "Int": 35,
+        "FM": 35,
+        "Soc": 30
+      },
+      "armure": {
+        "tete": 0,
+        "corps": 0,
+        "bras": 0,
+        "jambes": 0
+      },
+      "notes": "G-DIV-18 : combattant d’Initiative 20 qui n’a pas encore joué.",
+      "jets": [
+        {
+          "nom": "Gourdin",
+          "type": "attaque",
+          "score": 35,
+          "degats": "BF+2"
+        }
+      ]
+    },
+    {
+      "nom": "Recette Rapide (Initiative 60)",
+      "type": "PNJ",
+      "groupe": "Recette",
+      "pv": 11,
+      "initiative": 60,
+      "caracteristiques": {
+        "CC": 35,
+        "CT": 35,
+        "F": 35,
+        "E": 35,
+        "I": 60,
+        "Ag": 35,
+        "Dex": 35,
+        "Int": 35,
+        "FM": 35,
+        "Soc": 30
+      },
+      "armure": {
+        "tete": 0,
+        "corps": 0,
+        "bras": 0,
+        "jambes": 0
+      },
+      "notes": "G-DIV-18 : renfort d’Initiative 60 (rang déjà dépassé). Initiative 35 : un Milicien ; 50 : le Tireur.",
+      "jets": [
+        {
+          "nom": "Gourdin",
+          "type": "attaque",
+          "score": 35,
+          "degats": "BF+2"
+        }
+      ]
+    },
+    {
+      "nom": "Recette Cobaye",
+      "type": "PJ",
+      "groupe": "Recette",
+      "pv": 30,
+      "initiative": 40,
+      "caracteristiques": {
+        "CC": 40,
+        "CT": 35,
+        "F": 35,
+        "E": 45,
+        "I": 40,
+        "Ag": 35,
+        "Dex": 35,
+        "Int": 35,
+        "FM": 40,
+        "Soc": 30
+      },
+      "armure": {
+        "tete": 0,
+        "corps": 0,
+        "bras": 0,
+        "jambes": 0
+      },
+      "notes": "Cible robuste et sans armure : localisation, critiques, amputation, séquelles, convalescence (G-CRI-1 à G-CRI-7).",
+      "jets": [
+        {
+          "nom": "Poings",
+          "type": "attaque",
+          "score": 40,
+          "degats": "BF"
+        },
+        {
+          "nom": "Esquive",
+          "type": "défense",
+          "score": 35
+        }
+      ]
+    }
+  ]
+}
