@@ -1,3 +1,4 @@
+import { openU1Settings } from './helpers/u1-drawer.mjs';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
 import { readFileSync, statSync } from 'node:fs';
@@ -20,7 +21,7 @@ try{
  await page.evaluate(async value=>{const{Store}=await import('/Outil-MJ-Warhammer/js/main.js');await Store.ready;await Store.loadFromJSON(value);},seed);
  const play=page.locator('#workspace-root'),action=play.locator('[data-action-key="net-escape"]');await action.waitFor();await action.click();
  const type=play.getByLabel('Type d’action');assert.equal(await type.locator('option[value="test"]').count(),1,'Le menu réel propose maintenant un Test explicite.');
- await play.locator('.workspace-resolution-settings > summary').click();let summary=play.getByText('Circonstances des Tests');if(!(await summary.evaluate(el=>el.closest('details')?.open)))await summary.click();await play.getByLabel('Sortie d’entrave : état Empêtré').selectOption('net-state');
+ await openU1Settings(play);let summary=play.getByText('Circonstances des Tests');if(!(await summary.evaluate(el=>el.closest('details')?.open)))await summary.click();await play.getByLabel('Sortie d’entrave : état Empêtré').selectOption('net-state');
  const roll=play.locator('[data-roll-input="attack"]');await roll.fill('20');
  await play.getByLabel('Jet d100 opposé — Force 35').fill('20');
  await type.selectOption('skill');await play.getByRole('button',{name:'Calculer',exact:true}).click();let preview=play.locator('.workspace-result-live');await preview.waitFor();

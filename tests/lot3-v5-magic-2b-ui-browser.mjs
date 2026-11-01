@@ -1,3 +1,4 @@
+import { openU1Settings } from './helpers/u1-drawer.mjs';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
 import { existsSync } from 'node:fs';
@@ -102,12 +103,12 @@ async function open(scenario, { w = '', t = 'mage-1', extra = '' } = {}) {
   await page.route(url => url.pathname === '/__lot3_magic_2b__.html', route => route.fulfill({ status: 200, contentType: 'text/html; charset=utf-8', body: HARNESS_HTML }));
   await page.goto(`${baseUrl}/__lot3_magic_2b__.html?s=${scenario}&w=${encodeURIComponent(w)}&t=${t}${extra}`, { waitUntil: 'networkidle' });
   await page.waitForSelector('.workspace-resolution');
-  await page.locator('.workspace-resolution-settings > summary').click();
+  await openU1Settings(page);
   return { page, context, errors };
 }
 async function pickSpell(page, name) {
   await page.click('[data-action-key="v5-magic:cast"]');
-  if (!await page.locator('.workspace-resolution-settings').evaluate(el => el.open)) await page.locator('.workspace-resolution-settings > summary').click();
+  await openU1Settings(page);
   await page.waitForSelector('[data-focus-key="magic-spell"]');
   await page.selectOption('[data-focus-key="magic-spell"]', await page.evaluate(n => window.__TEST__.getSpellContract(n).id, name));
   await page.waitForTimeout(250);
@@ -502,6 +503,7 @@ try {
     await page.getByLabel('Lire/Écrire, matériel et conditions de déploiement confirmés').check();
     await page.evaluate(() => { window.__TEST__.delayMs = 200; });
     const deploy = page.getByRole('button', { name: 'Déployer une rune (1 Round)', exact: true });
+    await deploy.scrollIntoViewIfNeeded();
     const rect = await deploy.boundingBox();
     await page.mouse.dblclick(rect.x + rect.width / 2, rect.y + rect.height / 2);
     await page.waitForFunction(() => window.__TEST__.Store.getCadaiRunes('mage-1').deployed === 1);

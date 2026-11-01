@@ -2215,7 +2215,8 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         { id: 'profiles', label: 'Profils', render: renderProfilesTab },
         { id: 'log', label: 'Journal', render: content => renderRenderer(callbacks.renderLog, content, 'Aucun événement récent.') }
       ],
-      onToggle: collapsed => grid.classList.toggle('is-side-collapsed', collapsed)
+      onToggle: collapsed => grid.classList.toggle('is-side-collapsed', collapsed),
+      onTemporaryReveal: () => grid.querySelector('[data-circumstances-toggle]')?.click()
     });
     grid.append(track, center, side.element);
     refs.play.appendChild(grid);
@@ -2226,6 +2227,8 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     const context = playContext();
     renderTrack(context);
     renderCenter(context);
+    const drawer = play.center.querySelector('.workspace-resolution-drawer');
+    play.side.setTemporaryCollapsed(Boolean(drawer && !drawer.hidden));
   }
 
   function renderLibrary() {
@@ -2367,6 +2370,20 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         render();
       });
   }
+
+  refs.root.addEventListener('workspace-circumstances-toggle', event => {
+    play.side.setTemporaryCollapsed(Boolean(event.detail?.open));
+  });
+
+  pressDocument.addEventListener('keydown', event => {
+    if (event.key !== 'Escape' || event.defaultPrevented || pressDocument.querySelector('dialog[open]')) return;
+    const drawer = refs.root.querySelector('.workspace-resolution-drawer:not([hidden])');
+    const toggle = refs.root.querySelector('[data-circumstances-toggle]');
+    if (!drawer || !toggle) return;
+    event.preventDefault();
+    toggle.click();
+    toggle.focus();
+  });
 
   refs.root.addEventListener('click', event => {
     const target = event.target.closest('button');

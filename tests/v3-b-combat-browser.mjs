@@ -1,3 +1,4 @@
+import { openU1Settings } from './helpers/u1-drawer.mjs';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
 import { readFileSync, statSync } from 'node:fs';
@@ -57,7 +58,7 @@ try {
     await play.locator('[data-workspace-select="a"]').click();
     await play.locator(`[data-action-key="${id}"]`).click();
     await play.getByLabel('Type d’action').selectOption('attack');
-    if (!await play.locator('.workspace-resolution-settings').evaluate(el => el.open)) await play.locator('.workspace-resolution-settings > summary').click();
+    await openU1Settings(play);
     await play.getByLabel('Nature du Test').selectOption('ranged');
   };
   const noDefense = async () => { const roll = play.locator('[data-roll-input="defense"]'); if (await roll.count()) await roll.fill(''); };

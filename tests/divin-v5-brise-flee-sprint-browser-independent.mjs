@@ -1,3 +1,4 @@
+import { openU1Settings, closeU1Drawer } from './helpers/u1-drawer.mjs';
 /** Recette indépendante Playwright pour Flee/Sprint Brisé: gestes visibles, preview, persistence et quatre vues. */
 import assert from 'node:assert/strict';
 import {createServer} from 'node:http';
@@ -24,7 +25,7 @@ const seed=()=>page.evaluate(async()=>{
 const actorPanel=()=>page.locator('[data-broken-escape-actor="priest"]');
 const choose=async(group,label,value)=>group.getByLabel(label,{exact:true}).selectOption(value);
 const view=async(width,theme)=>{
- await page.setViewportSize({width,height:width===390?844:900});await page.evaluate(value=>document.documentElement.dataset.theme=value,theme);
+ await page.setViewportSize({width,height:width===390?844:900});await closeU1Drawer(page);await page.evaluate(value=>document.documentElement.dataset.theme=value,theme);
  await page.waitForTimeout(80);assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),`${width}/${theme}: aucun débordement horizontal`);
  const file=`broken-escape-${width}-${theme}.png`;await page.screenshot({path:resolve(output,file),fullPage:true});receipt.screenshots.push(file);
 };
@@ -33,7 +34,7 @@ try{
  browser=await chromium.launch({headless:true,executablePath:process.env.PLAYWRIGHT_EXECUTABLE_PATH||'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe'});
  const context=await browser.newContext({serviceWorkers:'block',viewport:{width:1440,height:900}});await context.route('https://**',route=>route.abort());
  page=await context.newPage();page.setDefaultTimeout(8000);const errors=[];page.on('pageerror',error=>errors.push(error.message));
- await page.goto(`http://127.0.0.1:${server.address().port}/`,{waitUntil:'domcontentloaded'});await ready();await seed();await page.getByRole('tab',{name:'Jouer',exact:true}).click();
+ await page.goto(`http://127.0.0.1:${server.address().port}/`,{waitUntil:'domcontentloaded'});await ready();await seed();await page.getByRole('tab',{name:'Jouer',exact:true}).click();await closeU1Drawer(page);
  const panel=page.locator('[data-broken-escape-panel]');await panel.waitFor({state:'visible'});let actor=actorPanel();
  await choose(actor,'Visibilité par rapport aux ennemis','true');await choose(actor,'Ennemis engagés avec ce personnage','none');await choose(actor,'Déplacement Flee','walk');await choose(actor,'Visibilité après cette étape','true');
  await actor.getByRole('button',{name:'Calculer l’aperçu',exact:true}).click();
@@ -63,15 +64,15 @@ try{
  await page.reload({waitUntil:'domcontentloaded'});await ready();after=await state();assert.equal(JSON.stringify(after.extensions.v5.brokenEscape.receipts.filter(row=>row.actorId==='priest')),committed,'reload restaure les reçus après Redo');
  check('Les gestes UI Undo/Redo retirent et restaurent ensemble dépense/reçu Sprint; le reload restaure le résultat de Redo.');
 
- await page.getByRole('tab',{name:'Jouer',exact:true}).click();actor=actorPanel();await actor.locator('[data-broken-escape-hide-skill="priest"]').selectOption('skill-stealth');await actor.locator('[data-broken-escape-prepare-hide="priest"]').click();
- const resolution=page.locator('.workspace-resolution');await resolution.waitFor({state:'visible'}); await resolution.locator('.workspace-resolution-settings > summary').click(); const hideActionField=resolution.locator('[data-focus-key="actor-isAction"]');await resolution.locator('.workspace-v5-context-details').first().evaluate(el=>{el.open=true;});const hideActionCount=await hideActionField.count();receipt.hideActionClassification=hideActionCount?{present:true,value:await hideActionField.inputValue(),disabled:await hideActionField.isDisabled()}:{present:false};receipt.hideActionClassification.message=await resolution.innerText();assert.match(receipt.hideActionClassification.message,/Le Test consomme l’Action du Tour\s*:\s*Oui\s*\(Hide facultatif\)/i,'Le coût Action connu de Hide doit être expliqué à l’écran.');assert.ok(!receipt.hideActionClassification.present||(receipt.hideActionClassification.value==='true'&&receipt.hideActionClassification.disabled),'Hide a un coût Action connu: le champ ne peut pas être reclassé Test libre.');await resolution.locator('[data-broken-escape-visibility="resolution"]').selectOption('false');await resolution.locator('[data-roll-input="attack"]').fill('23');
+ await page.getByRole('tab',{name:'Jouer',exact:true}).click();await closeU1Drawer(page);actor=actorPanel();await actor.locator('[data-broken-escape-hide-skill="priest"]').selectOption('skill-stealth');await actor.locator('[data-broken-escape-prepare-hide="priest"]').click();
+ const resolution=page.locator('.workspace-resolution');await resolution.waitFor({state:'visible'}); await openU1Settings(resolution); const hideActionField=resolution.locator('[data-focus-key="actor-isAction"]');await resolution.locator('.workspace-v5-context-details').evaluateAll(els=>els.forEach(el=>{el.open=true;}));const hideActionCount=await hideActionField.count();receipt.hideActionClassification=hideActionCount?{present:true,value:await hideActionField.inputValue(),disabled:await hideActionField.isDisabled()}:{present:false};receipt.hideActionClassification.message=await resolution.innerText();assert.match(receipt.hideActionClassification.message,/Le Test consomme l’Action du Tour\s*:\s*Oui\s*\(Hide facultatif\)/i,'Le coût Action connu de Hide doit être expliqué à l’écran.');assert.ok(!receipt.hideActionClassification.present||(receipt.hideActionClassification.value==='true'&&receipt.hideActionClassification.disabled),'Hide a un coût Action connu: le champ ne peut pas être reclassé Test libre.');await resolution.locator('[data-broken-escape-visibility="resolution"]').selectOption('false');await closeU1Drawer(page);await resolution.locator('[data-roll-input="attack"]').fill('23');
  await page.evaluate(async()=>{const{Store}=await import('/js/main.js');const original=Store.previewResolution.bind(Store);window.__brokenHidePreviewInput=null;window.__brokenHidePreviewOutput=null;Store.previewResolution=input=>{window.__brokenHidePreviewInput=structuredClone(input);const result=original(input);window.__brokenHidePreviewOutput={ready:result.ready,status:result.status,error:result.error,unresolved:result.unresolved};return result;};});
  const hideBefore=await state();await resolution.getByRole('button',{name:'Calculer',exact:true}).click();await page.waitForFunction(()=>window.__brokenHidePreviewOutput!==null||Boolean(document.querySelector('.workspace-resolution [role="alert"]')));
  const hideEvidence=await page.evaluate(()=>({input:window.__brokenHidePreviewInput,preview:window.__brokenHidePreviewOutput,alerts:[...document.querySelectorAll('.workspace-resolution [role="alert"]')].map(node=>node.innerText),pills:[...document.querySelectorAll('.workspace-resolution .workspace-outcome')].map(node=>node.innerText),apply:[...document.querySelectorAll('.workspace-resolution [data-focus-key="apply"]')].map(node=>({disabled:node.disabled,label:node.innerText}))}));receipt.hideAfterSprint={input:hideEvidence.input,context:hideEvidence.input?.v5?.context,preview:hideEvidence.preview,alerts:hideEvidence.alerts,pills:hideEvidence.pills,apply:hideEvidence.apply,storeUnchanged:JSON.stringify(await state())===JSON.stringify(hideBefore)}; // Refus précoce d'une Action ordinaire Brisé: le renderer doit présenter le fait manquant / refus, sans inventer de Test.
  await resolution.locator('[data-action-key=blade]').click();
  const visibilityCases=[];
  for(const [name,value] of [['missing',''],['visible','true']]){
-  await resolution.locator('[data-broken-escape-visibility="resolution"]').selectOption(value);
+  await openU1Settings(resolution);await resolution.locator('[data-broken-escape-visibility="resolution"]').selectOption(value);await closeU1Drawer(page);
   await resolution.locator('[data-roll-input="attack"]').fill('23');
   await page.evaluate(()=>{window.__brokenHidePreviewInput=null;window.__brokenHidePreviewOutput=null;});
   const beforeOrdinary=await state();await resolution.getByRole('button',{name:'Calculer',exact:true}).click();
@@ -84,13 +85,13 @@ try{
  assert.equal(receipt.cancelBlockedPreview.stateUnchanged,true,'Annuler un refus ne mute pas le Store.');assert.deepEqual(receipt.cancelBlockedPreview.alerts,[],'Annuler retire le message de refus.');assert.deepEqual(receipt.cancelBlockedPreview.pills,[]);
  check('Une attaque ordinaire Brisé avec visibilité absente ou visible reçoit un refus accessible; aucun résultat de Test fictif, aucune application et aucune mutation.');
  // Le choix Action/Test libre doit être explicite pour une compétence Brisé après Sprint.
- await resolution.locator('[data-broken-escape-visibility="resolution"]').selectOption('false');
- await resolution.locator('[data-focus-key="action-type"]').selectOption('skill');await resolution.locator('.workspace-v5-context-details').first().evaluate(el=>{el.open=true;});
+ await openU1Settings(resolution);await resolution.locator('[data-broken-escape-visibility="resolution"]').selectOption('false');await closeU1Drawer(page);
+ await resolution.locator('[data-focus-key="action-type"]').selectOption('skill');await openU1Settings(resolution);await resolution.locator('.workspace-v5-context-details').first().evaluate(el=>{el.open=true;});
  const skillActionField=resolution.locator('[data-focus-key="actor-isAction"]');receipt.hideToSkillClassification={present:await skillActionField.count()===1,disabled:await skillActionField.isDisabled(),value:await skillActionField.inputValue()};assert.equal(receipt.hideToSkillClassification.present,true,'Après Hide puis blade → Compétence, le choix de classification doit réapparaître.');assert.equal(receipt.hideToSkillClassification.disabled,false,'Une compétence générique doit laisser choisir Action/Test libre.');assert.equal(receipt.hideToSkillClassification.value,'','Une compétence générique non classée reste à préciser.');
- await resolution.locator('[data-focus-key="actor-runningOrHiding"]').selectOption('false');
+ await resolution.locator('[data-focus-key="actor-runningOrHiding"]').selectOption('false');await closeU1Drawer(page);
  await resolution.locator('[data-roll-input="attack"]').fill('23');
  async function captureSkillClassification(value){
-  if(value!==null){await resolution.locator('.workspace-v5-context-details').first().evaluate(el=>{el.open=true;});await resolution.locator('[data-focus-key="actor-isAction"]').selectOption(value);}
+  if(value!==null){await openU1Settings(resolution);await resolution.locator('.workspace-v5-context-details').first().evaluate(el=>{el.open=true;});await resolution.locator('[data-focus-key="actor-isAction"]').selectOption(value);await closeU1Drawer(page);}
   await page.evaluate(()=>{window.__brokenHidePreviewInput=null;window.__brokenHidePreviewOutput=null;});
   const beforeSkill=await state();await resolution.getByRole('button',{name:'Calculer',exact:true}).click();await page.waitForFunction(()=>window.__brokenHidePreviewOutput!==null||Boolean(document.querySelector('.workspace-resolution [role="alert"]')));
   const evidence=await page.evaluate(()=>({input:window.__brokenHidePreviewInput,preview:window.__brokenHidePreviewOutput,context:window.__brokenHidePreviewInput?.v5?.context,live:document.querySelector('.workspace-result-live')?.innerText||'',alerts:[...document.querySelectorAll('.workspace-resolution [role="alert"]')].map(node=>node.innerText),pills:[...document.querySelectorAll('.workspace-resolution .workspace-outcome')].map(node=>node.innerText),apply:[...document.querySelectorAll('.workspace-resolution [data-focus-key="apply"]')].map(node=>({disabled:node.disabled,label:node.innerText}))}));

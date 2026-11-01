@@ -1,3 +1,4 @@
+import { openU1Settings } from './helpers/u1-drawer.mjs';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
 import { readFileSync, statSync } from 'node:fs';
@@ -62,7 +63,7 @@ try{
  await page.locator('#tab-combat').click();
  await page.locator('.mini-dice-line[data-dice-id="f2-canon-action"]').dispatchEvent('click');
  await page.waitForSelector('#workspace-play .workspace-resolution');
- await page.locator('.workspace-resolution-settings > summary').click();
+ await openU1Settings(page);
  const explosionDetails=page.locator('#workspace-play details.workspace-v5-context-details').filter({hasText:'Explosion : identifiants de toutes les cibles dans le diamètre'});
  if(await explosionDetails.count()&&!await explosionDetails.evaluate(el=>el.open)) await explosionDetails.locator('summary').click();
  const explosionTargets=page.getByLabel('Explosion : identifiants de toutes les cibles dans le diamètre (virgules)');
@@ -116,7 +117,7 @@ try{
  });
  await page.locator('#tab-combat').click();
  await page.locator('.mini-dice-line[data-dice-id="f2-catapult-generic-action"]').dispatchEvent('click');
- await page.locator('.workspace-resolution-settings > summary').click();
+ await openU1Settings(page);
  const genericSpecialty=page.getByLabel('Spécialité de tir pour cette arme (choix MJ si le catalogue ne la précise pas)');
  const engineeringOption=await genericSpecialty.locator('option').evaluateAll(options=>options.find(option=>option.textContent.includes('Projectiles (Ingénierie)'))?.value);
  assert.ok(engineeringOption,'la liste MJ propose une spécialité Projectiles non Poudre noire');

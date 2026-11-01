@@ -23,7 +23,7 @@ function writeStored(value) {
 /**
  * @param {{ tabs: Array<{ id: string, label: string, render: (content: HTMLElement) => void }>, onToggle?: (collapsed: boolean) => void }} options
  */
-export function initSidePanel({ tabs, onToggle = () => {} }) {
+export function initSidePanel({ tabs, onToggle = () => {}, onTemporaryReveal = () => {} }) {
   const stored = readStored();
   const state = {
     tab: tabs.some(tab => tab.id === stored.tab) ? stored.tab : tabs[0].id,
@@ -32,6 +32,8 @@ export function initSidePanel({ tabs, onToggle = () => {} }) {
       : (typeof window !== 'undefined' && window.innerWidth < 1100)
   };
   const rendered = new Set();
+  let temporarilyCollapsed = false;
+  const isCollapsed = () => state.collapsed || temporarilyCollapsed;
 
   const element = document.createElement('aside');
   element.className = 'workspace-side';
@@ -74,21 +76,22 @@ export function initSidePanel({ tabs, onToggle = () => {} }) {
   });
 
   function sync({ remember = true } = {}) {
-    element.classList.toggle('is-collapsed', state.collapsed);
-    toggle.textContent = state.collapsed ? '«' : '»';
-    toggle.setAttribute('aria-label', state.collapsed ? 'Déplier le panneau' : 'Replier le panneau');
+    const collapsed = isCollapsed();
+    element.classList.toggle('is-collapsed', collapsed);
+    toggle.textContent = collapsed ? '«' : '»';
+    toggle.setAttribute('aria-label', collapsed ? 'Déplier le panneau' : 'Replier le panneau');
     toggle.title = toggle.getAttribute('aria-label');
-    toggle.setAttribute('aria-expanded', String(!state.collapsed));
+    toggle.setAttribute('aria-expanded', String(!collapsed));
     tabs.forEach(tab => {
       const active = tab.id === state.tab;
       const button = buttons.get(tab.id);
-      button.setAttribute('aria-selected', String(active && !state.collapsed));
+      button.setAttribute('aria-selected', String(active && !collapsed));
       button.tabIndex = active ? 0 : -1;
-      panels.get(tab.id).hidden = state.collapsed || !active;
+      panels.get(tab.id).hidden = collapsed || !active;
     });
-    if (!state.collapsed && !rendered.has(state.tab)) refresh(state.tab);
+    if (!collapsed && !rendered.has(state.tab)) refresh(state.tab);
     if (remember) writeStored({ tab: state.tab, collapsed: state.collapsed });
-    onToggle(state.collapsed);
+    onToggle(collapsed);
   }
 
   function refresh(id = null) {
@@ -97,7 +100,7 @@ export function initSidePanel({ tabs, onToggle = () => {} }) {
       const tab = tabs.find(item => item.id === tabId);
       if (!tab) return;
       // A hidden tab is refreshed when it is shown again.
-      if (state.collapsed || tabId !== state.tab) { rendered.delete(tabId); return; }
+      if (isCollapsed() || tabId !== state.tab) { rendered.delete(tabId); return; }
       tab.render(panels.get(tabId));
       rendered.add(tabId);
     });
@@ -105,6 +108,7 @@ export function initSidePanel({ tabs, onToggle = () => {} }) {
 
   function open(id) {
     if (!buttons.has(id)) throw new RangeError(`Panneau inconnu : ${id}`);
+    if (temporarilyCollapsed) onTemporaryReveal();
     state.tab = id;
     state.collapsed = false;
     sync();
@@ -131,6 +135,12 @@ export function initSidePanel({ tabs, onToggle = () => {} }) {
     buttons.get(ids[next]).focus();
   });
   toggle.addEventListener('click', () => {
+    if (temporarilyCollapsed) {
+      onTemporaryReveal();
+      state.collapsed = false;
+      sync();
+      return;
+    }
     state.collapsed = !state.collapsed;
     sync();
   });
@@ -143,6 +153,11 @@ export function initSidePanel({ tabs, onToggle = () => {} }) {
     open,
     collapse,
     refresh,
+    setTemporaryCollapsed(value) {
+      if (temporarilyCollapsed === Boolean(value)) return;
+      temporarilyCollapsed = Boolean(value);
+      sync({ remember: false });
+    },
     getState: () => ({ ...state })
   });
 }

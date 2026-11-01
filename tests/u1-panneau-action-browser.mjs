@@ -1,0 +1,131 @@
+import assert from 'node:assert/strict';
+import { createServer } from 'node:http';
+import { readFileSync, statSync, mkdirSync } from 'node:fs';
+import { resolve, extname, sep } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { chromium } from 'playwright';
+
+const root = fileURLToPath(new URL('..', import.meta.url));
+const types = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.json': 'application/json', '.css': 'text/css; charset=utf-8', '.svg': 'image/svg+xml' };
+const server = createServer((req, res) => {
+  try {
+    const path = new URL(req.url, 'http://localhost').pathname;
+    if (path === '/harness') {
+      res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+      res.end('<!doctype html><html lang="fr"><head><link rel="stylesheet" href="/MJ.css"><link rel="stylesheet" href="/js/ui/workspace.css"></head><body><main id="mount"></main></body></html>');
+      return;
+    }
+    const file = resolve(root, '.' + decodeURIComponent(path));
+    if (!file.startsWith(resolve(root) + sep) || !statSync(file).isFile()) throw new Error('missing');
+    res.writeHead(200, { 'Content-Type': types[extname(file)] || 'application/octet-stream' });
+    res.end(readFileSync(file));
+  } catch { res.writeHead(404).end(); }
+});
+await new Promise(resolveServer => server.listen(0, '127.0.0.1', resolveServer));
+const browser = await chromium.launch({ headless: true, executablePath: process.env.PLAYWRIGHT_EXECUTABLE_PATH || 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe' });
+try {
+  const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, serviceWorkers: 'block' });
+  const errors = [];
+  page.on('pageerror', error => errors.push(error.message));
+  await page.goto(`http://127.0.0.1:${server.address().port}/harness`);
+  await page.evaluate(async () => {
+    const { createStore } = await import('/js/core/store.js');
+    const { initWorkspaceView } = await import('/js/ui/workspace-view.js');
+    const store = createStore({ storage: null });
+    await store.ready;
+    const action = { id: 'blade', type: 'attack', note: 'Hallebarde', attr: 'CC', base: 50, damage: 5, extensions: { v5: { slModifier: 2 } } };
+    const common = { zone: 'active', hp: 20, maxHp: 20, caracs: { CC: 50, CT: 40, F: 40, E: 40, Ag: 40, FM: 40 }, skills: [], equipment: [], states: [], armor: { head: 0, body: 0, arms: 0, legs: 0 } };
+    const actor = { ...common, id: 'npc', name: 'Garde', kind: 'PNJ', camp: 'ennemi', initiative: 50, actions: [action], extensions: { v5: {} } };
+    const target = { ...common, id: 'pj', name: 'Ulrike', kind: 'PJ', camp: 'pj', initiative: 40, actions: [], extensions: { v5: { divineEffects: [{ id: 'protection', attackDeterrent: { skill: 'Calme', slBonus: 2 } }] } } };
+    await store.loadFromJSON({ schemaVersion: 3, reserve: [], log: [], diceLines: [], combat: { round: 1, currentActorId: 'npc', order: ['npc', 'pj'], participants: [actor, target] } });
+    const view = initWorkspaceView({ Store: store, mount: document.querySelector('#mount'), showNavigation: false, actions: { renderRules() {}, renderLog() {}, applyResolution: preview => store.applyResolution(preview) } });
+    view.setSpace('play');
+    if (!view.openResolution({ ...action, participantId: 'npc', targetId: 'pj' })) throw new Error('résolution indisponible');
+    window.__u1 = { view, store };
+  });
+  const drawer = page.locator('.workspace-resolution-drawer');
+  const toggle = page.locator('[data-circumstances-toggle]');
+  assert.equal(await drawer.isVisible(), true, 'le tiroir est ouvert par défaut en attaque');
+  assert.equal(await page.locator('.workspace-resolution-settings').evaluate(el => el.open), true, 'le bloc historique reste ouvert en attaque');
+  assert.equal(await page.locator('.workspace-side').evaluate(el => Math.round(el.getBoundingClientRect().width)) <= 48, true, 'le panneau latéral prend la forme d’un rail');
+  assert.equal(await page.locator('.workspace-side-toggle').getAttribute('aria-expanded'), 'false', 'le rail expose son état replié');
+  await toggle.click();
+  assert.equal(await drawer.isHidden(), true);
+  assert.ok(await page.locator('.workspace-side').evaluate(el => el.getBoundingClientRect().width) > 48, 'le panneau latéral retrouve sa largeur');
+  assert.equal(await page.locator('.workspace-side-toggle').getAttribute('aria-expanded'), 'true', 'l’état accessible du panneau est restauré');
+  await page.locator('.workspace-side-toggle').click();
+  const savedSide = await page.evaluate(() => localStorage.getItem('wfrp.sidePanel'));
+  await toggle.click();
+  await toggle.click();
+  assert.equal(await page.locator('.workspace-side-toggle').getAttribute('aria-expanded'), 'false', 'un panneau déjà replié reste replié après fermeture');
+  assert.equal(await page.evaluate(() => localStorage.getItem('wfrp.sidePanel')), savedSide, 'le tiroir ne modifie pas la préférence latérale');
+  await page.locator('.workspace-side-toggle').click();
+  await toggle.click();
+  await page.locator('.workspace-side-tab[data-side-tab="rules"]').click();
+  assert.equal(await drawer.isHidden(), true, 'ouvrir un onglet latéral ferme le tiroir');
+  assert.equal(await page.locator('.workspace-side-toggle').getAttribute('aria-expanded'), 'true');
+  await toggle.click();
+  assert.equal(await page.getByLabel('Nature du Test', { exact: true }).evaluate(el => Boolean(el.closest('.workspace-circumstances-group.is-combat'))), true);
+  assert.equal(await page.getByLabel('Nature de la défense', { exact: true }).evaluate(el => Boolean(el.closest('.workspace-circumstances-group.is-defense'))), true);
+  assert.equal(await page.locator('[data-focus-key="v5Advantages"]').evaluate(el => Boolean(el.closest('.workspace-circumstances-group.is-fortune'))), true);
+  assert.equal(await page.getByLabel('Modificateur V5 (DR)', { exact: true }).inputValue(), '2');
+  assert.match(await toggle.textContent(), /0 actives/, 'le modificateur par défaut de l’action n’est pas compté');
+  await page.locator('.workspace-resolution').scrollIntoViewIfNeeded();
+  assert.ok(await drawer.evaluate(el => el.getBoundingClientRect().top >= 0), 'le tiroir reste visible pendant le défilement');
+  const calm = page.getByLabel('Test de Calme de l’attaquant (Bénédiction de Protection)', { exact: true });
+  assert.equal(await calm.count(), 1);
+  assert.equal(await calm.evaluate(el => Boolean(el.closest('.workspace-circumstances-group.is-required'))), true, 'le Test de Calme manquant est regroupé dans Obligatoire');
+  await calm.focus();
+  await calm.selectOption('pass');
+  assert.equal(await calm.evaluate(el => document.activeElement === el), true, 'le focus suit le champ après son changement de groupe');
+  assert.equal(await calm.getAttribute('aria-required'), null, 'le champ renseigné n’est plus marqué obligatoire');
+  assert.equal(await calm.evaluate(el => Boolean(el.closest('.workspace-circumstances-group.is-combat'))), true);
+  await calm.selectOption('');
+  assert.equal(await calm.evaluate(el => Boolean(el.closest('.workspace-circumstances-group.is-required'))), true);
+  await page.locator('[data-focus-key="v5Advantages"]').fill('1');
+  await page.locator('[data-focus-key="v5Advantages"]').dispatchEvent('change');
+  assert.match(await toggle.textContent(), /1 active/);
+  assert.equal(await drawer.isVisible(), true, 'le tiroir reste ouvert après nouveau rendu');
+  assert.equal(await page.locator('[data-focus-key="v5Advantages"]').inputValue(), '1');
+  await page.getByLabel('Nature du Test', { exact: true }).selectOption('ranged');
+  const engaged = page.getByLabel('La cible est engagée au corps à corps (Désavantage au tir)', { exact: true });
+  await engaged.selectOption('true');
+  const selectionRoll = page.getByLabel('Jet d100 pour désigner le combattant touché', { exact: true });
+  const countBeforeRoll = Number((await toggle.textContent()).match(/\d+/)[0]);
+  await selectionRoll.fill('61');
+  await selectionRoll.dispatchEvent('change');
+  assert.equal(Number((await toggle.textContent()).match(/\d+/)[0]), countBeforeRoll + 1, 'un champ conditionnel renseigné est compté');
+  await engaged.selectOption('false');
+  await engaged.selectOption('true');
+  assert.equal(await selectionRoll.inputValue(), '61', 'le champ conditionnel conserve sa valeur');
+  assert.equal(Number((await toggle.textContent()).match(/\d+/)[0]), countBeforeRoll + 1, 'le compteur retrouve la valeur conditionnelle');
+  await page.getByLabel('Nature du Test', { exact: true }).selectOption('melee');
+  await page.setViewportSize({ width: 900, height: 900 });
+  assert.equal(await drawer.evaluate(el => getComputedStyle(el).position), 'fixed');
+  assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, 'aucun défilement horizontal à 900 px');
+  assert.equal(await page.locator('.workspace-circumstances-backdrop').isVisible(), true);
+  await page.keyboard.press('Escape');
+  assert.equal(await drawer.isHidden(), true, 'Échap ferme le tiroir');
+  await toggle.click();
+  assert.equal(await page.locator('[data-focus-key="v5Advantages"]').inputValue(), '1', 'la valeur survit à la fermeture');
+  await page.locator('.workspace-circumstances-backdrop').click({ position: { x: 5, y: 5 } });
+  assert.equal(await drawer.isHidden(), true, 'un clic dehors ferme le tiroir');
+  assert.equal(await toggle.evaluate(el => document.activeElement === el), true, 'la fermeture rend le focus au bouton');
+  await toggle.click();
+  await page.setViewportSize({ width: 390, height: 844 });
+  assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, 'aucun débordement horizontal sur téléphone');
+  assert.equal(await drawer.evaluate(el => getComputedStyle(el).position), 'fixed');
+  mkdirSync(resolve(root, 'captures'), { recursive: true });
+  for (const width of [1440, 900]) {
+    await page.setViewportSize({ width, height: 900 });
+    for (const theme of ['light', 'dark']) {
+      await page.evaluate(value => { document.documentElement.dataset.theme = value; }, theme);
+      await page.screenshot({ path: resolve(root, 'captures', `u1-${width}-${theme}.png`) });
+    }
+  }
+  assert.deepEqual(errors, []);
+  console.log('U1 : tiroir ouvert en attaque, rail, conservation et Échap vérifiés dans le vrai Workspace.');
+} finally {
+  await browser.close();
+  await new Promise(resolveClose => server.close(resolveClose));
+}

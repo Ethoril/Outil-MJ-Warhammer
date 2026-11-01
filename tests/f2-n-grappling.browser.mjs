@@ -1,3 +1,4 @@
+import { openU1Settings } from './helpers/u1-drawer.mjs';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
 import { readFileSync, statSync } from 'node:fs';
@@ -57,7 +58,7 @@ try{
  const checks=[];checks.push({name:'ui',result:await run('ui')});
  await page.evaluate(async()=>{const {Store}=window.__f2n;const fighter=(id,camp)=>({id,name:id,kind:'PJ',camp,zone:'active',hp:20,maxHp:20,initiative:id==='holder'?60:40,caracs:{CC:50,F:40,E:30,Ag:30,BF:4,BE:3},states:[],skills:[{id:`b-${id}`,name:'Bagarre',total:50},{id:`f-${id}`,name:'Force',total:40}],actions:[{id:`a-${id}`,name:'Bagarre',type:'attack',attr:'CC',base:50,damage:4,extensions:{fiche:{skillId:`b-${id}`}}},{id:`force-${id}`,name:'Force',type:'test',attr:'F',base:40,extensions:{fiche:{skillId:`f-${id}`}}}],equipment:[],armor:{head:0,body:0,arms:0,legs:0},extensions:{v5:{}}});await Store.loadFromJSON({schemaVersion:3,reserve:[],combat:{round:1,currentActorId:'holder',order:['holder','held'],participants:[fighter('holder','pj'),fighter('held','npc')]},log:[],diceLines:[],extensions:{v5:{turnIndex:1}}});});
  await page.locator('#tab-combat').click();
- const resolution=page.locator('.workspace-resolution');const openSettings=async panel=>{const details=panel.locator('.workspace-resolution-settings');if(!await details.evaluate(el=>el.open))await details.locator(':scope > summary').click();};await openSettings(resolution);const declare=resolution.getByRole('checkbox',{name:/Déclarer une tentative d’empoignade/});
+ const resolution=page.locator('.workspace-resolution');const openSettings=async panel=>openU1Settings(panel);await openSettings(resolution);const declare=resolution.getByRole('checkbox',{name:/Déclarer une tentative d’empoignade/});
  checks.push({name:'real-ui-ready',declarationControls:await declare.count(),rollFields:await resolution.locator('[data-roll-input]').count()});
  await declare.check();await resolution.locator('[data-roll-input="attack"]').fill('25');await resolution.locator('[data-roll-input="defense"]').fill('70');
  await resolution.getByRole('button',{name:'Calculer',exact:true}).click();

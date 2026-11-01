@@ -1,3 +1,4 @@
+import { openU1Settings } from './helpers/u1-drawer.mjs';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
 import { readFileSync, statSync } from 'node:fs';
@@ -44,7 +45,7 @@ try {
   await page.evaluate(async state => { const { Store } = await import('/Outil-MJ-Warhammer/js/main.js'); await Store.ready; await Store.loadFromJSON(state); }, fixture());
 
   const combat = page.locator('#workspace-root'), actorCard = combat.locator('[data-workspace-select="a"]');
-  const openResolutionSettings = async () => { const details = combat.locator('.workspace-resolution-settings'); if (!await details.evaluate(el => el.open)) await details.locator(':scope > summary').click(); };
+  const openResolutionSettings = async () => openU1Settings(combat);
   await actorCard.click();
   await combat.getByRole('combobox', { name: /Arme de tir tenue pour viser Garde/ }).selectOption('bow');
   await combat.getByRole('checkbox', { name: 'Je confirme que cette arme est tenue en main' }).check();

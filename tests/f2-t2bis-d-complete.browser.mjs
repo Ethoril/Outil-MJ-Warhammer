@@ -1,3 +1,4 @@
+import { openU1Settings } from './helpers/u1-drawer.mjs';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
 import { readFileSync, statSync } from 'node:fs';
@@ -35,7 +36,7 @@ try{
   const load=async state=>page.evaluate(async value=>{const{Store}=await import('/Outil-MJ-Warhammer/js/main.js');await Store.ready;await Store.loadFromJSON(value);},state);
   const read=async()=>page.evaluate(async()=>{const{Store}=await import('/Outil-MJ-Warhammer/js/main.js');await Store.ready;return JSON.parse(Store.getFullJSON());});
   const play=page.locator('#workspace-root');
-  const chooseAction=async id=>{const button=play.locator(`[data-action-key="${id}"]`);await button.waitFor();await button.click();const details=play.locator('.workspace-resolution-settings');if(!await details.evaluate(el=>el.open))await details.locator(':scope > summary').click();};
+  const chooseAction=async id=>{const button=play.locator(`[data-action-key="${id}"]`);await button.waitFor();await button.click();await openU1Settings(play);};
   const selectAttack=async id=>{await chooseAction(id);await play.getByLabel('Type d’action').selectOption('attack');if(id==='d-inflict-action')await play.getByLabel('Nature du Test').selectOption('melee');};
   const openProtection=async()=>{const summary=play.getByText('Protection et bouclier pour cette attaque');if(!(await summary.evaluate(el=>el.closest('details')?.open)))await summary.click();};
   const settleChoices=async()=>{const groups=play.locator('.workspace-v5-choice-group');for(let i=0;i<await groups.count();i++){const radio=groups.nth(i).locator('input[type="radio"]').first();if(await radio.isEnabled())await radio.check();}};

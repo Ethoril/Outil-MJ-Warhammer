@@ -1,3 +1,4 @@
+import { openU1Settings } from './helpers/u1-drawer.mjs';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
 import { readFileSync, statSync } from 'node:fs';
@@ -28,7 +29,7 @@ try{
  await panel.waitFor();
  await panel.locator('summary',{hasText:'Critiques à suivre (0)'}).waitFor();
  await combat.locator('[data-workspace-select="hero"]').click();
- if(!await combat.locator('.workspace-resolution-settings').evaluate(el=>el.open))await combat.locator('.workspace-resolution-settings > summary').click();await combat.getByRole('combobox',{name:'Nature du Test'}).selectOption('melee');
+ await openU1Settings(combat);await combat.getByRole('combobox',{name:'Nature du Test'}).selectOption('melee');
  await combat.getByRole('textbox',{name:'Attaque (CC 60)'}).fill('1');await combat.getByRole('button',{name:'Calculer'}).click();
  const effect=combat.getByRole('textbox',{name:'Gravité (d100 + 210)'});await effect.fill('45');await effect.press('Tab');
  await combat.locator('.workspace-resolution-footer').getByRole('button',{name:/Appliquer/}).click();

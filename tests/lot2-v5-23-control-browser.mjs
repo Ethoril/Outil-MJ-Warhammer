@@ -1,3 +1,4 @@
+import { openU1Settings, closeU1Drawer } from './helpers/u1-drawer.mjs';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
 import { readFileSync, statSync, mkdirSync } from 'node:fs';
@@ -74,17 +75,19 @@ async function setup({ width = 1440, both = false, states = [], extraTarget = fa
     view.setSpace('play'); window.lot2UI = { store, view, calls, applyResults, turnResults, combatEngine, bus, recoveryOptionsFor, getSaved: () => structuredClone(saved) };
     window.randomDraws = 0; const originalRandom = Math.random; Math.random = () => { window.randomDraws += 1; return originalRandom(); };
   }, { origin, both, states, extraTarget, actorMomentum, actorTalents, targetTalents });
-  await page.locator('.workspace-resolution-settings > summary').click();
+  await openU1Settings(page);
   return { page, context };
 }
 const panel = page => page.locator('.workspace-resolution');
 const applyButton = page => panel(page).locator('[data-focus-key="apply"]');
 async function enterRolls(page, attack, defense) {
+  if (page.viewportSize().width <= 900) await closeU1Drawer(page);
   await panel(page).locator('[data-roll-input="attack"]').fill(String(attack));
   if (defense != null) await panel(page).locator('[data-roll-input="defense"]').fill(String(defense));
   await panel(page).getByRole('button', { name: 'Calculer', exact: true }).click();
 }
 async function defenseCC(page) {
+  if (page.viewportSize().width <= 900) await closeU1Drawer(page);
   await panel(page).locator('[data-focus-key="defense-stat"]').selectOption('CC');
 }
 async function participantHP(page, id) { return page.evaluate(id => window.lot2UI.store.listParticipants().find(row => row.id === id).hp, id); }
@@ -99,7 +102,7 @@ try {
   await applyButton(p).click(); await expect.poll(()=>p.evaluate(()=>window.lot2UI.applyResults.at(-1)?.status)).toBe('applied'); await p.getByRole('button',{name:'Annuler la dernière commande'}).click(); await expect.poll(()=>participantHP(p,'target')).toBe(12); await extra.context.close();
 
   const beat=await setup({width:390,actorMomentum:false,actorTalents:[owned('talent-beat-blade')]}); const b=beat.page;
-  await defenseCC(b); await panel(b).getByText('Circonstances des Tests',{exact:true}).click();
+  await defenseCC(b); await openU1Settings(b); await panel(b).getByText('Circonstances des Tests',{exact:true}).click();
   await panel(b).getByLabel('Battement : remplacer toutes les Blessures et conséquences du critique',{exact:true}).check();
   await panel(b).getByLabel('Taille de l’auteur',{exact:true}).selectOption('3'); await panel(b).getByLabel('Taille de la cible',{exact:true}).selectOption('3'); await enterRolls(b,22,81);
   await expect(panel(b)).toContainText('Battement : 0 Blessure'); await expect(panel(b).locator('[data-roll-input="critical-location"]')).toHaveCount(0); await expect(applyButton(b)).toBeEnabled();
@@ -113,7 +116,7 @@ try {
   await r.evaluate(async()=>{await window.lot2UI.store.updateParticipant('target',{hp:40,maxHp:40});}); await defenseCC(r); await enterRolls(r,23,81); await expect(applyButton(r)).toBeEnabled(); await applyButton(r).click();
   const use=r.getByRole('button',{name:'Utiliser Assaut féroce de Acteur de recette',exact:true}); await expect(use).toBeVisible(); const before=await r.evaluate(()=>({revision:window.lot2UI.store.getLocalRevision(),draws:window.randomDraws,momentum:window.lot2UI.store.listParticipants().find(row=>row.id==='actor').extensions.v5.hasMomentum}));
   await use.click(); await expect(panel(r).locator('[data-roll-input="attack"]')).toHaveValue(''); assert.equal(await r.evaluate(()=>window.randomDraws),before.draws); assert.equal(await r.evaluate(()=>window.lot2UI.store.getLocalRevision()),before.revision);
-  if(!await panel(r).locator('.workspace-resolution-settings').evaluate(el=>el.open))await panel(r).locator('.workspace-resolution-settings > summary').click();
+  await openU1Settings(panel(r));
   await panel(r).getByText('Circonstances des Tests',{exact:true}).click(); await panel(r).getByRole('button',{name:'Quitter la préparation d’Assaut féroce',exact:true}).click(); assert.equal(await r.evaluate(()=>window.lot2UI.store.getLocalRevision()),before.revision); assert.equal(await r.evaluate(()=>window.lot2UI.store.listParticipants().find(row=>row.id==='actor').extensions.v5.hasMomentum),true);
   await use.click(); await enterRolls(r,61,81); await expect(panel(r).locator('input[name="v5-choice-actor"]')).toHaveCount(0); await expect(applyButton(r)).toBeEnabled(); await applyButton(r).click(); await expect.poll(()=>r.evaluate(()=>window.lot2UI.applyResults.at(-1)?.status)).toBe('applied'); await expect(use).toHaveCount(0);
   const reactionLedger=await r.evaluate(()=>JSON.parse(window.lot2UI.store.getFullJSON()).extensions.v5.actionLedger); assert.ok(reactionLedger.quotaUsage.some(row=>row.quotaId==='talent-furious-assault:round')); assert.ok(reactionLedger.quotaUsage.some(row=>row.quotaId==='system:paid-momentum-extra-attack')); await reaction.context.close();

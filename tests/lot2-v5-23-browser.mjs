@@ -1,3 +1,4 @@
+import { openU1Settings, closeU1Drawer } from './helpers/u1-drawer.mjs';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
 import { readFileSync, statSync, mkdirSync } from 'node:fs';
@@ -74,17 +75,19 @@ async function setup({ width = 1440, both = false, states = [], extraTarget = fa
     view.setSpace('play'); window.lot2UI = { store, view, calls, applyResults, turnResults, combatEngine, bus, recoveryOptionsFor, getSaved: () => structuredClone(saved) };
     window.randomDraws = 0; const originalRandom = Math.random; Math.random = () => { window.randomDraws += 1; return originalRandom(); };
   }, { origin, both, states, extraTarget, actorMomentum, talentNames, ranged });
-  await page.locator('.workspace-resolution-settings > summary').click();
+  await openU1Settings(page);
   return { page, context };
 }
 const panel = page => page.locator('.workspace-resolution');
 const applyButton = page => panel(page).locator('[data-focus-key="apply"]');
 async function enterRolls(page, attack, defense) {
+  if (page.viewportSize().width <= 900) await closeU1Drawer(page);
   await panel(page).locator('[data-roll-input="attack"]').fill(String(attack));
   if (defense != null) await panel(page).locator('[data-roll-input="defense"]').fill(String(defense));
   await panel(page).getByRole('button', { name: 'Calculer', exact: true }).click();
 }
 async function defenseCC(page) {
+  if (page.viewportSize().width <= 900) await closeU1Drawer(page);
   await panel(page).locator('[data-focus-key="defense-stat"]').selectOption('CC');
 }
 async function participantHP(page, id) { return page.evaluate(id => window.lot2UI.store.listParticipants().find(row => row.id === id).hp, id); }
@@ -122,10 +125,13 @@ try {
 
   const battement=await setup({talentNames:['Battement'],actorMomentum:false,width:390});const b=battement.page;
   await defenseCC(b);
+  await openU1Settings(b);
   await panel(b).getByRole('checkbox',{name:'Battement : remplacer toutes les Blessures et conséquences du critique',exact:true}).check();
   await panel(b).getByLabel('Taille de l’auteur',{exact:true}).selectOption('3');
   await enterRolls(b,22,73);await expect(applyButton(b)).toBeDisabled();
+  await openU1Settings(b);
   await panel(b).getByLabel('Taille de la cible',{exact:true}).selectOption('3');
+  await closeU1Drawer(b);
   await panel(b).getByRole('button',{name:'Calculer',exact:true}).click();
   await expect(panel(b)).toContainText('Battement : 0 Blessure');await expect(applyButton(b)).toBeEnabled();
   await expect(panel(b).locator('[data-critical-input]')).toHaveCount(0);
@@ -139,14 +145,20 @@ try {
   assert.equal(effect.v5Timing.authorId,'actor');assert.equal(effect.v5Timing.targetId,'target');assert.equal(effect.v5Timing.expiry.actorId,'actor');assert.equal(effect.v5Timing.expiry.turn,3);
   await enterRolls(b,61,73);await panel(b).locator('input[name="v5-choice-actor"][value="keep"]').check();
   await expect(panel(b)).toContainText('Battement : la cible ne peut pas opposer Corps à corps');await expect(applyButton(b)).toBeDisabled();
+  await openU1Settings(b);
   await panel(b).getByLabel('Nature de la défense',{exact:true}).selectOption('test');
+  await closeU1Drawer(b);
   await panel(b).getByRole('button',{name:'Calculer',exact:true}).click();await panel(b).locator('input[name="v5-choice-actor"][value="keep"]').check();await expect(applyButton(b)).toBeEnabled();
+  await closeU1Drawer(b);
   await b.getByRole('button',{name:'Terminer le tour de recette'}).click();
   assert.equal(await b.evaluate(()=>window.lot2UI.store.listParticipants().find(row=>row.id==='target').states.some(row=>row.kind==='talent-active')),true,'current author turn does not expire');
+  await closeU1Drawer(b);
   await b.getByRole('button',{name:'Terminer le tour de recette'}).click();
   assert.equal(await b.evaluate(()=>window.lot2UI.store.listParticipants().find(row=>row.id==='target').states.some(row=>row.kind==='talent-active')),true,'target turn does not expire');
+  await closeU1Drawer(b);
   await b.getByRole('button',{name:'Terminer le tour de recette'}).click();
   await expect.poll(()=>b.evaluate(()=>window.lot2UI.store.listParticipants().find(row=>row.id==='target').states.some(row=>row.kind==='talent-active'))).toBe(false);
+  await closeU1Drawer(b);
   await b.getByRole('button',{name:'Annuler la dernière commande'}).click();
   await expect.poll(()=>b.evaluate(()=>window.lot2UI.store.listParticipants().find(row=>row.id==='target').states.some(row=>row.kind==='talent-active'))).toBe(true);
   await battement.context.close();

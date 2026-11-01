@@ -518,3 +518,24 @@ dialog.tool-sheet.campaign-time-dialog { position:fixed; inset:auto; top:50%; le
 
 .workspace-roll-owner { display: inline-block; width: fit-content; padding: 1px 7px; border-radius: 999px; color: var(--panel); background: var(--camp-ennemi); font-size: 12px; font-weight: 700; }
 .workspace-roll-owner.is-pj { background: var(--camp-pj); }
+
+/* Le tiroir remplace temporairement la largeur du panneau latéral sans modifier son état. */
+.workspace-play-grid { position: relative; }
+.workspace-resolution-drawer { position: fixed; top: 72px; right: calc(max(0px, (100vw - 1600px) / 2) + clamp(16px, 2vw, 24px) + 44px); z-index: 4; box-sizing: border-box; width: 300px; max-height: calc(100vh - 88px); overflow: auto; display: grid; gap: 10px; align-content: start; padding: 14px; background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius); }
+.workspace-resolution-drawer[hidden], .workspace-circumstances-backdrop[hidden] { display: none; }
+.workspace-circumstances-heading { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.workspace-circumstances-heading h4 { margin: 0; color: var(--accent-text); }
+.workspace-circumstances-backdrop { display: none; }
+@media (min-width: 901px) {
+  .workspace-play-grid:has(.workspace-resolution-drawer:not([hidden])) { grid-template-columns: 248px minmax(0, 1fr) 344px; }
+  .workspace-play-grid:has(.workspace-resolution-drawer:not([hidden])) .workspace-side { width: 44px; justify-self: end; grid-template-rows: auto; }
+}
+@media (max-width: 900px) {
+  .workspace-resolution-drawer { position: fixed; top: 0; bottom: 0; right: 0; width: min(360px, 90vw); max-height: none; z-index: 101; border-radius: 0; }
+  .workspace-circumstances-backdrop:not([hidden]) { display: block; position: fixed; inset: 0; z-index: 100; background: transparent; backdrop-filter: brightness(.45); }
+}
+.workspace-circumstances-group { display: grid; gap: 6px; min-width: 0; }
+.workspace-circumstances-group[hidden] { display: none; }
+.workspace-circumstances-group h5 { margin: 0; color: var(--accent-text); font-family: var(--font-text); font-size: 15px; }
+.workspace-circumstances-group.is-required { padding: 8px; border: 2px solid var(--accent); border-radius: var(--radius); background: var(--bg); }
+.workspace-circumstances-summary { margin: 0; font-size: 14px; }

@@ -1,3 +1,4 @@
+import { openU1Settings } from './helpers/u1-drawer.mjs';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
 import { readFileSync, statSync } from 'node:fs';
@@ -29,7 +30,7 @@ try{
   await page.evaluate(async s=>{const {Store}=await import('/Outil-MJ-Warhammer/js/main.js');await Store.ready;await Store.loadFromJSON(JSON.stringify(s));},state);
   await page.locator('#tab-combat').click();
   const workspace=page.locator('#workspace-root');
-  const openSettings=async()=>{const details=workspace.locator('.workspace-resolution-settings');if(!await details.evaluate(el=>el.open))await details.locator(':scope > summary').click();};
+  const openSettings=async()=>openU1Settings(workspace);
   // Les puces de cible sont dans le groupe « Adversaires » : la liste des combattants porte des boutons du même nom.
   const foe=name=>workspace.getByRole('group',{name:'Adversaires'}).getByRole('button',{name,exact:true});
 

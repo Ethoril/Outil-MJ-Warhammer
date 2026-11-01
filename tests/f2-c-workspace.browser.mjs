@@ -1,3 +1,4 @@
+import { openU1Settings } from './helpers/u1-drawer.mjs';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
 import { readFileSync, statSync } from 'node:fs';
@@ -24,7 +25,7 @@ try{
    const noop=()=>{};const view=initWorkspaceView({Store:store,Bus:bus,mount:document.querySelector('#mount'),actions:{renderRules:noop,renderLog:noop,getFortune:()=>0,adjustHp:noop,setStates:noop,applyResolution:noop,acquireStates:noop}});view.setSpace('play');window.f2Workspace={store,view};
  },origin);
  const panel=page.locator('.workspace-resolution');
- await panel.locator('.workspace-resolution-settings > summary').click();
+ await openU1Settings(panel);
  await page.getByLabel('Groupe d’arme à confirmer par le MJ').selectOption('Ingénierie tir');
  assert.equal(await page.getByLabel('Nature du Test').inputValue(),'ranged','formulaire: nature affichée Tir');
  await page.getByLabel('Augmentations de la spécialité (MJ, si la fiche ne les fournit pas)').fill('3');

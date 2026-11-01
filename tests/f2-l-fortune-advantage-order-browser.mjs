@@ -1,3 +1,4 @@
+import { openU1Settings } from './helpers/u1-drawer.mjs';
 import { createServer } from 'node:http';
 import { readFileSync, statSync } from 'node:fs';
 import { join, normalize, extname } from 'node:path';
@@ -24,7 +25,7 @@ try{
     const view=initWorkspaceView({Store:store,Combat:{},Bus:{on(){return()=>{};}},mount:document.querySelector('#mount'),actions:{renderOverview(content){content.textContent='Rappel';},renderLog(content){content.textContent='Journal';},applyResolution:preview=>store.applyResolution(preview)}});
     const action=store.listParticipants()[0].actions[0];window.__store=store;window.__view=view;view.openResolution({...action,participantId:'hero'});
   });
-  await page.locator('.workspace-resolution-settings > summary').click();
+  await openU1Settings(page);
   const chance=page.getByRole('checkbox',{name:'Dépenser 1 Point de Chance pour obtenir Avantage avant le jet'});
   check(await chance.count()===1&&await chance.isEnabled(),'parcours Workspace : option disponible avant la saisie');
   await chance.check();await page.waitForFunction(()=>window.__view.getViewState().resolution.fortuneAdvantageDeclarationId);

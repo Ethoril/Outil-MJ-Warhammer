@@ -1,3 +1,4 @@
+import { openU1Settings } from './helpers/u1-drawer.mjs';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
 import { readFileSync, statSync, mkdirSync } from 'node:fs';
@@ -74,7 +75,7 @@ async function setup({ width = 1440, both = false, states = [], extraTarget = fa
     view.setSpace('play'); window.lot2UI = { store, view, calls, applyResults, turnResults, combatEngine, bus, recoveryOptionsFor, getSaved: () => structuredClone(saved) };
     window.randomDraws = 0; const originalRandom = Math.random; Math.random = () => { window.randomDraws += 1; return originalRandom(); };
   }, { origin, both, states, extraTarget, actorMomentum });
-  await page.locator('.workspace-resolution-settings > summary').click();
+  await openU1Settings(page);
   return { page, context };
 }
 const panel = page => page.locator('.workspace-resolution');
@@ -146,7 +147,7 @@ try {
     document.querySelector('#test-quick-roll').addEventListener('click',()=>{const result=runDiceLine('quick-resume',window.lot2UI.store);window.quickResult=result;if(result?.status==='requires-resolution')window.quickOpened=window.lot2UI.view.openResolution(window.lot2UI.store.getDiceLines().find(line=>line.id==='quick-resume'),{roll:result.initialRoll});});
   },origin);
   await quickPage.getByRole('button',{name:'Jet rapide V5'}).click();assert.equal(await quickPage.evaluate(()=>window.quickResult.status),'requires-resolution');assert.equal(await quickPage.evaluate(()=>window.quickOpened),true);await expect(panel(quickPage).locator('[data-roll-input="attack"]')).toHaveValue('62');assert.equal(await quickPage.evaluate(()=>window.randomDraws),1);
-  await panel(quickPage).locator('.workspace-resolution-settings > summary').click();
+  await openU1Settings(panel(quickPage));
   await panel(quickPage).getByText('Circonstances des Tests',{exact:true}).click();await panel(quickPage).getByLabel('Le Test implique un mouvement',{exact:true}).selectOption('false');await panel(quickPage).getByLabel('Sources supplémentaires d’Avantage',{exact:true}).fill('1');await quickPage.keyboard.press('Tab');await panel(quickPage).getByRole('button',{name:'Calculer',exact:true}).click();await expect(panel(quickPage).locator('input[name="v5-choice-actor"]')).toHaveCount(2);await panel(quickPage).locator('input[name="v5-choice-actor"][value="reverse"]').check();await expect(panel(quickPage).locator('[data-roll-input="attack"]')).toHaveValue('62');assert.equal(await quickPage.evaluate(()=>window.randomDraws),1);assert.equal(await quickPage.evaluate(()=>window.lot2UI.view.getViewState().resolution.preview.roll),26);await quickResume.context.close();
 
   // Two players each select their own voluntary inversion. Defender advice minimizes received wounds.
@@ -237,6 +238,7 @@ try {
 
   // Phone layout, screen-reader labels, Rulebook critical rows >100, search within table effects.
   const phone = await setup({ width: 390 }); const m = phone.page;
+  await panel(m).locator('.workspace-resolution-drawer').getByRole('button', { name: 'Fermer', exact: true }).click();
   await defenseCC(m); await enterRolls(m, 61, 73); await expect(panel(m).locator('.workspace-v5-choice-cards')).toHaveCSS('grid-template-columns', /^\d/);
   assert.ok(await m.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1), 'phone has no horizontal overflow');
   await m.screenshot({ path: join(root, 'tmp/lot2-ui/comparaison-mobile.png'), fullPage: true });
@@ -252,6 +254,7 @@ try {
 
   // End-of-Round fire: no guessed die, no mutation before complete input, one die reused for the later critical request.
   const effects = await setup({ states: [{name:'Enflammé',level:2}] }); const e=effects.page;
+  await panel(e).locator('.workspace-resolution-drawer').getByRole('button', { name: 'Fermer', exact: true }).click();
   await e.evaluate(async()=>{await window.lot2UI.store.updateParticipant('actor',{hp:3});await window.lot2UI.store.setRoundTurn(1,'target');});
   const startRevision=await e.evaluate(()=>window.lot2UI.store.getLocalRevision());
   await e.getByRole('button',{name:'Terminer le tour de recette'}).click();const effectDialog=e.getByRole('dialog',{name:'Terminer le tour : effets V5'});
@@ -263,6 +266,7 @@ try {
   await e.setViewportSize({width:390,height:980});assert.ok(await e.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth+1),'effects dialog fits phone');const effectBounds=await effectDialog.boundingBox();assert.ok(effectBounds.x>=0&&effectBounds.x+effectBounds.width<=390,'effect dialog stays within phone viewport');assert.ok(effectBounds.height<700,'effect dialog uses content height rather than filling screen');await e.screenshot({path:join(root,'tmp/lot2-ui/effets-mobile.png')});
   await effectDialog.getByLabel('Critique de feu au corps : jet de gravité d100',{exact:true}).fill('20');await effectDialog.getByRole('button',{name:'Confirmer les effets'}).click();await expect(effectDialog).toHaveCount(0);await expect.poll(()=>participantHP(e,'actor')).toBe(0);
   assert.equal(await e.evaluate(()=>window.randomDraws),1);assert.equal(await e.evaluate(()=>window.lot2UI.store.getCombat().round),2);
+  if (await panel(e).locator('.workspace-resolution-drawer').isVisible()) await panel(e).locator('.workspace-resolution-drawer').getByRole('button', { name: 'Fermer', exact: true }).click();
   await e.getByRole('button',{name:'Annuler la dernière commande'}).click();await expect.poll(()=>participantHP(e,'actor')).toBe(3);assert.equal(await e.evaluate(()=>window.lot2UI.store.getCombat().round),1);
   // A concurrent command invalidates the whole effects receipt without consuming its dice or ending the turn.
   await e.getByRole('button',{name:'Terminer le tour de recette'}).click();await effectDialog.getByRole('button',{name:/Lancer d10/}).click();
@@ -271,11 +275,13 @@ try {
 
   // Acquiring a timed Condition on another target uses the named author's end of Turn and acquires Fatigued when the last Stunned expires.
   const timing=await setup();const a=timing.page;
+  await panel(a).locator('.workspace-resolution-drawer').getByRole('button', { name: 'Fermer', exact: true }).click();
   await a.getByRole('button',{name:'Ajouter un état à Défenseur de recette',exact:true}).click();const stateForm=a.getByRole('group',{name:'Ajouter un état à Défenseur de recette',exact:true});
   await stateForm.getByLabel('État',{exact:true}).selectOption('Sonné');await stateForm.getByLabel('Phase d’expiration').selectOption('endOfTurn');await stateForm.getByLabel('Round d’expiration').fill('1');await stateForm.getByLabel('Acteur du Tour d’expiration').selectOption('actor');await a.setViewportSize({width:390,height:980});await stateForm.scrollIntoViewIfNeeded();assert.ok(await a.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth+1),'state expiry form fits phone');await a.screenshot({path:join(root,'tmp/lot2-ui/echeance-mobile.png')});await stateForm.getByRole('button',{name:'Ajouter',exact:true}).click();
   await expect.poll(()=>a.evaluate(()=>window.lot2UI.store.listParticipants().find(row=>row.id==='target').states.some(row=>row.name==='Sonné'))).toBe(true);
   const timedState=await a.evaluate(()=>window.lot2UI.store.listParticipants().find(row=>row.id==='target').states.find(row=>row.name==='Sonné'));assert.equal(timedState.v5Timing.expiry.actorId,'actor');assert.equal(timedState.authorId,'actor');assert.equal(timedState.targetId,'target');
   await a.getByRole('button',{name:'Terminer le tour de recette'}).click();await expect.poll(()=>a.evaluate(()=>window.lot2UI.store.listParticipants().find(row=>row.id==='target').states.some(row=>row.name==='Sonné'))).toBe(false);await expect(a.getByRole('button',{name:'Récupérer Exténué de Défenseur de recette'})).toBeVisible();
+  if (await panel(a).locator('.workspace-resolution-drawer').isVisible()) await panel(a).locator('.workspace-resolution-drawer').getByRole('button', { name: 'Fermer', exact: true }).click();
   await a.getByRole('button',{name:'Récupérer Exténué de Défenseur de recette'}).click();const methodDialog=a.getByRole('dialog',{name:/Récupérer Exténué/});await methodDialog.getByLabel('Méthode de récupération').selectOption('rest');await methodDialog.getByRole('button',{name:'Continuer'}).click();
   const recoveryDialog=a.getByRole('dialog',{name:'Récupérer un État'});await expect(recoveryDialog).toBeVisible();await a.screenshot({path:join(root,'tmp/lot2-ui/recuperation-mobile.png')});await recoveryDialog.getByLabel('Repos adapté à la cause confirmé par le MJ').selectOption('true');await recoveryDialog.getByRole('button',{name:'Confirmer les effets'}).click();await expect(recoveryDialog).toHaveCount(0);await expect(a.getByRole('button',{name:'Récupérer Exténué de Défenseur de recette'})).toHaveCount(0);
   await a.getByRole('button',{name:'Annuler la dernière commande'}).click();await expect(a.getByRole('button',{name:'Récupérer Exténué de Défenseur de recette'})).toBeVisible();await timing.context.close();

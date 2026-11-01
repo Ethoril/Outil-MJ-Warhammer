@@ -62,7 +62,7 @@ try {
       document.querySelector('#mount').textContent = '';
       const calls = [];
       const handlers = {
-        select: payload => { calls.push({ kind: 'select', payload }); if (spec.interactive && payload.v5Context) window.__render({ ...spec, calm: payload.v5Context.protectionCalm }); },
+        select: payload => { calls.push({ kind: 'select', payload }); if (spec.interactive && payload.v5Context) window.__render({ ...spec, calm: payload.v5Context.protectionCalm }); if (spec.rerenderAdvantage && 'v5Advantages' in payload) window.__render({ ...spec, advantage: payload.v5Advantages }); },
         input: (key, value) => calls.push({ kind: 'input', key, value }),
         roll: () => {}, calculate: () => {}, compare: () => {}, choose: () => {}, apply: () => calls.push({ kind: 'apply' }), cancel: () => {}
       };
@@ -75,9 +75,9 @@ try {
       }
       const target = { id: 'target', name: 'Cible', kind: 'PJ', camp: spec.targetCamp, caracs: { CC: 45, Ag: 40, E: 40, F: 40 } };
       if (spec.targetDivine) target.extensions = { v5: { divineEffects: [{ id: 'l1', attackDeterrent: { skill: 'Calme', slBonus: 2, ...(spec.passedActor ? { passedAttackerIds: ['actor'] } : {}), ...(spec.passedOther ? { passedAttackerIds: ['other'] } : {}) } }] } };
-      const actions = [{ id: 'a1', type: 'attack', attr: 'CC', note: 'Attaque', base: 50, damage: 5 }];
+      const actions = [{ id: 'a1', type: 'attack', attr: spec.ranged ? 'CT' : 'CC', note: 'Attaque', base: 50, damage: 5 }];
       const section = renderResolutionPanel({
-        draft: { v5Context: { protectionCalm: spec.calm }, ...(spec.interactive ? { preview: previewResolution({ actor, target, action: actions[0], roll: 20, attackContext: { ranged: true }, v5: { kind: 'ranged', context: { protectionCalm: spec.calm } } }) } : {}) },
+        draft: { v5Advantages: spec.advantage, v5Context: { protectionCalm: spec.calm }, ...(spec.interactive ? { preview: previewResolution({ actor, target, action: actions[0], roll: 20, attackContext: { ranged: true }, v5: { kind: 'ranged', context: { protectionCalm: spec.calm } } }) } : {}) },
         actor,
         participants: [actor, target],
         actions,
@@ -103,15 +103,34 @@ try {
   await page.evaluate(() => window.__render({ actorCamp: 'ennemi', targetCamp: 'pj', targetDivine: true, interactive: true }));
   check((await page.locator('.workspace-resolution-step > h4').allTextContents()).join('|') === '1 · Action et cible|2 · Jets|3 · Résultat', 'U1-1 : les trois étapes sont présentes et ordonnées');
   check((await page.locator('.workspace-resolution-rolls .workspace-roll-owner').allTextContents()).join('|') === 'PNJ|PJ', 'U1-1 : les jets indiquent le type du combattant');
+  check(await page.getByRole('button', { name: /Circonstances ·/ }).count() === 1, 'U1-2 : un bouton ouvre le tiroir des circonstances');
+  check(await page.locator('.workspace-resolution-drawer').isVisible() && await page.locator('.workspace-resolution-settings').evaluate(el => el.open) && await page.getByText('Circonstances des Tests', { exact: true }).evaluate(el => el.parentElement.open), 'U1-2 : en attaque, le tiroir et les réglages historiques sont ouverts par défaut');
   const applyButton = page.locator('[data-focus-key="apply"]');
   const reason = page.getByRole('button', { name: /saisir le Test de Calme/ });
   check(await applyButton.isDisabled() && await reason.count() === 1, 'C1 : la saisie manquante est expliquée près du bouton');
+  await page.getByRole('button', { name: /Circonstances ·/ }).click();
   await reason.click();
+  check(await page.getByRole('button', { name: /Circonstances ·/ }).getAttribute('aria-expanded') === 'true', 'U1-2 : le motif rouvre le tiroir fermé');
   check(await calmSelect.evaluate(el => document.activeElement === el) && await calmSelect.getAttribute('aria-required') === 'true', 'C1 : le motif dirige vers le champ obligatoire');
   await calmSelect.selectOption('pass');
   check(await applyButton.isEnabled(), 'C1 : la réussite active l’application (' + await applyButton.getAttribute('title') + ')');
   await applyButton.click();
   check((await lastCall())?.kind === 'apply', 'C1 : le bouton actif transmet la demande d’application');
+
+  await page.evaluate(() => window.__render({ actorCamp: 'ennemi', targetCamp: 'pj' }));
+  const circumstances = page.getByRole('button', { name: /Circonstances ·/ });
+  const advantages = page.locator('[data-focus-key="v5Advantages"]');
+  const beforeCount = await circumstances.textContent();
+  await advantages.fill('1');
+  await advantages.dispatchEvent('change');
+  check(beforeCount !== await circumstances.textContent() && /1 active/.test(await circumstances.textContent()), 'U1-2 : une valeur modifiée augmente le compteur');
+
+  await page.evaluate(() => window.__render({ actorCamp: 'ennemi', targetCamp: 'pj', ranged: true, rerenderAdvantage: true }));
+  check(/0 actives/.test(await circumstances.textContent()), 'U1-2 : la nature de tir par défaut ne compte pas comme circonstance');
+  await advantages.fill('1'); await advantages.dispatchEvent('change');
+  check(/1 active/.test(await circumstances.textContent()), 'U1-2 : le compteur survit au nouveau rendu');
+  await advantages.fill('0'); await advantages.dispatchEvent('change');
+  check(/0 actives/.test(await circumstances.textContent()), 'U1-2 : revenir à la valeur par défaut retire la circonstance');
 
   // a) Attaque d’un ennemi sur une cible porteuse d’une couche attackDeterrent.
   await page.evaluate(() => window.__render({ actorCamp: 'ennemi', targetCamp: 'pj', targetDivine: true }));

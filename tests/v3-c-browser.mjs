@@ -1,3 +1,4 @@
+import { openU1Settings } from './helpers/u1-drawer.mjs';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
 import { readFileSync, statSync } from 'node:fs';
@@ -92,7 +93,7 @@ try {
   await page.locator('#workspace-root [data-workspace-select="a"]').click();
   await page.locator('#workspace-root').locator('[data-focus-key="target-m"]').click();
   await page.locator('#workspace-root').getByLabel('Type d’action').selectOption('cast');
-  await page.locator('#workspace-root .workspace-resolution-settings > summary').click();
+  await openU1Settings(page);
   const spellSelect = page.locator('#workspace-root').getByLabel(/Sort/u).first();
   await spellSelect.selectOption({ label: 'Souffle · NI 6 (arcane)' });
   const box = page.locator('#workspace-root details.workspace-v5-context-details', { hasText: 'Cibles multiples' });

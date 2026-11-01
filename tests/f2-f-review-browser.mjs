@@ -1,3 +1,4 @@
+import { openU1Settings } from './helpers/u1-drawer.mjs';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
 import { readFileSync, statSync } from 'node:fs';
@@ -33,7 +34,7 @@ try{
   await page.locator('#tab-combat').click();
   await page.locator('[data-action-key="antler-attack"]').click();
   const workspace=page.locator('#workspace-root');
-  const openSettings=async()=>{const details=workspace.locator('.workspace-resolution-settings');if(!await details.evaluate(el=>el.open))await details.locator(':scope > summary').click();};
+  const openSettings=async()=>openU1Settings(workspace);
   await openSettings();
   assert.equal(await workspace.getByLabel('Origine de la poignée en bois de Grand Cerf').count(),1);
   // Warp Blade : score et d100 du Test de Résistance saisis dans le panneau, gardés d’un rendu à l’autre, oubliés au changement de cible.
