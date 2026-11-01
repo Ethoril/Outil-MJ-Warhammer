@@ -328,6 +328,9 @@ function parseProfile(raw, index, referential = BASE_REFERENTIAL) {
     hp: hp !== null || (values.hp !== undefined && values.hp !== null) ? { status: 'found', value: hp, lines: [] } : { status: 'missing', value: null, lines: [] }
   };
   const profile = { name: name || null, kind, group, hp, initiative, caracs, armor: parseArmor(values.armor, errors), tags, notes, favorite, actions };
+  // Espèce (texte) et Mouvement (entier ≥ 0) sont contrôlés avant d'être repris.
+  if (values.race !== undefined && typeof values.race !== 'string') { errors.push({ field: 'espèce', reason: 'texte-attendu', value: shownValue(values.race) }); delete values.race; }
+  if (values.movement !== undefined) { const moved = parseInteger(values.movement, 'mouvement', errors, { min: 0 }); if (moved === null) delete values.movement; else values.movement = moved; }
   const hasArmor = values.armor !== undefined || values.armorLocations !== undefined;
   // Talents, compétences, sorts, prières, équipement, Traits et ressources à la forme de l'outil : ils passent par la voie des fiches.
   const keys = Object.keys(raw).map(normKey);

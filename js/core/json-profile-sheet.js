@@ -98,6 +98,7 @@ function parseTalents(value, ref, errors, tools) {
       if (parsed !== null) rank = parsed;
     }
     // « Béni (Ulric) » ou { nom: "Béni", specialisation: "Ulric" } : même talent.
+    if (read.specialization !== undefined && read.specialization !== null && typeof read.specialization !== 'string') errors.push({ field: 'talents', reason: 'texte-attendu', value: tools.shown(read.specialization), message: `Talent « ${read.name} » : la spécialisation doit être un texte (reçu ${tools.shown(read.specialization)}).` });
     const spec = typeof read.specialization === 'string' ? read.specialization.trim() : '';
     return [{ base: read.name, spec, rank }];
   })) {
@@ -105,6 +106,8 @@ function parseTalents(value, ref, errors, tools) {
     const found = resolveTalent(full);
     if (found.status !== 'resolved') {
       errors.push({ field: 'talents', reason: 'talent-inconnu', value: row.base, message: `${unknownMessage('Talent inconnu', row.base, ref.talents)}` });
+    } else if (row.spec && !found.specialization) {
+      errors.push({ field: 'talents', reason: 'specialisation-perdue', value: row.spec, message: `Talent « ${found.entry.nom} » : il n’a pas de spécialisation, « ${row.spec} » ignorée.` });
     } else if (found.open) {
       errors.push({ field: 'talents', reason: 'specialisation-manquante', value: row.base, message: `Talent « ${found.entry.nom} » : précisez la spécialisation ({ "nom": "${found.entry.nom}", "specialisation": "…" }).` });
     }
@@ -169,7 +172,7 @@ function parseEquipment(value, ref, errors, tools) {
     if (!read) continue;
     const matches = byName.get(strict(read.name)) || [];
     const narrowed = typeof read.category === 'string' && read.category.trim() ? matches.filter(match => fold(match.category) === fold(read.category)) : matches;
-    if (!matches.length) errors.push({ field: 'équipement', reason: 'objet-inconnu', value: read.name, message: `${unknownMessage('Objet inconnu', read.name, items.map(entry => entry.name))}${closestName(read.name, items.map(entry => entry.name)) ? '' : ' (catalogue d’équipement) ; non ajouté'}` });
+    if (!matches.length) errors.push({ field: 'équipement', reason: 'objet-inconnu', value: read.name, message: `${unknownMessage('Objet inconnu', read.name, items.map(entry => entry.name))}${closestName(read.name, items.map(entry => entry.name)) ? '' : ' (catalogue d’équipement)'} ; non ajouté` });
     else if (!narrowed.length) errors.push({ field: 'équipement', reason: 'objet-inconnu', value: read.name, message: `Objet inconnu dans la catégorie « ${read.category} » : « ${read.name} » existe en ${[...new Set(matches.map(match => match.category))].join(', ')}.` });
     else if (narrowed.length > 1) errors.push({ field: 'équipement', reason: 'objet-ambigu', value: read.name, message: `Objet ambigu : « ${read.name} » existe en ${[...new Set(narrowed.map(match => match.category))].join(', ')} — ajoutez { "nom": "${read.name}", "categorie": "…" }.` });
     else place(narrowed[0]);
@@ -186,7 +189,8 @@ function parseTraits(value, size, ref, errors, tools) {
     let text = '';
     if (typeof item === 'string') text = item.trim();
     else if (isRecord(item)) {
-      const { values } = tools.readRecord(item, TRAIT_KEYS);
+      const { values, unknown } = tools.readRecord(item, TRAIT_KEYS);
+      unknown.forEach(key => errors.push({ field: `traits · ${key}`, reason: 'champ-inconnu', value: '' }));
       text = typeof values.name === 'string' ? `${values.name.trim()}${values.value !== undefined && values.value !== null && values.value !== '' ? ` (${values.value})` : ''}` : '';
     }
     if (!text) { errors.push({ field: 'traits', reason: 'texte-attendu', value: tools.shown(item) }); continue; }
@@ -200,6 +204,7 @@ function parseTraits(value, size, ref, errors, tools) {
     const text = `Taille (${String(size).trim()})`;
     if (!parseSizeTrait(text)) errors.push({ field: 'taille', reason: 'taille-inconnue', value: String(size), message: `Taille inconnue : « ${size} » (attendu : ${SIZE_WORDS_SHOWN}).` });
     else if (!traits.some(trait => parseSizeTrait(trait))) add(text);
+    else errors.push({ field: 'taille', reason: 'taille-concurrente', value: String(size), message: `« taille » ignorée : les traits donnent déjà « ${traits.find(trait => parseSizeTrait(trait))} ».` });
   }
   return traits;
 }

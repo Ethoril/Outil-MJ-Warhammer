@@ -27,6 +27,8 @@ const REASON_LABELS = {
   'taille-inconnue': 'Taille inconnue',
   'specialisation-manquante': 'spécialisation manquante',
   doublon: 'en double',
+  'taille-concurrente': 'Taille déjà donnée par les Traits',
+  'specialisation-perdue': 'spécialisation sans effet',
   'caracteristique-manquante': 'caractéristique manquante',
   'arme-sans-base': 'arme sans compétence liée',
   'cles-concurrentes': 'deux clés pour le même champ'

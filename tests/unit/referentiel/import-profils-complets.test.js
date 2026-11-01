@@ -190,6 +190,19 @@ describe('Import JSON : clés françaises, alias et clés anglaises', () => {
     assert.match(warningsOf(weapon).join(' | '), /Arme « Arc elfique \(2M\) » : aucune compétence liée avec une base/);
   });
 
+  test('détails signalés : objet avec suggestion non ajouté, Trait objet à clé en trop, Taille concurrente, Mouvement et espèce, spécialisation perdue', () => {
+    const text = extra => warningsOf(importOne(JSON.stringify({ ...base, ...extra }))).join(' | ');
+    assert.match(text({ equipement: ['Arbalete (2M)'] }), /vouliez-vous « Arbalète \(2M\) » \? ; non ajouté/);
+    assert.match(text({ traits: [{ nom: 'Peur', valeur: 2, couleur: 'rouge' }] }), /traits · couleur/);
+    assert.match(text({ traits: ['Taille (Petite)'], taille: 'Grande' }), /« taille » ignorée : les traits donnent déjà « Taille \(Petite\) »/);
+    assert.match(text({ mouvement: 'vite' }), /mouvement/);
+    assert.match(text({ mouvement: -2 }), /mouvement/);
+    assert.match(text({ espece: 12 }), /espece|espèce/);
+    assert.equal(importOne(JSON.stringify({ ...base, espece: 'nain', mouvement: 3 })).status, 'ready');
+    assert.match(text({ talents: [{ nom: 'Combat instinctif', specialisation: 'Foo' }] }), /Combat instinctif.*n’a pas de spécialisation.*« Foo » ignorée/);
+    assert.match(text({ talents: [{ nom: 'Béni', specialisation: 7 }] }), /spécialisation/);
+  });
+
   test('rang, doublons de talent et talents sans spécialisation', () => {
     const result = importOne(JSON.stringify({ ...base, talents: ['Combat instinctif', { nom: 'Combat instinctif', rang: 2 }, 'Béni'] }));
     assert.equal(result.profiles[0].talents.find(item => item.id === 'talent-combat-reflexes').rank, 3);
@@ -244,7 +257,7 @@ describe('Import JSON : noms inconnus signalés avec le nom le plus proche', () 
     assert.match(warnings({ competences: ['Priere'] })[0], /^Compétence inconnue : « Priere » — vouliez-vous « Prière » \?$/);
     assert.match(warnings({ sorts: ['Brise os'] })[0], /^Sort inconnu : « Brise os » — vouliez-vous « Brise-os » \?$/);
     assert.match(warnings({ prieres: ['Morsure du louf'] })[0], /^Prière inconnue : « Morsure du louf » — vouliez-vous « Morsure du loup » \?$/);
-    assert.match(warnings({ equipement: ['Arbalete (2M)'] })[0], /^Objet inconnu : « Arbalete \(2M\) » — vouliez-vous « Arbalète \(2M\) » \?$/);
+    assert.match(warnings({ equipement: ['Arbalete (2M)'] })[0], /^Objet inconnu : « Arbalete \(2M\) » — vouliez-vous « Arbalète \(2M\) » \? ; non ajouté$/);
     assert.match(warnings({ traits: ['Regeneratoin'] })[0], /^Trait inconnu : « Regeneratoin »/);
   });
 
