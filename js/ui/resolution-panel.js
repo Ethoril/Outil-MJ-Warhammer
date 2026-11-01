@@ -91,7 +91,7 @@ import { ROLL_LABELS, renderResult, renderComparison, renderDivineSocialFacts } 
 import { node, button, chip, rubric, outcomePill, signed } from './resolution-panel/dom.js';
 import { renderV5MagicContext } from './resolution-panel/magic.js';
 import { rollField, renderElapsedTime } from './resolution-panel/critical.js';
-import { circumstanceGroup, countActiveCircumstances, circumstanceControls, emptyNpcRolls } from './resolution-panel/dom.js';
+import { circumstanceGroup, countActiveCircumstances, circumstanceControls, emptyNpcRolls, renderConfirmationButtons } from './resolution-panel/dom.js';
 
 /** Stable key of an action within the actor's list (dice lines may lack an id). */
 export function actionKey(action, index) {
@@ -2824,6 +2824,7 @@ export function renderResolutionPanel(options) {
     }
   const elapsed = ['cast','channelling','dispel'].includes(type) ? renderElapsedTime(participants, handlers) : null;
   if (elapsed) addCircumstance('magic-context', elapsed);
+  renderConfirmationButtons(drawer);
   // Jets
   const rolls = node('div', 'workspace-resolution-rolls');
   // L'incantation et la dissipation se jouent sur Langue (Magick), pas sur l'Intelligence de l'action.

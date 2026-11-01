@@ -1,3 +1,4 @@
+import {chooseConfirmation} from './helpers/confirmation.mjs';
 /** Independent UI gesture control for Courroux 11–15, real app + IndexedDB. */
 import assert from 'node:assert/strict';
 import {createServer} from 'node:http';
@@ -20,8 +21,8 @@ const prepare=async(roll)=>{
  const panel=await openPanel();await panel.getByRole('combobox',{name:'Prière divine',exact:true}).selectOption('divine:blessing:myrmidia:battle');
  assert.equal(await panel.evaluate(el=>el.open),true,'le panneau reste ouvert après sélection de prière');
  await panel.getByRole('checkbox',{name:'Destinataire Allié',exact:true}).check();
- await panel.getByRole('combobox',{name:'Allié · Portée / zone confirmée',exact:true}).selectOption('true');
- await panel.getByRole('combobox',{name:'Le personnage peut prononcer la prière',exact:true}).selectOption('true');
+ await chooseConfirmation(panel.getByRole('group',{name:'Allié · Portée / zone confirmée',exact:true}),'true');
+ await chooseConfirmation(panel.getByRole('group',{name:'Le personnage peut prononcer la prière',exact:true}),'true');
  await panel.getByRole('spinbutton',{name:'Jet de Prière (d100)',exact:true}).fill(String(roll));
  await panel.locator('[data-divine-action="calculate"]').click();return panel;
 };

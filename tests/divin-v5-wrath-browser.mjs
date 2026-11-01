@@ -1,3 +1,4 @@
+import {chooseConfirmation} from './helpers/confirmation.mjs';
 /** Principal acceptance: real application, gestures and native IndexedDB. */
 import assert from 'node:assert/strict';
 import {createServer} from 'node:http';
@@ -19,8 +20,8 @@ const prepare=async(contractId,roll)=>{
  const panel=await openPanel();await panel.getByRole('combobox',{name:'Prière divine',exact:true}).selectOption(contractId);
  assert.equal(await panel.evaluate(el=>el.open),true,'Le panneau ouvert reste ouvert après choix de prière');
  await panel.getByRole('checkbox',{name:'Destinataire Allié',exact:true}).check();
- await panel.getByRole('combobox',{name:'Allié · Portée / zone confirmée',exact:true}).selectOption('true');
- await panel.getByRole('combobox',{name:'Le personnage peut prononcer la prière',exact:true}).selectOption('true');
+ await chooseConfirmation(panel.getByRole('group',{name:'Allié · Portée / zone confirmée',exact:true}),'true');
+ await chooseConfirmation(panel.getByRole('group',{name:'Le personnage peut prononcer la prière',exact:true}),'true');
  await panel.getByRole('spinbutton',{name:'Jet de Prière (d100)',exact:true}).fill(String(roll));
  await panel.getByRole('combobox',{name:'Fin de l’effet (choix du MJ)',exact:true}).selectOption('endOfRound');
  await panel.locator('[data-divine-action="calculate"]').click();return panel;

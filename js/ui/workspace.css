@@ -544,3 +544,8 @@ dialog.tool-sheet.campaign-time-dialog { position:fixed; inset:auto; top:50%; le
 .workspace-action-menu[hidden], .workspace-action-type[hidden] { display: none; }
 .workspace-combat-actions > summary { display: inline-block; cursor: pointer; list-style: none; }
 .workspace-combat-actions > summary::-webkit-details-marker { display: none; }
+
+.workspace-confirmation { display: inline-flex; gap: .35rem; align-items: center; }
+.workspace-confirmation-button { min-height: 40px; padding: .3rem .65rem; border: 1px solid currentColor; border-radius: .35rem; background: transparent; color: inherit; cursor: pointer; }
+.workspace-confirmation-button[aria-pressed="true"] { background: var(--accent, #78532f); color: var(--button-text, #fff); }
+.workspace-confirmation-button:disabled { opacity: .55; cursor: not-allowed; }

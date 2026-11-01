@@ -1,3 +1,4 @@
+import {chooseConfirmation} from './helpers/confirmation.mjs';
 /** T5 acceptance: panneau de prières piloté par le contrat, application réelle, gestes réels, IndexedDB native. */
 import assert from 'node:assert/strict';
 import {createServer} from 'node:http';
@@ -39,7 +40,7 @@ const loadState=async()=>{
 const openPanel=async()=>{const panel=page.locator('[data-divine-panel]');await panel.waitFor();if(!await panel.evaluate(el=>el.open))await panel.locator('summary').first().click();return panel;};
 const choose=async(panel,contractId)=>{await panel.getByRole('combobox',{name:'Prière divine',exact:true}).selectOption(contractId);assert.equal(await panel.evaluate(el=>el.open),true,'le panneau reste ouvert');return panel;};
 const baseFields=async(panel,roll=45)=>{
- await panel.getByRole('combobox',{name:'Le personnage peut prononcer la prière',exact:true}).selectOption('true');
+ await chooseConfirmation(panel.getByRole('group',{name:'Le personnage peut prononcer la prière',exact:true}),'true');
  await panel.getByRole('spinbutton',{name:'Jet de Prière (d100)',exact:true}).fill(String(roll));
 };
 const calculate=async panel=>{await panel.locator('[data-divine-action="calculate"]').click();return panel.locator('.workspace-divine-preview');};
@@ -66,8 +67,8 @@ try{
  await panel.getByRole('checkbox',{name:'Destinataire Allié',exact:true}).check();
  const warning=panel.getByText('Allié est un allié du prêtre',{exact:false});
  await warning.waitFor();assert.equal(await warning.getAttribute('role'),'status','l’avertissement de zone est annoncé');
- for(const name of ['Goule','Allié'])await panel.getByRole('combobox',{name:`${name} · Portée / zone confirmée`,exact:true}).selectOption('true');
- await panel.getByRole('combobox',{name:'Allié · Serviteur de la Ruine, orque ou gobelin',exact:true}).selectOption('false');
+ for(const name of ['Goule','Allié'])await chooseConfirmation(panel.getByRole('group',{name:`${name} · Portée / zone confirmée`,exact:true}),'true');
+ await chooseConfirmation(panel.getByRole('group',{name:'Allié · Serviteur de la Ruine, orque ou gobelin',exact:true}),'false');
  await baseFields(panel);
  let preview=await calculate(panel);
  assert.match(await preview.innerText(),/À fournir avant d’appliquer/i);
@@ -104,7 +105,7 @@ try{
  // 2. Retrait d'État avec choix : Secours de Rhya.
  await loadState();panel=await choose(await openPanel(),'divine:miracle:rhya:rhya-s-succour');
  await panel.getByRole('checkbox',{name:'Destinataire Cultiste',exact:true}).check();
- await panel.getByRole('combobox',{name:'Cultiste · Portée / zone confirmée',exact:true}).selectOption('true');
+ await chooseConfirmation(panel.getByRole('group',{name:'Cultiste · Portée / zone confirmée',exact:true}),'true');
  await baseFields(panel);
  preview=await calculate(panel);
  assert.match(await preview.innerText(),/État retiré chez Cultiste|Cultiste/);
@@ -145,7 +146,7 @@ try{
  // 4. Durée calendaire : l'échéance vient de l'horloge de jeu.
  await loadState();panel=await choose(await openPanel(),'divine:miracle:morr:stay-morr-s-hand');
  await panel.getByRole('checkbox',{name:'Destinataire Allié',exact:true}).check();
- for(const label of ['Cible à portée de contact','À 0 Blessure','Consentante'])await panel.getByRole('combobox',{name:`Allié · ${label}`,exact:true}).selectOption('true');
+ for(const label of ['Cible à portée de contact','À 0 Blessure','Consentante'])await chooseConfirmation(panel.getByRole('group',{name:`Allié · ${label}`,exact:true}),'true');
  await baseFields(panel);
  preview=await calculate(panel);
  await waitFor(async()=>/Échéance calendaire : 6 h de temps de campagne/.test(await preview.innerText().catch(()=>'')),'échéance calendaire');
@@ -155,7 +156,7 @@ try{
  // 5. Bénédiction (régression) : le formulaire historique reste utilisable.
  await loadState();panel=await choose(await openPanel(),'divine:blessing:sigmar:battle');
  await panel.getByRole('checkbox',{name:'Destinataire Allié',exact:true}).check();
- await panel.getByRole('combobox',{name:'Allié · Portée / zone confirmée',exact:true}).selectOption('true');
+ await chooseConfirmation(panel.getByRole('group',{name:'Allié · Portée / zone confirmée',exact:true}),'true');
  await baseFields(panel);await panel.getByRole('combobox',{name:'Fin de l’effet (choix du MJ)',exact:true}).selectOption('endOfRound');
  preview=await calculate(panel);await waitFor(async()=>!await panel.locator('[data-divine-action="apply"]').isDisabled(),'bénédiction prête');
  await panel.locator('summary',{hasText:'Extensions de la prière'}).click();

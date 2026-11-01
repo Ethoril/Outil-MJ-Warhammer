@@ -1,3 +1,4 @@
+import {chooseBoolean} from './helpers/confirmation.mjs';
 import { openU1Settings, closeU1Drawer } from './helpers/u1-drawer.mjs';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
@@ -110,7 +111,7 @@ try{
  await p.evaluate(()=>document.documentElement.setAttribute('data-theme','dark'));await customAction(p);
  await expect(panel(p).getByLabel('Compétence de ce Test pour les talents',{exact:true})).toBeDisabled();
  await enterRolls(p,61);await expect(applyButton(p)).toBeDisabled();await expect(panel(p)).toContainText('Orateur : Le Test sert à influencer un groupe — à préciser.');
- await panel(p).getByLabel('Le Test sert à influencer un groupe',{exact:true}).selectOption('true');await enterRolls(p,61);
+ await chooseBoolean(panel(p).getByLabel('Le Test sert à influencer un groupe',{exact:true}),'true');await enterRolls(p,61);
  await expect(panel(p).locator('input[name="v5-choice-actor"]')).toHaveCount(2);await panel(p).locator('input[name="v5-choice-actor"][value="reverse"]').check();
  const chosen=await preview(p);assert.equal(chosen.roll,16);assert.equal(chosen.sl,4);await expect(applyButton(p)).toBeEnabled();const rev=await p.evaluate(()=>window.lot2UI.store.getLocalRevision());
  await applyButton(p).click();await expect.poll(()=>p.evaluate(()=>window.lot2UI.applyResults.at(-1)?.status)).toBe('applied');assert.equal(await p.evaluate(()=>window.lot2UI.store.getLocalRevision()),rev+1);
@@ -128,7 +129,7 @@ try{
  const strike=await setup({width:390,actorMomentum:false,actorTalents:[owned('talent-strike-to-stun')]});const s=strike.page;
  await s.evaluate(()=>document.documentElement.setAttribute('data-theme','dark'));await s.evaluate(async()=>{await window.lot2UI.store.updateParticipant('target',{hp:40,maxHp:40,caracs:{CC:60,E:30,Ag:40},armor:{head:0,body:0,arms:0,legs:0}});});
  await customAction(s,{name:'Corps à corps (Bagarre)',type:'attack',base:60,damage:3});await defenseCC(s);
- await openU1Settings(s);await s.getByLabel('Arme improvisée (Frappe assommante)',{exact:true}).selectOption('true');await s.getByLabel('Test de neutralisation silencieuse (page 135)',{exact:true}).selectOption('false');await s.getByLabel('Coup ciblé (−2 DR, hors modificateur saisi)',{exact:true}).selectOption('false');
+ await openU1Settings(s);await chooseBoolean(s.getByLabel('Arme improvisée (Frappe assommante)',{exact:true}),'true');await chooseBoolean(s.getByLabel('Test de neutralisation silencieuse (page 135)',{exact:true}),'false');await chooseBoolean(s.getByLabel('Coup ciblé (−2 DR, hors modificateur saisi)',{exact:true}),'false');
  await enterRolls(s,10,40);const stunPreview=await preview(s);assert.equal(stunPreview.damage.finalDamage,3);assert.equal(stunPreview.weaponConditions.applied[0].level,1);await expect(applyButton(s)).toBeEnabled();
  await applyButton(s).click();await expect.poll(()=>s.evaluate(()=>window.lot2UI.applyResults.at(-1)?.status)).toBe('applied');assert.equal(await s.evaluate(()=>window.lot2UI.store.listParticipants().find(row=>row.id==='target').states.find(row=>row.key==='sonne').level),1);
  await s.getByRole('button',{name:'Annuler la dernière commande'}).click();await expect.poll(()=>s.evaluate(()=>window.lot2UI.store.listParticipants().find(row=>row.id==='target').hp)).toBe(40);assert.equal(await s.evaluate(()=>window.lot2UI.store.listParticipants().find(row=>row.id==='target').states.length),0);
@@ -136,8 +137,8 @@ try{
 
  const silent=await setup({width:390,actorMomentum:false,actorTalents:[owned('talent-strike-to-stun')]});const q=silent.page;
  await customAction(q,{name:'Corps à corps (Bagarre)',type:'opposition',base:60});await panel(q).getByRole('button',{name:'Défenseur de recette',exact:true}).click();
- await openU1Settings(q);await q.getByLabel('Nature du Test',{exact:true}).selectOption('melee');await q.getByLabel('Test de neutralisation silencieuse (page 135)',{exact:true}).selectOption('true');
- await q.getByLabel('Procédure hors combat',{exact:true}).selectOption('true');await q.getByLabel('Cible ignorant le danger',{exact:true}).selectOption('true');
+ await openU1Settings(q);await q.getByLabel('Nature du Test',{exact:true}).selectOption('melee');await chooseBoolean(q.getByLabel('Test de neutralisation silencieuse (page 135)',{exact:true}),'true');
+ await chooseBoolean(q.getByLabel('Procédure hors combat',{exact:true}),'true');await chooseBoolean(q.getByLabel('Cible ignorant le danger',{exact:true}),'true');
  await closeU1Drawer(q);await panel(q).locator('[data-focus-key="defense-stat"]').selectOption('E');await expect(q.getByLabel('Nature de la défense',{exact:true})).toHaveValue('test');await enterRolls(q,61,22);
  await expect(panel(q).locator('input[name="v5-choice-actor"]')).toHaveCount(2);await panel(q).locator('input[name="v5-choice-actor"][value="reverse"]').check();const qp=await preview(q);assert.equal(qp.roll,16);assert.equal(qp.damage,null);assert.equal(qp.critical,null);assert.equal(qp.defenderCritical,null);assert.deepEqual(qp.unresolved,[]);await expect(panel(q).locator('[data-roll-input*="critical"]')).toHaveCount(0);assert.ok(qp.reminders.some(row=>/Inconscient/.test(row)));
  await expect(applyButton(q)).toBeEnabled();await applyButton(q).click();await expect.poll(()=>q.evaluate(()=>window.lot2UI.applyResults.at(-1)?.status)).toBe('applied');assert.equal(await participantHP(q,'target'),12);assert.equal(await q.evaluate(()=>window.lot2UI.store.listParticipants().find(row=>row.id==='target').states.length),0);assert.equal(await q.evaluate(()=>window.lot2UI.store.listParticipants().find(row=>row.id==='actor').extensions.v5.hasMomentum),false);assert.equal(await participantHP(q,'actor'),12);assert.equal(await q.evaluate(()=>window.lot2UI.store.listParticipants().find(row=>row.id==='actor').states.length),0);assert.equal(await q.evaluate(()=>window.lot2UI.store.listParticipants().find(row=>row.id==='target').extensions.v5.hasMomentum),false);

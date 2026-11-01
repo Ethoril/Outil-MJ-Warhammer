@@ -1,3 +1,4 @@
+import {chooseConfirmation} from './helpers/confirmation.mjs';
 /** P4c B4 : invocations divines (Hurlement du loup, Roi de la Nature, Œil de l'aigle), application réelle, gestes réels, IndexedDB native. */
 import assert from 'node:assert/strict';
 import {createServer} from 'node:http';
@@ -49,7 +50,7 @@ const loadState=async()=>{
 const openPanel=async()=>{const panel=page.locator('[data-divine-panel]');await panel.waitFor();if(!await panel.evaluate(el=>el.open))await panel.locator('summary').first().click();return panel;};
 const choose=async(panel,contractId)=>{await panel.getByRole('combobox',{name:'Prière divine',exact:true}).selectOption(contractId);return panel;};
 const baseFields=async(panel,roll=45)=>{
- await panel.getByRole('combobox',{name:'Le personnage peut prononcer la prière',exact:true}).selectOption('true');
+ await chooseConfirmation(panel.getByRole('group',{name:'Le personnage peut prononcer la prière',exact:true}),'true');
  await panel.getByRole('spinbutton',{name:'Jet de Prière (d100)',exact:true}).fill(String(roll));
 };
 const calculate=async panel=>{await panel.locator('[data-divine-action="calculate"]').click();const preview=panel.locator('.workspace-divine-preview');await preview.waitFor();return preview;};
@@ -72,7 +73,7 @@ const shots=async prefix=>{
 const castHowl=async({roll=45}={})=>{
  const panel=await choose(await openPanel(),HOWL);
  assert.equal(await panel.getByRole('checkbox',{name:/^Destinataire /}).count(),0,'cible implicite : aucune case à cocher');
- const range=panel.getByRole('combobox',{name:'Prêtresse · Portée / zone confirmée',exact:true});if(await range.count())await range.selectOption('true');
+ const range=panel.getByRole('group',{name:'Prêtresse · Portée / zone confirmée',exact:true});if(await range.count())await chooseConfirmation(range,'true');
  await baseFields(panel,roll);
  await panel.getByRole('combobox',{name:'Fin de l’effet (choix du MJ)',exact:true}).selectOption('endOfTurn');
  const preview=await calculate(panel);
@@ -160,7 +161,7 @@ try{
  // 2. Roi de la Nature : animal parmi la liste fermée, position saisie, durée en minutes sur l'horloge de campagne.
  await loadState();panel=await choose(await openPanel(),KING);
  assert.equal(await panel.getByRole('checkbox',{name:/^Destinataire /}).count(),0,'cible implicite : aucune case à cocher');
- const kingRange=panel.getByRole('combobox',{name:'Prêtresse · Portée / zone confirmée',exact:true});if(await kingRange.count())await kingRange.selectOption('true');
+ const kingRange=panel.getByRole('group',{name:'Prêtresse · Portée / zone confirmée',exact:true});if(await kingRange.count())await chooseConfirmation(kingRange,'true');
  await baseFields(panel);
  assert.equal(await panel.getByRole('combobox',{name:'Fin de l’effet (choix du MJ)',exact:true}).count(),0,'durée en minutes : pas de fin de Round à choisir');
  const beast=panel.getByRole('combobox',{name:'Bête invoquée',exact:true}),position=panel.getByRole('textbox',{name:'Position d’apparition',exact:true});
@@ -207,7 +208,7 @@ try{
  // 3. Œil de l'aigle : capteur hors ordre, absent de la piste des Tours.
  await loadState();panel=await choose(await openPanel(),EAGLE);
  assert.equal(await panel.getByRole('checkbox',{name:/^Destinataire /}).count(),0,'Œil de l’aigle : aucune case à cocher');
- const eagleRange=panel.getByRole('combobox',{name:'Prêtresse · Portée / zone confirmée',exact:true});if(await eagleRange.count())await eagleRange.selectOption('true');
+ const eagleRange=panel.getByRole('group',{name:'Prêtresse · Portée / zone confirmée',exact:true});if(await eagleRange.count())await chooseConfirmation(eagleRange,'true');
  await baseFields(panel);await panel.getByRole('combobox',{name:'Fin de l’effet (choix du MJ)',exact:true}).selectOption('endOfRound');
  preview=await calculate(panel);assert.match(await preview.innerText(),/capteur hors de l’ordre du combat/);
  await apply(panel);await waitFor(async()=>(await summons()).length===1,'capteur créé');

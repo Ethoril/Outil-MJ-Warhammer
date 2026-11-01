@@ -1,3 +1,4 @@
+import {chooseBoolean} from './helpers/confirmation.mjs';
 import { openU1Settings } from './helpers/u1-drawer.mjs';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
@@ -148,7 +149,7 @@ try {
   },origin);
   await quickPage.getByRole('button',{name:'Jet rapide V5'}).click();assert.equal(await quickPage.evaluate(()=>window.quickResult.status),'requires-resolution');assert.equal(await quickPage.evaluate(()=>window.quickOpened),true);await expect(panel(quickPage).locator('[data-roll-input="attack"]')).toHaveValue('62');assert.equal(await quickPage.evaluate(()=>window.randomDraws),1);
   await openU1Settings(panel(quickPage));
-  await panel(quickPage).getByText('Circonstances des Tests',{exact:true}).click();await panel(quickPage).getByLabel('Le Test implique un mouvement',{exact:true}).selectOption('false');await panel(quickPage).getByLabel('Sources supplémentaires d’Avantage',{exact:true}).fill('1');await quickPage.keyboard.press('Tab');await panel(quickPage).getByRole('button',{name:'Calculer',exact:true}).click();await expect(panel(quickPage).locator('input[name="v5-choice-actor"]')).toHaveCount(2);await panel(quickPage).locator('input[name="v5-choice-actor"][value="reverse"]').check();await expect(panel(quickPage).locator('[data-roll-input="attack"]')).toHaveValue('62');assert.equal(await quickPage.evaluate(()=>window.randomDraws),1);assert.equal(await quickPage.evaluate(()=>window.lot2UI.view.getViewState().resolution.preview.roll),26);await quickResume.context.close();
+  await panel(quickPage).getByText('Circonstances des Tests',{exact:true}).click();await chooseBoolean(panel(quickPage).getByLabel('Le Test implique un mouvement',{exact:true}),'false');await panel(quickPage).getByLabel('Sources supplémentaires d’Avantage',{exact:true}).fill('1');await quickPage.keyboard.press('Tab');await panel(quickPage).getByRole('button',{name:'Calculer',exact:true}).click();await expect(panel(quickPage).locator('input[name="v5-choice-actor"]')).toHaveCount(2);await panel(quickPage).locator('input[name="v5-choice-actor"][value="reverse"]').check();await expect(panel(quickPage).locator('[data-roll-input="attack"]')).toHaveValue('62');assert.equal(await quickPage.evaluate(()=>window.randomDraws),1);assert.equal(await quickPage.evaluate(()=>window.lot2UI.view.getViewState().resolution.preview.roll),26);await quickResume.context.close();
 
   // Two players each select their own voluntary inversion. Defender advice minimizes received wounds.
   const dual = await setup({ both: true }); const q = dual.page;
@@ -203,19 +204,19 @@ try {
 
   // Conditions have fully accessible contextual selectors; legacy modifiers need a conscious DR choice.
   const contexts = await setup({ states: [{ name: 'Brisé', level: 1 }, { name: 'Enchevêtré', level: 1 }, { name: 'Aveuglé', level: 1 }] }); const x = contexts.page;
-  await panel(x).locator('[data-action-key="search"]').click(); await panel(x).locator('[data-broken-escape-visibility="resolution"]').selectOption('false'); await enterRolls(x, 23);
-  await panel(x).getByText('Circonstances des Tests', { exact: true }).evaluate(el => { el.closest('details').open = true; }); await panel(x).getByLabel('Le Test consomme l’Action du Tour', { exact: true }).selectOption('false'); await panel(x).getByText('Circonstances des Tests', { exact: true }).evaluate(el => { el.closest('details').open = true; }); await enterRolls(x, 23);
+  await panel(x).locator('[data-action-key="search"]').click(); await chooseBoolean(panel(x).locator('[data-broken-escape-visibility="resolution"]'),'false'); await enterRolls(x, 23);
+  await panel(x).getByText('Circonstances des Tests', { exact: true }).evaluate(el => { el.closest('details').open = true; }); await chooseBoolean(panel(x).getByLabel('Le Test consomme l’Action du Tour', { exact: true }),'false'); await panel(x).getByText('Circonstances des Tests', { exact: true }).evaluate(el => { el.closest('details').open = true; }); await enterRolls(x, 23);
   await expect(panel(x)).toContainText('Préciser si le Test implique un mouvement'); await expect(applyButton(x)).toBeDisabled();
   await panel(x).getByText('Circonstances des Tests', { exact: true }).evaluate(el => { el.closest('details').open = true; });
   for (const name of ['Le Test consomme l’Action du Tour','Le Test implique un mouvement','Le Test sert à fuir ou se cacher','Le Test est réalisable sans voir mais repose sur la vue']) {
-    await panel(x).getByLabel(name, { exact: true }).selectOption('false');
+    await chooseBoolean(panel(x).getByLabel(name, { exact: true }),'false');
     await panel(x).getByText('Circonstances des Tests', { exact: true }).evaluate(el => { el.closest('details').open = true; });
   }
   await enterRolls(x, 23); await expect(applyButton(x)).toBeEnabled();
   await panel(x).locator('[data-action-key="legacy"]').click();
   for (const name of ['Le Test consomme l’Action du Tour','Le Test implique un mouvement','Le Test sert à fuir ou se cacher','Le Test est réalisable sans voir mais repose sur la vue']) {
     await panel(x).getByText('Circonstances des Tests', { exact: true }).evaluate(el => { el.closest('details').open = true; });
-    await panel(x).getByLabel(name, { exact: true }).selectOption('false');
+    await chooseBoolean(panel(x).getByLabel(name, { exact: true }),'false');
   }
   await enterRolls(x, 23);
   await expect(panel(x)).toContainText('Ancien modificateur de seuil'); await expect(applyButton(x)).toBeDisabled();

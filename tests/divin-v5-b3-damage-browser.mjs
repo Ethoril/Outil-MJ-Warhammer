@@ -1,3 +1,4 @@
+import {chooseConfirmation} from './helpers/confirmation.mjs';
 /** B03 : saisie réelle, projection inerte et transaction persistée du Courroux. */
 import assert from 'node:assert/strict';
 import {createServer} from 'node:http';
@@ -30,8 +31,8 @@ try{
  await panel.getByRole('combobox',{name:'Culte',exact:true}).selectOption('Myrmidia');
  await panel.getByRole('combobox',{name:'Prière divine',exact:true}).selectOption('divine:blessing:myrmidia:battle');
  await panel.getByRole('checkbox',{name:'Destinataire Allié B03',exact:true}).check();
- const range=panel.getByRole('combobox',{name:'Allié B03 · Portée / zone confirmée',exact:true});if(await range.count())await range.selectOption('true');
- await panel.getByRole('combobox',{name:'Le personnage peut prononcer la prière',exact:true}).selectOption('true');
+ const range=panel.getByRole('group',{name:'Allié B03 · Portée / zone confirmée',exact:true});if(await range.count())await chooseConfirmation(range,'true');
+ await chooseConfirmation(panel.getByRole('group',{name:'Le personnage peut prononcer la prière',exact:true}),'true');
  await panel.getByRole('spinbutton',{name:'Jet de Prière (d100)',exact:true}).fill('99');
  const before=await snapshot();await panel.locator('[data-divine-action="calculate"]').click();
  await panel.getByRole('spinbutton',{name:'Jet de Courroux (d100)',exact:true}).fill('31');await panel.locator('[data-divine-action="calculate"]').click();

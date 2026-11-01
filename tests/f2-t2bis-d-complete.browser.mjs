@@ -1,3 +1,4 @@
+import {chooseBoolean, confirmationValue} from './helpers/confirmation.mjs';
 import { openU1Settings, openU1Types } from './helpers/u1-drawer.mjs';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
@@ -54,7 +55,7 @@ try{
   // Armure d’inventaire + Taille : localisation du Corps ciblée, baisse du PA
   // de la seule pièce nommée, avec le vrai calcul et l’application Store.
   await selectAttack('d-cut');await play.getByText('Protection et bouclier pour cette attaque').click();
-  await play.getByLabel('Coup ciblé (−2 DR, hors modificateur saisi)').selectOption('true');await play.getByLabel('Localisation du coup ciblé').selectOption('body');
+  await chooseBoolean(play.getByLabel('Coup ciblé (−2 DR, hors modificateur saisi)'),'true');await play.getByLabel('Localisation du coup ciblé').selectOption('body');
   await play.getByLabel('Taille : pièce d’armure ou bouclier frappé').selectOption('d-mail');
   await enterRoll(31);let preview=await play.locator('.workspace-result-live').innerText();assert.match(preview,/Touché · Corps/u);await apply();
   let state=await read(),foe=state.combat.participants.find(row=>row.id===target.id);assert.equal(foe.extensions.v5.armorDamageByItem?.['d-mail'],1,'Taille diminue de 1 PA la pièce d’inventaire touchée');
@@ -65,15 +66,15 @@ try{
   for(const [location,side,covered] of [['head','left',true],['body','left',true],['leftArm','left',true],['rightArm','left',false],['leftLeg','left',false],['rightLeg','left',false]]){
     await selectAttack('d-plain-action');await openProtection();
     await play.getByLabel('Bouclier utilisé').selectOption('d-shield');await openProtection();await play.getByLabel('Bouclier attaché au bras ou en bandoulière').check();await openProtection();await play.getByLabel('Bras non directeur').selectOption(side);
-    for(const label of ['Bouclier disponible ce tour','Défense opposée avec ce bouclier','Attaquant visible']){await openProtection();await play.getByLabel(label).selectOption('true');}
-    await play.getByLabel('Coup ciblé (−2 DR, hors modificateur saisi)').selectOption('true');await play.getByLabel('Localisation du coup ciblé').selectOption(location);
+    for(const label of ['Bouclier disponible ce tour','Défense opposée avec ce bouclier','Attaquant visible']){await openProtection();await chooseBoolean(play.getByLabel(label),'true');}
+    await chooseBoolean(play.getByLabel('Coup ciblé (−2 DR, hors modificateur saisi)'),'true');await play.getByLabel('Localisation du coup ciblé').selectOption(location);
     await enterRoll(31);preview=await play.locator('.workspace-result-live').innerText();assert.match(preview,/Touché/u,`localisation ${location}: aperçu d’attaque visible`);
     await play.getByText('Détail des calculs et règles').click();const calculations=await play.locator('.workspace-v5-calculations').innerText();assert.match(calculations,new RegExp(`Protection retenue : ${covered?3:1} PA`),`PA attachés sur ${location} (cotte dégradée à 1 PA)`);
     await apply();state=await read();foe=state.combat.participants.find(row=>row.id===target.id);assert.ok(foe,'cible conservée après attaque');
   }
   // Seuil V5 de 2 PA pour opposer un tir par Esquive : le bouclier attaché à
   // 2 PA autorise le jet, le même profil à 1 PA ne permet pas cette opposition.
-  const checkShieldShot=async ap=>{const shieldTarget={...structuredClone(targetBase),equipment:[{id:'shot-shield',kind:'shield',name:'Bouclier seuil',ap,locations:[],keywords:[{id:'bouclier'}]}]};await load(combat(actor,shieldTarget));await selectAttack('d-bolas-action');await play.getByLabel(`Défense de ${shieldTarget.name} : caractéristique ou jet`).selectOption('Ag');await openProtection();await play.getByLabel('Bouclier utilisé').selectOption('shot-shield');await openProtection();await play.getByLabel('Bouclier attaché au bras ou en bandoulière').check();await openProtection();await play.getByLabel('Bras non directeur').selectOption('left');for(const label of ['Bouclier disponible ce tour','Défense opposée avec ce bouclier','Attaquant visible']){await openProtection();await play.getByLabel(label).selectOption('true');}await enterAttackAndDefense(31,20);return play.locator('.workspace-result-live').innerText();};
+  const checkShieldShot=async ap=>{const shieldTarget={...structuredClone(targetBase),equipment:[{id:'shot-shield',kind:'shield',name:'Bouclier seuil',ap,locations:[],keywords:[{id:'bouclier'}]}]};await load(combat(actor,shieldTarget));await selectAttack('d-bolas-action');await play.getByLabel(`Défense de ${shieldTarget.name} : caractéristique ou jet`).selectOption('Ag');await openProtection();await play.getByLabel('Bouclier utilisé').selectOption('shot-shield');await openProtection();await play.getByLabel('Bouclier attaché au bras ou en bandoulière').check();await openProtection();await play.getByLabel('Bras non directeur').selectOption('left');for(const label of ['Bouclier disponible ce tour','Défense opposée avec ce bouclier','Attaquant visible']){await openProtection();await chooseBoolean(play.getByLabel(label),'true');}await enterAttackAndDefense(31,20);return play.locator('.workspace-result-live').innerText();};
   const shieldTwoPa=await checkShieldShot(2);assert.doesNotMatch(shieldTwoPa,/Confirmer la règle autorisant cette défense contre un tir/u,'2 PA autorisent l’opposition à distance par Esquive');
   const shieldOnePa=await checkShieldShot(1);assert.match(shieldOnePa,/Confirmer la règle autorisant cette défense contre un tir/u,'1 PA ne permet pas l’opposition à distance par Esquive');
   // Filet à crochets : le Test de Force d’évasion exige l’opposition du filet,
@@ -95,9 +96,9 @@ try{
 
   // Bolas : un coup au Corps ne déclenche pas la condition « jambes seulement »;
   // un coup aux jambes ajoute Empêtré et À terre via la résolution appliquée.
-  await selectAttack('d-bolas-action');await play.getByLabel('Coup ciblé (−2 DR, hors modificateur saisi)').selectOption('true');await play.getByLabel('Localisation du coup ciblé').selectOption('body');await enterRoll(31);await apply();
+  await selectAttack('d-bolas-action');await chooseBoolean(play.getByLabel('Coup ciblé (−2 DR, hors modificateur saisi)'),'true');await play.getByLabel('Localisation du coup ciblé').selectOption('body');await enterRoll(31);await apply();
   state=await read();foe=state.combat.participants.find(row=>row.id===target.id);assert.equal(foe.states.some(row=>row.key==='enchevetre'),false,'Bolas au Corps : aucun Empêtré');assert.equal(foe.states.some(row=>row.key==='aterre'),false,'Bolas au Corps : aucun À terre');
-  await selectAttack('d-bolas-action');await play.getByLabel('Coup ciblé (−2 DR, hors modificateur saisi)').selectOption('true');await play.getByLabel('Localisation du coup ciblé').selectOption('leftLeg');await enterRoll(31);await apply();
+  await selectAttack('d-bolas-action');await chooseBoolean(play.getByLabel('Coup ciblé (−2 DR, hors modificateur saisi)'),'true');await play.getByLabel('Localisation du coup ciblé').selectOption('leftLeg');await enterRoll(31);await apply();
   state=await read();foe=state.combat.participants.find(row=>row.id===target.id);assert.equal(foe.states.some(row=>row.key==='enchevetre'),true,'Bolas aux jambes : Empêtré appliqué');assert.equal(foe.states.some(row=>row.key==='a-terre'),true,'Bolas aux jambes : À terre appliqué');
 
   // Empaleuse sur arc avec aucune munition suivie : chemin générique non bloqué,
@@ -113,8 +114,8 @@ try{
   // un chargeur. La Poivrière réclame son fait de seconde main dans le panneau.
   await play.getByLabel('Capacité arbitrée — Mitrailleuse Ratling Skaven').fill('6');await play.getByRole('button',{name:'Enregistrer l’arbitrage'}).first().click();
   state=await read();let ratling=state.combat.participants.find(row=>row.id===actor.id).equipment.find(row=>row.id==='d-ratling');assert.equal(ratling.extensions.v5.reloadState.repeaterRating,6,'arbitrage Ratling persisté par le Store');
-  await selectAttack('d-pepper-action');assert.equal(await play.getByLabel('Seconde main libre pour préparer le canon de la Poivrière').inputValue(),'','la Poivrière exige une réponse explicite');
-  await play.getByLabel('Seconde main libre pour préparer le canon de la Poivrière').selectOption('false');await enterRoll(31);preview=await play.locator('.workspace-result-live').innerText();assert.match(preview,/Touché/u);await apply();
+  await selectAttack('d-pepper-action');assert.equal(await confirmationValue(play.getByLabel('Seconde main libre pour préparer le canon de la Poivrière')),'','la Poivrière exige une réponse explicite');
+  await chooseBoolean(play.getByLabel('Seconde main libre pour préparer le canon de la Poivrière'),'false');await enterRoll(31);preview=await play.locator('.workspace-result-live').innerText();assert.match(preview,/Touché/u);await apply();
   state=await read();let pepper=state.combat.participants.find(row=>row.id===actor.id).equipment.find(row=>row.id==='d-pepper');assert.equal(pepper.extensions.v5.reloadState.requiresReload,true,'main occupée : le tir perd À répétition et impose une recharge complète (L13 p.103, T2 bis)');
   assert.ok(await play.getByLabel('Rechargement des armes').count(),'panneau Recharge visible dans l’application');
 

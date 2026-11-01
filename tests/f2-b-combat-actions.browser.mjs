@@ -1,3 +1,4 @@
+import {chooseConfirmation} from './helpers/confirmation.mjs';
 import { openU1Settings, openU1TurnActions } from './helpers/u1-drawer.mjs';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
@@ -210,7 +211,7 @@ try {
   await actorCard.click();
   await openResolutionSettings();
   await combat.getByRole('combobox', { name: 'Nature du Test' }).selectOption('ranged');
-  await combat.getByRole('combobox', { name: 'La cible est engagée au corps à corps (Désavantage au tir)' }).selectOption('true');
+  await chooseConfirmation(combat.getByRole('group', { name: 'La cible est engagée au corps à corps (Désavantage au tir)' }), 'true');
   await combat.getByRole('checkbox', { name: 'Engagé avec la cible : Allié' }).check();
   await combat.getByRole('spinbutton', { name: 'Jet d100 pour désigner le combattant touché' }).fill('80');
   await combat.getByRole('spinbutton', { name: 'Jet d100 pour désigner le combattant touché' }).press('Tab');

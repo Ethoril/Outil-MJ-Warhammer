@@ -1,3 +1,4 @@
+import {chooseConfirmation} from './helpers/confirmation.mjs';
 /** B02 : vrai panneau, IndexedDB native, attribution humaine puis Prière elfique. */
 import assert from 'node:assert/strict';
 import {createServer} from 'node:http';
@@ -53,8 +54,8 @@ try{
  await panel.getByRole('combobox',{name:'Culte',exact:true}).selectOption('Mathlann');
  await panel.getByRole('combobox',{name:'Prière divine',exact:true}).selectOption(MATH);
  await panel.getByRole('checkbox',{name:'Destinataire Prêtre mixte',exact:true}).check();
- const range=panel.getByRole('combobox',{name:'Prêtre mixte · Portée / zone confirmée',exact:true});if(await range.count())await range.selectOption('true');
- await panel.getByRole('combobox',{name:'Le personnage peut prononcer la prière',exact:true}).selectOption('true');
+ const range=panel.getByRole('group',{name:'Prêtre mixte · Portée / zone confirmée',exact:true});if(await range.count())await chooseConfirmation(range,'true');
+ await chooseConfirmation(panel.getByRole('group',{name:'Le personnage peut prononcer la prière',exact:true}),'true');
  await panel.getByRole('spinbutton',{name:'Jet de Prière (d100)',exact:true}).fill('99');
  await panel.locator('[data-divine-action="calculate"]').click();
  assert.match(await panel.locator('.workspace-divine-preview').innerText(),/Prière ratée/);

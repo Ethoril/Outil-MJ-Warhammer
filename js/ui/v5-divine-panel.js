@@ -7,6 +7,7 @@ import {defaultFirstMorningAt} from '../core/v5-game-time.js';
 import {resolveV5ConditionTestContext} from '../core/v5-test-context.js';
 import {isBrokenActor,renderBrokenEscapeVisibilityControl} from './v5-broken-escape-panel.js';
 import {d100} from '../core/dice.js';
+import {renderConfirmationButtons} from './resolution-panel/dom.js';
 import {emptyDivineForm,defaultDivineSelection,confirmRangeByDefault,buildDivineForm,toEngineInput,buildExpiry,isSelfTargeted,classifyNeeds,describeEffectResult,summonLayerLabel,summarizeExecution,deadlineLines,formatCampaignTime,fieldValue,setFieldValue,focusKey} from './v5-divine-form-model.js';
 const node=(tag,klass,text)=>{const el=document.createElement(tag);if(klass)el.className=klass;if(text!==undefined)el.textContent=text;return el;};
 const clone=value=>structuredClone(value);
@@ -331,9 +332,10 @@ export function createDivinePanel({Store,refresh,onRollChange=()=>{}}){
   const source=contract.source;
   const sourceLabel=source?.document?`${source.document}${source.edition?' · '+source.edition:''}${source.printedPage?' · p. '+[].concat(source.printedPage).join(', '):''}`:'Source originale non retrouvée';
   content.append(node('p','workspace-muted','Source : '+sourceLabel+(source?.sourceStatus==='found-adaptation-blocked'?' · adaptation V4 retrouvée, contrat V5 bloqué jusqu’à arbitrage.':'')));
-  if(!concerned){
+  if(divineSinPolicy(contract).exempt){
    content.append(node('p','workspace-muted',`${contract.deity} : culte elfe exempt du Péché et du Courroux (Guide des Hauts Elfes, p. 99).`));
-  }else{
+  }
+  if(!divineSinPolicy(contract).exempt){
    const sin=node('details','workspace-v5-context-details');sin.append(node('summary','','Péchés : '+(actor.extensions?.v5?.divine?.sin??'à renseigner')));if(state.sinOpen)sin.open=true;sin.addEventListener('toggle',()=>{state.sinOpen=sin.open;});content.append(sin);
    field(sin,'Total de Péchés','sinEdit');field(sin,'Raison de l’ajustement des Péchés','sinReason',{type:'text'});
    button(sin,'Enregistrer les Péchés',()=>run(async()=>{const result=await Store.setDivineSin(actor.id,Number(state.sinEdit),{reason:state.sinReason,cult:contract.deity,baseRevision:Store.getLocalRevision()});if(result?.ok===false)throw Error(result.error||'Péchés non enregistrés.');state.preview=null;}),state.sinEdit==='','sin');
@@ -368,7 +370,7 @@ export function createDivinePanel({Store,refresh,onRollChange=()=>{}}){
   for(const layer of actor.extensions?.v5?.divineEffects||[])if(layer.type==='wrath-skill-penalty')content.append(node('p','workspace-field-error','Courroux : −1 DR à '+layer.skills.map(row=>row.name).join(', ')+' · '+layer.duration.value+(layer.duration.unit==='hours'?' heure(s)':' jour(s)')+' · échéance : '+formatCampaignTime(layer.deadline.atSeconds)+' de temps de campagne · Source L06 p.218.'));
   for(const layer of actor.extensions?.v5?.divineEffects||[])if(layer.type==='wrath-round-rule')content.append(node('p','workspace-field-error',(layer.mode==='ban'?'Prière interdite':'Prière comme Action obligatoire')+' · '+layer.resultId.replace('wrath:','')+' · '+layer.rounds+' Round(s), fin après les effets du Round '+layer.roundDeadline+' · scène '+(layer.roundAnchor.sceneId||'combat local')+' · Source L06 p.218.'));
   const recovery=recoveryPanel(actor,participants);if(recovery)content.append(recovery);
-  if(contract.status==='blocked')return panel;
+  if(contract.status==='blocked'){renderConfirmationButtons(panel);return panel;}
   if(contract.deity==='Solkan'){
    const box=node('div','workspace-divine-corruption');box.append(node('p','workspace-muted','Pureté de Solkan : Péchés et Corruption doivent être connus et nuls. Corruption actuelle : '+(Number.isSafeInteger(actor.extensions?.v5?.corruptionPoints)?actor.extensions.v5.corruptionPoints:'inconnue')+'. Source : Archives of the Empire 3 p.55.'));
    field(box,'Points de Corruption connus','corruptionEdit',{min:0});field(box,'Motif de la valeur de Corruption','corruptionReason',{type:'text'});
@@ -584,6 +586,7 @@ export function createDivinePanel({Store,refresh,onRollChange=()=>{}}){
    content.append(outcome);
   }
   if(state.error){const message=node('p','workspace-field-error',state.error);message.setAttribute('role','alert');content.append(message);}
+  renderConfirmationButtons(panel);
   return panel;
  }};
 }

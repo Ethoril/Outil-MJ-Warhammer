@@ -1,3 +1,4 @@
+import {chooseBoolean} from './helpers/confirmation.mjs';
 import { openU1Settings, closeU1Drawer, clickU1Magic } from './helpers/u1-drawer.mjs';
 import assert from 'node:assert/strict';
 import {createServer} from 'node:http';
@@ -22,9 +23,9 @@ try{
    if(f.requiredWhen)continue;
    if(f.requiredIfOvercast)await field(optionLabel(c.overcast.specific.find(o=>o.id===f.requiredIfOvercast))).fill('1');
    const controls=f.perTarget?page.getByLabel(new RegExp('^'+escape(f.label)+' — ')):field(f.label);assert.ok(await controls.count(),name+' : '+f.label);
-   for(let j=0;j<await controls.count();j++){const control=controls.nth(j);if(f.type==='boolean')await control.selectOption(String(f.expected ?? false));else if(f.type==='select')await control.selectOption(f.options[0][0]);else if(f.type==='targets')await control.selectOption({index:0});else if(f.type==='object')await control.selectOption({index:1});else await control.fill(f.type==='text'?'Objet et contexte déclarés':String(f.key==='delayHoursDie'?5:f.key==='direction'?4:f.key==='behaviourRoll'?9:f.key==='lightHours'?0.25:f.key==='corpseAgeSeconds'?30:f.max===10?5:f.min ?? 1));facts++;}
+   for(let j=0;j<await controls.count();j++){const control=controls.nth(j);if(f.type==='boolean')await chooseBoolean(control,String(f.expected ?? false));else if(f.type==='select')await control.selectOption(f.options[0][0]);else if(f.type==='targets')await control.selectOption({index:0});else if(f.type==='object')await control.selectOption({index:1});else await control.fill(f.type==='text'?'Objet et contexte déclarés':String(f.key==='delayHoursDie'?5:f.key==='direction'?4:f.key==='behaviourRoll'?9:f.key==='lightHours'?0.25:f.key==='corpseAgeSeconds'?30:f.max===10?5:f.min ?? 1));facts++;}
   }
-  for(const selector of ['Pierre : cible non consentante','Bois : cible non consentante','Ailes : cible non consentante']){const control=page.getByLabel(new RegExp('^'+escape(selector)+' — '));if(await control.count()){await control.first().selectOption('true');facts++;}}
+  for(const selector of ['Pierre : cible non consentante','Bois : cible non consentante','Ailes : cible non consentante']){const control=page.getByLabel(new RegExp('^'+escape(selector)+' — '));if(await control.count()){await chooseBoolean(control.first(),'true');facts++;}}
   for(const label of await page.locator('input[aria-label]').evaluateAll(es=>es.map(e=>e.getAttribute('aria-label')).filter(s=>s.startsWith('Sort :')||s.startsWith('Opposition :')))){await field(label).fill('95');facts++;}
   for(const o of c.overcast.specific || []){await field(optionLabel(o)).fill('1');assert.equal(await field(optionLabel(o)).inputValue(),'1');facts++;await field(optionLabel(o)).fill('0');}
   receipts.push({name,controls:(c.effects.facts || []).map(f=>f.label),options:(c.overcast.specific || []).map(o=>o.label)});

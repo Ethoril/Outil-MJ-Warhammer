@@ -1,3 +1,4 @@
+import {chooseBoolean, confirmationValue} from './helpers/confirmation.mjs';
 import { openU1Settings, clickU1Magic } from './helpers/u1-drawer.mjs';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
@@ -168,11 +169,11 @@ try {
     assert.equal(await page.getByLabel('Protection de Guerrier du Chaos : résultat du d10').count(), 1);
     const fire = page.getByLabel('Guerrier du Chaos : feu ?', { exact: true });
     assert.equal(await fire.count(), 1, 'le feu se déclare quand l’Égide en dépend');
-    assert.match(await fire.locator('option').first().innerText(), /Déduit : (oui|non)/);
-    await origin.selectOption('true'); await page.waitForTimeout(250);
-    await page.getByLabel('Guerrier du Chaos : feu ?', { exact: true }).selectOption('false'); await page.waitForTimeout(250);
-    assert.equal(await page.getByLabel('Guerrier du Chaos : origine extérieure à la zone ?', { exact: true }).inputValue(), 'true', 'la première réponse n’est pas perdue');
-    assert.equal(await page.getByLabel('Guerrier du Chaos : feu ?', { exact: true }).inputValue(), 'false');
+    assert.match(await fire.locator('.workspace-confirmation-unset').innerText(), /Déduit : (oui|non)/);
+    await chooseBoolean(origin,'true'); await page.waitForTimeout(250);
+    await chooseBoolean(page.getByLabel('Guerrier du Chaos : feu ?', { exact: true }),'false'); await page.waitForTimeout(250);
+    assert.equal(await confirmationValue(page.getByLabel('Guerrier du Chaos : origine extérieure à la zone ?', { exact: true })), 'true', 'la première réponse n’est pas perdue');
+    assert.equal(await confirmationValue(page.getByLabel('Guerrier du Chaos : feu ?', { exact: true })), 'false');
     await page.getByLabel('Protection de Guerrier du Chaos : résultat du d10').fill('10'); await page.waitForTimeout(150);
     await calc(page, 25);
     const result = await page.locator('.workspace-magic-result').innerText();
@@ -207,12 +208,12 @@ try {
     const { page, context } = await open('attack', { w: 'Dôme' });
     await page.click('[data-action-key="bow-enemy-1"]'); await page.waitForTimeout(300);
     const origin = () => page.getByLabel('Aldous Flammecoeur : origine extérieure à la zone ?', { exact: true });
-    await origin().selectOption('true'); await page.waitForTimeout(250);
+    await chooseBoolean(origin(),'true'); await page.waitForTimeout(250);
     await page.fill('input[aria-label="Protection magique : résultat du d10"]', '3'); await page.waitForTimeout(150);
     await calc(page, 25);
     await page.locator('button[data-focus-key="apply"]', { hasText: /^Appliquer/ }).click(); await page.waitForTimeout(500);
     await page.click('[data-action-key="bow-enemy-1"]'); await page.waitForTimeout(300);
-    assert.equal(await origin().inputValue(), '', 'la nature de l’attaque précédente est oubliée');
+    assert.equal(await confirmationValue(origin()), '', 'la nature de l’attaque précédente est oubliée');
     assert.equal(await page.inputValue('input[aria-label="Protection magique : résultat du d10"]'), '', 'le d10 précédent est oublié');
     await context.close();
   }
@@ -398,14 +399,14 @@ try {
     assert.match(options[1], /Robe scintillante — Guerrier du Chaos \(NI \d+\)/, 'NI explicite dans le libellé');
     await effect.selectOption({ index: 1 }); await page.waitForTimeout(250);
     const visible = page.getByLabel('Sort persistant ou point ciblé visible du dissipateur', { exact: true });
-    assert.equal(await visible.inputValue(), '', 'visibilité non renseignée par défaut');
+    assert.equal(await confirmationValue(visible), '', 'visibilité non renseignée par défaut');
     assert.equal(await page.getByLabel(/^Distance au sort persistant/).inputValue(), '', 'distance vide par défaut');
     await calcAny(page, 53);
     assert.match(await text(page), /Dissipation impossible : Saisir une distance valide/, 'refus sans distance, jamais 0 par défaut');
     await page.getByLabel(/^Distance au sort persistant/).fill('10'); await page.waitForTimeout(150);
     await calcAny(page, 53);
     assert.match(await text(page), /Dissipation impossible : Saisir explicitement la visibilité/, 'refus sans visibilité, jamais « non » par défaut');
-    await visible.selectOption('true'); await page.waitForTimeout(250);
+    await chooseBoolean(visible,'true'); await page.waitForTimeout(250);
     await calcAny(page, 53);
     assert.match(await text(page), /Test étendu : \+\d+ DR ; progression \d+\/\d+ DR/);
     assert.equal(await page.getByLabel('Recommencer la tentative : repartir de zéro DR').count(), 0, 'pas de recommencement tant que le Test n’a pas échoué');
@@ -428,10 +429,10 @@ try {
     await pickSpell(page, 'Carreau');
     await targetOnly(page, 'Guerrier du Chaos');
     await page.getByLabel('Réaction de dissipation adverse', { exact: true }).selectOption('enemy-2'); await page.waitForTimeout(250);
-    assert.equal(await page.getByLabel('Lanceur ou point ciblé visible du dissipateur', { exact: true }).inputValue(), '', 'visibilité non renseignée par défaut');
+    assert.equal(await confirmationValue(page.getByLabel('Lanceur ou point ciblé visible du dissipateur', { exact: true })), '', 'visibilité non renseignée par défaut');
     await page.fill('[data-focus-key="magicDispelRoll"]', '14');
     await page.getByLabel(/^Distance du dissipateur/).fill('10');
-    await page.getByLabel('Lanceur ou point ciblé visible du dissipateur', { exact: true }).selectOption('true'); await page.waitForTimeout(250);
+    await chooseBoolean(page.getByLabel('Lanceur ou point ciblé visible du dissipateur', { exact: true }),'true'); await page.waitForTimeout(250);
     await calc(page, 5);
     const gained = await page.locator('.workspace-magic-result').innerText();
     assert.match(gained, /Opposition de dissipation : Test du lanceur \+6 DR − dissipateur \+5 DR = \+1 DR nets/, gained);
@@ -577,7 +578,7 @@ try {
     const { page, context, errors } = await open('cast', { extra: '&y=' + encodeURIComponent(JSON.stringify({ talents: [{ id: 'talent-lileath-s-blessing', status: 'resolved', rank: 1 }] })) });
     await page.evaluate(async () => { for (const n of ['Protection', 'Dôme']) { const a = window.__TEST__.Store.listParticipants().find(q => q.id === 'enemy-1'); await window.__TEST__.Store.updateParticipant('enemy-1', { extensions: { ...a.extensions, v5: { ...a.extensions.v5, channelling: { type: 'winds', sl: 30 } } } }); await window.__TEST__.Store.applySpellExecution(n, { actorId: 'enemy-1', targetIds: ['enemy-1'], roll: 3, attributeActive: false }); } });
     await pickSpell(page, 'Carreau');
-    await page.getByLabel('Guerrier du Chaos : origine extérieure à la zone ?', { exact: true }).selectOption('true'); await page.waitForTimeout(300);
+    await chooseBoolean(page.getByLabel('Guerrier du Chaos : origine extérieure à la zone ?', { exact: true }),'true'); await page.waitForTimeout(300);
     const wards = page.getByLabel(/^Protection de Guerrier du Chaos.*résultat du d10$/);
     assert.equal(await wards.count(), 2);
     await wards.nth(0).click(); await page.keyboard.type('3'); await wards.nth(1).click(); await page.keyboard.type('4'); await page.waitForTimeout(300);

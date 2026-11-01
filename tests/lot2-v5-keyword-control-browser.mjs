@@ -1,3 +1,4 @@
+import {chooseBoolean} from './helpers/confirmation.mjs';
 import { openU1Settings, closeU1Drawer } from './helpers/u1-drawer.mjs';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
@@ -121,7 +122,7 @@ async function configure(page,{actor,target,actionId}){
  if(actionId)await page.locator('[data-action-key="'+actionId+'"]').click();
 }
 async function criticalInput(page,field,value){if(page.viewportSize().width <= 900)await closeU1Drawer(page);await panel(page).locator('[data-roll-input="'+field+'"]').fill(String(value));await panel(page).getByRole('button',{name:'Calculer',exact:true}).click();}
-async function protectionChoice(page,label,value){await openU1Settings(page);const details=panel(page).locator('details.workspace-defense').filter({has:page.getByText('Protection et bouclier pour cette attaque',{exact:true})});if(await details.getAttribute('open')===null)await details.locator('summary').click();await panel(page).getByLabel(label,{exact:true}).selectOption(value);}
+async function protectionChoice(page,label,value){await openU1Settings(page);const details=panel(page).locator('details.workspace-defense').filter({has:page.getByText('Protection et bouclier pour cette attaque',{exact:true})});if(await details.getAttribute('open')===null)await details.locator('summary').click();await chooseBoolean(panel(page).getByLabel(label,{exact:true}),value);}
 async function capture(page,name){await noOverflow(page);await page.screenshot({path:join(root,'tmp/lot2-keyword-control-ui/'+name),fullPage:true});}
 async function undo(page){if(page.viewportSize().width <= 900)await closeU1Drawer(page);await page.getByRole('button',{name:'Annuler la dernière commande',exact:true}).click();}
 async function apply(page){if(page.viewportSize().width <= 900)await closeU1Drawer(page);await expect(applyButton(page)).toBeEnabled();await applyButton(page).click();await expect.poll(()=>page.evaluate(()=>window.lot2UI.applyResults.at(-1)?.status)).toBe('applied');}

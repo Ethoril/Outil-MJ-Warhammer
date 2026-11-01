@@ -62,10 +62,10 @@ try{
 
  await loadState();const panel=await openPanel();
  assert.equal(await panel.getByRole('combobox',{name:'Culte',exact:true}).inputValue(),'Myrmidia');
- assert.equal(await panel.getByRole('combobox',{name:'Le personnage peut prononcer la prière',exact:true}).inputValue(),'true');
+ assert.equal(await panel.getByRole('group',{name:'Le personnage peut prononcer la prière',exact:true}).getByRole('button',{name:'Oui',exact:true}).getAttribute('aria-pressed'),'true');
  await choose(panel,'divine:blessing:myrmidia:protection');
  await panel.getByRole('checkbox',{name:'Destinataire Allié',exact:true}).check();
- assert.equal(await panel.getByRole('combobox',{name:'Allié · Portée / zone confirmée',exact:true}).inputValue(),'true');
+ assert.equal(await panel.getByRole('group',{name:'Allié · Portée / zone confirmée',exact:true}).getByRole('button',{name:'Oui',exact:true}).getAttribute('aria-pressed'),'true');
  await page.evaluate(()=>{Math.random=()=>0.24});
  await panel.getByRole('button',{name:'Lancer le jet de Prière',exact:true}).click();
  assert.equal(await panel.getByRole('spinbutton',{name:'Jet de Prière (d100)',exact:true}).inputValue(),'25');
@@ -83,6 +83,9 @@ try{
  assert.equal(await bulk.isEnabled(),true,'effacer le jet de prière rend le lancer groupé disponible');
  await page.evaluate(async()=>{const {Store}=await import('/js/main.js');await Store.updateParticipant('priest',{kind:'PJ'});});
  await waitFor(async()=>await page.getByRole('button',{name:'Lancer tous les dés des PNJ',exact:true}).isDisabled(),'jet de PJ non proposé');
+ const voice=panel.getByRole('group',{name:'Le personnage peut prononcer la prière',exact:true});
+ await voice.getByRole('button',{name:'Non',exact:true}).click();assert.equal(await voice.getByRole('button',{name:'Non',exact:true}).getAttribute('aria-pressed'),'true');
+ await voice.getByRole('button',{name:'Oui',exact:true}).click();
  await panel.getByRole('combobox',{name:'Culte',exact:true}).selectOption('Mathlann');
  assert.equal(await panel.getByLabel('Total de Péchés',{exact:true}).count(),0);
  assert.equal(await panel.getByLabel('Mission de pénitence',{exact:true}).count(),0);

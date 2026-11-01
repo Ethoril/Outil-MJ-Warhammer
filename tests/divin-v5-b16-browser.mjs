@@ -1,3 +1,4 @@
+import {chooseConfirmation} from './helpers/confirmation.mjs';
 /** B16 : absolution et pénitence d’Altdorf dans les vrais champs. */
 import assert from 'node:assert/strict';
 import {createServer} from 'node:http';
@@ -23,13 +24,13 @@ try{
  await page.getByRole('tab',{name:'Jouer',exact:true}).click();const actor=page.locator('[data-workspace-select="priest"]');if(await actor.count())await actor.click();const panel=await openPanel();
  const sinOf=async()=>(await snap()).combat.participants.find(r=>r.id==='priest').extensions.v5.divine.sin;
  await panel.getByRole('combobox',{name:'Culte de l’absolution',exact:true}).selectOption('Myrmidia');await panel.getByRole('spinbutton',{name:'Péchés à retirer (décision MJ)',exact:true}).fill('2');await panel.getByRole('textbox',{name:'Motif MJ de l’absolution',exact:true}).fill('Don au temple');await panel.getByRole('button',{name:'Préparer l’absolution',exact:true}).click();
- await panel.getByRole('combobox',{name:'Peut prononcer la Prière de récupération',exact:true}).selectOption('true');await panel.getByRole('spinbutton',{name:'Jet de récupération du Courroux (d100)',exact:true}).fill('35');await panel.locator('[data-divine-action="recovery-calculate"]').click();
+ await chooseConfirmation(panel.getByRole('group',{name:'Peut prononcer la Prière de récupération',exact:true}),'true');await panel.getByRole('spinbutton',{name:'Jet de récupération du Courroux (d100)',exact:true}).fill('35');await panel.locator('[data-divine-action="recovery-calculate"]').click();
  assert.ok((await panel.innerText()).includes('2 Péché(s) seront retirés'));assert.equal(await sinOf(),3,'aperçu inerte');
  for(const width of [1440,390]){await page.setViewportSize({width,height:width===390?844:900});assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'pas de débordement '+width);const file='b16-absolution-'+width+'.png';await page.screenshot({path:resolve(output,file),fullPage:true});receipt.screenshots.push(file);}
  await page.setViewportSize({width:1440,height:900});await panel.locator('[data-divine-action="recovery-apply"]').click();await page.waitForFunction(async()=>{const{Store}=await import('/js/main.js');return Store.listParticipants().find(r=>r.id==='priest').extensions.v5.divine.sin===1;});
  receipt.checks.push('Absolution MJ : Test partagé, 2 Péchés retirés dans les vrais champs, aperçu inerte');
- await panel.getByRole('combobox',{name:'Type d’absolution',exact:true}).selectOption('altdorf');await panel.getByRole('combobox',{name:'Pèlerinage accompli (confirmation MJ)',exact:true}).selectOption('true');await panel.getByRole('button',{name:'Préparer l’absolution',exact:true}).click();
- await panel.getByRole('combobox',{name:'Peut prononcer la Prière de récupération',exact:true}).selectOption('true');await panel.getByRole('spinbutton',{name:'Jet de récupération du Courroux (d100)',exact:true}).fill('97');await panel.locator('[data-divine-action="recovery-calculate"]').click();await panel.locator('[data-divine-action="recovery-apply"]').click();
+ await panel.getByRole('combobox',{name:'Type d’absolution',exact:true}).selectOption('altdorf');await chooseConfirmation(panel.getByRole('group',{name:'Pèlerinage accompli (confirmation MJ)',exact:true}),'true');await panel.getByRole('button',{name:'Préparer l’absolution',exact:true}).click();
+ await chooseConfirmation(panel.getByRole('group',{name:'Peut prononcer la Prière de récupération',exact:true}),'true');await panel.getByRole('spinbutton',{name:'Jet de récupération du Courroux (d100)',exact:true}).fill('97');await panel.locator('[data-divine-action="recovery-calculate"]').click();await panel.locator('[data-divine-action="recovery-apply"]').click();
  await page.waitForFunction(async()=>{const{Store}=await import('/js/main.js');return Store.listParticipants().find(r=>r.id==='priest').states.some(s=>s.name==='Exténué');});assert.equal(await sinOf(),1);
  receipt.checks.push('Pénitence d’Altdorf : échec ordinaire = Exténué, Péchés inchangés');
  await page.reload({waitUntil:'domcontentloaded'});await ready();assert.equal(await sinOf(),1);

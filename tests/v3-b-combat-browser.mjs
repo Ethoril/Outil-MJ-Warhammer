@@ -1,3 +1,4 @@
+import {chooseBoolean} from './helpers/confirmation.mjs';
 import { openU1Settings, openU1Types } from './helpers/u1-drawer.mjs';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
@@ -67,12 +68,12 @@ try {
   // 1. Tir sur un adversaire engagé avec le tireur : se résout comme une mêlée, sans Désavantage de tir dans la mêlée (p.165).
   await load(fixture());
   await prepareShot();
-  await play.getByLabel('La cible est engagée au corps à corps (Désavantage au tir)').selectOption('true');
+  await chooseBoolean(play.getByLabel('La cible est engagée au corps à corps (Désavantage au tir)'),'true');
   await play.locator('[data-roll-input="attack"]').fill('31');
   await calculate();
   assert.match(await details(), /1 Désavantage/u, 'tir dans une mêlée : Désavantage affiché');
   await prepareShot('pshot');
-  await play.getByLabel(/La cible est engagée avec le tireur/u).selectOption('true');
+  await chooseBoolean(play.getByLabel(/La cible est engagée avec le tireur/u),'true');
   await play.getByLabel(/Défense de Garde : caractéristique ou jet/u).selectOption('CC');
   await play.locator('[data-roll-input="defense"]').fill('45');
   await calculate();
@@ -84,7 +85,7 @@ try {
   await load(fixture());
   await prepareShot();
   await noDefense();
-  await play.getByLabel(/À répétition : tir double/u).selectOption('true');
+  await chooseBoolean(play.getByLabel(/À répétition : tir double/u),'true');
   await play.locator('[data-roll-input="attack"]').fill('31');
   await calculate();
   assert.match(await details(), /À répétition : tir double/u, 'le −1 DR du tir double figure au détail');
@@ -98,7 +99,7 @@ try {
   assert.equal(state.combat.participants.find(row => row.id === 'a').equipment[0].extensions.v5.reloadState.shotsRemaining, 2, 'premier tir : une munition');
   await prepareShot();
   await noDefense();
-  await play.getByLabel(/À répétition : tir double/u).selectOption('true');
+  await chooseBoolean(play.getByLabel(/À répétition : tir double/u),'true');
   await play.getByLabel(/Premier tir du tir double/u).selectOption({ index: 1 });
   await play.locator('[data-roll-input="attack"]').fill('31');
   await calculate();

@@ -1,3 +1,4 @@
+import {chooseBoolean} from './helpers/confirmation.mjs';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
 import { readFileSync, statSync, mkdirSync } from 'node:fs';
@@ -173,7 +174,7 @@ try {
   await page.evaluate(() => { const draft=window.__u1.view.getViewState().resolution; for(const key of Object.keys(draft))delete draft[key];Object.assign(draft,window.__u1.savedDraft);window.__u1.store.previewResolution=window.__u1.originalPreview;window.__u1.view.render(); });
   await page.getByLabel('Nature du Test', { exact: true }).selectOption('ranged');
   const engaged = page.getByLabel('La cible est engagée au corps à corps (Désavantage au tir)', { exact: true });
-  await engaged.selectOption('true');
+  await chooseBoolean(engaged,'true');
   await page.getByLabel('Engagé avec la cible : Bandit', { exact: true }).check();
   await page.getByLabel('Engagé avec la cible : Dagmar', { exact: true }).check();
   const npcEngaged = page.getByLabel('Jet de défense d100 de Bandit', { exact: true });
@@ -190,8 +191,8 @@ try {
   await selectionRoll.fill('61');
   await selectionRoll.dispatchEvent('change');
   assert.equal(Number((await toggle.textContent()).match(/\d+/)[0]), countBeforeRoll + 1, 'un champ conditionnel renseigné est compté');
-  await engaged.selectOption('false');
-  await engaged.selectOption('true');
+  await chooseBoolean(engaged,'false');
+  await chooseBoolean(engaged,'true');
   assert.equal(await selectionRoll.inputValue(), '61', 'le champ conditionnel conserve sa valeur');
   assert.equal(Number((await toggle.textContent()).match(/\d+/)[0]), countBeforeRoll + 1, 'le compteur retrouve la valeur conditionnelle');
   await page.getByLabel('Nature du Test', { exact: true }).selectOption('melee');

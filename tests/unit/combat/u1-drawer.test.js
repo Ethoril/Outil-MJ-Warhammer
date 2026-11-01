@@ -53,3 +53,10 @@ test('un blocage du moteur reste visible même si sa liste détaillée est vide'
   const preview = { ready: false, status: 'blocked', error: 'Blocage moteur', unresolved: [] };
   assert.ok(applicationBlockingReasons(preview, { criticalErrors: {} }, true).some(reason => reason.text === 'Blocage moteur'));
 });
+
+test('C18 : Oui et Non se remplacent, une seconde pression remet À préciser', async () => {
+  const { nextConfirmationValue } = await import('../../../js/ui/resolution-panel/dom.js');
+  assert.equal(nextConfirmationValue('', 'true'), 'true');
+  assert.equal(nextConfirmationValue('true', 'false'), 'false');
+  assert.equal(nextConfirmationValue('false', 'false'), '');
+});

@@ -1,3 +1,4 @@
+import {chooseBoolean} from './helpers/confirmation.mjs';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
 import { mkdir, readFile, stat } from 'node:fs/promises';
@@ -102,8 +103,8 @@ try {
   assert.equal(furySource.source.fileSha256,'53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de',
     'le hash du livre V5 source reste intact');
   await page.locator('[aria-label="Destinataire Allié"]').check();
-  await page.locator('[aria-label="Allié · Portée / zone confirmée"]').selectOption('true');
-  await page.locator('[aria-label="Le personnage peut prononcer la prière"]').selectOption('true');
+  await chooseBoolean(page.locator('[aria-label="Allié · Portée / zone confirmée"]'),'true');
+  await chooseBoolean(page.locator('[aria-label="Le personnage peut prononcer la prière"]'),'true');
   await page.locator('[aria-label="Jet de Prière (d100)"]').fill('23');
   await page.locator('[aria-label="Arbitrage DIV-05 pour pénalités incomparables"]').selectOption('sl');
   await page.locator('[aria-label="Motif de l’arbitrage MJ DIV-05"]').fill('Arbitrage explicite pour atteindre le preview DIV-03');
@@ -123,10 +124,10 @@ try {
   await page.waitForFunction(()=>window.__TEST__.Store.listParticipants().find(p=>p.id==='priest').extensions.v5.divine.sin===1);
 
   await page.locator('[aria-label="Destinataire Allié"]').check();
-  await page.locator('[aria-label="Allié · Portée / zone confirmée"]').selectOption('true');
-  await page.locator('[aria-label="Allié · Ne vénère pas Myrmidia"]').selectOption('true');
-  await page.locator('[aria-label="Allié · Regarde le prêtre"]').selectOption('true');
-  await page.locator('[aria-label="Le personnage peut prononcer la prière"]').selectOption('true');
+  await chooseBoolean(page.locator('[aria-label="Allié · Portée / zone confirmée"]'),'true');
+  await chooseBoolean(page.locator('[aria-label="Allié · Ne vénère pas Myrmidia"]'),'true');
+  await chooseBoolean(page.locator('[aria-label="Allié · Regarde le prêtre"]'),'true');
+  await chooseBoolean(page.locator('[aria-label="Le personnage peut prononcer la prière"]'),'true');
   await page.locator('[aria-label="Jet de Prière (d100)"]').fill('21');
   const statesBox=panel.locator('details.workspace-v5-context-details').filter({hasText:'États appliqués au Test de Prière (Soc)'});
   if(!await statesBox.evaluate(element=>element.open)) await statesBox.locator('summary').click();

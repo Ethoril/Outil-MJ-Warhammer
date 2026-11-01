@@ -1,3 +1,4 @@
+import {chooseConfirmation} from './helpers/confirmation.mjs';
 /** Contrôle indépendant des gestes Courroux 61–65 / 89–95, navigateur + IndexedDB natif. */
 import assert from 'node:assert/strict';
 import {createServer} from 'node:http';
@@ -28,8 +29,8 @@ const seed=async()=>page.evaluate(async()=>{
 const prepare=async({roll,wrathRoll})=>{
  const panel=await openPanel();await panel.getByRole('combobox',{name:'Prière divine',exact:true}).selectOption('divine:blessing:myrmidia:battle');
  await panel.getByRole('checkbox',{name:'Destinataire Allié',exact:true}).check();
- await panel.getByRole('combobox',{name:'Allié · Portée / zone confirmée',exact:true}).selectOption('true');
- await panel.getByRole('combobox',{name:'Le personnage peut prononcer la prière',exact:true}).selectOption('true');
+ await chooseConfirmation(panel.getByRole('group',{name:'Allié · Portée / zone confirmée',exact:true}),'true');
+ await chooseConfirmation(panel.getByRole('group',{name:'Le personnage peut prononcer la prière',exact:true}),'true');
  await panel.getByRole('spinbutton',{name:'Jet de Prière (d100)',exact:true}).fill(String(roll));
  await panel.locator('[data-divine-action="calculate"]').click();
  await panel.getByRole('spinbutton',{name:'Jet de Courroux (d100)',exact:true}).fill(String(wrathRoll));

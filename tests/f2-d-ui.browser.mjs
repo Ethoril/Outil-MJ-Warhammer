@@ -1,3 +1,4 @@
+import {chooseConfirmation} from './helpers/confirmation.mjs';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
 import { readFileSync, statSync } from 'node:fs';
@@ -32,10 +33,10 @@ try{
   const pepperbox={...actor,equipment:[...actor.equipment,{id:'pepperbox',kind:'weapon',name:'Poivrière',keywords:[{id:'a-repetition',parameter:'4',asterisk:true}]}]};
   const pepperboxAttack={id:'pepperbox-attack',type:'attack',note:'Poivrière',attr:'CT',base:50,damage:8,extensions:{fiche:{equipmentId:'pepperbox'}}};
   await render({actor:pepperbox,target,action:pepperboxAttack});
-  const freeHand=page.getByRole('combobox',{name:'Seconde main libre pour préparer le canon de la Poivrière'});
-  assert.equal(await freeHand.count(),1,'l’astérisque exige une réponse oui/non');await freeHand.selectOption('true');
+  const freeHand=page.getByRole('group',{name:'Seconde main libre pour préparer le canon de la Poivrière'});
+  assert.equal(await freeHand.count(),1,'l’astérisque exige une réponse oui/non');await chooseConfirmation(freeHand,'true');
   assert.equal(await page.evaluate(()=>window.calls.at(-1)[0].v5Context.freeHandAvailable),true,'la main libre rejoint le contexte de résolution');
-  await freeHand.selectOption('false');assert.equal(await page.evaluate(()=>window.calls.at(-1)[0].v5Context.freeHandAvailable),false,'la main occupée est aussi transmise au contexte');
+  await chooseConfirmation(freeHand,'false');assert.equal(await page.evaluate(()=>window.calls.at(-1)[0].v5Context.freeHandAvailable),false,'la main occupée est aussi transmise au contexte');
   await render({actor:pepperbox,target,action:pepperboxAttack,draft:{v5Context:{freeHandAvailable:false}}});
   assert.ok((await page.locator('.workspace-muted').allTextContents()).some(text=>text.includes('après ce tir, recharge complète nécessaire')),'la main occupée impose une recharge complète après ce tir');
 

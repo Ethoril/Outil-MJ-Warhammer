@@ -1,3 +1,4 @@
+import {chooseBoolean} from './helpers/confirmation.mjs';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
 import { readFile, stat, mkdir } from 'node:fs/promises';
@@ -37,9 +38,9 @@ try {
   const shieldId=await page.locator('[aria-label="Prière divine"] option').evaluateAll(options=>options.find(option=>option.textContent.includes('Bouclier de Myrmidia'))?.value);
   assert.ok(shieldId,'option Bouclier de Myrmidia visible');await page.locator('[aria-label="Prière divine"]').selectOption(shieldId);
   await page.locator('[aria-label="Destinataire Allié"]').check();
-  await page.locator('[aria-label="Allié · Portée \/ zone confirmée"]').selectOption('true');
-  await page.locator('[aria-label="Allié · Allié admissible"]').selectOption('true');
-  await page.locator('[aria-label="Le personnage peut prononcer la prière"]').selectOption('true');
+  await chooseBoolean(page.locator('[aria-label="Allié · Portée \/ zone confirmée"]'),'true');
+  await chooseBoolean(page.locator('[aria-label="Allié · Allié admissible"]'),'true');
+  await chooseBoolean(page.locator('[aria-label="Le personnage peut prononcer la prière"]'),'true');
   await page.locator('[aria-label="Jet de Prière (d100)"]').fill('23');
   await page.locator('[aria-label="Fin de l’effet (choix du MJ)"]').selectOption('endOfRound');
   await page.locator('[data-divine-action="calculate"]').click();

@@ -1,3 +1,4 @@
+import {chooseBoolean, confirmationValue} from './helpers/confirmation.mjs';
 import { openU1Settings } from './helpers/u1-drawer.mjs';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
@@ -106,10 +107,10 @@ try{
  assert.equal(await combat.getByText(/une arme à deux mains est interdite/).count(),0,'l’épée à une main est permise');
  // La main directrice perdue : la circonstance est réellement cochée, et la règle générale de la main secondaire (−2 DR, une seule fois) apparaît dans la résolution.
  assert.equal(await combat.getByText(/Main secondaire/).count(),0,'aucune pénalité tant que la circonstance n’est pas précisée');
- await offHandField.selectOption('true');
+ await chooseBoolean(offHandField,'true');
  await combat.getByRole('textbox',{name:'Attaque (CC 55)'}).fill('30');await combat.getByRole('button',{name:'Calculer'}).click();
  await combat.getByText(/Main secondaire/).first().waitFor({state:'attached'});
- assert.equal(await combat.getByLabel(/Séquelle · Test de mêlée avec l’arme de la main non directrice/).first().inputValue(),'true','la case est bien cochée');
+ assert.equal(await confirmationValue(combat.getByLabel(/Séquelle · Test de mêlée avec l’arme de la main non directrice/).first()),'true','la case est bien cochée');
  const offHandLines=await combat.getByText(/Main secondaire/).allTextContents();
  assert.ok(offHandLines.some(text=>/−2|-2/.test(text)),`pénalité −2 DR attendue : ${offHandLines.join(' | ')}`);
  await combat.getByLabel(/Attaque avec la main secondaire/).check();

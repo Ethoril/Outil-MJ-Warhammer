@@ -1,3 +1,4 @@
+import {chooseBoolean} from './helpers/confirmation.mjs';
 import { openU1Settings } from './helpers/u1-drawer.mjs';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
@@ -84,7 +85,7 @@ try{
  const rangedException=page.getByLabel('Tir opposé par Esquive confirmé par le MJ');
  const rangedDetails=page.locator('details.workspace-v5-context-details').filter({has:rangedException});
  if(await rangedDetails.count()&&!await rangedDetails.evaluate(el=>el.open)) await rangedDetails.locator('summary').click();
- await rangedException.selectOption('true');
+ await chooseBoolean(rangedException,'true');
  await page.locator('[data-roll-input="attack"]').fill('01');
  const defense=page.locator('[data-roll-input="defense"]');
  if(await defense.count()) await defense.fill('96');
@@ -128,7 +129,7 @@ try{
  await page.locator('[data-focus-key="target-f2-generic-target"]').click();
  const genericException=page.getByLabel('Tir opposé par Esquive confirmé par le MJ'),genericDetails=page.locator('details.workspace-v5-context-details').filter({has:genericException});
  if(await genericDetails.count()&&!await genericDetails.evaluate(el=>el.open)) await genericDetails.locator('summary').click();
- await genericException.selectOption('true');
+ await chooseBoolean(genericException,'true');
  await page.locator('[data-roll-input="attack"]').fill('01');
  const genericDefense=page.locator('[data-roll-input="defense"]');if(await genericDefense.count())await genericDefense.fill('96');
  await page.getByRole('button',{name:'Calculer',exact:true}).click();

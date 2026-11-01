@@ -14,6 +14,51 @@ export function button(label, className, attrs = {}) {
   return element;
 }
 
+/** Une seconde pression sur le choix actif rétablit « À préciser ». */
+export const nextConfirmationValue = (current, chosen) => current === chosen ? '' : chosen;
+
+/** Remplace visuellement les listes à trois états tout en conservant leur gestionnaire historique. */
+export function renderConfirmationButtons(root) {
+  for (const select of root.querySelectorAll('select')) {
+    const values = [...select.options].map(option => option.value);
+    if (values.length !== 3 || !['', 'true', 'false'].every(value => values.includes(value))) continue;
+    if (!/^oui\b/i.test([...select.options].find(option => option.value === 'true')?.text || '') || !/^non\b/i.test([...select.options].find(option => option.value === 'false')?.text || '')) continue;
+    const label = select.getAttribute('aria-label');
+    if (!label) continue;
+    const group = node('span', 'workspace-confirmation');
+    group.setAttribute('role', 'group'); group.setAttribute('aria-label', label); group.tabIndex = -1;
+    if (select.disabled) group.setAttribute('aria-disabled', 'true');
+    for (const name of ['aria-describedby', 'aria-invalid', 'aria-required']) if (select.hasAttribute(name)) group.setAttribute(name, select.getAttribute(name));
+    for (const key of Object.keys(select.dataset)) if (key !== 'defaultValue') { group.dataset[key] = select.dataset[key]; delete select.dataset[key]; }
+    const unset = node('span', 'workspace-confirmation-unset', [...select.options].find(option => option.value === '')?.text || 'À préciser');
+    unset.hidden = select.value !== '';
+    group.appendChild(unset);
+    for (const value of ['true', 'false']) {
+      const choice = button(value === 'true' ? 'Oui' : 'Non', 'workspace-confirmation-button');
+      choice.setAttribute('aria-pressed', String(select.value === value));
+      choice.title = ([...select.options].find(option => option.value === value)?.text || '') + ' — recliquer pour revenir à « À préciser »';
+      choice.disabled = select.disabled;
+      choice.addEventListener('click', () => {
+        select.value = nextConfirmationValue(select.value, value);
+        unset.hidden = select.value !== '';
+        for (const child of group.querySelectorAll('button')) child.setAttribute('aria-pressed', String(child === choice && select.value === value));
+        select.dispatchEvent(new Event('change', { bubbles: true }));
+      });
+      group.appendChild(choice);
+    }
+    select.removeAttribute('aria-label'); select.dataset.confirmationLabel = label; select.hidden = true; select.setAttribute('aria-hidden', 'true'); select.tabIndex = -1;
+    select.insertAdjacentElement('afterend', group);
+    const caption = group.parentElement;
+    if (caption?.tagName === 'LABEL') {
+      const wrapper = document.createElement('div');
+      for (const attribute of caption.attributes) wrapper.setAttribute(attribute.name, attribute.value);
+      wrapper.append(...caption.childNodes);
+      caption.replaceWith(wrapper);
+    }
+    root.appendChild(select);
+  }
+}
+
 /** Nombre sans signe « + », négatif en U+2212 (PV sous zéro). */
 export const minusSigned = value => {
   const number = Number(value) || 0;
@@ -114,7 +159,7 @@ export function circumstanceControls(root) {
   return [...root.querySelectorAll('input, select, textarea')]
     .filter(element => !['hidden', 'button', 'submit'].includes(element.type))
     .map(element => {
-      const label = element.getAttribute('aria-label') || [...(element.closest('label')?.childNodes || [])]
+      const label = element.getAttribute('aria-label') || element.dataset.confirmationLabel || [...(element.closest('label')?.childNodes || [])]
         .filter(child => child.nodeType === 3).map(child => child.textContent).join(' ').trim();
       const stem = `${element.tagName}:${element.type}:${element.dataset.focusKey || label || element.name || element.id}`;
       const index = occurrences.get(stem) || 0;

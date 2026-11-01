@@ -1,3 +1,4 @@
+import {chooseConfirmation} from './helpers/confirmation.mjs';
 /** B15 : Jugement dernier, Destin et proposition de rejet dans les vrais champs. */
 import assert from 'node:assert/strict';
 import {createServer} from 'node:http';
@@ -21,7 +22,7 @@ try{
 
  await page.evaluate(async()=>{const{Store}=await import('/js/main.js');const a=Store.listParticipants().find(r=>r.id==='priest');await Store.updateParticipant('priest',{fate:1,skills:a.skills.map(row=>row.name==='Prière'?{...row,advances:10,total:70}:row),extensions:{...a.extensions,v5:{...a.extensions.v5,fate:1}}});});
  await page.getByRole('tab',{name:'Jouer',exact:true}).click();const actor=page.locator('[data-workspace-select="priest"]');if(await actor.count())await actor.click();let panel=await openPanel();
- await panel.getByRole('combobox',{name:'Culte',exact:true}).selectOption('Myrmidia');await panel.getByRole('combobox',{name:'Prière divine',exact:true}).selectOption('divine:blessing:myrmidia:battle');await panel.getByRole('checkbox',{name:'Destinataire Allié B15',exact:true}).check();await panel.getByRole('combobox',{name:'Allié B15 · Portée / zone confirmée',exact:true}).selectOption('true');await panel.getByRole('combobox',{name:'Le personnage peut prononcer la prière',exact:true}).selectOption('true');await panel.getByRole('spinbutton',{name:'Jet de Prière (d100)',exact:true}).fill('99');await panel.locator('[data-divine-action="calculate"]').click();
+ await panel.getByRole('combobox',{name:'Culte',exact:true}).selectOption('Myrmidia');await panel.getByRole('combobox',{name:'Prière divine',exact:true}).selectOption('divine:blessing:myrmidia:battle');await panel.getByRole('checkbox',{name:'Destinataire Allié B15',exact:true}).check();await chooseConfirmation(panel.getByRole('group',{name:'Allié B15 · Portée / zone confirmée',exact:true}),'true');await chooseConfirmation(panel.getByRole('group',{name:'Le personnage peut prononcer la prière',exact:true}),'true');await panel.getByRole('spinbutton',{name:'Jet de Prière (d100)',exact:true}).fill('99');await panel.locator('[data-divine-action="calculate"]').click();
  await panel.getByRole('spinbutton',{name:'Jet de Courroux (d100)',exact:true}).fill('91');await panel.locator('[data-divine-action="calculate"]').click();
  assert.match(await panel.innerText(),/Rendez des comptes/);assert.equal(await panel.locator('[data-divine-action="apply"]').isDisabled(),false);await panel.locator('[data-divine-action="apply"]').click();
  await page.waitForFunction(async()=>{const{Store}=await import('/js/main.js');return Store.listParticipants().find(r=>r.id==='priest').extensions.v5.divineJudgments?.[0]?.status==='departed';});
@@ -34,7 +35,7 @@ try{
  for(const width of [1440,390]){await page.setViewportSize({width,height:width===390?844:900});assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'pas de débordement '+width);const file='b15-proposal-'+width+'.png';await page.screenshot({path:resolve(output,file),fullPage:true});receipt.screenshots.push(file);}
  await page.setViewportSize({width:1440,height:900});
  receipt.checks.push('Retour par Destin : Point débité une fois, rejet seulement proposé (talents et avances intacts)');
- await panel.getByRole('textbox',{name:'Motif MJ de la décision',exact:true}).fill('Je vous rejette');await panel.getByRole('combobox',{name:'Confirmer la perte définitive',exact:true}).selectOption('true');await panel.getByRole('button',{name:'Confirmer le rejet',exact:true}).click();
+ await panel.getByRole('textbox',{name:'Motif MJ de la décision',exact:true}).fill('Je vous rejette');await chooseConfirmation(panel.getByRole('group',{name:'Confirmer la perte définitive',exact:true}),'true');await panel.getByRole('button',{name:'Confirmer le rejet',exact:true}).click();
  await page.waitForFunction(async()=>{const{Store}=await import('/js/main.js');return Store.listParticipants().find(r=>r.id==='priest').extensions.v5.divineJudgments[0].status==='rejected';});
  a=(await snap()).combat.participants.find(r=>r.id==='priest');assert.equal(a.talents.some(t=>t.specialization==='Myrmidia'),false);assert.equal(a.skills.find(r=>r.name==='Prière').advances,0);
  await page.reload({waitUntil:'domcontentloaded'});await ready();a=(await snap()).combat.participants.find(r=>r.id==='priest');assert.equal(a.extensions.v5.divineRejections[0].kind,'permanent');
