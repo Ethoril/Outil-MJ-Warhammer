@@ -1440,3 +1440,25 @@ test('recette G : active encounter additions require initiative and keep the cur
   assert.equal(store.listParticipants()[0].hp, 4);
   assert.equal(store.listEncounters().find(row => row.id === 'rg-i-enc').entries.length, 1);
 });
+
+test('recette G : une occurrence proposée ne réalerte pas après rechargement', async () => {
+  let saved = null;
+  const persistence = { async load() { return saved && structuredClone(saved); }, async saveAtomic({ state }) { saved = structuredClone(state); return { ok: true }; } };
+  const alerts = [];
+  const bus = { emit(type, payload) { if (type === 'scene:event-proposed') alerts.push(payload); } };
+  let store = createStore({ persistence, bus });
+  await store.ready;
+  await store.addProfile({ id: 'alert-profile', name: 'Blessé', kind: 'PJ', hp: 10, initiative: 30 });
+  await store.saveEncounter({ id: 'alert-enc', entries: [{ id: 'alert-entry', profileId: 'alert-profile', zone: 'active', camp: 'pj' }] });
+  await store.launchEncounter('alert-enc');
+  const actor = store.listParticipants()[0];
+  await store.saveSceneEvent({ id: 'alert-event', condition: { type: 'hpBelow', participantId: actor.id, hp: 5 }, consequence: { type: 'note', text: 'Danger' } });
+  await store.updateParticipant(actor.id, { hp: 4 });
+  assert.equal(alerts.length, 1);
+  store = createStore({ persistence, bus });
+  await store.ready;
+  await store.updateParticipant(actor.id, { hp: 6 });
+  await store.updateParticipant(actor.id, { hp: 3 });
+  assert.equal(alerts.length, 1);
+  assert.equal(store.previewSceneEvent(store.getActiveScene().events[0]).status, 'proposed');
+});

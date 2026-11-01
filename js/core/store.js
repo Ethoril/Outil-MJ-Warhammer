@@ -169,7 +169,6 @@ import { createV5CombatActionsApi } from './store/api-v5-combat-actions.js';
 
 
 export function createStore({ storage = typeof localStorage !== 'undefined' ? localStorage : null, sync = null, persistence = null, persistenceFactory = null, contextId = 'guest', divineAuthority = 'MJ', appVersion = 'unknown', bus = null, now = () => new Date().toLocaleTimeString(), onSyncStatus = null, onLocalStatus = null, onReady = null } = {}) {
-  const seenSceneEventOccurrences = new Set();
   const CLIENT_ID = (typeof crypto !== 'undefined' && crypto.randomUUID) ? crypto.randomUUID() : uid();
 
   let reserve = new Map();
@@ -1475,6 +1474,12 @@ function resolvedCorruptionTest(participant, skillId, input) {
           && (!sameValue(before.activeScene, canonical.activeScene) || !sameValue(before.combat, canonical.combat))) {
           canonical.activeScene.revision = localRevision + 1;
         }
+        const seenOccurrences = new Set(before.activeScene?.id === canonical.activeScene?.id ? before.activeScene?.extensions?.v5?.alertedEventOccurrences || [] : []);
+        const newEventProposals = newlyProposedSceneEvents(before.activeScene, canonical.activeScene, seenOccurrences);
+        if (newEventProposals.length) {
+          const scene = canonical.activeScene;
+          canonical.activeScene = { ...scene, extensions: { ...(scene.extensions || {}), v5: { ...(scene.extensions?.v5 || {}), alertedEventOccurrences: [...seenOccurrences] } } };
+        }
         canonical = { ...canonical, syncPending: pendingProtocolState };
         validateCommandEnvelope(canonical);
         const after = JSON.parse(JSON.stringify(canonical));
@@ -1521,7 +1526,7 @@ function resolvedCorruptionTest(participant, skillId, input) {
               localRevision = nextRevision;
               pendingProtocolState = Boolean(persistedState.syncPending);
               applyDataToState(after, { includeLog: true, includeHistory: false });
-              for (const proposal of newlyProposedSceneEvents(before.activeScene, after.activeScene, seenSceneEventOccurrences)) emitBus('scene:event-proposed', proposal);
+              for (const proposal of newEventProposals) emitBus('scene:event-proposed', proposal);
               emitBus('reserve');
               emitBus('combat');
               emitBus('log');
@@ -1560,7 +1565,7 @@ function resolvedCorruptionTest(participant, skillId, input) {
           historyState = nextHistory;
           localRevision = nextRevision;
           applyDataToState(after, { includeLog: true, includeHistory: false });
-          for (const proposal of newlyProposedSceneEvents(before.activeScene, after.activeScene, seenSceneEventOccurrences)) emitBus('scene:event-proposed', proposal);
+          for (const proposal of newEventProposals) emitBus('scene:event-proposed', proposal);
           const persisted = save(true);
           emitBus('reserve');
           emitBus('combat');
