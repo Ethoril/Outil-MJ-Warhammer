@@ -37,3 +37,6 @@
 - C11 : le message affiché précise « erreur interne » et renvoie à la console.
 - C12 : boutons Lancer nommés (aria-label, data-focus-key).
 - C19 : décision du MJ, « Ignorer » = l’effet ne joue pas pour cette action, jamais de réussite forcée.
+## Reprise — C19 : inventaire des blocages
+
+Seule **Bénédiction de Protection** est actuellement ignorable : sa source peut être écartée pour cette résolution sans inventer le résultat du Test ; l’effet et ses dispenses restent intacts pour les actions suivantes. Les autres catégories ne sont pas encore ignorables : jets d’attaque et de défense (faits indispensables, interdits par le MJ) ; dés et choix de critiques (résultat de critique indéterminé) ; cible (destinataire absent) ; protection ou PA (dégâts indéterminés) ; sélection de résultat et erreurs de saisie (résultat invalide ou ambigu) ; incidents et autres faits magiques (effets et coûts non établis) ; blocages généraux, avertissements mécaniques et `unresolved` de talents, équipement, déplacements ou règles (les raisons sont textuelles et ne désignent pas de manière fiable une source isolable ; certaines sont des interdictions ou des calculs). Une extension de l’ignorance à une nouvelle source nécessite son identification stable et une vérification explicite de ses conséquences ; aucune valeur n’est supposée.

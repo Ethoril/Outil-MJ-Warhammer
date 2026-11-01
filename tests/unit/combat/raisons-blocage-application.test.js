@@ -45,3 +45,12 @@ test('each original blocking condition is equivalent for physical and magic prev
   assert.equal(applicationBlockingReasons({ v5MagicKind: 'cast', castPreview: { spellSuccess: false }, spellPreview: { ready: false } }, {}, true).length, 0);
   assert.match(applicationBlockingReasons({ mechanicalWarnings: [{ keywordId: 'foo', reason: 'bar' }] }, {}, true)[0].text, /foo.*bar/);
 });
+
+test('C19 : seule la Protection identifiée est proposée à ignorer, jamais un jet', () => {
+  const reasons = applicationBlockingReasons({ unresolved: [
+    'Bénédiction de Protection : saisir le Test de Calme Accessible (+2 DR) de l’attaquant.',
+    'Jet de défense requis', 'Autre condition mécanique'
+  ] }, {}, true);
+  assert.deepEqual(reasons.filter(row => row.ignorable).map(row => row.ignorable), ['divine-protection']);
+  assert.equal(applicationBlockingReasons(null, { attackRoll: '' }, true, { requiresRoll: true })[0].ignorable, undefined);
+});

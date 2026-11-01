@@ -1028,6 +1028,20 @@ test('Protection : les six contrats ne sont plus manuels', () => {
   for (const cult of CULTS) assert.notEqual(getDivineContract(`divine:blessing:${cult}:protection`).status, 'manual', cult);
 });
 
+test('C19 : ignorer Protection autorise cette attaque sans retenir une réussite de Calme', async () => {
+  const { store } = await fixture();
+  const missing = hit(store, 'ally');
+  assert.equal(protectionNotes(missing).length, 1);
+  const input = structuredClone(missing.input);
+  input.v5.context = { ...(input.v5.context || {}), ignoredConditions: ['divine-protection'] };
+  const ignored = store.previewResolution(input);
+  assert.equal(protectionNotes(ignored).length, 0);
+  assert.equal((await store.applyResolution(ignored)).status, 'applied');
+  assert.ok(person(store, 'ally').hp < 40);
+  assert.equal(protectionNotes(hit(store, 'ally', undefined, 'new')).length, 1, 'l’ignorance ne vaut que pour cette attaque');
+  assert.match(JSON.parse(store.getFullJSON()).log.map(row => row.text).join('\n'), /Condition ignorée par le MJ : .*Protection/);
+});
+
 test('Protection : sans Test de Calme saisi ou sur un échec, l’attaque contre la cible bénie n’est pas applicable', async () => {
   const { store } = await fixture();
   const missing = hit(store, 'ally');

@@ -250,6 +250,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     const actions = actorActions(actor);
     const keys = actions.map(actionKey);
     if (!keys.includes(draft.actionKey)) {
+      draft.ignoredConditions = [];
       draft.actionKey = keys[0] || null;
       draft.v5Kind = null;
       draft.v5SlModifier = null;
@@ -289,6 +290,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     if (!target && state.targetChoice !== 'none' && !['skill', 'channelling'].includes(type)) {
       target = groups.adversaries[0] || others[0] || (type === 'cast' ? actor : null);
     }
+    if (draft.ignoredConditions?.length && draft.ignoredTargetId !== (target?.id ?? null)) draft.ignoredConditions = [];
     if (draft.preview && !draft.preview.v5MagicKind && (draft.preview.engagedShot?.intendedTargetId ?? draft.preview.targetId ?? draft.preview.input?.targetId ?? null) !== (target?.id ?? null)) {
       draft.preview = null;
       resetCritical(draft);
@@ -849,6 +851,8 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     const action={...context.action,type:context.type},attack=['attack','attaque'].includes(context.type);
     const weapon=action.extensions?.equipment||context.actor?.equipment?.find(row=>row.id===action.extensions?.fiche?.equipmentId);
     const weaponContext={...(action.extensions?.v5?.initialContext||{}),...(draft.v5Context||{})};
+    delete weaponContext.ignoredConditions;
+    if (draft.ignoredConditions?.length) weaponContext.ignoredConditions=[...draft.ignoredConditions];
     const metadataGroup=weaponSkillGroupInfo(weapon?.category,weapon);
     const selectedGroup=!metadataGroup&&attack?weaponSkillGroupInfo(weaponContext.weaponTrainingGroup,weapon):null;
     const attackContext=equipmentAttackContext(weapon,attack?weaponContext:{});
@@ -965,6 +969,14 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
   }
 
   const resolutionHandlers = {
+    ignoreCondition(id) {
+      if (id !== 'divine-protection') return;
+      const draft = state.resolution;
+      draft.ignoredTargetId = playContext().target?.id ?? null;
+      draft.ignoredConditions = [...new Set([...(draft.ignoredConditions || []), id])];
+      if (draft.preview) resolutionHandlers.calculate();
+      else render();
+    },
     preflight(context) {
       const draft = state.resolution;
       if (draft.busy || ['channelling','cast','dispel'].includes(context.type) || typeof Store.previewResolution !== 'function' || !validRoll(draft.attackRoll)) return null;
@@ -1069,6 +1081,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       draft.v5Choice = null;
       draft.defenseChoice = null;
       if ('targetId' in patch) {
+        draft.ignoredConditions = [];
         clearFortuneAdvantageDraft(draft);
         state.targetChoice = patch.targetId;
         draft.v5Context={...(draft.v5Context||{})};
@@ -1100,6 +1113,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       }
       const actionChanged = 'actionKey' in patch && patch.actionKey !== draft.actionKey;
       if (actionChanged) {
+        draft.ignoredConditions = [];
         clearFortuneAdvantageDraft(draft);
         draft.v5Kind = null;
         draft.v5SlModifier = null;
@@ -1130,6 +1144,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       if ('ammunitionArbitrated' in patch) draft.ammunitionArbitrated = patch.ammunitionArbitrated;
       if (actionChanged || ('type' in patch && patch.type !== draft.type)) resetMagicDice(draft);
       if ('type' in patch) {
+        if (patch.type !== draft.type) draft.ignoredConditions = [];
         draft.type = patch.type;
         draft.v5Kind = null;
         draft.charging = false;
@@ -1769,6 +1784,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
           draft.error = { field: 'apply', message: result.error };
           focusKey = 'calculate';
         } else {
+          draft.ignoredConditions = [];
           draft.attackRoll = '';
           draft.defenseRoll = '';
           draft.v5Choice = null;

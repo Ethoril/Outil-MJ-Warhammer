@@ -668,13 +668,16 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
     const opposed = preview?.opposition?.mode === 'opposed' ? preview.opposition : null;
     const wounds = Math.min(Math.max(0, Number(target.hp) || 0), (preview.damage?.finalDamage || 0) + (preview.critical?.application?.extraWounds || 0));
     const manualDamage = preview?.weapon?.status === 'manual' ? ` · dégâts à arbitrer (${preview.weapon.text})` : '';
+    const ignoredProtection = preview.attack && actor.camp !== target.camp
+      && input.v5?.context?.ignoredConditions?.includes('divine-protection')
+      && (target.extensions?.v5?.divineEffects || []).some(layer => layer?.attackDeterrent);
     return {
       id: uid(), ts: Date.now(), kind: 'resolution',
       encounterId: activeScene?.encounterId || null, sceneId: activeScene?.id || null,
       actorId: actor.id || input.actorId || null,
       targetId: target.id || preview?.targetId || null,
       actorName: actor.name || null, targetName: target.name || null,
-      text: `${RESOLUTION_TYPE_LABELS[actionType] || 'Action'} — ${opposed ? preview.hit ? 'touché' : 'pas de touche' : outcome} sur ${targetLabel} · DR ${opposed?.netSl ?? preview.sl}${preview.damage || preview.critical?.application?.extraWounds ? ` · ${wounds} Blessures` : ''}${manualDamage}${preview.critical ? ' · critique' : ''}${preview.defenderCritical ? ' · critique défensif' : ''}${preview.familiarConditionRefusals?.length ? ` · États refusés : ${preview.familiarConditionRefusals.map(row => `${row.name || 'Homoncule'} (${row.state})`).join(', ')}` : ''}`,
+      text: `${RESOLUTION_TYPE_LABELS[actionType] || 'Action'} — ${opposed ? preview.hit ? 'touché' : 'pas de touche' : outcome} sur ${targetLabel} · DR ${opposed?.netSl ?? preview.sl}${preview.damage || preview.critical?.application?.extraWounds ? ` · ${wounds} Blessures` : ''}${manualDamage}${preview.critical ? ' · critique' : ''}${preview.defenderCritical ? ' · critique défensif' : ''}${preview.familiarConditionRefusals?.length ? ` · États refusés : ${preview.familiarConditionRefusals.map(row => `${row.name || 'Homoncule'} (${row.state})`).join(', ')}` : ''}${ignoredProtection ? ' · Condition ignorée par le MJ : Bénédiction de Protection' : ''}`,
       detail: {
         ...(opposed ? { hit: Boolean(preview.hit), opposition: opposed } : {}),
         ruleVersion: preview.ruleVersion,

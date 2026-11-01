@@ -61,7 +61,7 @@ export function applicationBlockingReasons(preview, draft, canApply, preflight =
     return reasons;
   }
   add(preview.choiceRequired, 'Choisissez le résultat à appliquer');
-  for (const text of preview.unresolved || []) reasons.push({ text, focus: /Calme.*attaquant/i.test(text) ? 'protection-calm' : /Tir engagé.*Test de défense/i.test(text) ? 'engaged-defense' : /jet de défense/i.test(text) ? 'defense-roll' : undefined });
+  for (const text of preview.unresolved || []) reasons.push({ text, focus: /Calme.*attaquant/i.test(text) ? 'protection-calm' : /Tir engagé.*Test de défense/i.test(text) ? 'engaged-defense' : /jet de défense/i.test(text) ? 'defense-roll' : undefined, ...(/^Bénédiction de Protection :/.test(text) ? { ignorable: 'divine-protection' } : {}) });
   const criticals = [preview.critical?.details, preview.critical?.second, preview.defenderCritical?.details];
   add(criticals.some(row => row?.pending), 'Complétez le jet de critique', 'critical-pending');
   add(criticals.some(row => row?.needsAlternative), 'Choisissez une alternative pour le critique', 'critical-alternative');
@@ -2982,6 +2982,11 @@ export function renderResolutionPanel(options) {
           });
           item.appendChild(link);
         } else item.textContent = reason.text;
+        if (reason.ignorable) {
+          const ignore = button('Ignorer', 'workspace-ghost');
+          ignore.addEventListener('click', () => handlers.ignoreCondition(reason.ignorable));
+          item.appendChild(ignore);
+        }
         list.appendChild(item);
       }
     };
@@ -3065,6 +3070,11 @@ export function renderResolutionPanel(options) {
           });
           item.appendChild(link);
         } else item.textContent = reason.text;
+        if (reason.ignorable) {
+          const ignore = button('Ignorer', 'workspace-ghost');
+          ignore.addEventListener('click', () => handlers.ignoreCondition(reason.ignorable));
+          item.appendChild(ignore);
+        }
         list.appendChild(item);
       }
       block.appendChild(list);
