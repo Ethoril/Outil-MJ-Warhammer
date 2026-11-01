@@ -1,6 +1,6 @@
-# Outil MJ — Warhammer (v3.32.0)
+# Outil MJ — Warhammer (v3.33.0)
 
-Application web progressive (PWA) d’assistance au Maître de Jeu pour **Warhammer**, avec combat **V5** et fiches importées. Version 3.32.0 : corrections de la recette à la table (bouton « Appliquer » qui dit ce qui manque, rencontres actives par défaut avec avertissement d'initiative, combattants ajoutés en cours de combat avec leur jet d'Initiative, restauration confirmée dans l'application, événements structurés qui proposent leur conséquence et se modifient, repères V5 qui ouvrent la règle, mots-clés de créature sans doublon, message clair pour l'ancien modificateur en %).
+Application web progressive (PWA) d’assistance au Maître de Jeu pour **Warhammer**, avec combat **V5** et fiches importées. Version 3.33.0 : panneau d'action refondu en trois étapes (action et cible, jets, résultat), pied « Appliquer » avec la liste des saisies manquantes, tiroir « Circonstances » regroupé par thèmes avec compteur, étiquettes PJ/PNJ et bouton « Lancer tous les dés des PNJ », menu « Sort, prière, Corruption… ».
 
 Le [rapport de recette du lot 2](docs/lot2/LOT2_RECETTE_2_5.md) décrit le périmètre livré, les contrôles et les limites. Les effets narratifs restent des rappels, les valeurs de progression appartiennent aux fiches et la magie/les prières automatisées restent au lot 3.
 
