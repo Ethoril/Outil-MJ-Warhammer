@@ -1492,10 +1492,10 @@ function resolvedCorruptionTest(participant, skillId, input) {
         // profile edit followed by a log entry still undoes the profile edit in
         // one gesture, and a local log never consumes a shared revision.
         const baseHistory = purgeScope ? purgeEncounterJournalHistory(historyState, purgeScope, before) : historyState;
-        // Ces commandes de table doivent rester utilisables avec une grande
-        // rencontre ; les autres gardent leur contrat historique de taille.
-        const compactTypes = ['v5-divine-prayer', 'v5-spell-execution-apply', 'apply-resolution', 'adjust-hp', 'heal-wounds-v5'];
-        const compact = compactTypes.includes(type) && JSON.stringify(before).length + JSON.stringify(after).length > 200000;
+        // Avec une grande rencontre, deux instantanés complets dépassent la limite
+        // de l'historique pour n'importe quelle commande (Tour suivant, PV, états) :
+        // on n'enregistre alors que les changements réversibles.
+        const compact = JSON.stringify(before).length + JSON.stringify(after).length > 200000;
         const nextHistory = recordHistory
           ? recordCommand(baseHistory, (compact ? createCompactStateCommand : createStateCommand)({
             id: `${CLIENT_ID}:command:${nextRevision}`,

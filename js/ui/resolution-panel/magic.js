@@ -76,6 +76,8 @@ export function renderV5MagicContext({ actor, participants = [], target, type, d
     if (['magicMiscastRoll', 'magicMajorRoll'].includes(key)) {
       const roll = node('button', 'workspace-secondary', 'Lancer');
       roll.type = 'button';
+      roll.setAttribute('aria-label', `Lancer le d100 : ${input.getAttribute('aria-label') || key}`);
+      roll.dataset.focusKey = `${key}-dice`;
       roll.addEventListener('click', () => {
         input.value = String(d100());
         input.dispatchEvent(new Event('input', { bubbles: true }));
@@ -215,6 +217,8 @@ export function renderV5MagicContext({ actor, participants = [], target, type, d
       if (['magicMiscastRoll', 'magicMajorRoll'].includes(key)) {
         const roll = node('button', 'workspace-secondary', 'Lancer');
         roll.type = 'button';
+        roll.setAttribute('aria-label', `Lancer le d100 : ${inp.getAttribute('aria-label') || key}`);
+        roll.dataset.focusKey = `${key}-dice`;
         roll.addEventListener('click', () => {
           inp.value = String(d100());
           inp.dispatchEvent(new Event('input', { bubbles: true }));

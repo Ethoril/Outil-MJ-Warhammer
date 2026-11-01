@@ -228,7 +228,7 @@ try {
   await page.locator('.workspace-resolution-footer').getByRole('button',{name:/Jet d’incident magique/}).click();
   const field=page.locator('[data-focus-key="magicMiscastRoll"]');
   assert.equal(await field.isVisible(),true);
-  const roll=field.locator('..').getByRole('button',{name:'Lancer',exact:true});
+  const roll=field.locator('..').getByRole('button',{name:/^Lancer le d100/});
   assert.equal(await roll.count(),1,'un bouton permet de lancer le jet d’incident');
   await page.evaluate(()=>{Math.random=()=>0.14});await roll.click();
   assert.equal(await field.inputValue(),'15');

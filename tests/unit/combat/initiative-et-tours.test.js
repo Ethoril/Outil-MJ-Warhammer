@@ -1920,7 +1920,9 @@ test('C6 Store — 60 commandes : seules les 50 dernières sont annulables, la 5
 test('C6 Store — participant volumineux (~100 Ko) : l’historique est rogné par octets, les plus anciennes commandes (dont l’ajout) ne sont plus annulables', async () => {
   const store = await fixture({ current: 'A' });
   await summon(store, person('N', 50, { notes: 'x'.repeat(100000), extensions: { v5: { blob: 'x'.repeat(100000) } } }));
-  for (let i = 1; i <= 5; i++) await store.updateParticipant('A', { hp: 19 - i });
+  // Lot 3 : les grandes commandes ne gardent que leurs changements ; chaque mise à jour remplace
+  // donc ici des notes de 400 Ko pour que l'historique dépasse encore 2 Mo et soit rogné.
+  for (let i = 1; i <= 5; i++) await store.updateParticipant('A', { hp: 19 - i, notes: String(i).repeat(400000) });
   let undone = 0;
   while (await store.undo()) undone++;
   assert.ok(undone < 7 && undone >= 1, `rognage par octets attendu, ${undone} Undo possibles`);
@@ -1936,11 +1938,15 @@ test('C6 Store — une commande dont l’état dépasse 2 Mo est refusée, l’�
   assert.deepEqual(view(store).ids, ['A', 'B', 'C']);
 });
 
-test('C6 Store — un participant de 900 Ko ajouté puis une mise à jour (inverse + résultat > 2 Mo) : la mise à jour est refusée, l’état est intact', async () => {
+// Recette G lot 3 (C10/C14) : une grande partie ne doit plus bloquer les commandes ordinaires ;
+// la commande n'enregistre que ses changements réversibles (ancien contrat : refus).
+test('C6 Store — un participant de 900 Ko ajouté puis une mise à jour (inverse + résultat > 2 Mo) : la mise à jour passe et s’annule exactement', async () => {
   const store = await fixture({ current: 'A' });
   await summon(store, person('N', 50, { notes: 'x'.repeat(900000), extensions: { v5: { blob: 'x'.repeat(900000) } } }));
   const before = world(store);
-  await assert.rejects(async () => store.updateParticipant('A', { hp: 3 }), /trop volumineuse/);
+  await store.updateParticipant('A', { hp: 3 });
+  assert.equal(byId(store, 'A').hp, 3);
+  assert.equal(await store.undo(), true);
   assert.deepEqual(world(store), before);
   assert.equal(byId(store, 'A').hp, 20);
 });

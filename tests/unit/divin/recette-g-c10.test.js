@@ -38,3 +38,21 @@ test('C10 : la purge de rencontre ne réintroduit pas de reçus depuis une comma
   assert.deepEqual(scope.participantIds,['p']);
 });
 
+
+// Contre-vérification (Claude) : toutes les commandes ordinaires doivent passer dans une grande rencontre.
+test('C10/C14 : Tour suivant et PV directs passent et s’annulent dans une grande rencontre',async()=>{
+  const p=parseProfileJson(readFileSync(new URL('../../../docs/recette/profils-recette-complets.json',import.meta.url),'utf8')).profiles;
+  const setup=createStore({storage:null});await setup.ready;
+  await setup.importParsedProfiles([...p,...p.slice(0,14).map((x,i)=>({...x,name:x.name+' '+i}))]);
+  await setup.addProfilesToCombat(setup.listProfiles().map(x=>x.id),{zone:'active'});
+  const v=JSON.parse(setup.getFullJSON()),c=v.combat;delete v.history;
+  v.activeScene={id:'scene',encounterId:'enc',title:'test',notes:'',status:'active',round:c.round,currentActorId:c.currentActorId,order:c.order,participants:structuredClone(c.participants),reinforcements:[],events:[],startedAt:null,extensions:{},revision:0};
+  v.encounters=[{id:'enc',name:'test'}];
+  const store=createStore({persistence:{async load(){return null},async saveAtomic(){return {ok:true}}},storage:null});await store.ready;await store.loadFromJSON(v);
+  const target=store.listParticipants()[1];const before=store.listParticipants();
+  await store.updateParticipant(target.id,{hp:target.hp-1});
+  assert.equal(store.listParticipants().find(x=>x.id===target.id).hp,target.hp-1);
+  await store.nextTurn();
+  assert.equal(await store.undo(),true);assert.equal(await store.undo(),true);
+  assert.deepEqual(store.listParticipants(),before);
+});

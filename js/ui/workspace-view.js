@@ -1788,7 +1788,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         draft.preview = null;
         if (result?.status !== 'stale') resetCritical(draft);
       } catch (error) {
-        draft.error = { field: 'apply', message: userMessage(error, error?.message || 'Résultat non appliqué : réessayez.') };
+        draft.error = { field: 'apply', message: userMessage(error, `Résultat non appliqué : erreur interne (${error?.message || 'sans détail'}), détail en console.`) };
       } finally {
         draft.busy = false;
         render(focusKey);
