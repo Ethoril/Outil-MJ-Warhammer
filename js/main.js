@@ -1064,12 +1064,18 @@ function openRestoresView() {
           const previewButton = document.createElement('button'); previewButton.type = 'button'; previewButton.className = 'ghost small'; previewButton.textContent = 'Voir le contenu';
           const restoreButton = document.createElement('button'); restoreButton.type = 'button'; restoreButton.className = 'danger ghost small'; restoreButton.textContent = 'Restaurer';
           const details = document.createElement('div'); details.className = 'muted';
+          const confirmation = document.createElement('div'); confirmation.hidden = true;
+          const confirmationText = document.createElement('p'); confirmationText.textContent = 'La partie courante sera remplacée. Confirmez la restauration.';
+          const confirmRestore = document.createElement('button'); confirmRestore.type = 'button'; confirmRestore.textContent = 'Confirmer la restauration';
+          const cancelRestore = document.createElement('button'); cancelRestore.type = 'button'; cancelRestore.textContent = 'Annuler la restauration';
+          confirmation.append(confirmationText, confirmRestore, cancelRestore);
+          cancelRestore.addEventListener('click', () => { confirmation.hidden = true; restoreButton.focus(); });
           let preview = null; let previewRevision = Store.getLocalRevision?.();
           previewButton.addEventListener('click', async () => {
             previewButton.disabled = true;
             try {
-              previewRevision = Store.getLocalRevision?.();
               preview = await requireStoreApi('previewRestorePoint')(point.id);
+              previewRevision = preview.baseRevision;
               details.textContent = `${preview.counts?.profiles || 0} profil(s), ${preview.counts?.participants || 0} participant(s), ${preview.counts?.rejected || 0} rejet(s) · source ${readableRestoreSource(preview.sourceFormat || point.sourceFormat || 'snapshot-v2')}`;
               restoreButton.disabled = false;
             } catch (error) { details.textContent = contextMessage('Contenu illisible', error, 'cette version ne peut pas être restaurée.'); }
@@ -1078,15 +1084,20 @@ function openRestoresView() {
           restoreButton.disabled = true;
           restoreButton.addEventListener('click', async () => {
             if (!preview) { details.textContent = 'Affichez le contenu de cette version avant de la restaurer.'; return; }
-            if (!window.confirm(`Restaurer la version « ${readableRestoreReason(point.reason)} » ? La partie courante sera remplacée.`)) return;
+            confirmation.hidden = false;
+            confirmRestore.focus();
+          });
+          confirmRestore.addEventListener('click', async () => {
             restoreButton.disabled = true;
+            confirmRestore.disabled = true;
             try {
               const result = await awaitStore(requireStoreApi('restorePoint')(point.id, { expectedRevision: previewRevision, expectedPointRevision: preview.data?.localRevision }), 'Restauration');
-              if (result?.status !== 'restored') throw result?.status === 'stale' ? userError('La partie a changé : affichez à nouveau le contenu de cette version.') : new Error('Restauration non appliquée.');
-              showToast('Version précédente restaurée', 'success'); dialog.close();
-            } catch (error) { restoreButton.disabled = false; details.textContent = contextMessage('Restauration impossible', error, 'réessayez, ou chargez une sauvegarde depuis un fichier.'); }
+              if (result?.status !== 'restored') throw result?.status === 'stale' ? userError('Les données ont changé depuis l’aperçu : rouvrez l’aperçu puis restaurez.') : new Error('Restauration non appliquée.');
+              showToast('Version précédente restaurée', 'success', { label: 'Annuler', onClick: () => Store.undo() }); dialog.close();
+            } catch (error) { restoreButton.disabled = false; confirmation.hidden = true; details.setAttribute('role', 'alert'); details.textContent = contextMessage('Restauration impossible', error, 'réessayez, ou chargez une sauvegarde depuis un fichier.'); }
+            finally { confirmRestore.disabled = false; }
           });
-          actions.append(previewButton, restoreButton); row.append(heading, meta, actions, details); list.appendChild(row);
+          actions.append(previewButton, restoreButton); row.append(heading, meta, actions, details, confirmation); list.appendChild(row);
         }
       } catch (error) { status.textContent = contextMessage('Versions précédentes indisponibles', error, 'le stockage local ne les conserve pas sur cet appareil.'); }
     };

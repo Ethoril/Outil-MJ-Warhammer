@@ -604,7 +604,14 @@ async function main() {
     }
     assert.ok(restoreRow, 'le point créé par le chargement réel doit être prévisualisable');
     await expect(restoreRow).toContainText(/profil\(s\), .*participant\(s\)/);
+    await page.evaluate(async () => { const { Store } = await import('/js/main.js'); const actor = Store.listParticipants()[0]; await Store.updateParticipant(actor.id, { hp: actor.hp + 1 }); });
+    await restoreRow.getByRole('button', { name: 'Restaurer', exact: true }).click();
+    await restoreRow.getByRole('button', { name: 'Confirmer la restauration' }).click();
+    await expect(restoreRow.getByRole('alert')).toContainText(/les données ont changé depuis l’aperçu/i);
+    await restoreRow.getByRole('button', { name: 'Voir le contenu' }).click();
     await restoreRow.getByRole('button', { name: 'Restaurer' }).click();
+    await expect(restoreRow).toContainText('La partie courante sera remplacée');
+    await restoreRow.getByRole('button', { name: 'Confirmer la restauration' }).click();
     await expect(restoresOverlay).toBeHidden();
     await expect(page.locator('#toast-container')).toContainText('Version précédente restaurée');
     await page.reload();
