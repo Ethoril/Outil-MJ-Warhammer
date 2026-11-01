@@ -450,12 +450,12 @@ async function main() {
     const critical = page.locator('.workspace-critical').first();
     await expect(result).toContainText('Critique du jet');
     await expect(result).not.toContainText('Acharnement');
-    await expect(critical.locator('.workspace-roll-label').first()).toHaveText('Localisation du critique (nouveau d100)');
+    await expect(critical.locator('.workspace-roll-label').first()).toHaveText('Localisation du critique (nouveau d100) *');
     await expect(page.locator('[data-roll-input="critical-effect"]')).toHaveCount(0);
     // V5 : la localisation de l'attaque (22 → Bras Gauche) fixe déjà les dégâts ; seul le critique du jet attend la sienne.
     await expect(result).toContainText('Combattant 4 : 6 Blessures proposées · PV 3 → 0');
     await expect(page.locator('.workspace-resolution [data-focus-key="apply"]')).toBeDisabled();
-    await expect(page.locator('.workspace-resolution [data-focus-key="apply"]')).toHaveAttribute('title', 'Lancez d’abord la localisation du critique');
+    await expect(page.locator('.workspace-resolution [data-focus-key="apply"]')).toHaveAttribute('title', /Lancez la localisation du critique/);
     // Un jet invalide s'affiche sous son champ sans effacer le bloc.
     const criticalLocation = page.locator('[data-roll-input="critical-location"]');
     await criticalLocation.fill('abc');
@@ -517,7 +517,7 @@ async function main() {
     await expect(page.locator('.workspace-comparison-item').first()).toContainText('touché · coup critique (localisation à lancer)');
     await page.locator('.workspace-comparison-item').first().getByRole('button').click();
     await expect(page.locator('[data-roll-input="critical-location"]')).toHaveValue('');
-    await expect(page.locator('.workspace-resolution [data-focus-key="apply"]')).toHaveAttribute('title', 'Lancez d’abord la localisation du critique');
+    await expect(page.locator('.workspace-resolution [data-focus-key="apply"]')).toHaveAttribute('title', /Lancez la localisation du critique/);
     await page.locator('.workspace-resolution').getByRole('group', { name: 'Adversaires' }).getByRole('button', { name: 'Combattant 2', exact: true }).click();
     await attack.fill('0');
     await attack.press('Enter');

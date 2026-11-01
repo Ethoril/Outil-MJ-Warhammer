@@ -40,7 +40,7 @@ export const hitMorphologySelection = (override, profileMorphology) => override 
 export function applicationBlockingReasons(preview, draft, canApply) {
   const reasons = [];
   const add = (condition, text, focus) => { if (condition) reasons.push({ text, focus }); };
-  add(draft.busy, 'Calcul en cours');
+  if (draft.busy) reasons.push({ text: 'Calcul en cours', silent: true });
   add(!canApply, 'Application indisponible dans cet écran');
   if (preview.v5MagicKind) {
     const invalid = preview.v5MagicKind === 'cast' && (preview.spellPreview?.fingerprintCheck?.valid === false || preview.spellPreview?.valid === false || (preview.castPreview?.spellSuccess && preview.spellPreview?.ready === false));
@@ -2806,10 +2806,12 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
       primary.disabled = reasons.length > 0;
       if (!reasons.length) return;
       primary.title = reasons.map(reason => reason.text).join('\n');
+      const listed = reasons.filter(reason => !reason.silent);
+      if (!listed.length) return;
       const block = node('div', 'workspace-field-error');
       block.appendChild(node('p', '', 'À saisir avant d’appliquer :'));
       const list = node('ul');
-      for (const reason of reasons) {
+      for (const reason of listed) {
         const item = node('li');
         const field = reason.focus && (section.querySelector?.(`[data-blocking-field="${reason.focus}"]`) || live.querySelector?.(`[data-blocking-field="${reason.focus}"]`));
         if (field) {
@@ -2841,7 +2843,6 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
       live.appendChild(apply);
       showReasons(primary);
     } else {
-      const needsTarget = preview.attack && !preview.targetId;
       const needsLocation = Boolean(preview.critical?.details?.needsLocation || preview.defenderCritical?.details?.needsLocation);
       const effects = preview.critical?.application;
       const manual = preview.weapon?.status === 'manual';
@@ -2856,7 +2857,6 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
       cancel.disabled = draft.busy;
       cancel.addEventListener('click', () => handlers.cancel());
       apply.append(primary, cancel);
-      if (needsTarget) apply.appendChild(node('span', 'workspace-muted', 'Choisissez une cible pour appliquer une attaque.'));
       live.appendChild(apply);
       showReasons(primary);
     }

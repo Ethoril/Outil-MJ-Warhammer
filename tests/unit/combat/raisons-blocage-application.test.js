@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import { strict as assert } from 'node:assert';
-import { applicationBlockingReasons } from '../js/ui/resolution-panel.js';
+import { applicationBlockingReasons } from '../../../js/ui/resolution-panel.js';
 
 test('application blocking reasons preserve the existing disable conditions', () => {
   const cases = [
