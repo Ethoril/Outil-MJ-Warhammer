@@ -221,6 +221,7 @@ try {
 
   // 1. Focalisation V5 via les vrais contrôles DOM du panneau de résolution
   await page.click('[data-action-key="v5-magic:channelling"]');
+  await page.click('.workspace-resolution-settings > summary');
   await page.waitForSelector('.workspace-v5-magic');
 
   const initialBadge = await page.textContent('.workspace-magic-reserve');
@@ -518,7 +519,7 @@ try {
   async function chooseArcaneEnemy() {
     for (const [id, checked] of [['enemy-1', true], ['mage-1', false]]) {
       const input = page.locator('[data-focus-key="magic-target-' + id + '"]');
-      const details = page.locator('details').filter({ has: input });
+      const details = page.locator('details.workspace-v5-context-details').filter({ has: input });
       if (!await details.evaluate(el => el.open)) await details.locator('summary').click();
       await input.setChecked(checked);
     }
@@ -633,7 +634,7 @@ try {
   const apotheoseId=await page.evaluate(async()=>{const {getSpellContract}=await import('/js/core/v5-spell-contracts.js');return getSpellContract('Apothéose').id;});await page.selectOption('[data-focus-key="magic-spell"]',apotheoseId);await page.check('[data-focus-key="magicUseCadaiRune"]');await page.check('[data-focus-key="magicCadaiAccessible"]');await page.fill('[data-focus-key="magicCadaiTestRoll"]','85');await page.fill('[data-roll-input="attack"]','25');await page.click('[data-focus-key="calculate"]');assert.equal(await page.isDisabled('[data-focus-key="apply"]'),false,await page.textContent('.workspace-magic-result'));await page.click('[data-focus-key="apply"]');await page.waitForFunction(()=>window.__TEST__.Store.getCadaiRunes('mage-1').deployed===0);await page.click('#test-undo');assert.equal(await page.evaluate(()=>window.__TEST__.Store.getCadaiRunes('mage-1').deployed),1);
   await page.evaluate(async()=>{await window.__TEST__.Store.applySpellEffects('ally-1',{id:'ui-dispel',spellId:'ui-dispel',spellName:'Sort persistant de recette',casterId:'mage-1',cn:4,castExecutionId:'ui-dispel-group',duration:'10 Rounds',statModifiers:{Ag:20}});window.__TEST__.view.render();});
   await page.click('[data-action-key="v5-magic:dispel"]');await page.selectOption('[data-focus-key="magicPersistentId"]','ui-dispel');await page.fill('[data-focus-key="magicPersistentDistance"]','10');await page.selectOption('[data-focus-key="magicPersistentVisible"]','true');await page.fill('[data-roll-input="attack"]','25');await page.click('[data-focus-key="calculate"]');assert.equal(await page.isDisabled('[data-focus-key="apply"]'),false,await page.textContent('.workspace-magic-result'));await page.click('[data-focus-key="apply"]');await page.waitForFunction(()=>!window.__TEST__.Store.listParticipants().find(p=>p.id==='ally-1').extensions.v5.spellEffects.some(e=>e.id==='ui-dispel'));await page.click('#test-undo');assert.equal(await page.evaluate(()=>window.__TEST__.Store.listParticipants().find(p=>p.id==='ally-1').extensions.v5.spellEffects.some(e=>e.id==='ui-dispel')),true);
-  await page.setViewportSize({width:390,height:844});await page.click('[data-action-key="v5-magic:cast"]');const fireId=await page.evaluate(async()=>{const {getSpellContract}=await import('/js/core/v5-spell-contracts.js');return getSpellContract('Tête Brûlante').id;});await page.selectOption('[data-focus-key="magic-spell"]',fireId);for(const id of ['ally-1','enemy-1']){const input=page.locator('[data-focus-key="magic-target-'+id+'"]');const details=page.locator('details').filter({has:input});if(!await details.evaluate(el=>el.open))await details.locator('summary').click();await input.check();}assert.equal(await page.isChecked('[data-focus-key="magic-target-ally-1"]'),true);assert.equal(await page.isChecked('[data-focus-key="magic-target-enemy-1"]'),true);await page.screenshot({path:join(TMP_DIR,'magic-v5-mixed-targets-mobile.png'),fullPage:true});await page.setViewportSize({width:1440,height:900});
+  await page.setViewportSize({width:390,height:844});await page.click('[data-action-key="v5-magic:cast"]');const fireId=await page.evaluate(async()=>{const {getSpellContract}=await import('/js/core/v5-spell-contracts.js');return getSpellContract('Tête Brûlante').id;});await page.selectOption('[data-focus-key="magic-spell"]',fireId);for(const id of ['ally-1','enemy-1']){const input=page.locator('[data-focus-key="magic-target-'+id+'"]');const details=page.locator('details.workspace-v5-context-details').filter({has:input});if(!await details.evaluate(el=>el.open))await details.locator('summary').click();await input.check();}assert.equal(await page.isChecked('[data-focus-key="magic-target-ally-1"]'),true);assert.equal(await page.isChecked('[data-focus-key="magic-target-enemy-1"]'),true);await page.screenshot({path:join(TMP_DIR,'magic-v5-mixed-targets-mobile.png'),fullPage:true});await page.setViewportSize({width:1440,height:900});
 
   // 5. Vérification réelle du Service Worker et du rechargement hors ligne
   await page.goto(baseUrl, { waitUntil: 'networkidle' });

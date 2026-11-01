@@ -38,10 +38,10 @@ try{
  await panel.waitFor();
  await combat.locator('[data-workspace-select="hero"]').click();
  await combat.getByRole('group',{name:'Adversaires'}).getByRole('button',{name:'Garde'}).click();
- await combat.getByRole('combobox',{name:'Nature du Test'}).selectOption('melee');
+ if(!await combat.locator('.workspace-resolution-settings').evaluate(el=>el.open))await combat.locator('.workspace-resolution-settings > summary').click();await combat.getByRole('combobox',{name:'Nature du Test'}).selectOption('melee');
  await combat.getByRole('textbox',{name:'Attaque (CC 60)'}).fill('1');await combat.getByRole('button',{name:'Calculer'}).click();
  const effect=combat.getByRole('textbox',{name:/Gravité \(d100 \+ \d+\)/});await effect.fill('5');await effect.press('Tab');
- await combat.locator('.workspace-result-live').getByRole('button',{name:/Appliquer/}).click();
+ await combat.locator('.workspace-resolution-footer').getByRole('button',{name:/Appliquer/}).click();
  const occurrence=(await participant('foe')).extensions.v5.criticalAftermath;
  assert.equal(occurrence.length,1);assert.equal(occurrence[0].effectName,'Cassure nette');assert.deepEqual(occurrence[0].sequela.injuries.map(row=>[row.name,row.severity,row.part]),[['Broken Bone','minor','arm']],'fracture mineure issue d’un critique appliqué par l’interface');
 
@@ -96,10 +96,10 @@ try{
  await combat.locator('[data-workspace-select="manchot"]').click();
  await combat.locator('[data-action-key="great"]').click();
  await combat.getByRole('group',{name:'Adversaires'}).getByRole('button',{name:'Héros'}).click();
- await combat.getByRole('combobox',{name:'Nature du Test'}).selectOption('melee');
+ if(!await combat.locator('.workspace-resolution-settings').evaluate(el=>el.open))await combat.locator('.workspace-resolution-settings > summary').click();await combat.getByRole('combobox',{name:'Nature du Test'}).selectOption('melee');
  await combat.getByRole('textbox',{name:'Attaque (CC 55)'}).fill('30');await combat.getByRole('button',{name:'Calculer'}).click();
  await combat.getByText(/une arme à deux mains est interdite/).first().waitFor();
- await combat.locator('[data-action-key="epee"]').click();await combat.getByRole('combobox',{name:'Nature du Test'}).selectOption('melee');
+ await combat.locator('[data-action-key="epee"]').click();if(!await combat.locator('.workspace-resolution-settings').evaluate(el=>el.open))await combat.locator('.workspace-resolution-settings > summary').click();await combat.getByRole('combobox',{name:'Nature du Test'}).selectOption('melee');
  await combat.getByRole('textbox',{name:'Attaque (CC 55)'}).fill('30');await combat.getByRole('button',{name:'Calculer'}).click();
  const offHandField=combat.getByLabel(/Séquelle · Test de mêlée avec l’arme de la main non directrice/).first();await offHandField.waitFor();
  assert.equal(await combat.getByText(/une arme à deux mains est interdite/).count(),0,'l’épée à une main est permise');

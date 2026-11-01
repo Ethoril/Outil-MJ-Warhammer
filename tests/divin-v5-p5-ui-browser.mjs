@@ -66,14 +66,14 @@ try {
         input: (key, value) => calls.push({ kind: 'input', key, value }),
         roll: () => {}, calculate: () => {}, compare: () => {}, choose: () => {}, apply: () => calls.push({ kind: 'apply' }), cancel: () => {}
       };
-      const actor = { id: 'actor', name: 'Attaquant', camp: spec.actorCamp, caracs: { CC: 50, Ag: 40, E: 40, F: 40 } };
+      const actor = { id: 'actor', name: 'Attaquant', kind: 'PNJ', camp: spec.actorCamp, caracs: { CC: 50, Ag: 40, E: 40, F: 40 } };
       if (spec.actorDivine || spec.actorQuick) {
         const layers = [];
         if (spec.actorDivine) layers.push({ id: 'l1', reverseDice: { remaining: 1 } });
         if (spec.actorQuick) layers.push({ id: 'l2', freeAttack: { scope: 'round', test: { attr: 'I', slModifier: 0 } } });
         actor.extensions = { v5: { divineEffects: layers } };
       }
-      const target = { id: 'target', name: 'Cible', camp: spec.targetCamp, caracs: { CC: 45, Ag: 40, E: 40, F: 40 } };
+      const target = { id: 'target', name: 'Cible', kind: 'PJ', camp: spec.targetCamp, caracs: { CC: 45, Ag: 40, E: 40, F: 40 } };
       if (spec.targetDivine) target.extensions = { v5: { divineEffects: [{ id: 'l1', attackDeterrent: { skill: 'Calme', slBonus: 2, ...(spec.passedActor ? { passedAttackerIds: ['actor'] } : {}), ...(spec.passedOther ? { passedAttackerIds: ['other'] } : {}) } }] } };
       const actions = [{ id: 'a1', type: 'attack', attr: 'CC', note: 'Attaque', base: 50, damage: 5 }];
       const section = renderResolutionPanel({
@@ -91,6 +91,7 @@ try {
         handlers
       });
       document.querySelector('#mount').appendChild(section);
+      if (!spec.interactive) section.querySelector('.workspace-resolution-settings').open = true;
       window.__calls = calls;
     };
   }, { moduleUrl: `http://127.0.0.1:${port}/js/ui/resolution-panel.js` });
@@ -100,6 +101,8 @@ try {
   const lastCall = () => page.evaluate(() => window.__calls[window.__calls.length - 1]);
 
   await page.evaluate(() => window.__render({ actorCamp: 'ennemi', targetCamp: 'pj', targetDivine: true, interactive: true }));
+  check((await page.locator('.workspace-resolution-step > h4').allTextContents()).join('|') === '1 · Action et cible|2 · Jets|3 · Résultat', 'U1-1 : les trois étapes sont présentes et ordonnées');
+  check((await page.locator('.workspace-resolution-rolls .workspace-roll-owner').allTextContents()).join('|') === 'PNJ|PJ', 'U1-1 : les jets indiquent le type du combattant');
   const applyButton = page.locator('[data-focus-key="apply"]');
   const reason = page.getByRole('button', { name: /saisir le Test de Calme/ });
   check(await applyButton.isDisabled() && await reason.count() === 1, 'C1 : la saisie manquante est expliquée près du bouton');

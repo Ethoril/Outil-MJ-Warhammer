@@ -32,11 +32,11 @@ try{
   const receipt=await page.evaluate(()=>window.__dialogSubmit);
   await page.evaluate(()=>window.__fatePromise);
   check(receipt?.amount===1&&receipt?.options?.permanentResilienceLoss===true,'le formulaire transmet le signal au Store sans erreur UI');
-  await page.evaluate(()=>{document.body.replaceChildren(window.__renderResolution(false,false));});
+  await page.evaluate(()=>{document.body.replaceChildren(window.__renderResolution(false,false));document.querySelector('.workspace-resolution-settings').open=true;});
   const available=page.getByRole('checkbox',{name:'Dépenser 1 Point de Chance pour obtenir Avantage avant le jet'});
   check(await available.count()===1&&await available.isEnabled(),'Chance → Avantage est disponible avant le d100');
   for(const withPreview of [false,true]){
-    await page.evaluate(value=>{document.body.replaceChildren(window.__renderResolution(true,value));},withPreview);
+    await page.evaluate(value=>{document.body.replaceChildren(window.__renderResolution(true,value));document.querySelector('.workspace-resolution-settings').open=true;},withPreview);
     const chance=page.getByRole('checkbox',{name:'Dépenser 1 Point de Chance pour obtenir Avantage avant le jet'});
     check(await chance.count()===1&&await chance.isDisabled(),`Chance → Avantage est verrouillé après roll${withPreview?' et aperçu':''}`);
   }

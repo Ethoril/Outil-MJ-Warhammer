@@ -17,7 +17,7 @@ try{
   const render=async({actor,target,action,type='attack',draft={}})=>page.evaluate(({actor,target,action,type,draft})=>{
     const panel=window.renderResolutionPanel({draft,actor,participants:[actor,target].filter(Boolean),actions:[action],actionKey:action.id,type,target,
       groups:{adversaries:target?[target]:[],allies:[]},defense:{options:[],value:'Ag',option:{value:'Ag',statLabel:'Ag',mod:0,v5:{kind:'test',slModifier:0}}},
-      canCalculate:false,canApply:false,handlers:window.handlers});document.body.replaceChildren(panel);
+      canCalculate:false,canApply:false,handlers:window.handlers});document.body.replaceChildren(panel);panel.querySelector('.workspace-resolution-settings').open=true;
   },{actor,target,action,type,draft});
   const actor={id:'hero',name:'Hero',kind:'PJ',camp:'allies',hp:20,maxHp:20,caracs:{CC:60,F:40,E:30,Ag:40},skills:[],states:[],
     equipment:[{id:'shield',kind:'shield',name:'Bouclier',ap:2,encumbrance:1,keywords:[{id:'bouclier'}]}],extensions:{v5:{}}};

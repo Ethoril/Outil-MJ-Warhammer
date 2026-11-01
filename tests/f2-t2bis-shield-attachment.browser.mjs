@@ -19,7 +19,7 @@ try{
   const action={id:'attack',type:'attack',note:'Attaque test',attr:'CC',base:60,damage:4,qualities:[]};
   await page.evaluate(({actor,target,action})=>{
     const panel=window.renderResolutionPanel({draft:{protectionContext:{shieldId:'shield'}},actor,participants:[actor,target],actions:[action],actionKey:action.id,type:'attack',target,
-      groups:{adversaries:[target],allies:[]},defense:{options:[],value:'Ag',option:{value:'Ag',statLabel:'Ag',mod:0,v5:{kind:'test',slModifier:0}}},canCalculate:false,canApply:false,handlers:window.handlers});document.body.replaceChildren(panel);
+      groups:{adversaries:[target],allies:[]},defense:{options:[],value:'Ag',option:{value:'Ag',statLabel:'Ag',mod:0,v5:{kind:'test',slModifier:0}}},canCalculate:false,canApply:false,handlers:window.handlers});document.body.replaceChildren(panel);panel.querySelector('.workspace-resolution-settings').open=true;
   },{actor,target,action});
   await page.getByText('Protection et bouclier pour cette attaque').click();
   const attached=page.getByRole('checkbox',{name:'Bouclier attaché au bras ou en bandoulière'});
@@ -28,7 +28,7 @@ try{
   const attachedContext=await page.evaluate(()=>window.calls.at(-1)[0].protectionContext);
   await page.evaluate(({actor,target,action,protectionContext})=>{
     const panel=window.renderResolutionPanel({draft:{protectionContext},actor,participants:[actor,target],actions:[action],actionKey:action.id,type:'attack',target,
-      groups:{adversaries:[target],allies:[]},defense:{options:[],value:'Ag',option:{value:'Ag',statLabel:'Ag',mod:0,v5:{kind:'test',slModifier:0}}},canCalculate:false,canApply:false,handlers:window.handlers});document.body.replaceChildren(panel);
+      groups:{adversaries:[target],allies:[]},defense:{options:[],value:'Ag',option:{value:'Ag',statLabel:'Ag',mod:0,v5:{kind:'test',slModifier:0}}},canCalculate:false,canApply:false,handlers:window.handlers});document.body.replaceChildren(panel);panel.querySelector('.workspace-resolution-settings').open=true;
   },{actor,target,action,protectionContext:attachedContext});
   await page.getByText('Protection et bouclier pour cette attaque').click();
   assert.equal(await page.getByRole('combobox',{name:'Bras non directeur'}).count(),1,'attaching the shield requests the non-dominant arm');

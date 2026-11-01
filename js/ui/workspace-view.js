@@ -1769,12 +1769,6 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     center.appendChild(duel);
     const escapePanel=brokenEscapePanel.render(context.participants,context.actor?.id);
     if(escapePanel)center.appendChild(escapePanel);
-    const prayers=divinePanel.render(context.actor,context.participants);
-    if(prayers)center.appendChild(prayers);
-    const corruption=corruptionPanel.render(context.actor);
-    if(corruption)center.appendChild(corruption);
-    const aftermath=aftermathPanel.render(context.participants);
-    if(aftermath)center.appendChild(aftermath);
 
     const draft = state.resolution;
     let previousWeaponAttacks = [], resolutionClock = {};
@@ -1804,6 +1798,13 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       canDeclareCombatMovement: Boolean(callbacks.declareCombatMovement),
       handlers: resolutionHandlers
     }));
+
+    const prayers=divinePanel.render(context.actor,context.participants);
+    if(prayers)center.appendChild(prayers);
+    const corruption=corruptionPanel.render(context.actor);
+    if(corruption)center.appendChild(corruption);
+    const aftermath=aftermathPanel.render(context.participants);
+    if(aftermath)center.appendChild(aftermath);
 
     const carriedPavises=(context.actor?.equipment||[]).filter(item=>item.kind==='shield'&&/pavise|pavois/i.test(item.name||item.id||''));
     if(carriedPavises.length){

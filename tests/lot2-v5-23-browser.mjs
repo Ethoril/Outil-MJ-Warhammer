@@ -74,6 +74,7 @@ async function setup({ width = 1440, both = false, states = [], extraTarget = fa
     view.setSpace('play'); window.lot2UI = { store, view, calls, applyResults, turnResults, combatEngine, bus, recoveryOptionsFor, getSaved: () => structuredClone(saved) };
     window.randomDraws = 0; const originalRandom = Math.random; Math.random = () => { window.randomDraws += 1; return originalRandom(); };
   }, { origin, both, states, extraTarget, actorMomentum, talentNames, ranged });
+  await page.locator('.workspace-resolution-settings > summary').click();
   return { page, context };
 }
 const panel = page => page.locator('.workspace-resolution');

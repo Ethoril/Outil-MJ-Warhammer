@@ -33,6 +33,8 @@ try{
   await page.locator('#tab-combat').click();
   await page.locator('[data-action-key="antler-attack"]').click();
   const workspace=page.locator('#workspace-root');
+  const openSettings=async()=>{const details=workspace.locator('.workspace-resolution-settings');if(!await details.evaluate(el=>el.open))await details.locator(':scope > summary').click();};
+  await openSettings();
   assert.equal(await workspace.getByLabel('Origine de la poignée en bois de Grand Cerf').count(),1);
   // Warp Blade : score et d100 du Test de Résistance saisis dans le panneau, gardés d’un rendu à l’autre, oubliés au changement de cible.
   await page.locator('[data-action-key="warp-attack"]').click();
@@ -82,6 +84,7 @@ try{
   // Griffes du tigre : la case du panneau écrit v5.context.felidWoundDisguise ; cochée, la blessure appliquée est enregistrée comme griffure de grand félin, décochée rien n'est enregistré.
   await page.locator('[data-workspace-select="f-review-actor"]').click();
   await page.locator('[data-action-key="tiger-attack"]').click();
+  await openSettings();
   const disguise=workspace.getByLabel('Maquiller la blessure en griffure de grand félin');
   assert.equal(await disguise.count(),1);
   const strikeTiger=async()=>{

@@ -74,6 +74,7 @@ async function setup({ width = 1440, both = false, states = [], extraTarget = fa
     view.setSpace('play'); window.lot2UI = { store, view, calls, applyResults, turnResults, combatEngine, bus, recoveryOptionsFor, getSaved: () => structuredClone(saved) };
     window.randomDraws = 0; const originalRandom = Math.random; Math.random = () => { window.randomDraws += 1; return originalRandom(); };
   }, { origin, both, states, extraTarget, actorMomentum });
+  await page.locator('.workspace-resolution-settings > summary').click();
   return { page, context };
 }
 const panel = page => page.locator('.workspace-resolution');
@@ -145,6 +146,7 @@ try {
     document.querySelector('#test-quick-roll').addEventListener('click',()=>{const result=runDiceLine('quick-resume',window.lot2UI.store);window.quickResult=result;if(result?.status==='requires-resolution')window.quickOpened=window.lot2UI.view.openResolution(window.lot2UI.store.getDiceLines().find(line=>line.id==='quick-resume'),{roll:result.initialRoll});});
   },origin);
   await quickPage.getByRole('button',{name:'Jet rapide V5'}).click();assert.equal(await quickPage.evaluate(()=>window.quickResult.status),'requires-resolution');assert.equal(await quickPage.evaluate(()=>window.quickOpened),true);await expect(panel(quickPage).locator('[data-roll-input="attack"]')).toHaveValue('62');assert.equal(await quickPage.evaluate(()=>window.randomDraws),1);
+  await panel(quickPage).locator('.workspace-resolution-settings > summary').click();
   await panel(quickPage).getByText('Circonstances des Tests',{exact:true}).click();await panel(quickPage).getByLabel('Le Test implique un mouvement',{exact:true}).selectOption('false');await panel(quickPage).getByLabel('Sources supplémentaires d’Avantage',{exact:true}).fill('1');await quickPage.keyboard.press('Tab');await panel(quickPage).getByRole('button',{name:'Calculer',exact:true}).click();await expect(panel(quickPage).locator('input[name="v5-choice-actor"]')).toHaveCount(2);await panel(quickPage).locator('input[name="v5-choice-actor"][value="reverse"]').check();await expect(panel(quickPage).locator('[data-roll-input="attack"]')).toHaveValue('62');assert.equal(await quickPage.evaluate(()=>window.randomDraws),1);assert.equal(await quickPage.evaluate(()=>window.lot2UI.view.getViewState().resolution.preview.roll),26);await quickResume.context.close();
 
   // Two players each select their own voluntary inversion. Defender advice minimizes received wounds.

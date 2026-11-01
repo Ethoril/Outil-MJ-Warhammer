@@ -34,6 +34,7 @@ try{
  const origin=`http://127.0.0.1:${server.address().port}${base}`;await page.goto(origin,{waitUntil:'domcontentloaded'});await page.waitForFunction(()=>document.querySelector('#app-content')?.style.display==='block',{timeout:20000});await page.locator('#tab-combat').click();
  const load=async state=>page.evaluate(async s=>{const{Store}=await import('/Outil-MJ-Warhammer/js/main.js');await Store.ready;await Store.loadFromJSON(s);},state),read=async()=>page.evaluate(async()=>{const{Store}=await import('/Outil-MJ-Warhammer/js/main.js');return JSON.parse(Store.getFullJSON());});
  await load(combatFixture());const combat=page.locator('#workspace-root');await combat.locator('[data-workspace-select="hero"]').click();
+ await combat.locator('.workspace-resolution-settings > summary').click();
  await combat.getByRole('combobox',{name:'Nature du Test'}).selectOption('melee');
  await combat.getByRole('textbox',{name:'Attaque (CC 60)'}).fill('1');await combat.getByRole('button',{name:'Calculer'}).click();
  const attackPreview=combat.locator('.workspace-result-live');
@@ -42,7 +43,7 @@ try{
  const previewText=await attackPreview.innerText();assert.match(previewText,/critique/i,'attaque d’interface avec critique visible');
  assert.match(previewText,/critique d’excédent/i,'la résolution présente explicitement le critique d’excédent');
  assert.ok(previewText.length>0);
- await attackPreview.getByRole('button',{name:/Appliquer/}).click();
+ await combat.locator('.workspace-resolution-footer').getByRole('button',{name:/Appliquer/}).click();
  const appliedAttack=await read(),foeAfter=appliedAttack.combat.participants.find(p=>p.id==='foe');assert.ok(foeAfter.extensions.v5.criticalAftermath?.length,'le critique/excédent produit une séquelle Store après application UI');
  // The rest starts from explicit critical aftermath preconditions in the fixture.
  await load(combatFixture());

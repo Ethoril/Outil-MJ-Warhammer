@@ -44,6 +44,7 @@ try {
   await page.evaluate(async state => { const { Store } = await import('/Outil-MJ-Warhammer/js/main.js'); await Store.ready; await Store.loadFromJSON(state); }, fixture());
 
   const combat = page.locator('#workspace-root'), actorCard = combat.locator('[data-workspace-select="a"]');
+  const openResolutionSettings = async () => { const details = combat.locator('.workspace-resolution-settings'); if (!await details.evaluate(el => el.open)) await details.locator(':scope > summary').click(); };
   await actorCard.click();
   await combat.getByRole('combobox', { name: /Arme de tir tenue pour viser Garde/ }).selectOption('bow');
   await combat.getByRole('checkbox', { name: 'Je confirme que cette arme est tenue en main' }).check();
@@ -86,6 +87,7 @@ try {
   await page.locator('#tab-combat').click();
   await page.evaluate(async state => { const { Store } = await import('/Outil-MJ-Warhammer/js/main.js'); await Store.loadFromJSON(state); }, fixture());
   await actorCard.click();
+  await openResolutionSettings();
   await combat.getByRole('combobox', { name: 'Nature du Test' }).selectOption('ranged');
   assert.match(await combat.locator('.workspace-resolution').innerText(), /Bandes dérivées de la portée imprimée \(100 m\) : Bout portant ≤ 4 m \(\+2 DR\) · Courte ≤ 50 m \(\+1 DR\) · Moyenne ≤ 100 m \(0 DR\) · Longue ≤ 200 m \(−1 DR\) · Extrême ≤ 300 m \(−2 DR\)/);
   await combat.getByRole('combobox', { name: 'Bande de portée choisie par le MJ' }).selectOption('point-blank');
@@ -99,7 +101,7 @@ try {
   const detailedShotPreview = await combat.locator('.workspace-result-live').innerText();
   assert.match(detailedShotPreview, /Météo et lumière \(niveau le plus sévère\) : −2 DR/);
   assert.match(detailedShotPreview, /Bande de portée choisie par le MJ : .* DR/);
-  await combat.locator('.workspace-result-live').getByRole('button', { name: /Appliquer/ }).click();
+  await combat.locator('.workspace-resolution-footer').getByRole('button', { name: /Appliquer/ }).click();
   await page.waitForFunction(async () => {
     const { Store } = await import('/Outil-MJ-Warhammer/js/main.js'); return Store.getCombat().participants.get('b')?.hp < 30;
   });
@@ -121,6 +123,7 @@ try {
   await page.locator('#tab-combat').click();
   await page.evaluate(async state => { const { Store } = await import('/Outil-MJ-Warhammer/js/main.js'); await Store.loadFromJSON(state); }, helplessFixture);
   await actorCard.click();
+  await openResolutionSettings();
   await combat.getByRole('combobox', { name: 'Nature du Test' }).selectOption('ranged');
   await combat.getByRole('combobox', { name: 'Bande de portée choisie par le MJ' }).selectOption('point-blank');
   const tableLethal = combat.getByRole('checkbox', { name: 'Activer l’option létale de la table pour cette résolution' });
@@ -133,7 +136,7 @@ try {
   await combat.getByRole('textbox', { name: 'Attaque (CT 70)' }).fill('1');
   await combat.getByRole('button', { name: 'Calculer' }).click();
   assert.match(await combat.locator('.workspace-result-live').innerText(), /OPTION LÉTALE CONFIRMÉE PAR LE MJ/);
-  await combat.locator('.workspace-result-live').getByRole('button', { name: /Appliquer/ }).click();
+  await combat.locator('.workspace-resolution-footer').getByRole('button', { name: /Appliquer/ }).click();
   await page.waitForFunction(async () => { const { Store } = await import('/Outil-MJ-Warhammer/js/main.js'); const target=Store.getCombat().participants.get('b'); return target?.hp===0&&target?.extensions?.v5?.dead===true; });
   const lethalApplied = await page.evaluate(async () => { const { Store } = await import('/Outil-MJ-Warhammer/js/main.js'); return { target:Store.getCombat().participants.get('b'), log:JSON.parse(Store.getFullJSON()).log[0] }; });
   assert.equal(lethalApplied.target.hp, 0, 'la confirmation létale applique les PV à zéro');
@@ -157,6 +160,7 @@ try {
   sharpshooterFixture.combat.participants[0].talents = [{ id: 'talent-sharpshooter', name: 'Tireur d’élite', status: 'resolved', rank: 1 }];
   await page.evaluate(async state => { const { Store } = await import('/Outil-MJ-Warhammer/js/main.js'); await Store.loadFromJSON(state); }, sharpshooterFixture);
   await actorCard.click();
+  await openResolutionSettings();
   await combat.getByRole('combobox', { name: 'Nature du Test' }).selectOption('ranged');
   await combat.getByRole('checkbox', { name: 'Tir extraordinaire selon Tireur d’élite' }).check();
   await combat.getByRole('textbox', { name: 'Décrire le Tir extraordinaire' }).fill('tir entre les barreaux de la herse');
@@ -167,7 +171,7 @@ try {
   await combat.getByRole('button', { name: 'Calculer' }).click();
   const extraordinaryDetails = await combat.locator('.workspace-resolution').innerText();
   assert.match(extraordinaryDetails, /Appliquer/);
-  await combat.locator('.workspace-result-live').getByRole('button', { name: /Appliquer/ }).click();
+  await combat.locator('.workspace-resolution-footer').getByRole('button', { name: /Appliquer/ }).click();
   const extraordinaryLog = await page.evaluate(async () => { const { Store } = await import('/Outil-MJ-Warhammer/js/main.js'); return JSON.parse(Store.getFullJSON()).log[0]; });
   assert.equal(extraordinaryLog?.detail?.input?.v5?.context?.extraordinaryShot, true);
   assert.equal(extraordinaryLog?.detail?.input?.v5?.context?.extraordinaryShotDifficulty, -4);
@@ -176,6 +180,7 @@ try {
   // Dispersion d’une arme de jet ratée
   await page.evaluate(async state => { const { Store } = await import('/Outil-MJ-Warhammer/js/main.js'); await Store.loadFromJSON(state); }, fixture());
   await actorCard.click();
+  await openResolutionSettings();
   await combat.getByRole('combobox', { name: 'Nature du Test' }).selectOption('ranged');
   await combat.getByRole('checkbox', { name: 'Il s’agit d’une arme de jet (dispersion seulement si le tir échoue)' }).check();
   await combat.getByRole('combobox', { name: 'Déviation d10 (direction relative à la cible)' }).selectOption('3');
@@ -188,7 +193,7 @@ try {
   await combat.getByRole('textbox', { name: 'Attaque (CT 70)' }).fill('95');
   await combat.getByRole('button', { name: 'Calculer' }).click();
   assert.match(await combat.locator('.workspace-result-live').innerText(), /Arme de jet déviée : d10 3 · haut-droite · 2d10 7 et 6 m = 13 m, plafond 6 m, résultat 6 m/);
-  await combat.locator('.workspace-result-live').getByRole('button', { name: /Enregistrer le résultat/ }).click();
+  await combat.locator('.workspace-resolution-footer').getByRole('button', { name: /Enregistrer le résultat/ }).click();
   const scatterLog = await page.evaluate(async () => { const { Store } = await import('/Outil-MJ-Warhammer/js/main.js'); return JSON.parse(Store.getFullJSON()).log[0]; });
   assert.equal(scatterLog?.detail?.scatter?.distanceYards, 6);
 
@@ -198,6 +203,7 @@ try {
   engagedFixture.combat.participants.push(actor('c', 'Allié', 'pj', { hp: 25, maxHp: 25 }));
   await page.evaluate(async state => { const { Store } = await import('/Outil-MJ-Warhammer/js/main.js'); await Store.loadFromJSON(state); }, engagedFixture);
   await actorCard.click();
+  await openResolutionSettings();
   await combat.getByRole('combobox', { name: 'Nature du Test' }).selectOption('ranged');
   await combat.getByRole('combobox', { name: 'La cible est engagée au corps à corps (Désavantage au tir)' }).selectOption('true');
   await combat.getByRole('checkbox', { name: 'Engagé avec la cible : Allié' }).check();
@@ -206,7 +212,7 @@ try {
   await combat.getByRole('textbox', { name: 'Attaque (CT 70)' }).fill('28');
   await combat.getByRole('button', { name: 'Calculer' }).click();
   assert.match(await combat.locator('.workspace-result-live').innerText(), /Tir contre des combattants engagés : déviation vers Allié \(d100 80\)/);
-  await combat.locator('.workspace-result-live').getByRole('button', { name: /Appliquer .* à Allié/ }).click();
+  await combat.locator('.workspace-resolution-footer').getByRole('button', { name: /Appliquer .* à Allié/ }).click();
   await page.waitForFunction(async () => {
     const { Store } = await import('/Outil-MJ-Warhammer/js/main.js');
     return Store.getCombat().participants.get('c')?.hp < 25 && Store.getCombat().participants.get('b')?.hp === 30;
@@ -238,7 +244,7 @@ try {
   await combat.getByRole('textbox', { name: 'Attaque (CC 65)' }).fill('20');
   await combat.getByRole('textbox', { name: /Jet de défense/ }).fill('80');
   await combat.getByRole('button', { name: 'Calculer' }).click();
-  await combat.locator('.workspace-result-live').getByRole('button', { name: /Appliquer .* à Garde/ }).click();
+  await combat.locator('.workspace-resolution-footer').getByRole('button', { name: /Appliquer .* à Garde/ }).click();
   await page.waitForFunction(async () => {
     const { Store } = await import('/Outil-MJ-Warhammer/js/main.js');
     return Store.getCombat().participants.get('b')?.hp < 30;
@@ -255,7 +261,7 @@ try {
   await combat.getByRole('button', { name: 'Calculer' }).click();
   assert.match(await combat.locator('.workspace-result-live').innerText(), /Opposition de Croche-pied : victoire de Aline\. Coût prévu : 1 Élan\. Garde reçoit À Terre\./);
   assert.match(await combat.locator('.workspace-result-live').innerText(), /Chute verticale de 2 m/);
-  await combat.locator('.workspace-result-live').getByRole('button', { name: /Enregistrer le résultat/ }).click();
+  await combat.locator('.workspace-resolution-footer').getByRole('button', { name: /Enregistrer le résultat/ }).click();
   await page.waitForFunction(async () => {
     const { Store } = await import('/Outil-MJ-Warhammer/js/main.js');
     const target = Store.getCombat().participants.get('b');
@@ -271,7 +277,7 @@ try {
   await combat.getByRole('button', { name: 'Calculer' }).click();
   await combat.getByRole('radio', { name: /Conserver 20/ }).check();
   assert.match(await combat.locator('.workspace-result-live').innerText(), /Coût proposé avant le jet : 1 Élan/);
-  await combat.locator('.workspace-result-live').getByRole('button', { name: /Appliquer .* à Garde/ }).click();
+  await combat.locator('.workspace-resolution-footer').getByRole('button', { name: /Appliquer .* à Garde/ }).click();
   const secondWeaponState = await page.evaluate(async () => { const { Store } = await import('/Outil-MJ-Warhammer/js/main.js'); return JSON.parse(Store.getFullJSON()); });
   assert.equal(secondWeaponState.extensions.v5.actionLedger.quotaUsage.some(row => row.quotaId === 'combat:base-second-weapon' && row.used === 1), true);
 

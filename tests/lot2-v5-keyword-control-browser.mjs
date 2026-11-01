@@ -74,6 +74,7 @@ async function setup({ width = 1440, both = false, states = [], extraTarget = fa
     view.setSpace('play'); window.lot2UI = { store, view, calls, applyResults, turnResults, combatEngine, bus, recoveryOptionsFor, getSaved: () => structuredClone(saved) };
     window.randomDraws = 0; const originalRandom = Math.random; Math.random = () => { window.randomDraws += 1; return originalRandom(); };
   }, { origin, both, states, extraTarget, actorMomentum, actorTalents, targetTalents });
+  await page.locator('.workspace-resolution-settings > summary').click();
   return { page, context };
 }
 const panel = page => page.locator('.workspace-resolution');
@@ -114,7 +115,7 @@ async function configure(page,{actor,target,actionId}){
  if(actionId)await page.locator('[data-action-key="'+actionId+'"]').click();
 }
 async function criticalInput(page,field,value){await panel(page).locator('[data-roll-input="'+field+'"]').fill(String(value));await panel(page).getByRole('button',{name:'Calculer',exact:true}).click();}
-async function protectionChoice(page,label,value){const details=panel(page).locator('details').filter({has:page.getByText('Protection et bouclier pour cette attaque',{exact:true})});if(await details.getAttribute('open')===null)await details.locator('summary').click();await panel(page).getByLabel(label,{exact:true}).selectOption(value);}
+async function protectionChoice(page,label,value){const details=panel(page).locator('details.workspace-defense').filter({has:page.getByText('Protection et bouclier pour cette attaque',{exact:true})});if(await details.getAttribute('open')===null)await details.locator('summary').click();await panel(page).getByLabel(label,{exact:true}).selectOption(value);}
 async function capture(page,name){await noOverflow(page);await page.screenshot({path:join(root,'tmp/lot2-keyword-control-ui/'+name),fullPage:true});}
 async function undo(page){await page.getByRole('button',{name:'Annuler la dernière commande',exact:true}).click();}
 async function apply(page){await expect(applyButton(page)).toBeEnabled();await applyButton(page).click();await expect.poll(()=>page.evaluate(()=>window.lot2UI.applyResults.at(-1)?.status)).toBe('applied');}

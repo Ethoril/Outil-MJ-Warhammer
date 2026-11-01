@@ -11,7 +11,7 @@ await new Promise(ok=>server.listen(0,'127.0.0.1',ok));
 const browser=await chromium.launch({headless:true,executablePath:process.env.PLAYWRIGHT_EXECUTABLE_PATH || 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe'}),page=await browser.newPage({viewport:{width:1440,height:1000},serviceWorkers:'block'});
 page.on('pageerror',e=>{errors.push(e.message);console.log(e.message);});
 const contractFor=name=>contracts.find(c=>c.name===name);
-const choose=async(name,active=false)=>{const c=contractFor(name);await page.goto('http://127.0.0.1:'+server.address().port+'/harness?spell='+c.id+(active?'&active='+encodeURIComponent(name):''));await page.waitForFunction(()=>window.ready);await page.click('[data-action-key="v5-magic:cast"]');await page.locator('[data-focus-key="magic-spell"]').selectOption(c.id);};
+const choose=async(name,active=false)=>{const c=contractFor(name);await page.goto('http://127.0.0.1:'+server.address().port+'/harness?spell='+c.id+(active?'&active='+encodeURIComponent(name):''));await page.waitForFunction(()=>window.ready);await page.click('[data-action-key="v5-magic:cast"]');if(!await page.locator('.workspace-resolution-settings').evaluate(el=>el.open))await page.locator('.workspace-resolution-settings > summary').click();await page.locator('[data-focus-key="magic-spell"]').selectOption(c.id);};
 const field=text=>page.getByLabel(text,{exact:true});let facts=0,clauses=0;
 try{
  for(const c of contracts.filter(c=>['high','elven-arcane','elven-petty'].includes(c.domain)&&c.effects.facts?.length)){

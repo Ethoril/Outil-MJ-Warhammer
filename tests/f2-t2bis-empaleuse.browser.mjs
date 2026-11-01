@@ -22,7 +22,7 @@ try{
   const action={id:'ranged-attack',type:'attack',note:'Arc de test',attr:'CT',base:60,damage:4,
     qualities:[{id:'empaleuse'}],extensions:{fiche:{equipmentId:'bow'},equipment:actor.equipment[0]}};
   await page.evaluate(({actor,target,action})=>{const panel=window.renderResolutionPanel({draft:{},actor,target,participants:[actor,target],actions:[action],actionKey:action.id,type:'attack',
-    groups:{adversaries:[target],allies:[]},defense:{options:[],value:'Ag',option:{value:'Ag',statLabel:'Ag',mod:0,v5:{kind:'test',slModifier:0}}},canCalculate:false,canApply:false,handlers:window.handlers});document.body.replaceChildren(panel);},{actor,target,action});
+    groups:{adversaries:[target],allies:[]},defense:{options:[],value:'Ag',option:{value:'Ag',statLabel:'Ag',mod:0,v5:{kind:'test',slModifier:0}}},canCalculate:false,canApply:false,handlers:window.handlers});document.body.replaceChildren(panel);panel.querySelector('.workspace-resolution-settings').open=true;},{actor,target,action});
   const ammo=page.getByRole('combobox',{name:'Munition'});
   assert.equal(await ammo.count(),1,'la munition reste un choix facultatif si le stock est représenté dans l’inventaire');
   assert.equal(await ammo.inputValue(),'','aucune munition n’est présélectionnée');

@@ -102,10 +102,12 @@ async function open(scenario, { w = '', t = 'mage-1', extra = '' } = {}) {
   await page.route(url => url.pathname === '/__lot3_magic_2b__.html', route => route.fulfill({ status: 200, contentType: 'text/html; charset=utf-8', body: HARNESS_HTML }));
   await page.goto(`${baseUrl}/__lot3_magic_2b__.html?s=${scenario}&w=${encodeURIComponent(w)}&t=${t}${extra}`, { waitUntil: 'networkidle' });
   await page.waitForSelector('.workspace-resolution');
+  await page.locator('.workspace-resolution-settings > summary').click();
   return { page, context, errors };
 }
 async function pickSpell(page, name) {
   await page.click('[data-action-key="v5-magic:cast"]');
+  if (!await page.locator('.workspace-resolution-settings').evaluate(el => el.open)) await page.locator('.workspace-resolution-settings > summary').click();
   await page.waitForSelector('[data-focus-key="magic-spell"]');
   await page.selectOption('[data-focus-key="magic-spell"]', await page.evaluate(n => window.__TEST__.getSpellContract(n).id, name));
   await page.waitForTimeout(250);
@@ -274,9 +276,9 @@ try {
     await pickSpell(page, 'Forme bestiale');
     assert.equal(await page.locator('[data-focus-key="magic-beast-key"]').count(), 1, 'sélecteur d’animal pour Forme bestiale');
     assert.equal(await page.locator('[data-focus-key="magic-kadon-monster"]').count(), 0, 'pas de sélecteur de monstre');
-    const optionsBlock = page.locator('details', { has: page.locator('summary', { hasText: 'Options du sort : Forme bestiale' }) });
+    const optionsBlock = page.locator('summary', { hasText: 'Options du sort : Forme bestiale' }).locator('..');
     assert.equal(await optionsBlock.locator('[data-focus-key="magic-beast-key"]').count(), 1, 'dans le bloc des options du sort');
-    const overcastBlock = page.locator('details', { has: page.locator('summary', { hasText: 'Surpuissance & Paramètres du sort' }) });
+    const overcastBlock = page.locator('summary', { hasText: 'Surpuissance & Paramètres du sort' }).locator('..');
     assert.equal(await overcastBlock.locator('[data-focus-key="magic-beast-key"]').count(), 0, 'plus dans la surpuissance');
     assert.equal(await overcastBlock.getByLabel('Palier Main de Gloire').count(), 0, 'aucun champ d’un autre sort');
     assert.equal(await page.getByLabel('Jet 3d10 commun (Main de Gloire)').count(), 0);

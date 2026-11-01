@@ -20,14 +20,14 @@ try{
  await page.evaluate(async value=>{const{Store}=await import('/Outil-MJ-Warhammer/js/main.js');await Store.ready;await Store.loadFromJSON(value);},seed);
  const play=page.locator('#workspace-root'),action=play.locator('[data-action-key="net-escape"]');await action.waitFor();await action.click();
  const type=play.getByLabel('Type d’action');assert.equal(await type.locator('option[value="test"]').count(),1,'Le menu réel propose maintenant un Test explicite.');
- let summary=play.getByText('Circonstances des Tests');if(!(await summary.evaluate(el=>el.closest('details')?.open)))await summary.click();await play.getByLabel('Sortie d’entrave : état Empêtré').selectOption('net-state');
+ await play.locator('.workspace-resolution-settings > summary').click();let summary=play.getByText('Circonstances des Tests');if(!(await summary.evaluate(el=>el.closest('details')?.open)))await summary.click();await play.getByLabel('Sortie d’entrave : état Empêtré').selectOption('net-state');
  const roll=play.locator('[data-roll-input="attack"]');await roll.fill('20');
  await play.getByLabel('Jet d100 opposé — Force 35').fill('20');
  await type.selectOption('skill');await play.getByRole('button',{name:'Calculer',exact:true}).click();let preview=play.locator('.workspace-result-live');await preview.waitFor();
  assert.match(await preview.innerText(),/Entrave : le Test de sortie doit être un Test de Force/u,'une compétence ordinaire ne peut pas contourner la garde de Force');
  await play.getByRole('button',{name:'Annuler le résultat calculé'}).click();await type.selectOption('test');const hookedDamage=play.getByLabel('Filet à crochets : dégâts MJ (armure ignorée)');await hookedDamage.fill('0');await hookedDamage.dispatchEvent('change');await play.getByRole('button',{name:'Calculer',exact:true}).click();preview=play.locator('.workspace-result-live');await preview.waitFor();
  let text=await preview.innerText();assert.doesNotMatch(text,/Entrave : le Test de sortie doit être un Test de Force/u);assert.match(text,/Sortie de filet : Force/u);
- await preview.getByRole('button',{name:/Appliquer|Enregistrer le résultat/}).click();
+ await play.locator('.workspace-resolution-footer').getByRole('button',{name:/Appliquer|Enregistrer le résultat/}).click();
  const level=await page.evaluate(async()=>{const{Store}=await import('/Outil-MJ-Warhammer/js/main.js');return Store.listParticipants().find(row=>row.id==='net-actor').states.find(row=>row.id==='net-state')?.level??0;});
  assert.equal(level,0,'l’application du Test de Force retire les états Empêtré prévus par les DR nets');
  console.log('Sortie de filet : la Compétence reste bloquée, le type Test permet la Force opposée et le résultat est appliqué.');

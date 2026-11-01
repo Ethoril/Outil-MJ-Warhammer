@@ -237,7 +237,7 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
     const action = actions.find((item, index) => actionKey(item, index) === selectedKey) || actions[0];
 
     if (canDeclareCombatAction || canDeclareCombatMovement) {
-      const combatActions = node('section', 'workspace-resolution-row');
+      const combatActions = node('section', 'workspace-resolution-row workspace-combat-actions');
       combatActions.appendChild(rubric('Actions du Tour'));
       combatActions.appendChild(node('p', 'workspace-muted', 'Mouvement narratif non observable automatiquement : indiquez-le quand il a lieu. La réorganisation des combattants ne constitue pas un déplacement.'));
       if (canDeclareCombatMovement) {
@@ -2739,6 +2739,12 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
     }));
     rolls.appendChild(defenseBlock);
   }
+  for (const [field, participant] of [['attack', actor], ['defense', target]]) {
+    const roll = rolls.querySelector?.(`[data-roll-input="${field}"]`)?.closest('.workspace-roll');
+    if (!roll || !participant) continue;
+    const isPlayer = participant.kind === 'PJ';
+    roll.prepend(node('span', `workspace-roll-owner ${isPlayer ? 'is-pj' : 'is-npc'}`, isPlayer ? 'PJ' : 'PNJ'));
+  }
   section.append(rolls, node('p', 'workspace-roll-hint', 'Dés lancés à la table : tapez le résultat dans la case, puis Entrée.'));
   section.lastChild.id = 'workspace-roll-hint';
 
@@ -2821,7 +2827,11 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
             if (caption && !caption.textContent.trim().endsWith('*')) caption.append(' *');
           }
           const link = button(reason.text, 'workspace-ghost');
-          link.addEventListener('click', () => { field.scrollIntoView({ block: 'center' }); field.focus(); });
+          link.addEventListener('click', () => {
+            for (let parent = field.parentElement; parent; parent = parent.parentElement) if (parent.tagName === 'DETAILS') parent.open = true;
+            field.scrollIntoView({ block: 'center' });
+            field.focus();
+          });
           item.appendChild(link);
         } else item.textContent = reason.text;
         list.appendChild(item);
@@ -2862,5 +2872,38 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
     }
   }
   section.appendChild(live);
+  arrangeResolutionSteps(section, { actionBlock, targetBlock, rolls, commands, live, draft });
   return section;
+}
+
+// Organise les contrôles déjà construits sans modifier leurs gestionnaires ni leurs valeurs.
+function arrangeResolutionSteps(section, { actionBlock, targetBlock, rolls, commands, live, draft }) {
+  if (!section.insertBefore) return;
+  const step = title => {
+    const block = node('section', 'workspace-resolution-step');
+    block.appendChild(node('h4', '', title));
+    return block;
+  };
+  const actionStep = step('1 · Action et cible');
+  const rollsStep = step('2 · Jets');
+  const resultStep = step('3 · Résultat');
+  const settings = node('details', 'workspace-resolution-settings');
+  settings.open = draft.circumstancesOpen ?? false;
+  settings.addEventListener('toggle', () => { draft.circumstancesOpen = settings.open; });
+  settings.appendChild(node('summary', '', 'Autres réglages'));
+  const footer = node('footer', 'workspace-resolution-footer');
+  const children = [...section.children];
+  for (const child of children) {
+    if (child === section.firstElementChild) continue;
+    if (child === actionBlock || child === targetBlock || child.classList.contains('workspace-combat-actions')) actionStep.appendChild(child);
+    else if (child === rolls || child === commands || child.id === 'workspace-roll-hint') rollsStep.appendChild(child);
+    else if (child === live) resultStep.appendChild(child);
+    else settings.appendChild(child);
+  }
+  rollsStep.insertBefore(settings, rollsStep.firstElementChild.nextSibling);
+  const applyCommands = live.querySelector(':scope > .workspace-resolution-commands');
+  if (applyCommands) footer.appendChild(applyCommands);
+  const reasons = live.querySelector(':scope > .workspace-field-error:not([role])');
+  if (reasons) footer.appendChild(reasons);
+  section.append(actionStep, rollsStep, resultStep, footer);
 }

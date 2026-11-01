@@ -28,10 +28,10 @@ try{
  await panel.waitFor();
  await panel.locator('summary',{hasText:'Critiques à suivre (0)'}).waitFor();
  await combat.locator('[data-workspace-select="hero"]').click();
- await combat.getByRole('combobox',{name:'Nature du Test'}).selectOption('melee');
+ if(!await combat.locator('.workspace-resolution-settings').evaluate(el=>el.open))await combat.locator('.workspace-resolution-settings > summary').click();await combat.getByRole('combobox',{name:'Nature du Test'}).selectOption('melee');
  await combat.getByRole('textbox',{name:'Attaque (CC 60)'}).fill('1');await combat.getByRole('button',{name:'Calculer'}).click();
  const effect=combat.getByRole('textbox',{name:'Gravité (d100 + 210)'});await effect.fill('45');await effect.press('Tab');
- await combat.locator('.workspace-result-live').getByRole('button',{name:/Appliquer/}).click();
+ await combat.locator('.workspace-resolution-footer').getByRole('button',{name:/Appliquer/}).click();
  const occurrence=(await participant('foe')).extensions.v5.criticalAftermath;assert.ok(occurrence?.length,'le critique appliqué par l’interface crée l’occurrence F2-I');
 
  // 2. Le panneau propose le suivi lié ; il n'existe aucun autre moyen d'ouvrir un suivi de critique.

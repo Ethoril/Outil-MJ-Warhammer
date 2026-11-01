@@ -74,6 +74,7 @@ async function setup({ width = 1440, both = false, states = [], extraTarget = fa
     view.setSpace('play'); window.lot2UI = { store, view, calls, applyResults, turnResults, combatEngine, bus, recoveryOptionsFor, getSaved: () => structuredClone(saved) };
     window.randomDraws = 0; const originalRandom = Math.random; Math.random = () => { window.randomDraws += 1; return originalRandom(); };
   }, { origin, both, states, extraTarget, actorMomentum, actorTalents, targetTalents });
+  await page.locator('.workspace-resolution-settings > summary').click();
   return { page, context };
 }
 const panel = page => page.locator('.workspace-resolution');
@@ -112,6 +113,7 @@ try {
   await r.evaluate(async()=>{await window.lot2UI.store.updateParticipant('target',{hp:40,maxHp:40});}); await defenseCC(r); await enterRolls(r,23,81); await expect(applyButton(r)).toBeEnabled(); await applyButton(r).click();
   const use=r.getByRole('button',{name:'Utiliser Assaut féroce de Acteur de recette',exact:true}); await expect(use).toBeVisible(); const before=await r.evaluate(()=>({revision:window.lot2UI.store.getLocalRevision(),draws:window.randomDraws,momentum:window.lot2UI.store.listParticipants().find(row=>row.id==='actor').extensions.v5.hasMomentum}));
   await use.click(); await expect(panel(r).locator('[data-roll-input="attack"]')).toHaveValue(''); assert.equal(await r.evaluate(()=>window.randomDraws),before.draws); assert.equal(await r.evaluate(()=>window.lot2UI.store.getLocalRevision()),before.revision);
+  if(!await panel(r).locator('.workspace-resolution-settings').evaluate(el=>el.open))await panel(r).locator('.workspace-resolution-settings > summary').click();
   await panel(r).getByText('Circonstances des Tests',{exact:true}).click(); await panel(r).getByRole('button',{name:'Quitter la préparation d’Assaut féroce',exact:true}).click(); assert.equal(await r.evaluate(()=>window.lot2UI.store.getLocalRevision()),before.revision); assert.equal(await r.evaluate(()=>window.lot2UI.store.listParticipants().find(row=>row.id==='actor').extensions.v5.hasMomentum),true);
   await use.click(); await enterRolls(r,61,81); await expect(panel(r).locator('input[name="v5-choice-actor"]')).toHaveCount(0); await expect(applyButton(r)).toBeEnabled(); await applyButton(r).click(); await expect.poll(()=>r.evaluate(()=>window.lot2UI.applyResults.at(-1)?.status)).toBe('applied'); await expect(use).toHaveCount(0);
   const reactionLedger=await r.evaluate(()=>JSON.parse(window.lot2UI.store.getFullJSON()).extensions.v5.actionLedger); assert.ok(reactionLedger.quotaUsage.some(row=>row.quotaId==='talent-furious-assault:round')); assert.ok(reactionLedger.quotaUsage.some(row=>row.quotaId==='system:paid-momentum-extra-attack')); await reaction.context.close();

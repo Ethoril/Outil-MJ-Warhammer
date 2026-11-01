@@ -57,6 +57,7 @@ try {
     await play.locator('[data-workspace-select="a"]').click();
     await play.locator(`[data-action-key="${id}"]`).click();
     await play.getByLabel('Type d’action').selectOption('attack');
+    if (!await play.locator('.workspace-resolution-settings').evaluate(el => el.open)) await play.locator('.workspace-resolution-settings > summary').click();
     await play.getByLabel('Nature du Test').selectOption('ranged');
   };
   const noDefense = async () => { const roll = play.locator('[data-roll-input="defense"]'); if (await roll.count()) await roll.fill(''); };
@@ -87,7 +88,7 @@ try {
   await calculate();
   assert.match(await details(), /À répétition : tir double/u, 'le −1 DR du tir double figure au détail');
   const apply = async () => {
-    const button = play.locator('.workspace-result-live').getByRole('button', { name: /Appliquer|Enregistrer le résultat/ });
+    const button = play.locator('.workspace-resolution-footer').getByRole('button', { name: /Appliquer|Enregistrer le résultat/ });
     assert.equal(await button.isEnabled(), true, await play.locator('.workspace-result-live').innerText());
     await button.click();
   };

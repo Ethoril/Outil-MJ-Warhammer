@@ -92,6 +92,7 @@ try {
   await page.locator('#workspace-root [data-workspace-select="a"]').click();
   await page.locator('#workspace-root').locator('[data-focus-key="target-m"]').click();
   await page.locator('#workspace-root').getByLabel('Type d’action').selectOption('cast');
+  await page.locator('#workspace-root .workspace-resolution-settings > summary').click();
   const spellSelect = page.locator('#workspace-root').getByLabel(/Sort/u).first();
   await spellSelect.selectOption({ label: 'Souffle · NI 6 (arcane)' });
   const box = page.locator('#workspace-root details.workspace-v5-context-details', { hasText: 'Cibles multiples' });

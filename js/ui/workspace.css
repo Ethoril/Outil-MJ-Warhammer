@@ -509,3 +509,12 @@ dialog.tool-sheet.campaign-time-dialog { position:fixed; inset:auto; top:50%; le
 .workspace-aftermath-check { display:grid; grid-template-columns:minmax(180px,1fr) repeat(2,minmax(80px,130px)); gap:8px; align-items:end; padding:8px 0; border-bottom:1px solid var(--line,var(--border,#8b7960)); }
 .workspace-aftermath-incident { display:grid; gap:8px; min-width:0; }
 @media(max-width:600px) { .workspace-aftermath-check { grid-template-columns:1fr 1fr; } .workspace-aftermath-check > span { grid-column:1 / -1; } }
+
+.workspace-resolution-step { display: grid; gap: 10px; margin-block: 16px; min-width: 0; }
+.workspace-resolution-step > h4 { margin: 0; color: var(--accent-text); }
+.workspace-resolution-settings { min-width: 0; }
+.workspace-resolution-footer { position: sticky; bottom: 0; z-index: 2; display: flex; flex-wrap: wrap; align-items: center; gap: 12px; background: var(--panel-2); padding: 12px; border-radius: var(--radius); }
+.workspace-resolution-footer:empty { display: none; }
+
+.workspace-roll-owner { display: inline-block; width: fit-content; padding: 1px 7px; border-radius: 999px; color: var(--panel); background: var(--camp-ennemi); font-size: 12px; font-weight: 700; }
+.workspace-roll-owner.is-pj { background: var(--camp-pj); }

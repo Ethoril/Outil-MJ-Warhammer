@@ -188,6 +188,7 @@ async function main() {
     await Store.addParticipant({ id: 'visual-target', name: 'Cible recette', kind: 'PNJ', hp: 30, maxHp: 30, initiative: 10, caracs: { E: 0, CC: 30 }, armorLocations: { head: 0, body: 0, rightArm: 0, leftArm: 0, rightLeg: 0, leftLeg: 0 }, actions: [], states: [], zone: 'active' });
   }, { bow: weapon('bow-test', { name: 'Arc de recette', category: 'Arc', range: '50', keywords: [] }), arrows: weapon('arrows', { kind: 'ammunition', name: 'Flèches recette', category: 'Arc', damage: '', reach: '', range: '', keywords: [{ id: 'empaleuse', parameter: '' }] }) });
   const resolution = visual.locator('.workspace-resolution');
+  await resolution.locator('.workspace-resolution-settings > summary').click();
   await resolution.getByRole('button', { name: /Arc de recette/ }).first().click();
   const ammo = resolution.getByRole('combobox', { name: 'Munition', exact: true });
   await expect(ammo).toBeVisible().catch(async error => { console.error('AMMO DEBUG — '+JSON.stringify(await visual.evaluate(async () => { const { Store } = await import('/js/main.js'); return { participants:Store.listParticipants().map(row=>({name:row.name,equipment:row.equipment?.map(item=>({id:item.id,kind:item.kind,category:item.category,range:item.range})),actions:row.actions?.map(action=>({note:action.note,fiche:action.extensions?.fiche}))})), resolution:document.querySelector('.workspace-resolution')?.textContent }; }))); throw error; }); await expect(ammo.locator('option[value="arrows"]')).toHaveCount(1);

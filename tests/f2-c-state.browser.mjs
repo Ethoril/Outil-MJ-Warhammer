@@ -62,7 +62,8 @@ try{
  await page.locator('#tab-combat').click();
  await page.locator('.mini-dice-line[data-dice-id="f2-canon-action"]').dispatchEvent('click');
  await page.waitForSelector('#workspace-play .workspace-resolution');
- const explosionDetails=page.locator('#workspace-play details').filter({hasText:'Explosion : identifiants de toutes les cibles dans le diamètre'});
+ await page.locator('.workspace-resolution-settings > summary').click();
+ const explosionDetails=page.locator('#workspace-play details.workspace-v5-context-details').filter({hasText:'Explosion : identifiants de toutes les cibles dans le diamètre'});
  if(await explosionDetails.count()&&!await explosionDetails.evaluate(el=>el.open)) await explosionDetails.locator('summary').click();
  const explosionTargets=page.getByLabel('Explosion : identifiants de toutes les cibles dans le diamètre (virgules)');
  await explosionTargets.fill(`${siege.targetId}, ${siege.secondaryTargetId}`);
@@ -77,7 +78,7 @@ try{
  await specialty.selectOption(powderOption);
  await page.locator('[data-focus-key="target-f2-siege-target"]').click();
  const rangedException=page.getByLabel('Tir opposé par Esquive confirmé par le MJ');
- const rangedDetails=page.locator('details').filter({has:rangedException});
+ const rangedDetails=page.locator('details.workspace-v5-context-details').filter({has:rangedException});
  if(await rangedDetails.count()&&!await rangedDetails.evaluate(el=>el.open)) await rangedDetails.locator('summary').click();
  await rangedException.selectOption('true');
  await page.locator('[data-roll-input="attack"]').fill('01');
@@ -115,12 +116,13 @@ try{
  });
  await page.locator('#tab-combat').click();
  await page.locator('.mini-dice-line[data-dice-id="f2-catapult-generic-action"]').dispatchEvent('click');
+ await page.locator('.workspace-resolution-settings > summary').click();
  const genericSpecialty=page.getByLabel('Spécialité de tir pour cette arme (choix MJ si le catalogue ne la précise pas)');
  const engineeringOption=await genericSpecialty.locator('option').evaluateAll(options=>options.find(option=>option.textContent.includes('Projectiles (Ingénierie)'))?.value);
  assert.ok(engineeringOption,'la liste MJ propose une spécialité Projectiles non Poudre noire');
  await genericSpecialty.selectOption(engineeringOption);
  await page.locator('[data-focus-key="target-f2-generic-target"]').click();
- const genericException=page.getByLabel('Tir opposé par Esquive confirmé par le MJ'),genericDetails=page.locator('details').filter({has:genericException});
+ const genericException=page.getByLabel('Tir opposé par Esquive confirmé par le MJ'),genericDetails=page.locator('details.workspace-v5-context-details').filter({has:genericException});
  if(await genericDetails.count()&&!await genericDetails.evaluate(el=>el.open)) await genericDetails.locator('summary').click();
  await genericException.selectOption('true');
  await page.locator('[data-roll-input="attack"]').fill('01');
