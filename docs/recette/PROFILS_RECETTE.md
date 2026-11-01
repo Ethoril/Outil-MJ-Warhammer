@@ -4,12 +4,13 @@ Mode d'emploi :
 
 1. **Bestiaire** : onglet Bibliothèque, `Bibliothèque de bestiaire`, taper le nom (anglais ou français) et le livre indiqués, **Ajouter au combat** (ou **Copier dans la réserve**).
 2. **JSON** : Préparer, Nouveau profil, `Créer depuis un JSON`, coller `docs/recette/profils-recette.json` en entier, **Vérifier le JSON** (aucun point « À vérifier » attendu), **Créer 13 profils**. Groupe « Recette ».
-3. **Prêtres, sorciers, Destin, Corruption, talents** : `profils-recette-complets.json` (21 profils) n'est pas importable en entier tant que l'import ne porte pas leurs clés (voir la dernière section) ; il sert de cas d'essai à la correction.
+3. **Prêtres, sorciers, Destin, Corruption, talents** : même chemin avec `docs/recette/profils-recette-complets.json` (21 profils : talents et rangs, compétences, sorts, prières, Fortune, Destin, Résilience, Corruption, Péchés). L'aperçu doit afficher ces lignes et aucun point « À vérifier ». **Créer 21 profils**.
+   **Arcs (G-ARM-2)** : `docs/recette/profils-recette-arcs.json` (1 profil, l'équipement du catalogue par nom).
 4. Recette sur `http://localhost:8765/` si la partie réelle vit sur `127.0.0.1:8765` (stockages séparés).
 
 ## Parcours, combattants, où les trouver
 
-B = bestiaire, J = `profils-recette.json` (utilisable maintenant), C = `profils-recette-complets.json` (après correction de l'import).
+B = bestiaire, J = `profils-recette.json` (utilisable maintenant), C = `profils-recette-complets.json` (21 profils, importables), A = `profils-recette-arcs.json`.
 
 | Parcours | Combattants | Où |
 |---|---|---|
@@ -37,7 +38,7 @@ B = bestiaire, J = `profils-recette.json` (utilisable maintenant), C = `profils-
 | G-ATT-2, 5 | tireur, cible engagée, arme Pistolet | J : Tireur (Arc long, Pistolet), Armurier |
 | G-ATT-6 | deux armes à une main | J : PJ Alpha (Épée + Dague) ; C : Deux armes |
 | G-ARM-1, 3, 4, 5, 6, 7 | une arme par Qualité (Pointue, Imprécise, À répétition, Explosion, Dispersion, Recharge, poudre noire, Taille, Entaille, filet) | J : Armurier |
-| G-ARM-2 | arc elfique, arc d'Anirain, arbalète | arbalète : J Armurier ; arcs : **non couvert** (armes du catalogue d'équipement) |
+| G-ARM-2 | arc elfique, arc d'Anirain, arbalète | A : Recette Archer (arc elfique, arc d'Anirain, arbalète du catalogue) ; arbalète : aussi J Armurier |
 | G-EMP-1, 2 | attaque à mains nues | J : Lutteur |
 | G-MON-1 | cavalier et monture active | J : Cavalier ; B : Cheval de guerre lourd L23 |
 | G-MON-2 | cavalier, Esquive montée, avec et sans Cavalier émérite | J : Cavalier ; C : Cavalier émérite ; B : Cheval de guerre lourd L23 |
@@ -58,31 +59,11 @@ B = bestiaire, J = `profils-recette.json` (utilisable maintenant), C = `profils-
 | G-DEC-7 | une fiche, une arme, un sort | B : tout profil ; C : Sorcier du Feu |
 | G-DEC-8 | prêtre sans Péché | C : Prêtre d'Ulric |
 
-Décompte (84 parcours) : bestiaire seul 10, JSON utilisable maintenant 37, complets (après correction de l'import) 36, non couvert 1 (G-ARM-2, arcs elfique et d'Anirain).
+Décompte (84 parcours) : bestiaire seul 10, JSON simple 37, complets 36, arcs (G-ARM-2) 1.
 Hypothèses : « vortex à étouffement » (G-DIV-2) et sort persistant à dissiper (G-MAG-5) se posent en séance ; je n'ai pas pu confirmer la Peur de Heomreth sans l'activer.
 
-## Ce que l'import JSON ne porte pas
+## Ce que l'import JSON porte (C9, corrigé)
 
-`parseProfileJson` (`js/core/json-profile-import.js:21` clés lues, `:31` clés ignorées sans avertissement) signale « champ inconnu » pour toute autre clé, et l'import (`store.js:5018 importParsedProfiles`) ne conserve que ce qu'il a lu ; `extensions` n'est gardé que s'il contient `fiche` ou `ficheId` (`json-profile-import.js:331`).
+Tout ce qui figurait ici comme « non porté » s'importe maintenant, avec des clés françaises et leurs alias anglais (documentées dans `docs/IMPORT_PROFILS_JSON.md`) : talents et rangs, compétences, Traits et Taille, sorts, prières, Fortune (Chance), Destin, Résilience, Corruption, Péchés, équipement du catalogue par nom. Les données passent par la voie des fiches (`ficheSnapshot` puis synchronisation) ; un nom absent des référentiels est signalé avec le nom le plus proche, une clé inconnue aussi. Le bouton « Copier en JSON » de l'éditeur de profil exporte un profil dans ce format.
 
-**Déjà accepté, sans être documenté** : les clés **anglaises** `skills`, `talents`, `equipment`, `spells`, `prayers`, `race`, `movement`, `protection`, `ficheSnapshot`, `armorLocations` (`models.js:132`, boucle `json-profile-import.js:324`) sont copiées telles quelles, sans contrôle, dans les formes internes ci-dessous. Vérifié : un prêtre importé ainsi arrive en combat avec ses talents et prières. Le format documenté et les clés françaises n'existent pas pour elles.
-
-| Élément | Où l'outil le stocke | Exemple de valeur | Clé française proposée | Parcours |
-|---|---|---|---|---|
-| Talents et rangs | `talents[]` du profil et du participant (`models.js:132`) : `{ id, status:'resolved', rank, specialization }` ; rang = acquisitions répétées (`reference-catalog.js:83` `aggregateTalents`) | `{ "id":"talent-eye-of-the-storm", "status":"resolved", "rank":2 }` ; `{ "id":"talent-bless", "specialization":"Ulric", "rank":1 }` | `talents: [{ nom, specialisation, rang }]` | DIV 1-15, 17 ; INI-2 ; ATT-6 ; MON-2 ; CRI-7 ; COR-2 ; MAG ; DEC-2 |
-| Compétences | `skills[]` (`models.js:132`) : `{ id, name, carac, total, advances, status }`, `total` = caractéristique + avances | `{ "id":"skill-50_72_69_e8_72_65-base", "name":"Prière", "total":80, "status":"resolved" }` | `competences: [{ nom, avances }]` (total calculé par `ficheSnapshot`, `fiche-sync.js:67`) | DIV, MAG, CRI-6, 7, MON |
-| Sorts | `spells[]` : `{ nom }` du catalogue de Magie (`v5-spell-contracts.js:932` lit `s.nom`) | `{ "nom":"Brise-os" }` | `sorts: ["Brise-os"]` | MAG, DEC-6, DIV-8 |
-| Prières et miracles | `prayers[]` : `{ nom }` = `catalogueName` du contrat (`v5-divine-access.js:93`, fonction `resolveDivineAccess` à `:83`) | `{ "nom":"Morsure du loup" }` | `prieres: ["Morsure du loup"]` | DIV 1-15, 17 ; DEC-8 |
-| Trait de créature (Taille, Grim, Peur…) | `traits[]` de la fiche (`models.js:194` profil, `:227` participant) ; la Taille est lue par `creature-size.js:39` (`parseSizeTrait`) | `"Taille (Grande)"`, `"Grim"`, `"Peur (2)"` | `traits: ["Taille (Grande)"]` | BES-2, 3 ; DEC-1, 3, 5 pour des créatures sur mesure |
-| Fortune (Chance) | `extensions.v5.fortune` ; miroir `fortune` (`models.js:243`) ; initialisée depuis la fiche par `snapshot.resources` (`fiche-sync.js:142`) | `3` | `fortune: 3` | DES-1, 2 |
-| Destin | `extensions.v5.fate` canonique (`v5-resources.js:149-151`, `models.js:257`) ; importé de la fiche par `fiche-sync.js:145` | `2` | `destin: 2` | DES-3, 4 ; BES-6 |
-| Résilience | `extensions.v5.resilience` (`fiche-sync.js:146`) | `1` | `resilience: 1` | DES, BES-6 |
-| Corruption | `extensions.v5.corruptionPoints` (`v5-resources.js:213`) | `8` | `corruption: 8` | COR-1 à 4 |
-| Péchés (cultes) | `extensions.v5.divine.sin` (`v5-divine-access.js:72`) | `0` | `peches: 0` | DEC-8, DIV |
-| Réserve de Canalisation | `extensions.v5.channelling` ; miroir `channelling` (`models.js:271`) | `{ "type":"winds", "sl":2 }` | `canalisation: { type, sl }` | MAG-3 (optionnel) |
-| Équipement du catalogue (armes, armures, boucliers) | `equipment[]` (`models.js:132`) : objets du catalogue d'équipement (`reference-catalog.js`), qui donnent aussi les PA par zone (`armorLocations`) | `{ "id":"weapon-…", "kind":"weapon", "name":"…" }` | `equipement: ["Arbalète (2M)"]` (par nom du catalogue) | ARM-2 (arcs), ATT-2, ARM-1 à 7 avec les vraies armes |
-| Monture | `extensions.v5.mounted` et `extensions.v5.mountId` du **participant** (`store.js:5023` `setMountedState`) : ne se décrit pas sur un profil, il désigne un autre participant | `{ "mounted":true, "mountId":"<id du participant>" }` | non applicable au profil ; éventuellement `monture: "Cheval de guerre lourd"` appliqué à l'entrée en combat | MON-1, 2 |
-| Familier | `extensions.v5.familiarLinks[]` (maître) et `familiarOf` (familier) (`familiars.js:4`) | `{ "system":"animal", … }` | à garder en action de séance | BES-6 |
-| Mots-clés, armure, jets, Qualités des jets | déjà portés (`keywords`, `armure`, `jets`) | — | — | — |
-
-Les clés françaises sont des propositions ; `profils-recette-complets.json` les emploie toutes (21 profils : 7 prêtres, 7 lanceurs de sorts, 7 PJ à talents ou ressources). Le script de vérification (`E:/tmp-node/check-profils-recette.mjs`) les traduit par le chemin de la synchronisation des fiches (`ficheSnapshot`, `applyFicheSync`) et contrôle dans un Store neuf que chaque prière est accessible par la fiche et que les talents, sorts, Fortune et Destin arrivent sur le participant : c'est le résultat que l'import corrigé devra produire.
+Reste hors de l'import : la **monture** (relation entre deux combattants, posée en séance), le **familier** (action de séance), la **Réserve de Canalisation** (`extensions.v5.channelling`) et l'initialisation de la Fortune en séance (G-DES-1, inchangée).

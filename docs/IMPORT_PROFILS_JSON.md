@@ -11,7 +11,7 @@ Un profil (personnage) peut être créé en collant du JSON, sans passer par les
 
 La racine est un profil `{ … }`, une liste de profils `[ … ]`, ou `{ "profils": [ … ] }` (alias `profiles`). Les clés `"format": "outil-mj-profil"` et `"version": 1` sont facultatives ; une version supérieure à 1 est refusée (« Version de format inconnue »).
 
-Les clés ignorent la casse, les accents, les espaces, les tirets et les soulignés : `"Caractéristiques"` = `"caracteristiques"`, `"pv_max"` = `"pvmax"`. Les clés anglaises d’un fichier de sauvegarde sont des alias acceptés. `id`, `extensions`, `participantId`, `targetId` et `attr` sont ignorés sans avertissement : chaque import crée un profil neuf.
+Les clés ignorent la casse, les accents, les espaces, les tirets et les soulignés : `"Caractéristiques"` = `"caracteristiques"`, `"pv_max"` = `"pvmax"`. Les clés anglaises d’un fichier de sauvegarde sont des alias acceptés (`skills`, `talents`, `equipment`, `spells`, `prayers`, `race`, `movement`, `protection`, `ficheSnapshot`, `armorLocations`) : sous leur clé anglaise, ces listes gardent la forme interne des sauvegardes et sont reprises **telles quelles, sans contrôle des noms**. Pour être validés contre les référentiels, les noms s’écrivent sous les clés françaises ci-dessous (`competences`, `sorts`, `prieres`, `equipement`, et `talents` en textes ou en objets `{ nom, … }`). `id`, `extensions`, `participantId`, `targetId` et `attr` sont ignorés sans avertissement : chaque import crée un profil neuf.
 
 ## Profil
 
@@ -30,6 +30,20 @@ Les clés ignorent la casse, les accents, les espaces, les tirets et les soulign
 | `keywords` | `motsclescreature`, `creaturekeywords` | liste de mots-clés du référentiel (espèce, nature, allégeance), par nom ou alias : « Peau verte », « Orc » et « Peaux-vertes » désignent le même terme ; stockés comme identifiants ; un terme inconnu est signalé « à vérifier » et jamais conservé | absent | Mots-clés de créature (sélecteur) |
 | `keywordExclusions` | `motsclesexclus` | mots-clés déduits (race, Trait de nature) que le MJ écarte | absent | bouton « Écarter » |
 | `jets` | `actions`, `diceLines` | liste de jets | `[]` | Jets pré-configurés |
+| `espece` | `race` | texte (« humain », « nain »…) | absent | — (sert au Mouvement des fiches) |
+| `mouvement` | `movement` | entier | absent | — |
+| `competences` | `skills` (forme interne, reprise telle quelle) | liste de compétences formées, voir plus bas | absent | — (fiche) |
+| `talents` | | liste de talents, voir plus bas | absent | — (fiche) |
+| `traits` | | liste de Traits de créature (« Peur (2) », « Grim ») | absent | — |
+| `taille` | `size` | « Petite », « Moyenne », « Grande », « Énorme », « Monstrueuse » (ajoute le Trait « Taille (…) ») | absent | — |
+| `sorts` | `spells` (forme interne) | liste de noms de sorts du référentiel de Magie | absent | — (fiche) |
+| `prieres` | `prayers` (forme interne) | liste de noms de Miracles du référentiel divin | absent | — (fiche) |
+| `equipement` | `equipment` (forme interne) | liste d’objets du catalogue d’équipement, par nom | absent | — (fiche) |
+| `fortune` | `chance` | entier ≥ 0 | absent | Fortune (Chance) de départ |
+| `destin` | `fate` | entier ≥ 0 | absent | Destin |
+| `resilience` | | entier ≥ 0 | absent | Résilience |
+| `corruption` | | entier ≥ 0, Points de Corruption | absent | Corruption |
+| `peches` | `sin` | entier ≥ 0, Péchés du culte | absent | Péchés (cultes) |
 
 ## Jet
 
@@ -38,7 +52,8 @@ Les clés ignorent la casse, les accents, les espaces, les tirets et les soulign
 | `nom` | `note`, `name`, `label` | texte non vide, **requis** | — (à vérifier) | Nom |
 | `type` | | voir ci-dessous | `""` (le moteur déduit : attaque si dégâts, sinon compétence) | Type |
 | `score` | `base`, `valeur` | entier, **requis** | — (à vérifier) | Score |
-| `mod` | `modificateur` | entier | 0 | Mod. |
+| `dr` | `modificateurdr`, `slmodifier` | entier : modificateur de V5, en DR (par exemple `-1` pour un tir à longue portée) | aucun | Modificateur V5 (DR) |
+| `mod` | `modificateur` | entier, **ancien** seuil en pourcentage de la V4 : à éviter, l’éditeur demande alors le modificateur en DR | 0 | — |
 | `degats` | `damage` | entier ou formule texte (`"BF+4"`, `"BF"`, `"1d10"`…) | aucun dégât | Dég. |
 | `qualites` | `qualities`, `motscles` | liste de textes ou d’objets `{ "nom": "Recharge", "valeur": 2 }`, ou texte « a, b » | `[]` | Mots-clés |
 
@@ -105,7 +120,6 @@ Remplit toutes les cases du formulaire (c’est aussi ce qu’insère « Insére
       "nom": "Hallebarde",
       "type": "attaque",
       "score": 45,
-      "mod": 0,
       "degats": "BF+4",
       "qualites": [
         "Percutante"
@@ -115,7 +129,7 @@ Remplit toutes les cases du formulaire (c’est aussi ce qu’insère « Insére
       "nom": "Arbalète",
       "type": "attaque",
       "score": 35,
-      "mod": -10,
+      "dr": -1,
       "degats": 9,
       "qualites": [
         "Recharge 1"
@@ -130,11 +144,59 @@ Remplit toutes les cases du formulaire (c’est aussi ce qu’insère « Insére
       "nom": "Intimidation",
       "type": "compétence",
       "score": 25,
-      "mod": 10
+      "dr": 1
     }
   ]
 }
 ```
+
+## Fiche du personnage : compétences, talents, sorts, prières, équipement
+
+Ces clés donnent au profil ce que donnerait une fiche de personnage synchronisée, par le même chemin (`ficheSnapshot` puis synchronisation) : le profil reste modifiable (aucun lien de fiche, aucun champ verrouillé), et ses PV, son Initiative, son Mouvement et ses caractéristiques restent ceux du JSON.
+
+* **`competences`** : `"Prière"` (0 avance) ou `{ "nom": "Prière", "avances": 20 }`. Le total (caractéristique + avances) est calculé avec `caracteristiques`. Les 25 compétences de base sont toujours présentes (avances 0) ; seules les compétences formées ou avancées sont à écrire.
+* **`talents`** : `"Combat instinctif"`, `"Béni (Ulric)"` ou `{ "nom": "Béni", "specialisation": "Ulric", "rang": 1 }`. Le rang est le nombre d’acquisitions (`"rang": 2` pour « Œil de la tempête »). Un talent qui exige une spécialisation sans la recevoir est signalé.
+* **`sorts`** et **`prieres`** : noms exacts du référentiel (`["Brise-os"]`, `["Morsure du loup"]`). Les Bénédictions n’ont pas à être listées : le talent « Béni (culte) » les donne.
+* **`equipement`** : noms du catalogue, `"Arbalète (2M)"`, `"Arc elfique (2M)"`, `"Arc d'Anirain Haut Elfe"`. Un nom présent dans plusieurs catégories se précise : `{ "nom": "Plastron", "categorie": "Plates" }`. Deux exemplaires = deux fois le nom. Chaque arme crée son jet (lié à la compétence que la fiche proposerait, par exemple `Projectiles (Arc)` si elle est dans `competences`) ; chaque pièce d’armure donne ses Points d’Armure par zone, sauf si le JSON écrit lui-même `armure` (qui l’emporte). Un objet complet `{ "id": …, "kind": …, … }` (export d’une sauvegarde) est repris tel quel.
+* **`traits`** : `"Peur (2)"`, `"Grim"` ou `{ "nom": "Peur", "valeur": 2 }` ; `taille` ajoute `Taille (Grande)`, lue par le moteur de Taille.
+* **`fortune`**, **`destin`**, **`resilience`** : valeurs de départ lues comme celles d’une fiche. **`corruption`** et **`peches`** s’inscrivent sur le profil. L’initialisation de la Fortune en séance reste celle de l’outil (G-DES-1), et la monture (relation entre deux combattants) se pose en séance.
+
+### Noms inconnus et clés inconnues
+
+Un nom absent du référentiel (talent, compétence, sort, prière, objet, Trait) n’est jamais ignoré en silence : l’aperçu l’affiche dans « À vérifier » avec le nom le plus proche, et le profil reste « à vérifier » jusqu’à confirmation.
+
+```
+Talent inconnu : « Oeil de la tempete » — vouliez-vous « Œil de la tempête » ?
+Objet ambigu : « Plastron » existe en Cuir bouilli, Mailles, Plates — ajoutez { "nom": "Plastron", "categorie": "…" }.
+```
+
+Si le profil est créé malgré tout, un talent, une compétence, un sort ou une prière inconnus restent sur le profil à l’état « à vérifier » (comme sur une fiche) ; un objet inconnu n’est pas ajouté. Les noms de talents et de compétences suivent les accents du référentiel ; ceux des sorts, prières et objets ignorent la casse et l’apostrophe typographique. Une **clé inconnue** (dans le profil, une compétence, un talent…) est signalée « champ inconnu ».
+
+### Exemple de personnage de fiche
+
+```json
+{
+  "nom": "Prêtre d’Ulric",
+  "type": "PNJ",
+  "pv": 14,
+  "caracteristiques": { "CC": 40, "CT": 35, "F": 35, "E": 35, "I": 40, "Ag": 35, "Dex": 35, "Int": 40, "FM": 50, "Soc": 70 },
+  "competences": [{ "nom": "Prière", "avances": 20 }],
+  "talents": [
+    { "nom": "Béni", "specialisation": "Ulric" },
+    { "nom": "Invocation", "specialisation": "Ulric" }
+  ],
+  "prieres": ["Morsure du loup", "Fureur d’Ulric"],
+  "peches": 0,
+  "fortune": 3,
+  "destin": 2,
+  "resilience": 1,
+  "equipement": ["Arbalète (2M)", "Calotte de cuir"]
+}
+```
+
+## Aller-retour : « Copier en JSON »
+
+Dans l’éditeur d’un profil existant (Modifier le profil), le bouton **Copier en JSON** place dans le presse-papiers le profil enregistré, dans ce format ; le coller dans « Créer depuis un JSON » recrée un profil identique (talents et rangs, compétences, sorts, prières, équipement, Traits, ressources, jets avec leurs qualités et leur DR). Les liens de fiche, les identifiants et les réglages de séance ne sont pas exportés.
 
 ## Exemple minimal
 
