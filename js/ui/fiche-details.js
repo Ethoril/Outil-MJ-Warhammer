@@ -7,7 +7,7 @@ const names={head:'Tête',body:'Corps',rightArm:'Bras droit',leftArm:'Bras gauch
 export function renderFicheDetails(subject={}) {
  const root=element('details');root.className='fiche-consultation';root.append(element('summary','Fiche : compétences, talents et équipement'));
  const source=subject.ficheSnapshot?.source;
- if(source)root.append(element('p',`Fiche ${subject.extensions?.ficheId || subject.ficheSnapshot.charId} · révision ${source.revision ?? 'non fournie'} · référentiel ${source.resolverVersion ? String(source.resolverVersion).replace(/^references:/,'').slice(0,12) : 'non indiqué'}`));
+ if(source&&(subject.extensions?.ficheId||subject.ficheSnapshot.charId))root.append(element('p',`Fiche ${subject.extensions?.ficheId || subject.ficheSnapshot.charId} · révision ${source.revision ?? 'non fournie'} · référentiel ${source.resolverVersion ? String(source.resolverVersion).replace(/^references:/,'').slice(0,12) : 'non indiqué'}`));
  root.append(element('p','Monnaie : 1 couronne = 20 pistoles = 240 sous ; 1 pistole = 12 sous.'));
  const section=(title,rows,describe)=>{rows=rows.filter(row=>row && typeof row==='object');const block=element('details');block.append(element('summary',`${title} (${rows.length})`));for(const row of rows){const item=element('details');const [label,text]=describe(row);item.append(element('summary',label),element('p',text||'Donnée conservée sans définition reconnue.'));block.append(item);}root.append(block);};
  section('Rejets divins',subject.extensions?.v5?.divineRejections||[],row=>[row.cult+' · '+(row.kind==='permanent'?'Rejet définitif':'Excommunication : '+row.stage+'/2 pénitences'),row.source.document+' p.'+row.source.printedPage+(row.prayLoss?' · '+row.prayLoss.advances+' avances Prière perdues':'')]);

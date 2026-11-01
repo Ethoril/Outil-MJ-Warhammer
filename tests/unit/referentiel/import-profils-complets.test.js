@@ -81,7 +81,31 @@ describe('Import JSON : les 21 profils complets de la recette', () => {
     assert.equal(actor.hp, raw.pv);
     assert.equal(actor.initiative, raw.initiative);
     assert.deepEqual(actor.caracs, raw.caracteristiques);
-    assert.ok(parsed.profiles.filter(profile => profile.talents || profile.skills || profile.spells).every(profile => profile.ficheSnapshot?.charId?.startsWith('json-')));
+    assert.ok(parsed.profiles.filter(profile => profile.talents || profile.skills || profile.spells).every(profile => profile.ficheSnapshot?.resources || profile.ficheSnapshot?.coverage));
+  });
+});
+
+describe('Import JSON : chaque copie en combat a sa propre identité', () => {
+  test('Fortune et Corruption de deux copies d’un même profil restent indépendantes, ainsi que le profil de réserve', async () => {
+    const parsed = parseProfileJson(JSON.stringify({ nom: 'Double', pv: 10, caracteristiques: { FM: 40, E: 30 }, fortune: 3, corruption: 2, talents: ['Combat instinctif'] }));
+    assert.deepEqual(warningsOf(parsed), []);
+    let saved = null;
+    const store = createStore({ persistence: { load: async () => structuredClone(saved), saveAtomic: async input => { saved = structuredClone(input.state); return { ok: true }; } } });
+    await store.ready;
+    await store.importParsedProfiles(parsed.profiles);
+    const [profile] = store.listProfiles();
+    await store.addProfilesToCombat([profile.id, profile.id], { zone: 'active' });
+    const [one, two] = store.listParticipants();
+    assert.notEqual(one.id, two.id);
+    await store.setFortune(one.id, 1);
+    assert.notEqual(store.getFortune(one.id).characterId, store.getFortune(two.id).characterId);
+    assert.notEqual(store.getFortune(one.id).balance, store.getFortune(two.id).balance);
+    await store.setCorruptionPoints(one.id, 7, { reason: 'essai' });
+    const points = id => store.listParticipants().find(item => item.id === id).extensions.v5.corruptionPoints;
+    assert.equal(points(one.id), 7);
+    assert.equal(points(two.id), 2);
+    assert.equal(store.getProfile(profile.id).extensions.v5.corruptionPoints, 2);
+    assert.equal(store.getProfile(profile.id).ficheSnapshot.charId, '');
   });
 });
 

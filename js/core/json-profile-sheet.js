@@ -251,6 +251,8 @@ export function buildProfileSheet(input, { caracs, name, hp, hasArmor, spelled }
   const updated = plan.updated;
   for (const key of lists) if (snapshot.coverage?.[key] === 'present') result.fields[key] = cloneValue(updated[key]);
   result.fields.ficheSnapshot = cloneValue(updated.ficheSnapshot);
+  // Pas d'identité de fiche : chaque copie en combat garde ses propres ressources, comme un profil sans fiche (les jets d'équipement portent leur identifiant).
+  result.fields.ficheSnapshot.charId = '';
   if (snapshot.coverage?.equipment === 'present') {
     result.actions = cloneValue(updated.diceLines).map(line => ({ ...line, name: line.note }));
     // Un `armure` écrit dans le JSON l'emporte ; sinon les pièces d'armure du catalogue donnent les Points d'Armure.
