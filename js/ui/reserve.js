@@ -2,7 +2,7 @@ import { DOM, qs, qsa, on, escapeHtml } from './dom.js';
 import { Profile, groupProfiles, normalizeAction, normalizeTags, cloneValue, normalizeArmorLocations } from '../core/models.js';
 import { normalizeDamageFields } from '../core/damage.js';
 import { normalizeSearchText } from '../core/sanitize.js';
-import { ACTION_FIELD_HELP, createQualityPicker, preserveEditedV5Modifier } from './action-editor.js';
+import { ACTION_FIELD_HELP, createQualityPicker, preserveEditedV5Modifier, legacyModifierMessage } from './action-editor.js';
 import { showToast } from './toast.js';
 import { renderFicheDetails } from './fiche-details.js';
 import { resolveKeyword } from '../core/reference-catalog.js';
@@ -150,7 +150,7 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
     // Anciennes cases X et Cap. (le moteur ne s'en sert pas) : plus affichées, leurs valeurs restent enregistrées.
     row._kept = { valuesX, capacity };
     row._original = cloneValue(original);
-    if (mod && original.extensions?.v5?.slModifier == null) { const hint = document.createElement('span'); hint.className = 'muted'; hint.textContent = `Ancien seuil ${mod > 0 ? '+' : ''}${mod} : DR à confirmer`; row.append(hint); row.querySelector('.pf-dice-mod').addEventListener('input', () => { hint.hidden = row.querySelector('.pf-dice-mod').value !== ''; }); }
+    if (mod && original.extensions?.v5?.slModifier == null) { const hint = document.createElement('span'); hint.className = 'muted'; hint.textContent = legacyModifierMessage(mod); row.append(hint); row.querySelector('.pf-dice-mod').addEventListener('input', () => { hint.hidden = row.querySelector('.pf-dice-mod').value !== ''; }); }
 
     const normalized = normalizeAction({ qualities: currentQualities });
     row._qualities = normalized.qualities;

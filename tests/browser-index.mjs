@@ -677,6 +677,16 @@ async function main() {
     await expect(jsonEdit.locator('[name=armor_body]')).toHaveValue('2');
     await expect(jsonEdit.locator('#form-dice-list .row')).toHaveCount(4);
     await expect(jsonEdit.locator('.pf-dice-damage').first()).toHaveValue('BF+4');
+    await expect(jsonEdit).not.toContainText('Modificateur de l’ancienne version');
+    const legacyText = await page.evaluate(async () => {
+      const { parseProfileJson } = await import('/js/core/json-profile-import.js');
+      const { createActionEditor } = await import('/js/ui/action-editor.js');
+      const parsed = parseProfileJson(JSON.stringify({ nom: 'Ancien garde', pv: 10, jets: [{ nom: 'Épée', base: 40, mod: -10 }] }));
+      const host = document.createElement('div'); document.body.append(host);
+      createActionEditor({ container: host, action: parsed.profiles[0].actions[0] });
+      const text = host.textContent; host.remove(); return text;
+    });
+    assert.match(legacyText, /Modificateur de l’ancienne version \(−10 %\) : indiquez le modificateur en DR/);
     // Cases d'un jet : une infobulle chacune ; les anciennes cases X et Cap. ont disparu.
     await expect(jsonEdit.getByRole('spinbutton', { name: 'Score' }).first()).toHaveAttribute('title', /Score à atteindre/);
     await expect(jsonEdit.getByRole('textbox', { name: 'Dégâts' }).first()).toHaveAttribute('title', /Bonus de Force/);

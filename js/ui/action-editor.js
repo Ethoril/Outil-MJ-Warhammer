@@ -2,6 +2,12 @@ import { getKeywordList } from '../core/keywords.js';
 import { actionWeaponDamage, evaluateWeaponDamage, normalizeDamageFields, strengthBonusOf } from '../core/damage.js';
 import { canonicalQualityId, normalizeQualities } from '../core/quality-normalization.js';
 
+export function legacyModifierMessage(modifier) {
+  const value = Number(modifier);
+  const signed = value < 0 ? `−${Math.abs(value)}` : value > 0 ? `+${value}` : '0';
+  return `Modificateur de l’ancienne version (${signed} %) : indiquez le modificateur en DR`;
+}
+
 /** Aide des cases d'un jet, en infobulle : formulaire de profil et édition d'un combattant. */
 export const ACTION_FIELD_HELP = Object.freeze({
   type: 'Type du jet : Attaque (dégâts, défense de la cible), Compétence, Défense ou Opposition. Vide : attaque s’il y a des dégâts, sinon compétence.',
@@ -118,7 +124,7 @@ export function createActionEditor({ container, action = {}, caracs, onChange = 
   modifier.step = '1'; root.append(modifier);
   if (state.mod && state.extensions?.v5?.slModifier == null) {
     const warning = document.createElement('span'); warning.className = 'action-mod-warning muted';
-    warning.textContent = `Ancien seuil ${state.mod > 0 ? '+' : ''}${state.mod} : DR à préciser`;
+    warning.textContent = legacyModifierMessage(state.mod);
     root.append(warning); modifier.addEventListener('change', () => { warning.hidden = modifier.value !== ''; });
   }
   root.append(input('action-note', 'text', state.note, 'Action / arme', 'Nom du jet', ACTION_FIELD_HELP.note));
