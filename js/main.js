@@ -386,7 +386,7 @@ async function awaitStore(operation, label = 'Opération locale') {
   return result;
 }
 
-function openCombatInitiativeDialog({ staging = null, startCombat = false, title = 'Préparer l’initiative' } = {}) {
+function openCombatInitiativeDialog({ staging = null, startCombat = false, title = 'Préparer l’initiative', nested = false } = {}) {
   const participants = staging?.scene?.participants || staging?.participants || Store.listParticipants().filter(row => row.zone === 'active');
   const active = participants.filter(row => row.zone === 'active');
   const state = { diceById: {}, combatReflexesById: {}, characteristicById: {}, tieOrders: { ...(staging?.tieOrders||{}) }, opposedRolls: { ...(staging?.opposedRolls||{}) }, tieChoices: { ...(staging?.tieChoices||{}) }, surprisedCamp: '', mountedRideTests: {}, preview: null };
@@ -424,7 +424,7 @@ function openCombatInitiativeDialog({ staging = null, startCombat = false, title
       for (const actor of active) {
         const row = document.createElement('div'); row.className = 'card';
         const label = document.createElement('strong'); label.textContent = `${actor.name} · ${actor.kind} · ${actor.camp || 'sans camp'}`; row.append(label);
-        row.append(inputField('I', 'characteristic', actor.id, state.characteristicById[actor.id], { min: 0, max: 100, required: true }));
+        row.append(inputField('I', 'characteristic', actor.id, state.characteristicById[actor.id], { min: 0, max: 100, required: true, readOnly: staging?.kind === 'edit-active-encounter' && actor.extensions?.v5?.combatInitiative?.initialized }));
         if(hasV5Talent(actor,'talent-combat-reflexes')){
           const preparation=actor.extensions?.v5?.combatReflexesPreparation,reflex=state.combatReflexesById[actor.id];
           if(preparation?.version===1&&preparation.participantId===actor.id&&preparation.characteristic===state.characteristicById[actor.id]){
@@ -438,7 +438,7 @@ function openCombatInitiativeDialog({ staging = null, startCombat = false, title
             for(const [value,labelText] of [['','Choisir'],['first','Premier'],['second','Second']]){const option=document.createElement('option');option.value=value;option.textContent=labelText;choice.append(option);}
             choice.value=reflex.choice;choiceLabel.append(choice);row.append(choiceLabel);
           }
-        }else row.append(inputField(actor.kind === 'PJ' ? 'd10 PJ' : 'd10 PNJ (tiré une fois)', 'die', actor.id, state.diceById[actor.id], { min: 1, max: 10, required: true, readOnly: actor.kind !== 'PJ' }));
+        }else row.append(inputField(actor.kind === 'PJ' ? 'd10 PJ' : 'd10 PNJ (tiré une fois)', 'die', actor.id, state.diceById[actor.id], { min: 1, max: 10, required: true, readOnly: actor.kind !== 'PJ' || (staging?.kind === 'edit-active-encounter' && actor.extensions?.v5?.combatInitiative?.initialized) }));
         rows.append(row);
       }
       form.append(rows);
@@ -448,6 +448,7 @@ function openCombatInitiativeDialog({ staging = null, startCombat = false, title
       for (const value of [...new Set(active.map(row => row.camp).filter(Boolean))]) { const option = document.createElement('option'); option.value = value; option.textContent = value; select.append(option); }
       select.value = state.surprisedCamp; camp.append(select); form.append(camp);
       if (!active.length) { select.disabled = true; select.title = 'Aucun combattant actif : passez-les en Actif dans la rencontre'; }
+      if (staging?.kind === 'edit-active-encounter') select.disabled = true;
       const tieArea = document.createElement('div'); tieArea.className = 'stack'; tieArea.dataset.tieArea = 'true'; form.append(tieArea);
       const mountedArea = document.createElement('div'); mountedArea.className = 'stack'; form.append(mountedArea);
       const status = document.createElement('p'); status.className = 'muted'; status.setAttribute('aria-live', 'polite'); form.append(status);
@@ -583,7 +584,7 @@ function openCombatInitiativeDialog({ staging = null, startCombat = false, title
         } catch (error) { status.textContent = contextMessage('Initiative non appliquée', error, 'corrigez les données, puis réessayez.'); }
       });
       recalculate();
-    });
+    }, { nested });
     if (!dialog) finish({ status: 'cancelled' });
   });
 }
@@ -682,11 +683,11 @@ function focusFromMemo(memo) {
   heading.focus();
 }
 
-function openOverlay(title, build) {
+function openOverlay(title, build, { nested = false } = {}) {
   const previous = openSheet;
   const active = document.activeElement;
   const opener = previous && (!active || previous.contains(active)) ? previous.returnFocus : focusMemo(active);
-  previous?.close({ restoreFocus: false });
+  if (!nested) previous?.close({ restoreFocus: false });
 
   const dialog = document.createElement('dialog');
   dialog.className = 'tool-sheet';
@@ -716,7 +717,7 @@ function openOverlay(title, build) {
   (mount.querySelector('[autofocus]') || Array.from(mount.querySelectorAll(FOCUSABLE)).find(item => !item.disabled && item.checkVisibility()) || close).focus();
   dialog.addEventListener('close', () => {
     dialog.remove();
-    if (openSheet === dialog) openSheet = null;
+    if (openSheet === dialog) openSheet = nested && previous?.isConnected ? previous : null;
     if (!restoreFocus) return;
     // Une commande du menu ⋯ n'est plus visible : le focus revient au bouton du menu.
     focusFromMemo(opener);
@@ -761,7 +762,11 @@ async function persistEncounter(draft) {
   const stored = Store.listEncounters?.().find(item => item.id === model.id);
   model.status = stored?.status || 'prepared';
   if (prepareWindow) prepareWindow.encounterId = model.id;
-  await awaitStore(requireStoreApi('saveEncounter')(model), 'Rencontre');
+  const staging = Store.previewEncounterEdit?.(model);
+  if (staging) {
+    const result = await openCombatInitiativeDialog({ staging, nested: true, title: 'Initiative des nouveaux combattants' });
+    if (result?.status !== 'applied') throw userError('Ajout non enregistré : complétez l’Initiative des nouveaux combattants.');
+  } else await awaitStore(requireStoreApi('saveEncounter')(model), 'Rencontre');
   if (Store.getActiveScene()?.encounterId === model.id && stored?.entries.some(entry => !model.entries.some(next => next.id === entry.id) || model.entries.find(next => next.id === entry.id).quantity < entry.quantity)) {
     showToast('Retiré de la rencontre, toujours présent dans le combat en cours', 'info');
   }

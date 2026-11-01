@@ -1252,6 +1252,15 @@ function resolvedCorruptionTest(participant, skillId, input) {
     return { ...draft, combat: { ...draft.combat, participants, order: [...active, ...rest] }, diceLines: lines, added };
   }
 
+  function encounterAdditions(draft, model) {
+    const previous = (draft.encounters || []).find(item => item.id === model.id);
+    const oldEntries = new Map((previous?.entries || []).map(entry => [entry.id, entry]));
+    return model.entries.flatMap(entry => {
+      const count = Math.max(0, entry.quantity - (oldEntries.get(entry.id)?.quantity || 0));
+      return Array.from({ length: count }, () => ({ id: entry.profileId, zone: entry.zone, camp: entry.camp, entryId: entry.id }));
+    });
+  }
+
   // Suivi des séquelles : exécution privée d'une opération du registre (jamais exposée comme API) et lecture du soigneur sur sa fiche.
   const absentAftermathSubjects = (state, participants) => [...new Set(state.incidents.filter(row => row.status === 'open' && !participants.some(item => item.id === row.participantId)).map(row => row.participantId))];
   /** none | pending (décision du choc non prise) | absent | occurred : une amputation confirmée exige la Chirurgie (p.178). */
@@ -2588,6 +2597,28 @@ function resolvedCorruptionTest(participant, skillId, input) {
       const scene=launchEncounter(encounter,{profiles:Array.from(reserve.values()),persistentCharacters,activeScene,now:null,idFactory:()=>`f2a:launch:${encounter.id}:${localRevision}:${sequence++}`});
       return {scene,baseRevision:localRevision,encounterId:encounter.id,kind:'launch'};
     },
+    previewEncounterEdit(input) {
+      const model = normalizeEncounter(input);
+      const draft = currentEnvelope();
+      if (draft.activeScene?.encounterId !== model.id || Number(draft.combat?.round) <= 0) return null;
+      const additions = encounterAdditions(draft, model);
+      if (!additions.some(item => item.zone === 'active')) return null;
+      const built = addProfilesToDraft(draft, additions);
+      const oldIds = new Set((draft.combat?.participants || []).map(row => row.id));
+      const added = built.combat.participants.filter(row => !oldIds.has(row.id));
+      if (added.length !== additions.length) throw new Error('Un profil ajouté à la rencontre est introuvable.');
+      const tieOrders = {}, opposedRolls = {}, tieChoices = {};
+      for (const group of stateExtensions?.v5?.combatInitiativeResolution?.tieGroups || []) {
+        const key = (group.participantIds || []).join('|');
+        if (group.bracketOrder?.length) tieOrders[key] = [...group.bracketOrder];
+        if (group.chosenOrder?.length) tieChoices[key] = [...group.chosenOrder];
+        for (const match of group.matches || []) {
+          const matchId = `${key}:${match.initiatorId}:${match.opponentId}`;
+          opposedRolls[matchId] = { initiatorRoll: match.initiatorRoll, opponentRoll: match.opponentRoll, ...(match.initiatorOptionId ? { initiatorChoice: match.initiatorOptionId } : {}), ...(match.opponentOptionId ? { opponentChoice: match.opponentOptionId } : {}), ...(match.initiatorConditionPenaltyMode ? { initiatorConditionPenaltyMode: match.initiatorConditionPenaltyMode } : {}), ...(match.opponentConditionPenaltyMode ? { opponentConditionPenaltyMode: match.opponentConditionPenaltyMode } : {}) };
+        }
+      }
+      return { kind: 'edit-active-encounter', encounter: model, baseRevision: localRevision, participants: built.combat.participants, addedIds: added.map(row => row.id), participantDiceLines: built.diceLines.filter(line => added.some(row => row.id === line.participantId)), tieOrders, opposedRolls, tieChoices };
+    },
     previewCombatRestart() {
       const scene=activeScene?.status==='active'?activeScene:null;
       if(scene){
@@ -2760,6 +2791,18 @@ function resolvedCorruptionTest(participant, skillId, input) {
         const startsNewScope=staging?.kind==='launch'||staging?.kind==='restart-scene'||staging?.kind==='restart-free'||captured.startCombat===true;
         const combatScopeId=startsNewScope?uid():draft.extensions?.v5?.combatScopeId;
         const extensions={...(draft.extensions||{}),v5:{...(draft.extensions?.v5||{}),...(combatScopeId?{combatScopeId}:{}),combatInitiativeInitialized:true,combatInitiativeResolution:resolution,orderRound:Number(draft.combat?.round)>0?draft.combat.round:null}};
+        if (staging?.kind === 'edit-active-encounter') {
+          if (draft.activeScene?.encounterId !== staging.encounter.id || Number(draft.combat?.round) <= 0) throw Object.assign(new Error('La rencontre a changé depuis la préparation.'), { code: 'COMBAT_INIT_STALE' });
+          const addedIds = new Set(staging.addedIds);
+          const existing = new Map((draft.combat?.participants || []).map(row => [row.id, row]));
+          const merged = nextParticipants.map(row => addedIds.has(row.id) ? row : existing.get(row.id)).filter(Boolean);
+          const inserted = insertParticipantsByInitiative(draft.combat, merged);
+          const updatedResolution = { ...resolution, order: inserted };
+          return { ...draft, encounters: [...(draft.encounters || []).filter(item => item.id !== staging.encounter.id), staging.encounter],
+            combat: { ...draft.combat, participants: merged, order: inserted },
+            extensions: { ...extensions, v5: { ...extensions.v5, combatInitiativeResolution: updatedResolution } },
+            diceLines: [...(draft.diceLines || []), ...(staging.participantDiceLines || [])] };
+        }
         if(sourceScene){
           const scene=freshScene({...cloneValue(sourceScene),status:'active',round:0,currentActorId:null,participants:nextParticipants,order,extensions:{...(sourceScene.extensions||{}),v5:{...(sourceScene.extensions?.v5||{}),...(combatScopeId?{combatScopeId}:{}),combatInitiativeResolution:resolution}}});
           let nextExtensions=extensions,diceLines=draft.diceLines||[],reminderChoices=draft.reminderChoices||[];
@@ -3323,12 +3366,8 @@ function resolvedCorruptionTest(participant, skillId, input) {
       return api.executeCommand('save-encounter', draft => {
         let next = { ...draft, encounters: [...(draft.encounters || []).filter(item => item.id !== model.id), model] };
         if (draft.activeScene?.encounterId !== model.id) return next;
-        const previous = (draft.encounters || []).find(item => item.id === model.id);
-        const oldEntries = new Map((previous?.entries || []).map(entry => [entry.id, entry]));
-        const additions = model.entries.flatMap(entry => {
-          const count = Math.max(0, entry.quantity - (oldEntries.get(entry.id)?.quantity || 0));
-          return Array.from({ length: count }, () => ({ id: entry.profileId, zone: entry.zone, camp: entry.camp, entryId: entry.id }));
-        });
+        const additions = encounterAdditions(draft, model);
+        if (Number(draft.combat?.round) > 0 && additions.some(item => item.zone === 'active')) throw Object.assign(new Error('Les nouveaux combattants actifs doivent recevoir leur jet d’Initiative.'), { code: 'COMBAT_INIT_REQUIRED', userFacing: true });
         if (additions.length) {
           const { added, ...updated } = addProfilesToDraft(next, additions);
           next = updated;

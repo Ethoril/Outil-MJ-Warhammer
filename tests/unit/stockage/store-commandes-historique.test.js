@@ -1406,3 +1406,37 @@ test('recette G : save active encounter adds entries atomically and undo preserv
   assert.equal(store.listParticipants()[0].hp, 4);
   assert.equal(store.listEncounters().find(e => e.id === 'rg-enc').entries.length, 1);
 });
+
+test('recette G : active encounter additions require initiative and keep the current turn', async () => {
+  let saved = null;
+  const persistence = { async load() { return saved; }, async saveAtomic({ state }) { saved = structuredClone(state); return { ok: true }; } };
+  const store = createStore({ persistence });
+  await store.ready;
+  await store.addProfile({ id: 'rg-i-a', name: 'A', kind: 'PJ', hp: 12, initiative: 50, caracs: { I: 50 } });
+  await store.addProfile({ id: 'rg-i-b', name: 'B', kind: 'PNJ', hp: 10, initiative: 30, caracs: { I: 30 } });
+  await store.saveEncounter({ id: 'rg-i-enc', entries: [{ id: 'rg-i-e1', profileId: 'rg-i-a', zone: 'active', camp: 'pj' }] });
+  await store.launchEncounter('rg-i-enc');
+  const original = store.listParticipants()[0];
+  const initial = store.previewCombatInitialization({ startCombat: true, diceById: { [original.id]: 8 } });
+  await store.applyCombatInitialization(initial);
+  await store.updateParticipant(original.id, { hp: 4 });
+  const model = store.listEncounters().find(row => row.id === 'rg-i-enc');
+  model.entries.push({ id: 'rg-i-e2', profileId: 'rg-i-b', quantity: 1, zone: 'active', camp: 'ennemi' });
+  await assert.rejects(Promise.resolve().then(() => store.saveEncounter(model)), /Initiative/);
+  const staging = store.previewEncounterEdit(model);
+  const withoutDie = store.previewCombatInitialization({ staging });
+  assert.equal(withoutDie.ready, false);
+  const newId = staging.addedIds[0];
+  const preview = store.previewCombatInitialization({ staging, diceById: { [original.id]: 8, [newId]: 1 } });
+  assert.equal(preview.ready, true);
+  assert.equal((await store.applyCombatInitialization(preview)).status, 'applied');
+  assert.equal(store.getCombat().round, 1);
+  assert.equal(store.getCombat().currentActorId, original.id);
+  assert.equal(store.listParticipants().find(row => row.id === original.id).hp, 4);
+  assert.equal(store.listParticipants().find(row => row.id === newId).extensions.v5.combatInitiative.die, 1);
+  assert.deepEqual(store.getEffectiveOrder(), [original.id, newId]);
+  await store.undo();
+  assert.equal(store.listParticipants().length, 1);
+  assert.equal(store.listParticipants()[0].hp, 4);
+  assert.equal(store.listEncounters().find(row => row.id === 'rg-i-enc').entries.length, 1);
+});

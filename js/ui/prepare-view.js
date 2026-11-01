@@ -72,8 +72,14 @@ export function initPrepareView({ mount, hosted = false, Store = null, encounter
       if (profile && !campChosen) camp.input.value = defaultEncounterCamp(profile.kind);
     });
     const addButton = document.createElement('button'); addButton.type = 'button'; addButton.textContent = 'Ajouter';
-    addButton.addEventListener('click', () => {
-      try { state.draft = setEncounterEntry(state.draft, select.value, { quantity: quantity.input.value, camp: camp.input.value, zone: zone.input.value }); void emit(); render(); }
+    addButton.addEventListener('click', async () => {
+      const previous = state.draft;
+      try {
+        state.draft = setEncounterEntry(state.draft, select.value, { quantity: quantity.input.value, camp: camp.input.value, zone: zone.input.value });
+        const saving = emit();
+        render();
+        if (!await saving) { state.draft = previous; render(); }
+      }
       catch (error) { fail(error, select.value ? 'Profil non ajouté : réessayez.' : 'Choisissez un profil à ajouter.'); }
     });
     add.append(select, quantity.wrapper, camp.wrapper, zone.wrapper, addButton); root.appendChild(add);
