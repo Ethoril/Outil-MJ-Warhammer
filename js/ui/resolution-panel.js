@@ -3157,7 +3157,7 @@ function arrangeResolutionSteps(section, { actionBlock, targetBlock, rolls, comm
   const refreshSummary = () => {
     const controls = circumstanceControls(drawer);
     const active = controls.filter(control => control.type === 'checkbox' || control.type === 'radio'
-      ? control.checked : String(control.value ?? '') !== String(control.defaultValue));
+      ? control.checked !== control.defaultChecked : String(control.value ?? '') !== String(control.defaultValue));
     const count = countActiveCircumstances(controls);
     toggle.textContent = `Circonstances · ${count} active${count === 1 ? '' : 's'}`;
     const labels = active.map(control => control.label);

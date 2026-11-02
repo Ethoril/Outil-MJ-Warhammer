@@ -145,10 +145,10 @@ export function circumstanceGroup(field, required = false) {
   return required ? 'required' : FIELD_GROUPS[field] || 'other';
 }
 
-/** Une case cochée et une valeur distincte de sa valeur par défaut comptent chacune une fois. */
+/** Une case dont l'état diffère de son état par défaut (décoché sauf `data-default-checked`) et une valeur distincte de sa valeur par défaut comptent chacune une fois. */
 export function countActiveCircumstances(controls) {
   return controls.reduce((count, control) => {
-    if (control.type === 'checkbox' || control.type === 'radio') return count + Number(Boolean(control.checked));
+    if (control.type === 'checkbox' || control.type === 'radio') return count + Number(Boolean(control.checked) !== Boolean(control.defaultChecked));
     return count + Number(String(control.value ?? '') !== String(control.defaultValue ?? ''));
   }, 0);
 }
@@ -167,7 +167,7 @@ export function circumstanceControls(root) {
       const value = element.type === 'select-multiple'
         ? JSON.stringify([...element.selectedOptions].map(option => option.value)) : element.value;
       const defaultValue = element.dataset.defaultValue ?? (element.type === 'select-multiple' ? '[]' : element.tagName === 'SELECT' ? element.options?.[0]?.value ?? '' : element.defaultValue ?? '');
-      return { element, key: `${stem}:${index}`, label: label || 'Réglage', type: element.type, value, defaultValue, checked: element.checked };
+      return { element, key: `${stem}:${index}`, label: label || 'Réglage', type: element.type, value, defaultValue, checked: element.checked, defaultChecked: element.dataset.defaultChecked === 'true' };
     });
 }
 

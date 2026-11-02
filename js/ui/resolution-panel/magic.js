@@ -368,6 +368,7 @@ export function renderV5MagicContext({ actor, participants = [], target, type, d
         const chk = document.createElement('input');
         chk.type = 'checkbox';
         chk.checked = currentTargets.includes(p.id);
+        chk.dataset.defaultChecked = String(defaultTargets.includes(p.id));
         chk.setAttribute('aria-label', `Cible du sort : ${p.name}`);
         chk.dataset.focusKey = `magic-target-${p.id}`;
         chk.addEventListener('change', () => {

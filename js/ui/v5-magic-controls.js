@@ -224,7 +224,7 @@ export function renderSpellRecipientControls({actor,participants,contract,draft,
   note('Attribut de Vent facultatif : appliqué aux ennemis par défaut, jamais aux alliés sauf case cochée.');
   for(const p of attributeTargets){
    const line=document.createElement('label');line.className='workspace-type workspace-recipient-check';const check=document.createElement('input');check.type='checkbox';
-   const explicit=draft.magicAttributeTargets?.[p.id];check.checked=typeof explicit==='boolean'?explicit:isHostileTarget(actor,p);check.setAttribute('aria-label','Appliquer l’attribut de Vent à '+p.name);
+   const explicit=draft.magicAttributeTargets?.[p.id];check.checked=typeof explicit==='boolean'?explicit:isHostileTarget(actor,p);check.dataset.defaultChecked=String(isHostileTarget(actor,p));check.setAttribute('aria-label','Appliquer l’attribut de Vent à '+p.name);
    check.addEventListener('change',()=>handlers.input('magicAttributeTargets',{...draft.magicAttributeTargets,[p.id]:check.checked}));
    line.append(check,'Appliquer l’attribut de Vent à '+p.name+(isHostileTarget(actor,p)?' (ennemi : appliqué par défaut)':' (non ennemi : non appliqué par défaut)'));box.append(line);
   }
