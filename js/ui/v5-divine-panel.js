@@ -2,7 +2,7 @@
 import {spellObjectChoices} from '../core/equipment.js';
 import {CAMP_LABELS} from '../core/encounters.js';
 import {getAllDivineContracts} from '../core/v5-divine-store.js';
-import {divineSinPolicy} from '../core/v5-divine-engine.js';
+import {divineSinPolicy,actorDivineCults} from '../core/v5-divine-engine.js';
 import {defaultFirstMorningAt} from '../core/v5-game-time.js';
 import {resolveV5ConditionTestContext} from '../core/v5-test-context.js';
 import {isBrokenActor,renderBrokenEscapeVisibilityControl} from './v5-broken-escape-panel.js';
@@ -29,7 +29,10 @@ function resolvedParamText(value){
  if(value.unit==='touch')return 'Contact';
  return unitText(value.value,value.unit);
 }
+// Un personnage sans culte, talent divin ni suivi divin n'affiche pas la section (bouton discret pour l'ouvrir).
+const hasDivineLife=actor=>Boolean(actor?.cult)||actorDivineCults(actor).length>0||Object.entries(actor?.extensions?.v5||{}).some(([key,value])=>/^divine/.test(key)&&(Array.isArray(value)?value.length>0:value&&typeof value==='object'?Object.values(value).some(item=>item):Boolean(value)));
 export function createDivinePanel({Store,refresh,onRollChange=()=>{}}){
+ const forcedActors=new Set();
  let state={actorId:null,open:false,cult:'',targetIds:[],form:emptyDivineForm(),lastReceipt:null,choices:{range:0,targets:0,duration:0,effect:0}};
  function reset(actor){state={actorId:actor.id,open:state.open,...defaultDivineSelection(actor,getAllDivineContracts()),targetIds:[],form:emptyDivineForm(),lastReceipt:null,choices:{range:0,targets:0,duration:0,effect:0},sinEdit:actor.extensions?.v5?.divine?.sin??'',sinReason:'',corruptionEdit:actor.extensions?.v5?.corruptionPoints??'',corruptionReason:'',roll:'',wrathRoll:'',wrathDurationRoll:'',wrathConsequence:'',expiryPhase:'',accessScope:'',accessReason:'',revokeReason:'',conditionPenaltyMode:'',conditionPenaltyReason:'',testOptionId:'',brokenEscapeVisibility:null,preview:null,busy:false,error:''};}
  function change(key,value){state[key]=value;if(key!=='testOptionId')state.testOptionId='';state.preview=null;state.error='';refresh();}
@@ -317,7 +320,13 @@ export function createDivinePanel({Store,refresh,onRollChange=()=>{}}){
  needsNpcRoll(actor){return state.open && state.actorId===actor?.id && actor?.kind!=='PJ' && !String(state.roll||'').trim();},
  rollNpc(actor){if(this.needsNpcRoll(actor)){state.roll=String(d100());state.preview=null;state.error='';}},
  render(actor,participants=[]){
-  if(!actor)return null;if(state.actorId!==actor.id)reset(actor);
+  if(!actor)return null;
+  if(!forcedActors.has(actor.id)&&!hasDivineLife(actor)){
+   const more=node('button','workspace-ghost','Prières divines…');more.type='button';more.dataset.divineReveal='';more.dataset.focusKey='divine-reveal';
+   more.addEventListener('click',()=>{forcedActors.add(actor.id);state.open=true;refresh();});
+   return more;
+  }
+  if(state.actorId!==actor.id)reset(actor);
   const allContracts=getAllDivineContracts().filter(row=>['blessing','miracle'].includes(row.type));
   const cults=[...new Set(allContracts.map(row=>row.deity).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'fr'));
   const contracts=state.cult?allContracts.filter(row=>row.deity===state.cult):allContracts;
