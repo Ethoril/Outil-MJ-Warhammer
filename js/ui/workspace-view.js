@@ -1084,6 +1084,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       if ('targetId' in patch) {
         draft.ignoredConditions = [];
         clearFortuneAdvantageDraft(draft);
+        if (state.targetChoice !== patch.targetId) draft.contextByAction = {};
         state.targetChoice = patch.targetId;
         draft.v5Context={...(draft.v5Context||{})};
         for(const key of ['fateAction','fateChosenRoll','fateCriticalLocation','warpBladeEnduranceTest','f2h'])delete draft.v5Context[key];
@@ -1132,7 +1133,9 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         draft.targetSize = null;
         draft.v5Advantages = 0;
         draft.v5Disadvantages = 0;
-        draft.v5Context = {};
+        // Les circonstances sont gardées par action pour le même acteur et la même cible (remises à zéro au changement d'acteur ou de cible).
+        if (draft.actionKey) draft.contextByAction = { ...draft.contextByAction, [draft.actionKey]: draft.v5Context || {} };
+        draft.v5Context = { ...(draft.contextByAction?.[patch.actionKey] || {}) };
         draft.talentChoices = {};
         draft.actionKey = patch.actionKey;
         draft.type = null;
