@@ -138,7 +138,7 @@ export function createV5CorruptionPanel({ Store, refresh = () => {} } = {}) {
         const result = await Store.setCorruptionPoints(actor.id, amount, { reason: state.pointReason, baseRevision: status.baseRevision });
         if (result?.status === 'stale' || result?.ok === false) throw new Error(result.error || 'La partie a changé; relisez le solde.');
         state.pointInput = ''; state.pointReason = ''; state.receipt = 'Solde connu enregistré.'; clearPreview();
-      }), state.pointInput === '' || !state.pointReason.trim());
+      }), () => state.pointInput === '' || !state.pointReason.trim());
       return panel;
     }
 
@@ -192,7 +192,7 @@ export function createV5CorruptionPanel({ Store, refresh = () => {} } = {}) {
         state.thresholdPreview = preview;
         if (preview.status === 'stale') throw new Error('La partie a changé; relisez le seuil et recalculez.');
         if (preview.status === 'needs-input') throw new Error('Le choix MJ ou le délai secret requis n’est pas complet.');
-      }), state.thresholdRoll === '');
+      }), () => state.thresholdRoll === '');
       if (state.thresholdPreview?.status === 'ready') {
         const preview = state.thresholdPreview;
         panel.append(node('p', 'workspace-corruption-preview', preview.outcome?.status === 'deferred'
@@ -303,7 +303,7 @@ export function createV5CorruptionPanel({ Store, refresh = () => {} } = {}) {
       const result = await Store.applyCorruptionAbsolution(actor.id, { amount: Number(state.absolutionAmount), reason: state.absolutionReason, baseRevision: status.baseRevision });
       if (result?.status === 'stale' || result?.ok === false) throw new Error(result.error || 'La partie a changé; relisez le solde.');
       state.absolutionAmount = ''; state.absolutionReason = ''; state.receipt = 'Absolution enregistrée.'; clearPreview();
-    }), state.absolutionAmount === '' || !state.absolutionReason.trim());
+    }), () => state.absolutionAmount === '' || !state.absolutionReason.trim());
 
     panel.append(node('h4', '', 'Choisir un résultat de table de mutation'));
     panel.append(node('p', 'workspace-muted', status.pendingMutation
