@@ -2593,14 +2593,22 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
   }
 
   refs.root.addEventListener('workspace-open-secondary', event => {
-    const panel = refs.root.querySelector(`[data-secondary-panel="${event.detail?.panel}"]`);
+    let panel = refs.root.querySelector(`[data-secondary-panel="${event.detail?.panel}"]`);
     if (!panel) return;
     event.detail.opened = true;
-    if (event.detail.panel === 'prayer') divinePanel.show();
+    if (event.detail.panel === 'prayer') {
+      divinePanel.show();
+      // Personnage sans culte ni prière : le menu « Prière » révèle la section au lieu de laisser le bouton discret.
+      if (panel.matches('[data-divine-reveal]')) {
+        panel.click();
+        panel = refs.root.querySelector('[data-secondary-panel="prayer"]');
+        if (!panel) return;
+      }
+    }
     if (panel.tagName === 'DETAILS') panel.open = true;
     panel.scrollIntoView({ block: 'start', behavior: 'auto' });
     // Prière : on amène directement le jet de Prière, sans repasser par Pénitences et Péchés.
-    const prayerRoll = event.detail.panel === 'prayer' && panel.querySelector('[data-focus-key="divine-roll"]');
+    const prayerRoll = event.detail.panel === 'prayer' ? panel.querySelector('[data-focus-key="divine-roll"]') : null;
     prayerRoll?.scrollIntoView({ block: 'center', behavior: 'auto' });
     (prayerRoll || panel.querySelector('summary, input, select, button'))?.focus({ preventScroll: true });
   });

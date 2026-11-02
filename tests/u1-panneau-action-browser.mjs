@@ -50,7 +50,7 @@ try {
   assert.equal(await magicMenu.getAttribute('aria-expanded'), 'true');
   for (const name of ['Focalisation V5', 'Incantation V5', 'Dissipation persistante V5', 'Prière', 'Corruption']) assert.equal(await page.locator('#workspace-magic-menu').getByRole('button', { name, exact: true }).isVisible(), true);
   const prayer = page.locator('[data-secondary-panel="prayer"]');
-  assert.equal(await prayer.evaluate(el => el.open), false, 'prière repliée au départ');
+  assert.equal(await prayer.evaluate(el => el.matches('button[data-divine-reveal]')), true, 'C44 : sans culte ni prière, seul le bouton discret est affiché au départ');
   await page.locator('#workspace-magic-menu').getByRole('button', { name: 'Prière', exact: true }).click();
   assert.equal(await prayer.evaluate(el => el.open), true, 'le menu ouvre le panneau de prière existant');
   await prayer.locator(':scope > summary').click();
