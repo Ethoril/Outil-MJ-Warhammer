@@ -39,7 +39,7 @@ describe('C33 arme non reliée : saisie manuelle au lieu du blocage', () => {
 
     test(`${quality.id} : chargeur vide saisi, l’arme doit être rechargée`, () => {
       const preview = shoot([quality], { context: { manualShotsRemaining: 0 } });
-      assert.deepEqual(preview.unresolved, ['À répétition : l’arme doit être rechargée avant un nouveau tir.']);
+      assert.deepEqual(preview.unresolved, [`${quality.id === 'recharge' ? 'Recharge' : 'À répétition'} : l’arme doit être rechargée avant un nouveau tir.`]);
     });
   }
 

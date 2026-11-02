@@ -667,11 +667,13 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     else entanglementRelease={linkId,holderId:actor.id,weaponId,conjuredEffectId:conjuredLock?.effect.id||null,conditionParticipantId:condition.person.id,condition:clone(condition.state)};
   }
   if (attackType(action.type) && actorPlan.kind === 'ranged' && reloadQuality) {
+    const reloadIds = [...(action.qualities || []), ...(selectedWeapon?.keywords || [])].map(row => typeof row === 'string' ? row : row?.id);
+    const reloadLabel = reloadIds.includes('a-repetition') ? 'À répétition' : reloadIds.some(id => ['salve', 'salvo'].includes(id)) ? 'Salve' : 'Recharge';
     if (!selectedWeapon) {
       // Arme de profil sans exemplaire d'inventaire (C33) : le MJ saisit le chargeur à la main ; aucun compteur durable n'est muté.
       const rawLeft = context.manualShotsRemaining, left = Number(rawLeft);
       if (rawLeft === undefined || rawLeft === null || String(rawLeft).trim() === '' || !Number.isSafeInteger(left) || left < 0) unresolved.push('Recharge : saisir les munitions restantes dans le chargeur de l’arme (saisie manuelle).');
-      else if (left < 1) unresolved.push('À répétition : l’arme doit être rechargée avant un nouveau tir.');
+      else if (left < 1) unresolved.push(`${reloadLabel} : l’arme doit être rechargée avant un nouveau tir.`);
       else if (context.repeaterDoubleShot === true && context.repeaterSecondShot !== true && left < 2) unresolved.push('Tir double À répétition : deux tirs restants sont requis dans l’arme (V5 p.305).');
     } else {
       const current = selectedWeapon.extensions?.v5?.reloadState || initialV5ReloadState({...selectedWeapon,keywords:[...(selectedWeapon.keywords||[]),...(action.qualities||[])]}).state;
@@ -682,7 +684,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
         const consumed = consumeV5WeaponShot(current);
         // V5 v3 p.305 : le premier tir d'un tir double réserve les deux munitions (le second, gratuit, n'en consomme qu'une).
         if (context.repeaterDoubleShot === true && context.repeaterSecondShot !== true && current.repeaterRating > 0 && current.shotsRemaining < 2) unresolved.push('Tir double À répétition : deux tirs restants sont requis dans l’arme (V5 p.305).');
-        if (consumed.status !== 'shot') unresolved.push('À répétition : l’arme doit être rechargée avant un nouveau tir.');
+        if (consumed.status !== 'shot') unresolved.push(`${reloadLabel} : l’arme doit être rechargée avant un nouveau tir.`);
         else {
           const after=consumed.state;
           if(selectedWeapon.keywords?.some(row=>(typeof row==='string'?row:row?.id)==='a-repetition'&&row?.asterisk===true)){

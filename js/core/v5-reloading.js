@@ -113,3 +113,22 @@ export function advanceV5Reload(state, { success, testSl, expectedRevision = sta
   return ready({ status: done ? 'reloaded' : 'progress', state: next,
     progress: { successes: next.accumulatedSuccesses, required: next.requiredSuccesses } });
 }
+
+/** Raisons de refus (reason ou status des transitions) en français, pour l'interface. */
+export const V5_RELOAD_REASON_LABELS = Object.freeze({
+  'weapon-not-fired': 'Cette arme n’a pas été tirée : il n’y a rien à recharger.',
+  'reload-required': 'L’arme doit d’abord être rechargée avant de tirer.',
+  'magazine-empty': 'Le chargeur est vide : rechargez l’arme.',
+  'not-reloading': 'Aucune recharge n’est en cours : commencez la recharge.',
+  'already-reloading': 'Une recharge est déjà en cours.',
+  stale: 'La partie a changé : recalculez le rechargement.'
+});
+
+/** Résumé d'un chargeur : une arme à simple Recharge n'a pas de compteur de tirs, elle est chargée ou à recharger. */
+export function describeV5ReloadState(state) {
+  if (!state) return 'chargeur non initialisé';
+  const capacity = Math.max(Number(state.repeaterRating) || 0, Number(state.salvoRating) || 0, Number(state.magazineCapacity) || 0);
+  const progress = state.reloading ? ` · recharge ${state.accumulatedSuccesses}/${state.requiredSuccesses} succès` : '';
+  if (capacity > 0) return `${state.shotsRemaining} tir(s) restant(s)${progress}`;
+  return `${state.reloading ? 'en recharge' : state.requiresReload ? 'à recharger' : 'chargée'}${progress}`;
+}

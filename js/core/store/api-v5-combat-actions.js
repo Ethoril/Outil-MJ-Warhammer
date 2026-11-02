@@ -3,7 +3,7 @@ import { previewV5Test } from '../v5-roll.js';
 import { previewV5ProjectileExtraction } from '../v5-weapon-qualities.js';
 import { cloneValue, uid } from '../models.js';
 import { recordV5ActionUsage, standardV5ActionSpent, previewV5PaviseDeploymentFrom } from '../store/v5-action-guards.js';
-import { initialV5ReloadState, createV5ReloadState, beginV5Reload, advanceV5Reload } from '../v5-reloading.js';
+import { initialV5ReloadState, createV5ReloadState, beginV5Reload, advanceV5Reload, V5_RELOAD_REASON_LABELS } from '../v5-reloading.js';
 import { previewV5BrokenEscape, BROKEN_ESCAPE_SOURCE, BROKEN_ESCAPE_RULE_VERSION } from '../v5-broken-escape.js';
 
 export function createV5CombatActionsApi({ api, currentEnvelope, issuedBrokenEscapePreviews, issuedPaviseDeploymentPreviews }) {
@@ -117,7 +117,7 @@ export function createV5CombatActionsApi({ api, currentEnvelope, issuedBrokenEsc
         expectedRevision: input.expectedWeaponRevision ?? current.revision });
       else return { ready: false, status: 'blocked', error: 'Choisir début ou progression du rechargement.' };
       if (!plan.ready || plan.status === 'stale' || plan.status === 'unavailable') return { ready: false, status: plan.status || 'requires-input',
-        error: plan.unresolved?.[0] || `Rechargement indisponible : ${plan.reason || plan.status}.` };
+        error: plan.unresolved?.[0] || V5_RELOAD_REASON_LABELS[plan.reason || plan.status] || `Rechargement indisponible : ${plan.reason || plan.status}.` };
       return { ready: true, actorId: actor.id, equipmentId: weapon.id, operation: input.operation,
         baseRevision: envelope.localRevision || 0, before: structuredClone(current), after: structuredClone(plan.state),
         result: plan.status, progress: plan.progress || null };

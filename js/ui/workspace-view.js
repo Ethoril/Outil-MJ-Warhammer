@@ -24,6 +24,7 @@ import { v5StoreActionClock } from '../core/v5-store-action.js';
 import { d100 } from '../core/dice.js';
 import { inferActionType, previewHpLoss, ResolutionError } from '../core/resolution.js';
 import { userMessage, userError, contextMessage, refusalError } from './messages.js';
+import { describeV5ReloadState, V5_RELOAD_REASON_LABELS } from '../core/v5-reloading.js';
 import { buildPsychologyBlock, readPsychologyInputs } from './psychology-block.js';
 import { buildFamiliarBlock, readFamiliarInputs, readFamiliarDeathInputs } from './familiar-block.js';
 import { formatV5Balance } from '../core/v5-resources.js';
@@ -2113,15 +2114,15 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       reloadPanel.appendChild(node('h3','workspace-card-title','Rechargement des armes'));
       for(const weapon of reloadWeapons){
         const state=weapon.extensions?.v5?.reloadState,wrap=node('div','workspace-v5-context');
-        const title=node('p','workspace-result-line',`${weapon.name||weapon.id} · ${state?`${state.shotsRemaining} tir(s) restant(s)`:'chargeur non initialisé'}${state?.reloading?` · recharge ${state.accumulatedSuccesses}/${state.requiredSuccesses} succès`:''}`);
+        const title=node('p','workspace-result-line',`${weapon.name||weapon.id} · ${describeV5ReloadState(state)}`);
         wrap.appendChild(title);
         const error=node('p','workspace-error');
         const apply=async input=>{try{
           error.textContent='';
           const plan=Store.previewV5WeaponReload({actorId:context.actor.id,equipmentId:weapon.id,...input});
-          if(!plan.ready)throw new Error(plan.error||'Rechargement à préciser.');
+          if(!plan.ready)throw userError(plan.error||'Rechargement à préciser.');
           const saved=await Store.applyV5WeaponReload(plan);
-          if(saved?.status!=='applied')throw new Error(saved?.reason||'Rechargement non enregistré.');
+          if(saved?.status!=='applied')throw userError(V5_RELOAD_REASON_LABELS[saved?.reason]||saved?.reason||'Rechargement non enregistré.');
           render();
         }catch(cause){error.textContent=userMessage(cause,'Rechargement non enregistré.');}};
         if(!state&&weapon.keywords?.some(row=>(typeof row==='string'?row:row?.id)==='a-repetition'&&String(row?.parameter).toLowerCase()==='variable')){
