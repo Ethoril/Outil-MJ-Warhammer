@@ -177,7 +177,7 @@ const traitText = trait => {
  * Une attaque imprimée « 2 Claws », « 8 × Tentacles » (`count`) devient autant d'actions (« Claws 1 », « Claws 2 »…), chacune marquée
  * `multiAttack` ; livre de base V5 (L06) p. 362 : « 8 Tentacles : la créature peut faire 8 attaques gratuites ».
  */
-function attackActions(attack) {
+function attackActions(attack, stats = {}) {
   // Une attaque imprimée « Ranged (Pistol) +9 » sans portée reste une attaque à distance (CT), portée à saisir par le MJ.
   const ranged = isInt(attack.rangeYards) || attack.ranged === true;
   const of = isInt(attack.count) && attack.count > 1 ? attack.count : 1;
@@ -187,7 +187,7 @@ function attackActions(attack) {
     const free = attack.free || (of > 1 && (tentacles || position > 0) ? 'all' : null);
     const v5 = { kind: ranged ? 'ranged' : 'melee', ...(free ? { [BESTIARY_FREE_ATTACK_KEY]: free } : {}), ...(of > 1 ? { multiAttack: { group: attack.name, index: position + 1, of } } : {}) };
     return normalizeAction({
-      name: of > 1 ? `${attack.name} ${position + 1}` : attack.name, type: 'attack', attr: ranged ? 'CT' : 'CC', base: attack.value ?? '', damage: attack.damage,
+      name: of > 1 ? `${attack.name} ${position + 1}` : attack.name, type: 'attack', attr: ranged ? 'CT' : 'CC', base: attack.value ?? stats[ranged ? 'CT' : 'CC'] ?? '', damage: attack.damage,
       qualities: cloneValue(attack.qualities || []), ...(isInt(attack.rangeYards) ? { rangeYards: attack.rangeYards } : {}),
       ...(attack.detail ? { detail: attack.detail } : {}), extensions: { v5 }
     });
@@ -258,7 +258,7 @@ export function buildParticipantFromBestiary(id, options = {}) {
     initiative: record.stats.I ?? 0, hp: wounds, maxHp: wounds,
     caracs: Object.fromEntries(Object.entries(record.stats).filter(([, value]) => value !== null)),
     armor,
-    actions: [...(record.attacks || []).filter(attack => includeOptional || !attack.optional).flatMap(attackActions), ...f2hProfileActions(record)],
+    actions: [...(record.attacks || []).filter(attack => includeOptional || !attack.optional).flatMap(attack => attackActions(attack, record.stats)), ...f2hProfileActions(record)],
     skills, talents,
     traits: traits.map(traitText), keywords: [...(record.keywords || [])], tags: [], notes: armourReminder,
     // `extensions.v5.reminders` : rappels affichés en combat par `deriveReminders` (js/core/reminders.js) ; `notes` n'est lu par aucune carte.
