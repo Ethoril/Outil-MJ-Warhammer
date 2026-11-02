@@ -104,7 +104,7 @@ export function createV5CombatActionsApi({ api, currentEnvelope, issuedBrokenEsc
       const current = weapon.extensions?.v5?.reloadState || initialV5ReloadState(weapon).state;
       const variableRepeater=weapon.keywords?.some(row=>(typeof row==='string'?row:row?.id)==='a-repetition'&&String(row?.parameter).toLowerCase()==='variable');
       if(variableRepeater&&!current&&input.operation==='arbitrate'){
-        const capacity=Number(input.repeaterRating),reloadSuccesses=Number(weapon.keywords?.find(row=>(typeof row==='string'?row:row?.id)==='recharge')?.parameter);
+        const capacity=Number(input.repeaterRating),reloadSuccesses=Number(weapon.keywords?.find(row=>(typeof row==='string'?row:row?.id)==='recharge')?.parameter ?? weapon.keywords?.find(row=>(typeof row==='string'?row:row?.id)==='recharge')?.rating);
         if(!Number.isSafeInteger(capacity)||capacity<1)return {ready:false,status:'requires-input',error:'Arbitrage Ratling : capacité entière positive requise.'};
         const adjudicated=createV5ReloadState({repeaterRating:capacity,reloadSuccesses});
         if(!adjudicated.ready)return {ready:false,status:'requires-input',error:'Arbitrage Ratling : capacité entière positive requise.'};

@@ -35,8 +35,8 @@ export function previewV5ActionQualities(input, { sourceQualities: effectiveSour
   const qualities = normalizeQualities([...sourceQualities, ...plan.proposals.filter(row => row.op === 'addQuality').map(row => ({ id: row.key, talentOrigins: clone(row.origins) }))]).filter(row => !suppressed.has(row.id));
   for(const effect of plan.proposals.filter(row=>row.op==='modifyQuality')){
     const quality=qualities.find(row=>row.id===effect.key);if(!quality)continue;
-    const rating=Number(quality.parameter);
-    if(!Number.isSafeInteger(rating)||rating<0||String(quality.parameter??'').trim()==='') {plan.unresolved.push({fields:['quality.'+effect.key+'.rating']});plan.ready=false;continue;}
+    const rating=Number(quality.parameter ?? quality.rating);
+    if(!Number.isSafeInteger(rating)||rating<0||String(quality.parameter??quality.rating??'').trim()==='') {plan.unresolved.push({fields:['quality.'+effect.key+'.rating']});plan.ready=false;continue;}
     quality.parameter=String(Math.max(0,rating+effect.amount));quality.talentOrigins=clone(effect.origins);
   }
   normalized.action = { ...normalized.action, sourceQualities, qualities };

@@ -1489,7 +1489,8 @@ export function renderResolutionPanel(options) {
       label.append(die);
       fields.append(label);
     }
-    const spreadRating=Number((action.qualities||[]).find(row=>(typeof row==='string'?row:row?.id)==='dispersion')?.parameter)||Number(current.spreadRating)||0;
+    const spreadQuality=(action.qualities||[]).find(row=>(typeof row==='string'?row:row?.id)==='dispersion');
+    const spreadRating=Number(spreadQuality?.parameter ?? spreadQuality?.rating)||Number(current.spreadRating)||0;
     fields.append(node('p','workspace-muted',`Bout portant : une cible, dégâts +${spreadRating}. Courte à longue : cible initiale et jusqu’à ${spreadRating} cibles visibles les plus proches; aucune paire ne dépasse ${spreadRating} m. Extrême : mêmes cibles, dégâts −${spreadRating}. Distances et visibilité sont arbitrées par le MJ; saisissez un jet de localisation d100 pour chaque cible secondaire.`));
   }
   if(type==='attack'&&(action?.qualities||[]).some(row=>(typeof row==='string'?row:row?.id)==='explosion')){

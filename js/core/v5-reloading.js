@@ -14,11 +14,11 @@ export function initialV5ReloadState(weapon) {
   const reload = qualities.find(row => (typeof row === 'string' ? row : row?.id) === 'recharge');
   if (!repeater && !salvo && !reload && weapon?.reload == null) return blocked('Cette arme ne porte ni À répétition, Salve ni Recharge.');
   const extension=weapon?.extensions?.v5||{};
-  const rawRepeater=repeater ? (typeof repeater === 'string' ? NaN : repeater.parameter) : 0;
+  const rawRepeater=repeater ? (typeof repeater === 'string' ? NaN : repeater.parameter ?? repeater.rating) : 0;
   // « Variable » is deliberately resolved by the MJ per weapon instance.
   const repeaterRating = String(rawRepeater).toLowerCase()==='variable' ? Number(extension.reloadState?.repeaterRating??extension.repeaterRating??NaN) : Number(rawRepeater);
-  const salvoRating = salvo ? Number(typeof salvo === 'string' ? NaN : salvo.parameter) : 0;
-  const rawReload = reload ? (typeof reload === 'string' ? NaN : reload.parameter) : (extension.reloadRequiredSuccesses??weapon.reload);
+  const salvoRating = salvo ? Number(typeof salvo === 'string' ? NaN : salvo.parameter ?? salvo.rating) : 0;
+  const rawReload = reload ? (typeof reload === 'string' ? NaN : reload.parameter ?? reload.rating) : (extension.reloadRequiredSuccesses??weapon.reload);
   const markedIncremental=reload?.asterisk===true||reload?.incrementalPerSalvo===true||extension.salvoReloadMode==='incremental'||typeof rawReload==='string'&&/\*$/.test(rawReload.trim());
   const reloadSuccesses = Number(typeof rawReload==='string'?rawReload.replace(/\*\s*$/,'').trim():rawReload);
   const salvoReloadMode=salvoRating>0?(markedIncremental?'incremental':'full'):'none';
