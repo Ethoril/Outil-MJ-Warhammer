@@ -12,13 +12,13 @@ const CAMP_ALIASES = new Map([
   ['ennemi', 'ennemi'], ['ennemis', 'ennemi'], ['hostile', 'ennemi'], ['adversaire', 'ennemi']
 ]);
 
-/** Canonical camp (`pj`, `allie`, `ennemi`, `neutre`) from free text; a PJ without a camp is `pj`. */
+/** Canonical camp (`pj`, `allie`, `ennemi`, `neutre`) from free text; a PJ without a camp is `pj`, an explicit « neutre » is kept. */
 export function normalizeCamp(value, kind) {
   const text = typeof value === 'string'
     ? value.trim().toLocaleLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
     : '';
   const camp = CAMP_ALIASES.get(text) || 'neutre';
-  if (camp === 'neutre' && (!text || text === 'neutre') && kind === 'PJ') return 'pj';
+  if (camp === 'neutre' && !text && kind === 'PJ') return 'pj';
   return camp;
 }
 
@@ -42,7 +42,7 @@ function cloneParticipant(profile, options, idFactory) {
     maxHp: persistent?.maxHp === null ? null : Number(persistent?.maxHp ?? profile.maxHp ?? profile.hp) || 0,
     states,
     zone: options.zone === 'active' ? 'active' : 'bench',
-    camp: requiredText(options.camp, 'neutre'),
+    camp: requiredText(options.camp, profile.kind === 'PJ' ? 'pj' : 'neutre'),
     color: options.color || 'default',
     armor: cloneValue(profile.armor || {}),
     ...normalizeFicheFields(profile),
