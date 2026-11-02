@@ -360,7 +360,7 @@ test('Camps — normalizeCamp ramène le texte libre aux quatre camps canoniques
   for (const value of ['neutre', 'marchands', '', undefined, null, 42]) assert.equal(normalizeCamp(value), 'neutre', String(value));
   assert.equal(normalizeCamp(undefined, 'PJ'), 'pj');
   assert.equal(normalizeCamp('', 'PJ'), 'pj');
-  assert.equal(normalizeCamp('Neutre', 'PJ'), 'pj');
+  assert.equal(normalizeCamp('Neutre', 'PJ'), 'neutre', 'un camp Neutre choisi explicitement prime sur le type PJ (C24)');
   assert.equal(normalizeCamp('marchands', 'PJ'), 'neutre');
   assert.equal(normalizeCamp('ennemi', 'PJ'), 'ennemi');
   assert.equal(normalizeCamp(undefined, 'Créature'), 'neutre');
