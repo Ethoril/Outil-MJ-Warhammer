@@ -749,26 +749,34 @@ test('F2-A — la preuve tournoi complète est conservée après reload, suspens
   assert.equal(reloaded.getActiveScene().id, sceneId);
 });
 
-test('F2-A — renforts sans jet gardent leur insertion canonique; score initial survivant suit encore la piste', async () => {
+test('F2-A / C27 — renforts en cours de Round : jet d’Initiative demandé, insertion à leur rang; score initial survivant suit encore la piste', async () => {
   const { store, persistence } = await fixture([person('a', { I: 90 }), person('b', { I: 30 }), person('e', { I: 70, zone: 'bench' })]);
   await store.applyCombatInitialization(store.previewCombatInitialization({ diceById: { a: 9, b: 2 }, startCombat: true }));
-  await store.addParticipant(person('c', { I: 99 }));
-  await store.addParticipant(person('d', { I: 30 }));
-  assert.deepEqual(store.getCombat().order, ['a', 'd', 'c', 'b']);
-  assert.deepEqual(JSON.parse(store.getFullJSON()).extensions.v5.combatInitiativeResolution.order, ['a', 'd', 'c', 'b']);
-  assert.deepEqual(store.getEffectiveOrder(), ['a', 'd', 'c', 'b'], 'I99 d’un renfort ne se compare jamais aux scores initiaux');
-  await store.moveParticipant('e', 'active');
-  assert.deepEqual(store.getEffectiveOrder(), ['a', 'e', 'd', 'c', 'b'], 'l’activation de banc insère sans jet au tour indiqué');
+  // Scores : a 9+9=18, b 3+2=5. Un renfort actif ou venant du banc reçoit son d10 comme avant le Round 1.
+  assert.throws(() => store.addParticipant(person('c', { I: 99 })), error => error.code === 'COMBAT_INIT_REQUIRED');
+  await assert.rejects(async () => store.moveParticipant('e', 'active'), error => error.code === 'COMBAT_INIT_REQUIRED');
+  const enter = async (staging, diceById) => {
+    const plan = store.previewCombatInitialization({ staging, diceById: { a: 9, b: 2, ...diceById } });
+    assert.equal(plan.ready, true, JSON.stringify(plan.needsInput));
+    assert.equal((await store.applyCombatInitialization(plan)).status, 'applied');
+  };
+  await enter(store.previewCombatParticipantAddition(person('c', { I: 99 })), { c: 1 });
+  await enter(store.previewCombatParticipantAddition(person('d', { I: 30 })), { d: 5 });
+  assert.deepEqual(store.getCombat().order, ['a', 'c', 'd', 'b']);
+  assert.deepEqual(JSON.parse(store.getFullJSON()).extensions.v5.combatInitiativeResolution.order, ['a', 'c', 'd', 'b']);
+  assert.deepEqual(store.getEffectiveOrder(), ['a', 'c', 'd', 'b'], 'I99 d’un renfort ne se compare jamais aux scores initiaux : seul son score de combat (9+1) compte');
+  await enter(store.previewCombatParticipantActivation('e'), { e: 10 });
+  assert.deepEqual(store.getEffectiveOrder(), ['a', 'e', 'c', 'd', 'b'], 'l’activation de banc insère à son rang (7+10=17)');
   await store.moveParticipant('a', 'bench');
   await store.moveParticipant('b', 'bench');
   await store.moveParticipant('e', 'bench');
-  assert.deepEqual(store.getEffectiveOrder(), ['d', 'c'], 'les renforts restants conservent l’ordre canonique quand les initiateurs initiaux sortent');
+  assert.deepEqual(store.getEffectiveOrder(), ['c', 'd'], 'les renforts restants conservent l’ordre canonique quand les initiateurs initiaux sortent');
   const reloaded = createStore({ persistence, storage: null }); await reloaded.ready;
-  assert.deepEqual(reloaded.getEffectiveOrder(), ['d', 'c']);
+  assert.deepEqual(reloaded.getEffectiveOrder(), ['c', 'd']);
   await reloaded.setOrderMode('manual');
-  await reloaded.moveInOrder('c', 'd');
+  await reloaded.moveInOrder('d', 'c');
   await reloaded.setOrderMode('automatic');
-  assert.deepEqual(reloaded.getCombat().order, ['d', 'c']);
+  assert.deepEqual(reloaded.getCombat().order, ['c', 'd']);
 });
 
 test('F2-A — terminer le combat efface le marqueur de piste initialisée avant un nouveau combat libre', async () => {

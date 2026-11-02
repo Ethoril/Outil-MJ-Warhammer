@@ -1,6 +1,6 @@
 // Lot 4 · C27 (G-INI-4, G-DIV-18) : un combattant qui entre pendant un Round doit recevoir son Initiative
 // et être inséré à son rang ; un rang déjà dépassé attend le Round suivant.
-// Phase de reproduction : ces tests échouent aujourd'hui (ajout direct et banc → « Faire entrer » sans jet, placé après le personnage courant).
+// Règle : même saisie qu'à l'ouverture (d10 PJ saisi, d10 PNJ tiré), insertion par insertParticipantsByInitiative.
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
 import { createStore } from '../../../js/core/store.js';
@@ -88,5 +88,45 @@ describe('C27 renfort en cours de Round', () => {
     const store = await round1();
     const staging = store.previewCombatParticipantAddition(person('direct', { initiative: 60, caracs: { I: 60 } }));
     assert.ok(staging, 'previewCombatParticipantAddition renvoie null dès que Round ≠ 0');
+  });
+
+  test('ajout direct actif avec jet au Round 1 : appliqué, inséré à son rang (entre alpha et beta pour un score 8), le courant ne change pas', async () => {
+    const store = await round1();
+    const staging = store.previewCombatParticipantAddition(person('direct', { initiative: 50, caracs: { I: 50 } }));
+    const plan = store.previewCombatInitialization({ staging, diceById: { alpha: 6, beta: 3, direct: 3 } });
+    assert.equal(plan.ready, true, JSON.stringify(plan.needsInput));
+    assert.equal((await store.applyCombatInitialization(plan)).status, 'applied');
+    assert.deepEqual(activeOrder(store), ['alpha', 'direct', 'beta']);
+    assert.equal(store.getCombat().currentActorId, 'alpha');
+    assert.equal(store.getCombat().round, 1);
+  });
+
+  test('sans le d10 du renfort, la saisie reste incomplète (rien n’est appliqué)', async () => {
+    const store = await round1();
+    const staging = store.previewCombatParticipantActivation('rapide');
+    const plan = store.previewCombatInitialization({ staging, diceById: { alpha: 6, beta: 3 } });
+    assert.equal(plan.ready, false);
+    assert.ok(plan.needsInput.some(row => row.participantId === 'rapide' && row.field === 'die'));
+  });
+
+  test('un combattant déjà doté d’une Initiative (retour du banc) revient sans nouveau jet', async () => {
+    const store = await round1();
+    assert.equal(store.previewCombatParticipantActivation('beta'), null);
+    await store.moveParticipant('beta', 'bench');
+    assert.equal(store.previewCombatParticipantActivation('beta'), null);
+    await store.moveParticipant('beta', 'active');
+    assert.equal(store.listParticipants().find(row => row.id === 'beta').zone, 'active');
+  });
+
+  test('avant le Round 1 (Round 0), l’ajout direct actif est toujours soumis au jet de préparation', async () => {
+    const store = createStore({ persistence: persistence(), storage: null });
+    await store.ready;
+    await store.loadFromJSON(base([person('alpha', { kind: 'PJ', camp: 'pj' }), person('banc', { zone: 'bench' })]));
+    const plan = store.previewCombatInitialization({ diceById: { alpha: 6 } });
+    assert.equal((await store.applyCombatInitialization(plan)).status, 'applied');
+    assert.equal(store.getCombat().round, 0);
+    assert.throws(() => store.addParticipant(person('direct')), error => error.code === 'COMBAT_INIT_REQUIRED');
+    assert.ok(store.previewCombatParticipantActivation('banc'));
+    assert.ok(store.previewCombatParticipantAddition(person('direct2')));
   });
 });

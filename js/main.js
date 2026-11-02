@@ -593,7 +593,7 @@ async function moveParticipantWithInitiative(id, zone, beforeId = null) {
   try {
     const staging=zone==='active'?Store.previewCombatParticipantActivation?.(id):null;
     if(staging){
-      const result=await openCombatInitiativeDialog({staging,title:'Activer avant le Round 1 · Initiative'});
+      const result=await openCombatInitiativeDialog({staging,title:Store.getCombat().round>0?'Renfort en cours de Round · Initiative':'Activer avant le Round 1 · Initiative'});
       if(result?.status==='cancelled')return result;
       await awaitStore(result,'Activation et initiative');
       return result;
@@ -1630,7 +1630,7 @@ const workspaceView = DOM.panels.workspace && qs('#workspace-root') ? initWorksp
     addProfileToActiveCombat: async id => {
       try {
         const profileName=Store.getProfile(id)?.name||'Profil';
-        if(Store.getCombat().round===0&&Store.isCombatInitiativeInitialized?.()){
+        if(Store.isCombatInitiativeInitialized?.()){
           const staging=requireStoreApi('previewCombatParticipantAddition')(id);
           const initialized=await openCombatInitiativeDialog({staging,title:`Initiative · Ajout actif de ${profileName}`});
           if(initialized?.status==='cancelled')return false;

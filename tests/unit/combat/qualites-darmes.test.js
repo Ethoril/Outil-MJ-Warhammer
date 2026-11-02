@@ -1762,8 +1762,13 @@ test('Mots clés × talents — Battement remplace Empaleuse/Dévastatrice/Assom
   assert.deepEqual(a.equipment, equipment); assert.equal(snapshotStore(store).extensions.v5.actionLedger.quotaUsage.length, 0);
 });
 
-test('Mots clés × talents — V4 Précise/Percutante ne deviennent pas DR V5 avec Coup puissant', () => {
-  for (const quality of ['precise', 'percutante']) {
+test('Mots clés × talents — V4 Précise se lit comme Pointue V5 (C33) ; Percutante ne devient pas DR V5 avec Coup puissant', () => {
+  const precise = previewResolution(raw({ actor: person('a', { talents: talents('Coup puissant') }), action: attack({ qualities: ['precise'] }) }));
+  assert.equal(precise.test.score, 60, 'aucun +10 au score cible');
+  assert.deepEqual(precise.mechanicalWarnings, []);
+  assert.ok(precise.damage, 'Précise n’empêche plus le calcul des dégâts');
+  assert.equal(applyResolution(precise, pureState(precise)).status, 'applied');
+  for (const quality of ['percutante']) {
     const p = previewResolution(raw({ actor: person('a', { talents: talents('Coup puissant') }),
       action: attack({ qualities: [quality] }) }));
     assert.equal(p.test.score, 60); assert.equal(p.sl, 4); assert.equal(p.damage, null);

@@ -1780,8 +1780,8 @@ function resolvedCorruptionTest(participant, skillId, input) {
 
     addParticipant(p) {
       if (!canMutate()) return false;
-      if(p?.zone==='active'&&Number(combat.round)===0&&stateExtensions?.v5?.combatInitiativeInitialized===true&&!p.extensions?.v5?.combatInitiative?.initialized)
-        throw Object.assign(new Error('Un ajout direct actif avant le Round 1 doit recevoir son jet d’Initiative dans le dialogue de préparation.'),{code:'COMBAT_INIT_REQUIRED',userFacing:true});
+      if(p?.zone==='active'&&stateExtensions?.v5?.combatInitiativeInitialized===true&&!p.extensions?.v5?.combatInitiative?.initialized)
+        throw Object.assign(new Error('Un ajout direct actif doit recevoir son jet d’Initiative dans le dialogue de préparation.'),{code:'COMBAT_INIT_REQUIRED',userFacing:true});
       if (persistence) {
         const captured = JSON.parse(JSON.stringify(p));
         return api.executeCommand('add-participant', draft => {
@@ -2541,8 +2541,8 @@ function resolvedCorruptionTest(participant, skillId, input) {
       if (!canMutate()) return false;
       const p = combat.participants.get(id);
       if (!p) return;
-      if(zone==='active'&&p.zone!=='active'&&Number(combat.round)===0&&stateExtensions?.v5?.combatInitiativeInitialized===true&&!p.extensions?.v5?.combatInitiative?.initialized)
-        throw Object.assign(new Error('Un combattant activé avant le Round 1 doit recevoir son jet d’Initiative dans le dialogue de préparation.'),{code:'COMBAT_INIT_REQUIRED',userFacing:true});
+      if(zone==='active'&&p.zone!=='active'&&stateExtensions?.v5?.combatInitiativeInitialized===true&&!p.extensions?.v5?.combatInitiative?.initialized)
+        throw Object.assign(new Error('Un combattant activé doit recevoir son jet d’Initiative dans le dialogue de préparation.'),{code:'COMBAT_INIT_REQUIRED',userFacing:true});
       if (persistence) return api.executeCommand('move-participant', draft => {
         let participants = (draft.combat?.participants || []).map(item => item.id === id ? { ...item, zone } : item);
         // Au banc, le participant quitte sa monture et libère ses cavaliers (comme updateParticipant).
@@ -2732,7 +2732,7 @@ function resolvedCorruptionTest(participant, skillId, input) {
     previewCombatParticipantActivation(id) {
       const participant=(currentEnvelope().combat?.participants||[]).find(row=>row.id===id);
       if(!participant)throw new Error('Combattant introuvable');
-      if(Number(combat.round)!==0||stateExtensions?.v5?.combatInitiativeInitialized!==true||participant.extensions?.v5?.combatInitiative?.initialized)return null;
+      if(stateExtensions?.v5?.combatInitiativeInitialized!==true||participant.extensions?.v5?.combatInitiative?.initialized)return null;
       const participants=(currentEnvelope().combat?.participants||[]).map(row=>row.id===id?{...row,zone:'active'}:cloneValue(row));
       const tieOrders={},opposedRolls={},tieChoices={};
       for(const group of stateExtensions?.v5?.combatInitiativeResolution?.tieGroups||[]){
@@ -2749,7 +2749,7 @@ function resolvedCorruptionTest(participant, skillId, input) {
       return {kind:'activate-pre-round',participantId:id,baseRevision:localRevision,participants,tieOrders,opposedRolls,tieChoices};
     },
     previewCombatParticipantAddition(participantOrProfileId) {
-      if(Number(combat.round)!==0||stateExtensions?.v5?.combatInitiativeInitialized!==true)return null;
+      if(stateExtensions?.v5?.combatInitiativeInitialized!==true)return null;
       const current=currentEnvelope(),profiles=new Map((current.reserve||[]).map(row=>[row.id,row]));
       let participant,profile=null;
       if(typeof participantOrProfileId==='string'){
@@ -2881,14 +2881,20 @@ function resolvedCorruptionTest(participant, skillId, input) {
           const v5=draft.extensions?.v5||{},ledger=v5.actionLedger;
           return {...draft,extensions:{...(draft.extensions||{}),v5:{...freshCombatScopedV5(v5,combatScopeId),combatInitiativeInitialized:true,combatInitiativeResolution:resolution,orderRound:null,...(ledger?{actionLedger:{...ledger,quotaUsage:(ledger.quotaUsage||[]).filter(row=>!String(row.scopeKey||'').includes(':0:pre-combat'))}}:{})}},combat:{...draft.combat,round:0,currentActorId:null,participants:nextParticipants,order,orderMode:ORDER_MODES.AUTOMATIC},log:[{id:uid(),ts:Date.now(),kind:'management',text:'Combat recommencé : PV remis au maximum.'},...log].slice(0,300)};
         }
+        // En cours de Round (C27) : le renfort est inséré à son rang dans la piste figée ; un rang déjà dépassé attend le Round suivant.
+        const inRound=Number(draft.combat?.round)>0;
         if(staging?.kind==='activate-pre-round'){
-          const scene=draft.activeScene?{...draft.activeScene,participants:nextParticipants,order,extensions:{...(draft.activeScene.extensions||{}),v5:{...(draft.activeScene.extensions?.v5||{}),combatInitiativeResolution:resolution}}}:draft.activeScene;
-          return {...draft,extensions,activeScene:scene,combat:{...draft.combat,participants:nextParticipants,order,orderMode:ORDER_MODES.AUTOMATIC}};
+          const placed=inRound?insertParticipantsByInitiative(draft.combat,nextParticipants):order;
+          const placedResolution=inRound?{...resolution,order:placed}:resolution;
+          const scene=draft.activeScene?{...draft.activeScene,participants:nextParticipants,order:placed,extensions:{...(draft.activeScene.extensions||{}),v5:{...(draft.activeScene.extensions?.v5||{}),combatInitiativeResolution:placedResolution}}}:draft.activeScene;
+          return {...draft,extensions:inRound?{...extensions,v5:{...extensions.v5,combatInitiativeResolution:placedResolution}}:extensions,activeScene:scene,combat:{...draft.combat,participants:nextParticipants,order:placed,orderMode:inRound?draft.combat.orderMode:ORDER_MODES.AUTOMATIC}};
         }
         if(staging?.kind==='add-active-participant-pre-round'){
-          const logEntry={id:uid(),ts:Date.now(),kind:'management',text:`${staging.participant.name} ajouté directement actif avec Initiative avant le Round 1.`};
-          const scene=draft.activeScene?{...draft.activeScene,participants:nextParticipants,order,extensions:{...(draft.activeScene.extensions||{}),v5:{...(draft.activeScene.extensions?.v5||{}),combatInitiativeResolution:resolution}}}:draft.activeScene;
-          return {...draft,extensions,activeScene:scene,combat:{...draft.combat,participants:nextParticipants,order,orderMode:ORDER_MODES.AUTOMATIC},
+          const logEntry={id:uid(),ts:Date.now(),kind:'management',text:inRound?`${staging.participant.name} ajouté directement actif en renfort au Round ${draft.combat.round}, avec Initiative.`:`${staging.participant.name} ajouté directement actif avec Initiative avant le Round 1.`};
+          const placed=inRound?insertParticipantsByInitiative(draft.combat,nextParticipants):order;
+          const placedResolution=inRound?{...resolution,order:placed}:resolution;
+          const scene=draft.activeScene?{...draft.activeScene,participants:nextParticipants,order:placed,extensions:{...(draft.activeScene.extensions||{}),v5:{...(draft.activeScene.extensions?.v5||{}),combatInitiativeResolution:placedResolution}}}:draft.activeScene;
+          return {...draft,extensions:inRound?{...extensions,v5:{...extensions.v5,combatInitiativeResolution:placedResolution}}:extensions,activeScene:scene,combat:{...draft.combat,participants:nextParticipants,order:placed,orderMode:inRound?draft.combat.orderMode:ORDER_MODES.AUTOMATIC},
             diceLines:[...(draft.diceLines||[]),...(staging.participantDiceLines||[])],log:[logEntry,...(draft.log||[])].slice(0,300)};
         }
         const firstActorId=order[0]||null,round=captured.startCombat===true?1:Number(draft.combat?.round)||0;
@@ -3158,8 +3164,8 @@ function resolvedCorruptionTest(participant, skillId, input) {
       const selectedIds = (Array.isArray(profileIds) ? profileIds : [profileIds]).filter(id => reserve.has(id));
       if (!selectedIds.length) throw new Error('Aucun profil à ajouter');
       const targetZone = zone === 'active' ? 'active' : 'bench';
-      if(targetZone==='active'&&Number(combat.round)===0&&stateExtensions?.v5?.combatInitiativeInitialized===true)
-        throw Object.assign(new Error('Un profil ajouté directement actif avant le Round 1 doit recevoir son jet d’Initiative dans le dialogue de préparation.'),{code:'COMBAT_INIT_REQUIRED',userFacing:true});
+      if(targetZone==='active'&&stateExtensions?.v5?.combatInitiativeInitialized===true)
+        throw Object.assign(new Error('Un profil ajouté directement actif doit recevoir son jet d’Initiative dans le dialogue de préparation.'),{code:'COMBAT_INIT_REQUIRED',userFacing:true});
       return api.executeCommand('add-profiles-to-combat', draft => {
         const { added, ...next } = addProfilesToDraft(draft, selectedIds.map(id => ({ id, zone: targetZone })));
         if (!added.length) throw new Error('Aucun profil à ajouter');
@@ -5099,8 +5105,8 @@ function resolvedCorruptionTest(participant, skillId, input) {
       // Décision du MJ (26/10) : tout personnage a son jet d’Initiative avant le Round 1, renfort de scène compris.
       const reinforcementId = event?.consequence?.type === 'reinforcement' ? (event.consequence.participantId || event.consequence.id) : null;
       const reinforced = reinforcementId ? combat.participants.get(reinforcementId) : null;
-      if (reinforced && reinforced.zone !== 'active' && Number(combat.round) === 0 && stateExtensions?.v5?.combatInitiativeInitialized === true && !reinforced.extensions?.v5?.combatInitiative?.initialized)
-        return Promise.resolve({ status: 'error', code: 'COMBAT_INIT_REQUIRED', reason: 'Un renfort avant le Round 1 doit d’abord recevoir son jet d’Initiative : faites-le entrer en jeu depuis le banc.' });
+      if (reinforced && reinforced.zone !== 'active' && stateExtensions?.v5?.combatInitiativeInitialized === true && !reinforced.extensions?.v5?.combatInitiative?.initialized)
+        return Promise.resolve({ status: 'error', code: 'COMBAT_INIT_REQUIRED', reason: 'Un renfort doit d’abord recevoir son jet d’Initiative : faites-le entrer en jeu depuis le banc.' });
       let semanticResult = null;
       const commit = api.executeCommand('apply-scene-event', draft => {
         const scene = draft.activeScene;

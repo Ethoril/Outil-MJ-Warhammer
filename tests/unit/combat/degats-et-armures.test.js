@@ -578,15 +578,16 @@ test('Lot2 combat V5 — défense Ag/Esquive donne test générique, aucun criti
   }
 });
 
-test('Lot2 combat V5 — Pointue et Imprécise réservées aux attaques, aucune conversion Précise V4', () => {
+test('Lot2 combat V5 — Pointue et Imprécise réservées aux attaques ; Précise hérité de la V4 se lit comme Pointue (C33, livre V5 p. 305)', () => {
   const plain = previewResolution(input());
   const defensivePointue = previewResolution(input({ defense: { base: 40, roll: 47, qualities: ['Pointue', 'Imprécise'] } }));
   assert.equal(defensivePointue.defenderTest.sl, plain.defenderTest.sl);
   const old = previewResolution(input({ action: { type: 'attack', base: 65, damage: 4, qualities: ['Précise'] } }));
-  assert.equal(old.score.target, 65);
-  assert.equal(old.damage, null);
-  assert.equal(old.decisions.actor.options[0].summary.certainty, 'partial');
-  assert.equal(applyResolution(old, state(old)).reason, 'version-effet-non-couverte');
+  assert.equal(old.score.target, 65, 'aucun +10 au score : la V4 n’est pas appliquée');
+  assert.deepEqual(old.mechanicalWarnings, []);
+  assert.equal(old.sl, previewResolution(input({ action: { type: 'attack', base: 65, damage: 4, qualities: ['Pointue'] } })).sl, 'même DR que Pointue');
+  assert.ok(old.damage);
+  assert.equal(applyResolution(old, state(old)).status, 'applied');
 });
 
 test('Lot2 combat V5 — Charge donne Élan avant Test mais choix explicite reste nécessaire', () => {
