@@ -1258,10 +1258,15 @@ function openEventsView() {
       (consequenceSelect.value === 'advanceClock' ? scene.clocks : participantChoices).forEach(item => targetSelect.appendChild(new Option(item.name || item.label || item.id, item.id)));
       targetSelect.value = previousTarget;
     };
+    // « Après un événement résolu » liste les événements ; les autres conditions ne listent que des combattants.
+    const refreshValueChoices = () => {
+      const previous = conditionSelect.value === 'previousResolved';
+      valueInput.replaceChildren(new Option(previous ? 'Choisir un événement…' : 'Choisir un participant…', ''));
+      if (previous) scene.events.forEach(item => valueInput.appendChild(new Option(`Événement : ${item.id}`, item.id)));
+      else participantChoices.forEach(item => valueInput.appendChild(new Option(item.name, item.id)));
+    };
     conditionSelect.addEventListener('change', refreshFields); consequenceSelect.addEventListener('change', refreshFields); refreshFields();
-    valueInput.replaceChildren(new Option(conditionSelect.value === 'previousResolved' ? 'Choisir un événement…' : 'Choisir un participant…', ''));
-    participantChoices.forEach(item => valueInput.appendChild(new Option(item.name, item.id)));
-    if (scene.events.length) scene.events.forEach(item => valueInput.appendChild(new Option(`Événement : ${item.id}`, item.id)));
+    conditionSelect.addEventListener('change', refreshValueChoices); refreshValueChoices();
     const chooser = document.createElement('p'); chooser.className = 'muted'; chooser.textContent = 'Les listes affichent les noms ; les identifiants restent internes.'; form.appendChild(chooser);
     const previewMount = document.createElement('div'); previewMount.className = 'scene-event-preview';
     const eventList = document.createElement('div');
