@@ -9,6 +9,13 @@ const SKILL_OPTIONS = Object.freeze([
   ['skill-52_e9_73_69_73_74_61_6e_63_65-base', 'Résistance'],
   ['skill-43_61_6c_6d_65-base', 'Calme']
 ]);
+const THRESHOLD_FIELDS = Object.freeze({ mutationDomainRoll: 'Jet d100 de mutation physique / mentale', gmChosenDomain: 'Choix MJ si espèce hors table' });
+/** Champs du Test de seuil encore à saisir, sous le libellé affiché dans le panneau (délai secret : les d10 vides). */
+const missingThresholdFields = (missing = [], delayDice = []) => missing.flatMap(key => {
+  if (key !== 'manifestationDice') return [THRESHOLD_FIELDS[key] || key];
+  const empty = delayDice.flatMap((value, index) => value === '' ? [`Délai secret · d10 ${index + 1}`] : []);
+  return empty.length ? empty : ['Délai secret (trois d10 de 1 à 10)'];
+});
 const errorText = error => error?.message || 'Action de Corruption non enregistrée.';
 
 export function createV5CorruptionPanel({ Store, refresh = () => {} } = {}) {
@@ -191,7 +198,7 @@ export function createV5CorruptionPanel({ Store, refresh = () => {} } = {}) {
         });
         state.thresholdPreview = preview;
         if (preview.status === 'stale') throw new Error('La partie a changé; relisez le seuil et recalculez.');
-        if (preview.status === 'needs-input') throw new Error('Le choix MJ ou le délai secret requis n’est pas complet.');
+        if (preview.status === 'needs-input') throw new Error(`Saisie manquante : ${missingThresholdFields(preview.missing, state.delayDice).join(', ')}.`);
       }), () => state.thresholdRoll === '');
       if (state.thresholdPreview?.status === 'ready') {
         const preview = state.thresholdPreview;
@@ -313,7 +320,7 @@ export function createV5CorruptionPanel({ Store, refresh = () => {} } = {}) {
     const table = catalog.find(item => item.id === state.catalogTableId) || null;
     if (!table && catalog.length) state.catalogTableId = catalog[0].id;
     const selectedTable = catalog.find(item => item.id === state.catalogTableId) || null;
-    optionSelect(panel, 'Table source', 'catalogTableId', catalog.map(item => [item.id, `${item.family} · ${item.source?.book || ''} p.${item.source?.printedPage ?? item.source?.pageImprimee ?? '?'}`]));
+    optionSelect(panel, 'Table source', 'catalogTableId', catalog.map(item => [item.id, `${item.family} · ${item.source?.book || item.source?.livre || ''} p.${item.source?.printedPage ?? item.source?.pageImprimee ?? '?'}`]));
     let selectedTableResolvedDomain = selectedTable?.domain || null;
     if (selectedTable?.selection?.renvoiDepuis) panel.append(node('p', 'workspace-muted', `Renvoi imprimé depuis : ${Array.isArray(selectedTable.selection.renvoiDepuis) ? selectedTable.selection.renvoiDepuis.join(', ') : selectedTable.selection.renvoiDepuis}.`));
     if (Array.isArray(selectedTable?.selection?.renvoiDepuis)) {

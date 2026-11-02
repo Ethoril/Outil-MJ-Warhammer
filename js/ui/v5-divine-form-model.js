@@ -376,6 +376,9 @@ export function describeEffectResult(row, { contract, participants = [] } = {}) 
       return `${who} : ${named.length ? 'État(s) retiré(s) : ' + named.join(', ') : 'aucun État retiré'}${Number.isFinite(result.remaining) ? ` · ${result.remaining} État(s) restant(s)` : ''}`
         + `${result.rested ? ' · bonus de repos posé' : ''}${result.restedReminder ? ' · ' + result.restedReminder : ''}`;
     }
+    case 'heal-critical':
+      return `${who} : ${result.healed?.length ? 'Blessure(s) Critique(s) guérie(s) : ' + result.healed.join(', ') : 'aucune Blessure Critique guérie'}`
+        + `${result.removedStates?.length ? ' · État(s) retiré(s) : ' + result.removedStates.map(item => stateLabel(item.name || item.key, item.level)).join(', ') : ''}`;
     case 'wound-heal': case 'healing':
       return `${who} : ${result.hpDelta ?? 0} Blessure(s) récupérée(s)${Number.isFinite(result.amount) ? ` (${result.amount} × ${result.chosen}/${result.slots} effet(s))` : ''}`;
     case 'weapon-bonus':

@@ -3284,7 +3284,8 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
     cadaiRuneUsed: Boolean(options.useCadaiRune),
     targetResults,
     secondaryResults: secondary.results,
-    attributeReceipts,
+    // Effet de l'attribut sur le lanceur (soin de la Grande Gueule, Point de Chance…) : annoncé avec les effets sur les cibles.
+    attributeReceipts: [...attributeReceipts, ...(allLore?.casterEffects?.summary ? [{ targetId: actor.id, lore: contract.domain, effect: allLore.casterEffects.summary, casterEffect: allLore.casterEffects }] : [])],
     lorePreview: allLore,
     // Rappels chiffrés : clauses de drapeaux non calculées et options de surpuissance propres au sort à valeur de rappel.
     reminders: [...reminderFlagTexts(contract, actor), ...specificOvercast.entries.map(entry => entry.reminder || !SPECIFIC_OVERCAST_KINDS.includes(entry.kind) ? specificOvercastReminder(entry, actor) : null).filter(Boolean)],

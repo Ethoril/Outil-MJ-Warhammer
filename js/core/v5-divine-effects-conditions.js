@@ -196,7 +196,8 @@ const healCritical = {
       removedStates, reminders: [...HEAL_CRITICAL_REMINDERS, ...stateReminders] };
   },
   receipt: (effect, { targetId, targetName, actor }, result) => ({ targetId, type: effect.type, result: clone(result),
-    log: `${actor?.name || 'Le prêtre'} · ${targetName || targetId} : ${result.healed.length ? 'Blessure(s) Critique(s) guérie(s) : ' + result.healed.join(', ') : 'aucune Blessure Critique guérie'}` })
+    log: `${actor?.name || 'Le prêtre'} · ${targetName || targetId} : ${result.healed.length ? 'Blessure(s) Critique(s) guérie(s) : ' + result.healed.join(', ') : 'aucune Blessure Critique guérie'}`
+      + `${result.removedStates?.length ? ' · État(s) retiré(s) : ' + result.removedStates.map(row => `${row.name || row.key}${row.level > 1 ? ' ×' + row.level : ''}`).join(', ') : ''}` })
 };
 
 const temporaryFortune = {
