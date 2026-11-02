@@ -28,7 +28,7 @@ import { buildPsychologyBlock, readPsychologyInputs } from './psychology-block.j
 import { buildFamiliarBlock, readFamiliarInputs, readFamiliarDeathInputs } from './familiar-block.js';
 import { formatV5Balance } from '../core/v5-resources.js';
 import { normalizeEffects } from '../core/effects.js';
-import { CAMP_LABELS, normalizeCamp, encounterDisplayStatus, encounterSummary, sortEncountersForDisplay } from '../core/encounters.js';
+import { CAMP_LABELS, normalizeCamp, participantCamp, encounterDisplayStatus, encounterSummary, sortEncountersForDisplay } from '../core/encounters.js';
 import { uid } from '../core/models.js';
 import { renderFicheDetails } from './fiche-details.js';
 import { renderSilhouette } from './silhouette.js';
@@ -279,7 +279,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     const action = actions[keys.indexOf(draft.actionKey)] || null;
     const type = draft.type || (action && ['channelling', 'cast', 'dispel'].includes(action.type) ? action.type : (action ? inferActionType(action) : null));
 
-    const camp = participant => normalizeCamp(participant?.camp, participant?.kind);
+    const camp = participant => participantCamp(participant);
     const others = active.filter(participant => participant.id !== actor?.id);
     const groups = {
       adversaries: others.filter(participant => camp(participant) !== camp(actor)),
@@ -667,7 +667,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
   }
 
   function canRemoveDefeated(participant) {
-    return participant && Number(participant.hp) <= 0 && participant.kind !== 'PJ' && normalizeCamp(participant.camp, participant.kind) !== 'pj';
+    return participant && Number(participant.hp) <= 0 && participant.kind !== 'PJ' && participantCamp(participant) !== 'pj';
   }
 
   function defeatedParticipantButton(participant, focusKey) {
@@ -1131,7 +1131,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         if (state.targetChoice !== patch.targetId) draft.contextByAction = {};
         state.targetChoice = patch.targetId;
         draft.v5Context={...(draft.v5Context||{})};
-        for(const key of ['fateAction','fateChosenRoll','fateCriticalLocation','warpBladeEnduranceTest','f2h'])delete draft.v5Context[key];
+        for(const key of ['fateAction','fateChosenRoll','fateCriticalLocation','warpBladeEnduranceTest','f2h','struckPieceManual'])delete draft.v5Context[key];
         for (const key of ['hitMorphology','hitAppendage','spiderLegSide','fallPreventedByEquipment','mountedRestraint','mountedRideTestsById','mountedRideScoresById','mountedRideRollsById']) delete draft.v5Context[key];
         draft.fortuneReroll=false;
         draft.fortuneRerollRolls=[];

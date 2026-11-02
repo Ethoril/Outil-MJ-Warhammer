@@ -29,7 +29,7 @@ import { initTextImportView } from './ui/import-text-view.js';
 import { initFicheSyncView } from './ui/fiche-sync-view.js';
 import { parseProfileJson, parseProfileInput, PROFILE_JSON_EXAMPLE } from './core/json-profile-import.js';
 import { createActionEditor, preserveEditedV5Modifier } from './ui/action-editor.js';
-import { createEncounter, normalizeEncounter, normalizeCamp, CAMP_LABELS } from './core/encounters.js';
+import { createEncounter, normalizeEncounter, normalizeCamp, participantCamp, CAMP_LABELS } from './core/encounters.js';
 import { userError, userMessage, contextMessage, refusalError } from './ui/messages.js';
 import { deriveReminders, pendingReminders, resolveReminder, REMINDER_DECISIONS } from './core/reminders.js';
 import { createScene, proposeSceneEvent } from './core/scene-events.js';
@@ -1448,7 +1448,7 @@ const workspaceView = DOM.panels.workspace && qs('#workspace-root') ? initWorksp
         form.elements.initiative.value = Number(participant.initiative) || 0;
         form.elements.initiative.readOnly = Boolean(participant.extensions?.ficheId);
         form.elements.zone.value = participant.zone === 'active' ? 'active' : 'bench';
-        form.elements.camp.value = normalizeCamp(participant.camp, participant.kind);
+        form.elements.camp.value = participantCamp(participant);
         const originalV5 = participant.extensions?.v5 || {};
         form.elements.mounted.checked = originalV5.mounted === true;
         form.elements.mountId.value = originalV5.mountId || '';
@@ -1568,6 +1568,8 @@ const workspaceView = DOM.panels.workspace && qs('#workspace-root') ? initWorksp
               nextV5.weaponHandsByEquipmentId = nextHands;
               patch.extensions = { ...liveExtensions, v5: nextV5 };
             }
+            // Neutre choisi par le MJ sur un PJ : marqué explicite, sinon un PJ au camp par défaut reste `pj` (C24).
+            if (fieldChanged('camp')) patch.extensions = { ...(patch.extensions || participantLive.extensions || {}), campExplicit: form.elements.camp.value === 'neutre' };
             if ((mountedChanged || mountIdChanged) && form.elements.mounted.checked && (!form.elements.mountId.value || zone !== 'active')) throw userError('Choisissez une monture active et gardez le cavalier actif.');
             if (statesChanged()) patch.states = normalizeEffects(stateValues);
             if (actionsTouched) {

@@ -5,6 +5,7 @@ import { uid } from '../core/models.js';
 const node = (tag, text = '') => { const element = document.createElement(tag); if (text) element.textContent = text; return element; };
 const opId = () => `aftermath-${uid()}`;
 const REASONS = {
+  'campaign-time-requires-input': 'Le temps de campagne demande une saisie (Tests quotidiens, Colère…) : avancez-le depuis le menu ⋯ › Temps de campagne.',
   'incident-source-required': 'Choisissez un critique à suivre ou une cause de Blessures perdues.',
   'critical-occurrence-not-found': 'Cette occurrence critique n’existe plus sur la fiche.',
   'no-wounds-lost': 'Ce personnage n’a perdu aucune Blessure.',

@@ -446,7 +446,9 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   // Raté d'arme à poudre : l'arme ne tire pas, même si l'attaquant gagne l'opposition (jet raté contre une défense pire).
   if(combatFailure.effects.some(effect=>effect.type==='weapon-misfire'))hit=false;
   let engagedShot=null,engagedUnresolved=[],lethalDeath=null,lethalUnresolved=[];
-  if(actorPlan.kind==='ranged'&&context.targetEngaged===true&&context.engagedWithShooter!==true&&actorTest.advantage?.net<0&&actorTest.optionId==='reverse'&&!hit){
+  // Une arme qui ne tire pas (raté d'arme) ne peut pas non plus dévier vers un autre combattant de la mêlée.
+  const weaponMisfired=combatFailure.effects.some(effect=>effect.type==='weapon-misfire');
+  if(actorPlan.kind==='ranged'&&context.targetEngaged===true&&context.engagedWithShooter!==true&&actorTest.advantage?.net<0&&actorTest.optionId==='reverse'&&!hit&&!weaponMisfired){
     const ordinaryPlan=previewV5Test({score:actorTest.score,roll:normalized.roll,kind:actorTest.kind,slModifiers:actorTest.details.modifiers,advantageSources:actorTest.advantage.advantage,disadvantageSources:actorTest.advantage.disadvantage.filter(row=>row.id!=='target-engaged')}),ordinary=selectV5Test(ordinaryPlan,ordinaryPlan.options[0].id);
     const wouldHit=defenderTest?resolveV5Opposition(ordinary,defenderTest).winner==='initiator':ordinary.success;
     if(wouldHit){

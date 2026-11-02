@@ -6,7 +6,7 @@ import { CommandError, createCommand, createStateCommand, executeCommand, invers
 import { DEFAULT_HISTORY_MAX_BYTES, MAX_HISTORY_COMMANDS, canRedo, canUndo, createHistory, markExternalBoundary, recordCommand, redo, undo } from '../../../js/core/history.js';
 import { sanitizeProfile } from '../../../js/core/sanitize.js';
 import { migrateSnapshot } from '../../../js/core/migrations.js';
-import { createEncounter, setEncounterEntry, launchEncounter, addImprovisedParticipant, suspendScene, resumeScene, duplicateEncounter, normalizeCamp, ENCOUNTER_STATUS_LABELS, encounterDisplayStatus, encounterSummary, sortEncountersForDisplay } from '../../../js/core/encounters.js';
+import { createEncounter, setEncounterEntry, launchEncounter, addImprovisedParticipant, suspendScene, resumeScene, duplicateEncounter, normalizeCamp, participantCamp, ENCOUNTER_STATUS_LABELS, encounterDisplayStatus, encounterSummary, sortEncountersForDisplay } from '../../../js/core/encounters.js';
 import { REMINDER_DECISIONS, deriveReminders, pendingReminders, resolveReminder } from '../../../js/core/reminders.js';
 import { advanceSceneClock, createIntention, createScene, createSceneEvent, evaluateSceneEvent, proposeSceneEvent, resolveSceneEvent, SceneEventError } from '../../../js/core/scene-events.js';
 import { userMessage } from '../../../js/ui/messages.js';
@@ -360,7 +360,10 @@ test('Camps — normalizeCamp ramène le texte libre aux quatre camps canoniques
   for (const value of ['neutre', 'marchands', '', undefined, null, 42]) assert.equal(normalizeCamp(value), 'neutre', String(value));
   assert.equal(normalizeCamp(undefined, 'PJ'), 'pj');
   assert.equal(normalizeCamp('', 'PJ'), 'pj');
-  assert.equal(normalizeCamp('Neutre', 'PJ'), 'neutre', 'un camp Neutre choisi explicitement prime sur le type PJ (C24)');
+  assert.equal(normalizeCamp('Neutre', 'PJ'), 'pj', 'le camp neutre par défaut d’un PJ (réserve, anciennes sauvegardes) reste pj');
+  assert.equal(normalizeCamp('Neutre', 'PJ', true), 'neutre', 'un camp Neutre choisi explicitement par le MJ prime sur le type PJ (C24)');
+  assert.equal(participantCamp({ kind: 'PJ', camp: 'neutre' }), 'pj');
+  assert.equal(participantCamp({ kind: 'PJ', camp: 'neutre', extensions: { campExplicit: true } }), 'neutre');
   assert.equal(normalizeCamp('marchands', 'PJ'), 'neutre');
   assert.equal(normalizeCamp('ennemi', 'PJ'), 'ennemi');
   assert.equal(normalizeCamp(undefined, 'Créature'), 'neutre');

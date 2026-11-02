@@ -2,7 +2,7 @@
 // Module pur : le moteur ne suit pas l'engagement, le MJ coche les combattants engagés avec la cible de chaque côté ;
 // on en tire les poids, le rapport et le modificateur du seul Test d'attaque de mêlée (jamais celui de défense).
 import { planCreatureSize } from './creature-size.js';
-import { normalizeCamp } from './encounters.js';
+import { participantCamp } from './encounters.js';
 import { availableV5TalentMeasures, previewV5TalentMeasure } from './v5-talent-measures.js';
 
 const ATTACK_TYPES = ['attack', 'attaque'];
@@ -16,7 +16,7 @@ const fold = value => String(value ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '
 
 /** Côté d'un participant : PJ et alliés ensemble face aux ennemis ; un participant neutre ne forme un côté qu'avec lui-même. */
 export const outnumberSide = participant => {
-  const camp = normalizeCamp(participant?.camp, participant?.kind);
+  const camp = participantCamp(participant);
   return camp === 'ennemi' ? 'ennemi' : camp === 'neutre' ? `neutre:${participant?.id}` : 'pj';
 };
 

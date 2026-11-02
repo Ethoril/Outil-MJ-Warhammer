@@ -1,4 +1,4 @@
-import {normalizeCamp} from './encounters.js';
+import {participantCamp} from './encounters.js';
 /** Adaptateur du domaine divin : contrats canoniques, sources actuelles et commandes du Store. */
 import registry from '../data/v5-divine-contracts.json' with {type:'json'};
 import {getReferenceCatalogue} from './reference-catalog.js';
@@ -381,7 +381,7 @@ function guardWrathCalendar(before,next){
 
 
 function prepareWrathAllies(state,actor,row,input,wrath,cult){
- const proposedIds=parts(state).filter(target=>target.zone==='active'&&target.id!==actor.id&&normalizeCamp(target.camp,target.kind)===normalizeCamp(actor.camp,actor.kind)).map(target=>target.id);
+ const proposedIds=parts(state).filter(target=>target.zone==='active'&&target.id!==actor.id&&participantCamp(target)===participantCamp(actor)).map(target=>target.id);
  const preview={resultId:row.id,proposedIds,selectedIds:Array.isArray(input.wrathAllyIds)?clone(input.wrathAllyIds):[],cult};
  const blocked=(error,field)=>({...failure('requires-input',error,[{field,label:error}]),wrathTableResult:clone(row),wrathAlliesPreview:preview});
  const ids=input.wrathAllyIds,roll=input.wrathDurationRoll,clock=state.extensions?.v5?.gameClock;

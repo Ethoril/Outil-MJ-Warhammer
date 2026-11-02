@@ -1,4 +1,4 @@
-import {normalizeCamp} from '../core/encounters.js';
+import {participantCamp} from '../core/encounters.js';
 import {v5CombatActionClock} from '../core/v5-resources.js';
 /** Interface MJ de la séquence obligatoire de Brisé (L06 p.163, 185–186).
  * Les faits restent locaux jusqu’au commit d’un reçu Store.
@@ -146,7 +146,7 @@ export function createV5BrokenEscapePanel({Store,refresh=()=>{},onPrepareHide=()
    engage.dataset.brokenEscapeEngagement=actor.id;
    if(d.engagement==='selected'){
     const list=node('fieldset','workspace-broken-facts');list.dataset.brokenEscapeEngagedList=actor.id;list.append(node('legend','','Choisissez chaque ennemi engagé'));
-    const others=participants.filter(p=>p.id!==actor.id&&p.zone==='active'&&normalizeCamp(p.camp,p.kind)!==normalizeCamp(actor.camp,actor.kind));
+    const others=participants.filter(p=>p.id!==actor.id&&p.zone==='active'&&participantCamp(p)!==participantCamp(actor));
     if(!others.length)list.append(node('p','workspace-field-error','Aucun autre combattant actif disponible pour confirmer un ennemi engagé.'));
     for(const other of others){
      const label=node('label','workspace-type',other.name),check=document.createElement('input');check.type='checkbox';check.checked=d.engaged.includes(other.id);
