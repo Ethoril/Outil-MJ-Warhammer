@@ -9,7 +9,7 @@ export const signedValue = value => {
 export const knownHp = actor => actor?.hp !== null && actor?.hp !== undefined && actor?.hp !== '' && Number.isFinite(Number(actor.hp));
 const WEAPON_QUALITY_LABELS = { assommante: 'Assommante', entaille: 'Entaille', inflige: 'Inflige', immobilisante: 'Immobilisante' };
 // Condition imposée par une Qualité d'arme : « Qualité : N état État » (ex. Inflige : 1 état Enchevêtré).
-export const describeWeaponCondition = condition => `${WEAPON_QUALITY_LABELS[condition?.source?.keywordId] || 'Qualité d’arme'} : ${condition?.level ?? 1} état ${v5ConditionName(condition?.key) || condition?.name || condition?.key || 'inconnu'}`;
+export const describeWeaponCondition = condition => `${WEAPON_QUALITY_LABELS[condition?.source?.keywordId] || 'Qualité d’arme'} : ${condition?.level ?? 1} ${(condition?.level ?? 1) > 1 ? 'états' : 'état'} ${v5ConditionName(condition?.key) || condition?.name || condition?.key || 'inconnu'}`;
 export const DETAIL_TYPE_LABELS = { attack: 'Attaque', skill: 'Compétence', defense: 'Défense', opposition: 'Opposition' };
 
 /** « gravité 43 + 10 = 53 → Côtes fracturées » ; « gravité non tirée » tant que le d100 manque. */

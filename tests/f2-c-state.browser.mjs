@@ -68,11 +68,11 @@ try{
  await page.locator('.mini-dice-line[data-dice-id="f2-canon-action"]').dispatchEvent('click');
  await page.waitForSelector('#workspace-play .workspace-resolution');
  await openU1Settings(page);
- const explosionDetails=page.locator('#workspace-play details.workspace-v5-context-details').filter({hasText:'Explosion : identifiants de toutes les cibles dans le diamètre'});
+ const explosionDetails=page.locator('#workspace-play details.workspace-v5-context-details').filter({hasText:'Explosion : cibles dans le diamètre'});
  if(await explosionDetails.count()&&!await explosionDetails.evaluate(el=>el.open)) await explosionDetails.locator('summary').click();
- const explosionTargets=page.getByLabel('Explosion : identifiants de toutes les cibles dans le diamètre (virgules)');
- await explosionTargets.fill(`${siege.targetId}, ${siege.secondaryTargetId}`);
- await explosionTargets.press('Tab');
+ // Lot 5 · C49 : les cibles de l'Explosion se cochent par leur nom.
+ const explosionNames=await page.evaluate(async({targetId,secondaryTargetId})=>{const {Store}=await import('./js/main.js'),people=Store.listParticipants();return [targetId,secondaryTargetId].map(id=>people.find(row=>row.id===id).name);},siege);
+ for(const name of explosionNames) await page.getByLabel(`Explosion : cibles dans le diamètre · ${name}`,{exact:true}).check();
  const secondaryLocation=page.getByLabel('Explosion · localisation d100 de Cible secondaire');
  await secondaryLocation.fill('35');
  await secondaryLocation.press('Tab');

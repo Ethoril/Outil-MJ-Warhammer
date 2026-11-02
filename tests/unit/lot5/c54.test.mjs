@@ -39,3 +39,22 @@ test('C54 : Annuler restitue la piste d’avant l’invocation', async () => {
   assert.deepEqual(store.getCombat().order, ['mage', 'foe']);
   assert.equal(store.listParticipants().some(p => p.id.startsWith('aux-')), false);
 });
+
+test('C54 : l’invoqué est placé à son rang d’Initiative dans la piste', async () => {
+  const { store } = await round1Cast();
+  const people = new Map(store.listParticipants().map(p => [p.id, p]));
+  const scores = store.getCombat().order.map(id => people.get(id)?.extensions?.v5?.combatInitiative?.score).filter(Number.isFinite);
+  assert.ok(scores.length > 1);
+  for (let i = 1; i < scores.length; i++) assert.ok(scores[i - 1] >= scores[i], `ordre non décroissant : ${scores.join(', ')}`);
+});
+
+// Contre-vérification (Claude) : un invoqué remis en jeu depuis le banc garde son d10 au lieu d'en retirer un.
+test('C54 : un invoqué qui revient du banc garde son Initiative', async () => {
+  const { store, summoned } = await round1Cast();
+  const id = summoned[0].id, before = summoned[0].extensions.v5.combatInitiative;
+  await store.moveParticipant(id, 'bench');
+  await store.moveParticipant(id, 'active');
+  const after = store.listParticipants().find(p => p.id === id).extensions.v5.combatInitiative;
+  assert.equal(after.die, before.die);
+  assert.equal(after.score, before.score);
+});

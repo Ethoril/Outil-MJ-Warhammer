@@ -20,6 +20,7 @@ export function registerNewV5Participants(before, next) {
       for (const participant of next.combat.participants || []) {
         if (participant.zone !== 'active' || oldIds.has(participant.id)) continue;
         const v5 = participant.extensions?.v5 || {};
+        if (v5.combatInitiative?.initialized) continue;
         const summoned = v5.summonedBySpellId || v5.divineSummon || v5.divineWrathSummon;
         const characteristic = Number.isInteger(participant.caracs?.I) ? participant.caracs.I : participant.initiative;
         if (!summoned || !Number.isInteger(characteristic) || characteristic < 0) continue;

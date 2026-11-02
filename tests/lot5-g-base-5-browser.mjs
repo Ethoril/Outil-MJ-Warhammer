@@ -12,7 +12,7 @@ try {
     const ids = Store.listProfiles().map(profile => profile.id);
     await Store.saveEncounter({ id: 'rencontre-g5', name: 'G5', entries: ids.map(profileId => ({ profileId, zone: 'active', quantity: 1 })) });
     await Store.launchEncounter('rencontre-g5');
-    await Store.executeCommand('create-scene-event', draft => ({ ...draft, activeScene: { ...draft.activeScene, events: [{ id: 'ev-jauge', condition: { type: 'manual' }, consequence: { type: 'note', text: 'Test' }, recurring: false }] } }));
+    await Store.executeCommand('create-scene-event', draft => ({ ...draft, activeScene: { ...draft.activeScene, events: [{ id: 'ev-jauge', condition: { type: 'manual' }, consequence: { type: 'note', text: 'Test' }, recurring: false }, { id: 'ev-suite', condition: { type: 'previousResolved', occurrenceId: `${draft.activeScene.id}:ev-jauge:once` }, consequence: { type: 'note', text: 'Suite' }, recurring: false }] } }));
   });
   await page.locator('#btn-menu').click();
   await page.locator('#workspace-events').click();
@@ -29,6 +29,11 @@ try {
   const events = await options();
   if (!events.some(label => /ev-jauge/.test(label))) failures.push(`previousResolved : l'événement doit être proposé, ${JSON.stringify(events)}`);
   if (events.includes('Garde')) failures.push(`previousResolved : aucun combattant attendu, ${JSON.stringify(events)}`);
+  // Contre-vérification (Claude) : « Modifier » un événement « Après un événement résolu » retrouve l'événement visé.
+  await form.locator('[name=condition]').selectOption('hpBelow');
+  await page.getByRole('dialog').getByRole('button', { name: 'Modifier', exact: true }).last().click();
+  const edited = await form.locator('[name=value]').inputValue();
+  if (edited !== 'ev-jauge') failures.push(`Modifier ev-suite : événement visé perdu, valeur « ${edited} »`);
   assert.deepEqual(failures, []);
   assert.deepEqual(app.errors, []);
   console.log('lot5-g-base-5-browser: OK');

@@ -123,7 +123,7 @@ try{
   // les entrées incohérentes de recharge sont rejetées dans l’interface.
   const negativeActor=structuredClone(actor);negativeActor.equipment=negativeActor.equipment.map(row=>row.id==='d-ratling'?{...row,extensions:{}}:row);
   await load(combat(negativeActor,structuredClone(targetBase)));await play.getByLabel('Capacité arbitrée — Mitrailleuse Ratling Skaven').fill('0');await play.getByRole('button',{name:'Enregistrer l’arbitrage'}).click();
-  const invalidText=await play.innerText();assert.match(invalidText,/Rechargement non enregistré\./u,'la demande de capacité invalide produit une erreur visible');
+  const invalidText=await play.innerText();assert.match(invalidText,/Arbitrage Ratling : capacité entière positive requise\./u,'la demande de capacité invalide produit une erreur visible');
   const negativeState=await read(),negativeRatling=negativeState.combat.participants.find(row=>row.id===actor.id)?.equipment?.find(row=>row.id==='d-ratling');assert.ok(negativeRatling,JSON.stringify(negativeState.combat.participants.find(row=>row.id===actor.id)));assert.equal(negativeRatling.extensions?.v5?.reloadState,undefined,'aucun chargeur créé après saisie invalide');
 
   // Undo/Redo, rechargement de page et persistance IndexedDB réels.

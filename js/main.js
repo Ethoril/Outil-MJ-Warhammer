@@ -1352,7 +1352,7 @@ function openEventsView() {
         form.elements.id.value = event.id;
         conditionSelect.value = event.condition.type;
         consequenceSelect.value = event.consequence.type;
-        refreshFields();
+        refreshFields(); refreshValueChoices();
         valueInput.value = event.condition.participantId || (event.condition.occurrenceId || '').replace(`${scene.id}:`, '').replace(/:once$/, '');
         roundInput.value = event.condition.round ?? '';
         hpInput.value = event.condition.hp ?? '';

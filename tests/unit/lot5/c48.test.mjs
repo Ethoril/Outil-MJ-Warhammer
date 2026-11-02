@@ -9,8 +9,8 @@ const condition = (keywordId, key, level, name) => ({ key, name, level, source: 
 test('C48 libellé de la condition : Qualité et État réels', () => {
   assert.equal(describeWeaponCondition(condition('assommante', 'sonne', 1, 'Sonné')), 'Assommante : 1 état Sonné');
   assert.equal(describeWeaponCondition(condition('inflige', 'enchevetre', 1, 'Empêtré')), 'Inflige : 1 état Enchevêtré');
-  assert.equal(describeWeaponCondition(condition('entaille', 'hemorragique', 2, 'Hémorragique')), 'Entaille : 2 état Hémorragique');
-  assert.equal(describeWeaponCondition(condition('immobilisante', 'enchevetre', 3)), 'Immobilisante : 3 état Enchevêtré');
+  assert.equal(describeWeaponCondition(condition('entaille', 'hemorragique', 2, 'Hémorragique')), 'Entaille : 2 états Hémorragique');
+  assert.equal(describeWeaponCondition(condition('immobilisante', 'enchevetre', 3)), 'Immobilisante : 3 états Enchevêtré');
 });
 
 test('C48 le détail du journal nomme la Qualité et l’État, pas toujours « Assommante : Sonné »', () => {

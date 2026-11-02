@@ -1115,7 +1115,13 @@ export function renderResolutionPanel(options) {
     select.dataset.defaultValue = '';
     select.append(new Option('À préciser', ''), new Option('Oui', 'true'), new Option('Non', 'false'));
     select.value = typeof current[key] === 'boolean' ? String(current[key]) : '';
-    select.addEventListener('change', () => handlers.select({ [contextKey]: { ...current, [key]: select.value === '' ? undefined : select.value === 'true' } }));
+    select.addEventListener('change', () => {
+      const value = select.value === '' ? undefined : select.value === 'true';
+      // Décocher le tir double abandonne aussi le second tir préparé.
+      if (key === 'repeaterDoubleShot' && value !== true && current.freeAttackTalent === 'repeater-double') {
+        handlers.select({ extraAttack: false, [contextKey]: { ...current, [key]: value, repeaterSecondShot: undefined, primaryResolutionId: undefined, freeAttackTalent: undefined } });
+      } else handlers.select({ [contextKey]: { ...current, [key]: value } });
+    });
     caption.appendChild(select);
     const group = container.dataset.circumstanceContext === 'true'
       ? (role === 'defender' ? 'defense' : circumstanceGroup(`context:${key}`)) : 'other';
