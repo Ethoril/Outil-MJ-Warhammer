@@ -2499,6 +2499,13 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
   }
 
   function render(focusKey = null) {
+    // Un aperçu calculé avant un changement de la partie (PV, états…) est marqué périmé à l'affichage.
+    const staleDraft = state.resolution;
+    if (staleDraft.preview && !staleDraft.busy) {
+      const key = JSON.stringify(readParticipants(Store).map(item => [item.id, item.hp, item.states]));
+      if (staleDraft.previewSeen?.preview !== staleDraft.preview) staleDraft.previewSeen = { preview: staleDraft.preview, key };
+      else if ((previewIsStale(staleDraft.preview) || staleDraft.previewSeen.key !== key) && !staleDraft.error) staleDraft.error = { field: 'general', message: 'La partie a changé depuis le calcul (PV, états…) : cet aperçu est périmé, recalculez avant d’appliquer.' };
+    }
     const saved = focusKey ? { key: focusKey, start: null, end: null } : captureFocus();
     renderTabs();
     refs.prepare.hidden = state.space !== 'prepare';
