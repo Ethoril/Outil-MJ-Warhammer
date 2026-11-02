@@ -700,6 +700,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         ...(preview?.weapon ? { weapon: preview.weapon } : {}),
         critical: preview?.critical || null,
         fumble: preview?.fumble || null,
+        ...(preview?.combatFailure ? { combatFailure: cloneValue({ fumble: preview.combatFailure.fumble, defender: preview.combatFailure.defender, misfire: preview.combatFailure.misfire, reminders: preview.combatFailure.reminders }) } : {}),
         ...(preview?.referenceVersion ? { referenceVersion: preview.referenceVersion } : {}),
         ...(preview?.mechanics ? { mechanics: cloneValue(preview.mechanics) } : {}),
         ...(preview?.protection ? { protection: cloneValue(preview.protection) } : {}),

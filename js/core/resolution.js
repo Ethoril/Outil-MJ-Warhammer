@@ -875,8 +875,9 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     combatFailure.defenderMisfire=defenderFailure.misfire;
     combatFailure.effects.push(...defenderFailure.effects);
     combatFailure.reminders.push(...defenderFailure.reminders);
-    combatFailure.unresolved.push(...defenderFailure.unresolved);
-    unresolved.push(...defenderFailure.unresolved);
+    const defenderUnresolved=defenderFailure.unresolved.map(text=>text.replace(/^Maladresse de combat/,'Maladresse du défenseur'));
+    combatFailure.unresolved.push(...defenderUnresolved);
+    unresolved.push(...defenderUnresolved);
   }
   if (!unopposedExplosion&&!parryUnopposed&&!(opposed?.winner==='defender'&&normalized.defense?.v5?.context?.specialAttack==='shieldsman')&&context.silentTakedown !== true && ['melee', 'ranged'].includes(defenderTest?.kind) && defenderTest.success && defenderCriticalClassification.critique) {
     const critLocation = normalized.defenderCriticalRolls?.location != null ? creatureLocationOf(normalized.defenderCriticalRolls.location,actor,normalized.defense?.v5?.context||{}) : null;

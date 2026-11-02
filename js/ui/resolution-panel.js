@@ -62,7 +62,7 @@ export function applicationBlockingReasons(preview, draft, canApply, preflight =
     return finish();
   }
   add(preview.choiceRequired, 'Choisissez le résultat à appliquer');
-  for (const text of preview.unresolved || []) reasons.push({ text, focus: /Calme.*attaquant/i.test(text) ? 'protection-calm' : /Tir engagé.*Test de défense/i.test(text) ? 'engaged-defense' : /jet de défense/i.test(text) ? 'defense-roll' : undefined, ...(/^Bénédiction de Protection :/.test(text) ? { ignorable: 'divine-protection' } : {}) });
+  for (const text of preview.unresolved || []) reasons.push({ text, focus: /^Maladresse du défenseur/.test(text) ? 'defender-fumble-roll' : /^Maladresse de combat : saisissez/.test(text) ? 'fumble-roll' : /Calme.*attaquant/i.test(text) ? 'protection-calm' : /Tir engagé.*Test de défense/i.test(text) ? 'engaged-defense' : /jet de défense/i.test(text) ? 'defense-roll' : undefined, ...(/^Bénédiction de Protection :/.test(text) ? { ignorable: 'divine-protection' } : {}) });
   const criticals = [preview.critical?.details, preview.critical?.second, preview.defenderCritical?.details];
   add(criticals.some(row => row?.pending), 'Complétez le jet de critique', 'critical-pending');
   add(criticals.some(row => row?.needsAlternative), 'Choisissez une alternative pour le critique', 'critical-alternative');
@@ -2455,6 +2455,7 @@ export function renderResolutionPanel(options) {
       if(key==='fumbleAllySelectionRoll'){input.dataset.npcRollKey='contextValue';input.dataset.npcRollField=key;}
       input.setAttribute('aria-label',label);
       input.dataset.focusKey=key;
+      if(key==='fumbleRoll')input.dataset.blockingField='fumble-roll';
       input.addEventListener('input',()=>handlers.select({v5Context:{...current,[key]:input.value===''?undefined:Number(input.value)}}));
       wrap.appendChild(input);
       failureFields.appendChild(wrap);
@@ -2500,6 +2501,8 @@ export function renderResolutionPanel(options) {
       input.step='1';
       input.value=defenseContext.defenderFumbleRoll??'';
       input.setAttribute('aria-label',wrap.textContent);
+      input.dataset.focusKey='defenderFumbleRoll';
+      input.dataset.blockingField='defender-fumble-roll';
       input.addEventListener('input',()=>handlers.select({defenseContext:{...defenseContext,defenderFumbleRoll:input.value===''?undefined:Number(input.value)}}));
       wrap.append(input);
       failureFields.append(wrap);
