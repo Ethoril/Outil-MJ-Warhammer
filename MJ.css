@@ -251,6 +251,7 @@ h4 { font-family: var(--font-ui); font-weight: 700; color: var(--accent); margin
 .grid-4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
 
 label { display: flex; flex-direction: column; gap: 4px; font-family: var(--font-ui); font-size: 13px; color: var(--muted); }
+label[hidden] { display: none; }
 input, select, button, textarea { color: var(--text); background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 8px 10px; font-family: var(--font-ui); font-size: 14.5px; }
 button { cursor: pointer; background-color: var(--panel-2); font-weight: 500; color: var(--heading-color); }
 button:hover { border-color: var(--accent); }

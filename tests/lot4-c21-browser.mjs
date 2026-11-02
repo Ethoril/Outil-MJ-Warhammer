@@ -14,7 +14,7 @@ try {
   await form.locator('[name=armor_rightArm]').fill('3');
   await form.locator('[name=armor_rightLeg]').fill('4');
   await form.locator('#btn-submit-form').click();
-  await page.locator('#reserve-list').getByText('Recette PA membres').waitFor();
+  await page.locator('#reserve-list').getByText('Recette PA membres').waitFor({ state: 'attached' });
   const stored = await page.evaluate(async () => {
     const { Store } = await import('/js/main.js');
     const p = Store.listProfiles().find(item => item.name === 'Recette PA membres');
@@ -22,6 +22,13 @@ try {
   });
   assert.equal(stored.armor.arms, 3, 'PA Bras conservés');
   assert.equal(stored.armor.legs, 4, 'PA Jambes conservés');
+  assert.equal(stored.armor.arms, stored.extArmor?.rightArm ?? 3, 'résumé armor.arms cohérent avec le Bras droit');
+  const kept = await page.evaluate(async () => {
+    const { Store } = await import('/js/main.js');
+    const p = Store.listProfiles().find(item => item.name === 'Recette PA membres');
+    return p.armorLocations ?? null;
+  });
+  if (kept) { assert.equal(kept.rightArm, 3, 'armorLocations.rightArm'); assert.equal(kept.rightLeg, 4, 'armorLocations.rightLeg'); }
   assert.deepEqual(app.errors, []);
   console.log('lot4-c21-browser: OK');
 } finally { await app.close(); }
