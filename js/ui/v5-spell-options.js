@@ -38,6 +38,7 @@ function profileSummary(actor, profile, kind, optionalTraits) {
 
 export function renderSpellOptions({ actor, participants, contract, draft, handlers, targetIds = [] }) {
   const special = contract?.effects?.special;
+  const attributeDice=draft.preview?.spellPreview?.attributeDice;
   const nodes = [];
   const push = element => { nodes.push(element); return element; };
 
@@ -78,10 +79,13 @@ export function renderSpellOptions({ actor, participants, contract, draft, handl
     const change=value=>{const current=who?draft.magicTargetTests?.[who.id] || {}:draft.magicSpellFacts || {},field=who?'magicTargetTests':'magicSpellFacts',next=who?{...draft.magicTargetTests,[who.id]:{...current,[key]:value}}:{...current,[key]:value};if(choices || /^mini[1-3]Direction$/.test(key))handlers.select({[field]:next});else handlers.input(field,next);};
     if(choices){control.append(new Option('À renseigner',''));for(const [v,t] of choices)control.append(new Option(t,v));control.value=data[key]===undefined?'':String(data[key]);control.addEventListener('change',()=>change(control.value===''?undefined:type==='boolean'?control.value==='true':control.value));}
     else{control.type=type;control.min=min;control.max=max;control.value=data[key] ?? '';control.addEventListener('input',()=>change(control.value===''?undefined:type==='number'?Number(control.value):control.value));}
+    if (key === attributeDice?.key) control.dataset.blockingField = 'magic-attribute-dice';
     if (die) { control.dataset.npcRollKey = who ? 'magicTargetTests' : 'magicSpellFacts'; control.dataset.npcRollField = key; if (who) control.dataset.npcRollOwnerId = who.id; }
     label.append(control);push(label);
   };
   if(special==='verdant-apotheosis')for(const who of participants.filter(p=>targetIds.includes(p.id)))spellField('decapitated','Cadavre décapité',{who,type:'boolean',choices:[['false','Non'],['true','Oui']]});
+  // Dés exigés par l'attribut du Domaine (d10 de l'offrande, d100 de Corruption) : un champ par participant concerné.
+  if(attributeDice)for(const who of participants.filter(p=>attributeDice.ids.includes(p.id)))spellField(attributeDice.key,attributeDice.label,{who,min:1,max:attributeDice.max,die:true});
   const vortex=contract?.effects?.vortex;
   if(vortex){
     for(const who of participants.filter(p=>targetIds.includes(p.id))){

@@ -1663,7 +1663,7 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
   const attributeTargets=Object.fromEntries(effectiveTargets.map(t=>[t.id,typeof options.attributeTargets?.[t.id]==='boolean' ? options.attributeTargets[t.id] : isHostileTarget(actor,t)]));
   const loreKey=attributeLore==='high' ? chosenLore : attributeLore;
   const allLore=options.attributeActive===false ? null : previewLoreAttribute({caster:actor,targets:effectiveTargets,lore:attributeLore,chosenLore,spell:contract,castingSl:castingPreview?.totalCastingSl ?? 0,options:{attributeTargets,attributeRolls:options.targetTests,duration:contract.duration,waaaghFortune:domainFacts.waaaghFortune===true}});
-  if(allLore?.missingRolls?.length)return {ready:false,valid:false,status:'dice-required',error:'Attribut du Domaine : '+allLore.missingLabel+' requis ('+allLore.missingRolls.join(', ')+').',contract};
+  if(allLore?.missingRolls?.length)return {ready:false,valid:false,status:'dice-required',error:'Attribut du Domaine : '+allLore.missingLabel+' requis ('+allLore.missingRolls.join(', ')+').',attributeDice:{key:allLore.lore==='maw'?'mawRoll':'corruptionRoll',label:allLore.missingLabel,ids:allLore.missingRolls,max:allLore.lore==='maw'?10:100},contract};
   // Règles de dégâts de l'attribut : Cieux et Métal ignorent les PA métalliques (même attribut coupé, comme avant), Métal les ajoute (V5 p. 252), Ombres ignore les PA non magiques (V5 p. 254).
   const loreDamage = {
     ignoreMetalAp: Boolean(allLore?.damageRules?.ignoreMetalAp) || ['heavens','metal'].includes(loreKey),

@@ -69,6 +69,7 @@ export function renderV5MagicContext({ actor, participants = [], target, type, d
     input.dataset.defaultValue = key === 'v5SlModifier' ? '0' : '';
     input.setAttribute('aria-label', labelText);
     input.dataset.focusKey = key;
+    if (key === 'magicFumbleLossRoll') input.dataset.blockingField = 'magic-loss';
     const incident = draft.preview?.castPreview?.miscast || draft.preview?.miscast;
     if (['magicMiscastRoll', 'magicMajorRoll'].includes(key) || key === 'magicSecondaryDistanceRoll' && isMiscastDistanceD100(incident?.table, incident?.entry?.max)) { input.dataset.npcRollKey = key; input.dataset.npcRollOwner = 'actor'; }
     input.addEventListener('input', () => handlers.input(key, input.value === '' ? null : Number(input.value)));
@@ -115,7 +116,7 @@ export function renderV5MagicContext({ actor, participants = [], target, type, d
       ['arcane', 'Magie Arcanique']
     ], draft.magicLore || 'fire');
     numberField('v5SlModifier', 'Modificateur V5 (DR)', draft.v5SlModifier ?? 0);
-    if(draft.preview?.fumble || draft.preview?.miscast || draft.magicMiscastRoll!=null || draft.magicFumbleLossRoll!=null){
+    if(draft.preview?.fumble || (draft.preview?.missing || []).some(key => ['lossRoll', 'miscastRoll', 'majorRoll'].includes(key)) || draft.preview?.miscast || draft.magicMiscastRoll!=null || draft.magicFumbleLossRoll!=null){
     numberField('magicFumbleLossRoll', 'Perte de réserve si maladresse (1d10)', draft.magicFumbleLossRoll ?? '', 1, 10);
     numberField('magicMiscastRoll', 'Jet d’incident si maladresse (1d100)', draft.magicMiscastRoll ?? '', 1, 100);
     numberField('magicMajorRoll', 'Jet Majeur d’incident si cascade (1d100)', draft.magicMajorRoll ?? '', 1, 100);
