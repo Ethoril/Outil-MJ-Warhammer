@@ -5,7 +5,6 @@ import { resolve, extname, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
 // Lot 4 · C33 : champs de saisie manuelle (data-blocking-field) d'une arme non reliée à un exemplaire d'inventaire (chargeur, pièce frappée, bande de portée, cibles).
-// Phase de reproduction : doit échouer aujourd'hui sur le cas { rating: 3 }.
 const root = resolve(fileURLToPath(new URL('../', import.meta.url)));
 const mime = { '.js': 'text/javascript; charset=utf-8', '.json': 'application/json', '.css': 'text/css; charset=utf-8', '.html': 'text/html; charset=utf-8' };
 const server = createServer((req, res) => { try { const pathname = decodeURIComponent(new URL(req.url, 'http://localhost').pathname); const file = resolve(root, `.${pathname}`); assert.ok(file.startsWith(root + sep)); assert.ok(statSync(file).isFile()); res.writeHead(200, { 'content-type': mime[extname(file)] || 'application/octet-stream' }); res.end(readFileSync(file)); } catch { res.writeHead(404); res.end('Not found'); } });
