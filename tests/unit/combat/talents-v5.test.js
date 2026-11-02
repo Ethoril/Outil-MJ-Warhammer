@@ -1334,7 +1334,9 @@ test('Contrôle indépendant V5 — critique conserve auteur, cible, verrou des 
   assert.equal(store.getLog()[0].detail.ruleVersion,'v5-combat-2026-10-09.24.6');
   const legacy=store.previewResolution({...input,action:{...input.action,qualities:['Précise']}});
   assert.deepEqual(legacy.mechanicalWarnings,[],'plus d’avertissement : Précise est lu comme Pointue (+1 DR sur une réussite, livre V5 p. 305)');
-  assert.equal((await store.applyResolution(legacy)).status,'applied','l’effet V4 n’est plus une raison d’application manuelle');
+  const legacyResult=await store.applyResolution(legacy);
+  assert.notEqual(legacyResult.reason,'version-effet-non-couverte','l’effet V4 n’est plus une raison d’application manuelle');
+  assert.equal(legacyResult.reason,'jets-de-critique-requis','seuls les jets du critique restent à saisir');
 });
 
 test('Contrôle indépendant 2.3 — comparaison sur Élan payé, résultat atomique, quota après rechargement et acteur distinct',()=>{
