@@ -1591,7 +1591,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     hit,
     scatter,
     engagedShot,
-    engagedDeflect,
+    ...(engagedDeflect?{engagedDeflect}:{}),
     lethalDeath,
     trip,
     tripFall,
