@@ -16,6 +16,7 @@ export function buildV5RollDecision(preview, { evaluateOutcome, baseRevision, re
     if (typeof outcome.hit !== 'boolean') throw new TypeError('Résultat de touche manquant');
     return { id: option.id, label: option.reversed ? `Inverser en ${test.roll}` : `Conserver ${test.roll}`,
       summary: { roll: test.roll, sl: outcome.preview?.test?.sl ?? test.sl, success: outcome.preview?.test?.success ?? test.success, hit: outcome.hit,
+        ...(outcome.deflected ? { deflected: true, deflectedTo: outcome.deflectedTo ?? null } : {}),
         location: outcome.location ?? null, woundsLost: outcome.woundsLost ?? null, certainty: outcome.certainty,
         costs: structuredClone(outcome.costs || []), importantEffects: structuredClone(outcome.importantEffects || []) },
       details: { test, action: structuredClone(outcome) } };

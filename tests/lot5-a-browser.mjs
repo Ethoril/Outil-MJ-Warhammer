@@ -69,6 +69,20 @@ try {
       assert.deepEqual(await page.evaluate(k => window.__selected.at(-1).v5Context[k], key), ['cible', 'voisin']);
     });
   }
+  await check('G-ATT-5 carte « Inverser » d’un tir dans la mêlée : annonce la déviation, pas « Touché »', async () => {
+    const text = await page.evaluate(async () => {
+      const { previewResolution } = await import('./js/core/resolution.js');
+      const { renderV5Decisions } = await import('./js/ui/resolution-panel/critical.js');
+      const fighter = (id, name, camp) => ({ id, name, kind: 'PJ', camp, zone: 'active', hp: 30, maxHp: 30, caracs: { CC: 50, CT: 60, F: 30, E: 30, I: 40, Ag: 40 }, skills: [], states: [], equipment: [], armor: { head: 0, body: 0, arms: 0, legs: 0 }, extensions: { v5: {} } });
+      const archer = fighter('archer', 'Archer', 'pj'), alpha = fighter('alpha', 'Alpha', 'pj'), sorcier = fighter('sorcier', 'Sorcier', 'ennemi');
+      const preview = previewResolution({ actor: archer, target: alpha, roll: 35, action: { type: 'attack', attr: 'CT', base: 60, damage: 9 },
+        v5: { kind: 'ranged', context: { weather: 'rain-wind', cover: true, targetEngaged: true, engagedTargetIds: ['alpha', 'sorcier'], engagedTargetRoll: 25 } }, v5State: { participants: [archer, alpha, sorcier] } });
+      return renderV5Decisions(preview, { v5Choice: null }, { select() {}, choose() {} }).textContent;
+    });
+    assert.match(text, /Inverser en/);
+    assert.match(text, /dévie vers Sorcier/);
+    assert.doesNotMatch(text, /Touché ·/);
+  });
   assert.deepEqual(errors, []);
 } finally { await browser.close(); server.close(); }
 if (failures) { console.log(`${failures} cas en échec`); process.exit(1); }

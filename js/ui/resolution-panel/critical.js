@@ -183,7 +183,7 @@ export function renderV5Decisions(preview, draft, handlers) {
       radio.addEventListener('change', () => handlers.chooseV5(role, option.id));
       const summary = option.summary;
       const text = node('div', 'workspace-v5-choice-text');
-      text.append(node('strong', '', option.label), node('span', '', `${role === 'defender' ? (summary.hit ? 'Touche reçue' : 'Attaque évitée') : (summary.hit ? 'Touché' : 'Pas de touche')} · ${signed(summary.sl)} DR`));
+      text.append(node('strong', '', option.label), node('span', '', summary.deflected ? `Raté sur la cible : le tir dévie vers ${summary.deflectedTo || 'un autre combattant de la mêlée'}, touché d’office · ${signed(summary.sl)} DR` : `${role === 'defender' ? (summary.hit ? 'Touche reçue' : 'Attaque évitée') : (summary.hit ? 'Touché' : 'Pas de touche')} · ${signed(summary.sl)} DR`));
       if (summary.location) text.appendChild(node('span', '', summary.location));
       text.appendChild(node('span', '', summary.woundsLost == null ? 'Blessures à préciser' : `${summary.woundsLost} Blessures ${role === 'defender' ? 'subies par le défenseur' : 'perdues par la cible'}`));
       if (summary.certainty === 'partial') text.appendChild(node('span', 'workspace-muted', 'Conséquences incomplètes : données à préciser.'));

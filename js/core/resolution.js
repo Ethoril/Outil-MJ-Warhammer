@@ -350,7 +350,9 @@ export function previewResolution(input) {
     const complete = !unknownOther && !option.unresolved.length && !option.mechanicalWarnings.length
       && !option.protection?.manual?.length && !criticals.some(critical => critical.details?.pending || critical.second?.pending)
       && (!option.hit || !option.attack || (option.damageReplacedByTalent || (option.damage && knownHp(normalized.target))));
-    return { certainty: complete ? 'complete' : 'partial', hit: option.hit,
+    // Tir dans une mêlée avec inversion obligatoire : le tir rate sa cible et dévie vers un autre combattant, touché d'office.
+    const deflectedTo = (normalized.v5State?.participants || []).find(person => person.id === option.engagedShot?.selectedTargetId);
+    return { certainty: complete ? 'complete' : 'partial', hit: option.hit, ...(option.engagedDeflect ? { deflected: true, deflectedTo: deflectedTo?.name || null } : {}),
       location: option.location?.name || null,
       woundsLost: complete ? Math.min(Math.max(0, Number(normalized.target?.hp) || 0), previewHpLoss(option)) : null,
       importantEffects: criticals.map(critical => critical === option.defenderCritical ? 'Critique défensif sur l’attaquant' : 'Blessure critique sur la cible'),
@@ -445,13 +447,14 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   const combatFailure = previewCombatFailure({ normalized, roll, fumble: combatFumbleTableEligible && !success && fumbleClassification.maladresse ? fumbleClassification : null, context, hit, success, sl });
   // Raté d'arme à poudre : l'arme ne tire pas, même si l'attaquant gagne l'opposition (jet raté contre une défense pire).
   if(combatFailure.effects.some(effect=>effect.type==='weapon-misfire'))hit=false;
-  let engagedShot=null,engagedUnresolved=[],lethalDeath=null,lethalUnresolved=[];
+  let engagedShot=null,engagedDeflect=false,engagedUnresolved=[],lethalDeath=null,lethalUnresolved=[];
   // Une arme qui ne tire pas (raté d'arme) ne peut pas non plus dévier vers un autre combattant de la mêlée.
   const weaponMisfired=combatFailure.effects.some(effect=>effect.type==='weapon-misfire');
   if(actorPlan.kind==='ranged'&&context.targetEngaged===true&&context.engagedWithShooter!==true&&actorTest.advantage?.net<0&&actorTest.optionId==='reverse'&&!hit&&!weaponMisfired){
     const ordinaryPlan=previewV5Test({score:actorTest.score,roll:normalized.roll,kind:actorTest.kind,slModifiers:actorTest.details.modifiers,advantageSources:actorTest.advantage.advantage,disadvantageSources:actorTest.advantage.disadvantage.filter(row=>row.id!=='target-engaged')}),ordinary=selectV5Test(ordinaryPlan,ordinaryPlan.options[0].id);
     const wouldHit=defenderTest?resolveV5Opposition(ordinary,defenderTest).winner==='initiator':ordinary.success;
     if(wouldHit){
+      engagedDeflect=true;
       const ids=context.engagedTargetIds,die=Number(context.engagedTargetRoll),participants=normalized.v5State?.participants||[];
       if(!Array.isArray(ids)||ids.length<2||new Set(ids).size!==ids.length||!ids.includes(normalized.target?.id)||!ids.every(id=>typeof id==='string'&&participants.some(row=>row.id===id&&row.zone==='active')))engagedUnresolved.push('Tir engagé : désigner tous les combattants actifs de la mêlée (cible initiale comprise).');
       else if(!Number.isInteger(die)||die<1||die>100)engagedUnresolved.push('Tir engagé : saisir le dé de sélection aléatoire d100.');
@@ -1588,6 +1591,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     hit,
     scatter,
     engagedShot,
+    engagedDeflect,
     lethalDeath,
     trip,
     tripFall,
