@@ -25,6 +25,13 @@ export function defaultDivineSelection(actor, contracts) {
   const cult = contracts.find(row => actor?.cult && fold(row.deity) === fold(actor.cult))?.deity || '';
   return { cult, contractId: contracts.find(row => row.type === 'blessing' && (!cult || row.deity === cult))?.id, canSpeak: true };
 }
+/** « Allié admissible » se déduit du camp : même camp que le prêtre = Oui ; camp neutre ou inconnu, la question reste posée. */
+export function confirmAllyByDefault(form, target, actor) {
+  if (!target?.camp || target.camp === 'neutre' || target.camp !== actor?.camp) return;
+  form.facts ??= {};
+  form.facts[target.id] ??= {};
+  if (!Object.hasOwn(form.facts[target.id], 'ally')) form.facts[target.id].ally = 'true';
+}
 export function confirmRangeByDefault(form, targetId) {
   form.facts ??= {};
   form.facts[targetId] ??= {};

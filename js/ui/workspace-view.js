@@ -2542,9 +2542,13 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     const panel = refs.root.querySelector(`[data-secondary-panel="${event.detail?.panel}"]`);
     if (!panel) return;
     event.detail.opened = true;
+    if (event.detail.panel === 'prayer') divinePanel.show();
     if (panel.tagName === 'DETAILS') panel.open = true;
     panel.scrollIntoView({ block: 'start', behavior: 'auto' });
-    panel.querySelector('summary, input, select, button')?.focus({ preventScroll: true });
+    // Prière : on amène directement le jet de Prière, sans repasser par Pénitences et Péchés.
+    const prayerRoll = event.detail.panel === 'prayer' && panel.querySelector('[data-focus-key="divine-roll"]');
+    prayerRoll?.scrollIntoView({ block: 'center', behavior: 'auto' });
+    (prayerRoll || panel.querySelector('summary, input, select, button'))?.focus({ preventScroll: true });
   });
 
   refs.root.addEventListener('workspace-circumstances-toggle', event => {
