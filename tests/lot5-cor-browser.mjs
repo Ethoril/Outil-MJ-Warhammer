@@ -21,9 +21,9 @@ try {
   await page.route(`${origin}/__cor__.html`, route => route.fulfill({ contentType: 'text/html; charset=utf-8', body: `<!doctype html><html lang="fr"><body><div id="mount"></div><script type="module">
 import { createV5CorruptionPanel } from '/js/ui/v5-corruption-panel.js';
 import { V5_CORRUPTION_MUTATION_CATALOG } from '/js/core/v5-corruption-mutation-catalog.js';
-const scenario = { missing: ['gmChosenDomain'] };
+const scenario = { missing: ['gmChosenDomain'], status: {} };
 const Store = new Proxy({
-  getCorruptionStatus: () => ({ baseRevision: 1, pointsKnown: true, mutations: [], corruptionPoints: 10, threshold: 5, corruptionSessionId: 's1', pendingThresholdTest: { id: 't' }, pendingMutation: null }),
+  getCorruptionStatus: () => ({ baseRevision: 1, pointsKnown: true, mutations: [], corruptionPoints: 10, threshold: 5, corruptionSessionId: 's1', pendingThresholdTest: { id: 't' }, pendingMutation: null, ...scenario.status }),
   getCorruptionMutationCatalog: () => V5_CORRUPTION_MUTATION_CATALOG,
   previewCorruptionThresholdTest: () => ({ status: 'needs-input', missing: scenario.missing })
 }, { get: (target, key) => key in target ? target[key] : () => ({}) });
@@ -31,7 +31,7 @@ const mount = document.getElementById('mount'), actor = { id: 'a', name: 'Test',
 const panel = createV5CorruptionPanel({ Store, refresh: () => draw() });
 const draw = () => mount.replaceChildren(panel.render(actor));
 draw();
-window.__scenario = scenario;
+window.__scenario = scenario; window.__draw = draw;
 </script></body></html>` }));
   await page.goto(`${origin}/__cor__.html`);
   await page.waitForSelector('.workspace-corruption-panel');
@@ -64,6 +64,22 @@ window.__scenario = scenario;
   await check('G-COR-2 : le jet de domaine manquant est nommé', async () => {
     const text = (await calculate(['mutationDomainRoll'])).join(' ');
     assert.match(text, /Jet d100 de mutation physique \/ mentale/);
+  });
+  const setStatus = async status => { await page.evaluate(value => { window.__scenario.status = value; window.__draw(); }, status); };
+  await check('C53 : les boutons de perte de personnage s’activent à la saisie du motif', async () => {
+    await setStatus({ pendingThresholdTest: null, pendingCharacterLoss: { id: 'l' } });
+    const confirm = page.getByRole('button', { name: 'Confirmer le personnage perdu au Chaos' }), refuse = page.getByRole('button', { name: 'Refuser la perte' });
+    assert.equal(await confirm.isDisabled(), true);
+    await page.getByLabel('Motif de la décision MJ').fill('Chaos');
+    assert.equal(await confirm.isEnabled(), true, 'Confirmer reste grisé');
+    assert.equal(await refuse.isEnabled(), true, 'Refuser reste grisé');
+  });
+  await check('C53 : « Confirmer cette mutation » s’active à la saisie de la description', async () => {
+    await setStatus({ pendingThresholdTest: null, pendingMutation: { domain: 'physical', manifestation: { days: 3 } } });
+    const confirm = page.getByRole('button', { name: 'Confirmer cette mutation' });
+    assert.equal(await confirm.isDisabled(), true);
+    await page.getByLabel('Description ou référence choisie par le MJ').fill('Corne');
+    assert.equal(await confirm.isEnabled(), true, 'Confirmer reste grisé');
   });
   assert.deepEqual(errors, []);
 } finally { await browser.close(); server.close(); }

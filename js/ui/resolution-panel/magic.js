@@ -508,7 +508,9 @@ export function renderV5MagicResult(preview, target, draft, handlers) {
     return result;
   }
   if (preview.v5MagicKind === 'channelling') {
-    pills.appendChild(outcomePill('Focalisation', preview.success, preview.sl));
+    // La pause ne gagne aucun DR : le pill affiche les DR du Test (Accessible compris), la ligne dit seulement si la réserve est conservée.
+    const pause = preview.actionType === 'channelling-pause';
+    pills.appendChild(outcomePill('Focalisation', preview.success, pause ? preview.test?.sl : preview.sl));
     if (preview.critical) pills.appendChild(node('span', 'workspace-outcome is-success', 'Critique (+2 × BFM)'));
     if (preview.fumble) pills.appendChild(node('span', 'workspace-outcome is-critical', 'Maladresse de Focalisation'));
     result.appendChild(pills);
@@ -518,7 +520,7 @@ export function renderV5MagicResult(preview, target, draft, handlers) {
     const nextSl = preview.newReserve?.sl ?? 0;
     const gained = preview.gain ?? preview.gainedSl ?? 0;
     result.appendChild(node('p', 'workspace-result-line',
-      `${preview.success ? 'Focalisation réussie' : 'Focalisation échouée'} · Réserve (${rType}) : ${prevSl} DR → ${nextSl} DR (gain ${signed(gained)})`));
+      `${preview.success ? 'Focalisation réussie' : 'Focalisation échouée'} · Réserve (${rType}) : ${prevSl} DR → ${nextSl} DR${pause ? (preview.success ? ' (réserve conservée)' : ' (réserve perdue)') : ` (gain ${signed(gained)})`}`));
     if (preview.typeChanged || preview.wipedPreviousReserve) {
       result.appendChild(node('p', 'workspace-result-line workspace-muted', 'Changement de type : la réserve précédente d’un autre type a été effacée avant le jet.'));
     }

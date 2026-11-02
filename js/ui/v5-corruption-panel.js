@@ -221,7 +221,7 @@ export function createV5CorruptionPanel({ Store, refresh = () => {} } = {}) {
         const result = await Store.confirmCorruptionMutation(actor.id, { mutationId: state.mutationDescription, baseRevision: status.baseRevision });
         if (result?.status === 'stale' || result?.ok === false) throw new Error(result.error || 'La partie a changé; relisez la mutation.');
         state.mutationDescription = ''; state.receipt = 'Mutation durable enregistrée; aucun effet de table K2 n’est appliqué ici.';
-      }), !state.mutationDescription.trim());
+      }), () => !state.mutationDescription.trim());
       button(panel, 'Refuser cette mutation', () => act(async () => {
         const result = await Store.declineCorruptionMutation(actor.id, { baseRevision: status.baseRevision });
         if (result?.status !== 'declined') throw new Error(result.error || 'La partie a changé; relisez la mutation.');
@@ -236,7 +236,7 @@ export function createV5CorruptionPanel({ Store, refresh = () => {} } = {}) {
           const result = await Store.decideCorruptionCharacterLoss(actor.id, { confirmed, reason: state.lossReason, baseRevision: status.baseRevision });
           if (result?.status === 'stale' || result?.ok === false) throw new Error(result.error || 'La partie a changé; relisez la décision.');
           state.lossReason = ''; state.receipt = `Décision de perte ${confirmed ? 'confirmée' : 'refusée'}.`;
-        }), !state.lossReason.trim());
+        }), () => !state.lossReason.trim());
       }
     } else if (status.pendingExposureSources?.length) {
       const source = status.pendingExposureSources[0];
