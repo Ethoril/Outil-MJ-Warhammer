@@ -1253,8 +1253,10 @@ function openEventsView() {
       textInput.placeholder = consequenceSelect.value === 'note' ? 'Note à annoncer' : consequenceSelect.value === 'addState' ? 'Nom de l’état' : consequenceSelect.value === 'advanceClock' ? 'Identifiant de jauge' : 'Identifiant du renfort';
       durationInput.hidden = consequenceSelect.value !== 'addState';
       amountInput.hidden = consequenceSelect.value === 'note';
+      const previousTarget = targetSelect.value;
       targetSelect.replaceChildren(new Option(consequenceSelect.value === 'advanceClock' ? 'Choisir une jauge…' : 'Choisir une cible…', ''));
       (consequenceSelect.value === 'advanceClock' ? scene.clocks : participantChoices).forEach(item => targetSelect.appendChild(new Option(item.name || item.label || item.id, item.id)));
+      targetSelect.value = previousTarget;
     };
     conditionSelect.addEventListener('change', refreshFields); consequenceSelect.addEventListener('change', refreshFields); refreshFields();
     valueInput.replaceChildren(new Option(conditionSelect.value === 'previousResolved' ? 'Choisir un événement…' : 'Choisir un participant…', ''));
@@ -1273,7 +1275,7 @@ function openEventsView() {
       box.appendChild(summary);
       if (preview.status === 'proposed') {
         const apply = document.createElement('button'); apply.type = 'button'; apply.textContent = 'Appliquer la conséquence';
-        apply.addEventListener('click', async () => { apply.disabled = true; try { const result = await awaitStore(requireStoreApi('applySceneEvent')(eventModel, { baseRevision: preview.baseRevision, sceneRevision: preview.sceneRevision, confirmed: true }), 'Événement'); if (result?.status !== 'applied') throw new Error(result?.reason || 'Conséquence non appliquée.'); showToast('Conséquence appliquée', 'success'); previewMount.replaceChildren(); } catch (error) { apply.disabled = false; showToast(contextMessage('Conséquence non appliquée', error, 'enregistrez et prévisualisez à nouveau l’événement.'), 'error'); } }); box.appendChild(apply);
+        apply.addEventListener('click', async () => { apply.disabled = true; try { const result = await awaitStore(requireStoreApi('applySceneEvent')(eventModel, { baseRevision: preview.baseRevision, sceneRevision: preview.sceneRevision, confirmed: true }), 'Événement'); if (result?.status !== 'applied') throw new Error(result?.reason || 'Conséquence non appliquée.'); showToast('Conséquence appliquée', 'success'); previewMount.replaceChildren(); refreshScene(); } catch (error) { apply.disabled = false; showToast(contextMessage('Conséquence non appliquée', error, 'enregistrez et prévisualisez à nouveau l’événement.'), 'error'); } }); box.appendChild(apply);
       }
       previewMount.appendChild(box);
     };
@@ -1311,15 +1313,23 @@ function openEventsView() {
     clockForm.innerHTML = '<strong>Jauge manuelle</strong><label>Identifiant<input name="id" required></label><label>Valeur<input name="value" type="number" value="0"></label><label>Maximum<input name="max" type="number" min="1" value="6"></label><button type="submit">Créer la jauge</button>';
     clockForm.addEventListener('submit', async event => {
       event.preventDefault(); const submit = clockForm.querySelector('button'); submit.disabled = true;
-      try { await awaitStore(requireStoreApi('executeCommand')('create-scene-clock', draft => ({ ...draft, activeScene: { ...draft.activeScene, clocks: [...(draft.activeScene?.clocks || []), { id: clockForm.elements.id.value.trim(), value: Number(clockForm.elements.value.value) || 0, max: Number(clockForm.elements.max.value) || null }] } })), 'Jauge'); showToast('Jauge créée', 'success'); }
+      try { await awaitStore(requireStoreApi('executeCommand')('create-scene-clock', draft => ({ ...draft, activeScene: { ...draft.activeScene, clocks: [...(draft.activeScene?.clocks || []), { id: clockForm.elements.id.value.trim(), value: Number(clockForm.elements.value.value) || 0, max: Number(clockForm.elements.max.value) || null }] } })), 'Jauge'); showToast('Jauge créée', 'success'); submit.disabled = false; refreshScene(); }
       catch (error) { submit.disabled = false; showToast(contextMessage('Jauge non créée', error, 'vérifiez l’identifiant et le maximum.'), 'error'); }
     });
     mount.appendChild(clockForm);
-    (scene.clocks || []).forEach(clock => {
+    const clockList = document.createElement('div');
+    mount.appendChild(clockList);
+    const renderClockList = () => {
+      clockList.replaceChildren();
+      (scene.clocks || []).forEach(clock => {
       const row = document.createElement('div'); row.className = 'card row'; row.append(document.createTextNode(`${clock.id} · ${clock.value}/${clock.max ?? '∞'}`));
       const advance = document.createElement('button'); advance.type = 'button'; advance.className = 'ghost small'; advance.textContent = '+1';
-      advance.addEventListener('click', async () => { advance.disabled = true; try { await awaitStore(requireStoreApi('advanceSceneClock')(clock.id, 1), 'Jauge'); showToast(`Jauge ${clock.id} avancée`, 'success'); } catch (error) { advance.disabled = false; showToast(contextMessage('Jauge non avancée', error, 'réessayez.'), 'error'); } }); row.appendChild(advance); mount.appendChild(row);
-    });
+      advance.addEventListener('click', async () => { advance.disabled = true; try { await awaitStore(requireStoreApi('advanceSceneClock')(clock.id, 1), 'Jauge'); showToast(`Jauge ${clock.id} avancée`, 'success'); refreshScene(); } catch (error) { advance.disabled = false; showToast(contextMessage('Jauge non avancée', error, 'réessayez.'), 'error'); } }); row.appendChild(advance); clockList.appendChild(row);
+      });
+    };
+    // Jauges et événements relus dans la séance après chaque modification, sans rouvrir le panneau.
+    const refreshScene = () => { scene.clocks = Store.getActiveScene()?.clocks || []; renderClockList(); refreshFields(); renderEventList(); };
+    renderClockList();
     mount.appendChild(eventList);
     function renderEventList() {
       const current = Store.getActiveScene();
