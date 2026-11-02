@@ -7,7 +7,7 @@ import { updateCriticalDeathCountdown } from '../v5-critical-aftermath.js';
 import { uid, cloneValue } from '../models.js';
 import { sequelaCharacteristicTotals, sequelaEffectRows, sequelaPhase } from '../v5-sequela-effects.js';
 
-export function createAftermathApi({ api, currentEnvelope, absentAftermathSubjects, runAftermathCommand, aftermathHealerOf, sequelaAmputation, aftermathAmputation, withHealingFumble }) {
+export function createAftermathApi({ api, currentEnvelope, absentAftermathSubjects, runAftermathCommand, stageAftermathClock, aftermathHealerOf, sequelaAmputation, aftermathAmputation, withHealingFumble }) {
   return {
     getAftermathState() {
       const stored = currentEnvelope().extensions?.v5?.aftermathRegister;
@@ -65,7 +65,17 @@ export function createAftermathApi({ api, currentEnvelope, absentAftermathSubjec
           const score = patient ? aftermathEnduranceScore(patient) : null;
           if (score !== null) enduranceScores[incident.participantId] = score;
         }
-        return advanceAftermathCalendar(state, { operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, days: input.days, dailyTests: input.dailyTests, enduranceScores, absentParticipantIds: absentAftermathSubjects(state, participants) });
+        const outcome = advanceAftermathCalendar(state, { operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, days: input.days, dailyTests: input.dailyTests, enduranceScores, absentParticipantIds: absentAftermathSubjects(state, participants) });
+        if (outcome.receipt.status !== 'applied') return outcome;
+        // Un seul temps (C39) : les mêmes jours avancent l'horloge de campagne, dans la même commande (un seul ↶).
+        const clocked = stageAftermathClock(draft, { days: outcome.receipt.days, operationId: input.operationId });
+        if (!clocked.ok) return { ...outcome, receipt: { ...outcome.receipt, status: 'refused', reason: 'campaign-time-requires-input', needsInput: clocked.needsInput } };
+        outcome.afterApply = next => {
+          const staged = stageAftermathClock(next, { days: outcome.receipt.days, operationId: input.operationId });
+          if (!staged.ok) throw new Error('Horloge de campagne : avance impossible');
+          return staged.state;
+        };
+        return outcome;
       });
     },
     /** Patient retiré du combat : l'incident est archivé, l'historique reste, plus aucun Test n'est attendu. */
