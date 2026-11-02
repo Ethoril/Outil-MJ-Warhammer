@@ -2,6 +2,7 @@ import { node, button, rubric, outcomePill, signed, minusSigned } from './dom.js
 import { renderV5Decisions, renderCritical, criticalEffectLine } from './critical.js';
 import { renderV5MagicResult } from './magic.js';
 import { formatDamageFormula, previewHpLoss } from '../../core/resolution.js';
+import { describeWeaponCondition } from '../../core/resolution/describe.js';
 import { getReferenceCatalogue } from '../../core/reference-catalog.js';
 import { V5_TALENT_TEST_CONTEXT_FIELDS, V5_TEST_TALENT_IDS } from '../../core/v5-talent-tests.js';
 import { hasV5Talent, V5_TALENT_IDS } from '../../core/v5-talents.js';
@@ -122,7 +123,7 @@ export function renderResult(preview, target, draft, handlers, participants=[]) 
     result.appendChild(node('p', 'workspace-result-line', `${name || 'Combattant'} : Élan ${change.before ? 'oui' : 'non'} → ${change.after ? 'oui' : 'non'}`));
   }
   for(const reminder of preview.reminders || [])result.appendChild(node('p','workspace-muted',reminder));
-  for(const occurrence of preview.weaponConditions?.applied || [])result.appendChild(node('p','workspace-result-line','Assommante : '+occurrence.level+' état Sonné proposé.'));
+  for(const occurrence of preview.weaponConditions?.applied || [])result.appendChild(node('p','workspace-result-line',describeWeaponCondition(occurrence)+' proposé.'));
   if((preview.targetConditionApplication||[]).some(row=>row.source?.kind==='knockout'))result.appendChild(node('p','workspace-result-line','Assommer : le total de Sonné dépasse le BE; Inconscient proposé.'));
   const renderedMountedRideInputs = new Set();
   for (const fall of preview.mountedFall || []) {

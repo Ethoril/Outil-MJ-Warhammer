@@ -1,4 +1,5 @@
 import { formatDamageFormula, formatWeaponDamage } from '../damage.js';
+import { v5ConditionName } from '../v5-effects.js';
 
 export const hasOwn = (value, key) => Object.prototype.hasOwnProperty.call(value, key);
 export const signedValue = value => {
@@ -6,6 +7,9 @@ export const signedValue = value => {
   return number < 0 ? `−${Math.abs(number)}` : `+${number}`;
 };
 export const knownHp = actor => actor?.hp !== null && actor?.hp !== undefined && actor?.hp !== '' && Number.isFinite(Number(actor.hp));
+const WEAPON_QUALITY_LABELS = { assommante: 'Assommante', entaille: 'Entaille', inflige: 'Inflige', immobilisante: 'Immobilisante' };
+// Condition imposée par une Qualité d'arme : « Qualité : N état État » (ex. Inflige : 1 état Enchevêtré).
+export const describeWeaponCondition = condition => `${WEAPON_QUALITY_LABELS[condition?.source?.keywordId] || 'Qualité d’arme'} : ${condition?.level ?? 1} état ${v5ConditionName(condition?.key) || condition?.name || condition?.key || 'inconnu'}`;
 export const DETAIL_TYPE_LABELS = { attack: 'Attaque', skill: 'Compétence', defense: 'Défense', opposition: 'Opposition' };
 
 /** « gravité 43 + 10 = 53 → Côtes fracturées » ; « gravité non tirée » tant que le d100 manque. */
@@ -91,7 +95,7 @@ export function describeResolutionDetail(detail) {
     if (proposal.op === 'modifyDamage') parts.push('Talent : +' + proposal.amount + ' Dégât (' + proposal.origins.map(origin => origin.talentId).join(', ') + ')');
     if (proposal.op === 'reduceConditionAcquisition') parts.push('Talent : ' + proposal.amount + ' acquisition(s) de ' + proposal.key + ' évitée(s).');
   }
-  for (const condition of [...(detail.weaponConditions?.applied||[]),...(detail.defenderWeaponConditions?.applied||[])]) parts.push('Assommante : ' + condition.level + ' état Sonné appliqué.');
+  for (const condition of [...(detail.weaponConditions?.applied||[]),...(detail.defenderWeaponConditions?.applied||[])]) parts.push(describeWeaponCondition(condition) + ' appliqué.');
   for(const state of detail.actorConditionApplication||[])if(state.source?.keywordId==='a-poudre-noire')parts.push('À Poudre noire : '+state.level+' état(s) Brisé acquis.');
   for (const reminder of detail.reminders || []) parts.push(reminder);
   if (detail.fumble) parts.push('Maladresse');

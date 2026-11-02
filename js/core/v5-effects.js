@@ -11,6 +11,7 @@ export const V5_EFFECT_RULE_VERSION = 'v5-effects-2026-10-09.1';
 export const V5_CONDITION_KEYS = Object.freeze(['enflamme','souille','hemorragique','aveugle','brise','assourdi','enchevetre','extenue','empoisonne','a-terre','sonne','surpris','inconscient']);
 const UNIQUE = new Set(['souille','a-terre','surpris','inconscient']);
 const NAMES = {enflamme:'Enflammé',souille:'Souillé',hemorragique:'Hémorragique',aveugle:'Aveuglé',brise:'Brisé',assourdi:'Assourdi',enchevetre:'Enchevêtré',extenue:'Exténué',empoisonne:'Empoisonné','a-terre':'À Terre',sonne:'Sonné',surpris:'Surpris',inconscient:'Inconscient'};
+export const v5ConditionName = key => NAMES[key] || null;
 const ALIASES = {ablaze:'enflamme',besmirched:'souille',bleeding:'hemorragique',blinded:'aveugle',broken:'brise',deafened:'assourdi',entangled:'enchevetre',fatigued:'extenue',poisoned:'empoisonne',prone:'a-terre',stunned:'sonne',surprised:'surpris',unconscious:'inconscient'};
 const PHASES = new Set(['startOfTurn','endOfTurn','endOfRound','attackAttempt']);
 const clone = value => structuredClone(value);
