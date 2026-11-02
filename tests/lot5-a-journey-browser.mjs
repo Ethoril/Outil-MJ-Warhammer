@@ -39,7 +39,7 @@ try {
     await store.ready;
     const shot = { id: 'a-tir', type: 'attack', note: 'Tir', name: 'Tir', attr: 'CT', base: 60, damage: 4, qualities: [{ id: 'a-repetition', parameter: '3' }] };
     const common = { zone: 'active', hp: 30, maxHp: 30, caracs: { CC: 50, CT: 60, F: 40, E: 40, I: 40, Ag: 40, Dex: 40, FM: 40 }, skills: [], equipment: [], states: [], armor: { head: 0, body: 0, arms: 0, legs: 0 }, extensions: { v5: { hasMomentum: false } } };
-    const actor = { ...common, id: 'tireur', name: 'Tireur', kind: 'PNJ', camp: 'ennemi', initiative: 50, actions: [shot] };
+    const actor = { ...common, id: 'tireur', name: 'Tireur', kind: 'PNJ', camp: 'ennemi', initiative: 50, actions: [shot], equipment: [{ id: 'pistolet', kind: 'weapon', name: 'Pistolet', category: 'Poudre noire', damage: '+4', range: '20', keywords: [{ id: 'recharge', parameter: '1' }] }] };
     const target = { ...common, id: 'pj', name: 'Ulrike', kind: 'PJ', camp: 'pj', initiative: 40, actions: [] };
     await store.loadFromJSON({ schemaVersion: 3, reserve: [], log: [], diceLines: [], extensions: { v5: { combatId: 'c47', turnIndex: 1 } }, combat: { round: 1, currentActorId: 'tireur', order: ['tireur', 'pj'], participants: [actor, target] } });
     window.__store = store;
@@ -75,6 +75,15 @@ try {
     await page.getByRole('button', { name: 'Calculer', exact: true }).click();
     await page.getByRole('button', { name: /^Appliquer/ }).click();
     await page.waitForFunction(() => (JSON.parse(window.__store.getFullJSON()).extensions.v5.standardTurnActions || []).length === 2);
+  });
+  await check('C50 : recharge d’une arme jamais tirée refusée avec la raison en français ; compteur « chargée »', async () => {
+    const panel = page.locator('.workspace-weapon-reload');
+    assert.match(await panel.innerText(), /Pistolet · chargée/);
+    assert.doesNotMatch(await panel.innerText(), /0 tir\(s\) restant/);
+    await panel.getByRole('button', { name: 'Commencer la recharge' }).click();
+    const message = await panel.locator('.workspace-error').innerText();
+    assert.match(message, /pas été tirée/);
+    assert.doesNotMatch(message, /non enregistré|weapon-not-fired/);
   });
   assert.deepEqual(errors, []);
 } finally { await browser.close(); server.close(); }

@@ -1767,7 +1767,7 @@ export function renderResolutionPanel(options) {
       if ([...(rangedWeapon?.keywords || []), ...(action?.qualities || [])].some(row => (typeof row === 'string' ? row : row?.id) === 'a-repetition')) {
         contextField(fields, 'actor', 'repeaterDoubleShot', 'À répétition : tir double (deux tirs sur la même cible à −1 DR, une seule Action)');
         if (draft.v5Context?.repeaterDoubleShot === true) {
-          const firstShots = previousWeaponAttacks.filter(row => (row.weaponId || null) === (rangedWeapon?.id || null) && row.targetId === target.id && row.actionType === 'attack');
+          const firstShots = previousWeaponAttacks.filter(row => (row.weaponId || null) === (action.extensions?.fiche?.equipmentId || null) && row.targetId === target.id && row.actionType === 'attack');
           const second = node('label', 'workspace-type', 'Premier tir du tir double (le tir actuel est alors le second, gratuit et sans Élan)'), secondSelect = document.createElement('select');
           secondSelect.setAttribute('aria-label', second.textContent);
           secondSelect.append(new Option('Premier tir (ou choisir le tir déjà appliqué…)', ''));
