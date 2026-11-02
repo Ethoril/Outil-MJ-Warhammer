@@ -78,6 +78,26 @@ try {
     assert.equal(pick(after), pick(without) - 2, `avant ${pick(without)} DR, après ${pick(after)} DR`);
     assert.match(after, /N’écoutez point la Sorcière|−2 DR|-2 DR/, 'le malus est nommé');
   });
+  await check('G-DIV-8 : seule la cible protégée subit le malus (le lanceur seul, hors zone, n’en subit aucun)', async () => {
+    const pick = text => Number(/Calcul d’incantation : ([+−-]?\d+) DR \(test\)/.exec(text)[1].replace('−', '-'));
+    const castOn = async name => {
+      // On coche d'abord la cible voulue : une liste vide retomberait sur la cible par défaut.
+      for (const label of [name, ...['Mage', 'Prêtre', 'PJ Alpha'].filter(row => row !== name)]) {
+        const box = page.getByLabel(`Cible du sort : ${label}`);
+        assert.equal(await box.count(), 1, `case « Cible du sort : ${label} » introuvable`);
+        if (await box.isChecked() !== (label === name)) await box.click();
+      }
+      await page.click('[data-focus-key="calculate"]');
+      return await page.locator('.workspace-resolution').innerText();
+    };
+    await clickU1Magic(page, 'cast'); await openU1Settings(page);
+    const box = page.getByLabel('Cible du sort : PJ Alpha');
+    if (!await box.isVisible()) await page.getByText(/Cibles multiples/).click();
+    const onAlpha = await castOn('PJ Alpha'), onMage = await castOn('Mage');
+    assert.equal(pick(onAlpha), pick(without) - 2, 'cible protégée : −2 DR');
+    assert.equal(pick(onMage), pick(without), 'cible non protégée : aucun malus');
+    assert.doesNotMatch(onMage, /N’écoutez point la Sorcière/, 'pas de motif sans cible protégée');
+  });
   assert.equal(pageErrors.length, 0, pageErrors.join(' | '));
 } finally { await browser.close(); await new Promise(r => server.close(r)); }
 const failed = results.filter(([, ok]) => !ok).length;

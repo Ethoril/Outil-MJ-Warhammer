@@ -58,7 +58,9 @@ export function applicationBlockingReasons(preview, draft, canApply, preflight =
     const incident = preview.castPreview?.miscast || preview.miscast;
     add(incident && incident.initialRoll == null && !incident.cancelled, 'Jet d’incident magique à saisir (d100)', 'magic-miscast');
     add(invalid, 'Vérifiez les éléments requis pour le sort');
-    add(preview.ready === false, 'Complétez les éléments requis pour la magie');
+    const magicMissing = [preview.missing, preview.castPreview?.missing].flat().filter(Boolean);
+    const magicFocus = magicMissing.includes('lossRoll') ? 'magic-loss' : magicMissing.includes('miscastRoll') ? 'magic-miscast' : preview.spellPreview?.attributeDice ? 'magic-attribute-dice' : undefined;
+    add(preview.ready === false, 'Complétez les éléments requis pour la magie', magicFocus);
     return finish();
   }
   add(preview.choiceRequired, 'Choisissez le résultat à appliquer');

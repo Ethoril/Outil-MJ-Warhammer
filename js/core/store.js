@@ -149,7 +149,7 @@ import { sharedState, sameSharedState } from './sync-protocol.js';
 import { applyFicheSync as applyFicheSyncToDraft } from './fiche-sync.js';
 import { convertLegacyV4Profile } from './v5-legacy-conversion.js';
 import { planMountedFall, V5_RIDE_SKILL_ID } from './v5-mounted-combat.js';
-import { createAftermathState, validateAftermathState, aftermathHealer } from './v5-aftermath.js';
+import { createAftermathState, validateAftermathState, aftermathHealer, aftermathEnduranceScore, advanceAftermathCalendar } from './v5-aftermath.js';
 
 export const KEY = { EXTENSIONS: 'wfrp.extensions.v1', RESERVE: 'wfrp.reserve.v1', COMBAT: 'wfrp.combat.v1', LOG: 'wfrp.log.v1', DICE: 'wfrp.dice.v1', TS: 'wfrp.sync.ts.v1' };
 
@@ -1322,6 +1322,53 @@ function resolvedCorruptionTest(participant, skillId, input) {
     }) : outcome;
   }
 
+  /** Échéances de campagne d'un brouillon (effets datés, échéances divines) une fois l'horloge avancée ; {ok:false, needsInput} sinon. */
+  function stageCampaignProgress(draft, clock, advanced, seconds) {
+    const progressed = advanceCampaignSnapshot(draft, { seconds, clock: draft.extensions?.v5?.gameClock });
+    if (!progressed.ok) return { ok: false, needsInput: progressed.needsInput };
+    const staged = { ...progressed.snapshot, extensions: { ...(progressed.snapshot.extensions || {}), v5: { ...(progressed.snapshot.extensions?.v5 || {}), gameClock: advanced.clock } } };
+    const divine = expireDivineAtClock(staged, { fromClock: clock, toClock: advanced.clock, receipt: advanced.receipt });
+    if (!divine.ok) return { ok: false, needsInput: divine.needsInput };
+    return { ok: true, state: divine.state, processedSubjects: [...progressed.processedSubjects, ...divine.removed.map(row => ({ path: row.path, id: row.participantId, expiredEffectId: row.effectId }))] };
+  }
+
+  const AFTERMATH_DAY_SECONDS = 86400;
+  const withAftermathAnchor = (state, syncedSeconds) => ({ ...state, extensions: { ...(state.extensions || {}), v5: { ...(state.extensions?.v5 || {}), aftermathClockSync: { syncedSeconds } } } });
+  /** Un seul temps (C39) : le calendrier de convalescence suit l'horloge de campagne par jours entiers ; la fraction de jour est reportée (ancre `aftermathClockSync`). */
+  function syncAftermathToClock(state, { fromSeconds, toSeconds, dailyTests = [], operationId }) {
+    const stored = state.extensions?.v5?.aftermathRegister;
+    if (stored == null) return { ok: true, state };
+    const register = validateAftermathState(stored);
+    const anchor = Number.isSafeInteger(state.extensions?.v5?.aftermathClockSync?.syncedSeconds) ? state.extensions.v5.aftermathClockSync.syncedSeconds : fromSeconds;
+    const days = Math.floor((toSeconds - anchor) / AFTERMATH_DAY_SECONDS);
+    if (days < 1) return { ok: true, state: withAftermathAnchor(state, anchor) };
+    const participants = state.combat?.participants || [];
+    const enduranceScores = {};
+    for (const incident of register.incidents) {
+      const patient = participants.find(row => row.id === incident.participantId);
+      const score = patient ? aftermathEnduranceScore(patient) : null;
+      if (score !== null) enduranceScores[incident.participantId] = score;
+    }
+    const outcome = advanceAftermathCalendar(register, { operationId, expectedRevision: register.revision, days, dailyTests, enduranceScores, absentParticipantIds: absentAftermathSubjects(register, participants) });
+    if (outcome.receipt.status !== 'applied') {
+      const required = outcome.receipt.reason === 'daily-tests-required';
+      return { ok: false, needsInput: [{ path: 'aftermath.dailyTests', code: required ? 'aftermath-daily-tests' : outcome.receipt.reason, requiredDailyChecks: outcome.receipt.requiredDailyChecks || [],
+        message: required ? 'Blessure non bandée : Tests quotidiens de Résistance à saisir avant d’avancer le temps.' : `Convalescence : ${outcome.receipt.reason}.` }] };
+    }
+    return { ok: true, state: withAftermathAnchor({ ...state, extensions: { ...state.extensions, v5: { ...state.extensions.v5, aftermathRegister: outcome.state } } }, anchor + days * AFTERMATH_DAY_SECONDS) };
+  }
+  /** « Jours à avancer » des Suites de combat : même temps que l'horloge de campagne, avancé de N jours dans la même commande. */
+  function stageAftermathClock(draft, { days, operationId }) {
+    const seconds = days * AFTERMATH_DAY_SECONDS;
+    const clock = draft.extensions?.v5?.gameClock || createGameClock(draft);
+    const anchor = Number.isSafeInteger(draft.extensions?.v5?.aftermathClockSync?.syncedSeconds) ? draft.extensions.v5.aftermathClockSync.syncedSeconds : clock.campaignSeconds;
+    const advanced = advanceGameClock(clock, { id: `clock-v1:${clock.revision}:aftermath:${operationId}`, baseRevision: clock.revision, kind: 'campaign-time-advance', seconds, reason: `Convalescence : ${days} jour(s)` });
+    if (!advanced.ok) return { ok: false, needsInput: [{ path: 'gameClock', code: advanced.status, message: 'Horloge de campagne : avance refusée.' }] };
+    const staged = stageCampaignProgress(draft, clock, advanced, seconds);
+    if (!staged.ok) return staged;
+    return { ok: true, state: withAftermathAnchor(staged.state, anchor + seconds) };
+  }
+
   function commitV5Effect(type, participantId, evaluate, supplied = {}) {
     const options = cloneValue(supplied);
     let receipt;
@@ -1949,15 +1996,14 @@ function resolvedCorruptionTest(participant, skillId, input) {
           if (advanced.status === 'duplicate') throw resultError({ ok: true, status: 'duplicate', receipt: advanced.receipt, clock: advanced.clock, processedSubjects: [] });
           if (!advanced.ok) throw resultError({ ok: false, status: advanced.status, receipt: advanced.receipt || null, clock: advanced.clock });
           if (draft.localRevision !== localBaseRevision) throw resultError({ ok: false, status: 'stale', receipt: null, clock });
-          const progressed = advanceCampaignSnapshot(draft, { seconds, clock: draft.extensions?.v5?.gameClock });
+          const progressed = stageCampaignProgress(draft, clock, advanced, seconds);
           if (!progressed.ok) throw resultError({ ok: false, status: 'requires-input', receipt: null, clock, processedSubjects: [], needsInput: progressed.needsInput });
-          const staged={...progressed.snapshot,extensions:{...(progressed.snapshot.extensions||{}),v5:{...(progressed.snapshot.extensions?.v5||{}),gameClock:advanced.clock}}};
-          const divine=expireDivineAtClock(staged,{fromClock:clock,toClock:advanced.clock,receipt:advanced.receipt});
-          if(!divine.ok)throw resultError({ok:false,status:'requires-input',receipt:null,clock,processedSubjects:[],needsInput:divine.needsInput});
-          processedSubjects = [...progressed.processedSubjects,...divine.removed.map(row=>({path:row.path,id:row.participantId,expiredEffectId:row.effectId}))];
+          const aftermath = syncAftermathToClock(progressed.state, { fromSeconds: clock.campaignSeconds, toSeconds: advanced.clock.campaignSeconds, dailyTests: input.dailyTests, operationId: `clock-aftermath:${eventId}` });
+          if (!aftermath.ok) throw resultError({ ok: false, status: 'requires-input', receipt: null, clock, processedSubjects: [], needsInput: aftermath.needsInput });
+          processedSubjects = progressed.processedSubjects;
           acceptedClock = advanced.clock;
           acceptedReceipt = advanced.receipt;
-          return { ...divine.state,
+          return { ...aftermath.state,
             log: [{ id: uid(), kind: 'management', text: `Temps de campagne avancé de ${seconds} seconde(s) : ${reason.trim()}` }, ...(draft.log || [])].slice(0, 300)
           };
         });
@@ -5128,7 +5174,7 @@ function resolvedCorruptionTest(participant, skillId, input) {
       });
     },
 
-    ...createAftermathApi({ api, currentEnvelope, absentAftermathSubjects, runAftermathCommand, aftermathHealerOf, sequelaAmputation, aftermathAmputation, withHealingFumble }),
+    ...createAftermathApi({ api, currentEnvelope, absentAftermathSubjects, runAftermathCommand, stageAftermathClock, aftermathHealerOf, sequelaAmputation, aftermathAmputation, withHealingFumble }),
     getFullJSON() {
       const data = currentEnvelope();
       return JSON.stringify(data, null, 2);

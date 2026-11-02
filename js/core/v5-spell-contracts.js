@@ -257,6 +257,12 @@ export function getContractChoiceOptions(contract) {
  * Détermine si une cible est hostile au lanceur.
  * RÈGLE : s'appuie sur le camp (`camp` ou `side`), jamais sur `type` ou `kind` ('PJ' / 'PNJ').
  */
+/** N’écoutez point la Sorcière : pénalité divine (maximum, une seule fois) portée par les cibles désignées ; [] sans pénalité. */
+export function divineCastingModifiers(targets = []) {
+  const penalty=Math.max(0,...targets.flatMap(t=>(t.extensions?.v5?.divineEffects || []).map(row=>Number(row.castingSlPenalty) || 0)));
+  return penalty>0?[{id:'divine-casting-penalty',label:'N’écoutez point la Sorcière : sort visant la zone',amount:-penalty}]:[];
+}
+
 export function isHostileTarget(actor, target) {
   if (!target || typeof target !== 'object') return false;
   if (actor && target.id === actor.id) return false;
@@ -1334,8 +1340,8 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
   const readingTargets=effectiveTargets.filter(t=>t.extensions?.v5?.specialStates?.mindMask);
   if(readingTargets.some(t=>options.targetTests?.[t.id]?.readingMagic===true))options={...options,slModifiers:[...(options.slModifiers || []),{id:'mind-mask-reading',label:'Masque de l’Esprit : lecture/divination',amount:-3}]};
   // N’écoutez point la Sorcière : pénalité divine (maximum, une seule fois) portée par les cibles désignées.
-  const divineCastingPenalty=Math.max(0,...effectiveTargets.flatMap(t=>(t.extensions?.v5?.divineEffects || []).map(row=>Number(row.castingSlPenalty) || 0)));
-  if(divineCastingPenalty>0)options={...options,slModifiers:[...(options.slModifiers || []),{id:'divine-casting-penalty',label:'N’écoutez point la Sorcière : sort visant la zone',amount:-divineCastingPenalty}]};
+  const divineModifiers=divineCastingModifiers(effectiveTargets);
+  if(divineModifiers.length)options={...options,slModifiers:[...(options.slModifiers || []),...divineModifiers]};
   const reserve = getChannellingReserve(actor);
   const expectedReserveType = contract.domain === 'high' ? 'high' : 'winds';
   const matchingReserveSl = reserve.type === expectedReserveType ? (Number(reserve.sl) || 0) : 0;
@@ -1663,7 +1669,7 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
   const attributeTargets=Object.fromEntries(effectiveTargets.map(t=>[t.id,typeof options.attributeTargets?.[t.id]==='boolean' ? options.attributeTargets[t.id] : isHostileTarget(actor,t)]));
   const loreKey=attributeLore==='high' ? chosenLore : attributeLore;
   const allLore=options.attributeActive===false ? null : previewLoreAttribute({caster:actor,targets:effectiveTargets,lore:attributeLore,chosenLore,spell:contract,castingSl:castingPreview?.totalCastingSl ?? 0,options:{attributeTargets,attributeRolls:options.targetTests,duration:contract.duration,waaaghFortune:domainFacts.waaaghFortune===true}});
-  if(allLore?.missingRolls?.length)return {ready:false,valid:false,status:'dice-required',error:'Attribut du Domaine : '+allLore.missingLabel+' requis ('+allLore.missingRolls.join(', ')+').',contract};
+  if(allLore?.missingRolls?.length)return {ready:false,valid:false,status:'dice-required',error:'Attribut du Domaine : '+allLore.missingLabel+' requis ('+allLore.missingRolls.join(', ')+').',attributeDice:{key:allLore.lore==='maw'?'mawRoll':'corruptionRoll',label:allLore.missingLabel,ids:allLore.missingRolls,max:allLore.lore==='maw'?10:100},contract};
   // Règles de dégâts de l'attribut : Cieux et Métal ignorent les PA métalliques (même attribut coupé, comme avant), Métal les ajoute (V5 p. 252), Ombres ignore les PA non magiques (V5 p. 254).
   const loreDamage = {
     ignoreMetalAp: Boolean(allLore?.damageRules?.ignoreMetalAp) || ['heavens','metal'].includes(loreKey),

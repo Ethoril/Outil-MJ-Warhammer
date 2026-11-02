@@ -8,7 +8,7 @@ import {resolveV5ConditionTestContext} from '../core/v5-test-context.js';
 import {isBrokenActor,renderBrokenEscapeVisibilityControl} from './v5-broken-escape-panel.js';
 import {d100} from '../core/dice.js';
 import {renderConfirmationButtons} from './resolution-panel/dom.js';
-import {emptyDivineForm,defaultDivineSelection,confirmRangeByDefault,buildDivineForm,toEngineInput,buildExpiry,isSelfTargeted,classifyNeeds,describeEffectResult,summonLayerLabel,summarizeExecution,deadlineLines,formatCampaignTime,fieldValue,setFieldValue,focusKey} from './v5-divine-form-model.js';
+import {emptyDivineForm,defaultDivineSelection,confirmRangeByDefault,confirmAllyByDefault,buildDivineForm,toEngineInput,buildExpiry,isSelfTargeted,classifyNeeds,describeEffectResult,summonLayerLabel,summarizeExecution,deadlineLines,formatCampaignTime,fieldValue,setFieldValue,focusKey} from './v5-divine-form-model.js';
 const node=(tag,klass,text)=>{const el=document.createElement(tag);if(klass)el.className=klass;if(text!==undefined)el.textContent=text;return el;};
 const clone=value=>structuredClone(value);
 const labels={implemented:'Effet calculable',assisted:'Effets calculés + rappels MJ',manual:'Effet assisté / rappel MJ',blocked:'Source ou arbitrage requis'};
@@ -97,7 +97,7 @@ export function createDivinePanel({Store,refresh,onRollChange=()=>{}}){
   const self=contract.params?.targets?.kind==='self' || contract.params?.sourceTarget==='You';
   const combat=Store.getCombat(),round=Number(combat.round)||1;
   const targetIds=self?[actor.id]:state.targetIds.slice();
-  const expiry=buildExpiry({contract,actor,choices:state.choices,round,phase:state.expiryPhase,manualRounds:state.form.expiryRounds});
+  const expiry=buildExpiry({contract,actor,choices:state.choices,round,phase:state.expiryPhase||'endOfRound',manualRounds:state.form.expiryRounds});
   return {actorId:actor.id,targetIds,roll:state.roll===''?undefined:Number(state.roll),canSpeak:state.canSpeak,
    wrathAllyIds:clone(state.wrathAllyIds),wrathAlliesConfirmed:state.wrathAlliesConfirmed==='true',wrathSkillIds:clone(state.wrathSkillIds),wrathRoundPolicy:state.wrathRoundPolicy||undefined,wrathActionDecision:state.wrathActionDecision||undefined,wrathRoundAnchor:state.wrathAnchorScene&&state.wrathAnchorRound?{sceneId:state.wrathAnchorScene,round:Number(state.wrathAnchorRound)}:undefined,
    wrathRoll:state.wrathRoll===''?undefined:Number(state.wrathRoll),wrathDurationRoll:state.wrathDurationRoll===''?undefined:Number(state.wrathDurationRoll),wrathConsequences:state.wrathConsequence.trim(),wrathPenanceText:state.wrathPenanceText||'',wrathRejectionConfirmed:state.wrathRejectionConfirmed==='true',wrathPrayAdvances:state.wrathPrayAdvances===undefined||state.wrathPrayAdvances===''?undefined:Number(state.wrathPrayAdvances),wrathFirstMorningAt:state.wrathFirstMorningAt===undefined||state.wrathFirstMorningAt===''?undefined:Number(state.wrathFirstMorningAt),...confiscationInput(),...summonInput(),
@@ -288,7 +288,8 @@ export function createDivinePanel({Store,refresh,onRollChange=()=>{}}){
  }
  function penanceControls(content,actor,cult){
   const restitution=id=>{const value=state.penanceRestitutions?.[id];if(!value)return {};const [confiscationId,restoreItemId]=JSON.parse(value);return {confiscationId,restoreItemId};};
-  const box=node('div','workspace-divine-penances');box.style.minWidth='0';box.append(node('h3','','Pénitences de la fiche'));const rows=actor.extensions?.v5?.divinePenances||[],mayManage=Store.canManageDivinePenances?.()===true;
+  const box=node('details','workspace-divine-penances');box.style.minWidth='0';box.append(node('summary','','Pénitences de la fiche'));const rows=actor.extensions?.v5?.divinePenances||[],mayManage=Store.canManageDivinePenances?.()===true;
+  const v5=actor.extensions?.v5||{};box.open=state.penanceOpen===true||[rows,v5.divineRejections,v5.divineDailyBleeding,v5.divineConfiscations,v5.divineJudgments].some(list=>list?.length);box.addEventListener('toggle',()=>{state.penanceOpen=box.open;});
   if(!rows.length)box.append(node('p','workspace-muted','Aucune pénitence enregistrée.'));
   if(mayManage&&rows.some(row=>row.status==='open'))field(box,'Motif de clôture MJ','penanceCloseReason',{type:'text'});
   for(const row of rows){const item=node('div','workspace-divine-penance');item.append(node('p','',row.cult+' · '+(row.status==='completed'?'Accomplie':'En cours')+' · '+row.text),node('small','workspace-muted',row.source.document+' p.'+row.source.printedPage));if(row.status==='completed')item.append(node('p','workspace-muted','Clôture MJ : '+row.completedReason));else if(mayManage){const eligible=(actor.extensions?.v5?.divineConfiscations||[]).filter(record=>record.cult===row.cult).flatMap(record=>(record.items||[]).filter(held=>held.magical&&held.status==='held').map(held=>[JSON.stringify([record.id,held.itemId]),held.label]));if(eligible.length)select(item,'Objet magique à restituer pour : '+row.text,state.penanceRestitutions?.[row.id]||'',[['','Choisir exactement un objet'],...eligible],value=>{state.penanceRestitutions={...(state.penanceRestitutions||{}),[row.id]:value};change('penanceCloseReason',state.penanceCloseReason||'');},'restitution-'+row.id);button(item,'Accomplir la pénitence : '+row.text,()=>run(async()=>{const result=await Store.completeDivinePenance(actor.id,row.id,{reason:state.penanceCloseReason,...restitution(row.id),baseRevision:Store.getLocalRevision()});if(result?.ok===false)throw Error(result.error||'Clôture non enregistrée.');state.preview=null;}),!(state.penanceCloseReason||'').trim(),'penance-complete');}box.append(item);}
@@ -318,6 +319,7 @@ export function createDivinePanel({Store,refresh,onRollChange=()=>{}}){
  }
  return {
  needsNpcRoll(actor){return state.open && state.actorId===actor?.id && actor?.kind!=='PJ' && !String(state.roll||'').trim();},
+ show(){state.open=true;},
  rollNpc(actor){if(this.needsNpcRoll(actor)){state.roll=String(d100());state.preview=null;state.error='';}},
  render(actor,participants=[]){
   if(!actor)return null;
@@ -444,6 +446,7 @@ export function createDivinePanel({Store,refresh,onRollChange=()=>{}}){
   const effectTargets=isSelfTargeted(contract)?[actor]:participants.filter(row=>row.zone==='active'&&state.targetIds.includes(row.id));
   for (const target of effectTargets) confirmRangeByDefault(state.form, target.id);
   const model=buildDivineForm(contract,{actor,targets:effectTargets,participants,form:state.form,choices:state.choices}),descr=model.descr;
+  for(const target of effectTargets)if((model.factFields[target.id]||[]).some(fact=>fact.field==='ally'&&fact.required))confirmAllyByDefault(state.form,target,actor);
   const needs=state.preview&&!state.preview.ready?classifyNeeds(state.preview.needsInput||[],{targets:effectTargets,fields:model.effectFields}):[];
   const blocking=new Set(needs.map(row=>row.anchor).filter(Boolean));
   const factsGroup=(container,fields)=>{const group=node('div','workspace-divine-target-facts');for(const fact of fields)formField(group,fact,blocking.has(fact.anchor));container.append(group);};
@@ -483,7 +486,7 @@ export function createDivinePanel({Store,refresh,onRollChange=()=>{}}){
   if(budget&&model.extensions.length)extension.append(node('p','workspace-muted',`Paliers de +2 DR dépensés : ${budget.spent} sur ${budget.available}.`));
   if(blocking.has('extensions'))extension.open=true;
   content.append(extension);
-  if(descr.expiryField)select(content,'Fin de l’effet (choix du MJ)',state.expiryPhase,[['','À préciser'],['endOfTurn','Fin du Tour du prêtre'],['endOfRound','Fin de Round']],value=>change('expiryPhase',value),'expiry');
+  if(descr.expiryField)select(content,'Fin de l’effet (choix du MJ)',state.expiryPhase||'endOfRound',[['endOfTurn','Fin du Tour du prêtre'],['endOfRound','Fin de Round']],value=>change('expiryPhase',value),'expiry');
   if(durationField)formField(content,durationField,blocking.has('expiryRounds'));
   if(descr.calendarDuration)content.append(node('p','workspace-muted','Durée en minutes, heures ou jours : l’échéance est calculée sur l’horloge de jeu au moment de l’aperçu.'));
   const actions=node('div','workspace-resolution-row');content.append(actions);

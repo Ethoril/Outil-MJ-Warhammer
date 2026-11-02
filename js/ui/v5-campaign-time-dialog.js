@@ -48,11 +48,23 @@ export function openCampaignTimeDialog({ Store, returnFocus } = {}) {
     const preview = node('p', 'Précisez la durée à avancer.', 'workspace-muted'); preview.setAttribute('aria-live', 'polite');
     const scope = node('p', 'Les durées de sorts, d’incidents, de talents et de Forme bestiale suivent le temps écoulé. Pour les sorts en Rounds, la convention de table est de 10 secondes par Round. Les échéances de Tour des prières attendent un Tour réel.', 'workspace-muted');
     const error = node('p', '', 'v5-effect-error'); error.setAttribute('role', 'alert'); error.hidden = true;
+    // Blessé non bandé : l'avance s'arrête et réclame ses Tests quotidiens de Résistance (un champ par jour franchi).
+    const dailyBox = node('div', null, 'campaign-time-daily'); dailyBox.hidden = true;
+    let dailyChecks = [];
+    const showDailyChecks = checks => {
+      dailyChecks = checks; dailyBox.replaceChildren(); dailyBox.hidden = !checks.length;
+      for (const [index, check] of checks.entries()) {
+        const patient = (savedState.combat?.participants || []).find(row => row.id === check.participantId)?.name || check.participantId;
+        const label = node('label', `${patient} · Résistance (+2 DR), jour ${check.day}${check.conditional ? ' (si non infecté avant)' : ''}`, 'campaign-time-field');
+        const roll = node('input'); roll.type = 'number'; roll.min = '1'; roll.max = '100'; roll.step = '1'; roll.dataset.dailyCheck = String(index);
+        roll.setAttribute('aria-label', label.textContent); label.append(roll); dailyBox.append(label);
+      }
+    };
     const mornings=node('div',null,'campaign-time-mornings'),morningText=node('p','', 'workspace-muted'),morningLabel=node('label','Traiter tous les matins franchis'),morningConfirm=node('input');morningConfirm.type='checkbox';morningConfirm.setAttribute('aria-label','Traiter tous les matins franchis');morningLabel.prepend(morningConfirm);mornings.append(morningText,morningLabel);mornings.hidden=true;
     const controls = node('div', null, 'row');
     const confirm = node('button', 'Avancer le temps'); confirm.type = 'submit';
     const cancel = node('button', 'Annuler', 'ghost'); cancel.type = 'button'; controls.append(confirm, cancel);
-    form.append(heading, current, durationRow, reasonLabel, preview, scope, mornings, error, controls);
+    form.append(heading, current, durationRow, reasonLabel, preview, scope, mornings, dailyBox, error, controls);
     dialog.append(form); document.body.append(dialog);
     let busy = false, outcome = null;
     const elapsedSeconds = () => {
@@ -78,8 +90,12 @@ export function openCampaignTimeDialog({ Store, returnFocus } = {}) {
         }
         busy = true; confirm.disabled = true; cancel.disabled = true; error.hidden = true;
         const command={seconds,reason:reason.value.trim(),clockBaseRevision:clock.revision},summary=getWrathMorningAdvanceSummary(savedState,{seconds});if(summary.requiresConfirmation){if(!morningConfirm.checked)throw userError('Confirmez explicitement le traitement de tous les matins franchis.');command.eventId='clock-v1:'+clock.revision+':morning:'+crypto.randomUUID();authorizeWrathMorningAdvance(savedState,{...command,confirmedAll:true});}
+        const dailyTests = dailyChecks.map((check, index) => ({ incidentId: check.incidentId, day: check.day, roll: Number(dailyBox.querySelector(`[data-daily-check="${index}"]`)?.value) })).filter(row => Number.isInteger(row.roll) && row.roll >= 1 && row.roll <= 100);
+        if (dailyTests.length) command.dailyTests = dailyTests;
         const result = await Store.advanceCampaignTime(command, { baseRevision });
         if (result === false || result?.ok === false) {
+          const aftermathChecks = (result?.needsInput || []).find(item => item.code === 'aftermath-daily-tests')?.requiredDailyChecks;
+          if (aftermathChecks?.length) { showDailyChecks(aftermathChecks); throw userError('Blessure non bandée : saisissez les Tests quotidiens de Résistance (d100) puis avancez à nouveau ; le temps n’a pas encore avancé.'); }
           const details = (result?.needsInput || []).map(item => [item.path, item.label || item.reason || item.message || item.field].filter(Boolean).join(' : ')).filter(Boolean);
           const fallback = ['stale', 'conflict'].includes(result?.status)
             ? 'La partie a changé. Fermez cette fenêtre puis rouvrez-la.'

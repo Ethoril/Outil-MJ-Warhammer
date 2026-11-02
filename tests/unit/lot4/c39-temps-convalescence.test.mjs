@@ -53,3 +53,51 @@ test('C39 : « Jours à avancer » (Suites de combat) est un raccourci : l’hor
   assert.equal(store.getAftermathState().calendar.currentDay, 2, 'précondition : calendrier de convalescence avancé');
   assert.equal(clockSeconds(store), 2 * DAY, 'horloge de campagne restée à 0 : deux temps distincts');
 });
+
+// Décision du MJ (02/11) : un blessé non bandé arrête l'avancement et demande ses Tests quotidiens avant de continuer.
+async function openWoundSetup() {
+  const store = createStore({ storage: null, persistence: memory() });
+  await store.ready;
+  await store.loadFromJSON({ schemaVersion: 3, reserve: [], combat: { round: 0, currentActorId: null, order: [], participants: [clone(patient)] }, log: [], diceLines: [], extensions: { v5: {} } });
+  const reg = await store.registerAftermathIncident({ operationId: 'reg', participantId: 'patient', cause: 'combat', bandaged: false });
+  assert.notEqual(reg?.status, 'refused', JSON.stringify(reg));
+  return store;
+}
+
+test('C39 : blessé non bandé, l’avance du temps s’arrête et réclame les Tests quotidiens, sans avancement partiel', async () => {
+  const store = await openWoundSetup();
+  const stopped = await store.advanceCampaignTime({ seconds: 2 * DAY, reason: 'Deux jours' });
+  assert.equal(stopped.ok, false);
+  assert.equal(stopped.status, 'requires-input');
+  const need = stopped.needsInput.find(row => row.code === 'aftermath-daily-tests');
+  assert.ok(need, JSON.stringify(stopped.needsInput));
+  assert.deepEqual(need.requiredDailyChecks.map(row => row.day), [0, 1], 'un Test par jour franchi');
+  assert.equal(clockSeconds(store), 0, 'l’horloge n’a pas avancé');
+  assert.equal(store.getAftermathState().calendar.currentDay, 0, 'le calendrier non plus');
+});
+
+test('C39 : une fois les Tests quotidiens saisis, le temps avance et le calendrier suit ; un seul ↶ rend les deux', async () => {
+  const store = await openWoundSetup();
+  const done = await store.advanceCampaignTime({ seconds: 2 * DAY, reason: 'Deux jours', dailyTests: [{ incidentId: 'incident:reg', day: 0, roll: 10 }, { incidentId: 'incident:reg', day: 1, roll: 10 }] });
+  assert.equal(done.ok, true, JSON.stringify(done));
+  assert.equal(clockSeconds(store), 2 * DAY);
+  assert.equal(store.getAftermathState().calendar.currentDay, 2);
+  assert.equal(store.getAftermathState().incidents[0].dailyChecks.length, 2, 'les deux Tests sont au registre');
+  await store.undo();
+  assert.equal(clockSeconds(store), 0, 'annulation : horloge');
+  assert.equal(store.getAftermathState().calendar.currentDay, 0, 'annulation : calendrier');
+  assert.equal(store.getAftermathState().incidents[0].dailyChecks.length, 0, 'annulation : Tests quotidiens');
+});
+
+test('C39 : « Jours à avancer » avec un blessé non bandé réclame toujours les Tests, puis avance horloge et calendrier ensemble', async () => {
+  const store = await openWoundSetup();
+  const refused = await store.advanceAftermathCalendar({ operationId: 'adv1', days: 1, dailyTests: [] });
+  assert.equal(refused.receipt.status, 'refused');
+  assert.equal(clockSeconds(store), 0);
+  const applied = await store.advanceAftermathCalendar({ operationId: 'adv2', days: 1, dailyTests: [{ incidentId: 'incident:reg', day: 0, roll: 10 }] });
+  assert.equal(applied.receipt.status, 'applied', JSON.stringify(applied.receipt));
+  assert.equal(clockSeconds(store), DAY);
+  await store.undo();
+  assert.equal(clockSeconds(store), 0);
+  assert.equal(store.getAftermathState().calendar.currentDay, 0);
+});

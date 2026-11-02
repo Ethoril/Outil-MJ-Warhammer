@@ -1021,6 +1021,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     }
   }
   unresolved.push(...criticalReady);
+  const criticalReadyPushed = criticalReady.length;
   const magicHitStates = hit && attackType(action.type) && target && !replacement ? magicWeaponHitConditions(actor, action, nature.ranged, damage?.finalDamage || 0).map(row => ({ id: `${normalized.resolutionId}:magic-weapon:${row.name}`, key: row.name.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase(), name: row.name, level: 1, source: { kind: 'magic-weapon', spellName: row.spellName } })) : [];
   // Attaque naturelle : états de la touche (Langue, Constricteur, Toile, Souffle) selon le plan du Trait ; rappels du plan joints au détail.
   const naturalPlan = naturalPlanOf(actor, normalized.v5), naturalReminders = [], { actorSize: naturalActorSize, targetSize: naturalTargetSize } = naturalSizes(normalized.v5);
@@ -1502,7 +1503,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     }
   }
 
-  unresolved.push(...criticalReady);
+  unresolved.push(...criticalReady.slice(criticalReadyPushed));
   if(actorPlan.crewSkill){
     talentActionChanges.push({participantId:actor.id,removeIds:[actorPlan.crewSkill.id]});
     supplementaryTalentPlans.push({proposals:[{op:'substituteCrewSkill',origins:[actorPlan.crewSkill.source]}]});

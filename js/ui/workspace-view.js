@@ -34,7 +34,7 @@ import { buildParticipantReminders } from '../core/reminders.js';
 import { renderResolutionPanel, actionKey, minusSigned, defenseOptions, defaultDefenseValue } from './resolution-panel.js';
 import { initSidePanel } from './side-panel.js';
 import { rollMisfortuneDie } from './resolution-panel/dom.js';
-import { getSpellContract, getAllSpellContracts } from '../core/v5-spell-contracts.js';
+import { getSpellContract, getAllSpellContracts, divineCastingModifiers } from '../core/v5-spell-contracts.js';
 import { magicGrantedActions, beastFormActions } from '../core/v5-magic-combat.js';
 import { transformationOvercastCost } from '../core/v5-magic-arbitrations.js';
 import { effectiveSupplementalEncumbrance } from '../core/v5-supplemental-equipment.js';
@@ -1586,6 +1586,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
               actorId: context.actor.id,
               roll: Number(rollRaw),
               slModifier: draft.v5SlModifier || 0,
+              slModifiers: divineCastingModifiers(Store.listParticipants().filter(row => targetIds.includes(row.id))),
               ...(draft.magicCriticalChoice ? { criticalChoice: draft.magicCriticalChoice } : {}),
               miscastRoll: draft.magicMiscastRoll,
               ...(draft.magicMajorRoll ? { majorRoll: draft.magicMajorRoll } : {}),
@@ -2551,9 +2552,13 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     const panel = refs.root.querySelector(`[data-secondary-panel="${event.detail?.panel}"]`);
     if (!panel) return;
     event.detail.opened = true;
+    if (event.detail.panel === 'prayer') divinePanel.show();
     if (panel.tagName === 'DETAILS') panel.open = true;
     panel.scrollIntoView({ block: 'start', behavior: 'auto' });
-    panel.querySelector('summary, input, select, button')?.focus({ preventScroll: true });
+    // Prière : on amène directement le jet de Prière, sans repasser par Pénitences et Péchés.
+    const prayerRoll = event.detail.panel === 'prayer' && panel.querySelector('[data-focus-key="divine-roll"]');
+    prayerRoll?.scrollIntoView({ block: 'center', behavior: 'auto' });
+    (prayerRoll || panel.querySelector('summary, input, select, button'))?.focus({ preventScroll: true });
   });
 
   refs.root.addEventListener('workspace-circumstances-toggle', event => {
