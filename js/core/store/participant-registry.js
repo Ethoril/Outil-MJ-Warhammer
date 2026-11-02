@@ -12,11 +12,11 @@ export function registerNewV5Participants(before, next) {
   const oldIds = new Set((before.combat?.participants || []).filter(participant => participant.zone === 'active').map(participant => participant.id));
   if (!(next.combat?.participants || []).some(participant => participant.zone === 'active' && !oldIds.has(participant.id))) return;
   if(before.extensions?.v5?.combatInitiativeInitialized){
-    // Une invocation qui apparaît après le tirage du Round 0 est un PNJ nouveau :
-    // son initiative doit être tirée immédiatement (d10 + Bonus d'Initiative),
-    // puis il rejoint l'ordre au rang correspondant. Les arrivées ordinaires
+    // Une invocation qui apparaît après le tirage, avant ou pendant un Round, est un PNJ nouveau :
+    // son initiative est tirée immédiatement (d10 + Bonus d'Initiative), puis il rejoint l'ordre à son
+    // rang (un rang déjà dépassé joue au Round suivant, comme un renfort, C27). Les arrivées ordinaires
     // conservent leur comportement de renfort.
-    if (before.combat?.round === 0) {
+    {
       for (const participant of next.combat.participants || []) {
         if (participant.zone !== 'active' || oldIds.has(participant.id)) continue;
         const v5 = participant.extensions?.v5 || {};
