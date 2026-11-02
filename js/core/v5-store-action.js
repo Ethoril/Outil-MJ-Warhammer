@@ -281,7 +281,7 @@ export function annotateV5StoreActionPreview(preview, input) {
   for (const decision of Object.values(decisions)) for (const option of decision.options || []) option.summary.costs = [...summaries];
   return { ...preview, decisions, actionCostPlan: clone(input.actionCostPlan),
     unresolved: [...(preview.unresolved || []), ...input.actionCostPlan.unresolved.map(item => item.reason), ...(input.actionCostPlan.duplicate ? ['Action déjà confirmée.'] : [])],
-    actionCosts: { paid: clone(input.actionCostPlan.paid), waived: clone(input.actionCostPlan.waived), usages: clone(input.actionCostPlan.usages), ready: input.actionCostPlan.ready } };
+    actionCosts: { actorId: input.actionCostPlan.actorId, paid: clone(input.actionCostPlan.paid), balances: clone(input.actionCostPlan.balances || []), waived: clone(input.actionCostPlan.waived), usages: clone(input.actionCostPlan.usages), ready: input.actionCostPlan.ready } };
 }
 export function commitV5StoreTalentUsages(preview, result, initial) {
   if (result.status !== 'applied') return result;

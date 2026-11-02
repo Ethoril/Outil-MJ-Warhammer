@@ -2495,7 +2495,7 @@
         {
           "id": "magic:0",
           "mode": "assisted",
-          "text": "Source canonique du Vent et distance réelle saisie, au plus 8 yards : +1 DR à un sort déjà réussi, sans cumul entre auras.",
+          "text": "Source canonique du Vent et distance réelle saisie, au plus 8 mètres : +1 DR à un sort déjà réussi, sans cumul entre auras.",
           "magicRegistry": true
         },
         {
@@ -5609,7 +5609,7 @@
         {
           "id": "tri:0",
           "mode": "reminder",
-          "text": "Vision nocturne ajoutée aux portées sensorielles à 20 yards ; conditions de lumière à apprécier par le MJ.",
+          "text": "Vision nocturne ajoutée aux portées sensorielles à 20 mètres ; conditions de lumière à apprécier par le MJ.",
           "scope": "narrative"
         }
       ]

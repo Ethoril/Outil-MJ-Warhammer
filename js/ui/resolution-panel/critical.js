@@ -107,7 +107,7 @@ export function renderCritical(preview, draft, handlers, defending = false) {
       error: errors[defending ? 'defenderLocation' : 'location'] || '', handlers, disabled: draft.busy,
       critical: defending ? 'defenderLocation' : 'location' }));
     if (!part.location) return;
-    block.appendChild(node('p', 'workspace-result-line', `${part.locationRoll} → ${part.location.name}`));
+    block.appendChild(node('p', 'workspace-result-line', part.locationRoll == null ? `Localisation choisie : ${part.location.name}` : `${part.locationRoll} → ${part.location.name}`));
     block.appendChild(rollField({ field: defending ? 'defender-critical-effect' : kind === 'first' ? 'critical-effect' : 'critical-second',
       label: part.bonus ? `Gravité (d100 + ${part.bonus})` : 'Gravité (d100)',
       value: defending ? kind==='first'?draft.defenderCriticalEffectRoll:draft.defenderCriticalSecondRoll : kind === 'first' ? draft.criticalEffectRoll : draft.criticalSecondRoll,

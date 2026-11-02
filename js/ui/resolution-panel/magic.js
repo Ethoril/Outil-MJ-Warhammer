@@ -6,6 +6,16 @@ import { renderSpellOptions } from '../v5-spell-options.js';
 import { ARCANE_ARMOR_LOCATIONS } from '../../core/v5-magic-arcane-unforgiving.js';
 import { DURATION_UNIT_LABELS, parseSpellDuration } from '../../core/v5-magic-effects.js';
 import { d100 } from '../../core/dice.js';
+// Dé manquant de l'incident (cœur) → champ du panneau qui le porte.
+export const MISCAST_DIE_FIELDS = Object.freeze({ duration: 'magicSecondaryDurationRoll', strength: 'magicSecondaryDurationRoll', damage: 'magicSecondaryDamageRoll', distance: 'magicSecondaryDistanceRoll' });
+// Recette G-U1-2 : le dé secondaire réclamé par l'incident est lancé avec les dés des PNJ et désigné par « À saisir ».
+function tagMiscastDie(input, key, incident) {
+  const die = Object.keys(MISCAST_DIE_FIELDS).find(name => MISCAST_DIE_FIELDS[name] === key && incident?.missingSecondaryDice?.includes(name));
+  if (!die) return;
+  input.dataset.blockingField = 'magic-secondary';
+  input.dataset.npcRollKey = key; input.dataset.npcRollOwner = 'actor';
+  input.dataset.npcRollField = incident.missingSecondaryDiceKinds?.[die] || 'd10';
+}
 export function missingMagicDice(preview) {
   if (!preview) return false;
   return [preview.missing, preview.spellPreview?.missing, preview.castPreview?.missing, preview.castPreview?.miscast?.missingSecondaryDice, preview.miscast?.missingSecondaryDice]
@@ -72,6 +82,7 @@ export function renderV5MagicContext({ actor, participants = [], target, type, d
     if (key === 'magicFumbleLossRoll') input.dataset.blockingField = 'magic-loss';
     const incident = draft.preview?.castPreview?.miscast || draft.preview?.miscast;
     if (['magicMiscastRoll', 'magicMajorRoll'].includes(key) || key === 'magicSecondaryDistanceRoll' && isMiscastDistanceD100(incident?.table, incident?.entry?.max)) { input.dataset.npcRollKey = key; input.dataset.npcRollOwner = 'actor'; }
+    tagMiscastDie(input, key, incident);
     input.addEventListener('input', () => handlers.input(key, input.value === '' ? null : Number(input.value)));
     label.appendChild(input);
     if (['magicMiscastRoll', 'magicMajorRoll'].includes(key)) {
@@ -213,6 +224,7 @@ export function renderV5MagicContext({ actor, participants = [], target, type, d
       inp.dataset.focusKey = key;
       const incident = draft.preview?.castPreview?.miscast || draft.preview?.miscast;
       if (['magicMiscastRoll', 'magicMajorRoll'].includes(key) || key === 'magicSecondaryDistanceRoll' && isMiscastDistanceD100(incident?.table, incident?.entry?.max)) { inp.dataset.npcRollKey = key; inp.dataset.npcRollOwner = 'actor'; }
+      tagMiscastDie(inp, key, incident);
       inp.addEventListener('input', () => handlers.input(key, inp.value === '' ? null : Number(inp.value)));
       wrap.appendChild(inp);
       if (['magicMiscastRoll', 'magicMajorRoll'].includes(key)) {

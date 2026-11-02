@@ -55,7 +55,7 @@ export function missingMagicDiceMessage(missing = []) {
  * Parse et structure les effets secondaires et dés tirés pour chaque incident.
  * Chaque dé absent ou hors bornes est ajouté à `missing` ; sa valeur reste null.
  */
-function buildMiscastDetails({ tableKey, entry, roll, secondaryRolls = {}, bfm = 0, isHighMagic = false, missing = [] }) {
+function buildMiscastDetails({ tableKey, entry, roll, secondaryRolls = {}, bfm = 0, isHighMagic = false, missing = [], missingKinds = {} }) {
   const sec = {...secondaryRolls,duration:secondaryRolls.duration ?? secondaryRolls.duration1d10,strength:secondaryRolls.strength ?? secondaryRolls.conditions1d10,damage:secondaryRolls.damage ?? secondaryRolls.damage1d10,distance:secondaryRolls.distance ?? secondaryRolls.distance1d10};
   const die = (keys, kind) => {
     for (const key of [].concat(keys)) {
@@ -63,6 +63,7 @@ function buildMiscastDetails({ tableKey, entry, roll, secondaryRolls = {}, bfm =
       if (value !== null) return value;
     }
     missing.push([].concat(keys)[0]);
+    missingKinds[[].concat(keys)[0]] = kind;
     return null;
   };
   const max = entry.max;
@@ -524,7 +525,7 @@ export function resolveMiscast(options = {}) {
   const instinctiveDiction = Boolean(options.instinctiveDiction) && !mitigationRefused;
   const baseModifier = Number(options.modifier) || 0;
   const secondaryRolls = secondaryRollsInput;
-  const missing = [];
+  const missing = [], missingKinds = {};
 
   // 1. Détermination de la sévérité effective
   // Influence corruptrice convertit tout jet Mineur en Majeur (le lanceur n'est pas sa propre influence)
@@ -613,7 +614,8 @@ export function resolveMiscast(options = {}) {
     secondaryRolls,
     bfm,
     isHighMagic,
-    missing
+    missing,
+    missingKinds
   });
   // V5 p. 239 : Drain de puissance vise le Talent employé pour lancer ; sans sort lancé (Focalisation), le MJ le désigne.
   if (details.type === 'talent-disabled') {
@@ -641,6 +643,7 @@ export function resolveMiscast(options = {}) {
   return {
     ...(details || {}),
     missingSecondaryDice: missing,
+    missingSecondaryDiceKinds: missingKinds,
     ready: missing.length === 0,
     table: finalTable,
     initialSeverity,

@@ -1,6 +1,7 @@
 import { CRIT_DATA } from '../data/crits.js';
 
 export const d100 = () => Math.floor(Math.random() * 100) + 1;
+export const d10 = () => Math.floor(Math.random() * 10) + 1;
 
 export const isDouble = (n) => n === 100 || (n <= 99 && n % 11 === 0);
 

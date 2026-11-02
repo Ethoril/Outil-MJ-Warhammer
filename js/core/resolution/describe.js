@@ -32,7 +32,7 @@ export function describeCritical(detail) {
   if (!isRecord(first) || !isRecord(first.location) || first.locationRoll === null || first.locationRoll === undefined) {
     return [detail.actionType && detail.actionType !== 'attack' ? 'Réussite critique' : 'Coup critique'];
   }
-  const parts = [`Critique : localisation ${first.locationRoll} → ${first.location.name} · ${describeSeverity(first)}`];
+  const parts = [`Critique : localisation ${first.locationRoll == null ? first.location.name : `${first.locationRoll} → ${first.location.name}`} · ${describeSeverity(first)}`];
   const second = critical.second;
   if (isRecord(second) && isRecord(second.location)) {
     parts.push(`Critique d’excédent : ${second.location.name} · ${describeSeverity(second)}`);

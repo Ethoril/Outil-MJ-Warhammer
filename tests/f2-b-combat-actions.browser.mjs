@@ -284,7 +284,7 @@ try {
   await combat.getByRole('textbox', { name: /Jet de défense/ }).fill('80');
   await combat.getByRole('button', { name: 'Calculer' }).click();
   await combat.getByRole('radio', { name: /Conserver 20/ }).check();
-  assert.match(await combat.locator('.workspace-result-live').innerText(), /Coût proposé avant le jet : 1 Élan/);
+  assert.match(await combat.locator('.workspace-result-live').innerText(), /Coût proposé avant le jet : .+ paie 1 Élan/);
   await combat.locator('.workspace-resolution-footer').getByRole('button', { name: /Appliquer .* à Garde/ }).click();
   const secondWeaponState = await page.evaluate(async () => { const { Store } = await import('/Outil-MJ-Warhammer/js/main.js'); return JSON.parse(Store.getFullJSON()); });
   assert.equal(secondWeaponState.extensions.v5.actionLedger.quotaUsage.some(row => row.quotaId === 'combat:base-second-weapon' && row.used === 1), true);

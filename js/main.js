@@ -37,6 +37,10 @@ import { normalizeEffects, normalizeState } from './core/effects.js';
 import { previewHpLoss, inferActionType } from './core/resolution.js';
 import { initCombatBanner } from './ui/combat-banner.js';
 import { openCampaignTimeDialog } from './ui/v5-campaign-time-dialog.js';
+// Libellés des saisies d'Initiative manquantes (recette G-INI-2 : plus d'identifiants internes).
+const INITIATIVE_INPUT_LABELS = Object.freeze({ characteristic: 'Initiative', die: 'd10', combatReflexesDice: 'deux d10 du Combat instinctif',
+  combatReflexesChoice: 'choix du Combat instinctif', tieChoice: 'départage de l’égalité', tieOrder: 'ordre de l’égalité',
+  initiatorRoll: 'jet du départage', opponentRoll: 'jet de l’adversaire au départage', surprisedCamp: 'camp surpris' });
 
 // Indicateur unique de la barre du haut : il résume les deux statuts détaillés
 // (#local-status, #sync-status), qui restent lisibles dans la section « État » du menu.
@@ -570,7 +574,11 @@ function openCombatInitiativeDialog({ staging = null, startCombat = false, title
         }
         status.textContent = !active.length ? 'Aucun combattant actif : passez-les en Actif dans la rencontre' : state.preview.ready
           ? `Ordre calculé : ${state.preview.order.map(id => active.find(row => row.id === id)?.name || id).join(' → ')}`
-          : `À compléter : ${state.preview.needsInput.map(item => item.field).join(', ')}`;
+          : `À compléter : ${[...new Set(state.preview.needsInput.map(item => {
+            const who = active.find(row => row.id === item.participantId)?.name;
+            const label = INITIATIVE_INPUT_LABELS[item.field] || item.field;
+            return who ? `${label} (${who})` : label;
+          }))].join(', ')}`;
       }
       calculate.addEventListener('click', () => { try { recalculate(); } catch (error) { status.textContent = error.message; } });
       apply.addEventListener('click', async () => {
@@ -1776,11 +1784,7 @@ on(DOM.combat.btnNextTurn, 'click', advanceTurn);
 on(DOM.combat.btnReset, 'click', () => { DOM.combat.results.replaceChildren(); });
 if (DOM.combat.btnEndCombat) {
   on(DOM.combat.btnEndCombat, 'click', () => {
-    const scene = Store.getActiveScene?.();
-    if (scene?.status === 'active' || scene?.status === 'suspended') {
-      openClosureView();
-      return;
-    }
+    // La vue de clôture a disparu en 3.11.0 : ce bouton masqué ne fait plus que réinitialiser (recette G-BASE-8).
     if (confirm('Retirer tous les combattants et remettre le round à zéro ?')) {
       Store.resetCombat();
       DOM.combat.results?.replaceChildren();

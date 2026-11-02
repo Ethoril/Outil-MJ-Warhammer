@@ -21,7 +21,7 @@ import { hasMomentum, inferV5Kind } from '../core/v5-combat-rules.js';
 import { withoutOutnumberContext } from '../core/outnumbering.js';
 import { equipmentAttackContext, weaponSkillGroupInfo } from '../core/equipment.js';
 import { v5StoreActionClock } from '../core/v5-store-action.js';
-import { d100 } from '../core/dice.js';
+import { d100, d10 } from '../core/dice.js';
 import { inferActionType, previewHpLoss, ResolutionError } from '../core/resolution.js';
 import { userMessage, userError, contextMessage, refusalError } from './messages.js';
 import { describeV5ReloadState, initialV5ReloadState, V5_RELOAD_REASON_LABELS } from '../core/v5-reloading.js';
@@ -1324,6 +1324,9 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
               facts[roll.property] = d100();
               draft.magicSpellFacts = facts;
             }
+          } else if (['magicSecondaryDurationRoll', 'magicSecondaryDamageRoll', 'magicSecondaryDistanceRoll'].includes(roll.key) && ['d10', '2d10', 'd100'].includes(roll.property)) {
+            // Dé secondaire réclamé par l'incident ; sa nature (1d10, 2d10, 1d100) vient du moteur.
+            if (!String(draft[roll.key] ?? '').trim()) draft[roll.key] = roll.property === 'd100' ? d100() : roll.property === '2d10' ? d10() + d10() : d10();
           } else if (['magicExtraRoll1', 'magicExtraRoll2'].includes(roll.key) && !String(draft[roll.key] ?? '').trim()) {
             draft[roll.key] = rollMisfortuneDie(d100);
           } else if (['magicMiscastRoll', 'magicMajorRoll', 'magicResistanceRoll', 'magicSecondaryDistanceRoll', 'magicExtraDistance1', 'magicExtraDistance2', 'magicMiscastRoll2', 'magicBurnoutRoll', 'magicDispelRoll', 'magicMeditationRoll', 'magicRuneKnowledgeRoll', 'magicCadaiTestRoll', 'magicCadaiMiscastRoll', 'magicCadaiBurnoutRoll', 'magicCorruptionInitialRoll', 'magicCadaiCorruptionRoll'].includes(roll.key) && !String(draft[roll.key] ?? '').trim()) {

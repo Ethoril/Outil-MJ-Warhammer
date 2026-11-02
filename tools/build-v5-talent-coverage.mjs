@@ -34,7 +34,7 @@ const items=snapshot.talents.entries.map(source=>{
      'talent-large': 'La synchronisation double les Blessures de l’Ogre, Dur à cuire compris ; les transformations recalculent selon leur taille. La taille elle-même reste importée.',
      'talent-small': 'La synchronisation calcule 2×BE + BFM pour Gnome et Skink, avec Dur à cuire ; les transformations utilisent leur propre formule de taille. Le reste de Petit reste le homebrew local.',
      'talent-second-sight': 'Perception magique en rappel ; la perte temporaire par incident est suivie et certains sorts accordent ou modifient Seconde vue.',
-     'talent-night-vision': 'Vision nocturne ajoutée aux portées sensorielles à 20 yards ; conditions de lumière à apprécier par le MJ.'
+     'talent-night-vision': 'Vision nocturne ajoutée aux portées sensorielles à 20 mètres ; conditions de lumière à apprécier par le MJ.'
    };
    clauses.push({id:'tri:'+index,mode:source.id==='talent-master-and-commander'?'assisted':mode,text:notes[source.id] || clause.text,scope:clause.scope});
  }

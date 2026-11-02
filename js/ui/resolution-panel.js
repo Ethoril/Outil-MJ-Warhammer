@@ -57,6 +57,8 @@ export function applicationBlockingReasons(preview, draft, canApply, preflight =
     const invalid = preview.v5MagicKind === 'cast' && (preview.spellPreview?.fingerprintCheck?.valid === false || preview.spellPreview?.valid === false || (preview.castPreview?.spellSuccess && preview.spellPreview?.ready === false));
     const incident = preview.castPreview?.miscast || preview.miscast;
     add(incident && incident.initialRoll == null && !incident.cancelled, 'Jet d’incident magique à saisir (d100)', 'magic-miscast');
+    const secondaryDice = (incident?.missingSecondaryDice || []).filter(die => MISCAST_DIE_FIELDS[die]);
+    add(secondaryDice.length > 0, missingMagicDiceMessage(secondaryDice), 'magic-secondary');
     add(invalid, 'Vérifiez les éléments requis pour le sort');
     const magicMissing = [preview.missing, preview.castPreview?.missing].flat().filter(Boolean);
     const magicFocus = magicMissing.includes('lossRoll') ? 'magic-loss' : magicMissing.includes('miscastRoll') ? 'magic-miscast' : preview.spellPreview?.attributeDice ? 'magic-attribute-dice' : undefined;
@@ -64,7 +66,7 @@ export function applicationBlockingReasons(preview, draft, canApply, preflight =
     return finish();
   }
   add(preview.choiceRequired, 'Choisissez le résultat à appliquer');
-  for (const text of preview.unresolved || []) reasons.push({ text, focus: /^Maladresse du défenseur/.test(text) ? 'defender-fumble-roll' : /^Maladresse de combat : saisissez/.test(text) ? 'fumble-roll' : /Calme.*attaquant/i.test(text) ? 'protection-calm' : /Tir engagé.*Test de défense/i.test(text) ? 'engaged-defense' : /^Recharge : saisir les munitions/.test(text) ? 'reload-ammo' : /^Taille : saisir la pièce/.test(text) ? 'hack-piece' : /^Dispersion : bande/.test(text) ? 'spread-band' : /^Dispersion : (?:cibles|inclure)/.test(text) ? 'spread-targets' : /^Explosion : (?:cibles|inclure)/.test(text) ? 'explosion-targets' : /jet de défense/i.test(text) ? 'defense-roll' : undefined, ...(/^Bénédiction de Protection :/.test(text) ? { ignorable: 'divine-protection' } : {}) });
+  for (const text of preview.unresolved || []) reasons.push({ text, focus: /^Maladresse du défenseur/.test(text) ? 'defender-fumble-roll' : /^Maladresse de combat : saisissez/.test(text) ? 'fumble-roll' : /Calme.*attaquant/i.test(text) ? 'protection-calm' : /Tir engagé.*Test de défense/i.test(text) ? 'engaged-defense' : /^Recharge : saisir les munitions/.test(text) ? 'reload-ammo' : /^Taille : saisir la pièce/.test(text) ? 'hack-piece' : /^Dispersion : bande/.test(text) ? 'spread-band' : /^Dispersion : (?:cibles|inclure)/.test(text) ? 'spread-targets' : /^Explosion : (?:cibles|inclure)/.test(text) ? 'explosion-targets' : /^Confirmer la règle autorisant cette défense contre un tir/.test(text) ? 'ranged-opposition' : /jet de défense/i.test(text) ? 'defense-roll' : undefined, ...(/^Bénédiction de Protection :/.test(text) ? { ignorable: 'divine-protection' } : {}) });
   const criticals = [preview.critical?.details, preview.critical?.second, preview.defenderCritical?.details];
   add(criticals.some(row => row?.pending), 'Complétez le jet de critique', 'critical-pending');
   add(criticals.some(row => row?.needsAlternative), 'Choisissez une alternative pour le critique', 'critical-alternative');
@@ -92,7 +94,8 @@ export const ACTION_TYPES = Object.freeze([
 export { minusSigned, signed } from './resolution-panel/dom.js';
 import { ROLL_LABELS, renderResult, renderComparison, renderDivineSocialFacts } from './resolution-panel/result.js';
 import { node, button, chip, rubric, outcomePill, signed } from './resolution-panel/dom.js';
-import { renderV5MagicContext } from './resolution-panel/magic.js';
+import { renderV5MagicContext, MISCAST_DIE_FIELDS } from './resolution-panel/magic.js';
+import { missingMagicDiceMessage } from '../core/v5-magic-miscasts.js';
 import { rollField, renderElapsedTime } from './resolution-panel/critical.js';
 import { circumstanceGroup, countActiveCircumstances, circumstanceControls, emptyNpcRolls, renderConfirmationButtons } from './resolution-panel/dom.js';
 
@@ -1127,6 +1130,7 @@ export function renderResolutionPanel(options) {
       ? (role === 'defender' ? 'defense' : circumstanceGroup(`context:${key}`)) : 'other';
     if (group === 'other') container.appendChild(caption);
     else fieldGroups[group].content.appendChild(caption);
+    return select;
   };
   const choiceField = (container, key, label, options) => {
     const current = draft.v5Context || {}, caption = node('label', 'workspace-type', label), select = document.createElement('select');
@@ -1721,7 +1725,7 @@ export function renderResolutionPanel(options) {
     fields.append(wrap);
   }
   if (kind.value === 'ranged' && target) {
-    contextField(fields, 'actor', 'rangedOppositionAllowed', 'Tir opposé par Esquive confirmé par le MJ (tireur à moins de Bonus d’Initiative mètres de la cible, ou bouclier de 2 PA ou plus)');
+    contextField(fields, 'actor', 'rangedOppositionAllowed', 'Tir opposé par Esquive confirmé par le MJ (tireur à moins de Bonus d’Initiative mètres de la cible, ou bouclier de 2 PA ou plus)').dataset.blockingField = 'ranged-opposition';
     contextField(fields, 'actor', 'pointBlank', 'Tir à bout portant');
   }
   if (type === 'attack' && target) contextField(fields, 'actor', 'targetHelpless', 'Cible sans défense : situation vérifiée par le MJ');

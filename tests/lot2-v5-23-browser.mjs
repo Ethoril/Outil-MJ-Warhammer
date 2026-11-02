@@ -99,7 +99,7 @@ try {
   await panel(p).getByRole('checkbox',{name:'Attaque supplémentaire : payer 1 Élan (une fois par Tour)',exact:true}).check();
   await enterRolls(p,61,73);
   await expect(panel(p).locator('input[name="v5-choice-actor"]')).toHaveCount(0);
-  await expect(panel(p)).toContainText('Coût proposé avant le jet : 1 Élan');
+  await expect(panel(p)).toContainText(/Coût proposé avant le jet : .+ paie 1 Élan/);
   await expect(applyButton(p)).toBeEnabled();
   const before=await p.evaluate(()=>window.lot2UI.store.getLocalRevision());
   assert.equal(await participantHP(p,'target'),12,'preview never applies resources/wounds');
@@ -173,7 +173,7 @@ try {
   await expect(panel(r).locator('[data-roll-input="attack"]')).toHaveValue('');
   assert.deepEqual(await r.evaluate(()=>({revision:window.lot2UI.store.getLocalRevision(),random:window.randomDraws})),unchanged,'opening reaction spends nothing and draws no die');
   await defenseCC(r);await enterRolls(r,61,73);await expect(panel(r).locator('input[name="v5-choice-actor"]')).toHaveCount(0);
-  await expect(panel(r)).toContainText('Coût proposé avant le jet : 1 Élan');await expect(applyButton(r)).toBeEnabled();
+  await expect(panel(r)).toContainText(/Coût proposé avant le jet : .+ paie 1 Élan/);await expect(applyButton(r)).toBeEnabled();
   await r.screenshot({path:join(root,'tmp/lot2-ui/assaut-feroce-mobile.png'),fullPage:true});
   await applyButton(r).click();await expect.poll(()=>participantHP(r,'target')).toBe(36);
   const response=await r.evaluate(()=>window.lot2UI.applyResults.at(-1));

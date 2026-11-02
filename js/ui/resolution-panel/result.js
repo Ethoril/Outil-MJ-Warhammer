@@ -12,6 +12,17 @@ import { readDivineRejections } from '../../core/v5-divine-access.js';
 
 export const ROLL_LABELS = Object.freeze({ attack: 'Attaque', test: 'Test', skill: 'Compétence', defense: 'Défense', opposition: 'Opposition', channelling: 'Focalisation', cast: 'Incantation', dispel: 'Dissipation' });
 
+const COST_LABELS = { momentum: 'Élan', fortune: 'Chance', fate: 'Destin', resolve: 'Résolution', resilience: 'Résilience' };
+// Un coût par payeur et par ressource, avec le nom du payeur et son solde (recette G-DES-2).
+function actionCostText(preview, participants) {
+  const { paid, balances = [] } = preview.actionCosts;
+  const rows = balances.length ? balances : paid.map(cost => ({ actorId: cost.actorId || preview.actionCosts.actorId, resource: cost.resource, amount: cost.amount }));
+  return rows.map(row => {
+    const payer = participants.find(entry => entry.id === row.actorId)?.name || (row.actorId === preview.input.actor?.id ? preview.input.actor.name : 'payeur inconnu');
+    const solde = Number.isFinite(row.before) && Number.isFinite(row.after) ? ` (solde ${row.before} → ${row.after})` : '';
+    return `${payer} paie ${row.amount} ${COST_LABELS[row.resource] || row.resource}${solde}`;
+  }).join(', ');
+}
 export function renderResult(preview, target, draft, handlers, participants=[]) {
   if (preview?.v5MagicKind) return renderV5MagicResult(preview, target, draft, handlers);
   const result = node('div', 'workspace-result');
@@ -112,7 +123,7 @@ export function renderResult(preview, target, draft, handlers, participants=[]) 
   if (preview.deathblow?.triggered) result.appendChild(node('p', 'workspace-result-line', `Frappe mortelle : attaque immédiate contre un autre adversaire au contact (au plus ${preview.deathblow.maxChain} ce Tour), jamais deux fois la même créature.`));
   if (effectiveTarget && preview.damage) result.appendChild(node('p', 'workspace-result-line', `${effectiveTarget.name} : ${previewHpLoss(preview)} Blessures proposées · PV ${effectiveTarget.hp} → ${Math.max(0, Number(effectiveTarget.hp) - previewHpLoss(preview))}`));
   if (preview.actionCosts?.paid?.length) result.appendChild(node('p', 'workspace-result-line',
-    'Coût proposé avant le jet : ' + preview.actionCosts.paid.map(cost => cost.resource === 'momentum' ? '1 Élan' : cost.amount + ' ' + cost.resource).join(', ')));
+    'Coût proposé avant le jet : ' + actionCostText(preview, participants)));
   if (preview.damageReplacedByTalent) result.appendChild(node('p', 'workspace-result-line', preview.damageReplacedByTalent.name||'Battement : 0 Blessure ; toutes les conséquences du critique remplacé sont supprimées. Esquive reste possible.'));
   if(preview.defenderDamageReplacedByTalent)result.append(node('p','workspace-result-line',preview.defenderDamageReplacedByTalent.name));
   for(const plan of preview.postActionCosts||[])result.append(node('p','workspace-result-line','Coût après le résultat : '+plan.paid.map(c=>c.amount+' Élan').join(', ')));
@@ -120,7 +131,9 @@ export function renderResult(preview, target, draft, handlers, participants=[]) 
   if (reductions.length) result.appendChild(node('p', 'workspace-result-line', 'Mâchoires d’acier : un Sonné évité, premier usage de cette rencontre.'));
   for (const change of preview.momentum || []) {
     const name = change.participantId === preview.input.actor?.id ? preview.input.actor.name : target?.name;
-    result.appendChild(node('p', 'workspace-result-line', `${name || 'Combattant'} : Élan ${change.before ? 'oui' : 'non'} → ${change.after ? 'oui' : 'non'}`));
+    // L'aperçu part de l'état après paiement : un Élan dépensé pour cette action était présent avant (recette G-ATT-6, G-DEC-5).
+    const paidMomentum = (preview.actionCosts?.paid || []).some(cost => cost.resource === 'momentum' && (cost.actorId || preview.actionCosts.actorId || preview.input.actor?.id) === change.participantId);
+    result.appendChild(node('p', 'workspace-result-line', `${name || 'Combattant'} : Élan ${change.before || paidMomentum ? 'oui' : 'non'} → ${change.after ? 'oui' : 'non'}`));
   }
   for(const reminder of preview.reminders || [])result.appendChild(node('p','workspace-muted',reminder));
   for(const occurrence of preview.weaponConditions?.applied || [])result.appendChild(node('p','workspace-result-line',describeWeaponCondition(occurrence)+' proposé.'));
