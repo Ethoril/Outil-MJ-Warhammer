@@ -2362,7 +2362,7 @@ export function renderResolutionPanel(options) {
     row.initiatorId===target?.id&&row.targetId===actor?.id||row.initiatorId===actor?.id&&row.targetId===target?.id
   );
   const liveLinkedGrapple=validGrapple(linkedGrapple)?linkedGrapple:null;
-  if(['attack','skill','opposition'].includes(type)&&(draft.v5Kind==='melee'||String(action?.attr||'').toUpperCase()==='CC')&&target){
+  if(['attack','skill','opposition'].includes(type)&&(kind.value==='melee'||String(action?.attr||'').toUpperCase()==='CC')&&target){
     const label=node('label','workspace-type','Déclarer une tentative d’empoignade (Bagarre avant le jet)'),check=document.createElement('input');
     check.type='checkbox';
     check.checked=current.grappleDeclared===true;

@@ -309,7 +309,9 @@ export function previewResolution(input) {
     const defenderSkill=normalized.target?.skills?.find(row=>row.id===(normalized.defense?.extensions?.fiche?.skillId||normalized.defense?.v5?.context?.skillId));
     const actorTestName=String(actorSkill?.name||normalized.action?.name||normalized.action?.skill||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
     const defenderName=String(defenderSkill?.name||normalized.defense?.label||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
-    if(!/(force|strength)/.test(actorTestName)||!/(force|strength)/.test(defenderName)){
+    // Un Test de Force est reconnu par sa caractéristique (saisie manuelle « F · 35 ») ou, à défaut, par le nom de la compétence.
+    const actorForce=normalized.action?.attr==='F'||/(force|strength)/.test(actorTestName),defenderForce=normalized.defense?.attr==='F'||/(force|strength)/.test(defenderName);
+    if(!actorForce||!defenderForce){
       result.grapple={status:'blocked',ready:false,unresolved:['Empoignade : les deux Tests opposés de Force sont requis.']};
       result.unresolved.push(...result.grapple.unresolved);
     }else{
