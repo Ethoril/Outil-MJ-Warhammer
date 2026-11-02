@@ -217,7 +217,7 @@ try {
   await combat.getByRole('spinbutton', { name: 'Jet d100 pour désigner le combattant touché' }).press('Tab');
   await combat.getByRole('textbox', { name: 'Attaque (CT 70)' }).fill('28');
   await combat.getByRole('button', { name: 'Calculer' }).click();
-  assert.match(await combat.locator('.workspace-result-live').innerText(), /Tir contre des combattants engagés : déviation vers Allié \(d100 80\)/);
+  assert.match(await combat.locator('.workspace-result-live').innerText(), /Tir dévié vers Allié \(d100 80\), jet 28 retenu/);
   await combat.locator('.workspace-resolution-footer').getByRole('button', { name: /Appliquer .* à Allié/ }).click();
   await page.waitForFunction(async () => {
     const { Store } = await import('/Outil-MJ-Warhammer/js/main.js');

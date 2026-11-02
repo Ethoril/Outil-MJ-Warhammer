@@ -168,22 +168,18 @@ try {
       v5Context:{ targetEngaged:true, engagedTargetIds:['pj','npc2'], engagedTargetRoll:80 } });
     window.__u1.view.render();
   });
-  assert.match(await footer.innerText(), /Tir engagé.*Test de défense/, JSON.stringify(await page.evaluate(() => ({ test:window.__u1.lastPreflight?.test, hit:window.__u1.lastPreflight?.hit, engaged:window.__u1.lastPreflight?.engagedShot }))));
-  await footer.getByRole('button', { name: /Tir engagé.*Test de défense/ }).click();
-  assert.equal(await page.getByLabel('Jet de défense d100 de Bandit', { exact: true }).evaluate(el => document.activeElement === el), true, 'le lien vise la défense engagée concernée');
+  // C28 : le tir dévié touche d'office l'autre combattant engagé, sans Test de défense à saisir.
+  assert.doesNotMatch(await footer.innerText(), /Tir engagé.*Test de défense/);
+  assert.equal(await page.evaluate(() => window.__u1.lastPreflight?.engagedShot?.selectedTargetId), 'npc2');
   await page.evaluate(() => { const draft=window.__u1.view.getViewState().resolution; for(const key of Object.keys(draft))delete draft[key];Object.assign(draft,window.__u1.savedDraft);window.__u1.store.previewResolution=window.__u1.originalPreview;window.__u1.view.render(); });
   await page.getByLabel('Nature du Test', { exact: true }).selectOption('ranged');
   const engaged = page.getByLabel('La cible est engagée au corps à corps (Désavantage au tir)', { exact: true });
   await chooseBoolean(engaged,'true');
   await page.getByLabel('Engagé avec la cible : Bandit', { exact: true }).check();
   await page.getByLabel('Engagé avec la cible : Dagmar', { exact: true }).check();
-  const npcEngaged = page.getByLabel('Jet de défense d100 de Bandit', { exact: true });
-  const pjEngaged = page.getByLabel('Jet de défense d100 de Dagmar', { exact: true });
   await page.locator('[data-roll-input="attack"]').fill('35');
   await bulk.click();
   assert.equal(await page.locator('[data-roll-input="attack"]').inputValue(), '35', 'un jet déjà saisi est conservé');
-  assert.match(await npcEngaged.inputValue(), /^(?:[1-9]|[1-9][0-9]|100)$/);
-  assert.equal(await pjEngaged.inputValue(), '', 'la défense engagée PJ reste vide');
   const selectionRoll = page.getByLabel('Jet d100 pour désigner le combattant touché', { exact: true });
   await selectionRoll.fill('');
   await selectionRoll.dispatchEvent('change');
