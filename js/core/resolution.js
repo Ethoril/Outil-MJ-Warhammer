@@ -436,6 +436,8 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   // Lasso de soie : aucune attaque n'est lancée (L22 p.73), donc aucune maladresse de combat.
   const combatFumbleTableEligible=action.extensions?.v5?.specialProfileAbility!=='cliff-spider-lasso'&&(attackType(action.type)&&!socialTest||qualifiedCombatTest||explicitWeaponTest);
   const combatFailure = previewCombatFailure({ normalized, roll, fumble: combatFumbleTableEligible && !success && fumbleClassification.maladresse ? fumbleClassification : null, context, hit, success, sl });
+  // Raté d'arme à poudre : l'arme ne tire pas, même si l'attaquant gagne l'opposition (jet raté contre une défense pire).
+  if(combatFailure.effects.some(effect=>effect.type==='weapon-misfire'))hit=false;
   let engagedShot=null,engagedUnresolved=[],lethalDeath=null,lethalUnresolved=[];
   if(actorPlan.kind==='ranged'&&context.targetEngaged===true&&context.engagedWithShooter!==true&&actorTest.advantage?.net<0&&actorTest.optionId==='reverse'&&!hit){
     const ordinaryPlan=previewV5Test({score:actorTest.score,roll:normalized.roll,kind:actorTest.kind,slModifiers:actorTest.details.modifiers,advantageSources:actorTest.advantage.advantage,disadvantageSources:actorTest.advantage.disadvantage.filter(row=>row.id!=='target-engaged')}),ordinary=selectV5Test(ordinaryPlan,ordinaryPlan.options[0].id);
