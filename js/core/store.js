@@ -2543,6 +2543,8 @@ function resolvedCorruptionTest(participant, skillId, input) {
       if (!p) return;
       if(zone==='active'&&p.zone!=='active'&&Number(combat.round)===0&&stateExtensions?.v5?.combatInitiativeInitialized===true&&!p.extensions?.v5?.combatInitiative?.initialized)
         throw Object.assign(new Error('Un combattant activé avant le Round 1 doit recevoir son jet d’Initiative dans le dialogue de préparation.'),{code:'COMBAT_INIT_REQUIRED',userFacing:true});
+      // Un capteur (Œil de l’aigle…) reste hors de l’ordre du combat : décision du MJ, il ne rejoint jamais les combattants.
+      if (zone === 'active' && p.extensions?.sensor === true) throw Object.assign(new Error(`${p.name} est un capteur : il reste au banc, hors de l’ordre du combat.`), { code: 'SENSOR_NOT_COMBATANT', userFacing: true });
       if (persistence) return api.executeCommand('move-participant', draft => {
         let participants = (draft.combat?.participants || []).map(item => item.id === id ? { ...item, zone } : item);
         // Au banc, le participant quitte sa monture et libère ses cavaliers (comme updateParticipant).

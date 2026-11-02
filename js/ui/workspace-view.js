@@ -516,7 +516,8 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         enter.dataset.actorId = participant.id;
         enter.disabled = !callbacks.enterParticipant;
         if (!callbacks.enterParticipant) enter.title = 'Action indisponible';
-        row.append(label, enter);
+        // Un capteur (extensions.sensor) reste au banc : pas de « Faire entrer ».
+        if (participant.extensions?.sensor === true) row.append(label); else row.append(label, enter);
         const remove = defeatedParticipantButton(participant, `bench-remove-${participant.id}`);
         if (remove) row.appendChild(remove);
         bench.appendChild(row);
