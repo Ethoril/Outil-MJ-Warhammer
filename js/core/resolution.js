@@ -343,7 +343,7 @@ export function previewResolution(input) {
     const complete = !unknownOther && !option.unresolved.length && !option.mechanicalWarnings.length
       && !option.protection?.manual?.length && !criticals.some(critical => critical.details?.pending || critical.second?.pending)
       && (!option.hit || !option.attack || (option.damageReplacedByTalent || (option.damage && knownHp(normalized.target))));
-    return { certainty: complete ? 'complete' : 'partial', hit: option.hit, test: option.test,
+    return { certainty: complete ? 'complete' : 'partial', hit: option.hit,
       location: option.location?.name || null,
       woundsLost: complete ? Math.min(Math.max(0, Number(normalized.target?.hp) || 0), previewHpLoss(option)) : null,
       importantEffects: criticals.map(critical => critical === option.defenderCritical ? 'Critique défensif sur l’attaquant' : 'Blessure critique sur la cible'),
