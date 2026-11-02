@@ -166,7 +166,7 @@ export function buildV5StoreActionInput(envelope, raw = {}) {
     if(context.repeaterDoubleShot!==true||context.repeaterSecondShot!==true||v5.kind!=='ranged'||![...(supplied.action?.qualities||[]),...(actor.equipment?.find(row=>row.id===supplied.action?.extensions?.fiche?.equipmentId)?.keywords||[])].some(row=>(typeof row==='string'?row:row?.id)==='a-repetition'))throw new TypeError('Tir double À répétition : second tir d’une arme À répétition requis.');
     // Le second tir suit un premier tir du même Tour, avec la même arme, sur la même cible.
     const firstShot=(envelope.extensions?.v5?.standardTurnActions||[]).find(row=>row.actionId===context.primaryResolutionId&&row.actorId===actorId&&row.encounterId===clock.encounterId&&row.turnId===clock.turnId&&row.kind==='action'&&row.actionType==='attack');
-    if(!firstShot||firstShot.weaponId!==supplied.action?.extensions?.fiche?.equipmentId||firstShot.targetId!==targetId)throw new TypeError('Tir double À répétition : un premier tir de ce Tour, avec la même arme et sur la même cible, est requis.');
+    if(!firstShot||(firstShot.weaponId||null)!==(supplied.action?.extensions?.fiche?.equipmentId||null)||firstShot.targetId!==targetId)throw new TypeError('Tir double À répétition : un premier tir de ce Tour, avec la même arme et sur la même cible, est requis.');
     quotas.push({id:'weapon:repeater-double-second-shot',scope:'turn',maximum:1});for(const cost of costs.filter(c=>c.resource==='momentum'))exemptions.push({costId:cost.id,sourceId:'weapon-repeater'});
   }
   if(context.talentAction==='shield-ally'){costs.push({id:'talent:shieldsman:momentum',resource:'momentum',amount:1});quotas.push({id:'talent:shieldsman',scope:'round',maximum:1});}

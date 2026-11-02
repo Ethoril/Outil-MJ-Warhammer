@@ -1461,6 +1461,27 @@ export function renderResolutionPanel(options) {
     contextField(fields,'actor','entanglementTest','Test de Force pour immobiliser avec le Mancatcher');
     if(testWeapon.extensions?.v5?.springLoaded!==true)contextField(fields,'actor','springLoaded','Mancatcher équipé du ressort (+2 DR)');
   }
+  // Cibles multiples (Dispersion, Explosion) : cases à cocher sur les participants actifs, nommés; le contexte garde les identifiants pour le moteur.
+  const targetChecklist=(title,contextKey,blockingField)=>{
+    const current=draft.v5Context||{},chosen=current[contextKey]||[],group=node('fieldset','workspace-type');
+    group.setAttribute('aria-label',title);
+    group.appendChild(node('legend','',title));
+    let first=true;
+    for(const person of participants.filter(row=>row.zone==='active')){
+      const label=node('label','workspace-type',`${person.name||person.id}${person.id===target?.id?' (cible initiale)':''}`),box=document.createElement('input');
+      box.type='checkbox';
+      box.checked=chosen.includes(person.id);
+      box.setAttribute('aria-label',`${title} · ${person.name||person.id}`);
+      if(first){box.dataset.blockingField=blockingField;first=false;}
+      box.addEventListener('change',()=>{
+        const live=draft.v5Context||{},ids=(live[contextKey]||[]).filter(id=>id!==person.id);
+        handlers.select({v5Context:{...live,[contextKey]:box.checked?participants.filter(row=>row.zone==='active'&&(row.id===person.id||ids.includes(row.id))).map(row=>row.id):ids}});
+      });
+      label.prepend(box);
+      group.appendChild(label);
+    }
+    fields.append(group);
+  };
   if(type==='attack'&&(action?.qualities||[]).some(row=>(typeof row==='string'?row:row?.id)==='dispersion')){
     const current=draft.v5Context||{},range=node('label','workspace-type','Dispersion : bande choisie par le MJ'),select=document.createElement('select');
     select.setAttribute('aria-label',range.textContent);
@@ -1470,14 +1491,7 @@ export function renderResolutionPanel(options) {
     select.addEventListener('change',()=>handlers.select({v5Context:{...current,spreadRangeBand:select.value||undefined}}));
     range.append(select);
     fields.append(range);
-    const targets=node('label','workspace-type','Dispersion : identifiants des cibles choisies (virgules)'),input=document.createElement('input');
-    input.type='text';
-    input.value=(current.spreadTargetIds||[]).join(', ');
-    input.dataset.blockingField='spread-targets';
-    input.setAttribute('aria-label',targets.textContent);
-    input.addEventListener('change',()=>handlers.select({v5Context:{...current,spreadTargetIds:input.value.split(',').map(value=>value.trim()).filter(Boolean)}}));
-    targets.append(input);
-    fields.append(targets);
+    targetChecklist('Dispersion : cibles choisies','spreadTargetIds','spread-targets');
     for(const id of(current.spreadTargetIds||[]).filter(id=>id!==target?.id)){
       secondaryHitMorphology(current,id,'Dispersion · ');
       const label=node('label','workspace-type',`Dispersion · localisation d100 de ${participants.find(row=>row.id===id)?.name||id}`),die=document.createElement('input');
@@ -1496,14 +1510,8 @@ export function renderResolutionPanel(options) {
     fields.append(node('p','workspace-muted',`Bout portant : une cible, dégâts +${spreadRating}. Courte à longue : cible initiale et jusqu’à ${spreadRating} cibles visibles les plus proches; aucune paire ne dépasse ${spreadRating} m. Extrême : mêmes cibles, dégâts −${spreadRating}. Distances et visibilité sont arbitrées par le MJ; saisissez un jet de localisation d100 pour chaque cible secondaire.`));
   }
   if(type==='attack'&&(action?.qualities||[]).some(row=>(typeof row==='string'?row:row?.id)==='explosion')){
-    const current=draft.v5Context||{},targets=node('label','workspace-type','Explosion : identifiants de toutes les cibles dans le diamètre (virgules)'),input=document.createElement('input');
-    input.type='text';
-    input.value=(current.explosionTargetIds||[]).join(', ');
-    input.dataset.blockingField='explosion-targets';
-    input.setAttribute('aria-label',targets.textContent);
-    input.addEventListener('change',()=>handlers.select({v5Context:{...current,explosionTargetIds:input.value.split(',').map(value=>value.trim()).filter(Boolean)}}));
-    targets.append(input);
-    fields.append(targets);
+    const current=draft.v5Context||{};
+    targetChecklist('Explosion : cibles dans le diamètre','explosionTargetIds','explosion-targets');
     for(const id of(current.explosionTargetIds||[]).filter(id=>id!==target?.id)){
       secondaryHitMorphology(current,id,'Explosion · ');
       const label=node('label','workspace-type',`Explosion · localisation d100 de ${participants.find(row=>row.id===id)?.name||id}`),die=document.createElement('input');
@@ -1756,10 +1764,10 @@ export function renderResolutionPanel(options) {
       const rangeBands = computeV5WeaponRangeBands(draft.v5Context?.weaponRangeYards ?? rangedWeapon?.range ?? action.range, actor);
       choiceField(fields, 'shotRange', 'Bande de portée choisie par le MJ', [['point-blank','Bout portant'],['short','Courte'],['medium','Moyenne'],['long','Longue'],['extreme','Extrême']]);
       if (rangeBands) fieldGroups.combat.content.appendChild(node('p', 'workspace-muted', `Bandes dérivées de la portée imprimée (${rangeBands.printedYards} m) : ${rangeBands.pointBlankYards === null ? 'Pas de bout portant (portée courte de 4 m ou moins)' : `Bout portant ≤ ${rangeBands.pointBlankYards} m (+2 DR)`} · Courte ≤ ${rangeBands.shortYards} m (+1 DR) · Moyenne ≤ ${rangeBands.mediumYards} m (0 DR) · Longue ≤ ${rangeBands.longYards} m (−1 DR) · Extrême ≤ ${rangeBands.extremeYards} m (−2 DR).`));
-      if ((rangedWeapon?.keywords || []).some(row => (typeof row === 'string' ? row : row?.id) === 'a-repetition')) {
+      if ([...(rangedWeapon?.keywords || []), ...(action?.qualities || [])].some(row => (typeof row === 'string' ? row : row?.id) === 'a-repetition')) {
         contextField(fields, 'actor', 'repeaterDoubleShot', 'À répétition : tir double (deux tirs sur la même cible à −1 DR, une seule Action)');
         if (draft.v5Context?.repeaterDoubleShot === true) {
-          const firstShots = previousWeaponAttacks.filter(row => row.weaponId === rangedWeapon?.id && row.targetId === target.id && row.actionType === 'attack');
+          const firstShots = previousWeaponAttacks.filter(row => (row.weaponId || null) === (rangedWeapon?.id || null) && row.targetId === target.id && row.actionType === 'attack');
           const second = node('label', 'workspace-type', 'Premier tir du tir double (le tir actuel est alors le second, gratuit et sans Élan)'), secondSelect = document.createElement('select');
           secondSelect.setAttribute('aria-label', second.textContent);
           secondSelect.append(new Option('Premier tir (ou choisir le tir déjà appliqué…)', ''));
