@@ -15,7 +15,7 @@ export function buildV5RollDecision(preview, { evaluateOutcome, baseRevision, re
     if (outcome.location != null && typeof outcome.location !== 'string') throw new TypeError('Localisation invalide');
     if (typeof outcome.hit !== 'boolean') throw new TypeError('Résultat de touche manquant');
     return { id: option.id, label: option.reversed ? `Inverser en ${test.roll}` : `Conserver ${test.roll}`,
-      summary: { roll: test.roll, sl: test.sl, success: test.success, hit: outcome.hit,
+      summary: { roll: test.roll, sl: outcome.test?.sl ?? test.sl, success: outcome.test?.success ?? test.success, hit: outcome.hit,
         location: outcome.location ?? null, woundsLost: outcome.woundsLost ?? null, certainty: outcome.certainty,
         costs: structuredClone(outcome.costs || []), importantEffects: structuredClone(outcome.importantEffects || []) },
       details: { test, action: structuredClone(outcome) } };

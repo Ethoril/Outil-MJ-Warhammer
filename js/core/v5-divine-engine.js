@@ -547,9 +547,9 @@ export function previewDivineExecution(actor, contract, targets = [], input = {}
   const effectTargets = (targets?.length ? targets : [actor]).filter(target => !rejectedTargetIds.includes(target.id));
   const unresolvedEffects = effects.flatMap(effect => effectNeeds(effect, { targets: effectTargets, input, actor }));
   const choiceResult = resolvePrayerChoices(contract, effectivePrayer, actor, input, effectTargets);
-  if (choiceResult.error) return { ...fail('needs-input', choiceResult.error, choiceResult.needs), preview: freeze({ prayer, success: prayer.success, contractId: contract.id, source: clone(contract.source), sourceReceipt: clone(contract.sourceReceipt) }) };
+  if (choiceResult.error) return { ...fail('needs-input', choiceResult.error, choiceResult.needs), preview: freeze({ prayer, success: prayer.success, skillScore, contractId: contract.id, source: clone(contract.source), sourceReceipt: clone(contract.sourceReceipt) }) };
   const targetProblem = validateTargetRules(contract, targets || [], input, choiceResult.resolvedParams, actor);
-  if (targetProblem) return { ...fail('needs-input', targetProblem.error, targetProblem.needs), preview: freeze({ prayer, success: prayer.success, contractId: contract.id, source: clone(contract.source), sourceReceipt: clone(contract.sourceReceipt), resolvedParams: clone(choiceResult.resolvedParams) }) };
+  if (targetProblem) return { ...fail('needs-input', targetProblem.error, targetProblem.needs), preview: freeze({ prayer, success: prayer.success, skillScore, contractId: contract.id, source: clone(contract.source), sourceReceipt: clone(contract.sourceReceipt), resolvedParams: clone(choiceResult.resolvedParams) }) };
   const resolvedEffects = effectiveSuccess && appliesEffects ? choiceResult.resolvedEffects : [];
   let wrathRoll = null;
   let wrathResult = null;

@@ -343,7 +343,7 @@ export function previewResolution(input) {
     const complete = !unknownOther && !option.unresolved.length && !option.mechanicalWarnings.length
       && !option.protection?.manual?.length && !criticals.some(critical => critical.details?.pending || critical.second?.pending)
       && (!option.hit || !option.attack || (option.damageReplacedByTalent || (option.damage && knownHp(normalized.target))));
-    return { certainty: complete ? 'complete' : 'partial', hit: option.hit,
+    return { certainty: complete ? 'complete' : 'partial', hit: option.hit, test: option.test,
       location: option.location?.name || null,
       woundsLost: complete ? Math.min(Math.max(0, Number(normalized.target?.hp) || 0), previewHpLoss(option)) : null,
       importantEffects: criticals.map(critical => critical === option.defenderCritical ? 'Critique défensif sur l’attaquant' : 'Blessure critique sur la cible'),
@@ -1020,6 +1020,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     }
   }
   unresolved.push(...criticalReady);
+  const criticalReadyPushed = criticalReady.length;
   const magicHitStates = hit && attackType(action.type) && target && !replacement ? magicWeaponHitConditions(actor, action, nature.ranged, damage?.finalDamage || 0).map(row => ({ id: `${normalized.resolutionId}:magic-weapon:${row.name}`, key: row.name.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase(), name: row.name, level: 1, source: { kind: 'magic-weapon', spellName: row.spellName } })) : [];
   // Attaque naturelle : états de la touche (Langue, Constricteur, Toile, Souffle) selon le plan du Trait ; rappels du plan joints au détail.
   const naturalPlan = naturalPlanOf(actor, normalized.v5), naturalReminders = [], { actorSize: naturalActorSize, targetSize: naturalTargetSize } = naturalSizes(normalized.v5);
@@ -1501,7 +1502,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     }
   }
 
-  unresolved.push(...criticalReady);
+  unresolved.push(...criticalReady.slice(criticalReadyPushed));
   if(actorPlan.crewSkill){
     talentActionChanges.push({participantId:actor.id,removeIds:[actorPlan.crewSkill.id]});
     supplementaryTalentPlans.push({proposals:[{op:'substituteCrewSkill',origins:[actorPlan.crewSkill.source]}]});
