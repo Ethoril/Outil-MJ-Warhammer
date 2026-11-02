@@ -304,7 +304,7 @@ export function toEngineInput(form, { targetIds = [], contract = null, actor = n
   const healCount = optionalNumber(form.healCount);
   if (healCount !== undefined) input.healCount = healCount;
   if (form.weaponId) input.facts.weapon = { equipmentId: form.weaponId, classConfirmed: form.weaponClassConfirmed === true };
-  for (const def of handlerInputFields(contract, { actor, targets: [] })) {
+  for (const def of handlerInputFields(contract, { actor, targets: targetIds.map(id => ({ id })) })) {
     const path = def.path.split('.');
     for (const key of def.scope === 'target' ? targetIds : [null]) {
       const full = key === null ? path : [...path, key];
