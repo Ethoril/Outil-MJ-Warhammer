@@ -64,7 +64,7 @@ export function applicationBlockingReasons(preview, draft, canApply, preflight =
     return finish();
   }
   add(preview.choiceRequired, 'Choisissez le résultat à appliquer');
-  for (const text of preview.unresolved || []) reasons.push({ text, focus: /^Maladresse du défenseur/.test(text) ? 'defender-fumble-roll' : /^Maladresse de combat : saisissez/.test(text) ? 'fumble-roll' : /Calme.*attaquant/i.test(text) ? 'protection-calm' : /Tir engagé.*Test de défense/i.test(text) ? 'engaged-defense' : /jet de défense/i.test(text) ? 'defense-roll' : undefined, ...(/^Bénédiction de Protection :/.test(text) ? { ignorable: 'divine-protection' } : {}) });
+  for (const text of preview.unresolved || []) reasons.push({ text, focus: /^Maladresse du défenseur/.test(text) ? 'defender-fumble-roll' : /^Maladresse de combat : saisissez/.test(text) ? 'fumble-roll' : /Calme.*attaquant/i.test(text) ? 'protection-calm' : /Tir engagé.*Test de défense/i.test(text) ? 'engaged-defense' : /^Recharge : saisir les munitions/.test(text) ? 'reload-ammo' : /^Taille : saisir la pièce/.test(text) ? 'hack-piece' : /^Dispersion : bande/.test(text) ? 'spread-band' : /^Dispersion : (?:cibles|inclure)/.test(text) ? 'spread-targets' : /^Explosion : (?:cibles|inclure)/.test(text) ? 'explosion-targets' : /jet de défense/i.test(text) ? 'defense-roll' : undefined, ...(/^Bénédiction de Protection :/.test(text) ? { ignorable: 'divine-protection' } : {}) });
   const criticals = [preview.critical?.details, preview.critical?.second, preview.defenderCritical?.details];
   add(criticals.some(row => row?.pending), 'Complétez le jet de critique', 'critical-pending');
   add(criticals.some(row => row?.needsAlternative), 'Choisissez une alternative pour le critique', 'critical-alternative');
@@ -1466,12 +1466,14 @@ export function renderResolutionPanel(options) {
     select.setAttribute('aria-label',range.textContent);
     select.append(new Option('Choisir la bande',''),new Option('À bout portant','point-blank'),new Option('Courte','short'),new Option('Moyenne','medium'),new Option('Longue','long'),new Option('Extrême','extreme'));
     select.value=current.spreadRangeBand||'';
+    select.dataset.blockingField='spread-band';
     select.addEventListener('change',()=>handlers.select({v5Context:{...current,spreadRangeBand:select.value||undefined}}));
     range.append(select);
     fields.append(range);
     const targets=node('label','workspace-type','Dispersion : identifiants des cibles choisies (virgules)'),input=document.createElement('input');
     input.type='text';
     input.value=(current.spreadTargetIds||[]).join(', ');
+    input.dataset.blockingField='spread-targets';
     input.setAttribute('aria-label',targets.textContent);
     input.addEventListener('change',()=>handlers.select({v5Context:{...current,spreadTargetIds:input.value.split(',').map(value=>value.trim()).filter(Boolean)}}));
     targets.append(input);
@@ -1497,6 +1499,7 @@ export function renderResolutionPanel(options) {
     const current=draft.v5Context||{},targets=node('label','workspace-type','Explosion : identifiants de toutes les cibles dans le diamètre (virgules)'),input=document.createElement('input');
     input.type='text';
     input.value=(current.explosionTargetIds||[]).join(', ');
+    input.dataset.blockingField='explosion-targets';
     input.setAttribute('aria-label',targets.textContent);
     input.addEventListener('change',()=>handlers.select({v5Context:{...current,explosionTargetIds:input.value.split(',').map(value=>value.trim()).filter(Boolean)}}));
     targets.append(input);
@@ -1517,6 +1520,20 @@ export function renderResolutionPanel(options) {
     contextField(fields,'actor','explosionOpposed','Exception MJ : la cible oppose normalement cette Explosion');
     fields.append(node('p','workspace-muted','Désignez toutes les cibles touchées. Par défaut, elles ne font pas d’opposition ordinaire; les dégâts ne prennent pas les DR de l’attaque.'));
   }
+  const unlinkedReload=type==='attack'&&kind.value==='ranged'&&(action?.qualities||[]).some(row=>['a-repetition','recharge','salve','salvo'].includes(typeof row==='string'?row:row?.id))
+    &&!(actor?.equipment||[]).some(row=>row?.kind==='weapon'&&row.id===(action.extensions?.fiche?.equipmentId||action.extensions?.equipment?.id));
+  if(unlinkedReload){
+    const current=draft.v5Context||{},wrap=node('label','workspace-type','Munitions restantes dans le chargeur (arme non reliée à l’inventaire, saisie manuelle)'),input=document.createElement('input');
+    input.type='number';
+    input.min='0';
+    input.step='1';
+    input.value=current.manualShotsRemaining??'';
+    input.dataset.blockingField='reload-ammo';
+    input.setAttribute('aria-label',wrap.textContent);
+    input.addEventListener('change',()=>handlers.select({v5Context:{...(draft.v5Context||{}),manualShotsRemaining:input.value===''?undefined:Number(input.value)}}));
+    wrap.append(input);
+    fields.append(wrap);
+  }
   if(type==='attack'&&(action?.qualities||[]).some(row=>(typeof row==='string'?row:row?.id)==='taille')&&target){
     const current=draft.v5Context||{},wrap=node('label','workspace-type','Taille : pièce d’armure ou bouclier frappé'),select=document.createElement('select');
     select.setAttribute('aria-label',wrap.textContent);
@@ -1529,6 +1546,15 @@ export function renderResolutionPanel(options) {
     });
     wrap.append(select);
     fields.append(wrap);
+    // Sans pièce identifiable sur la fiche de la cible, le MJ nomme la pièce frappée (l'usure n'est pas suivie).
+    const manualWrap=node('label','workspace-type','Taille : pièce frappée, saisie manuelle (si aucune pièce n’est identifiable)'),manual=document.createElement('input');
+    manual.type='text';
+    manual.value=current.struckPieceManual||'';
+    manual.dataset.blockingField='hack-piece';
+    manual.setAttribute('aria-label',manualWrap.textContent);
+    manual.addEventListener('change',()=>handlers.select({v5Context:{...(draft.v5Context||{}),struckPieceManual:manual.value.trim()||undefined}}));
+    manualWrap.append(manual);
+    fields.append(manualWrap);
   }
   if(type==='attack'&&(action?.qualities||[]).some(row=>(typeof row==='string'?row:row?.id)==='entaille')&&target){
     const current=draft.v5Context||{},wrap=node('label','workspace-type','Entaille : dépenser 1 Élan pour +1 Hémorragique'),select=document.createElement('select');

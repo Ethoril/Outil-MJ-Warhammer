@@ -127,6 +127,11 @@ export function previewResolution(input) {
   initial.combatPrelude=prelude;
   const prepared = previewV5ActionQualities(initial,weaponSkillPreview.receipt?{sourceQualities:weaponSkillPreview.action.qualities}:undefined);
   const normalized = prepared.normalized;
+  // « Précise » hérité de la V4 (+10) : en V5 la qualité est « Pointue » (+1 DR sur une réussite, Imprécise l'emporte ; livre p. 305).
+  if(Array.isArray(normalized.action?.qualities)&&normalized.action.qualities.some(row=>(typeof row==='string'?row:row?.id)==='precise')){
+    const asPointue=row=>(typeof row==='string'?row:row?.id)==='precise'?{id:'pointue',name:'Pointue',parameter:''}:row;
+    normalized.action={...normalized.action,qualities:normalizeQualities(normalized.action.qualities.map(asPointue))};
+  }
   if(weaponItem?.extensions?.v5?.destroyed===true)normalized.destroyedWeaponUnresolved='Arme détruite : elle ne peut pas être utilisée.';
   if(normalized.v5?.context?.knockout===true){
     const qids=(normalized.action?.qualities||[]).map(q=>typeof q==='string'?q:q?.id),nature=normalized.v5?.context?.attackNature;
@@ -660,8 +665,13 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     else entanglementRelease={linkId,holderId:actor.id,weaponId,conjuredEffectId:conjuredLock?.effect.id||null,conditionParticipantId:condition.person.id,condition:clone(condition.state)};
   }
   if (attackType(action.type) && actorPlan.kind === 'ranged' && reloadQuality) {
-    if (!selectedWeapon) unresolved.push('Recharge : l’arme doit être reliée à un exemplaire durable de l’inventaire pour suivre ses tirs et annuler correctement la mutation.');
-    else {
+    if (!selectedWeapon) {
+      // Arme de profil sans exemplaire d'inventaire (C33) : le MJ saisit le chargeur à la main ; aucun compteur durable n'est muté.
+      const rawLeft = context.manualShotsRemaining, left = Number(rawLeft);
+      if (rawLeft === undefined || rawLeft === null || String(rawLeft).trim() === '' || !Number.isSafeInteger(left) || left < 0) unresolved.push('Recharge : saisir les munitions restantes dans le chargeur de l’arme (saisie manuelle).');
+      else if (left < 1) unresolved.push('À répétition : l’arme doit être rechargée avant un nouveau tir.');
+      else if (context.repeaterDoubleShot === true && context.repeaterSecondShot !== true && left < 2) unresolved.push('Tir double À répétition : deux tirs restants sont requis dans l’arme (V5 p.305).');
+    } else {
       const current = selectedWeapon.extensions?.v5?.reloadState || initialV5ReloadState({...selectedWeapon,keywords:[...(selectedWeapon.keywords||[]),...(action.qualities||[])]}).state;
       if (!current) unresolved.push('À répétition : compteur de tirs ou Recharge non interprétable; arbitrage MJ requis.');
       else if(selectedWeapon.keywords?.some(row=>(typeof row==='string'?row:row?.id)==='a-repetition'&&row?.asterisk===true)&&current.requiresManualRotation===true&&context.freeHandAvailable!==true)
@@ -797,7 +807,15 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
         :previewV5Hack({qualities:action.qualities,hit:true,struckItemId,currentAp:struck?.ap});
       if(hack.none){
         hack=null;
-        if(protection.ap>0)mechanicalWarnings.push({keywordId:'taille',reason:'taille-aucune-piece-identifiable'});
+        // Aucune pièce identifiable sur la fiche (C33) : le MJ nomme la pièce frappée ; son usure n'est pas suivie.
+        const manualPiece=String(context.struckPieceManual??'').trim();
+        if(protection.ap>0){
+          if(!manualPiece)unresolved.push('Taille : saisir la pièce d’armure ou le bouclier frappé (aucune pièce identifiable sur la fiche).');
+          else {
+            protection={...protection,ap:Math.max(0,protection.ap-1)};
+            hack={ready:true,unresolved:[],manual:true,damage:null,struckItemName:manualPiece};
+          }
+        }
       }
       else if(!hack.ready)unresolved.push(...hack.unresolved);
       else {

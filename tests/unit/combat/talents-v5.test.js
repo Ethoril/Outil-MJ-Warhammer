@@ -1322,7 +1322,7 @@ test('Contrôle indépendant V5 — jet obligatoire manquant bloque toute mutati
   assert.equal(store.listParticipants().find(item=>item.id===burning.id).hp,17,'The committed explicit d10 must remain 6, not the later mutated 10');
 });
 
-test('Contrôle indépendant V5 — critique conserve auteur, cible, verrou des soins et version ; effet Précise V4 reste visible et bloqué',async()=>{
+test('Contrôle indépendant V5 — critique conserve auteur, cible, verrou des soins et version ; Précise hérité de la V4 se résout comme Pointue V5 (C33)',async()=>{
   const {store}=await encounterStore();const [author,target]=store.listParticipants();
   assert.equal(keywordMechanicalStatus('empaleuse').word.edition,'V5');
   const input={actorId:author.id,targetId:target.id,action:{type:'attack',base:60,damage:4},roll:22,defense:{base:20,roll:81},criticalRolls:{location:2,effect:49}};
@@ -1333,8 +1333,8 @@ test('Contrôle indépendant V5 — critique conserve auteur, cible, verrou des 
   assert.equal(blinded.source.authorId,author.id);assert.equal(blinded.source.targetId,target.id);
   assert.equal(store.getLog()[0].detail.ruleVersion,'v5-combat-2026-10-09.24.6');
   const legacy=store.previewResolution({...input,action:{...input.action,qualities:['Précise']}});
-  assert.ok(legacy.mechanicalWarnings.some(warning=>warning.keywordId==='precise'));
-  assert.equal((await store.applyResolution(legacy)).status,'manual');
+  assert.deepEqual(legacy.mechanicalWarnings,[],'plus d’avertissement : Précise est lu comme Pointue (+1 DR sur une réussite, livre V5 p. 305)');
+  assert.notEqual((await store.applyResolution(legacy)).reason,'version-effet-non-couverte','l’effet V4 n’est plus une raison d’application manuelle');
 });
 
 test('Contrôle indépendant 2.3 — comparaison sur Élan payé, résultat atomique, quota après rechargement et acteur distinct',()=>{
