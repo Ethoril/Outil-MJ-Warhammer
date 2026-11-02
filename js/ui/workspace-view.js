@@ -23,7 +23,9 @@ import { equipmentAttackContext, weaponSkillGroupInfo } from '../core/equipment.
 import { v5StoreActionClock } from '../core/v5-store-action.js';
 import { d100 } from '../core/dice.js';
 import { inferActionType, previewHpLoss, ResolutionError } from '../core/resolution.js';
-import { userMessage, userError } from './messages.js';
+import { userMessage, userError, contextMessage, refusalError } from './messages.js';
+import { buildPsychologyBlock, readPsychologyInputs } from './psychology-block.js';
+import { buildFamiliarBlock, readFamiliarInputs, readFamiliarDeathInputs } from './familiar-block.js';
 import { formatV5Balance } from '../core/v5-resources.js';
 import { normalizeEffects } from '../core/effects.js';
 import { CAMP_LABELS, normalizeCamp, encounterDisplayStatus, encounterSummary, sortEncountersForDisplay } from '../core/encounters.js';
@@ -542,6 +544,47 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     return reminders;
   }
 
+  // Commandes des anciennes cartes (card.js) rebranchées sur la fiche : Peur/Terreur « Au contact ou à la vue » et familiers. Mêmes blocs, mêmes appels au Store.
+  function creatureCommandBlocks(participant) {
+    const observe = (result, label) => Promise.resolve(result).then(value => { if (value === false || value?.ok === false) throw refusalError(value, label); return value; })
+      .catch(error => import('./toast.js').then(({ showToast }) => showToast(contextMessage(`${label} impossible`, error, 'réessayez.'), 'error'))).finally(() => render());
+    const toast = (message, type = 'error') => import('./toast.js').then(({ showToast }) => showToast(message, type));
+    const make = tag => document.createElement(tag), id = participant.id, blocks = [];
+    const psychology = buildPsychologyBlock(make, participant, Store.listParticipants());
+    if (psychology) {
+      psychology.addEventListener('click', event => {
+        if (!event.target.matches?.('.btn-creature-psychology')) return;
+        event.preventDefault();
+        const { targetId } = readPsychologyInputs(psychology), kind = event.target.dataset.psychology;
+        observe(Store.applyCreaturePsychology(id, kind, { targetId }), kind === 'fear' ? 'Peur' : 'Terreur');
+      });
+      blocks.push(psychology);
+    }
+    const familiar = buildFamiliarBlock(make, participant, Store.listParticipants());
+    if (familiar) {
+      familiar.addEventListener('click', event => {
+        const clicked = event.target;
+        if (clicked.matches?.('.btn-create-familiar')) {
+          event.preventDefault();
+          const input = readFamiliarInputs(familiar);
+          if (!input.familiarId) { toast('Création de familier : choisissez le familier.'); return; }
+          observe(Store.createFamiliar(id, input.familiarId, input), 'Création de familier');
+        } else if (clicked.matches?.('.btn-familiar-range')) {
+          event.preventDefault();
+          observe(Store.setFamiliarRange(id, clicked.dataset.linkId, clicked.dataset.inRange !== 'true'), 'Portée du familier');
+        } else if (clicked.matches?.('.btn-familiar-death')) {
+          event.preventDefault();
+          observe(Store.resolveFamiliarDeath(id, clicked.dataset.familiarId, readFamiliarDeathInputs(familiar)), 'Mort du familier');
+        } else if (clicked.matches?.('.btn-unlink-familiar')) {
+          event.preventDefault();
+          observe(Store.unlinkFamiliar(id, clicked.dataset.linkId), 'Lien de familier');
+        }
+      });
+      blocks.push(familiar);
+    }
+    return blocks;
+  }
+
   const isHomunculusParticipant = participant => familiarOfOf(participant)?.system === 'homunculus';
 
   function renderStateForm(participant) {
@@ -819,7 +862,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       use.disabled = state.resolution.busy || state.resolution.reactionId === offer.id;
       body.appendChild(use);
     }
-    body.appendChild(states);
+    body.append(...creatureCommandBlocks(participant), states);
     sheet.appendChild(body);
     sheet.appendChild(renderFicheDetails(participant));
 
