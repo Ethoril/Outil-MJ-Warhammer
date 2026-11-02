@@ -34,7 +34,7 @@ import { buildParticipantReminders } from '../core/reminders.js';
 import { renderResolutionPanel, actionKey, minusSigned, defenseOptions, defaultDefenseValue } from './resolution-panel.js';
 import { initSidePanel } from './side-panel.js';
 import { rollMisfortuneDie } from './resolution-panel/dom.js';
-import { getSpellContract, getAllSpellContracts } from '../core/v5-spell-contracts.js';
+import { getSpellContract, getAllSpellContracts, divineCastingModifiers } from '../core/v5-spell-contracts.js';
 import { magicGrantedActions, beastFormActions } from '../core/v5-magic-combat.js';
 import { transformationOvercastCost } from '../core/v5-magic-arbitrations.js';
 import { effectiveSupplementalEncumbrance } from '../core/v5-supplemental-equipment.js';
@@ -1583,6 +1583,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
               actorId: context.actor.id,
               roll: Number(rollRaw),
               slModifier: draft.v5SlModifier || 0,
+              slModifiers: divineCastingModifiers(Store.listParticipants().filter(row => targetIds.includes(row.id))),
               ...(draft.magicCriticalChoice ? { criticalChoice: draft.magicCriticalChoice } : {}),
               miscastRoll: draft.magicMiscastRoll,
               ...(draft.magicMajorRoll ? { majorRoll: draft.magicMajorRoll } : {}),

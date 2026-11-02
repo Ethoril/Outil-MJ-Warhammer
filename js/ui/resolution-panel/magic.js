@@ -562,6 +562,8 @@ export function renderV5MagicResult(preview, target, draft, handlers) {
   result.appendChild(node('p', 'workspace-result-line',
     `Calcul d’incantation : ${signed(cast.testSl ?? 0)} DR (test) + ${reserveUsed} DR (réserve consommée) = ${totalSl} DR vs NI ${contract.cn ?? 0}`));
 
+  const divinePenalty = (cast.test?.details?.modifiers || []).find(row => row.id === 'divine-casting-penalty');
+  if (divinePenalty) result.appendChild(node('p', 'workspace-result-line', `${divinePenalty.label} : ${signed(divinePenalty.amount)} DR au Test d’incantation.`));
   if (reaction) {
     result.appendChild(node('p', 'workspace-result-line', `Opposition de dissipation : Test du lanceur ${signed(reaction.casterSl)} DR − dissipateur ${signed(reaction.dispellerSl)} DR = ${signed(reaction.netSl)} DR nets.`));
     result.appendChild(node('p', 'workspace-result-line', reaction.dispelled
