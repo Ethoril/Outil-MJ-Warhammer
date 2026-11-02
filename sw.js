@@ -205,6 +205,7 @@ const ASSETS_TO_CACHE = [
   './js/ui/action-editor.js',
   './js/ui/keyboard.js',
   './js/ui/journal-view.js',
+  './js/ui/journal-turns.js',
   './js/ui/messages.js',
   './js/ui/reserve.js',
   './js/ui/bestiary-library.js',
