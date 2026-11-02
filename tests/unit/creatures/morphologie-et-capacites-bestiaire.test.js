@@ -622,15 +622,15 @@ test('Wulfrik Champion Slayer gains Momentum once per duel, re-armed by the GM (
 test('Great cat Deathblow triggers on every successful melee hit, whatever the Size (L23 p.87)', () => {
   const cat = { ...p('E0-P-792'), id: 'great-cat', zone: 'active' };
   const claw = cat.actions.find(row => row.type === 'attack' && row.attr === 'CC');
-  const run = (actor, action, roll) => previewResolution({ resolutionId: `deathblow-${actor.id}-${roll}`, baseRevision: 0, actor, action, roll,
+  const run = (actor, action, roll, defenseRoll = 95) => previewResolution({ resolutionId: `deathblow-${actor.id}-${roll}`, baseRevision: 0, actor, action, roll,
     target: { id: 'prey', name: 'Proie', zone: 'active', hp: 60, maxHp: 60, caracs: { E: 30 }, equipment: [], states: [] },
-    defense: { base: 20, roll: 95, v5: { kind: 'test' } }, v5: { kind: 'melee', context: {} } });
+    defense: { base: 20, roll: defenseRoll, v5: { kind: 'test' } }, v5: { kind: 'melee', context: {} } });
   const hit = run(cat, claw, 10);
   assert.equal(hit.hit, true);
   assert.equal(hit.deathblow?.maxChain, Math.floor(cat.caracs.CC / 10));
   assert.ok(hit.reminders.some(text => /Frappe mortelle/.test(text)));
   assert.ok(hit.reminders.some(text => text.includes('Chaque bond vise une créature différente, jamais deux fois la même (V4 p.160, L23 p.87)')), 'le rappel garde la règle des cibles distinctes');
-  assert.equal(run(cat, claw, 99).deathblow, null, 'a miss never triggers it');
+  assert.equal(run(cat, claw, 99, 5).deathblow, null, 'a miss never triggers it');
   const other = { ...p('E0-P-807'), id: 'farm', zone: 'active' };
   assert.equal(run(other, other.actions.find(row => row.type === 'attack' && row.attr === 'CC'), 10).deathblow, null, 'other profiles do not have it');
 });
