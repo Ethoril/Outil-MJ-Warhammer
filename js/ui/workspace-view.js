@@ -1132,6 +1132,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         state.targetChoice = patch.targetId;
         draft.v5Context={...(draft.v5Context||{})};
         for(const key of ['fateAction','fateChosenRoll','fateCriticalLocation','warpBladeEnduranceTest','f2h','struckPieceManual'])delete draft.v5Context[key];
+        if(draft.v5Context.repeaterSecondShot===true){for(const key of ['repeaterDoubleShot','repeaterSecondShot','primaryResolutionId','freeAttackTalent'])delete draft.v5Context[key];draft.extraAttack=false;}
         for (const key of ['hitMorphology','hitAppendage','spiderLegSide','fallPreventedByEquipment','mountedRestraint','mountedRideTestsById','mountedRideScoresById','mountedRideRollsById']) delete draft.v5Context[key];
         draft.fortuneReroll=false;
         draft.fortuneRerollRolls=[];
@@ -1835,6 +1836,8 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
           draft.error = { field: 'apply', message: result.error };
           focusKey = 'calculate';
         } else {
+          // Tir double À répétition : après le premier tir, le second est préparé (même arme, même cible) avec le premier tir déjà désigné.
+          const firstOfDouble = draft.preview.input?.v5?.context?.repeaterDoubleShot === true && draft.preview.input.v5.context.repeaterSecondShot !== true && draft.preview.resolutionId ? draft.preview.resolutionId : null;
           draft.ignoredConditions = [];
           draft.attackRoll = '';
           draft.defenseRoll = '';
@@ -1850,6 +1853,10 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
           draft.fortuneAdvantageDeclarationId=null;
           if (draft.preview.v5MagicKind) resetMagicDice(draft);
           forgetAttackAnswers(draft);
+          if (firstOfDouble) {
+            draft.extraAttack = true;
+            draft.v5Context = { ...(draft.v5Context || {}), repeaterDoubleShot: true, repeaterSecondShot: true, freeAttackTalent: 'repeater-double', primaryResolutionId: firstOfDouble };
+          }
           focusKey = 'roll-attack';
         }
         draft.preview = null;
