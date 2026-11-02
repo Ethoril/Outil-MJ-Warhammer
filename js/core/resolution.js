@@ -445,32 +445,28 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
       if(!Array.isArray(ids)||ids.length<2||new Set(ids).size!==ids.length||!ids.includes(normalized.target?.id)||!ids.every(id=>typeof id==='string'&&participants.some(row=>row.id===id&&row.zone==='active')))engagedUnresolved.push('Tir engagé : désigner tous les combattants actifs de la mêlée (cible initiale comprise).');
       else if(!Number.isInteger(die)||die<1||die>100)engagedUnresolved.push('Tir engagé : saisir le dé de sélection aléatoire d100.');
       else {
-        const index=Math.floor((die-1)*ids.length/100),selectedId=ids[index],selected=participants.find(row=>row.id===selectedId);
-        let selectedDefense=selectedId===normalized.target?.id?normalized.defense:context.engagedDefensesById?.[selectedId];
-        const validDefense=!selectedDefense?false:Number.isFinite(Number(selectedDefense.base))&&Number.isInteger(Number(selectedDefense.roll))&&Number(selectedDefense.roll)>=1&&Number(selectedDefense.roll)<=100;
-        if((!selectedDefense||!validDefense)&&normalized.defense)engagedUnresolved.push('Tir engagé : fournir le Test de défense de la cible tirée au sort.');
-        else {
-          const intendedTargetId=normalized.target?.id||null;
-          normalized={...normalized,target:selected,targetId:selected?.id||null,defense:selectedDefense};
-          target=selected;
-          actorTest=ordinary;
-          roll=actorTest.roll;
-          targetScore=actorTest.score;
-          success=actorTest.success;
-          sl=actorTest.sl;
-          doubled=actorTest.details.doubled;
-          criticalClassification=isCriticalRoll(roll,doubled,action.qualities);
-          fumbleClassification=isFumbleRoll(roll,doubled,action.qualities);
-          defenderPlan=selectedDefense?buildCombatTest(normalized,'defender'):null;
-          defenderTest=selectedDefense?selectV5Test(defenderPlan.test,selectedDefense.v5?.choice||defenderPlan.test.options[0].id):null;
-          targetLevels=conditionLevels(target);
-          cannotDefend=targetLevels.has('surpris')||targetLevels.has('inconscient')||context.targetHelpless===true||context.targetCannotDefend===true;
-          helpless=(targetLevels.has('inconscient')||context.targetHelpless===true||context.targetCannotDefend===true)&&(actorPlan.kind==='melee'||(actorPlan.kind==='ranged'&&(context.pointBlank===true||context.shotRange==='point-blank')));
-          opposition=defenderTest?resolveV5Opposition(actorTest,defenderTest):null;
-          opposed=opposition?{mode:'opposed',attacker:{...actorTest},defender:{...defenderTest,label:selectedDefense.label,base:selectedDefense.base,mod:defenderTest.details.totalModifier,statePenalty:defenderPlan.penalty},netSl:opposition.netSl,winner:opposition.winner==='initiator'?'attacker':'defender',tie:opposition.tie}:null;
-          hit=helpless&&!opposed?true:opposed?opposed.winner==='attacker':true;
-          engagedShot={roll:die,selectedIndex:index,selectedTargetId:selectedId,intendedTargetId,candidates:[...ids],reason:'forced-disadvantage-miss'};
-        }
+        // Livre V5 p. 167 : le tir dévie vers un AUTRE combattant de la mêlée (cible initiale exclue), touché d'office, sans Test de défense.
+        const candidates=ids.filter(id=>id!==normalized.target?.id),index=Math.floor((die-1)*candidates.length/100),selectedId=candidates[index],selected=participants.find(row=>row.id===selectedId);
+        const intendedTargetId=normalized.target?.id||null;
+        normalized={...normalized,target:selected,targetId:selected?.id||null,defense:undefined};
+        target=selected;
+        actorTest=ordinary;
+        roll=actorTest.roll;
+        targetScore=actorTest.score;
+        success=actorTest.success;
+        sl=actorTest.sl;
+        doubled=actorTest.details.doubled;
+        criticalClassification=isCriticalRoll(roll,doubled,action.qualities);
+        fumbleClassification=isFumbleRoll(roll,doubled,action.qualities);
+        defenderPlan=null;
+        defenderTest=null;
+        targetLevels=conditionLevels(target);
+        cannotDefend=true;
+        helpless=false;
+        opposition=null;
+        opposed=null;
+        hit=true;
+        engagedShot={roll:die,selectedIndex:index,selectedTargetId:selectedId,intendedTargetId,candidates,retainedRoll:roll,reason:'forced-disadvantage-miss'};
       }
     }
   }

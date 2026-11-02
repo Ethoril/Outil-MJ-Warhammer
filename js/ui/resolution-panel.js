@@ -1850,7 +1850,7 @@ export function renderResolutionPanel(options) {
       if (draft.v5Context?.targetEngaged === true && draft.v5Context?.engagedWithShooter !== true && target) {
         const current = draft.v5Context || {}, engagedIds = new Set(current.engagedTargetIds || [target.id]);
         engagedIds.add(target.id);
-        fields.appendChild(node('p', 'workspace-muted', 'Cochez les combattants effectivement engagés, alliés compris. Le jet de choix est saisi une fois et reste stable au recalcul.'));
+        fields.appendChild(node('p', 'workspace-muted', 'Cochez les combattants effectivement engagés, alliés compris. Si le Désavantage fait rater un tir qui aurait touché, un autre combattant engagé est tiré au sort (d100) et touché d’office, sans Test de défense.'));
         for (const person of participants.filter(row => row.zone === 'active' && row.id !== actor.id)) {
           const label = node('label', 'workspace-type', `${person.name} · ${person.kind === 'PJ' ? 'Personnage joueur' : 'Personnage non joueur'}${person.camp ? ` · ${person.camp}` : ''}`), check = document.createElement('input');
           check.type = 'checkbox';
@@ -1865,50 +1865,6 @@ export function renderResolutionPanel(options) {
           });
           label.prepend(check);
           fields.appendChild(label);
-          if (person.id !== target.id && engagedIds.has(person.id)) {
-            const defense = current.engagedDefensesById?.[person.id] || {};
-            const kindLabel = node('label', 'workspace-type', `Défense de ${person.name}`), kindSelect = document.createElement('select');
-            kindSelect.setAttribute('aria-label', `Type de défense de ${person.name}`);
-            kindSelect.append(new Option('Esquive / autre Test','test'),new Option('Corps à corps','melee'));
-            kindSelect.value = defense.v5?.kind || 'test';
-            const baseLabel = node('label','workspace-type',`Score de défense de ${person.name}`), baseInput = document.createElement('input');
-            baseInput.type='number';
-            baseInput.min='0';
-            baseInput.max='200';
-            baseInput.value=defense.base??'';
-            baseInput.setAttribute('aria-label',baseLabel.textContent);
-            const rollLabel = node('label','workspace-type',`Jet de défense d100 de ${person.name}`), rollInput = document.createElement('input');
-            rollInput.type='number';
-            rollInput.min='1';
-            rollInput.max='100';
-            rollInput.value=defense.roll??'';
-            const defenseIds=current.engagedTargetIds || [target.id], defenseDie=Number(current.engagedTargetRoll);
-            const selectedId=Number.isInteger(defenseDie)&&defenseDie>=1&&defenseDie<=100 ? defenseIds[Math.floor((defenseDie-1)*defenseIds.length/100)] : null;
-            if(selectedId===person.id){if(!String(rollInput.value).trim())rollInput.dataset.blockingField='engaged-defense';else if(!String(baseInput.value).trim())baseInput.dataset.blockingField='engaged-defense';}
-            rollInput.disabled = draft.busy;
-            rollInput.setAttribute('aria-label',rollLabel.textContent);
-            const saveDefense = () => {
-              const all = { ...(draft.v5Context?.engagedDefensesById || {}) };
-              all[person.id] = { base: baseInput.value === '' ? null : Number(baseInput.value), roll: rollInput.value === '' ? null : Number(rollInput.value), label: kindSelect.value === 'melee' ? 'Corps à corps' : 'Esquive', v5: { kind: kindSelect.value, choice: 'keep' } };
-              handlers.select({ v5Context: { ...(draft.v5Context || {}), engagedDefensesById: all } });
-            };
-            kindSelect.addEventListener('change', saveDefense);
-            baseInput.addEventListener('change', saveDefense);
-            rollInput.addEventListener('change', saveDefense);
-            kindLabel.appendChild(kindSelect);
-            baseLabel.appendChild(baseInput);
-            rollLabel.appendChild(rollInput);
-            const rollWrap = node('div', 'workspace-roll');
-            rollWrap.prepend(node('span', `workspace-roll-owner ${person.kind === 'PJ' ? 'is-pj' : 'is-npc'}`, person.kind === 'PJ' ? 'PJ' : 'PNJ'));
-            const rollButton = button('Lancer', 'workspace-secondary', { 'aria-label': `Lancer le d100 : Jet de défense de ${person.name}` });
-            rollButton.disabled = draft.busy;
-            rollButton.addEventListener('click', () => handlers.rollEngaged(person.id));
-            rollInput.dataset.focusKey = `engaged-defense-roll-${person.id}`;
-            rollInput.addEventListener('keydown', event => { if (event.key === 'Enter') { event.preventDefault(); saveDefense(); handlers.calculate(); } });
-            rollWrap.append(rollLabel, rollButton);
-            engagedRolls.push({ element: rollWrap, input: rollInput, person });
-            fields.append(kindLabel,baseLabel);
-          }
         }
         const rollLabel = node('label','workspace-type','Jet d100 pour désigner le combattant touché');
         const roll = document.createElement('input');

@@ -168,7 +168,8 @@ export function renderV5Decisions(preview, draft, handlers) {
     const group = node('fieldset', 'workspace-v5-choice-group');
     group.appendChild(node('legend', '', `${name} — ${decision.forcedInversion ? 'inversion obligatoire' : 'choix du joueur'}`));
     const cards = node('div', 'workspace-v5-choice-cards');
-    const selected = role === 'actor' ? preview.input.v5.choice : preview.input.defense?.v5.choice;
+    // Tir dévié (livre p. 167) : le jet retenu est celui sans Désavantage, aucune des cartes n'est retenue.
+    const selected = preview.engagedShot ? null : role === 'actor' ? preview.input.v5.choice : preview.input.defense?.v5.choice;
     for (const option of decision.options) {
       const card = node('label', 'workspace-v5-choice');
       if (option.id === selected) card.classList.add('is-selected');
@@ -176,7 +177,7 @@ export function renderV5Decisions(preview, draft, handlers) {
       radio.type = 'radio';
       radio.name = `v5-choice-${role}`;
       radio.value = option.id;
-      radio.checked = option.id === selected || !decision.choiceRequired;
+      radio.checked = !preview.engagedShot && (option.id === selected || !decision.choiceRequired);
       radio.disabled = draft.busy || !decision.choiceRequired;
       radio.dataset.focusKey = `v5-choice-${role}-${option.id}`;
       radio.addEventListener('change', () => handlers.chooseV5(role, option.id));

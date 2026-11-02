@@ -1230,6 +1230,9 @@ test('F2-B — Tir engagé ne redirige que la touche annulée par Désavantage, 
   const preview=store.previewResolution({resolutionId:'engaged-redirect',actorId:'a',targetId:'b',action:{type:'attack',attr:'CT',base:60,damage:4},roll:18,
     v5:{kind:'ranged',choice:'reverse',context:{targetEngaged:true,engagedTargetIds:['b','c'],engagedTargetRoll:80}}});
   assert.deepEqual(preview.unresolved,[]);assert.equal(preview.engagedShot.selectedTargetId,'c');assert.equal(preview.targetId,'c');assert.equal(preview.hit,true);
+  const lowDie=store.previewResolution({resolutionId:'engaged-redirect-low',actorId:'a',targetId:'b',action:{type:'attack',attr:'CT',base:60,damage:4},roll:18,
+    v5:{kind:'ranged',choice:'reverse',context:{targetEngaged:true,engagedTargetIds:['b','c'],engagedTargetRoll:10}}});
+  assert.equal(lowDie.engagedShot.selectedTargetId,'c','C28 : la cible initiale est exclue du tirage, même pour un d100 bas');assert.equal(lowDie.engagedShot.retainedRoll,18);assert.equal(lowDie.input.defense,undefined,'C28 : aucun Test de défense pour le combattant touché');
   assert.equal((await store.applyResolution(preview)).status,'applied');
   assert.equal(p.read().combat.participants.find(row=>row.id==='b').hp,30,'la cible initiale n’est pas blessée');
   assert.ok(p.read().combat.participants.find(row=>row.id==='c').hp<30,'le combattant tiré au sort subit réellement les dégâts');

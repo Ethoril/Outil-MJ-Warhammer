@@ -60,7 +60,7 @@ export function renderResult(preview, target, draft, handlers, participants=[]) 
   }
   if(preview.engagedShot){
     const chosen=participants.find(row=>row.id===preview.engagedShot.selectedTargetId)?.name||target?.name||'combattant choisi';
-    result.appendChild(node('p','workspace-result-line',`Tir contre des combattants engagés : déviation vers ${chosen} (d100 ${preview.engagedShot.roll}). La résolution ci-dessous porte sur cette cible.`));
+    result.appendChild(node('p','workspace-result-line',`Tir dévié vers ${chosen} (d100 ${preview.engagedShot.roll}), jet ${preview.engagedShot.retainedRoll} retenu. Touché d’office, sans Test de défense ; la résolution ci-dessous porte sur cette cible.`));
   }
   if(preview.scatter){
     const scatter=preview.scatter,direction=Number(scatter.directionRoll)===9?'aux pieds du tireur':Number(scatter.directionRoll)===10?'aux pieds de la cible':scatter.direction||'direction non déterminée';
