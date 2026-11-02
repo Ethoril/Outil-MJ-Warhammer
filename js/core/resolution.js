@@ -960,8 +960,10 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     const entangled=weaponConditions.proposed.find(row=>row.key==='enchevetre');
     if(entangled)entangled.source={...(entangled.source||{}),hookedNet:true,weaponId:weaponSource?.id||weaponReferenceId||null,authorId:actor?.id};
   }
-  const entailleSpend=Number(context.entailleMomentumSpend||0);
-  const slashPlan=previewV5Slash({qualities:action.qualities,criticalDamage:Boolean(criticalBlock?.details||criticalBlock?.second),spendAdvantage:entailleSpend});
+  // Sans Blessure Critique, Entaille n'a rien à aggraver : l'Élan coché n'est pas dépensé et rien ne bloque (MJ, 02/11).
+  const slashCritical=Boolean(criticalBlock?.details||criticalBlock?.second);
+  const entailleSpend=slashCritical?Number(context.entailleMomentumSpend||0):0;
+  const slashPlan=previewV5Slash({qualities:action.qualities,criticalDamage:slashCritical,spendAdvantage:entailleSpend});
   const slash={...slashPlan,momentumSpent:entailleSpend};
   if(!slash.ready)unresolved.push(...slash.unresolved);
   const entaille=action.qualities.some(row=>(typeof row==='string'?row:row?.id)==='entaille');
