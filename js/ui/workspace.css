@@ -97,11 +97,34 @@
 /* ---------- Jouer : piste | duel et résolution | panneau latéral ---------- */
 .workspace-play-grid {
   display: grid;
-  grid-template-columns: 248px minmax(0, 1fr) 300px;
+  grid-template-columns: minmax(0, 1fr) 300px;
   align-items: start;
   gap: var(--workspace-gap);
 }
-.workspace-play-grid.is-side-collapsed { grid-template-columns: 248px minmax(0, 1fr) 44px; }
+.workspace-play-grid.is-side-collapsed { grid-template-columns: minmax(0, 1fr) 44px; }
+/* Plateau des mêlées (maquette B) : toute la largeur, au-dessus de la résolution. */
+.workspace-play-grid > .workspace-track-column { grid-column: 1 / -1; }
+.workspace-plateau { display: flex; flex-wrap: wrap; gap: var(--workspace-gap); align-items: flex-start; }
+.workspace-plateau > .workspace-track { flex: 999 1 520px; min-width: 0; display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-start; }
+.workspace-plateau > .workspace-bench { flex: 1 1 220px; margin-top: 0; padding: 10px; border: 1px dashed var(--border); border-radius: var(--radius); }
+.workspace-zone { flex: 1 1 240px; min-width: 0; display: grid; gap: 6px; align-content: start; padding: 10px; background: var(--bg); border: 1px solid var(--chip); border-radius: var(--radius); }
+.workspace-zone.is-melee { border: 2px solid var(--accent); }
+.workspace-zone.is-drop { outline: 2px dashed var(--accent); outline-offset: 2px; }
+.workspace-zone-head { display: flex; align-items: baseline; gap: 8px; }
+.workspace-zone-head strong { color: var(--accent-text); }
+.workspace-zone-ratio { font-family: var(--font-ui); font-size: 12.5px; padding: 1px 8px; border-radius: 999px; background: var(--chip); }
+.workspace-token { cursor: grab; }
+.workspace-token-move { justify-self: end; margin: 0 6px; max-width: calc(100% - 12px); font-size: 13px; min-height: 30px; }
+.workspace-token-engaged { font-family: var(--font-ui); font-size: 12.5px; color: var(--accent-text); }
+.workspace-action-bar, .workspace-disengage { margin-top: 10px; padding: 12px 14px; display: grid; gap: 8px; background: var(--panel); border: 2px solid var(--accent); border-radius: var(--radius); }
+.workspace-action-bar-title { margin: 0; font-weight: 700; color: var(--accent-text); }
+.workspace-action-bar-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 8px; }
+.workspace-action-bar-item { display: grid; gap: 2px; justify-items: start; text-align: left; min-height: 52px; padding: 6px 12px; border: 1px solid var(--accent); border-radius: var(--radius); background: var(--bg); color: var(--accent-text); }
+.workspace-action-bar-item span { font-family: var(--font-ui); font-size: 12.5px; color: var(--muted); }
+.workspace-action-bar-item:active { transform: scale(0.98); }
+.workspace-engagement-derived { display: grid; gap: 6px; padding: 8px 10px; border: 1px solid var(--hp-ok); border-radius: var(--radius); background: color-mix(in srgb, var(--hp-ok) 12%, transparent); }
+.workspace-engagement-derived p { margin: 0; }
+.workspace-engagement-actions { display: flex; flex-wrap: wrap; gap: 6px; }
 .workspace-track-column,
 .workspace-center,
 .workspace-side { min-width: 0; }
@@ -324,12 +347,12 @@
 .workspace-side.is-collapsed .workspace-side-tab { flex: none; writing-mode: vertical-rl; white-space: nowrap; overflow-wrap: normal; padding: 10px 4px; min-height: 0; min-width: 32px; }
 
 @media (min-width: 1100px) and (max-width: 1279px) {
-  .workspace-play-grid { grid-template-columns: 248px minmax(0, 1fr) 260px; }
+  .workspace-play-grid { grid-template-columns: minmax(0, 1fr) 260px; }
 }
 
 @media (max-width: 1099px) {
-  .workspace-play-grid { grid-template-columns: 220px minmax(0, 1fr) 260px; }
-  .workspace-play-grid.is-side-collapsed { grid-template-columns: 220px minmax(0, 1fr) 44px; }
+  .workspace-play-grid { grid-template-columns: minmax(0, 1fr) 260px; }
+  .workspace-play-grid.is-side-collapsed { grid-template-columns: minmax(0, 1fr) 44px; }
 }
 
 @media (max-width: 720px) {
@@ -527,7 +550,7 @@ dialog.tool-sheet.campaign-time-dialog { position:fixed; inset:auto; top:50%; le
 .workspace-circumstances-heading h4 { margin: 0; color: var(--accent-text); }
 .workspace-circumstances-backdrop { display: none; }
 @media (min-width: 901px) {
-  .workspace-play-grid:has(.workspace-resolution-drawer:not([hidden])) { grid-template-columns: 248px minmax(0, 1fr) 344px; }
+  .workspace-play-grid:has(.workspace-resolution-drawer:not([hidden])) { grid-template-columns: minmax(0, 1fr) 344px; }
   .workspace-play-grid:has(.workspace-resolution-drawer:not([hidden])) .workspace-side { position: sticky; top: 72px; z-index: 5; width: 44px; justify-self: end; grid-template-rows: auto; }
 }
 @media (max-width: 900px) {

@@ -18,7 +18,7 @@ import { openCampaignTimeDialog } from './v5-campaign-time-dialog.js';
 import { isMiscastConditionLocked } from '../core/v5-magic-miscasts.js';
 import { recoveryMethodsFor } from './v5-effect-dialog.js';
 import { hasMomentum, inferV5Kind } from '../core/v5-combat-rules.js';
-import { withoutOutnumberContext } from '../core/outnumbering.js';
+import { withoutOutnumberContext, outnumberSide } from '../core/outnumbering.js';
 import { equipmentAttackContext, weaponSkillGroupInfo } from '../core/equipment.js';
 import { v5StoreActionClock } from '../core/v5-store-action.js';
 import { d100, d10 } from '../core/dice.js';
@@ -38,7 +38,8 @@ import { uid } from '../core/models.js';
 import { renderFicheDetails } from './fiche-details.js';
 import { renderSilhouette } from './silhouette.js';
 import { buildParticipantReminders } from '../core/reminders.js';
-import { deriveEngagementContext } from '../core/engagements.js';
+import { deriveEngagementContext, engagedWith } from '../core/engagements.js';
+import { plateauZones, actionBarModel, renderActionBar, renderDisengageForm } from './workspace/plateau.js';
 import { renderResolutionPanel, actionKey, minusSigned, defenseOptions, defaultDefenseValue } from './resolution-panel.js';
 import { initSidePanel } from './side-panel.js';
 import { rollMisfortuneDie } from './resolution-panel/dom.js';
@@ -468,12 +469,49 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     return node('span', `workspace-camp is-${value}`, CAMP_LABELS[value]);
   }
 
+  // Plateau des mêlées (maquette B, spec engagements S1-S3) : à la place de la piste, une zone par mêlée puis Libres et
+  // Hors combat (banc) ; les jetons gardent les sélecteurs de l'ancienne piste. Glisser-déposer ou « Déplacer… » : engagement
+  // décidé par le MJ, sans règle ; les règles (Se désengager, Fuir, Charger) passent par la barre d'actions.
+  const plateauToast = (label, error) => import('./toast.js').then(({ showToast }) => showToast(contextMessage(label, error, 'réessayez.'), 'error'));
+  const moveCommand = (participant, value) => {
+    const run = value === 'free' ? () => Store.disengageParticipant(participant.id)
+      : value.startsWith('engage:') ? () => Store.engageParticipants(participant.id, value.slice(7))
+        : value === 'surround:on' || value === 'surround:off' ? () => Store.setParticipantPosition(participant.id, { surrounded: value === 'surround:on' }) : null;
+    if (!run) return;
+    Promise.resolve().then(run).catch(error => plateauToast('Déplacement impossible', error)).finally(() => render());
+  };
+  const dropOnZone = (zone, participantId, context) => {
+    const mover = context.active.find(row => row.id === participantId);
+    if (!mover) return;
+    if (zone.kind === 'free') return moveCommand(mover, 'free');
+    const foes = zone.members.filter(person => person.id !== mover.id && outnumberSide(person) !== outnumberSide(mover));
+    foes.reduce((chain, foe) => chain.then(() => Store.engageParticipants(mover.id, foe.id)), Promise.resolve())
+      .catch(error => plateauToast('Engagement impossible', error)).finally(() => render());
+  };
   function renderTrack(context) {
     const column = play.track;
-    column.replaceChildren(rubric('Piste des tours'));
+    column.replaceChildren(rubric('Plateau des mêlées'));
+    const board = node('div', 'workspace-plateau');
     const track = node('div', 'workspace-track');
-    track.setAttribute('aria-label', 'Piste des tours');
+    track.setAttribute('aria-label', 'Plateau des mêlées');
     if (!context.active.length) track.appendChild(node('p', 'workspace-muted', 'Aucun combattant en jeu.'));
+    const zones = context.active.length ? plateauZones(context.active) : [];
+    const zoneOf = new Map();
+    for (const zone of zones) {
+      if (zone.kind === 'free' && !zone.members.length && zones.length > 1) continue;
+      const section = node('section', `workspace-zone is-${zone.kind}`);
+      section.setAttribute('aria-label', zone.title);
+      const head = node('div', 'workspace-zone-head');
+      head.appendChild(node('strong', '', zone.title));
+      if (zone.ratio) head.appendChild(node('span', 'workspace-zone-ratio', zone.ratio));
+      section.appendChild(head);
+      section.addEventListener('dragover', event => { event.preventDefault(); section.classList.add('is-drop'); });
+      section.addEventListener('dragleave', () => section.classList.remove('is-drop'));
+      section.addEventListener('drop', event => { event.preventDefault(); section.classList.remove('is-drop'); dropOnZone(zone, event.dataTransfer?.getData('text/plain'), context); });
+      for (const member of zone.members) zoneOf.set(member.id, section);
+      track.appendChild(section);
+    }
+    const partnersOf = participant => engagedWith({ participants: context.active }, context.active, participant.id);
     context.active.forEach(participant => {
       const isActor = participant.id === context.actor?.id;
       const isCurrent = participant.id === context.combat.currentActorId;
@@ -504,14 +542,31 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         states.forEach(item => list.appendChild(node('span', 'workspace-state-chip', stateLabel(item))));
         item.appendChild(list);
       }
+      const partners = partnersOf(participant);
+      const partnerNames = partners.map(id => context.active.find(row => row.id === id)?.name).filter(Boolean);
+      if (partnerNames.length) item.appendChild(node('span', 'workspace-token-engaged', `Engagé avec : ${partnerNames.join(', ')}`));
+      const surrounded = participant.extensions?.v5?.position?.surrounded === true;
+      if (surrounded) item.appendChild(node('span', 'workspace-token-engaged', 'Encerclé'));
+      const entry = node('div', `workspace-track-entry workspace-token is-camp-${context.camp(participant)}`);
+      entry.draggable = true;
+      entry.addEventListener('dragstart', event => event.dataTransfer?.setData('text/plain', participant.id));
+      const move = document.createElement('select');
+      move.className = 'workspace-token-move';
+      move.setAttribute('aria-label', `Déplacer ${participant.name}`);
+      move.dataset.focusKey = `move-${participant.id}`;
+      move.append(new Option('Déplacer…', ''));
+      for (const foe of context.active.filter(person => person.id !== participant.id && outnumberSide(person) !== outnumberSide(participant) && !partners.includes(person.id)))
+        move.append(new Option(`Engager avec ${foe.name}`, `engage:${foe.id}`));
+      if (partners.length) move.append(new Option('Libre (désengager sans règle)', 'free'));
+      move.append(surrounded ? new Option('N’est plus encerclé', 'surround:off') : new Option('Encerclé', 'surround:on'));
+      move.addEventListener('change', () => moveCommand(participant, move.value));
+      entry.append(item, move);
       const remove = defeatedParticipantButton(participant, `track-remove-${participant.id}`);
-      if (remove) {
-        const entry = node('div', `workspace-track-entry is-camp-${context.camp(participant)}`);
-        entry.append(item, remove);
-        track.appendChild(entry);
-      } else track.appendChild(item);
+      if (remove) entry.appendChild(remove);
+      (zoneOf.get(participant.id) || track).appendChild(entry);
     });
-    column.appendChild(track);
+    board.appendChild(track);
+    column.appendChild(board);
 
     if (context.bench.length) {
       const bench = node('section', 'workspace-bench');
@@ -535,8 +590,41 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         const reminders = participantReminderBlock(participant);
         if (reminders) bench.appendChild(reminders);
       });
-      column.appendChild(bench);
+      board.appendChild(bench);
     }
+    renderPlateauActions(context, column);
+  }
+  // Barre d'actions du combattant actif et formulaire de Désengagement (spec CA10-CA14).
+  function renderPlateauActions(context, column) {
+    const actor = context.actor;
+    if (!actor || actor.zone !== 'active' || !context.started) return;
+    const actions = context.actions || [], keys = actions.map(actionKey);
+    const commands = {
+      select: patch => {
+        const { charging, ...rest } = patch;
+        resolutionHandlers.select(rest);
+        if (charging) resolutionHandlers.select({ charging: true });
+      },
+      disengage: () => { state.disengage = { actorId: actor.id }; render(); },
+      flee: () => {
+        if (isBrokenActor(actor)) {
+          import('./toast.js').then(({ showToast }) => showToast('Brisé : utilisez la fuite de Brisé du panneau.', 'info'));
+          return;
+        }
+        Promise.resolve().then(() => Store.applyFlee(actor.id)).catch(error => plateauToast('Fuite impossible', error)).finally(() => render());
+      }
+    };
+    const rows = actionBarModel({ actor, active: context.active, actions, actionKeys: keys, previewDisengage: id => Store.previewDisengage(id) });
+    renderActionBar(column, { actor, rows, commands });
+    if (state.disengage?.actorId !== actor.id) return;
+    const input = { ...state.disengage };
+    delete input.actorId;
+    const plan = Store.previewDisengage(actor.id, input);
+    renderDisengageForm(column, { actor, plan, state: input, active: context.active,
+      onChange: patch => { state.disengage = { ...state.disengage, ...patch }; render(); },
+      onApply: () => Promise.resolve().then(() => Store.applyDisengage(actor.id, input)).then(() => { state.disengage = null; })
+        .catch(error => plateauToast('Désengagement impossible', error)).finally(() => render()),
+      onClose: () => { state.disengage = null; render(); } });
   }
 
   // Bloc des rappels portés par un participant (Fait / Ignorer) ; null sans rappel. Partagé par le banc et la fiche du personnage actif.
