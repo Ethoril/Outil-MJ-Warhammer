@@ -623,7 +623,7 @@ export function renderV5MagicResult(preview, target, draft, handlers) {
   if (cast.spellSuccess && sp) {
     for (const t of sp.targetResults || sp.targets || []) {
       const tName = t.targetName || t.name || 'Cible';
-      for(const action of t.actions || [])if(['mj-input','chain-ended','conjured-weapon','option-tests','affliction-receipt','suppression','banishment-receipt','calm'].includes(action.kind) && action.summary)result.appendChild(node('p','workspace-result-line',tName+' : '+action.summary));
+      for(const action of t.actions || [])if(['mj-input','chain-ended','conjured-weapon','option-tests','affliction-receipt','suppression','banishment-receipt','calm','critical-wound'].includes(action.kind) && action.summary)result.appendChild(node('p','workspace-result-line',tName+' : '+action.summary));
       if(t.quantifiedReminder)result.appendChild(node('p','workspace-result-line',tName+' : '+Object.entries(t.quantifiedReminder).map(([key,value])=>key+' = '+value).join(' ; ')+' (reçu à appliquer sur la fiche ou le terrain).'));
       if (t.missile) {
         const rawDmg = t.missile.rawDamage ?? t.missile.baseDamage ?? 0;

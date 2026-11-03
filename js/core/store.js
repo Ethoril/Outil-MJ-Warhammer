@@ -4294,7 +4294,7 @@ function resolvedCorruptionTest(participant, skillId, input) {
         if(needs.length)throw Object.assign(new Error(needs[0].message),{userFacing:true,needsInput:needs});
         input.prayerSLContext={sceneId:draft.activeScene?.status==='active'?draft.activeScene.id:null,round:draft.combat?.round};
         const preview=previewMagicMeditation(participants[index],input);
-        if(!preview.ready)throw new Error(preview.error);
+        if(!preview.ready)throw Object.assign(new Error(preview.error),{userFacing:true});
         if(preview.success){
           if(preview.yenlui){
             participants[index].extensions ??={};

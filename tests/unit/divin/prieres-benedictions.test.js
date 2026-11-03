@@ -1410,6 +1410,19 @@ test('Souffle : la cible bénie ne s’étouffe pas ; à l’expiration l’éto
   assert.equal(subject(store, 'foe').hp, 0, 'l’étouffement a repris');
 });
 
+test('Souffle jusqu’à la fin du Round 6 : protège encore au passage de ce Round, l’étouffement reprend au suivant (recette G-DIV-2)', async () => {
+  const { store, engine } = await fixture();
+  const preview = store.previewDivineExecution(BREATH, { actorId: 'priest', targetIds: ['foe'], roll: 45, canSpeak: true, choices: { range: 0, targets: 0, duration: 0 },
+    expiry: { phase: 'endOfRound', round: 6 }, facts: { targets: { foe: { withinRange: true } } } });
+  assert.equal(preview.ready, true, `${preview.error} ${JSON.stringify(preview.needsInput)}`);
+  assert.equal((await store.applyDivineExecution(BREATH, { preview })).ready, true);
+  const round = () => JSON.parse(store.getFullJSON()).combat.round;
+  while (round() <= 6) await endTurn(engine);
+  assert.equal(round(), 7);
+  assert.equal(subject(store, 'foe').hp, 1, 'aucune Blessure au passage de la fin du Round 6');
+  assert.equal(subject(store, 'foe').extensions.v5.specialStates?.doesNotBreathe, undefined, 'Souffle a expiré à ce passage');
+});
+
 test('Souffle : Undo retire la protection', async () => {
   const { store, engine } = await fixture();
   await bless(store);

@@ -105,11 +105,13 @@ export function previewV5Turn(state, { inputs = {} } = {}) {
   const caster=phaseRow('endOfCasterTurn');
   const casterSpells=roundSpellEffects(participants,caster.phase,caster.round,inputs,caster.actorId);participants=casterSpells.participants;requests.push(...casterSpells.requests);effectLogs.push(...casterSpells.logs);
   if (transition.round > combat.round) {
-    runPhase('endOfRound', phaseRows('endOfRound'));
+    // Recette G-DIV-2 : les effets de sort de fin de Round (étouffement…) se résolvent avant l'expiration des couches
+    // divines de ce même Round ; un Souffle « jusqu'à la fin du Round 6 » protège encore à ce passage.
     const endRound=phaseRows('endOfRound').at(-1),startRound=phaseRow('startOfRound');
-    for (const row of [endRound,startRound]) {
-      const spells=roundSpellEffects(participants,row.phase,row.round,inputs,row.actorId); participants=spells.participants; requests.push(...spells.requests); effectLogs.push(...spells.logs);
-    }
+    const roundSpells=row=>{const spells=roundSpellEffects(participants,row.phase,row.round,inputs,row.actorId); participants=spells.participants; requests.push(...spells.requests); effectLogs.push(...spells.logs);};
+    roundSpells(endRound);
+    runPhase('endOfRound', phaseRows('endOfRound'));
+    roundSpells(startRound);
   }
   if(transition.round>combat.round){transition.order=effectiveOrder(participants,{mode:combat.orderMode,order:combat.order,autoOrder:before.extensions?.v5?.combatInitiativeResolution?.order,round:transition.round});transition.currentActorId=transition.order[0] || null;}
   toPosition = { ...fromPosition, round: transition.round, turnIndex: turn + 1, currentActorId: transition.currentActorId };

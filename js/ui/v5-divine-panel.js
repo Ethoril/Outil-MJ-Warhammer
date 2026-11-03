@@ -373,11 +373,12 @@ export function createDivinePanel({Store,refresh,onRollChange=()=>{}}){
   }
   const active=participants.flatMap(target=>(target.extensions?.v5?.divineEffects||[]).filter(layer=>layer.casterId===actor.id).map(layer=>({...layer,targetName:target.name})));
   if(active.length){
-   const list=node('details','workspace-v5-context-details');list.append(node('summary','','Prières actives du personnage'));field(list,'Raison de fin de prière','endReason',{type:'text'});
+   // Le bloc reste ouvert après « Terminer » : un refus (motif manquant) reste lisible (recette G-DIV-17).
+   const list=node('details','workspace-v5-context-details');list.open=state.activePrayersOpen===true;list.addEventListener('toggle',()=>{state.activePrayersOpen=list.open;});list.append(node('summary','','Prières actives du personnage'));field(list,'Raison de fin de prière','endReason',{type:'text'});
    for(const id of [...new Set(active.map(layer=>layer.executionId))]){
     const layers=active.filter(layer=>layer.executionId===id),name=contracts.find(row=>row.id===layers[0].prayerId)?.name||'Prière';
     list.append(node('p','',[name+' · '+[...new Set(layers.map(layer=>layer.targetName))].join(', '),...layers.map(layer=>summonLayerLabel(layer,participants)).filter(Boolean)].join(' · ')));
-    button(list,'Terminer '+name,()=>run(async()=>{const result=await Store.endDivinePrayer(id,{reason:state.endReason,baseRevision:Store.getLocalRevision()});if(result?.ok===false)throw Error(result.error||'Fin non enregistrée.');state.preview=null;}),false,'end');
+    button(list,'Terminer '+name,()=>run(async()=>{state.activePrayersOpen=true;const result=await Store.endDivinePrayer(id,{reason:state.endReason,baseRevision:Store.getLocalRevision()});if(result?.ok===false)throw Error(result.error||'Fin non enregistrée.');state.preview=null;}),false,'end');
    }content.append(list);
   }
   if((actor.extensions?.v5?.divineEffects||[]).some(row=>row.type==='wrath-fortune-refresh'))content.append(node('p','workspace-muted','Courroux : prochain renouvellement de Chance limité à un point permanent (L06 p.219).'));
