@@ -113,3 +113,14 @@ test('passage au banc ou retrait du combat : les engagements sont défaits pour 
   await store.engageParticipants('gunther', 'aldric');
   assert.deepEqual(pairs(store), ['aldric-gunther']);
 });
+
+test('déplacement au banc et retrait, chemin sans persistance : paires défaites des deux côtés (CA8)', async () => {
+  const store = await fixture();
+  await store.engageParticipants('gunther', 'orc');
+  await store.moveParticipant('orc', 'bench');
+  await store.moveParticipant('orc', 'active');
+  assert.deepEqual(pairs(store), [], 'revenu du banc par moveParticipant');
+  await store.engageParticipants('aldric', 'orc');
+  await store.removeParticipant('orc');
+  assert.equal(person(store, 'aldric').extensions.v5.engagements, undefined, 'plus de trace sur le survivant');
+});

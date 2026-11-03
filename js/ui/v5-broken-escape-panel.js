@@ -40,7 +40,7 @@ export function createV5BrokenEscapePanel({Store,refresh=()=>{},onPrepareHide=()
   const revision=Store.getLocalRevision?.()??null;
   let d=drafts.get(actor.id);
   // Engagements durables (spec engagements CA13, CA17) : les adversaires engagés du plateau sont pré-renseignés.
-  const plateau=engagedWith({participants:Store.listParticipants?.()||[]},Store.listParticipants?.()||[],actor.id);
+  const people=Store.listParticipants?.()||[],plateau=engagedWith({participants:people},people,actor.id).filter(id=>participantCamp(people.find(row=>row.id===id))!==participantCamp(actor));
   if(!d)d={turnId,baseRevision:revision,action:'flee',before:null,after:null,engagement:plateau.length?'selected':null,engaged:[...plateau],mode:null,roll:'',choice:null,attestValue:null,preview:null,error:'',busy:false};
   else if(d.turnId!==turnId){Object.assign(d,{turnId,baseRevision:revision,action:'flee',before:null,after:null,engagement:plateau.length?'selected':null,engaged:[...plateau],mode:null,roll:'',choice:null,attestValue:null,hideSkillId:null,lastReceipt:null,preview:null,error:'',busy:false});}
   else if(d.baseRevision!==revision){const hadPreview=Boolean(d.preview);Object.assign(d,{baseRevision:revision,before:null,after:null,engagement:plateau.length?'selected':null,engaged:[...plateau],mode:null,roll:'',choice:null,attestValue:null,hideSkillId:null,preview:null,error:hadPreview?'La partie a changé : les faits et l’aperçu ont été invalidés; renseignez-les à nouveau.':''});}

@@ -171,6 +171,14 @@ import { withoutEngagements } from './engagements.js';
 
 
 // G-MON-2 : mort ou inconscience confirmée hors résolution : chute automatique (rider-dead/unconscious, mount-dead/unconscious), comme pour la résolution.
+// Engagements (spec CA8), chemin sans persistance : `id` quitte le combat ou passe au banc, ses paires sont défaites des deux côtés.
+const unlinkEngagementsInMap = (participantsMap, id, markDirty, self = null) => {
+  for (const row of withoutEngagements({ participants: [...participantsMap.values()] }, id).participants) {
+    if (row === participantsMap.get(row.id)) continue;
+    if (self && row.id === id) Object.assign(self, row);
+    else { participantsMap.set(row.id, row); markDirty(`combat/participants/${row.id}`, row); }
+  }
+};
 const fallFromSaddle = (participants, id) => dismountLinkedRiders(participants.map(row => row.id === id && row.extensions?.v5?.mounted === true ? clearMountedRelation(row) : row), id);
 
 export function createStore({ storage = typeof localStorage !== 'undefined' ? localStorage : null, sync = null, persistence = null, persistenceFactory = null, contextId = 'guest', divineAuthority = 'MJ', appVersion = 'unknown', bus = null, now = () => new Date().toLocaleTimeString(), onSyncStatus = null, onLocalStatus = null, onReady = null } = {}) {
@@ -1834,6 +1842,7 @@ function resolvedCorruptionTest(participant, skillId, input) {
       recordSnapshot('remove-participant');
       const turnTransition = participant.zone === 'active' ? removeFromCombat({ participants: Array.from(combat.participants.values()), order: combat.order, currentActorId: combat.currentActorId, participantId: id }) : null;
       combat.participants.delete(id);
+      unlinkEngagementsInMap(combat.participants, id, markDirty);
       combat.participants.forEach((item, key) => {
         if (item.extensions?.v5?.mounted === true && item.extensions.v5.mountId === id) {
           const dismounted = clearMountedRelation(item);
@@ -1887,12 +1896,7 @@ function resolvedCorruptionTest(participant, skillId, input) {
           combat.participants.set(key, linkedRider);
           markDirty(`combat/participants/${key}`, linkedRider);
         });
-        // Engagements (spec CA8) : au banc, le combattant n'est plus engagé, des deux côtés.
-        const unlinked = withoutEngagements({ participants: [...combat.participants.values()] }, id).participants;
-        for (const row of unlinked) if (row !== combat.participants.get(row.id)) {
-          if (row.id === id) Object.assign(p, row);
-          else { combat.participants.set(row.id, row); markDirty(`combat/participants/${row.id}`, row); }
-        }
+        unlinkEngagementsInMap(combat.participants, id, markDirty, p);
       }
       markDirty(`combat/participants/${id}`, p);
       save();
@@ -2585,6 +2589,7 @@ function resolvedCorruptionTest(participant, skillId, input) {
           combat.participants.set(key, linkedRider);
           markDirty(`combat/participants/${key}`, linkedRider);
         });
+        unlinkEngagementsInMap(combat.participants, id, markDirty, p);
       }
       const remainingOrder = combat.order.filter(xId => xId !== id);
       const activeOrder = remainingOrder.filter(xId => combat.participants.get(xId)?.zone === 'active');

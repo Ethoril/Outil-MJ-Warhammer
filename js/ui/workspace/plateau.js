@@ -61,6 +61,8 @@ export function actionBarModel({ actor, active, actions = [], actionKeys = [], p
   for (const foe of freeFoes.filter(foe => !engagedIds.includes(foe.id)).slice(0, 4)) rows.push({ id: `charge-${foe.id}`, label: `Charger · ${foe.name}`,
     consequence: engagedFoes.length ? 'interdit : déjà engagé (p. 163) · clic = forcer (MJ)' : 'Élan si la distance de charge est atteinte',
     run: commands => commands.select({ targetId: foe.id, charging: true, ...(meleeKey ? { actionKey: meleeKey } : {}) }) });
+  if (engagedFoes.length && !freeFoes.some(foe => !engagedIds.includes(foe.id))) rows.push({ id: 'charge-blocked', label: 'Charger', consequence: 'interdit : déjà engagé (p. 163) · clic = forcer (MJ)',
+    run: commands => commands.select({ targetId: engagedFoes[0].id, charging: true, ...(meleeKey ? { actionKey: meleeKey } : {}) }) });
   if (rangedKey) {
     const target = enemiesOf(actor, active).find(foe => !engagedIds.includes(foe.id)) || enemiesOf(actor, active)[0];
     if (target) {

@@ -618,6 +618,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       // Mène au contrôle du panneau de résolution (« Viser » déclaré, puces de choix d’action).
       focus: key => {
         const target = play.center.querySelector(key === 'action' ? '.workspace-resolution [data-focus-key^="action-"], .workspace-resolution .workspace-chip' : `[data-focus-key="${key}"]`);
+        for (let parent = target?.parentElement; parent; parent = parent.parentElement) if (parent.tagName === 'DETAILS') parent.open = true;
         target?.scrollIntoView?.({ block: 'center' });
         target?.focus?.();
       },
