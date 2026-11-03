@@ -45,7 +45,7 @@ export function actionBarModel({ actor, active, actions = [], actionKeys = [], p
   for (const foe of engagedFoes) {
     const derived = deriveEngagementContext({ combat: { participants: active }, participants: active, actorId: actor.id, targetId: foe.id, kind: 'melee' });
     const plan = planOutnumbering({ actor, target: foe, participants: active, context: derived });
-    rows.push({ id: `attack-${foe.id}`, label: `Attaquer ${foe.name}`, consequence: [plan.outnumbered || plan.surrounded ? plan.summary : 'engagés', ...(meleeKey ? [] : ['aucune arme de mêlée préparée'])].join(' · '),
+    rows.push({ id: `attack-${foe.id}`, label: `Attaquer · ${foe.name}`, consequence: [plan.outnumbered || plan.surrounded ? plan.summary : 'engagés', ...(meleeKey ? [] : ['aucune arme de mêlée préparée'])].join(' · '),
       run: commands => commands.select({ targetId: foe.id, ...(meleeKey ? { actionKey: meleeKey } : {}) }) });
   }
   if (engagedFoes.length) {
@@ -57,7 +57,7 @@ export function actionBarModel({ actor, active, actions = [], actionKeys = [], p
     rows.push({ id: 'flee', label: 'Fuir', consequence: orderly ? `En Bon Ordre : pas d’Élan pour ${engagedFoes.map(foe => foe.name).join(', ')} ; Brisé dû`
       : `Élan et attaque gratuite pour ${engagedFoes.map(foe => foe.name).join(', ')} ; +${engagedFoes.length} Brisé`, run: commands => commands.flee() });
   } else {
-    for (const foe of freeFoes.slice(0, 4)) rows.push({ id: `charge-${foe.id}`, label: `Charger ${foe.name}`, consequence: 'Élan si la distance de charge est atteinte',
+    for (const foe of freeFoes.slice(0, 4)) rows.push({ id: `charge-${foe.id}`, label: `Charger · ${foe.name}`, consequence: 'Élan si la distance de charge est atteinte',
       run: commands => commands.select({ targetId: foe.id, charging: true, ...(meleeKey ? { actionKey: meleeKey } : {}) }) });
   }
   if (rangedKey) {
@@ -65,11 +65,11 @@ export function actionBarModel({ actor, active, actions = [], actionKeys = [], p
     if (target) {
       const derived = deriveEngagementContext({ combat: { participants: active }, participants: active, actorId: actor.id, targetId: target.id, kind: 'ranged' });
       const consequence = derived.shooterEngagedElsewhere ? 'engagé : Pistolet seulement' : derived.targetEngaged ? 'cible engagée : Désavantage, déviation possible' : 'tir libre';
-      rows.push({ id: `shoot-${target.id}`, label: `Tirer sur ${target.name}`, consequence, run: commands => commands.select({ targetId: target.id, actionKey: rangedKey }) });
+      rows.push({ id: `shoot-${target.id}`, label: `Tirer · ${target.name}`, consequence, run: commands => commands.select({ targetId: target.id, actionKey: rangedKey }) });
     }
   }
   const aimTarget = engagedFoes[0] || enemiesOf(actor, active)[0];
-  if (aimTarget) rows.push({ id: `aim-${aimTarget.id}`, label: `Viser ${aimTarget.name}`, consequence: 'la prochaine attaque en profite', run: commands => commands.select({ targetId: aimTarget.id }) });
+  if (aimTarget) rows.push({ id: `aim-${aimTarget.id}`, label: `Viser · ${aimTarget.name}`, consequence: 'la prochaine attaque en profite', run: commands => commands.select({ targetId: aimTarget.id }) });
   return rows;
 }
 

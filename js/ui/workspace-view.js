@@ -544,10 +544,10 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       }
       const partners = partnersOf(participant);
       const partnerNames = partners.map(id => context.active.find(row => row.id === id)?.name).filter(Boolean);
-      if (partnerNames.length) item.appendChild(node('span', 'workspace-token-engaged', `Engagé avec : ${partnerNames.join(', ')}`));
       const surrounded = participant.extensions?.v5?.position?.surrounded === true;
-      if (surrounded) item.appendChild(node('span', 'workspace-token-engaged', 'Encerclé'));
       const entry = node('div', `workspace-track-entry workspace-token is-camp-${context.camp(participant)}`);
+      // Hors du bouton-jeton : son texte (nom accessible, filtres des parcours) reste celui de l'ancienne piste.
+      const facts = [...(partnerNames.length ? [`Engagé avec : ${partnerNames.join(', ')}`] : []), ...(surrounded ? ['Encerclé'] : [])];
       entry.draggable = true;
       entry.addEventListener('dragstart', event => event.dataTransfer?.setData('text/plain', participant.id));
       const move = document.createElement('select');
@@ -560,7 +560,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       if (partners.length) move.append(new Option('Libre (désengager sans règle)', 'free'));
       move.append(surrounded ? new Option('N’est plus encerclé', 'surround:off') : new Option('Encerclé', 'surround:on'));
       move.addEventListener('change', () => moveCommand(participant, move.value));
-      entry.append(item, move);
+      entry.append(item, ...facts.map(text => node('span', 'workspace-token-engaged', text)), move);
       const remove = defeatedParticipantButton(participant, `track-remove-${participant.id}`);
       if (remove) entry.appendChild(remove);
       (zoneOf.get(participant.id) || track).appendChild(entry);

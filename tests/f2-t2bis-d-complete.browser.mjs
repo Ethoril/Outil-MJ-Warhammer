@@ -74,6 +74,9 @@ try{
   }
   // Seuil V5 de 2 PA pour opposer un tir par Esquive : le bouclier attaché à
   // 2 PA autorise le jet, le même profil à 1 PA ne permet pas cette opposition.
+  // Engagements durables (3.39.0) : les attaques de mêlée ci-dessus ont engagé la tireuse avec la cible ; le MJ la libère avant les tirs.
+  const freeShooter=()=>page.evaluate(async id=>{const{Store}=await import('/Outil-MJ-Warhammer/js/main.js');await Store.ready;await Store.disengageParticipant(id);},actor.id);
+  await freeShooter();
   const checkShieldShot=async ap=>{const shieldTarget={...structuredClone(targetBase),equipment:[{id:'shot-shield',kind:'shield',name:'Bouclier seuil',ap,locations:[],keywords:[{id:'bouclier'}]}]};await load(combat(actor,shieldTarget));await selectAttack('d-bolas-action');await play.getByLabel(`Défense de ${shieldTarget.name} : caractéristique ou jet`).selectOption('Ag');await openProtection();await play.getByLabel('Bouclier utilisé').selectOption('shot-shield');await openProtection();await play.getByLabel('Bouclier attaché au bras ou en bandoulière').check();await openProtection();await play.getByLabel('Bras non directeur').selectOption('left');for(const label of ['Bouclier disponible ce tour','Défense opposée avec ce bouclier','Attaquant visible']){await openProtection();await chooseBoolean(play.getByLabel(label),'true');}await enterAttackAndDefense(31,20);return play.locator('.workspace-result-live').innerText();};
   const shieldTwoPa=await checkShieldShot(2);assert.doesNotMatch(shieldTwoPa,/Confirmer la règle autorisant cette défense contre un tir/u,'2 PA autorisent l’opposition à distance par Esquive');
   const shieldOnePa=await checkShieldShot(1);assert.match(shieldOnePa,/Confirmer la règle autorisant cette défense contre un tir/u,'1 PA ne permet pas l’opposition à distance par Esquive');
@@ -94,6 +97,7 @@ try{
   await load(combat(actor,structuredClone(targetBase)));
   await selectAttack('d-inflict-action');await enterRoll(31);await apply();state=await read();foe=state.combat.participants.find(row=>row.id===target.id);assert.equal(foe.states.some(row=>row.key==='sonne'),true,'Inflige Sonné appliqué après un coup réussi');
 
+  await freeShooter();
   // Bolas : un coup au Corps ne déclenche pas la condition « jambes seulement »;
   // un coup aux jambes ajoute Empêtré et À terre via la résolution appliquée.
   await selectAttack('d-bolas-action');await chooseBoolean(play.getByLabel('Coup ciblé (−2 DR, hors modificateur saisi)'),'true');await play.getByLabel('Localisation du coup ciblé').selectOption('body');await enterRoll(31);await apply();

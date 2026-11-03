@@ -56,14 +56,14 @@ try {
   assert.equal(await zone('Mêlée 1').locator('.workspace-zone-ratio').textContent(), '2 contre 1');
   assert.equal(await zone('Mêlée 1').locator('[data-workspace-select]').count(), 3);
   assert.equal(await zone('Libres').locator('[data-workspace-select]').count(), 2);
-  assert.match(await page.locator('[data-workspace-select="orc"]').textContent(), /Engagé avec : Gunther, Aldric/);
+  assert.match(await page.locator('.workspace-token').filter({ has: page.locator('[data-workspace-select="orc"]') }).textContent(), /Engagé avec : Gunther, Aldric/);
   // CA10 : barre d'actions, conséquence annoncée.
   const bar = page.locator('.workspace-action-bar');
-  assert.match(await bar.textContent(), /Attaquer Orc/);
-  assert.match(await bar.getByRole('button', { name: /^Attaquer Orc/ }).textContent(), /surnombre/);
+  assert.match(await bar.textContent(), /Attaquer · Orc/);
+  assert.match(await bar.getByRole('button', { name: /^Attaquer · Orc/ }).textContent(), /surnombre/);
   assert.match(await bar.getByRole('button', { name: /^Se désengager/ }).textContent(), /Test opposé contre Orc/);
   // CA11 + CA15 : Attaquer prépare le panneau ; le surnombre est déduit, sans cases.
-  await bar.getByRole('button', { name: /^Attaquer Orc/ }).click();
+  await bar.getByRole('button', { name: /^Attaquer · Orc/ }).click();
   await page.waitForTimeout(200);
   if (await page.locator('.workspace-resolution-drawer').getAttribute('hidden') !== null) await page.locator('[data-circumstances-toggle]').click();
   assert.match(await page.locator('.workspace-engagement-derived').first().textContent(), /Déduit du plateau : 2 contre 1 : surnombre, \+1 DR/);

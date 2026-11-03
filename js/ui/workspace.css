@@ -115,7 +115,7 @@
 .workspace-zone-ratio { font-family: var(--font-ui); font-size: 12.5px; padding: 1px 8px; border-radius: 999px; background: var(--chip); }
 .workspace-token { cursor: grab; }
 .workspace-token-move { justify-self: end; margin: 0 6px; max-width: calc(100% - 12px); font-size: 13px; min-height: 30px; }
-.workspace-token-engaged { font-family: var(--font-ui); font-size: 12.5px; color: var(--accent-text); }
+.workspace-token-engaged { margin: 0 10px; font-family: var(--font-ui); font-size: 12.5px; color: var(--accent-text); }
 .workspace-action-bar, .workspace-disengage { margin-top: 10px; padding: 12px 14px; display: grid; gap: 8px; background: var(--panel); border: 2px solid var(--accent); border-radius: var(--radius); }
 .workspace-action-bar-title { margin: 0; font-weight: 700; color: var(--accent-text); }
 .workspace-action-bar-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 8px; }
