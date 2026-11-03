@@ -1224,7 +1224,7 @@ export function renderResolutionPanel(options) {
     appendageInput.type='text';
     appendageInput.value=morphologyContext.hitAppendage||'';
     appendageInput.setAttribute('aria-label',appendageLabel.textContent);
-    appendageInput.addEventListener('change',()=>handlers.select({v5Context:{...morphologyContext,hitAppendage:appendageInput.value.trim()||undefined}}));
+    appendageInput.addEventListener('change',()=>handlers.select({v5Context:{...morphologyContext,hitAppendage:appendageInput.value.trim()||undefined,hitAppendageAp:undefined}}));
     appendageLabel.append(appendageInput);
     talentFields.append(appendageLabel);
     if(morphologyContext.hitAppendage){
