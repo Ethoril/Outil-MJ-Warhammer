@@ -2262,6 +2262,8 @@ export function renderResolutionPanel(options) {
     const field=role==='actor'?'v5Context':'defenseContext',current=draft[field]||{};
     for(const [key,text]of [['mounted','Esquive montée'],['confined','Espace exigu'],['status','Statut supérieur'],['proneAttack','Attaque À terre'],['belowTarget','Attaque sous la cible'],['longRange','Longue portée'],['extremeRange','Portée extrême'],['flying','Tir sous Trait Vol'],['terrainMovement','Terrain gênant le mouvement'],['critical','Blessure critique'],['amputation','Amputation']]){
       if(role==='actor'&&['belowTarget','terrainMovement'].includes(key))continue;
+      // L'attaquant n'esquive pas : « Esquive montée » ne concerne que la défense (ou un Test opposé).
+      if(role==='actor'&&key==='mounted'&&type==='attack')continue;
       if(role==='defender'&&key==='mounted'&&target?.extensions?.v5?.mounted===true&&defense?.option?.extensions?.fiche?.skillId==='skill-45_73_71_75_69_76_65-base')continue;
       const label=node('label','workspace-type',text+(role==='defender'?' (défense)':''));
       const input=document.createElement('input');

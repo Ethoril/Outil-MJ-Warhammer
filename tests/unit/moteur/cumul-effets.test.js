@@ -118,3 +118,11 @@ test('R1 un sort dont la clé est « Endurance » s\'applique au Test de Résist
   const sl = resist(store).sl;
   assert.equal(sl, -1 + 2, `obtenu ${sl} ; ${dump(store)}`);
 });
+
+test('Clés adverses des sorts : « Mêlée adverse » vise un Test de Corps à corps, « Endurance adverse » un Test de Résistance', async () => {
+  const { magicAdverseModifiers } = await import('../../../js/core/v5-magic-talents.js');
+  const holder = { extensions: { v5: { testModifiers: { 'Mêlée adverse': -1, 'Endurance adverse': -2, 'Perception adverse': -1 } } } };
+  assert.deepEqual(magicAdverseModifiers(holder, 'Corps à corps (Base)').map(row => row.amount), [-1]);
+  assert.deepEqual(magicAdverseModifiers(holder, 'Résistance').map(row => row.amount), [-2]);
+  assert.deepEqual(magicAdverseModifiers(holder, 'Esquive'), []);
+});

@@ -141,8 +141,9 @@ export function magicSkillModifiers(actor,skill,context={}){
 }
 /** Clés « … adverse » du porteur d'un effet (Perception adverse…) : elles s'appliquent au Test de qui s'y oppose. */
 export function magicAdverseModifiers(holder,skill){
- const test=splitSkill(skill);
- return Object.entries(holder?.extensions?.v5?.testModifiers || {}).filter(([key])=>{const wanted=splitSkill(key);return wanted.base.endsWith(' adverse')&&wanted.base.slice(0,-' adverse'.length)===test.base&&(!wanted.spec||wanted.spec===test.spec);})
+ const test=splitSkill(normalizeTestKey(skill));
+ // « Mêlée adverse » vise un Test de Corps à corps : même table de noms que testKeyApplies.
+ return Object.entries(holder?.extensions?.v5?.testModifiers || {}).filter(([key])=>{const raw=splitSkill(key);if(!raw.base.endsWith(' adverse'))return false;const wanted=splitSkill(normalizeTestKey(String(key).replace(/\s+adverse(?=\s*(\(|$))/i,'')));return wanted.base===test.base&&(!wanted.spec||wanted.spec===test.spec);})
   .map(([key,amount])=>({id:'spell-adverse:'+key,label:'Effet magique adverse : '+key,amount}));
 }
 export function previewMagicMeditation(actor,options={}){
