@@ -49,6 +49,8 @@ import { createV5AftermathPanel } from './v5-aftermath-panel.js';
 import { WORKSPACE_SPACES, noop, node, button, readProfiles, readEncounters, readScenes, readParticipants, readCombat, turnKey, STATE_NAMES, stateLabel, toughnessBonus, armorSummary, displayedArmorLocations, hpText, hpBar, CRITICAL_ERROR_FIELDS, DEFENDER_CRITICAL_FIELDS, criticalRollError, dispelDistance, dispelVisible, validRoll, criticalRollsChanged, profileSearchText, createShell, profileSummary, magicCastingSpell } from './workspace/helpers.js';
 export { WORKSPACE_SPACES, STATE_NAMES, magicCastingSpell } from './workspace/helpers.js';
 
+// G-CRI-5 : parties amputées (clés des séquelles) affichées en français.
+const AMPUTATION_PART_LABELS={hand:'main',arm:'bras',foot:'pied',leg:'jambe','leg-left':'jambe gauche','leg-right':'jambe droite',ear:'oreille',eye:'œil',finger:'doigt',toe:'orteil',nose:'nez',teeth:'dents',tongue:'langue'};
 /**
  * @param {{Store: object, Combat?: object, Bus?: object, mount?: Element, actions?: object}} options
  */
@@ -2325,7 +2327,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       section.setAttribute('aria-label','Chocs d’amputation à résoudre');
       section.appendChild(rubric('Chocs d’amputation — Test de Résistance'));
       for(const item of amputationFollowups){
-        const {participant,record,requirements}=item,parts=[...new Set(requirements.map(row=>row.part).filter(Boolean))].join(', ')||'membre',canReject= requirements.length>0&&requirements.every(row=>row.conditional===true);
+        const {participant,record,requirements}=item,parts=[...new Set(requirements.map(row=>AMPUTATION_PART_LABELS[row.part]||row.part).filter(Boolean))].join(', ')||'membre',canReject= requirements.length>0&&requirements.every(row=>row.conditional===true);
         section.appendChild(node('p','workspace-result-line',`${participant.name} · ${record.effectName} · amputation : ${parts} · Résistance ${requirements[0].difficultyDR} DR${(record.sequela?.durableEffects||[]).some(effect=>effect.kind==='surgery-required')?' · chirurgie requise':''}`));
         const row=node('div','workspace-critical-amputation-controls');
         const allFingersLost=requirements.some(requirement=>requirement.trigger==='all-fingers-lost'),factLabel=allFingersLost?'Tous les doigts ont été perdus':'Amputation effectivement survenue';

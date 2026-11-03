@@ -168,6 +168,9 @@ import { createAftermathApi } from './store/api-aftermath.js';
 import { createV5CombatActionsApi } from './store/api-v5-combat-actions.js';
 
 
+// G-MON-2 : mort ou inconscience confirmée hors résolution : chute automatique (rider-dead/unconscious, mount-dead/unconscious), comme pour la résolution.
+const fallFromSaddle = (participants, id) => dismountLinkedRiders(participants.map(row => row.id === id && row.extensions?.v5?.mounted === true ? clearMountedRelation(row) : row), id);
+
 export function createStore({ storage = typeof localStorage !== 'undefined' ? localStorage : null, sync = null, persistence = null, persistenceFactory = null, contextId = 'guest', divineAuthority = 'MJ', appVersion = 'unknown', bus = null, now = () => new Date().toLocaleTimeString(), onSyncStatus = null, onLocalStatus = null, onReady = null } = {}) {
   const CLIENT_ID = (typeof crypto !== 'undefined' && crypto.randomUUID) ? crypto.randomUUID() : uid();
 
@@ -2433,6 +2436,7 @@ function resolvedCorruptionTest(participant, skillId, input) {
         const result=decideV5CriticalDeath(draft.combat.participants[index],{decision,round:draft.combat?.round});
         if(!['dead','declined'].includes(result.status))throw Object.assign(new Error(result.reason||'Confirmation MJ requise.'),{userFacing:true,code:'CRITICAL_DEATH_CONFIRMATION'});
         draft.combat.participants[index]=result.participant;
+        if(result.status==='dead')draft.combat.participants=fallFromSaddle(draft.combat.participants,participantId);
         return draft;
       });
     },
@@ -2443,6 +2447,7 @@ function resolvedCorruptionTest(participant, skillId, input) {
         const result=decideV5ImmediateCriticalDeath(draft.combat.participants[index],{criticalId,decision});
         if(!['dead','declined'].includes(result.status))throw Object.assign(new Error(result.reason||'Confirmation MJ requise.'),{userFacing:true,code:'CRITICAL_DEATH_CONFIRMATION'});
         draft.combat.participants[index]=result.participant;
+        if(result.status==='dead')draft.combat.participants=fallFromSaddle(draft.combat.participants,participantId);
         return draft;
       });
     },
@@ -2471,6 +2476,7 @@ function resolvedCorruptionTest(participant, skillId, input) {
         const result = decideV5SuddenDeath(draft.combat.participants[index], plan, outcome);
         if (!['dead', 'unconscious'].includes(result.status)) throw Object.assign(new Error(result.reason || 'Choix MJ requis.'), { userFacing: true, code: 'SUDDEN_DEATH_CONFIRMATION' });
         draft.combat.participants[index] = result.participant;
+        draft.combat.participants = fallFromSaddle(draft.combat.participants, participantId);
         draft.log = [{ id: uid(), kind: 'management', actorId: participantId, actorName: result.participant.name, text: `${result.participant.name} : mort subite — ${result.status === 'dead' ? 'mort' : 'inconscient'} (choix MJ)`, detail: { kind: 'sudden-death', outcome: result.status } }, ...(draft.log || [])].slice(0, 300);
         return draft;
       });

@@ -72,7 +72,10 @@ describe('Import JSON : les 21 profils complets de la recette', () => {
       }
     }
     assert.equal(byName('Recette Mage Œil de la tempête').talents.find(item => item.id === 'talent-eye-of-the-storm').rank, 2);
-    assert.equal(store.listProfiles().find(profile => profile.name === 'Recette Deux armes').diceLines.length, 2);
+    // G-ATT-6 : les deux armes viennent du catalogue (equipement), pour le sélecteur « Attaque précédente… ».
+    const twoWeapons = store.listProfiles().find(profile => profile.name === 'Recette Deux armes');
+    assert.deepEqual(['Épée', 'Dague'].map(name => twoWeapons.equipment.some(item => item.kind === 'weapon' && item.name === name)), [true, true]);
+    assert.equal(twoWeapons.diceLines.length, 4);
   });
 
   test('un profil importé reste modifiable : ni lien de fiche, ni champ verrouillé, PV et Initiative du JSON conservés', async () => {

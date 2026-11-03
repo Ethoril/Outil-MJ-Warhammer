@@ -852,27 +852,11 @@
         "bras": 0,
         "jambes": 0
       },
-      "notes": "G-ATT-6 (le talent dispense du coût en Élan de la seconde arme).",
+      "notes": "G-ATT-6 : armes du catalogue pour le sélecteur « Attaque précédente… » ; cocher « Attaque de seconde arme sans Élan » quand le talent Maniement de deux armes s’applique.",
+      "equipement": ["Épée", "Dague"],
       "talents": [
         {
           "nom": "Maniement de deux armes"
-        }
-      ],
-      "jets": [
-        {
-          "nom": "Épée",
-          "type": "attaque",
-          "score": 45,
-          "degats": "BF+4"
-        },
-        {
-          "nom": "Dague",
-          "type": "attaque",
-          "score": 45,
-          "degats": "BF+2",
-          "qualites": [
-            "Parade"
-          ]
         }
       ]
     },
@@ -900,7 +884,7 @@
         "bras": 0,
         "jambes": 0
       },
-      "notes": "G-MON-2 : l’Esquive montée ne prend pas le Désavantage automatique.",
+      "notes": "G-MON-2 : Acrobaties équestres dispense l’Esquive montée du Désavantage automatique ; Cavalier émérite seul ne la dispense pas.",
       "competences": [
         {
           "nom": "Chevaucher",
@@ -910,6 +894,9 @@
       "talents": [
         {
           "nom": "Cavalier émérite"
+        },
+        {
+          "nom": "Acrobaties équestres"
         }
       ]
     },

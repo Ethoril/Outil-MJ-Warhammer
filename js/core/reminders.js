@@ -23,6 +23,10 @@ const companionReminderTexts = (person, participants) => {
 // Un module rend des textes (clé = rang) ou des `{ key, text }` (clé stable par sens du rappel).
 const traitReminderTexts = person => TRAIT_REMINDERS.flatMap(([name, fn]) => fn(person).map((entry, index) => (typeof entry === 'string' ? { key: `${name}-${index}`, text: entry } : { key: `${name}-${entry.key}`, text: entry.text })));
 
+// G-DIV-12 : une couche divine reçue d'un autre prêtre doit se voir sur la fiche de celui qui la porte.
+const divineStateReminders = person => person?.extensions?.v5?.specialStates?.orderlyDisengage === true
+  ? [{ key: 'divine-orderly-disengage', text: 'En Bon Ordre (prière) : se désengage sans Élan ni attaque gratuite adverse, à appliquer par le MJ.' }] : [];
+
 const hasOwn = (value, key) => Object.prototype.hasOwnProperty.call(value, key);
 const isRecord = value => value !== null && typeof value === 'object' && !Array.isArray(value);
 
@@ -109,7 +113,7 @@ export function deriveReminders(snapshot = {}, transition = {}, choices = []) {
     // Rappels dérivés des Traits (calculés à l'affichage, jamais écrits dans le participant) : permanents, donc réservés à la carte
     // et au Personnage actif (transition « participant »), jamais à « À traiter » qui ne garde que les rappels liés à un moment.
     if (transition.type === 'participant') {
-      const entries = [...traitReminderTexts(person), ...companionReminderTexts(person, snapshot.allParticipants || snapshot.participants).map((text, index) => ({ key: `companion-${index}`, text }))];
+      const entries = [...traitReminderTexts(person), ...divineStateReminders(person), ...companionReminderTexts(person, snapshot.allParticipants || snapshot.participants).map((text, index) => ({ key: `companion-${index}`, text }))];
       for (const { key, text } of entries) candidates.push({ kind: 'participant-reminder', effectId: `${person.id}:trait-${key}`, text: `${person.name || 'Participant'} : ${text}`, mode: 'reminder' });
     }
     for (const note of Array.isArray(person.extensions?.v5?.reminders) ? person.extensions.v5.reminders : []) {

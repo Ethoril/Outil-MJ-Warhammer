@@ -1715,3 +1715,11 @@ test('v3 Jugement du Roi de la neige : ignore BE et PA et inflige Sonné', () =>
   assert.equal(clause(judgement, 'redirect-stunned').mode, 'manual');
 });
 });
+
+test('G-DIV-12 : l’allié qui porte En Bon Ordre en voit le rappel sur sa fiche', async () => {
+  const store = createStore({ persistence: memory(), storage: null }); await store.ready;
+  const ally = { id: 'ally', name: 'Allié', kind: 'PJ', camp: 'pj', zone: 'active', initiative: 40, hp: 10, maxHp: 10, caracs: { CC: 40, I: 40, M: 4 }, skills: [], talents: [], equipment: [], traits: [], states: [], armor: { head: 0, body: 0, arms: 0, legs: 0 }, extensions: { v5: { specialStates: { orderlyDisengage: true } } } };
+  await store.loadFromJSON({ schemaVersion: 3, reserve: [], log: [], diceLines: [], combat: { round: 1, currentActorId: 'ally', order: ['ally'], participants: [ally] } });
+  const reminders = JSON.stringify(store.getParticipantReminders('ally'));
+  assert.match(reminders, /En Bon Ordre/);
+});

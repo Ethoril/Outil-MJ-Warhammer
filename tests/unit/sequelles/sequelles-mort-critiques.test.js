@@ -1935,3 +1935,18 @@ test('T2 bis — les décisions refusent une révision périmée, une option dé
   persistence.close();
 });
 });
+
+test('G-MON-2 : la monture tuée par un critique confirmé par le MJ désarçonne son cavalier', async () => {
+  const person = id => ({ id, name: id, kind: 'PJ', camp: 'pj', zone: 'active', hp: 12, maxHp: 12, caracs: { CC: 40, E: 30, I: 30 }, skills: [], talents: [], equipment: [], traits: [], states: [], armor: { head: 0, body: 0, arms: 0, legs: 0 }, extensions: { v5: {} } });
+  const mountSource = createCriticalAftermathRecord(person('mount'), { table: 'HEAD', effectRoll: 100, resolutionId: 'mount-fatal', criticalIndex: 0, round: 1 });
+  const mount = { ...mountSource.participant, zone: 'active', name: 'Destrier' };
+  const rider = { ...person('rider'), zone: 'active', name: 'Cavalier', extensions: { v5: { mounted: true, mountId: 'mount' } } };
+  const store = createStore({ storage: null }); await store.ready;
+  await store.loadFromJSON({ schemaVersion: 3, reserve: [], log: [], diceLines: [], combat: { round: 1, currentActorId: 'rider', order: ['rider', 'mount'], participants: [rider, mount] } });
+  await store.decideImmediateCriticalDeath('mount', mountSource.record.id, 'confirm');
+  const after = store.listParticipants();
+  assert.equal(after.find(row => row.id === 'mount').extensions.v5.dead, true);
+  const saddle = after.find(row => row.id === 'rider').extensions.v5;
+  assert.equal(saddle.mounted, false, 'le cavalier tombe quand sa monture meurt');
+  assert.equal(saddle.mountId, undefined);
+});

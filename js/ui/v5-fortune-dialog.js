@@ -19,7 +19,9 @@ export function openV5FortuneDialog({ participantName, fortune, submit, getCurre
     const operationLabel=el('label','Opération'),operation=el('select');operation.setAttribute('aria-label','Opération de Chance');operation.append(new Option('Corriger le solde','correction'));if(fortune.permanent!==null)operation.append(new Option('Renouvellement normal','refresh'));operationLabel.append(operation);const reasonLabel=el('label','Motif du renouvellement'),reason=el('input');reason.setAttribute('aria-label','Motif du renouvellement');reasonLabel.append(reason);reasonLabel.hidden=true;
     if(fortune.refreshLimit===1)summary.append(' Courroux : le prochain renouvellement normal donnera 1 point permanent (L06 p.219).');
     operation.addEventListener('change',()=>{reasonLabel.hidden=operation.value!=='refresh';amountLabel.firstChild.textContent=operation.value==='refresh'?'Pool normal de Chance à renouveler':'Points de Fortune disponibles';amount.value='';});
-    const hint = el('p', 'Ce solde est conservé dans cette rencontre ; liez une fiche de personnage pour le garder d’une rencontre à l’autre. Une annulation restaure aussi la Fortune.', 'workspace-muted');
+    // G-DES-1 : seule une copie de rencontre (identité « copy: ») perd son solde en changeant de rencontre.
+    const durable = Boolean(fortune.characterId) && !String(fortune.characterId).startsWith('copy:');
+    const hint = el('p', (durable ? 'Ce solde est conservé entre les rencontres.' : 'Ce solde est conservé dans cette rencontre ; liez une fiche de personnage pour le garder d’une rencontre à l’autre.') + ' Une annulation restaure aussi la Fortune.', 'workspace-muted');
     const sourceLabel = el('label', 'Initialiser depuis'), source = el('select'); source.setAttribute('aria-label', 'Initialiser Fortune depuis');
     source.append(new Option('Saisie MJ', 'mj'));
     if (fortune.balance === null && fortune.sourceBalance !== null) source.append(new Option('Solde courant connu de la fiche (' + fortune.sourceBalance + ')', 'fiche'));

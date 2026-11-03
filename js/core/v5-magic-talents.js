@@ -6,6 +6,7 @@ import { previewV5Test, selectV5Test, normalizeV5Roll } from './v5-roll.js';
 import { getBurnoutStatus, consumeCadaiRune, prepareCadaiRerolls } from './v5-magic-high.js';
 import { applyPrayerSLCaps,getPrayerSLModifiers } from './v5-divine-prayer-caps.js';
 import { mishapSeverity, groundCastModifier, slannAboard } from './slann.js';
+import { normalizeTestKey } from './v5-divine-effects-tests.js';
 
 const ruleError=message=>Object.assign(new Error(message),{userFacing:true});
 export function magicTalentRank(actor, id, specialization = null) {
@@ -123,7 +124,8 @@ function testKeyApplies(key,skill,context){
  if(key==='all')return true;
  // « carac:soc » : tout Test lié à cette caractéristique (Tests de Sociabilité), quelle que soit la compétence.
  if(/^carac:/i.test(key))return Boolean(context?.carac)&&fold(key.slice(6))===fold(context.carac);
- const wanted=splitSkill(key),test=splitSkill(skill);
+ // Clés de sorts issues de la source anglaise (« Endurance », « Mêlée ») : même table que les prières (V5 p. 248).
+ const wanted=splitSkill(normalizeTestKey(key)),test=splitSkill(normalizeTestKey(skill));
  if(wanted.base==='tous les tests')return !wanted.spec||wanted.spec==='secousse';
  if(wanted.base.endsWith(' adverse'))return false;
  if(wanted.base!==test.base)return false;
