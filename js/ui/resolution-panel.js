@@ -66,7 +66,7 @@ export function applicationBlockingReasons(preview, draft, canApply, preflight =
     return finish();
   }
   add(preview.choiceRequired, 'Choisissez le résultat à appliquer');
-  for (const text of preview.unresolved || []) reasons.push({ text, focus: /^Maladresse du défenseur/.test(text) ? 'defender-fumble-roll' : /^Maladresse de combat : saisissez/.test(text) ? 'fumble-roll' : /Calme.*attaquant/i.test(text) ? 'protection-calm' : /Tir engagé.*Test de défense/i.test(text) ? 'engaged-defense' : /^Recharge : saisir les munitions/.test(text) ? 'reload-ammo' : /^Taille : saisir la pièce/.test(text) ? 'hack-piece' : /^Dispersion : bande/.test(text) ? 'spread-band' : /^Dispersion : (?:cibles|inclure)/.test(text) ? 'spread-targets' : /^Explosion : (?:cibles|inclure)/.test(text) ? 'explosion-targets' : /^Confirmer la règle autorisant cette défense contre un tir/.test(text) ? 'ranged-opposition' : /jet de défense/i.test(text) ? 'defense-roll' : undefined, ...(/^Bénédiction de Protection :/.test(text) ? { ignorable: 'divine-protection' } : {}) });
+  for (const text of preview.unresolved || []) reasons.push({ text, focus: /^Maladresse du défenseur/.test(text) ? 'defender-fumble-roll' : /^Maladresse de combat : saisissez/.test(text) ? 'fumble-roll' : /Calme.*attaquant/i.test(text) ? 'protection-calm' : /Tir engagé.*Test de défense/i.test(text) ? 'engaged-defense' : /^Recharge : saisir les munitions/.test(text) ? 'reload-ammo' : /^Taille : saisir la pièce/.test(text) ? 'hack-piece' : /^Dispersion : bande/.test(text) ? 'spread-band' : /^Dispersion : (?:cibles|inclure)/.test(text) ? 'spread-targets' : /^Explosion : (?:cibles|inclure)/.test(text) ? 'explosion-targets' : /^Confirmer la règle autorisant cette défense contre un tir/.test(text) ? 'ranged-opposition' : /^Appendice : saisissez les PA/.test(text) ? 'appendage-ap' : /jet de défense/i.test(text) ? 'defense-roll' : undefined, ...(/^Bénédiction de Protection :/.test(text) ? { ignorable: 'divine-protection' } : {}) });
   const criticals = [preview.critical?.details, preview.critical?.second, preview.defenderCritical?.details];
   add(criticals.some(row => row?.pending), 'Complétez le jet de critique', 'critical-pending');
   add(criticals.some(row => row?.needsAlternative), 'Choisissez une alternative pour le critique', 'critical-alternative');
@@ -1227,6 +1227,14 @@ export function renderResolutionPanel(options) {
     appendageInput.addEventListener('change',()=>handlers.select({v5Context:{...morphologyContext,hitAppendage:appendageInput.value.trim()||undefined}}));
     appendageLabel.append(appendageInput);
     talentFields.append(appendageLabel);
+    if(morphologyContext.hitAppendage){
+      const apLabel=node('label','workspace-type','PA de l’appendice atteint'),apInput=document.createElement('input');
+      apInput.type='number';apInput.min='0';apInput.step='1';apInput.value=morphologyContext.hitAppendageAp??'';
+      apInput.setAttribute('aria-label',apLabel.textContent);apInput.dataset.blockingField='appendage-ap';
+      apInput.addEventListener('change',()=>handlers.select({v5Context:{...morphologyContext,hitAppendageAp:apInput.value===''?undefined:Number(apInput.value)}}));
+      apLabel.append(apInput);
+      talentFields.append(apLabel);
+    }
     contextField(talentFields,'actor','calledShot','Coup ciblé (−2 DR, hors modificateur saisi)');
     if(draft.v5Context?.calledShot){
       const label=node('label','workspace-type','Localisation du coup ciblé');

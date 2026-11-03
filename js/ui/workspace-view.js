@@ -1186,7 +1186,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         draft.v5Context={...(draft.v5Context||{})};
         for(const key of ['fateAction','fateChosenRoll','fateCriticalLocation','warpBladeEnduranceTest','f2h','struckPieceManual'])delete draft.v5Context[key];
         if(draft.v5Context.repeaterSecondShot===true){for(const key of ['repeaterDoubleShot','repeaterSecondShot','primaryResolutionId','freeAttackTalent'])delete draft.v5Context[key];draft.extraAttack=false;}
-        for (const key of ['hitMorphology','hitAppendage','spiderLegSide','fallPreventedByEquipment','mountedRestraint','mountedRideTestsById','mountedRideScoresById','mountedRideRollsById']) delete draft.v5Context[key];
+        for (const key of ['hitMorphology','hitAppendage','hitAppendageAp','spiderLegSide','fallPreventedByEquipment','mountedRestraint','mountedRideTestsById','mountedRideScoresById','mountedRideRollsById']) delete draft.v5Context[key];
         draft.fortuneReroll=false;
         draft.fortuneRerollRolls=[];
         draft.targetSize = null;

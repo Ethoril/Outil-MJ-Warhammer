@@ -176,6 +176,19 @@ test('F2-G integration — app. sans table propre choisit ARM pour les critiques
   assert.equal(result.critical.details.location.key, 'ARM');
   assert.equal(result.critical.details.location.name, 'Queue');
   assert.equal(result.critical.details.location.appendageCriticalTable, 'ARM');
+  assert.ok(result.unresolved.includes('Appendice : saisissez les PA de l’appendice atteint.'), 'G-CRI-2 : sans PA saisis, le calcul est bloqué');
+});
+
+test('G-CRI-2 — les PA saisis pour un appendice sans table propre remplacent ceux de la localisation', () => {
+  const result = previewResolution({
+    actor: { id: 'attacker', states: [] }, target: { id: 'target', hp: 5, maxHp: 5, caracs: { E: 20 }, armor: { head: 0, body: 2, arms: 0, legs: 0 }, states: [] },
+    action: { type: 'attack', base: 99, damage: 8, qualities: [] },
+    v5: { kind: 'melee', context: { hitAppendage: 'Queue', hitAppendageAp: 1 } }, roll: 77, baseRevision: 1,
+    criticalRolls: { location: 30, effect: 40 }
+  });
+  assert.equal(result.protection.ap, 1);
+  assert.equal(result.protection.appendage, 'Queue');
+  assert.equal(result.unresolved.some(reason => /^Appendice/.test(reason)), false);
 });
 
 test('F2-G integration — morphologie MJ par cible secondaire passe au Store pour Dispersion', async () => {

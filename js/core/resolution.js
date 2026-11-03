@@ -804,6 +804,12 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
       location, attackRoll: roll,
       hitLocationRoll: location?.roll, critical: criticalAttack, qualities: action.qualities, nature });
     protection=applyAlliedShield(normalized,applyForgeProtection(normalized,protection));
+    // G-CRI-2 : un appendice sans table propre (queue, tentacule) n'a pas de PA lisibles sur la fiche ; le MJ les saisit.
+    if(context.hitAppendage){
+      const appendageAp=context.hitAppendageAp;
+      if(appendageAp===undefined||appendageAp===null||appendageAp===''||!Number.isSafeInteger(Number(appendageAp))||Number(appendageAp)<0)unresolved.push('Appendice : saisissez les PA de l’appendice atteint.');
+      else protection={...protection,ap:Number(appendageAp)+(protection.shieldAp||0),baseAp:Number(appendageAp),counted:[],appendage:context.hitAppendage};
+    }
     if(hit&&action.qualities.some(row=>(typeof row==='string'?row:row?.id)==='taille')){
       const struckItemId=context.struckItemId;
       const struck=(protection.counted||[]).find(item=>item.id===struckItemId)||[protection.shield].find(item=>item?.id===struckItemId);
