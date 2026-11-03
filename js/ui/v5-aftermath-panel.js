@@ -381,11 +381,11 @@ export function createV5AftermathPanel({ Store, refresh = () => {} } = {}) {
           const difficulty = control('Difficulté du soin (DR)', `treat-${incident.id}-difficulty`, { value: '0' });
           const supplies = checkbox('Fournitures médicales disponibles', `treat-${incident.id}-supplies`);
           const inCombat = checkbox('Pendant un combat', `treat-${incident.id}-combat`);
-          const d10 = control('1d10 en cas de maladresse', `treat-${incident.id}-d10`, { min: 1, max: 10 });
+          // Le 1d10 de maladresse vient des champs du soigneur (un seul champ, recette G-CRI-7).
           const woundHealUsed = incident.treatments.some(item => ['heal', 'animal-care'].includes(item.kind));
           const choice = select('Talent Chirurgie (hors combat) : valeur retenue', `treat-${incident.id}-choice`, [['', 'Sans Talent'], ['sl', 'DR obtenus'], ['units', 'Chiffre des unités du d100']]);
           if (woundHealUsed) treatment.appendChild(node('p', 'Le soin de Blessures est déjà utilisé : ce Test ne retire que des Hémorragiques (une par Blessure qu’il aurait rendue).'));
-          treatment.append(...fields.elements, difficulty.label, supplies.label, inCombat.label, choice.label, d10.label, button('Enregistrer le Test de soin', () => void run(`treat-${incident.id}`, () => Store.treatAftermathWound({ operationId: opId(), expectedRevision: state.revision, incidentId: incident.id, ...fields.values(), difficultyDR: Number(difficulty.input.value) || 0, supplies: supplies.input.checked, inCombat: inCombat.input.checked, d10: d10.input.value === '' ? null : Number(d10.input.value), surgeryChoice: choice.input.value || null, bleedingOnly: woundHealUsed }))));
+          treatment.append(...fields.elements, difficulty.label, supplies.label, inCombat.label, choice.label, button('Enregistrer le Test de soin', () => void run(`treat-${incident.id}`, () => Store.treatAftermathWound({ operationId: opId(), expectedRevision: state.revision, incidentId: incident.id, ...fields.values(), difficultyDR: Number(difficulty.input.value) || 0, supplies: supplies.input.checked, inCombat: inCombat.input.checked, d10: fields.values().d10 ?? null, surgeryChoice: choice.input.value || null, bleedingOnly: woundHealUsed }))));
           card.appendChild(treatment);
           if (incident.infection) {
             const infection = details(`infection-${incident.id}`, 'Traiter l’infection');

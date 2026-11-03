@@ -744,7 +744,7 @@
     },
     {
       "nom": "Recette Maître de familier",
-      "type": "PNJ",
+      "type": "PJ",
       "groupe": "Recette",
       "pv": 12,
       "initiative": 40,

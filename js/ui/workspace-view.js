@@ -27,6 +27,10 @@ import { userMessage, userError, contextMessage, refusalError } from './messages
 import { describeV5ReloadState, initialV5ReloadState, V5_RELOAD_REASON_LABELS } from '../core/v5-reloading.js';
 import { buildPsychologyBlock, readPsychologyInputs } from './psychology-block.js';
 import { buildFamiliarBlock, readFamiliarInputs, readFamiliarDeathInputs } from './familiar-block.js';
+import { buildHeadsBlock, nextHeadState } from './heads-block.js';
+import { buildRegenerationBlock, readRegenerationInputs } from './regeneration-block.js';
+import { buildSlannBlock, readSlannInputs } from './slann-block.js';
+import { buildCreatureStatesBlock, readCreatureStatesInputs } from './creature-states-block.js';
 import { formatV5Balance } from '../core/v5-resources.js';
 import { normalizeEffects } from '../core/effects.js';
 import { CAMP_LABELS, normalizeCamp, participantCamp, encounterDisplayStatus, encounterSummary, sortEncountersForDisplay } from '../core/encounters.js';
@@ -582,6 +586,54 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         }
       });
       blocks.push(familiar);
+    }
+    // Recette G-BES-4/5 : Régénération, têtes, palanquin du Slann, Nuée et Venin, comme sur l'ancienne carte de combat.
+    const regeneration = buildRegenerationBlock(make, participant);
+    if (regeneration) {
+      regeneration.addEventListener('click', event => {
+        if (!event.target.matches?.('.btn-regeneration')) return;
+        event.preventDefault();
+        const { roll, fireWounds, fireCriticalIds } = readRegenerationInputs(regeneration);
+        if (!Number.isInteger(roll) || roll < 1 || roll > 10) { toast('Régénération : saisissez le d10 (1 à 10).'); return; }
+        observe(Store.applyRegeneration(id, roll, { fireWounds, fireCriticalIds }), 'Régénération');
+      });
+      blocks.push(regeneration);
+    }
+    const heads = buildHeadsBlock(make, participant);
+    if (heads) {
+      heads.addEventListener('click', event => {
+        if (!event.target.matches?.('.btn-head')) return;
+        event.preventDefault();
+        observe(Store.setHeadState(id, event.target.dataset.headId, nextHeadState(event.target.dataset.state)), 'Tête');
+      });
+      blocks.push(heads);
+    }
+    const slann = buildSlannBlock(make, participant);
+    if (slann) {
+      slann.addEventListener('click', event => {
+        if (event.target.matches?.('.btn-slann-aboard')) {
+          event.preventDefault();
+          observe(Store.setSlannAboard(id, event.target.dataset.aboard !== 'true'), 'Palanquin');
+        } else if (event.target.matches?.('.btn-slann-contemplation')) {
+          event.preventDefault();
+          const { sl, success } = readSlannInputs(slann);
+          observe(Store.applySlannContemplation(id, sl, { success }), 'Contemplation');
+        }
+      });
+      blocks.push(slann);
+    }
+    const creatureStates = buildCreatureStatesBlock(make, participant, Store.listParticipants());
+    if (creatureStates) {
+      creatureStates.addEventListener('click', event => {
+        if (event.target.matches?.('.btn-swarm-end-round')) {
+          event.preventDefault();
+          observe(Store.applySwarmEndOfRound(id, readCreatureStatesInputs(creatureStates).engagedIds), 'Nuée');
+        } else if (event.target.matches?.('.btn-creature-venom')) {
+          event.preventDefault();
+          observe(Store.applyCreatureVenom(id, readCreatureStatesInputs(creatureStates).venomTargetId), 'Venin');
+        }
+      });
+      blocks.push(creatureStates);
     }
     return blocks;
   }
@@ -2274,7 +2326,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       section.appendChild(rubric('Chocs d’amputation — Test de Résistance'));
       for(const item of amputationFollowups){
         const {participant,record,requirements}=item,parts=[...new Set(requirements.map(row=>row.part).filter(Boolean))].join(', ')||'membre',canReject= requirements.length>0&&requirements.every(row=>row.conditional===true);
-        section.appendChild(node('p','workspace-result-line',`${participant.name} · ${record.effectName} · amputation : ${parts} · Résistance ${requirements[0].difficultyDR} DR · chirurgie requise`));
+        section.appendChild(node('p','workspace-result-line',`${participant.name} · ${record.effectName} · amputation : ${parts} · Résistance ${requirements[0].difficultyDR} DR${(record.sequela?.durableEffects||[]).some(effect=>effect.kind==='surgery-required')?' · chirurgie requise':''}`));
         const row=node('div','workspace-critical-amputation-controls');
         const allFingersLost=requirements.some(requirement=>requirement.trigger==='all-fingers-lost'),factLabel=allFingersLost?'Tous les doigts ont été perdus':'Amputation effectivement survenue';
         const occurrenceLabel=node('label','workspace-type',factLabel),occurrence=document.createElement('select');
