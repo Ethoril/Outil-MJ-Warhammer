@@ -102,3 +102,14 @@ test('scène de la rencontre : enregistrée, validée, appliquée par défaut à
   await store.setParticipantPosition('gunther', { higherGround: true });
   assert.equal(person(store, 'gunther').extensions.v5.position.higherGround, true);
 });
+
+test('passage au banc ou retrait du combat : les engagements sont défaits pour de bon (CA8)', async () => {
+  const store = await fixture();
+  await store.engageParticipants('gunther', 'orc');
+  await store.engageParticipants('aldric', 'orc');
+  await store.updateParticipant('orc', { zone: 'bench' });
+  await store.updateParticipant('orc', { zone: 'active' });
+  assert.deepEqual(pairs(store), [], 'revenu du banc : plus engagé');
+  await store.engageParticipants('gunther', 'aldric');
+  assert.deepEqual(pairs(store), ['aldric-gunther']);
+});

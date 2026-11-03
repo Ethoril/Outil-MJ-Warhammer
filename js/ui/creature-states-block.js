@@ -1,4 +1,5 @@
 import { stateTraits } from '../core/creature-states.js';
+import { engagedWith } from '../core/engagements.js';
 
 const hasKey = (participant, key) => stateTraits(participant).some(trait => trait.key === key);
 const adversaries = (participant, participants) => participants.filter(item => item.zone === 'active' && item.id !== participant.id && item.camp !== participant.camp);
@@ -14,6 +15,7 @@ export function buildCreatureStatesBlock(createElement, participant, participant
   const block = createElement('div');
   block.className = 'actor-creature-states';
   const others = adversaries(participant, participants);
+  const engaged = engagedWith({ participants }, participants, participant.id);
   if (swarm) {
     const label = createElement('span');
     label.textContent = 'Nuée, engagés :';
@@ -24,6 +26,8 @@ export function buildCreatureStatesBlock(createElement, participant, participant
       box.type = 'checkbox';
       box.className = 'swarm-engaged';
       box.value = item.id;
+      // Engagements durables (spec engagements CA17) : les engagés du plateau sont cochés d'office, le MJ peut décocher.
+      box.checked = engaged.includes(item.id);
       wrap.appendChild(box);
       const name = createElement('span');
       name.textContent = item.name || item.id;

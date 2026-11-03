@@ -9,6 +9,7 @@ const POSITION_KEYS = ['surrounded', 'higherGround', 'cover'];
 // Scène (planche D) : posée une fois pour la rencontre, elle pré-remplit chaque action (une valeur saisie sur l'action l'emporte).
 export const SCENE_KEYS = Object.freeze({ weather: ['normal', 'fog', 'rain-wind', 'extreme'], lighting: ['normal', 'fog', 'dim', 'dark'], difficultTerrain: [true, false], narrowSpace: [true, false] });
 
+const encounterKey = envelope => envelope?.activeScene?.encounterId || envelope?.activeScene?.id || null;
 export const engagementLogEntry = (text, actorId = null) => ({ id: uid(), ts: Date.now(), kind: 'management', actorId, targetId: null, text, detail: null });
 const withLog = (draft, text, actorId) => ({ ...draft, log: [engagementLogEntry(text, actorId), ...(draft.log || [])].slice(0, 300) });
 const nameOf = (draft, id) => draft.combat?.participants?.find(row => row.id === id)?.name || id;
@@ -93,15 +94,22 @@ export function createEngagementsApi({ api, currentEnvelope }) {
         return withLog(next, `Fuite · ${actor.name} fuit ${names}${orderly ? ' (En Bon Ordre : pas d’Élan ni d’attaque gratuite)' : ' : ils gagnent l’Élan et peuvent le perdre pour une attaque gratuite'}${broken ? ` ; ${actor.name} gagne ${broken} Brisé` : ''}.`, actorId);
       });
     },
-    getSceneCircumstances() { return { ...(currentEnvelope().extensions?.v5?.sceneCircumstances || {}) }; },
+    // La scène appartient à la rencontre en cours (scène active) : une autre rencontre repart d'une scène vide.
+    getSceneCircumstances() {
+      const envelope = currentEnvelope(), stored = envelope.extensions?.v5?.sceneCircumstances || {};
+      if ((stored.encounterKey ?? null) !== encounterKey(envelope)) return {};
+      const { encounterKey: _key, ...values } = stored;
+      return values;
+    },
     /** Règle la scène : une clé à `null`/absente de SCENE_KEYS est retirée. */
     setSceneCircumstances(patch = {}) {
       for (const [key, value] of Object.entries(patch)) if (!Object.hasOwn(SCENE_KEYS, key) || (value !== null && value !== undefined && !SCENE_KEYS[key].includes(value)))
         throw Object.assign(new Error(`Circonstance de scène invalide : ${key}.`), { userFacing: true });
       if (!Object.keys(patch).length) return { ok: true, unchanged: true };
       return api.executeCommand('set-scene-circumstances', draft => {
-        const scene = { ...(draft.extensions?.v5?.sceneCircumstances || {}) };
-        for (const [key, value] of Object.entries(patch)) if (value === null || value === undefined) delete scene[key]; else scene[key] = value;
+        const stored = draft.extensions?.v5?.sceneCircumstances || {}, key = encounterKey(draft);
+        const scene = (stored.encounterKey ?? null) === key ? { ...stored } : { encounterKey: key };
+        for (const [field, value] of Object.entries(patch)) if (value === null || value === undefined) delete scene[field]; else scene[field] = value;
         return { ...draft, extensions: { ...(draft.extensions || {}), v5: { ...(draft.extensions?.v5 || {}), sceneCircumstances: scene } } };
       });
     },

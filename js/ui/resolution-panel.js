@@ -194,7 +194,7 @@ export function renderResolutionPanel(options) {
     const scene = options.scene, box = fieldGroups.scene.content;
     const sceneSelect = (key, label, choices) => {
       const caption = node('label', 'workspace-type', label), select = document.createElement('select');
-      select.setAttribute('aria-label', `Scène · ${label}`);
+      select.setAttribute('aria-label', label);
       select.dataset.focusKey = `scene-${key}`;
       for (const [value, text] of choices) select.append(new Option(text, value));
       select.value = scene[key] || 'normal';
@@ -202,13 +202,13 @@ export function renderResolutionPanel(options) {
       caption.appendChild(select);
       box.appendChild(caption);
     };
-    sceneSelect('lighting', 'Lumière', [['normal', 'Normale'], ['fog', 'Faible lumière (−1 DR au tir)'], ['dim', 'Pénombre (−1 DR au tir)'], ['dark', 'Noir total (−3 DR au tir)']]);
-    sceneSelect('weather', 'Météo', [['normal', 'Sans effet'], ['fog', 'Brouillard (−1 DR au tir)'], ['rain-wind', 'Pluie ou vent (−2 DR au tir)'], ['extreme', 'Extrême (−3 DR au tir)']]);
+    sceneSelect('lighting', 'Éclairage de la scène', [['normal', 'Normale'], ['fog', 'Faible lumière (−1 DR au tir)'], ['dim', 'Pénombre (−1 DR au tir)'], ['dark', 'Noir total (−3 DR au tir)']]);
+    sceneSelect('weather', 'Temps qu’il fait sur la scène', [['normal', 'Sans effet'], ['fog', 'Brouillard (−1 DR au tir)'], ['rain-wind', 'Pluie ou vent (−2 DR au tir)'], ['extreme', 'Extrême (−3 DR au tir)']]);
     for (const [key, label] of [['difficultTerrain', 'Terrain difficile (−1 DR en mêlée)'], ['narrowSpace', 'Espace exigu (mêlée)']]) {
       const caption = node('label', 'workspace-type'), box2 = document.createElement('input');
       box2.type = 'checkbox';
       box2.checked = scene[key] === true;
-      box2.setAttribute('aria-label', `Scène · ${label}`);
+      box2.setAttribute('aria-label', `${label}, pour toute la scène`);
       box2.addEventListener('change', () => handlers.setScene({ [key]: box2.checked ? true : null }));
       caption.append(box2, label);
       box.appendChild(caption);

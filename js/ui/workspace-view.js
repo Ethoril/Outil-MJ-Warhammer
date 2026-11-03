@@ -18,7 +18,10 @@ import { openCampaignTimeDialog } from './v5-campaign-time-dialog.js';
 import { isMiscastConditionLocked } from '../core/v5-magic-miscasts.js';
 import { recoveryMethodsFor } from './v5-effect-dialog.js';
 import { hasMomentum, inferV5Kind } from '../core/v5-combat-rules.js';
-import { withoutOutnumberContext, outnumberSide } from '../core/outnumbering.js';
+import { withoutOutnumberContext as withoutOutnumberKeys, outnumberSide } from '../core/outnumbering.js';
+// Surnombre, tir engagé et forçage du MJ ne valent que pour la cible où ils ont été saisis (spec engagements CA18).
+const TARGET_ENGAGEMENT_KEYS = ['targetEngaged', 'engagedWithShooter', 'engagedTargetIds', 'engagedTargetRoll', 'engagedDefensesById', 'shooterEngagedElsewhere', 'engagementForced'];
+const withoutOutnumberContext = context => { const rest = withoutOutnumberKeys(context); for (const key of TARGET_ENGAGEMENT_KEYS) delete rest[key]; return rest; };
 import { equipmentAttackContext, weaponSkillGroupInfo } from '../core/equipment.js';
 import { v5StoreActionClock } from '../core/v5-store-action.js';
 import { d100, d10 } from '../core/dice.js';
@@ -529,7 +532,9 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       // Comme le ▶ : pas de « tour » annoncé tant que le combat n'a pas commencé.
       if (isTurn) item.setAttribute('aria-current', 'step');
       const top = node('span', 'workspace-track-top');
-      top.append(node('span', 'workspace-track-marker', isTurn ? '▶' : ''), node('strong', 'workspace-track-name combatant-name', participant.name));
+      const marker = node('span', 'workspace-track-marker', isTurn ? '▶' : '');
+      marker.dataset.rank = String(context.active.indexOf(participant) + 1);
+      top.append(marker, node('strong', 'workspace-track-name combatant-name', participant.name));
       if (isTarget) top.appendChild(node('span', 'workspace-track-role', 'cible'));
       const hp = node('span', 'workspace-track-hp num', hpText(participant));
       hp.prepend(node('span', 'workspace-sr', 'PV '));
@@ -610,6 +615,12 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         if (charging) resolutionHandlers.select({ charging: true });
       },
       disengage: () => { state.disengage = { actorId: actor.id }; render(); },
+      // Mène au contrôle du panneau de résolution (« Viser » déclaré, puces de choix d’action).
+      focus: key => {
+        const target = play.center.querySelector(key === 'action' ? '.workspace-resolution [data-focus-key^="action-"], .workspace-resolution .workspace-chip' : `[data-focus-key="${key}"]`);
+        target?.scrollIntoView?.({ block: 'center' });
+        target?.focus?.();
+      },
       flee: () => {
         if (isBrokenActor(actor)) {
           import('./toast.js').then(({ showToast }) => showToast('Brisé : utilisez la fuite de Brisé du panneau.', 'info'));
@@ -1913,8 +1924,9 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
             input.defense = { extensions:option.extensions,attr:option.attr,roll: defenseRoll, base: (shown ?? option.base) ?? 0, mod: option.mod || 0, qualities: option.qualities || [], label: option.statLabel, v5: { ...defenseV5Input({ ...context, defense: { option } }, target.id === context.target?.id ? draft : { ...draft, defenseKind: null, defenseSlModifier: null, defenseAdvantages: 0, defenseDisadvantages: 0, defenseContext: {} }), choice: null } };
           }
           // Le surnombre saisi ne vaut que pour la cible sélectionnée.
-          const base = v5Input(context, draft);
-          input.v5 = { ...base, ...(target.id === context.target?.id ? {} : { context: withoutOutnumberContext(base.context) }), targetSize: target.id === context.target?.id ? draft.targetSize : null, choice: null };
+          // Chaque cible comparée reçoit ses propres engagements déduits ; les saisies de la cible sélectionnée ne la suivent pas.
+          const base = target.id === context.target?.id ? v5Input(context, draft) : v5Input({ ...context, target }, { ...draft, v5Context: withoutOutnumberContext(draft.v5Context || {}) });
+          input.v5 = { ...base, targetSize: target.id === context.target?.id ? draft.targetSize : null, choice: null };
           return { targetId: target.id, name: target.name, hp: target.hp, preview: Store.previewResolution(input) };
         });
       } catch (error) {

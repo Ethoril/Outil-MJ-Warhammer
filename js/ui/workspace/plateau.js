@@ -56,10 +56,11 @@ export function actionBarModel({ actor, active, actions = [], actionKeys = [], p
     const orderly = actor.extensions?.v5?.specialStates?.orderlyDisengage === true;
     rows.push({ id: 'flee', label: 'Fuir', consequence: orderly ? `En Bon Ordre : pas d’Élan pour ${engagedFoes.map(foe => foe.name).join(', ')} ; Brisé dû`
       : `Élan et attaque gratuite pour ${engagedFoes.map(foe => foe.name).join(', ')} ; +${engagedFoes.length} Brisé`, run: commands => commands.flee() });
-  } else {
-    for (const foe of freeFoes.slice(0, 4)) rows.push({ id: `charge-${foe.id}`, label: `Charger · ${foe.name}`, consequence: 'Élan si la distance de charge est atteinte',
-      run: commands => commands.select({ targetId: foe.id, charging: true, ...(meleeKey ? { actionKey: meleeKey } : {}) }) });
   }
+  // Charge (p. 163) : seulement si non engagé ; engagé, la raison est annoncée et le clic vaut forçage par le MJ.
+  for (const foe of freeFoes.filter(foe => !engagedIds.includes(foe.id)).slice(0, 4)) rows.push({ id: `charge-${foe.id}`, label: `Charger · ${foe.name}`,
+    consequence: engagedFoes.length ? 'interdit : déjà engagé (p. 163) · clic = forcer (MJ)' : 'Élan si la distance de charge est atteinte',
+    run: commands => commands.select({ targetId: foe.id, charging: true, ...(meleeKey ? { actionKey: meleeKey } : {}) }) });
   if (rangedKey) {
     const target = enemiesOf(actor, active).find(foe => !engagedIds.includes(foe.id)) || enemiesOf(actor, active)[0];
     if (target) {
@@ -69,7 +70,9 @@ export function actionBarModel({ actor, active, actions = [], actionKeys = [], p
     }
   }
   const aimTarget = engagedFoes[0] || enemiesOf(actor, active)[0];
-  if (aimTarget) rows.push({ id: `aim-${aimTarget.id}`, label: `Viser · ${aimTarget.name}`, consequence: 'la prochaine attaque en profite', run: commands => commands.select({ targetId: aimTarget.id }) });
+  if (aimTarget) rows.push({ id: `aim-${aimTarget.id}`, label: `Viser · ${aimTarget.name}`, consequence: 'la prochaine attaque en profite',
+    run: commands => { commands.select({ targetId: aimTarget.id }); commands.focus('declare-aim'); } });
+  rows.push({ id: 'other', label: 'Autres actions', consequence: 'magie, prière ou Test : panneau complet', run: commands => commands.focus('action') });
   return rows;
 }
 

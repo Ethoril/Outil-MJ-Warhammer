@@ -167,6 +167,7 @@ import { createDivineApi } from './store/api-divine.js';
 import { createAftermathApi } from './store/api-aftermath.js';
 import { createV5CombatActionsApi } from './store/api-v5-combat-actions.js';
 import { createEngagementsApi, engageAfterMeleeAttack, withExpiredEngagements } from './store/api-engagements.js';
+import { withoutEngagements } from './engagements.js';
 
 
 // G-MON-2 : mort ou inconscience confirmée hors résolution : chute automatique (rider-dead/unconscious, mount-dead/unconscious), comme pour la résolution.
@@ -1820,7 +1821,7 @@ function resolvedCorruptionTest(participant, skillId, input) {
           if (familiarLinksOf(item).some(row => row.familiarId === id)) return withV5(item, v5 => ({ ...v5, familiarLinks: v5.familiarLinks.filter(row => row.familiarId !== id) }));
           return item;
         };
-        const participants = dismountLinkedRiders((draft.combat?.participants || []).filter(item => item.id !== id).map(stripLinks), id);
+        const participants = withoutEngagements({ participants: dismountLinkedRiders((draft.combat?.participants || []).filter(item => item.id !== id).map(stripLinks), id) }, id).participants;
         const transition = participant.zone === 'active' ? removeFromCombat({ participants: draft.combat?.participants || [], order: draft.combat?.order || [], currentActorId: draft.combat?.currentActorId, participantId: id }) : null;
         return {
           ...draft,
@@ -1871,7 +1872,7 @@ function resolvedCorruptionTest(participant, skillId, input) {
         return api.executeCommand('update-participant', draft => {
           assertEditRevision(expectedLocalRevision, draft.localRevision);
           let participants = (draft.combat?.participants || []).map(item => item.id === id ? momentumAfterChange(item, assertMiscastConditionsKept(item, { ...item, ...capturedPatch, ...pickBaseLayers(item, capturedPatch) })) : item);
-          if (capturedPatch.zone === 'bench') participants = dismountLinkedRiders(participants.map(item => item.id === id ? clearMountedRelation(item) : item), id);
+          if (capturedPatch.zone === 'bench') participants = withoutEngagements({ participants: dismountLinkedRiders(participants.map(item => item.id === id ? clearMountedRelation(item) : item), id) }, id).participants;
           return { ...draft, combat: { ...draft.combat, participants } };
         });
       }
@@ -1886,6 +1887,12 @@ function resolvedCorruptionTest(participant, skillId, input) {
           combat.participants.set(key, linkedRider);
           markDirty(`combat/participants/${key}`, linkedRider);
         });
+        // Engagements (spec CA8) : au banc, le combattant n'est plus engagé, des deux côtés.
+        const unlinked = withoutEngagements({ participants: [...combat.participants.values()] }, id).participants;
+        for (const row of unlinked) if (row !== combat.participants.get(row.id)) {
+          if (row.id === id) Object.assign(p, row);
+          else { combat.participants.set(row.id, row); markDirty(`combat/participants/${row.id}`, row); }
+        }
       }
       markDirty(`combat/participants/${id}`, p);
       save();
@@ -2555,7 +2562,7 @@ function resolvedCorruptionTest(participant, skillId, input) {
       if (persistence) return api.executeCommand('move-participant', draft => {
         let participants = (draft.combat?.participants || []).map(item => item.id === id ? { ...item, zone } : item);
         // Au banc, le participant quitte sa monture et libère ses cavaliers (comme updateParticipant).
-        if (zone === 'bench') participants = dismountLinkedRiders(participants.map(item => item.id === id ? clearMountedRelation(item) : item), id);
+        if (zone === 'bench') participants = withoutEngagements({ participants: dismountLinkedRiders(participants.map(item => item.id === id ? clearMountedRelation(item) : item), id) }, id).participants;
         const remaining = (draft.combat?.order || []).filter(item => item !== id);
         const active = remaining.filter(item => participants.find(p => p.id === item)?.zone === 'active');
         const bench = remaining.filter(item => participants.find(p => p.id === item)?.zone === 'bench');

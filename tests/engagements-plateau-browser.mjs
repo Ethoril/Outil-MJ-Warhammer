@@ -98,9 +98,9 @@ try {
   assert.match(await page.locator('.workspace-token').filter({ has: page.locator('[data-workspace-select="aldric"]') }).textContent(), /Position haute/);
   await page.locator('[data-workspace-select="gunther"]').click();
   if (await page.locator('.workspace-resolution-drawer').getAttribute('hidden') !== null) await page.locator('[data-circumstances-toggle]').click();
-  await page.getByLabel('Scène · Lumière').selectOption('dim');
+  await page.getByLabel('Éclairage de la scène').selectOption('dim');
   await page.waitForFunction(() => window.__store.getSceneCircumstances().lighting === 'dim', null, { timeout: 5000 });
-  assert.equal(await page.getByLabel('Scène · Lumière').inputValue(), 'dim');
+  assert.equal(await page.getByLabel('Éclairage de la scène').inputValue(), 'dim');
   assert.equal(errors.length, 0, errors.join(' | '));
   console.log('engagements-plateau-browser: OK');
 } finally { await browser.close(); server.close(); }
