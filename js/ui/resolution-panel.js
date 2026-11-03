@@ -7,7 +7,7 @@ import {renderSituationFields,renderSupportFields} from './v5-talent-situations.
 import { renderV5TalentMeasures } from './v5-talent-measures.js';
 import { V5_ACTIVATED_TALENTS,knownV5MartialQualities,noTestV5TalentAction }  from '../core/v5-talent-actions.js';
 import { computeV5WeaponReachGuide, computeV5WeaponRangeBands } from '../core/v5-talent-combat.js';
-import { inferV5Kind, hasMomentum } from '../core/v5-combat-rules.js';
+import { inferV5Kind, hasMomentum, characteristicMatchAgainst, actionCharacteristic } from '../core/v5-combat-rules.js';
 import { naturalCombatTraits, naturalAttackNeedsSize } from '../core/creature-combat.js';
 import { psychologyTraits } from '../core/creature-psychology.js';
 import { planBestiaryProfileAbilities } from '../core/creature-abilities.js';
@@ -66,7 +66,7 @@ export function applicationBlockingReasons(preview, draft, canApply, preflight =
     return finish();
   }
   add(preview.choiceRequired, 'Choisissez le résultat à appliquer');
-  for (const text of preview.unresolved || []) reasons.push({ text, focus: /^Maladresse du défenseur/.test(text) ? 'defender-fumble-roll' : /^Maladresse de combat : saisissez/.test(text) ? 'fumble-roll' : /Calme.*attaquant/i.test(text) ? 'protection-calm' : /Tir engagé.*Test de défense/i.test(text) ? 'engaged-defense' : /^Recharge : saisir les munitions/.test(text) ? 'reload-ammo' : /^Taille : saisir la pièce/.test(text) ? 'hack-piece' : /^Dispersion : bande/.test(text) ? 'spread-band' : /^Dispersion : (?:cibles|inclure)/.test(text) ? 'spread-targets' : /^Explosion : (?:cibles|inclure)/.test(text) ? 'explosion-targets' : /^Confirmer la règle autorisant cette défense contre un tir/.test(text) ? 'ranged-opposition' : /^Appendice : saisissez les PA/.test(text) ? 'appendage-ap' : /jet de défense/i.test(text) ? 'defense-roll' : undefined, ...(/^Bénédiction de Protection :/.test(text) ? { ignorable: 'divine-protection' } : {}) });
+  for (const text of preview.unresolved || []) reasons.push({ text, focus: /^Maladresse du défenseur/.test(text) ? 'defender-fumble-roll' : /^Maladresse de combat : saisissez/.test(text) ? 'fumble-roll' : /Calme.*attaquant/i.test(text) ? 'protection-calm' : /Tir engagé.*Test de défense/i.test(text) ? 'engaged-defense' : /^Recharge : saisir les munitions/.test(text) ? 'reload-ammo' : /^Taille : saisir la pièce/.test(text) ? 'hack-piece' : /^Dispersion : bande/.test(text) ? 'spread-band' : /^Dispersion : (?:cibles|inclure)/.test(text) ? 'spread-targets' : /^Explosion : (?:cibles|inclure)/.test(text) ? 'explosion-targets' : /^Confirmer la règle autorisant cette défense contre un tir/.test(text) ? 'ranged-opposition' : /^Appendice : saisissez les PA/.test(text) ? 'appendage-ap' : /^Malice de Ranald : choisissez/.test(text) ? 'ranald-characteristic' : /jet de défense/i.test(text) ? 'defense-roll' : undefined, ...(/^Bénédiction de Protection :/.test(text) ? { ignorable: 'divine-protection' } : {}) });
   const criticals = [preview.critical?.details, preview.critical?.second, preview.defenderCritical?.details];
   add(criticals.some(row => row?.pending), 'Complétez le jet de critique', 'critical-pending');
   add(criticals.some(row => row?.needsAlternative), 'Choisissez une alternative pour le critique', 'critical-alternative');
@@ -1198,6 +1198,21 @@ export function renderResolutionPanel(options) {
   };
   addTalentContext('actor',actor,action);
   if(['attack','opposition'].includes(type)&&target)addTalentContext('defender',target,defense?.option);
+  // G-DIV-9 : Malice de Ranald contre l'adversaire, action sans Caractéristique (jet libre, action manuelle) : le MJ désigne celle du Test.
+  const ranaldField=(role,tester,opponent,option)=>{
+    const match=characteristicMatchAgainst(tester,opponent);
+    if(!match||!option||actionCharacteristic(option))return;
+    const field=role==='actor'?'v5Context':'defenseContext',current=draft[field]||{};
+    const label=node('label','workspace-type',`Malice de Ranald : Caractéristique de ce Test (${tester.name})`),select=document.createElement('select');
+    select.setAttribute('aria-label',label.textContent);select.dataset.blockingField='ranald-characteristic';
+    select.append(new Option('CC par défaut en mêlée, sinon à choisir',''));
+    for(const carac of match.characteristics||[])select.append(new Option(`${carac} (égalée à ${opponent?.caracs?.[carac]??'?'})`,carac));
+    select.append(new Option('Une autre Caractéristique (pas d’égalisation)','other'));
+    select.value=current.ranaldCharacteristic||'';
+    select.addEventListener('change',()=>handlers.select({[field]:{...current,ranaldCharacteristic:select.value||undefined}}));
+    label.append(select);talentFields.append(label);
+  };
+  if(['attack','opposition'].includes(type)&&target){ranaldField('actor',actor,target,action);ranaldField('defender',target,actor,defense?.option);}
   if(['melee','ranged'].includes(kind.value)&&type==='attack'&&hasV5Talent(actor,'talent-strike-to-stun'))contextField(talentFields,'actor','weaponImprovised','Arme improvisée (Frappe assommante)');
   if(type==='attack'){
     const morphologyContext=draft.v5Context||{};

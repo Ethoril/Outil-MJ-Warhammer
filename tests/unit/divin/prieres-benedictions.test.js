@@ -988,6 +988,35 @@ test('Malice de Ranald : seulement dans les Tests opposés contre l’adversaire
   await s.undo();
   assert.equal(attack(s, 'priest', 'foe', 40, 'a4').test.score, 70, 'Undo rétablit la prière');
 });
+
+// G-DIV-9 (décision du MJ, 03/11) : une action sans Caractéristique (jet libre de profil, action manuelle) ne peut pas être égalée
+// en silence : le MJ choisit la Caractéristique du Test (`v5.context.ranaldCharacteristic`, « other » = aucune des deux).
+test('Malice de Ranald : action sans Caractéristique, le MJ la choisit ; sinon le calcul est bloqué', async () => {
+  const s = await fixture();
+  const preview = s.previewDivineExecution(MISCHIEF, request(['CC', 'Int']));
+  await s.applyDivineExecution(MISCHIEF, { preview });
+  const free = (context, id) => s.previewResolution({ resolutionId: id, actorId: 'priest', targetId: 'foe', roll: 45,
+    action: { type: 'attack', base: 40, damage: 3 }, defense: { base: 60, attr: 'CC', roll: 50, v5: { kind: 'melee' } }, v5: { kind: 'melee', context } });
+  const melee = free({}, 'f0');
+  assert.equal(melee.test.score, 70, 'mêlée sans Caractéristique : CC préremplie, égalée');
+  assert.equal(melee.unresolved.some(reason => /^Malice de Ranald/.test(reason)), false);
+  const opposed = s.previewResolution({ resolutionId: 'f1', actorId: 'priest', targetId: 'foe', roll: 45,
+    action: { type: 'test', base: 40 }, defense: { base: 60, attr: 'Int', roll: 50, v5: { kind: 'test' } }, v5: { kind: 'test', context: {} } });
+  assert.ok(opposed.unresolved.some(reason => /^Malice de Ranald : choisissez la Caractéristique/.test(reason)), JSON.stringify(opposed.unresolved));
+  assert.equal(free({ ranaldCharacteristic: 'CC' }, 'f2').test.score, 70, 'CC choisie : égalée');
+  const other = free({ ranaldCharacteristic: 'other' }, 'f3');
+  assert.equal(other.test.score, 40, 'autre Caractéristique : pas d’égalisation');
+  assert.equal(other.unresolved.some(reason => /^Malice de Ranald/.test(reason)), false);
+  // Les actions de profil et manuelles portent attr « Custom » (models.js) : c'est une Caractéristique absente.
+  const custom = s.previewResolution({ resolutionId: 'f5', actorId: 'priest', targetId: 'foe', roll: 45,
+    action: { type: 'test', base: 40, attr: 'Custom' }, defense: { base: 60, attr: 'Int', roll: 50, v5: { kind: 'test' } }, v5: { kind: 'test', context: {} } });
+  assert.ok(custom.unresolved.some(reason => /^Malice de Ranald : choisissez/.test(reason)), 'attr Custom : Caractéristique à choisir');
+  const customMelee = s.previewResolution({ resolutionId: 'f6', actorId: 'priest', targetId: 'foe', roll: 45,
+    action: { type: 'attack', base: 40, attr: 'Custom', damage: 3 }, defense: { base: 60, attr: 'CC', roll: 50, v5: { kind: 'melee' } }, v5: { kind: 'melee', context: {} } });
+  assert.equal(customMelee.test.score, 70, 'attr Custom en mêlée : CC par défaut, égalée');
+  const bound = attack(s, 'priest', 'foe', 40, 'f4');
+  assert.equal(bound.unresolved.some(reason => /^Malice de Ranald/.test(reason)), false, 'action liée à une Caractéristique : rien à demander');
+});
 });
 
 describe('Protection', () => {

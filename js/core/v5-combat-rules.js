@@ -113,8 +113,16 @@ export function v5ShieldDefense(normalized, catalogue = getReferenceCatalogue())
 }
 // Malice de Ranald : pendant la durée, dans tout Test opposé contre l’adversaire désigné, deux Caractéristiques du prêtre prennent
 // la valeur de l’adversaire ; la fiche ne change pas, le score du Test est décalé de l’écart lu au moment du Test.
-export function characteristicMatchShift(tester, opponent, action) {
-  const carac = action?.attr;
+// Caractéristique réelle d'une action : les actions de profil et manuelles portent « Custom » (aucune).
+const TEST_CHARACTERISTICS = new Set(['CC', 'CT', 'F', 'E', 'I', 'Ag', 'Dex', 'Int', 'FM', 'Soc']);
+export const actionCharacteristic = action => TEST_CHARACTERISTICS.has(action?.attr) ? action.attr : null;
+// Couche de Malice de Ranald du porteur contre cet adversaire, ou null.
+export function characteristicMatchAgainst(tester, opponent) {
+  return (tester?.extensions?.v5?.divineEffects || []).find(layer => layer?.characteristicMatch?.opponentId === opponent?.id)?.characteristicMatch || null;
+}
+// `chosen` : Caractéristique désignée par le MJ quand l'action n'en porte pas (jet libre, action manuelle) ; « other » = aucune des deux.
+export function characteristicMatchShift(tester, opponent, action, chosen = null) {
+  const carac = actionCharacteristic(action) || (chosen && chosen !== 'other' ? chosen : null);
   if (!carac) return 0;
   const matched = (tester?.extensions?.v5?.divineEffects || [])
     .some(layer => layer?.characteristicMatch?.opponentId === opponent?.id && layer.characteristicMatch.characteristics?.includes(carac));
@@ -131,15 +139,20 @@ export function buildCombatTest(normalized, role = 'actor') {
   const settings = defending ? normalized.defense.v5 || {} : normalized.v5 || {};
   const warLeader=warLeaderSubstitution(normalized,actor,action,settings);if(warLeader)action={...action,base:warLeader.commandBase};
   // Test opposé uniquement : la Malice de Ranald décale le score du prêtre contre l’adversaire désigné, la fiche reste intacte.
-  if (defending || normalized.defense) {
-    const mischief = characteristicMatchShift(actor, target, action);
-    if (mischief) action = { ...action, base: action.base + mischief };
-  }
   if(!defending&&normalized.noTestAction){
     const test=structuredClone(previewV5Test({score:0,roll:1,kind:'test'})),first=test.options[0];first.result={...first.result,success:true,sl:0,critical:false,fumble:false,automatic:true,noTest:true,details:{...first.result.details,doubled:false}};test.options=[{...first,id:'keep'}];test.choiceRequired=false;test.forcedInversion=false;
     return{test,talentPlans:[],talentSLChoices:[],kind:'test',penalty:0,penaltyStates:[],unresolved:[],restrictions:(actor.states||[]).some(s=>['inconscient','surpris'].includes(s.key))?['Inconscient ou Surpris : ce choix de talent est indisponible.']:[],charging:false,qualityBonus:0};
   }
   const kind = settings.kind || (defending ? (/^(?:Ag|Esquive|Dodge)$/i.test(action.label) ? 'test' : 'melee') : inferV5Kind(action, normalized.attackContext));
+  let mischiefMissing = false;
+  if (defending || normalized.defense) {
+    // Une arme de mêlée sans Caractéristique se teste sur CC : valeur préremplie, que le MJ peut changer.
+    const chosen = settings.context?.ranaldCharacteristic || (!actionCharacteristic(action) && kind === 'melee' ? 'CC' : null);
+    // G-DIV-9 : sans Caractéristique connue, la Malice ne s'ignore pas en silence ; le MJ désigne celle du Test.
+    mischiefMissing = !actionCharacteristic(action) && !chosen && Boolean(characteristicMatchAgainst(actor, target));
+    const mischief = characteristicMatchShift(actor, target, action, chosen);
+    if (mischief) action = { ...action, base: action.base + mischief };
+  }
   const levels = conditionLevels(actor), targetLevels = conditionLevels(target);
   // Endurance de l'anachorète (p. 226) : malus et Désavantages d'États ignorés ; Inconscient, Surpris et la vue exigée restent des restrictions.
   const ignoreConditions = actor.extensions?.v5?.specialStates?.ignoreConditionPenalties === true;
@@ -147,7 +160,8 @@ export function buildCombatTest(normalized, role = 'actor') {
   const contact=contactWeapon(normalized,actor,action,settings);action=contact.action;
   // Talents donnés par les Traits de compagnon d'un familier animal à portée : comptés comme ceux du maître pour ce Test.
   const talentModifiers=previewV5TalentTestModifiers(withCompanionTalents(actor,normalized.v5State?.participants||[]),{action,settings,kind,role:talentRole,opponent:target});
-  const unresolved = [...(normalized.weaponSkillUnresolved||[]),...contact.unresolved], restrictions = [];if(unavailableDisarmedWeapon(actor,action))restrictions.push('Cette arme a été désarmée : la récupérer avant de l’employer.');
+  const unresolved = [...(normalized.weaponSkillUnresolved||[]),...contact.unresolved], restrictions = [];
+  if(mischiefMissing)unresolved.push('Malice de Ranald : choisissez la Caractéristique de ce Test (une des deux égalées, ou une autre).');if(unavailableDisarmedWeapon(actor,action))restrictions.push('Cette arme a été désarmée : la récupérer avant de l’employer.');
   if(!defending && target?.extensions?.v5?.specialStates?.tinySwarmCannotAttack && /nu[eé]e|swarm/i.test((actor.traits || []).join(' '))){
     const size=Number(settings.actorSize ?? normalized.attackContext?.actorSize);
     if(!Number.isInteger(size)||size<1||size>7)unresolved.push('Zone de Confort : Taille de la Nuée requise.');
