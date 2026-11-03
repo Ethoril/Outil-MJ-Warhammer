@@ -1,6 +1,7 @@
 import {wrathForcedPrayerGate} from './v5-divine-prayer-caps.js';
 /** Pure V5 turn transition; every die is an explicit input and all actors share one commit. */
 import {expireDivineEffects} from './v5-divine-engine.js';
+import { withExpiredEngagements } from './store/api-engagements.js';
 import {refreshEffectLayers} from './v5-magic-effects.js';
 import { effectiveOrder, nextTurn } from './turn-order.js';
 import { advanceV5Effects, acquireV5Conditions } from './v5-effects.js';
@@ -152,6 +153,8 @@ export function previewV5Turn(state, { inputs = {} } = {}) {
   const divineClock=expireDivineAtClock(stateAfter,{fromClock:clock,toClock:clockResult.clock,receipt:clockResult.receipt});
   if(!divineClock.ok)return {status:'requires-input',ready:false,baseRevision:before.localRevision||0,requests:[],error:divineClock.needsInput.map(row=>row.message).join(' '),needsInput:divineClock.needsInput};
   stateAfter=divineClock.state;
+  // Engagements (p. 163) : une paire sans attaque pendant le Round qui s'achève cesse.
+  if (transition.round > combat.round && combat.round > 0) stateAfter = withExpiredEngagements(stateAfter, combat.round);
   if (transition.round > combat.round) {
     const reminders = stateAfter.combat.participants.filter(participant => participant.zone === 'active' && (participant.extensions?.v5?.divineEffects || []).some(layer => layer.freeAttack))
       .map(participant => ({ id: `divine-free-attack:${transition.round}:${participant.id}`, kind: 'reminder', actorId: participant.id,

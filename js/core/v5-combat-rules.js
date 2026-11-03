@@ -337,6 +337,8 @@ export function buildCombatTest(normalized, role = 'actor') {
   if(!defending&&kind==='ranged'&&settings.context?.engagedWithShooter===true&&!(action.qualities||[]).some(row=>(typeof row==='string'?row:row?.id)==='pistolet'))unresolved.push('Tir sur un adversaire engagé avec le tireur : seule une arme Pistolet permet de tirer en étant engagé (V5 p.165).');
   const pistolContact=previewV5PistolContact({qualities:action.qualities||[],attack:!defending,engaged:settings.context?.targetEngaged===true,ranged:kind==='ranged'});
   // Livre de base V5 v3 p.165 : un tir contre un adversaire engagé avec le tireur se résout comme une mêlée et ne compte pas comme un tir dans la mêlée.
+  // Tireur engagé avec un autre que sa cible (p. 165) : seule une arme Pistolet permet de tirer.
+  if(!defending&&kind==='ranged'&&settings.context?.shooterEngagedElsewhere===true&&settings.context?.engagedWithShooter!==true&&!(action.qualities||[]).some(row=>(typeof row==='string'?row:row?.id)==='pistolet'))unresolved.push('Tireur engagé en mêlée : seule une arme Pistolet permet de tirer (p. 165).');
   if(!defending&&kind==='ranged'&&settings.context?.targetEngaged===true&&settings.context?.engagedWithShooter!==true&&!pistolContact.allowed)disadvantages.push({id:'target-engaged',label:'Tir sur une cible engagée'});
   if(!defending&&kind==='test'&&action.attr==='F'&&context.entanglementTest===true){
     const weaponId=context.entanglementWeaponId||action.extensions?.fiche?.equipmentId||action.extensions?.equipment?.id;

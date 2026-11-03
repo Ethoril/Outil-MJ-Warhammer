@@ -5,6 +5,7 @@ import { cloneValue, uid } from '../models.js';
 import { recordV5ActionUsage, standardV5ActionSpent, previewV5PaviseDeploymentFrom } from '../store/v5-action-guards.js';
 import { initialV5ReloadState, createV5ReloadState, beginV5Reload, advanceV5Reload, V5_RELOAD_REASON_LABELS } from '../v5-reloading.js';
 import { previewV5BrokenEscape, BROKEN_ESCAPE_SOURCE, BROKEN_ESCAPE_RULE_VERSION } from '../v5-broken-escape.js';
+import { withoutEngagements } from '../engagements.js';
 
 export function createV5CombatActionsApi({ api, currentEnvelope, issuedBrokenEscapePreviews, issuedPaviseDeploymentPreviews }) {
   return {
@@ -193,7 +194,7 @@ export function createV5CombatActionsApi({ api, currentEnvelope, issuedBrokenEsc
         if(plan.action==='flee'&&(ledger.quotaUsage.some(row=>row.actorId===actorId&&row.quotaId==='system:turn-action'&&row.scope==='turn'&&row.scopeKey===key&&row.used)||standardV5ActionSpent(draft,actorId,clock)))throw Object.assign(new Error('DIV-BROKEN-MIDTURN-01 : Action déjà dépensée, décision MJ explicite requise.'),{userFacing:true});
         if(plan.action==='flee'&&validEngaged){
           const fx=plan.engagedEscapeEffects;
-          for(const enemyId of fx.engagedEnemyIds||[]){
+          for(const enemyId of fx.orderly?[]:fx.engagedEnemyIds||[]){
             const foe=draft.combat?.participants?.find(row=>row.id===enemyId&&row.zone==='active');
             if(!foe)continue;
             foe.extensions??={};
@@ -207,6 +208,8 @@ export function createV5CombatActionsApi({ api, currentEnvelope, issuedBrokenEsc
             actor.extensions.v5.hasMomentum=false;
           }
         }
+        // Le fuyard quitte ses engagements (spec engagements CA13).
+        if(plan.action==='flee'&&draft.combat)draft.combat=withoutEngagements(draft.combat,actorId);
         if(old)old.used=1;else ledger.quotaUsage.push({actorId,quotaId,scope:'turn',scopeKey:key,used:1});
         ledger.appliedActions??=[];
         ledger.appliedActions.push({actionId:plan.actionId,actorId,encounterId:clock.encounterId||null});

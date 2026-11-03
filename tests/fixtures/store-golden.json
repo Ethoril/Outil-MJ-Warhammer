@@ -118,6 +118,13 @@
    "suspendActiveScene/0",
    "resumeScene/1",
    "getReactionOpportunities/1",
+   "listEngagedWith/1",
+   "engageParticipants/2",
+   "disengageParticipant/1",
+   "previewDisengage/1",
+   "applyDisengage/1",
+   "applyFlee/1",
+   "setParticipantPosition/1",
    "confirmBrokenEscapeVisibility/0",
    "previewV5ProjectileExtraction/0",
    "applyV5ProjectileExtraction/1",
@@ -1603,6 +1610,41 @@
     "state": "438e1db161d112d5"
    },
    {
+    "label": "sweep listEngagedWith",
+    "result": "4f53cda18c2baa0c",
+    "state": "438e1db161d112d5"
+   },
+   {
+    "label": "sweep engageParticipants",
+    "error": "Error: Deux combattants distincts du combat sont requis.",
+    "state": "438e1db161d112d5"
+   },
+   {
+    "label": "sweep disengageParticipant",
+    "error": "Error: Combattant introuvable.",
+    "state": "438e1db161d112d5"
+   },
+   {
+    "label": "sweep previewDisengage",
+    "result": "9572453ac9ab4694",
+    "state": "438e1db161d112d5"
+   },
+   {
+    "label": "sweep applyDisengage",
+    "error": "Error: Combattant introuvable.",
+    "state": "438e1db161d112d5"
+   },
+   {
+    "label": "sweep applyFlee",
+    "error": "Error: Combattant introuvable.",
+    "state": "438e1db161d112d5"
+   },
+   {
+    "label": "sweep setParticipantPosition",
+    "error": "Error: Combattant introuvable.",
+    "state": "438e1db161d112d5"
+   },
+   {
     "label": "sweep confirmBrokenEscapeVisibility",
     "result": "b7d3ad04c3a38476",
     "state": "438e1db161d112d5"
@@ -2488,6 +2530,13 @@
    "suspendActiveScene/0",
    "resumeScene/1",
    "getReactionOpportunities/1",
+   "listEngagedWith/1",
+   "engageParticipants/2",
+   "disengageParticipant/1",
+   "previewDisengage/1",
+   "applyDisengage/1",
+   "applyFlee/1",
+   "setParticipantPosition/1",
    "confirmBrokenEscapeVisibility/0",
    "previewV5ProjectileExtraction/0",
    "applyV5ProjectileExtraction/1",
@@ -3970,6 +4019,41 @@
    {
     "label": "sweep getReactionOpportunities",
     "result": "4f53cda18c2baa0c",
+    "state": "c998526c0692af32"
+   },
+   {
+    "label": "sweep listEngagedWith",
+    "result": "4f53cda18c2baa0c",
+    "state": "c998526c0692af32"
+   },
+   {
+    "label": "sweep engageParticipants",
+    "error": "Error: Deux combattants distincts du combat sont requis.",
+    "state": "c998526c0692af32"
+   },
+   {
+    "label": "sweep disengageParticipant",
+    "error": "Error: Combattant introuvable.",
+    "state": "c998526c0692af32"
+   },
+   {
+    "label": "sweep previewDisengage",
+    "result": "9572453ac9ab4694",
+    "state": "c998526c0692af32"
+   },
+   {
+    "label": "sweep applyDisengage",
+    "error": "Error: Combattant introuvable.",
+    "state": "c998526c0692af32"
+   },
+   {
+    "label": "sweep applyFlee",
+    "error": "Error: Combattant introuvable.",
+    "state": "c998526c0692af32"
+   },
+   {
+    "label": "sweep setParticipantPosition",
+    "error": "Error: Combattant introuvable.",
     "state": "c998526c0692af32"
    },
    {

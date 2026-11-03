@@ -166,6 +166,7 @@ import {
 import { createDivineApi } from './store/api-divine.js';
 import { createAftermathApi } from './store/api-aftermath.js';
 import { createV5CombatActionsApi } from './store/api-v5-combat-actions.js';
+import { createEngagementsApi, engageAfterMeleeAttack, withExpiredEngagements } from './store/api-engagements.js';
 
 
 // G-MON-2 : mort ou inconscience confirmée hors résolution : chute automatique (rider-dead/unconscious, mount-dead/unconscious), comme pour la résolution.
@@ -3051,6 +3052,7 @@ function resolvedCorruptionTest(participant, skillId, input) {
           if(!divine.ok)throw Object.assign(new Error(divine.needsInput.map(row=>row.message).join(' ')),{code:'V5_TURN_INPUT',needsInput:divine.needsInput});
           nextState=divine.state;
         }
+        if(result.round>(draft.combat?.round||0)&&(draft.combat?.round||0)>0)nextState=withExpiredEngagements(nextState,draft.combat.round);
         reconcileCriticalDeathForRound(nextState,result.round);
         transitionResult = { ...result, phases, clock: cloneValue(clock) };
         return nextState;
@@ -3857,6 +3859,7 @@ function resolvedCorruptionTest(participant, skillId, input) {
     },
   };
 
+  Object.assign(api, createEngagementsApi({ api, currentEnvelope }));
   Object.assign(api, createV5CombatActionsApi({ api, currentEnvelope, issuedBrokenEscapePreviews, issuedPaviseDeploymentPreviews }), {
     previewResolution(input = {}) {
       const snapshot=currentEnvelope();
@@ -4102,6 +4105,7 @@ function resolvedCorruptionTest(participant, skillId, input) {
         if(preview.defenderTest&&combatState.byActorId?.[defendedActorId]?.kind==='aim')delete combatState.byActorId[defendedActorId];
         next.extensions??={};
         next.extensions.v5={...combatRoot,combatActions:combatState};
+        engageAfterMeleeAttack(next,preview);
         if(!reaction&&!isExplicitV5NonAction(preview,preview.input||{})&&escapeActor?.states?.some(row=>['brise','broken'].includes(String(row.key||row.name||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase())))recordV5EscapeVisibility(next,actorId,preview.input?.brokenEscapeFacts?.visibleToAnyEnemy,preview.resolutionId);
         return next;
       });
@@ -4182,6 +4186,7 @@ function resolvedCorruptionTest(participant, skillId, input) {
         },actorId);
         if(isV5ActionUse(simulation.preview,input)&&!commitReaction)recordV5ActionUsage(next,actorId,simulation.preview.resolutionId);
         if(isBrokenEscapeActor(commitActor))recordV5EscapeVisibility(next,actorId,input.brokenEscapeFacts?.visibleToAnyEnemy,simulation.preview.resolutionId);
+        engageAfterMeleeAttack(next,simulation.preview);
         return next;
       });
       return Promise.resolve(commit).then(persisted => {

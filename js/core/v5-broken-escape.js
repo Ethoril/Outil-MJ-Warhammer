@@ -20,7 +20,7 @@ const finiteInt = (v,min=0) => Number.isSafeInteger(v) && v >= min;
 const talentRank = (actor, idPattern, namePattern) => (actor?.talents || [])
   .filter(row => row?.status === 'resolved' && (idPattern.test(String(row.id || row.catalogueTalentId || '')) || (namePattern && namePattern.test(String(row.name || row.label || '')))))
   .reduce((sum, row) => sum + (Number.isSafeInteger(row.rank) && row.rank > 0 ? row.rank : 1), 0);
-const hasFleeTalent = actor => talentRank(actor, /^talent-flee$/i, /^fuite\s*!?$|^flee\s*!?$/i) > 0;
+export const hasFleeTalent = actor => talentRank(actor, /^talent-flee$/i, /^fuite\s*!?$|^flee\s*!?$/i) > 0;
 const hasSteadyOnFleeExemption = (actor, facts) =>
   facts?.steadyOnActive === true ||
   (actor?.states || []).some(s => ['steady-on', 'en-bon-ordre', 'tenez-bon', 'orderly-retreat'].includes(String(s?.key || s?.name || '').toLowerCase()));
@@ -50,11 +50,14 @@ export function previewV5BrokenEscape({ state, actor, actorId=actor?.id, action,
       const spentSet = new Set(Array.isArray(facts.freeAttackSpentMomentumIds) ? facts.freeAttackSpentMomentumIds : []);
       const brokenExempt = hasFleeTalent(actor) || hasSteadyOnFleeExemption(actor, facts);
       const addedBrokenCount = brokenExempt ? 0 : uniqueEnemies.length;
+      // En Bon Ordre (Up in Arms p. 79) : les engagés ne gagnent pas l'Élan et n'ont pas d'attaque gratuite ; le Brisé reste dû.
+      const orderly = actor?.extensions?.v5?.specialStates?.orderlyDisengage === true;
       engagedEscapeEffects = {
         engagedEnemyIds: uniqueEnemies,
-        momentumGainedEnemyIds: [...uniqueEnemies],
-        freeAttackSpentMomentumIds: uniqueEnemies.filter(id => spentSet.has(id)),
-        momentumRetainedEnemyIds: uniqueEnemies.filter(id => !spentSet.has(id)),
+        orderly,
+        momentumGainedEnemyIds: orderly ? [] : [...uniqueEnemies],
+        freeAttackSpentMomentumIds: orderly ? [] : uniqueEnemies.filter(id => spentSet.has(id)),
+        momentumRetainedEnemyIds: orderly ? [] : uniqueEnemies.filter(id => !spentSet.has(id)),
         brokenExempt,
         addedBrokenCount,
         surrounded: facts.surrounded === true

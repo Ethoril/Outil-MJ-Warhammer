@@ -38,6 +38,7 @@ import { uid } from '../core/models.js';
 import { renderFicheDetails } from './fiche-details.js';
 import { renderSilhouette } from './silhouette.js';
 import { buildParticipantReminders } from '../core/reminders.js';
+import { deriveEngagementContext } from '../core/engagements.js';
 import { renderResolutionPanel, actionKey, minusSigned, defenseOptions, defaultDefenseValue } from './resolution-panel.js';
 import { initSidePanel } from './side-panel.js';
 import { rollMisfortuneDie } from './resolution-panel/dom.js';
@@ -955,7 +956,10 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     const metadataGroup=weaponSkillGroupInfo(weapon?.category,weapon);
     const selectedGroup=!metadataGroup&&attack?weaponSkillGroupInfo(weaponContext.weaponTrainingGroup,weapon):null;
     const attackContext=equipmentAttackContext(weapon,attack?weaponContext:{});
-    return { kind: (attack?selectedGroup?.kind:null) || draft.v5Kind || inferV5Kind(action, attackContext),
+    const kind=(attack?selectedGroup?.kind:null) || draft.v5Kind || inferV5Kind(action, attackContext);
+    // Engagements durables (spec engagements CA15-CA18) : surnombre et tir engagé déduits du plateau ; une valeur forcée par le MJ l'emporte.
+    if(attack&&context.target)for(const [key,value] of Object.entries(deriveEngagementContext({combat:{participants:context.participants||[]},participants:context.participants||[],actorId:context.actor?.id,targetId:context.target.id,kind})))if(weaponContext[key]===undefined&&(value===true||(Array.isArray(value)&&value.length)))weaponContext[key]=value;
+    return { kind,
       ...(draft.v5SlModifier != null ? { slModifier: draft.v5SlModifier } : context.action.extensions?.v5?.slModifier != null ? { slModifier: context.action.extensions.v5.slModifier } : {}),
       choice: draft.v5Choice, charging: draft.charging, context: { ...weaponContext, ...(context.action.id?.startsWith('broken-hide:')?{isAction:true}: {}) },
       talentChoices: { ...(draft.talentChoices || {}), 'talent-beat-blade:replace-damage': draft.beatBlade === true },

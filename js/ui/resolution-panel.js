@@ -15,6 +15,7 @@ import { creatureSizeOf } from '../core/creature-size.js';
 import { carriesSense } from '../core/creature-senses.js';
 import { carriesMovement } from '../core/creature-movement.js';
 import { engagedCandidates, planOutnumbering } from '../core/outnumbering.js';
+import { deriveEngagementContext, engagedWith } from '../core/engagements.js';
 import { hasV5Talent, V5_TALENT_IDS } from '../core/v5-talents.js';
 import { ammunitionCompatibility, equipmentAttackContext, weaponSkillGroupInfo, conjuredWeaponMetadata, weaponHandsForParticipant } from '../core/equipment.js';
 import { isBlackpowderIncidentEligible } from '../core/v5-combat-fumbles.js';
@@ -1753,8 +1754,43 @@ export function renderResolutionPanel(options) {
   }
   if (type === 'attack' && target) contextField(fields, 'actor', 'targetHelpless', 'Cible sans défense : situation vérifiée par le MJ');
   // Surnombre (L06 p. 167, BR-16) : le moteur ne suit pas l'engagement, le MJ coche les engagés avec la cible de chaque côté.
+  // Engagements du plateau (spec engagements CA15-CA18) : la déduction remplace les cases ; le MJ peut la forcer ou la laisser au récit.
+  const ENGAGEMENT_KEYS = ['outnumberAttackerIds', 'outnumberDefenderIds', 'surrounded', 'targetEngaged', 'engagedWithShooter', 'engagedTargetIds', 'shooterEngagedElsewhere', 'engagementForced'];
+  const engagementBanner = (container, summary, neutral) => {
+    const current = draft.v5Context || {}, box = node('div', 'workspace-engagement-derived');
+    box.appendChild(node('p', '', `Déduit du plateau : ${summary}`));
+    const row = node('div', 'workspace-engagement-actions');
+    const force = node('button', 'workspace-chip', 'Forcer');
+    force.type = 'button';
+    force.addEventListener('click', () => handlers.select({ v5Context: { ...current, ...neutral.plateau, engagementForced: 'mj' } }));
+    const story = node('button', 'workspace-chip', 'Laisser au récit');
+    story.type = 'button';
+    story.addEventListener('click', () => handlers.select({ v5Context: { ...current, ...neutral.values, engagementForced: 'recit' } }));
+    row.append(force, story);
+    box.appendChild(row);
+    container.appendChild(box);
+  };
+  const plateauReturn = container => {
+    const back = node('button', 'workspace-chip', 'Revenir au plateau');
+    back.type = 'button';
+    back.addEventListener('click', () => {
+      const rest = { ...(draft.v5Context || {}) };
+      for (const key of ENGAGEMENT_KEYS) delete rest[key];
+      handlers.select({ v5Context: rest });
+    });
+    container.appendChild(node('p', 'workspace-muted', draft.v5Context?.engagementForced === 'recit' ? 'Engagements laissés au récit pour cette action.' : 'Engagements forcés par le MJ pour cette action.'));
+    container.appendChild(back);
+  };
   if (type === 'attack' && kind.value === 'melee' && target && target.id !== actor.id) {
     const current = draft.v5Context || {};
+    const plateau = deriveEngagementContext({ combat: { participants }, participants, actorId: actor.id, targetId: target.id, kind: 'melee' });
+    const fromPlateau = !current.engagementForced && (engagedWith({ participants }, participants, actor.id).includes(target.id) || plateau.outnumberAttackerIds.length > 0 || plateau.outnumberDefenderIds.length > 0);
+    if (fromPlateau) {
+      fieldGroups.combat.content.appendChild(rubric('Surnombre (mêlée)'));
+      engagementBanner(fieldGroups.combat.content, planOutnumbering({ actor, target, participants, context: { ...current, ...plateau } }).summary,
+        { plateau, values: { outnumberAttackerIds: [], outnumberDefenderIds: [], surrounded: false } });
+    } else {
+    if (current.engagementForced) plateauReturn(fieldGroups.combat.content);
     const engagedBoxes = (key, title, people) => {
       if (!people.length) return;
       fieldGroups.combat.content.appendChild(node('p', 'workspace-muted', title));
@@ -1779,7 +1815,8 @@ export function renderResolutionPanel(options) {
     if (candidates.attackers.some(person => (current.outnumberAttackerIds || []).includes(person.id))) contextField(fields, 'actor', 'surrounded', 'Cible encerclée, sans voie d’échappement (en général 3 attaquants, 2 en espace étroit : +2 DR)');
     const outnumber = planOutnumbering({ actor, target, participants, context: current });
     if (outnumber.summary) fieldGroups.combat.content.appendChild(node('p', 'workspace-muted', outnumber.summary));
-    fieldGroups.combat.content.appendChild(node('p', 'workspace-muted', 'Désengagement (L06 p. 167) : Désavantage si l’on est en infériorité numérique ; impossible si l’on est encerclé (la Fuite reste possible). Rappel : le moteur n’a pas d’action de Désengagement.'));
+    }
+    fieldGroups.combat.content.appendChild(node('p', 'workspace-muted', 'Désengagement (p. 163) : bouton « Se désengager » de la barre d’actions ; Désavantage en infériorité numérique, impossible encerclé (la Fuite reste possible).'));
   }
   if (['attack', 'opposition'].includes(type) && target) {
     fieldGroups.defense.content.appendChild(rubric('Circonstances de la défense'));
@@ -1913,6 +1950,30 @@ export function renderResolutionPanel(options) {
         fields.appendChild(label);
         fields.appendChild(node('p','workspace-muted','Le reçu conserve les dés, la distance obtenue et le plafond; le pion n’est pas déplacé automatiquement. Pour un résultat aux pieds du tireur ou de la cible, aucun repère de distance n’est requis.'));
       }
+      const rangedPlateau = target ? deriveEngagementContext({ combat: { participants }, participants, actorId: actor.id, targetId: target.id, kind: 'ranged' }) : {};
+      const rangedFromPlateau = target && !draft.v5Context?.engagementForced && (rangedPlateau.targetEngaged || rangedPlateau.engagedWithShooter || rangedPlateau.shooterEngagedElsewhere);
+      if (rangedFromPlateau) {
+        const names = ids => ids.map(id => participants.find(row => row.id === id)?.name || id).join(', ');
+        const summary = [rangedPlateau.engagedWithShooter ? 'la cible est engagée avec le tireur (mêlée opposée, Pistolet)' : '',
+          rangedPlateau.targetEngaged && !rangedPlateau.engagedWithShooter ? `cible engagée avec ${names(rangedPlateau.engagedTargetIds.slice(1))} (Désavantage, déviation possible)` : '',
+          rangedPlateau.shooterEngagedElsewhere && !rangedPlateau.engagedWithShooter ? 'tireur engagé en mêlée (Pistolet seulement)' : ''].filter(Boolean).join(' ; ');
+        engagementBanner(fields, summary, { plateau: rangedPlateau, values: { targetEngaged: false, engagedWithShooter: false, engagedTargetIds: [], shooterEngagedElsewhere: false } });
+        if (rangedPlateau.targetEngaged && !rangedPlateau.engagedWithShooter) {
+          const rollLabel = node('label', 'workspace-type', 'Jet d100 pour désigner le combattant touché');
+          const roll = document.createElement('input');
+          roll.type = 'number';
+          roll.min = '1';
+          roll.max = '100';
+          roll.value = draft.v5Context?.engagedTargetRoll ?? '';
+          roll.dataset.npcRollKey = 'contextValue';
+          roll.dataset.npcRollField = 'engagedTargetRoll';
+          roll.setAttribute('aria-label', rollLabel.textContent);
+          roll.addEventListener('change', () => handlers.select({ v5Context: { ...(draft.v5Context || {}), engagedTargetRoll: roll.value === '' ? null : Number(roll.value) } }));
+          rollLabel.appendChild(roll);
+          fields.appendChild(rollLabel);
+        }
+      } else {
+      if (draft.v5Context?.engagementForced) plateauReturn(fields);
       contextField(fields, 'actor', 'targetEngaged', 'La cible est engagée au corps à corps (Désavantage au tir)');
       contextField(fields, 'actor', 'engagedWithShooter', 'La cible est engagée avec le tireur (le tir se résout comme une mêlée : Corps à corps opposé, pas de Désavantage de tir dans la mêlée)');
       if (draft.v5Context?.targetEngaged === true && draft.v5Context?.engagedWithShooter !== true && target) {
@@ -1945,6 +2006,7 @@ export function renderResolutionPanel(options) {
         roll.addEventListener('change',()=>handlers.select({v5Context:{...(draft.v5Context||{}),engagedTargetRoll:roll.value===''?null:Number(roll.value)}}));
         rollLabel.appendChild(roll);
         fields.appendChild(rollLabel);
+      }
       }
     } else if (kind.value === 'melee') {
       choiceField(fields, 'height', 'Hauteur relative', [['attacker','Attaquant plus haut (+1 DR)'],['defender','Défenseur plus haut (−1 DR)']]);
