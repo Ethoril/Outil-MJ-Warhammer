@@ -38,7 +38,7 @@ import { uid } from '../core/models.js';
 import { renderFicheDetails } from './fiche-details.js';
 import { renderSilhouette } from './silhouette.js';
 import { buildParticipantReminders } from '../core/reminders.js';
-import { deriveEngagementContext, engagedWith } from '../core/engagements.js';
+import { deriveEngagementContext, deriveSceneContext, engagedWith } from '../core/engagements.js';
 import { plateauZones, actionBarModel, renderActionBar, renderDisengageForm } from './workspace/plateau.js';
 import { renderResolutionPanel, actionKey, minusSigned, defenseOptions, defaultDefenseValue } from './resolution-panel.js';
 import { initSidePanel } from './side-panel.js';
@@ -476,7 +476,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
   const moveCommand = (participant, value) => {
     const run = value === 'free' ? () => Store.disengageParticipant(participant.id)
       : value.startsWith('engage:') ? () => Store.engageParticipants(participant.id, value.slice(7))
-        : value === 'surround:on' || value === 'surround:off' ? () => Store.setParticipantPosition(participant.id, { surrounded: value === 'surround:on' }) : null;
+        : /^(surround|high|cover):(on|off)$/.test(value) ? () => Store.setParticipantPosition(participant.id, { [{ surround: 'surrounded', high: 'higherGround', cover: 'cover' }[value.split(':')[0]]]: value.endsWith(':on') }) : null;
     if (!run) return;
     Promise.resolve().then(run).catch(error => plateauToast('Déplacement impossible', error)).finally(() => render());
   };
@@ -547,7 +547,8 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       const surrounded = participant.extensions?.v5?.position?.surrounded === true;
       const entry = node('div', `workspace-track-entry workspace-token is-camp-${context.camp(participant)}`);
       // Hors du bouton-jeton : son texte (nom accessible, filtres des parcours) reste celui de l'ancienne piste.
-      const facts = [...(partnerNames.length ? [`Engagé avec : ${partnerNames.join(', ')}`] : []), ...(surrounded ? ['Encerclé'] : [])];
+      const held = participant.extensions?.v5?.position || {};
+      const facts = [...(partnerNames.length ? [`Engagé avec : ${partnerNames.join(', ')}`] : []), ...(surrounded ? ['Encerclé'] : []), ...(held.higherGround ? ['Position haute'] : []), ...(held.cover ? ['À couvert'] : [])];
       entry.draggable = true;
       entry.addEventListener('dragstart', event => event.dataTransfer?.setData('text/plain', participant.id));
       const move = document.createElement('select');
@@ -559,6 +560,9 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         move.append(new Option(`Engager avec ${foe.name}`, `engage:${foe.id}`));
       if (partners.length) move.append(new Option('Libre (désengager sans règle)', 'free'));
       move.append(surrounded ? new Option('N’est plus encerclé', 'surround:off') : new Option('Encerclé', 'surround:on'));
+      const position = participant.extensions?.v5?.position || {};
+      move.append(position.higherGround ? new Option('Quitte la position haute', 'high:off') : new Option('Position haute', 'high:on'));
+      move.append(position.cover ? new Option('N’est plus à couvert', 'cover:off') : new Option('À couvert', 'cover:on'));
       move.addEventListener('change', () => moveCommand(participant, move.value));
       entry.append(item, ...facts.map(text => node('span', 'workspace-token-engaged', text)), move);
       const remove = defeatedParticipantButton(participant, `track-remove-${participant.id}`);
@@ -1047,6 +1051,8 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     const kind=(attack?selectedGroup?.kind:null) || draft.v5Kind || inferV5Kind(action, attackContext);
     // Engagements durables (spec engagements CA15-CA18) : surnombre et tir engagé déduits du plateau ; une valeur forcée par le MJ l'emporte.
     if(attack&&context.target)for(const [key,value] of Object.entries(deriveEngagementContext({combat:{participants:context.participants||[]},participants:context.participants||[],actorId:context.actor?.id,targetId:context.target.id,kind})))if(weaponContext[key]===undefined&&(value===true||(Array.isArray(value)&&value.length)))weaponContext[key]=value;
+    // Scène et positions durables (planche D) : valeurs par défaut, une saisie sur l'action l'emporte.
+    if(attack&&context.target)for(const [key,value] of Object.entries(deriveSceneContext({scene:Store.getSceneCircumstances?.()||{},actor:context.actor,target:context.target,kind})))if(weaponContext[key]===undefined)weaponContext[key]=value;
     return { kind,
       ...(draft.v5SlModifier != null ? { slModifier: draft.v5SlModifier } : context.action.extensions?.v5?.slModifier != null ? { slModifier: context.action.extensions.v5.slModifier } : {}),
       choice: draft.v5Choice, charging: draft.charging, context: { ...weaponContext, ...(context.action.id?.startsWith('broken-hide:')?{isAction:true}: {}) },
@@ -1205,6 +1211,9 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         draft.busy = false;
         render();
       }
+    },
+    setScene(patch) {
+      Promise.resolve().then(() => Store.setSceneCircumstances(patch)).catch(error => import('./toast.js').then(({ showToast }) => showToast(contextMessage('Scène non enregistrée', error, 'réessayez.'), 'error'))).finally(() => render());
     },
     select(patch) {
       const draft = state.resolution;
@@ -2143,6 +2152,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       canApply: Boolean(callbacks.applyResolution || ['channelling', 'cast', 'dispel'].includes(context.type)),
       canDeclareCombatAction: Boolean(callbacks.declareCombatAction),
       canDeclareCombatMovement: Boolean(callbacks.declareCombatMovement),
+      scene: Store.getSceneCircumstances?.() || null,
       handlers: resolutionHandlers
     }));
 

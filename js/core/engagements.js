@@ -154,6 +154,25 @@ export function deriveEngagementContext({ combat, participants = [], actorId, ta
   return {};
 }
 
+/**
+ * Valeurs par défaut issues de la scène (planche D) et des positions durables : météo et lumière pour un tir, terrain difficile
+ * et espace exigu pour une mêlée ; position haute → hauteur relative en mêlée ; cible à couvert → couvert au tir.
+ */
+export function deriveSceneContext({ scene = {}, actor, target, kind } = {}) {
+  const out = {};
+  if (kind === 'ranged') {
+    for (const key of ['weather', 'lighting']) if (scene[key] && scene[key] !== 'normal') out[key] = scene[key];
+    if (target?.extensions?.v5?.position?.cover === true) out.cover = true;
+  }
+  if (kind === 'melee') {
+    for (const key of ['difficultTerrain', 'narrowSpace']) if (scene[key] === true) out[key] = true;
+    const high = person => person?.extensions?.v5?.position?.higherGround === true;
+    if (high(actor) && !high(target)) out.height = 'attacker';
+    else if (high(target) && !high(actor)) out.height = 'defender';
+  }
+  return out;
+}
+
 /** Meilleur score de Corps à corps (CC à défaut) : celui que le désengagé doit battre (p. 163). */
 export function bestMeleeScore(person) {
   const melee = (person?.skills || []).filter(row => /^corps a corps/.test(fold(row?.name ?? row?.nom))).map(row => Number(row.total ?? row.score)).filter(Number.isFinite);

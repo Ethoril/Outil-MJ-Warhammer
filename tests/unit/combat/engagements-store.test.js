@@ -89,3 +89,16 @@ test('les engagements survivent à une sauvegarde rechargée (CA9)', async () =>
   await reloaded.loadFromJSON(JSON.parse(store.getFullJSON()));
   assert.deepEqual(pairs(reloaded), ['gunther-orc']);
 });
+
+test('scène de la rencontre : enregistrée, validée, appliquée par défaut à l’attaque (CA20)', async () => {
+  const store = await fixture();
+  await store.setSceneCircumstances({ lighting: 'dark', difficultTerrain: true });
+  assert.deepEqual(store.getSceneCircumstances(), { lighting: 'dark', difficultTerrain: true });
+  assert.throws(() => store.setSceneCircumstances({ lighting: 'lune' }), /invalide/);
+  await store.setSceneCircumstances({ lighting: null });
+  assert.deepEqual(store.getSceneCircumstances(), { difficultTerrain: true });
+  await store.undo();
+  assert.equal(store.getSceneCircumstances().lighting, 'dark', 'Annuler restaure la scène');
+  await store.setParticipantPosition('gunther', { higherGround: true });
+  assert.equal(person(store, 'gunther').extensions.v5.position.higherGround, true);
+});

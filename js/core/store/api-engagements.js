@@ -6,6 +6,8 @@ import { outnumberSide } from '../outnumbering.js';
 import { hasFleeTalent } from '../v5-broken-escape.js';
 
 const POSITION_KEYS = ['surrounded', 'higherGround', 'cover'];
+// Scène (planche D) : posée une fois pour la rencontre, elle pré-remplit chaque action (une valeur saisie sur l'action l'emporte).
+export const SCENE_KEYS = Object.freeze({ weather: ['normal', 'fog', 'rain-wind', 'extreme'], lighting: ['normal', 'fog', 'dim', 'dark'], difficultTerrain: [true, false], narrowSpace: [true, false] });
 
 export const engagementLogEntry = (text, actorId = null) => ({ id: uid(), ts: Date.now(), kind: 'management', actorId, targetId: null, text, detail: null });
 const withLog = (draft, text, actorId) => ({ ...draft, log: [engagementLogEntry(text, actorId), ...(draft.log || [])].slice(0, 300) });
@@ -89,6 +91,18 @@ export function createEngagementsApi({ api, currentEnvelope }) {
           : { ...row, states: [...(row.states || []), { id: `flee:${uid()}`, key: 'brise', name: 'Brisé', level: broken, source: { kind: 'rule', page: 163, label: 'Fuite engagée' } }] })) } };
         const names = foes.map(foe => foe.name).join(', ');
         return withLog(next, `Fuite · ${actor.name} fuit ${names}${orderly ? ' (En Bon Ordre : pas d’Élan ni d’attaque gratuite)' : ' : ils gagnent l’Élan et peuvent le perdre pour une attaque gratuite'}${broken ? ` ; ${actor.name} gagne ${broken} Brisé` : ''}.`, actorId);
+      });
+    },
+    getSceneCircumstances() { return { ...(currentEnvelope().extensions?.v5?.sceneCircumstances || {}) }; },
+    /** Règle la scène : une clé à `null`/absente de SCENE_KEYS est retirée. */
+    setSceneCircumstances(patch = {}) {
+      for (const [key, value] of Object.entries(patch)) if (!Object.hasOwn(SCENE_KEYS, key) || (value !== null && value !== undefined && !SCENE_KEYS[key].includes(value)))
+        throw Object.assign(new Error(`Circonstance de scène invalide : ${key}.`), { userFacing: true });
+      if (!Object.keys(patch).length) return { ok: true, unchanged: true };
+      return api.executeCommand('set-scene-circumstances', draft => {
+        const scene = { ...(draft.extensions?.v5?.sceneCircumstances || {}) };
+        for (const [key, value] of Object.entries(patch)) if (value === null || value === undefined) delete scene[key]; else scene[key] = value;
+        return { ...draft, extensions: { ...(draft.extensions || {}), v5: { ...(draft.extensions?.v5 || {}), sceneCircumstances: scene } } };
       });
     },
     /** Positions durables d'un combattant (encerclé, position haute, couvert) : `true` pose, `false`/absent retire. */

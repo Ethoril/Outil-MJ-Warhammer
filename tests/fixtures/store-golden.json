@@ -124,6 +124,8 @@
    "previewDisengage/1",
    "applyDisengage/1",
    "applyFlee/1",
+   "getSceneCircumstances/0",
+   "setSceneCircumstances/0",
    "setParticipantPosition/1",
    "confirmBrokenEscapeVisibility/0",
    "previewV5ProjectileExtraction/0",
@@ -1640,6 +1642,16 @@
     "state": "438e1db161d112d5"
    },
    {
+    "label": "sweep getSceneCircumstances",
+    "result": "44136fa355b3678a",
+    "state": "438e1db161d112d5"
+   },
+   {
+    "label": "sweep setSceneCircumstances",
+    "result": "1e98272ec29191cc",
+    "state": "438e1db161d112d5"
+   },
+   {
     "label": "sweep setParticipantPosition",
     "error": "Error: Combattant introuvable.",
     "state": "438e1db161d112d5"
@@ -2536,6 +2548,8 @@
    "previewDisengage/1",
    "applyDisengage/1",
    "applyFlee/1",
+   "getSceneCircumstances/0",
+   "setSceneCircumstances/0",
    "setParticipantPosition/1",
    "confirmBrokenEscapeVisibility/0",
    "previewV5ProjectileExtraction/0",
@@ -4049,6 +4063,16 @@
    {
     "label": "sweep applyFlee",
     "error": "Error: Combattant introuvable.",
+    "state": "c998526c0692af32"
+   },
+   {
+    "label": "sweep getSceneCircumstances",
+    "result": "44136fa355b3678a",
+    "state": "c998526c0692af32"
+   },
+   {
+    "label": "sweep setSceneCircumstances",
+    "result": "1e98272ec29191cc",
     "state": "c998526c0692af32"
    },
    {

@@ -79,3 +79,14 @@ test('meilleure Mêlée : compétence de Corps à corps, sinon CC', () => {
   assert.equal(bestMeleeScore(fighter('x', 'pj', { skills: [{ name: 'Corps à corps (Base)', total: 48 }, { name: 'Corps à corps (Escrime)', total: 52 }] })), 52);
   assert.equal(bestMeleeScore(fighter('y', 'pj')), 40);
 });
+
+test('scène et positions : valeurs par défaut selon le genre d’attaque (CA20, CA21)', async () => {
+  const { deriveSceneContext } = await import('../../../js/core/engagements.js');
+  const scene = { lighting: 'dim', weather: 'normal', difficultTerrain: true, narrowSpace: true };
+  const high = fighter('h', 'pj', { extensions: { v5: { position: { higherGround: true } } } });
+  const covered = fighter('c', 'ennemi', { extensions: { v5: { position: { cover: true } } } });
+  assert.deepEqual(deriveSceneContext({ scene, actor: high, target: covered, kind: 'ranged' }), { lighting: 'dim', cover: true });
+  assert.deepEqual(deriveSceneContext({ scene, actor: high, target: covered, kind: 'melee' }), { difficultTerrain: true, narrowSpace: true, height: 'attacker' });
+  assert.deepEqual(deriveSceneContext({ scene: {}, actor: covered, target: high, kind: 'melee' }), { height: 'defender' });
+  assert.deepEqual(deriveSceneContext({ scene, actor: high, target: covered, kind: 'test' }), {});
+});

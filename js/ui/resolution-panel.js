@@ -169,7 +169,7 @@ export function renderResolutionPanel(options) {
   drawer.append(heading, node('p', 'workspace-muted', 'Ce qui est coché entre dans le calcul.'));
   const engagedRolls = [];
   const fieldGroups = {};
-  for (const [key, label] of [['required','Obligatoire'], ['combat','Combat'], ['defense',target ? `Défense de ${target.name}` : 'Défense'], ['fortune','Avantage et Fortune'], ['talents','Talents'], ['weapon','Arme et munitions'], ['magic','Magie'], ['lethal','Issue létale']]) {
+  for (const [key, label] of [['required','À régler maintenant'], ['scene','Scène (toute la rencontre)'], ['combat','Combat'], ['defense',target ? `Défense de ${target.name}` : 'Défense'], ['fortune','Avantage et Fortune'], ['talents','Talents'], ['weapon','Arme et munitions'], ['magic','Magie'], ['lethal','Issue létale']]) {
     const group = node('section', `workspace-circumstances-group is-${key}`);
     group.appendChild(node('h5', '', label));
     const content = node('div', 'workspace-v5-context');
@@ -188,6 +188,33 @@ export function renderResolutionPanel(options) {
     if (group === 'other') settings.appendChild(element);
     else fieldGroups[group].content.appendChild(element);
   };
+
+  // Scène (planche D) : réglée une fois pour la rencontre, elle pré-remplit chaque action ; une valeur saisie plus bas l'emporte.
+  if (options.scene && ['attack'].includes(type)) {
+    const scene = options.scene, box = fieldGroups.scene.content;
+    const sceneSelect = (key, label, choices) => {
+      const caption = node('label', 'workspace-type', label), select = document.createElement('select');
+      select.setAttribute('aria-label', `Scène · ${label}`);
+      select.dataset.focusKey = `scene-${key}`;
+      for (const [value, text] of choices) select.append(new Option(text, value));
+      select.value = scene[key] || 'normal';
+      select.addEventListener('change', () => handlers.setScene({ [key]: select.value === 'normal' ? null : select.value }));
+      caption.appendChild(select);
+      box.appendChild(caption);
+    };
+    sceneSelect('lighting', 'Lumière', [['normal', 'Normale'], ['fog', 'Faible lumière (−1 DR au tir)'], ['dim', 'Pénombre (−1 DR au tir)'], ['dark', 'Noir total (−3 DR au tir)']]);
+    sceneSelect('weather', 'Météo', [['normal', 'Sans effet'], ['fog', 'Brouillard (−1 DR au tir)'], ['rain-wind', 'Pluie ou vent (−2 DR au tir)'], ['extreme', 'Extrême (−3 DR au tir)']]);
+    for (const [key, label] of [['difficultTerrain', 'Terrain difficile (−1 DR en mêlée)'], ['narrowSpace', 'Espace exigu (mêlée)']]) {
+      const caption = node('label', 'workspace-type'), box2 = document.createElement('input');
+      box2.type = 'checkbox';
+      box2.checked = scene[key] === true;
+      box2.setAttribute('aria-label', `Scène · ${label}`);
+      box2.addEventListener('change', () => handlers.setScene({ [key]: box2.checked ? true : null }));
+      caption.append(box2, label);
+      box.appendChild(caption);
+    }
+    box.appendChild(node('p', 'workspace-muted', 'Pré-remplit chaque action ; une valeur choisie dans Combat l’emporte pour cette action. Positions (haute, à couvert, encerclé) : menu « Déplacer… » du jeton.'));
+  }
 
   const brokenFacts=renderBrokenEscapeVisibilityControl({actor,value:draft.brokenEscapeVisibility,onChange:value=>handlers.select({brokenEscapeVisibility:value}),key:'resolution'});
   if(brokenFacts){
@@ -3175,6 +3202,19 @@ export function renderResolutionPanel(options) {
       }
       block.appendChild(list);
       live.appendChild(block);
+      // CA19 : en tête du tiroir, ce qui bloque et dont la commande est dans le tiroir, chaque ligne menant à son champ.
+      for (const reason of listed) {
+        const field = reason.focus && drawer.querySelector?.(`[data-blocking-field="${reason.focus}"]`);
+        if (!field || field.closest('.workspace-circumstances-group.is-required')) continue;
+        const jump = button(reason.text, 'workspace-ghost');
+        jump.addEventListener('click', () => {
+          for (let parent = field.parentElement; parent; parent = parent.parentElement) if (parent.tagName === 'DETAILS') parent.open = true;
+          field.scrollIntoView({ block: 'center' });
+          field.focus();
+        });
+        fieldGroups.required.content.appendChild(jump);
+        fieldGroups.required.group.hidden = false;
+      }
     };
     if (preview.v5MagicKind) {
       const magicLabel = preview.v5MagicKind === 'channelling'
