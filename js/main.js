@@ -40,7 +40,8 @@ import { openCampaignTimeDialog } from './ui/v5-campaign-time-dialog.js';
 // Libellés des saisies d'Initiative manquantes (recette G-INI-2 : plus d'identifiants internes).
 const INITIATIVE_INPUT_LABELS = Object.freeze({ characteristic: 'Initiative', die: 'd10', combatReflexesDice: 'deux d10 du Combat instinctif',
   combatReflexesChoice: 'choix du Combat instinctif', tieChoice: 'départage de l’égalité', tieOrder: 'ordre de l’égalité',
-  initiatorRoll: 'jet du départage', opponentRoll: 'jet de l’adversaire au départage', surprisedCamp: 'camp surpris' });
+  initiatorRoll: 'jet du départage', opponentRoll: 'jet de l’adversaire au départage', surprisedCamp: 'camp surpris',
+  initiatorChoice: 'résultat retenu au départage', opponentChoice: 'résultat retenu par l’adversaire au départage' });
 
 // Indicateur unique de la barre du haut : il résume les deux statuts détaillés
 // (#local-status, #sync-status), qui restent lisibles dans la section « État » du menu.
@@ -576,7 +577,7 @@ function openCombatInitiativeDialog({ staging = null, startCombat = false, title
           ? `Ordre calculé : ${state.preview.order.map(id => active.find(row => row.id === id)?.name || id).join(' → ')}`
           : `À compléter : ${[...new Set(state.preview.needsInput.map(item => {
             const who = active.find(row => row.id === item.participantId)?.name;
-            const label = INITIATIVE_INPUT_LABELS[item.field] || item.field;
+            const label = INITIATIVE_INPUT_LABELS[item.field] || item.label || item.field;
             return who ? `${label} (${who})` : label;
           }))].join(', ')}`;
       }
