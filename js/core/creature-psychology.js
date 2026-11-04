@@ -14,7 +14,7 @@ const RULES = {
   terror: { fr: 'Terreur', names: ['terror', 'terreur'], note: 'Premier contact : Psychologie ou Brisé égal à l\'indice plus chaque DR négatif ; Peur de même indice ensuite, quel que soit le résultat.' },
   afraid: { fr: 'Effrayé', names: ['afraid', 'effraye'], note: 'Peur (2) de la cible nommée ; interdit de gagner de l\'Élan et l\'avantage de mêlée de la source jusqu\'au seuil.' },
   animosity: { fr: 'Animosité', names: ['animosity', 'animosite'], note: 'Calme pour se retenir, sinon opposition sociale ou physique à la cible ; +1 DR de Sociabilité contre elle.' },
-  prejudice: { fr: 'Préjugé', names: ['prejudice', 'prejuge'], note: 'Aversion envers la cible, selon les règles sociales du socle V4 ; sans effet de règle propre ici.' },
+  prejudice: { fr: 'Préjugé', names: ['prejudice', 'prejuge'], note: 'Aversion envers la cible, à jouer en roleplay ; sans effet de règle propre.' },
   hatred: { fr: 'Haine', names: ['hatred', 'haine'], note: 'Calme pour se retenir, sinon attaque prioritaire du groupe ; +1 DR en mêlée et au tir contre lui ; immunité à sa Peur et à son Intimidation, pas à sa Terreur.' },
   belligerent: { fr: 'Belliqueux', names: ['belligerent', 'belliqueux'], note: 'Immunité à la Peur tant que la créature possède de l\'Élan (variante Temple of Spite : et aucun Élan adverse).' },
   bestial: { fr: 'Bestial', names: ['bestial'], note: 'Pas de langage rationnel, défense par Esquive ; un feu qui blesse donne Brisé ; sous la moitié des Blessures, fuite ou Frénésie.' },
@@ -194,7 +194,8 @@ const MANAGED_PSYCHOLOGY = new Set(['fear', 'terror', 'belligerent', 'immunePsyc
 const REMAINING_PSYCHOLOGY = {
   hatred: 'Calme pour se retenir, sinon attaque prioritaire du groupe ; +1 DR en mêlée et au tir contre lui (l\'immunité à sa Peur et à son Intimidation est appliquée).',
   frenzy: 'Volonté pour entrer en Frénésie, à faire à la main (les effets de la Frénésie sont appliqués) ; fin sans ennemi proche, puis Exténué.',
-  skittish: 'Magie spectaculaire visible ou bruit violent : un Brisé (la chute de monture est appliquée).'
+  skittish: 'Magie spectaculaire visible ou bruit violent : un Brisé (la chute de monture est appliquée).',
+  coldBlooded: 'La première fin normale de Surpris est ignorée (l\'Avantage aux Tests de Calme est appliqué).'
 };
 export function psychologyReminders(participant) {
   const out = [];
