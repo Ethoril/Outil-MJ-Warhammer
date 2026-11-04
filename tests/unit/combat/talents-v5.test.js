@@ -546,7 +546,8 @@ test('Contrôle 2.4 — snapshots divergents signalent ambiguïté, pas d’unio
 test('Contrôle 2.4 — Mains agiles Bagarre exige toucher en attaque, ne bonifie pas la défense Bagarre',async()=>{
  const ctx=await setup({actorTalents:[owned('talent-fast-hands')],targetTalents:[owned('talent-fast-hands')]});
  const action={type:'attack',base:60,damage:3,extensions:{fiche:{skillId:skill('Corps à corps (Bagarre)')}}};
- const missing=ctx.store.previewResolution(hitInput(ctx,'control24-touch-missing',{action}));assert.ok(missing.unresolved.some(row=>/touchingOpponent/.test(row)));
+ // Recette du 04/11 : toucher un adversaire est une intention déclarée ; sans déclaration, un coup de poing ordinaire ne pose pas la question.
+ const missing=ctx.store.previewResolution(hitInput(ctx,'control24-touch-missing',{action}));assert.ok(!missing.unresolved.some(row=>/touchingOpponent/.test(row)));assert.equal(missing.test.advantage.net,0);
  const punch=ctx.store.previewResolution(hitInput(ctx,'control24-normal-punch',{action,v5:{kind:'melee',context:{touchingOpponent:false}}}));assert.equal(punch.test.advantage.net,0);
  const touch=ctx.store.previewResolution(hitInput(ctx,'control24-touch',{action,v5:{kind:'melee',choice:'keep',context:{touchingOpponent:true}},defense:{base:60,roll:40,label:'Bagarre',extensions:{fiche:{skillId:skill('Corps à corps (Bagarre)')}},v5:{kind:'melee',context:{touchingOpponent:true}}}}));assert.equal(touch.test.advantage.net,1);assert.equal(touch.opposition.defender.advantage.net,0);
  const skillPreview=ctx.store.previewResolution({...testInput(ctx,'control24-fast-defender','Charme',{roll:28}),targetId:ctx.targetId,action:{type:'opposition',base:50},defense:{base:50,roll:61,label:'Escamotage',extensions:{fiche:{skillId:skill('Escamotage')}},v5:{kind:'test',choice:'reverse'}}});assert.equal(skillPreview.opposition.defender.roll,16);assert.equal(skillPreview.opposition.defender.advantage.net,1);
@@ -893,7 +894,8 @@ test('2.4 Fast Hands touches with Brawling attack, cannot boost Brawling defense
   const p = build(['fast-hands'], 'Corps à corps (Bagarre)', { kind: 'melee', context: { touchingOpponent: true } }, {action:action('Corps à corps (Bagarre)',{type:'attack'})});
   assert.equal(p.test.advantage.net, 1);
   assert.equal(build(['fast-hands'], 'Corps à corps (Bagarre)', { kind: 'melee', context: { touchingOpponent: false } }, {action:action('Corps à corps (Bagarre)',{type:'attack'})}).test.advantage.net, 0);
-  assert.ok(build(['fast-hands'], 'Corps à corps (Bagarre)', { kind: 'melee' }, {action:action('Corps à corps (Bagarre)',{type:'attack'})}).unresolved.some(text => text.includes('touchingOpponent')));
+  // Recette du 04/11 : sans déclaration du MJ, toucher l'adversaire vaut « non ».
+  assert.ok(!build(['fast-hands'], 'Corps à corps (Bagarre)', { kind: 'melee' }, {action:action('Corps à corps (Bagarre)',{type:'attack'})}).unresolved.some(text => text.includes('touchingOpponent')));
   const defending = buildCombatTest({ actor: actor([]), target: actor(['fast-hands']), action: action(null),
     defense: { ...action('Corps à corps (Bagarre)'), roll: 47, v5: { kind: 'melee', context: { touchingOpponent: true } } }, roll: 40, v5: { kind: 'melee' } }, 'defender');
   assert.equal(defending.test.advantage.net, 0);

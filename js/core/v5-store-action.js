@@ -170,7 +170,7 @@ export function buildV5StoreActionInput(envelope, raw = {}) {
     quotas.push({id:'weapon:repeater-double-second-shot',scope:'turn',maximum:1});for(const cost of costs.filter(c=>c.resource==='momentum'))exemptions.push({costId:cost.id,sourceId:'weapon-repeater'});
   }
   if(context.talentAction==='shield-ally'){costs.push({id:'talent:shieldsman:momentum',resource:'momentum',amount:1});quotas.push({id:'talent:shieldsman',scope:'round',maximum:1});}
-  if(context.talentAction==='overcome-fear'){const active=(actor.states||[]).find(s=>s.key==='fear-of-talent'&&s.id===context.fearEffectId&&sourceActive(s));if(active)quotas.push({id:'talent:frightening:control',scope:active.mode==='sl'?'round':'turn',maximum:1});}
+  if(context.talentAction==='overcome-fear'){const fears=(actor.states||[]).filter(s=>s.key==='fear-of-talent'&&sourceActive(s)),active=context.fearEffectId?fears.find(s=>s.id===context.fearEffectId):[...fears].sort((a,b)=>(b.rating||0)-(a.rating||0))[0];if(active&&clock.encounterId)quotas.push({id:'talent:frightening:control',scope:active.mode==='sl'?'round':'turn',maximum:1});}
   if(context.talentAction==='overcome-terror')quotas.push({id:'talent:small-terror:'+encodeURIComponent(context.terrorEffectId||''),scope:'encounter',maximum:1});
   if(context.talentAction==='hatred')quotas.push({id:'talent:hatred:'+encodeURIComponent(context.psychologySpecialty||''),scope:context.hatredRetry===true?'round':'encounter',maximum:1});
   if(context.talentAction==='vice'&&context.viceRetry===true)quotas.push({id:'talent:vice-retry:'+encodeURIComponent(context.psychologySpecialty||''),scope:'round',maximum:1});

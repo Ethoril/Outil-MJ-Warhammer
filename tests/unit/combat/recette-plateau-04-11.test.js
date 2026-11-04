@@ -81,3 +81,12 @@ test('Surmonter la Peur sans désigner la Peur : celle de plus haut indice est p
   const fear = store.listParticipants().find(row => row.id === 'elysia').states.find(row => row.key === 'fear-of-talent');
   assert.equal(fear.successes, 2);
 });
+
+test('aucun talent de Test ne pose de question hors sujet sur une attaque ou une défense ordinaire (seule la Haine demande le groupe)', async () => {
+  const { V5_TEST_TALENT_IDS } = await import('../../../js/core/v5-talent-tests.js');
+  const asked = new Set();
+  for (const [action, kind, roles] of [[{ label: 'Hache', type: 'attack', attr: 'CC', qualities: [] }, 'melee', ['attacker', 'defender']], [{ label: 'Arc', type: 'attack', attr: 'CT', qualities: [] }, 'ranged', ['attacker', 'defender']], [{ label: 'Esquive', type: 'test', attr: 'Ag' }, 'test', ['defender']]])
+    for (const role of roles) for (const id of new Set(V5_TEST_TALENT_IDS))
+      for (const row of previewV5TalentTestModifiers({ id: 'x', talents: [owned(id)] }, { action, settings: {}, kind, role }).unresolved) asked.add(row);
+  assert.deepEqual([...asked], ['Talent talent-hatred : préciser enemyGroup.']);
+});

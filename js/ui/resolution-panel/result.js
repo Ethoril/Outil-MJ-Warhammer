@@ -23,6 +23,16 @@ function actionCostText(preview, participants) {
     return `${payer} paie ${row.amount} ${COST_LABELS[row.resource] || row.resource}${solde}`;
   }).join(', ');
 }
+/** Libellé lisible d'un point non résolu de talent (« Talent talent-x : préciser champ. ») ; les autres textes sont rendus tels quels. */
+export function readableTalentWarning(warning) {
+  const match = /^Talent(?: (talent-[a-z0-9-]+))? : préciser (.+)\.$/.exec(warning);
+  const talentName = match?.[1] ? getReferenceCatalogue().talents.find(row=>row.id===match[1])?.nom || 'Talent' : 'Talent';
+  const field = match?.[2];
+  const contextLabel = V5_TALENT_TEST_CONTEXT_FIELDS.find(row=>row.field===field)?.label || ({skillId:'Compétence du Test',skillGroupId:'Compétence du Test',specialization:'Spécialité du Test',specializationId:'Spécialité du Test',weaponImprovised:'Arme improvisée','weapon.improvised':'Arme improvisée',silentTakedown:'Neutralisation silencieuse',outsideCombat:'Procédure hors combat',targetUnaware:'Cible ignorant le danger'})[field];
+  const text = match && (contextLabel || field.startsWith('choices.')) ? talentName+' : '+(contextLabel ? contextLabel+' — à préciser.' : 'choisir DR ou unités pour ce jet réussi.') : warning;
+  return text;
+}
+
 export function renderResult(preview, target, draft, handlers, participants=[]) {
   if (preview?.v5MagicKind) return renderV5MagicResult(preview, target, draft, handlers);
   const result = node('div', 'workspace-result');
@@ -216,11 +226,7 @@ export function renderResult(preview, target, draft, handlers, participants=[]) 
     result.append(label);
   }
   for (const warning of preview.unresolved || []) {
-    const match = /^Talent(?: (talent-[a-z0-9-]+))? : préciser (.+)\.$/.exec(warning);
-    const talentName = match?.[1] ? getReferenceCatalogue().talents.find(row=>row.id===match[1])?.nom || 'Talent' : 'Talent';
-    const field = match?.[2];
-    const contextLabel = V5_TALENT_TEST_CONTEXT_FIELDS.find(row=>row.field===field)?.label || ({skillId:'Compétence du Test',skillGroupId:'Compétence du Test',specialization:'Spécialité du Test',specializationId:'Spécialité du Test',weaponImprovised:'Arme improvisée','weapon.improvised':'Arme improvisée',silentTakedown:'Neutralisation silencieuse',outsideCombat:'Procédure hors combat',targetUnaware:'Cible ignorant le danger'})[field];
-    const text = match && (contextLabel || field.startsWith('choices.')) ? talentName+' : '+(contextLabel ? contextLabel+' — à préciser.' : 'choisir DR ou unités pour ce jet réussi.') : warning;
+    const text = readableTalentWarning(warning);
     result.appendChild(node('p', 'workspace-field-error', text));
   }
   if (preview.choiceRequired) result.appendChild(node('p', 'workspace-muted', 'Choisissez chaque inversion facultative avant de confirmer.'));

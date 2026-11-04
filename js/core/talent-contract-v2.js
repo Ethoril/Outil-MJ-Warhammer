@@ -97,7 +97,7 @@ export function evaluateTalentContractsV2({ contracts, acquisitions, sourceHashe
         if (actual == null && predicate.field === 'enemyGroup' && Array.isArray(context?.enemyKeywords) && context.enemyKeywords.length) actual = ENEMY_FROM_KEYWORDS;
         const other = predicate.op === 'lteField' ? read(context,predicate.otherField) : undefined;
         // Une compétence précise d'un autre groupe que celui du jet ne peut pas être celle du jet (identifiants « skill-<groupe>-<spécialité> »).
-        if (actual == null && predicate.field === 'skillId' && predicate.op === 'eq' && typeof context?.skillGroupId === 'string' && context.skillGroupId.startsWith('skill-group-') && !String(predicate.value).startsWith('skill-' + context.skillGroupId.slice(12) + '-')) {rejected = true; continue;}
+        if (actual == null && predicate.field === 'skillId' && ['eq','in'].includes(predicate.op) && typeof context?.skillGroupId === 'string' && context.skillGroupId.startsWith('skill-group-') && ![predicate.value].flat().some(value => String(value).startsWith('skill-' + context.skillGroupId.slice(12) + '-'))) {rejected = true; continue;}
         if (actual == null) {missing.add(predicate.field); continue;}
         if (!scalar(actual)) throw new TypeError('Valeur de contexte v2 invalide');
         if (predicate.op === 'lteField' && other == null) {missing.add(predicate.otherField); continue;}

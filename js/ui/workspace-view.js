@@ -2027,6 +2027,8 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
           draft.fortuneAdvantageDeclarationId=null;
           if (draft.preview.v5MagicKind) resetMagicDice(draft);
           forgetAttackAnswers(draft);
+          // Action de situation jouée (Surmonter la Peur…) : le panneau revient à l'action par défaut et à la cible proposée.
+          if (String(draft.preview.input?.action?.id || '').startsWith('activate:')) { draft.actionKey = null; state.targetChoice = null; }
           if (firstOfDouble) {
             draft.extraAttack = true;
             draft.v5Context = { ...(draft.v5Context || {}), repeaterDoubleShot: true, repeaterSecondShot: true, freeAttackTalent: 'repeater-double', primaryResolutionId: firstOfDouble };

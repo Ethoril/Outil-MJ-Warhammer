@@ -67,7 +67,7 @@ export function applicationBlockingReasons(preview, draft, canApply, preflight =
     return finish();
   }
   add(preview.choiceRequired, 'Choisissez le résultat à appliquer');
-  for (const text of preview.unresolved || []) reasons.push({ text, focus: /^Maladresse du défenseur/.test(text) ? 'defender-fumble-roll' : /^Maladresse de combat : saisissez/.test(text) ? 'fumble-roll' : /Calme.*attaquant/i.test(text) ? 'protection-calm' : /Tir engagé.*Test de défense/i.test(text) ? 'engaged-defense' : /^Recharge : saisir les munitions/.test(text) ? 'reload-ammo' : /^Taille : saisir la pièce/.test(text) ? 'hack-piece' : /^Dispersion : bande/.test(text) ? 'spread-band' : /^Dispersion : (?:cibles|inclure)/.test(text) ? 'spread-targets' : /^Explosion : (?:cibles|inclure)/.test(text) ? 'explosion-targets' : /^Confirmer la règle autorisant cette défense contre un tir/.test(text) ? 'ranged-opposition' : /^Appendice : saisissez les PA/.test(text) ? 'appendage-ap' : /^Malice de Ranald : choisissez/.test(text) ? 'ranald-characteristic' : /jet de défense/i.test(text) ? 'defense-roll' : undefined, ...(/une Charge est requise\.$/.test(text) ? { action: 'charge' } : {}), ...(/^Bénédiction de Protection :/.test(text) ? { ignorable: 'divine-protection' } : {}) });
+  for (const text of preview.unresolved || []) reasons.push({ text: readableTalentWarning(text), focus: /^Maladresse du défenseur/.test(text) ? 'defender-fumble-roll' : /^Maladresse de combat : saisissez/.test(text) ? 'fumble-roll' : /Calme.*attaquant/i.test(text) ? 'protection-calm' : /Tir engagé.*Test de défense/i.test(text) ? 'engaged-defense' : /^Recharge : saisir les munitions/.test(text) ? 'reload-ammo' : /^Taille : saisir la pièce/.test(text) ? 'hack-piece' : /^Dispersion : bande/.test(text) ? 'spread-band' : /^Dispersion : (?:cibles|inclure)/.test(text) ? 'spread-targets' : /^Explosion : (?:cibles|inclure)/.test(text) ? 'explosion-targets' : /^Confirmer la règle autorisant cette défense contre un tir/.test(text) ? 'ranged-opposition' : /^Appendice : saisissez les PA/.test(text) ? 'appendage-ap' : /^Malice de Ranald : choisissez/.test(text) ? 'ranald-characteristic' : /jet de défense/i.test(text) ? 'defense-roll' : undefined, ...(/une Charge est requise\.$/.test(text) ? { action: 'charge' } : {}), ...(/^Bénédiction de Protection :/.test(text) ? { ignorable: 'divine-protection' } : {}) });
   const criticals = [preview.critical?.details, preview.critical?.second, preview.defenderCritical?.details];
   // Le jet sur la table des critiques n'apparaît qu'une fois la localisation connue : une seule ligne à la fois.
   add(criticals.some(row => row?.pending && !row?.needsLocation), 'Complétez le jet de critique', 'critical-pending');
@@ -149,7 +149,7 @@ export const ACTION_TYPES = Object.freeze([
   ['dispel', 'Dissipation persistante V5']
 ]);
 export { minusSigned, signed } from './resolution-panel/dom.js';
-import { ROLL_LABELS, renderResult, renderComparison, renderDivineSocialFacts } from './resolution-panel/result.js';
+import { ROLL_LABELS, renderResult, renderComparison, renderDivineSocialFacts, readableTalentWarning } from './resolution-panel/result.js';
 import { node, button, chip, rubric, outcomePill, signed } from './resolution-panel/dom.js';
 import { renderV5MagicContext, MISCAST_DIE_FIELDS } from './resolution-panel/magic.js';
 import { missingMagicDiceMessage } from '../core/v5-magic-miscasts.js';
