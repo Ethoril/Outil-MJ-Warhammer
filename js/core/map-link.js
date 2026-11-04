@@ -12,8 +12,7 @@ export const MAP_LINK_TIMEOUT_MS = 15000;
 
 /**
  * Effets éphémères d'un changement d'état (contrat §9), après le `token.state` qui les porte :
- * `fx.wound` à chaque baisse de PV, `fx.death` au passage à mort. La cause vaut `blood` tant que sa
- * déduction (coup, feu, sort, poison, critique) n'est pas branchée (lot 4). Un pion qui apparaît
+ * `fx.wound` à chaque baisse de PV, `fx.death` au passage à mort. La cause vient de l'état, avec `blood` par défaut. Un pion qui apparaît
  * ne joue rien.
  */
 export function effectsOf(prev, next) {

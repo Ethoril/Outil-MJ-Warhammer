@@ -1280,9 +1280,22 @@ test('F2-B — mort directe désactivée par défaut, éligibilité bornée, opt
   assert.equal(approved.ready,true);assert.deepEqual(approved.lethalDeath,{targetId:'b',confirmedBy:'explicit-gm',tableOptionEnabled:true});
   const applied=await store.applyResolution(approved);assert.equal(applied.status,'applied');assert.deepEqual(applied.resolution.lethalDeath.application,{hp:0,dead:true});
   assert.equal(persistence.read().combat.participants.find(row=>row.id==='b').extensions.v5.dead,true);
+  assert.equal(persistence.read().combat.participants.find(row=>row.id==='b').extensions.v5.deathCause,'blood');
   assert.equal(persistence.read().combat.participants.find(row=>row.id==='b').hp,0);
   assert.equal(await store.undo(),true);assert.notEqual(persistence.read().combat.participants.find(row=>row.id==='b').extensions?.v5?.dead,true);
   const reload=createStore({persistence,storage:null});await reload.ready;assert.notEqual(reload.listParticipants().find(row=>row.id==='b').extensions?.v5?.dead,true);
+});
+
+test('une attaque létale sur un mort conserve sa première cause', async () => {
+  const {store}=await setup();
+  const previous=store.listParticipants().find(row=>row.id==='b');
+  await store.updateParticipant('b',{extensions:{...previous.extensions,v5:{...previous.extensions?.v5,dead:true,deathCause:'poison'}}});
+  const preview=store.previewResolution({...hit('lethal-again'),defense:undefined,v5:{kind:'melee',context:{targetHelpless:true,lethalIntent:true,lethalTableEnabled:true,confirmLethalDeath:true}}});
+  assert.equal(preview.ready,true,JSON.stringify(preview.unresolved));
+  assert.equal((await store.applyResolution(preview)).status,'applied');
+  const target=store.listParticipants().find(row=>row.id==='b');
+  assert.equal(target.extensions.v5.dead,true);
+  assert.equal(target.extensions.v5.deathCause,'poison');
 });
 });
 

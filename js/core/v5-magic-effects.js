@@ -824,6 +824,7 @@ export function expireSpellEffects(participant, filter = {}) {
   for(let i=remainingEffects.length-1;i>=0;i--)if(remainingEffects[i].parentEffectId && removedEffects.some(e=>e.id===remainingEffects[i].parentEffectId))removedEffects.push(...remainingEffects.splice(i,1));
   if(next.extensions.v5.beastForm && removedEffects.some(e=>e.beastFormMarker))next=revertBeastForm(next).participant;
   // Apothéose (+10 DR, HEPG p. 86) : la cible relevée meurt au terme du sort ou s'il est dissipé, et ne peut plus être ramenée.
+  if(removedEffects.some(e=>e.dieOnExpiry || e.corpseOnExpiry) && next.extensions.v5.dead !== true) next.extensions.v5.deathCause='magic';
   if(removedEffects.some(e=>e.dieOnExpiry)){next.hp=0;next.dead=true;next.extensions.v5={...next.extensions.v5,dead:true,cannotBeRevived:true};}
   if(removedEffects.some(e=>e.corpseOnExpiry)){next.hp=0;next.dead=true;next.extensions.v5.dead=true;}
   next.extensions.v5.spellEffects = remainingEffects;

@@ -3515,7 +3515,7 @@ export function applySpellExecution(draft, contractOrId, input = {}) {
 
     if(tRes.vortexParticipant){
       const next=tRes.vortexParticipant,ids=new Set((target.extensions?.v5?.spellEffects || []).map(e=>e.id));target.hp=next.hp;target.states=structuredClone(next.states || []);
-      if(next.extensions?.v5?.dead)target.extensions.v5.dead=true;
+      if(next.extensions?.v5?.dead){if(target.extensions.v5.dead!==true)target.extensions.v5.deathCause=next.extensions.v5.deathCause || 'magic';target.extensions.v5.dead=true;}
       if(tRes.criticalWound){target.extensions.v5.criticalWounds=[...(target.extensions.v5.criticalWounds || []),{...tRes.criticalWound,id:`${opKey}:crit:${target.id}`,source:'spell',round:currentRound}];criticalWoundInflicted=true;}
       for(const layer of next.extensions?.v5?.spellEffects || [])if(!ids.has(layer.id))Object.assign(target,applySpellEffects(target,layer,{round:currentRound,caster:actor}).participant);
       participants[pIdx]=target;appliedTargets.push({targetId:target.id,targetName:target.name,newHp:target.hp,woundsLost:tRes.woundsLost,actions:tRes.actions});continue;
@@ -3570,7 +3570,7 @@ export function applySpellExecution(draft, contractOrId, input = {}) {
       target.hp = Math.min(maxHp, (Number(target.hp) || 0) + tRes.woundsHealed);
     }
 
-    if (tRes.kill) { target.extensions.v5.dead=true; target.extensions.v5.cannotRaiseUndead=true; }
+    if (tRes.kill) { if(target.extensions.v5.dead!==true)target.extensions.v5.deathCause=contract.domain === 'fire' ? 'fire' : 'magic'; target.extensions.v5.dead=true; target.extensions.v5.cannotRaiseUndead=true; }
     if(tRes.restoreCorpse){target.hp=tRes.directSetHp;target.dead=false;target.isDead=false;target.extensions.v5.dead=false;target.states=(target.states || []).filter(s=>!['mort','dead','inconscient'].includes(fold(s.key || s.name)));}
     if(tRes.permanentStatDeltas){const patch=Object.fromEntries(Object.entries(tRes.permanentStatDeltas).map(([key,delta])=>[key,Math.max(0,baseCharacteristicScore(target,key)+delta)]));target=rebaseMagicLayers(target,{caracs:patch});participants[pIdx]=target;}
     if (tRes.channellingGain) { const caster=participants.find(p => p.id === actor.id); caster.extensions.v5.channelling={ type:'winds', sl:(Number(caster.extensions.v5.channelling?.sl)||0)+tRes.channellingGain }; }

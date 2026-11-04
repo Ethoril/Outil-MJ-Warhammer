@@ -286,6 +286,7 @@ test('Mort — V5 p. 247 : Mort rapide tue à 0 B, Undo restaure', async () => {
   const {store}=await encounter({foe:{hp:0}}); const before=store.listParticipants();
   await cast(store,contracts.find(c=>c.canonicalName==='Swift Passing'));
   assert.equal(subject(store,'foe').extensions.v5.dead,true); assert.equal(subject(store,'foe').extensions.v5.cannotRaiseUndead,true);
+  assert.equal(subject(store,'foe').extensions.v5.deathCause,'magic');
   await store.undo(); assert.deepEqual(store.listParticipants(),before);
 });
 });

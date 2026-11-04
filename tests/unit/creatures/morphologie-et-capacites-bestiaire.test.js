@@ -912,6 +912,8 @@ test('All three Flying Death Skull profiles revert at 0 Wounds, applied by the S
     assert.equal(applied.status, 'applied', JSON.stringify({ id, reason: applied.reason, unresolved: confirmed.unresolved, choice: confirmed.choiceRequired }));
     const after = store.listParticipants().find(row => row.id === skull.id);
     assert.equal(after.extensions.v5.inanimateAs, 'crâne ordinaire', id);
+    assert.equal(after.extensions.v5.dead, true, id);
+    assert.equal(after.extensions.v5.deathCause, 'blood', id);
   }
 });
 

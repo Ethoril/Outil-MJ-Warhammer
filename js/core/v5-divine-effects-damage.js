@@ -233,6 +233,7 @@ const directDamage = {
     const destroyed = effect.killAtZeroNoReraise === true && participant.hp === 0 && undeadEstablished(participant, input);
     if (destroyed) {
       participant.extensions ||= {}; participant.extensions.v5 ||= {};
+      if (participant.extensions.v5.dead !== true) participant.extensions.v5.deathCause = 'magic';
       participant.extensions.v5.dead = true; participant.extensions.v5.cannotRaiseUndead = true;
     }
     const conditions = acquireConditions(participant, effect, ctx);

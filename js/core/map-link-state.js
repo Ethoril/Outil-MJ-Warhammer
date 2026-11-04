@@ -91,7 +91,8 @@ export function tokenStateOf(participant, participants = [], { maxHp = null, ima
     hp: { current: Math.max(0, Math.min(current, max)), max },
     health: healthOf(current, max),
     ...markersOf(participant),
-    dead: v5Of(participant).dead === true
+    dead: v5Of(participant).dead === true,
+    deathCause: v5Of(participant).dead === true ? (v5Of(participant).deathCause ?? null) : null
   };
 }
 

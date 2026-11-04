@@ -109,7 +109,7 @@ export function previewSpellInteraction(state, { effectId, targetId, kind, roll,
   } else if(kind==='death-burst' && effect.specialState?.deathBurst){
     if(owner.hp!==0 || !effect.spellDamageAtZero || effect.deathBurstDone || deathConfirmed!==true || targetsDeclared!==true || !Array.isArray(targetIds))return block('Mort due au sort confirmée, tous les destinataires dans 2 mètres déclarés et explosion non utilisée requis.');
     for(const id of new Set(targetIds)){const victim=participants.find(p=>p.id===id),answer=targetTests[id];if(!victim || victim.id===owner.id || !Number.isFinite(answer?.distance)||answer.distance<0||answer.distance>effect.specialState.deathBurst.radius || !d100(answer.locationRoll))return block('Explosion : participant réel, distance ≤2 mètres et localisation d100 requis.');const raw=resolveSpellDamage({caster,target:victim,formula:String(Math.floor(caster.caracs.FM/10)+effect.specialState.deathBurst.missile),roll:reverseV5Roll(answer.locationRoll),spell:{name:'Explosion de Sang Bouillonnant'}}),protectedHit=previewMagicProtection(victim,raw.finalDamage,{wardRoll:answer.wardRoll,nature:attackNature({magical:true,spell:true,ranged:true,fire:true})});if(!protectedHit.ready)return block(protectedHit.error);const lost=Math.min(victim.hp,protectedHit.amount);victim.hp-=lost;damage+=lost;}
-    effect.deathBurstDone=true;owner.extensions.v5.dead=true;summary='Explosion +1 : −'+damage+' B sur les destinataires déclarés, mort enregistrée.';
+    effect.deathBurstDone=true;if(owner.extensions.v5.dead!==true)owner.extensions.v5.deathCause='fire';owner.extensions.v5.dead=true;summary='Explosion +1 : −'+damage+' B sur les destinataires déclarés, mort enregistrée.';
   } else if(kind==='zone'  && effect.specialState?.zoneModifiers){
     if(target.id!==owner.id || !['inside','outside'].includes(controlValue))return block('Choisir la présence dans la zone du destinataire de cette couche.');
     replaceLayer({statModifiers:effect.specialState.zoneModifiers[controlValue]});summary='Présence '+controlValue+' : modificateurs de couche recalculés.';
@@ -301,7 +301,7 @@ export function randomVortexStep(participants,caster,effect,{inputs={},initial=n
    let collisionDamage=0;
    if(thrown?.collision){const collided=resolveSpellDamage({caster,target,formula:'7',roll:reverseV5Roll(location),spell:{name:'Collision du vortex'}}),p=previewMagicProtection(target,collided.finalDamage,{wardRoll:data[field('CollisionWard')] ?? data.collisionWardRoll,nature:attackNature({magical:false,ranged:false,declared:{crush:true}})});if(!p.ready){request('CollisionWard','wards','Protection contre collision (d10 séparés)');continue;}collisionDamage=p.amount;}
    const amount=protectedHit.amount+collisionDamage;target.hp=Math.max(0,target.hp-amount);
-   if(sun && !sun.success){target.hp=0;target.extensions.v5.dead=true;}
+   if(sun && !sun.success){target.hp=0;if(target.extensions.v5.dead!==true)target.extensions.v5.deathCause='magic';target.extensions.v5.dead=true;}
    const conditions=[...(stage.profile.conditions || []),...(thrown?['À Terre']:[])];
    if(conditions.length)Object.assign(target,acquireV5Conditions(target,conditions,{round}).participant);
    if(stage.profile.suffocation && (data[field('Inside')] ?? data.inside)){
@@ -419,7 +419,7 @@ export function roundSpellEffects(participants, phase, round, inputs = {}, actor
       lost = Math.min(1,Number(target.hp));
       if (target.hp === 0) {
         effect.suffocationZeroRounds=(effect.suffocationZeroRounds || 0)+1;
-        if (effect.suffocationZeroRounds >= Math.floor(Number(target.caracs.E)/10)) target.extensions.v5.dead=true;
+        if (effect.suffocationZeroRounds >= Math.floor(Number(target.caracs.E)/10)) { if(target.extensions.v5.dead!==true)target.extensions.v5.deathCause='magic'; target.extensions.v5.dead=true; }
       }
     }
     if(spec.damageOnlyOnTestFailure && !secondaryFailed)damageSpec=null;

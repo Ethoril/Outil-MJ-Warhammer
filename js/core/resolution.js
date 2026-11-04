@@ -1798,12 +1798,12 @@ export function applyResolution(preview, currentState) {
     if(preview.skullReversion?.targetId===updated.id){
       updated.hp=0;
       updated.extensions??={};
-      updated.extensions.v5={...(updated.extensions.v5||{}),dead:true,inanimateAs:'crâne ordinaire'};
+      updated.extensions.v5={...(updated.extensions.v5||{}),...(updated.extensions.v5?.dead === true ? {} : {deathCause:'blood'}),dead:true,inanimateAs:'crâne ordinaire'};
     }
     if(preview.lethalDeath?.targetId===updated.id){
       updated.hp=0;
       updated.extensions??={};
-      updated.extensions.v5={...(updated.extensions.v5||{}),dead:true};
+      updated.extensions.v5={...(updated.extensions.v5||{}),...(updated.extensions.v5?.dead === true ? {} : {deathCause:'blood'}),dead:true};
     }
     if(preview.tripFall){
       updated.extensions??={};

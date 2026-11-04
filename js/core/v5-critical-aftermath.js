@@ -143,6 +143,7 @@ export function decideCriticalDeath(participant, { decision, round } = {}) {
   const next = withV5(participant, { [CRITICAL_DEATH_FIELD]: nextCount });
   if (decision === 'confirm') {
     next.hp = 0;
+    if (next.extensions.v5.dead !== true) next.extensions.v5.deathCause = 'blood';
     next.extensions.v5.dead = true;
   }
   return { status: decision === 'confirm' ? 'dead' : 'declined', participant: next, countdown: nextCount };
@@ -164,6 +165,7 @@ export function decideImmediateCriticalDeath(participant, { criticalId, decision
     : row);
   if (decision === 'confirm') {
     next.hp = 0;
+    if (next.extensions.v5.dead !== true) next.extensions.v5.deathCause = 'blood';
     next.extensions.v5.dead = true;
   }
   return { status: decision === 'confirm' ? 'dead' : 'declined', participant: next,
@@ -201,7 +203,10 @@ export function decideSuddenDeath(participant, plan, outcome) {
   if (outcome !== 'dead' && outcome !== 'unconscious') return { status: 'confirmation-required', participant, plan };
   const next = clone(participant);
   next.extensions = { ...(next.extensions || {}), v5: { ...(next.extensions?.v5 || {}) } };
-  if (outcome === 'dead') next.extensions.v5.dead = true;
+  if (outcome === 'dead') {
+    if (next.extensions.v5.dead !== true) next.extensions.v5.deathCause = 'blood';
+    next.extensions.v5.dead = true;
+  }
   else {
     const receipt = acquireV5Conditions(next, [{ name: 'Inconscient', source: { kind: 'sudden-death' } }]);
     Object.assign(next, receipt.participant);

@@ -357,6 +357,7 @@ test('Anéantir : un non mort-vivant est refusé, le fait MJ établit un mort-vi
   assert.equal(ghoul.hp, 0);
   assert.equal(ghoul.extensions.v5.cannotRaiseUndead, true);
   assert.equal(ghoul.extensions.v5.dead, true);
+  assert.equal(ghoul.extensions.v5.deathCause, 'magic');
   assert.equal(result.receipt.effectReceipts[0].result.destroyed, true);
   const survivor = await fixture('Morr', [undead('tough', { hp: 30 })]);
   await cast(survivor, ANNIHILATE, input(['tough'], { damageRoll: 3 }));

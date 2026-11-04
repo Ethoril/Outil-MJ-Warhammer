@@ -89,3 +89,14 @@ test('effets : fx.wound à chaque baisse de PV, fx.death au passage à mort, rie
   const order = t.channel.sent.map(m => m.type);
   assert.ok(order.indexOf('token.state') < order.indexOf('fx.wound'), 'l’état part avant l’effet');
 });
+
+test('la liaison transmet la cause de mort enregistrée uniquement pour un mort', () => {
+  const t = setup([gob('g1')]);
+  t.set([gob('g1', { hp: 0, extensions: { v5: { dead: true, deathCause: 'fire' } } })]);
+  t.link.refresh();
+  assert.equal(t.channel.sent.find(m => m.type === 'token.state').payload.deathCause, 'fire');
+  assert.equal(t.channel.sent.find(m => m.type === 'fx.death').payload.cause, 'fire');
+  t.set([gob('g1', { extensions: { v5: { dead: false, deathCause: 'fire' } } })]);
+  t.link.refresh();
+  assert.equal(t.channel.sent.filter(m => m.type === 'token.state').at(-1).payload.deathCause, null);
+});
