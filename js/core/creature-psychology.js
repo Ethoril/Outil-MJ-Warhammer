@@ -189,10 +189,18 @@ function receiptOf(plan) {
 }
 
 /** Rappels de Psychologie d'un participant, sans doublon (affichage de fiche). */
+// Règle des profils (MJ, 04/11/2026) : aucun rappel pour ce que l'outil applique ; pour ce qu'il applique en partie, le rappel ne dit que le reste.
+const MANAGED_PSYCHOLOGY = new Set(['fear', 'terror', 'belligerent', 'immunePsychology']);
+const REMAINING_PSYCHOLOGY = {
+  hatred: 'Calme pour se retenir, sinon attaque prioritaire du groupe ; +1 DR en mêlée et au tir contre lui (l\'immunité à sa Peur et à son Intimidation est appliquée).',
+  frenzy: 'Volonté pour entrer en Frénésie, à faire à la main (les effets de la Frénésie sont appliqués) ; fin sans ennemi proche, puis Exténué.',
+  skittish: 'Magie spectaculaire visible ou bruit violent : un Brisé (la chute de monture est appliquée).'
+};
 export function psychologyReminders(participant) {
   const out = [];
   for (const trait of psychologyTraits(participant)) {
-    const text = `${RULES[trait.key].fr} : ${RULES[trait.key].note}`;
+    if (MANAGED_PSYCHOLOGY.has(trait.key)) continue;
+    const text = `${RULES[trait.key].fr} : ${REMAINING_PSYCHOLOGY[trait.key] || RULES[trait.key].note}`;
     if (!out.includes(text)) out.push(text);
   }
   return out;

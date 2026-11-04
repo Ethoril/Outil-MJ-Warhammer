@@ -246,10 +246,10 @@ test('B1 : Force opposée gagnée automatiquement par la plus grande créature �
   assert.equal(result.opposition.winner, 'defender');
 });
 
-test('B1 : le rappel de Taille (poids au surnombre) est sur la carte du Stegadon, pas du PJ', async () => {
+test('B1 : aucun rappel de Taille (appliquée par l’outil) sur la carte du Stegadon ni du PJ', async () => {
   const { store, stegadon } = await table();
   const texts = store.getParticipantReminders(stegadon.id).map(item => item.text);
-  assert.ok(texts.some(text => /Taille/.test(text) && /surnombre/.test(text)));
+  assert.ok(!texts.some(text => /Taille/.test(text) && /surnombre/.test(text)));
   assert.deepEqual(store.getParticipantReminders('h'), []);
 });
 });
@@ -951,9 +951,9 @@ async function table({ hp = 60, criticals = [] } = {}) {
 }
 const beastOf = store => store.getCombat().participants.get('beast');
 
-test('B3 : le rappel de Régénération figure sur la Hydre, pas sur un participant sans le Trait', async () => {
+test('B3 : aucun rappel de Régénération (appliquée par le bouton) sur la Hydre ni sur un participant sans le Trait', async () => {
   const store = await table();
-  assert.match(store.getParticipantReminders('beast').map(item => item.text).join('\n'), /Régénération : Début de Round : 1d10/);
+  assert.ok(!store.getParticipantReminders('beast').some(item => /Régénération/.test(item.text)));
   assert.ok(!store.getParticipantReminders('hero').some(item => /Régénération/.test(item.text)));
 });
 
@@ -1037,9 +1037,9 @@ async function table(extra = []) {
 }
 const who = (store, id) => store.getCombat().participants.get(id);
 
-test('B4 : le rappel de Terreur figure sur le Spectre, pas sur un participant sans le Trait', async () => {
+test('B4 : aucun rappel de Terreur (appliquée par l’outil) sur le Spectre ni sur un participant sans le Trait', async () => {
   const store = await table();
-  assert.match(store.getParticipantReminders('wraith').map(item => item.text).join('\n'), /Terreur : Premier contact/);
+  assert.ok(!store.getParticipantReminders('wraith').some(item => /Terreur/.test(item.text)));
   assert.ok(!store.getParticipantReminders('hero').some(item => /Terreur/.test(item.text)));
 });
 
@@ -1127,14 +1127,14 @@ test('B4c : « À traiter » d’une scène active ne porte aucune ligne permane
   const scene = deriveReminders({ sceneId: 's', participants }, { id: 'round-1', type: 'endTurn', actorId: 'h1', round: 1 }, []);
   assert.deepEqual(scene.filter(item => item.kind === 'participant-reminder' && /Taille|Plusieurs têtes|tête/.test(item.text)), []);
   const card = deriveReminders({ sceneId: 's', participants: [stegadon, hydra] }, { id: 'round-1', type: 'participant', round: 1 }, []);
-  assert.ok(card.some(item => /Taille/.test(item.text)), 'la carte garde le rappel de Taille');
+  assert.ok(!card.some(item => /Taille/.test(item.text)), 'la carte ne porte plus de rappel de Taille');
   assert.ok(card.some(item => /tête\(s\) valide/.test(item.text)), 'la carte garde le rappel des têtes');
 });
 
-test('B4c : pas de rappel de Taille pour une créature de Taille Moyenne ou Petite', () => {
+test('B4c : pas de rappel de Taille, quelle que soit la Taille (appliquée par l’outil)', () => {
   assert.deepEqual(sizeReminders({ traits: ['Size (Average)'] }), []);
   assert.deepEqual(sizeReminders({ traits: ['Taille (Petite)'] }), []);
-  assert.equal(sizeReminders({ traits: ['Size (Large)'] }).length, 1);
+  assert.deepEqual(sizeReminders({ traits: ['Size (Large)'] }), []);
 });
 
 test('B4c : « Fait » sur la ligne d’état des têtes ne masque que cette ligne, qui revient quand une tête tombe', async () => {
@@ -1242,11 +1242,11 @@ test('B5 : Furtif, Discrétion à Agilité+10 pour le Skink caméléon', async (
   assert.equal(result.score.target, Number(lizard.caracs.Ag) + 10);
 });
 
-test('B5 : les rappels de sens sont sur la carte du Skink', async () => {
+test('B5 : aucun rappel de Caméléon ni de Furtif sur la carte du Skink (appliqués par l’outil)', async () => {
   const { store, made: [lizard] } = await table(skink());
   const texts = store.getParticipantReminders(lizard.id).map(item => item.text);
-  assert.ok(texts.some(text => /Caméléon/.test(text)));
-  assert.ok(texts.some(text => /Furtif/.test(text)));
+  assert.ok(!texts.some(text => /Caméléon/.test(text)));
+  assert.ok(!texts.some(text => /Furtif/.test(text)));
 });
 
 test('B5 : sans contexte précisé, aucun modificateur de sens n’est appliqué', async () => {
@@ -1290,10 +1290,12 @@ test('B6 : Amphibie et Arboricole modifient Natation, Escalade et Discrétion', 
   assert.equal(amount(store.previewResolution(skill(skink.id, 'h', 'Athlétisme', {})), 'move:arboreal'), undefined);
 });
 
-test('B6 : les rappels de déplacement sont sur la carte du Roc et du Skink', async () => {
+test('B6 : le rappel de Vol du Roc est réduit à ce qui reste à la main ; aucun rappel d’Amphibie sur le Skink', async () => {
   const { store, made: [roc, skink] } = await table('Roc plume-vive', 'Skink caméléon');
-  assert.ok(store.getParticipantReminders(roc.id).some(item => / : Vol : /.test(item.text)));
-  assert.ok(store.getParticipantReminders(skink.id).some(item => / : Amphibie : /.test(item.text)));
+  const flight = store.getParticipantReminders(roc.id).find(item => / : Vol : /.test(item.text));
+  assert.ok(flight);
+  assert.match(flight.text, /le −2 DR à ses tirs en vol est appliqué/);
+  assert.ok(!store.getParticipantReminders(skink.id).some(item => / : Amphibie : /.test(item.text)));
 });
 });
 
@@ -1316,7 +1318,7 @@ async function table() {
 }
 const who = (store, id) => store.getCombat().participants.get(id);
 
-test('B7 : la carte de la Nuée affiche engagés et Venin, rappels de Traits sur la carte', async () => {
+test('B7 : la carte de la Nuée affiche engagés et Venin, rappel de Nuée réduit et aucun rappel de Venin', async () => {
   const store = await table();
   const make = tag => ({ tag, children: [], dataset: {}, className: '', textContent: '', appendChild(child) { this.children.push(child); return child; } });
   const block = buildCreatureStatesBlock(make, who(store, 'swarm'), [...store.getCombat().participants.values()]);
@@ -1328,7 +1330,8 @@ test('B7 : la carte de la Nuée affiche engagés et Venin, rappels de Traits sur
   assert.deepEqual(readCreatureStatesInputs({ querySelectorAll: () => boxes, querySelector: () => ({ value: 'mage' }) }), { engagedIds: ['hero'], venomTargetId: 'mage' });
   const texts = store.getParticipantReminders('swarm').map(item => item.text).join('\n');
   assert.match(texts, /Nuée :/);
-  assert.match(texts, /Venin :/);
+  assert.match(texts, /immunité à la Psychologie et perte de Blessures des engagés appliquées/);
+  assert.doesNotMatch(texts, /Venin :/);
   assert.ok(!store.getParticipantReminders('hero').some(item => /Nuée|Venin/.test(item.text)));
 });
 
@@ -1399,7 +1402,7 @@ test('B8 : rappels de magie (Slann) et de capacités propres (Horreur rose, L23)
   assert.match(texts, /Lanceur de sorts :/);
   assert.match(texts, /Focalisation Volonté\+10/);
   const horror = store.getParticipantReminders('horror').map(item => item.text).join('\n');
-  assert.match(horror, /Split \(T3 Déclencheurs de mort\) : Sur Blessure Critique/);
+  assert.match(horror, /Rappel — Split : /, 'déclencheur de mort non branché : rappel gardé');
   assert.match(horror, /Rappel — Tzeentch’s Fire : Les Horreurs du même type/);
   assert.ok(store.getParticipantReminders('hero').length === 0);
 });
@@ -1552,8 +1555,9 @@ const texts = (store, id) => store.getParticipantReminders(id).map(item => item.
 
 test('B9 : rappels de capacités slann sur la carte du Slann, pas sur celle du PJ ; Téléportation de secours', async () => {
   const store = await table();
-  assert.match(texts(store, 'master'), /Palanquin \(palanquinTraits\)/);
-  assert.match(texts(store, 'master'), /Maître des incidents \(mishapSeverity\)/);
+  assert.match(texts(store, 'master'), /Rappel — Palanquin : /, 'Palanquin non branché : rappel gardé');
+  assert.doesNotMatch(texts(store, 'master'), /Maître des incidents \(mishapSeverity\)/);
+  assert.match(texts(store, 'master'), /Rappel — Augure slann/);
   assert.doesNotMatch(texts(store, 'master'), /Au sol/);
   assert.doesNotMatch(texts(store, 'master'), /Action gratuite : lancer Téléportation/);
   assert.equal(store.getParticipantReminders('hero').length, 0);
@@ -1567,7 +1571,7 @@ test('B9 : Slann au sol, −3 aux lancements et à la Focalisation, annulable', 
   assert.equal(modifiers('master').length, 0);
   assert.equal((await store.setSlannAboard('master', false)).ok, true);
   assert.deepEqual(modifiers('master').map(item => item.amount), [-3]);
-  assert.match(texts(store, 'master'), /Au sol : -3/);
+  assert.doesNotMatch(texts(store, 'master'), /Au sol/);
   const channelling = previewChannelling(get(store, 'master'), { type: 'winds', roll: 50 });
   assert.ok(JSON.stringify(channelling).includes('slann-ground'));
   await store.undo();
@@ -1965,12 +1969,13 @@ test('S1 Contemplation : table de DR, états posés en reçu seulement', () => {
   assert.equal(at(1.5).available, false);
 });
 
-test('S1 rappels de fiche : 8e profil complet, Prêtre relique et Télépathie en rappel', () => {
+test('S1 rappels de fiche : 8e profil sans les capacités assistées, Prêtre relique et Télépathie en rappel', () => {
   const first = slannReminders(slann('E0-P-259'));
-  assert.equal(first.length, 8);
+  assert.equal(first.length, 4);
   assert.ok(first.some(line => /^Rappel — Prêtre relique/.test(line)));
-  assert.ok(first.some(line => /^Palanquin \(palanquinTraits\)/.test(line)));
-  assert.equal(slannReminders(fifth()).length, 5);
+  assert.ok(first.some(line => /^Rappel — Palanquin/.test(line)), 'Palanquin non branché : rappel gardé');
+  assert.equal(slannReminders(fifth()).length, 3);
+  assert.ok(slannReminders(fifth()).every(line => /^Rappel — /.test(line)));
   assert.deepEqual(slannReminders({}), []);
 });
 });

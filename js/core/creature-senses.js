@@ -152,9 +152,12 @@ function receiptOf(plan) {
 }
 
 /** Rappels de sens d'un participant, sans doublon (affichage de fiche). */
+// Règle des profils (MJ, 04/11/2026) : aucun rappel pour ce que l'outil applique ; pour ce qu'il applique en partie, le rappel ne dit que le reste.
+const MANAGED_SENSES = new Set(['stealthy', 'tracker', 'distracting', 'chameleon']);
 export function senseReminders(participant) {
   const out = [];
   for (const trait of senseTraits(participant)) {
+    if (MANAGED_SENSES.has(trait.key)) continue;
     const text = `${RULES[trait.key].fr} : ${RULES[trait.key].note}`;
     if (!out.includes(text)) out.push(text);
   }

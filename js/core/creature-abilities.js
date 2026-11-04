@@ -143,9 +143,8 @@ export function uncoveredAbilityRefs(participant) {
 export function creatureAbilityReminders(participant) {
   return refsOf(participant).flatMap(id => {
     const entry = BY_ID.get(id);
-    if (!entry) return [];
-    return [entry.status === 'covered'
-      ? `${entry.name} (${entry.by}) : ${entry.summaryFr}`
-      : `Rappel — ${entry.name} : ${entry.summaryFr}`];
+    // Capacité couverte par un module de l'outil : appliquée, pas de rappel ; les déclencheurs de mort (T3) ne sont pas encore branchés.
+    if (!entry || entry.status === 'covered' && entry.by !== 'T3 Déclencheurs de mort') return [];
+    return [`Rappel — ${entry.name} : ${entry.summaryFr}`];
   });
 }

@@ -73,6 +73,7 @@ export function planRegeneration(participant, options = {}) {
 }
 
 /** Rappel de Régénération d'un participant, sans doublon (affichage de fiche). */
-export function regenerationReminders(participant) {
-  return hasRegeneration(participant) ? [`${LABEL} : ${NOTE}`] : [];
+// Régénération appliquée par le bouton de la fiche (d10 saisi, soin et critique) : pas de rappel.
+export function regenerationReminders() {
+  return [];
 }

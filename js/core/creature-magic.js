@@ -184,6 +184,8 @@ function receiptOf(plan) {
 export function creatureMagicReminders(participant) {
   const out = [];
   for (const trait of creatureMagicTraits(participant)) {
+    // Résistance à la Magie : appliquée aux sorts (pas de rappel).
+    if (trait.key === 'magicResistance') continue;
     const text = trait.key === 'mark'
       ? `Marque du Chaos : ${MARK_NOTES[trait.god] ?? MARK_NOTES.chaos}`
       : `${RULES[trait.key].fr} : ${RULES[trait.key].note}`;

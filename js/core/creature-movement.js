@@ -160,10 +160,17 @@ export function movementTestRules({ actor, skillLabel = '', kind, defending = fa
 export const carriesMovement = (participant, key) => traitsOf(participant).some(trait => trait.key === key);
 
 /** Rappels de déplacement d'un participant, sans doublon (affichage de fiche). */
+// Règle des profils (MJ, 04/11/2026) : aucun rappel pour ce que l'outil applique ; pour ce qu'il applique en partie, le rappel ne dit que le reste.
+const MANAGED_MOVEMENT = new Set(['amphibious', 'arboreal']);
+const REMAINING_MOVEMENT = {
+  fly: 'Mouvement aérien à l\'indice, peut charger, doit voler s\'il commence en vol ; pour le viser, la portée est décalée d\'un cran (le −2 DR à ses tirs en vol est appliqué).',
+  marine: 'Hors de l\'eau M tombe à 1 ; doit être arrosée régulièrement sous peine d\'asphyxie (le −2 DR hors de l\'eau est appliqué).'
+};
 export function movementReminders(participant) {
   const out = [];
   for (const trait of movementTraits(participant)) {
-    const text = `${RULES[trait.key].fr} : ${RULES[trait.key].note}`;
+    if (MANAGED_MOVEMENT.has(trait.key)) continue;
+    const text = `${RULES[trait.key].fr} : ${REMAINING_MOVEMENT[trait.key] || RULES[trait.key].note}`;
     if (!out.includes(text)) out.push(text);
   }
   return out;

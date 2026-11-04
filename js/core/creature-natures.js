@@ -96,11 +96,12 @@ export function attacksAreMagical(participant) {
 
 const REMINDERS = {
   undead: 'Mort-vivant : ni boire, manger ni respirer ; nature reconnue par les sorts et miracles spécifiques.',
-  daemonic: 'Démoniaque : ni boire, manger ni respirer ; disparaît à zéro Blessure ; attaques magiques.',
-  construct: 'Artificiel : ni boire, manger ni respirer ; pas de Tests mentaux, Endurance remplace Volonté ; Force pour les Blessures ; toutes ses attaques sont Magiques.',
-  ethereal: 'Éthéré : traverse les solides ; ses attaques sont magiques.',
+  // Les attaques magiques, la Protection, l'Endurance pour la Volonté et l'immunité aux attaques ordinaires sont appliquées : seul le reste est rappelé.
+  daemonic: 'Démoniaque : ni boire, manger ni respirer ; disparaît à zéro Blessure.',
+  construct: 'Artificiel : ni boire, manger ni respirer ; pas de Tests mentaux ; Force pour les Blessures.',
+  ethereal: 'Éthéré : traverse les solides.',
   painless: 'Insensible à la douleur : ignore les pénalités des Blessures Critiques (hors amputations), mais garde les États.',
-  magical: 'Magique : ses attaques sont magiques et affectent les créatures vulnérables à cette seule nature.',
+  magical: 'Magique : affecte les créatures vulnérables à cette seule nature.',
   shield: 'Bouclier : lu comme l\'option Bouclier (+PA, +1 DR en opposition par Esquive ou Mêlée), à appliquer en défense.'
 };
 

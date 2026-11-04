@@ -193,10 +193,16 @@ function receiptOf(plan) {
 }
 
 /** Rappels d'états continus d'un participant, sans doublon (affichage de fiche). */
+// Règle des profils (MJ, 04/11/2026) : aucun rappel pour ce que l'outil applique ; pour ce qu'il applique en partie, le rappel ne dit que le reste.
+const MANAGED_STATES = new Set(['venom']);
+const REMAINING_STATES = {
+  swarm: 'Taille ignorée ; mouvement ignore l\'engagement ; Blessures quintuplées et CC accrue (valeurs du profil) ; tir facilité de quatre DR (immunité à la Psychologie et perte de Blessures des engagés appliquées).'
+};
 export function stateReminders(participant) {
   const out = [];
   for (const trait of stateTraits(participant)) {
-    const text = `${RULES[trait.key].fr} : ${RULES[trait.key].note}`;
+    if (MANAGED_STATES.has(trait.key)) continue;
+    const text = `${RULES[trait.key].fr} : ${REMAINING_STATES[trait.key] || RULES[trait.key].note}`;
     if (!out.includes(text)) out.push(text);
   }
   return out;

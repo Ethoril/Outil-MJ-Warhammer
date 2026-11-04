@@ -896,7 +896,8 @@ test('Q8 Artificiel — toutes ses attaques sont Magiques (moteur de nature d\'a
   const golem = make(['Construct']);
   assert.equal(attacksAreMagical(golem), true);
   assert.equal(attacksAreMagical(make(['Bite'])), false);
-  assert.match(natureReminders(golem).join(' '), /attaques sont Magiques/);
+  assert.doesNotMatch(natureReminders(golem).join(' '), /Magiques/);
+  assert.match(natureReminders(golem).join(' '), /Artificiel : ni boire, manger ni respirer ; pas de Tests mentaux ; Force pour les Blessures\./);
   assert.equal(weaponAttackNature({ actor: golem, action: {}, ranged: false }).magical, true);
   assert.notEqual(weaponAttackNature({ actor: make(['Bite']), action: {}, ranged: false }).magical, true);
   assert.equal(weaponAttackNature({ actor: golem, action: {}, ranged: false, declared: { magical: false } }).magical, false);
@@ -1055,7 +1056,7 @@ test('T10 reçu et rappels', () => {
   const plan = planCreatureSize(creature(['Size (Large)']));
   assert.equal(plan.receipt.ability, 'Taille');
   assert.equal(plan.receipt.size, 'Grande');
-  assert.equal(sizeReminders(creature(['Size (Large)'])).length, 1);
+  assert.deepEqual(sizeReminders(creature(['Size (Large)'])), []);
   assert.deepEqual(sizeReminders(creature(['Bite'])), []);
 });
 });
@@ -1189,8 +1190,7 @@ test('T12 profils réels : Drakwald Mancatcher (Spiteful) et Forest Goblin Shama
   const library = book('L11');
   const spider = buildParticipantFromBestiary('E0-P-003', { library });
   const lines = creatureAbilityReminders(spider);
-  assert.equal(lines.length, 1);
-  assert.match(lines[0], /T6 Haine/);
+  assert.deepEqual(lines, [], 'capacité couverte par le module de Haine : aucun rappel');
   const shaman = buildParticipantFromBestiary('E0-P-006', { library });
   const [line] = creatureAbilityReminders(shaman);
   assert.match(line, /Rappel/);
@@ -1412,7 +1412,9 @@ test('T3 déclencheurs de mort et reformation portés par les capacités du prof
 });
 
 test('T3 rappels de fiche sans doublon', () => {
-  assert.equal(stateReminders(synthetic(['Venom', 'Infected', 'Venom'])).length, 2);
+  assert.equal(stateReminders(synthetic(['Swarm', 'Infected', 'Swarm'])).length, 2);
+  assert.equal(stateReminders(synthetic(['Venom', 'Infected', 'Venom'])).length, 1, 'Venin appliqué : aucun rappel');
+  assert.ok(!stateReminders(synthetic(['Venom'])).some(line => /Venin/.test(line)));
 });
 });
 
@@ -1506,7 +1508,9 @@ test('T4 Aquatique (Death on the Reik) — pas de déplacement sur terre', () =>
 });
 
 test('T4 rappels de fiche sans doublon', () => {
-  assert.equal(movementReminders(synthetic(['Fly (50)', 'Arboreal', 'Fly (50)'])).length, 2);
+  assert.equal(movementReminders(synthetic(['Fly (50)', 'Fly (50)'])).length, 1);
+  assert.deepEqual(movementReminders(synthetic(['Arboreal'])), [], 'Arboricole appliqué : aucun rappel');
+  assert.equal(movementReminders(synthetic(['Fly (50)', 'Arboreal', 'Fly (50)'])).length, 1);
 });
 });
 
@@ -1582,7 +1586,9 @@ test('T5 Sens vibratoires — quatre BI yards, jamais Surpris', () => {
 });
 
 test('T5 rappels de fiche sans doublon', () => {
-  assert.equal(senseReminders(synthetic(['Night Vision', 'Tracker', 'Night Vision'])).length, 2);
+  assert.equal(senseReminders(synthetic(['Night Vision', 'Night Vision'])).length, 1);
+  assert.deepEqual(senseReminders(synthetic(['Tracker'])), [], 'Pisteur appliqué : aucun rappel');
+  assert.equal(senseReminders(synthetic(['Night Vision', 'Tracker', 'Night Vision'])).length, 1);
 });
 });
 
@@ -1874,7 +1880,7 @@ test('T8 Regenerate (sort) : même plan, reçu lisible, rappels sans doublon', (
   assert.equal(plan.heal.amount, 3);
   assert.match(plan.receipt.ability, /Régénération/);
   assert.deepEqual(plan.receipt.blocked, []);
-  assert.equal(regenerationReminders(make(['Regeneration', 'Regenerate'])).length, 1);
+  assert.deepEqual(regenerationReminders(make(['Regeneration', 'Regenerate'])), [], 'Régénération appliquée : aucun rappel');
   assert.deepEqual(regenerationReminders(make(['Bite'])), []);
 });
 });

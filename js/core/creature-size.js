@@ -101,6 +101,7 @@ export function planCreatureSize(participant, options = {}) {
 }
 
 /** Rappel de Taille d'un participant de catégorie imprimée Grande ou plus (Moyenne et Petite : la note n'a aucun effet). */
-export function sizeReminders(participant) {
-  return hasExplicitSize(participant) && creatureSizeOf(participant).rank >= SIZE_RANKS.large ? [`${LABEL} : ${NOTE}`] : [];
+// Taille appliquée par l'outil (surnombre, allonge, écarts de Taille ; dégâts déjà imprimés sur un profil) : pas de rappel.
+export function sizeReminders() {
+  return [];
 }
