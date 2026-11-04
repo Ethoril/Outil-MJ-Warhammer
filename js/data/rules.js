@@ -233,24 +233,25 @@ export const RULES = [
   {
     id: 'psychologie',
     title: 'Psychologie : Peur & Terreur',
-    intro: 'La Peur est un Trait Psychologique représentant une aversion extrême. Les créatures possèdent un Indice de Peur (ex: Peur 2).',
+    intro: 'La Peur est un Trait Psychologique représentant une aversion extrême. Les créatures possèdent un Indice de Peur (ex: Peur 2). Règles V5 (Livre de base p. 183-185).',
     sections: [
       {
         h4: '1. Surmonter la Peur',
         p: 'Pour vaincre sa peur, le personnage doit réussir un Test Étendu de Calme.',
         ul: [
-          'Objectif : Cumuler un nombre de DR (Degrés de Réussite) ≥ Indice de Peur.',
-          'Quand : À la fin de chaque Round (avant ou après le jet de récupération de l\'état Brisé).',
-          'Succès : Une fois le total atteint, vous n\'êtes plus sujet à la Peur pour le reste de la rencontre.'
+          'Objectif : Cumuler un nombre de DR (Degrés de Réussite) ≥ Indice de Peur ; avec plusieurs sources, on vise l\'indice le plus élevé.',
+          'Quand : Une tentative par Round.',
+          'Succès : Une fois le total atteint, vous n\'êtes plus sujet aux Peurs de cet indice ou moins pour le reste de la rencontre.',
+          'Un allié connu ne provoque pas la Peur.'
         ]
       },
       {
         h4: '2. Les Effets (Tant qu\'on a Peur)',
         p: 'Tant que le total de DR requis n\'est pas atteint, vous subissez :',
         ul: [
-          'Malus d\'action : -1 DR à tous les Tests liés à la source de la peur (attaque, interaction...).',
-          'Mouvement restreint : Impossible de se rapprocher volontairement. Pour forcer sa volonté afin d\'approcher : Test de Calme Intermédiaire (+0) requis.',
-          'Risque de panique : Si la source approche, Test de Calme Intermédiaire (+0) immédiat. En cas d\'échec : gain de l\'État Brisé.'
+          'Élan : vous perdez votre Élan et ne pouvez plus en gagner.',
+          'Mêlée : la source de la Peur a l\'Avantage quand elle vous attaque en mêlée (appliqué par l\'outil).',
+          'Vous pouvez agir normalement : la Peur n\'interdit ni d\'attaquer ni de se déplacer.'
         ]
       },
       {
@@ -258,10 +259,11 @@ export const RULES = [
         p: 'Une forme plus intense de la Peur.',
         ul: [
           'À la vue de la créature : Test de Calme immédiat.',
-          'Échec : Gagnez un nombre d\'États Brisé égal à (Indice Terreur + DR d\'échec).',
+          'Réussite : immunisé contre toute Terreur de la rencontre.',
+          'Échec : Gagnez un nombre d\'États Brisé égal à l\'Indice de Terreur, plus 1 par DR négatif au-delà du premier.',
           'Ensuite : La créature cause la Peur (avec un indice égal à son indice de Terreur) pour le reste du combat.'
         ],
-        example: 'Rappel sur l\'État Brisé : Vous devez fuir et vous cacher. Vous subissez -10 à tous les Tests qui ne servent pas à fuir. Vous ne pouvez tenter de retirer cet état qu\'à la fin du Round (Test de Calme) si vous n\'êtes pas engagé au corps à corps.'
+        example: 'Rappel sur l\'État Brisé (V5 p. 185) : pendant votre Tour, Mouvement en Fuite et Action en Sprint jusqu\'à être caché hors de vue de tout ennemi ; −1 DR par occurrence aux Tests qui ne servent ni à fuir ni à se cacher.'
       }
     ]
   },

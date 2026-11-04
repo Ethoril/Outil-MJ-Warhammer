@@ -89,7 +89,7 @@ export function actionBarModel({ actor, active, actions = [], actionKeys = [], p
   if (fearIndex >= 0) {
     const fears = (actor.states || []).filter(row => row.key === 'fear-of-talent' && row.overcome !== true);
     const name = id => active.find(row => row.id === id)?.name;
-    rows.unshift({ id: 'overcome-fear', label: 'Surmonter la Peur', consequence: `Test de Calme étendu (fin de Round) : ${fears.map(row => `${name(row.authorId) || row.name} ${Number(row.successes) || 0}/${row.rating} DR`).join(', ') || 'Peur en cours'}`,
+    rows.unshift({ id: 'overcome-fear', label: 'Surmonter la Peur', consequence: `Test de Calme étendu, une tentative par Round : ${fears.map(row => `${name(row.authorId) || row.name} ${Number(row.successes) || 0}/${row.rating} DR`).join(', ') || 'Peur en cours'}`,
       run: commands => commands.select({ actionKey: actionKeys[fearIndex], targetId: 'none' }) });
   }
   rows.push({ id: 'other', label: 'Autres actions', consequence: 'magie, prière ou Test : panneau complet', run: commands => commands.focus('action') });

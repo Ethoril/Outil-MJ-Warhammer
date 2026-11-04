@@ -170,7 +170,7 @@ export function psychologyTestRules(n,subject,action,settings,{kind,defending}){
  if((action.extensions?.fiche?.skillId??c.skillId)===calmId()&&hasTrait(subject,/[àa] sang[- ]froid|cold[- ]blooded/i))advantages.push({id:'trait:cold-blooded',label:'À Sang-froid : Avantage aux Tests de Calme'});
  const terror=(subject.states||[]).find(s=>s.key==='terror-of-talent'&&activeSource(s));if(terror&&!(subject.states||[]).some(s=>s.key==='frenzy'&&activeSource(s))&&c.talentAction!=='overcome-terror'&&c.mandatoryTest!==true)restrictions.push('Terreur : résoudre le Test de Calme initial avant cette Action.');
  const fear=(subject.states||[]).find(s=>s.key==='fear-of-talent'&&activeSource(s)),target=defending?n.actor:n.target;
- if(!defending&&kind==='melee'&&!(target?.states||[]).some(s=>s.key==='frenzy'&&activeSource(s))&&(target?.states||[]).some(s=>s.key==='fear-of-talent'&&s.authorId===subject.id&&activeSource(s)))advantages.push({id:'talent:frightening',label:'Effrayant : Peur non surmontée'});
+ if(!defending&&kind==='melee'&&!(target?.states||[]).some(s=>s.key==='frenzy'&&activeSource(s))&&(target?.states||[]).some(s=>s.key==='fear-of-talent'&&s.authorId===subject.id&&activeSource(s)))advantages.push({id:'talent:frightening',label:`${target.name||'La cible'} a Peur (V5 p.183) : Avantage en mêlée`});
  if(fear)plans.push({proposals:[{origins:[fear.source]}]});
  const frenzy=(subject.states||[]).some(s=>s.key==='frenzy'&&activeSource(s));
  if(frenzy&&c.psychologyKind&&c.psychologyKind!=='none')restrictions.push('Frénésie : immunité aux autres Psychologies ; aucun Test de ce type à effectuer.');
