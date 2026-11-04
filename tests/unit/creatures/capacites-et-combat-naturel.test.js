@@ -1713,7 +1713,7 @@ test('T6 Craintif, Territorial, Immunité Psychologique, Rage', () => {
   assert.deepEqual(planPsychology(make(['Skittish']), 'skittish').effects[0].conditions, [{ name: 'Brisé', level: 1 }]);
   assert.equal(planPsychology(make(['Territorial']), 'territorial').effects[0].defendsTerritory, true);
   assert.deepEqual(planPsychology(make(['Immune to Psychology']), 'immunePsychology').effects, [{ immuneToPsychology: true }]);
-  assert.equal(planPsychology(make(['Fury']), 'fury').effects[0].advantageThresholds.length, 2);
+  assert.deepEqual(planPsychology(make(['Fury']), 'fury').effects[0].onMomentumGain, { becomes: 'frenzy', thenLosesMomentum: true }, 'Rage : conversion V5 p. 364, lecture littérale (MJ, 04/11)');
 });
 
 test('T6 Trait absent et rappels sans doublon', () => {

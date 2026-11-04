@@ -26,7 +26,8 @@ const RULES = {
   skittish: { fr: 'Craintif', names: ['skittish', 'craintif', 'nerveux'], note: 'Magie spectaculaire visible ou bruit violent : un Brisé ; un entraînement Magie ou Guerre apporte ses exceptions.' },
   territorial: { fr: 'Territorial', names: ['territorial'], note: 'Défend son territoire jusqu\'à la mort ; cesse normalement la poursuite à la frontière.' },
   immunePsychology: { fr: 'Immunité Psychologique', names: ['immune to psychology', 'immunite psychologique'], note: 'Ignore les règles de Psychologie ; ne garantit pas l\'immunité aux poisons à procédure similaire.' },
-  fury: { fr: 'Rage', names: ['fury', 'rage'], note: 'Un Avantage : Haine des adversaires proches ; trois Avantages : Frénésie, puis perte de tout l\'Avantage.' }
+  // Trait V4 converti selon le livre de base V5 p. 364 (lecture littérale retenue par le MJ le 04/11/2026) : les seuils d'Avantage valent l'Élan.
+  fury: { fr: 'Rage', names: ['fury', 'rage'], note: 'Dès qu\'elle gagne l\'Élan : Frénésie, puis perte de l\'Élan.' }
 };
 
 const BY_NAME = new Map(Object.entries(RULES).flatMap(([key, rule]) => rule.names.map(name => [name, key])));
@@ -166,7 +167,7 @@ export function planPsychology(participant, key, options = {}) {
   } else if (key === 'immunePsychology') {
     plan.effects.push({ immuneToPsychology: true });
   } else if (key === 'fury') {
-    plan.effects.push({ advantageThresholds: [{ advantage: 1, becomes: 'hatred' }, { advantage: 3, becomes: 'frenzy', thenLosesAllAdvantage: true }] });
+    plan.effects.push({ onMomentumGain: { becomes: 'frenzy', thenLosesMomentum: true } });
   }
   plan.reminders.push(rule.note);
   plan.available = plan.unresolved.length === 0;
