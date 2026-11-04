@@ -138,6 +138,7 @@
    "applyBrokenEscape/1",
    "previewResolution/0",
    "previewV5CombatAction/0",
+   "getV5TurnFacts/1",
    "declareV5CombatMovement/0",
    "applyV5CombatAction/1",
    "applyResolution/1",
@@ -1712,6 +1713,11 @@
     "state": "438e1db161d112d5"
    },
    {
+    "label": "sweep getV5TurnFacts",
+    "result": "7e89d3c262fd5790",
+    "state": "438e1db161d112d5"
+   },
+   {
     "label": "sweep declareV5CombatMovement",
     "result": "d46deb443d3fb7b4",
     "state": "438e1db161d112d5"
@@ -2562,6 +2568,7 @@
    "applyBrokenEscape/1",
    "previewResolution/0",
    "previewV5CombatAction/0",
+   "getV5TurnFacts/1",
    "declareV5CombatMovement/0",
    "applyV5CombatAction/1",
    "applyResolution/1",
@@ -4133,6 +4140,11 @@
    {
     "label": "sweep previewV5CombatAction",
     "result": "f6058f81054f39d6",
+    "state": "c998526c0692af32"
+   },
+   {
+    "label": "sweep getV5TurnFacts",
+    "result": "7e89d3c262fd5790",
     "state": "c998526c0692af32"
    },
    {

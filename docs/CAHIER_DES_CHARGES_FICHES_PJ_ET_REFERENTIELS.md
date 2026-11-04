@@ -194,13 +194,13 @@ Décision du MJ du 04/11/2026 : le familier n’est plus créé depuis le cartou
 
 Décision du MJ du 04/11/2026 : la fiche renomme `chance` en `fortune` et supprime `resilience` et `determination` (ressources V4). L’outil lit `fortune`, et `chance` en repli tant que toutes les fiches ne sont pas renommées ; `destin` reste lu.
 
-Données que l’outil sait exploiter mais que la fiche ne fournit pas encore :
+Champs V5 livrés par la fiche le 04/11/2026 et lus par l’outil (schéma dans `fiches/{charId}.data`) :
 
-- **Péché courant** (prêtres) : exigé avant toute prière, aujourd’hui saisi à la main dans l’outil.
-- **Points de Corruption** : l’outil les suit en séance, mais ne reprend pas la valeur de la fiche.
-- **Familier** : voir §4.5.
-- **Mots-clés du personnage** (Haine, Animosité, Préjugé, Sans peur [Ennemi]…) : même référentiel que l’outil, pour que ces talents s’appliquent d’office.
-- **Espèce reconnue** : l’espèce doit appartenir à la liste connue de l’outil, sinon le Mouvement est à saisir ; la Taille (Petite pour Halfling et Gnome, Grande pour Ogre) se déduira de l’espèce, côté outil.
+- `fortune`, `peche`, `corruption` : chaînes de 0 à 4 chiffres, la chaîne vide vaut 0. Le Péché va dans `extensions.v5.divine.sin`, la Corruption dans `extensions.v5.corruptionPoints` ; comme le Destin, la valeur de séance est gardée tant que la fiche ne change pas.
+- `familiers` (`id`, `systeme`, `type`, `vent`, `espece`, `nom`, `destinSacrifie`) : un profil de bibliothèque par familier (`fiche-familier-<charId>-<id>`), tiré du bestiaire (homoncules L17, animaux L02, le corbeau prend la Corneille, le générique reste vierge) ; il entre en combat avec son maître et s’y lie sans débit de Destin. Un familier retiré de la fiche perd son lien au prochain import.
+- `motsCles` (`{ id, cible }`) : la cible de `haine` et `sans-peur` devient la spécialité du talent possédé ; `animosite` et `prejuge` valent le Trait de Psychologie du même nom.
+
+Reste côté outil : la Taille des PJ selon l’espèce (Petite pour Halfling et Gnome, Grande pour Ogre).
 
 ## 5 Synchronisation et propriété des données
 

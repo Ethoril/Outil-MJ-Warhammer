@@ -87,7 +87,7 @@ import { advanceGameClock, campaignDurationSeconds, createGameClock, deriveTurnP
 import { advanceCampaignSnapshot } from './v5-campaign-time.js';
 import { proposeNewKeyword, referentialFromExtensions, setActiveReferential } from './creature-keywords.js';
 import { attacksAreMagical } from './creature-natures.js';
-import { validateFamiliarLink, buildFamiliarLink, familiarBackLink, familiarLinksOf, planFamiliarCreation, familiarLinkLabel, previewFamiliarCondition, previewFamiliarHealing, planFamiliarDeath, familiarDeathDamage } from './familiars.js';
+import { validateFamiliarLink, buildFamiliarLink, familiarBackLink, familiarLinksOf, planFamiliarCreation, familiarLinkLabel, previewFamiliarCondition, previewFamiliarHealing, planFamiliarDeath, familiarDeathDamage, linkDeclaredFamiliars } from './familiars.js';
 import { hasRegeneration, planRegeneration } from './creature-regeneration.js';
 import { hasManyHeads, headRegistryOf, applyHeadCritical, restoreHead, HEAD_STATES } from './creature-heads.js';
 import { planPsychology, psychologyTraits } from './creature-psychology.js';
@@ -1245,8 +1245,12 @@ function resolvedCorruptionTest(participant, skillId, input) {
       .map(template => ({ ...JSON.parse(JSON.stringify(template)), id: uid(), participantId, extensions: { ...template.extensions, profileActionId: template.id } }));
   }
 
-  function addProfilesToDraft(draft, additions) {
+  function addProfilesToDraft(draft, requested) {
     const profiles = new Map((draft.reserve || []).map(profile => [profile.id, profile]));
+    // Un PJ entre avec les familiers déclarés par sa fiche (même zone), sauf ceux déjà en combat ou demandés.
+    const present = new Set([...(draft.combat?.participants || []).map(item => item.profileId), ...requested.map(item => item.id)]);
+    const additions = requested.flatMap(addition => [addition, ...(profiles.get(addition.id)?.extensions?.v5?.declaredFamiliars || [])
+      .filter(row => profiles.has(row.profileId) && !present.has(row.profileId) && present.add(row.profileId)).map(row => ({ id: row.profileId, zone: addition.zone }))]);
     const participants = [...(draft.combat?.participants || [])];
     const lines = [...(draft.diceLines || [])];
     const usedNames = new Set(participants.map(item => item.name));
@@ -1265,7 +1269,7 @@ function resolvedCorruptionTest(participant, skillId, input) {
       if (addition.zone === 'active') active.splice(automatic ? initiativeIndex(active, participant.id, participants) : active.length, 0, participant.id);
       added.push(participant.name);
     }
-    return { ...draft, combat: { ...draft.combat, participants, order: [...active, ...rest] }, diceLines: lines, added };
+    return { ...draft, combat: { ...draft.combat, participants: linkDeclaredFamiliars(participants), order: [...active, ...rest] }, diceLines: lines, added };
   }
 
   function encounterAdditions(draft, model) {
@@ -1741,6 +1745,8 @@ function resolvedCorruptionTest(participant, skillId, input) {
       return api.executeCommand('sync-fiches', draft => {
         assertRevision(draft.localRevision);
         const next = applyFicheSyncToDraft(draft, captured);
+        // Familiers déclarés par la fiche : liés tout de suite quand le maître et le familier sont déjà en combat.
+        if (next.combat?.participants) next.combat = { ...next.combat, participants: linkDeclaredFamiliars(next.combat.participants) };
         return reconcileV5ResourceBindings(draft, next, captured);
       });
     },

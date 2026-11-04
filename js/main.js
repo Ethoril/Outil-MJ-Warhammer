@@ -10,7 +10,7 @@ import { createCombatEngine } from './core/combat.js';
 import { d100 } from './core/dice.js';
 import { initReserveUI } from './ui/reserve.js';
 import { createBestiaryLibrary } from './ui/bestiary-library.js';
-import { createBestiaryLoader, registerSummonLibrary } from './core/bestiary-profiles.js';
+import { createBestiaryLoader, registerSummonLibrary, buildReserveProfileFromBestiary } from './core/bestiary-profiles.js';
 import { initImportModalUI } from './ui/import-modal.js';
 import { initCardUI } from './ui/card.js';
 import { initCombatViewUI } from './ui/combat-view.js';
@@ -1050,6 +1050,17 @@ async function openFicheSyncView() {
       mount, hosted: true, source,
       getContext: () => ({ profiles: Store.listProfiles(), participants: [...Store.listParticipants(), ...(Store.listSuspendedScenes?.() || []).flatMap(scene => (scene.participants || []).map(row => ({...row,name:`${row.name} — ${scene.title || 'scène suspendue'}`})))], revision: Store.getLocalRevision?.() }),
       callbacks: {
+        // Familiers déclarés par la fiche : profil type du bestiaire (homoncules L17, animaux L02), nom français.
+        familiarProfiles: async familiars => {
+          const { ficheFamiliarTemplate } = await import('./core/fiche-sync.js');
+          const loader = createBestiaryLoader(async path => { const response = await fetch(path); if (!response.ok) throw new Error(`${path} : ${response.status}`); return response.json(); });
+          const profiles = {};
+          for (const familiar of familiars) {
+            const template = ficheFamiliarTemplate(familiar);
+            if (template) profiles[familiar.id] = buildReserveProfileFromBestiary(template.id, { library: await loader.book(template.book), nameFr: true });
+          }
+          return profiles;
+        },
         onApply: async (entries, options) => {
           const result = await awaitStore(requireStoreApi('applyFicheSync')(entries, options), 'Mise à jour des PJ');
           dialog.close();

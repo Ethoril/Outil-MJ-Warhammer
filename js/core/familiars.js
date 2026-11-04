@@ -237,3 +237,37 @@ export function familiarReminders(participant) {
     'À la mort du maître, le familier subit le même sort.'
   ];
 }
+
+/**
+ * Familiers déclarés par la fiche du PJ (`extensions.v5.declaredFamiliars`, décision du MJ du 04/11/2026) : en combat, chaque
+ * déclaration se lie au participant de son profil (`profileId`), sans débit de Destin (déjà compté sur la fiche) ; un lien `fiche:`
+ * dont la déclaration a disparu est retiré des deux côtés. Rend la liste mise à jour (la même liste quand rien ne change).
+ */
+export function linkDeclaredFamiliars(participants = []) {
+  const out = [...participants];
+  const withV5 = (row, patch) => ({ ...row, extensions: { ...(row.extensions || {}), v5: patch({ ...v5Of(row) }) } });
+  for (let index = 0; index < out.length; index += 1) {
+    const declared = Array.isArray(v5Of(out[index]).declaredFamiliars) ? v5Of(out[index]).declaredFamiliars : null;
+    if (!declared) continue;
+    const wanted = new Set(declared.map(row => 'fiche:' + row.id));
+    for (const stale of familiarLinksOf(out[index]).filter(link => link.source === 'fiche' && !wanted.has(link.id))) {
+      out[index] = withV5(out[index], v5 => ({ ...v5, familiarLinks: v5.familiarLinks.filter(link => link.id !== stale.id) }));
+      const freed = out.findIndex(row => familiarOfOf(row)?.linkId === stale.id && familiarOfOf(row)?.masterId === out[index].id);
+      if (freed >= 0) out[freed] = withV5(out[freed], v5 => { const { familiarOf, ...rest } = v5; return rest; });
+    }
+    for (const row of declared) {
+      const id = 'fiche:' + row.id;
+      if (familiarLinksOf(out[index]).some(link => link.id === id)) continue;
+      const familiarIndex = out.findIndex(item => item.profileId === row.profileId && !familiarOfOf(item));
+      if (familiarIndex < 0) continue;
+      const input = { system: row.system, kind: row.kind, wind: row.wind, species: row.species };
+      if (!validateFamiliarLink(out[index], out[familiarIndex], input).ok) continue;
+      const link = { ...buildFamiliarLink(out[familiarIndex], input, { id }), source: 'fiche',
+        creation: { resource: 'fate', spent: row.fateSacrificed, pointsToDistribute: row.fateSacrificed - 1, fromFiche: true } };
+      out[index] = withV5(out[index], v5 => ({ ...v5, familiarLinks: [...(v5.familiarLinks || []), link] }));
+      out[familiarIndex] = { ...withV5(out[familiarIndex], v5 => ({ ...v5, familiarOf: familiarBackLink(out[index], link) })),
+        camp: out[index].camp === 'pj' ? 'allie' : out[index].camp };
+    }
+  }
+  return out.every((row, index) => row === participants[index]) ? participants : out;
+}

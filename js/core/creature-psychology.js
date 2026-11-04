@@ -46,7 +46,9 @@ export function parsePsychologyTrait(trait) {
 
 const traitsOf = participant => [
   ...(Array.isArray(participant?.traits) ? participant.traits : []),
-  ...(Array.isArray(participant?.extensions?.traits) ? participant.extensions.traits : [])
+  ...(Array.isArray(participant?.extensions?.traits) ? participant.extensions.traits : []),
+  // Animosité et Préjugé déclarés par la fiche du PJ (`motsCles`) : même règle que le Trait.
+  ...(participant?.extensions?.v5?.keywordTargets || []).filter(row => ['animosite', 'prejuge'].includes(row?.id)).map(row => `${row.id === 'animosite' ? 'Animosité' : 'Préjugé'} (${row.target})`)
 ].map(parsePsychologyTrait).filter(Boolean);
 
 /** Traits de Psychologie portés par un participant (un élément par clé). */

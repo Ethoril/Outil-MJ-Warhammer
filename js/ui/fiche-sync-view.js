@@ -1,9 +1,11 @@
 import { ficheSnapshot, matchFiches, planProfileSync, ficheErrorMessage, profileSyncFingerprint, planHealthSync } from '../core/fiche-sync.js';
 import { userMessage, userError } from './messages.js';
+import { resolveKeyword } from '../core/creature-keywords.js';
 
 const shown = value => (value === null || value === undefined || value === '' ? '—' : String(value));
 const MISSING = '__introuvable';
 const NEW_PROFILE = '__nouveau';
+const KEYWORD_TYPE_LABELS = Object.freeze({ haine: 'Haine', animosite: 'Animosité', prejuge: 'Préjugé', 'sans-peur': 'Sans peur' });
 const plural = (count, word) => `${count} ${word}${count > 1 ? 's' : ''}`;
 
 /**
@@ -128,6 +130,12 @@ export function initFicheSyncView({ mount, hosted = false, source, getContext, c
       collections.appendChild(row);
     });
     card.appendChild(collections);
+    if (snapshot.familiars?.length || snapshot.keywordTargets?.length) {
+      const declared = document.createElement('p'); declared.className = 'muted';
+      declared.textContent = [snapshot.familiars?.length ? `Familiers : ${snapshot.familiars.map(row => row.name).join(', ')} (profils créés et liés en combat)` : '',
+        snapshot.keywordTargets?.length ? `Mots-clés : ${snapshot.keywordTargets.map(row => `${KEYWORD_TYPE_LABELS[row.id] || row.id} (${resolveKeyword(row.target)?.nameFr || row.target})`).join(', ')}` : ''].filter(Boolean).join(' · ');
+      card.appendChild(declared);
+    }
     const active = (getContext().participants || []).filter(row => row.profileId === profile.id || row.extensions?.ficheId === snapshot.charId);
     active.forEach(row => {
       const health = planHealthSync(row, snapshot.woundsMax);
@@ -274,7 +282,13 @@ export function initFicheSyncView({ mount, hosted = false, source, getContext, c
             const profile = (getContext().profiles || []).find(row => row.id === selection.profileId);
             if (!profile || profileSyncFingerprint(profile) !== selection.fingerprint) throw userError('Un profil a changé pendant la relecture. Relisez les fiches.');
           }
-          await callbacks.onApply?.(chosen.map(([charId, selection]) => ({ charId, profileId: selection.newProfile && selection.profileId === NEW_PROFILE ? selection.newProfile.id : selection.profileId, ...(selection.profileId === NEW_PROFILE ? { newProfile: selection.newProfile } : {}), snapshot: snapshots.find(item => item.charId === charId), links: selection.links, convert: selection.convert, equipmentLinks: selection.equipmentLinks, adoptActions: selection.adoptActions, replaceAssociation: selection.replaceAssociation === true, expectedProfileFingerprint: selection.fingerprint })), { expectedLocalRevision: previewRevision });
+          // Familiers de la fiche : profils types du bestiaire chargés avant l'application (vierges si le chargement échoue).
+          const familiarProfiles = new Map();
+          for (const [charId] of chosen) {
+            const familiars = snapshots.find(item => item.charId === charId)?.familiars || [];
+            familiarProfiles.set(charId, familiars.length ? await Promise.resolve(callbacks.familiarProfiles?.(familiars)).catch(() => ({})) || {} : {});
+          }
+          await callbacks.onApply?.(chosen.map(([charId, selection]) => ({ charId, familiarProfiles: familiarProfiles.get(charId), profileId: selection.newProfile && selection.profileId === NEW_PROFILE ? selection.newProfile.id : selection.profileId, ...(selection.profileId === NEW_PROFILE ? { newProfile: selection.newProfile } : {}), snapshot: snapshots.find(item => item.charId === charId), links: selection.links, convert: selection.convert, equipmentLinks: selection.equipmentLinks, adoptActions: selection.adoptActions, replaceAssociation: selection.replaceAssociation === true, expectedProfileFingerprint: selection.fingerprint })), { expectedLocalRevision: previewRevision });
         } catch (cause) { error = userMessage(cause, 'Mise à jour non appliquée : réessayez.'); render(); }
       });
       apply.disabled = !chosen.length || duplicate || duplicateAdoption || unconfirmedReplacement || arbitrationRequired;

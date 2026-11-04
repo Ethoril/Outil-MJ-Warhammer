@@ -265,7 +265,10 @@ export function contextMatchesSpecialization(specialization, actual, context, re
  */
 export function traitTargets(subject, names, referential = activeReferential()) {
   const wanted = new Set(names.map(normalizeKeywordText));
-  const rows = [...(Array.isArray(subject?.traits) ? subject.traits : []), ...(Array.isArray(subject?.extensions?.traits) ? subject.extensions.traits : [])];
+  // Animosité et Préjugé déclarés par la fiche du PJ (`motsCles`, 04/11/2026) valent le Trait du même nom sur leur cible.
+  const declared = (subject?.extensions?.v5?.keywordTargets || []).filter(row => ['animosite', 'prejuge'].includes(row?.id))
+    .map(row => `${row.id === 'animosite' ? 'Animosité' : 'Préjugé'} (${row.target})`);
+  const rows = [...(Array.isArray(subject?.traits) ? subject.traits : []), ...(Array.isArray(subject?.extensions?.traits) ? subject.extensions.traits : []), ...declared];
   const targets = [];
   for (const trait of rows) {
     const text = typeof trait === 'string' ? trait : String(trait?.name || trait?.nom || '');

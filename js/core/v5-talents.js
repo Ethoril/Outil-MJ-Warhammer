@@ -3,6 +3,7 @@ import baseRegistry from '../data/v5-talent-contracts.json' with { type: 'json' 
 import testRegistry from '../data/v5-test-talent-contracts.json' with { type: 'json' };
 import qualityRegistry from '../data/v5-quality-talent-contracts.json' with { type: 'json' };
 import additionalRegistry from '../data/v5-additional-talent-contracts.json' with { type: 'json' };
+import { resolveKeyword } from './creature-keywords.js';
 const registry = {contracts:[...baseRegistry.contracts,...testRegistry.contracts,...qualityRegistry.contracts,...additionalRegistry.contracts],
   sourceDescriptions:{...baseRegistry.sourceDescriptions,...testRegistry.sourceDescriptions,...qualityRegistry.sourceDescriptions,...additionalRegistry.sourceDescriptions}};
 export const V5_TALENT_CONTRACTS = Object.freeze(registry.contracts);
@@ -22,6 +23,7 @@ export const V5_TALENT_IDS = Object.freeze({
   accurateShot: 'talent-accurate-shot', mightyBlow: 'talent-strike-mighty-blow',
   ironJaw: 'talent-iron-jaw', beatBlade: 'talent-beat-blade', furiousAssault: 'talent-furious-assault'
 });
+const KEYWORD_TALENTS = Object.freeze({ haine: 'talent-hatred', 'sans-peur': 'talent-fearless' });
 export function acquiredV5Talents(participant) {
   const groups = new Map();
   for (const row of participant?.talents || []) {
@@ -29,6 +31,13 @@ export function acquiredV5Talents(participant) {
     const specialization = row.specialization || row.specialty || null;
     const key = JSON.stringify([row.id, specialization]);
     if (!groups.has(key)) groups.set(key, { talentId: row.id, rank: row.rank, ...(specialization ? { specialization } : {}) });
+  }
+  // Mots-clés de la fiche (04/11/2026) : la cible de Haine et de Sans peur, en identifiant du référentiel, vaut spécialité du talent possédé.
+  for (const target of participant?.extensions?.v5?.keywordTargets || []) {
+    const talentId = KEYWORD_TALENTS[target?.id];
+    const owned = [...groups.values()].filter(row => row.talentId === talentId);
+    if (!owned.length || owned.some(row => row.specialization && resolveKeyword(row.specialization)?.id === target.target)) continue;
+    groups.set(JSON.stringify([talentId, target.target]), { talentId, rank: Math.max(...owned.map(row => row.rank)), specialization: target.target });
   }
   return [...groups.values()];
 }

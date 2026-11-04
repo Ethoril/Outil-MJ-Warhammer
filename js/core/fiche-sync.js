@@ -6,8 +6,44 @@ import { normalizeEquipment, calculateArmor, armourProtection, equipmentQualitie
 import { getReferenceCatalogue, resolveSkill, aggregateTalents } from './reference-catalog.js';
 import { actionHasDamage, normalizeDamageFields, strengthBonusOf } from './damage.js';
 import { rebaseMagicLayers } from './v5-magic-effects.js';
+import { FAMILIAR_SYSTEMS, HOMUNCULUS_KINDS, FAMILIAR_WINDS, COMPANION_TRAITS, FAMILIAR_NAMES } from './familiars.js';
 
 export const FICHE_CHAR_IDS = Object.freeze(['bhelgi', 'caelel', 'elysia', 'hellaya', 'wren']);
+
+/** Profils types du bestiaire pour un familier déclaré par la fiche (L17 homoncules, L02 animaux ; le corbeau prend la Corneille). */
+export const FICHE_FAMILIAR_TEMPLATES = Object.freeze({
+  homunculus: { book: 'L17', ids: { combat: 'E0-P-528', power: 'E0-P-529', spell: 'E0-P-530' } },
+  animal: { book: 'L02', ids: { fox: 'E0-P-141', owl: 'E0-P-143', stoat: 'E0-P-144', badger: 'E0-P-139', cat: 'E0-P-142', raven: 'E0-P-140' } }
+});
+export const ficheFamiliarTemplate = familiar => {
+  const group = FICHE_FAMILIAR_TEMPLATES[familiar?.system];
+  const id = group?.ids[familiar.system === 'homunculus' ? familiar.kind : familiar.species];
+  return id ? { book: group.book, id } : null;
+};
+/** Profil de bibliothèque d'un familier de la fiche : identité stable par fiche et par familier. */
+export const ficheFamiliarProfileId = (charId, familiarId) => `fiche-familier-${charId}-${familiarId}`;
+const FICHE_KEYWORD_TYPES = Object.freeze(['haine', 'animosite', 'prejuge', 'sans-peur']);
+
+/** `familiers` de la fiche (schéma du 04/11/2026), en clés de l'outil ; null si le champ est absent. */
+function ficheFamiliars(raw, warnings) {
+  if (!Object.hasOwn(raw, 'familiers')) return null;
+  if (!Array.isArray(raw.familiers)) { warnings.push({ field: 'familiars', severity: 'warning', code: 'collection-invalid', consequence: 'previous-values-preserved' }); return null; }
+  const valid = row => isRecord(row) && typeof row.id === 'string' && /^[A-Za-z0-9_-]{1,64}$/.test(row.id) && FAMILIAR_SYSTEMS.includes(row.systeme)
+    && (row.systeme === 'homunculus' ? HOMUNCULUS_KINDS.includes(row.type) && FAMILIAR_WINDS.includes(row.vent) : row.type === 'power' && Object.hasOwn(COMPANION_TRAITS, row.espece))
+    && Number.isSafeInteger(row.destinSacrifie) && row.destinSacrifie >= 1 && row.destinSacrifie <= 100;
+  return raw.familiers.flatMap(row => {
+    if (!valid(row)) { warnings.push({ field: 'familiars', entry: row?.id ?? null, severity: 'warning', code: 'familiar-invalid', message: 'Familier de la fiche illisible : ignoré.' }); return []; }
+    const homunculus = row.systeme === 'homunculus';
+    const name = typeof row.nom === 'string' && row.nom.trim() ? row.nom.trim().slice(0, 200) : homunculus ? FAMILIAR_NAMES[row.type] : COMPANION_TRAITS[row.espece].name;
+    return [{ id: row.id, system: row.systeme, kind: homunculus ? row.type : 'power', wind: homunculus ? row.vent : null, species: homunculus ? null : row.espece, name, fateSacrificed: row.destinSacrifie }];
+  });
+}
+/** `motsCles` de la fiche : `{ id, cible }` d'un type connu ; null si le champ est absent. */
+function ficheKeywordTargets(raw) {
+  if (!Object.hasOwn(raw, 'motsCles') || !Array.isArray(raw.motsCles)) return null;
+  return raw.motsCles.filter(row => isRecord(row) && FICHE_KEYWORD_TYPES.includes(row.id) && typeof row.cible === 'string' && row.cible.trim())
+    .map(row => ({ id: row.id, target: row.cible.trim() }));
+}
 
 // Clés de la fiche → clés canoniques du profil.
 const CARAC_MAP = Object.freeze({ cc: 'CC', ct: 'CT', f: 'F', e: 'E', i: 'I', ag: 'Ag', dex: 'Dex', int: 'Int', fm: 'FM', soc: 'Soc' });
@@ -136,6 +172,10 @@ export function ficheSnapshot(charId, fiche, metadata = {}) {
     source, caracs: totals, initiative: totals.I ?? null, movement,
     wounds: max, woundsMax: max, skills, talents: coverage.talents === 'present' ? talentResult.items : [],
     equipment: equipmentResult.items, spells, prayers, coverage, warnings };
+  const familiars = ficheFamiliars(raw, warnings);
+  if (familiars) snapshot.familiars = familiars.map(row => ({ ...row, profileId: ficheFamiliarProfileId(charId, row.id) }));
+  const keywordTargets = ficheKeywordTargets(raw);
+  if (keywordTargets) snapshot.keywordTargets = keywordTargets;
   // `fortune` (ex-`chance`) is the fiche's current resource; `destin` is its maximum.
   // Empty/missing/invalid values do not authorize a resource initialization.
   const count = key => own(raw, key) && ((typeof raw[key] === 'string' && /^\d+$/.test(raw[key])) || typeof raw[key] === 'number') && Number.isSafeInteger(Number(raw[key])) && Number(raw[key]) >= 0 ? Number(raw[key]) : null;
@@ -174,7 +214,10 @@ function importFicheDurables(subject, snapshot, previousSnapshot) {
     if (path.length > 1) v5[path[0]] = { ...(v5[path[0]] || {}), [path[1]]: wanted[key] };
     else v5[path[0]] = wanted[key];
   }
-  if (!Object.keys(v5).some(key => v5[key] !== subject.extensions?.v5?.[key])) return subject;
+  // Familiers et mots-clés : la fiche fait foi dès qu'elle porte le champ.
+  if (Array.isArray(snapshot?.familiars)) v5.declaredFamiliars = cloneValue(snapshot.familiars);
+  if (Array.isArray(snapshot?.keywordTargets)) v5.keywordTargets = cloneValue(snapshot.keywordTargets);
+  if (!Object.keys(v5).some(key => JSON.stringify(v5[key]) !== JSON.stringify(subject.extensions?.v5?.[key]))) return subject;
   return { ...subject, extensions: { ...(subject.extensions || {}), v5 } };
 }
 
@@ -537,6 +580,15 @@ export function applyFicheSync(draft, entries) {
     const plan = planProfileSync(entry.snapshot, profile, entry);
     const updated = plan.updated;
     next.reserve[index] = updated;
+    // Familiers de la fiche : un profil de bibliothèque chacun (profil type du bestiaire fourni par l'appelant, sinon vierge), renommé si la fiche change.
+    for (const familiar of entry.snapshot.familiars || []) {
+      const at = next.reserve.findIndex(row => row.id === familiar.profileId);
+      if (at >= 0) { if (next.reserve[at].name !== familiar.name) next.reserve[at] = { ...next.reserve[at], name: familiar.name }; continue; }
+      const template = entry.familiarProfiles?.[familiar.id];
+      next.reserve.push({ caracs: {}, skills: [], talents: [], equipment: [], diceLines: [], traits: [], hp: 0, maxHp: 0, kind: 'Créature', ...cloneValue(template || {}),
+        id: familiar.profileId, name: familiar.name,
+        extensions: { ...cloneValue(template?.extensions || {}), ficheFamiliar: { charId: entry.snapshot.charId, id: familiar.id } } });
+    }
     const profileActions = new Map(updated.diceLines.map(action => [action.id, action]));
     const equipmentActions = new Map(updated.diceLines.filter(sourceActionKey).map(action => [sourceActionKey(action), action]));
     const sourceCharIds = new Set([entry.snapshot.charId, ...(entry.replaceAssociation === true && profile.extensions?.ficheId ? [profile.extensions.ficheId] : [])]);

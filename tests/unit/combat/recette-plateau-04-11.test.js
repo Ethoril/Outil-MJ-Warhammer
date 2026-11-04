@@ -115,3 +115,44 @@ test('fiche V5 : fortune vide vaut 0, Péché et Corruption importés puis conse
   assert.equal(draft.reserve[0].extensions.v5.divine.sin, 0);
   assert.equal(draft.reserve[0].extensions.v5.corruptionPoints, 4);
 });
+
+test('fiche V5 : familiers créés depuis le bestiaire et liés en combat sans débit de Destin ; mots-clés en cible des talents', async () => {
+  const { readFileSync } = await import('node:fs');
+  const { ficheSnapshot } = await import('../../../js/core/fiche-sync.js');
+  const { buildReserveProfileFromBestiary } = await import('../../../js/core/bestiary-profiles.js');
+  const { createStore } = await import('../../../js/core/store.js');
+  const { acquiredV5Talents } = await import('../../../js/core/v5-talents.js');
+  const raw = JSON.parse(readFileSync(new URL('../../fixtures/fiche-caelel.json', import.meta.url), 'utf8'));
+  const familiers = [{ id: 'fam_a', systeme: 'homunculus', type: 'spell', vent: 'ulgu', espece: null, nom: 'Brindille', destinSacrifie: 2 },
+    { id: 'fam_b', systeme: 'animal', type: 'power', vent: null, espece: 'cat', nom: '', destinSacrifie: 1 },
+    { id: 'bad', systeme: 'animal', type: 'spell', vent: null, espece: 'cat', nom: 'X', destinSacrifie: 1 }];
+  const fiche = extra => ficheSnapshot('caelel', { ...raw, destin: '3', familiers, motsCles: [{ id: 'haine', cible: 'peaux-vertes' }], ...extra });
+  const snapshot = fiche();
+  assert.deepEqual(snapshot.familiars.map(row => [row.name, row.profileId]), [['Brindille', 'fiche-familier-caelel-fam_a'], ['Chat', 'fiche-familier-caelel-fam_b']]);
+  assert.ok(snapshot.warnings.some(row => row.code === 'familiar-invalid'));
+  const l17 = JSON.parse(readFileSync(new URL('../../../js/data/bestiary/L17.json', import.meta.url), 'utf8')).profiles;
+  const familiarProfiles = { fam_a: buildReserveProfileFromBestiary('E0-P-530', { library: l17, nameFr: true }) };
+  const store = createStore({ storage: null });
+  await store.ready;
+  const newProfile = { id: 'pj-caelel', name: 'Caelel', kind: 'PJ', caracs: {}, skills: [], talents: [{ id: 'talent-hatred', status: 'resolved', rank: 1 }], equipment: [], diceLines: [], extensions: {} };
+  await store.applyFicheSync([{ charId: 'caelel', profileId: 'pj-caelel', newProfile, snapshot, familiarProfiles }]);
+  const spell = store.listProfiles().find(row => row.id === 'fiche-familier-caelel-fam_a');
+  assert.equal(spell.name, 'Brindille');
+  assert.ok(Number(spell.caracs.FM) > 0, 'profil type du bestiaire');
+  assert.ok(store.listProfiles().some(row => row.id === 'fiche-familier-caelel-fam_b'), 'sans profil type : profil vierge');
+  await store.addProfilesToCombat(['pj-caelel']);
+  const people = store.listParticipants();
+  const master = people.find(row => row.profileId === 'pj-caelel');
+  assert.equal(people.length, 3, 'les deux familiers entrent avec leur maître');
+  assert.deepEqual(master.extensions.v5.familiarLinks.map(link => [link.id, link.system, link.kind, link.wind, link.creation.pointsToDistribute]), [['fiche:fam_a', 'homunculus', 'spell', 'ulgu', 1], ['fiche:fam_b', 'animal', 'power', null, 0]]);
+  assert.equal(master.extensions.v5.fate, 3, 'aucun Destin débité : il est déjà compté sur la fiche');
+  assert.equal(people.find(row => row.profileId === 'fiche-familier-caelel-fam_a').extensions.v5.familiarOf.masterId, master.id);
+  // La talent Haine reçoit la cible du mot-clé de la fiche.
+  assert.deepEqual(master.extensions.v5.keywordTargets, [{ id: 'haine', target: 'peaux-vertes' }]);
+  assert.ok(acquiredV5Talents({ ...master, talents: [{ id: 'talent-hatred', status: 'resolved', rank: 1 }] }).some(row => row.talentId === 'talent-hatred' && row.specialization === 'peaux-vertes'));
+  // Familier retiré de la fiche : lien retiré au prochain import.
+  await store.applyFicheSync([{ charId: 'caelel', profileId: 'pj-caelel', snapshot: fiche({ familiers: familiers.slice(0, 1) }) }]);
+  const after = store.listParticipants().find(row => row.profileId === 'pj-caelel');
+  assert.deepEqual(after.extensions.v5.familiarLinks.map(link => link.id), ['fiche:fam_a']);
+  assert.equal(store.listParticipants().find(row => row.profileId === 'fiche-familier-caelel-fam_b').extensions.v5.familiarOf, undefined);
+});
