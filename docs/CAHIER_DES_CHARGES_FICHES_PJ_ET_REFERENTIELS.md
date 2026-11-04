@@ -188,7 +188,7 @@ Les caractéristiques importées ne sont pas majorées une seconde fois par les 
 
 ### 4.5 Familier
 
-Décision du MJ du 04/11/2026 : le familier n’est plus créé depuis le cartouche du PJ dans l’outil. Il se déclare dans la fiche du PJ (site des fiches) ou dans le profil du PNJ, et l’outil reprend la déclaration à l’import. La fiche doit fournir, pour chaque familier : le système (homoncule ou familier animal), le type (combat, puissance ou sort ; un animal est toujours de puissance), le Vent d’un homoncule, l’espèce d’un animal (Trait de compagnon), le profil ou le PNJ qui le représente, et le point sacrifié (Destin ou Résilience) avec les points supplémentaires cédés. La mécanique de l’outil (portée de 4 m, talents de compagnon, mort du familier) reste inchangée.
+Décision du MJ du 04/11/2026 : le familier n’est plus créé depuis le cartouche du PJ dans l’outil. Il se déclare dans la fiche du PJ (site des fiches) ou dans le profil du PNJ, et l’outil reprend la déclaration à l’import. La fiche doit fournir, pour chaque familier : le système (homoncule ou familier animal), le type (combat, puissance ou sort ; un animal est toujours de puissance), le Vent d’un homoncule, l’espèce d’un animal (Trait de compagnon), le profil ou le PNJ qui le représente, et le Destin sacrifié (1 point, plus les points supplémentaires cédés ; la V5 n’a plus de Résilience). La mécanique de l’outil (portée de 4 m, talents de compagnon, mort du familier) reste inchangée.
 
 ### 4.6 Ressources V5 et données encore absentes de la fiche
 

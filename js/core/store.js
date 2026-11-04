@@ -3539,7 +3539,7 @@ function resolvedCorruptionTest(participant, skillId, input) {
       return typeof result?.then === 'function' ? result.then(done => ({ ...done, ok: true, link })) : { ...result, ok: true, link };
     },
     /**
-     * Création de familier (B10, décisions du MJ du 22/10) : lien posé des deux côtés, 1 Destin ou 1 Résilience débité du maître
+     * Création de familier (B10, décisions du MJ du 22/10 et du 04/11) : lien posé des deux côtés, 1 Destin débité du maître
      * (plus un par point supplémentaire cédé, chacun à répartir), familier d'un PJ passé PNJ allié : une seule commande annulable.
      */
     createFamiliar(masterId, familiarId, input = {}) {

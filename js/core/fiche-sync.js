@@ -142,7 +142,7 @@ export function ficheSnapshot(charId, fiche, metadata = {}) {
   // `fortune` (nom V5 de la fiche depuis le 04/11/2026), `chance` gardé pour les fiches pas encore renommées.
   const fortune = count('fortune') ?? count('chance');
   if (fortune !== null) snapshot.resources = { fortune };
-  // B10b : Destin et Résilience de la fiche, lus à la synchronisation (voir `importFicheDurables`).
+  // B10b : Destin (et Résilience des anciennes fiches ou des profils JSON) lus à la synchronisation (voir `importFicheDurables`).
   const durables = {};
   if (count('destin') !== null) durables.fate = count('destin');
   if (count('resilience') !== null) durables.resilience = count('resilience');

@@ -280,13 +280,14 @@ test('B10 : plan de création, coût et points à répartir ; refus motivés', (
   assert.equal(plan.ok, true);
   assert.deepEqual([plan.before, plan.spent, plan.after, plan.pointsToDistribute, plan.camp], [2, 2, 0, 1, 'allie']);
   assert.equal(planFamiliarCreation(master, familiar, { ...homunculus, extraPoints: 2 }).ok, false);
-  assert.match(planFamiliarCreation(master, familiar, { ...homunculus, resource: 'gold' }).message, /Destin ou Résilience/);
+  assert.match(planFamiliarCreation(master, familiar, { ...homunculus, resource: 'gold' }).message, /seul le Destin/);
+  assert.equal(planFamiliarCreation(master, familiar, { ...homunculus, resource: 'resilience' }).ok, false, 'V5 : plus de Résilience à sacrifier');
   const unknown = planFamiliarCreation({ id: 'm', extensions: { v5: {} } }, familiar, homunculus);
   assert.equal(unknown.ok, false);
   assert.match(unknown.message, /Destin du maître inconnu/);
   assert.equal(planFamiliarCreation({ id: 'm', extensions: { v5: {} } }, familiar, { ...homunculus, balance: 1 }).before, 1);
   assert.equal(familiarCostBalance({ fate: 4 }, 'fate'), 4);
-  assert.equal(familiarCostBalance({ extensions: { v5: { resilience: 2 } } }, 'resilience'), 2);
+  assert.equal(familiarCostBalance({ extensions: { v5: { resilience: 2 } } }, 'resilience'), null);
   assert.equal(planFamiliarCreation(master, master, homunculus).ok, false);
 });
 
@@ -300,7 +301,8 @@ test('B10 : créer un familier depuis le bloc de la carte, Destin débité, PNJ 
   assert.ok(block);
   assert.ok(made.some(el => el.className === 'tiny btn-create-familiar' && el.textContent === 'Création de familier'));
   const options = made.filter(el => el.tag === 'option').map(el => el.textContent);
-  for (const name of ['Homoncule', 'Familier animal', 'Familier de combat', 'Familier de puissance', 'Familier de sort', 'Destin', 'Résilience']) assert.ok(options.includes(name), name);
+  for (const name of ['Homoncule', 'Familier animal', 'Familier de combat', 'Familier de puissance', 'Familier de sort', 'Destin']) assert.ok(options.includes(name), name);
+  assert.ok(!options.includes('Résilience'));
   assert.ok(options.includes('Chat') && options.includes('Homoncule'));
   const inputs = readFamiliarInputs(block);
   assert.deepEqual(inputs, { familiarId: 'imp', system: 'homunculus', kind: 'power', wind: 'aqshy', species: null, resource: 'fate', extraPoints: 1, balance: null });
@@ -325,19 +327,13 @@ test('B10 : créer un familier depuis le bloc de la carte, Destin débité, PNJ 
   assert.equal(get(store, 'imp').camp, 'neutre');
 });
 
-test('B10 : Résilience inconnue saisie par le MJ, familier animal ; refus sans révision', async () => {
-  const store = await table({ fate: null });
+test('B10 : la Résilience n’est plus sacrifiable (V5) ; refus sans révision', async () => {
+  const store = await table();
   const before = store.getHistory().past.length;
-  const refused = await store.createFamiliar('hero', 'cat', { system: 'animal', kind: 'power', species: 'cat', resource: 'resilience' });
+  const refused = await store.createFamiliar('hero', 'cat', { system: 'animal', kind: 'power', species: 'cat', resource: 'resilience', balance: 2 });
   assert.equal(refused.ok, false);
-  assert.match(refused.message, /Résilience du maître inconnue/);
+  assert.match(refused.message, /seul le Destin/);
   assert.equal(store.getHistory().past.length, before);
-  const done = await store.createFamiliar('hero', 'cat', { system: 'animal', kind: 'power', species: 'cat', resource: 'resilience', balance: 2 });
-  assert.equal(done.ok, true);
-  assert.equal(get(store, 'hero').extensions.v5.resilience, 1);
-  assert.equal(get(store, 'hero').extensions.v5.familiarLinks[0].creation.balanceEntered, true);
-  await store.undo();
-  assert.equal(get(store, 'hero').extensions.v5.resilience, undefined);
 });
 });
 
@@ -369,17 +365,15 @@ test('B10b : l’instantané lit Destin et Résilience de la fiche, ignore les v
   assert.deepEqual(fiche({ destin: '1', chance: '2' }).resources, { fortune: 2 });
 });
 
-test('B10b : fiche Destin 3, Résilience 2 → créer un familier en Résilience débite 1, Annuler le rend', async () => {
+test('B10b : fiche Destin 3 → créer un familier débite 1 Destin, Annuler le rend', async () => {
   const store = await table();
   await sync(store, fiche({ destin: '3', resilience: '2' }));
   assert.equal(get(store, 'hero').extensions.v5.fate, 3);
-  assert.equal(get(store, 'hero').extensions.v5.resilience, 2);
-  const done = await store.createFamiliar('hero', 'imp', { system: 'homunculus', kind: 'power', wind: 'aqshy', resource: 'resilience' });
+  const done = await store.createFamiliar('hero', 'imp', { system: 'homunculus', kind: 'power', wind: 'aqshy', resource: 'fate' });
   assert.equal(done.ok, true);
-  assert.equal(get(store, 'hero').extensions.v5.resilience, 1);
-  assert.equal(get(store, 'hero').extensions.v5.familiarLinks[0].creation.balanceEntered, false);
+  assert.equal(get(store, 'hero').extensions.v5.fate, 2);
   await store.undo();
-  assert.equal(get(store, 'hero').extensions.v5.resilience, 2);
+  assert.equal(get(store, 'hero').extensions.v5.fate, 3);
 });
 
 test('B10b : une resynchronisation sans changement de fiche ne rend pas le point débité ; une fiche modifiée le remplace', async () => {
@@ -392,19 +386,8 @@ test('B10b : une resynchronisation sans changement de fiche ne rend pas le point
   assert.equal(get(store, 'hero').extensions.v5.fate, 2, 'fiche inchangée : le débit est conservé');
   await sync(store, fiche({ destin: '4', resilience: '2' }));
   assert.equal(get(store, 'hero').extensions.v5.fate, 4, 'fiche modifiée : nouvelle valeur de la fiche');
-  assert.equal(get(store, 'hero').extensions.v5.resilience, 2);
 });
 
-test('B10b : fiche sans Résilience → la saisie à la main reste demandée', async () => {
-  const store = await table();
-  const { resilience, ...rest } = fixture;
-  await sync(store, ficheSnapshot('caelel', { ...rest, destin: '2' }));
-  assert.equal(get(store, 'hero').extensions.v5.fate, 2);
-  assert.equal(get(store, 'hero').extensions.v5.resilience, undefined);
-  const refused = await store.createFamiliar('hero', 'imp', { system: 'homunculus', kind: 'power', wind: 'aqshy', resource: 'resilience' });
-  assert.equal(refused.ok, false);
-  assert.match(refused.message, /Résilience du maître inconnue/);
-});
 });
 
 describe('services des familiers', () => {

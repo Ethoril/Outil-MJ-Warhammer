@@ -29,7 +29,7 @@ const addNumber = (createElement, block, className, title, placeholder) => {
 
 /**
  * Bloc Familier de la carte (B10) : familiers liés du maître, puis « Création de familier » (familier choisi parmi les
- * participants, type, Vent ou espèce, Destin ou Résilience sacrifié, points supplémentaires, solde saisi si inconnu).
+ * participants, type, Vent ou espèce, Destin sacrifié, points supplémentaires, solde saisi si inconnu).
  * Affiché pour un PJ ou un maître déjà lié ; `null` pour un familier ou un autre participant.
  */
 export function buildFamiliarBlock(createElement, participant, participants = [], { creation = false } = {}) {

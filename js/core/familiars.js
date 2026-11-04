@@ -73,19 +73,18 @@ export const FAMILIAR_NAMES = Object.freeze({
   combat: 'Familier de combat', power: 'Familier de puissance', spell: 'Familier de sort'
 });
 export const FAMILIAR_WIND_NAMES = Object.freeze({ aqshy: 'Aqshy', azyr: 'Azyr', chamon: 'Chamon', ghur: 'Ghur', ghyran: 'Ghyran', hysh: 'Hysh', shyish: 'Shyish', ulgu: 'Ulgu' });
-/** Ressource sacrifiée à la création : le Destin permanent (`extensions.v5.fate`, miroir `fate`) ou la Résilience (`extensions.v5.resilience`, BR-02). */
-export const FAMILIAR_COSTS = Object.freeze({ fate: 'Destin', resilience: 'Résilience' });
+/** Ressource sacrifiée à la création : le Destin permanent (`extensions.v5.fate`, miroir `fate`) ; la V5 n'a plus de Résilience (MJ, 04/11/2026). */
+export const FAMILIAR_COSTS = Object.freeze({ fate: 'Destin' });
 
 const balanceOf = value => (value !== undefined && value !== null && value !== '' && Number.isSafeInteger(Number(value)) && Number(value) >= 0 ? Number(value) : null);
 /** Solde permanent connu de la ressource du maître, sinon null (la part temporaire du Destin n'est jamais sacrifiée). */
 export function familiarCostBalance(master, resource) {
   if (resource === 'fate') return balanceOf(v5Of(master).fate ?? master?.fate);
-  if (resource === 'resilience') return balanceOf(v5Of(master).resilience);
   return null;
 }
 
 /**
- * Création de familier (décision du MJ du 22/10) : un événement unique qui débite 1 Destin ou 1 Résilience du maître ;
+ * Création de familier (décisions du MJ du 22/10 et du 04/11) : un événement unique qui débite 1 Destin du maître ;
  * chaque point supplémentaire cédé donne 1 point à répartir au familier. Le solde saisi par le MJ (`balance`) ne sert que
  * si l'outil ne connaît pas celui du maître. Le familier d'un PJ devient un PNJ allié ; rien n'est écrit ici.
  */
@@ -94,14 +93,14 @@ export function planFamiliarCreation(master, familiar, input = {}) {
   const check = validateFamiliarLink(master, familiar, input);
   if (!check.ok) return check;
   const label = FAMILIAR_COSTS[input.resource];
-  if (!label) return refuse('unknown-resource', 'Création de familier : choisir Destin ou Résilience.');
+  if (!label) return refuse('unknown-resource', 'Création de familier : seul le Destin peut être sacrifié.');
   const extra = input.extraPoints ?? 0;
   if (!Number.isInteger(extra) || extra < 0) return refuse('invalid-extra', 'Points supplémentaires : un entier positif ou nul.');
   const known = familiarCostBalance(master, input.resource);
   const before = known ?? balanceOf(input.balance);
-  if (before === null) return refuse('unknown-balance', `${label} du maître inconnu${input.resource === 'resilience' ? 'e' : ''} : saisir son solde actuel.`);
+  if (before === null) return refuse('unknown-balance', `${label} du maître inconnu : saisir son solde actuel.`);
   const spent = 1 + extra;
-  if (before < spent) return refuse('insufficient', `${label} insuffisant${input.resource === 'resilience' ? 'e' : ''} : ${before} point(s) pour ${spent} cédé(s).`);
+  if (before < spent) return refuse('insufficient', `${label} insuffisant : ${before} point(s) pour ${spent} cédé(s).`);
   return {
     ok: true, resource: input.resource, label, before, spent, after: before - spent, pointsToDistribute: extra,
     balanceEntered: known === null, camp: master.camp === 'pj' ? 'allie' : master.camp
