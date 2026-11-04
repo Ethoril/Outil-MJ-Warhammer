@@ -124,6 +124,7 @@ export function profileActionSource(raw) {
 export function canonicalizeProfileFields(raw) {
   if (!isRecord(raw)) return raw;
   const { actions, ...rest } = raw;
+  if (Object.hasOwn(rest, 'tokenImage')) rest.tokenImage = normalizeTokenImage(rest.tokenImage) ?? null;
   if (Array.isArray(raw.diceLines) || Array.isArray(actions)) rest.diceLines = profileActionSource(raw);
   return rest;
 }
@@ -165,9 +166,27 @@ export function normalizeFicheFields(raw = {}) {
   return fields;
 }
 
+export const TOKEN_IMAGE_LIMIT = 24576;
+export function normalizeTokenImage(value) {
+  return typeof value === 'string' && value.length <= TOKEN_IMAGE_LIMIT && /^data:image\/(?:webp|jpeg);base64,(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/.test(value) && value.split(',')[1] ? value : undefined;
+}
+
+// L'encodeur est injecté ; le choix des paliers reste indépendant du canvas.
+export async function chooseTokenImage(encode) {
+  for (const size of [256, 192, 128]) {
+    for (const quality of [0.85, 0.75, 0.65, 0.55, 0.45]) {
+      const image = normalizeTokenImage(await encode(size, quality));
+      if (image) return image;
+    }
+  }
+  return null;
+}
+
 export class Profile {
   constructor({ id = uid(), name, kind = 'Créature', initiative = 30, hp = 10, maxHp, caracs = {}, armor = { head: 0, body: 0, arms: 0, legs: 0 }, diceLines, actions, group = '', tags = [], notes = '', favorite = false, extensions = {}, ...ficheFields } = {}) {
     this.id = id;
+    const tokenImage = normalizeTokenImage(ficheFields.tokenImage);
+    if (tokenImage) this.tokenImage = tokenImage;
     this.name = (name || 'Sans-nom').trim();
     this.kind = ['PJ', 'PNJ', 'Créature'].includes(kind) ? kind : 'Créature';
     this.initiative = Number(initiative) || 0;

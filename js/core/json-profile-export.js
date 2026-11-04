@@ -85,6 +85,7 @@ export function exportProfileJson(profile) {
   const armor = exportArmor(profile);
   const jets = (profile.diceLines || []).filter(action => !action.extensions?.fiche?.equipmentId).map(exportAction);
   const out = {
+    ...(profile.tokenImage ? { tokenImage: profile.tokenImage } : {}),
     nom: profile.name, type: profile.kind, ...(profile.group ? { groupe: profile.group } : {}),
     pv: profile.maxHp ?? profile.hp, initiative: profile.initiative, caracteristiques: { ...profile.caracs },
     ...(armor ? { armure: armor } : {}),

@@ -1,0 +1,40 @@
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import { indexedDB } from 'fake-indexeddb';
+import { createPersistence } from '../../../js/core/persistence.js';
+import { createStore } from '../../../js/core/store.js';
+import { Profile } from '../../../js/core/models.js';
+const image = 'data:image/webp;base64,YWJj';
+const makeStorage = () => { const data = new Map(); return { getItem: key => data.get(key) ?? null, setItem: (key, value) => data.set(key, String(value)) }; };
+test('image conservée dans localStorage et duplication', () => {
+  const storage = makeStorage();
+  const store = createStore({ storage });
+  store.addProfile(new Profile({ id: 'g', name: 'Gobelin', hp: 8, tokenImage: image }));
+  store.duplicateProfile('g');
+  assert.deepEqual(store.listProfiles().map(p => p.tokenImage), [image, image]);
+  const reloaded = createStore({ storage });
+  assert.deepEqual(reloaded.listProfiles().map(p => p.tokenImage), [image, image]);
+  reloaded.updateProfile('g', { tokenImage: null });
+  assert.equal(Object.hasOwn(reloaded.getProfile('g'), 'tokenImage'), false);
+});
+test('image conservée dans IndexedDB après réhydratation', async () => {
+  const persistence = createPersistence({ indexedDB, dbName: 'lot2-images', contextId: 'guest' });
+  const store = createStore({ storage: makeStorage(), persistence });
+  await store.ready;
+  await store.addProfile(new Profile({ id: 'g', name: 'Gobelin', hp: 8, tokenImage: image }));
+  assert.equal((await persistence.load()).reserve[0].tokenImage, image);
+  const reopened = createStore({ storage: makeStorage(), persistence });
+  await reopened.ready;
+  assert.equal(reopened.getProfile('g').tokenImage, image);
+  persistence.close();
+});
+test('image conservée dans les échanges Firebase de la réserve', async () => {
+  const pushes = [];
+  const sync = { dbRef: 'ref', onValue(_ref, cb) { this.cb = cb; }, set(_ref, data) { pushes.push(data); return Promise.resolve(); }, update(_ref, data) { pushes.push(data); return Promise.resolve(); } };
+  const store = createStore({ storage: makeStorage(), sync });
+  store.addProfile(new Profile({ id: 'g', name: 'Gobelin', hp: 8, tokenImage: image }));
+  await new Promise(resolve => setTimeout(resolve, 400));
+  assert.ok(pushes.some(batch => batch['reserve/g']?.tokenImage === image || batch.reserve?.g?.tokenImage === image));
+  sync.cb({ val: () => ({ writer: 'remote', timestamp: Date.now() + 60000, reserve: [{ id: 'remote', name: 'Distant', hp: 8, tokenImage: image }] }) });
+  assert.equal(store.getProfile('remote').tokenImage, image);
+});

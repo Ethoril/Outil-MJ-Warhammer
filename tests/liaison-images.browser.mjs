@@ -1,0 +1,34 @@
+import { createServer } from 'node:http';
+import { readFileSync, statSync } from 'node:fs';
+import { join, normalize, extname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { chromium } from 'playwright';
+import { expect } from 'playwright/test';
+const root = fileURLToPath(new URL('..', import.meta.url));
+const mime = { '.html':'text/html', '.js':'text/javascript', '.css':'text/css', '.json':'application/json', '.svg':'image/svg+xml' };
+const server = createServer((req,res) => { try { const p=join(root,normalize(decodeURIComponent(req.url.split('?')[0]) === '/' ? '/index.html' : decodeURIComponent(req.url.split('?')[0]))); if (!p.startsWith(root) || !statSync(p).isFile()) throw 0; res.writeHead(200,{'Content-Type':mime[extname(p)]||'application/octet-stream'}); res.end(readFileSync(p)); } catch { res.writeHead(404); res.end(); } });
+await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
+const browser=await chromium.launch({headless:true,executablePath:process.env.PLAYWRIGHT_EXECUTABLE_PATH});
+try {
+ const page=await browser.newPage();
+ await page.route('**/*',route=>route.request().url().startsWith(`http://127.0.0.1:${server.address().port}/`)?route.continue():route.abort());
+ await page.goto(`http://127.0.0.1:${server.address().port}/`);
+ await page.locator('#tab-prepare').click();
+ await page.locator('#workspace-prepare').getByRole('button',{name:'Nouveau profil',exact:true}).click();
+ let dialog=page.getByRole('dialog');
+ await dialog.locator('[name=name]').fill('Gobelin image');
+ const png=await page.evaluate(()=>{const c=document.createElement('canvas');c.width=400;c.height=200;const x=c.getContext('2d');x.fillStyle='red';x.fillRect(0,0,400,200);return c.toDataURL().split(',')[1];});
+ await dialog.locator('#token-image-file').setInputFiles({name:'gob.png',mimeType:'image/png',buffer:Buffer.from(png,'base64')});
+ await expect(dialog.locator('#token-image-preview')).toBeVisible();
+ const image=await dialog.locator('#token-image-preview').getAttribute('src');
+ expect(image.startsWith('data:image/webp;base64,')).toBeTruthy(); expect(image.length).toBeLessThanOrEqual(24576);
+ await dialog.locator('#btn-submit-form').click(); await expect(dialog).toBeHidden();
+ await page.reload(); await page.locator('#tab-prepare').click();
+ await page.locator('#workspace-prepare').getByRole('button',{name:'Modifier Gobelin image'}).click();
+ dialog=page.getByRole('dialog'); await expect(dialog.locator('#token-image-preview')).toHaveAttribute('src',image);
+ await dialog.locator('#token-image-remove').click(); await expect(dialog.locator('#token-image-preview')).toBeHidden();
+ await dialog.locator('#btn-submit-form').click(); await expect(dialog).toBeHidden();
+ await page.locator('#workspace-prepare').getByRole('button',{name:'Modifier Gobelin image'}).click();
+ await expect(page.getByRole('dialog').locator('#token-image-preview')).toBeHidden();
+ console.log('Image : import, sauvegarde, rechargement et retrait réussis.');
+} finally { await browser.close(); server.close(); }

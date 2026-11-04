@@ -29,14 +29,14 @@ export function effectsOf(prev, next) {
  * `getParticipants()` rend la liste des participants de la scène (vide hors combat) ; `maxHpOf(participant)` résout
  * le maximum d'un PJ persistant ; `onStatus(status)` reçoit 'connected' | 'disconnected' | 'version-mismatch'.
  */
-export function createMapLink({ channel, getParticipants, maxHpOf = () => null, now = () => Date.now(), onStatus = () => {} }) {
+export function createMapLink({ channel, getParticipants, maxHpOf = () => null, imageUrlOf = () => null, now = () => Date.now(), onStatus = () => {} }) {
   let seq = 0;
   let states = {};
   let lastSeen = 0;
   let status = 'disconnected';
   const setStatus = next => { if (next !== status) { status = next; onStatus(next); } };
   const send = (type, payload = {}) => channel.postMessage({ v: MAP_LINK_VERSION, type, seq: ++seq, at: now(), from: 'outil-mj', payload });
-  const read = () => tokenStatesOf(getParticipants() || [], { maxHpOf });
+  const read = () => tokenStatesOf(getParticipants() || [], { maxHpOf, imageUrlOf });
 
   /** Relit la scène et émet les changements (à brancher sur `Bus.on('combat')`). */
   function refresh() {

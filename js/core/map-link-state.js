@@ -1,6 +1,6 @@
 /**
  * Liaison RPG Map Display (contrat v1, docs/CONTRAT_LIAISON_MAP_DISPLAY.md §4-§5). Module pur : construit l'état
- * `token.state` d'un participant et le diff entre deux instantanés. Pas encore de montures (`rider`) ni d'image (lots 2-3).
+ * `token.state` d'un participant et le diff entre deux instantanés. Pas encore de montures (`rider`, lot 3).
  */
 import { creatureSizeOf } from './creature-size.js';
 import { carriesSense } from './creature-senses.js';
@@ -74,7 +74,7 @@ const isPjMount = (participant, participants) => {
  * Payload `token.state` d'un participant (§4). `maxHp` doit être résolu par l'appelant pour un PJ persistant
  * (option `maxHp`) ; à défaut, le maximum retombe sur les PV courants.
  */
-export function tokenStateOf(participant, participants = [], { maxHp = null } = {}) {
+export function tokenStateOf(participant, participants = [], { maxHp = null, imageUrl = null } = {}) {
   const pj = participant.kind === 'PJ';
   const current = Number(participant.hp) || 0;
   const max = Number(maxHp ?? participant.maxHp) > 0 ? Number(maxHp ?? participant.maxHp) : Math.max(current, 1);
@@ -84,7 +84,7 @@ export function tokenStateOf(participant, participants = [], { maxHp = null } = 
     camp: participantCamp(participant),
     kind: pj || isPjMount(participant, participants) ? 'pc' : 'npc',
     visionSource: pj,
-    imageUrl: null,
+    imageUrl: pj ? null : imageUrl,
     sizeCells: SIZE_CELLS[creatureSizeOf(participant).key] ?? 1,
     ...rangeCellsOf(participant),
     visionDim: visionDimOf(participant),
@@ -97,7 +97,7 @@ export function tokenStateOf(participant, participants = [], { maxHp = null } = 
 
 /** Instantané `{ ref: state }` des participants d'une scène. */
 export const tokenStatesOf = (participants = [], options = {}) => Object.fromEntries(participants
-  .map(participant => tokenStateOf(participant, participants, { maxHp: options.maxHpOf?.(participant) ?? null }))
+  .map(participant => tokenStateOf(participant, participants, { maxHp: options.maxHpOf?.(participant) ?? null, imageUrl: options.imageUrlOf?.(participant) ?? null }))
   .map(state => [state.ref, state]));
 
 /** `ref` dont l'état a changé, apparu ou disparu entre deux instantanés. */

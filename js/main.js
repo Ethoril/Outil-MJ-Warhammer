@@ -1817,9 +1817,11 @@ if (typeof BroadcastChannel === 'function') {
   const mapLink = createMapLink({
     channel: new BroadcastChannel(MAP_LINK_CHANNEL),
     getParticipants: () => Store.listParticipants(),
+    imageUrlOf: participant => Store.getProfile(participant.profileId)?.tokenImage ?? null,
     maxHpOf: participant => { const profile = Store.getProfile(participant.profileId); return profile?.ficheSnapshot?.woundsMax ?? profile?.maxHp ?? null; },
     onStatus: status => showToast(...MAP_LINK_STATUS[status])
   });
+  Bus.on('reserve', mapLink.refresh);
   Bus.on('combat', mapLink.refresh);
   Bus.on('combat:update', mapLink.refresh);
   setInterval(mapLink.tick, MAP_LINK_PING_MS);

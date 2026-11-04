@@ -1,5 +1,5 @@
 import { DOM, qs, qsa, on, escapeHtml } from './dom.js';
-import { Profile, groupProfiles, normalizeAction, normalizeTags, cloneValue, normalizeArmorLocations } from '../core/models.js';
+import { Profile, groupProfiles, normalizeAction, normalizeTags, cloneValue, normalizeArmorLocations, chooseTokenImage } from '../core/models.js';
 import { normalizeDamageFields } from '../core/damage.js';
 import { normalizeSearchText } from '../core/sanitize.js';
 import { ACTION_FIELD_HELP, createQualityPicker, preserveEditedV5Modifier, legacyModifierMessage } from './action-editor.js';
@@ -21,6 +21,16 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
   const btnCopyJson = qs('#btn-copy-profile-json');
   const settle = (operation, label = 'Opération') => Promise.resolve(operation).then(result => { if (result === false || result?.ok === false) throw result?.error || new Error(`${label} impossible.`); return result; }).catch(error => showToast(contextMessage(`${label} impossible`, error, 'réessayez.'), 'error'));
 
+  let tokenImage = null;
+  let imageRevision = 0;
+  function setTokenImage(value) {
+    tokenImage = value || null;
+    const preview = DOM.reserve.form.querySelector('#token-image-preview');
+    const remove = DOM.reserve.form.querySelector('#token-image-remove');
+    if (preview) { preview.hidden = !tokenImage; if (tokenImage) preview.src = tokenImage; else preview.removeAttribute('src'); }
+    if (remove) remove.hidden = !tokenImage;
+  }
+
   function ensureProfileFields() {
     const kind = DOM.reserve.form?.querySelector('[name=kind]');
     if (kind && !kind.querySelector('option[value="PNJ"]')) kind.append(new Option('PNJ', 'PNJ'));
@@ -28,9 +38,33 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
     const meta = document.createElement('div');
     meta.id = 'form-profile-meta';
     meta.style.cssText = 'display:grid; gap:6px; margin:10px 0;';
-    meta.innerHTML = '<label>Culte<input name="cult" placeholder="Myrmidia"></label><label>Tags <small class="muted">(séparés par des virgules)</small><input name="tags" placeholder="chef, gobelin, magie"></label><label>Notes<textarea name="notes" rows="2" placeholder="Repères et consignes"></textarea></label><label style="display:flex; gap:6px; align-items:center;"><input type="checkbox" name="favorite"> Profil favori</label><label style="display:flex; gap:6px; align-items:center;"><input type="checkbox" name="propagate"> Mettre à jour les exemplaires en cours (PV max et fiche, sans toucher aux PV actuels ni aux états)</label>';
+    meta.innerHTML = '<div class="row"><img id="token-image-preview" alt="Aperçu du pion" hidden style="width:64px;height:64px;border-radius:50%;object-fit:cover"><button type="button" id="token-image-select">Image du pion…</button><button type="button" id="token-image-remove" hidden>Retirer l’image</button><input id="token-image-file" type="file" accept="image/*" hidden></div><label>Culte<input name="cult" placeholder="Myrmidia"></label><label>Tags <small class="muted">(séparés par des virgules)</small><input name="tags" placeholder="chef, gobelin, magie"></label><label>Notes<textarea name="notes" rows="2" placeholder="Repères et consignes"></textarea></label><label style="display:flex; gap:6px; align-items:center;"><input type="checkbox" name="favorite"> Profil favori</label><label style="display:flex; gap:6px; align-items:center;"><input type="checkbox" name="propagate"> Mettre à jour les exemplaires en cours (PV max et fiche, sans toucher aux PV actuels ni aux états)</label>';
     const actions = DOM.reserve.form.querySelector('.actions');
     DOM.reserve.form.insertBefore(meta, actions);
+    const input = meta.querySelector('#token-image-file');
+    meta.querySelector('#token-image-select').addEventListener('click', () => input.click());
+    meta.querySelector('#token-image-remove').addEventListener('click', () => { imageRevision++; setTokenImage(null); if (btnSubmit) btnSubmit.disabled = false; });
+    input.addEventListener('change', async () => {
+      const file = input.files?.[0]; input.value = '';
+      if (!file) return;
+      const revision = ++imageRevision;
+      const submit = btnSubmit;
+      if (submit) submit.disabled = true;
+      try {
+        const src = await new Promise((resolve, reject) => { const reader = new FileReader(); reader.onload = () => resolve(reader.result); reader.onerror = () => reject(reader.error); reader.readAsDataURL(file); });
+        const image = await new Promise((resolve, reject) => { const img = new Image(); img.onload = () => resolve(img); img.onerror = reject; img.src = src; });
+        const side = Math.min(image.naturalWidth, image.naturalHeight);
+        const result = await chooseTokenImage((size, quality) => {
+          const canvas = document.createElement('canvas'); canvas.width = size; canvas.height = size;
+          canvas.getContext('2d').drawImage(image, (image.naturalWidth - side) / 2, (image.naturalHeight - side) / 2, side, side, 0, 0, size, size);
+          return canvas.toDataURL('image/webp', quality);
+        });
+        if (revision !== imageRevision) return;
+        if (!result) throw new Error('Image trop volumineuse ou format WebP indisponible.');
+        setTokenImage(result);
+      } catch (error) { if (revision === imageRevision) showToast('Impossible de préparer cette image. Essayez une autre image.', 'error'); }
+      finally { if (revision === imageRevision && submit) submit.disabled = false; }
+    });
   }
 
   // Mots-clés de créature (espèce, nature, allégeance) : sélecteur du référentiel, jamais de texte libre.
@@ -188,6 +222,7 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
     const right = document.createElement('div'); right.className = 'row';
     const tags = normalizeTags(p.tags);
     left.innerHTML = `<div><strong>${escapeHtml(p.name)}</strong> <span class="muted">(${escapeHtml(p.kind)})</span>${p.favorite ? ' ⭐' : ''}</div><div class="muted" style="font-size:0.85em;">Init ${p.initiative} • PV ${p.hp}${tags.length ? ` • ${escapeHtml(tags.join(', '))}` : ''}</div>`;
+    if (p.tokenImage) { const image = document.createElement('img'); image.src = p.tokenImage; image.alt = 'Image du pion'; image.style.cssText = 'width:64px;height:64px;border-radius:50%;object-fit:cover;'; left.prepend(image); }
     const btnEdit = document.createElement('button'); btnEdit.textContent = 'Éditer'; btnEdit.classList.add('ghost'); btnEdit.addEventListener('click', () => loadProfileIntoForm(p));
     const btnDup = document.createElement('button'); btnDup.textContent = 'Dupliq.'; btnDup.classList.add('ghost'); btnDup.addEventListener('click', () => Store.duplicateProfile(p.id));
     const btnFav = document.createElement('button'); btnFav.textContent = p.favorite ? '★' : '☆'; btnFav.title = 'Profil favori'; btnFav.classList.add('ghost'); btnFav.addEventListener('click', () => settle(Store.updateProfile(p.id, { favorite: !p.favorite }), 'Favori'));
@@ -239,6 +274,8 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
     ensureProfileFields();
     ensureKeywordPicker();
     keywordPicker.setSubject(p);
+    imageRevision++; setTokenImage(p.tokenImage);
+    if (btnSubmit) btnSubmit.disabled = false;
     setMountSubject(p);
     ensureArmorSides();
     const f = DOM.reserve.form;
@@ -270,6 +307,8 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
     ensureProfileFields();
     ensureKeywordPicker();
     keywordPicker.setSubject({});
+    imageRevision++; setTokenImage(null);
+    if (btnSubmit) btnSubmit.disabled = false;
     setMountSubject(null);
     ensureArmorSides();
     lockSourceFields();
@@ -338,6 +377,7 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
 
     const id = fd.get('id');
     const data = { name: fd.get('name'), kind: fd.get('kind'), initiative: Number(fd.get('initiative') || 0), hp: Number(fd.get('hp') || 0), group: (fd.get('group') || '').trim(), cult: String(fd.get('cult') || '').trim(), tags: normalizeTags(fd.get('tags')), notes: String(fd.get('notes') || ''), favorite: fd.get('favorite') === 'on', caracs, armor, armorLocations, diceLines };
+    data.tokenImage = tokenImage;
     const existing = id ? Store.getProfile(id) : null;
     const cults = (existing?.talents || []).filter(row => ['talent-bless', 'talent-invoke'].includes(row.id)).map(row => row.specialization || row.specialty).filter(Boolean);
     if (data.cult && cults.length && !cults.some(cult => normalizeSearchText(cult) === normalizeSearchText(data.cult))) {
