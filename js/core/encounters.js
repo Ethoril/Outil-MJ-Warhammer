@@ -1,6 +1,7 @@
 /** Pure E11 encounter and scene lifecycle operations. */
 import { cloneValue, normalizeAction, normalizeCaracs, normalizeFicheFields, normalizeTags, uid } from './models.js';
 import { normalizeEffects } from './effects.js';
+import { declaredMountOf, linkDeclaredMounts } from './mounts.js';
 
 const isRecord = value => value !== null && typeof value === 'object' && !Array.isArray(value);
 const statuses = new Set(['prepared', 'active', 'suspended']);
@@ -143,6 +144,19 @@ export function launchEncounter(encounter, { profiles = [], persistentCharacters
       participants.push(cloneParticipant(profile, { ...entry, name, persistentCharacter: persistent, entryId: entry.id }, idFactory));
     }
   }
+  // Chaque cavalier dont le profil déclare une monture l'amène (même zone) ; une monture déjà composée dans la rencontre sert d'abord.
+  const spare = new Map();
+  for (const item of participants) spare.set(item.profileId, (spare.get(item.profileId) || 0) + 1);
+  const riders = participants.filter(item => declaredMountOf(item) && profileMap.has(declaredMountOf(item).profileId));
+  const added = new Map();
+  for (const rider of riders) {
+    const mountProfile = profileMap.get(declaredMountOf(rider).profileId);
+    if ((spare.get(mountProfile.id) || 0) > 0) { spare.set(mountProfile.id, spare.get(mountProfile.id) - 1); continue; }
+    added.set(mountProfile.id, (added.get(mountProfile.id) || 0) + 1);
+    const count = riders.filter(row => declaredMountOf(row).profileId === mountProfile.id).length;
+    participants.push(cloneParticipant(mountProfile, { zone: rider.zone, camp: rider.camp, name: count > 1 ? `${mountProfile.name} ${added.get(mountProfile.id)}` : mountProfile.name }, idFactory));
+  }
+  participants.splice(0, participants.length, ...linkDeclaredMounts(participants));
   const scene = {
     id: idFactory(), encounterId: model.id, title: model.title, notes: model.notes,
     status: 'active', round: 0, currentActorId: null, order: [], participants,

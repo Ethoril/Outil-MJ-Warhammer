@@ -4,6 +4,7 @@ import {createV5BrokenEscapePanel,isBrokenActor} from './v5-broken-escape-panel.
 import {beastFormRestriction} from '../core/v5-magic-arbitrations.js';
 import { magicActionsFor } from '../core/creature-magic.js';
 import { familiarOfOf, FAMILIAR_HEALING_SOURCES } from '../core/familiars.js';
+import { canRide, mountCandidates, mountLabel, mountOfOf, ownMountIdOf } from '../core/mounts.js';
 /**
  * Vue de séance E09.
  *
@@ -477,6 +478,33 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
   // Hors combat (banc) ; les jetons gardent les sélecteurs de l'ancienne piste. Glisser-déposer ou « Déplacer… » : engagement
   // décidé par le MJ, sans règle ; les règles (Se désengager, Fuir, Charger) passent par la barre d'actions.
   const plateauToast = (label, error) => import('./toast.js').then(({ showToast }) => showToast(contextMessage(label, error, 'réessayez.'), 'error'));
+  // Pastille « À pied / Monté » du cartouche : bascule sur la monture liée, ou choix parmi les participants actifs sans monture liée.
+  function mountControl(participant, people) {
+    if (!canRide(participant)) return null;
+    const mounted = participant.extensions?.v5?.mounted === true;
+    const apply = (value, mountId = null) => Promise.resolve().then(() => Store.setMounted(participant.id, value, { mountId }))
+      .then(result => { if (result?.ok === false) throw Object.assign(new Error(result.message), { userFacing: true }); })
+      .catch(error => plateauToast(value ? 'Mise en selle impossible' : 'Pied à terre impossible', error)).finally(() => render());
+    const linked = ownMountIdOf(participant) && people.some(row => row.id === ownMountIdOf(participant));
+    if (mounted || linked) {
+      const toggle = button(mountLabel(participant, people), `workspace-mount-toggle${mounted ? ' is-mounted' : ''}`, {
+        'aria-pressed': String(mounted), 'data-focus-key': `mount-${participant.id}`,
+        title: mounted ? 'Mettre pied à terre (la monture reste liée)' : 'Monter en selle' });
+      toggle.addEventListener('click', event => { event.preventDefault(); apply(!mounted); });
+      return toggle;
+    }
+    const candidates = mountCandidates(participant, people);
+    const select = document.createElement('select');
+    select.className = 'workspace-mount-toggle';
+    select.setAttribute('aria-label', `Monture de ${participant.name}`);
+    select.dataset.focusKey = `mount-${participant.id}`;
+    select.append(new Option(mountLabel(participant, people), ''));
+    for (const row of candidates) select.append(new Option(`Monter sur ${row.name}`, row.id));
+    select.disabled = !candidates.length;
+    if (!candidates.length) select.title = 'Aucune monture en jeu : déclarez-la dans le profil ou faites-la entrer';
+    select.addEventListener('change', () => { if (select.value) apply(true, select.value); });
+    return select;
+  }
   const moveCommand = (participant, value) => {
     const run = value === 'free' ? () => Store.disengageParticipant(participant.id)
       : value.startsWith('engage:') ? () => Store.engageParticipants(participant.id, value.slice(7))
@@ -554,7 +582,8 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       const entry = node('div', `workspace-track-entry workspace-token is-camp-${context.camp(participant)}`);
       // Hors du bouton-jeton : son texte (nom accessible, filtres des parcours) reste celui de l'ancienne piste.
       const held = participant.extensions?.v5?.position || {};
-      const facts = [...(partnerNames.length ? [`Engagé avec : ${partnerNames.join(', ')}`] : []), ...(surrounded ? ['Encerclé'] : []), ...(held.higherGround ? ['Position haute'] : []), ...(held.cover ? ['À couvert'] : [])];
+      const riderName = mountOfOf(participant) && context.active.find(row => row.id === mountOfOf(participant))?.name;
+      const facts = [...(partnerNames.length ? [`Engagé avec : ${partnerNames.join(', ')}`] : []), ...(surrounded ? ['Encerclé'] : []), ...(held.higherGround ? ['Position haute'] : []), ...(held.cover ? ['À couvert'] : []), ...(riderName ? [`Monture de ${riderName}`] : [])];
       entry.draggable = true;
       entry.addEventListener('dragstart', event => event.dataTransfer?.setData('text/plain', participant.id));
       const move = document.createElement('select');
@@ -570,7 +599,10 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       move.append(position.higherGround ? new Option('Quitte la position haute', 'high:off') : new Option('Position haute', 'high:on'));
       move.append(position.cover ? new Option('N’est plus à couvert', 'cover:off') : new Option('À couvert', 'cover:on'));
       move.addEventListener('change', () => moveCommand(participant, move.value));
-      entry.append(item, ...facts.map(text => node('span', 'workspace-token-engaged', text)), move);
+      entry.append(item, ...facts.map(text => node('span', 'workspace-token-engaged', text)));
+      const mount = mountControl(participant, context.active);
+      if (mount) entry.appendChild(mount);
+      entry.appendChild(move);
       const remove = defeatedParticipantButton(participant, `track-remove-${participant.id}`);
       if (remove) entry.appendChild(remove);
       (zoneOf.get(participant.id) || track).appendChild(entry);
@@ -665,6 +697,12 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       .catch(error => import('./toast.js').then(({ showToast }) => showToast(contextMessage(`${label} impossible`, error, 'réessayez.'), 'error'))).finally(() => render());
     const toast = (message, type = 'error') => import('./toast.js').then(({ showToast }) => showToast(message, type));
     const make = tag => document.createElement(tag), id = participant.id, blocks = [];
+    const mount = mountControl(participant, Store.listParticipants());
+    if (mount) {
+      const block = node('div', 'actor-mount');
+      block.append(node('span', '', 'Monture :'), mount);
+      blocks.push(block);
+    }
     const psychology = buildPsychologyBlock(make, participant, Store.listParticipants());
     if (psychology) {
       psychology.addEventListener('click', event => {

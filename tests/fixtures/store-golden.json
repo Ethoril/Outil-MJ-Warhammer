@@ -98,6 +98,8 @@
    "linkFamiliar/2",
    "createFamiliar/2",
    "unlinkFamiliar/2",
+   "setProfileMount/1",
+   "setMounted/2",
    "setFamiliarRange/3",
    "resolveFamiliarDeath/2",
    "applyRegeneration/2",
@@ -1513,6 +1515,16 @@
     "state": "0c9c5c4659c904c0"
    },
    {
+    "label": "sweep setProfileMount",
+    "result": "78f321085d238bb7",
+    "state": "0c9c5c4659c904c0"
+   },
+   {
+    "label": "sweep setMounted",
+    "result": "768a2f0f2cc415dc",
+    "state": "0c9c5c4659c904c0"
+   },
+   {
     "label": "sweep setFamiliarRange",
     "result": "3e22de28bea39f4a",
     "state": "0c9c5c4659c904c0"
@@ -2528,6 +2540,8 @@
    "linkFamiliar/2",
    "createFamiliar/2",
    "unlinkFamiliar/2",
+   "setProfileMount/1",
+   "setMounted/2",
    "setFamiliarRange/3",
    "resolveFamiliarDeath/2",
    "applyRegeneration/2",
@@ -3940,6 +3954,16 @@
    {
     "label": "sweep unlinkFamiliar",
     "result": "da54d55cf134566d",
+    "state": "eab58cb08aaa5cb3"
+   },
+   {
+    "label": "sweep setProfileMount",
+    "result": "78f321085d238bb7",
+    "state": "eab58cb08aaa5cb3"
+   },
+   {
+    "label": "sweep setMounted",
+    "result": "768a2f0f2cc415dc",
     "state": "eab58cb08aaa5cb3"
    },
    {

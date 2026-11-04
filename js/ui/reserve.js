@@ -9,6 +9,10 @@ import { resolveKeyword } from '../core/reference-catalog.js';
 import { contextMessage } from './messages.js';
 import { createKeywordPicker } from './keyword-picker.js';
 import { exportProfilesJson } from '../core/json-profile-export.js';
+import { createBestiaryLoader, buildReserveProfileFromBestiary } from '../core/bestiary-profiles.js';
+import { declaredMountOf, isMountCandidate } from '../core/mounts.js';
+
+const fetchJson = async path => { const response = await fetch(path); if (!response.ok) throw new Error(`${path} : ${response.status}`); return response.json(); };
 
 export function initReserveUI(Store, { onSaved = () => {} } = {}) {
   const formTitle = qs('#form-title');
@@ -41,6 +45,71 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
     section.append(title, holder);
     f.insertBefore(section, f.querySelector('.actions'));
     keywordPicker = createKeywordPicker({ container: holder, store: Store, subject: {} });
+  }
+
+  // Monture du profil : animal du bestiaire (Dressé (Monture) par défaut, tout le bestiaire sur demande), copié en profil de bibliothèque.
+  let mountSection = null, mountSubjectId = null, bestiaryProfiles = null;
+  const bestiaryLoader = createBestiaryLoader(fetchJson);
+  const loadBestiary = () => bestiaryProfiles || (bestiaryProfiles = bestiaryLoader.index()
+    .then(books => bestiaryLoader.load(books.map(book => book.book))).then(rows => rows.filter(row => row.kind === 'profile' || !row.kind))
+    .catch(error => { bestiaryProfiles = null; throw error; }));
+  function ensureMountSection() {
+    const f = DOM.reserve.form;
+    if (!f || mountSection) return;
+    mountSection = document.createElement('div');
+    mountSection.id = 'form-mount'; mountSection.style.cssText = 'display:grid; gap:6px; margin:10px 0;';
+    const title = document.createElement('div'); title.className = 'muted'; title.textContent = 'Monture (entre en combat avec ce profil, à pied par défaut)';
+    const current = document.createElement('div'); current.className = 'row form-mount-current'; current.style.cssText = 'align-items:center; gap:8px;';
+    const search = document.createElement('div'); search.className = 'row'; search.style.cssText = 'align-items:center; gap:8px;';
+    const text = document.createElement('input'); text.type = 'search'; text.className = 'form-mount-search'; text.placeholder = 'Chercher une monture (cheval, loup, griffon…)';
+    text.setAttribute('aria-label', 'Chercher une monture dans le bestiaire');
+    const allLabel = document.createElement('label'); allLabel.className = 'muted';
+    const all = document.createElement('input'); all.type = 'checkbox'; all.className = 'form-mount-all';
+    allLabel.append(all, ' tout le bestiaire');
+    search.append(text, allLabel);
+    const results = document.createElement('div'); results.className = 'form-mount-results'; results.style.cssText = 'display:flex; flex-wrap:wrap; gap:6px;';
+    mountSection.append(title, current, search, results);
+    f.insertBefore(mountSection, f.querySelector('.actions'));
+    const refresh = () => {
+      results.textContent = '';
+      if (!mountSubjectId) return;
+      const wanted = normalizeSearchText(text.value || '');
+      if (!wanted && !all.checked) return;
+      loadBestiary().then(rows => {
+        results.textContent = '';
+        const found = rows.filter(row => (all.checked || isMountCandidate(row)) && (!wanted || [row.name, row.nameFr].some(value => normalizeSearchText(value || '').includes(wanted)))).slice(0, 24);
+        if (!found.length) { results.append(Object.assign(document.createElement('span'), { className: 'muted', textContent: all.checked ? 'Aucune créature.' : 'Aucune monture dressée : cochez « tout le bestiaire ».' })); return; }
+        for (const row of found) {
+          const pick = document.createElement('button'); pick.type = 'button'; pick.className = 'ghost tiny form-mount-pick';
+          pick.textContent = `${row.nameFr || row.name} (${row.book} p. ${row.page})`;
+          pick.addEventListener('click', () => {
+            const template = buildReserveProfileFromBestiary(row.id, { library: rows, nameFr: true });
+            const profileId = mountSubjectId;
+            settle(Store.setProfileMount(profileId, { template, bestiaryId: row.id, name: template.name }), 'Monture').then(() => { text.value = ''; results.textContent = ''; setMountSubject(Store.getProfile(profileId)); showToast(`Monture : ${template.name}`, 'success'); });
+          });
+          results.append(pick);
+        }
+      }).catch(error => showToast(contextMessage('Bestiaire indisponible', error, 'réessayez.'), 'error'));
+    };
+    on(text, 'input', refresh);
+    on(all, 'change', refresh);
+  }
+  function setMountSubject(profile) {
+    ensureMountSection();
+    if (!mountSection) return;
+    mountSubjectId = profile?.id || null;
+    const current = mountSection.querySelector('.form-mount-current');
+    current.textContent = '';
+    const declared = declaredMountOf(profile);
+    current.append(Object.assign(document.createElement('span'), { textContent: !mountSubjectId ? 'Enregistrez le profil pour lui donner une monture.' : declared ? `Monture : ${declared.name}` : 'Aucune monture.' }));
+    if (declared) {
+      const remove = document.createElement('button'); remove.type = 'button'; remove.className = 'ghost tiny form-mount-remove'; remove.textContent = 'Retirer la monture';
+      remove.addEventListener('click', () => { const profileId = mountSubjectId; settle(Store.setProfileMount(profileId, null), 'Monture').then(() => setMountSubject(Store.getProfile(profileId))); });
+      current.append(remove);
+    }
+    mountSection.querySelector('.form-mount-search').disabled = !mountSubjectId;
+    mountSection.querySelector('.form-mount-all').disabled = !mountSubjectId;
+    mountSection.querySelector('.form-mount-results').textContent = '';
   }
 
   function ensureArmorSides() {
@@ -170,6 +239,7 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
     ensureProfileFields();
     ensureKeywordPicker();
     keywordPicker.setSubject(p);
+    setMountSubject(p);
     ensureArmorSides();
     const f = DOM.reserve.form;
     lockSourceFields(p);
@@ -200,6 +270,7 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
     ensureProfileFields();
     ensureKeywordPicker();
     keywordPicker.setSubject({});
+    setMountSubject(null);
     ensureArmorSides();
     lockSourceFields();
     DOM.reserve.form.reset();

@@ -149,6 +149,7 @@ import { sharedState, sameSharedState } from './sync-protocol.js';
 import { applyFicheSync as applyFicheSyncToDraft } from './fiche-sync.js';
 import { convertLegacyV4Profile } from './v5-legacy-conversion.js';
 import { planMountedFall, V5_RIDE_SKILL_ID } from './v5-mounted-combat.js';
+import { declaredMountOf, linkDeclaredMounts, mountProfileId, planMountToggle, applyMountToggle } from './mounts.js';
 import { createAftermathState, validateAftermathState, aftermathHealer, aftermathEnduranceScore, advanceAftermathCalendar } from './v5-aftermath.js';
 
 export const KEY = { EXTENSIONS: 'wfrp.extensions.v1', RESERVE: 'wfrp.reserve.v1', COMBAT: 'wfrp.combat.v1', LOG: 'wfrp.log.v1', DICE: 'wfrp.dice.v1', TS: 'wfrp.sync.ts.v1' };
@@ -1247,9 +1248,10 @@ function resolvedCorruptionTest(participant, skillId, input) {
 
   function addProfilesToDraft(draft, requested) {
     const profiles = new Map((draft.reserve || []).map(profile => [profile.id, profile]));
-    // Un PJ entre avec les familiers déclarés par sa fiche (même zone), sauf ceux déjà en combat ou demandés.
+    // Un PJ entre avec les familiers déclarés par sa fiche et la monture déclarée par son profil (même zone), sauf ceux déjà en combat ou demandés.
     const present = new Set([...(draft.combat?.participants || []).map(item => item.profileId), ...requested.map(item => item.id)]);
-    const additions = requested.flatMap(addition => [addition, ...(profiles.get(addition.id)?.extensions?.v5?.declaredFamiliars || [])
+    const companionsOf = profile => [...(profile?.extensions?.v5?.declaredFamiliars || []), ...(declaredMountOf(profile) ? [declaredMountOf(profile)] : [])];
+    const additions = requested.flatMap(addition => [addition, ...companionsOf(profiles.get(addition.id))
       .filter(row => profiles.has(row.profileId) && !present.has(row.profileId) && present.add(row.profileId)).map(row => ({ id: row.profileId, zone: addition.zone }))]);
     const participants = [...(draft.combat?.participants || [])];
     const lines = [...(draft.diceLines || [])];
@@ -1269,7 +1271,7 @@ function resolvedCorruptionTest(participant, skillId, input) {
       if (addition.zone === 'active') active.splice(automatic ? initiativeIndex(active, participant.id, participants) : active.length, 0, participant.id);
       added.push(participant.name);
     }
-    return { ...draft, combat: { ...draft.combat, participants: linkDeclaredFamiliars(participants), order: [...active, ...rest] }, diceLines: lines, added };
+    return { ...draft, combat: { ...draft.combat, participants: linkDeclaredMounts(linkDeclaredFamiliars(participants)), order: [...active, ...rest] }, diceLines: lines, added };
   }
 
   function encounterAdditions(draft, model) {
@@ -3586,6 +3588,49 @@ function resolvedCorruptionTest(participant, skillId, input) {
       return typeof result?.then === 'function' ? result.then(done => ({ ...done, ok: true })) : { ...result, ok: true };
     },
     /** Portée d'un familier animal : booléen posé par le MJ, jamais calculé. */
+    /**
+     * Monture déclarée par un profil : `mount` = `{ template, bestiaryId, name }` (champs de Réserve copiés du bestiaire) crée ou
+     * remplace le profil `monture-<profil>` ; null retire la déclaration (le profil de la monture reste en bibliothèque).
+     * Les participants du profil reçoivent la déclaration et se lient à la monture déjà en combat. Annulable.
+     */
+    setProfileMount(profileId, mount = null) {
+      const profile = reserve.get(profileId);
+      if (!profile) return { ok: false, reason: 'unknown-profile', message: 'Profil introuvable.' };
+      if (mount && !mount.template) return { ok: false, reason: 'no-template', message: 'Profil de la monture manquant.' };
+      const id = mountProfileId(profileId);
+      const declared = mount ? { profileId: id, name: String(mount.name || mount.template.name || 'Monture').slice(0, 200), bestiaryId: mount.bestiaryId || null } : null;
+      const declare = row => withV5(row, v5 => { const { declaredMount, ...rest } = v5; return declared ? { ...rest, declaredMount: declared } : rest; });
+      const captured = mount ? cloneValue(mount.template) : null;
+      const result = api.executeCommand('set-profile-mount', draft => {
+        let profiles = (draft.reserve || []).map(row => row.id === profileId ? declare(row) : row);
+        if (captured) {
+          const built = { caracs: {}, skills: [], talents: [], equipment: [], diceLines: [], traits: [], hp: 0, maxHp: 0, kind: 'Créature', ...captured, id, name: declared.name,
+            extensions: { ...(captured.extensions || {}), mountFor: { profileId, bestiaryId: declared.bestiaryId } } };
+          profiles = profiles.some(row => row.id === id) ? profiles.map(row => row.id === id ? built : row) : [...profiles, built];
+        }
+        return { ...draft, reserve: profiles,
+          ...(draft.combat ? { combat: { ...draft.combat, participants: linkDeclaredMounts((draft.combat.participants || []).map(row => row.profileId === profileId ? declare(row) : row)) } } : {}),
+          log: [{ id: uid(), ts: Date.now(), kind: 'management', text: `Réserve: monture de ${profile.name} ${declared ? `: ${declared.name}` : 'retirée'}` }, ...(draft.log || [])].slice(0, 300) };
+      });
+      return typeof result?.then === 'function' ? result.then(done => ({ ...done, ok: true })) : { ...result, ok: true };
+    },
+    /**
+     * Monté / à pied : `mounted` true met en selle sur la monture liée (ou `mountId`, choisie parmi les participants actifs),
+     * false fait mettre pied à terre ; le lien durable reste pour remonter. Refus explicites (monture absente, en attente, déjà montée). Annulable.
+     */
+    setMounted(riderId, mounted, { mountId = null } = {}) {
+      const people = Array.from(combat.participants.values());
+      const rider = people.find(row => row.id === riderId);
+      const plan = planMountToggle(rider, people, { mounted: mounted === true, mountId });
+      if (!plan.ok) return plan;
+      const mountName = people.find(row => row.id === plan.mountId)?.name || 'sa monture';
+      const result = api.executeCommand('set-mounted', draft => ({ ...draft,
+        combat: { ...draft.combat, participants: applyMountToggle(draft.combat?.participants || [], riderId, plan) },
+        log: [{ id: uid(), ts: Date.now(), kind: 'effect', actorId: riderId, targetId: plan.mountId,
+          text: plan.mounted ? `${rider.name} monte sur ${mountName}` : `${rider.name} met pied à terre (${mountName})`,
+          detail: { kind: 'mounted-toggle', mounted: plan.mounted, mountId: plan.mountId } }, ...(draft.log || [])].slice(0, 300) }));
+      return typeof result?.then === 'function' ? result.then(done => ({ ...done, ok: true })) : { ...result, ok: true };
+    },
     setFamiliarRange(masterId, linkId, inRange) {
       const master = combat.participants.get(masterId), link = familiarLinksOf(master).find(row => row.id === linkId);
       if (!link || link.system !== 'animal') return { ok: false, reason: 'unknown-link', message: 'Lien d’animal introuvable.' };

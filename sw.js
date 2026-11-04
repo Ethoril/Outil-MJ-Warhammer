@@ -140,6 +140,7 @@ const ASSETS_TO_CACHE = [
   './js/core/v5-magic-turn.js',
   './js/core/v5-magic-talents.js',
   './js/core/familiars.js',
+  './js/core/mounts.js',
   './js/core/slann.js',
   './js/data/v5-magic-talent-sources.json',
   './js/data/v5-magic-talent-coverage.json',
