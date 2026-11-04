@@ -42,7 +42,7 @@ export const hitMorphologySelection = (override, profileMorphology) => override 
 export function applicationBlockingReasons(preview, draft, canApply, preflight = {}) {
   const reasons = [];
   const add = (condition, text, focus) => { if (condition) reasons.push({ text, focus }); };
-  const finish = () => reasons.map(reason => reason.focus ? reason : { ...reason, withoutField: true });
+  const finish = () => reasons.map(reason => reason.focus || reason.action ? reason : { ...reason, withoutField: true });
   if (draft.busy) reasons.push({ text: 'Calcul en cours', silent: true });
   add(!canApply, 'Application indisponible dans cet écran');
   if (!preview) {
@@ -67,9 +67,10 @@ export function applicationBlockingReasons(preview, draft, canApply, preflight =
     return finish();
   }
   add(preview.choiceRequired, 'Choisissez le résultat à appliquer');
-  for (const text of preview.unresolved || []) reasons.push({ text, focus: /^Maladresse du défenseur/.test(text) ? 'defender-fumble-roll' : /^Maladresse de combat : saisissez/.test(text) ? 'fumble-roll' : /Calme.*attaquant/i.test(text) ? 'protection-calm' : /Tir engagé.*Test de défense/i.test(text) ? 'engaged-defense' : /^Recharge : saisir les munitions/.test(text) ? 'reload-ammo' : /^Taille : saisir la pièce/.test(text) ? 'hack-piece' : /^Dispersion : bande/.test(text) ? 'spread-band' : /^Dispersion : (?:cibles|inclure)/.test(text) ? 'spread-targets' : /^Explosion : (?:cibles|inclure)/.test(text) ? 'explosion-targets' : /^Confirmer la règle autorisant cette défense contre un tir/.test(text) ? 'ranged-opposition' : /^Appendice : saisissez les PA/.test(text) ? 'appendage-ap' : /^Malice de Ranald : choisissez/.test(text) ? 'ranald-characteristic' : /jet de défense/i.test(text) ? 'defense-roll' : undefined, ...(/^Bénédiction de Protection :/.test(text) ? { ignorable: 'divine-protection' } : {}) });
+  for (const text of preview.unresolved || []) reasons.push({ text, focus: /^Maladresse du défenseur/.test(text) ? 'defender-fumble-roll' : /^Maladresse de combat : saisissez/.test(text) ? 'fumble-roll' : /Calme.*attaquant/i.test(text) ? 'protection-calm' : /Tir engagé.*Test de défense/i.test(text) ? 'engaged-defense' : /^Recharge : saisir les munitions/.test(text) ? 'reload-ammo' : /^Taille : saisir la pièce/.test(text) ? 'hack-piece' : /^Dispersion : bande/.test(text) ? 'spread-band' : /^Dispersion : (?:cibles|inclure)/.test(text) ? 'spread-targets' : /^Explosion : (?:cibles|inclure)/.test(text) ? 'explosion-targets' : /^Confirmer la règle autorisant cette défense contre un tir/.test(text) ? 'ranged-opposition' : /^Appendice : saisissez les PA/.test(text) ? 'appendage-ap' : /^Malice de Ranald : choisissez/.test(text) ? 'ranald-characteristic' : /jet de défense/i.test(text) ? 'defense-roll' : undefined, ...(/une Charge est requise\.$/.test(text) ? { action: 'charge' } : {}), ...(/^Bénédiction de Protection :/.test(text) ? { ignorable: 'divine-protection' } : {}) });
   const criticals = [preview.critical?.details, preview.critical?.second, preview.defenderCritical?.details];
-  add(criticals.some(row => row?.pending), 'Complétez le jet de critique', 'critical-pending');
+  // Le jet sur la table des critiques n'apparaît qu'une fois la localisation connue : une seule ligne à la fois.
+  add(criticals.some(row => row?.pending && !row?.needsLocation), 'Complétez le jet de critique', 'critical-pending');
   add(criticals.some(row => row?.needsAlternative), 'Choisissez une alternative pour le critique', 'critical-alternative');
   add(preview.attack && !preview.targetId, 'Choisissez une cible pour appliquer une attaque', 'target');
   add(preview.critical?.details?.needsLocation || preview.defenderCritical?.details?.needsLocation, 'Lancez la localisation du critique', 'critical-location');
@@ -80,6 +81,61 @@ export function applicationBlockingReasons(preview, draft, canApply, preflight =
     reasons.push({ text: detail || 'Complétez les éléments mécaniques requis' });
   }
   return finish();
+}
+
+/**
+ * Ligne de « À saisir avant d'appliquer » : un lien vers le champ, et sur place ce qui se règle d'un geste
+ * (d100 du critique saisi ou lancé ici, Charge déclarée), pour ne pas chercher le champ dans le panneau.
+ */
+function blockingReasonItem(reason, field, { section, handlers }) {
+  const item = node('li', 'workspace-blocking-reason');
+  if (field) {
+    const link = button(reason.text, 'workspace-ghost workspace-blocking-link');
+    link.addEventListener('click', () => {
+      if (field.closest('.workspace-resolution-drawer')?.hidden) section.querySelector('[data-circumstances-toggle]')?.click();
+      for (let parent = field.parentElement; parent; parent = parent.parentElement) if (parent.tagName === 'DETAILS') parent.open = true;
+      field.scrollIntoView({ block: 'center' }); field.focus();
+    });
+    item.appendChild(link);
+    if (field.tagName === 'INPUT' && field.dataset.criticalDraftKey) {
+      const proxy = document.createElement('input');
+      proxy.className = 'workspace-roll-input num';
+      proxy.inputMode = 'numeric';
+      proxy.maxLength = 3;
+      proxy.placeholder = 'd100';
+      proxy.value = field.value;
+      proxy.disabled = field.disabled;
+      proxy.setAttribute('aria-label', reason.text + ' (d100)');
+      const push = () => { field.value = proxy.value; field.dispatchEvent(new Event('input', { bubbles: true })); };
+      proxy.addEventListener('input', push);
+      proxy.addEventListener('change', () => field.dispatchEvent(new Event('change', { bubbles: true })));
+      proxy.addEventListener('keydown', event => {
+        if (event.key !== 'Enter') return;
+        event.preventDefault();
+        push();
+        field.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+      });
+      item.appendChild(proxy);
+      const roll = field.closest('.workspace-roll-row')?.querySelector('button');
+      if (roll) {
+        const launch = button('Lancer', 'workspace-secondary');
+        launch.disabled = roll.disabled;
+        launch.addEventListener('click', () => roll.click());
+        item.appendChild(launch);
+      }
+    }
+  } else item.appendChild(node('span', '', reason.text));
+  if (reason.action === 'charge') {
+    const charge = button('Déclarer la Charge', 'workspace-secondary', { 'data-focus-key': 'declare-charge' });
+    charge.addEventListener('click', () => { handlers.select({ charging: true }); handlers.calculate(); });
+    item.appendChild(charge);
+  }
+  if (reason.ignorable) {
+    const ignore = button('Ignorer', 'workspace-ghost');
+    ignore.addEventListener('click', () => handlers.ignoreCondition(reason.ignorable));
+    item.appendChild(ignore);
+  }
+  return item;
 }
 
 export const ACTION_TYPES = Object.freeze([
@@ -150,7 +206,7 @@ const testMenuState = new WeakMap();
 const turnActionsState = new WeakMap();
 
 export function renderResolutionPanel(options) {
-  const { draft, actor, participants=[], actions, actionKey: selectedKey, type, target, groups, defense, previousWeaponAttacks=[], resolutionClock={}, canCalculate, canApply, canDeclareCombatAction=false, canDeclareCombatMovement=false, handlers } = options;
+  const { draft, actor, participants=[], actions, actionKey: selectedKey, type, target, groups, defense, previousWeaponAttacks=[], resolutionClock={}, canCalculate, canApply, canDeclareCombatAction=false, handlers } = options;
   const fuseClock={currentRound:resolutionClock.currentRound??draft?.round,currentTurnIndex:resolutionClock.currentTurnIndex??draft?.v5Clock?.turnIndex};
   const section = node('section', 'workspace-resolution workspace-card');
   section.setAttribute('aria-labelledby', 'workspace-resolution-title');
@@ -344,85 +400,14 @@ export function renderResolutionPanel(options) {
     if (!actions.length) return section;
     const action = actions.find((item, index) => actionKey(item, index) === selectedKey) || actions[0];
 
-    if (canDeclareCombatAction || canDeclareCombatMovement) {
+    if (canDeclareCombatAction) {
       const combatActions = node('details', 'workspace-resolution-row workspace-combat-actions');
       combatActions.open = Boolean(turnActionsState.get(draft));
       const turnSummary = node('summary', 'workspace-chip', 'Actions du Tour…');
       turnSummary.addEventListener('click', () => { turnActionsState.set(draft, !combatActions.open); });
       combatActions.appendChild(turnSummary);
       combatActions.addEventListener('toggle', () => { if (combatActions.isConnected) turnActionsState.set(draft, combatActions.open); });
-      combatActions.appendChild(node('p', 'workspace-muted', 'Mouvement narratif non observable automatiquement : indiquez-le quand il a lieu. La réorganisation des combattants ne constitue pas un déplacement.'));
-      if (canDeclareCombatMovement) {
-        const move = button('Déclarer un déplacement effectué', 'workspace-secondary', { 'data-focus-key': 'declare-movement' });
-        move.disabled = draft.busy;
-        move.addEventListener('click', () => handlers.declareCombatMovement());
-        combatActions.appendChild(move);
-      }
-      if (canDeclareCombatAction && target && target.id !== actor.id) {
-        const weapons=(actor.equipment||[]).filter(row=>row?.kind==='weapon');
-        if(weapons.length){
-          const label=node('label','workspace-type',`Arme de tir tenue pour viser ${target.name}`),select=document.createElement('select');
-          select.setAttribute('aria-label',label.textContent);
-          select.append(new Option('Choisir une arme équipée…',''));
-          for(const weapon of weapons)select.append(new Option(`${weapon.name||weapon.id}${String(weapon.range||'').trim()?'':' · portée non renseignée'}`,weapon.id));
-          select.value=draft.combatAimWeaponId||'';
-          select.addEventListener('change',()=>handlers.select({combatAimWeaponId:select.value,combatAimWeaponHeldConfirmed:false,combatAimWeaponKindConfirmed:false}));
-          label.append(select);
-          combatActions.appendChild(label);
-          const selectedWeapon=weapons.find(row=>row.id===draft.combatAimWeaponId);
-          if(selectedWeapon&&!String(selectedWeapon.range||'').trim()){
-            const kindLabel=node('label','workspace-type','Je confirme que cette arme équipée est une arme à distance');
-            const ranged=document.createElement('input');
-            ranged.type='checkbox';
-            ranged.checked=draft.combatAimWeaponKindConfirmed===true;
-            ranged.setAttribute('aria-label',kindLabel.textContent);
-            ranged.addEventListener('change',()=>handlers.select({combatAimWeaponKindConfirmed:ranged.checked}));
-            kindLabel.prepend(ranged);
-            combatActions.appendChild(kindLabel);
-          }
-          const confirmLabel=node('label','workspace-type','Je confirme que cette arme est tenue en main');
-          const confirm=document.createElement('input');
-          confirm.type='checkbox';
-          confirm.checked=draft.combatAimWeaponHeldConfirmed===true;
-          confirm.disabled=!draft.combatAimWeaponId;
-          confirm.setAttribute('aria-label',confirmLabel.textContent);
-          confirm.addEventListener('change',()=>handlers.select({combatAimWeaponHeldConfirmed:confirm.checked}));
-          confirmLabel.prepend(confirm);
-          combatActions.appendChild(confirmLabel);
-          const aim = button(`Viser ${target.name}`, 'workspace-secondary', { 'data-focus-key': 'declare-aim' });
-          aim.disabled = draft.busy || !draft.combatAimWeaponId || draft.combatAimWeaponHeldConfirmed!==true || Boolean(selectedWeapon&&!String(selectedWeapon.range||'').trim()&&draft.combatAimWeaponKindConfirmed!==true);
-          aim.addEventListener('click', () => handlers.declareCombatAction('aim', { targetId: target.id, weaponId:draft.combatAimWeaponId, rangedWeaponConfirmed: Boolean(selectedWeapon&&!String(selectedWeapon.range||'').trim()), rangedWeaponHeldConfirmed:draft.combatAimWeaponHeldConfirmed===true }));
-          combatActions.appendChild(aim);
-        } else {
-          const nameLabel=node('label','workspace-type','Nom de l’arme de tir utilisée pour viser '+target.name),nameInput=document.createElement('input');
-          nameInput.type='text';
-          nameInput.value=draft.combatAimWeaponName||'';
-          nameInput.setAttribute('aria-label',nameLabel.textContent);
-          nameInput.addEventListener('change',()=>handlers.select({combatAimWeaponName:nameInput.value.trim()}));
-          nameLabel.appendChild(nameInput);
-          combatActions.appendChild(nameLabel);
-          const natureLabel=node('label','workspace-type','Je confirme que cette attaque utilise une arme à distance');
-          const nature=document.createElement('input');
-          nature.type='checkbox';
-          nature.checked=draft.combatAimWeaponKindConfirmed===true;
-          nature.setAttribute('aria-label',natureLabel.textContent);
-          nature.addEventListener('change',()=>handlers.select({combatAimWeaponKindConfirmed:nature.checked}));
-          natureLabel.prepend(nature);
-          combatActions.appendChild(natureLabel);
-          const heldLabel=node('label','workspace-type','Je confirme que l’arme est tenue en main');
-          const held=document.createElement('input');
-          held.type='checkbox';
-          held.checked=draft.combatAimWeaponHeldConfirmed===true;
-          held.setAttribute('aria-label',heldLabel.textContent);
-          held.addEventListener('change',()=>handlers.select({combatAimWeaponHeldConfirmed:held.checked}));
-          heldLabel.prepend(held);
-          combatActions.appendChild(heldLabel);
-          const aim=button(`Viser ${target.name}`,'workspace-secondary',{'data-focus-key':'declare-aim'});
-          aim.disabled=draft.busy||!draft.combatAimWeaponName||draft.combatAimWeaponKindConfirmed!==true||draft.combatAimWeaponHeldConfirmed!==true;
-          aim.addEventListener('click',()=>handlers.declareCombatAction('aim',{targetId:target.id,weaponName:draft.combatAimWeaponName,rangedWeaponConfirmed:true,rangedWeaponHeldConfirmed:true}));
-          combatActions.appendChild(aim);
-        }
-      }
+      // Se déplacer et Viser sont dans la barre d'actions du plateau ; restent ici le Croche-pied et l'Action défensive.
       const tripPrimaries=previousWeaponAttacks.filter(row=>row.targetId===target?.id&&row.hit===true&&row.actionType==='attack');
       const athletics=(target?.skills||[]).filter(row=>row.status==='resolved'&&row.id&&/athlet/i.test(String(row.name||row.nom||'').normalize('NFD').replace(/[\u0300-\u036f]/g,''))&&Number.isFinite(Number(row.total??row.value)));
       if(target&&tripPrimaries.length){
@@ -500,7 +485,7 @@ export function renderResolutionPanel(options) {
         defend.addEventListener('click', () => handlers.declareCombatAction('defensive', { skillId: draft.combatDefensiveSkillId }));
         combatActions.appendChild(defend);
       } else if (canDeclareCombatAction) combatActions.appendChild(node('p', 'workspace-muted', 'Aucune compétence résolue disponible pour l’Action défensive.'));
-      section.appendChild(combatActions);
+      if (combatActions.childElementCount > 1) section.appendChild(combatActions);
     }
 
     if(action.extensions?.fiche?.requiresLink) fieldGroups.weapon.content.appendChild(node('p','workspace-field-error','Compétence à choisir dans « Mettre à jour les PJ » avant de lancer cette action.'));
@@ -3093,24 +3078,9 @@ export function renderResolutionPanel(options) {
       for (const field of previouslyRequired) field.removeAttribute('aria-required');
       previouslyRequired.clear();
       for (const reason of reasons) {
-        const item = node('li');
         const field = reason.focus && section.querySelector?.(`[data-blocking-field="${reason.focus}"]`);
-        if (field) {
-          if (['INPUT', 'SELECT', 'TEXTAREA'].includes(field.tagName)) { field.setAttribute('aria-required', 'true'); previouslyRequired.add(field); }
-          const link = button(reason.text, 'workspace-ghost');
-          link.addEventListener('click', () => {
-            if (field.closest('.workspace-resolution-drawer')?.hidden) section.querySelector('[data-circumstances-toggle]')?.click();
-            for (let parent = field.parentElement; parent; parent = parent.parentElement) if (parent.tagName === 'DETAILS') parent.open = true;
-            field.scrollIntoView({ block: 'center' }); field.focus();
-          });
-          item.appendChild(link);
-        } else item.textContent = reason.text;
-        if (reason.ignorable) {
-          const ignore = button('Ignorer', 'workspace-ghost');
-          ignore.addEventListener('click', () => handlers.ignoreCondition(reason.ignorable));
-          item.appendChild(ignore);
-        }
-        list.appendChild(item);
+        if (field && ['INPUT', 'SELECT', 'TEXTAREA'].includes(field.tagName)) { field.setAttribute('aria-required', 'true'); previouslyRequired.add(field); }
+        list.appendChild(blockingReasonItem(reason, field, { section, handlers }));
       }
     };
     rolls.addEventListener('input', refreshPending);
@@ -3176,29 +3146,13 @@ export function renderResolutionPanel(options) {
       block.appendChild(node('p', '', 'À saisir avant d’appliquer :'));
       const list = node('ul');
       for (const reason of listed) {
-        const item = node('li');
         const field = reason.focus && (section.querySelector?.(`[data-blocking-field="${reason.focus}"]`) || live.querySelector?.(`[data-blocking-field="${reason.focus}"]`));
-        if (field) {
-          if (['INPUT', 'SELECT', 'TEXTAREA'].includes(field.tagName)) {
-            field.setAttribute('aria-required', 'true');
-            const caption = field.closest?.('label') || (field.id && (section.querySelector?.(`label[for="${field.id}"]`) || live.querySelector?.(`label[for="${field.id}"]`)));
-            if (caption && !caption.textContent.trim().endsWith('*')) caption.append(' *');
-          }
-          const link = button(reason.text, 'workspace-ghost');
-          link.addEventListener('click', () => {
-            if (field.closest('.workspace-resolution-drawer')?.hidden) section.querySelector('[data-circumstances-toggle]')?.click();
-            for (let parent = field.parentElement; parent; parent = parent.parentElement) if (parent.tagName === 'DETAILS') parent.open = true;
-            field.scrollIntoView({ block: 'center' });
-            field.focus();
-          });
-          item.appendChild(link);
-        } else item.textContent = reason.text;
-        if (reason.ignorable) {
-          const ignore = button('Ignorer', 'workspace-ghost');
-          ignore.addEventListener('click', () => handlers.ignoreCondition(reason.ignorable));
-          item.appendChild(ignore);
+        if (field && ['INPUT', 'SELECT', 'TEXTAREA'].includes(field.tagName)) {
+          field.setAttribute('aria-required', 'true');
+          const caption = field.closest?.('label') || (field.id && (section.querySelector?.(`label[for="${field.id}"]`) || live.querySelector?.(`label[for="${field.id}"]`)));
+          if (caption && !caption.textContent.trim().endsWith('*')) caption.append(' *');
         }
-        list.appendChild(item);
+        list.appendChild(blockingReasonItem(reason, field, { section, handlers }));
       }
       block.appendChild(list);
       live.appendChild(block);

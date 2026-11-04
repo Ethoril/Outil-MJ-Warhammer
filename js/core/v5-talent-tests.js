@@ -16,16 +16,20 @@ export const V5_TALENT_TEST_CONTEXT_FIELDS = Object.freeze([...registry.contextD
 const records = value => value && typeof value === 'object' && !Array.isArray(value);
 const labels = () => new Map(getReferenceCatalogue().talents.map(row => [row.id, row.name || row.nom || row.id]));
 const unknowns = plan => plan.unresolved.flatMap(row => row.fields.map(field => 'Talent ' + row.talentId + ' : préciser ' + field + '.'));
+const COMBAT_SKILL_GROUPS = { melee: 'skill-group-43_6f_72_70_73_20_e0_20_63_6f_72_70_73', ranged: 'skill-group-50_72_6f_6a_65_63_74_69_6c_65_73', dodge: 'skill-group-45_73_71_75_69_76_65' };
+const combatSkillGroup = (action, kind) => /^(?:Esquive|Dodge)$/i.test(action.label || '') ? COMBAT_SKILL_GROUPS.dodge : COMBAT_SKILL_GROUPS[kind];
 /** Imported skill identity has precedence over a manual contextual identity. */
 export function buildV5TalentTestContext(action = {}, settings = {}, extra = {}) {
   const context = records(settings.context) ? settings.context : {};
   const skillId = action.extensions?.fiche?.skillId ?? context.skillId;
   const skill = getReferenceCatalogue().skills.find(row => row.id === skillId);
   const none = skillId === 'none';
+  // Jet de combat sans compétence importée (créature, défense, arme saisie) : le groupe est connu par la nature du jet.
+  const combatGroup = skill || none ? undefined : combatSkillGroup(action, extra.kind);
   // Adversaire connu par ses mots-clés : la Haine et les spécialisations à cible s'appliquent d'office ; une saisie `enemyGroup` du MJ prime.
   const enemyKeywords = extra.opponent && context.enemyGroup == null ? participantKeywords(extra.opponent).ids : [];
   return { ...context, ...(enemyKeywords.length ? { enemyKeywords } : {}), ...(context.talentAction==='vice'?{resistingVice:context.viceRetry!==true}:{}), ...(context.talentAction==='relentless'?{pursuit:false,pursuitRole:'none'}:{}), psychologyKind:context.psychologyKind||(context.talentAction==='overcome-terror'?'terror':context.talentAction==='overcome-fear'?'fear':'none'),blackpowderBrokenTest:context.blackpowderBrokenTest===true,avoidingSurprise:context.avoidingSurprise===true,normallyAllowedSurpriseTest:context.normallyAllowedSurpriseTest===true,talentAction:context.talentAction||'none',preRollTalent:context.preRollTalent||'none',calledShot:context.calledShot??false,silentTakedown:context.silentTakedown??false, ...extra, attributeId:action.attr || context.attributeId || 'none', weapon:{hack:(action.qualities||[]).some(row=>row.id==='taille'),crewed:(action.qualities||[]).some(row=>row.id==='equipage'),...(extra.weapon||{})}, outsideCombat: ['attack', 'attaque'].includes(action.type) ? false : context.outsideCombat,
-    skillId: none ? 'none' : skill?.id, skillGroupId: none ? 'none' : skill?.groupId,
+    skillId: none ? 'none' : skill?.id, skillGroupId: none ? 'none' : skill?.groupId ?? combatGroup,
     specializationId: skill?.specializationId ?? (skill || none ? 'none' : undefined),
     specialization: skill?.specialization ?? (skill ? 'none' : undefined) };
 }

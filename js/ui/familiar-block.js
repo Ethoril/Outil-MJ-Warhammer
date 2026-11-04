@@ -32,10 +32,11 @@ const addNumber = (createElement, block, className, title, placeholder) => {
  * participants, type, Vent ou espèce, Destin ou Résilience sacrifié, points supplémentaires, solde saisi si inconnu).
  * Affiché pour un PJ ou un maître déjà lié ; `null` pour un familier ou un autre participant.
  */
-export function buildFamiliarBlock(createElement, participant, participants = []) {
+export function buildFamiliarBlock(createElement, participant, participants = [], { creation = false } = {}) {
   if (!participant || familiarOfOf(participant)) return null;
   const links = familiarLinksOf(participant);
-  if (participant.kind !== 'PJ' && !links.length) return null;
+  // Le familier se déclare dans la fiche du PJ (site) ou le profil du PNJ : le cartouche n'affiche que les liens existants.
+  if (!links.length && !(creation && participant.kind === 'PJ')) return null;
   const block = createElement('div');
   block.className = 'actor-familiar';
   const label = createElement('span');
@@ -87,7 +88,7 @@ export function buildFamiliarBlock(createElement, participant, participants = []
     addNumber(createElement, block, 'familiar-death-d2', 'Second d10 des dégâts', 'd10');
   }
   const candidates = participants.filter(item => item.id !== participant.id && item.kind !== 'PJ' && !familiarOfOf(item) && !familiarLinksOf(item).length);
-  if (!candidates.length) return block;
+  if (!creation || !candidates.length) return block;
   addSelect(createElement, block, 'familiar-target', 'Participant qui devient le familier (PNJ allié)', [['', 'Familier…'], ...candidates.map(item => [item.id, item.name || item.id])]);
   addSelect(createElement, block, 'familiar-system', 'Système de familier', [['homunculus', FAMILIAR_NAMES.homunculus], ['animal', FAMILIAR_NAMES.animal]]);
   addSelect(createElement, block, 'familiar-kind', 'Type d’homoncule (un familier animal est toujours de puissance)', HOMUNCULUS_KINDS.map(kind => [kind, FAMILIAR_NAMES[kind]]));

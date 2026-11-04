@@ -615,6 +615,8 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         if (charging) resolutionHandlers.select({ charging: true });
       },
       disengage: () => { state.disengage = { actorId: actor.id }; render(); },
+      move: () => resolutionHandlers.declareCombatMovement(),
+      aim: values => resolutionHandlers.declareCombatAction('aim', values),
       // Mène au contrôle du panneau de résolution (« Viser » déclaré, puces de choix d’action).
       focus: key => {
         const target = play.center.querySelector(key === 'action' ? '.workspace-resolution [data-focus-key^="action-"], .workspace-resolution .workspace-chip' : `[data-focus-key="${key}"]`);
@@ -630,7 +632,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         Promise.resolve().then(() => Store.applyFlee(actor.id)).catch(error => plateauToast('Fuite impossible', error)).finally(() => render());
       }
     };
-    const rows = actionBarModel({ actor, active: context.active, actions, actionKeys: keys, previewDisengage: id => Store.previewDisengage(id) });
+    const rows = actionBarModel({ actor, active: context.active, actions, actionKeys: keys, previewDisengage: id => Store.previewDisengage(id), turnFacts: Store.getV5TurnFacts?.(actor.id) || {} });
     renderActionBar(column, { actor, rows, commands });
     if (state.disengage?.actorId !== actor.id) return;
     const input = { ...state.disengage };

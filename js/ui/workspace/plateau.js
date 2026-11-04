@@ -35,7 +35,7 @@ const attackOfKind = (actions, kind) => actions.findIndex(action => ATTACKS.incl
  * Modèle de la barre d'actions : `{ id, label, consequence, disabled?, run }` où `run` reçoit les commandes
  * (`select`, `disengage`, `flee`, `brokenFlee`). `actions` : actions préparées de l'acteur (avec leur clé).
  */
-export function actionBarModel({ actor, active, actions = [], actionKeys = [], previewDisengage }) {
+export function actionBarModel({ actor, active, actions = [], actionKeys = [], previewDisengage, turnFacts = {} }) {
   if (!actor || actor.zone !== 'active') return [];
   const engagedIds = engagedWith({ participants: active }, active, actor.id), engagedFoes = enemiesOf(actor, active).filter(foe => engagedIds.includes(foe.id));
   const freeFoes = enemiesOf(actor, active);
@@ -71,9 +71,27 @@ export function actionBarModel({ actor, active, actions = [], actionKeys = [], p
       rows.push({ id: `shoot-${target.id}`, label: `Tirer · ${target.name}`, consequence, run: commands => commands.select({ targetId: target.id, actionKey: rangedKey }) });
     }
   }
-  const aimTarget = engagedFoes[0] || enemiesOf(actor, active)[0];
-  if (aimTarget) rows.push({ id: `aim-${aimTarget.id}`, label: `Viser · ${aimTarget.name}`, consequence: 'la prochaine attaque en profite',
-    run: commands => { commands.select({ targetId: aimTarget.id }); commands.focus('declare-aim'); } });
+  // Viser (une Action) : déclaré d'un clic avec l'arme du tir préparé ; le clic du MJ vaut confirmation de l'arme tenue.
+  const aimTarget = engagedFoes[0] || enemiesOf(actor, active).find(foe => !engagedIds.includes(foe.id)) || enemiesOf(actor, active)[0];
+  if (aimTarget && rangedIndex >= 0) {
+    const shot = actions[rangedIndex], equipmentId = shot.extensions?.fiche?.equipmentId;
+    const weapon = equipmentId && (actor.equipment || []).some(item => item.id === equipmentId && item.kind === 'weapon')
+      ? { weaponId: equipmentId } : { weaponName: String(shot.name || shot.nom || shot.note || 'Arme de tir').trim() };
+    const aimed = turnFacts.aimTargetId === aimTarget.id;
+    rows.push({ id: `aim-${aimTarget.id}`, label: `Viser · ${aimTarget.name}`, consequence: aimed ? 'visée en cours : le prochain tir sur cette cible en profite' : 'une Action : le prochain tir sur cette cible en profite',
+      disabled: aimed, run: commands => commands.aim({ targetId: aimTarget.id, ...weapon, rangedWeaponConfirmed: true, rangedWeaponHeldConfirmed: true }) });
+  }
+  // Se déplacer (le Move du Tour) : noté pour le tir (−1 DR) et la Visée, qui s'annule.
+  rows.push({ id: 'move', label: 'Se déplacer', consequence: turnFacts.moved ? 'déplacement noté ce Tour : −1 DR au tir, Visée perdue' : 'noter le déplacement du Tour : −1 DR au tir, annule la Visée',
+    disabled: turnFacts.moved === true, run: commands => commands.move() });
+  // Peur (Test étendu de Calme, en fin de Round) : DR cumulés contre l'indice de chaque Peur en cours.
+  const fearIndex = actions.findIndex(action => action.id === 'activate:overcome-fear');
+  if (fearIndex >= 0) {
+    const fears = (actor.states || []).filter(row => row.key === 'fear-of-talent' && row.overcome !== true);
+    const name = id => active.find(row => row.id === id)?.name;
+    rows.unshift({ id: 'overcome-fear', label: 'Surmonter la Peur', consequence: `Test de Calme étendu (fin de Round) : ${fears.map(row => `${name(row.authorId) || row.name} ${Number(row.successes) || 0}/${row.rating} DR`).join(', ') || 'Peur en cours'}`,
+      run: commands => commands.select({ actionKey: actionKeys[fearIndex], targetId: 'none' }) });
+  }
   rows.push({ id: 'other', label: 'Autres actions', consequence: 'magie, prière ou Test : panneau complet', run: commands => commands.focus('action') });
   return rows;
 }
@@ -90,6 +108,7 @@ export function renderActionBar(container, { actor, rows, commands }) {
     action.dataset.focusKey = `plateau-${row.id}`;
     action.append(el('strong', '', row.label), el('span', '', row.consequence));
     action.setAttribute('aria-label', `${row.label} : ${row.consequence}`);
+    action.disabled = row.disabled === true;
     action.addEventListener('click', () => row.run(commands));
     list.appendChild(action);
   }

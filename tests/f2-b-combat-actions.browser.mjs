@@ -48,18 +48,15 @@ try {
   const combat = page.locator('#workspace-root'), actorCard = combat.locator('[data-workspace-select="a"]');
   const openResolutionSettings = async () => openU1Settings(combat);
   await actorCard.click();
-  assert.equal(await combat.locator('.workspace-combat-actions').evaluate(el => el.open), false, 'les Actions du Tour sont repliées au départ');
-  await openU1TurnActions(combat);
-  await combat.getByRole('combobox', { name: /Arme de tir tenue pour viser Garde/ }).selectOption('bow');
-  await combat.getByRole('checkbox', { name: 'Je confirme que cette arme est tenue en main' }).check();
-  await combat.getByRole('button', { name: 'Viser Garde' }).click();
+  // Viser et Se déplacer sont dans la barre d'actions du plateau (recette du 04/11) : un clic, l'arme du tir préparé.
+  await combat.locator('[data-focus-key="plateau-aim-b"]').click();
   await page.waitForFunction(async () => {
     const { Store } = await import('/Outil-MJ-Warhammer/js/main.js');
     const state = JSON.parse(Store.getFullJSON()).extensions?.v5?.combatActions?.byActorId?.a;
-    return state?.kind === 'aim' && state.targetId === 'b' && state.weaponId === 'bow';
+    return state?.kind === 'aim' && state.targetId === 'b' && state.weaponName === 'Tir à l’arc';
   });
 
-  await combat.getByRole('button', { name: 'Déclarer un déplacement effectué' }).click();
+  await combat.locator('[data-focus-key="plateau-move"]').click();
   await page.waitForFunction(async () => {
     const { Store } = await import('/Outil-MJ-Warhammer/js/main.js');
     const combatActions = JSON.parse(Store.getFullJSON()).extensions?.v5?.combatActions;

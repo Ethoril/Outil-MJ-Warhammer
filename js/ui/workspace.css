@@ -276,6 +276,11 @@
 .workspace-defense-base { min-height: 34px; padding: 4px 8px; }
 .workspace-defense-base { width: 4.5em; }
 .workspace-field-error { margin: 0; font-family: var(--font-ui); font-size: 13px; font-weight: 700; color: var(--accent-text); }
+/* « À saisir avant d'appliquer » : chaque ligne se règle sur place (lien vers le champ, d100, Charge). */
+.workspace-blocking-reason { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 4px 0; }
+.workspace-blocking-link { padding: 0; border: 0; background: none; color: inherit; font: inherit; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.workspace-blocking-link:hover { color: var(--text); }
+.workspace-blocking-reason .workspace-roll-input { width: 64px; }
 
 .workspace-result-live { display: grid; gap: 10px; }
 .workspace-result-live:empty { display: none; }

@@ -295,7 +295,8 @@ test('B10 : créer un familier depuis le bloc de la carte, Destin débité, PNJ 
   const made = [];
   const values = { '.familiar-target': 'imp', '.familiar-system': 'homunculus', '.familiar-kind': 'power', '.familiar-wind': 'aqshy', '.familiar-species': '', '.familiar-resource': 'fate', '.familiar-extra': '1', '.familiar-balance': '' };
   const createElement = tag => { const el = { tag, children: [], dataset: {}, appendChild(child) { this.children.push(child); }, querySelector(selector) { return { value: values[selector] ?? '' }; } }; made.push(el); return el; };
-  const block = buildFamiliarBlock(createElement, get(store, 'hero'), store.listParticipants());
+  assert.equal(buildFamiliarBlock(createElement, get(store, 'hero'), store.listParticipants()), null, 'sans lien, le cartouche du PJ n’affiche pas de création');
+  const block = buildFamiliarBlock(createElement, get(store, 'hero'), store.listParticipants(), { creation: true });
   assert.ok(block);
   assert.ok(made.some(el => el.className === 'tiny btn-create-familiar' && el.textContent === 'Création de familier'));
   const options = made.filter(el => el.tag === 'option').map(el => el.textContent);

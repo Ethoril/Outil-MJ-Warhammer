@@ -11,7 +11,8 @@
   <meta name="theme-color" content="#1c1815" media="(prefers-color-scheme: dark)" />
   <link rel="stylesheet" href="MJ.css" />
   <script>
-    if ('serviceWorker' in navigator) {
+    // En développement local, pas de service worker : chaque rechargement sert le code modifié.
+    if ('serviceWorker' in navigator && !['localhost', '127.0.0.1'].includes(location.hostname)) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('sw.js').catch(err => console.warn('SW registration failed:', err));
       });

@@ -3983,6 +3983,11 @@ function resolvedCorruptionTest(participant, skillId, input) {
       if(spent)needsInput.push('Une Action a déjà été dépensée pendant ce Tour.');
       return {ready:needsInput.length===0,status:needsInput.length?'requires-input':'ready',kind:input.kind,actorId,targetId:input.targetId||null,skillId:input.skillId||null,weaponId:aimWeapon?.id||null,weaponName:aimWeapon?.name||input.weaponName?.trim()||null,rangedWeaponConfirmed:aimWeaponRanged||input.rangedWeaponConfirmed===true,rangedWeaponHeldConfirmed:input.rangedWeaponHeldConfirmed===true,actionId:input.actionId||`combat-action:${actorId}:${clock.turnId}:${input.kind}`,clock,baseRevision:localRevision,needsInput,unresolved:needsInput};
     },
+    // Faits du Tour affichés par la barre d'actions : déplacement déclaré ce Tour, Visée en cours.
+    getV5TurnFacts(actorId){
+      const snapshot=currentEnvelope(),clock=v5StoreActionClock(snapshot),actions=combatActionState(snapshot),movement=actions.movementByActorId?.[actorId],aim=actions.byActorId?.[actorId];
+      return {moved:Boolean(movement&&movement.turnId===clock.turnId&&movement.encounterId===clock.encounterId),aimTargetId:aim?.kind==='aim'&&aim.encounterId===clock.encounterId?aim.targetId||null:null};
+    },
     declareV5CombatMovement(input={}){
       const snapshot=currentEnvelope(),actorId=input.actorId||snapshot.combat?.currentActorId,clock=v5StoreActionClock(snapshot),actor=snapshot.combat?.participants?.find(row=>row.id===actorId);
       if(!actor||actor.zone!=='active'||actorId!==snapshot.combat?.currentActorId)return {status:'blocked',reason:'Le déplacement doit être déclaré pour l’acteur du Tour courant.'};

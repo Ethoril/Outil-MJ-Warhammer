@@ -36,10 +36,11 @@ export function parsePsychologyTrait(trait) {
   const rawName = typeof trait === 'string' ? trait : trait?.name ?? trait?.nom ?? '';
   const psychologyWrapper = typeof trait === 'object' && ['psychologie', 'psychology'].includes(fold(rawName));
   const text = psychologyWrapper ? (trait?.param ?? trait?.parameter ?? '') : rawName;
-  const match = /^\s*([^(]+?)\s*(?:\(\s*([^)]*)\s*\))?\s*$/.exec(String(text));
+  // « Peur (2) » comme « Peur 2 » : l'indice peut être imprimé sans parenthèses.
+  const match = /^\s*([^(]+?)\s*(?:\(\s*([^)]*)\s*\)|\s(\d+))?\s*$/.exec(String(text));
   if (!match) return null;
   const key = BY_NAME.get(fold(match[1]));
-  const detail = (match[2] ?? (!psychologyWrapper && typeof trait === 'object' ? trait?.param ?? trait?.rating : '') ?? '').toString().trim();
+  const detail = (match[2] ?? match[3] ?? (!psychologyWrapper && typeof trait === 'object' ? trait?.param ?? trait?.rating : '') ?? '').toString().trim();
   return key ? { key, name: match[1].trim(), detail } : null;
 }
 

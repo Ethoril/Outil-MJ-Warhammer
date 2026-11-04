@@ -186,6 +186,10 @@ La caractéristique d’une compétence provient de son contrat de référence ;
 
 Les caractéristiques importées ne sont pas majorées une seconde fois par les talents. Les blessures maximum et le mouvement suivent les fonctions dérivées des fiches, avec des tests de parité, plutôt qu’un deuxième calcul indépendant.
 
+### 4.5 Familier
+
+Décision du MJ du 04/11/2026 : le familier n’est plus créé depuis le cartouche du PJ dans l’outil. Il se déclare dans la fiche du PJ (site des fiches) ou dans le profil du PNJ, et l’outil reprend la déclaration à l’import. La fiche doit fournir, pour chaque familier : le système (homoncule ou familier animal), le type (combat, puissance ou sort ; un animal est toujours de puissance), le Vent d’un homoncule, l’espèce d’un animal (Trait de compagnon), le profil ou le PNJ qui le représente, et le point sacrifié (Destin ou Résilience) avec les points supplémentaires cédés. La mécanique de l’outil (portée de 4 m, talents de compagnon, mort du familier) reste inchangée.
+
 ## 5 Synchronisation et propriété des données
 
 ### 5.1 Parcours utilisateur

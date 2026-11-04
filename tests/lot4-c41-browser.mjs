@@ -56,17 +56,15 @@ try {
   await page.waitForFunction(() => window.__store.listParticipants().find(row => row.id === 'hero').states.some(state => state.key === 'fear-of-talent'));
   assert.ok((await stateKeys('hero')).includes('fear-of-talent'), 'le clic applique la Peur à l’adversaire (même effet que l’ancienne carte)');
   assert.equal(await page.evaluate(() => window.__store.listParticipants().find(row => row.id === 'hero').states.find(state => state.key === 'fear-of-talent').rating), 2);
-  // Création de familier : le PJ avec un PNJ candidat voit la commande.
+  // Familier : plus de création dans le cartouche (déclaré par la fiche du site ou le profil) ; un lien existant reste affiché.
   await page.evaluate(() => { window.__store.setCurrentActor?.('hero'); });
   await page.evaluate(async () => { await window.__store.updateParticipant('wraith', { zone: 'bench' }); });
-  const familiar = page.locator('.actor-familiar');
-  assert.ok(await familiar.count() >= 1, 'un PJ avec un PNJ candidat doit voir la création de familier');
-  await familiar.first().locator('.familiar-target').selectOption('imp');
-  await familiar.first().locator('.familiar-resource').selectOption('fate');
-  await familiar.first().locator('.familiar-system').selectOption('homunculus');
-  await familiar.first().locator('.btn-create-familiar').click();
+  assert.equal(await page.locator('.btn-create-familiar').count(), 0, 'le cartouche du PJ ne propose plus la création de familier');
+  const created = await page.evaluate(async () => window.__store.createFamiliar('hero', 'imp', { system: 'homunculus', kind: 'power', wind: 'aqshy', resource: 'fate' }));
+  assert.equal(created?.ok, true, JSON.stringify(created));
+  await page.evaluate(() => window.__view.setSpace('play'));
   await page.waitForFunction(() => (window.__store.listParticipants().find(row => row.id === 'hero').extensions.v5.familiarLinks || []).length === 1);
-  assert.equal(await page.evaluate(() => window.__store.listParticipants().find(row => row.id === 'hero').extensions.v5.familiarLinks[0].familiarId), 'imp');
+  await page.locator('.actor-familiar .familiar-link').first().waitFor({ state: 'attached', timeout: 5000 });
   assert.deepEqual(errors, []);
   console.log('lot4-c41-browser: OK');
 } finally { await browser.close(); server.close(); }
