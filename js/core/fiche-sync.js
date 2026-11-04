@@ -136,10 +136,12 @@ export function ficheSnapshot(charId, fiche, metadata = {}) {
     source, caracs: totals, initiative: totals.I ?? null, movement,
     wounds: max, woundsMax: max, skills, talents: coverage.talents === 'present' ? talentResult.items : [],
     equipment: equipmentResult.items, spells, prayers, coverage, warnings };
-  // `chance` is the fiche's current resource; `destin` is its maximum.
+  // `fortune` (ex-`chance`) is the fiche's current resource; `destin` is its maximum.
   // Empty/missing/invalid values do not authorize a resource initialization.
   const count = key => own(raw, key) && ((typeof raw[key] === 'string' && /^\d+$/.test(raw[key])) || typeof raw[key] === 'number') && Number.isSafeInteger(Number(raw[key])) && Number(raw[key]) >= 0 ? Number(raw[key]) : null;
-  if (count('chance') !== null) snapshot.resources = { fortune: count('chance') };
+  // `fortune` (nom V5 de la fiche depuis le 04/11/2026), `chance` gardé pour les fiches pas encore renommées.
+  const fortune = count('fortune') ?? count('chance');
+  if (fortune !== null) snapshot.resources = { fortune };
   // B10b : Destin et Résilience de la fiche, lus à la synchronisation (voir `importFicheDurables`).
   const durables = {};
   if (count('destin') !== null) durables.fate = count('destin');

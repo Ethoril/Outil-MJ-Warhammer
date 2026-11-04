@@ -190,6 +190,18 @@ Les caractéristiques importées ne sont pas majorées une seconde fois par les 
 
 Décision du MJ du 04/11/2026 : le familier n’est plus créé depuis le cartouche du PJ dans l’outil. Il se déclare dans la fiche du PJ (site des fiches) ou dans le profil du PNJ, et l’outil reprend la déclaration à l’import. La fiche doit fournir, pour chaque familier : le système (homoncule ou familier animal), le type (combat, puissance ou sort ; un animal est toujours de puissance), le Vent d’un homoncule, l’espèce d’un animal (Trait de compagnon), le profil ou le PNJ qui le représente, et le point sacrifié (Destin ou Résilience) avec les points supplémentaires cédés. La mécanique de l’outil (portée de 4 m, talents de compagnon, mort du familier) reste inchangée.
 
+### 4.6 Ressources V5 et données encore absentes de la fiche
+
+Décision du MJ du 04/11/2026 : la fiche renomme `chance` en `fortune` et supprime `resilience` et `determination` (ressources V4). L’outil lit `fortune`, et `chance` en repli tant que toutes les fiches ne sont pas renommées ; `destin` reste lu.
+
+Données que l’outil sait exploiter mais que la fiche ne fournit pas encore :
+
+- **Péché courant** (prêtres) : exigé avant toute prière, aujourd’hui saisi à la main dans l’outil.
+- **Points de Corruption** : l’outil les suit en séance, mais ne reprend pas la valeur de la fiche.
+- **Familier** : voir §4.5.
+- **Mots-clés du personnage** (Haine, Animosité, Préjugé, Sans peur [Ennemi]…) : même référentiel que l’outil, pour que ces talents s’appliquent d’office.
+- **Espèce reconnue** : l’espèce doit appartenir à la liste connue de l’outil, sinon le Mouvement est à saisir ; la Taille (Petite pour Halfling et Gnome, Grande pour Ogre) se déduira de l’espèce, côté outil.
+
 ## 5 Synchronisation et propriété des données
 
 ### 5.1 Parcours utilisateur

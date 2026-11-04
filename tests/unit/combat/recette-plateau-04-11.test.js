@@ -90,3 +90,10 @@ test('aucun talent de Test ne pose de question hors sujet sur une attaque ou une
       for (const row of previewV5TalentTestModifiers({ id: 'x', talents: [owned(id)] }, { action, settings: {}, kind, role }).unresolved) asked.add(row);
   assert.deepEqual([...asked], ['Talent talent-hatred : préciser enemyGroup.']);
 });
+
+test('la fiche peut nommer sa ressource `fortune` (ex-`chance`)', async () => {
+  const { ficheSnapshot } = await import('../../../js/core/fiche-sync.js');
+  assert.equal(ficheSnapshot('a', { nom: 'A', fortune: 3 }).resources.fortune, 3);
+  assert.equal(ficheSnapshot('b', { nom: 'B', chance: 2 }).resources.fortune, 2);
+  assert.equal(ficheSnapshot('c', { nom: 'C', fortune: 1, chance: 4 }).resources.fortune, 1);
+});
