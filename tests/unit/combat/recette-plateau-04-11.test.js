@@ -65,3 +65,19 @@ test('premier import d’une fiche : un profil PJ est créé dans la bibliothèq
   await store.undo();
   assert.equal(store.listProfiles().some(row => row.id === 'pj-caelel'), false);
 });
+
+test('Surmonter la Peur sans désigner la Peur : celle de plus haut indice est prise d’office, les DR s’ajoutent', async () => {
+  const { createStore } = await import('../../../js/core/store.js');
+  const { fearAction } = await import('../../../js/core/v5-talent-psychology.js');
+  const store = createStore({ storage: null });
+  await store.ready;
+  const f = (id, name, camp, extra = {}) => ({ id, name, kind: camp === 'ennemi' ? 'PNJ' : 'PJ', camp, zone: 'active', initiative: 50, hp: 14, maxHp: 14, caracs: { CC: 45, CT: 40, F: 35, E: 35, I: 40, Ag: 38, Dex: 35, Int: 30, FM: 35, Soc: 30, M: 4 }, skills: [], talents: [], equipment: [], traits: [], states: [], armor: { head: 0, body: 0, arms: 0, legs: 0 }, extensions: { v5: {} }, ...extra });
+  await store.loadFromJSON({ schemaVersion: 3, reserve: [], log: [], diceLines: [], combat: { round: 1, currentActorId: 'elysia', order: ['elysia', 'beast'], participants: [f('beast', 'Taureau', 'ennemi', { traits: ['Peur (3)'] }), f('elysia', 'Elysia', 'pj')] } });
+  await store.applyCreaturePsychology('beast', 'fear', { targetId: 'elysia' });
+  const actor = store.listParticipants().find(row => row.id === 'elysia'), action = fearAction(actor);
+  const preview = store.previewResolution({ actorId: 'elysia', actor, action, roll: 12, v5: { kind: 'test', context: { ...action.extensions.v5.initialContext } } });
+  assert.deepEqual(preview.unresolved, []);
+  assert.equal((await store.applyResolution(preview)).status, 'applied');
+  const fear = store.listParticipants().find(row => row.id === 'elysia').states.find(row => row.key === 'fear-of-talent');
+  assert.equal(fear.successes, 2);
+});

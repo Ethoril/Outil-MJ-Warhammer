@@ -122,10 +122,12 @@ export const PSYCHOLOGY_ACTIONS=[{id:'large-fear',owner:'large',name:'Grande tai
 export function fearAction(subject){return(subject.states||[]).some(s=>s.key==='fear-of-talent'&&activeSource(s))?{id:'activate:overcome-fear',note:'Surmonter la Peur (Test de Calme)',type:'skill',attr:'FM',base:subject.skills?.find(s=>s.id===calmId()&&s.status==='resolved')?.total??willpowerBase(subject).value,mod:0,qualities:[],extensions:{fiche:{skillId:calmId()},v5:{kind:'test',initialContext:{talentAction:'overcome-fear',psychologyKind:'fear'}}}}:null;}
 export function previewPsychologyActivation(n,test){
  const c=n.v5.context||{},id=c.talentAction,row=PSYCHOLOGY_ACTIONS.find(r=>r.id===id);if(!row&&id!=='overcome-fear')return null;
- const existing=(n.actor.states||[]).find(s=>s.key==='fear-of-talent'&&s.id===c.fearEffectId&&activeSource(s));
+ // Peur à surmonter : celle désignée, sinon d'office celle de plus haut indice (on commence par elle).
+ const activeFears=(n.actor.states||[]).filter(s=>s.key==='fear-of-talent'&&activeSource(s));
+ const existing=c.fearEffectId?activeFears.find(s=>s.id===c.fearEffectId):[...activeFears].sort((a,b)=>(b.rating||0)-(a.rating||0))[0];
  const plan=id==='overcome-fear'?{proposals:existing?[{op:'activateTalent',origins:[existing.source]}]:[],ready:true,unresolved:[]}:situationPlan(n.actor,id);
  const origin=plan.proposals[0]?.origins[0],changes=[],conditions=[],unresolved=[],reminders=[];
- if(!origin)unresolved.push('Psychologie de talent indisponible ou source à revalider.');
+ if(!origin)unresolved.push(id==='overcome-fear'?'Peur : aucune Peur en cours à surmonter pour ce personnage.':'Psychologie de talent indisponible ou source à revalider.');
  if(row?.noTest&&!n.noTestAction)unresolved.push('Cette Psychologie exige son action propre sans jet.');
  if(!row?.noTest&&(n.action.extensions?.fiche?.skillId??c.skillId)!==calmId())unresolved.push('Test de Psychologie : compétence Calme requise.');
  const state=(key,name,subject,extra={})=>({id:n.resolutionId+':'+key+':'+subject.id,key,name,kind:'talent-pending',level:1,source:origin,authorId:n.actor.id,targetId:subject.id,...extra});
@@ -135,7 +137,7 @@ export function previewPsychologyActivation(n,test){
   for(const pid of c.frightenedIds||[]){const p=n.v5State?.participants?.find(p=>p.id===pid);if(!p||p.camp===n.actor.camp||p.id===n.actor.id)unresolved.push('Effrayant : adversaire introuvable.');else if(id==='large-fear'&&(!Number.isSafeInteger(c.frightenedSizes?.[pid])||c.frightenedSizes[pid]>=n.v5.actorSize))unresolved.push('Grande taille : catégorie plus petite de chaque créature requise.');else if(!(p.states||[]).some(s=>['fear-of-talent','fear-overcome'].includes(s.key)&&s.authorId===n.actor.id&&s.encounterId===n.v5Clock.encounterId))changes.push({participantId:pid,add:[state('fear-of-talent',id==='large-fear'?'Peur de Grande taille (1)':'Peur d’Effrayant : '+(n.v5.actorSize===4?2:1)+' réussite(s)',p,{rating:id==='frightening'&&n.v5.actorSize===4?2:1,mode:id==='large-fear'?'sl':'successes',successes:0,restriction:'cannotGainMomentum',encounterId:n.v5Clock.encounterId})]});}
  }
  if(id==='overcome-fear'){
-  if(!existing||existing.mode!=='sl'&&!n.v5Clock.turnId?.endsWith(':'+n.actor.id))unresolved.push('Effrayant : effet identifié et Test pendant votre Tour requis.');
+  if(existing&&existing.mode!=='sl'&&!n.v5Clock.turnId?.endsWith(':'+n.actor.id))unresolved.push('Peur : ce Test se fait pendant le Tour du personnage.');
   const fears=(n.actor.states||[]).filter(s=>s.key==='fear-of-talent'&&activeSource(s));
   if(existing&&fears.some(s=>s.rating>existing.rating))unresolved.push('Peur : commencer par la source au degré le plus élevé.');
   if(existing&&test.success&&!unresolved.length){const immunity=evaluateV5Talents(n.actor,{event:'test.beforeRoll',role:'actor',context:{skillId:calmId(),psychologyKind:'fear',enemyGroup:c.enemyGroup},includeTalents:['talent-fearless','talent-hatred']});plan.proposals.push(...immunity.proposals);const successes=existing.successes+(existing.mode==='sl'?Math.max(0,test.sl):1),overcome=immunity.proposals.some(p=>p.op==='forceTestSuccess')||successes>=existing.rating;const affected=overcome?fears.filter(s=>s.rating<=existing.rating):[existing];plan.proposals.push(...affected.map(s=>({origins:[s.source]})));changes.push({participantId:n.actor.id,removeIds:affected.map(s=>s.id),add:affected.map(s=>({...s,key:overcome?'fear-overcome':s.key,name:overcome?'Peur surmontée':s.name,successes:s.id===existing.id?successes:s.successes,restriction:overcome?null:s.restriction}))});}
