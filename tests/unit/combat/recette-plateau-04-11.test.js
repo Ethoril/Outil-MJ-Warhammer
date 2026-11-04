@@ -46,3 +46,22 @@ test('barre d’actions : Peur à surmonter, Viser d’un clic avec l’arme du 
   assert.deepEqual(calls, [{ targetId: 't', weaponName: 'Arbalète', rangedWeaponConfirmed: true, rangedWeaponHeldConfirmed: true }]);
   assert.equal(rows.find(row => row.id === 'move').disabled, true);
 });
+
+test('premier import d’une fiche : un profil PJ est créé dans la bibliothèque vide, puis annulable', async () => {
+  const { readFileSync } = await import('node:fs');
+  const { ficheSnapshot } = await import('../../../js/core/fiche-sync.js');
+  const { createStore } = await import('../../../js/core/store.js');
+  const snapshot = ficheSnapshot('caelel', JSON.parse(readFileSync(new URL('../../fixtures/fiche-caelel.json', import.meta.url), 'utf8')));
+  const store = createStore({ storage: null });
+  await store.ready;
+  const newProfile = { id: 'pj-caelel', name: snapshot.name, kind: 'PJ', caracs: {}, skills: [], talents: [], equipment: [], diceLines: [], extensions: {} };
+  const result = await store.applyFicheSync([{ charId: 'caelel', profileId: 'pj-caelel', newProfile, snapshot }]);
+  assert.notEqual(result?.changed, false);
+  const profile = store.listProfiles().find(row => row.id === 'pj-caelel');
+  assert.equal(profile.kind, 'PJ');
+  assert.equal(profile.extensions.ficheId, 'caelel');
+  assert.equal(profile.caracs.CC, 54);
+  assert.equal(profile.maxHp, 18);
+  await store.undo();
+  assert.equal(store.listProfiles().some(row => row.id === 'pj-caelel'), false);
+});

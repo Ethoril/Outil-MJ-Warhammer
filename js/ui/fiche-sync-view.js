@@ -3,6 +3,7 @@ import { userMessage, userError } from './messages.js';
 
 const shown = value => (value === null || value === undefined || value === '' ? '—' : String(value));
 const MISSING = '__introuvable';
+const NEW_PROFILE = '__nouveau';
 const plural = (count, word) => `${count} ${word}${count > 1 ? 's' : ''}`;
 
 /**
@@ -22,6 +23,18 @@ export function initFicheSyncView({ mount, hosted = false, source, getContext, c
 
   const fail = cause => { error = ficheErrorMessage(cause, { online: globalThis.navigator?.onLine !== false }); };
   const pjs = () => (getContext().profiles || []).filter(profile => profile.kind === 'PJ');
+  // Premier import : une fiche sans profil crée un profil PJ vierge, rempli par la synchronisation comme une mise à jour.
+  const blankProfile = snapshot => {
+    const taken = new Set((getContext().profiles || []).map(row => row.id));
+    let id = `pj-${snapshot.charId}`;
+    for (let n = 2; taken.has(id); n += 1) id = `pj-${snapshot.charId}-${n}`;
+    return { id, name: snapshot.name || snapshot.charId, kind: 'PJ', caracs: {}, skills: [], talents: [], equipment: [], diceLines: [], extensions: {} };
+  };
+  const profileOf = (selection, charId) => {
+    if (selection.profileId !== NEW_PROFILE) return pjs().find(row => row.id === selection.profileId);
+    selection.newProfile ??= blankProfile(snapshots.find(row => row.charId === charId) || { charId });
+    return selection.newProfile;
+  };
 
   async function check() {
     phase = 'checking'; render();
@@ -47,7 +60,8 @@ export function initFicheSyncView({ mount, hosted = false, source, getContext, c
       missing = fetched.filter(item => !item.data).map(item => `${item.charId} (${item.status === 'error' ? ficheErrorMessage(item.error) : item.status === 'invalid' ? 'document invalide' : 'absente'})`);
       previewRevision = getContext().revision;
       const matches = matchFiches(snapshots, getContext().profiles || []);
-      selections = new Map(snapshots.map(snapshot => [snapshot.charId, { profileId: matches[snapshot.charId], links: {}, convert: {}, equipmentLinks: {}, adoptActions: {}, replaceAssociation: false, fingerprint: null }]));
+      const noPj = !pjs().length;
+      selections = new Map(snapshots.map(snapshot => [snapshot.charId, { profileId: matches[snapshot.charId] || (noPj ? NEW_PROFILE : undefined), links: {}, convert: {}, equipmentLinks: {}, adoptActions: {}, replaceAssociation: false, fingerprint: null }]));
       phase = 'preview';
     } catch (cause) { fail(cause); phase = 'signin'; }
     render();
@@ -79,12 +93,13 @@ export function initFicheSyncView({ mount, hosted = false, source, getContext, c
     const choose = document.createElement('select');
     choose.append(new Option('Ignorer cette fiche', ''));
     pjs().forEach(profile => choose.append(new Option(profile.name, profile.id)));
+    choose.append(new Option('Créer un nouveau profil PJ', NEW_PROFILE));
     choose.dataset.key = `profil:${snapshot.charId}`;
     choose.value = selection.profileId || '';
     choose.addEventListener('change', () => { selection.profileId = choose.value || null; selection.links = {}; selection.convert = {}; selection.equipmentLinks = {}; selection.adoptActions = {}; selection.replaceAssociation = false; selection.fingerprint = null; render(); });
     card.appendChild(labelled('Profil à mettre à jour', choose));
 
-    const profile = pjs().find(item => item.id === selection.profileId);
+    const profile = profileOf(selection, snapshot.charId);
     if (!profile) {
       const none = document.createElement('p'); none.className = 'muted';
       none.textContent = pjs().length ? 'Aucun profil PJ ne correspond : fiche ignorée tant qu’aucun profil n’est choisi.' : 'Aucun profil : la réserve ne contient pas de PJ.';
@@ -94,7 +109,7 @@ export function initFicheSyncView({ mount, hosted = false, source, getContext, c
     const plan = planProfileSync(snapshot, profile, selection);
     selection.fingerprint ??= plan.precondition.profileFingerprint;
     const sourceInfo = document.createElement('p'); sourceInfo.className = 'muted';
-    sourceInfo.textContent = `Source : fiche ${snapshot.charId} · révision ${snapshot.source?.revision ?? 'non fournie'}.`;
+    sourceInfo.textContent = `${selection.newProfile ? `Un profil PJ « ${profile.name} » sera créé dans la bibliothèque. ` : ''}Source : fiche ${snapshot.charId} · révision ${snapshot.source?.revision ?? 'non fournie'}.`;
     card.appendChild(sourceInfo);
     if (profile.extensions?.ficheId && profile.extensions.ficheId !== snapshot.charId) {
       const previousId = profile.extensions.ficheId;
@@ -224,13 +239,13 @@ export function initFicheSyncView({ mount, hosted = false, source, getContext, c
       snapshots.forEach(snapshot => root.appendChild(entryCard(snapshot)));
       if (missing.length) { const absent = document.createElement('p'); absent.className = 'muted'; absent.textContent = `Fiche absente : ${missing.join(', ')}.`; root.appendChild(absent); }
       const chosen = [...selections.entries()].filter(([, selection]) => selection.profileId);
-      const unconfirmedReplacement = chosen.some(([charId, selection]) => { const profile = pjs().find(row => row.id === selection.profileId); return profile?.extensions?.ficheId && profile.extensions.ficheId !== charId && selection.replaceAssociation !== true; });
+      const unconfirmedReplacement = chosen.some(([charId, selection]) => { const profile = profileOf(selection, charId); return profile?.extensions?.ficheId && profile.extensions.ficheId !== charId && selection.replaceAssociation !== true; });
       const arbitrationRequired = chosen.some(([charId, selection]) => {
-        const profile = pjs().find(row => row.id === selection.profileId);
+        const profile = profileOf(selection, charId);
         const snapshot = snapshots.find(row => row.charId === charId);
         return profile && snapshot && planProfileSync(snapshot, profile, selection).warnings.some(warning => warning.code === 'moved-instance-arbitration-required');
       });
-      const duplicate = chosen.length !== new Set(chosen.map(([, selection]) => selection.profileId)).size;
+      const duplicate = chosen.length !== new Set(chosen.map(([charId, selection]) => profileOf(selection, charId)?.id)).size;
       const adoptions = chosen.flatMap(([,selection]) => Object.values(selection.adoptActions || {}).filter(Boolean));
       const duplicateAdoption = adoptions.length !== new Set(adoptions).size;
       if (duplicateAdoption) { const warn = document.createElement('p'); warn.className='error';warn.setAttribute('role','alert');warn.textContent='Une action locale ne peut remplacer qu’une seule action source. Changez le rapprochement.';root.appendChild(warn); }
@@ -242,6 +257,7 @@ export function initFicheSyncView({ mount, hosted = false, source, getContext, c
           const context = getContext();
           if (previewRevision !== undefined && context.revision !== previewRevision) throw userError('La séance a changé depuis l’aperçu. Relisez les fiches avant d’appliquer.');
           for (const [charId, selection] of chosen) {
+            if (selection.profileId === NEW_PROFILE) continue;
             const profile = (context.profiles || []).find(row => row.id === selection.profileId);
             if (!profile || profileSyncFingerprint(profile) !== selection.fingerprint) throw userError('Un profil a changé depuis l’aperçu. Relisez les fiches.');
             if (profile.extensions?.ficheId && profile.extensions.ficheId !== charId && selection.replaceAssociation !== true) throw userError('Confirmez le remplacement de la fiche avant d’appliquer.');
@@ -254,10 +270,11 @@ export function initFicheSyncView({ mount, hosted = false, source, getContext, c
           }
           if (previewRevision !== undefined && getContext().revision !== previewRevision) throw userError('La séance a changé pendant la relecture. Relisez les fiches avant d’appliquer.');
           for (const [, selection] of chosen) {
+            if (selection.profileId === NEW_PROFILE) continue;
             const profile = (getContext().profiles || []).find(row => row.id === selection.profileId);
             if (!profile || profileSyncFingerprint(profile) !== selection.fingerprint) throw userError('Un profil a changé pendant la relecture. Relisez les fiches.');
           }
-          await callbacks.onApply?.(chosen.map(([charId, selection]) => ({ charId, profileId: selection.profileId, snapshot: snapshots.find(item => item.charId === charId), links: selection.links, convert: selection.convert, equipmentLinks: selection.equipmentLinks, adoptActions: selection.adoptActions, replaceAssociation: selection.replaceAssociation === true, expectedProfileFingerprint: selection.fingerprint })), { expectedLocalRevision: previewRevision });
+          await callbacks.onApply?.(chosen.map(([charId, selection]) => ({ charId, profileId: selection.newProfile && selection.profileId === NEW_PROFILE ? selection.newProfile.id : selection.profileId, ...(selection.profileId === NEW_PROFILE ? { newProfile: selection.newProfile } : {}), snapshot: snapshots.find(item => item.charId === charId), links: selection.links, convert: selection.convert, equipmentLinks: selection.equipmentLinks, adoptActions: selection.adoptActions, replaceAssociation: selection.replaceAssociation === true, expectedProfileFingerprint: selection.fingerprint })), { expectedLocalRevision: previewRevision });
         } catch (cause) { error = userMessage(cause, 'Mise à jour non appliquée : réessayez.'); render(); }
       });
       apply.disabled = !chosen.length || duplicate || duplicateAdoption || unconfirmedReplacement || arbitrationRequired;

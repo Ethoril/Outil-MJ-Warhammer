@@ -502,6 +502,9 @@ export function planProfileSync(snapshot, profile, choices = {}) {
 
 /** Apply all profiles in one immutable draft; every live copy uses its own old maximum once. */
 export function applyFicheSync(draft, entries) {
+  // Premier import : le profil PJ vierge d'une entrée `newProfile` rejoint la bibliothèque avant la synchronisation.
+  const created = (entries || []).filter(entry => entry.newProfile?.id && entry.newProfile.kind === 'PJ' && !(draft.reserve || []).some(row => row.id === entry.newProfile.id));
+  if (created.length) draft = { ...draft, reserve: [...(draft.reserve || []), ...created.map(entry => cloneValue(entry.newProfile))] };
   let next = cloneValue(draft);
   const changedNames = [];
   // Preconditions are checked before changing any profile, making a stale multi-PJ batch atomic.
