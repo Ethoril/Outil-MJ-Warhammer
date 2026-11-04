@@ -97,3 +97,36 @@ test('lancer une rencontre : chaque cavalier amène sa monture, une monture comp
   assert.ok(horses.every(row => row.camp === 'ennemi' && row.zone === 'active' && row.extensions.v5.mountOf));
   assert.ok(scene.participants.every(row => row.extensions?.v5?.mounted !== true), 'à pied par défaut');
 });
+
+test('recette du 04/11 : le menu ne propose pas les ennemis, la monture déclarée sert sans lien posé', async () => {
+  const { mountCandidates, linkedMountOf } = await import('../../../js/core/mounts.js');
+  const rider = { id: 'r', name: 'Renaut', kind: 'PJ', camp: 'pj', zone: 'active', extensions: { v5: { declaredMount: { profileId: 'monture-p', name: 'Destrier' } } } };
+  const horse = { id: 'h', name: 'Destrier', kind: 'Créature', camp: 'allie', zone: 'active', profileId: 'monture-p' };
+  const goblin = { id: 'g', name: 'Gobelin', kind: 'Créature', camp: 'ennemi', zone: 'active' };
+  const dog = { id: 'd', name: 'Chien', kind: 'Créature', camp: 'allie', zone: 'active' };
+  const people = [rider, horse, goblin, dog];
+  assert.deepEqual(mountCandidates(rider, people).map(row => row.id), ['h', 'd']);
+  assert.equal(linkedMountOf(rider, people)?.id, 'h');
+  assert.deepEqual(planMountToggle(rider, people, { mounted: true }), { ok: true, mounted: true, mountId: 'h' });
+  assert.equal(mountLabel(rider, people), 'À pied (Destrier)');
+  assert.equal(planMountToggle(rider, [rider, { ...horse, zone: 'bench' }], { mounted: true }).reason, 'mount-bench');
+});
+
+test('recette du 04/11 : déclarer la monture d’une PJ déjà en combat la fait entrer en attente, liée', async () => {
+  const { createStore } = await import('../../../js/core/store.js');
+  const store = createStore({ storage: null });
+  await store.ready;
+  await store.addProfile({ id: 'p-elysia', name: 'Elysia', kind: 'PJ', caracs: {}, skills: [], talents: [], equipment: [], diceLines: [], extensions: {} });
+  await store.addProfilesToCombat(['p-elysia'], { zone: 'active' });
+  const template = buildReserveProfileFromBestiary(byName('Horse').id, { library: l06, nameFr: true });
+  await store.setProfileMount('p-elysia', { template, bestiaryId: byName('Horse').id });
+  const people = store.listParticipants();
+  const elysia = people.find(row => row.profileId === 'p-elysia'), horse = people.find(row => row.profileId === 'monture-p-elysia');
+  assert.ok(horse, 'la monture entre dans le combat');
+  assert.equal(horse.zone, 'bench');
+  assert.equal(horse.camp, 'allie');
+  assert.equal(elysia.extensions.v5.ownMountId, horse.id);
+  assert.equal(store.setMounted(elysia.id, true).reason, 'mount-bench');
+  await store.setProfileMount('p-elysia', { template, bestiaryId: byName('Horse').id });
+  assert.equal(store.listParticipants().filter(row => row.profileId === 'monture-p-elysia').length, 1, 'pas de seconde monture');
+});

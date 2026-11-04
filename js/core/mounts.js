@@ -7,6 +7,7 @@
  */
 import { creatureSizeOf } from './creature-size.js';
 import { V5_RIDE_SKILL_ID } from './v5-mounted-combat.js';
+import { participantCamp } from './encounters.js';
 
 const fold = value => String(value ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
 const v5Of = participant => participant?.extensions?.v5 || {};
@@ -40,10 +41,22 @@ export function canRide(participant) {
 /** Cavalier monté sur `mountId` (au plus un). */
 export const riderOf = (mountId, participants = []) => participants.find(row => v5Of(row).mounted === true && v5Of(row).mountId === mountId) || null;
 
-/** Montures possibles d'un cavalier sans monture liée : participants actifs non PJ, ni lui-même, ni cavalier, ni déjà montés ou liés à un autre. */
+// Camp effectif (un PJ sans camp explicite est PJ) : PJ et alliés font un seul côté.
+const sideOf = participant => (['pj', 'allie'].includes(participantCamp(participant)) ? 'pj' : participantCamp(participant));
+const freeFor = (rider, row, participants) => row.id !== rider?.id && row.kind !== 'PJ' && v5Of(row).mounted !== true
+  && !(riderOf(row.id, participants) && riderOf(row.id, participants).id !== rider?.id) && (!mountOfOf(row) || mountOfOf(row) === rider?.id);
+
+/** Monture du cavalier : le lien durable, sinon le participant libre du profil déclaré (la déclaration fait foi). */
+export function linkedMountOf(rider, participants = []) {
+  const own = participants.find(row => row.id === ownMountIdOf(rider));
+  if (own) return own;
+  const declared = declaredMountOf(rider);
+  return declared ? participants.find(row => row.profileId === declared.profileId && freeFor(rider, row, participants)) || null : null;
+}
+
+/** Montures possibles d'un cavalier sans monture liée : participants actifs de son camp (PJ et alliés ensemble), non PJ, libres. */
 export function mountCandidates(rider, participants = []) {
-  return participants.filter(row => row.id !== rider?.id && row.zone === 'active' && row.kind !== 'PJ' && v5Of(row).mounted !== true
-    && !riderOf(row.id, participants) && (!mountOfOf(row) || mountOfOf(row) === rider?.id));
+  return participants.filter(row => row.zone === 'active' && sideOf(row) === sideOf(rider) && freeFor(rider, row, participants));
 }
 
 /**
@@ -57,7 +70,7 @@ export function planMountToggle(rider, participants = [], { mounted, mountId = n
   if (v5Of(rider).mounted === true) return refuse('already-mounted', `${rider.name || 'Ce participant'} est déjà en selle.`);
   if (rider.zone !== 'active') return refuse('rider-bench', 'Le cavalier doit être en jeu.');
   if (mountOfOf(rider) || riderOf(rider.id, participants)) return refuse('rider-is-mount', 'Une monture ne peut pas monter en selle.');
-  const id = mountId || ownMountIdOf(rider);
+  const id = mountId || linkedMountOf(rider, participants)?.id || ownMountIdOf(rider);
   if (!id) return refuse('no-mount', 'Choisissez la monture.');
   if (id === rider.id) return refuse('self', 'Un participant ne peut pas être sa propre monture.');
   const mount = participants.find(row => row.id === id);
@@ -97,14 +110,15 @@ export function linkDeclaredMounts(participants = []) {
     if (at < 0) continue;
     const riderId = out[index].id;
     out[index] = withV5(out[index], v5 => ({ ...v5, ownMountId: out[at].id }));
-    out[at] = { ...withV5(out[at], v5 => ({ ...v5, mountOf: riderId })), camp: out[index].camp === 'pj' ? 'allie' : out[index].camp };
+    const camp = participantCamp(out[index]);
+    out[at] = { ...withV5(out[at], v5 => ({ ...v5, mountOf: riderId })), camp: camp === 'pj' ? 'allie' : camp };
   }
   return out.every((row, index) => row === participants[index]) ? participants : out;
 }
 
 /** Libellé du cartouche : « Monté · Cheval », « À pied (Cheval) », « À pied ». */
 export function mountLabel(rider, participants = []) {
-  const id = v5Of(rider).mounted === true ? v5Of(rider).mountId : ownMountIdOf(rider);
+  const id = v5Of(rider).mounted === true ? v5Of(rider).mountId : ownMountIdOf(rider) || linkedMountOf(rider, participants)?.id;
   const mount = participants.find(row => row.id === id);
   const name = mount?.name || (id ? 'monture absente' : declaredMountOf(rider)?.name || '');
   return v5Of(rider).mounted === true ? `Monté · ${name || 'monture'}` : name ? `À pied (${name})` : 'À pied';

@@ -4,7 +4,7 @@ import {createV5BrokenEscapePanel,isBrokenActor} from './v5-broken-escape-panel.
 import {beastFormRestriction} from '../core/v5-magic-arbitrations.js';
 import { magicActionsFor } from '../core/creature-magic.js';
 import { familiarOfOf, FAMILIAR_HEALING_SOURCES } from '../core/familiars.js';
-import { canRide, mountCandidates, mountLabel, mountOfOf, ownMountIdOf } from '../core/mounts.js';
+import { canRide, linkedMountOf, mountCandidates, mountLabel, mountOfOf } from '../core/mounts.js';
 /**
  * Vue de séance E09.
  *
@@ -485,7 +485,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     const apply = (value, mountId = null) => Promise.resolve().then(() => Store.setMounted(participant.id, value, { mountId }))
       .then(result => { if (result?.ok === false) throw Object.assign(new Error(result.message), { userFacing: true }); })
       .catch(error => plateauToast(value ? 'Mise en selle impossible' : 'Pied à terre impossible', error)).finally(() => render());
-    const linked = ownMountIdOf(participant) && people.some(row => row.id === ownMountIdOf(participant));
+    const linked = Boolean(linkedMountOf(participant, people));
     if (mounted || linked) {
       const toggle = button(mountLabel(participant, people), `workspace-mount-toggle${mounted ? ' is-mounted' : ''}`, {
         'aria-pressed': String(mounted), 'data-focus-key': `mount-${participant.id}`,
@@ -600,7 +600,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       move.append(position.cover ? new Option('N’est plus à couvert', 'cover:off') : new Option('À couvert', 'cover:on'));
       move.addEventListener('change', () => moveCommand(participant, move.value));
       entry.append(item, ...facts.map(text => node('span', 'workspace-token-engaged', text)));
-      const mount = mountControl(participant, context.active);
+      const mount = mountControl(participant, Store.listParticipants());
       if (mount) entry.appendChild(mount);
       entry.appendChild(move);
       const remove = defeatedParticipantButton(participant, `track-remove-${participant.id}`);

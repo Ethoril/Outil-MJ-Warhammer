@@ -3608,8 +3608,15 @@ function resolvedCorruptionTest(participant, skillId, input) {
             extensions: { ...(captured.extensions || {}), mountFor: { profileId, bestiaryId: declared.bestiaryId } } };
           profiles = profiles.some(row => row.id === id) ? profiles.map(row => row.id === id ? built : row) : [...profiles, built];
         }
-        return { ...draft, reserve: profiles,
-          ...(draft.combat ? { combat: { ...draft.combat, participants: linkDeclaredMounts((draft.combat.participants || []).map(row => row.profileId === profileId ? declare(row) : row)) } } : {}),
+        let next = { ...draft, reserve: profiles,
+          ...(draft.combat ? { combat: { ...draft.combat, participants: linkDeclaredMounts((draft.combat.participants || []).map(row => row.profileId === profileId ? declare(row) : row)) } } : {}) };
+        // Cavalier déjà en combat sans monture : elle entre en attente, liée, dans son camp (« Faire entrer » règle son Initiative).
+        if (declared) {
+          const people = next.combat?.participants || [];
+          const riders = people.filter(row => row.profileId === profileId && !people.some(other => other.id === row.extensions?.v5?.ownMountId));
+          if (riders.length) { const { added, ...built } = addProfilesToDraft(next, riders.map(rider => ({ id, zone: 'bench', camp: rider.camp }))); next = built; }
+        }
+        return { ...next,
           log: [{ id: uid(), ts: Date.now(), kind: 'management', text: `Réserve: monture de ${profile.name} ${declared ? `: ${declared.name}` : 'retirée'}` }, ...(draft.log || [])].slice(0, 300) };
       });
       return typeof result?.then === 'function' ? result.then(done => ({ ...done, ok: true })) : { ...result, ok: true };
