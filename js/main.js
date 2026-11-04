@@ -37,6 +37,7 @@ import { normalizeEffects, normalizeState } from './core/effects.js';
 import { previewHpLoss, inferActionType } from './core/resolution.js';
 import { initCombatBanner } from './ui/combat-banner.js';
 import { openCampaignTimeDialog } from './ui/v5-campaign-time-dialog.js';
+import { createMapLink, MAP_LINK_CHANNEL, MAP_LINK_PING_MS } from './core/map-link.js';
 // Libellés des saisies d'Initiative manquantes (recette G-INI-2 : plus d'identifiants internes).
 const INITIATIVE_INPUT_LABELS = Object.freeze({ characteristic: 'Initiative', die: 'd10', combatReflexesDice: 'deux d10 du Combat instinctif',
   combatReflexesChoice: 'choix du Combat instinctif', tieChoice: 'départage de l’égalité', tieOrder: 'ordre de l’égalité',
@@ -1809,6 +1810,20 @@ on(DOM.combat.btnD100, 'click', () => {
   Store.log({ kind: 'roll', text: `🎲 Jet de d100 simple → ${roll}`, detail: { Jet: roll } });
   showToast(`🎲 d100 = ${roll}`, 'info');
 });
+
+// Liaison RPG Map Display (docs/CONTRAT_LIAISON_MAP_DISPLAY.md) : onglet gm.html du même navigateur, même origine.
+if (typeof BroadcastChannel === 'function') {
+  const MAP_LINK_STATUS = { connected: ['🗺️ Carte connectée', 'info'], disconnected: ['🗺️ Carte déconnectée', 'info'], 'version-mismatch': ['🗺️ Carte : versions de liaison différentes', 'error'] };
+  const mapLink = createMapLink({
+    channel: new BroadcastChannel(MAP_LINK_CHANNEL),
+    getParticipants: () => Store.listParticipants(),
+    maxHpOf: participant => { const profile = Store.getProfile(participant.profileId); return profile?.ficheSnapshot?.woundsMax ?? profile?.maxHp ?? null; },
+    onStatus: status => showToast(...MAP_LINK_STATUS[status])
+  });
+  Bus.on('combat', mapLink.refresh);
+  Bus.on('combat:update', mapLink.refresh);
+  setInterval(mapLink.tick, MAP_LINK_PING_MS);
+}
 
 // Abonnements Bus
 Bus.on('reserve', reserveUI.renderReserve);
