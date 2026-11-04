@@ -139,13 +139,17 @@ export function ficheSnapshot(charId, fiche, metadata = {}) {
   // `fortune` (ex-`chance`) is the fiche's current resource; `destin` is its maximum.
   // Empty/missing/invalid values do not authorize a resource initialization.
   const count = key => own(raw, key) && ((typeof raw[key] === 'string' && /^\d+$/.test(raw[key])) || typeof raw[key] === 'number') && Number.isSafeInteger(Number(raw[key])) && Number(raw[key]) >= 0 ? Number(raw[key]) : null;
-  // `fortune` (nom V5 de la fiche depuis le 04/11/2026), `chance` gardé pour les fiches pas encore renommées.
-  const fortune = count('fortune') ?? count('chance');
+  // Champs V5 de la fiche (04/11/2026) : chaîne de 0 à 4 chiffres, la chaîne vide vaut 0.
+  const digits = key => own(raw, key) && (typeof raw[key] === 'string' ? /^\d{0,4}$/.test(raw[key]) : Number.isSafeInteger(raw[key]) && raw[key] >= 0) ? Number(raw[key] || 0) : null;
+  // `fortune` remplace `chance` ; une fiche pas encore réécrite n'a que `chance`.
+  const fortune = digits('fortune') ?? count('chance');
   if (fortune !== null) snapshot.resources = { fortune };
   // B10b : Destin (et Résilience des anciennes fiches ou des profils JSON) lus à la synchronisation (voir `importFicheDurables`).
   const durables = {};
   if (count('destin') !== null) durables.fate = count('destin');
   if (count('resilience') !== null) durables.resilience = count('resilience');
+  if (digits('peche') !== null) durables.sin = digits('peche');
+  if (digits('corruption') !== null) durables.corruption = digits('corruption');
   if (Object.keys(durables).length) snapshot.durables = durables;
   source.fingerprint = ficheFingerprint(snapshot);
   return snapshot;
@@ -159,12 +163,16 @@ function importFicheDurables(subject, snapshot, previousSnapshot) {
   const wanted = snapshot?.durables || {};
   const previous = previousSnapshot?.durables || {};
   const v5 = { ...(subject.extensions?.v5 || {}) };
-  for (const key of ['fate', 'resilience']) {
+  // Péché (`divine.sin`) et Corruption (`corruptionPoints`) suivent la même règle que le Destin : l'outil les fait évoluer en séance.
+  const paths = { fate: ['fate'], resilience: ['resilience'], corruption: ['corruptionPoints'], sin: ['divine', 'sin'] };
+  for (const [key, path] of Object.entries(paths)) {
     if (!Number.isSafeInteger(wanted[key])) continue;
-    const known = v5[key] ?? (key === 'fate' ? subject.fate : undefined);
+    const known = path.length > 1 ? v5[path[0]]?.[path[1]] : v5[path[0]] ?? (key === 'fate' ? subject.fate : undefined);
     // Sans valeur précédente connue (snapshot antérieur à B10b), la valeur de l'outil n'est pas écrasée ; le snapshot garde celle de la fiche.
     const changed = Number.isSafeInteger(previous[key]) && previous[key] !== wanted[key];
-    if (known === undefined || known === null || known === '' || changed) v5[key] = wanted[key];
+    if (!(known === undefined || known === null || known === '' || changed)) continue;
+    if (path.length > 1) v5[path[0]] = { ...(v5[path[0]] || {}), [path[1]]: wanted[key] };
+    else v5[path[0]] = wanted[key];
   }
   if (!Object.keys(v5).some(key => v5[key] !== subject.extensions?.v5?.[key])) return subject;
   return { ...subject, extensions: { ...(subject.extensions || {}), v5 } };

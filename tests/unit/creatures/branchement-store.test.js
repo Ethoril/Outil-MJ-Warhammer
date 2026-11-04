@@ -360,8 +360,8 @@ async function table() {
 const sync = (store, snapshot) => store.applyFicheSync([{ charId: 'caelel', profileId: 'pj', snapshot, links: {}, convert: {} }]);
 
 test('B10b : l’instantané lit Destin et Résilience de la fiche, ignore les valeurs invalides', () => {
-  assert.deepEqual(fiche({ destin: '3', resilience: '2' }).durables, { fate: 3, resilience: 2 });
-  assert.equal(fiche({ destin: '', resilience: 'x' }).durables, undefined);
+  assert.deepEqual(fiche({ destin: '3', resilience: '2' }).durables, { fate: 3, resilience: 2, corruption: 0 });
+  assert.deepEqual(fiche({ destin: '', resilience: 'x' }).durables, { corruption: 0 }, 'Destin et Résilience invalides ignorés');
   assert.deepEqual(fiche({ destin: '1', chance: '2' }).resources, { fortune: 2 });
 });
 
@@ -550,7 +550,7 @@ test('B11c 2 : la première synchro après B10b n’écrase pas un Destin dépen
   await sync(fiche({ destin: '3', resilience: '2' }));
   assert.equal(get(store, 'hero').extensions.v5.fate, 1, 'Destin dépensé conservé');
   assert.equal(get(store, 'hero').extensions.v5.resilience, 0);
-  assert.deepEqual(store.getFullJSON && JSON.parse(store.getFullJSON()).reserve[0].ficheSnapshot.durables, { fate: 3, resilience: 2 }, 'le snapshot garde la valeur de la fiche');
+  assert.deepEqual(store.getFullJSON && JSON.parse(store.getFullJSON()).reserve[0].ficheSnapshot.durables, { fate: 3, resilience: 2, corruption: 0 }, 'le snapshot garde la valeur de la fiche');
   await sync(fiche({ destin: '3', resilience: '2' }));
   assert.equal(get(store, 'hero').extensions.v5.fate, 1, 'fiche inchangée');
   await sync(fiche({ destin: '4', resilience: '2' }));

@@ -97,3 +97,21 @@ test('la fiche peut nommer sa ressource `fortune` (ex-`chance`)', async () => {
   assert.equal(ficheSnapshot('b', { nom: 'B', chance: 2 }).resources.fortune, 2);
   assert.equal(ficheSnapshot('c', { nom: 'C', fortune: 1, chance: 4 }).resources.fortune, 1);
 });
+
+test('fiche V5 : fortune vide vaut 0, Péché et Corruption importés puis conservés en séance tant que la fiche ne change pas', async () => {
+  const { ficheSnapshot, applyFicheSync } = await import('../../../js/core/fiche-sync.js');
+  assert.equal(ficheSnapshot('a', { nom: 'A', fortune: '', chance: '3' }).resources.fortune, 0);
+  const snap = (peche, corruption) => ficheSnapshot('p', { nom: 'Prêtre', destin: '2', peche, corruption });
+  assert.deepEqual(snap('1', '3').durables, { fate: 2, sin: 1, corruption: 3 });
+  assert.equal(snap('x', '').durables.sin, undefined);
+  const profile = { id: 'pj', name: 'Prêtre', kind: 'PJ', caracs: {}, skills: [], talents: [], equipment: [], diceLines: [], extensions: {} };
+  let draft = applyFicheSync({ reserve: [profile] }, [{ snapshot: snap('1', '3'), profileId: 'pj' }]);
+  assert.equal(draft.reserve[0].extensions.v5.divine.sin, 1);
+  assert.equal(draft.reserve[0].extensions.v5.corruptionPoints, 3);
+  draft.reserve[0].extensions.v5.divine.sin = 2;
+  draft = applyFicheSync(draft, [{ snapshot: snap('1', '3'), profileId: 'pj' }]);
+  assert.equal(draft.reserve[0].extensions.v5.divine.sin, 2, 'fiche inchangée : la valeur de séance est gardée');
+  draft = applyFicheSync(draft, [{ snapshot: snap('0', '4'), profileId: 'pj' }]);
+  assert.equal(draft.reserve[0].extensions.v5.divine.sin, 0);
+  assert.equal(draft.reserve[0].extensions.v5.corruptionPoints, 4);
+});

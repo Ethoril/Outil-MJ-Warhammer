@@ -294,7 +294,7 @@ test('application — uniquement les champs prévus, sur un brouillon', () => {
   assert.equal(pj.initiative, 55);
   assert.equal(pj.hp, 18);
   // B10b : Destin et Résilience de la fiche (1 et 1) sont importés (réponse du MJ du 24/10 à BR-02).
-  assert.deepEqual(pj.extensions, { autre: 1, ficheId: 'caelel', v5: { fate: 1, resilience: 1 } });
+  assert.deepEqual(pj.extensions, { autre: 1, ficheId: 'caelel', v5: { fate: 1, resilience: 1, corruptionPoints: 0 } });
   const [epee, arc, esq, perc, rien] = pj.diceLines;
   assert.equal(epee.base, 69); assert.equal(epee.mod, 5); assert.equal(epee.note, 'Épée');
   assert.equal(epee.damage, 5); assert.equal(epee.damageFormula, 'BF+5');
