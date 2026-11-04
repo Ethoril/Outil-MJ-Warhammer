@@ -183,7 +183,7 @@ h3 { font-size: 19px; font-weight: 600; }
 h4 { font-family: var(--font-ui); font-weight: 700; color: var(--accent); margin: 12px 0 6px 0; }
 .combatant-name { font-family: var(--font-display); font-weight: 600; }
 .num, input[type=number] { font-variant-numeric: tabular-nums lining-nums; }
-.wrap { max-width: 1400px; margin: 0 auto; padding: 0 16px; }
+.wrap { margin: 0 auto; padding: 0 16px; } /* toute la largeur de l'écran (MJ, 04/11/2026) */
 
 .topbar { position: sticky; top: 0; z-index: 10; background: var(--topbar-bg); backdrop-filter: blur(6px); border-bottom: 2px solid var(--border); }
 .topbar .wrap { display: flex; align-items: center; gap: 12px; padding: 10px 16px; }

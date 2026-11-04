@@ -1,8 +1,10 @@
 .workspace-view {
   --workspace-gap: clamp(10px, 1.2vw, 18px);
+  /* Tiroir des circonstances : plus large sur grand écran (1440p), 300 px sur un portable. */
+  --circumstances-width: clamp(300px, 18vw, 420px);
   display: grid;
   gap: var(--workspace-gap);
-  width: min(100%, 1600px);
+  width: 100%; /* toute la largeur de l’écran (MJ, 04/11/2026) */
   margin: 18px auto;
   padding-inline: clamp(16px, 2vw, 24px);
   box-sizing: border-box;
@@ -102,8 +104,10 @@
   gap: var(--workspace-gap);
 }
 .workspace-play-grid.is-side-collapsed { grid-template-columns: minmax(0, 1fr) 44px; }
-/* Plateau des mêlées (maquette B) : toute la largeur, au-dessus de la résolution. */
-.workspace-play-grid > .workspace-track-column { grid-column: 1 / -1; }
+/* Plateau des mêlées (maquette B) : toute la largeur, au-dessus de la résolution ; placement explicite pour le tiroir des circonstances. */
+.workspace-play-grid > .workspace-track-column { grid-column: 1 / -1; grid-row: 1; }
+.workspace-play-grid > .workspace-center { grid-column: 1; grid-row: 2; }
+.workspace-play-grid > .workspace-side { grid-column: 2; grid-row: 2; }
 .workspace-plateau { display: flex; flex-wrap: wrap; gap: var(--workspace-gap); align-items: flex-start; }
 .workspace-plateau > .workspace-track { flex: 999 1 520px; min-width: 0; display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-start; }
 .workspace-plateau > .workspace-bench { flex: 1 1 220px; margin-top: 0; padding: 10px; border: 1px dashed var(--border); border-radius: var(--radius); }
@@ -366,6 +370,7 @@
 @media (max-width: 720px) {
   .workspace-play-grid,
   .workspace-play-grid.is-side-collapsed { grid-template-columns: minmax(0, 1fr); }
+  .workspace-play-grid > .workspace-side { grid-column: 1; grid-row: 3; }
   .workspace-side { position: static; max-height: none; }
   .workspace-side.is-collapsed .workspace-side-header,
   .workspace-side.is-collapsed .workspace-side-tabs { flex-direction: row; }
@@ -552,13 +557,16 @@ dialog.tool-sheet.campaign-time-dialog { position:fixed; inset:auto; top:50%; le
 
 /* Le tiroir remplace temporairement la largeur du panneau latéral sans modifier son état. */
 .workspace-play-grid { position: relative; }
-.workspace-resolution-drawer { position: fixed; top: 72px; right: var(--circumstances-right, 60px); z-index: 4; box-sizing: border-box; width: 300px; max-height: calc(100vh - 88px); overflow: auto; display: grid; gap: 10px; align-content: start; padding: 14px; background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius); }
+.workspace-resolution-drawer { position: fixed; top: var(--circumstances-top, 72px); right: var(--circumstances-right, 60px); z-index: 4; box-sizing: border-box; width: var(--circumstances-width, 300px); max-height: calc(100vh - var(--circumstances-top, 72px) - 16px); overflow: auto; display: grid; gap: 10px; align-content: start; padding: 14px; background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius); }
 .workspace-resolution-drawer[hidden], .workspace-circumstances-backdrop[hidden] { display: none; }
 .workspace-circumstances-heading { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
 .workspace-circumstances-heading h4 { margin: 0; color: var(--accent-text); }
 .workspace-circumstances-backdrop { display: none; }
 @media (min-width: 901px) {
-  .workspace-play-grid:has(.workspace-resolution-drawer:not([hidden])) { grid-template-columns: minmax(0, 1fr) 344px; }
+  .workspace-play-grid:has(.workspace-resolution-drawer:not([hidden])) { grid-template-columns: minmax(0, 1fr) calc(var(--circumstances-width, 300px) + 60px); }
+  /* Tiroir ouvert : le plateau laisse la colonne de droite au tiroir, qui ne recouvre jamais le centre. */
+  .workspace-play-grid:has(.workspace-resolution-drawer:not([hidden])) > .workspace-track-column { grid-column: 1; }
+  .workspace-play-grid:has(.workspace-resolution-drawer:not([hidden])) > .workspace-side { grid-row: 1 / span 2; }
   .workspace-play-grid:has(.workspace-resolution-drawer:not([hidden])) .workspace-side { position: sticky; top: 72px; z-index: 5; width: 44px; justify-self: end; grid-template-rows: auto; }
 }
 @media (max-width: 900px) {

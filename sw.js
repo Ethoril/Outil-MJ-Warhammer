@@ -48,6 +48,7 @@ const ASSETS_TO_CACHE = [
   './js/core/outnumbering.js',
   './js/core/engagements.js',
   './js/ui/workspace/plateau.js',
+  './js/ui/dice-buttons.js',
   './js/core/store/api-engagements.js',
   './js/core/bestiary-templates.js',
   './js/core/creature-abilities.js',

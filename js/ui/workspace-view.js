@@ -28,6 +28,7 @@ import { d100, d10 } from '../core/dice.js';
 import { inferActionType, previewHpLoss, ResolutionError } from '../core/resolution.js';
 import { userMessage, userError, contextMessage, refusalError } from './messages.js';
 import { describeV5ReloadState, initialV5ReloadState, V5_RELOAD_REASON_LABELS } from '../core/v5-reloading.js';
+import { addRollButtons } from './dice-buttons.js';
 import { buildPsychologyBlock, readPsychologyInputs } from './psychology-block.js';
 import { buildFamiliarBlock, readFamiliarInputs, readFamiliarDeathInputs } from './familiar-block.js';
 import { buildHeadsBlock, nextHeadState } from './heads-block.js';
@@ -2613,12 +2614,19 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     if (!view || !drawer || view.innerWidth <= 900) return;
     const rail = play.side.element.getBoundingClientRect();
     if (rail.width > 0) drawer.style.setProperty('--circumstances-right', `${Math.max(0, view.innerWidth - rail.left)}px`);
+    // Sous la barre du haut et la bannière du combat (dont la hauteur varie avec l'écran), jamais dessous.
+    const topbar = pressDocument.querySelector('.topbar')?.getBoundingClientRect();
+    if (topbar?.height) drawer.style.setProperty('--circumstances-top', `${Math.round(topbar.bottom) + 8}px`);
   }
   const onWorkspaceResize = () => {
     if (!play.grid.isConnected) { pressDocument.defaultView?.removeEventListener('resize', onWorkspaceResize); return; }
     alignCircumstancesDrawer();
   };
   pressDocument.defaultView?.addEventListener('resize', onWorkspaceResize);
+  // Bouton « Lancer » de chaque saisie de dé, y compris dans les panneaux qui se redessinent seuls (désengagement, fuite, suites…).
+  addRollButtons(refs.play);
+  const rollButtonsObserver = pressDocument.defaultView?.MutationObserver ? new pressDocument.defaultView.MutationObserver(() => addRollButtons(refs.play)) : null;
+  rollButtonsObserver?.observe(refs.play, { childList: true, subtree: true });
 
   function renderPlay() {
     const context = playContext();
