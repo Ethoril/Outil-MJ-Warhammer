@@ -88,6 +88,15 @@ Les lots 2 à 5 suivent le §13 du contrat.
   2. **La connexion oscille** (« connected » / « disconnected » en boucle dans la console de la vue MJ) pendant que l'onglet de l'outil MJ restait longtemps en arrière-plan. Hypothèse non confirmée : le ralentissement des minuteries des onglets cachés (une par minute après 5 min) espace les `mj.ping` au-delà du délai de 15 s. Pendant la mesure (1 min), les pings arrivaient bien toutes les 5 s. Piste : délai de 75 s, ou ping relancé sur `visibilitychange`.
   3. **Aucun rendu « mort »** sur le pion (ni désaturation ni croix, §7) et aucune animation `fx.*` : attendu pour les lots suivants, à confirmer.
 
+**Suite du 05/11 : lot 1 terminé côté code** (commits locaux, non poussés, dans les deux dépôts).
+- Constat 1 corrigé : un message reçu sans campagne marque l'état comme manqué, et `map.hello` repart au premier battement qui trouve une campagne (`mjLink.js`).
+- Constat 2 confirmé puis corrigé : onglet caché depuis plus de 5 min, ses pings passent à un par minute (mesuré). Chaque côté **répond au battement reçu** s'il n'a pas battu depuis 4 s (`MAP_LINK_ECHO_MS`, `MJ_LINK_ECHO_MS`). Contrat §2.3 amendé, dans les deux copies.
+- Constat 3 : rendu « mort » dans `tokens.js` (désaturation par fusion `saturation`, assombrissement, croix discrète).
+- Fin de C : chiffre de niveau dès 2 sur le badge (`statusBadges.js`). Marqueurs `fatigued` (dessin `lorc/despair`) et `tainted` (`delapouite/fly`), choisis par le MJ le 05/11. Catégories : `control` et `damage`, choisies par Claude. Mis à jour : icônes, `SOURCES.md`, `attributions.html`, constantes, manifeste, CdC Q7. Ces marqueurs étaient jusque-là **refusés par la validation** alors que l'outil MJ les envoyait déjà.
+- F : l'outil MJ émet aussi les PJ persistants hors scène (`offScenePjParticipants`) et la liste `mj.roster`. La carte la reçoit et propose « Lier à un PJ de l'outil MJ » dans la fiche d'un pion PJ ; `bind` publie `token.link` puis réémet `map.hello`. Contrat §3 précisé.
+- Recette navigateur de F : pion Elysia posé, lié par le sélecteur, puis blessé hors combat dans l'outil MJ ; la carte affiche 5/12 et Sonné avec le chiffre 2.
+- Reste ouvert (lot 1) : indicateurs visibles « carte connectée » et « outil MJ connecté », qui ne sont aujourd'hui qu'un toast et un message de console ; portées effectives (Traits) ; PV max d'un PJ persistant à confirmer sur une vraie fiche.
+
 **Essais d'effets du lot 4 (04/11, à la demande du MJ)**, dans `tmp/effets-sang/`. Images générées avec Magnific (Nano Banana 2.1), vues de dessus :
 - `gerbe-1/2` : gerbe de sang ;
 - `flaque-1/2` : flaque ;

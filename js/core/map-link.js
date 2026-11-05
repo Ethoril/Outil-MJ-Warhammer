@@ -4,11 +4,16 @@
  * change en `token.state`, un `ref` non PJ qui disparaît (fin de rencontre, retrait) en `token.remove`. Mort et banc
  * gardent le participant, donc le pion.
  */
-import { MAP_LINK_VERSION, tokenStatesOf, diffTokenStates } from './map-link-state.js';
+import { MAP_LINK_VERSION, tokenStatesOf, diffTokenStates, pjRosterOf } from './map-link-state.js';
 
 export const MAP_LINK_CHANNEL = 'wfrp-map-link';
 export const MAP_LINK_PING_MS = 5000;
 export const MAP_LINK_TIMEOUT_MS = 15000;
+/**
+ * Écho du battement (contrat §2.3) : un onglet caché voit ses minuteries ralenties à une par minute, mais reçoit
+ * toujours les messages. Il répond donc au battement de l'autre côté s'il n'a pas battu depuis ce délai.
+ */
+export const MAP_LINK_ECHO_MS = 4000;
 
 /**
  * Effets éphémères d'un changement d'état (contrat §9), après le `token.state` qui les porte :
@@ -31,11 +36,20 @@ export function effectsOf(prev, next) {
 export function createMapLink({ channel, getParticipants, maxHpOf = () => null, imageUrlOf = () => null, now = () => Date.now(), onStatus = () => {} }) {
   let seq = 0;
   let states = {};
+  let roster = '[]';
   let lastSeen = 0;
+  let lastPing = -Infinity;
   let status = 'disconnected';
   const setStatus = next => { if (next !== status) { status = next; onStatus(next); } };
   const send = (type, payload = {}) => channel.postMessage({ v: MAP_LINK_VERSION, type, seq: ++seq, at: now(), from: 'outil-mj', payload });
   const read = () => tokenStatesOf(getParticipants() || [], { maxHpOf, imageUrlOf });
+  /** Liste des PJ (`mj.roster`, §3), émise quand elle change ou sur demande. */
+  const sendRoster = (force = false) => {
+    const characters = pjRosterOf(states), text = JSON.stringify(characters);
+    if (!force && text === roster) return;
+    roster = text;
+    send('mj.roster', { characters });
+  };
 
   /** Relit la scène et émet les changements (à brancher sur `Bus.on('combat')`). */
   function refresh() {
@@ -48,12 +62,14 @@ export function createMapLink({ channel, getParticipants, maxHpOf = () => null, 
       }
     }
     states = next;
+    sendRoster();
   }
 
   /** Instantané complet, en réponse à `map.hello`. */
   function snapshot() {
     states = read();
     send('mj.snapshot', { tokens: Object.values(states) });
+    sendRoster(true);
   }
 
   function onMessage(message) {
@@ -62,11 +78,17 @@ export function createMapLink({ channel, getParticipants, maxHpOf = () => null, 
     lastSeen = now();
     setStatus('connected');
     if (message.type === 'map.hello') snapshot();
+    if (message.type === 'map.ping' && now() - lastPing > MAP_LINK_ECHO_MS) ping();
+  }
+
+  function ping() {
+    lastPing = now();
+    send('mj.ping');
   }
 
   /** Battement : à appeler toutes les `MAP_LINK_PING_MS`. */
   function tick() {
-    send('mj.ping');
+    ping();
     if (status === 'connected' && now() - lastSeen > MAP_LINK_TIMEOUT_MS) setStatus('disconnected');
   }
 

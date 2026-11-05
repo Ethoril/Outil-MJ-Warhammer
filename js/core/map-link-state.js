@@ -106,3 +106,31 @@ export function diffTokenStates(prev = {}, next = {}) {
   const refs = new Set([...Object.keys(prev), ...Object.keys(next)]);
   return [...refs].filter(ref => JSON.stringify(prev[ref] ?? null) !== JSON.stringify(next[ref] ?? null));
 }
+
+/**
+ * PJ hors scène (contrat §3) : la liaison d'un PJ est durable, son pion reste piloté en exploration. Chaque personnage
+ * persistant absent de la scène devient un pseudo-participant PJ, fait de son profil (caractéristiques, Mouvement,
+ * Traits) et de son état persistant (PV, états, extensions). `profileOf(id)` rend le profil ou `null`.
+ */
+export function offScenePjParticipants(characters = [], sceneParticipants = [], profileOf = () => null) {
+  const inScene = new Set(sceneParticipants.filter(row => row?.kind === 'PJ' && row.persistentCharacterId).map(row => row.persistentCharacterId));
+  return characters.filter(character => character?.id && !inScene.has(character.id)).map(character => {
+    const profile = (character.profileId && profileOf(character.profileId)) || {};
+    return {
+      ...profile,
+      ...character,
+      id: character.id,
+      kind: 'PJ',
+      camp: 'pj',
+      persistentCharacterId: character.id,
+      profileId: character.profileId ?? profile.id ?? null,
+      name: character.name || profile.name || '',
+      caracs: character.caracs ?? profile.caracs,
+      extensions: { ...(profile.extensions || {}), ...(character.extensions || {}) }
+    };
+  });
+}
+
+/** Liste des PJ pour la liaison durable (`mj.roster`, §3) : `[{ ref, label }]`, triée par nom. */
+export const pjRosterOf = (states = {}) => Object.values(states).filter(state => state.ref.startsWith('pj:'))
+  .map(state => ({ ref: state.ref, label: state.label })).sort((a, b) => a.label.localeCompare(b.label, 'fr'));
