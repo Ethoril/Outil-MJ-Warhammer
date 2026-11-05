@@ -391,7 +391,6 @@ async function main() {
 
     // E15: create a manual clock, preview a structured consequence, apply it
     // explicitly, and reopen the real panel to verify the persisted value.
-    await openAppMenu(page);
     await page.locator('#workspace-events').click();
     let eventsOverlay = page.getByRole('dialog');
     const clockForm = eventsOverlay.locator('form').filter({ hasText: 'Jauge manuelle' });
@@ -420,7 +419,6 @@ async function main() {
     await page.keyboard.press('Escape');
     await expect(page.getByRole('dialog')).toHaveCount(0);
     await expect(page.locator('#btn-menu')).toBeFocused();
-    await openAppMenu(page);
     await page.locator('#workspace-events').click();
     eventsOverlay = page.getByRole('dialog');
     await expect(eventsOverlay).toContainText('horloge-recette · 0/3');
@@ -434,7 +432,6 @@ async function main() {
     await eventsOverlay.locator('.scene-event-preview').getByRole('button', { name: 'Appliquer la conséquence' }).click();
     await expect(page.locator('#toast-container')).toContainText('Conséquence appliquée');
     await eventsOverlay.getByRole('button', { name: 'Fermer' }).click();
-    await openAppMenu(page);
     await page.locator('#workspace-events').click();
     eventsOverlay = page.getByRole('dialog');
     await expect(eventsOverlay).toContainText('horloge-recette · 1/3');
@@ -651,7 +648,6 @@ async function main() {
     await expect(page.locator('.workspace-track .workspace-track-item')).toHaveCount(2);
     await expect(page.locator('.workspace-track')).toContainText('Garde importé');
     await expect(page.locator('.workspace-track')).toContainText('Éclaireur importé');
-    await openAppMenu(page);
     await page.locator('#workspace-events').click();
     const restoredEvents = page.getByRole('dialog');
     await expect(restoredEvents).not.toContainText('horloge-recette');

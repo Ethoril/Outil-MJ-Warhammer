@@ -1730,7 +1730,7 @@ const safeOpen = operation => { try { operation(); } catch (error) { showToast(u
 on(qs('#workspace-reminders'), 'click', () => safeOpen(openRemindersView));
 on(qs('#workspace-events'), 'click', () => safeOpen(openEventsView));
 on(qs('#workspace-campaign-time'), 'click', () => {
-  openCampaignTimeDialog({ Store, returnFocus: qs('#btn-menu') }).catch(error => showToast(userMessage(error, 'Le temps de campagne est indisponible.'), 'error'));
+  openCampaignTimeDialog({ Store, returnFocus: qs('#workspace-campaign-time') }).catch(error => showToast(userMessage(error, 'Le temps de campagne est indisponible.'), 'error'));
 });
 on(qs('#workspace-import-text'), 'click', () => safeOpen(openTextImportView));
 on(qs('#workspace-fiche-sync'), 'click', () => { openFicheSyncView().catch(error => showToast(contextMessage('Fiches indisponibles', error, 'vérifiez votre connexion, puis réessayez.'), 'error')); });

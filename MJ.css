@@ -205,6 +205,9 @@ h4 { font-family: var(--font-ui); font-weight: 700; color: var(--accent); margin
 .status-indicator[data-tone="danger"] .status-label { color: var(--danger); }
 
 /* Outils de séance en accès direct et indicateur de liaison (U7, L1a) */
+.topbar-tools { display: inline-flex; gap: 6px; flex: none; }
+.topbar-tool { font-size: 13.5px; padding: 4px 10px; white-space: nowrap; }
+.topbar-tool:disabled { color: var(--muted); cursor: not-allowed; }
 .map-link-indicator { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-ui); font-size: 13px; color: var(--muted); white-space: nowrap; }
 .map-link-indicator[data-state="connected"] { color: var(--text); }
 .map-link-indicator[data-state="connected"] .status-dot { background: var(--hp-ok); }
