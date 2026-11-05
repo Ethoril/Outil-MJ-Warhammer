@@ -103,7 +103,7 @@ Entre deux vagues : fusion des branches dans `dev/recette-plateau-04-11` (outil 
 
 **E1, médaillons** (branche `claude/e1-medaillons-a7988b`) : **sans débord** ; pion mort en **cerclage gris** ; liseré choisi à la main **abandonné** (seule la teinte du camp compte). **Choix du MJ après examen de la maquette** :
 - **Variante B** (personnage sur fond émaillé, une image par profil), sans débord.
-- **PJ** : cerclage bronze teinté, une couleur par personnage : rouge pour Elysia, jade pour Hellaya, saumon pour Wren, bleu pour Caelel, bleu clair pour Bhelgi (teintes exactes à proposer au MJ ; la couleur doit venir de l'outil MJ, donc un champ au contrat §4).
+- **PJ** : cerclage bronze teinté, une couleur par personnage : rouge pour Elysia, jade pour Hellaya, saumon pour Wren, bleu pour Caelel, bleu clair pour Bhelgi. **Teintes exactes validées par le MJ (05/11 soir)** : Elysia `#b3262e`, Hellaya `#2e9e6e`, Wren `#e8846a`, Caelel `#2a4fa8`, Bhelgi `#6fb4e6` (voir `docs/maquettes/e1-medaillons/teintes-pj.html`). La couleur doit venir de l'outil MJ, donc un champ au contrat §4.
 - **Ennemis** : cerclage fer à pointes. **Alliés** : étain à laurier. **Neutres** : bronze.
 - Cerclage **fin** (fenêtre à 69 %), **dans la case**, repli sur le disque simple **sous 36 px**.
 Morceau d'intégration **P2** (Map Display + contrat), après P1.
