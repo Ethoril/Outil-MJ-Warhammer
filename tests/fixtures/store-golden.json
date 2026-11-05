@@ -101,6 +101,7 @@
    "unlinkFamiliar/2",
    "setProfileMount/1",
    "setMounted/2",
+   "setMountGate/1",
    "setFamiliarRange/3",
    "resolveFamiliarDeath/2",
    "applyRegeneration/2",
@@ -141,6 +142,7 @@
    "applyBrokenEscape/1",
    "previewResolution/0",
    "previewV5CombatAction/0",
+   "spendV5RunAction/1",
    "getV5TurnFacts/1",
    "declareV5CombatMovement/0",
    "applyV5CombatAction/1",
@@ -1535,6 +1537,11 @@
     "state": "0c9c5c4659c904c0"
    },
    {
+    "label": "sweep setMountGate",
+    "result": "0f7d52c75e67041d",
+    "state": "0c9c5c4659c904c0"
+   },
+   {
     "label": "sweep setFamiliarRange",
     "result": "3e22de28bea39f4a",
     "state": "0c9c5c4659c904c0"
@@ -1732,6 +1739,11 @@
    {
     "label": "sweep previewV5CombatAction",
     "result": "b10c5f5fe1162238",
+    "state": "438e1db161d112d5"
+   },
+   {
+    "label": "sweep spendV5RunAction",
+    "result": "639fba694f971f80",
     "state": "438e1db161d112d5"
    },
    {
@@ -2573,6 +2585,7 @@
    "unlinkFamiliar/2",
    "setProfileMount/1",
    "setMounted/2",
+   "setMountGate/1",
    "setFamiliarRange/3",
    "resolveFamiliarDeath/2",
    "applyRegeneration/2",
@@ -2613,6 +2626,7 @@
    "applyBrokenEscape/1",
    "previewResolution/0",
    "previewV5CombatAction/0",
+   "spendV5RunAction/1",
    "getV5TurnFacts/1",
    "declareV5CombatMovement/0",
    "applyV5CombatAction/1",
@@ -4007,6 +4021,11 @@
     "state": "eab58cb08aaa5cb3"
    },
    {
+    "label": "sweep setMountGate",
+    "result": "0f7d52c75e67041d",
+    "state": "eab58cb08aaa5cb3"
+   },
+   {
     "label": "sweep setFamiliarRange",
     "result": "3e22de28bea39f4a",
     "state": "eab58cb08aaa5cb3"
@@ -4204,6 +4223,11 @@
    {
     "label": "sweep previewV5CombatAction",
     "result": "f6058f81054f39d6",
+    "state": "c998526c0692af32"
+   },
+   {
+    "label": "sweep spendV5RunAction",
+    "result": "639fba694f971f80",
     "state": "c998526c0692af32"
    },
    {

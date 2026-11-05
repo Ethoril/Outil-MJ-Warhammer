@@ -205,6 +205,8 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
   const issuedBrokenEscapePreviews = new Map();
   const issuedPaviseDeploymentPreviews = new Map();
   let localRevision = 0;
+  // Remonte vérifiée par la carte (liaison RPG Map Display, contrat §8.2) : `({ rider, mount }) => Promise<{ ok, message? }>`.
+  let mountGate = null;
   let lastRemoteRevision = -1;
   let turnSelectionPending = false;
   let lastAppliedTimestamp = 0;
@@ -1480,6 +1482,35 @@ function resolvedCorruptionTest(participant, skillId, input) {
     return api.executeCommand(type, draft => {
       if (draft.localRevision !== expected) throw Object.assign(new Error('État modifié depuis l’aperçu : la partie a changé. Recalculez avant d’appliquer cette action magique.'), { code: 'V5_MAGIC_STALE', userFacing: true });
       return mutator(draft);
+    });
+  }
+
+  // Bascule monté / à pied validée (`planMountToggle`) : écrite d'un coup, annulable.
+  function applyMounted(riderId, rider, people, plan) {
+    const mountName = people.find(row => row.id === plan.mountId)?.name || 'sa monture';
+    const result = api.executeCommand('set-mounted', draft => ({ ...draft,
+      combat: { ...draft.combat, participants: applyMountToggle(draft.combat?.participants || [], riderId, plan) },
+      log: [{ id: uid(), ts: Date.now(), kind: 'effect', actorId: riderId, targetId: plan.mountId,
+        text: plan.mounted ? `${rider.name} monte sur ${mountName}` : `${rider.name} met pied à terre (${mountName})`,
+        detail: { kind: 'mounted-toggle', mounted: plan.mounted, mountId: plan.mountId } }, ...(draft.log || [])].slice(0, 300) }));
+    return typeof result?.then === 'function' ? result.then(done => ({ ...done, ok: true })) : { ...result, ok: true };
+  }
+
+  // Écriture de `setMountedState`, après la porte de remonte éventuelle.
+  function applyMountedState(riderId, { mounted = false, mountId = null, baseRevision = localRevision } = {}) {
+    return api.executeCommand('set-mounted-state-v5', draft => {
+      if (draft.localRevision !== baseRevision) throw Object.assign(new Error('La rencontre a changé. Relisez la monture du cavalier.'), { code: 'MOUNTED_STATE_STALE', userFacing: true });
+      const participants = draft.combat?.participants || [];
+      const rider = participants.find(row => row.id === riderId);
+      if (!rider) throw Object.assign(new Error('Le cavalier doit être un participant de la rencontre.'), { code: 'MOUNTED_RIDER_REQUIRED', userFacing: true });
+      if (mounted !== true) {
+        return { ...draft, combat: { ...draft.combat, participants: participants.map(row => row.id === riderId ? clearMountedRelation(row) : row) } };
+      }
+      if (rider.zone !== 'active') throw Object.assign(new Error('Le cavalier doit être un participant actif.'), { code: 'MOUNTED_RIDER_REQUIRED', userFacing: true });
+      if (typeof mountId !== 'string' || !mountId.trim() || mountId === riderId) throw Object.assign(new Error('Choisissez une monture active distincte du cavalier.'), { code: 'MOUNTED_MOUNT_REQUIRED', userFacing: true });
+      const mount = participants.find(row => row.id === mountId);
+      if (!mount || mount.zone !== 'active') throw Object.assign(new Error('La monture choisie doit être un participant actif.'), { code: 'MOUNTED_MOUNT_REQUIRED', userFacing: true });
+      return { ...draft, combat: { ...draft.combat, participants: participants.map(row => row.id === riderId ? withV5(row, v5 => ({ ...v5, mounted: true, mountId })) : row) } };
     });
   }
 
@@ -3642,14 +3673,19 @@ function resolvedCorruptionTest(participant, skillId, input) {
       const rider = people.find(row => row.id === riderId);
       const plan = planMountToggle(rider, people, { mounted: mounted === true, mountId });
       if (!plan.ok) return plan;
-      const mountName = people.find(row => row.id === plan.mountId)?.name || 'sa monture';
-      const result = api.executeCommand('set-mounted', draft => ({ ...draft,
-        combat: { ...draft.combat, participants: applyMountToggle(draft.combat?.participants || [], riderId, plan) },
-        log: [{ id: uid(), ts: Date.now(), kind: 'effect', actorId: riderId, targetId: plan.mountId,
-          text: plan.mounted ? `${rider.name} monte sur ${mountName}` : `${rider.name} met pied à terre (${mountName})`,
-          detail: { kind: 'mounted-toggle', mounted: plan.mounted, mountId: plan.mountId } }, ...(draft.log || [])].slice(0, 300) }));
-      return typeof result?.then === 'function' ? result.then(done => ({ ...done, ok: true })) : { ...result, ok: true };
+      if (plan.mounted && mountGate) {
+        return Promise.resolve(mountGate({ rider, mount: people.find(row => row.id === plan.mountId) })).then(answer => {
+          if (answer?.ok === false) return { ok: false, reason: answer.reason || 'refused', message: answer.message };
+          // La rencontre a pu changer pendant l'attente : la bascule se revalide sur l'état courant.
+          const fresh = Array.from(combat.participants.values()), freshRider = fresh.find(row => row.id === riderId);
+          const again = planMountToggle(freshRider, fresh, { mounted: true, mountId: plan.mountId });
+          return again.ok ? applyMounted(riderId, freshRider, fresh, again) : again;
+        });
+      }
+      return applyMounted(riderId, rider, people, plan);
     },
+    /** Branche la vérification de remonte par la carte (§8.2) ; `null` la retire. */
+    setMountGate(gate) { mountGate = typeof gate === 'function' ? gate : null; },
     setFamiliarRange(masterId, linkId, inRange) {
       const master = combat.participants.get(masterId), link = familiarLinksOf(master).find(row => row.id === linkId);
       if (!link || link.system !== 'animal') return { ok: false, reason: 'unknown-link', message: 'Lien d’animal introuvable.' };
@@ -4052,6 +4088,28 @@ function resolvedCorruptionTest(participant, skillId, input) {
       const spent=standardV5ActionSpent(snapshot,actorId,clock)||Boolean(combatActionBlock(snapshot,actorId));
       if(spent)needsInput.push('Une Action a déjà été dépensée pendant ce Tour.');
       return {ready:needsInput.length===0,status:needsInput.length?'requires-input':'ready',kind:input.kind,actorId,targetId:input.targetId||null,skillId:input.skillId||null,weaponId:aimWeapon?.id||null,weaponName:aimWeapon?.name||input.weaponName?.trim()||null,rangedWeaponConfirmed:aimWeaponRanged||input.rangedWeaponConfirmed===true,rangedWeaponHeldConfirmed:input.rangedWeaponHeldConfirmed===true,actionId:input.actionId||`combat-action:${actorId}:${clock.turnId}:${input.kind}`,clock,baseRevision:localRevision,needsInput,unresolved:needsInput};
+    },
+    /**
+     * Course signalée par la carte (L6), validée par le MJ : consomme l'Action du Tour du combattant actif. Refus sans
+     * rien écrire hors de son Tour ou si l'Action est déjà dépensée. Annulable.
+     */
+    spendV5RunAction(actorId){
+      const check=draft=>{
+        const clock=v5StoreActionClock(draft),actor=draft.combat?.participants?.find(row=>row.id===actorId);
+        if(!actor||draft.combat?.currentActorId!==actorId||!clock.turnId)return {ok:false,reason:'not-turn',message:'Ce n’est pas le Tour de ce combattant.'};
+        if(standardV5ActionSpent(draft,actorId,clock)||combatActionBlock(draft,actorId))return {ok:false,reason:'spent',message:'Une Action a déjà été dépensée pendant ce Tour.'};
+        return {ok:true,clock,actor};
+      };
+      const first=check(currentEnvelope());
+      if(!first.ok)return first;
+      const saved=api.executeCommand('v5-run-action',draft=>{
+        const again=check(draft);
+        if(!again.ok)throw Object.assign(new Error(again.message),{userFacing:true});
+        recordV5ActionUsage(draft,actorId,`run:${actorId}:${again.clock.turnId}`);
+        draft.log=[{id:uid(),ts:Date.now(),kind:'effect',actorId,text:`${again.actor.name} court (Action utilisée)`,detail:{kind:'map-run'}},...(draft.log||[])].slice(0,300);
+        return draft;
+      });
+      return saved&&typeof saved.then==='function'?saved.then(result=>(result?.ok===false?{ok:false,reason:'error',message:result.error}:{ok:true})):{ok:true};
     },
     // Faits du Tour affichés par la barre d'actions : déplacement déclaré ce Tour, Visée en cours.
     getV5TurnFacts(actorId){
@@ -5264,22 +5322,16 @@ function resolvedCorruptionTest(participant, skillId, input) {
     },
 
     setMountedState(riderId, { mounted = false, mountId = null, baseRevision = localRevision } = {}) {
-      return api.executeCommand('set-mounted-state-v5', draft => {
-        if (draft.localRevision !== baseRevision) throw Object.assign(new Error('La rencontre a changé. Relisez la monture du cavalier.'), { code: 'MOUNTED_STATE_STALE', userFacing: true });
-        const participants = draft.combat?.participants || [];
-        const rider = participants.find(row => row.id === riderId);
-        if (!rider) throw Object.assign(new Error('Le cavalier doit être un participant de la rencontre.'), { code: 'MOUNTED_RIDER_REQUIRED', userFacing: true });
-        if (mounted !== true) {
-          return { ...draft, combat: { ...draft.combat, participants: participants.map(row => row.id === riderId ? clearMountedRelation(row) : row) } };
-        }
-        if (rider.zone !== 'active') throw Object.assign(new Error('Le cavalier doit être un participant actif.'), { code: 'MOUNTED_RIDER_REQUIRED', userFacing: true });
-        if (typeof mountId !== 'string' || !mountId.trim() || mountId === riderId) throw Object.assign(new Error('Choisissez une monture active distincte du cavalier.'), { code: 'MOUNTED_MOUNT_REQUIRED', userFacing: true });
-        const mount = participants.find(row => row.id === mountId);
-        if (!mount || mount.zone !== 'active') throw Object.assign(new Error('La monture choisie doit être un participant actif.'), { code: 'MOUNTED_MOUNT_REQUIRED', userFacing: true });
-        return { ...draft, combat: { ...draft.combat, participants: participants.map(row => row.id === riderId ? withV5(row, v5 => ({ ...v5, mounted: true, mountId })) : row) } };
-      });
+      const rider = combat.participants.get(riderId), mount = combat.participants.get(mountId);
+      const remount = mounted === true && mountGate && rider && mount && !(rider.extensions?.v5?.mounted === true && rider.extensions.v5.mountId === mountId);
+      if (remount) {
+        return Promise.resolve(mountGate({ rider, mount })).then(answer => {
+          if (answer?.ok === false) throw Object.assign(new Error(answer.message || 'La carte refuse la mise en selle.'), { code: 'MOUNTED_MAP_REFUSED', userFacing: true });
+          return applyMountedState(riderId, { mounted, mountId, baseRevision });
+        });
+      }
+      return applyMountedState(riderId, { mounted, mountId, baseRevision });
     },
-
     ...createAftermathApi({ api, currentEnvelope, absentAftermathSubjects, runAftermathCommand, stageAftermathClock, aftermathHealerOf, sequelaAmputation, aftermathAmputation, withHealingFumble }),
     // Accesseurs légers du rendu (U1) : mêmes lectures que JSON.parse(getFullJSON()), sans sérialiser l'enveloppe.
     // Valeurs simples ou copies : le rendu ne peut pas muter l'état du store.
