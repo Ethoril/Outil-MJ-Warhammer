@@ -102,3 +102,5 @@ Entre deux vagues : fusion des branches dans `dev/recette-plateau-04-11` (outil 
 - **Q9** : un modificateur écarté reste **visible, barré**, avec la règle qui l'écarte.
 
 **E1, médaillons** (branche `claude/e1-medaillons-a7988b`) : **sans débord** ; pion mort en **cerclage gris** ; liseré choisi à la main **abandonné** (seule la teinte du camp compte). Variante A/B/C, épaisseur, dépassement de case et seuil de repli : en attente, après examen de la maquette.
+
+**Pions de Map Display, décision du MJ (05/11, en regardant E1)** : la « chasse » du pion disparaît entièrement : la bande neutre, l'arc de PV proportionnel des PJ (`hpArc`, `computeProportionalRing`) et l'anneau Blessé/Critique des PNJ (`stateRing`, `computeStateRing`). On garde le compteur chiffré (11/14) et les badges d'état. Pion **non relié** : portrait + liseré de couleur de Map Display, rien d'autre. Pion **relié** : le médaillon E1 (variante à choisir). Morceau **P1** (Map Display : `tokenSocket.js`, `statusBadges.js`, `layers/tokens.js`, `diag.js`, constantes et tests), sans fichier commun avec L5-MD ; à lancer après la remise à zéro du quota.
