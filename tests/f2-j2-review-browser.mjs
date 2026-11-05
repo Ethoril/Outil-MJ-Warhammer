@@ -37,6 +37,8 @@ try{
  const waitStatus=async pattern=>page.waitForFunction(source=>new RegExp(source).test(document.querySelector('.workspace-aftermath-status')?.textContent||''),pattern.source);
 
  // 1. Un critique appliqué par l'interface : cible choisie dans le groupe « Adversaires », gravité 5 + 70 d'excédent = 75, Cassure nette (fracture mineure du bras gauche).
+ // U3 : « Suites de combat » est fermé pendant le combat ; le MJ l'ouvre, U2 le garde ouvert ensuite.
+ const aftermath=combat.locator('details.workspace-aftermath');assert.equal(await aftermath.evaluate(el=>el.open),false,'Suites de combat fermé pendant le combat');await aftermath.locator(':scope > summary').click();
  await panel.waitFor();
  await combat.locator('[data-workspace-select="hero"]').click();
  await combat.getByRole('group',{name:'Adversaires'}).getByRole('button',{name:'Garde'}).click();

@@ -2238,7 +2238,8 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       center.appendChild(details);
     }
     const aftermath=aftermathPanel.render(context.participants);
-    if(aftermath){const details=node('details','workspace-card workspace-secondary-panel');details.open=true;details.append(node('summary','','Suites de combat'),aftermath);center.appendChild(details);}
+    // U3 (05/11) : fermé pendant le combat, ouvert hors combat ; s'il est ouvert par le MJ, U2 (captureView) le garde ouvert.
+    if(aftermath){const details=node('details','workspace-card workspace-secondary-panel workspace-aftermath');details.open=!context.started;details.append(node('summary','','Suites de combat'),aftermath);center.appendChild(details);}
 
     const carriedPavises=(context.actor?.equipment||[]).filter(item=>item.kind==='shield'&&/pavise|pavois/i.test(item.name||item.id||''));
     if(carriedPavises.length){
