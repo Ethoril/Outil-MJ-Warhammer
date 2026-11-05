@@ -567,7 +567,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       const hp = node('span', 'workspace-track-hp num', hpText(participant));
       hp.prepend(node('span', 'workspace-sr', 'PV '));
       top.appendChild(hp);
-      item.append(top, hpBar(participant),
+      item.append(top, hpBar(participant, pendingHpLoss(participant)),
         node('span', 'workspace-track-meta num', `BE ${toughnessBonus(participant)} · PA ${armorSummary(participant.armor,displayedArmorLocations(participant))}`));
       const states = normalizeEffects(participant.states);
       if (states.length) {
@@ -907,7 +907,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     hp.append(node('span', 'workspace-sheet-hp-label', 'PV'), ' ', hpText(participant));
     if (hit?.damage || hit?.critical?.application?.extraWounds) hp.appendChild(node('span', 'workspace-sheet-hp-after', ` → ${minusSigned(Math.max(0, (Number(participant.hp) || 0) - previewHpLoss(hit)))}`));
     heading.append(identity, hp);
-    sheet.append(heading, hpBar(participant));
+    sheet.append(heading, hpBar(participant, hit ? previewHpLoss(hit) : 0));
     const ownReminders = !isTarget ? participantReminderBlock(participant) : null;
     if (ownReminders) sheet.appendChild(ownReminders);
 
@@ -2686,6 +2686,12 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
 
   // The play layout is built once: the side panel keeps its DOM (search,
   // filters, focus) while the track and the centre are re-rendered.
+  // U5 : PV que l'aperçu en cours retirerait à ce participant (segment de la barre de PV).
+  function pendingHpLoss(participant) {
+    const preview = state.resolution.preview;
+    return preview && !preview.choiceRequired && preview.targetId === participant.id ? previewHpLoss(preview) : 0;
+  }
+  let playReady = false;
   const play = (() => {
     const grid = node('div', 'workspace-play-grid');
     const track = node('aside', 'workspace-track-column');
@@ -2695,31 +2701,61 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       tabs: [
         { id: 'rules', label: 'Règles', render: content => renderRenderer(callbacks.renderRules, content, 'Les règles et mots-clés restent consultables sans modifier la séance.') },
         { id: 'profiles', label: 'Profils', render: renderProfilesTab },
+        { id: 'circumstances', label: 'Circonstances', render: content => { if (!content.firstChild) content.appendChild(circumstancesPlaceholder()); } },
         { id: 'log', label: 'Journal', render: content => renderRenderer(callbacks.renderLog, content, 'Aucun événement récent.') }
       ],
-      onToggle: collapsed => grid.classList.toggle('is-side-collapsed', collapsed),
-      onTemporaryReveal: () => grid.querySelector('[data-circumstances-toggle]')?.click()
+      onToggle: collapsed => {
+        grid.classList.toggle('is-side-collapsed', collapsed);
+        onSideChange();
+      }
     });
     grid.append(track, center, side.element);
     refs.play.appendChild(grid);
     return { grid, track, center, side };
   })();
 
-  function alignCircumstancesDrawer() {
-    const view = pressDocument.defaultView;
-    const drawer = play.center.querySelector('.workspace-resolution-drawer');
-    if (!view || !drawer || view.innerWidth <= 900) return;
-    const rail = play.side.element.getBoundingClientRect();
-    if (rail.width > 0) drawer.style.setProperty('--circumstances-right', `${Math.max(0, view.innerWidth - rail.left)}px`);
-    // Sous la barre du haut et la bannière du combat (dont la hauteur varie avec l'écran), jamais dessous.
-    const topbar = pressDocument.querySelector('.topbar')?.getBoundingClientRect();
-    if (topbar?.height) drawer.style.setProperty('--circumstances-top', `${Math.round(topbar.bottom) + 8}px`);
+  // U6 (05/11, D5) : Circonstances est un onglet du panneau latéral. Le bloc construit par la résolution
+  // (aside .workspace-resolution-drawer) est déplacé à chaque rendu dans l'onglet ; il est « ouvert » quand
+  // l'onglet est affiché et le panneau déplié. Rien ne recouvre plus le plateau.
+  const CIRC_TAB = 'circumstances';
+  let previousSideTab = 'rules';
+  const circumstancesAutoOpened = new WeakSet();
+  playReady = true;
+  function circumstancesPlaceholder() { return node('p', 'workspace-muted', 'Aucune résolution en cours : les circonstances apparaissent avec l’action à résoudre.'); }
+  const circumstancesPanel = () => play.side.element.querySelector(`#workspace-side-panel-${CIRC_TAB}`);
+  function syncCircumstancesOpen() {
+    const drawer = circumstancesPanel()?.querySelector('.workspace-resolution-drawer');
+    if (!drawer) return;
+    const { tab, collapsed } = play.side.getState();
+    const open = tab === CIRC_TAB && !play.side.element.classList.contains('is-collapsed') && !collapsed;
+    drawer.hidden = !open;
+    play.center.querySelector('[data-circumstances-toggle]')?.setAttribute('aria-expanded', String(open));
   }
-  const onWorkspaceResize = () => {
-    if (!play.grid.isConnected) { pressDocument.defaultView?.removeEventListener('resize', onWorkspaceResize); return; }
-    alignCircumstancesDrawer();
-  };
-  pressDocument.defaultView?.addEventListener('resize', onWorkspaceResize);
+  function onSideChange() {
+    if (!playReady) return;
+    const { tab } = play.side.getState();
+    if (tab !== CIRC_TAB) previousSideTab = tab;
+    const { collapsed } = play.side.getState();
+    play.grid.classList.toggle('is-side-circumstances', tab === CIRC_TAB && !collapsed);
+    syncCircumstancesOpen();
+  }
+  function mountCircumstances() {
+    const panel = circumstancesPanel();
+    if (!panel) return;
+    const drawer = play.center.querySelector('.workspace-resolution-drawer');
+    if (!drawer) { panel.replaceChildren(circumstancesPlaceholder()); return; }
+    // Clé de préservation (U2) : le participant dont relève la résolution, comme avant le déplacement.
+    const owner = drawer.closest('[data-details-owner]')?.dataset.detailsOwner;
+    if (owner) drawer.dataset.detailsOwner = owner;
+    panel.replaceChildren(drawer);
+    // Ouverture par défaut (la résolution ouvre le bloc tant que le MJ n'a pas choisi) : l'onglet est affiché une seule
+    // fois par brouillon, puis le choix d'onglet du MJ prime d'un rendu à l'autre.
+    if (!drawer.hidden && !circumstancesAutoOpened.has(state.resolution)) {
+      circumstancesAutoOpened.add(state.resolution);
+      play.side.open(CIRC_TAB, { remember: false });
+    }
+    syncCircumstancesOpen();
+  }
   // Bouton « Lancer » de chaque saisie de dé, y compris dans les panneaux qui se redessinent seuls (désengagement, fuite, suites…).
   addRollButtons(refs.play);
   const rollButtonsObserver = pressDocument.defaultView?.MutationObserver ? new pressDocument.defaultView.MutationObserver(() => addRollButtons(refs.play)) : null;
@@ -2729,9 +2765,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     const context = playContext();
     renderTrack(context);
     renderCenter(context);
-    const drawer = play.center.querySelector('.workspace-resolution-drawer');
-    play.side.setTemporaryCollapsed(Boolean(drawer && !drawer.hidden));
-    alignCircumstancesDrawer();
+    mountCircumstances();
   }
 
   function renderLibrary() {
@@ -2941,9 +2975,13 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     (prayerRoll || panel.querySelector('summary, input, select, button'))?.focus({ preventScroll: true });
   });
 
+  // Geste du MJ (bouton Circonstances ou Fermer) : on affiche l'onglet, ou on revient à l'onglet précédent.
+  // L'ouverture par défaut (remember = false) ne change jamais l'onglet choisi.
   refs.root.addEventListener('workspace-circumstances-toggle', event => {
-    play.side.setTemporaryCollapsed(Boolean(event.detail?.open));
-    alignCircumstancesDrawer();
+    if (!event.detail?.remember) return;
+    if (event.detail.open) play.side.open(CIRC_TAB, { remember: false });
+    else if (play.side.getState().tab === CIRC_TAB && !play.side.restore()) play.side.open(previousSideTab);
+    syncCircumstancesOpen();
   });
 
   pressDocument.addEventListener('keydown', event => {
