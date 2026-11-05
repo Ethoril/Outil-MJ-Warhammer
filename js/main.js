@@ -1830,6 +1830,8 @@ if (typeof BroadcastChannel === 'function') {
   Bus.on('reserve', mapLink.refresh);
   Bus.on('combat', mapLink.refresh);
   Bus.on('combat:update', mapLink.refresh);
+  // Remonte (contrat §8.2) : la carte vérifie l'adjacence avant la bascule ; refus → message du cartouche ou du formulaire.
+  Store.setMountGate(mapLink.requestMount);
   setInterval(mapLink.tick, MAP_LINK_PING_MS);
 }
 

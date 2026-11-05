@@ -1,6 +1,6 @@
 /**
  * Liaison RPG Map Display (contrat v1, docs/CONTRAT_LIAISON_MAP_DISPLAY.md §4-§5). Module pur : construit l'état
- * `token.state` d'un participant et le diff entre deux instantanés. Pas encore de montures (`rider`, lot 3).
+ * `token.state` d'un participant et le diff entre deux instantanés. Montures (§8) : un cavalier monté porte `rider`.
  */
 import { creatureSizeOf } from './creature-size.js';
 import { carriesSense } from './creature-senses.js';
@@ -120,15 +120,38 @@ export function tokenStateOf(participant, participants = [], { maxHp = null, ima
     hp: { current: Math.max(0, Math.min(current, max)), max },
     health: healthOf(current, max),
     ...markersOf(participant),
+    mounted: false,
+    rider: null,
     dead: v5Of(participant).dead === true,
     deathCause: v5Of(participant).dead === true ? (v5Of(participant).deathCause ?? null) : null
   };
 }
 
+/** RiderOverlay (§8.1) : l'état de la monture porté par le pion du cavalier. */
+export const riderOverlayOf = mountState => ({
+  ref: mountState.ref, label: mountState.label, imageUrl: mountState.imageUrl, hp: mountState.hp, health: mountState.health,
+  markers: mountState.markers, markerLevels: mountState.markerLevels
+});
+
+/**
+ * Pion monté (§8.1) : le cavalier garde son `ref`, prend la taille et les portées de sa monture et porte `rider`.
+ * La carte fusionne les pions ; l'état de la monture part toujours, pour son pion conservé hors plateau.
+ */
+export function mountedTokenState(riderState, mountState) {
+  return { ...riderState, sizeCells: mountState.sizeCells, speedCells: mountState.speedCells, runCells: mountState.runCells,
+    mounted: true, rider: riderOverlayOf(mountState) };
+}
+
 /** Instantané `{ ref: state }` des participants d'une scène. */
-export const tokenStatesOf = (participants = [], options = {}) => Object.fromEntries(participants
-  .map(participant => tokenStateOf(participant, participants, { maxHp: options.maxHpOf?.(participant) ?? null, imageUrl: options.imageUrlOf?.(participant) ?? null }))
-  .map(state => [state.ref, state]));
+export function tokenStatesOf(participants = [], options = {}) {
+  const stateOf = participant => tokenStateOf(participant, participants, { maxHp: options.maxHpOf?.(participant) ?? null, imageUrl: options.imageUrlOf?.(participant) ?? null });
+  const byId = new Map(participants.map(participant => [participant.id, participant]));
+  return Object.fromEntries(participants.map(participant => {
+    const state = stateOf(participant);
+    const mount = v5Of(participant).mounted === true ? byId.get(v5Of(participant).mountId) : null;
+    return [state.ref, mount && mount !== participant ? mountedTokenState(state, stateOf(mount)) : state];
+  }));
+}
 
 /** `ref` dont l'état a changé, apparu ou disparu entre deux instantanés. */
 export function diffTokenStates(prev = {}, next = {}) {

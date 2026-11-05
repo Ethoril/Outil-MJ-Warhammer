@@ -101,6 +101,7 @@
    "unlinkFamiliar/2",
    "setProfileMount/1",
    "setMounted/2",
+   "setMountGate/1",
    "setFamiliarRange/3",
    "resolveFamiliarDeath/2",
    "applyRegeneration/2",
@@ -1535,6 +1536,11 @@
     "state": "0c9c5c4659c904c0"
    },
    {
+    "label": "sweep setMountGate",
+    "result": "0f7d52c75e67041d",
+    "state": "0c9c5c4659c904c0"
+   },
+   {
     "label": "sweep setFamiliarRange",
     "result": "3e22de28bea39f4a",
     "state": "0c9c5c4659c904c0"
@@ -2573,6 +2579,7 @@
    "unlinkFamiliar/2",
    "setProfileMount/1",
    "setMounted/2",
+   "setMountGate/1",
    "setFamiliarRange/3",
    "resolveFamiliarDeath/2",
    "applyRegeneration/2",
@@ -4004,6 +4011,11 @@
    {
     "label": "sweep setMounted",
     "result": "768a2f0f2cc415dc",
+    "state": "eab58cb08aaa5cb3"
+   },
+   {
+    "label": "sweep setMountGate",
+    "result": "0f7d52c75e67041d",
     "state": "eab58cb08aaa5cb3"
    },
    {
