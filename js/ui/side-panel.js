@@ -106,12 +106,26 @@ export function initSidePanel({ tabs, onToggle = () => {}, onTemporaryReveal = (
     });
   }
 
-  function open(id) {
+  // `remember: false` : affichage passager (ex. bouton Circonstances) ; onglet et repli choisis par l'utilisateur
+  // sont gardés pour `restore()` et rien n'est écrit dans localStorage.
+  let before = null;
+  function open(id, { remember = true } = {}) {
     if (!buttons.has(id)) throw new RangeError(`Panneau inconnu : ${id}`);
     if (temporarilyCollapsed) onTemporaryReveal();
+    if (remember) before = null;
+    else if (!before) before = { tab: state.tab, collapsed: state.collapsed };
     state.tab = id;
     state.collapsed = false;
-    sync();
+    sync({ remember });
+  }
+
+  /** Revient à l'onglet et au repli d'avant un affichage passager ; faux s'il n'y en avait pas. */
+  function restore() {
+    if (!before) return false;
+    Object.assign(state, before);
+    before = null;
+    sync({ remember: false });
+    return true;
   }
 
   function collapse() {
@@ -151,6 +165,7 @@ export function initSidePanel({ tabs, onToggle = () => {}, onTemporaryReveal = (
   return Object.freeze({
     element,
     open,
+    restore,
     collapse,
     refresh,
     setTemporaryCollapsed(value) {

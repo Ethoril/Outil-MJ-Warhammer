@@ -108,9 +108,25 @@ try {
   assert.equal(await drawer.isHidden(), true);
   assert.equal(await page.locator('.workspace-side-toggle').getAttribute('aria-expanded'), 'true', 'le panneau garde sa largeur');
   await page.locator('.workspace-side-toggle').click();
+  const savedSide = await page.evaluate(() => localStorage.getItem('wfrp.sidePanel'));
   await toggle.click();
   assert.equal(await page.locator('.workspace-side-toggle').getAttribute('aria-expanded'), 'true', 'U6 : ouvrir Circonstances déplie un panneau replié');
   assert.equal(await drawer.isVisible(), true, 'le bloc est visible dans l’onglet');
+  assert.equal(await page.evaluate(() => localStorage.getItem('wfrp.sidePanel')), savedSide, 'l’ouverture passagère ne modifie pas la préférence latérale');
+  await drawer.getByRole('button', { name: 'Fermer', exact: true }).click();
+  assert.equal(await drawer.isHidden(), true, 'Fermer referme le bloc');
+  assert.equal(await toggle.evaluate(el => document.activeElement === el), true, 'après Fermer, le focus revient au bouton Circonstances');
+  assert.equal(await page.locator('.workspace-side-toggle').getAttribute('aria-expanded'), 'false', 'un panneau déjà replié reste replié après fermeture');
+  assert.equal(await page.evaluate(() => localStorage.getItem('wfrp.sidePanel')), savedSide, 'la fermeture ne modifie pas la préférence latérale');
+  await toggle.click();
+  await page.keyboard.press('Escape');
+  assert.equal(await drawer.isHidden(), true, 'Échap referme le bloc');
+  assert.equal(await toggle.evaluate(el => document.activeElement === el), true, 'après Échap, le focus revient au bouton Circonstances');
+  assert.equal(await page.locator('.workspace-side-toggle').getAttribute('aria-expanded'), 'false', 'replié après Échap');
+  assert.equal(await page.evaluate(() => localStorage.getItem('wfrp.sidePanel')), savedSide, 'Échap ne modifie pas la préférence latérale');
+  await page.locator('.workspace-side-toggle').click();
+  await toggle.click();
+  assert.equal(await drawer.isVisible(), true, 'bloc visible avec un panneau déplié');
   await toggle.click();
   assert.equal(await drawer.isHidden(), true, 'le bouton referme le bloc');
   await toggle.click();
@@ -202,6 +218,12 @@ try {
   await toggle.click();
   await page.setViewportSize({ width: 390, height: 844 });
   assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, 'aucun débordement horizontal sur téléphone');
+  await toggle.scrollIntoViewIfNeeded();
+  if (await drawer.isHidden()) await toggle.click();
+  await drawer.scrollIntoViewIfNeeded();
+  const phoneBox = await drawer.boundingBox();
+  assert.ok(phoneBox && phoneBox.width > 0 && phoneBox.x >= 0 && phoneBox.x + phoneBox.width <= 390 + 1, `390 px : le bloc Circonstances est atteignable et tient dans la largeur (${JSON.stringify(phoneBox)})`);
+  assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, '390 px : aucun défilement horizontal avec le bloc ouvert');
   assert.notEqual(await drawer.evaluate(el => getComputedStyle(el).position), 'fixed');
   mkdirSync(resolve(root, 'captures'), { recursive: true });
   for (const width of [1440, 900]) {

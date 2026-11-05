@@ -2752,7 +2752,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     // fois par brouillon, puis le choix d'onglet du MJ prime d'un rendu à l'autre.
     if (!drawer.hidden && !circumstancesAutoOpened.has(state.resolution)) {
       circumstancesAutoOpened.add(state.resolution);
-      play.side.open(CIRC_TAB);
+      play.side.open(CIRC_TAB, { remember: false });
     }
     syncCircumstancesOpen();
   }
@@ -2979,8 +2979,8 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
   // L'ouverture par défaut (remember = false) ne change jamais l'onglet choisi.
   refs.root.addEventListener('workspace-circumstances-toggle', event => {
     if (!event.detail?.remember) return;
-    if (event.detail.open) play.side.open(CIRC_TAB);
-    else if (play.side.getState().tab === CIRC_TAB) play.side.open(previousSideTab);
+    if (event.detail.open) play.side.open(CIRC_TAB, { remember: false });
+    else if (play.side.getState().tab === CIRC_TAB && !play.side.restore()) play.side.open(previousSideTab);
     syncCircumstancesOpen();
   });
 
