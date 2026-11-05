@@ -1,0 +1,50 @@
+// U2 (05/11) : un rendu (ici, 1 PV retiré depuis la fiche) ne referme pas les sections de fiche ouvertes par le MJ
+// et ne fait pas sauter le défilement de la page. Application complète, vrai Store, harnais de f2-i-complete.
+import assert from 'node:assert/strict';
+import { createServer } from 'node:http';
+import { readFileSync, statSync } from 'node:fs';
+import { resolve, sep, extname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { chromium } from 'playwright';
+
+const root=fileURLToPath(new URL('../',import.meta.url)),base='/Outil-MJ-Warhammer/';
+const types={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.json':'application/json','.svg':'image/svg+xml','.webmanifest':'application/manifest+json'};
+const server=createServer((req,res)=>{try{const pathname=decodeURIComponent(new URL(req.url,'http://localhost').pathname);assert.ok(pathname.startsWith(base));const path=resolve(root,pathname.slice(base.length)||'index.html');assert.ok(path.startsWith(resolve(root)+sep)&&statSync(path).isFile());res.writeHead(200,{'Content-Type':types[extname(path)]||'application/octet-stream','Cache-Control':'no-store'});res.end(readFileSync(path));}catch{res.writeHead(404);res.end('Not found');}});
+const skills=Array.from({length:12},(_,i)=>({id:`skill-${i}`,name:`Compétence ${i}`,status:'resolved',total:30+i,carac:'Ag'}));
+const person=(id,name,kind='PJ')=>({id,name,kind,camp:kind==='PJ'?'pj':'ennemi',zone:'active',initiative:id==='hero'?60:30,hp:20,maxHp:20,caracs:{CC:60,CT:50,F:40,E:30,BE:3,I:40,Ag:35,Dex:35,Int:30,FM:35,Soc:25},skills,talents:[{id:'t1',name:'Ambidextre'}],equipment:[{id:'sword',name:'Épée',kind:'weapon'}],traits:[],states:[],armor:{head:0,body:0,arms:0,legs:0},extensions:{v5:{}},actions:[{id:'sword',note:'Coup d’épée',type:'attack',attr:'CC',base:60,damage:4,qualities:[]}]});
+const fixture={schemaVersion:3,reserve:[],diceLines:[],log:[],extensions:{v5:{combatId:'u2-browser',turnIndex:1}},combat:{round:1,currentActorId:'hero',order:['hero','foe'],participants:[person('hero','Héros'),person('foe','Garde','PNJ')]}};
+
+await new Promise(done=>server.listen(0,'127.0.0.1',done));
+const browser=await chromium.launch({headless:true,executablePath:process.env.PLAYWRIGHT_EXECUTABLE_PATH||(process.platform==='win32'?'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe':undefined)});
+try{
+ const context=await browser.newContext({serviceWorkers:'block',viewport:{width:1280,height:640}}),page=await context.newPage(),errors=[];page.setDefaultTimeout(12000);page.on('pageerror',e=>errors.push(e.message));
+ await page.goto(`http://127.0.0.1:${server.address().port}${base}`,{waitUntil:'domcontentloaded'});await page.waitForFunction(()=>document.querySelector('#app-content')?.style.display==='block',{timeout:20000});await page.locator('#tab-combat').click();
+ await page.evaluate(async s=>{const{Store}=await import('/Outil-MJ-Warhammer/js/main.js');await Store.ready;await Store.loadFromJSON(s);},JSON.stringify(fixture));
+ const hp=()=>page.evaluate(async()=>{const{Store}=await import('/Outil-MJ-Warhammer/js/main.js');return JSON.parse(Store.getFullJSON()).combat.participants.find(p=>p.id==='hero').hp;});
+ const combat=page.locator('#workspace-root');await combat.locator('[data-workspace-select="hero"]').click();
+ const sheet=combat.locator('[data-sheet-role="actor"][data-actor-id="hero"]');
+ const fiche=sheet.locator('details.fiche-consultation');
+ await fiche.locator(':scope > summary').click();
+ const section=fiche.locator(':scope > details').filter({has:page.locator(':scope > summary',{hasText:/^Compétences/})}).first();
+ await section.locator(':scope > summary').click();
+ const sectionTitle=(await section.locator(':scope > summary').innerText()).replace(/\s*\(\d+\)\s*$/,'');
+ assert.equal(await section.evaluate(el=>el.open),true,'section de fiche ouverte avant le rendu');
+ // Page défilée tout en bas, dans la section ouverte : si elle se refermait, la page raccourcirait et le défilement
+ // serait ramené en arrière. Le clic passe par le gestionnaire du bouton, sans défilement de Playwright.
+ const minus=sheet.locator('[data-focus-key="hp-minus-hero"]');
+ await page.evaluate(()=>{const s=document.scrollingElement;s.scrollTop=s.scrollHeight;});
+ const before=await page.evaluate(()=>document.scrollingElement.scrollTop);
+ assert.ok(before>0,`la page doit être défilée pour mesurer un saut (scrollTop=${before})`);
+ await minus.evaluate(el=>el.click());
+ await page.waitForFunction(async()=>{const{Store}=await import('/Outil-MJ-Warhammer/js/main.js');return JSON.parse(Store.getFullJSON()).combat.participants.find(p=>p.id==='hero').hp===19;});
+ await page.waitForTimeout(150);
+ assert.equal(await hp(),19,'1 PV retiré');
+ const after=await page.evaluate(()=>document.scrollingElement.scrollTop);
+ assert.ok(Math.abs(after-before)<=1,`le défilement ne saute pas (avant ${before}, après ${after})`);
+ const reopened=combat.locator('[data-sheet-role="actor"][data-actor-id="hero"] details.fiche-consultation');
+ assert.equal(await reopened.evaluate(el=>el.open),true,'la fiche reste ouverte après le rendu');
+ const sectionAfter=reopened.locator(':scope > details').filter({has:page.locator(':scope > summary',{hasText:sectionTitle})}).first();
+ assert.equal(await sectionAfter.evaluate(el=>el.open),true,`la section « ${sectionTitle} » reste ouverte après le rendu`);
+ assert.deepEqual(errors,[],'aucune erreur JavaScript');
+ console.log(`U2 navigateur : fiche et section « ${sectionTitle} » restées ouvertes après −1 PV, défilement ${before} → ${after}.`);
+}finally{await browser.close();await new Promise(done=>server.close(done));}

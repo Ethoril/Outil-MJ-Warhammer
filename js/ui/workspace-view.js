@@ -24,7 +24,6 @@ import { withoutOutnumberContext as withoutOutnumberKeys, outnumberSide } from '
 const TARGET_ENGAGEMENT_KEYS = ['targetEngaged', 'engagedWithShooter', 'engagedTargetIds', 'engagedTargetRoll', 'engagedDefensesById', 'shooterEngagedElsewhere', 'engagementForced'];
 const withoutOutnumberContext = context => { const rest = withoutOutnumberKeys(context); for (const key of TARGET_ENGAGEMENT_KEYS) delete rest[key]; return rest; };
 import { equipmentAttackContext, weaponSkillGroupInfo } from '../core/equipment.js';
-import { v5StoreActionClock } from '../core/v5-store-action.js';
 import { d100, d10 } from '../core/dice.js';
 import { inferActionType, previewHpLoss, ResolutionError } from '../core/resolution.js';
 import { userMessage, userError, contextMessage, refusalError } from './messages.js';
@@ -400,7 +399,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       onDuplicate: callbacks.duplicateProfile,
       onRemove: callbacks.removeProfile
     });
-      card.appendChild(renderFicheDetails(profile));
+      card.dataset.detailsOwner=`profile:${profile.id}`;card.appendChild(renderFicheDetails(profile));
     list.appendChild(card);
     });
     refs.prepare.appendChild(list);
@@ -895,6 +894,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       return sheet;
     }
     sheet.dataset.actorId = participant.id;
+    sheet.dataset.detailsOwner = `participant:${participant.id}`;
     const preview = state.resolution.preview;
     const hit = isTarget && preview && !preview.choiceRequired && preview.targetId === participant.id ? preview : null;
 
@@ -1209,7 +1209,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     if(draft.fortuneAdvantageDeclarationId)input.fortuneAdvantageDeclarationId=draft.fortuneAdvantageDeclarationId;
     const combatRound=readCombat(Store).round;
     let currentTurnIndex=1;
-    try{currentTurnIndex=Number(JSON.parse(Store.getFullJSON()).extensions?.v5?.turnIndex)||1;}catch{}
+    try{currentTurnIndex=Number(Store.getTurnIndex())||1;}catch{}
     if(Number.isSafeInteger(combatRound)&&combatRound>0){
       input.round=combatRound;
       input.v5={...input.v5,context:{...(input.v5.context||{}),currentRound:combatRound,currentTurnIndex}};
@@ -2097,7 +2097,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     const center = play.center;
     center.replaceChildren();
     let suddenDeathEnabled = false;
-    try { suddenDeathEnabled = JSON.parse(Store.getFullJSON()).extensions?.v5?.suddenDeathEnabled === true; } catch {}
+    try { suddenDeathEnabled = Store.isSuddenDeathEnabled() === true; } catch {}
     const suddenDeath = node('section', 'workspace-card workspace-sudden-death');
     suddenDeath.setAttribute('aria-label', 'Réglage de table : mort subite des figurants');
     suddenDeath.appendChild(rubric('Mort subite des figurants'));
@@ -2185,12 +2185,10 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     const draft = state.resolution;
     let previousWeaponAttacks = [], resolutionClock = {};
     try {
-      const envelope = JSON.parse(Store.getFullJSON());
-      const clockRound=envelope.combat?.round,clockTurnIndex=envelope.activeScene?.extensions?.v5?.turnIndex??envelope.extensions?.v5?.turnIndex;
+      const clockRound=Store.getActionClock(context.actor?.id).round,clockTurnIndex=Store.getTurnIndex({scene:true});
       if(Number.isSafeInteger(clockRound)&&clockRound>0)resolutionClock.currentRound=clockRound;
       if(Number.isSafeInteger(clockTurnIndex)&&clockTurnIndex>0)resolutionClock.currentTurnIndex=clockTurnIndex;
-      const {encounterId,turnId}=v5StoreActionClock({...envelope,combat:{...(envelope.combat||{}),currentActorId:context.actor?.id}});
-      previousWeaponAttacks = (envelope.extensions?.v5?.standardTurnActions || []).filter(row => row.actorId === context.actor?.id && row.encounterId === encounterId && row.turnId === turnId && row.kind === 'action' && row.targetId)
+      previousWeaponAttacks = Store.listTurnActions(context.actor?.id).filter(row => row.kind === 'action' && row.targetId)
         .map(row => ({ ...row, weaponName: context.actor?.equipment?.find(item => item.id === row.weaponId)?.name || 'Action' }));
     } catch { previousWeaponAttacks = []; }
     center.appendChild(renderResolutionPanel({
@@ -2238,7 +2236,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         const deployment=context.actor?.extensions?.v5?.paviseDeploymentByItemId?.[item.id]||null,wrap=node('div','workspace-v5-context');
         let actionAvailable=false,actionBlock='';
         try{
-          const envelope=JSON.parse(Store.getFullJSON()),clock=v5StoreActionClock(envelope),isCurrent=envelope.combat?.currentActorId===context.actor.id,spent=(envelope.extensions?.v5?.standardTurnActions||[]).some(row=>row.actorId===context.actor.id&&row.encounterId===clock.encounterId&&row.turnId===clock.turnId),sameTurnSecond=deployment?.actionsPaid===1&&deployment.lastTurnId===clock.turnId;
+          const clock=Store.getActionClock(),isCurrent=readCombat(Store).currentActorId===context.actor.id,spent=Store.listTurnActions(context.actor.id).length>0,sameTurnSecond=deployment?.actionsPaid===1&&deployment.lastTurnId===clock.turnId;
           actionAvailable=Boolean(isCurrent&&clock.turnId&&!spent&&!sameTurnSecond);
           if(!isCurrent)actionBlock='Le porteur doit être l’acteur courant.';else if(!clock.turnId)actionBlock='Tour non suivi : l’Action ne peut pas être dépensée.';else if(spent)actionBlock='Une Action a déjà été dépensée pendant ce Tour.';else if(sameTurnSecond)actionBlock='La seconde Action exige un Tour ultérieur.';
         }catch{actionBlock='État de combat indisponible.';}
@@ -2724,7 +2722,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
           onDuplicate: callbacks.duplicateProfile,
           onRemove: callbacks.removeProfile
         });
-          card.appendChild(renderFicheDetails(profile));
+          card.dataset.detailsOwner=`profile:${profile.id}`;card.appendChild(renderFicheDetails(profile));
         list.appendChild(card);
         });
         content.appendChild(list);
@@ -2748,13 +2746,50 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
           canEdit: Boolean(callbacks.editProfile),
           onEdit: callbacks.editProfile
         });
-          card.appendChild(renderFicheDetails(profile));
+          card.dataset.detailsOwner=`profile:${profile.id}`;card.appendChild(renderFicheDetails(profile));
         list.appendChild(card);
         });
         content.appendChild(list);
       }
     }
     refs.library.appendChild(content);
+  }
+
+  // U2 (05/11) : chaque rendu reconstruit la colonne centrale et les fiches. On note avant le rendu les <details>
+  // ouverts et les zones défilées, sous une clé stable (propriétaire : participant ou profil ; chaîne des titres de
+  // sections, sans leur compteur ; rang à titre égal), puis on les rétablit. Un <details> fermé par défaut et ouvert
+  // par le MJ reste ouvert ; un panneau ouvert d'office garde son ouverture. Les panneaux secondaires
+  // (data-secondary-panel) ont déjà leur propre mémoire (secondaryOpen) et ne sont pas touchés.
+  const sectionLabel = details => String(details.querySelector(':scope > summary')?.textContent || '').replace(/\s*\(\d+\)\s*$/, '').trim();
+  function viewKeys(selector, describe) {
+    const keys = new Map(), seen = new Map();
+    for (const element of refs.root.querySelectorAll(selector)) {
+      const owner = element.closest('[data-details-owner]')?.dataset.detailsOwner || '';
+      const space = element.closest('#workspace-prepare, #workspace-play, #workspace-library')?.id || '';
+      const path = [];
+      for (let details = element.closest('details'); details && refs.root.contains(details); details = details.parentElement?.closest('details')) path.unshift(sectionLabel(details));
+      const base = JSON.stringify([space, owner, describe(element), path]);
+      const rank = seen.get(base) || 0;
+      seen.set(base, rank + 1);
+      keys.set(element, `${base}#${rank}`);
+    }
+    return keys;
+  }
+  // Zones à défilement interne reconstruites par le rendu (tiroir des circonstances, panneaux latéraux, journaux).
+  const SCROLLERS = '.workspace-resolution-drawer, .workspace-side-panel, .log, [data-scroll-key]';
+  const scrollerName = element => element.dataset.scrollKey || element.classList[0] || element.tagName;
+  function captureView() {
+    const open = new Set(), scroll = new Map();
+    for (const [details, key] of viewKeys('details', () => 'details')) if (details.open && !details.dataset.secondaryPanel) open.add(key);
+    for (const [element, key] of viewKeys(SCROLLERS, scrollerName)) if (element.scrollTop > 0) scroll.set(key, element.scrollTop);
+    const page = pressDocument.scrollingElement;
+    return { open, scroll, pageTop: page ? page.scrollTop : null };
+  }
+  function restoreView(saved) {
+    if (saved.open.size) for (const [details, key] of viewKeys('details', () => 'details')) if (!details.open && saved.open.has(key)) details.open = true;
+    if (saved.scroll.size) for (const [element, key] of viewKeys(SCROLLERS, scrollerName)) if (saved.scroll.has(key) && element.scrollTop !== saved.scroll.get(key)) element.scrollTop = saved.scroll.get(key);
+    const page = pressDocument.scrollingElement;
+    if (page && saved.pageTop != null && page.scrollTop !== saved.pageTop) page.scrollTop = saved.pageTop;
   }
 
   // The whole view is rebuilt on every Bus event: the focused control is found
@@ -2790,6 +2825,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       else if ((previewIsStale(staleDraft.preview) || staleDraft.previewSeen.key !== key) && !staleDraft.error) staleDraft.error = { field: 'general', message: 'La partie a changé depuis le calcul (PV, états…) : cet aperçu est périmé, recalculez avant d’appliquer.' };
     }
     const saved = focusKey ? { key: focusKey, start: null, end: null } : captureFocus();
+    const view = captureView();
     renderTabs();
     refs.prepare.hidden = state.space !== 'prepare';
     refs.play.hidden = state.space !== 'play';
@@ -2798,6 +2834,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     renderPrepare();
     renderPlay();
     renderLibrary();
+    restoreView(view);
     restoreFocusKey(saved);
   }
 

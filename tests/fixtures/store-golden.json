@@ -277,6 +277,10 @@
    "recordAftermathCharacteristicLoss/0",
    "registerAftermathDisease/0",
    "careForAftermathDisease/0",
+   "getTurnIndex/0",
+   "isSuddenDeathEnabled/0",
+   "getActionClock/0",
+   "listTurnActions/1",
    "getFullJSON/0",
    "listRestorePoints/0",
    "previewRestorePoint/1",
@@ -2411,6 +2415,26 @@
     "state": "dd5ad58ef568d99f"
    },
    {
+    "label": "sweep getTurnIndex",
+    "result": "6b86b273ff34fce1",
+    "state": "dd5ad58ef568d99f"
+   },
+   {
+    "label": "sweep isSuddenDeathEnabled",
+    "result": "b5bea41b6c623f7c",
+    "state": "dd5ad58ef568d99f"
+   },
+   {
+    "label": "sweep getActionClock",
+    "result": "1a101d532d8df3d1",
+    "state": "dd5ad58ef568d99f"
+   },
+   {
+    "label": "sweep listTurnActions",
+    "result": "4f53cda18c2baa0c",
+    "state": "dd5ad58ef568d99f"
+   },
+   {
     "label": "sweep getFullJSON",
     "result": "f8e6cf71edbd5407",
     "state": "dd5ad58ef568d99f"
@@ -2725,6 +2749,10 @@
    "recordAftermathCharacteristicLoss/0",
    "registerAftermathDisease/0",
    "careForAftermathDisease/0",
+   "getTurnIndex/0",
+   "isSuddenDeathEnabled/0",
+   "getActionClock/0",
+   "listTurnActions/1",
    "getFullJSON/0",
    "listRestorePoints/0",
    "previewRestorePoint/1",
@@ -4856,6 +4884,26 @@
    {
     "label": "sweep careForAftermathDisease",
     "error": "TypeError: identifiant d’opération requis",
+    "state": "77480e24d5d28861"
+   },
+   {
+    "label": "sweep getTurnIndex",
+    "result": "6b86b273ff34fce1",
+    "state": "77480e24d5d28861"
+   },
+   {
+    "label": "sweep isSuddenDeathEnabled",
+    "result": "b5bea41b6c623f7c",
+    "state": "77480e24d5d28861"
+   },
+   {
+    "label": "sweep getActionClock",
+    "result": "e466b0324ad83709",
+    "state": "77480e24d5d28861"
+   },
+   {
+    "label": "sweep listTurnActions",
+    "result": "4f53cda18c2baa0c",
     "state": "77480e24d5d28861"
    },
    {
