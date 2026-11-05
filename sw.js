@@ -184,6 +184,7 @@ const ASSETS_TO_CACHE = [
   './js/core/json-profile-export.js',
   './js/core/map-link-state.js',
   './js/core/map-link.js',
+  './js/core/map-link-run.js',
   './js/core/turn-order.js',
   './js/core/sanitize.js',
   './js/core/fiche-sync.js',
