@@ -567,7 +567,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       const hp = node('span', 'workspace-track-hp num', hpText(participant));
       hp.prepend(node('span', 'workspace-sr', 'PV '));
       top.appendChild(hp);
-      item.append(top, hpBar(participant),
+      item.append(top, hpBar(participant, pendingHpLoss(participant)),
         node('span', 'workspace-track-meta num', `BE ${toughnessBonus(participant)} · PA ${armorSummary(participant.armor,displayedArmorLocations(participant))}`));
       const states = normalizeEffects(participant.states);
       if (states.length) {
@@ -907,7 +907,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     hp.append(node('span', 'workspace-sheet-hp-label', 'PV'), ' ', hpText(participant));
     if (hit?.damage || hit?.critical?.application?.extraWounds) hp.appendChild(node('span', 'workspace-sheet-hp-after', ` → ${minusSigned(Math.max(0, (Number(participant.hp) || 0) - previewHpLoss(hit)))}`));
     heading.append(identity, hp);
-    sheet.append(heading, hpBar(participant));
+    sheet.append(heading, hpBar(participant, hit ? previewHpLoss(hit) : 0));
     const ownReminders = !isTarget ? participantReminderBlock(participant) : null;
     if (ownReminders) sheet.appendChild(ownReminders);
 
@@ -2686,6 +2686,11 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
 
   // The play layout is built once: the side panel keeps its DOM (search,
   // filters, focus) while the track and the centre are re-rendered.
+  // U5 : PV que l'aperçu en cours retirerait à ce participant (segment de la barre de PV).
+  function pendingHpLoss(participant) {
+    const preview = state.resolution.preview;
+    return preview && !preview.choiceRequired && preview.targetId === participant.id ? previewHpLoss(preview) : 0;
+  }
   let playReady = false;
   const play = (() => {
     const grid = node('div', 'workspace-play-grid');

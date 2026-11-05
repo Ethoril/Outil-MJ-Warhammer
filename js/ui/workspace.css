@@ -128,10 +128,10 @@
 .workspace-mount-toggle { justify-self: start; margin: 0 6px; max-width: calc(100% - 12px); min-height: 30px; padding: 2px 10px; font-family: var(--font-ui); font-size: 13px; border: 1px solid var(--border); border-radius: 999px; background: var(--bg); color: var(--text); }
 .workspace-mount-toggle.is-mounted { border-color: var(--accent); background: var(--chip); color: var(--accent-text); font-weight: 700; }
 .workspace-token-engaged { margin: 0 10px; font-family: var(--font-ui); font-size: 12.5px; color: var(--accent-text); }
-.workspace-action-bar, .workspace-disengage { margin-top: 10px; padding: 12px 14px; display: grid; gap: 8px; background: var(--panel); border: 2px solid var(--accent); border-radius: var(--radius); }
+.workspace-action-bar, .workspace-disengage { margin-top: 10px; padding: 12px 14px; display: grid; gap: 8px; background: var(--panel); border: 0; box-shadow: inset 3px 0 0 var(--accent); border-radius: var(--radius); }
 .workspace-action-bar-title { margin: 0; font-weight: 700; color: var(--accent-text); }
 .workspace-action-bar-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 8px; }
-.workspace-action-bar-item { display: grid; gap: 2px; justify-items: start; text-align: left; min-height: 52px; padding: 6px 12px; border: 1px solid var(--accent); border-radius: var(--radius); background: var(--bg); color: var(--accent-text); }
+.workspace-action-bar-item { display: grid; gap: 2px; justify-items: start; text-align: left; min-height: 52px; padding: 6px 12px; border: 0; border-radius: var(--radius); background: var(--panel-2); color: var(--accent-text); }
 .workspace-action-bar-item span { font-family: var(--font-ui); font-size: 12.5px; color: var(--muted); }
 .workspace-action-bar-item:active { transform: scale(0.98); }
 .workspace-engagement-derived { display: grid; gap: 6px; padding: 8px 10px; border: 1px solid var(--hp-ok); border-radius: var(--radius); background: color-mix(in srgb, var(--hp-ok) 12%, transparent); }
@@ -190,10 +190,12 @@
 .workspace-track-meta { font-family: var(--font-ui); font-size: 12.5px; color: var(--muted); }
 .workspace-track-states { display: flex; flex-wrap: wrap; gap: 4px; }
 
-.workspace-hp-bar { display: block; height: 5px; border-radius: 3px; background: var(--chip); overflow: hidden; }
+.workspace-hp-bar { position: relative; display: block; height: 5px; border-radius: 3px; background: var(--chip); overflow: hidden; }
 .workspace-hp-fill { display: block; height: 100%; background: var(--hp-ok); }
 .workspace-hp-bar.is-warn .workspace-hp-fill { background: var(--hp-warn); }
 .workspace-hp-bar.is-crit .workspace-hp-fill { background: var(--hp-crit); }
+/* U5 : dégâts prévisualisés, hachurés pour rester lisibles sans la couleur. */
+.workspace-hp-loss { position: absolute; top: 0; bottom: 0; background: repeating-linear-gradient(135deg, var(--hp-crit) 0 3px, transparent 3px 6px); box-shadow: inset 0 0 0 1px var(--hp-crit); }
 
 .workspace-bench { margin-top: 16px; display: grid; gap: 6px; }
 .workspace-bench-item { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; padding: 6px 8px; border: 1px dashed var(--border); border-radius: var(--radius); }
@@ -341,6 +343,7 @@
 .workspace-side-header { display: flex; align-items: stretch; gap: 4px; padding: 6px; border-bottom: 1px solid var(--chip); }
 .workspace-side-tabs { display: flex; flex: 1; gap: 4px; min-width: 0; }
 .workspace-side-tab { flex: 1; min-height: 34px; padding: 5px 6px; border: 1px solid transparent; background: transparent; color: var(--text); font-size: 14px; }
+.workspace-side-tab[data-side-tab="circumstances"] { flex: 2.2; overflow-wrap: normal; }
 .workspace-side-tab[aria-selected="true"] { background: var(--text); color: var(--bg); border-color: var(--text); font-weight: 700; }
 .workspace-side-toggle { flex: none; min-width: 32px; padding: 4px 8px; background: transparent; color: var(--text); font-weight: 700; }
 .workspace-side-panel { min-height: 0; overflow-y: auto; padding: 10px 12px; font-size: 15px; }
@@ -394,7 +397,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .workspace-view * { scroll-behavior: auto; transition: none !important; }
+  .workspace-view * { scroll-behavior: auto; transition: none !important; animation: none !important; }
+  .workspace-view button:active:not(:disabled) { transform: none; }
 }
 
 /* Fiche étroite (1100 px avec panneau déplié) : caractéristiques sur deux rangs,
@@ -567,6 +571,9 @@ dialog.tool-sheet.campaign-time-dialog { position:fixed; inset:auto; top:50%; le
 @media(max-width:600px) { .workspace-aftermath-check { grid-template-columns:1fr 1fr; } .workspace-aftermath-check > span { grid-column:1 / -1; } }
 
 .workspace-resolution-step { display: grid; gap: 10px; margin-block: 16px; min-width: 0; }
+/* U5 : micro-transitions (120 à 180 ms, ease-out) sur les commandes ; propriétés peu coûteuses uniquement. */
+.workspace-view button, .workspace-view summary, .workspace-side-tab { transition: background-color 150ms ease-out, color 150ms ease-out, border-color 150ms ease-out, box-shadow 150ms ease-out, transform 120ms ease-out; }
+.workspace-view button:active:not(:disabled) { transform: scale(0.97); }
 .workspace-resolution-step > h4 { margin: 0; color: var(--accent-text); }
 .workspace-resolution-settings { min-width: 0; }
 .workspace-resolution-footer { position: sticky; bottom: 0; z-index: 2; display: flex; flex-wrap: wrap; align-items: center; gap: 12px; background: var(--panel-2); padding: 12px; border-radius: var(--radius); }
@@ -584,7 +591,7 @@ dialog.tool-sheet.campaign-time-dialog { position:fixed; inset:auto; top:50%; le
 .workspace-circumstances-group { display: grid; gap: 6px; min-width: 0; }
 .workspace-circumstances-group[hidden] { display: none; }
 .workspace-circumstances-group h5 { margin: 0; color: var(--accent-text); font-family: var(--font-text); font-size: 15px; }
-.workspace-circumstances-group.is-required { padding: 8px; border: 2px solid var(--accent); border-radius: var(--radius); background: var(--bg); }
+.workspace-circumstances-group.is-required { padding: 8px 8px 8px 11px; border: 0; box-shadow: inset 3px 0 0 var(--accent); border-radius: var(--radius); background: var(--panel-2); }
 .workspace-circumstances-summary { margin: 0; font-size: 14px; }
 
 .workspace-action-menu { display: flex; flex-wrap: wrap; gap: .35rem; padding: .5rem; border: 1px solid var(--border); border-radius: .5rem; background: var(--bg); }

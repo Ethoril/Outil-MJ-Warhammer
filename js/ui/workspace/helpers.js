@@ -104,14 +104,26 @@ export function hpTone(hp, maxHp) {
   return ratio <= 0.25 ? 'crit' : ratio <= 0.5 ? 'warn' : 'ok';
 }
 
-export function hpBar(participant) {
+/**
+ * Barre de PV. `previewLoss` (U5) : PV que l'aperçu de résolution retirerait (previewHpLoss) ; le segment
+ * « workspace-hp-loss » couvre la part qui disparaîtrait, à droite des PV restants. Aucun effet sans aperçu.
+ */
+export function hpBar(participant, previewLoss = 0) {
   const hp = Number(participant.hp) || 0;
   const max = Number(participant.maxHp ?? participant.hp) || 0;
+  const pct = value => Math.max(0, Math.min(100, max > 0 ? (value / max) * 100 : 0));
   const bar = node('span', `workspace-hp-bar is-${hpTone(hp, max)}`);
   bar.setAttribute('aria-hidden', 'true');
   const fill = node('span', 'workspace-hp-fill');
-  fill.style.width = `${Math.max(0, Math.min(100, max > 0 ? (hp / max) * 100 : 0))}%`;
+  const loss = Math.max(0, Math.min(Math.max(hp, 0), Number(previewLoss) || 0));
+  fill.style.width = `${pct(hp - loss)}%`;
   bar.appendChild(fill);
+  if (loss > 0) {
+    const segment = node('span', 'workspace-hp-loss');
+    segment.style.left = `${pct(hp - loss)}%`;
+    segment.style.width = `${pct(loss)}%`;
+    bar.appendChild(segment);
+  }
   return bar;
 }
 
