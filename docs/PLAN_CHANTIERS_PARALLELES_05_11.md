@@ -8,6 +8,7 @@ Trois fronts : la **liaison avec RPG Map Display** (lots 1 à 5), le mot-clé **
 - **Map Display** : worktree dédié, créé depuis `feat/liaison-outil-mj` (worktree `E:\rpg-map-display-liaison`). Lire son `CLAUDE.md` : manifeste fermé, `pnpm run verify`, mutation des tests. Pas de push.
 - **Contrat** : toute modification se reporte dans les deux copies (`docs/CONTRAT_LIAISON_MAP_DISPLAY.md` et `docs/CONTRAT-LIAISON-OUTIL-MJ.md`). Seule la session qui en a besoin y touche.
 - Un test vert ne prouve rien tant que sa mutation n'est pas rouge.
+- **Tests (règle du MJ, 05/11)** : dans une session, seulement les tests des fichiers touchés et leurs mutations, sans suite complète ni `pnpm run verify`. La suite complète et la porte tournent une fois, à la fusion de la vague. Tout test navigateur se lance sous `timeout 120`.
 - Fin de session : dire la branche, les commits, ce qui est vérifié, et ce qui ne l'est pas.
 
 ## Fichiers chauds (un seul écrivain à la fois)
