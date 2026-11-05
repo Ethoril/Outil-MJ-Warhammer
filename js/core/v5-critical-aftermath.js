@@ -159,6 +159,25 @@ export function criticalDeathCause(record, { decapitated = false } = {}) {
   return ['ARM', 'BODY', 'LEG'].includes(record?.table) ? 'dismemberment' : 'blood';
 }
 
+/**
+ * Mort proposée par un état en fin de Round (`pendingStateDeath`, posé par la fin de Tour V5) :
+ * le MJ confirme (mort V5 et cause pour la carte) ou refuse ; la proposition disparaît dans les deux cas.
+ */
+export function decideStateDeath(participant, { pendingId, decision } = {}) {
+  const pending = participant?.extensions?.v5?.pendingStateDeath;
+  if (!pending || pending.id !== pendingId) return { status: 'blocked', participant, reason: 'Décès proposé introuvable.' };
+  if (decision !== 'confirm' && decision !== 'decline') return { status: 'confirmation-required', participant };
+  const next = clone(participant);
+  next.extensions = { ...(next.extensions || {}), v5: { ...(next.extensions?.v5 || {}) } };
+  delete next.extensions.v5.pendingStateDeath;
+  if (decision === 'confirm') {
+    next.hp = 0;
+    if (next.extensions.v5.dead !== true) next.extensions.v5.deathCause = pending.cause || 'blood';
+    next.extensions.v5.dead = true;
+  }
+  return { status: decision === 'confirm' ? 'dead' : 'declined', participant: next };
+}
+
 /** Death printed in a critical table is a request for an explicit MJ decision. */
 export function decideImmediateCriticalDeath(participant, { criticalId, decision, decapitated = false } = {}) {
   if (!participant?.id || !criticalId || (decision !== 'confirm' && decision !== 'decline')) {

@@ -79,7 +79,7 @@ import { normalizeEffects } from './effects.js';
 import { buildV5StoreActionInput, annotateV5StoreActionPreview, applyV5StoreAction, v5StoreActionState, v5StoreActionResult, v5StoreActionClock, commitV5StoreTalentUsages } from './v5-store-action.js';
 import { getV5Fortune, getV5Fate, v5ResourceIdentity, consumeTemporaryFortune as consumeParticipantTempFortune, consumeTemporaryFate as consumeParticipantTempFate, projectV5Resources, projectV5ResourceEnvelope, commitV5Resources, creditFortuneCorruption, setV5Fortune, refreshV5Fortune, reconcileV5ResourceBindings } from './v5-resources.js';
 import { acquireV5Conditions, recoverV5Condition, healV5Wounds } from './v5-effects.js';
-import { decideCriticalDeath as decideV5CriticalDeath, decideImmediateCriticalDeath as decideV5ImmediateCriticalDeath, previewSuddenDeath as previewV5SuddenDeath, decideSuddenDeath as decideV5SuddenDeath, updateCriticalDeathCountdown, previewAmputationShock as previewV5AmputationShock, applyAmputationShock as applyV5AmputationShock, amputationShockRequirements } from './v5-critical-aftermath.js';
+import { decideCriticalDeath as decideV5CriticalDeath, decideImmediateCriticalDeath as decideV5ImmediateCriticalDeath, decideStateDeath as decideV5StateDeath,previewSuddenDeath as previewV5SuddenDeath, decideSuddenDeath as decideV5SuddenDeath, updateCriticalDeathCountdown, previewAmputationShock as previewV5AmputationShock, applyAmputationShock as applyV5AmputationShock, amputationShockRequirements } from './v5-critical-aftermath.js';
 import { encounterJournalScope, purgeEncounterJournal, purgeEncounterJournalHistory, tagNewEncounterLogs } from './encounter-journal.js';
 import { momentumAfterChange, withMomentum, loseMomentumUnderFear } from './v5-combat-rules.js';
 import { canUseV5Move } from './v5-combat-fumbles.js';
@@ -2467,6 +2467,17 @@ function resolvedCorruptionTest(participant, skillId, input) {
         if(index<0)throw new TypeError('Participant introuvable');
         const result=decideV5ImmediateCriticalDeath(draft.combat.participants[index],{criticalId,decision,decapitated});
         if(!['dead','declined'].includes(result.status))throw Object.assign(new Error(result.reason||'Confirmation MJ requise.'),{userFacing:true,code:'CRITICAL_DEATH_CONFIRMATION'});
+        draft.combat.participants[index]=result.participant;
+        if(result.status==='dead')draft.combat.participants=fallFromSaddle(draft.combat.participants,participantId);
+        return draft;
+      });
+    },
+    decideStateDeath(participantId, pendingId, decision) {
+      return api.executeCommand('decide-state-death-v5',draft=>{
+        const index=(draft.combat?.participants||[]).findIndex(row=>row.id===participantId);
+        if(index<0)throw new TypeError('Participant introuvable');
+        const result=decideV5StateDeath(draft.combat.participants[index],{pendingId,decision});
+        if(!['dead','declined'].includes(result.status))throw Object.assign(new Error(result.reason||'Confirmation MJ requise.'),{userFacing:true,code:'STATE_DEATH_CONFIRMATION'});
         draft.combat.participants[index]=result.participant;
         if(result.status==='dead')draft.combat.participants=fallFromSaddle(draft.combat.participants,participantId);
         return draft;

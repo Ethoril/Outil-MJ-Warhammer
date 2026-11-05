@@ -358,7 +358,8 @@ export function advanceV5Effects(participant,transition={},inputs={}) {
   }
   let next=expireV5Effects(participant,{...transition,moment:'beforeEffects'}).participant;
   next.states=normalizeEffects(next.states);
-  const needsInput=[],reminders=[],criticalRequests=[],removed=[],recoveryHandled=new Set();let death=false,acquiredInstances=0;
+  // deathCause : première cause du passage à mort proposé (contrat de liaison §9) ; null = repli `blood` de la carte.
+  const needsInput=[],reminders=[],criticalRequests=[],removed=[],recoveryHandled=new Set();let death=false,deathCause=null,deathSource=null,acquiredInstances=0;
   const ownTurn=transition.phase==='endOfTurn'&&transition.actorId===next.id;
   const roundEnd=transition.phase==='endOfRound';
   const add=conditions=>{
@@ -391,10 +392,10 @@ export function advanceV5Effects(participant,transition={},inputs={}) {
     }
     if(bleeding&&hp===0){
       if(levels(next.states,'inconscient')){
-        if(bleeding>=10)death=true;
+        if(bleeding>=10){death=true;deathCause??='blood';deathSource??='bleeding';}
         else{
           const roll=explicitD10(inputs.bleedingDeathRoll,'bleedingDeathRoll',needsInput);
-          if(roll!==null){death=roll<=bleeding;if(roll===10){const clear=removeInstances(next.states,'hemorragique',1);next.states=clear.states;removed.push(...clear.removed);}}
+          if(roll!==null){death=roll<=bleeding;if(death){deathCause??='blood';deathSource??='bleeding';}if(roll===10){const clear=removeInstances(next.states,'hemorragique',1);next.states=clear.states;removed.push(...clear.removed);}}
         }
       }else if(inputs.bleedingEnduranceTest){if(!testValue(inputs.bleedingEnduranceTest).success)add([{name:'Inconscient',level:1,source:{kind:'bleeding-zero-wounds'}}]);}
       else needs(needsInput,'bleedingEnduranceTest','Résistance +0 DR pour éviter Inconscient à 0 Blessure');
@@ -408,7 +409,7 @@ export function advanceV5Effects(participant,transition={},inputs={}) {
         if(transition.round>=dueRound){
           if(!inputs.poisonEnduranceTest)needs(needsInput,'poisonEnduranceTest','Résistance pour survivre au poison en étant Inconscient');
           else if(be!==null){
-            const survived=testValue(inputs.poisonEnduranceTest).success;death=death||!survived;
+            const survived=testValue(inputs.poisonEnduranceTest).success;death=death||!survived;if(!survived){deathCause??='poison';deathSource??='poison';}
             if(survived){
               let nextDue=be>0?transition.round+be:inputs.nextPoisonDeathDueRound;
               if(nextDue===undefined)needs(needsInput,'nextPoisonDeathDueRound','BE nul : prochain Test de survie au poison à arbitrer');
@@ -430,7 +431,7 @@ export function advanceV5Effects(participant,transition={},inputs={}) {
           if(be!==null){next.extensions={...(next.extensions||{}),v5:{...(next.extensions?.v5||{}),suffocationDeathDueRound:transition.round+be}};reminders.push(`Suffocation : Inconscient ; mort par asphyxie au Round ${transition.round+be} si rien ne change.`);}
         }else{
           const due=next.extensions?.v5?.suffocationDeathDueRound;
-          if(Number.isSafeInteger(due)&&transition.round>=due){death=true;reminders.push('Suffocation : BE Rounds écoulés sans air, mort à confirmer par le MJ.');}
+          if(Number.isSafeInteger(due)&&transition.round>=due){death=true;deathSource??='suffocation';reminders.push('Suffocation : BE Rounds écoulés sans air, mort à confirmer par le MJ.');}
           else if(!Number.isSafeInteger(due)){
             const be=toughnessBonus(next,inputs.toughnessBonus,needsInput);
             if(be!==null){next.extensions={...(next.extensions||{}),v5:{...(next.extensions?.v5||{}),suffocationDeathDueRound:transition.round+be}};reminders.push(`Suffocation : déjà Inconscient ; mort par asphyxie au Round ${transition.round+be} si rien ne change.`);}
@@ -466,7 +467,7 @@ export function advanceV5Effects(participant,transition={},inputs={}) {
   }
   if((!levels(next.states,'empoisonne')||!levels(next.states,'inconscient'))&&next.extensions?.v5?.poisonDeathDueRound!==undefined){next.extensions={...next.extensions,v5:{...next.extensions.v5}};delete next.extensions.v5.poisonDeathDueRound;}
   if(Number(next.hp)<Number(before.hp))Object.assign(next,withMomentum(next,false));
-  return createReceipt(before,next,{acquiredInstances,removed,needsInput,reminders,criticalRequests,death});
+  return createReceipt(before,next,{acquiredInstances,removed,needsInput,reminders,criticalRequests,death,deathCause:death?deathCause:null,deathSource:death?deathSource:null});
 }
 /** Actual healed Wounds remove the same number of Bleeding occurrences. */
 export function healV5Wounds(participant,amount) {

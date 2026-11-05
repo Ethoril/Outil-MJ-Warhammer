@@ -2442,13 +2442,15 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       const v5=participant.extensions?.v5||{};
       for(const record of v5.criticalAftermath||[])if(record.sequela?.criticalDeath===true&&!record.deathDecision)criticalDecisions.push({kind:'table',participant,record});
       if(['countdown','awaiting-mj'].includes(v5.criticalDeath?.status))criticalDecisions.push({kind:'countdown',participant,countdown:v5.criticalDeath});
+      if(v5.pendingStateDeath&&v5.dead!==true)criticalDecisions.push({kind:'state',participant,pending:v5.pendingStateDeath});
     }
     if(criticalDecisions.length){
       const section=node('section','workspace-card workspace-critical-death-decisions');
       section.setAttribute('aria-label','Décisions MJ sur les morts critiques');
       section.appendChild(rubric('Décisions du MJ — mort critique'));
       for(const item of criticalDecisions){
-        const participant=item.participant,label=item.kind==='table'?`${participant.name} · ${item.record.effectName} (${item.record.source?.printedName||item.record.table})`:`${participant.name} · décompte arrivé à l’échéance du Round ${item.countdown.dueRound}`;
+        const stateCause={bleeding:'hémorragie',poison:'poison','fire-critical':'flammes',suffocation:'asphyxie'}[item.pending?.source]||'état';
+        const participant=item.participant,label=item.kind==='state'?`${participant.name} · décès proposé par ${stateCause} (Round ${item.pending.round})`:item.kind==='table'?`${participant.name} · ${item.record.effectName} (${item.record.source?.printedName||item.record.table})`:`${participant.name} · décompte arrivé à l’échéance du Round ${item.countdown.dueRound}`;
         const row=node('div','workspace-result-line');
         row.appendChild(node('span','',label));
         // Crâne fracassé (V5 p. 173) : une arme tranchante peut décapiter ; le MJ le constate, la carte joue la décapitation.
@@ -2460,7 +2462,8 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
           button.addEventListener('click',async()=>{
             button.disabled=true;
             try{
-              if(item.kind==='table')await Store.decideImmediateCriticalDeath(participant.id,item.record.id,decision,{decapitated});else await Store.decideCriticalDeath(participant.id,decision,{round:readCombat(Store).round});
+              if(item.kind==='state')await Store.decideStateDeath(participant.id,item.pending.id,decision);
+              else if(item.kind==='table')await Store.decideImmediateCriticalDeath(participant.id,item.record.id,decision,{decapitated});else await Store.decideCriticalDeath(participant.id,decision,{round:readCombat(Store).round});
               render();
             }catch(error){
               button.disabled=false;

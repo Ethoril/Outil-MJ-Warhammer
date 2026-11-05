@@ -79,8 +79,15 @@ export function previewV5Turn(state, { inputs = {} } = {}) {
         for (const need of acquired.needsInput) requests.push({ ...need, participantId: participant.id, participantName: participant.name, kind: kinds[need.field] || 'integer' });
         receipt.reminders.push(`Critique au corps ${severity} : ${effect.name}. ${effect.eff}`);
         receipt.reminders.push(...effect.parsed.reminders);
-        if (effect.parsed.death) receipt.death = true;
+        if (effect.parsed.death) { receipt.death = true; receipt.deathCause ??= 'fire'; receipt.deathSource ??= 'fire-critical'; }
         receipt.fireCritical = { ...critical, roll: data.fireCriticalRoll, severity, effect };
+      }
+      // Mort proposée par un état (Hémorragique, Empoisonné, Suffocation, critique de feu) : décision MJ en attente,
+      // confirmée par decideStateDeath, qui pose la mort V5 et sa cause pour la carte.
+      if (receipt.death && updated.extensions?.v5?.dead !== true) {
+        updated = { ...updated, extensions: { ...(updated.extensions || {}), v5: { ...(updated.extensions?.v5 || {}),
+          pendingStateDeath: { id: `state-death:${participant.id}:${round}:${serial}:${phase}`, cause: receipt.deathCause || 'blood', source: receipt.deathSource || null, round, phase,
+            reminders: receipt.reminders.filter(text => /mort|décès|Hémorragique|Empoisonné|Critique/i.test(text)) } } } };
       }
       const afterDivine=expireDivineEffects(updated,{...finish,turn:finish.turnIndex});
       if(afterDivine.removed.length)updated=refreshEffectLayers(afterDivine.participant,updated);
@@ -90,7 +97,7 @@ export function previewV5Turn(state, { inputs = {} } = {}) {
       receipts.push({ participantId: participant.id, phase, ...receipt });
       if (receipt.hpDelta || receipt.removed.length || receipt.acquiredInstances || receipt.reminders.length || receipt.fireCritical || receipt.death) {
         effectLogs.push({ id: `v5-turn:${before.localRevision || 0}:${serial}:${phase}:${participant.id}`,  kind: 'effect', actorId: participant.id, actorName: participant.name,
-          text: `${participant.name} · ${phase === 'endOfRound' ? 'fin de Round' : phase === 'startOfTurn' ? 'début de Tour' : 'fin de Tour'}${receipt.hpDelta ? ` · ${-receipt.hpDelta} Blessures perdues` : ''}${receipt.removed.length ? ` · ${receipt.removed.length} effet(s) retiré(s)` : ''}${receipt.death ? ' · décès : vérifier le personnage' : ''}`,
+          text: `${participant.name} · ${phase === 'endOfRound' ? 'fin de Round' : phase === 'startOfTurn' ? 'début de Tour' : 'fin de Tour'}${receipt.hpDelta ? ` · ${-receipt.hpDelta} Blessures perdues` : ''}${receipt.removed.length ? ` · ${receipt.removed.length} effet(s) retiré(s)` : ''}${receipt.death ? ' · décès à confirmer par le MJ' : ''}`,
           detail: { ruleVersion: receipt.ruleVersion, phase, round, turn: serial, hpBefore: participant.hp, hpAfter: updated.hp,
             input: structuredClone(data), removed: receipt.removed, reminders: receipt.reminders, fireCritical: receipt.fireCritical || null, death: receipt.death } });
       }

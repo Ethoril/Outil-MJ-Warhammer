@@ -784,6 +784,9 @@ export function applyMiscastToParticipant(participant, miscast, options = {}) {
     woundsLost = currentHp;
     next.hp = 0;
     next.dead = true;
+    // Marqueur V5 lu par la liaison carte (fx.death) ; une cause déjà enregistrée reste.
+    if (next.extensions.v5.dead !== true) next.extensions.v5.deathCause = 'magic';
+    next.extensions.v5.dead = true;
     next.extensions.v5.headExploded = true;
   }
 

@@ -39,6 +39,7 @@
    "healCriticalWound/2",
    "decideCriticalDeath/2",
    "decideImmediateCriticalDeath/3",
+   "decideStateDeath/3",
    "setSuddenDeathEnabled/1",
    "previewSuddenDeath/1",
    "decideSuddenDeath/2",
@@ -1216,6 +1217,11 @@
    },
    {
     "label": "sweep decideImmediateCriticalDeath",
+    "error": "TypeError: Participant introuvable",
+    "state": "2c189c0822a1ee35"
+   },
+   {
+    "label": "sweep decideStateDeath",
     "error": "TypeError: Participant introuvable",
     "state": "2c189c0822a1ee35"
    },
@@ -2481,6 +2487,7 @@
    "healCriticalWound/2",
    "decideCriticalDeath/2",
    "decideImmediateCriticalDeath/3",
+   "decideStateDeath/3",
    "setSuddenDeathEnabled/1",
    "previewSuddenDeath/1",
    "decideSuddenDeath/2",
@@ -3658,6 +3665,11 @@
    },
    {
     "label": "sweep decideImmediateCriticalDeath",
+    "error": "TypeError: Participant introuvable",
+    "state": "3c7e0ec1eca18195"
+   },
+   {
+    "label": "sweep decideStateDeath",
     "error": "TypeError: Participant introuvable",
     "state": "3c7e0ec1eca18195"
    },
