@@ -30,6 +30,15 @@ Les branches des sessions (`claude/*`, `feat/liaison-l*`) sont fusionnées. Les 
    - les parcours `f2-j` et `f2-j2` échouaient déjà avant U3 ;
    - les audits E0/E1/E2 échouent sous Windows.
 
+## Vague 3 (05/11 au soir) : fusionnée, non poussée
+
+- Outil MJ `dev/recette-plateau-04-11` : U6+U5, L5-MJ, cadrage U8, étude E1 fusionnés. `tests/unit` : 5 746 tests, 4 échecs (audits E0/E1/E2, préexistants Windows), **75 s**. Parcours verts : startup, u6, u5, u1-panneau-action, u2, u3, lot2, engagements-plateau. **`browser-index` échoue** (« un jet de critique tapé ne doit pas être ignoré par Appliquer », `5 !== 13`), **déjà sur la base de la vague** (branche U8, sans JS) : à trier.
+- Map Display `feat/liaison-outil-mj` : L5-MD fusionné, `pnpm run verify` vert (312 e2e, 4 gestes).
+- Contrat : D4 (diagonale 1,5), `cells: null`, adjacence complète et camps, dans les deux copies.
+- **Reste de L5-MJ à brancher** (fichiers d'U6) : montage `mountMapLinkFeedback` dans `main.js` (ligne dans le rapport de la session L5-MJ), préremplissage de la portée dans `resolution-panel.js` (`distanceBetween`), pastille « posé » dans `workspace-view.js` (`mapLink.isPlaced`).
+- Suites décidées : U8 L0+L1 en vague 4 (réponses du MJ dans le plan) ; P1 (suppression de la chasse des pions) puis P2 (médaillons variante B) dans Map Display.
+- **Commande de la suite complète** : `node --test "tests/unit/**/*.test.js"` puis `"tests/unit/**/*.test.mjs"`. Jamais `node --test` nu à la racine : il parcourt aussi tous les worktrees (`.claude/worktrees`, `tmp/*-worktree`), dure plus de 15 min et mélange leurs échecs.
+
 ## Règles de travail (du MJ)
 
 - **Tests** : dans une session, seulement les tests des fichiers touchés et leurs mutations. Suite complète (2 min) et `pnpm run verify` **une seule fois par vague**, à la fusion. Tout test navigateur se lance sous `timeout 120`.
