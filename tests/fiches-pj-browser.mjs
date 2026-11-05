@@ -145,8 +145,8 @@ async function main() {
   await visual.locator('#tab-library').click();
   const card = visual.locator('.workspace-space-library .workspace-profile-card').filter({ hasText: 'Caelel' });
   await expect(card).toHaveCount(1); await card.locator('.fiche-consultation > summary').click();
-  await card.locator('.fiche-consultation > details').filter({ has: visual.locator('summary', { hasText: /^Talents/ }) }).locator(':scope > summary').click();
-  await card.locator('.fiche-consultation > details').filter({ has: visual.locator('summary', { hasText: /^Équipement/ }) }).locator(':scope > summary').click();
+  await card.locator('.fiche-tab', { hasText: /^Talents/ }).click();
+  await card.locator('.fiche-tab', { hasText: /^Équipement/ }).click();
   const output = join(root, 'tmp', 'fiches-pj-receipt'); mkdirSync(output, { recursive: true });
   for (const [name, width, height, theme] of [['desktop-light', 1440, 1000, 'light'], ['desktop-dark', 1440, 1000, 'dark'], ['mobile-light', 390, 900, 'light'], ['mobile-dark', 390, 900, 'dark']]) {
     await visual.setViewportSize({ width, height }); await visual.evaluate(theme => { document.documentElement.setAttribute('data-theme', theme); }, theme);

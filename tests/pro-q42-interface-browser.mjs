@@ -63,7 +63,7 @@ try {
 
   const titles = await page.evaluate(async ({ base }) => {
     const { renderFicheDetails } = await import(base + '/js/ui/fiche-details.js');
-    const summaries = subject => Array.from(renderFicheDetails(subject).querySelectorAll('summary')).map(node => node.textContent);
+    const summaries = subject => Array.from(renderFicheDetails(subject).querySelectorAll('h4')).map(node => node.textContent);
     return { empty: summaries({ extensions: { v5: { bestiary: { unvaluedSkills: [] } } } }), full: summaries({ extensions: { v5: { bestiary: { unvaluedSkills: ['Language (Elthárin)'] } } } }) };
   }, { base });
   check(!titles.empty.some(text => /sans valeur imprimée/.test(text)), 'section masquée quand aucune compétence sans valeur');
