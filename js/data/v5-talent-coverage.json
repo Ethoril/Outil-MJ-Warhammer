@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "ruleVersion": "catalogue-utile-v5-2026-10-10.1",
-  "sourceCatalogueVersion": "references:543c3fbc1ae34af91710bad61a1f7f61bfc257055dff96cdd3894934c4ce75cd",
+  "sourceCatalogueVersion": "references:cf8a20e4498b5610a2545dc72cfbcaf06e83adb2c5c0a8aa489c098a49a37746",
   "policy": "Traitement explicite par clause. Les rappels ne sont pas des automatismes et les contrats actifs sont vérifiés séparément.",
   "items": [
     {

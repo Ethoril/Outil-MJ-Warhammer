@@ -136,6 +136,20 @@
       "effectHash": "sha256:fa3f847edae3b71525f491a3d6b96036632fc9133b7263b24165856abaa9aa2b",
       "ruleVersion": "quality-v5-2026-10-09.24.5",
       "engine": "ignore-two-armour"
+    },
+    {
+      "id": "barrakul",
+      "name": "Barrakul",
+      "effect": "Ignore les PA et boucliers non magique",
+      "type": "Atout d'arme",
+      "parameter": "",
+      "source": "Dwarf Player's Guide p.115",
+      "edition": "V4 supplément",
+      "aliases": [],
+      "note": "Décision MJ 05/11 : PA des armures non magiques ignorés ; bouclier non magique sans PA ni +1 DR ; une pièce portant Magique garde tout.",
+      "effectHash": "sha256:63dae762d615eea5cba64aac1acc03e7326deeaacc75f3dd247944a0c5ff255f",
+      "ruleVersion": "quality-v5-2026-11-05.barrakul",
+      "engine": "ignore-non-magical-armour-and-shields"
     }
   ],
   "approvedOverrides": {

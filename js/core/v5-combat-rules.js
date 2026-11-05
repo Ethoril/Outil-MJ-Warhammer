@@ -104,7 +104,12 @@ export function v5ShieldDefense(normalized, catalogue = getReferenceCatalogue())
         : 'Bouclier V5 : opposition par Esquive ou Corps à corps requise.' : null;
   const v5Confirmed = confirmed && bouclier && canUseV5Bonus;
   const legacyRanged = !bouclier && rating >= 2;
+  // Barrakul (décision MJ 05/11) : un bouclier non magique perd son +1 DR ; ses PA sont retirés par locationProtection.
+  const attackQualityIds = (normalized.action?.qualities || []).map(row => typeof row === 'string' ? row : row?.id);
+  const barrakulIgnored = (v5Confirmed || (!bouclier && confirmed)) && attackQualityIds.includes('barrakul')
+    && keywordMechanicalStatus('barrakul').status === 'covered' && !shield.keywords?.some(item => item.id === 'magique');
   return { confirmed: !bouclier && confirmed,
+    ...(barrakulIgnored ? { barrakulIgnored: true } : {}),
     ...(bouclier ? { v5Bonus: v5Confirmed } : {}),
     rangedDodgeAllowed: bouclier ? v5Confirmed && rangedAttack && rating >= 2 && dodgeDefense
       : confirmed && legacyRanged,
@@ -246,7 +251,7 @@ export function buildCombatTest(normalized, role = 'actor') {
     const defensive = defenseEngines.some(engine => engine.id === 'defensive' && !overriddenDefense.has(engine.id));
     const shieldDefense = v5ShieldDefense(normalized);
     if (shieldDefense.unresolved) unresolved.push(shieldDefense.unresolved);
-    const shield = shieldDefense.v5Bonus || shieldDefense.confirmed;
+    const shield = (shieldDefense.v5Bonus || shieldDefense.confirmed) && !shieldDefense.barrakulIgnored;
     if (defensive || shield) modifiers.push({ id: 'defensive-protection', label: shield ? 'Bouclier V5 (ne cumule pas Défensive)' : 'Défensive', amount: 1 });
     for (const engine of defenseEngines) if (!overriddenDefense.has(engine.id) && engine.params.bonus < 0)
       modifiers.push({ id: `quality-${engine.id}`, label: 'Déséquilibrée', amount: engine.params.bonus });

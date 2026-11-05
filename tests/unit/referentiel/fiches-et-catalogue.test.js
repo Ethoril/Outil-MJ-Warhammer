@@ -578,7 +578,7 @@ test('Références — CSV accents, virgules, guillemets et cellules sur plusieu
 });
 test('Références — identifiant explicite et paramètres conservent colonnes nommées',async()=>{
  const csv=await fetchFixture('https://example.org/?sheet=Mots%20Cl%C3%A9s%20Armes%20et%20Armures').then(r=>r.text());const words=parseKeywordCSV(csv);
- assert.equal(words.length,57);assert.equal(words.find(w=>w.id==='protectrice').edition,'V4');assert.ok(words.find(w=>w.id==='protectrice').parameter);
+ assert.equal(words.length,58);assert.equal(words.find(w=>w.id==='protectrice').edition,'V4');assert.ok(words.find(w=>w.id==='protectrice').parameter);
  assert.throws(()=>parseKeywordCSV('Nom,Effet\nTest,test'),/Colonnes/);
 });
 test('Références — instantané commun source, compétences principales et talents traduits',()=>{

@@ -480,6 +480,14 @@ const shieldCoversLocation=(context,id)=>{
  return offHandSide===id.slice(0,-3);
 };
 const supportedConditional = id => contracts.entries.find(w=>w.id===id);
+// Barrakul (Dwarf Player's Guide p.115) : « Ignore les PA et boucliers non magique ». Une pièce est magique quand elle porte
+// la qualité Magique ; les PA des couches magiques (sorts, miracles) ne sont pas des pièces et restent comptés.
+const isMagicalItem = item => itemKeywords(item).includes('magique');
+const barrakulCoverage = attackWords => {
+ if(!attackWords.includes('barrakul'))return 'absent';
+ const word=resolveKeyword('barrakul'),source=talentQualityRegistry.qualityContracts.find(q=>q.id==='barrakul');
+ return word&&source&&word.effect===source.effect&&word.edition===source.edition&&word.source===source.source?'covered':'manual';
+};
 /** Effective armour for a supplied hit context. Shield never enters permanent PA. */
 export function locationProtection(target,context={}){
  const id=locationId(context),warnings=[],manual=[],evaluatedKeywords=new Set();if(!id){const override=Number(context.manualAp);if(context.manualAp!==undefined&&context.manualAp!==null&&Number.isFinite(override)&&override>=0)return {location:null,ap:override,baseAp:null,shieldAp:0,counted:[],ignored:[],manual:[],warnings,evaluatedKeywords:[],arbitrated:true};return {ap:null,baseAp:null,shieldAp:0,counted:[],ignored:[],manual:['localisation-requise'],warnings};}
@@ -495,6 +503,9 @@ export function locationProtection(target,context={}){
  const attackRoll=Number(context.attackRoll),hitRoll=Number(context.hitLocationRoll??context.location?.roll);
  const attackWords=(context.qualities||[]).map(w=>resolveKeyword(typeof w==='string'?w:w.id)?.id??(typeof w==='string'?w:w.id));
  let criticalIgnored=false;
+ const barrakulStatus=barrakulCoverage(attackWords),barrakul=barrakulStatus==='covered';
+ if(barrakulStatus!=='absent')evaluatedKeywords.add('barrakul');
+ if(barrakulStatus==='manual')manual.push('effet-non-couvert:barrakul');
  for(const sourceItem of location?.counted||[]){let include=true;const itemDamage=Number(target?.extensions?.v5?.armorDamageByItem?.[sourceItem.id])||0;const item={...sourceItem,ap:Math.max(0,sourceItem.ap-itemDamage)};const known=item.keywords.map(w=>w.id);
  if((context.ignoreMetalArmour===true||context.ignoreMetalArmour==='non-magical'&&!/magique/i.test(String(item.category||'')))&&/mail|plate|gromril|ithilmar|metal/i.test(String(item.category||item.name||''))){include=false;ignored.push({item,reason:context.ignoreMetalArmour===true?'Warp Blade : les PA de cette pièce métallique sont ignorés':'Décharge électrique : les PA de cette pièce métallique non magique sont ignorés'});}
  for(const keywordId of known)evaluatedKeywords.add(keywordId);
@@ -507,8 +518,11 @@ export function locationProtection(target,context={}){
   if(keywordId==='impenetrable'&&context.critical){if(!Number.isInteger(attackRoll)||attackRoll<1||attackRoll>100)manual.push('jet-attaque-requis:impenetrable');else if(attackRoll%2!==0)criticalIgnored=true;}
  }
  if(known.some(key=>(context.ignoredArmourFlaws||[]).includes(key))){include=false;ignored.push({item,reason:'Talent : armure ignorée ('+known.filter(key=>context.ignoredArmourFlaws.includes(key)).join(', ')+')'});}
+ if(include&&barrakul&&!isMagicalItem(item)){include=false;ignored.push({item,reason:'Barrakul : PA de cette pièce non magique ignorés'});}
  if(include)counted.push(item);
  }
+ // Sans pièce identifiée (PA saisis à la main, PA physiques conservés hors possessions), rien ne dit si la protection est magique.
+ if(barrakul&&((!location&&Number(baseAp)>0)||(protection&&Number.isSafeInteger(retained)&&retained>0)))manual.push('barrakul-magie-armure-a-preciser');
  if(location)ap=counted.reduce((sum,item)=>sum+item.ap,0)+(Number.isSafeInteger(retained)&&retained>=0?retained:0);
  if(location?.ignored.some(row=>row.item.ap===null))manual.push('pa-a-preciser');
  let shieldAp=0,shield=null;
@@ -565,7 +579,8 @@ export function locationProtection(target,context={}){
  const paviseCovered=deployment?.status==='planted' && ['north','south','east','west'].includes(paviseFacing)
   && attackDirection===paviseFacing && Number(context.paviseDistanceYards)<=1
   && (context.ranged===true || (context.paviseMeleeFirstTurn===true && context.ranged===false));
- if(paviseCovered)ap=Math.max(ap,5);
+ if(paviseCovered&&!(barrakul&&!isMagicalItem(paviseItem)))ap=Math.max(ap,5);
+ if(barrakul&&shield&&shieldAp>0&&!isMagicalItem(shield)){shieldAp=0;warnings.push('Barrakul : PA du bouclier non magique ignorés');}
  if(attackWords.includes('perforante')){const word=resolveKeyword('perforante'),source=talentQualityRegistry.qualityContracts.find(q=>q.id==='perforante');evaluatedKeywords.add('perforante');if(word?.effect!==source?.effect||word?.edition!==source?.edition||word?.source!==source?.source)manual.push('effet-non-couvert:perforante');else ap=Math.max(0,ap-2);}
  if(context.manualAp!==undefined&&context.manualAp!==null){const override=Number(context.manualAp);if(Number.isFinite(override)&&override>=0)return {location:id,ap:override,baseAp,shieldAp,counted,ignored,shield,criticalIgnored,manual:[],warnings,evaluatedKeywords:context.critical&&evaluatedKeywords.has('impenetrable')?['impenetrable']:[],arbitrated:true};}
  return {location:id,ap:manual.length?null:ap+shieldAp,baseAp,shieldAp,counted,ignored,shield,criticalIgnored,manual:[...new Set(manual)],warnings,evaluatedKeywords:[...evaluatedKeywords]};

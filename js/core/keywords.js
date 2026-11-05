@@ -28,7 +28,7 @@ const RESOLUTION_QUALITY_COVERAGE=Object.freeze({
 export function keywordMechanicalStatus(value){
  const raw=typeof value==='string'?value:value?.id;const id=ENGINES[raw]?.aliasOf??resolveKeyword(raw)?.id??raw;
  const word=resolveKeyword(id),baseline=contracts.entries.find(w=>w.id===id)||talentQualityRegistry.qualityContracts.find(w=>w.id===id);
- const protectionEngine = ({perforante:'ignore-two-armour',flexible:'armour-layers',partielle:'conditional-location-armour','points-faibles':'conditional-critical-armour',impenetrable:'odd-hit-critical-immunity',protectrice:'contextual-shield-armour'})[id];
+ const protectionEngine = ({perforante:'ignore-two-armour',barrakul:'ignore-non-magical-armour-and-shields',flexible:'armour-layers',partielle:'conditional-location-armour','points-faibles':'conditional-critical-armour',impenetrable:'odd-hit-critical-immunity',protectrice:'contextual-shield-armour'})[id];
  const declaration=RESOLUTION_QUALITY_COVERAGE[id];
  const engine=ENGINES[id] || (declaration ? {tier:1,engine:declaration.engine,scope:'resolution-quality'} : protectionEngine ? {tier:1,engine:protectionEngine,scope:'protection'} : null);if(!engine)return {id,status:'manual',reason:'effet-non-automatise',word};
  if(!word||!baseline||word.effect!==baseline.effect||word.edition!==baseline.edition)return {id,status:'manual',reason:'version-effet-non-couverte',word};
