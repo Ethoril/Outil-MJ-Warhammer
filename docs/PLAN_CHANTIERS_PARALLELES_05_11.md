@@ -63,6 +63,20 @@ Constats vérifiés le 05/11 : 4 appels `JSON.parse(Store.getFullJSON())` dans `
 | **U6** | Outil MJ | Bord droit : soit tiroir *Circonstances* en onglet du panneau latéral, soit outils flottants déplaçables. | `workspace-view.js`, `main.js`, CSS | **D5** : quelle option |
 | **U8** | Outil MJ | Moteur d'effets unifié (`docs/PROPOSITION_MOTEUR_EFFETS_UNIFIE.md`), à cadrer avant *Sea of Claws* (skill `cadrer-feature`). | — | priorité à confirmer |
 
+### Étude E1 : pions en médaillon (demande du MJ, 05/11)
+
+Référence fournie par le MJ (GIF « Fantasy_GIF_16 », lien Discord) : médaillon rond à cerclage métallique ciselé, laiton ou bronze sombre, avec un petit ornement en haut. Le personnage **déborde du cercle** : tête, ailes et armes passent par-dessus le cadre. Une pastille d'état est accrochée au cerclage, en bas à gauche. Ce rendu n'a jamais été obtenu jusqu'ici.
+
+Étude, sans code de production, à mener avec le MCP Magnific :
+1. **Cerclages** : générer 3 ou 4 cerclages dans l'esprit grimdark WFRP (fond transparent, vue de face), en déclinaisons par camp (métal ou teinte).
+2. **Débord** : détourer quelques portraits existants (`images_remove_background`), puis poser le personnage en deux couches. Le fond est découpé dans le cercle ; le personnage détouré passe par-dessus le haut du cerclage.
+3. **Faisabilité Canvas dans Map Display** : ordre des couches (fond, cerclage, débord, badges), coût avec 20 à 40 pions, lisibilité sur la TV et à petit zoom, poids des images (plafond de 24 Kio par image du contrat §6), teinte du camp, cohabitation avec les deux anneaux du pion monté (L3-MD) et avec le rendu « mort ».
+4. **Livrable** : une page de maquette avec 2 ou 3 variantes réelles, leur coût, et les décisions à prendre par le MJ. Aucune intégration avant son choix.
+
+| Id | Dépôt | Contenu | Décision attendue |
+|---|---|---|---|
+| **E1** | aucun (étude) | Maquette des médaillons, images Magnific, mesure du coût Canvas | choix d'une variante, puis morceau d'intégration dans Map Display |
+
 Écartés pour l'instant : le découpage des monolithes (gros risque, aucun gain fonctionnel) et l'installation de skills externes (`impeccable`, `game-ui-design`), à décider séparément.
 
 ## Vagues
@@ -71,6 +85,6 @@ Constats vérifiés le 05/11 : 4 appels `JSON.parse(Store.getFullJSON())` dans `
 |---|---|---|
 | **1** | B1 · U1→U2 (une session) · U4 · L1c · L1a+U7 · L1b+L2 (une session Map Display) | prête (D1 et D2 tranchés) |
 | **2** | U3 · L3-MJ · L3-MD · L4 · L6-MD · B2 · liseré de camp des pions liés et liste « en attente » dans la colonne étroite (constats de recette du 05/11) · `tests/browser-index.mjs` sous Windows | après les fusions de la vague 1 ; D3 pour L4 |
-| **3** | U5 · U6 · L5-MJ · L5-MD · cadrage U8 | D4, D5 |
+| **3** | U5 · U6 · L5-MJ · L5-MD · cadrage U8 · étude E1 | D4, D5 |
 
 Entre deux vagues : fusion des branches dans `dev/recette-plateau-04-11` (outil MJ) et dans `feat/liaison-outil-mj` (Map Display), sur feu vert du MJ, puis recette navigateur sur le port 8771.
