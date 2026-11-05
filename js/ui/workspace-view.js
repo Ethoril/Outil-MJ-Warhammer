@@ -24,7 +24,6 @@ import { withoutOutnumberContext as withoutOutnumberKeys, outnumberSide } from '
 const TARGET_ENGAGEMENT_KEYS = ['targetEngaged', 'engagedWithShooter', 'engagedTargetIds', 'engagedTargetRoll', 'engagedDefensesById', 'shooterEngagedElsewhere', 'engagementForced'];
 const withoutOutnumberContext = context => { const rest = withoutOutnumberKeys(context); for (const key of TARGET_ENGAGEMENT_KEYS) delete rest[key]; return rest; };
 import { equipmentAttackContext, weaponSkillGroupInfo } from '../core/equipment.js';
-import { v5StoreActionClock } from '../core/v5-store-action.js';
 import { d100, d10 } from '../core/dice.js';
 import { inferActionType, previewHpLoss, ResolutionError } from '../core/resolution.js';
 import { userMessage, userError, contextMessage, refusalError } from './messages.js';
@@ -1209,7 +1208,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     if(draft.fortuneAdvantageDeclarationId)input.fortuneAdvantageDeclarationId=draft.fortuneAdvantageDeclarationId;
     const combatRound=readCombat(Store).round;
     let currentTurnIndex=1;
-    try{currentTurnIndex=Number(JSON.parse(Store.getFullJSON()).extensions?.v5?.turnIndex)||1;}catch{}
+    try{currentTurnIndex=Number(Store.getTurnIndex())||1;}catch{}
     if(Number.isSafeInteger(combatRound)&&combatRound>0){
       input.round=combatRound;
       input.v5={...input.v5,context:{...(input.v5.context||{}),currentRound:combatRound,currentTurnIndex}};
@@ -2097,7 +2096,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     const center = play.center;
     center.replaceChildren();
     let suddenDeathEnabled = false;
-    try { suddenDeathEnabled = JSON.parse(Store.getFullJSON()).extensions?.v5?.suddenDeathEnabled === true; } catch {}
+    try { suddenDeathEnabled = Store.isSuddenDeathEnabled() === true; } catch {}
     const suddenDeath = node('section', 'workspace-card workspace-sudden-death');
     suddenDeath.setAttribute('aria-label', 'Réglage de table : mort subite des figurants');
     suddenDeath.appendChild(rubric('Mort subite des figurants'));
@@ -2185,12 +2184,10 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     const draft = state.resolution;
     let previousWeaponAttacks = [], resolutionClock = {};
     try {
-      const envelope = JSON.parse(Store.getFullJSON());
-      const clockRound=envelope.combat?.round,clockTurnIndex=envelope.activeScene?.extensions?.v5?.turnIndex??envelope.extensions?.v5?.turnIndex;
+      const clockRound=Store.getActionClock(context.actor?.id).round,clockTurnIndex=Store.getTurnIndex({scene:true});
       if(Number.isSafeInteger(clockRound)&&clockRound>0)resolutionClock.currentRound=clockRound;
       if(Number.isSafeInteger(clockTurnIndex)&&clockTurnIndex>0)resolutionClock.currentTurnIndex=clockTurnIndex;
-      const {encounterId,turnId}=v5StoreActionClock({...envelope,combat:{...(envelope.combat||{}),currentActorId:context.actor?.id}});
-      previousWeaponAttacks = (envelope.extensions?.v5?.standardTurnActions || []).filter(row => row.actorId === context.actor?.id && row.encounterId === encounterId && row.turnId === turnId && row.kind === 'action' && row.targetId)
+      previousWeaponAttacks = Store.listTurnActions(context.actor?.id).filter(row => row.kind === 'action' && row.targetId)
         .map(row => ({ ...row, weaponName: context.actor?.equipment?.find(item => item.id === row.weaponId)?.name || 'Action' }));
     } catch { previousWeaponAttacks = []; }
     center.appendChild(renderResolutionPanel({
@@ -2238,7 +2235,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         const deployment=context.actor?.extensions?.v5?.paviseDeploymentByItemId?.[item.id]||null,wrap=node('div','workspace-v5-context');
         let actionAvailable=false,actionBlock='';
         try{
-          const envelope=JSON.parse(Store.getFullJSON()),clock=v5StoreActionClock(envelope),isCurrent=envelope.combat?.currentActorId===context.actor.id,spent=(envelope.extensions?.v5?.standardTurnActions||[]).some(row=>row.actorId===context.actor.id&&row.encounterId===clock.encounterId&&row.turnId===clock.turnId),sameTurnSecond=deployment?.actionsPaid===1&&deployment.lastTurnId===clock.turnId;
+          const clock=Store.getActionClock(),isCurrent=readCombat(Store).currentActorId===context.actor.id,spent=Store.listTurnActions(context.actor.id).length>0,sameTurnSecond=deployment?.actionsPaid===1&&deployment.lastTurnId===clock.turnId;
           actionAvailable=Boolean(isCurrent&&clock.turnId&&!spent&&!sameTurnSecond);
           if(!isCurrent)actionBlock='Le porteur doit être l’acteur courant.';else if(!clock.turnId)actionBlock='Tour non suivi : l’Action ne peut pas être dépensée.';else if(spent)actionBlock='Une Action a déjà été dépensée pendant ce Tour.';else if(sameTurnSecond)actionBlock='La seconde Action exige un Tour ultérieur.';
         }catch{actionBlock='État de combat indisponible.';}

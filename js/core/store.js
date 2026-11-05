@@ -5281,6 +5281,27 @@ function resolvedCorruptionTest(participant, skillId, input) {
     },
 
     ...createAftermathApi({ api, currentEnvelope, absentAftermathSubjects, runAftermathCommand, stageAftermathClock, aftermathHealerOf, sequelaAmputation, aftermathAmputation, withHealingFumble }),
+    // Accesseurs légers du rendu (U1) : mêmes lectures que JSON.parse(getFullJSON()), sans sérialiser l'enveloppe.
+    // Valeurs simples ou copies : le rendu ne peut pas muter l'état du store.
+    getTurnIndex({ scene = false } = {}) {
+      const raw = scene ? (activeScene?.extensions?.v5?.turnIndex ?? stateExtensions?.v5?.turnIndex) : stateExtensions?.v5?.turnIndex;
+      return raw === undefined || (raw !== null && typeof raw === 'object') ? null : raw;
+    },
+    isSuddenDeathEnabled() {
+      return stateExtensions?.v5?.suddenDeathEnabled === true;
+    },
+    getActionClock(actorId = null) {
+      return v5StoreActionClock({
+        ...(activeScene ? { activeScene } : {}),
+        extensions: stateExtensions,
+        combat: { round: combat.round, currentActorId: actorId ?? combat.currentActorId }
+      });
+    },
+    listTurnActions(actorId) {
+      if (actorId == null) return [];
+      const { encounterId, turnId } = api.getActionClock(actorId);
+      return cloneValue((stateExtensions?.v5?.standardTurnActions || []).filter(row => row.actorId === actorId && row.encounterId === encounterId && row.turnId === turnId));
+    },
     getFullJSON() {
       const data = currentEnvelope();
       return JSON.stringify(data, null, 2);
