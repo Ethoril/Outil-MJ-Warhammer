@@ -1,0 +1,450 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pions en médaillon (E1)</title>
+<style>
+  :root { --bg:#16140f; --panel:#221f18; --line:#3a3428; --text:#e9e2d0; --muted:#a89f8a; --accent:#c9a45c; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font:15px/1.5 Georgia, 'Times New Roman', serif; }
+  main { max-width:1100px; margin:0 auto; padding:24px 16px 64px; }
+  h1 { font-size:26px; margin:0 0 4px; color:var(--accent); }
+  h2 { font-size:20px; margin:40px 0 10px; color:var(--accent); border-bottom:1px solid var(--line); padding-bottom:4px; }
+  h3 { font-size:17px; margin:0 0 6px; }
+  p, li { color:var(--text); }
+  .muted { color:var(--muted); font-size:13px; }
+  .card { background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:14px; margin:12px 0; }
+  .controls { display:flex; flex-wrap:wrap; gap:6px 18px; align-items:center; position:sticky; top:0; z-index:5; background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:10px 14px; }
+  .controls label { font-size:14px; white-space:nowrap; }
+  canvas.stage { width:100%; height:auto; display:block; border-radius:6px; background:#2b2a24; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(120px, 1fr)); gap:10px; }
+  .grid figure { margin:0; text-align:center; font-size:12px; color:var(--muted); }
+  .grid img { width:100%; aspect-ratio:1; object-fit:contain; background:repeating-conic-gradient(#2c2a24 0 25%, #36332b 0 50%) 0 0/16px 16px; border-radius:6px; }
+  table { border-collapse:collapse; width:100%; font-size:14px; }
+  th, td { border-bottom:1px solid var(--line); padding:6px 8px; text-align:left; vertical-align:top; }
+  th { color:var(--accent); font-weight:normal; }
+  td.num { text-align:right; font-variant-numeric:tabular-nums; }
+  button { font:inherit; background:#3a3020; color:var(--text); border:1px solid var(--accent); border-radius:6px; padding:6px 14px; cursor:pointer; }
+  button:disabled { opacity:.5; cursor:wait; }
+  .tag { display:inline-block; font-size:12px; padding:1px 7px; border-radius:10px; background:#3a3428; color:var(--muted); margin-left:6px; }
+  .ok { color:#9fc79a; } .ko { color:#e0907f; }
+  ol li, ul li { margin:4px 0; }
+  @media (max-width:600px) { .controls { position:static; } }
+</style>
+</head>
+<body>
+<main>
+  <h1>Pions en médaillon — étude E1</h1>
+  <p class="muted">Étude du 05/11/2026 pour RPG Map Display. Aucune intégration : cette page reproduit le rendu Canvas des pions (<code>js/render/layers/tokens.js</code>) avec trois variantes de médaillon, sur des images réelles. Les rendus ci-dessous sont dessinés en direct par la même méthode que Map Display (Canvas 2D, découpes, <code>drawImage</code>).</p>
+
+  <div class="controls" id="controls">
+    <label><input type="checkbox" id="o-debord" checked> Débord</label>
+    <label><input type="checkbox" id="o-dead"> Mort</label>
+    <label><input type="checkbox" id="o-mount"> Monté</label>
+    <label><input type="checkbox" id="o-sel"> Sélectionné</label>
+    <label><input type="checkbox" id="o-etat" checked> Pastille d'état</label>
+    <label><input type="checkbox" id="o-epais"> Cerclages épais</label>
+    <label><input type="checkbox" id="o-lod" checked> Repli sous <span id="lod-v">36</span> px</label>
+    <label>Ampleur du débord <input type="range" id="o-scale" min="0.95" max="1.45" step="0.01" value="1.25"></label>
+  </div>
+
+  <h2>Les trois variantes et le rendu actuel</h2>
+  <p class="muted">Chaque ligne montre un pion par camp (PJ, allié, ennemi, neutre) à 96, 60 et 36 px à l'écran (grand zoom sur la TV, zoom courant, petit zoom).</p>
+
+  <div class="card">
+    <h3>Loupe <span class="tag">180 px</span></h3>
+    <p class="muted">Elysia (PJ) et Gor (ennemi) : actuel, A, B, C.</p>
+    <canvas class="stage" data-variant="loupe"></canvas>
+  </div>
+  <div class="card">
+    <h3>Actuel <span class="tag">référence</span></h3>
+    <canvas class="stage" data-variant="actuel"></canvas>
+  </div>
+  <div class="card">
+    <h3>A. Médaillon ciselé, un métal par camp <span class="tag">2 images par profil</span></h3>
+    <p class="muted">PJ laiton à comète, allié étain à laurier, ennemi fer à pointes, neutre bronze à crâne. Le portrait d'origine remplit la fenêtre ; le personnage détouré repasse par-dessus le haut du cerclage.</p>
+    <canvas class="stage" data-variant="A"></canvas>
+  </div>
+  <div class="card">
+    <h3>B. Un seul cerclage teinté, personnage sur fond de camp <span class="tag">1 image par profil</span></h3>
+    <p class="muted">Le cerclage bronze est teinté à la couleur du camp (calculé une fois par camp, mis en cache). Le décor du portrait disparaît : le personnage détouré se détache sur un fond émaillé du camp.</p>
+    <canvas class="stage" data-variant="B"></canvas>
+  </div>
+  <div class="card">
+    <h3>C. Cerclage dessiné en Canvas <span class="tag">aucune image de cadre</span></h3>
+    <p class="muted">Bague biseautée tracée en dégradé de la couleur du camp, petit clou en haut, même débord. Pas d'image de cadre à charger, net à tous les zooms, mais pas de ciselure.</p>
+    <canvas class="stage" data-variant="C"></canvas>
+  </div>
+
+  <h2>Cerclages générés (Magnific)</h2>
+  <p class="muted">Deux planches 2×2 sur fond vert, détourées en local par incrustation. WebP 256 px, alpha. Les poids sont mesurés.</p>
+  <div class="grid" id="frames-grid"></div>
+
+  <h2>Débord : détourage des portraits existants</h2>
+  <p class="muted">Portraits de <code>maps/tokens/</code> (200 px, déjà découpés en rond avec leur liseré), détourés par <code>images_remove_background</code>.</p>
+  <div class="grid" id="cuts-grid"></div>
+  <ul>
+    <li class="ok">Elysia et Wilhelm : détourage propre du premier coup.</li>
+    <li class="ok">Gor et l'hydre : le premier essai gardait le disque et l'anneau ; propre une fois l'anneau gommé et le disque posé sur fond blanc.</li>
+    <li class="ko">Bestigor : le ciel d'orage reste collé au personnage même au second essai. Un portrait sur décor chargé demande une retouche ou une régénération.</li>
+    <li>Limite de fond : un portrait déjà découpé en rond a perdu ce qui dépassait du disque. Le débord ne peut donc pas sortir du disque d'origine (≈ 88 % du rayon) : il couvre la bande du cerclage, pas au-delà.</li>
+  </ul>
+
+  <h2>Banc Canvas : 20 et 40 pions</h2>
+  <p class="muted">Temps de dessin des pions sur le fil principal, par image (moyenne sur 200 images après 20 de chauffe), toile 1920×1080. La découpe et la composition GPU qui suivent ne sont pas comptées ; c'est le temps qui bloque l'interface.</p>
+  <p><button id="bench">Lancer le banc</button> <span class="muted" id="bench-status"></span></p>
+  <table id="bench-table">
+    <thead><tr><th>Variante</th><th class="num">20 pions · 64 px</th><th class="num">40 pions · 64 px</th><th class="num">40 pions · 28 px</th><th class="num">40 pions, morts et montés</th></tr></thead>
+    <tbody></tbody>
+  </table>
+  <p><b>Mesure du 05/11</b> (navigateur intégré de Claude Code, Chromium, onglet en arrière-plan : chiffres bruités, meilleur de trois passes, en ms par image) :</p>
+  <table>
+    <thead><tr><th>Variante</th><th class="num">20 · 64 px</th><th class="num">40 · 64 px</th><th class="num">40 · 28 px</th><th class="num">40 morts et montés</th></tr></thead>
+    <tbody>
+      <tr><td>Actuel</td><td class="num">0,22</td><td class="num">0,64</td><td class="num">0,70</td><td class="num">1,83</td></tr>
+      <tr><td>A</td><td class="num">1,39</td><td class="num">0,63</td><td class="num">0,57</td><td class="num">2,68</td></tr>
+      <tr><td>B</td><td class="num">0,89</td><td class="num">0,94</td><td class="num">0,73</td><td class="num">3,02</td></tr>
+      <tr><td>C</td><td class="num">0,87</td><td class="num">1,18</td><td class="num">0,79</td><td class="num">3,19</td></tr>
+    </tbody>
+  </table>
+  <p>Conclusion : au pire environ 3 ms pour 40 pions, soit moins d'un cinquième du budget d'une image à 60 i/s, et Map Display ne redessine qu'à l'invalidation ou pendant un déplacement. Le coût n'est pas un critère de choix entre les variantes. À remesurer sur le PC de la TV avant intégration.</p>
+  <canvas id="bench-canvas" width="1920" height="1080" style="width:100%;max-width:480px;margin-top:10px;border-radius:6px"></canvas>
+
+  <h2>Faisabilité dans Map Display</h2>
+  <table>
+    <thead><tr><th>Point</th><th>Constat</th></tr></thead>
+    <tbody>
+      <tr><td>Ordre des couches</td><td>1. portrait (ou fond de camp) découpé dans la fenêtre du cerclage ; 2. rendu « mort » dans la même découpe ; 3. filet du cavalier si monté ; 4. cerclage ; 5. débord, découpé à une bande haute centrée ; 6. anneau de sélection ; 7. médaillon du cavalier ; 8. élévation, PV, pastille d'état, rangée de marqueurs, numéro. Les étapes 1, 2, 6 à 8 existent déjà dans <code>_drawToken</code> ; s'ajoutent le cerclage (un <code>drawImage</code>) et le débord (une découpe et un <code>drawImage</code>).</td></tr>
+      <tr><td>Coût</td><td>Voir le banc : deux <code>drawImage</code> de plus par pion. Les teintes par camp et les versions « mort » du cerclage se calculent une fois dans une toile hors écran, jamais à chaque image.</td></tr>
+      <tr><td>Poids des images</td><td>Cerclages : 12 à 19 Kio chacun, livrés avec l'application (pas soumis au plafond par profil). Par profil : portrait 7 à 10 Kio et détourage 8 à 11 Kio, chacun sous 24 Kio. La variante A double le poids par profil : le plafond de 512 Kio au total passe d'environ 50 profils illustrés à environ 25.</td></tr>
+      <tr><td>Contrat de liaison</td><td>Le détourage est une <b>deuxième image</b> par profil (A, C) ou remplace le portrait (B). Il faut un champ de plus au contrat (§6) ou une règle « l'image est déjà détourée ». Le recadrage rond fait à l'import de l'outil MJ coupe ce qui dépasse : pour un vrai débord, l'import doit garder l'image carrée.</td></tr>
+      <tr><td>Teinte du camp</td><td>A : par le métal (4 cerclages). B : teinte calculée (mode « color ») sur un seul cerclage. C : couleur directe. Un liseré choisi à la main par le MJ (<code>borderColor</code>) n'a plus de place visible en A ; en B et C il remplace la teinte du camp.</td></tr>
+      <tr><td>Pion monté (L3)</td><td>Le cerclage tient lieu d'anneau extérieur (la monture) ; l'anneau intérieur clair du cavalier devient un filet au bord de la fenêtre. Le débord se resserre au centre pour ne pas mordre le médaillon du cavalier, en haut à droite. Le haut du pion devient chargé (PV, débord, cavalier) : à juger sur la loupe en cochant « Monté ».</td></tr>
+      <tr><td>Rendu « mort »</td><td>Portrait désaturé et assombri comme aujourd'hui, cerclage en version grise (mise en cache), croix ; le débord est supprimé : le personnage « retombe » dans son cadre, ce qui se lit de loin. Le cerclage gris efface le camp, alors que le rendu actuel garde le liseré coloré : à trancher.</td></tr>
+      <tr><td>Débord réel</td><td>Pour que la tête passe sur le cerclage, le portrait est agrandi (×1,25 par défaut, réglable en haut de page) : la fenêtre ne montre plus que le buste. Le débord reste modeste, borné par le recadrage rond d'origine.</td></tr>
+      <tr><td>Petit zoom</td><td>Sous ~36 px à l'écran, la ciselure devient une bouillie et la fenêtre (69 % du diamètre) réduit le visage. Repli proposé : le rendu actuel avec un liseré de la couleur du métal. Le cerclage épais (fenêtre à 60 %) est à écarter pour cette raison.</td></tr>
+      <tr><td>Badges</td><td>PV en haut à gauche et élévation en haut à droite restent ; le débord occupe le haut-centre. La pastille d'état s'accroche au cerclage en bas à gauche, à la place du numéro d'exemplaire qui irait en bas à droite.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Coûts de l'étude</h2>
+  <table>
+    <tbody>
+      <tr><td>Crédits Magnific</td><td>2 planches de cerclages × 65 = 130 ; 8 détourages × 3 = 24 ; total 154 crédits.</td></tr>
+      <tr><td>Par nouveau profil illustré (A ou C)</td><td>3 crédits de détourage, plus une retouche à la main si le décor est chargé (1 cas sur 5 ici).</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Décisions à prendre par le MJ</h2>
+  <ol>
+    <li><b>Variante</b> : A (un métal par camp, deux images par profil), B (cerclage teinté, une image détourée par profil, décor perdu) ou C (cerclage dessiné, pas de ciselure).</li>
+    <li><b>Débord</b> : garder le débord, sachant qu'il exige une image détourée par profil (champ nouveau au contrat §6, ou image unique détourée en B) et un import qui ne recadre plus en rond.</li>
+    <li><b>Cerclage</b> : fin (fenêtre 69 %) ou épais (fenêtre 60 %) ; le fin est recommandé pour le petit zoom.</li>
+    <li><b>Débordement de la case</b> : le cerclage reste dans la case (actuel) ou la dépasse légèrement pour rendre de la place au visage.</li>
+    <li><b>Repli au petit zoom</b> : seuil (36 px proposé) sous lequel on revient au disque simple.</li>
+    <li><b>Pion mort</b> : cerclage gris (camp effacé) ou cerclage du camp gardé, portrait seul désaturé.</li>
+    <li><b>Liseré manuel</b> (<code>borderColor</code>) : abandonné en A, ou prioritaire sur la teinte du camp en B et C.</li>
+  </ol>
+</main>
+
+<script>
+'use strict';
+// Géométrie des cerclages dans leur image de 256 px : centre, rayon extérieur, rayon de la fenêtre.
+const FR = {"bronze-fin":{"cx":127.7,"cy":131.2,"r":124.8,"ri":87.0},"bronze-epais":{"cx":127.7,"cy":128.1,"r":127.9,"ri":80.0},"fer-fin":{"cx":127.9,"cy":140.6,"r":115.4,"ri":80.5},"fer-epais":{"cx":127.7,"cy":128.1,"r":127.9,"ri":80.0},"laiton-fin":{"cx":127.8,"cy":133.7,"r":122.3,"ri":77.4},"laiton-epais":{"cx":128.0,"cy":128.1,"r":127.9,"ri":76.7},"etain-fin":{"cx":127.7,"cy":131.5,"r":124.5,"ri":78.8},"etain-epais":{"cx":127.7,"cy":128.1,"r":127.9,"ri":77.0}};
+const SIZES = {"cerclage-bronze-fin":15.0,"cerclage-bronze-epais":14.7,"cerclage-fer-fin":12.1,"cerclage-fer-epais":12.7,"cerclage-laiton-fin":18.1,"cerclage-laiton-epais":19.4,"cerclage-etain-fin":17.8,"cerclage-etain-epais":17.9,"portrait-elysia":6.9,"debord-elysia":7.9,"portrait-wilhelm":8.9,"debord-wilhelm":8.5,"portrait-gor":9.7,"debord-gor":11.4,"portrait-hydre":8.0,"debord-hydre":9.7,"portrait-bestigor":8.6,"debord-bestigor":8.1};
+// Teintes de camp de Map Display (CAMP_FILL) et métal de la variante A.
+const CAMPS = {
+  pj:     { color:'#34507f', metal:'laiton', light:'#7c9bd0', name:'PJ' },
+  allie:  { color:'#3f6e4a', metal:'etain',  light:'#86c095', name:'allié' },
+  ennemi: { color:'#a8402f', metal:'fer',    light:'#e0806c', name:'ennemi' },
+  neutre: { color:'#6b7178', metal:'bronze', light:'#b3b9c0', name:'neutre' },
+};
+const ROW = [
+  { id:'elysia',  camp:'pj',     label:'Elysia',  hp:[11,14], rider:'wilhelm' },
+  { id:'wilhelm', camp:'allie',  label:'Wilhelm', hp:[9,12],  rider:'elysia' },
+  { id:'gor',     camp:'ennemi', label:'Gor',     hp:[18,22], rider:'wilhelm' },
+  { id:'hydre',   camp:'neutre', label:'Hydre',   hp:[40,52], rider:'gor' },
+];
+const IMG = {};
+const O = () => ({
+  debord: document.getElementById('o-debord').checked,
+  dead: document.getElementById('o-dead').checked,
+  mount: document.getElementById('o-mount').checked,
+  sel: document.getElementById('o-sel').checked,
+  etat: document.getElementById('o-etat').checked,
+  epais: document.getElementById('o-epais').checked,
+  lod: document.getElementById('o-lod').checked,
+  lodPx: 36,
+  scale: parseFloat(document.getElementById('o-scale').value),
+});
+
+function load(name) {
+  return new Promise((res) => { const i = new Image(); i.onload = () => { IMG[name] = i; res(); }; i.onerror = () => res(); i.src = name + '.webp'; });
+}
+
+// ── Caches hors écran : cerclage teinté par camp (B) et version « mort » ; calculés une fois.
+const frameCache = new Map();
+function frameCanvas(name, tint, dead) {
+  const key = name + '|' + (tint || '') + '|' + (dead ? 1 : 0);
+  let c = frameCache.get(key);
+  if (c) return c;
+  const src = IMG['cerclage-' + name];
+  c = document.createElement('canvas'); c.width = c.height = 256;
+  const x = c.getContext('2d');
+  x.drawImage(src, 0, 0, 256, 256);
+  if (tint) {
+    x.globalCompositeOperation = 'color'; x.fillStyle = tint; x.globalAlpha = 0.85; x.fillRect(0, 0, 256, 256);
+    x.globalAlpha = 1; x.globalCompositeOperation = 'destination-in'; x.drawImage(src, 0, 0, 256, 256);
+  }
+  if (dead) {
+    x.globalCompositeOperation = 'saturation'; x.fillStyle = '#808080'; x.fillRect(0, 0, 256, 256);
+    x.globalCompositeOperation = 'source-atop'; x.fillStyle = 'rgba(0,0,0,0.35)'; x.fillRect(0, 0, 256, 256);
+    x.globalCompositeOperation = 'destination-in'; x.drawImage(src, 0, 0, 256, 256);
+  }
+  frameCache.set(key, c);
+  return c;
+}
+
+function circle(ctx, cx, cy, r) { ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); }
+
+function deadOverlay(ctx, x, y, w, h) {
+  ctx.globalCompositeOperation = 'saturation'; ctx.fillStyle = '#808080'; ctx.fillRect(x, y, w, h);
+  ctx.globalCompositeOperation = 'source-over'; ctx.fillStyle = 'rgba(0,0,0,0.35)'; ctx.fillRect(x, y, w, h);
+}
+
+function drawRider(ctx, t, x, y, s, ringColor) {
+  const r = s * 0.42 / 2, cx = x + s - r, cy = y + r;
+  ctx.save(); circle(ctx, cx, cy, r); ctx.save(); ctx.clip();
+  const im = IMG['portrait-' + t.rider];
+  if (im) ctx.drawImage(im, cx - r * 1.12, cy - r * 1.12, r * 2.24, r * 2.24);
+  ctx.restore();
+  ctx.lineWidth = 2; ctx.strokeStyle = ringColor; ctx.stroke();
+  ctx.lineWidth = 1; ctx.strokeStyle = 'rgba(0,0,0,.7)'; circle(ctx, cx, cy, r + 1.5); ctx.stroke();
+  ctx.restore();
+}
+
+function drawBadges(ctx, t, x, y, s, R, o) {
+  const cx = x + s / 2, cy = y + s / 2;
+  // PV en haut à gauche (cartouche chiffré actuel).
+  const fs = Math.max(9, Math.round(s * 0.16));
+  ctx.save();
+  ctx.font = `bold ${fs}px sans-serif`;
+  const txt = `${t.hp[0]}/${t.hp[1]}`;
+  const tw = ctx.measureText(txt).width + fs * 0.6, th = fs * 1.3;
+  ctx.fillStyle = 'rgba(0,0,0,.85)';
+  ctx.beginPath(); ctx.roundRect ? ctx.roundRect(x + s * 0.02, y + s * 0.02, tw, th, 3) : ctx.rect(x + s * 0.02, y + s * 0.02, tw, th);
+  ctx.fill(); ctx.strokeStyle = 'rgba(255,255,255,.5)'; ctx.lineWidth = 1; ctx.stroke();
+  ctx.fillStyle = '#fff'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText(txt, x + s * 0.02 + tw / 2, y + s * 0.02 + th / 2 + 0.5);
+  // Pastille d'état accrochée au cerclage, en bas à gauche (135°).
+  if (o.etat) {
+    const pr = Math.max(6, s * 0.11), px = cx - R * 0.72, py = cy + R * 0.72;
+    circle(ctx, px, py, pr + 1.5); ctx.fillStyle = '#1a140c'; ctx.fill();
+    circle(ctx, px, py, pr); ctx.fillStyle = '#b8322a'; ctx.fill();
+    ctx.lineWidth = Math.max(1, pr * 0.18); ctx.strokeStyle = '#d9b26a'; ctx.stroke();
+    ctx.fillStyle = '#fff'; ctx.font = `bold ${Math.round(pr * 1.3)}px sans-serif`; ctx.fillText('!', px, py + 0.5);
+  }
+  ctx.restore();
+}
+
+// ── Rendu actuel (copie simplifiée de TokensLayer._drawToken) ; sert aussi de repli au petit zoom.
+function drawActuel(ctx, t, x, y, s, o, ringColor) {
+  const cx = x + s / 2, cy = y + s / 2, r = s / 2 - 1.5;
+  ctx.save(); circle(ctx, cx, cy, r); ctx.clip();
+  const im = IMG['portrait-' + t.id];
+  // Le portrait de maps/tokens a son propre liseré : on le recadre comme Map Display (cover).
+  if (im) ctx.drawImage(im, x, y, s, s);
+  if (o.dead) deadOverlay(ctx, x, y, s, s);
+  ctx.restore();
+  ctx.save(); circle(ctx, cx, cy, r); ctx.lineWidth = 3; ctx.strokeStyle = ringColor || CAMPS[t.camp].color; ctx.stroke();
+  if (o.mount) {
+    circle(ctx, cx, cy, r - 4.5); ctx.strokeStyle = 'rgba(0,0,0,.6)'; ctx.stroke();
+    circle(ctx, cx, cy, r - 7.5); ctx.strokeStyle = 'rgba(255,255,255,.9)'; ctx.stroke();
+  }
+  ctx.restore();
+  if (o.mount) drawRider(ctx, t, x, y, s, CAMPS[t.camp].color);
+  if (o.dead) cross(ctx, cx, cy, r * 0.5);
+  if (o.sel) { ctx.save(); circle(ctx, cx, cy, s / 2 + 4); ctx.lineWidth = 3; ctx.strokeStyle = '#fff'; ctx.stroke(); ctx.restore(); }
+  drawBadges(ctx, t, x, y, s, r, o);
+}
+
+function cross(ctx, cx, cy, a) {
+  ctx.save(); ctx.beginPath();
+  ctx.moveTo(cx - a, cy - a); ctx.lineTo(cx + a, cy + a); ctx.moveTo(cx + a, cy - a); ctx.lineTo(cx - a, cy + a);
+  ctx.strokeStyle = 'rgba(255,255,255,.7)'; ctx.lineWidth = 3; ctx.stroke(); ctx.restore();
+}
+
+const METAL_SOLID = { laiton:'#b08a45', etain:'#9a9c9e', fer:'#4a4440', bronze:'#6f6040' };
+
+function drawMedallion(ctx, variant, t, x, y, s, o) {
+  const camp = CAMPS[t.camp];
+  if (variant === 'actuel') return drawActuel(ctx, t, x, y, s, o);
+  if (o.lod && s < o.lodPx) return drawActuel(ctx, t, x, y, s, o, variant === 'A' ? METAL_SOLID[camp.metal] : camp.color);
+  const cx = x + s / 2, cy = y + s / 2;
+  const R = s / 2;                       // le cerclage reste dans la case
+  const tag = o.epais ? 'epais' : 'fin';
+  let rw, fname, tint = null;
+  if (variant === 'A') { fname = camp.metal + '-' + tag; }
+  if (variant === 'B') { fname = 'bronze-' + tag; tint = camp.color; }
+  if (variant === 'C') { rw = R * 0.80; }
+  let g = null, k = 1;
+  if (fname) { g = FR[fname]; k = R / g.r; rw = g.ri * k + 0.5; }
+
+  // Portrait : l'image de 200 px (disque utile ≈ 88 %) est agrandie pour que le haut du personnage
+  // atteigne la bande du cerclage.
+  const P = s * o.scale, px = cx - P / 2, py = cy - P / 2 + s * 0.06 * (o.scale - 0.95) / 0.3;
+  const portrait = IMG['portrait-' + t.id], cut = IMG['debord-' + t.id];
+
+  // 1-2. Fond dans la fenêtre, rendu « mort ».
+  ctx.save(); circle(ctx, cx, cy, rw); ctx.clip();
+  if (variant === 'B') {
+    const gr = ctx.createRadialGradient(cx, cy - rw * 0.3, rw * 0.1, cx, cy, rw);
+    gr.addColorStop(0, camp.light); gr.addColorStop(1, '#0d0b08');
+    ctx.fillStyle = gr; ctx.fillRect(cx - rw, cy - rw, rw * 2, rw * 2);
+    if (cut) ctx.drawImage(cut, px, py, P, P);
+  } else if (portrait) {
+    ctx.drawImage(portrait, px, py, P, P);
+  }
+  if (o.dead) deadOverlay(ctx, cx - rw, cy - rw, rw * 2, rw * 2);
+  ctx.restore();
+
+  // 3. Filet du cavalier (pion monté) au bord de la fenêtre.
+  if (o.mount) {
+    ctx.save(); circle(ctx, cx, cy, rw - 2); ctx.lineWidth = 2; ctx.strokeStyle = 'rgba(255,255,255,.9)'; ctx.stroke(); ctx.restore();
+  }
+
+  // 4. Cerclage.
+  if (fname) {
+    const fc = frameCanvas(fname, tint, o.dead);
+    ctx.drawImage(fc, cx - g.cx * k, cy - g.cy * k, 256 * k, 256 * k);
+  } else {
+    drawProceduralRing(ctx, cx, cy, R, rw, o.dead ? '#5a5a5a' : camp.color, o.dead ? '#9a9a9a' : camp.light);
+  }
+
+  // 5. Débord : le personnage détouré repasse par-dessus le haut du cerclage (jamais s'il est mort).
+  if (o.debord && !o.dead && cut) {
+    const half = o.mount ? s * 0.2 : s * 0.32;
+    ctx.save();
+    ctx.beginPath(); ctx.rect(cx - half, y - s, half * 2, (cy - s * 0.1) - (y - s)); ctx.clip();
+    ctx.drawImage(cut, px, py, P, P);
+    ctx.restore();
+  }
+
+  if (o.mount) drawRider(ctx, t, x, y, s, camp.color);
+  if (o.dead) cross(ctx, cx, cy, rw * 0.5);
+  if (o.sel) { ctx.save(); circle(ctx, cx, cy, R + 4); ctx.lineWidth = 3; ctx.strokeStyle = '#fff'; ctx.stroke(); ctx.restore(); }
+  drawBadges(ctx, t, x, y, s, R, o);
+}
+
+function drawProceduralRing(ctx, cx, cy, R, rw, color, light) {
+  ctx.save();
+  const gr = ctx.createLinearGradient(cx, cy - R, cx, cy + R);
+  gr.addColorStop(0, light); gr.addColorStop(0.5, color); gr.addColorStop(1, '#120e0a');
+  ctx.beginPath(); ctx.arc(cx, cy, R - 0.5, 0, Math.PI * 2); ctx.arc(cx, cy, rw, 0, Math.PI * 2, true);
+  ctx.fillStyle = gr; ctx.fill('evenodd');
+  ctx.lineWidth = 1.2; ctx.strokeStyle = 'rgba(0,0,0,.8)';
+  circle(ctx, cx, cy, R - 0.5); ctx.stroke(); circle(ctx, cx, cy, rw); ctx.stroke();
+  ctx.strokeStyle = 'rgba(255,240,200,.35)'; circle(ctx, cx, cy, (R + rw) / 2); ctx.stroke();
+  // Clou en haut.
+  const sr = (R - rw) * 0.55;
+  circle(ctx, cx, cy - (R + rw) / 2, sr); ctx.fillStyle = light; ctx.fill(); ctx.strokeStyle = 'rgba(0,0,0,.8)'; ctx.stroke();
+  ctx.restore();
+}
+
+// ── Planches de démonstration.
+function mapBackground(ctx, w, h, cell) {
+  ctx.fillStyle = '#3a3a30'; ctx.fillRect(0, 0, w, h);
+  ctx.strokeStyle = 'rgba(0,0,0,.25)'; ctx.lineWidth = 1;
+  for (let gx = 0; gx < w; gx += cell) { ctx.beginPath(); ctx.moveTo(gx + 0.5, 0); ctx.lineTo(gx + 0.5, h); ctx.stroke(); }
+  for (let gy = 0; gy < h; gy += cell) { ctx.beginPath(); ctx.moveTo(0, gy + 0.5); ctx.lineTo(w, gy + 0.5); ctx.stroke(); }
+}
+
+function renderStage(cv) {
+  const variant = cv.dataset.variant, o = O();
+  const dpr = window.devicePixelRatio || 1;
+  if (variant === 'loupe') {
+    const W = 1040, H = 470, s = 180;
+    cv.width = W * dpr; cv.height = H * dpr;
+    const ctx = cv.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    mapBackground(ctx, W, H, 45);
+    [ROW[0], ROW[2]].forEach((t, j) => ['actuel', 'A', 'B', 'C'].forEach((v, i) => drawMedallion(ctx, v, t, 40 + i * 250, 30 + j * 225, s, o)));
+    return;
+  }
+  const W = 1040, H = 150;
+  cv.width = W * dpr; cv.height = H * dpr;
+  const ctx = cv.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  mapBackground(ctx, W, H, 30);
+  let x = 20;
+  for (const s of [96, 60, 36]) {
+    for (const t of ROW) {
+      drawMedallion(ctx, variant, t, x, (H - s) / 2 + 6, s, o);
+      x += s + Math.max(14, s * 0.22);
+    }
+    x += 26;
+  }
+}
+function renderAll() { document.querySelectorAll('canvas.stage').forEach(renderStage); }
+
+// ── Banc.
+function bench(variant, n, s, extra) {
+  const cv = document.getElementById('bench-canvas'), ctx = cv.getContext('2d');
+  const o = Object.assign(O(), { dead:false, mount:false, sel:false }, extra || {});
+  let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  const toks = [];
+  for (let i = 0; i < n; i++) toks.push({ t: ROW[i % 4], x: Math.floor(rnd() * (1920 - s)), y: Math.floor(rnd() * (1080 - s)) });
+  const frame = () => {
+    mapBackground(ctx, 1920, 1080, 64);
+    for (const k of toks) drawMedallion(ctx, variant, k.t, k.x, k.y, s, o);
+  };
+  for (let i = 0; i < 20; i++) frame();
+  const N = 200, t0 = performance.now();
+  for (let i = 0; i < N; i++) frame();
+  const per = (performance.now() - t0) / N;
+  // Fond seul, à soustraire.
+  const b0 = performance.now();
+  for (let i = 0; i < N; i++) mapBackground(ctx, 1920, 1080, 64);
+  const bg = (performance.now() - b0) / N;
+  return Math.max(0, per - bg);
+}
+
+document.getElementById('bench').addEventListener('click', async () => {
+  const btn = document.getElementById('bench'), st = document.getElementById('bench-status');
+  btn.disabled = true; st.textContent = 'mesure en cours…';
+  const tb = document.querySelector('#bench-table tbody'); tb.innerHTML = '';
+  const names = { actuel:'Actuel', A:'A. métal par camp', B:'B. cerclage teinté', C:'C. cerclage dessiné' };
+  const results = {};
+  for (const v of ['actuel', 'A', 'B', 'C']) {
+    await new Promise((r) => setTimeout(r, 30));
+    const row = [bench(v, 20, 64), bench(v, 40, 64), bench(v, 40, 28), bench(v, 40, 64, { dead:true, mount:true })];
+    results[v] = row;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${names[v]}</td>` + row.map((m) => `<td class="num">${m.toFixed(2)} ms</td>`).join('');
+    tb.appendChild(tr);
+  }
+  window.__benchResults = results;
+  st.textContent = 'fait (' + navigator.userAgent.match(/(Chrome|Firefox|Safari)\/[\d.]+/)?.[0] + ', budget d’une image à 60 i/s : 16,7 ms)';
+  btn.disabled = false;
+});
+
+// ── Galeries.
+function gallery(id, names) {
+  const g = document.getElementById(id);
+  for (const n of names) {
+    const f = document.createElement('figure');
+    f.innerHTML = `<img src="${n}.webp" alt="${n}"><figcaption>${n.replace(/^(cerclage|portrait|debord)-/, '$1 ')}<br>${SIZES[n].toFixed(1)} Kio</figcaption>`;
+    g.appendChild(f);
+  }
+}
+const frameNames = ['bronze', 'fer', 'laiton', 'etain'].flatMap((m) => ['cerclage-' + m + '-fin', 'cerclage-' + m + '-epais']);
+const cutNames = ['elysia', 'wilhelm', 'gor', 'hydre', 'bestigor'].flatMap((n) => ['portrait-' + n, 'debord-' + n]);
+gallery('frames-grid', frameNames);
+gallery('cuts-grid', cutNames);
+
+Promise.all([...frameNames, ...cutNames].map(load)).then(() => {
+  renderAll();
+  document.querySelectorAll('#controls input').forEach((i) => i.addEventListener('input', renderAll));
+});
+</script>
+</body>
+</html>
