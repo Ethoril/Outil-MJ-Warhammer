@@ -2098,32 +2098,16 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     center.replaceChildren();
     let suddenDeathEnabled = false;
     try { suddenDeathEnabled = Store.isSuddenDeathEnabled() === true; } catch {}
-    const suddenDeath = node('section', 'workspace-card workspace-sudden-death');
-    suddenDeath.setAttribute('aria-label', 'Réglage de table : mort subite des figurants');
-    suddenDeath.appendChild(rubric('Mort subite des figurants'));
-    const optionLabel = node('label', 'workspace-type', 'Activer la règle de table — désactivée par défaut');
-    const option = document.createElement('input');
-    option.type = 'checkbox';
-    option.checked = suddenDeathEnabled;
-    option.setAttribute('aria-label', 'Activer la mort subite des figurants');
-    option.addEventListener('change', async () => {
-      option.disabled = true;
-      try {
-        await Store.setSuddenDeathEnabled(option.checked);
-        render();
-      } catch (error) {
-        option.disabled = false;
-        option.checked = !option.checked;
-        suddenDeath.appendChild(node('p', 'workspace-error', userMessage(error, 'Réglage non enregistré.')));
-      }
-    });
-    optionLabel.prepend(option);
-    suddenDeath.appendChild(optionLabel);
-    if (suddenDeathEnabled) {
-      const candidates = (context.participants || []).filter(row => ['PNJ', 'Créature'].includes(row.kind)
-        && Number(row.hp) === 0 && row.extensions?.v5?.dead !== true
-        && !(row.states || []).some(state => state.key === 'inconscient' || state.name === 'Inconscient'));
-      for (const participant of candidates) {
+    // U3 (05/11) : le réglage de table vit dans « Règles de table », fermé, en bas de la colonne ; la bannière
+    // n'apparaît que lorsqu'un figurant est à 0 Blessure et qu'une décision du MJ est attendue.
+    const suddenDeathCandidates = !suddenDeathEnabled ? [] : (context.participants || []).filter(row => ['PNJ', 'Créature'].includes(row.kind)
+      && Number(row.hp) === 0 && row.extensions?.v5?.dead !== true
+      && !(row.states || []).some(state => state.key === 'inconscient' || state.name === 'Inconscient'));
+    if (suddenDeathCandidates.length) {
+      const banner = node('section', 'workspace-card workspace-sudden-death workspace-sudden-death-banner');
+      banner.setAttribute('aria-label', 'Mort subite : décision du MJ attendue');
+      banner.appendChild(rubric('Mort subite — décision attendue'));
+      for (const participant of suddenDeathCandidates) {
         const row = node('div', 'workspace-result-line');
         row.appendChild(node('span', '', `${participant.name || participant.id} · 0 Blessure`));
         const confirmLabel = node('label', 'workspace-type', 'Confirmer que c’est un PNJ secondaire');
@@ -2158,11 +2142,39 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
           });
           row.appendChild(choose);
         }
-        suddenDeath.appendChild(row);
+        banner.appendChild(row);
       }
-      if (!candidates.length) suddenDeath.appendChild(node('p', 'workspace-muted', 'Aucun figurant à 0 Blessure à arbitrer.'));
+      center.appendChild(banner);
     }
-    center.appendChild(suddenDeath);
+    const tableRules = () => {
+      const details = node('details', 'workspace-card workspace-table-rules');
+      details.appendChild(node('summary', '', 'Règles de table'));
+      const suddenDeath = node('section', 'workspace-sudden-death-setting');
+      suddenDeath.setAttribute('aria-label', 'Réglage de table : mort subite des figurants');
+      const optionLabel = node('label', 'workspace-type', 'Mort subite des figurants — désactivée par défaut');
+      const option = document.createElement('input');
+      option.type = 'checkbox';
+      option.checked = suddenDeathEnabled;
+      option.setAttribute('aria-label', 'Activer la mort subite des figurants');
+      option.addEventListener('change', async () => {
+        option.disabled = true;
+        try {
+          await Store.setSuddenDeathEnabled(option.checked);
+          render();
+        } catch (error) {
+          option.disabled = false;
+          option.checked = !option.checked;
+          suddenDeath.appendChild(node('p', 'workspace-error', userMessage(error, 'Réglage non enregistré.')));
+        }
+      });
+      optionLabel.prepend(option);
+      suddenDeath.appendChild(optionLabel);
+      if (suddenDeathEnabled) suddenDeath.appendChild(node('p', 'workspace-muted', suddenDeathCandidates.length
+        ? 'Décision attendue : voir la bannière en haut de la colonne.'
+        : 'Aucun figurant à 0 Blessure à arbitrer.'));
+      details.appendChild(suddenDeath);
+      return details;
+    };
     if (!context.participants.length) {
       const empty = node('div', 'workspace-empty workspace-card workspace-play-empty');
       empty.appendChild(node('h2', '', 'Aucune rencontre en cours'));
@@ -2174,6 +2186,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       center.appendChild(empty);
       const prepared = encounterList({ compact: true });
       if (prepared.list) center.append(rubric('Rencontres préparées'), prepared.list);
+      center.appendChild(tableRules());
       return;
     }
     const duel = node('div', 'workspace-duel');
@@ -2574,6 +2587,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         center.appendChild(pending);
       }
     }
+    center.appendChild(tableRules());
   }
 
   function renderProfilesTab(content) {
