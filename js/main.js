@@ -40,6 +40,7 @@ import { openCampaignTimeDialog } from './ui/v5-campaign-time-dialog.js';
 import { renderMapLinkIndicator } from './ui/map-link-indicator.js';
 import { createMapLink, MAP_LINK_CHANNEL, MAP_LINK_PING_MS } from './core/map-link.js';
 import { offScenePjParticipants, persistentMaxHpOf } from './core/map-link-state.js';
+import { runProposalOf } from './core/map-link-run.js';
 // Libellés des saisies d'Initiative manquantes (recette G-INI-2 : plus d'identifiants internes).
 const INITIATIVE_INPUT_LABELS = Object.freeze({ characteristic: 'Initiative', die: 'd10', combatReflexesDice: 'deux d10 du Combat instinctif',
   combatReflexesChoice: 'choix du Combat instinctif', tieChoice: 'départage de l’égalité', tieOrder: 'ordre de l’égalité',
@@ -1825,7 +1826,16 @@ if (typeof BroadcastChannel === 'function') {
     getParticipants: () => { const scene = Store.listParticipants(); return [...scene, ...offScenePjParticipants(Store.listPersistentCharacters(), scene, id => Store.getProfile(id))]; },
     imageUrlOf: participant => Store.getProfile(participant.profileId)?.tokenImage ?? null,
     maxHpOf: participant => persistentMaxHpOf(Store.getProfile(participant.profileId)),
-    onStatus: showMapLinkStatus
+    onStatus: showMapLinkStatus,
+    // Course (L6) : proposition au MJ, rien n'est décompté sans son clic.
+    onRan: ref => {
+      const proposal = runProposalOf(ref, { participants: Store.listParticipants(), currentActorId: Store.getCombat().currentActorId,
+        actionSpent: id => Store.listTurnActions(id).length > 0 });
+      if (!proposal) return;
+      if (!proposal.canSpend) { showToast(`🗺️ ${proposal.message}`, 'info'); return; }
+      showToast(`🗺️ ${proposal.message}`, 'warning', { label: 'Action utilisée', onClick: () => Promise.resolve(Store.spendV5RunAction(proposal.actorId))
+        .then(result => { if (result?.ok === false) showToast(result.message, 'error'); }) }, 15000);
+    }
   });
   Bus.on('reserve', mapLink.refresh);
   Bus.on('combat', mapLink.refresh);

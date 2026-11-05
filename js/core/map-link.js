@@ -40,11 +40,11 @@ export function effectsOf(prev, next) {
 
 /**
  * `getParticipants()` rend la liste des participants de la scène (vide hors combat) ; `maxHpOf(participant)` résout
- * le maximum d'un PJ persistant ; `onStatus(status)` reçoit 'connected' | 'disconnected' | 'version-mismatch' ;
- * `setTimer`/`clearTimer` servent au délai de `mount.request`.
+ * le maximum d'un PJ persistant ; `onStatus(status)` reçoit 'connected' | 'disconnected' | 'version-mismatch' ; `onRan(ref)` reçoit `map.ran` (palier Course
+ * franchi sur la carte, L6) ; `setTimer`/`clearTimer` servent au délai de `mount.request`.
  */
 export function createMapLink({ channel, getParticipants, maxHpOf = () => null, imageUrlOf = () => null, now = () => Date.now(), onStatus = () => {},
-  setTimer = (fn, ms) => setTimeout(fn, ms), clearTimer = id => clearTimeout(id) }) {
+  onRan = () => {}, setTimer = (fn, ms) => setTimeout(fn, ms), clearTimer = id => clearTimeout(id) }) {
   let seq = 0;
   let states = {};
   let roster = '[]';
@@ -96,6 +96,7 @@ export function createMapLink({ channel, getParticipants, maxHpOf = () => null, 
     const payload = message.payload || {};
     if (message.type === 'map.placed' && payload.ref) placed.add(payload.ref);
     if (message.type === 'map.unplaced' && payload.ref) placed.delete(payload.ref);
+    if (message.type === 'map.ran' && payload.ref) onRan(payload.ref);
     if (message.type === 'mount.accepted') settleMount(payload.riderRef, { ok: true });
     if (message.type === 'mount.refused') settleMount(payload.riderRef, payload.reason === 'not-adjacent'
       ? { ok: false, reason: 'not-adjacent', message: MOUNT_NOT_ADJACENT_MESSAGE }

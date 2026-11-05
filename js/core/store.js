@@ -4089,6 +4089,28 @@ function resolvedCorruptionTest(participant, skillId, input) {
       if(spent)needsInput.push('Une Action a déjà été dépensée pendant ce Tour.');
       return {ready:needsInput.length===0,status:needsInput.length?'requires-input':'ready',kind:input.kind,actorId,targetId:input.targetId||null,skillId:input.skillId||null,weaponId:aimWeapon?.id||null,weaponName:aimWeapon?.name||input.weaponName?.trim()||null,rangedWeaponConfirmed:aimWeaponRanged||input.rangedWeaponConfirmed===true,rangedWeaponHeldConfirmed:input.rangedWeaponHeldConfirmed===true,actionId:input.actionId||`combat-action:${actorId}:${clock.turnId}:${input.kind}`,clock,baseRevision:localRevision,needsInput,unresolved:needsInput};
     },
+    /**
+     * Course signalée par la carte (L6), validée par le MJ : consomme l'Action du Tour du combattant actif. Refus sans
+     * rien écrire hors de son Tour ou si l'Action est déjà dépensée. Annulable.
+     */
+    spendV5RunAction(actorId){
+      const check=draft=>{
+        const clock=v5StoreActionClock(draft),actor=draft.combat?.participants?.find(row=>row.id===actorId);
+        if(!actor||draft.combat?.currentActorId!==actorId||!clock.turnId)return {ok:false,reason:'not-turn',message:'Ce n’est pas le Tour de ce combattant.'};
+        if(standardV5ActionSpent(draft,actorId,clock)||combatActionBlock(draft,actorId))return {ok:false,reason:'spent',message:'Une Action a déjà été dépensée pendant ce Tour.'};
+        return {ok:true,clock,actor};
+      };
+      const first=check(currentEnvelope());
+      if(!first.ok)return first;
+      const saved=api.executeCommand('v5-run-action',draft=>{
+        const again=check(draft);
+        if(!again.ok)throw Object.assign(new Error(again.message),{userFacing:true});
+        recordV5ActionUsage(draft,actorId,`run:${actorId}:${again.clock.turnId}`);
+        draft.log=[{id:uid(),ts:Date.now(),kind:'effect',actorId,text:`${again.actor.name} court (Action utilisée)`,detail:{kind:'map-run'}},...(draft.log||[])].slice(0,300);
+        return draft;
+      });
+      return saved&&typeof saved.then==='function'?saved.then(result=>(result?.ok===false?{ok:false,reason:'error',message:result.error}:{ok:true})):{ok:true};
+    },
     // Faits du Tour affichés par la barre d'actions : déplacement déclaré ce Tour, Visée en cours.
     getV5TurnFacts(actorId){
       const snapshot=currentEnvelope(),clock=v5StoreActionClock(snapshot),actions=combatActionState(snapshot),movement=actions.movementByActorId?.[actorId],aim=actions.byActorId?.[actorId];
