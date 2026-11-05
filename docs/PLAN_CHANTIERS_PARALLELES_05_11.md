@@ -88,3 +88,17 @@ Référence fournie par le MJ (GIF « Fantasy_GIF_16 », lien Discord) : médail
 | **3** | U5 · U6 · L5-MJ · L5-MD · cadrage U8 · étude E1 | prête (D4, D5 tranchés le 05/11) |
 
 Entre deux vagues : fusion des branches dans `dev/recette-plateau-04-11` (outil MJ) et dans `feat/liaison-outil-mj` (Map Display), sur feu vert du MJ, puis recette navigateur sur le port 8771.
+
+## Décisions du MJ en cours de vague 3 (05/11)
+
+**U8, questions de `docs/specs/moteur-effets-unifie/questions-mj.md`** (branche `claude/u8-cadrage-ceaabd`) :
+- **Q1** : le meilleur bonus et la pire pénalité des sorts (p. 235) valent **par Test** : « Dur comme le roc » et « Brise-dents » donnent +2, pas +4. Lot L1.
+- **Q2** : prière et sort sur le même Test **se somment** (sources différentes, p. 130), même clé comprise.
+- **Q3** : le malus d'un sort ou d'une prière **s'ajoute** à la pénalité d'États.
+- **Q4** : Avantage de cavalerie et Avantage d'un talent sont **deux sources distinctes** ; pas d'autre exclusion.
+- **Q5** : le plafond de DR d'une prière s'applique **au résultat final**, bonus compris (comportement actuel).
+- **Q6** : les Tests hors pivot passent **tous par l'agrégateur**, sauf règle contraire du livre repérée lot par lot.
+- **Q7/Q8** : L0 et L1 en vague 4 ; le reste au fil des suppléments (Sea of Claws dans les formats actuels, puis migration).
+- **Q9** : un modificateur écarté reste **visible, barré**, avec la règle qui l'écarte.
+
+**E1, médaillons** (branche `claude/e1-medaillons-a7988b`) : **sans débord** ; pion mort en **cerclage gris** ; liseré choisi à la main **abandonné** (seule la teinte du camp compte). Variante A/B/C, épaisseur, dépassement de case et seuil de repli : en attente, après examen de la maquette.
