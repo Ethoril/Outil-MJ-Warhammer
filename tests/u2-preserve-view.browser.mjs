@@ -25,10 +25,12 @@ try{
  const sheet=combat.locator('[data-sheet-role="actor"][data-actor-id="hero"]');
  const fiche=sheet.locator('details.fiche-consultation');
  await fiche.locator(':scope > summary').click();
- const section=fiche.locator(':scope > details').filter({has:page.locator(':scope > summary',{hasText:/^Compétences/})}).first();
- await section.locator(':scope > summary').click();
- const sectionTitle=(await section.locator(':scope > summary').innerText()).replace(/\s*\(\d+\)\s*$/,'');
- assert.equal(await section.evaluate(el=>el.open),true,'section de fiche ouverte avant le rendu');
+ // Depuis U4 (05/11), les sections de la fiche sont des onglets : l'onglet choisi doit le rester.
+ const tabs=fiche.getByRole('tab');
+ assert.ok(await tabs.count()>=2,'au moins deux onglets dans la fiche');
+ const second=tabs.nth(1);await second.click();
+ const sectionTitle=(await second.innerText()).trim();
+ assert.equal(await second.getAttribute('aria-selected'),'true','onglet choisi avant le rendu');
  // Page défilée tout en bas, dans la section ouverte : si elle se refermait, la page raccourcirait et le défilement
  // serait ramené en arrière. Le clic passe par le gestionnaire du bouton, sans défilement de Playwright.
  const minus=sheet.locator('[data-focus-key="hp-minus-hero"]');
@@ -43,8 +45,8 @@ try{
  assert.ok(Math.abs(after-before)<=1,`le défilement ne saute pas (avant ${before}, après ${after})`);
  const reopened=combat.locator('[data-sheet-role="actor"][data-actor-id="hero"] details.fiche-consultation');
  assert.equal(await reopened.evaluate(el=>el.open),true,'la fiche reste ouverte après le rendu');
- const sectionAfter=reopened.locator(':scope > details').filter({has:page.locator(':scope > summary',{hasText:sectionTitle})}).first();
- assert.equal(await sectionAfter.evaluate(el=>el.open),true,`la section « ${sectionTitle} » reste ouverte après le rendu`);
+ const tabAfter=reopened.getByRole('tab',{name:sectionTitle,exact:true});
+ assert.equal(await tabAfter.getAttribute('aria-selected'),'true',`l'onglet « ${sectionTitle} » reste choisi après le rendu`);
  assert.deepEqual(errors,[],'aucune erreur JavaScript');
- console.log(`U2 navigateur : fiche et section « ${sectionTitle} » restées ouvertes après −1 PV, défilement ${before} → ${after}.`);
+ console.log(`U2 navigateur : fiche ouverte et onglet « ${sectionTitle} » conservé après −1 PV, défilement ${before} → ${after}.`);
 }finally{await browser.close();await new Promise(done=>server.close(done));}
