@@ -37,8 +37,8 @@ Trois fronts : la **liaison avec RPG Map Display** (lots 1 à 5), le mot-clé **
 | **L4** | Map Display | Effets : gerbe, tache au sol, six animations de mort, nouveau `js/render/layers/fx.js` (manifeste). Images de `tmp/effets-sang/` en WebP. | `fx.js`, `tokens.js`, assets | **D3** : choix des images |
 | **L6-MD** | Map Display | Second palier de la zone de déplacement (contrat §11.6, oublié au lot 1) : Marche en aplat, Course en anneau hachuré pâle. Le trajet qui dépasse la Marche change de style, avec l'étiquette « Course : Action utilisée », sur la tablette comme sur l'écran MJ. Un pion lié va jusqu'à `runCells`, y compris quand un joueur le déplace depuis la tablette (décision du MJ, 05/11). Envoi de `map.ran { ref }` à l'outil MJ (nom à inscrire au contrat). | `moveZone.js`, `movePlan.js`, `selection.js`, `mjLink.js` | — |
 | **L6-MJ** | Outil MJ | À la réception de `map.ran`, **proposition** « X a couru : Action utilisée ? », validée par le MJ en un clic (décision du 05/11 : rien ne se décompte dans son dos). | `map-link.js`, UI du plateau | après L6-MD |
-| **L5-MJ** | Outil MJ | Indicateurs « posé » et « à poser », suggestions d'engagement, distance préremplie. | `map-link.js`, UI du plateau | **D4** : diagonale |
-| **L5-MD** | Map Display | `map.placed` / `unplaced`, `map.adjacency`, `map.distance`, traits d'engagement sur l'écran MJ. | `mjLink.js`, `panel.js`, un calque | **D4** |
+| **L5-MJ** | Outil MJ | Indicateurs « posé » et « à poser », suggestions d'engagement, distance préremplie. | `map-link.js`, UI du plateau | **D4 tranché (05/11)** : diagonale = 1,5 case (géométrie de Map Display), adjacence sur 8 voisines |
+| **L5-MD** | Map Display | `map.placed` / `unplaced`, `map.adjacency`, `map.distance`, traits d'engagement sur l'écran MJ. | `mjLink.js`, `panel.js`, un calque | **D4 tranché (05/11)** |
 
 ### Barrakul (B)
 
@@ -60,8 +60,8 @@ Constats vérifiés le 05/11 : 4 appels `JSON.parse(Store.getFullJSON())` dans `
 | **U3** | Outil MJ | Colonne *Jouer* allégée : Mort subite dans les réglages, avec une bannière seulement quand un figurant tombe à 0 ; Suites de combat fermé pendant le combat ; pavois, plate, rechargement et projectiles en puces sur la fiche du combattant. | `workspace-view.js` | — |
 | **U4** | Outil MJ | Fiche : onglets compacts (Compétences, Talents, Équipement, Magie/Foi) au lieu des accordéons, onglet actif conservé. | `fiche-details.js`, CSS de la fiche | — |
 | **U5** | Outil MJ | HUD : barre de PV avec segment de dégâts prévisualisés (`previewHpLoss`), surfaces au lieu des bordures imbriquées, micro-transitions de 120 à 180 ms avec `prefers-reduced-motion`. Skills `emil-design-eng` et `improve-animations` disponibles. | `workspace.css`, `MJ.css`, rendu de la barre de PV | après U3 |
-| **U6** | Outil MJ | Bord droit : soit tiroir *Circonstances* en onglet du panneau latéral, soit outils flottants déplaçables. | `workspace-view.js`, `main.js`, CSS | **D5** : quelle option |
-| **U8** | Outil MJ | Moteur d'effets unifié (`docs/PROPOSITION_MOTEUR_EFFETS_UNIFIE.md`), à cadrer avant *Sea of Claws* (skill `cadrer-feature`). | — | priorité à confirmer |
+| **U6** | Outil MJ | Bord droit : soit tiroir *Circonstances* en onglet du panneau latéral, soit outils flottants déplaçables. | `workspace-view.js`, `main.js`, CSS | **D5 tranché (05/11)** : tiroir *Circonstances* en onglet du panneau latéral |
+| **U8** | Outil MJ | Moteur d'effets unifié (`docs/PROPOSITION_MOTEUR_EFFETS_UNIFIE.md`), à cadrer avant *Sea of Claws* (skill `cadrer-feature`). | — | **confirmé (05/11)** : cadrage seul en vague 3, sans code |
 
 ### Étude E1 : pions en médaillon (demande du MJ, 05/11)
 
@@ -85,6 +85,6 @@ Référence fournie par le MJ (GIF « Fantasy_GIF_16 », lien Discord) : médail
 |---|---|---|
 | **1** | B1 · U1→U2 (une session) · U4 · L1c · L1a+U7 · L1b+L2 (une session Map Display) | prête (D1 et D2 tranchés) |
 | **2** | U3 · L3-MJ · L3-MD · L4 · L6-MD · B2 · liseré de camp des pions liés et liste « en attente » dans la colonne étroite (constats de recette du 05/11) · `tests/browser-index.mjs` sous Windows | après les fusions de la vague 1 ; D3 pour L4 |
-| **3** | U5 · U6 · L5-MJ · L5-MD · cadrage U8 · étude E1 | D4, D5 |
+| **3** | U5 · U6 · L5-MJ · L5-MD · cadrage U8 · étude E1 | prête (D4, D5 tranchés le 05/11) |
 
 Entre deux vagues : fusion des branches dans `dev/recette-plateau-04-11` (outil MJ) et dans `feat/liaison-outil-mj` (Map Display), sur feu vert du MJ, puis recette navigateur sur le port 8771.
