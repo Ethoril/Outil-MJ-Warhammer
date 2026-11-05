@@ -77,6 +77,9 @@ try {
     await page.waitForFunction(() => (JSON.parse(window.__store.getFullJSON()).extensions.v5.standardTurnActions || []).length === 2);
   });
   await check('C50 : recharge d’une arme jamais tirée refusée avec la raison en français ; compteur « chargée »', async () => {
+    // U3 : le rechargement est une puce sur la fiche de l’acteur ; le MJ l’ouvre.
+    const chip = page.locator('.workspace-sheet-actor details.workspace-equipment-chip > summary', { hasText: 'Rechargement' });
+    if (!await chip.evaluate(el => el.parentElement.open)) await chip.click();
     const panel = page.locator('.workspace-weapon-reload');
     assert.match(await panel.innerText(), /Pistolet · chargée/);
     assert.doesNotMatch(await panel.innerText(), /0 tir\(s\) restant/);
