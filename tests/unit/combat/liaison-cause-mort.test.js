@@ -17,6 +17,20 @@ test('mort critique confirmée : cause ordinaire et conservation de la cause ant
   assert.equal(confirm(old).extensions.v5.deathCause, 'poison');
 });
 
+test('lignes mortelles V5 : membres et corps démembrent, crâne décapité au choix du MJ', () => {
+  const confirmOn = (table, options = {}) => {
+    const record = createCriticalAftermathRecord(person(), { table, effectRoll: 999, resolutionId: 'mort', round: 1 });
+    return decideImmediateCriticalDeath(record.participant, { criticalId: record.record.id, decision: 'confirm', ...options }).participant;
+  };
+  for (const table of ['ARM', 'BODY', 'LEG']) assert.equal(confirmOn(table).extensions.v5.deathCause, 'dismemberment', table);
+  assert.equal(confirmOn('HEAD').extensions.v5.deathCause, 'blood');
+  const head = confirmOn('HEAD', { decapitated: true });
+  assert.equal(head.extensions.v5.deathCause, 'decapitation');
+  assert.equal(head.extensions.v5.criticalAftermath[0].deathDecision.decapitated, true);
+  // « Décapité » n'a de sens que sur la tête.
+  assert.equal(confirmOn('ARM', { decapitated: true }).extensions.v5.deathCause, 'dismemberment');
+});
+
 test('expiration létale : cause magique et première cause conservée', () => {
   const target = person();
   target.extensions.v5.spellEffects = [{ id: 'ending', dieOnExpiry: true }];

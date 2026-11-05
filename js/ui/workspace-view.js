@@ -2451,14 +2451,16 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         const participant=item.participant,label=item.kind==='table'?`${participant.name} · ${item.record.effectName} (${item.record.source?.printedName||item.record.table})`:`${participant.name} · décompte arrivé à l’échéance du Round ${item.countdown.dueRound}`;
         const row=node('div','workspace-result-line');
         row.appendChild(node('span','',label));
-        for(const [decision,text] of [['confirm','Confirmer la mort'],['decline','Refuser la mort']]){
+        // Crâne fracassé (V5 p. 173) : une arme tranchante peut décapiter ; le MJ le constate, la carte joue la décapitation.
+        const choices=[['confirm','Confirmer la mort'],...(item.kind==='table'&&item.record.table==='HEAD'?[['confirm','Confirmer : décapité',true]]:[]),['decline','Refuser la mort']];
+        for(const [decision,text,decapitated=false] of choices){
           const button=node('button','workspace-secondary',text);
           button.type='button';
           button.disabled=state.resolution.busy;
           button.addEventListener('click',async()=>{
             button.disabled=true;
             try{
-              if(item.kind==='table')await Store.decideImmediateCriticalDeath(participant.id,item.record.id,decision);else await Store.decideCriticalDeath(participant.id,decision,{round:readCombat(Store).round});
+              if(item.kind==='table')await Store.decideImmediateCriticalDeath(participant.id,item.record.id,decision,{decapitated});else await Store.decideCriticalDeath(participant.id,decision,{round:readCombat(Store).round});
               render();
             }catch(error){
               button.disabled=false;

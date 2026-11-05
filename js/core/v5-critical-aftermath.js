@@ -149,8 +149,18 @@ export function decideCriticalDeath(participant, { decision, round } = {}) {
   return { status: decision === 'confirm' ? 'dead' : 'declined', participant: next, countdown: nextCount };
 }
 
+/**
+ * Cause de mort pour la carte (contrat de liaison §9), lue dans la ligne mortelle V5 (pp. 173-176) :
+ * bras, corps et jambe sectionnent ou coupent en deux (Démembrement brutal, Corps déchiré, Bassin
+ * fracassé) ; Crâne fracassé enfonce la tête, sauf arme tranchante, que seul le MJ peut constater.
+ */
+export function criticalDeathCause(record, { decapitated = false } = {}) {
+  if (record?.table === 'HEAD') return decapitated === true ? 'decapitation' : 'blood';
+  return ['ARM', 'BODY', 'LEG'].includes(record?.table) ? 'dismemberment' : 'blood';
+}
+
 /** Death printed in a critical table is a request for an explicit MJ decision. */
-export function decideImmediateCriticalDeath(participant, { criticalId, decision } = {}) {
+export function decideImmediateCriticalDeath(participant, { criticalId, decision, decapitated = false } = {}) {
   if (!participant?.id || !criticalId || (decision !== 'confirm' && decision !== 'decline')) {
     return { status: 'confirmation-required', participant };
   }
@@ -161,11 +171,11 @@ export function decideImmediateCriticalDeath(participant, { criticalId, decision
   const next = clone(participant);
   next.extensions = { ...(next.extensions || {}), v5: { ...(next.extensions?.v5 || {}) } };
   next.extensions.v5[CRITICAL_AFTERMATH_FIELD] = rows.map(row => row.id === criticalId
-    ? { ...row, deathDecision: { outcome: decision, decidedBy: 'MJ' } }
+    ? { ...row, deathDecision: { outcome: decision, decidedBy: 'MJ', ...(decision === 'confirm' && record.table === 'HEAD' && decapitated === true ? { decapitated: true } : {}) } }
     : row);
   if (decision === 'confirm') {
     next.hp = 0;
-    if (next.extensions.v5.dead !== true) next.extensions.v5.deathCause = 'blood';
+    if (next.extensions.v5.dead !== true) next.extensions.v5.deathCause = criticalDeathCause(record, { decapitated });
     next.extensions.v5.dead = true;
   }
   return { status: decision === 'confirm' ? 'dead' : 'declined', participant: next,

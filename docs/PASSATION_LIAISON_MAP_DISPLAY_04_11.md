@@ -74,6 +74,13 @@ Pour la session du compte Pro qui reprend le chantier. **Lire d'abord** `docs/CO
 
 Les lots 2 à 5 suivent le §13 du contrat.
 
+**Lot 2, côté outil MJ : intégré le 04/11.** GPT a ajouté l'image de pion sur le profil (champ `tokenImage`) : commit `1fe91ac`, intégré par avance rapide dans `dev/recette-plateau-04-11` après contre-vérification. Son rapport : `tmp/lot2-images-worktree/docs/RAPPORT_GPT_LIAISON_LOT2.md`. Reste à faire, côté Map Display : le disque de camp avec initiales pour un pion sans image.
+
+**Lot 4, cause de mort côté outil MJ : intégré le 04/11 (partiel).** Commit GPT `cdd75e4`, avance rapide dans `dev/recette-plateau-04-11` après contre-vérification (diff relu, 741 tests ciblés verts, mutation de la garde « cause seulement si mort » en rouge). Rapport : `docs/RAPPORT_GPT_LIAISON_LOT4.md`. Causes posées : `blood` (attaque, critique, mort subite), `magic` (effet divin, expiration, étouffement, Soleil Violet), `fire` (Sang Bouillonnant, sort du domaine `fire`). Questions au MJ, en attente :
+- ~~décapitation et démembrement~~ **tranché par le MJ le 05/11** d'après les lignes mortelles V5 (pp. 173-176) : Démembrement brutal (bras arraché), Corps déchiré (coupé en deux) et Bassin fracassé (jambe sectionnée) → `dismemberment` ; Crâne fracassé → `blood` (tête enfoncée), ou `decapitation` si le MJ clique « Confirmer : décapité » (le livre réserve la décapitation à une arme tranchante, que l'outil ne connaît pas). `criticalDeathCause` dans `v5-critical-aftermath.js`, `deathDecision.decapitated` garde la trace ; non commité ;
+- morts par état (Enflammé, Hémorragique, Empoisonné) : `advanceV5Effects` propose le décès sans poser `extensions.v5.dead`, donc ni `fire` ni `poison` ;
+- Incident Cataclysme : pose `participant.dead` et non `extensions.v5.dead`, donc pas de `fx.death` sur la carte.
+
 **Essais d'effets du lot 4 (04/11, à la demande du MJ)**, dans `tmp/effets-sang/`. Images générées avec Magnific (Nano Banana 2.1), vues de dessus :
 - `gerbe-1/2` : gerbe de sang ;
 - `flaque-1/2` : flaque ;

@@ -2461,11 +2461,11 @@ function resolvedCorruptionTest(participant, skillId, input) {
         return draft;
       });
     },
-    decideImmediateCriticalDeath(participantId, criticalId, decision) {
+    decideImmediateCriticalDeath(participantId, criticalId, decision, { decapitated = false } = {}) {
       return api.executeCommand('decide-immediate-critical-death-v5',draft=>{
         const index=(draft.combat?.participants||[]).findIndex(row=>row.id===participantId);
         if(index<0)throw new TypeError('Participant introuvable');
-        const result=decideV5ImmediateCriticalDeath(draft.combat.participants[index],{criticalId,decision});
+        const result=decideV5ImmediateCriticalDeath(draft.combat.participants[index],{criticalId,decision,decapitated});
         if(!['dead','declined'].includes(result.status))throw Object.assign(new Error(result.reason||'Confirmation MJ requise.'),{userFacing:true,code:'CRITICAL_DEATH_CONFIRMATION'});
         draft.combat.participants[index]=result.participant;
         if(result.status==='dead')draft.combat.participants=fallFromSaddle(draft.combat.participants,participantId);
