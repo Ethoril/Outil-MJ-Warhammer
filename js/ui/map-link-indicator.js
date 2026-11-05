@@ -18,3 +18,22 @@ export function renderMapLinkIndicator(node, status) {
   if (label) label.textContent = view.label;
   return view;
 }
+
+/**
+ * Compte « À poser (N) » (contrat §10) à côté de l'indicateur : pions liés que la carte n'a pas posés. Caché quand la
+ * carte est déconnectée ou que tout est posé ; le titre liste les noms. `view` : `mapLink.placement()`.
+ */
+export function mapLinkPendingView(view) {
+  const pending = view?.connected ? view.pending || [] : [];
+  if (!pending.length) return null;
+  return { label: `À poser (${pending.length})`, title: `À poser sur la carte : ${pending.map(row => row.label).join(', ')}` };
+}
+
+export function renderMapLinkPending(node, view) {
+  if (!node) return null;
+  const shown = mapLinkPendingView(view);
+  node.hidden = !shown;
+  node.textContent = shown ? shown.label : '';
+  if (shown) node.title = shown.title; else node.removeAttribute?.('title');
+  return shown;
+}
