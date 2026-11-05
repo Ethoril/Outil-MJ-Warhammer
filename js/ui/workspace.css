@@ -1,7 +1,5 @@
 .workspace-view {
   --workspace-gap: clamp(10px, 1.2vw, 18px);
-  /* Tiroir des circonstances : plus large sur grand écran (1440p), 300 px sur un portable. */
-  --circumstances-width: clamp(300px, 18vw, 420px);
   display: grid;
   gap: var(--workspace-gap);
   width: 100%; /* toute la largeur de l’écran (MJ, 04/11/2026) */
@@ -108,6 +106,11 @@
 .workspace-play-grid > .workspace-track-column { grid-column: 1 / -1; grid-row: 1; }
 .workspace-play-grid > .workspace-center { grid-column: 1; grid-row: 2; }
 .workspace-play-grid > .workspace-side { grid-column: 2; grid-row: 2; }
+/* U6 : le panneau suit le défilement (Circonstances reste sous la main) et s'élargit quand l'onglet Circonstances est affiché. */
+@media (min-width: 901px) {
+  .workspace-play-grid > .workspace-side { position: sticky; top: 72px; align-self: start; }
+  .workspace-play-grid.is-side-circumstances:not(.is-side-collapsed) { grid-template-columns: minmax(0, 1fr) clamp(320px, 26vw, 440px); }
+}
 .workspace-plateau { display: flex; flex-wrap: wrap; gap: var(--workspace-gap); align-items: flex-start; }
 .workspace-plateau > .workspace-track { flex: 999 1 520px; min-width: 0; display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-start; }
 .workspace-plateau > .workspace-bench { flex: 1 1 220px; margin-top: 0; padding: 10px; border: 1px dashed var(--border); border-radius: var(--radius); }
@@ -572,24 +575,12 @@ dialog.tool-sheet.campaign-time-dialog { position:fixed; inset:auto; top:50%; le
 .workspace-roll-owner { display: inline-block; width: fit-content; padding: 1px 7px; border-radius: 999px; color: var(--panel); background: var(--camp-ennemi); font-size: 12px; font-weight: 700; }
 .workspace-roll-owner.is-pj { background: var(--camp-pj); }
 
-/* Le tiroir remplace temporairement la largeur du panneau latéral sans modifier son état. */
+/* U6 (D5) : Circonstances est un onglet du panneau latéral ; le bloc y est déplacé par la vue et ne recouvre plus le plateau. */
 .workspace-play-grid { position: relative; }
-.workspace-resolution-drawer { position: fixed; top: var(--circumstances-top, 72px); right: var(--circumstances-right, 60px); z-index: 4; box-sizing: border-box; width: var(--circumstances-width, 300px); max-height: calc(100vh - var(--circumstances-top, 72px) - 16px); overflow: auto; display: grid; gap: 10px; align-content: start; padding: 14px; background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius); }
-.workspace-resolution-drawer[hidden], .workspace-circumstances-backdrop[hidden] { display: none; }
+.workspace-resolution-drawer { box-sizing: border-box; display: grid; gap: 10px; align-content: start; min-width: 0; }
+.workspace-resolution-drawer[hidden], .workspace-circumstances-backdrop { display: none; }
 .workspace-circumstances-heading { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
 .workspace-circumstances-heading h4 { margin: 0; color: var(--accent-text); }
-.workspace-circumstances-backdrop { display: none; }
-@media (min-width: 901px) {
-  .workspace-play-grid:has(.workspace-resolution-drawer:not([hidden])) { grid-template-columns: minmax(0, 1fr) calc(var(--circumstances-width, 300px) + 60px); }
-  /* Tiroir ouvert : le plateau laisse la colonne de droite au tiroir, qui ne recouvre jamais le centre. */
-  .workspace-play-grid:has(.workspace-resolution-drawer:not([hidden])) > .workspace-track-column { grid-column: 1; }
-  .workspace-play-grid:has(.workspace-resolution-drawer:not([hidden])) > .workspace-side { grid-row: 1 / span 2; }
-  .workspace-play-grid:has(.workspace-resolution-drawer:not([hidden])) .workspace-side { position: sticky; top: 72px; z-index: 5; width: 44px; justify-self: end; grid-template-rows: auto; }
-}
-@media (max-width: 900px) {
-  .workspace-resolution-drawer { position: fixed; top: 0; bottom: 0; right: 0; width: min(360px, 90vw); max-height: none; z-index: 101; border-radius: 0; }
-  .workspace-circumstances-backdrop:not([hidden]) { display: block; position: fixed; inset: 0; z-index: 100; background: transparent; backdrop-filter: brightness(.45); }
-}
 .workspace-circumstances-group { display: grid; gap: 6px; min-width: 0; }
 .workspace-circumstances-group[hidden] { display: none; }
 .workspace-circumstances-group h5 { margin: 0; color: var(--accent-text); font-family: var(--font-text); font-size: 15px; }

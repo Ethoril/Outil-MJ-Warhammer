@@ -1,5 +1,8 @@
 /** Ouvre le tiroir et son bloc historique avant les gestes des parcours existants. */
+// U6 : le bloc Circonstances est dans le panneau latéral, hors de la section Résolution ; on le cherche dans toute la page.
+const wholePage = scope => typeof scope.page === 'function' ? scope.page() : scope;
 export async function openU1Settings(scope) {
+  scope = wholePage(scope);
   const drawer = scope.locator('.workspace-resolution-drawer');
   if (await drawer.isHidden()) await scope.locator('[data-circumstances-toggle]').click();
   const details = scope.locator('.workspace-resolution-settings');
@@ -10,6 +13,7 @@ export async function openU1Settings(scope) {
 
 /** Revient au panneau principal, notamment derrière le voile sur téléphone. */
 export async function closeU1Drawer(scope) {
+  scope = wholePage(scope);
   const drawer = scope.locator('.workspace-resolution-drawer');
   if (await drawer.isVisible()) await drawer.getByRole('button', { name: 'Fermer', exact: true }).click();
 }

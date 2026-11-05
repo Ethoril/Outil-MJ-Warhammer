@@ -239,6 +239,8 @@ export function renderResolutionPanel(options) {
   settings.appendChild(node('summary', '', 'Autres réglages'));
   drawer.appendChild(settings);
   section.appendChild(drawer);
+  // U6 : le bloc Circonstances est déplacé par la vue hors de la section ; les recherches de champs couvrent les deux.
+  const within = { one: selector => section.querySelector?.(selector) || drawer.querySelector?.(selector) || null, all: selector => [...new Set([...(section.querySelectorAll?.(selector) || []), ...(drawer.querySelectorAll?.(selector) || [])])] };
   const addCircumstance = (key, element, required = false) => {
     const group = circumstanceGroup(key, required);
     if (group === 'other') settings.appendChild(element);
@@ -3000,11 +3002,11 @@ export function renderResolutionPanel(options) {
     roll.prepend(node('span', `workspace-roll-owner ${isPlayer ? 'is-pj' : 'is-npc'}`, isPlayer ? 'PJ' : 'PNJ'));
   }
   for (const item of engagedRolls) rolls.appendChild(item.element);
-  const eligibleRolls = () => emptyNpcRolls([...(section.querySelectorAll?.('[data-npc-roll-key]') || [])].map(input => {
+  const eligibleRolls = () => emptyNpcRolls([...(within.all('[data-npc-roll-key]') || [])].map(input => {
     const creature = input.dataset.npcRollCreature === 'true';
     const person = creature ? null : input.dataset.npcRollOwnerId ? participants.find(row => row.id === input.dataset.npcRollOwnerId) : actor;
     return { field: 'magic', key: input.dataset.npcRollKey, property: input.dataset.npcRollField, subjectId: input.dataset.npcRollSubjectId, personId: person?.id, creature, owner: person?.kind === 'PJ' ? 'PJ' : 'PNJ', value: input.value, disabled: input.disabled || (!person && !creature) };
-  }).concat([...(section.querySelectorAll?.('[data-critical-draft-key]') || [])].map(input => ({ field: 'critical', key: input.dataset.criticalDraftKey, owner: (input.dataset.rollOwner === 'defender' ? target : actor)?.kind === 'PJ' ? 'PJ' : 'PNJ', value: input.value, disabled: input.disabled || !(input.dataset.rollOwner === 'defender' ? target : actor) })).concat([...engagedRolls.map(({ input, person }) => ({ field: 'engaged', personId: person.id, owner: person.kind === 'PJ' ? 'PJ' : 'PNJ', value: input.value, disabled: input.disabled })), ...[['attack', actor], ['defense', target]].map(([field, person]) => {
+  }).concat([...(within.all('[data-critical-draft-key]') || [])].map(input => ({ field: 'critical', key: input.dataset.criticalDraftKey, owner: (input.dataset.rollOwner === 'defender' ? target : actor)?.kind === 'PJ' ? 'PJ' : 'PNJ', value: input.value, disabled: input.disabled || !(input.dataset.rollOwner === 'defender' ? target : actor) })).concat([...engagedRolls.map(({ input, person }) => ({ field: 'engaged', personId: person.id, owner: person.kind === 'PJ' ? 'PJ' : 'PNJ', value: input.value, disabled: input.disabled })), ...[['attack', actor], ['defense', target]].map(([field, person]) => {
     const input = rolls.querySelector?.(`[data-roll-input="${field}"]`);
     return { field, owner: person?.kind === 'PJ' ? 'PJ' : 'PNJ', value: input?.value, disabled: !input || input.disabled || !person };
   })])).concat(handlers.npcPrayerRoll?.(actor) ? [{ field: 'divine', owner: 'PNJ', value: '', disabled: false }] : []));
@@ -3048,7 +3050,7 @@ export function renderResolutionPanel(options) {
   if (!preview) {
     const attackInput = rolls.querySelector?.('[data-roll-input="attack"]');
     const defenseInput = rolls.querySelector?.('[data-roll-input="defense"]');
-    const calmInput = section.querySelector?.('[data-blocking-field="protection-calm"]');
+    const calmInput = within.one('[data-blocking-field="protection-calm"]');
     if (attackInput) attackInput.dataset.blockingField = 'attack-roll';
     if (defenseInput) defenseInput.dataset.blockingField = 'defense-roll';
     const waiting = draft.comparison ? null : node('p', 'workspace-muted workspace-result-waiting');
@@ -3078,7 +3080,7 @@ export function renderResolutionPanel(options) {
       for (const field of previouslyRequired) field.removeAttribute('aria-required');
       previouslyRequired.clear();
       for (const reason of reasons) {
-        const field = reason.focus && section.querySelector?.(`[data-blocking-field="${reason.focus}"]`);
+        const field = reason.focus && within.one(`[data-blocking-field="${reason.focus}"]`);
         if (field && ['INPUT', 'SELECT', 'TEXTAREA'].includes(field.tagName)) { field.setAttribute('aria-required', 'true'); previouslyRequired.add(field); }
         list.appendChild(blockingReasonItem(reason, field, { section, handlers }));
       }
@@ -3119,9 +3121,9 @@ export function renderResolutionPanel(options) {
     }
   } else if (preview) {
     live.appendChild(renderResult(preview, target, draft, handlers, participants));
-    const defenseRoll = section.querySelector?.('[data-roll-input="defense"]');
+    const defenseRoll = within.one('[data-roll-input="defense"]');
     if (defenseRoll) defenseRoll.dataset.blockingField = 'defense-roll';
-    const miscastRoll = section.querySelector?.('[data-focus-key="magicMiscastRoll"]');
+    const miscastRoll = within.one('[data-focus-key="magicMiscastRoll"]');
     if (miscastRoll) miscastRoll.dataset.blockingField = 'magic-miscast';
     const criticalPending = live.querySelector?.('[data-roll-input="critical-effect"], [data-roll-input="critical-second"], [data-roll-input="defender-critical-effect"]');
     if (criticalPending) criticalPending.dataset.blockingField = 'critical-pending';
@@ -3146,10 +3148,10 @@ export function renderResolutionPanel(options) {
       block.appendChild(node('p', '', 'À saisir avant d’appliquer :'));
       const list = node('ul');
       for (const reason of listed) {
-        const field = reason.focus && (section.querySelector?.(`[data-blocking-field="${reason.focus}"]`) || live.querySelector?.(`[data-blocking-field="${reason.focus}"]`));
+        const field = reason.focus && (within.one(`[data-blocking-field="${reason.focus}"]`) || live.querySelector?.(`[data-blocking-field="${reason.focus}"]`));
         if (field && ['INPUT', 'SELECT', 'TEXTAREA'].includes(field.tagName)) {
           field.setAttribute('aria-required', 'true');
-          const caption = field.closest?.('label') || (field.id && (section.querySelector?.(`label[for="${field.id}"]`) || live.querySelector?.(`label[for="${field.id}"]`)));
+          const caption = field.closest?.('label') || (field.id && (within.one(`label[for="${field.id}"]`) || live.querySelector?.(`label[for="${field.id}"]`)));
           if (caption && !caption.textContent.trim().endsWith('*')) caption.append(' *');
         }
         list.appendChild(blockingReasonItem(reason, field, { section, handlers }));
@@ -3258,7 +3260,7 @@ function arrangeResolutionSteps(section, { actionBlock, targetBlock, rolls, comm
     drawer.hidden = !open;
     backdrop.hidden = !open;
     toggle.setAttribute('aria-expanded', String(open));
-    section.dispatchEvent(new CustomEvent('workspace-circumstances-toggle', { bubbles: true, detail: { open } }));
+    section.dispatchEvent(new CustomEvent('workspace-circumstances-toggle', { bubbles: true, detail: { open, remember } }));
   };
   toggle.addEventListener('click', () => setOpen(drawer.hidden));
   closeDrawer.addEventListener('click', () => { setOpen(false); toggle.focus(); });
