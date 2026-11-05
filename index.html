@@ -40,6 +40,13 @@
         <button id="tab-library" class="tab" data-tab="workspace" data-workspace-space="library" role="tab" aria-selected="false" aria-controls="panel-workspace" tabindex="-1">Bibliothèque</button>
       </nav>
       <div class="spacer"></div>
+      <div class="topbar-tools" role="group" aria-label="Outils de séance">
+        <button id="workspace-campaign-time" type="button" class="ghost topbar-tool">Temps de campagne</button>
+        <button id="workspace-events" type="button" class="ghost topbar-tool">Événements / Jauges</button>
+        <button id="workspace-reminders" type="button" class="ghost topbar-tool">Rappels</button>
+      </div>
+      <span id="map-link-indicator" class="map-link-indicator" data-state="disconnected" role="status" aria-live="polite" title="Liaison avec RPG Map Display"><span class="status-dot" aria-hidden="true"></span><span class="map-link-label">Carte déconnectée</span></span>
+      <span id="map-link-pending" class="map-link-pending" hidden></span>
       <span id="status-indicator" class="status-indicator" data-tone="neutral" aria-live="polite" title="Local : vérification… · Distant : invité"><span class="status-dot" aria-hidden="true"></span><span class="status-label">Vérification…</span></span>
       <button id="btn-undo" type="button" class="ghost topbar-icon" aria-label="Annuler" aria-keyshortcuts="Meta+Z" title="Annuler (⌘Z)" disabled>↶</button>
       <button id="btn-menu" type="button" class="ghost topbar-icon" popovertarget="app-menu" aria-label="Menu" aria-haspopup="dialog" aria-controls="app-menu" aria-expanded="false">⋯</button>
@@ -47,15 +54,12 @@
     <div id="combat-banner" class="combat-banner" role="region" aria-label="Combat en cours" hidden></div>
     <div id="app-menu" class="app-menu" popover="auto" role="dialog" aria-label="Menu de l’application">
       <div class="app-menu-group" role="group" aria-labelledby="app-menu-h-session">
-        <div id="app-menu-h-session" class="app-menu-heading">Séance</div>
+        <div id="app-menu-h-session" class="app-menu-heading">Fichiers et imports</div>
         <button id="workspace-save" type="button">Sauvegarder dans un fichier</button>
         <button id="workspace-load" type="button">Charger un fichier</button>
         <button id="workspace-restores" type="button">Versions précédentes</button>
         <button id="workspace-import-text" type="button">Importer du texte</button>
         <button id="workspace-fiche-sync" type="button">Mettre à jour les PJ</button>
-        <button id="workspace-reminders" type="button">Rappels</button>
-        <button id="workspace-events" type="button">Événements structurés</button>
-        <button id="workspace-campaign-time" type="button">Temps de campagne</button>
         <div id="app-menu-resume" class="app-menu-dynamic"></div>
         <button id="workspace-restart-combat" type="button" hidden>Recommencer le combat</button>
       </div>
