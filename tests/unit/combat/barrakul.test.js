@@ -61,10 +61,22 @@ describe('Barrakul', () => {
     assert.equal(locationProtection(pavise(magic), { ...context, qualities: ['barrakul'] }).ap, 5);
   });
 
-  test('PA sans pièce identifiée : le MJ précise si l’armure est magique', () => {
-    const hit = locationProtection({ armor: { body: 2 }, extensions: { v5: {} } }, { location: 'body', qualities: ['barrakul'] });
-    assert.equal(hit.ap, null);
-    assert.ok(hit.manual.includes('barrakul-magie-armure-a-preciser'));
+  // Décision MJ 05/11 (2e arbitrage) : des PA sans pièce identifiée sont considérés non magiques, donc ignorés.
+  test('PA saisis à la main : considérés non magiques, ignorés', () => {
+    const t = { armor: { body: 2 }, extensions: { v5: {} } };
+    assert.equal(locationProtection(t, { location: 'body' }).ap, 2);
+    const hit = locationProtection(t, { location: 'body', qualities: ['barrakul'] });
+    assert.equal(hit.ap, 0);
+    assert.deepEqual(hit.manual, []);
+  });
+
+  test('PA physiques conservés hors possessions : considérés non magiques, ignorés', () => {
+    const t = { equipment: [armour('gromril', 3, magic)],
+      extensions: { v5: { divineConfiscations: [{ retainedArmor: { body: 2 } }] } } };
+    assert.equal(locationProtection(t, { location: 'body' }).ap, 5);
+    const hit = locationProtection(t, { location: 'body', qualities: ['barrakul'] });
+    assert.equal(hit.ap, 3);
+    assert.deepEqual(hit.manual, []);
   });
 
   const defenseInput = (shieldKeywords, attackQualities) => {
@@ -93,6 +105,21 @@ describe('Barrakul', () => {
     const input = defenseInput(magic, [{ id: 'barrakul' }]);
     assert.equal(v5ShieldDefense(input).barrakulIgnored, undefined);
     assert.equal(shieldBonus(input).length, 1);
+  });
+
+  // Décision MJ 05/11 (2e arbitrage) : le bouclier non magique perd aussi la permission d'esquiver les tirs (2 PA).
+  const rangedDodge = (shieldKeywords, attackQualities) => {
+    const input = defenseInput(shieldKeywords, attackQualities);
+    input.action = { ...input.action, attr: 'CT' };
+    input.defense = { ...input.defense, label: 'Esquive', attr: 'Ag', v5: { kind: 'test', context: {} } };
+    input.attackContext = { ranged: true }; input.v5 = { kind: 'ranged', context: {} };
+    input.protectionContext = { ...input.protectionContext, ranged: true };
+    return v5ShieldDefense(input).rangedDodgeAllowed;
+  };
+  test('tir Barrakul : bouclier non magique sans esquive à toute portée, bouclier magique la garde', () => {
+    assert.equal(rangedDodge([], []), true);
+    assert.equal(rangedDodge([], [{ id: 'barrakul' }]), false);
+    assert.equal(rangedDodge(magic, [{ id: 'barrakul' }]), true);
   });
 
   test('Défensive de l’arme du défenseur n’est pas un bouclier : son +1 DR reste', () => {

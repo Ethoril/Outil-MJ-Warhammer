@@ -111,7 +111,8 @@ export function v5ShieldDefense(normalized, catalogue = getReferenceCatalogue())
   return { confirmed: !bouclier && confirmed,
     ...(barrakulIgnored ? { barrakulIgnored: true } : {}),
     ...(bouclier ? { v5Bonus: v5Confirmed } : {}),
-    rangedDodgeAllowed: bouclier ? v5Confirmed && rangedAttack && rating >= 2 && dodgeDefense
+    // Barrakul (décision MJ 05/11) : le bouclier non magique perd aussi l'Esquive des tirs à toute portée.
+    rangedDodgeAllowed: barrakulIgnored ? false : bouclier ? v5Confirmed && rangedAttack && rating >= 2 && dodgeDefense
       : confirmed && legacyRanged,
     rating: (bouclier ? v5Confirmed : confirmed) ? rating : null,
     unresolved };

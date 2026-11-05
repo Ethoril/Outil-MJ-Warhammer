@@ -521,9 +521,11 @@ export function locationProtection(target,context={}){
  if(include&&barrakul&&!isMagicalItem(item)){include=false;ignored.push({item,reason:'Barrakul : PA de cette pièce non magique ignorés'});}
  if(include)counted.push(item);
  }
- // Sans pièce identifiée (PA saisis à la main, PA physiques conservés hors possessions), rien ne dit si la protection est magique.
- if(barrakul&&((!location&&Number(baseAp)>0)||(protection&&Number.isSafeInteger(retained)&&retained>0)))manual.push('barrakul-magie-armure-a-preciser');
- if(location)ap=counted.reduce((sum,item)=>sum+item.ap,0)+(Number.isSafeInteger(retained)&&retained>=0?retained:0);
+ // Décision MJ 05/11 : des PA sans pièce identifiée (saisis à la main, conservés hors possessions) sont considérés non magiques.
+ const retainedValid=Number.isSafeInteger(retained)&&retained>=0;
+ if(barrakul&&!location&&Number(baseAp)>0){ap=0;warnings.push('Barrakul : PA saisis sans pièce, considérés non magiques, ignorés');}
+ if(barrakul&&protection&&retainedValid&&retained>0)warnings.push('Barrakul : PA conservés hors possessions, considérés non magiques, ignorés');
+ if(location)ap=counted.reduce((sum,item)=>sum+item.ap,0)+(retainedValid&&!barrakul?retained:0);
  if(location?.ignored.some(row=>row.item.ap===null))manual.push('pa-a-preciser');
  let shieldAp=0,shield=null;
  const shields=protection?.shields||[];
