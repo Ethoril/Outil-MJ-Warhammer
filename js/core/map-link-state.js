@@ -5,6 +5,7 @@
 import { creatureSizeOf } from './creature-size.js';
 import { carriesSense } from './creature-senses.js';
 import { participantCamp } from './encounters.js';
+import { carriesMovement, planMovement } from './creature-movement.js';
 
 export const MAP_LINK_VERSION = 1;
 
@@ -33,13 +34,41 @@ const movementOf = participant => {
   return raw !== null && raw !== undefined && raw !== '' && Number.isFinite(Number(raw)) ? Number(raw) : null;
 };
 
-/** Marche et Course en cases de 2 m (§4) : Marche M×2 m = M cases, Course 2M cases ; Enchevêtré = 0. */
+/** Mouvement après séquelles (moteur `v5-sequela-effects`, projeté dans `extensions.v5.sequelaEffects`), sinon M. */
+const baseMovementOf = participant => {
+  const effective = v5Of(participant).sequelaEffects?.movement?.effective;
+  return Number.isFinite(effective) ? effective : movementOf(participant);
+};
+const hasState = (participant, marker) => (participant?.states || [])
+  .some(state => MARKER_BY_STATE[stateKey(state)] === marker && Number(state?.level ?? 1) > 0);
+/** Livre de base V5 p.186-187 : Enchevêtré « may not Move », Surpris « no Action or Move », Inconscient « do nothing ». */
+const NO_MOVE = ['entangled', 'surprised', 'unconscious'];
+
+/**
+ * Marche et Course effectives en cases de 2 m (§4) : Marche M cases, Course 2M (table de Mouvement, V5 p.163).
+ * Ordre : séquelles (M effectif), Sonné (M ÷ 2 arrondi au supérieur, p.186), Traits via `planMovement`
+ * (Foulée : Course ×1,5, p.361 ; Vol : Move jusqu'à l'indice en mètres, p.358), puis À terre (ramper à la moitié
+ * de la Marche, Move seulement, p.186) et les états sans Move. Bond, Grimpant et les Traits aquatiques ne changent
+ * pas la Marche ni la Course au sol.
+ */
 export function rangeCellsOf(participant) {
-  const m = movementOf(participant);
-  if (m === null) return { speedCells: null, runCells: null };
-  const stuck = (participant?.states || []).some(state => MARKER_BY_STATE[stateKey(state)] === 'entangled' && Number(state?.level ?? 1) > 0);
-  return stuck ? { speedCells: 0, runCells: 0 } : { speedCells: m, runCells: 2 * m };
+  const base = baseMovementOf(participant);
+  if (base === null) return { speedCells: null, runCells: null };
+  if (NO_MOVE.some(marker => hasState(participant, marker))) return { speedCells: 0, runCells: 0 };
+  // À terre : le Move ne sert qu'à se relever ou ramper (M mètres, soit M/2 cases) ; pas de Course. États différents :
+  // la pénalité la plus forte (p.185), et ramper reste sous la Marche de Sonné.
+  if (hasState(participant, 'prone')) { const crawl = Math.floor(base / 2); return { speedCells: crawl, runCells: crawl }; }
+  const m = hasState(participant, 'stunned') ? Math.ceil(base / 2) : base;
+  let speedCells = m;
+  let runCells = 2 * m;
+  if (carriesMovement(participant, 'sprinter')) runCells = planMovement(participant, 'sprinter', { baseRun: runCells }).movement.run;
+  const fly = carriesMovement(participant, 'fly') ? planMovement(participant, 'fly').movement : null;
+  if (fly) { const cells = Math.floor(fly.rating / 2); speedCells = Math.max(speedCells, cells); runCells = Math.max(runCells, cells); }
+  return { speedCells, runCells };
 }
+
+/** PV max d'un PJ persistant : maximum de Blessures de la fiche importée, sinon `maxHp` du profil (import JSON : null). */
+export const persistentMaxHpOf = profile => profile?.ficheSnapshot?.woundsMax ?? profile?.maxHp ?? null;
 
 /** Vision dans le noir en cases (§4) : 1 par défaut, 10 Vision nocturne, 20 Vision dans le noir. */
 export const visionDimOf = participant => (carriesSense(participant, 'darkVision') ? 20 : carriesSense(participant, 'nightVision') ? 10 : 1);
