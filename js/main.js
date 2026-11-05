@@ -37,6 +37,7 @@ import { normalizeEffects, normalizeState } from './core/effects.js';
 import { previewHpLoss, inferActionType } from './core/resolution.js';
 import { initCombatBanner } from './ui/combat-banner.js';
 import { openCampaignTimeDialog } from './ui/v5-campaign-time-dialog.js';
+import { renderMapLinkIndicator } from './ui/map-link-indicator.js';
 import { createMapLink, MAP_LINK_CHANNEL, MAP_LINK_PING_MS } from './core/map-link.js';
 import { offScenePjParticipants } from './core/map-link-state.js';
 // Libellés des saisies d'Initiative manquantes (recette G-INI-2 : plus d'identifiants internes).
@@ -1814,14 +1815,17 @@ on(DOM.combat.btnD100, 'click', () => {
 
 // Liaison RPG Map Display (docs/CONTRAT_LIAISON_MAP_DISPLAY.md) : onglet gm.html du même navigateur, même origine.
 if (typeof BroadcastChannel === 'function') {
-  const MAP_LINK_STATUS = { connected: ['🗺️ Carte connectée', 'info'], disconnected: ['🗺️ Carte déconnectée', 'info'], 'version-mismatch': ['🗺️ Carte : versions de liaison différentes', 'error'] };
+  const showMapLinkStatus = status => {
+    if (!renderMapLinkIndicator(qs('#map-link-indicator'), status)) return;
+    if (status === 'disconnected') showToast('🗺️ Carte déconnectée', 'info');
+  };
   const mapLink = createMapLink({
     channel: new BroadcastChannel(MAP_LINK_CHANNEL),
     // Scène, plus les PJ persistants hors scène : leur pion reste lié en exploration (contrat §3).
     getParticipants: () => { const scene = Store.listParticipants(); return [...scene, ...offScenePjParticipants(Store.listPersistentCharacters(), scene, id => Store.getProfile(id))]; },
     imageUrlOf: participant => Store.getProfile(participant.profileId)?.tokenImage ?? null,
     maxHpOf: participant => { const profile = Store.getProfile(participant.profileId); return profile?.ficheSnapshot?.woundsMax ?? profile?.maxHp ?? null; },
-    onStatus: status => showToast(...MAP_LINK_STATUS[status])
+    onStatus: showMapLinkStatus
   });
   Bus.on('reserve', mapLink.refresh);
   Bus.on('combat', mapLink.refresh);
