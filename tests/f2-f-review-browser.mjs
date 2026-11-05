@@ -59,9 +59,12 @@ try{
   assert.equal(await workspace.getByLabel('Objet de focalisation utilisé').count(),1);
   assert.equal(await workspace.getByText('Le bonus s’applique uniquement à Focalisation dans le domaine indiqué; le bâton ne réduit pas le niveau d’incantation.',{exact:true}).count(),1);
   assert.equal(await workspace.getByLabel('Encombrement de la pièce métallique équivalente (MJ)').count(),1);
+  const openChip=async label=>{const summary=page.locator('.workspace-sheet-actor details.workspace-equipment-chip > summary',{hasText:label});if(!await summary.evaluate(el=>el.parentElement.open))await summary.click();};// U3 : panneaux d’équipement en puces sur la fiche de l’acteur
+  await openChip('Plate de léviathan');
   await workspace.getByLabel('Encombrement de la pièce métallique équivalente (MJ)').fill('4');
   await workspace.getByRole('button',{name:'Enregistrer la référence métal'}).click();
   await page.waitForFunction(()=>document.querySelector('.workspace-leviathan-encumbrance')?.textContent.includes('léviathan 3 Encombrement'));
+  await openChip('Pavois');
   await workspace.getByLabel('Direction choisie par le MJ').selectOption('north');
   await workspace.getByRole('button',{name:'Dépenser la première Action de mise en place'}).click();
   await page.waitForFunction(()=>document.querySelector('.workspace-pavise-setup')?.textContent.includes('Première Action dépensée'));
@@ -73,6 +76,7 @@ try{
   await page.evaluate(async()=>{const {Store}=await import('/Outil-MJ-Warhammer/js/main.js');do await Store.nextTurn();while(Store.getCombat().currentActorId!=='f-review-actor');});
   await page.waitForFunction(()=>document.querySelector('.workspace-pavise-setup')?.textContent.includes('seconde Action au prochain Tour'));
   await page.waitForFunction(()=>{const button=[...document.querySelectorAll('.workspace-pavise-setup button')].find(row=>row.textContent.includes('seconde Action'));return button&&!button.disabled;});
+  await openChip('Pavois');
   await secondAction.click();
   await page.waitForFunction(()=>document.querySelector('.workspace-pavise-setup')?.textContent.includes('Planté face au north'));
   assert.equal(await workspace.getByLabel('Objet porté contenant de la malepierre').count(),1);

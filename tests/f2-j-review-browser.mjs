@@ -26,6 +26,8 @@ try{
  const participant=async id=>(await read()).combat.participants.find(row=>row.id===id);
 
  // 1. Un critique appliqué par l'interface crée l'occurrence F2-I ; aucune occurrence, aucun suivi proposé avant.
+ // U3 : « Suites de combat » est fermé pendant le combat ; le MJ l'ouvre, U2 le garde ouvert ensuite.
+ const aftermath=combat.locator('details.workspace-aftermath');assert.equal(await aftermath.evaluate(el=>el.open),false,'Suites de combat fermé pendant le combat');await aftermath.locator(':scope > summary').click();
  await panel.waitFor();
  await panel.locator('summary',{hasText:'Critiques à suivre (0)'}).waitFor();
  await combat.locator('[data-workspace-select="hero"]').click();

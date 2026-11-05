@@ -1065,6 +1065,8 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     }
     body.append(...creatureCommandBlocks(participant), states);
     sheet.appendChild(body);
+    const equipment = equipmentChips(participant, role);
+    if (equipment) sheet.appendChild(equipment);
     sheet.appendChild(renderFicheDetails(participant));
 
     const actionsRow = node('div', 'workspace-inline-actions');
@@ -2093,37 +2095,263 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     }
   };
 
+  // U3 (05/11) : panneaux d'équipement montrés en puces sur la fiche du combattant (equipmentChips), plus en blocs
+  // pleine largeur dans la colonne. Leur fonction est inchangée.
+  function paviseSetupPanel(actor){
+    const carriedPavises=(actor?.equipment||[]).filter(item=>item.kind==='shield'&&/pavise|pavois/i.test(item.name||item.id||''));
+    if(!carriedPavises.length)return null;
+    {
+      const deploymentPanel=node('section','workspace-chip-panel workspace-pavise-setup');
+      deploymentPanel.setAttribute('aria-label','Mise en place du pavois');
+      deploymentPanel.appendChild(node('h3','workspace-card-title','Mise en place du pavois'));
+      for(const item of carriedPavises){
+        const deployment=actor?.extensions?.v5?.paviseDeploymentByItemId?.[item.id]||null,wrap=node('div','workspace-v5-context');
+        let actionAvailable=false,actionBlock='';
+        try{
+          const clock=Store.getActionClock(),isCurrent=readCombat(Store).currentActorId===actor.id,spent=Store.listTurnActions(actor.id).length>0,sameTurnSecond=deployment?.actionsPaid===1&&deployment.lastTurnId===clock.turnId;
+          actionAvailable=Boolean(isCurrent&&clock.turnId&&!spent&&!sameTurnSecond);
+          if(!isCurrent)actionBlock='Le porteur doit être l’acteur courant.';else if(!clock.turnId)actionBlock='Tour non suivi : l’Action ne peut pas être dépensée.';else if(spent)actionBlock='Une Action a déjà été dépensée pendant ce Tour.';else if(sameTurnSecond)actionBlock='La seconde Action exige un Tour ultérieur.';
+        }catch{actionBlock='État de combat indisponible.';}
+        const progress=deployment?.status==='planted'?`Planté face au ${deployment.facing} · 2/2 Actions`:deployment?.actionsPaid===1?`Première Action dépensée · face au ${deployment.facing} · en attente d’un autre Tour`: 'Non planté · 0/2 Actions';
+        wrap.appendChild(node('p','workspace-result-line',`${item.name||item.id} · ${progress}`));
+        if(deployment?.status!=='planted'){
+          const label=node('label','workspace-type','Direction choisie par le MJ'),choice=document.createElement('select');
+          choice.setAttribute('aria-label',label.textContent);
+          choice.append(new Option('Choisir…',''));
+          for(const [value,text] of [['north','Nord'],['south','Sud'],['east','Est'],['west','Ouest']])choice.append(new Option(text,value));
+          choice.value=deployment?.facing||'';
+          label.append(choice);
+          wrap.appendChild(label);
+          const error=node('p','workspace-error'),apply=button(deployment?.actionsPaid===1?'Dépenser la seconde Action au prochain Tour':'Dépenser la première Action de mise en place','workspace-primary');
+          apply.type='button';
+          choice.addEventListener('change',()=>{apply.disabled=Boolean(!choice.value||!actionAvailable||state.busy||!Store);});
+          apply.addEventListener('click',async()=>{
+            apply.disabled=true;
+            error.textContent='';
+            try{
+              const plan=Store.previewV5PaviseDeployment({actorId:actor.id,equipmentId:item.id,direction:choice.value});
+              if(!plan.ready)throw new Error(plan.error||'Mise en place non disponible.');
+              const result=await Store.applyV5PaviseDeployment(plan);
+              if(result?.status!=='applied')throw new Error(result?.reason||'Action du pavois non enregistrée.');
+              render();
+            }catch(cause){
+              error.textContent=userMessage(cause,'Action du pavois non enregistrée.');
+              apply.disabled=false;
+            }
+          });
+          apply.disabled=Boolean(!choice.value||!actionAvailable||state.busy||!Store);
+          wrap.append(error,apply);
+          if(actionBlock)wrap.appendChild(node('p','workspace-muted',actionBlock));
+        }
+        deploymentPanel.appendChild(wrap);
+      }
+      deploymentPanel.appendChild(node('p','workspace-muted','Chaque clic dépense et journalise une Action du Tour courant. La seconde Action doit être dépensée à un Tour ultérieur; la protection n’est active qu’après les deux dépenses.'));
+      return deploymentPanel;
+    }
+  }
+  function leviathanPanel(actor){
+    const leviathanPieces=(actor?.equipment||[]).filter(item=>/leviathan plate|plate de leviathan/i.test(item.name||item.id||''));
+    if(!leviathanPieces.length)return null;
+    {
+      const panel=node('section','workspace-chip-panel workspace-leviathan-encumbrance');
+      panel.setAttribute('aria-label','Encombrement de la plate de léviathan');
+      panel.appendChild(node('h3','workspace-card-title','Encombrement de la plate de léviathan'));
+      for(const item of leviathanPieces){
+        const wrap=node('div','workspace-v5-context'),baseline=item.extensions?.v5?.metalEquivalentEncumbrance;
+        const effective=effectiveSupplementalEncumbrance(item,baseline);
+        wrap.appendChild(node('p','workspace-result-line',effective===null?`${item.name} · saisissez l’Encombrement de la pièce métallique équivalente pour calculer cet objet.`:`${item.name} · métal ${baseline} · léviathan ${effective} Encombrement (−1)`));
+        const label=node('label','workspace-type','Encombrement de la pièce métallique équivalente (MJ)');
+        const input=document.createElement('input');
+        input.type='number';
+        input.min='1';
+        input.step='1';
+        input.value=baseline??'';
+        input.setAttribute('aria-label',label.textContent);
+        label.append(input);
+        wrap.appendChild(label);
+        const error=node('p','workspace-error'),save=button('Enregistrer la référence métal','workspace-primary');
+        save.type='button';
+        save.addEventListener('click',async()=>{
+          save.disabled=true;
+          error.textContent='';
+          try{
+            const value=Number(input.value);
+            if(!Number.isSafeInteger(value)||value<1)throw new Error('Saisissez un Encombrement métallique entier positif.');
+            const fresh=(Store.listParticipants?.()||[]).find(row=>row.id===actor.id)||actor;
+            const equipment=(fresh.equipment||[]).map(row=>row.id!==item.id?row:{...row,extensions:{...(row.extensions||{}),v5:{...(row.extensions?.v5||{}),metalEquivalentEncumbrance:value}}});
+            const result=await Store.updateParticipant(fresh.id,{equipment});
+            if(result?.ok===false)throw new Error(result.error||'Référence non enregistrée.');
+            render();
+          }catch(cause){
+            error.textContent=userMessage(cause,'Référence non enregistrée.');
+            save.disabled=false;
+          }
+        });
+        wrap.append(error,save);
+        panel.appendChild(wrap);
+      }
+      panel.appendChild(node('p','workspace-muted','Calcul stocké sur l’objet : Encombrement de la pièce métallique équivalente moins 1. Aucun autre objet ni PA/Taille ne change.'));
+      return panel;
+    }
+  }
+  function reloadPanel(actor){
+    const reloadWeapons=(actor?.equipment||[]).filter(item=>item.kind==='weapon'&&!/griffonsfoot/i.test(item.name||'')&&item.keywords?.some(row=>['a-repetition','recharge','salve','salvo'].includes(typeof row==='string'?row:row?.id)));
+    if(!reloadWeapons.length)return null;
+    {
+      const reloadPanel=node('section','workspace-chip-panel workspace-weapon-reload');
+      reloadPanel.setAttribute('aria-label','Rechargement des armes');
+      reloadPanel.appendChild(node('h3','workspace-card-title','Rechargement des armes'));
+      for(const weapon of reloadWeapons){
+        const state=weapon.extensions?.v5?.reloadState,wrap=node('div','workspace-v5-context');
+        const title=node('p','workspace-result-line',`${weapon.name||weapon.id} · ${describeV5ReloadState(state||initialV5ReloadState(weapon).state)}`);
+        wrap.appendChild(title);
+        const error=node('p','workspace-error');
+        const apply=async input=>{try{
+          error.textContent='';
+          const plan=Store.previewV5WeaponReload({actorId:actor.id,equipmentId:weapon.id,...input});
+          if(!plan.ready)throw userError(plan.error||'Rechargement à préciser.');
+          const saved=await Store.applyV5WeaponReload(plan);
+          if(saved?.status!=='applied')throw userError(V5_RELOAD_REASON_LABELS[saved?.reason]||saved?.reason||'Rechargement non enregistré.');
+          render();
+        }catch(cause){error.textContent=userMessage(cause,'Rechargement non enregistré.');}};
+        if(!state&&weapon.keywords?.some(row=>(typeof row==='string'?row:row?.id)==='a-repetition'&&String(row?.parameter).toLowerCase()==='variable')){
+          const label=node('label','workspace-type','Capacité du chargeur arbitrée par le MJ '),capacity=document.createElement('input');
+          capacity.type='number';
+          capacity.min='1';
+          capacity.step='1';
+          capacity.setAttribute('aria-label',`Capacité arbitrée — ${weapon.name||weapon.id}`);
+          const decide=button('Enregistrer l’arbitrage','workspace-primary');
+          decide.type='button';
+          decide.addEventListener('click',()=>{
+            if(!capacity.value){
+              error.textContent='Saisissez une capacité entière positive.';
+              return;
+            }
+            apply({operation:'arbitrate',repeaterRating:Number(capacity.value)});
+          });
+          label.append(capacity);
+          wrap.append(label,decide);
+        }
+        const begin=button('Commencer la recharge','workspace-secondary');
+        begin.type='button';
+        begin.addEventListener('click',()=>apply({operation:'begin'}));
+        begin.disabled=state?.reloading===true;
+        wrap.appendChild(begin);
+        if(state?.reloading){
+          const select=document.createElement('select');
+          select.setAttribute('aria-label',`Résultat du Test de recharge — ${weapon.name||weapon.id}`);
+          select.append(new Option('Résultat du Test…',''),new Option('Réussite','success'),new Option('Échec','failure'));
+          const sl=document.createElement('input');
+          sl.type='number';
+          sl.step='1';
+          sl.setAttribute('aria-label',`DR du Test de recharge — ${weapon.name||weapon.id}`);
+          const progress=button('Enregistrer le Test','workspace-primary');
+          progress.type='button';
+          progress.addEventListener('click',()=>{
+            if(!select.value||sl.value===''){
+              error.textContent='Saisissez le résultat et la DR du Test.';
+              return;
+            }
+            apply({operation:'progress',success:select.value==='success',testSl:Number(sl.value),expectedWeaponRevision:state.revision});
+          });
+          wrap.append(select,sl,progress);
+        }
+        wrap.appendChild(error);
+        reloadPanel.appendChild(wrap);
+      }
+      return reloadPanel;
+    }
+  }
+  function lodgedProjectilesPanel(participants){
+    const lodged=(participants||[]).flatMap(participant=>(participant.extensions?.v5?.lodgedProjectiles||[]).filter(row=>row.removed!==true).map(projectile=>({participant,projectile})));
+    if(!lodged.length)return null;
+    {
+      const panel=node('section','workspace-chip-panel workspace-impaled-projectiles');
+      panel.setAttribute('aria-label','Projectiles fichés');
+      panel.appendChild(node('h3','workspace-card-title','Projectiles fichés — Empaleuse'));
+      for(const {participant,projectile} of lodged){
+        const wrap=node('div','workspace-v5-context');
+        wrap.appendChild(node('p','workspace-result-line',`${participant.name||participant.id} · ${projectile.ammunitionId} · ${projectile.removal==='surgery'?'chirurgie requise':'Test de Guérison requis'} · 1 Blessure bloquée`));
+        const error=node('p','workspace-error');
+        let surgeryConfirmed=false,skillId='',testRoll='';
+        if(projectile.removal==='surgery'){
+          const label=node('label','workspace-type','Le MJ confirme la chirurgie');
+          const check=document.createElement('input');
+          check.type='checkbox';
+          check.addEventListener('change',()=>{surgeryConfirmed=check.checked;});
+          label.prepend(check);
+          wrap.appendChild(label);
+        }else{
+          const skills=(participant.skills||[]).filter(row=>/gu[eé]rison|heal/iu.test(row.name||row.nom||''));
+          const select=document.createElement('select');
+          select.setAttribute('aria-label',`Compétence Guérison — ${participant.name||participant.id}`);
+          select.append(new Option('Choisir Guérison…',''));
+          for(const row of skills)select.append(new Option(row.name||row.nom||row.id,row.id));
+          select.addEventListener('change',()=>{skillId=select.value;});
+          const input=document.createElement('input');
+          input.type='number';
+          input.min='1';
+          input.max='100';
+          input.step='1';
+          input.setAttribute('aria-label',`d100 du Test de Guérison — ${participant.name||participant.id}`);
+          input.addEventListener('input',()=>{testRoll=input.value;});
+          wrap.append(select,input);
+        }
+        const apply=button('Enregistrer le retrait','workspace-primary');
+        apply.type='button';
+        apply.addEventListener('click',async()=>{try{
+          error.textContent='';
+          const plan=Store.previewV5ProjectileExtraction({participantId:participant.id,projectileId:projectile.id,
+            method:projectile.removal==='surgery'?'surgery':'heal-test',surgeryConfirmed,skillId,roll:testRoll===''?undefined:Number(testRoll)});
+          if(!plan.ready)throw new Error(plan.error);
+            const result=await Store.applyV5ProjectileExtraction(plan);
+            if(result?.status!=='applied')throw new Error(result?.reason||'Retrait non enregistré.');
+            render();
+        }catch(cause){error.textContent=userMessage(cause,'Retrait non enregistré.');}});
+        wrap.append(apply,error);
+        panel.appendChild(wrap);
+      }
+      return panel;
+    }
+  }
+  function equipmentChip(label,panel){
+    const chip=node('details','workspace-equipment-chip');
+    chip.append(node('summary','workspace-state-chip',label),panel);
+    return chip;
+  }
+  // Libellés stables (sans état) : U2 retrouve la puce ouverte d'un rendu à l'autre ; le compteur « (N) » est ignoré.
+  function equipmentChips(participant,role){
+    const chips=[];
+    if(role==='actor'){
+      const pavise=paviseSetupPanel(participant);if(pavise)chips.push(equipmentChip('Pavois',pavise));
+      const leviathan=leviathanPanel(participant);if(leviathan)chips.push(equipmentChip('Plate de léviathan',leviathan));
+      const reload=reloadPanel(participant);if(reload)chips.push(equipmentChip('Rechargement',reload));
+    }
+    const count=(participant.extensions?.v5?.lodgedProjectiles||[]).filter(row=>row.removed!==true).length;
+    const lodged=count?lodgedProjectilesPanel([participant]):null;
+    if(lodged)chips.push(equipmentChip(`Projectiles fichés (${count})`,lodged));
+    if(!chips.length)return null;
+    const row=node('div','workspace-equipment-chips');
+    row.setAttribute('aria-label',`Équipement en jeu — ${participant.name||participant.id}`);
+    row.append(...chips);
+    return row;
+  }
+
   function renderCenter(context) {
     const center = play.center;
     center.replaceChildren();
     let suddenDeathEnabled = false;
     try { suddenDeathEnabled = Store.isSuddenDeathEnabled() === true; } catch {}
-    const suddenDeath = node('section', 'workspace-card workspace-sudden-death');
-    suddenDeath.setAttribute('aria-label', 'Réglage de table : mort subite des figurants');
-    suddenDeath.appendChild(rubric('Mort subite des figurants'));
-    const optionLabel = node('label', 'workspace-type', 'Activer la règle de table — désactivée par défaut');
-    const option = document.createElement('input');
-    option.type = 'checkbox';
-    option.checked = suddenDeathEnabled;
-    option.setAttribute('aria-label', 'Activer la mort subite des figurants');
-    option.addEventListener('change', async () => {
-      option.disabled = true;
-      try {
-        await Store.setSuddenDeathEnabled(option.checked);
-        render();
-      } catch (error) {
-        option.disabled = false;
-        option.checked = !option.checked;
-        suddenDeath.appendChild(node('p', 'workspace-error', userMessage(error, 'Réglage non enregistré.')));
-      }
-    });
-    optionLabel.prepend(option);
-    suddenDeath.appendChild(optionLabel);
-    if (suddenDeathEnabled) {
-      const candidates = (context.participants || []).filter(row => ['PNJ', 'Créature'].includes(row.kind)
-        && Number(row.hp) === 0 && row.extensions?.v5?.dead !== true
-        && !(row.states || []).some(state => state.key === 'inconscient' || state.name === 'Inconscient'));
-      for (const participant of candidates) {
+    // U3 (05/11) : le réglage de table vit dans « Règles de table », fermé, en bas de la colonne ; la bannière
+    // n'apparaît que lorsqu'un figurant est à 0 Blessure et qu'une décision du MJ est attendue.
+    const suddenDeathCandidates = !suddenDeathEnabled ? [] : (context.participants || []).filter(row => ['PNJ', 'Créature'].includes(row.kind)
+      && Number(row.hp) === 0 && row.extensions?.v5?.dead !== true
+      && !(row.states || []).some(state => state.key === 'inconscient' || state.name === 'Inconscient'));
+    if (suddenDeathCandidates.length) {
+      const banner = node('section', 'workspace-card workspace-sudden-death workspace-sudden-death-banner');
+      banner.setAttribute('aria-label', 'Mort subite : décision du MJ attendue');
+      banner.appendChild(rubric('Mort subite — décision attendue'));
+      for (const participant of suddenDeathCandidates) {
         const row = node('div', 'workspace-result-line');
         row.appendChild(node('span', '', `${participant.name || participant.id} · 0 Blessure`));
         const confirmLabel = node('label', 'workspace-type', 'Confirmer que c’est un PNJ secondaire');
@@ -2158,11 +2386,39 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
           });
           row.appendChild(choose);
         }
-        suddenDeath.appendChild(row);
+        banner.appendChild(row);
       }
-      if (!candidates.length) suddenDeath.appendChild(node('p', 'workspace-muted', 'Aucun figurant à 0 Blessure à arbitrer.'));
+      center.appendChild(banner);
     }
-    center.appendChild(suddenDeath);
+    const tableRules = () => {
+      const details = node('details', 'workspace-card workspace-table-rules');
+      details.appendChild(node('summary', '', 'Règles de table'));
+      const suddenDeath = node('section', 'workspace-sudden-death-setting');
+      suddenDeath.setAttribute('aria-label', 'Réglage de table : mort subite des figurants');
+      const optionLabel = node('label', 'workspace-type', 'Mort subite des figurants — désactivée par défaut');
+      const option = document.createElement('input');
+      option.type = 'checkbox';
+      option.checked = suddenDeathEnabled;
+      option.setAttribute('aria-label', 'Activer la mort subite des figurants');
+      option.addEventListener('change', async () => {
+        option.disabled = true;
+        try {
+          await Store.setSuddenDeathEnabled(option.checked);
+          render();
+        } catch (error) {
+          option.disabled = false;
+          option.checked = !option.checked;
+          suddenDeath.appendChild(node('p', 'workspace-error', userMessage(error, 'Réglage non enregistré.')));
+        }
+      });
+      optionLabel.prepend(option);
+      suddenDeath.appendChild(optionLabel);
+      if (suddenDeathEnabled) suddenDeath.appendChild(node('p', 'workspace-muted', suddenDeathCandidates.length
+        ? 'Décision attendue : voir la bannière en haut de la colonne.'
+        : 'Aucun figurant à 0 Blessure à arbitrer.'));
+      details.appendChild(suddenDeath);
+      return details;
+    };
     if (!context.participants.length) {
       const empty = node('div', 'workspace-empty workspace-card workspace-play-empty');
       empty.appendChild(node('h2', '', 'Aucune rencontre en cours'));
@@ -2174,6 +2430,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       center.appendChild(empty);
       const prepared = encounterList({ compact: true });
       if (prepared.list) center.append(rubric('Rencontres préparées'), prepared.list);
+      center.appendChild(tableRules());
       return;
     }
     const duel = node('div', 'workspace-duel');
@@ -2225,215 +2482,13 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       center.appendChild(details);
     }
     const aftermath=aftermathPanel.render(context.participants);
-    if(aftermath){const details=node('details','workspace-card workspace-secondary-panel');details.open=true;details.append(node('summary','','Suites de combat'),aftermath);center.appendChild(details);}
+    // U3 (05/11) : fermé pendant le combat, ouvert hors combat ; s'il est ouvert par le MJ, U2 (captureView) le garde ouvert.
+    if(aftermath){const details=node('details','workspace-card workspace-secondary-panel workspace-aftermath');details.open=!context.started;details.append(node('summary','','Suites de combat'),aftermath);center.appendChild(details);}
 
-    const carriedPavises=(context.actor?.equipment||[]).filter(item=>item.kind==='shield'&&/pavise|pavois/i.test(item.name||item.id||''));
-    if(carriedPavises.length){
-      const deploymentPanel=node('section','workspace-card workspace-pavise-setup');
-      deploymentPanel.setAttribute('aria-label','Mise en place du pavois');
-      deploymentPanel.appendChild(node('h3','workspace-card-title','Mise en place du pavois'));
-      for(const item of carriedPavises){
-        const deployment=context.actor?.extensions?.v5?.paviseDeploymentByItemId?.[item.id]||null,wrap=node('div','workspace-v5-context');
-        let actionAvailable=false,actionBlock='';
-        try{
-          const clock=Store.getActionClock(),isCurrent=readCombat(Store).currentActorId===context.actor.id,spent=Store.listTurnActions(context.actor.id).length>0,sameTurnSecond=deployment?.actionsPaid===1&&deployment.lastTurnId===clock.turnId;
-          actionAvailable=Boolean(isCurrent&&clock.turnId&&!spent&&!sameTurnSecond);
-          if(!isCurrent)actionBlock='Le porteur doit être l’acteur courant.';else if(!clock.turnId)actionBlock='Tour non suivi : l’Action ne peut pas être dépensée.';else if(spent)actionBlock='Une Action a déjà été dépensée pendant ce Tour.';else if(sameTurnSecond)actionBlock='La seconde Action exige un Tour ultérieur.';
-        }catch{actionBlock='État de combat indisponible.';}
-        const progress=deployment?.status==='planted'?`Planté face au ${deployment.facing} · 2/2 Actions`:deployment?.actionsPaid===1?`Première Action dépensée · face au ${deployment.facing} · en attente d’un autre Tour`: 'Non planté · 0/2 Actions';
-        wrap.appendChild(node('p','workspace-result-line',`${item.name||item.id} · ${progress}`));
-        if(deployment?.status!=='planted'){
-          const label=node('label','workspace-type','Direction choisie par le MJ'),choice=document.createElement('select');
-          choice.setAttribute('aria-label',label.textContent);
-          choice.append(new Option('Choisir…',''));
-          for(const [value,text] of [['north','Nord'],['south','Sud'],['east','Est'],['west','Ouest']])choice.append(new Option(text,value));
-          choice.value=deployment?.facing||'';
-          label.append(choice);
-          wrap.appendChild(label);
-          const error=node('p','workspace-error'),apply=button(deployment?.actionsPaid===1?'Dépenser la seconde Action au prochain Tour':'Dépenser la première Action de mise en place','workspace-primary');
-          apply.type='button';
-          choice.addEventListener('change',()=>{apply.disabled=Boolean(!choice.value||!actionAvailable||state.busy||!Store);});
-          apply.addEventListener('click',async()=>{
-            apply.disabled=true;
-            error.textContent='';
-            try{
-              const plan=Store.previewV5PaviseDeployment({actorId:context.actor.id,equipmentId:item.id,direction:choice.value});
-              if(!plan.ready)throw new Error(plan.error||'Mise en place non disponible.');
-              const result=await Store.applyV5PaviseDeployment(plan);
-              if(result?.status!=='applied')throw new Error(result?.reason||'Action du pavois non enregistrée.');
-              render();
-            }catch(cause){
-              error.textContent=userMessage(cause,'Action du pavois non enregistrée.');
-              apply.disabled=false;
-            }
-          });
-          apply.disabled=Boolean(!choice.value||!actionAvailable||state.busy||!Store);
-          wrap.append(error,apply);
-          if(actionBlock)wrap.appendChild(node('p','workspace-muted',actionBlock));
-        }
-        deploymentPanel.appendChild(wrap);
-      }
-      deploymentPanel.appendChild(node('p','workspace-muted','Chaque clic dépense et journalise une Action du Tour courant. La seconde Action doit être dépensée à un Tour ultérieur; la protection n’est active qu’après les deux dépenses.'));
-      center.appendChild(deploymentPanel);
-    }
-
-    const leviathanPieces=(context.actor?.equipment||[]).filter(item=>/leviathan plate|plate de leviathan/i.test(item.name||item.id||''));
-    if(leviathanPieces.length){
-      const panel=node('section','workspace-card workspace-leviathan-encumbrance');
-      panel.setAttribute('aria-label','Encombrement de la plate de léviathan');
-      panel.appendChild(node('h3','workspace-card-title','Encombrement de la plate de léviathan'));
-      for(const item of leviathanPieces){
-        const wrap=node('div','workspace-v5-context'),baseline=item.extensions?.v5?.metalEquivalentEncumbrance;
-        const effective=effectiveSupplementalEncumbrance(item,baseline);
-        wrap.appendChild(node('p','workspace-result-line',effective===null?`${item.name} · saisissez l’Encombrement de la pièce métallique équivalente pour calculer cet objet.`:`${item.name} · métal ${baseline} · léviathan ${effective} Encombrement (−1)`));
-        const label=node('label','workspace-type','Encombrement de la pièce métallique équivalente (MJ)');
-        const input=document.createElement('input');
-        input.type='number';
-        input.min='1';
-        input.step='1';
-        input.value=baseline??'';
-        input.setAttribute('aria-label',label.textContent);
-        label.append(input);
-        wrap.appendChild(label);
-        const error=node('p','workspace-error'),save=button('Enregistrer la référence métal','workspace-primary');
-        save.type='button';
-        save.addEventListener('click',async()=>{
-          save.disabled=true;
-          error.textContent='';
-          try{
-            const value=Number(input.value);
-            if(!Number.isSafeInteger(value)||value<1)throw new Error('Saisissez un Encombrement métallique entier positif.');
-            const fresh=(Store.listParticipants?.()||[]).find(row=>row.id===context.actor.id)||context.actor;
-            const equipment=(fresh.equipment||[]).map(row=>row.id!==item.id?row:{...row,extensions:{...(row.extensions||{}),v5:{...(row.extensions?.v5||{}),metalEquivalentEncumbrance:value}}});
-            const result=await Store.updateParticipant(fresh.id,{equipment});
-            if(result?.ok===false)throw new Error(result.error||'Référence non enregistrée.');
-            render();
-          }catch(cause){
-            error.textContent=userMessage(cause,'Référence non enregistrée.');
-            save.disabled=false;
-          }
-        });
-        wrap.append(error,save);
-        panel.appendChild(wrap);
-      }
-      panel.appendChild(node('p','workspace-muted','Calcul stocké sur l’objet : Encombrement de la pièce métallique équivalente moins 1. Aucun autre objet ni PA/Taille ne change.'));
-      center.appendChild(panel);
-    }
-
-    const reloadWeapons=(context.actor?.equipment||[]).filter(item=>item.kind==='weapon'&&!/griffonsfoot/i.test(item.name||'')&&item.keywords?.some(row=>['a-repetition','recharge','salve','salvo'].includes(typeof row==='string'?row:row?.id)));
-    if(reloadWeapons.length){
-      const reloadPanel=node('section','workspace-card workspace-weapon-reload');
-      reloadPanel.setAttribute('aria-label','Rechargement des armes');
-      reloadPanel.appendChild(node('h3','workspace-card-title','Rechargement des armes'));
-      for(const weapon of reloadWeapons){
-        const state=weapon.extensions?.v5?.reloadState,wrap=node('div','workspace-v5-context');
-        const title=node('p','workspace-result-line',`${weapon.name||weapon.id} · ${describeV5ReloadState(state||initialV5ReloadState(weapon).state)}`);
-        wrap.appendChild(title);
-        const error=node('p','workspace-error');
-        const apply=async input=>{try{
-          error.textContent='';
-          const plan=Store.previewV5WeaponReload({actorId:context.actor.id,equipmentId:weapon.id,...input});
-          if(!plan.ready)throw userError(plan.error||'Rechargement à préciser.');
-          const saved=await Store.applyV5WeaponReload(plan);
-          if(saved?.status!=='applied')throw userError(V5_RELOAD_REASON_LABELS[saved?.reason]||saved?.reason||'Rechargement non enregistré.');
-          render();
-        }catch(cause){error.textContent=userMessage(cause,'Rechargement non enregistré.');}};
-        if(!state&&weapon.keywords?.some(row=>(typeof row==='string'?row:row?.id)==='a-repetition'&&String(row?.parameter).toLowerCase()==='variable')){
-          const label=node('label','workspace-type','Capacité du chargeur arbitrée par le MJ '),capacity=document.createElement('input');
-          capacity.type='number';
-          capacity.min='1';
-          capacity.step='1';
-          capacity.setAttribute('aria-label',`Capacité arbitrée — ${weapon.name||weapon.id}`);
-          const decide=button('Enregistrer l’arbitrage','workspace-primary');
-          decide.type='button';
-          decide.addEventListener('click',()=>{
-            if(!capacity.value){
-              error.textContent='Saisissez une capacité entière positive.';
-              return;
-            }
-            apply({operation:'arbitrate',repeaterRating:Number(capacity.value)});
-          });
-          label.append(capacity);
-          wrap.append(label,decide);
-        }
-        const begin=button('Commencer la recharge','workspace-secondary');
-        begin.type='button';
-        begin.addEventListener('click',()=>apply({operation:'begin'}));
-        begin.disabled=state?.reloading===true;
-        wrap.appendChild(begin);
-        if(state?.reloading){
-          const select=document.createElement('select');
-          select.setAttribute('aria-label',`Résultat du Test de recharge — ${weapon.name||weapon.id}`);
-          select.append(new Option('Résultat du Test…',''),new Option('Réussite','success'),new Option('Échec','failure'));
-          const sl=document.createElement('input');
-          sl.type='number';
-          sl.step='1';
-          sl.setAttribute('aria-label',`DR du Test de recharge — ${weapon.name||weapon.id}`);
-          const progress=button('Enregistrer le Test','workspace-primary');
-          progress.type='button';
-          progress.addEventListener('click',()=>{
-            if(!select.value||sl.value===''){
-              error.textContent='Saisissez le résultat et la DR du Test.';
-              return;
-            }
-            apply({operation:'progress',success:select.value==='success',testSl:Number(sl.value),expectedWeaponRevision:state.revision});
-          });
-          wrap.append(select,sl,progress);
-        }
-        wrap.appendChild(error);
-        reloadPanel.appendChild(wrap);
-      }
-      center.appendChild(reloadPanel);
-    }
-    const lodged=(context.participants||[]).flatMap(participant=>(participant.extensions?.v5?.lodgedProjectiles||[]).filter(row=>row.removed!==true).map(projectile=>({participant,projectile})));
-    if(lodged.length){
-      const panel=node('section','workspace-card workspace-impaled-projectiles');
-      panel.setAttribute('aria-label','Projectiles fichés');
-      panel.appendChild(node('h3','workspace-card-title','Projectiles fichés — Empaleuse'));
-      for(const {participant,projectile} of lodged){
-        const wrap=node('div','workspace-v5-context');
-        wrap.appendChild(node('p','workspace-result-line',`${participant.name||participant.id} · ${projectile.ammunitionId} · ${projectile.removal==='surgery'?'chirurgie requise':'Test de Guérison requis'} · 1 Blessure bloquée`));
-        const error=node('p','workspace-error');
-        let surgeryConfirmed=false,skillId='',testRoll='';
-        if(projectile.removal==='surgery'){
-          const label=node('label','workspace-type','Le MJ confirme la chirurgie');
-          const check=document.createElement('input');
-          check.type='checkbox';
-          check.addEventListener('change',()=>{surgeryConfirmed=check.checked;});
-          label.prepend(check);
-          wrap.appendChild(label);
-        }else{
-          const skills=(participant.skills||[]).filter(row=>/gu[eé]rison|heal/iu.test(row.name||row.nom||''));
-          const select=document.createElement('select');
-          select.setAttribute('aria-label',`Compétence Guérison — ${participant.name||participant.id}`);
-          select.append(new Option('Choisir Guérison…',''));
-          for(const row of skills)select.append(new Option(row.name||row.nom||row.id,row.id));
-          select.addEventListener('change',()=>{skillId=select.value;});
-          const input=document.createElement('input');
-          input.type='number';
-          input.min='1';
-          input.max='100';
-          input.step='1';
-          input.setAttribute('aria-label',`d100 du Test de Guérison — ${participant.name||participant.id}`);
-          input.addEventListener('input',()=>{testRoll=input.value;});
-          wrap.append(select,input);
-        }
-        const apply=button('Enregistrer le retrait','workspace-primary');
-        apply.type='button';
-        apply.addEventListener('click',async()=>{try{
-          error.textContent='';
-          const plan=Store.previewV5ProjectileExtraction({participantId:participant.id,projectileId:projectile.id,
-            method:projectile.removal==='surgery'?'surgery':'heal-test',surgeryConfirmed,skillId,roll:testRoll===''?undefined:Number(testRoll)});
-          if(!plan.ready)throw new Error(plan.error);
-            const result=await Store.applyV5ProjectileExtraction(plan);
-            if(result?.status!=='applied')throw new Error(result?.reason||'Retrait non enregistré.');
-            render();
-        }catch(cause){error.textContent=userMessage(cause,'Retrait non enregistré.');}});
-        wrap.append(apply,error);
-        panel.appendChild(wrap);
-      }
-      center.appendChild(panel);
-    }
+    // Projectiles fichés des combattants absents du duel (ni acteur ni cible) : pas de fiche où poser la puce.
+    const shownIds=new Set([context.actor?.id,context.target?.id].filter(Boolean));
+    const otherLodged=lodgedProjectilesPanel((context.participants||[]).filter(row=>!shownIds.has(row.id)));
+    if(otherLodged){otherLodged.classList.replace('workspace-chip-panel','workspace-card');center.appendChild(otherLodged);}
 
     const criticalDecisions=[];
     for(const participant of context.participants||[]){
@@ -2574,6 +2629,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         center.appendChild(pending);
       }
     }
+    center.appendChild(tableRules());
   }
 
   function renderProfilesTab(content) {

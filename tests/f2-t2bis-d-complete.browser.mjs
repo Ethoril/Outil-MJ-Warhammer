@@ -116,6 +116,8 @@ try{
 
   // Recharge : la Ratling « Variable » exige un arbitrage positif avant d’avoir
   // un chargeur. La Poivrière réclame son fait de seconde main dans le panneau.
+  const openChip=async label=>{const summary=page.locator('.workspace-sheet-actor details.workspace-equipment-chip > summary',{hasText:label});if(!await summary.evaluate(el=>el.parentElement.open))await summary.click();};// U3 : panneaux d’équipement en puces sur la fiche de l’acteur
+  await openChip('Rechargement');
   await play.getByLabel('Capacité arbitrée — Mitrailleuse Ratling Skaven').fill('6');await play.getByRole('button',{name:'Enregistrer l’arbitrage'}).first().click();
   state=await read();let ratling=state.combat.participants.find(row=>row.id===actor.id).equipment.find(row=>row.id==='d-ratling');assert.equal(ratling.extensions.v5.reloadState.repeaterRating,6,'arbitrage Ratling persisté par le Store');
   await selectAttack('d-pepper-action');assert.equal(await confirmationValue(play.getByLabel('Seconde main libre pour préparer le canon de la Poivrière')),'','la Poivrière exige une réponse explicite');

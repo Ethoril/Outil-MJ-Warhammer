@@ -605,3 +605,15 @@ dialog.tool-sheet.campaign-time-dialog { position:fixed; inset:auto; top:50%; le
 .workspace-confirmation-button { min-height: 40px; padding: .3rem .65rem; border: 1px solid currentColor; border-radius: .35rem; background: transparent; color: inherit; cursor: pointer; }
 .workspace-confirmation-button[aria-pressed="true"] { background: var(--accent, #78532f); color: var(--button-text, #fff); }
 .workspace-confirmation-button:disabled { opacity: .55; cursor: not-allowed; }
+
+/* U3 (05/11) : équipement en jeu (pavois, plate de léviathan, rechargement, projectiles fichés) en puces sur la fiche. */
+.workspace-equipment-chips { display: flex; flex-wrap: wrap; gap: 6px; align-items: flex-start; margin-top: 8px; }
+.workspace-equipment-chip > summary { cursor: pointer; list-style: none; width: fit-content; }
+.workspace-equipment-chip > summary::-webkit-details-marker { display: none; }
+.workspace-equipment-chip > summary::after { content: ' ▾'; }
+.workspace-equipment-chip[open] { flex-basis: 100%; }
+.workspace-equipment-chip[open] > summary { border-color: var(--accent); color: var(--accent-text); }
+.workspace-equipment-chip[open] > summary::after { content: ' ▴'; }
+.workspace-chip-panel { margin-top: 6px; padding: 8px 10px; border: 1px solid var(--chip); border-radius: var(--radius); background: var(--bg); }
+.workspace-chip-panel > .workspace-card-title { display: none; }
+.workspace-table-rules > summary, .workspace-aftermath > summary { cursor: pointer; }
