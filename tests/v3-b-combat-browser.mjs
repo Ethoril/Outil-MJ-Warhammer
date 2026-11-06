@@ -5,7 +5,7 @@ import { createServer } from 'node:http';
 import { readFileSync, statSync } from 'node:fs';
 import { resolve, sep, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { chromium } from 'playwright';
+import { launchBrowser } from './helpers/browser.mjs';
 
 // Lot v3-B : parcours navigateur sur l'application complète et son vrai Store (livre de base V5 v3) :
 // tir sur un adversaire engagé avec le tireur (p.165), tir double À répétition (p.305), Peur qui retire l'Élan (p.183).
@@ -39,7 +39,7 @@ const fixture = () => ({ schemaVersion: 3, reserve: [], diceLines: [], log: [], 
   ] } });
 
 await new Promise(done => server.listen(0, '127.0.0.1', done));
-const browser = await chromium.launch({ headless: true, executablePath: process.env.PLAYWRIGHT_EXECUTABLE_PATH || (process.platform === 'win32' ? 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe' : undefined) });
+const browser = await launchBrowser();
 try {
   const context = await browser.newContext({ serviceWorkers: 'block' }), page = await context.newPage(), errors = [];
   page.setDefaultTimeout(12000);

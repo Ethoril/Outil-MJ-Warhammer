@@ -4,11 +4,10 @@ import { createServer } from 'node:http';
 import { readFile, stat } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { extname, join, normalize, resolve } from 'node:path';
-import { chromium } from 'playwright';
+import { launchBrowser } from './helpers/browser.mjs';
 import { openU1Settings, clickU1Magic } from './helpers/u1-drawer.mjs';
 
 const ROOT = resolve('.');
-const EDGE = 'C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe';
 const MIME = { '.css': 'text/css; charset=utf-8', '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.json': 'application/json; charset=utf-8', '.mjs': 'text/javascript; charset=utf-8', '.svg': 'image/svg+xml' };
 const server = createServer(async (req, res) => {
   try {
@@ -41,7 +40,7 @@ view.setSpace('play'); window.__TEST__ = { Store: store, view };
 
 const results = [];
 const check = async (name, fn) => { try { await fn(); results.push([name, true]); console.log('ok   -', name); } catch (e) { results.push([name, false]); console.log('FAIL -', name, '\n      ', e.message.split('\n').slice(0, 4).join('\n       ')); } };
-const browser = await chromium.launch({ headless: true, ...(process.env.PLAYWRIGHT_EXECUTABLE_PATH ? { executablePath: process.env.PLAYWRIGHT_EXECUTABLE_PATH } : existsSync(EDGE) ? { executablePath: EDGE } : {}) });
+const browser = await launchBrowser();
 try {
   const page = await browser.newPage({ viewport: { width: 1440, height: 700 }, serviceWorkers: 'block' });
   const pageErrors = []; page.on('pageerror', e => pageErrors.push(e.message));

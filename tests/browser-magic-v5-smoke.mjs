@@ -6,19 +6,11 @@ import { createServer } from 'node:http';
 import { existsSync } from 'node:fs';
 import { readFile, stat, mkdir } from 'node:fs/promises';
 import { extname, join, normalize, resolve } from 'node:path';
-import { chromium } from 'playwright';
+import { launchBrowser } from './helpers/browser.mjs';
 
 const ROOT = resolve('.');
 const TMP_DIR = resolve('tmp/lot3');
-const EDGE_PATH = 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe';
-const LAUNCH_OPTS = {
-  headless: true,
-  ...(process.env.PLAYWRIGHT_EXECUTABLE_PATH
-    ? { executablePath: process.env.PLAYWRIGHT_EXECUTABLE_PATH }
-    : existsSync(EDGE_PATH)
-      ? { executablePath: EDGE_PATH }
-      : {})
-};
+const LAUNCH_OPTS = { headless: true };
 
 const MIME_TYPES = {
   '.css': 'text/css; charset=utf-8',
@@ -207,7 +199,7 @@ let browser;
 
 try {
   await mkdir(TMP_DIR, { recursive: true });
-  browser = await chromium.launch(LAUNCH_OPTS);
+  browser = await launchBrowser(LAUNCH_OPTS);
   const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
   const page = await context.newPage();
 

@@ -5,10 +5,9 @@ import { readFile, stat, mkdir, writeFile } from 'node:fs/promises';
 import { extname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { existsSync } from 'node:fs';
-import { chromium } from 'playwright';
+import { launchBrowser } from './helpers/browser.mjs';
 const ROOT = resolve(fileURLToPath(new URL('..', import.meta.url)));
 const OUT = join(ROOT, 'tmp/divin/campaign-ui-independent');
-const edge = 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe';
 const html = `<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="/MJ.css"><link rel="stylesheet" href="/js/ui/workspace.css"></head><body><button id="open">Ouvrir temps</button><script type="module">
 import {openCampaignTimeDialog} from '/js/ui/v5-campaign-time-dialog.js';
 const probe={revision:5,calls:[],mode:'blocked',closed:0};
@@ -21,7 +20,7 @@ const server=createServer(async(req,res)=>{try{const url=new URL(req.url,'http:/
 await mkdir(OUT,{recursive:true});await new Promise(done=>server.listen(0,'127.0.0.1',done));
 const checks=[],failures=[];let browser;
 try{
- browser=await chromium.launch({headless:true,...(existsSync(edge)?{executablePath:edge}:{})});
+ browser=await launchBrowser();
  const context=await browser.newContext({viewport:{width:390,height:844}}),page=await context.newPage();page.setDefaultTimeout(5000);
  const fresh=async()=>{await page.goto(`http://127.0.0.1:${server.address().port}/__independent__`,{waitUntil:'networkidle'});await page.getByRole('button',{name:'Ouvrir temps'}).click();};
  const fill=async()=>{await page.getByRole('spinbutton',{name:'Durée écoulée'}).fill('1');await page.getByRole('textbox',{name:'Motif MJ'}).fill('Contrôle indépendant');};

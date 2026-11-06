@@ -5,8 +5,8 @@ import { readFileSync, realpathSync, writeFileSync, statSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { resolve, extname, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { chromium } from 'playwright';
 import { APP_VERSION } from '../js/version.js';
+import { launchBrowser } from './helpers/browser.mjs';
 
 const root = realpathSync(fileURLToPath(new URL('../', import.meta.url)));
 const pointer = JSON.parse(readFileSync(resolve(root, 'tmp/lot3/release-path.json')));
@@ -35,7 +35,7 @@ const origin = `http://127.0.0.1:${server.address().port}`;
 let browser;
 const checks = [];
 try {
-  browser = await chromium.launch({ headless: true, executablePath: process.env.PLAYWRIGHT_EXECUTABLE_PATH || (process.platform === 'win32' ? 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe' : undefined) });
+  browser = await launchBrowser();
   for (const width of [1440, 390]) {
     const context = await browser.newContext({ viewport: { width, height: 900 }, serviceWorkers: 'allow' });
     const page = await context.newPage(), errors = [];

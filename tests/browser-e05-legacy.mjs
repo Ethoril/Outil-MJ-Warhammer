@@ -3,8 +3,8 @@ import { createServer } from 'node:http';
 import { readFileSync, statSync } from 'node:fs';
 import { join, normalize, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { chromium } from 'playwright';
 import { expect } from 'playwright/test';
+import { launchBrowser } from './helpers/browser.mjs';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const mime = {
@@ -102,11 +102,7 @@ const fixture = `
 
 async function main() {
   const { server, port } = await startServer();
-  const browser = await chromium.launch({
-    headless: true,
-    executablePath: process.env.PLAYWRIGHT_EXECUTABLE_PATH
-      || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
-  });
+  const browser = await launchBrowser();
   const errors = [];
   try {
     const context = await browser.newContext({ serviceWorkers: 'block' });

@@ -5,8 +5,8 @@ import { createServer } from 'node:http';
 import { readFileSync, statSync } from 'node:fs';
 import { resolve, sep, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { chromium } from 'playwright';
 import { getReferenceCatalogue } from '../js/core/reference-catalog.js';
+import { launchBrowser } from './helpers/browser.mjs';
 
 // Parcours d'intégration sur l'application complète et son vrai Store. Les
 // semences sont injectées dans le Store invité du contexte navigateur jetable.
@@ -29,7 +29,7 @@ const withWeapons=()=>{const cutter={item:{id:'d-cutter',kind:'weapon',name:'Arm
   return {actor,items:{cutter:cutter.item,bolas:bolas.item,bow:bow.item,pepper:pepper.item,ratling:ratling.item,hammer,plain:plain.item}};
 };
 await new Promise(done=>server.listen(0,'127.0.0.1',done));
-const browser=await chromium.launch({headless:true,executablePath:process.env.PLAYWRIGHT_EXECUTABLE_PATH||(process.platform==='win32'?'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe':undefined)});
+const browser=await launchBrowser();
 try{
   const context=await browser.newContext({serviceWorkers:'block'}),page=await context.newPage(),errors=[];page.setDefaultTimeout(12000);page.on('pageerror',error=>errors.push(error.message));
   const origin=`http://127.0.0.1:${server.address().port}${base}`;

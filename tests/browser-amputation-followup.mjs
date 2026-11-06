@@ -3,7 +3,7 @@ import { createServer } from 'node:http';
 import { readFileSync, statSync } from 'node:fs';
 import { extname, join, normalize } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { chromium } from 'playwright';
+import { launchBrowser } from './helpers/browser.mjs';
 
 const root=fileURLToPath(new URL('..',import.meta.url));
 const mime={'.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.json':'application/json'};
@@ -13,7 +13,7 @@ function startServer(){
 }
 
 const {server,port}=await startServer();
-const browser=await chromium.launch({headless:true,executablePath:process.env.PLAYWRIGHT_EXECUTABLE_PATH||(process.platform==='win32'?'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe':undefined)});
+const browser=await launchBrowser();
 try{
   const context=await browser.newContext({serviceWorkers:'block'});await context.route('**/*',route=>route.request().url().startsWith(`http://127.0.0.1:${port}/`)?route.continue():route.abort());
   const page=await context.newPage();await page.goto(`http://127.0.0.1:${port}/blank`);await page.setContent('<main><div id="mount"></div></main>');await page.addStyleTag({path:join(root,'MJ.css')});await page.addStyleTag({path:join(root,'js/ui/workspace.css')});

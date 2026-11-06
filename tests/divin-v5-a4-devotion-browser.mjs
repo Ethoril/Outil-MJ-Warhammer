@@ -3,13 +3,13 @@ import {createServer} from 'node:http';
 import {readFileSync,statSync} from 'node:fs';
 import {resolve,sep,extname} from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {chromium} from 'playwright';
+import { launchBrowser } from './helpers/browser.mjs';
 const root=fileURLToPath(new URL('../',import.meta.url));
 const server=createServer((req,res)=>{try{const path=resolve(root,decodeURIComponent(new URL(req.url,'http://localhost').pathname).slice(1)||'index.html');assert.ok(path.startsWith(root)&&statSync(path).isFile());res.setHeader('Content-Type',({'.js':'text/javascript','.json':'application/json','.html':'text/html','.css':'text/css'})[extname(path)]||'application/octet-stream');res.end(readFileSync(path));}catch{res.writeHead(404).end();}});
 await new Promise(done=>server.listen(0,'127.0.0.1',done));
 let browser;
 try{
- browser=await chromium.launch({headless:true,executablePath:process.env.PLAYWRIGHT_EXECUTABLE_PATH||'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe'});
+ browser=await launchBrowser();
  const context=await browser.newContext({serviceWorkers:'block'});await context.route('https://**',route=>route.abort());
  const page=await context.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
  await page.goto(`http://127.0.0.1:${server.address().port}/`);await page.waitForFunction(()=>document.querySelector('#app-content')?.style.display==='block');

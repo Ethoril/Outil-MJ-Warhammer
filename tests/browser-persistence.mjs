@@ -3,8 +3,8 @@ import { createServer } from 'node:http';
 import { readFileSync, statSync } from 'node:fs';
 import { join, normalize, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { chromium } from 'playwright';
 import { expect } from 'playwright/test';
+import { launchBrowser } from './helpers/browser.mjs';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const fixtures = join(root, 'tests', 'fixtures');
@@ -134,9 +134,7 @@ async function runScenario(name, callback, results) {
 async function main() {
   const { server, port } = await startStaticServer();
   const origin = `http://127.0.0.1:${port}`;
-  const executablePath = process.env.PLAYWRIGHT_EXECUTABLE_PATH
-    || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
-  const browser = await chromium.launch({ headless: true, executablePath });
+  const browser = await launchBrowser();
   const results = [];
   const fixture = readFileSync(join(fixtures, 'e04-v2.json'), 'utf8');
   const invalidFixture = readFileSync(join(fixtures, 'e04-invalid.json'), 'utf8');

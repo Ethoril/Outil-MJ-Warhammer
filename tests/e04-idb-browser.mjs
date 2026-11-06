@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { chromium } from 'playwright';
+import { launchBrowser } from './helpers/browser.mjs';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const persistenceSource = readFileSync(`${root}/js/core/persistence.js`, 'utf8');
@@ -24,9 +24,7 @@ function startServer() {
 }
 
 const { server, port } = await startServer();
-const executablePath = process.env.PLAYWRIGHT_EXECUTABLE_PATH
-  || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
-const browser = await chromium.launch({ headless: true, executablePath });
+const browser = await launchBrowser();
 
 try {
   const page = await browser.newPage();

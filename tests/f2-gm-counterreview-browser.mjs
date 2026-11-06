@@ -4,7 +4,7 @@ import { createServer } from 'node:http';
 import { readFileSync, statSync } from 'node:fs';
 import { resolve, sep, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { chromium } from 'playwright';
+import { launchBrowser } from './helpers/browser.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const base = '/Outil-MJ-Warhammer/';
@@ -20,7 +20,7 @@ const server = createServer((req,res) => {
   } catch { res.writeHead(404); res.end('Not found'); }
 });
 await new Promise(done => server.listen(0, '127.0.0.1', done));
-const browser = await chromium.launch({ headless:true, executablePath:process.env.PLAYWRIGHT_EXECUTABLE_PATH || (process.platform === 'win32' ? 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe' : undefined) });
+const browser = await launchBrowser();
 try {
   const page = await browser.newPage();
   const errors = [];

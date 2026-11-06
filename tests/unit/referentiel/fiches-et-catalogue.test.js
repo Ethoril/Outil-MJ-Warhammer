@@ -1291,7 +1291,7 @@ if (process.env.LOT1_BROWSER_FINAL === '1') test('Contrôle final navigateur —
   const { statSync } = await import('node:fs');
   const { join, extname } = await import('node:path');
   const { fileURLToPath } = await import('node:url');
-  const { chromium } = await import('playwright');
+  const { launchBrowser } = await import('../../helpers/browser.mjs');
   const { expect } = await import('playwright/test');
   const root = fileURLToPath(new URL('../../..', import.meta.url));
   const types = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.svg': 'image/svg+xml' };
@@ -1308,7 +1308,7 @@ if (process.env.LOT1_BROWSER_FINAL === '1') test('Contrôle final navigateur —
   let browser;
   try {
     const origin = `http://127.0.0.1:${server.address().port}`;
-    browser = await chromium.launch({ headless: true, executablePath: process.env.PLAYWRIGHT_EXECUTABLE_PATH });
+    browser = await launchBrowser();
     const context = await browser.newContext({ serviceWorkers: 'block' });
     await context.route('**/*', route => route.request().url().startsWith(origin + '/') ? route.continue() : route.abort());
     const page = await context.newPage(); const errors = []; page.on('pageerror', error => errors.push(error.message));

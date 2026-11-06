@@ -5,8 +5,8 @@ import { createServer } from 'node:http';
 import { readFileSync, statSync } from 'node:fs';
 import { join, normalize, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { chromium } from 'playwright';
 import { expect } from 'playwright/test';
+import { launchBrowser } from './helpers/browser.mjs';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const mime = {
@@ -118,9 +118,7 @@ async function openAppMenu(page) {
 
 async function main() {
   const { server, port } = await startStaticServer();
-  const executablePath = process.env.PLAYWRIGHT_EXECUTABLE_PATH
-    || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
-  const browser = await chromium.launch({ headless: true, executablePath });
+  const browser = await launchBrowser();
 
   try {
     const context = await browser.newContext({ serviceWorkers: 'block' });

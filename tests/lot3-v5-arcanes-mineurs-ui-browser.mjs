@@ -4,14 +4,14 @@ import assert from 'node:assert/strict';
 import {createServer} from 'node:http';
 import {readFile} from 'node:fs/promises';
 import {resolve,extname} from 'node:path';
-import {chromium} from 'playwright';
 import contracts from '../js/data/v5-spell-contracts.json' with {type:'json'};
 import {workspaceHarness} from './helpers/lot3-workspace-harness.mjs';
+import { launchBrowser } from './helpers/browser.mjs';
 
 const root=resolve('.');
 const server=createServer(async(req,res)=>{try{const url=new URL(req.url,'http://localhost');if(url.pathname==='/harness'){res.setHeader('Content-Type','text/html');res.end(workspaceHarness);return;}const path=resolve(root,'.'+decodeURIComponent(url.pathname));if(!path.startsWith(root+'\\')&&!path.startsWith(root+'/'))throw Error();res.setHeader('Content-Type',extname(path)==='.js'?'application/javascript':extname(path)==='.json'?'application/json':'text/css');res.end(await readFile(path));}catch{res.writeHead(404).end();}});
 await new Promise(ok=>server.listen(0,'127.0.0.1',ok));
-const browser=await chromium.launch({headless:true,executablePath:process.env.PLAYWRIGHT_EXECUTABLE_PATH || 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe'});
+const browser=await launchBrowser();
 const page=await browser.newPage({viewport:{width:1440,height:1000},serviceWorkers:'block'}),errors=[];page.on('pageerror',e=>{errors.push(e.message);console.log('Erreur de page : '+e.message);});
 const choose=async(name,active='',allies=false)=>{
  await page.goto('http://127.0.0.1:'+server.address().port+'/harness?active='+encodeURIComponent(active)+(allies?'&allies=1':''));await page.waitForFunction(()=>window.ready);

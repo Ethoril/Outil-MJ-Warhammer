@@ -4,7 +4,7 @@ import { createServer } from 'node:http';
 import { readFileSync, statSync } from 'node:fs';
 import { resolve, sep, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { chromium } from 'playwright';
+import { launchBrowser } from './helpers/browser.mjs';
 
 // Reproduction isolée : application complète, vrai Store, seed JSON de test.
 const root=fileURLToPath(new URL('../',import.meta.url)),base='/Outil-MJ-Warhammer/';
@@ -14,7 +14,7 @@ const actor={id:'net-actor',name:'Acteur filet',kind:'PJ',camp:'pj',zone:'active
 const target={id:'net-source',name:'Source du filet',kind:'PNJ',camp:'ennemi',zone:'active',initiative:30,hp:20,maxHp:20,caracs:{CC:35,CT:30,F:30,E:30,BE:3,I:30,Ag:30},skills:[],talents:[],traits:[],states:[],armor:{head:0,body:0,arms:0,legs:0},extensions:{v5:{}}};
 const seed={schemaVersion:3,reserve:[],diceLines:[],log:[],combat:{round:1,currentActorId:actor.id,order:[actor.id,target.id],participants:[actor,target]}};
 await new Promise(done=>server.listen(0,'127.0.0.1',done));
-const browser=await chromium.launch({headless:true,executablePath:process.env.PLAYWRIGHT_EXECUTABLE_PATH||(process.platform==='win32'?'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe':undefined)});
+const browser=await launchBrowser();
 try{
  const context=await browser.newContext({serviceWorkers:'block'}),page=await context.newPage();page.setDefaultTimeout(12000);
  const origin=`http://127.0.0.1:${server.address().port}${base}`;await page.goto(origin,{waitUntil:'domcontentloaded'});await page.waitForFunction(()=>document.querySelector('#app-content')?.style.display==='block',{timeout:20000});await page.locator('#tab-combat').click();

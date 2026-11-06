@@ -5,8 +5,8 @@ import { createServer } from 'node:http';
 import { readFileSync, statSync, mkdirSync } from 'node:fs';
 import { resolve, sep, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { chromium } from 'playwright';
 import { applyOperation } from '../js/core/sync-protocol.js';
+import { launchBrowser } from './helpers/browser.mjs';
 const cacheName = `wfrp-cache-v${APP_VERSION}`, updatedCacheName = `${cacheName}-qa-update`;
 const root = fileURLToPath(new URL('../', import.meta.url));
 const fixture = JSON.parse(readFileSync(new URL('./fixtures/fiche-caelel.json', import.meta.url)));
@@ -63,7 +63,7 @@ async function boot(page, deviceId) {
 try {
   await new Promise(done => server.listen(0, '127.0.0.1', done));
   const origin = `http://127.0.0.1:${server.address().port}`;
-  browser = await chromium.launch({ headless: true, executablePath: process.env.PLAYWRIGHT_EXECUTABLE_PATH || (process.platform === 'win32' ? 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe' : undefined) });
+  browser = await launchBrowser();
   const pwaContext = await browser.newContext({ serviceWorkers: 'allow' });
   const page = await pwaContext.newPage(), errors = [];
   page.on('pageerror', error => errors.push(error.message));

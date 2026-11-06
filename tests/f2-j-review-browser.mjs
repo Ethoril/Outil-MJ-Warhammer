@@ -4,7 +4,7 @@ import { createServer } from 'node:http';
 import { readFileSync, statSync } from 'node:fs';
 import { resolve, sep, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { chromium } from 'playwright';
+import { launchBrowser } from './helpers/browser.mjs';
 
 // Parcours navigateur F2-J : un critique appliqué par l'interface crée l'occurrence F2-I, le panneau propose le suivi lié,
 // un soin passe par la compétence Guérison du soigneur et un d100, un saut de trois jours liste chaque Test quotidien.
@@ -16,7 +16,7 @@ const hero=person('hero','Héros','PJ',{caracs:{CC:60,CT:50,F:40,E:30,BE:3,I:40,
 const fixture=()=>({schemaVersion:3,reserve:[],diceLines:[],log:[],extensions:{v5:{combatId:'f2-j-review-browser',turnIndex:1}},combat:{round:1,currentActorId:'hero',order:['hero','foe','cripple'],participants:[hero,person('foe','Garde','PNJ',{hp:2,maxHp:20,states:[{id:'ko',key:'inconscient',name:'Inconscient',level:1}],actions:[]}),person('cripple','Éclopé','PJ',{hp:10,maxHp:20})]}});
 
 await new Promise(done=>server.listen(0,'127.0.0.1',done));
-const browser=await chromium.launch({headless:true,executablePath:process.env.PLAYWRIGHT_EXECUTABLE_PATH||(process.platform==='win32'?'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe':undefined)});
+const browser=await launchBrowser();
 try{
  const context=await browser.newContext({serviceWorkers:'block'}),page=await context.newPage(),errors=[];page.setDefaultTimeout(12000);page.on('pageerror',e=>errors.push(e.message));
  const origin=`http://127.0.0.1:${server.address().port}${base}`;await page.goto(origin,{waitUntil:'domcontentloaded'});await page.waitForFunction(()=>document.querySelector('#app-content')?.style.display==='block',{timeout:20000});await page.locator('#tab-combat').click();

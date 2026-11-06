@@ -3,7 +3,7 @@ import { createServer } from 'node:http';
 import { readFileSync, statSync } from 'node:fs';
 import { resolve, extname, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { chromium } from 'playwright';
+import { launchBrowser } from './helpers/browser.mjs';
 
 // Lot 5 · G-COR-3 : les familles de mutations autres que L06 s'affichaient sans nom de livre (« Mutations physiques ·  p.66 »).
 // Lot 5 · G-COR-2 : « Le choix MJ ou le délai secret requis n'est pas complet » doit nommer le champ manquant.
@@ -11,7 +11,7 @@ const root = resolve(fileURLToPath(new URL('../', import.meta.url)));
 const mime = { '.js': 'text/javascript; charset=utf-8', '.json': 'application/json', '.css': 'text/css; charset=utf-8', '.html': 'text/html; charset=utf-8' };
 const server = createServer((req, res) => { try { const pathname = decodeURIComponent(new URL(req.url, 'http://localhost').pathname); const file = resolve(root, `.${pathname}`); assert.ok(file.startsWith(root + sep)); assert.ok(statSync(file).isFile()); res.writeHead(200, { 'content-type': mime[extname(file)] || 'application/octet-stream' }); res.end(readFileSync(file)); } catch { res.writeHead(404); res.end('Not found'); } });
 await new Promise(done => server.listen(0, '127.0.0.1', done));
-const browser = await chromium.launch({ headless: true, executablePath: process.env.PLAYWRIGHT_EXECUTABLE_PATH || 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe' });
+const browser = await launchBrowser();
 const origin = `http://127.0.0.1:${server.address().port}`;
 let failures = 0;
 const check = async (name, fn) => { try { await fn(); console.log('ok  -', name); } catch (error) { failures++; console.log('FAIL -', name, '\n   ', error.message.split('\n').slice(0, 3).join('\n    ')); } };

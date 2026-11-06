@@ -6,7 +6,7 @@ import {createServer} from 'node:http';
 import {readFileSync,statSync,mkdirSync,writeFileSync} from 'node:fs';
 import {resolve,sep,extname} from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {chromium} from 'playwright';
+import { launchBrowser } from './helpers/browser.mjs';
 
 const root=fileURLToPath(new URL('../',import.meta.url));
 const output=process.env.DIVIN_BROKEN_ESCAPE_UI_OUTPUT||resolve(root,'tmp/divin/brise-flee-sprint-browser-independent');mkdirSync(output,{recursive:true});
@@ -32,7 +32,7 @@ const view=async(width,theme)=>{
 };
 try{
  await new Promise(done=>server.listen(0,'127.0.0.1',done));serverStarted=true;
- browser=await chromium.launch({headless:true,executablePath:process.env.PLAYWRIGHT_EXECUTABLE_PATH||'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe'});
+ browser=await launchBrowser();
  const context=await browser.newContext({serviceWorkers:'block',viewport:{width:1440,height:900}});await context.route('https://**',route=>route.abort());
  page=await context.newPage();page.setDefaultTimeout(8000);const errors=[];page.on('pageerror',error=>errors.push(error.message));
  await page.goto(`http://127.0.0.1:${server.address().port}/`,{waitUntil:'domcontentloaded'});await ready();await seed();await page.getByRole('tab',{name:'Jouer',exact:true}).click();await closeU1Drawer(page);

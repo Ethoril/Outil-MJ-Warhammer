@@ -5,13 +5,11 @@ import { mkdir, readFile, stat, writeFile } from 'node:fs/promises';
 import { extname, join, normalize, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { existsSync } from 'node:fs';
-import { chromium } from 'playwright';
+import { launchBrowser } from './helpers/browser.mjs';
 
 const ROOT = resolve(fileURLToPath(new URL('..', import.meta.url)));
 const EVIDENCE = join(ROOT, 'tmp', 'divin', 'e5-browser-independent');
-const EDGE = 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe';
 const RUN_ID = `${Date.now()}-${Math.random().toString(36).slice(2)}`;
-const launch = { headless: true, ...(existsSync(EDGE) ? { executablePath: EDGE } : {}) };
 const mime = { '.css': 'text/css', '.html': 'text/html', '.js': 'text/javascript', '.json': 'application/json', '.svg': 'image/svg+xml' };
 const html = `<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="/MJ.css"><link rel="stylesheet" href="/js/ui/workspace.css"></head><body>
 <main><h1>Contrôle indépendant E5</h1><div id="combat-banner"></div><div id="history"><button id="undo">Annuler</button><button id="redo">Rétablir</button></div><pre id="state" style="max-width:100%;max-height:12rem;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere"></pre></main>
@@ -62,7 +60,7 @@ await new Promise(resolveListen => server.listen(0, '127.0.0.1', resolveListen))
 await mkdir(EVIDENCE, { recursive: true });
 let browser;
 try {
-  browser = await chromium.launch(launch);
+  browser = await launchBrowser();
   const context = await browser.newContext({ viewport: { width: 1280, height: 850 } });
   const page = await context.newPage(); page.setDefaultTimeout(8000);
   const errors = []; page.on('pageerror', error => errors.push(error.message));

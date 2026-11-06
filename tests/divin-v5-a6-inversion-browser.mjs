@@ -2,7 +2,7 @@ import { createServer } from 'node:http';
 import { readFileSync, statSync } from 'node:fs';
 import { join, normalize, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { chromium } from 'playwright';
+import { launchBrowser } from './helpers/browser.mjs';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const mime = { '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.json': 'application/json' };
@@ -29,15 +29,6 @@ function startServer() {
   });
 }
 
-function findExecutable() {
-  const candidates = [
-    process.env.PLAYWRIGHT_EXECUTABLE_PATH,
-    'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe',
-    'C:/Program Files/Google/Chrome/Application/chrome.exe',
-    '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
-  ].filter(Boolean);
-  return candidates.find(candidate => { try { return statSync(candidate).isFile(); } catch { return false; } });
-}
 
 const failures = [];
 const pageErrors = [];
@@ -47,7 +38,7 @@ const check = (ok, description) => {
 };
 
 const { server, port } = await startServer();
-const browser = await chromium.launch({ headless: true, executablePath: findExecutable() });
+const browser = await launchBrowser();
 try {
   const context = await browser.newContext({ serviceWorkers: 'block' });
   const page = await context.newPage();

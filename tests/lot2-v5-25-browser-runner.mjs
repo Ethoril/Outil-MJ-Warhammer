@@ -27,7 +27,7 @@ for (const script of scripts) {
   const code = await new Promise((done, reject) => {
     const child = spawn(process.execPath, [resolve(root, 'tests', script)], {
       cwd: root, windowsHide: true,
-      env: { ...process.env, ...(process.platform === 'win32' ? { PLAYWRIGHT_EXECUTABLE_PATH: process.env.PLAYWRIGHT_EXECUTABLE_PATH || 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe' } : {}) },
+      env: process.env,
       stdio: ['ignore', 'pipe', 'pipe']
     });
     child.stdout.pipe(stream, { end: false }); child.stderr.pipe(stream, { end: false });
