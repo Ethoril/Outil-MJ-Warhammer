@@ -546,6 +546,9 @@ async function main() {
         await galleryResolution.locator('[data-roll-input="critical-effect"]').press('Enter');
         await expect(galleryResolution.locator('.workspace-result')).toContainText('70 → « Blessure béante »');
         await expect(button).toBeEnabled();
+        // La sortie du champ (Entrée) programme un recalcul différé de 200 ms. S'il tombait après la frappe
+        // suivante, il recalculerait avec le nouveau jet avant le clic : on laisse ce recalcul passer d'abord.
+        await page.waitForTimeout(300);
         await galleryResolution.locator('[data-roll-input="critical-effect"]').fill(gravity);
         const untouched = await galleryHp();
         await button.click();
