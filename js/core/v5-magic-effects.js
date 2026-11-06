@@ -98,16 +98,54 @@ const bonusSource = (value, effect) => ({ value, casterId: effect?.casterId ?? n
  * Le rang d'un lanceur ne profite jamais aux sorts d'un autre.
  */
 function bonusTotal(sources) {
+  return bonusesTaken(sources).reduce((total, source) => total + source.value, 0);
+}
+/** Bonus retenus par `bonusTotal` (le meilleur, puis les sources supplémentaires de Bénédiction de Lileath). */
+function bonusesTaken(sources) {
   const sorted = [...sources].sort((a, b) => b.value - a.value);
-  if (!sorted.length) return 0;
+  if (!sorted.length) return [];
   const taken = new Set([sorted[0]]);
-  let total = sorted[0].value;
   const ranks = new Map();
   for (const source of sorted) if (source.casterId != null && source.rank > 0) ranks.set(source.casterId, Math.max(ranks.get(source.casterId) || 0, source.rank));
   for (const [casterId, rank] of ranks) {
-    for (const source of sorted.filter(item => item.casterId === casterId && !taken.has(item)).slice(0, rank)) { taken.add(source); total += source.value; }
+    for (const source of sorted.filter(item => item.casterId === casterId && !taken.has(item)).slice(0, rank)) taken.add(source);
   }
-  return total;
+  return [...taken];
+}
+
+/**
+ * Modificateurs de Tests magiques retenus pour UN Test résolu (U8, lot L1). `applies(key)` dit si une clé de couche vise ce Test.
+ * Sorts : R3 (V5 p. 235) par Test résolu, toutes clés confondues — meilleur bonus (plus les sources de Lileath, D-06), pire malus,
+ * exceptions `stackable` cumulées ; les clés d'une même couche qui visent ce Test forment une seule source. Deux sorts qui visent le même Test par des clés différentes (« carac:e », « Endurance ») ne se
+ * cumulent donc plus.
+ * Prières : même règle, en un groupe distinct par Test résolu (arbitrage du MJ du 06/11 ; la même prière deux fois reste refusée
+ * à la pose, R4 p. 217). Prière et sort se somment (sources différentes, p. 130, Q2 du MJ, même clé comprise).
+ * Retourne `[{ key, amount }]`, un élément par clé retenue (montants non nuls), dans l'ordre des couches.
+ */
+export function resolvedMagicTestModifiers({ spellEffects = [], divineEffects = [] } = {}, applies = () => true) {
+  const totals = new Map();
+  const add = (key, value) => totals.set(key, (totals.get(key) || 0) + value);
+  const contributions = layers => (Array.isArray(layers) ? layers : [])
+    .filter(e => e && typeof e === 'object' && e.testModifiers && typeof e.testModifiers === 'object')
+    .flatMap(effect => Object.entries(effect.testModifiers)
+      .map(([key, raw]) => ({ key, value: Number(raw), effect }))
+      .filter(row => Number.isFinite(row.value) && row.value !== 0 && applies(row.key)));
+  const cumulate = rows => {
+    for (const row of rows) if (row.effect.stackable === true || row.effect.isStackable === true) add(row.key, row.value);
+    const regular = rows.filter(row => row.effect.stackable !== true && row.effect.isStackable !== true);
+    // Une source = une couche : ses propres clés qui visent ce Test s'additionnent (un seul sort ou une seule prière),
+    // le non-cumul s'applique entre couches.
+    const perLayer = sign => [...new Set(regular.map(row => row.effect))].map(effect => {
+      const own = regular.filter(row => row.effect === effect && Math.sign(row.value) === sign);
+      return { ...bonusSource(own.reduce((total, row) => total + row.value, 0), effect), rows: own };
+    }).filter(source => source.rows.length);
+    for (const source of bonusesTaken(perLayer(1))) for (const row of source.rows) add(row.key, row.value);
+    const penalties = perLayer(-1);
+    if (penalties.length) for (const row of penalties.reduce((a, b) => (b.value < a.value ? b : a)).rows) add(row.key, row.value);
+  };
+  cumulate(contributions(unsuppressedSpellEffects(spellEffects)));
+  cumulate(contributions(divineEffects));
+  return [...totals].filter(([, amount]) => amount !== 0).map(([key, amount]) => ({ key, amount }));
 }
 
 const AP_GROUPS = Object.freeze({ all: ['head', 'body', 'leftArm', 'rightArm', 'leftLeg', 'rightLeg'], arms: ['leftArm', 'rightArm'], legs: ['leftLeg', 'rightLeg'] });
