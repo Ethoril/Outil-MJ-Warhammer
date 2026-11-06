@@ -483,6 +483,9 @@ body:has(dialog.tool-sheet[open]) #toast-container { right: calc(clamp(480px, 50
   .topbar-main > .spacer { display: none; }
   .topbar-main .tabs { grid-column: 1 / -1; grid-row: 2; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .topbar-main .tab { padding-inline: 8px; min-width: 0; }
+  /* Outils de séance et voyant de la carte (05/11) : une ligne pleine chacun, sinon la barre déborde à 390 px. */
+  .topbar-main .topbar-tools { grid-column: 1 / -1; flex-wrap: wrap; }
+  .topbar-main .map-link-indicator { grid-column: 1 / -1; }
   .topbar-title { margin-right: 0; font-size: 18px; }
   .status-indicator { font-size: 12px; gap: 4px; }
   .topbar .combat-banner-inner { flex-wrap: wrap; }

@@ -78,7 +78,8 @@ async function setup({ width = 1440, both = false, states = [], extraTarget = fa
   await openU1Settings(page);
   return { page, context };
 }
-const panel = page => page.locator('.workspace-resolution');
+const panel = page => page.locator('.workspace-resolution, .workspace-resolution-drawer');
+const playArea = page => page.locator('.workspace-play-grid');
 const applyButton = page => panel(page).locator('[data-focus-key="apply"]');
 async function enterRolls(page, attack, defense) {
   if (page.viewportSize().width <= 900) await closeU1Drawer(page);
@@ -99,7 +100,7 @@ try {
   await panel(p).getByRole('checkbox',{name:'Attaque supplémentaire : payer 1 Élan (une fois par Tour)',exact:true}).check();
   await enterRolls(p,61,73);
   await expect(panel(p).locator('input[name="v5-choice-actor"]')).toHaveCount(0);
-  await expect(panel(p)).toContainText(/Coût proposé avant le jet : .+ paie 1 Élan/);
+  await expect(playArea(p)).toContainText(/Coût proposé avant le jet : .+ paie 1 Élan/);
   await expect(applyButton(p)).toBeEnabled();
   const before=await p.evaluate(()=>window.lot2UI.store.getLocalRevision());
   assert.equal(await participantHP(p,'target'),12,'preview never applies resources/wounds');
@@ -108,16 +109,16 @@ try {
   assert.equal(receipt.status,'applied');assert.equal(receipt.resolution.damage.talentDamage,1);assert.equal(receipt.resolution.test.advantage.net,0);
   assert.equal(await p.evaluate(()=>window.lot2UI.store.listParticipants().find(row=>row.id==='actor').extensions.v5.hasMomentum),true);
   await panel(p).getByRole('checkbox',{name:'Attaque supplémentaire : payer 1 Élan (une fois par Tour)',exact:true}).check();
-  await enterRolls(p,61,73);await expect(panel(p)).toContainText('Quota épuisé');await expect(applyButton(p)).toBeDisabled();
+  await enterRolls(p,61,73);await expect(playArea(p)).toContainText('Quota épuisé');await expect(applyButton(p)).toBeDisabled();
   assert.equal(await p.evaluate(()=>window.lot2UI.store.getLocalRevision()),before+1);
   await p.getByRole('button',{name:'Annuler la dernière commande'}).click();await expect.poll(()=>participantHP(p,'target')).toBe(12);
   assert.equal(await p.evaluate(()=>JSON.parse(window.lot2UI.store.getFullJSON()).extensions.v5.actionLedger?.quotaUsage.length||0),0);
   await extra.context.close();
 
   const aim=await setup({talentNames:['Tir précis','Tir précis'],ranged:true,actorMomentum:false});const q=aim.page;
-  await enterRolls(q,23);await expect(panel(q)).toContainText('6 Blessures proposées');
+  await enterRolls(q,23);await expect(playArea(q)).toContainText('6 Blessures proposées');
   await panel(q).getByRole('checkbox',{name:'Visée effectuée : Tir précis donne +2 Dégâts',exact:true}).check();
-  await panel(q).getByRole('button',{name:'Calculer',exact:true}).click();await expect(panel(q)).toContainText('7 Blessures proposées');
+  await panel(q).getByRole('button',{name:'Calculer',exact:true}).click();await expect(playArea(q)).toContainText('7 Blessures proposées');
   await expect(applyButton(q)).toBeEnabled();await applyButton(q).click();await expect.poll(()=>participantHP(q,'target')).toBe(5);
   assert.equal(await q.evaluate(()=>window.lot2UI.applyResults.at(-1).resolution.damage.talentDamage),2);
   await q.getByRole('button',{name:'Annuler la dernière commande'}).click();await expect.poll(()=>participantHP(q,'target')).toBe(12);
@@ -133,7 +134,7 @@ try {
   await panel(b).getByLabel('Taille de la cible',{exact:true}).selectOption('3');
   await closeU1Drawer(b);
   await panel(b).getByRole('button',{name:'Calculer',exact:true}).click();
-  await expect(panel(b)).toContainText('Battement : 0 Blessure');await expect(applyButton(b)).toBeEnabled();
+  await expect(playArea(b)).toContainText('Battement : 0 Blessure');await expect(applyButton(b)).toBeEnabled();
   await expect(panel(b).locator('[data-critical-input]')).toHaveCount(0);
   assert.ok(await b.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth+1),'Battement controls fit phone');
   await b.screenshot({path:join(root,'tmp/lot2-ui/battement-mobile-parchment.png'),fullPage:true});
@@ -144,7 +145,7 @@ try {
   const effect=await b.evaluate(()=>window.lot2UI.store.listParticipants().find(row=>row.id==='target').states.find(row=>row.kind==='talent-active'));
   assert.equal(effect.v5Timing.authorId,'actor');assert.equal(effect.v5Timing.targetId,'target');assert.equal(effect.v5Timing.expiry.actorId,'actor');assert.equal(effect.v5Timing.expiry.turn,3);
   await enterRolls(b,61,73);await panel(b).locator('input[name="v5-choice-actor"][value="keep"]').check();
-  await expect(panel(b)).toContainText('Battement : la cible ne peut pas opposer Corps à corps');await expect(applyButton(b)).toBeDisabled();
+  await expect(playArea(b)).toContainText('Battement : la cible ne peut pas opposer Corps à corps');await expect(applyButton(b)).toBeDisabled();
   await openU1Settings(b);
   await panel(b).getByLabel('Nature de la défense',{exact:true}).selectOption('test');
   await closeU1Drawer(b);
@@ -169,11 +170,11 @@ try {
   const use=r.getByRole('button',{name:'Utiliser Assaut féroce de Acteur de recette',exact:true});await expect(use).toBeVisible();
   const unchanged=await r.evaluate(()=>({revision:window.lot2UI.store.getLocalRevision(),random:window.randomDraws}));
   await use.click();
-  await expect(panel(r)).toContainText('Assaut féroce : nouvelle attaque avec la même arme contre le même adversaire.');
+  await expect(playArea(r)).toContainText('Assaut féroce : nouvelle attaque avec la même arme contre le même adversaire.');
   await expect(panel(r).locator('[data-roll-input="attack"]')).toHaveValue('');
   assert.deepEqual(await r.evaluate(()=>({revision:window.lot2UI.store.getLocalRevision(),random:window.randomDraws})),unchanged,'opening reaction spends nothing and draws no die');
   await defenseCC(r);await enterRolls(r,61,73);await expect(panel(r).locator('input[name="v5-choice-actor"]')).toHaveCount(0);
-  await expect(panel(r)).toContainText(/Coût proposé avant le jet : .+ paie 1 Élan/);await expect(applyButton(r)).toBeEnabled();
+  await expect(playArea(r)).toContainText(/Coût proposé avant le jet : .+ paie 1 Élan/);await expect(applyButton(r)).toBeEnabled();
   await r.screenshot({path:join(root,'tmp/lot2-ui/assaut-feroce-mobile.png'),fullPage:true});
   await applyButton(r).click();await expect.poll(()=>participantHP(r,'target')).toBe(36);
   const response=await r.evaluate(()=>window.lot2UI.applyResults.at(-1));

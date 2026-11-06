@@ -78,7 +78,8 @@ async function setup({ width = 1440, both = false, states = [], extraTarget = fa
   await openU1Settings(page);
   return { page, context };
 }
-const panel = page => page.locator('.workspace-resolution');
+const panel = page => page.locator('.workspace-resolution, .workspace-resolution-drawer');
+const playArea = page => page.locator('.workspace-play-grid');
 const applyButton = page => panel(page).locator('[data-focus-key="apply"]');
 async function enterRolls(page, attack, defense) {
   if (page.viewportSize().width <= 900) await closeU1Drawer(page);
@@ -105,7 +106,7 @@ try {
   await defenseCC(b); await openU1Settings(b); await panel(b).getByText('Circonstances des Tests',{exact:true}).click();
   await panel(b).getByLabel('Battement : remplacer toutes les Blessures et conséquences du critique',{exact:true}).check();
   await panel(b).getByLabel('Taille de l’auteur',{exact:true}).selectOption('3'); await panel(b).getByLabel('Taille de la cible',{exact:true}).selectOption('3'); await enterRolls(b,22,81);
-  await expect(panel(b)).toContainText('Battement : 0 Blessure'); await expect(panel(b).locator('[data-roll-input="critical-location"]')).toHaveCount(0); await expect(applyButton(b)).toBeEnabled();
+  await expect(playArea(b)).toContainText('Battement : 0 Blessure'); await expect(panel(b).locator('[data-roll-input="critical-location"]')).toHaveCount(0); await expect(applyButton(b)).toBeEnabled();
   await applyButton(b).click(); await expect.poll(()=>b.evaluate(()=>window.lot2UI.applyResults.at(-1)?.status)).toBe('applied'); assert.equal(await participantHP(b,'target'),12); assert.equal(await b.evaluate(()=>window.lot2UI.store.listParticipants().find(row=>row.id==='target').states[0].kind),'talent-active');
   assert.equal(await b.evaluate(()=>document.documentElement.scrollWidth>window.innerWidth),false,'Mobile page must not overflow horizontally'); await b.screenshot({path:join(root,'tmp/lot2-control-ui/battement-mobile.png'),fullPage:true}); await beat.context.close();
 

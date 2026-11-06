@@ -80,7 +80,8 @@ async function setup({ width = 1440, both = false, states = [], extraTarget = fa
   if (page.viewportSize().width <= 900) await closeU1Drawer(page);
   return { page, context };
 }
-const panel = page => page.locator('.workspace-resolution');
+const panel = page => page.locator('.workspace-resolution, .workspace-resolution-drawer');
+const playArea = page => page.locator('.workspace-play-grid');
 const applyButton = page => panel(page).locator('[data-focus-key="apply"]');
 async function enterRolls(page, attack, defense) {
   if (page.viewportSize().width <= 900) await closeU1Drawer(page);
@@ -110,7 +111,7 @@ try{
  const publicSpeaker=await setup({actorMomentum:false,actorTalents:[owned('talent-public-speaker')]});const p=publicSpeaker.page;
  await p.evaluate(()=>document.documentElement.setAttribute('data-theme','dark'));await customAction(p);
  await expect(panel(p).getByLabel('Compétence de ce Test pour les talents',{exact:true})).toBeDisabled();
- await enterRolls(p,61);await expect(applyButton(p)).toBeDisabled();await expect(panel(p)).toContainText('Orateur : Le Test sert à influencer un groupe — à préciser.');
+ await enterRolls(p,61);await expect(applyButton(p)).toBeDisabled();await expect(playArea(p)).toContainText('Orateur : Le Test sert à influencer un groupe — à préciser.');
  await chooseBoolean(panel(p).getByLabel('Le Test sert à influencer un groupe',{exact:true}),'true');await enterRolls(p,61);
  await expect(panel(p).locator('input[name="v5-choice-actor"]')).toHaveCount(2);await panel(p).locator('input[name="v5-choice-actor"][value="reverse"]').check();
  const chosen=await preview(p);assert.equal(chosen.roll,16);assert.equal(chosen.sl,4);await expect(applyButton(p)).toBeEnabled();const rev=await p.evaluate(()=>window.lot2UI.store.getLocalRevision());
