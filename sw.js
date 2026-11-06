@@ -196,6 +196,7 @@ const ASSETS_TO_CACHE = [
   './js/core/sanitize.js',
   './js/core/fiche-sync.js',
   './js/core/fiche-source.js',
+  './js/core/fiche-writeback.js',
   './js/core/keywords.js',
   './js/core/roll-qualities.js',
   './js/data/keywords-fallback.json',
@@ -278,7 +279,8 @@ const ASSETS_TO_CACHE = [
   './vendor/firebase/firebase-auth.js',
   './vendor/firebase/firebase-database.js',
   './vendor/firebase/firebase-firestore.js',
-  './vendor/firebase/firebase-app-check.js'
+  './vendor/firebase/firebase-app-check.js',
+  './vendor/firebase/firebase-functions.js'
 ];
 
 self.addEventListener('install', (event) => {

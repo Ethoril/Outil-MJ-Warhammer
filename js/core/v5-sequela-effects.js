@@ -211,10 +211,26 @@ export function teethLimitOf(participant) {
   return null;
 }
 
-export function sequelaMirror(register, participant) {
+/**
+ * Chantier H (A2) : la part d'une perte permanente déjà reportée sur la Base de la fiche (`reported`, clés de la fiche
+ * ou canoniques → points) est portée par les caractéristiques ; la ligne n'applique plus que le reste. La séquelle ne change pas.
+ */
+function withoutReported(rows, reported) {
+  const left = {};
+  for (const [key, amount] of Object.entries(reported || {})) if (Number.isSafeInteger(amount) && amount > 0) left[normalizeCarac(key)] = (left[normalizeCarac(key)] || 0) + amount;
+  if (!Object.keys(left).length) return rows;
+  return rows.map(row => {
+    if (row.type !== 'char' || row.lifetime !== 'permanent' || !(left[row.carac] > 0) || !(row.amount < 0)) return row;
+    const taken = Math.min(left[row.carac], -row.amount);
+    left[row.carac] -= taken;
+    return { ...row, amount: row.amount + taken, reportedToFiche: taken, label: `${row.label} · ${row.amount + taken === 0 ? 'reportée sur la fiche' : `${taken} reporté(s) sur la fiche`}` };
+  });
+}
+
+export function sequelaMirror(register, participant, { reported = null } = {}) {
   if (!register || !Array.isArray(register.sequelae) || !register.sequelae.length || !participant?.id) return null;
   let rows;
-  try { rows = sequelaEffectRows(register, participant.id); } catch { return null; }
+  try { rows = withoutReported(sequelaEffectRows(register, participant.id), reported); } catch { return null; }
   const reminders = [];
   const teeth = register.sequelae.filter(row => row.participantId === participant.id && row.kind === 'loss' && row.part === 'teeth' && row.status === 'permanent').reduce((sum, row) => sum + row.count, 0);
   // p.179 : « plus de la moitié » des dents, seuil par espèce (Humains 16, Elfes 18, Halflings et Nains 20), strictement dépassé.
@@ -303,7 +319,7 @@ export function sequelaTestRules({ actor, opponent = null, skillLabel = '', acti
         else if (isCharmTest(label)) push(row, row.charm);
       }); break;
       case 'appropriate-social': if (key === 'Soc' && ask('sequelaScarAppropriate', 'Séquelle : préciser si la cicatrice de duel est appropriée à ce Test social.')) push(row, row.amount); break;
-      case 'char': if (key && row.carac === key) { out.scoreDelta += row.amount; out.sources.push(row.id); } break;
+      case 'char': if (key && row.carac === key && row.amount) { out.scoreDelta += row.amount; out.sources.push(row.id); } break;
       default: break;
     }
   }

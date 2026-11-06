@@ -192,7 +192,27 @@ export function ficheSnapshot(charId, fiche, metadata = {}) {
   if (digits('corruption') !== null) durables.corruption = digits('corruption');
   if (Object.keys(durables).length) snapshot.durables = durables;
   source.fingerprint = ficheFingerprint(snapshot);
+  // Chantier H : valeurs brutes de la fiche à cette lecture, bases des écritures en retour (fiche-writeback.js).
+  // Hors empreinte : ce bloc ne change pas l'identité utile de la fiche.
+  snapshot.writebackBase = ficheWritebackBase(raw, metadata);
   return snapshot;
+}
+
+const WRITEBACK_FIELDS = Object.freeze(['destin', 'fortune', 'peche', 'corruption']);
+const WRITEBACK_ROWS = Object.freeze(['talentsAcq', 'equipment', 'skillsAdvanced']);
+/** Un champ ou une collection absents de la fiche restent absents ici : absent n'est jamais « vide ». */
+function ficheWritebackBase(raw, metadata = {}) {
+  const base = { revision: Number.isSafeInteger(metadata.revision) ? metadata.revision : null, fields: {}, carac: {}, rows: {}, unidentified: {} };
+  for (const key of WRITEBACK_FIELDS) if (own(raw, key)) base.fields[key] = cloneValue(raw[key]);
+  if (isRecord(raw.carac)) for (const key of Object.keys(CARAC_MAP)) if (isRecord(raw.carac[key])) base.carac[key] = cloneValue(raw.carac[key]);
+  for (const key of WRITEBACK_ROWS) {
+    if (!own(raw, key) || !Array.isArray(raw[key])) continue;
+    const identified = raw[key].filter(row => isRecord(row) && typeof row.id === 'string' && row.id);
+    base.rows[key] = Object.fromEntries(identified.map(row => [row.id, cloneValue(row)]));
+    if (identified.length !== raw[key].length) base.unidentified[key] = raw[key].length - identified.length;
+  }
+  if (own(raw, 'suiviMj') && Array.isArray(raw.suiviMj)) base.suiviMj = cloneValue(raw.suiviMj);
+  return base;
 }
 
 /**

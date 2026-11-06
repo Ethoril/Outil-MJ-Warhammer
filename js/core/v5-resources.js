@@ -160,7 +160,10 @@ export function projectV5Resources(envelope, participants = []) {
     if (fortune !== null) next.extensions = { ...(next.extensions || {}), v5: { ...(next.extensions?.v5 || {}), resources: { ...(next.extensions?.v5?.resources || {}), fortune } } };
     else if (Object.hasOwn(next.extensions?.v5?.resources || {}, 'fortune')) delete next.extensions.v5.resources.fortune;
     // Séquelles (F2-J2) : le registre de convalescence est la seule source, la fiche du participant n'en garde qu'une projection lue par la résolution.
-    const sequelae = sequelaMirror(envelope?.extensions?.v5?.aftermathRegister, next);
+    const ficheId = next.extensions?.ficheId || next.ficheSnapshot?.charId;
+    // Chantier H : la part des pertes déjà écrite sur la Base de la fiche n'est plus retirée une seconde fois.
+    const reported = ficheId ? envelope?.extensions?.v5?.ficheWriteback?.caracReported?.[ficheId] : null;
+    const sequelae = sequelaMirror(envelope?.extensions?.v5?.aftermathRegister, next, { reported });
     if (sequelae) next.extensions = { ...(next.extensions || {}), v5: { ...(next.extensions?.v5 || {}), sequelaEffects: sequelae } };
     else if (next.extensions?.v5 && Object.hasOwn(next.extensions.v5, 'sequelaEffects')) delete next.extensions.v5.sequelaEffects;
     return next;

@@ -1,6 +1,6 @@
 // Lecture des fiches de personnage dans l'autre projet Firebase (campagne-wrpg, Firestore).
 // Seul module à toucher le réseau pour cette fonction : le reste reçoit une « source »
-// ({ getUser, signIn, signOut, fetchAll }) et se teste avec une fausse.
+// ({ getUser, signIn, signOut, fetchAll, sendCommand }) et se teste avec une fausse.
 // Les modules Firebase ne sont chargés qu'à l'ouverture de la fonction ; l'application
 // Firebase est nommée pour ne pas interférer avec celle de la synchronisation (sync.js).
 import { FICHE_CHAR_IDS } from './fiche-sync.js';
@@ -17,9 +17,13 @@ const RECAPTCHA_SITE_KEY = '6Lfx25YtAAAAAAkRJrYSQsH6rdE1buedQzw0xTXb';
 // Même règle que le site des fiches : App Check n'est actif que sur le site publié.
 const APP_CHECK_HOST = 'ethoril.github.io';
 const APP_NAME = 'fiches';
+// Cloud Function des commandes de fiche (site des fiches) : même région que son déploiement.
+const FUNCTIONS_REGION = 'europe-west1';
+const COMMAND_FUNCTION = 'executeFicheCommand';
 
-export function createFicheSource({ loadSdk = null } = {}) {
+export function createFicheSource({ loadSdk = null, loadFunctions = null } = {}) {
   let sdk = null;
+  let callable = null;
   const load = async () => {
     if (sdk) return sdk;
     if (loadSdk) { sdk = await loadSdk(); return sdk; }
@@ -70,6 +74,20 @@ export function createFicheSource({ loadSdk = null } = {}) {
       }));
       if (results.every(item => item.status === 'error')) throw results[0].error;
       return results;
+    },
+    /**
+     * Commande de fiche (`{ charId, operationId, baseRevision, type, payload }`) envoyée à la Cloud Function ;
+     * renvoie sa réponse. Une erreur (conflit compris : code `functions/aborted`, `details.kind === 'conflict'`) est propagée.
+     */
+    async sendCommand(command) {
+      if (!command || typeof command !== 'object' || !FICHE_CHAR_IDS.includes(command.charId)) throw new TypeError('Commande de fiche invalide : fiche inconnue.');
+      if (!callable) {
+        const { instance } = await load();
+        const functions = loadFunctions ? await loadFunctions() : await import('../../vendor/firebase/firebase-functions.js');
+        callable = functions.httpsCallable(functions.getFunctions(instance, FUNCTIONS_REGION), COMMAND_FUNCTION);
+      }
+      const result = await callable(command);
+      return result?.data;
     }
   };
 }

@@ -64,6 +64,10 @@ Les identifiants de suivi sont dérivés de l'identifiant de l'outil (`outil:<id
 
 **Valeurs de base.** La base d'un change est la valeur de la fiche **à la dernière lecture par l'outil**, pas celle du moment de l'envoi : c'est elle qui permet de voir que le joueur a modifié la fiche. `ficheSnapshot` (`js/core/fiche-sync.js`) ne garde aujourd'hui que des totaux ; il gagne un bloc `writebackBase` (valeurs brutes : `destin`, `fortune`, `peche`, `corruption`, `carac.*.{base,adv}`, lignes `talentsAcq`/`equipment`/`skillsAdvanced` par `id`, `suiviMj`). Après un envoi réussi, l'outil y recopie les valeurs envoyées et la nouvelle révision (CA7).
 
+**Pertes déjà reportées (arbitrage du 06/11 soir, A1/A2).** La partie garde `extensions.v5.ficheWriteback.caracReported[charId][carac]` : cible = Base lue − (total − déjà reporté) ; un succès, « Garder la fiche » ou « Imposer l'outil » réussi le fixent au total, une annulation réussie le remet à sa valeur d'avant l'envoi. La ligne d'effet `char` de la séquelle n'applique plus que total − déjà reporté (projection `sequelaMirror`), sans toucher à la séquelle : la perte ne compte jamais deux fois.
+
+**Copies divergentes (même arbitrage).** Une valeur se lit dans l'ordre participant du combat, scène active, personnage persistant, profil de réserve ; un désaccord entre copies met un avertissement sur la ligne.
+
 ## 3. Côté outil
 
 - `vendor/firebase/firebase-functions.js` : même version que les autres modules embarqués.
