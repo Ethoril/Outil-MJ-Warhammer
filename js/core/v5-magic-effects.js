@@ -116,11 +116,10 @@ function bonusesTaken(sources) {
 /**
  * Modificateurs de Tests magiques retenus pour UN Test résolu (U8, lot L1). `applies(key)` dit si une clé de couche vise ce Test.
  * Sorts : R3 (V5 p. 235) par Test résolu, toutes clés confondues — meilleur bonus (plus les sources de Lileath, D-06), pire malus,
- * exceptions `stackable` cumulées. Deux sorts qui visent le même Test par des clés différentes (« carac:e », « Endurance ») ne se
+ * exceptions `stackable` cumulées ; les clés d'une même couche qui visent ce Test forment une seule source. Deux sorts qui visent le même Test par des clés différentes (« carac:e », « Endurance ») ne se
  * cumulent donc plus.
- * Prières : règle inchangée, par clé (la même prière n'est jamais posée deux fois, R4 p. 217 ; deux prières différentes sur le même
- * Test restent à arbitrer). Prière et sort se somment (sources différentes, R1 p. 130) ; leur collision sur une même clé est refusée
- * à la pose (DIV-05).
+ * Prières : même règle, en un groupe distinct par Test résolu (arbitrage du MJ du 06/11 ; la même prière deux fois reste refusée
+ * à la pose, R4 p. 217). Prière et sort se somment (sources différentes, p. 130, Q2 du MJ, même clé comprise).
  * Retourne `[{ key, amount }]`, un élément par clé retenue (montants non nuls), dans l'ordre des couches.
  */
 export function resolvedMagicTestModifiers({ spellEffects = [], divineEffects = [] } = {}, applies = () => true) {
@@ -134,13 +133,18 @@ export function resolvedMagicTestModifiers({ spellEffects = [], divineEffects = 
   const cumulate = rows => {
     for (const row of rows) if (row.effect.stackable === true || row.effect.isStackable === true) add(row.key, row.value);
     const regular = rows.filter(row => row.effect.stackable !== true && row.effect.isStackable !== true);
-    for (const source of bonusesTaken(regular.filter(row => row.value > 0).map(row => ({ ...bonusSource(row.value, row.effect), key: row.key })))) add(source.key, source.value);
-    const penalties = regular.filter(row => row.value < 0);
-    if (penalties.length) { const worst = penalties.reduce((a, b) => (b.value < a.value ? b : a)); add(worst.key, worst.value); }
+    // Une source = une couche : ses propres clés qui visent ce Test s'additionnent (un seul sort ou une seule prière),
+    // le non-cumul s'applique entre couches.
+    const perLayer = sign => [...new Set(regular.map(row => row.effect))].map(effect => {
+      const own = regular.filter(row => row.effect === effect && Math.sign(row.value) === sign);
+      return { ...bonusSource(own.reduce((total, row) => total + row.value, 0), effect), rows: own };
+    }).filter(source => source.rows.length);
+    for (const source of bonusesTaken(perLayer(1))) for (const row of source.rows) add(row.key, row.value);
+    const penalties = perLayer(-1);
+    if (penalties.length) for (const row of penalties.reduce((a, b) => (b.value < a.value ? b : a)).rows) add(row.key, row.value);
   };
   cumulate(contributions(unsuppressedSpellEffects(spellEffects)));
-  const prayers = contributions(divineEffects);
-  for (const key of new Set(prayers.map(row => row.key))) cumulate(prayers.filter(row => row.key === key));
+  cumulate(contributions(divineEffects));
   return [...totals].filter(([, amount]) => amount !== 0).map(([key, amount]) => ({ key, amount }));
 }
 

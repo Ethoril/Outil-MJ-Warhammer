@@ -50,7 +50,18 @@ test.todo('Q2 prière et sort sur la même caractéristique : somme, E 30 + 10 (
 
 test.todo('Q2 la pose d\'une prière sur un sort de même clé n\'est plus refusée (DIV-05) : somme attendue (aujourd\'hui refus à la pose, v5-divine-store.js)');
 
-test.todo('Q2 deux prières différentes sur le même Test par des clés différentes (le livre ne règle que la même prière, R4) : question posée au MJ');
+// Arbitrage du MJ du 06/11 : deux prières différentes suivent la règle des sorts, meilleur bonus et pire pénalité par Test résolu.
+test('MJ 06/11 deux prières différentes, clés différentes, même Test : meilleur bonus et pire pénalité (+2, +1, -1, -2 donnent 0)', () => {
+  const holder = fighter('h', 'pj', { prayers: [prayerLayer('p1', { 'Résistance': 2 }), prayerLayer('p2', { 'carac:e': 1 }),
+    prayerLayer('p3', { 'Tous les Tests': -1 }), prayerLayer('p4', { 'Résistance': -2 })] });
+  assert.equal(sum(magicSkillModifiers(holder, 'Résistance', { carac: 'E' })), 0);
+});
+
+test('MJ 06/11 groupe des prières à côté du groupe des sorts : meilleur bonus de chaque groupe, puis somme (Q2)', () => {
+  const holder = fighter('h', 'pj', { spells: [spellLayer('s1', { 'carac:e': 2 }), spellLayer('s2', { 'Endurance': 1 })],
+    prayers: [prayerLayer('p1', { 'Résistance': 1 }), prayerLayer('p2', { 'Tous les Tests': 2 })] });
+  assert.equal(sum(magicSkillModifiers(holder, 'Résistance', { carac: 'E' })), 4);
+});
 
 // ---- Q3 · États et effets ----
 const stunned = [{ key: 'sonne', name: 'Sonné', level: 1 }];
