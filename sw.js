@@ -166,6 +166,7 @@ const ASSETS_TO_CACHE = [
   './js/core/sync-session.js',
   './js/core/effects.js',
   './js/core/effect-engine.js',
+  './js/core/condition-effects.js',
   './js/core/quality-normalization.js',
   './js/core/commands.js',
   './js/core/history.js',
