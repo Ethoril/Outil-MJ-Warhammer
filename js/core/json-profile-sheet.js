@@ -4,6 +4,7 @@
  * passe par la voie des fiches : `ficheSnapshot` puis `planProfileSync`, comme une fiche synchronisée. Module pur.
  */
 import registry from '../data/v5-divine-contracts.json' with { type: 'json' };
+import { SUPPLEMENT_DIVINE_CONTRACTS, SUPPLEMENT_SPELL_CONTRACTS } from './supplement-loader.js';
 import { CREATURE_TRAIT_NAMES } from '../data/creature-trait-names.js';
 import { cloneValue, uid } from './models.js';
 import { getReferenceCatalogue, resolveTalent, resolveSkill } from './reference-catalog.js';
@@ -57,12 +58,12 @@ const SIZE_WORDS_SHOWN = 'Petite, Moyenne, Grande, Énorme, Monstrueuse';
 /** Noms français des référentiels (talents, compétences, sorts, prières, objets), lus à chaque analyse pour suivre le référentiel chargé. */
 function referentials() {
   const catalogue = getReferenceCatalogue();
-  const contracts = registry.contracts.filter(contract => contract.catalogueName);
+  const contracts = [...registry.contracts, ...SUPPLEMENT_DIVINE_CONTRACTS].filter(contract => contract.catalogueName);
   return {
     catalogue,
     talents: catalogue.talents.map(entry => entry.nom),
     skills: catalogue.skills.map(entry => entry.nom),
-    spells: new Map(catalogue.magic.spells.map(spell => [strict(spell.nom), spell.nom])),
+    spells: new Map([...catalogue.magic.spells.map(spell => [strict(spell.nom), spell.nom]), ...SUPPLEMENT_SPELL_CONTRACTS.map(spell => [strict(spell.name), spell.name])]),
     prayers: new Map(contracts.map(contract => [strict(contract.catalogueName), contract.catalogueName])),
     traits: new Set(CREATURE_TRAIT_NAMES.map(fold))
   };

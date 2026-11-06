@@ -18,6 +18,8 @@ import { runDiceLine } from './ui/dice-line.js';
 import { renderReferenceTables } from './ui/rules-view.js';
 import { renderLog, initLogViewUI } from './ui/journal-view.js';
 import { showToast } from './ui/toast.js';
+import { SUPPLEMENT_ERRORS } from './core/supplement-loader.js';
+import { mountSupplementErrors } from './ui/supplement-errors-banner.js';
 import { initKeyboardShortcuts } from './ui/keyboard.js';
 import { initThemeManager } from './ui/theme.js';
 import { openV5EffectInputDialog, chooseV5RecoveryMethod, recoveryOptionsFor as normalizeV5RecoveryOptions } from './ui/v5-effect-dialog.js';
@@ -307,6 +309,10 @@ tabArray.forEach((t, idx) => {
   });
 });
 switchTab('workspace', 'prepare');
+
+// Suppléments (U8 L7, Q5 du MJ) : un élément invalide est écarté au chargement et signalé par un bandeau qui reste affiché,
+// sans bloquer l'application.
+mountSupplementErrors(qs('#app-content'), SUPPLEMENT_ERRORS);
 
 // Init Sub-modules UI
 let profileSavedHandler = null;
