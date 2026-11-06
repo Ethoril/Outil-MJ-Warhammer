@@ -10,7 +10,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { buildCombatTest } from '../../../js/core/v5-combat-rules.js';
 import { previewResolution } from '../../../js/core/resolution.js';
-import { magicSkillModifiers } from '../../../js/core/v5-magic-talents.js';
+import { magicSkillModifiers, magicAdverseModifiers, collectTestEffects } from '../../../js/core/v5-magic-talents.js';
 import { calculateEffectiveStats } from '../../../js/core/v5-magic-effects.js';
 import { getReferenceCatalogue } from '../../../js/core/reference-catalog.js';
 import { combineEffects } from '../../../js/core/effect-engine.js';
@@ -62,6 +62,27 @@ test('MJ 06/11 groupe des prières à côté du groupe des sorts : meilleur bonu
   const holder = fighter('h', 'pj', { spells: [spellLayer('s1', { 'carac:e': 2 }), spellLayer('s2', { 'Endurance': 1 })],
     prayers: [prayerLayer('p1', { 'Résistance': 1 }), prayerLayer('p2', { 'Tous les Tests': 2 })] });
   assert.equal(sum(magicSkillModifiers(holder, 'Résistance', { carac: 'E' })), 4);
+});
+
+// Lot L3 : buildCombatTest lit talents et couches par collectTestEffects (R1 talent + sort/prière, Q2 sort + prière).
+test('L3 talent, sort et prière sur le même Test : réunis par le moteur, chacun gardé (R1, Q2)', () => {
+  const holder = fighter('h', 'pj', { spells: [spellLayer('s', { 'Tous les Tests': 1 })], prayers: [prayerLayer('p', { 'Résistance': 1 })] });
+  const talentRow = { id: 'talent:test', label: 'Talent', amount: 1 };
+  const collected = collectTestEffects(holder, { skill: 'Résistance', carac: 'E' }, { talentRows: [talentRow] });
+  assert.deepEqual(collected.talentRows, [talentRow]);
+  assert.deepEqual(collected.layerRows, [{ key: 'Tous les Tests', amount: 1 }, { key: 'Résistance', amount: 1 }]);
+  assert.deepEqual(collected.unresolved, []);
+});
+
+test('L3 Q13 une couche à deux clés visant le même Test : une source, clés additionnées (Charme +2 et Tous les Tests +1 → +3)', () => {
+  const holder = fighter('h', 'pj', { spells: [spellLayer('a', { 'Charme': 2, 'Tous les Tests': 1 }), spellLayer('b', { 'Charme': 2 })] });
+  assert.equal(sum(magicSkillModifiers(holder, 'Charme', { carac: 'Soc' })), 3);
+});
+
+test('L3 clés « … adverse » de deux sorts sur le même Test de l\'opposant : meilleur bonus par Test résolu, plus de somme par clé', () => {
+  const holder = fighter('h', 'pj', { spells: [spellLayer('a', { 'Perception adverse': -1 }), spellLayer('b', { 'Perception (Vue) adverse': -2 })] });
+  assert.equal(sum(magicAdverseModifiers(holder, 'Perception (Vue)')), -2);
+  assert.equal(sum(magicAdverseModifiers(holder, 'Perception (Ouïe)')), -1);
 });
 
 // ---- Q3 · États et effets ----

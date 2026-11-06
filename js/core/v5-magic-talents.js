@@ -161,30 +161,35 @@ export function layerTestEffects(v5={}){
 export function collectTestEffects(actor,test={},{talentRows=[]}={}){
  const v5=actor?.extensions?.v5||{};
  const layers=layerTestEffects(v5);
- const talents=talentRows.filter(row=>Number.isFinite(Number(row?.amount))).map((row,index)=>({bearer:{kind:'talent',sourceId:String(row.id||'talent:'+index)},effect:{op:'modifySL',amount:Number(row.amount),stack:'add',stackGroup:'talent:'+index},row}));
- const combined=combineEffects([...layers,...talents],{test});
+ // Une ligne de talent sans montant chiffré n'entre pas dans le cumul : elle est rendue telle quelle, à sa place.
+ const talents=talentRows.map((row,index)=>Number.isFinite(row?.amount)?{bearer:{kind:'talent',sourceId:String(row.id||'talent:'+index)},effect:{op:'modifySL',amount:row.amount,stack:'add',stackGroup:'talent:'+index},row}:{row,passThrough:true});
+ const combined=combineEffects([...layers,...talents.filter(entry=>!entry.passThrough)],{test});
  const applied=combined.groups.filter(group=>group.status==='applied');
  const totals=new Map();
  for(const group of applied.filter(group=>group.kind!=='talent'))for(const entry of group.kept)totals.set(entry.key,(totals.get(entry.key)||0)+entry.effect.amount);
  const keptTalents=new Set(applied.filter(group=>group.kind==='talent').flatMap(group=>group.kept));
  return {
   layerRows:[...totals].filter(([,amount])=>amount!==0).map(([key,amount])=>({key,amount})),
-  talentRows:talents.filter(entry=>keptTalents.has(entry)).map(entry=>entry.row),
+  talentRows:talents.filter(entry=>entry.passThrough||keptTalents.has(entry)).map(entry=>entry.row),
   signals:combined.signals,
   unresolved:combined.signals.map(signal=>`Cumul non arbitré entre ${signal.kinds.join(' et ')} (${signal.op}) : à trancher par le MJ avant le Test.`)
  };
 }
 /**
- * Modificateurs magiques d'un Test. Avec des couches (sorts, prières), le cumul passe par le moteur (`collectTestEffects`) sur les
- * clés qui visent CE Test ; sans couche, les modificateurs par clé du porteur sont lus tels quels.
+ * Modificateurs d'un Test réunis par le moteur (U8 L3, lu par `buildCombatTest`) : couches magiques (`magic`, cumul sur les clés qui
+ * visent CE Test, incidents compris), lignes de talents (`talents` : `talentRows` passées par la table entre familles, R1) et
+ * messages de cumul non arbitré (`unresolved`). Sans couche, les modificateurs par clé du porteur sont lus tels quels.
  */
-export function magicSkillModifiers(actor,skill,context={}){
- const result=[];const name=fold(skill);const v5=actor?.extensions?.v5 || {};
- const rows=hasTestLayer(v5)?collectTestEffects(actor,{skill,carac:context?.carac,skillContext:context?.skillContext}).layerRows.map(row=>[row.key,row.amount]):Object.entries(v5.testModifiers || {}).filter(([key])=>testKeyApplies(key,skill,context));
- for(const [key,amount] of rows)result.push({id:'spell-skill:'+key,label:'Effet magique : '+(/^carac:/i.test(key)?'Tests de '+(CARAC_LABELS[fold(key.slice(6))]||key.slice(6)):key),amount});
- for(const [index,effect] of (actor?.extensions?.v5?.miscastEffects || []).entries())if(effect.type==='penalty' && [...(effect.targetSkills || []),effect.targetSkillCategory].filter(Boolean).some(s=>name.includes(fold(s)) || name.includes('langue')&&s==='Incantation'))result.push({id:'miscast:'+index,label:effect.name,amount:effect.slModifier});
- return result;
+export function magicTestModifiers(actor,skill,context={},{talentRows=[]}={}){
+ const name=fold(skill);const v5=actor?.extensions?.v5 || {};
+ const collected=collectTestEffects(actor,{skill,carac:context?.carac,skillContext:context?.skillContext},{talentRows});
+ const rows=hasTestLayer(v5)?collected.layerRows.map(row=>[row.key,row.amount]):Object.entries(v5.testModifiers || {}).filter(([key])=>testKeyApplies(key,skill,context));
+ const magic=rows.map(([key,amount])=>({id:'spell-skill:'+key,label:'Effet magique : '+(/^carac:/i.test(key)?'Tests de '+(CARAC_LABELS[fold(key.slice(6))]||key.slice(6)):key),amount}));
+ for(const [index,effect] of (v5.miscastEffects || []).entries())if(effect.type==='penalty' && [...(effect.targetSkills || []),effect.targetSkillCategory].filter(Boolean).some(s=>name.includes(fold(s)) || name.includes('langue')&&s==='Incantation'))magic.push({id:'miscast:'+index,label:effect.name,amount:effect.slModifier});
+ return {magic,talents:collected.talentRows,unresolved:collected.unresolved};
 }
+/** Modificateurs magiques d'un Test (couches et incidents), voir `magicTestModifiers`. */
+export function magicSkillModifiers(actor,skill,context={}){return magicTestModifiers(actor,skill,context).magic;}
 /**
  * Clés « … adverse » du porteur d'un effet (Perception adverse…) : elles s'appliquent au Test de qui s'y oppose (« Mêlée adverse »
  * vise un Test de Corps à corps). Avec des couches, cumul par Test résolu comme les autres clés (R3 p. 235 ; Q10, Q13 du MJ).
