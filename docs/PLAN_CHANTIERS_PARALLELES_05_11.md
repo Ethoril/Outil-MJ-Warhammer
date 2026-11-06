@@ -109,6 +109,7 @@ Entre deux vagues : fusion des branches dans `dev/recette-plateau-04-11` (outil 
 - **Q16 (06/11)** : une clé « … adverse » du porteur et un sort posé sur l'opposant, sur le même Test, **se somment** (porteurs différents).
 - **Q17 (06/11)** : deux Traits identiques à valeur (Peur (2) d'un sort, Peur (2) d'une prière) : le Trait n'est présent qu'une fois, avec **la plus haute valeur**.
 - **Q18 (06/11)** : deux remplacements du bonus de dégâts (`replaceDamageBonus`) : on garde **le plus haut**, sans somme.
+- **Q19 (06/11)** : les exceptions d'États (Endurance de l'anachorète, Revigorer, Clarté d'esprit, talents qui ôtent une pénalité) et les Désavantages d'États (À terre, Aveuglé…) valent **pour tous les Tests** (combat, magie, contexte de Test) : un seul calcul, celui du combat.
 
 **E1, médaillons** (branche `claude/e1-medaillons-a7988b`) : **sans débord** ; pion mort en **cerclage gris** ; liseré choisi à la main **abandonné** (seule la teinte du camp compte). **Choix du MJ après examen de la maquette** :
 - **Variante B** (personnage sur fond émaillé, une image par profil), sans débord.
