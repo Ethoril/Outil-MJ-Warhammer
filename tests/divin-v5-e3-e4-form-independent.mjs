@@ -72,7 +72,7 @@ try {
   await page.waitForFunction(()=>window.__TEST__.Store.getDivineAccessGrants('priest').some(row=>row.prayerId==='divine:miracle:appel-a-la-fureur'&&row.status==='active'));
   const grantId=await page.evaluate(()=>window.__TEST__.Store.getDivineAccessGrants('priest').find(row=>row.prayerId==='divine:miracle:appel-a-la-fureur'&&row.status==='active').id);
   const refreshedGrantBox=panel.locator('details.workspace-v5-context-details').filter({hasText:'Accès à la prière'});
-  await refreshedGrantBox.locator('summary').click();
+  if(!await refreshedGrantBox.evaluate(element=>element.open))await refreshedGrantBox.locator('summary').click();
   await refreshedGrantBox.locator('[aria-label="Raison de révocation"]').fill('Fin du contrôle indépendant');
   await page.setViewportSize({width:390,height:844});
   await page.screenshot({path:join(EVIDENCE,'revoke-mobile-dark.png'),fullPage:true}); screenshots.push('revoke-mobile-dark.png');

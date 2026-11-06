@@ -90,7 +90,7 @@ view.setSpace('play');
 const { server, baseUrl } = await startStaticServer();
 const browser = await launchBrowser(LAUNCH_OPTS);
 const RECIPIENTS = 'Ennemis engagés ou créatures affectées (désignés par le MJ) : ';
-const text = async page => (await page.locator('.workspace-resolution').innerText()).split('\n').filter(Boolean).join(' | ');
+const text = async page => (await page.locator('.workspace-resolution, .workspace-resolution-drawer').allInnerTexts()).join(' ').split('\n').filter(Boolean).join(' | ');
 const states = (page, id) => page.evaluate(id => window.__TEST__.Store.listParticipants().find(p => p.id === id).states.map(s => s.key || s.name), id);
 
 async function open(scenario, { w = '', t = 'mage-1', extra = '' } = {}) {
