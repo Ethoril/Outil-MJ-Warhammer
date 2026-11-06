@@ -23,3 +23,12 @@ Aucune réponse n'est présumée ici. Les références de page sont celles déj�
 **Q8 · Lancement.** L0 et L1 (correction du cumul par Test) sont indépendants des fichiers chauds et pourraient partir en vague 4. Le reste (L2 à L9) attend-il une vague dédiée, ou se fait-il au rythme des suppléments, comme le proposait la note du 02/11 ?
 
 **Q9 · Affichage « non cumulé ».** Un modificateur écarté par une règle de cumul doit-il rester visible (barré, avec la règle) dans le détail du Test, ou disparaître ?
+
+## Réponses du MJ sur L7 (06/11)
+
+- **Un seul fichier** pour tous les suppléments : `js/data/v5-supplements.json`.
+- **Dégâts, États, Traits, PA** : formats actuels (Q7) ; briques avec L8 et L9.
+- **À faire tout de suite, dans L7** :
+  - coûts et quotas d'action des talents de supplément ;
+  - prières et sorts de supplément lançables depuis l'interface (NI, portée, durée) ;
+  - bandeau d'erreur de chargement qui reste affiché.

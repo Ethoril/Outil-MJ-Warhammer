@@ -17,6 +17,7 @@ import { availableV5TalentActions } from '../core/v5-talent-actions.js';
 import { createV5TimedEffect } from '../core/v5-effects.js';
 import { openCampaignTimeDialog } from './v5-campaign-time-dialog.js';
 import { isMiscastConditionLocked } from '../core/v5-magic-miscasts.js';
+import { prepareMagicOptions } from '../core/v5-magic-talents.js';
 import { recoveryMethodsFor } from './v5-effect-dialog.js';
 import { hasMomentum, inferV5Kind } from '../core/v5-combat-rules.js';
 import { withoutOutnumberContext as withoutOutnumberKeys, outnumberSide } from '../core/outnumbering.js';
@@ -117,6 +118,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     draft.magicTargetTests = {};
     draft.magicMountedRideTests = {};
     draft.magicSecondaryRolls = {};
+    draft.magicConditionContext = {};
   }
   // Autre jet de critique : ses effets repartent cochés (les cases décochées visaient l'ancien tirage).
   // La localisation change aussi les dégâts, donc l'existence du second critique.
@@ -1729,7 +1731,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
               .filter(([, roll]) => roll != null && roll !== '').map(([purpose, roll]) => ({ purpose, roll }))
             : [];
           const extraMagicInput={
-            senseFacts:draft.magicSenseFacts || {},requireExplicitDice:true,distraction:Boolean(draft.magicDistraction),yenluiPenalty:draft.magicYenluiPenalty,
+            senseFacts:draft.magicSenseFacts || {},conditionContext:draft.magicConditionContext || {},requireExplicitDice:true,distraction:Boolean(draft.magicDistraction),yenluiPenalty:draft.magicYenluiPenalty,
             magicDefianceTargets:draft.magicDefianceTargets || [],
             suffusedBy:draft.magicSuffusedId?[{id:draft.magicSuffusedId,distance:draft.magicSuffusedDistance}]:[],
             choice:draft.magicTestChoice || 'keep',
@@ -1743,7 +1745,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
           if (context.type === 'dispel') {
             const effect=Store.listParticipants().flatMap(p=>p.extensions?.v5?.spellEffects || []).find(e=>e.id===draft.magicPersistentId);
             if(!effect)throw new Error('Choisir un effet magique persistant.');
-            const preview=Store.previewDispelPersistent(effect,{dispellerId:context.actor.id,roll:Number(rollRaw),distance:dispelDistance(draft.magicPersistentDistance),visible:dispelVisible(draft.magicPersistentVisible),...(draft.magicPersistentRestart ? {restartAttempt:true} : {})});
+            const preview=Store.previewDispelPersistent(effect,{dispellerId:context.actor.id,conditionContext:draft.magicConditionContext || {},roll:Number(rollRaw),distance:dispelDistance(draft.magicPersistentDistance),visible:dispelVisible(draft.magicPersistentVisible),...(draft.magicPersistentRestart ? {restartAttempt:true} : {})});
             draft.preview={...preview,v5MagicKind:'dispel',actorId:context.actor.id,baseRevision:Store.getLocalRevision()};
           } else if (context.type === 'channelling') {
             const magicInput = {
@@ -1928,6 +1930,12 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
               magicOptions,
               castInput
             };
+          }
+          // U8 Q19 : les questions d'États restées sans réponse (Brisé, Enchevêtré, À terre, Aveuglé, Souillé), posées par le panneau.
+          // Sans réponse, ces États ne pèsent pas en magie, comme avant.
+          if (draft.preview) {
+            try { draft.preview.conditionNeeds = prepareMagicOptions(context.actor, context.type === 'cast' ? 'casting' : context.type, { conditionContext: draft.magicConditionContext || {} }).conditionNeeds || []; }
+            catch { draft.preview.conditionNeeds = []; }
           }
         } catch (error) {
           draft.preview = null;
