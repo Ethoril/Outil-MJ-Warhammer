@@ -107,6 +107,8 @@ Entre deux vagues : fusion des branches dans `dev/recette-plateau-04-11` (outil 
 - **Q14 (06/11)** : Q2 vaut aussi pour les PA, les bonus d'arme et les Traits identiques : prière et sort **se somment**, DIV-05 ne refuse plus ces poses.
 - **Q15 (06/11)** : le Test de Prière lit aussi les modificateurs de **Sociabilité** (`carac:soc`, « Sociabilité »).
 - **Q16 (06/11)** : une clé « … adverse » du porteur et un sort posé sur l'opposant, sur le même Test, **se somment** (porteurs différents).
+- **Q17 (06/11)** : deux Traits identiques à valeur (Peur (2) d'un sort, Peur (2) d'une prière) : le Trait n'est présent qu'une fois, avec **la plus haute valeur**.
+- **Q18 (06/11)** : deux remplacements du bonus de dégâts (`replaceDamageBonus`) : on garde **le plus haut**, sans somme.
 
 **E1, médaillons** (branche `claude/e1-medaillons-a7988b`) : **sans débord** ; pion mort en **cerclage gris** ; liseré choisi à la main **abandonné** (seule la teinte du camp compte). **Choix du MJ après examen de la maquette** :
 - **Variante B** (personnage sur fond émaillé, une image par profil), sans débord.
