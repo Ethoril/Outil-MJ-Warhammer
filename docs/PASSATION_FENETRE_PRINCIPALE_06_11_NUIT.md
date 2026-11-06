@@ -8,6 +8,26 @@ Travail de nuit en autonomie, sur feu vert du MJ. **Fusionné sur feu vert du MJ
 
 **Suite de L3, fusionnée (`1a1bc77`, `02267d9`)** : Q14 à Q18 appliqués. PA, bonus d'arme et Traits d'une prière et d'un sort se somment (DIV-05 levé pour eux). Le Test de Prière et la Prière de récupération lisent la Sociabilité et cumulent par Test résolu. Un Trait identique garde la plus haute valeur (corrigé dans `creature-psychology.js`, qui prenait le premier). Les PA des Arcanes impitoyables comptent les prières. `resolvedMagicTestModifiers` est retiré. Suite complète : 5 722 tests, seuls les 4 audits Windows échouent, 1 todo (Q5). Reste du plan U8 : L4, L5a-c, L5z (voir `tasks.md`).
 
+**Médaillons des PJ (06/11 matin)** : le MJ a refusé la teinte calculée. Magnific a généré les 5 médaillons à partir du bronze validé, et le MJ les a validés (`docs/maquettes/e1-medaillons/cerclage-pj-*.webp`, planche `planche-medaillons-pj.png`). La carte affiche l'image du PJ quand `color` est l'une des 5 teintes (`71c1008`). Une couleur inconnue garde le bronze teinté en repli. Dans l'outil MJ, un menu des 5 PJ remplace le champ hexa (`ebfcf3a`). Les PNJ utilisaient déjà tels quels les cerclages Magnific validés (étain, bronze, fer).
+
+**Recette du 06/11 dans le navigateur intégré (port 8771)** — vérifié :
+- carte connectée, « À poser (N) », pose depuis la réserve de la carte, pastilles « posé » ;
+- contact détecté → toast « les engager ? » → « Engager » crée la mêlée, et la carte trace le trait ;
+- médaillon Magnific d'Elysia chargé (`cerclage-pj-elysia.webp`), fer à pointes pour le gobelin ;
+- menu des 5 PJ dans le profil.
+
+Constats :
+- (a) les initiales d'« Elysia (test) » donnent « E( » ;
+- (b) le trait d'engagement passe par-dessus les médaillons et barre les initiales ;
+- (c) un participant « en attente » n'apparaît pas sur la piste ; seul « Faire entrer » le montre, d'où un doublon créé par erreur pendant la recette ;
+- (d) le menu de couleur n'a pas d'`aria-label`.
+
+**Non vérifié** :
+- la bande de portée préremplie (aucun tir disponible : une « Action improvisée » n'a pas de portée, il faut une arme à distance dans l'équipement) ;
+- U5 (barre de PV en aperçu), montures, Course.
+
+Données de test laissées en place : le profil « Elysia (test) », deux participants Elysia dans le combat local, et la carte « Ferme isolée » chargée dans la session Firebase 94SHD avec trois pions posés.
+
 Le tableau ci-dessous garde la trace des branches d'origine.
 
 ## Branches à fusionner (sur feu vert)
