@@ -2,7 +2,7 @@ import {participantCamp} from './encounters.js';
 /** Adaptateur du domaine divin : contrats canoniques, sources actuelles et commandes du Store. */
 import registry from '../data/v5-divine-contracts.json' with {type:'json'};
 import {getReferenceCatalogue} from './reference-catalog.js';
-import {readDivineRelics,previewDivineExecution,applyDivineExecution,expireDivineEffects,resolveSinAdjustmentCult,divineSinPolicy,wrathDeityRejections} from './v5-divine-engine.js';
+import {readDivineRelics,previewDivineExecution,applyDivineExecution,expireDivineEffects,resolveSinAdjustmentCult,divineSinPolicy,wrathDeityRejections,readPrayerModifiers} from './v5-divine-engine.js';
 import {calculateArmor,spellObjectChoices} from './equipment.js';
 import {refreshEffectLayers,rebaseMagicLayers} from './v5-magic-effects.js';
 import {uid,normalizeAction} from './models.js';
@@ -1088,7 +1088,11 @@ function calculateWrathRecovery(state,input){
  const relic=relicRead.relics[0]||null;
  let test,options;
  if(gmWrath){test={success:true,fumble:false,sl:0,roll:0,initialRoll:0,reversed:false,optionId:'gm'};options=[];}
- const prayerSheetModifiers=[...new Map([...magicSkillModifiers(actor,'Prière',{carac:'Soc'}),...magicSkillModifiers(actor,'Pray',{carac:'Soc'})].map(row=>[row.id,row])).values()];
+ // Mêmes clés et même cumul par Test résolu que le Test de Prière (Q10, Q13, Q15 du MJ) : « Prière », « Pray », « Sociabilité »,
+ // `carac:soc`… réunies en un seul Test ; les incidents de lancement visant la Prière s'y ajoutent.
+ const sheetPrayerModifiers=readPrayerModifiers(actor);
+ if(!gmWrath&&sheetPrayerModifiers===null)return failure('requires-input','Modificateur de Test de Prière invalide sur la fiche.',[{field:'actor.extensions.v5.testModifiers',label:'DR entiers issus des couches actives'}]);
+ const prayerSheetModifiers=[...(sheetPrayerModifiers||[]),...new Map([...magicSkillModifiers(actor,'Prière'),...magicSkillModifiers(actor,'Pray')].filter(row=>row.id.startsWith('miscast:')).map(row=>[row.id,row])).values()];
  if(!gmWrath)try{
   const preview=previewV5Test({score:effectiveSkillScore(actor,skills[0].total,'Soc'),roll:normalizeV5Roll(input.roll),kind:'test',
    slModifiers:[{id:rule.id+':recovery',label:'Prière de récupération',amount:rule.recovery.difficulty},...testContext.slModifiers,...modifiers.modifiers,...prayerSheetModifiers,...(relic&&!gmWrath?[{id:'relic:'+relic.id,label:'Relique : '+relic.label,amount:relic.prayerSL}]:[])],advantageSources:testContext.advantageSources,disadvantageSources:testContext.disadvantageSources});

@@ -110,6 +110,7 @@ export function applyArcaneArmorDamage(target, receipt) {
   for (const [loc, amount] of Object.entries(receipt.damageByLocation)) {
     v5.armorDamage[loc] = (v5.armorDamage[loc] || 0) + amount;
   }
-  next.armor = calculateEffectiveMagicAP(v5.baseArmor, v5.spellEffects || [], v5.armorDamage);
+  // PA des prières en groupe distinct, sommé à celui des sorts (MJ 06/11, Q14), comme recomputeLayerValues.
+  next.armor = calculateEffectiveMagicAP(v5.baseArmor, v5.spellEffects || [], v5.armorDamage, v5.divineEffects || []);
   return next;
 }

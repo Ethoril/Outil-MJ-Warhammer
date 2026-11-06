@@ -15,6 +15,9 @@ import { calculateEffectiveStats, calculateMagicApByLocation, calculateEffective
 import { getReferenceCatalogue } from '../../../js/core/reference-catalog.js';
 import { combineEffects } from '../../../js/core/effect-engine.js';
 import { finalizeDivineState } from '../../../js/core/v5-divine-store.js';
+import { psychologyTraits } from '../../../js/core/creature-psychology.js';
+import { magicWeaponBonus } from '../../../js/core/v5-magic-combat.js';
+import { applyArcaneArmorDamage } from '../../../js/core/v5-magic-arcane-unforgiving.js';
 
 const spellLayer = (id, testModifiers) => ({ id, spellId: 'spell-' + id, spellName: id, casterId: 'caster-' + id, testModifiers });
 const prayerLayer = (id, testModifiers) => ({ id, type: 'test-modifier', testModifiers });
@@ -65,6 +68,26 @@ test('Q14 PA d\'un sort et d\'une prière sur la même localisation : somme, mei
   const prayers = [{ id: 'p1', type: 'armor-bonus', apModifiers: { all: 1 } }];
   assert.equal(calculateMagicApByLocation(spells, prayers).body, 3);
   assert.equal(calculateEffectiveMagicAP({ body: 1 }, spells, {}, prayers).body, 4);
+});
+
+test('Q17 deux Traits identiques à valeur (Peur (2) et Peur (3)) : la plus haute est gardée, quel que soit l\'ordre', () => {
+  for (const traits of [['Peur (2)', 'Peur (3)'], ['Peur (3)', 'Peur (2)']]) {
+    const fear = psychologyTraits({ traits }).filter(trait => trait.key === 'fear');
+    assert.equal(fear.length, 1);
+    assert.equal(Number.parseInt(fear[0].detail, 10), 3, JSON.stringify(fear));
+  }
+});
+
+test('Q18 deux remplacements du bonus de dégâts (sort et prière) : le plus haut est gardé', () => {
+  const actor = { extensions: { v5: { weaponBonuses: [{ effectId: 's', replaceDamageBonus: 4 }, { effectId: 'd', divineEffectId: 'd', replaceDamageBonus: 6 }] } } };
+  assert.equal(magicWeaponBonus(actor, { id: 'w', type: 'attack' }, false, 3), 3, 'remplacement 6 contre une base de 3');
+});
+
+test('Q14 Arcanes impitoyables : les PA recalculés après dégradation gardent les prières, en groupe sommé aux sorts', () => {
+  const target = { id: 't', armor: { body: 2 }, extensions: { v5: { baseArmor: { head: 0, body: 2, leftArm: 0, rightArm: 0, leftLeg: 0, rightLeg: 0 },
+    spellEffects: [{ id: 's', casterId: 'x', apModifiers: { body: 1 } }], divineEffects: [{ id: 'p', type: 'armor-bonus', apModifiers: { body: 2 } }] } } };
+  const next = applyArcaneArmorDamage(target, { destroyedAp: 1, damageByLocation: { body: 1 } });
+  assert.equal(next.armor.body, 2 + 1 + 2 - 1);
 });
 
 test('Q16 clé « … adverse » du porteur et sort posé sur l\'opposant, même Test : les deux se somment', () => {
