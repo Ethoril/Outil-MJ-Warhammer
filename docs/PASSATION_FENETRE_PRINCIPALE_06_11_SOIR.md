@@ -46,11 +46,21 @@ Les règles de travail ne changent pas :
 - Les données de test sont nettoyées : combat local vide, profil « Elysia (test) » supprimé, aucun pion sur la carte 94SHD (« Ferme isolée » reste chargée). La session KM73Z n'a jamais reçu de contenu ; ce n'est pas vérifiable sans la console Firebase.
 - **Incident** : `git worktree remove --force` a vidé le `node_modules` du dépôt principal. Des worktrees y étaient reliés par jonction, et la suppression a suivi la jonction. Il a été restauré par `npm ci`. **Désormais : chercher les jonctions avant toute suppression, et chaque fenêtre fait son propre `npm ci`, sans jonction.**
 
+## Fait le 06/11 en fin de soirée (fenêtres parallèles, tout fusionné, rien poussé)
+
+- **Pose armée** : recette conforme après correctif. Map Display `55fdccb` sur `feat/liaison-outil-mj` : la monture d'une paire montée est masquée de la réserve, le panneau montre « Cavalier — … » puis « Monture — … », et les badges du cavalier passent d'abord. Le badge ambre d'un état de la monture seule n'a pas été vu en monté, car « À terre » sur la monture fait démonter (`v5-mounted-combat.js:156`).
+- **Démontage** : le Cheval reste sur le plateau et le cavalier **retourne en réserve**. Reste à décider s'il doit plutôt rester posé à côté de sa monture.
+- **Terminer le combat** : de retour dans les outils de séance, avec une confirmation (`4c83595`).
+- **Armes L12 en français** (`claude/armes-l12-fr`, fusionné) : table `js/data/weapon-names-fr.js`, arbitrages du MJ (Cimeterre ; tout traduire). Le nom anglais est gardé dans `extensions.v5.sourceName`.
+- **`lot3-v5-magic-2b-ui`** passe de 103 s à 52 s. `browser-index` a passé 10 fois sur 10.
+- **Course par glisser** : décision du MJ, voir le point 3 ci-dessous.
+- **Navigateur intégré** : les anciennes sessions de cartes sont retirées et le « Autres MJ » fantôme a disparu.
+
 ## Restent ouverts
 
 1. **Pose armée** d'une paire cavalier-monture depuis la réserve de la carte : à tester.
 2. **Map Display, pion monté** : le pion montre les états de la monture (icône À terre du Gobelin Coureur), alors que son panneau montre le cavalier. Le MJ l'a remarqué : le panneau devrait dire quel combattant il montre, ou montrer les deux. La monture apparaît aussi dans la réserve de la carte.
-3. **Course par glisser-déposer** : le glisser du pion par le MJ n'envoie pas `map.ran`. Décider si c'est voulu (placement libre du MJ) ou à aligner sur le déplacement en deux clics.
+3. **Course par glisser-déposer** : le glisser du pion par le MJ n'envoie pas `map.ran`. **Décision du MJ (06/11 soir) : voulu.** Le glisser du MJ est un placement libre et ne compte jamais comme Course.
 4. **Libellés anglais** des armes des profils L12 (« Sword », « Bow ») dans le panneau d'action.
 5. **« Terminer le combat »** : le bouton n'existe plus que dans l'ancien panneau masqué (`#btn-end-combat`). Pour vider un combat, il faut retirer les participants un à un.
 6. **À surveiller** : `lot3-v5-magic-2b-ui` prend 103 s, près de la limite de 120 s. `browser-index` a été stabilisé, mais sans preuve absolue (point ci-dessus).
