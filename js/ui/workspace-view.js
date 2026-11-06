@@ -1934,8 +1934,12 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
           // U8 Q19 : les questions d'États restées sans réponse (Brisé, Enchevêtré, À terre, Aveuglé, Souillé), posées par le panneau.
           // Sans réponse, ces États ne pèsent pas en magie, comme avant.
           if (draft.preview) {
-            try { draft.preview.conditionNeeds = prepareMagicOptions(context.actor, context.type === 'cast' ? 'casting' : context.type, { conditionContext: draft.magicConditionContext || {} }).conditionNeeds || []; }
-            catch { draft.preview.conditionNeeds = []; }
+            try {
+              const states = prepareMagicOptions(context.actor, context.type === 'cast' ? 'casting' : context.type, { conditionContext: draft.magicConditionContext || {} });
+              draft.preview.conditionNeeds = states.conditionNeeds || [];
+              draft.preview.conditionDisadvantages = states.disadvantageSources || [];
+              draft.preview.conditionModifiers = states.slModifiers || [];
+            } catch { draft.preview.conditionNeeds = []; draft.preview.conditionDisadvantages = []; draft.preview.conditionModifiers = []; }
           }
         } catch (error) {
           draft.preview = null;

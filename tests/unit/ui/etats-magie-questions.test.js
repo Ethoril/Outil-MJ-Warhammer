@@ -54,3 +54,28 @@ test('États mixtes : la question du mode a ses deux réponses, À terre en Dés
   assert.equal(penalty(prepareMagicOptions(mage(states), 'dispel', { conditionContext: { ...ctx, conditionPenaltyMode: 'sl' } })), -1);
   assert.equal(penalty(prepareMagicOptions(mage(states), 'dispel', { conditionContext: { ...ctx, conditionPenaltyMode: 'disadvantage' } })), 0);
 });
+
+test('recette 06/11 : la question répondue reste visible avec sa réponse, et le détail montre le Désavantage « À terre »', async () => {
+  const { visibleConditionQuestions, conditionDetailLines } = await import('../../../js/ui/resolution-panel/condition-questions.js');
+  const actor = mage([{ key: 'aterre', name: 'À terre', level: 1 }]);
+  const open = prepareMagicOptions(actor, 'casting', { conditionContext: {} });
+  assert.deepEqual(visibleConditionQuestions(open.conditionNeeds, {}).map(q => q.field), ['involvesMovement']);
+  const answered = prepareMagicOptions(actor, 'casting', { conditionContext: { involvesMovement: true } });
+  assert.deepEqual(answered.conditionNeeds, []);
+  assert.deepEqual(visibleConditionQuestions(answered.conditionNeeds, { involvesMovement: true }).map(q => q.field), ['involvesMovement']);
+  fakeDom();
+  try {
+    const calls = [];
+    const box = renderConditionQuestions({ conditionNeeds: [] }, { magicConditionContext: { involvesMovement: true } }, { select: p => calls.push(p), calculate: () => calls.push('calc') });
+    const select = box.children[0].children[0];
+    assert.equal(select.value, 'true');
+    select.value = '';
+    select.listeners.change();
+    assert.deepEqual(calls, [{ magicConditionContext: { involvesMovement: undefined } }, 'calc']);
+  } finally { cleanDom(); }
+  const lines = conditionDetailLines({ conditionDisadvantages: answered.disadvantageSources, conditionModifiers: answered.slModifiers });
+  assert.equal(lines.length, 1);
+  assert.match(lines[0], /^Désavantage : .*terre/i);
+  const pen = conditionDetailLines({ conditionModifiers: [{ id: 'magic-condition-penalty', label: 'Pénalité d’État', amount: -2 }] });
+  assert.deepEqual(pen, ['Pénalité d’État (État) : −2 DR']);
+});
