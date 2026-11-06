@@ -4,6 +4,10 @@ Travail de nuit en autonomie, sur feu vert du MJ. **Fusionné sur feu vert du MJ
 
 **Décisions du MJ du 06/11** : deux prières différentes sur un même Test → meilleur bonus et pire pénalité, comme les sorts (le groupe des prières et celui des sorts se somment, Q2) ; débord des ornements gardé ; mots-clés incomplets écartés et signalés ; la monture d'un PJ prend la teinte de son cavalier, sauf `tokenColor` propre. **À confirmer** : une même couche (sort ou prière) qui porte deux clés visant le même Test (Charme +2 et Tous les Tests +1) compte pour une seule source, et ses clés s'additionnent (+3). C'est ce qu'attendait un test existant ; R3 vise plusieurs sorts, pas les clés d'un même effet.
 
+**Suite de la nuit** : U8 L2 (`cf05aff`, moteur pur `effect-engine.js`) et U8 L3 (`ddd4fbe`, adaptateur des couches, `buildCombatTest` via `collectTestEffects`, Q2 sur les caractéristiques, DIV-05 lu dans la table du moteur, Test de prière par Test résolu) sont fusionnés, ainsi que le précache de `effect-engine.js` (`dcd7042`). Réponses Q10 à Q13 du MJ dans `docs/PLAN_CHANTIERS_PARALLELES_05_11.md`. Suite complète après L3 : 5 715 tests, seuls les 4 audits Windows échouent (avant le correctif du précache, `sw.js` échouait aussi ; ses 21 tests sont verts depuis), 1 todo (Q5). Parcours navigateur : `browser-startup` et `browser-keywords` verts ; `browser-magic-v5-smoke` et `browser-workspace` dépassent `timeout 120`, **déjà avant L3** (vérifié sur la tête de L2) : à trier.
+
+**Questions U8 ouvertes (après L3)** : (1) Q2 vaut-il aussi pour PA, bonus d'arme et Traits identiques entre prière et sort ? La pose reste refusée pour l'instant. (2) Le Test de Prière doit-il lire aussi `carac:soc` / « Sociabilité » ? (3) Une clé « … adverse » du porteur et un sort posé sur l'opposant, même Test : meilleur bonus entre les deux, ou somme (actuel) ? Ménage possible : `resolvedMagicTestModifiers` n'est plus appelé que par les tests. Reste du plan U8 : L4, L5a-c, L5z (voir `tasks.md`).
+
 Le tableau ci-dessous garde la trace des branches d'origine.
 
 ## Branches à fusionner (sur feu vert)
