@@ -1518,7 +1518,7 @@ test('les jets hors d100 et les extensions au-delà des DR sont rejetés; le Pé
   assert.equal(highSin.preview.wrath.outcome.id, 'wrath:151-plus');
 });
 
-test('DIV-05 bloque le même bonus stat divin+magique et le cumul PA au calcul Store', () => {
+test('DIV-05 : même bonus de caractéristique divin+magique sommé (Q2 du MJ), cumul de PA toujours bloqué au calcul Store', () => {
   const priest = { id: 'priest', zone: 'active', skills: [{ name: 'Prière', status: 'resolved', total: 60 }],
     caracs: { Soc: 60 }, talents: [{ id: 'talent-bless', status: 'resolved', rank: 1, specialization: 'Myrmidia' }],
     extensions: { v5: { divine: { sin: 0 } } } };
@@ -1527,8 +1527,7 @@ test('DIV-05 bloque le même bonus stat divin+magique et le cumul PA au calcul S
   const battle = previewStoreDivine(battleState, battleId, { actorId: 'priest', targetIds: ['ally'], canSpeak: true,
     roll: 23, choices: { range: 0, targets: 0, duration: 0 }, expiry: { phase: 'endOfRound', round: 6 },
     facts: { targets: { ally: { withinRange: true } } } });
-  assert.equal(battle.ready, false);
-  assert.match(battle.error, /DIV-05/);
+  assert.equal(battle.ready, true, battle.error);
 
   const invoker = { ...priest, talents: [{ id: 'talent-invoke', status: 'resolved', rank: 1, specialization: 'Myrmidia' }],
     prayers: [{ name: contract(shieldId).catalogueName }] };

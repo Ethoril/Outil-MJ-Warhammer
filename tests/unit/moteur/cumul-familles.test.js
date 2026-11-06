@@ -14,6 +14,7 @@ import { magicSkillModifiers, magicAdverseModifiers, collectTestEffects } from '
 import { calculateEffectiveStats } from '../../../js/core/v5-magic-effects.js';
 import { getReferenceCatalogue } from '../../../js/core/reference-catalog.js';
 import { combineEffects } from '../../../js/core/effect-engine.js';
+import { finalizeDivineState } from '../../../js/core/v5-divine-store.js';
 
 const spellLayer = (id, testModifiers) => ({ id, spellId: 'spell-' + id, spellName: id, casterId: 'caster-' + id, testModifiers });
 const prayerLayer = (id, testModifiers) => ({ id, type: 'test-modifier', testModifiers });
@@ -44,12 +45,20 @@ test('Q2 prière et sort sur le même Test, clés différentes : somme (+2 et +2
   assert.equal(sum(magicSkillModifiers(holder, 'Résistance', { carac: 'E' })), 4);
 });
 
-test.todo('Q2 prière et sort sur la même caractéristique : somme, E 30 + 10 (sort) + 10 (prière) = 50 (aujourd\'hui 40, meilleur bonus commun)', () => {
-  const stats = calculateEffectiveStats({ E: 30 }, [{ id: 's', casterId: 'x', statModifiers: { E: 10 } }, { id: 'p', type: 'characteristic-modifier', statModifiers: { E: 10 } }]);
+// Lot L3 : sorts et prières passés en deux groupes (spellEffects, divineEffects), comme dans recomputeLayerValues.
+test('Q2 prière et sort sur la même caractéristique : somme, E 30 + 10 (sort) + 10 (prière) = 50', () => {
+  const stats = calculateEffectiveStats({ E: 30 }, [{ id: 's', casterId: 'x', statModifiers: { E: 10 } }], [{ id: 'p', type: 'characteristic-modifier', statModifiers: { E: 10 } }]);
   assert.equal(stats.E, 50);
 });
 
-test.todo('Q2 la pose d\'une prière sur un sort de même clé n\'est plus refusée (DIV-05) : somme attendue (aujourd\'hui refus à la pose, v5-divine-store.js)');
+test('Q2 la pose d\'une prière sur un sort de même clé n\'est plus refusée (DIV-05 lu dans la table du moteur)', () => {
+  const state = (divine, spell) => ({ combat: { participants: [{ id: 'p', zone: 'active', extensions: { v5: { divineEffects: [{ id: 'd', ...divine }], spellEffects: [{ id: 's', ...spell }] } } }] } });
+  const same = state({ testModifiers: { 'Résistance': 1 }, statModifiers: { E: 10 } }, { testModifiers: { 'Résistance': 1 }, statModifiers: { E: 10 } });
+  assert.doesNotThrow(() => finalizeDivineState(same, structuredClone(same)));
+  // Hors Q2 (Traits identiques) : toujours à arbitrer.
+  const traits = state({ traits: ['Peur (1)'] }, { traits: ['Peur (1)'] });
+  assert.throws(() => finalizeDivineState(traits, structuredClone(traits)), /DIV-05/);
+});
 
 // Arbitrage du MJ du 06/11 : deux prières différentes suivent la règle des sorts, meilleur bonus et pire pénalité par Test résolu.
 test('MJ 06/11 deux prières différentes, clés différentes, même Test : meilleur bonus et pire pénalité (+2, +1, -1, -2 donnent 0)', () => {

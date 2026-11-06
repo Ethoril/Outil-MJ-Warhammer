@@ -197,10 +197,10 @@ test('perSuccessLevels {every, add, field} et strengthFrom résolus à l’aper�
   assert.equal(person(store, 'ally').states.find(row => row.key === 'aveugle').level, 6);
 });
 
-test('garde DIV-05 : un modificateur de Test divin et magique sur la même cible est refusé', () => {
+test('garde DIV-05 levée par Q2 du MJ : un modificateur de Test divin et magique sur la même cible se somme', () => {
   const participant = divine => ({ id: 'p', zone: 'active', extensions: { v5: { divineEffects: [{ id: 'd', testModifiers: divine }], spellEffects: [{ id: 's', testModifiers: { all: 5 } }] } } });
   const state = divine => ({ combat: { participants: [participant(divine)] } });
-  assert.throws(() => finalizeDivineState(state({ all: 10 }), state({ all: 10 })), /DIV-05/);
+  assert.doesNotThrow(() => finalizeDivineState(state({ all: 10 }), state({ all: 10 })));
   assert.doesNotThrow(() => finalizeDivineState(state({ Athlétisme: 10 }), state({ Athlétisme: 10 })));
 });
 

@@ -5,7 +5,7 @@
 //  R2 p.130 « Advantage and Disadvantage » : Avantage et Désavantage s'annulent un pour un ; chaque source d'Avantage après la première donne +1 SL (Désavantage : -1 SL).
 //  R3 p.235 « Duration » : quand des Sorts donnent des bonus ou des pénalités, seuls le meilleur bonus et la pire pénalité s'appliquent à la cible ; ils ne se cumulent pas.
 //  R4 p.217 « Prayers » : plusieurs invocations d'une même prière par des personnes différentes ne donnent pas de bonus cumulés.
-//  Non couvert par le livre : cumul d'une prière et d'un sort sur la même cible de Test (le code le laisse « à arbitrer », DIV-05).
+//  Non couvert par le livre : cumul d'une prière et d'un sort sur la même cible de Test ; arbitré par le MJ (Q2, 05/11) : somme.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createStore } from '../../../js/core/store.js';
