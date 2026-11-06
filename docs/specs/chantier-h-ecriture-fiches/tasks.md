@@ -55,5 +55,5 @@ Chaque tâche est un lot en **fenêtre secondaire**, sur **un seul dépôt**, da
   - Acceptation : `node --test tests/fiche-writeback.test.mjs`.
 
 - [ ] **T9 · O · Contre-vérification, recette prod et publication** — après : T5, T8
-  - Vérificateurs indépendants ; suite complète à la fusion ; recette CA24 sur `ethoril.github.io` (fiche `test`, ou un PJ réel avec l'accord du MJ) ; publication **sur feu vert du MJ** ; mise à jour de `docs/VARIABLES_PERSISTANTES_PJ.md` (colonne « écrit vers la fiche »).
+  - Vérificateurs indépendants ; suite complète à la fusion ; recette CA24 sur `ethoril.github.io` (un vrai PJ, Fortune +1 puis annulation, avec l'accord du MJ le jour de la recette) ; publication **sur feu vert du MJ** ; mise à jour de `docs/VARIABLES_PERSISTANTES_PJ.md` (colonne « écrit vers la fiche »).
   - Critères : CA24, puis tous les CA par le `verifier`.

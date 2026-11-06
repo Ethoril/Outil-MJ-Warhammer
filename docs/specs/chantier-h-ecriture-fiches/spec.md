@@ -12,7 +12,10 @@ Cadrage du 06/11/2026, à partir de `docs/PASSATION_CHANTIER_H.md` (`f842490`). 
 | Q4 | Blessures courantes | **Outil seul.** La fiche a bien un champ « Blessures actuelles » (`blessuresAct`, tenu par le joueur, contrairement à ce que disait la passation) ; l'outil ne l'écrit pas. Choix confirmé par le MJ après correction. |
 | Q5 | Annulation | **Commande inverse** : « Annuler le dernier envoi » renvoie les anciennes valeurs, refusé champ par champ si la fiche a changé depuis. Possible jusqu'à l'envoi suivant. |
 | Q6 | Visibilité | Le joueur lit **tout** le document de sa fiche, historique compris (`firestore.rules`, `canReadFiche`). Donc **aucune donnée réservée au MJ n'est jamais écrite sur la fiche**, ni dans un motif d'opération. |
-| Q7 | Tests | **Émulateur + recette prod** : la fonction sous tests et émulateur, l'outil sur une fonction simulée, puis une recette réelle sur `ethoril.github.io` avec la fiche `test`. |
+| Q7 | Tests | **Émulateur + recette prod** : la fonction sous tests et émulateur, l'outil sur une fonction simulée, puis une recette réelle sur `ethoril.github.io` sur **un vrai PJ** (Fortune +1 puis annulation), avec l'accord du MJ le jour de la recette ; pas de code pour lier la fiche `test` (précision du 06/11 soir). |
+| Q8 | Perte de caractéristique par séquelle | **Base seulement** sur la fiche : les Avances ne bougent pas, pour ne pas baisser le coût en XP de l'Avance suivante (06/11 soir). |
+| Q9 | Résilience | **Aucune.** La V5 n'a plus de Résilience ; le familier se paie en Destin, dans l'outil aussi (`js/core/familiars.js`). Rien à écrire (06/11 soir). |
+| Q10 | Envoi partiel, annulation, conflit sur une perte | « Annuler le dernier envoi » ne vise que les fiches réellement écrites ; une annulation ne s'annule pas ; « Garder la fiche » sur une perte de caractéristique ne touche pas la séquelle dans l'outil, seule la valeur à envoyer s'aligne sur la fiche (06/11 soir). |
 
 ## Constats dans le dépôt des fiches (lecture seule, `e6bc651`)
 
@@ -38,17 +41,17 @@ Cadrage du 06/11/2026, à partir de `docs/PASSATION_CHANTIER_H.md` (`f842490`). 
 
 ### S3 · Conflits
 - **CA10** · Étant donné un champ que le joueur a modifié depuis la dernière lecture par l'outil, quand le MJ envoie une valeur différente, alors la fiche refuse l'envoi de cette fiche sans rien écrire, et l'outil affiche ce champ avec la valeur actuelle de la fiche et celle de l'outil.
-- **CA11** · Pour chaque champ en conflit, le MJ choisit « Garder la fiche » (l'outil reprend la valeur de la fiche) ou « Imposer l'outil » ; il renvoie ensuite. Les autres fiches de l'envoi ne sont pas bloquées par ce conflit.
+- **CA11** · Pour chaque champ en conflit, le MJ choisit « Garder la fiche » (l'outil reprend la valeur de la fiche) ou « Imposer l'outil » ; il renvoie ensuite. Les autres fiches de l'envoi ne sont pas bloquées par ce conflit. « Garder la fiche » sur une perte de caractéristique ne modifie pas la séquelle enregistrée dans l'outil : seule la valeur à envoyer s'aligne sur la fiche, et la différence ne revient plus.
 - **CA12** · Si la fiche porte déjà la valeur que l'outil veut écrire (correction faite à la main, par exemple une perte de caractéristique), ce n'est pas un conflit et rien n'est écrit deux fois.
 
 ### S4 · Annuler le dernier envoi
-- **CA13** · Après un envoi, « Annuler le dernier envoi » rétablit sur chaque fiche les valeurs d'avant, en une opération par fiche liée à l'envoi annulé.
+- **CA13** · Après un envoi, « Annuler le dernier envoi » rétablit sur chaque fiche les valeurs d'avant, en une opération par fiche liée à l'envoi annulé. Seules les fiches réellement écrites par cet envoi sont visées ; une fiche restée en conflit ou décochée n'en fait pas partie.
 - **CA14** · Un champ modifié sur la fiche depuis l'envoi est un conflit (même traitement que CA10–CA11).
-- **CA15** · L'annulation n'est plus proposée après un nouvel envoi ; elle ne touche pas l'état de l'outil.
+- **CA15** · L'annulation n'est plus proposée après un nouvel envoi ; elle ne touche pas l'état de l'outil. Une annulation ne s'annule pas : la fonction refuse un `undoOf` qui désigne lui-même une annulation.
 
 ### S5 · Valeurs que la fiche porte déjà
 - **CA16** · Destin, Fortune, Péché et Corruption modifiés en jeu partent vers `destin`, `fortune`, `peche`, `corruption`.
-- **CA17** · Une perte de caractéristique par séquelle part vers la caractéristique de la fiche, Base d'abord puis Avances, selon la répartition faite dans l'outil.
+- **CA17** · Une perte de caractéristique par séquelle part vers la **Base** de la caractéristique de la fiche, pour son total ; les Avances de la fiche ne changent jamais (Q8). Une perte supérieure à la Base est montrée « à faire à la main », jamais reportée sur les Avances.
 - **CA18** · Une excommunication ou un rejet définitif retire de la fiche les talents Béni/Invocation du culte et met à zéro les Avances de Prière ; un réimport ultérieur ne les rétablit pas.
 - **CA19** · Un objet retenu par le Courroux est retiré de l'équipement de la fiche ; rendu par une pénitence, il y revient à l'identique ; un ancien import ne le recrée jamais.
 
@@ -59,7 +62,7 @@ Cadrage du 06/11/2026, à partir de `docs/PASSATION_CHANTIER_H.md` (`f842490`). 
 - **CA23** · Le délai secret de mutation, les mutations en attente non confirmées, la perte de personnage à arbitrer et tout champ réservé au MJ n'atteignent jamais la fiche : la fonction refuse toute clé hors de la liste autorisée.
 
 ### S7 · Recette
-- **CA24** · Sur `ethoril.github.io`, avec App Check actif, le MJ envoie puis annule un changement sur la fiche `test`, et l'historique de la fiche montre les deux opérations.
+- **CA24** · Sur `ethoril.github.io`, avec App Check actif, le MJ envoie puis annule un changement sur un vrai PJ (Fortune +1), avec son accord le jour de la recette, et l'historique de la fiche montre les deux opérations.
 
 ## Hors périmètre
 - Écrire les Blessures courantes (`blessuresAct`) — décision Q4.

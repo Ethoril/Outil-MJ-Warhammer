@@ -23,7 +23,8 @@ payload = {
 }
 Change (clés fermées, toute autre clé est refusée — CA23) :
   { op:'counter',   field:'fortune'|'destin'|'peche'|'corruption', base:string|null, value:string, label }
-  { op:'carac',     carac:'cc'|'ct'|'f'|'e'|'i'|'ag'|'dex'|'int'|'fm'|'soc', base:{base,adv}, value:{base,adv}, label }
+  { op:'carac',     carac:'cc'|'ct'|'f'|'e'|'i'|'ag'|'dex'|'int'|'fm'|'soc', base:int, value:int, label }
+                    // Base seulement (Q8) : carac.<x>.base ; carac.<x>.adv n'est jamais touché
   { op:'skill-adv', id, base:int, value:int, label }                          // Avances de Prière
   { op:'row',       collection:'talentsAcq'|'equipment', id, base:objet|null, value:objet|null, label }
                     // retrait : value null ; restitution : base null ; ligne entière comparée
@@ -39,7 +40,7 @@ label : provenance lisible (≤200), recopiée dans l'historique (CA2, CA9)
 
 **Historique** : `history/<operationId>` reçoit `type:'outil-mj'`, `reason`, `summary { kind:'outil-mj', label, undoOf? }` et `changes { clé: { before, after } }`, comme un `patch` (CA9). Rien de réservé au MJ n'y entre, puisque le payload n'en accepte pas.
 
-**Annulation** (CA13–CA15) : c'est une commande `outil-mj` ordinaire, `undoOf` renseigné, chaque change inversé (`base` ↔ `value`). Un champ modifié depuis l'envoi tombe dans le conflit normal (CA14). La fonction vérifie seulement que `undoOf` désigne une opération `outil-mj` de la même fiche.
+**Annulation** (CA13–CA15) : c'est une commande `outil-mj` ordinaire, `undoOf` renseigné, chaque change inversé (`base` ↔ `value`). Un champ modifié depuis l'envoi tombe dans le conflit normal (CA14). La fonction vérifie que `undoOf` désigne une opération `outil-mj` de la même fiche **qui n'est pas elle-même une annulation** (CA15). L'outil n'envoie d'annulation que pour les fiches écrites par le dernier envoi (CA13).
 
 ## 2. Tri des variables (outil → fiche)
 
@@ -49,7 +50,7 @@ label : provenance lisible (≤200), recopiée dans l'historique (CA2, CA9)
 | A | `characterResources[].fortune` (clé `characterId`) | `counter fortune` |
 | A | `extensions.v5.divine.sin` | `counter peche` |
 | A | `extensions.v5.corruptionPoints` | `counter corruption` |
-| A | `aftermathRegister.sequelae[]` `characteristic-loss` (répartition `split`) et pertes permanentes déduites (`sequelaCharacteristicTotals`, `lifetime` permanent seulement) | `carac` |
+| A | `aftermathRegister.sequelae[]` `characteristic-loss` et pertes permanentes déduites (`sequelaCharacteristicTotals`, `lifetime` permanent seulement), **total de la perte, sans tenir compte de la répartition `split`** | `carac` (Base seulement, Q8) |
 | B | `divineRejections[].prayLoss` (Avances de Prière à zéro) | `skill-adv` |
 | B | `divineRejections[].removedTalents` (Béni / Invocation du culte) | `row talentsAcq` (retrait) |
 | B | `divineConfiscations[]` retenu / rendu | `row equipment` (retrait / restitution de la copie conservée) |
@@ -99,5 +100,5 @@ Tests ciblés par lot ; suite complète de chaque dépôt à la fusion seulement
 - **Talents retirés et journal d'XP** (lot fiches B) : retirer une ligne de `talentsAcq` hors d'une annulation d'achat ne doit ni rembourser l'XP ni permettre ensuite un `cancel` de l'achat ; à vérifier dans `xp.js` et `cancel()` avant de coder.
 - **Identifiants de fiche dans l'outil** (lot outil B) : talents, équipement et Prière doivent porter l'`id` de la ligne de fiche ; une ligne sans `id` sûr est montrée « à faire à la main » dans l'aperçu, jamais rapprochée par nom.
 - **App Check sous émulateur** : si l'émulateur de Functions l'impose, le test de bout en bout passe par le gestionnaire (`createFicheCommandHandler`) et la recette prod couvre App Check.
-- **Résilience** : la fiche V5 n'expose plus `resilience` en modification ; le débit de Résilience d'un familier n'est pas renvoyé, sauf avis contraire du MJ.
-- **Fiche `test` en recette** : l'outil ne lit que les 5 fiches de PJ. Si la lier coûte du code, la recette se fait sur un vrai PJ (Fortune +1 puis annulation), avec l'accord du MJ au moment de la recette.
+- **Caractéristiques et XP** : levé par Q8. La perte ne touche que la Base, donc ni le coût des Avances ni le journal d'XP ne bougent. Pour mémoire, `cancel()` (`js/fiche/commands.js`) refuse déjà d'annuler un achat dont la donnée a changé.
+- Résilience (sans objet, Q9) et fiche `test` (recette sur un vrai PJ, Q7) : tranchés le 06/11 soir.
