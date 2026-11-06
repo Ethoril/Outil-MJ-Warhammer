@@ -2,6 +2,7 @@
 // La réponse part dans `draft.magicConditionContext` (mêmes champs que le combat : involvesMovement, runningOrHiding, reliesOnSight,
 // usesFellowship, conditionPenaltyMode) et le Test se recalcule. Sans réponse, ces États ne pèsent pas en magie.
 import { node } from './dom.js';
+import { modifierLines } from './modifiers.js';
 import { CONDITION_QUESTIONS } from '../../core/condition-effects.js';
 
 const MIXED_QUESTION = 'États de pénalités différentes : choisir les DR ou le Désavantage retenu par le MJ.';
@@ -14,11 +15,35 @@ export function conditionQuestions(needs = []) {
     : text === MIXED_QUESTION ? [{ field: 'conditionPenaltyMode', text, kind: 'mode' }] : []);
 }
 
+const FIELD_TEXT = new Map([...[...BOOLEAN_FIELDS].map(([text, field]) => [field, text]), ['conditionPenaltyMode', MIXED_QUESTION]]);
+
+/** Questions ouvertes (`conditionNeeds`) puis celles déjà répondues (`magicConditionContext`), pour que le MJ puisse revenir sur sa réponse. */
+export function visibleConditionQuestions(needs = [], context = {}) {
+  const open = conditionQuestions(needs), seen = new Set(open.map(q => q.field));
+  const answered = conditionQuestions([...FIELD_TEXT].filter(([field]) => !seen.has(field) && context?.[field] != null).map(([, text]) => text));
+  return [...open, ...answered];
+}
+
+/** Lignes du détail des États appliqués à un Test de magie : `Désavantage : À terre`, pénalité d'État (même format que le combat). */
+export function conditionDetailLines(preview) {
+  const penalties = (preview?.conditionModifiers || []).filter(row => row.id === 'magic-condition-penalty');
+  return [...(preview?.conditionDisadvantages || []).map(row => `Désavantage : ${row.label}`),
+    ...modifierLines(penalties).map(line => line.text)];
+}
+
+export function renderConditionDetail(preview) {
+  const lines = conditionDetailLines(preview);
+  if (!lines.length) return null;
+  const box = node('div', 'workspace-condition-detail');
+  for (const text of lines) box.append(node('p', 'workspace-formula-notes', text));
+  return box;
+}
+
 export function renderConditionQuestions(preview, draft, handlers) {
-  const questions = conditionQuestions(preview?.conditionNeeds);
+  const current = draft.magicConditionContext || {};
+  const questions = visibleConditionQuestions(preview?.conditionNeeds, current);
   if (!questions.length) return null;
   const box = node('div', 'workspace-condition-questions');
-  const current = draft.magicConditionContext || {};
   for (const question of questions) {
     const label = node('label', 'workspace-type', question.text), select = document.createElement('select');
     select.setAttribute('aria-label', question.text);

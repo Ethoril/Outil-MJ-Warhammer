@@ -1,5 +1,5 @@
 import { node, rubric, outcomePill, signed, isMiscastDistanceD100 } from './dom.js';
-import { renderConditionQuestions } from './condition-questions.js';
+import { renderConditionQuestions, renderConditionDetail } from './condition-questions.js';
 import { getSpellContract, getAllSpellContracts, getContractChoiceOptions } from '../../core/v5-spell-contracts.js';
 import { getChannellingReserve } from '../../core/v5-magic-channelling.js';
 import { renderMagicControls, renderSpellRecipientControls } from '../v5-magic-controls.js';
@@ -515,6 +515,8 @@ export function renderV5MagicResult(preview, target, draft, handlers) {
 
   const conditionBox = renderConditionQuestions(preview, draft, handlers);
   if (conditionBox) result.appendChild(conditionBox);
+  const conditionDetail = renderConditionDetail(preview);
+  if (conditionDetail) result.appendChild(conditionDetail);
   if(preview.error&&preview.v5MagicKind!=='dispel')result.appendChild(node('p','workspace-result-line',preview.error));
   if (preview.v5MagicKind === 'dispel') {
     const dispelReason=preview.reason||preview.error;
