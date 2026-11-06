@@ -1551,6 +1551,8 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     status: 'preview',
     ruleVersion: V5_COMBAT_RULE_VERSION,
     test: actorTest,
+    ...(actorPlan.droppedModifiers?.length ? { droppedModifiers: actorPlan.droppedModifiers } : {}),
+    ...(defenderPlan?.droppedModifiers?.length ? { defenderDroppedModifiers: defenderPlan.droppedModifiers } : {}),
     ...(slExtreme ? { slExtreme } : {}),
     defenderTest,
     momentum,

@@ -1,6 +1,7 @@
 import { node, button, rubric, outcomePill, signed, minusSigned } from './dom.js';
 import { renderV5Decisions, renderCritical, criticalEffectLine } from './critical.js';
 import { renderV5MagicResult } from './magic.js';
+import { renderModifierLines } from './modifiers.js';
 import { formatDamageFormula, previewHpLoss } from '../../core/resolution.js';
 import { describeWeaponCondition } from '../../core/resolution/describe.js';
 import { getReferenceCatalogue } from '../../core/reference-catalog.js';
@@ -275,11 +276,11 @@ export function renderResult(preview, target, draft, handlers, participants=[]) 
   if (preview.defenderCritical) result.appendChild(renderCritical(preview, draft, handlers, true));
   const calculations = node('details', 'workspace-v5-calculations');
   calculations.appendChild(node('summary', '', 'Détail des calculs et règles'));
-  for (const [name, test] of [['Attaque / Test', preview.test], ['Défense', preview.defenderTest]]) {
+  for (const [name, test, dropped] of [['Attaque / Test', preview.test, preview.droppedModifiers], ['Défense', preview.defenderTest, preview.defenderDroppedModifiers]]) {
     if (!test) continue;
     if(test.resultTier?.label)calculations.appendChild(node('p','workspace-formula-notes',`${name} : ${test.resultTier.label} (${signed(test.sl)} DR)`));
     calculations.appendChild(node('p', 'workspace-formula-notes', `${name} : ${test.automatic?'réussite automatique, sans jet':`jet initial ${test.initialRoll}, jet final ${test.roll}`} · score ${test.score} · DR de base ${signed(test.details.baseSl)} · modificateurs ${signed(test.details.totalModifier)} · ${test.advantage.advantage.length} Avantage(s), ${test.advantage.disadvantage.length} Désavantage(s)`));
-    for (const modifier of test.details.modifiers) calculations.appendChild(node('p', 'workspace-formula-notes', `${modifier.label} : ${signed(modifier.amount)} DR`));
+    for (const line of renderModifierLines(test.details.modifiers, dropped)) calculations.appendChild(line);
     if (test.zeroOutcome) calculations.appendChild(node('p', 'workspace-formula-notes', test.success ? 'Réussite marginale (+0 DR)' : 'Échec marginal (−0 DR)'));
   }
   if (preview.opposition?.mode === 'opposed') calculations.appendChild(node('p', 'workspace-formula-notes', `DR net ${signed(preview.opposition.netSl)}${preview.opposition.tie ? ' · égalité : l’initiateur gagne' : ''}`));
