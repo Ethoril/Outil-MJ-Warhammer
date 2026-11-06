@@ -118,6 +118,7 @@ const ASSETS_TO_CACHE = [
   './js/core/talent-contracts.js',
   './js/core/talent-contract-v2.js',
   './js/core/v5-action-costs.js',
+  './js/core/v5-action-costs-schema.js',
   './js/core/v5-store-action.js',
   './js/core/v5-resources.js',
   './js/core/v5-reactions.js',

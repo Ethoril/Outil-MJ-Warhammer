@@ -151,6 +151,51 @@
               ]
             }
           ]
+        },
+        {
+          "id": "talent-supplement-fictif-machoire",
+          "name": "Mâchoire fictive",
+          "description": "Talent fictif de test (U8 L7) : copie déclarative de Mâchoire de fer, quota « une fois par rencontre » compris.",
+          "status": "validated",
+          "source": {
+            "reference": "Fixture U8 L7",
+            "effectHash": "sha256:3e6e67b4295bba36b6d2696e3d90d06232efccfa1b286d5c10c181a29b53a499"
+          },
+          "clauses": [
+            {
+              "id": "first-stunned-acquisition",
+              "event": "condition.beforeAcquire",
+              "role": "defender",
+              "when": [
+                {
+                  "field": "condition.id",
+                  "op": "eq",
+                  "value": "sonne"
+                },
+                {
+                  "field": "condition.instances",
+                  "op": "gte",
+                  "value": 1
+                }
+              ],
+              "effects": [
+                {
+                  "op": "reduceConditionAcquisition",
+                  "key": "sonne",
+                  "amount": 1,
+                  "stackGroup": "talent-supplement-fictif-machoire",
+                  "stack": "max"
+                }
+              ],
+              "quotas": [
+                {
+                  "id": "talent-supplement-fictif-machoire:first-stunned",
+                  "scope": "encounter",
+                  "maximum": 1
+                }
+              ]
+            }
+          ]
         }
       ],
       "prayers": [

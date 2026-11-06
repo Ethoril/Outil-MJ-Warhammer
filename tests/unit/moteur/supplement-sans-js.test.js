@@ -24,13 +24,16 @@ const sha = text => 'sha256:' + createHash('sha256').update(text, 'utf8').digest
 const load = data => loadSupplements(data, { reservedIds: BOOK_RESERVED_IDS });
 const loaded = load(FIXTURE);
 const TALENT = 'talent-supplement-fictif-nageur', BOOK_TALENT = 'talent-strong-swimmer';
+const JAW = 'talent-supplement-fictif-machoire', BOOK_JAW = 'talent-iron-jaw';
 const SPELL = 'spell-supplement-fictif-peau-de-corail', PRAYER = 'divine:supplement-fictif:benediction-des-flots';
 const RAGE = 'divine:miracle:rhya:rhya-s-rage';
 
 // Registre de l'application + supplément fictif, assemblé comme dans v5-talents.js.
 const bookRegistry = { contracts: [...V5_TALENT_CONTRACTS], sourceDescriptions: { ...bookTalents.sourceDescriptions } };
 const registry = mergeTalentRegistry(bookRegistry, loaded);
-const hashes = { ...currentV5TalentHashes(), ...talentSourceHashes(registry, loaded.talentHashes) };
+// Empreintes : celles du livre (application) + celles des talents de supplément, absents du catalogue (branche dédiée de talentSourceHashes).
+const supplementHashes = talentSourceHashes({ contracts: loaded.talents, sourceDescriptions: loaded.talentDescriptions }, loaded.talentHashes);
+const hashes = { ...currentV5TalentHashes(), ...supplementHashes };
 const swimmer = talentId => ({ id: 'nageur', talents: [{ id: talentId, status: 'resolved', rank: 1 }] });
 const swimContext = { skillId: 'skill-4e_61_74_61_74_69_6f_6e-base', skillGroupId: 'skill-group-4e_61_74_61_74_69_6f_6e', pursuit: true };
 const strip = plan => plan.proposals.map(({ origins, stackGroup, ...rest }) => rest);
@@ -42,11 +45,12 @@ const resistance = target => magicTestModifiers(target, 'Résistance', { carac: 
 
 test('CA8 · le supplément fictif se charge sans erreur : un talent, une prière, un sort', () => {
   assert.deepEqual(loaded.errors, []);
-  assert.deepEqual(loaded.talents.map(row => row.talentId), [TALENT]);
+  assert.deepEqual(loaded.talents.map(row => row.talentId), [TALENT, JAW]);
   assert.deepEqual(loaded.prayers.map(row => row.id), [PRAYER]);
   assert.deepEqual(loaded.spells.map(row => row.id), [SPELL]);
   // Le contrat compilé a exactement la forme des contrats v2 du livre.
-  assert.equal(validateTalentContractV2(structuredClone(loaded.talents[0])), true);
+  for (const contract of loaded.talents) assert.equal(validateTalentContractV2(structuredClone(contract)), true);
+  assert.deepEqual(supplementHashes, loaded.talentHashes);
 });
 
 test('CA8 · talent fictif : mêmes propositions que le talent du livre qu’il recopie, par le même évaluateur', () => {
@@ -68,6 +72,23 @@ test('CA8 · talent dont l’empreinte ne correspond pas au texte : forme accept
   const other = load(data);
   assert.deepEqual(other.errors, []); // la forme est valide ; c'est le test des empreintes (ci-dessous) qui garde le fichier réel
   assert.notEqual(other.talents[0].source.effectHash, sha(other.talentDescriptions[TALENT]));
+});
+
+test('Q2 (MJ 06/11) · talent fictif à quota « une fois par rencontre » : même comportement que Mâchoire de fer, quota compris', () => {
+  const plan = (talentId, used) => {
+    const participant = { id: 'nageur', talents: [{ id: talentId, status: 'resolved', rank: 1 }] };
+    const quotaId = `${talentId}:first-stunned`;
+    const state = { revision: 0, participants: [participant], v5ActionLedger: { appliedActions: [], quotaUsage: used ? [{ actorId: 'nageur', quotaId, scope: 'encounter', scopeKey: JSON.stringify(['e1']), used }] : [] } };
+    return evaluateV5TalentsIn(registry, hashes, participant, { event: 'condition.beforeAcquire', role: 'defender', context: { condition: { id: 'sonne', instances: 2 } }, state, clock: { encounterId: 'e1' }, actionId: 'a1' });
+  };
+  for (const used of [0, 1]) {
+    const fromJson = plan(JAW, used), fromBook = plan(BOOK_JAW, used);
+    assert.deepEqual(strip(fromJson), strip(fromBook));
+    assert.deepEqual(fromJson.trace.map(row => row.status), fromBook.trace.map(row => row.status));
+    assert.deepEqual(fromJson.quotas.map(row => ({ ...row, id: null })), fromBook.quotas.map(row => ({ ...row, id: null })));
+  }
+  assert.deepEqual(plan(JAW, 0).proposals.map(row => [row.op, row.amount]), [['reduceConditionAcquisition', 1]]);
+  assert.deepEqual(plan(JAW, 1).trace.map(row => row.status), ['quotaExhausted']);
 });
 
 test('CA8 · sort fictif : couche au format stocké, meilleur bonus avec Dur comme le roc (R3 p. 235)', () => {
@@ -97,7 +118,7 @@ test('CA9 · brique inconnue ou champ mal formé : refusé avec l’élément et
   const supplement = data.supplements[0];
   supplement.talents.push({ ...structuredClone(supplement.talents[0]), id: 'talent-supplement-op-inconnue', clauses: [{ id: 'x', event: 'test.beforeRoll', role: 'actor', when: [], effects: [{ op: 'teleport', stackGroup: 'g', stack: 'unique' }] }] });
   supplement.talents.push({ ...structuredClone(supplement.talents[0]), id: 'talent-supplement-champ', clauses: [{ id: 'y', event: 'test.beforeRoll', role: 'actor', when: [{ field: 'phaseLunaire', op: 'eq', value: 1 }], effects: [{ op: 'modifySL', amount: 1, stackGroup: 'g', stack: 'max' }] }] });
-  supplement.talents.push({ ...structuredClone(supplement.talents[0]), id: 'talent-supplement-cout', clauses: [{ ...structuredClone(supplement.talents[0].clauses[0]), costs: [] }] });
+  supplement.talents.push({ ...structuredClone(supplement.talents[0]), id: 'talent-supplement-cout', clauses: [{ ...structuredClone(supplement.talents[0].clauses[0]), quotas: [{ id: 'q', scope: 'semaine', maximum: 1 }] }] });
   supplement.talents.push({ ...structuredClone(supplement.talents[0]), id: BOOK_TALENT });
   supplement.spells.push({ id: 'spell-supplement-montant', name: 'Montant', clauses: [{ id: 'z', event: 'test.beforeRoll', role: 'actor', when: [], effects: [{ op: 'modifySL', amount: 'deux', key: 'Endurance' }] }] });
   supplement.spells.push({ id: 'spell-supplement-degats', name: 'Dégâts', clauses: [{ id: 'd', event: 'damage.beforeProtection', role: 'actor', when: [], effects: [{ op: 'modifyDamage', amount: 2, key: 'all' }] }] });
@@ -114,7 +135,7 @@ test('CA9 · brique inconnue ou champ mal formé : refusé avec l’élément et
   };
   expect('talent-supplement-op-inconnue', 'clauses.x.op', /Opération v2 non couverte/);
   expect('talent-supplement-champ', 'clauses.y.when', /Prédicat v2 non couvert/);
-  expect('talent-supplement-cout', 'clauses.advantage-actor.costs', /non couvert/);
+  expect('talent-supplement-cout', 'clauses.advantage-actor.quotas', /portée invalide/);
   expect(BOOK_TALENT, 'id', /déjà pris/);
   expect('spell-supplement-montant', 'clauses.z.effects.0.amount', /entier/);
   expect('spell-supplement-degats', 'clauses.d.event', /non couvert/);
@@ -122,7 +143,7 @@ test('CA9 · brique inconnue ou champ mal formé : refusé avec l’élément et
   expect('divine:supplement:inconnu', 'couleur', /non couvert/);
   assert.equal(result.errors.length, 8);
   // Les éléments valides restent chargés.
-  assert.deepEqual([result.talents.length, result.spells.length, result.prayers.length], [1, 1, 1]);
+  assert.deepEqual([result.talents.length, result.spells.length, result.prayers.length], [2, 1, 1]);
 });
 
 test('CA9 · registre illisible ou supplément mal formé : signalé, jamais d’exception', () => {

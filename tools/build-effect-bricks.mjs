@@ -38,7 +38,7 @@ export function renderBricks() {
       effects: [{ op: 'modifySL', amount: 1, stackGroup: 'talent-exemple', stack: 'max' }] }] }, null, 2), '```', '',
     '- `status` : `validated` (appliqué) ou `draft` (tracé, jamais appliqué).',
     '- `source.effectHash` : empreinte sha256 du texte `description` (`node -e "console.log(\'sha256:\'+require(\'crypto\').createHash(\'sha256\').update(process.argv[1]).digest(\'hex\'))" "<texte>"`) ; vérifiée par `tests/unit/moteur/supplement-sans-js.test.js`.',
-    '- Coûts, exemptions et quotas d’action (`costs`, `exemptions`, `quotas`) : **pas encore couverts** pour un talent de supplément (refusés au chargement).',
+    '- Coûts, exemptions et quotas d’action (`costs`, `exemptions`, `quotas`) : vocabulaire de `js/core/v5-action-costs-schema.js`. Coût `{ id, resource, amount, actorId? }` (ressource `momentum`, `fate` ou ressource déclarée) ; exemption `{ costId, sourceId }` ; quota `{ id, scope, maximum, amount? }`, portée `turn`, `round`, `encounter` ou `session` (« une fois par Round » : `{ id: "…", scope: "round", maximum: 1 }`).',
     '- Le personnage acquiert le talent par son identifiant (`talents: [{ id, status: "resolved", rank }]`).', '');
 
   add('### Prière et sort', '', 'Effets de couche, cumulés comme les sorts et prières du livre :', '', '```json', JSON.stringify({

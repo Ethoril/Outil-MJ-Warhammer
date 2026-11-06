@@ -7,7 +7,7 @@
  * (`SUPPLEMENT_ERRORS`, message qui nomme le supplément, l'élément et le champ, CA9) ; les éléments valides restent chargés et
  * l'application démarre.
  *
- *  - talent : contrat v2 des talents (mêmes clauses ; coûts et quotas d'action pas encore couverts), ajouté au registre de `v5-talents.js` et évalué par
+ *  - talent : contrat v2 des talents (mêmes clauses, coûts, exemptions et quotas d'action), ajouté au registre de `v5-talents.js` et évalué par
  *    `evaluateTalentContractsV2` comme un talent du livre. Le texte de l'effet (`description`) est épinglé par `source.effectHash`
  *    (sha256 du texte, vérifié par `tests/unit/moteur/supplement-sans-js.test.js`).
  *  - prière, sort : effets de couche (`modifySL` avant le jet, sur une clé de Test), compilés au format stocké des couches
@@ -22,6 +22,7 @@ import additionalTalents from '../data/v5-additional-talent-contracts.json' with
 import spellContracts from '../data/v5-spell-contracts.json' with { type: 'json' };
 import divineContracts from '../data/v5-divine-contracts.json' with { type: 'json' };
 import { onlyFields, validateEffectClause, normalizeTestTarget } from './effect-engine.js';
+import { validateV5ActionDeclarations } from './v5-action-costs-schema.js';
 
 export const SUPPLEMENT_SCHEMA_VERSION = 1;
 /** Familles qu'un supplément peut déclarer : clé du JSON → famille du porteur. */
@@ -59,10 +60,11 @@ function compileTalent(element, supplement) {
     try { validateEffectClause({ ...clause, bearer: { kind: 'talent', sourceId: element.id } }); }
     catch (error) { fail(error.message, `clauses.${error.element ?? '?'}${error.field ? '.' + error.field : ''}`); }
   }
-  // Coûts, exemptions et quotas d'action : non couverts en L7 (leur validateur, v5-action-costs.js, ne peut pas être chargé ici
-  // sans cycle d'import avec v5-talents.js). Refusés plutôt qu'appliqués sans contrôle (question au MJ).
-  for (const clause of element.clauses) for (const key of ['costs', 'exemptions', 'quotas'])
-    if (clause[key] !== undefined) fail(`« ${key} » non couvert pour un talent de supplément (coûts et quotas d’action : lot suivant)`, `clauses.${clause.id}.${key}`);
+  // Coûts, exemptions et quotas d'action (« une fois par Round »…) : même vocabulaire que les talents du livre (v5-action-costs-schema.js).
+  for (const clause of element.clauses) {
+    try { validateV5ActionDeclarations({ costs: clause.costs, exemptions: clause.exemptions, quotas: clause.quotas }); }
+    catch (error) { fail(`coûts ou quotas d’action refusés : ${error.message}`, `clauses.${clause.id}.${['quotas', 'costs', 'exemptions'].find(key => clause[key] !== undefined) ?? 'costs'}`); }
+  }
   if (!['draft', 'validated'].includes(element.status ?? 'validated')) fail('statut « draft » ou « validated » requis', 'status');
   fields(element.source, ['reference', 'effectHash'], 'source.');
   requireText(element.source.reference, 'source.reference');
