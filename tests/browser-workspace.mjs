@@ -38,7 +38,7 @@ async function main() {
   const browser = await chromium.launch({
     headless: true,
     executablePath: process.env.PLAYWRIGHT_EXECUTABLE_PATH
-      || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
+      || (process.platform === 'win32' ? 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe' : '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome')
   });
   try {
     const context = await browser.newContext({ serviceWorkers: 'block', viewport: { width: 1440, height: 900 } });
