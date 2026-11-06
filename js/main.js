@@ -1830,6 +1830,7 @@ if (typeof BroadcastChannel === 'function') {
     // Scène, plus les PJ persistants hors scène : leur pion reste lié en exploration (contrat §3).
     getParticipants: () => { const scene = Store.listParticipants(); return [...scene, ...offScenePjParticipants(Store.listPersistentCharacters(), scene, id => Store.getProfile(id))]; },
     imageUrlOf: participant => Store.getProfile(participant.profileId)?.tokenImage ?? null,
+    colorOf: participant => Store.getProfile(participant.profileId)?.tokenColor ?? null,
     maxHpOf: participant => persistentMaxHpOf(Store.getProfile(participant.profileId)),
     onStatus: showMapLinkStatus,
     // Course (L6) : proposition au MJ, rien n'est décompté sans son clic.

@@ -1,5 +1,5 @@
 import { normalizeEffects, normalizeState, resolveEffectCapability } from './effects.js';
-import { cloneValue, normalizeAction, normalizeCaracs, normalizeTags, normalizeTraits, profileActionSource, normalizeFicheFields, normalizeTokenImage } from './models.js';
+import { cloneValue, normalizeAction, normalizeCaracs, normalizeTags, normalizeTraits, profileActionSource, normalizeFicheFields, normalizeTokenColor, normalizeTokenImage } from './models.js';
 import { validateDivineAccessRegistry } from './v5-divine-access.js';
 import { validateGameClock } from './v5-game-time.js';
 
@@ -174,6 +174,7 @@ export function sanitizeProfile(o) {
   const profile = {
     id: String(o.id),
     ...(normalizeTokenImage(o.tokenImage) ? { tokenImage: normalizeTokenImage(o.tokenImage) } : {}),
+    ...(normalizeTokenColor(o.tokenColor) ? { tokenColor: normalizeTokenColor(o.tokenColor) } : {}),
     name: (typeof o.name === 'string' && o.name.trim()) ? o.name.trim() : 'Sans-nom',
     kind: ['PJ', 'PNJ', 'Créature'].includes(o.kind) ? o.kind : 'Créature',
     initiative: Number(o.initiative) || 0,

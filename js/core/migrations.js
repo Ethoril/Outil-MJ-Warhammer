@@ -5,7 +5,7 @@
  * a schema v3 envelope without mutating the input. It deliberately does not write
  * storage or execute extension fields.
  */
-import { normalizeCaracs, profileActionSource, normalizeFicheFields, FICHE_DATA_FIELDS, normalizeTokenImage } from './models.js';
+import { normalizeCaracs, profileActionSource, normalizeFicheFields, FICHE_DATA_FIELDS, normalizeTokenColor, normalizeTokenImage } from './models.js';
 import { normalizeDamageFields } from './damage.js';
 import { sanitizeMagicEnvelope } from './sanitize.js';
 import { emptyDivineAccess } from './v5-divine-access.js';
@@ -156,7 +156,7 @@ function itemId(entry, path, report) {
   return id;
 }
 
-const PROFILE_KEYS = [...FICHE_DATA_FIELDS, 'id', 'name', 'kind', 'initiative', 'hp', 'maxHp', 'caracs', 'armor', 'diceLines', 'actions', 'group', 'tags', 'notes', 'favorite', 'tokenImage'];
+const PROFILE_KEYS = [...FICHE_DATA_FIELDS, 'id', 'name', 'kind', 'initiative', 'hp', 'maxHp', 'caracs', 'armor', 'diceLines', 'actions', 'group', 'tags', 'notes', 'favorite', 'tokenImage', 'tokenColor'];
 const PARTICIPANT_KEYS = [...FICHE_DATA_FIELDS, 'id', 'profileId', 'persistentCharacterId', 'improvised', 'name', 'kind', 'initiative', 'hp', 'maxHp', 'states', 'zone', 'camp', 'color', 'armor', 'caracs', 'actions', 'tags', 'notes', 'source'];
 const DICE_KEYS = ['id', 'participantId', 'type', 'attr', 'base', 'mod', 'note', 'damage', 'damageFormula', 'targetId', 'qualities', 'valuesX', 'capacity'];
 const COMBAT_KEYS = ['round', 'currentActorId', 'order', 'participants', 'meta', 'orderMode', 'extensions'];
@@ -179,6 +179,8 @@ function migrateProfiles(raw, report) {
     Object.assign(item, normalizeFicheFields(item));
     const tokenImage = normalizeTokenImage(item.tokenImage);
     if (tokenImage) item.tokenImage = tokenImage; else delete item.tokenImage;
+    const tokenColor = normalizeTokenColor(item.tokenColor);
+    if (tokenColor) item.tokenColor = tokenColor; else delete item.tokenColor;
     sanitizeNumericMap(item, 'armor', 'reserve/' + id, report);
     if (Array.isArray(item.actions)) {
       // `diceLines` fait foi, sauf s'il est vide à côté d'actions remplies ;

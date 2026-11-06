@@ -13,6 +13,7 @@ const REASON_LABELS = {
   'type-inconnu': 'valeur inconnue',
   'valeur-negative': 'nombre positif ou nul attendu',
   'texte-attendu': 'texte attendu',
+  'couleur-attendue': 'couleur #rrggbb attendue',
   'liste-attendue': 'liste attendue',
   'objet-attendu': 'objet { … } attendu',
   'booleen-attendu': 'vrai ou faux attendu',

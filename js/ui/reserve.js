@@ -1,5 +1,5 @@
 import { DOM, qs, qsa, on, escapeHtml } from './dom.js';
-import { Profile, groupProfiles, normalizeAction, normalizeTags, cloneValue, normalizeArmorLocations, chooseTokenImage } from '../core/models.js';
+import { Profile, groupProfiles, normalizeAction, normalizeTags, cloneValue, normalizeArmorLocations, chooseTokenImage, normalizeTokenColor } from '../core/models.js';
 import { normalizeDamageFields } from '../core/damage.js';
 import { normalizeSearchText } from '../core/sanitize.js';
 import { ACTION_FIELD_HELP, createQualityPicker, preserveEditedV5Modifier, legacyModifierMessage } from './action-editor.js';
@@ -38,10 +38,13 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
     const meta = document.createElement('div');
     meta.id = 'form-profile-meta';
     meta.style.cssText = 'display:grid; gap:6px; margin:10px 0;';
-    meta.innerHTML = '<div class="row"><img id="token-image-preview" alt="Aperçu du pion" hidden style="width:64px;height:64px;border-radius:50%;object-fit:cover"><button type="button" id="token-image-select">Image du pion…</button><button type="button" id="token-image-remove" hidden>Retirer l’image</button><input id="token-image-file" type="file" accept="image/*" hidden></div><label>Culte<input name="cult" placeholder="Myrmidia"></label><label>Tags <small class="muted">(séparés par des virgules)</small><input name="tags" placeholder="chef, gobelin, magie"></label><label>Notes<textarea name="notes" rows="2" placeholder="Repères et consignes"></textarea></label><label style="display:flex; gap:6px; align-items:center;"><input type="checkbox" name="favorite"> Profil favori</label><label style="display:flex; gap:6px; align-items:center;"><input type="checkbox" name="propagate"> Mettre à jour les exemplaires en cours (PV max et fiche, sans toucher aux PV actuels ni aux états)</label>';
+    meta.innerHTML = '<div class="row"><img id="token-image-preview" alt="Aperçu du pion" hidden style="width:64px;height:64px;border-radius:50%;object-fit:cover"><button type="button" id="token-image-select">Image du pion…</button><button type="button" id="token-image-remove" hidden>Retirer l’image</button><input id="token-image-file" type="file" accept="image/*" hidden></div><div class="row"><label>Couleur du pion <small class="muted">(cerclage d’un PJ sur la carte, #rrggbb, vide = couleur du camp)</small><input name="tokenColor" id="token-color" placeholder="#b3262e" maxlength="7" size="8" pattern="#[0-9a-fA-F]{6}" title="Couleur au format #rrggbb"></label><input type="color" id="token-color-picker" aria-label="Choisir la couleur du pion" value="#b3262e"></div><label>Culte<input name="cult" placeholder="Myrmidia"></label><label>Tags <small class="muted">(séparés par des virgules)</small><input name="tags" placeholder="chef, gobelin, magie"></label><label>Notes<textarea name="notes" rows="2" placeholder="Repères et consignes"></textarea></label><label style="display:flex; gap:6px; align-items:center;"><input type="checkbox" name="favorite"> Profil favori</label><label style="display:flex; gap:6px; align-items:center;"><input type="checkbox" name="propagate"> Mettre à jour les exemplaires en cours (PV max et fiche, sans toucher aux PV actuels ni aux états)</label>';
     const actions = DOM.reserve.form.querySelector('.actions');
     DOM.reserve.form.insertBefore(meta, actions);
     const input = meta.querySelector('#token-image-file');
+    const colorText = meta.querySelector('#token-color'), colorPicker = meta.querySelector('#token-color-picker');
+    colorPicker.addEventListener('input', () => { colorText.value = colorPicker.value; });
+    colorText.addEventListener('input', () => { const color = normalizeTokenColor(colorText.value); if (color) colorPicker.value = color; });
     meta.querySelector('#token-image-select').addEventListener('click', () => input.click());
     meta.querySelector('#token-image-remove').addEventListener('click', () => { imageRevision++; setTokenImage(null); if (btnSubmit) btnSubmit.disabled = false; });
     input.addEventListener('change', async () => {
@@ -284,6 +287,8 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
     f.querySelector('[name=kind]').value = p.kind; f.querySelector('[name=initiative]').value = p.initiative; f.querySelector('[name=hp]').value = p.hp;
     f.querySelector('[name=group]').value = p.group || '';
     f.querySelector('[name=cult]').value = p.cult || '';
+    f.querySelector('[name=tokenColor]').value = p.tokenColor || '';
+    if (p.tokenColor) f.querySelector('#token-color-picker').value = p.tokenColor;
     f.querySelector('[name=tags]').value = normalizeTags(p.tags).join(', ');
     f.querySelector('[name=notes]').value = p.notes || '';
     f.querySelector('[name=favorite]').checked = Boolean(p.favorite);
@@ -378,6 +383,9 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
     const id = fd.get('id');
     const data = { name: fd.get('name'), kind: fd.get('kind'), initiative: Number(fd.get('initiative') || 0), hp: Number(fd.get('hp') || 0), group: (fd.get('group') || '').trim(), cult: String(fd.get('cult') || '').trim(), tags: normalizeTags(fd.get('tags')), notes: String(fd.get('notes') || ''), favorite: fd.get('favorite') === 'on', caracs, armor, armorLocations, diceLines };
     data.tokenImage = tokenImage;
+    const rawColor = String(fd.get('tokenColor') || '').trim();
+    data.tokenColor = normalizeTokenColor(rawColor) ?? null;
+    if (rawColor && !data.tokenColor) { showToast('Couleur du pion : format #rrggbb attendu (ex. #b3262e).', 'error'); if (submit) submit.disabled = false; return; }
     const existing = id ? Store.getProfile(id) : null;
     const cults = (existing?.talents || []).filter(row => ['talent-bless', 'talent-invoke'].includes(row.id)).map(row => row.specialization || row.specialty).filter(Boolean);
     if (data.cult && cults.length && !cults.some(cult => normalizeSearchText(cult) === normalizeSearchText(data.cult))) {

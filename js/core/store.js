@@ -1747,6 +1747,7 @@ function resolvedCorruptionTest(participant, skillId, input) {
       beginCommand('update-profile');
       Object.assign(p, canonicalizeProfileFields(patch));
       if (p.tokenImage == null) delete p.tokenImage;
+      if (p.tokenColor == null) delete p.tokenColor;
       markDirty(`reserve/${id}`, p);
       // Profiles are reusable templates; active participant copies are frozen
       // at import/launch time. Propagation is available only through the
