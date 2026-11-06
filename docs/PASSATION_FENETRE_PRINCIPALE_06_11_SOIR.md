@@ -49,7 +49,8 @@ Les règles de travail ne changent pas :
 ## Fait le 06/11 en fin de soirée (fenêtres parallèles, tout fusionné, rien poussé)
 
 - **Pose armée** : recette conforme après correctif. Map Display `55fdccb` sur `feat/liaison-outil-mj` : la monture d'une paire montée est masquée de la réserve, le panneau montre « Cavalier — … » puis « Monture — … », et les badges du cavalier passent d'abord. Le badge ambre d'un état de la monture seule n'a pas été vu en monté, car « À terre » sur la monture fait démonter (`v5-mounted-combat.js:156`).
-- **Démontage** : le Cheval reste sur le plateau et le cavalier **retourne en réserve**. Reste à décider s'il doit plutôt rester posé à côté de sa monture.
+- **Démontage** (décision du MJ) : le cavalier reste sur le plateau, sur la case libre adjacente la plus proche de sa monture, et ne va en réserve que si aucune n'est libre. C'est Map Display `817e22f` (`splitMount` / `placeOnFreeAdjacentCell`, `js/app/mjLink.js`). La recette est conforme pour le démontage volontaire, la chute et le panneau à pied. Le cas encerclé n'est couvert que par un test unitaire.
+- **Terminer le combat** : le panneau intégré bloque le `confirm()` natif. La boîte de confirmation reste donc à vérifier dans un navigateur normal.
 - **Terminer le combat** : de retour dans les outils de séance, avec une confirmation (`4c83595`).
 - **Armes L12 en français** (`claude/armes-l12-fr`, fusionné) : table `js/data/weapon-names-fr.js`, arbitrages du MJ (Cimeterre ; tout traduire). Le nom anglais est gardé dans `extensions.v5.sourceName`.
 - **`lot3-v5-magic-2b-ui`** passe de 103 s à 52 s. `browser-index` a passé 10 fois sur 10.
