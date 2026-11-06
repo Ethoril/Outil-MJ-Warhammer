@@ -89,6 +89,7 @@ view.setSpace('play');
 
 const { server, baseUrl } = await startStaticServer();
 const browser = await launchBrowser(LAUNCH_OPTS);
+const SETTLE_RATIO = 0.25;
 const RECIPIENTS = 'Ennemis engagés ou créatures affectées (désignés par le MJ) : ';
 const text = async page => (await page.locator('.workspace-resolution, .workspace-resolution-drawer').allInnerTexts()).join(' ').split('\n').filter(Boolean).join(' | ');
 const states = (page, id) => page.evaluate(id => window.__TEST__.Store.listParticipants().find(p => p.id === id).states.map(s => s.key || s.name), id);
@@ -96,9 +97,13 @@ const states = (page, id) => page.evaluate(id => window.__TEST__.Store.listParti
 async function open(scenario, { w = '', t = 'mage-1', extra = '' } = {}) {
   const context = await browser.newContext({ viewport: { width: 1440, height: 1000 }, serviceWorkers: 'block' });
   const page = await context.newPage(); const errors = [];
+  // Les attentes de « laisser le rendu se poser » sont réduites (la plupart des gestes attendent déjà un sélecteur) ; les écarts de double-clic, eux, passent par `realWait` et restent exacts.
+  const realWaitForTimeout = page.waitForTimeout.bind(page);
+  page.realWait = ms => realWaitForTimeout(ms);
+  page.waitForTimeout = ms => realWaitForTimeout(Math.max(40, Math.round(ms * SETTLE_RATIO)));
   page.on('pageerror', e => errors.push(e.message));
   await page.route(url => url.pathname === '/__lot3_magic_2b__.html', route => route.fulfill({ status: 200, contentType: 'text/html; charset=utf-8', body: HARNESS_HTML }));
-  await page.goto(`${baseUrl}/__lot3_magic_2b__.html?s=${scenario}&w=${encodeURIComponent(w)}&t=${t}${extra}`, { waitUntil: 'networkidle' });
+  await page.goto(`${baseUrl}/__lot3_magic_2b__.html?s=${scenario}&w=${encodeURIComponent(w)}&t=${t}${extra}`, { waitUntil: 'load' });
   await page.waitForSelector('.workspace-resolution');
   await openU1Settings(page);
   return { page, context, errors };
@@ -534,7 +539,7 @@ try {
     const clickTwice = async (name, gap) => {
       const button = page.getByRole('button', { name, exact: true }); await button.scrollIntoViewIfNeeded();
       const rect = await button.boundingBox(), x = rect.x + rect.width / 2, y = rect.y + rect.height / 2;
-      await page.mouse.click(x, y); await page.waitForTimeout(gap); await page.mouse.click(x, y); await page.waitForTimeout(600);
+      await page.mouse.click(x, y); await page.realWait(gap); await page.mouse.click(x, y); await page.realWait(600);
     };
     await page.fill('[data-focus-key="magicRuneKnowledgeRoll"]', '25');
     await page.getByLabel('Lire/Écrire, matériel et conditions de déploiement confirmés').check();
@@ -565,7 +570,7 @@ try {
     await page.evaluate(() => { window.__TEST__.calls = { adventure: 0 }; const original = window.__TEST__.Store.startMagicAdventure; window.__TEST__.Store.startMagicAdventure = (...args) => { window.__TEST__.calls.adventure++; return original.apply(window.__TEST__.Store, args); }; window.__TEST__.delayMs = 20; });
     const button = page.getByRole('button', { name: 'Commencer une nouvelle aventure (Défiance magique)', exact: true }); await button.scrollIntoViewIfNeeded();
     const rect = await button.boundingBox(), x = rect.x + rect.width / 2, y = rect.y + rect.height / 2;
-    await page.mouse.click(x, y); await page.waitForTimeout(90); await page.mouse.click(x, y); await page.waitForTimeout(600);
+    await page.mouse.click(x, y); await page.realWait(90); await page.mouse.click(x, y); await page.realWait(600);
     assert.equal(await page.evaluate(() => window.__TEST__.calls.adventure), 1, 'une seule nouvelle aventure');
     assert.deepEqual(errors, []); await context.close();
   }
