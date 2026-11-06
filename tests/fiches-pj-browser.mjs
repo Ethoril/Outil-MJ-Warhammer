@@ -8,6 +8,7 @@ import { join, normalize, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
 import { expect } from 'playwright/test';
+import { launchBrowser } from './helpers/browser.mjs';
 const root = fileURLToPath(new URL('..', import.meta.url));
 const fixture = JSON.parse(readFileSync(new URL('./fixtures/fiche-caelel.json', import.meta.url), 'utf8'));
 const mime = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.json': 'application/json', '.css': 'text/css', '.svg': 'image/svg+xml' };
@@ -23,9 +24,7 @@ let browser;
 async function main() {
   await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
   const origin = `http://127.0.0.1:${server.address().port}`;
-  const edge = 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe';
-  const executablePath = process.env.PLAYWRIGHT_EXECUTABLE_PATH || (existsSync(edge) ? edge : chromium.executablePath());
-  browser = await chromium.launch({ headless: true, executablePath });
+  browser = await launchBrowser();
   const context = await browser.newContext({ serviceWorkers: 'block' }); const page = await context.newPage();
   const errors = []; const dialogs = [];
   page.on('pageerror', error => errors.push(error.stack || error.message));

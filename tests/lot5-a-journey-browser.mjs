@@ -3,7 +3,7 @@ import { createServer } from 'node:http';
 import { readFileSync, statSync } from 'node:fs';
 import { resolve, extname, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { chromium } from 'playwright';
+import { launchBrowser } from './helpers/browser.mjs';
 
 // Lot 5 · A, parcours dans Jouer.
 //  C47 (mineur) : après le premier tir d'un tir double À répétition, le second tir est préparé (case cochée, premier tir désigné).
@@ -24,7 +24,7 @@ const server = createServer((req, res) => {
   } catch { res.writeHead(404).end(); }
 });
 await new Promise(done => server.listen(0, '127.0.0.1', done));
-const browser = await chromium.launch({ headless: true, executablePath: process.env.PLAYWRIGHT_EXECUTABLE_PATH || 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe' });
+const browser = await launchBrowser();
 let failures = 0;
 const check = async (name, fn) => { try { await fn(); console.log('ok  -', name); } catch (error) { failures++; console.log('FAIL -', name, '\n   ', error.message.split('\n').slice(0, 5).join('\n    ')); } };
 try {

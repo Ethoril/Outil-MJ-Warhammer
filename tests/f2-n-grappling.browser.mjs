@@ -5,7 +5,7 @@ import { createServer } from 'node:http';
 import { readFileSync, statSync } from 'node:fs';
 import { resolve, extname, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { chromium } from 'playwright';
+import { launchBrowser } from './helpers/browser.mjs';
 
 // Browser integration against index.html, the singleton production Store, the
 // real resolution panel and its IndexedDB adapter. No mock DOM or Store.
@@ -13,7 +13,7 @@ const root=resolve(fileURLToPath(new URL('../',import.meta.url)));
 const mime={'.js':'text/javascript; charset=utf-8','.json':'application/json','.css':'text/css; charset=utf-8','.html':'text/html; charset=utf-8'};
 const server=createServer((req,res)=>{try{const pathname=decodeURIComponent(new URL(req.url,'http://localhost').pathname);const file=resolve(root,`.${pathname}`);assert.ok(file.startsWith(root+sep));assert.ok(statSync(file).isFile());res.writeHead(200,{'content-type':mime[extname(file)]||'application/octet-stream'});res.end(readFileSync(file));}catch{res.writeHead(404);res.end('Not found');}});
 await new Promise(done=>server.listen(0,'127.0.0.1',done));
-const browser=await chromium.launch({headless:true,executablePath:process.env.PLAYWRIGHT_EXECUTABLE_PATH||'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe'});
+const browser=await launchBrowser();
 const origin=`http://127.0.0.1:${server.address().port}`;
 try{
  const context=await browser.newContext({serviceWorkers:'block',viewport:{width:1440,height:900}}),page=await context.newPage(),errors=[];

@@ -2,7 +2,7 @@ import { createServer } from 'node:http';
 import { readFileSync, statSync } from 'node:fs';
 import { join, normalize, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { chromium } from 'playwright';
+import { launchBrowser } from './helpers/browser.mjs';
 
 // Q39 : depuis l'application réelle (index.html), l'onglet « Bibliothèque » mène à la bibliothèque de bestiaire :
 // recherche « Stegadon », fiche, « Ajouter au combat », le profil apparaît au banc de « Jouer ».
@@ -22,17 +22,13 @@ function startServer() {
   });
   return new Promise((resolve, reject) => { server.once('error', reject); server.listen(0, '127.0.0.1', () => resolve({ server, port: server.address().port })); });
 }
-function findExecutable() {
-  return [process.env.PLAYWRIGHT_EXECUTABLE_PATH, 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe', 'C:/Program Files/Google/Chrome/Application/chrome.exe', '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome']
-    .filter(Boolean).find(candidate => { try { return statSync(candidate).isFile(); } catch { return false; } });
-}
 
 const failures = [];
 const pageErrors = [];
 const check = (ok, description) => { if (ok) console.log('PASS — ' + description); else { failures.push(description); console.log('FAIL — ' + description); } };
 
 const { server, port } = await startServer();
-const browser = await chromium.launch({ headless: true, executablePath: findExecutable() });
+const browser = await launchBrowser();
 try {
   const context = await browser.newContext({ serviceWorkers: 'block', viewport: { width: 1440, height: 900 } });
   const page = await context.newPage();

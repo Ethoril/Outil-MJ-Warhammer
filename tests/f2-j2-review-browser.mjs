@@ -5,9 +5,9 @@ import { createServer } from 'node:http';
 import { readFileSync, statSync } from 'node:fs';
 import { resolve, sep, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { chromium } from 'playwright';
 import { createCriticalAftermathRecord } from '../js/core/v5-critical-aftermath.js';
 import { getV5CriticalEffect } from '../js/data/v5-crits.js';
+import { launchBrowser } from './helpers/browser.mjs';
 
 // Parcours navigateur F2-J2 : une fracture issue d'un critique appliqué par l'interface, son Test d'immobilisation, l'avancement du calendrier jusqu'à la guérison,
 // puis une main perdue confirmée dans le registre F2-I : arme à deux mains refusée, main directrice cochée et pénalité vérifiée dans la résolution, Undo/Redo.
@@ -26,7 +26,7 @@ const manchot={...mutilated.participant,camp:'ennemi',initiative:40,equipment:[{
 const fixture=()=>({schemaVersion:3,reserve:[],diceLines:[],log:[],extensions:{v5:{combatId:'f2-j2-review-browser',turnIndex:1}},combat:{round:1,currentActorId:'hero',order:['hero','foe','manchot'],participants:[hero,person('foe','Garde','PNJ',{hp:2,maxHp:20,states:[{id:'ko',key:'inconscient',name:'Inconscient',level:1}],actions:[]}),manchot]}});
 
 await new Promise(done=>server.listen(0,'127.0.0.1',done));
-const browser=await chromium.launch({headless:true,executablePath:process.env.PLAYWRIGHT_EXECUTABLE_PATH||(process.platform==='win32'?'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe':undefined)});
+const browser=await launchBrowser();
 try{
  const context=await browser.newContext({serviceWorkers:'block'}),page=await context.newPage(),errors=[];page.setDefaultTimeout(12000);page.on('pageerror',e=>errors.push(e.message));
  const origin=`http://127.0.0.1:${server.address().port}${base}`;await page.goto(origin,{waitUntil:'domcontentloaded'});await page.waitForFunction(()=>document.querySelector('#app-content')?.style.display==='block',{timeout:20000});await page.locator('#tab-combat').click();

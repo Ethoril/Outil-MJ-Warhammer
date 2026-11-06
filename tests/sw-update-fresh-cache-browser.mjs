@@ -3,7 +3,7 @@ import { createServer } from 'node:http';
 import { readFileSync, statSync } from 'node:fs';
 import { resolve, extname, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { chromium } from 'playwright';
+import { launchBrowser } from './helpers/browser.mjs';
 
 // 3.33.0 (MJ, 01/11) : derrière `python -m http.server`, sans Cache-Control, le navigateur juge frais
 // un module ancien ; la mise à jour du service worker le recopiait dans le nouveau cache à côté de
@@ -31,7 +31,7 @@ const server = createServer((req, res) => {
   } catch { res.writeHead(404).end(); }
 });
 await new Promise(resolveServer => server.listen(0, '127.0.0.1', resolveServer));
-const browser = await chromium.launch({ headless: true, executablePath: process.env.PLAYWRIGHT_EXECUTABLE_PATH || 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe' });
+const browser = await launchBrowser();
 try {
   const context = await browser.newContext();
   const page = await context.newPage();

@@ -4,6 +4,7 @@ import { readFileSync, statSync } from 'node:fs';
 import { resolve, extname, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
+import { launchBrowser } from './helpers/browser.mjs';
 
 // C44 (recette 3.34.0, G-U1-5) : « Prières divines » n’est pas affichée pour un personnage sans culte ni prière
 // (bouton discret pour l’ouvrir) ; un prêtre (culte renseigné) la garde.
@@ -24,7 +25,7 @@ const server = createServer((req, res) => {
   } catch { res.writeHead(404).end(); }
 });
 await new Promise(done => server.listen(0, '127.0.0.1', done));
-const browser = await chromium.launch({ headless: true, executablePath: process.env.PLAYWRIGHT_EXECUTABLE_PATH || 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe' });
+const browser = await launchBrowser();
 try {
   const errors = [];
   const open = async cult => {

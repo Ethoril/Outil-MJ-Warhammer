@@ -5,7 +5,6 @@ import { createServer } from 'node:http';
 import { existsSync } from 'node:fs';
 import { readFile, stat } from 'node:fs/promises';
 import { extname, join, normalize, resolve } from 'node:path';
-import { chromium } from 'playwright';
 import { BEAST_PROFILES, KADON_PROFILES, creatureWounds } from '../js/core/v5-magic-arbitrations.js';
 
 /**
@@ -15,11 +14,7 @@ import { BEAST_PROFILES, KADON_PROFILES, creatureWounds } from '../js/core/v5-ma
  * profil du monstre de Transformation de Kadon, restauration des Bmax du Fléau des Démons (bandeau de combat).
  */
 const ROOT = resolve('.');
-const EDGE_PATH = 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe';
-const LAUNCH_OPTS = {
-  headless: true,
-  ...(process.env.PLAYWRIGHT_EXECUTABLE_PATH ? { executablePath: process.env.PLAYWRIGHT_EXECUTABLE_PATH } : existsSync(EDGE_PATH) ? { executablePath: EDGE_PATH } : {})
-};
+const LAUNCH_OPTS = { headless: true };
 const MIME_TYPES = { '.css': 'text/css; charset=utf-8', '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.json': 'application/json; charset=utf-8', '.mjs': 'text/javascript; charset=utf-8', '.png': 'image/png', '.svg': 'image/svg+xml' };
 
 function startStaticServer() {
@@ -47,6 +42,7 @@ import { createStore } from '/js/core/store.js';
 import { initWorkspaceView } from '/js/ui/workspace-view.js';
 import { getSpellContract } from '/js/core/v5-spell-contracts.js';
 import { initCombatBanner } from '/js/ui/combat-banner.js';
+import { launchBrowser } from './helpers/browser.mjs';
 const params = new URLSearchParams(location.search), scenario = params.get('s') || 'cast', casterOfWards = params.get('t') || 'mage-1';
 let saved = null; const listeners = new Map();
 const bus = { on(e, f) { if (!listeners.has(e)) listeners.set(e, new Set()); listeners.get(e).add(f); }, emit(e, ...a) { for (const f of listeners.get(e) || []) f(...a); } };
@@ -92,7 +88,7 @@ view.setSpace('play');
 </script></body></html>`;
 
 const { server, baseUrl } = await startStaticServer();
-const browser = await chromium.launch(LAUNCH_OPTS);
+const browser = await launchBrowser(LAUNCH_OPTS);
 const RECIPIENTS = 'Ennemis engagés ou créatures affectées (désignés par le MJ) : ';
 const text = async page => (await page.locator('.workspace-resolution').innerText()).split('\n').filter(Boolean).join(' | ');
 const states = (page, id) => page.evaluate(id => window.__TEST__.Store.listParticipants().find(p => p.id === id).states.map(s => s.key || s.name), id);

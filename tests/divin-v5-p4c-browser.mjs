@@ -5,7 +5,7 @@ import {createServer} from 'node:http';
 import {readFileSync,statSync,mkdirSync,writeFileSync} from 'node:fs';
 import {resolve,sep,extname} from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {chromium} from 'playwright';
+import { launchBrowser } from './helpers/browser.mjs';
 const root=fileURLToPath(new URL('../',import.meta.url));
 const output=resolve(root,'tmp/divin/p4c-browser');mkdirSync(output,{recursive:true});
 const types={'.html':'text/html; charset=utf-8','.js':'text/javascript','.json':'application/json','.css':'text/css','.svg':'image/svg+xml','.woff2':'font/woff2','.webmanifest':'application/manifest+json'};
@@ -81,7 +81,7 @@ const castHowl=async({roll=45}={})=>{
 };
 try{
  await new Promise(done=>server.listen(0,'127.0.0.1',done));
- browser=await chromium.launch({headless:true,executablePath:process.env.PLAYWRIGHT_EXECUTABLE_PATH||'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe'});
+ browser=await launchBrowser();
  const context=await browser.newContext({serviceWorkers:'block',viewport:{width:1440,height:900}});await context.route('https://**',route=>route.abort());
  page=await context.newPage();page.setDefaultTimeout(7000);const errors=[];page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push('console: '+m.text());});
  await page.goto(`http://127.0.0.1:${server.address().port}/`,{waitUntil:'domcontentloaded'});await ready();

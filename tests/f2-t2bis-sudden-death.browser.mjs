@@ -3,7 +3,7 @@ import { createServer } from 'node:http';
 import { readFileSync, statSync } from 'node:fs';
 import { join, normalize, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { chromium } from 'playwright';
+import { launchBrowser } from './helpers/browser.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const mime = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.json': 'application/json', '.svg': 'image/svg+xml', '.webmanifest': 'application/manifest+json' };
@@ -19,7 +19,7 @@ const server = createServer((req, res) => {
 });
 
 await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
-const browser = await chromium.launch({ headless: true, executablePath: process.env.PLAYWRIGHT_EXECUTABLE_PATH || (process.platform === 'win32' ? 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe' : undefined) });
+const browser = await launchBrowser();
 try {
   const context = await browser.newContext({ serviceWorkers: 'block' });
   const page = await context.newPage(), origin = `http://127.0.0.1:${server.address().port}`;

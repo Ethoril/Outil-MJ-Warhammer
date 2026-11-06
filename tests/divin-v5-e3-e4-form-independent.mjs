@@ -5,15 +5,13 @@ import { mkdir, readFile, stat } from 'node:fs/promises';
 import { extname, join, normalize, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { existsSync } from 'node:fs';
-import { chromium } from 'playwright';
 
 const ROOT = resolve(fileURLToPath(new URL('..', import.meta.url)));
 const EVIDENCE = join(ROOT,'tmp','divin','browser-independent');
-const EDGE = 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe';
-const launch = { headless: true, ...(existsSync(EDGE) ? { executablePath: EDGE } : {}) };
 const mime = { '.css':'text/css','.html':'text/html','.js':'text/javascript','.json':'application/json','.svg':'image/svg+xml' };
 const html = `<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="/MJ.css"><link rel="stylesheet" href="/js/ui/workspace.css"></head><body><div id="workspace-mount"></div><script type="module">
 import {createStore} from '/js/core/store.js';import {initWorkspaceView} from '/js/ui/workspace-view.js';import registry from '/js/data/v5-divine-contracts.json' with {type:'json'};
+import { launchBrowser } from './helpers/browser.mjs';
 let saved=localStorage.getItem('independent-divine-form-state');const hadSaved=Boolean(saved);const listeners=new Map();const bus={on(e,f){if(!listeners.has(e))listeners.set(e,new Set());listeners.get(e).add(f)},emit(e,...a){for(const f of listeners.get(e)||[])f(...a)}};
 const Store=createStore({bus,persistence:{async load(){return saved?JSON.parse(saved):null},async saveAtomic({state}){saved=JSON.stringify(state);localStorage.setItem('independent-divine-form-state',saved);return {ok:true}}}});await Store.ready;
 const sun=registry.contracts.find(c=>c.canonicalName==='Blazing Sun');const invocation=sun.requiredTalent.catalogueTalentId;
@@ -38,7 +36,7 @@ await new Promise(resolveListen=>server.listen(0,'127.0.0.1',resolveListen));
 await mkdir(EVIDENCE,{recursive:true});
 let browser;
 try {
-  browser = await chromium.launch(launch);
+  browser = await launchBrowser(launch);
   const context = await browser.newContext({viewport:{width:1280,height:900}});
   const page = await context.newPage(); page.setDefaultTimeout(6000);
   const errors=[]; page.on('pageerror',error=>errors.push(error.message));

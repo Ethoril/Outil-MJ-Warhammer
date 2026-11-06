@@ -5,12 +5,11 @@ import { readFile, stat, mkdir, writeFile } from 'node:fs/promises';
 import { extname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { existsSync } from 'node:fs';
-import { chromium } from 'playwright';
 const ROOT = resolve(fileURLToPath(new URL('..', import.meta.url)));
 const OUT = join(ROOT, 'tmp/divin/campaign-ui-independent');
-const edge = 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe';
 const html = `<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="/MJ.css"><link rel="stylesheet" href="/js/ui/workspace.css"></head><body><button id="open">Ouvrir temps</button><script type="module">
 import {openCampaignTimeDialog} from '/js/ui/v5-campaign-time-dialog.js';
+import { launchBrowser } from './helpers/browser.mjs';
 const probe={revision:5,calls:[],mode:'blocked',closed:0};
 const Store={getLocalRevision:()=>probe.revision,getFullJSON:()=>JSON.stringify({extensions:{v5:{gameClock:{revision:0,campaignSeconds:0}}}}),
  advanceCampaignTime:async(...args)=>{probe.calls.push(args);if(probe.mode==='pending')return new Promise(resolve=>probe.finish=resolve);if(probe.mode==='false')return false;return {ok:false,status:'requires-input',needsInput:[{path:'persistentCharacters[0].extensions.v5.spellEffects[0]',message:'Durée calendaire sans ancre : personnage durable.'}]};}};
@@ -21,7 +20,7 @@ const server=createServer(async(req,res)=>{try{const url=new URL(req.url,'http:/
 await mkdir(OUT,{recursive:true});await new Promise(done=>server.listen(0,'127.0.0.1',done));
 const checks=[],failures=[];let browser;
 try{
- browser=await chromium.launch({headless:true,...(existsSync(edge)?{executablePath:edge}:{})});
+ browser=await launchBrowser();
  const context=await browser.newContext({viewport:{width:390,height:844}}),page=await context.newPage();page.setDefaultTimeout(5000);
  const fresh=async()=>{await page.goto(`http://127.0.0.1:${server.address().port}/__independent__`,{waitUntil:'networkidle'});await page.getByRole('button',{name:'Ouvrir temps'}).click();};
  const fill=async()=>{await page.getByRole('spinbutton',{name:'Durée écoulée'}).fill('1');await page.getByRole('textbox',{name:'Motif MJ'}).fill('Contrôle indépendant');};

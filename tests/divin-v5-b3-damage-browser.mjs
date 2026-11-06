@@ -5,7 +5,7 @@ import {createServer} from 'node:http';
 import {readFileSync,statSync,mkdirSync,writeFileSync} from 'node:fs';
 import {resolve,sep,extname} from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {chromium} from 'playwright';
+import { launchBrowser } from './helpers/browser.mjs';
 const root=fileURLToPath(new URL('../',import.meta.url)),output=resolve(root,'tmp/gpt-phase-b/b3-browser');mkdirSync(output,{recursive:true});
 const types={'.html':'text/html; charset=utf-8','.js':'text/javascript','.json':'application/json','.css':'text/css','.svg':'image/svg+xml','.webmanifest':'application/manifest+json'};
 const server=createServer((req,res)=>{try{const file=resolve(root,decodeURIComponent(new URL(req.url,'http://localhost').pathname).slice(1)||'index.html');assert.ok(file.startsWith(resolve(root)+sep)&&statSync(file).isFile());res.writeHead(200,{'Content-Type':types[extname(file)]||'application/octet-stream','Cache-Control':'no-store'});res.end(readFileSync(file));}catch{res.writeHead(404).end();}});
@@ -15,7 +15,7 @@ const ready=()=>page.waitForFunction(()=>document.querySelector('#app-content')?
 const openPanel=async()=>{const panel=page.locator('[data-divine-panel]');await panel.waitFor();if(!await panel.evaluate(el=>el.open))await panel.locator('summary').first().click();return panel;};
 try{
  await new Promise(done=>server.listen(0,'127.0.0.1',done));
- browser=await chromium.launch({headless:true,executablePath:process.env.PLAYWRIGHT_EXECUTABLE_PATH||'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe'});
+ browser=await launchBrowser();
  const context=await browser.newContext({serviceWorkers:'block',viewport:{width:1440,height:900}});await context.route('https://**',route=>route.abort());
  page=await context.newPage();page.setDefaultTimeout(8000);const errors=[];page.on('pageerror',error=>errors.push(error.message));
  await page.goto(`http://127.0.0.1:${server.address().port}/`,{waitUntil:'domcontentloaded'});await ready();

@@ -2,13 +2,13 @@ import { createServer } from 'node:http';
 import { readFileSync, statSync } from 'node:fs';
 import { join, normalize, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { chromium } from 'playwright';
 import { expect } from 'playwright/test';
+import { launchBrowser } from './helpers/browser.mjs';
 const root = fileURLToPath(new URL('..', import.meta.url));
 const mime = { '.html':'text/html', '.js':'text/javascript', '.css':'text/css', '.json':'application/json', '.svg':'image/svg+xml' };
 const server = createServer((req,res) => { try { const p=join(root,normalize(decodeURIComponent(req.url.split('?')[0]) === '/' ? '/index.html' : decodeURIComponent(req.url.split('?')[0]))); if (!p.startsWith(root) || !statSync(p).isFile()) throw 0; res.writeHead(200,{'Content-Type':mime[extname(p)]||'application/octet-stream'}); res.end(readFileSync(p)); } catch { res.writeHead(404); res.end(); } });
 await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
-const browser=await chromium.launch({headless:true,executablePath:process.env.PLAYWRIGHT_EXECUTABLE_PATH});
+const browser=await launchBrowser();
 try {
  const page=await browser.newPage();
  await page.route('**/*',route=>route.request().url().startsWith(`http://127.0.0.1:${server.address().port}/`)?route.continue():route.abort());

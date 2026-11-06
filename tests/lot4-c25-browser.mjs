@@ -3,7 +3,7 @@ import { createServer } from 'node:http';
 import { readFileSync, statSync } from 'node:fs';
 import { resolve, extname, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { chromium } from 'playwright';
+import { launchBrowser } from './helpers/browser.mjs';
 
 // C25 (recette 3.34.0, « Aperçu d’attaque et modification de PV ») : après un changement de PV de la cible,
 // un aperçu déjà calculé ne doit pas garder son critique d’excédent sans être marqué périmé (ou être recalculé).
@@ -24,7 +24,7 @@ const server = createServer((req, res) => {
   } catch { res.writeHead(404).end(); }
 });
 await new Promise(done => server.listen(0, '127.0.0.1', done));
-const browser = await chromium.launch({ headless: true, executablePath: process.env.PLAYWRIGHT_EXECUTABLE_PATH || 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe' });
+const browser = await launchBrowser();
 try {
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, serviceWorkers: 'block' });
   const errors = [];

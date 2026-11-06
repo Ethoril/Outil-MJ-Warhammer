@@ -4,7 +4,7 @@ import { createServer } from 'node:http';
 import { readFileSync, statSync, mkdirSync } from 'node:fs';
 import { resolve, extname, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { chromium } from 'playwright';
+import { launchBrowser } from './helpers/browser.mjs';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const types = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.json': 'application/json', '.css': 'text/css; charset=utf-8', '.svg': 'image/svg+xml' };
@@ -23,7 +23,7 @@ const server = createServer((req, res) => {
   } catch { res.writeHead(404).end(); }
 });
 await new Promise(resolveServer => server.listen(0, '127.0.0.1', resolveServer));
-const browser = await chromium.launch({ headless: true, executablePath: process.env.PLAYWRIGHT_EXECUTABLE_PATH || 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe' });
+const browser = await launchBrowser();
 try {
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, serviceWorkers: 'block' });
   const errors = [];

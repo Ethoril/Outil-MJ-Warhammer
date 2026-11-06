@@ -5,8 +5,8 @@ import { createServer } from 'node:http';
 import { readFileSync, statSync, mkdirSync } from 'node:fs';
 import { join, resolve, extname, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { chromium } from 'playwright';
 import { expect } from 'playwright/test';
+import { launchBrowser } from './helpers/browser.mjs';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const mime = { '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.html': 'text/html; charset=utf-8', '.json': 'application/json', '.svg': 'image/svg+xml' };
@@ -20,7 +20,7 @@ const server = createServer((req, res) => {
 });
 await new Promise(resolveListen => server.listen(0, '127.0.0.1', resolveListen));
 const origin = `http://127.0.0.1:${server.address().port}`;
-const browser = await chromium.launch({ headless: true, executablePath: process.env.PLAYWRIGHT_EXECUTABLE_PATH || 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe' });
+const browser = await launchBrowser();
 mkdirSync(join(root, 'tmp/lot2-24-control-ui'), { recursive: true });
 const errors = [];
 async function setup({ width = 1440, both = false, states = [], extraTarget = false, actorMomentum = true, actorTalents = [], targetTalents = [] } = {}) {

@@ -4,9 +4,9 @@ import { createServer } from 'node:http';
 import { readFileSync, statSync } from 'node:fs';
 import { resolve, sep, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { chromium } from 'playwright';
 import { createCriticalAftermathRecord } from '../js/core/v5-critical-aftermath.js';
 import { getV5CriticalEffect } from '../js/data/v5-crits.js';
+import { launchBrowser } from './helpers/browser.mjs';
 
 // Full app + real Store; JSON seeds only documented preconditions that would
 // otherwise require many combat rounds (existing critical aftermath records).
@@ -30,7 +30,7 @@ const poisoned=person('poisoned','PJ Empoisonné','PJ',{hp:0,extensions:{v5:{pen
 const toeTarget={...toe.participant,zone:'active'},fatalTarget={...fatal.participant,zone:'active'},refusedTarget={...refusedFatal.participant,zone:'active'},combatFixture=()=>({schemaVersion:3,reserve:[],diceLines:[],log:[],extensions:{v5:{combatId:'f2-i-complete-browser',turnIndex:1}},combat:{round:1,currentActorId:'hero',order:['hero','foe'],participants:[hero,person('foe','Garde','PNJ',{hp:2,maxHp:20,states:[{id:'ko',key:'inconscient',name:'Inconscient',level:1}],actions:[]}),toeTarget,fatalTarget,refusedTarget,hand,poisoned]}});
 
 await new Promise(done=>server.listen(0,'127.0.0.1',done));
-const browser=await chromium.launch({headless:true,executablePath:process.env.PLAYWRIGHT_EXECUTABLE_PATH||(process.platform==='win32'?'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe':undefined)});
+const browser=await launchBrowser();
 try{
  const context=await browser.newContext({serviceWorkers:'block'}),page=await context.newPage(),errors=[];page.setDefaultTimeout(12000);page.on('pageerror',e=>errors.push(e.message));
  const origin=`http://127.0.0.1:${server.address().port}${base}`;await page.goto(origin,{waitUntil:'domcontentloaded'});await page.waitForFunction(()=>document.querySelector('#app-content')?.style.display==='block',{timeout:20000});await page.locator('#tab-combat').click();

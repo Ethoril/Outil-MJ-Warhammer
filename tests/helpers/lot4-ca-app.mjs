@@ -2,7 +2,7 @@ import { createServer } from 'node:http';
 import { readFileSync, statSync } from 'node:fs';
 import { join, normalize, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { chromium } from 'playwright';
+import { launchBrowser } from './browser.mjs';
 
 // Démarre index.html (Firebase remplacé au niveau du module) pour les parcours du lot 4, sous-lot C-a.
 const root = fileURLToPath(new URL('../..', import.meta.url));
@@ -20,7 +20,7 @@ export async function startApp() {
   });
   await new Promise((resolve, reject) => { server.once('error', reject); server.listen(0, '127.0.0.1', resolve); });
   const port = server.address().port;
-  const browser = await chromium.launch({ headless: true, executablePath: process.env.PLAYWRIGHT_EXECUTABLE_PATH || 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe' });
+  const browser = await launchBrowser();
   const context = await browser.newContext({ serviceWorkers: 'block', viewport: { width: 1440, height: 900 } });
   const page = await context.newPage();
   const errors = [];

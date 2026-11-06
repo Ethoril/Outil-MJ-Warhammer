@@ -4,12 +4,12 @@ import assert from 'node:assert/strict';
 import {createServer} from 'node:http';
 import {readFile,writeFile,mkdir} from 'node:fs/promises';
 import {resolve,extname,sep} from 'node:path';
-import {chromium} from 'playwright';
 import {workspaceHarness} from './helpers/lot3-workspace-harness.mjs';
+import { launchBrowser } from './helpers/browser.mjs';
 const root=resolve('.'),server=createServer(async(req,res)=>{try{const u=new URL(req.url,'http://localhost');if(u.pathname==='/harness'){res.setHeader('Content-Type','text/html');res.end(workspaceHarness);return;}const p=resolve(root,'.'+decodeURIComponent(u.pathname));assert.ok(p.startsWith(root+sep));res.setHeader('Content-Type',extname(p)==='.js'?'application/javascript':extname(p)==='.json'?'application/json':'text/css');res.end(await readFile(p));}catch{res.writeHead(404).end();}});
 await new Promise(ok=>server.listen(0,'127.0.0.1',ok));const origin='http://127.0.0.1:'+server.address().port;
 let browser;const receipts=[],errors=[];
-try{browser=await chromium.launch({headless:true,executablePath:process.env.PLAYWRIGHT_EXECUTABLE_PATH||'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe'});
+try{browser=await launchBrowser();
  for(const width of [1440,390])for(const theme of ['dark','parchment']){
   const context=await browser.newContext({viewport:{width,height:1050},serviceWorkers:'block'});
   await context.route('**/*',route=>route.request().url().startsWith(origin)?route.continue():route.abort());

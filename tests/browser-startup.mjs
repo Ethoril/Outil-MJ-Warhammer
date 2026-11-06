@@ -10,7 +10,7 @@ import { execFileSync } from 'node:child_process';
 import { readFileSync, statSync, mkdirSync } from 'node:fs';
 import { resolve, sep, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { chromium } from 'playwright';
+import { launchBrowser } from './helpers/browser.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const output = resolve(root, 'tmp/startup-receipt');
@@ -72,7 +72,7 @@ let browser;
 try {
   await new Promise(done => server.listen(0, '127.0.0.1', done));
   const url = 'http://127.0.0.1:' + server.address().port + basePath;
-  browser = await chromium.launch({ headless: true, executablePath: process.env.PLAYWRIGHT_EXECUTABLE_PATH || (process.platform === 'win32' ? 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe' : undefined) });
+  browser = await launchBrowser();
 
   const fresh = await browser.newContext({ serviceWorkers: 'block' });
   const page = await fresh.newPage(), errors = [], failed = [];

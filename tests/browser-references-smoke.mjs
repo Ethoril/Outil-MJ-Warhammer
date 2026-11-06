@@ -3,12 +3,12 @@ import {createServer} from 'node:http';
 import {readFile,stat} from 'node:fs/promises';
 import {resolve,extname,sep} from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {chromium} from 'playwright';
+import { launchBrowser } from './helpers/browser.mjs';
 const root=fileURLToPath(new URL('../',import.meta.url));
 const types={'.js':'text/javascript','.json':'application/json','.css':'text/css'};
 const server=createServer(async(req,res)=>{try{if(req.url==='/qa-reference'){res.writeHead(200,{'Content-Type':'text/html'});res.end('<!doctype html><meta charset="utf-8"><title>Recette références</title><link rel="stylesheet" href="/MJ.css"><link rel="stylesheet" href="/js/ui/workspace.css"><div id="panel-rules"></div>');return;}const path=resolve(root,'.'+decodeURIComponent(req.url.split('?')[0]));if(!path.startsWith(resolve(root)+sep)||!(await stat(path)).isFile())throw new Error('404');res.writeHead(200,{'Content-Type':types[extname(path)]||'text/plain'});res.end(await readFile(path));}catch{res.writeHead(404);res.end('Not found');}});
 await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));const url='http://127.0.0.1:'+server.address().port;
-const browser=await chromium.launch({headless:true,executablePath:process.env.PLAYWRIGHT_EXECUTABLE_PATH || (process.platform==='win32'?'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe':undefined)});
+const browser=await launchBrowser();
 try{
  const page=await browser.newPage();const errors=[];page.on('pageerror',error=>errors.push(error.message));
  await page.route('https://docs.google.com/**',route=>route.fulfill({status:503,body:'Unavailable'}));
