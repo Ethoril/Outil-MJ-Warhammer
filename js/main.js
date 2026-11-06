@@ -972,6 +972,7 @@ function renderAppMenu() {
   const running = active?.status === 'active';
   ['workspace-reminders', 'workspace-events'].forEach(id => { const button = qs(`#${id}`); if (button) button.disabled = !running; });
   const restart = qs('#workspace-restart-combat'); if (restart) restart.hidden = !(running || Store.getCombat?.().participants?.size > 0);
+  const endCombat = qs('#workspace-end-combat'); if (endCombat) endCombat.hidden = !(running || Store.getCombat?.().participants?.size > 0);
   const mount = qs('#app-menu-resume'); if (!mount) return;
   mount.replaceChildren();
   (Store.listSuspendedScenes?.() || []).forEach(scene => {
@@ -1809,16 +1810,16 @@ on(DOM.combat.fileInput, 'change', (e) => {
 on(DOM.combat.btnStart, 'click', startCombatFromButton);
 on(DOM.combat.btnNextTurn, 'click', advanceTurn);
 on(DOM.combat.btnReset, 'click', () => { DOM.combat.results.replaceChildren(); });
-if (DOM.combat.btnEndCombat) {
-  on(DOM.combat.btnEndCombat, 'click', () => {
-    // La vue de clôture a disparu en 3.11.0 : ce bouton masqué ne fait plus que réinitialiser (recette G-BASE-8).
-    if (confirm('Retirer tous les combattants et remettre le round à zéro ?')) {
-      Store.resetCombat();
-      DOM.combat.results?.replaceChildren();
-      showToast('Combat réinitialisé', 'warning', { label: 'Annuler', onClick: () => Store.undo() });
-    }
-  });
-}
+// Un seul gestionnaire pour l'ancien bouton masqué et pour la barre d'outils de séance.
+const endCombatWithConfirmation = () => {
+  if (confirm('Retirer tous les combattants et remettre le round à zéro ?')) {
+    Store.resetCombat();
+    DOM.combat.results?.replaceChildren();
+    showToast('Combat réinitialisé', 'warning', { label: 'Annuler', onClick: () => Store.undo() });
+  }
+};
+if (DOM.combat.btnEndCombat) on(DOM.combat.btnEndCombat, 'click', endCombatWithConfirmation);
+on(qs('#workspace-end-combat'), 'click', endCombatWithConfirmation);
 on(DOM.combat.btnD100, 'click', () => {
   const roll = d100();
   Store.log({ kind: 'roll', text: `🎲 Jet de d100 simple → ${roll}`, detail: { Jet: roll } });
