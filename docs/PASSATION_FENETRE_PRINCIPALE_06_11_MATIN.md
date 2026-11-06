@@ -43,6 +43,19 @@ La fenêtre principale garde son rôle : découper, lancer, relire les diffs, fu
   - Clarté d'esprit n'efface plus que Sonné (Q20, ce qui change aussi le combat) ;
   - Q5 couvert par un test.
 
+## Fait le 06/11 après-midi
+
+- `pnpm run verify` de Map Display : vert. Un test de démarrage de `prepare-server` a dépassé son délai sous charge, puis il est passé quand on l'a relancé seul.
+- U8 L6 et les questions d'États en magie, fusionnés (`ee03ec3`).
+- U8 L7, fusionné (`6b8a207`) avec les réponses du MJ :
+  - un seul fichier pour les suppléments ;
+  - coûts et quotas des talents de supplément ;
+  - sorts et prières de supplément lançables ;
+  - bandeau d'erreurs qui reste affiché.
+- Précache de `sw.js` complété pour les modules de L6 (`ebd6b30`).
+- Suite complète : 5 880 tests. Seuls les 4 audits E0, E1 et E2 connus échouent. Pour la lancer, utiliser `node --test "tests/**/*.test.js" "tests/**/*.test.mjs"` : un `node --test` nu balaie aussi les worktrees de `tmp/`.
+- Contrôle sur 8771 : l'application charge sans erreur, les nouveaux modules sont servis, aucun bandeau n'apparaît avec le fichier de suppléments vide, et le rendu des lignes barrées et des questions est conforme. Le parcours en jeu n'est pas fait : la fenêtre était masquée.
+
 ## À faire, dans l'ordre
 
 1. **`pnpm run verify`** dans `E:\rpg-map-display-liaison`, environ 6 min, à ne pas lancer en même temps que la suite de l'outil MJ.
