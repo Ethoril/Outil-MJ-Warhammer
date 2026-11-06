@@ -5,11 +5,11 @@ import { readFile, stat, mkdir, writeFile } from 'node:fs/promises';
 import { extname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { existsSync } from 'node:fs';
+import { launchBrowser } from './helpers/browser.mjs';
 const ROOT = resolve(fileURLToPath(new URL('..', import.meta.url)));
 const OUT = join(ROOT, 'tmp/divin/campaign-ui-independent');
 const html = `<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="/MJ.css"><link rel="stylesheet" href="/js/ui/workspace.css"></head><body><button id="open">Ouvrir temps</button><script type="module">
 import {openCampaignTimeDialog} from '/js/ui/v5-campaign-time-dialog.js';
-import { launchBrowser } from './helpers/browser.mjs';
 const probe={revision:5,calls:[],mode:'blocked',closed:0};
 const Store={getLocalRevision:()=>probe.revision,getFullJSON:()=>JSON.stringify({extensions:{v5:{gameClock:{revision:0,campaignSeconds:0}}}}),
  advanceCampaignTime:async(...args)=>{probe.calls.push(args);if(probe.mode==='pending')return new Promise(resolve=>probe.finish=resolve);if(probe.mode==='false')return false;return {ok:false,status:'requires-input',needsInput:[{path:'persistentCharacters[0].extensions.v5.spellEffects[0]',message:'Durée calendaire sans ancre : personnage durable.'}]};}};

@@ -3,6 +3,7 @@ import { createServer } from 'node:http';
 import { readFile, stat } from 'node:fs/promises';
 import { extname, join, normalize, resolve } from 'node:path';
 import { existsSync } from 'node:fs';
+import { launchBrowser } from './helpers/browser.mjs';
 
 const ROOT = resolve('.');
 const HISTORICAL_PANEL = 'C:\\Users\\arnot\\.codex\\visualizations\\2026\\10\\17\\01a14afb-f993-7171-b422-c21e6f8aa1e2\\divin-continuation-baseline\\js\\ui\\v5-divine-panel.js';
@@ -10,7 +11,6 @@ const serveHistoricalPanel = process.argv.includes('--historical-panel');
 const mime = { '.css':'text/css','.html':'text/html','.js':'text/javascript','.json':'application/json','.svg':'image/svg+xml' };
 const html = `<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="/js/ui/workspace.css"></head><body><main id="mount"></main><script type="module">
 import {createDivinePanel} from '/js/ui/v5-divine-panel.js';
-import { launchBrowser } from './helpers/browser.mjs';
 const actor={id:'priest',name:'Prêtresse',cult:'Myrmidia',extensions:{v5:{divine:{sin:0}}}};
 const panel=createDivinePanel({Store:{resolveDivineAccess:()=>({allowed:true,mode:'sheet',reason:'Accès établi.'}),getDivineAccessGrants:()=>[]},refresh:render});
 function render(){document.querySelector('#mount').replaceChildren(panel.render(actor,[actor]));}

@@ -5,6 +5,7 @@ import { mkdir, readFile, stat, writeFile } from 'node:fs/promises';
 import { extname, join, normalize, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { existsSync } from 'node:fs';
+import { launchBrowser } from './helpers/browser.mjs';
 
 const ROOT = resolve(fileURLToPath(new URL('..', import.meta.url)));
 const EVIDENCE = join(ROOT, 'tmp', 'divin', 'e5-browser-independent');
@@ -18,7 +19,6 @@ import {createPersistence} from '/js/core/persistence.js';
 import {createCombatEngine} from '/js/core/combat.js';
 import {initCombatBanner} from '/js/ui/combat-banner.js';
 import {getAllDivineContracts} from '/js/core/v5-divine-store.js';
-import { launchBrowser } from './helpers/browser.mjs';
 const DB='divine-e5-independent-native-idb-${RUN_ID}';
 const persistence=createPersistence({indexedDB,dbName:DB,contextId:'e5-independent'});
 const Store=createStore({storage:null,persistence,contextId:'e5-independent'});await Store.ready;

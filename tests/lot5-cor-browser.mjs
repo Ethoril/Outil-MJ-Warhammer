@@ -3,6 +3,7 @@ import { createServer } from 'node:http';
 import { readFileSync, statSync } from 'node:fs';
 import { resolve, extname, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { launchBrowser } from './helpers/browser.mjs';
 
 // Lot 5 · G-COR-3 : les familles de mutations autres que L06 s'affichaient sans nom de livre (« Mutations physiques ·  p.66 »).
 // Lot 5 · G-COR-2 : « Le choix MJ ou le délai secret requis n'est pas complet » doit nommer le champ manquant.
@@ -20,7 +21,6 @@ try {
   await page.route(`${origin}/__cor__.html`, route => route.fulfill({ contentType: 'text/html; charset=utf-8', body: `<!doctype html><html lang="fr"><body><div id="mount"></div><script type="module">
 import { createV5CorruptionPanel } from '/js/ui/v5-corruption-panel.js';
 import { V5_CORRUPTION_MUTATION_CATALOG } from '/js/core/v5-corruption-mutation-catalog.js';
-import { launchBrowser } from './helpers/browser.mjs';
 const scenario = { missing: ['gmChosenDomain'], status: {} };
 const Store = new Proxy({
   getCorruptionStatus: () => ({ baseRevision: 1, pointsKnown: true, mutations: [], corruptionPoints: 10, threshold: 5, corruptionSessionId: 's1', pendingThresholdTest: { id: 't' }, pendingMutation: null, ...scenario.status }),

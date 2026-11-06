@@ -6,6 +6,7 @@ import { existsSync } from 'node:fs';
 import { readFile, stat } from 'node:fs/promises';
 import { extname, join, normalize, resolve } from 'node:path';
 import { BEAST_PROFILES, KADON_PROFILES, creatureWounds } from '../js/core/v5-magic-arbitrations.js';
+import { launchBrowser } from './helpers/browser.mjs';
 
 /**
  * Livraison 2b du lot 3, retours de vérification, côté interface : désignation de plusieurs ennemis engagés, réponses de
@@ -42,7 +43,6 @@ import { createStore } from '/js/core/store.js';
 import { initWorkspaceView } from '/js/ui/workspace-view.js';
 import { getSpellContract } from '/js/core/v5-spell-contracts.js';
 import { initCombatBanner } from '/js/ui/combat-banner.js';
-import { launchBrowser } from './helpers/browser.mjs';
 const params = new URLSearchParams(location.search), scenario = params.get('s') || 'cast', casterOfWards = params.get('t') || 'mage-1';
 let saved = null; const listeners = new Map();
 const bus = { on(e, f) { if (!listeners.has(e)) listeners.set(e, new Set()); listeners.get(e).add(f); }, emit(e, ...a) { for (const f of listeners.get(e) || []) f(...a); } };
