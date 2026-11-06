@@ -28,7 +28,7 @@ Cadrage du 06/11/2026, à partir de `docs/PASSATION_CHANTIER_H.md` (`f842490`). 
 - **CA2** · L'aperçu liste, par PJ lié à une fiche (identité de fiche, jamais le nom), chaque différence durable sous la forme « champ : valeur de la fiche → valeur de l'outil », avec sa provenance lisible (« Création du familier », « Séquelle : pied perdu »…).
 - **CA3** · Un PJ sans différence n'apparaît pas ; s'il n'y a aucune différence, l'aperçu le dit et n'envoie rien.
 - **CA4** · Le MJ peut décocher une différence ou un PJ entier ; seules les lignes cochées partent.
-- **CA5** · Les Blessures courantes, les états de combat, les données de séance, les réglages de partie, les reçus d'audit et toute donnée réservée au MJ n'apparaissent jamais dans l'aperçu.
+- **CA5** · Les Blessures courantes, les états de combat, l'état du matériel (voir Hors périmètre), les données de séance, les réglages de partie, les reçus d'audit et toute donnée réservée au MJ n'apparaissent jamais dans l'aperçu.
 
 ### S2 · Envoyer
 - **CA6** · Un envoi produit une seule opération par fiche ; rejouée (même identifiant), elle ne s'applique pas deux fois.
@@ -64,7 +64,8 @@ Cadrage du 06/11/2026, à partir de `docs/PASSATION_CHANTIER_H.md` (`f842490`). 
 ## Hors périmètre
 - Écrire les Blessures courantes (`blessuresAct`) — décision Q4.
 - Écriture automatique à chaque commande — décision Q1.
-- Sur la fiche : monture et état monté, état et recharge des armes, poudre et projectiles, dégâts d'armure par pièce, effets divins calendaires (plafond, malus, réprobation, suspension), Hémorragie quotidienne, reliques, livre sacré perdu, Jugement dernier, expositions de Corruption, mots-clés posés ou écartés par le MJ — ils restent dans l'outil (Q3).
+- **État du matériel**, exclu comme les données de combat (décision du MJ du 06/11 soir) : disposition des armes (lâchée, cassée), rechargement, poudre et projectiles, dégâts d'armure par pièce, projectiles fichés, pavois. Ni écrit vers la fiche, ni montré dans l'aperçu.
+- Sur la fiche : monture et état monté, effets divins calendaires (plafond, malus, réprobation, suspension), Hémorragie quotidienne, reliques, livre sacré perdu, Jugement dernier, expositions de Corruption, mots-clés posés ou écartés par le MJ — ils restent dans l'outil (Q3).
 - Une zone réservée au MJ sur la fiche — décision Q6.
 - Monture lue depuis la fiche (option C, non retenue) ; Taille des PJ selon l'espèce côté outil (rappel 5, chantier à part) ; PV et Mouvement des espèces (déjà faits côté fiches).
 - RPG Map Display.
