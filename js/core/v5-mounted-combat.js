@@ -1,4 +1,5 @@
 import { creatureSizeOf } from './creature-size.js';
+import { slModifierClause } from './effect-engine.js';
 
 const isRecord = value => value !== null && typeof value === 'object' && !Array.isArray(value);
 const fold = value => String(value ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '');
@@ -84,6 +85,21 @@ export function planMountedAttack({ actor, target, actorMount = null, targetMoun
     }
   }
   return plan;
+}
+
+/**
+ * U8 lot L5c · sources d'Avantage et de Désavantage de monture → clauses du moteur d'effets (famille `mount`), sans branchement.
+ * Prend un plan de `planMountedAttack` ou de `planMountedDodge` (`advantageSources`, `disadvantageSources`) : une clause
+ * `grantAdvantage` / `grantDisadvantage` par source, `unique`, son propre groupe de cumul (id de la source). Avantage de cavalerie et
+ * Avantage d'un talent restent deux sources distinctes, la monture se somme avec toutes les familles (Q4). Le nombre de groupes
+ * `grantAdvantage` / `grantDisadvantage` retenus par `combineEffects` = le nombre de sources du plan.
+ */
+export function mountedAdvantageClauses(plan, { ownerId = 'participant' } = {}) {
+  const make = (op, row) => slModifierClause({ id: row.id, op, bearer: { kind: 'mount', sourceId: `${ownerId}:${row.id}` }, stack: 'unique', stackGroup: row.id });
+  return [
+    ...(Array.isArray(plan?.advantageSources) ? plan.advantageSources : []).map(row => make('grantAdvantage', row)),
+    ...(Array.isArray(plan?.disadvantageSources) ? plan.disadvantageSources : []).map(row => make('grantDisadvantage', row))
+  ];
 }
 
 /** V5 p. 168: Trick Rider is the sole mounted-Dodge exemption. */

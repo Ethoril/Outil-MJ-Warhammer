@@ -346,3 +346,24 @@ export function combineEffects(entries, { test = null, table = BETWEEN_GROUPS } 
   for (const group of resolved) if (group.status === 'applied' && typeof group.amount === 'number') totals[group.op] = safeSum(totals[group.op] ?? 0, group.amount);
   return { ready: !signals.length, groups: resolved, totals, signals };
 }
+
+// ---------------------------------------------------------------------------------------------------------------------------
+// Aides aux adaptateurs (lots L5a-c) : de l'existant vers des clauses, des clauses vers des effets portés. Rien n'est branché.
+// ---------------------------------------------------------------------------------------------------------------------------
+/**
+ * Clause d'un modificateur de DR (`modifySL`) ou d'une source d'Avantage / de Désavantage (`grantAdvantage`, `grantDisadvantage`,
+ * sans montant). `id` = identifiant du modificateur existant (l'affichage garde son libellé, repris du calcul actuel).
+ * `bearer` : { kind, sourceId, ... } ; `stack` : politique de l'effet (`max`, `add`, `unique`, `bestBonusWorstPenalty`…).
+ */
+export function slModifierClause({ id: clauseId, bearer, op = 'modifySL', amount, stack, stackGroup, role = 'actor', event = 'test.beforeRoll', when = [] }) {
+  const effect = { op, ...(op === 'modifySL' ? { amount } : {}), stack, stackGroup };
+  const clause = { id: clauseId, event, role, when, effects: [effect], bearer };
+  validateEffectClause(clause);
+  return clause;
+}
+
+/** Clauses communes → effets portés `[{ bearer, effect, clauseId }]` que `combineEffects` lit (chaque clause est validée). */
+export function clauseEntries(clauses) {
+  if (!Array.isArray(clauses)) fail('Clauses requises');
+  return clauses.flatMap(clause => { validateEffectClause(clause); return clause.effects.map(effect => ({ bearer: clause.bearer, effect, clauseId: clause.id })); });
+}

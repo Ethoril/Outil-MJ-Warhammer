@@ -3,6 +3,8 @@
 // Module pur : lit les Traits (texte « Nom (précision) », noms anglais ou français) et rend un plan (modificateurs, déplacements,
 // points non résolus, rappels, reçu) sans rien écrire. Ce que le moteur ne sait pas trancher reste en rappel.
 
+import { slModifierClause } from './effect-engine.js';
+
 const fold = value => String(value ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/\s+/g, ' ').trim();
 
 const RULES = {
@@ -154,6 +156,18 @@ export function movementTestRules({ actor, skillLabel = '', kind, defending = fa
   if (owns('arboreal') && /escalade|climb|discretion/.test(label)) push('arboreal', 'move:arboreal', 'Escalade ou Discrétion (Arboricole)', 'Escalade et Discrétion');
   if (owns('marine') && context.inWater === false) push('marine', 'move:marine-dry', "Créature marine hors de l'eau", 'tous les Tests');
   return modifiers;
+}
+
+/**
+ * U8 lot L5a · adaptateur Traits de déplacement → clauses du moteur d'effets (famille `trait`), sans branchement : mêmes entrées que
+ * `movementTestRules`, une clause `modifySL` par modificateur retenu (id de clause = id du modificateur). Un Trait = une source
+ * (`<participant>:trait:<clé>`), un groupe de cumul par Trait, politique `max` (Q17 : deux occurrences d'un même Trait, la plus haute) ;
+ * entre familles les Traits se somment avec tout (Q11, BETWEEN_GROUPS).
+ */
+export function movementTestClauses(args) {
+  const owner = args?.actor?.id ?? 'participant';
+  const traitOf = id => ({ 'move:fly-ranged': 'fly', 'move:amphibious-swim': 'amphibious', 'move:arboreal': 'arboreal', 'move:marine-dry': 'marine' })[id];
+  return movementTestRules(args).map(row => slModifierClause({ id: row.id, bearer: { kind: 'trait', sourceId: `${owner}:trait:${traitOf(row.id)}` }, amount: row.amount, stack: 'max', stackGroup: row.id }));
 }
 
 /** Vrai si le participant porte un Trait de déplacement de la clé donnée (le panneau n'affiche une question que si besoin). */

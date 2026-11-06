@@ -3,6 +3,7 @@
 // on en tire les poids, le rapport et le modificateur du seul Test d'attaque de mêlée (jamais celui de défense).
 import { planCreatureSize } from './creature-size.js';
 import { participantCamp } from './encounters.js';
+import { slModifierClause } from './effect-engine.js';
 import { availableV5TalentMeasures, previewV5TalentMeasure } from './v5-talent-measures.js';
 
 const ATTACK_TYPES = ['attack', 'attaque'];
@@ -78,6 +79,19 @@ export function planOutnumbering({ actor, target, participants = [], context = {
   const modifiers = surrounded ? [{ id: 'outnumber:surrounded', label: `Cible encerclée (${ratio})`, amount: 2 }]
     : outnumbered ? [{ id: 'outnumber', label: `Surnombre (${ratio})`, amount: 1 }] : [];
   return { applicable, attackers: { count: attackers.length, weight: attackerWeight }, defenders: { count: defenders.length, weight: defenderWeight }, outnumbered, surrounded, amount, summary, modifiers, reminders };
+}
+
+/**
+ * U8 lot L5b · surnombre → clauses du moteur d'effets (famille `situation`, Q12), sans branchement : mêmes entrées et mêmes garde-fous
+ * que `outnumberTestRules`. +1 DR (surnombre) et +2 DR (cible encerclée) sont deux clauses du groupe `outnumber` en politique `max` :
+ * « non cumulés » (L06 p. 166-167) devient une politique, la plus haute l'emporte et l'autre reste listée comme écartée. Le
+ * surnombre se somme ensuite avec toutes les autres familles (Q4, Q12). Total des clauses = somme de `outnumberTestRules`.
+ */
+export function outnumberTestClauses({ actor, target, participants = [], kind, defending = false, action = {}, context = {} }) {
+  if (defending || kind !== 'melee' || !ATTACK_TYPES.includes(action.type)) return [];
+  const plan = planOutnumbering({ actor, target, participants, context });
+  const make = (id, amount) => slModifierClause({ id, bearer: { kind: 'situation', sourceId: `${actor?.id ?? 'participant'}:outnumber` }, amount, stack: 'max', stackGroup: 'outnumber' });
+  return [...(plan.outnumbered ? [make('outnumber', 1)] : []), ...(plan.surrounded ? [make('outnumber:surrounded', 2)] : [])];
 }
 
 /** Modificateurs du Test d'attaque de mêlée ; rien pour un Test de défense, un tir ou un autre Test. */
