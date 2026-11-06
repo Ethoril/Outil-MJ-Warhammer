@@ -44,14 +44,39 @@ test('une modification du profil diffuse un état pour chaque copie', () => {
 
 // Couleur du pion d'un PJ (contrat §4, champ `color`) : cerclage teinté sur la carte (lot P2).
 const pj = { id: 'e', kind: 'PJ', persistentCharacterId: 'c1', profileId: 'ely', name: 'Elysia', hp: 12 };
-test('couleur du pion : #rrggbb validé, envoyé pour un PJ seulement, null sans couleur', () => {
+test('couleur du pion : #rrggbb validé, renseigné pour un PJ seulement, null ailleurs', () => {
   assert.equal(tokenStateOf(pj, [], { color: '#B3262E' }).color, '#b3262e');
   assert.equal(tokenStateOf(pj, [], {}).color, null);
   assert.equal(tokenStateOf(pj, [], { color: 'rouge' }).color, null);
-  assert.equal(Object.hasOwn(tokenStateOf(npc, [], { color: '#b3262e' }), 'color'), false);
+  assert.equal(tokenStateOf(npc, [], { color: '#b3262e' }).color, null);
   const states = tokenStatesOf([pj, npc], { colorOf: p => (p.profileId === 'ely' ? '#b3262e' : '#2e9e6e') });
   assert.equal(states['pj:c1'].color, '#b3262e');
-  assert.equal(Object.hasOwn(states['p:g'], 'color'), false);
+  assert.equal(states['p:g'].color, null);
+});
+// Décision du MJ du 06/11 : la monture d'un PJ prend la teinte de son cavalier, sauf couleur propre à son profil.
+const cheval = { id: 'm', kind: 'Créature', profileId: 'destrier', name: 'Destrier', hp: 20, extensions: { v5: { mountOf: 'e' } } };
+test('couleur du pion : la monture d’un PJ prend la couleur du cavalier, sauf la sienne ; démontée, null', () => {
+  const colors = { ely: '#b3262e' };
+  const colorOf = p => colors[p.profileId] ?? null;
+  assert.equal(tokenStatesOf([pj, cheval], { colorOf })['p:m'].color, '#b3262e');
+  assert.equal(tokenStatesOf([pj, { ...cheval, extensions: { v5: { mountOf: 'e', mounted: false } } }], { colorOf })['p:m'].color, '#b3262e');
+  colors.destrier = '#6fb4e6';
+  assert.equal(tokenStatesOf([pj, cheval], { colorOf })['p:m'].color, '#6fb4e6', 'couleur propre de la monture');
+  delete colors.destrier;
+  assert.equal(tokenStatesOf([pj, { ...cheval, extensions: {} }], { colorOf })['p:m'].color, null, 'sans cavalier');
+  assert.equal(tokenStatesOf([{ ...npc, id: 'e' }, cheval], { colorOf: () => '#b3262e' })['p:m'].color, null, 'cavalier non PJ');
+});
+test('couleur du pion : la monture est renvoyée quand son cavalier PJ la prend puis la quitte', () => {
+  let mount = { ...cheval, extensions: {} };
+  const channel = { sent: [], postMessage(message) { this.sent.push(message); } };
+  const link = createMapLink({ channel, getParticipants: () => [pj, mount], colorOf: p => (p.profileId === 'ely' ? '#b3262e' : null) });
+  link.refresh(); channel.sent.length = 0;
+  const sentFor = ref => channel.sent.filter(m => m.type === 'token.state' && m.payload.ref === ref).map(m => m.payload.color);
+  mount = cheval; link.refresh();
+  assert.deepEqual(sentFor('p:m'), ['#b3262e'], 'cavalier posé : teinte du PJ');
+  channel.sent.length = 0;
+  mount = { ...cheval, extensions: {} }; link.refresh();
+  assert.deepEqual(sentFor('p:m'), [null], 'cavalier retiré : teinte effacée');
 });
 test('couleur du pion : normalisation du profil, aller-retour JSON, import refusé hors format', () => {
   const valid = value => sanitizeProfile({ id: 'e', name: 'Elysia', tokenColor: value }).tokenColor;
