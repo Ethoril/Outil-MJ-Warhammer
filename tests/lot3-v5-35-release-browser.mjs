@@ -38,6 +38,7 @@ try {
   browser = await launchBrowser();
   for (const width of [1440, 390]) {
     const context = await browser.newContext({ viewport: { width, height: 900 }, serviceWorkers: 'allow' });
+    await context.addInitScript(()=>{ if('serviceWorker' in navigator) window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{})); }); // index.html n'enregistre plus le service worker sur localhost/127.0.0.1 (d17639e) : le test le fait à sa place
     const page = await context.newPage(), errors = [];
     page.on('pageerror', error => errors.push(error.message));
     await page.route('**/*', route => new URL(route.request().url()).origin === origin ? route.continue() : route.abort());
