@@ -18,10 +18,12 @@ import {previewV5Test,selectV5Test,normalizeV5Roll} from './v5-roll.js';
 import {resolveV5ConditionTestContext} from './v5-test-context.js';
 import {effectiveSkillScore,baseCharacteristicScore,magicSkillModifiers} from './v5-magic-talents.js';
 import {betweenGroupsRule} from './effect-engine.js';
+import {SUPPLEMENT_DIVINE_CONTRACTS} from './supplement-loader.js';
 
 const clone=value=>structuredClone(value);
 const text=value=>typeof value==='string'&&value.trim()?value.trim():null;
-const entries=()=>(registry.contracts || registry.entries || []).map(row=>({...row,schemaVersion:registry.schemaVersion,sourceFingerprint:registry.sourceFingerprint}));
+// Prières de supplément déclarées en JSON (U8 L7, Q4 du MJ 06/11) : invocables comme celles du livre.
+const entries=()=>[...(registry.contracts || registry.entries || []),...SUPPLEMENT_DIVINE_CONTRACTS].map(row=>({...row,schemaVersion:registry.schemaVersion,sourceFingerprint:registry.sourceFingerprint}));
 const failure=(status,error,needsInput=[])=>({ready:false,ok:false,status,error,needsInput});
 const ruleError=message=>Object.assign(new Error(message),{userFacing:true,code:'DIVINE_REFUSED'});
 // Une confirmation est liée à l’aperçu effectivement émis, y compris son jet,

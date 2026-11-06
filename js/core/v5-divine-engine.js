@@ -2,6 +2,7 @@
 import { previewV5Test, selectV5Test, normalizeV5Roll } from './v5-roll.js';
 import { acquireV5Conditions, healV5Wounds } from './v5-effects.js';
 import DIVINE_REGISTRY from '../data/v5-divine-contracts.json' with { type: 'json' };
+import { SUPPLEMENT_DIVINE_CONTRACTS, isSupplementDivineContract } from './supplement-loader.js';
 import {resolveDivineAccess,emptyDivineAccess,resolveDivineTalentRestriction} from './v5-divine-access.js';
 import {applyPrayerSLCaps,getPrayerSLModifiers} from './v5-divine-prayer-caps.js';
 import {v5ResourceIdentity} from './v5-resources.js';
@@ -43,10 +44,11 @@ function sourceError(contract, input = {}) {
   if (!contract || typeof contract.id !== 'string') return 'Contrat divin v1 requis.';
   if (!contract.source || !contract.sourceReceipt) return 'Source et reçu de source requis.';
   // Livre de base V5, ou supplément déclaré par le registre (sourceManifest.supplementBooks) pour un module de miracles.
-  const supplement = DIVINE_REGISTRY.sourceManifest?.supplementBooks?.some(book => book.document === contract.source.document && book.fileSha256 === contract.source.fileSha256);
+  // Prière de supplément déclarée en JSON (U8 L7) : sa source est le supplément chargé et validé au démarrage.
+  const supplement = isSupplementDivineContract(contract) || DIVINE_REGISTRY.sourceManifest?.supplementBooks?.some(book => book.document === contract.source.document && book.fileSha256 === contract.source.fileSha256);
   if (contract.source.document !== 'Livre de base V5 EN v2.pdf' && !supplement) return 'La source V5 EN canonique est requise; le catalogue ou le Livre FR V4 ne confirme pas cette règle.';
   if (input.sourceFingerprint !== DIVINE_REGISTRY.sourceFingerprint) return 'L’empreinte du registre divin canonique est absente ou obsolète.';
-  const canonical = DIVINE_REGISTRY.contracts?.find(row => row.id === contract.id);
+  const canonical = [...(DIVINE_REGISTRY.contracts || []), ...SUPPLEMENT_DIVINE_CONTRACTS].find(row => row.id === contract.id);
   // The Store attaches registry envelope metadata to its canonical contract.
   // Those two fields are authenticated independently above; all domain fields
   // still have to match the generated row byte-for-byte after key ordering.

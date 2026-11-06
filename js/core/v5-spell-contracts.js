@@ -20,7 +20,10 @@ import { magicTalentRank, applyMagicAttempt, suffusedCastingBonus, magicalSenseR
  * Module pur : aucune E/S, aucun tirage implicite, prévisualisations sans mutation d'état.
  */
 
-import SPELL_CONTRACTS from '../data/v5-spell-contracts.json' with { type: 'json' };
+import BOOK_SPELL_CONTRACTS from '../data/v5-spell-contracts.json' with { type: 'json' };
+import { SUPPLEMENT_SPELL_CONTRACTS } from './supplement-loader.js';
+// Sorts de supplément déclarés en JSON (U8 L7, Q4 du MJ 06/11) : lançables comme ceux du livre.
+const SPELL_CONTRACTS = [...BOOK_SPELL_CONTRACTS, ...SUPPLEMENT_SPELL_CONTRACTS];
 import {
   resolveMagicMissile,
   resolveSpellDamage,

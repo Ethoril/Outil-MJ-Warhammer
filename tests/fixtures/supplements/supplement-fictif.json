@@ -217,7 +217,22 @@
                 }
               ]
             }
-          ]
+          ],
+          "description": "Miracle fictif de test (U8 L7) : +2 DR aux Tests de Résistance du prêtre.",
+          "page": 1,
+          "type": "miracle",
+          "deity": "Rhya",
+          "range": {
+            "kind": "self"
+          },
+          "targets": {
+            "kind": "self"
+          },
+          "duration": {
+            "kind": "characteristic-bonus",
+            "characteristic": "Soc",
+            "unit": "rounds"
+          }
         }
       ],
       "spells": [
@@ -239,7 +254,24 @@
                 }
               ]
             }
-          ]
+          ],
+          "description": "Sort fictif de test (U8 L7) : la peau de la cible durcit comme le corail.",
+          "page": 1,
+          "lore": "Domaine fictif",
+          "domain": null,
+          "wind": null,
+          "cn": 3,
+          "range": "Bonus de Force Mentale mètres",
+          "target": "1",
+          "duration": "Bonus de Force Mentale Rounds",
+          "overcast": {
+            "allowed": true,
+            "options": [
+              "range",
+              "duration",
+              "targets"
+            ]
+          }
         }
       ]
     }

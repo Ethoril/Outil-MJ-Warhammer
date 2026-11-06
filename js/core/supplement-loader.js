@@ -33,6 +33,17 @@ export const LAYER_BRICKS = Object.freeze({ event: 'test.beforeRoll', role: 'act
 const SUPPLEMENT_KEYS = ['id', 'title', 'version', 'edition', 'reference', 'talents', 'prayers', 'spells'];
 const TALENT_KEYS = ['id', 'name', 'description', 'status', 'source', 'clauses'];
 const LAYER_KEYS = ['id', 'name', 'description', 'reference', 'clauses'];
+/** Champs de lancement (MJ 06/11, Q4) : un sort et une prière de supplément sont lançables par les chemins existants. */
+const SPELL_KEYS = [...LAYER_KEYS, 'page', 'lore', 'domain', 'wind', 'cn', 'range', 'target', 'duration', 'overcast', 'aoe'];
+const PRAYER_KEYS = [...LAYER_KEYS, 'page', 'type', 'deity', 'range', 'targets', 'duration'];
+export const SPELL_OVERCAST_OPTIONS = Object.freeze(['range', 'duration', 'targets', 'aoe']);
+/** Paramètres de prière (vocabulaire du registre divin, `numericParam` de v5-divine-engine.js). */
+export const PRAYER_PARAM_KINDS = Object.freeze({
+  range: Object.freeze(['fixed', 'self', 'touch', 'characteristic', 'characteristic-bonus']),
+  targets: Object.freeze(['count', 'self', 'characteristic-bonus']),
+  duration: Object.freeze(['fixed', 'characteristic', 'characteristic-bonus']),
+});
+const CHARACTERISTICS = ['CC', 'CT', 'F', 'E', 'I', 'Ag', 'Dex', 'Int', 'FM', 'Soc'];
 const LAYER_CLAUSE_KEYS = ['id', 'event', 'role', 'when', 'effects'];
 const LAYER_EFFECT_KEYS = ['op', 'amount', 'key', 'stackable'];
 
@@ -79,7 +90,7 @@ function compileTalent(element, supplement) {
 
 /** Prière ou sort de supplément → élément compilé `{ id, name, kind, clauses (avec porteur), testModifiers }`. */
 function compileLayerElement(element, kind, supplement) {
-  fields(element, LAYER_KEYS);
+  fields(element, kind === 'spell' ? SPELL_KEYS : PRAYER_KEYS);
   requireText(element.id, 'id'); requireText(element.name, 'name');
   if (!Array.isArray(element.clauses) || !element.clauses.length) fail('champ « clauses » requis (au moins une clause)', 'clauses');
   const testModifiers = {};
@@ -105,8 +116,69 @@ function compileLayerElement(element, kind, supplement) {
   });
   const stackable = element.clauses.some(clause => clause.effects?.some(effect => effect.stackable === true));
   if (stackable && element.clauses.some(clause => clause.effects?.some(effect => effect.stackable !== true))) fail('« stackable » doit valoir pour tous les effets de l’élément (la couche entière se cumule)', 'clauses');
-  return { id: element.id, name: element.name, kind, supplementId: supplement.id, reference: element.reference ?? supplement.reference ?? null,
+  const compiled = { id: element.id, name: element.name, kind, supplementId: supplement.id, reference: element.reference ?? supplement.reference ?? null,
     description: element.description ?? null, clauses, testModifiers, ...(stackable ? { stackable: true } : {}) };
+  compiled.contract = kind === 'spell' ? spellContract(element, compiled, supplement) : prayerContract(element, compiled, supplement);
+  return compiled;
+}
+
+/** Sort de supplément → contrat de sort (format de `v5-spell-contracts.json`, effets `test-modifiers` comme Bonne Volonté). */
+function spellContract(element, compiled, supplement) {
+  requireText(element.lore, 'lore');
+  if (!Number.isSafeInteger(element.cn) || element.cn < 0) fail('NI entière positive ou nulle requise', 'cn');
+  for (const key of ['range', 'target', 'duration']) requireText(element[key], key);
+  for (const key of ['domain', 'wind']) if (element[key] != null && !text(element[key])) fail('texte ou null attendu', key);
+  if (element.page != null && !Number.isSafeInteger(element.page)) fail('page entière attendue', 'page');
+  if (element.aoe !== undefined && typeof element.aoe !== 'boolean') fail('vrai ou faux attendu', 'aoe');
+  const overcast = element.overcast ?? { allowed: false, options: [] };
+  fields(overcast, ['allowed', 'options'], 'overcast.');
+  if (typeof overcast.allowed !== 'boolean' || !Array.isArray(overcast.options) || overcast.options.some(option => !SPELL_OVERCAST_OPTIONS.includes(option)))
+    fail(`surincantation : { allowed, options } avec options parmi ${SPELL_OVERCAST_OPTIONS.join(', ')}`, 'overcast');
+  return { id: element.id, row: null, name: element.name, canonicalName: null, page: element.page ?? null, domain: element.domain ?? null, wind: element.wind ?? null,
+    type: element.lore, cn: element.cn, range: element.range, target: element.target, duration: element.duration, sourceFingerprint: null, treatment: 'engine',
+    overcast: { allowed: overcast.allowed, options: [...overcast.options] },
+    effects: { type: 'test-modifiers', ...(element.aoe ? { aoe: true } : {}), testModifiers: { ...compiled.testModifiers }, ...(compiled.stackable ? { isStackable: true } : {}) },
+    reminders: element.description ?? '', assistedClauses: [], sharedWith: null, sourceBook: supplement.id, edition: `Supplément ${supplement.title} (${supplement.edition})`,
+    isBookV5: false, isElf: false, isWom: false, isJadeVariant: false, isCatalogue: false, isTradition: false, ficheFollowUp: false, isVortex: false, isAuxiliary: false,
+    supplementId: supplement.id };
+}
+
+const BOOK_DIVINE = divineContracts.contracts;
+const DIVINE_EXTENSIONS = {
+  blessing: BOOK_DIVINE.find(row => row.id === 'divine:blessing:myrmidia:battle')?.extensions ?? [],
+  miracle: BOOK_DIVINE.find(row => row.type === 'miracle' && row.extensions?.[0]?.sourceRef === 'miracle-scaling')?.extensions ?? [],
+};
+function prayerParam(value, name) {
+  fields(value, ['kind', 'value', 'unit', 'characteristic'], `${name}.`);
+  if (!PRAYER_PARAM_KINDS[name].includes(value.kind)) fail(`type « ${value.kind} » non couvert (${PRAYER_PARAM_KINDS[name].join(', ')})`, `${name}.kind`);
+  if (['fixed', 'count'].includes(value.kind) && (!Number.isSafeInteger(value.value) || value.value < 0)) fail('valeur entière requise', `${name}.value`);
+  if (value.kind.startsWith('characteristic') && !CHARACTERISTICS.includes(value.characteristic)) fail(`caractéristique parmi ${CHARACTERISTICS.join(', ')}`, `${name}.characteristic`);
+  if (name === 'duration' && !['rounds', 'minutes', 'hours', 'days'].includes(value.unit)) fail('unité de durée : rounds, minutes, hours ou days', 'duration.unit');
+  if (name === 'range' && ['fixed', 'characteristic', 'characteristic-bonus'].includes(value.kind) && value.unit !== 'yards') fail('unité de portée « yards » (mètres, même valeur)', 'range.unit');
+  return clone(value);
+}
+/**
+ * Prière de supplément → contrat divin v1 (format de `v5-divine-contracts.json`). Le talent requis (Béni / Invocation du dieu) et
+ * la progression par DR sont repris d'une prière du livre du même dieu et du même type : un dieu sans prière au livre est refusé.
+ */
+function prayerContract(element, compiled, supplement) {
+  if (!['blessing', 'miracle'].includes(element.type)) fail('type « blessing » ou « miracle » requis', 'type');
+  requireText(element.deity, 'deity');
+  const model = BOOK_DIVINE.find(row => row.type === element.type && row.deity === element.deity && row.requiredTalent?.id);
+  if (!model) fail(`aucune ${element.type === 'blessing' ? 'bénédiction' : 'miracle'} du livre pour « ${element.deity} » : talent requis inconnu`, 'deity');
+  if (element.page != null && !Number.isSafeInteger(element.page)) fail('page entière attendue', 'page');
+  const params = { range: prayerParam(element.range, 'range'), targets: prayerParam(element.targets, 'targets'), duration: prayerParam(element.duration, 'duration') };
+  const duration = params.duration.kind === 'fixed' ? { value: params.duration.value, unit: params.duration.unit }
+    : { value: null, sourceParameter: 'params.duration', unit: params.duration.unit, requiresResolvedExpiry: true };
+  const source = { document: `supplement:${supplement.id}`, fileSha256: null, edition: `${supplement.title} (${supplement.edition})`, sourceStatus: 'supplement-json',
+    printedPage: element.page ?? null, section: element.name, clauses: [] };
+  return { id: element.id, type: element.type, name: element.name, deity: element.deity, catalogueName: element.name, status: 'implemented',
+    source, sourceReceipt: { ...clone(source), supplementId: supplement.id, supplementVersion: supplement.version },
+    requiredTalent: clone(model.requiredTalent), requiredKnownPrayer: true, params, extensions: clone(DIVINE_EXTENSIONS[element.type]),
+    effects: [{ type: 'test-modifier', modifiers: { ...compiled.testModifiers }, duration }],
+    labels: { effect: element.description ?? '', sourceStatus: `Supplément ${supplement.title}` },
+    clauses: [{ id: 'pray-test', mode: 'engine', sourceRef: 'prayer-success' }, ...compiled.clauses.map(clause => ({ id: clause.id, mode: 'engine', sourceRef: `supplement:${supplement.id}` }))],
+    needsInput: [], supplementId: supplement.id };
 }
 
 /**
@@ -188,6 +260,11 @@ if (SUPPLEMENT_ERRORS.length && typeof console !== 'undefined') for (const error
 const byId = list => new Map(list.map(row => [row.id, row]));
 const SPELLS = byId(SUPPLEMENTS.spells), PRAYERS = byId(SUPPLEMENTS.prayers);
 export const supplementSpell = id => SPELLS.get(id) ?? null;
+/** Contrats de lancement des sorts et prières de supplément (ajoutés aux registres de v5-spell-contracts.js et du divin). */
+export const SUPPLEMENT_SPELL_CONTRACTS = Object.freeze(SUPPLEMENTS.spells.map(row => row.contract));
+export const SUPPLEMENT_DIVINE_CONTRACTS = Object.freeze(SUPPLEMENTS.prayers.map(row => row.contract));
+/** Un contrat divin est-il une prière de supplément chargée (source `supplement:<id>`) ? */
+export const isSupplementDivineContract = contract => Boolean(typeof contract?.source?.document === 'string' && contract.source.document.startsWith('supplement:') && PRAYERS.has(contract.id));
 export const supplementPrayer = id => PRAYERS.get(id) ?? null;
 export const listSupplementSpells = () => [...SUPPLEMENTS.spells];
 export const listSupplementPrayers = () => [...SUPPLEMENTS.prayers];

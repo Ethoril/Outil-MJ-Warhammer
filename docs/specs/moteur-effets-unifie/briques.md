@@ -77,15 +77,33 @@ Contrat v2 des talents (même évaluateur que les talents du livre) :
 - Coûts, exemptions et quotas d’action (`costs`, `exemptions`, `quotas`) : vocabulaire de `js/core/v5-action-costs-schema.js`. Coût `{ id, resource, amount, actorId? }` (ressource `momentum`, `fate` ou ressource déclarée) ; exemption `{ costId, sourceId }` ; quota `{ id, scope, maximum, amount? }`, portée `turn`, `round`, `encounter` ou `session` (« une fois par Round » : `{ id: "…", scope: "round", maximum: 1 }`).
 - Le personnage acquiert le talent par son identifiant (`talents: [{ id, status: "resolved", rank }]`).
 
-### Prière et sort
+### Sort
 
-Effets de couche, cumulés comme les sorts et prières du livre :
+Lançable par le panneau de magie comme un sort du livre (NI, portée, cible, durée du JSON) ; ses effets sont des effets de couche :
 
 ```json
 {
   "id": "spell-exemple",
   "name": "Exemple",
+  "description": "Texte affiché en rappel.",
   "reference": "Sea of Claws, p. …",
+  "page": 42,
+  "lore": "Domaine de …",
+  "domain": null,
+  "wind": null,
+  "cn": 3,
+  "range": "Bonus de Force Mentale mètres",
+  "target": "1",
+  "duration": "Bonus de Force Mentale Rounds",
+  "overcast": {
+    "allowed": true,
+    "options": [
+      "range",
+      "duration",
+      "targets"
+    ]
+  },
+  "aoe": false,
   "clauses": [
     {
       "id": "endurance",
@@ -104,11 +122,62 @@ Effets de couche, cumulés comme les sorts et prières du livre :
 }
 ```
 
+- `cn` : NI entière ; `range`, `target`, `duration` : textes du livre, lus comme ceux des sorts du livre (« Vous », « Bonus de Force Mentale mètres », « Bonus de Force Mentale Rounds »…) ; `lore` : libellé du Domaine ; surincantation : options parmi `range`, `duration`, `targets`, `aoe`.
+
+### Prière
+
+Invocable par le panneau divin comme une prière du livre ; le talent requis (Béni / Invocation du dieu) et la progression par DR sont repris d’une prière du livre du même dieu et du même type :
+
+```json
+{
+  "id": "divine:sea-of-claws:exemple",
+  "name": "Exemple",
+  "description": "Texte affiché.",
+  "reference": "Sea of Claws, p. …",
+  "page": 42,
+  "type": "miracle",
+  "deity": "Manann",
+  "range": {
+    "kind": "self"
+  },
+  "targets": {
+    "kind": "self"
+  },
+  "duration": {
+    "kind": "characteristic-bonus",
+    "characteristic": "Soc",
+    "unit": "rounds"
+  },
+  "clauses": [
+    {
+      "id": "resistance",
+      "event": "test.beforeRoll",
+      "role": "actor",
+      "when": [],
+      "effects": [
+        {
+          "op": "modifySL",
+          "amount": 2,
+          "key": "Résistance"
+        }
+      ]
+    }
+  ]
+}
+```
+
+- `type` : `blessing` ou `miracle` ; `deity` : un dieu qui a déjà une prière de ce type au livre.
+- `range` : `kind` parmi `fixed`, `self`, `touch`, `characteristic`, `characteristic-bonus` ; `value` entière pour `fixed` / `count`, `characteristic` (CC, CT, F, E, I, Ag, Dex, Int, FM, Soc) pour `characteristic*`, `unit: "yards"` (mètres, même valeur).
+- `targets` : `kind` parmi `count`, `self`, `characteristic-bonus` ; `value` entière pour `fixed` / `count`, `characteristic` (CC, CT, F, E, I, Ag, Dex, Int, FM, Soc) pour `characteristic*`.
+- `duration` : `kind` parmi `fixed`, `characteristic`, `characteristic-bonus` ; `value` entière pour `fixed` / `count`, `characteristic` (CC, CT, F, E, I, Ag, Dex, Int, FM, Soc) pour `characteristic*`, `unit` : `rounds`, `minutes`, `hours` ou `days`.
+
+### Effets de couche (sort et prière)
+
 - Événement `test.beforeRoll`, rôle `actor`, `when` vide, opération(s) : `modifySL`.
 - `key` : clé de Test (« Endurance », « Corps à corps (Escrime) », « carac:e », « all » ou « Tous les Tests », « Perception adverse »).
 - `amount` : entier non nul ; `stackable: true` (sur tous les effets de l’élément) pour une exception cumulée explicite du livre.
 - Cumul imposé par la famille : `bestBonusWorstPenalty` (groupe `magic-test`) ; une couche = une source, ses clés visant le même Test s’additionnent (Q13).
-- Les autres effets des sorts et prières (dégâts, États, Traits, PA…) ne sont pas encore des briques : ils restent dans les formats actuels (`v5-spell-contracts.json`, `v5-divine-contracts.json`).
+- Les autres effets des sorts et prières (dégâts, États, Traits, PA…) ne sont pas encore des briques : ils restent dans les formats actuels (`v5-spell-contracts.json`, `v5-divine-contracts.json`), décision Q7 du MJ ; L8 et L9 les ajouteront.
 
 ## Événements
 

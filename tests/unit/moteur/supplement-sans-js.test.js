@@ -4,36 +4,35 @@
 //  - le talent est une copie déclarative de Nageur émérite (talent-strong-swimmer) : mêmes propositions, même évaluateur ;
 //  - le sort (+3 « carac:e ») se cumule avec Dur comme le roc (+2 « carac:e ») par meilleur bonus (R3 V5 p. 235) ;
 //  - la prière (+2 Résistance) se somme avec un sort (MJ 05/11 Q2) et entre en meilleur bonus avec Rage de Rhya (MJ 06/11 Q10).
+// Le fichier des suppléments est remplacé par la fixture (hook de résolution, tests/helpers/supplement-fixture-hooks.mjs) : les
+// modules de l'application sont chargés APRÈS le hook, par import dynamique, et lisent le supplément fictif comme un vrai.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
-import { loadSupplements, supplementLayer, mergeTalentRegistry, BOOK_RESERVED_IDS, SUPPLEMENTS, SUPPLEMENT_ERRORS } from '../../../js/core/supplement-loader.js';
-import { V5_TALENT_CONTRACTS, evaluateV5TalentsIn, talentSourceHashes, currentV5TalentHashes } from '../../../js/core/v5-talents.js';
-import { validateTalentContractV2 } from '../../../js/core/talent-contract-v2.js';
-import { magicTestModifiers } from '../../../js/core/v5-magic-talents.js';
-import { getSpellContract } from '../../../js/core/v5-spell-contracts.js';
-import { getAllDivineContracts } from '../../../js/core/v5-divine-store.js';
-import { NUMERIC_OPS, UNIQUE_OPS, OP_PHASES, STACK_POLICIES, CLAUSE_EVENTS } from '../../../js/core/effect-engine.js';
-import { renderBricks, BRICKS_PATH } from '../../../tools/build-effect-bricks.mjs';
-import bookTalents from '../../../js/data/v5-test-talent-contracts.json' with { type: 'json' };
+import '../../helpers/supplement-fixture-hooks.mjs';
+const { loadSupplements, supplementLayer, BOOK_RESERVED_IDS, SUPPLEMENTS, SUPPLEMENT_ERRORS } = await import('../../../js/core/supplement-loader.js');
+const { V5_TALENT_CONTRACTS, evaluateV5Talents, currentV5TalentHashes } = await import('../../../js/core/v5-talents.js');
+const { validateTalentContractV2 } = await import('../../../js/core/talent-contract-v2.js');
+const { magicTestModifiers } = await import('../../../js/core/v5-magic-talents.js');
+const { getSpellContract, getAllSpellContracts } = await import('../../../js/core/v5-spell-contracts.js');
+const { getAllDivineContracts, getDivineContract } = await import('../../../js/core/v5-divine-store.js');
+const { NUMERIC_OPS, UNIQUE_OPS, OP_PHASES, STACK_POLICIES, CLAUSE_EVENTS } = await import('../../../js/core/effect-engine.js');
+const { renderBricks, BRICKS_PATH } = await import('../../../tools/build-effect-bricks.mjs');
 
 const read = path => JSON.parse(readFileSync(new URL(path, import.meta.url), 'utf8'));
 const FIXTURE = read('../../fixtures/supplements/supplement-fictif.json');
+const REAL = read('../../../js/data/v5-supplements.json');
 const sha = text => 'sha256:' + createHash('sha256').update(text, 'utf8').digest('hex');
 const load = data => loadSupplements(data, { reservedIds: BOOK_RESERVED_IDS });
-const loaded = load(FIXTURE);
+const loaded = SUPPLEMENTS; // chargé au démarrage depuis la fixture
 const TALENT = 'talent-supplement-fictif-nageur', BOOK_TALENT = 'talent-strong-swimmer';
 const JAW = 'talent-supplement-fictif-machoire', BOOK_JAW = 'talent-iron-jaw';
 const SPELL = 'spell-supplement-fictif-peau-de-corail', PRAYER = 'divine:supplement-fictif:benediction-des-flots';
 const RAGE = 'divine:miracle:rhya:rhya-s-rage';
 
-// Registre de l'application + supplément fictif, assemblé comme dans v5-talents.js.
-const bookRegistry = { contracts: [...V5_TALENT_CONTRACTS], sourceDescriptions: { ...bookTalents.sourceDescriptions } };
-const registry = mergeTalentRegistry(bookRegistry, loaded);
-// Empreintes : celles du livre (application) + celles des talents de supplément, absents du catalogue (branche dédiée de talentSourceHashes).
-const supplementHashes = talentSourceHashes({ contracts: loaded.talents, sourceDescriptions: loaded.talentDescriptions }, loaded.talentHashes);
-const hashes = { ...currentV5TalentHashes(), ...supplementHashes };
+// Chemin de l'application : registre de v5-talents.js (livre + supplément), empreintes de currentV5TalentHashes.
+const evaluate = (participant, options) => evaluateV5Talents(participant, options);
 const swimmer = talentId => ({ id: 'nageur', talents: [{ id: talentId, status: 'resolved', rank: 1 }] });
 const swimContext = { skillId: 'skill-4e_61_74_61_74_69_6f_6e-base', skillGroupId: 'skill-group-4e_61_74_61_74_69_6f_6e', pursuit: true };
 const strip = plan => plan.proposals.map(({ origins, stackGroup, ...rest }) => rest);
@@ -50,19 +49,24 @@ test('CA8 · le supplément fictif se charge sans erreur : un talent, une prièr
   assert.deepEqual(loaded.spells.map(row => row.id), [SPELL]);
   // Le contrat compilé a exactement la forme des contrats v2 du livre.
   for (const contract of loaded.talents) assert.equal(validateTalentContractV2(structuredClone(contract)), true);
-  assert.deepEqual(supplementHashes, loaded.talentHashes);
+  assert.deepEqual(SUPPLEMENT_ERRORS, []);
+  for (const contract of loaded.talents) {
+    assert.ok(V5_TALENT_CONTRACTS.some(row => row.talentId === contract.talentId), 'talent au registre de l’application');
+    assert.equal(currentV5TalentHashes()[contract.talentId], contract.source.effectHash, 'empreinte du supplément retenue');
+    assert.equal(contract.source.effectHash, sha(loaded.talentDescriptions[contract.talentId]), `empreinte de ${contract.talentId}`);
+  }
 });
 
 test('CA8 · talent fictif : mêmes propositions que le talent du livre qu’il recopie, par le même évaluateur', () => {
   for (const [role, context] of [['actor', swimContext], ['actor', { ...swimContext, pursuit: false }], ['defender', swimContext]]) {
     const options = { event: 'test.beforeRoll', role, context };
-    const fromJson = evaluateV5TalentsIn(registry, hashes, swimmer(TALENT), options);
-    const fromBook = evaluateV5TalentsIn(registry, hashes, swimmer(BOOK_TALENT), options);
+    const fromJson = evaluate(swimmer(TALENT), options);
+    const fromBook = evaluate(swimmer(BOOK_TALENT), options);
     assert.equal(fromJson.ready, fromBook.ready);
     assert.deepEqual(strip(fromJson), strip(fromBook));
     assert.ok(fromJson.trace.length && fromJson.trace.every(row => row.talentId === TALENT && row.status !== 'sourceUnavailable'));
   }
-  const plan = evaluateV5TalentsIn(registry, hashes, swimmer(TALENT), { event: 'test.beforeRoll', role: 'actor', context: swimContext });
+  const plan = evaluate(swimmer(TALENT), { event: 'test.beforeRoll', role: 'actor', context: swimContext });
   assert.deepEqual(plan.proposals.map(row => [row.op, row.amount ?? null]).sort(), [['grantAdvantage', null], ['modifySL', 2]]);
 });
 
@@ -79,7 +83,7 @@ test('Q2 (MJ 06/11) · talent fictif à quota « une fois par rencontre » : mê
     const participant = { id: 'nageur', talents: [{ id: talentId, status: 'resolved', rank: 1 }] };
     const quotaId = `${talentId}:first-stunned`;
     const state = { revision: 0, participants: [participant], v5ActionLedger: { appliedActions: [], quotaUsage: used ? [{ actorId: 'nageur', quotaId, scope: 'encounter', scopeKey: JSON.stringify(['e1']), used }] : [] } };
-    return evaluateV5TalentsIn(registry, hashes, participant, { event: 'condition.beforeAcquire', role: 'defender', context: { condition: { id: 'sonne', instances: 2 } }, state, clock: { encounterId: 'e1' }, actionId: 'a1' });
+    return evaluate(participant, { event: 'condition.beforeAcquire', role: 'defender', context: { condition: { id: 'sonne', instances: 2 } }, state, clock: { encounterId: 'e1' }, actionId: 'a1' });
   };
   for (const used of [0, 1]) {
     const fromJson = plan(JAW, used), fromBook = plan(BOOK_JAW, used);
@@ -153,14 +157,92 @@ test('CA9 · registre illisible ou supplément mal formé : signalé, jamais d�
   assert.match(result.errors[0].message, /^Supplément « x » \(champ « edition »\) : édition « V5 » requise$/);
 });
 
-test('fichier réel des suppléments : chargé sans erreur, talents au registre, empreintes conformes à leur texte', () => {
-  assert.deepEqual(SUPPLEMENT_ERRORS, []);
-  const ids = new Set(V5_TALENT_CONTRACTS.map(row => row.talentId));
-  for (const contract of SUPPLEMENTS.talents) {
-    assert.ok(ids.has(contract.talentId));
-    assert.equal(contract.source.effectHash, sha(SUPPLEMENTS.talentDescriptions[contract.talentId]), `empreinte de ${contract.talentId}`);
+test('fichier réel des suppléments (js/data/v5-supplements.json) : chargé sans erreur, empreintes conformes à leur texte', () => {
+  const real = load(REAL);
+  assert.deepEqual(real.errors, []);
+  for (const contract of real.talents) {
+    assert.equal(contract.source.effectHash, sha(real.talentDescriptions[contract.talentId]), `empreinte de ${contract.talentId}`);
     assert.equal(validateTalentContractV2(structuredClone(contract)), true);
   }
+});
+
+// ---------------------------------------------------------------------------------------------------------------------------
+// Q4 (MJ 06/11) : le sort et la prière de supplément se lancent par les chemins existants (store.previewSpellExecution,
+// store.previewDivineExecution), avec la NI, la portée et la durée déclarées dans le JSON.
+// ---------------------------------------------------------------------------------------------------------------------------
+const { encounter, cast, subject } = await import('../../helpers/lot3-domain-fixture.js');
+const { createStore } = await import('../../../js/core/store.js');
+const { createGameClock } = await import('../../../js/core/v5-game-time.js');
+
+test('Q4 · sort fictif : contrat au registre des sorts (NI, portée, durée du JSON), lancé par le store comme un sort du livre', async () => {
+  const contract = getSpellContract(SPELL);
+  assert.ok(contract && getAllSpellContracts().some(row => row.id === SPELL));
+  assert.equal(getSpellContract('Peau de corail (fictif)')?.id, SPELL, 'trouvé par son nom, comme sur une fiche');
+  assert.deepEqual([contract.cn, contract.range, contract.target, contract.duration, contract.type], [3, 'Bonus de Force Mentale mètres', '1', 'Bonus de Force Mentale Rounds', 'Domaine fictif']);
+  assert.deepEqual(contract.effects, { type: 'test-modifiers', testModifiers: { 'carac:e': 3 } });
+  const { store } = await encounter();
+  const preview = await cast(store, contract);
+  assert.equal(preview.castingPreview?.cn ?? contract.cn, 3);
+  const foe = subject(store, 'foe');
+  assert.equal(foe.extensions.v5.testModifiers['carac:e'], 3);
+  assert.ok(foe.extensions.v5.spellEffects.some(layer => layer.spellId === SPELL));
+  // Comme s'il était codé : avec Dur comme le roc (+2) lancé sur la même cible, le meilleur bonus seul (R3 p. 235).
+  const roc = getSpellContract('Dur comme le roc');
+  await store.applySpellEffects('foe', { id: 'roc', spellId: roc.id, spellName: roc.name, casterId: 'autre', testModifiers: structuredClone(roc.effects.testModifiers), duration: '10 Rounds' });
+  assert.equal(resistance(subject(store, 'foe')), 3);
+});
+
+const memory = () => { let saved = null; return { async load() { return saved && structuredClone(saved); }, async saveAtomic({ state }) { saved = structuredClone(state); return { ok: true }; } }; };
+const priest = () => ({ id: 'hero', name: 'hero', kind: 'PJ', camp: 'pj', zone: 'active', initiative: 60, hp: 30, maxHp: 30, fortune: 2,
+  caracs: { CC: 40, CT: 40, F: 30, E: 30, I: 40, Ag: 40, Dex: 40, Int: 50, FM: 50, Soc: 60, M: 4 },
+  skills: [{ id: 'skill-50_72_69_e8_72_65-base', name: 'Prière', status: 'resolved', carac: 'Soc', total: 60 }],
+  talents: [{ id: 'talent-bless', status: 'resolved', rank: 1, specialization: 'Rhya' }, { id: 'talent-invoke', status: 'resolved', rank: 1, specialization: 'Rhya' }],
+  prayers: [{ name: 'Bénédiction des flots (fictive)', status: 'resolved' }, { name: 'Rage de Rhya', status: 'resolved' }],
+  equipment: [], states: [], actions: [], armor: { head: 0, body: 0, arms: 0, legs: 0 }, extensions: { v5: { divine: { sin: 0 }, hasMomentum: true } } });
+async function chapel() {
+  const store = createStore({ persistence: memory(), storage: null }); await store.ready;
+  const snapshot = { schemaVersion: 3, reserve: [], combat: { round: 1, currentActorId: 'hero', order: ['hero'], participants: [priest()] }, log: [], diceLines: [], extensions: { v5: { turnIndex: 1 } } };
+  snapshot.extensions.v5.gameClock = createGameClock(snapshot);
+  await store.loadFromJSON(snapshot);
+  return store;
+}
+const invoke = async (store, id) => {
+  const preview = store.previewDivineExecution(id, { actorId: 'hero', targetIds: [], roll: 45, canSpeak: true, choices: { range: 0, targets: 0, duration: 0, effect: 0 }, expiry: { phase: 'endOfTurn', round: 6, actorId: 'hero' }, defending: true, 'force-test': 0 });
+  assert.equal(preview.ready, true, preview.error);
+  const result = await store.applyDivineExecution(id, { preview });
+  assert.equal(result.ready, true, result.error);
+};
+
+test('Q4 · prière fictive : contrat au registre divin (portée, cibles, durée du JSON), invoquée par le store comme une prière du livre', async () => {
+  const contract = getDivineContract(PRAYER);
+  assert.equal(contract?.type, 'miracle');
+  assert.deepEqual(contract.params, { range: { kind: 'self' }, targets: { kind: 'self' }, duration: { kind: 'characteristic-bonus', characteristic: 'Soc', unit: 'rounds' } });
+  assert.equal(contract.requiredTalent.id, 'talent-invoke');
+  assert.deepEqual(contract.effects.map(row => [row.type, row.modifiers]), [['test-modifier', { 'Résistance': 2 }]]);
+  const store = await chapel();
+  await invoke(store, PRAYER);
+  const hero = store.listParticipants().find(row => row.id === 'hero');
+  assert.equal(hero.extensions.v5.testModifiers['Résistance'], 2);
+  assert.equal(resistance(hero), 2);
+});
+
+test('Q4 · sans le talent du dieu, la prière fictive est refusée comme une prière du livre', async () => {
+  const store = await chapel();
+  const preview = id => store.previewDivineExecution(id, { actorId: 'hero', targetIds: [], roll: 45, canSpeak: true, choices: { range: 0, targets: 0, duration: 0, effect: 0 }, expiry: { phase: 'endOfTurn', round: 6, actorId: 'hero' } });
+  await store.loadFromJSON({ schemaVersion: 3, reserve: [], combat: { round: 1, currentActorId: 'hero', order: ['hero'], participants: [{ ...priest(), talents: [] }] }, log: [], diceLines: [], extensions: { v5: { turnIndex: 1 } } });
+  assert.equal(preview(PRAYER).ready, false);
+  assert.equal(preview(RAGE).ready, false);
+});
+
+test('Q4 · champs de lancement mal formés : refusés avec l’élément et le champ', () => {
+  const data = structuredClone(FIXTURE);
+  const supplement = data.supplements[0];
+  const spell = supplement.spells[0], prayer = supplement.prayers[0];
+  supplement.spells = [{ ...structuredClone(spell), id: 'spell-sans-ni', cn: undefined }, { ...structuredClone(spell), id: 'spell-surincantation', overcast: { allowed: true, options: ['vol'] } }];
+  supplement.prayers = [{ ...structuredClone(prayer), id: 'divine:sans-dieu', deity: 'Dieu inconnu' }, { ...structuredClone(prayer), id: 'divine:duree', duration: { kind: 'instant' } }];
+  supplement.talents = [];
+  const errors = Object.fromEntries(load(data).errors.map(row => [row.elementId, row.field]));
+  assert.deepEqual(errors, { 'spell-sans-ni': 'cn', 'spell-surincantation': 'overcast', 'divine:sans-dieu': 'deity', 'divine:duree': 'duration.kind' });
 });
 
 test('CA10 · briques.md est à jour et liste toutes les opérations, événements et politiques du validateur', () => {
