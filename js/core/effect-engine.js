@@ -184,7 +184,7 @@ export const STACK_POLICIES = Object.freeze({
   unique: Object.freeze({ label: 'une seule occurrence', reference: 'contrat de l’effet' }),
   add: Object.freeze({ label: 'somme', reference: 'contrat de l’effet' }),
   max: Object.freeze({ label: 'la plus haute valeur', reference: 'contrat de l’effet' }),
-  bestBonusWorstPenalty: Object.freeze({ label: 'meilleur bonus et pire pénalité', reference: 'V5 p. 235 (sorts) ; arbitrage du MJ du 06/11 (prières) ; HEPG p. 83 (Bénédiction de Lileath)' }),
+  bestBonusWorstPenalty: Object.freeze({ label: 'meilleur bonus et pire pénalité', reference: 'V5 p. 235 (sorts) ; arbitrage du MJ du 06/11 (prières, Q10) ; une couche = une source, ses clés s’additionnent (MJ 06/11 Q13) ; HEPG p. 83 (Bénédiction de Lileath)' }),
   strongest: Object.freeze({ label: 'la plus forte pénalité', reference: 'États : seule la plus forte pénalité s’applique (v5-combat-rules.js)' }),
 });
 const safeSum = (total, value) => { const next = total + value; if (!integer(next)) fail('Cumul hors plage sûre', 'amount'); return next; };
@@ -261,11 +261,15 @@ const R1 = 'R1 V5 p. 130 : Difficulté et modificateurs du personnage (Talents, 
 const Q2 = 'MJ 05/11 Q2 : prière et sort sur le même Test se somment (sources différentes, p. 130), même clé comprise';
 const Q3 = 'MJ 05/11 Q3 : le malus d’un sort ou d’une prière s’ajoute à la pénalité d’États';
 const Q4 = 'MJ 05/11 Q4 : qualités, montures et surnombre se somment avec tout le reste, sans autre exclusion ; Avantage de cavalerie et Avantage d’un talent sont deux sources distinctes';
+const Q11 = 'MJ 06/11 Q11 : un Trait de créature se somme avec talent, sort, prière, État et saisie du MJ';
+const Q12 = 'MJ 06/11 Q12 : talent et pénalité d’États se somment ; la saisie libre du MJ et toute la famille « situation » (couvert, position haute, surnombre…) se somment à tous les autres effets';
 const pairKey = (a, b) => [a, b].sort().join('+');
 /**
  * Politiques de cumul entre familles, une ligne par paire tracée (livre ou arbitrage du MJ). `sum` : les deux s'appliquent
  * (montants additionnés ; pour un Avantage, deux sources distinctes, R2 p. 130). Les exclusions ponctuelles déjà codées
  * (Bouclier sans Défensive, Maîtrise du combat à deux sans la Taille, B12) sont des règles d'effet, pas de famille.
+ * Depuis Q11-Q12 (MJ 06/11), toute paire de familles est tracée : le signalement CA5 ne vaut plus que pour une table réduite
+ * (supplément, test) ou une famille ajoutée plus tard.
  */
 export const BETWEEN_GROUPS = deepFreeze((() => {
   const rows = new Map();
@@ -275,7 +279,10 @@ export const BETWEEN_GROUPS = deepFreeze((() => {
   put('prayer', 'spell', Q2);
   put('condition', 'spell', Q3);
   put('condition', 'prayer', Q3);
-  for (const kind of ['quality', 'mount', 'situation']) for (const other of BEARER_KINDS) if (other !== kind) put(kind, other, Q4);
+  put('talent', 'condition', Q12);
+  for (const kind of ['situation', 'gm']) for (const other of BEARER_KINDS) if (other !== kind) put(kind, other, Q12);
+  for (const other of ['talent', 'spell', 'prayer', 'condition']) put('trait', other, Q11);
+  for (const kind of ['quality', 'mount']) for (const other of BEARER_KINDS) if (other !== kind) put(kind, other, Q4);
   return Object.fromEntries(rows);
 })());
 const BETWEEN_POLICIES = new Set(['sum']);
