@@ -60,7 +60,7 @@ await new Promise(resolveListen => server.listen(0, '127.0.0.1', resolveListen))
 await mkdir(EVIDENCE, { recursive: true });
 let browser;
 try {
-  browser = await launchBrowser(launch);
+  browser = await launchBrowser();
   const context = await browser.newContext({ viewport: { width: 1280, height: 850 } });
   const page = await context.newPage(); page.setDefaultTimeout(8000);
   const errors = []; page.on('pageerror', error => errors.push(error.message));

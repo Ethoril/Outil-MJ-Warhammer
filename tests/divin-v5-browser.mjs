@@ -26,7 +26,7 @@ await new Promise(resolveListen=>server.listen(0,'127.0.0.1',resolveListen));
 const base=`http://127.0.0.1:${server.address().port}`;
 let browser;
 try {
-  browser=await launchBrowser(launch);
+  browser=await launchBrowser();
   const context=await browser.newContext({viewport:{width:1440,height:900}});
   const page=await context.newPage();page.setDefaultTimeout(5000);const errors=[];page.on('pageerror',e=>errors.push(e.message));
   await page.goto(`${base}/__divine__.html`,{waitUntil:'networkidle'});
