@@ -1,5 +1,6 @@
 import { normalizeState } from './effects.js';
-import { conditionPenaltyEffects, conditionDisadvantageEffects } from './condition-effects.js';
+import { conditionPenaltyEffects, conditionDisadvantageEffects, conditionTestRules, conditionDisadvantageRows } from './condition-effects.js';
+import { conditionPenaltyIgnores } from './v5-talents.js';
 
 const CHARACTERISTICS = new Set(['CC', 'CT', 'F', 'E', 'I', 'Ag', 'Dex', 'Int', 'FM', 'Soc', 'M']);
 const TALENT_MARKERS = new Set(['talent-active', 'talent-pending']);
@@ -144,6 +145,11 @@ export function resolveV5ConditionTestContext(actor, context = {}) {
     requiresSight = needsBoolean('requiresSight', 'Préciser si la tâche exige strictement la vue.');
     if (requiresSight !== true && !ignoreConditions) reliesOnSight = needsBoolean('reliesOnSight', 'Préciser si la tâche repose fortement sur la vue.');
   }
+  // Souillé : Désavantage aux Tests de Sociabilité, ou d'Endurance contre les Plaies purulentes ; sinon le MJ le précise, comme au combat.
+  let usesFellowship = null;
+  if (levels.souille && !ignoreConditions && characteristic !== 'Soc' && !(characteristic === 'E' && context.festeringWounds === true)) {
+    usesFellowship = needsBoolean('usesFellowship', 'Préciser si le Test utilise la Sociabilité.');
+  }
   let isAction = null;
   if (levels.surpris || levels.inconscient) {
     isAction = needsBoolean('isAction', 'Préciser si ce Test résout une Action.');
@@ -152,43 +158,27 @@ export function resolveV5ConditionTestContext(actor, context = {}) {
   const mentalCharacteristic = ['Int', 'I', 'FM', 'Soc'].includes(characteristic);
   const clarityOfThought = actor?.extensions?.v5?.specialStates?.clarityOfThought === true;
   const clarityIgnoresStun = mentalCharacteristic && clarityOfThought && levels.sonne > 0;
-  if (mentalCharacteristic && clarityOfThought && levels.extenue > 0) {
-    addNeed(needsInput, seenNeeds, 'clarityFatigueProjection',
-      'Clarté d’esprit (p. 251) ignore les modificateurs négatifs aux processus mentaux; son interaction avec Exténué n’est pas encore projetée dans ce Test.');
-  }
+  // MJ 06/11 : Clarté d'esprit efface Sonné, pas Exténué ; la pénalité d'Exténué reste sur un Test mental.
   if (clarityIgnoresStun) ignoredPenaltySources.push({
     id: 'clarity-of-thought:stunned',
     label: `Clarté d’esprit ignore le malus de Sonné pour un Test mental (${characteristic}); l’État reste actif.`,
     source: { document: 'Livre de base V5 EN v2', printedPage: 251, citation: 'Livre de base V5 EN v2, p. 251', rule: 'Clarity of Thought' }
   });
-  const slPenaltyCandidates = [];
-  for (const key of ['sonne', 'extenue', 'empoisonne']) {
-    if (levels[key] && !(key === 'sonne' && clarityIgnoresStun)) slPenaltyCandidates.push({ key, amount: levels[key] });
-  }
-  if (levels.brise && runningOrHiding === false) slPenaltyCandidates.push({ key: 'brise', amount: levels.brise });
-  if (levels.enchevetre && movement === true) slPenaltyCandidates.push({ key: 'enchevetre', amount: levels.enchevetre });
-  if (ignoreConditions) {
-    slPenaltyCandidates.length = 0;
-    if (['sonne', 'extenue', 'empoisonne', 'brise', 'enchevetre', 'aterre', 'souille', 'aveugle'].some(key => levels[key])) ignoredPenaltySources.push({
-      id: 'anchorite-endurance:conditions',
-      label: 'Endurance de l’anachorète ignore les pénalités causées par les États; ils restent actifs.',
-      source: { document: 'Livre de base V5 EN v2', printedPage: 226, citation: 'Livre de base V5 EN v2, p. 226', rule: 'Anchorite’s Endurance' }
-    });
-  }
-  // U8 L5z (Q6) : plus forte pénalité d'États par le moteur d'effets (`strongest`), exceptions déjà retirées des candidats.
-  const slPenalty = conditionPenaltyEffects(new Map(slPenaltyCandidates.map(row => [row.key, row.amount]))).penalty;
-
-  const disadvantageCandidates = [];
-  if (levels.aterre && movement === true) disadvantageCandidates.push({ key: 'aterre', count: 1 });
-  if (levels.souille && characteristic === 'Soc') disadvantageCandidates.push({ key: 'souille', count: 1 });
-  if (levels.aveugle && requiresSight === false && reliesOnSight === true) {
-    disadvantageCandidates.push({ key: 'aveugle', count: levels.aveugle });
-  }
-  if (ignoreConditions) disadvantageCandidates.length = 0;
-  // Désavantages d'un seul État, le plus fort ; à égalité, le premier dans l'ordre des clés (ordre alphabétique, comme avant).
-  const disadvantageRows = new Map([...disadvantageCandidates].sort((a, b) => a.key.localeCompare(b.key))
-    .map(row => [row.key, Array.from({ length: row.count }, (_, index) => ({ id: `condition:${row.key}:${index + 1}`, label: STATE_LABELS[row.key] }))]));
-  const worstDisadvantage = conditionDisadvantageEffects(disadvantageRows);
+  if (ignoreConditions && ['sonne', 'extenue', 'empoisonne', 'brise', 'enchevetre', 'aterre', 'souille', 'aveugle'].some(key => levels[key])) ignoredPenaltySources.push({
+    id: 'anchorite-endurance:conditions',
+    label: 'Endurance de l’anachorète ignore les pénalités causées par les États; ils restent actifs.',
+    source: { document: 'Livre de base V5 EN v2', printedPage: 226, citation: 'Livre de base V5 EN v2, p. 226', rule: 'Anchorite’s Endurance' }
+  });
+  // MJ 06/11 Q19 : le calcul d'États du combat pour ce Test (conditionTestRules, puis le moteur d'effets), mêmes exceptions :
+  // Endurance de l'anachorète, ignoreFatiguePenalties (Exténué), Clarté de pensée (Sonné), talents `ignoreConditionPenalty`.
+  const flags = actor?.extensions?.v5?.specialStates;
+  const conditionRules = conditionTestRules(new Map(Object.entries(levels)), { kind: 'test', attr: characteristic, ignoreAll: ignoreConditions,
+    context: { involvesMovement: movement, runningOrHiding, requiresSight, reliesOnSight, usesFellowship, festeringWounds: context.festeringWounds } });
+  const conditionPenalty = conditionPenaltyEffects(conditionRules.relevant, { ignoreAll: ignoreConditions, ignoreFatigue: flags?.ignoreFatiguePenalties === true,
+    ignoreStun: clarityIgnoresStun, talentIgnores: conditionPenaltyIgnores(actor) });
+  const slPenalty = conditionPenalty.penalty;
+  // Désavantages d'un seul État, le plus fort ; à égalité, le premier dans l'ordre À terre, Aveuglé, Souillé.
+  const worstDisadvantage = conditionDisadvantageEffects(conditionDisadvantageRows(conditionRules.disadvantages, (key, index) => `condition:${key}:${index + 1}`));
   const hasSlPenalty = slPenalty > 0;
   const hasDisadvantage = worstDisadvantage.length > 0;
   const mode = context.conditionPenaltyMode;
@@ -209,8 +199,8 @@ export function resolveV5ConditionTestContext(actor, context = {}) {
   const applySl = !hasSlPenalty || !hasDisadvantage || mode === 'sl' && Boolean(reason);
   const applyDisadvantage = !hasSlPenalty || !hasDisadvantage || mode === 'disadvantage' && Boolean(reason);
   if (hasSlPenalty && applySl) {
-    const label = slPenaltyCandidates.filter(row => row.amount === slPenalty).sort((a, b) => a.key.localeCompare(b.key))
-      .map(row => STATE_LABELS[row.key]).join(', ');
+    const label = [...conditionPenalty.levels].filter(([, level]) => level === slPenalty).map(([key]) => key).sort()
+      .map(key => STATE_LABELS[key]).join(', ');
     slModifiers.push({ id: 'conditions:highest-sl', label: `Malus d’État maximal (${label})`, amount: -slPenalty });
   }
   if (hasDisadvantage && applyDisadvantage) {

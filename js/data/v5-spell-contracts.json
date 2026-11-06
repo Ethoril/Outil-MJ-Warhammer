@@ -9338,7 +9338,6 @@
       "type": "special",
       "special": "clarity-of-thought",
       "ignoreMentalPenalties": true,
-      "ignoreFatiguePenalties": true,
       "ignoreHeadCriticalPenalties": true
     },
     "reminders": "Vous apaisez l’esprit de votre cible, lui permettant de réfléchir avec lucidité. La cible ignore tous les modificateurs négatifs affectant ses processus mentaux, y compris les États comme Sonné, les Mutations mentales, les Psychologies, etc., tant que le Sort est actif.",

@@ -1,6 +1,6 @@
 /** Acquisitions résolues et descriptions publiques épinglées ; jamais d'activation par lecture de prose. */
 import pins from '../data/v5-magic-talent-sources.json' with { type: 'json' };
-import { acquiredV5Talents } from './v5-talents.js';
+import { acquiredV5Talents, conditionPenaltyIgnores } from './v5-talents.js';
 import { getReferenceCatalogue } from './reference-catalog.js';
 import { previewV5Test, selectV5Test, normalizeV5Roll } from './v5-roll.js';
 import { getBurnoutStatus, consumeCadaiRune, prepareCadaiRerolls } from './v5-magic-high.js';
@@ -9,7 +9,7 @@ import { mishapSeverity, groundCastModifier, slannAboard } from './slann.js';
 // Cycle d'import connu (v5-magic-effects lit magicTalentRank) : seules des fonctions, appelées après le chargement.
 import { unsuppressedSpellEffects } from './v5-magic-effects.js';
 import { combineEffects, targetAppliesToTest } from './effect-engine.js';
-import { conditionPenaltyEffects } from './condition-effects.js';
+import { conditionPenaltyEffects, conditionDisadvantageEffects, conditionTestRules, conditionDisadvantageRows } from './condition-effects.js';
 
 const ruleError=message=>Object.assign(new Error(message),{userFacing:true});
 export function magicTalentRank(actor, id, specialization = null) {
@@ -74,14 +74,27 @@ export function prepareMagicOptions(actor, kind, options={}, spell = null) {
     if (magicTalentRank(assistant,'magical-assistant')) slModifiers.push({id:'magical-assistant',label:'Assistant magique',amount:2});
     else if (magicTalentRank(assistant,'animal-assistant')) advantageSources.push({id:'animal-assistant',label:'Assistant animal'});
   }
-  const levels=new Map();for(const state of actor.states || []){const key=fold(state.key || state.name);levels.set(key,(levels.get(key)||0)+Number(state.level || 1));}
+  const levels=new Map();for(const state of actor.states || []){const key=fold(state.key || state.name).replace(/[- ]/g,'');levels.set(key,(levels.get(key)||0)+Number(state.level || 1));}
   if(['casting','channelling','dispel'].includes(kind) && (levels.has('inconscient') || levels.has('surpris')))throw ruleError('Inconscient ou Surpris : Test magique indisponible.');
-  const ignoreFatigue=['casting','channelling','pause'].includes(kind) && Number(activeMagicTalent(actor,'eye-of-the-storm')?.magicTalentRank)>=2;
+  // Œil de la tempête (rang 2) ; drapeau `ignoreFatiguePenalties` comme au combat (MJ 06/11 Q19).
+  const ignoreFatigue=['casting','channelling','pause'].includes(kind) && Number(activeMagicTalent(actor,'eye-of-the-storm')?.magicTalentRank)>=2 || flags?.ignoreFatiguePenalties===true;
   const mental=['casting','channelling','dispel','interruption'].includes(kind);
   if(flags?.clarityOfThought && mental)for(let i=slModifiers.length-1;i>=0;i--)if(slModifiers[i].amount<0 && /psychology|mental.?mutation|mutation.?mental/i.test(slModifiers[i].id))slModifiers.splice(i,1);
-  // U8 L5z (Q6) : pénalité d'États par le moteur d'effets (la plus forte seule), Œil de la tempête et Clarté de pensée appliqués avant le cumul.
-  const penalty=conditionPenaltyEffects(new Map(['sonne','extenue','empoisonne'].map(key=>[key,levels.get(key)||0])),{ignoreFatigue,ignoreStun:Boolean(flags?.clarityOfThought && mental)}).penalty;
-  if(penalty)slModifiers.push({id:'magic-condition-penalty',label:'Pénalité d’État',amount:-penalty});
+  // MJ 06/11 Q19 : le calcul d'États du combat (conditionTestRules, conditionPenaltyEffects, conditionDisadvantageEffects), mêmes
+  // exceptions : Endurance de l'anachorète, Revigorer, Clarté de pensée, talents `ignoreConditionPenalty`, Brisé, Enchevêtré,
+  // Désavantages d'États. `options.conditionContext` porte les réponses du MJ (involvesMovement, runningOrHiding, reliesOnSight,
+  // requiresSight, usesFellowship, conditionPenaltyMode) ; une réponse manquante reste une question (`next.conditionNeeds`).
+  const ignoreAll=flags?.ignoreConditionPenalties===true, conditionContext=options.conditionContext||{};
+  const conditionRules=conditionTestRules(levels,{kind:'test',attr:['casting','dispel'].includes(kind)?'Int':'FM',context:conditionContext,ignoreAll});
+  if(conditionRules.restrictions.length)throw ruleError(conditionRules.restrictions.join(' '));
+  const penalty=conditionPenaltyEffects(conditionRules.relevant,{ignoreAll,ignoreFatigue,ignoreStun:Boolean(flags?.clarityOfThought && mental),talentIgnores:conditionPenaltyIgnores(actor)}).penalty;
+  const worstDisadvantage=conditionDisadvantageEffects(conditionDisadvantageRows(conditionRules.disadvantages));
+  const conditionNeeds=[...conditionRules.unresolved], mixed=penalty>0 && worstDisadvantage.length>0, mode=conditionContext.conditionPenaltyMode;
+  if(mixed && !['sl','disadvantage'].includes(mode))conditionNeeds.push('États de pénalités différentes : choisir les DR ou le Désavantage retenu par le MJ.');
+  const appliedPenalty=mixed && mode==='disadvantage'?0:penalty;
+  if(appliedPenalty)slModifiers.push({id:'magic-condition-penalty',label:'Pénalité d’État',amount:-appliedPenalty});
+  next.disadvantageSources=[...(options.disadvantageSources || []),...(!mixed || mode!=='sl'?worstDisadvantage:[])];
+  next.conditionNeeds=[...new Set(conditionNeeds)];
   if(['casting','channelling'].includes(kind)){const ground=groundCastModifier(actor,{aboard:slannAboard(actor)});if(ground.available && ground.modifier)slModifiers.push({id:'slann-ground',label:'Slann au sol',amount:ground.modifier});}
   if(Number(activeMagicTalent(actor,'sanctuary-of-the-mind')?.magicTalentRank)>=3)for(const modifier of slModifiers)if(modifier.id==='yenlui' && modifier.amount<0)modifier.amount=0;
   const lore=String(spell?.wind || spell?.type || options.wind || options.lore || '').toLowerCase();

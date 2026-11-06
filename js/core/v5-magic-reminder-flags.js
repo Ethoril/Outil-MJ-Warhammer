@@ -37,7 +37,7 @@ export const MARKER_ONLY_SPECIAL_STATES = Object.freeze([
   'fickleFingers', 'firstPortent', 'secondPortent', 'thirdPortent', 'casterLosesFateIfUsed',
   'cannotUseFortune', 'arrowAttraction', 'lockedTarget', 'glamourOfTeclis', 'amberTrance',
   'beastMaster', 'controlledBy', 'spiralStaircase', 'phasProtection', 'clarityOfThought',
-  'ignoreMentalAndFatiguePenalties', 'ignoreMentalPenalties', 'ignoreFatiguePenalties', 'ignoreHeadCriticalPenalties', 'vegetalEnchantment',
+  'ignoreMentalPenalties', 'ignoreHeadCriticalPenalties', 'vegetalEnchantment',
   'magicalAlarm', 'mindMask', 'bodyPurification', 'poisonPurged', 'comfortZone',
   'revealMagic', 'sanctifiedGround', 'swiftPassing', 'arrowShield', 'droppedItem',
   'magicShield', 'rotArmour', 'hornOfAndar', 'dropEngagement', 'tasteOfFireLiquid',

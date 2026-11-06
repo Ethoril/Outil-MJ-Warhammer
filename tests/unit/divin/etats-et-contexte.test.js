@@ -409,15 +409,16 @@ test('E4 contexte — Clarté d’esprit écarte seulement Sonné pour Int/I/FM/
   assert.deepEqual(physical.ignoredPenaltySources, []);
 });
 
-test('E4 contexte — Exténué mental avec Clarté bloque tant que ignoreFatiguePenalties n’est pas projeté', () => {
+// MJ 06/11 : Clarté d'esprit efface Sonné, pas Exténué ; plus de question en suspens sur leur interaction.
+test('E4 contexte — Exténué mental avec Clarté : la pénalité d’Exténué reste, sans question', () => {
   const result = resolveV5ConditionTestContext({
     states: [{ key: 'extenue', name: 'Exténué', level: 2 }],
     extensions: { v5: { specialStates: { clarityOfThought: true } } }
   }, { characteristic: 'Soc' });
-  assert.equal(result.ready, false);
+  assert.equal(result.ready, true);
   assert.equal(result.levels.extenue, 2);
-  assert.ok(result.needsInput.some(row => row.field === 'clarityFatigueProjection'));
-  assert.match(result.needsInput.find(row => row.field === 'clarityFatigueProjection').label, /p\. 251|fatigue/i);
+  assert.equal(result.needsInput.some(row => row.field === 'clarityFatigueProjection'), false);
+  assert.deepEqual(result.slModifiers.map(row => row.amount), [-2]);
 });
 
 test('E4 contexte — conflit de pénalités exige décision DIV-05 motivée', () => {
@@ -747,26 +748,16 @@ test('E4 runtime indépendant — Clarté d’esprit canonique écarte seulement
     'la dérogation appliquée doit conserver sa référence de source p. 251');
 });
 
-test('E4 runtime indépendant — Clarté d’esprit ne laisse pas passer le malus mental Exténué sans examen explicite', async () => {
+// MJ 06/11 : Clarté d'esprit efface Sonné, pas Exténué ; la Prière (Test mental) garde la pénalité d'Exténué.
+test('E4 runtime indépendant — Clarté d’esprit laisse le malus Exténué sur la Prière', async () => {
   const store = await makeStore([{ key: 'extenue', name: 'Exténué', level: 2 }], {
     clarityOfThought: true
   });
   const result = store.previewDivineExecution(BATTLE, prayer());
-  if (result.ready) {
-    assert.equal(result.preview.conditionTestContext.levels.extenue, 2,
-      'la Condition Exténué et son niveau restent présents même si une règle l’exempte');
-    assert.deepEqual(result.preview.conditionTestContext.slModifiers, [],
-      'Clarté ne laisse pas appliquer son malus à ce Test mental');
-    assert.equal(result.preview.prayer.sl, 4, 'le +4 SL de base n’est pas réduit par Exténué');
-    const evidence = JSON.stringify(result.preview.conditionTestContext);
-    assert.match(evidence, /Clarté|clarityOfThought/i);
-    assert.match(evidence, /p\.?\s*251|V5[^\"]{0,12}251/i,
-      'l’exemption doit porter une provenance explicite p. 251');
-  } else {
-    const details = [result.error, ...(result.needsInput || []).map(row => row.label || row.field)].join(' ');
-    assert.match(details, /Clarté|clarity|Exténué|fatigue|mental/i,
-      'un cas connu mais non raccordé doit bloquer explicitement plutôt que produire un malus erroné');
-  }
+  assert.equal(result.ready, true, result.error);
+  assert.equal(result.preview.conditionTestContext.levels.extenue, 2);
+  assert.deepEqual(result.preview.conditionTestContext.slModifiers.map(row => row.amount), [-2]);
+  assert.equal(result.preview.prayer.sl, 2, 'le +4 SL de base est réduit de 2 par Exténué');
 });
 
 test('E4 runtime indépendant — aperçu avec Courroux et Péché ne mutile pas le Store avant Apply', async () => {
