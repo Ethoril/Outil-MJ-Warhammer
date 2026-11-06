@@ -158,12 +158,14 @@ export function layerTestEffects(v5={}){
  * Retourne `{ layerRows:[{key,amount}], talentRows, signals, unresolved }` ; une paire de familles non arbitrée (CA5) n'est
  * jamais additionnée : ses montants sont retirés et un message `unresolved` la nomme.
  */
-export function collectTestEffects(actor,test={},{talentRows=[]}={}){
+export function collectTestEffects(actor,test={},{talentRows=[],applies=null}={}){
  const v5=actor?.extensions?.v5||{};
- const layers=layerTestEffects(v5);
+ // `applies(key)` : sélection des clés propre à l'appelant (table de clés d'un moteur qui n'est pas celle des compétences) ; les clés
+ // retenues visent alors toutes le même Test et forment un seul groupe par famille.
+ const layers=typeof applies==='function'?layerTestEffects(v5).filter(entry=>applies(entry.key)).map(({effect:{target,...effect},...entry})=>({...entry,effect})):layerTestEffects(v5);
  // Une ligne de talent sans montant chiffré n'entre pas dans le cumul : elle est rendue telle quelle, à sa place.
  const talents=talentRows.map((row,index)=>Number.isFinite(row?.amount)?{bearer:{kind:'talent',sourceId:String(row.id||'talent:'+index)},effect:{op:'modifySL',amount:row.amount,stack:'add',stackGroup:'talent:'+index},row}:{row,passThrough:true});
- const combined=combineEffects([...layers,...talents.filter(entry=>!entry.passThrough)],{test});
+ const combined=combineEffects([...layers,...talents.filter(entry=>!entry.passThrough)],typeof applies==='function'?{}:{test});
  const applied=combined.groups.filter(group=>group.status==='applied');
  const totals=new Map();
  for(const group of applied.filter(group=>group.kind!=='talent'))for(const entry of group.kept)totals.set(entry.key,(totals.get(entry.key)||0)+entry.effect.amount);
