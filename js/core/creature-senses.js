@@ -3,6 +3,7 @@
 // modificateurs, effets, points non résolus, rappels, reçu) sans rien écrire. Ce que le moteur ne sait pas trancher reste en rappel.
 
 import { isLiving } from './creature-natures.js';
+import { slModifierClause } from './effect-engine.js';
 
 const fold = value => String(value ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/\s+/g, ' ').trim();
 
@@ -107,6 +108,14 @@ export function distractingPenalty(sources, distances) {
 
 const has = (participant, key) => traitsOf(participant).some(trait => trait.key === key);
 
+/** Porteurs de Perturbant qui touchent `actor` (hors lui-même, camp différent ou inconnu) et prédicat « camp inconnu ». */
+function distractingSources(actor, participants = []) {
+  const campOf = person => String(person?.camp ?? person?.side ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
+  const unknownCamp = person => !campOf(person) || !campOf(actor);
+  const enemyOf = person => unknownCamp(person) || campOf(person) !== campOf(actor);
+  return { sources: (participants || []).filter(person => person?.id !== actor?.id && has(person, 'distracting') && enemyOf(person)), unknownCamp };
+}
+
 /**
  * Effets des Traits de sens sur un Test, quand le contexte les détermine (rien d'inventé sinon : le rappel de la carte reste).
  * `actor` passe le Test contre `opponent` ; `participants` : toute la scène ; `context` : `targetMoving` (Caméléon), `distractingInRange` (Perturbant).
@@ -121,10 +130,7 @@ export function senseTestRules({ actor, opponent, participants = [], skillLabel 
   }
   // Perturbant (V5 v3 p.358) : seuls les ennemis vivants le subissent (ni alliés, ni Mort-vivant, Démoniaque, Éthéré ou Artificiel), en attaque comme en défense.
   // Camp absent : supposé ennemi (rappel dans le libellé) ; tout participant hors du camp du Perturbant est touché, « neutre » compris (MJ 31/10) ; un Perturbant neutre touche donc tous les non-neutres, pas les neutres (son propre camp).
-  const campOf = person => String(person?.camp ?? person?.side ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
-  const unknownCamp = person => !campOf(person) || !campOf(actor);
-  const enemyOf = person => unknownCamp(person) || campOf(person) !== campOf(actor);
-  const sources = (participants || []).filter(person => person?.id !== actor?.id && has(person, 'distracting') && enemyOf(person));
+  const { sources, unknownCamp } = distractingSources(actor, participants);
   if (context.distractingInRange === true && isLiving(actor) && sources.length) {
     modifiers.push({ id: 'sense:distracting', label: sources.every(unknownCamp) ? 'Perturbant à portée (une seule fois ; camp inconnu, supposé ennemi)' : 'Perturbant à portée (une seule fois)', amount: -2 });
   }
@@ -136,6 +142,22 @@ export function senseTestRules({ actor, opponent, participants = [], skillLabel 
     if (skill && skill.value > currentBase) base = { score: skill.value, label: `${RULES[skillKey].fr} : ${skill.skill} ${skill.value} (${skill.source})` };
   }
   return { modifiers, base };
+}
+
+/**
+ * U8 lot L5a · adaptateur Traits de sens → clauses du moteur d'effets (famille `trait`), sans branchement : mêmes entrées que
+ * `senseTestRules`, une clause `modifySL` par modificateur retenu (id de clause = id du modificateur). Le porteur est le participant
+ * qui a le Trait (Caméléon : l'opposant). Perturbant : une clause par source à portée, même groupe de cumul, politique `max` : le
+ * −2 DR ne compte qu'une fois quel que soit le nombre de sources (V5 v3 p. 358). La valeur de compétence de Furtif et de Pisteur
+ * (`base`, un score et non un modificateur de DR) n'a pas d'opération dans le moteur : elle reste lue par `senseTestRules`.
+ */
+export function senseTestClauses(args) {
+  const { actor, opponent, participants = [] } = args || {};
+  const clause = (row, owner, trait) => slModifierClause({ id: row.id, bearer: { kind: 'trait', sourceId: `${owner?.id ?? 'participant'}:trait:${trait}` }, amount: row.amount, stack: 'max', stackGroup: row.id });
+  return senseTestRules(args).modifiers.flatMap(row => {
+    if (row.id === 'sense:distracting') return distractingSources(actor, participants).sources.map(source => clause(row, source, 'distracting'));
+    return [clause(row, opponent, 'chameleon')];
+  });
 }
 
 /** Participants de la scène qui portent un Trait de sens donné (le panneau n'affiche une question que s'il en existe). */
