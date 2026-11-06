@@ -9,7 +9,7 @@ import {contactWeapon} from './v5-talent-contact.js';
 import {psychologyTestRules} from './v5-talent-psychology.js';
 import {senseTestRules,senseTestClauses} from './creature-senses.js';
 import {movementTestRules,movementTestClauses} from './creature-movement.js';
-import {outnumberTestRules,outnumberTestClauses} from './outnumbering.js';
+import {outnumberTestRules,outnumberTestClauses,outnumberClauseLabels} from './outnumbering.js';
 import {unavailableDisarmedWeapon} from './v5-talent-replacements.js';
 import {warLeaderSubstitution} from './v5-talent-situations.js';
 import {calculateV5ArmorPenalty,previewV5Parry} from './v5-weapon-qualities.js';
@@ -185,7 +185,7 @@ function combatEngineEffects({ actor, defending, kind, action, settings, shield,
   // U8 L6 (Q9) : effets écartés par la règle de cumul, pour l'affichage barré « non cumulé » (aucun effet sur le calcul).
   const PART_SOURCES = { trait: 'Trait', defense: 'Qualité', attack: 'Qualité', mount: 'Monture' };
   const dropped = combined.groups.flatMap(group => group.dropped.map(({ entry, rule }) => ({ ...display.get(entry.clauseId),
-    amount: entry.effect.amount, rule, source: PART_SOURCES[segment.get(entry.clauseId)] ?? null })));
+    amount: entry.effect.amount, rule, source: /^outnumber/.test(entry.clauseId) ? 'Surnombre' : PART_SOURCES[segment.get(entry.clauseId)] ?? null })));
   return { droppedRows: dropped, traitRows: rows('trait'), defenseRows: rows('defense'), attackRows: rows('attack'), successBonus: success?.totals.modifySL ?? 0,
     advantageSources: sources(settings.advantageSources, 'grantAdvantage'), disadvantageSources: sources(settings.disadvantageSources, 'grantDisadvantage'), unresolved };
 }
@@ -299,7 +299,7 @@ export function buildCombatTest(normalized, role = 'actor') {
   const shieldUsed=defending?(()=>{const shieldDefense=v5ShieldDefense(normalized);return Boolean((shieldDefense.v5Bonus||shieldDefense.confirmed)&&!shieldDefense.barrakulIgnored);})():false;
   const engineEffects=combatEngineEffects({actor,defending,kind,action,settings,shield:shieldUsed,
     traits:{clauses:[...senseTestClauses(senseArgs),...movementTestClauses(movementArgs),...outnumberTestClauses(outnumberArgs)],
-      rows:[...senses.modifiers,...movementTestRules(movementArgs),...outnumberTestRules(outnumberArgs)]}});
+      rows:[...senses.modifiers,...movementTestRules(movementArgs),...outnumberClauseLabels(outnumberArgs),...outnumberTestRules(outnumberArgs)]}});
   unresolved.push(...engineEffects.unresolved);
   modifiers.push(...engineEffects.traitRows);
   if(settings.context?.blackpowderBrokenTest===true&&talentModifiers.context.skillId==='skill-43_61_6c_6d_65-base')modifiers.push({id:'quality:blackpowder-calm',label:'Calme Accessible contre À Poudre noire',amount:2});

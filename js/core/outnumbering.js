@@ -78,7 +78,9 @@ export function planOutnumbering({ actor, target, participants = [], context = {
   const summary = !applicable ? '' : surrounded ? `${ratio} : cible encerclée, +2 DR` : outnumbered ? `${ratio} : surnombre, +1 DR` : `${ratio} : pas de surnombre`;
   const modifiers = surrounded ? [{ id: 'outnumber:surrounded', label: `Cible encerclée (${ratio})`, amount: 2 }]
     : outnumbered ? [{ id: 'outnumber', label: `Surnombre (${ratio})`, amount: 1 }] : [];
-  return { applicable, attackers: { count: attackers.length, weight: attackerWeight }, defenders: { count: defenders.length, weight: defenderWeight }, outnumbered, surrounded, amount, summary, modifiers, reminders };
+  // Libellés des deux clauses (L5b), y compris celle que la politique `max` écarte, pour l'affichage « non cumulé » (Q9).
+  const labels = { outnumber: `Surnombre (${ratio})`, 'outnumber:surrounded': `Cible encerclée (${ratio})` };
+  return { applicable, attackers: { count: attackers.length, weight: attackerWeight }, defenders: { count: defenders.length, weight: defenderWeight }, outnumbered, surrounded, amount, summary, modifiers, labels, reminders };
 }
 
 /**
@@ -98,4 +100,10 @@ export function outnumberTestClauses({ actor, target, participants = [], kind, d
 export function outnumberTestRules({ actor, target, participants = [], kind, defending = false, action = {}, context = {} }) {
   if (defending || kind !== 'melee' || !ATTACK_TYPES.includes(action.type)) return [];
   return planOutnumbering({ actor, target, participants, context }).modifiers;
+}
+
+/** Libellés de toutes les clauses de `outnumberTestClauses` (retenue ou écartée), en lignes `{ id, label }` sans montant. */
+export function outnumberClauseLabels({ actor, target, participants = [], kind, defending = false, action = {}, context = {} }) {
+  if (defending || kind !== 'melee' || !ATTACK_TYPES.includes(action.type)) return [];
+  return Object.entries(planOutnumbering({ actor, target, participants, context }).labels).map(([id, label]) => ({ id, label }));
 }

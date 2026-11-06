@@ -9,9 +9,14 @@ const dropped = [{ label: 'État extenue', amount: -1, rule: 'strongest', source
 
 test('effet retenu : libellé, source et montant ; effet écarté : barré, non cumulé, règle', () => {
   const lines = modifierLines(kept, dropped);
-  assert.deepEqual(lines.map(l => l.text), ['Plus forte pénalité d’État (État) : −2 DR', 'Tir rapide (Talent) : +1 DR', 'État extenue (État) : −1 DR']);
+  assert.deepEqual(lines.map(l => l.text), ['Plus forte pénalité d’État (État) : −2 DR', 'Tir rapide (Talent) : +1 DR', 'État extenue : −1 DR']);
   assert.deepEqual(lines.map(l => l.struck), [false, false, true]);
   assert.match(lines[2].note, /^non cumulé · règle : la plus forte pénalité$/);
+});
+
+test('la source n’est pas répétée quand le libellé la porte déjà (recette 06/11)', () => {
+  const lines = modifierLines([{ id: 'outnumber:surrounded', label: 'Cible encerclée (2 contre 1)', amount: 2 }], [{ label: 'Surnombre (2 contre 1)', amount: 1, rule: 'max', source: 'Surnombre' }]);
+  assert.deepEqual(lines.map(l => l.text), ['Cible encerclée (2 contre 1) (Surnombre) : +2 DR', 'Surnombre (2 contre 1) : +1 DR']);
 });
 
 test('rendu DOM : <s> + mention pour l’écarté, texte simple pour le retenu', () => {
@@ -22,7 +27,7 @@ test('rendu DOM : <s> + mention pour l’écarté, texte simple pour le retenu',
     assert.equal(keptRow.textContent, 'Plus forte pénalité d’État (État) : −2 DR');
     assert.equal(keptRow.children.length, 0);
     assert.equal(droppedRow.children[0].tag, 's');
-    assert.equal(droppedRow.children[0].textContent, 'État extenue (État) : −1 DR');
+    assert.equal(droppedRow.children[0].textContent, 'État extenue : −1 DR');
     assert.match(droppedRow.children[1].textContent, /non cumulé · règle : la plus forte pénalité/);
   } finally { delete globalThis.document; }
 });

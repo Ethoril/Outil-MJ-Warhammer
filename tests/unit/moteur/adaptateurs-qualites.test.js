@@ -51,6 +51,16 @@ test('L5b surnombre : +1 et +2 ne se cumulent pas (politique max), le +1 reste l
   assert.deepEqual(combined.groups[0].dropped.map(row => [row.entry.clauseId, row.rule]), [['outnumber', 'max']]);
 });
 
+test('L6 recette : le +1 de surnombre écarté par l’encerclement s’affiche « Surnombre (2 contre 1) », source Surnombre', () => {
+  const a = fighter('a', 'pj'), b = fighter('b', 'pj'), t = fighter('t', 'ennemi');
+  const result = melee(a, t, { participants: [a, b, t], context: { outnumberAttackerIds: ['b'], surrounded: true } });
+  const row = result.droppedModifiers.find(entry => entry.id === 'outnumber');
+  assert.ok(row, JSON.stringify(result.droppedModifiers));
+  assert.equal(row.label, 'Surnombre (2 contre 1)');
+  assert.equal(row.source, 'Surnombre');
+  assert.equal(row.amount, 1);
+});
+
 test('L5b surnombre : aucun effet en défense, au tir ou hors attaque, comme outnumberTestRules', () => {
   const a = fighter('a', 'pj'), b = fighter('b', 'pj'), t = fighter('t', 'ennemi');
   const base = { actor: a, target: t, participants: [a, b, t], kind: 'melee', action: { type: 'attack' }, context: { outnumberAttackerIds: ['b'] } };

@@ -11,15 +11,18 @@ export function modifierSource(modifier) {
   return SOURCE_BY_ID.find(([pattern]) => pattern.test(String(modifier.id || '')))?.[1] ?? null;
 }
 
+// La source entre parenthèses, sauf si le libellé la porte déjà (« Surnombre (2 contre 1) »).
+const withSource = (label, source) => source && !String(label).startsWith(source) ? `${label} (${source})` : `${label}`;
+
 /** Lignes d'affichage : `{ text, struck, note? }`. `dropped` : `[{ label, amount, rule, source }]` (effets écartés). */
 export function modifierLines(modifiers = [], dropped = []) {
   const lines = modifiers.map(modifier => {
     const source = modifierSource(modifier);
-    return { text: `${modifier.label}${source ? ` (${source})` : ''} : ${signed(modifier.amount)} DR`, struck: false };
+    return { text: `${withSource(modifier.label, source)} : ${signed(modifier.amount)} DR`, struck: false };
   });
   for (const row of dropped) {
     const policy = STACK_POLICIES[row.rule];
-    lines.push({ text: `${row.label}${row.source ? ` (${row.source})` : ''} : ${signed(row.amount)} DR`, struck: true,
+    lines.push({ text: `${withSource(row.label, row.source)} : ${signed(row.amount)} DR`, struck: true,
       note: `non cumulé · règle : ${policy ? policy.label : row.rule}` });
   }
   return lines;
