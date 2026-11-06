@@ -1,4 +1,5 @@
 import { normalizeState } from './effects.js';
+import { conditionPenaltyEffects, conditionDisadvantageEffects } from './condition-effects.js';
 
 const CHARACTERISTICS = new Set(['CC', 'CT', 'F', 'E', 'I', 'Ag', 'Dex', 'Int', 'FM', 'Soc', 'M']);
 const TALENT_MARKERS = new Set(['talent-active', 'talent-pending']);
@@ -174,7 +175,8 @@ export function resolveV5ConditionTestContext(actor, context = {}) {
       source: { document: 'Livre de base V5 EN v2', printedPage: 226, citation: 'Livre de base V5 EN v2, p. 226', rule: 'Anchorite’s Endurance' }
     });
   }
-  const worstSlPenalty = slPenaltyCandidates.sort((a, b) => b.amount - a.amount || a.key.localeCompare(b.key))[0];
+  // U8 L5z (Q6) : plus forte pénalité d'États par le moteur d'effets (`strongest`), exceptions déjà retirées des candidats.
+  const slPenalty = conditionPenaltyEffects(new Map(slPenaltyCandidates.map(row => [row.key, row.amount]))).penalty;
 
   const disadvantageCandidates = [];
   if (levels.aterre && movement === true) disadvantageCandidates.push({ key: 'aterre', count: 1 });
@@ -183,9 +185,12 @@ export function resolveV5ConditionTestContext(actor, context = {}) {
     disadvantageCandidates.push({ key: 'aveugle', count: levels.aveugle });
   }
   if (ignoreConditions) disadvantageCandidates.length = 0;
-  const worstDisadvantage = disadvantageCandidates.sort((a, b) => b.count - a.count || a.key.localeCompare(b.key))[0];
-  const hasSlPenalty = Boolean(worstSlPenalty);
-  const hasDisadvantage = Boolean(worstDisadvantage);
+  // Désavantages d'un seul État, le plus fort ; à égalité, le premier dans l'ordre des clés (ordre alphabétique, comme avant).
+  const disadvantageRows = new Map([...disadvantageCandidates].sort((a, b) => a.key.localeCompare(b.key))
+    .map(row => [row.key, Array.from({ length: row.count }, (_, index) => ({ id: `condition:${row.key}:${index + 1}`, label: STATE_LABELS[row.key] }))]));
+  const worstDisadvantage = conditionDisadvantageEffects(disadvantageRows);
+  const hasSlPenalty = slPenalty > 0;
+  const hasDisadvantage = worstDisadvantage.length > 0;
   const mode = context.conditionPenaltyMode;
   const reason = typeof context.conditionPenaltyReason === 'string' ? context.conditionPenaltyReason.trim() : '';
 
@@ -204,15 +209,12 @@ export function resolveV5ConditionTestContext(actor, context = {}) {
   const applySl = !hasSlPenalty || !hasDisadvantage || mode === 'sl' && Boolean(reason);
   const applyDisadvantage = !hasSlPenalty || !hasDisadvantage || mode === 'disadvantage' && Boolean(reason);
   if (hasSlPenalty && applySl) {
-    const label = slPenaltyCandidates.filter(row => row.amount === worstSlPenalty.amount)
+    const label = slPenaltyCandidates.filter(row => row.amount === slPenalty).sort((a, b) => a.key.localeCompare(b.key))
       .map(row => STATE_LABELS[row.key]).join(', ');
-    slModifiers.push({ id: 'conditions:highest-sl', label: `Malus d’État maximal (${label})`, amount: -worstSlPenalty.amount });
+    slModifiers.push({ id: 'conditions:highest-sl', label: `Malus d’État maximal (${label})`, amount: -slPenalty });
   }
   if (hasDisadvantage && applyDisadvantage) {
-    for (let index = 0; index < worstDisadvantage.count; index++) {
-      const key = worstDisadvantage.key;
-      disadvantageSources.push({ id: `condition:${key}:${index + 1}`, label: STATE_LABELS[key] });
-    }
+    disadvantageSources.push(...worstDisadvantage);
   }
 
   if (levels.aveugle && requiresSight === true) restrictions.push('Aveuglé : cette tâche exige strictement la vue.');
