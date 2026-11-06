@@ -266,6 +266,7 @@ const ASSETS_TO_CACHE = [
   './js/core/v5-supplemental-equipment.js',
   './js/core/v5-weapon-qualities.js',
   './js/data/f2-h-profile-abilities.js',
+  './js/data/weapon-names-fr.js',
   './js/data/v5-combat-fumbles.js',
   './js/data/v5-corruption-mutations-l17.js',
   './js/data/v5-corruption-mutations-l23-audit.js',
