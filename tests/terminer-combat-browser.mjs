@@ -5,7 +5,7 @@ import { resolve, extname, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { launchBrowser } from './helpers/browser.mjs';
 
-// « Terminer le combat » dans les outils de séance : confirmation, Annuler laisse le combat, Confirmer le vide ; pas de débordement à 390 px.
+// « Terminer le combat » dans les outils de séance : vide le combat sans boîte native, « Annuler » du toast le rétablit ; pas de débordement à 390 px.
 const root = fileURLToPath(new URL('..', import.meta.url));
 const types = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.json': 'application/json', '.css': 'text/css; charset=utf-8', '.svg': 'image/svg+xml' };
 const server = createServer((req, res) => {
@@ -39,23 +39,22 @@ try {
   await btn.waitFor({ state: 'visible', timeout: 5000 });
   const tokens = () => page.locator('.workspace-token').count();
   assert.ok(await tokens() >= 2, 'le plateau montre les combattants');
-  // Annuler : le combat reste.
-  dialogs.length = 0; accept = false;
-  await btn.click();
-  assert.equal(dialogs.length, 1);
-  assert.match(dialogs[0], /Retirer tous les combattants/);
-  assert.ok(await tokens() >= 2, 'Annuler laisse le combat');
   // Mobile : pas de débordement horizontal, bouton visible.
   await page.setViewportSize({ width: 390, height: 844 });
   assert.ok(await btn.isVisible());
   assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth), 'barre sans débordement à 390 px');
   if (process.env.TERMINER_SHOT) await page.screenshot({ path: process.env.TERMINER_SHOT });
   await page.setViewportSize({ width: 1440, height: 900 });
-  // Confirmer : le combat est vidé.
-  accept = true;
+  // Sans boîte native (décision du MJ du 06/11) : le clic vide le combat, le toast propose « Annuler ».
+  dialogs.length = 0; accept = false;
   await btn.click();
   await page.waitForFunction(() => document.querySelectorAll('.workspace-token').length === 0, null, { timeout: 5000 });
   await btn.waitFor({ state: 'hidden', timeout: 5000 });
+  assert.deepEqual(dialogs, [], 'aucune boîte native');
+  // « Annuler » du toast : le combat revient.
+  await page.getByRole('button', { name: 'Annuler', exact: true }).last().click();
+  await page.waitForFunction(() => document.querySelectorAll('.workspace-token').length >= 2, null, { timeout: 5000 });
+  await btn.waitFor({ state: 'visible', timeout: 5000 });
   assert.deepEqual(errors, []);
   console.log('terminer-combat: OK');
 } finally { await browser.close(); server.close(); }

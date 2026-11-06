@@ -1811,15 +1811,14 @@ on(DOM.combat.btnStart, 'click', startCombatFromButton);
 on(DOM.combat.btnNextTurn, 'click', advanceTurn);
 on(DOM.combat.btnReset, 'click', () => { DOM.combat.results.replaceChildren(); });
 // Un seul gestionnaire pour l'ancien bouton masqué et pour la barre d'outils de séance.
-const endCombatWithConfirmation = () => {
-  if (confirm('Retirer tous les combattants et remettre le round à zéro ?')) {
-    Store.resetCombat();
-    DOM.combat.results?.replaceChildren();
-    showToast('Combat réinitialisé', 'warning', { label: 'Annuler', onClick: () => Store.undo() });
-  }
+// Décision du MJ (06/11) : pas de boîte native (le navigateur intégré de l'app la refuse sans l'afficher) ; le filet est le toast « Annuler ».
+const endCombat = () => {
+  Store.resetCombat();
+  DOM.combat.results?.replaceChildren();
+  showToast('Combat terminé : tous les combattants retirés, round remis à zéro', 'warning', { label: 'Annuler', onClick: () => Store.undo() });
 };
-if (DOM.combat.btnEndCombat) on(DOM.combat.btnEndCombat, 'click', endCombatWithConfirmation);
-on(qs('#workspace-end-combat'), 'click', endCombatWithConfirmation);
+if (DOM.combat.btnEndCombat) on(DOM.combat.btnEndCombat, 'click', endCombat);
+on(qs('#workspace-end-combat'), 'click', endCombat);
 on(DOM.combat.btnD100, 'click', () => {
   const roll = d100();
   Store.log({ kind: 'roll', text: `🎲 Jet de d100 simple → ${roll}`, detail: { Jet: roll } });
