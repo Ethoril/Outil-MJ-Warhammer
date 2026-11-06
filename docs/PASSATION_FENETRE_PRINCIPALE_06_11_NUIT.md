@@ -1,6 +1,10 @@
 # Passation de la fenêtre principale (06/11/2026, nuit)
 
-Travail de nuit en autonomie, sur feu vert du MJ. **Rien n'est poussé, rien n'est fusionné** : chaque branche attend le feu vert du MJ. Le quota de 5 h était à 37 % à 1 h 20.
+Travail de nuit en autonomie, sur feu vert du MJ. **Fusionné sur feu vert du MJ, rien n'est poussé.** `dev/recette-plateau-04-11` contient L5-MJ, P2 côté outil MJ (`767566e`), U8 L0-L1 (`5d00c51`, prières incluses) et le correctif `parseKeywordCSV` (`1575139`). `feat/liaison-outil-mj` (Map Display) contient P1 et P2 (`522fcf2`). Suite complète de l'outil MJ : 5 774 tests, 4 échecs (les audits E0/E1/E2 connus sous Windows). `pnpm run verify` : vert (312 réussis, 6 ignorés, 4 manuels).
+
+**Décisions du MJ du 06/11** : deux prières différentes sur un même Test → meilleur bonus et pire pénalité, comme les sorts (le groupe des prières et celui des sorts se somment, Q2) ; débord des ornements gardé ; mots-clés incomplets écartés et signalés ; la monture d'un PJ prend la teinte de son cavalier, sauf `tokenColor` propre. **À confirmer** : une même couche (sort ou prière) qui porte deux clés visant le même Test (Charme +2 et Tous les Tests +1) compte pour une seule source, et ses clés s'additionnent (+3). C'est ce qu'attendait un test existant ; R3 vise plusieurs sorts, pas les clés d'un même effet.
+
+Le tableau ci-dessous garde la trace des branches d'origine.
 
 ## Branches à fusionner (sur feu vert)
 
