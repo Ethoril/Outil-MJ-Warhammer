@@ -2403,11 +2403,10 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
       computedTraits.push('Protection de Pha (Test de FM requis pour tirer)');
       computedSpecialState.phasProtection = true;
     } else if (specialTag === 'clarity-of-thought' || effects.removeBrokenPerSl) {
-      computedTraits.push('Clarté d’Esprit (Pénalités mentales, d’Exténué et de Critique à la Tête ignorées)');
+      // V5 p. 251, MJ 06/11 : Clarté d'esprit efface Sonné (processus mentaux), pas Exténué.
+      computedTraits.push('Clarté d’Esprit (Pénalités mentales et de Critique à la Tête ignorées)');
       computedSpecialState.clarityOfThought = true;
-      computedSpecialState.ignoreMentalAndFatiguePenalties = true;
       computedSpecialState.ignoreMentalPenalties = true;
-      computedSpecialState.ignoreFatiguePenalties = true;
       computedSpecialState.ignoreHeadCriticalPenalties = true;
     } else if (specialTag === 'vegetal-enchantment' || effects.plantGrowth) {
       computedTraits.push('Enchantement Végétal (Croissance accélérée)');

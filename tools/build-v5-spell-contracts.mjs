@@ -444,7 +444,6 @@ const SPELL_EFFECTS_CONFIG = {
     type: 'special',
     special: 'clarity-of-thought',
     ignoreMentalPenalties: true,
-    ignoreFatiguePenalties: true,
     ignoreHeadCriticalPenalties: true
   },
   'Daemonbane': {

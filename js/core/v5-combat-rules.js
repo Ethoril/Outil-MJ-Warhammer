@@ -25,7 +25,7 @@ import { applyV5TalentPenaltyRules, applyV5AttackSituationModifiers, computeV5We
 import { normalizeState } from './effects.js';
 import { previewV5TalentTestModifiers, previewV5TalentSLChoices } from './v5-talent-tests.js';
 import { sequelaTestRules } from './v5-sequela-effects.js';
-import { conditionPenaltyEffects, conditionDisadvantageEffects } from './condition-effects.js';
+import { conditionPenaltyEffects, conditionDisadvantageEffects, conditionTestRules, conditionDisadvantageRows } from './condition-effects.js';
 import { weaponHandsForParticipant } from './equipment.js';
 export const V5_COMBAT_RULE_VERSION = 'v5-combat-2026-10-09.24.6';
 export const hasMomentum = actor => actor?.extensions?.v5?.hasMomentum === true;
@@ -338,7 +338,6 @@ export function buildCombatTest(normalized, role = 'actor') {
     advantages.push({ id: 'talent-beat-blade', label: 'Battement sur la cible' });
   const charging = !defending && kind === 'melee' && settings.charging === true;
   if (kind === 'melee' && (hasMomentum(actor) || charging || defending&&normalized.combatPrelude?.targetIncomingMomentum)) advantages.push({ id: 'momentum', label: charging ? 'Élan de Charge' : 'Élan' });
-  const relevant = new Map(['sonne', 'extenue', 'empoisonne'].map(key => [key, levels.get(key) || 0]));
   const context = settings.context || {};
   advantages.push(...support.advantages);
   if(magicTalentRank(actor,'magical-sense') && /perception/i.test(skill?.nom || action.label || action.note || '') && context.magicalNature===true && context.seesWinds===true)advantages.push({id:'magical-sense',label:'Perception de la Magie'});
@@ -350,45 +349,22 @@ export function buildCombatTest(normalized, role = 'actor') {
     if(typeof context.relatedToDebate!=='boolean')unresolved.push('Ergoteur : préciser si ce Test a un rapport avec la dispute.');
     else if(!context.relatedToDebate)modifiers.push({id:'talent:argumentative',label:'Dispute sans rapport avec le Test',amount:-3,talentOrigins:[debate.source]});
   }
-  const movement = kind === 'melee' ? true : context.involvesMovement;
-  if (levels.has('enchevetre') && !ignoreConditions) {
-    if (movement == null) unresolved.push('Préciser si le Test implique un mouvement.');
-    if (movement) relevant.set('enchevetre', levels.get('enchevetre'));
-  }
-  if (levels.has('brise') && !ignoreConditions) {
-    const escape = kind !== 'test' ? false : context.runningOrHiding;
-    if (escape == null) unresolved.push('Préciser si le Test sert à fuir ou se cacher.');
-    if (escape === false) relevant.set('brise', levels.get('brise'));
-  }
+  // MJ 06/11 Q19 : un seul calcul des États pour tous les Tests (conditionTestRules, condition-effects.js).
+  const conditionRules = conditionTestRules(levels, { kind, attr: action.attr, context, ignoreAll: ignoreConditions });
+  const relevant = conditionRules.relevant;
+  unresolved.push(...conditionRules.unresolved);
   const flags=actor.extensions?.v5?.specialStates, mental=['Int','I','FM','Soc'].includes(action.attr);
   if(kind==='ranged' && flags?.flying && !context.flying)modifiers.push({id:'spell-flight-ranged',label:'Tir en vol',amount:-2});
   if(defending && (normalized.actor?.states || []).some(s=>s.source?.coldBreath && /extenue|fatigued/i.test(s.key || s.name)))modifiers.push({id:'spell-cold-defense',label:'Défense contre le Souffle froid',amount:1});
   if(flags?.clarityOfThought && mental) { for(let i=modifiers.length-1;i>=0;i--) if(modifiers[i].amount<0 && /psychology|mental.?mutation|mutation.?mental/i.test(modifiers[i].id)) modifiers.splice(i,1); }
   if(flags?.blockedSkillFamilies?.includes('language') && /langue|language/i.test(skillLabel) || flags?.blockedSkillFamilies?.includes('lore') && /savoir|lore|connaissance/i.test(skillLabel)) restrictions.push('Forme sauvage : Langues et Savoirs indisponibles.');
-  // U8 L4 : pénalités d'États cumulées par le moteur d'effets (la plus forte seule), exceptions comprises : Revigorer et Clarté
-  // d'Esprit (Exténué compté sans pénalité), Clarté de pensée (Sonné sur un Test mental), talents, Endurance de l'anachorète.
+  // U8 L4 : pénalités d'États cumulées par le moteur d'effets (la plus forte seule), exceptions comprises : drapeau
+  // ignoreFatiguePenalties (Exténué compté sans pénalité ; pas Clarté d'esprit, MJ 06/11), Clarté de pensée (Sonné sur un Test mental), talents, Endurance de l'anachorète.
   const conditionPenalty = conditionPenaltyEffects(relevant, { ignoreAll: ignoreConditions, ignoreFatigue: Boolean(flags?.ignoreFatiguePenalties),
     ignoreStun: Boolean(flags?.clarityOfThought && mental), talentIgnores: talentModifiers.ignoredPenalties });
   const penalty = conditionPenalty.penalty;
-  const conditionDisadvantages = new Map();
-  if (levels.has('aterre') && !ignoreConditions) {
-    if (movement == null) unresolved.push('Préciser si le Test implique un mouvement.');
-    if (movement) conditionDisadvantages.set('prone', [{ id: 'prone', label: 'À terre' }]);
-  }
-  if (levels.has('aveugle')) {
-    if (kind === 'ranged') restrictions.push('Un combattant Aveuglé ne peut pas effectuer de tir.');
-    if (kind === 'melee' && !ignoreConditions) conditionDisadvantages.set('blinded', Array.from({ length: levels.get('aveugle') }, (_, i) => ({ id: `blinded-${i}`, label: 'Aveuglé' })));
-    if (kind === 'test' && context.requiresSight === true) restrictions.push('Ce Test exige la vue : un combattant Aveuglé ne peut pas l’effectuer.');
-    if (kind === 'test' && context.reliesOnSight == null && context.requiresSight !== true && !ignoreConditions) unresolved.push('Préciser si le Test repose sur la vue.');
-    if (kind === 'test' && context.reliesOnSight && context.requiresSight !== true && !ignoreConditions) conditionDisadvantages.set('blinded', Array.from({ length: levels.get('aveugle') }, (_, i) => ({ id: `blinded-${i}`, label: 'Aveuglé' })));
-  }
-  if (levels.has('souille') && !ignoreConditions) {
-    const fellowship = kind !== 'test' ? false : action.attr === 'Soc' ? true : context.usesFellowship;
-    if (fellowship == null && !(action.attr === 'E' && context.festeringWounds === true)) unresolved.push('Préciser si le Test utilise la Sociabilité.');
-    if (fellowship) conditionDisadvantages.set('besmirched', [{ id: 'besmirched', label: 'Souillé' }]);
-    // V5 v3 p.185 : Désavantage aussi aux Tests d'Endurance contre les Plaies purulentes (le MJ le déclare ; l'outil ne tient pas de Test quotidien).
-    else if (kind === 'test' && action.attr === 'E' && context.festeringWounds === true) conditionDisadvantages.set('besmirched', [{ id: 'besmirched', label: 'Souillé (Plaies purulentes)' }]);
-  }
+  restrictions.push(...conditionRules.restrictions);
+  const conditionDisadvantages = conditionDisadvantageRows(conditionRules.disadvantages);
   if(!defending&&(actor.states||[]).some(s=>s.key==='glorious-spent'&&sourceActive(s))&&levels.has('sonne')&&context.mandatoryTest!==true&&context.freeAttackTalent!=='glorious-demise')restrictions.push('Fin glorieuse : aucune Action au prochain Tour tant que Sonné.');
   if (levels.has('inconscient')&&!(normalized.combatPrelude?.immediate?.glorious&&!defending)) restrictions.push('Un combattant Inconscient ne peut pas agir ou se défendre.');
   if (levels.has('surpris')) restrictions.push('Un combattant Surpris ne peut pas agir ou se défendre.');

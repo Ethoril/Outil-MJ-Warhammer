@@ -56,6 +56,18 @@ export function evaluateV5Talents(participant, { event, role, context, choices =
   return evaluateTalentContractsV2({ contracts: registry.contracts, acquisitions: acquiredV5Talents(participant).filter(row => (!includeTalents || includeTalents.includes(row.talentId)) && !excludeTalents.includes(row.talentId)),
     sourceHashes: currentV5TalentHashes(), event, role, context, choices, state, clock: actionClock, actionId, actorId: participant?.id });
 }
+const CONDITION_IGNORE_TALENT_IDS = Object.freeze(registry.contracts
+  .filter(contract => (contract.clauses || []).some(clause => (clause.effects || []).some(effect => effect.op === 'ignoreConditionPenalty')))
+  .map(contract => contract.talentId));
+/**
+ * Propositions `ignoreConditionPenalty` des talents acquis (Infatigable…) pour un Test hors combat (magie, contexte de Test) :
+ * la même lecture que `previewV5TalentTestModifiers(...).ignoredPenalties` au combat (MJ 06/11 Q19), pour `conditionPenaltyEffects`.
+ */
+export function conditionPenaltyIgnores(participant, { role = 'actor', context = {} } = {}) {
+  if (!CONDITION_IGNORE_TALENT_IDS.length) return [];
+  return evaluateV5Talents(participant, { event: 'test.beforeRoll', role, context, includeTalents: CONDITION_IGNORE_TALENT_IDS })
+    .proposals.filter(row => row.op === 'ignoreConditionPenalty');
+}
 /** One shared reduction for attack, defense and direct acquisition Store commands. */
 export function previewV5TalentConditions(participant, states, { state, clock = {}, actionId } = {}) {
   const keys=[...new Set(states.map(row=>row.key))];

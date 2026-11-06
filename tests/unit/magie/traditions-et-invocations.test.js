@@ -347,9 +347,10 @@ test('B3 Manifestation de Démon Mineur — Sanguinaire de Khorne ou Démonette 
 describe('registre des traditions — caractérisation', () => {
 // Caractérisation de la phase D : les 277 contrats issus de l'audit ne changent jamais, quels que soient les sorts de traditions ajoutés.
 const base=contracts.filter(c=>!c.isTradition);
+// Empreinte mise à jour le 06/11 : Clarté d'esprit sans ignoreFatiguePenalties (le MJ : elle efface Sonné, pas Exténué).
 test('Phase D — les 277 contrats d’audit sont inchangés (empreinte)',()=>{
  assert.equal(base.length,277);
- assert.equal(createHash('sha256').update(JSON.stringify(base)).digest('hex'),'dddcbf2751ed3fd234de311be66498b38779e3fe963bcae94515c08feb0c059f');
+ assert.equal(createHash('sha256').update(JSON.stringify(base)).digest('hex'),'d1fccbb5e4c3980e1701b1764b89cc6c7a7b3d81b0dd85529ad5cfd63508ed67');
 });
 test('Phase D — ids et noms uniques sur tout le catalogue de contrats',()=>{
  const all=getAllSpellContracts();

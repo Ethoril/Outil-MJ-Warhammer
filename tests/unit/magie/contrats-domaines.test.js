@@ -402,6 +402,13 @@ test('Retours lot 1 — V5 p. 251 : Clarté ignore Sonné, conserve Exténué et
  const p=store.previewCasting(getSpellContract('Lumière guérisseuse'),{actorId:'foe',roll:25,slModifiers:[{id:'head-critical',amount:-1}]});
  assert.equal(p.testSl,4);
 });
+// MJ 06/11 : Clarté d'esprit efface Sonné, pas Exténué ; au combat aussi, la pénalité d'Exténué reste.
+test('Retours lot 1 — V5 p. 251 : au combat, Clarté d’esprit laisse la pénalité d’Exténué',async()=>{
+ const {store}=await encounter({foe:{states:[{name:'Exténué',level:2}]}});await cast(store,getSpellContract('Clarté d’esprit'));
+ assert.equal(subject(store,'foe').extensions.v5.specialStates?.ignoreFatiguePenalties,undefined);
+ const p=store.previewResolution({actorId:'foe',targetId:'mage',action:{id:'blade',type:'attack',attr:'CC',base:50,damage:3,qualities:[]},roll:25,defense:{base:50,roll:95,v5:{kind:'melee',choice:'keep'}},v5:{kind:'melee',choice:'keep'}});
+ assert.equal(p.test.details.modifiers.find(row=>row.id==='conditions')?.amount,-2,JSON.stringify(p.test.details.modifiers));
+});
 test('Retours lot 1 — V5 p. 255 : attaque appliquée termine automatiquement l’invisibilité, Undo la restaure',async()=>{
  const {store,engine}=await encounter();await cast(store,getSpellContract('Linceul d’Invisibilité'));await endTurn(engine);
  const before=store.listParticipants();
