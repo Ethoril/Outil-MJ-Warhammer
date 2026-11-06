@@ -13,6 +13,7 @@ import { previewResolution } from '../../../js/core/resolution.js';
 import { magicSkillModifiers } from '../../../js/core/v5-magic-talents.js';
 import { calculateEffectiveStats } from '../../../js/core/v5-magic-effects.js';
 import { getReferenceCatalogue } from '../../../js/core/reference-catalog.js';
+import { combineEffects } from '../../../js/core/effect-engine.js';
 
 const spellLayer = (id, testModifiers) => ({ id, spellId: 'spell-' + id, spellName: id, casterId: 'caster-' + id, testModifiers });
 const prayerLayer = (id, testModifiers) => ({ id, type: 'test-modifier', testModifiers });
@@ -137,4 +138,15 @@ test('Q4 Désavantage du cavalier protégé et autre Désavantage sur la même a
 test.todo('Q5 plafond de DR de prière sur le résultat final, bonus compris : 1 DR + 2 de bonus = 3, plafonné à +0');
 
 // ---- CA5 ----
-test.todo('CA5 une paire de familles absente de la table est signalée au MJ, jamais additionnée en silence (lot L2)');
+// Lot L2 : le moteur d'effets (effect-engine.js) lit la table de cumul entre familles ; une table vide rend toute paire absente.
+test('CA5 une paire de familles absente de la table est signalée au MJ, jamais additionnée en silence (lot L2)', () => {
+  const entry = (kind, sourceId, target, amount, stack) => ({ bearer: { kind, sourceId }, effect: { op: 'modifySL', amount, stack, stackGroup: 'sl', target } });
+  const entries = [entry('spell', 's', 'carac:e', 2, 'bestBonusWorstPenalty'), entry('prayer', 'p', 'Résistance', 1, 'bestBonusWorstPenalty')];
+  const test = { skill: 'Résistance', carac: 'E' };
+  assert.equal(combineEffects(entries, { test }).totals.modifySL, 3, 'paire tracée (Q2) : somme');
+  const absent = combineEffects(entries, { test, table: {} });
+  assert.equal(absent.ready, false);
+  assert.deepEqual(absent.signals, [{ type: 'pairNotArbitrated', op: 'modifySL', kinds: ['prayer', 'spell'] }]);
+  assert.equal(absent.totals.modifySL, undefined);
+  assert.deepEqual(absent.groups.map(group => [group.kind, group.amount, group.status]), [['spell', 2, 'unresolved'], ['prayer', 1, 'unresolved']]);
+});
