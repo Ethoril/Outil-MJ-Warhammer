@@ -23,6 +23,7 @@ import { applyV5TalentPenaltyRules, applyV5AttackSituationModifiers, computeV5We
 import { normalizeState } from './effects.js';
 import { previewV5TalentTestModifiers, previewV5TalentSLChoices } from './v5-talent-tests.js';
 import { sequelaTestRules } from './v5-sequela-effects.js';
+import { conditionPenaltyEffects, conditionDisadvantageEffects } from './condition-effects.js';
 import { weaponHandsForParticipant } from './equipment.js';
 export const V5_COMBAT_RULE_VERSION = 'v5-combat-2026-10-09.24.6';
 export const hasMomentum = actor => actor?.extensions?.v5?.hasMomentum === true;
@@ -283,9 +284,6 @@ export function buildCombatTest(normalized, role = 'actor') {
   const charging = !defending && kind === 'melee' && settings.charging === true;
   if (kind === 'melee' && (hasMomentum(actor) || charging || defending&&normalized.combatPrelude?.targetIncomingMomentum)) advantages.push({ id: 'momentum', label: charging ? 'Élan de Charge' : 'Élan' });
   const relevant = new Map(['sonne', 'extenue', 'empoisonne'].map(key => [key, levels.get(key) || 0]));
-  // Revigorer et Clarté d'Esprit : les états Exténué restent comptés mais n'infligent plus leur pénalité.
-  if(actor.extensions?.v5?.specialStates?.ignoreFatiguePenalties)relevant.set('extenue',0);
-  for(const effect of talentModifiers.ignoredPenalties)relevant.set(effect.key,Math.max(0,(relevant.get(effect.key)||0)-effect.amount));
   const context = settings.context || {};
   advantages.push(...support.advantages);
   if(magicTalentRank(actor,'magical-sense') && /perception/i.test(skill?.nom || action.label || action.note || '') && context.magicalNature===true && context.seesWinds===true)advantages.push({id:'magical-sense',label:'Perception de la Magie'});
@@ -310,10 +308,13 @@ export function buildCombatTest(normalized, role = 'actor') {
   const flags=actor.extensions?.v5?.specialStates, mental=['Int','I','FM','Soc'].includes(action.attr);
   if(kind==='ranged' && flags?.flying && !context.flying)modifiers.push({id:'spell-flight-ranged',label:'Tir en vol',amount:-2});
   if(defending && (normalized.actor?.states || []).some(s=>s.source?.coldBreath && /extenue|fatigued/i.test(s.key || s.name)))modifiers.push({id:'spell-cold-defense',label:'Défense contre le Souffle froid',amount:1});
-  if(flags?.clarityOfThought && mental) { relevant.set('sonne',0); for(let i=modifiers.length-1;i>=0;i--) if(modifiers[i].amount<0 && /psychology|mental.?mutation|mutation.?mental/i.test(modifiers[i].id)) modifiers.splice(i,1); }
+  if(flags?.clarityOfThought && mental) { for(let i=modifiers.length-1;i>=0;i--) if(modifiers[i].amount<0 && /psychology|mental.?mutation|mutation.?mental/i.test(modifiers[i].id)) modifiers.splice(i,1); }
   if(flags?.blockedSkillFamilies?.includes('language') && /langue|language/i.test(skillLabel) || flags?.blockedSkillFamilies?.includes('lore') && /savoir|lore|connaissance/i.test(skillLabel)) restrictions.push('Forme sauvage : Langues et Savoirs indisponibles.');
-  if (ignoreConditions) relevant.clear();
-  const penalty = Math.max(0, ...relevant.values());
+  // U8 L4 : pénalités d'États cumulées par le moteur d'effets (la plus forte seule), exceptions comprises : Revigorer et Clarté
+  // d'Esprit (Exténué compté sans pénalité), Clarté de pensée (Sonné sur un Test mental), talents, Endurance de l'anachorète.
+  const conditionPenalty = conditionPenaltyEffects(relevant, { ignoreAll: ignoreConditions, ignoreFatigue: Boolean(flags?.ignoreFatiguePenalties),
+    ignoreStun: Boolean(flags?.clarityOfThought && mental), talentIgnores: talentModifiers.ignoredPenalties });
+  const penalty = conditionPenalty.penalty;
   const conditionDisadvantages = new Map();
   if (levels.has('aterre') && !ignoreConditions) {
     if (movement == null) unresolved.push('Préciser si le Test implique un mouvement.');
@@ -358,7 +359,7 @@ export function buildCombatTest(normalized, role = 'actor') {
   }
   // Different Condition penalties do not add. Like-for-like penalties select
   // the largest; a DR penalty versus inversion requires an explicit MJ ruling.
-  const worstDisadvantage = [...conditionDisadvantages.values()].sort((a, b) => b.length - a.length)[0] || [];
+  const worstDisadvantage = conditionDisadvantageEffects(conditionDisadvantages);
   const mixed = !talentModifiers.ignoreNegative && penalty > 0 && worstDisadvantage.length > 0;
   const conditionPenaltyMode = context.conditionPenaltyMode;
   if (mixed && !['sl', 'disadvantage'].includes(conditionPenaltyMode)) unresolved.push('États de pénalités différentes : choisir les DR ou le Désavantage retenu par le MJ.');
@@ -415,6 +416,6 @@ export function buildCombatTest(normalized, role = 'actor') {
   const talentSL = previewV5TalentSLChoices(withCompanionTalents(actor,normalized.v5State?.participants||[]), test, { action, settings, kind, role: talentRole, opponent: target });
   test = talentSL.test; unresolved.push(...talentSL.unresolved);
   test={...test,options:test.options.map(o=>({...o,result:refreshV5ResultTier(enforceMagicTestRestrictions(actor,o.result,{magical:false}))}))};
-  return { test, crewSkill,talentPlans: [talentModifiers.plan, ...talentSL.plans,...psychology.plans,...contact.plans,...(contactTalent?[contactTalent]:[]),...(dualWhirlwind?[dualWhirlwind]:[]),...(warLeader?[{proposals:[{origins:[warLeader.source]}]}]:[])], talentSLChoices: talentSL.choiceDescriptors, kind, penalty: appliedPenalty, penaltyStates: [...relevant].filter(([, value]) => value).map(([key]) => key),
+  return { test, crewSkill,talentPlans: [talentModifiers.plan, ...talentSL.plans,...psychology.plans,...contact.plans,...(contactTalent?[contactTalent]:[]),...(dualWhirlwind?[dualWhirlwind]:[]),...(warLeader?[{proposals:[{origins:[warLeader.source]}]}]:[])], talentSLChoices: talentSL.choiceDescriptors, kind, penalty: appliedPenalty, penaltyStates: [...conditionPenalty.levels].filter(([, value]) => value).map(([key]) => key),
     unresolved, restrictions, charging, qualityBonus: conditionalBonus,extraordinaryShot };
 }

@@ -14,6 +14,7 @@ import { magicSkillModifiers, magicAdverseModifiers, collectTestEffects } from '
 import { calculateEffectiveStats, calculateMagicApByLocation, calculateEffectiveMagicAP } from '../../../js/core/v5-magic-effects.js';
 import { getReferenceCatalogue } from '../../../js/core/reference-catalog.js';
 import { combineEffects } from '../../../js/core/effect-engine.js';
+import { conditionPenaltyEffects, conditionDisadvantageEffects } from '../../../js/core/condition-effects.js';
 import { finalizeDivineState } from '../../../js/core/v5-divine-store.js';
 import { psychologyTraits } from '../../../js/core/creature-psychology.js';
 import { magicWeaponBonus } from '../../../js/core/v5-magic-combat.js';
@@ -150,6 +151,63 @@ test('Q3 pénalité d\'État et malus de prière au même Test : ils s\'addition
   const both = melee(fighter('a', 'pj', { states: stunned, prayers: [prayerLayer('p', { 'Tous les Tests': -1 })] }), target);
   assert.equal(conditionPenalty(both), conditionPenalty(stateOnly));
   assert.equal(modifiersOf(both).find(row => row.id.startsWith('spell-skill:'))?.amount, -1);
+});
+
+// Lot L4 : les États passent dans le moteur d'effets (condition-effects.js) : plus forte pénalité seule (`strongest`), un seul
+// État donne ses Désavantages, exceptions appliquées avant le cumul.
+const state = (key, name, level = 1) => ({ key, name, level });
+const conditionRows = result => modifiersOf(result).filter(row => row.id === 'conditions');
+
+test('L4 pénalités d\'États différents : seule la plus forte s\'applique (Sonné 2, Exténué 1, Empoisonné 1 → −2)', () => {
+  const result = melee(fighter('a', 'pj', { states: [state('sonne', 'Sonné', 2), state('extenue', 'Exténué'), state('empoisonne', 'Empoisonné')] }), fighter('t', 'ennemi'));
+  assert.equal(result.penalty, 2);
+  assert.deepEqual(conditionRows(result).map(row => row.amount), [-2]);
+  assert.deepEqual(result.penaltyStates, ['sonne', 'extenue', 'empoisonne']);
+});
+
+test('L4 les États écartés restent listés avec la règle qui les écarte (CA7)', () => {
+  const effects = conditionPenaltyEffects(new Map([['sonne', 1], ['extenue', 3], ['empoisonne', 0]]));
+  assert.equal(effects.penalty, 3);
+  assert.deepEqual(effects.kept, ['extenue']);
+  assert.deepEqual(effects.dropped, [{ key: 'sonne', rule: 'strongest' }]);
+});
+
+test('L4 Désavantages d\'États : seul l\'État qui en donne le plus s\'applique (À terre 1, Aveuglé 2 → 2 Désavantages)', () => {
+  const result = melee(fighter('a', 'pj', { states: [state('aterre', 'À terre'), state('aveugle', 'Aveuglé', 2)] }), fighter('t', 'ennemi'));
+  assert.deepEqual(result.test.advantage.disadvantage.map(row => row.id), ['blinded-0', 'blinded-1']);
+  assert.deepEqual(conditionDisadvantageEffects(new Map([['prone', [{ id: 'prone' }]], ['besmirched', [{ id: 'besmirched' }]]])).map(row => row.id), ['prone'], 'à égalité, le premier déclaré');
+});
+
+test('L4 exception : Endurance de l\'anachorète (ignoreConditionPenalties) ôte pénalité et Désavantages d\'États', () => {
+  const result = melee(fighter('a', 'pj', { states: [state('sonne', 'Sonné', 2), state('aveugle', 'Aveuglé')], extra: { specialStates: { ignoreConditionPenalties: true } } }), fighter('t', 'ennemi'));
+  assert.equal(result.penalty, 0);
+  assert.deepEqual(conditionRows(result), []);
+  assert.deepEqual(result.test.advantage.disadvantage, []);
+});
+
+test('L4 exceptions avant le cumul : Exténué ignoré (Revigorer), Sonné ignoré sur un Test mental (Clarté de pensée), talent qui retire des niveaux', () => {
+  const levels = new Map([['sonne', 1], ['extenue', 3], ['empoisonne', 0]]);
+  assert.equal(conditionPenaltyEffects(levels, { ignoreFatigue: true }).penalty, 1);
+  assert.equal(conditionPenaltyEffects(levels, { ignoreFatigue: true, ignoreStun: true }).penalty, 0);
+  assert.equal(conditionPenaltyEffects(levels, { talentIgnores: [{ key: 'extenue', amount: 2 }] }).penalty, 1);
+  assert.equal(levels.get('extenue'), 3, 'niveaux d\'entrée intacts');
+});
+
+test('L4 Q12 talent et pénalité d\'États se somment ; la saisie du MJ aussi', () => {
+  const entries = [
+    { bearer: { kind: 'condition', sourceId: 'sonne' }, effect: { op: 'modifySL', amount: -2, stack: 'strongest', stackGroup: 'condition-penalty' } },
+    { bearer: { kind: 'condition', sourceId: 'extenue' }, effect: { op: 'modifySL', amount: -1, stack: 'strongest', stackGroup: 'condition-penalty' } },
+    { bearer: { kind: 'talent', sourceId: 't' }, effect: { op: 'modifySL', amount: 1, stack: 'add', stackGroup: 'talent-t' } }];
+  assert.equal(combineEffects(entries).totals.modifySL, -1);
+  const target = fighter('t', 'ennemi');
+  const stateOnly = melee(fighter('a', 'pj', { states: stunned }), target);
+  const withGm = buildCombatTest({ actor: fighter('a', 'pj', { states: stunned }), target, roll: 42,
+    action: { type: 'attack', label: 'Épée', attr: 'CC', base: 40, qualities: [] },
+    defense: { type: 'skill', label: 'Corps à corps (Base)', attr: 'CC', base: 40, roll: 42, qualities: [], v5: { kind: 'melee', context: {} } },
+    attackContext: { ranged: false }, v5: { kind: 'melee', context: {}, slModifiers: [{ id: 'gm', label: 'MJ', amount: -1 }] }, v5State: { participants: [target] },
+    combatPrelude: {}, weaponSkillUnresolved: [], protectionContext: {} }, 'actor');
+  assert.equal(withGm.penalty, stateOnly.penalty);
+  assert.equal(sum(modifiersOf(withGm)), sum(modifiersOf(stateOnly)) - 1);
 });
 
 // ---- Q4 · qualités, surnombre, montures ----
