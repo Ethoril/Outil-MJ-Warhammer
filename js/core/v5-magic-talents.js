@@ -9,6 +9,7 @@ import { mishapSeverity, groundCastModifier, slannAboard } from './slann.js';
 // Cycle d'import connu (v5-magic-effects lit magicTalentRank) : seules des fonctions, appelées après le chargement.
 import { unsuppressedSpellEffects } from './v5-magic-effects.js';
 import { combineEffects, targetAppliesToTest } from './effect-engine.js';
+import { conditionPenaltyEffects } from './condition-effects.js';
 
 const ruleError=message=>Object.assign(new Error(message),{userFacing:true});
 export function magicTalentRank(actor, id, specialization = null) {
@@ -78,7 +79,8 @@ export function prepareMagicOptions(actor, kind, options={}, spell = null) {
   const ignoreFatigue=['casting','channelling','pause'].includes(kind) && Number(activeMagicTalent(actor,'eye-of-the-storm')?.magicTalentRank)>=2;
   const mental=['casting','channelling','dispel','interruption'].includes(kind);
   if(flags?.clarityOfThought && mental)for(let i=slModifiers.length-1;i>=0;i--)if(slModifiers[i].amount<0 && /psychology|mental.?mutation|mutation.?mental/i.test(slModifiers[i].id))slModifiers.splice(i,1);
-  const penalty=Math.max(flags?.clarityOfThought && mental?0:levels.get('sonne')||0,ignoreFatigue?0:levels.get('extenue')||0,levels.get('empoisonne')||0);
+  // U8 L5z (Q6) : pénalité d'États par le moteur d'effets (la plus forte seule), Œil de la tempête et Clarté de pensée appliqués avant le cumul.
+  const penalty=conditionPenaltyEffects(new Map(['sonne','extenue','empoisonne'].map(key=>[key,levels.get(key)||0])),{ignoreFatigue,ignoreStun:Boolean(flags?.clarityOfThought && mental)}).penalty;
   if(penalty)slModifiers.push({id:'magic-condition-penalty',label:'Pénalité d’État',amount:-penalty});
   if(['casting','channelling'].includes(kind)){const ground=groundCastModifier(actor,{aboard:slannAboard(actor)});if(ground.available && ground.modifier)slModifiers.push({id:'slann-ground',label:'Slann au sol',amount:ground.modifier});}
   if(Number(activeMagicTalent(actor,'sanctuary-of-the-mind')?.magicTalentRank)>=3)for(const modifier of slModifiers)if(modifier.id==='yenlui' && modifier.amount<0)modifier.amount=0;
