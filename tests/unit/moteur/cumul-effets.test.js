@@ -126,3 +126,97 @@ test('Clés adverses des sorts : « Mêlée adverse » vise un Test de Corps à 
   assert.deepEqual(magicAdverseModifiers(holder, 'Résistance').map(row => row.amount), [-2]);
   assert.deepEqual(magicAdverseModifiers(holder, 'Esquive'), []);
 });
+
+// ---- U8 lot L0 (CA1, CA2, CA11) : la règle R3 vaut par Test résolu, pas par clé. ----
+// Deux sorts différents peuvent viser le même Test par des clés différentes (« carac:e » et « Endurance » pour la Résistance ;
+// « Tous les Tests » et « Perception (Vue normale) ») : seuls le meilleur bonus et la pire pénalité des Sorts s'appliquent (R3, p. 235).
+const sumMagic = async (store, skill, context = {}) => {
+  const { magicSkillModifiers } = await import('../../../js/core/v5-magic-talents.js');
+  return magicSkillModifiers(person(store, 'hero'), skill, context).reduce((total, row) => total + row.amount, 0);
+};
+
+test('CA1 R3 deux sorts différents, clés différentes, même Test (carac:e et Endurance) : +2, pas +4', async () => {
+  const store = await fixture();
+  await spell(store, 'Dur comme le roc', 's1', 'hero');
+  await spell(store, 'Brise-dents', 's2', 'other');
+  const sl = resist(store).sl;
+  assert.equal(sl, -1 + 2, `obtenu ${sl} ; ${dump(store)}`);
+});
+
+test('CA1 R3 trois sorts sur la Résistance par deux clés : un seul +2 ; Calme reçoit aussi un seul +2', async () => {
+  const store = await fixture();
+  await spell(store, 'WAAAGH !', 's1', 'other');
+  await spell(store, 'Dur comme le roc', 's2', 'hero');
+  await spell(store, 'Brise-dents', 's3', 'other');
+  assert.equal(await sumMagic(store, 'Résistance', { carac: 'E' }), 2, dump(store));
+  assert.equal(await sumMagic(store, 'Calme', { carac: 'FM' }), 2, dump(store));
+});
+
+test('CA2 R3 deux pénalités de sorts différents, clés différentes, même Test : seule la pire (Perception (Vue normale) -2 et Tous les Tests -1 donnent -2)', async () => {
+  const store = await fixture();
+  await spell(store, 'Yeux de Volans', 's1', 'other');
+  await spell(store, 'Démangeaison', 's2', 'other');
+  assert.equal(await sumMagic(store, 'Perception (Vue normale)', { carac: 'I' }), -2, dump(store));
+});
+
+test('CA2 R3 pénalités égales sur deux clés (Focalisation -1 et Tous les Tests -1) : -1, pas -2', async () => {
+  const store = await fixture();
+  await spell(store, 'Réfraction prismatique de Habermas', 's1', 'other');
+  await spell(store, 'Malédiction du Destin', 's2', 'other');
+  assert.equal(await sumMagic(store, 'Focalisation', { carac: 'FM' }), -1, dump(store));
+});
+
+test('CA1 + CA2 R3 sur le pivot : +2, +2, -1 et -1 de quatre sorts sur des clés différentes donnent +1 net', async () => {
+  const store = await fixture();
+  await spell(store, 'Dur comme le roc', 's1', 'hero');
+  await spell(store, 'Brise-dents', 's2', 'other');
+  await spell(store, 'Démangeaison', 's3', 'other');
+  await spell(store, 'Malédiction du Destin', 's4', 'other');
+  const sl = resist(store).sl;
+  assert.equal(sl, -1 + 2 - 1, `obtenu ${sl} ; ${dump(store)}`);
+});
+
+test('CA1 un sort qui ne vise pas ce Test n\'y compte pas (carac:e hors Test d\'Endurance)', async () => {
+  const store = await fixture();
+  await spell(store, 'Dur comme le roc', 's1', 'hero');
+  await spell(store, 'Brise-dents', 's2', 'other');
+  assert.equal(await sumMagic(store, 'Calme', { carac: 'FM' }), 2);
+  assert.equal(await sumMagic(store, 'Perception', { carac: 'I' }), 0);
+});
+
+// Copies « caractéristiques » et « PA » de la règle R3 : contrôles (leurs clés sont déjà canoniques, la règle doit tenir).
+test('R3 caractéristiques : sorts sur la même caractéristique, meilleur bonus et pire malus', async () => {
+  const { calculateEffectiveStats } = await import('../../../js/core/v5-magic-effects.js');
+  const stats = calculateEffectiveStats({ E: 30, F: 30 }, [
+    { id: 'a', casterId: 'x', statModifiers: { E: 10 } }, { id: 'b', casterId: 'y', statModifiers: { E: 20, F: -5 } }, { id: 'c', casterId: 'y', statModifiers: { F: -10 } }]);
+  assert.equal(stats.E, 50);
+  assert.equal(stats.F, 20);
+});
+
+test('R3 PA : un groupe « all » et une localisation visent les mêmes PA, meilleur bonus par localisation', async () => {
+  const { calculateMagicApByLocation } = await import('../../../js/core/v5-magic-effects.js');
+  const ap = calculateMagicApByLocation([{ id: 'a', casterId: 'x', apModifiers: { all: 1 } }, { id: 'b', casterId: 'y', apModifiers: { body: 2 } }]);
+  assert.deepEqual(ap, { head: 1, body: 2, leftArm: 1, rightArm: 1, leftLeg: 1, rightLeg: 1 });
+});
+
+// CA11 : une sauvegarde d'avant le chantier (couches posées, testModifiers par clé déjà calculés) se recharge ;
+// mêmes résultats, hors cas corrigés par CA1-CA2.
+async function savedGame(layers, testModifiers) {
+  const store = createStore({ persistence: memory(), storage: null }); await store.ready;
+  const saved = hero('hero', { extensions: { v5: { divine: { sin: 0 }, hasMomentum: true, spellEffects: layers, testModifiers } } });
+  const snapshot = { schemaVersion: 3, reserve: [], combat: { round: 1, currentActorId: 'hero', order: ['hero', 'other'], participants: [saved, hero('other', { initiative: 30 })] }, log: [], diceLines: [], extensions: { v5: { turnIndex: 1 } } };
+  snapshot.extensions.v5.gameClock = createGameClock(snapshot);
+  await store.loadFromJSON(snapshot);
+  return store;
+}
+const savedLayer = (name, id, casterId) => { const c = getSpellContract(name); return { id, spellId: c.id, spellName: c.name, casterId, testModifiers: structuredClone(c.effects.testModifiers), duration: '10 Rounds' }; };
+
+test('CA11 sauvegarde d\'avant le chantier, un seul sort : même résultat qu\'avant', async () => {
+  const store = await savedGame([savedLayer('Brise-dents', 's1', 'hero')], { Endurance: 2, Calme: 2 });
+  assert.equal(resist(store).sl, -1 + 2, dump(store));
+});
+
+test('CA11 sauvegarde d\'avant le chantier, deux sorts à clés différentes : le cas corrigé par CA1 (+2)', async () => {
+  const store = await savedGame([savedLayer('Dur comme le roc', 's1', 'hero'), savedLayer('Brise-dents', 's2', 'other')], { 'carac:e': 2, Endurance: 2, Calme: 2 });
+  assert.equal(resist(store).sl, -1 + 2, dump(store));
+});
