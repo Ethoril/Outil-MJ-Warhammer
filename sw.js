@@ -221,6 +221,7 @@ const ASSETS_TO_CACHE = [
   './js/ui/map-link-feedback.js',
   './js/ui/messages.js',
   './js/ui/reserve.js',
+  './js/ui/token-color-options.js',
   './js/ui/bestiary-library.js',
   './js/ui/resolution-panel.js',
   './js/ui/resolution-panel/dom.js',
