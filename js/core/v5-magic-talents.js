@@ -7,6 +7,8 @@ import { getBurnoutStatus, consumeCadaiRune, prepareCadaiRerolls } from './v5-ma
 import { applyPrayerSLCaps,getPrayerSLModifiers } from './v5-divine-prayer-caps.js';
 import { mishapSeverity, groundCastModifier, slannAboard } from './slann.js';
 import { normalizeTestKey } from './v5-divine-effects-tests.js';
+// Cycle d'import connu (v5-magic-effects lit magicTalentRank) : seules des fonctions, appelées après le chargement.
+import { resolvedMagicTestModifiers } from './v5-magic-effects.js';
 
 const ruleError=message=>Object.assign(new Error(message),{userFacing:true});
 export function magicTalentRank(actor, id, specialization = null) {
@@ -133,9 +135,16 @@ function testKeyApplies(key,skill,context){
  return test.spec===wanted.spec||[].concat(context?.skillContext||[]).map(fold).includes(wanted.spec);
 }
 const CARAC_LABELS={cc:'Capacité de Combat',ct:'Capacité de Tir',f:'Force',e:'Endurance',i:'Initiative',ag:'Agilité',dex:'Dextérité',int:'Intelligence',fm:'Force Mentale',soc:'Sociabilité'};
+/**
+ * Modificateurs magiques d'un Test. Avec des couches (sorts, prières), le cumul se fait sur les clés qui visent CE Test
+ * (R3 par Test résolu, `resolvedMagicTestModifiers`) ; sans couche, les modificateurs par clé du porteur sont lus tels quels.
+ */
 export function magicSkillModifiers(actor,skill,context={}){
- const result=[];const name=fold(skill);
- for(const [key,amount] of Object.entries(actor?.extensions?.v5?.testModifiers || {}))if(testKeyApplies(key,skill,context))result.push({id:'spell-skill:'+key,label:'Effet magique : '+(/^carac:/i.test(key)?'Tests de '+(CARAC_LABELS[fold(key.slice(6))]||key.slice(6)):key),amount});
+ const result=[];const name=fold(skill);const v5=actor?.extensions?.v5 || {};
+ const layered=[...(Array.isArray(v5.spellEffects)?v5.spellEffects:[]),...(Array.isArray(v5.divineEffects)?v5.divineEffects:[])].some(e=>e&&typeof e.testModifiers==='object'&&e.testModifiers);
+ const applies=key=>testKeyApplies(key,skill,context);
+ const rows=layered?resolvedMagicTestModifiers(v5,applies).map(row=>[row.key,row.amount]):Object.entries(v5.testModifiers || {}).filter(([key])=>applies(key));
+ for(const [key,amount] of rows)result.push({id:'spell-skill:'+key,label:'Effet magique : '+(/^carac:/i.test(key)?'Tests de '+(CARAC_LABELS[fold(key.slice(6))]||key.slice(6)):key),amount});
  for(const [index,effect] of (actor?.extensions?.v5?.miscastEffects || []).entries())if(effect.type==='penalty' && [...(effect.targetSkills || []),effect.targetSkillCategory].filter(Boolean).some(s=>name.includes(fold(s)) || name.includes('langue')&&s==='Incantation'))result.push({id:'miscast:'+index,label:effect.name,amount:effect.slModifier});
  return result;
 }
