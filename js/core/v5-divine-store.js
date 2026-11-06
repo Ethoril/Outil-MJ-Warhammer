@@ -242,15 +242,17 @@ const reducedRow=row=>row&&Object.fromEntries(['nom','portee','cible','duree','e
 const weaponBonusKeys=['damage','replaceDamageBonus','damageFormula'];
 const overlappingWeaponBonus=(left,right)=>Boolean(left&&right)&&(!left.equipmentId||!right.equipmentId||left.equipmentId===right.equipmentId)&&weaponBonusKeys.some(key=>left[key]!==undefined&&right[key]!==undefined);
 // DIV-05 lu depuis la table des politiques du moteur (U8 L3) : prière et sort se somment sur une caractéristique ou un Test (Q2 du
-// MJ, même clé comprise) ; Traits, bonus d'arme et PA identiques ne relèvent pas de Q2 et restent à arbitrer.
+// MJ, même clé comprise), et aussi pour les PA, les bonus d'arme et les Traits identiques (Q14, 06/11) : aucune de ces poses n'est
+// refusée tant que la table trace la paire. Une table qui ne la trace plus rétablit le refus (CA5).
 const prayerSpellSum=()=>betweenGroupsRule('prayer','spell')?.policy==='sum';
 function unresolvedCombination(state){
  const summed=prayerSpellSum();
+ if(summed)return null;
  for(const target of parts(state)){
   const spells=target.extensions?.v5?.spellEffects||[],divine=target.extensions?.v5?.divineEffects||[];
   for(const layer of divine)for(const spell of spells){
-   if(!summed&&Object.keys(layer.statModifiers||{}).some(key=>Number(layer.statModifiers[key])&&Number(spell.statModifiers?.[key])))return 'Le cumul d’un bonus divin et magique sur la même caractéristique reste à arbitrer (DIV-05).';
-   if(!summed&&Object.keys(layer.testModifiers||{}).some(key=>Number(layer.testModifiers[key])&&Number(spell.testModifiers?.[key])))return 'Le cumul d’un modificateur de Test divin et magique sur la même cible de Test reste à arbitrer (DIV-05).';
+   if(Object.keys(layer.statModifiers||{}).some(key=>Number(layer.statModifiers[key])&&Number(spell.statModifiers?.[key])))return 'Le cumul d’un bonus divin et magique sur la même caractéristique reste à arbitrer (DIV-05).';
+   if(Object.keys(layer.testModifiers||{}).some(key=>Number(layer.testModifiers[key])&&Number(spell.testModifiers?.[key])))return 'Le cumul d’un modificateur de Test divin et magique sur la même cible de Test reste à arbitrer (DIV-05).';
    if((layer.traits||[]).some(trait=>(spell.traits||[]).includes(trait)))return 'Le cumul d’un Trait divin et magique identique reste à arbitrer (DIV-05).';
    if(overlappingWeaponBonus(layer.weaponBonus,spell.weaponBonus))return 'Le cumul d’un bonus d’arme divin et magique sur la même arme reste à arbitrer (DIV-05).';
    if(Object.keys(layer.apModifiers||{}).length && (Object.keys(spell.apModifiers||{}).length||Number(spell.apBonus)||Number(spell.armorBonus)))return 'Le cumul de PA divins et magiques reste à arbitrer (DIV-05).';
@@ -1086,7 +1088,7 @@ function calculateWrathRecovery(state,input){
  const relic=relicRead.relics[0]||null;
  let test,options;
  if(gmWrath){test={success:true,fumble:false,sl:0,roll:0,initialRoll:0,reversed:false,optionId:'gm'};options=[];}
- const prayerSheetModifiers=[...new Map([...magicSkillModifiers(actor,'Prière'),...magicSkillModifiers(actor,'Pray')].map(row=>[row.id,row])).values()];
+ const prayerSheetModifiers=[...new Map([...magicSkillModifiers(actor,'Prière',{carac:'Soc'}),...magicSkillModifiers(actor,'Pray',{carac:'Soc'})].map(row=>[row.id,row])).values()];
  if(!gmWrath)try{
   const preview=previewV5Test({score:effectiveSkillScore(actor,skills[0].total,'Soc'),roll:normalizeV5Roll(input.roll),kind:'test',
    slModifiers:[{id:rule.id+':recovery',label:'Prière de récupération',amount:rule.recovery.difficulty},...testContext.slModifiers,...modifiers.modifiers,...prayerSheetModifiers,...(relic&&!gmWrath?[{id:'relic:'+relic.id,label:'Relique : '+relic.label,amount:relic.prayerSL}]:[])],advantageSources:testContext.advantageSources,disadvantageSources:testContext.disadvantageSources});

@@ -996,6 +996,20 @@ test('U8 L3 — modificateurs de couches du Test de Prière : cumul par Test ré
   assert.equal(rows.reduce((total, row) => total + row.amount, 0), 3, JSON.stringify(rows));
 });
 
+test('Q15 — le Test de Prière lit aussi carac:soc et « Sociabilité » (par Test résolu avec les autres clés)', () => {
+  const spell = (id, testModifiers) => ({ id, spellId: 'spell-' + id, casterId: 'c-' + id, testModifiers });
+  const prayer = (id, testModifiers) => ({ id, type: 'test-modifier', testModifiers });
+  const run = v5 => { const who = { ...actor, extensions: { v5: { divine: { sin: 0 }, ...v5 } } };
+    const result = previewDivineExecution(who, baseContract, [who], { canSpeak: true, roll: 23, sourceFingerprint: fingerprint,
+      round: 1, expiry: { phase: 'endOfRound', round: 6 }, facts: { targets: { [who.id]: { withinRange: true } } } });
+    assert.equal(result.ready, true, result.error);
+    return result.preview.slModifiers.filter(row => row.id.startsWith('divine-test:')).reduce((total, row) => total + row.amount, 0); };
+  assert.equal(run({ spellEffects: [spell('a', { 'carac:soc': 1 })] }), 1);
+  assert.equal(run({ divineEffects: [prayer('p', { 'Sociabilité': 2 })] }), 2);
+  assert.equal(run({ spellEffects: [spell('a', { 'carac:soc': 1 }), spell('b', { Prière: 2 })], divineEffects: [prayer('p', { 'Sociabilité': 1 })] }), 3);
+  assert.equal(run({ testModifiers: { 'carac:soc': -1 } }), -1);
+});
+
 test('self/self miracles still enforce canonical targets and their sourced duration', () => {
   const spear = DIVINE_REGISTRY.contracts.find(row => row.canonicalName === 'Spear of Myrmidia');
   const priest = { ...actor, caracs: { Soc: 50 }, skills: [{ name: 'Pray', status: 'resolved', total: 50 }],

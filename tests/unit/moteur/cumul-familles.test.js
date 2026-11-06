@@ -11,7 +11,7 @@ import assert from 'node:assert/strict';
 import { buildCombatTest } from '../../../js/core/v5-combat-rules.js';
 import { previewResolution } from '../../../js/core/resolution.js';
 import { magicSkillModifiers, magicAdverseModifiers, collectTestEffects } from '../../../js/core/v5-magic-talents.js';
-import { calculateEffectiveStats } from '../../../js/core/v5-magic-effects.js';
+import { calculateEffectiveStats, calculateMagicApByLocation, calculateEffectiveMagicAP } from '../../../js/core/v5-magic-effects.js';
 import { getReferenceCatalogue } from '../../../js/core/reference-catalog.js';
 import { combineEffects } from '../../../js/core/effect-engine.js';
 import { finalizeDivineState } from '../../../js/core/v5-divine-store.js';
@@ -55,9 +55,22 @@ test('Q2 la pose d\'une prière sur un sort de même clé n\'est plus refusée (
   const state = (divine, spell) => ({ combat: { participants: [{ id: 'p', zone: 'active', extensions: { v5: { divineEffects: [{ id: 'd', ...divine }], spellEffects: [{ id: 's', ...spell }] } } }] } });
   const same = state({ testModifiers: { 'Résistance': 1 }, statModifiers: { E: 10 } }, { testModifiers: { 'Résistance': 1 }, statModifiers: { E: 10 } });
   assert.doesNotThrow(() => finalizeDivineState(same, structuredClone(same)));
-  // Hors Q2 (Traits identiques) : toujours à arbitrer.
-  const traits = state({ traits: ['Peur (1)'] }, { traits: ['Peur (1)'] });
-  assert.throws(() => finalizeDivineState(traits, structuredClone(traits)), /DIV-05/);
+  // Q14 (06/11) : PA, bonus d'arme et Traits identiques se somment aussi, la pose n'est plus refusée.
+  const others = state({ traits: ['Peur (1)'], apModifiers: { all: 1 }, weaponBonus: { damage: 1 } }, { traits: ['Peur (1)'], apModifiers: { all: 1 }, weaponBonus: { damage: 1 } });
+  assert.doesNotThrow(() => finalizeDivineState(others, structuredClone(others)));
+});
+
+test('Q14 PA d\'un sort et d\'une prière sur la même localisation : somme, meilleur bonus dans chaque groupe', () => {
+  const spells = [{ id: 's1', casterId: 'x', apModifiers: { body: 2 } }, { id: 's2', casterId: 'y', apModifiers: { body: 1 } }];
+  const prayers = [{ id: 'p1', type: 'armor-bonus', apModifiers: { all: 1 } }];
+  assert.equal(calculateMagicApByLocation(spells, prayers).body, 3);
+  assert.equal(calculateEffectiveMagicAP({ body: 1 }, spells, {}, prayers).body, 4);
+});
+
+test('Q16 clé « … adverse » du porteur et sort posé sur l\'opposant, même Test : les deux se somment', () => {
+  const holder = fighter('h', 'pj', { spells: [spellLayer('a', { 'Perception adverse': -1 })] });
+  const opponent = fighter('o', 'ennemi', { spells: [spellLayer('b', { 'Perception': -2 })] });
+  assert.equal(sum([...magicSkillModifiers(opponent, 'Perception'), ...magicAdverseModifiers(holder, 'Perception')]), -3);
 });
 
 // Arbitrage du MJ du 06/11 : deux prières différentes suivent la règle des sorts, meilleur bonus et pire pénalité par Test résolu.

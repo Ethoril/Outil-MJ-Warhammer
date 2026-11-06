@@ -371,7 +371,8 @@ export function wrathDeityRejections(subject){
  return {ok:true,layers:clone(layers),needsInput:[]};
 }
 
-const PRAYER_TEST_KEYS = ['all', 'tous les tests', 'pray', 'prayer', 'priere'];
+// Q15 du MJ (06/11) : le Test de Prière lit aussi les clés de Sociabilité (`carac:soc`, « Sociabilité »).
+const PRAYER_TEST_KEYS = ['all', 'tous les tests', 'pray', 'prayer', 'priere', 'carac:soc', 'sociabilite'];
 /**
  * Modificateurs du Test de Prière lus sur la fiche. Avec des couches (sorts, prières), cumul par Test résolu par le moteur d'effets
  * (U8 L3, `collectTestEffects`) : meilleur bonus et pire pénalité dans chaque famille (R3 p. 235 ; Q10), une couche = une source

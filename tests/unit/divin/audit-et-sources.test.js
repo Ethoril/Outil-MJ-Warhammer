@@ -1518,7 +1518,7 @@ test('les jets hors d100 et les extensions au-delà des DR sont rejetés; le Pé
   assert.equal(highSin.preview.wrath.outcome.id, 'wrath:151-plus');
 });
 
-test('DIV-05 : même bonus de caractéristique divin+magique sommé (Q2 du MJ), cumul de PA toujours bloqué au calcul Store', () => {
+test('DIV-05 : même bonus de caractéristique (Q2) et PA (Q14) divin+magique acceptés au calcul Store', () => {
   const priest = { id: 'priest', zone: 'active', skills: [{ name: 'Prière', status: 'resolved', total: 60 }],
     caracs: { Soc: 60 }, talents: [{ id: 'talent-bless', status: 'resolved', rank: 1, specialization: 'Myrmidia' }],
     extensions: { v5: { divine: { sin: 0 } } } };
@@ -1535,8 +1535,7 @@ test('DIV-05 : même bonus de caractéristique divin+magique sommé (Q2 du MJ), 
   const shield = previewStoreDivine({ localRevision: 1, combat: { round: 1, participants: [invoker, armoredAlly] } }, shieldId,
     { actorId: 'priest', targetIds: ['ally'], canSpeak: true, roll: 23, choices: { range: 0, targets: 0, duration: 0 },
       expiry: { phase: 'endOfRound', round: 6 }, facts: { targets: { ally: { withinRange: true, ally: true } } } });
-  assert.equal(shield.ready, false);
-  assert.match(shield.error, /DIV-05/);
+  assert.equal(shield.ready, true, shield.error);
 });
 
 test('fin manuelle de sun-a retire son seul état Aveuglé et préserve sun-b', () => {

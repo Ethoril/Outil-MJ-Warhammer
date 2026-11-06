@@ -119,11 +119,10 @@ test('Masque mortuaire : fin par le MJ, Undo, Redo et rechargement gardent l’a
   assert.deepEqual(priest.traits, [...new Set([...priest.extensions.v5.baseTraits, ...priest.extensions.v5.temporaryTraits])]);
 });
 
-test('Trait divin et trait de sort identiques : cumul refusé (DIV-05) ; un trait différent passe', async () => {
+test('Trait divin et trait de sort identiques : pose acceptée (Q14 du MJ, DIV-05 levé) ; un trait différent passe', async () => {
   const store = await fixture({ cult: 'Morr', priest: { extensions: { v5: { divine: { sin: 0 }, spellEffects: [{ id: 'spell-1', spellName: 'Sort', traits: ['Peur (2)'] }] } } } });
-  const blocked = store.previewDivineExecution(MASK, input());
-  assert.equal(blocked.ready, false);
-  assert.match(blocked.error, /DIV-05/);
+  const allowed = store.previewDivineExecution(MASK, input());
+  assert.equal(allowed.ready, true, allowed.error);
   const other = await fixture({ cult: 'Morr', priest: { extensions: { v5: { divine: { sin: 0 }, spellEffects: [{ id: 'spell-1', spellName: 'Sort', traits: ['Immatériel'] }] } } } });
   assert.equal(other.previewDivineExecution(MASK, input()).ready, true);
 });
@@ -217,12 +216,13 @@ test('Marteau ardent : désignation de l’arme requise, bonus posé dans weapon
   assert.equal(magicWeaponBonus(person(store, 'priest'), hammerAction, false, 0), 0);
 });
 
-test('bonus d’arme divin et magique sur la même arme : cumul refusé (DIV-05)', async () => {
+test('bonus d’arme divin et magique sur la même arme : pose acceptée, dégâts sommés (Q14 du MJ, DIV-05 levé)', async () => {
   const spell = { id: 'spell-weapon', spellName: 'Sort', weaponBonus: { damage: 2, equipmentId: 'hammer' } };
   const store = await fixture({ priest: { actions: [hammerAction], extensions: { v5: { divine: { sin: 0 }, spellEffects: [spell] } } } });
-  const blocked = store.previewDivineExecution(HAMMER, input({ facts: { weapon: { equipmentId: 'hammer' } } }));
-  assert.equal(blocked.ready, false);
-  assert.match(blocked.error, /DIV-05/);
+  const allowed = store.previewDivineExecution(HAMMER, input({ facts: { weapon: { equipmentId: 'hammer' } } }));
+  assert.equal(allowed.ready, true, allowed.error);
+  const actor = { extensions: { v5: { weaponBonuses: [{ effectId: 's', damage: 2, equipmentId: 'hammer' }, { effectId: 'd', divineEffectId: 'd', damage: 3, equipmentId: 'hammer' }, { effectId: 's2', damage: 1, equipmentId: 'hammer' }] } } };
+  assert.equal(magicWeaponBonus(actor, { ...hammerAction, id: 'hammer', type: 'attack' }, false, 0), 5, 'meilleur des sorts (2) + meilleur des prières (3)');
   const elsewhere = await fixture({ priest: { actions: [hammerAction], extensions: { v5: { divine: { sin: 0 }, spellEffects: [{ ...spell, weaponBonus: { damage: 2, equipmentId: 'sword' } }] } } } });
   assert.equal(elsewhere.previewDivineExecution(HAMMER, input({ facts: { weapon: { equipmentId: 'hammer' } } })).ready, true);
 });
@@ -361,13 +361,13 @@ test('test-modifier : modificateur de Test divin posé sur la couche et lu par l
   assert.deepEqual(person(store, 'priest').extensions.v5.testModifiers, {});
 });
 
-test('garde DIV-05 directe : traits et bonus d’arme identiques refusés, distincts acceptés', () => {
+test('garde DIV-05 directe levée par Q14 du MJ : traits et bonus d’arme identiques acceptés, distincts aussi', () => {
   const state = (divine, spell) => ({ combat: { participants: [{ id: 'p', zone: 'active', extensions: { v5: { divineEffects: [{ id: 'd', ...divine }], spellEffects: [{ id: 's', ...spell }] } } }] } });
-  assert.throws(() => finalizeDivineState(state({ traits: ['Peur (1)'] }, { traits: ['Peur (1)'] }), state({ traits: ['Peur (1)'] }, { traits: ['Peur (1)'] })), /Trait divin et magique/);
+  assert.doesNotThrow(() => finalizeDivineState(state({ traits: ['Peur (1)'] }, { traits: ['Peur (1)'] }), state({ traits: ['Peur (1)'] }, { traits: ['Peur (1)'] })));
   assert.doesNotThrow(() => finalizeDivineState(state({ traits: ['Peur (1)'] }, { traits: ['Immatériel'] }), state({ traits: ['Peur (1)'] }, { traits: ['Immatériel'] })));
   const weapon = (divine, spell) => state({ weaponBonus: divine }, { weaponBonus: spell });
-  assert.throws(() => finalizeDivineState(weapon({ damage: 3 }, { damage: 1 }), weapon({ damage: 3 }, { damage: 1 })), /bonus d’arme/);
-  assert.throws(() => finalizeDivineState(weapon({ damage: 3, equipmentId: 'a' }, { damage: 1 }), weapon({ damage: 3, equipmentId: 'a' }, { damage: 1 })), /bonus d’arme/);
+  assert.doesNotThrow(() => finalizeDivineState(weapon({ damage: 3 }, { damage: 1 }), weapon({ damage: 3 }, { damage: 1 })));
+  assert.doesNotThrow(() => finalizeDivineState(weapon({ damage: 3, equipmentId: 'a' }, { damage: 1 }), weapon({ damage: 3, equipmentId: 'a' }, { damage: 1 })));
   assert.doesNotThrow(() => finalizeDivineState(weapon({ damage: 3, equipmentId: 'a' }, { damage: 1, equipmentId: 'b' }), weapon({ damage: 3, equipmentId: 'a' }, { damage: 1, equipmentId: 'b' })));
   assert.doesNotThrow(() => finalizeDivineState(weapon({ magical: true }, { magical: true }), weapon({ magical: true }, { magical: true })));
 });
