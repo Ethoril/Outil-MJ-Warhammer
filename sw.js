@@ -168,6 +168,7 @@ const ASSETS_TO_CACHE = [
   './js/core/effects.js',
   './js/core/effect-engine.js',
   './js/core/supplement-loader.js',
+  './js/ui/supplement-errors-banner.js',
   './js/data/v5-supplements.json',
   './js/core/condition-effects.js',
   './js/core/quality-normalization.js',

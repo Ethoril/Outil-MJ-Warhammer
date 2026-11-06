@@ -252,3 +252,30 @@ test('CA10 · briques.md est à jour et liste toutes les opérations, événemen
   for (const event of CLAUSE_EVENTS) assert.ok(content.includes('`' + event + '`'), event);
   for (const policy of Object.keys(STACK_POLICIES)) assert.ok(content.includes('`' + policy + '`'), policy);
 });
+
+// ---------------------------------------------------------------------------------------------------------------------------
+// Q5 (MJ 06/11) : les erreurs de chargement s'affichent dans un bandeau qui reste affiché (pas de fermeture, repliable).
+// ---------------------------------------------------------------------------------------------------------------------------
+const { supplementErrorsHtml, mountSupplementErrors } = await import('../../../js/ui/supplement-errors-banner.js');
+
+test('Q5 · bandeau des erreurs : un message par élément écarté, échappé, sans bouton de fermeture ; rien sans erreur', () => {
+  const data = structuredClone(FIXTURE);
+  data.supplements[0].spells.push({ id: 'spell-<b>', name: 'Montant', clauses: [{ id: 'z', event: 'test.beforeRoll', role: 'actor', when: [], effects: [{ op: 'modifySL', amount: 'deux', key: 'Endurance' }] }] });
+  data.supplements[0].prayers.push({ id: 'divine:x', name: 'X', couleur: 'bleu' });
+  const errors = load(data).errors;
+  assert.equal(errors.length, 2);
+  const html = supplementErrorsHtml(errors);
+  assert.match(html, /^<details class="supplement-errors" open><summary>2 éléments de supplément écartés au chargement/);
+  assert.equal((html.match(/<li>/g) || []).length, 2);
+  assert.ok(html.includes('sort « spell-&lt;b&gt; » (champ « clauses.z.effects.0.amount »)'));
+  assert.ok(!/<button|close|fermer/i.test(html));
+  assert.equal(supplementErrorsHtml([]), '');
+  assert.equal(supplementErrorsHtml(SUPPLEMENT_ERRORS), '', 'fixture valide : aucun bandeau');
+  // Montage : en tête de l'hôte, rôle alert ; aucun élément sans erreur.
+  const made = [];
+  const host = { ownerDocument: { createElement: tag => { const node = { tag, attributes: {}, setAttribute(key, value) { this.attributes[key] = value; } }; made.push(node); return node; } }, prepend(node) { this.first = node; } };
+  assert.equal(mountSupplementErrors(host, []), null);
+  const banner = mountSupplementErrors(host, errors);
+  assert.equal(host.first, banner);
+  assert.deepEqual([banner.id, banner.attributes.role, banner.innerHTML], ['supplement-errors', 'alert', html]);
+});

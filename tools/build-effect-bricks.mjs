@@ -23,7 +23,7 @@ export function renderBricks() {
   const add = (...rows) => lines.push(...rows);
   add('# U8 · Briques d’effet', '',
     '<!-- Fichier généré par `node tools/build-effect-bricks.mjs` depuis `js/core/effect-engine.js` et `js/core/supplement-loader.js`. Ne pas modifier à la main. -->', '',
-    'Ce qu’un supplément peut déclarer **sans JS** dans `js/data/v5-supplements.json`. Tout ce qui n’est pas listé ici est refusé au chargement, avec un message qui nomme le supplément, l’élément et le champ ; l’élément est écarté, l’application démarre quand même (message d’erreur affiché au démarrage).', '');
+    'Ce qu’un supplément peut déclarer **sans JS** dans `js/data/v5-supplements.json`. Tout ce qui n’est pas listé ici est refusé au chargement, avec un message qui nomme le supplément, l’élément et le champ ; l’élément est écarté, l’application démarre quand même, avec un bandeau d’erreurs qui reste affiché en tête de l’espace tant que le fichier n’est pas corrigé.', '');
 
   add('## Format du fichier', '', '```json', JSON.stringify({ schemaVersion: SUPPLEMENT_SCHEMA_VERSION, supplements: [{
     id: 'sea-of-claws', title: 'Sea of Claws', version: '1', edition: 'V5', reference: 'Sea of Claws (V5)',
