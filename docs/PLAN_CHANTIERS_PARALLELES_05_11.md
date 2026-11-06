@@ -100,6 +100,10 @@ Entre deux vagues : fusion des branches dans `dev/recette-plateau-04-11` (outil 
 - **Q6** : les Tests hors pivot passent **tous par l'agrégateur**, sauf règle contraire du livre repérée lot par lot.
 - **Q7/Q8** : L0 et L1 en vague 4 ; le reste au fil des suppléments (Sea of Claws dans les formats actuels, puis migration).
 - **Q9** : un modificateur écarté reste **visible, barré**, avec la règle qui l'écarte.
+- **Q10 (06/11)** : deux prières différentes sur un même Test → meilleur bonus et pire pénalité, comme les sorts ; le groupe des prières et celui des sorts se somment (Q2).
+- **Q11 (06/11)** : un Trait de créature **se somme** avec talent, sort, prière, État et saisie du MJ.
+- **Q12 (06/11)** : talent et pénalité d'États **se somment**. La saisie libre du MJ et toute la famille « situation » (couvert, position haute, surnombre…) **se somment** à tous les autres effets.
+- **Q13 (06/11)** : une même couche (sort ou prière) qui porte plusieurs clés visant le même Test compte pour **une seule source**, et ses clés s'additionnent (Charme +2 et Tous les Tests +1 → +3).
 
 **E1, médaillons** (branche `claude/e1-medaillons-a7988b`) : **sans débord** ; pion mort en **cerclage gris** ; liseré choisi à la main **abandonné** (seule la teinte du camp compte). **Choix du MJ après examen de la maquette** :
 - **Variante B** (personnage sur fond émaillé, une image par profil), sans débord.
