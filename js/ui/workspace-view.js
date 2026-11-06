@@ -2674,9 +2674,22 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       addActive.dataset.profileId=profile.id;
       addActive.disabled=!callbacks.addProfileToActiveCombat;
       if(!callbacks.addProfileToActiveCombat)addActive.title='Action indisponible';
+      // Un PJ n'entre qu'une fois dans le combat (recette du 06/11) : déjà présent, en attente ou actif, ses boutons se taisent.
+      const presence = profile.kind === 'PJ' ? pjCombatPresence(profile.id) : null;
+      if (presence) {
+        for (const control of [add, addActive]) { control.disabled = true; control.title = presence === 'waiting' ? `${profile.name} est déjà au combat, en attente : « Faire entrer »` : `${profile.name} est déjà au combat`; }
+        text.appendChild(node('span', 'workspace-muted', presence === 'waiting' ? 'Au combat · en attente' : 'Au combat'));
+      }
       item.append(text, add, addActive);
       list.appendChild(item);
     });
+  }
+
+  /** Présence d'un PJ dans le combat : 'waiting', 'active', ou null s'il n'y est pas. */
+  function pjCombatPresence(profileId) {
+    const rows = (Store.listParticipants?.() || []).filter(row => row.profileId === profileId);
+    if (!rows.length) return null;
+    return rows.some(row => row.zone === 'active') ? 'active' : 'waiting';
   }
 
   function renderRenderer(renderer, content, fallback) {
