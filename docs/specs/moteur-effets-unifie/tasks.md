@@ -24,5 +24,5 @@ Fichiers **chauds** du plan général : `store.js`, `resolution.js`, `workspace-
 
 - **Tout de suite** (si le MJ répond à Q1) : L0 partie CA1-CA2, puis L1. Indépendant de tout fichier chaud.
 - **Ensuite** : L2 en parallèle de L1 ; puis L3 → L4 → L5z en file sur `v5-combat-rules.js` ; L5a, L5b, L5c en parallèle entre L2 et L5z.
-- **Au rythme des suppléments** : L7 avant le premier élément de *Sea of Claws* ; L8 et L9 quand un supplément les touche.
+- **Au rythme des suppléments** : L7 pour les suppléments futurs, sans bloquer personne. *Sea of Claws* est déjà intégré dans les formats actuels : bestiaire, prières et sorts dans l'outil, carrières dans la feuille Aides de jeu (décision Q7 : formats actuels, puis migration). L8 et L9 viendront quand un supplément les touchera.
 - Aucun lot ne touche `store.js` ni `workspace-view.js` ; seul L5z peut toucher `resolution.js`, et seulement si Q5 le demande : à placer dans une vague où personne d'autre n'y écrit.

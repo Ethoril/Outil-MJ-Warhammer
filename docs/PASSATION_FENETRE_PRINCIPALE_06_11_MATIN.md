@@ -48,7 +48,7 @@ La fenêtre principale garde son rôle : découper, lancer, relire les diffs, fu
 1. **`pnpm run verify`** dans `E:\rpg-map-display-liaison`, environ 6 min, à ne pas lancer en même temps que la suite de l'outil MJ.
 2. **U8 L6** (fenêtre Sonnet) : détail des modificateurs dans `js/ui/resolution-panel/result.js`, avec source, montant et « non cumulé » barré avec sa règle (Q9). `condition-effects.js` et `combineEffects` rendent déjà les effets écartés avec leur règle.
 3. **Interface des réponses d'États en magie** : `next.conditionNeeds` (Brisé, Enchevêtré, À terre, Aveuglé, Souillé) n'est lu par aucun écran. Tant que le MJ n'a pas répondu, ces États ne pèsent pas en magie, comme avant. À brancher dans le panneau de résolution.
-4. **U8 L7** (fenêtre Opus), avant le premier élément de *Sea of Claws* : chargeur de JSON de supplément sans JS. L8 et L9 suivent au rythme des suppléments.
+4. **U8 L7** (fenêtre Opus) : chargeur de JSON de supplément sans JS, pour les suppléments futurs. Ce n'est pas un préalable : *Sea of Claws* est déjà intégré dans les formats actuels (Q7), et ses carrières vivent dans la feuille Aides de jeu. L8 et L9 suivent au rythme des suppléments.
 5. **Recette restante** sur le port 8771 :
    - la bande de portée préremplie, qui demande un combattant avec une arme à distance dans son équipement ;
    - U5 (barre de PV en aperçu), montures, Course ;
