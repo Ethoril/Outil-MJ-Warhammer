@@ -7,16 +7,18 @@ import {magicSkillModifiers,magicTestModifiers,magicAdverseModifiers,effectiveSk
 import {situationPlan} from './v5-talent-situations.js';
 import {contactWeapon} from './v5-talent-contact.js';
 import {psychologyTestRules} from './v5-talent-psychology.js';
-import {senseTestRules} from './creature-senses.js';
-import {movementTestRules} from './creature-movement.js';
-import {outnumberTestRules} from './outnumbering.js';
+import {senseTestRules,senseTestClauses} from './creature-senses.js';
+import {movementTestRules,movementTestClauses} from './creature-movement.js';
+import {outnumberTestRules,outnumberTestClauses} from './outnumbering.js';
 import {unavailableDisarmedWeapon} from './v5-talent-replacements.js';
 import {warLeaderSubstitution} from './v5-talent-situations.js';
 import {calculateV5ArmorPenalty,previewV5Parry} from './v5-weapon-qualities.js';
 import { pendingCrewSkill,sourceActive } from './v5-talent-actions.js';
 import { previewV5Test,reverseV5Roll,refreshV5ResultTier }  from './v5-roll.js';
 import { previewV5PistolContact } from './v5-weapon-qualities.js';
-import { activeEngines } from './roll-qualities.js';
+import { attackSlClauses, defenseQualityClauses } from './roll-qualities.js';
+import { mountedAdvantageClauses } from './v5-mounted-combat.js';
+import { combineEffects, clauseEntries } from './effect-engine.js';
 import { keywordMechanicalStatus } from './keywords.js';
 import { activeV5TalentEffects } from './v5-talents.js';
 import { applyV5TalentPenaltyRules, applyV5AttackSituationModifiers, computeV5WeaponRangeBands } from './v5-talent-combat.js';
@@ -137,6 +139,53 @@ export function characteristicMatchShift(tester, opponent, action, chosen = null
   const delta = Number(opponent?.caracs?.[carac]) - Number(tester?.caracs?.[carac]);
   return Number.isFinite(delta) ? delta : 0;
 }
+const MOUNTED_SOURCE = /^mounted:/;
+/**
+ * U8 L5z : modificateurs de Traits, de surnombre, de qualités et de montures cumulés par le moteur d'effets (`combineEffects`,
+ * table `BETWEEN_GROUPS`). Chaque groupe `applied` redonne ses lignes, au libellé repris du calcul existant par l'id de clause ;
+ * les Avantages et Désavantages de monture se comptent un par groupe `applied` et par `op`. Les sources de monture arrivent dans
+ * `settings.advantageSources` / `disadvantageSources` (préfixe `mounted:`, posées par la résolution) et y gardent leur place.
+ * Rend `{ traitRows, defenseRows, attackRows, successBonus, advantageSources, disadvantageSources, unresolved }`.
+ */
+function combatEngineEffects({ actor, defending, kind, action, settings, shield, traits }) {
+  const ownerId = actor?.id ?? 'participant';
+  const qualities = action.qualities || [];
+  const display = new Map(), segment = new Map();
+  const add = (clauses, part, labelOf) => { for (const clause of clauses) { segment.set(clause.id, part); display.set(clause.id, labelOf(clause.id)); } return clauses; };
+  const traitLabels = new Map(traits.rows.map(row => [row.id, row.label]));
+  const shieldLabel = shield ? 'Bouclier V5 (ne cumule pas Défensive)' : 'Défensive';
+  const defenseLabel = id => id.startsWith('defensive-protection') ? { id: 'defensive-protection', label: shieldLabel } : { id, label: 'Déséquilibrée' };
+  const attackQualities = kind === 'test' || defending ? [] : qualities;
+  const mountedRows = [...(settings.advantageSources || []), ...(settings.disadvantageSources || [])].filter(row => MOUNTED_SOURCE.test(row?.id));
+  const mountLabels = new Map(mountedRows.map(row => [row.id, row]));
+  const mountPlan = { advantageSources: (settings.advantageSources || []).filter(row => MOUNTED_SOURCE.test(row?.id)), disadvantageSources: (settings.disadvantageSources || []).filter(row => MOUNTED_SOURCE.test(row?.id)) };
+  const clauses = [
+    ...add(traits.clauses, 'trait', id => ({ id, label: traitLabels.get(id) ?? id })),
+    ...add(defending ? defenseQualityClauses(qualities, { kind, shield, ownerId }) : [], 'defense', defenseLabel),
+    ...add(attackSlClauses(false, attackQualities, { ownerId }), 'attack', id => ({ id, label: id.replace(/^quality-/, '') })),
+    ...add(mountedAdvantageClauses(mountPlan, { ownerId }), 'mount', id => ({ ...mountLabels.get(id) }))
+  ];
+  const combined = combineEffects(clauseEntries(clauses));
+  const applied = combined.groups.filter(group => group.status === 'applied');
+  const rows = part => applied.filter(group => group.op === 'modifySL' && segment.get(group.kept[0]?.clauseId) === part)
+    .flatMap(group => group.kept.map(entry => ({ ...display.get(entry.clauseId), amount: entry.effect.amount })));
+  const sources = (list, op) => {
+    const kept = new Map(applied.filter(group => group.op === op).map(group => [group.kept[0].clauseId, display.get(group.kept[0].clauseId)]));
+    return (list || []).flatMap(row => {
+      if (!MOUNTED_SOURCE.test(row?.id)) return [row];
+      const source = kept.get(row.id); kept.delete(row.id);
+      return source ? [source] : [];
+    });
+  };
+  // Pointue : clause `test.afterRoll` à condition de réussite, seule une réussite la reçoit (après tous les DR sans condition).
+  const successClauses = attackSlClauses(true, attackQualities, { ownerId }).filter(clause => clause.when.length);
+  const success = successClauses.length ? combineEffects(clauseEntries(successClauses)) : null;
+  const unresolved = [combined, success].filter(result => result && !result.ready)
+    .flatMap(result => result.signals.map(signal => `Cumul non arbitré entre familles (${signal.kinds.join(' et ')}) : à trancher par le MJ.`));
+  return { traitRows: rows('trait'), defenseRows: rows('defense'), attackRows: rows('attack'), successBonus: success?.totals.modifySL ?? 0,
+    advantageSources: sources(settings.advantageSources, 'grantAdvantage'), disadvantageSources: sources(settings.disadvantageSources, 'grantDisadvantage'), unresolved };
+}
+
 export function buildCombatTest(normalized, role = 'actor') {
   const defending = role === 'defender';
   const actor = defending ? normalized.target : normalized.actor;
@@ -233,12 +282,22 @@ export function buildCombatTest(normalized, role = 'actor') {
   const suffused=magicSkillReplacement(actor,skill?.nom || action.label || action.note || '',settings.context);
   action={...action,base:suffused?.score ?? (action.extensions?.v5?.scoreIsCurrent ? action.base : effectiveSkillScore(actor,action.base,action.attr || skill?.carac))};
   // Traits de sens (Caméléon, Perturbant, Furtif, Pisteur) : appliqués quand le contexte les détermine, sinon rappel de la carte.
-  const senses=senseTestRules({actor,opponent:target,participants:normalized.v5State?.participants||[],skillLabel,kind,defending,context:settings.context||{},currentBase:Number(action.base)||0});
-  if(senses.base)action={...action,base:senses.base.score};
-  modifiers.push(...senses.modifiers);
-  modifiers.push(...movementTestRules({actor,skillLabel,kind,defending,context:settings.context||{}}));
+  // U8 L5z : Traits (sens, déplacement), surnombre, qualités et montures passent par le moteur d'effets (combineEffects,
+  // BETWEEN_GROUPS) ; les libellés sont repris du calcul existant par l'id de clause. Hors moteur : score de base de Furtif et
+  // Pisteur, Précise (score), bonus de Taille.
+  const participants=normalized.v5State?.participants||[];
+  const senseArgs={actor,opponent:target,participants,skillLabel,kind,defending,context:settings.context||{},currentBase:Number(action.base)||0};
+  const movementArgs={actor,skillLabel,kind,defending,context:settings.context||{}};
   // Surnombre et Encerclement (L06 p. 167, BR-16) : le Test d'attaque de mêlée seulement, sur les engagés cochés par le MJ.
-  modifiers.push(...outnumberTestRules({actor,target,participants:normalized.v5State?.participants||[],kind,defending,action,context:settings.context||{}}));
+  const outnumberArgs={actor,target,participants,kind,defending,action,context:settings.context||{}};
+  const senses=senseTestRules(senseArgs);
+  if(senses.base)action={...action,base:senses.base.score};
+  const shieldUsed=defending?(()=>{const shieldDefense=v5ShieldDefense(normalized);return Boolean((shieldDefense.v5Bonus||shieldDefense.confirmed)&&!shieldDefense.barrakulIgnored);})():false;
+  const engineEffects=combatEngineEffects({actor,defending,kind,action,settings,shield:shieldUsed,
+    traits:{clauses:[...senseTestClauses(senseArgs),...movementTestClauses(movementArgs),...outnumberTestClauses(outnumberArgs)],
+      rows:[...senses.modifiers,...movementTestRules(movementArgs),...outnumberTestRules(outnumberArgs)]}});
+  unresolved.push(...engineEffects.unresolved);
+  modifiers.push(...engineEffects.traitRows);
   if(settings.context?.blackpowderBrokenTest===true&&talentModifiers.context.skillId==='skill-43_61_6c_6d_65-base')modifiers.push({id:'quality:blackpowder-calm',label:'Calme Accessible contre À Poudre noire',amount:2});
   // Attraction des flèches : les tireurs adverses gagnent des DR contre la cible.
   if(!defending && kind==='ranged' && Number(target?.extensions?.v5?.specialStates?.incomingRangedBonusSl))modifiers.push({id:'spell-ranged-attraction',label:'Attraction des flèches',amount:Number(target.extensions.v5.specialStates.incomingRangedBonusSl)});
@@ -250,22 +309,18 @@ export function buildCombatTest(normalized, role = 'actor') {
   if (!defending && settings.context?.calledShot === true && !settings.calledShotPenaltyIgnored) modifiers.push({ id: 'called-shot', label: 'Coup ciblé V5', amount: -2 });
   if (slModifier) modifiers.push({ id: 'difficulty', label: 'Difficulté V5', amount: slModifier });
   if (defending) {
-    const defenseEngines = kind === 'melee' ? activeEngines(action.qualities || []).filter(engine => engine.engine === 'defense-sl-bonus') : [];
-    const overriddenDefense = new Set(defenseEngines.flatMap(engine => engine.overrides || []));
-    const defensive = defenseEngines.some(engine => engine.id === 'defensive' && !overriddenDefense.has(engine.id));
     const shieldDefense = v5ShieldDefense(normalized);
     if (shieldDefense.unresolved) unresolved.push(shieldDefense.unresolved);
-    const shield = (shieldDefense.v5Bonus || shieldDefense.confirmed) && !shieldDefense.barrakulIgnored;
-    if (defensive || shield) modifiers.push({ id: 'defensive-protection', label: shield ? 'Bouclier V5 (ne cumule pas Défensive)' : 'Défensive', amount: 1 });
-    for (const engine of defenseEngines) if (!overriddenDefense.has(engine.id) && engine.params.bonus < 0)
-      modifiers.push({ id: `quality-${engine.id}`, label: 'Déséquilibrée', amount: engine.params.bonus });
+    // Défensive, Bouclier (sans cumul avec Défensive : groupe `max`) et Déséquilibrée, cumulés par le moteur.
+    modifiers.push(...engineEffects.defenseRows);
   }
   if(!defending&&normalized.combatPrelude?.coverPenalty)modifiers.push({id:'talent:entrenchment',label:'Retranchement de la cible',amount:-normalized.combatPrelude.coverPenalty});
   if(!defending&&normalized.combatPrelude?.guardPenalty)modifiers.push({id:'talent:kingsguard',label:'Garde royal proche de la cible',amount:-normalized.combatPrelude.guardPenalty});
   if(defending&&kind==='melee'){const small=normalized.combatPrelude?.small,penalty=small?.active?small.defensePenalty:normalized.combatPrelude?.large?.defensePenalty;if(penalty)modifiers.push({id:small?.active?'talent:small-defense':'talent:large-defense',label:small?.active?'Défense contre créature plus grande (Petit)':'Défense contre Grande taille',amount:-penalty});}
   if(!defending&&normalized.combatPrelude?.small?.scoreBonus)action={...action,base:action.base+normalized.combatPrelude.small.scoreBonus};
   const reachDefense=defending&&kind==='melee'&&settings.context?.longerWeaponDefense===true,contactTalent=reachDefense?situationPlan(normalized.actor,'in-fighter'):null;if(reachDefense&&!contactTalent?.proposals.length)modifiers.push({id:'longer-weapon-defense',label:'Arme plus longue en défense',amount:1});
-  const advantages = [...(settings.advantageSources || [])], disadvantages = [...(settings.disadvantageSources || [])];
+  // Sources de monture (Avantage de cavalerie, cavalier protégé, Esquive à cheval) : une source = un groupe `applied` du moteur.
+  const advantages = engineEffects.advantageSources, disadvantages = engineEffects.disadvantageSources;
   // Séquelles durables et temporaires (F2-J2) : une seule source, le registre de convalescence projeté sur le participant.
   const sequelaWeapon = actor?.equipment?.find(row => row.id === (action.extensions?.fiche?.equipmentId || action.extensions?.equipment?.id)) || action.extensions?.equipment;
   let sequelaHands = sequelaWeapon && sequelaWeapon.kind === 'weapon' ? weaponHandsForParticipant(sequelaWeapon, actor, { action, context: settings.context || {} }) : null;
@@ -367,10 +422,8 @@ export function buildCombatTest(normalized, role = 'actor') {
   if (appliedPenalty) modifiers.push({ id: 'conditions', label: 'Plus forte pénalité d’État', amount: -appliedPenalty });
   if (!mixed || conditionPenaltyMode !== 'sl') disadvantages.push(...worstDisadvantage);
   // V4 descriptions never supply an automatic V5 score conversion.
-  const qualityModifiers = (kind === 'test' || defending ? [] : activeEngines(action.qualities || [])).filter(engine => engine.engine === 'attack-sl-bonus');
-  const overridden = new Set(qualityModifiers.flatMap(engine => engine.overrides || []));
-  for (const engine of qualityModifiers) if (!overridden.has(engine.id) && !engine.params?.onSuccessOnly)
-    modifiers.push({ id: `quality-${engine.id}`, label: engine.id, amount: engine.params.bonus });
+  // Imprécise (et toute qualité d'attaque sans condition de réussite) : moteur d'effets, avant le jet.
+  modifiers.push(...engineEffects.attackRows);
   modifiers.push(...testEffects.talents); advantages.push(...talentModifiers.advantageSources); disadvantages.push(...talentModifiers.disadvantageSources);
   unresolved.push(...talentModifiers.unresolved,...testEffects.unresolved);
   // Main directrice perdue : la séquelle force la règle générale de la main non directrice (même identifiant, donc Ambidextre la supprime).
@@ -402,7 +455,7 @@ export function buildCombatTest(normalized, role = 'actor') {
   const dualWhirlwind=!defending&&context.specialAttack==='whirlwind-of-death'&&context.dualWielding===true?situationPlan(actor,'dual-whirlwind'):null;
   if(dualWhirlwind?.proposals.length){const preview=structuredClone(test),preserved=preview.advantage.slModifier,mods=[...modifiers,...(preserved?[{id:'talent:dual-whirlwind-preserved-advantage',label:'Équilibre Avantage V5',amount:preserved}]:[])];const make=(id,roll)=>({id,reversed:id==='reverse',result:previewV5Test({score:Math.max(0,action.base),roll,kind,slModifiers:mods}).options[0].result});preview.options=[make('keep',normalized.roll),make('reverse',reverseV5Roll(normalized.roll))];preview.choiceRequired=normalized.roll!==reverseV5Roll(normalized.roll);preview.forcedInversion=false;test=preview;}
   // Pointue is conditional on success after all unconditional DR modifiers.
-  const conditionalBonus = qualityModifiers.filter(engine => !overridden.has(engine.id) && engine.params?.onSuccessOnly).reduce((sum, engine) => sum + engine.params.bonus, 0);
+  const conditionalBonus = engineEffects.successBonus;
   if (conditionalBonus) {
     test = structuredClone(test);
     for (const option of test.options) if (option.result.success) {
