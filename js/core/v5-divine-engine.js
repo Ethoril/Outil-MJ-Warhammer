@@ -378,7 +378,7 @@ const PRAYER_TEST_KEYS = ['all', 'tous les tests', 'pray', 'prayer', 'priere', '
  * (U8 L3, `collectTestEffects`) : meilleur bonus et pire pénalité dans chaque famille (R3 p. 235 ; Q10), une couche = une source
  * (Q13), sorts et prières sommés (Q2). Sans couche, le résumé par clé est lu tel quel.
  */
-function readPrayerModifiers(actor) {
+export function readPrayerModifiers(actor) {
   const v5 = actor?.extensions?.v5 || {};
   const modifiers = v5.testModifiers || {};
   if (!objectValue(modifiers)) return null;

@@ -52,10 +52,17 @@ const traitsOf = participant => [
   ...(participant?.extensions?.v5?.keywordTargets || []).filter(row => ['animosite', 'prejuge'].includes(row?.id)).map(row => `${row.id === 'animosite' ? 'Animosité' : 'Préjugé'} (${row.target})`)
 ].map(parsePsychologyTrait).filter(Boolean);
 
-/** Traits de Psychologie portés par un participant (un élément par clé). */
+/**
+ * Traits de Psychologie portés par un participant (un élément par clé). Deux Traits identiques à valeur (Peur (2) d'un sort et
+ * Peur (3) d'une prière) : la plus haute valeur est gardée (MJ 06/11, Q17) ; à valeur égale ou sans valeur, le premier.
+ */
 export function psychologyTraits(participant) {
-  const seen = new Set();
-  return traitsOf(participant).filter(trait => (seen.has(trait.key) ? false : seen.add(trait.key)));
+  const kept = new Map();
+  for (const trait of traitsOf(participant)) {
+    const current = kept.get(trait.key);
+    if (!current || (ratingOf(trait.detail) ?? 0) > (ratingOf(current.detail) ?? 0)) kept.set(trait.key, trait);
+  }
+  return [...kept.values()];
 }
 
 const ratingOf = detail => {
@@ -74,7 +81,7 @@ const NAMES = { hatred: ['hatred', 'haine'], animosity: ['animosity', 'animosite
  */
 export function planPsychology(participant, key, options = {}) {
   const rule = RULES[key];
-  const owned = rule && traitsOf(participant).find(trait => trait.key === key);
+  const owned = rule && psychologyTraits(participant).find(trait => trait.key === key);
   const plan = { key, label: rule?.fr ?? key, available: false, states: [], tests: [], modifiers: [], effects: [], unresolved: [], reminders: [] };
   if (!owned) {
     plan.unresolved.push(`${plan.label} : Trait absent du participant.`);
