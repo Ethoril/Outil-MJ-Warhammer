@@ -184,6 +184,7 @@ async function main() {
     await runScenario('service worker réel : installation puis reload hors ligne', async () => {
       swVersion = 'A';
       const context = await browser.newContext({ serviceWorkers: 'allow' });
+      await context.addInitScript(()=>{ if('serviceWorker' in navigator) window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{})); }); // index.html n'enregistre plus le service worker sur localhost/127.0.0.1 (d17639e) : le test le fait à sa place
       try {
         await configureNetwork(context, port);
         const page = await context.newPage();
@@ -203,6 +204,7 @@ async function main() {
     await runScenario('cache vA/vB : waiting puis activation volontaire', async () => {
       swVersion = 'A';
       const context = await browser.newContext({ serviceWorkers: 'allow' });
+      await context.addInitScript(()=>{ if('serviceWorker' in navigator) window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{})); }); // index.html n'enregistre plus le service worker sur localhost/127.0.0.1 (d17639e) : le test le fait à sa place
       try {
         await configureNetwork(context, port);
         const page = await context.newPage();
@@ -228,6 +230,7 @@ async function main() {
     await runScenario('quota local : une mise à jour en attente reste refusée', async () => {
       swVersion = 'A';
       const context = await browser.newContext({ serviceWorkers: 'allow' });
+      await context.addInitScript(()=>{ if('serviceWorker' in navigator) window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{})); }); // index.html n'enregistre plus le service worker sur localhost/127.0.0.1 (d17639e) : le test le fait à sa place
       try {
         await configureNetwork(context, port);
         const page = await context.newPage();

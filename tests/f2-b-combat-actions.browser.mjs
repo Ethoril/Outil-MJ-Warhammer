@@ -91,7 +91,7 @@ try {
   await actorCard.click();
   await openResolutionSettings();
   await combat.getByRole('combobox', { name: 'Nature du Test' }).selectOption('ranged');
-  assert.match(await combat.locator('.workspace-resolution').innerText(), /Bandes dérivées de la portée imprimée \(100 m\) : Bout portant ≤ 4 m \(\+2 DR\) · Courte ≤ 50 m \(\+1 DR\) · Moyenne ≤ 100 m \(0 DR\) · Longue ≤ 200 m \(−1 DR\) · Extrême ≤ 300 m \(−2 DR\)/);
+  assert.match((await combat.locator('.workspace-resolution, .workspace-resolution-drawer').allInnerTexts()).join(' '), /Bandes dérivées de la portée imprimée \(100 m\) : Bout portant ≤ 4 m \(\+2 DR\) · Courte ≤ 50 m \(\+1 DR\) · Moyenne ≤ 100 m \(0 DR\) · Longue ≤ 200 m \(−1 DR\) · Extrême ≤ 300 m \(−2 DR\)/);
   await combat.getByRole('combobox', { name: 'Bande de portée choisie par le MJ' }).selectOption('point-blank');
   await combat.getByRole('combobox', { name: 'Météo' }).selectOption('rain-wind');
   await combat.getByRole('combobox', { name: 'Lumière' }).selectOption('fog');
@@ -172,7 +172,7 @@ try {
   await combat.getByRole('spinbutton', { name: 'Difficulté du Tir extraordinaire (DR signés)' }).press('Tab');
   await combat.getByRole('textbox', { name: 'Attaque (CT 70)' }).fill('10');
   await combat.getByRole('button', { name: 'Calculer' }).click();
-  const extraordinaryDetails = await combat.locator('.workspace-resolution').innerText();
+  const extraordinaryDetails = (await combat.locator('.workspace-resolution, .workspace-resolution-drawer').allInnerTexts()).join(' ');
   assert.match(extraordinaryDetails, /Appliquer/);
   await combat.locator('.workspace-resolution-footer').getByRole('button', { name: /Appliquer/ }).click();
   const extraordinaryLog = await page.evaluate(async () => { const { Store } = await import('/Outil-MJ-Warhammer/js/main.js'); return JSON.parse(Store.getFullJSON()).log[0]; });
@@ -243,7 +243,7 @@ try {
   });
   await page.evaluate(async state => { const { Store } = await import('/Outil-MJ-Warhammer/js/main.js'); await Store.loadFromJSON(state); }, meleeFixture);
   await actorCard.click();
-  assert.match(await combat.locator('.workspace-resolution').innerText(), /Allonge Très longue : permet d’engager jusqu’à 4 m au lieu de 2/);
+  assert.match((await combat.locator('.workspace-resolution, .workspace-resolution-drawer').allInnerTexts()).join(' '), /Allonge Très longue : permet d’engager jusqu’à 4 m au lieu de 2/);
   await combat.getByRole('textbox', { name: 'Attaque (CC 65)' }).fill('20');
   await combat.getByRole('textbox', { name: /Jet de défense/ }).fill('80');
   await combat.getByRole('button', { name: 'Calculer' }).click();

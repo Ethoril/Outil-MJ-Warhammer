@@ -139,7 +139,7 @@ try{
  assert.equal(await genericApply.isDisabled(),false,'le résultat est applicable après les vérifications requises; cela ne certifie pas toutes les qualités du profil');
  const calculationDetails=page.locator('#workspace-play details.workspace-v5-calculations');
  if(!await calculationDetails.evaluate(element=>element.open)) await calculationDetails.locator('summary').click();
- assert.match(await calculationDetails.innerText(),/imprecise\s*:\s*−1 DR/i,'la qualité Imprécise source applique explicitement −1 DR au Test');
+ assert.match(await calculationDetails.innerText(),/imprecise(?: \(Qualité\))?\s*:\s*−1 DR/i,'la qualité Imprécise source applique explicitement −1 DR au Test');
  const reloadStatus=await page.evaluate(async()=>{const {keywordMechanicalStatus}=await import('./js/core/keywords.js');return keywordMechanicalStatus('recharge').status;});
  assert.equal(reloadStatus,'covered','Recharge est calculée depuis F2-D (v5-reloading.js)');
  const genericBefore=await page.evaluate(async({targetId})=>{const {Store}=await import('./js/main.js');return Store.listParticipants().find(row=>row.id===targetId).hp;},genericSiege);

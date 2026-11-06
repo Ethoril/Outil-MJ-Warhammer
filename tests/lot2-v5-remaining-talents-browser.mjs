@@ -80,7 +80,7 @@ async function setup({ width = 1440, both = false, states = [], extraTarget = fa
   if (page.viewportSize().width <= 900) await closeU1Drawer(page);
   return { page, context };
 }
-const panel = page => page.locator('.workspace-resolution');
+const panel = page => page.locator('.workspace-play-grid');
 const applyButton = page => panel(page).locator('[data-focus-key="apply"]');
 async function enterRolls(page, attack, defense) {
   if (page.viewportSize().width <= 900) await closeU1Drawer(page);

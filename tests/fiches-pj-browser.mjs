@@ -188,7 +188,7 @@ async function main() {
     ] });
     await Store.addParticipant({ id: 'visual-target', name: 'Cible recette', kind: 'PNJ', hp: 30, maxHp: 30, initiative: 10, caracs: { E: 0, CC: 30 }, armorLocations: { head: 0, body: 0, rightArm: 0, leftArm: 0, rightLeg: 0, leftLeg: 0 }, actions: [], states: [], zone: 'active' });
   }, { bow: weapon('bow-test', { name: 'Arc de recette', category: 'Arc', range: '50', keywords: [] }), arrows: weapon('arrows', { kind: 'ammunition', name: 'Flèches recette', category: 'Arc', damage: '', reach: '', range: '', keywords: [{ id: 'empaleuse', parameter: '' }] }) });
-  const resolution = visual.locator('.workspace-resolution');
+  const resolution = visual.locator('.workspace-resolution, .workspace-resolution-drawer');
   await openU1Settings(resolution);
   await resolution.getByRole('button', { name: /Arc de recette/ }).first().click();
   const ammo = resolution.getByRole('combobox', { name: 'Munition', exact: true });

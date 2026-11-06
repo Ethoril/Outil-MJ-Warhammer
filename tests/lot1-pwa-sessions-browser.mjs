@@ -65,6 +65,7 @@ try {
   const origin = `http://127.0.0.1:${server.address().port}`;
   browser = await launchBrowser();
   const pwaContext = await browser.newContext({ serviceWorkers: 'allow' });
+  await pwaContext.addInitScript(()=>{ if('serviceWorker' in navigator) window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{})); }); // index.html n'enregistre plus le service worker sur localhost/127.0.0.1 (d17639e) : le test le fait à sa place
   const page = await pwaContext.newPage(), errors = [];
   page.on('pageerror', error => errors.push(error.message));
   await page.goto(origin);
@@ -90,7 +91,7 @@ try {
   for (const value of ['version-historique', 'fleche-1', '2 PA', 'Maille historique', 'Précise historique', 'Édition historique', 'Effet conservé']) assert.ok(journal.includes(value), value);
   assert.equal(await page.locator('#qa-journal img').count(), 0, 'historical source strings remain escaped');
   await page.locator('#qa-journal').evaluate(node => node.remove());
-  assert.equal(seeded.profile.maxHp, 18); assert.equal(seeded.profile.hp, 18, 'reserve is a full-health template'); assert.equal(seeded.keywords, 57);
+  assert.equal(seeded.profile.maxHp, 18); assert.equal(seeded.profile.hp, 18, 'reserve is a full-health template'); assert.equal(seeded.keywords, 58);
   assert.ok(seeded.caches.includes(cacheName));
   assert.equal(await page.getByRole('button', { name: 'Actualiser', exact: true }).count(), 0, 'first installation offers no inactive update button');
   await pwaContext.setOffline(true); await page.reload();
@@ -103,7 +104,7 @@ try {
     const result = await Store.applyFicheSync([{ profileId: 'pwa-pj', charId: 'caelel', snapshot: ficheSnapshot('caelel', fixture) }]);
     return { profile: Store.getProfile('pwa-pj'), keywords: getReferenceCatalogue().keywords.length, before, after: Store.getLocalRevision(), changed: result.changed, controlled: !!navigator.serviceWorker.controller };
   }, fixture);
-  assert.deepEqual(offline.profile, seeded.profile); assert.equal(offline.keywords, 57); assert.equal(offline.changed, false); assert.equal(offline.before, offline.after); assert.ok(offline.controlled);
+  assert.deepEqual(offline.profile, seeded.profile); assert.equal(offline.keywords, 58); assert.equal(offline.changed, false); assert.equal(offline.before, offline.after); assert.ok(offline.controlled);
   await pwaContext.setOffline(false); updateWorker = true;
   await page.evaluate(async () => { await caches.open('qa-obsolete-cache'); const registration = await navigator.serviceWorker.getRegistration(); await registration.update(); });
   await page.waitForFunction(async () => !!(await navigator.serviceWorker.getRegistration())?.waiting);
@@ -154,6 +155,7 @@ try {
   // are real; Auth's cached identity and the unavailable remote SDK are explicit fixtures.
   cachedIdentityFixture = true;
   const accountContext = await browser.newContext({ serviceWorkers: 'allow' });
+  await accountContext.addInitScript(()=>{ if('serviceWorker' in navigator) window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{})); }); // index.html n'enregistre plus le service worker sur localhost/127.0.0.1 (d17639e) : le test le fait à sa place
   const accountPage = await accountContext.newPage();
   await accountPage.goto(origin + '/qa-session.html');
   await accountPage.evaluate(async state => {
