@@ -18,9 +18,14 @@ test('L12 : Sword et Bow s’affichent Épée et Arc, sans changer valeur ni dé
   assert.equal(action.extensions.v5.sourceName, 'Sword');
 });
 
-test('L12 : inventaire des armes anglaises sans traduction (informatif)', () => {
+test('L12 : aucun nom d’attaque anglais ne reste, Scimitar donne Cimeterre', () => {
+  const fr = new Set(Object.values(WEAPON_NAMES_FR));
   const missing = new Set();
-  for (const profile of l12) for (const attack of profile.attacks || []) if (!attack.nameFr && !Object.hasOwn(WEAPON_NAMES_FR, attack.name.toLowerCase())) missing.add(attack.name);
-  console.log('Sans traduction :', [...missing].join(' | '));
-  assert.ok(missing.size > 0);
+  for (const profile of l12) {
+    for (const attack of profile.attacks || []) if (!attack.nameFr && !Object.hasOwn(WEAPON_NAMES_FR, attack.name.toLowerCase())) missing.add(attack.name);
+    if (profile.kind === 'template') continue;
+    for (const name of names(profile.id)) { const base = name.replace(/ [0-9]+$/, ''); assert.ok(fr.has(base) || profile.attacks.some(a => a.nameFr === base), name); }
+  }
+  assert.deepEqual([...missing], []);
+  assert.ok(names(withAttack('Scimitar').id).includes('Cimeterre'));
 });

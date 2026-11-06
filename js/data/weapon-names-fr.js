@@ -1,12 +1,16 @@
 /**
  * Armes imprimées en anglais dans les profils de bestiaire → nom français du livre de base (affichage seulement :
  * l'identifiant, les calculs et le nom source `extensions.v5.sourceName` restent inchangés).
- * Seules les armes ayant un équivalent dans le catalogue d'équipement sont listées ; les armes propres à une créature
- * (Choppa, Skull-Stick, Skarsnik's Prodda…) et les attaques naturelles gardent leur nom du livre.
+ * Couvre aussi les armes propres aux créatures et les attaques naturelles (arbitrage du MJ, 06/11).
  */
 export const WEAPON_NAMES_FR = Object.freeze({
-  'sword': 'Épée', 'bow': 'Arc', 'spear': 'Lance', 'staff': 'Bâton', 'sling': 'Fronde', 'scimitar': 'Sabre',
+  'sword': 'Épée', 'bow': 'Arc', 'spear': 'Lance', 'staff': 'Bâton', 'sling': 'Fronde', 'scimitar': 'Cimeterre',
   'javelins': 'Javelots', 'javelin': 'Javelot', 'knives': 'Couteaux', 'knife': 'Couteau', 'dagger': 'Dague',
+  'weapon': 'Arme', 'ranged': 'Arme à distance', 'choppa': 'Kikoup’', 'two-handed choppa': 'Kikoup’ à deux mains',
+  'stone axe': 'Hache de pierre', 'two-handed stone axe': 'Hache de pierre à deux mains', 'skull-stick': 'Bâton à crânes',
+  'spiked club': 'Massue cloutée', 'bite': 'Morsure', 'tusks': 'Défenses', 'fangs': 'Crocs', 'horns': 'Cornes',
+  'jaws and claws': 'Mâchoires et griffes', 'tentacles': 'Tentacules', "skarsnik's prodda": 'Le Prodda de Skarsnik', 'the red fang': 'Le Croc Rouge',
+  'zweihänder': 'Zweihänder',
   'two-handed warhammer': 'Marteau de guerre à deux mains', 'warhammer': 'Marteau de guerre'
 });
 
