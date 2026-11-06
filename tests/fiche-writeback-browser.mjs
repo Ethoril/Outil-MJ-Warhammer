@@ -96,6 +96,8 @@ async function main() {
   const soc = page.locator('[data-key="row:wren:carac:soc"]');
   await expect(soc).toBeDisabled();
   await expect(wren).toContainText('à faire à la main');
+  // T8 : séquelle permanente vers le « Suivi du MJ » (lot C).
+  await expect(wren).toContainText('Suivi du MJ : — → « Perte : dents »');
   // CA4 : une ligne décochée ne part pas.
   await page.locator('[data-key="row:wren:counter:fortune"]').uncheck();
   if (captures) { mkdirSync(captures, { recursive: true }); await page.locator('#mount').screenshot({ path: join(captures, 't7-apercu.png') }); }
@@ -103,10 +105,11 @@ async function main() {
   await page.getByRole('button', { name: /^Envoyer \(2 fiches\)/ }).click();
   // Wren écrite ; Elysia en conflit (CA10), sans rien écrire.
   await expect(page.locator('[data-fiche="elysia"] [data-key="conflict:elysia:counter:destin"]')).toContainText('fiche 4 · outil 1');
-  const after = await page.evaluate(() => ({ wren: window.harness.fn.store.wren, elysia: window.harness.fn.store.elysia, sent: window.harness.sent.map(c => ({ charId: c.charId, keys: c.payload.changes.map(x => x.op + ':' + (x.field || x.carac)) })) }));
+  const after = await page.evaluate(() => ({ wren: window.harness.fn.store.wren, elysia: window.harness.fn.store.elysia, sent: window.harness.sent.map(c => ({ charId: c.charId, keys: c.payload.changes.map(x => x.op + ':' + (x.field || x.carac || x.id)) })) }));
   assert.equal(after.wren.data.destin, '2'); assert.equal(after.wren.data.fortune, '2', 'ligne décochée non envoyée'); assert.deepEqual(after.wren.data.carac.ag, { base: 27, adv: 4 });
   assert.equal(after.elysia.data.destin, '4');
-  assert.deepEqual(after.sent.find(c => c.charId === 'wren').keys.sort(), ['carac:ag', 'counter:destin']);
+  assert.deepEqual(after.sent.find(c => c.charId === 'wren').keys.sort(), ['carac:ag', 'counter:destin', 'suivi:outil:loss:teeth']);
+  assert.deepEqual(after.wren.data.suiviMj.map(row => [row.id, row.categorie]), [['outil:loss:teeth', 'sequelle']]);
   if (captures) await page.locator('#mount').screenshot({ path: join(captures, 't7-conflit.png') });
   // Une fiche en conflit attend le choix du MJ : elle ne compte plus dans l'envoi (Fortune de Wren reste décochée).
   await expect(page.locator('[data-key="send"]')).toHaveText('Rien à envoyer');
@@ -129,7 +132,7 @@ async function main() {
   await page.locator('[data-key="undo"]').click();
   await expect(page.locator('#mount')).toContainText('Dernier envoi annulé');
   const undone = await page.evaluate(() => ({ wren: window.harness.fn.store.wren.data, history: window.harness.fn.history.map(h => h.summary), store: window.harness.store.planFicheWriteback(), fate: window.harness.store.listParticipants().find(row => row.id === 'p-wren').extensions.v5.fate }));
-  assert.equal(undone.wren.destin, '3'); assert.equal(undone.wren.carac.ag.base, 32);
+  assert.equal(undone.wren.destin, '3'); assert.equal(undone.wren.carac.ag.base, 32); assert.deepEqual(undone.wren.suiviMj, []);
   assert.equal(undone.history.at(-1).undoOf, 'outilmj-' + undone.store.lastSend.sendId + '-wren');
   assert.equal(undone.fate, 2, 'l’annulation ne touche pas l’état de jeu');
   // CA15 : une annulation ne s'annule pas.

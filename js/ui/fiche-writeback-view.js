@@ -13,12 +13,23 @@ const MANUAL_REASONS = Object.freeze({
   'base-unknown': 'Base absente ou illisible sur la fiche',
   'loss-exceeds-base': 'perte supérieure à la Base : les Avances ne sont jamais touchées',
   'value-out-of-range': 'valeur hors du format de la fiche (4 chiffres)',
-  'absent-before-send': 'champ absent de la fiche avant l’envoi'
+  'absent-before-send': 'champ absent de la fiche avant l’envoi',
+  'collection-absent': 'la fiche n’a pas encore cette liste',
+  'no-fiche-id': 'ligne sans identifiant de fiche sûr (jamais rapprochée par son nom)',
+  'id-too-long': 'identifiant trop long pour la fiche'
 });
-const shown = value => (value === null || value === undefined || value === '' ? '—' : String(value));
-const fieldLabel = key => {
-  const [op, name] = String(key).split(':');
-  return op === 'carac' ? `${FIELD_LABELS[name] || name} (Base)` : FIELD_LABELS[name] || name;
+// Ligne de fiche (talent, objet, entrée de suivi) : son nom ; absente : « absent ».
+const shown = value => value === null || value === undefined || value === '' ? '—'
+  : typeof value === 'object' ? `« ${value.nom || value.name || value.libelle || value.id || '?'} »` : String(value);
+const fieldLabel = (key, op = null) => {
+  const [kind, name, collection] = String(key).split(':');
+  if (kind === 'carac') return `${FIELD_LABELS[name] || name} (Base)`;
+  if (kind === 'counter') return FIELD_LABELS[name] || name;
+  if (kind === 'skill-adv' || (kind === 'manual' && op === 'skill-adv')) return 'Prière (Avances)';
+  if (kind === 'row') return name === 'talentsAcq' ? 'Talent' : 'Objet';
+  if (kind === 'suivi') return 'Suivi du MJ';
+  if (kind === 'manual') return /:talent:\d+$/.test(key) ? 'Talent' : /:objet:\d+$/.test(key) ? 'Objet' : 'Ligne';
+  return FIELD_LABELS[name] || collection || name;
 };
 const plural = (count, word) => `${count} ${word}${count > 1 ? 's' : ''}`;
 const dateText = date => `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}`;
@@ -166,7 +177,7 @@ export function initFicheWritebackView({ mount, source, api, now = () => new Dat
       box.checked = !unchecked.has(rowId(fiche.charId, row.key));
       box.addEventListener('change', () => { if (box.checked) unchecked.delete(rowId(fiche.charId, row.key)); else unchecked.add(rowId(fiche.charId, row.key)); render(); });
     }
-    label.append(box, ` ${fieldLabel(row.key)} : ${shown(row.ficheValue)} → ${shown(row.toolValue)}`);
+    label.append(box, ` ${fieldLabel(row.key, row.op)} : ${row.manual && row.ficheValue === null && row.toolValue === null ? 'à reporter' : `${shown(row.ficheValue)} → ${shown(row.toolValue)}`}`);
     item.appendChild(label);
     const details = [row.label, row.manual ? `à faire à la main : ${MANUAL_REASONS[row.reason] || row.reason}` : '', row.warning === 'copies-disagree' ? 'les copies du personnage dans l’outil ne concordent pas : valeur du combat retenue' : ''].filter(Boolean);
     if (details.length) item.appendChild(el('div', details.join(' · '), 'muted'));

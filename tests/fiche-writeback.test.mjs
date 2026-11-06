@@ -331,3 +331,169 @@ describe('T6 · source réseau', () => {
     assert.equal(ficheFingerprint(copy), snapshot.source.fingerprint);
   });
 });
+
+// ---------- T8 : lots B (Prière, talents, équipement) et C (suivi du MJ) ----------
+const RELIC = { id: 'eq-relic', baseId: 'relic', kind: 'trapping', name: 'Relique de Sigmar', notes: 'bénie' };
+const FICHE_B = () => ({ ...WREN(),
+  skillsAdvanced: [{ id: 'sa-priere', nom: 'Prière', carac: 'soc', adv: 10 }],
+  talentsAcq: [{ id: 't-beni', nom: 'Béni (Sigmar)' }, { id: 't-inv', nom: 'Invocation (Sigmar)' }, { id: 't-autre', nom: 'Chanceux' }],
+  equipment: [clone(RELIC)],
+  suiviMj: [{ id: 'manuel-1', categorie: 'maladie', libelle: 'Saisie à la main sur la fiche', detail: '' }] });
+const copiesOf = (state, charId = 'wren') => [...state.reserve, ...state.combat.participants].filter(row => row.extensions.ficheId === charId);
+function rejectWren(state, { kind = 'permanent', acquisitions } = {}) {
+  for (const subject of copiesOf(state)) {
+    subject.skills = [{ id: 'skill-priere', storageKey: 'sa-priere', name: 'Prière', advances: 0, total: 3 }];
+    subject.extensions.v5.divineRejections = [{ id: 'wrath-rejection:x1', kind, cult: 'Sigmar', stage: 0, lossConfirmedBy: 'MJ',
+      wrathProof: { roll: 147, sinAtTest: 9 },
+      ...(kind === 'permanent' ? { prayLoss: { skillId: 'skill-priere', advances: 10, scoreBefore: 13, scoreAfter: 3 },
+        removedTalents: [{ id: 'talent-beni', name: 'Béni', specialty: 'Sigmar', acquisitions: acquisitions || [{ id: 't-beni', nom: 'Béni (Sigmar)' }] },
+          { id: 'talent-invocation', name: 'Invocation', specialty: 'Sigmar', acquisitions: [{ id: 't-inv', nom: 'Invocation (Sigmar)' }] }] } : {}) }];
+  }
+  return state;
+}
+function confiscate(state, status = 'held') {
+  for (const subject of copiesOf(state)) subject.extensions.v5.divineConfiscations = [{ id: 'wrath-confiscation:x2', type: 'wrath-confiscation', cult: 'Sigmar',
+    items: [{ itemId: 'eq-relic', label: 'Relique', magical: true, status, equipment: clone(RELIC), actions: [] }], retainedArmor: {}, wrathProof: { roll: 112 } }];
+  return state;
+}
+const rowsOfPlan = (plan, charId = 'wren') => plan.fiches.find(fiche => fiche.charId === charId)?.rows || [];
+
+describe('T8 · Prière et talents (CA18)', () => {
+  test('rejet définitif : Avances de Prière à zéro, talents Béni/Invocation retirés, autres talents intacts', async () => {
+    const fiches = { wren: { revision: 7, data: FICHE_B() } };
+    let state = rejectWren(makeState(fiches));
+    const rows = rowsOfPlan(planFicheWriteback(state));
+    const prayer = rows.find(row => row.key === 'skill-adv:sa-priere');
+    assert.deepEqual(prayer.change, { op: 'skill-adv', id: 'sa-priere', base: 10, value: 0, label: prayer.change.label });
+    const beni = rows.find(row => row.key === 'row:talentsAcq:t-beni');
+    assert.deepEqual(beni.change, { op: 'row', collection: 'talentsAcq', id: 't-beni', base: { id: 't-beni', nom: 'Béni (Sigmar)' }, value: null, label: beni.change.label });
+    assert.ok(rows.find(row => row.key === 'row:talentsAcq:t-inv'));
+    assert.ok(!rows.some(row => row.key === 'row:talentsAcq:t-autre'));
+    assert.ok(!JSON.stringify(rows).includes('147'), 'aucune preuve de jet du MJ');
+    const fn = createFakeFunction(fiches);
+    state = await sendAll(fn, state, planFicheWriteback(state));
+    assert.deepEqual(fn.store.wren.data.talentsAcq.map(row => row.id), ['t-autre']);
+    assert.equal(fn.store.wren.data.skillsAdvanced[0].adv, 0);
+    assert.deepEqual(rowsOfPlan(planFicheWriteback(state)).filter(row => !row.key.startsWith('suivi:')), [], 'plus rien à envoyer (CA7)');
+  });
+
+  test('rejet temporaire : rien ; acquisition sans id de fiche ou collection absente : « à faire à la main », jamais par nom', () => {
+    assert.deepEqual(rowsOfPlan(planFicheWriteback(rejectWren(makeState({ wren: { revision: 7, data: FICHE_B() } }), { kind: 'temporary' }))), []);
+    const noId = rowsOfPlan(planFicheWriteback(rejectWren(makeState({ wren: { revision: 7, data: FICHE_B() } }), { acquisitions: [{ nom: 'Béni (Sigmar)' }] })));
+    const manual = noId.find(row => row.op === 'row' && row.manual);
+    assert.equal(manual.reason, 'no-fiche-id'); assert.equal(manual.change, null);
+    const data = FICHE_B(); delete data.talentsAcq; delete data.skillsAdvanced;
+    const absent = rowsOfPlan(planFicheWriteback(rejectWren(makeState({ wren: { revision: 7, data } }))));
+    assert.ok(absent.filter(row => row.op === 'row' || row.op === 'skill-adv').every(row => row.manual && row.reason === 'collection-absent'));
+    assert.ok(absent.some(row => row.op === 'skill-adv'));
+  });
+
+  test('ligne déjà retirée par le joueur : pas de différence ; ligne modifiée : conflit row:talentsAcq:<id>, puis choix du MJ', async () => {
+    const fiches = { wren: { revision: 7, data: FICHE_B() } };
+    let state = rejectWren(makeState(fiches));
+    const fn = createFakeFunction(fiches);
+    fn.edit('wren', data => { data.talentsAcq = data.talentsAcq.filter(row => row.id !== 't-inv'); data.talentsAcq[0].nom = 'Béni (Sigmar) renommé'; });
+    const fiche = planFicheWriteback(state).fiches[0];
+    const error = await fn.execute(buildFicheCommand('wren', fiche.rows, { sendId: 's1', revision: 7, reason: 'Fin de séance (outil MJ)' })).catch(e => e);
+    assert.deepEqual(ficheConflictOf(error).fields, ['row:talentsAcq:t-beni']);
+    const value = ficheValueForKey(fn.store.wren.data, 'row:talentsAcq:t-beni');
+    assert.equal(value.nom, 'Béni (Sigmar) renommé');
+    state = applyConflictChoice(state, 'wren', 'row:talentsAcq:t-beni', 'outil', value);
+    state = await sendAll(fn, state, planFicheWriteback(state));
+    assert.deepEqual(fn.store.wren.data.talentsAcq.map(row => row.id), ['t-autre']);
+    // « Garder la fiche » sur une ligne : la différence ne revient plus tant que l'outil ne change pas.
+    const kept = applyConflictChoice(rejectWren(makeState(fiches)), 'wren', 'row:talentsAcq:t-beni', 'fiche', { id: 't-beni', nom: 'Béni (Sigmar)' });
+    assert.ok(!rowsOfPlan(planFicheWriteback(kept)).some(row => row.key === 'row:talentsAcq:t-beni'));
+    assert.ok(rowsOfPlan(planFicheWriteback(kept)).some(row => row.key === 'row:talentsAcq:t-inv'));
+  });
+});
+
+describe('T8 · équipement retenu par le Courroux (CA19)', () => {
+  test('objet retenu → retiré ; rendu → revient à l’identique ; jamais recréé s’il n’a pas été retiré par l’outil', async () => {
+    const fiches = { wren: { revision: 7, data: FICHE_B() } };
+    let state = confiscate(makeState(fiches));
+    const removal = rowsOfPlan(planFicheWriteback(state)).find(row => row.key === 'row:equipment:eq-relic');
+    assert.deepEqual(removal.change.base, RELIC); assert.equal(removal.change.value, null);
+    const fn = createFakeFunction(fiches);
+    state = await sendAll(fn, state, planFicheWriteback(state), { sendId: 's1' });
+    assert.deepEqual(fn.store.wren.data.equipment, []);
+    for (const subject of copiesOf(state)) subject.extensions.v5.divineConfiscations[0].items[0].status = 'returned';
+    const restore = rowsOfPlan(planFicheWriteback(state)).find(row => row.key === 'row:equipment:eq-relic');
+    assert.equal(restore.change.base, null); assert.deepEqual(restore.change.value, RELIC);
+    state = await sendAll(fn, state, planFicheWriteback(state), { sendId: 's2' });
+    assert.deepEqual(fn.store.wren.data.equipment, [RELIC]);
+    assert.ok(!rowsOfPlan(planFicheWriteback(state)).some(row => row.key === 'row:equipment:eq-relic'));
+    // Rendu sans retrait préalable par l'outil, objet absent de la fiche (vendu par le joueur) : rien.
+    const data = FICHE_B(); data.equipment = [];
+    assert.ok(!rowsOfPlan(planFicheWriteback(confiscate(makeState({ wren: { revision: 7, data } }), 'returned'))).some(row => row.op === 'row'));
+  });
+});
+
+describe('T8 · Suivi du MJ (CA20, CA22, CA23)', () => {
+  function withSuivi(state) {
+    const register = { schemaVersion: 1, revision: 1, calendar: { schemaVersion: 1, originDay: 0, currentDay: 40 }, receipts: [], incidents: [],
+      sequelae: [
+        { id: 'loss:foot', participantId: 'p-wren', kind: 'loss', part: 'foot', side: 'left', label: 'Perte : pied', status: 'permanent', history: [] },
+        { id: 'bone:arm', participantId: 'p-wren', kind: 'broken-bone', part: 'arm', side: 'right', label: 'Fracture : bras', status: 'permanent', history: [] },
+        { id: 'scars:p-wren', participantId: 'p-wren', kind: 'scar-decision', label: 'Cicatrices impressionnantes', status: 'permanent', agreed: true, history: [] },
+        { id: 'loss:pending', participantId: 'p-wren', kind: 'loss', part: 'hand', label: 'Perte : main', status: 'needs-facts', history: [] },
+        agLoss(2)],
+      diseases: [{ id: 'dis-1', participantId: 'p-wren', label: 'Fièvre des marais', startDay: 30, remainingDays: 4, status: 'active', careLog: [{ note: 'Note secrète du MJ' }] },
+        { id: 'dis-0', participantId: 'p-wren', label: 'Toux', status: 'cured' }] };
+    state.extensions.v5.aftermathRegister = register;
+    for (const subject of copiesOf(state)) Object.assign(subject.extensions.v5, {
+      divinePenances: [{ id: 'penance:p1', cult: 'Sigmar', text: 'Jeûner trois jours au temple', status: 'open', origin: { kind: 'gm', reason: 'Raison secrète du MJ' } }],
+      corruptionMutations: [{ id: 'mut-1', status: 'confirmed', label: 'Animalistic Legs', summary: 'Jambes animales : le Mouvement augmente de 1.', questionsMJ: ['Question secrète'], manifestation: { note: 'Manifestation secrète' } }],
+      pendingCorruptionMutation: { id: 'mut-2', status: 'pending', domain: 'physical', delayDays: 7 },
+      pendingCorruptionCharacterLoss: { id: 'corruption-loss:mut-1', status: 'pending' } });
+    return state;
+  }
+
+  test('CA20 : pénitence, séquelles, cicatrices, maladie, mutation confirmée → entrées outil:<id> ; rien d’autre', async () => {
+    const fiches = { wren: { revision: 7, data: FICHE_B() } };
+    let state = withSuivi(makeState(fiches));
+    const rows = rowsOfPlan(planFicheWriteback(state)).filter(row => row.op === 'suivi');
+    const byId = Object.fromEntries(rows.map(row => [row.change.id, row.change.value]));
+    assert.deepEqual(Object.keys(byId).sort(), ['outil:bone:arm', 'outil:dis-1', 'outil:loss:foot', 'outil:mut-1', 'outil:penance:p1', 'outil:scars:p-wren']);
+    assert.deepEqual(Object.fromEntries(Object.entries(byId).map(([id, entry]) => [id, entry.categorie])), {
+      'outil:bone:arm': 'sequelle', 'outil:dis-1': 'maladie', 'outil:loss:foot': 'sequelle', 'outil:mut-1': 'mutation', 'outil:penance:p1': 'penitence', 'outil:scars:p-wren': 'cicatrice' });
+    assert.equal(byId['outil:penance:p1'].detail, 'Jeûner trois jours au temple');
+    assert.equal(byId['outil:mut-1'].detail, 'Jambes animales : le Mouvement augmente de 1.');
+    for (const row of rows) assert.equal(row.change.base, null);
+    const commands = JSON.stringify(planFicheWriteback(state));
+    for (const secret of ['Raison secrète', 'Note secrète', 'Question secrète', 'Manifestation secrète', 'mut-2', 'delayDays', 'corruption-loss', 'Secret du MJ']) assert.ok(!commands.includes(secret), secret);
+    const fn = createFakeFunction(fiches);
+    state = await sendAll(fn, state, planFicheWriteback(state));
+    assert.equal(fn.store.wren.data.suiviMj.length, 7, 'l’entrée saisie à la main reste');
+    assert.ok(!rowsOfPlan(planFicheWriteback(state)).some(row => row.op === 'suivi'), 'CA7');
+  });
+
+  test('CA22 : pénitence close et maladie guérie disparaissent au prochain envoi (value null) ; annulation les rétablit', async () => {
+    const fiches = { wren: { revision: 7, data: FICHE_B() } };
+    let state = withSuivi(makeState(fiches));
+    const fn = createFakeFunction(fiches);
+    state = await sendAll(fn, state, planFicheWriteback(state), { sendId: 's1' });
+    for (const subject of copiesOf(state)) subject.extensions.v5.divinePenances[0].status = 'completed';
+    state.extensions.v5.aftermathRegister.diseases[0].status = 'cured';
+    const rows = rowsOfPlan(planFicheWriteback(state)).filter(row => row.op === 'suivi');
+    assert.deepEqual(rows.map(row => [row.change.id, row.change.value]).sort(), [['outil:dis-1', null], ['outil:penance:p1', null]]);
+    state = await sendAll(fn, state, planFicheWriteback(state), { sendId: 's2' });
+    assert.deepEqual(fn.store.wren.data.suiviMj.map(row => row.id).sort(), ['manuel-1', 'outil:bone:arm', 'outil:loss:foot', 'outil:mut-1', 'outil:scars:p-wren']);
+    const [undo] = buildUndoCommands(state.extensions.v5.ficheWriteback.lastSend);
+    state = applyWritebackSuccess(state, 'wren', await fn.execute(undo.command), undo.rows);
+    assert.equal(fn.store.wren.data.suiviMj.length, 7);
+  });
+
+  test('base du suivi lue dans writebackBase.suiviMj ; entrée modifiée sur la fiche = conflit suivi:<id>', async () => {
+    const fiches = { wren: { revision: 7, data: FICHE_B() } };
+    let state = withSuivi(makeState(fiches));
+    const fn = createFakeFunction(fiches);
+    state = await sendAll(fn, state, planFicheWriteback(state), { sendId: 's1' });
+    fn.edit('wren', data => { data.suiviMj.find(row => row.id === 'outil:dis-1').detail = 'modifié'; });
+    state.extensions.v5.aftermathRegister.diseases[0].status = 'cured';
+    const fiche = planFicheWriteback(state).fiches[0];
+    const error = await fn.execute(buildFicheCommand('wren', fiche.rows, { sendId: 's2', revision: fiche.revision, reason: 'Fin de séance (outil MJ)' })).catch(e => e);
+    assert.deepEqual(ficheConflictOf(error).fields, ['suivi:outil:dis-1']);
+    assert.equal(ficheValueForKey(fn.store.wren.data, 'suivi:outil:dis-1').detail, 'modifié');
+  });
+});
