@@ -123,50 +123,23 @@ function bonusesTaken(sources) {
   return [...taken];
 }
 
-/**
- * Modificateurs de Tests magiques retenus pour UN Test résolu (U8, lot L1). `applies(key)` dit si une clé de couche vise ce Test.
- * Sorts : R3 (V5 p. 235) par Test résolu, toutes clés confondues — meilleur bonus (plus les sources de Lileath, D-06), pire malus,
- * exceptions `stackable` cumulées ; les clés d'une même couche qui visent ce Test forment une seule source. Deux sorts qui visent le même Test par des clés différentes (« carac:e », « Endurance ») ne se
- * cumulent donc plus.
- * Prières : même règle, en un groupe distinct par Test résolu (arbitrage du MJ du 06/11 ; la même prière deux fois reste refusée
- * à la pose, R4 p. 217). Prière et sort se somment (sources différentes, p. 130, Q2 du MJ, même clé comprise).
- * Retourne `[{ key, amount }]`, un élément par clé retenue (montants non nuls), dans l'ordre des couches.
- */
-export function resolvedMagicTestModifiers({ spellEffects = [], divineEffects = [] } = {}, applies = () => true) {
-  const totals = new Map();
-  const add = (key, value) => totals.set(key, (totals.get(key) || 0) + value);
-  const contributions = layers => (Array.isArray(layers) ? layers : [])
-    .filter(e => e && typeof e === 'object' && e.testModifiers && typeof e.testModifiers === 'object')
-    .flatMap(effect => Object.entries(effect.testModifiers)
-      .map(([key, raw]) => ({ key, value: Number(raw), effect }))
-      .filter(row => Number.isFinite(row.value) && row.value !== 0 && applies(row.key)));
-  const cumulate = rows => {
-    for (const row of rows) if (row.effect.stackable === true || row.effect.isStackable === true) add(row.key, row.value);
-    const regular = rows.filter(row => row.effect.stackable !== true && row.effect.isStackable !== true);
-    // Une source = une couche : ses propres clés qui visent ce Test s'additionnent (un seul sort ou une seule prière),
-    // le non-cumul s'applique entre couches.
-    const perLayer = sign => [...new Set(regular.map(row => row.effect))].map(effect => {
-      const own = regular.filter(row => row.effect === effect && Math.sign(row.value) === sign);
-      return { ...bonusSource(own.reduce((total, row) => total + row.value, 0), effect), rows: own };
-    }).filter(source => source.rows.length);
-    for (const source of bonusesTaken(perLayer(1))) for (const row of source.rows) add(row.key, row.value);
-    const penalties = perLayer(-1);
-    if (penalties.length) for (const row of penalties.reduce((a, b) => (b.value < a.value ? b : a)).rows) add(row.key, row.value);
-  };
-  cumulate(contributions(unsuppressedSpellEffects(spellEffects)));
-  cumulate(contributions(divineEffects));
-  return [...totals].filter(([, amount]) => amount !== 0).map(([key, amount]) => ({ key, amount }));
-}
-
 const AP_GROUPS = Object.freeze({ all: ['head', 'body', 'leftArm', 'rightArm', 'leftLeg', 'rightLeg'], arms: ['leftArm', 'rightArm'], legs: ['leftLeg', 'rightLeg'] });
 const AP_LOCATION_IDS = Object.freeze(['head', 'body', 'leftArm', 'rightArm', 'leftLeg', 'rightLeg']);
 
 /**
  * Bonus de PA par localisation apportés par les couches magiques, règle de non-cumul V5 (meilleur bonus, pire malus,
  * exceptions explicites cumulées). Les groupes (`all`, `arms`, `legs`) sont développés avant le non-cumul.
+ * Sorts et prières (`divineEffects`) : deux groupes de non-cumul qui se somment (MJ 06/11, Q14, comme Q2).
  */
-function magicApBonuses(spellEffects = []) {
-  const activeEffects = (spellEffects || []).filter(e => e && e.apModifiers);
+function magicApBonuses(spellEffects = [], divineEffects = []) {
+  const result = {};
+  for (const group of [apGroupBonuses(spellEffects), apGroupBonuses(divineEffects)])
+    for (const [loc, value] of Object.entries(group)) result[loc] = (result[loc] || 0) + value;
+  return result;
+}
+
+function apGroupBonuses(effects = []) {
+  const activeEffects = (Array.isArray(effects) ? effects : []).filter(e => e && e.apModifiers);
   const locMap = new Map();
 
   for (const eff of activeEffects) {
@@ -203,12 +176,13 @@ function magicApBonuses(spellEffects = []) {
 }
 
 /**
- * Calcule les PA effectifs apportés par la magie selon la règle de non-cumul.
+ * Calcule les PA effectifs apportés par la magie selon la règle de non-cumul ; prières (`divineEffects`) en groupe distinct, sommé
+ * à celui des sorts (Q14 du MJ).
  */
-export function calculateEffectiveMagicAP(baseArmor = {}, spellEffects = [], armorDamage = {}) {
+export function calculateEffectiveMagicAP(baseArmor = {}, spellEffects = [], armorDamage = {}, divineEffects = []) {
   // Les six localisations sont toujours développées : un groupe `arms`/`legs` de la base ne doit pas laisser un membre à 0.
   const result = normalizeArmorLocations(baseArmor);
-  for (const [loc, bonus] of Object.entries(magicApBonuses(spellEffects))) {
+  for (const [loc, bonus] of Object.entries(magicApBonuses(spellEffects, divineEffects))) {
     result[loc] = Math.max(0, (Number(result[loc]) || 0) + bonus);
   }
 
@@ -217,7 +191,7 @@ export function calculateEffectiveMagicAP(baseArmor = {}, spellEffects = [], arm
     for (const [loc, ap] of Object.entries(locations)) result[loc] = Math.max(0, ap - (armorDamage[loc] || 0));
   }
   // Barrière non cumulative avec l'armure portée : la plus haute des deux valeurs par localisation.
-  for (const [loc, floor] of Object.entries(calculateMagicApFloor(spellEffects))) result[loc] = Math.max(Number(result[loc]) || 0, floor);
+  for (const [loc, floor] of Object.entries(calculateMagicApFloor([...(spellEffects || []), ...(divineEffects || [])]))) result[loc] = Math.max(Number(result[loc]) || 0, floor);
   return result;
 }
 
@@ -235,8 +209,8 @@ export function calculateMagicApFloor(spellEffects = []) {
  * `extensions.v5.magicAp`. `locationProtection` les ajoute à l'armure de la fiche (équipement ou `armorLocations`),
  * que la magie ne réécrit jamais.
  */
-export function calculateMagicApByLocation(spellEffects = []) {
-  const bonuses = magicApBonuses(spellEffects);
+export function calculateMagicApByLocation(spellEffects = [], divineEffects = []) {
+  const bonuses = magicApBonuses(spellEffects, divineEffects);
   return Object.fromEntries(AP_LOCATION_IDS.filter(loc => bonuses[loc]).map(loc => [loc, bonuses[loc]]));
 }
 
@@ -481,8 +455,9 @@ function recomputeLayerValues(next, effects) {
     if (Number.isFinite(Number(baseCaracs.M))) { next.M = next.caracs.M; next.movement = next.caracs.M; }
   }
   const baseArmor = v5.baseArmor || next.baseArmor;
-  if (baseArmor) next.armor = calculateEffectiveMagicAP(baseArmor, effects, v5.armorDamage);
-  const magicAp = calculateMagicApByLocation(effects);
+  // PA : sorts et prières en deux groupes de non-cumul qui se somment (Q14 du MJ).
+  if (baseArmor) next.armor = calculateEffectiveMagicAP(baseArmor, spellLayers, v5.armorDamage, divineLayers);
+  const magicAp = calculateMagicApByLocation(spellLayers, divineLayers);
   if (Object.keys(magicAp).length) v5.magicAp = magicAp; else delete v5.magicAp;
   const effectiveWard = calculateEffectiveWard(effects);
   if (effectiveWard !== null) v5.ward = effectiveWard; else delete v5.ward;

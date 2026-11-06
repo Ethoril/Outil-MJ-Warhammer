@@ -60,7 +60,9 @@ export function magicWeaponBonus(actor,action={},ranged,baseBonus=0){
  const bonuses=weaponBonusesFor(actor,action,ranged);
   const replacements=bonuses.filter(b=>b.replaceDamageBonus!==undefined);
   const replacement=replacements.length ? Math.max(...replacements.map(b=>Number(b.replaceDamageBonus)))-baseBonus : 0;
-  return replacement+Math.max(0,...bonuses.filter(b=>b.replaceDamageBonus===undefined).map(b=>Number(b.damage) || 0));
+  // Meilleur bonus de dégâts des sorts, puis celui des prières (`divineEffectId`) : les deux groupes se somment (Q14 du MJ).
+  const added=bonuses.filter(b=>b.replaceDamageBonus===undefined),best=rows=>Math.max(0,...rows.map(b=>Number(b.damage) || 0));
+  return replacement+best(added.filter(b=>!b.divineEffectId))+best(added.filter(b=>b.divineEffectId));
 }
 
 /** États que l'arme enchantée inflige à la créature touchée (Épée enflammée de Rhuin : Enflammé), jamais à son porteur. */
