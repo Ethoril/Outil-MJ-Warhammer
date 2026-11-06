@@ -72,7 +72,7 @@ try{
  // 3. Test d'immobilisation : compétence Guérison de la fiche et d100 saisi (score 60, jet 20, +2 DR dans la semaine).
  const card=sequelae.locator('.workspace-aftermath-sequela').filter({hasText:'Fracture mineure'});
  await card.locator('summary',{hasText:'Immobiliser la fracture'}).click();
- await card.getByLabel('Soigneur').selectOption({label:'Héros'});await card.getByLabel('Compétence').selectOption({index:0});await card.getByLabel('d100',{exact:true}).fill('20');
+ await card.getByLabel('Soigneur').selectOption({label:'Héros'});await card.getByLabel('Compétence').selectOption({index:0});await card.getByLabel(/^d100/).fill('20');
  assert.equal(await card.getByLabel('Réussite').count(),0,'aucun champ libre de réussite');
  await card.getByRole('button',{name:'Enregistrer le Test d’immobilisation'}).click();
  await waitStatus(/fracture immobilisée/);assert.match(await status.innerText(),/d100 20 contre 60 : réussite/);

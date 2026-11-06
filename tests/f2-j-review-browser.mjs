@@ -49,7 +49,7 @@ try{
  await treatment.locator('summary').click();
  await treatment.getByLabel('Soigneur').selectOption({label:'Héros'});
  await treatment.getByLabel('Compétence').selectOption({index:0});
- await treatment.getByLabel('d100',{exact:true}).fill('20');
+ await treatment.getByLabel(/^d100/).fill('20');
  assert.equal(await treatment.getByLabel('Réussite').count()+await treatment.getByLabel('DR du Test de soin').count(),0,'aucun champ libre de résultat ou de réussite');
  assert.equal(await treatment.getByLabel('Fournitures médicales disponibles').isChecked(),false,'les fournitures ne sont pas cochées par défaut');
  await treatment.getByLabel('Fournitures médicales disponibles').check();
