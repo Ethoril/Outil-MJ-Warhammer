@@ -182,7 +182,11 @@ function combatEngineEffects({ actor, defending, kind, action, settings, shield,
   const success = successClauses.length ? combineEffects(clauseEntries(successClauses)) : null;
   const unresolved = [combined, success].filter(result => result && !result.ready)
     .flatMap(result => result.signals.map(signal => `Cumul non arbitré entre familles (${signal.kinds.join(' et ')}) : à trancher par le MJ.`));
-  return { traitRows: rows('trait'), defenseRows: rows('defense'), attackRows: rows('attack'), successBonus: success?.totals.modifySL ?? 0,
+  // U8 L6 (Q9) : effets écartés par la règle de cumul, pour l'affichage barré « non cumulé » (aucun effet sur le calcul).
+  const PART_SOURCES = { trait: 'Trait', defense: 'Qualité', attack: 'Qualité', mount: 'Monture' };
+  const dropped = combined.groups.flatMap(group => group.dropped.map(({ entry, rule }) => ({ ...display.get(entry.clauseId),
+    amount: entry.effect.amount, rule, source: PART_SOURCES[segment.get(entry.clauseId)] ?? null })));
+  return { droppedRows: dropped, traitRows: rows('trait'), defenseRows: rows('defense'), attackRows: rows('attack'), successBonus: success?.totals.modifySL ?? 0,
     advantageSources: sources(settings.advantageSources, 'grantAdvantage'), disadvantageSources: sources(settings.disadvantageSources, 'grantDisadvantage'), unresolved };
 }
 
@@ -445,6 +449,8 @@ export function buildCombatTest(normalized, role = 'actor') {
   const talentSL = previewV5TalentSLChoices(withCompanionTalents(actor,normalized.v5State?.participants||[]), test, { action, settings, kind, role: talentRole, opponent: target });
   test = talentSL.test; unresolved.push(...talentSL.unresolved);
   test={...test,options:test.options.map(o=>({...o,result:refreshV5ResultTier(enforceMagicTestRestrictions(actor,o.result,{magical:false}))}))};
-  return { test, crewSkill,talentPlans: [talentModifiers.plan, ...talentSL.plans,...psychology.plans,...contact.plans,...(contactTalent?[contactTalent]:[]),...(dualWhirlwind?[dualWhirlwind]:[]),...(warLeader?[{proposals:[{origins:[warLeader.source]}]}]:[])], talentSLChoices: talentSL.choiceDescriptors, kind, penalty: appliedPenalty, penaltyStates: [...conditionPenalty.levels].filter(([, value]) => value).map(([key]) => key),
+  // U8 L6 : modificateurs écartés (États puis qualités, Traits, montures), montrés barrés par le panneau ; `source` = famille affichée.
+  const droppedModifiers = [...conditionPenalty.dropped.map(row => ({ id: 'condition:' + row.key, label: 'État ' + ((actor.states || []).find(s => s.key === row.key)?.name || row.key), amount: -(conditionPenalty.levels.get(row.key) || 0), rule: row.rule, source: 'État' })), ...engineEffects.droppedRows];
+  return { test, droppedModifiers, crewSkill,talentPlans: [talentModifiers.plan, ...talentSL.plans,...psychology.plans,...contact.plans,...(contactTalent?[contactTalent]:[]),...(dualWhirlwind?[dualWhirlwind]:[]),...(warLeader?[{proposals:[{origins:[warLeader.source]}]}]:[])], talentSLChoices: talentSL.choiceDescriptors, kind, penalty: appliedPenalty, penaltyStates: [...conditionPenalty.levels].filter(([, value]) => value).map(([key]) => key),
     unresolved, restrictions, charging, qualityBonus: conditionalBonus,extraordinaryShot };
 }
