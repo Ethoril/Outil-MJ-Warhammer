@@ -6,6 +6,7 @@ import { keywordMechanicalStatus } from './keywords.js';
 // déclarés dans ENGINES mais consommés nulle part.
 import { ENGINES } from '../data/keyword-engines.js';
 import { normalizeQualities } from './quality-normalization.js';
+import { slModifierClause } from './effect-engine.js';
 
 /** Moteurs actifs pour une liste de qualités, dédoublonnés par slug. */
 export function activeEngines(qualities = []) {
@@ -48,6 +49,39 @@ export function applyAttackSl(sl, success, qualities = []) {
     bonus += Number(e.params?.bonus) || 0;
   }
   return { sl: (Number(sl) || 0) + bonus, bonus };
+}
+
+/**
+ * U8 lot L5b · Pointue / Imprécise → clauses du moteur d'effets (famille `quality`), sans branchement : mêmes entrées que
+ * `applyAttackSl` (`success` : la réussite du Test, qui détermine si la clause de Pointue vaut). Une clause `modifySL` par qualité
+ * retenue, au moment `test.afterRoll` ; Pointue porte la condition `test.success` ; Imprécise l'emporte sur Pointue (`overrides`
+ * du moteur de mot-clé, la clause écrasée n'est pas émise). Total des clauses = `applyAttackSl(...).bonus`.
+ */
+export function attackSlClauses(success, qualities = [], { ownerId = 'participant' } = {}) {
+  const engines = activeEngines(qualities).filter(e => e.engine === 'attack-sl-bonus');
+  const overridden = new Set(engines.flatMap(e => e.overrides || []));
+  return engines.filter(e => !overridden.has(e.id) && !(e.params?.onSuccessOnly && !success) && (Number(e.params?.bonus) || 0) !== 0)
+    .map(e => slModifierClause({ id: `quality-${e.id}`, event: 'test.afterRoll', role: 'attacker', bearer: { kind: 'quality', sourceId: `${ownerId}:quality:${e.id}` },
+      amount: Number(e.params.bonus), stack: 'max', stackGroup: `quality-${e.id}`, when: e.params?.onSuccessOnly ? [{ field: 'test.success', op: 'eq', value: true }] : [] }));
+}
+
+/**
+ * U8 lot L5b · Défensive, Déséquilibrée et Bouclier → clauses de la défense de mêlée (famille `quality`), sans branchement.
+ * `kind` : seul un Test de mêlée lit les qualités de défense de l'arme ; `shield` : un Bouclier V5 (ou Protectrice) confirmé et non
+ * annulé, décidé par l'appelant (`v5ShieldDefense`). L'exclusion du livre « sans cumul avec Défensive » (Bouclier, V5 p. 306) devient
+ * une politique : les deux clauses +1 partagent le groupe `defensive-protection` en `max`, le second est écarté et reste listé.
+ * Déséquilibrée écrase Défensive (`overrides` du moteur) : la clause de Défensive n'est alors pas émise, celle du Bouclier reste.
+ * Total des clauses = ce que `buildCombatTest` ajoute en `defensive-protection` et `quality-desequilibree`.
+ */
+export function defenseQualityClauses(qualities = [], { kind = 'melee', shield = false, ownerId = 'participant' } = {}) {
+  const engines = kind === 'melee' ? activeEngines(qualities).filter(e => e.engine === 'defense-sl-bonus') : [];
+  const overridden = new Set(engines.flatMap(e => e.overrides || []));
+  const make = (id, quality, amount, stackGroup) => slModifierClause({ id, role: 'defender', bearer: { kind: 'quality', sourceId: `${ownerId}:quality:${quality}` }, amount, stack: 'max', stackGroup });
+  const clauses = [];
+  if (engines.some(e => e.id === 'defensive' && !overridden.has(e.id))) clauses.push(make('defensive-protection', 'defensive', 1, 'defensive-protection'));
+  if (shield) clauses.push(make('defensive-protection:shield', 'shield', 1, 'defensive-protection'));
+  for (const e of engines) if (!overridden.has(e.id) && e.params.bonus < 0) clauses.push(make(`quality-${e.id}`, e.id, e.params.bonus, `quality-${e.id}`));
+  return clauses;
 }
 
 /**
