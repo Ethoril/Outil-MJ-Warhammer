@@ -185,7 +185,7 @@ export const STACK_POLICIES = Object.freeze({
   add: Object.freeze({ label: 'somme', reference: 'contrat de l’effet' }),
   max: Object.freeze({ label: 'la plus haute valeur', reference: 'contrat de l’effet' }),
   bestBonusWorstPenalty: Object.freeze({ label: 'meilleur bonus et pire pénalité', reference: 'V5 p. 235 (sorts) ; arbitrage du MJ du 06/11 (prières, Q10) ; une couche = une source, ses clés s’additionnent (MJ 06/11 Q13) ; HEPG p. 83 (Bénédiction de Lileath)' }),
-  strongest: Object.freeze({ label: 'la plus forte pénalité', reference: 'États : seule la plus forte pénalité s’applique (v5-combat-rules.js)' }),
+  strongest: Object.freeze({ label: 'la plus forte pénalité', reference: 'États : seule la plus forte pénalité s’applique (condition-effects.js)' }),
 });
 const safeSum = (total, value) => { const next = total + value; if (!integer(next)) fail('Cumul hors plage sûre', 'amount'); return next; };
 

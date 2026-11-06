@@ -19,6 +19,8 @@ import { finalizeDivineState } from '../../../js/core/v5-divine-store.js';
 import { psychologyTraits } from '../../../js/core/creature-psychology.js';
 import { magicWeaponBonus } from '../../../js/core/v5-magic-combat.js';
 import { applyArcaneArmorDamage } from '../../../js/core/v5-magic-arcane-unforgiving.js';
+import { createGameClock } from '../../../js/core/v5-game-time.js';
+import { previewHistoricalWrath } from '../../fixtures/divine-wrath-history.mjs';
 
 const spellLayer = (id, testModifiers) => ({ id, spellId: 'spell-' + id, spellName: id, casterId: 'caster-' + id, testModifiers });
 const prayerLayer = (id, testModifiers) => ({ id, type: 'test-modifier', testModifiers });
@@ -257,9 +259,23 @@ test('Q4 Désavantage du cavalier protégé et autre Désavantage sur la même a
 });
 
 // ---- Q5 · plafond de prière ----
-// Comportement actuel conforme (applyPrayerSLCaps appelé sur le Test déjà modifié) ; un cas réel demande une sanction calendaire
-// sourcée (validCap, v5-divine-prayer-caps.js), à reprendre des fixtures de tests/unit/divin/courroux.test.js.
-test.todo('Q5 plafond de DR de prière sur le résultat final, bonus compris : 1 DR + 2 de bonus = 3, plafonné à +0');
+// Comportement actuel conforme (applyPrayerSLCaps appelé sur le Test déjà modifié). Sanction calendaire 6–10 sourcée, posée par la
+// fixture historique de tests/unit/divin/courroux.test.js (previewHistoricalWrath, validée par validCap).
+test('Q5 plafond de DR de prière sur le résultat final, bonus compris : 1 DR + 2 de bonus = 3, plafonné à +0', () => {
+  const PRAY = 'skill-50_72_69_e8_72_65-base';
+  const priest = { ...fighter('priest', 'pj', { extra: { divine: { sin: 0 } } }), kind: 'PJ', skills: [{ id: PRAY, name: 'Prière', carac: 'Soc', status: 'resolved', total: 60 }] };
+  const state = { schemaVersion: 3, reserve: [], combat: { round: 1, participants: [priest] }, extensions: { v5: {} } };
+  state.extensions.v5.gameClock = createGameClock(state);
+  const wrath = previewHistoricalWrath(state);
+  assert.equal(wrath.ready, true, wrath.error);
+  const sanctioned = wrath.state.combat.participants[0];
+  // Soc 60, jet 50 : 1 DR ; bonus de +2 DR : 3 DR.
+  const pray = actor => previewResolution({ actor, roll: 50, action: { type: 'skill', label: 'Prière', attr: 'Soc', base: 60, extensions: { fiche: { skillId: PRAY } } },
+    v5: { kind: 'test', slModifiers: [{ id: 'gm-bonus', label: 'Bonus du MJ', amount: 2 }] }, v5State: { participants: [actor] } });
+  const free = pray(priest), capped = pray(sanctioned);
+  assert.equal(free.test.success, true); assert.equal(free.test.sl, 3, 'sans sanction : 1 DR + 2 de bonus');
+  assert.equal(capped.test.success, true); assert.equal(capped.test.sl, 0, 'plafond sur le résultat final, bonus compris');
+});
 
 // ---- CA5 ----
 // Lot L2 : le moteur d'effets (effect-engine.js) lit la table de cumul entre familles ; une table vide rend toute paire absente.
