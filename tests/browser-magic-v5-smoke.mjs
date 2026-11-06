@@ -640,7 +640,9 @@ try {
 
   // 5. Vérification réelle du Service Worker et du rechargement hors ligne
   await page.goto(baseUrl, { waitUntil: 'networkidle' });
+  // index.html n'enregistre plus le SW sur localhost (d17639e) : le test l'enregistre lui-même, c'est le même sw.js.
   await page.evaluate(async () => {
+    await navigator.serviceWorker.register('sw.js');
     await navigator.serviceWorker.ready;
   });
   await page.reload({ waitUntil: 'networkidle' });
