@@ -6,6 +6,7 @@ import { activeReferential } from './creature-keywords.js';
 import { cloneValue, normalizeAction, uid } from './models.js';
 import { getReferenceCatalogue, resolveSkill, resolveTalent } from './reference-catalog.js';
 import { deriveHitMorphology } from './v5-hit-morphology.js';
+import { weaponNameFr } from '../data/weapon-names-fr.js';
 import { F2_H_PROFILE_ABILITIES } from '../data/f2-h-profile-abilities.js';
 
 export const BESTIARY_STAT_KEYS = Object.freeze(['M', 'CC', 'CT', 'F', 'E', 'I', 'Ag', 'Dex', 'Int', 'FM', 'Soc']);
@@ -183,13 +184,14 @@ function attackActions(attack, stats = {}) {
   const of = isInt(attack.count) && attack.count > 1 ? attack.count : 1;
   // Tentacules : toutes les attaques sont gratuites ; décision du MJ du 23/10 : tout autre multiplicateur ne rend gratuite que chaque attaque au-delà de la première.
   const tentacles = /tentacle/i.test(`${attack.trait || ''} ${attack.name || ''}`);
+  const label = attack.nameFr || weaponNameFr(attack.name);
   return Array.from({ length: of }, (_, position) => {
     const free = attack.free || (of > 1 && (tentacles || position > 0) ? 'all' : null);
-    const v5 = { kind: ranged ? 'ranged' : 'melee', ...(free ? { [BESTIARY_FREE_ATTACK_KEY]: free } : {}), ...(of > 1 ? { multiAttack: { group: attack.name, index: position + 1, of } } : {}) };
+    const v5 = { kind: ranged ? 'ranged' : 'melee', ...(free ? { [BESTIARY_FREE_ATTACK_KEY]: free } : {}), ...(of > 1 ? { multiAttack: { group: label, index: position + 1, of } } : {}) };
     return normalizeAction({
-      name: of > 1 ? `${attack.name} ${position + 1}` : attack.name, type: 'attack', attr: ranged ? 'CT' : 'CC', base: attack.value ?? stats[ranged ? 'CT' : 'CC'] ?? '', damage: attack.damage,
+      name: of > 1 ? `${label} ${position + 1}` : label, type: 'attack', attr: ranged ? 'CT' : 'CC', base: attack.value ?? stats[ranged ? 'CT' : 'CC'] ?? '', damage: attack.damage,
       qualities: cloneValue(attack.qualities || []), ...(isInt(attack.rangeYards) ? { rangeYards: attack.rangeYards } : {}),
-      ...(attack.detail ? { detail: attack.detail } : {}), extensions: { v5 }
+      ...(attack.detail ? { detail: attack.detail } : {}), extensions: { v5: label === attack.name ? v5 : { ...v5, sourceName: attack.name } }
     });
   });
 }
