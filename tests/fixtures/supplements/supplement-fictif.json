@@ -1,0 +1,202 @@
+{
+  "schemaVersion": 1,
+  "supplements": [
+    {
+      "id": "supplement-fictif",
+      "title": "Supplément fictif (test U8 L7)",
+      "version": "1",
+      "edition": "V5",
+      "reference": "Fixture de test, aucun livre",
+      "talents": [
+        {
+          "id": "talent-supplement-fictif-nageur",
+          "name": "Nageur fictif",
+          "description": "Talent fictif de test (U8 L7) : copie déclarative de Nageur émérite, sans aucun code.",
+          "status": "validated",
+          "source": {
+            "reference": "Fixture U8 L7",
+            "effectHash": "sha256:980eea40a20e6bb0a1b594056c89688f07e903911efdaa2bfed1d9e76f7f9e97"
+          },
+          "clauses": [
+            {
+              "id": "advantage-actor",
+              "event": "test.beforeRoll",
+              "role": "actor",
+              "when": [
+                {
+                  "field": "skillGroupId",
+                  "op": "eq",
+                  "value": "skill-group-4e_61_74_61_74_69_6f_6e"
+                }
+              ],
+              "effects": [
+                {
+                  "op": "grantAdvantage",
+                  "stackGroup": "talent-supplement-fictif-nageur",
+                  "stack": "unique"
+                }
+              ]
+            },
+            {
+              "id": "advantage-attacker",
+              "event": "test.beforeRoll",
+              "role": "attacker",
+              "when": [
+                {
+                  "field": "skillGroupId",
+                  "op": "eq",
+                  "value": "skill-group-4e_61_74_61_74_69_6f_6e"
+                }
+              ],
+              "effects": [
+                {
+                  "op": "grantAdvantage",
+                  "stackGroup": "talent-supplement-fictif-nageur",
+                  "stack": "unique"
+                }
+              ]
+            },
+            {
+              "id": "advantage-defender",
+              "event": "test.beforeRoll",
+              "role": "defender",
+              "when": [
+                {
+                  "field": "skillGroupId",
+                  "op": "eq",
+                  "value": "skill-group-4e_61_74_61_74_69_6f_6e"
+                }
+              ],
+              "effects": [
+                {
+                  "op": "grantAdvantage",
+                  "stackGroup": "talent-supplement-fictif-nageur",
+                  "stack": "unique"
+                }
+              ]
+            },
+            {
+              "id": "modifySL-actor",
+              "event": "test.beforeRoll",
+              "role": "actor",
+              "when": [
+                {
+                  "field": "skillId",
+                  "op": "eq",
+                  "value": "skill-4e_61_74_61_74_69_6f_6e-base"
+                },
+                {
+                  "field": "pursuit",
+                  "op": "eq",
+                  "value": true
+                }
+              ],
+              "effects": [
+                {
+                  "op": "modifySL",
+                  "amount": 2,
+                  "stackGroup": "talent-supplement-fictif-nageur",
+                  "stack": "add"
+                }
+              ]
+            },
+            {
+              "id": "modifySL-attacker",
+              "event": "test.beforeRoll",
+              "role": "attacker",
+              "when": [
+                {
+                  "field": "skillId",
+                  "op": "eq",
+                  "value": "skill-4e_61_74_61_74_69_6f_6e-base"
+                },
+                {
+                  "field": "pursuit",
+                  "op": "eq",
+                  "value": true
+                }
+              ],
+              "effects": [
+                {
+                  "op": "modifySL",
+                  "amount": 2,
+                  "stackGroup": "talent-supplement-fictif-nageur",
+                  "stack": "add"
+                }
+              ]
+            },
+            {
+              "id": "modifySL-defender",
+              "event": "test.beforeRoll",
+              "role": "defender",
+              "when": [
+                {
+                  "field": "skillId",
+                  "op": "eq",
+                  "value": "skill-4e_61_74_61_74_69_6f_6e-base"
+                },
+                {
+                  "field": "pursuit",
+                  "op": "eq",
+                  "value": true
+                }
+              ],
+              "effects": [
+                {
+                  "op": "modifySL",
+                  "amount": 2,
+                  "stackGroup": "talent-supplement-fictif-nageur",
+                  "stack": "add"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "prayers": [
+        {
+          "id": "divine:supplement-fictif:benediction-des-flots",
+          "name": "Bénédiction des flots (fictive)",
+          "reference": "Fixture U8 L7",
+          "clauses": [
+            {
+              "id": "resistance",
+              "event": "test.beforeRoll",
+              "role": "actor",
+              "when": [],
+              "effects": [
+                {
+                  "op": "modifySL",
+                  "amount": 2,
+                  "key": "Résistance"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "spells": [
+        {
+          "id": "spell-supplement-fictif-peau-de-corail",
+          "name": "Peau de corail (fictif)",
+          "reference": "Fixture U8 L7",
+          "clauses": [
+            {
+              "id": "endurance",
+              "event": "test.beforeRoll",
+              "role": "actor",
+              "when": [],
+              "effects": [
+                {
+                  "op": "modifySL",
+                  "amount": 3,
+                  "key": "carac:e"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

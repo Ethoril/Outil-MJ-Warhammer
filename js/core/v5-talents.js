@@ -4,8 +4,10 @@ import testRegistry from '../data/v5-test-talent-contracts.json' with { type: 'j
 import qualityRegistry from '../data/v5-quality-talent-contracts.json' with { type: 'json' };
 import additionalRegistry from '../data/v5-additional-talent-contracts.json' with { type: 'json' };
 import { resolveKeyword } from './creature-keywords.js';
-const registry = {contracts:[...baseRegistry.contracts,...testRegistry.contracts,...qualityRegistry.contracts,...additionalRegistry.contracts],
-  sourceDescriptions:{...baseRegistry.sourceDescriptions,...testRegistry.sourceDescriptions,...qualityRegistry.sourceDescriptions,...additionalRegistry.sourceDescriptions}};
+import { SUPPLEMENTS, mergeTalentRegistry } from './supplement-loader.js';
+// Talents de supplément (U8 L7) : déclarés en JSON (`v5-supplements.json`), validés au démarrage, évalués comme ceux du livre.
+const registry = mergeTalentRegistry({contracts:[...baseRegistry.contracts,...testRegistry.contracts,...qualityRegistry.contracts,...additionalRegistry.contracts],
+  sourceDescriptions:{...baseRegistry.sourceDescriptions,...testRegistry.sourceDescriptions,...qualityRegistry.sourceDescriptions,...additionalRegistry.sourceDescriptions}}, SUPPLEMENTS);
 export const V5_TALENT_CONTRACTS = Object.freeze(registry.contracts);
 export const V5_TALENT_APPROVED_OVERRIDES = Object.freeze({...qualityRegistry.approvedOverrides,...additionalRegistry.approvedOverrides});
 const quotaClock = clock => {
@@ -42,20 +44,29 @@ export function acquiredV5Talents(participant) {
   return [...groups.values()];
 }
 export const hasV5Talent = (participant, id) => acquiredV5Talents(participant).some(row => row.talentId === id);
-/** Equality against the pinned published texts is synchronous; SHA256 pins are independently checked in tests. */
-export function currentV5TalentHashes(catalogue = getReferenceCatalogue()) {
+/**
+ * Equality against the pinned published texts is synchronous; SHA256 pins are independently checked in tests.
+ * Empreintes des sources de talents d'un registre (pur) : texte du catalogue identique au texte épinglé → empreinte du contrat ;
+ * texte changé → 'source-text-changed' ; talent de supplément absent du catalogue → son empreinte (`supplementHashes`, U8 L7),
+ * son texte étant dans le supplément même.
+ */
+export function talentSourceHashes(talentRegistry, supplementHashes = {}, catalogue = getReferenceCatalogue()) {
   const texts = new Map((catalogue?.talents || []).map(row => [row.id, row.description]));
-  return Object.fromEntries(registry.contracts.flatMap(contract => texts.has(contract.talentId)
-    ? [[contract.talentId, texts.get(contract.talentId) === registry.sourceDescriptions[contract.talentId]
-      ? contract.source.effectHash : 'source-text-changed']] : []));
+  return Object.fromEntries(talentRegistry.contracts.flatMap(contract => texts.has(contract.talentId)
+    ? [[contract.talentId, texts.get(contract.talentId) === talentRegistry.sourceDescriptions[contract.talentId]
+      ? contract.source.effectHash : 'source-text-changed']]
+    : Object.hasOwn(supplementHashes, contract.talentId) ? [[contract.talentId, supplementHashes[contract.talentId]]] : []));
 }
-export function evaluateV5Talents(participant, { event, role, context, choices = {}, state, clock = {}, actionId, includeTalents, excludeTalents = [] } = {}) {
+export function currentV5TalentHashes(catalogue = getReferenceCatalogue()) { return talentSourceHashes(registry, SUPPLEMENTS.talentHashes, catalogue); }
+/** Évaluation des talents d'un participant contre un registre donné (celui de l'application, ou un registre de test, U8 L7). */
+export function evaluateV5TalentsIn(talentRegistry, sourceHashes, participant, { event, role, context, choices = {}, state, clock = {}, actionId, includeTalents, excludeTalents = [] } = {}) {
   // The combat clock also carries UI/lifecycle fields (for example turnIndex).
   // Talent action-cost contracts consume only the canonical quota clock.
   const actionClock = quotaClock(clock);
-  return evaluateTalentContractsV2({ contracts: registry.contracts, acquisitions: acquiredV5Talents(participant).filter(row => (!includeTalents || includeTalents.includes(row.talentId)) && !excludeTalents.includes(row.talentId)),
-    sourceHashes: currentV5TalentHashes(), event, role, context, choices, state, clock: actionClock, actionId, actorId: participant?.id });
+  return evaluateTalentContractsV2({ contracts: talentRegistry.contracts, acquisitions: acquiredV5Talents(participant).filter(row => (!includeTalents || includeTalents.includes(row.talentId)) && !excludeTalents.includes(row.talentId)),
+    sourceHashes, event, role, context, choices, state, clock: actionClock, actionId, actorId: participant?.id });
 }
+export function evaluateV5Talents(participant, options = {}) { return evaluateV5TalentsIn(registry, currentV5TalentHashes(), participant, options); }
 const CONDITION_IGNORE_TALENT_IDS = Object.freeze(registry.contracts
   .filter(contract => (contract.clauses || []).some(clause => (clause.effects || []).some(effect => effect.op === 'ignoreConditionPenalty')))
   .map(contract => contract.talentId));
