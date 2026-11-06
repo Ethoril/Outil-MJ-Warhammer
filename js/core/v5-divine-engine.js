@@ -9,6 +9,8 @@ import {resolveV5ConditionTestContext} from './v5-test-context.js';
 import {campaignDurationSeconds} from './v5-game-time.js';
 import {calendarDurationUnits,targetRuleFactFields} from './v5-divine-grammar.js';
 import {effectHandler,effectNeeds,isLayerlessEffect,hasImplicitCasterTarget} from './v5-divine-effect-handlers.js';
+// Cycle d'import connu (v5-magic-talents → v5-magic-effects → …) : fonction appelée seulement à l'exécution.
+import {collectTestEffects} from './v5-magic-talents.js';
 
 export const V5_DIVINE_ENGINE_VERSION = 'v5-divine-engine-2026-10-21.3';
 const clone = value => structuredClone(value);
@@ -369,14 +371,24 @@ export function wrathDeityRejections(subject){
  return {ok:true,layers:clone(layers),needsInput:[]};
 }
 
+const PRAYER_TEST_KEYS = ['all', 'tous les tests', 'pray', 'prayer', 'priere'];
+/**
+ * Modificateurs du Test de Prière lus sur la fiche. Avec des couches (sorts, prières), cumul par Test résolu par le moteur d'effets
+ * (U8 L3, `collectTestEffects`) : meilleur bonus et pire pénalité dans chaque famille (R3 p. 235 ; Q10), une couche = une source
+ * (Q13), sorts et prières sommés (Q2). Sans couche, le résumé par clé est lu tel quel.
+ */
 function readPrayerModifiers(actor) {
-  const modifiers = actor?.extensions?.v5?.testModifiers || {};
+  const v5 = actor?.extensions?.v5 || {};
+  const modifiers = v5.testModifiers || {};
   if (!objectValue(modifiers)) return null;
-  const relevant = Object.entries(modifiers).filter(([key]) => {
-    const normalized = fold(key);
-    return ['all', 'tous les tests', 'pray', 'prayer', 'priere'].includes(normalized);
-  });
-  if (Object.keys(modifiers).some(key => /^(pray|prayer|priere)\s*\(/i.test(fold(key)))) return null;
+  const isPrayerKey = key => PRAYER_TEST_KEYS.includes(fold(key));
+  const layers = [...(Array.isArray(v5.spellEffects) ? v5.spellEffects : []), ...(Array.isArray(v5.divineEffects) ? v5.divineEffects : [])]
+    .filter(layer => objectValue(layer?.testModifiers));
+  const keys = [...Object.keys(modifiers), ...layers.flatMap(layer => Object.keys(layer.testModifiers))];
+  if (keys.some(key => /^(pray|prayer|priere)\s*\(/i.test(fold(key)))) return null;
+  const relevant = layers.length
+    ? collectTestEffects(actor, { skill: 'Prière' }, { applies: isPrayerKey }).layerRows.map(row => [row.key, row.amount])
+    : Object.entries(modifiers).filter(([key]) => isPrayerKey(key));
   if (relevant.some(([, value]) => !Number.isSafeInteger(value))) return null;
   return relevant.map(([key, amount]) => ({ id: `divine-test:${key}`, label: `Modificateur de Test : ${key}`, amount }));
 }

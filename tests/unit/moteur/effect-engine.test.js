@@ -134,17 +134,39 @@ test('Q4 Avantage de cavalerie et Avantage d\'un talent : deux sources distincte
   assert.equal(result.groups.filter(group => group.op === 'grantAdvantage' && group.status === 'applied').length, 2);
 });
 
-test('table entre familles : lignes tracées seulement (R1, Q2, Q3, Q4), chacune avec sa référence', () => {
-  for (const rule of Object.values(BETWEEN_GROUPS)) { assert.equal(rule.policy, 'sum'); assert.match(rule.reference, /R1|Q2|Q3|Q4/); }
+test('table entre familles : lignes tracées seulement (R1, Q2, Q3, Q4, Q11, Q12), chacune avec sa référence', () => {
+  for (const rule of Object.values(BETWEEN_GROUPS)) { assert.equal(rule.policy, 'sum'); assert.match(rule.reference, /R1|Q2|Q3|Q4|Q11|Q12/); }
   for (const kind of BEARER_KINDS) if (kind !== 'quality') assert.ok(betweenGroupsRule('quality', kind), kind);
   assert.equal(betweenGroupsRule('talent', 'spell').reference.startsWith('R1'), true);
   assert.throws(() => betweenGroupsRule('spell', 'spell'), /distinctes/);
 });
 
-// ---- CA5 ----
-test('CA5 paire non arbitrée (Trait et sort, question ouverte au MJ) : signalée, hors du total, montants visibles', () => {
+test('MJ 06/11 Q11-Q12 : toute paire de familles est tracée (Trait avec tout, talent et État, MJ et situation avec tout)', () => {
+  for (let i = 0; i < BEARER_KINDS.length; i += 1) for (let j = i + 1; j < BEARER_KINDS.length; j += 1)
+    assert.ok(betweenGroupsRule(BEARER_KINDS[i], BEARER_KINDS[j]), `${BEARER_KINDS[i]}+${BEARER_KINDS[j]}`);
+  for (const other of ['talent', 'spell', 'prayer', 'condition', 'gm']) assert.match(betweenGroupsRule('trait', other).reference, /Q11|Q12/, other);
+  assert.match(betweenGroupsRule('talent', 'condition').reference, /Q12/);
+  assert.match(betweenGroupsRule('gm', 'spell').reference, /Q12/);
+  assert.match(betweenGroupsRule('situation', 'condition').reference, /Q12/);
   const trait = { bearer: bearer('trait', 'trait-x'), effect: sl(1, 'add') };
   const result = combineEffects([trait, spell('s', 'Résistance', 2), prayer('p', 'Résistance', 1)], { test: resistance });
+  assert.equal(result.ready, true);
+  assert.equal(result.totals.modifySL, 4);
+});
+
+test('MJ 06/11 Q13 : une couche qui porte deux clés visant le même Test compte pour une source, ses clés s\'additionnent', () => {
+  const charm = { bearer: bearer('spell', 'spell-a', { layerId: 'a' }), effect: sl(2, 'bestBonusWorstPenalty', { target: 'Charme' }) };
+  const all = { bearer: bearer('spell', 'spell-a', { layerId: 'a' }), effect: sl(1, 'bestBonusWorstPenalty', { target: 'Tous les Tests' }) };
+  const other = { bearer: bearer('spell', 'spell-b', { layerId: 'b' }), effect: sl(2, 'bestBonusWorstPenalty', { target: 'Charme' }) };
+  assert.equal(combineEffects([charm, all, other], { test: { skill: 'Charme', carac: 'Soc' } }).totals.modifySL, 3);
+});
+
+// ---- CA5 ----
+// Depuis Q11-Q12, la table du livre et du MJ couvre toutes les paires : le signalement se lit sur une table réduite.
+const withoutTrait = Object.fromEntries(Object.entries(BETWEEN_GROUPS).filter(([, rule]) => !rule.kinds.includes('trait')));
+test('CA5 paire absente de la table (Trait retiré d\'une table réduite) : signalée, hors du total, montants visibles', () => {
+  const trait = { bearer: bearer('trait', 'trait-x'), effect: sl(1, 'add') };
+  const result = combineEffects([trait, spell('s', 'Résistance', 2), prayer('p', 'Résistance', 1)], { test: resistance, table: withoutTrait });
   assert.equal(result.ready, false);
   assert.deepEqual(result.signals, [{ type: 'pairNotArbitrated', op: 'modifySL', kinds: ['prayer', 'trait'] }, { type: 'pairNotArbitrated', op: 'modifySL', kinds: ['spell', 'trait'] }]);
   assert.deepEqual(result.groups.map(group => [group.kind, group.amount, group.status]), [['trait', 1, 'unresolved'], ['spell', 2, 'unresolved'], ['prayer', 1, 'unresolved']]);
@@ -152,7 +174,7 @@ test('CA5 paire non arbitrée (Trait et sort, question ouverte au MJ) : signalé
 });
 
 test('CA5 une paire non arbitrée sur une opération ne bloque pas les autres opérations', () => {
-  const result = combineEffects([{ bearer: bearer('trait', 't'), effect: sl(1, 'add') }, { bearer: bearer('gm', 'mj'), effect: { op: 'grantAdvantage', stack: 'unique', stackGroup: 'a' } }, spell('s', 'Résistance', 2)], { test: resistance });
+  const result = combineEffects([{ bearer: bearer('trait', 't'), effect: sl(1, 'add') }, { bearer: bearer('gm', 'mj'), effect: { op: 'grantAdvantage', stack: 'unique', stackGroup: 'a' } }, spell('s', 'Résistance', 2)], { test: resistance, table: withoutTrait });
   assert.equal(result.groups.find(group => group.op === 'grantAdvantage').status, 'applied');
   assert.equal(result.signals.length, 1);
 });

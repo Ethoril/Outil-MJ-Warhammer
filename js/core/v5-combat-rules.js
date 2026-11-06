@@ -2,7 +2,7 @@ import {enforceMagicTestRestrictions,activeMagicTalent} from './v5-magic-talents
 import {transformationRestrictions} from './v5-magic-combat.js';
 import {getReferenceCatalogue} from './reference-catalog.js';
 import {familiarSupport,withCompanionTalents} from './familiars.js';
-import {magicSkillModifiers,magicAdverseModifiers,effectiveSkillScore,magicSkillReplacement,familiarSkillSupport,magicTalentRank} from './v5-magic-talents.js';
+import {magicSkillModifiers,magicTestModifiers,magicAdverseModifiers,effectiveSkillScore,magicSkillReplacement,familiarSkillSupport,magicTalentRank} from './v5-magic-talents.js';
 /** Common V5 combat context; session resources live in extensions.v5. */
 import {situationPlan} from './v5-talent-situations.js';
 import {contactWeapon} from './v5-talent-contact.js';
@@ -188,7 +188,9 @@ export function buildCombatTest(normalized, role = 'actor') {
   const manualSupport=familiarSkillSupport(actor,familiar,skill?.nom || action.label || action.note || '',settings.context);
   const support=manualSupport.modifiers.length||manualSupport.advantages.length?manualSupport:familiarSupport(actor,normalized.v5State?.participants || [],skill?.nom || action.label || action.note || '',settings.context);
   const skillLabel=skill?.nom || action.label || action.note || '';
-  const modifiers = [...support.modifiers,...magicSkillModifiers(actor,skillLabel,{...settings.context,carac:settings.context?.carac||skill?.carac||action.attr}),
+  // U8 L3 : talents et couches (sorts, prières) du Test réunis par le moteur d'effets (collectTestEffects).
+  const testEffects=magicTestModifiers(actor,skillLabel,{...settings.context,carac:settings.context?.carac||skill?.carac||action.attr},{talentRows:talentModifiers.slModifiers});
+  const modifiers = [...support.modifiers,...testEffects.magic,
     // Clés « … adverse » du porteur opposé, et « Défense contre Tir » du défenseur visé par un tir.
     ...(target&&!defending?magicAdverseModifiers(target,skillLabel):[]),...(defending&&kind==='ranged'?magicSkillModifiers(actor,'Défense contre Tir'):[]),...(settings.slModifiers || [])];
   if(defending&&settings.context?.offHandWeapon===true)modifiers.push({id:'quality:offhand-defense',label:'Défense avec la main non directrice',amount:-2});
@@ -368,8 +370,8 @@ export function buildCombatTest(normalized, role = 'actor') {
   const overridden = new Set(qualityModifiers.flatMap(engine => engine.overrides || []));
   for (const engine of qualityModifiers) if (!overridden.has(engine.id) && !engine.params?.onSuccessOnly)
     modifiers.push({ id: `quality-${engine.id}`, label: engine.id, amount: engine.params.bonus });
-  modifiers.push(...talentModifiers.slModifiers); advantages.push(...talentModifiers.advantageSources); disadvantages.push(...talentModifiers.disadvantageSources);
-  unresolved.push(...talentModifiers.unresolved);
+  modifiers.push(...testEffects.talents); advantages.push(...talentModifiers.advantageSources); disadvantages.push(...talentModifiers.disadvantageSources);
+  unresolved.push(...talentModifiers.unresolved,...testEffects.unresolved);
   // Main directrice perdue : la séquelle force la règle générale de la main non directrice (même identifiant, donc Ambidextre la supprime).
   if (sequelae.offHand?.forced) modifiers.push({ id: 'penalty:offHand', label: 'Main secondaire', amount: -2 });
   applyV5TalentPenaltyRules(modifiers,talentModifiers.penaltyRules,{kind,role:talentRole,context:settings.context||{},advantage:advantages.length-disadvantages.length,aimed:settings.aimed});

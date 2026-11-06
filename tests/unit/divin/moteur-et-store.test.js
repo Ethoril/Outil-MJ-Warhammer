@@ -982,6 +982,20 @@ test('E4 — un État de Prière résolu contribue au Test; les modificateurs de
   assert.equal(withModifier.preview.prayer.sl, withModifier.preview.prayer.details.baseSl - 1);
 });
 
+test('U8 L3 — modificateurs de couches du Test de Prière : cumul par Test résolu (R3 p. 235, Q10, Q13, Q2 du MJ), plus de somme par clé', () => {
+  const spell = (id, testModifiers) => ({ id, spellId: 'spell-' + id, casterId: 'c-' + id, testModifiers });
+  const prayer = (id, testModifiers) => ({ id, type: 'test-modifier', testModifiers });
+  // Sorts : « all » +1 et « Prière » +2 de deux sorts → meilleur bonus +2 ; prières : « Tous les Tests » +1 et « Pray » +1 de deux
+  // prières → +1 ; les deux groupes se somment : +3 (et non +5 par clé).
+  const layered = { ...actor, extensions: { v5: { divine: { sin: 0 }, spellEffects: [spell('a', { all: 1 }), spell('b', { Prière: 2 })],
+    divineEffects: [prayer('p', { 'Tous les Tests': 1 }), prayer('q', { Pray: 1 })] } } };
+  const result = previewDivineExecution(layered, baseContract, [layered], { canSpeak: true, roll: 23, sourceFingerprint: fingerprint,
+    round: 1, expiry: { phase: 'endOfRound', round: 6 }, facts: { targets: { [layered.id]: { withinRange: true } } } });
+  assert.equal(result.ready, true, result.error);
+  const rows = result.preview.slModifiers.filter(row => row.id.startsWith('divine-test:'));
+  assert.equal(rows.reduce((total, row) => total + row.amount, 0), 3, JSON.stringify(rows));
+});
+
 test('self/self miracles still enforce canonical targets and their sourced duration', () => {
   const spear = DIVINE_REGISTRY.contracts.find(row => row.canonicalName === 'Spear of Myrmidia');
   const priest = { ...actor, caracs: { Soc: 50 }, skills: [{ name: 'Pray', status: 'resolved', total: 50 }],

@@ -157,7 +157,7 @@ test('Bondissant comme un cerf : M +1 et Jambes solides le temps de la durée', 
   assert.ok(!acquiredV5Talents(person(store, 'priest')).some(row => row.talentId === 'talent-strong-legs'));
 });
 
-test('Sagesse de la chouette : Int +20, étiquettes de talents, Menaçant injecté, non-cumul avec un sort (DIV-05)', async () => {
+test('Sagesse de la chouette : Int +20, étiquettes de talents, Menaçant injecté, somme avec un sort sur Int (Q2 du MJ, DIV-05 levé)', async () => {
   const store = await fixture({ cult: 'Verena' });
   await cast(store, OWL);
   const priest = person(store, 'priest');
@@ -168,9 +168,11 @@ test('Sagesse de la chouette : Int +20, étiquettes de talents, Menaçant inject
   assert.ok(owned.includes('talent-menacing'));
   assert.ok(!owned.includes('talent-acute-sense') && !owned.includes('talent-night-vision'), 'seuls les talents à contrat mécanique sont injectés');
   const stacked = await fixture({ cult: 'Verena', priest: { extensions: { v5: { divine: { sin: 0 }, spellEffects: [{ id: 'spell-int', spellName: 'Sort', statModifiers: { Int: 10 } }] } } } });
-  const blocked = stacked.previewDivineExecution(OWL, input());
-  assert.equal(blocked.ready, false);
-  assert.match(blocked.error, /DIV-05/);
+  // MJ 05/11 Q2 : prière et sort se somment, même caractéristique comprise (sources différentes, p. 130).
+  const allowed = stacked.previewDivineExecution(OWL, input());
+  assert.equal(allowed.ready, true, allowed.error);
+  await cast(stacked, OWL);
+  assert.equal(person(stacked, 'priest').caracs.Int, priest.caracs.Int + 10, 'Int +20 (prière) et +10 (sort) se somment');
 });
 
 test('un talent déjà possédé au même rang n’est pas dupliqué par l’injection', async () => {
@@ -781,10 +783,10 @@ test('ancienne forme {Natation: 4} : couche inchangée', async () => {
   assert.deepEqual(layers(store, 'priest')[0].testModifiers, { Natation: 4 });
 });
 
-test('DIV-05 : un modificateur de Test magique sur la même clé bloque toujours le cumul avec une couche divine', () => {
+test('DIV-05 levé par Q2 du MJ : un modificateur de Test magique sur la même clé se somme avec une couche divine', () => {
   const state = (divine, spell) => ({ combat: { participants: [{ id: 'p', zone: 'active', extensions: { v5: { divineEffects: [{ id: 'd', ...divine }], spellEffects: [{ id: 's', ...spell }] } } }] } });
   const layer = { testModifiers: { 'Résistance': 6 } };
-  assert.throws(() => finalizeDivineState(state(layer, { testModifiers: { 'Résistance': 1 } }), state(layer, { testModifiers: { 'Résistance': 1 } })), /modificateur de Test divin et magique/);
+  assert.doesNotThrow(() => finalizeDivineState(state(layer, { testModifiers: { 'Résistance': 1 } }), state(layer, { testModifiers: { 'Résistance': 1 } })));
   assert.doesNotThrow(() => finalizeDivineState(state(layer, { testModifiers: { Charme: 1 } }), state(layer, { testModifiers: { Charme: 1 } })));
 });
 

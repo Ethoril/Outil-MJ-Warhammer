@@ -43,10 +43,26 @@ export const STANDARD_CARACS = Object.freeze(['CC', 'CT', 'F', 'E', 'I', 'Ag', '
  * - Cumuler les effets marqués comme exception explicite (ex: stackable: true)
  * - Bénédiction de Lileath (D-06) : le rang du LANCEUR, enregistré sur la couche au lancement, autorise autant de sources supplémentaires
  *   parmi les sorts de ce lanceur (voir `bonusTotal`) ; le talent de la cible n'est jamais lu.
+ * Prières (`divineEffects`, U8 L3) : même règle entre elles (MJ 06/11, Q10), en un groupe distinct ; le groupe des prières et celui
+ * des sorts se somment (sources différentes, p. 130, Q2 du MJ, même caractéristique comprise).
  */
-export function calculateEffectiveStats(baseStats = {}, spellEffects = []) {
+export function calculateEffectiveStats(baseStats = {}, spellEffects = [], divineEffects = []) {
   const result = structuredClone(baseStats || {});
-  const activeEffects = (spellEffects || []).filter(e => e && e.statModifiers);
+  const groups = [statChanges(spellEffects), statChanges(divineEffects)];
+  for (const stat of new Set(groups.flatMap(group => [...group.keys()]))) {
+    const changes = groups.map(group => group.get(stat)).filter(Boolean);
+    const netChange = changes.reduce((total, change) => total + change.net, 0);
+    let computed = Math.max(0, (Number(baseStats[stat]) || 0) + netChange);
+    if (changes.some(change => change.capAt100)) computed = Math.min(100, computed);
+    result[stat] = computed;
+  }
+  return result;
+}
+
+/** Variation nette par caractéristique d'un groupe de couches (meilleur bonus, pire malus, exceptions cumulées). */
+function statChanges(effects = []) {
+  const changes = new Map();
+  const activeEffects = (Array.isArray(effects) ? effects : []).filter(e => e && e.statModifiers);
 
   // Collecter les modificateurs par caractéristique
   const modMap = new Map();
@@ -79,16 +95,10 @@ export function calculateEffectiveStats(baseStats = {}, spellEffects = []) {
     const worstPenalty = entry.penalties.length > 0 ? Math.min(...entry.penalties) : 0;
     const sumStackable = entry.stackables.reduce((acc, v) => acc + v, 0);
 
-    const netChange = bestBonus + worstPenalty + sumStackable;
-    const baseVal = Number(baseStats[stat]) || 0;
-    let computed = Math.max(0, baseVal + netChange);
-    if (entry.capAt100) {
-      computed = Math.min(100, computed);
-    }
-    result[stat] = computed;
+    changes.set(stat, { net: bestBonus + worstPenalty + sumStackable, capAt100: entry.capAt100 === true });
   }
 
-  return result;
+  return changes;
 }
 
 /** Source d'un bonus : valeur, lanceur et rang de Bénédiction de Lileath de ce lanceur au lancement (absent = 0). */
@@ -245,9 +255,17 @@ export function calculateEffectiveWard(spellEffects = []) {
 
 /**
  * Calcule les modificateurs de Tests (DR) effectifs apportés par la magie
- * selon la règle de non-cumul V5 (meilleur bonus + pire malus par compétence/catégorie).
+ * selon la règle de non-cumul V5 (meilleur bonus + pire malus par compétence/catégorie). Résumé par clé : le cumul d'un Test passe
+ * par `collectTestEffects` (v5-magic-talents.js). Prières (`divineEffects`) : groupe distinct, sommé à celui des sorts (Q2, Q10).
  */
-export function calculateEffectiveTestModifiers(spellEffects = []) {
+export function calculateEffectiveTestModifiers(spellEffects = [], divineEffects = []) {
+  const result = {};
+  for (const nets of [testModifierNets(spellEffects), testModifierNets(divineEffects)])
+    for (const [key, net] of Object.entries(nets)) result[key] = (result[key] || 0) + net;
+  return Object.fromEntries(Object.entries(result).filter(([, net]) => net !== 0));
+}
+
+function testModifierNets(spellEffects = []) {
   const result = {};
   const activeEffects = (spellEffects || []).filter(e => e && e.testModifiers && typeof e.testModifiers === 'object');
   const modMap = new Map();
@@ -449,13 +467,15 @@ function recomputeLayerValues(next, effects) {
   effects = (Array.isArray(effects) ? effects : []).filter(e => e && typeof e === 'object' && !Array.isArray(e));
   const hadSuppression=effects.some(e=>e.suppressedEffectIds?.length) || next.extensions.v5.suppressedEffectIds?.length;
   next.extensions.v5.suppressedEffectIds=effects.flatMap(e=>e.suppressedEffectIds || []).filter(id => typeof id === 'string' && id);
-  effects=[...unsuppressedSpellEffects(effects),...(next.extensions.v5.divineEffects || [])];
+  const spellLayers=unsuppressedSpellEffects(effects),divineLayers=(next.extensions.v5.divineEffects || []).filter(e => e && typeof e === 'object' && !Array.isArray(e));
+  effects=[...spellLayers,...(next.extensions.v5.divineEffects || [])];
   const v5 = next.extensions.v5;
   const baseCaracs = v5.baseCaracs || next.baseCaracs;
   if (baseCaracs) {
     const movement = knownMovement(next);
     if (!Number.isFinite(Number(baseCaracs.M)) && movement !== null) baseCaracs.M = movement;
-    next.caracs = calculateEffectiveStats(baseCaracs, effects);
+    // Sorts et prières : deux groupes de non-cumul qui se somment (Q2, Q10 du MJ).
+    next.caracs = calculateEffectiveStats(baseCaracs, spellLayers, divineLayers);
     // Mouvement inconnu : rien n'est écrit (l'aperçu des sorts qui le modifient est bloqué en amont).
     if (!Number.isFinite(Number(baseCaracs.M))) delete next.caracs.M;
     if (Number.isFinite(Number(baseCaracs.M))) { next.M = next.caracs.M; next.movement = next.caracs.M; }
@@ -477,7 +497,7 @@ function recomputeLayerValues(next, effects) {
   for (const [key, value] of Object.entries(typed)) if (Array.isArray(value) ? value.length : Object.keys(value).length) v5[key] = value; else delete v5[key];
   const immunities = { damage: effects.flatMap(e => e?.immunities?.damage || []), conditions: effects.flatMap(e => e?.immunities?.conditions || []) };
   if (immunities.damage.length || immunities.conditions.length) v5.immunities = immunities; else delete v5.immunities;
-  const effectiveTestModifiers = calculateEffectiveTestModifiers(effects);
+  const effectiveTestModifiers = calculateEffectiveTestModifiers(spellLayers, divineLayers);
   v5.testModifiers = effectiveTestModifiers;
   next.testModifiers = effectiveTestModifiers;
   v5.suppressedSpellIds=[...new Set(effects.flatMap(e=>e.specialState?.suppressedSpellIds || []))];
