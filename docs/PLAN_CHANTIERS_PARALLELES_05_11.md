@@ -104,6 +104,9 @@ Entre deux vagues : fusion des branches dans `dev/recette-plateau-04-11` (outil 
 - **Q11 (06/11)** : un Trait de créature **se somme** avec talent, sort, prière, État et saisie du MJ.
 - **Q12 (06/11)** : talent et pénalité d'États **se somment**. La saisie libre du MJ et toute la famille « situation » (couvert, position haute, surnombre…) **se somment** à tous les autres effets.
 - **Q13 (06/11)** : une même couche (sort ou prière) qui porte plusieurs clés visant le même Test compte pour **une seule source**, et ses clés s'additionnent (Charme +2 et Tous les Tests +1 → +3).
+- **Q14 (06/11)** : Q2 vaut aussi pour les PA, les bonus d'arme et les Traits identiques : prière et sort **se somment**, DIV-05 ne refuse plus ces poses.
+- **Q15 (06/11)** : le Test de Prière lit aussi les modificateurs de **Sociabilité** (`carac:soc`, « Sociabilité »).
+- **Q16 (06/11)** : une clé « … adverse » du porteur et un sort posé sur l'opposant, sur le même Test, **se somment** (porteurs différents).
 
 **E1, médaillons** (branche `claude/e1-medaillons-a7988b`) : **sans débord** ; pion mort en **cerclage gris** ; liseré choisi à la main **abandonné** (seule la teinte du camp compte). **Choix du MJ après examen de la maquette** :
 - **Variante B** (personnage sur fond émaillé, une image par profil), sans débord.
