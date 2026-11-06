@@ -1087,6 +1087,24 @@ async function openFicheSyncView() {
   });
 }
 
+// Chantier H : écriture en retour vers les fiches (fin de séance). Firebase n'est chargé qu'à l'ouverture, Functions qu'au premier envoi.
+async function openFicheWritebackView() {
+  const [{ createFicheSource }, { initFicheWritebackView }] = await Promise.all([import('./core/fiche-source.js'), import('./ui/fiche-writeback-view.js')]);
+  const source = createFicheSource();
+  return openOverlay('Envoyer aux fiches', (mount, dialog) => {
+    const view = initFicheWritebackView({
+      mount, source,
+      api: {
+        plan: () => requireStoreApi('planFicheWriteback')(),
+        applySuccess: (charId, response, rows) => awaitStore(requireStoreApi('applyFicheWritebackSuccess')(charId, response, rows), 'Envoi aux fiches'),
+        applyChoice: (charId, key, choice, value) => awaitStore(requireStoreApi('applyFicheWritebackConflictChoice')(charId, key, choice, value), 'Conflit de fiche')
+      },
+      callbacks: { onClose: () => dialog.close() }
+    });
+    view.start();
+  });
+}
+
 function openRestoresView() {
   return openOverlay('Versions précédentes', (mount, dialog) => {
     const status = document.createElement('p'); status.className = 'muted'; status.textContent = 'Chargement…'; mount.appendChild(status);
@@ -1747,6 +1765,7 @@ on(qs('#workspace-campaign-time'), 'click', () => {
 });
 on(qs('#workspace-import-text'), 'click', () => safeOpen(openTextImportView));
 on(qs('#workspace-fiche-sync'), 'click', () => { openFicheSyncView().catch(error => showToast(contextMessage('Fiches indisponibles', error, 'vérifiez votre connexion, puis réessayez.'), 'error')); });
+on(qs('#workspace-fiche-writeback'), 'click', () => { openFicheWritebackView().catch(error => showToast(contextMessage('Fiches indisponibles', error, 'vérifiez votre connexion, puis réessayez.'), 'error')); });
 on(qs('#workspace-restart-combat'), 'click', () => { restartCombat(); });
 on(qs('#workspace-save'), 'click', () => DOM.combat.btnSaveFile?.click());
 on(qs('#workspace-load'), 'click', () => DOM.combat.btnLoadFile?.click());

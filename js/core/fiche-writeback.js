@@ -11,10 +11,10 @@ const SEND_ID = /^[A-Za-z0-9_-]{1,64}$/;
 const MAX_CHANGES = 40;
 // Compteurs : champ de la fiche → lecture dans l'outil et clé du snapshot (`durables` / `resources`).
 const COUNTERS = Object.freeze({
-  destin: { label: 'Destin', snapshot: ['durables', 'fate'] },
-  fortune: { label: 'Fortune', snapshot: ['resources', 'fortune'] },
-  peche: { label: 'Péché', snapshot: ['durables', 'sin'] },
-  corruption: { label: 'Corruption', snapshot: ['durables', 'corruption'] }
+  destin: { label: 'Destin modifié en jeu (outil MJ)', snapshot: ['durables', 'fate'] },
+  fortune: { label: 'Fortune modifiée en jeu (outil MJ)', snapshot: ['resources', 'fortune'] },
+  peche: { label: 'Péché modifié en jeu (outil MJ)', snapshot: ['durables', 'sin'] },
+  corruption: { label: 'Corruption modifiée en jeu (outil MJ)', snapshot: ['durables', 'corruption'] }
 });
 // Clés de caractéristique de la fiche → clés canoniques de l'outil.
 const CARACS = Object.freeze({ cc: 'CC', ct: 'CT', f: 'F', e: 'E', i: 'I', ag: 'Ag', dex: 'Dex', int: 'Int', fm: 'FM', soc: 'Soc' });
@@ -107,7 +107,7 @@ export function planFicheWriteback(state) {
       if (ficheCounterNumber(raw) === tool.value) continue;
       const ficheValue = raw === null ? null : String(raw);
       const row = { key: `counter:${field}`, op: 'counter', ficheValue, toolValue: String(tool.value), manual: false };
-      const changeLabel = `${label} modifié en jeu (outil MJ)`;
+      const changeLabel = label;
       if (tool.value > 9999) Object.assign(row, { manual: true, reason: 'value-out-of-range', change: null, label: changeLabel });
       else Object.assign(row, { label: changeLabel, change: { op: 'counter', field, base: ficheValue, value: String(tool.value), label: changeLabel } });
       if (tool.disagree) row.warning = 'copies-disagree';

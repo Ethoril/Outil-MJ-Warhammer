@@ -432,6 +432,18 @@
 .fiche-consultation p { margin: 8px 0; font-size: 14px; line-height: 1.5; }
 .fiche-sync-entry select { max-width: 100%; }
 .fiche-sync-actions label { display: block; margin: 6px 0; }
+/* Chantier H : « Envoyer aux fiches ». */
+.fiche-writeback-entry { margin: 10px 0; }
+.fiche-writeback-entry label { display: flex; flex-direction: row; align-items: baseline; gap: 6px; }
+.fiche-writeback-entry input[type="checkbox"] { width: auto; margin: 0; flex: none; }
+.fiche-writeback-rows { list-style: none; padding: 0; margin: 6px 0; }
+.fiche-writeback-row { margin: 6px 0; overflow-wrap: anywhere; }
+.fiche-writeback-row .muted { margin-left: 1.6em; font-size: .9em; }
+.fiche-writeback-row.is-manual > label { opacity: .7; }
+.fiche-writeback-conflict { border-left: 3px solid var(--danger, #b3261e); padding: 4px 0 4px 10px; margin-top: 8px; }
+.fiche-writeback-conflict-row { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; margin: 6px 0; }
+.fiche-writeback-undo { margin-top: 16px; }
+[data-key="reason"] { width: 100%; max-width: 40em; }
 
 .workspace-v5-context { display:flex; flex-wrap:wrap; gap:8px 16px; padding:10px 0; min-width:0; max-width:100%; }
 .workspace-v5-context h4, .workspace-v5-context p { flex-basis:100%; min-width:0; overflow-wrap:anywhere; }

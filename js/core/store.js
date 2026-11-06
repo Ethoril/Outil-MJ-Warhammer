@@ -147,6 +147,7 @@ import { deriveReminders, pendingReminders, resolveReminder } from './reminders.
 import { createScene, createIntention, createSceneEvent, createSceneClock, proposeSceneEvent, newlyProposedSceneEvents, resolveSceneEvent, applySceneEvent, advanceSceneClock } from './scene-events.js';
 import { sharedState, sameSharedState } from './sync-protocol.js';
 import { applyFicheSync as applyFicheSyncToDraft } from './fiche-sync.js';
+import { planFicheWriteback, applyWritebackSuccess, applyConflictChoice } from './fiche-writeback.js';
 import { convertLegacyV4Profile } from './v5-legacy-conversion.js';
 import { planMountedFall, V5_RIDE_SKILL_ID } from './v5-mounted-combat.js';
 import { declaredMountOf, linkDeclaredMounts, mountProfileId, planMountToggle, applyMountToggle } from './mounts.js';
@@ -1783,6 +1784,31 @@ function resolvedCorruptionTest(participant, skillId, input) {
         // Familiers déclarés par la fiche : liés tout de suite quand le maître et le familier sont déjà en combat.
         if (next.combat?.participants) next.combat = { ...next.combat, participants: linkDeclaredFamiliars(next.combat.participants) };
         return reconcileV5ResourceBindings(draft, next, captured);
+      });
+    },
+    /** Chantier H : différences durables à écrire sur les fiches (lot A) et dernier envoi, sans rien modifier. */
+    planFicheWriteback() {
+      const envelope = JSON.parse(JSON.stringify(currentEnvelope()));
+      return { ...planFicheWriteback(envelope), lastSend: envelope.extensions?.v5?.ficheWriteback?.lastSend || null, revision: localRevision };
+    },
+    /** Envoi (ou annulation) accepté par une fiche : une commande annulable de l'outil, journalisée sans valeur réservée au MJ. */
+    applyFicheWritebackSuccess(charId, response, rows) {
+      if (!canMutate()) return false;
+      const captured = JSON.parse(JSON.stringify({ response, rows }));
+      const undo = (captured.rows || []).some(row => row.undoOf);
+      return api.executeCommand(undo ? 'fiche-writeback-undo' : 'fiche-writeback', draft => {
+        const next = applyWritebackSuccess(draft, charId, captured.response, captured.rows);
+        next.log = [{ id: uid(), ts: Date.now(), kind: 'management', text: `${undo ? 'Envoi annulé sur la fiche' : 'Envoyé à la fiche'} ${charId} : ${(captured.rows || []).filter(row => row.change).map(row => row.key).join(', ')} (révision ${captured.response.revision}).` }, ...(next.log || [])].slice(0, 300);
+        return next;
+      });
+    },
+    /** Choix du MJ sur un champ en conflit (« Garder la fiche » / « Imposer l'outil »). */
+    applyFicheWritebackConflictChoice(charId, key, choice, ficheValue) {
+      if (!canMutate()) return false;
+      return api.executeCommand('fiche-writeback-conflict', draft => {
+        const next = applyConflictChoice(draft, charId, key, choice, ficheValue);
+        next.log = [{ id: uid(), ts: Date.now(), kind: 'management', text: `Conflit sur la fiche ${charId} (${key}) : ${choice === 'fiche' ? 'valeur de la fiche gardée' : 'valeur de l’outil imposée'}.` }, ...(next.log || [])].slice(0, 300);
+        return next;
       });
     },
     removeProfile(id) {

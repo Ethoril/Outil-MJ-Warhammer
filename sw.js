@@ -248,6 +248,7 @@ const ASSETS_TO_CACHE = [
   './js/ui/workspace-view.js',
   './js/ui/import-text-view.js',
   './js/ui/fiche-sync-view.js',
+  './js/ui/fiche-writeback-view.js',
   './js/ui/prepare-view.js',
   './js/ui/workspace.css',
   './js/core/currency.js',
