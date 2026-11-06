@@ -26,6 +26,14 @@ Constats :
 - la bande de portée préremplie (aucun tir disponible : une « Action improvisée » n'a pas de portée, il faut une arme à distance dans l'équipement) ;
 - U5 (barre de PV en aperçu), montures, Course.
 
+**Constats corrigés (06/11)** :
+- (a) initiales sans ponctuation, sur le pion et dans le panneau « Sur la carte » (Map Display `1e20630`, `6ea2716`) ;
+- (b) trait d'engagement de centre à centre, dessiné sous les pions ;
+- (c) un PJ déjà au combat, en attente ou actif, ne peut plus y être ajouté une seconde fois (`709fd7a`). La section « En attente » existait déjà, le doublon venait de la recette ;
+- (d) écarté : le menu est dans un `<label>`, il a donc déjà un nom accessible.
+
+L'ordre des calques (b) est couvert par les tests, mais le zoom de la carte n'a pas répondu dans le navigateur intégré : le trait n'a pas été vu à pleine taille.
+
 Données de test laissées en place : le profil « Elysia (test) », deux participants Elysia dans le combat local, et la carte « Ferme isolée » chargée dans la session Firebase 94SHD avec trois pions posés.
 
 Le tableau ci-dessous garde la trace des branches d'origine.
