@@ -1605,7 +1605,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     tripFall,
     extraordinaryShot:actorPlan.extraordinaryShot||null,
     reachGuide:actorPlan.kind==='melee'?computeV5WeaponReachGuide(naturalWeaponDefaults({reach:context.weaponReach||(actor?.equipment?.find(item=>item.id===action?.extensions?.fiche?.equipmentId)||action?.extensions?.equipment)?.reach||action?.reach,qualities:action?.qualities,natural:Boolean(naturalPlan||inferredNatural),size:creatureSizeOf(actor).key}).reach):null,
-    rangeBands:actorPlan.kind==='ranged'?computeV5WeaponRangeBands(context.weaponRangeYards??(actor?.equipment?.find(item=>item.id===action?.extensions?.fiche?.equipmentId)||action?.extensions?.equipment)?.range??action?.range,actor):null,
+    rangeBands:actorPlan.kind==='ranged'?computeV5WeaponRangeBands(context.weaponRangeYards??(actor?.equipment?.find(item=>item.id===action?.extensions?.fiche?.equipmentId)||action?.extensions?.equipment)?.range??action?.range??action?.rangeYards,actor):null,
     sl,
     resultTier: actorTest.resultTier,
     defenderResultTier: defenderTest?.resultTier||null,

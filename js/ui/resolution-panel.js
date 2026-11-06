@@ -1852,7 +1852,7 @@ export function renderResolutionPanel(options) {
     if (kind.value === 'ranged') {
       const rangedWeapons = (actor?.equipment || []).filter(item => item?.kind === 'weapon' && String(item.range || '').trim());
       const rangedWeapon = actor?.equipment?.find(item => item?.id === action.extensions?.fiche?.equipmentId) || action.extensions?.equipment || (rangedWeapons.length === 1 ? rangedWeapons[0] : null);
-      const rangeBands = computeV5WeaponRangeBands(draft.v5Context?.weaponRangeYards ?? rangedWeapon?.range ?? action.range, actor);
+      const rangeBands = computeV5WeaponRangeBands(draft.v5Context?.weaponRangeYards ?? rangedWeapon?.range ?? action.range ?? action.rangeYards, actor);
       choiceField(fields, 'shotRange', 'Bande de portée choisie par le MJ', [['point-blank','Bout portant'],['short','Courte'],['medium','Moyenne'],['long','Longue'],['extreme','Extrême']]);
       if (mapDistanceProvider && actor && target) {
         const mapNote = node('p', 'workspace-muted map-distance-note', 'Distance sur la carte : mesure en cours…');
