@@ -24,14 +24,24 @@ export function parseReferenceCSV(text){
  else if(c===','&&!quoted){row.push(cell);cell='';}else if((c==='\n'||c==='\r')&&!quoted){if(c==='\r'&&input[i+1]==='\n')i++;row.push(cell);if(row.some(v=>v.trim()))rows.push(row);row=[];cell='';}else cell+=c;}
  if(quoted)throw new Error('CSV incomplet : guillemet non fermé');row.push(cell);if(row.some(v=>v.trim()))rows.push(row);return rows;
 }
-export function parseKeywordCSV(text){
+export function parseKeywordCSV(text){return analyzeKeywordCSV(text).words;}
+/**
+ * Mots-clés complets et lignes écartées (décision du MJ, 06/11) : une ligne nommée sans Identifiant, Effet, Source ou
+ * Version retenue est écartée et signalée (`skipped`, avec l'indice de la ligne dans le tableau parsé) ; la feuille vide
+ * ou un identifiant en double restent bloquants.
+ */
+export function analyzeKeywordCSV(text){
  const [headers,...rows]=parseReferenceCSV(text);if(!headers)throw new Error('Source mots clés vide');
  const index=name=>headers.findIndex(h=>referenceKey(h)===referenceKey(name));
  const required=['Identifiant','Nom','Effet','Type','Paramètre','Source','Version retenue','Anciens noms','Nom EN','Remarque'];
  if(required.some(h=>index(h)<0))throw new Error('Colonnes du référentiel mots clés inattendues');
  const value=(row,name)=>String(row[index(name)]??'').trim();
- const words=rows.filter(row=>value(row,'Nom')).map(row=>({id:value(row,'Identifiant'),name:value(row,'Nom'),effect:value(row,'Effet'),type:value(row,'Type'),parameter:value(row,'Paramètre'),source:value(row,'Source'),edition:value(row,'Version retenue'),aliases:[value(row,'Nom EN'),...value(row,'Anciens noms').split(',').map(v=>v.trim())].filter(Boolean),note:value(row,'Remarque')}));
- if(!words.length||new Set(words.map(w=>w.id)).size!==words.length||words.some(w=>!w.id||!w.effect||!w.source||!w.edition))throw new Error('Référentiel mots clés vide, incomplet ou ambigu');return words;
+ const words=[],skipped=[];
+ rows.forEach((row,index)=>{if(!value(row,'Nom'))return;
+  const word={id:value(row,'Identifiant'),name:value(row,'Nom'),effect:value(row,'Effet'),type:value(row,'Type'),parameter:value(row,'Paramètre'),source:value(row,'Source'),edition:value(row,'Version retenue'),aliases:[value(row,'Nom EN'),...value(row,'Anciens noms').split(',').map(v=>v.trim())].filter(Boolean),note:value(row,'Remarque')};
+  const missing=[['id','Identifiant'],['effect','Effet'],['source','Source'],['edition','Version retenue']].filter(([key])=>!word[key]).map(([,label])=>label);
+  if(missing.length)skipped.push({row:index+1,name:word.name,missing});else words.push(word);});
+ if(!words.length||new Set(words.map(w=>w.id)).size!==words.length)throw new Error('Référentiel mots clés vide, incomplet ou ambigu');return {words,skipped};
 }
 
 
@@ -99,7 +109,10 @@ export async function refreshReferences({fetchImpl=globalThis.fetch,forceRefresh
  const tables=Object.fromEntries(loaded.map(v=>[v.name,v.table]));
  for(const [name,headers] of Object.entries({'Armes Corps à Corps':['Nom','Catégorie','Dégâts','Allonge','Atouts et Défauts'],'Armes à Distance':['Nom','Catégorie','Dégâts','Portée','Atouts et Défauts'],'Armures':['Nom','Catégorie','Zones Couvertes',"Valeur d'Armure (PA)"]})) {
   if(headers.some(header=>!tables[name]?.[0]?.includes(header)))throw new Error('Colonnes équipement inattendues : '+name);
- }parseKeywordCSV(loaded.find(v=>v.name===REQUIRED_SHEETS[0]).csv);
+ }const {skipped}=analyzeKeywordCSV(loaded.find(v=>v.name===REQUIRED_SHEETS[0]).csv);
+ // Lignes de mots-clés incomplètes : écartées du catalogue et signalées au MJ, sans bloquer l'actualisation.
+ if(skipped.length){const drop=new Set(skipped.map(s=>s.row));tables[REQUIRED_SHEETS[0]]=tables[REQUIRED_SHEETS[0]].filter((row,index)=>!drop.has(index));}
+ const keywordWarning=skipped.length?`Mots-clés écartés (ligne incomplète) : ${skipped.map(s=>`${s.name} (${s.missing.join(', ')} manquant)`).join(' ; ')}`:null;
  const equipment=buildEquipmentRows(tables);equipment.catalogVersion='equipment:'+await sha256(JSON.stringify({items:equipment.items,keywords:equipment.keywords}));
  for(const item of equipment.items)item.catalogVersion=equipment.catalogVersion;
  equipment.sources=Object.fromEntries(loaded.filter(v=>['Mots Clés Armes et Armures','Armes Corps à Corps','Armes à Distance','Armures'].includes(v.name)).map(v=>[v.name,{url:v.url,sha256:v.sha256}]));equipment.fetchedAt=new Date().toISOString();
@@ -111,6 +124,6 @@ export async function refreshReferences({fetchImpl=globalThis.fetch,forceRefresh
  next.contentVersion='references:'+await sha256(referenceContentPayload(next));
  const prepared=createReferenceResolvers(next);let cacheWarning=null;
  try{(storage === undefined ? globalThis.localStorage : storage)?.setItem(CACHE_KEY,JSON.stringify({data:next,updatedAt:next.fetchedAt}));}catch(error){cacheWarning=`Cache non enregistré : ${error.message}`;}
- current=deepFreeze(next);resolvers=prepared;status={source:'Google Sheets + contrat publié des fiches',contentVersion:current.contentVersion,updatedAt:current.fetchedAt,error:null,cacheWarning};return {ok:true,catalogue:getReferenceCatalogue(),status:getReferenceStatus()};
+ current=deepFreeze(next);resolvers=prepared;status={source:'Google Sheets + contrat publié des fiches',contentVersion:current.contentVersion,updatedAt:current.fetchedAt,error:null,cacheWarning,warning:keywordWarning};return {ok:true,catalogue:getReferenceCatalogue(),status:getReferenceStatus()};
  }catch(error){status={...status,error:error.message};return {ok:false,catalogue:getReferenceCatalogue(),status:getReferenceStatus()};}finally{pending=null;}})();return pending;
 }

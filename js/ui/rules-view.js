@@ -276,7 +276,8 @@ function updateRulesList(term, root = qs('#panel-rules')) {
       btnReload.textContent = '⏳ Chargement...';
       try {
         const result = await refreshReferences({ forceRefresh: true });
-        if (result.ok) showToast('Références Aides de jeu actualisées', 'success');
+        if (result.ok && result.status.warning) showToast(`Références Aides de jeu actualisées. ${result.status.warning}.`, 'warning');
+        else if (result.ok) showToast('Références Aides de jeu actualisées', 'success');
         else showToast(`Actualisation échouée : ${result.status.error}. Le dernier ensemble valide reste utilisé.`, 'error');
         updateRulesList(term, root);
       } catch (err) {
