@@ -42,6 +42,13 @@ export function computeV5WeaponRangeBands(rawRange,actor=null){
  const shortYards=printedYards/2;
  return {printedYards,pointBlankYards:shortYards>4?4:null,shortYards,mediumYards:printedYards,longYards:printedYards*2,extremeYards:printedYards*3};
 }
+/** Bande de portée d'une distance mesurée (mètres = yards), d'après les bandes dérivées ; `null` au-delà de l'Extrême. */
+export function v5RangeBandForMeters(meters,bands){
+ if(!bands||!Number.isFinite(meters)||meters<0)return null;
+ if(bands.pointBlankYards!==null&&meters<=bands.pointBlankYards)return 'point-blank';
+ for(const [band,limit] of [['short',bands.shortYards],['medium',bands.mediumYards],['long',bands.longYards],['extreme',bands.extremeYards]])if(meters<=limit)return band;
+ return null;
+}
 /** L06 p.166 modifiers belong to the attack Test, even when a resolution also contains a defense. */
 export function applyV5AttackSituationModifiers(modifiers,{role,kind,actionType,actor,target,context={},actorSize,targetSize,talentRules=[],advantage=0,aimed=false,rangeBands=null}={}){
  if(role!=='attacker'||!['attack','attaque'].includes(actionType)||!['melee','ranged'].includes(kind))return [];

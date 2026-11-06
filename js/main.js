@@ -41,6 +41,8 @@ import { renderMapLinkIndicator } from './ui/map-link-indicator.js';
 import { createMapLink, MAP_LINK_CHANNEL, MAP_LINK_PING_MS } from './core/map-link.js';
 import { offScenePjParticipants, persistentMaxHpOf } from './core/map-link-state.js';
 import { runProposalOf } from './core/map-link-run.js';
+import { mountMapLinkFeedback } from './ui/map-link-feedback.js';
+import { setMapDistanceProvider } from './ui/resolution-panel.js';
 // Libellés des saisies d'Initiative manquantes (recette G-INI-2 : plus d'identifiants internes).
 const INITIATIVE_INPUT_LABELS = Object.freeze({ characteristic: 'Initiative', die: 'd10', combatReflexesDice: 'deux d10 du Combat instinctif',
   combatReflexesChoice: 'choix du Combat instinctif', tieChoice: 'départage de l’égalité', tieOrder: 'ordre de l’égalité',
@@ -1400,10 +1402,13 @@ function openEventsView() {
   });
 }
 
+// Branché plus bas par la liaison carte (L5) : rend vrai si le pion du participant est posé.
+let mapLinkPlacement = null;
 const workspaceView = DOM.panels.workspace && qs('#workspace-root') ? initWorkspaceView({
   Store, Combat, Bus, mount: qs('#workspace-root'), showNavigation: false,
   actions: {
     ...encounterListActions,
+    isPlacedOnMap: participant => mapLinkPlacement?.(participant) === true,
     // La bibliothèque de bestiaire vit sous la vue de travail et ne se montre que dans l'espace Bibliothèque.
     spaceShown: space => { qs('#bestiary-library').hidden = space !== 'library'; },
     createProfile: openCreateProfileView,
@@ -1837,6 +1842,11 @@ if (typeof BroadcastChannel === 'function') {
         .then(result => { if (result?.ok === false) showToast(result.message, 'error'); }) }, 15000);
     }
   });
+  // Retours de la carte (L5) : « À poser (N) », suggestions d'engagement, distance préremplie, pastille « posé ».
+  const mapLinkFeedback = mountMapLinkFeedback({ mapLink, store: Store, showToast, pendingNode: qs('#map-link-pending') });
+  setMapDistanceProvider(mapLinkFeedback.distanceBetween);
+  mapLinkPlacement = participant => mapLink.isPlaced(participant);
+  mapLink.on('placement', () => workspaceView?.render());
   Bus.on('reserve', mapLink.refresh);
   Bus.on('combat', mapLink.refresh);
   Bus.on('combat:update', mapLink.refresh);

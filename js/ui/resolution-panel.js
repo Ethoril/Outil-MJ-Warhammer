@@ -6,7 +6,14 @@ import {wardDiceCount,reductionLayers,weaponAttackNature} from '../core/v5-magic
 import {renderSituationFields,renderSupportFields} from './v5-talent-situations.js';
 import { renderV5TalentMeasures } from './v5-talent-measures.js';
 import { V5_ACTIVATED_TALENTS,knownV5MartialQualities,noTestV5TalentAction }  from '../core/v5-talent-actions.js';
-import { computeV5WeaponReachGuide, computeV5WeaponRangeBands } from '../core/v5-talent-combat.js';
+import { computeV5WeaponReachGuide, computeV5WeaponRangeBands, v5RangeBandForMeters } from '../core/v5-talent-combat.js';
+
+// Liaison carte (L5) : `(de, vers, usage) => Promise<{ ok, meters?, cells?, message? }>`, branché par main.js.
+let mapDistanceProvider = null;
+export function setMapDistanceProvider(fn) { mapDistanceProvider = typeof fn === 'function' ? fn : null; }
+// Paire tireur→cible déjà préremplie dans ce round : si le MJ efface la bande, on ne la remet pas.
+const mapRangePrefilled = new Set();
+const SHOT_RANGE_LABELS = { 'point-blank': 'Bout portant', short: 'Courte', medium: 'Moyenne', long: 'Longue', extreme: 'Extrême' };
 import { inferV5Kind, hasMomentum, characteristicMatchAgainst, actionCharacteristic } from '../core/v5-combat-rules.js';
 import { naturalCombatTraits, naturalAttackNeedsSize } from '../core/creature-combat.js';
 import { psychologyTraits } from '../core/creature-psychology.js';
@@ -1847,6 +1854,22 @@ export function renderResolutionPanel(options) {
       const rangedWeapon = actor?.equipment?.find(item => item?.id === action.extensions?.fiche?.equipmentId) || action.extensions?.equipment || (rangedWeapons.length === 1 ? rangedWeapons[0] : null);
       const rangeBands = computeV5WeaponRangeBands(draft.v5Context?.weaponRangeYards ?? rangedWeapon?.range ?? action.range, actor);
       choiceField(fields, 'shotRange', 'Bande de portée choisie par le MJ', [['point-blank','Bout portant'],['short','Courte'],['medium','Moyenne'],['long','Longue'],['extreme','Extrême']]);
+      if (mapDistanceProvider && actor && target) {
+        const mapNote = node('p', 'workspace-muted map-distance-note', 'Distance sur la carte : mesure en cours…');
+        fields.appendChild(mapNote);
+        const pairKey = `${actor.id}>${target.id}@${draft?.round ?? ''}`;
+        Promise.resolve(mapDistanceProvider(actor, target, 'ranged')).then(answer => {
+          if (!mapNote.isConnected) return;
+          if (!answer?.ok) { mapNote.textContent = answer?.message || 'Distance à saisir.'; return; }
+          const band = v5RangeBandForMeters(answer.meters, rangeBands);
+          mapNote.textContent = `Distance sur la carte : ${answer.meters} m${rangeBands ? ` → ${band ? SHOT_RANGE_LABELS[band] : 'au-delà de l’Extrême'}` : ''}.`;
+          const current = draft.v5Context || {};
+          if (band && !current.shotRange && !mapRangePrefilled.has(pairKey)) {
+            mapRangePrefilled.add(pairKey);
+            handlers.select({ v5Context: { ...current, shotRange: band } });
+          }
+        }, () => { if (mapNote.isConnected) mapNote.textContent = 'Distance à saisir.'; });
+      }
       if (rangeBands) fieldGroups.combat.content.appendChild(node('p', 'workspace-muted', `Bandes dérivées de la portée imprimée (${rangeBands.printedYards} m) : ${rangeBands.pointBlankYards === null ? 'Pas de bout portant (portée courte de 4 m ou moins)' : `Bout portant ≤ ${rangeBands.pointBlankYards} m (+2 DR)`} · Courte ≤ ${rangeBands.shortYards} m (+1 DR) · Moyenne ≤ ${rangeBands.mediumYards} m (0 DR) · Longue ≤ ${rangeBands.longYards} m (−1 DR) · Extrême ≤ ${rangeBands.extremeYards} m (−2 DR).`));
       if ([...(rangedWeapon?.keywords || []), ...(action?.qualities || [])].some(row => (typeof row === 'string' ? row : row?.id) === 'a-repetition')) {
         contextField(fields, 'actor', 'repeaterDoubleShot', 'À répétition : tir double (deux tirs sur la même cible à −1 DR, une seule Action)');

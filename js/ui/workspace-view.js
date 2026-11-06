@@ -564,6 +564,11 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       marker.dataset.rank = String(context.active.indexOf(participant) + 1);
       top.append(marker, node('strong', 'workspace-track-name combatant-name', participant.name));
       if (isTarget) top.appendChild(node('span', 'workspace-track-role', 'cible'));
+      if (actions.isPlacedOnMap?.(participant)) {
+        const placed = node('span', 'workspace-track-placed', 'posé');
+        placed.title = 'Pion posé sur la carte';
+        top.appendChild(placed);
+      }
       const hp = node('span', 'workspace-track-hp num', hpText(participant));
       hp.prepend(node('span', 'workspace-sr', 'PV '));
       top.appendChild(hp);
