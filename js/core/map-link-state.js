@@ -6,6 +6,7 @@ import { creatureSizeOf } from './creature-size.js';
 import { carriesSense } from './creature-senses.js';
 import { participantCamp } from './encounters.js';
 import { carriesMovement, planMovement } from './creature-movement.js';
+import { normalizeTokenColor } from './models.js';
 
 export const MAP_LINK_VERSION = 1;
 
@@ -101,9 +102,10 @@ const isPjMount = (participant, participants) => {
 
 /**
  * Payload `token.state` d'un participant (§4). `maxHp` doit être résolu par l'appelant pour un PJ persistant
- * (option `maxHp`) ; à défaut, le maximum retombe sur les PV courants.
+ * (option `maxHp`) ; à défaut, le maximum retombe sur les PV courants. `color` (`#rrggbb`, profil `tokenColor`) ne part
+ * que pour un PJ : la teinte de son cerclage sur la carte ; `null` quand le profil n'en a pas.
  */
-export function tokenStateOf(participant, participants = [], { maxHp = null, imageUrl = null } = {}) {
+export function tokenStateOf(participant, participants = [], { maxHp = null, imageUrl = null, color = null } = {}) {
   const pj = participant.kind === 'PJ';
   const current = Number(participant.hp) || 0;
   const max = Number(maxHp ?? participant.maxHp) > 0 ? Number(maxHp ?? participant.maxHp) : Math.max(current, 1);
@@ -114,6 +116,7 @@ export function tokenStateOf(participant, participants = [], { maxHp = null, ima
     kind: pj || isPjMount(participant, participants) ? 'pc' : 'npc',
     visionSource: pj,
     imageUrl: pj ? null : imageUrl,
+    ...(pj ? { color: normalizeTokenColor(color) ?? null } : {}),
     sizeCells: SIZE_CELLS[creatureSizeOf(participant).key] ?? 1,
     ...rangeCellsOf(participant),
     visionDim: visionDimOf(participant),
@@ -144,7 +147,8 @@ export function mountedTokenState(riderState, mountState) {
 
 /** Instantané `{ ref: state }` des participants d'une scène. */
 export function tokenStatesOf(participants = [], options = {}) {
-  const stateOf = participant => tokenStateOf(participant, participants, { maxHp: options.maxHpOf?.(participant) ?? null, imageUrl: options.imageUrlOf?.(participant) ?? null });
+  const stateOf = participant => tokenStateOf(participant, participants, { maxHp: options.maxHpOf?.(participant) ?? null, imageUrl: options.imageUrlOf?.(participant) ?? null,
+    color: options.colorOf?.(participant) ?? null });
   const byId = new Map(participants.map(participant => [participant.id, participant]));
   return Object.fromEntries(participants.map(participant => {
     const state = stateOf(participant);

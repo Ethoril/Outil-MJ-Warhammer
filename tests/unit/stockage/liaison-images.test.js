@@ -38,3 +38,14 @@ test('image conservée dans les échanges Firebase de la réserve', async () => 
   sync.cb({ val: () => ({ writer: 'remote', timestamp: Date.now() + 60000, reserve: [{ id: 'remote', name: 'Distant', hp: 8, tokenImage: image }] }) });
   assert.equal(store.getProfile('remote').tokenImage, image);
 });
+test('couleur du pion conservée au rechargement, effacée par un patch null (contrat §4, lot P2)', () => {
+  const storage = makeStorage();
+  const store = createStore({ storage });
+  store.addProfile(new Profile({ id: 'e', name: 'Elysia', kind: 'PJ', hp: 12, tokenColor: '#B3262E' }));
+  const reloaded = createStore({ storage });
+  assert.equal(reloaded.getProfile('e').tokenColor, '#b3262e');
+  reloaded.updateProfile('e', { tokenColor: '#2E9E6E' });
+  assert.equal(reloaded.getProfile('e').tokenColor, '#2e9e6e');
+  reloaded.updateProfile('e', { tokenColor: null });
+  assert.equal(Object.hasOwn(reloaded.getProfile('e'), 'tokenColor'), false);
+});

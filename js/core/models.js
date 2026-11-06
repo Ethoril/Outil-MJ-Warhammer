@@ -125,6 +125,7 @@ export function canonicalizeProfileFields(raw) {
   if (!isRecord(raw)) return raw;
   const { actions, ...rest } = raw;
   if (Object.hasOwn(rest, 'tokenImage')) rest.tokenImage = normalizeTokenImage(rest.tokenImage) ?? null;
+  if (Object.hasOwn(rest, 'tokenColor')) rest.tokenColor = normalizeTokenColor(rest.tokenColor) ?? null;
   if (Array.isArray(raw.diceLines) || Array.isArray(actions)) rest.diceLines = profileActionSource(raw);
   return rest;
 }
@@ -171,6 +172,11 @@ export function normalizeTokenImage(value) {
   return typeof value === 'string' && value.length <= TOKEN_IMAGE_LIMIT && /^data:image\/(?:webp|jpeg);base64,(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/.test(value) && value.split(',')[1] ? value : undefined;
 }
 
+/** Couleur du pion sur la carte (cerclage d'un PJ, contrat de liaison §4) : `#rrggbb`, rendue en minuscules. */
+export function normalizeTokenColor(value) {
+  return typeof value === 'string' && /^#[0-9a-f]{6}$/i.test(value.trim()) ? value.trim().toLowerCase() : undefined;
+}
+
 // L'encodeur est injecté ; le choix des paliers reste indépendant du canvas.
 export async function chooseTokenImage(encode) {
   for (const size of [256, 192, 128]) {
@@ -187,6 +193,8 @@ export class Profile {
     this.id = id;
     const tokenImage = normalizeTokenImage(ficheFields.tokenImage);
     if (tokenImage) this.tokenImage = tokenImage;
+    const tokenColor = normalizeTokenColor(ficheFields.tokenColor);
+    if (tokenColor) this.tokenColor = tokenColor;
     this.name = (name || 'Sans-nom').trim();
     this.kind = ['PJ', 'PNJ', 'Créature'].includes(kind) ? kind : 'Créature';
     this.initiative = Number(initiative) || 0;
