@@ -124,6 +124,13 @@ async function main() {
   await expect(page.locator('[data-key="row:wren:counter:destin"]')).toHaveCount(0);
   await expect(page.locator('[data-key="row:wren:carac:ag"]')).toHaveCount(0);
 
+  // Contre-vérification (2) : recocher une ligne puis renvoyer ne réutilise pas l'envoi précédent (pas d'already-exists).
+  await page.locator('[data-key="row:wren:counter:fortune"]').check();
+  await page.getByRole('button', { name: 'Envoyer (1 fiche)', exact: true }).click();
+  await expect(page.locator('#mount')).toContainText('Envoi terminé.');
+  const resent = await page.evaluate(() => ({ fortune: window.harness.fn.store.wren.data.fortune, ops: window.harness.sent.map(c => c.operationId) }));
+  assert.equal(resent.fortune, '0');
+  assert.equal(new Set(resent.ops).size, resent.ops.length, 'chaque écriture a son propre identifiant d’opération');
   // CA13 : annulation proposée pour la seule fiche écrite, et toujours là après rechargement.
   await expect(page.locator('[data-key="undo"]')).toContainText('wren');
   await expect(page.locator('[data-key="undo"]')).not.toContainText('elysia');
@@ -133,7 +140,8 @@ async function main() {
   await expect(page.locator('#mount')).toContainText('Dernier envoi annulé');
   const undone = await page.evaluate(() => ({ wren: window.harness.fn.store.wren.data, history: window.harness.fn.history.map(h => h.summary), store: window.harness.store.planFicheWriteback(), fate: window.harness.store.listParticipants().find(row => row.id === 'p-wren').extensions.v5.fate }));
   assert.equal(undone.wren.destin, '3'); assert.equal(undone.wren.carac.ag.base, 32); assert.deepEqual(undone.wren.suiviMj, []);
-  assert.equal(undone.history.at(-1).undoOf, 'outilmj-' + undone.store.lastSend.sendId + '-wren');
+  assert.equal(undone.wren.fortune, '2', 'l’annulation couvre les deux envois de la même ouverture de l’écran');
+  assert.equal(undone.history.filter(h => h.undoOf).length, 2);
   assert.equal(undone.fate, 2, 'l’annulation ne touche pas l’état de jeu');
   // CA15 : une annulation ne s'annule pas.
   await expect(page.locator('[data-key="undo"]')).toHaveCount(0);

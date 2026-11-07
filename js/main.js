@@ -1096,7 +1096,7 @@ async function openFicheWritebackView() {
       mount, source,
       api: {
         plan: () => requireStoreApi('planFicheWriteback')(),
-        applySuccess: (charId, response, rows) => awaitStore(requireStoreApi('applyFicheWritebackSuccess')(charId, response, rows), 'Envoi aux fiches'),
+        applySuccess: (charId, response, rows, options) => awaitStore(requireStoreApi('applyFicheWritebackSuccess')(charId, response, rows, options), 'Envoi aux fiches'),
         applyChoice: (charId, key, choice, value) => awaitStore(requireStoreApi('applyFicheWritebackConflictChoice')(charId, key, choice, value), 'Conflit de fiche')
       },
       callbacks: { onClose: () => dialog.close() }
