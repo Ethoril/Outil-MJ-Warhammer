@@ -6,6 +6,9 @@
    "addProfile/1",
    "updateProfile/2",
    "applyFicheSync/1",
+   "planFicheWriteback/0",
+   "applyFicheWritebackSuccess/3",
+   "applyFicheWritebackConflictChoice/4",
    "removeProfile/1",
    "clearReserve/0",
    "duplicateProfile/1",
@@ -33,6 +36,7 @@
    "applyCorruptionThresholdTest/2",
    "resolveObsoleteCorruptionThresholdTest/1",
    "confirmCorruptionMutation/1",
+   "markCorruptionMutationManifested/1",
    "declineCorruptionMutation/1",
    "applyCorruptionAbsolution/1",
    "decideCorruptionCharacterLoss/1",
@@ -633,7 +637,7 @@
    },
    {
     "label": "getCorruptionStatus",
-    "result": "a5dbc5f999a6cbaf",
+    "result": "5a077afe154edaee",
     "state": "f434cf72fbfef552"
    },
    {
@@ -1062,6 +1066,21 @@
     "state": "325f50704e5da7c5"
    },
    {
+    "label": "sweep planFicheWriteback",
+    "result": "ee71a3c67b799492",
+    "state": "325f50704e5da7c5"
+   },
+   {
+    "label": "sweep applyFicheWritebackSuccess",
+    "error": "TypeError: Réponse de la fonction invalide.",
+    "state": "325f50704e5da7c5"
+   },
+   {
+    "label": "sweep applyFicheWritebackConflictChoice",
+    "error": "TypeError: Choix « fiche » ou « outil » attendu.",
+    "state": "325f50704e5da7c5"
+   },
+   {
     "label": "sweep removeProfile",
     "result": "0f7d52c75e67041d",
     "state": "325f50704e5da7c5"
@@ -1194,6 +1213,11 @@
    {
     "label": "sweep confirmCorruptionMutation",
     "error": "TypeError: Description ou référence de mutation choisie par le MJ requise",
+    "state": "2c189c0822a1ee35"
+   },
+   {
+    "label": "sweep markCorruptionMutationManifested",
+    "error": "TypeError: Personnage introuvable",
     "state": "2c189c0822a1ee35"
    },
    {
@@ -2490,6 +2514,9 @@
    "addProfile/1",
    "updateProfile/2",
    "applyFicheSync/1",
+   "planFicheWriteback/0",
+   "applyFicheWritebackSuccess/3",
+   "applyFicheWritebackConflictChoice/4",
    "removeProfile/1",
    "clearReserve/0",
    "duplicateProfile/1",
@@ -2517,6 +2544,7 @@
    "applyCorruptionThresholdTest/2",
    "resolveObsoleteCorruptionThresholdTest/1",
    "confirmCorruptionMutation/1",
+   "markCorruptionMutationManifested/1",
    "declineCorruptionMutation/1",
    "applyCorruptionAbsolution/1",
    "decideCorruptionCharacterLoss/1",
@@ -3117,7 +3145,7 @@
    },
    {
     "label": "getCorruptionStatus",
-    "result": "05aee5a99e3221bd",
+    "result": "f2cb219aca43e15a",
     "state": "1812f62eeb62fa0d"
    },
    {
@@ -3546,6 +3574,21 @@
     "state": "123d17cf6059e097"
    },
    {
+    "label": "sweep planFicheWriteback",
+    "result": "f9791cb7fb8da0ff",
+    "state": "123d17cf6059e097"
+   },
+   {
+    "label": "sweep applyFicheWritebackSuccess",
+    "error": "TypeError: Réponse de la fonction invalide.",
+    "state": "123d17cf6059e097"
+   },
+   {
+    "label": "sweep applyFicheWritebackConflictChoice",
+    "error": "TypeError: Choix « fiche » ou « outil » attendu.",
+    "state": "123d17cf6059e097"
+   },
+   {
     "label": "sweep removeProfile",
     "result": "0f7d52c75e67041d",
     "state": "123d17cf6059e097"
@@ -3678,6 +3721,11 @@
    {
     "label": "sweep confirmCorruptionMutation",
     "error": "TypeError: Description ou référence de mutation choisie par le MJ requise",
+    "state": "3c7e0ec1eca18195"
+   },
+   {
+    "label": "sweep markCorruptionMutationManifested",
+    "error": "TypeError: Personnage introuvable",
     "state": "3c7e0ec1eca18195"
    },
    {
