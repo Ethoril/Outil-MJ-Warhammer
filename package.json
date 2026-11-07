@@ -1,6 +1,6 @@
 {
   "name": "outil-mj-warhammer",
-  "version": "3.42.2",
+  "version": "3.42.3",
   "type": "module",
   "scripts": {
     "test": "node --test",
