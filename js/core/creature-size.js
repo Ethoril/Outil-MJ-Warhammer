@@ -43,12 +43,17 @@ export function parseSizeTrait(trait) {
   return key ? describe(key) : null;
 }
 
-/** Taille du participant : Trait, sinon champ `size` (profil), sinon Moyenne supposée (`assumed: true`). */
+// Espèce lue sur la fiche d'un PJ (champ `race`) : Taille V5 de l'espèce (Halfelin et Gnome Petits, Ogre Grand ; rappel du MJ, 07/11/2026).
+const SPECIES_SIZE = Object.freeze({ halfelin: 'small', halfling: 'small', gnome: 'small', ogre: 'large' });
+
+/** Taille du participant : Trait, sinon champ `size` (profil), sinon espèce de la fiche, sinon Moyenne supposée (`assumed: true`). */
 export function creatureSizeOf(participant) {
   const fromTrait = traitListOf(participant).map(parseSizeTrait).find(Boolean);
   if (fromTrait) return { ...fromTrait, assumed: false };
   const fromField = SIZE_WORDS[fold(participant?.size ?? participant?.profile?.size)];
   if (fromField) return { ...describe(fromField), assumed: false };
+  const fromSpecies = SPECIES_SIZE[fold(participant?.race ?? participant?.profile?.race)];
+  if (fromSpecies) return { ...describe(fromSpecies), assumed: false };
   return { ...describe('average'), assumed: true };
 }
 
