@@ -8,7 +8,7 @@ Cadrage du 06/11/2026, à partir de `docs/PASSATION_CHANTIER_H.md` (`f842490`). 
 |---|---|---|
 | Q1 | Moment de l'écriture | **Bouton de fin de séance** « Envoyer aux fiches » (menu `⋯`), avec un aperçu des différences par PJ, sur le modèle de « Mettre à jour les PJ ». |
 | Q2 | Conflit avec une modification du joueur | La fiche **refuse** le champ en conflit ; l'outil montre les deux valeurs et **le MJ choisit**. |
-| Q3 | Valeurs absentes de la fiche | N'ajouter à la fiche **que ce que le joueur doit voir** : pénitences, séquelles permanentes, cicatrices, maladies, mutations visibles. Le reste reste dans l'outil. |
+| Q3 | Valeurs absentes de la fiche | N'ajouter à la fiche **que ce que le joueur doit voir** : pénitences, séquelles permanentes, cicatrices, maladies, mutations confirmées, physiques comme mentales (précision du MJ du 07/11). Le reste reste dans l'outil. |
 | Q4 | Blessures courantes | **Outil seul.** La fiche a bien un champ « Blessures actuelles » (`blessuresAct`, tenu par le joueur, contrairement à ce que disait la passation) ; l'outil ne l'écrit pas. Choix confirmé par le MJ après correction. |
 | Q5 | Annulation | **Commande inverse** : « Annuler le dernier envoi » renvoie les anciennes valeurs, refusé champ par champ si la fiche a changé depuis. Possible jusqu'à l'envoi suivant. |
 | Q6 | Visibilité | Le joueur lit **tout** le document de sa fiche, historique compris (`firestore.rules`, `canReadFiche`). Donc **aucune donnée réservée au MJ n'est jamais écrite sur la fiche**, ni dans un motif d'opération. |
