@@ -53,6 +53,7 @@ import { magicGrantedActions, beastFormActions } from '../core/v5-magic-combat.j
 import { transformationOvercastCost } from '../core/v5-magic-arbitrations.js';
 import { effectiveSupplementalEncumbrance } from '../core/v5-supplemental-equipment.js';
 import { createV5AftermathPanel } from './v5-aftermath-panel.js';
+import { mountCampaignWorkspace } from './campaign-workspace.js';
 import { WORKSPACE_SPACES, noop, node, button, readProfiles, readEncounters, readScenes, readParticipants, readCombat, turnKey, STATE_NAMES, stateLabel, toughnessBonus, armorSummary, displayedArmorLocations, hpText, hpBar, CRITICAL_ERROR_FIELDS, DEFENDER_CRITICAL_FIELDS, criticalRollError, dispelDistance, dispelVisible, validRoll, criticalRollsChanged, profileSearchText, createShell, profileSummary, magicCastingSpell } from './workspace/helpers.js';
 export { WORKSPACE_SPACES, STATE_NAMES, magicCastingSpell } from './workspace/helpers.js';
 
@@ -68,6 +69,11 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
   if (!Store) throw new TypeError('workspace-view nécessite Store');
 
   const refs = createShell(mount, { showNavigation });
+  const aftermathPanel = createV5AftermathPanel({ Store, refresh: () => render() });
+  const campaign = mountCampaignWorkspace({ root: refs.campaign, Store, aftermathPanel, onAdvanceTime: async () => {
+    try { await openCampaignTimeDialog({ Store }); }
+    catch (error) { actions.showToast?.(userMessage(error, 'Le temps de campagne est indisponible.'), 'error'); }
+  } });
   const secondaryOpen = new Map();
   const secondaryDirty = new Set();
   const state = {
@@ -201,7 +207,6 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
 
   const divinePanel=createDivinePanel({Store,refresh:()=>render(),onRollChange:()=>refs.root.querySelector('[data-focus-key="roll-all-npc"]')?.dispatchEvent(new Event('refresh-npc-rolls'))});
   const corruptionPanel=createV5CorruptionPanel({Store,refresh:()=>render()});
-  const aftermathPanel=createV5AftermathPanel({Store,refresh:()=>render()});
   const brokenEscapePanel=createV5BrokenEscapePanel({Store,refresh:()=>render(),onPrepareHide(actorId,skillId){
     const actor=readParticipants(Store).find(row=>row.id===actorId&&row.zone==='active');
     if(!actor)return;
@@ -2503,7 +2508,16 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     }
     const aftermath=aftermathPanel.render(context.participants);
     // U3 (05/11) : fermé pendant le combat, ouvert hors combat ; s'il est ouvert par le MJ, U2 (captureView) le garde ouvert.
-    if(aftermath){const details=node('details','workspace-card workspace-secondary-panel workspace-aftermath');details.open=!context.started;details.append(node('summary','','Suites de combat'),aftermath);center.appendChild(details);}
+    if(aftermath){
+      const linkToCampaign = button('Ouvrir dans l’espace Campagne (suivi et soins) →', 'workspace-aftermath-link');
+      linkToCampaign.type = 'button';
+      linkToCampaign.dataset.workspaceSpace = 'campaign';
+      aftermath.prepend(linkToCampaign);
+      const details=node('details','workspace-card workspace-secondary-panel workspace-aftermath');
+      details.open=!context.started;
+      details.append(node('summary','','Suites de combat'),aftermath);
+      center.appendChild(details);
+    }
 
     // Projectiles fichés des combattants absents du duel (ni acteur ni cible) : pas de fiche où poser la puce.
     const shownIds=new Set([context.actor?.id,context.target?.id].filter(Boolean));
@@ -2888,7 +2902,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     const keys = new Map(), seen = new Map();
     for (const element of refs.root.querySelectorAll(selector)) {
       const owner = element.closest('[data-details-owner]')?.dataset.detailsOwner || '';
-      const space = element.closest('#workspace-prepare, #workspace-play, #workspace-library')?.id || '';
+      const space = element.closest('#workspace-prepare, #workspace-play, #workspace-campaign, #workspace-library')?.id || '';
       const path = [];
       for (let details = element.closest('details'); details && refs.root.contains(details); details = details.parentElement?.closest('details')) path.unshift(sectionLabel(details));
       const base = JSON.stringify([space, owner, describe(element), path]);
@@ -2952,10 +2966,12 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     renderTabs();
     refs.prepare.hidden = state.space !== 'prepare';
     refs.play.hidden = state.space !== 'play';
+    refs.campaign.hidden = state.space !== 'campaign';
     refs.library.hidden = state.space !== 'library';
     callbacks.spaceShown?.(state.space);
     renderPrepare();
     renderPlay();
+    if (state.space === 'campaign') campaign.render();
     renderLibrary();
     restoreView(view);
     restoreFocusKey(saved);

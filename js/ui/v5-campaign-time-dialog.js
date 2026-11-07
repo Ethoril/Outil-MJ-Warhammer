@@ -21,7 +21,7 @@ function timeText(seconds) {
   return parts.join(' ') || '0 s';
 }
 
-export function openCampaignTimeDialog({ Store, returnFocus } = {}) {
+export function openCampaignTimeDialog({ Store, returnFocus, initialAmount, initialUnit, defaultReason } = {}) {
   if (!Store?.advanceCampaignTime) throw new TypeError('Avance de campagne indisponible.');
   const baseRevision = Store.getLocalRevision();
   const clock = clockOf(Store),savedState=JSON.parse(Store.getFullJSON());
@@ -80,6 +80,10 @@ export function openCampaignTimeDialog({ Store, returnFocus } = {}) {
       } catch { preview.textContent = 'Précisez une durée positive, exprimable en secondes entières.'; }
     };
     amount.addEventListener('input',()=>{morningConfirm.checked=false;updatePreview();});unit.addEventListener('change',()=>{morningConfirm.checked=false;updatePreview();});
+    if (initialAmount != null) amount.value = String(initialAmount);
+    if (initialUnit != null) unit.value = String(initialUnit);
+    if (defaultReason != null) reason.value = String(defaultReason);
+    if (initialAmount != null) updatePreview();
     form.addEventListener('submit', async event => {
       event.preventDefault(); if (busy) return;
       try {

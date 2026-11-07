@@ -72,13 +72,27 @@ async function main() {
     await expect(page.locator('#app-content')).toBeVisible();
     await expect(page.locator('#workspace-root')).toBeVisible();
 
-    for (const [id, space] of [['tab-prepare', 'prepare'], ['tab-combat', 'play'], ['tab-library', 'library']]) {
+    for (const [id, space] of [['tab-prepare', 'prepare'], ['tab-combat', 'play'], ['tab-campaign', 'campaign'], ['tab-library', 'library']]) {
       const tab = page.locator(`#${id}`);
       await expect(tab).toBeVisible();
       await tab.click();
       await expect(page.locator(`#workspace-${space}`)).toBeVisible();
       await expect(tab).toHaveAttribute('aria-selected', 'true');
     }
+
+    // Campagne utilise le vrai Store : avance et annulation mettent à jour la synthèse.
+    await page.locator('#tab-campaign').click();
+    const campaign = page.locator('#workspace-campaign');
+    await expect(campaign).toContainText('0 s');
+    await campaign.getByRole('button', { name: 'Avancer le temps…' }).click();
+    const campaignDialog = page.getByRole('dialog', { name: 'Temps de campagne' });
+    await campaignDialog.getByLabel('Durée écoulée').fill('60');
+    await campaignDialog.getByLabel('Motif MJ').fill('Recette du temps');
+    await campaignDialog.getByRole('button', { name: 'Avancer le temps', exact: true }).click();
+    await expect(campaignDialog).toBeHidden();
+    await expect(campaign.locator('.campaign-clock-value')).toHaveText('1 h');
+    await page.locator('#btn-undo').click();
+    await expect(campaign.locator('.campaign-clock-value')).toHaveText('0 s');
 
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.locator('#tab-prepare').click();

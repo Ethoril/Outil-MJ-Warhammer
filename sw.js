@@ -1,4 +1,4 @@
-const CACHE_NAME = 'wfrp-cache-v3.42.5';
+const CACHE_NAME = 'wfrp-cache-v3.42.5-campagne1';
 
 const ASSETS_TO_CACHE = [
   './',
@@ -22,6 +22,8 @@ const ASSETS_TO_CACHE = [
   './js/data/reference-equipment-builder.js',
   './js/data/reference-snapshot.json',
   './js/ui/fiche-details.js',
+  './js/ui/campaign-workspace.js',
+  './js/ui/campaign-workspace.css',
   './js/data/shared/catalogue/skill-resolver.js',
   './js/data/shared/catalogue/talent-resolver.js',
   './js/data/shared/catalogue/talent-source.js',

@@ -1433,6 +1433,7 @@ const workspaceView = DOM.panels.workspace && qs('#workspace-root') ? initWorksp
   Store, Combat, Bus, mount: qs('#workspace-root'), showNavigation: false,
   actions: {
     ...encounterListActions,
+    showToast,
     isPlacedOnMap: participant => mapLinkPlacement?.(participant) === true,
     // La bibliothèque de bestiaire vit sous la vue de travail et ne se montre que dans l'espace Bibliothèque.
     spaceShown: space => { qs('#bestiary-library').hidden = space !== 'library'; },

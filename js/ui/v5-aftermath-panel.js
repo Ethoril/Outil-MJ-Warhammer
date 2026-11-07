@@ -2,7 +2,12 @@ import { aftermathDate, aftermathSkills } from '../core/v5-aftermath.js';
 import { requiredSequelaFacts, sequelaAsksPrimary } from '../core/v5-sequelae.js';
 import { uid } from '../core/models.js';
 
-const node = (tag, text = '') => { const element = document.createElement(tag); if (text) element.textContent = text; return element; };
+const node = (tag, text = '', className = '') => {
+  const element = document.createElement(tag);
+  if (text) element.textContent = text;
+  if (className) element.className = className;
+  return element;
+};
 const opId = () => `aftermath-${uid()}`;
 const REASONS = {
   'campaign-time-requires-input': 'Le temps de campagne demande une saisie (Tests quotidiens, Colère…) : avancez-le depuis le menu ⋯ › Temps de campagne.',
@@ -67,10 +72,12 @@ const REASONS = {
 const receiptText = receipt => {
   if (!receipt) return '';
   const head = receipt.status === 'applied' ? 'Enregistré' : 'Refus';
-  const DONE = { 'sequelae-opened': 'suivi des séquelles ouvert', 'sequela-facts-set': 'faits enregistrés', 'fracture-bound': 'fracture immobilisée', 'immobilization-failed': 'immobilisation ratée',
+  const DONE = {
+    'sequelae-opened': 'suivi des séquelles ouvert', 'sequela-facts-set': 'faits enregistrés', 'fracture-bound': 'fracture immobilisée', 'immobilization-failed': 'immobilisation ratée',
     'binding-removed': 'bandage retiré', 'fracture-healed': 'fracture guérie', 'fracture-healed-bound': 'fracture guérie sans Test (restée attachée)', 'fracture-badly-healed': 'fracture mal soignée : séquelle permanente',
     'tear-shortened': 'déchirure raccourcie', 'tear-heal-failed': 'soin sans effet', 'limb-reset-confirmed': 'membre remis en place', 'post-encounter-passed': 'Test réussi', 'post-encounter-failed': 'Test raté : la perte suit le choc d’amputation',
-    'foot-lost-confirmed': 'perte du pied confirmée', 'foot-loss-waived': 'perte du pied écartée', 'hand-relearned': 'pénalité réduite', 'scars-agreed': 'cicatrices accordées', 'scars-declined': 'cicatrices refusées', 'characteristic-loss-recorded': 'perte de caractéristique enregistrée' };
+    'foot-lost-confirmed': 'perte du pied confirmée', 'foot-loss-waived': 'perte du pied écartée', 'hand-relearned': 'pénalité réduite', 'scars-agreed': 'cicatrices accordées', 'scars-declined': 'cicatrices refusées', 'characteristic-loss-recorded': 'perte de caractéristique enregistrée'
+  };
   const why = REASONS[receipt.reason] || DONE[receipt.reason] || (String(receipt.reason || '').startsWith('facts-missing:') ? `fait manquant (${receipt.reason.split(':')[1]})` : receipt.reason) || 'opération traitée';
   const test = receipt.roll != null ? ` · d100 ${receipt.roll} contre ${receipt.score} : ${receipt.success ? 'réussite' : 'échec'}${receipt.fumble ? ' (maladresse)' : ''}, ${receipt.sl} DR` : '';
   const wounds = (receipt.healed ? ` · ${receipt.healed} Blessure(s) rendue(s)` : '') + (receipt.bleedingRemoved ? ` · ${receipt.bleedingRemoved} Hémorragique(s) retiré(s)` : '') + (receipt.amountChoice ? ` · Chirurgie : ${receipt.amountChoice === 'units' ? 'chiffre des unités' : 'DR'}` : '');
@@ -86,28 +93,48 @@ export function createV5AftermathPanel({ Store, refresh = () => {} } = {}) {
   const ui = { values: {}, open: new Set(), preview: null, lastReceipt: null };
   const clearValues = prefix => { for (const key of Object.keys(ui.values)) if (key.startsWith(prefix)) delete ui.values[key]; };
   const run = async (prefix, action) => {
-    try { const result = await action(); ui.lastReceipt = result?.receipt || { status: 'refused', reason: result?.reason || 'Commande refusée.' }; if (result?.receipt?.status === 'applied') { clearValues(prefix); ui.preview = null; } }
-    catch (cause) { ui.lastReceipt = { status: 'refused', reason: cause?.message || 'Commande impossible.' }; }
+    try {
+      const result = await action();
+      ui.lastReceipt = result?.receipt || { status: 'refused', reason: result?.reason || 'Commande refusée.' };
+      if (result?.receipt?.status === 'applied') { clearValues(prefix); ui.preview = null; }
+    } catch (cause) {
+      ui.lastReceipt = { status: 'refused', reason: cause?.message || 'Commande impossible.' };
+    }
     refresh();
   };
   const remember = (input, key) => {
     const stored = ui.values[key];
     if (stored !== undefined) { if (input.type === 'checkbox') input.checked = stored; else input.value = stored; }
-    input.addEventListener(input.type === 'checkbox' || input.tagName === 'SELECT' ? 'change' : 'input', () => { ui.values[key] = input.type === 'checkbox' ? input.checked : input.value; });
+    input.addEventListener(input.type === 'checkbox' || input.tagName === 'SELECT' ? 'change' : 'input', () => {
+      const val = input.type === 'checkbox' ? input.checked : input.value;
+      ui.values[key] = val;
+      // Synchronisation immédiate des champs jumeaux (même name) dans l'arbre pour éviter toute divergence
+      const scope = input.closest('.campaign-workspace') || document;
+      const peers = scope.querySelectorAll(`[name="${input.name}"]`);
+      peers.forEach(peer => {
+        if (peer !== input) {
+          if (peer.type === 'checkbox') peer.checked = input.checked;
+          else peer.value = input.value;
+        }
+      });
+    });
     return input;
   };
   const control = (labelText, key, { type = 'number', value = '', min = null, max = null } = {}) => {
-    const label = node('label', labelText); const input = document.createElement('input'); input.name = key; input.type = type;
+    const label = node('label', labelText, 'workspace-aftermath-field');
+    const input = document.createElement('input'); input.name = key; input.type = type;
     if (type === 'number') { input.step = '1'; input.inputMode = 'numeric'; if (min !== null) input.min = min; if (max !== null) input.max = max; }
     if (value !== '') input.value = value;
     remember(input, key); label.appendChild(input); return { label, input };
   };
   const checkbox = (labelText, key, checked = false) => {
-    const label = node('label'); const input = document.createElement('input'); input.type = 'checkbox'; input.name = key; input.checked = checked;
+    const label = node('label', '', 'workspace-aftermath-checkbox');
+    const input = document.createElement('input'); input.type = 'checkbox'; input.name = key; input.checked = checked;
     remember(input, key); label.append(input, document.createTextNode(` ${labelText}`)); return { label, input };
   };
   const select = (labelText, key, options) => {
-    const label = node('label', labelText); const input = document.createElement('select'); input.name = key;
+    const label = node('label', labelText, 'workspace-aftermath-field');
+    const input = document.createElement('select'); input.name = key;
     for (const [value, text] of options) { const option = node('option', text); option.value = value; input.appendChild(option); }
     remember(input, key); label.appendChild(input); return { label, input };
   };
@@ -116,7 +143,9 @@ export function createV5AftermathPanel({ Store, refresh = () => {} } = {}) {
     element.addEventListener('toggle', () => { if (element.open) ui.open.add(key); else ui.open.delete(key); });
     return element;
   };
-  const button = (text, handler) => { const element = node('button', text); element.type = 'button'; element.addEventListener('click', handler); return element; };
+  const button = (text, handler, className = '') => {
+    const element = node('button', text, className); element.type = 'button'; element.addEventListener('click', handler); return element;
+  };
 
   const SIDE_OPTIONS = [['', 'Choisir…'], ['left', 'Gauche'], ['right', 'Droit(e)']];
   const PHASE_TEXT = {
@@ -125,20 +154,80 @@ export function createV5AftermathPanel({ Store, refresh = () => {} } = {}) {
   };
   const LIFETIME_TEXT = { temporary: 'temporaire', permanent: 'permanent' };
 
+  const healerFields = (prefix, purpose, participants = []) => {
+    const healerLabel = node('label', 'Soigneur', 'workspace-aftermath-field');
+    const healerInput = document.createElement('select'); healerInput.name = `${prefix}-healer`;
+    for (const [value, text] of [['', 'Choisir…'], ...participants.map(row => [row.id, row.name || row.id])]) {
+      const option = node('option', text); option.value = value; healerInput.appendChild(option);
+    }
+    healerLabel.appendChild(healerInput);
+
+    const skillLabel = node('label', 'Compétence', 'workspace-aftermath-field');
+    const skill = document.createElement('select'); skill.name = `${prefix}-skill`; skillLabel.appendChild(skill);
+    remember(skill, `${prefix}-skill`);
+
+    const populateSkillSelect = (selectEl, healerId) => {
+      selectEl.replaceChildren();
+      const owner = participants.find(row => row.id === healerId);
+      const skills = owner ? aftermathSkills(owner, purpose) : [];
+      if (!skills.length) selectEl.appendChild(Object.assign(node('option', owner ? 'Aucune compétence sur la fiche' : '—'), { value: '' }));
+      for (const row of skills) selectEl.appendChild(Object.assign(node('option', `${row.name} (${row.score})`), { value: String(row.id) }));
+      if (ui.values[`${prefix}-skill`] !== undefined && [...selectEl.options].some(o => o.value === ui.values[`${prefix}-skill`])) {
+        selectEl.value = ui.values[`${prefix}-skill`];
+      }
+      ui.values[`${prefix}-skill`] = selectEl.value;
+    };
+
+    const syncAllSkills = () => {
+      const scope = healerInput.closest('.campaign-workspace') || document;
+      const peerSkills = scope.querySelectorAll(`[name="${prefix}-skill"]`);
+      if (peerSkills.length) {
+        peerSkills.forEach(peerSelect => populateSkillSelect(peerSelect, healerInput.value));
+      } else {
+        populateSkillSelect(skill, healerInput.value);
+      }
+    };
+
+    healerInput.addEventListener('change', () => {
+      delete ui.values[`${prefix}-skill`];
+      syncAllSkills();
+    });
+
+    remember(healerInput, `${prefix}-healer`);
+    populateSkillSelect(skill, healerInput.value);
+
+    const roll = control('d100', `${prefix}-roll`, { min: 1, max: 100 });
+    const d10 = control('1d10 de Blessures (maladresse seulement)', `${prefix}-d10`, { min: 1, max: 10 });
+    return {
+      elements: [healerLabel, skillLabel, roll.label, d10.label],
+      values: () => ({
+        healerId: healerInput.value || null,
+        skillId: skill.value || null,
+        roll: roll.input.value === '' ? null : Number(roll.input.value),
+        ...(d10.input.value === '' ? {} : { d10: Number(d10.input.value) })
+      })
+    };
+  };
+
   /** Section « Séquelles » du panneau : tout passe par les commandes du Store, jamais par une valeur de réussite saisie. */
-  function renderSequelae(state, participants, nameOf, healerFields) {
+  function renderSequelae(state, participants, nameOf, healerFieldsFn, { participantId = null, allowAbsentActions = false } = {}) {
     const section = node('section'); section.className = 'workspace-aftermath-sequelae'; section.setAttribute('aria-label', 'Séquelles durables et temporaires');
     section.appendChild(node('h4', 'Séquelles des critiques'));
-    const overview = Store.listAftermathSequelae();
+    const overview = typeof Store.listAftermathSequelae === 'function' ? Store.listAftermathSequelae() : { sequelae: [], pending: [], incidents: [], characteristics: {} };
     const revision = state.revision;
 
     // 1. Critiques dont les séquelles restent à ouvrir : les faits que le registre ne peut pas lire sont demandés ici.
-    const toOpen = overview.incidents.filter(row => row.needsOpening);
-    const opening = details('sequelae-open', `Séquelles à suivre (${toOpen.length})`);
+    const allToOpen = (overview.incidents || []).filter(row => row.needsOpening);
+    const toOpen = (participantId ? allToOpen.filter(row => row.participantId === participantId) : allToOpen)
+      .filter(row => allowAbsentActions || participants.some(p => p.id === row.participantId));
+    const openingKey = participantId ? `sequelae-open-${participantId}` : 'sequelae-open';
+    const opening = details(openingKey, `Séquelles à suivre (${toOpen.length})`);
     if (!toOpen.length) opening.appendChild(node('p', 'Aucun critique suivi ne laisse de séquelle sans suivi.'));
     for (const entry of toOpen) {
       const box = node('div'); box.className = 'workspace-aftermath-open';
-      box.appendChild(node('p', `${nameOf(entry.participantId)} · incident ${entry.incidentId} · ${entry.planned.map(item => item.label).join(', ')}`));
+      const labelLine = `${nameOf(entry.participantId)} · ${entry.planned.map(item => item.label).join(', ')}`;
+      const p = node('p', labelLine);
+      box.appendChild(p);
       const getters = [];
       for (const item of entry.planned) {
         const need = requiredSequelaFacts(item);
@@ -156,7 +245,8 @@ export function createV5AftermathPanel({ Store, refresh = () => {} } = {}) {
     section.appendChild(opening);
 
     // 2. Décisions en attente au jour courant.
-    const pending = overview.pending;
+    const allPending = overview.pending || [];
+    const pending = participantId ? allPending.filter(row => row.participantId === participantId) : allPending;
     if (pending.length) {
       const list = node('ul'); list.className = 'workspace-aftermath-pending';
       for (const row of pending) list.appendChild(node('li', `${nameOf(row.participantId)} · ${row.label} : ${{ 'needs-facts': 'faits à saisir', 'fracture-final-test': 'Test de fin de guérison à faire', 'surgery-deadline-missed': 'échéance de chirurgie dépassée, décision du MJ', 'post-encounter-test': 'Test de Résistance après la rencontre' }[row.kind] || row.kind}`));
@@ -164,14 +254,22 @@ export function createV5AftermathPanel({ Store, refresh = () => {} } = {}) {
     }
 
     // 3. Chaque séquelle suivie, avec ses étapes.
+    const allSequelae = overview.sequelae || [];
+    const sequelae = participantId ? allSequelae.filter(row => row.participantId === participantId) : allSequelae;
     const list = node('div'); list.className = 'workspace-aftermath-sequela-list';
-    if (!overview.sequelae.length) list.appendChild(node('p', 'Aucune séquelle suivie.'));
-    for (const sequela of overview.sequelae) {
+    if (!sequelae.length) list.appendChild(node('p', 'Aucune séquelle suivie.'));
+    for (const sequela of sequelae) {
       if (sequela.kind === 'scar-decision' || sequela.kind === 'characteristic-loss') continue;
       const card = node('article'); card.className = 'card workspace-aftermath-sequela';
       const timing = sequela.endDay != null ? ` · ${sequela.kind === 'torn-muscle' && sequela.severity === 'minor' ? 'guérie au terme de 30 − BE jours, au jour' : 'fin au jour'} ${sequela.endDay}${sequela.partialDay != null ? ` (adoucissement au jour ${sequela.partialDay})` : ''}` : (sequela.deadlineDay != null ? ` · chirurgie avant la fin du jour ${sequela.deadlineDay}` : '');
       card.appendChild(node('h5', `${nameOf(sequela.participantId)} · ${sequela.label}${sequela.side ? ` (${sequela.side === 'left' ? 'gauche' : 'droit(e)'})` : ''}`));
-      card.appendChild(node('p', `Séquelle ${sequela.id} · ${PHASE_TEXT[sequela.phase] || sequela.phase}${timing}${sequela.count ? ` · ${sequela.count}` : ''}`));
+      card.appendChild(node('p', `${PHASE_TEXT[sequela.phase] || sequela.phase}${timing}${sequela.count ? ` · ${sequela.count}` : ''}`));
+      const isPresent = participants.some(row => row.id === sequela.participantId);
+      if (!isPresent && !allowAbsentActions) {
+        card.appendChild(node('p', 'Patient absent de la rencontre : séquelle en consultation (soins et tests indisponibles).'));
+        list.appendChild(card);
+        continue;
+      }
       const id = sequela.id;
       if (sequela.status === 'needs-facts') {
         const facts = details(`facts-${id}`, 'Saisir les faits manquants');
@@ -191,7 +289,7 @@ export function createV5AftermathPanel({ Store, refresh = () => {} } = {}) {
         if (sequela.phase === 'healing') {
           if (imm.state !== 'bound') {
             const bind = details(`bind-${id}`, imm.state === 'unbound' ? 'Rattacher la fracture (nouveau Test)' : 'Immobiliser la fracture');
-            const fields = healerFields(`bind-${id}`, 'heal');
+            const fields = healerFieldsFn(`bind-${id}`, 'heal');
             bind.append(...fields.elements, node('p', `Guérison ${sequela.severity === 'major' ? '+0' : '+2'} DR${imm.state === 'unbound' ? ' dans la journée' : ' dans la semaine de 8 jours'} : le Test de fin de guérison est évité tant que la fracture reste attachée.`),
               button('Enregistrer le Test d’immobilisation', () => void run(`bind-${id}`, () => Store.immobilizeAftermathFracture({ operationId: opId(), expectedRevision: revision, sequelaId: id, ...fields.values() }))));
             card.appendChild(bind);
@@ -209,7 +307,7 @@ export function createV5AftermathPanel({ Store, refresh = () => {} } = {}) {
       }
       if (sequela.kind === 'torn-muscle' && sequela.status === 'open' && sequela.severity === 'minor' && !sequela.healTest && sequela.phase === 'healing') {
         const heal = details(`muscle-${id}`, 'Soigner la déchirure (raccourcit la durée)');
-        const fields = healerFields(`muscle-${id}`, 'heal');
+        const fields = healerFieldsFn(`muscle-${id}`, 'heal');
         const difficulty = control('Modificateur du MJ (DR)', `muscle-${id}-difficulty`, { value: '0' });
         heal.append(...fields.elements, difficulty.label, button('Enregistrer le Test de soin', () => void run(`muscle-${id}`, () => Store.treatAftermathTornMuscle({ operationId: opId(), expectedRevision: revision, sequelaId: id, difficultyDR: Number(difficulty.input.value) || 0, ...fields.values() }))));
         card.appendChild(heal);
@@ -226,9 +324,9 @@ export function createV5AftermathPanel({ Store, refresh = () => {} } = {}) {
           button('Le pied est sauvé (décision du MJ)', () => void run(`deadline-${id}`, () => Store.decideAftermathSurgeryDeadline({ operationId: opId(), expectedRevision: revision, sequelaId: id, footLost: false }))));
       }
       if (sequela.kind === 'disease' && sequela.status === 'open') {
-        const label = control('Maladie à suivre', `disease-${id}-label`, { type: 'text', value: sequela.name || '' });
+        const diseaseLabel = control('Maladie à suivre', `disease-${id}-label`, { type: 'text', value: sequela.name || '' });
         const duration = control('Durée (jours, d’après la maladie)', `disease-${id}-duration`, { min: 1 });
-        card.append(label.label, duration.label, button('Enregistrer la maladie de ce critique', () => void run(`disease-${id}`, () => Store.registerAftermathDisease({ operationId: opId(), expectedRevision: revision, participantId: sequela.participantId, label: label.input.value, durationDays: Number(duration.input.value), sequelaId: id }))));
+        card.append(diseaseLabel.label, duration.label, button('Enregistrer la maladie de ce critique', () => void run(`disease-${id}`, () => Store.registerAftermathDisease({ operationId: opId(), expectedRevision: revision, participantId: sequela.participantId, label: diseaseLabel.input.value, durationDays: Number(duration.input.value), sequelaId: id }))));
       }
       if (sequela.kind === 'loss' && ['hand', 'arm'].includes(sequela.part) && sequela.primary && sequela.status === 'permanent' && sequela.relearned < 2) card.appendChild(button('100 PX dépensés pour réapprendre (−1 DR de pénalité)', () => void run(`relearn-${id}`, () => Store.recordAftermathRelearning({ operationId: opId(), expectedRevision: revision, sequelaId: id, hundredsOfXp: 1 }))));
       list.appendChild(card);
@@ -237,7 +335,8 @@ export function createV5AftermathPanel({ Store, refresh = () => {} } = {}) {
 
     // 4. Effets actifs par personnage (Mouvement effectif compris) et pertes de caractéristique à renvoyer à la fiche.
     const effects = node('div'); effects.className = 'workspace-aftermath-effects';
-    for (const person of participants) {
+    const effectParticipants = participantId ? participants.filter(row => row.id === participantId) : participants;
+    for (const person of effectParticipants) {
       const mirror = person.extensions?.v5?.sequelaEffects;
       if (!mirror) continue;
       const box = node('div');
@@ -247,30 +346,298 @@ export function createV5AftermathPanel({ Store, refresh = () => {} } = {}) {
       for (const row of mirror.rows) ul.appendChild(node('li', `${row.label} · ${LIFETIME_TEXT[row.lifetime] || row.lifetime}`));
       for (const text of mirror.reminders || []) ul.appendChild(node('li', text));
       box.appendChild(ul);
-      const totals = overview.characteristics[person.id];
+      const totals = overview.characteristics?.[person.id];
       if (totals) box.appendChild(node('p', `À renvoyer à la fiche (jamais écrit par l’outil) : ${Object.entries(totals).map(([key, value]) => `${key} ${value.amount}`).join(', ')}`));
       effects.appendChild(box);
     }
-    section.appendChild(effects);
+    if (effects.childElementCount) section.appendChild(effects);
 
     // 5. Décisions du MJ qui ne dépendent d'aucune table : cicatrices impressionnantes et perte de caractéristique.
-    const decisions = details('sequelae-decisions', 'Cicatrices impressionnantes et pertes de caractéristique');
-    const scarPerson = select('Personnage', 'scar-person', [['', 'Choisir…'], ...participants.map(row => [row.id, row.name || row.id])]);
-    const scarAgreed = checkbox('Le MJ accorde les cicatrices impressionnantes (+1 DR Intimidation, −1 DR Charme)', 'scar-agreed');
+    const decisions = details(participantId ? `sequelae-decisions-${participantId}` : 'sequelae-decisions', 'Cicatrices impressionnantes et pertes de caractéristique');
+    const scarPerson = select('Personnage', `scar-person${participantId ? `-${participantId}` : ''}`, [['', 'Choisir…'], ...participants.map(row => [row.id, row.name || row.id])]);
+    if (participantId) scarPerson.input.value = participantId;
+    const scarAgreed = checkbox('Le MJ accorde les cicatrices impressionnantes (+1 DR Intimidation, −1 DR Charme)', `scar-agreed${participantId ? `-${participantId}` : ''}`);
     decisions.append(scarPerson.label, scarAgreed.label, button('Enregistrer la décision', () => void run('scar-', () => Store.decideAftermathImpressiveScars({ operationId: opId(), expectedRevision: revision, participantId: scarPerson.input.value, agreed: scarAgreed.input.checked }))));
-    const lossPerson = select('Personnage', 'closs-person', [['', 'Choisir…'], ...participants.map(row => [row.id, row.name || row.id])]);
-    const lossCarac = select('Caractéristique', 'closs-carac', [['', 'Choisir…'], ...['CC', 'CT', 'F', 'E', 'I', 'Ag', 'Dex', 'Int', 'FM', 'Soc'].map(key => [key, key])]);
-    const lossAmount = control('Perte', 'closs-amount', { min: 1 });
-    const lossBase = control('Caractéristique de base actuelle (facultatif)', 'closs-base', { min: 0 });
-    const lossAdvances = control('Avancements achetés (facultatif)', 'closs-advances', { min: 0 });
-    const lossReason = control('Origine', 'closs-reason', { type: 'text' });
+    const lossPerson = select('Personnage', `closs-person${participantId ? `-${participantId}` : ''}`, [['', 'Choisir…'], ...participants.map(row => [row.id, row.name || row.id])]);
+    if (participantId) lossPerson.input.value = participantId;
+    const lossCarac = select('Caractéristique', `closs-carac${participantId ? `-${participantId}` : ''}`, [['', 'Choisir…'], ...['CC', 'CT', 'F', 'E', 'I', 'Ag', 'Dex', 'Int', 'FM', 'Soc'].map(key => [key, key])]);
+    const lossAmount = control('Perte', `closs-amount${participantId ? `-${participantId}` : ''}`, { min: 1 });
+    const lossBase = control('Caractéristique de base actuelle (facultatif)', `closs-base${participantId ? `-${participantId}` : ''}`, { min: 0 });
+    const lossAdvances = control('Avancements achetés (facultatif)', `closs-advances${participantId ? `-${participantId}` : ''}`, { min: 0 });
+    const lossReason = control('Origine', `closs-reason${participantId ? `-${participantId}` : ''}`, { type: 'text' });
     decisions.append(lossPerson.label, lossCarac.label, lossAmount.label, lossBase.label, lossAdvances.label, lossReason.label, button('Enregistrer la perte de caractéristique', () => void run('closs-', () => Store.recordAftermathCharacteristicLoss({ operationId: opId(), expectedRevision: revision, participantId: lossPerson.input.value, carac: lossCarac.input.value, amount: Number(lossAmount.input.value),
       base: lossBase.input.value === '' ? null : Number(lossBase.input.value), advances: lossAdvances.input.value === '' ? null : Number(lossAdvances.input.value), reason: lossReason.input.value }))));
     section.appendChild(decisions);
     return section;
   }
 
+  function renderIncidentCard(incident, state, participants, nameOf) {
+    const card = node('article'); card.className = 'card workspace-aftermath-incident';
+    card.dataset.incidentId = incident.id;
+    card.dataset.participantId = incident.participantId;
+    const patient = participants.find(row => row.id === incident.participantId);
+    let origin = '';
+    if (incident.source.kind === 'critical') {
+      const crit = (patient?.extensions?.v5?.criticalAftermath || []).find(row => row.id === incident.source.criticalId);
+      const name = crit?.effectName || incident.source.criticalWoundId || 'Blessure critique';
+      const loc = crit?.location ? ` (${crit.location})` : '';
+      origin = `critique : ${name}${loc}`;
+    } else {
+      origin = `Blessures perdues : ${incident.source.cause || 'Sans cause précisée'}`;
+    }
+    const statusLabel = incident.status === 'open' ? 'en suivi' : (incident.status === 'archived' ? 'archivé' : 'clôturé');
+    card.appendChild(node('h4', `${nameOf(incident.participantId)} · blessure du jour ${incident.injuryDay} · ${statusLabel}`));
+    const summary = [
+      origin,
+      incident.subjectKind === 'animal' ? 'animal' : 'personne',
+      incident.bandaged ? 'bandé' : 'non bandé',
+      incident.infection ? 'infection active' : 'pas d’infection',
+      `chirurgie ${incident.requiresSurgery ? (incident.surgeryCompleted ? 'terminée' : 'requise') : 'non requise'}`
+    ].join(' · ');
+    card.appendChild(node('p', summary));
+    card.appendChild(node('p', `Soins utilisés : ${incident.treatments.map(item => `${item.kind} (jour ${item.day})`).join(', ') || 'aucun'} · Tests quotidiens : ${incident.dailyChecks.length}`));
+
+    if (incident.status === 'open') {
+      const isPresent = participants.some(row => row.id === incident.participantId);
+      if (isPresent) {
+        const animal = incident.subjectKind === 'animal';
+        const treatment = details(`treat-${incident.id}`, animal ? 'Soins aux animaux' : 'Guérison');
+        const fields = healerFields(`treat-${incident.id}`, animal ? 'animal-care' : 'heal', participants);
+        const difficulty = control('Difficulté du soin (DR)', `treat-${incident.id}-difficulty`, { value: '0' });
+        const supplies = checkbox('Fournitures médicales disponibles', `treat-${incident.id}-supplies`);
+        const inCombat = checkbox('Pendant un combat', `treat-${incident.id}-combat`);
+        const woundHealUsed = incident.treatments.some(item => ['heal', 'animal-care'].includes(item.kind));
+        const choice = select('Talent Chirurgie (hors combat) : valeur retenue', `treat-${incident.id}-choice`, [['', 'Sans Talent'], ['sl', 'DR obtenus'], ['units', 'Chiffre des unités du d100']]);
+        if (woundHealUsed) treatment.appendChild(node('p', 'Le soin de Blessures est déjà utilisé : ce Test ne retire que des Hémorragiques (une par Blessure qu’il aurait rendue).'));
+        treatment.append(...fields.elements, difficulty.label, supplies.label, inCombat.label, choice.label, button('Enregistrer le Test de soin', () => void run(`treat-${incident.id}`, () => Store.treatAftermathWound({ operationId: opId(), expectedRevision: state.revision, incidentId: incident.id, ...fields.values(), difficultyDR: Number(difficulty.input.value) || 0, supplies: supplies.input.checked, inCombat: inCombat.input.checked, d10: fields.values().d10 ?? null, surgeryChoice: choice.input.value || null, bleedingOnly: woundHealUsed }))));
+        card.appendChild(treatment);
+        if (incident.infection) {
+          const infection = details(`infection-${incident.id}`, 'Traiter l’infection');
+          const infectionFields = healerFields(`infection-${incident.id}`, animal ? 'animal-care' : 'heal', participants);
+          const remedy = checkbox('Remède adapté obtenu (sans Test)', `infection-${incident.id}-remedy`);
+          infection.append(...infectionFields.elements, remedy.label, button('Enregistrer le traitement', () => void run(`infection-${incident.id}`, () => Store.treatAftermathInfection({ operationId: opId(), expectedRevision: state.revision, incidentId: incident.id, ...infectionFields.values(), remedy: remedy.input.checked }))));
+          card.appendChild(infection);
+        }
+        if (incident.source.kind === 'critical' && !incident.treatments.some(item => item.kind === 'surgery' && item.succeeded)) {
+          const surgery = details(`surgery-${incident.id}`, 'Opérer la blessure critique');
+          const surgeryFields = healerFields(`surgery-${incident.id}`, 'heal', participants);
+          const surgeryD10 = control('1d10 en cas de maladresse', `surgery-${incident.id}-d10`, { min: 1, max: 10 });
+          surgery.append(...surgeryFields.elements, surgeryD10.label, button('Enregistrer le Test de chirurgie', () => void run(`surgery-${incident.id}`, () => Store.treatAftermathSurgicalIncident({ operationId: opId(), expectedRevision: state.revision, incidentId: incident.id, ...surgeryFields.values(), d10: surgeryD10.input.value === '' ? null : Number(surgeryD10.input.value) }))));
+          card.appendChild(surgery);
+        }
+        const close = details(`close-${incident.id}`, incident.source.kind === 'critical' ? 'Déclarer le critique guéri' : 'Clore le suivi');
+        const ended = checkbox('Les malus temporaires sont terminés', `close-${incident.id}-ended`);
+        const statesOk = checkbox('Les États du critique sont retirés (confirmation du MJ, si la fiche ne les rattache pas)', `close-${incident.id}-states`);
+        close.append(ended.label, statesOk.label, button('Clore', () => void run(`close-${incident.id}`, () => Store.closeAftermathIncident({ operationId: opId(), expectedRevision: state.revision, incidentId: incident.id, temporaryEffectsEnded: ended.input.checked, statesConfirmed: statesOk.input.checked }))));
+        card.appendChild(close);
+      } else {
+        card.appendChild(node('p', 'Patient hors du combat : aucun Test attendu.'));
+        card.appendChild(button('Archiver ce suivi', () => void run(`archive-${incident.id}`, () => Store.archiveAftermathIncident({ operationId: opId(), expectedRevision: state.revision, incidentId: incident.id }))));
+      }
+    }
+    return card;
+  }
+
+  function renderProposals(state, participants, filterParticipantId = null) {
+    const allProposals = typeof Store.listAftermathProposals === 'function' ? Store.listAftermathProposals() : [];
+    const proposals = filterParticipantId ? allProposals.filter(row => row.participantId === filterParticipantId) : allProposals;
+    const key = filterParticipantId ? `critical-proposals-${filterParticipantId}` : 'critical-proposals';
+    const critical = details(key, `Critiques à suivre (${proposals.length})`);
+    critical.className = 'workspace-aftermath-register';
+    if (!proposals.length) critical.appendChild(node('p', 'Aucune occurrence critique sans suivi.'));
+    for (const proposal of proposals) {
+      const row = node('div'); row.className = 'workspace-aftermath-proposal';
+      row.appendChild(node('span', `${proposal.participantName || proposal.participantId} · ${proposal.effectName || 'critique'} (${proposal.location || '?'})${proposal.requiresSurgery ? ' · chirurgie requise' : ''}`));
+      const kind = select('Sujet', `proposal-kind-${proposal.criticalId}`, [['person', 'Personne'], ['animal', 'Animal']]);
+      const bandaged = checkbox('Déjà bandée ou traitée', `proposal-bandaged-${proposal.criticalId}`);
+      const open = button(`Ouvrir le suivi de ${proposal.effectName || 'ce critique'}`, () => void run(`proposal-${proposal.criticalId}`, () => Store.registerAftermathIncident({ operationId: opId(), expectedRevision: state.revision, participantId: proposal.participantId, criticalId: proposal.criticalId, subjectKind: kind.input.value, bandaged: bandaged.input.checked })));
+      row.append(kind.label, bandaged.label, open); critical.appendChild(row);
+    }
+    return critical;
+  }
+
+  function renderLostWounds(state, participants, filterParticipantId = null) {
+    const key = filterParticipantId ? `wounds-lost-${filterParticipantId}` : 'wounds-lost';
+    const lost = details(key, 'Blessures perdues hors critique');
+    lost.className = 'workspace-aftermath-register';
+    const hurt = participants.filter(row => Number(row.hp) < Number(row.maxHp));
+    const patient = select('Blessé', `lost-patient${filterParticipantId ? `-${filterParticipantId}` : ''}`, [['', 'Choisir…'], ...hurt.map(row => [row.id, `${row.name || row.id} (${row.hp}/${row.maxHp})`])]);
+    if (filterParticipantId) patient.input.value = filterParticipantId;
+    const cause = control('Cause', `lost-cause${filterParticipantId ? `-${filterParticipantId}` : ''}`, { type: 'text' });
+    const lostKind = select('Sujet', `lost-kind${filterParticipantId ? `-${filterParticipantId}` : ''}`, [['person', 'Personne'], ['animal', 'Animal']]);
+    const lostBandaged = checkbox('Déjà bandée ou traitée', `lost-bandaged${filterParticipantId ? `-${filterParticipantId}` : ''}`);
+    lost.append(patient.label, cause.label, lostKind.label, lostBandaged.label, button('Créer le suivi', () => void run(`lost-${filterParticipantId || ''}`, () => Store.registerAftermathIncident({ operationId: opId(), expectedRevision: state.revision, participantId: patient.input.value, cause: cause.input.value, subjectKind: lostKind.input.value, bandaged: lostBandaged.input.checked }))));
+    return lost;
+  }
+
+  function renderDiseases(state, participants, nameOf, filterParticipantId = null, { allowAbsentActions = false } = {}) {
+    const allDiseases = state.diseases || [];
+    const diseasesList = filterParticipantId ? allDiseases.filter(row => row.participantId === filterParticipantId) : allDiseases;
+    const key = filterParticipantId ? `diseases-${filterParticipantId}` : 'diseases';
+    const diseases = details(key, `Maladies suivies (${diseasesList.length})`);
+    diseases.className = 'workspace-aftermath-diseases';
+    const sick = select('Malade', `disease-patient${filterParticipantId ? `-${filterParticipantId}` : ''}`, [['', 'Choisir…'], ...participants.map(row => [row.id, row.name || row.id])]);
+    if (filterParticipantId) sick.input.value = filterParticipantId;
+    const label = control('Maladie', `disease-label${filterParticipantId ? `-${filterParticipantId}` : ''}`, { type: 'text' });
+    const duration = control('Durée restante (jours, d’après la maladie)', `disease-duration${filterParticipantId ? `-${filterParticipantId}` : ''}`, { min: 1 });
+    diseases.append(sick.label, label.label, duration.label, button('Enregistrer la maladie', () => void run(`disease-${filterParticipantId || ''}`, () => Store.registerAftermathDisease({ operationId: opId(), expectedRevision: state.revision, participantId: sick.input.value, label: label.input.value, durationDays: Number(duration.input.value) }))));
+    for (const disease of diseasesList) {
+      const card = node('article'); card.className = 'card workspace-aftermath-disease';
+      card.appendChild(node('p', `${disease.label} · ${nameOf(disease.participantId)} · ${disease.status === 'active' ? `${disease.remainingDays} jour(s) restant(s)` : 'terminée'} · soins : ${disease.careLog.map(row => `jour ${row.day} (${nameOf(row.healerId)})`).join(', ') || 'aucun'}`));
+      const isPresent = participants.some(row => row.id === disease.participantId);
+      if (disease.status === 'active') {
+        if (isPresent || allowAbsentActions) {
+          const fields = healerFields(`care-${disease.id}`, 'heal', participants);
+          const difficulty = control('Modificateur du MJ (DR)', `care-${disease.id}-difficulty`, { value: '0' });
+          const rested = checkbox('Journée de repos sous ses soins', `care-${disease.id}-rested`, true);
+          card.append(...fields.elements, difficulty.label, rested.label, button('Enregistrer les soins du jour', () => void run(`care-${disease.id}`, () => Store.careForAftermathDisease({ operationId: opId(), expectedRevision: state.revision, diseaseId: disease.id, ...fields.values(), difficultyDR: Number(difficulty.input.value) || 0, rested: rested.input.checked }))));
+        } else {
+          card.appendChild(node('p', 'Malade absent de la rencontre : soins de maladie non disponibles.'));
+        }
+      }
+      diseases.appendChild(card);
+    }
+    return diseases;
+  }
+
+  function renderAdvance(state, participants, nameOf) {
+    const advanceForm = node('form'); advanceForm.className = 'workspace-aftermath-advance';
+    advanceForm.addEventListener('submit', event => event.preventDefault());
+    const days = control('Jours à avancer', 'advance-days', { min: 1, value: '1' });
+    const previewBox = node('div'); previewBox.setAttribute('aria-live', 'polite');
+    const confirm = button('Confirmer l’avancement', () => {
+      if (!ui.preview || ui.preview.status !== 'ready') { ui.lastReceipt = { status: 'refused', reason: 'Faites un aperçu avant de confirmer.' }; refresh(); return; }
+      const dailyTests = ui.preview.requiredDailyChecks.flatMap(check => {
+        const raw = ui.values[`daily-${check.incidentId}-${check.day}`];
+        return raw === undefined || raw === '' ? [] : [{ incidentId: check.incidentId, day: check.day, roll: Number(raw) }];
+      });
+      void run('daily-', () => Store.advanceAftermathCalendar({ operationId: opId(), expectedRevision: state.revision, days: ui.preview.days, dailyTests }));
+    });
+    confirm.disabled = !ui.preview || ui.preview.status !== 'ready';
+    const previewButton = button('Aperçu des échéances', () => {
+      ui.preview = Store.previewAftermathAdvance({ days: Number(days.input.value), expectedRevision: state.revision });
+      if (ui.preview.status !== 'ready') ui.lastReceipt = { status: 'refused', reason: ui.preview.reason };
+      refresh();
+    });
+    days.input.addEventListener('input', () => { ui.preview = null; confirm.disabled = true; previewBox.replaceChildren(); });
+    const week = button('Entre-aventure (environ 8 jours)', () => { ui.values['advance-days'] = '8'; ui.preview = null; refresh(); });
+    if (ui.preview?.status === 'ready') {
+      const checks = ui.preview.requiredDailyChecks;
+      previewBox.appendChild(node('p', `Du jour ${ui.preview.fromDay} au jour ${ui.preview.toDay}. ${checks.length} Test(s) de Résistance +2 DR possible(s) à saisir, un d100 par jour et par blessure non traitée.`));
+      if (ui.preview.absentIncidents?.length) previewBox.appendChild(node('p', `Patient(s) hors du combat, aucun Test attendu : ${ui.preview.absentIncidents.map(row => `${nameOf(row.participantId)} (incident ${row.incidentId})`).join(', ')}. Archivez ces suivis ci-dessous.`));
+      for (const event of ui.preview.sequelaEvents || []) previewBox.appendChild(node('p', `Jour ${event.day} · ${event.participantName || event.participantId} · ${event.label} : ${{ 'fracture-heals': event.testNeeded ? 'fin de guérison, Test d’Endurance à faire' : 'fin de guérison (restée attachée, aucun Test)', 'tear-eases': 'la pénalité diminue', 'tear-heals': 'guérison complète', 'surgery-deadline-passes': 'l’échéance de chirurgie passe', 'rebind-window-passes': 'le délai pour rattacher la fracture passe' }[event.kind] || event.kind}`));
+      for (const check of checks) {
+        const row = node('div'); row.className = 'workspace-aftermath-check';
+        const label = `${check.participantName || check.participantId} · fin du jour ${check.day} · Résistance +2 DR${check.score != null ? ` (score ${check.score})` : ' (score introuvable)'}`;
+        row.appendChild(node('span', label));
+        if (check.conditional) row.appendChild(node('em', ' — requis seulement si les jours précédents sont réussis'));
+        row.appendChild(control(`d100 du jour ${check.day} pour ${check.participantName || check.participantId}`, `daily-${check.incidentId}-${check.day}`, { min: 1, max: 100 }).label);
+        previewBox.appendChild(row);
+      }
+    }
+    advanceForm.append(days.label, week, previewButton, previewBox, confirm);
+    return advanceForm;
+  }
+
+  function renderReceiptStatus() {
+    const status = node('p', receiptText(ui.lastReceipt));
+    status.setAttribute('role', 'status');
+    status.className = 'workspace-aftermath-status';
+    return status;
+  }
+
+  function renderParticipantConvalescence(participantId, participants = []) {
+    let state;
+    try { state = Store.getAftermathState(); } catch (cause) {
+      const err = node('div', `Registre indisponible : ${cause?.message || cause}`);
+      return err;
+    }
+    const isPresent = participants.some(row => row.id === participantId);
+    const nameOf = id => participants.find(row => row.id === id)?.name || id;
+    const container = node('div');
+    container.className = 'workspace-aftermath-participant-actions';
+    container.dataset.aftermathScope = 'detail';
+
+    // Participant absent de la rencontre :
+    // Les soins, médicaments, chirurgies, formulaires de maladie et séquelles restent réservés aux participants présents.
+    // Seule l'action d'archivage des incidents ouverts hors rencontre est proposée.
+    if (!isPresent) {
+      const ownIncidents = (state.incidents || []).filter(row => row.participantId === participantId && row.status === 'open');
+      if (ownIncidents.length) {
+        const incBox = node('div'); incBox.className = 'workspace-aftermath-incidents';
+        for (const incident of ownIncidents) {
+          incBox.appendChild(renderIncidentCard(incident, state, participants, nameOf));
+        }
+        container.appendChild(incBox);
+      }
+      return container;
+    }
+
+    // 1. Proposals for this participant
+    const proposals = (typeof Store.listAftermathProposals === 'function' ? Store.listAftermathProposals() : []).filter(row => row.participantId === participantId);
+    if (proposals.length) {
+      container.appendChild(renderProposals(state, participants, participantId));
+    }
+
+    // 2. Incidents for this participant
+    const ownIncidents = (state.incidents || []).filter(row => row.participantId === participantId && row.status === 'open');
+    if (ownIncidents.length) {
+      const incBox = node('div'); incBox.className = 'workspace-aftermath-incidents';
+      for (const incident of ownIncidents) {
+        incBox.appendChild(renderIncidentCard(incident, state, participants, nameOf));
+      }
+      container.appendChild(incBox);
+    }
+
+    // 3. Diseases for this participant
+    const ownDiseases = (state.diseases || []).filter(row => row.participantId === participantId && row.status === 'active');
+    if (ownDiseases.length) {
+      container.appendChild(renderDiseases(state, participants, nameOf, participantId, { allowAbsentActions: false }));
+    }
+
+    // 4. Sequelae for this participant
+    const overview = typeof Store.listAftermathSequelae === 'function' ? Store.listAftermathSequelae() : { sequelae: [], pending: [], incidents: [], characteristics: {} };
+    const hasSequelae = (overview.sequelae || []).some(row => row.participantId === participantId) ||
+      (overview.pending || []).some(row => row.participantId === participantId) ||
+      (overview.incidents || []).some(row => row.participantId === participantId && row.needsOpening);
+    if (hasSequelae) {
+      container.appendChild(renderSequelae(state, participants, nameOf, (prefix, purpose) => healerFields(prefix, purpose, participants), { participantId, allowAbsentActions: false }));
+    }
+
+    // 5. Quick action: Lost wounds follow-up if participant is hurt
+    const person = participants.find(row => row.id === participantId);
+    if (person && Number(person.hp) < Number(person.maxHp)) {
+      container.appendChild(renderLostWounds(state, participants, participantId));
+    }
+
+    return container;
+  }
+
+  function renderGlobalConvalescence(participants = []) {
+    let state;
+    try { state = Store.getAftermathState(); } catch (cause) {
+      const err = node('div', `Registre indisponible : ${cause?.message || cause}`);
+      return err;
+    }
+    const nameOf = id => participants.find(row => row.id === id)?.name || id;
+    const container = node('section');
+    container.className = 'workspace-aftermath-global';
+    container.dataset.aftermathScope = 'global';
+    container.setAttribute('aria-label', 'Opérations générales de convalescence');
+
+    container.appendChild(renderProposals(state, participants));
+    container.appendChild(renderLostWounds(state, participants));
+    container.appendChild(renderDiseases(state, participants, nameOf, null, { allowAbsentActions: false }));
+    container.appendChild(renderSequelae(state, participants, nameOf, (prefix, purpose) => healerFields(prefix, purpose, participants), { allowAbsentActions: false }));
+    container.appendChild(renderAdvance(state, participants, nameOf));
+    return container;
+  }
+
   return {
+    renderReceiptStatus,
+    renderParticipantConvalescence,
+    renderGlobalConvalescence,
+    getLastReceipt: () => ui.lastReceipt,
     render(participants = []) {
       let state;
       try { state = Store.getAftermathState(); } catch (cause) {
@@ -280,161 +647,23 @@ export function createV5AftermathPanel({ Store, refresh = () => {} } = {}) {
       const nameOf = id => participants.find(row => row.id === id)?.name || id;
       const panel = node('section'); panel.className = 'workspace-card workspace-aftermath'; panel.setAttribute('aria-label', 'Suivi des séquelles et convalescence');
       panel.appendChild(node('h3', 'Séquelles et convalescence'));
-      const status = node('p', receiptText(ui.lastReceipt)); status.setAttribute('role', 'status'); status.className = 'workspace-aftermath-status';
-      panel.appendChild(status);
+      panel.appendChild(renderReceiptStatus());
       const date = aftermathDate(state);
-      panel.appendChild(node('p', `Calendrier de convalescence · jour ${date.day} · jour ${date.dayInImperialWeek}/8 de la semaine impériale · origine ${state.calendar.originDay}. Cette horloge est indépendante du temps de magie.`));
+      panel.appendChild(node('p', `Calendrier de convalescence · jour ${date.day} · jour ${date.dayInImperialWeek}/8 de la semaine impériale · origine ${state.calendar.originDay}. Les jours avancés font aussi progresser le temps de campagne.`));
 
-      // Soigneur + compétence de la fiche + d100 : le moteur lit le score et calcule réussite et DR.
-      const healerFields = (prefix, purpose) => {
-        const healer = select('Soigneur', `${prefix}-healer`, [['', 'Choisir…'], ...participants.map(row => [row.id, row.name || row.id])]);
-        const skillLabel = node('label', 'Compétence'); const skill = document.createElement('select'); skill.name = `${prefix}-skill`; skillLabel.appendChild(skill);
-        const fill = () => {
-          skill.replaceChildren();
-          const owner = participants.find(row => row.id === healer.input.value);
-          const skills = owner ? aftermathSkills(owner, purpose) : [];
-          if (!skills.length) skill.appendChild(Object.assign(node('option', owner ? 'Aucune compétence sur la fiche' : '—'), { value: '' }));
-          for (const row of skills) skill.appendChild(Object.assign(node('option', `${row.name} (${row.score})`), { value: String(row.id) }));
-          if (ui.values[`${prefix}-skill`] !== undefined) skill.value = ui.values[`${prefix}-skill`];
-        };
-        skill.addEventListener('change', () => { ui.values[`${prefix}-skill`] = skill.value; });
-        healer.input.addEventListener('change', () => { delete ui.values[`${prefix}-skill`]; fill(); });
-        fill();
-        const roll = control('d100', `${prefix}-roll`, { min: 1, max: 100 });
-        const d10 = control('1d10 de Blessures (maladresse seulement)', `${prefix}-d10`, { min: 1, max: 10 });
-        return { elements: [healer.label, skillLabel, roll.label, d10.label], values: () => ({ healerId: healer.input.value || null, skillId: skill.value || null, roll: roll.input.value === '' ? null : Number(roll.input.value), ...(d10.input.value === '' ? {} : { d10: Number(d10.input.value) }) }) };
-      };
-
-      // Avancement du calendrier : l'aperçu liste chaque Test quotidien, jour par jour.
-      const advanceForm = node('form'); advanceForm.className = 'workspace-aftermath-advance';
-      advanceForm.addEventListener('submit', event => event.preventDefault());
-      const days = control('Jours à avancer', 'advance-days', { min: 1, value: '1' });
-      const previewBox = node('div'); previewBox.setAttribute('aria-live', 'polite');
-      const confirm = button('Confirmer l’avancement', () => {
-        if (!ui.preview || ui.preview.status !== 'ready') { ui.lastReceipt = { status: 'refused', reason: 'Faites un aperçu avant de confirmer.' }; refresh(); return; }
-        const dailyTests = ui.preview.requiredDailyChecks.flatMap(check => {
-          const raw = ui.values[`daily-${check.incidentId}-${check.day}`];
-          return raw === undefined || raw === '' ? [] : [{ incidentId: check.incidentId, day: check.day, roll: Number(raw) }];
-        });
-        void run('daily-', () => Store.advanceAftermathCalendar({ operationId: opId(), expectedRevision: state.revision, days: ui.preview.days, dailyTests }));
-      });
-      confirm.disabled = !ui.preview || ui.preview.status !== 'ready';
-      const previewButton = button('Aperçu des échéances', () => {
-        ui.preview = Store.previewAftermathAdvance({ days: Number(days.input.value), expectedRevision: state.revision });
-        if (ui.preview.status !== 'ready') ui.lastReceipt = { status: 'refused', reason: ui.preview.reason };
-        refresh();
-      });
-      days.input.addEventListener('input', () => { ui.preview = null; confirm.disabled = true; previewBox.replaceChildren(); });
-      const week = button('Entre-aventure (environ 8 jours)', () => { ui.values['advance-days'] = '8'; ui.preview = null; refresh(); });
-      if (ui.preview?.status === 'ready') {
-        const checks = ui.preview.requiredDailyChecks;
-        previewBox.appendChild(node('p', `Du jour ${ui.preview.fromDay} au jour ${ui.preview.toDay}. ${checks.length} Test(s) de Résistance +2 DR possible(s) à saisir, un d100 par jour et par blessure non traitée.`));
-        if (ui.preview.absentIncidents?.length) previewBox.appendChild(node('p', `Patient(s) hors du combat, aucun Test attendu : ${ui.preview.absentIncidents.map(row => `${nameOf(row.participantId)} (incident ${row.incidentId})`).join(', ')}. Archivez ces suivis ci-dessous.`));
-        for (const event of ui.preview.sequelaEvents || []) previewBox.appendChild(node('p', `Jour ${event.day} · ${event.participantName || event.participantId} · ${event.label} : ${{ 'fracture-heals': event.testNeeded ? 'fin de guérison, Test d’Endurance à faire' : 'fin de guérison (restée attachée, aucun Test)', 'tear-eases': 'la pénalité diminue', 'tear-heals': 'guérison complète', 'surgery-deadline-passes': 'l’échéance de chirurgie passe', 'rebind-window-passes': 'le délai pour rattacher la fracture passe' }[event.kind] || event.kind}`));
-        for (const check of checks) {
-          const row = node('div'); row.className = 'workspace-aftermath-check';
-          const label = `${check.participantName || check.participantId} · incident ${check.incidentId} · fin du jour ${check.day} · Résistance +2 DR${check.score != null ? ` (score ${check.score})` : ' (score introuvable)'}`;
-          row.appendChild(node('span', label));
-          if (check.conditional) row.appendChild(node('em', ' — requis seulement si les jours précédents sont réussis'));
-          row.appendChild(control(`d100 du jour ${check.day} pour ${check.incidentId}`, `daily-${check.incidentId}-${check.day}`, { min: 1, max: 100 }).label);
-          previewBox.appendChild(row);
-        }
-      }
-      advanceForm.append(days.label, week, previewButton, previewBox, confirm);
-      panel.appendChild(advanceForm);
-
-      // Ouvrir un suivi : uniquement depuis une occurrence F2-I, ou une cause de Blessures réellement perdues.
-      const proposals = Store.listAftermathProposals?.() || [];
-      const critical = details('critical-proposals', `Critiques à suivre (${proposals.length})`); critical.className = 'workspace-aftermath-register';
-      if (!proposals.length) critical.appendChild(node('p', 'Aucune occurrence critique sans suivi.'));
-      for (const proposal of proposals) {
-        const row = node('div'); row.className = 'workspace-aftermath-proposal';
-        row.appendChild(node('span', `${proposal.participantName || proposal.participantId} · ${proposal.effectName || 'critique'} (${proposal.location || '?'})${proposal.requiresSurgery ? ' · chirurgie requise' : ''}`));
-        const kind = select('Sujet', `proposal-kind-${proposal.criticalId}`, [['person', 'Personne'], ['animal', 'Animal']]);
-        const bandaged = checkbox('Déjà bandée ou traitée', `proposal-bandaged-${proposal.criticalId}`);
-        const open = button(`Ouvrir le suivi de ${proposal.effectName || 'ce critique'}`, () => void run(`proposal-${proposal.criticalId}`, () => Store.registerAftermathIncident({ operationId: opId(), expectedRevision: state.revision, participantId: proposal.participantId, criticalId: proposal.criticalId, subjectKind: kind.input.value, bandaged: bandaged.input.checked })));
-        row.append(kind.label, bandaged.label, open); critical.appendChild(row);
-      }
-      panel.appendChild(critical);
-
-      const lost = details('wounds-lost', 'Blessures perdues hors critique'); lost.className = 'workspace-aftermath-register';
-      const hurt = participants.filter(row => Number(row.hp) < Number(row.maxHp));
-      const patient = select('Blessé', 'lost-patient', [['', 'Choisir…'], ...hurt.map(row => [row.id, `${row.name || row.id} (${row.hp}/${row.maxHp})`])]);
-      const cause = control('Cause', 'lost-cause', { type: 'text' });
-      const lostKind = select('Sujet', 'lost-kind', [['person', 'Personne'], ['animal', 'Animal']]);
-      const lostBandaged = checkbox('Déjà bandée ou traitée', 'lost-bandaged');
-      lost.append(patient.label, cause.label, lostKind.label, lostBandaged.label, button('Créer le suivi', () => void run('lost-', () => Store.registerAftermathIncident({ operationId: opId(), expectedRevision: state.revision, participantId: patient.input.value, cause: cause.input.value, subjectKind: lostKind.input.value, bandaged: lostBandaged.input.checked }))));
-      panel.appendChild(lost);
+      panel.appendChild(renderAdvance(state, participants, nameOf));
+      panel.appendChild(renderProposals(state, participants));
+      panel.appendChild(renderLostWounds(state, participants));
 
       const list = node('div'); list.className = 'workspace-aftermath-incidents';
       if (!state.incidents.length) list.appendChild(node('p', 'Aucun incident enregistré.'));
       for (const incident of state.incidents) {
-        const card = node('article'); card.className = 'card workspace-aftermath-incident';
-        const origin = incident.source.kind === 'critical' ? `critique ${incident.source.criticalId}` : `Blessures perdues : ${incident.source.cause}`;
-        card.appendChild(node('h4', `${nameOf(incident.participantId)} · blessure du jour ${incident.injuryDay} · ${incident.status === 'open' ? 'en suivi' : (incident.status === 'archived' ? 'archivé' : 'clôturé')}`));
-        card.appendChild(node('p', `Incident ${incident.id} · ${origin} · ${incident.subjectKind === 'animal' ? 'animal' : 'personne'} · ${incident.bandaged ? 'bandé' : 'non bandé'} · ${incident.infection ? 'infection active' : 'pas d’infection'} · chirurgie ${incident.requiresSurgery ? (incident.surgeryCompleted ? 'terminée' : 'requise') : 'non requise'}`));
-        card.appendChild(node('p', `Soins utilisés : ${incident.treatments.map(item => `${item.kind} (jour ${item.day})`).join(', ') || 'aucun'} · Tests quotidiens : ${incident.dailyChecks.length}`));
-        if (incident.status === 'open') {
-          const animal = incident.subjectKind === 'animal';
-          const treatment = details(`treat-${incident.id}`, animal ? 'Soins aux animaux' : 'Guérison');
-          const fields = healerFields(`treat-${incident.id}`, animal ? 'animal-care' : 'heal');
-          const difficulty = control('Difficulté du soin (DR)', `treat-${incident.id}-difficulty`, { value: '0' });
-          const supplies = checkbox('Fournitures médicales disponibles', `treat-${incident.id}-supplies`);
-          const inCombat = checkbox('Pendant un combat', `treat-${incident.id}-combat`);
-          // Le 1d10 de maladresse vient des champs du soigneur (un seul champ, recette G-CRI-7).
-          const woundHealUsed = incident.treatments.some(item => ['heal', 'animal-care'].includes(item.kind));
-          const choice = select('Talent Chirurgie (hors combat) : valeur retenue', `treat-${incident.id}-choice`, [['', 'Sans Talent'], ['sl', 'DR obtenus'], ['units', 'Chiffre des unités du d100']]);
-          if (woundHealUsed) treatment.appendChild(node('p', 'Le soin de Blessures est déjà utilisé : ce Test ne retire que des Hémorragiques (une par Blessure qu’il aurait rendue).'));
-          treatment.append(...fields.elements, difficulty.label, supplies.label, inCombat.label, choice.label, button('Enregistrer le Test de soin', () => void run(`treat-${incident.id}`, () => Store.treatAftermathWound({ operationId: opId(), expectedRevision: state.revision, incidentId: incident.id, ...fields.values(), difficultyDR: Number(difficulty.input.value) || 0, supplies: supplies.input.checked, inCombat: inCombat.input.checked, d10: fields.values().d10 ?? null, surgeryChoice: choice.input.value || null, bleedingOnly: woundHealUsed }))));
-          card.appendChild(treatment);
-          if (incident.infection) {
-            const infection = details(`infection-${incident.id}`, 'Traiter l’infection');
-            const infectionFields = healerFields(`infection-${incident.id}`, animal ? 'animal-care' : 'heal');
-            const remedy = checkbox('Remède adapté obtenu (sans Test)', `infection-${incident.id}-remedy`);
-            infection.append(...infectionFields.elements, remedy.label, button('Enregistrer le traitement', () => void run(`infection-${incident.id}`, () => Store.treatAftermathInfection({ operationId: opId(), expectedRevision: state.revision, incidentId: incident.id, ...infectionFields.values(), remedy: remedy.input.checked }))));
-            card.appendChild(infection);
-          }
-          if (incident.source.kind === 'critical' && !incident.treatments.some(item => item.kind === 'surgery' && item.succeeded)) {
-            const surgery = details(`surgery-${incident.id}`, 'Opérer la blessure critique');
-            const surgeryFields = healerFields(`surgery-${incident.id}`, 'heal');
-            const surgeryD10 = control('1d10 en cas de maladresse', `surgery-${incident.id}-d10`, { min: 1, max: 10 });
-            surgery.append(...surgeryFields.elements, surgeryD10.label, button('Enregistrer le Test de chirurgie', () => void run(`surgery-${incident.id}`, () => Store.treatAftermathSurgicalIncident({ operationId: opId(), expectedRevision: state.revision, incidentId: incident.id, ...surgeryFields.values(), d10: surgeryD10.input.value === '' ? null : Number(surgeryD10.input.value) }))));
-            card.appendChild(surgery);
-          }
-          const close = details(`close-${incident.id}`, incident.source.kind === 'critical' ? 'Déclarer le critique guéri' : 'Clore le suivi');
-          const ended = checkbox('Les malus temporaires sont terminés', `close-${incident.id}-ended`);
-          const statesOk = checkbox('Les États du critique sont retirés (confirmation du MJ, si la fiche ne les rattache pas)', `close-${incident.id}-states`);
-          close.append(ended.label, statesOk.label, button('Clore', () => void run(`close-${incident.id}`, () => Store.closeAftermathIncident({ operationId: opId(), expectedRevision: state.revision, incidentId: incident.id, temporaryEffectsEnded: ended.input.checked, statesConfirmed: statesOk.input.checked }))));
-          card.appendChild(close);
-          if (!participants.some(row => row.id === incident.participantId)) {
-            card.appendChild(node('p', 'Patient hors du combat : aucun Test attendu.'));
-            card.appendChild(button('Archiver ce suivi', () => void run(`archive-${incident.id}`, () => Store.archiveAftermathIncident({ operationId: opId(), expectedRevision: state.revision, incidentId: incident.id }))));
-          }
-        }
-        list.appendChild(card);
+        list.appendChild(renderIncidentCard(incident, state, participants, nameOf));
       }
       panel.appendChild(list);
 
-      // Maladies : soins quotidiens d'un malade (V5 p. 182).
-      const diseases = details('diseases', `Maladies suivies (${(state.diseases || []).length})`); diseases.className = 'workspace-aftermath-diseases';
-      const sick = select('Malade', 'disease-patient', [['', 'Choisir…'], ...participants.map(row => [row.id, row.name || row.id])]);
-      const label = control('Maladie', 'disease-label', { type: 'text' });
-      const duration = control('Durée restante (jours, d’après la maladie)', 'disease-duration', { min: 1 });
-      diseases.append(sick.label, label.label, duration.label, button('Enregistrer la maladie', () => void run('disease-', () => Store.registerAftermathDisease({ operationId: opId(), expectedRevision: state.revision, participantId: sick.input.value, label: label.input.value, durationDays: Number(duration.input.value) }))));
-      for (const disease of state.diseases || []) {
-        const card = node('article'); card.className = 'card workspace-aftermath-disease';
-        card.appendChild(node('p', `${disease.label} · ${nameOf(disease.participantId)} · ${disease.status === 'active' ? `${disease.remainingDays} jour(s) restant(s)` : 'terminée'} · soins : ${disease.careLog.map(row => `jour ${row.day} (${nameOf(row.healerId)})`).join(', ') || 'aucun'}`));
-        if (disease.status === 'active') {
-          const fields = healerFields(`care-${disease.id}`, 'heal');
-          const difficulty = control('Modificateur du MJ (DR)', `care-${disease.id}-difficulty`, { value: '0' });
-          const rested = checkbox('Journée de repos sous ses soins', `care-${disease.id}-rested`, true);
-          card.append(...fields.elements, difficulty.label, rested.label, button('Enregistrer les soins du jour', () => void run(`care-${disease.id}`, () => Store.careForAftermathDisease({ operationId: opId(), expectedRevision: state.revision, diseaseId: disease.id, ...fields.values(), difficultyDR: Number(difficulty.input.value) || 0, rested: rested.input.checked }))));
-        }
-        diseases.appendChild(card);
-      }
-      panel.appendChild(diseases);
-      // Séquelles durables et temporaires (F2-J2) : étapes de guérison, Tests réels (compétence de la fiche + d100), pertes confirmées.
-      panel.appendChild(renderSequelae(state, participants, nameOf, healerFields));
+      panel.appendChild(renderDiseases(state, participants, nameOf, null, { allowAbsentActions: true }));
+      panel.appendChild(renderSequelae(state, participants, nameOf, (prefix, purpose) => healerFields(prefix, purpose, participants), { allowAbsentActions: true }));
       return panel;
     }
   };

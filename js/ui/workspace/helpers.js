@@ -3,11 +3,12 @@ import { locationProtection } from '../../core/equipment.js';
 import { userMessage } from '../messages.js';
 import { minusSigned } from '../resolution-panel/dom.js';
 
-export const WORKSPACE_SPACES = Object.freeze(['prepare', 'play', 'library']);
+export const WORKSPACE_SPACES = Object.freeze(['prepare', 'play', 'campaign', 'library']);
 
 export const SPACE_LABELS = Object.freeze({
   prepare: 'Préparer',
   play: 'Jouer',
+  campaign: 'Campagne',
   library: 'Bibliothèque'
 });
 
@@ -186,23 +187,29 @@ export function createShell(mount, { showNavigation = true } = {}) {
   const prepare = node('section', 'workspace-space workspace-space-prepare');
   prepare.id = 'workspace-prepare';
   prepare.setAttribute('role', 'tabpanel');
-  prepare.setAttribute('aria-labelledby', 'workspace-tab-prepare');
+  prepare.setAttribute('aria-labelledby', showNavigation ? 'workspace-tab-prepare' : 'tab-prepare');
   root.appendChild(prepare);
 
   const play = node('section', 'workspace-space workspace-space-play');
   play.id = 'workspace-play';
   play.setAttribute('role', 'tabpanel');
-  play.setAttribute('aria-labelledby', 'workspace-tab-play');
+  play.setAttribute('aria-labelledby', showNavigation ? 'workspace-tab-play' : 'tab-combat');
   root.appendChild(play);
+
+  const campaign = node('section', 'workspace-space workspace-space-campaign');
+  campaign.id = 'workspace-campaign';
+  campaign.setAttribute('role', 'tabpanel');
+  campaign.setAttribute('aria-labelledby', showNavigation ? 'workspace-tab-campaign' : 'tab-campaign');
+  root.appendChild(campaign);
 
   const library = node('section', 'workspace-space workspace-space-library');
   library.id = 'workspace-library';
   library.setAttribute('role', 'tabpanel');
-  library.setAttribute('aria-labelledby', 'workspace-tab-library');
+  library.setAttribute('aria-labelledby', showNavigation ? 'workspace-tab-library' : 'tab-library');
   root.appendChild(library);
 
   mount.replaceChildren(root);
-  return { root, nav, prepare, play, library };
+  return { root, nav, prepare, play, campaign, library };
 }
 
 export function profileSummary(profile, {
