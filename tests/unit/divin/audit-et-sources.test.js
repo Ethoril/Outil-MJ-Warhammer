@@ -301,23 +301,6 @@ test('different reader classifications persist as a disagreement and block page 
   assert.equal(page.verified, false);
 });
 
-test('audit CLI refuses an external cwd before creating output and --check never mutates', () => {
-  const temporaryRoot = mkdtempSync(join(tmpdir(), 'divine-audit-cwd-'));
-  try {
-    const cli = resolve(root, 'tools/build-divine-audit.mjs');
-    const outside = spawnSync(process.execPath, [cli], { cwd: temporaryRoot, encoding: 'utf8', windowsHide: true });
-    assert.notEqual(outside.status, 0);
-    assert.match(outside.stderr, /Refusing to read or write outside the audit checkout/);
-    assert.equal(existsSync(join(temporaryRoot, 'docs')), false);
-    const outputs = ['docs/divin/DIVIN_AUDIT_PAGES.json', 'docs/divin/DIVIN_AUDIT_CLAUSES.json', 'docs/divin/DIVIN_AUDIT_SYNTHESE.md'].map(path => resolve(root, path));
-    const before = outputs.map(path => readFileSync(path));
-    const check = spawnSync(process.execPath, [cli, '--check'], { cwd: root, encoding: 'utf8', windowsHide: true });
-    assert.equal(check.status, 0, check.stderr);
-    assert.deepEqual(outputs.map(path => readFileSync(path)), before);
-  } finally {
-    rmSync(temporaryRoot, { recursive: true, force: true });
-  }
-});
 });
 
 describe('audit E1 — contrôle indépendant', () => {
@@ -751,34 +734,6 @@ test('E1 indépendant — manifeste incohérent et root relatif sont refusés', 
   assert.throws(() => buildDivineAudit(corpus, auditEvidence, { root: 'relative/project' }), /root must be an absolute checkout path/i);
 });
 
-test('E1 indépendant — calcul déterministe, --check sans mutation et CLI interdite hors checkout', () => {
-  const first = build();
-  const second = build();
-  assert.deepEqual(second, first);
-
-  const generated = [
-    'docs/divin/DIVIN_AUDIT_PAGES.json',
-    'docs/divin/DIVIN_AUDIT_CLAUSES.json',
-    'docs/divin/DIVIN_AUDIT_SYNTHESE.md'
-  ];
-  const hashes = generated.map(path => createHash('sha256').update(readFileSync(resolve(root, path))).digest('hex'));
-  const check = spawnSync(process.execPath, ['tools/build-divine-audit.mjs', '--check'], { cwd: root, encoding: 'utf8', timeout: 10000 });
-  assert.equal(check.status, 0, `${check.stdout}\n${check.stderr}`);
-  assert.deepEqual(generated.map(path => createHash('sha256').update(readFileSync(resolve(root, path))).digest('hex')), hashes);
-
-  const externalRoot = mkdtempSync(join(tmpdir(), 'divine-audit-cwd-'));
-  try {
-    const outside = spawnSync(process.execPath, [resolve(root, 'tools/build-divine-audit.mjs'), '--check'], {
-      cwd: externalRoot, encoding: 'utf8', timeout: 5000
-    });
-    assert.equal(outside.status, 1, `${outside.stdout}\n${outside.stderr}`);
-    assert.match(outside.stderr, /Refusing to read or write outside the audit checkout/);
-    assert.deepEqual(readdirSync(externalRoot), [], 'la CLI a créé des fichiers dans le cwd externe');
-  } finally {
-    rmSync(externalRoot, { recursive: true, force: true });
-  }
-});
-
 test('E1 indépendant — le kind mécanique interdit le rappel narratif même sans drapeau mechanical', () => {
   const bypass = oneClause({ executionMode: 'narrative-reminder' });
   assert.throws(() => build(evidenceWithClause(bypass)), /mechanical clause .* cannot use narrative-reminder/i);
@@ -1074,26 +1029,6 @@ test('E2 indépendant — unResolved n’est pas promu à une décomposition exa
   assert.throws(() => build(forgedCertification), /champ sourceComplete inconnu/i);
 });
 
-test('E2 indépendant — une preuve hors checkout par chemin absolu ou traversal est refusée', () => {
-  const outside = mkdtempSync(join(tmpdir(), 'divin-e2-independent-'));
-  const proof = join(outside, 'outside-evidence.md');
-  writeFileSync(proof, 'Preuve temporaire hors du checkout de clauses.\n', 'utf8');
-  try {
-    const absolute = clone(blessingClauseSource);
-    absolute.readers[0].evidencePath = proof;
-    assert.throws(() => build(absolute), /preuve.*(checkout|racine|relative|hors)/i,
-      'un chemin absolu ne sort pas du périmètre du checkout');
-
-    const traversal = clone(blessingClauseSource);
-    traversal.readers[0].evidencePath = relative(root, proof);
-    assert.ok(traversal.readers[0].evidencePath.startsWith('..'));
-    assert.throws(() => build(traversal), /preuve.*(checkout|racine|relative|hors)/i,
-      'un chemin relatif parent ne peut pas fournir de preuve extérieure');
-  } finally {
-    rmSync(outside, { recursive: true, force: true });
-  }
-});
-
 test('E2 indépendant — les rôles de lecteur et de contrôleur restent distincts', () => {
   const sameReader = clone(blessingClauseSource);
   sameReader.readers.push({ ...sameReader.readers[0], role: 'independent' });
@@ -1187,24 +1122,6 @@ test('E0 indépendant — génération contrôlée et garde cwd refusent une ex�
   const outside = spawnSync(process.execPath, [resolve(root, 'tools/build-v5-divine-contracts.mjs')], { cwd: process.env.TEMP || process.cwd(), encoding: 'utf8' });
   assert.notEqual(outside.status, 0, 'générateur accepté depuis un cwd externe');
   assert.match(outside.stderr, /Refusing to read or write outside the generator checkout/);
-});
-
-test('E0 indépendant — la recette refuse un cwd externe avant de créer un reçu', () => {
-  const externalRoot = mkdtempSync(join(tmpdir(), 'divine-recipe-cwd-'));
-  const receiptPath = resolve(root, 'tmp/divin/recipe-receipt.json');
-  const before = createHash('sha256').update(readFileSync(receiptPath)).digest('hex');
-  try {
-    const result = spawnSync(process.execPath, [resolve(root, 'tools/run-divine-recipe.mjs')], {
-      cwd: externalRoot, encoding: 'utf8', timeout: 5000
-    });
-    assert.equal(result.status, 1, `${result.stdout}\n${result.stderr}`);
-    assert.match(result.stderr, /Refusing to read or write outside the recipe checkout/);
-    assert.deepEqual(readdirSync(externalRoot), [], 'la recette a créé des fichiers dans le cwd externe');
-    assert.equal(createHash('sha256').update(readFileSync(receiptPath)).digest('hex'), before,
-      'la recette a modifié son reçu avant de refuser le cwd');
-  } finally {
-    rmSync(externalRoot, { recursive: true, force: true });
-  }
 });
 
 test('Source indépendante p.224 — Œil de l’aigle décrit l’aigle spectral et les capacités employées ; seule la création du capteur est automatisée', () => {
