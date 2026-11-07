@@ -127,7 +127,9 @@ export function ficheSnapshot(charId, fiche, metadata = {}) {
   const addSkill = (storageKey, name, advances, rawCarac, basic) => {
     const found = resolveSkill(name, { owned: !basic });
     const entry = found?.entry;
-    const carac = entry?.carac || rawCarac;
+    // La fiche fait foi : la carac déclarée sur la ligne prime sur celle du catalogue (Bhelgi : Projectiles sur Dex).
+    const knownCarac = value => Boolean(CARAC_MAP[value] || Object.values(CARAC_MAP).includes(value));
+    const carac = knownCarac(rawCarac) ? rawCarac : entry?.carac || rawCarac;
     const canonical = CARAC_MAP[carac] || (Object.values(CARAC_MAP).includes(carac) ? carac : null);
     // An unresolved/open slot is retained for consultation, never usable as an action score.
     const open = /\((au choix|.* ou .*|.*\/.*)\)/i.test(name);

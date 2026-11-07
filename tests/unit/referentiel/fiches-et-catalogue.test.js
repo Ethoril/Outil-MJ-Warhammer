@@ -824,12 +824,13 @@ test('Fiche v3 — talents absents ou invalides ne retirent ni Dur à cuire ni s
   }
 });
 
-test('Fiche v3 — basicSpecs et caractéristique de référence remplacent les anciens libellés et caracs erronées', () => {
+// Décision du MJ du 07/11 : la carac déclarée par la ligne de la fiche fait foi, même hors règle.
+test('Fiche v3 — basicSpecs remplace les anciens libellés ; la carac de la ligne de la fiche fait foi', () => {
   const snapshot = ficheSnapshot('caelel', { ...raw, basicSpecs: { Art: 'Peinture' }, skillsAdvanced: [{ id: 's1', nom: 'Corps à corps (Escrime)', carac: 'ct', adv: 5 }] });
   const art = snapshot.skills.find(row => row.storageKey === 'Art');
   assert.equal(art.name, 'Art (Peinture)'); assert.equal(art.carac, 'dex'); assert.equal(art.total, 47);
   const melee = snapshot.skills.find(row => row.storageKey === 's1');
-  assert.equal(melee.carac, 'cc'); assert.equal(melee.total, 59);
+  assert.equal(melee.carac, 'ct'); assert.equal(melee.total, snapshot.caracs.CT + 5);
 });
 
 test('Fiche v3 — collection de compétences invalide exclue entièrement, précédentes conservées', () => {
