@@ -8,7 +8,7 @@ import { projectV5Resources } from '../js/core/v5-resources.js';
 import { sequelaTestRules } from '../js/core/v5-sequela-effects.js';
 import {
   planFicheWriteback, buildFicheCommand, buildUndoCommands, applyWritebackSuccess, applyConflictChoice,
-  ficheConflictOf, ficheValueForKey
+  ficheConflictOf, ficheValueForKey, writebackErrorMessage
 } from '../js/core/fiche-writeback.js';
 
 const clone = value => structuredClone(value);
@@ -495,5 +495,186 @@ describe('T8 · Suivi du MJ (CA20, CA22, CA23)', () => {
     const error = await fn.execute(buildFicheCommand('wren', fiche.rows, { sendId: 's2', revision: fiche.revision, reason: 'Fin de séance (outil MJ)' })).catch(e => e);
     assert.deepEqual(ficheConflictOf(error).fields, ['suivi:outil:dis-1']);
     assert.equal(ficheValueForKey(fn.store.wren.data, 'suivi:outil:dis-1').detail, 'modifié');
+  });
+});
+
+// ---------- Contre-vérification T6–T8 (07/11) ----------
+const replaceParticipant = (state, charId, newId) => {
+  const old = state.combat.participants.find(row => row.extensions.ficheId === charId);
+  state.combat.participants = state.combat.participants.filter(row => row !== old).concat([{ ...clone(state.reserve.find(row => row.extensions.ficheId === charId)), id: newId, profileId: old.profileId }]);
+  return state;
+};
+
+describe('Contre-vérification · séquelles orphelines (C1)', () => {
+  test('nouvelle rencontre : ni Base qui remonte ni clôture du suivi pour une séquelle dont le participant a disparu', async () => {
+    const fiches = { wren: { revision: 7, data: WREN() } };
+    let state = makeState(fiches, { register: register([agLoss(5), { id: 'inj:ear', participantId: 'p-wren', kind: 'loss', part: 'ear', side: 'left', label: 'Perte : oreille', status: 'permanent', history: [] }]) });
+    const fn = createFakeFunction(fiches);
+    state = await sendAll(fn, state, planFicheWriteback(state));
+    assert.deepEqual(fn.store.wren.data.suiviMj.map(row => row.id), ['outil:inj:ear']);
+    replaceParticipant(state, 'wren', 'p-wren-2');
+    assert.deepEqual(planFicheWriteback(state).fiches, [], 'aucune ligne : sources introuvables laissées telles quelles');
+  });
+
+  test('participant disparu mais déjà rattaché par un envoi : une nouvelle perte sur l’ancien id reste attribuée à la fiche', async () => {
+    const fiches = { wren: { revision: 7, data: WREN() } };
+    // Le participant porte déjà une séquelle au registre : il est rattaché à la fiche (ici par l'envoi ; en jeu, dès la commande de convalescence).
+    let state = makeState(fiches, { tool: { wren: { fate: 2 } }, register: register([{ id: 'inj:ear', participantId: 'p-wren', kind: 'loss', part: 'ear', side: 'left', label: 'Perte : oreille', status: 'permanent', history: [] }]) });
+    state = await sendAll(createFakeFunction(fiches), state, planFicheWriteback(state));
+    replaceParticipant(state, 'wren', 'p-wren-2');
+    state.extensions.v5.aftermathRegister.sequelae.push(agLoss(3));
+    const row = rowsOfPlan(planFicheWriteback(state)).find(item => item.key === 'carac:ag');
+    assert.equal(row.change.value, 29);
+  });
+
+  test('perte jamais envoyée dont le participant a disparu : signalée « à faire à la main », jamais perdue en silence', () => {
+    const state = makeState({ wren: { revision: 7, data: WREN() } }, { register: register([agLoss(4, { participantId: 'p-inconnu' })]) });
+    const plan = planFicheWriteback(state);
+    assert.deepEqual(plan.orphans.map(row => row.sequelaId), ['characteristic-loss:op-4-Ag']);
+    assert.ok(!JSON.stringify(plan.orphans).includes('Secret'), 'aucun motif du MJ');
+  });
+
+  test('source retrouvée et levée : la Base remonte et le suivi se clôt, lignes non cochées par défaut', async () => {
+    const fiches = { wren: { revision: 7, data: WREN() } };
+    const bone = { id: 'bone:leg', participantId: 'p-wren', kind: 'broken-bone', part: 'leg', side: 'left', label: 'Fracture : jambe', status: 'permanent', history: [] };
+    let state = makeState(fiches, { register: register([bone]) });
+    state = await sendAll(createFakeFunction(fiches), state, planFicheWriteback(state));
+    state.extensions.v5.aftermathRegister.sequelae[0].status = 'healed';
+    const rows = rowsOfPlan(planFicheWriteback(state));
+    const ag = rows.find(row => row.key === 'carac:ag');
+    assert.ok(ag.change.value > ag.change.base); assert.equal(ag.defaultUnchecked, true);
+    const closed = rows.find(row => row.key === 'suivi:outil:bone:leg');
+    assert.equal(closed.change.value, null); assert.equal(closed.defaultUnchecked, true);
+  });
+});
+
+describe('Contre-vérification · cicatrices, pertes hors fiche, lignes sans id (C3, C5, 13)', () => {
+  test('cicatrice de duel : seulement si l’incident est clos, une seule par personnage', () => {
+    const scar = (id, incidentId) => ({ id, participantId: 'p-wren', incidentId, kind: 'scar', label: 'Cicatrice de duel', status: 'permanent', history: [] });
+    const reg = register([scar('scar:1', 'inc-open'), scar('scar:2', 'inc-closed'), scar('scar:3', 'inc-closed-2')]);
+    reg.incidents = [{ id: 'inc-open', status: 'open' }, { id: 'inc-closed', status: 'closed' }, { id: 'inc-closed-2', status: 'closed' }];
+    const ids = rowsOfPlan(planFicheWriteback(makeState({ wren: { revision: 7, data: WREN() } }, { register: reg }))).filter(row => row.op === 'suivi').map(row => row.change.id);
+    assert.deepEqual(ids, ['outil:scar:2']);
+  });
+
+  test('perte sur une caractéristique absente de la fiche (M) et talent sans acquisitions : « à faire à la main » avec motif', () => {
+    const state = makeState({ wren: { revision: 7, data: FICHE_B() } }, { register: register([agLoss(2, { carac: 'M', id: 'characteristic-loss:m' })]) });
+    for (const subject of copiesOf(state)) subject.extensions.v5.divineRejections = [{ id: 'rej', kind: 'permanent', cult: 'Sigmar', lossConfirmedBy: 'MJ', removedTalents: [{ id: 'talent-beni', name: 'Béni' }] }];
+    const rows = rowsOfPlan(planFicheWriteback(state));
+    assert.equal(rows.find(row => row.key === 'manual:carac:M').reason, 'carac-not-on-fiche');
+    assert.equal(rows.find(row => row.op === 'row' && row.manual).reason, 'no-fiche-id');
+  });
+
+  test('lignes de fiche sans id ou à id en double : « à faire à la main », jamais un conflit insoluble', () => {
+    const data = FICHE_B(); data.talentsAcq.push({ nom: 'Béni (Sigmar)' }); data.equipment.push(clone(RELIC));
+    const state = confiscate(rejectWren(makeState({ wren: { revision: 7, data } })));
+    const rows = rowsOfPlan(planFicheWriteback(state));
+    assert.ok(rows.some(row => row.manual && row.reason === 'fiche-rows-without-id' && row.op === 'row'));
+    const relic = rows.find(row => row.key === 'row:equipment:eq-relic');
+    assert.equal(relic.manual, true); assert.equal(relic.reason, 'duplicate-id');
+  });
+
+  test('Prière rangée parmi les compétences de base de la fiche : motif explicite', () => {
+    const state = rejectWren(makeState({ wren: { revision: 7, data: FICHE_B() } }));
+    for (const subject of copiesOf(state)) subject.skills = [{ id: 'skill-priere', storageKey: 'Prière', name: 'Prière', basic: true, advances: 0 }];
+    assert.equal(rowsOfPlan(planFicheWriteback(state)).find(row => row.op === 'skill-adv').reason, 'basic-skill');
+  });
+});
+
+describe('Contre-vérification · compteurs (3, C2, 10) et mutations (11)', () => {
+  test('fiche sans `fortune` mais avec `chance` : même règle que migrerFicheV5, pas de conflit', async () => {
+    const data = WREN(); delete data.fortune; data.chance = '2';
+    const fiches = { wren: { revision: 7, data } };
+    let state = makeState(fiches, { tool: { wren: { fortune: 0 } } });
+    state.extensions.v5.ficheWriteback = { fortuneAnchor: { wren: { fiche: 2, tool: 2 } } };
+    assert.equal(state.reserve[0].ficheSnapshot.writebackBase.fields.fortune, '2');
+    assert.equal(ficheValueForKey(data, 'counter:fortune'), '2');
+    const fn = createFakeFunction(fiches);
+    state = await sendAll(fn, state, planFicheWriteback(state));
+    assert.equal(fn.store.wren.data.fortune, '0');
+  });
+
+  test('C2 : Fortune envoyée seulement si le registre a bougé depuis sa dernière lecture ; sinon ligne non cochée', () => {
+    const state = makeState({ wren: { revision: 7, data: WREN() } }, { tool: { wren: { fortune: 0 } } });
+    const unknown = rowsOfPlan(planFicheWriteback(state)).find(row => row.key === 'counter:fortune');
+    assert.equal(unknown.defaultUnchecked, true); assert.equal(unknown.note, 'fortune-anchor-unknown');
+    state.extensions.v5.ficheWriteback = { fortuneAnchor: { wren: { fiche: 1, tool: 0 } } };
+    const still = rowsOfPlan(planFicheWriteback(state)).find(row => row.key === 'counter:fortune');
+    assert.equal(still.defaultUnchecked, true); assert.equal(still.note, 'fiche-changed-tool-unchanged');
+    state.extensions.v5.ficheWriteback = { fortuneAnchor: { wren: { fiche: 2, tool: 1 } } };
+    assert.ok(!rowsOfPlan(planFicheWriteback(state)).find(row => row.key === 'counter:fortune').defaultUnchecked);
+  });
+
+  test('C2 : un registre initialisé depuis la fiche mémorise la valeur lue', async () => {
+    const { setV5Fortune } = await import('../js/core/v5-resources.js');
+    const state = makeState({ wren: { revision: 7, data: WREN() } });
+    state.extensions.v5.characterResources = [];
+    const next = setV5Fortune(state, state.combat.participants[0], 2, { source: 'fiche' });
+    const entry = next.extensions.v5.characterResources.find(row => row.characterId === 'fiche:wren');
+    assert.deepEqual([entry.ficheAnchor, entry.toolAnchor], [2, 2]);
+  });
+
+  test('Péché et Corruption absents de la fiche valent 0 : pas de ligne « — → 0 »', () => {
+    const data = WREN(); delete data.peche; delete data.corruption;
+    const state = makeState({ wren: { revision: 7, data } }, { tool: { wren: { sin: 0, corruption: 0 } } });
+    assert.deepEqual(rowsOfPlan(planFicheWriteback(state)).filter(row => ['counter:peche', 'counter:corruption'].includes(row.key)), []);
+  });
+
+  test('mutation confirmée sans résumé : effet visible pris au catalogue, jamais la manifestation', () => {
+    const state = makeState({ wren: { revision: 7, data: WREN() } });
+    for (const subject of copiesOf(state)) subject.extensions.v5.corruptionMutations = [{ id: 'mut-9', tableRowId: 'L06-PHY-01', entryId: 'L06-PHY-01', status: 'confirmed', description: 'L06-PHY-01', manifestation: { text: 'Manifestation secrète' } }];
+    const entry = rowsOfPlan(planFicheWriteback(state)).find(row => row.key === 'suivi:outil:mut-9').change.value;
+    assert.equal(entry.detail, 'Jambes animales : le Mouvement augmente de 1.');
+    assert.ok(!JSON.stringify(entry).includes('secrète'));
+  });
+});
+
+describe('Contre-vérification · envois successifs, erreurs, historique (2, 5, 6)', () => {
+  test('une même vue cumule ses envois dans lastSend ; l’annulation les défait tous, du plus récent au plus ancien', async () => {
+    const fiches = { wren: { revision: 7, data: WREN() } };
+    let state = makeState(fiches, { tool: { wren: { fate: 2 } } });
+    const fn = createFakeFunction(fiches);
+    const send = async sendId => {
+      const fiche = planFicheWriteback(state).fiches[0];
+      const command = buildFicheCommand('wren', fiche.rows, { sendId, revision: fiche.revision, reason: 'Fin de séance (outil MJ)' });
+      state = applyWritebackSuccess(state, 'wren', await fn.execute(command), fiche.rows, { sessionId: 'vue-1' });
+    };
+    await send('s1');
+    for (const subject of copiesOf(state)) subject.extensions.v5.fate = 1;
+    await send('s2');
+    assert.equal(fn.store.wren.data.destin, '1');
+    const undo = buildUndoCommands(state.extensions.v5.ficheWriteback.lastSend);
+    assert.deepEqual(undo.map(item => item.command.payload.undoOf), ['outilmj-s2-wren', 'outilmj-s1-wren']);
+    for (const item of undo) state = applyWritebackSuccess(state, item.charId, await fn.execute(item.command), item.rows);
+    assert.equal(fn.store.wren.data.destin, '3');
+    assert.deepEqual(buildUndoCommands(state.extensions.v5.ficheWriteback.lastSend), []);
+  });
+
+  test('messages d’erreur propres à l’écriture, préfixe functions/ normalisé', () => {
+    const error = (code, details) => Object.assign(new Error('x'), { code, details });
+    assert.match(writebackErrorMessage(error('functions/permission-denied')), /MJ/);
+    assert.match(writebackErrorMessage(error('functions/already-exists')), /déjà/);
+    assert.match(writebackErrorMessage(error('functions/invalid-argument')), /refusé/);
+    assert.match(writebackErrorMessage(error('functions/failed-precondition', { kind: 'migration-needed' })), /migr/);
+    assert.match(writebackErrorMessage(error('functions/failed-precondition'), { undo: true }), /annulation/i);
+    assert.match(writebackErrorMessage(error('functions/unavailable')), /injoignables/);
+  });
+
+  test('les commandes d’envoi ne sont pas annulables par l’historique de l’outil (pas de double comptage)', async () => {
+    const { createStore } = await import('../js/core/store.js');
+    let saved = null;
+    const store = createStore({ storage: null, persistence: { async load() { return saved && clone(saved); }, async saveAtomic({ state }) { saved = clone(state); return { ok: true }; } } });
+    await store.ready;
+    const fiches = { wren: { revision: 7, data: WREN() } };
+    const base = makeState(fiches, { register: register([agLoss(5)]) });
+    await store.loadFromJSON({ ...base, combat: { round: 0, currentActorId: null, order: [], participants: base.combat.participants.map(row => ({ ...row, camp: 'pj', zone: 'active', skills: [], talents: [] })) }, diceLines: [] });
+    const plan = store.planFicheWriteback();
+    const fiche = plan.fiches[0];
+    const response = await createFakeFunction(fiches).execute(buildFicheCommand('wren', fiche.rows, { sendId: 's1', revision: 7, reason: 'Fin de séance (outil MJ)' }));
+    await store.applyFicheWritebackSuccess('wren', response, fiche.rows);
+    const reported = () => JSON.parse(store.getFullJSON()).extensions.v5.ficheWriteback.caracReported.wren.ag;
+    assert.equal(reported(), 5);
+    await store.undo?.();
+    assert.equal(reported(), 5);
   });
 });

@@ -147,7 +147,7 @@ import { deriveReminders, pendingReminders, resolveReminder } from './reminders.
 import { createScene, createIntention, createSceneEvent, createSceneClock, proposeSceneEvent, newlyProposedSceneEvents, resolveSceneEvent, applySceneEvent, advanceSceneClock } from './scene-events.js';
 import { sharedState, sameSharedState } from './sync-protocol.js';
 import { applyFicheSync as applyFicheSyncToDraft } from './fiche-sync.js';
-import { planFicheWriteback, applyWritebackSuccess, applyConflictChoice } from './fiche-writeback.js';
+import { planFicheWriteback, applyWritebackSuccess, applyConflictChoice, rememberAftermathOwners } from './fiche-writeback.js';
 import { convertLegacyV4Profile } from './v5-legacy-conversion.js';
 import { planMountedFall, V5_RIDE_SKILL_ID } from './v5-mounted-combat.js';
 import { declaredMountOf, linkDeclaredMounts, mountProfileId, planMountToggle, applyMountToggle } from './mounts.js';
@@ -1333,7 +1333,8 @@ function resolvedCorruptionTest(participant, skillId, input) {
       if (outcome?.receipt?.status !== 'applied' || outcome.state.revision === current.revision) throw refused;
       let next = { ...draft, extensions: { ...extensions, v5: { ...v5, aftermathRegister: outcome.state } } };
       if (outcome.afterApply) next = outcome.afterApply(next);
-      return next;
+      // Chantier H : la séquelle reste attribuée à la fiche du PJ après la fin du combat (participant recréé à chaque rencontre).
+      return rememberAftermathOwners(next);
     }); } catch (error) {
       if (error?.aftermathRefused) return outcome;
       throw error;
@@ -1516,7 +1517,7 @@ function resolvedCorruptionTest(participant, skillId, input) {
   }
 
   const api = {
-    executeCommand(type, mutator, { restore = null, recordHistory = true, purgeEncounterId = null } = {}) {
+    executeCommand(type, mutator, { restore = null, recordHistory = true, purgeEncounterId = null, externalBoundary = null } = {}) {
       if (!canMutate()) throw new Error('Store non prêt');
       if (typeof mutator !== 'function') throw new TypeError('Mutateur de commande requis');
       const run = () => {
@@ -1598,7 +1599,7 @@ function resolvedCorruptionTest(participant, skillId, input) {
         // de l'historique pour n'importe quelle commande (Tour suivant, PV, états) :
         // on n'enregistre alors que les changements réversibles.
         const compact = JSON.stringify(before).length + JSON.stringify(after).length > 200000;
-        const nextHistory = recordHistory
+        const recordedHistory = recordHistory
           ? recordCommand(baseHistory, (compact ? createCompactStateCommand : createStateCommand)({
             id: `${CLIENT_ID}:command:${nextRevision}`,
             type,
@@ -1607,6 +1608,9 @@ function resolvedCorruptionTest(participant, skillId, input) {
             after
           }))
           : baseHistory;
+        // Écriture déjà faite hors de l'outil (fiches) : la commande reste partagée, mais l'historique se ferme,
+        // car annuler en deçà désaccorderait l'outil et la fiche (chantier H).
+        const nextHistory = externalBoundary ? markExternalBoundary(recordedHistory, { ...externalBoundary, revision: nextRevision }) : recordedHistory;
         const protocolReady = Boolean(syncSession && syncSessionReady);
         const remoteNeeded = recordHistory && (hasSharedStateChange(before, after) || pendingProtocolState);
         const markPending = !protocolReady && Boolean(syncSession) && hasSharedStateChange(before, after);
@@ -1792,15 +1796,15 @@ function resolvedCorruptionTest(participant, skillId, input) {
       return { ...planFicheWriteback(envelope), lastSend: envelope.extensions?.v5?.ficheWriteback?.lastSend || null, revision: localRevision };
     },
     /** Envoi (ou annulation) accepté par une fiche : une commande annulable de l'outil, journalisée sans valeur réservée au MJ. */
-    applyFicheWritebackSuccess(charId, response, rows) {
+    applyFicheWritebackSuccess(charId, response, rows, options = {}) {
       if (!canMutate()) return false;
-      const captured = JSON.parse(JSON.stringify({ response, rows }));
+      const captured = JSON.parse(JSON.stringify({ response, rows, options: { sessionId: options.sessionId } }));
       const undo = (captured.rows || []).some(row => row.undoOf);
       return api.executeCommand(undo ? 'fiche-writeback-undo' : 'fiche-writeback', draft => {
-        const next = applyWritebackSuccess(draft, charId, captured.response, captured.rows);
+        const next = applyWritebackSuccess(draft, charId, captured.response, captured.rows, captured.options);
         next.log = [{ id: uid(), ts: Date.now(), kind: 'management', text: `${undo ? 'Envoi annulé sur la fiche' : 'Envoyé à la fiche'} ${charId} : ${(captured.rows || []).filter(row => row.change).map(row => row.key).join(', ')} (révision ${captured.response.revision}).` }, ...(next.log || [])].slice(0, 300);
         return next;
-      });
+      }, { externalBoundary: { reason: 'fiche-writeback', charId } });
     },
     /** Choix du MJ sur un champ en conflit (« Garder la fiche » / « Imposer l'outil »). */
     applyFicheWritebackConflictChoice(charId, key, choice, ficheValue) {
@@ -1809,7 +1813,7 @@ function resolvedCorruptionTest(participant, skillId, input) {
         const next = applyConflictChoice(draft, charId, key, choice, ficheValue);
         next.log = [{ id: uid(), ts: Date.now(), kind: 'management', text: `Conflit sur la fiche ${charId} (${key}) : ${choice === 'fiche' ? 'valeur de la fiche gardée' : 'valeur de l’outil imposée'}.` }, ...(next.log || [])].slice(0, 300);
         return next;
-      });
+      }, { externalBoundary: { reason: 'fiche-writeback-conflict', charId } });
     },
     removeProfile(id) {
       if (!canMutate()) return false;

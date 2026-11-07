@@ -1,7 +1,7 @@
 // Fonction `executeFicheCommand` simulée au plus près du contrat `outil-mj` (docs/specs/chantier-h-ecriture-fiches/plan.md §1),
 // précisé par le serveur T1/T2 (dépôt des fiches, js/fiche/outil-mj.js, branche claude/h-t1-outil-mj-7aa9fa).
 // Partagée par tests/fiche-writeback.test.mjs (Node) et tests/fiche-writeback-browser.mjs (servie au navigateur) : aucune dépendance.
-// Écart assumé : l'objet d'équipement n'est pas validé contre le référentiel (forme seule).
+// Écart assumé : l'objet d'équipement est validé en forme seulement (pas contre le référentiel publié).
 const clone = value => structuredClone(value);
 const COUNTERS = ['fortune', 'destin', 'peche', 'corruption'];
 const CARACS = ['cc', 'ct', 'f', 'e', 'i', 'ag', 'dex', 'int', 'fm', 'soc'];
@@ -55,6 +55,20 @@ function applyChange(data, change) {
   else if (change.op === 'row') data[change.collection] = upsert(rowsOf(data, change), change.id, change.value);
   else data.suiviMj = upsert(rowsOf(data, change), change.id, change.value);
 }
+// Forme minimale d'un objet d'équipement (validateEquipmentItem côté fiches fait davantage).
+const equipmentError = row => isRecord(row) && rowId(row.id) && typeof row.kind === 'string' && row.kind && text(row.name, 200, 1) ? null : 'objet d’équipement invalide';
+// Comme assertSafeTree : JSON pur, profondeur bornée ; et la taille conservatrice de la fiche (900 KiB).
+function safeTreeError(value, depth = 0) {
+  if (depth > 32) return 'arbre trop profond';
+  if (value === null || typeof value === 'string' || typeof value === 'boolean') return null;
+  if (typeof value === 'number') return Number.isFinite(value) ? null : 'nombre invalide';
+  if (Array.isArray(value)) { for (const item of value) { const error = safeTreeError(item, depth + 1); if (error) return error; } return null; }
+  if (isRecord(value)) { for (const [key, item] of Object.entries(value)) { if (key === '__proto__') return 'clé interdite'; const error = safeTreeError(item, depth + 1); if (error) return error; } return null; }
+  return 'valeur non sérialisable';
+}
+const MAX_FICHE_BYTES = 900 * 1024;
+// migrerFicheV5 (dépôt des fiches, js/fiche/v5.js) : `fortune` reprend `chance` s'il manque, avant toute comparaison.
+const migrerFicheV5 = data => !isRecord(data) || Object.hasOwn(data, 'fortune') || !Object.hasOwn(data, 'chance') ? data : { ...data, fortune: data.chance };
 const callableError = (code, message, details) => Object.assign(new Error(message), { code: `functions/${code}`, details });
 
 export function createFakeFunction(fiches, { role = 'mj' } = {}) {
@@ -76,6 +90,7 @@ export function createFakeFunction(fiches, { role = 'mj' } = {}) {
         if (entry === null) continue;
         if (!isRecord(entry) || entry.id !== change.id) fail('identifiant de ligne incohérent');
         if (change.collection === 'talentsAcq' && talentError(entry)) fail(talentError(entry));
+        if (change.collection === 'equipment' && equipmentError(entry)) fail(equipmentError(entry));
       }
     }
     if (change.op === 'suivi') {
@@ -111,30 +126,33 @@ export function createFakeFunction(fiches, { role = 'mj' } = {}) {
       return clone(receipts.get(operationId).response);
     }
     const fiche = store[charId];
-    if (!fiche) fail('fiche absente', 'not-found');
+    if (!fiche || !isRecord(fiche.data)) fail('migration de fiche requise', 'failed-precondition', { kind: 'migration-needed' });
     if (baseRevision > fiche.revision) fail('révision inconnue', 'aborted', { kind: 'conflict', revision: fiche.revision });
     if (payload.undoOf !== undefined) {
       const target = receipts.get(payload.undoOf);
       if (!target || target.charId !== charId) fail('annulation inconnue', 'failed-precondition');
       if (target.payload.undoOf !== undefined) fail('une annulation ne s’annule pas', 'failed-precondition');
     }
+    const source = migrerFicheV5(fiche.data);
     const conflicts = [];
     const toApply = [];
     for (const change of payload.changes) {
-      if (matching(fiche.data, change).length > 1) { conflicts.push(keyOf(change)); continue; } // id en double
-      const current = currentValue(fiche.data, change);
+      if (matching(source, change).length > 1) { conflicts.push(keyOf(change)); continue; } // id en double
+      const current = currentValue(source, change);
       if (same(current, change.value)) continue; // CA12 (et ligne déjà absente pour un retrait)
       if (same(current, change.base)) toApply.push(change);
       else conflicts.push(keyOf(change));
     }
     if (conflicts.length) fail('la fiche a changé depuis la dernière lecture de l’outil', 'aborted', { kind: 'conflict', fields: conflicts, revision: fiche.revision });
-    const data = clone(fiche.data);
+    const data = clone(source);
     const changes = {};
     for (const change of toApply) {
       const before = currentValue(data, change);
       applyChange(data, change);
       changes[keyOf(change)] = { before, after: currentValue(data, change), label: change.label };
     }
+    if (safeTreeError(data)) fail(safeTreeError(data));
+    if (new TextEncoder().encode(stable(data)).length > MAX_FICHE_BYTES) fail('la fiche dépasse la taille maximale conservatrice', 'resource-exhausted', { kind: 'fiche-too-large' });
     fiche.data = data;
     fiche.revision += 1;
     const response = { operationId, charId, revision: fiche.revision };

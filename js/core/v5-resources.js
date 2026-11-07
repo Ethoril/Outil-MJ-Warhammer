@@ -201,6 +201,8 @@ export function setV5Fortune(envelope, subject, value, { source = 'mj', characte
   }
   const registry = registryOf(next), index = registry.findIndex(row => row.characterId === identity);
   const entry = { ...(index >= 0 ? registry[index] : {}), characterId: identity, fortune: value, initializedFrom: index >= 0 ? registry[index].initializedFrom : source };
+  // Chantier H (C2) : à l'initialisation, valeurs de la fiche et du registre, repère de l'écriture en retour de la Fortune.
+  if (index < 0 && Number.isSafeInteger(known.sourceBalance)) Object.assign(entry, { ficheAnchor: known.sourceBalance, toolAnchor: value });
   if (index >= 0) registry[index] = entry; else registry.push(entry);
   return projectV5ResourceEnvelope(withRegistry(next, registry));
 }

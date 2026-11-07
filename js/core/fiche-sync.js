@@ -200,18 +200,27 @@ export function ficheSnapshot(charId, fiche, metadata = {}) {
 
 const WRITEBACK_FIELDS = Object.freeze(['destin', 'fortune', 'peche', 'corruption']);
 const WRITEBACK_ROWS = Object.freeze(['talentsAcq', 'equipment', 'skillsAdvanced']);
-/** Un champ ou une collection absents de la fiche restent absents ici : absent n'est jamais « vide ». */
+const duplicateIds = rows => [...new Set(rows.map(row => row.id).filter((id, index, ids) => ids.indexOf(id) !== index))];
+/** Un champ ou une collection absents de la fiche restent absents ici : absent n'est jamais « vide ». Identifiants en double relevés. */
 function ficheWritebackBase(raw, metadata = {}) {
-  const base = { revision: Number.isSafeInteger(metadata.revision) ? metadata.revision : null, fields: {}, carac: {}, rows: {}, unidentified: {} };
+  const base = { revision: Number.isSafeInteger(metadata.revision) ? metadata.revision : null, fields: {}, carac: {}, rows: {}, unidentified: {}, duplicates: {} };
   for (const key of WRITEBACK_FIELDS) if (own(raw, key)) base.fields[key] = cloneValue(raw[key]);
+  // Même règle que migrerFicheV5 côté fiches (appliquée avant toute comparaison) : `fortune` reprend `chance` s'il manque.
+  if (!own(raw, 'fortune') && own(raw, 'chance')) base.fields.fortune = cloneValue(raw.chance);
   if (isRecord(raw.carac)) for (const key of Object.keys(CARAC_MAP)) if (isRecord(raw.carac[key])) base.carac[key] = cloneValue(raw.carac[key]);
   for (const key of WRITEBACK_ROWS) {
     if (!own(raw, key) || !Array.isArray(raw[key])) continue;
     const identified = raw[key].filter(row => isRecord(row) && typeof row.id === 'string' && row.id);
     base.rows[key] = Object.fromEntries(identified.map(row => [row.id, cloneValue(row)]));
     if (identified.length !== raw[key].length) base.unidentified[key] = raw[key].length - identified.length;
+    const dups = duplicateIds(identified);
+    if (dups.length) base.duplicates[key] = dups;
   }
-  if (own(raw, 'suiviMj') && Array.isArray(raw.suiviMj)) base.suiviMj = cloneValue(raw.suiviMj);
+  if (own(raw, 'suiviMj') && Array.isArray(raw.suiviMj)) {
+    base.suiviMj = cloneValue(raw.suiviMj);
+    const dups = duplicateIds(raw.suiviMj.filter(row => isRecord(row) && typeof row.id === 'string'));
+    if (dups.length) base.duplicates.suiviMj = dups;
+  }
   return base;
 }
 
