@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>U1 · maquette D validée par le MJ (01/11/2026)</title>
+</head>
+<body>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya:wght@400;500;700&amp;family=Alegreya+Sans:wght@400;500;700&amp;family=Grenze+Gotisch:wght@500;700&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#8a0707}a:hover{color:#b31212}
+.chip{font:500 15px 'Alegreya Sans',sans-serif;padding:8px 14px;border-radius:999px;border:1px solid #b9a582;background:#fdf6e3;color:#3e2e22;cursor:pointer}
+.chip.on{background:#5a1d1d;border-color:#5a1d1d;color:#fdf6e3}
+.d100{width:72px;height:52px;box-sizing:border-box;border:2px solid #5a1d1d;border-radius:8px;background:#fffaf0;font:700 26px 'Alegreya Sans',sans-serif;color:#3e2e22;text-align:center}
+.roll{height:52px;padding:0 14px;border-radius:8px;border:1px solid #5a1d1d;background:#fdf6e3;color:#5a1d1d;font:700 15px 'Alegreya Sans',sans-serif;cursor:pointer;display:flex;align-items:center;gap:6px}
+.lbl{font:500 14px 'Alegreya Sans',sans-serif;color:#5e4e42}
+.step{width:28px;height:28px;border-radius:50%;background:#5a1d1d;color:#fdf6e3;font:700 15px 'Alegreya Sans',sans-serif;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.tg{display:flex;align-items:center;gap:8px;font-size:15px}
+.grp{font:700 15px 'Alegreya',serif;color:#5a1d1d;margin:6px 0 2px}
+.who{font:700 12px 'Alegreya Sans',sans-serif;padding:2px 8px;border-radius:999px;color:#fff}
+</style>
+<div style="width:1440px;height:900px;box-sizing:border-box;background:#f5e5c7;color:#3e2e22;font-family:'Alegreya Sans',sans-serif;display:flex;flex-direction:column">
+
+<header style="height:60px;flex-shrink:0;display:flex;align-items:center;gap:24px;padding:0 24px;background:#e8d8b8;border-bottom:1px solid #b9a582">
+<span style="font:700 26px 'Grenze Gotisch',serif;color:#5a1d1d">Jouer</span>
+<span style="font:500 17px 'Alegreya Sans',sans-serif">Round 2 · tour de <strong>Garde du pont</strong></span>
+<span style="flex-grow:1"></span>
+<button class="chip" type="button">Annuler ↶</button>
+<button type="button" style="font:700 15px 'Alegreya Sans',sans-serif;padding:10px 18px;border-radius:8px;border:0;background:#8a0707;color:#fff">Tour suivant (N)</button>
+</header>
+
+<div style="flex-grow:1;display:flex;min-height:0">
+
+<nav aria-label="Piste des tours" style="width:220px;flex-shrink:0;padding:16px;box-sizing:border-box;display:flex;flex-direction:column;gap:8px;border-right:1px solid #b9a582">
+<span class="lbl">Ordre du Round</span>
+<div style="padding:10px 12px;border-radius:8px;background:#fdf6e3;border-left:4px solid #2a6354"><strong>Dagmar Haffner</strong><br><span class="lbl">PV 12/14 · a joué</span></div>
+<div style="padding:10px 12px;border-radius:8px;background:#fdf6e3;border:2px solid #9b2317"><strong>Garde du pont</strong><br><span class="lbl">PV 9/12 · joue</span></div>
+<div style="padding:10px 12px;border-radius:8px;background:#fdf6e3;border-left:4px solid #2a6354"><strong>Ulrike</strong><br><span class="lbl">PV 11/11 · Bénédiction de Protection</span></div>
+<div style="padding:10px 12px;border-radius:8px;background:#fdf6e3;border-left:4px solid #9b2317"><strong>Bandit</strong><br><span class="lbl">PV 8/8</span></div>
+</nav>
+
+<main style="flex-grow:1;min-width:0;padding:20px 28px;box-sizing:border-box;display:flex;flex-direction:column;gap:18px;overflow:hidden">
+
+<section style="display:flex;gap:16px;align-items:flex-start">
+<div class="step">1</div>
+<div style="flex-grow:1;display:flex;flex-direction:column;gap:10px">
+<h2 style="margin:0;font:700 20px 'Alegreya',serif;color:#5a1d1d">Action et cible</h2>
+<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+<span class="lbl" style="width:64px">Action</span>
+<button class="chip on" type="button">Hallebarde · CC 41 · dégâts +5</button>
+<button class="chip" type="button">Coup de poing</button>
+<button class="chip" type="button">Test…</button>
+<button class="chip" type="button">Sort, prière, Corruption…</button>
+</div>
+<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+<span class="lbl" style="width:64px">Cible</span>
+<button class="chip on" type="button">Ulrike</button>
+<button class="chip" type="button">Dagmar Haffner</button>
+</div>
+</div>
+</section>
+
+<section style="display:flex;gap:16px;align-items:flex-start">
+<div class="step">2</div>
+<div style="flex-grow:1;display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;align-items:center;gap:16px">
+<h2 style="margin:0;font:700 20px 'Alegreya',serif;color:#5a1d1d">Jets</h2>
+<button type="button" class="chip" style="border-color:#9b2317;color:#9b2317">Lancer tous les dés des PNJ</button>
+</div>
+<div style="display:flex;gap:40px;align-items:flex-end;flex-wrap:wrap">
+<div style="display:flex;flex-direction:column;gap:4px">
+<span class="lbl"><span class="who" style="background:#9b2317">PNJ</span> Attaque du Garde · CC 41</span>
+<div style="display:flex;gap:8px"><input class="d100" value="34" aria-label="Jet d'attaque"><button class="roll" type="button">Lancer</button></div>
+<span class="lbl">tiré par l'outil</span>
+</div>
+<div style="display:flex;flex-direction:column;gap:4px">
+<span class="lbl"><span class="who" style="background:#2a6354">PJ</span> Défense d'Ulrike · Esquive 38</span>
+<div style="display:flex;gap:8px"><input class="d100" value="" placeholder="—" aria-label="Jet de défense"><button class="roll" type="button">Lancer</button></div>
+<span class="lbl">dé du joueur : tapez-le puis Entrée</span>
+</div>
+</div>
+<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+<button class="chip on" type="button" aria-expanded="true" aria-controls="tiroir">Circonstances · 2 actives</button>
+<span class="lbl">Position haute +1 DR · Protection d'Ulrike : Test de Calme à saisir</span>
+</div>
+</div>
+</section>
+
+<section style="display:flex;gap:16px;align-items:flex-start">
+<div class="step">3</div>
+<div style="flex-grow:1;display:flex;flex-direction:column;gap:12px">
+<h2 style="margin:0;font:700 20px 'Alegreya',serif;color:#5a1d1d">Résultat</h2>
+<div style="padding:14px 16px;border-radius:8px;border:1px dashed #b9a582;color:#5e4e42;font-size:15px">En attente du jet de défense d'Ulrike.</div>
+</div>
+</section>
+
+<footer style="margin-top:auto;padding:16px;border-radius:8px;background:#e8d8b8;display:flex;align-items:center;gap:20px">
+<button type="button" disabled="" aria-describedby="manqueD" style="font:700 17px 'Alegreya Sans',sans-serif;padding:14px 22px;border-radius:8px;border:0;background:#c9b9a0;color:#6b5a4c">Appliquer</button>
+<div id="manqueD" style="display:flex;flex-direction:column;gap:2px">
+<span style="font:700 15px 'Alegreya Sans',sans-serif;color:#8a0707">À saisir avant d'appliquer :</span>
+<a href="#" style="font-size:15px">Jet de défense d'Ulrike</a>
+<a href="#calme" style="font-size:15px">Test de Calme du Garde du pont (Bénédiction de Protection)</a>
+</div>
+<span style="flex-grow:1"></span>
+<button class="chip" type="button">Effacer</button>
+</footer>
+
+</main>
+
+<aside id="tiroir" aria-label="Circonstances" style="width:330px;flex-shrink:0;border-left:1px solid #b9a582;background:#e8d8b8;padding:18px 20px;box-sizing:border-box;display:flex;flex-direction:column;gap:6px;overflow:hidden">
+<div style="display:flex;align-items:baseline;justify-content:space-between">
+<h2 style="margin:0;font:700 20px 'Alegreya',serif;color:#5a1d1d">Circonstances</h2>
+<button class="chip" type="button">Fermer</button>
+</div>
+<span class="lbl">Ce qui est coché entre dans le calcul.</span>
+<div class="grp">Obligatoire</div>
+<label id="calme" class="tg" style="padding:8px;border:2px solid #8a0707;border-radius:8px;background:#fdf6e3;flex-wrap:wrap">Protection d'Ulrike : Test de Calme du Garde
+<select style="font:inherit" aria-required="true"><option>À saisir</option><option>Échec : autre cible ou Action</option><option>Réussite</option></select>
+<button class="roll" type="button" style="height:32px">Lancer</button></label>
+<div class="grp">Combat</div>
+<label class="tg"><input type="checkbox" checked=""> Position haute (+1 DR)</label>
+<label class="tg"><input type="checkbox"> Terrain difficile (−1 DR)</label>
+<label class="tg"><input type="checkbox"> Espace exigu</label>
+<label class="tg"><input type="checkbox"> Surnombre : 1 allié engagé</label>
+<label class="tg"><input type="checkbox"> Main secondaire (−2 DR)</label>
+<div class="grp">Défense d'Ulrike</div>
+<label class="tg"><input type="checkbox"> À Terre</label>
+<label class="tg"><input type="checkbox"> Encerclée, sans échappatoire</label>
+<div class="grp">Avantage et Fortune</div>
+<label class="tg">Avantage <input type="number" value="0" style="width:48px" aria-label="Sources d'Avantage"> Désavantage <input type="number" value="0" style="width:48px" aria-label="Sources de Désavantage"></label>
+<label class="tg"><input type="checkbox"> Relancer avec 1 Point de Chance</label>
+<div class="grp">Talents</div>
+<label class="tg">Activation <select style="font:inherit"><option>Aucune</option><option>Frénésie</option></select></label>
+<label class="tg"><input type="checkbox"> Coup ciblé (−2 DR)</label>
+</aside>
+
+</div>
+</div>
+</body>
+</html>

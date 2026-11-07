@@ -14,55 +14,91 @@ Ouvrir `http://127.0.0.1:8765/` dans Chrome. `localhost:8765` et `127.0.0.1:8765
 
 ## Parcours fonctionnels
 
-- [ ] G-BASE-1 · Profils : création, rechargement, import JSON
+- [y] G-BASE-1 · Profils : création, rechargement, import JSON
   1. Dans **Préparer**, créer un profil complet avec nom, type, groupe, initiative, PV, endurance, armures, caractéristiques et une action préparée ; chaque case d’un jet montre une infobulle d’aide au survol. Recharger la page et vérifier les valeurs. Créer ensuite un profil par **Nouveau profil**, puis **Créer depuis un JSON** : **Insérer un exemple**, **Vérifier le JSON**, relire l’aperçu, **Créer 1 profil**, puis ouvrir **Modifier** et vérifier que toutes les cases sont remplies (format : [IMPORT_PROFILS_JSON.md](IMPORT_PROFILS_JSON.md)).
   Attendu : les valeurs saisies survivent au rechargement ; le profil importé a toutes ses cases remplies.
-  Remarques :
+  Remarques : beaucoup de doublons dans la liste des mots clés de créatures / apparition de Ancien seuil -10 : DR à confirmer sur un profil importé json depuis ton exemple, ça veut dire quoi exactement ? 
 
-- [ ] G-BASE-2 · Bibliothèque et références
+- [y] G-BASE-2 · Bibliothèque et références
   1. Dans **Bibliothèque**, rechercher un nom, un tag ou le nom d’une action. Ouvrir **Règles et mots-clés** et vérifier que les références, dont `Sonné`, sont visibles. Modifier, dupliquer puis supprimer une fiche de test.
   Attendu : la recherche trouve le profil ; `Sonné` est visible dans les références ; modifier, dupliquer et supprimer fonctionnent.
-  Remarques :
+  Remarques : dans règles et mots clés, repères V5, appuyer sur les boutons jets, élan, etc affiche une recherche de mots au lieu de juste afficher précisément ce qu'on pense avoir cliqué, c'est à dire la règle des tests, d'élan, etc
 
-- [ ] G-BASE-3 · Rencontre et personnage actif
+- [y] G-BASE-3 · Rencontre et personnage actif
   1. Dans **Préparer**, cliquer **Nouvelle rencontre**, ajouter au moins deux profils actifs et cliquer **Lancer la rencontre** (ou fermer la fenêtre : la rencontre reste dans la liste **Rencontres** et se lance par **Lancer**, se rouvre par **Modifier**, se retire par **Supprimer**). Dans **Jouer**, cliquer une ligne de la piste de gauche, avant puis après **Commencer le combat** : ce combattant devient le personnage actif (« Personnage actif », ou « Agit hors tour » quand ce n’est pas son tour, le ▶ restant sur le combattant du tour) et ses actions préparées sont visibles ; **Tour suivant** repart du combattant du tour.
   Attendu : le combattant cliqué devient « Personnage actif » (ou « Agit hors tour ») ; **Tour suivant** repart du combattant du tour.
-  Remarques :
+  Remarques : à l'écran d'initiative d'une nouvelle rencontre, le sélecteur de camp surpris ne propose que "aucun" en choix, alors que j'ai bien un pj et un pnj dans le test. Ordre calculé est vide, le bouton calculer / actualiser l'ordre n'a pas d'effet visible. C'est possiblement parce que les deux personnages étaient classés "en attente", il faudrait un avertissement. D'ailleurs à la création d'une rencontre, le défaut doit être à actif / ennemi (pour les pnjs/créatures) et actif aussi pour les pjs
 
-- [ ] G-BASE-4 · Action, défense et annulation
+- [x] G-BASE-4 · Action, défense et annulation
   1. Ouvrir une action physique, choisir le type, la cible (puces **Cible** de Résolution) et un jet déterministe (le d100 lancé à la table se tape dans la case, puis Entrée). Pour une attaque, la défense de la cible propose ses jets enregistrés à côté de CC et Ag ; un jet de type Défense est choisi d’office. Prévisualiser le résultat puis cliquer **Appliquer les conséquences**. Vérifier le PV de la cible et l’entrée du journal. Utiliser `Annuler` puis `Rétablir` sur une modification PV et vérifier les deux valeurs.
   Attendu : le PV de la cible et le journal changent à l’application ; `Annuler` puis `Rétablir` redonnent les deux valeurs.
-  Remarques :
+  Remarques : Il faut revoir complètement l'interface. Les actions physiques doivent être en haut, corruption et compagnie viennent après. Le cartouche d'action est complet mais il faudra faire une passe d'ui complète pour le rendre plus digeste et pouvoir aller à l'essentiel. Impossible de cliquer sur "appliquer 11 dégats à Garde du pont" calculés dans mon tests, j'ai un symbole d'interdit sur le bouton au survol et je ne sais pas pourquoi. Peut être parce qu'il y a des choses au dessus que je n'ai pas renseigné alors que le moteur l'attend, mais il y a trop d'éléments, je ne sais pas ce qui est obligatoire ou pas et en l'état je n'arrive pas à valider l'action
 
-- [ ] G-BASE-5 · Événements structurés
+- [x] G-BASE-5 · Événements structurés
   1. Dans le menu, **Événements structurés** : créer une jauge manuelle. Créer un événement qui l’avance, enregistrer et prévisualiser, appliquer explicitement la conséquence, fermer puis rouvrir le panneau et vérifier la valeur.
   Attendu : la jauge garde sa valeur après fermeture et réouverture du panneau.
-  Remarques :
+  Remarques : j'ai pu créer, mais rien ne se passe quand les conditions demandées sont remplies. L'évènement ne voit pas la condition remplie visiblement. Et on ne peut plus rentrer dedans pour modifier ou revoir ce qu'on avait fait
 
-- [ ] G-BASE-6 · Comparer les cibles
+- [y] G-BASE-6 · Comparer les cibles
   1. Dans **Résolution** (comparaison « Et si… »), choisir une attaque, un jet et plusieurs cibles. Cliquer **Comparer les cibles**, puis **Choisir** sur la ligne d’une seule cible. Vérifier que seule cette cible change. Abandonner un aperçu sans appliquer ne modifie aucune fiche.
   Attendu : seule la cible choisie change ; un aperçu abandonné ne modifie aucune fiche.
-  Remarques :
+  Remarques : impossible à tester je n'avais que deux personnages dans le combat. J'ai voulu en rajouter, j'ai pu modifier la rencontre, mais une fois revenu dans la rencontre les nouveaux personnages ne s'affichent pas. A noter que le test 10 a permis de voir tous les personnages revenir dans le reset, du coup je test et la comparaison marche
 
-- [ ] G-BASE-7 · Sauvegarde fichier et versions précédentes
+- [x] G-BASE-7 · Sauvegarde fichier et versions précédentes
   1. Pour E04, cliquer **Sauvegarder dans un fichier**, charger le fichier local et accepter le remplacement après lecture de l’aperçu. Modifier ensuite un PV, ouvrir **Versions précédentes**, prévisualiser le point `Import remplacé`, confirmer **Restaurer**, recharger et vérifier que les profils et la scène reviennent à l’état du point.
   Attendu : après restauration et rechargement, profils et scène reviennent à l’état du point.
+  Remarques : tout le parcours marche jusqu'au bouton "restaurer" qui n'a pas d'effet
+
+- [y] G-BASE-8 · Suspendre, reprendre et clôturer
+  1. Dans **Préparer**, la carte de la rencontre en cours indique **En cours** ; cliquer **Suspendre**, recharger puis cliquer **Reprendre** sur la carte (ou dans le menu ⋯). Vérifier que les participants et leur PV sont conservés. Ajouter un personnage persistant.
+  Attendu : participants et PV sont conservés. (La clôture avec aperçu, l’archive et le report n’existent plus depuis la 3.11.0.)
   Remarques :
 
-- [ ] G-BASE-8 · Suspendre, reprendre et clôturer
-  1. Dans **Préparer**, la carte de la rencontre en cours indique **En cours** ; cliquer **Suspendre**, recharger puis cliquer **Reprendre** sur la carte (ou dans le menu ⋯). Vérifier que les participants et leur PV sont conservés. Ajouter un personnage persistant, clôturer avec aperçu, puis vérifier l’archive et le report.
-  Attendu : participants et PV sont conservés ; l’archive et le report sont visibles après clôture.
-  Remarques :
-
-- [ ] G-BASE-9 · Hors ligne et synchronisation
+- [x] G-BASE-9 · Hors ligne et synchronisation
   1. Passer hors ligne avec les outils locaux, faire une modification, recharger et revenir en ligne. L’état local doit rester lisible ; une divergence de compte doit présenter une résolution explicite avant publication.
   Attendu : l’état local reste lisible ; une divergence de compte propose une résolution explicite avant publication.
-  Remarques :
+  Remarques : pas pu tester mais sans importance, le hors ligne n'est pas une priorité
 
-- [ ] G-BASE-10 · Recommencer le combat
+- [y] G-BASE-10 · Recommencer le combat
   1. Pendant un combat d’essai (dégâts, états, tours, combattant ajouté), cliquer **Recommencer** sur la carte de la rencontre en cours dans **Préparer** (ou **Recommencer le combat** dans le menu ⋯) et confirmer : PV, états, tours et combattants reviennent à la composition de la rencontre, le combat n’est plus commencé. **Annuler** (toast ou ↶) rend l’état d’avant.
   Attendu : PV, états, tours et combattants reviennent à la composition de la rencontre ; **Annuler** rend l’état d’avant.
   Remarques :
+
+## Panneau d’action refondu (3.33.0)
+
+Repères pour tous les parcours : le panneau **Résolution** se lit en trois étapes. **1 · Action et cible** : puces d’action et de cible, **Test…** (ancien sélecteur de type), **Sort, prière, Corruption…** (Focalisation, Incantation, Dissipation, Prière, Corruption), **Actions du Tour…**. **2 · Jets** : cases d100 avec leur étiquette PJ ou PNJ, **Lancer tous les dés des PNJ**, **Calculer**, puis **Circonstances · N actives**. **3 · Résultat**. En pied : **Appliquer**, **Effacer** (ancien « Annuler » du résultat ; ↶ reste l’annulation de la dernière commande) et la liste « À saisir avant d’appliquer ». Les cases et listes que les parcours ci-dessous situent dans « Test V5 », « Circonstances des Tests » ou « Pénalités de situation en DR » sont dans le tiroir **Circonstances** à droite (mêmes libellés), ouvert par défaut sur grand écran ; à 900 px ou moins il se superpose et reste fermé tant qu’on ne l’ouvre pas.
+
+- [x] G-U1-1 · Trois étapes et pied
+  1. Ouvrir une attaque d’un PNJ contre un PJ. Vérifier l’ordre 1 · Action et cible, 2 · Jets, 3 · Résultat ; avant tout jet, l’étape 3 dit ce qu’elle attend. Saisir l’attaque seule : « En attente du jet de défense de <cible> ». Faire défiler un long panneau.
+  Attendu : le pied (Appliquer, Effacer, « À saisir avant d’appliquer ») reste visible en bas ; chaque ligne de la liste mène à son champ, en ouvrant le tiroir s’il le faut ; Appliquer s’active dès que la liste est vide.
+  Remarques : globalement fonctionnement ok sauf les lignes "à saisir avant d'appliquer" qui ne sont pas cliquables et n'amène pas directement à ce qu'il faut remplir, ce qui peut être long quand il faut chercher dans le contexte. Certaines saisies où il faut confirmer un élément devraient permettre de cocher directement oui oui non l'élément d'ailleurs. Il faut aussi la possibilité pour le mj de choisir d'ignorer des conditions non réunies pour favoriser le rp et le narratif. Parfois une condition qui passe de non remplie à remplie ne saute pas et bloque le test. (par exemple tir à bout portant à oui a été reconnu, basculé à non il n'a plus été reconnu)
+
+- [x] G-U1-2 · Lancer tous les dés des PNJ
+  1. Attaque d’un PNJ contre un PJ : cliquer **Lancer tous les dés des PNJ**. 2. Refaire avec une défense de PJ déjà saisie, puis avec un critique, puis en magie (incident, Dissipation par un PNJ).
+  Attendu : seules les cases vides des PNJ et créatures sont remplies ; les dés des PJ et les cases déjà saisies ne bougent pas ; le calcul se lance seul ; un résultat déjà choisi (garder ou inverser) n’est pas effacé quand seul un dé de critique est lancé. Bouton grisé, avec explication au survol, s’il n’y a rien à lancer.
+  Remarques : lors d'une attaque, même si le jet d'attaque est raté, des dégâts sont proposés. Si le jet opposé est gagné par l'attaquant mais qu'il a raté son jet d'attaque, l'attaque reste un échec. Vu sur un critique mais peut être présent parfois ailleurs, message "résultat non appliqué: recalculez, puis réessayez". Arrivé aussi en lançant un sort, serres d'ambres. Est ce que ça arrive quand il y a des effets à appliquer qui sont narratifs et pas calculés par le moteur ? Lors d'un incident, j'ai ces messages mais je ne comprends pas comment résoudre l'incident, il n'y a pas de jet accessible Incident magique (MINOR) : Incident à déterminer —
+
+Incident magique transmis incomplet : jet d’incident (initialRoll / miscastRoll) manquant.
+
+- [x] G-U1-3 · Tiroir Circonstances
+  1. Sous Protection, attaquer le PJ béni : le Test de Calme est dans le groupe **Obligatoire** du tiroir. 2. Cocher une circonstance, fermer puis rouvrir le tiroir, changer d’action puis revenir. 3. Fermer le tiroir et passer à une autre action. 4. Réduire la fenêtre sous 900 px, ouvrir le tiroir, le fermer par Échap puis par un clic dehors.
+  Attendu : groupes dans l’ordre Obligatoire, Combat, Défense de la cible, Avantage et Fortune, Talents, Arme et munitions, Magie, autres ; un groupe vide n’apparaît pas ; le compteur ne compte que ce que le MJ a changé (pas les valeurs déduites de l’arme) ; les valeurs survivent à la fermeture ; une fermeture reste fermée d’une action à l’autre ; le panneau latéral se replie en rail tant que le tiroir est ouvert et revient ensuite.
+  Remarques : déjà pour créer la protection c'est très compliqué. Quand on va sélectionner prières, le culte du prètre n'est pas automatiquement reconnu, ça devrait faire partie des infos d'une fiche. Ensuite les emplacements liés à pénitence et péchés ne devraient apparaitre que si le personnage est concerné. Accès à la prière: par défaut le sélecteur de capacité de prononcer la prière doit être à oui. Et il manque un bouton pour tirer le jet de prière. On ne doit pas demander si la portée et la zone sont confirmées, si le mj est en train de saisir l'action c'est que c'est le cas. Quand on veut appliquer la prière: erreur  Commande trop volumineuse pour maxBytes
+
+- [y] G-U1-4 · Sort, prière, Corruption
+  1. Ouvrir **Sort, prière, Corruption…** et choisir tour à tour Incantation, Dissipation, Prière, Corruption.
+  Attendu : les sorts règlent le type comme l’ancien sélecteur ; Prière et Corruption ouvrent leur panneau existant, placé sous la Résolution ; les mêmes champs qu’avant sont présents.
+  Remarques :
+
+- [x] G-U1-5 · À la table
+  1. Jouer un vrai Round complet (attaques, défenses, un sort, une prière) avec le nouveau panneau.
+  Attendu : on va plus vite à l’essentiel qu’avant ; rien ne manque.
+  Remarques (gênes, lenteur de saisie sur une grosse rencontre, éléments à déplacer) : échec à cause des tests précédents
+
+- [x] G-RETEST · Corrections de la 3.32.0 à revoir
+  1. Rejouer G-BASE-3, 4, 5, 6 et 7 (C4 : fichier → chargement → versions → **Restaurer** n’a pas de parcours automatisé).
+  Attendu : les remarques notées sur ces parcours sont résolues.
+  Remarques : vu au passage, impossible de changer les points de vie d'un personnage ce qui empêche aussi des tests. Impossible de charger un fichier de save, il n'est pas reconnu
 
 ## Recette automatisée de référence
 
@@ -125,7 +161,7 @@ Ce parcours guidé permet au MJ de vérifier pas à pas, à la table dans l’on
   Remarques :
 - [ ] G-DIV-9 · Malice de Ranald (Tests opposés seulement)
   1. Lancer *Malice de Ranald* en ciblant un adversaire unique et en sélectionnant deux Caractéristiques distinctes dans `Première Caractéristique égalée (d10 : 1-2 CC, 3-4 I, 5-6 Int, 7-8 Soc, 9-0 au choix)` et `Seconde Caractéristique égalée (doublon : relancer)`. Observer la fiche du prêtre, effectuer un Test non opposé, puis effectuer un Test opposé contre cet adversaire sur l’une des Caractéristiques choisies.
-  Attendu : La fiche du prêtre et ses Tests simples (ou opposés à un autre ennemi) conservent ses Caractéristiques normales ; lors d’un Test opposé contre l’adversaire désigné impliquant l’une des deux Caractéristiques retenues, le seuil du prêtre utilise la valeur courante de l’adversaire (même si elle est inférieure).
+  Attendu : La fiche du prêtre et ses Tests simples (ou opposés à un autre ennemi) conservent ses Caractéristiques normales ; lors d’un Test opposé contre l’adversaire désigné impliquant l’une des deux Caractéristiques retenues, le seuil du prêtre utilise la valeur courante de l’adversaire (même si elle est inférieure). Avec un jet libre de profil ou une action manuelle (sans Caractéristique), le champ `Malice de Ranald : Caractéristique de ce Test` apparaît : en mêlée CC par défaut, sinon le calcul est bloqué tant qu’elle n’est pas choisie (« Une autre Caractéristique » = pas d’égalisation).
   Remarques :
 - [ ] G-DIV-10 · Attaque Rapide (Myrmidia — rappel de début de Round et attaque hors séquence)
   1. Lancer *Attaque Rapide* sur le prêtre, passer au Round suivant, puis ouvrir **Résolution** pour une attaque et cocher `Attaque rapide (Myrmidia) : attaque gratuite hors séquence`.
@@ -137,14 +173,14 @@ Ce parcours guidé permet au MJ de vérifier pas à pas, à la table dans l’on
   Remarques :
 - [ ] G-DIV-12 · En Bon Ordre (Myrmidia)
   1. Lancer *En Bon Ordre* sur les alliés choisis.
-  Attendu : Les alliés désignés reçoivent la couche active visible sur leur fiche, qui permet de se désengager sans pénalité ni attaque gratuite pendant la durée.
+  Attendu : Les alliés désignés reçoivent la couche active visible sur leur fiche. L’outil n’a pas encore d’action Désengagement (prévue avec le chantier des engagements de mêlée) : pendant la durée, le MJ applique lui-même le désengagement sans pénalité ni attaque gratuite.
   Remarques :
 - [ ] G-DIV-13 · Larmes de Shallya (retrait de Blessures Critiques et des États liés)
   1. Sur un personnage portant au moins une Blessure Critique enregistrée avec ses États associés (ex. `Hémorragique`, `Sonné`), lancer *Larmes de Shallya*, sélectionner la blessure dans `Blessure Critique guérie n° 1/3 (selon les DR)`, et prévisualiser/appliquer avec puis sans la case `Retirer aussi les États liés aux Blessures Critiques guéries`.
   Attendu : La Blessure Critique sélectionnée (et jusqu’à 1 de plus par tranche de `+2 DR`) est retirée du registre de la cible. Lorsque la case `Retirer aussi les États liés aux Blessures Critiques guéries` est cochée, les États issus des critiques guéris sont retirés simultanément et mentionnés dans le reçu ; si elle reste décochée, seule la Blessure Critique est retirée et les États demeurent. `Annuler` restaure le critique et les États retirés.
   Remarques :
 - [ ] G-DIV-14 · Faire monter les enjeux (Ranald)
-  1. Lancer *Faire monter les enjeux* sur une cible, puis résoudre son prochain Test dans **Résolution** (essayer un jet tout juste réussi à `+1 DR`, puis après `Annuler` un jet tout juste échoué à `-1 DR`).
+  1. Lancer *Faire monter les enjeux* sur une cible, puis résoudre son prochain Test dans **Résolution** (essayer un jet tout juste réussi à `+1 DR`, puis après `Effacer` un jet tout juste échoué à `-1 DR`).
   Attendu : En cas de réussite du Test de la cible, ses DR sont portés à au moins `+6 DR` ; en cas d’échec, ses DR sont portés à au plus `-6 DR`. Ce résultat amplifié s’applique à l’opposition et aux dégâts, consomme la couche à usage unique lors de l’application, et peut être annulé par `Annuler`.
   Remarques :
 - [ ] G-DIV-15 · Dévotion de la Guerrière (Myrmidia — mot-clé du référentiel, plus de saisie libre)
@@ -160,11 +196,11 @@ Ce parcours guidé permet au MJ de vérifier pas à pas, à la table dans l’on
   Remarques :
 - [ ] G-DIV-17 · Invocations et capteurs à cible implicite (Destinataires masqués)
   1. Ouvrir le formulaire divin et choisir *Hurlement du loup*, *Roi de la Nature*, *Œil de l’aigle* ou *Yeux de chat*.
-  Attendu : Le panneau n’affiche aucune case `Destinataire` ni aucun fait de portée à confirmer ; il indique `Cible : le prêtre (cible implicite).`. Après saisie du jet de Prière et des éventuels paramètres d’invocation (position, durée), `Calculer la prière` puis `Appliquer la prière` créent directement l’invocation ou le capteur rattaché au prêtre.
+  Attendu : Le panneau n’affiche aucune case `Destinataire` ni aucun fait de portée à confirmer ; il indique `Cible : le prêtre (cible implicite).`. Après saisie du jet de Prière et, pour *Roi de la Nature* seulement, de `Bête invoquée` et `Position d’apparition` (la durée est calculée), `Calculer la prière` puis `Appliquer la prière` créent directement l’invocation ou le capteur rattaché au prêtre.
   Remarques :
 - [ ] G-DIV-18 · Insertion d’un participant à son rang d’Initiative en cours de Round
-  1. En combat V5 commencé (par ex. Round 1, pendant le Tour d’un premier combattant d’Initiative `50` alors qu’un combattant d’Initiative `20` n’a pas encore joué), faire entrer un nouveau participant d’Initiative `35` (par ajout manuel à la rencontre, invocation magique ou invocation divine) et passer au Tour suivant ; répéter l’essai avec un participant d’Initiative `60` (rang déjà dépassé dans le Round courant).
-  Attendu : Le nouveau participant est inséré à son rang d’Initiative V5 dans la piste d’ordre. Si son rang n’a pas encore été franchi dans le Round (`35` avant `20`), il joue son Tour dès ce Round avant le combattant d’Initiative `20` ; si son rang est déjà dépassé (`60` alors que le Tour courant est à `50`), il est placé en tête de l’ordre mais ne joue qu’au Round suivant. `Annuler` retire le participant et restitue l’ordre ainsi que le combattant actif d’origine.
+  1. En combat V5 commencé (par ex. Round 1, pendant le Tour d’un premier combattant d’Initiative `9` alors qu’un combattant d’Initiative `6` n’a pas encore joué ; en V5 l’Initiative est Bonus d’Initiative + d10), faire entrer un nouveau participant par **Faire entrer** ; dans la fenêtre « Renfort en cours de Round · Initiative », ajuster son Initiative (le d10 du PNJ est tiré et affiché) pour obtenir un score de `8`, puis passer au Tour suivant ; répéter l’essai avec un score de `12` (rang déjà dépassé dans le Round courant). Une créature invoquée (sort ou prière) n’ouvre pas cette fenêtre : son Initiative est tirée seule (Bonus d’Initiative + d10) et elle prend son rang selon la même règle.
+  Attendu : Le nouveau participant est inséré à son rang d’Initiative V5 dans la piste d’ordre. Si son rang n’a pas encore été franchi dans le Round (`8` avant `6`), il joue son Tour dès ce Round avant le combattant d’Initiative `6` ; si son rang est déjà dépassé (`12` alors que le Tour courant est à `9`), il est placé en tête de l’ordre mais ne joue qu’au Round suivant. `Annuler` renvoie le participant au banc (« En attente ») et restitue l’ordre ainsi que le combattant actif d’origine.
   Remarques :
 
 ## Parcours de la 3.22 à la 3.30.0
@@ -185,7 +221,7 @@ Ce parcours guidé permet au MJ de vérifier pas à pas, à la table dans l’on
 
 - [ ] G-BES-3 · Surnombre en mêlée
   1. Faire engager quatre combattants contre deux. 2. Dans **Résolution**, ouvrir `Surnombre (mêlée)` et cocher les participants de `Engagés avec la cible, du côté de l’attaquant :` et de `Engagés avec eux, du côté de la cible :`. 3. Prévisualiser, puis cocher `Cible encerclée, sans voie d’échappement (en général 3 attaquants, 2 en espace étroit : +2 DR)`.
-  Attendu : un camp qui compte au moins le double d’engagés donne +1 DR à l’attaque de mêlée ; encerclée : +2 DR, non cumulé ; jamais de malus pour le défenseur. Une créature compte 1 (Moyenne), 2 (Grande), 3 (Énorme) ou 4 (Monstrueuse).
+  Attendu : un camp qui compte au moins le double d’engagés donne +1 DR à l’attaque de mêlée ; encerclée : +2 DR, non cumulé ; jamais de malus pour le défenseur. Côté cible, une créature compte 1 (Moyenne), 2 (Grande), 3 (Énorme) ou 4 (Monstrueuse) ; côté attaquant, chaque engagé compte 1 (règle du MJ du 25/10).
   Remarques :
 
 - [ ] G-BES-4 · Régénération et têtes
@@ -221,7 +257,7 @@ Ce parcours guidé permet au MJ de vérifier pas à pas, à la table dans l’on
   Remarques :
 
 - [ ] G-INI-4 · Initiative d’un combattant qui entre ou revient
-  1. Combat commencé, faire entrer un renfort (**Faire entrer**). 2. Cliquer **Modifier** sur un combattant en attente, passer `Zone` à `Actif`. 3. Cliquer **Tour suivant**.
+  1. Combat commencé, cliquer **Faire entrer** sur un combattant en attente (seule commande d’entrée dans **Jouer**). 2. Saisir son Initiative V5 (Bonus d’Initiative + d10) dans la fenêtre « Renfort en cours de Round · Initiative ». 3. Cliquer **Tour suivant**.
   Attendu : le renfort prend son rang d’Initiative ; un rang déjà dépassé attend le Round suivant (voir aussi la section divine, parcours 3.3).
   Remarques :
 
@@ -254,7 +290,7 @@ Ce parcours guidé permet au MJ de vérifier pas à pas, à la table dans l’on
 
 - [ ] G-ATT-6 · Deux armes et main secondaire
   1. Combattant à deux armes à une main. 2. Cocher `Attaque avec la main secondaire (−2 DR selon les règles)`. 3. Pour la seconde arme du même Tour, choisir l’attaque dans `Attaque précédente pour l’attaque immédiate de l’autre arme`.
-  Attendu : −2 DR à la main secondaire ; la seconde attaque ne dépense pas d’Élan et exige une attaque déjà appliquée ce Tour.
+  Attendu : −2 DR à la main secondaire ; la seconde attaque dépense 1 Élan (sauf talent Maniement de deux armes, V5 p. 166-167 : cocher alors `Attaque de seconde arme sans Élan`) et exige une attaque déjà appliquée ce Tour avec l’autre arme.
   Remarques :
 
 - [ ] G-ATT-7 · Cible sans défense et option létale
@@ -285,8 +321,8 @@ Ce parcours guidé permet au MJ de vérifier pas à pas, à la table dans l’on
   Remarques :
 
 - [ ] G-ARM-5 · Rechargement
-  1. Dans `Rechargement des armes`, régler la capacité puis cliquer **Enregistrer l’arbitrage**, puis **Commencer la recharge**. 2. Saisir le résultat du Test et cliquer **Enregistrer le Test**. 3. Retenter un tir avant la fin de la recharge.
-  Attendu : l’arme n’est rechargée qu’une fois le Test enregistré ; le tir avant la fin est signalé.
+  1. Tirer une fois avec une arme à Recharge (ex. Arbalète). 2. Dans `Rechargement des armes`, cliquer **Commencer la recharge** (pour une arme À répétition variable, régler d’abord la capacité et cliquer **Enregistrer l’arbitrage**). 3. Retenter un tir avant la fin de la recharge. 4. Saisir le résultat du Test et cliquer **Enregistrer le Test**.
+  Attendu : l’arme n’est rechargée qu’une fois le Test enregistré ; le tir avant la fin est signalé ; une recharge demandée sur une arme qui n’a pas encore tiré est refusée avec sa raison.
   Remarques :
 
 - [ ] G-ARM-6 · Maladresses et incident de poudre
@@ -312,13 +348,13 @@ Ce parcours guidé permet au MJ de vérifier pas à pas, à la table dans l’on
   Remarques :
 
 - [ ] G-MON-1 · Lier cavalier et monture
-  1. Cliquer **Modifier** sur le cavalier, section `Combat monté` : cocher `Le personnage est monté`, choisir `Monture active`. 2. Enregistrer. 3. Au démarrage d’un combat, saisir le Test de Chevaucher demandé.
+  1. Cliquer **Modifier** sur le cavalier, section `Combat monté` : cocher `Le personnage est monté`, choisir `Monture active`. 2. Enregistrer. 3. Au démarrage d’un combat où le camp du cavalier est choisi dans `Camp surpris`, saisir le Test de Chevaucher demandé (il n’est pas demandé sans surprise).
   Attendu : le lien survit aux Actions ; sans monture active choisie, l’enregistrement est refusé (`Choisissez une monture active et gardez le cavalier actif.`).
   Remarques :
 
 - [ ] G-MON-2 · Charge, Esquive et chute
   1. Cavalier : cocher `Charge donnant Élan (distance et conditions vérifiées)`. 2. Faire attaquer le cavalier et le faire défendre avec Esquive. 3. Mettre la monture hors de combat.
-  Attendu : l’Esquive montée prend un Désavantage automatique (sauf Cavalier émérite), à la place de l’ancien champ chiffré, sans cumul ; la chute donne mort, KO, À Terre, Surpris ou Sonné selon la table.
+  Attendu : l’Esquive montée prend un Désavantage automatique (sauf talent Acrobaties équestres, V5 p. 168), à la place de l’ancien champ chiffré, sans cumul ; la chute donne mort, KO, À Terre, Surpris ou Sonné selon la table.
   Remarques :
 
 ### Critiques, localisations et séquelles
@@ -330,7 +366,7 @@ Ce parcours guidé permet au MJ de vérifier pas à pas, à la table dans l’on
 
 - [ ] G-CRI-2 · Créature non humanoïde
   1. Cible quadrupède ou araignée : régler `Morphologie de la cible (choix du MJ)` sur `Quadrupède`. 2. Pour un coup à une patte, choisir `Côté de patte touché (choix MJ si nécessaire)`. 3. Prévisualiser.
-  Attendu : la localisation suit la morphologie ; un appendice sans table propre demande les PA à saisir ; l’humanoïde garde sa table.
+  Attendu : la localisation suit la morphologie ; un appendice sans table propre (champ `Appendice atteint sans table propre`) fait apparaître `PA de l’appendice atteint`, qui bloque le calcul tant qu’il est vide, et le critique utilise la table Bras ; l’humanoïde garde sa table.
   Remarques :
 
 - [ ] G-CRI-3 · Assommer
@@ -344,13 +380,13 @@ Ce parcours guidé permet au MJ de vérifier pas à pas, à la table dans l’on
   Remarques :
 
 - [ ] G-CRI-5 · Amputation et séquelles
-  1. Critique qui coupe un membre. 2. Dans `Chocs d’amputation — Test de Résistance`, saisir le résultat puis cliquer **Enregistrer le choc**. 3. Ouvrir `Séquelles des critiques` et cliquer **Créer le suivi**.
+  1. Critique qui coupe un membre. 2. Dans `Chocs d’amputation — Test de Résistance`, saisir le résultat puis cliquer **Enregistrer le choc**. 3. Cliquer **Ouvrir le suivi de <critique>**, puis **Ouvrir le suivi des séquelles de <nom>**.
   Attendu : un choc d’amputation est exigé avant le suivi ; la séquelle est enregistrée sur la fiche et ses malus permanents sont lus par la résolution.
   Remarques :
 
 - [ ] G-CRI-6 · Convalescence et soins hors combat
-  1. Menu, **Temps de campagne** : avancer de plusieurs jours, voir l’aperçu, cliquer **Confirmer l’avancement**. 2. Pour un critique suivi, choisir `Guérison` avec `Difficulté du soin (DR)` puis **Enregistrer le Test de soin**. 3. Infection : cliquer **Traiter l’infection**.
-  Attendu : le calendrier de convalescence avance ; un Test de Résistance par blessure non traitée chaque soir ; un seul Test de Guérison par incident ; un Test raté ne bande pas la blessure.
+  1. Dans **Suites de combat**, calendrier de convalescence : avancer de plusieurs jours, voir l’aperçu, cliquer **Confirmer l’avancement**. 2. Pour un critique suivi, choisir `Guérison` avec `Difficulté du soin (DR)`, cocher `Fournitures médicales disponibles` (sinon le Test est refusé), puis **Enregistrer le Test de soin**. 3. Infection : cliquer **Traiter l’infection**.
+  Attendu : le calendrier de convalescence avance ; un Test de Résistance par blessure non traitée chaque soir ; un seul Test de Guérison pour soigner les Blessures de l’incident (un Test suivant ne sert qu’à arrêter l’Hémorragie) ; un Test raté ne bande pas la blessure.
   Remarques :
 
 - [ ] G-CRI-7 · Chirurgie et fractures
@@ -361,8 +397,8 @@ Ce parcours guidé permet au MJ de vérifier pas à pas, à la table dans l’on
 ### Destin et Chance
 
 - [ ] G-DES-1 · Fortune d’un personnage
-  1. Sur la carte du personnage, cliquer le bouton `Fortune : …`. 2. Saisir `Points de Fortune disponibles (permanents)`, cliquer **Initialiser Fortune**. 3. Rouvrir et choisir `Renouvellement normal`.
-  Attendu : le solde est conservé entre les rencontres ; **Annuler** restaure aussi la Fortune.
+  1. Sur la carte du personnage, cliquer le bouton `Fortune : …`. 2. Saisir `Points de Fortune disponibles` (libellé suivi de « (permanents) » s’il existe de la Fortune temporaire), cliquer **Initialiser Fortune** (ensuite **Enregistrer Fortune**). 3. Rouvrir et choisir `Renouvellement normal`.
+  Attendu : le solde est conservé dans la rencontre (Recommencer, Suspendre/Reprendre, rechargement) ; d’une rencontre à l’autre seulement si le profil est lié à une fiche de personnage ; le dialogue dit lequel des deux cas s’applique ; **Annuler** restaure aussi la Fortune.
   Remarques :
 
 - [ ] G-DES-2 · Chance avant et après le jet
@@ -416,7 +452,7 @@ Ce parcours guidé permet au MJ de vérifier pas à pas, à la table dans l’on
 
 - [ ] G-MAG-3 · Focalisation, pause et interruption
   1. Action `Focalisation V5` : `Accumuler (Focalisation +0 DR)`. 2. Mode `Pause de focalisation (Focalisation Accessible +2 DR)`. 3. Mode `Test d’interruption (Calme Difficile −2 DR)`.
-  Attendu : un Test d’interruption raté fait perdre des DR de la réserve ; l’Exténué s’applique à la pause (sauf Œil de la tempête, voir G-DEC-2).
+  Attendu : un Test d’interruption raté fait perdre des DR de la réserve ; l’Exténué s’applique à la pause (sauf Œil de la tempête activé par la méditation, voir G-DEC-2).
   Remarques :
 
 - [ ] G-MAG-4 · Haute Magie et runes
@@ -437,7 +473,7 @@ Ce parcours guidé permet au MJ de vérifier pas à pas, à la table dans l’on
   Remarques :
 
 - [ ] G-DEC-2 · Œil de la tempête et pause de Focalisation
-  1. Lanceur avec le Talent Œil de la tempête au rang 2 ou plus. 2. Focalisation en mode `Pause de focalisation (Focalisation Accessible +2 DR)`, avec l’état Exténué sur le lanceur.
+  1. Lanceur avec le Talent Œil de la tempête au rang 2 ou plus ; activer d’abord le talent par **Résoudre la méditation** (20 minutes, Test de Prière, d10 de durée) : sans cette activation, l’Exténué s’applique comme pour tout lanceur. 2. Focalisation en mode `Pause de focalisation (Focalisation Accessible +2 DR)`, avec l’état Exténué sur le lanceur.
   Attendu : l’Exténué est ignoré pour la pause comme pour l’incantation et la Focalisation ; une distraction n’interrompt pas la Focalisation.
   Remarques :
 
@@ -470,6 +506,35 @@ Ce parcours guidé permet au MJ de vérifier pas à pas, à la table dans l’on
   1. Obtenir un résultat 96-100 sur la table du Courroux.
   2. Lire le champ « Pénitence imposée par le Courroux (à définir ; son suivi sur la fiche est facultatif) » et tenter d’appliquer sans le remplir.
   Attendu : l’application est refusée tant que le texte de la pénitence est vide (le moteur exige de savoir quelle pénitence est imposée ; seul son suivi sur la fiche est facultatif, décision B-C20). Le libellé précise que la pénitence est à définir et que seul son suivi est facultatif.
+  Remarques :
+
+## Plateau des mêlées et circonstances (3.39.0)
+
+À faire à la table, dans **Jouer**. Le plateau remplace la piste : une zone par mêlée, puis `Libres`, puis `En attente`. Un engagement se crée seul quand une attaque de mêlée est appliquée, et cesse après un Round complet sans attaque entre les deux (V5 p. 163).
+
+- [ ] G-ENG-1 · Engagement par l’attaque et fin d’engagement
+  1. Rencontre avec deux PJ et deux PNJ, commencer le combat. 2. Appliquer une attaque de mêlée d’un PJ sur un PNJ. 3. Passer les Tours jusqu’à la fin du Round suivant sans que ces deux-là s’attaquent.
+  Attendu : après l’attaque, les deux jetons passent dans `Mêlée 1` (rapport « 1 contre 1 », mention « Engagé avec : … » sous chaque jeton) ; ils restent engagés au passage au Round suivant, puis la paire cesse à la fin de ce Round sans attaque, avec une ligne « Fin d’engagement » au journal. **Annuler** défait chaque étape.
+  Remarques :
+- [ ] G-ENG-2 · Déplacer à la main (décision du MJ)
+  1. Sur un jeton, menu `Déplacer…` → `Engager avec …`. 2. Glisser un jeton sur une zone de mêlée. 3. `Déplacer…` → `Libre (désengager sans règle)`.
+  Attendu : l’engagement suit le choix du MJ sans Test, avec une ligne au journal « (MJ) » ; le glisser sur une mêlée engage avec tous les adversaires de cette zone ; Annuler restaure.
+  Remarques :
+- [ ] G-ENG-3 · Barre d’actions et surnombre déduit
+  1. Deux PJ engagés avec un même PNJ. 2. Au Tour d’un des PJ, lire la barre « … ce qu’il peut faire d’ici ». 3. Cliquer `Attaquer · <PNJ>`, ouvrir `Circonstances`.
+  Attendu : chaque bouton annonce sa conséquence (surnombre, Test opposé, Élan…) ; Attaquer prépare l’action et la cible sans rien appliquer ; dans Combat, « Déduit du plateau : 2 contre 1 : surnombre, +1 DR » sans case à cocher ; `Forcer` fait apparaître les cases, `Laisser au récit` neutralise, `Revenir au plateau` rétablit la déduction ; le forçage est noté au journal de l’action appliquée.
+  Remarques :
+- [ ] G-ENG-4 · Se désengager
+  1. PJ engagé sans Élan : `Se désengager`, saisir les deux d100 (Esquive du PJ, meilleure Mêlée adverse), appliquer. 2. Recommencer avec un PJ qui a l’Élan. 3. Marquer le PJ `Encerclé` (menu `Déplacer…`) puis essayer. 4. Allié sous *En Bon Ordre*.
+  Attendu : 1. réussite = le PJ passe dans `Libres`, échec = il reste engagé et ses adversaires gagnent l’Élan ; Désavantage annoncé s’il est en infériorité numérique. 2. il perd l’Élan et se désengage sans Test. 3. refusé (« Fuir reste possible »), sauf `Passer outre (décision du MJ)`. 4. désengagé sans Élan ni Test (interprétation à valider).
+  Remarques :
+- [ ] G-ENG-5 · Fuir et tirer dans la mêlée
+  1. PJ engagé (non Brisé) : `Fuir`. 2. Un tireur libre vise un PNJ engagé avec un PJ. 3. Un tireur engagé tire sur un autre ennemi avec un arc.
+  Attendu : 1. les engagés gagnent l’Élan (attaque gratuite à jouer par le MJ), le fuyard gagne 1 Brisé par engagé et devient Libre ; sous En Bon Ordre, pas d’Élan pour eux. 2. « cible engagée : Désavantage, déviation possible » déduit, d100 de déviation demandé si le tir rate à cause du Désavantage. 3. refusé : « seule une arme Pistolet permet de tirer ».
+  Remarques :
+- [ ] G-ENG-6 · Scène et positions
+  1. Dans `Circonstances`, groupe `Scène (toute la rencontre)` : Lumière `Pénombre`, `Terrain difficile`. 2. `Déplacer…` → `Position haute` sur un PJ, `À couvert` sur un PNJ. 3. Faire un tir puis une attaque de mêlée.
+  Attendu : la scène reste réglée d’une action à l’autre et pré-remplit le tir (Pénombre −1 DR) et la mêlée (terrain −1 DR) ; la position haute donne +1 DR à la mêlée de ce PJ, le couvert −1 DR au tir sur ce PNJ ; une valeur choisie dans Combat l’emporte pour l’action ; ce qui bloque le calcul apparaît en tête du tiroir sous `À régler maintenant`.
   Remarques :
 
 ## Limites connues
