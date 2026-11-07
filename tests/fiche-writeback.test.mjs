@@ -443,7 +443,7 @@ describe('T8 · Suivi du MJ (CA20, CA22, CA23)', () => {
     state.extensions.v5.aftermathRegister = register;
     for (const subject of copiesOf(state)) Object.assign(subject.extensions.v5, {
       divinePenances: [{ id: 'penance:p1', cult: 'Sigmar', text: 'Jeûner trois jours au temple', status: 'open', origin: { kind: 'gm', reason: 'Raison secrète du MJ' } }],
-      corruptionMutations: [{ id: 'mut-1', status: 'confirmed', label: 'Animalistic Legs', summary: 'Jambes animales : le Mouvement augmente de 1.', questionsMJ: ['Question secrète'], manifestation: { note: 'Manifestation secrète' } }],
+      corruptionMutations: [{ id: 'mut-1', status: 'confirmed', manifestedAt: 1, label: 'Animalistic Legs', summary: 'Jambes animales : le Mouvement augmente de 1.', questionsMJ: ['Question secrète'], manifestation: { note: 'Manifestation secrète' } }],
       pendingCorruptionMutation: { id: 'mut-2', status: 'pending', domain: 'physical', delayDays: 7 },
       pendingCorruptionCharacterLoss: { id: 'corruption-loss:mut-1', status: 'pending' } });
     return state;
@@ -622,7 +622,7 @@ describe('Contre-vérification · compteurs (3, C2, 10) et mutations (11)', () =
 
   test('mutation confirmée sans résumé : effet visible pris au catalogue, jamais la manifestation', () => {
     const state = makeState({ wren: { revision: 7, data: WREN() } });
-    for (const subject of copiesOf(state)) subject.extensions.v5.corruptionMutations = [{ id: 'mut-9', tableRowId: 'L06-PHY-01', entryId: 'L06-PHY-01', status: 'confirmed', description: 'L06-PHY-01', manifestation: { text: 'Manifestation secrète' } }];
+    for (const subject of copiesOf(state)) subject.extensions.v5.corruptionMutations = [{ id: 'mut-9', tableRowId: 'L06-PHY-01', entryId: 'L06-PHY-01', status: 'confirmed', manifestedAt: 1, description: 'L06-PHY-01', manifestation: { text: 'Manifestation secrète' } }];
     const entry = rowsOfPlan(planFicheWriteback(state)).find(row => row.key === 'suivi:outil:mut-9').change.value;
     assert.equal(entry.detail, 'Jambes animales : le Mouvement augmente de 1.');
     assert.ok(!JSON.stringify(entry).includes('secrète'));
@@ -676,5 +676,26 @@ describe('Contre-vérification · envois successifs, erreurs, historique (2, 5, 
     assert.equal(reported(), 5);
     await store.undo?.();
     assert.equal(reported(), 5);
+  });
+});
+
+describe('Mutation manifestée seulement (décision du MJ du 07/11)', () => {
+  const withMutation = (state, extra) => {
+    for (const subject of copiesOf(state)) subject.extensions.v5.corruptionMutations = [{ id: 'mut-m', status: 'confirmed', label: 'Animalistic Legs', summary: 'Jambes animales.', manifestation: { days: 9 }, ...extra }];
+    return state;
+  };
+  test('confirmée mais pas manifestée : aucune ligne, pas même « à faire à la main »', () => {
+    const rows = rowsOfPlan(planFicheWriteback(withMutation(makeState({ wren: { revision: 7, data: WREN() } }), {})));
+    assert.deepEqual(rows.filter(row => row.op === 'suivi' || String(row.key).includes('mut-m')), []);
+  });
+  test('confirmée et manifestée : entrée de suivi, sans le délai', () => {
+    const row = rowsOfPlan(planFicheWriteback(withMutation(makeState({ wren: { revision: 7, data: WREN() } }), { manifestedAt: 5 }))).find(item => item.key === 'suivi:outil:mut-m');
+    assert.equal(row.change.value.categorie, 'mutation');
+    assert.ok(!JSON.stringify(row).includes('days'));
+  });
+  test('déjà envoyée puis redevenue non manifestée (annulation de la marque) : pas de retrait proposé', () => {
+    const data = WREN(); data.suiviMj = [{ id: 'outil:mut-m', categorie: 'mutation', libelle: 'Animalistic Legs', detail: 'Jambes animales.' }];
+    const rows = rowsOfPlan(planFicheWriteback(withMutation(makeState({ wren: { revision: 7, data } }), {})));
+    assert.deepEqual(rows.filter(row => row.op === 'suivi'), []);
   });
 });

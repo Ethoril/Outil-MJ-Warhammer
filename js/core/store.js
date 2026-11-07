@@ -791,7 +791,13 @@ function corruptionSkillScore(participant, skillId, input = {}) {
   }
   throw Object.assign(new Error(`Compétence ${skillId} non résolue : saisissez un score fixé par le MJ et son motif.`), { code: 'CORRUPTION_SKILL_REQUIRED', userFacing: true });
 }
-function corruptionStatusFor(participant, baseRevision, sessionId = null) {
+/** Délai secret écoulé selon le temps de campagne (confirmation + jours) : rappel au MJ, jamais une marque automatique. */
+function mutationManifestationDue(mutation, campaignSeconds) {
+  const start = mutation?.confirmation?.campaignSeconds, days = mutation?.manifestation?.days;
+  return mutation?.status === 'confirmed' && !Number.isFinite(mutation.manifestedAt) && Number.isSafeInteger(start) && Number.isSafeInteger(days)
+    && Number.isSafeInteger(campaignSeconds) && campaignSeconds >= start + days * 86400;
+}
+function corruptionStatusFor(participant, baseRevision, sessionId = null, campaignSeconds = null) {
   const v5 = participant.extensions?.v5 || {};
   let facts = null, thresholdError = null;
   try { facts = corruptionFacts(participant); } catch (error) { thresholdError = error.message; }
@@ -806,7 +812,8 @@ function corruptionStatusFor(participant, baseRevision, sessionId = null) {
     threshold: facts?.threshold ?? null,
     thresholdError,
     species: participant.species || participant.race || v5.species || v5.bestiary?.identity?.species || null,
-    mutations: Array.isArray(v5.corruptionMutations) ? cloneValue(v5.corruptionMutations) : [],
+    mutations: Array.isArray(v5.corruptionMutations) ? cloneValue(v5.corruptionMutations).map(row => ({ ...row, manifestationDue: mutationManifestationDue(row, campaignSeconds) })) : [],
+    campaignSeconds,
     mutationCatalogRecords: Array.isArray(v5.corruptionMutationCatalogRecords) ? cloneValue(v5.corruptionMutationCatalogRecords) : [],
     pendingThresholdTest: v5.pendingCorruptionTest ? cloneValue(v5.pendingCorruptionTest) : null,
     pendingMutation: v5.pendingCorruptionMutation ? cloneValue(v5.pendingCorruptionMutation) : null,
@@ -2205,7 +2212,7 @@ function resolvedCorruptionTest(participant, skillId, input) {
       const sessionId = envelope.extensions?.v5?.talentSessionId || null;
       const subject = findCorruptionSubject(envelope, id);
       if (!subject) throw new TypeError('Personnage introuvable');
-      return corruptionStatusFor(subject, localRevision, sessionId);
+      return corruptionStatusFor(subject, localRevision, sessionId, (stateExtensions?.v5?.gameClock || createGameClock(currentEnvelope())).campaignSeconds);
     },
     declareWarpstoneDailyExposure(id, { itemId, attackId, dayLabel, confirmed = false, baseRevision = localRevision } = {}) {
       const sourceId=itemId||attackId;
@@ -2402,7 +2409,7 @@ function resolvedCorruptionTest(participant, skillId, input) {
         const mutation = { ...result.mutation, ...(selectedCatalog ? cloneValue(selectedCatalog) : {}),
           description: selectedCatalog?.label || capturedId, effectsApplied: false,
           ...(selectedCatalog && !selectedCatalog.domain ? { compatibilityDecision: { domain: compatibilityDomain, decidedBy: 'gm', decision: 'compatible-with-pending-k1-domain' } } : {}),
-          confirmation: { confirmedBy: 'gm', confirmedAt: Date.now() },
+          confirmation: { confirmedBy: 'gm', confirmedAt: Date.now(), campaignSeconds: draft.extensions?.v5?.gameClock?.campaignSeconds ?? null },
           manifestation: cloneValue(v5.pendingCorruptionMutation.manifestation) };
         updateCorruptionCopies(draft, id, row => {
           const rowV5 = row.extensions?.v5 || {};
@@ -2418,6 +2425,27 @@ function resolvedCorruptionTest(participant, skillId, input) {
         return draft;
       }).then(result => result?.ok === false ? { status: 'error', ok: false, error: result.error }
         : { status: 'confirmed', ok: true })
+        .catch(error => error?.code === 'CORRUPTION_STALE' ? { status: 'stale', ok: false, error: error.message } : Promise.reject(error));
+    },
+    /** Décision du MJ (07/11) : une mutation confirmée est marquée manifestée à la main ; elle ne part sur la fiche qu'ensuite. Annulable. */
+    markCorruptionMutationManifested(id, { mutationId, baseRevision = localRevision } = {}) {
+      return Promise.resolve(api.executeCommand('mark-corruption-mutation-manifested-v5', draft => {
+        if (draft.localRevision !== baseRevision) throw Object.assign(new Error('La partie a changé. Relisez les mutations.'), { code: 'CORRUPTION_STALE', userFacing: true });
+        const subject = findCorruptionSubject(draft, id);
+        if (!subject) throw new TypeError('Personnage introuvable');
+        const target = (subject.extensions?.v5?.corruptionMutations || []).find(row => row?.id === mutationId);
+        if (!target || target.status !== 'confirmed') throw Object.assign(new Error('Mutation confirmée introuvable.'), { code: 'CORRUPTION_MUTATION_NOT_FOUND', userFacing: true });
+        if (Number.isFinite(target.manifestedAt)) return draft;
+        const manifestedAt = Date.now(), campaignSeconds = draft.extensions?.v5?.gameClock?.campaignSeconds ?? null;
+        updateCorruptionCopies(draft, id, row => {
+          const rowV5 = row.extensions?.v5 || {};
+          row.extensions = { ...(row.extensions || {}), v5: { ...rowV5, corruptionMutations: (rowV5.corruptionMutations || []).map(item => item?.id === mutationId ? { ...item, manifestedAt, manifestedCampaignSeconds: campaignSeconds } : item) } };
+          return row;
+        });
+        draft.log = [{ id: uid(), kind: 'management', actorId: id, actorName: subject.name, text: `${subject.name} : mutation manifestée · ${target.label || target.description || target.tableRowId}`,
+          detail: { kind: 'mark-corruption-mutation-manifested-v5', mutationId } }, ...(draft.log || [])].slice(0, 300);
+        return draft;
+      })).then(result => result?.ok === false ? { status: 'error', ok: false, error: result.error } : { status: 'manifested', ok: true })
         .catch(error => error?.code === 'CORRUPTION_STALE' ? { status: 'stale', ok: false, error: error.message } : Promise.reject(error));
     },
     declineCorruptionMutation(id, { baseRevision = localRevision } = {}) {

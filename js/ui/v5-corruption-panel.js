@@ -383,7 +383,19 @@ export function createV5CorruptionPanel({ Store, refresh = () => {} } = {}) {
           ? ` · ${mutation.tableId} / ${mutation.entryId} · résultat ${mutation.result ?? '?'}${mutation.column ? ` · ${mutation.column}` : ''} · ${mutation.source?.referenceF2 || mutation.referenceF2 || 'renvoi'} · ${mutation.source?.printedPage ?? mutation.source?.pageImprimee ?? '?'} / PDF ${mutation.source?.pdfPage ?? mutation.source?.pagePdf ?? '?'} · ${mutation.dataVersion} · effets non appliqués`
           : '';
         const renvoi = mutation.renvoiParent ? ` · renvoi parent ${mutation.renvoiParent.label}` : '';
-        list.append(node('li', '', `${mutation.domain === 'physical' ? 'Physique' : 'Mentale'} · ${mutation.description || mutation.tableRowId} · ${mutation.manifestation?.days ?? '?'} jours (MJ)${catalogDetails}${renvoi}`));
+        // Décision du MJ (07/11) : la mutation ne part sur la fiche du joueur qu'une fois marquée manifestée.
+        const manifested = Number.isFinite(mutation.manifestedAt) ? ' · manifestée' : mutation.manifestationDue ? ' · délai écoulé, à marquer' : '';
+        const item = node('li', '', `${mutation.domain === 'physical' ? 'Physique' : 'Mentale'} · ${mutation.description || mutation.tableRowId} · ${mutation.manifestation?.days ?? '?'} jours (MJ)${catalogDetails}${renvoi}${manifested}`);
+        if (mutation.status === 'confirmed' && !Number.isFinite(mutation.manifestedAt)) {
+          const mark = node('button', '', 'Marquer manifestée'); mark.type = 'button'; mark.disabled = state.busy;
+          mark.addEventListener('click', () => act(async () => {
+            const result = await Store.markCorruptionMutationManifested(status.participantId, { mutationId: mutation.id, baseRevision: status.baseRevision });
+            if (result?.status !== 'manifested') throw new Error(result?.error || 'La partie a changé ; relisez les mutations.');
+            state.receipt = 'Mutation marquée manifestée : elle partira sur la fiche au prochain envoi.';
+          }));
+          item.append(' ', mark);
+        }
+        list.append(item);
       }
       panel.append(list);
     }

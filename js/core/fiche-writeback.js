@@ -363,7 +363,8 @@ function wantedSuivi(state, charId) {
     if (isRecord(disease) && ids.has(disease.participantId) && disease.status === 'active') add(disease.id, 'maladie', disease.label, '');
   }
   const mutations = firstList(state, charId, readMutations);
-  for (const mutation of mutations.value.filter(row => isRecord(row) && row.status === 'confirmed')) {
+  // Décision du MJ (07/11) : une mutation confirmée ne part sur la fiche qu'une fois marquée manifestée.
+  for (const mutation of mutations.value.filter(row => isRecord(row) && row.status === 'confirmed' && Number.isFinite(row.manifestedAt))) {
     // Effet visible : résumé de la mutation, sinon celui du catalogue ; jamais la manifestation ni les questions au MJ.
     const entry = MUTATION_ENTRIES.get(mutation.entryId) || MUTATION_ENTRIES.get(mutation.tableRowId) || null;
     const summary = typeof mutation.summary === 'string' ? mutation.summary : typeof entry?.summary === 'string' ? entry.summary : '';
@@ -381,6 +382,7 @@ function suiviSourceClosed(state, charId, entryId) {
   if (disease) return disease.status !== 'active';
   const penance = anyListEntry(state, charId, readPenances, sourceId);
   if (penance) return penance.status !== 'open';
+  // Mutation confirmée redevenue non manifestée (marque annulée) : jamais retirée de la fiche par l'outil.
   const mutation = anyListEntry(state, charId, readMutations, sourceId);
   if (mutation) return mutation.status !== 'confirmed';
   return false;

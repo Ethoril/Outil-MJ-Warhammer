@@ -1157,3 +1157,63 @@ test('K2 UI leaves L17 compatibility blank and requires the MJ to choose it', as
   } finally { globalThis.document = originalDocument; }
 });
 });
+
+describe('Chantier H — mutation manifestée (décision du MJ du 07/11)', () => {
+  const RESISTANCE_ID = 'skill-52_e9_73_69_73_74_61_6e_63_65-base';
+  const mutation = { id: 'mut-a', status: 'confirmed', domain: 'physical', description: 'Jambes animales',
+    manifestation: { days: 5, visibility: 'gm-only' }, confirmation: { confirmedBy: 'gm', confirmedAt: 1, campaignSeconds: 0 } };
+  const hero = () => ({ id: 'hero', name: 'hero', zone: 'active', hp: 12, maxHp: 12, states: [], species: 'Human',
+    caracs: { E: 30, FM: 30 }, skills: [{ id: RESISTANCE_ID, status: 'resolved', total: 50 }], talents: [],
+    extensions: { v5: { corruptionPoints: 3, corruptionMutations: [structuredClone(mutation)] } } });
+  async function setup() {
+    let saved = null;
+    const store = createStore({ storage: null, persistence: { async load() { return saved && structuredClone(saved); }, async saveAtomic({ state }) { saved = structuredClone(state); return { ok: true }; } } });
+    await store.ready;
+    await store.loadFromJSON({ schemaVersion: 3, reserve: [], combat: { round: 0, order: [], participants: [hero()] }, log: [], diceLines: [] });
+    return store;
+  }
+  const walk = (node, test) => [node, ...(node?.children || []).flatMap(child => walk(child, test))].filter(item => item && test(item));
+
+  test('le rappel « délai écoulé » ne vient que du temps de campagne, sans marque automatique', async () => {
+    const store = await setup();
+    assert.equal(store.getCorruptionStatus('hero').mutations[0].manifestationDue, false);
+    await store.advanceCampaignTime({ seconds: 6 * 86400, reason: 'Voyage' });
+    const status = store.getCorruptionStatus('hero');
+    assert.equal(status.mutations[0].manifestationDue, true);
+    assert.equal(status.mutations[0].manifestedAt, undefined, 'jamais marquée automatiquement');
+  });
+
+  test('« Marquer manifestée » dans le panneau de Corruption : enregistrée sur la mutation, annulable', async () => {
+    const originalDocument = globalThis.document;
+    class Element {
+      constructor(tag) { this.tag = tag; this.children = []; this.listeners = {}; this.dataset = {}; this.attributes = {}; this.value = ''; }
+      append(...children) { this.children.push(...children); }
+      appendChild(child) { this.children.push(child); }
+      setAttribute(name, value) { this.attributes[name] = value; }
+      addEventListener(name, handler) { this.listeners[name] = handler; }
+      async click() { return this.listeners.click?.(); }
+    }
+    globalThis.document = { createElement: tag => new Element(tag) };
+    try {
+      const store = await setup();
+      await store.advanceCampaignTime({ seconds: 6 * 86400, reason: 'Voyage' });
+      const panel = createV5CorruptionPanel({ Store: store });
+      const rendered = panel.render(store.listParticipants().find(row => row.id === 'hero'));
+      assert.ok(walk(rendered, item => item.tag === 'li' && String(item.textContent).includes('délai écoulé, à marquer')).length);
+      const [button] = walk(rendered, item => item.tag === 'button' && item.textContent === 'Marquer manifestée');
+      assert.ok(button);
+      await button.click();
+      const marked = store.getCorruptionStatus('hero').mutations[0];
+      assert.ok(Number.isFinite(marked.manifestedAt));
+      assert.equal(marked.manifestationDue, false);
+      await store.undo();
+      assert.equal(store.getCorruptionStatus('hero').mutations[0].manifestedAt, undefined);
+    } finally { globalThis.document = originalDocument; }
+  });
+
+  test('la confirmation retient le temps de campagne pour le rappel', async () => {
+    const store = await setup();
+    const status = store.getCorruptionStatus('hero');
+    assert.equal(typeof status.campaignSeconds, 'number');
+  });
+});

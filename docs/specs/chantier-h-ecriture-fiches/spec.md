@@ -8,7 +8,7 @@ Cadrage du 06/11/2026, à partir de `docs/PASSATION_CHANTIER_H.md` (`f842490`). 
 |---|---|---|
 | Q1 | Moment de l'écriture | **Bouton de fin de séance** « Envoyer aux fiches » (menu `⋯`), avec un aperçu des différences par PJ, sur le modèle de « Mettre à jour les PJ ». |
 | Q2 | Conflit avec une modification du joueur | La fiche **refuse** le champ en conflit ; l'outil montre les deux valeurs et **le MJ choisit**. |
-| Q3 | Valeurs absentes de la fiche | N'ajouter à la fiche **que ce que le joueur doit voir** : pénitences, séquelles permanentes, cicatrices, maladies, mutations confirmées, physiques comme mentales (précision du MJ du 07/11). Le reste reste dans l'outil. |
+| Q3 | Valeurs absentes de la fiche | N'ajouter à la fiche **que ce que le joueur doit voir** : pénitences, séquelles permanentes, cicatrices, maladies, mutations confirmées, physiques comme mentales (précision du MJ du 07/11), **une fois manifestées** : le MJ marque « Manifestée » dans le panneau de Corruption, l'outil rappelle quand le délai secret est écoulé selon le temps de campagne, sans jamais marquer seul (décision du MJ du 07/11). Le reste reste dans l'outil. |
 | Q4 | Blessures courantes | **Outil seul.** La fiche a bien un champ « Blessures actuelles » (`blessuresAct`, tenu par le joueur, contrairement à ce que disait la passation) ; l'outil ne l'écrit pas. Choix confirmé par le MJ après correction. |
 | Q5 | Annulation | **Commande inverse** : « Annuler le dernier envoi » renvoie les anciennes valeurs, refusé champ par champ si la fiche a changé depuis. Possible jusqu'à l'envoi suivant. |
 | Q6 | Visibilité | Le joueur lit **tout** le document de sa fiche, historique compris (`firestore.rules`, `canReadFiche`). Donc **aucune donnée réservée au MJ n'est jamais écrite sur la fiche**, ni dans un motif d'opération. |
@@ -56,10 +56,10 @@ Cadrage du 06/11/2026, à partir de `docs/PASSATION_CHANTIER_H.md` (`f842490`). 
 - **CA19** · Un objet retenu par le Courroux est retiré de l'équipement de la fiche ; rendu par une pénitence, il y revient à l'identique ; un ancien import ne le recrée jamais.
 
 ### S6 · Valeurs ajoutées à la fiche, visibles du joueur
-- **CA20** · La fiche gagne une section en lecture seule pour le joueur, « Suivi du MJ », qui liste les pénitences en cours, les séquelles permanentes (parties perdues, fractures mal soignées), les cicatrices, les maladies et les mutations, chacune avec un libellé et une courte description.
+- **CA20** · La fiche gagne une section en lecture seule pour le joueur, « Suivi du MJ », qui liste les pénitences en cours, les séquelles permanentes (parties perdues, fractures mal soignées), les cicatrices, les maladies et les mutations confirmées **et manifestées**, chacune avec un libellé et une courte description. Une mutation confirmée non manifestée ne produit aucune ligne, pas même « à faire à la main » ; déjà envoyée, elle n'est pas retirée si sa marque est annulée.
 - **CA21** · Seule l'opération du MJ peut écrire cette section ; une modification simple du joueur (ou du MJ sur le site) est refusée.
 - **CA22** · Une pénitence close ou une maladie guérie dans l'outil disparaît de la section au prochain envoi.
-- **CA23** · Le délai secret de mutation, les mutations en attente non confirmées, la perte de personnage à arbitrer et tout champ réservé au MJ n'atteignent jamais la fiche : la fonction refuse toute clé hors de la liste autorisée.
+- **CA23** · Le délai secret de mutation, les mutations en attente non confirmées, les mutations confirmées pas encore manifestées, la perte de personnage à arbitrer et tout champ réservé au MJ n'atteignent jamais la fiche : la fonction refuse toute clé hors de la liste autorisée.
 
 ### S7 · Recette
 - **CA24** · Sur `ethoril.github.io`, avec App Check actif, le MJ envoie puis annule un changement sur un vrai PJ (Fortune +1), avec son accord le jour de la recette, et l'historique de la fiche montre les deux opérations.
