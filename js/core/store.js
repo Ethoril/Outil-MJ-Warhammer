@@ -228,6 +228,26 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
   let syncEnabled = !persistence;
   let syncSession = null;
   let syncSessionReady = false;
+  // Rencontre nommée « test » : bac à sable. Instantané pris au lancement, aucune écriture locale ni distante tant que la
+  // scène test est active, puis retour exact à l'instantané quand elle se termine (fin, suspension, annulation, Undo).
+  let sandbox = null;
+  const isTestScene = scene => scene?.status === 'active' && String(scene.title || '').trim().toLowerCase() === 'test';
+  // Seul un lancement ouvre le bac à sable : un import ou une synchronisation qui apporte une scène « test » reste persisté.
+  const SANDBOX_ENTRY_COMMANDS = new Set(['launch-encounter', 'initialize-combat-initiative', 'resume-scene']);
+  function enterSandboxIfTest(next, type) {
+    if (sandbox || !SANDBOX_ENTRY_COMMANDS.has(type) || !isTestScene(next?.activeScene) || isTestScene(activeScene)) return;
+    sandbox = { state: currentEnvelope(), history: historyState, revision: localRevision, pending: pendingProtocolState };
+    reportLocalStatus('sandbox');
+  }
+  function settleSandbox(force = false) {
+    if (!sandbox || (!force && isTestScene(activeScene))) return;
+    const saved = sandbox; sandbox = null;
+    // Historique fermé : un « Annuler » après la fin du test ne doit pas défaire une commande antérieure au test.
+    historyState = markExternalBoundary(saved.history, { reason: 'test-sandbox', revision: saved.revision }); localRevision = saved.revision; pendingProtocolState = saved.pending;
+    applyDataToState(saved.state, { includeLog: true, includeHistory: false });
+    lastSnapshot = null;
+    reportLocalStatus('saved');
+  }
   let syncSessionStarting = false;
   let syncContextId = null;
   let syncAttachEpoch = 0;
@@ -974,7 +994,7 @@ function resolvedCorruptionTest(participant, skillId, input) {
   }
 
   function publishRevisionedStateIfNeeded(sharedChanged) {
-    if (!sharedChanged || !syncSession || !syncSessionReady) return Promise.resolve(null);
+    if (!sharedChanged || !syncSession || !syncSessionReady || sandbox) return Promise.resolve(null);
     pendingProtocolState = false;
     const state = currentEnvelope();
     return syncSession.enqueue({ state, localState: state })
@@ -987,6 +1007,7 @@ function resolvedCorruptionTest(participant, skillId, input) {
 
   function queuePersistenceSave(updates = {}, restore = null, stateOverride = null, { includeOperation = true } = {}) {
     if (!persistence) return;
+    if (sandbox) { reportLocalStatus('sandbox'); return Promise.resolve({ ok: true, sandbox: true }); }
     const operationEntries = includeOperation && Object.keys(updates).length ? [{
       operationId: `${CLIENT_ID}:${++operationSequence}`,
       sequence: operationSequence,
@@ -1130,7 +1151,7 @@ function resolvedCorruptionTest(participant, skillId, input) {
     // Include history in the same envelope as the mutation and outbox entry.
     // The persistence queue therefore observes one coherent command boundary.
     commitPendingCommand();
-    const protocolReady = Boolean(syncSession && syncSessionReady);
+    const protocolReady = Boolean(syncSession && syncSessionReady && !sandbox);
     const persisted = persistLocal({
       updates,
       restore,
@@ -1618,7 +1639,8 @@ function resolvedCorruptionTest(participant, skillId, input) {
         // Écriture déjà faite hors de l'outil (fiches) : la commande reste partagée, mais l'historique se ferme,
         // car annuler en deçà désaccorderait l'outil et la fiche (chantier H).
         const nextHistory = externalBoundary ? markExternalBoundary(recordedHistory, { ...externalBoundary, revision: nextRevision }) : recordedHistory;
-        const protocolReady = Boolean(syncSession && syncSessionReady);
+        enterSandboxIfTest(after, type);
+        const protocolReady = Boolean(syncSession && syncSessionReady && !sandbox);
         const remoteNeeded = recordHistory && (hasSharedStateChange(before, after) || pendingProtocolState);
         const markPending = !protocolReady && Boolean(syncSession) && hasSharedStateChange(before, after);
         const operationQueued = protocolReady && remoteNeeded;
@@ -1643,6 +1665,7 @@ function resolvedCorruptionTest(participant, skillId, input) {
               localRevision = nextRevision;
               pendingProtocolState = Boolean(persistedState.syncPending);
               applyDataToState(after, { includeLog: true, includeHistory: false });
+              settleSandbox(type === 'reset-combat');
               for (const proposal of newEventProposals) emitBus('scene:event-proposed', proposal);
               emitBus('reserve');
               emitBus('combat');
@@ -1797,13 +1820,17 @@ function resolvedCorruptionTest(participant, skillId, input) {
         return reconcileV5ResourceBindings(draft, next, captured);
       });
     },
+    /** Vrai pendant une rencontre « test » : rien n'est enregistré ni envoyé aux fiches. */
+    isTestSandbox() { return Boolean(sandbox); },
     /** Chantier H : différences durables à écrire sur les fiches (lot A) et dernier envoi, sans rien modifier. */
     planFicheWriteback() {
+      if (sandbox) throw new Error('Rencontre « test » en cours : rien n’est envoyé aux fiches.');
       const envelope = JSON.parse(JSON.stringify(currentEnvelope()));
       return { ...planFicheWriteback(envelope), lastSend: envelope.extensions?.v5?.ficheWriteback?.lastSend || null, revision: localRevision };
     },
     /** Envoi (ou annulation) accepté par une fiche : une commande annulable de l'outil, journalisée sans valeur réservée au MJ. */
     applyFicheWritebackSuccess(charId, response, rows, options = {}) {
+      if (sandbox) return Promise.reject(new Error('Rencontre « test » en cours : rien n’est envoyé aux fiches.'));
       if (!canMutate()) return false;
       const captured = JSON.parse(JSON.stringify({ response, rows, options: { sessionId: options.sessionId } }));
       const undo = (captured.rows || []).some(row => row.undoOf);
@@ -3374,14 +3401,14 @@ function resolvedCorruptionTest(participant, skillId, input) {
           const sharedChanged = transition.command.data?.compactState === 1
             ? hasSharedStateChange(current, state)
             : hasSharedStateChange(transition.command.result.state, transition.command.inverse.state);
-          const protocolReady = Boolean(syncSession && syncSessionReady);
+          const protocolReady = Boolean(syncSession && syncSessionReady && !sandbox);
           const operationQueued = protocolReady && sharedChanged;
           const persistState = { ...state, history: transition.history, ...(!protocolReady && syncSession && sharedChanged ? { syncPending: true } : {}) };
           const finish = result => {
             if (result?.ok === false) return false;
             historyState = transition.history;
             localRevision = nextRevision;
-            try { applyDataToState(state, { includeLog: true, includeHistory: false }); }
+            try { applyDataToState(state, { includeLog: true, includeHistory: false }); settleSandbox(); }
             catch (error) {
               historyState = beforeHistory;
               localRevision = beforeRevision;
@@ -3448,7 +3475,7 @@ function resolvedCorruptionTest(participant, skillId, input) {
         const sharedChanged = transition.command.data?.compactState === 1
           ? hasSharedStateChange(current, state)
           : hasSharedStateChange(transition.command.inverse.state, transition.command.result.state);
-        const protocolReady = Boolean(syncSession && syncSessionReady);
+        const protocolReady = Boolean(syncSession && syncSessionReady && !sandbox);
         const operationQueued = protocolReady && sharedChanged;
         const persistState = { ...state, history: transition.history, ...(!protocolReady && syncSession && sharedChanged ? { syncPending: true } : {}) };
         const finish = result => {
@@ -3456,6 +3483,7 @@ function resolvedCorruptionTest(participant, skillId, input) {
           historyState = transition.history;
           localRevision = nextRevision;
           applyDataToState(state, { includeLog: true, includeHistory: false });
+          settleSandbox();
           emitBus('reserve');
           emitBus('combat');
           emitBus('log');

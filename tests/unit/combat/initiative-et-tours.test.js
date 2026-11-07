@@ -417,7 +417,7 @@ test('F2-A — score égal puis I départage ; même score et même I exige un t
   const unresolved = buildPlan(tied, { diceById: { first: 4, second: 4 } });
   assert.equal(unresolved.ready, false);
   assert.ok(unresolved.tieGroups.some(group => group.participantIds.length === 2));
-  assert.ok(unresolved.needsInput.some(row => row.field === 'tieOrder'));
+  assert.ok(unresolved.needsInput.some(row => row.field === 'initiatorRoll'), 'deux ex aequo : Test opposé direct, sans ordre préalable');
 });
 
 test('F2-A — Combat instinctif garde les deux d10, laisse choisir le second, ajoute BI une fois et conserve I', () => {
@@ -2303,5 +2303,89 @@ test('C02 — Poursuite V5 (C0-L06-074, C0-L06-023, C0-L06-044) : échelle 1-10,
   assert.equal(caught.ready, true);
   assert.equal(caught.nextDistance, 0);
   assert.equal(caught.outcome, 'caught');
+});
+});
+
+describe('Égalités d’Initiative simplifiées (07/11)', () => {
+const person = (id, { I = 40, talents = [] } = {}) => ({ id, name: id, kind: 'PJ', camp: 'pj', zone: 'active', initiative: I, hp: 10, maxHp: 10, states: [], caracs: { I }, talents, extensions: { v5: {} } });
+const plan = (rows, input) => TurnOrder.prepareCombatInitiative(rows, input);
+const rover = [{ id: 'talent-rover', rank: 1, status: 'resolved' }, { id: 'talent-scale-sheer-surface', rank: 1, status: 'resolved' }];
+
+test('le Test d’I est un Test de caractéristique : Vagabond et Grimpeur ne demandent aucune compétence', () => {
+  const rows = [person('caelel', { talents: rover }), person('hellaya')];
+  const key = 'caelel|hellaya';
+  const result = plan(rows, { diceById: { caelel: 5, hellaya: 5 }, opposedRolls: { [`${key}:caelel:hellaya`]: { initiatorRoll: 20, opponentRoll: 80 } } });
+  assert.deepEqual(result.needsInput, []);
+  assert.deepEqual(result.order, ['caelel', 'hellaya']);
+});
+
+test('à deux ex aequo : ni ordre préalable ni choix après le Test, le gagnant agit en premier', () => {
+  const rows = [person('a'), person('b')];
+  const first = plan(rows, { diceById: { a: 5, b: 5 } });
+  assert.deepEqual(first.needsInput.map(row => row.field), ['initiatorRoll', 'opponentRoll'], 'les deux d100 demandés ensemble');
+  const done = plan(rows, { diceById: { a: 5, b: 5 }, opposedRolls: { 'a|b:a:b': { initiatorRoll: 90, opponentRoll: 10 } } });
+  assert.equal(done.ready, true, JSON.stringify(done.needsInput));
+  assert.deepEqual(done.order, ['b', 'a']);
+});
+
+test('à deux ex aequo : le MJ peut trancher directement sans Test opposé', () => {
+  const rows = [person('a'), person('b')];
+  const done = plan(rows, { diceById: { a: 5, b: 5 }, tieChoices: { 'a|b': ['b', 'a'] } });
+  assert.equal(done.ready, true, JSON.stringify(done.needsInput));
+  assert.deepEqual(done.order, ['b', 'a']);
+  assert.equal(done.oppositions.length, 0);
+});
+});
+
+describe('Rencontre « test » sans persistance (07/11)', () => {
+function recordingPersistence() {
+  let saved = null, writes = 0;
+  return { async load() { return saved && structuredClone(saved); }, async saveAtomic({ state }) { writes++; saved = structuredClone(state); return { ok: true }; }, read: () => saved && structuredClone(saved), writes: () => writes };
+}
+async function setup(title) {
+  const persistence = recordingPersistence();
+  const store = createStore({ persistence });
+  await store.ready;
+  await store.addProfile({ id: 'garde', name: 'Garde', hp: 12, initiative: 30 });
+  await store.savePersistentCharacter?.({ id: 'pj', name: 'PJ', hp: 10, maxHp: 10 });
+  await store.saveEncounter({ id: 'enc', title, entries: [{ id: 'e1', profileId: 'garde', quantity: 1, zone: 'active' }] });
+  return { store, persistence };
+}
+test('une rencontre « test » n’écrit rien et revient à l’état d’avant à sa fin (suspension)', async () => {
+  const { store, persistence } = await setup(' Test ');
+  const before = JSON.parse(store.getFullJSON()), writes = persistence.writes(), stored = persistence.read();
+  await store.launchEncounter('enc');
+  assert.equal(store.isTestSandbox(), true);
+  const id = store.listParticipants()[0].id;
+  await store.updateParticipant?.(id, { hp: 3 });
+  assert.throws(() => store.planFicheWriteback(), /test/);
+  assert.equal(persistence.writes(), writes, 'aucune écriture pendant le test');
+  await store.suspendActiveScene();
+  assert.equal(store.isTestSandbox(), false);
+  assert.equal(persistence.writes(), writes);
+  assert.deepEqual(persistence.read(), stored);
+  const after = JSON.parse(store.getFullJSON());
+  assert.deepEqual(after.encounters, before.encounters);
+  assert.equal(after.activeScene ?? null, before.activeScene ?? null);
+  assert.deepEqual(after.suspendedScenes, before.suspendedScenes);
+  assert.equal(store.canUndo?.() ?? false, false, 'Annuler ne remonte pas avant le test');
+  await store.addProfile({ id: 'autre', name: 'Autre', hp: 5, initiative: 10 });
+  assert.ok(persistence.writes() > writes, 'la persistance reprend après le test');
+});
+test('« Terminer le combat » clôt aussi le test', async () => {
+  const { store, persistence } = await setup('test');
+  const writes = persistence.writes();
+  await store.launchEncounter('enc');
+  await store.resetCombat();
+  assert.equal(store.isTestSandbox(), false);
+  assert.equal(persistence.writes(), writes);
+  assert.equal(JSON.parse(store.getFullJSON()).activeScene ?? null, null);
+});
+test('une rencontre d’un autre nom reste persistée', async () => {
+  const { store, persistence } = await setup('Test du pont');
+  const writes = persistence.writes();
+  await store.launchEncounter('enc');
+  assert.equal(store.isTestSandbox(), false);
+  assert.ok(persistence.writes() > writes);
 });
 });

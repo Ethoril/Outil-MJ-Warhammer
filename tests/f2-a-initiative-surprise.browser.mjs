@@ -304,15 +304,12 @@ try {
   const twoDialog = page.locator('dialog.tool-sheet'); await twoDialog.waitFor({ state: 'visible' });
   for (const input of await twoDialog.locator('input[name^="die:"]').all()) await input.fill('5');
   await twoDialog.getByRole('button', { name: 'Calculer / actualiser l’ordre' }).click();
-  const twoBracket = twoDialog.locator('select[data-kind="tieOrder"]'); assert.equal(await twoBracket.count(), 2);
-  await twoBracket.nth(0).selectOption({ label: 'Daria · pj · PJ' }); await twoBracket.nth(1).selectOption({ label: 'Émile · pj · PJ' });
+  assert.equal(await twoDialog.locator('select[data-kind="tieOrder"]').count(), 0, 'à deux, pas d’ordre préalable');
+  const opposed = twoDialog.locator('[data-match-id]'); assert.equal(await opposed.count(), 2, 'les deux d100 sont demandés ensemble');
+  await opposed.nth(0).fill('20'); await opposed.nth(1).fill('80');
   await twoDialog.getByRole('button', { name: 'Calculer / actualiser l’ordre' }).click();
-  for (const roll of ['20', '80']) {
-    const opposed = twoDialog.locator('[data-match-id]'); assert.equal(await opposed.count(), 1);
-    await opposed.fill(roll); await twoDialog.getByRole('button', { name: 'Calculer / actualiser l’ordre' }).click();
-  }
-  const twoChoice = twoDialog.locator('select[data-kind="tieChoice"]'); assert.equal(await twoChoice.count(), 2);
-  await twoChoice.nth(0).selectOption({ label: 'Émile · pj · PJ' }); await twoChoice.nth(1).selectOption({ label: 'Daria · pj · PJ' });
+  assert.match(await twoDialog.textContent(), /Ordre calculé : Daria → Émile/, 'le vainqueur agit en premier sans autre saisie');
+  await twoDialog.locator('select[data-kind="tieFirst"]').selectOption({ label: 'Émile · pj · PJ' });
   await twoDialog.getByRole('button', { name: 'Calculer / actualiser l’ordre' }).click();
   await twoDialog.getByRole('button', { name: 'Confirmer et appliquer' }).click();
   const twoState = await page.evaluate(async () => { const { Store } = await import('/Outil-MJ-Warhammer/js/main.js'); const full = JSON.parse(Store.getFullJSON()); return { order: Store.getCombat().order, people: Store.listParticipants(), audit: full.extensions?.v5?.combatInitiativeResolution?.tieGroups?.[0] }; });

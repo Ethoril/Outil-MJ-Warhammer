@@ -56,6 +56,7 @@ const INITIATIVE_INPUT_LABELS = Object.freeze({ characteristic: 'Initiative', di
 const SYNC_BUSY = ['sending', 'pending', 'connecting', 'transition'];
 const SYNC_OK = ['synced', 'connected', 'ready'];
 function statusSummary(local, sync) {
+  if (local === 'sandbox') return { label: 'Rencontre test : rien n’est enregistré', tone: 'warn' };
   if (sync === 'conflict') return { label: 'Conflit à résoudre', tone: 'danger' };
   if (local === 'error' || local === 'unavailable') return { label: 'Enregistrement local en échec', tone: 'danger' };
   if (sync === 'error') return { label: 'Erreur de synchronisation', tone: 'warn' };
@@ -86,7 +87,8 @@ function updateLocalStatus(status) {
     saving: 'Local : sauvegarde…',
     unavailable: 'Local : indisponible',
     saved: 'Local : enregistré',
-    error: 'Local : erreur de sauvegarde'
+    error: 'Local : erreur de sauvegarde',
+    sandbox: 'Local : rencontre test, rien n’est enregistré'
   };
   if (el) {
     el.textContent = labels[status] || status;
@@ -497,6 +499,7 @@ function openCombatInitiativeDialog({ staging = null, startCombat = false, title
           const key = input.dataset.groupKey;
           if (input.dataset.kind === 'tieOrder') state.tieOrders[key] = Array.from(tieArea.querySelectorAll(`[data-group-key="${CSS.escape(key)}"][data-kind="tieOrder"][data-position]`)).sort((a,b)=>Number(a.dataset.position)-Number(b.dataset.position)).map(item=>item.value).filter(Boolean);
           if (input.dataset.kind === 'tieChoice') state.tieChoices[key] = Array.from(tieArea.querySelectorAll(`[data-group-key="${CSS.escape(key)}"][data-kind="tieChoice"][data-position]`)).sort((a,b)=>Number(a.dataset.position)-Number(b.dataset.position)).map(item=>item.value).filter(Boolean);
+          if (input.dataset.kind === 'tieFirst') { if (input.value) state.tieChoices[key] = [input.value, ...key.split('|').filter(id => id !== input.value)]; else delete state.tieChoices[key]; }
         }
         for (const input of tieArea.querySelectorAll('[data-match-id]')) {
           const match = input.dataset.matchId, side = input.dataset.side, rolls = state.opposedRolls[match] || {};
@@ -526,60 +529,57 @@ function openCombatInitiativeDialog({ staging = null, startCombat = false, title
         for (const group of state.preview.tieGroups) {
           const section = document.createElement('section'); section.className = 'card';
           const heading = document.createElement('strong'); heading.textContent = `Égalité : ${group.participantIds.map(participantLabel).join(' / ')}`; section.append(heading);
-          const needsBracket = state.preview.needsInput.some(item => item.groupKey === group.key && item.field === 'tieOrder');
-          if (needsBracket) {
-            const note = document.createElement('p'); note.textContent = 'Ordre des adversaires choisi par le MJ avant les jets :'; section.append(note);
+          if (group.participantIds.length >= 3) {
+            const note = document.createElement('p'); note.textContent = 'Égalité à trois ou plus : choisissez directement l’ordre des ex aequo :'; section.append(note);
             for (let position = 0; position < group.participantIds.length; position++) {
-              const label = document.createElement('label'); label.textContent = `Participant ${position + 1} `;
-              const select = document.createElement('select'); select.dataset.groupKey = group.key; select.dataset.kind = 'tieOrder'; select.dataset.position = String(position); select.required = true;
+              const label = document.createElement('label'); label.textContent = `Position ${position + 1} `;
+              const select = document.createElement('select'); select.dataset.groupKey = group.key; select.dataset.kind = 'tieChoice'; select.dataset.position = String(position); select.required = true;
               const blank = document.createElement('option'); blank.value = ''; blank.textContent = 'Choisir un participant'; select.append(blank);
               for (const id of group.participantIds) { const option = document.createElement('option'); option.value = id; option.textContent = participantLabel(id); select.append(option); }
-              select.value = state.tieOrders[group.key]?.[position] || '';
+              select.value = state.tieChoices[group.key]?.[position] || '';
               label.append(select); section.append(label);
             }
           } else {
+            // Deux ex aequo : un Test opposé d’I (le vainqueur agit en premier), ou le MJ tranche directement.
+            const chosenFirst = state.tieChoices[group.key]?.[0] || '';
+            const firstLabel = document.createElement('label'); firstLabel.textContent = 'Qui agit en premier ? ';
+            const firstSelect = document.createElement('select'); firstSelect.dataset.groupKey = group.key; firstSelect.dataset.kind = 'tieFirst';
+            const byTest = document.createElement('option'); byTest.value = ''; byTest.textContent = 'Le vainqueur du Test opposé d’I'; firstSelect.append(byTest);
+            for (const id of group.participantIds) { const option = document.createElement('option'); option.value = id; option.textContent = participantLabel(id); firstSelect.append(option); }
+            firstSelect.value = chosenFirst; firstSelect.addEventListener('change', recalculate);
+            firstLabel.append(firstSelect); section.append(firstLabel);
             for (const match of state.preview.oppositions.filter(item => item.groupKey === group.key)) {
               const outcome = document.createElement('p'); outcome.className = 'muted';
-              outcome.textContent = `${participantLabel(match.initiatorId)} (I ${match.initiator.score}, d100 ${match.initiator.roll}, DR ${match.initiator.sl}) contre ${participantLabel(match.opponentId)} (I ${match.opponent.score}, d100 ${match.opponent.roll}, DR ${match.opponent.sl}) · DR net ${match.netSl} · vainqueur : ${participantLabel(match.winnerId)}.`;
+              outcome.textContent = `Test opposé : ${participantLabel(match.initiatorId)} (d100 ${match.initiator.roll}, DR ${match.initiator.sl}) contre ${participantLabel(match.opponentId)} (d100 ${match.opponent.roll}, DR ${match.opponent.sl}) · vainqueur : ${participantLabel(match.winnerId)}.`;
               section.append(outcome);
             }
-            for (const need of state.preview.needsInput.filter(item => item.groupKey === group.key && ['initiatorRoll', 'opponentRoll','initiatorChoice','opponentChoice','initiatorConditionPenaltyMode','opponentConditionPenaltyMode'].includes(item.field))) {
-              const who = participantLabel(need.participantId);
-              const label = document.createElement('label');
-              const rolls = state.opposedRolls[need.matchId] || {};
-              if (need.field.endsWith('Roll')) {
-                label.textContent = `${who} · d100 `;
-                const input = document.createElement('input'); input.type = 'number'; input.min = '1'; input.max = '100'; input.dataset.matchId = need.matchId; input.dataset.side = need.field; input.required = true;
-                const existing = rolls[input.dataset.side]; if (Number.isInteger(existing)) input.value = String(existing);
-                label.append(input);
-              } else if (need.field.endsWith('Choice')) {
-                label.textContent = `${who} · inversion du Test `;
-                const select = document.createElement('select'); select.dataset.matchId = need.matchId; select.dataset.side = need.field; select.required = true;
-                const blank = document.createElement('option'); blank.value = ''; blank.textContent = 'Choisir'; select.append(blank);
-                for (const id of need.optionIds || []) { const option = document.createElement('option'); option.value = id; option.textContent = id === 'reverse' ? 'Inverser le d100' : 'Garder le d100'; select.append(option); }
-                select.value = rolls[need.field] || ''; label.append(select);
-              } else if (need.field.endsWith('ConditionPenaltyMode')) {
-                label.textContent = `${who} · pénalités d’États `;
-                const select = document.createElement('select'); select.dataset.matchId = need.matchId; select.dataset.side = need.field; select.required = true;
-                const blank = document.createElement('option'); blank.value = ''; blank.textContent = 'Choisir le mode'; select.append(blank);
-                for (const [value,text] of [['sl','Appliquer les DR'],['disadvantage','Appliquer le Désavantage']]) { const option = document.createElement('option'); option.value = value; option.textContent = text; select.append(option); }
-                select.value = rolls[need.field] || ''; label.append(select);
+            if (!chosenFirst) {
+              for (const need of state.preview.needsInput.filter(item => item.groupKey === group.key && ['initiatorRoll', 'opponentRoll','initiatorChoice','opponentChoice','initiatorConditionPenaltyMode','opponentConditionPenaltyMode'].includes(item.field))) {
+                const who = participantLabel(need.participantId);
+                const label = document.createElement('label');
+                const rolls = state.opposedRolls[need.matchId] || {};
+                if (need.field.endsWith('Roll')) {
+                  label.textContent = `${who} · d100 du Test d’I `;
+                  const input = document.createElement('input'); input.type = 'number'; input.min = '1'; input.max = '100'; input.dataset.matchId = need.matchId; input.dataset.side = need.field; input.required = true;
+                  const existing = rolls[input.dataset.side]; if (Number.isInteger(existing)) input.value = String(existing);
+                  label.append(input);
+                } else if (need.field.endsWith('Choice')) {
+                  label.textContent = `${who} · inversion du Test `;
+                  const select = document.createElement('select'); select.dataset.matchId = need.matchId; select.dataset.side = need.field; select.required = true;
+                  const blank = document.createElement('option'); blank.value = ''; blank.textContent = 'Choisir'; select.append(blank);
+                  for (const id of need.optionIds || []) { const option = document.createElement('option'); option.value = id; option.textContent = id === 'reverse' ? 'Inverser le d100' : 'Garder le d100'; select.append(option); }
+                  select.value = rolls[need.field] || ''; label.append(select);
+                } else {
+                  label.textContent = `${who} · pénalités d’États `;
+                  const select = document.createElement('select'); select.dataset.matchId = need.matchId; select.dataset.side = need.field; select.required = true;
+                  const blank = document.createElement('option'); blank.value = ''; blank.textContent = 'Choisir le mode'; select.append(blank);
+                  for (const [value,text] of [['sl','Appliquer les DR'],['disadvantage','Appliquer le Désavantage']]) { const option = document.createElement('option'); option.value = value; option.textContent = text; select.append(option); }
+                  select.value = rolls[need.field] || ''; label.append(select);
+                }
+                section.append(label);
               }
-              section.append(label);
-            }
-            for (const need of state.preview.needsInput.filter(item => item.groupKey === group.key && item.field === 'oppositionContext')) {
-              const unresolved = document.createElement('p'); unresolved.className = 'muted'; unresolved.textContent = `${participantLabel(need.participantId)} : décision/contextuel requis — ${need.label}`; section.append(unresolved);
-            }
-            if (state.preview.needsInput.some(item => item.groupKey === group.key && item.field === 'tieChoice')) {
-              const tieNeed = state.preview.needsInput.find(item => item.groupKey === group.key && item.field === 'tieChoice');
-              const note = document.createElement('p'); note.textContent = tieNeed.direct ? 'Égalité à trois ou plus : choisissez directement l’ordre des ex aequo :' : `${participantLabel(tieNeed.winnerId)} a gagné. Choisissez l’ordre complet du groupe :`; section.append(note);
-              for (let position = 0; position < group.participantIds.length; position++) {
-                const label = document.createElement('label'); label.textContent = `Position ${position + 1} `;
-                const select = document.createElement('select'); select.dataset.groupKey = group.key; select.dataset.kind = 'tieChoice'; select.dataset.position = String(position); select.required = true;
-                const blank = document.createElement('option'); blank.value = ''; blank.textContent = 'Choisir un participant'; select.append(blank);
-                for (const id of group.participantIds) { const option = document.createElement('option'); option.value = id; option.textContent = participantLabel(id); select.append(option); }
-                select.value = state.tieChoices[group.key]?.[position] || '';
-                label.append(select); section.append(label);
+              for (const need of state.preview.needsInput.filter(item => item.groupKey === group.key && item.field === 'oppositionContext')) {
+                const unresolved = document.createElement('p'); unresolved.className = 'muted'; unresolved.textContent = `${participantLabel(need.participantId)} : ${need.label} Vous pouvez aussi choisir directement qui agit en premier.`; section.append(unresolved);
               }
             }
           }

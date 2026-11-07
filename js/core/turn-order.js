@@ -131,23 +131,24 @@ export function prepareCombatInitiative(participants, {
     index=end;
   }
   const oppositions=[],resolvedGroups=new Map();
+  const isPermutation=(list,ids)=>Array.isArray(list)&&list.length===ids.length&&new Set(list).size===list.length&&list.every(id=>ids.includes(id));
   for(const group of tieGroups){
+    // Ordre tranché par le MJ : il prime toujours (trois ex aequo ou plus, choix direct, ou vainqueur qui laisse passer).
+    const choice=tieChoices[group.key],chosen=isPermutation(choice,group.participantIds);
     if(group.participantIds.length>=3){
-      const choice=tieChoices[group.key];
-      const valid=Array.isArray(choice)&&choice.length===group.participantIds.length&&new Set(choice).size===choice.length&&choice.every(id=>group.participantIds.includes(id));
-      if(!valid)needsInput.push({field:'tieChoice',groupKey:group.key,participantIds:group.participantIds,direct:true});
+      if(!chosen)needsInput.push({field:'tieChoice',groupKey:group.key,participantIds:group.participantIds,direct:true});
       else resolvedGroups.set(group.key,{supplied:choice,direct:true});
       continue;
     }
-    const supplied=tieOrders[group.key];
-    const exact=Array.isArray(supplied)&&supplied.length===group.participantIds.length&&new Set(supplied).size===supplied.length&&supplied.every(id=>group.participantIds.includes(id));
-    if(!exact){needsInput.push({field:'tieOrder',groupKey:group.key,participantIds:group.participantIds});continue;}
+    // Deux ex aequo : Test opposé d'I, l'initiateur est le premier listé sauf ordre explicite (sans effet sur le classement).
+    const supplied=isPermutation(tieOrders[group.key],group.participantIds)?tieOrders[group.key]:group.participantIds;
+    const before=needsInput.length;
     let champion=supplied[0];
     for(let index=1;index<supplied.length;index++){
       const initiatorId=champion,opponentId=supplied[index],id=`${group.key}:${initiatorId}:${opponentId}`,rolls=opposedRolls[id];
-      if(!Number.isInteger(rolls?.initiatorRoll)||rolls.initiatorRoll<1||rolls.initiatorRoll>100){needsInput.push({field:'initiatorRoll',groupKey:group.key,matchId:id,participantId:initiatorId});break;}
-      if(!Number.isInteger(rolls?.opponentRoll)||rolls.opponentRoll<1||rolls.opponentRoll>100){needsInput.push({field:'opponentRoll',groupKey:group.key,matchId:id,participantId:opponentId});break;}
-      const buildInitiativeTest=(actor,target,roll,side)=>buildCombatTest({actor,target,roll,action:{base:combatInitiativeOf(actor).characteristic,attr:'I',label:'Initiative',type:'test',qualities:[],extensions:{v5:{kind:'test',scoreIsCurrent:true}}},v5:{kind:'test',context:{mandatoryTest:true,sequelaNoCircumstanceInput:true,involvesMovement:false,requiresSight:false,reliesOnSight:false,usesFellowship:false,runningOrHiding:false,conditionPenaltyMode:rolls[`${side}ConditionPenaltyMode`]}},v5State:{participants:active}});
+      const missingRolls=[['initiatorRoll',initiatorId],['opponentRoll',opponentId]].filter(([field])=>!Number.isInteger(rolls?.[field])||rolls[field]<1||rolls[field]>100);
+      if(missingRolls.length){for(const [field,participantId] of missingRolls)needsInput.push({field,groupKey:group.key,matchId:id,participantId});break;}
+      const buildInitiativeTest=(actor,target,roll,side)=>buildCombatTest({actor,target,roll,action:{base:combatInitiativeOf(actor).characteristic,attr:'I',label:'Initiative',type:'test',qualities:[],extensions:{v5:{kind:'test',scoreIsCurrent:true}}},v5:{kind:'test',context:{skillId:'none',mandatoryTest:true,sequelaNoCircumstanceInput:true,involvesMovement:false,requiresSight:false,reliesOnSight:false,usesFellowship:false,runningOrHiding:false,conditionPenaltyMode:rolls[`${side}ConditionPenaltyMode`]}},v5State:{participants:active}});
       const initiatorPlan=buildInitiativeTest(byId.get(initiatorId),byId.get(opponentId),rolls.initiatorRoll,'initiator'),opponentPlan=buildInitiativeTest(byId.get(opponentId),byId.get(initiatorId),rolls.opponentRoll,'opponent');
       for(const [side,participantId,testPlan] of [['initiator',initiatorId,initiatorPlan],['opponent',opponentId,opponentPlan]]){
         for(const label of testPlan.unresolved||[])needsInput.push({field:label.includes('États de pénalités différentes')?`${side}ConditionPenaltyMode`:'oppositionContext',groupKey:group.key,matchId:id,participantId,label});
@@ -164,11 +165,9 @@ export function prepareCombatInitiative(participants, {
         initiatorConditionPenaltyMode:rolls.initiatorConditionPenaltyMode,opponentConditionPenaltyMode:rolls.opponentConditionPenaltyMode});champion=winnerId;
     }
     const completed=oppositions.filter(row=>row.groupKey===group.key).length>=supplied.length-1;
+    if(chosen){needsInput.splice(before);resolvedGroups.set(group.key,{...(completed?{championId:champion}:{direct:true}),supplied:choice});continue;}
     if(!completed)continue;
-    const choice=tieChoices[group.key];
-    const valid=Array.isArray(choice)&&choice.length===group.participantIds.length&&new Set(choice).size===choice.length&&choice.every(id=>group.participantIds.includes(id));
-    if(!valid)needsInput.push({field:'tieChoice',groupKey:group.key,winnerId:champion,participantIds:group.participantIds});
-    else resolvedGroups.set(group.key,{championId:champion,supplied:choice});
+    resolvedGroups.set(group.key,{championId:champion,supplied:[champion,...group.participantIds.filter(id=>id!==champion)]});
   }
   let order=[];
   for(let index=0;index<sorted.length;){
