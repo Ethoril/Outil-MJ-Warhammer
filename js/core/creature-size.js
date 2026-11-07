@@ -49,12 +49,12 @@ const SPECIES_SIZE = Object.freeze({ halfelin: 'small', halfling: 'small', gnome
 /** Taille du participant : Trait, sinon champ `size` (profil), sinon espèce de la fiche, sinon Moyenne supposée (`assumed: true`). */
 export function creatureSizeOf(participant) {
   const fromTrait = traitListOf(participant).map(parseSizeTrait).find(Boolean);
-  if (fromTrait) return { ...fromTrait, assumed: false };
+  if (fromTrait) return { ...fromTrait, assumed: false, source: 'trait' };
   const fromField = SIZE_WORDS[fold(participant?.size ?? participant?.profile?.size)];
-  if (fromField) return { ...describe(fromField), assumed: false };
+  if (fromField) return { ...describe(fromField), assumed: false, source: 'field' };
   const fromSpecies = SPECIES_SIZE[fold(participant?.race ?? participant?.profile?.race)];
-  if (fromSpecies) return { ...describe(fromSpecies), assumed: false };
-  return { ...describe('average'), assumed: true };
+  if (fromSpecies) return { ...describe(fromSpecies), assumed: false, source: 'species' };
+  return { ...describe('average'), assumed: true, source: 'assumed' };
 }
 
 const hasExplicitSize = participant => !creatureSizeOf(participant).assumed;

@@ -16,7 +16,10 @@ export function previewLarge(n){
  const normal=melee&&!n.v5.extraAttack&&(c.freeAttackTalent==null||c.freeAttackTalent==='none')&&c.talentAction!=='stomp';
  const bf=Number.isSafeInteger(n.actor?.caracs?.F)?Math.floor(n.actor.caracs.F/10):null;
  if(normal&&talentA&&bf==null)unresolved.push('Grande taille : Bonus de Force requis pour les dégâts normaux.');
- return{plans,unresolved,damageBonus:normal&&talentA&&bf!=null?bf:0,defensePenalty:melee&&onA&&known&&sizes[0]>sizes[1]?2:0,forceWinner:strength&&known&&(onA||onB)&&sizes[0]!==sizes[1]?{larger:sizes[0]>sizes[1]?'attacker':'defender',gap:Math.abs(sizes[0]-sizes[1])}:null};
+ // Taille Grande ou plus venue de l'espèce d'un PJ (fiche) : dégâts calculés depuis la fiche, donc +BF par cran au-dessus de Moyenne (V5 p. 360) ; un Trait est déjà imprimé.
+ const speciesA=creatureSizeOf(n.actor),speciesBonus=normal&&!talentA&&speciesA.source==='species'&&speciesA.rank>=4;
+ if(speciesBonus&&bf==null)unresolved.push('Taille : Bonus de Force requis pour les dégâts normaux.');
+ return{plans,unresolved,damageBonus:normal&&talentA&&bf!=null?bf:speciesBonus&&bf!=null?bf*(speciesA.rank-3):0,defensePenalty:melee&&onA&&known&&sizes[0]>sizes[1]?2:0,forceWinner:strength&&known&&(onA||onB)&&sizes[0]!==sizes[1]?{larger:sizes[0]>sizes[1]?'attacker':'defender',gap:Math.abs(sizes[0]-sizes[1])}:null};
 }
 export function resolveSizeOpposition(opposed,large,actorTest,defenderTest){
  if(!opposed||!large?.forceWinner)return opposed;const{larger,gap}=large.forceWinner,small=larger==='attacker'?defenderTest:actorTest;

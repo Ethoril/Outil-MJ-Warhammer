@@ -35,3 +35,19 @@ test('le plan de Taille d’un PJ Halfelin face à un Humain voit un écart d’
   assert.equal(plan.versus.gap, 1);
   assert.equal(plan.versus.larger, 'opponent');
 });
+
+import { previewLarge } from '../../../js/core/v5-talent-size.js';
+
+const largeInput = (actor, extra = {}) => ({ actor, target: { race: 'Humain', caracs: { F: 30 } }, action: { type: 'attack', attr: 'CC' }, defense: null,
+  v5: { kind: 'melee', extraAttack: false, context: {}, ...extra } });
+
+test('PJ Ogre (Taille Grande par l’espèce) : +BF aux dégâts de mêlée normaux, ni au tir ni à l’attaque bonus', () => {
+  const ogre = { race: 'Ogre', caracs: { F: 45 } };
+  assert.equal(previewLarge(largeInput(ogre)).damageBonus, 4);
+  assert.equal(previewLarge(largeInput(ogre, { kind: 'ranged' })).damageBonus, 0);
+  assert.equal(previewLarge(largeInput(ogre, { extraAttack: true })).damageBonus, 0);
+});
+
+test('créature au Trait Grande : dégâts déjà imprimés, aucun +BF ajouté', () => {
+  assert.equal(previewLarge(largeInput({ traits: ['Taille (Grande)'], caracs: { F: 45 } })).damageBonus, 0);
+});
