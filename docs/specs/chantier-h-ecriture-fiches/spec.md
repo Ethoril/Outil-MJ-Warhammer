@@ -52,7 +52,7 @@ Cadrage du 06/11/2026, à partir de `docs/PASSATION_CHANTIER_H.md` (`f842490`). 
 ### S5 · Valeurs que la fiche porte déjà
 - **CA16** · Destin, Fortune, Péché et Corruption modifiés en jeu partent vers `destin`, `fortune`, `peche`, `corruption`.
 - **CA17** · Une perte de caractéristique par séquelle part vers la **Base** de la caractéristique de la fiche, pour son total ; les Avances de la fiche ne changent jamais (Q8). Une perte supérieure à la Base est montrée « à faire à la main », jamais reportée sur les Avances.
-- **CA18** · Une excommunication ou un rejet définitif retire de la fiche les talents Béni/Invocation du culte et met à zéro les Avances de Prière ; un réimport ultérieur ne les rétablit pas.
+- **CA18** · Un rejet définitif confirmé par le MJ retire de la fiche les talents Béni/Invocation du culte et met à zéro les Avances de Prière ; un réimport ultérieur ne les rétablit pas. L’excommunication temporaire ne retire rien (comme le moteur, contre-vérification du 07/11).
 - **CA19** · Un objet retenu par le Courroux est retiré de l'équipement de la fiche ; rendu par une pénitence, il y revient à l'identique ; un ancien import ne le recrée jamais.
 
 ### S6 · Valeurs ajoutées à la fiche, visibles du joueur
