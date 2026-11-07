@@ -1,7 +1,7 @@
 import{situationPlan,activeSource}from'./v5-talent-situations.js';import{getReferenceCatalogue}from'./reference-catalog.js';
 export function previewShieldAlly(n){
  if(n.v5.context?.talentAction!=='shield-ally')return null;const c=n.v5.context,plan=situationPlan(n.actor,'shield-ally'),changes=[],unresolved=[],reminders=[];
- const shield=n.actor.equipment?.find(s=>s.id===c.heldShieldId&&s.kind==='shield'),rating=shield?Number(shield.keywords.find(q=>q.id==='protectrice')?.parameter):c.shieldRating;
+ const shield=n.actor.equipment?.find(s=>s.id===c.heldShieldId&&s.kind==='shield'),rating=shield?Number((shield.keywords||[]).find(q=>q.id==='protectrice')?.parameter):c.shieldRating;
  if(!plan.proposals.length||!n.target||n.target.id===n.actor.id||n.actor.camp!==n.target.camp||c.adjacent!==true||c.shieldAvailable!==true||c.allyHasShield!==false||!Number.isSafeInteger(rating)||rating<1)unresolved.push('Porte-bouclier : bouclier tenu, PA précis, allié adjacent sans bouclier requis.');
  if(!unresolved.length)changes.push({participantId:n.target.id,removeKeys:['shield-ally'],add:[{id:n.resolutionId+':shield-ally',key:'shield-ally',name:'PA du bouclier d’un allié adjacent',kind:'talent-pending',level:1,source:plan.proposals[0].origins[0],authorId:n.actor.id,targetId:n.target.id,shieldId:shield?.id??null,ap:rating}]});
  reminders.push('Le bonus de PA vaut pendant la protection de l’allié adjacent ; confirmer la disponibilité du bouclier à chaque attaque.');return{plan,changes,unresolved,reminders};

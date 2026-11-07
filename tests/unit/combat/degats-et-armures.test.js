@@ -745,3 +745,46 @@ test('Lot2 combat V5 — un critique à échéance inconnue refuse une applicati
   assert.deepEqual(before, state(preview));
 });
 });
+
+test('Pièce d’armure sans liste de qualités : la parade se calcule (Elysia, 07/11)', async () => {
+  const store = createStore({ storage: null, persistence: { async load() { return null; }, async saveAtomic() { return { ok: true }; } } });
+  await store.ready;
+  await store.addParticipant({ id: 'a', name: 'PNJ', kind: 'PNJ', camp: 'ennemi', zone: 'active', hp: 10, maxHp: 10, caracs: { CC: 55, F: 30, E: 30 } });
+  await store.addParticipant({ id: 't', name: 'Elysia', kind: 'PJ', camp: 'pj', zone: 'active', hp: 10, maxHp: 10, caracs: { CC: 72, E: 30 },
+    equipment: [{ id: 'veste', kind: 'armour', name: 'Veste de cuir', ap: 1, layer: 'leather', locations: ['body', 'rightArm', 'leftArm'] }] });
+  const [a, t] = ['a', 't'].map(id => store.listParticipants().find(p => p.id === id));
+  const preview = store.previewResolution({ actor: a, target: t, action: { id: 'sword', type: 'attack', base: 55, damage: 6, v5: { kind: 'melee' } },
+    roll: 23, defense: { base: 72, roll: 85, v5: { kind: 'melee' } }, v5: { kind: 'melee', charging: true } });
+  assert.ok(preview);
+});
+
+test('Armes, armures et boucliers sans champs facultatifs : rien ne bloque l’import ni le combat (MJ, 07/11)', async () => {
+  const { normalizeEquipment } = await import('../../../js/core/equipment.js');
+  const full = { id: 'epee', baseId: 'epee', catalogVersion: '', kind: 'weapon', name: 'Épée', category: 'Base', damage: 'BF+4', reach: 'Moyenne', range: '', ap: null, locations: [], layer: 'none', keywords: [], notes: '', source: '', custom: true };
+  for (const missing of ['keywords', 'locations', 'notes', 'source', 'category', 'damage', 'reach', 'range', 'layer', 'catalogVersion', 'baseId', 'custom']) {
+    const { [missing]: _, ...partial } = full;
+    const result = normalizeEquipment([partial, { id: 'veste', kind: 'armour', name: 'Veste', ap: 1, locations: ['body'] }]);
+    assert.equal(result.coverage, 'present', `objet sans ${missing}`);
+    assert.equal(result.items.length, 2, `objet sans ${missing}`);
+  }
+  const store = createStore({ storage: null, persistence: { async load() { return null; }, async saveAtomic() { return { ok: true }; } } });
+  await store.ready;
+  const sword = { id: 'epee', kind: 'weapon', name: 'Épée' }, bow = { id: 'arc', kind: 'weapon', name: 'Arc' };
+  const mail = { id: 'cotte', kind: 'armour', name: 'Cotte', ap: 2, layer: 'flexible', locations: ['head', 'body', 'rightArm', 'leftArm', 'rightLeg', 'leftLeg'] };
+  const shield = { id: 'bouclier', kind: 'shield', name: 'Bouclier' }, buckler = { id: 'rondache', kind: 'shield', name: 'Rondache', ap: 1 };
+  const equipment = [sword, bow, { id: 'veste', kind: 'armour', name: 'Veste', ap: 1 }, mail, shield, buckler];
+  for (const [id, kind, camp] of [['a', 'PNJ', 'ennemi'], ['t', 'PJ', 'pj']]) await store.addParticipant({ id, name: id, kind, camp, zone: 'active', hp: 12, maxHp: 12, caracs: { CC: 55, CT: 40, F: 30, E: 30, Ag: 30 }, equipment });
+  const get = id => store.listParticipants().find(p => p.id === id);
+  const melee = { v5: { kind: 'melee' } };
+  const runs = [
+    { action: { id: 'x1', type: 'attack', base: 55, damage: 4, extensions: { fiche: { equipmentId: 'epee' } }, ...melee }, defense: { base: 72, roll: 85, extensions: { fiche: { equipmentId: 'bouclier' } }, ...melee }, ...melee },
+    { action: { id: 'x2', type: 'attack', base: 55, damage: 4, extensions: { equipment: sword }, ...melee }, defense: { base: 72, roll: 85, extensions: { equipment: buckler }, ...melee }, ...melee },
+    { action: { id: 'x3', type: 'attack', base: 55, damage: 4, extensions: { fiche: { equipmentId: 'epee' } }, ...melee }, defense: { base: 72, roll: 85, ...melee }, v5: { kind: 'melee', charging: true, choice: 'keep' } },
+    { action: { id: 'x4', type: 'attack', base: 40, damage: 3, extensions: { fiche: { equipmentId: 'arc' } }, v5: { kind: 'ranged' } }, defense: { label: 'Esquive', base: 30, roll: 85 }, v5: { kind: 'ranged' } },
+    { action: { id: 'x6', type: 'attack', base: 55, damage: 1, extensions: { equipment: shield }, ...melee }, defense: { base: 30, roll: 85, ...melee }, v5: { kind: 'melee', context: { attackWithShield: true } } }
+  ];
+  for (const run of runs) {
+    const preview = store.previewResolution({ actor: get('a'), target: get('t'), roll: 23, ...run });
+    assert.ok(preview.damage, run.action.id);
+  }
+});

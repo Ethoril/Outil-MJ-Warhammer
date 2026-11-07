@@ -1092,7 +1092,10 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
   function calculationError(error) {
     const field = error instanceof ResolutionError || error?.name === 'ResolutionError'
       ? (validRoll(state.resolution.attackRoll) ? 'defense' : 'attack') : 'general';
-    return { field, message: userMessage(error, 'Calcul impossible : vérifiez l’action et les jets saisis.') };
+    const fallback = 'Calcul impossible : vérifiez l’action et les jets saisis.';
+    const message = userMessage(error, fallback);
+    // Erreur imprévue : le détail technique s'affiche, sinon seule la console le montre.
+    return { field, message: message === fallback && error?.message ? `Calcul impossible (erreur interne : ${error.message}).` : message };
   }
 
   function declaredSources(value, prefix) {

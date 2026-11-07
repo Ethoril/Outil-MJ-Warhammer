@@ -55,12 +55,26 @@ export function spellObjectChoices(participant,{weaponsOnly=false}={}){
  }
  return items.filter(item=>typeof item.id==='string' && item.id.length);
 }
+/** Champs facultatifs absents d’un objet (fiche ancienne, saisie, export partiel) : complétés pour la validation seulement, jamais un rejet ; l’objet est conservé tel quel (MJ, 07/11). */
+const EQUIPMENT_TEXT_FIELDS=['catalogVersion','category','damage','reach','range','notes','source'];
+export function withEquipmentDefaults(raw){
+ if(!raw||typeof raw!=='object'||Array.isArray(raw))return raw;
+ const item={...raw},absent=key=>item[key]===undefined||item[key]===null;
+ for(const key of EQUIPMENT_TEXT_FIELDS)if(absent(key))item[key]='';
+ if(absent('keywords'))item.keywords=[];
+ if(absent('locations'))item.locations=[];
+ if(absent('layer'))item.layer='none';
+ if(item.ap===undefined)item.ap=null;
+ if(absent('baseId')&&typeof item.id==='string')item.baseId=item.id;
+ if(absent('custom'))item.custom=false;
+ return item;
+}
 export function normalizeEquipment(collection,{catalogue=getReferenceCatalogue(),present=collection!==undefined}={}){
  if(!present)return {coverage:'absent',items:[],warnings:[]};
  const invalid=message=>({coverage:'invalid',items:[],warnings:[{field:'equipment',code:'invalid-collection',severity:'error',message}]});
  if(!Array.isArray(collection)||collection.length>500)return invalid('Collection d’équipement invalide');
  const ids=new Set(),items=[],warnings=[];
- for(const raw of collection){try{validateEquipmentItem(raw,catalogue);if(ids.has(raw.id))return invalid(`Identifiant d’objet dupliqué : ${raw.id}`);ids.add(raw.id);items.push(globalThis.structuredClone(raw));}
+ for(const given of collection){const raw=withEquipmentDefaults(given);try{validateEquipmentItem(raw,catalogue);if(ids.has(raw.id))return invalid(`Identifiant d’objet dupliqué : ${raw.id}`);ids.add(raw.id);items.push(globalThis.structuredClone(given));}
  catch(error){return invalid(error.message);}
  if(!catalogue.items?.some(item=>item.id===raw.baseId))warnings.push({field:'equipment',entry:raw.id,code:'unknown-model',severity:'warning',message:'Modèle inconnu ; exemplaire conservé'});
  if(raw.ap===null&&['armour','shield'].includes(raw.kind))warnings.push({field:'equipment',entry:raw.id,code:'armour-unspecified',severity:'warning',message:'PA à préciser'});
@@ -506,7 +520,7 @@ export function locationProtection(target,context={}){
  const barrakulStatus=barrakulCoverage(attackWords),barrakul=barrakulStatus==='covered';
  if(barrakulStatus!=='absent')evaluatedKeywords.add('barrakul');
  if(barrakulStatus==='manual')manual.push('effet-non-couvert:barrakul');
- for(const sourceItem of location?.counted||[]){let include=true;const itemDamage=Number(target?.extensions?.v5?.armorDamageByItem?.[sourceItem.id])||0;const item={...sourceItem,ap:Math.max(0,sourceItem.ap-itemDamage)};const known=item.keywords.map(w=>w.id);
+ for(const sourceItem of location?.counted||[]){let include=true;const itemDamage=Number(target?.extensions?.v5?.armorDamageByItem?.[sourceItem.id])||0;const item={...sourceItem,ap:Math.max(0,sourceItem.ap-itemDamage)};const known=(item.keywords||[]).map(w=>w.id);
  if((context.ignoreMetalArmour===true||context.ignoreMetalArmour==='non-magical'&&!/magique/i.test(String(item.category||'')))&&/mail|plate|gromril|ithilmar|metal/i.test(String(item.category||item.name||''))){include=false;ignored.push({item,reason:context.ignoreMetalArmour===true?'Warp Blade : les PA de cette pièce métallique sont ignorés':'Décharge électrique : les PA de cette pièce métallique non magique sont ignorés'});}
  for(const keywordId of known)evaluatedKeywords.add(keywordId);
  for(const keywordId of known)if(!resolveKeyword(keywordId))manual.push(`effet-inconnu:${keywordId}`);
@@ -536,7 +550,7 @@ export function locationProtection(target,context={}){
   else if(context.opposedWithShield===true){
    if(context.defenseProvided!==true)manual.push('jet-opposition-requis:bouclier');
    if(typeof context.ranged!=='boolean')manual.push('type-attaque-requis:bouclier');
-   const v5Shield=shield.keywords.some(word=>word.id==='bouclier');
+   const v5Shield=(shield.keywords||[]).some(word=>word.id==='bouclier');
    if(v5Shield){
     evaluatedKeywords.add('bouclier');
     if(!Number.isSafeInteger(shield.ap)||shield.ap<0)manual.push('protection-bouclier-a-preciser');
@@ -554,7 +568,7 @@ export function locationProtection(target,context={}){
    evaluatedKeywords.add('protectrice');
    const definition=resolveKeyword('protectrice'),baseline=supportedConditional('protectrice');
    if(!definition||definition.effect!==baseline?.effect||definition.edition!==baseline?.edition)manual.push('effet-non-couvert:protectrice');
-   const word=shield.keywords.find(w=>w.id==='protectrice'),rating=Number(word?.parameter);
+   const word=(shield.keywords||[]).find(w=>w.id==='protectrice'),rating=Number(word?.parameter);
    if(!word||!Number.isSafeInteger(rating)||rating<0||rating>100||word.parameter.trim()==='')manual.push('protection-bouclier-a-preciser');
    else if(context.defenseProvided===true && typeof context.ranged==='boolean'){
     shieldAp=rating;
