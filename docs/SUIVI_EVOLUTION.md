@@ -10,6 +10,12 @@
 | E09–E10 | Intégré et validé dans la vraie coquille | Navigation Préparer/Jouer/Bibliothèque, profils complets, recherche actions/tags, favoris, règles réelles, sélection et suivi du tour. |
 | E11–E17 | Intégré ; parcours navigateur bornés passants | `tests/browser-index.mjs` couvre lancement, suspension/reprise, clôture, personnage persistant, E15, E16 et E04 sur l’index réel. |
 
+## 3.43.0 — espace Campagne (08/11/2026)
+
+- Nouvel onglet Campagne, troisième entre Jouer et Bibliothèque (raccourci « 3 », Bibliothèque sur « 4 ») : temps de campagne, synthèse des suivis par personnage (blessures, critiques, maladies, séquelles, convalescence) et soins contextuels au personnage sélectionné. « Suites de combat » dans Jouer renvoie vers Campagne ; Jouer passe en pleine largeur avec rail latéral repliable.
+- Limite connue : les soins et tests de convalescence ne visent que les participants de la rencontre en cours. Un suivi rattaché à un participant absent est affiché sous « Suivi hors rencontre » et peut seulement être archivé ; la continuité des soins entre rencontres demande d’abord un contrat d’identité (voir `docs/CAMPAGNE_LOT2.md`).
+- Le contenu avait été déployé le 07/11 (`babe2ba`) sans changement de version, avec un cache suffixé à la main ; la 3.43.0 rétablit la règle « nom du cache = `wfrp-cache-v<version>` » et ajoute `node tools/bump-version.mjs X.Y.Z`, qui écrit la version dans ses sept emplacements (les notes restent à rédiger).
+
 ## Preuves navigateur finales
 
 Les tests Playwright utilisent Chrome local, un serveur HTTP loopback temporaire, un profil isolé, le module Firebase simulé et les service workers bloqués. Les requêtes externes sont refusées.
