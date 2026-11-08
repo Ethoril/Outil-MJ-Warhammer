@@ -24,8 +24,10 @@ test('package.json — le script de test découvre les fichiers, il ne les énum
     + 'arrivé quatre fois. Utiliser « node --test », qui les découvre tous. '
     + `Énumérés ici : ${enumérés.join(', ')}`);
 
-  assert.match(cmd, /^node --test\s*$/,
-    'Le script doit être exactement « node --test ».');
+  // ARCH-04 (08/11) : découverte bornée à tests/unit par des motifs, jamais par une liste de fichiers ;
+  // « node --test » nu ratissait aussi les worktrees et archives de tmp/.
+  assert.match(cmd, /^node --test( "tests\/unit\/\*\*\/\*\.test\.m?js")+\s*$/,
+    'Le script doit être « node --test » suivi des seuls motifs de tests/unit.');
 });
 
 test('package.json — tous les fichiers de tests/ seraient donc exécutés', () => {
