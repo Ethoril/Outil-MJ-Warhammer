@@ -1,5 +1,13 @@
 import { showToast } from './toast.js';
 
+// Touches des onglets, dans l’ordre de la barre (index.html les annonce par aria-keyshortcuts).
+export const SPACE_SHORTCUTS = Object.freeze([
+  { key: '1', space: 'prepare' },
+  { key: '2', space: 'play' },
+  { key: '3', space: 'campaign' },
+  { key: '4', space: 'library' }
+]);
+
 /**
  * Initialise la gestion globale des raccourcis clavier (macOS / PC).
  * Active uniquement lorsque le focus n'est PAS dans un champ de saisie texte.
@@ -43,8 +51,9 @@ export function initKeyboardShortcuts(Store, CombatEngine, goToSpace, { advanceT
       return;
     }
 
-    // Ignorer les raccourcis simples si l'utilisateur saisit du texte
-    if (isInput) return;
+    // Ignorer les raccourcis simples si l'utilisateur saisit du texte, ou s’ils sont combinés
+    // à Ctrl, Alt ou ⌘ : ces combinaisons restent au navigateur (Ctrl+D, Ctrl+1…).
+    if (isInput || e.ctrlKey || e.altKey || e.metaKey) return;
 
     const key = e.key.toLowerCase();
 
@@ -70,23 +79,11 @@ export function initKeyboardShortcuts(Store, CombatEngine, goToSpace, { advanceT
       return;
     }
 
-    // 1, 2, 3 -> Navigation par onglets
-    if (key === '1') {
+    // 1 à 4 -> Navigation par onglets, dans l’ordre de la barre
+    const shortcut = SPACE_SHORTCUTS.find(entry => entry.key === key);
+    if (shortcut) {
       e.preventDefault();
-      goToSpace('prepare');
-      return;
-    }
-
-    if (key === '2') {
-      e.preventDefault();
-      goToSpace('play');
-      return;
-    }
-
-    if (key === '3') {
-      e.preventDefault();
-      goToSpace('library');
-      return;
+      goToSpace(shortcut.space);
     }
   });
 }
