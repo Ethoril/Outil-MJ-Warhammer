@@ -7,6 +7,7 @@ import { buildCombatTest } from '../../../js/core/v5-combat-rules.js';
 import { resolveV5TestModifiers, finalizeV5TestModifiers } from '../../../js/core/v5-test-modifiers.js';
 import { getReferenceCatalogue } from '../../../js/core/reference-catalog.js';
 import { CONDITION_QUESTIONS } from '../../../js/core/condition-effects.js';
+import { currentV5TalentHashes } from '../../../js/core/v5-talents.js';
 
 const SWIM = 'skill-4e_61_74_61_74_69_6f_6e-base';   // Natation (F) ; Nageur endurant : +2 DR en poursuite
 const CALM = 'skill-43_61_6c_6d_65-base';            // Calme (FM), Test mental
@@ -125,4 +126,21 @@ test('T0 clés « … adverse » de l’opposant : lues pour le testeur, comme a
 test('T0 CA9 : sans État, talent ni effet, la fonction commune ne rend rien', () => {
   const { common } = compareWithPivot(person(), { skillId: CALM });
   assert.deepEqual([common.slModifiers, common.advantageSources, common.disadvantageSources, common.needsInput, common.unresolved, common.restrictions], [[], [], [], [], [], []]);
+});
+
+test('T0 plafond Esprit fort (V5 p. 127) : modificateurs négatifs ramenés à 0, pas de pénalité d’État, même résultat que le pivot', () => {
+  const actor = person({ states: [STUNNED], talents: ['talent-strong-minded'], spells: [spellLayer('s', { Calme: -2 })] });
+  const { common } = compareWithPivot(actor, { skillId: CALM, context: { preRollTalent: 'strong-minded' } });
+  assert.equal(common.ignoreNegative, true);
+  assert.equal(common.penalty, 0);
+  assert.deepEqual(common.slModifiers.map(row => [row.id, row.amount]), [['spell-skill:Calme', 0]]);
+});
+
+test('T0 plafond Distrait : aucun Avantage, au pivot comme au calcul commun', () => {
+  const distracted = { key: 'distracted', name: 'Distrait', kind: 'talent-active', restriction: 'noMomentumOrAdvantage',
+    source: { talentId: 'talent-distract', source: { effectHash: currentV5TalentHashes()['talent-distract'] } } };
+  const actor = person({ states: [distracted], talents: ['talent-strong-swimmer'] });
+  const { common } = compareWithPivot(actor, { skillId: SWIM, context: { pursuit: true, pursuitRole: 'pursuer', involvesMovement: true } });
+  assert.deepEqual(common.advantageSources, []);
+  assert.deepEqual(common.slModifiers.map(row => [row.id, row.amount]), [['talent:talent-strong-swimmer', 2]]);
 });

@@ -8,7 +8,7 @@
  *  Commun (ici) — une propriété du testeur ou d'un effet posé sur lui, valable pour tout Test :
  *  - États : `conditionTestRules`, `conditionPenaltyEffects`, `conditionDisadvantageRows` / `conditionDisadvantageEffects`
  *    (condition-effects.js). Le livre les définit pour « tous les Tests » (V5 v3 p. 183-186 ; MJ 06/11 Q19). Exceptions comprises :
- *    Endurance de l'anachorète (`ignoreConditionPenalties`, p. 226), `ignoreFatiguePenalties`, Clarté d'esprit (`clarityOfThought`,
+ *    Endurance de l'anachorète (`ignoreConditionPenalties`, p. 226), `ignoreFatiguePenalties`, Clarté d'esprit (`clarityOfThought`, V5 p. 251, nommée aussi « Clarté de pensée » dans le code ;
  *    Sonné sans pénalité sur un Test mental), talents `ignoreConditionPenalty`. Le choix DR ou Désavantage quand les pénalités
  *    d'États diffèrent (`conditionPenaltyMode`) est aussi commun.
  *  - Talents de Test : `previewV5TalentTestModifiers` (événement `test.beforeRoll`), talents des Traits de compagnon d'un familier
@@ -33,7 +33,7 @@
  *  - psychologie, Ergoteur, Frénésie, Malice de Ranald, Défense contre Tir, Souffle froid, Tir en vol, Retranchement, Garde royal,
  *    Petit/Grand, Élan, Cible à terre / Aveuglée / Surprise, maladresses, Tir extraordinaire, À répétition, Mancatcher, Blessures
  *    Critiques précisées par le MJ : chacun dépend de l'arme, de la cible ou d'une saisie du panneau de combat ;
- *  - Clarté d'esprit sur les lignes de psychologie et de mutation mentale : elle porte sur des lignes que seul le combat calcule ;
+ *  - Clarté d'esprit (`clarityOfThought`) sur les lignes de psychologie et de mutation mentale : elle porte sur des lignes que seul le combat calcule ;
  *    la part commune (Sonné ignoré sur un Test mental) est ici.
  *  - restrictions Inconscient, Surpris, Fin glorieuse : le pivot les formule pour un combattant (avec l'exception de la Fin
  *    glorieuse) ; la question vaut pour les Tests secondaires et sera traitée famille par famille.
@@ -42,9 +42,9 @@
  *
  *  `conditionTestRules` rend des questions (`CONDITION_QUESTIONS` : mouvement, fuite, vue, Sociabilité) ; `buildCombatTest` les met
  *  dans `unresolved`, que `resolution.js` reverse dans `preview.unresolved` (aperçu non applicable). Le panneau
- *  (`blockingReasons`, js/ui/resolution-panel.js) les affiche dans « À saisir avant d'appliquer », et les cases de contexte
+ *  (`applicationBlockingReasons`, js/ui/resolution-panel.js) les affiche dans « À saisir avant d'appliquer », et les cases de contexte
  *  `involvesMovement`, `runningOrHiding`, `reliesOnSight`, `requiresSight`, `usesFellowship` (et `conditionPenaltyMode`) écrivent
- *  la réponse dans `draft.v5Context` → `normalized.v5.context` ; le Test se recalcule. Pour la magie, `prepareMagicOptions` rend
+ *  la réponse dans `draft.v5Context` → `normalized.v5.context` (`draft.defenseContext` pour le défenseur) ; le Test se recalcule. Pour la magie, `prepareMagicOptions` rend
  *  `conditionNeeds`, que `js/ui/resolution-panel/condition-questions.js` traduit en champs (`conditionQuestions`) et range dans
  *  `draft.magicConditionContext`. Ici, `needsInput` rend ces mêmes questions sous la forme `{ field, label }` (mêmes libellés, mêmes
  *  champs que ces deux écrans) : un Test secondaire qui en reçoit une n'est pas résolu (CA8).
@@ -118,7 +118,8 @@ export function resolveV5TestModifiers(actor, test = {}, context = {}) {
   const ignoreAll = flags?.ignoreConditionPenalties === true;
   const rules = conditionTestRules(conditionLevels(actor), { kind, attr: characteristic, context: situation, ignoreAll });
   // U8 L4 : pénalités d'États cumulées par le moteur d'effets (la plus forte seule) : ignoreFatiguePenalties (Exténué sans
-  // pénalité ; pas Clarté d'esprit, MJ 06/11), Clarté de pensée (Sonné sur un Test mental), talents, Endurance de l'anachorète.
+  // pénalité ; Clarté d'esprit n'efface pas Exténué, MJ 06/11), Clarté d'esprit (`clarityOfThought` : Sonné sur un Test mental),
+  // talents `ignoreConditionPenalty`, Endurance de l'anachorète.
   const penaltyEffects = conditionPenaltyEffects(rules.relevant, { ignoreAll, ignoreFatigue: Boolean(flags?.ignoreFatiguePenalties),
     ignoreStun: Boolean(flags?.clarityOfThought && MENTAL.has(characteristic)), talentIgnores: talents.ignoredPenalties });
   const penalty = penaltyEffects.penalty;
@@ -156,6 +157,6 @@ export function resolveV5TestModifiers(actor, test = {}, context = {}) {
  * modificateur négatif et ôte tout Désavantage.
  */
 export function finalizeV5TestModifiers(actor, resolved, { slModifiers, advantageSources, disadvantageSources }) {
-  if ((actor.states || []).some(s => s.restriction === 'noMomentumOrAdvantage' && sourceActive(s))) advantageSources.length = 0;
+  if ((actor?.states || []).some(s => s.restriction === 'noMomentumOrAdvantage' && sourceActive(s))) advantageSources.length = 0;
   if (resolved.ignoreNegative) { for (const row of slModifiers) if (row.amount < 0) row.amount = 0; disadvantageSources.length = 0; }
 }
