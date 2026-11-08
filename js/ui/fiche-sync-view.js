@@ -1,5 +1,6 @@
 import { ficheSnapshot, matchFiches, planProfileSync, ficheErrorMessage, profileSyncFingerprint, planHealthSync } from '../core/fiche-sync.js';
 import { userMessage, userError } from './messages.js';
+import { ficheUnavailableReason } from '../core/fiche-source.js';
 import { resolveKeyword } from '../core/creature-keywords.js';
 
 const shown = value => (value === null || value === undefined || value === '' ? '—' : String(value));
@@ -59,7 +60,7 @@ export function initFicheSyncView({ mount, hosted = false, source, getContext, c
     try {
       const fetched = await source.fetchAll();
       snapshots = fetched.filter(item => item.data).map(item => ficheSnapshot(item.charId, item.data, item.metadata));
-      missing = fetched.filter(item => !item.data).map(item => `${item.charId} (${item.status === 'error' ? ficheErrorMessage(item.error) : item.status === 'invalid' ? 'document invalide' : 'absente'})`);
+      missing = fetched.filter(item => !item.data).map(item => `${item.charId} (${ficheUnavailableReason(item, ficheErrorMessage)})`);
       previewRevision = getContext().revision;
       const matches = matchFiches(snapshots, getContext().profiles || []);
       const noPj = !pjs().length;

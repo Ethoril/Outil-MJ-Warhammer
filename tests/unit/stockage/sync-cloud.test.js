@@ -12,7 +12,7 @@ import { Profile, Participant } from '../../../js/core/models.js';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { createFicheSource } from '../../../js/core/fiche-source.js';
+import { createFicheSource, ficheUnavailableReason } from '../../../js/core/fiche-source.js';
 import { APP_VERSION } from '../../../js/version.js';
 
 describe('Erreurs authentification cloud', () => {
@@ -1176,6 +1176,7 @@ test('Cloud v3 — ancienne file ne rejoue pas les opérations v2 et exige choix
 const makeSource=(reader)=>createFicheSource({loadSdk:async()=>({db:{},firestore:{doc:(_db,_collection,id)=>id,getDocFromServer:reader,getDoc:()=>{throw Error('cache forbidden');}}})});
 test('Lecture fiches — erreur partielle explicite et metadata source réelle',async()=>{const source=makeSource(async id=>{if(id==='wren')throw Object.assign(Error('refus'),{code:'permission-denied'});return {exists:()=>id!=='hellaya',data:()=>({schemaVersion:4,revision:19,data:{nom:id,equipment:[]}})};});const rows=await source.fetchAll();assert.equal(rows.find(row=>row.charId==='wren').status,'error');assert.equal(rows.find(row=>row.charId==='hellaya').status,'missing');assert.deepEqual(rows[0].metadata,{schemaVersion:4,revision:19});});
 test('Lecture fiches — refus global propagé, enveloppe invalide jamais utilisée',async()=>{await assert.rejects(makeSource(async()=>{throw Error('network unavailable');}).fetchAll(),/network unavailable/);const rows=await makeSource(async()=>({exists:()=>true,data:()=>({data:[]})})).fetchAll();assert.ok(rows.every(row=>row.status==='invalid'&&row.data===null));});
+test('FICHES-04 — fiche réinitialisée (tombstone) jamais lue comme disponible',async()=>{const rows=await makeSource(async id=>({exists:()=>true,data:()=>id==='wren'?({tombstone:true,schemaVersion:4,revision:3,data:{nom:''}}):({schemaVersion:4,revision:1,data:{nom:id}})})).fetchAll();const wren=rows.find(row=>row.charId==='wren');assert.equal(wren.status,'reset');assert.equal(wren.data,null);assert.ok(rows.filter(row=>row.charId!=='wren').every(row=>row.status==='available'));assert.match(ficheUnavailableReason(wren),/réinitialisée sur le site des fiches/);});
 });
 
 describe('Rattrapage des ecarts de synchronisation', () => {

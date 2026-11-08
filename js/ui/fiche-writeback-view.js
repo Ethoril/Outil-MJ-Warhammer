@@ -106,8 +106,9 @@ export function initFicheWritebackView({ mount, source, api, now = () => new Dat
     try { fetched = await source.fetchAll(); }
     catch (cause) { for (const entry of entries) entry.readError = fail(cause); return; }
     for (const entry of entries) {
-      const data = fetched.find(item => item.charId === entry.charId)?.data;
-      if (!data) { entry.readError = 'Fiche illisible : relisez-la avant de choisir.'; continue; }
+      const row = fetched.find(item => item.charId === entry.charId);
+      const data = row?.data;
+      if (!data) { entry.readError = row?.status === 'reset' ? 'Fiche réinitialisée sur le site des fiches : réimportez-la là-bas avant de choisir.' : 'Fiche illisible : relisez-la avant de choisir.'; continue; }
       entry.readError = '';
       for (const key of [...entry.fields]) {
         // Ligne en double sur la fiche : à faire à la main, la ligne sort de l'envoi plutôt que de bloquer la fiche.

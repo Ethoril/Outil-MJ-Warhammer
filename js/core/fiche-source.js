@@ -21,6 +21,14 @@ const APP_NAME = 'fiches';
 const FUNCTIONS_REGION = 'europe-west1';
 const COMMAND_FUNCTION = 'executeFicheCommand';
 
+/** Raison lisible d'une fiche non lue par fetchAll (statut autre que 'available'). */
+export function ficheUnavailableReason(item, describeError = error => error?.message || 'erreur de lecture') {
+  if (item?.status === 'error') return describeError(item.error);
+  if (item?.status === 'reset') return 'réinitialisée sur le site des fiches : réimportez-la là-bas avant de la lire';
+  if (item?.status === 'invalid') return 'document invalide';
+  return 'absente';
+}
+
 export function createFicheSource({ loadSdk = null, loadFunctions = null } = {}) {
   let sdk = null;
   let callable = null;
@@ -66,6 +74,8 @@ export function createFicheSource({ loadSdk = null, loadFunctions = null } = {})
           const snapshot = await read(firestore.doc(db, 'fiches', charId));
           if (!snapshot.exists()) return { charId, data: null, status: 'missing' };
           const envelope = snapshot.data();
+          // Fiche réinitialisée sur le site des fiches (FICHES-04) : la fonction refuse tout sauf import/reset, rien n'est lu.
+          if (envelope?.tombstone === true) return { charId, data: null, status: 'reset' };
           if (!envelope?.data || typeof envelope.data !== 'object' || Array.isArray(envelope.data)) return { charId, data: null, status: 'invalid' };
           return { charId, data: envelope.data, status: 'available', metadata: {
             schemaVersion: envelope.schemaVersion ?? null, revision: envelope.revision ?? null
