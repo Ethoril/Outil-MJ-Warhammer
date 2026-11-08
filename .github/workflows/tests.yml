@@ -1,0 +1,24 @@
+name: Tests unitaires
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  unitaires:
+    runs-on: ubuntu-latest
+    env:
+      PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Tests unitaires (.js)
+        run: node --test "tests/unit/**/*.test.js"
+      - name: Tests unitaires (.mjs)
+        run: node --test "tests/unit/**/*.test.mjs"
