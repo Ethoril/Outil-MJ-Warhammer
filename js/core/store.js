@@ -1,4 +1,5 @@
 import {setStoreSanctifiedGround,removeStoreSanctifiedGround,enterStoreSanctifiedGround,leaveStoreSanctifiedGround,applyStoreDivineNavalEvent,startStoreDivineDailyWrath,waiveStoreDivineDailyWrathDay,closeStoreDivineDailyWrath,setStoreDivineRelic,removeStoreDivineRelic,applyStoreDivineSinEvent,returnStoreDivineJudgment,decideStoreDivineJudgmentRejection,createStoreDivinePenance,completeStoreDivinePenance,previewStoreDivineWrathRecovery,previewStoreDivine,setStoreDivineSin,endStoreDivinePrayer,finalizeDivineState,expireDivineAtPhases,expireDivineAtClock} from './v5-divine-store.js';
+import { safeLocalStorage } from './safe-storage.js';
 import { casterCaracs } from './creature-abilities.js';
 import {processCombatTurnSpells,shieldAtTurnStart,previewSpellInteraction,removeExpiredSummons,endSpellEffectsOnEvent} from './v5-magic-turn.js';
 import {previewMagicMeditation,activeMagicTalent,magicTalentRank,effectiveSkillScore,baseCharacteristicScore} from './v5-magic-talents.js';
@@ -183,7 +184,7 @@ const unlinkEngagementsInMap = (participantsMap, id, markDirty, self = null) => 
 };
 const fallFromSaddle = (participants, id) => dismountLinkedRiders(participants.map(row => row.id === id && row.extensions?.v5?.mounted === true ? clearMountedRelation(row) : row), id);
 
-export function createStore({ storage = typeof localStorage !== 'undefined' ? localStorage : null, sync = null, persistence = null, persistenceFactory = null, contextId = 'guest', divineAuthority = 'MJ', appVersion = 'unknown', bus = null, now = () => new Date().toLocaleTimeString(), onSyncStatus = null, onLocalStatus = null, onReady = null } = {}) {
+export function createStore({ storage = safeLocalStorage(), sync = null, persistence = null, persistenceFactory = null, contextId = 'guest', divineAuthority = 'MJ', appVersion = 'unknown', bus = null, now = () => new Date().toLocaleTimeString(), onSyncStatus = null, onLocalStatus = null, onReady = null } = {}) {
   const CLIENT_ID = (typeof crypto !== 'undefined' && crypto.randomUUID) ? crypto.randomUUID() : uid();
 
   let reserve = new Map();

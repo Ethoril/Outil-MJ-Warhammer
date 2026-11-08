@@ -1,4 +1,5 @@
 import { withMomentum, momentumAfterChange } from './core/v5-combat-rules.js';
+import { safeLocalStorage } from './core/safe-storage.js';
 import { hasV5Talent } from './core/v5-talents.js';
 import { APP_VERSION } from './version.js';
 import { Bus } from './ui/bus.js';
@@ -131,7 +132,7 @@ try {
 
 // Init Store & Engine
 export const Store = createStore({
-  storage: typeof localStorage !== 'undefined' ? localStorage : null,
+  storage: safeLocalStorage(),
   sync: null, // Sera injecté lors de la connexion Firebase
   persistence: appPersistence,
   persistenceFactory: typeof indexedDB !== 'undefined' ? persistenceFactory : null,

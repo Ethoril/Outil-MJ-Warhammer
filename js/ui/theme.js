@@ -2,16 +2,21 @@
  * Gestionnaire du Thème (Clair / Sombre / Système).
  * Mémorise le choix dans localStorage sous 'wfrp.theme'.
  */
+import { safeLocalStorage } from '../core/safe-storage.js';
+
 export function initThemeManager() {
   const btn = document.getElementById('btn-theme-toggle');
   if (!btn) return;
 
   const SAVED_KEY = 'wfrp.theme';
-  let currentTheme = localStorage.getItem(SAVED_KEY) || 'system';
+  // Stockage interdit ou plein : le thème reste réglable, sans être mémorisé (BOOT-05).
+  const storage = safeLocalStorage();
+  let currentTheme = 'system';
+  try { currentTheme = storage?.getItem(SAVED_KEY) || 'system'; } catch { /* mode dégradé */ }
 
   function applyTheme(theme) {
     currentTheme = theme;
-    localStorage.setItem(SAVED_KEY, theme);
+    try { storage?.setItem(SAVED_KEY, theme); } catch { /* mode dégradé */ }
 
     if (theme === 'dark') {
       document.documentElement.setAttribute('data-theme', 'dark');
