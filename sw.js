@@ -32,6 +32,7 @@ const ASSETS_TO_CACHE = [
   './js/data/shared/fiche/skill-names.js',
 
   './js/core/store.js',
+  './js/core/safe-storage.js',
   './js/core/store/v5-action-guards.js',
   './js/core/store/critical-death.js',
   './js/core/store/participant-registry.js',
