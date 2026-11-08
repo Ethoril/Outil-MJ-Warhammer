@@ -71,6 +71,12 @@ export function rangeCellsOf(participant) {
 /** PV max d'un PJ persistant : maximum de Blessures de la fiche importée, sinon `maxHp` du profil (import JSON : null). */
 export const persistentMaxHpOf = profile => profile?.ficheSnapshot?.woundsMax ?? profile?.maxHp ?? null;
 
+/**
+ * PV max envoyés à la carte (audit A3) : celui du participant d'abord, car il suit la fiche (`planHealthSync`) et les
+ * effets du jeu ; à défaut, celui du profil persistant. `null` laisse `tokenStateOf` lire `participant.maxHp`.
+ */
+export const mapMaxHpOf = (participant, profile) => (Number(participant?.maxHp) > 0 ? null : persistentMaxHpOf(profile));
+
 /** Vision dans le noir en cases (§4) : 1 par défaut, 10 Vision nocturne, 20 Vision dans le noir. */
 export const visionDimOf = participant => (carriesSense(participant, 'darkVision') ? 20 : carriesSense(participant, 'nightVision') ? 10 : 1);
 

@@ -42,7 +42,7 @@ import { initCombatBanner } from './ui/combat-banner.js';
 import { openCampaignTimeDialog } from './ui/v5-campaign-time-dialog.js';
 import { renderMapLinkIndicator } from './ui/map-link-indicator.js';
 import { createMapLink, MAP_LINK_CHANNEL, MAP_LINK_PING_MS } from './core/map-link.js';
-import { offScenePjParticipants, persistentMaxHpOf } from './core/map-link-state.js';
+import { offScenePjParticipants, mapMaxHpOf } from './core/map-link-state.js';
 import { runProposalOf } from './core/map-link-run.js';
 import { mountMapLinkFeedback } from './ui/map-link-feedback.js';
 import { setMapDistanceProvider } from './ui/resolution-panel.js';
@@ -1858,7 +1858,7 @@ if (typeof BroadcastChannel === 'function') {
     getParticipants: () => { const scene = Store.listParticipants(); return [...scene, ...offScenePjParticipants(Store.listPersistentCharacters(), scene, id => Store.getProfile(id))]; },
     imageUrlOf: participant => Store.getProfile(participant.profileId)?.tokenImage ?? null,
     colorOf: participant => Store.getProfile(participant.profileId)?.tokenColor ?? null,
-    maxHpOf: participant => persistentMaxHpOf(Store.getProfile(participant.profileId)),
+    maxHpOf: participant => mapMaxHpOf(participant, Store.getProfile(participant.profileId)),
     onStatus: showMapLinkStatus,
     // Course (L6) : proposition au MJ, rien n'est décompté sans son clic.
     onRan: ref => {
