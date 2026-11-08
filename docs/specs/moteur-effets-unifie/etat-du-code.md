@@ -1,5 +1,7 @@
 # U8 · État du code : où chaque effet est calculé (05/11/2026)
 
+> **Document historique (08/11/2026).** Relevé du 05/11 avant les lots L0 à L7 de `tasks.md`, tous livrés en 3.41.0 ; l’écart de cumul décrit en dernière section est corrigé par L0/L1 (55bd897, fb007e0, ed52cd4) et les adaptateurs des familles sont branchés dans `buildCombatTest` (L5z, 8527b64). Les numéros de ligne ci-dessous ne valent plus.
+
 Relevé en lecture seule sur `dd658b6` (branche issue de `dev/recette-plateau-04-11`). Les comptes marqués « ~ » sont des ordres de grandeur. Chemins sous `js/`.
 
 ## Le pivot qui existe déjà
