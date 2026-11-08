@@ -111,6 +111,8 @@ export function createMapLink({ channel, getParticipants, maxHpOf = () => null, 
     send('mj.snapshot', { tokens: Object.values(states) });
     sendRoster(true);
     sendEngagements(true);
+    // Carte rechargée (audit A5) : elle renvoie map.placed pour chaque pion réellement posé après mj.snapshot.
+    placed.clear();
     emitPlacement();
   }
 
@@ -197,7 +199,8 @@ export function createMapLink({ channel, getParticipants, maxHpOf = () => null, 
   /** Battement : à appeler toutes les `MAP_LINK_PING_MS`. */
   function tick() {
     ping();
-    if (status === 'connected' && now() - lastSeen > MAP_LINK_TIMEOUT_MS) setStatus('disconnected');
+    // Déconnexion (audit A5) : plus aucun pion supposé posé ; setStatus émet la vue vidée.
+    if (status === 'connected' && now() - lastSeen > MAP_LINK_TIMEOUT_MS) { placed.clear(); setStatus('disconnected'); }
   }
 
   channel.onmessage = event => onMessage(event?.data ?? event);
