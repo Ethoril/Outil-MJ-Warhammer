@@ -2,7 +2,7 @@
 
 Chaque tâche est un brief autonome pour une session (Opus : règles et store). Le test vient avant le code et échoue aujourd'hui. Lire `spec.md`, `plan.md`, `inventaire.md`. Commandes : tests ciblés `node --test "tests/unit/<dossier>/<fichier>.test.js"` ; suite complète seulement à la fusion de la vague. Commits locaux sur `main` suffixés « (Claude) », chemins nommés explicitement, pas de stash, pas de push. Fin de chaque tâche : `verifier` (code) + relecture des pages du livre citées.
 
-- [ ] **T0 · Fonction commune extraite du pivot.** Objectif : créer `resolveV5TestModifiers` dans `js/core/v5-test-modifiers.js` en extrayant de `buildCombatTest` la partie États + talents + couches ; `buildCombatTest` l'appelle.
+- [x] **T0 · Fonction commune extraite du pivot.** Objectif : créer `resolveV5TestModifiers` dans `js/core/v5-test-modifiers.js` en extrayant de `buildCombatTest` la partie États + talents + couches ; `buildCombatTest` l'appelle.
   Fichiers : `js/core/v5-test-modifiers.js` (nouveau), `js/core/v5-combat-rules.js`, `tests/unit/moteur/tests-secondaires-agregateur.test.js` (nouveau).
   À établir et écrire en tête du module : quels modificateurs de `buildCombatTest` restent propres au combat ; le mécanisme existant de `needsInput` côté panneau ; l'absence de nouveau cycle d'imports (`npx madge --circular js/core` ou équivalent, avant/après).
   CA : CA9, CA10 (combat). Acceptation : `node --test "tests/unit/combat/**/*.test.js" "tests/unit/moteur/**/*.test.js"` vert sans changer une seule valeur attendue.

@@ -2,7 +2,7 @@ import {enforceMagicTestRestrictions,activeMagicTalent} from './v5-magic-talents
 import {transformationRestrictions} from './v5-magic-combat.js';
 import {getReferenceCatalogue} from './reference-catalog.js';
 import {familiarSupport,withCompanionTalents} from './familiars.js';
-import {magicSkillModifiers,magicTestModifiers,magicAdverseModifiers,effectiveSkillScore,magicSkillReplacement,familiarSkillSupport,magicTalentRank} from './v5-magic-talents.js';
+import {magicSkillModifiers,effectiveSkillScore,magicSkillReplacement,familiarSkillSupport,magicTalentRank} from './v5-magic-talents.js';
 /** Common V5 combat context; session resources live in extensions.v5. */
 import {situationPlan} from './v5-talent-situations.js';
 import {contactWeapon} from './v5-talent-contact.js';
@@ -23,9 +23,10 @@ import { keywordMechanicalStatus } from './keywords.js';
 import { activeV5TalentEffects } from './v5-talents.js';
 import { applyV5TalentPenaltyRules, applyV5AttackSituationModifiers, computeV5WeaponRangeBands } from './v5-talent-combat.js';
 import { normalizeState } from './effects.js';
-import { previewV5TalentTestModifiers, previewV5TalentSLChoices } from './v5-talent-tests.js';
+import { previewV5TalentSLChoices } from './v5-talent-tests.js';
 import { sequelaTestRules } from './v5-sequela-effects.js';
-import { conditionPenaltyEffects, conditionDisadvantageEffects, conditionTestRules, conditionDisadvantageRows } from './condition-effects.js';
+import { conditionLevels, resolveV5TestModifiers, finalizeV5TestModifiers } from './v5-test-modifiers.js';
+export { conditionLevels };
 import { weaponHandsForParticipant } from './equipment.js';
 export const V5_COMBAT_RULE_VERSION = 'v5-combat-2026-10-09.24.6';
 export const hasMomentum = actor => actor?.extensions?.v5?.hasMomentum === true;
@@ -39,16 +40,6 @@ export const withMomentum = (actor, value) => {
 /** Un participant qui vient d'acquérir une restriction de Peur perd l'Élan qu'il avait. */
 export const isFrightened = actor => !(actor.states||[]).some(s=>s.key==='frenzy'&&sourceActive(s))&&(actor.states||[]).some(s=>s.restriction==='cannotGainMomentum'&&sourceActive(s));
 export const loseMomentumUnderFear = actor => hasMomentum(actor)&&isFrightened(actor)?withMomentum(actor,false):actor;
-export const conditionLevels = actor => {
-  const levels = new Map();
-  for (const [index, raw] of (actor?.states || []).entries()) {
-    if (Number(raw?.level) === 0 || (raw?.source?.source?.effectHash && !sourceActive(raw))) continue;
-    const state = normalizeState(raw, index);if(['talent-active','talent-pending'].includes(state.kind))continue;
-    const key = state.key.replace(/[- ]/g, '');
-    levels.set(key, (levels.get(key) || 0) + state.level);
-  }
-  return levels;
-};
 /** Only a new instance counts: Prone, Surprised and Unconscious do not stack. */
 export function acquiredConditionInstances(actor, proposed = []) {
   const existing = conditionLevels(actor);
@@ -214,12 +205,8 @@ export function buildCombatTest(normalized, role = 'actor') {
     if (mischief) action = { ...action, base: action.base + mischief };
   }
   const levels = conditionLevels(actor), targetLevels = conditionLevels(target);
-  // Endurance de l'anachorète (p. 226) : malus et Désavantages d'États ignorés ; Inconscient, Surpris et la vue exigée restent des restrictions.
-  const ignoreConditions = actor.extensions?.v5?.specialStates?.ignoreConditionPenalties === true;
   const talentRole=defending?'defender':['attack','attaque'].includes(action.type)?'attacker':'actor';
   const contact=contactWeapon(normalized,actor,action,settings);action=contact.action;
-  // Talents donnés par les Traits de compagnon d'un familier animal à portée : comptés comme ceux du maître pour ce Test.
-  const talentModifiers=previewV5TalentTestModifiers(withCompanionTalents(actor,normalized.v5State?.participants||[]),{action,settings,kind,role:talentRole,opponent:target});
   const unresolved = [...(normalized.weaponSkillUnresolved||[]),...contact.unresolved], restrictions = [];
   if(mischiefMissing)unresolved.push('Malice de Ranald : choisissez la Caractéristique de ce Test (une des deux égalées, ou une autre).');if(unavailableDisarmedWeapon(actor,action))restrictions.push('Cette arme a été désarmée : la récupérer avant de l’employer.');
   if(!defending && target?.extensions?.v5?.specialStates?.tinySwarmCannotAttack && /nu[eé]e|swarm/i.test((actor.traits || []).join(' '))){
@@ -242,11 +229,14 @@ export function buildCombatTest(normalized, role = 'actor') {
   const manualSupport=familiarSkillSupport(actor,familiar,skill?.nom || action.label || action.note || '',settings.context);
   const support=manualSupport.modifiers.length||manualSupport.advantages.length?manualSupport:familiarSupport(actor,normalized.v5State?.participants || [],skill?.nom || action.label || action.note || '',settings.context);
   const skillLabel=skill?.nom || action.label || action.note || '';
-  // U8 L3 : talents et couches (sorts, prières) du Test réunis par le moteur d'effets (collectTestEffects).
-  const testEffects=magicTestModifiers(actor,skillLabel,{...settings.context,carac:settings.context?.carac||skill?.carac||action.attr},{talentRows:talentModifiers.slModifiers});
+  // Q6 T0 : États, talents (compagnons d'un familier compris) et couches de sorts et de prières, calcul commun à tous les Tests
+  // (v5-test-modifiers.js) ; chaque famille garde ci-dessous sa place dans la liste des modificateurs.
+  const common=resolveV5TestModifiers(actor,{characteristic:action.attr,skill:skillLabel,skillCharacteristic:skill?.carac,kind,role:talentRole,opponent:target,
+    participants:normalized.v5State?.participants||[],action,settings},settings.context||{});
+  const talentModifiers=common.parts.talents,testEffects=common.parts.layers,conditionPart=common.parts.conditions;
   const modifiers = [...support.modifiers,...testEffects.magic,
     // Clés « … adverse » du porteur opposé, et « Défense contre Tir » du défenseur visé par un tir.
-    ...(target&&!defending?magicAdverseModifiers(target,skillLabel):[]),...(defending&&kind==='ranged'?magicSkillModifiers(actor,'Défense contre Tir'):[]),...(settings.slModifiers || [])];
+    ...common.parts.adverse,...(defending&&kind==='ranged'?magicSkillModifiers(actor,'Défense contre Tir'):[]),...(settings.slModifiers || [])];
   if(defending&&settings.context?.offHandWeapon===true)modifiers.push({id:'quality:offhand-defense',label:'Défense avec la main non directrice',amount:-2});
   const parryDefense=previewV5Parry({qualities:action.qualities||[],defending,offHand:settings.context?.offHandWeapon===true});
   if(parryDefense.defensePenalty===0){const index=modifiers.findIndex(row=>row.id==='quality:offhand-defense');if(index>=0)modifiers.splice(index,1);}
@@ -354,21 +344,15 @@ export function buildCombatTest(normalized, role = 'actor') {
     else if(!context.relatedToDebate)modifiers.push({id:'talent:argumentative',label:'Dispute sans rapport avec le Test',amount:-3,talentOrigins:[debate.source]});
   }
   // MJ 06/11 Q19 : un seul calcul des États pour tous les Tests (conditionTestRules, condition-effects.js).
-  const conditionRules = conditionTestRules(levels, { kind, attr: action.attr, context, ignoreAll: ignoreConditions });
-  const relevant = conditionRules.relevant;
+  const conditionRules = conditionPart.rules;
   unresolved.push(...conditionRules.unresolved);
   const flags=actor.extensions?.v5?.specialStates, mental=['Int','I','FM','Soc'].includes(action.attr);
   if(kind==='ranged' && flags?.flying && !context.flying)modifiers.push({id:'spell-flight-ranged',label:'Tir en vol',amount:-2});
   if(defending && (normalized.actor?.states || []).some(s=>s.source?.coldBreath && /extenue|fatigued/i.test(s.key || s.name)))modifiers.push({id:'spell-cold-defense',label:'Défense contre le Souffle froid',amount:1});
   if(flags?.clarityOfThought && mental) { for(let i=modifiers.length-1;i>=0;i--) if(modifiers[i].amount<0 && /psychology|mental.?mutation|mutation.?mental/i.test(modifiers[i].id)) modifiers.splice(i,1); }
   if(flags?.blockedSkillFamilies?.includes('language') && /langue|language/i.test(skillLabel) || flags?.blockedSkillFamilies?.includes('lore') && /savoir|lore|connaissance/i.test(skillLabel)) restrictions.push('Forme sauvage : Langues et Savoirs indisponibles.');
-  // U8 L4 : pénalités d'États cumulées par le moteur d'effets (la plus forte seule), exceptions comprises : drapeau
-  // ignoreFatiguePenalties (Exténué compté sans pénalité ; pas Clarté d'esprit, MJ 06/11), Clarté de pensée (Sonné sur un Test mental), talents, Endurance de l'anachorète.
-  const conditionPenalty = conditionPenaltyEffects(relevant, { ignoreAll: ignoreConditions, ignoreFatigue: Boolean(flags?.ignoreFatiguePenalties),
-    ignoreStun: Boolean(flags?.clarityOfThought && mental), talentIgnores: talentModifiers.ignoredPenalties });
-  const penalty = conditionPenalty.penalty;
+  // U8 L4 : pénalités d'États (la plus forte seule) et leurs exceptions, calculées par resolveV5TestModifiers.
   restrictions.push(...conditionRules.restrictions);
-  const conditionDisadvantages = conditionDisadvantageRows(conditionRules.disadvantages);
   if(!defending&&(actor.states||[]).some(s=>s.key==='glorious-spent'&&sourceActive(s))&&levels.has('sonne')&&context.mandatoryTest!==true&&context.freeAttackTalent!=='glorious-demise')restrictions.push('Fin glorieuse : aucune Action au prochain Tour tant que Sonné.');
   if (levels.has('inconscient')&&!(normalized.combatPrelude?.immediate?.glorious&&!defending)) restrictions.push('Un combattant Inconscient ne peut pas agir ou se défendre.');
   if (levels.has('surpris')) restrictions.push('Un combattant Surpris ne peut pas agir ou se défendre.');
@@ -393,14 +377,11 @@ export function buildCombatTest(normalized, role = 'actor') {
     else if(context.springLoaded===true||entanglingWeapon.extensions?.v5?.springLoaded===true)modifiers.push({id:'quality:mancatcher-spring-loaded',label:'Mancatcher à ressort : +20 au Test de Force pour entraver',amount:2});
   }
   // Different Condition penalties do not add. Like-for-like penalties select
-  // the largest; a DR penalty versus inversion requires an explicit MJ ruling.
-  const worstDisadvantage = conditionDisadvantageEffects(conditionDisadvantages);
-  const mixed = !talentModifiers.ignoreNegative && penalty > 0 && worstDisadvantage.length > 0;
-  const conditionPenaltyMode = context.conditionPenaltyMode;
-  if (mixed && !['sl', 'disadvantage'].includes(conditionPenaltyMode)) unresolved.push('États de pénalités différentes : choisir les DR ou le Désavantage retenu par le MJ.');
-  const appliedPenalty = talentModifiers.ignoreNegative || mixed && conditionPenaltyMode === 'disadvantage' ? 0 : penalty;
-  if (appliedPenalty) modifiers.push({ id: 'conditions', label: 'Plus forte pénalité d’État', amount: -appliedPenalty });
-  if (!mixed || conditionPenaltyMode !== 'sl') disadvantages.push(...worstDisadvantage);
+  // the largest; a DR penalty versus inversion requires an explicit MJ ruling (resolveV5TestModifiers).
+  unresolved.push(...conditionPart.mixedUnresolved);
+  const appliedPenalty = conditionPart.appliedPenalty;
+  modifiers.push(...conditionPart.penaltyRows);
+  disadvantages.push(...conditionPart.disadvantageRows);
   // V4 descriptions never supply an automatic V5 score conversion.
   // Imprécise (et toute qualité d'attaque sans condition de réussite) : moteur d'effets, avant le jet.
   modifiers.push(...engineEffects.attackRows);
@@ -423,8 +404,8 @@ export function buildCombatTest(normalized, role = 'actor') {
     if (kept.length > 1) modifiers.splice(0, modifiers.length, ...modifiers.filter(row => !offIds.has(row.id) || row === kept[0]));
     if (kept[0]?.amount < 0) kept[0].amount = Math.min(0, kept[0].amount + sequelae.offHand.reduction);
   }
-  if((actor.states||[]).some(s=>s.restriction==='noMomentumOrAdvantage'&&sourceActive(s)))advantages.length=0;
-  if(talentModifiers.ignoreNegative){for(const row of modifiers)if(row.amount<0)row.amount=0;disadvantages.length=0;}
+  // Distrait et Esprit fort : plafonds communs, appliqués en dernier sur la liste complète (avant les séquelles, comme avant).
+  finalizeV5TestModifiers(actor,common,{slModifiers:modifiers,advantageSources:advantages,disadvantageSources:disadvantages});
   // Les pertes durables ne sont pas des pénalités d'État : aucun talent d'immunité aux États ne les efface.
   modifiers.push(...sequelae.modifiers); advantages.push(...sequelae.advantages); disadvantages.push(...sequelae.disadvantages);
   const ignoreCritical=context.extendedTest===true && activeMagicTalent(actor,'mind-over-body')?.ignoreCriticalPenalties;
@@ -450,7 +431,7 @@ export function buildCombatTest(normalized, role = 'actor') {
   test = talentSL.test; unresolved.push(...talentSL.unresolved);
   test={...test,options:test.options.map(o=>({...o,result:refreshV5ResultTier(enforceMagicTestRestrictions(actor,o.result,{magical:false}))}))};
   // U8 L6 : modificateurs écartés (États puis qualités, Traits, montures), montrés barrés par le panneau ; `source` = famille affichée.
-  const droppedModifiers = [...conditionPenalty.dropped.map(row => ({ id: 'condition:' + row.key, label: 'État ' + ((actor.states || []).find(s => s.key === row.key)?.name || row.key), amount: -(conditionPenalty.levels.get(row.key) || 0), rule: row.rule, source: 'État' })), ...engineEffects.droppedRows];
-  return { test, droppedModifiers, crewSkill,talentPlans: [talentModifiers.plan, ...talentSL.plans,...psychology.plans,...contact.plans,...(contactTalent?[contactTalent]:[]),...(dualWhirlwind?[dualWhirlwind]:[]),...(warLeader?[{proposals:[{origins:[warLeader.source]}]}]:[])], talentSLChoices: talentSL.choiceDescriptors, kind, penalty: appliedPenalty, penaltyStates: [...conditionPenalty.levels].filter(([, value]) => value).map(([key]) => key),
+  const droppedModifiers = [...conditionPart.droppedRows, ...engineEffects.droppedRows];
+  return { test, droppedModifiers, crewSkill,talentPlans: [talentModifiers.plan, ...talentSL.plans,...psychology.plans,...contact.plans,...(contactTalent?[contactTalent]:[]),...(dualWhirlwind?[dualWhirlwind]:[]),...(warLeader?[{proposals:[{origins:[warLeader.source]}]}]:[])], talentSLChoices: talentSL.choiceDescriptors, kind, penalty: appliedPenalty, penaltyStates: conditionPart.penaltyStates,
     unresolved, restrictions, charging, qualityBonus: conditionalBonus,extraordinaryShot };
 }
