@@ -38,9 +38,9 @@ Chaque tâche est un lot en **fenêtre secondaire**, sur **un seul dépôt**, da
 
 - [ ] **T6 · O · Contrat client et plan de différences du lot A** `[P]` avec T1–T4
   - Objectif : `sendCommand` dans la source, `writebackBase` dans `ficheSnapshot`, module pur `fiche-writeback.js` pour les compteurs et les caractéristiques (plan, commande, succès, conflit, annulation), testé sur une source simulée qui reproduit le contrat de `plan.md` §1.
-  - Fichiers : `vendor/firebase/firebase-functions.js` (+ `LICENSES.md`), `js/core/fiche-source.js`, `js/core/fiche-sync.js` (bloc `writebackBase` seulement), `js/core/fiche-writeback.js` (nouveau), `tests/fiche-writeback.test.mjs` (nouveau), `sw.js` (précache).
+  - Fichiers : `vendor/firebase/firebase-functions.js` (+ `LICENSES.md`), `js/core/fiche-source.js`, `js/core/fiche-sync.js` (bloc `writebackBase` seulement), `js/core/fiche-writeback.js` (nouveau), `tests/unit/stockage/fiche-writeback.test.mjs` (nouveau), `sw.js` (précache).
   - Critères : CA2, CA3, CA5, CA6, CA7, CA11, CA12, CA15, CA16, CA17 (côté outil).
-  - Acceptation : `node --test tests/fiche-writeback.test.mjs` et les tests existants de `fiche-sync`.
+  - Acceptation : `node --test tests/unit/stockage/fiche-writeback.test.mjs` et les tests existants de `fiche-sync`.
 
 - [ ] **T7 · O · Écran « Envoyer aux fiches »** — après : T6
   - Objectif : entrée du menu `⋯`, aperçu à cases, envoi fiche par fiche, conflits avec choix du MJ, « Annuler le dernier envoi », `lastSend` persistant.
@@ -50,9 +50,9 @@ Chaque tâche est un lot en **fenêtre secondaire**, sur **un seul dépôt**, da
 
 - [ ] **T8 · O · Lots B et C : Prière, talents, équipement, suivi** — après : T7
   - Objectif : ajouter au plan de différences les changes `skill-adv`, `row` (excommunication, confiscations) et `suivi` (pénitences, séquelles, cicatrices, maladies, mutations confirmées), en filtrant toute donnée réservée au MJ ; lignes sans `id` de fiche sûr = « à faire à la main ».
-  - Fichiers : `js/core/fiche-writeback.js`, `js/core/fiche-sync.js` (lecture de `suiviMj` dans le snapshot), `tests/fiche-writeback.test.mjs`.
+  - Fichiers : `js/core/fiche-writeback.js`, `js/core/fiche-sync.js` (lecture de `suiviMj` dans le snapshot), `tests/unit/stockage/fiche-writeback.test.mjs`.
   - Critères : CA5, CA18, CA19, CA20, CA22, CA23 (côté outil).
-  - Acceptation : `node --test tests/fiche-writeback.test.mjs`.
+  - Acceptation : `node --test tests/unit/stockage/fiche-writeback.test.mjs`.
 
 - [ ] **T9 · O · Contre-vérification, recette prod et publication** — après : T5, T8
   - Vérificateurs indépendants ; suite complète à la fusion ; recette CA24 sur `ethoril.github.io` (un vrai PJ, Fortune +1 puis annulation, avec l'accord du MJ le jour de la recette) ; publication **sur feu vert du MJ** ; mise à jour de `docs/VARIABLES_PERSISTANTES_PJ.md` (colonne « écrit vers la fiche »).

@@ -2,17 +2,17 @@
 // La « fonction » est simulée ici au plus près du contrat (docs/specs/chantier-h-ecriture-fiches/plan.md §1).
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
-import { ficheSnapshot, ficheFingerprint } from '../js/core/fiche-sync.js';
-import { createFicheSource } from '../js/core/fiche-source.js';
-import { projectV5Resources } from '../js/core/v5-resources.js';
-import { sequelaTestRules } from '../js/core/v5-sequela-effects.js';
+import { ficheSnapshot, ficheFingerprint } from '../../../js/core/fiche-sync.js';
+import { createFicheSource } from '../../../js/core/fiche-source.js';
+import { projectV5Resources } from '../../../js/core/v5-resources.js';
+import { sequelaTestRules } from '../../../js/core/v5-sequela-effects.js';
 import {
   planFicheWriteback, buildFicheCommand, buildUndoCommands, applyWritebackSuccess, applyConflictChoice,
   ficheConflictOf, ficheValueForKey, writebackErrorMessage
-} from '../js/core/fiche-writeback.js';
+} from '../../../js/core/fiche-writeback.js';
 
 const clone = value => structuredClone(value);
-import { createFakeFunction } from './helpers/fake-fiche-function.mjs';
+import { createFakeFunction } from '../../helpers/fake-fiche-function.mjs';
 
 // ---------- Partie de test ----------
 const WREN = () => ({ nom: 'Wren', race: 'Humain', destin: '3', fortune: '2', peche: '1', corruption: '0', blessuresAct: '4',
@@ -606,7 +606,7 @@ describe('Contre-vérification · compteurs (3, C2, 10) et mutations (11)', () =
   });
 
   test('C2 : un registre initialisé depuis la fiche mémorise la valeur lue', async () => {
-    const { setV5Fortune } = await import('../js/core/v5-resources.js');
+    const { setV5Fortune } = await import('../../../js/core/v5-resources.js');
     const state = makeState({ wren: { revision: 7, data: WREN() } });
     state.extensions.v5.characterResources = [];
     const next = setV5Fortune(state, state.combat.participants[0], 2, { source: 'fiche' });
@@ -661,7 +661,7 @@ describe('Contre-vérification · envois successifs, erreurs, historique (2, 5, 
   });
 
   test('les commandes d’envoi ne sont pas annulables par l’historique de l’outil (pas de double comptage)', async () => {
-    const { createStore } = await import('../js/core/store.js');
+    const { createStore } = await import('../../../js/core/store.js');
     let saved = null;
     const store = createStore({ storage: null, persistence: { async load() { return saved && clone(saved); }, async saveAtomic({ state }) { saved = clone(state); return { ok: true }; } } });
     await store.ready;

@@ -1,6 +1,6 @@
 // Fonction `executeFicheCommand` simulée au plus près du contrat `outil-mj` (docs/specs/chantier-h-ecriture-fiches/plan.md §1),
 // précisé par le serveur T1/T2 (dépôt des fiches, js/fiche/outil-mj.js, branche claude/h-t1-outil-mj-7aa9fa).
-// Partagée par tests/fiche-writeback.test.mjs (Node) et tests/fiche-writeback-browser.mjs (servie au navigateur) : aucune dépendance.
+// Partagée par tests/unit/stockage/fiche-writeback.test.mjs (Node) et tests/fiche-writeback-browser.mjs (servie au navigateur) : aucune dépendance.
 // Écart assumé : l'objet d'équipement est validé en forme seulement (pas contre le référentiel publié).
 const clone = value => structuredClone(value);
 const COUNTERS = ['fortune', 'destin', 'peche', 'corruption'];

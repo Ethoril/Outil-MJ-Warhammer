@@ -84,7 +84,7 @@ Les identifiants de suivi sont dérivés de l'identifiant de l'outil (`outil:<id
 | 9, 13 (côté fiche), 17–19 (côté fiche) | même fichier : historique, `undoOf`, lignes et caractéristiques |
 | contrat de bout en bout | `tools/fiche-outil-mj-emulator.mjs` (Firestore + Functions sous émulateur, projet `demo-…`, sur le modèle de `tools/equipment-emulator.mjs`) |
 | 20, 22 (affichage fiche) | test de vue du dépôt des fiches + contrôle manuel en local |
-| 2–5, 7, 11, 15–19 (côté outil) | `tests/fiche-writeback.test.mjs` (module pur, source simulée) |
+| 2–5, 7, 11, 15–19 (côté outil) | `tests/unit/stockage/fiche-writeback.test.mjs` (module pur, source simulée) |
 | 1–4, 10–15 (écran) | test navigateur sur `localhost:8766` avec source simulée, sous `timeout 120` |
 | 24 | recette manuelle du MJ sur `ethoril.github.io` (App Check actif) |
 
