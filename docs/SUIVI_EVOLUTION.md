@@ -10,6 +10,13 @@
 | E09–E10 | Intégré et validé dans la vraie coquille | Navigation Préparer/Jouer/Bibliothèque, profils complets, recherche actions/tags, favoris, règles réelles, sélection et suivi du tour. |
 | E11–E17 | Intégré ; parcours navigateur bornés passants | `tests/browser-index.mjs` couvre lancement, suspension/reprise, clôture, personnage persistant, E15, E16 et E04 sur l’index réel. |
 
+## 3.44.0 — mise à jour des PJ plus sûre, Skink Petit, hygiène (08/11/2026)
+
+- « Mettre à jour les PJ » ne rattache plus un personnage persistant à une fiche par son seul nom : un homonyme sans lien est proposé dans l'aperçu avec une case « Rattacher », et il n'est modifié que si le MJ la coche.
+- L'aperçu liste nommément, pour chaque PJ, le Mouvement, les compteurs (ancienne → nouvelle valeur : Destin, Fortune, Résilience, Péché, Corruption), les talents et objets ajoutés ou retirés, et les personnages persistants modifiés. Cette liste est calculée sur une copie de l'état par la même fonction que la mise à jour.
+- Skink et Skink caméléon en Taille Petite (Lustria p. 160, bestiaire p. 136 et 142), comme leurs Blessures.
+- Dépôt : `CLAUDE.md` des règles de travail, tests unitaires lancés par GitHub Actions à chaque push, README réécrit en document d'entrée, documents périmés archivés, worktrees et branches fusionnés retirés (tags `archive/*`), cadrage de Q6 (`docs/specs/tests-secondaires-agregateur/`).
+
 ## 3.43.0 — espace Campagne (08/11/2026)
 
 - Nouvel onglet Campagne, troisième entre Jouer et Bibliothèque (raccourci « 3 », Bibliothèque sur « 4 ») : temps de campagne, synthèse des suivis par personnage (blessures, critiques, maladies, séquelles, convalescence) et soins contextuels au personnage sélectionné. « Suites de combat » dans Jouer renvoie vers Campagne ; Jouer passe en pleine largeur avec rail latéral repliable.
