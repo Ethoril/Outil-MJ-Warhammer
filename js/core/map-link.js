@@ -80,10 +80,10 @@ export function createMapLink({ channel, getParticipants, maxHpOf = () => null, 
     roster = text;
     send('mj.roster', { characters });
   };
-  /** Engagements actifs (`mj.engagements`, §10), émis quand ils changent ; l'instantané ne renvoie qu'une liste non vide. */
+  /** Engagements actifs (`mj.engagements`, §10), émis quand ils changent ; l'instantané les renvoie toujours, même vides (audit A6). */
   const sendEngagements = (force = false) => {
     const pairs = engagementPairsOf(getParticipants() || []), text = JSON.stringify(pairs);
-    if (text === engagements && !(force && pairs.length)) return;
+    if (!force && text === engagements) return;
     engagements = text;
     send('mj.engagements', { pairs });
   };

@@ -47,8 +47,10 @@ test('enveloppe : version, seq croissant, émetteur', () => {
 test('map.hello → instantané complet et statut connecté ; version inconnue signalée', () => {
   const t = setup([pj, gob('g1')]);
   t.channel.onmessage({ data: { v: 1, type: 'map.hello', from: 'map', payload: {} } });
-  const snap = t.channel.sent.at(-1);
-  assert.equal(snap.type, 'mj.snapshot');
+  // L'instantané est suivi de mj.engagements, envoyé même vide (audit A6).
+  const snap = t.channel.sent.find(message => message.type === 'mj.snapshot');
+  assert.ok(snap);
+  assert.equal(t.channel.sent.at(-1).type, 'mj.engagements');
   assert.deepEqual(snap.payload.tokens.map(s => s.ref).sort(), ['p:g1', 'pj:c9']);
   assert.equal(t.link.status(), 'connected');
   t.link.onMessage({ v: 2, type: 'map.ping', from: 'map' });
