@@ -1,3 +1,5 @@
+> Archivé le 08/11/2026, périmé : voir [README](../../README.md).
+
 # Contrat du moteur de règles
 
 Ce document décrit l'état observé lors de l'audit préparatoire du 5 septembre 2026, avant

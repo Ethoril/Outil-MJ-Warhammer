@@ -1,3 +1,5 @@
+> Archivé le 08/11/2026, périmé : voir [README](../../README.md).
+
 # Protocole de recette — Outil MJ Warhammer
 
 Recette manuelle de fin de projet. Compagnon de [`PLAN.md`](PLAN.md) : chaque vérification

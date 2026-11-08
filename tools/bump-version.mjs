@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Écrit la version de l’application dans tous ses emplacements.
 // Usage : node tools/bump-version.mjs 3.43.0
-// Les notes de version (README ligne 3, docs/SUIVI_EVOLUTION.md) restent à rédiger à la main.
+// Les notes de version (docs/SUIVI_EVOLUTION.md) restent à rédiger à la main.
 import { readFileSync, writeFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';

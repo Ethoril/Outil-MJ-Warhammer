@@ -1,3 +1,5 @@
+> Archivé le 08/11/2026, périmé : voir [README](../../README.md).
+
 # Passation — plan de fin de projet (mise à jour le 24 octobre 2026, 21 h)
 
 L’orchestration passe au **compte Claude Pro** (Claude Code avec la configuration `~/.claude-perso`) jusqu’à dimanche 25/10 : le compte Team de l’app est presque à court de quota.
