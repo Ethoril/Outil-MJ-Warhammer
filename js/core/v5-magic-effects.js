@@ -441,8 +441,8 @@ function recomputeLayerValues(next, effects) {
   effects = (Array.isArray(effects) ? effects : []).filter(e => e && typeof e === 'object' && !Array.isArray(e));
   const hadSuppression=effects.some(e=>e.suppressedEffectIds?.length) || next.extensions.v5.suppressedEffectIds?.length;
   next.extensions.v5.suppressedEffectIds=effects.flatMap(e=>e.suppressedEffectIds || []).filter(id => typeof id === 'string' && id);
-  const spellLayers=unsuppressedSpellEffects(effects),divineLayers=(next.extensions.v5.divineEffects || []).filter(e => e && typeof e === 'object' && !Array.isArray(e));
-  effects=[...spellLayers,...(next.extensions.v5.divineEffects || [])];
+  const spellLayers=unsuppressedSpellEffects(effects),divineLayers=(Array.isArray(next.extensions.v5.divineEffects) ? next.extensions.v5.divineEffects : []).filter(e => e && typeof e === 'object' && !Array.isArray(e));
+  effects=[...spellLayers,...divineLayers];
   const v5 = next.extensions.v5;
   const baseCaracs = v5.baseCaracs || next.baseCaracs;
   if (baseCaracs) {
