@@ -23,6 +23,11 @@ import { endStoreDivinePrayer, getDivineContract, previewStoreDivine, validateDi
 import { getReferenceCatalogue, refreshReferences } from '../../../js/core/reference-catalog.js';
 
 const root = resolve(fileURLToPath(new URL('../../..', import.meta.url)));
+// Les audits E0/E1 s'appuient sur des preuves visuelles stockées hors dépôt (captures du chantier divin,
+// sur la machine du MJ). Sans elles (CI GitHub, autre poste), ces suites sont sautées au lieu d'échouer.
+const visualProofPaths = [...new Set(JSON.stringify(pages).match(/"visualEvidencePath":"[^"]+"/g) || [])].map(entry => entry.slice(22, -1));
+const localProofs = visualProofPaths.length > 0 && visualProofPaths.every(path => existsSync(path));
+const needsLocalProofs = { skip: localProofs ? false : 'preuves visuelles du chantier divin absentes de ce poste' };
 const clone = value => structuredClone(value);
 const expected = [
   ['Commander la Légion', 'Command the Legion'],
@@ -36,7 +41,7 @@ const expected = [
   ['Vindicte Vengeresse', 'Vengeful Wrath']
 ];
 
-describe('audit E1 du corpus', () => {
+describe('audit E1 du corpus', needsLocalProofs, () => {
 const corpus = JSON.parse(readFileSync(resolve(root, 'docs/divin/DIVIN_CORPUS_LIVRES.json'), 'utf8'));
 
 test('audit dispositions exactly cover the corpus; only doubly sourced pages count as explored', () => {
@@ -303,7 +308,7 @@ test('different reader classifications persist as a disagreement and block page 
 
 });
 
-describe('audit E1 — contrôle indépendant', () => {
+describe('audit E1 — contrôle indépendant', needsLocalProofs, () => {
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../../..');
 const build = (evidence = auditEvidence, sourceCorpus = corpus) => buildDivineAudit(sourceCorpus, evidence, { root });
 const pageKey = row => `${row.bookId}:${row.physicalPage}`;
@@ -1054,7 +1059,7 @@ test('E2 indépendant — CLI --check refuse un cwd externe avant toute lecture 
 });
 });
 
-describe('recette E0 — contrôle indépendant', () => {
+describe('recette E0 — contrôle indépendant', needsLocalProofs, () => {
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../../..');
 const inventory = JSON.parse(readFileSync(resolve(root, 'docs/divin/DIVIN_INVENTAIRE.json'), 'utf8'));
 const sourceHash = '0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07';
@@ -1239,7 +1244,7 @@ test('Œil de l’aigle — résumé et delta correspondent aux lectures V5 p.22
 });
 });
 
-describe('source Hospice — contrôle indépendant', () => {
+describe('source Hospice — contrôle indépendant', needsLocalProofs, () => {
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../../..');
 const sourceUrl = new URL('../../../docs/divin/sources/L01-hospice-readings.mjs', import.meta.url);
 const hash = '925cf38a31ffa3561c63df3a9a1c2e2c18034ff0ed1e1d90571965a068434c5e';
@@ -1508,7 +1513,7 @@ test('des sources de miracle et talent périmées sont bloquées après un rafra
 });
 });
 
-describe('commandements — contrôle indépendant', () => {
+describe('commandements — contrôle indépendant', needsLocalProofs, () => {
 const sourceModuleUrl = new URL('../../../docs/divin/sources/L06-strictures.mjs', import.meta.url);
 const expectedHash = '53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de';
 const cultPages = new Map([
