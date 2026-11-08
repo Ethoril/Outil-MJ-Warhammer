@@ -12,9 +12,27 @@ export const DISTANCE_QUERY_TIMEOUT_MS = 3000;
 
 const pairKeyOf = (a, b) => (a < b ? `${a}|${b}` : `${b}|${a}`);
 
-/** Pions liés que la carte n'a pas encore posés : `[{ ref, label }]`, triés par nom. */
+/**
+ * Montures fusionnées (§8.1) : `Map` ref de la monture → ref de son cavalier monté. La carte garde la monture
+ * en réserve (map.unplaced) et la résout par `rider.ref` dans le pion du cavalier (MAP-03).
+ */
+export function mergedMountRefsOf(states = {}) {
+  const merged = new Map();
+  for (const state of Object.values(states)) if (state?.mounted === true && state.rider?.ref) merged.set(state.rider.ref, state.ref);
+  return merged;
+}
+
+/** Pion posé sur la carte : posé lui-même, ou monture fusionnée dont le cavalier est posé. */
+export function isRefPlaced(ref, states = {}, placed = new Set()) {
+  if (placed.has(ref)) return true;
+  const riderRef = mergedMountRefsOf(states).get(ref);
+  return riderRef !== undefined && placed.has(riderRef);
+}
+
+/** Pions liés que la carte n'a pas encore posés : `[{ ref, label }]`, triés par nom ; une monture fusionnée suit son cavalier. */
 export function pendingTokensOf(states = {}, placed = new Set()) {
-  return Object.values(states).filter(state => state?.ref && !placed.has(state.ref))
+  const merged = mergedMountRefsOf(states);
+  return Object.values(states).filter(state => state?.ref && !placed.has(state.ref) && !merged.has(state.ref))
     .map(state => ({ ref: state.ref, label: state.label || '' })).sort((a, b) => a.label.localeCompare(b.label, 'fr'));
 }
 

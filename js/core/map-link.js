@@ -5,7 +5,7 @@
  * gardent le participant, donc le pion.
  */
 import { MAP_LINK_VERSION, tokenStatesOf, diffTokenStates, pjRosterOf, mapRefOf } from './map-link-state.js';
-import { DISTANCE_QUERY_TIMEOUT_MS, pendingTokensOf, engagementPairsOf } from './map-link-feedback.js';
+import { DISTANCE_QUERY_TIMEOUT_MS, pendingTokensOf, engagementPairsOf, isRefPlaced } from './map-link-feedback.js';
 
 export const MAP_LINK_CHANNEL = 'wfrp-map-link';
 export const MAP_LINK_PING_MS = 5000;
@@ -173,7 +173,7 @@ export function createMapLink({ channel, getParticipants, maxHpOf = () => null, 
   function queryDistance(from, to) {
     const fromRef = mapRefOf(from), toRef = mapRefOf(to);
     if (status !== 'connected') return Promise.resolve({ ok: false, reason: 'disconnected', message: 'Carte déconnectée : distance à saisir.' });
-    if (!placed.has(fromRef) || !placed.has(toRef)) return Promise.resolve({ ok: false, reason: 'not-placed', message: 'Pion non posé sur la carte : distance à saisir.' });
+    if (!isRefPlaced(fromRef, states, placed) || !isRefPlaced(toRef, states, placed)) return Promise.resolve({ ok: false, reason: 'not-placed', message: 'Pion non posé sur la carte : distance à saisir.' });
     const queryId = `dq-${++distanceSeq}`;
     return new Promise(resolve => {
       const timer = setTimer(() => settleDistance(queryId, { ok: false, reason: 'timeout', message: 'La carte n’a pas répondu : distance à saisir.' }), DISTANCE_QUERY_TIMEOUT_MS);
@@ -204,5 +204,5 @@ export function createMapLink({ channel, getParticipants, maxHpOf = () => null, 
   states = read();
   send('mj.hello');
   return { refresh, snapshot, tick, onMessage, requestMount, queryDistance, on, placement: placementView,
-    isPlaced: participant => placed.has(mapRefOf(participant)), status: () => status, close: () => channel.close?.() };
+    isPlaced: participant => isRefPlaced(mapRefOf(participant), states, placed), status: () => status, close: () => channel.close?.() };
 }
