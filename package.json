@@ -3,7 +3,7 @@
   "version": "3.43.0",
   "type": "module",
   "scripts": {
-    "test": "node --test",
+    "test": "node --test \"tests/unit/**/*.test.js\" \"tests/unit/**/*.test.mjs\"",
     "test:browser": "node tests/browser-smoke.mjs",
     "test:browser-all": "node tools/run-browser-journeys.mjs",
     "test:fiches-browser": "node tests/fiches-pj-browser.mjs",
