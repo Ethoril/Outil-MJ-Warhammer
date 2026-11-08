@@ -44,7 +44,9 @@ export function parseSizeTrait(trait) {
 }
 
 // Espèce lue sur la fiche d'un PJ (champ `race`) : Taille V5 de l'espèce (Halfelin et Gnome Petits, Ogre Grand ; rappel du MJ, 07/11/2026).
-const SPECIES_SIZE = Object.freeze({ halfelin: 'small', halfling: 'small', gnome: 'small', ogre: 'large' });
+// Skink et Skink caméléon Petits (Lustria L07 p. 160 ; bestiaire L07 p. 136 et 142). Les fiches écrivent l'espèce en clé à tirets (`skink`, `haut-elfe`).
+const SPECIES_SIZE = Object.freeze({ halfelin: 'small', halfling: 'small', gnome: 'small', skink: 'small', 'skink cameleon': 'small', ogre: 'large' });
+const speciesKey = value => fold(value).replace(/[-_]+/g, ' ').replace(/\s+/g, ' ').trim();
 
 /** Taille du participant : Trait, sinon champ `size` (profil), sinon espèce de la fiche, sinon Moyenne supposée (`assumed: true`). */
 export function creatureSizeOf(participant) {
@@ -52,7 +54,7 @@ export function creatureSizeOf(participant) {
   if (fromTrait) return { ...fromTrait, assumed: false, source: 'trait' };
   const fromField = SIZE_WORDS[fold(participant?.size ?? participant?.profile?.size)];
   if (fromField) return { ...describe(fromField), assumed: false, source: 'field' };
-  const fromSpecies = SPECIES_SIZE[fold(participant?.race ?? participant?.profile?.race)];
+  const fromSpecies = SPECIES_SIZE[speciesKey(participant?.race ?? participant?.profile?.race)];
   if (fromSpecies) return { ...describe(fromSpecies), assumed: false, source: 'species' };
   return { ...describe('average'), assumed: true, source: 'assumed' };
 }
