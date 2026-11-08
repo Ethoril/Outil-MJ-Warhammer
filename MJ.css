@@ -481,8 +481,8 @@ body:has(dialog.tool-sheet[open]) #toast-container { right: calc(clamp(480px, 50
 @media (max-width: 600px) {
   .topbar .topbar-main { display: grid; grid-template-columns: minmax(0, 1fr) auto auto auto; gap: 8px; }
   .topbar-main > .spacer { display: none; }
-  .topbar-main .tabs { grid-column: 1 / -1; grid-row: 2; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .topbar-main .tab { padding-inline: 8px; min-width: 0; }
+  .topbar-main .tabs { grid-column: 1 / -1; grid-row: 2; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .topbar-main .tab { padding-inline: 4px; min-width: 0; font-size: 14px; }
   /* Outils de séance et voyant de la carte (05/11) : une ligne pleine chacun, sinon la barre déborde à 390 px. */
   .topbar-main .topbar-tools { grid-column: 1 / -1; flex-wrap: wrap; }
   .topbar-main .map-link-indicator { grid-column: 1 / -1; }
