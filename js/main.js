@@ -1062,7 +1062,7 @@ async function openFicheSyncView() {
   return openOverlay('Mettre à jour les PJ', (mount, dialog) => {
     const view = initFicheSyncView({
       mount, hosted: true, source,
-      getContext: () => ({ profiles: Store.listProfiles(), participants: [...Store.listParticipants(), ...(Store.listSuspendedScenes?.() || []).flatMap(scene => (scene.participants || []).map(row => ({...row,name:`${row.name} — ${scene.title || 'scène suspendue'}`})))], revision: Store.getLocalRevision?.() }),
+      getContext: () => ({ profiles: Store.listProfiles(), participants: [...Store.listParticipants(), ...(Store.listSuspendedScenes?.() || []).flatMap(scene => (scene.participants || []).map(row => ({...row,name:`${row.name} — ${scene.title || 'scène suspendue'}`})))], persistentCharacters: Store.listPersistentCharacters?.() || [], encounters: Store.listEncounters?.() || [], revision: Store.getLocalRevision?.() }),
       callbacks: {
         // Familiers déclarés par la fiche : profil type du bestiaire (homoncules L17, animaux L02), nom français.
         familiarProfiles: async familiars => {

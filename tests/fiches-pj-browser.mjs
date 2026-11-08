@@ -46,12 +46,19 @@ async function main() {
     const actor = store.listParticipants()[0]; await store.updateParticipant(actor.id, { hp: 8, maxHp: 14, states: ['Sonné|3'] });
     const harness = window.harness = { store, data: { ...fixture, equipment }, sourceRevision: 'r1', sourceCalls: 0, applied: 0 };
     const source = { async getUser() { return { name: 'MJ simulé' }; }, async signIn() { return { name: 'MJ simulé' }; }, async signOut() {}, async fetchAll() { harness.sourceCalls++; if (harness.pauseNextFetch) { harness.pauseNextFetch = false; await new Promise(resolve => { harness.sourceWaiting = true; harness.releaseSource = resolve; }); harness.sourceWaiting = false; } return [{ charId: 'caelel', data: structuredClone(harness.data), metadata: { schemaVersion: 4, revision: harness.sourceRevision }, status: 'ok' }]; } };
-    const view = initFicheSyncView({ mount: document.querySelector('#mount'), source, getContext: () => ({ profiles: store.listProfiles(), participants: store.listParticipants(), revision: store.getLocalRevision() }), callbacks: { async onApply(entries, options) { await store.applyFicheSync(entries, options); harness.applied++; } } });
+    const view = initFicheSyncView({ mount: document.querySelector('#mount'), source, getContext: () => ({ profiles: store.listProfiles(), participants: store.listParticipants(), persistentCharacters: store.listPersistentCharacters(), encounters: store.listEncounters(), revision: store.getLocalRevision() }), callbacks: { async onApply(entries, options) { await store.applyFicheSync(entries, options); harness.applied++; } } });
     harness.view = view; await view.start();
   }, { fixture, equipment: [weapon('one'), weapon('two')] });
   await expect(page.getByRole('heading', { name: 'Actions issues des armes et boucliers' })).toBeVisible();
   await expect(page.locator('[data-key="equipment:caelel:one:attack"]')).toHaveValue('');
   await expect(page.locator('#mount')).toContainText('8/14 → 12/18 PV');
+  // Aperçu nommé (analyse du 08/11) : Mouvement, compteurs, talents et objets ajoutés, persistants modifiés.
+  await expect(page.locator('#mount')).toContainText('Mouvement : — → 5');
+  await expect(page.locator('#mount')).toContainText('Destin : — → ');
+  await expect(page.locator('#mount')).toContainText('Talents ajoutés : ');
+  await expect(page.locator('#mount')).toContainText('Objets ajoutés : Épée de recette');
+  await expect(page.locator('#mount')).toContainText('Personnages persistants modifiés : Caelel.');
+  mkdirSync(join(root, 'tmp', 'fiches-pj-receipt'), { recursive: true }); await page.locator('.fiche-sync-entry').screenshot({ path: join(root, 'tmp', 'fiches-pj-receipt', 'apercu-nomme.png') });
   await page.locator('[data-key="adopt:caelel:one:attack"]').selectOption('legacy');
   const skillValue = await page.locator('[data-key="equipment:caelel:one:attack"] option').evaluateAll(options => options.find(option => option.textContent.startsWith('Corps à corps (Base)'))?.value);
   assert.ok(skillValue); await page.locator('[data-key="equipment:caelel:one:attack"]').selectOption(skillValue);

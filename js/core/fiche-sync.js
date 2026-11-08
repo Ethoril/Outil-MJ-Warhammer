@@ -418,6 +418,33 @@ function proposeEquipmentSkill(item, role, skills) {
   return '';
 }
 
+export const FICHE_COUNTER_LABELS = Object.freeze({ fate: 'Destin', fortune: 'Fortune', resilience: 'Résilience', sin: 'Péché', corruption: 'Corruption' });
+const COUNTER_READERS = Object.freeze({
+  fate: subject => subject?.extensions?.v5?.fate ?? subject?.fate,
+  fortune: subject => subject?.ficheSnapshot?.resources?.fortune,
+  resilience: subject => subject?.extensions?.v5?.resilience,
+  sin: subject => subject?.extensions?.v5?.divine?.sin,
+  corruption: subject => subject?.extensions?.v5?.corruptionPoints
+});
+const talentLabel = row => { const name = row?.name || row?.nom || row?.id || '?'; const spec = row?.specialty || row?.specialization; return spec && !normalizeName(name).includes(normalizeName(spec)) ? `${name} (${spec})` : String(name); };
+const talentIdentity = row => `${row.id || row.name || row.nom}:${row.specialty || row.specialization || ''}`;
+const namedDiff = (old, current, identity, label) => {
+  const before = new Map((Array.isArray(old) ? old : []).map(row => [identity(row), row]));
+  const after = new Map((Array.isArray(current) ? current : []).map(row => [identity(row), row]));
+  return { added: [...after].filter(([id]) => !before.has(id)).map(([, row]) => label(row)), removed: [...before].filter(([id]) => !after.has(id)).map(([, row]) => label(row)) };
+};
+/** Ce que la synchronisation change nommément sur le profil (ancien profil → profil écrit) : Mouvement, compteurs, talents et objets. */
+export function profileSyncDetails(profile, updated) {
+  const counters = Object.entries(COUNTER_READERS).map(([key, read]) => ({ key, label: FICHE_COUNTER_LABELS[key], old: read(profile) ?? null, new: read(updated) ?? null }))
+    .filter(row => String(row.old) !== String(row.new));
+  return {
+    movement: String(profile.movement ?? '') !== String(updated.movement ?? '') ? { old: profile.movement ?? null, new: updated.movement ?? null } : null,
+    counters,
+    talents: namedDiff(profile.talents, updated.talents, talentIdentity, talentLabel),
+    equipment: namedDiff(profile.equipment, updated.equipment, row => row.id || row.name, row => String(row.name || row.id || '?'))
+  };
+}
+
 /** Pure preview and complete candidate. Explicit first bindings/adoptions only. */
 export function planProfileSync(snapshot, profile, choices = {}) {
   const { links = {}, convert = {}, equipmentLinks = {}, adoptActions = {} } = choices;
@@ -459,7 +486,7 @@ export function planProfileSync(snapshot, profile, choices = {}) {
   const collections = {};
   for (const key of ['skills', 'talents', 'equipment', 'spells', 'prayers']) {
     const coverage = snapshot.coverage?.[key] ?? 'present';
-    collections[key] = { coverage, ...(coverage === 'present' ? collectionDiff(profile[key], snapshot[key], key === 'talents' ? row => `${row.id || row.name || row.nom}:${row.specialty || row.specialization || ''}` : undefined) : { added: [], changed: [], removed: [] }) };
+    collections[key] = { coverage, ...(coverage === 'present' ? collectionDiff(profile[key], snapshot[key], key === 'talents' ? talentIdentity : undefined) : { added: [], changed: [], removed: [] }) };
     if (coverage === 'present') updated[key] = cloneValue(snapshot[key] || []);
   }
   // A catalogue refresh can remove or rename a source row while a profile still
@@ -576,7 +603,8 @@ export function planProfileSync(snapshot, profile, choices = {}) {
   updated.ficheSnapshot = cloneValue(snapshot);
   const warnings = [...cloneValue(snapshot.warnings || []), ...equipmentWarnings];
   if (health.warning) warnings.push({ field: 'hp', code: health.warning, severity: 'warning', ...(health.warning === 'reserve-health-normalized' ? { message: 'Ancienne réserve avec PV courants : la réserve reprend le maximum de fiche ; les Blessures subies restent conservées dans les participants et personnages persistants déjà enregistrés.' } : {}), consequence: health.warning === 'old-maximum-unknown' ? 'hp-preserved' : 'signed-wounds-preserved' });
-  return { profileId: profile.id, charId: snapshot.charId, name: profile.name, caracs,
+  const details = profileSyncDetails(profile, updated);
+  return { profileId: profile.id, charId: snapshot.charId, name: profile.name, caracs, details,
     initiative: { old: profile.initiative, new: snapshot.initiative ?? profile.initiative },
     hp: { old: health.old, new: health.new, computable: health.computable }, health, actions, collections,
     equipmentActions, removedActions, protection: { old: profile.armorLocations || null, new: updated.armorLocations || null }, warnings,
@@ -717,18 +745,46 @@ export function applyFicheSync(draft, entries) {
       next.diceLines = next.diceLines.filter(line => !touchedIds.has(line.participantId));
       for (const [id, lines] of byParticipant) next.diceLines.push(...(combatById.get(id)?.extensions?.v5?.beastForm ? lines : syncActions(lines)).map(line => ({ ...line, participantId: id, id: lines.some(old => old.id === line.id) ? line.id : `${id}:${line.id}` })));
     }
-    const linked = new Set((next.encounters || []).flatMap(item => item.entries || []).filter(item => item.profileId === profile.id && item.persistentCharacterId).map(item => item.persistentCharacterId));
-    for (const subject of [...(next.combat?.participants || []), ...(next.activeScene?.participants || []), ...(next.suspendedScenes || []).flatMap(scene => scene.participants || [])]) if (subject.profileId === profile.id && subject.persistentCharacterId) linked.add(subject.persistentCharacterId);
-    next.persistentCharacters = (next.persistentCharacters || []).map(subject => {
-      const byProfile = subject.profileId === profile.id || subject.extensions?.ficheId === entry.snapshot.charId;
-      const named = !linked.size && normalizeName(subject.name) === normalizeName(profile.name);
-      return byProfile || linked.has(subject.id) || named ? { ...copyFields(subject), profileId: profile.id } : subject;
-    });
+    // L'identité fait foi : un homonyme sans lien n'est touché que si le MJ l'a coché dans l'aperçu (`adoptPersistents`).
+    const { targets } = persistentSyncTargets(next, profile, entry.snapshot, entry.adoptPersistents);
+    next.persistentCharacters = (next.persistentCharacters || []).map(subject => targets.has(subject.id) ? { ...copyFields(subject), profileId: profile.id } : subject);
     if (ficheFingerprint(next) !== ficheFingerprint(draft)) changedNames.push(profile.name);
   }
   if (ficheFingerprint(next) === ficheFingerprint(draft)) return draft;
   next.log = [{ id: uid(), ts: Date.now(), kind: 'management', text: `Fiches PJ mises à jour : ${[...new Set(changedNames)].join(', ')}.` }, ...(next.log || [])].slice(0, 300);
   return next;
+}
+
+/**
+ * Personnages persistants d'un profil : liés par `profileId`, `extensions.ficheId` ou une rencontre/scène.
+ * Sans aucun lien, un homonyme sans lien est seulement proposé (`proposed`) : il n'est ciblé que si son id figure dans `adopt`
+ * (premier rattachement d'un persistant créé par son nom dans « Préparer », confirmé par le MJ).
+ */
+export function persistentSyncTargets(draft, profile, snapshot, adopt = []) {
+  const linked = new Set((draft?.encounters || []).flatMap(item => item.entries || []).filter(item => item.profileId === profile.id && item.persistentCharacterId).map(item => item.persistentCharacterId));
+  for (const subject of [...(draft?.combat?.participants || []), ...(draft?.activeScene?.participants || []), ...(draft?.suspendedScenes || []).flatMap(scene => scene.participants || [])]) if (subject.profileId === profile.id && subject.persistentCharacterId) linked.add(subject.persistentCharacterId);
+  const persistents = draft?.persistentCharacters || [];
+  const targets = new Set(persistents.filter(subject => subject.profileId === profile.id || subject.extensions?.ficheId === snapshot.charId || linked.has(subject.id)).map(subject => subject.id));
+  const proposed = targets.size ? [] : persistents.filter(subject => !subject.profileId && !subject.extensions?.ficheId && normalizeName(subject.name) && normalizeName(subject.name) === normalizeName(profile.name))
+    .map(subject => ({ id: subject.id, name: subject.name }));
+  const chosen = new Set(Array.isArray(adopt) ? adopt : []);
+  for (const row of proposed) if (chosen.has(row.id)) targets.add(row.id);
+  return { targets, proposed };
+}
+
+/**
+ * Personnages persistants que `applyFicheSync` modifiera pour cette entrée, calculés en l'appliquant sur une copie de `draft`.
+ * `blocked` : l'application refuserait (lien de fiche à confirmer, équipement à arbitrer) ; rien ne serait modifié.
+ */
+export function previewPersistentSync(draft, entry) {
+  const profile = (draft?.reserve || []).find(row => row.id === entry.profileId) || (entry.newProfile?.id === entry.profileId ? entry.newProfile : null);
+  if (!profile || !entry.snapshot) return { changed: [], proposed: [], blocked: false };
+  const { proposed } = persistentSyncTargets(draft, profile, entry.snapshot, []);
+  let next;
+  try { next = applyFicheSync(draft, [entry]); } catch { return { changed: [], proposed, blocked: true }; }
+  const before = new Map((draft.persistentCharacters || []).map(row => [row.id, ficheFingerprint(row)]));
+  const changed = (next.persistentCharacters || []).filter(row => before.get(row.id) !== ficheFingerprint(row)).map(row => ({ id: row.id, name: row.name }));
+  return { changed, proposed, blocked: false };
 }
 
 /** Message lisible pour une erreur de lecture des fiches (Firebase ou réseau). */

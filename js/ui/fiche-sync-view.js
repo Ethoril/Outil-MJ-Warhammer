@@ -1,4 +1,4 @@
-import { ficheSnapshot, matchFiches, planProfileSync, ficheErrorMessage, profileSyncFingerprint, planHealthSync } from '../core/fiche-sync.js';
+import { ficheSnapshot, matchFiches, planProfileSync, ficheErrorMessage, profileSyncFingerprint, planHealthSync, previewPersistentSync } from '../core/fiche-sync.js';
 import { userMessage, userError } from './messages.js';
 import { ficheUnavailableReason } from '../core/fiche-source.js';
 import { resolveKeyword } from '../core/creature-keywords.js';
@@ -38,6 +38,9 @@ export function initFicheSyncView({ mount, hosted = false, source, getContext, c
     selection.newProfile ??= blankProfile(snapshots.find(row => row.charId === charId) || { charId });
     return selection.newProfile;
   };
+  // Entrée transmise à applyFicheSync : la même sert à l'aperçu des persistants et à l'application.
+  const entryOf = (charId, selection) => ({ charId, profileId: selection.newProfile && selection.profileId === NEW_PROFILE ? selection.newProfile.id : selection.profileId, ...(selection.profileId === NEW_PROFILE ? { newProfile: selection.newProfile } : {}), snapshot: snapshots.find(item => item.charId === charId), links: selection.links, convert: selection.convert, equipmentLinks: selection.equipmentLinks, adoptActions: selection.adoptActions, adoptPersistents: [...(selection.adoptPersistents || [])], replaceAssociation: selection.replaceAssociation === true });
+  const draftOf = () => { const context = getContext(); return { reserve: context.profiles || [], persistentCharacters: context.persistentCharacters || [], encounters: context.encounters || [], combat: { participants: context.participants || [] } }; };
 
   async function check() {
     phase = 'checking'; render();
@@ -64,7 +67,7 @@ export function initFicheSyncView({ mount, hosted = false, source, getContext, c
       previewRevision = getContext().revision;
       const matches = matchFiches(snapshots, getContext().profiles || []);
       const noPj = !pjs().length;
-      selections = new Map(snapshots.map(snapshot => [snapshot.charId, { profileId: matches[snapshot.charId] || (noPj ? NEW_PROFILE : undefined), links: {}, convert: {}, equipmentLinks: {}, adoptActions: {}, replaceAssociation: false, fingerprint: null }]));
+      selections = new Map(snapshots.map(snapshot => [snapshot.charId, { profileId: matches[snapshot.charId] || (noPj ? NEW_PROFILE : undefined), links: {}, convert: {}, equipmentLinks: {}, adoptActions: {}, adoptPersistents: [], replaceAssociation: false, fingerprint: null }]));
       phase = 'preview';
     } catch (cause) { fail(cause); phase = 'signin'; }
     render();
@@ -88,6 +91,39 @@ export function initFicheSyncView({ mount, hosted = false, source, getContext, c
     return item;
   }
 
+  // Détail nommé de ce que la synchronisation écrit sur le profil (même calcul que planProfileSync → applyFicheSync).
+  function detailList(details) {
+    const list = document.createElement('ul'); list.className = 'fiche-sync-details';
+    const line = text => { const item = document.createElement('li'); item.textContent = text; list.appendChild(item); };
+    if (details?.movement) line(`Mouvement : ${shown(details.movement.old)} → ${shown(details.movement.new)}`);
+    for (const counter of details?.counters || []) line(`${counter.label} : ${shown(counter.old)} → ${shown(counter.new)}`);
+    for (const [key, label] of [['talents', 'Talents'], ['equipment', 'Objets']]) {
+      if (details?.[key]?.added.length) line(`${label} ajoutés : ${details[key].added.join(', ')}`);
+      if (details?.[key]?.removed.length) line(`${label} retirés : ${details[key].removed.join(', ')}`);
+    }
+    return list;
+  }
+
+  // Persistants modifiés (calculés en appliquant sur une copie) et homonymes sans lien à rattacher explicitement.
+  function appendPersistents(card, snapshot, selection) {
+    const entry = entryOf(snapshot.charId, selection);
+    const preview = previewPersistentSync(draftOf(), entry);
+    const info = document.createElement('p'); info.className = 'fiche-sync-persistents';
+    info.textContent = preview.blocked ? 'Personnages persistants : aucun tant que l’application est bloquée.'
+      : preview.changed.length ? `Personnages persistants modifiés : ${preview.changed.map(row => row.name || row.id).join(', ')}.` : 'Aucun personnage persistant modifié.';
+    card.appendChild(info);
+    for (const row of preview.proposed) {
+      const check = document.createElement('input'); check.type = 'checkbox'; check.dataset.key = `persistant:${snapshot.charId}:${row.id}`;
+      check.checked = (selection.adoptPersistents || []).includes(row.id);
+      check.addEventListener('change', () => {
+        const chosen = new Set(selection.adoptPersistents || []);
+        if (check.checked) chosen.add(row.id); else chosen.delete(row.id);
+        selection.adoptPersistents = [...chosen]; render();
+      });
+      card.appendChild(labelled(`Rattacher à cette fiche le personnage persistant « ${row.name} » (même nom, aucun lien enregistré)`, check));
+    }
+  }
+
   function entryCard(snapshot) {
     const selection = selections.get(snapshot.charId);
     const card = document.createElement('article'); card.className = 'import-text-profile fiche-sync-entry';
@@ -99,7 +135,7 @@ export function initFicheSyncView({ mount, hosted = false, source, getContext, c
     choose.append(new Option('Créer un nouveau profil PJ', NEW_PROFILE));
     choose.dataset.key = `profil:${snapshot.charId}`;
     choose.value = selection.profileId || '';
-    choose.addEventListener('change', () => { selection.profileId = choose.value || null; selection.links = {}; selection.convert = {}; selection.equipmentLinks = {}; selection.adoptActions = {}; selection.replaceAssociation = false; selection.fingerprint = null; render(); });
+    choose.addEventListener('change', () => { selection.profileId = choose.value || null; selection.links = {}; selection.convert = {}; selection.equipmentLinks = {}; selection.adoptActions = {}; selection.adoptPersistents = []; selection.replaceAssociation = false; selection.fingerprint = null; render(); });
     card.appendChild(labelled('Profil à mettre à jour', choose));
 
     const profile = profileOf(selection, snapshot.charId);
@@ -131,6 +167,8 @@ export function initFicheSyncView({ mount, hosted = false, source, getContext, c
       collections.appendChild(row);
     });
     card.appendChild(collections);
+    card.appendChild(detailList(plan.details));
+    appendPersistents(card, snapshot, selection);
     if (snapshot.familiars?.length || snapshot.keywordTargets?.length) {
       const declared = document.createElement('p'); declared.className = 'muted';
       declared.textContent = [snapshot.familiars?.length ? `Familiers : ${snapshot.familiars.map(row => row.name).join(', ')} (profils créés et liés en combat)` : '',
@@ -289,7 +327,7 @@ export function initFicheSyncView({ mount, hosted = false, source, getContext, c
             const familiars = snapshots.find(item => item.charId === charId)?.familiars || [];
             familiarProfiles.set(charId, familiars.length ? await Promise.resolve(callbacks.familiarProfiles?.(familiars)).catch(() => ({})) || {} : {});
           }
-          await callbacks.onApply?.(chosen.map(([charId, selection]) => ({ charId, familiarProfiles: familiarProfiles.get(charId), profileId: selection.newProfile && selection.profileId === NEW_PROFILE ? selection.newProfile.id : selection.profileId, ...(selection.profileId === NEW_PROFILE ? { newProfile: selection.newProfile } : {}), snapshot: snapshots.find(item => item.charId === charId), links: selection.links, convert: selection.convert, equipmentLinks: selection.equipmentLinks, adoptActions: selection.adoptActions, replaceAssociation: selection.replaceAssociation === true, expectedProfileFingerprint: selection.fingerprint })), { expectedLocalRevision: previewRevision });
+          await callbacks.onApply?.(chosen.map(([charId, selection]) => ({ ...entryOf(charId, selection), familiarProfiles: familiarProfiles.get(charId), expectedProfileFingerprint: selection.fingerprint })), { expectedLocalRevision: previewRevision });
         } catch (cause) { error = userMessage(cause, 'Mise à jour non appliquée : réessayez.'); render(); }
       });
       apply.disabled = !chosen.length || duplicate || duplicateAdoption || unconfirmedReplacement || arbitrationRequired;
