@@ -60,7 +60,7 @@ export function chooseV5RecoveryMethod({ participantName, condition, getFortune,
 }
 
 /** Collect pending inputs, then submit against the same revision; subsequent requests reuse every value. */
-export function openV5EffectInputDialog({ pending, submit, getCurrentRevision, title = 'Résoudre les effets V5' } = {}) {
+export function openV5EffectInputDialog({ pending, submit, getCurrentRevision, getObstinateStatus, getObstinateIdentity, title = 'Résoudre les effets V5' } = {}) {
   if (pending?.status !== 'requires-input' || typeof submit !== 'function') throw new TypeError('Aperçu d’effets V5 requis');
   return new Promise(resolve => {
     const opener=document.activeElement;
@@ -71,14 +71,40 @@ export function openV5EffectInputDialog({ pending, submit, getCurrentRevision, t
     const controls=el('div',null,'row');const confirm=el('button','Confirmer les effets');confirm.type='submit';const cancel=el('button','Annuler','ghost');cancel.type='button';controls.append(confirm,cancel);
     form.append(heading,intro,prior,fields,alert,controls);dialog.append(form);document.body.append(dialog);
     let current=pending,inputs=structuredClone(pending.inputs||{}),busy=false,finished=false,outcome={status:'cancelled'};
-    const drawn=new Set(),labels=new Map();let readers=[];
+    const drawn=new Set(),labels=new Map(),talentOwners=new Map();let readers=[],talentControls=[];
     const keyFor=request=>`${request.participantId}:${request.field}`;
     const showError=message=>{alert.textContent=message;alert.hidden=false;};
     const finish=result=>{if(finished)return;finished=true;outcome=result;dialog.close();};
     const setValue=(request,value)=>{inputs[request.participantId]||={};inputs[request.participantId][request.field]=value;};
     const getValue=request=>inputs[request.participantId]?.[request.field];
+    const identity=id=>getObstinateIdentity?.(id) || id;
+    // Un Test qui disparaît après une étape ne doit pas faire réapparaître un ancien choix plus tard ; on conserve tous les dés.
+    const discardObsoleteChoices=result=>{
+      if(!Array.isArray(result.performedTests))return;
+      const pendingTalent=new Set((result.requests || []).filter(row=>row.testTalentField).map(row=>`${row.participantId}:${row.testTalentField}`));
+      for(const [participantId,values] of Object.entries(inputs))for(const [field,value] of Object.entries(values || {})){
+        const choiceKey=`${participantId}:${field}`,tester=talentOwners.get(choiceKey);
+        if(value!=='strong-minded' || !tester || pendingTalent.has(choiceKey))continue;
+        if(!result.performedTests.some(test=>test.participantId===tester && `${test.testKey}preRollTalent`===field))delete values[field];
+      }
+    };
+    const refreshTalentChoices=()=>{
+      for(const entry of talentControls){
+        const ownKey=keyFor(entry.request),owner=identity(entry.testerId);
+        const reserved=Object.entries(inputs).some(([participantId,values])=>Object.entries(values || {}).some(([field,value])=>{
+          const choiceKey=`${participantId}:${field}`,tester=talentOwners.get(choiceKey) || participantId;
+          const visible=talentControls.some(row=>keyFor(row.request)===choiceKey);
+          const performed=!Array.isArray(current.performedTests) || current.performedTests.some(test=>test.participantId===tester && `${test.testKey}preRollTalent`===field);
+          return (visible || performed) && identity(tester)===owner && field.endsWith(':preRollTalent') && value==='strong-minded' && choiceKey!==ownKey;
+        }));
+        const status=getObstinateStatus(entry.testerId);
+        entry.select.options[1].disabled=reserved || !status?.available;
+        const reason=reserved?'Obstiné est déjà choisi pour un autre Test de cette résolution.':status?.available?'':status?.reason || 'Obstiné indisponible.';
+        entry.reason.textContent=reason;entry.reason.hidden=!reason;
+      }
+    };
     function render() {
-      fields.replaceChildren();prior.replaceChildren();readers=[];alert.hidden=true;
+      fields.replaceChildren();prior.replaceChildren();readers=[];talentControls=[];alert.hidden=true;
       const pendingKeys=new Set((current.requests||[]).map(keyFor));
       const answered=[];
       for(const [participantId,values] of Object.entries(inputs))for(const [field,value]of Object.entries(values||{}))if(!pendingKeys.has(`${participantId}:${field}`)&&labels.has(`${participantId}:${field}`))answered.push(`${labels.get(`${participantId}:${field}`)} : ${Array.isArray(value)?(value.length?value.join(', '):'Aucune cible'):typeof value==='object'?`${value.success?'Réussite':'Échec'}, ${value.sl} DR`:String(value)}`);
@@ -91,6 +117,32 @@ export function openV5EffectInputDialog({ pending, submit, getCurrentRevision, t
         const wrapper=el('div',null,'v5-effect-field');const label=el('label',`${request.label}${request.bonus?` (+${request.bonus} à la gravité)` : ''}`);const id=`v5-effect-input-${++index}`;label.htmlFor=id;wrapper.append(label);
         let kind=BOOLEAN_FIELDS.has(request.field)?'boolean':request.field==='recoveryMoment'?'moment':request.kind;
         const value=getValue(request);
+        // Choix propre à ce Test, présenté avec son d100 : les autres jets du même personnage gardent leur propre choix.
+        let talentControl=null;
+        if(request.testTalentField && typeof getObstinateStatus==='function'){
+          const testerId=request.testTalentParticipantId || request.participantId;
+          const status=getObstinateStatus(testerId);
+          if(status && status.reason!=='Talent Obstiné non acquis.'){
+            const talentRequest={participantId:request.participantId,field:request.testTalentField};
+            talentOwners.set(keyFor(talentRequest),testerId);
+            const talentLabel=el('label',`Obstiné avant le jet — ${request.label}`),talent=el('select');
+            talent.setAttribute('aria-label',talentLabel.textContent);
+            talent.append(new Option('Aucun','none'),new Option('Obstiné : ignorer les modificateurs négatifs','strong-minded'));
+            talent.options[1].disabled=!status.available;
+            talent.value=getValue(talentRequest)==='strong-minded'?'strong-minded':'none';
+            labels.set(keyFor(talentRequest),`${request.participantName||'Combattant'} — Obstiné avant ${request.label}`);
+            talentControl=talent;
+            talentLabel.append(talent);wrapper.append(talentLabel);
+            const reason=el('p','','workspace-muted');wrapper.append(reason);
+            talentControls.push({request:talentRequest,testerId,select:talent,reason});
+            talent.addEventListener('change',()=>{setValue(talentRequest,talent.value);refreshTalentChoices();});
+            readers.push(()=>{
+              const latest=getObstinateStatus(testerId);
+              if(talent.value==='strong-minded' && !latest?.available)throw userError(latest?.reason || 'Obstiné n’est plus disponible.');
+              setValue(talentRequest,talent.value);
+            });
+          }
+        }
         if(kind==='targets'){
           const select=document.createElement('select');select.multiple=true;select.setAttribute('aria-label',request.label);select.append(new Option('Aucune cible traversée','none'));
           for(const [id,name] of request.options || [])select.append(new Option(name,id));
@@ -112,15 +164,18 @@ export function openV5EffectInputDialog({ pending, submit, getCurrentRevision, t
           const input=el('input');input.id=id;input.type='text';input.inputMode='numeric';input.autocomplete='off';input.value=value??'';input.setAttribute('aria-label',request.label);
           const maximum=kind==='d8'?8:kind==='d10'?10:kind==='2d10'?20:kind==='d100'?100:Number.MAX_SAFE_INTEGER;const minimum=kind==='2d10'?2:kind==='d8'||kind==='d10'||kind==='d100'||request.field==='currentRound'?1:0;
           const row=el('div',null,'row');row.append(input);
+          const lockTalent=()=>{if(talentControl)talentControl.disabled=Boolean(input.value.trim()) || drawn.has(keyFor(request));};
+          input.addEventListener('input',lockTalent);lockTalent();
           if(kind==='d10'||kind==='d100') {
             const roll=el('button',`Lancer ${kind}`,'ghost');roll.type='button';roll.setAttribute('aria-label',`Lancer ${kind} : ${request.label}`);roll.disabled=drawn.has(keyFor(request));
-            roll.addEventListener('click',()=>{if(drawn.has(keyFor(request)))return;const rolled=Math.floor(Math.random()*maximum)+1;input.value=String(rolled);setValue(request,rolled);drawn.add(keyFor(request));roll.disabled=true;input.focus();});row.append(roll);
+            roll.addEventListener('click',()=>{if(drawn.has(keyFor(request)))return;const rolled=Math.floor(Math.random()*maximum)+1;input.value=String(rolled);setValue(request,rolled);drawn.add(keyFor(request));lockTalent();roll.disabled=true;input.focus();});row.append(roll);
           }
           wrapper.append(row);
           readers.push(()=>{const text=input.value.trim();const amount=kind==='d100'&&text==='00'?100:Number(text);if(!text||!Number.isSafeInteger(amount)||amount<minimum||amount>maximum)throw userError(`${request.label} : entier ${maximum===Number.MAX_SAFE_INTEGER?(minimum===1?'supérieur ou égal à 1':'positif ou nul'):`de ${minimum} à ${maximum}`} requis.`);setValue(request,amount);});
         }
         group.append(wrapper);
       }
+      refreshTalentChoices();
       confirm.disabled=manual||busy;
     }
     form.addEventListener('submit',async event=>{
@@ -129,7 +184,7 @@ export function openV5EffectInputDialog({ pending, submit, getCurrentRevision, t
       try {
         readers.forEach(read=>read());busy=true;confirm.disabled=true;cancel.disabled=true;
         const result=await submit(structuredClone(inputs),current.baseRevision);
-        if(result?.status==='requires-input'){current={...result,inputs};busy=false;cancel.disabled=false;render();fields.querySelector('input,select')?.focus();return;}
+        if(result?.status==='requires-input'){discardObsoleteChoices(result);current={...result,inputs};busy=false;cancel.disabled=false;render();fields.querySelector('input,select')?.focus();return;}
         if(result?.status==='stale'){busy=false;cancel.disabled=false;showError('La partie a changé. Fermez cette fenêtre et recalculez les effets.');confirm.disabled=true;return;}
         if(result===false||result?.ok===false)throw result?.error||userError('Les effets n’ont pas été enregistrés : réessayez.');
         finish(result);

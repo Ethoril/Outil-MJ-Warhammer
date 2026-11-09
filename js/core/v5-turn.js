@@ -48,7 +48,8 @@ export function previewV5Turn(state, { inputs = {} } = {}) {
   catch (error) { return { status: 'clock-conflict', ready: false, baseRevision: before.localRevision || 0, requests: [], error: error.message }; }
   const phaseRows = name => phasePlan.filter(item => item.phase === name);
   const phaseRow = name => phaseRows(name).at(-1) || null;
-  const requests = [], receipts = [], effectLogs = [];
+  const requests = [], receipts = [], effectLogs = [], performedTests = [];
+  const noteTests = result => performedTests.push(...(result.performedTests || []));
   let participants = (combat.participants || []).map(participant => structuredClone(participant));
   const runPhase = (phase, rows) => {
     const start = rows[0], finish = rows.at(-1);
@@ -106,17 +107,17 @@ export function previewV5Turn(state, { inputs = {} } = {}) {
   };
   runPhase('endOfTurn', phaseRows('endOfTurn'));
   const ending=phaseRow('endOfTurn');
-  const endedSpells=roundSpellEffects(participants,ending.phase,ending.round,inputs,ending.actorId);participants=endedSpells.participants;requests.push(...endedSpells.requests);effectLogs.push(...endedSpells.logs);
+  const endedSpells=roundSpellEffects(participants,ending.phase,ending.round,inputs,ending.actorId);participants=endedSpells.participants;requests.push(...endedSpells.requests);effectLogs.push(...endedSpells.logs);noteTests(endedSpells);
   const expiry=phaseRow('expiry');
-  const closingSpells=roundSpellEffects(participants,expiry.phase,expiry.round,inputs,expiry.actorId);participants=closingSpells.participants;requests.push(...closingSpells.requests);effectLogs.push(...closingSpells.logs);
+  const closingSpells=roundSpellEffects(participants,expiry.phase,expiry.round,inputs,expiry.actorId);participants=closingSpells.participants;requests.push(...closingSpells.requests);effectLogs.push(...closingSpells.logs);noteTests(closingSpells);
   participants = processCombatTurnSpells(participants, transition.round, transition.currentActorId, { actorId: combat.currentActorId, round: combat.round });
   const caster=phaseRow('endOfCasterTurn');
-  const casterSpells=roundSpellEffects(participants,caster.phase,caster.round,inputs,caster.actorId);participants=casterSpells.participants;requests.push(...casterSpells.requests);effectLogs.push(...casterSpells.logs);
+  const casterSpells=roundSpellEffects(participants,caster.phase,caster.round,inputs,caster.actorId);participants=casterSpells.participants;requests.push(...casterSpells.requests);effectLogs.push(...casterSpells.logs);noteTests(casterSpells);
   if (transition.round > combat.round) {
     // Recette G-DIV-2 : les effets de sort de fin de Round (étouffement…) se résolvent avant l'expiration des couches
     // divines de ce même Round ; un Souffle « jusqu'à la fin du Round 6 » protège encore à ce passage.
     const endRound=phaseRows('endOfRound').at(-1),startRound=phaseRow('startOfRound');
-    const roundSpells=row=>{const spells=roundSpellEffects(participants,row.phase,row.round,inputs,row.actorId); participants=spells.participants; requests.push(...spells.requests); effectLogs.push(...spells.logs);};
+    const roundSpells=row=>{const spells=roundSpellEffects(participants,row.phase,row.round,inputs,row.actorId); participants=spells.participants; requests.push(...spells.requests); effectLogs.push(...spells.logs);noteTests(spells);};
     roundSpells(endRound);
     runPhase('endOfRound', phaseRows('endOfRound'));
     roundSpells(startRound);
@@ -127,13 +128,14 @@ export function previewV5Turn(state, { inputs = {} } = {}) {
   catch (error) { return { status: 'clock-conflict', ready: false, baseRevision: before.localRevision || 0, requests: [], error: error.message }; }
   runPhase('startOfTurn', phaseRows('startOfTurn'));
   const starting=phaseRow('startOfTurn');
-  const startSpells=roundSpellEffects(participants,starting.phase,starting.round,inputs,starting.actorId);participants=startSpells.participants;requests.push(...startSpells.requests);effectLogs.push(...startSpells.logs);
+  const startSpells=roundSpellEffects(participants,starting.phase,starting.round,inputs,starting.actorId);participants=startSpells.participants;requests.push(...startSpells.requests);effectLogs.push(...startSpells.logs);noteTests(startSpells);
   participants = shieldAtTurnStart(participants, transition.currentActorId);
   // Sorts à coups récurrents (Lames Azurées) : portés au début du Tour de l'adversaire désigné.
   const recurring = recurringSpellHits(participants, transition.currentActorId, inputs);
   participants = recurring.participants;
   requests.push(...recurring.requests);
   effectLogs.push(...recurring.logs);
+  noteTests(recurring);
   const nextActor = participants.find(participant => participant.id === transition.currentActorId);
   const uniqueRequests = requests.filter((request, index) => requests.findIndex(other => other.participantId === request.participantId && other.field === request.field) === index);
   const clockEvent = {
@@ -169,5 +171,6 @@ export function previewV5Turn(state, { inputs = {} } = {}) {
     stateAfter.log = [...reminders, ...(stateAfter.log || [])].slice(0, 300);
   }
   return { status: uniqueRequests.length ? 'requires-input' : 'ready', ready: !uniqueRequests.length,
-    baseRevision: before.localRevision || 0, inputs: structuredClone(inputs), requests: uniqueRequests, receipts, transition, phases: clockResult.validatedPhases, clockReceipt: clockResult.receipt, state: stateAfter };
+    baseRevision: before.localRevision || 0, inputs: structuredClone(inputs), requests: uniqueRequests, receipts, transition, phases: clockResult.validatedPhases, clockReceipt: clockResult.receipt, state: stateAfter,
+    performedTests: [...new Map(performedTests.map(test => [JSON.stringify([test.participantId,test.testKey]),test])).values()] };
 }

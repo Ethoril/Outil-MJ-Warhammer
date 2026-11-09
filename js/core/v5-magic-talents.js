@@ -95,6 +95,7 @@ export function prepareMagicOptions(actor, kind, options={}, spell = null) {
   const common=resolveV5TestModifiers(actor,{characteristic:test.characteristic,skill:test.skill,skillCharacteristic:test.characteristic,kind:'test',ignoreFatigue,isAction:['pause','interruption'].includes(kind),
     action:{type:'test',attr:test.characteristic,label:test.skill,base:0,qualities:[],extensions:{fiche:{skillId:test.skillId}}},
     ...(dispelKeys?{appliesKey:key=>dispelKeys.has(fold(key).trim())||testKeyApplies(key,test.skill,{carac:test.characteristic})}:{})},{...conditionContext,skillId:test.skillId});
+  if (Array.isArray(options.applicableQuestions) && options.questionAnswerAt) options.applicableQuestions.push(...(common.questions || []).map(row => ({ ...row, participantId: actor.id, answerAt: options.questionAnswerAt })));
   const {conditions,layers}=common.parts;
   const slModifiers=[...layers.magic,...(options.slModifiers || []).map(row=>({...row})),...(Number(options.yenluiPenalty)<0 ? [{id:'yenlui',label:'Yenlui',amount:Number(options.yenluiPenalty)}]:[])], advantageSources=[...(options.advantageSources || [])];
   if (['casting','channelling'].includes(kind) && assistant && options.assistantLinked === true && assistant.id !== actor.id) {

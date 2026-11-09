@@ -386,6 +386,7 @@ export function previewLoreAttribute({
           // Q6 T7 : calcul commun du testeur (États, talents, sorts et prières, séquelles) ; réponses du MJ aux questions d'États dans
           // `attributeRolls[id].corruptionContext`. Une question sans réponse (CA8) ou une restriction (CA14) laisse l'attribut non résolu.
           const secondary = previewV5SecondaryTest(target, { score, roll, test: { characteristic: 'E', skill: skill?.name || 'Résistance', passive: true /* Test subi, MJ 09/11 CA21 */ }, context: options.attributeRolls?.[target.id]?.corruptionContext || {} });
+          if (options.applicableQuestions) options.applicableQuestions.push(...(secondary.questions || []).map(row => ({ ...row, participantId: target.id, answerAt: `targetTests.${target.id}.corruptionContext` })));
           if (!secondary.ready) { conditionNeeds.push({ participantId: target.id, needsInput: secondary.needsInput }); missingRolls.push(target.id); continue; }
           const test = selectV5Test(secondary.preview, secondary.optionId);
           const detail = secondary.rows.length ? { detail: secondaryTestDetail(secondary) } : {};

@@ -5,6 +5,7 @@ import { validatePrayerSLCaps, getPrayerSLModifiers } from '../v5-divine-prayer-
 import { assertDivineWrathConditionsKept } from '../v5-effects.js';
 import { isMiscastConditionLocked } from '../v5-magic-miscasts.js';
 import { rebaseMagicLayers } from '../v5-magic-effects.js';
+import { consumeObstinate } from '../v5-obstinate.js';
 
 export function grappleTurnGateBlock(envelope,input,actor){
  if(input.v5?.context?.isAction===false||input.reactionId||input.v5?.reactionId||input.v5?.context?.reaction===true)return null;
@@ -76,11 +77,12 @@ export function ordinaryActionAfterCombatActionBlock(envelope,actorId){
  const block=combatActionBlock(envelope,actorId);
  return block?{...block,error:'Visée ou Défensive a déjà consommé l’Action de ce Tour.'}:null;
 }
-export function combatMagicActionStore(api,actorId){
+export function combatMagicActionStore(api,actorId,testContext){
  return {...api,executeCommand(type,mutator,options){return api.executeCommand(type,draft=>{
   const block=combatActionBlock(draft,actorId);
   if(block)throw Object.assign(new Error(block.error),{userFacing:true,code:block.code});
   const next=mutator(draft)||draft;
+  consumeObstinate(next, draft.combat?.participants?.find(row=>row.id===actorId), testContext);
   if(next.extensions?.v5?.combatActions?.byActorId?.[actorId]?.kind==='aim')delete next.extensions.v5.combatActions.byActorId[actorId];
   recordV5ActionUsage(next,actorId,`${type}:${next.localRevision}`);
   return next;

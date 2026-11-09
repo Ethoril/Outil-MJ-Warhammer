@@ -67,18 +67,22 @@ export const CONDITION_QUESTIONS = Object.freeze({
  */
 export function conditionTestRules(levels, { kind = 'test', attr = null, context = {}, ignoreAll = false } = {}) {
   const relevant = new Map(['sonne', 'extenue', 'empoisonne'].map(key => [key, levels.get(key) || 0]));
-  const disadvantages = new Map(), unresolved = [], restrictions = [];
+  const disadvantages = new Map(), unresolved = [], restrictions = [], questions = [];
+  const question = label => { if (!questions.includes(label)) questions.push(label); };
   const movement = kind === 'melee' ? true : context.involvesMovement;
   if (levels.has('enchevetre') && !ignoreAll) {
+    if (kind !== 'melee') question(CONDITION_QUESTIONS.movement);
     if (movement == null) unresolved.push(CONDITION_QUESTIONS.movement);
     if (movement) relevant.set('enchevetre', levels.get('enchevetre'));
   }
   if (levels.has('brise') && !ignoreAll) {
     const escape = kind !== 'test' ? false : context.runningOrHiding;
+    if (kind === 'test') question(CONDITION_QUESTIONS.escape);
     if (escape == null) unresolved.push(CONDITION_QUESTIONS.escape);
     if (escape === false) relevant.set('brise', levels.get('brise'));
   }
   if (levels.has('aterre') && !ignoreAll) {
+    if (kind !== 'melee') question(CONDITION_QUESTIONS.movement);
     if (movement == null) unresolved.push(CONDITION_QUESTIONS.movement);
     if (movement) disadvantages.set('aterre', { count: 1, label: 'À terre' });
   }
@@ -87,18 +91,20 @@ export function conditionTestRules(levels, { kind = 'test', attr = null, context
     if (kind === 'ranged') restrictions.push('Un combattant Aveuglé ne peut pas effectuer de tir.');
     if (kind === 'melee' && !ignoreAll) disadvantages.set('aveugle', blinded);
     if (kind === 'test' && context.requiresSight === true) restrictions.push('Ce Test exige la vue : un combattant Aveuglé ne peut pas l’effectuer.');
+    if (kind === 'test' && context.requiresSight !== true && !ignoreAll) question(CONDITION_QUESTIONS.sight);
     if (kind === 'test' && context.reliesOnSight == null && context.requiresSight !== true && !ignoreAll) unresolved.push(CONDITION_QUESTIONS.sight);
     if (kind === 'test' && context.reliesOnSight && context.requiresSight !== true && !ignoreAll) disadvantages.set('aveugle', blinded);
   }
   if (levels.has('souille') && !ignoreAll) {
     const fellowship = kind !== 'test' ? false : attr === 'Soc' ? true : context.usesFellowship;
     const festering = kind === 'test' && attr === 'E' && context.festeringWounds === true;
+    if (kind === 'test' && attr !== 'Soc' && !festering) question(CONDITION_QUESTIONS.fellowship);
     if (fellowship == null && !festering) unresolved.push(CONDITION_QUESTIONS.fellowship);
     if (fellowship) disadvantages.set('souille', { count: 1, label: 'Souillé' });
     // V5 v3 p.185 : Désavantage aussi aux Tests d'Endurance contre les Plaies purulentes (le MJ le déclare).
     else if (festering) disadvantages.set('souille', { count: 1, label: 'Souillé (Plaies purulentes)' });
   }
-  return { relevant, disadvantages, unresolved, restrictions };
+  return { relevant, disadvantages, unresolved, restrictions, questions };
 }
 
 const DISADVANTAGE_IDS = Object.freeze({ aterre: 'prone', aveugle: 'blinded', souille: 'besmirched' });

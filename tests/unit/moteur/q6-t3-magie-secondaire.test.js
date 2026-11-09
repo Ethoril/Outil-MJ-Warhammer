@@ -99,6 +99,27 @@ test('Arcanes impitoyables : Sonné pèse sur le Test de Dextérité du choix de
   assert.equal(stunned.dexterityTest.sl, witness.dexterityTest.sl - 1);
 });
 
+test('Arcanes impitoyables : Obstiné choisi pour la Focalisation annule son malus propre', () => {
+  const target = { id: 'cible', name: 'Cible', caracs: { E: 30 }, equipment: [], armor: {} };
+  const caster = wizard({ states: [STUNNED], talents: [talent('strong-minded')], v5: { channelling: { type: 'high', sl: 6 } } });
+  const facts = { magicItemPresent: true, focalisationRoll: 25, randomMagicItem: 'Anneau', armorDamageLocations: [] };
+  const declared = { armorPoints: 0, enhancedDamage: false, chooseMagicItem: false };
+  const normal = previewArcaneUnforgiving(caster, target, declared, facts);
+  const chosen = previewArcaneUnforgiving(caster, target, declared, { ...facts, focalisationConditionContext: STRONG });
+  assert.equal(normal.ready && chosen.ready, true);
+  assert.equal(chosen.focalisationTest.sl, normal.focalisationTest.sl + 1);
+});
+
+test('Arcanes impitoyables : la question applicable de Focalisation reste visible après réponse', () => {
+  const target = { id: 'cible', name: 'Cible', caracs: { E: 30 }, equipment: [], armor: {} };
+  const caster = wizard({ states: [{ key: 'aterre', name: 'À terre', level: 1 }], v5: { channelling: { type: 'high', sl: 6 } } });
+  const questions = [];
+  const facts = { magicItemPresent: true, focalisationRoll: 25, randomMagicItem: 'Anneau', armorDamageLocations: [], focalisationConditionContext: { involvesMovement: false } };
+  const preview = previewArcaneUnforgiving(caster, target, { armorPoints: 0, enhancedDamage: false, chooseMagicItem: false }, facts, questions);
+  assert.equal(preview.ready, true, preview.error);
+  assert.ok(questions.some(row => row.field === 'involvesMovement' && row.answerAt === 'arcaneTargets.cible.focalisationConditionContext'));
+});
+
 test('pause de Focalisation : un Désavantage commun impose l’option inversée sans erreur', () => {
   const hurt = previewChannelling(wizard({ v5: FM_FRACTURE }), { mode: 'pause', roll: 12 });
   assert.equal(hurt.test.roll, 21, 'le Désavantage inverse 12 en 21');

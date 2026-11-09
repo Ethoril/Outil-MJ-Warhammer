@@ -5,6 +5,7 @@ import {processCombatTurnSpells,shieldAtTurnStart,previewSpellInteraction,remove
 import {previewMagicMeditation,activeMagicTalent,magicTalentRank,effectiveSkillScore,baseCharacteristicScore} from './v5-magic-talents.js';
 import { previewV5Test, selectV5Test, normalizeV5Roll } from './v5-roll.js';
 import { previewV5SecondaryTest, secondaryTestDetail } from './v5-test-modifiers.js';
+import { obstinateStatus, findObstinateActor, consumeObstinate } from './v5-obstinate.js';
 import {
   applyCorruptionAbsolution as applyCorruptionAbsolutionPure,
   calculateCorruptionThreshold,
@@ -1463,6 +1464,7 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
         draft.extensions = { ...(draft.extensions || {}), v5: { ...(draft.extensions?.v5 || {}), actionLedger: applied.state.v5ActionLedger } };
         receipt.talentUsageReceipts = applied.talentUsageReceipts;
       }
+      for (const test of receipt.secondaryObstinateTests || []) consumeObstinate(draft, findObstinateActor(draft, test.participantId), test);
       if (type === 'recover-condition-v5' && options.method === 'fortune' && receipt.removed.length) {
         const current = getV5Fortune(draft, participant);
         if (current.balance === null) throw Object.assign(new Error('Initialisez le compteur de Chance du personnage.'), { code: 'V5_FORTUNE_UNKNOWN', userFacing: true });
@@ -1482,7 +1484,7 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
       .catch(error => {
         if (error.code === 'V5_EFFECT_DUPLICATE') return { status: 'duplicate', ok: true };
         if (error.code === 'V5_EFFECT_STALE') return { status: 'stale', requiresPreview: true };
-        if (error.code === 'V5_EFFECT_INPUT') return { ...receipt, status: 'requires-input', baseRevision: expected,
+        if (error.code === 'V5_EFFECT_INPUT') return { ...receipt, status: 'requires-input', baseRevision: expected, ...(type === 'acquire-conditions-v5' ? { performedTests: receipt.secondaryObstinateTests || [] } : {}),
           requests: receipt.needsInput.map(need => ({ ...need, participantId, participantName: need.participantName || combat.participants.get(participantId)?.name,
             kind: need.kind || (need.field === 'recoveryTest' ? 'test' : /^mountedRideRoll/.test(need.field) ? 'd100' : ['transition','recoveryMethod'].includes(need.field) ? 'manual' : ['minuteElapsed','restSatisfied','engaged','fullRoundHidden','causeEnded','medicalAttention','surgery','outOfCombat','overrideRecovery'].includes(need.field) ? 'boolean' : 'integer') })) };
         throw error;
@@ -2052,6 +2054,7 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
         const acquiredStates = (receipt.participant.states || []).filter(row => row.id && !beforeStateIds.has(row.id));
         const normalizedKeys = new Set(acquiredStates.map(row => String(row.key || row.name || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '')));
         const mountedFallReceipts = [], extraDismounts = new Map();
+        const secondaryObstinateTests = [];
         const checkSkittish = subject => psychologyTraits(subject).some(row => row.key === 'skittish');
         const riders = (draft.combat?.participants || []).filter(row => row.extensions?.v5?.mounted === true && row.extensions.v5.mountId === id);
         const riderEvent = receipt.participant.extensions?.v5?.mounted === true
@@ -2071,11 +2074,12 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
           if (plan.requiredTest) {
             const skill = (rider.skills || []).find(row => row?.id === V5_RIDE_SKILL_ID && row.status !== 'unresolved');
             const suffix = rider.id === id ? '' : ':' + rider.id;
+            const conditionField = name => `mountedRideCondition${suffix}:${name}`;
             const manualScore = suffix ? context[`mountedRideScore${suffix}`] : context.mountedRideScore;
             const rideScore = Number.isSafeInteger(skill?.total) ? skill.total : manualScore !== null && manualScore !== undefined && manualScore !== '' && Number.isSafeInteger(Number(manualScore)) ? Number(manualScore) : null;
             const rideRoll = Number(suffix ? context[`mountedRideRoll${suffix}`] : context.mountedRideRoll);
             if (rideScore === null) receipt.needsInput.push({ field: `mountedRideScore${suffix}`, kind: 'integer', label: `${rider.name || rider.id} : score de Chevaucher` });
-            if (!Number.isInteger(rideRoll) || rideRoll < 1 || rideRoll > 100) receipt.needsInput.push({ field: `mountedRideRoll${suffix}`, kind: 'd100', label: `${rider.name || rider.id} : Test de Chevaucher d100` });
+            if (!Number.isInteger(rideRoll) || rideRoll < 1 || rideRoll > 100) receipt.needsInput.push({ field: `mountedRideRoll${suffix}`, kind: 'd100', label: `${rider.name || rider.id} : Test de Chevaucher d100`, testTalentField: conditionField('preRollTalent'), testTalentParticipantId: rider.id });
             if (rideScore === null || !Number.isInteger(rideRoll) || rideRoll < 1 || rideRoll > 100) {
               receipt.ready = false;
               continue;
@@ -2083,7 +2087,6 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
             // Q6 · T4 : le calcul de resolution.js (calcul commun), pas un second. Le cavalier est testé avec ses États d'avant
             // l'acquisition, comme dans resolution.js, plus le Sonné qui déclenche le Test (MJ 09/11 CA26) ; réponses d'États dans
             // `mountedRideCondition<suffixe>:<champ>`.
-            const conditionField = name => `mountedRideCondition${suffix}:${name}`;
             const tester = rider.id === id ? participant : rider;
             const ride = previewMountedSecondaryTest(event === 'rider-stunned' ? withTriggeringStun(tester, acquiredStates) : tester, { score: rideScore, roll: rideRoll, stat: 'Ag', skill: 'Chevaucher',
               slModifiers: [{ id: 'mounted:fall', label: 'Désarçonnement', amount: plan.requiredTest.modifier }],
@@ -2094,6 +2097,7 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
               continue;
             }
             plan.test = { ...ride.test, detail: ride.detail };
+            secondaryObstinateTests.push({ participantId: rider.id, testKey: conditionField(''), ...spellTestContext(context, conditionField) });
             if (plan.dismount === 'on-failed-test') plan.dismount = !plan.test.success;
           }
           mountedFallReceipts.push({ participantId: rider.id, event, ...plan });
@@ -2111,6 +2115,8 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
         }
         if(resolute.exceptions.length&&participant.extensions?.v5?.hasMomentum===true)receipt.participant={...receipt.participant,extensions:{...receipt.participant.extensions,v5:{...receipt.participant.extensions?.v5,hasMomentum:true}}};
         receipt.resoluteTest=resolute.test;
+        if (resolute.test) secondaryObstinateTests.push({ participantId: id, ...(context.resoluteConditionContext || {}) });
+        if (secondaryObstinateTests.length) receipt.secondaryObstinateTests = secondaryObstinateTests;
         if(exit.unresolved.length){
           receipt.ready=false;
           receipt.needsInput.push(...exit.unresolved.map(label=>({field:'frenzyExit',label})));
@@ -2352,6 +2358,7 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
         const sessionId = draft.extensions?.v5?.talentSessionId || null;
         const result = corruptionExposurePreview(subject, input, baseRevision, sessionId);
         if (result.status !== 'ready') throw Object.assign(new Error('Réponse du MJ requise avant d’appliquer le Test de Corruption.'), { code: 'CORRUPTION_INPUT', userFacing: true });
+        consumeObstinate(draft, subject, input.conditionContext);
         const exposure = { id: exposureId, influence: result.test.influence, kind: result.test.exposure,
           sessionId, declaredSources: String(input.declaredSources || '').trim(),
           skillId: result.test.skillId, roll: result.test.roll, success: result.test.success, sl: result.test.sl,
@@ -2396,6 +2403,7 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
         const result = corruptionThresholdPreview(subject, input, baseRevision);
         if (result.status === 'blocked') throw Object.assign(new Error((result.unresolved || []).join(' ') || 'Test de Corruption interdit.'), { code: 'CORRUPTION_INPUT', userFacing: true });
         if (result.status === 'needs-input') throw Object.assign(new Error('Choix MJ requis avant d’appliquer le Test de Corruption.'), { code: 'CORRUPTION_INPUT', userFacing: true });
+        if (result.status !== 'not-required') consumeObstinate(draft, subject, input.conditionContext);
         const oldV5 = subject.extensions?.v5 || {};
         let pendingMutation = null;
         updateCorruptionCopies(draft, id, row => {
@@ -3028,6 +3036,12 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
         if(scenePreview&&!(draft.encounters||[]).some(item=>item.id===scenePreview.scene.encounterId))throw Object.assign(new Error('La rencontre a changé depuis la préparation.'),{code:'COMBAT_INIT_STALE'});
         plan=prepareCombatInitiative(sourceParticipants,captured.request||{});
         if(!plan.ready)throw Object.assign(new Error('La préparation du combat est incomplète.'),{code:'COMBAT_INIT_INPUT',needsInput:plan.needsInput});
+        const quotaState = sourceScene ? { ...draft, activeScene: { ...sourceScene, participants: sourceParticipants } } : draft;
+        for (const fall of verifiedMounted.mountedFall || []) if (fall.test) {
+          const rider = sourceParticipants.find(row => row.id === fall.participantId);
+          consumeObstinate(quotaState, rider, captured.request?.mountedRideTests?.[fall.participantId]?.conditionContext);
+        }
+        draft.extensions = quotaState.extensions;
         const planned=new Map(plan.participants.map(row=>[row.id,row]));
         let nextParticipants=sourceParticipants.map(row=>{
           const next=cloneValue(planned.get(row.id)||row),meta=next.extensions?.v5?.combatInitiative;
@@ -4354,7 +4368,8 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
           ...v5StoreActionResult(draft, result),
           log: [resolutionLogEntry(preview, result.resolution), ...(draft.log || [])].slice(0, 300)
         },resolvedActorId);
-        const exposure = preview.supplementalEquipment?.exposure;
+        for (const test of preview.secondaryObstinateTests || []) consumeObstinate(next, findObstinateActor(next, test.participantId), test);
+        const exposure = preview.fateAction?.cancelled || preview.fateSurvival ? null : preview.supplementalEquipment?.exposure;
         const exposureTargetId = exposure?.participantId || preview.targetId || preview.input?.target?.id || preview.input?.targetId;
         if (exposure && exposureTargetId) updateCorruptionCopies(next, exposureTargetId, row => {
           const extensions = row.extensions || {}, oldV5 = extensions.v5 || {};
@@ -4464,6 +4479,7 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
           ...v5StoreActionResult(draft, result),
           log: [resolutionLogEntry(simulation.preview, result.resolution), ...(draft.log || [])].slice(0, 300)
         },actorId);
+        for (const test of simulation.preview.secondaryObstinateTests || []) consumeObstinate(next, findObstinateActor(next, test.participantId), test);
         if(isV5ActionUse(simulation.preview,input)&&!commitReaction)recordV5ActionUsage(next,actorId,simulation.preview.resolutionId);
         if(isBrokenEscapeActor(commitActor))recordV5EscapeVisibility(next,actorId,input.brokenEscapeFacts?.visibleToAnyEnemy,simulation.preview.resolutionId);
         engageAfterMeleeAttack(next,simulation.preview);
@@ -4491,7 +4507,7 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
     },
     applyChannelling(preview, options = {}) {
       const actorId=options.actorId||preview.input?.actorId||combat.currentActorId;
-      return applyChannelling(combatMagicActionStore(api,actorId), preview, {...options,actorId,turnKey:String(combat.round || 1)+':'+String(stateExtensions?.v5?.turnIndex || 1)});
+      return applyChannelling(combatMagicActionStore(api,actorId,preview.input?.conditionContext), preview, {...options,actorId,turnKey:String(combat.round || 1)+':'+String(stateExtensions?.v5?.turnIndex || 1)});
     },
     previewCasting(spell, input = {}) {
       const actorId = input.actorId || input.actor?.id || combat.currentActorId;
@@ -4502,7 +4518,7 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
     },
     applyCasting(preview, options = {}) {
       const actorId=options.actorId||preview.input?.actorId||combat.currentActorId;
-      return applyCasting(combatMagicActionStore(api,actorId), preview, {...options,actorId});
+      return applyCasting(combatMagicActionStore(api,actorId,preview.input?.conditionContext), preview, {...options,actorId});
     },
     previewMiscast(input = {}) {
       const actorId = input.actorId || input.actor?.id || combat.currentActorId;
@@ -4544,6 +4560,7 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
         const reroll=previewCadaiCorruptionReroll(actor,{spell,castExecutionId:input.castExecutionId,accessible:input.accessible,firstRoll:input.firstRoll,reroll:input.reroll,slModifier:Number(input.slModifier || 0),alreadyRerolled:executions[e].rerolledCorruption.includes(corruptionId),conditionContext:input.conditionContext||{}});
         // T10 : les questions d'États ou de séquelle du Test de Calme repartent avec l'erreur, pour que le panneau les pose.
         if(!reroll.ready)throw Object.assign(new Error(reroll.error),{userFacing:true,...(reroll.needsInput?{needsInput:reroll.needsInput}:{})});
+        consumeObstinate(draft, actor, input.conditionContext);
         const paid=consumeCadaiRune(actor,{purpose:'corruption'});
         if(!paid.success)throw new Error(paid.reason);
         participants[i]=paid.participant;
@@ -4588,6 +4605,7 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
         const preview=previewMagicMeditation(participants[index],input);
         // T10 : questions d'États ou de séquelle du Test de Prière (`input.conditionContext`) renvoyées au panneau.
         if(!preview.ready)throw Object.assign(new Error(preview.error),{userFacing:true,...(preview.needsInput?{needsInput:preview.needsInput}:{})});
+        consumeObstinate(draft, participants[index], input.conditionContext);
         if(preview.success){
           if(preview.yenlui){
             participants[index].extensions ??={};
@@ -4628,6 +4646,7 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
           // Q6 T5 : Test de Savoir (Magie) par le calcul commun ; Test actif d'un Round (Inconscient, Surpris : CA14).
           const secondary=previewV5SecondaryTest(participants[index],{score,roll:normalizeV5Roll(input.roll),kind:'test',test:{characteristic:'Int',skill:skill?.name||skill?.nom||'Savoir (Magie)',isAction:true},context:input.conditionContext||{}});
           if(!secondary.ready)throw Object.assign(new Error(secondary.needsInput.map(row=>row.label).join(' ')),{userFacing:true,needsInput:secondary.needsInput});
+          consumeObstinate(draft, participants[index], input.conditionContext);
           const test=selectV5Test(secondary.preview,secondary.optionId);
           if(test.success)participants[index] = deployCadaiRune(participants[index], {count:1});
           draft.log=[{id:uid(),ts:Date.now(),kind:'magic',text:'Déploiement Cadai (1 Round) : '+(test.success?'réussi':'échec')+' ; jet '+input.roll+' ; '+test.sl+' DR'},...(draft.log || [])];
@@ -4665,7 +4684,7 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
       return previewDispelCasting(dispeller, castingPreview, { turnKey: `${round}:${stateExtensions?.v5?.turnIndex ?? 1}`, round, ...input });
     },
     applyDispelCasting(preview, options = {}) {
-      return applyDispelCasting(combatMagicActionStore(api,preview.dispellerId), preview, options);
+      return applyDispelCasting(combatMagicActionStore(api,preview.dispellerId,preview.input?.conditionContext), preview, options);
     },
     previewDispelPersistent(persistentEffect, input = {}) {
       const dispellerId = input.dispellerId || input.actorId || combat.currentActorId;
@@ -4676,7 +4695,7 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
     },
     applyDispelPersistent(preview, options = {}) {
       if(preview.baseRevision!==undefined && preview.baseRevision!==localRevision)throw new Error('État modifié : recalcul requis.');
-      return applyDispelPersistent(combatMagicActionStore(api,preview.dispellerId), preview, options);
+      return applyDispelPersistent(combatMagicActionStore(api,preview.dispellerId,preview.input?.conditionContext), preview, options);
     },
     applySpellEffects(participantId, effectDefinition, options = {}) {
       const targetId = participantId || combat.currentActorId;
@@ -5238,23 +5257,31 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
         }
       }
       const needsInput = [];
+      const mountedCounts = new Map();
+      for (const fall of mountedFall) if (fall.requiredTest) mountedCounts.set(fall.participantId, (mountedCounts.get(fall.participantId) || 0) + 1);
       for (const fall of mountedFall) {
         if (!fall.requiredTest) continue;
         const rider = roster.find(row => row.id === fall.participantId), skill = rider?.skills?.find(row => row?.id === V5_RIDE_SKILL_ID && row.status !== 'unresolved');
-        const answer = input.mountedRideTests?.[fall.participantId] || {};
+        const multiple = mountedCounts.get(fall.participantId) > 1;
+        const personAnswers = input.mountedRideTests?.[fall.participantId] || {};
+        const answer = multiple ? personAnswers[fall.event] || {} : personAnswers[fall.event] || personAnswers;
+        const key = `${fall.participantId}${multiple ? ':' + fall.event : ''}`;
+        const path = `mountedRideTests.${fall.participantId}${multiple ? '.' + fall.event : ''}.conditionContext`;
         const score = Number.isSafeInteger(skill?.total) ? skill.total : answer.score !== '' && answer.score != null && Number.isSafeInteger(Number(answer.score)) ? Number(answer.score) : null;
         const roll = Number(answer.roll);
-        if (score === null) needsInput.push({ field: `mountedRideScore:${fall.participantId}`, kind: 'integer', min: 0, max: 100, label: `${rider?.name || fall.participantId} : score de Chevaucher` });
-        if (!Number.isInteger(roll) || roll < 1 || roll > 100) needsInput.push({ field: `mountedRideRoll:${fall.participantId}`, kind: 'd100', min: 1, max: 100, label: `${rider?.name || fall.participantId} : d100 de Chevaucher (${fall.event}, ${fall.requiredTest.modifier >= 0 ? '+' : ''}${fall.requiredTest.modifier} DR)` });
+        if (score === null) needsInput.push({ field: `mountedRideScore:${key}`, kind: 'integer', min: 0, max: 100, label: `${rider?.name || fall.participantId} : score de Chevaucher` });
+        if (!Number.isInteger(roll) || roll < 1 || roll > 100) needsInput.push({ field: `mountedRideRoll:${key}`, kind: 'd100', min: 1, max: 100, label: `${rider?.name || fall.participantId} : d100 de Chevaucher (${fall.event}, ${fall.requiredTest.modifier >= 0 ? '+' : ''}${fall.requiredTest.modifier} DR)` });
         // Q6 · T4 : Désarçonnement par le calcul commun (resolution.js) ; réponses d'États dans mountedRideTests.<id>.conditionContext.
         // MJ 09/11 CA26 : le Sonné qui déclenche le Test compte dans ce Test.
         const ride = score !== null && Number.isInteger(roll) && roll >= 1 && roll <= 100 ? previewMountedSecondaryTest(withTriggeringStun(rider, fall.triggerStates), { score, roll, stat: 'Ag', skill: 'Chevaucher',
           slModifiers: [{ id: 'mounted:fall', label: 'Désarçonnement', amount: fall.requiredTest.modifier }], participants: roster, context: answer.conditionContext,
-          answerAt: `mountedRideTests.${fall.participantId}.conditionContext` }) : null;
-        if (ride && !ride.ready) needsInput.push(...ride.needsInput.map(row => ({ ...row, field: row.field ? `rideCondition:${fall.participantId}:${row.field}` : `rideBlocked:${fall.participantId}`,
+          answerAt: path }) : null;
+        if (ride?.questions?.length) preview.applicableQuestions = [...(preview.applicableQuestions || []), ...ride.questions];
+        if (ride && !ride.ready) needsInput.push(...ride.needsInput.map(row => ({ ...row, field: row.field ? `rideCondition:${key}:${row.field}` : `rideBlocked:${key}`,
           kind: row.field ? 'boolean' : 'manual', label: `${rider?.name || fall.participantId} : Chevaucher : ${row.label}` })));
         else if (ride) {
           fall.test = { ...ride.test, detail: ride.detail };
+          fall.conditionContext = cloneValue(answer.conditionContext || {});
           fall.dismount = !fall.test.success;
         }
       }
@@ -5292,6 +5319,15 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
         }
         execResult = applySpellExecutionInternal(draft, contract, input);
         if (execResult?.ready !== false) {
+          if (mountedPreflight.castingPreview?.roll != null) consumeObstinate(draft, actor, input.conditionContext || input.options?.conditionContext);
+          if (mountedPreflight.dispelReaction) {
+            const reaction = mountedPreflight.dispelReaction;
+            consumeObstinate(draft, findObstinateActor(draft, reaction.dispellerId), input.dispelReaction?.conditionContext || input.options?.dispelReaction?.conditionContext);
+          }
+          for (const test of mountedPreflight.performedTests || []) consumeObstinate(draft, findObstinateActor(draft, test.participantId), test);
+          for (const fall of input.preview?.mountedFall || []) if (fall.test) {
+            consumeObstinate(draft, findObstinateActor(draft, fall.participantId), fall.conditionContext);
+          }
           const dismounted = new Set((input.preview?.mountedFall || []).filter(row => row.dismount === true).map(row => row.participantId));
           if (dismounted.size) draft.combat.participants = draft.combat.participants.map(row => dismounted.has(row.id) ? clearMountedRelation(row) : row);
           for (const fall of input.preview?.mountedFall || []) {
@@ -5332,6 +5368,7 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
         if(draft.localRevision!==expected) throw new Error('Le combat a changé.');
         const result=previewSpellInteraction(draft,input);
         if(!result.ready) throw new Error(result.error);
+        for(const test of result.performedTests || []) consumeObstinate(result.state, findObstinateActor(result.state,test.participantId), test);
         return result.state;
       });
     },
@@ -5991,6 +6028,16 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
   };
 
   api.ready = readyPromise;
+  api.getObstinateStatus = (actorId, stagedActor = null, stagedScene = null) => {
+    const state = currentEnvelope();
+    const sceneActor = stagedScene?.participants?.find(row => row.id === actorId);
+    const context = sceneActor ? { ...state, activeScene: stagedScene } : state;
+    return obstinateStatus(context, sceneActor || findObstinateActor(state, actorId) || (stagedActor?.id === actorId ? stagedActor : null));
+  };
+  api.getObstinateIdentity = actorId => {
+    const state = currentEnvelope(), actor = findObstinateActor(state, actorId);
+    return actor ? (v5ResourceIdentity(state, actor) || `instance:${actor.id}`) : null;
+  };
 
   startSyncListener();
 

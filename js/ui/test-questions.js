@@ -41,7 +41,7 @@ export function collectTestQuestions(value, { defaultAt = null } = {}) {
         if (!isRecord(row) || typeof row.label !== 'string') continue;
         const answerAt = typeof row.answerAt === 'string' ? row.answerAt : defaultAt;
         // Chute d'un sort, embuscade : le Store préfixe le champ (`rideCondition:<id>:<champ>`, `rideBlocked:<id>` pour un motif).
-        const field = /^rideBlocked:/.test(row.field || '') ? null : /^rideCondition:[^:]+:(.+)$/.exec(row.field || '')?.[1] ?? row.field;
+        const field = /^rideBlocked:/.test(row.field || '') ? null : /^rideCondition:[^:]+:(?:[^:]+:)?(involvesMovement|runningOrHiding|reliesOnSight|requiresSight|usesFellowship|conditionPenaltyMode|sequela.+)$/.exec(row.field || '')?.[1] ?? row.field;
         if (answerAt === null || (field && !isQuestionField(field))) continue;
         const id = `${answerAt}|${field || row.label}`;
         if (!seen.has(id)) { seen.add(id); rows.push({ ...row, field: field || null, answerAt }); }
@@ -118,17 +118,20 @@ export function renderTestQuestions(rows = [], { root = {}, onChange, nameOf = (
 
 /**
  * Obstiné (`talent-strong-minded`, V5 p. 127) : choix avant le jet (`preRollTalent: 'strong-minded'`), proposé quand le testeur a le
- * talent. `onChange('strong-minded' | 'none')`. Le compte « une fois par séance » n'est tenu que par le panneau de combat.
+ * talent. `onChange('strong-minded' | 'none')` ; `status` donne la disponibilité dans la séance.
  */
-export function renderObstinateChoice(actor, value, onChange, { focusKey = 'pre-roll-talent', title = 'Talent à choisir avant le jet' } = {}) {
+export function renderObstinateChoice(actor, value, onChange, { focusKey = 'pre-roll-talent', title = 'Talent à choisir avant le jet', status = null } = {}) {
   if (!actor || !hasV5Talent(actor, 'talent-strong-minded')) return null;
   const label = node('label', 'workspace-type workspace-obstinate', title), select = document.createElement('select');
   select.setAttribute('aria-label', title);
   select.dataset.focusKey = focusKey;
-  select.append(new Option('Aucun', 'none'), new Option('Obstiné : ignorer les modificateurs négatifs', 'strong-minded'));
+  const option = new Option('Obstiné : ignorer les modificateurs négatifs', 'strong-minded');
+  option.disabled = status?.available === false;
+  select.append(new Option('Aucun', 'none'), option);
   select.value = value === 'strong-minded' ? 'strong-minded' : 'none';
   select.addEventListener('change', () => onChange(select.value));
   label.append(select);
+  if (option.disabled && status.reason) label.append(node('span', 'workspace-muted', status.reason));
   return label;
 }
 

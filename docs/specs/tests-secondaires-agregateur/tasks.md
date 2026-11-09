@@ -55,4 +55,6 @@ Chaque tâche est un brief autonome pour une session (Opus : règles et store). 
 
 - [ ] **T9 · Fusion.** Suite complète une fois, parcours navigateur des zones touchées sous `timeout 120`, `verifier` sur toute la spec, CA11 (sauvegarde ancienne rechargée). Release proposée au MJ.
 
+  Avancement du 09/11 après passation : CA35 et CA36 sont en cours de raccordement et de contre-vérification. Les essais de fin de Tour, du vortex et des scènes préparées ont révélé des cas supplémentaires ; ne pas considérer T9 comme achevée tant que la revue complète, la couverture CA1 et les écarts de présentation CA5 ne sont pas clos. En convalescence, une avance regroupant plusieurs Tests du même patient avec Obstiné est refusée atomiquement : avancer jour par jour permet de ne choisir qu'un Test.
+
 Ordre suggéré : T0 → (T1 ∥ T2 ∥ T6) → (T3 ∥ T4 ∥ T7 ∥ T8) → T5 → T9. T3 et T4 touchent tous deux `store.js` : si on les lance ensemble, T3 laisse la commande `v5-cadai-deploy` à T5.

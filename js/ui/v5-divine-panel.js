@@ -459,7 +459,7 @@ export function createDivinePanel({Store,refresh,onRollChange=()=>{}}){
   content.append(accessBox);  const form=node('div','workspace-resolution-row');content.append(form);
   const brokenVisibility=renderBrokenEscapeVisibilityControl({actor,value:state.brokenEscapeVisibility,onChange:value=>{state.brokenEscapeVisibility=value;state.preview=null;state.error='';refresh();},key:'prayer'});if(brokenVisibility)form.append(brokenVisibility);
   // T10 : Obstiné (V5 p. 127) choisi avant le jet de Prière ; il annule aussi les malus propres à la Prière (Courroux, Relique négative, CA18).
-  const obstinate=renderObstinateChoice(actor,state.preRollTalent,value=>change('preRollTalent',value),{focusKey:'prayer-pre-roll-talent'});if(obstinate)form.append(obstinate);
+  const obstinate=renderObstinateChoice(actor,state.preRollTalent,value=>change('preRollTalent',value),{focusKey:'prayer-pre-roll-talent',status:Store.getObstinateStatus?.(actor.id)});if(obstinate)form.append(obstinate);
   select(form,'Le personnage peut prononcer la prière',state.canSpeak===null?'':String(state.canSpeak),[['','À préciser'],['true','Oui'],['false','Non']],value=>change('canSpeak',value===''?null:value==='true'),'voice');
   const prayerRoll=field(form,'Jet de Prière (d100)','roll',{min:1,max:100});
   const rollPrayer=node('button','workspace-secondary','Lancer');rollPrayer.type='button';rollPrayer.setAttribute('aria-label','Lancer le jet de Prière');

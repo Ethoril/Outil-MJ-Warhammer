@@ -176,6 +176,9 @@ export function resolveV5TestModifiers(actor, test = {}, context = {}) {
   const unresolved = [...rules.unresolved, ...mixedUnresolved, ...talents.unresolved, ...layers.unresolved, ...(test.sequela ? sequelae.unresolved : sequelaNeeds.map(row => row.label))];
   const needsInput = [...[...new Set([...rules.unresolved, ...mixedUnresolved])].map(label => ({ field: QUESTION_FIELDS.get(label) ?? null, label })),
     ...sequelaNeeds].filter((row, index, list) => !row.field || list.findIndex(other => other.field === row.field) === index);
+  // Questions réellement applicables à ce Test, y compris celles déjà répondues. Elles ne bloquent pas le calcul.
+  const questions = [...[...new Set([...(rules.questions || []), ...(mixed ? [MIXED_CONDITION_QUESTION] : [])])].map(label => ({ field: QUESTION_FIELDS.get(label), label })),
+    ...(test.sequela ? [] : sequelae.applicableQuestions)].filter((row, index, list) => row.field && list.findIndex(other => other.field === row.field) === index);
   const tag = (list, source, rowKind) => list.map(row => ({ ...row, source, kind: rowKind }));
   const rows = [...tag(layers.magic, 'Sort ou prière', 'modifier'), ...tag(adverse, 'Effet adverse', 'modifier'), ...tag(penaltyRows, 'État', 'modifier'),
     ...tag(layers.talents, 'Talent', 'modifier'), ...tag(disadvantageRows, 'État', 'disadvantage'), ...tag(talents.advantageSources, 'Talent', 'advantage'),
@@ -183,7 +186,7 @@ export function resolveV5TestModifiers(actor, test = {}, context = {}) {
     ...tag(sequelaRows.advantages, 'Séquelle', 'advantage'), ...tag(sequelaRows.disadvantages, 'Séquelle', 'disadvantage'), ...droppedRows.map(row => ({ ...row, kind: 'modifier', dropped: true })),
     // T10 : pénalité d'État annulée par Obstiné, gardée au détail, barrée (« malus ramené à 0 et visible »), comme au combat (Q9).
     ...(talents.ignoreNegative && penalty > 0 ? [{ id: 'conditions', label: 'Plus forte pénalité d’État', amount: -penalty, source: 'État', kind: 'modifier', dropped: true, rule: 'Obstiné' }] : [])];
-  return { slModifiers, advantageSources, disadvantageSources, rows, needsInput, unresolved,
+  return { slModifiers, advantageSources, disadvantageSources, rows, needsInput, questions, unresolved,
     restrictions: [...actorRestrictions, ...rules.restrictions, ...sequelae.restrictions], scoreDelta: sequelae.scoreDelta,
     // CA13, CA14 : restrictions qui interdisent le Test lui-même (Inconscient, Surpris sur une Action, séquelle).
     blockingRestrictions: [...actorRestrictions, ...sequelae.restrictions],
@@ -219,16 +222,22 @@ export function previewV5SecondaryTest(actor, { score, roll, kind = 'test', test
   const common = resolveV5TestModifiers(actor, { kind, ...test }, context || {});
   // CA14 : une restriction (Inconscient, Surpris sur un Test d'action, séquelle qui l'interdit) bloque le Test, avec son motif.
   if (common.restrictions.length) return { ready: false, blocked: true, restrictions: common.restrictions,
-    needsInput: common.restrictions.map(label => ({ field: null, label, restriction: true })), unresolved: [...common.restrictions, ...common.unresolved], rows: common.rows };
-  if (common.needsInput.length) return { ready: false, needsInput: common.needsInput, unresolved: common.unresolved, rows: common.rows };
+    needsInput: common.restrictions.map(label => ({ field: null, label, restriction: true })), questions: common.questions, unresolved: [...common.restrictions, ...common.unresolved], rows: common.rows };
+  if (common.needsInput.length) return { ready: false, needsInput: common.needsInput, questions: common.questions, unresolved: common.unresolved, rows: common.rows };
   const lists = { slModifiers: [...slModifiers, ...common.slModifiers].map(row => ({ ...row })),
     advantageSources: [...advantageSources, ...common.advantageSources], disadvantageSources: [...disadvantageSources, ...common.disadvantageSources] };
   finalizeV5TestModifiers(actor, common, lists);
+  const rows = [...common.rows.map(row => {
+    if (!row.dropped && row.kind === 'modifier' && row.amount < 0 && row.durable !== true && common.ignoreNegative) return { ...row, dropped: true, rule: 'Obstiné' };
+    const remaining = row.kind === 'advantage' ? lists.advantageSources : row.kind === 'disadvantage' ? lists.disadvantageSources : null;
+    if (!row.dropped && remaining && !remaining.some(item => item.id === row.id)) return { ...row, dropped: true, rule: row.kind === 'disadvantage' && common.ignoreNegative ? 'Obstiné' : 'Distrait' };
+    return row;
+  }), ...slModifiers.filter(row => common.ignoreNegative && row.amount < 0 && row.durable !== true).map(row => ({ ...row, source: 'Test', kind: 'modifier', dropped: true, rule: 'Obstiné' }))];
   const preview = previewV5Test({ score: Math.max(0, score + (common.scoreDelta || 0)), roll, kind, ...lists });
   const [first, ...others] = preview.options;
   const option = others.reduce((best, row) => { const [a, b] = [optionRank(row.result), optionRank(best.result)]; return a[0] > b[0] || a[0] === b[0] && a[1] > b[1] ? row : best; }, first);
   return { ready: true, result: option.result, optionId: option.id, preview, modifiers: lists.slModifiers, advantageSources: lists.advantageSources,
-    disadvantageSources: lists.disadvantageSources, rows: common.rows, needsInput: [], unresolved: common.unresolved, restrictions: common.restrictions };
+    disadvantageSources: lists.disadvantageSources, rows, needsInput: [], questions: common.questions, unresolved: common.unresolved, restrictions: common.restrictions };
 }
 
 /** Détail lisible d'un Test secondaire (CA5) : chaque modificateur avec son montant, puis Avantages et Désavantages. */

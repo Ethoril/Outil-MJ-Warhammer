@@ -128,7 +128,7 @@ export function renderActionBar(container, { actor, rows, commands }) {
  * Formulaire de Désengagement (p. 163) : compétence, deux d100, aperçu recalculé à chaque saisie, puis Appliquer.
  * `state` : { skill, actorRoll, opponentRoll, force } gardé par l'appelant ; `onChange(patch)`, `onApply()`, `onClose()`.
  */
-export function renderDisengageForm(container, { actor, plan, state, active, onChange, onApply, onClose }) {
+export function renderDisengageForm(container, { actor, plan, state, active, onChange, onApply, onClose, getObstinateStatus }) {
   const form = el('section', 'workspace-disengage');
   form.setAttribute('aria-label', `Désengagement de ${actor.name}`);
   form.appendChild(el('p', 'workspace-action-bar-title', `${actor.name} se désengage`));
@@ -163,7 +163,7 @@ export function renderDisengageForm(container, { actor, plan, state, active, onC
     for (const [key, person] of [['context', actor], ['opponentContext', active.find(row => row.id === plan.bestOpponentId)]]) {
       const answers = state[key] || {};
       const choice = renderObstinateChoice(person, answers.preRollTalent, value => { const next = { ...answers }; if (value === 'strong-minded') next.preRollTalent = value; else delete next.preRollTalent; onChange({ [key]: next }); },
-        { focusKey: `disengage-${key}-pre-roll-talent`, title: `Obstiné avant le jet — ${person?.name || ''}` });
+        { focusKey: `disengage-${key}-pre-roll-talent`, title: `Obstiné avant le jet — ${person?.name || ''}`, status: person && getObstinateStatus?.(person.id) });
       if (choice) form.appendChild(choice);
     }
     // CA8 : précision demandée par un État (posée, ou déjà répondue et modifiable), réponse dans le contexte du camp.

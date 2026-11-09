@@ -570,7 +570,7 @@ export function createV5AftermathPanel({ Store, refresh = () => {} } = {}) {
       ui.conditionContext = { ...ui.conditionContext, obstinateTesterIds: [...ids] };
       if (!ids.size) delete ui.conditionContext.obstinateTesterIds;
       refresh();
-    }, { focusKey: `aftermath-obstinate-${person.id}`, title: `Obstiné avant le jet — ${person.name || person.id}` })).filter(Boolean);
+    }, { focusKey: `aftermath-obstinate-${person.id}`, title: `Obstiné avant le jet — ${person.name || person.id}`, status: Store.getObstinateStatus?.(person.id) })).filter(Boolean);
     if (!questions && !obstinate.length) return status;
     // CA8 : la réponse vaut pour la prochaine opération relancée, puis s'efface une fois l'opération enregistrée.
     const box = node('div'); box.className = 'workspace-aftermath-condition-questions';

@@ -1,7 +1,7 @@
 import {participantCamp} from '../core/encounters.js';
 import {v5CombatActionClock} from '../core/v5-resources.js';
 import { engagedWith } from '../core/engagements.js';
-import { renderTestQuestions, renderObstinateChoice } from './test-questions.js';
+import { renderTestQuestions, renderObstinateChoice, renderSourceDetail } from './test-questions.js';
 /** Interface MJ de la séquence obligatoire de Brisé (L06 p.163, 185–186).
  * Les faits restent locaux jusqu’au commit d’un reçu Store.
  */
@@ -84,6 +84,7 @@ export function createV5BrokenEscapePanel({Store,refresh=()=>{},onPrepareHide=()
   }else{
    const t=p.test||{},r=t.result||{};
    box.append(node('p','', 'Athlétisme '+(t.score??'—')+' · jet '+(r.initialRoll??'—')+(r.reversed?' inversé vers '+r.roll:'')+' · '+(r.sl??'—')+' DR (Intermédiaire +2).'));
+   if(t.sourceDetail){const detail=renderSourceDetail(t.sourceDetail);if(detail)box.append(detail);}
    box.append(node('p','', 'Move/Flee : '+p.moveDistance+' mètres de jeu; Sprint supplémentaire : '+p.sprintDistance+' mètres; total : '+p.totalDistance+' mètres de jeu.'));
    if(t.preview?.choiceRequired){
     const select=document.createElement('select');select.setAttribute('aria-label','Choix du résultat Athlétisme');select.dataset.brokenEscapeChoice=id;
@@ -198,7 +199,7 @@ export function createV5BrokenEscapePanel({Store,refresh=()=>{},onPrepareHide=()
   });buttons.append(apply);section.append(buttons);previewBlock(section,d,required,actor.id);
   if(required==='sprint'){
    const set=next=>{d.conditionContext=next;d.preview=null;drafts.set(actor.id,d);calc.click();};
-   const obstinate=renderObstinateChoice(actor,d.conditionContext?.preRollTalent,value=>{const next={...(d.conditionContext||{})};if(value==='strong-minded')next.preRollTalent=value;else delete next.preRollTalent;set(next);},{focusKey:'broken-sprint-pre-roll-talent'});
+   const obstinate=renderObstinateChoice(actor,d.conditionContext?.preRollTalent,value=>{const next={...(d.conditionContext||{})};if(value==='strong-minded')next.preRollTalent=value;else delete next.preRollTalent;set(next);},{focusKey:'broken-sprint-pre-roll-talent',status:Store.getObstinateStatus?.(actor.id)});
    if(obstinate)section.append(obstinate);
    const rows=(d.preview&&!d.preview.ready?d.preview.needsInput||[]:[]).filter(row=>row&&typeof row==='object').map(row=>({...row,answerAt:''}));
    const questions=renderTestQuestions(rows,{root:d.conditionContext||{},onChange:set,subjectOf:()=>actor,title:'À préciser avant le Test d’Athlétisme',focusPrefix:'broken-sprint',answeredAt:['']});

@@ -109,13 +109,13 @@ describe('Q6 · T8 : Tests des contrats de sorts par le calcul commun', () => {
     assert.deepEqual(row.testDetails.fear, ['horn-morale −2 DR', STATE_ROW]);
   });
 
-  test('Calme (WoM p. 80) : Test de Sociabilité du lanceur', async () => {
+  test('Calme (HEPG p. 80) : Test de Sociabilité du lanceur', async () => {
     const clean = receipt(await cast('Calme', { fellowshipRoll: 25 })).calmTest;
     const row = receipt(await cast('Calme', { fellowshipRoll: 25 }, { mage: { states: tired } }));
     assert.equal(row.calmTest.sl, clean.sl - 1);
   });
 
-  test('Purification du Corps (WoM p. 82) : Test de Résistance du lanceur', async () => {
+  test('Purification du Corps (HEPG p. 82) : Test de Résistance du lanceur', async () => {
     const patch = { enduranceRoll: 25, domainFacts: { affliction: 'poison', afflictionName: 'Poison' } };
     assert.equal(receipt(await cast('Purification du Corps (Ghyran & Hysh)', patch)).testDetails, undefined);
     const row = receipt(await cast('Purification du Corps (Ghyran & Hysh)', patch, { mage: { states: tired } }));
@@ -142,7 +142,7 @@ describe('Q6 · T8 : Tests des contrats de sorts par le calcul commun', () => {
     assert.deepEqual(blind.needsInput.map(row => [row.field, row.answerAt]), [['reliesOnSight', 'targetTests.mage.conditionContext']]);
   });
 
-  test('Option de sort (Drain de Magie, WoM p. 87) : Test d’Intelligence du lanceur', async () => {
+  test('Option de sort (Drain de Magie, HEPG p. 87) : Test d’Intelligence du lanceur', async () => {
     const run = async states => {
       const p = await cast('Drain de Magie', { sl: 14, overcastSpecific: { wide: 1 }, domainFacts: { optionRoll_wide: 30 } }, { mage: { states } });
       assert.equal(p.ready, true, p.error);

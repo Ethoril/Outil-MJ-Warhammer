@@ -36,15 +36,16 @@ export function getArcaneWornArmor(target) {
 
 /** Q6 T3 : Test de Dextérité par le calcul commun (États, couches, talents, séquelles) ; `{ blocked }` si un État l'interdit ou
  * demande une précision (`facts.dexterityConditionContext`). */
-function secondaryTest(actor, score, roll, modifier = 0, conditionContext = {}) {
+function secondaryTest(actor, score, roll, modifier = 0, conditionContext = {}, onQuestions = () => {}) {
   if (!Number.isInteger(roll) || roll < 1 || roll > 100) return null;
   const secondary = previewV5SecondaryTest(actor, { score, roll, test: { characteristic: 'Dex' }, context: conditionContext,
     slModifiers: modifier ? [{ id: 'arcane-dexterity', label: 'Test de Dextérité', amount: modifier }] : [] });
+  onQuestions(secondary.questions || []);
   if (!secondary.ready) return { blocked: secondary.needsInput.map(row => row.label).join(' '), needsInput: secondary.needsInput };
   return selectV5Test(secondary.preview, secondary.optionId);
 }
 
-export function previewArcaneUnforgiving(actor, target, declared, facts) {
+export function previewArcaneUnforgiving(actor, target, declared, facts, applicableQuestions = []) {
   if (!facts || typeof facts.magicItemPresent !== 'boolean') {
     return invalid(`Précisez si ${target.name || target.id} porte un objet magique.`);
   }
@@ -67,16 +68,17 @@ export function previewArcaneUnforgiving(actor, target, declared, facts) {
     if (!Number.isInteger(facts.focalisationRoll) || facts.focalisationRoll < 1 || facts.focalisationRoll > 100) return invalid('Saisissez le Test de Focalisation (Haute Magie) pour détruire l’objet magique.');
     let channel;
     try { channel = previewChannelling(actor, { type: 'high', roll: facts.focalisationRoll, choice: facts.focalisationChoice,
+      conditionContext: facts.focalisationConditionContext || {}, applicableQuestions, questionAnswerAt: `arcaneTargets.${target.id}.focalisationConditionContext`,
       slModifiers: facts.focalisationModifiers || [], advantageSources: facts.focalisationAdvantages || [], disadvantageSources: facts.focalisationDisadvantages || [],
       miscastRoll: facts.miscastRoll, majorRoll: facts.majorRoll, secondaryRolls: facts.secondaryRolls, lossRoll: facts.lossRoll,
       miscastRoll2: facts.miscastRoll2, miscastChoice: facts.miscastChoice }); }
-    catch (error) { return invalid(error.message); }
+    catch (error) { return { ...invalid(error.message), ...(error.needsInput ? { status: 'condition-input-required', needsInput: error.needsInput.map(row => ({ ...row, participantId: actor.id, answerAt: `arcaneTargets.${target.id}.focalisationConditionContext` })) } : {}) }; }
     if (!channel.test) return invalid(channel.error || 'Focalisation (Haute Magie) indisponible.');
     focalisationTest = { ...channel.test, sl: channel.sl, skill: 'Focalisation (Haute Magie)' };
     if (focalisationTest.success) {
       if (declared.chooseMagicItem) {
         if (!Number.isFinite(actor.caracs?.Dex)) return invalid('La Dextérité du lanceur est nécessaire au choix de l’objet.');
-        dexterityTest = secondaryTest(actor, actor.caracs.Dex, facts.dexterityRoll, 2, facts.dexterityConditionContext || {});
+        dexterityTest = secondaryTest(actor, actor.caracs.Dex, facts.dexterityRoll, 2, facts.dexterityConditionContext || {}, questions => applicableQuestions.push(...questions.map(row => ({ ...row, participantId: actor.id, answerAt: `arcaneTargets.${target.id}.dexterityConditionContext` }))));
         if (!dexterityTest) return invalid('Saisissez le Test de Dextérité (+2 DR) pour choisir l’objet magique.');
         // T10 : questions rangées sous options.arcaneTargets.<id>.dexterityConditionContext (le lanceur teste pour cette cible).
         if (dexterityTest.blocked) return { ...invalid(dexterityTest.blocked, 'condition-input-required'),

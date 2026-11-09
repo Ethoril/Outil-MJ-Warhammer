@@ -151,9 +151,21 @@ describe('Q6 · T4 : commandes de monture du Store', () => {
     const store = await load([actor('rider', { mounted: true, mountId: 'horse', states: [broken] }), horse('horse', [{ name: 'Psychologie', param: 'Craintif' }])]);
     const pending = await store.acquireConditions('horse', ['Surpris'], { 'mountedRideScore:rider': 55, 'mountedRideRoll:rider': 40 });
     assert.equal(pending.status, 'requires-input');
+    assert.deepEqual(pending.performedTests, [], 'un Test bloqué ne réserve pas Obstiné');
     assert.ok(pending.requests.some(row => row.field === 'mountedRideCondition:rider:runningOrHiding'), JSON.stringify(pending.requests));
     const applied = await store.acquireConditions('horse', ['Surpris'], { 'mountedRideScore:rider': 55, 'mountedRideRoll:rider': 40, 'mountedRideCondition:rider:runningOrHiding': false });
     assert.equal(applied.mountedFall[0].test.sl, 4);
+  });
+  test('État de la monture : le Chevaucher du cavalier consomme Obstiné et Annuler le rend', async () => {
+    const rider = actor('rider', { mounted: true, mountId: 'horse' });
+    rider.talents.push({ id: 'talent-strong-minded', status: 'resolved', rank: 1 });
+    const store = await load([rider, horse('horse', [{ name: 'Psychologie', param: 'Craintif' }])]);
+    await store.startTalentSession();
+    const result = await store.acquireConditions('horse', ['Surpris'], { 'mountedRideScore:rider': 55, 'mountedRideRoll:rider': 40, 'mountedRideCondition:rider:preRollTalent': 'strong-minded' });
+    assert.equal(result.status, 'applied');
+    assert.equal(store.getObstinateStatus('rider').available, false);
+    await store.undo();
+    assert.equal(store.getObstinateStatus('rider').available, true);
   });
   test('Embuscade : Surpris à cheval par le calcul commun ; Inconscient bloque', async () => {
     const run = async states => {
@@ -168,6 +180,21 @@ describe('Q6 · T4 : commandes de monture du Store', () => {
     assert.equal(tiredRun.mountedFall[0].test.sl, 4);
     assert.equal(outRun.mountedFall[0].test, undefined);
     assert.ok(outRun.needsInput.some(row => /Inconscient/.test(row.label)), JSON.stringify(outRun.needsInput));
+  });
+  test('Embuscade : Chevaucher consomme Obstiné et Annuler rend le quota', async () => {
+    const rider = actor('rider', { mounted: true, mountId: 'horse', ride: 55 }); rider.camp = 'ambush';
+    rider.talents.push({ id: 'talent-strong-minded', status: 'resolved', rank: 1 });
+    const mount = horse('horse'); mount.camp = 'ambush';
+    const foe = actor('attacker'); foe.camp = 'heroes';
+    const store = await load([rider, mount, foe]);
+    await store.startTalentSession();
+    const preview = store.previewCombatInitialization({ surprisedCamp: 'ambush', characteristicById: { rider: 50, horse: 30, attacker: 40 },
+      diceById: { rider: 5, horse: 4, attacker: 3 }, mountedRideTests: { rider: { roll: 40, conditionContext: { preRollTalent: 'strong-minded' } } } });
+    assert.equal(preview.ready, true, JSON.stringify(preview.needsInput));
+    assert.equal((await store.applyCombatInitialization(preview)).ok, true);
+    assert.equal(store.getObstinateStatus('rider').available, false);
+    await store.undo();
+    assert.equal(store.getObstinateStatus('rider').available, true);
   });
 });
 

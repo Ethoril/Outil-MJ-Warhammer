@@ -101,7 +101,7 @@ export function createV5CorruptionPanel({ Store, refresh = () => {} } = {}) {
   function testAnswers(parent, actor, key, preview, calc) {
     const set = next => { state[key] = next; if (calc && !calc.disabled) calc.click(); else refresh(); };
     const obstinate = renderObstinateChoice(actor, state[key].preRollTalent, value => { const next = { ...state[key] }; if (value === 'strong-minded') next.preRollTalent = value; else delete next.preRollTalent; set(next); },
-      { focusKey: `corruption-${key}-pre-roll-talent` });
+      { focusKey: `corruption-${key}-pre-roll-talent`, status: Store.getObstinateStatus?.(actor.id) });
     if (obstinate) parent.append(obstinate);
     const pending = Boolean(preview && ['needs-input', 'blocked'].includes(preview.status));
     const rows = (pending ? preview.needsInput || [] : []).filter(row => row && typeof row.label === 'string' && (!row.field || isQuestionField(row.field))).map(row => ({ ...row, answerAt: '' }));

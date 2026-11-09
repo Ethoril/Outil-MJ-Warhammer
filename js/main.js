@@ -24,6 +24,7 @@ import { mountSupplementErrors } from './ui/supplement-errors-banner.js';
 import { initKeyboardShortcuts } from './ui/keyboard.js';
 import { initThemeManager } from './ui/theme.js';
 import { openV5EffectInputDialog, chooseV5RecoveryMethod, recoveryOptionsFor as normalizeV5RecoveryOptions } from './ui/v5-effect-dialog.js';
+import { renderObstinateChoice } from './ui/test-questions.js';
 import { openV5FortuneDialog } from './ui/v5-fortune-dialog.js';
 import { openV5FateDialog } from './ui/v5-fate-dialog.js';
 import { initWorkspaceView } from './ui/workspace-view.js';
@@ -372,7 +373,7 @@ async function advanceTurn() {
     let result = combat.round > 0 ? await Combat.nextTurn() : combatInitiativeAlreadyResolved()?await Combat.start():await openCombatInitiativeDialog({ startCombat: true, title: 'Démarrer le combat · Initiative' });
     if (result?.status === 'cancelled') return result;
     if (result?.status === 'requires-input') result = await openV5EffectInputDialog({ pending: result,
-      title: 'Terminer le tour : effets V5', getCurrentRevision: () => Store.getLocalRevision(),
+      title: 'Terminer le tour : effets V5', getCurrentRevision: () => Store.getLocalRevision(), getObstinateStatus: id => Store.getObstinateStatus(id), getObstinateIdentity: id => Store.getObstinateIdentity(id),
       submit: (inputs, baseRevision) => Combat.nextTurn({ inputs, baseRevision }) });
     if (result?.status === 'stale') showToast('La partie a changé : recalculez les effets avant de terminer le tour.', 'info');
     else if (result?.status !== 'cancelled') await awaitStore(result, 'Fin du tour');
@@ -520,6 +521,13 @@ function openCombatInitiativeDialog({ staging = null, startCombat = false, title
         for (const need of state.preview.needsInput.filter(item => item.field.startsWith('mountedRide'))) {
           const riderId = need.field.split(':')[1], field = need.field.startsWith('mountedRideScore') ? 'score' : 'roll';
           const rider = active.find(row => row.id === riderId), answer = state.mountedRideTests[riderId] || {};
+          if(field==='roll'){
+            const choice=renderObstinateChoice(rider,answer.conditionContext?.preRollTalent,value=>{
+              state.mountedRideTests[riderId]={...answer,conditionContext:{...(answer.conditionContext||{}),preRollTalent:value}};
+              try { recalculate(); } catch(error) { status.textContent=error.message; }
+            },{focusKey:`initiative-ride-obstinate-${riderId}`,title:`Obstiné avant le jet — Chevaucher de ${rider?.name||riderId}`,status:rider&&Store.getObstinateStatus(rider.id,rider,staging?.scene)});
+            if(choice)mountedArea.append(choice);
+          }
           const label = document.createElement('label'); label.textContent = `${need.label} `;
           const input = document.createElement('input'); input.type = 'number'; input.min = String(need.min ?? (field === 'roll' ? 1 : 0)); input.max = String(need.max ?? 100); input.required = true;
           input.dataset.mountedRider = riderId; input.dataset.field = field;
@@ -771,7 +779,7 @@ async function resolveV5EffectOperation(operation, { title = 'Résoudre les effe
   const baseRevision = Store.getLocalRevision();
   let result = await operation(inputs, baseRevision);
   if (result?.status === 'requires-input') result = await openV5EffectInputDialog({ pending: { ...result, inputs }, title,
-    getCurrentRevision: () => Store.getLocalRevision(), submit: operation });
+    getCurrentRevision: () => Store.getLocalRevision(), getObstinateStatus: id => Store.getObstinateStatus(id), getObstinateIdentity: id => Store.getObstinateIdentity(id), submit: operation });
   if (result?.status === 'cancelled') return result;
   if (result?.status === 'stale') throw userError('La partie a changé : recalculez cette action.');
   await awaitStore(result, title);

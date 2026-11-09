@@ -121,13 +121,14 @@ export function previewMountedSecondaryTest(subject, { score, roll, stat, skill 
   const secondary = previewV5SecondaryTest(subject, { score, roll, kind: 'test', slModifiers, context: situation,
     test: { characteristic: stat, skill, skillCharacteristic: stat, role, opponent, participants, isAction: false, passive } });
   const name = subject.name || subject.id;
+  const questions = (secondary.questions || []).map(row => ({ ...row, participantId: subject.id ?? null, answerAt }));
   if (!secondary.ready) {
     const needsInput = secondary.needsInput.map(row => ({ ...row, participantId: subject.id ?? null, answerAt }));
-    return { ready: false, blocked: secondary.blocked === true, needsInput, message: secondary.blocked
+    return { ready: false, blocked: secondary.blocked === true, needsInput, questions, message: secondary.blocked
       ? `${name} ne peut pas faire le Test de ${label} : ${secondary.restrictions.join(' ')}`
       : `${name}, Test de ${label} : à préciser avant le Test : ${needsInput.map(row => row.label).join(' ; ')}` };
   }
-  return { ready: true, test: selectV5Test(secondary.preview, secondary.optionId), detail: secondaryTestDetail(secondary) };
+  return { ready: true, test: selectV5Test(secondary.preview, secondary.optionId), detail: secondaryTestDetail(secondary), questions };
 }
 
 export function previewResolution(input) {
@@ -718,7 +719,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
           holderId:condition.source?.weaponLocked&&escape.freed&&!escape.remainingEntangled?condition.source.authorId:null,
           conjuredEffectId:condition.source?.weaponLocked&&escape.freed&&!escape.remainingEntangled?(condition.source?.conjuredEffectId||null):null,
           hookedNetDamage:condition.source?.hookedNet===true?hookedNetPlan.damage:0,
-          opposition:{actorSl:escape.actorSl,sourceSl:escape.opponentSl,netSl:escape.netSl,sourceRoll:opponentRoll,sourceScore,springLoaded}};
+          opposition:{actorSl:escape.actorSl,sourceSl:escape.opponentSl,netSl:escape.netSl,sourceRoll:opponentRoll,sourceScore,springLoaded,sourceParticipantId:sourceIsParticipant?sourceParticipant.id:null}};
       }
       }
     }
@@ -1662,6 +1663,24 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     skullReversion,
     championSlayerDuel: championSlayerGain ? { participantId: actor.id, targetId: target.id } : null,
     supplementalEquipment,
+    secondaryObstinateTests: [
+      ...(combatFailure.effects || []).filter(row => row.type === 'volley-recoil').map(row => ({ participantId: row.targetId, preRollTalent: context.recoilTestContext?.preRollTalent })),
+      ...(supplementalEquipment?.enduranceTest ? [{ participantId: target?.id, consequenceOfAttack: true, preRollTalent: context.warpBladeEnduranceTest?.conditionContext?.preRollTalent }] : []),
+      ...(tripFall?.enduranceTest ? [{ participantId: target?.id, consequenceOfAttack: true, preRollTalent: context.tripFallConditionContext?.preRollTalent }] : []),
+      ...(netEscape?.opposition?.sourceParticipantId ? [{ participantId: netEscape.opposition.sourceParticipantId, preRollTalent: context.netEscapeSourceConditionContext?.preRollTalent }] : []),
+      ...(resoluteActor.test ? [{ participantId: actor?.id, preRollTalent: normalized.v5?.context?.resoluteConditionContext?.preRollTalent }] : []),
+      ...(resoluteTarget.test ? [{ participantId: target?.id, consequenceOfAttack: true, preRollTalent: normalized.defense?.v5?.context?.resoluteConditionContext?.preRollTalent }] : []),
+      ...mountedFallPlans.flatMap(plan => {
+        const count = mountedRidePlanCounts.get(plan.participantId) || 0;
+        const answers = context.mountedRideTestsById || context.mountedRideTests || {};
+        const answer = mountedRideAnswerFor({ participantId: plan.participantId, event: plan.event, requiredPlanCount: count, answersById: answers });
+        const selected = answer.conditionContext ?? (count <= 1 ? context.mountedRideConditionContext : undefined);
+        const consequenceOfAttack = plan.participantId === target?.id || plan.mountId === target?.id;
+        return [ ...(plan.test ? [{ participantId: plan.participantId, consequenceOfAttack, preRollTalent: selected?.preRollTalent }] : []),
+          ...(plan.strengthOpposition?.holderId ? [{ participantId: plan.strengthOpposition.holderId, consequenceOfAttack, preRollTalent: context.mountedForceConditionContext?.holder?.preRollTalent }] : []),
+          ...(plan.strengthOpposition?.riderId ? [{ participantId: plan.strengthOpposition.riderId, consequenceOfAttack, preRollTalent: context.mountedForceConditionContext?.rider?.preRollTalent }] : []) ];
+      })
+    ],
     weaponReload,
     entanglement,
     netEscape,
@@ -1732,7 +1751,9 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
       || (OPPOSITION_TYPES.has(action.type) ? { mode: 'manual', reason: 'aucune-convention-locale-vérifiée' } : null),
     application: { status: 'pending', applied: false }
   };
+  if (!result.secondaryObstinateTests.length) delete result.secondaryObstinateTests;
   if (normalized.v5?.context?.fateAction === 'cancel-attack' && attackType(action.type)) {
+    delete result.secondaryObstinateTests;
     result.fateAction = { action: 'cancel-attack', cancelled: true };
     result.hit = false;
     result.damage = null;
@@ -1755,6 +1776,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     const deathResult=criticalBlock?.details?.parsed?.death===true||criticalBlock?.second?.parsed?.death===true;
     const lethal=attackType(action.type)&&target&&hit&&(deathResult||lethalDeath?.targetId===target.id);
     if(lethal){
+      delete result.secondaryObstinateTests;
       result.fateSurvival={participantId:target.id,removedFromEncounter:true};
       result.hit=false;
       result.damage=null;

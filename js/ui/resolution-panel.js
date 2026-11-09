@@ -44,7 +44,7 @@ import { qualityLabel } from '../core/quality-normalization.js';
 import { resolveCastingSkill } from '../core/v5-magic-casting.js';
 import { isDouble } from '../core/dice.js';
 import { validRoll } from './workspace/helpers.js';
-import { collectTestQuestions, renderTestQuestions } from './test-questions.js';
+import { collectTestQuestions, renderTestQuestions, renderObstinateChoice, getAt } from './test-questions.js';
 
 export const isCriticalFateRoll = value => Number.isInteger(Number(value)) && Number(value) >= 1 && Number(value) <= 100 && isDouble(Number(value));
 export const hitMorphologySelection = (override, profileMorphology) => override !== undefined ? override : profileMorphology || '';
@@ -195,13 +195,20 @@ export function renderPreviewTestQuestions(preview, draft, handlers, participant
   const subjectOf = id => participants.find(row => row.id === id) || null;
   const recalc = patch => { handlers.select(patch); handlers.calculate?.(); };
   if (preview.v5MagicKind) {
-    const rows = collectTestQuestions(preview.spellPreview || {}, { defaultAt: null });
-    if (!rows.length) return null;
+    const open = collectTestQuestions(preview.spellPreview || {}, { defaultAt: null });
     const root = { conditionContext: draft.magicConditionContext || {}, targetTests: draft.magicTargetTests || {}, mountedRideTests: draft.magicMountedRideTests || {}, arcaneTargets: draft.magicArcaneTargets || {},
       dispelReaction: { conditionContext: draft.magicDispelConditionContext || {} } };
+    // Une ancienne réponse reste corrigeable uniquement si le moteur confirme que ce Test et cette question sont encore applicables.
+    // Les questions déjà montrées évitent de doubler un autre champ qui utilise le même contexte du lanceur.
+    const keys = new Set(open.map(row => `${row.answerAt}|${row.field}`));
+    const applicable = new Set((preview.spellPreview?.applicableQuestions || []).map(row => `${row.answerAt}|${row.field}`));
+    const answered = (draft.magicAnsweredTestQuestions || []).filter(row => row.field && applicable.has(`${row.answerAt}|${row.field}`) && getAt(root, row.answerAt)?.[row.field] != null && !keys.has(`${row.answerAt}|${row.field}`));
+    const rows = [...open, ...answered];
+    if (!rows.length) return null;
     return renderTestQuestions(rows, { root, nameOf, subjectOf, title: 'À préciser pour les Tests du sort', focusPrefix: 'magic-test-question', includeAnswered: false,
       onChange: next => recalc({ magicConditionContext: next.conditionContext || {}, magicTargetTests: next.targetTests || {}, magicMountedRideTests: next.mountedRideTests || {}, magicArcaneTargets: next.arcaneTargets || {},
-        magicDispelConditionContext: next.dispelReaction?.conditionContext || {} }) });
+        magicDispelConditionContext: next.dispelReaction?.conditionContext || {},
+        magicAnsweredTestQuestions: [...new Map([...(draft.magicAnsweredTestQuestions || []), ...rows].filter(row => row.field && getAt(next, row.answerAt)?.[row.field] != null).map(row => [`${row.answerAt}|${row.field}`, row])).values()] }) });
   }
   const rows = collectTestQuestions(preview);
   if (!rows.length) return null;
@@ -681,7 +688,7 @@ export function renderResolutionPanel(options) {
       }
     }
     if (['channelling', 'cast', 'dispel'].includes(type)) {
-      addCircumstance('magic-context', renderV5MagicContext({ actor, participants, target, type, draft, handlers }));
+      addCircumstance('magic-context', renderV5MagicContext({ actor, participants, target, type, draft, handlers, getObstinateStatus: options.getObstinateStatus, getObstinateIdentity: options.getObstinateIdentity }));
     } else {
       if(type === 'attack') {
         const ammo=action.extensions?.equipment?.range ? (actor.equipment||[]).filter(row=>row.kind==='ammunition' && ammunitionCompatibility(action.extensions.equipment,row).status !== 'incompatible') : [];
@@ -1396,6 +1403,7 @@ export function renderResolutionPanel(options) {
       if(value===undefined)delete next[key];
       handlers.select({v5Context:{...current,warpBladeEnduranceTest:Object.keys(next).length?next:undefined}});
     };
+    const choice=renderObstinateChoice(target,stored.conditionContext?.preRollTalent,value=>setTest('conditionContext',{...(stored.conditionContext||{}),preRollTalent:value}),{focusKey:'warp-blade-obstinate',title:'Obstiné avant le jet — cible de la Warp Blade',status:target&&options.getObstinateStatus?.(target.id)});if(choice)fields.append(choice);
     for(const [key,text,min] of [['score','Warp Blade : score de fiche de Résistance de la cible, sans modificateurs (Test +2 DR si >1 Blessure)',0],['roll','Warp Blade : jet d100 du Test de Résistance de la cible',1]]){
       const label=node('label','workspace-type',text),input=document.createElement('input');
       input.type='number';
@@ -2320,16 +2328,23 @@ export function renderResolutionPanel(options) {
     const select=document.createElement('select');
     select.setAttribute('aria-label',label.textContent);
     select.append(new Option('Aucun','none'));
-    if(hasV5Talent(actor,'talent-strong-minded'))select.append(new Option('Obstiné : ignorer les modificateurs négatifs','strong-minded'));
+    const obstinateStatus = options.getObstinateStatus?.(actor.id);
+    if(hasV5Talent(actor,'talent-strong-minded')){const obstinateOption=new Option('Obstiné : ignorer les modificateurs négatifs','strong-minded');obstinateOption.disabled=obstinateStatus?.available===false;select.append(obstinateOption);}
     if(hasV5Talent(actor,'talent-resistant'))select.append(new Option('Résistance : réussite automatique','resistant'));
     select.value=current.preRollTalent||'none';
     select.dataset.defaultValue=String(initialContext.preRollTalent||'none');
     select.addEventListener('change',()=>handlers.select({v5Context:{...current,preRollTalent:select.value}}));
     label.append(select);
+    if(hasV5Talent(actor,'talent-strong-minded')&&obstinateStatus?.available===false&&obstinateStatus.reason)label.append(node('span','workspace-muted',obstinateStatus.reason));
     talentOptions.append(label);
     const start=button('Commencer une nouvelle séance','workspace-ghost');
     start.addEventListener('click',()=>handlers.startTalentSession());
     talentOptions.append(start);
+  }
+  if(target&&hasV5Talent(target,'talent-strong-minded')){
+    const defenseContext=draft.defenseContext||{};
+    const choice=renderObstinateChoice(target,defenseContext.preRollTalent,value=>handlers.select({defenseContext:{...defenseContext,preRollTalent:value}}),{focusKey:'defense-pre-roll-talent',title:'Obstiné avant le jet — défense de '+target.name,status:options.getObstinateStatus?.(target.id)});
+    if(choice)fieldGroups.defense.content.append(choice);
   }
   if((actor.states||[]).some(s=>s.key==='frenzy')){
     const label=node('label','workspace-type','Ennemi le plus proche'),select=document.createElement('select');
@@ -2545,6 +2560,7 @@ export function renderResolutionPanel(options) {
     contextField(v5,role,'tryResolute','Déterminé : tenter Calme après un État'+(role==='defender'?' (défense)':''));
     const key=role==='actor'?'v5Context':'defenseContext',values=role==='actor'?current:draft.defenseContext||{};
     if(values.tryResolute){
+      const choice=renderObstinateChoice(subject,values.resoluteConditionContext?.preRollTalent,value=>handlers.select({[key]:{...values,resoluteConditionContext:{...(values.resoluteConditionContext||{}),preRollTalent:value}}}),{focusKey:`${role}-resolute-obstinate`,title:'Obstiné avant le jet — Déterminé'+(role==='defender'?' (défense)':''),status:options.getObstinateStatus?.(subject.id)});if(choice)v5.append(choice);
       const label=node('label','workspace-type','Jet de Calme Déterminé'+(role==='defender'?' (défense)':'')),input=document.createElement('input');
       input.type='number';
       input.min='1';
@@ -2915,6 +2931,7 @@ export function renderResolutionPanel(options) {
       addNumber('recoilTestBase','Résistance : score de fiche, sans modificateurs (Test à +2 DR)',1,100);
       addNumber('recoilTestRoll','d100 de Résistance',1,100);
       const base=Number(current.recoilTestBase),roll=Number(current.recoilTestRoll),recoilContext=current.recoilTestContext||{};
+      const choice=renderObstinateChoice(actor,recoilContext.preRollTalent,value=>handlers.select({v5Context:{...current,recoilTestContext:{...recoilContext,preRollTalent:value}}}),{focusKey:'recoil-obstinate',title:'Obstiné avant le jet — recul',status:options.getObstinateStatus?.(actor.id)});if(choice)controls.append(choice);
       secondaryConditionFields(controls,{subject:actor,test:{characteristic:'E',skill:'Résistance',passive:true},context:recoilContext,pendingLabels:(draft.preview?.unresolved||[]).filter(text=>String(text).startsWith('Arquebuse à salve, Test de Résistance')),
         title:'Recul, Test de Résistance',focusPrefix:'recoil-condition',onChange:next=>handlers.select({v5Context:{...current,recoilTestContext:Object.keys(next).length?next:undefined}})});
       let recoilTest=null;
@@ -3226,7 +3243,7 @@ export function renderResolutionPanel(options) {
       block.appendChild(list); live.appendChild(block);
     }
   } else if (preview) {
-    live.appendChild(renderResult(preview, target, draft, handlers, participants));
+    live.appendChild(renderResult(preview, target, draft, handlers, participants, options.getObstinateStatus));
     const testQuestions = renderPreviewTestQuestions(preview, draft, handlers, participants);
     if (testQuestions) live.appendChild(testQuestions);
     const defenseRoll = within.one('[data-roll-input="defense"]');

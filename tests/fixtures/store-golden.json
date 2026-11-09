@@ -303,7 +303,9 @@
    "exportSyncConflict/0",
    "importGuestSnapshot/1",
    "attachSync/1",
-   "ready/object"
+   "ready/object",
+   "getObstinateStatus/1",
+   "getObstinateIdentity/1"
   ],
   "entries": [
    {
@@ -2510,6 +2512,16 @@
     "label": "sweep whenIdle",
     "result": "65d0cffc354d7db0",
     "state": "dd5ad58ef568d99f"
+   },
+   {
+    "label": "sweep getObstinateStatus",
+    "result": "2e224ab41c199f98",
+    "state": "dd5ad58ef568d99f"
+   },
+   {
+    "label": "sweep getObstinateIdentity",
+    "result": "74234e98afe7498f",
+    "state": "dd5ad58ef568d99f"
    }
   ]
  },
@@ -2817,7 +2829,9 @@
    "exportSyncConflict/0",
    "importGuestSnapshot/1",
    "attachSync/1",
-   "ready/object"
+   "ready/object",
+   "getObstinateStatus/1",
+   "getObstinateIdentity/1"
   ],
   "entries": [
    {
@@ -5023,6 +5037,16 @@
    {
     "label": "sweep whenIdle",
     "result": "07891df578f1d4d3",
+    "state": "77480e24d5d28861"
+   },
+   {
+    "label": "sweep getObstinateStatus",
+    "result": "2e224ab41c199f98",
+    "state": "77480e24d5d28861"
+   },
+   {
+    "label": "sweep getObstinateIdentity",
+    "result": "74234e98afe7498f",
     "state": "77480e24d5d28861"
    }
   ]

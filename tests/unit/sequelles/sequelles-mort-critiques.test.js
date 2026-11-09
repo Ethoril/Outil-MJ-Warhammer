@@ -1425,7 +1425,9 @@ test('J2 — la proposition de suivi liste les séquelles de la table avec un id
 
 test('J2 — fracture : faits manquants, immobilisation à temps, fin de guérison dispensée, critique déclaré guéri', async () => {
   const { participant, record } = wounded('patient', 'ARM', 'Clean Break');
+  participant.talents = [...(participant.talents || []), { id: 'talent-strong-minded', status: 'resolved', rank: 1 }];
   const { store } = await setup([participant, healerSheet()]);
+  await store.startTalentSession();
   const incidentId = await follow(store, 'patient', record);
   assert.equal((await close(store, incidentId)).receipt.reason, 'sequelae-follow-up-not-opened');
   const opened = await store.openAftermathSequelae({ operationId: op(), incidentId });
@@ -1450,8 +1452,9 @@ test('J2 — fracture : faits manquants, immobilisation à temps, fin de guéris
   assert.deepEqual(rowsOf(store, 'patient'), [], 'le jour 34 le malus temporaire a disparu');
   assert.equal(store.listAftermathSequelae().pending[0].kind, 'fracture-final-test');
   assert.equal((await close(store, incidentId)).receipt.reason, 'sequelae-follow-up-open');
-  const healed = await store.resolveAftermathFracture({ operationId: op(), sequelaId: bone.id });
+  const healed = await store.resolveAftermathFracture({ operationId: op(), sequelaId: bone.id, roll: 20, conditionContext: { obstinateTesterIds: ['patient'] } });
   assert.deepEqual([healed.receipt.reason, healed.receipt.waived], ['fracture-healed-bound', true], 'attachée tout le long : pas de Test d’Endurance');
+  assert.equal(store.getObstinateStatus('patient').available, true, 'aucun Test : aucun usage d’Obstiné');
   assert.equal((await close(store, incidentId)).receipt.reason, 'critical-healed');
   const kept = sequelaeOf(store)[0];
   assert.deepEqual([kept.status, kept.finalTest.waived, kept.history.length >= 0], ['healed', true, true], 'l’historique reste après la clôture');

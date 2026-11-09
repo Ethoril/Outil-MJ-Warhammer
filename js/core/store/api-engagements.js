@@ -4,6 +4,7 @@ import { uid } from '../models.js';
 import { withEngagement, withoutEngagements, engagedWith, canBeEngaged, expireEngagements, previewDisengage as previewDisengagePlan } from '../engagements.js';
 import { outnumberSide } from '../outnumbering.js';
 import { hasFleeTalent } from '../v5-broken-escape.js';
+import { consumeObstinate } from '../v5-obstinate.js';
 
 const POSITION_KEYS = ['surrounded', 'higherGround', 'cover'];
 // Scène (planche D) : posée une fois pour la rencontre, elle pré-remplit chaque action (une valeur saisie sur l'action l'emporte).
@@ -66,6 +67,10 @@ export function createEngagementsApi({ api, currentEnvelope }) {
       return api.executeCommand('disengage-v5', draft => {
         const plan = previewDisengagePlan({ combat: draft.combat, participants: draft.combat?.participants || [], actorId, input });
         if (plan.status !== 'ready') throw Object.assign(new Error(plan.reason || 'La situation a changé : recalculez.'), { userFacing: true });
+        if (plan.mode === 'test') {
+          consumeObstinate(draft, draft.combat.participants.find(row => row.id === actorId), input.context);
+          consumeObstinate(draft, draft.combat.participants.find(row => row.id === plan.bestOpponentId), input.opponentContext);
+        }
         let next = draft;
         if (plan.success) {
           next = { ...next, combat: withoutEngagements(next.combat, actorId, plan.opponentIds) };

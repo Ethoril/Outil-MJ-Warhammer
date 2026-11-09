@@ -1,6 +1,7 @@
 import { node, button, rubric, outcomePill, signed, minusSigned } from './dom.js';
 import { renderV5Decisions, renderCritical, criticalEffectLine } from './critical.js';
 import { renderV5MagicResult } from './magic.js';
+import { renderObstinateChoice } from '../test-questions.js';
 import { renderModifierLines } from './modifiers.js';
 import { formatDamageFormula, previewHpLoss } from '../../core/resolution.js';
 import { describeWeaponCondition } from '../../core/resolution/describe.js';
@@ -34,8 +35,8 @@ export function readableTalentWarning(warning) {
   return text;
 }
 
-export function renderResult(preview, target, draft, handlers, participants=[]) {
-  if (preview?.v5MagicKind) return renderV5MagicResult(preview, target, draft, handlers);
+export function renderResult(preview, target, draft, handlers, participants=[], getObstinateStatus) {
+  if (preview?.v5MagicKind) return renderV5MagicResult(preview, target, draft, handlers, participants, getObstinateStatus);
   const result = node('div', 'workspace-result');
   const queued=(preview.input?.actor?.extensions?.v5?.combatEffects||[]).filter(row=>!['weapon-explosion','salvo-artillery-hit','salvo-artillery-destroyed','fumble-ally-hit','misfire'].includes(row.kind));
   if(queued.length)result.appendChild(node('p','workspace-field-error','Effets de maladresse encore en attente : '+queued.map(row=>row.kind).join(', ')+'. Vérifiez leur durée et résolution selon la table.'));
@@ -189,6 +190,7 @@ export function renderResult(preview, target, draft, handlers, participants=[]) 
       if (!renderedMountedRideInputs.has(rideInputKey)) {
         renderedMountedRideInputs.add(rideInputKey);
         const rideTests = current.mountedRideTestsById || {}, riderTests = rideTests[fall.participantId] || {}, rideTestCount = preview.mountedFall.filter(row=>row.participantId===fall.participantId&&row.requiredTest).length, riderTest = riderTests[fall.event] || (rideTestCount===1?riderTests:{});
+        const choice=renderObstinateChoice(rider,riderTest.conditionContext?.preRollTalent,value=>{const updated={...riderTest,conditionContext:{...(riderTest.conditionContext||{}),preRollTalent:value}};handlers.select({v5Context:{...current,mountedRideTestsById:{...rideTests,[fall.participantId]:rideTestCount===1?updated:{...riderTests,[fall.event]:updated}}}});handlers.calculate?.();},{focusKey:`mounted-ride-obstinate-${rideInputKey}`,title:`Obstiné avant le jet — Chevaucher de ${rider?.name||fall.participantId}`,status:rider&&getObstinateStatus?.(rider.id)});if(choice)result.append(choice);
         for (const [field,label,min,max] of [['score','score de Chevaucher',0,100],['roll','d100',1,100]]) {
         const skill = rider?.skills?.find(row => row.id === 'skill-43_68_65_76_61_75_63_68_65_72-base' && row.status !== 'unresolved');
         if (field === 'score' && Number.isSafeInteger(skill?.total)) continue;

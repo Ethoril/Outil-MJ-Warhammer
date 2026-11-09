@@ -295,7 +295,7 @@ export function sequelaQuestionLabel(field, participant = null) {
  */
 export function sequelaTestRules({ actor, opponent = null, skillLabel = '', actionLabel = '', carac = null, kind = 'test', defending = false, attack = false, context = {}, weaponHands = null, shieldUsed = false } = {}) {
   // `questions` (CA22) : `{ field, label }` de chaque circonstance sans réponse, pour `needsInput`.
-  const out = { modifiers: [], advantages: [], disadvantages: [], restrictions: [], unresolved: [], questions: [], scoreDelta: 0, sources: [], offHand: null };
+  const out = { modifiers: [], advantages: [], disadvantages: [], restrictions: [], unresolved: [], questions: [], applicableQuestions: [], scoreDelta: 0, sources: [], offHand: null };
   const rows = sequelaRows(actor);
   const label = `${skillLabel} ${actionLabel}`;
   const key = normalizeCarac(carac);
@@ -306,6 +306,7 @@ export function sequelaTestRules({ actor, opponent = null, skillLabel = '', acti
   const noInput = context?.sequelaNoCircumstanceInput === true;
   const ask = (name, text) => {
     if (noInput) return false;
+    if (!out.applicableQuestions.some(row => row.field === name)) out.applicableQuestions.push({ field: name, label: sequelaQuestionLabel(name, actor) || text });
     if (typeof flag(name) !== 'boolean') { out.unresolved.push(text); if (!out.questions.some(row => row.field === name)) out.questions.push({ field: name, label: sequelaQuestionLabel(name, actor) || text }); }
     return flag(name) === true;
   };
@@ -338,6 +339,7 @@ export function sequelaTestRules({ actor, opponent = null, skillLabel = '', acti
       case 'no-dodge': if (dodge) out.restrictions.push(row.label); break;
       case 'dodge-athletics-disadvantage': if (dodge || isAthleticsTest(label)) { out.disadvantages.push({ id: row.id, label: 'Pied/jambe perdu' }); out.sources.push(row.id); } break;
       case 'both-eyes': if (kind === 'test') {
+        if (!noInput && !out.applicableQuestions.some(row => row.field === 'reliesOnSight')) out.applicableQuestions.push({ field: 'reliesOnSight', label: 'Préciser si le Test repose sur la vue.' });
         const known = typeof flag('reliesOnSight') === 'boolean' || typeof flag('requiresSight') === 'boolean';
         if (!known) out.unresolved.push('Séquelle : préciser si le Test est influencé par la vue.');
         else if (flag('reliesOnSight') === true || flag('requiresSight') === true) { out.disadvantages.push({ id: row.id, label: 'Deux yeux perdus' }); out.sources.push(row.id); }

@@ -4,7 +4,7 @@ import { renderObstinateChoice, renderSourceDetail } from '../test-questions.js'
 import { getSpellContract, getAllSpellContracts, getContractChoiceOptions } from '../../core/v5-spell-contracts.js';
 import { getChannellingReserve } from '../../core/v5-magic-channelling.js';
 import { renderMagicControls, renderSpellRecipientControls } from '../v5-magic-controls.js';
-import { renderSpellOptions } from '../v5-spell-options.js';
+import { renderSpellOptions, clearVortexTestTalents, vortexSelectedTalents } from '../v5-spell-options.js';
 import { ARCANE_ARMOR_LOCATIONS } from '../../core/v5-magic-arcane-unforgiving.js';
 import { DURATION_UNIT_LABELS, parseSpellDuration } from '../../core/v5-magic-effects.js';
 import { d100 } from '../../core/dice.js';
@@ -48,7 +48,7 @@ export function magicTargetIdsOf(draft, contract, actor, target, participants) {
   return target ? [target.id] : [actor.id];
 }
 
-export function renderV5MagicContext({ actor, participants = [], target, type, draft, handlers }) {
+export function renderV5MagicContext({ actor, participants = [], target, type, draft, handlers, getObstinateStatus, getObstinateIdentity }) {
   const v5 = node('div', 'workspace-v5-context workspace-v5-magic');
   const reserve = getChannellingReserve(actor);
   const reserveLabel = reserve.type === 'high' ? 'Haute Magie (Qhaysh)' : reserve.type === 'winds' ? '8 Vents' : 'aucune';
@@ -58,12 +58,19 @@ export function renderV5MagicContext({ actor, participants = [], target, type, d
   v5.appendChild(reserveLine);
   // T10 : Obstiné (V5 p. 127), choisi avant le jet de lancer, de Focalisation ou de Dissipation : la réponse part dans le contexte
   // des États du Test magique (`magicConditionContext.preRollTalent`), lu par le calcul commun.
+  let castingTalentStatus=getObstinateStatus?.(actor.id);
+  const selectedContract=type==='cast'?getSpellContract(defaultMagicSpellId(draft,actor)):null;
+  if(type==='cast' && selectedContract?.effects?.vortex && castingTalentStatus?.available!==false){
+    const ids=magicTargetIdsOf(draft,selectedContract,actor,target,participants),identity=id=>getObstinateIdentity?.(id) || id;
+    if(vortexSelectedTalents(draft,actor,participants,ids).some(row=>row.value==='strong-minded'&&identity(row.participantId)===identity(actor.id)))
+      castingTalentStatus={available:false,reason:'Obstiné est déjà choisi pour un autre Test de ce sort.'};
+  }
   const obstinate = ['cast', 'channelling', 'dispel'].includes(type) ? renderObstinateChoice(actor, draft.magicConditionContext?.preRollTalent, value => {
     const next = { ...(draft.magicConditionContext || {}) };
     if (value === 'strong-minded') next.preRollTalent = value; else delete next.preRollTalent;
     handlers.select({ magicConditionContext: next });
     handlers.calculate?.();
-  }, { focusKey: 'magic-pre-roll-talent' }) : null;
+  }, { focusKey: 'magic-pre-roll-talent', status: castingTalentStatus }) : null;
   if (obstinate) v5.appendChild(obstinate);
 
   const selectField = (key, labelText, options, currentVal) => {
@@ -112,7 +119,7 @@ export function renderV5MagicContext({ actor, participants = [], target, type, d
   };
 
   const magicTargetIds = type === 'cast' ? magicTargetIdsOf(draft, getSpellContract(defaultMagicSpellId(draft, actor)), actor, target, participants) : [];
-  v5.appendChild(renderMagicControls({actor,participants,type,draft,handlers,targetIds:magicTargetIds}));
+  v5.appendChild(renderMagicControls({actor,participants,type,draft,handlers,targetIds:magicTargetIds,getObstinateStatus}));
   if (type === 'dispel') return v5;
   if (type === 'channelling') {
     v5.prepend(rubric('Focalisation V5'));
@@ -176,7 +183,7 @@ export function renderV5MagicContext({ actor, participants = [], target, type, d
     v5.appendChild(spellLabel);
 
     const contract = getSpellContract(defaultSpellId);
-    const recipientControls = contract && renderSpellRecipientControls({ actor, participants, contract, draft, handlers, targetIds: magicTargetIds, target });
+    const recipientControls = contract && renderSpellRecipientControls({ actor, participants, contract, draft, handlers, targetIds: magicTargetIds, target, getObstinateStatus });
     if (recipientControls) v5.appendChild(recipientControls);
     if (contract) {
       const summary = node('p', 'workspace-muted workspace-magic-contract-summary',
@@ -208,7 +215,7 @@ export function renderV5MagicContext({ actor, participants = [], target, type, d
 
     // Options propres au sort (une seule rubrique, uniquement pour le sort concerné) ; la surpuissance générique reste dans le bloc suivant.
     const specificBox = node('div', 'workspace-v5-context');
-    specificBox.append(...renderSpellOptions({ actor, participants, contract, draft, handlers, targetIds: magicTargetIds }));
+    specificBox.append(...renderSpellOptions({ actor, participants, contract, draft, handlers, targetIds: magicTargetIds, getObstinateStatus, getObstinateIdentity }));
     const isVortexSpell = contract?.isVortex || contract?.effects?.type === 'vortex';
     const movementOnly=contract?.effects?.vortexMovementOnly === true;
     const isArcane = contract?.effects?.special === 'arcane-unforgiving';
@@ -236,7 +243,11 @@ export function renderV5MagicContext({ actor, participants = [], target, type, d
       const incident = draft.preview?.castPreview?.miscast || draft.preview?.miscast;
       if (['magicMiscastRoll', 'magicMajorRoll'].includes(key) || key === 'magicSecondaryDistanceRoll' && isMiscastDistanceD100(incident?.table, incident?.entry?.max)) { inp.dataset.npcRollKey = key; inp.dataset.npcRollOwner = 'actor'; }
       tagMiscastDie(inp, key, incident);
-      inp.addEventListener('input', () => handlers.input(key, inp.value === '' ? null : Number(inp.value)));
+      inp.addEventListener('input', () => {
+        const value=inp.value === '' ? null : Number(inp.value);
+        if(key==='magicVortexDistance' && (value===null || value>8)) handlers.select({...clearVortexTestTalents(draft,actor.id,(_id,field)=>/^mini\d+/.test(field)),magicVortexDistance:value});
+        else handlers.input(key,value);
+      });
       wrap.appendChild(inp);
       if (['magicMiscastRoll', 'magicMajorRoll'].includes(key)) {
         const roll = node('button', 'workspace-secondary', 'Lancer');
@@ -279,7 +290,7 @@ export function renderV5MagicContext({ actor, participants = [], target, type, d
       addNum(specificBox, 'magicVortexDirectionRoll', 'Vortex : d10 de direction si Test raté (1 disparaît, 2 N, 3 NE, 4 E, 5 en place, 6 SE, 7 S, 8 SO, 9 O, 10 NO)', 1, 10);
       addNum(specificBox, 'magicVortexDistance', 'Distance du Vortex (2d10 m)', 2, 20);
     }
-    if (isArcane) specificBox.appendChild(renderArcaneFields(draft, actor, target, participants, handlers));
+    if (isArcane) specificBox.appendChild(renderArcaneFields(draft, actor, target, participants, handlers, getObstinateStatus));
     if (specificBox.childElementCount) {
       const specificDetails = node('details', 'workspace-v5-context-details');
       specificDetails.open = draft.magicOptionsOpen ?? true;
@@ -399,7 +410,10 @@ export function renderV5MagicContext({ actor, participants = [], target, type, d
           const next = chk.checked
             ? [...new Set([...currentTargets, p.id])]
             : currentTargets.filter(id => id !== p.id);
-          handlers.select({ magicTargetIds: next });
+          const effective=next.length?next:defaultTargets;
+          const cleaned=contract?.effects?.vortex && !effective.includes(p.id)
+            ? clearVortexTestTalents(draft,actor.id,(id,key)=>id===p.id&&!/^mini\d+/.test(key)) : {};
+          handlers.select({ ...cleaned, magicTargetIds: next });
         });
         lbl.append(chk, ` ${p.name}`);
         multiBox.appendChild(lbl);
@@ -411,7 +425,7 @@ export function renderV5MagicContext({ actor, participants = [], target, type, d
   return v5;
 }
 
-export function renderArcaneFields(draft, actor, target, participants, handlers) {
+export function renderArcaneFields(draft, actor, target, participants, handlers, getObstinateStatus) {
   const box = node('fieldset', 'workspace-v5-choice-group workspace-arcane-options');
   box.appendChild(node('legend', '', 'Destruction des Arcanes'));
   const armorPoints = Number(draft.magicArcaneArmorPoints) || 0;
@@ -478,6 +492,8 @@ export function renderArcaneFields(draft, actor, target, participants, handlers)
         ['randomMagicItem', 'Objet magique tiré au sort', false],
         ...(draft.magicArcaneChooseItem ? [['dexterityRoll', 'Test de Dextérité (+2 DR), 1d100', true], ['chosenMagicItem', 'Objet magique choisi', false]] : [])
       ]) {
+        if(key==='focalisationRoll'){const choice=renderObstinateChoice(actor,facts.focalisationConditionContext?.preRollTalent,value=>update({focalisationConditionContext:{...(facts.focalisationConditionContext||{}),preRollTalent:value}}),{focusKey:`arcane-focalisation-obstinate-${person.id}`,title:`Obstiné avant le jet — Focalisation pour ${person.name}`,status:getObstinateStatus?.(actor.id)});if(choice)box.append(choice);}
+        if(key==='dexterityRoll'){const choice=renderObstinateChoice(actor,facts.dexterityConditionContext?.preRollTalent,value=>update({dexterityConditionContext:{...(facts.dexterityConditionContext||{}),preRollTalent:value}}),{focusKey:`arcane-dexterity-obstinate-${person.id}`,title:`Obstiné avant le jet — Dextérité pour ${person.name}`,status:getObstinateStatus?.(actor.id)});if(choice)box.append(choice);}
         const label = node('label', 'workspace-type', text);
         const input = document.createElement('input');
         input.type = numeric ? 'number' : 'text';
@@ -519,7 +535,7 @@ export function protectionNote(protection) {
   return '';
 }
 
-export function renderV5MagicResult(preview, target, draft, handlers) {
+export function renderV5MagicResult(preview, target, draft, handlers, participants = [], getObstinateStatus) {
   const result = node('div', 'workspace-result workspace-magic-result');
   const pills = node('div', 'workspace-result-pills');
 
@@ -623,9 +639,12 @@ export function renderV5MagicResult(preview, target, draft, handlers) {
     err.setAttribute('role', 'alert');
     result.appendChild(err);
     for (const need of sp.needsInput || []) if (need.field?.startsWith('mountedRide')) {
-      const [, riderId] = need.field.split(':');
+      const [, riderId, event] = need.field.split(':');
       const field = need.field.startsWith('mountedRideScore') ? 'score' : 'roll';
-      const answers = draft.magicMountedRideTests || {}, current = answers[riderId] || {};
+      const answers = draft.magicMountedRideTests || {}, riderAnswers = answers[riderId] || {}, current = event ? riderAnswers[event] || {} : riderAnswers;
+      const update = patch => handlers.select({magicMountedRideTests:{...answers,[riderId]:event?{...riderAnswers,[event]:{...current,...patch}}:{...current,...patch}}});
+      const rider=participants.find(row=>row.id===riderId);
+      if(field==='roll'){const choice=renderObstinateChoice(rider,current.conditionContext?.preRollTalent,value=>{update({conditionContext:{...(current.conditionContext||{}),preRollTalent:value}});handlers.calculate?.();},{focusKey:`magic-ride-obstinate-${riderId}-${event||'single'}`,title:`Obstiné avant le jet — Chevaucher de ${rider?.name||riderId}`,status:rider&&getObstinateStatus?.(riderId)});if(choice)result.append(choice);}
       const label = node('label', 'workspace-type', need.label || `${riderId} · ${field === 'roll' ? 'd100' : 'score de Chevaucher'}`);
       const input = document.createElement('input');
       input.type = 'number';
@@ -634,7 +653,7 @@ export function renderV5MagicResult(preview, target, draft, handlers) {
       input.value = current[field] == null ? '' : String(current[field]);
       if (field === 'roll') { input.dataset.npcRollKey = 'magicMountedRideTests'; input.dataset.npcRollOwnerId = riderId; }
       input.addEventListener('change', () => {
-        handlers.select({ magicMountedRideTests: { ...answers, [riderId]: { ...current, [field]: input.value === '' ? null : Number(input.value) } } });
+        update({ [field]: input.value === '' ? null : Number(input.value) });
         handlers.calculate();
       });
       label.append(input);
@@ -735,10 +754,12 @@ export function renderV5MagicResult(preview, target, draft, handlers) {
       if (fall.test) result.appendChild(node('p', 'workspace-result-line', `${fall.participantId} : Chevaucher ${fall.test.roll}, ${fall.test.sl} DR · ${fall.dismount ? 'désarçonné' : 'reste en selle'}.`));
     }
     for (const need of sp.needsInput || []) if (need.field?.startsWith('mountedRide')) {
-      const [, riderId] = need.field.split(':');
+      const [, riderId, event] = need.field.split(':');
       const field = need.field.startsWith('mountedRideScore') ? 'score' : 'roll';
-      const rider = (sp.targets || []).find(row => row.id === riderId);
-      const answers = draft.magicMountedRideTests || {}, current = answers[riderId] || {};
+      const rider = participants.find(row => row.id === riderId) || (sp.targets || []).find(row => row.id === riderId);
+      const answers = draft.magicMountedRideTests || {}, riderAnswers = answers[riderId] || {}, current = event ? riderAnswers[event] || {} : riderAnswers;
+      const update = patch => handlers.select({magicMountedRideTests:{...answers,[riderId]:event?{...riderAnswers,[event]:{...current,...patch}}:{...current,...patch}}});
+      if(field==='roll'){const choice=renderObstinateChoice(rider,current.conditionContext?.preRollTalent,value=>{update({conditionContext:{...(current.conditionContext||{}),preRollTalent:value}});handlers.calculate?.();},{focusKey:`magic-ride-obstinate-${riderId}-${event||'single'}`,title:`Obstiné avant le jet — Chevaucher de ${rider?.name||riderId}`,status:rider&&getObstinateStatus?.(riderId)});if(choice)result.append(choice);}
       const label = node('label', 'workspace-type', need.label || `${rider?.name || riderId} · ${field === 'roll' ? 'd100' : 'score de Chevaucher'}`);
       const input = document.createElement('input');
       input.type = 'number';
@@ -747,7 +768,7 @@ export function renderV5MagicResult(preview, target, draft, handlers) {
       input.value = current[field] == null ? '' : String(current[field]);
       if (field === 'roll') { input.dataset.npcRollKey = 'magicMountedRideTests'; input.dataset.npcRollOwnerId = riderId; }
       input.addEventListener('change', () => {
-        handlers.select({ magicMountedRideTests: { ...answers, [riderId]: { ...current, [field]: input.value === '' ? null : Number(input.value) } } });
+        update({ [field]: input.value === '' ? null : Number(input.value) });
         handlers.calculate();
       });
       label.append(input);

@@ -6,8 +6,10 @@ import { recordV5ActionUsage, standardV5ActionSpent, previewV5PaviseDeploymentFr
 import { initialV5ReloadState, createV5ReloadState, beginV5Reload, advanceV5Reload, V5_RELOAD_REASON_LABELS } from '../v5-reloading.js';
 import { previewV5BrokenEscape, BROKEN_ESCAPE_SOURCE, BROKEN_ESCAPE_RULE_VERSION } from '../v5-broken-escape.js';
 import { withoutEngagements } from '../engagements.js';
+import { consumeObstinate } from '../v5-obstinate.js';
 
 export function createV5CombatActionsApi({ api, currentEnvelope, issuedBrokenEscapePreviews, issuedPaviseDeploymentPreviews }) {
+  const issuedExtractionPreviews = new Map();
   return {
     confirmBrokenEscapeVisibility({actorId,visibleToAnyEnemy}={}) {
       const envelope=currentEnvelope(),clock=v5StoreActionClock(envelope);
@@ -52,16 +54,21 @@ export function createV5CombatActionsApi({ api, currentEnvelope, issuedBrokenEsc
       }
       const result=previewV5ProjectileExtraction({projectile,method:input.method,success:test?.success,testSl:test?.sl,surgeryConfirmed:input.surgeryConfirmed});
       if(!result.ready)return {ready:false,status:'requires-input',error:result.unresolved[0]};
-      return {ready:true,baseRevision:envelope.localRevision||0,participantId:participant.id,projectileId:projectile.id,before:structuredClone(projectile),after:{...structuredClone(projectile),removed:true,
+      const plan = {ready:true,previewId:uid(),baseRevision:envelope.localRevision||0,participantId:participant.id,projectileId:projectile.id,obstinateChosen:Boolean(test && input.conditionContext?.preRollTalent==='strong-minded'),before:structuredClone(projectile),after:{...structuredClone(projectile),removed:true,
         removalReceipt:{method:result.method,...(test?{test:{roll:test.roll,score:test.score,success:test.success,sl:test.sl,detail:testDetail}}:{}),...(input.surgeryConfirmed?{surgeryConfirmed:true}:{})}}};
+      issuedExtractionPreviews.set(plan.previewId, JSON.stringify(plan));
+      while (issuedExtractionPreviews.size > 100) issuedExtractionPreviews.delete(issuedExtractionPreviews.keys().next().value);
+      return plan;
     },
     applyV5ProjectileExtraction(supplied) {
       const plan=cloneValue(supplied);
       if(!plan?.ready)return Promise.resolve({status:'blocked',reason:'Recalculer l’extraction avant application.'});
+      if(!plan.previewId || issuedExtractionPreviews.get(plan.previewId)!==JSON.stringify(plan))return Promise.resolve({status:'blocked',reason:'Aperçu d’extraction absent ou modifié ; recalculez.'});
       const saved=api.executeCommand('v5-projectile-extraction',draft=>{
         if((draft.localRevision||0)!==plan.baseRevision)throw Object.assign(new Error('La partie a changé; recalculez l’extraction.'),{userFacing:true});
         const participant=draft.combat?.participants?.find(row=>row.id===plan.participantId),live=participant?.extensions?.v5?.lodgedProjectiles?.find(row=>row.id===plan.projectileId);
         if(!live||JSON.stringify(live)!==JSON.stringify(plan.before))throw Object.assign(new Error('Le projectile fiché a changé; recalculez l’extraction.'),{userFacing:true});
+        if(plan.obstinateChosen)consumeObstinate(draft,participant,{preRollTalent:'strong-minded'});
         const updated=structuredClone(participant);
         updated.extensions.v5.lodgedProjectiles=updated.extensions.v5.lodgedProjectiles.map(row=>row.id===plan.projectileId?structuredClone(plan.after):row);
         draft.combat.participants=draft.combat.participants.map(row=>row.id===participant.id?updated:row);
@@ -224,6 +231,7 @@ export function createV5CombatActionsApi({ api, currentEnvelope, issuedBrokenEsc
         seqs.receipts=[...(seqs.receipts||[]),receipt].slice(-300);
         draft.extensions??={};
         draft.extensions.v5={...root,actionLedger:ledger,brokenEscape:seqs};
+        if(plan.test)consumeObstinate(draft,actor,plan.facts?.conditionContext);
         return draft;
       });
       const finish=result=>{

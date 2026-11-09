@@ -56,6 +56,8 @@ Le MJ a décidé les 05 et 06/11 que tous les Tests, et pas seulement le Test pr
 - **CA32** Un poursuivant Brisé ne fuit pas : les malus de Brisé s'appliquent à son Test de poursuite, sans question.
 - **CA33** Une source de Filet Inconsciente lâche prise : tous les niveaux d'Empêtré tombent, et le Filet à crochets ne fait pas de dégâts.
 - **CA34** Une cible Inconsciente du Souffle est traitée comme une cible Surprise : elle n'esquive pas.
+- **CA35** (MJ 09/11) Obstiné dispose d'un seul usage par personnage et par séance, partagé entre tous les écrans et le combat. Un usage déjà dépensé rend le choix indisponible avec son motif ; commencer une nouvelle séance le rend disponible. Seul un Test effectivement appliqué consomme l'usage et l'annulation par l'historique le restitue.
+- **CA36** Obstiné est aussi proposé avant les Tests de Chevaucher, de recul d'arquebuse, de Warp Blade, de Déterminé, de résistance des cibles de sorts et de fin de Tour.
 
 ## Hors périmètre
 

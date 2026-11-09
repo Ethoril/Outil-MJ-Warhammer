@@ -1,6 +1,6 @@
-import { previewV5Test, selectV5Test } from './v5-roll.js';
+import { selectV5Test } from './v5-roll.js';
 import { effectiveSkillScore } from './v5-magic-talents.js';
-import { resolveV5ConditionTestContext, withV5TestTalents } from './v5-test-context.js';
+import { resolveV5ConditionTestContext } from './v5-test-context.js';
 import { previewV5SecondaryTest, secondaryTestDetail } from './v5-test-modifiers.js';
 
 export const BROKEN_ESCAPE_RULE_VERSION = 'l06-broken-escape-2026-10-18.1';
@@ -82,14 +82,13 @@ export function previewV5BrokenEscape({ state, actor, actorId=actor?.id, action,
     const baseScore = skill.total ?? skill.value;
     // Séquelles (MJ 09/11 CA13) : Caractéristique perdue ajoutée après le contexte d'États.
     const baseSkillScore = effectiveSkillScore(actor, baseScore, skill.carac || 'Ag');
-    const context = resolveV5ConditionTestContext(actor,{characteristic:skill.carac || 'Ag',isAction:true,involvesMovement:true,runningOrHiding:true,requiresSight:false,reliesOnSight:false,
+    const context = resolveV5ConditionTestContext(actor,{...answers(facts),characteristic:skill.carac || 'Ag',isAction:true,involvesMovement:true,runningOrHiding:true,requiresSight:false,reliesOnSight:false,
       // MJ 09/11 CA22 : courir ne se fait pas à deux mains ; les autres circonstances de séquelle restent demandées.
       talentContext:{...answers(facts),sequelaTwoHands:false}});
-    if (!context.ready) return {ready:false,status:'requires-input',error:'Le contexte du Test Athlétisme est incomplet.',needsInput:clone(context.needsInput),unresolved:clone(context.needsInput)};
-    const score=Math.max(0,baseSkillScore+(context.scoreDelta||0));
-    // T10 : talents génériques du Test et plafonds de fin de calcul (Obstiné, Distrait) sur la liste complète, comme à la Prière.
-    const sprintLists=withV5TestTalents(actor,context,{slModifiers:[...context.slModifiers,{id:'broken-sprint-average',label:'Sprint moyen (+2 DR)',amount:2}],advantageSources:context.advantageSources,disadvantageSources:context.disadvantageSources});
-    const testPreview=previewV5Test({score,roll,...sprintLists});
+    const secondary=previewV5SecondaryTest(actor,{score:baseSkillScore,roll,test:{characteristic:skill.carac||'Ag',skill:skill.name||skill.nom||'Athlétisme',isAction:true},
+      context:{...answers(facts),involvesMovement:true,runningOrHiding:true,requiresSight:false,reliesOnSight:false,sequelaTwoHands:false},slModifiers:[{id:'broken-sprint-average',label:'Sprint moyen (+2 DR)',amount:2}]});
+    if(!secondary.ready)return {ready:false,status:'requires-input',error:secondary.restrictions?.join(' ')||'Le contexte du Test Athlétisme est incomplet.',needsInput:clone(secondary.needsInput),unresolved:clone(secondary.needsInput)};
+    const testPreview=secondary.preview,score=testPreview.options[0].result.score;
     if (testPreview.choiceRequired && !['keep','reverse'].includes(choice)) return fail('Choisir le résultat du Test Athlétisme.','choice');
     const selectedChoice=testPreview.options.length===1?testPreview.options[0].id:choice;
     const test=selectV5Test(testPreview,selectedChoice);
@@ -97,20 +96,21 @@ export function previewV5BrokenEscape({ state, actor, actorId=actor?.id, action,
     if (!finiteInt(movement,0)) return fail('Mouvement de base inconnu; Sprint ne peut pas être calculé.','actor.caracs.M');
     const moveDistance=movement*(sequence.moveMode==='run'?4:2), sprintDistance=movement*4+test.sl;
     if (sprintDistance < 0) return {ready:false,status:'requires-input',error:'La formule source donne une distance Sprint négative; arbitrage MJ requis.',needsInput:[{field:'sprintDistance',label:'Arbitrer une distance Sprint négative.'}]};
-    return {ready:true,status:'ready',ruleVersion:BROKEN_ESCAPE_RULE_VERSION,action,actorId,turn:clone(turn),facts:clone(facts),test:{...clone(test),score,characteristic:skill.carac||'Ag',difficultySl:2,result:clone(test),preview:clone(testPreview),context:clone(context)},moveDistance,sprintDistance,totalDistance:moveDistance+sprintDistance,moveUnit:'yards',sequenceAfter:{fleeCommitted:true,visibleToAnyEnemy:facts.visibleToAnyEnemyAfter,moveMode:sequence.moveMode,moveDistance,sprintDistance,totalDistance:moveDistance+sprintDistance},source:clone(BROKEN_ESCAPE_SOURCE)};
+    return {ready:true,status:'ready',ruleVersion:BROKEN_ESCAPE_RULE_VERSION,action,actorId,turn:clone(turn),facts:clone(facts),test:{...clone(test),score,characteristic:skill.carac||'Ag',difficultySl:2,result:clone(test),preview:clone(testPreview),context:clone(context),detail:secondaryTestDetail(secondary),sourceDetail:{rows:clone(secondary.rows),modifiers:clone(secondary.modifiers)}},moveDistance,sprintDistance,totalDistance:moveDistance+sprintDistance,moveUnit:'yards',sequenceAfter:{fleeCommitted:true,visibleToAnyEnemy:facts.visibleToAnyEnemyAfter,moveMode:sequence.moveMode,moveDistance,sprintDistance,totalDistance:moveDistance+sprintDistance},source:clone(BROKEN_ESCAPE_SOURCE)};
   }
   if (facts.visibleToAnyEnemy !== false) return {ready:false,status:'blocked',error:'Hide est une Action facultative uniquement après confirmation MJ que le personnage est hors de vue.'};
   const skill=(actor.skills||[]).find(row=>(facts.skillId&&row.id===facts.skillId)||(facts.skillName&&String(row.name||row.nom||'').toLowerCase()===String(facts.skillName).toLowerCase()));
   if (!skill || skill.status!=='resolved' || !Number.isInteger(skill.total??skill.value)) return fail('Choisir une compétence résolue pour le Test facultatif de Hide.','facts.skillId');
   if (!finiteInt(roll,1)||roll>100) return fail('Fournir le jet d100 explicite du Test facultatif de Hide.','roll');
   const baseSkillScore=effectiveSkillScore(actor,skill.total??skill.value,skill.carac||'Ag');
-  const context=resolveV5ConditionTestContext(actor,{characteristic:skill.carac||'Ag',isAction:true,involvesMovement:false,runningOrHiding:true,requiresSight:false,reliesOnSight:false,talentContext:{...answers(facts),sequelaTwoHands:false}});
-  if(!context.ready)return {ready:false,status:'requires-input',error:'Le contexte du Test de Hide est incomplet.',needsInput:clone(context.needsInput)};
-  const score=Math.max(0,baseSkillScore+(context.scoreDelta||0));
-  const testPreview=previewV5Test({score,roll,...withV5TestTalents(actor,context,{slModifiers:context.slModifiers,advantageSources:context.advantageSources,disadvantageSources:context.disadvantageSources})});
+  const context=resolveV5ConditionTestContext(actor,{...answers(facts),characteristic:skill.carac||'Ag',isAction:true,involvesMovement:false,runningOrHiding:true,requiresSight:false,reliesOnSight:false,talentContext:{...answers(facts),sequelaTwoHands:false}});
+  const secondary=previewV5SecondaryTest(actor,{score:baseSkillScore,roll,test:{characteristic:skill.carac||'Ag',skill:skill.name||skill.nom||'',isAction:true},
+    context:{...answers(facts),involvesMovement:false,runningOrHiding:true,requiresSight:false,reliesOnSight:false,sequelaTwoHands:false}});
+  if(!secondary.ready)return {ready:false,status:'requires-input',error:secondary.restrictions?.join(' ')||'Le contexte du Test de Hide est incomplet.',needsInput:clone(secondary.needsInput)};
+  const testPreview=secondary.preview,score=testPreview.options[0].result.score;
   if(testPreview.choiceRequired&&!['keep','reverse'].includes(choice))return fail('Choisir le résultat du Test de Hide.','choice');
   const selectedChoice=testPreview.options.length===1?testPreview.options[0].id:choice,test=selectV5Test(testPreview,selectedChoice);
-  return {ready:true,status:'ready',ruleVersion:BROKEN_ESCAPE_RULE_VERSION,action,actorId,turn:clone(turn),facts:clone(facts),test:{...clone(test),score,characteristic:skill.carac||'Ag',result:clone(test),preview:clone(testPreview),context:clone(context)},sequenceAfter:sequence?clone(sequence):null,source:clone(BROKEN_ESCAPE_SOURCE)};
+  return {ready:true,status:'ready',ruleVersion:BROKEN_ESCAPE_RULE_VERSION,action,actorId,turn:clone(turn),facts:clone(facts),test:{...clone(test),score,characteristic:skill.carac||'Ag',result:clone(test),preview:clone(testPreview),context:clone(context),detail:secondaryTestDetail(secondary)},sequenceAfter:sequence?clone(sequence):null,source:clone(BROKEN_ESCAPE_SOURCE)};
 }
 
 /** T10 : réponses du MJ aux questions du Test de Sprint ou de Se cacher (séquelle de zone, Obstiné), dans `facts.conditionContext`. */

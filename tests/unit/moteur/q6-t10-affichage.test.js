@@ -9,6 +9,7 @@ import { sequelaQuestionLabel } from '../../../js/core/v5-sequela-effects.js';
 import { previewCadaiCorruptionReroll } from '../../../js/core/v5-magic-high.js';
 import { getAllSpellContracts } from '../../../js/core/v5-spell-contracts.js';
 import { collectTestQuestions, answerTestQuestion, getAt, isQuestionField } from '../../../js/ui/test-questions.js';
+import { previewV5SecondaryTest } from '../../../js/core/v5-test-modifiers.js';
 import { encounter, inputFor } from '../../helpers/lot3-domain-fixture.js';
 import { input } from '../../helpers/lot3-wom-fixture.js';
 
@@ -25,6 +26,13 @@ describe('Libellés et chemins de réponse', () => {
       needsInput: [{ field: 'involvesMovement', label: 'sans chemin' }] };
     const rows = collectTestQuestions(preview);
     assert.deepEqual(rows.map(row => [row.answerAt, row.field]), [['tripFallConditionContext', 'involvesMovement'], ['mountedRideTests.r1.conditionContext', 'reliesOnSight']]);
+  });
+  test('chutes multiples : chaque événement garde ses questions, y compris les zones de séquelle', () => {
+    const needsInput = [
+      { field: 'rideCondition:r1:rider-stunned:involvesMovement', label: 'Mouvement', answerAt: 'mountedRideTests.r1.rider-stunned.conditionContext' },
+      { field: 'rideCondition:r1:mount-stunned:sequelaUses:arm:left', label: 'Bras', answerAt: 'mountedRideTests.r1.mount-stunned.conditionContext' }
+    ];
+    assert.deepEqual(collectTestQuestions({ needsInput }).map(row => row.field), ['involvesMovement', 'sequelaUses:arm:left']);
   });
   test('answerTestQuestion range la réponse au chemin, sans toucher au reste', () => {
     const root = { keep: 1, mountedRideTests: { r1: { roll: 40 } } };
@@ -59,8 +67,10 @@ describe('Questions rendues avec leur chemin de réponse', () => {
     assert.equal(pending.status, 'condition-input-required');
     assert.equal(pending.attributeDice, undefined, 'le d100 déjà saisi n’est pas redemandé');
     assert.deepEqual(pending.needsInput.map(row => [row.field, row.answerAt]), [['involvesMovement', 'targetTests.foe.corruptionContext']]);
+    assert.ok(pending.applicableQuestions.some(row => row.field === 'involvesMovement' && row.participantId === 'foe' && row.answerAt === 'targetTests.foe.corruptionContext'));
     const answered = ask({ corruptionContext: { involvesMovement: false } });
     assert.notEqual(answered.status, 'condition-input-required', answered.error);
+    assert.ok(answered.applicableQuestions.some(row => row.field === 'involvesMovement' && row.participantId === 'foe' && row.answerAt === 'targetTests.foe.corruptionContext'));
   });
   test('Sprint de Brisé : la question de zone se répond dans facts.conditionContext', () => {
     const row = { type: 'loc-dr', loc: 'leg:left', amount: -1, label: 'Déchirure musculaire mineure (jambe gauche) : −1 DR aux Tests impliquant la zone', lifetime: 'temporary', sourceId: 'tm' };
@@ -114,6 +124,7 @@ describe('Convalescence : une réponse par patient', () => {
     await store.ready;
     const stunned = id => ({ ...patient(id), states: [{ id: 's', key: 'sonne', name: 'Sonné', level: 2 }], talents: [{ id: 'talent-strong-minded', status: 'resolved', rank: 1 }] });
     await store.loadFromJSON({ schemaVersion: 3, reserve: [], combat: { round: 0, currentActorId: null, order: [], participants: [stunned('a')] }, log: [], diceLines: [], extensions: { v5: {} } });
+    await store.startTalentSession();
     await store.registerAftermathIncident({ operationId: 'r', participantId: 'a', cause: 'combat' });
     const dailyTests = [{ incidentId: store.getAftermathState().incidents[0].id, day: 0, roll: 30 }];
     const out = await store.advanceAftermathCalendar({ operationId: 'adv', days: 1, dailyTests, conditionContext: { obstinateTesterIds: ['a'] } });
@@ -123,6 +134,34 @@ describe('Convalescence : une réponse par patient', () => {
 });
 
 describe('Sprint de Brisé : talents et plafonds', () => {
+  test('Sprint de Brisé : le blocage Surpris indique son motif', () => {
+    const actor = { id:'hero', caracs:{ M:4, Ag:40 }, states:[{ key:'brise', name:'Brisé', level:1 }, { key:'surpris', name:'Surpris', level:1 }], talents:[], skills:[{ name:'Athlétisme', carac:'Ag', status:'resolved', total:55 }], extensions:{ v5:{} } };
+    const result = previewV5BrokenEscape({ actor, action:'sprint', facts:{ visibleToAnyEnemyAfter:false }, turn:{ encounterId:'e', turnId:'t', round:1 }, roll:30, sequence:{ fleeCommitted:true, visibleToAnyEnemy:true, moveMode:'run' } });
+    assert.equal(result.ready, false);
+    assert.match([result.error, ...(result.needsInput || []).map(row => row.label)].join(' '), /Surpris/i);
+  });
+  test('Sprint et Se cacher : une réponse de circonstance Souillé atteint le calcul', () => {
+    const actor = { id:'hero', name:'Héros', caracs:{ M:4, Ag:40 }, states:[{ key:'brise', name:'Brisé', level:1 }, { key:'souille', name:'Souillé', level:1 }], talents:[],
+      skills:[{ id:'ath', name:'Athlétisme', carac:'Ag', status:'resolved', total:55 }, { id:'hide', name:'Discrétion', carac:'Ag', status:'resolved', total:55 }], extensions:{ v5:{} } };
+    const base = { actor, turn:{ encounterId:'e', turnId:'t', round:1 }, roll:30, sequence:{ fleeCommitted:true, visibleToAnyEnemy:true, moveMode:'run' } };
+    const context = { usesFellowship:false };
+    assert.equal(previewV5BrokenEscape({ ...base, action:'sprint', facts:{ visibleToAnyEnemyAfter:false, conditionContext:context } }).ready, true);
+    assert.equal(previewV5BrokenEscape({ ...base, action:'hide', facts:{ visibleToAnyEnemy:false, skillId:'hide', conditionContext:context } }).ready, true);
+  });
+  test('Sprint et Se cacher : les effets de sort et de prière modifient les deux Tests', () => {
+    const actor = { id:'hero', name:'Héros', caracs:{ M:4, Ag:40 }, states:[{ key:'brise', name:'Brisé', level:1 }], talents:[],
+      skills:[{ id:'ath', name:'Athlétisme', carac:'Ag', status:'resolved', total:55 }, { id:'hide', name:'Discrétion', carac:'Ag', status:'resolved', total:55 }],
+      extensions:{ v5:{ spellEffects:[{ id:'s', spellId:'s', spellName:'Sort', casterId:'mage', testModifiers:{ 'Tous les Tests':1 } }], divineEffects:[{ id:'p', type:'test-modifier', testModifiers:{ 'Tous les Tests':1 } }] } } };
+    const base = { actor, turn:{ encounterId:'e', turnId:'t', round:1 }, roll:30, sequence:{ fleeCommitted:true, visibleToAnyEnemy:true, moveMode:'run' } };
+    const sprint = previewV5BrokenEscape({ ...base, action:'sprint', facts:{ visibleToAnyEnemyAfter:false } });
+    const hide = previewV5BrokenEscape({ ...base, action:'hide', facts:{ visibleToAnyEnemy:false, skillId:'hide' } });
+    const plain = structuredClone(actor); plain.extensions.v5.spellEffects=[]; plain.extensions.v5.divineEffects=[];
+    const normalSprint = previewV5BrokenEscape({ ...base, actor:plain, action:'sprint', facts:{ visibleToAnyEnemyAfter:false } });
+    const normalHide = previewV5BrokenEscape({ ...base, actor:plain, action:'hide', facts:{ visibleToAnyEnemy:false, skillId:'hide' } });
+    assert.equal(sprint.test.sl, normalSprint.test.sl + 2);
+    assert.equal(hide.test.sl, normalHide.test.sl + 2);
+    assert.ok(sprint.test.detail.some(line => /Tous les Tests.*\+2 DR/.test(line)));
+  });
   test('Obstiné choisi avant le jet annule le malus d’Exténué du Test d’Athlétisme', () => {
     const hero = talents => ({ id: 'hero', name: 'Héros', caracs: { M: 4, Ag: 40 }, states: [{ id: 'b1', key: 'brise', name: 'Brisé', level: 1 }, { id: 'f', key: 'extenue', name: 'Exténué', level: 2 }],
       skills: [{ id: 'ath', name: 'Athlétisme', carac: 'Ag', status: 'resolved', total: 55 }], talents, extensions: { v5: {} } });
@@ -132,5 +171,24 @@ describe('Sprint de Brisé : talents et plafonds', () => {
     const plain = sprint(hero(strongMinded)), chosen = sprint(hero(strongMinded), { preRollTalent: 'strong-minded' });
     assert.equal(plain.ready && chosen.ready, true, JSON.stringify(plain.needsInput || chosen.needsInput));
     assert.equal(chosen.test.sl, plain.test.sl + 2, 'Exténué 2 ramené à 0');
+  });
+  test('Sprint avec Obstiné : un Désavantage de Souillé annulé est indiqué comme écarté', () => {
+    const actor = { id:'hero', caracs:{ M:4, Ag:40 }, states:[{ key:'brise', name:'Brisé', level:1 }, { key:'souille', name:'Souillé', level:1 }], talents:[{ id:'talent-strong-minded', status:'resolved', rank:1 }], skills:[{ name:'Athlétisme', carac:'Ag', status:'resolved', total:55 }], extensions:{ v5:{} } };
+    const result = previewV5BrokenEscape({ actor, action:'sprint', facts:{ visibleToAnyEnemyAfter:false, conditionContext:{ usesFellowship:true, preRollTalent:'strong-minded' } }, turn:{ encounterId:'e', turnId:'t', round:1 }, roll:30, sequence:{ fleeCommitted:true, visibleToAnyEnemy:true, moveMode:'run' } });
+    assert.equal(result.ready, true);
+    const row = result.test.sourceDetail.rows.find(item => item.kind === 'disadvantage' && /Souillé/i.test(item.label));
+    assert.equal(row?.dropped, true);
+  });
+  test('Sprint avec Obstiné : un malus de sort annulé reste visible comme écarté', () => {
+    const actor = { id:'hero', caracs:{ M:4, Ag:40 }, states:[{ key:'brise', name:'Brisé', level:1 }], talents:[{ id:'talent-strong-minded', status:'resolved', rank:1 }], skills:[{ name:'Athlétisme', carac:'Ag', status:'resolved', total:55 }], extensions:{ v5:{ spellEffects:[{id:'s',spellId:'s',spellName:'Sort',casterId:'m',testModifiers:{'Tous les Tests':-2}}] } } };
+    const result = previewV5BrokenEscape({ actor, action:'sprint', facts:{ visibleToAnyEnemyAfter:false, conditionContext:{ preRollTalent:'strong-minded' } }, turn:{ encounterId:'e', turnId:'t', round:1 }, roll:30, sequence:{ fleeCommitted:true, visibleToAnyEnemy:true, moveMode:'run' } });
+    assert.equal(result.ready, true);
+    assert.ok(result.test.sourceDetail.rows.some(row => row.kind === 'modifier' && row.amount === -2 && row.dropped && row.rule === 'Obstiné'));
+  });
+  test('Obstiné : un malus propre au Test reste affiché barré', () => {
+    const actor = { id:'hero', caracs:{ Ag:40 }, states:[], talents:[{ id:'talent-strong-minded', status:'resolved', rank:1 }], extensions:{ v5:{} } };
+    const result = previewV5SecondaryTest(actor, { score:40, roll:30, test:{ characteristic:'Ag' }, context:{ preRollTalent:'strong-minded' }, slModifiers:[{ id:'difficulty', label:'Difficulté', amount:-2 }] });
+    assert.equal(result.ready, true);
+    assert.ok(result.rows.some(row => row.id === 'difficulty' && row.amount === -2 && row.dropped && row.rule === 'Obstiné'));
   });
 });

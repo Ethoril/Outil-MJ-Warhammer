@@ -121,6 +121,8 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
   }
   function resetMagicDice(draft) {
     draft.magicCtRoll=null;
+    draft.magicTestTalents = {};
+    draft.magicVortexRequests = [];
     for (const key of MAGIC_DICE_KEYS) draft[key] = key === 'magicNoOtherTargets' ? false : null;
     draft.magicTargetTests = {};
     draft.magicMountedRideTests = {};
@@ -686,7 +688,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     const input = { ...state.disengage };
     delete input.actorId;
     const plan = Store.previewDisengage(actor.id, input);
-    renderDisengageForm(column, { actor, plan, state: input, active: context.active,
+    renderDisengageForm(column, { actor, plan, state: input, active: context.active, getObstinateStatus: id => Store.getObstinateStatus?.(id),
       onChange: patch => { state.disengage = { ...state.disengage, ...patch }; render(); },
       onApply: () => Promise.resolve().then(() => Store.applyDisengage(actor.id, input)).then(() => { state.disengage = null; })
         .catch(error => plateauToast('Désengagement impossible', error)).finally(() => render()),
@@ -1329,6 +1331,10 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         return;
       }
       draft.magicOpSpent = {};
+      if ('magicDispellerId' in patch && patch.magicDispellerId !== draft.magicDispellerId) draft.magicDispelConditionContext = {};
+      if ('magicSpellId' in patch && patch.magicSpellId !== draft.magicSpellId) {
+        draft.magicAnsweredTestQuestions = [];
+      }
       if('brokenEscapeVisibility' in patch)draft.brokenEscapeVisibility=patch.brokenEscapeVisibility;
       if ('magicSpellId' in patch && patch.magicSpellId !== draft.magicSpellId) {
         draft.magicMjChoice = '';
@@ -1749,7 +1755,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
               .filter(([, roll]) => roll != null && roll !== '').map(([purpose, roll]) => ({ purpose, roll }))
             : [];
           const extraMagicInput={
-            senseFacts:draft.magicSenseFacts || {},conditionContext:draft.magicConditionContext || {},requireExplicitDice:true,distraction:Boolean(draft.magicDistraction),yenluiPenalty:draft.magicYenluiPenalty,
+            senseFacts:draft.magicSenseFacts || {},conditionContext:draft.magicConditionContext || {},testTalents:draft.magicTestTalents || {},requireExplicitDice:true,distraction:Boolean(draft.magicDistraction),yenluiPenalty:draft.magicYenluiPenalty,
             magicDefianceTargets:draft.magicDefianceTargets || [],
             suffusedBy:draft.magicSuffusedId?[{id:draft.magicSuffusedId,distance:draft.magicSuffusedDistance}]:[],
             choice:draft.magicTestChoice || 'keep',
@@ -2343,7 +2349,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
           input.addEventListener('input',()=>{testRoll=input.value;});
           wrap.append(select,input);
           // T10 : Obstiné avant le jet et questions d'États ou de séquelle du Test de Guérison (refus précédent), réponse dans `conditionContext`.
-          const obstinate=renderObstinateChoice(participant,conditionContext.preRollTalent,value=>{conditionContext={...conditionContext};if(value==='strong-minded')conditionContext.preRollTalent=value;else delete conditionContext.preRollTalent;},{focusKey:`extraction-${projectile.id}-pre-roll-talent`});
+          const obstinate=renderObstinateChoice(participant,conditionContext.preRollTalent,value=>{conditionContext={...conditionContext};if(value==='strong-minded')conditionContext.preRollTalent=value;else delete conditionContext.preRollTalent;},{focusKey:`extraction-${projectile.id}-pre-roll-talent`,status:Store.getObstinateStatus?.(participant.id)});
           if(obstinate)wrap.append(obstinate);
         }
         const questionsBox=node('div','workspace-extraction-questions');
@@ -2521,6 +2527,8 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       defense: context.defense,
       previousWeaponAttacks,
       resolutionClock,
+      getObstinateStatus: id => Store.getObstinateStatus?.(id),
+      getObstinateIdentity: id => Store.getObstinateIdentity?.(id),
       canCalculate: typeof Store.previewResolution === 'function' || ['channelling', 'cast', 'dispel'].includes(context.type),
       canApply: Boolean(callbacks.applyResolution || ['channelling', 'cast', 'dispel'].includes(context.type)),
       canDeclareCombatAction: Boolean(callbacks.declareCombatAction),

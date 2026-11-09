@@ -82,6 +82,7 @@ try {
   const sequelaSpeech = { id: 'sq-speech', type: 'speech-dr', amount: -1, label: 'Fracture mal soignée (tête) : −1 DR aux Tests de Langue parlée' };
 
   async function screen(name, body) {
+    if (process.env.Q6_SCREEN && !name.startsWith(process.env.Q6_SCREEN)) return;
     try { await body(); results.push([name, true]); console.log('  ok   ' + name); }
     catch (error) { failed += 1; results.push([name, false]); console.log('  FAIL ' + name + '\n       ' + String(error.message).split('\n').join('\n       ')); }
   }
@@ -194,8 +195,9 @@ try {
 
   // ÉCRAN 3 : attribut de Tzeentch : la question d'État du Test de Corruption se pose dans « À préciser pour les Tests du sort ».
   await screen('3 Tzeentch : la question d’État de la cible À terre a son champ, sans nouveau d100', async () => {
-    await boot({ v5: { channelling: { sl: 30, type: 'winds' } }, spells: ['Transformation de Tzeentch'], foes: [{ id: 'foe', name: 'Orc', patch: { skills: [{ name: 'Résistance', total: 40 }], states: [{ id: 'prone-1', key: 'aterre', name: 'À terre', level: 1 }] } }] });
+    await boot({ v5: { channelling: { sl: 30, type: 'winds' } }, spells: ['Transformation de Tzeentch'], foes: [{ id: 'foe', name: 'Orc', patch: { skills: [{ name: 'Résistance', total: 40 }], states: [{ id: 'prone-1', key: 'aterre', name: 'À terre', level: 1 }] } }, { id: 'other', name: 'Gobelin' }] });
     await openCast('Transformation de Tzeentch');
+    await page.click('[data-focus-key="target-foe"]');
     await roll(25);
     await calculate();
     assert.match(await resultText(), /d100 du Test de Corruption requis/);
@@ -210,12 +212,198 @@ try {
     assert.match(await page.locator('.workspace-test-questions').first().textContent(), /À préciser pour les Tests du sort/);
     assert.equal(await page.getByLabel('d100 du Test de Corruption — Orc').count(), 0, 'le d100 déjà saisi n’est pas redemandé');
     assert.equal(await applyButton().isDisabled(), true, 'rien à appliquer avant la réponse');
-    await question.selectOption('false');
+    await chooseBoolean(question,'false');
     await page.waitForTimeout(400);
     let text = await resultText();
     assert.doesNotMatch(text, /précision d’État du Test de Corruption|d100 du Test de Corruption requis/, 'la question est levée');
     assert.match(text, /Test de Corruption (raté|réussi) [(]40[)]/, 'le Test de Corruption de la cible est résolu avec le d100 déjà saisi');
     assert.equal(await applyButton().isDisabled(), false);
+    assert.equal(await question.count(), 1, 'la réponse reste visible après résolution');
+    assert.equal(await question.inputValue(), 'false');
+    await question.selectOption('true');
+    await page.waitForTimeout(400);
+    assert.equal(await question.inputValue(), 'true', 'le MJ peut corriger sa réponse');
+    assert.equal(await applyButton().isDisabled(), false);
+    await question.selectOption('false');
+    await page.waitForTimeout(400);
+    assert.equal(await question.inputValue(), 'false');
+    await page.click('[data-focus-key="target-other"]');
+    await calculate();
+    assert.equal(await question.count(), 0, 'la réponse de l’ancienne cible ne réapparaît pas');
+    await page.click('[data-focus-key="target-foe"]');
+    await calculate();
+    assert.equal(await question.count(), 1, 'la réponse conservée redevient corrigeable en revenant à la cible');
+    assert.equal(await question.inputValue(), 'false');
+    await page.selectOption('[data-focus-key="magic-spell"]', await spellId('Carreau'));
+    await calculate();
+    assert.equal(await question.count(), 0, 'la réponse de l’ancien sort ne réapparaît pas');
+  });
+
+  await screen('3b questions de sort : seules les cibles et options encore applicables restent corrigeables', async () => {
+    const values = await page.evaluate(async () => {
+      const { renderPreviewTestQuestions } = await import('/js/ui/resolution-panel.js');
+      const rows = [
+        { field: 'involvesMovement', label: 'Mouvement ?', participantId: 'a', answerAt: 'targetTests.a.conditionContext' },
+        { field: 'involvesMovement', label: 'Mouvement ?', participantId: 'b', answerAt: 'targetTests.b.conditionContext' }
+      ];
+      const draft = { magicTargetTests: { a: { conditionContext: { involvesMovement: false } }, b: { conditionContext: { involvesMovement: true } } }, magicAnsweredTestQuestions: rows };
+      const draw = applicableQuestions => renderPreviewTestQuestions({ v5MagicKind: 'cast', spellPreview: { applicableQuestions } }, draft, { select() {} }, [{ id: 'a', name: 'A' }, { id: 'b', name: 'B' }]);
+      const both = draw(rows), second = draw([rows[1]]), neither = draw([]);
+      return { both: [...both.querySelectorAll('select')].map(el => [el.getAttribute('aria-label'), el.value]), second: [...second.querySelectorAll('select')].map(el => el.getAttribute('aria-label')), neither: neither === null };
+    });
+    assert.deepEqual(values.both, [['A : Mouvement ?', 'false'], ['B : Mouvement ?', 'true']]);
+    assert.deepEqual(values.second, ['B : Mouvement ?'], 'une cible ou option retirée ne laisse pas sa question à l’écran');
+    assert.equal(values.neither, true, 'aucune ancienne question sans Test applicable');
+  });
+
+  await screen('3c vortex initial : Calme de protection et question d’État restent accessibles', async () => {
+    await boot({ v5: { channelling: { sl: 30, type: 'winds' } }, spells: ['Tempête Magmatique'], foes: [{ id: 'foe', name: 'Orc', patch: {
+      talents:[talent('strong-minded')],states: [{ id: 'prone-1', key: 'aterre', name: 'À terre', level: 1 }],
+      extensions: { v5: { damageReductions: [{ amount: 1, filter: null, calmTest: true }] } }
+    } }] });
+    await page.evaluate(()=>window.__store.startTalentSession());await openCast('Tempête Magmatique');
+    await page.selectOption('[data-focus-key="magicVortexDirection"]','E');
+    await page.selectOption('[data-focus-key="magicVortexWillpower"]','success');
+    await page.fill('[data-focus-key="magicVortexDistance"]','10');
+    await roll(25); await calculate();
+    const calm=page.locator('input[aria-label*="vortex principal : Calme pour la réduction de dégâts"]').first();
+    assert.equal(await calm.count(),1,'le d100 demandé par le vortex doit être affiché');
+    const firstTalent=page.getByLabel(/Obstiné avant le jet — .*vortex principal : Calme pour la réduction/).first();
+    await firstTalent.selectOption('strong-minded');
+    await calm.fill('35'); await calculate();
+    const question=page.getByLabel(/Préciser si le Test implique un mouvement/).last();
+    assert.equal(await question.count(),1,'la question du Test de Calme doit être affichée');
+    await chooseBoolean(question,'false');
+    await page.waitForTimeout(300);
+    assert.equal(await confirmationValue(question),'false','la réponse reste corrigeable');
+    await chooseBoolean(question,'true');
+    await page.waitForTimeout(300);
+    assert.equal(await confirmationValue(question),'true');
+    assert.equal(await calm.inputValue(),'35','le d100 reste lui aussi corrigeable');
+    assert.equal(await applyButton().isDisabled(),false,'le vortex peut être appliqué après les réponses');
+    await page.fill('[data-focus-key="magicVortexDistance"]','8');
+    await page.fill('[data-focus-key="magic-specific-mini"]','1');
+    await page.fill('[data-focus-key="wom-caster-mini1Direction"]','5');
+    await page.selectOption('[data-focus-key="wom-mini1Targets"]',['foe']);
+    await calculate();
+    const miniCalm=page.locator('input[aria-label*="mini-vortex 1 : Calme pour la réduction"]').first();
+    assert.equal(await miniCalm.count(),1,'la protection du mini-vortex a son propre Test');
+    const miniTalent=page.getByLabel(/Obstiné avant le jet — .*mini-vortex 1 : Calme pour la réduction/).first();
+    assert.equal(await miniTalent.locator('option[value="strong-minded"]').evaluate(node=>node.disabled),true,'un second Test du même personnage ne peut pas réserver Obstiné');
+    assert.match(await miniTalent.locator('..').innerText(),/déjà choisi pour un autre Test/);
+    await calm.fill('');await calm.blur();await page.waitForTimeout(300);
+    await firstTalent.selectOption('none');
+    assert.equal(await miniTalent.locator('option[value="strong-minded"]').evaluate(node=>node.disabled),false,'le choix est libéré si le premier jet est effacé et le talent retiré');
+    await miniTalent.selectOption('strong-minded');
+    await calm.fill('35');await calm.blur();await page.waitForTimeout(300);
+    await miniCalm.fill('35');await miniCalm.blur();await page.waitForTimeout(300);
+    const miniQuestion=page.getByLabel(/mini-vortex 1 : Calme.*Préciser si le Test implique un mouvement/).last();
+    assert.equal(await miniQuestion.count(),1);await chooseBoolean(miniQuestion,'false');await page.waitForTimeout(300);
+    assert.equal(await confirmationValue(miniQuestion),'false');
+    assert.equal(await miniCalm.inputValue(),'35');
+    assert.equal(await applyButton().isDisabled(),false);
+    await calm.fill('');await calm.blur();await page.waitForTimeout(300);
+    assert.equal(await firstTalent.locator('option[value="strong-minded"]').evaluate(node=>node.disabled),true,'le premier Test ne peut plus réserver le talent choisi pour le second');
+    await calm.fill('35');await calm.blur();await page.waitForTimeout(300);
+    await page.fill('[data-focus-key="magic-specific-mini"]','0');await calculate();
+    assert.equal(await miniCalm.count(),0,'la suppression du mini-vortex masque ses champs');
+    await calm.fill('');await calm.blur();await page.waitForTimeout(300);await firstTalent.selectOption('strong-minded');
+    await calm.fill('35');await calm.blur();await page.waitForTimeout(300);
+    await page.fill('[data-focus-key="magic-specific-mini"]','1');await calculate();
+    assert.equal(await miniCalm.inputValue(),'35','un mini-vortex réactivé retrouve son jet');
+    assert.equal(await confirmationValue(miniQuestion),'false','sa réponse reste corrigeable');
+    assert.equal(await miniTalent.inputValue(),'none','le choix d’Obstiné du Test désactivé ne ressurgit pas');
+    assert.equal(await miniTalent.locator('option[value="strong-minded"]').evaluate(node=>node.disabled),true);
+    assert.equal(await applyButton().isDisabled(),false,'un seul Test réserve le quota après réactivation');
+    await calm.fill('');await calm.blur();await page.waitForTimeout(300);await firstTalent.selectOption('none');
+    await miniCalm.fill('');await miniCalm.blur();await page.waitForTimeout(300);await miniTalent.selectOption('strong-minded');
+    await miniCalm.fill('35');await miniCalm.blur();await page.waitForTimeout(300);
+    await page.fill('[data-focus-key="magicVortexDistance"]','');await calculate();
+    await page.fill('[data-focus-key="magicVortexDistance"]','8');await calculate();
+    assert.equal(await miniTalent.inputValue(),'none','la distance effacée retire le choix même si elle est aussitôt restaurée');
+    assert.equal(await miniCalm.inputValue(),'35','effacer la distance ne modifie pas le dé déjà connu');
+    await miniCalm.fill('');await miniCalm.blur();await page.waitForTimeout(300);await miniTalent.selectOption('strong-minded');
+    await miniCalm.fill('35');await miniCalm.blur();await page.waitForTimeout(300);
+    await page.fill('[data-focus-key="magicVortexDistance"]','');await calculate();
+    await page.fill('[data-focus-key="magicVortexDistance"]','10');await calculate();
+    await firstTalent.selectOption('strong-minded');await calm.fill('35');await calm.blur();await page.waitForTimeout(300);
+    await page.fill('[data-focus-key="magicVortexDistance"]','8');await calculate();
+    assert.equal(await miniTalent.inputValue(),'none','effacer la distance supprime la réservation du mini-vortex');
+    assert.equal(await miniCalm.inputValue(),'35','le dé du mini-vortex est conservé');
+    assert.equal(await applyButton().isDisabled(),false);
+    await applyButton().click();
+    await page.waitForFunction(()=>window.__store.getObstinateStatus('foe').available===false);
+    await page.evaluate(()=>window.__store.undo());
+    assert.equal(await page.evaluate(()=>window.__store.getObstinateStatus('foe').available),true,'annuler rend le quota');
+  });
+
+  await screen('3d Soleil Violet : Obstiné proposé avant le premier aperçu', async () => {
+    await boot({ v5: { channelling: { sl: 30, type: 'winds' } }, spells: ['Cendres et Poussière'], foes: [{id:'foe',name:'Orc',patch:{talents:[talent('strong-minded')]}}] });
+    await page.evaluate(()=>window.__store.startTalentSession());
+    await openCast('Cendres et Poussière');
+    await page.selectOption('[data-focus-key="magicVortexDirection"]','E');
+    await page.selectOption('[data-focus-key="magicVortexWillpower"]','success');
+    await page.fill('[data-focus-key="magicVortexDistance"]','10');
+    await page.fill('[data-focus-key="magic-specific-sun"]','1');
+    await chooseBoolean(page.getByLabel('Soleil Violet : contact avec la sphère — Orc'),'true');
+    const talentChoice=page.getByLabel('Obstiné avant le jet — Soleil Violet de Orc');
+    assert.equal(await talentChoice.count(),1,'le choix est disponible avant tout calcul');
+    await talentChoice.selectOption('strong-minded');
+    await page.getByLabel('Soleil Violet : Calme contre la mort (d100) — Orc').fill('35');
+    assert.equal(await talentChoice.isDisabled(),true,'le talent est verrouillé dès la saisie du d100');
+    await page.getByLabel('Soleil Violet : Calme contre la mort (d100) — Orc').fill('');
+    assert.equal(await talentChoice.isDisabled(),false,'effacer le d100 permet de corriger le choix');
+    await page.getByLabel('Soleil Violet : Calme contre la mort (d100) — Orc').fill('35');
+    await chooseBoolean(page.getByLabel('Cendres : encore dans le nuage après le déplacement — Orc'),'false');
+    await roll(25);await calculate();
+    assert.equal(await talentChoice.count(),1,'aucun doublon après calcul');
+    assert.equal(await talentChoice.inputValue(),'strong-minded');
+    await chooseBoolean(page.getByLabel('Soleil Violet : contact avec la sphère — Orc'),'false');await calculate();
+    await chooseBoolean(page.getByLabel('Soleil Violet : contact avec la sphère — Orc'),'true');await calculate();
+    assert.equal(await talentChoice.inputValue(),'none','le choix lié au contact annulé ne ressurgit pas');
+    assert.equal(await page.getByLabel('Soleil Violet : Calme contre la mort (d100) — Orc').inputValue(),'35');
+  });
+
+  await screen('3e Thorsen : collision, Calme et Protections à un ou plusieurs dés', async () => {
+    for (const multiple of [false,true]) {
+      const wards=[{threshold:7,filter:{any:['crush']},casterId:'l',lileathRank:1},...(multiple?[{threshold:8,filter:{any:['crush']},casterId:'l',lileathRank:1}]:[])];
+      await boot({v5:{channelling:{sl:30,type:'winds'}},spells:['Orage de Thorsen'],foes:[{id:'foe',name:'Orc',patch:{talents:[talent('strong-minded')],states:[{id:'prone',key:'aterre',name:'À terre',level:1}],extensions:{v5:{wards,damageReductions:[{amount:1,filter:{any:['crush']},calmTest:true}]}}}}]});
+      await page.evaluate(()=>window.__store.startTalentSession());await openCast('Orage de Thorsen');
+      await page.selectOption('[data-focus-key="magicVortexDirection"]','E');
+      await page.selectOption('[data-focus-key="magicVortexWillpower"]','success');
+      await page.fill('[data-focus-key="magicVortexDistance"]','10');
+      await page.fill('[data-focus-key="wom-foe-throwDirection"]','4');
+      await chooseBoolean(page.getByLabel('Thorsen : collision solide ou créature — Orc'),'true');
+      await page.getByLabel('Thorsen : d10 des Protections contre collision — Orc').fill(multiple?'3 8':'7');
+      await roll(25);await calculate();
+      const choice=page.getByLabel(/Obstiné avant le jet — .*Calme pour la collision/).first();
+      assert.equal(await choice.count(),1);await choice.selectOption('strong-minded');
+      const calm=page.locator('input[aria-label*="Calme pour la collision"]').first();
+      await calm.fill('35');assert.equal(await choice.isDisabled(),true,'le choix est verrouillé avant recalcul');await calm.blur();await page.waitForTimeout(300);
+      assert.equal(await choice.isDisabled(),true,'le choix reste verrouillé après recalcul');
+      const question=page.getByLabel(/Calme pour la collision : Préciser si le Test implique un mouvement/).last();
+      assert.equal(await question.count(),1);await chooseBoolean(question,'false');await page.waitForTimeout(300);
+      assert.equal(await confirmationValue(question),'false');
+      assert.equal(await applyButton().isDisabled(),false,`collision résolue avec ${multiple?'deux dés':'un dé'}`);
+      assert.deepEqual(await page.evaluate(()=>window.__store && document.querySelector('[data-focus-key="wom-foe-collisionWardRoll"]')?.value),multiple?'3 8':'7');
+      await chooseBoolean(page.getByLabel('Thorsen : collision solide ou créature — Orc'),'false');await calculate();
+      await chooseBoolean(page.getByLabel('Thorsen : collision solide ou créature — Orc'),'true');await calculate();
+      assert.equal(await choice.inputValue(),'none','un choix lié à une collision annulée ne ressurgit pas');
+      assert.equal(await calm.inputValue(),'35','le d100 reste conservé');
+    }
+  });
+
+  await screen('3f le lanceur touché par son mini-vortex ne réserve pas deux fois Obstiné', async () => {
+    await boot({mage:{talents:[talent('strong-minded')]},v5:{channelling:{sl:30,type:'winds'},damageReductions:[{amount:1,filter:null,calmTest:true}]},spells:['Tempête Magmatique']});
+    await page.evaluate(()=>window.__store.startTalentSession());await openCast('Tempête Magmatique');
+    await page.selectOption('[data-focus-key="magicVortexDirection"]','E');await page.selectOption('[data-focus-key="magicVortexWillpower"]','success');
+    await page.fill('[data-focus-key="magicVortexDistance"]','8');await page.fill('[data-focus-key="magic-specific-mini"]','1');
+    await page.fill('[data-focus-key="wom-caster-mini1Direction"]','5');await page.selectOption('[data-focus-key="wom-mini1Targets"]',['mage']);
+    await roll(25);await calculate();
+    const secondary=page.getByLabel(/Obstiné avant le jet — .*mini-vortex 1 : Calme pour la réduction/).first();
+    assert.equal(await secondary.count(),1);await secondary.selectOption('strong-minded');
+    const casting=page.locator('[data-focus-key="magic-pre-roll-talent"]');
+    assert.equal(await casting.locator('option[value="strong-minded"]').evaluate(node=>node.disabled),true,'le Test de lancement ne peut pas utiliser le talent déjà choisi pour le mini-vortex');
   });
 
   // ÉCRAN 4 : méditation et runes des Cadai : après un refus, la question apparaît près du bouton, la commande passe une fois répondu.

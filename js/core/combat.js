@@ -1,6 +1,7 @@
 import { previewV5Turn } from './v5-turn.js';
 import { uid } from './models.js';
 import { advanceEndOfTurn } from './effects.js';
+import { consumeObstinate, findObstinateActor } from './v5-obstinate.js';
 
 export function computeEndOfTurn(p, d10Roll = 1) {
   return advanceEndOfTurn(p, { d10Roll });
@@ -66,6 +67,7 @@ export function createCombatEngine(Store) {
         if (draft.localRevision !== expected) throw Object.assign(new Error('Le combat a changé'), { code: 'V5_TURN_STALE' });
         const current = previewV5Turn(draft, options);
         if (!current.ready) throw Object.assign(new Error('Des données sont requises'), { code: 'V5_TURN_INPUT', preview: current });
+        for (const test of current.performedTests || []) consumeObstinate(current.state, findObstinateActor(draft, test.participantId), test);
         return current.state;
       });
       return commit && typeof commit.then === 'function' ? commit.then(finish).catch(fail) : finish(commit);

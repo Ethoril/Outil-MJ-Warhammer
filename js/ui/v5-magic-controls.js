@@ -8,13 +8,13 @@ import {missingMagicDiceMessage} from '../core/v5-magic-miscasts.js';
 import {normalizeLoreId,arcaneMagicLores} from '../core/v5-magic-attributes.js';
 import {renderTestQuestions,renderObstinateChoice} from './test-questions.js';
 const loreOptions=[['','Aucun attribut'],['beasts','Bêtes'],['death','Mort'],['fire','Feu'],['heavens','Cieux'],['life','Vie'],['light','Lumière'],['metal','Métal'],['shadow','Ombres']];
-export function renderMagicControls({actor,participants,type,draft,handlers,targetIds}){
+export function renderMagicControls({actor,participants,type,draft,handlers,targetIds,getObstinateStatus}){
  // T10 : questions d'États ou de séquelle (et Obstiné) des Tests lancés par un bouton du panneau (méditation, déploiement et relance
  // Cadai) : la commande refusée rend ses questions (`magicSecondaryNeeds[nom]`), la réponse part dans `magicSecondaryContexts[nom]`.
  const secondaryQuestions=(container,name)=>{
   const context=draft.magicSecondaryContexts?.[name] || {};
   const set=next=>handlers.select({magicSecondaryContexts:{...(draft.magicSecondaryContexts || {}),[name]:next}});
-  const obstinate=renderObstinateChoice(actor,context.preRollTalent,value=>{const next={...context};if(value==='strong-minded')next.preRollTalent=value;else delete next.preRollTalent;set(next);},{focusKey:'magic-secondary-'+name+'-pre-roll-talent'});
+  const obstinate=renderObstinateChoice(actor,context.preRollTalent,value=>{const next={...context};if(value==='strong-minded')next.preRollTalent=value;else delete next.preRollTalent;set(next);},{focusKey:'magic-secondary-'+name+'-pre-roll-talent',status:getObstinateStatus?.(actor.id)});
   if(obstinate)container.append(obstinate);
   const rows=(draft.magicSecondaryNeeds?.[name] || []).map(row=>({...row,answerAt:''}));
   const questions=renderTestQuestions(rows,{root:context,onChange:set,subjectOf:()=>actor,title:'À préciser avant le Test',focusPrefix:'magic-secondary-'+name,answeredAt:['']});
@@ -89,7 +89,7 @@ export function renderMagicControls({actor,participants,type,draft,handlers,targ
   if(draft.magicDispellerId){
    // T10 : Obstiné du dissipateur, choisi avant son jet ; réponse dans le contexte de la réaction (`magicDispelConditionContext`).
    const dispeller=participants.find(p=>p.id===draft.magicDispellerId),dispelContext=draft.magicDispelConditionContext || {};
-   const dispelObstinate=renderObstinateChoice(dispeller,dispelContext.preRollTalent,value=>{const next={...dispelContext};if(value==='strong-minded')next.preRollTalent=value;else delete next.preRollTalent;handlers.select({magicDispelConditionContext:next});handlers.calculate?.();},{focusKey:'magic-dispeller-pre-roll-talent',title:'Obstiné avant le jet — '+(dispeller?.name || 'dissipateur')});
+   const dispelObstinate=renderObstinateChoice(dispeller,dispelContext.preRollTalent,value=>{const next={...dispelContext};if(value==='strong-minded')next.preRollTalent=value;else delete next.preRollTalent;handlers.select({magicDispelConditionContext:next});handlers.calculate?.();},{focusKey:'magic-dispeller-pre-roll-talent',title:'Obstiné avant le jet — '+(dispeller?.name || 'dissipateur'),status:dispeller && getObstinateStatus?.(dispeller.id)});
    if(dispelObstinate)box.append(dispelObstinate);
   }
   if(draft.magicDispellerId){field('magicDispelRoll','Jet Langue (Magick) du dissipateur (1d100)');distanceField('magicDispelDistance','Distance du dissipateur au lanceur ou au point ciblé, en mètres');visibleField('magicDispelVisible','Lanceur ou point ciblé visible du dissipateur');}
@@ -175,7 +175,7 @@ export function natureSelects(target,getCurrent,onChange,base={}){
 
 const ATTRIBUTE_LORES=new Set(['fire','death','light']);
 /** S-07 : destinataires secondaires (ennemis engagés, attaquant) et choix par cible des attributs facultatifs, tous désignés par le MJ. */
-export function renderSpellRecipientControls({actor,participants,contract,draft,handlers,targetIds}){
+export function renderSpellRecipientControls({actor,participants,contract,draft,handlers,targetIds,getObstinateStatus}){
  const effects=contract?.effects||{};
  const groups=[['engaged',effects.secondaryLabel || 'Ennemis engagés ou créatures affectées (désignés par le MJ)',effects.engagedEnemyConditions?.length||effects.engagedEnemyDamage||effects.engagedEnemyTestModifiers],['attacker','Attaquant visé par la réaction (désigné par le MJ)',effects.attackerConditions?.length],['collision','Créatures heurtées par Poussée (déclarées par le MJ)',effects.collisionConditions?.length]].filter(g=>g[2]);
  const mainTargets=participants.filter(p=>(targetIds?.length?targetIds:draft.magicTargetIds||[]).includes(p.id));
@@ -206,13 +206,15 @@ export function renderSpellRecipientControls({actor,participants,contract,draft,
   select.addEventListener('change',()=>setTargetTest(p.id,{nearest:select.value===''?undefined:select.value==='true'}));label.append(select);box.append(label);
  }
  if(effects.breath){
+  const talent=(person,key,title)=>{const choice=renderObstinateChoice(person,draft.magicTestTalents?.[key],value=>{handlers.select({magicTestTalents:{...(draft.magicTestTalents||{}),[key]:value}});handlers.calculate?.();},{focusKey:'spell-obstinate-'+key,title:'Obstiné avant le jet — '+title,status:getObstinateStatus?.(person.id)});if(choice)box.append(choice);};
+  talent(actor,'breath:shot','Souffle, tir de '+actor.name);
   const label=document.createElement('label');label.className='workspace-type';label.textContent='Souffle : Test de CT du lanceur (d100)';const input=document.createElement('input');input.type='number';input.min='1';input.max='100';input.value=draft.magicCtRoll ?? '';input.setAttribute('aria-label',label.textContent);input.dataset.focusKey='magic-ct-roll';input.addEventListener('input',()=>handlers.input('magicCtRoll',input.value===''?undefined:Number(input.value)));label.append(input);box.append(label);
   for(const [index,p] of ordered.entries()){
    perTargetNumber(p,index===0?'distance':'fromPrimary',index===0?'Souffle : distance au lanceur (m)':'Souffle : distance à la cible principale (m)');
    // MJ 09/11 CA24 et CA34 : une cible Surprise ou Inconsciente n'esquive pas le Souffle : aucune Esquive demandée.
    const noDodge=breathNoDodgeReason(p);if(noDodge){const note=document.createElement('p');note.className='workspace-muted';note.dataset.breathNoDodge=p.id;note.textContent='Souffle : '+p.name+' est '+noDodge+' : aucune Esquive possible.';box.append(note);continue;}
    const label=document.createElement('label');label.className='workspace-type';label.textContent='Souffle : opposition — '+p.name;const select=document.createElement('select');select.setAttribute('aria-label',label.textContent);select.dataset.focusKey='breath-oppose-'+p.id;select.append(new Option('Esquive (d100 requis)','true'),new Option('Opposition refusée','false'));select.value=draft.magicTargetTests?.[p.id]?.opposeBreath===false?'false':'true';select.addEventListener('change',()=>setTargetTest(p.id,{opposeBreath:select.value==='true'}));label.append(select);box.append(label);
-   if(draft.magicTargetTests?.[p.id]?.opposeBreath!==false)perTargetNumber(p,'dodgeRoll','Souffle : Esquive (d100)',1,100);
+   if(draft.magicTargetTests?.[p.id]?.opposeBreath!==false){talent(p,'breath:dodge:'+p.id,'Souffle, Esquive de '+p.name);perTargetNumber(p,'dodgeRoll','Souffle : Esquive (d100)',1,100);}
   }
  }
  if(effects.rolledDamage)for(const p of mainTargets)perTargetNumber(p,'damageRoll','Dégâts du sort : d'+effects.rolledDamage.sides,1,effects.rolledDamage.sides);

@@ -155,6 +155,17 @@ test('F2-L characterization — Fate cancels a declared attack before damage and
   assert.equal(store.listParticipants().find(row => row.id === 'foe').hp, 20);
 });
 
+test('Destin : une attaque annulée ne crée pas d’exposition à la malepierre', async () => {
+  const store = await combat({ actor: participant('hero'), target: participant('foe', { extensions: { v5: { fate: 1 } } }) });
+  const preview = store.previewResolution({ actorId: 'hero', targetId: 'foe', resolutionId: 'fate-corruption', roll: 31,
+    action: { type: 'attack', attr: 'CC', base: 90, damage: 12 }, defense: { base: 30, roll: 70, v5: { kind: 'melee' } },
+    v5: { kind: 'melee', context: { fateAction: 'cancel-attack', supplementalEquipmentRuleId: 'F-L11-0018' } } });
+  assert.equal(preview.ready, true, preview.unresolved?.join('; '));
+  assert.ok(preview.supplementalEquipment?.exposure, 'précondition : la touche aurait provoqué une exposition');
+  assert.equal((await store.applyResolution(preview)).status, 'applied');
+  assert.deepEqual(store.listParticipants().find(row => row.id === 'foe').extensions.v5.pendingCorruptionExposures || [], []);
+});
+
 test('F2-L characterization — V4 profile conversion is idempotent and maps the accepted V5 terms', async () => {
   const { convertLegacyV4Profile } = await import('../../../js/core/v5-legacy-conversion.js');
   const legacy = { id: 'old', extensions: { v4: { advantage: 2, resilience: 3, determination: 4, difficulty: 20, resolve: 1 } } };

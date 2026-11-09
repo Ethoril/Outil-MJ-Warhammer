@@ -6,7 +6,7 @@ import { BEAST_PROFILES, KADON_PROFILES, BEAST_TRAIT_COST, KADON_OPTION_COST, op
 import {spellObjectChoices,conjuredWeaponSkillScore} from '../core/equipment.js';
 import {wardDiceCount} from '../core/v5-magic-combat.js';
 import {getSpellContract,isHostileTarget} from '../core/v5-spell-contracts.js';
-import {renderTestQuestions} from './test-questions.js';
+import {renderTestQuestions,renderObstinateChoice} from './test-questions.js';
 
 function node(tag, className, text) {
   const element = document.createElement(tag);
@@ -18,6 +18,26 @@ function node(tag, className, text) {
 const SIZE_LABELS = { small: 'Petite', average: 'Moyenne', large: 'Grande', enormous: 'Énorme', monstrous: 'Monstrueuse' };
 const KADON_MANUAL = 'manual';
 const MONSTER_STATS = ['CC', 'CT', 'F', 'E', 'I', 'Ag', 'Dex', 'Soc'];
+
+/** Efface seulement les choix de talent devenus sans objet, en conservant les dés et les autres réponses. */
+export function clearVortexTestTalents(draft, actorId, discard) {
+  const clear=(values,id)=>Object.fromEntries(Object.entries(values || {}).filter(([key])=>!key.endsWith(':preRollTalent') || !discard(id,key)));
+  return {magicTargetTests:Object.fromEntries(Object.entries(draft.magicTargetTests || {}).map(([id,values])=>[id,clear(values,id)])),
+    magicSpellFacts:clear(draft.magicSpellFacts,actorId)};
+}
+
+/** Choix de talent des Tests du vortex encore proposés dans l'aperçu courant. */
+export function vortexSelectedTalents(draft, actor, participants, targetIds) {
+  const preview=draft.preview?.spellPreview || {},requests=preview.vortexRequests || [];
+  const applicable=new Set([...(preview.applicableVortexInputs || []),...(preview.applicableQuestions || [])].map(row=>`${row.participantId}:${row.field}`));
+  const keyOf=row=>`${row.participantId}:${row.field}`,current=new Set(requests.map(keyOf));
+  const rows=[...new Map([...requests,...(draft.magicVortexRequests || []).filter(row=>!current.has(keyOf(row))&&applicable.has(keyOf(row)))].map(row=>[keyOf(row),row])).values()];
+  const selected=rows.filter(row=>row.testTalentField && row.field!=='Calm').map(row=>({participantId:row.participantId,field:row.testTalentField,
+    value:(row.participantId===actor.id?draft.magicSpellFacts:draft.magicTargetTests?.[row.participantId])?.[row.testTalentField]}));
+  if(draft.magicOvercastSpecific?.sun)for(const person of participants.filter(row=>targetIds.includes(row.id)&&draft.magicTargetTests?.[row.id]?.sunTouched))
+    selected.push({participantId:person.id,field:'Calm:preRollTalent',value:draft.magicTargetTests?.[person.id]?.['Calm:preRollTalent']});
+  return selected;
+}
 
 /** Nombre de DR de surpuissance encore disponibles d'après le dernier aperçu de l'incantation ; Infinity tant qu'il n'y en a pas. */
 function availableOvercast(draft) {
@@ -37,11 +57,26 @@ function profileSummary(actor, profile, kind, optionalTraits) {
   }
 }
 
-export function renderSpellOptions({ actor, participants, contract, draft, handlers, targetIds = [] }) {
+export function renderSpellOptions({ actor, participants, contract, draft, handlers, targetIds = [], getObstinateStatus, getObstinateIdentity }) {
   const special = contract?.effects?.special;
   const attributeDice=draft.preview?.spellPreview?.attributeDice;
   const nodes = [];
   const push = element => { nodes.push(element); return element; };
+  const lockTalentAfterRoll = (choice, input) => {
+    const select=choice?.querySelector('select');
+    if(!select || !input)return;
+    const note=node('span','workspace-muted','Effacez le jet pour modifier le choix d’Obstiné.');
+    choice.append(note);
+    const update=()=>{select.disabled=String(input.value || '').trim()!=='';note.hidden=!select.disabled;};
+    input.addEventListener('input',update);update();
+  };
+  const talentChoice = (person, testKey, title) => {
+    const choice = renderObstinateChoice(person, draft.magicTestTalents?.[testKey], value => {
+      handlers.select({ magicTestTalents: { ...(draft.magicTestTalents || {}), [testKey]: value } });
+      handlers.calculate?.();
+    }, { focusKey: `spell-obstinate-${testKey}`, title: `Obstiné avant le jet — ${title}`, status: person && getObstinateStatus?.(person.id) });
+    if (choice) push(choice);
+  };
 
   const numberField = (key, text, min = 0, max = 100) => {
     const label = node('label', 'workspace-type', text);
@@ -77,28 +112,105 @@ export function renderSpellOptions({ actor, participants, contract, draft, handl
   const spellField=(key,text,{who=null,type='number',choices=null,min=0,max=100,die=false}={})=>{
     const data=who?draft.magicTargetTests?.[who.id] || {}:draft.magicSpellFacts || {},label=node('label','workspace-type',text+(who?' — '+who.name:''));
     const control=document.createElement(choices?'select':'input');control.setAttribute('aria-label',label.textContent);control.dataset.focusKey='wom-'+(who?.id || 'caster')+'-'+key;
-    const change=value=>{const current=who?draft.magicTargetTests?.[who.id] || {}:draft.magicSpellFacts || {},field=who?'magicTargetTests':'magicSpellFacts',next=who?{...draft.magicTargetTests,[who.id]:{...current,[key]:value}}:{...current,[key]:value};if(choices || /^mini[1-3]Direction$/.test(key))handlers.select({[field]:next});else handlers.input(field,next);};
+    const change=value=>{const current=who?draft.magicTargetTests?.[who.id] || {}:draft.magicSpellFacts || {},field=who?'magicTargetTests':'magicSpellFacts';let next=who?{...draft.magicTargetTests,[who.id]:{...current,[key]:value}}:{...current,[key]:value};
+      if(who && value===false && ['sunTouched','collision'].includes(key)){
+        const prefixes=key==='sunTouched'?['Calm:']:['CollisionProtectionCalm:'];
+        next={...next,[who.id]:Object.fromEntries(Object.entries(next[who.id]).filter(([name])=>!prefixes.some(prefix=>name===prefix+'preRollTalent')))};
+      }
+      if(!who && /^mini\d+Direction$/.test(key) && value===1){const stage=key.slice(0,-'Direction'.length),cleaned=clearVortexTestTalents(draft,actor.id,(_id,name)=>name.startsWith(stage));handlers.select({...cleaned,magicSpellFacts:{...cleaned.magicSpellFacts,[key]:value}});return;}
+      if(choices || /^mini[1-3]Direction$/.test(key))handlers.select({[field]:next});else handlers.input(field,next);};
     if(choices){control.append(new Option('À renseigner',''));for(const [v,t] of choices)control.append(new Option(t,v));control.value=data[key]===undefined?'':String(data[key]);control.addEventListener('change',()=>change(control.value===''?undefined:type==='boolean'?control.value==='true':control.value));}
-    else{control.type=type;control.min=min;control.max=max;control.value=data[key] ?? '';control.addEventListener('input',()=>change(control.value===''?undefined:type==='number'?Number(control.value):control.value));}
+    else{control.type=type;control.min=min;control.max=max;control.value=Array.isArray(data[key])?data[key].join(' '):data[key] ?? '';control.addEventListener('input',()=>{
+      const raw=control.value.trim(),wardDice=key==='collisionWardRoll'&&/^\s*(?:10|[1-9])(?:\s+(?:10|[1-9]))*\s*$/.test(raw)?raw.split(/\s+/).map(Number):null;
+      change(!raw?undefined:wardDice?(wardDice.length===1?wardDice[0]:wardDice):type==='number'?Number(raw):control.value);
+    });}
     if (key === attributeDice?.key) control.dataset.blockingField = 'magic-attribute-dice';
     if (die) { control.dataset.npcRollKey = who ? 'magicTargetTests' : 'magicSpellFacts'; control.dataset.npcRollField = key; if (who) control.dataset.npcRollOwnerId = who.id; }
-    label.append(control);push(label);
+    label.append(control);push(label);return control;
   };
   if(special==='verdant-apotheosis')for(const who of participants.filter(p=>targetIds.includes(p.id)))spellField('decapitated','Cadavre décapité',{who,type:'boolean',choices:[['false','Non'],['true','Oui']]});
   // Dés exigés par l'attribut du Domaine (d10 de l'offrande, d100 de Corruption) : un champ par participant concerné.
-  if(attributeDice)for(const who of participants.filter(p=>attributeDice.ids.includes(p.id)))spellField(attributeDice.key,attributeDice.label,{who,min:1,max:attributeDice.max,die:true});
+  if(attributeDice)for(const who of participants.filter(p=>attributeDice.ids.includes(p.id))){
+    if(attributeDice.key==='corruptionRoll'){const context=draft.magicTargetTests?.[who.id]?.corruptionContext||{};const choice=renderObstinateChoice(who,context.preRollTalent,value=>{handlers.select({magicTargetTests:{...(draft.magicTargetTests||{}),[who.id]:{...(draft.magicTargetTests?.[who.id]||{}),corruptionContext:{...context,preRollTalent:value}}}});handlers.calculate?.();},{focusKey:`corruption-attribute-obstinate-${who.id}`,title:`Obstiné avant le jet — Corruption de ${who.name}`,status:getObstinateStatus?.(who.id)});if(choice)push(choice);}
+    spellField(attributeDice.key,attributeDice.label,{who,min:1,max:attributeDice.max,die:true});
+  }
   const vortex=contract?.effects?.vortex;
   if(vortex){
+    // Le vortex peut demander d'autres jets après son aperçu (Protection, Calme, circonstances d'État, mini-vortex).
+    // Une réponse reste modifiable tant que le moteur confirme que le champ est encore applicable.
+    const spellPreview=draft.preview?.spellPreview || {};
+    const requests=spellPreview.vortexRequests || [];
+    const applicable=new Set([...(spellPreview.applicableVortexInputs || []),...(spellPreview.applicableQuestions || [])]
+      .map(row=>`${row.participantId}:${row.field}`));
+    const keyOf=row=>`${row.participantId}:${row.field}`;
+    const currentKeys=new Set(requests.map(keyOf));
+    const rows=[...requests,...(draft.magicVortexRequests || []).filter(row=>!currentKeys.has(keyOf(row))&&applicable.has(keyOf(row)))];
+    const unique=[...new Map(rows.map(row=>[keyOf(row),row])).values()];
+    const identity=id=>getObstinateIdentity?.(id) || id;
+    const selected=vortexSelectedTalents(draft,actor,participants,targetIds);
+    if(draft.magicConditionContext?.preRollTalent==='strong-minded')selected.push({participantId:actor.id,field:'casting',value:'strong-minded'});
+    const statusFor=(person,field)=>{
+      const status=person && getObstinateStatus?.(person.id);
+      if(status?.available===false)return status;
+      const reserved=person && selected.some(row=>identity(row.participantId)===identity(person.id) && !(row.participantId===person.id && row.field===field) && row.value==='strong-minded');
+      return reserved?{available:false,reason:'Obstiné est déjà choisi pour un autre Test de ce sort.'}:status;
+    };
+    for(const request of unique){
+      // Les paramètres de trajectoire des mini-vortex disposent déjà de leurs champs ci-dessous.
+      if(request.participantId===actor.id && /^mini\d+(Direction|Distance|Targets)$/.test(request.field))continue;
+      const person=participants.find(row=>row.id===request.participantId),isCaster=request.participantId===actor.id;
+      const values=isCaster?(draft.magicSpellFacts || {}):(draft.magicTargetTests?.[request.participantId] || {});
+      const storeValue=(field,value)=>{
+        const history=[...new Map([...(draft.magicVortexRequests || []),...requests].map(row=>[keyOf(row),row])).values()];
+        const patch=isCaster?{magicSpellFacts:{...(draft.magicSpellFacts || {}),[field]:value}}:
+          {magicTargetTests:{...(draft.magicTargetTests || {}),[request.participantId]:{...(draft.magicTargetTests?.[request.participantId] || {}),[field]:value}}};
+        handlers.select({...patch,magicVortexRequests:history});handlers.calculate?.();
+      };
+      let choice=null;
+      if(request.testTalentField && request.field!=='Calm'){
+        choice=renderObstinateChoice(person,values[request.testTalentField],value=>storeValue(request.testTalentField,value),
+          {focusKey:`vortex-obstinate-${request.participantId}-${request.field}`,title:`Obstiné avant le jet — ${request.label}`,status:statusFor(person,request.testTalentField)});
+        if(choice)push(choice);
+      }
+      // Les faits du vortex principal ont déjà un champ permanent (leurs noms historiques sont en minuscules).
+      // Ne pas créer une seconde saisie prioritaire qui masquerait ensuite ces valeurs.
+      if(['ThrowDirection','Collision','Inside','SunTouched','Calm'].includes(request.field) || request.field==='CollisionWard' && draft.magicTargetTests?.[request.participantId]?.collision && wardDiceCount(person?.extensions?.v5 || {}))continue;
+      if(request.kind==='manual'){push(node('p','workspace-field-error',request.label));continue;}
+      const label=node('label','workspace-type',request.label),control=document.createElement(request.kind==='boolean'||request.kind==='targets'?'select':'input');
+      control.setAttribute('aria-label',request.label);control.dataset.focusKey=`vortex-input-${request.participantId}-${request.field}`;
+      if(request.kind==='boolean'){
+        control.append(new Option('À préciser',''),new Option('Oui','true'),new Option('Non','false'));
+        control.value=values[request.field]==null?'':String(values[request.field]);
+        control.addEventListener('change',()=>storeValue(request.field,control.value===''?undefined:control.value==='true'));
+      } else if(request.kind==='targets'){
+        control.multiple=true;control.append(new Option('Aucune cible','none'));for(const [id,name] of request.options || [])control.append(new Option(name,id));
+        for(const option of control.options)option.selected=Array.isArray(values[request.field])?(values[request.field].length?values[request.field].includes(option.value):option.value==='none'):false;
+        control.addEventListener('change',()=>storeValue(request.field,[...control.selectedOptions].map(row=>row.value).filter(value=>value!=='none')));
+      } else {
+        control.type=request.kind==='wards'?'text':'number';control.value=Array.isArray(values[request.field])?values[request.field].join(' '):values[request.field] ?? '';
+        if(request.kind!=='wards'){control.min=request.kind==='2d10'?'2':'1';control.max=String({d8:8,d10:10,'2d10':20,d100:100}[request.kind] || 100);}
+        control.addEventListener('change',()=>{const raw=control.value.trim(),dice=raw.split(/\s+/).map(Number);storeValue(request.field,!raw?undefined:request.kind==='wards'?(dice.length===1?dice[0]:dice):Number(raw));});
+      }
+      label.append(control);push(label);
+      if(request.testTalentField && request.kind==='d100')lockTalentAfterRoll(choice,control);
+    }
     for(const who of participants.filter(p=>targetIds.includes(p.id))){
-      if(vortex.throw){spellField('throwDirection','Thorsen : direction aléatoire de projection (d8)',{who,min:1,max:8});spellField('collision','Thorsen : collision solide ou créature',{who,type:'boolean',choices:[['true','Oui'],['false','Non']]});if(draft.magicTargetTests?.[who.id]?.collision && wardDiceCount(who))spellField('collisionWardRoll','Thorsen : d10 des Protections contre collision',{who,type:'text'});}
+      if(vortex.throw){spellField('throwDirection','Thorsen : direction aléatoire de projection (d8)',{who,min:1,max:8});spellField('collision','Thorsen : collision solide ou créature',{who,type:'boolean',choices:[['true','Oui'],['false','Non']]});if(draft.magicTargetTests?.[who.id]?.collision && wardDiceCount(who.extensions?.v5 || {}))spellField('collisionWardRoll','Thorsen : d10 des Protections contre collision',{who,type:'text'});}
       if(vortex.suffocation)spellField('inside','Cendres : encore dans le nuage après le déplacement',{who,type:'boolean',choices:[['true','Oui'],['false','Non']]});
-      if(draft.magicOvercastSpecific?.sun){spellField('sunTouched','Soleil Violet : contact avec la sphère',{who,type:'boolean',choices:[['true','Oui'],['false','Non']]});if(draft.magicTargetTests?.[who.id]?.sunTouched)spellField('calmRoll','Soleil Violet : Calme contre la mort (d100)',{who,min:1,max:100,die:true});}
+      if(draft.magicOvercastSpecific?.sun){spellField('sunTouched','Soleil Violet : contact avec la sphère',{who,type:'boolean',choices:[['true','Oui'],['false','Non']]});if(draft.magicTargetTests?.[who.id]?.sunTouched){
+        const facts=draft.magicTargetTests?.[who.id] || {};
+        const choice=renderObstinateChoice(who,facts['Calm:preRollTalent'],value=>{handlers.select({magicTargetTests:{...(draft.magicTargetTests||{}),[who.id]:{...facts,'Calm:preRollTalent':value}}});handlers.calculate?.();},
+          {focusKey:`vortex-sun-obstinate-${who.id}`,title:`Obstiné avant le jet — Soleil Violet de ${who.name}`,status:statusFor(who,'Calm:preRollTalent')});
+        if(choice)push(choice);
+        const calmInput=spellField('calmRoll','Soleil Violet : Calme contre la mort (d100)',{who,min:1,max:100,die:true});
+        lockTalentAfterRoll(choice,calmInput);
+      }}
     }
     if(draft.magicOvercastSpecific?.mini && draft.magicVortexDistance!=null && Number(draft.magicVortexDistance)<=8){
       for(let i=1;i<=Math.min(3,draft.magicOvercastSpecific.mini);i++){
         const stage='mini'+i;spellField(stage+'Direction','Mini-vortex '+i+' : direction aléatoire d10',{min:1,max:10});const direction=draft.magicSpellFacts?.[stage+'Direction'];
         if(direction && direction!==1 && direction!==5)spellField(stage+'Distance','Mini-vortex '+i+' : distance 2d10',{min:2,max:20});
-        if(direction && direction!==1){const label=node('label','workspace-type','Mini-vortex '+i+' : cibles réellement traversées'),select=document.createElement('select');select.multiple=true;select.setAttribute('aria-label',label.textContent);select.dataset.focusKey='wom-'+stage+'Targets';select.append(new Option('Aucune cible','none'));for(const p of participants)select.append(new Option(p.name,p.id));const previous=draft.magicSpellFacts?.[stage+'Targets'];for(const option of select.options)option.selected=Array.isArray(previous)?previous.length===0?option.value==='none':previous.includes(option.value):false;select.addEventListener('change',()=>handlers.input('magicSpellFacts',{...draft.magicSpellFacts,[stage+'Targets']:[...select.selectedOptions].map(o=>o.value).filter(id=>id!=='none')}));label.append(select);push(label);}
+        if(direction && direction!==1){const label=node('label','workspace-type','Mini-vortex '+i+' : cibles réellement traversées'),select=document.createElement('select');select.multiple=true;select.setAttribute('aria-label',label.textContent);select.dataset.focusKey='wom-'+stage+'Targets';select.append(new Option('Aucune cible','none'));for(const p of participants)select.append(new Option(p.name,p.id));const previous=draft.magicSpellFacts?.[stage+'Targets'];for(const option of select.options)option.selected=Array.isArray(previous)?previous.length===0?option.value==='none':previous.includes(option.value):false;select.addEventListener('change',()=>{const ids=[...select.selectedOptions].map(o=>o.value).filter(id=>id!=='none');const cleaned=clearVortexTestTalents(draft,actor.id,(id,key)=>key.startsWith(stage)&&!ids.includes(id));handlers.select({...cleaned,magicSpellFacts:{...cleaned.magicSpellFacts,[stage+'Targets']:ids}});});label.append(select);push(label);}
       }
     }
   }
@@ -109,6 +221,7 @@ export function renderSpellOptions({ actor, participants, contract, draft, handl
     const change=patch=>handlers.select({magicTargetTests:{...draft.magicTargetTests,[person.id]:{...data(),...patch}}});
     checkField('magicTargetTests','Tenter '+optionalTest.label+' — '+person.name,{checked:data()[optionalTest.choiceKey]===true,focusKey:'magic-optional-'+person.id,onChange:yes=>change({[optionalTest.choiceKey]:yes})});
     if(data()[optionalTest.choiceKey]){
+      talentChoice(person, `optional:${person.id}`, optionalTest.label + ' — ' + person.name);
       const label=node('label','workspace-type',optionalTest.label+' : d100 — '+person.name),input=document.createElement('input');
       input.type='number';input.min='1';input.max='100';input.value=data()[optionalTest.rollField] ?? '';input.setAttribute('aria-label',label.textContent);input.dataset.focusKey='magic-optional-roll-'+person.id;input.dataset.npcRollKey='magicTargetTests';input.dataset.npcRollField=optionalTest.rollField;input.dataset.npcRollOwnerId=person.id;
       input.addEventListener('input',()=>handlers.input('magicTargetTests',{...draft.magicTargetTests,[person.id]:{...data(),[optionalTest.rollField]:input.value===''?undefined:Number(input.value)}}));label.append(input);push(label);
@@ -135,6 +248,7 @@ export function renderSpellOptions({ actor, participants, contract, draft, handl
         value => change(value === '' ? undefined : spec.type === 'boolean' ? value === 'true' : value));
     } else {
       const label = node('label', 'workspace-type', spec.label), input = document.createElement('input');
+      if (spec.key.startsWith('optionRoll_')) talentChoice(actor, `option:${spec.key.slice('optionRoll_'.length)}`, spec.label);
       input.type = spec.type === 'number' ? 'number' : 'text'; input.value = current[spec.key] ?? '';
       if (spec.type === 'number') { input.min=String(spec.min ?? 0); if(spec.max!==undefined)input.max=String(spec.max); input.step=spec.integer===false?'any':'1'; }
       input.setAttribute('aria-label',spec.label); input.dataset.focusKey='magic-fact-'+spec.key+(spec.targetId?'-'+spec.targetId:'');
@@ -146,18 +260,21 @@ export function renderSpellOptions({ actor, participants, contract, draft, handl
   }
 
   const baseEffects=contract?.effects || {},selectedEffects={...baseEffects,...baseEffects.factModes?.values[draft.magicSpellFacts?.[baseEffects.factModes?.fact]]};
+  if(selectedEffects.purifyAffliction)talentChoice(actor,'purify','Purification — '+actor.name);
+  if(selectedEffects.special==='calm')talentChoice(actor,'calm','Calme — '+actor.name);
   for(const who of participants.filter(p=>targetIds.includes(p.id))){
     const test=selectedEffects.primarySecondaryTests?(who.id===targetIds[0]?selectedEffects.primarySecondaryTests.primary:selectedEffects.primarySecondaryTests.others):selectedEffects.secondaryTest;
-    if(test && (!test.whenFact || draft.magicTargetTests?.[who.id]?.[test.whenFact]===true) && !draft.magicTargetTests?.[who.id]?.[test.skipWhenFact])spellField(test.rollField || 'resistanceRoll','Sort : '+test.skill+' ('+(test.modifierSl || 0)+' DR, d100)',{who,min:1,max:100,die:true});
-    if(selectedEffects.attitudeModifiers && isHostileTarget(actor,who))spellField('fearRoll','Cor : Peur (Calme, d100)',{who,min:1,max:100,die:true});
-    if(selectedEffects.followupTest){const t=selectedEffects.followupTest;spellField(t.rollField,'Sort : second '+t.skill+' ('+t.modifierSl+' DR, d100) si premier échec',{who,min:1,max:100,die:true});}
+    if(test && test.actor!=='caster' && (!test.whenFact || draft.magicTargetTests?.[who.id]?.[test.whenFact]===true) && !draft.magicTargetTests?.[who.id]?.[test.skipWhenFact]){talentChoice(who,`resistance:${who.id}`,test.skill+' — '+who.name);spellField(test.rollField || 'resistanceRoll','Sort : '+test.skill+' ('+(test.modifierSl || 0)+' DR, d100)',{who,min:1,max:100,die:true});}
+    if(selectedEffects.attitudeModifiers && isHostileTarget(actor,who)){talentChoice(who,`fear:${who.id}`,'Peur — '+who.name);spellField('fearRoll','Cor : Peur (Calme, d100)',{who,min:1,max:100,die:true});}
+    if(selectedEffects.followupTest){const t=selectedEffects.followupTest;talentChoice(who,`followup:${who.id}`,'second '+t.skill+' — '+who.name);spellField(t.rollField,'Sort : second '+t.skill+' ('+t.modifierSl+' DR, d100) si premier échec',{who,min:1,max:100,die:true});}
     if(selectedEffects.permanentStatDice)for(const [key,field] of Object.entries(selectedEffects.permanentStatDice))spellField(field,'Vieillissement : perte permanente de '+key+' (d10) si Calme raté',{who,min:1,max:10});
-    if(Object.entries(baseEffects.optionRules || {}).some(([id,r])=>r.immediateSuffocation && draft.magicOvercastSpecific?.[id] && (draft.magicSpellFacts?.['optionTargets_'+id] || []).includes(who.id)))spellField('optionResistanceRoll','Suffocation : Force Mentale (d100)',{who,min:1,max:100,die:true});
+    if(Object.entries(baseEffects.optionRules || {}).some(([id,r])=>r.immediateSuffocation && draft.magicOvercastSpecific?.[id] && (draft.magicSpellFacts?.['optionTargets_'+id] || []).includes(who.id))){talentChoice(who,`suffocation:${who.id}`,'Suffocation — '+who.name);spellField('optionResistanceRoll','Suffocation : Force Mentale (d100)',{who,min:1,max:100,die:true});}
   }
   const opposition=selectedEffects.opposedTest,opposedTargets=opposition?participants.filter(p=>targetIds.includes(p.id) && (!opposition.whenFact || draft.magicTargetTests?.[p.id]?.[opposition.whenFact]===true)):[];
   if(opposedTargets.length){
+    talentChoice(actor,'opposition:caster','Opposition — '+actor.name);
     if(!factFields.some(f=>f.key==='opposedActorRoll'))spellField('opposedActorRoll','Opposition : Force Mentale du lanceur (d100)',{min:1,max:100,die:true});
-    for(const who of opposedTargets)if(!factFields.some(f=>f.key==='opponentRoll'&&f.targetId===who.id))spellField('opponentRoll','Opposition : '+opposition.targetSkill+' de la cible (d100)',{who,min:1,max:100,die:true});
+    for(const who of opposedTargets){talentChoice(who,`opposition:target:${who.id}`,'Opposition — '+who.name);if(!factFields.some(f=>f.key==='opponentRoll'&&f.targetId===who.id))spellField('opponentRoll','Opposition : '+opposition.targetSkill+' de la cible (d100)',{who,min:1,max:100,die:true});}
   }
   const active = participants.flatMap(p => (p.extensions?.v5?.spellEffects || []).filter(e=>e.spellId===contract?.id).map(e=>({owner:p,e})));
   if (active.length && handlers.magicSpellInteraction) {
@@ -260,6 +377,11 @@ export function renderSpellOptions({ actor, participants, contract, draft, handl
         const unrepresentedCreature = ['worm', 'summon-attack'].includes(current.kind) && key !== 'opponentRoll';
         const ownerId = unrepresentedCreature ? null : key === 'opponentRoll' ? current.targetId : key === 'locationRoll' || casterRoll ? e?.casterId : current.targetId;
         if (ownerId || unrepresentedCreature) { input.dataset.npcRollKey = 'magicInteraction'; input.dataset.npcRollField = key; if (ownerId) input.dataset.npcRollOwnerId = ownerId; else input.dataset.npcRollCreature = 'true'; }
+        if(ownerId&&key!=='locationRoll'){
+          const person=participants.find(row=>row.id===ownerId),context=current.testContexts?.[ownerId]||{};
+          const choice=renderObstinateChoice(person,context.preRollTalent,value=>change({testContexts:{...(current.testContexts||{}),[ownerId]:{...context,preRollTalent:value}}}),{focusKey:`magic-interaction-obstinate-${ownerId}`,title:`Obstiné avant le jet — ${person?.name||ownerId}`,status:getObstinateStatus?.(ownerId)});
+          if(choice)details.append(choice);
+        }
       }
       input.addEventListener('input',()=>handlers.input('magicInteraction',{...draft.magicInteraction,[key]:key==='wardRoll'?input.value:input.value===''?undefined:Number(input.value)}));label.append(input);details.append(label);
     }
@@ -312,7 +434,8 @@ export function renderSpellOptions({ actor, participants, contract, draft, handl
         // Relu à la saisie : une option saisie juste avant (sans nouveau rendu) ne doit pas être perdue.
         const next = { ...draft.magicOvercastSpecific, [option.id]: steps || undefined };
         const total = specificOptions.reduce((sum, item) => sum + item.cost * (Number(next[item.id]) || 0), 0);
-        handlers.select({magicOvercastSpecific:next,magicOvercastSpecial:total || null});
+        const cleaned=option.id==='mini'?clearVortexTestTalents(draft,actor.id,(_id,key)=>{const n=/^mini(\d+)/.exec(key);return n && Number(n[1])>steps;}):option.id==='sun'&&!steps?clearVortexTestTalents(draft,actor.id,(_id,key)=>key==='Calm:preRollTalent'):{};
+        handlers.select({...cleaned,magicOvercastSpecific:next,magicOvercastSpecial:total || null});
       });
       label.appendChild(input);
       push(label);

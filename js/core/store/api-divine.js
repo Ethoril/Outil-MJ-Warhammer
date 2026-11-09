@@ -1,4 +1,5 @@
 import { getStoreDivineAccessGrants, resolveStoreDivineAccess, createStoreDivineAccessGrant, revokeStoreDivineAccessGrant, getDivineContract, getAllDivineContracts, getDivinePenanceExamples, previewStoreDivineAbsolution, applyStoreDivineAbsolution, previewStoreDivineNavalEvent, getStoreDivineDailyWrathStatus, getDivineSinEvents, getDivineSinReminders, previewStoreDivineSinEvent, applyStoreDivineWrathRecovery, applyStoreDivine } from '../v5-divine-store.js';
+import { consumeObstinate } from '../v5-obstinate.js';
 import { cloneValue } from '../models.js';
 import { combatActionBlock, brokenEscapeActionBlock, isBrokenEscapeActor, recordV5ActionUsage, recordV5EscapeVisibility } from '../store/v5-action-guards.js';
 import { isV5BrokenEscapeActionBlocked } from '../v5-broken-escape.js';
@@ -69,6 +70,7 @@ export function createDivineApi({ api, currentEnvelope, divineAuthority }) {
         const block=brokenEscapeActionBlock(draft,actorId);
         if(block||isBrokenEscapeActor(actor)&&(typeof visible!=='boolean'||isV5BrokenEscapeActionBlocked(actor,{visibleToAnyEnemy:visible,sequence:draft.extensions?.v5?.brokenEscape?.byActorId?.[actorId]})))throw Object.assign(new Error('Brisé : Prière de récupération indisponible pour ce Tour.'),{userFacing:true});
         execution=applyStoreDivineWrathRecovery(draft,captured);
+        consumeObstinate(execution.state,actor,captured.preview?.input?.conditionContext);
         if(execution.state.extensions?.v5?.combatActions?.byActorId?.[actorId]?.kind==='aim')delete execution.state.extensions.v5.combatActions.byActorId[actorId];
         if(execution?.state)registerNewV5Participants(draft,execution.state);
         recordV5ActionUsage(execution.state,actorId,execution.executionId);
@@ -98,6 +100,7 @@ export function createDivineApi({ api, currentEnvelope, divineAuthority }) {
         execution=applyStoreDivine(draft,identifier,input);
         if (execution?.ready && execution.state) registerNewV5Participants(draft, execution.state);
         if(execution?.ready&&execution.state){
+          consumeObstinate(execution.state,actor,input.preview?.input?.conditionContext);
           const executionId=execution.executionId||input.preview?.executionId||`prayer:${identifier}:${execution.state.localRevision}`,tracked=recordV5ActionUsage(execution.state,actorId,executionId);
           if(!tracked.ok)throw Object.assign(new Error(tracked.reason),{userFacing:true});
           if(execution.state.extensions?.v5?.combatActions?.byActorId?.[actorId]?.kind==='aim')delete execution.state.extensions.v5.combatActions.byActorId[actorId];
