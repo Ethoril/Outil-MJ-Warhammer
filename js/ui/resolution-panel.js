@@ -2514,7 +2514,7 @@ export function renderResolutionPanel(options) {
       input.addEventListener('change',()=>handlers.select({[key]:{...values,resoluteRoll:input.value===''?undefined:Number(input.value)}}));
       label.append(input);
       v5.append(label);
-      secondaryConditionFields(v5,{subject,test:{characteristic:'FM',skill:'Calme'},context:values.resoluteConditionContext||{},pendingLabels:(draft.preview?.unresolved||[]).filter(text=>String(text).startsWith('Déterminé (Calme)')),
+      secondaryConditionFields(v5,{subject,test:{characteristic:'FM',skill:'Calme'},context:values.resoluteConditionContext||{},pendingLabels:(draft.preview?.unresolved||[]).filter(text=>String(text).startsWith('Déterminé (Calme) de '+(subject?.name||subject?.id)+' :')),
         title:'Déterminé (Calme)'+(role==='defender'?' (défense)':''),focusPrefix:`${role}-resolute-condition`,onChange:next=>handlers.select({[key]:{...values,resoluteConditionContext:Object.keys(next).length?next:undefined}})});
     }
   }

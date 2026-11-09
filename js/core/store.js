@@ -1401,9 +1401,14 @@ function resolvedCorruptionTest(participant, skillId, input) {
       const score = patient ? aftermathEnduranceScore(patient) : null;
       if (score !== null) enduranceScores[incident.participantId] = score;
     }
-    const outcome = advanceAftermathCalendar(register, { operationId, expectedRevision: register.revision, days, dailyTests, enduranceScores, absentParticipantIds: absentAftermathSubjects(register, participants) });
+    const outcome = advanceAftermathCalendar(register, { operationId, expectedRevision: register.revision, days, dailyTests, enduranceScores, absentParticipantIds: absentAftermathSubjects(register, participants),
+      // Q6 T6 (CA12) : même Test que l'écran de convalescence, modificateurs communs du patient compris.
+      testers: Object.fromEntries(participants.map(row => [row.id, row])) });
     if (outcome.receipt.status !== 'applied') {
       const required = outcome.receipt.reason === 'daily-tests-required';
+      // CA8 : un État du patient exige une précision ; la réponse se donne dans les Suites de combat (Avancer), qui relance le Test.
+      if (outcome.receipt.reason === 'condition-input-required') return { ok: false, needsInput: [{ path: 'aftermath.dailyTests', code: 'condition-input-required', needsInput: outcome.receipt.needsInput,
+        message: `Convalescence : un État du patient exige une précision (${outcome.receipt.needsInput.map(row => row.label).join(' ')}). Avancez ces jours depuis les Suites de combat pour y répondre.` }] };
       return { ok: false, needsInput: [{ path: 'aftermath.dailyTests', code: required ? 'aftermath-daily-tests' : outcome.receipt.reason, requiredDailyChecks: outcome.receipt.requiredDailyChecks || [],
         message: required ? 'Blessure non bandée : Tests quotidiens de Résistance à saisir avant d’avancer le temps.' : `Convalescence : ${outcome.receipt.reason}.` }] };
     }

@@ -198,3 +198,27 @@ describe('Warp Blade : Test de la cible sur score de fiche + modificateurs commu
     assert.equal(out.enduranceTest.sl, 2);
   });
 });
+
+describe('Retours du verifier : horloge de campagne et Déterminé nommé', () => {
+  test('avancer l’horloge de campagne applique aussi les modificateurs du patient (CA12, même Test que Suites de combat)', async () => {
+    const store = await aftermathStore([person('patient', { states: [{ id: 's1', key: 'sonne', name: 'Sonné', level: 2 }] })]);
+    const incidentId = await openWound(store);
+    const done = await store.advanceCampaignTime({ seconds: 86400, reason: 'Un jour', dailyTests: [{ incidentId, day: 0, roll: 30 }] });
+    assert.equal(done.ok, true, JSON.stringify(done));
+    const check = store.getAftermathState().incidents[0].dailyChecks[0];
+    assert.equal(check.sl, 0, '3 − 3 + 2 − 2 (Sonné)');
+  });
+  test('horloge de campagne, patient À terre : arrêt avec la question, sans avancement (CA8)', async () => {
+    const store = await aftermathStore([person('patient', { states: [{ id: 's1', key: 'aterre', name: 'À terre', level: 1 }] })]);
+    const incidentId = await openWound(store);
+    const stopped = await store.advanceCampaignTime({ seconds: 86400, reason: 'Un jour', dailyTests: [{ incidentId, day: 0, roll: 30 }] });
+    assert.equal(stopped.ok, false);
+    const need = stopped.needsInput.find(row => row.code === 'condition-input-required');
+    assert.ok(need && /mouvement/.test(need.message), JSON.stringify(stopped.needsInput));
+    assert.equal(store.getAftermathState().calendar.currentDay, 0);
+  });
+  test('Déterminé : la question nomme le personnage (acteur et défenseur ne se mélangent pas)', () => {
+    const out = tryCalm(subject([{ id: 'c1', key: 'aterre', name: 'À terre', level: 1 }]), 30);
+    assert.ok(out.unresolved.some(row => row.startsWith('Déterminé (Calme) de Sujet : ')), out.unresolved.join(' | '));
+  });
+});

@@ -99,12 +99,15 @@ const receiptText = receipt => {
 export function createV5AftermathPanel({ Store, refresh = () => {} } = {}) {
   if (!Store) throw new TypeError('Store requis pour le suivi des séquelles');
   // État d'interface conservé d'un rendu à l'autre : saisies, sections ouvertes, aperçu du saut, dernier reçu.
-  const ui = { values: {}, open: new Set(), preview: null, lastReceipt: null, conditionContext: {} };
+  const ui = { values: {}, open: new Set(), preview: null, lastReceipt: null, conditionContext: {}, conditionFor: null };
   const clearValues = prefix => { for (const key of Object.keys(ui.values)) if (key.startsWith(prefix)) delete ui.values[key]; };
   const run = async (prefix, action) => {
+    // CA8 : les réponses aux questions d'États ne valent que pour l'opération qui les a demandées, jamais pour une autre.
+    if (ui.conditionFor !== prefix) ui.conditionContext = {};
     try {
       const result = await action();
       ui.lastReceipt = result?.receipt || { status: 'refused', reason: result?.reason || 'Commande refusée.' };
+      ui.conditionFor = ui.lastReceipt.needsInput?.length || Object.keys(ui.conditionContext).length ? prefix : null;
       if (result?.receipt?.status === 'applied') { clearValues(prefix); ui.preview = null; ui.conditionContext = {}; }
     } catch (cause) {
       ui.lastReceipt = { status: 'refused', reason: cause?.message || 'Commande impossible.' };

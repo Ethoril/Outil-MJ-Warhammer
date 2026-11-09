@@ -37,7 +37,7 @@ export function resoluteException(n,subject,settings,instances){
  // max(Sonné, Exténué, Empoisonné). Les précisions d'États de ce Test de Calme ont leur propre contexte (resoluteConditionContext),
  // distinct de celui du Test principal de l'action ; sans réponse, le Test attend le MJ (CA8).
  const secondary=previewV5SecondaryTest(subject,{score:base,roll:c.resoluteRoll,test:{characteristic:'FM',skill:'Calme'},context:c.resoluteConditionContext||{}});
- if(!secondary.ready)return{plans,unresolved:secondary.needsInput.map(row=>'Déterminé (Calme) : '+row.label),needsInput:secondary.needsInput,exceptions:[]};
+ if(!secondary.ready)return{plans,unresolved:secondary.needsInput.map(row=>'Déterminé (Calme) de '+(subject.name||subject.id)+' : '+row.label),needsInput:secondary.needsInput,exceptions:[]};
  const result=secondary.result;
  return{plans,unresolved,exceptions:result.success?[{reason:'conditionAcquired',talentId:origin.talentId,applies:true}]:[],test:result,detail:secondaryTestDetail(secondary)};
 }
