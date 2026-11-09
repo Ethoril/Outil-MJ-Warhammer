@@ -5245,7 +5245,7 @@ function resolvedCorruptionTest(participant, skillId, input) {
       input = cloneValue(input);
       const mountedPreflight = api.previewSpellExecution(contractOrId, input);
       if (mountedPreflight.status === 'mounted-fall-check-required') return { ...mountedPreflight, ok: false, status: 'requires-input' };
-      if (mountedPreflight.mountedFall?.length && mountedPreflight.needsInput?.some(need => need.field?.startsWith('mountedRide'))) {
+      if (mountedPreflight.mountedFall?.length && mountedPreflight.needsInput?.some(need => /^(mountedRide|rideCondition:|rideBlocked:)/.test(need.field || ''))) {
         return { ...mountedPreflight, ok: false, status: 'requires-input' };
       }
       if (mountedPreflight.mountedFall?.length) input.preview = { ...(input.preview || {}), mountedFall: cloneValue(mountedPreflight.mountedFall) };

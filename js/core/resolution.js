@@ -96,17 +96,18 @@ import { previewV5SecondaryTest, secondaryTestDetail } from './v5-test-modifiers
  * d'un Filet. Seul calcul de ces Tests : `store.js` (États acquis, embuscade, chute d'un sort) l'appelle aussi.
  * - Les États déjà portés par le testeur comptent ; l'État qui déclenche le Test (Sonné, Surpris…) n'est pas encore posé.
  * - `participant: false` ou sujet absent (source d'un Filet sans fiche, Force saisie d'un adversaire hors plateau) : score gardé.
- * - Aucun de ces Tests n'est une Action (CA14) : Surpris ne les bloque pas, Inconscient si.
+ * - Aucun de ces Tests n'est une Action (CA14) : Surpris ne les bloque pas, Inconscient si, sauf Test subi (`passive`, CA21 :
+ *   Endurance de la chute).
  * - Chevaucher repose sur la vue : Aveuglé, V5 v3 p. 185 (« Tests that rely heavily on sight […] such as Climb or Ride »).
  * - `answerAt` : chemin où ranger les réponses aux questions d'États (rendu avec chaque question, CA8).
  * Rend `{ ready: true, test, detail }` (`test` au format de `selectV5Test`) ou `{ ready: false, blocked, needsInput, message }`.
  */
 export function previewMountedSecondaryTest(subject, { score, roll, stat, skill = '', label = skill || stat, slModifiers = [], role = 'actor',
-  opponent = null, participants = [], context = {}, answerAt = null, participant = true } = {}) {
+  opponent = null, participants = [], context = {}, answerAt = null, participant = true, passive = false } = {}) {
   if (!participant || !subject) return { ready: true, test: selectV5Test(previewV5Test({ score, roll, kind: 'test', slModifiers }), 'keep'), detail: [] };
   const situation = { ...(skill === 'Chevaucher' ? { reliesOnSight: true } : {}), ...(context || {}) };
   const secondary = previewV5SecondaryTest(subject, { score, roll, kind: 'test', slModifiers, context: situation,
-    test: { characteristic: stat, skill, skillCharacteristic: stat, role, opponent, participants, isAction: false } });
+    test: { characteristic: stat, skill, skillCharacteristic: stat, role, opponent, participants, isAction: false, passive } });
   const name = subject.name || subject.id;
   if (!secondary.ready) {
     const needsInput = secondary.needsInput.map(row => ({ ...row, participantId: subject.id ?? null, answerAt }));
@@ -531,7 +532,8 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
             if(!Number.isInteger(roll)||roll<1||roll>100)tripUnresolved.push('Chute du Croche-pied : Test d’Endurance +0 requis (d100).');
             else {
               // Q6 · T4 : Endurance de la chute (V5 v3 p. 169, Challenging +0) par le calcul commun ; réponses d'États dans tripFallConditionContext.
-              const endurance=previewMountedSecondaryTest(target,{score:toughness,roll,stat:'E',skill:'Résistance',label:'Endurance',opponent:actor,
+              // Test subi (CA21) : un Inconscient le fait, avec ses malus d'États ; pas d'opposant (Test non opposé).
+              const endurance=previewMountedSecondaryTest(target,{score:toughness,roll,stat:'E',skill:'Résistance',label:'Endurance',passive:true,
                 participants:normalized.v5State?.participants||[],context:context.tripFallConditionContext,answerAt:'tripFallConditionContext'});
               if(!endurance.ready){tripUnresolved.push('Chute du Croche-pied : '+endurance.message);tripFallNeedsInput.push(...endurance.needsInput);}
               else enduranceTest={...endurance.test,detail:endurance.detail};
@@ -1260,7 +1262,10 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     }
     // Q6 · T4 : Chevaucher par le calcul commun (seul calcul, appelé aussi par store.js). Réponses d'États dans la réponse du cavalier
     // (`mountedRideTestsById.<id>[.<événement>].conditionContext`) ou, pour un seul Test, dans `mountedRideConditionContext`.
-    const answerAt = 'mountedRideTestsById.' + plan.participantId + (singlePlan ? '' : '.' + plan.event) + '.conditionContext';
+    const answers = context.mountedRideTestsById || context.mountedRideTests || {};
+    const byEvent = !singlePlan || answers[plan.participantId]?.[plan.event] && typeof answers[plan.participantId][plan.event] === 'object';
+    const answerAt = (context.mountedRideTestsById ? 'mountedRideTestsById.' : context.mountedRideTests ? 'mountedRideTests.' : 'mountedRideTestsById.')
+      + plan.participantId + (byEvent ? '.' + plan.event : '') + '.conditionContext';
     const ride = previewMountedSecondaryTest(rider, { score, roll, stat: 'Ag', skill: 'Chevaucher',
       slModifiers: [{ id: 'mounted:fall', label: 'Désarçonnement', amount: plan.requiredTest.modifier }],
       participants: normalized.v5State?.participants || [], answerAt,

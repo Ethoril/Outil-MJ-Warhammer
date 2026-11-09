@@ -167,3 +167,30 @@ describe('Q6 · T4 : commandes de monture du Store', () => {
     assert.ok(outRun.needsInput.some(row => /Inconscient/.test(row.label)), JSON.stringify(outRun.needsInput));
   });
 });
+
+describe('Q6 · T4 : retours du verifier', () => {
+  test('Chute d’un sort : une question d’État sur Chevaucher empêche l’application du sort', async () => {
+    const { fixture, input, contractFor } = await import('../../helpers/lot3-catalogue-fixture.js');
+    const { store } = await fixture();
+    const state = JSON.parse(store.getFullJSON());
+    const rider = state.combat.participants.find(row => row.id === 'foe');
+    rider.extensions.v5 = { ...(rider.extensions.v5 || {}), mounted: true, mountId: 'horse' };
+    rider.states = [...(rider.states || []), broken];
+    state.combat.participants.push({ id: 'horse', name: 'Horse', kind: 'Créature', camp: 'ennemi', zone: 'active', size: 'large', caracs: { F: 50 }, traits: [], states: [], skills: [], equipment: [] });
+    await store.loadFromJSON(state);
+    const spell = { ...input('Choc', { actorId: 'mage', targetIds: ['foe'], sl: 12 }), mountedRideTests: { foe: { score: 55, roll: 99 } } };
+    const preview = store.previewSpellExecution(contractFor('Choc').id, spell);
+    assert.ok(preview.needsInput.some(row => row.field === 'rideCondition:foe:runningOrHiding'), JSON.stringify(preview.needsInput));
+    const applied = await store.applySpellExecution(contractFor('Choc').id, spell);
+    assert.equal(applied?.status, 'requires-input');
+    assert.equal(store.listParticipants().find(row => row.id === 'foe').states.some(row => row.key === 'sonne'), false);
+    const answered = { ...spell, mountedRideTests: { foe: { score: 55, roll: 99, conditionContext: { runningOrHiding: false } } } };
+    assert.equal(store.previewSpellExecution(contractFor('Choc').id, answered).mountedFall[0].dismount, true);
+  });
+  test('CA21 : l’Endurance de la chute est un Test subi, faite même Inconscient', () => {
+    const attacker = actor('attacker'), target = actor('rider', { mounted: true, toughness: 20, states: [out] });
+    const preview = previewResolution({ actor: attacker, target, roll: 25, action: { type: 'test', attr: 'F', base: 40 },
+      defense: { base: 30, roll: 80, v5: { kind: 'test', choice: 'keep' } }, v5: { kind: 'test', context: { trip: true, tripFallEnduranceRoll: 10 } } });
+    assert.ok(preview.tripFall?.enduranceTest, JSON.stringify(preview.unresolved));
+  });
+});
