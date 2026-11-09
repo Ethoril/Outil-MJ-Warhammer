@@ -10,6 +10,13 @@
 | E09–E10 | Intégré et validé dans la vraie coquille | Navigation Préparer/Jouer/Bibliothèque, profils complets, recherche actions/tags, favoris, règles réelles, sélection et suivi du tour. |
 | E11–E17 | Intégré ; parcours navigateur bornés passants | `tests/browser-index.mjs` couvre lancement, suspension/reprise, clôture, personnage persistant, E15, E16 et E04 sur l’index réel. |
 
+## 3.45.0 — Tests secondaires par l’agrégateur commun, Obstiné partagé et libellés « Chance » (09/11/2026)
+
+- Chantier Q6 (`docs/specs/tests-secondaires-agregateur/`) : tous les Tests secondaires (désengagement, lancer/Focalisation/Dissipation/méditation/relance et déploiement Cadai/Arcanes impitoyables, Prière et Courroux, Chevaucher/Désarçonnement/chute après Croche-pied/échappée de Filet, Corruption/poursuite/Sprint et Se cacher de Brisé/extraction de projectile, recul d'arquebuse/Warp Blade/convalescence/Déterminé, contrats de sorts et sorts au fil des tours) passent par le calcul commun extrait de `buildCombatTest` (`js/core/v5-test-modifiers.js` : États et exceptions, séquelles durables et à circonstance, talents, couches de sorts et de prières, plafonds Obstiné et Distrait, restrictions Inconscient/Surpris et distinction actif/subi).
+- Chaque question d'État ou de séquelle posée par un Test secondaire dispose de son champ de réponse dans l'écran concerné et reste modifiable après saisie ; le détail par source (modificateurs retenus et écartés barrés) s'affiche en magie, en Prière et au désengagement comme au combat.
+- Obstiné (`talent-strong-minded`, V5 p. 127, CA35/CA36) est proposé avant le jet sur l'ensemble des Tests secondaires et partage un quota unique « une fois par séance » par personnage entre tous les écrans et le combat (consommé uniquement à l'application, restitué à l'annulation, réinitialisé au début d'une nouvelle séance).
+- Les points de Chance s'affichent désormais « Chance » (au lieu de « Fortune ») dans toute l'interface, les messages et les échanges avec les fiches (`docs/RENOMMAGE_CHANCE_FORTUNE.md`).
+
 ## 3.44.0 — mise à jour des PJ plus sûre, Skink Petit, hygiène (08/11/2026)
 
 - « Mettre à jour les PJ » ne rattache plus un personnage persistant à une fiche par son seul nom : un homonyme sans lien est proposé dans l'aperçu avec une case « Rattacher », et il n'est modifié que si le MJ la coche.
