@@ -6,6 +6,7 @@ import { BEAST_PROFILES, KADON_PROFILES, BEAST_TRAIT_COST, KADON_OPTION_COST, op
 import {spellObjectChoices,conjuredWeaponSkillScore} from '../core/equipment.js';
 import {wardDiceCount} from '../core/v5-magic-combat.js';
 import {getSpellContract,isHostileTarget} from '../core/v5-spell-contracts.js';
+import {renderTestQuestions} from './test-questions.js';
 
 function node(tag, className, text) {
   const element = document.createElement(tag);
@@ -264,6 +265,10 @@ export function renderSpellOptions({ actor, participants, contract, draft, handl
     }
     const button=node('button','workspace-secondary','Résoudre la clause du sort');button.type='button';button.disabled=!current.effectId || !current.targetId || !current.kind || draft.busy;
     const revision=handlers.magicRevision?.();button.addEventListener('click',()=>handlers.magicSpellInteraction({...draft.magicInteraction},revision));details.append(button);
+    // T10 : questions d'États ou de séquelle d'un testeur de la clause (refus précédent), réponse dans `testContexts[id]`.
+    const interactionQuestions=renderTestQuestions((draft.magicSecondaryNeeds?.interaction || []).map(row=>({...row,answerAt:row.participantId || ''})).filter(row=>row.answerAt),{root:current.testContexts || {},
+      onChange:next=>change({testContexts:next}),nameOf:id=>participants.find(p=>p.id===id)?.name || null,subjectOf:id=>participants.find(p=>p.id===id) || null,title:'À préciser avant de résoudre la clause',focusPrefix:'magic-interaction-question'});
+    if(interactionQuestions)details.append(interactionQuestions);
   }
 
   /** Traits optionnels d'une créature : une case par trait, nombre limité par les DR disponibles. */

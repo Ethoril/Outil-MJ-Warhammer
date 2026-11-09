@@ -34,7 +34,9 @@ test('lancer : Obstiné ramène à 0 la difficulté et la pénalité d’armure'
   assert.deepEqual([amounts(witness).difficulty, amounts(witness).armor], [-2, -2]);
   const strong = previewCasting(armoured({ talents: [talent('strong-minded')] }), spell, { roll: 25, slModifier: -2, conditionContext: STRONG });
   assert.deepEqual([amounts(strong).difficulty, amounts(strong).armor], [0, 0]);
-  assert.equal(strong.armorPenalty, -2, 'la pénalité d’armure calculée reste affichée');
+  // T10 : sous Obstiné, l'aperçu rend la pénalité d'armure effectivement appliquée (0), que le panneau n'affiche plus.
+  assert.equal(strong.armorPenalty, 0, 'pénalité d’armure appliquée : 0 sous Obstiné');
+  assert.equal(witness.armorPenalty, -2);
   assert.equal(strong.test.sl, witness.test.sl + 4);
 });
 

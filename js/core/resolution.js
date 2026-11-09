@@ -671,6 +671,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   else if(attackType(action.type)&&actorShield&&context.attackWithShield!==true&&!shieldHands.allowed)unresolved.push('Bouclier : combinaison des mains incompatible avec cette arme.');
   if(typeof recoveryId==='string'&&!weaponTrapRecovery)unresolved.push('Piège-lame : choisir une arme lâchée, présente dans un inventaire actif, à récupérer explicitement.');
   let netEscape = null;
+  const netEscapeNeedsInput = [];
   if (context.netEscapeConditionId) {
     const conditionId=context.netEscapeConditionId;
     const condition=actor?.states?.find(row=>row.id===conditionId&&['enchevetre','empetre','entangled'].includes(foldKey(row.key||row.name||'')));
@@ -700,7 +701,8 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
         ? previewMountedSecondaryTest(sourceParticipant,{score:sourceScore,roll:opponentRoll,stat:'F',label:'Force',role:'defender',opponent:actor,
           participants:normalized.v5State?.participants||[],context:context.netEscapeSourceConditionContext,answerAt:'netEscapeSourceConditionContext',
           participant:sourceIsParticipant}) : null;
-      if(sourceRun&&!sourceRun.ready)unresolved.push('Filet : '+sourceRun.message);
+      // T10 : questions de la source rangées dans l'aperçu (`netEscapeNeedsInput`, avec leur `answerAt`) pour que le panneau les pose.
+      if(sourceRun&&!sourceRun.ready){unresolved.push('Filet : '+sourceRun.message);netEscapeNeedsInput.push(...sourceRun.needsInput);}
       const sourceTest=sourceRun?.ready?sourceRun.test:null;
       const springLoaded=source.entanglementKind==='mancatcher'&&source.springLoaded===true;
       const escape=sourceTest?advanceV5NetEscape({testSl:sl,opponentSl:sourceTest.sl,opponentBonus:springLoaded?2:0,entangled:condition.level}):null;
@@ -1663,6 +1665,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     weaponReload,
     entanglement,
     netEscape,
+    ...(netEscapeNeedsInput.length ? { netEscapeSource: { needsInput: netEscapeNeedsInput } } : {}),
     entanglementRelease,
     projectileLodging,
     hack,

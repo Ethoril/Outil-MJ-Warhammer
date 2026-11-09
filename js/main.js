@@ -526,6 +526,24 @@ function openCombatInitiativeDialog({ staging = null, startCombat = false, title
           if (Number.isInteger(answer[field])) input.value = String(answer[field]);
           label.append(input); mountedArea.append(label);
         }
+        // T10 : questions d'États ou de séquelle du Test de Chevaucher (Surpris à cheval), réponse dans mountedRideTests.<id>.conditionContext.
+        for (const need of state.preview.needsInput.filter(item => /^ride(Condition|Blocked):/.test(item.field || ''))) {
+          const [, riderId, ...rest] = need.field.split(':'), field = rest.join(':');
+          if (need.field.startsWith('rideBlocked:')) { mountedArea.append(Object.assign(document.createElement('p'), { className: 'workspace-field-error', textContent: need.label })); continue; }
+          const answer = state.mountedRideTests[riderId] || {}, context = answer.conditionContext || {};
+          const label = document.createElement('label'); label.textContent = `${need.label} `;
+          const select = document.createElement('select'); select.setAttribute('aria-label', need.label); select.dataset.rideCondition = need.field;
+          if (field === 'conditionPenaltyMode') select.append(new Option('À préciser', ''), new Option('Pénalité en DR', 'sl'), new Option('Désavantage', 'disadvantage'));
+          else select.append(new Option('À préciser', ''), new Option('Oui', 'true'), new Option('Non', 'false'));
+          select.value = context[field] == null ? '' : String(context[field]);
+          select.addEventListener('change', () => {
+            const next = { ...(state.mountedRideTests[riderId]?.conditionContext || {}) };
+            if (select.value === '') delete next[field]; else next[field] = field === 'conditionPenaltyMode' ? select.value : select.value === 'true';
+            state.mountedRideTests[riderId] = { ...(state.mountedRideTests[riderId] || {}), conditionContext: next };
+            try { recalculate(); } catch (error) { status.textContent = error.message; }
+          });
+          label.append(select); mountedArea.append(label);
+        }
         for (const fall of state.preview.mountedFall || []) if (fall.test) mountedArea.append(Object.assign(document.createElement('p'), { className: 'muted', textContent: `${active.find(row => row.id === fall.participantId)?.name || fall.participantId} : Chevaucher ${fall.test.roll}, ${fall.test.sl} DR${fall.dismount ? ' — désarçonné' : ' — reste en selle'}.` }));
         for (const group of state.preview.tieGroups) {
           const section = document.createElement('section'); section.className = 'card';

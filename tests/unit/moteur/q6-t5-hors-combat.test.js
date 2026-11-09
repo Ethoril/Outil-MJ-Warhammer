@@ -177,14 +177,15 @@ test('poursuite et rune Cadai : Tests d’action, un Surpris ne les tente pas ce
   await assert.rejects(async () => { const { result } = await deploy([SURPRISED]); if (result?.ok === false) throw new Error(result.error); }, /Surpris/);
 });
 
-test('poursuite : la proie Brisée fuit (pas de pénalité), le poursuivant Brisé pose la question de la fuite au MJ', () => {
+test('poursuite : la proie Brisée fuit (pas de pénalité), le poursuivant Brisé subit Brisé sans question (MJ 09/11 CA32)', () => {
   const witness = pursue(runner('q'), runner('p'));
   const quarry = pursue(runner('q', [BROKEN]), runner('p'));
   assert.equal(quarry.quarryTest.sl, witness.quarryTest.sl, 'Brisé : pas de pénalité sur un Test pour fuir');
   const pursuer = pursue(runner('q'), runner('p', [BROKEN]));
-  assert.equal(pursuer.ready, false);
-  assert.deepEqual(pursuer.needsInput.map(row => row.field), ['pursuerContext.runningOrHiding']);
-  const answered = pursue(runner('q'), runner('p', [BROKEN]), { pursuerContext: { runningOrHiding: false } });
+  assert.equal(pursuer.ready, true, 'CA32 : aucune question de fuite pour le poursuivant');
+  assert.equal(pursuer.pursuerTest.sl, witness.pursuerTest.sl - 1, 'CA32 : le malus de Brisé s’applique');
+  // Une ancienne réponse « fuit » ne retire pas le malus : le poursuivant ne fuit pas.
+  const answered = pursue(runner('q'), runner('p', [BROKEN]), { pursuerContext: { runningOrHiding: true } });
   assert.equal(answered.pursuerTest.sl, witness.pursuerTest.sl - 1);
 });
 

@@ -2,12 +2,24 @@ import { isMiscastDistanceD100 } from './resolution-panel/dom.js';
 import {magicTalentRank} from '../core/v5-magic-talents.js';
 import {getCadaiRunes,getBurnoutStatus} from '../core/v5-magic-high.js';
 import {wardDiceCount,targetNatureTags,natureTagLabel,spellAttackNature,DEDUCED_TAGS} from '../core/v5-magic-combat.js';
-import {isHostileTarget,getSpellContract} from '../core/v5-spell-contracts.js';
+import {isHostileTarget,getSpellContract,breathNoDodgeReason} from '../core/v5-spell-contracts.js';
 import {listDispellablePersistentEffects} from '../core/v5-magic-dispel.js';
 import {missingMagicDiceMessage} from '../core/v5-magic-miscasts.js';
 import {normalizeLoreId,arcaneMagicLores} from '../core/v5-magic-attributes.js';
+import {renderTestQuestions,renderObstinateChoice} from './test-questions.js';
 const loreOptions=[['','Aucun attribut'],['beasts','Bêtes'],['death','Mort'],['fire','Feu'],['heavens','Cieux'],['life','Vie'],['light','Lumière'],['metal','Métal'],['shadow','Ombres']];
 export function renderMagicControls({actor,participants,type,draft,handlers,targetIds}){
+ // T10 : questions d'États ou de séquelle (et Obstiné) des Tests lancés par un bouton du panneau (méditation, déploiement et relance
+ // Cadai) : la commande refusée rend ses questions (`magicSecondaryNeeds[nom]`), la réponse part dans `magicSecondaryContexts[nom]`.
+ const secondaryQuestions=(container,name)=>{
+  const context=draft.magicSecondaryContexts?.[name] || {};
+  const set=next=>handlers.select({magicSecondaryContexts:{...(draft.magicSecondaryContexts || {}),[name]:next}});
+  const obstinate=renderObstinateChoice(actor,context.preRollTalent,value=>{const next={...context};if(value==='strong-minded')next.preRollTalent=value;else delete next.preRollTalent;set(next);},{focusKey:'magic-secondary-'+name+'-pre-roll-talent'});
+  if(obstinate)container.append(obstinate);
+  const rows=(draft.magicSecondaryNeeds?.[name] || []).map(row=>({...row,answerAt:''}));
+  const questions=renderTestQuestions(rows,{root:context,onChange:set,subjectOf:()=>actor,title:'À préciser avant de relancer',focusPrefix:'magic-secondary-'+name});
+  if(questions)container.append(questions);
+ };
  const baseRevision=handlers.magicRevision?.();
  // U-01 : clé d'opération créée au rendu, consommée une fois ; null = opération déjà appliquée, bouton inactif jusqu'à la prochaine saisie.
  const opKey=name=>handlers.magicOperationKey?.(name),opSpent=name=>Boolean(handlers.magicOperationKey)&&!opKey(name);
@@ -95,6 +107,7 @@ export function renderMagicControls({actor,participants,type,draft,handlers,targ
   field('magicMeditationMinutes','Minutes de contemplation ou méditation');field('magicMeditationRoll','Test de Prière (1d100)');
   field('magicMeditationDice','Durée : résultats des d10 séparés par des espaces','text');
   const apply=document.createElement('button');apply.type='button';apply.className='workspace-secondary';apply.textContent='Résoudre la méditation';apply.disabled=Boolean(draft.busy || opSpent('meditation'));{const key=opKey('meditation');apply.addEventListener('click',()=>handlers.magicMeditation(baseRevision,key));}box.append(apply);
+ secondaryQuestions(box,'meditation');
  }
  const suffused=participants.filter(p=>magicTalentRank(p,'suffuse-with'));
  if(type==='cast'&&suffused.length){field('magicSuffusedId','Imprégné : porteur du Vent à proximité','select',[['','Aucun'],...suffused.map(p=>[p.id,p.name])]);if(draft.magicSuffusedId)field('magicSuffusedDistance','Distance du porteur d’Imprégné en mètres');}
@@ -104,6 +117,7 @@ export function renderMagicControls({actor,participants,type,draft,handlers,targ
  field('magicRuneKnowledgeRoll','Déploiement : jet Savoir (Magie) (+0 DR), 1d100');
  field('magicRuneMaterials','Lire/Écrire, matériel et conditions de déploiement confirmés','checkbox');
  const deploy=document.createElement('button');deploy.type='button';deploy.className='workspace-secondary';deploy.textContent='Déployer une rune (1 Round)';deploy.disabled=Boolean(draft.busy || opSpent('rune-deploy'));{const key=opKey('rune-deploy');deploy.addEventListener('click',()=>handlers.magicRune('deploy',baseRevision,key));}box.append(deploy);
+ secondaryQuestions(box,'rune-deploy');
  const reset=document.createElement('button');reset.type='button';reset.className='workspace-ghost';reset.textContent='Quitter le lieu : effacer les runes';reset.disabled=Boolean(draft.busy || !runes.deployed || opSpent('rune-reset'));{const key=opKey('rune-reset');reset.addEventListener('click',()=>handlers.magicRune('reset',baseRevision,key));}box.append(reset);
  if(runes.deployed){
   field('magicUseCadaiRune','Consommer une rune pour relancer','checkbox');
@@ -120,6 +134,7 @@ export function renderMagicControls({actor,participants,type,draft,handlers,targ
     field('magicCorruptionInitialRoll','Jet initial du Test de Corruption (1d100)');field('magicCadaiCorruptionRoll','Nouveau jet Cadai du Test de Corruption (1d100)');
     const modifier=field('magicCorruptionModifier','Modificateur du Test de Corruption (DR)');modifier.min='-100';modifier.max='100';
     const button=document.createElement('button');button.type='button';button.className='workspace-secondary';button.textContent='Résoudre la relance de Corruption';button.disabled=Boolean(draft.busy || opSpent('corruption-rune'));{const key=opKey('corruption-rune');button.addEventListener('click',()=>handlers.magicCorruptionRune(baseRevision,key));}box.append(button);
+    secondaryQuestions(box,'corruption-rune');
    }
   }
  }
@@ -188,6 +203,8 @@ export function renderSpellRecipientControls({actor,participants,contract,draft,
   const label=document.createElement('label');label.className='workspace-type';label.textContent='Souffle : Test de CT du lanceur (d100)';const input=document.createElement('input');input.type='number';input.min='1';input.max='100';input.value=draft.magicCtRoll ?? '';input.setAttribute('aria-label',label.textContent);input.dataset.focusKey='magic-ct-roll';input.addEventListener('input',()=>handlers.input('magicCtRoll',input.value===''?undefined:Number(input.value)));label.append(input);box.append(label);
   for(const [index,p] of ordered.entries()){
    perTargetNumber(p,index===0?'distance':'fromPrimary',index===0?'Souffle : distance au lanceur (m)':'Souffle : distance à la cible principale (m)');
+   // MJ 09/11 CA24 et CA34 : une cible Surprise ou Inconsciente n'esquive pas le Souffle : aucune Esquive demandée.
+   const noDodge=breathNoDodgeReason(p);if(noDodge){const note=document.createElement('p');note.className='workspace-muted';note.dataset.breathNoDodge=p.id;note.textContent='Souffle : '+p.name+' est '+noDodge+' : aucune Esquive possible.';box.append(note);continue;}
    const label=document.createElement('label');label.className='workspace-type';label.textContent='Souffle : opposition — '+p.name;const select=document.createElement('select');select.setAttribute('aria-label',label.textContent);select.dataset.focusKey='breath-oppose-'+p.id;select.append(new Option('Esquive (d100 requis)','true'),new Option('Opposition refusée','false'));select.value=draft.magicTargetTests?.[p.id]?.opposeBreath===false?'false':'true';select.addEventListener('change',()=>setTargetTest(p.id,{opposeBreath:select.value==='true'}));label.append(select);box.append(label);
    if(draft.magicTargetTests?.[p.id]?.opposeBreath!==false)perTargetNumber(p,'dodgeRoll','Souffle : Esquive (d100)',1,100);
   }

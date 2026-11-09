@@ -1423,9 +1423,10 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
       testers: Object.fromEntries(participants.map(row => [row.id, row])) });
     if (outcome.receipt.status !== 'applied') {
       const required = outcome.receipt.reason === 'daily-tests-required';
-      // CA8 : un État du patient exige une précision ; la réponse se donne dans les Suites de combat (Avancer), qui relance le Test.
+      // CA8 : un État ou une séquelle du patient exige une précision (« séquelle » quand c'en est une, T10) ; la réponse se donne dans
+      // les Suites de combat (Avancer), qui relance le Test.
       if (outcome.receipt.reason === 'condition-input-required') return { ok: false, needsInput: [{ path: 'aftermath.dailyTests', code: 'condition-input-required', needsInput: outcome.receipt.needsInput,
-        message: `Convalescence : un État du patient exige une précision (${outcome.receipt.needsInput.map(row => row.label).join(' ')}). Avancez ces jours depuis les Suites de combat pour y répondre.` }] };
+        message: `Convalescence : ${outcome.receipt.needsInput.some(row => /^sequela/.test(row.field || '')) ? 'une séquelle' : 'un État'} du patient exige une précision (${outcome.receipt.needsInput.map(row => row.label).join(' ')}). Avancez ces jours depuis les Suites de combat pour y répondre.` }] };
       return { ok: false, needsInput: [{ path: 'aftermath.dailyTests', code: required ? 'aftermath-daily-tests' : outcome.receipt.reason, requiredDailyChecks: outcome.receipt.requiredDailyChecks || [],
         message: required ? 'Blessure non bandée : Tests quotidiens de Résistance à saisir avant d’avancer le temps.' : `Convalescence : ${outcome.receipt.reason}.` }] };
     }
@@ -4540,8 +4541,9 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
         if(e<0)throw new Error('Relance de Corruption : exécution de Haute Magie de ce lanceur introuvable.');
         const corruptionId=String(input.corruptionId || 'corruption');
         const actor=participants[i],spell=getSpellContract(executions[e].spellId);
-        const reroll=previewCadaiCorruptionReroll(actor,{spell,castExecutionId:input.castExecutionId,accessible:input.accessible,firstRoll:input.firstRoll,reroll:input.reroll,slModifier:Number(input.slModifier || 0),alreadyRerolled:executions[e].rerolledCorruption.includes(corruptionId)});
-        if(!reroll.ready)throw Object.assign(new Error(reroll.error),{userFacing:true});
+        const reroll=previewCadaiCorruptionReroll(actor,{spell,castExecutionId:input.castExecutionId,accessible:input.accessible,firstRoll:input.firstRoll,reroll:input.reroll,slModifier:Number(input.slModifier || 0),alreadyRerolled:executions[e].rerolledCorruption.includes(corruptionId),conditionContext:input.conditionContext||{}});
+        // T10 : les questions d'États ou de séquelle du Test de Calme repartent avec l'erreur, pour que le panneau les pose.
+        if(!reroll.ready)throw Object.assign(new Error(reroll.error),{userFacing:true,...(reroll.needsInput?{needsInput:reroll.needsInput}:{})});
         const paid=consumeCadaiRune(actor,{purpose:'corruption'});
         if(!paid.success)throw new Error(paid.reason);
         participants[i]=paid.participant;
@@ -4584,7 +4586,8 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
         if(needs.length)throw Object.assign(new Error(needs[0].message),{userFacing:true,needsInput:needs});
         input.prayerSLContext={sceneId:draft.activeScene?.status==='active'?draft.activeScene.id:null,round:draft.combat?.round};
         const preview=previewMagicMeditation(participants[index],input);
-        if(!preview.ready)throw Object.assign(new Error(preview.error),{userFacing:true});
+        // T10 : questions d'États ou de séquelle du Test de Prière (`input.conditionContext`) renvoyées au panneau.
+        if(!preview.ready)throw Object.assign(new Error(preview.error),{userFacing:true,...(preview.needsInput?{needsInput:preview.needsInput}:{})});
         if(preview.success){
           if(preview.yenlui){
             participants[index].extensions ??={};

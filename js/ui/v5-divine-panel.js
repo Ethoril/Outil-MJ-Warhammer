@@ -1,5 +1,6 @@
 /** Brouillon de prière conservé entre rendus ; seul le Store peut confirmer une conséquence. */
-import { testQuestionLabel, answeredSequelaFields } from '../core/v5-test-modifiers.js';
+import { testQuestionLabel, answeredSequelaFields, resolveV5TestModifiers } from '../core/v5-test-modifiers.js';
+import { renderObstinateChoice, renderSourceDetail } from './test-questions.js';
 import {spellObjectChoices} from '../core/equipment.js';
 import {CAMP_LABELS} from '../core/encounters.js';
 import {getAllDivineContracts} from '../core/v5-divine-store.js';
@@ -114,7 +115,7 @@ export function createDivinePanel({Store,refresh,onRollChange=()=>{}}){
    wrathRoll:state.wrathRoll===''?undefined:Number(state.wrathRoll),wrathDurationRoll:state.wrathDurationRoll===''?undefined:Number(state.wrathDurationRoll),wrathConsequences:state.wrathConsequence.trim(),wrathPenanceText:state.wrathPenanceText||'',wrathRejectionConfirmed:state.wrathRejectionConfirmed==='true',wrathPrayAdvances:state.wrathPrayAdvances===undefined||state.wrathPrayAdvances===''?undefined:Number(state.wrathPrayAdvances),wrathFirstMorningAt:state.wrathFirstMorningAt===undefined||state.wrathFirstMorningAt===''?undefined:Number(state.wrathFirstMorningAt),...confiscationInput(),...summonInput(),
    wrathDamageRoll:state.wrathDamageRoll?Number(state.wrathDamageRoll):undefined,wrathEnduranceRoll:state.wrathEnduranceRoll?Number(state.wrathEnduranceRoll):undefined,
    wrathTestOptionId:state.wrathTestOptionId||undefined,wrathConditionContext:{...(state.wrathSequelaAnswers||{}),conditionPenaltyMode:state.wrathConditionPenaltyMode||undefined,conditionPenaltyReason:state.wrathConditionPenaltyReason||''},
-   testOptionId:state.testOptionId||undefined,conditionContext:{...(state.prayerSequelaAnswers||{}),conditionPenaltyMode:state.conditionPenaltyMode||undefined,conditionPenaltyReason:state.conditionPenaltyReason},
+   testOptionId:state.testOptionId||undefined,conditionContext:{...(state.prayerSequelaAnswers||{}),...(state.preRollTalent==='strong-minded'?{preRollTalent:'strong-minded'}:{}),conditionPenaltyMode:state.conditionPenaltyMode||undefined,conditionPenaltyReason:state.conditionPenaltyReason},
    choices:clone(state.choices),...toEngineInput(state.form,{targetIds,contract,actor}),...(isBrokenActor(actor)&&typeof state.brokenEscapeVisibility==='boolean'?{brokenEscapeFacts:{visibleToAnyEnemy:state.brokenEscapeVisibility}}:{}),expiry};
  }
  function accessControls(container,preview,{recovery=false}={}){
@@ -427,7 +428,7 @@ export function createDivinePanel({Store,refresh,onRollChange=()=>{}}){
    accessBox.append(node('p','workspace-muted','Cette exception autorise uniquement cette prière pour ce sujet; elle ne débloque pas une source ni n’ajoute de mécanique.'));
   }
   const conditionResult=resolveV5ConditionTestContext(actor,{characteristic:'Soc',isAction:true,involvesMovement:false,
-   runningOrHiding:false,requiresSight:false,reliesOnSight:false,talentContext:state.prayerSequelaAnswers||{},conditionPenaltyMode:state.conditionPenaltyMode||undefined,
+   runningOrHiding:false,requiresSight:false,reliesOnSight:false,talentContext:{...(state.prayerSequelaAnswers||{}),...(state.preRollTalent==='strong-minded'?{preRollTalent:'strong-minded'}:{})},conditionPenaltyMode:state.conditionPenaltyMode||undefined,
    conditionPenaltyReason:state.conditionPenaltyReason});
   const needsPenaltyArbitration=conditionResult.needsInput.some(row=>['conditionPenaltyMode','conditionPenaltyReason'].includes(row.field))
    ||Boolean(conditionResult.arbitration);
@@ -453,6 +454,8 @@ export function createDivinePanel({Store,refresh,onRollChange=()=>{}}){
   }
   content.append(accessBox);  const form=node('div','workspace-resolution-row');content.append(form);
   const brokenVisibility=renderBrokenEscapeVisibilityControl({actor,value:state.brokenEscapeVisibility,onChange:value=>{state.brokenEscapeVisibility=value;state.preview=null;state.error='';refresh();},key:'prayer'});if(brokenVisibility)form.append(brokenVisibility);
+  // T10 : Obstiné (V5 p. 127) choisi avant le jet de Prière ; il annule aussi les malus propres à la Prière (Courroux, Relique négative, CA18).
+  const obstinate=renderObstinateChoice(actor,state.preRollTalent,value=>change('preRollTalent',value),{focusKey:'prayer-pre-roll-talent'});if(obstinate)form.append(obstinate);
   select(form,'Le personnage peut prononcer la prière',state.canSpeak===null?'':String(state.canSpeak),[['','À préciser'],['true','Oui'],['false','Non']],value=>change('canSpeak',value===''?null:value==='true'),'voice');
   const prayerRoll=field(form,'Jet de Prière (d100)','roll',{min:1,max:100});
   const rollPrayer=node('button','workspace-secondary','Lancer');rollPrayer.type='button';rollPrayer.setAttribute('aria-label','Lancer le jet de Prière');
@@ -518,6 +521,9 @@ export function createDivinePanel({Store,refresh,onRollChange=()=>{}}){
    if(preview?.prayer)outcome.append(node('p','',`${preview.prayer.success?'Prière réussie':'Prière ratée'} · ${preview.prayer.sl} DR · score ${preview.skillScore}`));
    if(preview?.prayerSLAdjustment)outcome.append(node('p','workspace-muted',`Courroux « Pensez à vos actes » · ${preview.prayerSLAdjustment.rawSL} DR bruts → ${preview.prayerSLAdjustment.effectiveSL} DR appliqués · plafond de +0 pendant huit jours impériaux.`));
    if(preview?.prayer?.reversed)outcome.append(node('p','workspace-muted',`Désavantage : jet inversé ${preview.prayer.initialRoll} → ${preview.prayer.roll}.`));
+   // T10 (CA5) : détail par source du Test de Prière (talents, sorts et prières, États, séquelles ; écartés barrés), comme au combat.
+   if(preview?.prayer?.details?.modifiers){const common=resolveV5TestModifiers(actor,{characteristic:'FM',skill:'Prière',skillCharacteristic:'FM',kind:'test',isAction:true},{...(state.prayerSequelaAnswers||{}),...(state.preRollTalent==='strong-minded'?{preRollTalent:'strong-minded'}:{}),skillId:'skill-50_72_69_e8_72_65-base'});
+    const detail=renderSourceDetail({rows:common.rows,modifiers:preview.prayer.details.modifiers,title:'Détail du Test de Prière (par source)'});if(detail)outcome.append(detail);}
    if(preview?.testOptions?.length&&result.needsInput?.some(row=>row.field==='testOptionId'))
     select(outcome,'Choix du jet favorable',state.testOptionId,preview.testOptions.map(option=>[option.id,option.id==='reverse'?`Inverser → ${option.result.roll}`:`Garder → ${option.result.roll}`]),value=>change('testOptionId',value),'test-option');
    if(preview?.resolvedParams)outcome.append(node('p','workspace-muted','Après extensions : '+Object.entries(preview.resolvedParams).map(([key,value])=>({range:'portée',targets:'cibles',duration:'durée'}[key]||key)+' '+resolvedParamText(value)).join(' · ')));

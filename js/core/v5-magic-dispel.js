@@ -71,7 +71,7 @@ function dispelTest(actor, options, ownSpell = false, persistent = false) {
     ...(magicShieldBonus ? [{ id: 'magic-shield', label: 'Bouclier magique', amount: magicShieldBonus }] : []),
     ...prepared.slModifiers.map(row => ({ ...row }))
   ];
-  // Plafonds de fin de calcul (Distrait, Esprit fort V5 p. 127) sur la liste complète de ce Test : difficulté, propre sort,
+  // Plafonds de fin de calcul (Distrait, Obstiné V5 p. 127) sur la liste complète de ce Test : difficulté, propre sort,
   // Bouclier magique et assistance compris (Q6 T1 ; idempotent après celui de prepareMagicOptions).
   finalizeV5TestModifiers(actor, prepared.testModifiers || {}, { slModifiers, advantageSources: prepared.advantageSources, disadvantageSources: prepared.disadvantageSources || [] });
   const context = { score, armorPenalty, armorDetails, slModifiers, cadaiReceipt: prepared.cadaiReceipt || null, turnKey: options.turnKey };

@@ -280,7 +280,9 @@ export function sequelaQuestionLabel(field, participant = null) {
   if (SEQUELA_QUESTIONS[field]) return SEQUELA_QUESTIONS[field];
   const loc = /^sequelaUses:(.+)$/.exec(String(field || ''))?.[1];
   if (!loc) return null;
-  const zone = sequelaRows(participant).find(row => row.type === 'loc-dr' && row.loc === loc)?.label?.split(' : ')[0] || loc;
+  // Sans participant (écran qui ne connaît que le champ), nom de la zone en clair : `arm:left` → « bras gauche ».
+  const [part, side] = loc.split(':');
+  const zone = sequelaRows(participant).find(row => row.type === 'loc-dr' && row.loc === loc)?.label?.split(' : ')[0] || sided(part, side);
   return `Séquelle : le Test utilise-t-il cette zone (${zone}) ?`;
 }
 

@@ -6,6 +6,7 @@ import { outnumberSide, planOutnumbering } from '../../core/outnumbering.js';
 import { inferV5Kind } from '../../core/v5-combat-rules.js';
 import { CONDITION_QUESTIONS } from '../../core/condition-effects.js';
 import { MIXED_CONDITION_QUESTION, testQuestionLabel, answeredSequelaFields } from '../../core/v5-test-modifiers.js';
+import { renderObstinateChoice } from '../test-questions.js';
 
 const el = (tag, className = '', text = '') => {
   const node = document.createElement(tag);
@@ -158,6 +159,13 @@ export function renderDisengageForm(container, { actor, plan, state, active, onC
     };
     form.append(skillLabel, roll(`d100 de ${actor.name} (score ${plan.actorScore}${plan.outnumbered ? ', Désavantage' : ''})`, 'actorRoll'),
       roll(`d100 de ${name(plan.bestOpponentId)} (meilleure Mêlée ${plan.opponentScore})`, 'opponentRoll'));
+    // T10 : Obstiné (V5 p. 127) choisi avant le jet, pour chaque camp qui a le talent ; réponse dans le contexte du camp.
+    for (const [key, person] of [['context', actor], ['opponentContext', active.find(row => row.id === plan.bestOpponentId)]]) {
+      const answers = state[key] || {};
+      const choice = renderObstinateChoice(person, answers.preRollTalent, value => { const next = { ...answers }; if (value === 'strong-minded') next.preRollTalent = value; else delete next.preRollTalent; onChange({ [key]: next }); },
+        { focusKey: `disengage-${key}-pre-roll-talent`, title: `Obstiné avant le jet — ${person?.name || ''}` });
+      if (choice) form.appendChild(choice);
+    }
     // CA8 : précision demandée par un État (posée, ou déjà répondue et modifiable), réponse dans le contexte du camp.
     for (const [side, key, who] of [['actor', 'context', actor.name], ['opponent', 'opponentContext', name(plan.bestOpponentId)]]) {
       const answers = state[key] || {};

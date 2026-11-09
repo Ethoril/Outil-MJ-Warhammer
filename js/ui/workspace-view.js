@@ -52,6 +52,7 @@ import { getSpellContract, getAllSpellContracts, divineCastingModifiers } from '
 import { magicGrantedActions, beastFormActions } from '../core/v5-magic-combat.js';
 import { transformationOvercastCost } from '../core/v5-magic-arbitrations.js';
 import { effectiveSupplementalEncumbrance } from '../core/v5-supplemental-equipment.js';
+import { renderTestQuestions, renderObstinateChoice } from './test-questions.js';
 import { createV5AftermathPanel } from './v5-aftermath-panel.js';
 import { mountCampaignWorkspace } from './campaign-workspace.js';
 import { WORKSPACE_SPACES, noop, node, button, readProfiles, readEncounters, readScenes, readParticipants, readCombat, turnKey, STATE_NAMES, stateLabel, toughnessBonus, armorSummary, displayedArmorLocations, hpText, hpBar, CRITICAL_ERROR_FIELDS, DEFENDER_CRITICAL_FIELDS, criticalRollError, dispelDistance, dispelVisible, validRoll, criticalRollsChanged, profileSearchText, createShell, profileSummary, magicCastingSpell } from './workspace/helpers.js';
@@ -125,6 +126,8 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     draft.magicMountedRideTests = {};
     draft.magicSecondaryRolls = {};
     draft.magicConditionContext = {};
+    draft.magicSecondaryNeeds = {};
+    draft.magicSecondaryContexts = {};
   }
   // Autre jet de critique : ses effets repartent cochés (les cases décochées visaient l'ancien tirage).
   // La localisation change aussi les dégâts, donc l'existence du second critique.
@@ -1163,7 +1166,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     return draft.magicOpKeys[name] ||= `op-${name}-${++magicOpSeq}`;
   }
   let magicOpSeq = 0;
-  async function runMagicSecondary(action, fallback, onSuccess = () => {}, baseRevision = Store.getLocalRevision(), operation = null) {
+  async function runMagicSecondary(action, fallback, onSuccess = () => {}, baseRevision = Store.getLocalRevision(), operation = null, questionsName = operation?.name || null) {
     const draft = state.resolution;
     if (draft.busy) return;
     if (operation && (!operation.key || draft.magicOpKeys?.[operation.name] !== operation.key || draft.magicOpSpent?.[operation.name])) return;
@@ -1177,10 +1180,14 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     render();
     try {
       const result = await action(baseRevision);
-      if (result?.ok === false) throw userError(typeof result.error === 'string' ? result.error : result.error?.message || fallback);
+      if (result?.ok === false) throw Object.assign(userError(typeof result.error === 'string' ? result.error : result.error?.message || fallback), Array.isArray(result.needsInput) ? { needsInput: result.needsInput } : {});
       draft.preview = null;
+      // T10 : Test résolu : ses questions et ses réponses ne valent plus.
+      if (questionsName) { draft.magicSecondaryNeeds = { ...draft.magicSecondaryNeeds, [questionsName]: [] }; draft.magicSecondaryContexts = { ...draft.magicSecondaryContexts, [questionsName]: {} }; }
       onSuccess();
     } catch (error) {
+      // T10 : questions d'États ou de séquelle du Test refusé, posées par le panneau près du bouton (`magicSecondaryNeeds`).
+      if (questionsName) draft.magicSecondaryNeeds = { ...draft.magicSecondaryNeeds, [questionsName]: Array.isArray(error?.needsInput) ? error.needsInput.filter(row => row && typeof row.label === 'string') : [] };
       draft.error = { field: 'general', message: userMessage(error, fallback) };
       if (operation) draft.magicOpSpent = { ...draft.magicOpSpent, [operation.name]: false };
     } finally {
@@ -1631,7 +1638,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     magicAdventure(revision,key){return runMagicSecondary(baseRevision=>Store.startMagicAdventure({baseRevision}),'Aventure non renouvelée.',undefined,revision,{name:'adventure',key});},
     magicCorruptionRune(revision,key){
       const draft=state.resolution;
-      return runMagicSecondary(baseRevision=>Store.rerollCorruptionWithCadai({baseRevision,actorId:playContext().actor.id,accessible:Boolean(draft.magicCadaiAccessible),castExecutionId:draft.magicCorruptionExecutionId,corruptionId:draft.magicCorruptionId || undefined,firstRoll:draft.magicCorruptionInitialRoll,reroll:draft.magicCadaiCorruptionRoll,slModifier:draft.magicCorruptionModifier}),'Relance de Corruption non appliquée.',()=>{
+      return runMagicSecondary(baseRevision=>Store.rerollCorruptionWithCadai({baseRevision,actorId:playContext().actor.id,accessible:Boolean(draft.magicCadaiAccessible),castExecutionId:draft.magicCorruptionExecutionId,corruptionId:draft.magicCorruptionId || undefined,firstRoll:draft.magicCorruptionInitialRoll,reroll:draft.magicCadaiCorruptionRoll,slModifier:draft.magicCorruptionModifier,conditionContext:draft.magicSecondaryContexts?.['corruption-rune'] || {}}),'Relance de Corruption non appliquée.',()=>{
         draft.magicUseCadaiRune=false;
         draft.magicCadaiCorruptionRoll=null;
         draft.magicCorruptionInitialRoll=null;
@@ -1640,7 +1647,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     magicMindOverBody(revision,key){return runMagicSecondary(baseRevision=>Store.activateMindOverBody(playContext().actor.id,{baseRevision}),'Activation non appliquée.',undefined,revision,{name:'mind-over-body',key});},
     magicMeditation(revision,key){
       const draft=state.resolution;
-      return runMagicSecondary(baseRevision=>Store.applyMagicMeditation({baseRevision,actorId:playContext().actor?.id,talentId:draft.magicMeditationId,name:draft.magicMeditationId,minutes:draft.magicMeditationMinutes,roll:draft.magicMeditationRoll,durationRolls:String(draft.magicMeditationDice || '').trim().split(/\s+/).filter(Boolean).map(Number)}),'Méditation non appliquée.',()=>{
+      return runMagicSecondary(baseRevision=>Store.applyMagicMeditation({baseRevision,conditionContext:draft.magicSecondaryContexts?.meditation || {},actorId:playContext().actor?.id,talentId:draft.magicMeditationId,name:draft.magicMeditationId,minutes:draft.magicMeditationMinutes,roll:draft.magicMeditationRoll,durationRolls:String(draft.magicMeditationDice || '').trim().split(/\s+/).filter(Boolean).map(Number)}),'Méditation non appliquée.',()=>{
         draft.magicMeditationMinutes=null;
         draft.magicMeditationRoll=null;
         draft.magicMeditationDice='';
@@ -1648,19 +1655,21 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     },
     magicRune(mode,revision,key){
       const draft=state.resolution;
-      return runMagicSecondary(baseRevision=>Store.deployCadaiRune({baseRevision,actorId:playContext().actor?.id,reset:mode==='reset',roll:draft.magicRuneKnowledgeRoll,conditionsConfirmed:draft.magicRuneMaterials}),'Rune non déployée.',()=>{if(mode!=='reset'){
+      return runMagicSecondary(baseRevision=>Store.deployCadaiRune({baseRevision,actorId:playContext().actor?.id,reset:mode==='reset',roll:draft.magicRuneKnowledgeRoll,conditionsConfirmed:draft.magicRuneMaterials,conditionContext:draft.magicSecondaryContexts?.['rune-deploy'] || {}}),'Rune non déployée.',()=>{if(mode!=='reset'){
         draft.magicRuneKnowledgeRoll=null;
         draft.magicRuneMaterials=false;
       }},revision,{name:mode==='reset'?'rune-reset':'rune-deploy',key});
     },
     magicSpellInteraction(input,revision){
+      const draft=state.resolution;
       const ward=value=>{
         if(typeof value!=='string')return value;
         const dice=value.trim().split(/[\s,;]+/).filter(Boolean).map(Number);
         return dice.length===1?dice[0]:dice;
       };
       input={...input,wardRoll:ward(input.wardRoll),targetTests:Object.fromEntries(Object.entries(input.targetTests || {}).map(([id,data])=>[id,{...data,wardRoll:ward(data.wardRoll)}]))};
-      return runMagicSecondary(baseRevision=>Store.applySpellInteraction({...input,baseRevision}),'Clause du sort impossible.',undefined,revision);
+      // T10 : réponses aux questions d'États ou de séquelle de chaque testeur (`testContexts[id]`), posées par le panneau après un refus.
+      return runMagicSecondary(baseRevision=>Store.applySpellInteraction({...input,testContexts:draft.magicInteraction?.testContexts || input.testContexts || {},baseRevision}),'Clause du sort impossible.',()=>{draft.magicInteraction={...(draft.magicInteraction || {}),testContexts:{}};},revision,null,'interaction');
     },
     magicRecovery(revision,key){return runMagicSecondary(baseRevision=>{
       const actorId=playContext().actor?.id;
@@ -1948,11 +1957,19 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
               draft.preview.conditionNeedRows = states.conditionNeedRows || [];
               draft.preview.conditionDisadvantages = states.disadvantageSources || [];
               draft.preview.conditionModifiers = states.slModifiers || [];
+              draft.preview.conditionRows = states.conditionRows || [];
             } catch { draft.preview.conditionNeeds = []; draft.preview.conditionNeedRows = []; draft.preview.conditionDisadvantages = []; draft.preview.conditionModifiers = []; }
           }
         } catch (error) {
           draft.preview = null;
-          draft.error = calculationError(error);
+          // MJ 09/11 CA29 (T10) : une question de séquelle sans réponse refuse le jet ; l'aperçu refusé garde ses questions pour
+          // que le panneau les pose (sinon elles disparaissaient avec l'aperçu).
+          if (Array.isArray(error?.needsInput) && error.needsInput.length) {
+            const rows = error.needsInput.map(row => ({ ...row }));
+            draft.preview = { v5MagicKind: context.type === 'cast' ? 'cast' : context.type, ready: false, refusedForQuestions: true, error: error.message,
+              actorId: context.actor.id, conditionNeeds: rows.filter(row => !/^sequela/.test(row.field || '')).map(row => row.label), conditionNeedRows: rows,
+              conditionDisadvantages: [], conditionModifiers: [], baseRevision: typeof Store.getLocalRevision === 'function' ? Store.getLocalRevision() : undefined };
+          } else draft.error = calculationError(error);
         }
         render(draft.error && draft.error.field !== 'general' ? `roll-${draft.error.field}` : focusKey);
         return;
@@ -2299,7 +2316,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         const wrap=node('div','workspace-v5-context');
         wrap.appendChild(node('p','workspace-result-line',`${participant.name||participant.id} · ${projectile.ammunitionId} · ${projectile.removal==='surgery'?'chirurgie requise':'Test de Guérison requis'} · 1 Blessure bloquée`));
         const error=node('p','workspace-error');
-        let surgeryConfirmed=false,skillId='',testRoll='';
+        let surgeryConfirmed=false,skillId='',testRoll='',conditionContext={};
         if(projectile.removal==='surgery'){
           const label=node('label','workspace-type','Le MJ confirme la chirurgie');
           const check=document.createElement('input');
@@ -2322,13 +2339,21 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
           input.setAttribute('aria-label',`d100 du Test de Guérison — ${participant.name||participant.id}`);
           input.addEventListener('input',()=>{testRoll=input.value;});
           wrap.append(select,input);
+          // T10 : Obstiné avant le jet et questions d'États ou de séquelle du Test de Guérison (refus précédent), réponse dans `conditionContext`.
+          const obstinate=renderObstinateChoice(participant,conditionContext.preRollTalent,value=>{conditionContext={...conditionContext};if(value==='strong-minded')conditionContext.preRollTalent=value;else delete conditionContext.preRollTalent;},{focusKey:`extraction-${projectile.id}-pre-roll-talent`});
+          if(obstinate)wrap.append(obstinate);
         }
+        const questionsBox=node('div','workspace-extraction-questions');
+        const showQuestions=rows=>{questionsBox.replaceChildren();const box=renderTestQuestions(rows,{root:conditionContext,onChange:next=>{conditionContext=next;showQuestions(rows);},
+          subjectOf:()=>participant,title:'À préciser avant le Test de Guérison',focusPrefix:`extraction-${projectile.id}`});if(box)questionsBox.append(box);};
+        wrap.append(questionsBox);
         const apply=button('Enregistrer le retrait','workspace-primary');
         apply.type='button';
         apply.addEventListener('click',async()=>{try{
           error.textContent='';
           const plan=Store.previewV5ProjectileExtraction({participantId:participant.id,projectileId:projectile.id,
-            method:projectile.removal==='surgery'?'surgery':'heal-test',surgeryConfirmed,skillId,roll:testRoll===''?undefined:Number(testRoll)});
+            method:projectile.removal==='surgery'?'surgery':'heal-test',surgeryConfirmed,skillId,roll:testRoll===''?undefined:Number(testRoll),conditionContext});
+          showQuestions((plan.needsInput||[]).map(row=>({...row,answerAt:''})));
           if(!plan.ready)throw new Error(plan.error);
             const result=await Store.applyV5ProjectileExtraction(plan);
             if(result?.status!=='applied')throw new Error(result?.reason||'Retrait non enregistré.');

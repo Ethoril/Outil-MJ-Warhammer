@@ -244,7 +244,8 @@ function focalisationModifiers(participant, options, targetType, extra = []) {
   // Q6 T3 (reste de T1) : plafonds de fin de calcul (Distrait, Obstiné V5 p. 127) sur la liste complète de ce Test, difficulté et
   // pénalité d'armure comprises, comme à la Dissipation (idempotent après celui de prepareMagicOptions).
   finalizeV5TestModifiers(participant, options.testModifiers || {}, { slModifiers, advantageSources: options.advantageSources || [], disadvantageSources: options.disadvantageSources || [] });
-  return { armorPenalty, armorContext, slModifiers };
+  // T10 : pénalité d'armure effectivement appliquée (0 sous Obstiné), pour que le panneau n'affiche pas un malus annulé.
+  return { armorPenalty: slModifiers.find(row => row.id === 'armor')?.amount ?? 0, armorContext, slModifiers };
 }
 
 /**

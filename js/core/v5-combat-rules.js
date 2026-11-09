@@ -403,7 +403,7 @@ export function buildCombatTest(normalized, role = 'actor') {
     if (kept.length > 1) modifiers.splice(0, modifiers.length, ...modifiers.filter(row => !offIds.has(row.id) || row === kept[0]));
     if (kept[0]?.amount < 0) kept[0].amount = Math.min(0, kept[0].amount + sequelae.offHand.reduction);
   }
-  // Distrait et Esprit fort : plafonds communs, appliqués en dernier sur la liste complète (avant les séquelles, comme avant).
+  // Distrait et Obstiné : plafonds communs, appliqués en dernier sur la liste complète (avant les séquelles, comme avant).
   finalizeV5TestModifiers(actor,common,{slModifiers:modifiers,advantageSources:advantages,disadvantageSources:disadvantages});
   // Les pertes durables ne sont pas des pénalités d'État : aucun talent d'immunité aux États ne les efface.
   modifiers.push(...sequelae.modifiers); advantages.push(...sequelae.advantages); disadvantages.push(...sequelae.disadvantages);

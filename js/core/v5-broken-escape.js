@@ -84,7 +84,7 @@ export function previewV5BrokenEscape({ state, actor, actorId=actor?.id, action,
     const baseSkillScore = effectiveSkillScore(actor, baseScore, skill.carac || 'Ag');
     const context = resolveV5ConditionTestContext(actor,{characteristic:skill.carac || 'Ag',isAction:true,involvesMovement:true,runningOrHiding:true,requiresSight:false,reliesOnSight:false,
       // MJ 09/11 CA22 : courir ne se fait pas à deux mains ; les autres circonstances de séquelle restent demandées.
-      talentContext:{sequelaTwoHands:false}});
+      talentContext:{...answers(facts),sequelaTwoHands:false}});
     if (!context.ready) return {ready:false,status:'requires-input',error:'Le contexte du Test Athlétisme est incomplet.',needsInput:clone(context.needsInput),unresolved:clone(context.needsInput)};
     const score=Math.max(0,baseSkillScore+(context.scoreDelta||0));
     const testPreview=previewV5Test({score,roll,slModifiers:[...context.slModifiers,{id:'broken-sprint-average',label:'Sprint moyen (+2 DR)',amount:2}],advantageSources:context.advantageSources,disadvantageSources:context.disadvantageSources});
@@ -102,7 +102,7 @@ export function previewV5BrokenEscape({ state, actor, actorId=actor?.id, action,
   if (!skill || skill.status!=='resolved' || !Number.isInteger(skill.total??skill.value)) return fail('Choisir une compétence résolue pour le Test facultatif de Hide.','facts.skillId');
   if (!finiteInt(roll,1)||roll>100) return fail('Fournir le jet d100 explicite du Test facultatif de Hide.','roll');
   const baseSkillScore=effectiveSkillScore(actor,skill.total??skill.value,skill.carac||'Ag');
-  const context=resolveV5ConditionTestContext(actor,{characteristic:skill.carac||'Ag',isAction:true,involvesMovement:false,runningOrHiding:true,requiresSight:false,reliesOnSight:false,talentContext:{sequelaTwoHands:false}});
+  const context=resolveV5ConditionTestContext(actor,{characteristic:skill.carac||'Ag',isAction:true,involvesMovement:false,runningOrHiding:true,requiresSight:false,reliesOnSight:false,talentContext:{...answers(facts),sequelaTwoHands:false}});
   if(!context.ready)return {ready:false,status:'requires-input',error:'Le contexte du Test de Hide est incomplet.',needsInput:clone(context.needsInput)};
   const score=Math.max(0,baseSkillScore+(context.scoreDelta||0));
   const testPreview=previewV5Test({score,roll,slModifiers:context.slModifiers,advantageSources:context.advantageSources,disadvantageSources:context.disadvantageSources});
@@ -110,6 +110,9 @@ export function previewV5BrokenEscape({ state, actor, actorId=actor?.id, action,
   const selectedChoice=testPreview.options.length===1?testPreview.options[0].id:choice,test=selectV5Test(testPreview,selectedChoice);
   return {ready:true,status:'ready',ruleVersion:BROKEN_ESCAPE_RULE_VERSION,action,actorId,turn:clone(turn),facts:clone(facts),test:{...clone(test),score,characteristic:skill.carac||'Ag',result:clone(test),preview:clone(testPreview),context:clone(context)},sequenceAfter:sequence?clone(sequence):null,source:clone(BROKEN_ESCAPE_SOURCE)};
 }
+
+/** T10 : réponses du MJ aux questions du Test de Sprint ou de Se cacher (séquelle de zone, Obstiné), dans `facts.conditionContext`. */
+function answers(facts) { return facts?.conditionContext && typeof facts.conditionContext === 'object' && !Array.isArray(facts.conditionContext) ? facts.conditionContext : {}; }
 
 export function isV5BrokenEscapeActionBlocked(actor, { visibleToAnyEnemy, sequence } = {}) {
   if (!broken(actor)) return false;
@@ -142,7 +145,8 @@ export function previewV5FleeTalentDisengageMove({ actor, disengagedConfirmed, m
 /**
  * Q6 T5 : Test de poursuite (L06 p. 158) par le calcul commun (États, talents, couches, séquelles). Test actif : un Inconscient ne
  * le tente pas, un Surpris non plus pendant ce Round (CA14). La poursuite est une course : le mouvement est donné, la fuite aussi pour
- * la proie (`fleeing`) ; pour le poursuivant (Brisé) et la vue, le MJ répond (`context.runningOrHiding`, `context.reliesOnSight`, CA8).
+ * la proie (`fleeing`) ; le poursuivant ne fuit pas (Brisé pèse sans question, MJ 09/11 CA32) ; pour la vue, le MJ répond
+ * (`context.reliesOnSight`, CA8).
  */
 function resolvePursuitActorTest(actor, roll, choice, slBonus, bonusLabel, extraSl = 0, context = {}, fleeing = false) {
   const skill = (actor?.skills || []).find(
@@ -156,7 +160,8 @@ function resolvePursuitActorTest(actor, roll, choice, slBonus, bonusLabel, extra
   if (extraSl !== 0) slModifiers.push({ id: 'pursuit-obstacle-modifier', label: 'Modificateur d’obstacle', amount: extraSl });
   const secondary = previewV5SecondaryTest(actor, { score, roll, kind: 'test', slModifiers,
     test: { characteristic: skill?.carac || 'Ag', skill: skill?.name || skill?.nom || 'Athlétisme', isAction: true },
-    context: { ...(context || {}), involvesMovement: true, ...(fleeing ? { runningOrHiding: true } : {}) } });
+    // MJ 09/11 CA32 : un poursuivant Brisé ne fuit pas : les malus de Brisé s'appliquent, sans question.
+    context: { ...(context || {}), involvesMovement: true, runningOrHiding: fleeing === true } });
   if (!secondary.ready) return { ready: false, error: secondary.needsInput.map(row => row.label).join(' '), needsInput: secondary.needsInput };
   const preview = secondary.preview;
   if (preview.choiceRequired && !['keep', 'reverse'].includes(choice)) {

@@ -855,6 +855,14 @@ function spellSkillMatches(skill,name) {
  * Rend `{ ready: true, test, detail }` (`test` au format de `selectV5Test`) ou `{ ready: false, blocked?, needsInput, error }` :
  * une précision d'État manquante (CA8) ou une restriction (Inconscient, Surpris, CA14) arrête le Test.
  */
+/**
+ * MJ 09/11 CA24 et CA34 : motif pour lequel une cible ne peut pas esquiver le Souffle (« Surprise », « Inconsciente »), ou null.
+ * Lu aussi par le panneau de magie pour ne pas demander l'Esquive.
+ */
+export function breathNoDodgeReason(target) {
+  const levels = conditionLevels(target);
+  return levels.get('inconscient') ? 'Inconsciente' : levels.get('surpris') ? 'Surprise' : null;
+}
 /** Libellé d'un Test de Caractéristique, pour les clés de couche (« Force Mentale »…). */
 const STAT_TEST_LABELS = { CC: 'Capacité de Combat', CT: 'Capacité de Tir', F: 'Force', E: 'Endurance', I: 'Initiative', Ag: 'Agilité', Dex: 'Dextérité',
   Int: 'Intelligence', FM: 'Force Mentale', Soc: 'Sociabilité' };
@@ -1723,6 +1731,10 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
   const attributeTargets=Object.fromEntries(effectiveTargets.map(t=>[t.id,typeof options.attributeTargets?.[t.id]==='boolean' ? options.attributeTargets[t.id] : isHostileTarget(actor,t)]));
   const loreKey=attributeLore==='high' ? chosenLore : attributeLore;
   const allLore=options.attributeActive===false ? null : previewLoreAttribute({caster:actor,targets:effectiveTargets,lore:attributeLore,chosenLore,spell:contract,castingSl:castingPreview?.totalCastingSl ?? 0,options:{attributeTargets,attributeRolls:options.targetTests,duration:contract.duration,waaaghFortune:domainFacts.waaaghFortune===true}});
+  // T10 : Corruption de Tzeentch en attente d'une précision d'État ou de séquelle (CA8, CA22) : la question, rangée dans
+  // targetTests.<id>.corruptionContext, plutôt qu'un nouveau d100 déjà saisi.
+  if(allLore?.conditionNeeds?.length){const needsInput=allLore.conditionNeeds.flatMap(row=>row.needsInput.map(need=>({...need,participantId:row.participantId,answerAt:'targetTests.'+row.participantId+'.corruptionContext'})));
+    return {ready:false,valid:false,status:needsInput.some(row=>row.restriction)?'test-blocked':'condition-input-required',error:'Attribut du Domaine : '+allLore.missingLabel+'.',needsInput,contract};}
   if(allLore?.missingRolls?.length)return {ready:false,valid:false,status:'dice-required',error:'Attribut du Domaine : '+allLore.missingLabel+' requis ('+allLore.missingRolls.join(', ')+').',attributeDice:{key:allLore.lore==='maw'?'mawRoll':'corruptionRoll',label:allLore.missingLabel,ids:allLore.missingRolls,max:allLore.lore==='maw'?10:100},contract};
   // Règles de dégâts de l'attribut : Cieux et Métal ignorent les PA métalliques (même attribut coupé, comme avant), Métal les ajoute (V5 p. 252), Ombres ignore les PA non magiques (V5 p. 254).
   const loreDamage = {
@@ -1845,8 +1857,9 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
       if(!shotRun.ready)return spellTestRefusal(shotRun,contract);
       const shot=shotRun.test;noteSpellTest(targetReceipt,'breathShot',shotRun);
       let defended=null;
-      // MJ 09/11 CA24 : une cible Surprise ne peut pas esquiver le Souffle, comme un défenseur Surpris au combat.
-      const surprised=Boolean(conditionLevels(target).get('surpris'));
+      // MJ 09/11 CA24 : une cible Surprise ne peut pas esquiver le Souffle, comme un défenseur Surpris au combat ; CA34 : une cible
+      // Inconsciente est traitée comme Surprise.
+      const noDodge=breathNoDodgeReason(target),surprised=Boolean(noDodge);
       if(answers.opposeBreath!==false && !surprised){
         if(!Number.isInteger(answers.dodgeRoll)||answers.dodgeRoll<1||answers.dodgeRoll>100)return {ready:false,valid:false,status:'dice-required',error:target.name+' : saisir l’Esquive ou déclarer le refus d’opposition.',contract};
         const skill=(target.skills || []).find(s=>spellSkillMatches(s,'Esquive'));
@@ -1854,13 +1867,13 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
         if(!dodgeRun.ready)return spellTestRefusal(dodgeRun,contract);
         defended=dodgeRun.test;noteSpellTest(targetReceipt,'breathDodge',dodgeRun);
       }
-      targetReceipt.breath={shot,defended,variant:attributeLore,...(surprised?{surprised:true}:{})};
+      targetReceipt.breath={shot,defended,variant:attributeLore,...(surprised?{surprised:true,noDodge}:{})};
       if(defended && defended.sl>shot.sl){targetReceipt.resisted=true;targetReceipt.actions.push({kind:'resisted',summary:'Esquive bat le Test de CT : Souffle évité.'});targetResults.push(targetReceipt);continue;}
       if(!variant.smoke){
         const raw=resolveSpellDamage({caster:actor,target,formula:String(bfm+variant.damage),roll,ignoreMetalAp:variant.ignoreMetalAp,spell:{name:contract.name}});
         targetReceipt.woundsLost=raw.woundsLost;targetReceipt.finalHp=raw.targetNewHp;targetReceipt.damage=raw;
       }
-      targetReceipt.actions.push({kind:'breath',summary:'Souffle '+attributeLore+' : CT '+shot.sl+' DR'+(defended?', Esquive '+defended.sl+' DR':surprised?', cible Surprise : aucune Esquive':', opposition refusée')+'.'});
+      targetReceipt.actions.push({kind:'breath',summary:'Souffle '+attributeLore+' : CT '+shot.sl+' DR'+(defended?', Esquive '+defended.sl+' DR':surprised?', cible '+noDodge+' : aucune Esquive':', opposition refusée')+'.'});
       if(variant.inventoryDamage)targetReceipt.inventoryDamage=variant.inventoryDamage;
     }
     if(effects.rolledDamage){

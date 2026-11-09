@@ -90,7 +90,10 @@ function priorReceipt(state, operationId) {
 function runTest(score, roll, amount, id, label, check = null) {
   const slModifiers = amount ? [{ id, label, amount }] : [];
   if (!check?.tester) return previewV5Test({ score, roll, kind: 'test', slModifiers }).options[0].result;
-  const secondary = previewV5SecondaryTest(check.tester, { score, roll, slModifiers, test: { characteristic: check.characteristic, skill: check.skill, ...(check.passive ? { passive: true } : {}) }, context: check.context || {} });
+  // T10 : Obstiné choisi par le MJ pour certains testeurs (`obstinateTesterIds`) : seul le testeur choisi l'applique à ce Test.
+  const { obstinateTesterIds, ...context } = check.context || {};
+  if (Array.isArray(obstinateTesterIds) && obstinateTesterIds.includes(check.tester.id)) context.preRollTalent = 'strong-minded';
+  const secondary = previewV5SecondaryTest(check.tester, { score, roll, slModifiers, test: { characteristic: check.characteristic, skill: check.skill, ...(check.passive ? { passive: true } : {}) }, context });
   if (!secondary.ready) return { pending: true, needsInput: secondary.needsInput };
   return secondary.rows.length ? { ...secondary.result, detail: secondaryTestDetail(secondary) } : secondary.result;
 }
@@ -244,7 +247,7 @@ export function previewAftermathAdvance(stateValue, { days, expectedRevision, ab
 }
 
 export function advanceAftermathCalendar(stateValue, {
-  operationId, expectedRevision, days, dailyTests = [], enduranceScores = {}, absentParticipantIds = [], testers = {}, conditionContext = {}
+  operationId, expectedRevision, days, dailyTests = [], enduranceScores = {}, absentParticipantIds = [], testers = {}, conditionContext = {}, conditionContexts = {}
 } = {}) {
   const state = assertState(stateValue);
   const prior = priorReceipt(state, operationId);
@@ -273,8 +276,10 @@ export function advanceAftermathCalendar(stateValue, {
       if (!supplied) { missing.push(check); break; }
       const score = enduranceScores[incident.participantId];
       if (!validScore(score)) return refusal('endurance-score-missing', { participantId: incident.participantId });
-      const test = runTest(score, supplied.roll, 2, 'aftermath:open-wound', 'Blessure non traitée (Résistance +2 DR)', enduranceCheck(testers?.[incident.participantId], conditionContext));
-      if (test.pending) return pendingTest(refusal('condition-input-required', { participantId: incident.participantId }), test);
+      // T10 : une réponse par patient (`conditionContexts[id]`, une zone de séquelle n'est pas celle d'un autre), sur la réponse commune.
+      const patientContext = { ...conditionContext, ...(conditionContexts?.[incident.participantId] || {}) };
+      const test = runTest(score, supplied.roll, 2, 'aftermath:open-wound', 'Blessure non traitée (Résistance +2 DR)', enduranceCheck(testers?.[incident.participantId], patientContext));
+      if (test.pending) return pendingTest(refusal('condition-input-required', { participantId: incident.participantId }), { needsInput: test.needsInput.map(row => ({ ...row, participantId: incident.participantId })) });
       const record = { day: check.day, ...testFacts(test) };
       incident.dailyChecks.push(record);
       processed.push({ incidentId: incident.id, participantId: incident.participantId, ...record });

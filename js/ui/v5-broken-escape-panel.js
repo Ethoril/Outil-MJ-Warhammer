@@ -1,6 +1,7 @@
 import {participantCamp} from '../core/encounters.js';
 import {v5CombatActionClock} from '../core/v5-resources.js';
 import { engagedWith } from '../core/engagements.js';
+import { renderTestQuestions, renderObstinateChoice } from './test-questions.js';
 /** Interface MJ de la séquence obligatoire de Brisé (L06 p.163, 185–186).
  * Les faits restent locaux jusqu’au commit d’un reçu Store.
  */
@@ -41,9 +42,9 @@ export function createV5BrokenEscapePanel({Store,refresh=()=>{},onPrepareHide=()
   let d=drafts.get(actor.id);
   // Engagements durables (spec engagements CA13, CA17) : les adversaires engagés du plateau sont pré-renseignés.
   const people=Store.listParticipants?.()||[],plateau=engagedWith({participants:people},people,actor.id).filter(id=>participantCamp(people.find(row=>row.id===id))!==participantCamp(actor));
-  if(!d)d={turnId,baseRevision:revision,action:'flee',before:null,after:null,engagement:plateau.length?'selected':null,engaged:[...plateau],mode:null,roll:'',choice:null,attestValue:null,preview:null,error:'',busy:false};
-  else if(d.turnId!==turnId){Object.assign(d,{turnId,baseRevision:revision,action:'flee',before:null,after:null,engagement:plateau.length?'selected':null,engaged:[...plateau],mode:null,roll:'',choice:null,attestValue:null,hideSkillId:null,lastReceipt:null,preview:null,error:'',busy:false});}
-  else if(d.baseRevision!==revision){const hadPreview=Boolean(d.preview);Object.assign(d,{baseRevision:revision,before:null,after:null,engagement:plateau.length?'selected':null,engaged:[...plateau],mode:null,roll:'',choice:null,attestValue:null,hideSkillId:null,preview:null,error:hadPreview?'La partie a changé : les faits et l’aperçu ont été invalidés; renseignez-les à nouveau.':''});}
+  if(!d)d={turnId,baseRevision:revision,action:'flee',before:null,after:null,engagement:plateau.length?'selected':null,engaged:[...plateau],mode:null,roll:'',choice:null,conditionContext:{},attestValue:null,preview:null,error:'',busy:false};
+  else if(d.turnId!==turnId){Object.assign(d,{turnId,baseRevision:revision,action:'flee',before:null,after:null,engagement:plateau.length?'selected':null,engaged:[...plateau],mode:null,roll:'',choice:null,conditionContext:{},attestValue:null,hideSkillId:null,lastReceipt:null,preview:null,error:'',busy:false});}
+  else if(d.baseRevision!==revision){const hadPreview=Boolean(d.preview);Object.assign(d,{baseRevision:revision,before:null,after:null,engagement:plateau.length?'selected':null,engaged:[...plateau],mode:null,roll:'',choice:null,conditionContext:{},attestValue:null,hideSkillId:null,preview:null,error:hadPreview?'La partie a changé : les faits et l’aperçu ont été invalidés; renseignez-les à nouveau.':''});}
   if(d.preview&&d.preview.baseRevision!==Store.getLocalRevision?.()){d.preview=null;d.error='La partie a changé : recalculez les conséquences.';}
   if(progress?.fleeCommitted&&progress.visibleToAnyEnemy===true&&!progress.sprintCommitted)d.action='sprint';
   drafts.set(actor.id,d);return d;
@@ -180,6 +181,8 @@ export function createV5BrokenEscapePanel({Store,refresh=()=>{},onPrepareHide=()
     else if(d.engagement==='selected'&&d.engaged.length)facts.engagedEnemyIds=[...d.engaged];
     if(d.mode)facts.moveMode=d.mode;
    }
+   // T10 : réponses aux questions du Test d'Athlétisme (séquelle de zone…) et Obstiné, dans les faits du Test.
+   if(required==='sprint'&&Object.keys(d.conditionContext||{}).length)facts.conditionContext={...d.conditionContext};
    const input={actorId:actor.id,action:required,facts,...(required==='sprint'&&d.roll!==''?{roll:Number(d.roll)}:{}),...(d.choice?{choice:d.choice}:{})};
    try{d.preview=Store.previewBrokenEscape(input);d.error=d.preview.ready?'':d.preview.error||'Informations requises pour calculer.';}
    catch(error){d.preview=null;d.error=error?.message||'Aperçu impossible.';}refresh();
@@ -193,6 +196,14 @@ export function createV5BrokenEscapePanel({Store,refresh=()=>{},onPrepareHide=()
     d.lastReceipt=result.receipt;d.baseRevision=Store.getLocalRevision?.()??null;d.preview=null;d.roll='';d.choice=null;d.action=required==='flee'?'sprint':null;
    }catch(error){d.error=error?.message||'Action non enregistrée.';d.preview=null;}finally{d.busy=false;refresh();}
   });buttons.append(apply);section.append(buttons);previewBlock(section,d,required,actor.id);
+  if(required==='sprint'){
+   const set=next=>{d.conditionContext=next;d.preview=null;drafts.set(actor.id,d);calc.click();};
+   const obstinate=renderObstinateChoice(actor,d.conditionContext?.preRollTalent,value=>{const next={...(d.conditionContext||{})};if(value==='strong-minded')next.preRollTalent=value;else delete next.preRollTalent;set(next);},{focusKey:'broken-sprint-pre-roll-talent'});
+   if(obstinate)section.append(obstinate);
+   const rows=(d.preview&&!d.preview.ready?d.preview.needsInput||[]:[]).filter(row=>row&&typeof row==='object').map(row=>({...row,answerAt:''}));
+   const questions=renderTestQuestions(rows,{root:d.conditionContext||{},onChange:set,subjectOf:()=>actor,title:'À préciser avant le Test d’Athlétisme',focusPrefix:'broken-sprint'});
+   if(questions)section.append(questions);
+  }
   if(d.error)section.append(node('p','workspace-field-error',d.error));
   appendReceipt(section,actor,whole,clock,d);
   return section;

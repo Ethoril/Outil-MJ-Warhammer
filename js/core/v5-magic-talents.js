@@ -128,7 +128,7 @@ export function prepareMagicOptions(actor, kind, options={}, spell = null) {
   if(Number(activeMagicTalent(actor,'sanctuary-of-the-mind')?.magicTalentRank)>=3)for(const modifier of slModifiers)if(modifier.id==='yenlui' && modifier.amount<0)modifier.amount=0;
   const lore=String(spell?.wind || spell?.type || options.wind || options.lore || '').toLowerCase();
   for(const effect of actor.extensions?.v5?.spellEffects || []) if(effect.loreTestBonus && ['casting','channelling'].includes(kind) && (lore===effect.loreTestBonus.lore || effect.loreTestBonus.lore==='fire' && /aqshy|feu/.test(lore))) slModifiers.push({id:'spell-lore-bonus',label:effect.spellName,amount:effect.loreTestBonus.amount});
-  // Plafonds de fin de calcul (Distrait, Esprit fort V5 p. 127) sur la liste de ce Test, comme au combat.
+  // Plafonds de fin de calcul (Distrait, Obstiné V5 p. 127) sur la liste de ce Test, comme au combat.
   finalizeV5TestModifiers(actor,common,{slModifiers,advantageSources,disadvantageSources:next.disadvantageSources});
   next.slModifiers=slModifiers;next.advantageSources=advantageSources;
   return next;

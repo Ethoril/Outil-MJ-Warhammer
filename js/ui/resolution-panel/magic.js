@@ -1,5 +1,6 @@
 import { node, rubric, outcomePill, signed, isMiscastDistanceD100 } from './dom.js';
 import { renderConditionQuestions, renderConditionDetail } from './condition-questions.js';
+import { renderObstinateChoice, renderSourceDetail } from '../test-questions.js';
 import { getSpellContract, getAllSpellContracts, getContractChoiceOptions } from '../../core/v5-spell-contracts.js';
 import { getChannellingReserve } from '../../core/v5-magic-channelling.js';
 import { renderMagicControls, renderSpellRecipientControls } from '../v5-magic-controls.js';
@@ -55,6 +56,15 @@ export function renderV5MagicContext({ actor, participants = [], target, type, d
   reserveLine.dataset.magicReserve = String(reserve.sl);
   reserveLine.dataset.magicReserveType = reserve.type || 'none';
   v5.appendChild(reserveLine);
+  // T10 : Obstiné (V5 p. 127), choisi avant le jet de lancer, de Focalisation ou de Dissipation : la réponse part dans le contexte
+  // des États du Test magique (`magicConditionContext.preRollTalent`), lu par le calcul commun.
+  const obstinate = ['cast', 'channelling', 'dispel'].includes(type) ? renderObstinateChoice(actor, draft.magicConditionContext?.preRollTalent, value => {
+    const next = { ...(draft.magicConditionContext || {}) };
+    if (value === 'strong-minded') next.preRollTalent = value; else delete next.preRollTalent;
+    handlers.select({ magicConditionContext: next });
+    handlers.calculate?.();
+  }, { focusKey: 'magic-pre-roll-talent' }) : null;
+  if (obstinate) v5.appendChild(obstinate);
 
   const selectField = (key, labelText, options, currentVal) => {
     const label = node('label', 'workspace-type', labelText);
@@ -515,9 +525,15 @@ export function renderV5MagicResult(preview, target, draft, handlers) {
 
   const conditionBox = renderConditionQuestions(preview, draft, handlers);
   if (conditionBox) result.appendChild(conditionBox);
-  const conditionDetail = renderConditionDetail(preview);
+  // T10 (CA5) : détail par source du Test magique, comme au combat (talents, sorts, États, séquelles ; écartés barrés).
+  const testModifiers = preview.castPreview?.test?.details?.modifiers || preview.test?.details?.modifiers || preview.context?.slModifiers || null;
+  const sourceDetail = testModifiers || preview.conditionRows?.length
+    ? renderSourceDetail({ rows: preview.conditionRows || [], modifiers: testModifiers || preview.conditionModifiers || [], title: 'Détail du Test (par source)' }) : null;
+  const conditionDetail = sourceDetail || renderConditionDetail(preview);
   if (conditionDetail) result.appendChild(conditionDetail);
   if(preview.error&&preview.v5MagicKind!=='dispel')result.appendChild(node('p','workspace-result-line',preview.error));
+  // T10 (CA29) : jet refusé faute de réponse à une question de séquelle : seules la question et le motif s'affichent.
+  if (preview.refusedForQuestions) { if (preview.v5MagicKind === 'dispel' && preview.error) result.appendChild(node('p', 'workspace-result-line workspace-field-error', preview.error)); return result; }
   if (preview.v5MagicKind === 'dispel') {
     const dispelReason=preview.reason||preview.error;
     result.appendChild(node('p', preview.allowed === false ? 'workspace-result-line workspace-field-error' : 'workspace-result-line', preview.allowed===false?`Dissipation impossible : ${dispelReason||'Conditions de dissipation non remplies.'}`:dispelReason?`Dissipation impossible : ${dispelReason}`:preview.summary||'Dissipation prête.'));

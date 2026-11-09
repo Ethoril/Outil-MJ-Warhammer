@@ -69,7 +69,7 @@ export function createAftermathApi({ api, currentEnvelope, absentAftermathSubjec
           const score = patient ? aftermathEnduranceScore(patient) : null;
           if (score !== null) enduranceScores[incident.participantId] = score;
         }
-        const outcome = advanceAftermathCalendar(state, { operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, days: input.days, dailyTests: input.dailyTests, enduranceScores, absentParticipantIds: absentAftermathSubjects(state, participants), testers: Object.fromEntries(participants.map(row => [row.id, row])), conditionContext: input.conditionContext || {} });
+        const outcome = advanceAftermathCalendar(state, { operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, days: input.days, dailyTests: input.dailyTests, enduranceScores, absentParticipantIds: absentAftermathSubjects(state, participants), testers: Object.fromEntries(participants.map(row => [row.id, row])), conditionContext: input.conditionContext || {}, conditionContexts: input.conditionContexts || {} });
         if (outcome.receipt.status !== 'applied') return outcome;
         // Un seul temps (C39) : les mêmes jours avancent l'horloge de campagne, dans la même commande (un seul ↶).
         const clocked = stageAftermathClock(draft, { days: outcome.receipt.days, operationId: input.operationId });

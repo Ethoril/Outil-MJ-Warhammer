@@ -1,4 +1,5 @@
 /** MJ-only Corruption panel. All durable changes go through Store commands. */
+import { renderTestQuestions, renderObstinateChoice, isQuestionField } from './test-questions.js';
 const node = (tag, className, text) => {
   const el = document.createElement(tag);
   if (className) el.className = className;
@@ -11,7 +12,7 @@ const SKILL_OPTIONS = Object.freeze([
 ]);
 const THRESHOLD_FIELDS = Object.freeze({ mutationDomainRoll: 'Jet d100 de mutation physique / mentale', gmChosenDomain: 'Choix MJ si espèce hors table' });
 /** Champs du Test de seuil encore à saisir, sous le libellé affiché dans le panneau (délai secret : les d10 vides). */
-const missingThresholdFields = (missing = [], delayDice = []) => missing.flatMap(key => {
+const missingThresholdFields = (missing = [], delayDice = []) => missing.filter(key => !isQuestionField(key)).flatMap(key => {
   if (key !== 'manifestationDice') return [THRESHOLD_FIELDS[key] || key];
   const empty = delayDice.flatMap((value, index) => value === '' ? [`Délai secret · d10 ${index + 1}`] : []);
   return empty.length ? empty : ['Délai secret (trois d10 de 1 à 10)'];
@@ -26,7 +27,9 @@ export function createV5CorruptionPanel({ Store, refresh = () => {} } = {}) {
     thresholdRoll: '', thresholdScore: '', thresholdScoreReason: '', mutationDomainRoll: '', gmChosenDomain: '',
     delayDice: ['', '', ''], thresholdPreview: null, mutationDescription: '', absolutionAmount: '', absolutionReason: '',
     catalogTableId: '', catalogEntryId: '', catalogResult: '', catalogColumn: '', catalogParentEntryId: '', catalogCompatibilityDomain: '',
-    lossReason: '', receipt: '', error: '', busy: false
+    lossReason: '', receipt: '', error: '', busy: false,
+    // T10 : réponses aux questions d'États ou de séquelle (et Obstiné) des Tests d'exposition et de seuil.
+    exposureContext: {}, thresholdContext: {}
   };
   let dynamicButtons = [];
   const refreshDynamicButtons = () => {
@@ -90,6 +93,20 @@ export function createV5CorruptionPanel({ Store, refresh = () => {} } = {}) {
     control.disabled = isDisabled() || state.busy;
     dynamicButtons.push({ control, isDisabled });
     control.addEventListener('click', action); parent.append(control); return control;
+  }
+  /**
+   * T10 : Obstiné avant le jet, puis questions d'États ou de séquelle d'un aperçu en attente (`needs-input`, `blocked`), avec un
+   * champ qui recalcule par le bouton du Test (`calc`). Les réponses vivent dans `state[key]` jusqu'à l'enregistrement.
+   */
+  function testAnswers(parent, actor, key, preview, calc) {
+    const set = next => { state[key] = next; if (calc && !calc.disabled) calc.click(); else refresh(); };
+    const obstinate = renderObstinateChoice(actor, state[key].preRollTalent, value => { const next = { ...state[key] }; if (value === 'strong-minded') next.preRollTalent = value; else delete next.preRollTalent; set(next); },
+      { focusKey: `corruption-${key}-pre-roll-talent` });
+    if (obstinate) parent.append(obstinate);
+    if (!preview || !['needs-input', 'blocked'].includes(preview.status)) return;
+    const rows = (preview.needsInput || []).filter(row => row && typeof row.label === 'string' && (!row.field || isQuestionField(row.field))).map(row => ({ ...row, answerAt: '' }));
+    const box = renderTestQuestions(rows, { root: state[key], onChange: set, subjectOf: () => actor, title: preview.status === 'blocked' ? 'Test de Corruption impossible' : 'À préciser avant le Test de Corruption', focusPrefix: `corruption-${key}` });
+    if (box) parent.append(box);
   }
   function currentStatus(actor) {
     try { return Store.getCorruptionStatus(actor.id); }
@@ -170,7 +187,7 @@ export function createV5CorruptionPanel({ Store, refresh = () => {} } = {}) {
         button(panel, 'Clore le Test de seuil devenu inutile', () => act(async () => {
           const result = await Store.resolveObsoleteCorruptionThresholdTest(actor.id, { baseRevision: status.baseRevision });
           if (result?.status === 'stale' || result?.ok === false) throw new Error(result.error || 'La partie a changé; relisez le seuil.');
-          state.thresholdPreview = null; state.thresholdRoll = ''; state.receipt = 'Test en attente clôturé après recalcul du seuil.';
+          state.thresholdPreview = null; state.thresholdRoll = ''; state.thresholdContext = {}; state.receipt = 'Test en attente clôturé après recalcul du seuil.';
         }));
       } else {
       panel.append(node('h4', '', 'Test immédiat contre la mutation requis'));
@@ -189,17 +206,19 @@ export function createV5CorruptionPanel({ Store, refresh = () => {} } = {}) {
         input.addEventListener('input', () => { state.delayDice[index] = input.value; state.thresholdPreview = null; refreshDynamicButtons(); });
         label.append(input); panel.append(label);
       });
-      button(panel, 'Calculer le Test de seuil', () => act(async () => {
+      const calcThreshold = button(panel, 'Calculer le Test de seuil', () => act(async () => {
         const preview = Store.previewCorruptionThresholdTest(actor.id, {
           baseRevision: status.baseRevision, roll: Number(state.thresholdRoll), manualScore: state.thresholdScore === '' ? undefined : Number(state.thresholdScore),
           manualScoreReason: state.thresholdScoreReason, mutationDomainRoll: state.mutationDomainRoll === '' ? undefined : Number(state.mutationDomainRoll),
-          gmChosenDomain: state.gmChosenDomain || undefined,
+          gmChosenDomain: state.gmChosenDomain || undefined, conditionContext: state.thresholdContext,
           manifestationDice: state.delayDice.some(value => value === '') ? undefined : state.delayDice.map(Number)
         });
         state.thresholdPreview = preview;
         if (preview.status === 'stale') throw new Error('La partie a changé; relisez le seuil et recalculez.');
-        if (preview.status === 'needs-input') throw new Error(`Saisie manquante : ${missingThresholdFields(preview.missing, state.delayDice).join(', ')}.`);
+        const missingText = missingThresholdFields(preview.missing, state.delayDice);
+        if (preview.status === 'needs-input' && missingText.length) throw new Error(`Saisie manquante : ${missingText.join(', ')}.`);
       }), () => state.thresholdRoll === '');
+      testAnswers(panel, actor, 'thresholdContext', state.thresholdPreview, calcThreshold);
       if (state.thresholdPreview?.status === 'ready') {
         const preview = state.thresholdPreview;
         panel.append(node('p', 'workspace-corruption-preview', preview.outcome?.status === 'deferred'
@@ -208,7 +227,7 @@ export function createV5CorruptionPanel({ Store, refresh = () => {} } = {}) {
         button(panel, 'Appliquer le résultat du Test', () => act(async () => {
           const result = await Store.applyCorruptionThresholdTest(actor.id, preview);
           if (result?.status === 'stale' || result?.ok === false) throw new Error(result.error || 'La partie a changé; recalculez.');
-          state.thresholdPreview = null; state.thresholdRoll = ''; state.mutationDomainRoll = ''; state.delayDice = ['', '', ''];
+          state.thresholdPreview = null; state.thresholdRoll = ''; state.thresholdContext = {}; state.mutationDomainRoll = ''; state.delayDice = ['', '', ''];
           state.receipt = 'Test de seuil enregistré.';
         }));
       }
@@ -246,20 +265,21 @@ export function createV5CorruptionPanel({ Store, refresh = () => {} } = {}) {
       field(panel, 'Jet du Test de Corruption (d100)', 'exposureRoll', { min: 1, max: 100 });
       field(panel, 'Score MJ si compétence non liée', 'manualScore', { min: 0, max: 100 });
       field(panel, 'Motif du score manuel', 'manualScoreReason', { type: 'text' });
-      button(panel, 'Calculer l’exposition immédiate', () => act(async () => {
+      const calcImmediate = button(panel, 'Calculer l’exposition immédiate', () => act(async () => {
         const preview = Store.previewCorruptionExposure(actor.id, { baseRevision: status.baseRevision,
           immediateExposureId: source.id, skillId: state.skillId, roll: Number(state.exposureRoll),
-          manualScore: state.manualScore === '' ? undefined : Number(state.manualScore), manualScoreReason: state.manualScoreReason });
+          manualScore: state.manualScore === '' ? undefined : Number(state.manualScore), manualScoreReason: state.manualScoreReason, conditionContext: state.exposureContext });
         state.exposurePreview = preview;
         if (preview.status === 'stale') throw new Error('La partie a changé; recalculez l’exposition.');
       }), () => state.exposureRoll === '');
+      testAnswers(panel, actor, 'exposureContext', state.exposurePreview, calcImmediate);
       if (state.exposurePreview?.status === 'ready') {
         const preview = state.exposurePreview;
         panel.append(node('p', 'workspace-corruption-preview', `${preview.test.skill} ${preview.test.success ? 'réussite' : 'échec'} · ${preview.test.sl} DR · gain ${preview.gainedPoints} · total ${preview.corruptionPoints} / seuil ${preview.threshold}${preview.thresholdTestRequired ? ' · Test de seuil immédiat ensuite' : ''}`));
         button(panel, 'Enregistrer l’exposition immédiate', () => act(async () => {
           const result = await Store.applyCorruptionExposure(actor.id, preview);
           if (result?.status === 'stale' || result?.ok === false) throw new Error(result.error || 'La partie a changé; recalculez l’exposition.');
-          state.exposurePreview = null; state.exposureRoll = ''; state.receipt = `Exposition enregistrée : +${preview.gainedPoints} point(s).`;
+          state.exposurePreview = null; state.exposureRoll = ''; state.exposureContext = {}; state.receipt = `Exposition enregistrée : +${preview.gainedPoints} point(s).`;
         }));
       }
     } else if (!status.corruptionSessionId) {
@@ -283,22 +303,23 @@ export function createV5CorruptionPanel({ Store, refresh = () => {} } = {}) {
       field(panel, 'Jet du Test de Corruption (d100)', 'exposureRoll', { min: 1, max: 100 });
       field(panel, 'Score MJ si compétence non liée', 'manualScore', { min: 0, max: 100 });
       field(panel, 'Motif du score manuel', 'manualScoreReason', { type: 'text' });
-      button(panel, 'Calculer l’exposition', () => act(async () => {
+      const calcExposure = button(panel, 'Calculer l’exposition', () => act(async () => {
         const preview = Store.previewCorruptionExposure(actor.id, {
           baseRevision: status.baseRevision, influence: state.influence, exposure: state.exposure, skillId: state.skillId,
-          roll: Number(state.exposureRoll), manualScore: state.manualScore === '' ? undefined : Number(state.manualScore), manualScoreReason: state.manualScoreReason,
+          roll: Number(state.exposureRoll), manualScore: state.manualScore === '' ? undefined : Number(state.manualScore), manualScoreReason: state.manualScoreReason, conditionContext: state.exposureContext,
           declaredSources: state.declaredSources
         });
         state.exposurePreview = preview;
         if (preview.status === 'stale') throw new Error('La partie a changé; recalculez l’exposition.');
       }), () => state.exposureRoll === '' || !state.declaredSources.trim());
+      testAnswers(panel, actor, 'exposureContext', state.exposurePreview, calcExposure);
       if (state.exposurePreview?.status === 'ready') {
         const preview = state.exposurePreview;
         panel.append(node('p', 'workspace-corruption-preview', `${preview.test.skill} ${preview.test.success ? 'réussite' : 'échec'} · ${preview.test.sl} DR · gain ${preview.gainedPoints} · total ${preview.corruptionPoints} / seuil ${preview.threshold}${preview.thresholdTestRequired ? ' · Test immédiat ensuite' : ''}`));
         button(panel, 'Enregistrer l’exposition', () => act(async () => {
           const result = await Store.applyCorruptionExposure(actor.id, preview);
           if (result?.status === 'stale' || result?.ok === false) throw new Error(result.error || 'La partie a changé; recalculez l’exposition.');
-          state.exposurePreview = null; state.exposureRoll = ''; state.receipt = `Exposition enregistrée : +${preview.gainedPoints} point(s).`;
+          state.exposurePreview = null; state.exposureRoll = ''; state.exposureContext = {}; state.receipt = `Exposition enregistrée : +${preview.gainedPoints} point(s).`;
         }));
       }
     }

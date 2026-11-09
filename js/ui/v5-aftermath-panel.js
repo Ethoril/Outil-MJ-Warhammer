@@ -1,8 +1,7 @@
 import { aftermathDate, aftermathSkills } from '../core/v5-aftermath.js';
 import { requiredSequelaFacts, sequelaAsksPrimary } from '../core/v5-sequelae.js';
 import { uid } from '../core/models.js';
-import { CONDITION_QUESTIONS } from '../core/condition-effects.js';
-import { MIXED_CONDITION_QUESTION, testQuestionLabel, answeredSequelaFields } from '../core/v5-test-modifiers.js';
+import { renderTestQuestions, renderObstinateChoice } from './test-questions.js';
 
 const node = (tag, text = '', className = '') => {
   const element = document.createElement(tag);
@@ -70,11 +69,8 @@ const REASONS = {
   'familiar-healing': 'Un homoncule ne guérit que par guérison naturelle ou par magie.',
   'amputation-decision-pending': 'Décidez d’abord du choc d’amputation de ce critique.',
   'subject-still-present': 'Le patient est toujours dans le combat : clôturez plutôt le suivi.',
-  'condition-input-required': 'Un État du testeur exige une précision : répondez à la question ci-dessous, puis relancez l’opération.'
+  'condition-input-required': 'Un État ou une séquelle du testeur exige une précision : répondez à la question ci-dessous, puis relancez l’opération.'
 };
-// Q6 T6 (CA8) : questions d'États d'un Test de convalescence, mêmes champs que le panneau de résolution.
-const CONDITION_FIELDS = [['involvesMovement', CONDITION_QUESTIONS.movement], ['runningOrHiding', CONDITION_QUESTIONS.escape],
-  ['reliesOnSight', CONDITION_QUESTIONS.sight], ['usesFellowship', CONDITION_QUESTIONS.fellowship], ['conditionPenaltyMode', MIXED_CONDITION_QUESTION]];
 const receiptText = receipt => {
   if (!receipt) return '';
   const head = receipt.status === 'applied' ? 'Enregistré' : 'Refus';
@@ -99,16 +95,17 @@ const receiptText = receipt => {
 export function createV5AftermathPanel({ Store, refresh = () => {} } = {}) {
   if (!Store) throw new TypeError('Store requis pour le suivi des séquelles');
   // État d'interface conservé d'un rendu à l'autre : saisies, sections ouvertes, aperçu du saut, dernier reçu.
-  const ui = { values: {}, open: new Set(), preview: null, lastReceipt: null, conditionContext: {}, conditionFor: null };
+  const ui = { values: {}, open: new Set(), preview: null, lastReceipt: null, conditionContext: {}, conditionContexts: {}, conditionFor: null, participants: [] };
   const clearValues = prefix => { for (const key of Object.keys(ui.values)) if (key.startsWith(prefix)) delete ui.values[key]; };
   const run = async (prefix, action) => {
     // CA8 : les réponses aux questions d'États ne valent que pour l'opération qui les a demandées, jamais pour une autre.
-    if (ui.conditionFor !== prefix) ui.conditionContext = {};
+    // Obstiné reste choisi d'une opération à l'autre (choix du MJ avant le jet), jusqu'à l'enregistrement.
+    if (ui.conditionFor !== prefix) { ui.conditionContext = ui.conditionContext.obstinateTesterIds ? { obstinateTesterIds: ui.conditionContext.obstinateTesterIds } : {}; ui.conditionContexts = {}; }
     try {
       const result = await action();
       ui.lastReceipt = result?.receipt || { status: 'refused', reason: result?.reason || 'Commande refusée.' };
-      ui.conditionFor = ui.lastReceipt.needsInput?.length || Object.keys(ui.conditionContext).length ? prefix : null;
-      if (result?.receipt?.status === 'applied') { clearValues(prefix); ui.preview = null; ui.conditionContext = {}; }
+      ui.conditionFor = ui.lastReceipt.needsInput?.length || Object.keys(ui.conditionContext).length || Object.keys(ui.conditionContexts).length ? prefix : null;
+      if (result?.receipt?.status === 'applied') { clearValues(prefix); ui.preview = null; ui.conditionContext = {}; ui.conditionContexts = {}; }
     } catch (cause) {
       ui.lastReceipt = { status: 'refused', reason: cause?.message || 'Commande impossible.' };
     }
@@ -523,7 +520,7 @@ export function createV5AftermathPanel({ Store, refresh = () => {} } = {}) {
         const raw = ui.values[`daily-${check.incidentId}-${check.day}`];
         return raw === undefined || raw === '' ? [] : [{ incidentId: check.incidentId, day: check.day, roll: Number(raw) }];
       });
-      void run('daily-', () => Store.advanceAftermathCalendar({ conditionContext: { ...ui.conditionContext }, operationId: opId(), expectedRevision: state.revision, days: ui.preview.days, dailyTests }));
+      void run('daily-', () => Store.advanceAftermathCalendar({ conditionContext: { ...ui.conditionContext }, conditionContexts: { ...ui.conditionContexts }, operationId: opId(), expectedRevision: state.revision, days: ui.preview.days, dailyTests }));
     });
     confirm.disabled = !ui.preview || ui.preview.status !== 'ready';
     const previewButton = button('Aperçu des échéances', () => {
@@ -555,36 +552,36 @@ export function createV5AftermathPanel({ Store, refresh = () => {} } = {}) {
     const status = node('p', receiptText(ui.lastReceipt));
     status.setAttribute('role', 'status');
     status.className = 'workspace-aftermath-status';
-    const asked = (ui.lastReceipt?.needsInput || []).filter(row => row.field);
-    const open = new Set(asked.map(row => row.field));
-    // MJ 09/11 CA22 : circonstances de séquelle du testeur (`sequela…`), posées et corrigeables comme les États.
-    const known = new Set(CONDITION_FIELDS.map(([field]) => field));
-    const sequela = [...new Set([...asked.map(row => row.field), ...answeredSequelaFields(ui.conditionContext)])].filter(field => !known.has(field) && /^sequela/.test(field))
-      .map(field => [field, asked.find(row => row.field === field)?.label || testQuestionLabel(field) || field]);
-    const questions = [...CONDITION_FIELDS.filter(([field]) => open.has(field) || ui.conditionContext[field] != null), ...sequela];
-    if (!questions.length) return status;
+    const people = ui.participants || [];
+    const nameOf = id => people.find(row => row.id === id)?.name || null;
+    // T10 : questions d'États ou de séquelle du testeur ; une réponse par patient pour l'avance du calendrier (`byPatient.<id>`,
+    // une zone de séquelle n'est pas celle d'un autre patient), sinon commune à l'opération relancée. Libellé « séquelle » quand c'en est une.
+    const rows = (ui.lastReceipt?.needsInput || []).filter(row => row && typeof row.label === 'string')
+      .map(row => ({ ...row, answerAt: row.participantId && ui.conditionFor === 'daily-' ? `byPatient.${row.participantId}` : '' }));
+    const root = { ...ui.conditionContext, byPatient: ui.conditionContexts };
+    const sequelaOnly = rows.length && rows.every(row => /^sequela/.test(row.field || ''));
+    const questions = renderTestQuestions(rows, { root, nameOf, subjectOf: id => people.find(row => row.id === id) || null,
+      title: sequelaOnly ? 'Précision de séquelle du testeur' : 'Précision d’État ou de séquelle du testeur', focusPrefix: 'aftermath-condition',
+      onChange: next => { const { byPatient = {}, ...rest } = next; ui.conditionContext = rest; ui.conditionContexts = byPatient; refresh(); } });
+    // Obstiné (V5 p. 127) : choisi avant le jet pour chaque testeur qui a le talent ; la commande l'applique au seul testeur choisi.
+    const obstinate = people.map(person => renderObstinateChoice(person, (ui.conditionContext.obstinateTesterIds || []).includes(person.id) ? 'strong-minded' : 'none', value => {
+      const ids = new Set(ui.conditionContext.obstinateTesterIds || []);
+      if (value === 'strong-minded') ids.add(person.id); else ids.delete(person.id);
+      ui.conditionContext = { ...ui.conditionContext, obstinateTesterIds: [...ids] };
+      if (!ids.size) delete ui.conditionContext.obstinateTesterIds;
+      refresh();
+    }, { focusKey: `aftermath-obstinate-${person.id}`, title: `Obstiné avant le jet — ${person.name || person.id}` })).filter(Boolean);
+    if (!questions && !obstinate.length) return status;
     // CA8 : la réponse vaut pour la prochaine opération relancée, puis s'efface une fois l'opération enregistrée.
     const box = node('div'); box.className = 'workspace-aftermath-condition-questions';
     box.appendChild(status);
-    for (const [field, text] of questions) {
-      const label = node('label', `Précision d’État du testeur : ${text}`, 'workspace-aftermath-field'), select = document.createElement('select');
-      select.name = `aftermath-condition-${field}`;
-      select.setAttribute('aria-label', text);
-      const choices = field === 'conditionPenaltyMode' ? [['', 'À préciser'], ['sl', 'Pénalité en DR'], ['disadvantage', 'Désavantage']] : [['', 'À préciser'], ['true', 'Oui'], ['false', 'Non']];
-      for (const [value, caption] of choices) select.appendChild(Object.assign(node('option', caption), { value }));
-      select.value = ui.conditionContext[field] == null ? '' : String(ui.conditionContext[field]);
-      select.addEventListener('change', () => {
-        if (select.value === '') delete ui.conditionContext[field];
-        else ui.conditionContext[field] = field === 'conditionPenaltyMode' ? select.value : select.value === 'true';
-        refresh();
-      });
-      label.appendChild(select);
-      box.appendChild(label);
-    }
+    if (questions) box.appendChild(questions);
+    for (const control of obstinate) box.appendChild(control);
     return box;
   }
 
   function renderParticipantConvalescence(participantId, participants = []) {
+    ui.participants = participants;
     let state;
     try { state = Store.getAftermathState(); } catch (cause) {
       const err = node('div', `Registre indisponible : ${cause?.message || cause}`);
@@ -652,6 +649,7 @@ export function createV5AftermathPanel({ Store, refresh = () => {} } = {}) {
   }
 
   function renderGlobalConvalescence(participants = []) {
+    ui.participants = participants;
     let state;
     try { state = Store.getAftermathState(); } catch (cause) {
       const err = node('div', `Registre indisponible : ${cause?.message || cause}`);
@@ -677,6 +675,7 @@ export function createV5AftermathPanel({ Store, refresh = () => {} } = {}) {
     renderGlobalConvalescence,
     getLastReceipt: () => ui.lastReceipt,
     render(participants = []) {
+    ui.participants = participants;
       let state;
       try { state = Store.getAftermathState(); } catch (cause) {
         const panel = node('section'); panel.className = 'workspace-card workspace-aftermath'; panel.setAttribute('aria-label', 'Suivi des séquelles');

@@ -44,6 +44,7 @@ import { qualityLabel } from '../core/quality-normalization.js';
 import { resolveCastingSkill } from '../core/v5-magic-casting.js';
 import { isDouble } from '../core/dice.js';
 import { validRoll } from './workspace/helpers.js';
+import { collectTestQuestions, renderTestQuestions } from './test-questions.js';
 
 export const isCriticalFateRoll = value => Number.isInteger(Number(value)) && Number(value) >= 1 && Number(value) <= 100 && isDouble(Number(value));
 export const hitMorphologySelection = (override, profileMorphology) => override !== undefined ? override : profileMorphology || '';
@@ -180,6 +181,30 @@ function secondaryConditionFields(container, { subject, test, context = {}, pend
     label.append(select);
     container.append(label);
   }
+}
+
+/**
+ * Q6 · T10 : questions des Tests secondaires d'un aperçu (Croche-pied, Filet, Chevaucher, Force après Chevaucher, Tests de sorts),
+ * chacune avec un champ qui range la réponse au chemin `answerAt` rendu par le moteur, puis recalcule. Combat : chemins relatifs au
+ * contexte du Test (`draft.v5Context`) ; magie : relatifs aux options du sort (`conditionContext` du lanceur, `targetTests`,
+ * `mountedRideTests`), rangées dans les champs `magic…` du brouillon.
+ */
+export function renderPreviewTestQuestions(preview, draft, handlers, participants = []) {
+  if (!preview) return null;
+  const nameOf = id => participants.find(row => row.id === id)?.name || null;
+  const subjectOf = id => participants.find(row => row.id === id) || null;
+  const recalc = patch => { handlers.select(patch); handlers.calculate?.(); };
+  if (preview.v5MagicKind) {
+    const rows = collectTestQuestions(preview.spellPreview || {}, { defaultAt: null });
+    if (!rows.length) return null;
+    const root = { conditionContext: draft.magicConditionContext || {}, targetTests: draft.magicTargetTests || {}, mountedRideTests: draft.magicMountedRideTests || {}, arcaneTargets: draft.magicArcaneTargets || {} };
+    return renderTestQuestions(rows, { root, nameOf, subjectOf, title: 'À préciser pour les Tests du sort', focusPrefix: 'magic-test-question', includeAnswered: false,
+      onChange: next => recalc({ magicConditionContext: next.conditionContext || {}, magicTargetTests: next.targetTests || {}, magicMountedRideTests: next.mountedRideTests || {}, magicArcaneTargets: next.arcaneTargets || {} }) });
+  }
+  const rows = collectTestQuestions(preview);
+  if (!rows.length) return null;
+  return renderTestQuestions(rows, { root: draft.v5Context || {}, nameOf, subjectOf, title: 'À préciser pour les Tests secondaires', focusPrefix: 'secondary-test-question',
+    includeAnswered: false, onChange: next => recalc({ v5Context: next }) });
 }
 
 export const ACTION_TYPES = Object.freeze([
@@ -1693,27 +1718,34 @@ export function renderResolutionPanel(options) {
       const source=state?.source||{},sourceActor=(participants||[]).find(row=>row.id===source.authorId);
       const force=['wielder','mancatcher','garrote','druchii-net'].includes(source.entanglementKind)&&sourceActor?.caracs?.F!=null?Number(sourceActor.caracs.F):Number(state?.strength??source.escapeStrength);
       const score=force;
-      const rollLabel=node('label','workspace-type',`Jet d100 opposé — Force ${Number.isFinite(score)?score:'à préciser'}${source.springLoaded?' · Mancatcher à ressort (+2 DR)':''}`),rollInput=document.createElement('input');
-      rollInput.type='number';
-      rollInput.min='1';
-      rollInput.max='100';
-      rollInput.step='1';
-      rollInput.value=current.netEscapeOpponentRoll??'';
-      if(sourceActor){rollInput.dataset.npcRollKey='contextValue';rollInput.dataset.npcRollField='netEscapeOpponentRoll';rollInput.dataset.npcRollOwnerId=sourceActor.id;}
-      rollInput.setAttribute('aria-label',rollLabel.textContent);
-      rollInput.addEventListener('change',()=>handlers.select({v5Context:{...current,netEscapeOpponentRoll:rollInput.value===''?undefined:Number(rollInput.value)}}));
-      rollLabel.append(rollInput);
-      fields.append(rollLabel);
-      if(state?.source?.hookedNet===true){
-        const label=node('label','workspace-type','Filet à crochets : dégâts MJ (armure ignorée)'),input=document.createElement('input');
-        input.type='number';
-        input.min='0';
-        input.step='1';
-        input.value=current.hookedNetDamage??'';
-        input.setAttribute('aria-label',label.textContent);
-        input.addEventListener('change',()=>handlers.select({v5Context:{...current,hookedNetDamage:input.value===''?undefined:Number(input.value)}}));
-        label.append(input);
-        fields.append(label);
+      // MJ 09/11 CA28 et CA33 : une source participante Inconsciente lâche prise : pas de d100 opposé à demander, tous les niveaux
+      // d'Empêtré tombent et le Filet à crochets ne fait pas de dégâts.
+      const sourceLetGo=['wielder','mancatcher','garrote','druchii-net'].includes(source.entanglementKind)&&sourceActor?.caracs?.F!=null
+        &&(sourceActor.states||[]).some(row=>['inconscient','unconscious'].includes(String(row?.key||row?.name||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase())&&Number(row.level??1)>0);
+      if(sourceLetGo){const note=node('p','workspace-result-line',`${sourceActor.name||'La source'} est Inconsciente : elle lâche prise. L’échappée est réussie d’office, sans Test opposé ; tous les niveaux d’Empêtré tombent${source.hookedNet===true?' et le Filet à crochets ne fait pas de dégâts':''}.`);note.dataset.netSourceLetGo=sourceActor.id;fields.append(note);}
+      else {
+        const rollLabel=node('label','workspace-type',`Jet d100 opposé — Force ${Number.isFinite(score)?score:'à préciser'}${source.springLoaded?' · Mancatcher à ressort (+2 DR)':''}`),rollInput=document.createElement('input');
+        rollInput.type='number';
+        rollInput.min='1';
+        rollInput.max='100';
+        rollInput.step='1';
+        rollInput.value=current.netEscapeOpponentRoll??'';
+        if(sourceActor){rollInput.dataset.npcRollKey='contextValue';rollInput.dataset.npcRollField='netEscapeOpponentRoll';rollInput.dataset.npcRollOwnerId=sourceActor.id;}
+        rollInput.setAttribute('aria-label',rollLabel.textContent);
+        rollInput.addEventListener('change',()=>handlers.select({v5Context:{...current,netEscapeOpponentRoll:rollInput.value===''?undefined:Number(rollInput.value)}}));
+        rollLabel.append(rollInput);
+        fields.append(rollLabel);
+        if(state?.source?.hookedNet===true){
+          const label=node('label','workspace-type','Filet à crochets : dégâts MJ (armure ignorée)'),input=document.createElement('input');
+          input.type='number';
+          input.min='0';
+          input.step='1';
+          input.value=current.hookedNetDamage??'';
+          input.setAttribute('aria-label',label.textContent);
+          input.addEventListener('change',()=>handlers.select({v5Context:{...current,hookedNetDamage:input.value===''?undefined:Number(input.value)}}));
+          label.append(input);
+          fields.append(label);
+        }
       }
       fields.append(node('p','workspace-muted',`L06 p.186 : ce Test est traité comme impliquant un mouvement. Gagnez l’opposition pour retirer Empêtré. Chaque DR après le premier retire un état supplémentaire. Les DR des tentatives précédentes ne se cumulent pas. En cas d’échec, rien ne change (décision MJ, V5). ${progress?'Ancienne progression ignorée.':''}`));
     }
@@ -3193,6 +3225,8 @@ export function renderResolutionPanel(options) {
     }
   } else if (preview) {
     live.appendChild(renderResult(preview, target, draft, handlers, participants));
+    const testQuestions = renderPreviewTestQuestions(preview, draft, handlers, participants);
+    if (testQuestions) live.appendChild(testQuestions);
     const defenseRoll = within.one('[data-roll-input="defense"]');
     if (defenseRoll) defenseRoll.dataset.blockingField = 'defense-roll';
     const miscastRoll = within.one('[data-focus-key="magicMiscastRoll"]');

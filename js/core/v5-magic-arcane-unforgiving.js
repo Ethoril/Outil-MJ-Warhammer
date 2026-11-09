@@ -40,7 +40,7 @@ function secondaryTest(actor, score, roll, modifier = 0, conditionContext = {}) 
   if (!Number.isInteger(roll) || roll < 1 || roll > 100) return null;
   const secondary = previewV5SecondaryTest(actor, { score, roll, test: { characteristic: 'Dex' }, context: conditionContext,
     slModifiers: modifier ? [{ id: 'arcane-dexterity', label: 'Test de Dextérité', amount: modifier }] : [] });
-  if (!secondary.ready) return { blocked: secondary.needsInput.map(row => row.label).join(' ') };
+  if (!secondary.ready) return { blocked: secondary.needsInput.map(row => row.label).join(' '), needsInput: secondary.needsInput };
   return selectV5Test(secondary.preview, secondary.optionId);
 }
 
@@ -78,7 +78,9 @@ export function previewArcaneUnforgiving(actor, target, declared, facts) {
         if (!Number.isFinite(actor.caracs?.Dex)) return invalid('La Dextérité du lanceur est nécessaire au choix de l’objet.');
         dexterityTest = secondaryTest(actor, actor.caracs.Dex, facts.dexterityRoll, 2, facts.dexterityConditionContext || {});
         if (!dexterityTest) return invalid('Saisissez le Test de Dextérité (+2 DR) pour choisir l’objet magique.');
-        if (dexterityTest.blocked) return invalid(dexterityTest.blocked);
+        // T10 : questions rangées sous options.arcaneTargets.<id>.dexterityConditionContext (le lanceur teste pour cette cible).
+        if (dexterityTest.blocked) return { ...invalid(dexterityTest.blocked, 'condition-input-required'),
+          needsInput: dexterityTest.needsInput.map(row => ({ ...row, participantId: actor.id, answerAt: `arcaneTargets.${target.id}.dexterityConditionContext` })) };
       }
       const chosen = declared.chooseMagicItem && dexterityTest.success;
       const name = chosen ? facts.chosenMagicItem : facts.randomMagicItem;

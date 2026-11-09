@@ -239,6 +239,7 @@ const ASSETS_TO_CACHE = [
   './js/ui/resolution-panel/result.js',
   './js/ui/resolution-panel/modifiers.js',
   './js/ui/resolution-panel/condition-questions.js',
+  './js/ui/test-questions.js',
   './js/ui/workspace/helpers.js',
   './js/ui/v5-magic-controls.js',
   './js/ui/v5-spell-options.js',

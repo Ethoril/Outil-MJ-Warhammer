@@ -314,6 +314,8 @@ function previewPreparedCasting(participant, spell, options) {
   // Q6 T3 (reste de T1) : plafonds de fin de calcul (Distrait, Obstiné V5 p. 127) sur la liste complète de ce Test, difficulté et
   // pénalité d'armure comprises, comme à la Dissipation (idempotent après celui de prepareMagicOptions).
   finalizeV5TestModifiers(participant, options.testModifiers || {}, { slModifiers, advantageSources: options.advantageSources || [], disadvantageSources: options.disadvantageSources || [] });
+  // T10 : pénalité d'armure effectivement appliquée (0 sous Obstiné), affichée par le panneau.
+  const appliedArmorPenalty = slModifiers.find(row => row.id === 'armor')?.amount ?? 0;
 
   if (options.roll === undefined || options.roll === null) {
     return {
@@ -326,7 +328,7 @@ function previewPreparedCasting(participant, spell, options) {
       bi,
       bfm,
       maxOvercastSpend,
-      armorPenalty,
+      armorPenalty: appliedArmorPenalty,
       slModifiers,
       missing: ['roll'],
       ready: false
@@ -441,7 +443,7 @@ function previewPreparedCasting(participant, spell, options) {
     bi,
     bfm,
     maxOvercastSpend,
-    armorPenalty,
+    armorPenalty: appliedArmorPenalty,
     armorDetails: armorContext,
     roll,
     test: selectedTest,
