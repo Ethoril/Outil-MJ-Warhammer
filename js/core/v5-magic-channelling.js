@@ -265,7 +265,7 @@ export function previewChannelling(participant, options = {}) {
   const startingReserve = typeChanged ? 0 : currentReserve.sl;
 
   const skill = resolveChannellingSkill(participant, { type: targetType, wind: options.wind });
-  const score = Number.isFinite(Number(options.score)) ? Number(options.score) : skill.score;
+  const score = Math.max(0, (Number.isFinite(Number(options.score)) ? Number(options.score) : skill.score) + (Number(options.scoreDelta) || 0)); // Séquelles : Caractéristique perdue (MJ 09/11 CA13)
   const bfm = Number.isFinite(Number(options.bfm)) ? Number(options.bfm) : skill.bfm;
 
   const { armorPenalty, armorContext, slModifiers } = focalisationModifiers(participant, options, targetType);
@@ -449,7 +449,7 @@ export function applyChannelling(target, preview, options = {}) {
 export function previewChannellingPause(participant, options = {}) {
   const currentReserve = getChannellingReserve(participant);
   // La Focalisation du type de la réserve ; l'élémentaire de mer la lit sur sa Force (resolveChannellingSkill).
-  const score = Number.isFinite(Number(options.score)) ? Number(options.score) : resolveChannellingSkill(participant, { type: currentReserve.type === 'high' ? 'high' : 'winds', wind: options.wind }).score;
+  const score = Math.max(0, (Number.isFinite(Number(options.score)) ? Number(options.score) : resolveChannellingSkill(participant, { type: currentReserve.type === 'high' ? 'high' : 'winds', wind: options.wind }).score) + (Number(options.scoreDelta) || 0)); // Séquelles : Caractéristique perdue (MJ 09/11 CA13)
 
   // Test de Focalisation (p.236) : mêmes modificateurs que le gain, plus l'Accessible (+2 DR).
   const pauseType = currentReserve.type === 'high' ? 'high' : 'winds';
@@ -530,7 +530,7 @@ export function previewChannellingInterruption(participant, options = {}) {
   const bfm = Math.floor(fm / 10);
   const skills = Array.isArray(participant?.skills) ? participant.skills : [];
   const foundSkill = skills.find(s => /calme|cool/i.test(s.name || s.nom || ''));
-  const score = Number.isFinite(Number(options.score)) ? Number(options.score) : effectiveSkillScore(participant,foundSkill?.total ?? foundSkill?.value ?? foundSkill?.score ?? baseCharacteristicScore(participant,'FM'),'FM');
+  const score = Math.max(0, (Number.isFinite(Number(options.score)) ? Number(options.score) : effectiveSkillScore(participant,foundSkill?.total ?? foundSkill?.value ?? foundSkill?.score ?? baseCharacteristicScore(participant,'FM'),'FM')) + (Number(options.scoreDelta) || 0)); // Séquelles : Caractéristique perdue (MJ 09/11 CA13)
 
   const slModifiers = [{ id: 'interruption-difficulty', label: 'Difficile (−2 DR)', amount: -2 },...(options.slModifiers || [])];
 

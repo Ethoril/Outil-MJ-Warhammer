@@ -17,6 +17,14 @@
  *  - Clés « … adverse » de l'opposant (`magicAdverseModifiers`) : une propriété de la couche de l'adversaire, quel que soit le Test.
  *    Le combat ne les lit que pour le testeur qui n'est pas le défenseur ; le calcul commun garde cette règle telle quelle
  *    (`role !== 'defender'`), sans la trancher.
+ *  - Séquelles durables et temporaires (`sequelaTestRules`, MJ 09/11 CA13) : elles pèsent sur tout Test dont elles visent la
+ *    Caractéristique ou la compétence. Le combat passe la main, le bouclier et l'arme (`test.sequela`) et ses réponses ; un Test
+ *    secondaire, sans écran pour ces circonstances, n'applique que les séquelles inconditionnelles (`sequelaNoCircumstanceInput`,
+ *    comme le départage d'Initiative), sauf les deux yeux perdus, qui posent la question de la vue des États. Lignes marquées
+ *    `durable` : « les pertes durables ne sont pas des pénalités d'État », aucun plafond (Esprit fort, Distrait) ne les efface.
+ *    `scoreDelta` (Caractéristique perdue) s'ajoute au score du Test.
+ *  - Restrictions d'acteur (MJ 09/11 CA14) : Inconscient, aucun Test ; Surpris, aucun Test qui demande d'agir
+ *    (`test.isAction` : désengagement, pause et interruption de Focalisation) ; `restrictions` bloque le Test secondaire.
  *  - Plafonds de fin de calcul (`finalizeV5TestModifiers`) : Esprit fort (`talent-strong-minded`, `ignoreNegativeModifiers`,
  *    Livre de base V5 p. 127, contrat de js/data/v5-additional-talent-contracts.json) annule tout modificateur négatif d'un Test, et
  *    Distrait (`noMomentumOrAdvantage`, v5-talent-actions.js) ôte tout Avantage. Les deux visent un Test quelconque, mais portent
@@ -27,16 +35,14 @@
  *  - armure portée (Discrétion, Perception) : équipement choisi pièce par pièce dans le panneau (`wornArmorItemIds`), pas un État ni
  *    un effet ; hors des familles de Q19 ;
  *  - familier qui assiste (`familiarSkillSupport`, `familiarSupport`) : présence d'un participant précis sur le plateau ;
- *  - séquelles durables (`sequelaTestRules`) : main, bouclier, arme utilisée ; « les pertes durables ne sont pas des pénalités
- *    d'État » (commentaire du pivot) — à reposer au MJ si elles doivent suivre les Tests secondaires ;
  *  - Tourbillon de mort, Pointue, qualités, Traits de sens et de déplacement, surnombre, montures (`combatEngineEffects`) ;
  *  - psychologie, Ergoteur, Frénésie, Malice de Ranald, Défense contre Tir, Souffle froid, Tir en vol, Retranchement, Garde royal,
  *    Petit/Grand, Élan, Cible à terre / Aveuglée / Surprise, maladresses, Tir extraordinaire, À répétition, Mancatcher, Blessures
  *    Critiques précisées par le MJ : chacun dépend de l'arme, de la cible ou d'une saisie du panneau de combat ;
  *  - Clarté d'esprit (`clarityOfThought`) sur les lignes de psychologie et de mutation mentale : elle porte sur des lignes que seul le combat calcule ;
  *    la part commune (Sonné ignoré sur un Test mental) est ici.
- *  - restrictions Inconscient, Surpris, Fin glorieuse : le pivot les formule pour un combattant (avec l'exception de la Fin
- *    glorieuse) ; la question vaut pour les Tests secondaires et sera traitée famille par famille.
+ *  - restrictions Inconscient, Surpris, Fin glorieuse du combattant : le combat garde ses messages (avec l'exception de la Fin
+ *    glorieuse) et ne lit pas `restrictions` du calcul commun.
  *
  * 2. Précision demandée au MJ (`needsInput`) pour le Test principal aujourd'hui
  *
@@ -66,6 +72,7 @@ import { withCompanionTalents } from './familiars.js';
 import { previewV5TalentTestModifiers } from './v5-talent-tests.js';
 import { magicTestModifiers, magicAdverseModifiers } from './v5-magic-talents.js';
 import { conditionPenaltyEffects, conditionDisadvantageEffects, conditionTestRules, conditionDisadvantageRows, CONDITION_QUESTIONS } from './condition-effects.js';
+import { sequelaTestRules } from './v5-sequela-effects.js';
 
 /** Niveaux d'États actifs du participant (clé sans espace ni tiret → niveau cumulé) ; marqueurs de talent exclus. */
 export const conditionLevels = actor => {
@@ -97,6 +104,8 @@ const MENTAL = new Set(['Int', 'I', 'FM', 'Soc']);
  *     alias anglais, niveaux non cumulables) ; `ignoreFatigue` ajoute une dispense d'Exténué propre au Test (Œil de la tempête
  *     rang 2) ; `appliesKey(key)` remplace la table des clés de couche quand le Test lit aussi des clés hors compétence (clé
  *     `Dissipation` du Test de Dissipation) : les clés retenues forment un seul Test, cumulées comme les autres.
+ *   - CA13 : `sequela` (`{ actionLabel, defending, attack, weaponHands, shieldUsed }`) : arguments du combat pour les séquelles ;
+ *     sans lui, Test secondaire (séquelles inconditionnelles seulement). CA14 : `isAction` (Test qui demande d'agir, Surpris).
  * `context` : contexte du Test (`settings.context` du combat) : réponses du MJ (`involvesMovement`, `conditionPenaltyMode`…).
  * Rend :
  *  - `slModifiers`, `advantageSources`, `disadvantageSources` : prêts pour `previewV5Test`, plafonds non appliqués
@@ -139,31 +148,47 @@ export function resolveV5TestModifiers(actor, test = {}, context = {}) {
   // U8 L6 : États écartés par la règle de cumul, montrés barrés (Q9).
   const droppedRows = penaltyEffects.dropped.map(row => ({ id: 'condition:' + row.key, label: 'État ' + ((actor?.states || []).find(s => s.key === row.key)?.name || row.key),
     amount: -(penaltyEffects.levels.get(row.key) || 0), rule: row.rule, source: 'État' }));
+  // CA13 : séquelles durables. Le combat fournit la main, le bouclier, l'arme et ses réponses ; un Test secondaire n'a pas d'écran
+  // pour ces circonstances : séquelles inconditionnelles seulement, sauf la vue (deux yeux perdus), question commune aux États.
+  const sequelaContext = test.sequela ? situation : { ...situation, sequelaNoCircumstanceInput: true };
+  const sequelae = sequelaTestRules({ actor, opponent, skillLabel, actionLabel: skillLabel, carac: situation.carac || test.skillCharacteristic || characteristic, kind,
+    context: sequelaContext, ...(test.sequela || {}) });
+  const durable = list => list.map(row => ({ ...row, durable: true }));
+  const sequelaRows = { modifiers: durable(sequelae.modifiers), advantages: durable(sequelae.advantages), disadvantages: durable(sequelae.disadvantages) };
+  const sequelaQuestions = test.sequela ? [] : sequelae.unresolved.map(() => CONDITION_QUESTIONS.sight);
+  // CA14 : Inconscient, aucun Test ; Surpris, aucun Test qui demande d'agir pendant ce Round.
+  const levels = test.levels instanceof Map ? test.levels : conditionLevels(actor);
+  const actorRestrictions = [...(levels.get('inconscient') ? ['Inconscient : aucun Test ne peut être tenté.'] : []),
+    ...(test.isAction === true && levels.get('surpris') ? ['Surpris : aucun Test qui demande d’agir pendant ce Round.'] : [])];
   const conditions = { rules, penaltyEffects, penalty, appliedPenalty, mixed, mixedUnresolved, penaltyRows, disadvantageRows, droppedRows,
     penaltyStates: [...penaltyEffects.levels].filter(([, value]) => value).map(([key]) => key) };
 
-  const slModifiers = [...layers.magic, ...adverse, ...penaltyRows, ...layers.talents];
-  const advantageSources = [...talents.advantageSources];
-  const disadvantageSources = [...disadvantageRows, ...talents.disadvantageSources];
-  const unresolved = [...rules.unresolved, ...mixedUnresolved, ...talents.unresolved, ...layers.unresolved];
-  const needsInput = [...new Set([...rules.unresolved, ...mixedUnresolved])].map(label => ({ field: QUESTION_FIELDS.get(label) ?? null, label }));
+  const slModifiers = [...layers.magic, ...adverse, ...penaltyRows, ...layers.talents, ...sequelaRows.modifiers];
+  const advantageSources = [...talents.advantageSources, ...sequelaRows.advantages];
+  const disadvantageSources = [...disadvantageRows, ...talents.disadvantageSources, ...sequelaRows.disadvantages];
+  const unresolved = [...rules.unresolved, ...mixedUnresolved, ...talents.unresolved, ...layers.unresolved, ...(test.sequela ? sequelae.unresolved : sequelaQuestions)];
+  const needsInput = [...new Set([...rules.unresolved, ...mixedUnresolved, ...sequelaQuestions])].map(label => ({ field: QUESTION_FIELDS.get(label) ?? null, label }));
   const tag = (list, source, rowKind) => list.map(row => ({ ...row, source, kind: rowKind }));
   const rows = [...tag(layers.magic, 'Sort ou prière', 'modifier'), ...tag(adverse, 'Effet adverse', 'modifier'), ...tag(penaltyRows, 'État', 'modifier'),
     ...tag(layers.talents, 'Talent', 'modifier'), ...tag(disadvantageRows, 'État', 'disadvantage'), ...tag(talents.advantageSources, 'Talent', 'advantage'),
-    ...tag(talents.disadvantageSources, 'Talent', 'disadvantage'), ...droppedRows.map(row => ({ ...row, kind: 'modifier', dropped: true }))];
-  return { slModifiers, advantageSources, disadvantageSources, rows, needsInput, unresolved, restrictions: [...rules.restrictions],
+    ...tag(talents.disadvantageSources, 'Talent', 'disadvantage'), ...tag(sequelaRows.modifiers, 'Séquelle', 'modifier'),
+    ...tag(sequelaRows.advantages, 'Séquelle', 'advantage'), ...tag(sequelaRows.disadvantages, 'Séquelle', 'disadvantage'), ...droppedRows.map(row => ({ ...row, kind: 'modifier', dropped: true }))];
+  return { slModifiers, advantageSources, disadvantageSources, rows, needsInput, unresolved,
+    restrictions: [...actorRestrictions, ...rules.restrictions, ...sequelae.restrictions], scoreDelta: sequelae.scoreDelta,
     ignoreNegative: talents.ignoreNegative, forceSuccess: talents.forceSuccess, penalty: appliedPenalty, penaltyStates: conditions.penaltyStates,
-    droppedModifiers: droppedRows, parts: { talents, layers, adverse, conditions } };
+    droppedModifiers: droppedRows, parts: { talents, layers, adverse, conditions, sequelae } };
 }
 
 /**
  * Plafonds de fin de calcul, sur la liste complète de l'appelant (modifiée sur place, comme le faisait `buildCombatTest`) :
  * Distrait (`noMomentumOrAdvantage`) ôte tout Avantage ; Esprit fort (`ignoreNegativeModifiers`, V5 p. 127) ramène à 0 tout
- * modificateur négatif et ôte tout Désavantage.
+ * modificateur négatif et ôte tout Désavantage. Les lignes `durable` (séquelles, CA13) échappent aux deux, comme au combat où
+ * elles sont ajoutées après les plafonds.
  */
 export function finalizeV5TestModifiers(actor, resolved, { slModifiers, advantageSources, disadvantageSources }) {
-  if ((actor?.states || []).some(s => s.restriction === 'noMomentumOrAdvantage' && sourceActive(s))) advantageSources.length = 0;
-  if (resolved.ignoreNegative) { for (const row of slModifiers) if (row.amount < 0) row.amount = 0; disadvantageSources.length = 0; }
+  const keepDurable = list => list.splice(0, list.length, ...list.filter(row => row?.durable === true));
+  if ((actor?.states || []).some(s => s.restriction === 'noMomentumOrAdvantage' && sourceActive(s))) keepDurable(advantageSources);
+  if (resolved.ignoreNegative) { for (const row of slModifiers) if (row.amount < 0 && row.durable !== true) row.amount = 0; keepDurable(disadvantageSources); }
 }
 
 const optionRank = result => [result.success ? 1 : 0, result.sl];
@@ -174,16 +199,20 @@ const optionRank = result => [result.success ? 1 : 0, result.sl];
  * Test, pas celui du Test principal de l'action). Une précision d'État manquante (`needsInput`) laisse le Test non résolu (CA8) :
  * `{ ready: false, needsInput, unresolved }`. Sinon les plafonds (`finalizeV5TestModifiers`) portent sur la liste complète, comme au
  * combat, et le testeur garde la meilleure option quand l'Avantage lui permet d'inverser le jet.
+ * Une restriction (CA14) rend `{ ready: false, blocked: true, restrictions, needsInput }` (motifs en `needsInput`, champ nul).
  * Rend `{ ready: true, result, preview, modifiers, advantageSources, disadvantageSources, rows, unresolved, restrictions }` ;
  * `modifiers` (montants après plafonds) et `rows` (source de chaque ligne commune, écartées comprises) forment le détail (CA5).
  */
 export function previewV5SecondaryTest(actor, { score, roll, kind = 'test', test = {}, context = {}, slModifiers = [], advantageSources = [], disadvantageSources = [] } = {}) {
   const common = resolveV5TestModifiers(actor, { kind, ...test }, context || {});
+  // CA14 : une restriction (Inconscient, Surpris sur un Test d'action, séquelle qui l'interdit) bloque le Test, avec son motif.
+  if (common.restrictions.length) return { ready: false, blocked: true, restrictions: common.restrictions,
+    needsInput: common.restrictions.map(label => ({ field: null, label, restriction: true })), unresolved: [...common.restrictions, ...common.unresolved], rows: common.rows };
   if (common.needsInput.length) return { ready: false, needsInput: common.needsInput, unresolved: common.unresolved, rows: common.rows };
   const lists = { slModifiers: [...slModifiers, ...common.slModifiers].map(row => ({ ...row })),
     advantageSources: [...advantageSources, ...common.advantageSources], disadvantageSources: [...disadvantageSources, ...common.disadvantageSources] };
   finalizeV5TestModifiers(actor, common, lists);
-  const preview = previewV5Test({ score, roll, kind, ...lists });
+  const preview = previewV5Test({ score: Math.max(0, score + (common.scoreDelta || 0)), roll, kind, ...lists });
   const [first, ...others] = preview.options;
   const option = others.reduce((best, row) => { const [a, b] = [optionRank(row.result), optionRank(best.result)]; return a[0] > b[0] || a[0] === b[0] && a[1] > b[1] ? row : best; }, first);
   return { ready: true, result: option.result, optionId: option.id, preview, modifiers: lists.slModifiers, advantageSources: lists.advantageSources,

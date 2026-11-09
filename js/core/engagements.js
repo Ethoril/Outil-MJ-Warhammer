@@ -208,12 +208,13 @@ function disengageSide(person, test, context, { advantages = [], disadvantages =
   const hadAdvantage = lists.advantageSources.length > 0;
   finalizeV5TestModifiers(person, resolved, lists);
   const capped = rows.map(row => {
-    if (row.dropped) return row;
+    if (row.dropped || row.durable) return row;
     if (resolved.ignoreNegative && ((row.kind === 'modifier' && row.amount < 0) || row.kind === 'disadvantage')) return { ...row, dropped: true, rule: 'Esprit fort' };
     if (hadAdvantage && !lists.advantageSources.length && row.kind === 'advantage') return { ...row, dropped: true, rule: 'Distrait' };
     return row;
   });
-  return { ...lists, rows: capped, needsInput: resolved.needsInput, unresolved: resolved.unresolved, restrictions: resolved.restrictions, penalty: resolved.penalty };
+  return { ...lists, rows: capped, needsInput: resolved.needsInput, unresolved: resolved.unresolved, restrictions: resolved.restrictions, penalty: resolved.penalty,
+    scoreDelta: resolved.scoreDelta || 0 };
 }
 const bestOption = preview => preview.options.reduce((best, option) => (option.result.sl > best.result.sl ? option : best), preview.options[0]);
 
@@ -244,19 +245,25 @@ export function previewDisengage({ combat, participants = [], actorId, input = {
   const actorScore = Number.isInteger(input.actorScore) ? input.actorScore : skill === 'acrobaties' ? skillScore(actor, ACROBATICS, 'Ag') : skillScore(actor, /^esquive/, 'Ag');
   const opponentScore = Number.isInteger(input.opponentScore) ? input.opponentScore : bestMeleeScore(best);
   // Q6 · T2 : calcul commun des deux côtés (CA3), la situation se somme (CA4). Le désengagé fait un Test d'Esquive ou d'Acrobaties
-  // (Test de compétence : À terre et Enchevêtré demandent si le Test implique un mouvement, CA8) ; l'adversaire résiste avec sa
-  // Mêlée (Test de mêlée, comme au combat) et ne lit pas les clés « … adverse » du désengagé (rôle de défenseur, comme au combat).
+  // (Test de compétence qui compte toujours comme un mouvement, MJ 09/11 CA15 : À terre et Enchevêtré s'appliquent sans question ;
+  // Test d'action, CA14 : Inconscient ou Surpris le bloquent) ; l'adversaire résiste avec sa Mêlée (Test de mêlée, comme au combat)
+  // et ne lit pas les clés « … adverse » du désengagé (rôle de défenseur, comme au combat, CA16).
   const actorSkill = skill === 'acrobaties' ? (actor.skills || []).map(row => row?.name ?? row?.nom).find(name => ACROBATICS.test(fold(name))) || 'Représentation (Acrobatie)' : 'Esquive';
-  const actorModifiers = disengageSide(actor, { characteristic: 'Ag', skill: actorSkill, skillCharacteristic: 'ag', kind: 'test', role: 'actor', opponent: best, participants },
-    input.context || {}, { disadvantages: outnumbered ? [{ id: 'disengage:outnumbered', label: 'En infériorité numérique' }] : [] });
+  const actorModifiers = disengageSide(actor, { characteristic: 'Ag', skill: actorSkill, skillCharacteristic: 'ag', kind: 'test', role: 'actor', opponent: best, participants, isAction: true },
+    { ...(input.context || {}), involvesMovement: true }, { disadvantages: outnumbered ? [{ id: 'disengage:outnumbered', label: 'En infériorité numérique' }] : [] });
   const opponentModifiers = disengageSide(best, { characteristic: 'CC', skill: bestMeleeSkill(best), skillCharacteristic: 'cc', kind: 'melee', role: 'defender', opponent: actor, participants },
     input.opponentContext || {}, { advantages: best.extensions?.v5?.hasMomentum === true ? [{ id: 'momentum', label: 'Élan' }] : [] });
+  const blockedBy = actorModifiers.restrictions.filter(text => /^(Inconscient|Surpris) :/.test(text));
+  if (blockedBy.length) return { status: 'blocked', mode: 'restricted', opponentIds, bestOpponentId: best.id, skill, actorModifiers, opponentModifiers,
+    reason: `${actor.name} ne peut pas se désengager : ${blockedBy.join(' ')}` };
   const needsInput = [...actorModifiers.needsInput.map(row => ({ side: 'actor', ...row })), ...opponentModifiers.needsInput.map(row => ({ side: 'opponent', ...row }))];
   const base = { mode: 'test', opponentIds, bestOpponentId: best.id, skill, actorScore, opponentScore, outnumbered, actorModifiers, opponentModifiers, needsInput };
   if (needsInput.length) return { ...base, status: 'needs-input', reason: `À saisir avant d’appliquer : ${needsInput.map(row => `${row.side === 'actor' ? actor.name : best.name} · ${row.label}`).join(' ; ')}` };
   if (!Number.isInteger(input.actorRoll) || !Number.isInteger(input.opponentRoll)) return { ...base, status: 'needs-rolls', reason: 'Saisissez les deux d100 du Test opposé.' };
   const test = (score, roll, side) => previewV5Test({ score, roll, slModifiers: side.slModifiers, advantageSources: side.advantageSources, disadvantageSources: side.disadvantageSources });
-  const actorTest = test(actorScore, input.actorRoll, actorModifiers), opponentTest = test(opponentScore, input.opponentRoll, opponentModifiers);
+  // Séquelles (CA13) : une Caractéristique perdue pèse sur le score de chaque camp.
+  const actorTest = test(Math.max(0, actorScore + actorModifiers.scoreDelta), input.actorRoll, actorModifiers),
+    opponentTest = test(Math.max(0, opponentScore + opponentModifiers.scoreDelta), input.opponentRoll, opponentModifiers);
   const own = bestOption(actorTest).result, theirs = bestOption(opponentTest).result;
   const opposition = resolveV5Opposition(own, theirs);
   const success = opposition.winner === 'initiator';

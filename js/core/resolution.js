@@ -1350,7 +1350,9 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   actorEvents.push(event('conditionAcquired', { instances: conditionChanges.actor?.acquiredInstances || 0 }));
   const reversal=evaluateV5Talents(target,{event:'momentum.beforeLoss',role:'defender',context:{kind:defenderPlan?.kind||'none',test:{success:defenderTest?.success||false},attack:{hit:Boolean(hit&&attackType(action.type))}}});
   supplementaryTalentPlans.push(reversal);
-  const resoluteActor=resoluteException(normalized,conditionChanges.actor?.participant||actor,normalized.v5,conditionChanges.actor?.acquiredInstances||0),resoluteTarget=resoluteException(normalized,conditionChanges.target?.participant||target,normalized.defense?.v5,conditionChanges.target?.acquiredInstances||0);
+  // MJ 09/11 CA20 : les États acquis ici sont ceux que Déterminé cherche à éviter ; ils ne comptent pas dans son Test de Calme.
+  const acquiredStateIds=(after,before)=>{const known=new Set((before?.states||[]).map(row=>row?.id));return (after?.states||[]).map(row=>row?.id).filter(id=>id&&!known.has(id));};
+  const resoluteActor=resoluteException(normalized,conditionChanges.actor?.participant||actor,normalized.v5,conditionChanges.actor?.acquiredInstances||0,acquiredStateIds(conditionChanges.actor?.participant,actor)),resoluteTarget=resoluteException(normalized,conditionChanges.target?.participant||target,normalized.defense?.v5,conditionChanges.target?.acquiredInstances||0,acquiredStateIds(conditionChanges.target?.participant,target));
   supplementaryTalentPlans.push(...resoluteActor.plans,...resoluteTarget.plans);
   unresolved.push(...resoluteActor.unresolved,...resoluteTarget.unresolved);
   planMomentum(actor, actorEvents,resoluteActor.exceptions,target);

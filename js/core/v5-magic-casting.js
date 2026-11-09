@@ -295,7 +295,7 @@ function previewPreparedCasting(participant, spell, options) {
   const matchingReserve = currentReserve.type === expectedType ? currentReserve.sl : 0;
 
   const skill = resolveCastingSkill(participant);
-  const score = Number.isFinite(Number(options.score)) ? Number(options.score) : skill.score;
+  const score = Math.max(0, (Number.isFinite(Number(options.score)) ? Number(options.score) : skill.score) + (Number(options.scoreDelta) || 0)); // Séquelles : Caractéristique perdue (MJ 09/11 CA13)
   const bi = skill.bi;
   const bfm = skill.bfm;
   const maxOvercastSpend = bi + bfm;

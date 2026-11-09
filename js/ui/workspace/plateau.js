@@ -57,7 +57,7 @@ export function actionBarModel({ actor, active, actions = [], actionKeys = [], p
   if (engagedFoes.length) {
     const plan = previewDisengage(actor.id);
     const consequence = plan.mode === 'surrounded' ? 'impossible : encerclé (Fuir reste possible)' : plan.mode === 'momentum' ? 'perd l’Élan, sans Test'
-      : plan.mode === 'orderly' ? 'En Bon Ordre : sans Élan ni Test' : `Test opposé contre ${active.find(row => row.id === plan.bestOpponentId)?.name || 'l’adversaire'}${plan.outnumbered ? ', Désavantage (infériorité)' : ''}`;
+      : plan.mode === 'orderly' ? 'En Bon Ordre : sans Élan ni Test' : plan.mode === 'restricted' ? `impossible : ${plan.reason}` : `Test opposé contre ${active.find(row => row.id === plan.bestOpponentId)?.name || 'l’adversaire'}${plan.outnumbered ? ', Désavantage (infériorité)' : ''}`;
     rows.push({ id: 'disengage', label: 'Se désengager', consequence, run: commands => commands.disengage() });
     const orderly = actor.extensions?.v5?.specialStates?.orderlyDisengage === true;
     rows.push({ id: 'flee', label: 'Fuir', consequence: orderly ? `En Bon Ordre : pas d’Élan pour ${engagedFoes.map(foe => foe.name).join(', ')} ; Brisé dû`

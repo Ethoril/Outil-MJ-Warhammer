@@ -2073,7 +2073,7 @@ function resolvedCorruptionTest(participant, skillId, input) {
         receipt.additionalParticipants = [...extraDismounts.values()].filter(row => row.id !== id);
         const exit=previewV5FrenzyExit(receipt.participant,{round:draft.combat?.round,resolutionId:actionId,state:v5StoreActionState(draft),clock:v5StoreActionClock(draft)});
         receipt.participant=exit.participant;
-        const resolute=resoluteException({},receipt.participant,{context},receipt.acquiredInstances);
+        const resolute=resoluteException({},receipt.participant,{context},receipt.acquiredInstances,acquiredStates.map(row=>row.id));
         if(resolute.unresolved.length){
           receipt.ready=false;
           receipt.needsInput.push(...resolute.unresolved.map(label=>({field:'resolute',label})));

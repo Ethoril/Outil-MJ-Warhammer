@@ -89,7 +89,7 @@ function projectWrathDamage(actor,rule,input,executionId,sinAtTest,round){
  if(!context.ready)return fail('Le contexte des États du Test de Résistance doit être précisé.',context.needsInput.map(row=>need('wrathConditionContext.'+row.field,row.label)).concat(context.restrictions.map(label=>need('wrathConditionContext',label))));
  let testPreview,test;
  try{
-  testPreview=previewV5Test({score,roll:normalizeV5Roll(input.wrathEnduranceRoll),kind:'test',
+  testPreview=previewV5Test({score:Math.max(0,score+(context.scoreDelta||0)),roll:normalizeV5Roll(input.wrathEnduranceRoll),kind:'test',
    ...withV5TestTalents(changed,context,{slModifiers:[{id:rule.id+':difficulty',label:'Difficulté source du Courroux',amount:rule.enduranceDifficulty},...context.slModifiers,...magicSkillModifiers(changed,skillName)],
    advantageSources:context.advantageSources,disadvantageSources:context.disadvantageSources})});
   projection.testOptions=clone(testPreview.options);
@@ -1098,7 +1098,7 @@ function calculateWrathRecovery(state,input){
  if(!gmWrath&&sheetPrayerModifiers===null)return failure('requires-input','Modificateur de Test de Prière invalide sur la fiche.',[{field:'actor.extensions.v5.testModifiers',label:'DR entiers issus des couches actives'}]);
  const prayerSheetModifiers=[...(sheetPrayerModifiers||[]),...new Map([...magicSkillModifiers(actor,'Prière'),...magicSkillModifiers(actor,'Pray')].filter(row=>row.id.startsWith('miscast:')).map(row=>[row.id,row])).values()];
  if(!gmWrath)try{
-  const preview=previewV5Test({score:effectiveSkillScore(actor,skills[0].total,'Soc'),roll:normalizeV5Roll(input.roll),kind:'test',
+  const preview=previewV5Test({score:Math.max(0,effectiveSkillScore(actor,skills[0].total,'Soc')+(testContext.scoreDelta||0)),roll:normalizeV5Roll(input.roll),kind:'test',
    ...withV5TestTalents(actor,testContext,{slModifiers:[{id:rule.id+':recovery',label:'Prière de récupération',amount:rule.recovery.difficulty},...testContext.slModifiers,...modifiers.modifiers,...prayerSheetModifiers,...(relic&&!gmWrath?[{id:'relic:'+relic.id,label:'Relique : '+relic.label,amount:relic.prayerSL}]:[])],advantageSources:testContext.advantageSources,disadvantageSources:testContext.disadvantageSources})});
   options=preview.options;
   if(preview.choiceRequired&&!input.testOptionId)return {...failure('requires-input','Choisissez le jet de Prière.',[{field:'testOptionId',label:'Choix du jet de Prière'}]),testOptions:options};

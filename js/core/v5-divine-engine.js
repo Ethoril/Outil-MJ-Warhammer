@@ -527,7 +527,8 @@ export function previewDivineExecution(actor, contract, targets = [], input = {}
   if (activePrayer) return fail('blocked', 'Cette prière est déjà active; attendre sa fin avant de la réutiliser.', [need('prayerExpiry', 'Expiration de la prière déjà active')]);
   let testPreview;
   try {
-    testPreview = previewV5Test({ score: skillScore, roll: normalizeV5Roll(input.roll), kind: 'test', slModifiers,
+    // Séquelles : Caractéristique perdue (MJ 09/11 CA13).
+    testPreview = previewV5Test({ score: Math.max(0, skillScore + (conditionTestContext.scoreDelta || 0)), roll: normalizeV5Roll(input.roll), kind: 'test', slModifiers,
       advantageSources:testLists.advantageSources,disadvantageSources:testLists.disadvantageSources });
   } catch (error) { return fail('invalid', error.message, [need('roll', 'Résultat d100 entre 1 et 100')]); }
   let prayer;

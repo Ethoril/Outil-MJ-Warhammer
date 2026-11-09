@@ -57,7 +57,7 @@ function prepareDispelOptions(actor, options, persistent = false) {
 function dispelTest(actor, options, ownSpell = false, persistent = false) {
   const prepared = prepareDispelOptions(actor, options, persistent);
   const skill = resolveCastingSkill(actor);
-  const score = options.score != null && Number.isFinite(Number(options.score)) ? Number(options.score) : skill.score;
+  const score = Math.max(0, (options.score != null && Number.isFinite(Number(options.score)) ? Number(options.score) : skill.score) + (Number(prepared.scoreDelta) || 0)); // Séquelles : Caractéristique perdue (MJ 09/11 CA13)
   // V5 p.237 : la pénalité d’armure ne concerne pas la dissipation.
   const armorDetails = { penalty: 0, maxAp: 0, details: {} };
   const armorPenalty = 0;

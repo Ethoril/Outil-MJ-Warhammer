@@ -91,7 +91,8 @@ export function prepareMagicOptions(actor, kind, options={}, spell = null) {
   // Œil de la tempête (rang 2) : Exténué sans pénalité à l'incantation, à la Focalisation et à sa pause.
   const ignoreFatigue=['casting','channelling','pause'].includes(kind) && Number(activeMagicTalent(actor,'eye-of-the-storm')?.magicTalentRank)>=2;
   const dispelKeys=kind==='dispel'?new Set(['dissipation',fold(DISPEL_MODE_KEYS[options.dispelMode]||DISPEL_MODE_KEYS.opposed)]):null;
-  const common=resolveV5TestModifiers(actor,{characteristic:test.characteristic,skill:test.skill,skillCharacteristic:test.characteristic,kind:'test',ignoreFatigue,
+  // MJ 09/11 CA14 : la pause et l'interruption de Focalisation demandent d'agir (Surpris les bloque) ; Inconscient bloque tout Test.
+  const common=resolveV5TestModifiers(actor,{characteristic:test.characteristic,skill:test.skill,skillCharacteristic:test.characteristic,kind:'test',ignoreFatigue,isAction:['pause','interruption'].includes(kind),
     action:{type:'test',attr:test.characteristic,label:test.skill,base:0,qualities:[],extensions:{fiche:{skillId:test.skillId}}},
     ...(dispelKeys?{appliesKey:key=>dispelKeys.has(fold(key).trim())||testKeyApplies(key,test.skill,{carac:test.characteristic})}:{})},{...conditionContext,skillId:test.skillId});
   const {conditions,layers}=common.parts;
@@ -102,13 +103,17 @@ export function prepareMagicOptions(actor, kind, options={}, spell = null) {
   }
   const levels=conditionLevels(actor);
   if(['casting','channelling','dispel'].includes(kind) && (levels.has('inconscient') || levels.has('surpris')))throw ruleError('Inconscient ou Surpris : Test magique indisponible.');
-  const mental=['casting','channelling','dispel','interruption'].includes(kind);
+  // MJ 09/11 CA17 : la pause de Focalisation est un Test mental pour Clarté d'esprit (V5 p. 251).
+  const mental=['casting','channelling','dispel','pause','interruption'].includes(kind);
   if(actor.extensions?.v5?.specialStates?.clarityOfThought && mental)for(let i=slModifiers.length-1;i>=0;i--)if(slModifiers[i].amount<0 && /psychology|mental.?mutation|mutation.?mental/i.test(slModifiers[i].id))slModifiers.splice(i,1);
   if(common.restrictions.length)throw ruleError(common.restrictions.join(' '));
   if(common.penalty)slModifiers.push({id:'magic-condition-penalty',label:'Pénalité d’État',amount:-common.penalty});
   slModifiers.push(...layers.talents);
-  advantageSources.push(...common.parts.talents.advantageSources);
-  next.disadvantageSources=[...(options.disadvantageSources || []),...conditions.disadvantageRows,...common.parts.talents.disadvantageSources];
+  // MJ 09/11 CA13 : séquelles durables (lignes `durable`, hors plafonds) ; la Caractéristique perdue pèse sur le score (`scoreDelta`).
+  slModifiers.push(...common.slModifiers.filter(row=>row.durable));
+  advantageSources.push(...common.parts.talents.advantageSources,...common.advantageSources.filter(row=>row.durable));
+  next.disadvantageSources=[...(options.disadvantageSources || []),...conditions.disadvantageRows,...common.parts.talents.disadvantageSources,...common.disadvantageSources.filter(row=>row.durable)];
+  next.scoreDelta=common.scoreDelta||0;
   next.conditionNeeds=common.needsInput.map(row=>row.label);
   next.conditionRows=common.rows;next.testUnresolved=common.unresolved;next.testModifiers=common;next.dispelKeyRows=dispelKeys?layers.magic.filter(row=>dispelKeys.has(fold(row.id.replace(/^spell-skill:/,'')).trim())).length:0;
   if(['casting','channelling'].includes(kind)){const ground=groundCastModifier(actor,{aboard:slannAboard(actor)});if(ground.available && ground.modifier)slModifiers.push({id:'slann-ground',label:'Slann au sol',amount:ground.modifier});}

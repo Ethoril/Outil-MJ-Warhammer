@@ -154,7 +154,8 @@ export function resolveV5ConditionTestContext(actor, context = {}) {
     usesFellowship = needsBoolean('usesFellowship', 'Préciser si le Test utilise la Sociabilité.');
   }
   let isAction = null;
-  if (levels.surpris || levels.inconscient) {
+  // MJ 09/11 CA14 : seul Surpris dépend de l'Action ; Inconscient interdit tout Test.
+  if (levels.surpris) {
     isAction = needsBoolean('isAction', 'Préciser si ce Test résout une Action.');
   }
 
@@ -180,7 +181,10 @@ export function resolveV5ConditionTestContext(actor, context = {}) {
   const skill = typeof context.skill === 'string' ? context.skill : '';
   const common = resolveV5TestModifiers(isRecord(actor) ? actor : {}, { characteristic, skill, kind: 'test', levels: new Map(Object.entries(levels)),
     action: { type: 'test', attr: characteristic, label: skill, base: 0, qualities: [], ...(typeof context.skillId === 'string' ? { extensions: { fiche: { skillId: context.skillId } } } : {}) } },
-    { ...(isRecord(context.talentContext) ? context.talentContext : {}), involvesMovement: movement, runningOrHiding, requiresSight, reliesOnSight, usesFellowship,
+    { ...(isRecord(context.talentContext) ? context.talentContext : {}), involvesMovement: movement, runningOrHiding,
+      // Deux yeux perdus (séquelle, CA13) : la réponse de l'appelant sur la vue vaut aussi hors Aveuglé.
+      requiresSight: requiresSight ?? (typeof context.requiresSight === 'boolean' ? context.requiresSight : null),
+      reliesOnSight: reliesOnSight ?? (typeof context.reliesOnSight === 'boolean' ? context.reliesOnSight : null), usesFellowship,
       festeringWounds: context.festeringWounds, conditionPenaltyMode: undefined });
   const conditionPenalty = common.parts.conditions.penaltyEffects;
   const slPenalty = conditionPenalty.penalty;
@@ -215,9 +219,18 @@ export function resolveV5ConditionTestContext(actor, context = {}) {
     disadvantageSources.push(...worstDisadvantage);
   }
 
+  // MJ 09/11 CA13 : séquelles durables du calcul commun (lignes `durable`, qu'aucun plafond n'efface) ; la Caractéristique perdue
+  // est rendue en `scoreDelta`, à ajouter au score du Test. Deux yeux perdus : la question de la vue, si l'appelant ne l'a pas tranchée.
+  slModifiers.push(...common.slModifiers.filter(row => row.durable));
+  advantageSources.push(...common.advantageSources.filter(row => row.durable));
+  disadvantageSources.push(...common.disadvantageSources.filter(row => row.durable));
+  if (common.parts.sequelae.unresolved.length)
+    addNeed(needsInput, seenNeeds, 'reliesOnSight', 'Préciser si la tâche repose fortement sur la vue.');
+  restrictions.push(...common.parts.sequelae.restrictions);
   if (levels.aveugle && requiresSight === true) restrictions.push('Aveuglé : cette tâche exige strictement la vue.');
   if (isAction === true && levels.surpris) restrictions.push('Surpris : aucune Action ne peut être entreprise.');
-  if (isAction === true && levels.inconscient) restrictions.push('Inconscient : aucune Action ne peut être entreprise.');
+  // MJ 09/11 CA14 : Inconscient, aucun Test, Action ou non.
+  if (levels.inconscient) restrictions.push(context.isAction === true ? 'Inconscient : aucune Action ne peut être entreprise.' : 'Inconscient : aucun Test ne peut être tenté.');
 
   return {
     ready: needsInput.length === 0 && restrictions.length === 0,
@@ -231,6 +244,7 @@ export function resolveV5ConditionTestContext(actor, context = {}) {
     conditionPenaltyMode: hasSlPenalty && hasDisadvantage && ['sl', 'disadvantage'].includes(mode) ? mode : null,
     conditionPenaltyReason: hasSlPenalty && hasDisadvantage && reason ? reason : null,
     arbitration,
+    scoreDelta: common.scoreDelta || 0,
     talents: { slModifiers: talentPart.slModifiers, advantageSources: talentPart.advantageSources, disadvantageSources: talentPart.disadvantageSources,
       ignoreNegative: talentPart.ignoreNegative, forceSuccess: talentPart.forceSuccess, unresolved: talentPart.unresolved }
   };

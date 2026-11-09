@@ -26,7 +26,8 @@ export function previewTalentReplacement(n,{hit,test,opposed,damage,location,qua
  return{replacement,damage,changes,states,plans,unresolved,reminders};
 }
 /** Calme is rolled only when the optional preservation is requested; other losses remain effective. */
-export function resoluteException(n,subject,settings,instances){
+/** MJ 09/11 CA20 : `avoidedStateIds`, États acquis que Déterminé cherche à éviter ; ils ne comptent pas dans son propre Test de Calme. */
+export function resoluteException(n,subject,settings,instances,avoidedStateIds=[]){
  const c=settings?.context||{},plans=[],unresolved=[];if(!instances||c.tryResolute!==true)return{plans,unresolved,exceptions:[]};
  const plan=situationPlan(subject,'resolute');plans.push(plan);const origin=plan.proposals[0]?.origins[0];
  if(!origin)unresolved.push('Déterminé indisponible ou source à revalider.');
@@ -36,7 +37,8 @@ export function resoluteException(n,subject,settings,instances){
  // Q6 T6 (F8) : le calcul commun des Tests (États avec leurs exceptions, talents, sorts et prières) remplace l'ancien
  // max(Sonné, Exténué, Empoisonné). Les précisions d'États de ce Test de Calme ont leur propre contexte (resoluteConditionContext),
  // distinct de celui du Test principal de l'action ; sans réponse, le Test attend le MJ (CA8).
- const secondary=previewV5SecondaryTest(subject,{score:base,roll:c.resoluteRoll,test:{characteristic:'FM',skill:'Calme'},context:c.resoluteConditionContext||{}});
+ const avoided=new Set(avoidedStateIds||[]),tester=avoided.size?{...subject,states:(subject.states||[]).filter(s=>!avoided.has(s?.id))}:subject;
+ const secondary=previewV5SecondaryTest(tester,{score:base,roll:c.resoluteRoll,test:{characteristic:'FM',skill:'Calme'},context:c.resoluteConditionContext||{}});
  if(!secondary.ready)return{plans,unresolved:secondary.needsInput.map(row=>'Déterminé (Calme) de '+(subject.name||subject.id)+' : '+row.label),needsInput:secondary.needsInput,exceptions:[]};
  const result=secondary.result;
  return{plans,unresolved,exceptions:result.success?[{reason:'conditionAcquired',talentId:origin.talentId,applies:true}]:[],test:result,detail:secondaryTestDetail(secondary)};

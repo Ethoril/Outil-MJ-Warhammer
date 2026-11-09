@@ -24,7 +24,6 @@ import { activeV5TalentEffects } from './v5-talents.js';
 import { applyV5TalentPenaltyRules, applyV5AttackSituationModifiers, computeV5WeaponRangeBands } from './v5-talent-combat.js';
 import { normalizeState } from './effects.js';
 import { previewV5TalentSLChoices } from './v5-talent-tests.js';
-import { sequelaTestRules } from './v5-sequela-effects.js';
 import { conditionLevels, resolveV5TestModifiers, finalizeV5TestModifiers } from './v5-test-modifiers.js';
 export { conditionLevels };
 import { weaponHandsForParticipant } from './equipment.js';
@@ -229,10 +228,17 @@ export function buildCombatTest(normalized, role = 'actor') {
   const manualSupport=familiarSkillSupport(actor,familiar,skill?.nom || action.label || action.note || '',settings.context);
   const support=manualSupport.modifiers.length||manualSupport.advantages.length?manualSupport:familiarSupport(actor,normalized.v5State?.participants || [],skill?.nom || action.label || action.note || '',settings.context);
   const skillLabel=skill?.nom || action.label || action.note || '';
+  // Séquelles (F2-J2, MJ 09/11 CA13) : main, bouclier et arme employés, passés au calcul commun.
+  const sequelaWeapon = actor?.equipment?.find(row => row.id === (action.extensions?.fiche?.equipmentId || action.extensions?.equipment?.id)) || action.extensions?.equipment;
+  let sequelaHands = sequelaWeapon && sequelaWeapon.kind === 'weapon' ? weaponHandsForParticipant(sequelaWeapon, actor, { action, context: settings.context || {} }) : null;
+  // Action sans arme de la fiche : le marqueur (2M) du nom fait foi, comme pour les armes du catalogue.
+  if (sequelaHands == null && /\(\s*2\s*m\s*\)/i.test([sequelaWeapon?.name, action.label, action.note, action.name].filter(Boolean).join(' '))) sequelaHands = 2;
+  const sequelaShield = defending ? Boolean(v5ShieldDefense(normalized).v5Bonus || v5ShieldDefense(normalized).confirmed) : (settings.context?.attackWithShield === true || settings.context?.shieldAttached === true);
   // Q6 T0 : États, talents (compagnons d'un familier compris) et couches de sorts et de prières, calcul commun à tous les Tests
   // (v5-test-modifiers.js) ; chaque famille garde ci-dessous sa place dans la liste des modificateurs.
   const common=resolveV5TestModifiers(actor,{characteristic:action.attr,skill:skillLabel,skillCharacteristic:skill?.carac,kind,role:talentRole,opponent:target,
-    participants:normalized.v5State?.participants||[],action,settings},settings.context||{});
+    participants:normalized.v5State?.participants||[],action,settings,sequela:{actionLabel:action.label || action.note || '',defending,
+      attack:!defending && ['attack','attaque'].includes(String(action.type || '').toLowerCase()),weaponHands:sequelaHands,shieldUsed:sequelaShield}},settings.context||{});
   const talentModifiers=common.parts.talents,testEffects=common.parts.layers,conditionPart=common.parts.conditions;
   const modifiers = [...support.modifiers,...testEffects.magic,
     // Clés « … adverse » du porteur opposé, et « Défense contre Tir » du défenseur visé par un tir.
@@ -315,15 +321,8 @@ export function buildCombatTest(normalized, role = 'actor') {
   const reachDefense=defending&&kind==='melee'&&settings.context?.longerWeaponDefense===true,contactTalent=reachDefense?situationPlan(normalized.actor,'in-fighter'):null;if(reachDefense&&!contactTalent?.proposals.length)modifiers.push({id:'longer-weapon-defense',label:'Arme plus longue en défense',amount:1});
   // Sources de monture (Avantage de cavalerie, cavalier protégé, Esquive à cheval) : une source = un groupe `applied` du moteur.
   const advantages = engineEffects.advantageSources, disadvantages = engineEffects.disadvantageSources;
-  // Séquelles durables et temporaires (F2-J2) : une seule source, le registre de convalescence projeté sur le participant.
-  const sequelaWeapon = actor?.equipment?.find(row => row.id === (action.extensions?.fiche?.equipmentId || action.extensions?.equipment?.id)) || action.extensions?.equipment;
-  let sequelaHands = sequelaWeapon && sequelaWeapon.kind === 'weapon' ? weaponHandsForParticipant(sequelaWeapon, actor, { action, context: settings.context || {} }) : null;
-  // Action sans arme de la fiche : le marqueur (2M) du nom fait foi, comme pour les armes du catalogue.
-  if (sequelaHands == null && /\(\s*2\s*m\s*\)/i.test([sequelaWeapon?.name, action.label, action.note, action.name].filter(Boolean).join(' '))) sequelaHands = 2;
-  const sequelaShield = defending ? Boolean(v5ShieldDefense(normalized).v5Bonus || v5ShieldDefense(normalized).confirmed) : (settings.context?.attackWithShield === true || settings.context?.shieldAttached === true);
-  const sequelae = sequelaTestRules({ actor, opponent: target, skillLabel, actionLabel: action.label || action.note || '', carac: settings.context?.carac || skill?.carac || action.attr, kind, defending,
-    attack: !defending && ['attack', 'attaque'].includes(String(action.type || '').toLowerCase()), context: settings.context || {},
-    weaponHands: sequelaHands, shieldUsed: sequelaShield });
+  // Séquelles durables et temporaires (F2-J2), calculées par le calcul commun (MJ 09/11 CA13) avec la main, le bouclier et l'arme.
+  const sequelae = common.parts.sequelae;
   unresolved.push(...sequelae.unresolved); restrictions.push(...sequelae.restrictions);
   if (sequelae.scoreDelta) action = { ...action, base: Math.max(0, action.base + sequelae.scoreDelta) };
   if (defending && kind === 'melee' && activeV5TalentEffects(actor).some(effect => effect.restriction === 'cannotOpposeWithMelee'))

@@ -507,8 +507,12 @@ test('E4 indépendant — Surpris/Inconscient bloquent une Action; parler reste 
     const blocked = resolveV5ConditionTestContext({ states: [condition] }, emptyContext({ isAction: true }));
     assert.equal(blocked.ready, false, condition.key);
   }
+  // MJ 09/11 CA14 : Inconscient interdit aussi un Test hors Action ; Surpris ne bloque que l'Action.
   const nonAction = resolveV5ConditionTestContext({ states: [state('inconscient', 'Inconscient')] }, emptyContext({ isAction: false }));
-  assert.equal(nonAction.ready, true, 'le module de contexte n’invente pas une interdiction hors Action');
+  assert.equal(nonAction.ready, false, 'Inconscient : aucun Test, Action ou non (CA14)');
+  assert.deepEqual(nonAction.restrictions, ['Inconscient : aucun Test ne peut être tenté.']);
+  const surprised = resolveV5ConditionTestContext({ states: [state('surpris', 'Surpris')] }, emptyContext({ isAction: false }));
+  assert.equal(surprised.ready, true, 'le module de contexte n’invente pas une interdiction de Surpris hors Action');
 });
 
 test('E4 indépendant — malus SL et Désavantage incomparables imposent un arbitrage MJ DIV-05', () => {

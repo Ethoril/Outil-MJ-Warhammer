@@ -1,12 +1,11 @@
 // Q6 · T2 (docs/specs/tests-secondaires-agregateur/) : le Désengagement (V5 p. 163, Test opposé Esquive ou Acrobaties contre la
 // meilleure Mêlée) passe par le calcul commun des deux côtés (CA3), en plus de l'infériorité numérique et de l'Élan (CA4) ;
-// détail par source (CA5), question de mouvement d'À terre ou d'Enchevêtré (CA8), rien ne change sans État ni effet (CA9).
+// détail par source (CA5), À terre et Enchevêtré sans question de mouvement (CA15, MJ 09/11), rien ne change sans État ni effet (CA9).
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { withEngagement, previewDisengage } from '../../../js/core/engagements.js';
 import { buildCombatTest } from '../../../js/core/v5-combat-rules.js';
 import { getReferenceCatalogue } from '../../../js/core/reference-catalog.js';
-import { CONDITION_QUESTIONS } from '../../../js/core/condition-effects.js';
 
 const DODGE = 'skill-45_73_71_75_69_76_65-base';
 const skillOf = id => getReferenceCatalogue().skills.find(row => row.id === id);
@@ -79,24 +78,21 @@ test('CA4 infériorité numérique, Élan de l’adversaire et État : tout se s
   assert.deepEqual(plan.opponentModifiers.rows.map(row => [row.source, row.kind]), [['Sort ou prière', 'modifier'], ['Situation', 'advantage']]);
 });
 
-test('CA8 désengagé À terre : la question de mouvement bloque, la réponse ajoute le Désavantage', () => {
+// MJ 09/11 CA15 : le désengagement compte toujours comme un mouvement ; plus de question, même une réponse « non » ne l'écarte pas.
+test('CA15 désengagé À terre : Désavantage sans question de mouvement', () => {
   const setup = duel({ actor: { states: [PRONE] } });
-  const pending = preview(setup, { actorRoll: 12, opponentRoll: 50 });
-  assert.equal(pending.status, 'needs-input');
-  assert.deepEqual(pending.needsInput, [{ side: 'actor', field: 'involvesMovement', label: CONDITION_QUESTIONS.movement }]);
-  assert.equal(pending.success, undefined);
   // 35 contre 12 : +2 DR ; avec le Désavantage, 12 devient 21 : +1 DR.
-  const moving = preview(setup, { actorRoll: 12, opponentRoll: 50, context: { involvesMovement: true } });
-  assert.deepEqual([moving.status, moving.actorModifiers.disadvantageSources.map(row => row.label), moving.actorSl], ['ready', ['À terre'], 1]);
+  const plan = preview(setup, { actorRoll: 12, opponentRoll: 50 });
+  assert.deepEqual([plan.status, plan.needsInput, plan.actorModifiers.disadvantageSources.map(row => row.label), plan.actorSl], ['ready', [], ['À terre'], 1]);
   const still = preview(setup, { actorRoll: 12, opponentRoll: 50, context: { involvesMovement: false } });
-  assert.deepEqual([still.status, still.actorModifiers.disadvantageSources, still.actorSl], ['ready', [], 2]);
+  assert.deepEqual([still.status, still.actorModifiers.disadvantageSources.map(row => row.label), still.actorSl], ['ready', ['À terre'], 1]);
 });
 
-test('CA8 Enchevêtré : même question, la réponse « oui » compte l’État', () => {
+test('CA15 Enchevêtré : l’État compte sans question', () => {
   const setup = duel({ actor: { states: [{ key: 'enchevetre', name: 'Enchevêtré', level: 1 }] } });
-  assert.deepEqual(preview(setup).needsInput.map(row => row.field), ['involvesMovement']);
-  const moving = preview(setup, { actorRoll: 21, opponentRoll: 50, context: { involvesMovement: true } });
-  assert.deepEqual(ids(moving.actorModifiers.slModifiers), [['conditions', -1]]);
+  assert.deepEqual(preview(setup).needsInput, []);
+  const plan = preview(setup, { actorRoll: 21, opponentRoll: 50 });
+  assert.deepEqual(ids(plan.actorModifiers.slModifiers), [['conditions', -1]]);
 });
 
 test('CA1 côté désengagé : mêmes modificateurs que le Test d’Esquive du plateau', () => {

@@ -500,8 +500,10 @@ test('R2-05 : aucune pénalité d’armure en dissipation',async()=>{
  const s=await setup(actor('mage',{equipment:[{id:'ap',kind:'armour',name:'Plate',layer:'rigid',ap:4,locations:['body'],equipped:true}]}));
  const p=s.previewDispelCasting({testSl:9,totalCastingSl:9},{roll:25,distance:1,visible:true});assert.equal(p.armorPenalty,0);assert.equal(p.selectedTest.sl,4);
 });
-test('R2-06 : Pause et Interruption restent possibles si muet, Surpris ou Inconscient',()=>{
- for(const key of ['surpris','inconscient'])for(const kind of ['pause','interruption'])assert.doesNotThrow(()=>prepareMagicOptions(actor('mage',{states:[{key,level:1}],extensions:{v5:{specialStates:{cannotSpeak:true},warWizardTurn:'1:1'}}}),kind,{turnKey:'1:1',roll:25}));
+// MJ 09/11 CA14 : Surpris (Test qui demande d'agir) et Inconscient bloquent désormais la pause et l'interruption ; muet, elles restent possibles.
+test('R2-06 : Pause et Interruption restent possibles si muet ; Surpris ou Inconscient les bloquent (CA14)',()=>{
+ for(const kind of ['pause','interruption'])assert.doesNotThrow(()=>prepareMagicOptions(actor('mage',{extensions:{v5:{specialStates:{cannotSpeak:true},warWizardTurn:'1:1'}}}),kind,{turnKey:'1:1',roll:25}));
+ for(const [key,pattern] of [['surpris',/Surpris/],['inconscient',/Inconscient/]])for(const kind of ['pause','interruption'])assert.throws(()=>prepareMagicOptions(actor('mage',{states:[{key,level:1}],extensions:{v5:{specialStates:{cannotSpeak:true},warWizardTurn:'1:1'}}}),kind,{turnKey:'1:1',roll:25}),pattern);
  assert.throws(()=>prepareMagicOptions(actor('mage',{states:[{key:'surpris',level:1}]}),'casting',{roll:25}),/Surpris/);
 });
 test('R2-07 : Focalisation Haute Magie sans incident ne paie pas de rune d’incident',async()=>{
