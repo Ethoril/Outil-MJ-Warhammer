@@ -196,7 +196,7 @@ const bestMeleeSkill = person => {
 /**
  * Q6 · T2 : modificateurs d'un camp du Désengagement. Calcul commun (États, talents, sorts et prières : `resolveV5TestModifiers`),
  * plus la situation propre au Désengagement (infériorité numérique, Élan), puis les plafonds de fin de calcul sur la liste complète
- * (Esprit fort, Distrait), comme le Test principal. `rows` : détail affiché, source et montant ; un malus annulé par un plafond reste
+ * (Obstiné, Distrait), comme le Test principal. `rows` : détail affiché, source et montant ; un malus annulé par un plafond reste
  * visible, barré (Q9). Les lignes sont prises avant les plafonds (qui modifient les modificateurs sur place).
  */
 function disengageSide(person, test, context, { advantages = [], disadvantages = [] } = {}) {
@@ -209,7 +209,7 @@ function disengageSide(person, test, context, { advantages = [], disadvantages =
   finalizeV5TestModifiers(person, resolved, lists);
   const capped = rows.map(row => {
     if (row.dropped || row.durable) return row;
-    if (resolved.ignoreNegative && ((row.kind === 'modifier' && row.amount < 0) || row.kind === 'disadvantage')) return { ...row, dropped: true, rule: 'Esprit fort' };
+    if (resolved.ignoreNegative && ((row.kind === 'modifier' && row.amount < 0) || row.kind === 'disadvantage')) return { ...row, dropped: true, rule: 'Obstiné' };
     if (hadAdvantage && !lists.advantageSources.length && row.kind === 'advantage') return { ...row, dropped: true, rule: 'Distrait' };
     return row;
   });

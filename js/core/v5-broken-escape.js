@@ -81,7 +81,9 @@ export function previewV5BrokenEscape({ state, actor, actorId=actor?.id, action,
     const baseScore = skill.total ?? skill.value;
     // Séquelles (MJ 09/11 CA13) : Caractéristique perdue ajoutée après le contexte d'États.
     const baseSkillScore = effectiveSkillScore(actor, baseScore, skill.carac || 'Ag');
-    const context = resolveV5ConditionTestContext(actor,{characteristic:skill.carac || 'Ag',isAction:true,involvesMovement:true,runningOrHiding:true,requiresSight:false,reliesOnSight:false});
+    const context = resolveV5ConditionTestContext(actor,{characteristic:skill.carac || 'Ag',isAction:true,involvesMovement:true,runningOrHiding:true,requiresSight:false,reliesOnSight:false,
+      // MJ 09/11 CA22 : courir ne se fait pas à deux mains ; les autres circonstances de séquelle restent demandées.
+      talentContext:{sequelaTwoHands:false}});
     if (!context.ready) return {ready:false,status:'requires-input',error:'Le contexte du Test Athlétisme est incomplet.',needsInput:clone(context.needsInput),unresolved:clone(context.needsInput)};
     const score=Math.max(0,baseSkillScore+(context.scoreDelta||0));
     const testPreview=previewV5Test({score,roll,slModifiers:[...context.slModifiers,{id:'broken-sprint-average',label:'Sprint moyen (+2 DR)',amount:2}],advantageSources:context.advantageSources,disadvantageSources:context.disadvantageSources});
@@ -99,7 +101,7 @@ export function previewV5BrokenEscape({ state, actor, actorId=actor?.id, action,
   if (!skill || skill.status!=='resolved' || !Number.isInteger(skill.total??skill.value)) return fail('Choisir une compétence résolue pour le Test facultatif de Hide.','facts.skillId');
   if (!finiteInt(roll,1)||roll>100) return fail('Fournir le jet d100 explicite du Test facultatif de Hide.','roll');
   const baseSkillScore=effectiveSkillScore(actor,skill.total??skill.value,skill.carac||'Ag');
-  const context=resolveV5ConditionTestContext(actor,{characteristic:skill.carac||'Ag',isAction:true,involvesMovement:false,runningOrHiding:true,requiresSight:false,reliesOnSight:false});
+  const context=resolveV5ConditionTestContext(actor,{characteristic:skill.carac||'Ag',isAction:true,involvesMovement:false,runningOrHiding:true,requiresSight:false,reliesOnSight:false,talentContext:{sequelaTwoHands:false}});
   if(!context.ready)return {ready:false,status:'requires-input',error:'Le contexte du Test de Hide est incomplet.',needsInput:clone(context.needsInput)};
   const score=Math.max(0,baseSkillScore+(context.scoreDelta||0));
   const testPreview=previewV5Test({score,roll,slModifiers:context.slModifiers,advantageSources:context.advantageSources,disadvantageSources:context.disadvantageSources});

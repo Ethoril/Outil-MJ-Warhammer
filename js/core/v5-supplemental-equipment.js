@@ -88,7 +88,7 @@ export function previewSupplementalEquipment({ item, actor, target, hit = false,
     const test = context.warpBladeEnduranceTest;
     if (!Number.isSafeInteger(test?.score)||test.score<0||!Number.isSafeInteger(test?.roll)||test.roll<1||test.roll>100) unresolved.push('Warp Blade : saisir le score de fiche (sans modificateurs) et le jet d100 du Test de Résistance moyen V4 (+20, converti en +2 DR V5) après plus d’une Blessure.');
     else {
-      const secondary=previewV5SecondaryTest(target,{score:test.score,roll:test.roll,test:{characteristic:'E',skill:'Résistance'},context:test.conditionContext||{},slModifiers:[{id:'warp-blade-v4-average-test',label:'Test moyen V4 (+20) converti en V5',amount:2}]});
+      const secondary=previewV5SecondaryTest(target,{score:test.score,roll:test.roll,test:{characteristic:'E',skill:'Résistance',passive:true},context:test.conditionContext||{},slModifiers:[{id:'warp-blade-v4-average-test',label:'Test moyen V4 (+20) converti en V5',amount:2}]});
       if(!secondary.ready)unresolved.push(...secondary.needsInput.map(row=>'Warp Blade, Test de Résistance de la cible : '+row.label));
       else {
         enduranceTest=secondary.result;enduranceDetail=secondaryTestDetail(secondary);

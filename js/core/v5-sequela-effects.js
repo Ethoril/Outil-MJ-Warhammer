@@ -264,12 +264,33 @@ export function sequelaContextFields(participant) {
   return fields;
 }
 
+/** MJ 09/11 CA22 : question posée au MJ pour une circonstance de séquelle (champ de contexte booléen), sur le modèle des États. */
+const SEQUELA_QUESTIONS = {
+  sequelaSpeech: 'Séquelle : le Test de Langue demande-t-il de parler ?',
+  sequelaTwoHands: 'Séquelle : le Test repose-t-il normalement sur deux mains ?',
+  sequelaWeaponTwoHands: 'Séquelle : l’arme employée exige-t-elle deux mains (arc, arbalète, arme non reconnue) ?',
+  sequelaShieldOnLostArm: 'Séquelle : le bouclier est-il fixé au bras perdu ou immobilisé ?',
+  sequelaOffHand: 'Séquelle : le Test de mêlée emploie-t-il l’arme de la main non directrice ?',
+  sequelaHearing: 'Séquelle : le Test de Perception repose-t-il sur l’ouïe ?',
+  sequelaSmell: 'Séquelle : le Test de Perception repose-t-il sur l’odorat ?',
+  sequelaScarAppropriate: 'Séquelle : la cicatrice de duel est-elle appropriée à ce Test social ?'
+};
+/** Libellé de la question d'un champ de séquelle (`sequelaUses:<zone>` : nom de la zone lu sur la séquelle du participant), ou null. */
+export function sequelaQuestionLabel(field, participant = null) {
+  if (SEQUELA_QUESTIONS[field]) return SEQUELA_QUESTIONS[field];
+  const loc = /^sequelaUses:(.+)$/.exec(String(field || ''))?.[1];
+  if (!loc) return null;
+  const zone = sequelaRows(participant).find(row => row.type === 'loc-dr' && row.loc === loc)?.label?.split(' : ')[0] || loc;
+  return `Séquelle : le Test utilise-t-il cette zone (${zone}) ?`;
+}
+
 /**
  * Règles de Test des séquelles pour un participant qui teste : modificateurs de DR, Avantages/Désavantages, restrictions,
  * précisions manquantes et variation du score. Une circonstance que l'outil ne connaît pas est demandée au MJ, jamais devinée.
  */
 export function sequelaTestRules({ actor, opponent = null, skillLabel = '', actionLabel = '', carac = null, kind = 'test', defending = false, attack = false, context = {}, weaponHands = null, shieldUsed = false } = {}) {
-  const out = { modifiers: [], advantages: [], disadvantages: [], restrictions: [], unresolved: [], scoreDelta: 0, sources: [], offHand: null };
+  // `questions` (CA22) : `{ field, label }` de chaque circonstance sans réponse, pour `needsInput`.
+  const out = { modifiers: [], advantages: [], disadvantages: [], restrictions: [], unresolved: [], questions: [], scoreDelta: 0, sources: [], offHand: null };
   const rows = sequelaRows(actor);
   const label = `${skillLabel} ${actionLabel}`;
   const key = normalizeCarac(carac);
@@ -278,7 +299,11 @@ export function sequelaTestRules({ actor, opponent = null, skillLabel = '', acti
   const flag = name => context?.[name];
   // Test imposé sans interface de saisie (départage d'Initiative) : aucune circonstance n'est supposée, aucune question n'est posée.
   const noInput = context?.sequelaNoCircumstanceInput === true;
-  const ask = (name, text) => { if (noInput) return false; if (typeof flag(name) !== 'boolean') out.unresolved.push(text); return flag(name) === true; };
+  const ask = (name, text) => {
+    if (noInput) return false;
+    if (typeof flag(name) !== 'boolean') { out.unresolved.push(text); if (!out.questions.some(row => row.field === name)) out.questions.push({ field: name, label: sequelaQuestionLabel(name, actor) || text }); }
+    return flag(name) === true;
+  };
   const used = new Set();
   const once = (row, apply) => { if (used.has(row.type + (row.loc || ''))) return; used.add(row.type + (row.loc || '')); apply(); };
   const push = (row, amount) => { out.modifiers.push({ id: `sequela:${row.id}`, label: row.label, amount }); out.sources.push(row.id); };

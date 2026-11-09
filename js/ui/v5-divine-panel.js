@@ -1,4 +1,5 @@
 /** Brouillon de prière conservé entre rendus ; seul le Store peut confirmer une conséquence. */
+import { testQuestionLabel, answeredSequelaFields } from '../core/v5-test-modifiers.js';
 import {spellObjectChoices} from '../core/equipment.js';
 import {CAMP_LABELS} from '../core/encounters.js';
 import {getAllDivineContracts} from '../core/v5-divine-store.js';
@@ -59,6 +60,16 @@ export function createDivinePanel({Store,refresh,onRollChange=()=>{}}){
   input.addEventListener('input',()=>{state[key]=input.value;if(key.startsWith('wrathRecovery')&&state.recoveryPreview)state.recoveryPreview={...state.recoveryPreview,ready:false};if(!key.startsWith('wrath'))state.testOptionId='';state.preview=key.startsWith('wrath')&&state.preview?{...state.preview,ready:false}:null;state.error='';invalidateEditedForm(input);if(key==='roll')onRollChange();});
   wrap.append(input);container.append(wrap);return input;
  }
+ /** MJ 09/11 CA22 : une question Oui/Non par circonstance de séquelle (posée ou déjà répondue) ; réponses rangées dans `state[key]`. */
+ function sequelaQuestions(container,needs,answers,key,onChange){
+  const asked=(needs||[]).filter(row=>/^sequela/.test(row.field||''));
+  for(const field of [...new Set([...asked.map(row=>row.field),...answeredSequelaFields(answers)])]){
+   const label=asked.find(row=>row.field===field)?.label||testQuestionLabel(field)||field;
+   select(container,label,answers[field]===undefined?'':String(answers[field]),[['','À préciser'],['true','Oui'],['false','Non']],value=>{
+    const next={...answers};if(value==='')delete next[field];else next[field]=value==='true';onChange(key,next);
+   },key+'-'+field);
+  }
+ }
  function select(container,label,value,options,handler,key){
   const wrap=node('label','workspace-type',label),input=node('select');input.setAttribute('aria-label',label);input.dataset.focusKey='divine-'+(key||label);
   for(const [id,text] of options)input.append(new Option(text,id));input.value=value??'';input.addEventListener('change',()=>handler(input.value));wrap.append(input);container.append(wrap);return input;
@@ -102,8 +113,8 @@ export function createDivinePanel({Store,refresh,onRollChange=()=>{}}){
    wrathAllyIds:clone(state.wrathAllyIds),wrathAlliesConfirmed:state.wrathAlliesConfirmed==='true',wrathSkillIds:clone(state.wrathSkillIds),wrathRoundPolicy:state.wrathRoundPolicy||undefined,wrathActionDecision:state.wrathActionDecision||undefined,wrathRoundAnchor:state.wrathAnchorScene&&state.wrathAnchorRound?{sceneId:state.wrathAnchorScene,round:Number(state.wrathAnchorRound)}:undefined,
    wrathRoll:state.wrathRoll===''?undefined:Number(state.wrathRoll),wrathDurationRoll:state.wrathDurationRoll===''?undefined:Number(state.wrathDurationRoll),wrathConsequences:state.wrathConsequence.trim(),wrathPenanceText:state.wrathPenanceText||'',wrathRejectionConfirmed:state.wrathRejectionConfirmed==='true',wrathPrayAdvances:state.wrathPrayAdvances===undefined||state.wrathPrayAdvances===''?undefined:Number(state.wrathPrayAdvances),wrathFirstMorningAt:state.wrathFirstMorningAt===undefined||state.wrathFirstMorningAt===''?undefined:Number(state.wrathFirstMorningAt),...confiscationInput(),...summonInput(),
    wrathDamageRoll:state.wrathDamageRoll?Number(state.wrathDamageRoll):undefined,wrathEnduranceRoll:state.wrathEnduranceRoll?Number(state.wrathEnduranceRoll):undefined,
-   wrathTestOptionId:state.wrathTestOptionId||undefined,wrathConditionContext:{conditionPenaltyMode:state.wrathConditionPenaltyMode||undefined,conditionPenaltyReason:state.wrathConditionPenaltyReason||''},
-   testOptionId:state.testOptionId||undefined,conditionContext:{conditionPenaltyMode:state.conditionPenaltyMode||undefined,conditionPenaltyReason:state.conditionPenaltyReason},
+   wrathTestOptionId:state.wrathTestOptionId||undefined,wrathConditionContext:{...(state.wrathSequelaAnswers||{}),conditionPenaltyMode:state.wrathConditionPenaltyMode||undefined,conditionPenaltyReason:state.wrathConditionPenaltyReason||''},
+   testOptionId:state.testOptionId||undefined,conditionContext:{...(state.prayerSequelaAnswers||{}),conditionPenaltyMode:state.conditionPenaltyMode||undefined,conditionPenaltyReason:state.conditionPenaltyReason},
    choices:clone(state.choices),...toEngineInput(state.form,{targetIds,contract,actor}),...(isBrokenActor(actor)&&typeof state.brokenEscapeVisibility==='boolean'?{brokenEscapeFacts:{visibleToAnyEnemy:state.brokenEscapeVisibility}}:{}),expiry};
  }
  function accessControls(container,preview,{recovery=false}={}){
@@ -416,11 +427,11 @@ export function createDivinePanel({Store,refresh,onRollChange=()=>{}}){
    accessBox.append(node('p','workspace-muted','Cette exception autorise uniquement cette prière pour ce sujet; elle ne débloque pas une source ni n’ajoute de mécanique.'));
   }
   const conditionResult=resolveV5ConditionTestContext(actor,{characteristic:'Soc',isAction:true,involvesMovement:false,
-   runningOrHiding:false,requiresSight:false,reliesOnSight:false,conditionPenaltyMode:state.conditionPenaltyMode||undefined,
+   runningOrHiding:false,requiresSight:false,reliesOnSight:false,talentContext:state.prayerSequelaAnswers||{},conditionPenaltyMode:state.conditionPenaltyMode||undefined,
    conditionPenaltyReason:state.conditionPenaltyReason});
   const needsPenaltyArbitration=conditionResult.needsInput.some(row=>['conditionPenaltyMode','conditionPenaltyReason'].includes(row.field))
    ||Boolean(conditionResult.arbitration);
-  if(Object.keys(conditionResult.levels).length||conditionResult.needsInput.length||conditionResult.restrictions.length){
+  if(Object.keys(conditionResult.levels).length||conditionResult.needsInput.length||conditionResult.restrictions.length||Object.keys(state.prayerSequelaAnswers||{}).length){
    const conditions=node('details','workspace-v5-context-details');conditions.open=!conditionResult.ready||conditionResult.ignoredPenaltySources.length>0;
    conditions.append(node('summary','','États appliqués au Test de Prière (Soc)'));
    const penalties=[...conditionResult.slModifiers.map(row=>`${row.amount} DR · ${row.label}`),
@@ -434,8 +445,10 @@ export function createDivinePanel({Store,refresh,onRollChange=()=>{}}){
    }
    if(needsPenaltyArbitration||conditionResult.needsInput.some(row=>row.field==='conditionPenaltyReason'))
     field(conditions,'Motif de l’arbitrage MJ DIV-05','conditionPenaltyReason',{type:'text'});
-   if(conditionResult.needsInput.some(row=>!['conditionPenaltyMode','conditionPenaltyReason'].includes(row.field)))
-    conditions.append(node('p','workspace-field-error',conditionResult.needsInput.filter(row=>!['conditionPenaltyMode','conditionPenaltyReason'].includes(row.field)).map(row=>row.label).join(' ')));
+   // MJ 09/11 CA22 : circonstance de séquelle du prêtre (champ `sequela…`), posée et corrigeable.
+   sequelaQuestions(conditions,conditionResult.needsInput,state.prayerSequelaAnswers||{},'prayerSequelaAnswers',change);
+   if(conditionResult.needsInput.some(row=>!['conditionPenaltyMode','conditionPenaltyReason'].includes(row.field)&&!/^sequela/.test(row.field||'')))
+    conditions.append(node('p','workspace-field-error',conditionResult.needsInput.filter(row=>!['conditionPenaltyMode','conditionPenaltyReason'].includes(row.field)&&!/^sequela/.test(row.field||'')).map(row=>row.label).join(' ')));
    content.append(conditions);
   }
   content.append(accessBox);  const form=node('div','workspace-resolution-row');content.append(form);
@@ -584,7 +597,8 @@ export function createDivinePanel({Store,refresh,onRollChange=()=>{}}){
      if(damage.diceCount)field(outcome,`Jet de Blessures du Courroux (${damage.diceCount}d10)`,'wrathDamageRoll',{min:damage.diceCount,max:10*damage.diceCount});
      field(outcome,'Jet de Résistance du Courroux (d100)','wrathEnduranceRoll',{min:1,max:100});
      outcome.append(node('p','workspace-muted',`Difficulté de Résistance : ${damage.enduranceDifficulty>=0?'+':''}${damage.enduranceDifficulty} DR. Péchés utilisés pour les Blessures : ${damage.sinAtTest}, avant décrément.`));
-     if(result.needsInput?.some(row=>row.field?.startsWith('wrathConditionContext.'))||state.wrathConditionPenaltyMode){
+     sequelaQuestions(outcome,(result.needsInput||[]).filter(row=>row.field?.startsWith('wrathConditionContext.sequela')).map(row=>({...row,field:row.field.slice('wrathConditionContext.'.length)})),state.wrathSequelaAnswers||{},'wrathSequelaAnswers',changeWrath);
+     if(result.needsInput?.some(row=>row.field?.startsWith('wrathConditionContext.')&&!row.field.startsWith('wrathConditionContext.sequela'))||state.wrathConditionPenaltyMode){
       select(outcome,'Arbitrage des États pour la Résistance',state.wrathConditionPenaltyMode,[['','Choisir pour ce Test'],['sl','Retenir le plus fort malus en DR'],['disadvantage','Retenir le Désavantage']],value=>changeWrath('wrathConditionPenaltyMode',value),'wrathConditionPenaltyMode');
       field(outcome,'Motif de l’arbitrage pour la Résistance','wrathConditionPenaltyReason',{type:'text'});
      }

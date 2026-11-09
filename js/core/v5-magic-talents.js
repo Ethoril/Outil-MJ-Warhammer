@@ -115,6 +115,8 @@ export function prepareMagicOptions(actor, kind, options={}, spell = null) {
   next.disadvantageSources=[...(options.disadvantageSources || []),...conditions.disadvantageRows,...common.parts.talents.disadvantageSources,...common.disadvantageSources.filter(row=>row.durable)];
   next.scoreDelta=common.scoreDelta||0;
   next.conditionNeeds=common.needsInput.map(row=>row.label);
+  // MJ 09/11 CA22 : questions avec leur champ (circonstances de séquelle `sequela…` comprises), pour le panneau.
+  next.conditionNeedRows=common.needsInput.map(row=>({...row}));
   next.conditionRows=common.rows;next.testUnresolved=common.unresolved;next.testModifiers=common;next.dispelKeyRows=dispelKeys?layers.magic.filter(row=>dispelKeys.has(fold(row.id.replace(/^spell-skill:/,'')).trim())).length:0;
   if(['casting','channelling'].includes(kind)){const ground=groundCastModifier(actor,{aboard:slannAboard(actor)});if(ground.available && ground.modifier)slModifiers.push({id:'slann-ground',label:'Slann au sol',amount:ground.modifier});}
   if(Number(activeMagicTalent(actor,'sanctuary-of-the-mind')?.magicTalentRank)>=3)for(const modifier of slModifiers)if(modifier.id==='yenlui' && modifier.amount<0)modifier.amount=0;

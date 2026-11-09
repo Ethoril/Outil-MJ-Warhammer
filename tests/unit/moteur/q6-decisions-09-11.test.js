@@ -14,6 +14,8 @@ import { getDivineContract } from '../../../js/core/v5-divine-store.js';
 import { resoluteException } from '../../../js/core/v5-talent-replacements.js';
 import { acquireV5Conditions } from '../../../js/core/v5-effects.js';
 import { createAftermathState, registerWoundIncident, treatInfection } from '../../../js/core/v5-aftermath.js';
+import { recordPostEncounterTest } from '../../../js/core/v5-sequelae.js';
+import { visibleConditionQuestions } from '../../../js/ui/resolution-panel/condition-questions.js';
 import { createStore } from '../../../js/core/store.js';
 import { getReferenceCatalogue } from '../../../js/core/reference-catalog.js';
 import { CONDITION_QUESTIONS } from '../../../js/core/condition-effects.js';
@@ -73,11 +75,6 @@ describe('CA13 séquelles durables dans le calcul commun', () => {
     const seeing = previewV5SecondaryTest(actor, { score: 40, roll: 23, test: { characteristic: 'I', skill: 'Perception' }, context: { reliesOnSight: true } });
     assert.deepEqual(seeing.disadvantageSources.map(row => row.label), ['Deux yeux perdus']);
   });
-  test('séquelle à circonstance (zone utilisée) : pas de question sur un Test secondaire, rien appliqué', () => {
-    const actor = person('a', { v5: sequelae([{ id: 'sq-loc', type: 'loc-dr', loc: 'head', amount: -1, label: 'Tête : −1 DR' }]) });
-    const out = previewV5SecondaryTest(actor, { score: 40, roll: 23, test: { characteristic: 'E', skill: 'Résistance' } });
-    assert.deepEqual([out.ready, out.modifiers.length], [true, 0]);
-  });
   test('désengagement : Agilité perdue sur l’Esquive du désengagé', () => {
     const plan = disengage(duel({ actor: { v5: sequelae([AG_LOSS]) } }), { actorRoll: 21, opponentRoll: 50 });
     // 35 − 10 = 25 contre 21 : 0 DR (au lieu de +1).
@@ -131,6 +128,84 @@ describe('CA14 Inconscient et Surpris', () => {
       runningOrHiding: false, requiresSight: false, reliesOnSight: false });
     assert.equal(context.ready, false);
     assert.deepEqual(context.restrictions, ['Inconscient : aucun Test ne peut être tenté.']);
+  });
+});
+
+describe('CA21 Tests subis d’un Inconscient', () => {
+  const unconscious = () => person('a', { states: [UNCONSCIOUS] });
+  test('Test subi (passive) : fait normalement ; le même Test actif reste bloqué', () => {
+    const passive = previewV5SecondaryTest(unconscious(), { score: 40, roll: 23, test: { characteristic: 'E', skill: 'Résistance', passive: true } });
+    assert.equal(passive.ready, true);
+    const active = previewV5SecondaryTest(unconscious(), { score: 40, roll: 23, test: { characteristic: 'E', skill: 'Résistance' } });
+    assert.deepEqual([active.ready, active.blocked], [false, true]);
+  });
+  test('Test subi : les malus d’États comptent (Exténué)', () => {
+    const out = previewV5SecondaryTest(person('a', { states: [UNCONSCIOUS, { key: 'extenue', name: 'Exténué', level: 2 }] }), { score: 40, roll: 23, test: { characteristic: 'E', skill: 'Résistance', passive: true } });
+    assert.deepEqual(out.modifiers.map(row => [row.id, row.amount]), [['conditions', -2]]);
+  });
+  test('convalescence : la Résistance d’un patient Inconscient est faite', () => {
+    const state = { ...createAftermathState(), sequelae: [{ id: 'toe', participantId: 'patient', kind: 'post-encounter-test', status: 'open', difficultyDR: 0 }] };
+    const out = recordPostEncounterTest(state, { operationId: 'p', expectedRevision: 0, sequelaId: 'toe', enduranceScore: 30, roll: 25, tester: person('patient', { states: [UNCONSCIOUS] }) });
+    assert.equal(out.receipt.status, 'applied', out.receipt.reason);
+  });
+  test('soins : le Test de Guérison d’un soigneur Inconscient reste bloqué (Test actif)', () => {
+    const opened = registerWoundIncident(createAftermathState(), { id: 'i1', operationId: 'r', expectedRevision: 0, participantId: 'patient', source: { kind: 'wounds-lost', cause: 'combat' } });
+    const state = { ...opened.state, incidents: opened.state.incidents.map(row => ({ ...row, infection: true })) };
+    const out = treatInfection(state, { operationId: 'o', expectedRevision: state.revision, incidentId: 'i1', healer: { participantId: 'healer', skill: 'heal', score: 60, advances: 10, intelligenceBonus: 5 },
+      roll: 42, tester: person('healer', { states: [UNCONSCIOUS] }) });
+    assert.equal(out.receipt.status, 'refused');
+    assert.deepEqual(out.receipt.needsInput.map(row => row.label), ['Inconscient : aucun Test ne peut être tenté.']);
+  });
+  test('Résistance au Courroux (contexte de Test, passive) : faite par un Inconscient', () => {
+    const facts = { characteristic: 'E', isAction: false, involvesMovement: false, runningOrHiding: false, requiresSight: false, reliesOnSight: false };
+    assert.equal(resolveV5ConditionTestContext(person('p', { states: [UNCONSCIOUS] }), { ...facts, passive: true }).ready, true);
+    assert.equal(resolveV5ConditionTestContext(person('p', { states: [UNCONSCIOUS] }), facts).ready, false);
+  });
+});
+
+describe('CA22 séquelles à circonstance : question au MJ', () => {
+  const HEAD = { id: 'sq-loc', type: 'loc-dr', loc: 'head', amount: -1, label: 'Tête : −1 DR' };
+  const HAND = { id: 'sq-hand', type: 'two-hands', label: 'Main perdue' };
+  test('zone utilisée : question, Test non résolu ; « oui » applique la séquelle, « non » l’écarte', () => {
+    const actor = person('a', { v5: sequelae([HEAD]) });
+    const run = context => previewV5SecondaryTest(actor, { score: 40, roll: 23, test: { characteristic: 'E', skill: 'Résistance' }, context });
+    const pending = run({});
+    assert.equal(pending.ready, false);
+    assert.deepEqual(pending.needsInput, [{ field: 'sequelaUses:head', label: 'Séquelle : le Test utilise-t-il cette zone (Tête) ?' }]);
+    assert.deepEqual(run({ 'sequelaUses:head': true }).modifiers.map(row => [row.id, row.amount]), [['sequela:sq-loc', -1]]);
+    assert.deepEqual(run({ 'sequelaUses:head': false }).modifiers, []);
+  });
+  test('parole sur un Test de Langue : « Le Test demande-t-il de parler ? »', () => {
+    const actor = person('a', { v5: sequelae([{ id: 'sq-sp', type: 'speech-dr', amount: -2, label: 'Langue fendue' }]) });
+    const pending = previewV5SecondaryTest(actor, { score: 40, roll: 23, test: { characteristic: 'Int', skill: 'Langue (Reikspiel)' } });
+    assert.deepEqual(pending.needsInput.map(row => row.field), ['sequelaSpeech']);
+    assert.match(pending.needsInput[0].label, /demande-t-il de parler/);
+  });
+  test('désengagement : la main perdue pose sa question au désengagé, la réponse débloque', () => {
+    const setup = duel({ actor: { v5: sequelae([HAND]) } });
+    const pending = disengage(setup, { actorRoll: 21, opponentRoll: 50 });
+    assert.equal(pending.status, 'needs-input');
+    assert.deepEqual(pending.needsInput.map(row => [row.side, row.field]), [['actor', 'sequelaTwoHands']]);
+    const answered = disengage(setup, { actorRoll: 21, opponentRoll: 50, context: { sequelaTwoHands: true } });
+    assert.deepEqual([answered.status, answered.actorModifiers.disadvantageSources.map(row => row.label)], ['ready', ['Main ou bras perdu (Test à deux mains)']]);
+  });
+  test('contexte de Test (Prière) : question en needsInput, réponse par le contexte des talents', () => {
+    const facts = { characteristic: 'Soc', isAction: true, involvesMovement: false, runningOrHiding: false, requiresSight: false, reliesOnSight: false, skill: 'Prière' };
+    const actor = person('p', { v5: sequelae([HEAD]) });
+    const pending = resolveV5ConditionTestContext(actor, facts);
+    assert.deepEqual([pending.ready, pending.needsInput.map(row => row.field)], [false, ['sequelaUses:head']]);
+    const answered = resolveV5ConditionTestContext(actor, { ...facts, talentContext: { 'sequelaUses:head': true } });
+    assert.deepEqual([answered.ready, answered.slModifiers.map(row => row.amount)], [true, [-1]]);
+  });
+  test('magie : la question est rendue avec son champ et affichée par le panneau, puis corrigeable', () => {
+    const prepared = prepareMagicOptions(person('m', { v5: sequelae([HAND]) }), 'channelling', {});
+    assert.deepEqual(prepared.conditionNeedRows.map(row => row.field), ['sequelaTwoHands']);
+    assert.deepEqual(visibleConditionQuestions(prepared.conditionNeeds, {}, prepared.conditionNeedRows).map(row => row.field), ['sequelaTwoHands']);
+    assert.deepEqual(visibleConditionQuestions([], { sequelaTwoHands: false }, []).map(row => [row.field, row.kind]), [['sequelaTwoHands', 'boolean']]);
+  });
+  test('départage d’Initiative (sequelaNoCircumstanceInput) : aucune question', () => {
+    const out = previewV5SecondaryTest(person('a', { v5: sequelae([HEAD, HAND]) }), { score: 40, roll: 23, test: { characteristic: 'E', skill: 'Résistance' }, context: { sequelaNoCircumstanceInput: true } });
+    assert.deepEqual([out.ready, out.modifiers], [true, []]);
   });
 });
 

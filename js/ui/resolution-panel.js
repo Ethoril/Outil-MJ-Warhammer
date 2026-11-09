@@ -26,7 +26,7 @@ import { deriveEngagementContext, engagedWith } from '../core/engagements.js';
 import { hasV5Talent, V5_TALENT_IDS } from '../core/v5-talents.js';
 import { ammunitionCompatibility, equipmentAttackContext, weaponSkillGroupInfo, conjuredWeaponMetadata, weaponHandsForParticipant } from '../core/equipment.js';
 import { isBlackpowderIncidentEligible } from '../core/v5-combat-fumbles.js';
-import { resolveV5TestModifiers, MIXED_CONDITION_QUESTION } from '../core/v5-test-modifiers.js';
+import { resolveV5TestModifiers, MIXED_CONDITION_QUESTION, testQuestionLabel, answeredSequelaFields } from '../core/v5-test-modifiers.js';
 import { previewV5SecondaryTest, secondaryTestDetail } from '../core/v5-test-modifiers.js';
 import { CONDITION_QUESTIONS } from '../core/condition-effects.js';
 import { deriveHitMorphology, normalizeHitMorphology } from '../core/v5-hit-morphology.js';
@@ -155,9 +155,15 @@ function blockingReasonItem(reason, field, { section, handlers }) {
 const SECONDARY_QUESTIONS = [['involvesMovement', CONDITION_QUESTIONS.movement], ['runningOrHiding', CONDITION_QUESTIONS.escape],
   ['reliesOnSight', CONDITION_QUESTIONS.sight], ['usesFellowship', CONDITION_QUESTIONS.fellowship], ['conditionPenaltyMode', MIXED_CONDITION_QUESTION]];
 function secondaryConditionFields(container, { subject, test, context = {}, pendingLabels = [], title, focusPrefix, onChange }) {
-  const open = new Set(subject ? resolveV5TestModifiers(subject, { kind: 'test', ...test }, context).needsInput.map(row => row.field) : []);
+  const asked = subject ? resolveV5TestModifiers(subject, { kind: 'test', ...test }, context).needsInput.filter(row => row.field) : [];
+  const open = new Set(asked.map(row => row.field));
   for (const [field, text] of SECONDARY_QUESTIONS) if (pendingLabels.some(label => String(label).endsWith(text))) open.add(field);
-  for (const [field, text] of SECONDARY_QUESTIONS) {
+  // MJ 09/11 CA22 : circonstances de séquelle (champs `sequela…`), posées puis corrigeables comme les États.
+  const known = new Set(SECONDARY_QUESTIONS.map(([field]) => field));
+  const sequelaQuestions = [...new Set([...asked.map(row => row.field), ...answeredSequelaFields(context)])].filter(field => !known.has(field))
+    .map(field => [field, asked.find(row => row.field === field)?.label || testQuestionLabel(field, subject) || field]);
+  for (const [field] of sequelaQuestions) open.add(field);
+  for (const [field, text] of [...SECONDARY_QUESTIONS, ...sequelaQuestions]) {
     if (!open.has(field) && context[field] == null) continue;
     const label = node('label', 'workspace-type', `${title} : ${text}`), select = document.createElement('select');
     select.setAttribute('aria-label', label.textContent);
@@ -1376,7 +1382,7 @@ export function renderResolutionPanel(options) {
       fields.append(label);
     }
     if(Number.isFinite(Number(target?.caracs?.E)))fields.append(node('p','workspace-muted',`Endurance de la cible : ${target.caracs.E} (reporter la compétence Résistance si elle figure sur la fiche ; l’outil ajoute États, talents, sorts et prières).`));
-    secondaryConditionFields(fields,{subject:target,test:{characteristic:'E',skill:'Résistance'},context:stored.conditionContext||{},pendingLabels:(draft.preview?.unresolved||[]).filter(text=>String(text).startsWith('Warp Blade, Test de Résistance')),
+    secondaryConditionFields(fields,{subject:target,test:{characteristic:'E',skill:'Résistance',passive:true},context:stored.conditionContext||{},pendingLabels:(draft.preview?.unresolved||[]).filter(text=>String(text).startsWith('Warp Blade, Test de Résistance')),
       title:'Warp Blade, Test de la cible',focusPrefix:'warp-blade-condition',onChange:next=>setTest('conditionContext',Object.keys(next).length?next:undefined)});
     fields.append(node('p','workspace-muted','La Warp Blade ignore les PA des pièces métalliques; ses qualités Défensive, Tailleuse et Empaleuse sont imprimées dans le profil d’attaque.'));
   }
@@ -2875,12 +2881,12 @@ export function renderResolutionPanel(options) {
       addNumber('recoilTestBase','Résistance : score de fiche, sans modificateurs (Test à +2 DR)',1,100);
       addNumber('recoilTestRoll','d100 de Résistance',1,100);
       const base=Number(current.recoilTestBase),roll=Number(current.recoilTestRoll),recoilContext=current.recoilTestContext||{};
-      secondaryConditionFields(controls,{subject:actor,test:{characteristic:'E',skill:'Résistance'},context:recoilContext,pendingLabels:(draft.preview?.unresolved||[]).filter(text=>String(text).startsWith('Arquebuse à salve, Test de Résistance')),
+      secondaryConditionFields(controls,{subject:actor,test:{characteristic:'E',skill:'Résistance',passive:true},context:recoilContext,pendingLabels:(draft.preview?.unresolved||[]).filter(text=>String(text).startsWith('Arquebuse à salve, Test de Résistance')),
         title:'Recul, Test de Résistance',focusPrefix:'recoil-condition',onChange:next=>handlers.select({v5Context:{...current,recoilTestContext:Object.keys(next).length?next:undefined}})});
       let recoilTest=null;
       if(Number.isInteger(base)&&base>=1&&base<=100&&Number.isInteger(roll)&&roll>=1&&roll<=100){
         // Q6 T6 : même calcul que la résolution (v5-combat-fumbles.js), score de fiche nu + modificateurs communs du tireur (CA12, CA5).
-        const secondary=previewV5SecondaryTest(actor,{score:base,roll,test:{characteristic:'E',skill:'Résistance'},context:recoilContext,slModifiers:[{id:'f2-e:salvo-recoil',label:'Recul de l’arquebuse à salve',amount:2}]});
+        const secondary=previewV5SecondaryTest(actor,{score:base,roll,test:{characteristic:'E',skill:'Résistance',passive:true},context:recoilContext,slModifiers:[{id:'f2-e:salvo-recoil',label:'Recul de l’arquebuse à salve',amount:2}]});
         if(secondary.ready){
           recoilTest=secondary.result;
           controls.append(node('p','workspace-muted',`Recul : Test de Résistance ${recoilTest.success?'réussi':'raté'} (${recoilTest.sl>=0?'+':''}${recoilTest.sl} DR) · ${secondaryTestDetail(secondary).join(' · ')}`));

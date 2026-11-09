@@ -41,6 +41,8 @@ Le MJ a décidé les 05 et 06/11 que tous les Tests, et pas seulement le Test pr
 - **CA18** Obstiné annule aussi les malus propres à un Test (Courroux sur la Prière, Relique négative, difficulté de la Résistance au Courroux, −1 DR de l'infection…), en lecture littérale, comme au combat.
 - **CA19** Déterminé applique les exceptions d'États (Endurance de l'anachorète, Clarté d'esprit…).
 - **CA20** L'État que Déterminé cherche à éviter ne compte pas dans son propre Test de Calme.
+- **CA21** (MJ 09/11, précise CA14) CA14 vise les Tests où l'on agit. Les Tests subis (résister à la Warp Blade, Résistance de convalescence, Résistance au Courroux, toute résistance passive du même genre) restent faits normalement par un Inconscient, avec les malus d'États. L'appelant distingue les deux par un drapeau (`passive`).
+- **CA22** (MJ 09/11, précise CA13) Les séquelles à circonstance (zone utilisée, parole, deux mains, ouïe, odorat, cicatrice appropriée…) ne sont pas ignorées sur un Test secondaire : comme pour les États, le Test pose la question au MJ (`needsInput`) et reste non résolu tant qu'elle n'a pas de réponse ; la réponse décide si la séquelle s'applique.
 
 ## Hors périmètre
 

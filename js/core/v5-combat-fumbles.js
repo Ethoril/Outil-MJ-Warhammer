@@ -145,7 +145,7 @@ function participantEffects(normalized, context, resolution = {}) {
     else {
       // Q6 T6 (CA12) : score de fiche nu + modificateurs communs du tireur (États, talents, sorts, prières) ; les précisions d'États de
       // ce Test de Résistance ont leur propre contexte (recoilTestContext), sans réponse le recul reste non résolu (CA8).
-      const secondary=previewV5SecondaryTest(normalized.actor,{score:base,roll:testRoll,test:{characteristic:'E',skill:'Résistance'},context:context.recoilTestContext||{},slModifiers:[{id:'salvo-recoil',label:'Résistance (+2 DR)',amount:2}]});
+      const secondary=previewV5SecondaryTest(normalized.actor,{score:base,roll:testRoll,test:{characteristic:'E',skill:'Résistance',passive:true},context:context.recoilTestContext||{},slModifiers:[{id:'salvo-recoil',label:'Résistance (+2 DR)',amount:2}]});
       if(!secondary.ready)unresolved.push(...secondary.needsInput.map(row=>'Arquebuse à salve, Test de Résistance : '+row.label));
       else {
       const test=secondary.result;

@@ -224,13 +224,15 @@ export function resolveV5ConditionTestContext(actor, context = {}) {
   slModifiers.push(...common.slModifiers.filter(row => row.durable));
   advantageSources.push(...common.advantageSources.filter(row => row.durable));
   disadvantageSources.push(...common.disadvantageSources.filter(row => row.durable));
-  if (common.parts.sequelae.unresolved.length)
+  if (common.parts.sequelae.unresolved.includes('Séquelle : préciser si le Test est influencé par la vue.'))
     addNeed(needsInput, seenNeeds, 'reliesOnSight', 'Préciser si la tâche repose fortement sur la vue.');
+  // MJ 09/11 CA22 : circonstance d'une séquelle (zone, parole, deux mains…) demandée au MJ ; réponse dans `talentContext`.
+  for (const row of common.parts.sequelae.questions || []) addNeed(needsInput, seenNeeds, row.field, row.label);
   restrictions.push(...common.parts.sequelae.restrictions);
   if (levels.aveugle && requiresSight === true) restrictions.push('Aveuglé : cette tâche exige strictement la vue.');
   if (isAction === true && levels.surpris) restrictions.push('Surpris : aucune Action ne peut être entreprise.');
-  // MJ 09/11 CA14 : Inconscient, aucun Test, Action ou non.
-  if (levels.inconscient) restrictions.push(context.isAction === true ? 'Inconscient : aucune Action ne peut être entreprise.' : 'Inconscient : aucun Test ne peut être tenté.');
+  // MJ 09/11 CA14 : Inconscient, aucun Test, Action ou non ; CA21 : sauf un Test subi (`passive`, Résistance au Courroux…).
+  if (levels.inconscient && context.passive !== true) restrictions.push(context.isAction === true ? 'Inconscient : aucune Action ne peut être entreprise.' : 'Inconscient : aucun Test ne peut être tenté.');
 
   return {
     ready: needsInput.length === 0 && restrictions.length === 0,
@@ -252,7 +254,7 @@ export function resolveV5ConditionTestContext(actor, context = {}) {
 
 /**
  * Q6 T1 : ajoute aux listes d'un Test les talents génériques rendus par `resolveV5ConditionTestContext` (`result.talents`), puis
- * applique les plafonds de fin de calcul (Distrait, Esprit fort V5 p. 127) sur la liste complète, comme au combat. Les lignes sont
+ * applique les plafonds de fin de calcul (Distrait, Obstiné V5 p. 127) sur la liste complète, comme au combat. Les lignes sont
  * recopiées : le résultat du contexte n'est pas modifié.
  */
 export function withV5TestTalents(actor, result, { slModifiers = [], advantageSources = [], disadvantageSources = [] } = {}) {

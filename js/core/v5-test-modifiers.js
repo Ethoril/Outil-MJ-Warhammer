@@ -18,13 +18,15 @@
  *    Le combat ne les lit que pour le testeur qui n'est pas le défenseur ; le calcul commun garde cette règle telle quelle
  *    (`role !== 'defender'`), sans la trancher.
  *  - Séquelles durables et temporaires (`sequelaTestRules`, MJ 09/11 CA13) : elles pèsent sur tout Test dont elles visent la
- *    Caractéristique ou la compétence. Le combat passe la main, le bouclier et l'arme (`test.sequela`) et ses réponses ; un Test
- *    secondaire, sans écran pour ces circonstances, n'applique que les séquelles inconditionnelles (`sequelaNoCircumstanceInput`,
- *    comme le départage d'Initiative), sauf les deux yeux perdus, qui posent la question de la vue des États. Lignes marquées
+ *    Caractéristique ou la compétence. Le combat passe la main, le bouclier et l'arme (`test.sequela`) et ses réponses. Sur un Test
+ *    secondaire, une séquelle à circonstance (zone utilisée, parole, deux mains, ouïe, odorat…) pose sa question au MJ dans
+ *    `needsInput` (champ `sequela…` du contexte, MJ 09/11 CA22), comme un État ; les deux yeux perdus posent la question de la vue
+ *    des États. Un contexte `sequelaNoCircumstanceInput` (départage d'Initiative) n'en pose aucune. Lignes marquées
  *    `durable` : « les pertes durables ne sont pas des pénalités d'État », aucun plafond (Obstiné, Distrait) ne les efface.
  *    `scoreDelta` (Caractéristique perdue) s'ajoute au score du Test.
  *  - Restrictions d'acteur (MJ 09/11 CA14) : Inconscient, aucun Test ; Surpris, aucun Test qui demande d'agir
- *    (`test.isAction` : désengagement, pause et interruption de Focalisation) ; `restrictions` bloque le Test secondaire.
+ *    (`test.isAction` : désengagement, pause et interruption de Focalisation) ; `restrictions` bloque le Test secondaire. CA21 : un
+ *    Test subi (`test.passive` : résister à la Warp Blade, Résistance de convalescence ou au Courroux…) reste fait par un Inconscient.
  *  - Plafonds de fin de calcul (`finalizeV5TestModifiers`) : Obstiné (`talent-strong-minded`, `ignoreNegativeModifiers`,
  *    Livre de base V5 p. 127, contrat de js/data/v5-additional-talent-contracts.json) annule tout modificateur négatif d'un Test, et
  *    Distrait (`noMomentumOrAdvantage`, v5-talent-actions.js) ôte tout Avantage. Les deux visent un Test quelconque, mais portent
@@ -72,7 +74,7 @@ import { withCompanionTalents } from './familiars.js';
 import { previewV5TalentTestModifiers } from './v5-talent-tests.js';
 import { magicTestModifiers, magicAdverseModifiers } from './v5-magic-talents.js';
 import { conditionPenaltyEffects, conditionDisadvantageEffects, conditionTestRules, conditionDisadvantageRows, CONDITION_QUESTIONS } from './condition-effects.js';
-import { sequelaTestRules } from './v5-sequela-effects.js';
+import { sequelaTestRules, sequelaQuestionLabel } from './v5-sequela-effects.js';
 
 /** Niveaux d'États actifs du participant (clé sans espace ni tiret → niveau cumulé) ; marqueurs de talent exclus. */
 export const conditionLevels = actor => {
@@ -105,7 +107,8 @@ const MENTAL = new Set(['Int', 'I', 'FM', 'Soc']);
  *     rang 2) ; `appliesKey(key)` remplace la table des clés de couche quand le Test lit aussi des clés hors compétence (clé
  *     `Dissipation` du Test de Dissipation) : les clés retenues forment un seul Test, cumulées comme les autres.
  *   - CA13 : `sequela` (`{ actionLabel, defending, attack, weaponHands, shieldUsed }`) : arguments du combat pour les séquelles ;
- *     sans lui, Test secondaire (séquelles inconditionnelles seulement). CA14 : `isAction` (Test qui demande d'agir, Surpris).
+ *     sans lui, Test secondaire (questions de circonstance en `needsInput`, CA22). CA14 : `isAction` (Test qui demande d'agir,
+ *     Surpris) ; CA21 : `passive` (Test subi : Inconscient ne le bloque pas).
  * `context` : contexte du Test (`settings.context` du combat) : réponses du MJ (`involvesMovement`, `conditionPenaltyMode`…).
  * Rend :
  *  - `slModifiers`, `advantageSources`, `disadvantageSources` : prêts pour `previewV5Test`, plafonds non appliqués
@@ -150,15 +153,19 @@ export function resolveV5TestModifiers(actor, test = {}, context = {}) {
     amount: -(penaltyEffects.levels.get(row.key) || 0), rule: row.rule, source: 'État' }));
   // CA13 : séquelles durables. Le combat fournit la main, le bouclier, l'arme et ses réponses ; un Test secondaire n'a pas d'écran
   // pour ces circonstances : séquelles inconditionnelles seulement, sauf la vue (deux yeux perdus), question commune aux États.
-  const sequelaContext = test.sequela ? situation : { ...situation, sequelaNoCircumstanceInput: true };
   const sequelae = sequelaTestRules({ actor, opponent, skillLabel, actionLabel: skillLabel, carac: situation.carac || test.skillCharacteristic || characteristic, kind,
-    context: sequelaContext, ...(test.sequela || {}) });
+    context: situation, ...(test.sequela || {}) });
   const durable = list => list.map(row => ({ ...row, durable: true }));
-  const sequelaRows = { modifiers: durable(sequelae.modifiers), advantages: durable(sequelae.advantages), disadvantages: durable(sequelae.disadvantages) };
-  const sequelaQuestions = test.sequela ? [] : sequelae.unresolved.map(() => CONDITION_QUESTIONS.sight);
+  // Main directrice perdue sur un Test secondaire de mêlée (réponse « oui ») : la pénalité de main non directrice, réduite par les
+  // 100 PX de réapprentissage ; le combat l'applique lui-même (règle générale, Ambidextre).
+  const offHand = !test.sequela && sequelae.offHand?.forced ? [{ id: 'penalty:offHand', label: 'Main secondaire (séquelle)', amount: Math.min(0, -2 + sequelae.offHand.reduction) }] : [];
+  const sequelaRows = { modifiers: [...durable(sequelae.modifiers), ...offHand], advantages: durable(sequelae.advantages), disadvantages: durable(sequelae.disadvantages) };
+  // CA22 : questions de circonstance (champ `sequela…`) ; deux yeux perdus : question de la vue des États.
+  const sightAsked = sequelae.unresolved.includes('Séquelle : préciser si le Test est influencé par la vue.');
+  const sequelaNeeds = test.sequela ? [] : [...(sightAsked ? [{ field: 'reliesOnSight', label: CONDITION_QUESTIONS.sight }] : []), ...sequelae.questions];
   // CA14 : Inconscient, aucun Test ; Surpris, aucun Test qui demande d'agir pendant ce Round.
   const levels = test.levels instanceof Map ? test.levels : conditionLevels(actor);
-  const actorRestrictions = [...(levels.get('inconscient') ? ['Inconscient : aucun Test ne peut être tenté.'] : []),
+  const actorRestrictions = [...(levels.get('inconscient') && test.passive !== true ? ['Inconscient : aucun Test ne peut être tenté.'] : []),
     ...(test.isAction === true && levels.get('surpris') ? ['Surpris : aucun Test qui demande d’agir pendant ce Round.'] : [])];
   const conditions = { rules, penaltyEffects, penalty, appliedPenalty, mixed, mixedUnresolved, penaltyRows, disadvantageRows, droppedRows,
     penaltyStates: [...penaltyEffects.levels].filter(([, value]) => value).map(([key]) => key) };
@@ -166,8 +173,9 @@ export function resolveV5TestModifiers(actor, test = {}, context = {}) {
   const slModifiers = [...layers.magic, ...adverse, ...penaltyRows, ...layers.talents, ...sequelaRows.modifiers];
   const advantageSources = [...talents.advantageSources, ...sequelaRows.advantages];
   const disadvantageSources = [...disadvantageRows, ...talents.disadvantageSources, ...sequelaRows.disadvantages];
-  const unresolved = [...rules.unresolved, ...mixedUnresolved, ...talents.unresolved, ...layers.unresolved, ...(test.sequela ? sequelae.unresolved : sequelaQuestions)];
-  const needsInput = [...new Set([...rules.unresolved, ...mixedUnresolved, ...sequelaQuestions])].map(label => ({ field: QUESTION_FIELDS.get(label) ?? null, label }));
+  const unresolved = [...rules.unresolved, ...mixedUnresolved, ...talents.unresolved, ...layers.unresolved, ...(test.sequela ? sequelae.unresolved : sequelaNeeds.map(row => row.label))];
+  const needsInput = [...[...new Set([...rules.unresolved, ...mixedUnresolved])].map(label => ({ field: QUESTION_FIELDS.get(label) ?? null, label })),
+    ...sequelaNeeds].filter((row, index, list) => !row.field || list.findIndex(other => other.field === row.field) === index);
   const tag = (list, source, rowKind) => list.map(row => ({ ...row, source, kind: rowKind }));
   const rows = [...tag(layers.magic, 'Sort ou prière', 'modifier'), ...tag(adverse, 'Effet adverse', 'modifier'), ...tag(penaltyRows, 'État', 'modifier'),
     ...tag(layers.talents, 'Talent', 'modifier'), ...tag(disadvantageRows, 'État', 'disadvantage'), ...tag(talents.advantageSources, 'Talent', 'advantage'),
@@ -229,3 +237,15 @@ export function secondaryTestDetail(secondary) {
   return [...secondary.modifiers.map(row => `${row.label} ${sign(row.amount)} DR`), ...secondary.advantageSources.map(row => `Avantage : ${row.label || row.id}`),
     ...secondary.disadvantageSources.map(row => `Désavantage : ${row.label || row.id}`), ...dropped];
 }
+
+/**
+ * CA22 : libellé de la question d'un champ de contexte d'un Test secondaire (États ou séquelle du sujet), pour les écrans qui
+ * affichent aussi les réponses déjà données ; null pour un champ inconnu. `testQuestionKind` : 'mode' (DR ou Désavantage) ou 'boolean'.
+ */
+export function testQuestionLabel(field, subject = null) {
+  for (const [label, key] of QUESTION_FIELDS) if (key === field) return label;
+  return sequelaQuestionLabel(field, subject);
+}
+export const testQuestionKind = field => (field === 'conditionPenaltyMode' ? 'mode' : 'boolean');
+/** Champs de séquelle déjà répondus dans un contexte (`sequela…`), pour que le MJ puisse revenir sur sa réponse. */
+export const answeredSequelaFields = (context = {}) => Object.keys(context || {}).filter(key => /^sequela(?!NoCircumstanceInput)/.test(key) && typeof context[key] === 'boolean');

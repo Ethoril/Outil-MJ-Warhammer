@@ -4,6 +4,7 @@
 import { node } from './dom.js';
 import { modifierLines } from './modifiers.js';
 import { CONDITION_QUESTIONS } from '../../core/condition-effects.js';
+import { testQuestionLabel, answeredSequelaFields } from '../../core/v5-test-modifiers.js';
 
 const MIXED_QUESTION = 'États de pénalités différentes : choisir les DR ou le Désavantage retenu par le MJ.';
 const BOOLEAN_FIELDS = new Map([[CONDITION_QUESTIONS.movement, 'involvesMovement'], [CONDITION_QUESTIONS.escape, 'runningOrHiding'],
@@ -18,10 +19,13 @@ export function conditionQuestions(needs = []) {
 const FIELD_TEXT = new Map([...[...BOOLEAN_FIELDS].map(([text, field]) => [field, text]), ['conditionPenaltyMode', MIXED_QUESTION]]);
 
 /** Questions ouvertes (`conditionNeeds`) puis celles déjà répondues (`magicConditionContext`), pour que le MJ puisse revenir sur sa réponse. */
-export function visibleConditionQuestions(needs = [], context = {}) {
+export function visibleConditionQuestions(needs = [], context = {}, rows = []) {
   const open = conditionQuestions(needs), seen = new Set(open.map(q => q.field));
   const answered = conditionQuestions([...FIELD_TEXT].filter(([field]) => !seen.has(field) && context?.[field] != null).map(([, text]) => text));
-  return [...open, ...answered];
+  // MJ 09/11 CA22 : circonstances de séquelle (`sequela…`), posées (`rows`, avec leur champ) ou déjà répondues.
+  const sequela = [...new Set([...(rows || []).map(row => row?.field).filter(field => /^sequela/.test(field || '')), ...answeredSequelaFields(context)])]
+    .map(field => ({ field, text: (rows || []).find(row => row?.field === field)?.label || testQuestionLabel(field) || field, kind: 'boolean' }));
+  return [...open, ...answered, ...sequela];
 }
 
 /** Lignes du détail des États appliqués à un Test de magie : `Désavantage : À terre`, pénalité d'État (même format que le combat). */
@@ -41,7 +45,7 @@ export function renderConditionDetail(preview) {
 
 export function renderConditionQuestions(preview, draft, handlers) {
   const current = draft.magicConditionContext || {};
-  const questions = visibleConditionQuestions(preview?.conditionNeeds, current);
+  const questions = visibleConditionQuestions(preview?.conditionNeeds, current, preview?.conditionNeedRows);
   if (!questions.length) return null;
   const box = node('div', 'workspace-condition-questions');
   for (const question of questions) {

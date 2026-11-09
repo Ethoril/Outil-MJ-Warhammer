@@ -2,7 +2,7 @@ import { aftermathDate, aftermathSkills } from '../core/v5-aftermath.js';
 import { requiredSequelaFacts, sequelaAsksPrimary } from '../core/v5-sequelae.js';
 import { uid } from '../core/models.js';
 import { CONDITION_QUESTIONS } from '../core/condition-effects.js';
-import { MIXED_CONDITION_QUESTION } from '../core/v5-test-modifiers.js';
+import { MIXED_CONDITION_QUESTION, testQuestionLabel, answeredSequelaFields } from '../core/v5-test-modifiers.js';
 
 const node = (tag, text = '', className = '') => {
   const element = document.createElement(tag);
@@ -555,8 +555,13 @@ export function createV5AftermathPanel({ Store, refresh = () => {} } = {}) {
     const status = node('p', receiptText(ui.lastReceipt));
     status.setAttribute('role', 'status');
     status.className = 'workspace-aftermath-status';
-    const open = new Set((ui.lastReceipt?.needsInput || []).map(row => row.field));
-    const questions = CONDITION_FIELDS.filter(([field]) => open.has(field) || ui.conditionContext[field] != null);
+    const asked = (ui.lastReceipt?.needsInput || []).filter(row => row.field);
+    const open = new Set(asked.map(row => row.field));
+    // MJ 09/11 CA22 : circonstances de séquelle du testeur (`sequela…`), posées et corrigeables comme les États.
+    const known = new Set(CONDITION_FIELDS.map(([field]) => field));
+    const sequela = [...new Set([...asked.map(row => row.field), ...answeredSequelaFields(ui.conditionContext)])].filter(field => !known.has(field) && /^sequela/.test(field))
+      .map(field => [field, asked.find(row => row.field === field)?.label || testQuestionLabel(field) || field]);
+    const questions = [...CONDITION_FIELDS.filter(([field]) => open.has(field) || ui.conditionContext[field] != null), ...sequela];
     if (!questions.length) return status;
     // CA8 : la réponse vaut pour la prochaine opération relancée, puis s'efface une fois l'opération enregistrée.
     const box = node('div'); box.className = 'workspace-aftermath-condition-questions';

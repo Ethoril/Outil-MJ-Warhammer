@@ -5,7 +5,7 @@ import { meleeGroups, engagedWith, deriveEngagementContext } from '../../core/en
 import { outnumberSide, planOutnumbering } from '../../core/outnumbering.js';
 import { inferV5Kind } from '../../core/v5-combat-rules.js';
 import { CONDITION_QUESTIONS } from '../../core/condition-effects.js';
-import { MIXED_CONDITION_QUESTION } from '../../core/v5-test-modifiers.js';
+import { MIXED_CONDITION_QUESTION, testQuestionLabel, answeredSequelaFields } from '../../core/v5-test-modifiers.js';
 
 const el = (tag, className = '', text = '') => {
   const node = document.createElement(tag);
@@ -161,9 +161,11 @@ export function renderDisengageForm(container, { actor, plan, state, active, onC
     // CA8 : précision demandée par un État (posée, ou déjà répondue et modifiable), réponse dans le contexte du camp.
     for (const [side, key, who] of [['actor', 'context', actor.name], ['opponent', 'opponentContext', name(plan.bestOpponentId)]]) {
       const answers = state[key] || {};
-      const fields = [...new Set([...(plan.needsInput || []).filter(row => row.side === side && row.field).map(row => row.field), ...Object.keys(answers).filter(field => QUESTION_LABELS[field])])];
+      // MJ 09/11 CA22 : les circonstances de séquelle (champs `sequela…`) se posent et se corrigent de la même façon.
+      const asked = (plan.needsInput || []).filter(row => row.side === side && row.field);
+      const fields = [...new Set([...asked.map(row => row.field), ...Object.keys(answers).filter(field => QUESTION_LABELS[field]), ...answeredSequelaFields(answers)])];
       for (const field of fields) {
-        const label = `${who} : ${QUESTION_LABELS[field]}`, wrap = el('label', 'workspace-type', label), select = el('select');
+        const label = `${who} : ${QUESTION_LABELS[field] || asked.find(row => row.field === field)?.label || testQuestionLabel(field) || field}`, wrap = el('label', 'workspace-type', label), select = el('select');
         select.setAttribute('aria-label', label);
         select.append(new Option('À préciser', ''), ...(field === 'conditionPenaltyMode' ? [new Option('Pénalité en DR', 'sl'), new Option('Désavantage', 'disadvantage')] : [new Option('Oui', 'true'), new Option('Non', 'false')]));
         const current = answers[field];

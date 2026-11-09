@@ -90,13 +90,14 @@ function priorReceipt(state, operationId) {
 function runTest(score, roll, amount, id, label, check = null) {
   const slModifiers = amount ? [{ id, label, amount }] : [];
   if (!check?.tester) return previewV5Test({ score, roll, kind: 'test', slModifiers }).options[0].result;
-  const secondary = previewV5SecondaryTest(check.tester, { score, roll, slModifiers, test: { characteristic: check.characteristic, skill: check.skill }, context: check.context || {} });
+  const secondary = previewV5SecondaryTest(check.tester, { score, roll, slModifiers, test: { characteristic: check.characteristic, skill: check.skill, ...(check.passive ? { passive: true } : {}) }, context: check.context || {} });
   if (!secondary.ready) return { pending: true, needsInput: secondary.needsInput };
   return secondary.rows.length ? { ...secondary.result, detail: secondaryTestDetail(secondary) } : secondary.result;
 }
 /** Modificateurs communs du soigneur (Guérison ou Soins aux animaux, Int) ou du patient (Résistance, E), lorsque le Store le fournit. */
 const healCheck = (healer, tester, context) => (tester ? { tester, characteristic: 'Int', skill: healer?.skillName || (healer?.skill === 'animal-care' ? 'Soins aux animaux' : 'Guérison'), context } : null);
-const enduranceCheck = (tester, context) => (tester ? { tester, characteristic: 'E', skill: 'Résistance', context } : null);
+// MJ 09/11 CA21 : la Résistance du patient est un Test subi (`passive`) : Inconscient ne la bloque pas.
+const enduranceCheck = (tester, context) => (tester ? { tester, characteristic: 'E', skill: 'Résistance', passive: true, context } : null);
 /** Opération refusée tant que le MJ n'a pas répondu aux questions d'États du Test (CA8). */
 const pendingTest = (outcome, test) => { outcome.receipt.needsInput = test.needsInput.map(row => ({ ...row })); return outcome; };
 const testFacts = test => ({ roll: test.roll, score: test.score, success: test.success, sl: test.sl, fumble: test.fumble, critical: test.critical, ...(test.detail ? { detail: [...test.detail] } : {}) });

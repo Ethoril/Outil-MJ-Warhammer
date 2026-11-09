@@ -83,7 +83,8 @@ function projectWrathDamage(actor,rule,input,executionId,sinAtTest,round){
  const score=effectiveSkillScore(actor,skills[0]?.total??baseCharacteristicScore(actor,'E'),'E');
  const changed=clone(actor),damage=handler.applyInstant(changed,effect,{actor,prayer:{sl:0},input:damageInput,executionId,targetId:actor.id});
  // Q6 T1 : talents génériques du Test de Résistance (calcul commun), contexte des talents saisi avec celui des États.
- const context=resolveV5ConditionTestContext(changed,{characteristic:'E',isAction:false,involvesMovement:false,runningOrHiding:false,requiresSight:false,reliesOnSight:false,
+ // MJ 09/11 CA21 : Résistance au Courroux, Test subi (`passive`).
+ const context=resolveV5ConditionTestContext(changed,{characteristic:'E',isAction:false,passive:true,involvesMovement:false,runningOrHiding:false,requiresSight:false,reliesOnSight:false,
   skill:'Résistance',skillId:'skill-52_e9_73_69_73_74_61_6e_63_65-base',talentContext:input.wrathConditionContext,
   conditionPenaltyMode:input.wrathConditionContext?.conditionPenaltyMode,conditionPenaltyReason:input.wrathConditionContext?.conditionPenaltyReason});
  if(!context.ready)return fail('Le contexte des États du Test de Résistance doit être précisé.',context.needsInput.map(row=>need('wrathConditionContext.'+row.field,row.label)).concat(context.restrictions.map(label=>need('wrathConditionContext',label))));

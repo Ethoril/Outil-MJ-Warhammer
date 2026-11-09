@@ -84,7 +84,10 @@ try {
   // Q6 T2 (CA3, CA5) : Gunther À terre, l'Orc Sonné ; le détail montre chaque source. MJ 09/11 CA15 : le désengagement compte
   // toujours comme un mouvement, plus de question de mouvement : le Désavantage d'À terre est là d'emblée.
   await page.evaluate(async () => {
-    await window.__store.updateParticipant('gunther', { states: [{ id: 'prone-1', key: 'aterre', name: 'À terre', level: 1 }] });
+    // MJ 09/11 CA22 : une main perdue pose sa question de circonstance au désengagé.
+    const gunther = window.__store.listParticipants().find(row => row.id === 'gunther');
+    await window.__store.updateParticipant('gunther', { states: [{ id: 'prone-1', key: 'aterre', name: 'À terre', level: 1 }],
+      extensions: { ...gunther.extensions, v5: { ...gunther.extensions?.v5, sequelaEffects: { rows: [{ id: 'sq-hand', type: 'two-hands', label: 'Main perdue' }] } } } });
     await window.__store.updateParticipant('orc', { states: [{ id: 'stun-1', key: 'sonne', name: 'Sonné', level: 1 }] });
   });
   await page.waitForTimeout(200);
@@ -92,6 +95,11 @@ try {
   const form = page.locator('.workspace-disengage');
   await form.locator('.workspace-disengage-detail').waitFor({ timeout: 5000 });
   assert.equal(await form.getByLabel('Gunther : Préciser si le Test implique un mouvement.').count(), 0);
+  const hands = form.getByLabel('Gunther : Séquelle : le Test repose-t-il normalement sur deux mains ?');
+  await assert.doesNotReject(hands.waitFor({ timeout: 5000 }));
+  assert.match(await form.textContent(), /À saisir avant d’appliquer/);
+  await hands.selectOption('false');
+  await page.waitForTimeout(200);
   assert.doesNotMatch(await form.textContent(), /À saisir avant d’appliquer/);
   const detail = await form.locator('.workspace-disengage-detail').textContent();
   assert.match(detail, /Gunther · À terre \(État\) : Désavantage/);

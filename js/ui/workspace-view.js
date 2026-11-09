@@ -1945,9 +1945,10 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
             try {
               const states = prepareMagicOptions(context.actor, context.type === 'cast' ? 'casting' : context.type, { conditionContext: draft.magicConditionContext || {} });
               draft.preview.conditionNeeds = states.conditionNeeds || [];
+              draft.preview.conditionNeedRows = states.conditionNeedRows || [];
               draft.preview.conditionDisadvantages = states.disadvantageSources || [];
               draft.preview.conditionModifiers = states.slModifiers || [];
-            } catch { draft.preview.conditionNeeds = []; draft.preview.conditionDisadvantages = []; draft.preview.conditionModifiers = []; }
+            } catch { draft.preview.conditionNeeds = []; draft.preview.conditionNeedRows = []; draft.preview.conditionDisadvantages = []; draft.preview.conditionModifiers = []; }
           }
         } catch (error) {
           draft.preview = null;
