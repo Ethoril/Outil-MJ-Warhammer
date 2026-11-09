@@ -1,6 +1,5 @@
 import { normalizeState } from './effects.js';
-import { conditionPenaltyEffects, conditionDisadvantageEffects, conditionTestRules, conditionDisadvantageRows } from './condition-effects.js';
-import { conditionPenaltyIgnores } from './v5-talents.js';
+import { resolveV5TestModifiers, finalizeV5TestModifiers } from './v5-test-modifiers.js';
 
 const CHARACTERISTICS = new Set(['CC', 'CT', 'F', 'E', 'I', 'Ag', 'Dex', 'Int', 'FM', 'Soc', 'M']);
 const TALENT_MARKERS = new Set(['talent-active', 'talent-pending']);
@@ -32,6 +31,10 @@ const STATE_LABELS = Object.freeze({
   enchevetre: 'Enchevêtré', extenue: 'Exténué', empoisonne: 'Empoisonné',
   aterre: 'À terre', sonne: 'Sonné', surpris: 'Surpris', inconscient: 'Inconscient'
 });
+
+/** Identifiants des Désavantages d'États du contexte de Test (`condition:<clé>:<n>`), à partir de ceux du combat. */
+const contextDisadvantageId = id => id === 'prone' ? 'condition:aterre:1' : id === 'besmirched' ? 'condition:souille:1'
+  : /^blinded-\d+$/.test(id) ? `condition:aveugle:${Number(id.slice(8)) + 1}` : id;
 
 const hasOwn = (value, key) => Object.prototype.hasOwnProperty.call(value, key);
 const isRecord = value => value !== null && typeof value === 'object' && !Array.isArray(value);
@@ -169,16 +172,21 @@ export function resolveV5ConditionTestContext(actor, context = {}) {
     label: 'Endurance de l’anachorète ignore les pénalités causées par les États; ils restent actifs.',
     source: { document: 'Livre de base V5 EN v2', printedPage: 226, citation: 'Livre de base V5 EN v2, p. 226', rule: 'Anchorite’s Endurance' }
   });
-  // MJ 06/11 Q19 : le calcul d'États du combat pour ce Test (conditionTestRules, puis le moteur d'effets), mêmes exceptions :
-  // Endurance de l'anachorète, ignoreFatiguePenalties (Exténué), Clarté de pensée (Sonné), talents `ignoreConditionPenalty`.
-  const flags = actor?.extensions?.v5?.specialStates;
-  const conditionRules = conditionTestRules(new Map(Object.entries(levels)), { kind: 'test', attr: characteristic, ignoreAll: ignoreConditions,
-    context: { involvesMovement: movement, runningOrHiding, requiresSight, reliesOnSight, usesFellowship, festeringWounds: context.festeringWounds } });
-  const conditionPenalty = conditionPenaltyEffects(conditionRules.relevant, { ignoreAll: ignoreConditions, ignoreFatigue: flags?.ignoreFatiguePenalties === true,
-    ignoreStun: clarityIgnoresStun, talentIgnores: conditionPenaltyIgnores(actor) });
+  // Q6 T1 (MJ 06/11 Q19) : le calcul commun du combat (`resolveV5TestModifiers`, v5-test-modifiers.js) sur les États reconnus ici
+  // (alias, niveaux non cumulables) et les réponses ci-dessus ; mêmes exceptions : Endurance de l'anachorète, ignoreFatiguePenalties
+  // (Exténué), Clarté d'esprit (Sonné), talents `ignoreConditionPenalty`. Le choix DR ou Désavantage reste arbitré ici (DIV-05,
+  // motif exigé) : le calcul commun rend la pénalité et le Désavantage bruts. Il rend aussi les talents génériques du Test
+  // (`talents`), que seuls les appelants qui les branchent ajoutent (Prière, Résistance au Courroux : Q6 T1).
+  const skill = typeof context.skill === 'string' ? context.skill : '';
+  const common = resolveV5TestModifiers(isRecord(actor) ? actor : {}, { characteristic, skill, kind: 'test', levels: new Map(Object.entries(levels)),
+    action: { type: 'test', attr: characteristic, label: skill, base: 0, qualities: [], ...(typeof context.skillId === 'string' ? { extensions: { fiche: { skillId: context.skillId } } } : {}) } },
+    { ...(isRecord(context.talentContext) ? context.talentContext : {}), involvesMovement: movement, runningOrHiding, requiresSight, reliesOnSight, usesFellowship,
+      festeringWounds: context.festeringWounds, conditionPenaltyMode: undefined });
+  const conditionPenalty = common.parts.conditions.penaltyEffects;
   const slPenalty = conditionPenalty.penalty;
   // Désavantages d'un seul État, le plus fort ; à égalité, le premier dans l'ordre À terre, Aveuglé, Souillé.
-  const worstDisadvantage = conditionDisadvantageEffects(conditionDisadvantageRows(conditionRules.disadvantages, (key, index) => `condition:${key}:${index + 1}`));
+  const worstDisadvantage = common.parts.conditions.disadvantageRows.map(row => ({ ...row, id: contextDisadvantageId(row.id) }));
+  const talentPart = common.parts.talents;
   const hasSlPenalty = slPenalty > 0;
   const hasDisadvantage = worstDisadvantage.length > 0;
   const mode = context.conditionPenaltyMode;
@@ -222,6 +230,21 @@ export function resolveV5ConditionTestContext(actor, context = {}) {
     needsInput,
     conditionPenaltyMode: hasSlPenalty && hasDisadvantage && ['sl', 'disadvantage'].includes(mode) ? mode : null,
     conditionPenaltyReason: hasSlPenalty && hasDisadvantage && reason ? reason : null,
-    arbitration
+    arbitration,
+    talents: { slModifiers: talentPart.slModifiers, advantageSources: talentPart.advantageSources, disadvantageSources: talentPart.disadvantageSources,
+      ignoreNegative: talentPart.ignoreNegative, forceSuccess: talentPart.forceSuccess, unresolved: talentPart.unresolved }
   };
+}
+
+/**
+ * Q6 T1 : ajoute aux listes d'un Test les talents génériques rendus par `resolveV5ConditionTestContext` (`result.talents`), puis
+ * applique les plafonds de fin de calcul (Distrait, Esprit fort V5 p. 127) sur la liste complète, comme au combat. Les lignes sont
+ * recopiées : le résultat du contexte n'est pas modifié.
+ */
+export function withV5TestTalents(actor, result, { slModifiers = [], advantageSources = [], disadvantageSources = [] } = {}) {
+  const talents = result?.talents || {};
+  const lists = { slModifiers: [...slModifiers, ...(talents.slModifiers || [])].map(row => ({ ...row })),
+    advantageSources: [...advantageSources, ...(talents.advantageSources || [])], disadvantageSources: [...disadvantageSources, ...(talents.disadvantageSources || [])] };
+  finalizeV5TestModifiers(actor, { ignoreNegative: talents.ignoreNegative === true }, lists);
+  return lists;
 }

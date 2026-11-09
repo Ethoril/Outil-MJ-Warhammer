@@ -15,7 +15,7 @@ import {removeFromCombat} from './turn-order.js';
 import {effectHandler} from './v5-divine-effect-handlers.js';
 import {WRATH_SUMMON_RULES,planWrathSummon,wrathSummonParticipant} from './v5-divine-effects-summon.js';
 import {previewV5Test,selectV5Test,normalizeV5Roll} from './v5-roll.js';
-import {resolveV5ConditionTestContext} from './v5-test-context.js';
+import {resolveV5ConditionTestContext,withV5TestTalents} from './v5-test-context.js';
 import {effectiveSkillScore,baseCharacteristicScore,magicSkillModifiers} from './v5-magic-talents.js';
 import {betweenGroupsRule} from './effect-engine.js';
 import {SUPPLEMENT_DIVINE_CONTRACTS} from './supplement-loader.js';
@@ -82,14 +82,16 @@ function projectWrathDamage(actor,rule,input,executionId,sinAtTest,round){
  const skillName=skills[0]?.name||skills[0]?.nom||'Résistance';
  const score=effectiveSkillScore(actor,skills[0]?.total??baseCharacteristicScore(actor,'E'),'E');
  const changed=clone(actor),damage=handler.applyInstant(changed,effect,{actor,prayer:{sl:0},input:damageInput,executionId,targetId:actor.id});
+ // Q6 T1 : talents génériques du Test de Résistance (calcul commun), contexte des talents saisi avec celui des États.
  const context=resolveV5ConditionTestContext(changed,{characteristic:'E',isAction:false,involvesMovement:false,runningOrHiding:false,requiresSight:false,reliesOnSight:false,
+  skill:'Résistance',skillId:'skill-52_e9_73_69_73_74_61_6e_63_65-base',talentContext:input.wrathConditionContext,
   conditionPenaltyMode:input.wrathConditionContext?.conditionPenaltyMode,conditionPenaltyReason:input.wrathConditionContext?.conditionPenaltyReason});
  if(!context.ready)return fail('Le contexte des États du Test de Résistance doit être précisé.',context.needsInput.map(row=>need('wrathConditionContext.'+row.field,row.label)).concat(context.restrictions.map(label=>need('wrathConditionContext',label))));
  let testPreview,test;
  try{
   testPreview=previewV5Test({score,roll:normalizeV5Roll(input.wrathEnduranceRoll),kind:'test',
-   slModifiers:[{id:rule.id+':difficulty',label:'Difficulté source du Courroux',amount:rule.enduranceDifficulty},...context.slModifiers,...magicSkillModifiers(changed,skillName)],
-   advantageSources:context.advantageSources,disadvantageSources:context.disadvantageSources});
+   ...withV5TestTalents(changed,context,{slModifiers:[{id:rule.id+':difficulty',label:'Difficulté source du Courroux',amount:rule.enduranceDifficulty},...context.slModifiers,...magicSkillModifiers(changed,skillName)],
+   advantageSources:context.advantageSources,disadvantageSources:context.disadvantageSources})});
   projection.testOptions=clone(testPreview.options);
   if(testPreview.choiceRequired&&!input.wrathTestOptionId)return fail('Choisissez l’issue du Test de Résistance.',[need('wrathTestOptionId','Issue de Résistance')]);
   test=selectV5Test(testPreview,input.wrathTestOptionId||(testPreview.forcedInversion?'reverse':'keep'));
@@ -1084,7 +1086,7 @@ function calculateWrathRecovery(state,input){
  const fold=value=>String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
  const skills=(actor.skills||[]).filter(row=>['pray','priere'].includes(fold(row.name||row.nom)));
  if(!gmWrath&&(!skills.length||skills.some(row=>row.status!=='resolved'||!Number.isSafeInteger(row.total)||row.total<0||!['soc','fellowship'].includes(fold(row.carac||'Soc')))||new Set(skills.map(row=>row.total)).size!==1||!Number.isSafeInteger(actor.caracs?.Soc)))return failure('requires-input','Prière résolue et Sociabilité courante requises.',[{field:'actor.skills',label:'Score de Prière résolu'}]);
- const testContext=resolveV5ConditionTestContext(actor,{characteristic:'Soc',isAction:true,involvesMovement:false,runningOrHiding:false,requiresSight:false,reliesOnSight:false,conditionPenaltyMode:input.conditionContext?.conditionPenaltyMode,conditionPenaltyReason:input.conditionContext?.conditionPenaltyReason});
+ const testContext=resolveV5ConditionTestContext(actor,{characteristic:'Soc',isAction:true,involvesMovement:false,runningOrHiding:false,requiresSight:false,reliesOnSight:false,skill:'Prière',skillId:'skill-50_72_69_e8_72_65-base',talentContext:input.conditionContext,conditionPenaltyMode:input.conditionContext?.conditionPenaltyMode,conditionPenaltyReason:input.conditionContext?.conditionPenaltyReason});
  if(!testContext.ready)return failure('requires-input','Précisez le contexte des États.',testContext.needsInput.concat(testContext.restrictions.map(label=>({field:'conditionContext',label}))));
  const relicRead=readDivineRelics(actor,lock.cult);if(!relicRead.ok)return failure('requires-input',relicRead.error,[{field:'actor.extensions.v5.divineRelics',label:'Reliques valides, une par dieu'}]);
  const relic=relicRead.relics[0]||null;
@@ -1097,7 +1099,7 @@ function calculateWrathRecovery(state,input){
  const prayerSheetModifiers=[...(sheetPrayerModifiers||[]),...new Map([...magicSkillModifiers(actor,'Prière'),...magicSkillModifiers(actor,'Pray')].filter(row=>row.id.startsWith('miscast:')).map(row=>[row.id,row])).values()];
  if(!gmWrath)try{
   const preview=previewV5Test({score:effectiveSkillScore(actor,skills[0].total,'Soc'),roll:normalizeV5Roll(input.roll),kind:'test',
-   slModifiers:[{id:rule.id+':recovery',label:'Prière de récupération',amount:rule.recovery.difficulty},...testContext.slModifiers,...modifiers.modifiers,...prayerSheetModifiers,...(relic&&!gmWrath?[{id:'relic:'+relic.id,label:'Relique : '+relic.label,amount:relic.prayerSL}]:[])],advantageSources:testContext.advantageSources,disadvantageSources:testContext.disadvantageSources});
+   ...withV5TestTalents(actor,testContext,{slModifiers:[{id:rule.id+':recovery',label:'Prière de récupération',amount:rule.recovery.difficulty},...testContext.slModifiers,...modifiers.modifiers,...prayerSheetModifiers,...(relic&&!gmWrath?[{id:'relic:'+relic.id,label:'Relique : '+relic.label,amount:relic.prayerSL}]:[])],advantageSources:testContext.advantageSources,disadvantageSources:testContext.disadvantageSources})});
   options=preview.options;
   if(preview.choiceRequired&&!input.testOptionId)return {...failure('requires-input','Choisissez le jet de Prière.',[{field:'testOptionId',label:'Choix du jet de Prière'}]),testOptions:options};
   test=selectV5Test(preview,input.testOptionId||(preview.forcedInversion?'reverse':'keep'));

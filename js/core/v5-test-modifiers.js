@@ -93,6 +93,10 @@ const MENTAL = new Set(['Int', 'I', 'FM', 'Soc']);
  *   - `role` : rôle de talent (`actor`, `attacker`, `defender`) ; `opponent` : participant opposé, ou rien ;
  *   - `participants` : participants du plateau (talents de compagnon d'un familier) ;
  *   - `action`, `settings` : forme du combat, lue par les talents ; à défaut, construites depuis `characteristic`, `skill`, `kind`.
+ *   - T1 : `levels` (Map clé → niveau) remplace la lecture des États quand l'appelant les a déjà reconnus (contexte de Test :
+ *     alias anglais, niveaux non cumulables) ; `ignoreFatigue` ajoute une dispense d'Exténué propre au Test (Œil de la tempête
+ *     rang 2) ; `appliesKey(key)` remplace la table des clés de couche quand le Test lit aussi des clés hors compétence (clé
+ *     `Dissipation` du Test de Dissipation) : les clés retenues forment un seul Test, cumulées comme les autres.
  * `context` : contexte du Test (`settings.context` du combat) : réponses du MJ (`involvesMovement`, `conditionPenaltyMode`…).
  * Rend :
  *  - `slModifiers`, `advantageSources`, `disadvantageSources` : prêts pour `previewV5Test`, plafonds non appliqués
@@ -111,17 +115,17 @@ export function resolveV5TestModifiers(actor, test = {}, context = {}) {
   // Talents : ceux des Traits de compagnon d'un familier à portée comptent comme ceux du maître pour ce Test.
   const talents = previewV5TalentTestModifiers(withCompanionTalents(actor, test.participants || []), { action, settings, kind, role, opponent });
   // U8 L3 : talents et couches (sorts, prières) réunis par le moteur d'effets (collectTestEffects).
-  const layers = magicTestModifiers(actor, skillLabel, { ...settings.context, carac: settings.context?.carac || test.skillCharacteristic || characteristic }, { talentRows: talents.slModifiers });
+  const layers = magicTestModifiers(actor, skillLabel, { ...settings.context, carac: settings.context?.carac || test.skillCharacteristic || characteristic }, { talentRows: talents.slModifiers, applies: test.appliesKey });
   // Clés « … adverse » du porteur opposé (le combat ne les lit que hors défense).
   const adverse = opponent && role !== 'defender' ? magicAdverseModifiers(opponent, skillLabel) : [];
   // États : un seul calcul pour tous les Tests (MJ 06/11 Q19), exceptions comprises.
   // Endurance de l'anachorète (p. 226) : malus et Désavantages d'États ignorés ; Inconscient, Surpris et la vue exigée restent.
   const ignoreAll = flags?.ignoreConditionPenalties === true;
-  const rules = conditionTestRules(conditionLevels(actor), { kind, attr: characteristic, context: situation, ignoreAll });
+  const rules = conditionTestRules(test.levels instanceof Map ? test.levels : conditionLevels(actor), { kind, attr: characteristic, context: situation, ignoreAll });
   // U8 L4 : pénalités d'États cumulées par le moteur d'effets (la plus forte seule) : ignoreFatiguePenalties (Exténué sans
   // pénalité ; Clarté d'esprit n'efface pas Exténué, MJ 06/11), Clarté d'esprit (`clarityOfThought` : Sonné sur un Test mental),
   // talents `ignoreConditionPenalty`, Endurance de l'anachorète.
-  const penaltyEffects = conditionPenaltyEffects(rules.relevant, { ignoreAll, ignoreFatigue: Boolean(flags?.ignoreFatiguePenalties),
+  const penaltyEffects = conditionPenaltyEffects(rules.relevant, { ignoreAll, ignoreFatigue: Boolean(flags?.ignoreFatiguePenalties || test.ignoreFatigue),
     ignoreStun: Boolean(flags?.clarityOfThought && MENTAL.has(characteristic)), talentIgnores: talents.ignoredPenalties });
   const penalty = penaltyEffects.penalty;
   // Des pénalités d'États différentes ne s'additionnent pas : DR contre Désavantage, le MJ tranche.

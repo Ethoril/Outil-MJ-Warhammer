@@ -1,6 +1,6 @@
 /** Acquisitions résolues et descriptions publiques épinglées ; jamais d'activation par lecture de prose. */
 import pins from '../data/v5-magic-talent-sources.json' with { type: 'json' };
-import { acquiredV5Talents, conditionPenaltyIgnores } from './v5-talents.js';
+import { acquiredV5Talents } from './v5-talents.js';
 import { getReferenceCatalogue } from './reference-catalog.js';
 import { previewV5Test, selectV5Test, normalizeV5Roll } from './v5-roll.js';
 import { getBurnoutStatus, consumeCadaiRune, prepareCadaiRerolls } from './v5-magic-high.js';
@@ -9,9 +9,20 @@ import { mishapSeverity, groundCastModifier, slannAboard } from './slann.js';
 // Cycle d'import connu (v5-magic-effects lit magicTalentRank) : seules des fonctions, appelées après le chargement.
 import { unsuppressedSpellEffects } from './v5-magic-effects.js';
 import { combineEffects, targetAppliesToTest } from './effect-engine.js';
-import { conditionPenaltyEffects, conditionDisadvantageEffects, conditionTestRules, conditionDisadvantageRows } from './condition-effects.js';
+// Cycle d'import connu (v5-test-modifiers lit magicTestModifiers) : seules des fonctions, appelées après le chargement.
+import { resolveV5TestModifiers, finalizeV5TestModifiers, conditionLevels } from './v5-test-modifiers.js';
 
 const ruleError=message=>Object.assign(new Error(message),{userFacing:true});
+/** Test de chaque Action magique (Q6 T1) : compétence au catalogue et Caractéristique ; la Dissipation est un Test de Langue (Magick). */
+const MAGIC_TESTS={
+ casting:{skill:'Langue (Magick)',skillId:'skill-4c_61_6e_67_75_65-4d_61_67_69_63_6b',characteristic:'Int'},
+ dispel:{skill:'Langue (Magick)',skillId:'skill-4c_61_6e_67_75_65-4d_61_67_69_63_6b',characteristic:'Int'},
+ channelling:{skill:'Focalisation',skillId:'skill-46_6f_63_61_6c_69_73_61_74_69_6f_6e-base',characteristic:'FM'},
+ pause:{skill:'Focalisation',skillId:'skill-46_6f_63_61_6c_69_73_61_74_69_6f_6e-base',characteristic:'FM'},
+ interruption:{skill:'Calme',skillId:'skill-43_61_6c_6d_65-base',characteristic:'FM'}
+};
+/** Variante de la clé `Dissipation` propre au mode (lue jusqu'ici en brut par v5-magic-dispel.js). */
+const DISPEL_MODE_KEYS={opposed:'Dissipation (Incantation opposée)',persistent:'Dissipation (Sort persistant étendu)'};
 export function magicTalentRank(actor, id, specialization = null) {
   const key = id.startsWith('talent-') ? id : 'talent-'+id;
   const lostIds = { 'sens de la magie': 'talent-magical-sense', 'perception de la magie': 'talent-magical-sense', 'magical sense': 'talent-magical-sense', 'seconde vue': 'talent-second-sight', 'second sight': 'talent-second-sight' };
@@ -69,36 +80,43 @@ export function prepareMagicOptions(actor, kind, options={}, spell = null) {
   if (kind === 'casting' && isTalentDrained(actor, spell, options)) throw ruleError('Drain de puissance : le Talent employé pour lancer ce sort est inutilisable.');
   if(kind==='casting' && (actor.extensions?.v5?.miscastEffects || []).some(e=>e.type==='restriction' && (e.restrictions || []).some(r=>/langue|verbal/i.test(r))))throw ruleError('Incident magique : utilisation de Langue (Magick) interdite pendant la durée indiquée.');
   const assistant=options.assistant;
-  const slModifiers=[...magicSkillModifiers(actor,kind==='casting'?'Langue (Magick)':kind==='pause'?'Focalisation':kind==='interruption'?'Calme':'Focalisation'),...(options.slModifiers || []),...(Number(options.yenluiPenalty)<0 ? [{id:'yenlui',label:'Yenlui',amount:Number(options.yenluiPenalty)}]:[])], advantageSources=[...(options.advantageSources || [])];
+  // Q6 T1 (MJ 06/11 Q6, Q19) : États, talents et couches de sorts et de prières par le calcul commun du combat
+  // (`resolveV5TestModifiers`, v5-test-modifiers.js), mêmes exceptions : Endurance de l'anachorète, Revigorer, Clarté d'esprit,
+  // talents `ignoreConditionPenalty`, Brisé, Enchevêtré, Désavantages d'États. `options.conditionContext` porte les réponses du MJ
+  // (involvesMovement, runningOrHiding, reliesOnSight, requiresSight, usesFellowship, conditionPenaltyMode) et le contexte des
+  // talents ; une réponse manquante reste une question (`next.conditionNeeds`). Dissipation : Test de Langue (Magick) qui lit aussi
+  // la clé `Dissipation` des couches (et sa variante du mode, `options.dispelMode`).
+  const test=MAGIC_TESTS[kind]||MAGIC_TESTS.channelling;
+  const conditionContext=options.conditionContext||{};
+  // Œil de la tempête (rang 2) : Exténué sans pénalité à l'incantation, à la Focalisation et à sa pause.
+  const ignoreFatigue=['casting','channelling','pause'].includes(kind) && Number(activeMagicTalent(actor,'eye-of-the-storm')?.magicTalentRank)>=2;
+  const dispelKeys=kind==='dispel'?new Set(['dissipation',fold(DISPEL_MODE_KEYS[options.dispelMode]||DISPEL_MODE_KEYS.opposed)]):null;
+  const common=resolveV5TestModifiers(actor,{characteristic:test.characteristic,skill:test.skill,skillCharacteristic:test.characteristic,kind:'test',ignoreFatigue,
+    action:{type:'test',attr:test.characteristic,label:test.skill,base:0,qualities:[],extensions:{fiche:{skillId:test.skillId}}},
+    ...(dispelKeys?{appliesKey:key=>dispelKeys.has(fold(key).trim())||testKeyApplies(key,test.skill,{carac:test.characteristic})}:{})},{...conditionContext,skillId:test.skillId});
+  const {conditions,layers}=common.parts;
+  const slModifiers=[...layers.magic,...(options.slModifiers || []).map(row=>({...row})),...(Number(options.yenluiPenalty)<0 ? [{id:'yenlui',label:'Yenlui',amount:Number(options.yenluiPenalty)}]:[])], advantageSources=[...(options.advantageSources || [])];
   if (['casting','channelling'].includes(kind) && assistant && options.assistantLinked === true && assistant.id !== actor.id) {
     if (magicTalentRank(assistant,'magical-assistant')) slModifiers.push({id:'magical-assistant',label:'Assistant magique',amount:2});
     else if (magicTalentRank(assistant,'animal-assistant')) advantageSources.push({id:'animal-assistant',label:'Assistant animal'});
   }
-  const levels=new Map();for(const state of actor.states || []){const key=fold(state.key || state.name).replace(/[- ]/g,'');levels.set(key,(levels.get(key)||0)+Number(state.level || 1));}
+  const levels=conditionLevels(actor);
   if(['casting','channelling','dispel'].includes(kind) && (levels.has('inconscient') || levels.has('surpris')))throw ruleError('Inconscient ou Surpris : Test magique indisponible.');
-  // Œil de la tempête (rang 2) ; drapeau `ignoreFatiguePenalties` comme au combat (MJ 06/11 Q19).
-  const ignoreFatigue=['casting','channelling','pause'].includes(kind) && Number(activeMagicTalent(actor,'eye-of-the-storm')?.magicTalentRank)>=2 || flags?.ignoreFatiguePenalties===true;
   const mental=['casting','channelling','dispel','interruption'].includes(kind);
-  if(flags?.clarityOfThought && mental)for(let i=slModifiers.length-1;i>=0;i--)if(slModifiers[i].amount<0 && /psychology|mental.?mutation|mutation.?mental/i.test(slModifiers[i].id))slModifiers.splice(i,1);
-  // MJ 06/11 Q19 : le calcul d'États du combat (conditionTestRules, conditionPenaltyEffects, conditionDisadvantageEffects), mêmes
-  // exceptions : Endurance de l'anachorète, Revigorer, Clarté de pensée, talents `ignoreConditionPenalty`, Brisé, Enchevêtré,
-  // Désavantages d'États. `options.conditionContext` porte les réponses du MJ (involvesMovement, runningOrHiding, reliesOnSight,
-  // requiresSight, usesFellowship, conditionPenaltyMode) ; une réponse manquante reste une question (`next.conditionNeeds`).
-  const ignoreAll=flags?.ignoreConditionPenalties===true, conditionContext=options.conditionContext||{};
-  const conditionRules=conditionTestRules(levels,{kind:'test',attr:['casting','dispel'].includes(kind)?'Int':'FM',context:conditionContext,ignoreAll});
-  if(conditionRules.restrictions.length)throw ruleError(conditionRules.restrictions.join(' '));
-  const penalty=conditionPenaltyEffects(conditionRules.relevant,{ignoreAll,ignoreFatigue,ignoreStun:Boolean(flags?.clarityOfThought && mental),talentIgnores:conditionPenaltyIgnores(actor)}).penalty;
-  const worstDisadvantage=conditionDisadvantageEffects(conditionDisadvantageRows(conditionRules.disadvantages));
-  const conditionNeeds=[...conditionRules.unresolved], mixed=penalty>0 && worstDisadvantage.length>0, mode=conditionContext.conditionPenaltyMode;
-  if(mixed && !['sl','disadvantage'].includes(mode))conditionNeeds.push('États de pénalités différentes : choisir les DR ou le Désavantage retenu par le MJ.');
-  const appliedPenalty=mixed && mode==='disadvantage'?0:penalty;
-  if(appliedPenalty)slModifiers.push({id:'magic-condition-penalty',label:'Pénalité d’État',amount:-appliedPenalty});
-  next.disadvantageSources=[...(options.disadvantageSources || []),...(!mixed || mode!=='sl'?worstDisadvantage:[])];
-  next.conditionNeeds=[...new Set(conditionNeeds)];
+  if(actor.extensions?.v5?.specialStates?.clarityOfThought && mental)for(let i=slModifiers.length-1;i>=0;i--)if(slModifiers[i].amount<0 && /psychology|mental.?mutation|mutation.?mental/i.test(slModifiers[i].id))slModifiers.splice(i,1);
+  if(common.restrictions.length)throw ruleError(common.restrictions.join(' '));
+  if(common.penalty)slModifiers.push({id:'magic-condition-penalty',label:'Pénalité d’État',amount:-common.penalty});
+  slModifiers.push(...layers.talents);
+  advantageSources.push(...common.parts.talents.advantageSources);
+  next.disadvantageSources=[...(options.disadvantageSources || []),...conditions.disadvantageRows,...common.parts.talents.disadvantageSources];
+  next.conditionNeeds=common.needsInput.map(row=>row.label);
+  next.conditionRows=common.rows;next.testUnresolved=common.unresolved;next.testModifiers=common;next.dispelKeyRows=dispelKeys?layers.magic.filter(row=>dispelKeys.has(fold(row.id.replace(/^spell-skill:/,'')).trim())).length:0;
   if(['casting','channelling'].includes(kind)){const ground=groundCastModifier(actor,{aboard:slannAboard(actor)});if(ground.available && ground.modifier)slModifiers.push({id:'slann-ground',label:'Slann au sol',amount:ground.modifier});}
   if(Number(activeMagicTalent(actor,'sanctuary-of-the-mind')?.magicTalentRank)>=3)for(const modifier of slModifiers)if(modifier.id==='yenlui' && modifier.amount<0)modifier.amount=0;
   const lore=String(spell?.wind || spell?.type || options.wind || options.lore || '').toLowerCase();
   for(const effect of actor.extensions?.v5?.spellEffects || []) if(effect.loreTestBonus && ['casting','channelling'].includes(kind) && (lore===effect.loreTestBonus.lore || effect.loreTestBonus.lore==='fire' && /aqshy|feu/.test(lore))) slModifiers.push({id:'spell-lore-bonus',label:effect.spellName,amount:effect.loreTestBonus.amount});
+  // Plafonds de fin de calcul (Distrait, Esprit fort V5 p. 127) sur la liste de ce Test, comme au combat.
+  finalizeV5TestModifiers(actor,common,{slModifiers,advantageSources,disadvantageSources:next.disadvantageSources});
   next.slModifiers=slModifiers;next.advantageSources=advantageSources;
   return next;
 }
@@ -197,10 +215,12 @@ export function collectTestEffects(actor,test={},{talentRows=[],applies=null}={}
  * visent CE Test, incidents compris), lignes de talents (`talents` : `talentRows` passées par la table entre familles, R1) et
  * messages de cumul non arbitré (`unresolved`). Sans couche, les modificateurs par clé du porteur sont lus tels quels.
  */
-export function magicTestModifiers(actor,skill,context={},{talentRows=[]}={}){
+export function magicTestModifiers(actor,skill,context={},{talentRows=[],applies=null}={}){
  const name=fold(skill);const v5=actor?.extensions?.v5 || {};
- const collected=collectTestEffects(actor,{skill,carac:context?.carac,skillContext:context?.skillContext},{talentRows});
- const rows=hasTestLayer(v5)?collected.layerRows.map(row=>[row.key,row.amount]):Object.entries(v5.testModifiers || {}).filter(([key])=>testKeyApplies(key,skill,context));
+ // `applies(key)` (Q6 T1) : table de clés propre au Test (Dissipation : compétence + clé `Dissipation`), couches et repli compris.
+ const selector=typeof applies==='function'?applies:null;
+ const collected=collectTestEffects(actor,{skill,carac:context?.carac,skillContext:context?.skillContext},{talentRows,applies:selector});
+ const rows=hasTestLayer(v5)?collected.layerRows.map(row=>[row.key,row.amount]):Object.entries(v5.testModifiers || {}).filter(([key])=>selector?selector(key):testKeyApplies(key,skill,context));
  const magic=rows.map(([key,amount])=>({id:'spell-skill:'+key,label:'Effet magique : '+(/^carac:/i.test(key)?'Tests de '+(CARAC_LABELS[fold(key.slice(6))]||key.slice(6)):key),amount}));
  for(const [index,effect] of (v5.miscastEffects || []).entries())if(effect.type==='penalty' && [...(effect.targetSkills || []),effect.targetSkillCategory].filter(Boolean).some(s=>name.includes(fold(s)) || name.includes('langue')&&s==='Incantation'))magic.push({id:'miscast:'+index,label:effect.name,amount:effect.slModifier});
  return {magic,talents:collected.talentRows,unresolved:collected.unresolved};

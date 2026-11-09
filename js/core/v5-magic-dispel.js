@@ -10,7 +10,8 @@ import { expireSpellEffects } from './v5-magic-effects.js';
 import { previewV5Test, selectV5Test, normalizeV5Roll } from './v5-roll.js';
 import { calculateMagicArmorPenalty } from './v5-magic-channelling.js';
 import { resolveCastingSkill } from './v5-magic-casting.js';
-import { prepareMagicOptions, enforceMagicTestRestrictions, magicSkillModifiers, familiarSkillSupport, applyMagicAttempt } from './v5-magic-talents.js';
+import { prepareMagicOptions, enforceMagicTestRestrictions, familiarSkillSupport, applyMagicAttempt } from './v5-magic-talents.js';
+import { finalizeV5TestModifiers } from './v5-test-modifiers.js';
 
 export const V5_MAGIC_DISPEL_VERSION = 'v5-magic-dispel-2026-10-11.1';
 
@@ -41,36 +42,38 @@ function languageRestriction(actor) {
   return known ? null : 'Langue (Magick) est une compétence avancée : compétence connue requise pour dissiper.';
 }
 
-function prepareDispelOptions(actor, options) {
-  // Dissiper utilise Langue, sans devenir une Action d'incantation ou de Focalisation.
-  const prepared = prepareMagicOptions(actor, 'dispel', options);
+function prepareDispelOptions(actor, options, persistent = false) {
+  // Dissiper utilise Langue, sans devenir une Action d'incantation ou de Focalisation. Q6 T1 : le calcul commun lit les couches de
+  // Langue (Magick) et la clé `Dissipation` (avec sa variante du mode) ; États et talents comme au combat.
+  const prepared = prepareMagicOptions(actor, 'dispel', { ...options, dispelMode: persistent ? 'persistent' : 'opposed' });
   if ((actor.extensions?.v5?.miscastEffects || []).some(e => e.type === 'restriction' && (e.restrictions || []).some(r => /langue|verbal/i.test(r))))
     throw new Error('Incident magique : utilisation de Langue (Magick) interdite.');
   const assistance = familiarSkillSupport(actor, options.assistant, 'Langue (Magick)', { magicAssistantLinked: options.assistantLinked });
-  prepared.slModifiers = [...magicSkillModifiers(actor, 'Langue (Magick)'),
-    ...prepared.slModifiers.filter(m => !m.id.startsWith('spell-skill:') && !m.id.startsWith('miscast:')),
-    ...assistance.modifiers];
+  prepared.slModifiers = [...prepared.slModifiers, ...assistance.modifiers];
   prepared.advantageSources = [...prepared.advantageSources, ...assistance.advantages];
   return prepared;
 }
 
 function dispelTest(actor, options, ownSpell = false, persistent = false) {
-  const prepared = prepareDispelOptions(actor, options);
+  const prepared = prepareDispelOptions(actor, options, persistent);
   const skill = resolveCastingSkill(actor);
   const score = options.score != null && Number.isFinite(Number(options.score)) ? Number(options.score) : skill.score;
   // V5 p.237 : la pénalité d’armure ne concerne pas la dissipation.
   const armorDetails = { penalty: 0, maxAp: 0, details: {} };
   const armorPenalty = 0;
-  const magicShieldBonus = Number(actor?.extensions?.v5?.magicShieldBonusSl
-    ?? actor?.extensions?.v5?.testModifiers?.[persistent ? 'Dissipation (Sort persistant étendu)' : 'Dissipation (Incantation opposée)']
-    ?? actor?.extensions?.v5?.testModifiers?.Dissipation ?? 0) || 0;
+  // Bouclier magique : sa couche porte aussi la clé `Dissipation`, déjà comptée par le calcul commun ; le champ
+  // `magicShieldBonusSl` ne sert plus qu'à défaut d'une telle clé (bonus de dissipation sans clé lisible, ancienne sauvegarde).
+  const magicShieldBonus = prepared.dispelKeyRows ? 0 : Number(actor?.extensions?.v5?.magicShieldBonusSl ?? 0) || 0;
   const slModifiers = [
     ...(Number(options.slModifier) ? [{ id: 'difficulty', label: 'Difficulté', amount: Number(options.slModifier) }] : []),
     ...(armorPenalty ? [{ id: 'armor', label: 'Pénalité d’armure', amount: armorPenalty }] : []),
     ...(ownSpell ? [{ id: 'own-spell', label: 'Propre sort', amount: 1 }] : []),
     ...(magicShieldBonus ? [{ id: 'magic-shield', label: 'Bouclier magique', amount: magicShieldBonus }] : []),
-    ...prepared.slModifiers
+    ...prepared.slModifiers.map(row => ({ ...row }))
   ];
+  // Plafonds de fin de calcul (Distrait, Esprit fort V5 p. 127) sur la liste complète de ce Test : difficulté, propre sort,
+  // Bouclier magique et assistance compris (Q6 T1 ; idempotent après celui de prepareMagicOptions).
+  finalizeV5TestModifiers(actor, prepared.testModifiers || {}, { slModifiers, advantageSources: prepared.advantageSources, disadvantageSources: prepared.disadvantageSources || [] });
   const context = { score, armorPenalty, armorDetails, slModifiers, cadaiReceipt: prepared.cadaiReceipt || null, turnKey: options.turnKey };
   if (prepared.roll == null) return { ...context, missing: ['roll'], ready: false };
   const roll = normalizeV5Roll(prepared.roll);

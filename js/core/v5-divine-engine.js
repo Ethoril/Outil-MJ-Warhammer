@@ -6,7 +6,7 @@ import { SUPPLEMENT_DIVINE_CONTRACTS, isSupplementDivineContract } from './suppl
 import {resolveDivineAccess,emptyDivineAccess,resolveDivineTalentRestriction} from './v5-divine-access.js';
 import {applyPrayerSLCaps,getPrayerSLModifiers} from './v5-divine-prayer-caps.js';
 import {v5ResourceIdentity} from './v5-resources.js';
-import {resolveV5ConditionTestContext} from './v5-test-context.js';
+import {resolveV5ConditionTestContext,withV5TestTalents} from './v5-test-context.js';
 import {campaignDurationSeconds} from './v5-game-time.js';
 import {calendarDurationUnits,targetRuleFactFields} from './v5-divine-grammar.js';
 import {effectHandler,effectNeeds,isLayerlessEffect,hasImplicitCasterTarget} from './v5-divine-effect-handlers.js';
@@ -498,6 +498,8 @@ export function previewDivineExecution(actor, contract, targets = [], input = {}
   if(!objectValue(conditionOverrides))return fail('needs-input','Le contexte des États de la Prière doit être un objet.',[need('conditionContext','Arbitrage DIV-05 structuré')]);
   const conditionTestContext=resolveV5ConditionTestContext(actor,{
     characteristic:'Soc',isAction:true,involvesMovement:false,runningOrHiding:false,requiresSight:false,reliesOnSight:false,
+    // Q6 T1 : talents génériques du Test de Prière (calcul commun), contexte des talents saisi avec celui des États.
+    skill:'Prière',skillId:'skill-50_72_69_e8_72_65-base',talentContext:conditionOverrides,
     conditionPenaltyMode:conditionOverrides.conditionPenaltyMode,
     conditionPenaltyReason:conditionOverrides.conditionPenaltyReason
   });
@@ -513,7 +515,9 @@ export function previewDivineExecution(actor, contract, targets = [], input = {}
   const relicRead=readDivineRelics(actor,contract.deity);
   if(!relicRead.ok)return fail('needs-input',relicRead.error,[need('actor.extensions.v5.divineRelics','Reliques valides, une par dieu')]);
   const relic=relicRead.relics[0]||null;
-  const slModifiers=[...sheetModifiers,...conditionTestContext.slModifiers,...prayerModifiers.modifiers,...(relic?[{id:'relic:'+relic.id,label:'Relique : '+relic.label,amount:relic.prayerSL}]:[])];
+  const testLists=withV5TestTalents(actor,conditionTestContext,{slModifiers:[...sheetModifiers,...conditionTestContext.slModifiers,...prayerModifiers.modifiers,...(relic?[{id:'relic:'+relic.id,label:'Relique : '+relic.label,amount:relic.prayerSL}]:[])],
+    advantageSources:conditionTestContext.advantageSources,disadvantageSources:conditionTestContext.disadvantageSources});
+  const slModifiers=testLists.slModifiers;
   const sinPolicy = divineSinPolicy(contract);
   const sin = sinPolicy.exempt ? 0 : readSin(actor);
   if (sin === null) return fail('needs-input', 'Le score de Péché doit être enregistré dans la fiche.', [need('actor.extensions.v5.divine.sin', 'Péché courant')]);
@@ -524,7 +528,7 @@ export function previewDivineExecution(actor, contract, targets = [], input = {}
   let testPreview;
   try {
     testPreview = previewV5Test({ score: skillScore, roll: normalizeV5Roll(input.roll), kind: 'test', slModifiers,
-      advantageSources:conditionTestContext.advantageSources,disadvantageSources:conditionTestContext.disadvantageSources });
+      advantageSources:testLists.advantageSources,disadvantageSources:testLists.disadvantageSources });
   } catch (error) { return fail('invalid', error.message, [need('roll', 'Résultat d100 entre 1 et 100')]); }
   let prayer;
   if (testPreview.choiceRequired && !input.testOptionId) {
