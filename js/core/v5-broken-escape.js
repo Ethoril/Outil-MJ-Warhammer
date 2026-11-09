@@ -1,6 +1,7 @@
 import { previewV5Test, selectV5Test } from './v5-roll.js';
 import { effectiveSkillScore } from './v5-magic-talents.js';
 import { resolveV5ConditionTestContext } from './v5-test-context.js';
+import { previewV5SecondaryTest, secondaryTestDetail } from './v5-test-modifiers.js';
 
 export const BROKEN_ESCAPE_RULE_VERSION = 'l06-broken-escape-2026-10-18.1';
 export const BROKEN_ESCAPE_SOURCE = Object.freeze({
@@ -138,7 +139,12 @@ export function previewV5FleeTalentDisengageMove({ actor, disengagedConfirmed, m
   };
 }
 
-function resolvePursuitActorTest(actor, roll, choice, slBonus, bonusLabel, extraSl = 0) {
+/**
+ * Q6 T5 : Test de poursuite (L06 p. 158) par le calcul commun (États, talents, couches, séquelles). Test actif : un Inconscient ne
+ * le tente pas, un Surpris non plus pendant ce Round (CA14). La poursuite est une course : mouvement et fuite sont donnés ; la vue
+ * reste une question au MJ (`context.reliesOnSight`, CA8).
+ */
+function resolvePursuitActorTest(actor, roll, choice, slBonus, bonusLabel, extraSl = 0, context = {}) {
   const skill = (actor?.skills || []).find(
     row => /athl[ée]tisme|chevaucher|conduite/i.test(row.name || row.nom || '') && row.status === 'resolved' && Number.isInteger(row.total ?? row.value)
   );
@@ -148,13 +154,17 @@ function resolvePursuitActorTest(actor, roll, choice, slBonus, bonusLabel, extra
   const slModifiers = [];
   if (slBonus !== 0) slModifiers.push({ id: 'pursuit-talent-bonus', label: bonusLabel, amount: slBonus });
   if (extraSl !== 0) slModifiers.push({ id: 'pursuit-obstacle-modifier', label: 'Modificateur d’obstacle', amount: extraSl });
-  const preview = previewV5Test({ score, roll, slModifiers });
+  const secondary = previewV5SecondaryTest(actor, { score, roll, kind: 'test', slModifiers,
+    test: { characteristic: skill?.carac || 'Ag', skill: skill?.name || skill?.nom || 'Athlétisme', isAction: true },
+    context: { ...(context || {}), involvesMovement: true, runningOrHiding: true } });
+  if (!secondary.ready) return { ready: false, error: secondary.needsInput.map(row => row.label).join(' '), needsInput: secondary.needsInput };
+  const preview = secondary.preview;
   if (preview.choiceRequired && !['keep', 'reverse'].includes(choice)) {
     return { ready: false, error: 'Choisir le résultat du Test de poursuite.' };
   }
   const selected = preview.options.length === 1 ? preview.options[0].id : choice;
   const test = selectV5Test(preview, selected);
-  return { ready: true, score, test, preview };
+  return { ready: true, score, test, preview, detail: secondaryTestDetail(secondary) };
 }
 
 export function resolveV5PursuitStep({
@@ -165,7 +175,9 @@ export function resolveV5PursuitStep({
   pursuerRoll,
   quarryChoice,
   pursuerChoice,
-  obstaclePenaltySl = 0
+  obstaclePenaltySl = 0,
+  quarryContext = {},
+  pursuerContext = {}
 } = {}) {
   if (!quarry || !pursuer) return fail('Proie et poursuivant requis.', 'quarry');
   if (!finiteInt(initialDistance, 1) || initialDistance > 10) {
@@ -175,10 +187,13 @@ export function resolveV5PursuitStep({
   if (!finiteInt(pursuerRoll, 1) || pursuerRoll > 100) return fail('Jet d100 du poursuivant requis.', 'pursuerRoll');
   const quarrySlBonus = talentRank(quarry, /^talent-flee$/i, /^fuite\s*!?$|^flee\s*!?$/i);
   const pursuerSlBonus = talentRank(pursuer, /^talent-relentless$/i, /^acharn[ée]$|^impitoyable$|^relentless$/i);
-  const qRes = resolvePursuitActorTest(quarry, quarryRoll, quarryChoice, quarrySlBonus, 'Fuite ! (+1 DR par rang)');
-  if (!qRes.ready) return fail(qRes.error, 'quarryChoice');
-  const pRes = resolvePursuitActorTest(pursuer, pursuerRoll, pursuerChoice, pursuerSlBonus, 'Impitoyable / Acharné (+1 DR par rang)', obstaclePenaltySl);
-  if (!pRes.ready) return fail(pRes.error, 'pursuerChoice');
+  const pending = (res, prefix, choiceField) => res.needsInput
+    ? { ...fail(res.error), needsInput: res.needsInput.map(row => ({ ...row, field: row.field ? `${prefix}.${row.field}` : null })) }
+    : fail(res.error, choiceField);
+  const qRes = resolvePursuitActorTest(quarry, quarryRoll, quarryChoice, quarrySlBonus, 'Fuite ! (+1 DR par rang)', 0, quarryContext);
+  if (!qRes.ready) return pending(qRes, 'quarryContext', 'quarryChoice');
+  const pRes = resolvePursuitActorTest(pursuer, pursuerRoll, pursuerChoice, pursuerSlBonus, 'Impitoyable / Acharné (+1 DR par rang)', obstaclePenaltySl, pursuerContext);
+  if (!pRes.ready) return pending(pRes, 'pursuerContext', 'pursuerChoice');
   const deltaSl = qRes.test.sl - pRes.test.sl;
   const rawNextDistance = initialDistance + deltaSl;
   const nextDistance = Math.max(0, rawNextDistance);
@@ -194,6 +209,8 @@ export function resolveV5PursuitStep({
     quarrySlBonus,
     pursuerSlBonus,
     quarryTest: qRes.test,
-    pursuerTest: pRes.test
+    pursuerTest: pRes.test,
+    quarryTestDetail: qRes.detail,
+    pursuerTestDetail: pRes.detail
   };
 }

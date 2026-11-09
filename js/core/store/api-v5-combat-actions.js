@@ -1,5 +1,5 @@
 import { v5StoreActionClock } from '../v5-store-action.js';
-import { previewV5Test } from '../v5-roll.js';
+import { previewV5SecondaryTest, secondaryTestDetail } from '../v5-test-modifiers.js';
 import { previewV5ProjectileExtraction } from '../v5-weapon-qualities.js';
 import { cloneValue, uid } from '../models.js';
 import { recordV5ActionUsage, standardV5ActionSpent, previewV5PaviseDeploymentFrom } from '../store/v5-action-guards.js';
@@ -39,18 +39,21 @@ export function createV5CombatActionsApi({ api, currentEnvelope, issuedBrokenEsc
     previewV5ProjectileExtraction(input = {}) {
       const envelope=currentEnvelope(),participant=envelope.combat?.participants?.find(row=>row.id===input.participantId);
       const projectile=participant?.extensions?.v5?.lodgedProjectiles?.find(row=>row.id===input.projectileId);
-      let test=null;
+      let test=null,testDetail=null;
       if(projectile?.removal==='heal-test'){
         const skill=participant.skills?.find(row=>row.id===input.skillId&&/gu[eé]rison|heal/iu.test(row.name||row.nom||''));
         const score=Number(skill?.total??skill?.score??skill?.value),roll=Number(input.roll);
         if(!Number.isFinite(score)||score<0||score>100||!Number.isInteger(roll)||roll<1||roll>100)
           return {ready:false,status:'requires-input',error:'Empaleuse : choisir une compétence Guérison et saisir son d100.'};
-        test=previewV5Test({score,roll,kind:'test'}).options[0].result;
+        // Q6 T5 : Test de Guérison par le calcul commun ; Test actif (Inconscient : CA14), questions d'État en attente (CA8).
+        const secondary=previewV5SecondaryTest(participant,{score,roll,kind:'test',test:{characteristic:skill.carac||'Int',skill:skill.name||skill.nom||'Guérison'},context:input.conditionContext||{}});
+        if(!secondary.ready)return {ready:false,status:secondary.blocked?'blocked':'requires-input',error:secondary.needsInput.map(row=>row.label).join(' '),needsInput:secondary.needsInput};
+        test=secondary.result;testDetail=secondaryTestDetail(secondary);
       }
       const result=previewV5ProjectileExtraction({projectile,method:input.method,success:test?.success,testSl:test?.sl,surgeryConfirmed:input.surgeryConfirmed});
       if(!result.ready)return {ready:false,status:'requires-input',error:result.unresolved[0]};
       return {ready:true,baseRevision:envelope.localRevision||0,participantId:participant.id,projectileId:projectile.id,before:structuredClone(projectile),after:{...structuredClone(projectile),removed:true,
-        removalReceipt:{method:result.method,...(test?{test:{roll:test.roll,score:test.score,success:test.success,sl:test.sl}}:{}),...(input.surgeryConfirmed?{surgeryConfirmed:true}:{})}}};
+        removalReceipt:{method:result.method,...(test?{test:{roll:test.roll,score:test.score,success:test.success,sl:test.sl,detail:testDetail}}:{}),...(input.surgeryConfirmed?{surgeryConfirmed:true}:{})}}};
     },
     applyV5ProjectileExtraction(supplied) {
       const plan=cloneValue(supplied);

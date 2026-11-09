@@ -4,6 +4,7 @@ import { casterCaracs } from './creature-abilities.js';
 import {processCombatTurnSpells,shieldAtTurnStart,previewSpellInteraction,removeExpiredSummons,endSpellEffectsOnEvent,spellTestContext,spellTestRequests} from './v5-magic-turn.js';
 import {previewMagicMeditation,activeMagicTalent,magicTalentRank,effectiveSkillScore,baseCharacteristicScore} from './v5-magic-talents.js';
 import { previewV5Test, selectV5Test, normalizeV5Roll } from './v5-roll.js';
+import { previewV5SecondaryTest, secondaryTestDetail } from './v5-test-modifiers.js';
 import {
   applyCorruptionAbsolution as applyCorruptionAbsolutionPure,
   calculateCorruptionThreshold,
@@ -846,14 +847,26 @@ function corruptionStatusFor(participant, baseRevision, sessionId = null, campai
     baseRevision
   };
 }
+/**
+ * Q6 T5 : Test de Corruption (Résistance ou Calme) par le calcul commun (États, talents, couches, séquelles). Test subi :
+ * « a Test to resist … Corruption », « hold off your corruption » (V5 p. 187-188), donc un Inconscient le fait (CA21).
+ * Une question d'État ou de séquelle sans réponse (`input.conditionContext`) rend `{ needsInput }` (CA8, CA22).
+ */
 function resolvedCorruptionTest(participant, skillId, input) {
   const { score, ...scoreInfo } = corruptionSkillScore(participant, skillId, input);
   const difficultyDR=Number(input?.difficultyDR)||0;
   if(!Number.isSafeInteger(difficultyDR)||difficultyDR < -10||difficultyDR > 10)throw new TypeError('Modificateur du Test de Corruption hors limites');
-  const preview = previewV5Test({ score, roll: normalizeV5Roll(input.roll), kind: 'test',slModifiers:difficultyDR?[{id:'corruption-source',label:'Source de Corruption',amount:difficultyDR}]:[] });
-    const resolved = selectV5Test(preview, 'keep');
-    return { ...resolved, scoreInfo };
+  const calm = skillId === CORRUPTION_SKILL_IDS.calm;
+  const secondary = previewV5SecondaryTest(participant, { score, roll: normalizeV5Roll(input.roll), kind: 'test',
+    test: { characteristic: calm ? 'FM' : 'E', skill: calm ? 'Calme' : 'Résistance', passive: true }, context: input?.conditionContext || {},
+    slModifiers: difficultyDR ? [{ id: 'corruption-source', label: 'Source de Corruption', amount: difficultyDR }] : [] });
+  if (!secondary.ready) return { needsInput: secondary.needsInput, blocked: secondary.blocked === true, unresolved: secondary.unresolved };
+  const resolved = selectV5Test(secondary.preview, secondary.optionId);
+  return { ...resolved, scoreInfo, detail: secondaryTestDetail(secondary) };
 }
+/** Retour d'un aperçu de Corruption dont le Test attend une réponse du MJ (CA8) ou est interdit (séquelle). */
+const corruptionTestPending = (participant, baseRevision, test) => ({ status: test.blocked ? 'blocked' : 'needs-input', participantId: participant.id, baseRevision,
+  needsInput: test.needsInput, missing: test.needsInput.map(row => row.field).filter(Boolean), unresolved: test.unresolved });
   function corruptionExposurePreview(participant, input, baseRevision, sessionId) {
     const v5 = participant.extensions?.v5 || {};
     const immediateId=typeof input?.immediateExposureId==='string'?input.immediateExposureId:null;
@@ -872,8 +885,10 @@ function resolvedCorruptionTest(participant, skillId, input) {
     const skillId=input?.skillId, influence=immediate?.influence||input?.influence, exposure=immediate?.exposure||input?.exposure,
       roll=input?.roll,manualScore=input?.manualScore,manualScoreReason=input?.manualScoreReason;
     const difficultyDR=immediate?.difficultyDR||0;
-    const testInput = { roll, manualScore, manualScoreReason,difficultyDR };
+    const conditionContext = input?.conditionContext && typeof input.conditionContext === 'object' ? input.conditionContext : undefined;
+    const testInput = { roll, manualScore, manualScoreReason,difficultyDR, conditionContext };
     const test = resolvedCorruptionTest(participant, skillId, testInput);
+    if (test.needsInput) return corruptionTestPending(participant, baseRevision, test);
     const result = resolveCorruptionExposure({
       currentPoints: v5.corruptionPoints, threshold: facts.threshold, influence, exposure, skillId,
       success: test.success, sl: test.sl
@@ -882,6 +897,7 @@ function resolvedCorruptionTest(participant, skillId, input) {
       status: 'ready', participantId: participant.id, baseRevision,
       sessionId: immediate ? null : sessionId,
       input: cloneValue({ skillId, influence, exposure, roll: normalizeV5Roll(roll), manualScore, manualScoreReason, declaredSources: input?.declaredSources || immediate?.source || '',
+        ...(conditionContext ? { conditionContext } : {}),
         ...(immediate ? { immediateExposureId: immediate.id, sourceRuleId: immediate.sourceRuleId, source: immediate.source, difficultyDR } : {}) }),
       ...result, test: cloneValue({ ...test, ...result.test, scoreInfo: test.scoreInfo }),
       facts: { toughnessBonus: facts.toughnessBonus, willpowerBonus: facts.willpowerBonus, pureSoul: facts.pureSoul }
@@ -896,6 +912,7 @@ function resolvedCorruptionTest(participant, skillId, input) {
     const facts = corruptionFacts(participant);
     if (v5.corruptionPoints <= facts.threshold) return { status: 'not-required', participantId: participant.id, baseRevision, threshold: facts.threshold, corruptionPoints: v5.corruptionPoints };
     const test = resolvedCorruptionTest(participant, CORRUPTION_SKILL_IDS.resistance, input || {});
+    if (test.needsInput) return corruptionTestPending(participant, baseRevision, test);
     const mutations = Array.isArray(v5.corruptionMutations) ? v5.corruptionMutations : [];
     let outcome;
     try { outcome = resolveCorruptionThresholdTest({
@@ -2331,6 +2348,7 @@ function resolvedCorruptionTest(participant, skillId, input) {
         if (!subject) throw new TypeError('Personnage introuvable');
         const sessionId = draft.extensions?.v5?.talentSessionId || null;
         const result = corruptionExposurePreview(subject, input, baseRevision, sessionId);
+        if (result.status !== 'ready') throw Object.assign(new Error('Réponse du MJ requise avant d’appliquer le Test de Corruption.'), { code: 'CORRUPTION_INPUT', userFacing: true });
         const exposure = { id: exposureId, influence: result.test.influence, kind: result.test.exposure,
           sessionId, declaredSources: String(input.declaredSources || '').trim(),
           skillId: result.test.skillId, roll: result.test.roll, success: result.test.success, sl: result.test.sl,
@@ -4601,7 +4619,10 @@ function resolvedCorruptionTest(participant, skillId, input) {
           if(input.conditionsConfirmed!==true)throw new Error('Lire/Écrire, matériel et conditions de déploiement requis.');
           const skill=(participants[index].skills || []).find(row=>/savoir.*magie|lore.*magic/i.test(row.name || row.nom || ''));
           const score=Number(skill?.total ?? skill?.score ?? skill?.value ?? participants[index].caracs?.Int) || 0;
-          const test=selectV5Test(previewV5Test({score,roll:input.roll,kind:'test'}),'keep');
+          // Q6 T5 : Test de Savoir (Magie) par le calcul commun ; Test actif d'un Round (Inconscient, Surpris : CA14).
+          const secondary=previewV5SecondaryTest(participants[index],{score,roll:normalizeV5Roll(input.roll),kind:'test',test:{characteristic:'Int',skill:skill?.name||skill?.nom||'Savoir (Magie)',isAction:true},context:input.conditionContext||{}});
+          if(!secondary.ready)throw Object.assign(new Error(secondary.needsInput.map(row=>row.label).join(' ')),{userFacing:true,needsInput:secondary.needsInput});
+          const test=selectV5Test(secondary.preview,secondary.optionId);
           if(test.success)participants[index] = deployCadaiRune(participants[index], {count:1});
           draft.log=[{id:uid(),ts:Date.now(),kind:'magic',text:'Déploiement Cadai (1 Round) : '+(test.success?'réussi':'échec')+' ; jet '+input.roll+' ; '+test.sl+' DR'},...(draft.log || [])];
         }
