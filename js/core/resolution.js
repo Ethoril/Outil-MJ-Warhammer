@@ -94,7 +94,8 @@ import { previewV5SecondaryTest, secondaryTestDetail } from './v5-test-modifiers
  * Q6 · T4 (CA1, CA3, CA8, CA14) : Test secondaire de monture ou de chute par le calcul commun. Chevaucher (Désarçonnement,
  * Surpris à cheval), opposition de Force après Chevaucher (les deux camps), Endurance après Croche-pied monté, Force de la source
  * d'un Filet. Seul calcul de ces Tests : `store.js` (États acquis, embuscade, chute d'un sort) l'appelle aussi.
- * - Les États déjà portés par le testeur comptent ; l'État qui déclenche le Test (Sonné, Surpris…) n'est pas encore posé.
+ * - Les États déjà portés par le testeur comptent ; l'État qui déclenche le Test n'est pas encore posé, sauf le Sonné qui déclenche
+ *   un Test de Chevaucher, qui compte dans ce Test (MJ 09/11 CA26, `withTriggeringStun`).
  * - `participant: false` ou sujet absent (source d'un Filet sans fiche, Force saisie d'un adversaire hors plateau) : score gardé.
  * - Aucun de ces Tests n'est une Action (CA14) : Surpris ne les bloque pas, Inconscient si, sauf Test subi (`passive`, CA21 :
  *   Endurance de la chute).
@@ -102,6 +103,17 @@ import { previewV5SecondaryTest, secondaryTestDetail } from './v5-test-modifiers
  * - `answerAt` : chemin où ranger les réponses aux questions d'États (rendu avec chaque question, CA8).
  * Rend `{ ready: true, test, detail }` (`test` au format de `selectV5Test`) ou `{ ready: false, blocked, needsInput, message }`.
  */
+/**
+ * MJ 09/11 CA26 : le Sonné qui déclenche un Test de Chevaucher compte dans ce Test (V5 p. 186). Rend une copie du cavalier portant,
+ * pour ce seul Test, les niveaux de Sonné acquis par l'événement (`states` : États acquis, seuls les Sonné sont retenus).
+ */
+export function withTriggeringStun(rider, states = []) {
+  const stun = (states || []).filter(row => ['sonne', 'stunned'].includes(foldKey(row?.key || row?.name || '')));
+  if (!rider || !stun.length) return rider;
+  return { ...rider, states: [...(rider.states || []), ...stun.map((row, index) => ({ id: 'ca26-trigger-' + index, key: 'sonne', name: 'Sonné',
+    level: Math.max(1, Number(row.level) || 1) }))] };
+}
+
 export function previewMountedSecondaryTest(subject, { score, roll, stat, skill = '', label = skill || stat, slModifiers = [], role = 'actor',
   opponent = null, participants = [], context = {}, answerAt = null, participant = true, passive = false } = {}) {
   if (!participant || !subject) return { ready: true, test: selectV5Test(previewV5Test({ score, roll, kind: 'test', slModifiers }), 'keep'), detail: [] };
@@ -533,7 +545,10 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
             else {
               // Q6 · T4 : Endurance de la chute (V5 v3 p. 169, Challenging +0) par le calcul commun ; réponses d'États dans tripFallConditionContext.
               // Test subi (CA21) : un Inconscient le fait, avec ses malus d'États ; pas d'opposant (Test non opposé).
-              const endurance=previewMountedSecondaryTest(target,{score:toughness,roll,stat:'E',skill:'Résistance',label:'Endurance',passive:true,
+              // MJ 09/11 CA27 : « Test d'Endurance » = compétence Résistance (avances comprises) ; à défaut, la caractéristique E.
+              const resilience=(target.skills||[]).find(row=>row?.id==='skill-52_e9_73_69_73_74_61_6e_63_65-base'||['resistance','endurance'].includes(foldKey(row?.name||'')));
+              const resilienceScore=Number.isSafeInteger(Number(resilience?.total))?Number(resilience.total):toughness;
+              const endurance=previewMountedSecondaryTest(target,{score:resilienceScore,roll,stat:'E',skill:'Résistance',label:'Endurance',passive:true,
                 participants:normalized.v5State?.participants||[],context:context.tripFallConditionContext,answerAt:'tripFallConditionContext'});
               if(!endurance.ready){tripUnresolved.push('Chute du Croche-pied : '+endurance.message);tripFallNeedsInput.push(...endurance.needsInput);}
               else enduranceTest={...endurance.test,detail:endurance.detail};
@@ -670,6 +685,13 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
       const sourceStrength=sourceIsParticipant ? Number(sourceParticipant.caracs.F) : threshold;
       const sourceScore=sourceStrength;
       const opponentRoll=context.netEscapeOpponentRoll;
+      // MJ 09/11 CA28 : une source participante Inconsciente lâche prise : l'échappée est réussie d'office, sans Test opposé.
+      const sourceLetGo=sourceIsParticipant&&['inconscient','unconscious'].some(key=>(sourceParticipant.states||[]).some(row=>foldKey(row?.key||row?.name||'')===key&&Number(row.level??1)>0));
+      if(sourceLetGo)netEscape={participantId:actor.id,conditionId,before:clone(condition),after:null,beforeProgress:progress,afterProgress:null,freed:true,remainingEntangled:0,
+        weaponId:condition.source?.weaponLocked?condition.source.weaponId:null,holderId:condition.source?.weaponLocked?condition.source.authorId:null,
+        conjuredEffectId:condition.source?.weaponLocked?(condition.source?.conjuredEffectId||null):null,hookedNetDamage:0,sourceLetGo:'Inconscient',
+        opposition:null};
+      else {
       if(!Number.isInteger(opponentRoll)||opponentRoll<1||opponentRoll>100)unresolved.push('Filet : saisir le jet d100 du Test opposé de Force de la source.');
       if(!Number.isSafeInteger(sourceScore)||sourceScore<0||sourceScore>100)unresolved.push('Filet : Force de la source requise pour son Test opposé.');
       // Q6 · T4 (CA3) : la source participante (porteur, Mancatcher…) passe par le calcul commun ; un seuil de matériau (V5 v3 p. 186,
@@ -695,6 +717,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
           conjuredEffectId:condition.source?.weaponLocked&&escape.freed&&!escape.remainingEntangled?(condition.source?.conjuredEffectId||null):null,
           hookedNetDamage:condition.source?.hookedNet===true?hookedNetPlan.damage:0,
           opposition:{actorSl:escape.actorSl,sourceSl:escape.opponentSl,netSl:escape.netSl,sourceRoll:opponentRoll,sourceScore,springLoaded}};
+      }
       }
     }
   }
@@ -1208,7 +1231,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   const mountedRiders = mountedRoster.filter(row => row?.extensions?.v5?.mounted === true && row.extensions.v5.mountId);
   const nextConditionKeys = new Set(targetConditionApplication.map(row => foldKey(row.key || row.name)));
   if (tripFall && target?.extensions?.v5?.mounted === true) mountedFallPlans.push({ participantId: target.id, event: 'rider-prone', ...planMountedFall({ event: 'rider-prone', fallPreventedByEquipment: context.fallPreventedByEquipment === true }) });
-  if (target?.extensions?.v5?.mounted === true && !tripFall) for (const event of mountedRiderEventsFor(nextConditionKeys)) mountedFallPlans.push({ participantId: target.id, event, ...planMountedFall({ event, fallPreventedByEquipment: context.fallPreventedByEquipment === true }) });
+  if (target?.extensions?.v5?.mounted === true && !tripFall) for (const event of mountedRiderEventsFor(nextConditionKeys)) mountedFallPlans.push({ participantId: target.id, event, ...(event === 'rider-stunned' ? { triggerStates: targetConditionApplication } : {}), ...planMountedFall({ event, fallPreventedByEquipment: context.fallPreventedByEquipment === true }) });
   const heldTarget = targetConditionApplication.some(row => row.key === 'enchevetre' && row.source?.kind === 'quality'
     && (row.source?.linkId || row.source?.weaponId || row.source?.keywordId === 'immobilisante'));
   const explicitRestraint = context.mountedRestraint === 'anchored' || context.mountedRestraint === 'held';
@@ -1266,7 +1289,8 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     const byEvent = !singlePlan || answers[plan.participantId]?.[plan.event] && typeof answers[plan.participantId][plan.event] === 'object';
     const answerAt = (context.mountedRideTestsById ? 'mountedRideTestsById.' : context.mountedRideTests ? 'mountedRideTests.' : 'mountedRideTestsById.')
       + plan.participantId + (byEvent ? '.' + plan.event : '') + '.conditionContext';
-    const ride = previewMountedSecondaryTest(rider, { score, roll, stat: 'Ag', skill: 'Chevaucher',
+    // MJ 09/11 CA26 : le Sonné qui déclenche le Test compte dans ce Test.
+    const ride = previewMountedSecondaryTest(withTriggeringStun(rider, plan.triggerStates), { score, roll, stat: 'Ag', skill: 'Chevaucher',
       slModifiers: [{ id: 'mounted:fall', label: 'Désarçonnement', amount: plan.requiredTest.modifier }],
       participants: normalized.v5State?.participants || [], answerAt,
       context: riderAnswer.conditionContext ?? (singlePlan ? context.mountedRideConditionContext : undefined) });
@@ -1377,7 +1401,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   };
   const actorConditionApplication=[...kept(activation.conditions||[],nature?.magical===true),...kept(magicFumbleStates,nature?.magical===true),...kept((defenderCritical?.application?.states||[]).map(row=>({...row,source:{...row.source,kind:'critical'}})),defenderMagical),...kept(defenderWeaponConditions.proposed,defenderMagical),...kept(blackpowderStates,false),...supplementalActorConditions];
   const actorConditionKeys = new Set(actorConditionApplication.map(row => foldKey(row.key || row.name)));
-  if (actor?.extensions?.v5?.mounted === true) for (const event of mountedRiderEventsFor(actorConditionKeys)) mountedFallPlans.push({ participantId: actor.id, event,
+  if (actor?.extensions?.v5?.mounted === true) for (const event of mountedRiderEventsFor(actorConditionKeys)) mountedFallPlans.push({ participantId: actor.id, event, ...(event === 'rider-stunned' ? { triggerStates: actorConditionApplication } : {}),
     ...planMountedFall({ event, fallPreventedByEquipment: context.fallPreventedByEquipment === true }) });
   mountedRidePlanCounts.clear();
   for (const plan of mountedFallPlans) if (plan.requiredTest) mountedRidePlanCounts.set(plan.participantId, (mountedRidePlanCounts.get(plan.participantId) || 0) + 1);

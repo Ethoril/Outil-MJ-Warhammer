@@ -32,16 +32,18 @@ function stunnedRiderInput(states, context = { mountedRideScore: 55, mountedRide
 }
 
 describe('Q6 · T4 : Chevaucher au Désarçonnement (resolution.js)', () => {
-  test('CA9 : sans État, le Test de Chevaucher garde son résultat', () => {
+  test('CA9 : sans État porté, le Test de Chevaucher ne compte que le Sonné qui le déclenche (CA26, MJ 09/11 soir)', () => {
     const clean = previewResolution(stunnedRiderInput([]));
-    assert.equal(clean.mountedFall[0].test.sl, 1 + 0, 'jet 40 sur 55 : 5 − 4 = 1 DR');
+    assert.equal(clean.mountedFall[0].test.sl, 1 - 1, 'jet 40 sur 55 : 5 − 4 = 1 DR, −1 du Sonné déclencheur (avant CA26 : 1)');
   });
 
   test('CA1 : Exténué du cavalier pèse sur Chevaucher, comme le calcul commun', () => {
+    // CA26 : le Sonné déclencheur (−1) compte ; la plus forte pénalité d'État seule s'applique, d'où Exténué 2 pour la voir jouer.
+    const tired2 = { ...tired, level: 2 };
     const clean = previewResolution(stunnedRiderInput([])).mountedFall[0].test;
-    const plan = previewResolution(stunnedRiderInput([tired])).mountedFall[0];
+    const plan = previewResolution(stunnedRiderInput([tired2])).mountedFall[0];
     assert.equal(plan.test.sl, clean.sl - 1);
-    const common = previewV5SecondaryTest(actor('attacker', { states: [tired] }), { score: 55, roll: 40,
+    const common = previewV5SecondaryTest(actor('attacker', { states: [tired2, { id: 'stun', key: 'sonne', name: 'Sonné', level: 1 }] }), { score: 55, roll: 40,
       slModifiers: [{ id: 'mounted:fall', label: 'Désarçonnement', amount: 0 }], test: { characteristic: 'Ag', skill: 'Chevaucher', isAction: false }, context: { reliesOnSight: true } });
     assert.equal(plan.test.sl, common.result.sl);
     assert.ok(plan.test.detail.some(text => /Exténué|État/.test(text)), plan.test.detail.join(' | '));
@@ -57,8 +59,9 @@ describe('Q6 · T4 : Chevaucher au Désarçonnement (resolution.js)', () => {
     assert.equal(answered.mountedFall[0].test.sl, 0, 'Brisé : −1 DR hors fuite');
   });
 
-  test('Chevaucher repose sur la vue (Aveuglé, V5 p. 185) : Désavantage sans question', () => {
-    const plan = previewResolution(stunnedRiderInput([blind])).mountedFall[0];
+  test('Chevaucher repose sur la vue (Aveuglé, V5 p. 185) : Désavantage sans question sur la vue', () => {
+    // CA26 : Aveuglé (Désavantage) et le Sonné déclencheur (DR) diffèrent : le MJ choisit le mode, ici le Désavantage.
+    const plan = previewResolution(stunnedRiderInput([blind], { mountedRideScore: 55, mountedRideRoll: 40, mountedRideConditionContext: { conditionPenaltyMode: 'disadvantage' } })).mountedFall[0];
     assert.ok(plan.test, JSON.stringify(plan.needsInput));
     assert.ok(plan.test.advantage.disadvantage.length > 0);
   });

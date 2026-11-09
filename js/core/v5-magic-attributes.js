@@ -377,7 +377,9 @@ export function previewLoreAttribute({
         } else {
           const roll = options.attributeRolls?.[target.id]?.corruptionRoll;
           if (!Number.isInteger(roll) || roll < 1 || roll > 100) { missingRolls.push(target.id); continue; }
-          const skill = (target.skills || []).find(sk => fold(sk?.name) === 'endurance');
+          // MJ 09/11 CA27 : un « Test d'Endurance » est un Test de la compétence Résistance (avances comprises) ; à défaut, la
+          // caractéristique E (« Endurance » reste lu pour une fiche ancienne qui nommerait ainsi la compétence).
+          const skill = (target.skills || []).find(sk => ['resistance', 'endurance'].includes(fold(sk?.name)) || sk?.id === 'skill-52_e9_73_69_73_74_61_6e_63_65-base');
           const score = Number(skill?.total ?? skill?.value ?? target.caracs?.E) || 0;
           // Q6 T7 : calcul commun du testeur (États, talents, sorts et prières, séquelles) ; réponses du MJ aux questions d'États dans
           // `attributeRolls[id].corruptionContext`. Une question sans réponse (CA8) ou une restriction (CA14) laisse l'attribut non résolu.

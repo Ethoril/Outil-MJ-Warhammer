@@ -143,7 +143,7 @@ import { createStateCommand, createCompactStateCommand, applyStateChanges } from
 import { createHistory, recordCommand, canUndo as historyCanUndo, canRedo as historyCanRedo, undo as historyUndo, redo as historyRedo, historySnapshot, markExternalBoundary } from './history.js';
 import { ORDER_MODES, effectiveOrder, moveInOrder, insertReinforcement, insertParticipantsByInitiative, setOrderMode as computeOrderMode, nextTurn as computeNextTurn, removeFromCombat, prepareCombatInitiative } from './turn-order.js';
 import { createEncounter, normalizeEncounter, setEncounterEntry, removeEncounterEntry, duplicateEncounter, launchEncounter, addImprovisedParticipant, suspendScene, resumeScene } from './encounters.js';
-import { previewResolution as buildResolutionPreview, applyResolution as applyActionResolution, previewMountedSecondaryTest } from './resolution.js';
+import { previewResolution as buildResolutionPreview, applyResolution as applyActionResolution, previewMountedSecondaryTest, withTriggeringStun } from './resolution.js';
 import { simulateAction, applySimulation as applyActionSimulation, discardSimulation } from './simulation.js';
 import { deriveReminders, pendingReminders, resolveReminder } from './reminders.js';
 import { createScene, createIntention, createSceneEvent, createSceneClock, proposeSceneEvent, newlyProposedSceneEvents, resolveSceneEvent, applySceneEvent, advanceSceneClock } from './scene-events.js';
@@ -2080,9 +2080,11 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
               continue;
             }
             // Q6 · T4 : le calcul de resolution.js (calcul commun), pas un second. Le cavalier est testé avec ses États d'avant
-            // l'acquisition, comme dans resolution.js ; réponses d'États dans `mountedRideCondition<suffixe>:<champ>`.
+            // l'acquisition, comme dans resolution.js, plus le Sonné qui déclenche le Test (MJ 09/11 CA26) ; réponses d'États dans
+            // `mountedRideCondition<suffixe>:<champ>`.
             const conditionField = name => `mountedRideCondition${suffix}:${name}`;
-            const ride = previewMountedSecondaryTest(rider.id === id ? participant : rider, { score: rideScore, roll: rideRoll, stat: 'Ag', skill: 'Chevaucher',
+            const tester = rider.id === id ? participant : rider;
+            const ride = previewMountedSecondaryTest(event === 'rider-stunned' ? withTriggeringStun(tester, acquiredStates) : tester, { score: rideScore, roll: rideRoll, stat: 'Ag', skill: 'Chevaucher',
               slModifiers: [{ id: 'mounted:fall', label: 'Désarçonnement', amount: plan.requiredTest.modifier }],
               participants: draft.combat?.participants || [], context: spellTestContext(context, conditionField) });
             if (!ride.ready) {
@@ -5160,7 +5162,7 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
               : newlyAcquired(before, after, new Set(['inconscient'])) ? 'rider-unconscious'
                 : newlyAcquired(before, after, new Set(['aterre'])) ? 'rider-prone' : null
           : null;
-        if (event) addMountedFall({ participantId: before.id, event, ...planMountedFall({ event }) });
+        if (event) addMountedFall({ participantId: before.id, event, ...(event === 'rider-stunned' ? { triggerStates: (after.states || []).filter(state => !(before.states || []).some(old => old.id && old.id === state.id)) } : {}), ...planMountedFall({ event }) });
         if ((receipt.kill || receipt.destroyed) && before.extensions?.v5?.mounted === true) addMountedFall({ participantId: before.id, event: 'rider-dead', ...planMountedFall({ event: 'rider-dead' }) });
         const riders = roster.filter(row => row.extensions?.v5?.mounted === true && row.extensions.v5.mountId === before.id);
         if (riders.length) {
@@ -5186,7 +5188,7 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
             : newlyAcquired(before, after, new Set(['sonne'])) ? 'rider-stunned'
               : newlyAcquired(before, after, new Set(['inconscient'])) ? 'rider-unconscious'
                 : newlyAcquired(before, after, new Set(['aterre'])) ? 'rider-prone' : null : null;
-        if (event) addMountedFall({ participantId: before.id, event, ...planMountedFall({ event }) });
+        if (event) addMountedFall({ participantId: before.id, event, ...(event === 'rider-stunned' ? { triggerStates: (after.states || []).filter(state => !(before.states || []).some(old => old.id && old.id === state.id)) } : {}), ...planMountedFall({ event }) });
         const riders = roster.filter(row => row.extensions?.v5?.mounted === true && row.extensions.v5.mountId === before.id);
         if (riders.length) {
           const mountEvent = newlyAcquired(before, after, new Set(['inconscient'])) ? 'mount-unconscious'
@@ -5215,7 +5217,7 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
                   : newlyAcquired(before, after, new Set(['aterre'])) ? 'rider-prone'
                     : newlyAcquired(before, after, new Set(['surpris'])) ? 'rider-surprised'
                       : newlyAcquired(before, after, new Set(['sonne'])) ? 'rider-stunned' : null : null;
-            if (event) addMountedFall({ participantId: before.id, event, ...planMountedFall({ event }) });
+            if (event) addMountedFall({ participantId: before.id, event, ...(event === 'rider-stunned' ? { triggerStates: (after.states || []).filter(state => !(before.states || []).some(old => old.id && old.id === state.id)) } : {}), ...planMountedFall({ event }) });
             const mountEvent = after.extensions?.v5?.dead === true ? 'mount-dead'
               : newlyAcquired(before, after, new Set(['inconscient'])) ? 'mount-unconscious'
                 : newlyAcquired(before, after, new Set(['aterre'])) ? 'mount-prone'
@@ -5242,7 +5244,8 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
         if (score === null) needsInput.push({ field: `mountedRideScore:${fall.participantId}`, kind: 'integer', min: 0, max: 100, label: `${rider?.name || fall.participantId} : score de Chevaucher` });
         if (!Number.isInteger(roll) || roll < 1 || roll > 100) needsInput.push({ field: `mountedRideRoll:${fall.participantId}`, kind: 'd100', min: 1, max: 100, label: `${rider?.name || fall.participantId} : d100 de Chevaucher (${fall.event}, ${fall.requiredTest.modifier >= 0 ? '+' : ''}${fall.requiredTest.modifier} DR)` });
         // Q6 · T4 : Désarçonnement par le calcul commun (resolution.js) ; réponses d'États dans mountedRideTests.<id>.conditionContext.
-        const ride = score !== null && Number.isInteger(roll) && roll >= 1 && roll <= 100 ? previewMountedSecondaryTest(rider, { score, roll, stat: 'Ag', skill: 'Chevaucher',
+        // MJ 09/11 CA26 : le Sonné qui déclenche le Test compte dans ce Test.
+        const ride = score !== null && Number.isInteger(roll) && roll >= 1 && roll <= 100 ? previewMountedSecondaryTest(withTriggeringStun(rider, fall.triggerStates), { score, roll, stat: 'Ag', skill: 'Chevaucher',
           slModifiers: [{ id: 'mounted:fall', label: 'Désarçonnement', amount: fall.requiredTest.modifier }], participants: roster, context: answer.conditionContext,
           answerAt: `mountedRideTests.${fall.participantId}.conditionContext` }) : null;
         if (ride && !ride.ready) needsInput.push(...ride.needsInput.map(row => ({ ...row, field: row.field ? `rideCondition:${fall.participantId}:${row.field}` : `rideBlocked:${fall.participantId}`,

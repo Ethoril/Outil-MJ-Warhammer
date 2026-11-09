@@ -95,11 +95,10 @@ describe('Q6 · T8 : Tests des contrats de sorts par le calcul commun', () => {
     assert.equal(answered.ready, true, answered.error);
   });
 
-  test('CA14 : une cible Inconsciente ne fait pas le Test de résistance, l’outil dit pourquoi', async () => {
+  test('CA21 : une cible Inconsciente fait le Test de résistance, Test subi (T11 ; avant : bloqué par CA14)', async () => {
     const p = await cast('Goût de la Mort', taste, { foe: { states: ['Inconscient'] } });
-    assert.equal(p.ready, false);
-    assert.equal(p.status, 'test-blocked');
-    assert.match(p.error, /Inconscient/);
+    assert.equal(p.ready, true, p.error);
+    assert.ok(receipt(p).resistanceTest);
   });
 
   test('Cor d’Andar (WoM p. 111) : Peur (1) immédiate, −2 DR du Cor plus les États', async () => {

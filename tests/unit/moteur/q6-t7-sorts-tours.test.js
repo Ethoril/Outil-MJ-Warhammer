@@ -47,11 +47,10 @@ describe('Test de Round d’un sort (CA1, CA8, CA14)', () => {
     assert.equal(answered.requests.length, 0);
     assert.match(roundLog(answered), /réussi/);
   });
-  test('Inconscient : aucun Test, demande manuelle qui dit pourquoi (CA14)', () => {
+  test('Inconscient : la résistance au sort est un Test subi, faite avec les malus d’États (CA21, T11 ; avant : bloquée par CA14)', () => {
     const out = roundRun([state('inconscient', 'Inconscient')], { 'spell:e1:roundTest': 35 });
-    const request = out.requests.find(row => row.kind === 'manual');
-    assert.match(request?.label || '', /Inconscient/);
-    assert.equal(roundLog(out), '');
+    assert.equal(out.requests.some(row => row.kind === 'manual'), false);
+    assert.match(roundLog(out), /Calme 1 DR, réussi/);
   });
 });
 

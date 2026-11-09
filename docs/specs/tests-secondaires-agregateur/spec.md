@@ -43,6 +43,14 @@ Le MJ a décidé les 05 et 06/11 que tous les Tests, et pas seulement le Test pr
 - **CA20** L'État que Déterminé cherche à éviter ne compte pas dans son propre Test de Calme.
 - **CA21** (MJ 09/11, précise CA14) CA14 vise les Tests où l'on agit. Les Tests subis (résister à la Warp Blade, Résistance de convalescence, Résistance au Courroux, toute résistance passive du même genre) restent faits normalement par un Inconscient, avec les malus d'États. L'appelant distingue les deux par un drapeau (`passive`).
 - **CA22** (MJ 09/11, précise CA13) Les séquelles à circonstance (zone utilisée, parole, deux mains, ouïe, odorat, cicatrice appropriée…) ne sont pas ignorées sur un Test secondaire : comme pour les États, le Test pose la question au MJ (`needsInput`) et reste non résolu tant qu'elle n'a pas de réponse ; la réponse décide si la séquelle s'applique.
+- **CA23** (MJ 09/11) En fin de Tour d'un sort, un Test actif d'un lanceur Inconscient (guidage de la Comète…) est raté d'office, avec le motif « Inconscient », sans bloquer le reste de la fin de Tour. Les résistances des cibles restent des Tests subis (CA21).
+- **CA24** (MJ 09/11) Une cible Surprise ne peut pas esquiver le Souffle, comme un défenseur Surpris au combat : le Souffle la touche sans opposition.
+- **CA25** (MJ 09/11) Un lanceur Aveuglé ne peut pas faire le Test de CT du Souffle (même règle qu'un tir au combat).
+- **CA26** (MJ 09/11 soir) Le Sonné qui déclenche un Test de Chevaucher compte dans ce Test (−1 DR, V5 p. 186), au combat comme hors combat (États acquis, sort).
+- **CA27** (MJ 09/11 soir) Un « Test d'Endurance » est un Test de la compétence Résistance (avances comprises), pas de la caractéristique E brute : chute après Croche-pied monté, Corruption de Tzeentch. Sans la compétence, la caractéristique E.
+- **CA28** (MJ 09/11 soir) Une source de Filet Inconsciente lâche prise : l'échappée est réussie d'office, sans Test opposé de la source.
+- **CA29** (MJ 09/11 soir) Au lancer, à la Focalisation (pause et interruption comprises) et à la Dissipation, une question de séquelle sans réponse empêche le jet, comme partout (CA22). Les questions d'États gardent leur règle propre à la magie (sans réponse, l'État ne pèse pas).
+- Alignement (MJ 09/11) : dans les oppositions des sorts au fil des tours, la cible qui résiste prend le rôle de défenseur, comme dans les contrats de sorts et le désengagement (CA16) : les effets « … adverse » ne jouent que dans un sens.
 
 ## Hors périmètre
 

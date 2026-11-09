@@ -117,6 +117,12 @@ export function prepareMagicOptions(actor, kind, options={}, spell = null) {
   next.conditionNeeds=common.needsInput.map(row=>row.label);
   // MJ 09/11 CA22 : questions avec leur champ (circonstances de séquelle `sequela…` comprises), pour le panneau.
   next.conditionNeedRows=common.needsInput.map(row=>({...row}));
+  // MJ 09/11 CA29 : au lancer, à la Focalisation (pause et interruption comprises) et à la Dissipation, une question de séquelle sans
+  // réponse empêche le jet, comme partout (CA22). Les questions d'États gardent leur règle propre à la magie (sans réponse, l'État ne
+  // pèse pas). Deux yeux perdus : la question de la vue vient de la séquelle. Sans d100, l'aperçu reste possible (questions à afficher).
+  const sightBySequela=common.parts.sequelae.unresolved.includes('Séquelle : préciser si le Test est influencé par la vue.');
+  next.sequelaNeedRows=common.needsInput.filter(row=>/^sequela/.test(row.field || '') || sightBySequela && row.field==='reliesOnSight').map(row=>({...row}));
+  if(next.sequelaNeedRows.length && options.roll!=null)throw Object.assign(ruleError('Séquelle : répondre avant le jet ('+next.sequelaNeedRows.map(row=>row.label).join(' ; ')+').'),{needsInput:next.sequelaNeedRows});
   next.conditionRows=common.rows;next.testUnresolved=common.unresolved;next.testModifiers=common;next.dispelKeyRows=dispelKeys?layers.magic.filter(row=>dispelKeys.has(fold(row.id.replace(/^spell-skill:/,'')).trim())).length:0;
   if(['casting','channelling'].includes(kind)){const ground=groundCastModifier(actor,{aboard:slannAboard(actor)});if(ground.available && ground.modifier)slModifiers.push({id:'slann-ground',label:'Slann au sol',amount:ground.modifier});}
   if(Number(activeMagicTalent(actor,'sanctuary-of-the-mind')?.magicTalentRank)>=3)for(const modifier of slModifiers)if(modifier.id==='yenlui' && modifier.amount<0)modifier.amount=0;
