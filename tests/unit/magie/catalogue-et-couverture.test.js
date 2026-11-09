@@ -412,7 +412,8 @@ probe('cadai-meditation', 'magic:0', 'HEPG p. 101, adaptation +2 DR', async () =
 });
 probe('eye-of-the-storm', 'magic:1', 'HEPG p. 105', async () => {
   const store = await combat(wizard('mage', { talents: [talent('eye-of-the-storm', 2)], states: [{ name: 'Exténué', level: 2 }] }));
-  await meditation(store, 'eye-of-the-storm');
+  // Q6 T3 : la méditation est un Test de Prière soumis à Exténué (−2 DR) ; jet 25 (au lieu de 45) pour qu'elle réussisse encore.
+  await store.applyMagicMeditation({ actorId: 'mage', talentId: 'talent-eye-of-the-storm', name: 'eye-of-the-storm', minutes: 20, roll: 25, durationRolls: [1, 1] });
   assert.equal(store.previewChannelling({ actorId: 'mage', roll: 25 }).test.sl, 4);
   assert.equal(store.previewCasting(getSpellContract('Carreau'), { actorId: 'mage', roll: 25 }).test.sl, 4);
 });

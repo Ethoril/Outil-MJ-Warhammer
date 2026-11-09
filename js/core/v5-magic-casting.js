@@ -9,6 +9,7 @@ import { prepareMagicOptions, magicTalentRank, applyMagicAttempt, magicTurnKey, 
  */
 import { MAGIC_DATA } from '../data/magic.js';
 import { previewV5Test, selectV5Test, normalizeV5Roll } from './v5-roll.js';
+import { finalizeV5TestModifiers } from './v5-test-modifiers.js';
 import {
   getChannellingReserve,
   clearChannellingReserve,
@@ -310,6 +311,9 @@ function previewPreparedCasting(participant, spell, options) {
     ...(armorPenalty !== 0 ? [{ id: 'armor', label: 'Pénalité d’armure', amount: armorPenalty }] : []),
     ...extraModifiers
   ];
+  // Q6 T3 (reste de T1) : plafonds de fin de calcul (Distrait, Obstiné V5 p. 127) sur la liste complète de ce Test, difficulté et
+  // pénalité d'armure comprises, comme à la Dissipation (idempotent après celui de prepareMagicOptions).
+  finalizeV5TestModifiers(participant, options.testModifiers || {}, { slModifiers, advantageSources: options.advantageSources || [], disadvantageSources: options.disadvantageSources || [] });
 
   if (options.roll === undefined || options.roll === null) {
     return {

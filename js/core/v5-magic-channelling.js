@@ -10,6 +10,7 @@ import { prepareMagicOptions, magicTalentRank, applyMagicAttempt, magicTurnKey, 
 import { MAGIC_DATA } from '../data/magic.js';
 import { HIT_LOCATIONS } from '../data/shared/fiche/equipment.js';
 import { previewV5Test, selectV5Test, normalizeV5Roll } from './v5-roll.js';
+import { finalizeV5TestModifiers } from './v5-test-modifiers.js';
 import { resolveMiscast, applyMiscastToParticipant, explicitMagicDie, missingMagicDiceMessage } from './v5-magic-miscasts.js';
 import { armorMaterial, unknownArmorMaterials } from './v5-armor-material.js';
 import { uid } from './models.js';
@@ -240,6 +241,9 @@ function focalisationModifiers(participant, options, targetType, extra = []) {
     ...extra,
     ...extraModifiers
   ];
+  // Q6 T3 (reste de T1) : plafonds de fin de calcul (Distrait, Obstiné V5 p. 127) sur la liste complète de ce Test, difficulté et
+  // pénalité d'armure comprises, comme à la Dissipation (idempotent après celui de prepareMagicOptions).
+  finalizeV5TestModifiers(participant, options.testModifiers || {}, { slModifiers, advantageSources: options.advantageSources || [], disadvantageSources: options.disadvantageSources || [] });
   return { armorPenalty, armorContext, slModifiers };
 }
 
@@ -476,7 +480,8 @@ export function previewChannellingPause(participant, options = {}) {
     advantageSources: options.advantageSources || [],
     disadvantageSources: options.disadvantageSources || []
   });
-  const selectedTest = enforceMagicTestRestrictions(participant,selectV5Test(testPreview,'keep'));
+  // Désavantage : option unique imposée (souvent inversée) ; Avantage : choix du MJ, comme au gain et à l'interruption.
+  const selectedTest = enforceMagicTestRestrictions(participant,selectV5Test(testPreview,testPreview.options.length === 1 ? testPreview.options[0].id : options.choice || 'keep'));
   const success = selectedTest.success;
   const newReserve = success ? currentReserve : { type: null, sl: 0 };
 
@@ -532,7 +537,11 @@ export function previewChannellingInterruption(participant, options = {}) {
   const foundSkill = skills.find(s => /calme|cool/i.test(s.name || s.nom || ''));
   const score = Math.max(0, (Number.isFinite(Number(options.score)) ? Number(options.score) : effectiveSkillScore(participant,foundSkill?.total ?? foundSkill?.value ?? foundSkill?.score ?? baseCharacteristicScore(participant,'FM'),'FM')) + (Number(options.scoreDelta) || 0)); // Séquelles : Caractéristique perdue (MJ 09/11 CA13)
 
+  // Q6 T3 : Test de Calme par le calcul commun (prepareMagicOptions, kind `interruption`) ; le Difficile entre dans les plafonds
+  // (Obstiné, Distrait) et les Avantages et Désavantages communs pèsent sur le jet.
   const slModifiers = [{ id: 'interruption-difficulty', label: 'Difficile (−2 DR)', amount: -2 },...(options.slModifiers || [])];
+  const advantageSources = options.advantageSources || [], disadvantageSources = options.disadvantageSources || [];
+  finalizeV5TestModifiers(participant, options.testModifiers || {}, { slModifiers, advantageSources, disadvantageSources });
 
   if (options.roll === undefined || options.roll === null) {
     return {
@@ -549,9 +558,12 @@ export function previewChannellingInterruption(participant, options = {}) {
     score,
     roll,
     kind: 'test',
-    slModifiers
+    slModifiers,
+    advantageSources,
+    disadvantageSources
   });
-  const selectedTest = selectV5Test(testPreview, 'keep');
+  // Désavantage : option unique imposée ; Avantage : choix du MJ (`options.choice`), comme au lancer et à la Focalisation.
+  const selectedTest = selectV5Test(testPreview, testPreview.options.length === 1 ? testPreview.options[0].id : options.choice || 'keep');
   const success = selectedTest.success;
 
   let lossRoll = null;

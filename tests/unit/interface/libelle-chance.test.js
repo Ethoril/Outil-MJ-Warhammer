@@ -10,8 +10,8 @@ import { fileURLToPath } from 'node:url';
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 // Noms propres : sort de Haute Magie, miracles de Ranald et de Handrich, bénédiction, malédiction, compétence ; citation anglaise du livre (L17).
 const NOMS_PROPRES = /A Fortune reroll|La Fortune est Capricieuse|Fortune généreuse|Bountiful Fortune|Twist of Fortune|Ill[- ]Fortune|Fortune[- ][Tt]elling|Fate and Fortune|Bénédiction de Fortune/g;
-// En attente : fichier réservé au chantier Q6, à corriger par la session qui le détient (signalé dans l'inventaire).
-const EN_ATTENTE = new Set(['js/core/v5-magic-high.js|L’épuisement temporaire nécessite un Point de Chance (Fortune).']);
+// En attente : libellés d'un fichier réservé à une autre session, à corriger par elle (vide : v5-magic-high.js corrigé par Q6 T3).
+const EN_ATTENTE = new Set();
 
 const walk = dir => fs.readdirSync(path.join(ROOT, dir), { withFileTypes: true }).flatMap(entry => {
   const rel = `${dir}/${entry.name}`;

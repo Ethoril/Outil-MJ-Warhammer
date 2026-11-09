@@ -5,8 +5,9 @@ import {commitV5Resources,getV5Fate,projectV5ResourceEnvelope,projectV5Resources
  * Conforme au Cahier des charges Lot 3 et au Cadrage Magie V5.
  * Module pur : aucune E/S, aucun tirage implicite, prévisualisations sans mutation d'état.
  */
-import { normalizeV5Roll, previewV5Test, selectV5Test } from './v5-roll.js';
+import { normalizeV5Roll, selectV5Test } from './v5-roll.js';
 import { effectiveSkillScore, baseCharacteristicScore } from './v5-magic-talents.js';
+import { previewV5SecondaryTest } from './v5-test-modifiers.js';
 
 export const V5_MAGIC_HIGH_VERSION = 'v5-magic-high-2026-10-10.1';
 
@@ -184,7 +185,7 @@ export function applyBurnout(target, preview, options = {}) {
 
 /**
  * Prévisualisation de l'annulation d'un épuisement magique via Fortune (Chance) ou Destin (Fate).
- * - Épuisement temporaire : 1 Point de Chance (Fortune) seulement.
+ * - Épuisement temporaire : 1 Point de Chance seulement.
  * - Épuisement permanent : 1 Point de Destin (High Elf Players Guide p. 84) seulement.
  * S-11 : la Chance se lit dans le registre V5 (`resources.fortune`, absent tant que le compteur n'est pas initialisé) ;
  * jamais de repli sur `participant.fortune`. Le Destin se lit via getV5Fate (champ canonique `extensions.v5.fate` + Destin temporaire des couches).
@@ -206,7 +207,7 @@ export function previewBurnoutRecovery(participant, { resource = null, envelope 
       possible: false,
       reason: current.permanent
         ? 'L’épuisement permanent nécessite la dépense d’un Point de Destin (Fate).'
-        : 'L’épuisement temporaire nécessite un Point de Chance (Fortune).',
+        : 'L’épuisement temporaire nécessite un Point de Chance.',
       requiredResource,
       providedResource
     };
@@ -413,7 +414,11 @@ export function previewCadaiCorruptionReroll(actor, options = {}) {
   const fold = value => String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
   const skill = (actor.skills || []).find(row => ['calme', 'cool'].includes(fold(row.name || row.nom)));
   const score = effectiveSkillScore(actor, skill?.total ?? skill?.value ?? skill?.score ?? baseCharacteristicScore(actor, 'FM'), 'FM');
-  const test = selectV5Test(previewV5Test({ score, roll: reroll, slModifiers: modifier ? [{ id: 'corruption-difficulty', label: 'Exposition à la Corruption', amount: modifier }] : [] }), 'keep');
+  // Q6 T3 : Test de Calme (FM) par le calcul commun ; l'exposition entre dans les plafonds (Obstiné, CA18). Inconscient le bloque.
+  const secondary = previewV5SecondaryTest(actor, { score, roll: reroll, test: { characteristic: 'FM', skill: 'Calme' }, context: options.conditionContext || {},
+    slModifiers: modifier ? [{ id: 'corruption-difficulty', label: 'Exposition à la Corruption', amount: modifier }] : [] });
+  if (!secondary.ready) return { ...fail(secondary.needsInput.map(row => row.label).join(' ')), needsInput: secondary.needsInput };
+  const test = selectV5Test(secondary.preview, secondary.optionId);
   return { ready: true, firstRoll, reroll, test, slModifier: modifier, castExecutionId: options.castExecutionId, spellId: options.spell.id,
     cadaiReceipt: { purpose: 'corruption', initialRoll: firstRoll, reroll } };
 }

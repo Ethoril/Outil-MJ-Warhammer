@@ -10,7 +10,7 @@ import { mishapSeverity, groundCastModifier, slannAboard } from './slann.js';
 import { unsuppressedSpellEffects } from './v5-magic-effects.js';
 import { combineEffects, targetAppliesToTest } from './effect-engine.js';
 // Cycle d'import connu (v5-test-modifiers lit magicTestModifiers) : seules des fonctions, appelées après le chargement.
-import { resolveV5TestModifiers, finalizeV5TestModifiers, conditionLevels } from './v5-test-modifiers.js';
+import { resolveV5TestModifiers, finalizeV5TestModifiers, conditionLevels, previewV5SecondaryTest } from './v5-test-modifiers.js';
 
 const ruleError=message=>Object.assign(new Error(message),{userFacing:true});
 /** Test de chaque Action magique (Q6 T1) : compétence au catalogue et Caractéristique ; la Dissipation est un Test de Langue (Magick). */
@@ -251,7 +251,12 @@ export function previewMagicMeditation(actor,options={}){
  const prayerSkill=Boolean(skill&&(skill.id==='skill-50_72_69_e8_72_65-base'||fold(skill.name||skill.nom)==='priere'));
  const prayerModifiers=prayerSkill?getPrayerSLModifiers(actor,options.prayerSLContext||{}):{ok:true,status:'unchanged',modifiers:[],needsInput:[]};
  if(!prayerModifiers.ok)return {ready:false,success:false,id,error:'Le malus de Prière du Courroux est invalide ou ne peut pas être daté.',needsInput:prayerModifiers.needsInput};
- let test=selectV5Test(previewV5Test({score,roll:normalizeV5Roll(options.roll),slModifiers:[...(cadai?[{id:'meditation-difficulty',label:'Accessible',amount:2}]:[]),...prayerModifiers.modifiers]}), 'keep');
+ // Q6 T3 : Test de Prière (FM) par le calcul commun : États, couches, talents, séquelles ; Inconscient le bloque (CA14). Une
+ // précision d'État manquante (`options.conditionContext`) laisse le Test non résolu (CA8). Accessible et Courroux avant les plafonds.
+ const secondary=previewV5SecondaryTest(actor,{score,roll:normalizeV5Roll(options.roll),test:{characteristic:'FM',skill:'Prière'},context:options.conditionContext||{},
+  slModifiers:[...(cadai?[{id:'meditation-difficulty',label:'Accessible',amount:2}]:[]),...prayerModifiers.modifiers]});
+ if(!secondary.ready)return {ready:false,success:false,id,error:secondary.needsInput.map(row=>row.label).join(' '),needsInput:secondary.needsInput,unresolved:secondary.unresolved};
+ let test=selectV5Test(secondary.preview,secondary.optionId);
  const rawSL=test.sl;
  const prayerSL=prayerSkill?applyPrayerSLCaps(actor,test):{ok:true,status:'unchanged',test,caps:[],needsInput:[]};
  if(!prayerSL.ok)return {ready:false,success:false,test,id,error:'La sanction calendaire de Prière est invalide.' ,needsInput:prayerSL.needsInput};

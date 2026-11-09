@@ -2,7 +2,8 @@
 import { calculateArmor, normalizeArmorLocations } from './equipment.js';
 import { calculateEffectiveMagicAP } from './v5-magic-effects.js';
 import { previewChannelling } from './v5-magic-channelling.js';
-import { previewV5Test, selectV5Test } from './v5-roll.js';
+import { selectV5Test } from './v5-roll.js';
+import { previewV5SecondaryTest } from './v5-test-modifiers.js';
 
 export const ARCANE_ARMOR_LOCATIONS = Object.freeze([
   ['head', 'Tête'], ['body', 'Corps'], ['leftArm', 'Bras gauche'],
@@ -33,10 +34,14 @@ export function getArcaneWornArmor(target) {
   return Object.fromEntries(Object.entries(normalizeArmorLocations(base)).map(([loc, ap]) => [loc, Math.max(0, ap - (damage[loc] || 0))]));
 }
 
-function secondaryTest(score, roll, modifier = 0) {
+/** Q6 T3 : Test de Dextérité par le calcul commun (États, couches, talents, séquelles) ; `{ blocked }` si un État l'interdit ou
+ * demande une précision (`facts.dexterityConditionContext`). */
+function secondaryTest(actor, score, roll, modifier = 0, conditionContext = {}) {
   if (!Number.isInteger(roll) || roll < 1 || roll > 100) return null;
-  return selectV5Test(previewV5Test({ score, roll, kind: 'test',
-    slModifiers: modifier ? [{ id: 'arcane-dexterity', amount: modifier }] : [] }), 'keep');
+  const secondary = previewV5SecondaryTest(actor, { score, roll, test: { characteristic: 'Dex' }, context: conditionContext,
+    slModifiers: modifier ? [{ id: 'arcane-dexterity', label: 'Test de Dextérité', amount: modifier }] : [] });
+  if (!secondary.ready) return { blocked: secondary.needsInput.map(row => row.label).join(' ') };
+  return selectV5Test(secondary.preview, secondary.optionId);
 }
 
 export function previewArcaneUnforgiving(actor, target, declared, facts) {
@@ -71,8 +76,9 @@ export function previewArcaneUnforgiving(actor, target, declared, facts) {
     if (focalisationTest.success) {
       if (declared.chooseMagicItem) {
         if (!Number.isFinite(actor.caracs?.Dex)) return invalid('La Dextérité du lanceur est nécessaire au choix de l’objet.');
-        dexterityTest = secondaryTest(actor.caracs.Dex, facts.dexterityRoll, 2);
+        dexterityTest = secondaryTest(actor, actor.caracs.Dex, facts.dexterityRoll, 2, facts.dexterityConditionContext || {});
         if (!dexterityTest) return invalid('Saisissez le Test de Dextérité (+2 DR) pour choisir l’objet magique.');
+        if (dexterityTest.blocked) return invalid(dexterityTest.blocked);
       }
       const chosen = declared.chooseMagicItem && dexterityTest.success;
       const name = chosen ? facts.chosenMagicItem : facts.randomMagicItem;
