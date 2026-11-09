@@ -850,6 +850,7 @@ function spellSkillMatches(skill,name) {
  * invoquée, monture saisie par le MJ) : ni États ni couches, il garde son score (CA3). `role: 'defender'` pour le camp qui
  * résiste à une opposition : il ne lit pas les clés « … adverse » du lanceur, comme un défenseur au combat (CA16).
  * `choice` : option de jet imposée ; `'first'` garde la première option (comportement antérieur) ; à défaut, la meilleure.
+ * `answerAt` : chemin des réponses d'États dans les options (rendu avec chaque question).
  * Rend `{ ready: true, test, detail }` (`test` au format de `selectV5Test`) ou `{ ready: false, blocked?, needsInput, error }` :
  * une précision d'État manquante (CA8) ou une restriction (Inconscient, Surpris, CA14) arrête le Test.
  */
@@ -857,7 +858,7 @@ function spellSkillMatches(skill,name) {
 const STAT_TEST_LABELS = { CC: 'Capacité de Combat', CT: 'Capacité de Tir', F: 'Force', E: 'Endurance', I: 'Initiative', Ag: 'Agilité', Dex: 'Dextérité',
   Int: 'Intelligence', FM: 'Force Mentale', Soc: 'Sociabilité' };
 function spellContractTest(tester, { score, roll, kind = 'test', stat = null, skill = '', role = 'actor', opponent = null, participants = [], context = {},
-  slModifiers = [], advantageSources = [], choice = null, participant = true } = {}) {
+  slModifiers = [], advantageSources = [], choice = null, participant = true, answerAt = 'conditionContext' } = {}) {
   if (!participant) {
     const preview = previewV5Test({ score, roll, kind, slModifiers, advantageSources });
     return { ready: true, test: selectV5Test(preview, choice && choice !== 'first' ? choice : preview.options[0].id), detail: [] };
@@ -870,7 +871,10 @@ function spellContractTest(tester, { score, roll, kind = 'test', stat = null, sk
   const secondary = previewV5SecondaryTest(tester, { score, roll, kind, slModifiers, advantageSources: ownAdvantages, context: context || {},
     test: { characteristic: stat, skill: label, skillCharacteristic: stat, role, opponent, participants } });
   const name = tester?.name || tester?.id || 'Le testeur';
-  if (!secondary.ready) return { ready: false, blocked: Boolean(secondary.blocked), needsInput: secondary.needsInput,
+  // Chaque question dit qui teste et où ranger la réponse (`answerAt` : options.conditionContext du lanceur, ou
+  // targetTests.<id>.conditionContext d'une cible).
+  if (!secondary.ready) return { ready: false, blocked: Boolean(secondary.blocked),
+    needsInput: secondary.needsInput.map(row => ({ ...row, participantId: tester?.id ?? null, answerAt })),
     error: secondary.blocked ? `${name} ne peut pas faire le Test de ${label} : ${secondary.restrictions.join(' ')}`
       : `${name}, Test de ${label} : à préciser avant le Test : ${secondary.needsInput.map(row => row.label).join(' ; ')}` };
   const optionId = choice === 'first' ? secondary.preview.options[0].id : choice || secondary.optionId;
@@ -1821,7 +1825,7 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
       // Q6 · T8 (CA3) : calcul commun des deux côtés ; un score fixé par le contrat (puissance invoquée, « Mork te veut ! ») n'est pas un participant.
       const casterRun=spellContractTest(actor,{score:spec.casterScore ?? Number(actor.caracs[spec.casterStat]),roll:casterDie,stat:spec.casterStat,skill:spec.casterSkill || '',opponent:target,participants:options.participants || [],context:options.conditionContext,participant:spec.casterScore==null});
       if(!casterRun.ready)return spellTestRefusal(casterRun,contract);
-      const targetRun=spellContractTest(target,{score:effectiveSkillScore(target,skill?.total ?? skill?.value ?? target.caracs[spec.targetStat],spec.targetStat),roll:die,stat:spec.targetStat,skill:skill?.name || spec.targetSkill,role:'defender',opponent:actor,participants:options.participants || [],context:options.targetTests?.[target.id]?.conditionContext,slModifiers:spec.targetSlModifier?[{id:'opposition',label:'Difficulté de l’opposition',amount:spec.targetSlModifier}]:[]});
+      const targetRun=spellContractTest(target,{score:effectiveSkillScore(target,skill?.total ?? skill?.value ?? target.caracs[spec.targetStat],spec.targetStat),roll:die,stat:spec.targetStat,skill:skill?.name || spec.targetSkill,role:'defender',opponent:actor,participants:options.participants || [],context:options.targetTests?.[target.id]?.conditionContext,answerAt:'targetTests.'+target.id+'.conditionContext',slModifiers:spec.targetSlModifier?[{id:'opposition',label:'Difficulté de l’opposition',amount:spec.targetSlModifier}]:[]});
       if(!targetRun.ready)return spellTestRefusal(targetRun,contract);
       const casterTest=casterRun.test,targetTest=targetRun.test;noteSpellTest(targetReceipt,'opposedCaster',casterRun);noteSpellTest(targetReceipt,'opposedTarget',targetRun);
       targetReceipt.opposedTest={casterTest,targetTest,won:casterTest.sl>targetTest.sl || Boolean(spec.casterWinsTies) && casterTest.sl===targetTest.sl};
@@ -1843,7 +1847,7 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
       if(answers.opposeBreath!==false){
         if(!Number.isInteger(answers.dodgeRoll)||answers.dodgeRoll<1||answers.dodgeRoll>100)return {ready:false,valid:false,status:'dice-required',error:target.name+' : saisir l’Esquive ou déclarer le refus d’opposition.',contract};
         const skill=(target.skills || []).find(s=>spellSkillMatches(s,'Esquive'));
-        const dodgeRun=spellContractTest(target,{score:effectiveSkillScore(target,skill?.total ?? skill?.value ?? target.caracs.Ag,'Ag'),roll:answers.dodgeRoll,stat:'Ag',skill:skill?.name || 'Esquive',role:'defender',opponent:actor,participants:options.participants || [],context:answers.conditionContext});
+        const dodgeRun=spellContractTest(target,{score:effectiveSkillScore(target,skill?.total ?? skill?.value ?? target.caracs.Ag,'Ag'),roll:answers.dodgeRoll,stat:'Ag',skill:skill?.name || 'Esquive',role:'defender',opponent:actor,participants:options.participants || [],context:answers.conditionContext,answerAt:'targetTests.'+target.id+'.conditionContext'});
         if(!dodgeRun.ready)return spellTestRefusal(dodgeRun,contract);
         defended=dodgeRun.test;noteSpellTest(targetReceipt,'breathDodge',dodgeRun);
       }
@@ -1935,6 +1939,7 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
           ...(secondaryTestSpec.opposed ? { role: 'defender', opponent: actor } : {}),
           participants: options.participants || [],
           context: options.targetTests?.[target.id]?.conditionContext,
+          answerAt: 'targetTests.' + target.id + '.conditionContext',
           participant: !(secondaryTestSpec.scoreWhenFact && options.targetTests?.[target.id]?.[secondaryTestSpec.scoreWhenFact] === true),
           slModifiers: modifierSl !== 0 ? [{ id: 'spell-mod', label: 'Modificateur du sort', amount: modifierSl }] : [],
           advantageSources: magicTalentRank(target,'magic-defiance') ? [{id:'magic-defiance',label:'Défiance magique'}] : [],
@@ -2227,7 +2232,7 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
       computedConditions.push(...(target.id===effectiveTargets[0].id?effects.primaryConditions:effects.splashConditions));
       const spec=effects.followupTest,die=options.targetTests?.[target.id]?.[spec.rollField];
       if(!Number.isInteger(die)||die<1||die>100)return {ready:false,valid:false,error:target.name+' : second Test de '+spec.skill+' (d100) requis.',contract};
-      const skill=(target.skills || []).find(s=>spellSkillMatches(s,spec.skill)),followupRun=spellContractTest(target,{score:effectiveSkillScore(target,skill?.total ?? target.caracs[spec.stat],spec.stat),roll:die,stat:spec.stat,skill:skill?.name || spec.skill,participants:options.participants || [],context:options.targetTests?.[target.id]?.conditionContext,slModifiers:[{id:'followup',amount:spec.modifierSl}]});
+      const skill=(target.skills || []).find(s=>spellSkillMatches(s,spec.skill)),followupRun=spellContractTest(target,{score:effectiveSkillScore(target,skill?.total ?? target.caracs[spec.stat],spec.stat),roll:die,stat:spec.stat,skill:skill?.name || spec.skill,participants:options.participants || [],context:options.targetTests?.[target.id]?.conditionContext,answerAt:'targetTests.'+target.id+'.conditionContext',slModifiers:[{id:'followup',amount:spec.modifierSl}]});
       if(!followupRun.ready)return spellTestRefusal(followupRun,contract);
       const test=followupRun.test;noteSpellTest(targetReceipt,'followup',followupRun);
       targetReceipt.followupTest=test;if(!test.success){computedConditions.push(...spec.conditions);Object.assign(computedSpecialState,spec.state);}
@@ -2243,7 +2248,7 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
       if(!ids.includes(target.id))continue;
       const die=options.targetTests?.[target.id]?.optionResistanceRoll;
       if(!Number.isInteger(die)||die<1||die>100)return {ready:false,valid:false,error:target.name+' : d100 de FM contre suffocation requis.',contract};
-      const suffocationRun=spellContractTest(target,{score:effectiveSkillScore(target,target.caracs.FM,'FM'),roll:die,stat:'FM',participants:options.participants || [],context:options.targetTests?.[target.id]?.conditionContext});
+      const suffocationRun=spellContractTest(target,{score:effectiveSkillScore(target,target.caracs.FM,'FM'),roll:die,stat:'FM',participants:options.participants || [],context:options.targetTests?.[target.id]?.conditionContext,answerAt:'targetTests.'+target.id+'.conditionContext'});
       if(!suffocationRun.ready)return spellTestRefusal(suffocationRun,contract);
       const test=suffocationRun.test;noteSpellTest(targetReceipt,'optionResistance',suffocationRun);
       targetReceipt.optionResistanceTest=test;optionSuffocation=!test.success;
@@ -2292,7 +2297,7 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
       if(!immune && (!Number.isInteger(die)||die<1||die>100))return {ready:false,valid:false,status:'dice-required',error:'Cor : saisir le d100 de Peur (Calme) de chaque ennemi.',contract};
       const skill=(target.skills || []).find(s=>spellSkillMatches(s,'Calme'));
       // Q6 · T8 : Peur (1) immédiate (Cor d'Andar, WoM p. 111) par le calcul commun, −2 DR du Cor en plus.
-      const fearRun=immune?null:spellContractTest(target,{score:effectiveSkillScore(target,skill?.total ?? skill?.value ?? target.caracs.FM,'FM'),roll:die,stat:'FM',skill:skill?.name || 'Calme',participants:options.participants || [],context:options.targetTests?.[target.id]?.conditionContext,slModifiers:[{id:'horn-morale',amount:-2}]});
+      const fearRun=immune?null:spellContractTest(target,{score:effectiveSkillScore(target,skill?.total ?? skill?.value ?? target.caracs.FM,'FM'),roll:die,stat:'FM',skill:skill?.name || 'Calme',participants:options.participants || [],context:options.targetTests?.[target.id]?.conditionContext,answerAt:'targetTests.'+target.id+'.conditionContext',slModifiers:[{id:'horn-morale',amount:-2}]});
       if(fearRun && !fearRun.ready)return spellTestRefusal(fearRun,contract);
       if(fearRun)noteSpellTest(targetReceipt,'fear',fearRun);
       const fear=immune?{success:true,sl:1,immune:true}:fearRun.test;
@@ -2342,7 +2347,7 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
       const remaining=(target.states || []).filter(s=>!(effects.removeConditions || []).some(name=>fold(name)===fold(s.name)));
       // Q6 · T8 : Test de Frénésie (FM, V5 p. 184) par le calcul commun, sur les États restant après ceux que le sort retire
       // (Cœurs Enflammés, V5 p. 248 : Brisé et Exténué ôtés avant le Test) ; la pénalité d'États n'est plus recalculée ici.
-      const optionalRun=spellContractTest({...target,states:remaining},{score:Number(target.caracs?.[optionalTest.stat]),roll:optionalRoll,stat:optionalTest.stat,participants:options.participants || [],context:choice.conditionContext,slModifiers:[{id:'optional-spell-test',amount:optionalTest.modifierSl || 0}]});
+      const optionalRun=spellContractTest({...target,states:remaining},{score:Number(target.caracs?.[optionalTest.stat]),roll:optionalRoll,stat:optionalTest.stat,participants:options.participants || [],context:choice.conditionContext,answerAt:'targetTests.'+target.id+'.conditionContext',slModifiers:[{id:'optional-spell-test',amount:optionalTest.modifierSl || 0}]});
       if(!optionalRun.ready)return spellTestRefusal(optionalRun,contract);
       const test=optionalRun.test;noteSpellTest(targetReceipt,'optional',optionalRun);
       targetReceipt.optionalTest=test;

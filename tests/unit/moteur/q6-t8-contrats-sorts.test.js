@@ -90,7 +90,7 @@ describe('Q6 · T8 : Tests des contrats de sorts par le calcul commun', () => {
     const pending = await cast('Goût de la Mort', taste, { foe });
     assert.equal(pending.ready, false);
     assert.equal(pending.status, 'condition-input-required');
-    assert.deepEqual(pending.needsInput.map(row => row.field), ['runningOrHiding']);
+    assert.deepEqual(pending.needsInput.map(row => [row.field, row.participantId, row.answerAt]), [['runningOrHiding', 'foe', 'targetTests.foe.conditionContext']]);
     const answered = await cast('Goût de la Mort', { targetTests: { foe: { ...taste.targetTests.foe, conditionContext: { runningOrHiding: false } } } }, { foe });
     assert.equal(answered.ready, true, answered.error);
   });
@@ -140,7 +140,7 @@ describe('Q6 · T8 : Tests des contrats de sorts par le calcul commun', () => {
     assert.equal(stunned.optionalTest.sl, clean.sl - 1);
     const blind = await cast('Cœurs Enflammés', patch, { mage: { states: ['Aveuglé'] } });
     assert.equal(blind.ready, false);
-    assert.deepEqual(blind.needsInput.map(row => row.field), ['reliesOnSight']);
+    assert.deepEqual(blind.needsInput.map(row => [row.field, row.answerAt]), [['reliesOnSight', 'targetTests.mage.conditionContext']]);
   });
 
   test('Option de sort (Drain de Magie, WoM p. 87) : Test d’Intelligence du lanceur', async () => {
@@ -155,7 +155,7 @@ describe('Q6 · T8 : Tests des contrats de sorts par le calcul commun', () => {
     assert.ok(option.detail.includes(STATE_ROW));
   });
 
-  test('Défiance magique (DPG p. 80) : absente du calcul commun, gardée par le contrat et comptée une fois', async () => {
+  test('Défiance magique (DPG p. 80) : absente du calcul commun, donc gardée par le contrat (une seule source)', async () => {
     const defiant = { talents: [{ id: 'talent-magic-defiance', status: 'resolved', rank: 1 }] };
     const common = resolveV5TestModifiers({ caracs: { FM: 60 }, states: [], ...defiant }, { characteristic: 'FM', skill: 'Calme' }, {});
     assert.equal(common.advantageSources.some(row => row.id === 'magic-defiance' || /Défiance/.test(row.label || '')), false);
