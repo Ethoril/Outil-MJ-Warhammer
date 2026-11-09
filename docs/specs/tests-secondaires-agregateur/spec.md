@@ -51,6 +51,11 @@ Le MJ a décidé les 05 et 06/11 que tous les Tests, et pas seulement le Test pr
 - **CA28** (MJ 09/11 soir) Une source de Filet Inconsciente lâche prise : l'échappée est réussie d'office, sans Test opposé de la source.
 - **CA29** (MJ 09/11 soir) Au lancer, à la Focalisation (pause et interruption comprises) et à la Dissipation, une question de séquelle sans réponse empêche le jet, comme partout (CA22). Les questions d'États gardent leur règle propre à la magie (sans réponse, l'État ne pèse pas).
 - Alignement (MJ 09/11) : dans les oppositions des sorts au fil des tours, la cible qui résiste prend le rôle de défenseur, comme dans les contrats de sorts et le désengagement (CA16) : les effets « … adverse » ne jouent que dans un sens.
+- **CA30** (MJ 09/11 soir) Le Test de Corruption est un Test subi (V5 p. 187-188) : un Inconscient le fait.
+- **CA31** Extraire un projectile reste permis à un acteur Surpris : Surpris ne vaut que pendant le Round de combat.
+- **CA32** Un poursuivant Brisé ne fuit pas : les malus de Brisé s'appliquent à son Test de poursuite, sans question.
+- **CA33** Une source de Filet Inconsciente lâche prise : tous les niveaux d'Empêtré tombent, et le Filet à crochets ne fait pas de dégâts.
+- **CA34** Une cible Inconsciente du Souffle est traitée comme une cible Surprise : elle n'esquive pas.
 
 ## Hors périmètre
 
