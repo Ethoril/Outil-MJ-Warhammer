@@ -88,6 +88,34 @@ import {
   incidentalArmour
 } from './resolution/criticals.js';
 export { previewHpLoss } from './resolution/criticals.js';
+import { previewV5SecondaryTest, secondaryTestDetail } from './v5-test-modifiers.js';
+
+/**
+ * Q6 · T4 (CA1, CA3, CA8, CA14) : Test secondaire de monture ou de chute par le calcul commun. Chevaucher (Désarçonnement,
+ * Surpris à cheval), opposition de Force après Chevaucher (les deux camps), Endurance après Croche-pied monté, Force de la source
+ * d'un Filet. Seul calcul de ces Tests : `store.js` (États acquis, embuscade, chute d'un sort) l'appelle aussi.
+ * - Les États déjà portés par le testeur comptent ; l'État qui déclenche le Test (Sonné, Surpris…) n'est pas encore posé.
+ * - `participant: false` ou sujet absent (source d'un Filet sans fiche, Force saisie d'un adversaire hors plateau) : score gardé.
+ * - Aucun de ces Tests n'est une Action (CA14) : Surpris ne les bloque pas, Inconscient si.
+ * - Chevaucher repose sur la vue : Aveuglé, V5 v3 p. 185 (« Tests that rely heavily on sight […] such as Climb or Ride »).
+ * - `answerAt` : chemin où ranger les réponses aux questions d'États (rendu avec chaque question, CA8).
+ * Rend `{ ready: true, test, detail }` (`test` au format de `selectV5Test`) ou `{ ready: false, blocked, needsInput, message }`.
+ */
+export function previewMountedSecondaryTest(subject, { score, roll, stat, skill = '', label = skill || stat, slModifiers = [], role = 'actor',
+  opponent = null, participants = [], context = {}, answerAt = null, participant = true } = {}) {
+  if (!participant || !subject) return { ready: true, test: selectV5Test(previewV5Test({ score, roll, kind: 'test', slModifiers }), 'keep'), detail: [] };
+  const situation = { ...(skill === 'Chevaucher' ? { reliesOnSight: true } : {}), ...(context || {}) };
+  const secondary = previewV5SecondaryTest(subject, { score, roll, kind: 'test', slModifiers, context: situation,
+    test: { characteristic: stat, skill, skillCharacteristic: stat, role, opponent, participants, isAction: false } });
+  const name = subject.name || subject.id;
+  if (!secondary.ready) {
+    const needsInput = secondary.needsInput.map(row => ({ ...row, participantId: subject.id ?? null, answerAt }));
+    return { ready: false, blocked: secondary.blocked === true, needsInput, message: secondary.blocked
+      ? `${name} ne peut pas faire le Test de ${label} : ${secondary.restrictions.join(' ')}`
+      : `${name}, Test de ${label} : à préciser avant le Test : ${needsInput.map(row => row.label).join(' ; ')}` };
+  }
+  return { ready: true, test: selectV5Test(secondary.preview, secondary.optionId), detail: secondaryTestDetail(secondary) };
+}
 
 export function previewResolution(input) {
   const initial=normalizeResolutionInput(input);
@@ -484,7 +512,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
       }
     }
   }
-  let trip=null,tripFall=null,tripUnresolved=[];
+  let trip=null,tripFall=null,tripUnresolved=[],tripFallNeedsInput=[];
   const tripSelected=context.trip===true&&opposed?.winner==='attacker';
   if(context.trip===true&&opposed){
     if(!tripSelected)trip={winner:opposed.winner,conditionApplied:false,costId:'combat:trip:momentum'};
@@ -502,8 +530,12 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
             const roll=Number(context.tripFallEnduranceRoll);
             if(!Number.isInteger(roll)||roll<1||roll>100)tripUnresolved.push('Chute du Croche-pied : Test d’Endurance +0 requis (d100).');
             else {
-              enduranceTest=previewV5Test({score:toughness,roll,kind:'test'}).options[0].result;
-              if(!enduranceTest.success){
+              // Q6 · T4 : Endurance de la chute (V5 v3 p. 169, Challenging +0) par le calcul commun ; réponses d'États dans tripFallConditionContext.
+              const endurance=previewMountedSecondaryTest(target,{score:toughness,roll,stat:'E',skill:'Résistance',label:'Endurance',opponent:actor,
+                participants:normalized.v5State?.participants||[],context:context.tripFallConditionContext,answerAt:'tripFallConditionContext'});
+              if(!endurance.ready){tripUnresolved.push('Chute du Croche-pied : '+endurance.message);tripFallNeedsInput.push(...endurance.needsInput);}
+              else enduranceTest={...endurance.test,detail:endurance.detail};
+              if(enduranceTest&&!enduranceTest.success){
                 const legRoll=Number(context.tripLegLocationRoll),legEffect=Number(context.tripLegCriticalEffectRoll),leg=Number.isInteger(legRoll)&&legRoll>=1&&legRoll<=100?creatureLocationOf(legRoll,target,context):null;
                 if(!leg||leg.key!=='LEG')tripUnresolved.push('Chute du Croche-pied : saisir une localisation d100 de Jambe pour la Blessure Critique.');
                 if(!Number.isInteger(legEffect)||legEffect<1||legEffect>100)tripUnresolved.push('Chute du Croche-pied : saisir le d100 d’effet Critique de Jambe.');
@@ -518,7 +550,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
             }
           }
           const effects=criticals.map(detail=>criticalApplication(criticalItems(detail,null,[])));
-          tripFall={yards:2,rawDamage,damageLoss,toughnessBonus:tb,armourApplied:false,protection:fallProtection,enduranceTest,criticals,extraCriticalWounds:effects.reduce((sum,row)=>sum+row.extraWounds,0),criticalStates:effects.flatMap(row=>row.states)};
+          tripFall={yards:2,rawDamage,damageLoss,toughnessBonus:tb,armourApplied:false,protection:fallProtection,enduranceTest,needsInput:tripFallNeedsInput,criticals,extraCriticalWounds:effects.reduce((sum,row)=>sum+row.extraWounds,0),criticalStates:effects.flatMap(row=>row.states)};
         }
       }
     }
@@ -632,14 +664,20 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
       const progress=Number(actor?.extensions?.v5?.netEscapeProgress?.[conditionId]||0);
       const source=condition.source||{};
       const sourceParticipant=(normalized.v5State?.participants||[]).find(row=>row.id===source.authorId);
-      const sourceStrength=['wielder','mancatcher','garrote','druchii-net'].includes(source.entanglementKind)&&sourceParticipant?.caracs?.F!=null
-        ? Number(sourceParticipant.caracs.F) : threshold;
+      const sourceIsParticipant=['wielder','mancatcher','garrote','druchii-net'].includes(source.entanglementKind)&&sourceParticipant?.caracs?.F!=null;
+      const sourceStrength=sourceIsParticipant ? Number(sourceParticipant.caracs.F) : threshold;
       const sourceScore=sourceStrength;
       const opponentRoll=context.netEscapeOpponentRoll;
       if(!Number.isInteger(opponentRoll)||opponentRoll<1||opponentRoll>100)unresolved.push('Filet : saisir le jet d100 du Test opposé de Force de la source.');
       if(!Number.isSafeInteger(sourceScore)||sourceScore<0||sourceScore>100)unresolved.push('Filet : Force de la source requise pour son Test opposé.');
-      const sourceTest=Number.isInteger(opponentRoll)&&opponentRoll>=1&&opponentRoll<=100&&Number.isSafeInteger(sourceScore)&&sourceScore>=0&&sourceScore<=100
-        ? selectV5Test(previewV5Test({score:sourceScore,roll:opponentRoll,kind:'test'}),'keep') : null;
+      // Q6 · T4 (CA3) : la source participante (porteur, Mancatcher…) passe par le calcul commun ; un seuil de matériau (V5 v3 p. 186,
+      // Force des matériaux) n'est pas un participant et garde son score. Réponses d'États dans netEscapeSourceConditionContext.
+      const sourceRun=Number.isInteger(opponentRoll)&&opponentRoll>=1&&opponentRoll<=100&&Number.isSafeInteger(sourceScore)&&sourceScore>=0&&sourceScore<=100
+        ? previewMountedSecondaryTest(sourceParticipant,{score:sourceScore,roll:opponentRoll,stat:'F',label:'Force',role:'defender',opponent:actor,
+          participants:normalized.v5State?.participants||[],context:context.netEscapeSourceConditionContext,answerAt:'netEscapeSourceConditionContext',
+          participant:sourceIsParticipant}) : null;
+      if(sourceRun&&!sourceRun.ready)unresolved.push('Filet : '+sourceRun.message);
+      const sourceTest=sourceRun?.ready?sourceRun.test:null;
       const springLoaded=source.entanglementKind==='mancatcher'&&source.springLoaded===true;
       const escape=sourceTest?advanceV5NetEscape({testSl:sl,opponentSl:sourceTest.sl,opponentBonus:springLoaded?2:0,entangled:condition.level}):null;
       if(!escape?.ready&&escape)unresolved.push(...escape.unresolved);
@@ -1220,7 +1258,20 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
       unresolved.push(...plan.unresolved);
       continue;
     }
-    plan.test = { ...selectV5Test(previewV5Test({ score, roll, kind: 'test', slModifiers: [{ id: 'mounted:fall', label: 'Désarçonnement', amount: plan.requiredTest.modifier }] }), 'keep'), skillId: V5_RIDE_SKILL_ID };
+    // Q6 · T4 : Chevaucher par le calcul commun (seul calcul, appelé aussi par store.js). Réponses d'États dans la réponse du cavalier
+    // (`mountedRideTestsById.<id>[.<événement>].conditionContext`) ou, pour un seul Test, dans `mountedRideConditionContext`.
+    const answerAt = 'mountedRideTestsById.' + plan.participantId + (singlePlan ? '' : '.' + plan.event) + '.conditionContext';
+    const ride = previewMountedSecondaryTest(rider, { score, roll, stat: 'Ag', skill: 'Chevaucher',
+      slModifiers: [{ id: 'mounted:fall', label: 'Désarçonnement', amount: plan.requiredTest.modifier }],
+      participants: normalized.v5State?.participants || [], answerAt,
+      context: riderAnswer.conditionContext ?? (singlePlan ? context.mountedRideConditionContext : undefined) });
+    if (!ride.ready) {
+      plan.needsInput = ride.needsInput;
+      plan.unresolved = [ride.message];
+      unresolved.push(ride.message);
+      continue;
+    }
+    plan.test = { ...ride.test, detail: ride.detail, skillId: V5_RIDE_SKILL_ID };
     if (plan.dismount === 'on-failed-test' && !plan.test.success) plan.dismount = true;
     else if (plan.dismount === 'on-failed-test') plan.dismount = false;
     if (plan.opposedStrengthSize === 'mount' && plan.test.success) {
@@ -1239,8 +1290,20 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
         plan.unresolved = [...(plan.unresolved || []), 'Opposition de Force après Chevaucher : saisissez les deux d100 et les scores manquants.'];
         unresolved.push(...plan.unresolved.slice(-1));
       } else {
-        const holderTest = selectV5Test(previewV5Test({ score: holderScore, roll: holderRoll, kind: 'test' }), 'keep');
-        const riderTest = selectV5Test(previewV5Test({ score: riderScore, roll: riderRoll, kind: 'test' }), 'keep');
+        // Q6 · T4 (CA3) : les deux camps par le calcul commun ; un saisisseur hors plateau (score saisi) garde son score.
+        const forceAnswers = context.mountedForceConditionContext || {}, roster = normalized.v5State?.participants || [];
+        const holderRun = previewMountedSecondaryTest(holder, { score: holderScore, roll: holderRoll, stat: 'F', label: 'Force', opponent: rider,
+          participants: roster, context: forceAnswers.holder, answerAt: 'mountedForceConditionContext.holder', participant: Boolean(holder?.id) });
+        const riderRun = previewMountedSecondaryTest(rider, { score: riderScore, roll: riderRoll, stat: 'F', label: 'Force', role: 'defender', opponent: holder,
+          participants: roster, context: forceAnswers.rider, answerAt: 'mountedForceConditionContext.rider' });
+        const pendingRuns = [holderRun, riderRun].filter(run => !run.ready);
+        if (pendingRuns.length) {
+          plan.needsInput = [...(plan.needsInput || []), ...pendingRuns.flatMap(run => run.needsInput)];
+          plan.unresolved = [...(plan.unresolved || []), ...pendingRuns.map(run => 'Opposition de Force après Chevaucher : ' + run.message)];
+          unresolved.push(...plan.unresolved.slice(-pendingRuns.length));
+          continue;
+        }
+        const holderTest = holderRun.test, riderTest = riderRun.test;
         const mount = resolveMountedMount(rider, mountedWithPrimary).mount;
         const choices = context.mountedSizeChoices || {};
         const holderSizeValue = plan.participantId === normalized.actor?.id ? choices.target : choices.actor;

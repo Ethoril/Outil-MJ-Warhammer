@@ -1,7 +1,7 @@
 import {setStoreSanctifiedGround,removeStoreSanctifiedGround,enterStoreSanctifiedGround,leaveStoreSanctifiedGround,applyStoreDivineNavalEvent,startStoreDivineDailyWrath,waiveStoreDivineDailyWrathDay,closeStoreDivineDailyWrath,setStoreDivineRelic,removeStoreDivineRelic,applyStoreDivineSinEvent,returnStoreDivineJudgment,decideStoreDivineJudgmentRejection,createStoreDivinePenance,completeStoreDivinePenance,previewStoreDivineWrathRecovery,previewStoreDivine,setStoreDivineSin,endStoreDivinePrayer,finalizeDivineState,expireDivineAtPhases,expireDivineAtClock} from './v5-divine-store.js';
 import { safeLocalStorage } from './safe-storage.js';
 import { casterCaracs } from './creature-abilities.js';
-import {processCombatTurnSpells,shieldAtTurnStart,previewSpellInteraction,removeExpiredSummons,endSpellEffectsOnEvent} from './v5-magic-turn.js';
+import {processCombatTurnSpells,shieldAtTurnStart,previewSpellInteraction,removeExpiredSummons,endSpellEffectsOnEvent,spellTestContext,spellTestRequests} from './v5-magic-turn.js';
 import {previewMagicMeditation,activeMagicTalent,magicTalentRank,effectiveSkillScore,baseCharacteristicScore} from './v5-magic-talents.js';
 import { previewV5Test, selectV5Test, normalizeV5Roll } from './v5-roll.js';
 import {
@@ -142,7 +142,7 @@ import { createStateCommand, createCompactStateCommand, applyStateChanges } from
 import { createHistory, recordCommand, canUndo as historyCanUndo, canRedo as historyCanRedo, undo as historyUndo, redo as historyRedo, historySnapshot, markExternalBoundary } from './history.js';
 import { ORDER_MODES, effectiveOrder, moveInOrder, insertReinforcement, insertParticipantsByInitiative, setOrderMode as computeOrderMode, nextTurn as computeNextTurn, removeFromCombat, prepareCombatInitiative } from './turn-order.js';
 import { createEncounter, normalizeEncounter, setEncounterEntry, removeEncounterEntry, duplicateEncounter, launchEncounter, addImprovisedParticipant, suspendScene, resumeScene } from './encounters.js';
-import { previewResolution as buildResolutionPreview, applyResolution as applyActionResolution } from './resolution.js';
+import { previewResolution as buildResolutionPreview, applyResolution as applyActionResolution, previewMountedSecondaryTest } from './resolution.js';
 import { simulateAction, applySimulation as applyActionSimulation, discardSimulation } from './simulation.js';
 import { deriveReminders, pendingReminders, resolveReminder } from './reminders.js';
 import { createScene, createIntention, createSceneEvent, createSceneClock, proposeSceneEvent, newlyProposedSceneEvents, resolveSceneEvent, applySceneEvent, advanceSceneClock } from './scene-events.js';
@@ -2062,7 +2062,18 @@ function resolvedCorruptionTest(participant, skillId, input) {
               receipt.ready = false;
               continue;
             }
-            plan.test = previewV5Test({ score: rideScore, roll: rideRoll, kind: 'test', slModifiers: [{ id: 'mounted:fall', label: 'Désarçonnement', amount: plan.requiredTest.modifier }] }).options[0].result;
+            // Q6 · T4 : le calcul de resolution.js (calcul commun), pas un second. Le cavalier est testé avec ses États d'avant
+            // l'acquisition, comme dans resolution.js ; réponses d'États dans `mountedRideCondition<suffixe>:<champ>`.
+            const conditionField = name => `mountedRideCondition${suffix}:${name}`;
+            const ride = previewMountedSecondaryTest(rider.id === id ? participant : rider, { score: rideScore, roll: rideRoll, stat: 'Ag', skill: 'Chevaucher',
+              slModifiers: [{ id: 'mounted:fall', label: 'Désarçonnement', amount: plan.requiredTest.modifier }],
+              participants: draft.combat?.participants || [], context: spellTestContext(context, conditionField) });
+            if (!ride.ready) {
+              receipt.needsInput.push(...spellTestRequests(ride, conditionField, `${rider.name || rider.id} : Chevaucher`));
+              receipt.ready = false;
+              continue;
+            }
+            plan.test = { ...ride.test, detail: ride.detail };
             if (plan.dismount === 'on-failed-test') plan.dismount = !plan.test.success;
           }
           mountedFallReceipts.push({ participantId: rider.id, event, ...plan });
@@ -2877,8 +2888,17 @@ function resolvedCorruptionTest(participant, skillId, input) {
         const entry = { participantId: rider.id, event: 'rider-surprised', ...fall };
         if (score === null) plan.needsInput.push({ field: `mountedRideScore:${rider.id}`, kind: 'integer', min: 0, max: 100, label: `${rider.name || rider.id} : score de Chevaucher` });
         if (!Number.isInteger(roll) || roll < 1 || roll > 100) plan.needsInput.push({ field: `mountedRideRoll:${rider.id}`, kind: 'd100', min: 1, max: 100, label: `${rider.name || rider.id} : d100 de Chevaucher (Surpris, +4 DR)` });
-        if (score !== null && Number.isInteger(roll) && roll >= 1 && roll <= 100) {
-          entry.test = selectV5Test(previewV5Test({ score, roll, kind: 'test', slModifiers: [{ id: 'mounted:fall', label: 'Surpris à cheval', amount: 4 }] }), 'keep');
+        // Q6 · T4 : Surpris à cheval par le calcul commun (resolution.js) ; réponses d'États dans mountedRideTests.<id>.conditionContext.
+        const ride = score !== null && Number.isInteger(roll) && roll >= 1 && roll <= 100 ? previewMountedSecondaryTest(rider, { score, roll, stat: 'Ag', skill: 'Chevaucher',
+          slModifiers: [{ id: 'mounted:fall', label: 'Surpris à cheval', amount: 4 }], participants, context: answer.conditionContext,
+          answerAt: `mountedRideTests.${rider.id}.conditionContext` }) : null;
+        if (ride && !ride.ready) {
+          plan.needsInput.push(...ride.needsInput.map(row => ({ ...row, field: row.field ? `rideCondition:${rider.id}:${row.field}` : `rideBlocked:${rider.id}`,
+            kind: row.field ? 'boolean' : 'manual', label: `${rider.name || rider.id} : Chevaucher : ${row.label}` })));
+          plan.ready = false;
+          plan.status = 'requires-input';
+        } else if (ride) {
+          entry.test = { ...ride.test, detail: ride.detail };
           entry.dismount = !entry.test.success;
         } else {
           plan.ready = false;
@@ -5199,8 +5219,14 @@ function resolvedCorruptionTest(participant, skillId, input) {
         const roll = Number(answer.roll);
         if (score === null) needsInput.push({ field: `mountedRideScore:${fall.participantId}`, kind: 'integer', min: 0, max: 100, label: `${rider?.name || fall.participantId} : score de Chevaucher` });
         if (!Number.isInteger(roll) || roll < 1 || roll > 100) needsInput.push({ field: `mountedRideRoll:${fall.participantId}`, kind: 'd100', min: 1, max: 100, label: `${rider?.name || fall.participantId} : d100 de Chevaucher (${fall.event}, ${fall.requiredTest.modifier >= 0 ? '+' : ''}${fall.requiredTest.modifier} DR)` });
-        if (score !== null && Number.isInteger(roll) && roll >= 1 && roll <= 100) {
-          fall.test = selectV5Test(previewV5Test({ score, roll, kind: 'test', slModifiers: [{ id: 'mounted:fall', label: 'Désarçonnement', amount: fall.requiredTest.modifier }] }), 'keep');
+        // Q6 · T4 : Désarçonnement par le calcul commun (resolution.js) ; réponses d'États dans mountedRideTests.<id>.conditionContext.
+        const ride = score !== null && Number.isInteger(roll) && roll >= 1 && roll <= 100 ? previewMountedSecondaryTest(rider, { score, roll, stat: 'Ag', skill: 'Chevaucher',
+          slModifiers: [{ id: 'mounted:fall', label: 'Désarçonnement', amount: fall.requiredTest.modifier }], participants: roster, context: answer.conditionContext,
+          answerAt: `mountedRideTests.${fall.participantId}.conditionContext` }) : null;
+        if (ride && !ride.ready) needsInput.push(...ride.needsInput.map(row => ({ ...row, field: row.field ? `rideCondition:${fall.participantId}:${row.field}` : `rideBlocked:${fall.participantId}`,
+          kind: row.field ? 'boolean' : 'manual', label: `${rider?.name || fall.participantId} : Chevaucher : ${row.label}` })));
+        else if (ride) {
+          fall.test = { ...ride.test, detail: ride.detail };
           fall.dismount = !fall.test.success;
         }
       }
