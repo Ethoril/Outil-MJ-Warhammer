@@ -83,6 +83,12 @@ describe('CA13 séquelles durables dans le calcul commun', () => {
     // 35 − 10 = 25 contre 21 : 0 DR (au lieu de +1).
     assert.deepEqual([plan.status, plan.actorSl], ['ready', 0]);
   });
+  test('désengagement par Esquive avec une jambe perdue (Esquive impossible) : bloqué, comme au combat', () => {
+    const leg = { id: 'sq-leg', type: 'no-dodge', label: 'Jambe perdue : Esquive impossible' };
+    const plan = disengage(duel({ actor: { v5: sequelae([leg]) } }), { actorRoll: 21, opponentRoll: 50 });
+    assert.deepEqual([plan.status, plan.mode], ['blocked', 'restricted']);
+    assert.match(plan.reason, /Esquive impossible/);
+  });
   test('Focalisation, Prière : la séquelle de la Caractéristique du Test compte', () => {
     const fm = { id: 'sq-fm', type: 'disadvantage-carac', carac: ['FM'], count: 1, label: 'Fracture au corps' };
     const prepared = prepareMagicOptions(person('m', { v5: sequelae([fm, { ...AG_LOSS, carac: 'FM' }]) }), 'channelling', {});

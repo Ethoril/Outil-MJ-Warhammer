@@ -175,6 +175,8 @@ export function resolveV5TestModifiers(actor, test = {}, context = {}) {
     ...tag(sequelaRows.advantages, 'Séquelle', 'advantage'), ...tag(sequelaRows.disadvantages, 'Séquelle', 'disadvantage'), ...droppedRows.map(row => ({ ...row, kind: 'modifier', dropped: true }))];
   return { slModifiers, advantageSources, disadvantageSources, rows, needsInput, unresolved,
     restrictions: [...actorRestrictions, ...rules.restrictions, ...sequelae.restrictions], scoreDelta: sequelae.scoreDelta,
+    // CA13, CA14 : restrictions qui interdisent le Test lui-même (Inconscient, Surpris sur une Action, séquelle).
+    blockingRestrictions: [...actorRestrictions, ...sequelae.restrictions],
     ignoreNegative: talents.ignoreNegative, forceSuccess: talents.forceSuccess, penalty: appliedPenalty, penaltyStates: conditions.penaltyStates,
     droppedModifiers: droppedRows, parts: { talents, layers, adverse, conditions, sequelae } };
 }

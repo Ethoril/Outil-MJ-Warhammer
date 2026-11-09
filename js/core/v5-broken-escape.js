@@ -79,10 +79,12 @@ export function previewV5BrokenEscape({ state, actor, actorId=actor?.id, action,
     const skill = (actor.skills || []).find(row => /athl[ée]tisme/i.test(row.name || row.nom || '') && row.status === 'resolved' && Number.isInteger(row.total ?? row.value));
     if (!skill) return fail('Le score actuel importé d’Athlétisme doit être résolu avant Sprint.','skills.Athlétisme');
     const baseScore = skill.total ?? skill.value;
-    const score = effectiveSkillScore(actor, baseScore, skill.carac || 'Ag');
+    // Séquelles (MJ 09/11 CA13) : Caractéristique perdue ajoutée après le contexte d'États.
+    const baseSkillScore = effectiveSkillScore(actor, baseScore, skill.carac || 'Ag');
     const context = resolveV5ConditionTestContext(actor,{characteristic:skill.carac || 'Ag',isAction:true,involvesMovement:true,runningOrHiding:true,requiresSight:false,reliesOnSight:false});
     if (!context.ready) return {ready:false,status:'requires-input',error:'Le contexte du Test Athlétisme est incomplet.',needsInput:clone(context.needsInput),unresolved:clone(context.needsInput)};
-    const testPreview=previewV5Test({score:Math.max(0,score+(context.scoreDelta||0)),roll,slModifiers:[...context.slModifiers,{id:'broken-sprint-average',label:'Sprint moyen (+2 DR)',amount:2}],advantageSources:context.advantageSources,disadvantageSources:context.disadvantageSources});
+    const score=Math.max(0,baseSkillScore+(context.scoreDelta||0));
+    const testPreview=previewV5Test({score,roll,slModifiers:[...context.slModifiers,{id:'broken-sprint-average',label:'Sprint moyen (+2 DR)',amount:2}],advantageSources:context.advantageSources,disadvantageSources:context.disadvantageSources});
     if (testPreview.choiceRequired && !['keep','reverse'].includes(choice)) return fail('Choisir le résultat du Test Athlétisme.','choice');
     const selectedChoice=testPreview.options.length===1?testPreview.options[0].id:choice;
     const test=selectV5Test(testPreview,selectedChoice);
@@ -96,10 +98,11 @@ export function previewV5BrokenEscape({ state, actor, actorId=actor?.id, action,
   const skill=(actor.skills||[]).find(row=>(facts.skillId&&row.id===facts.skillId)||(facts.skillName&&String(row.name||row.nom||'').toLowerCase()===String(facts.skillName).toLowerCase()));
   if (!skill || skill.status!=='resolved' || !Number.isInteger(skill.total??skill.value)) return fail('Choisir une compétence résolue pour le Test facultatif de Hide.','facts.skillId');
   if (!finiteInt(roll,1)||roll>100) return fail('Fournir le jet d100 explicite du Test facultatif de Hide.','roll');
-  const score=effectiveSkillScore(actor,skill.total??skill.value,skill.carac||'Ag');
+  const baseSkillScore=effectiveSkillScore(actor,skill.total??skill.value,skill.carac||'Ag');
   const context=resolveV5ConditionTestContext(actor,{characteristic:skill.carac||'Ag',isAction:true,involvesMovement:false,runningOrHiding:true,requiresSight:false,reliesOnSight:false});
   if(!context.ready)return {ready:false,status:'requires-input',error:'Le contexte du Test de Hide est incomplet.',needsInput:clone(context.needsInput)};
-  const testPreview=previewV5Test({score:Math.max(0,score+(context.scoreDelta||0)),roll,slModifiers:context.slModifiers,advantageSources:context.advantageSources,disadvantageSources:context.disadvantageSources});
+  const score=Math.max(0,baseSkillScore+(context.scoreDelta||0));
+  const testPreview=previewV5Test({score,roll,slModifiers:context.slModifiers,advantageSources:context.advantageSources,disadvantageSources:context.disadvantageSources});
   if(testPreview.choiceRequired&&!['keep','reverse'].includes(choice))return fail('Choisir le résultat du Test de Hide.','choice');
   const selectedChoice=testPreview.options.length===1?testPreview.options[0].id:choice,test=selectV5Test(testPreview,selectedChoice);
   return {ready:true,status:'ready',ruleVersion:BROKEN_ESCAPE_RULE_VERSION,action,actorId,turn:clone(turn),facts:clone(facts),test:{...clone(test),score,characteristic:skill.carac||'Ag',result:clone(test),preview:clone(testPreview),context:clone(context)},sequenceAfter:sequence?clone(sequence):null,source:clone(BROKEN_ESCAPE_SOURCE)};

@@ -214,7 +214,7 @@ function disengageSide(person, test, context, { advantages = [], disadvantages =
     return row;
   });
   return { ...lists, rows: capped, needsInput: resolved.needsInput, unresolved: resolved.unresolved, restrictions: resolved.restrictions, penalty: resolved.penalty,
-    scoreDelta: resolved.scoreDelta || 0 };
+    scoreDelta: resolved.scoreDelta || 0, blockingRestrictions: resolved.blockingRestrictions || [] };
 }
 const bestOption = preview => preview.options.reduce((best, option) => (option.result.sl > best.result.sl ? option : best), preview.options[0]);
 
@@ -253,7 +253,7 @@ export function previewDisengage({ combat, participants = [], actorId, input = {
     { ...(input.context || {}), involvesMovement: true }, { disadvantages: outnumbered ? [{ id: 'disengage:outnumbered', label: 'En infériorité numérique' }] : [] });
   const opponentModifiers = disengageSide(best, { characteristic: 'CC', skill: bestMeleeSkill(best), skillCharacteristic: 'cc', kind: 'melee', role: 'defender', opponent: actor, participants },
     input.opponentContext || {}, { advantages: best.extensions?.v5?.hasMomentum === true ? [{ id: 'momentum', label: 'Élan' }] : [] });
-  const blockedBy = actorModifiers.restrictions.filter(text => /^(Inconscient|Surpris) :/.test(text));
+  const blockedBy = actorModifiers.blockingRestrictions;
   if (blockedBy.length) return { status: 'blocked', mode: 'restricted', opponentIds, bestOpponentId: best.id, skill, actorModifiers, opponentModifiers,
     reason: `${actor.name} ne peut pas se désengager : ${blockedBy.join(' ')}` };
   const needsInput = [...actorModifiers.needsInput.map(row => ({ side: 'actor', ...row })), ...opponentModifiers.needsInput.map(row => ({ side: 'opponent', ...row }))];
