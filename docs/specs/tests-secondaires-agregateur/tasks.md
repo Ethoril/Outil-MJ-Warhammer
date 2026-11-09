@@ -7,15 +7,15 @@ Chaque tâche est un brief autonome pour une session (Opus : règles et store). 
   À établir et écrire en tête du module : quels modificateurs de `buildCombatTest` restent propres au combat ; le mécanisme existant de `needsInput` côté panneau ; l'absence de nouveau cycle d'imports (`npx madge --circular js/core` ou équivalent, avant/après).
   CA : CA9, CA10 (combat). Acceptation : `node --test "tests/unit/combat/**/*.test.js" "tests/unit/moteur/**/*.test.js"` vert sans changer une seule valeur attendue.
 
-- [ ] **T1 · Contextes existants délégués.** Objectif : `resolveV5ConditionTestContext` et `prepareMagicOptions` délèguent leur calcul d'États (et de couches pour la magie) à la fonction commune ; les talents génériques entrent dans le lancer, la Focalisation, la Dissipation et la Prière. Après : T0.
+- [x] **T1 · Contextes existants délégués.** Objectif : `resolveV5ConditionTestContext` et `prepareMagicOptions` délèguent leur calcul d'États (et de couches pour la magie) à la fonction commune ; les talents génériques entrent dans le lancer, la Focalisation, la Dissipation et la Prière. Après : T0. Livré : `d940efd`.
   Fichiers : `js/core/v5-test-context.js`, `js/core/v5-magic-talents.js`, `js/core/v5-magic-dispel.js` (clé `Dissipation` lue par la fonction commune), `js/core/v5-divine-engine.js`, `js/core/v5-divine-store.js`, test commun.
   CA : CA1, CA2, CA5 (magie principale, prière), CA10. Acceptation : `etats-tous-les-tests`, `cumul-familles`, `magie/lancement-focalisation`, `magie/incidents-dissipation-haute-magie`, `divin/**` verts.
 
-- [ ] **T2 · Désengagement** `[P avec T1]`. Objectif : `previewDisengage` applique la fonction commune aux deux camps, plus infériorité numérique et Élan ; le plateau affiche le détail et pose la question de mouvement si besoin. Après : T0.
+- [x] **T2 · Désengagement** `[P avec T1]`. Objectif : `previewDisengage` applique la fonction commune aux deux camps, plus infériorité numérique et Élan ; le plateau affiche le détail et pose la question de mouvement si besoin. Après : T0. Livré : `1f5207c, 72812f0`.
   Fichiers : `js/core/engagements.js`, `js/core/store/api-engagements.js`, `js/ui/workspace/plateau.js` et la partie désengagement de `js/ui/workspace-view.js`, test commun, `tests/unit/combat/engagements*.test.js`.
   CA : CA1, CA3, CA4, CA5, CA8, CA9. Acceptation : tests ciblés + `timeout 120 node tests/engagements-plateau-browser.mjs`.
 
-- [ ] **T3 · Magie secondaire de premier niveau.** Objectif : interruption de Focalisation (Avantages et Désavantages compris), méditation, relance Cadai, déploiement Cadai, Arcanes impitoyables passent par la fonction commune. Après : T1.
+- [ ] **T3 · Magie secondaire de premier niveau.** Objectif : interruption de Focalisation (Avantages et Désavantages compris), méditation, relance Cadai, déploiement Cadai, Arcanes impitoyables passent par la fonction commune. Reprendre aussi un reste de T1 : au lancer et à la Focalisation, la difficulté et l'armure sont ajoutées après le calcul commun, donc Esprit fort ne les annule pas (corrigé pour la Dissipation). Après : T1.
   Fichiers : `js/core/v5-magic-channelling.js`, `js/core/v5-magic-talents.js` (méditation), `js/core/v5-magic-high.js`, `js/core/v5-magic-arcane-unforgiving.js`, la commande `v5-cadai-deploy` de `js/core/store.js`, test commun.
   CA : CA1, CA9, CA10.
 
@@ -27,7 +27,7 @@ Chaque tâche est un brief autonome pour une session (Opus : règles et store). 
   Fichiers : `js/core/store.js` (`resolvedCorruptionTest`), `js/core/v5-broken-escape.js` (poursuite), `js/core/store/api-v5-combat-actions.js`, test commun.
   CA : CA1, CA9, CA10.
 
-- [ ] **T6 · Scores saisis et Déterminé** `[P avec T3]`. Objectif : arquebuse à salve, Warp Blade et séquelles de convalescence ajoutent la fonction commune au score de fiche saisi, avec le libellé « score de fiche, sans modificateurs » ; Déterminé utilise le calcul commun au lieu de son recalcul manuel. Après : T0.
+- [x] **T6 · Scores saisis et Déterminé** `[P avec T3]`. Objectif : arquebuse à salve, Warp Blade et séquelles de convalescence ajoutent la fonction commune au score de fiche saisi, avec le libellé « score de fiche, sans modificateurs » ; Déterminé utilise le calcul commun au lieu de son recalcul manuel. Après : T0. Livré : `25ee412, 8b993bd`.
   Fichiers : `js/core/v5-combat-fumbles.js`, `js/core/v5-supplemental-equipment.js`, `js/core/v5-aftermath.js`, `js/core/v5-talent-replacements.js`, libellés dans `js/ui/resolution-panel.js` et l'écran de convalescence, test commun.
   CA : CA8 (séquelle À terre), CA12, CA9.
 
