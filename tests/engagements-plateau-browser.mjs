@@ -81,8 +81,23 @@ try {
   await zone('Mêlée 2').waitFor({ timeout: 5000 });
   assert.equal(await zone('Mêlée 2').locator('[data-workspace-select]').count(), 2);
   // CA12 : Se désengager, Test opposé saisi, appliqué : Gunther redevient Libre.
+  // Q6 T2 (CA3, CA5, CA8) : Gunther À terre, l'Orc Sonné ; la question de mouvement bloque, le détail montre chaque source.
+  await page.evaluate(async () => {
+    await window.__store.updateParticipant('gunther', { states: [{ id: 'prone-1', key: 'aterre', name: 'À terre', level: 1 }] });
+    await window.__store.updateParticipant('orc', { states: [{ id: 'stun-1', key: 'sonne', name: 'Sonné', level: 1 }] });
+  });
+  await page.waitForTimeout(200);
   await bar.getByRole('button', { name: /^Se désengager/ }).click();
   const form = page.locator('.workspace-disengage');
+  const movement = form.getByLabel('Gunther : Préciser si le Test implique un mouvement.');
+  await assert.doesNotReject(movement.waitFor({ timeout: 5000 }));
+  assert.match(await form.textContent(), /À saisir avant d’appliquer/);
+  assert.equal(await form.getByRole('button', { name: 'Appliquer le désengagement' }).isDisabled(), true);
+  await movement.selectOption('true');
+  await page.waitForTimeout(200);
+  const detail = await form.locator('.workspace-disengage-detail').textContent();
+  assert.match(detail, /Gunther · À terre \(État\) : Désavantage/);
+  assert.match(detail, /Orc · Plus forte pénalité d’État \(État\) : −1 DR/);
   await form.getByLabel(/d100 de Gunther/).fill('5');
   await form.getByLabel(/d100 de Gunther/).press('Tab');
   await form.getByLabel(/d100 de Orc/).fill('90');

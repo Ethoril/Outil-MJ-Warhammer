@@ -4,6 +4,8 @@
 import { meleeGroups, engagedWith, deriveEngagementContext } from '../../core/engagements.js';
 import { outnumberSide, planOutnumbering } from '../../core/outnumbering.js';
 import { inferV5Kind } from '../../core/v5-combat-rules.js';
+import { CONDITION_QUESTIONS } from '../../core/condition-effects.js';
+import { MIXED_CONDITION_QUESTION } from '../../core/v5-test-modifiers.js';
 
 const el = (tag, className = '', text = '') => {
   const node = document.createElement(tag);
@@ -13,6 +15,10 @@ const el = (tag, className = '', text = '') => {
 };
 const enemiesOf = (person, people) => people.filter(other => other.id !== person.id && outnumberSide(other) !== outnumberSide(person));
 const ATTACKS = ['attack', 'attaque'];
+// Q6 · T2 : questions d'États du Désengagement (CA8), mêmes champs et libellés que le panneau de résolution.
+const QUESTION_LABELS = { involvesMovement: CONDITION_QUESTIONS.movement, runningOrHiding: CONDITION_QUESTIONS.escape, reliesOnSight: CONDITION_QUESTIONS.sight,
+  usesFellowship: CONDITION_QUESTIONS.fellowship, conditionPenaltyMode: MIXED_CONDITION_QUESTION };
+const signedSl = amount => `${amount > 0 ? '+' : amount < 0 ? '−' : '±'}${Math.abs(amount)} DR`;
 
 /** Zones du plateau dans l'ordre du Round : mêlées (ordre de leur premier membre), puis Libres. */
 export function plateauZones(active) {
@@ -152,6 +158,39 @@ export function renderDisengageForm(container, { actor, plan, state, active, onC
     };
     form.append(skillLabel, roll(`d100 de ${actor.name} (score ${plan.actorScore}${plan.outnumbered ? ', Désavantage' : ''})`, 'actorRoll'),
       roll(`d100 de ${name(plan.bestOpponentId)} (meilleure Mêlée ${plan.opponentScore})`, 'opponentRoll'));
+    // CA8 : précision demandée par un État (posée, ou déjà répondue et modifiable), réponse dans le contexte du camp.
+    for (const [side, key, who] of [['actor', 'context', actor.name], ['opponent', 'opponentContext', name(plan.bestOpponentId)]]) {
+      const answers = state[key] || {};
+      const fields = [...new Set([...(plan.needsInput || []).filter(row => row.side === side && row.field).map(row => row.field), ...Object.keys(answers).filter(field => QUESTION_LABELS[field])])];
+      for (const field of fields) {
+        const label = `${who} : ${QUESTION_LABELS[field]}`, wrap = el('label', 'workspace-type', label), select = el('select');
+        select.setAttribute('aria-label', label);
+        select.append(new Option('À préciser', ''), ...(field === 'conditionPenaltyMode' ? [new Option('Pénalité en DR', 'sl'), new Option('Désavantage', 'disadvantage')] : [new Option('Oui', 'true'), new Option('Non', 'false')]));
+        const current = answers[field];
+        select.value = current === undefined ? '' : String(current);
+        select.addEventListener('change', () => {
+          const next = { ...answers };
+          if (select.value === '') delete next[field]; else next[field] = field === 'conditionPenaltyMode' ? select.value : select.value === 'true';
+          onChange({ [key]: next });
+        });
+        wrap.appendChild(select);
+        form.appendChild(wrap);
+      }
+    }
+    // CA5 : détail des modificateurs de chaque camp, avec leur source ; un modificateur écarté reste visible, barré.
+    const sides = [[actor.name, plan.actorModifiers], [name(plan.bestOpponentId), plan.opponentModifiers]].filter(([, side]) => side?.rows?.length);
+    if (sides.length) {
+      const detail = el('div', 'workspace-disengage-detail');
+      detail.setAttribute('aria-label', 'Modificateurs du Désengagement');
+      for (const [who, side] of sides) for (const row of side.rows) {
+        const effect = row.kind === 'advantage' ? 'Avantage' : row.kind === 'disadvantage' ? 'Désavantage' : signedSl(Number(row.amount) || 0);
+        const text = `${who} · ${row.label} (${row.source}) : ${effect}${row.dropped ? ` — écarté${row.rule ? ` (${row.rule})` : ''}` : ''}`;
+        const line = el('p', 'workspace-formula-notes');
+        line.appendChild(row.dropped ? el('s', '', text) : document.createTextNode(text));
+        detail.appendChild(line);
+      }
+      form.appendChild(detail);
+    }
   }
   if (plan.summary || (plan.status !== 'ready' && plan.reason && plan.mode !== 'surrounded')) form.appendChild(el('p', plan.status === 'ready' ? '' : 'workspace-muted', plan.summary || plan.reason));
   const row = el('div', 'workspace-inline-actions'), apply = el('button', 'workspace-primary', 'Appliquer le désengagement'), close = el('button', 'workspace-secondary', 'Fermer');

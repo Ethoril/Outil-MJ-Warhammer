@@ -5,6 +5,7 @@
 // déduit, et le MJ peut toujours forcer une autre valeur dans le contexte de l'action.
 import { outnumberSide, outnumberWeightOf } from './outnumbering.js';
 import { previewV5Test, resolveV5Opposition } from './v5-roll.js';
+import { resolveV5TestModifiers, finalizeV5TestModifiers } from './v5-test-modifiers.js';
 
 const fold = value => String(value ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
 const pairKey = (a, b) => (a < b ? [a, b] : [b, a]);
@@ -183,6 +184,35 @@ const skillScore = (person, pattern, carac) => {
   const value = Number(row?.total ?? row?.score);
   return Number.isFinite(value) ? value : Number(person?.caracs?.[carac]) || 0;
 };
+/** Libellé de la meilleure compétence de Corps à corps (celle de `bestMeleeScore`), « Corps à corps » à défaut (CC seule). */
+const bestMeleeSkill = person => {
+  const rows = (person?.skills || []).filter(row => /^corps a corps/.test(fold(row?.name ?? row?.nom)) && Number.isFinite(Number(row.total ?? row.score)));
+  const best = rows.reduce((top, row) => (top && Number(top.total ?? top.score) >= Number(row.total ?? row.score) ? top : row), null);
+  return best ? String(best.name ?? best.nom) : 'Corps à corps';
+};
+
+/**
+ * Q6 · T2 : modificateurs d'un camp du Désengagement. Calcul commun (États, talents, sorts et prières : `resolveV5TestModifiers`),
+ * plus la situation propre au Désengagement (infériorité numérique, Élan), puis les plafonds de fin de calcul sur la liste complète
+ * (Esprit fort, Distrait), comme le Test principal. `rows` : détail affiché, source et montant ; un malus annulé par un plafond reste
+ * visible, barré (Q9). Les lignes sont prises avant les plafonds (qui modifient les modificateurs sur place).
+ */
+function disengageSide(person, test, context, { advantages = [], disadvantages = [] } = {}) {
+  const resolved = resolveV5TestModifiers(person, test, context);
+  const situation = (list, kind) => list.map(row => ({ ...row, source: 'Situation', kind }));
+  const rows = [...resolved.rows, ...situation(advantages, 'advantage'), ...situation(disadvantages, 'disadvantage')];
+  const lists = { slModifiers: resolved.slModifiers.map(row => ({ ...row })), advantageSources: [...resolved.advantageSources, ...advantages],
+    disadvantageSources: [...resolved.disadvantageSources, ...disadvantages] };
+  const hadAdvantage = lists.advantageSources.length > 0;
+  finalizeV5TestModifiers(person, resolved, lists);
+  const capped = rows.map(row => {
+    if (row.dropped) return row;
+    if (resolved.ignoreNegative && ((row.kind === 'modifier' && row.amount < 0) || row.kind === 'disadvantage')) return { ...row, dropped: true, rule: 'Esprit fort' };
+    if (hadAdvantage && !lists.advantageSources.length && row.kind === 'advantage') return { ...row, dropped: true, rule: 'Distrait' };
+    return row;
+  });
+  return { ...lists, rows: capped, needsInput: resolved.needsInput, unresolved: resolved.unresolved, restrictions: resolved.restrictions, penalty: resolved.penalty };
+}
 const bestOption = preview => preview.options.reduce((best, option) => (option.result.sl > best.result.sl ? option : best), preview.options[0]);
 
 /**
@@ -211,10 +241,20 @@ export function previewDisengage({ combat, participants = [], actorId, input = {
   const skill = input.skill === 'acrobaties' ? 'acrobaties' : 'esquive';
   const actorScore = Number.isInteger(input.actorScore) ? input.actorScore : skill === 'acrobaties' ? skillScore(actor, /acrobaties/, 'Ag') : skillScore(actor, /^esquive/, 'Ag');
   const opponentScore = Number.isInteger(input.opponentScore) ? input.opponentScore : bestMeleeScore(best);
-  const base = { mode: 'test', opponentIds, bestOpponentId: best.id, skill, actorScore, opponentScore, outnumbered };
+  // Q6 · T2 : calcul commun des deux côtés (CA3), la situation se somme (CA4). Le désengagé fait un Test d'Esquive ou d'Acrobaties
+  // (Test de compétence : À terre et Enchevêtré demandent si le Test implique un mouvement, CA8) ; l'adversaire résiste avec sa
+  // Mêlée (Test de mêlée, comme au combat) et ne lit pas les clés « … adverse » du désengagé (rôle de défenseur, comme au combat).
+  const actorSkill = skill === 'acrobaties' ? (actor.skills || []).map(row => row?.name ?? row?.nom).find(name => /acrobaties/.test(fold(name))) || 'Acrobaties' : 'Esquive';
+  const actorModifiers = disengageSide(actor, { characteristic: 'Ag', skill: actorSkill, skillCharacteristic: 'ag', kind: 'test', role: 'actor', opponent: best, participants },
+    input.context || {}, { disadvantages: outnumbered ? [{ id: 'disengage:outnumbered', label: 'En infériorité numérique' }] : [] });
+  const opponentModifiers = disengageSide(best, { characteristic: 'CC', skill: bestMeleeSkill(best), skillCharacteristic: 'cc', kind: 'melee', role: 'defender', opponent: actor, participants },
+    input.opponentContext || {}, { advantages: best.extensions?.v5?.hasMomentum === true ? [{ id: 'momentum', label: 'Élan' }] : [] });
+  const needsInput = [...actorModifiers.needsInput.map(row => ({ side: 'actor', ...row })), ...opponentModifiers.needsInput.map(row => ({ side: 'opponent', ...row }))];
+  const base = { mode: 'test', opponentIds, bestOpponentId: best.id, skill, actorScore, opponentScore, outnumbered, actorModifiers, opponentModifiers, needsInput };
+  if (needsInput.length) return { ...base, status: 'needs-input', reason: `À saisir avant d’appliquer : ${needsInput.map(row => `${row.side === 'actor' ? actor.name : best.name} · ${row.label}`).join(' ; ')}` };
   if (!Number.isInteger(input.actorRoll) || !Number.isInteger(input.opponentRoll)) return { ...base, status: 'needs-rolls', reason: 'Saisissez les deux d100 du Test opposé.' };
-  const actorTest = previewV5Test({ score: actorScore, roll: input.actorRoll, disadvantageSources: outnumbered ? [{ id: 'disengage:outnumbered', label: 'En infériorité numérique' }] : [] });
-  const opponentTest = previewV5Test({ score: opponentScore, roll: input.opponentRoll, advantageSources: best.extensions?.v5?.hasMomentum === true ? [{ id: 'momentum', label: 'Élan' }] : [] });
+  const test = (score, roll, side) => previewV5Test({ score, roll, slModifiers: side.slModifiers, advantageSources: side.advantageSources, disadvantageSources: side.disadvantageSources });
+  const actorTest = test(actorScore, input.actorRoll, actorModifiers), opponentTest = test(opponentScore, input.opponentRoll, opponentModifiers);
   const own = bestOption(actorTest).result, theirs = bestOption(opponentTest).result;
   const opposition = resolveV5Opposition(own, theirs);
   const success = opposition.winner === 'initiator';
