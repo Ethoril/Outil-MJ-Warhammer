@@ -9,6 +9,36 @@ import { previewV5Test, selectV5Test } from './v5-roll.js';
 import { hasArcaneMagicLore, hasLivingMagicNature, hasTargetNatureOrTrait } from './v5-magic-attributes.js';
 import { magicTalentRank,effectiveSkillScore } from './v5-magic-talents.js';
 import { markCorruptionThresholdTest } from './v5-corruption.js';
+import { previewV5SecondaryTest, secondaryTestDetail } from './v5-test-modifiers.js';
+import { getReferenceCatalogue } from './reference-catalog.js';
+
+/**
+ * Q6 · T7 (docs/specs/tests-secondaires-agregateur/) : Test de sort au fil des tours, calcul commun compris (États, talents, sorts
+ * et prières, séquelles : `previewV5SecondaryTest`). `score` : score lu comme avant (fiche corrigée des couches, ou brut) ;
+ * `slModifiers` : modificateurs propres au sort, placés avant les communs. `opponent` : participant opposé (clés « … adverse »,
+ * CA3) ; une créature de sort sans fiche n'est pas un participant : son côté garde son score nu. `context` : réponses du MJ aux
+ * questions d'États de CE Test. Rend le résultat retenu (forme de `selectV5Test`, plus `detail` quand une ligne commune existe),
+ * ou `{ pending: true, blocked, needsInput }` quand une précision d'État manque (CA8) ou qu'une restriction l'interdit (CA14).
+ */
+export function spellTurnTest(person, { score, roll, stat, skill = '', slModifiers = [], context = {}, opponent = null, role, isAction = false }) {
+  const secondary = previewV5SecondaryTest(person, { score, roll, slModifiers, context: context || {},
+    test: { characteristic: stat, skill, opponent, ...(role ? { role } : {}), isAction } });
+  if (!secondary.ready) return { pending: true, blocked: secondary.blocked === true, needsInput: secondary.needsInput };
+  const result = selectV5Test(secondary.preview, secondary.optionId);
+  // Les modificateurs du sort n'ont qu'un identifiant : il sert de libellé, comme dans `previewV5Test`.
+  return secondary.rows.length ? { ...result, detail: secondaryTestDetail({ ...secondary, modifiers: secondary.modifiers.map(row => ({ ...row, label: row.label || row.id })) }) } : result;
+}
+/** Champs des réponses du MJ aux questions d'États (mêmes noms que `v5Context` du combat). */
+const CONDITION_FIELDS = ['involvesMovement', 'runningOrHiding', 'reliesOnSight', 'usesFellowship', 'conditionPenaltyMode'];
+/** Réponses lues dans les saisies booléennes d'une commande (`field(nom)`) ; le choix DR/Désavantage est un booléen « Oui = DR ». */
+export const spellTestContext = (data, field) => Object.fromEntries(CONDITION_FIELDS.flatMap(name => {
+  const value = data?.[field(name)];
+  return typeof value === 'boolean' ? [[name, name === 'conditionPenaltyMode' ? (value ? 'sl' : 'disadvantage') : value]] : [];
+}));
+/** Questions d'États (CA8) en demandes booléennes ; une restriction (CA14) en demande manuelle, qui bloque la commande. */
+export const spellTestRequests = (pending, field, label) => pending.needsInput.map((row, index) => row.field && !row.restriction
+  ? { field: field(row.field), kind: 'boolean', label: `${label} : ${row.label}${row.field === 'conditionPenaltyMode' ? ' (Oui : DR ; Non : Désavantage)' : ''}` }
+  : { field: field('restriction' + index), kind: 'manual', label: `${label} : ${row.label}` });
 /** Retrait atomique des couches dont le contrat annonce une fin sur événement. */
 export function endSpellEffectsOnEvent(participants,actorId,event){
  return participants.map(p=>{
@@ -65,7 +95,7 @@ export function removeExpiredSummons(envelope,{deferCurrent=true}={}) {
 export function oppositeCamp(camp){return normalizeCamp(camp)==='ennemi'?'allie':'ennemi';}
 
 /** Traversée, déplacement, détection ou bruit déclaré : résolution sans relancer le sort ni consommer une réserve. */
-export function previewSpellInteraction(state, { effectId, targetId, kind, roll, wardRoll, locationRoll, controlValue,lineOfSight,opponentRoll,damageRoll,targetIds,targetsDeclared,targetTests={},declaredFailures,missileDeclared,missConfirmed,originalRoll,actionId,distance,actionConfirmed,strengthBonus,meleeWoundConfirmed,deathConfirmed } = {}) {
+export function previewSpellInteraction(state, { effectId, targetId, kind, roll, wardRoll, locationRoll, controlValue,lineOfSight,opponentRoll,damageRoll,targetIds,targetsDeclared,targetTests={},declaredFailures,missileDeclared,missConfirmed,originalRoll,actionId,distance,actionConfirmed,strengthBonus,meleeWoundConfirmed,deathConfirmed,testContexts={} } = {}) {
   const next=structuredClone(state), participants=next.combat?.participants || [];
   const owner=participants.find(p=>(p.extensions?.v5?.spellEffects || []).some(e=>e.id===effectId));
   const effect=owner?.extensions.v5.spellEffects.find(e=>e.id===effectId), target=participants.find(p=>p.id===targetId);
@@ -80,9 +110,14 @@ export function previewSpellInteraction(state, { effectId, targetId, kind, roll,
     return {ready:true,state:next,baseRevision:state.localRevision,summary:'Lames Azurées : '+target.name+' ajouté aux adversaires engagés.'};
   }
   const d100=value=>Number.isInteger(value)&&value>=1&&value<=100;
-  const secondary=(person,skill,stat,die,modifierSl=0)=>{
+  // Q6 T7 : chaque Test passe par le calcul commun ; r\u00e9ponses du MJ aux questions d'\u00c9tats par testeur (`testContexts[id]`).
+  // Un Test en attente (pr\u00e9cision d'\u00c9tat, CA8 ; restriction, CA14) bloque la clause, sans rien appliquer.
+  const run=(person,options)=>spellTurnTest(person,{...options,context:testContexts?.[person.id] || {}});
+  const waiting=(person,t)=>({...block(person.name+' : '+t.needsInput.map(row=>row.label).join(' ; ')),needsInput:t.needsInput.map(row=>({...row,participantId:person.id}))});
+  // `options.skill` : libell\u00e9 de comp\u00e9tence pour le calcul commun ('' pour un Test de Caract\u00e9ristique).
+  const secondary=(person,skill,stat,die,modifierSl=0,options={})=>{
     const match=(person.skills || []).find(s=>String(s.name).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()===skill.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase());
-    return selectV5Test(previewV5Test({score:effectiveSkillScore(person,match?.total ?? match?.value ?? person.caracs[stat],stat),roll:die,slModifiers:[{id:'spell-secondary',amount:modifierSl}]}),'keep');
+    return run(person,{skill,...options,score:effectiveSkillScore(person,match?.total ?? match?.value ?? person.caracs[stat],stat),roll:die,stat,slModifiers:[{id:'spell-secondary',amount:modifierSl}]});
   };
   const replaceLayer=patch=>{
     const expires=effect.expiresAtRound,keptStates=structuredClone(owner.states || []);
@@ -93,14 +128,14 @@ export function previewSpellInteraction(state, { effectId, targetId, kind, roll,
   };
   if(kind==='event' && effect.specialState?.endsOnEvents?.includes(controlValue)){if(effect.specialState.endsWholeCastOnEvents){for(const person of participants){const ids=(person.extensions?.v5?.spellEffects || []).filter(e=>e.castExecutionId===effect.castExecutionId).map(e=>e.id);for(const id of ids)Object.assign(person,expireSpellEffects(person,{effectId:id}).participant);}}else Object.assign(owner,expireSpellEffects(owner,{effectId}).participant);summary='Événement de fin déclaré : '+controlValue+'.';
   } else if(kind==='calm-mount' && effect.specialState?.mountFleeing){
-    if(!d100(roll))return block('Chevaucher +0 : d100 du cavalier requis.');test=secondary(target,'Chevaucher','Ag',roll);if(test.success)replaceLayer({specialState:{...effect.specialState,mountFleeing:false}});summary='Chevaucher '+test.sl+' DR : '+(test.success?'monture calmée':'fuite maintenue')+'.';
+    if(!d100(roll))return block('Chevaucher +0 : d100 du cavalier requis.');test=secondary(target,'Chevaucher','Ag',roll);if(test.pending)return waiting(target,test);if(test.success)replaceLayer({specialState:{...effect.specialState,mountFleeing:false}});summary='Chevaucher '+test.sl+' DR : '+(test.success?'monture calmée':'fuite maintenue')+'.';
   } else if(kind==='body-fire' && effect.specialState?.bodyFire){
     if(target.id===owner.id || !['grab','grapple','blood'].includes(controlValue))return block('Corps de Feu : adversaire réel et clause choisis requis.');
     const spec=effect.specialState.bodyFire;let formula=String(8+spec.castingSl),ignoreAp=false;
     if(controlValue!=='grapple'){
       if(!d100(roll))return block('Corps de Feu : d100 de Calme ou Esquive requis.');
       if(controlValue==='blood' && meleeWoundConfirmed!==true)return block('Confirmer les Blessures reçues en mêlée.');
-      test=secondary(target,controlValue==='grab'?'Calme':'Esquive',controlValue==='grab'?'FM':'Ag',roll,controlValue==='grab'?-2:0);
+      test=secondary(target,controlValue==='grab'?'Calme':'Esquive',controlValue==='grab'?'FM':'Ag',roll,controlValue==='grab'?-2:0);if(test.pending)return waiting(target,test);
       if(controlValue==='blood'){formula=String(Math.floor(caster.caracs.FM/10)+spec.bloodMissile);ignoreAp=true;}
     }
     if(controlValue!=='blood' || !test.success){if(!ignoreAp&&!d100(locationRoll))return block('Corps de Feu : localisation d100 requise.');const raw=resolveSpellDamage({caster,target,formula,roll:locationRoll?reverseV5Roll(locationRoll):undefined,ignoreAp,spell:{name:effect.spellName}}),protectedHit=previewMagicProtection(target,raw.finalDamage,{wardRoll,nature:attackNature({magical:true,spell:true,ranged:controlValue==='blood',fire:true})});if(!protectedHit.ready)return block(protectedHit.error);damage=Math.min(target.hp,protectedHit.amount);target.hp-=damage;}
@@ -117,19 +152,19 @@ export function previewSpellInteraction(state, { effectId, targetId, kind, roll,
     if(target.id!==owner.id)return block('La sortie doit concerner le destinataire protégé.');Object.assign(owner,expireSpellEffects(owner,{effectId}).participant);summary='Sortie de zone : immunité de la couche retirée.';
   } else if(kind==='worm' && effect.specialState?.wormGrapple){
     if(target.id!==owner.id || !d100(roll)||!d100(opponentRoll)||!['entangle','leather'].includes(controlValue))return block('Ver : cible de la couche, deux d100 et action choisie requis.');
-    test=selectV5Test(previewV5Test({score:effect.specialState.wormGrapple.strength,roll}),'keep');const opposed=secondary(target,'Force','F',opponentRoll);
+    test=selectV5Test(previewV5Test({score:effect.specialState.wormGrapple.strength,roll}),'keep');const opposed=secondary(target,'Force','F',opponentRoll,0,{skill:''});if(opposed.pending)return waiting(target,opposed);
     if(opposed.sl>test.sl){Object.assign(owner,expireSpellEffects(owner,{effectId}).participant);summary='Cible libérée : sort terminé.';}
     else if(controlValue==='entangle'){const ids=new Set((target.states || []).map(s=>s.id));Object.assign(target,acquireV5Conditions(target,[{name:'Enchevêtré',source:{strength:effect.specialState.entangledStrength}}],{round:next.combat.round}).participant);target.states=target.states.map(s=>ids.has(s.id)?s:{...s,spellEffectId:effect.id,removeOnSpellExpiry:true});summary='Ver gagne : +1 Enchevêtré F50.';}
     else{const locations=targetTests[target.id]?.leatherLocations;if(!Array.isArray(locations)||locations.some(l=>!['head','body','arms','legs'].includes(l)))return block('Déclarer les localisations réellement protégées par du cuir (y compris aucune).');const armor=structuredClone(target.extensions.v5.baseArmor || target.baseArmor || target.armor);const aliases={arms:['rightArm','leftArm'],legs:['rightLeg','leftLeg']};for(const loc of new Set(locations))for(const key of aliases[loc] || [loc])armor[key]=Math.max(0,Number(armor[key] ?? armor[loc])-1);Object.assign(target,rebaseMagicLayers(target,{armor}));summary='Ver gagne : cuir −1 PA aux localisations déclarées ; sacs/objets à reporter sur la fiche.';}
   } else if(kind==='grapple' && effect.specialState?.grappleFloor){
-    if(!d100(roll))return block('Iyrtu : d100 de l’empoignade requis.');test=secondary(caster,'Corps à corps (Bagarre)','CC',roll);if(!test.success)test={...test,success:true,sl:0};summary='Empoignade : '+test.sl+' DR, minimum +0 sur échec ; utiliser ce reçu pour l’opposition réelle.';
+    if(!d100(roll))return block('Iyrtu : d100 de l’empoignade requis.');test=secondary(caster,'Corps à corps (Bagarre)','CC',roll,0,{opponent:target.id!==caster.id?target:null});if(test.pending)return waiting(caster,test);if(!test.success)test={...test,success:true,sl:0};summary='Empoignade : '+test.sl+' DR, minimum +0 sur échec ; utiliser ce reçu pour l’opposition réelle.';
   } else if(kind==='summon-attack' && effect.specialState?.summonAttack){
     const spec=effect.specialState.summonAttack,round=next.combat.round,used=effect.summonAttacksRound===round?effect.summonAttacks || []:[];
     if(next.combat.currentActorId!==caster.id || spec.requiresAction && (round<=effect.appliedAtRound || actionConfirmed!==true))return block('Invocation : Tour du lanceur et Action déclarée à partir du Round suivant requis.');
     if(!Number.isFinite(distance)||distance<0||distance>spec.range || lineOfSight!==true)return block('Distance dans la portée et ligne de vue doivent être déclarées.');
     if(used.length>=spec.count || used.filter(id=>id===target.id).length>=spec.maxPerTarget)return block('Limite d’attaques de l’invocation ou de la cible atteinte ce Round.');
     if(!d100(roll)||!d100(opponentRoll)||!d100(locationRoll))return block('Invocation : d100 d’attaque, de défense et de localisation requis.');
-    test=selectV5Test(previewV5Test({score:spec.ws,roll}),'keep');const defence=secondary(target,controlValue==='dodge'?'Esquive':'Corps à corps (Bagarre)',controlValue==='dodge'?'Ag':'CC',opponentRoll);
+    test=selectV5Test(previewV5Test({score:spec.ws,roll}),'keep');const defence=secondary(target,controlValue==='dodge'?'Esquive':'Corps à corps (Bagarre)',controlValue==='dodge'?'Ag':'CC',opponentRoll,0,{role:'defender'});if(defence.pending)return waiting(target,defence);
     if(test.success && test.sl>=defence.sl){
       if(spec.requiresStrengthBonus && (!Number.isInteger(strengthBonus)||strengthBonus<0))return block('Chiens : Bonus de Force du profil MJ requis pour Arme (Morsure) +8.');
       const raw=spec.damage+(spec.requiresStrengthBonus?strengthBonus:0),receipt=resolveSpellDamage({caster,target,formula:String(raw),roll:reverseV5Roll(locationRoll),spell:{name:effect.spellName}}),protectedHit=previewMagicProtection(target,receipt.finalDamage,{wardRoll,nature:attackNature({magical:true,ranged:false,spell:true})});
@@ -144,18 +179,19 @@ export function previewSpellInteraction(state, { effectId, targetId, kind, roll,
     const action=(target.actions || []).find(a=>a.id===actionId);
     if(missileDeclared!==true || missConfirmed!==true || !action || action.attr!=='CT' || action.type!=='attack')return block('Relance : tir physique/munition magique raté confirmé et action de tir réelle requis (pas un projectile magique).');
     if(!Number.isInteger(roll)||roll<1||roll>100 || !Number.isInteger(originalRoll)||originalRoll<1||originalRoll>100)return block('Fournir le d100 initial et celui de la relance.');
-    const original=selectV5Test(previewV5Test({score:Number(action.base ?? target.caracs.CT),roll:originalRoll}),'keep');
-    test=selectV5Test(previewV5Test({score:Number(action.base ?? target.caracs.CT),roll}),'keep');
+    const shot=die=>run(target,{score:Number(action.base ?? target.caracs.CT),roll:die,stat:'CT',skill:getReferenceCatalogue().skills.find(row=>row.id===action.extensions?.fiche?.skillId)?.nom || action.label || action.note || '',role:'attacker',isAction:true});
+    const original=shot(originalRoll);if(original.pending)return waiting(target,original);
+    test=shot(roll);
     summary='Relance du tir '+action.note+' : initial '+original.sl+' DR, relance '+test.sl+' DR ; utiliser ce jet pour l’attaque opposée et ses dégâts, sans les appliquer deux fois.';
   } else if(kind==='iron-listener' && effect.specialState?.ironVoice){
     if(!Number.isInteger(roll)||roll<1||roll>100)return block('Auditeur hostile : Perception d100 requise.');
     const skill=(target.skills || []).find(s=>/perception/i.test(s.name || ''));
-    test=selectV5Test(previewV5Test({score:effectiveSkillScore(target,skill?.total ?? skill?.value ?? target.caracs.I,'I'),roll,slModifiers:[{id:'iron-listener',amount:-1}]}),'keep');
+    test=run(target,{score:effectiveSkillScore(target,skill?.total ?? skill?.value ?? target.caracs.I,'I'),roll,stat:'I',skill:'Perception',slModifiers:[{id:'iron-listener',amount:-1}]});if(test.pending)return waiting(target,test);
     summary='Auditeur hostile : '+test.sl+' DR, '+(test.success?'bonus +1 du locuteur neutralisé contre cet auditeur':'bonus +1 maintenu')+'. Voix normale/cri ×3 ; murmures exclus.';
   } else if(kind==='tempest-move' && effect.specialState?.tempestMovement){
     if(!Number.isInteger(roll)||roll<1||roll>100 || !['air','ground'].includes(controlValue))return block('Tempête : Calme d100 et position en vol/au sol requis.');
     const skill=(target.skills || []).find(s=>/calme/i.test(s.name || ''));
-    test=selectV5Test(previewV5Test({score:effectiveSkillScore(target,skill?.total ?? skill?.value ?? target.caracs.FM,'FM'),roll}),'keep');
+    test=run(target,{score:effectiveSkillScore(target,skill?.total ?? skill?.value ?? target.caracs.FM,'FM'),roll,stat:'FM',skill:'Calme'});if(test.pending)return waiting(target,test);
     summary='Calme '+test.sl+' DR : '+(test.success?'déplacement permis':'déplacement interdit')+(!test.success&&controlValue==='air'?' ; chute de 50 mètres ce Round (hauteur, impact et atterrissage : MJ)':'')+'. CT −3 DR pour la durée.';
   } else if(kind==='flight' && effect.specialState?.flightAvailable){
     if(!['air','ground'].includes(controlValue))return block('Choisir en vol ou au sol.');
@@ -171,15 +207,15 @@ export function previewSpellInteraction(state, { effectId, targetId, kind, roll,
     if(!spec.options.some(([value])=>value===controlValue))return block('Choisir la modification du sort.');
     if(!Number.isInteger(roll)||roll<1||roll>100)return block('Saisir le d100 de '+spec.skill+'.');
     const skill=(caster.skills || []).find(s=>(s.name || '').toLowerCase()===spec.skill.toLowerCase());
-    test=selectV5Test(previewV5Test({score:effectiveSkillScore(caster,skill?.total ?? skill?.value ?? caster.caracs[spec.stat],spec.stat),roll,slModifiers:[{id:'spell-control',amount:spec.modifierSl}]}),'keep');
+    test=run(caster,{score:effectiveSkillScore(caster,skill?.total ?? skill?.value ?? caster.caracs[spec.stat],spec.stat),roll,stat:spec.stat,skill:spec.skill,isAction:spec.action===true,slModifiers:[{id:'spell-control',amount:spec.modifierSl}]});if(test.pending)return waiting(caster,test);
     if(effect.specialState.extendedAfterFailures && declaredFailures>=3){effect.expiresAtRound=next.combat.round+spellFormulaValue(effect.specialState.extendedAfterFailures,caster)*360;summary='Glamour prolongé BI heures après trois échecs déclarés. ';}
     if(test.success){effect.specialState[spec.field]=controlValue;owner.extensions.v5.specialStates[spec.field]=controlValue;}
     summary+= 'Contrôle '+spec.skill+' +'+spec.modifierSl+' : '+test.sl+' DR, '+(test.success?'modification acceptée':'aucune modification')+(spec.action?' ; une Action utilisée (sans Focalisation).':'');
     }
   } else if(kind==='opposed-move' && effect.specialState?.objectMovement){
     if(!Number.isInteger(roll)||roll<1||roll>100||!Number.isInteger(opponentRoll)||opponentRoll<1||opponentRoll>100)return block('Déplacement entravé : fournir les deux d100, FM et Force.');
-    test=selectV5Test(previewV5Test({score:Number(caster.caracs.FM),roll}),'keep');
-    const opponent=selectV5Test(previewV5Test({score:Number(target.caracs.F),roll:opponentRoll}),'keep');
+    test=run(caster,{score:Number(caster.caracs.FM),roll,stat:'FM',opponent:target.id!==caster.id?target:null});if(test.pending)return waiting(caster,test);
+    const opponent=run(target,{score:Number(target.caracs.F),roll:opponentRoll,stat:'F',opponent:target.id!==caster.id?caster:null});if(opponent.pending)return waiting(target,opponent);
     summary='FM '+test.sl+' contre Force '+opponent.sl+' DR : '+(test.sl>opponent.sl?'objet déplacé dans la distance du reçu':'objet retenu (égalité incluse)')+'. Destination : MJ.';
   } else if(kind==='blood' && effect.specialState?.damageTrigger){
     if(targetsDeclared!==true || !Array.isArray(targetIds))return block('Sang corrosif : déclarer tous les engagés, y compris aucun.');
@@ -201,7 +237,7 @@ export function previewSpellInteraction(state, { effectId, targetId, kind, roll,
     else {
       if (!Number.isInteger(roll)||roll<1||roll>100) return block('Saisir le d100 du Test de détection.');
       const skill=(target.skills || []).find(s=>(s.name || '').toLowerCase()===spec.skill.toLowerCase());
-      const test=selectV5Test(previewV5Test({score:Number(skill?.total ?? target.caracs?.[spec.stat]),roll,slModifiers:[{id:'spell-detection',amount:spec.modifierSl}]}),'keep');
+      const test=run(target,{score:Number(skill?.total ?? target.caracs?.[spec.stat]),roll,stat:spec.stat,skill:spec.skill,slModifiers:[{id:'spell-detection',amount:spec.modifierSl}]});if(test.pending)return waiting(target,test);
       summary=test.success && test.sl>spec.castingSl ? 'Test opposé gagné : présence ou illusion détectée, sans dissiper le sort.' : 'Test opposé perdu : illusion non détectée.';
     }
   } else {
@@ -214,9 +250,10 @@ export function previewSpellInteraction(state, { effectId, targetId, kind, roll,
       if (testSpec) {
         if (!Number.isInteger(roll)||roll<1||roll>100) return block('Saisir le d100 du Test secondaire.');
         const tester=spec.testActor==='caster'?caster:target,skill=(tester.skills || []).find(s=>(s.name || '').toLowerCase()===testSpec.skill.toLowerCase());
-        test=selectV5Test(previewV5Test({score:effectiveSkillScore(tester,skill?.total ?? tester.caracs?.[testSpec.stat],testSpec.stat),roll,slModifiers:[{id:'spell-trigger',amount:testSpec.modifierSl}]}),'keep');
+        const rival=spec.opposedTest && tester.id!==target.id?target:null;
+        test=run(tester,{score:effectiveSkillScore(tester,skill?.total ?? tester.caracs?.[testSpec.stat],testSpec.stat),roll,stat:testSpec.stat,skill:testSpec.skill,opponent:rival,slModifiers:[{id:'spell-trigger',amount:testSpec.modifierSl}]});if(test.pending)return waiting(tester,test);
         failed=!test.success;
-        if(spec.opposedTest){if(!d100(opponentRoll))return block('Auteur de l’effet magique : d100 adverse de FM requis.');const other=secondary(target,spec.opposedTest.skill,spec.opposedTest.stat,opponentRoll);test={...test,opponentSl:other.sl,won:test.sl>other.sl};failed=!test.won;}
+        if(spec.opposedTest){if(!d100(opponentRoll))return block('Auteur de l’effet magique : d100 adverse de FM requis.');const other=secondary(target,spec.opposedTest.skill,spec.opposedTest.stat,opponentRoll,0,{opponent:tester.id!==target.id?tester:null});if(other.pending)return waiting(target,other);test={...test,opponentSl:other.sl,won:test.sl>other.sl};failed=!test.won;}
       }
       // `alwaysConditions` : états acquis dans tous les cas à la clause (ex. Horreur hantante : +1 Exténué à l'entrée), avant ceux de l'échec.
       conditions=[...(spec.alwaysConditions || []),...(failed ? (spec.conditions || spec.failConditions || []) : [])];
@@ -282,7 +319,8 @@ export function randomVortexStep(participants,caster,effect,{inputs={},initial=n
    const wards=data[field('Ward')] ?? data.wardRoll;
    const declared={...data.attackNature,...Object.fromEntries(Object.entries(data).filter(([name,value])=>name.startsWith(field('Nature:'))&&typeof value==='boolean').map(([name,value])=>[name.slice(field('Nature:').length),value]))};
    const nature=attackNature({magical:true,spell:true,ranged:true,fire:stage.profile.fire===true,declared});
-   const calmDie=data[field('ProtectionCalm')] ?? data.protectionCalmRoll,calmSkill=(target.skills || []).find(s=>/calme|cool/i.test(s.name || '')),calm=Number.isInteger(calmDie)&&calmDie>=1&&calmDie<=100?selectV5Test(previewV5Test({score:effectiveSkillScore(target,calmSkill?.total ?? target.caracs.FM,'FM'),roll:calmDie}),'keep'):null;
+   const calmDie=data[field('ProtectionCalm')] ?? data.protectionCalmRoll,calmSkill=(target.skills || []).find(s=>/calme|cool/i.test(s.name || '')),calm=Number.isInteger(calmDie)&&calmDie>=1&&calmDie<=100?spellTurnTest(target,{score:effectiveSkillScore(target,calmSkill?.total ?? target.caracs.FM,'FM'),roll:calmDie,stat:'FM',skill:'Calme',context:spellTestContext(data,name=>field('ProtectionCalm:'+name))}):null;
+   if(calm?.pending){for(const row of spellTestRequests(calm,name=>'ProtectionCalm:'+name,'Calme pour la réduction de dégâts'))request(row.field,row.kind,row.label);continue;}
    const protectedHit=previewMagicProtection(target,raw.finalDamage,{wardRoll:wards,nature,calm});
    if(!protectedHit.ready){if(protectedHit.unknown?.length)for(const tag of protectedHit.unknown)request('Nature:'+tag,'boolean','nature de la frappe : '+natureTagLabel(tag));else if(/Calme/.test(protectedHit.error || ''))request('ProtectionCalm','d100','Calme pour la réduction de dégâts');else request('Ward','wards','d10 de chaque Protection, séparés par des espaces');continue;}
    let thrown=null,sun=null;
@@ -295,7 +333,7 @@ export function randomVortexStep(participants,caster,effect,{inputs={},initial=n
    if(stage.profile.sun){
     const touched=data[field('SunTouched')] ?? data.sunTouched;
     if(typeof touched!=='boolean'){request('SunTouched','boolean','touché par le Soleil Violet ?');continue;}
-    if(touched){const die=data[field('Calm')] ?? data.calmRoll;if(!Number.isInteger(die)||die<1||die>100){request('Calm','d100','Calme +0 contre la mort');continue;}const skill=(target.skills || []).find(s=>/calme|cool/i.test(s.name));sun=selectV5Test(previewV5Test({score:effectiveSkillScore(target,skill?.total ?? target.caracs.FM,'FM'),roll:die}),'keep');}
+    if(touched){const die=data[field('Calm')] ?? data.calmRoll;if(!Number.isInteger(die)||die<1||die>100){request('Calm','d100','Calme +0 contre la mort');continue;}const skill=(target.skills || []).find(s=>/calme|cool/i.test(s.name));sun=spellTurnTest(target,{score:effectiveSkillScore(target,skill?.total ?? target.caracs.FM,'FM'),roll:die,stat:'FM',skill:'Calme',context:spellTestContext(data,name=>field('Calm:'+name))});if(sun.pending){for(const row of spellTestRequests(sun,name=>'Calm:'+name,'Calme +0 contre la mort'))request(row.field,row.kind,row.label);continue;}}
    }
    if(stage.profile.suffocation && typeof (data[field('Inside')] ?? data.inside)!=='boolean'){request('Inside','boolean','encore dans le nuage après déplacement ?');continue;}
    let collisionDamage=0;
@@ -370,7 +408,8 @@ export function roundSpellEffects(participants, phase, round, inputs = {}, actor
       if (!Number.isInteger(guide[rollKey]) || guide[rollKey]<1 || guide[rollKey]>100) { requests.push({participantId:caster.id,field:rollKey,kind:'d100',label:'Comète : jet du Test de guidage (d100)'}); continue; }
       const astronomy = (caster.skills || []).find(s => /astronom/i.test(s.name || ''));
       if (guide[kindKey] && !astronomy) { requests.push({participantId:caster.id,field:guideKey('skill'),kind:'manual',label:'Savoir (Astronomie) absent : choisir CT ou renseigner la compétence sur le profil.'}); continue; }
-      const test = selectV5Test(previewV5Test({score:guide[kindKey]?Number(astronomy.total):Number(caster.caracs.CT),roll:guide[rollKey],slModifiers:[{id:'comet',amount:guide[kindKey]?2:-3}]}),'keep');
+      const test = spellTurnTest(caster,{score:guide[kindKey]?Number(astronomy.total):Number(caster.caracs.CT),roll:guide[rollKey],stat:guide[kindKey]?'Int':'CT',skill:guide[kindKey]?astronomy.name:'',slModifiers:[{id:'comet',amount:guide[kindKey]?2:-3}],context:spellTestContext(guide,name=>guideKey('guidance:'+name))});
+      if (test.pending) { for(const row of spellTestRequests(test,name=>guideKey('guidance:'+name),'Comète : Test de guidage'))requests.push({participantId:caster.id,participantName:caster.name,...row}); continue; }
       if (!test.success) {
         const scatterKey=guideKey('scatter');
         if (!Number.isInteger(guide[scatterKey]) || guide[scatterKey]<1 || guide[scatterKey]>10) { requests.push({participantId:caster.id,field:scatterKey,kind:'d10',label:'Comète : distance par DR négatif (d10), direction et zone finale à fixer par le MJ'}); continue; }
@@ -386,7 +425,8 @@ export function roundSpellEffects(participants, phase, round, inputs = {}, actor
       const die=data[key('roundTest')],testSpec=spec.test;
       if(!Number.isInteger(die)||die<1||die>100){ask('roundTest','d100',testSpec.skill+' ('+testSpec.modifierSl+' DR)');continue;}
       const skill=(target.skills || []).find(s=>(s.name || '').toLowerCase()===testSpec.skill.toLowerCase());
-      const test=selectV5Test(previewV5Test({score:effectiveSkillScore(target,skill?.total ?? skill?.value ?? target.caracs[testSpec.stat],testSpec.stat),roll:die,slModifiers:[{id:'spell-round',amount:testSpec.modifierSl}]}),'keep');
+      const test=spellTurnTest(target,{score:effectiveSkillScore(target,skill?.total ?? skill?.value ?? target.caracs[testSpec.stat],testSpec.stat),roll:die,stat:testSpec.stat,skill:testSpec.skill,slModifiers:[{id:'spell-round',amount:testSpec.modifierSl}],context:spellTestContext(data,name=>key('roundTest:'+name))});
+      if(test.pending){for(const row of spellTestRequests(test,name=>'roundTest:'+name,testSpec.skill))ask(row.field,row.kind,row.label);continue;}
       secondaryFailed=!test.success;
       logs.push({kind:'effect',actorId:caster.id,text:effect.spellName+' — '+target.name+' : '+testSpec.skill+' '+test.sl+' DR, '+(test.success?'réussi':'raté')+'. '+(spec.testReminder || '')});
     }
@@ -405,7 +445,8 @@ export function roundSpellEffects(participants, phase, round, inputs = {}, actor
           if(typeof flying!=='boolean'){ask('flying','boolean','actuellement en vol ?');continue;}
           if(!Number.isInteger(athletics)||athletics<1||athletics>100){ask('athletics','d100','Athlétisme '+(flying?'+1':'+2')+' DR');continue;}
           const skill=(target.skills || []).find(s=>/athlet/i.test((s.name || '').normalize('NFD').replace(/[\u0300-\u036f]/g,'')));
-          const test=selectV5Test(previewV5Test({score:effectiveSkillScore(target,skill?.total ?? skill?.value ?? target.caracs.Ag,'Ag'),roll:athletics,slModifiers:[{id:'tempest-athletics',amount:flying?spec.athleticsFlyingSl:spec.athleticsGroundSl}]}),'keep');tempestFailed=!test.success;base=flying?spec.missileFlying:spec.missileGround;
+          const test=spellTurnTest(target,{score:effectiveSkillScore(target,skill?.total ?? skill?.value ?? target.caracs.Ag,'Ag'),roll:athletics,stat:'Ag',skill:'Athlétisme',slModifiers:[{id:'tempest-athletics',amount:flying?spec.athleticsFlyingSl:spec.athleticsGroundSl}],context:spellTestContext(data,name=>key('athletics:'+name))});
+          if(test.pending){for(const row of spellTestRequests(test,name=>'athletics:'+name,'Athlétisme'))ask(row.field,row.kind,row.label);continue;}tempestFailed=!test.success;base=flying?spec.missileFlying:spec.missileGround;
           logs.push({kind:'effect',actorId:caster.id,text:effect.spellName+' — '+target.name+' : Athlétisme '+test.sl+' DR ; '+(tempestFailed?'−20 CC/CT jusqu’à la fin du sort':'caractéristiques préservées')+(spec.moveTest?' ; déplacement soumis à Calme +0, chute 50 m/Round si volant raté et CT −3 DR.':'')});
         }
       }
@@ -433,7 +474,8 @@ export function roundSpellEffects(participants, phase, round, inputs = {}, actor
       const wardCount=wardDiceCount(target.extensions?.v5 || {}), wardRolls=Array.from({length:wardCount},(_,i)=>data[key('ward'+i)]);
       const declared={...spec.attackNature,...damageSpec.attackNature,...Object.fromEntries(Object.entries(data).filter(([name,value])=>name.startsWith(key('nature:'))&&typeof value==='boolean').map(([name,value])=>[name.slice(key('nature:').length),value]))};
       const calmDie=data[key('protectionCalm')],calmSkill=(target.skills || []).find(s=>/calme|cool/i.test(s.name || ''));
-      const calm=Number.isInteger(calmDie)&&calmDie>=1&&calmDie<=100?selectV5Test(previewV5Test({score:effectiveSkillScore(target,calmSkill?.total ?? calmSkill?.value ?? target.caracs.FM,'FM'),roll:calmDie}),'keep'):null;
+      const calm=Number.isInteger(calmDie)&&calmDie>=1&&calmDie<=100?spellTurnTest(target,{score:effectiveSkillScore(target,calmSkill?.total ?? calmSkill?.value ?? target.caracs.FM,'FM'),roll:calmDie,stat:'FM',skill:'Calme',context:spellTestContext(data,name=>key('protectionCalm:'+name))}):null;
+      if(calm?.pending){for(const row of spellTestRequests(calm,name=>'protectionCalm:'+name,'Calme pour la réduction de dégâts'))ask(row.field,row.kind,row.label);continue;}
       const protection=previewMagicProtection(target,damage.finalDamage,{wardRoll:wardCount>1?wardRolls:wardRolls[0],nature:attackNature({magical:true,spell:true,ranged:true,fire:effect.domain==='fire',declared}),calm});
       if (!protection.ready) {
         if(protection.unknown?.length)for(const tag of protection.unknown)ask('nature:'+tag,'boolean','nature de la frappe : '+natureTagLabel(tag)+' ?');
@@ -521,7 +563,8 @@ export function recurringSpellHits(participants, currentActorId, inputs = {}) {
         const wardDice = wardFields.map(name => Number.isInteger(data[name]) ? data[name] : null);
         const naturePrefix='recurringNature:'+effect.id+':'+(i+1)+':',declared=Object.fromEntries(Object.entries(data).filter(([name,value])=>name.startsWith(naturePrefix)&&typeof value==='boolean').map(([name,value])=>[name.slice(naturePrefix.length),value]));
         const calmField='recurringCalm:'+effect.id+':'+(i+1),calmDie=data[calmField],skill=(current.skills || []).find(s=>/calme|cool/i.test(s.name || ''));
-        const calm=Number.isInteger(calmDie)&&calmDie>=1&&calmDie<=100?selectV5Test(previewV5Test({score:effectiveSkillScore(current,skill?.total ?? current.caracs.FM,'FM'),roll:calmDie}),'keep'):null;
+        const calm=Number.isInteger(calmDie)&&calmDie>=1&&calmDie<=100?spellTurnTest(current,{score:effectiveSkillScore(current,skill?.total ?? current.caracs.FM,'FM'),roll:calmDie,stat:'FM',skill:'Calme',context:spellTestContext(data,name=>calmField+':'+name)}):null;
+        if(calm?.pending){for(const row of spellTestRequests(calm,name=>calmField+':'+name,effect.spellName+' : Calme contre coup '+(i+1)))wardRequests.push({participantId:target.id,participantName:target.name,...row});return;}
         const protection = previewMagicProtection(current, damage, { wardRoll: wardFields.length > 1 ? wardDice : wardDice[0], nature:attackNature({ranged:false,magical:true,spell:true,declared}),calm });
         if(protection.unknown?.length){for(const tag of protection.unknown)wardRequests.push({participantId:target.id,participantName:target.name,field:naturePrefix+tag,kind:'boolean',label:effect.spellName+' : nature du coup '+(i+1)+' — '+natureTagLabel(tag)+' ?'});return;}
         if(!protection.ready && /Calme/.test(protection.error || '')){wardRequests.push({participantId:target.id,field:calmField,kind:'d100',label:effect.spellName+' : Calme contre coup '+(i+1)+' (d100)'});return;}

@@ -1618,7 +1618,9 @@ test('Transformation de Tzeentch — À Terre, Endurance +0 en fin de Round : é
   const {store,engine}=await encounter();await cast(store,c,{targetTests:{foe:{roll:95,resistanceRoll:95}}});
   assert.equal(level(subject(store,'foe'),'À Terre'),1);
   const layer=subject(store,'foe').extensions.v5.spellEffects.find(e=>e.spellId===c.id);
-  await endTurn(engine,{inputs:{foe:{['spell:'+layer.id+':roundTest']:roll}}});await endTurn(engine,{inputs:{foe:{['spell:'+layer.id+':roundTest']:roll}}});
+  // Q6 T7 : la cible est À Terre ; le Test d'Endurance pose la question du mouvement (CA8), réponse « non » du MJ.
+  const answers={['spell:'+layer.id+':roundTest']:roll,['spell:'+layer.id+':roundTest:involvesMovement']:false};
+  await endTurn(engine,{inputs:{foe:answers}});await endTurn(engine,{inputs:{foe:answers}});
   assert.equal(subject(store,'foe').extensions.v5.corruptionPoints||0,corruption,'jet '+roll);
  }
  assert.match(c.reminders,/sans défense/);

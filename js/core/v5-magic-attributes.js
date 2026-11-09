@@ -10,7 +10,8 @@ import { markCorruptionThresholdTest } from './v5-corruption.js';
 import { acquireV5Conditions, healV5Wounds } from './v5-effects.js';
 import { applySpellEffects } from './v5-magic-effects.js';
 import { withMomentum } from './v5-combat-rules.js';
-import { previewV5Test, selectV5Test } from './v5-roll.js';
+import { selectV5Test } from './v5-roll.js';
+import { previewV5SecondaryTest, secondaryTestDetail } from './v5-test-modifiers.js';
 import { armorMaterial, wornArmourPieces } from './v5-armor-material.js';
 import { keywordMatches, participantKeywords, resolveKeyword } from './creature-keywords.js';
 
@@ -361,7 +362,7 @@ export function previewLoreAttribute({
     case 'tzeentch': {
       // Domaines du Chaos (V5 pp. 259-260) : effet porté par une couche sur chaque cible du sort ; Nurgle et Slaanesh n'agissent que « tant que le sort est en effet ».
       const instant = /instantan/i.test(String(spell.duration || options.duration || ''));
-      const missingRolls = [];
+      const missingRolls = [], conditionNeeds = [];
       for (const target of targets) {
         if (!target) continue;
         const name = target.name || target.id;
@@ -378,12 +379,19 @@ export function previewLoreAttribute({
           if (!Number.isInteger(roll) || roll < 1 || roll > 100) { missingRolls.push(target.id); continue; }
           const skill = (target.skills || []).find(sk => fold(sk?.name) === 'endurance');
           const score = Number(skill?.total ?? skill?.value ?? target.caracs?.E) || 0;
-          const test = selectV5Test(previewV5Test({ score, roll }), 'keep');
+          // Q6 T7 : calcul commun du testeur (États, talents, sorts et prières, séquelles) ; réponses du MJ aux questions d'États dans
+          // `attributeRolls[id].corruptionContext`. Une question sans réponse (CA8) ou une restriction (CA14) laisse l'attribut non résolu.
+          const secondary = previewV5SecondaryTest(target, { score, roll, test: { characteristic: 'E', skill: skill?.name || 'Résistance' }, context: options.attributeRolls?.[target.id]?.corruptionContext || {} });
+          if (!secondary.ready) { conditionNeeds.push({ participantId: target.id, needsInput: secondary.needsInput }); missingRolls.push(target.id); continue; }
+          const test = selectV5Test(secondary.preview, secondary.optionId);
+          const detail = secondary.rows.length ? { detail: secondaryTestDetail(secondary) } : {};
           targetEffects.set(target.id, test.success
-            ? { type: 'lore-attribute-tzeentch', lore: 'tzeentch', test: { roll, success: true, sl: test.sl }, spellEffect: { tempFortunePoints: 1, duration: 'Spéciale' }, summary: `${name} : Test de Corruption réussi (${roll}), +1 Point de Chance jusqu’à la fin de la rencontre.` }
-            : { type: 'lore-attribute-tzeentch', lore: 'tzeentch', test: { roll, success: false, sl: test.sl }, corruptionGain: 1, summary: `${name} : Test de Corruption raté (${roll}), +1 Point de Corruption.` });
+            ? { type: 'lore-attribute-tzeentch', lore: 'tzeentch', test: { roll, success: true, sl: test.sl, ...detail }, spellEffect: { tempFortunePoints: 1, duration: 'Spéciale' }, summary: `${name} : Test de Corruption réussi (${roll}), +1 Point de Chance jusqu’à la fin de la rencontre.` }
+            : { type: 'lore-attribute-tzeentch', lore: 'tzeentch', test: { roll, success: false, sl: test.sl, ...detail }, corruptionGain: 1, summary: `${name} : Test de Corruption raté (${roll}), +1 Point de Corruption.` });
         }
       }
+      if (conditionNeeds.length) return { lore: activeLore, loreName: LORE_ATTRIBUTES[activeLore].name, casterEffects: null, targetEffects, damageRules, missingRolls, conditionNeeds, ready: false,
+        missingLabel: 'précision d’État du Test de Corruption (' + [...new Set(conditionNeeds.flatMap(row => row.needsInput.map(need => need.label)))].join(' ; ') + ')' };
       if (missingRolls.length) return { lore: activeLore, loreName: LORE_ATTRIBUTES[activeLore].name, casterEffects: null, targetEffects, damageRules, missingRolls, missingLabel: 'd100 du Test de Corruption', ready: false };
       break;
     }
