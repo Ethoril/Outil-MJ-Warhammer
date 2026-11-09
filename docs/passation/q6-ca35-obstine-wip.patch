@@ -1,0 +1,60 @@
+diff --git a/js/core/store.js b/js/core/store.js
+index 9827634..913f008 100644
+--- a/js/core/store.js
++++ b/js/core/store.js
+@@ -5,6 +5,7 @@ import {processCombatTurnSpells,shieldAtTurnStart,previewSpellInteraction,remove
+ import {previewMagicMeditation,activeMagicTalent,magicTalentRank,effectiveSkillScore,baseCharacteristicScore} from './v5-magic-talents.js';
+ import { previewV5Test, selectV5Test, normalizeV5Roll } from './v5-roll.js';
+ import { previewV5SecondaryTest, secondaryTestDetail } from './v5-test-modifiers.js';
++import { consumeObstinateIn, obstinateActorsIn, obstinateStatus } from './v5-obstinate.js';
+ import {
+   applyCorruptionAbsolution as applyCorruptionAbsolutionPure,
+   calculateCorruptionThreshold,
+@@ -1568,10 +1569,15 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
+     });
+   }
+ 
++  // MJ 09/11 CA35 : données de l'application en cours (arguments d'une commande `apply…`), relues par la première commande qu'elle
++  // exécute pour y décompter Obstiné (v5-obstinate.js) dans le même état : l'annulation (historique) rend l'usage.
++  let pendingObstinate = null;
+   const api = {
+     executeCommand(type, mutator, { restore = null, recordHistory = true, purgeEncounterId = null, externalBoundary = null } = {}) {
+       if (!canMutate()) throw new Error('Store non prêt');
+       if (typeof mutator !== 'function') throw new TypeError('Mutateur de commande requis');
++      const obstinate = pendingObstinate;
++      pendingObstinate = null;
+       const run = () => {
+         // Build every value from a clone.  In the persistent path this function
+         // does not mutate the live Store until IDB has committed the candidate.
+@@ -1586,6 +1592,7 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
+           throw error;
+         }
+         if (next === undefined) throw new Error('La commande n’a produit aucun état');
++        if (obstinate) consumeObstinateIn(next, obstinate);
+         // Les soldes de Chance projetés sur les participants suivent toujours le registre (expirations comprises).
+         next = finalizeDivineState(before,next);
+         next = projectV5ResourceEnvelope(removeExpiredSummons(next));
+@@ -5991,6 +5998,23 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
+   };
+ 
+   api.ready = readyPromise;
++  // MJ 09/11 CA35 : chaque commande qui applique un Test relève le choix d'Obstiné de ses testeurs (`obstinateActorId`) ; le décompte
++  // se fait dans la commande (refus si l'usage de la séance est déjà pris). Une commande imbriquée garde le choix de la plus externe.
++  for (const name of Object.keys(api)) {
++    if (!/^(apply|resolve|record|treat|careFor|immobilize|advanceAftermath|deployCadai|rerollCorruption)[A-Z]/.test(name) || typeof api[name] !== 'function') continue;
++    const original = api[name];
++    api[name] = function (...args) {
++      if (pendingObstinate !== null || !obstinateActorsIn(args).length) return original.apply(this, args);
++      pendingObstinate = args;
++      let result;
++      try { result = original.apply(this, args); } catch (error) { pendingObstinate = null; throw error; }
++      if (result && typeof result.then === 'function') return result.finally(() => { if (pendingObstinate === args) pendingObstinate = null; });
++      if (pendingObstinate === args) pendingObstinate = null;
++      return result;
++    };
++  }
++  api.getObstinateStatus = actorId => { const envelope = currentEnvelope(); const actor = [...(envelope.combat?.participants || []), ...(envelope.activeScene?.participants || [])].find(row => row.id === actorId);
++    return obstinateStatus(envelope, actor); };
+ 
+   startSyncListener();
+ 
