@@ -39,6 +39,10 @@ Chaque tâche est un brief autonome pour une session (Opus : règles et store). 
   Fichiers : `js/core/v5-spell-contracts.js`, test commun, `magie/contrats-*.test.js`.
   CA : CA1, CA3, CA7, CA9, CA10.
 
+- [ ] **T10 · Affichage : Obstiné partout et détail par source en magie et en Prière.** Objectif : le choix avant le jet du talent Obstiné (`talent-strong-minded`, V5 p. 127, `preRollTalent: 'strong-minded'`, aujourd'hui seulement dans le panneau de combat, `resolution-panel.js`) est proposé partout où un Test se lance : désengagement sur le plateau, lancer, Focalisation et Dissipation, Prière, convalescence. Les panneaux de magie et de Prière affichent le détail complet par source rendu par le calcul commun (talents compris, modificateurs écartés barrés, Q9), comme au combat. Vérifier au passage si l'usage « une fois par séance » est compté ; sinon, le signaler au MJ sans l'inventer. Après : T3, T7, T8 (mêmes écrans).
+  Fichiers : `js/ui/workspace/plateau.js`, panneau magique de `js/ui/workspace-view.js`, `js/ui/v5-divine-panel.js`, écran de convalescence, contextes des modules concernés pour relayer `preRollTalent`.
+  CA : CA5, CA18. Acceptation : un parcours navigateur par écran sous `timeout 120` (choix d'Obstiné puis malus ramené à 0 et visible ; un talent de Prière visible dans le détail).
+
 - [ ] **T9 · Fusion.** Suite complète une fois, parcours navigateur des zones touchées sous `timeout 120`, `verifier` sur toute la spec, CA11 (sauvegarde ancienne rechargée). Release proposée au MJ.
 
 Ordre suggéré : T0 → (T1 ∥ T2 ∥ T6) → (T3 ∥ T4 ∥ T7 ∥ T8) → T5 → T9. T3 et T4 touchent tous deux `store.js` : si on les lance ensemble, T3 laisse la commande `v5-cadai-deploy` à T5.
