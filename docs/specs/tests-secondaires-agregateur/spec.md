@@ -32,6 +32,16 @@ Le MJ a décidé les 05 et 06/11 que tous les Tests, et pas seulement le Test pr
 - **CA10** Les tests unitaires existants des familles touchées restent verts. Seules changent les valeurs attendues des cas où un État, un talent ou un effet était ignoré à tort, et chaque changement est justifié dans le commit.
 - **CA11** Une partie sauvegardée avant le chantier se recharge sans erreur ni migration.
 
+### S6 · Décisions du MJ du 09/11 (questions remontées par T0, T1, T2, T6)
+- **CA13** Les séquelles durables pèsent sur tout Test, principal ou secondaire, dont elles visent la caractéristique ou la compétence.
+- **CA14** Un acteur Inconscient ne fait aucun Test secondaire. Un acteur Surpris ne peut pas faire, pendant ce Round, un Test qui demande d'agir (désengagement, pause ou interruption de Focalisation…). L'outil bloque le Test et dit pourquoi.
+- **CA15** Le désengagement compte toujours comme un mouvement : À terre et Enchevêtré s'appliquent sans question.
+- **CA16** Les effets « … adverse » posés sur le désengagé ne jouent pas contre l'adversaire qui résiste, comme pour un défenseur au combat.
+- **CA17** La pause de Focalisation est un Test mental pour Clarté d'esprit (p. 251).
+- **CA18** Esprit fort annule aussi les malus propres à un Test (Courroux sur la Prière, Relique négative, difficulté de la Résistance au Courroux, −1 DR de l'infection…), en lecture littérale, comme au combat.
+- **CA19** Déterminé applique les exceptions d'États (Endurance de l'anachorète, Clarté d'esprit…).
+- **CA20** L'État que Déterminé cherche à éviter ne compte pas dans son propre Test de Calme.
+
 ## Hors périmètre
 
 - Le Test principal et l'agrégateur lui-même : on les réutilise tels quels, sans changer leurs règles de cumul.
