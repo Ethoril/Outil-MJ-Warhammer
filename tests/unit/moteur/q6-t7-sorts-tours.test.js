@@ -5,6 +5,7 @@ import assert from 'node:assert/strict';
 import { previewV5Test, selectV5Test } from '../../../js/core/v5-roll.js';
 import { spellTurnTest, roundSpellEffects, previewSpellInteraction, randomVortexStep } from '../../../js/core/v5-magic-turn.js';
 import { previewLoreAttribute } from '../../../js/core/v5-magic-attributes.js';
+import { getAllSpellContracts } from '../../../js/core/v5-spell-contracts.js';
 
 const state = (key, name, level = 1) => ({ id: 'st-' + key, key, name, level });
 const person = (id, states = [], extra = {}) => ({ id, name: id === 'c' ? 'Lanceur' : 'Cible', camp: id === 'c' ? 'allie' : 'ennemi', hp: 12, maxHp: 12,
@@ -29,6 +30,33 @@ describe('Calcul commun d’un Test de sort (CA9)', () => {
 });
 
 describe('Test de Round d’un sort (CA1, CA8, CA14)', () => {
+  test('CA27 : un Test récurrent d’Endurance utilise Résistance et ses modificateurs', () => {
+    const caster=person('c');
+    const target=person('t',[],{skills:[{id:'skill-52_e9_73_69_73_74_61_6e_63_65-base',name:'Résistance',total:70}],
+      extensions:{v5:{spellEffects:[roundLayer({skill:'Endurance',stat:'E',modifierSl:0},{failCorruption:1}),
+        {id:'buff',spellId:'buff',spellName:'Protection',casterId:'c',testModifiers:{Résistance:2}}]}}});
+    const run=who=>roundSpellEffects([caster,who],'endOfRound',2,{t:{'spell:e1:roundTest':65}});
+    const pending=roundSpellEffects([caster,target],'endOfRound',2,{});
+    assert.match(pending.requests.find(row=>row.field==='spell:e1:roundTest').label,/Résistance/,'le champ nomme la compétence utilisée');
+    const skilled=run(target);
+    assert.match(skilled.logs.map(row=>row.text).join(' '),/Résistance 3 DR, réussi/,'70 au lieu de E 40, avec +2 DR de Résistance');
+    assert.equal(skilled.participants.find(row=>row.id==='t').extensions.v5.corruptionPoints || 0,0);
+    const untrained=structuredClone(target);untrained.skills=[];
+    assert.match(run(untrained).logs.map(row=>row.text).join(' '),/0 DR, raté/,'sans compétence, E 40 et le même bonus');
+    const legacy=structuredClone(target);legacy.skills=[{name:'Endurance',total:60}];
+    assert.match(run(legacy).logs.map(row=>row.text).join(' '),/2 DR, réussi/,'les anciennes fiches Endurance gardent les effets Résistance');
+  });
+  test('CA27 : les trois contrats récurrents concernés utilisent Résistance', () => {
+    for(const name of ['Transformation de Tzeentch','Consentement','Le Soleil mauvais']){
+      const contract=getAllSpellContracts().find(row=>row.name===name),spec=contract.effects.roundEffect;
+      assert.equal(spec.test.skill,'Endurance',name);
+      const target=person('t',[],{skills:[{name:'Résistance',total:70}],extensions:{v5:{spellEffects:[
+        {id:'real',spellId:contract.id,spellName:name,casterId:'c',appliedAtRound:1,expiresAtRound:9,roundEffect:spec},
+        {id:'buff',spellId:'buff',spellName:'Protection',casterId:'c',testModifiers:{Résistance:2}}]}}});
+      const result=roundSpellEffects([person('c'),target],spec.phase,2,{t:{'spell:real:roundTest':65,'spell:real:location':35}});
+      assert.match(result.logs.map(row=>row.text).join(' '),/3 DR, réussi/,name);
+    }
+  });
   test('Sonné 2 : la pénalité d’État s’applique, le Test est raté et l’échec du sort joue', () => {
     const out = roundRun([state('sonne', 'Sonné', 2)], { 'spell:e1:roundTest': 35 });
     assert.match(roundLog(out), /Calme -1 DR, raté/);

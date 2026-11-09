@@ -37,6 +37,11 @@ export function spellTurnTest(person, { score, roll, stat, skill = '', slModifie
 export const turnEndAutoFailure = person => (conditionLevels(person).get('inconscient') ? 'Inconscient' : null);
 /** Champs des réponses du MJ aux questions d'États (mêmes noms que `v5Context` du combat). */
 const CONDITION_FIELDS = ['involvesMovement', 'runningOrHiding', 'reliesOnSight', 'usesFellowship', 'conditionPenaltyMode'];
+// Les contrats hérités de la source anglaise nomment « Endurance » la compétence française Résistance (MJ 09/11 CA27).
+const canonicalTurnSkill = value => {
+  const name=String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
+  return ['endurance','resistance'].includes(name)?'resistance':name;
+};
 /** Réponses lues dans les saisies booléennes d'une commande (`field(nom)`) ; le choix DR/Désavantage est un booléen « Oui = DR ». */
 export const spellTestContext = (data, field) => ({ ...Object.fromEntries(CONDITION_FIELDS.flatMap(name => {
   const value = data?.[field(name)];
@@ -491,12 +496,14 @@ export function roundSpellEffects(participants, phase, round, inputs = {}, actor
     let secondaryFailed=false;
     if(spec.test){
       const die=data[key('roundTest')],testSpec=spec.test;
-      if(!Number.isInteger(die)||die<1||die>100){ask('roundTest','d100',testSpec.skill+' ('+testSpec.modifierSl+' DR)');continue;}
-      const skill=(target.skills || []).find(s=>(s.name || '').toLowerCase()===testSpec.skill.toLowerCase());
-      const test=spellTurnTest(target,{score:effectiveSkillScore(target,skill?.total ?? skill?.value ?? target.caracs[testSpec.stat],testSpec.stat),roll:die,stat:testSpec.stat,skill:testSpec.skill,slModifiers:[{id:'spell-round',amount:testSpec.modifierSl}],passive:true,context:trackedSpellTestContext(performedTests,target,data,name=>key('roundTest:'+name))});
-      if(test.pending){for(const row of spellTestRequests(test,name=>'roundTest:'+name,testSpec.skill))ask(row.field,row.kind,row.label);continue;}
+      const skillKey=canonicalTurnSkill(testSpec.skill);
+      const skillLabel=skillKey==='resistance'?'Résistance':testSpec.skill;
+      if(!Number.isInteger(die)||die<1||die>100){ask('roundTest','d100',skillLabel+' ('+testSpec.modifierSl+' DR)');continue;}
+      const skill=(target.skills || []).find(s=>canonicalTurnSkill(s.name || s.nom || s.sourceName)===skillKey || skillKey==='resistance' && s.id==='skill-52_e9_73_69_73_74_61_6e_63_65-base');
+      const test=spellTurnTest(target,{score:effectiveSkillScore(target,skill?.total ?? skill?.value ?? target.caracs[testSpec.stat],testSpec.stat),roll:die,stat:testSpec.stat,skill:skillLabel,slModifiers:[{id:'spell-round',amount:testSpec.modifierSl}],passive:true,context:trackedSpellTestContext(performedTests,target,data,name=>key('roundTest:'+name))});
+      if(test.pending){for(const row of spellTestRequests(test,name=>'roundTest:'+name,skillLabel))ask(row.field,row.kind,row.label);continue;}
       secondaryFailed=!test.success;
-      logs.push({kind:'effect',actorId:caster.id,text:effect.spellName+' — '+target.name+' : '+testSpec.skill+' '+test.sl+' DR, '+(test.success?'réussi':'raté')+'. '+(spec.testReminder || '')});
+      logs.push({kind:'effect',actorId:caster.id,text:effect.spellName+' — '+target.name+' : '+skillLabel+' '+test.sl+' DR, '+(test.success?'réussi':'raté')+'. '+(spec.testReminder || '')});
     }
     let damageSpec=spec.damage;
     let tempestFailed=false;
