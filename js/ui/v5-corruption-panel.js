@@ -103,9 +103,9 @@ export function createV5CorruptionPanel({ Store, refresh = () => {} } = {}) {
     const obstinate = renderObstinateChoice(actor, state[key].preRollTalent, value => { const next = { ...state[key] }; if (value === 'strong-minded') next.preRollTalent = value; else delete next.preRollTalent; set(next); },
       { focusKey: `corruption-${key}-pre-roll-talent` });
     if (obstinate) parent.append(obstinate);
-    if (!preview || !['needs-input', 'blocked'].includes(preview.status)) return;
-    const rows = (preview.needsInput || []).filter(row => row && typeof row.label === 'string' && (!row.field || isQuestionField(row.field))).map(row => ({ ...row, answerAt: '' }));
-    const box = renderTestQuestions(rows, { root: state[key], onChange: set, subjectOf: () => actor, title: preview.status === 'blocked' ? 'Test de Corruption impossible' : 'À préciser avant le Test de Corruption', focusPrefix: `corruption-${key}` });
+    const pending = Boolean(preview && ['needs-input', 'blocked'].includes(preview.status));
+    const rows = (pending ? preview.needsInput || [] : []).filter(row => row && typeof row.label === 'string' && (!row.field || isQuestionField(row.field))).map(row => ({ ...row, answerAt: '' }));
+    const box = renderTestQuestions(rows, { root: state[key], onChange: set, subjectOf: () => actor, title: preview?.status === 'blocked' ? 'Test de Corruption impossible' : 'À préciser avant le Test de Corruption', focusPrefix: `corruption-${key}`, answeredAt: [''] });
     if (box) parent.append(box);
   }
   function currentStatus(actor) {
@@ -122,7 +122,9 @@ export function createV5CorruptionPanel({ Store, refresh = () => {} } = {}) {
         thresholdRoll: '', thresholdScore: '', thresholdScoreReason: '', mutationDomainRoll: '', gmChosenDomain: '',
         delayDice: ['', '', ''], thresholdPreview: null, mutationDescription: '', absolutionAmount: '', absolutionReason: '',
         lossReason: '', receipt: '', error: '', busy: false
-        , catalogTableId: '', catalogEntryId: '', catalogResult: '', catalogColumn: '', catalogParentEntryId: '', catalogCompatibilityDomain: ''
+        , catalogTableId: '', catalogEntryId: '', catalogResult: '', catalogColumn: '', catalogParentEntryId: '', catalogCompatibilityDomain: '',
+        // T10 : les réponses et le choix d'Obstiné valent pour un seul personnage.
+        exposureContext: {}, thresholdContext: {}
       });
     }
     const status = currentStatus(actor);

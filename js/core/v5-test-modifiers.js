@@ -180,7 +180,9 @@ export function resolveV5TestModifiers(actor, test = {}, context = {}) {
   const rows = [...tag(layers.magic, 'Sort ou prière', 'modifier'), ...tag(adverse, 'Effet adverse', 'modifier'), ...tag(penaltyRows, 'État', 'modifier'),
     ...tag(layers.talents, 'Talent', 'modifier'), ...tag(disadvantageRows, 'État', 'disadvantage'), ...tag(talents.advantageSources, 'Talent', 'advantage'),
     ...tag(talents.disadvantageSources, 'Talent', 'disadvantage'), ...tag(sequelaRows.modifiers, 'Séquelle', 'modifier'),
-    ...tag(sequelaRows.advantages, 'Séquelle', 'advantage'), ...tag(sequelaRows.disadvantages, 'Séquelle', 'disadvantage'), ...droppedRows.map(row => ({ ...row, kind: 'modifier', dropped: true }))];
+    ...tag(sequelaRows.advantages, 'Séquelle', 'advantage'), ...tag(sequelaRows.disadvantages, 'Séquelle', 'disadvantage'), ...droppedRows.map(row => ({ ...row, kind: 'modifier', dropped: true })),
+    // T10 : pénalité d'État annulée par Obstiné, gardée au détail, barrée (« malus ramené à 0 et visible »), comme au combat (Q9).
+    ...(talents.ignoreNegative && penalty > 0 ? [{ id: 'conditions', label: 'Plus forte pénalité d’État', amount: -penalty, source: 'État', kind: 'modifier', dropped: true, rule: 'Obstiné' }] : [])];
   return { slModifiers, advantageSources, disadvantageSources, rows, needsInput, unresolved,
     restrictions: [...actorRestrictions, ...rules.restrictions, ...sequelae.restrictions], scoreDelta: sequelae.scoreDelta,
     // CA13, CA14 : restrictions qui interdisent le Test lui-même (Inconscient, Surpris sur une Action, séquelle).

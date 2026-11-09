@@ -18,7 +18,10 @@ export const PART_TEXT = {
   head: 'tête', body: 'corps', arm: 'bras', leg: 'jambe', hand: 'main', foot: 'pied', ear: 'oreille', eye: 'œil', finger: 'doigt(s)',
   toe: 'orteil(s)', nose: 'nez', teeth: 'dents', tongue: 'langue'
 };
-const sided = (part, side) => `${PART_TEXT[part] || part}${side ? ` ${SIDE_TEXT[side] || side}` : ''}`;
+// Accord du côté avec la partie : « bras droit », « jambe droite » (pas « droit(e) »).
+const FEMININE_PARTS = new Set(['leg', 'hand', 'ear', 'tongue', 'head']);
+const sideText = (part, side) => side === 'right' ? (FEMININE_PARTS.has(part) ? 'droite' : 'droit') : SIDE_TEXT[side] || side;
+const sided = (part, side) => `${PART_TEXT[part] || part}${side ? ` ${sideText(part, side)}` : ''}`;
 const CARAC_ALIASES = { cc: 'CC', ws: 'CC', ct: 'CT', bs: 'CT', f: 'F', s: 'F', e: 'E', t: 'E', i: 'I', ag: 'Ag', dex: 'Dex', int: 'Int', fm: 'FM', wp: 'FM', soc: 'Soc', fel: 'Soc' };
 export const normalizeCarac = value => CARAC_ALIASES[fold(value)] || (value ? String(value) : null);
 
@@ -88,7 +91,7 @@ export function sequelaEffectRows(state, participantId) {
     }
     if (s.kind === 'broken-bone' && phase === 'permanent') {
       const n = s.severity === 'major' ? 2 : 1;
-      if (s.part === 'arm') add(s, 'badly-healed', { type: 'loc-dr', loc: `arm:${s.side}`, carac: ['Ag'], amount: -n, label: `Fracture mal soignée (bras ${SIDE_TEXT[s.side]}) : −${n} DR aux Tests d’Agilité utilisant ce bras` });
+      if (s.part === 'arm') add(s, 'badly-healed', { type: 'loc-dr', loc: `arm:${s.side}`, carac: ['Ag'], amount: -n, label: `Fracture mal soignée (${sided('arm', s.side)}) : −${n} DR aux Tests d’Agilité utilisant ce bras` });
       else if (s.part === 'head') add(s, 'badly-healed', { type: 'speech-dr', amount: -n, label: `Fracture mal soignée (tête) : −${n} DR aux Tests de Langue parlée` });
       else {
         add(s, 'badly-healed-movement', { type: 'movement', mode: 'minus', amount: n, label: `Fracture mal soignée (${PART_TEXT[s.part]}) : Mouvement −${n}` });
@@ -99,7 +102,7 @@ export function sequelaEffectRows(state, participantId) {
       const amount = s.severity === 'major' ? (phase === 'recovering' ? -1 : -2) : -1;
       const loc = s.part === 'arm' || s.part === 'leg' ? `${s.part}:${s.side}` : s.part;
       add(s, 'loc', { lifetime: 'temporary', type: 'loc-dr', loc, amount, label: `Déchirure musculaire ${s.severity === 'major' ? 'majeure' : 'mineure'} (${sided(s.part, s.side)}) : ${amount} DR aux Tests impliquant la zone${s.severity === 'major' ? '' : ' (guérie au terme de 30 − BE jours)'}` });
-      if (s.part === 'leg') add(s, 'movement', { lifetime: 'temporary', type: 'movement', mode: 'half', label: `Déchirure musculaire (jambe ${SIDE_TEXT[s.side]}) : Mouvement divisé par deux` });
+      if (s.part === 'leg') add(s, 'movement', { lifetime: 'temporary', type: 'movement', mode: 'half', label: `Déchirure musculaire (${sided('leg', s.side)}) : Mouvement divisé par deux` });
     }
   }
 
@@ -129,8 +132,8 @@ export function sequelaEffectRows(state, participantId) {
   // Orteils : −1 CC/Ag chacun ; sur un pied ensuite perdu, la pénalité du pied est réduite d'autant (ci-dessus), le total reste 10.
   for (const [side, count] of toes) {
     const own1 = own.find(row => row.kind === 'loss' && row.part === 'toe' && row.side === side);
-    add(own1, 'toes-cc', { type: 'char', carac: 'CC', amount: -count, label: `${count} orteil(s) perdu(s) (pied ${SIDE_TEXT[side]}) : Capacité de Combat −${count}` });
-    add(own1, 'toes-ag', { type: 'char', carac: 'Ag', amount: -count, label: `${count} orteil(s) perdu(s) (pied ${SIDE_TEXT[side]}) : Agilité −${count}` });
+    add(own1, 'toes-cc', { type: 'char', carac: 'CC', amount: -count, label: `${count} orteil(s) perdu(s) (${sided('foot', side)}) : Capacité de Combat −${count}` });
+    add(own1, 'toes-ag', { type: 'char', carac: 'Ag', amount: -count, label: `${count} orteil(s) perdu(s) (${sided('foot', side)}) : Agilité −${count}` });
   }
 
   // Bras et mains : tâches à deux mains, armes à deux mains, bouclier, main directrice (p.178). Quatre doigts perdus valent une main.
@@ -138,7 +141,7 @@ export function sequelaEffectRows(state, participantId) {
   for (const [side, entry] of fingers) {
     if (upper.some(row => row.side === side)) continue;
     if (entry.count >= 4) asHand.push({ sequela: entry.sequela, side, arm: false, primary: entry.sequela.primary === true, relearned: entry.sequela.relearned || 0, lifetime: 'permanent', fromFingers: true });
-    else add(entry.sequela, 'fingers', { type: 'loc-dr', loc: `arm:${side}`, amount: -entry.count, label: `${entry.count} doigt(s) perdu(s) (main ${SIDE_TEXT[side]}) : −${entry.count} DR aux Tests utilisant cette main` });
+    else add(entry.sequela, 'fingers', { type: 'loc-dr', loc: `arm:${side}`, amount: -entry.count, label: `${entry.count} doigt(s) perdu(s) (${sided('hand', side)}) : −${entry.count} DR aux Tests utilisant cette main` });
   }
   if (asHand.length) {
     const lifetime = asHand.every(row => row.lifetime === 'temporary') ? 'temporary' : 'permanent';

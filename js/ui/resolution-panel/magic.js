@@ -526,7 +526,9 @@ export function renderV5MagicResult(preview, target, draft, handlers) {
   const conditionBox = renderConditionQuestions(preview, draft, handlers);
   if (conditionBox) result.appendChild(conditionBox);
   // T10 (CA5) : détail par source du Test magique, comme au combat (talents, sorts, États, séquelles ; écartés barrés).
-  const testModifiers = preview.castPreview?.test?.details?.modifiers || preview.test?.details?.modifiers || preview.context?.slModifiers || null;
+  // La pénalité d'État du Test magique (`magic-condition-penalty`) est la ligne `conditions` du calcul commun : une seule ligne.
+  const testModifiers = (preview.castPreview?.test?.details?.modifiers || preview.test?.details?.modifiers || preview.context?.slModifiers || null)
+    ?.map(row => row.id === 'magic-condition-penalty' ? { ...row, id: 'conditions' } : row) || null;
   const sourceDetail = testModifiers || preview.conditionRows?.length
     ? renderSourceDetail({ rows: preview.conditionRows || [], modifiers: testModifiers || preview.conditionModifiers || [], title: 'Détail du Test (par source)' }) : null;
   const conditionDetail = sourceDetail || renderConditionDetail(preview);

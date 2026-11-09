@@ -201,7 +201,7 @@ export function createV5BrokenEscapePanel({Store,refresh=()=>{},onPrepareHide=()
    const obstinate=renderObstinateChoice(actor,d.conditionContext?.preRollTalent,value=>{const next={...(d.conditionContext||{})};if(value==='strong-minded')next.preRollTalent=value;else delete next.preRollTalent;set(next);},{focusKey:'broken-sprint-pre-roll-talent'});
    if(obstinate)section.append(obstinate);
    const rows=(d.preview&&!d.preview.ready?d.preview.needsInput||[]:[]).filter(row=>row&&typeof row==='object').map(row=>({...row,answerAt:''}));
-   const questions=renderTestQuestions(rows,{root:d.conditionContext||{},onChange:set,subjectOf:()=>actor,title:'À préciser avant le Test d’Athlétisme',focusPrefix:'broken-sprint'});
+   const questions=renderTestQuestions(rows,{root:d.conditionContext||{},onChange:set,subjectOf:()=>actor,title:'À préciser avant le Test d’Athlétisme',focusPrefix:'broken-sprint',answeredAt:['']});
    if(questions)section.append(questions);
   }
   if(d.error)section.append(node('p','workspace-field-error',d.error));

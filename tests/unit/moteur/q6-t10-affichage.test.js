@@ -121,3 +121,16 @@ describe('Convalescence : une réponse par patient', () => {
     assert.equal(out.receipt.processedDailyChecks[0].sl, 2, 'Sonné 2 annulé par Obstiné : +2 DR de difficulté seulement');
   });
 });
+
+describe('Sprint de Brisé : talents et plafonds', () => {
+  test('Obstiné choisi avant le jet annule le malus d’Exténué du Test d’Athlétisme', () => {
+    const hero = talents => ({ id: 'hero', name: 'Héros', caracs: { M: 4, Ag: 40 }, states: [{ id: 'b1', key: 'brise', name: 'Brisé', level: 1 }, { id: 'f', key: 'extenue', name: 'Exténué', level: 2 }],
+      skills: [{ id: 'ath', name: 'Athlétisme', carac: 'Ag', status: 'resolved', total: 55 }], talents, extensions: { v5: {} } });
+    const sprint = (actor, conditionContext) => previewV5BrokenEscape({ actor, action: 'sprint', turn: { encounterId: 'e', turnId: 't', round: 1 }, roll: 10,
+      facts: { visibleToAnyEnemyAfter: false, ...(conditionContext ? { conditionContext } : {}) }, sequence: { fleeCommitted: true, visibleToAnyEnemy: true, moveMode: 'run' } });
+    const strongMinded = [{ id: 'talent-strong-minded', status: 'resolved', rank: 1 }];
+    const plain = sprint(hero(strongMinded)), chosen = sprint(hero(strongMinded), { preRollTalent: 'strong-minded' });
+    assert.equal(plain.ready && chosen.ready, true, JSON.stringify(plain.needsInput || chosen.needsInput));
+    assert.equal(chosen.test.sl, plain.test.sl + 2, 'Exténué 2 ramené à 0');
+  });
+});

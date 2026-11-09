@@ -119,7 +119,9 @@ export function previewDispelCasting(dispeller, castingPreview, options = {}) {
     return refused('dispel-casting', 'DR du seul Test d’incantation requis pour l’opposition.', context);
   let result;
   try { result = dispelTest(dispeller, options); }
-  catch (error) { return refused('dispel-casting', error.message, context); }
+  // T10 : une question de séquelle du dissipateur (CA29) repart avec son chemin de réponse (options du sort : dispelReaction.conditionContext).
+  catch (error) { return { ...refused('dispel-casting', error.message, context),
+    ...(Array.isArray(error?.needsInput) ? { needsInput: error.needsInput.map(row => ({ ...row, participantId: dispeller?.id ?? null, answerAt: 'dispelReaction.conditionContext' })) } : {}) }; }
   const base = { ...context, ...result, actionType: 'dispel-casting', allowed: true, maxRangeYards: check.maxRangeYards };
   if (!result.ready) return { ...base, summary: 'Saisir le jet de dissipation de Langue (Magick) (+0 DR).' };
   const dispellerSl = Math.max(0, result.selectedTest.sl); // un DR négatif du dissipateur compte pour 0 (arbitrage du MJ)

@@ -114,10 +114,11 @@ test('CA1 côté désengagé : mêmes modificateurs que le Test d’Esquive du p
 test('CA5 Obstiné : un malus de sort reste affiché, barré, et ne compte plus', () => {
   const plan = preview(duel({ actor: { states: [STUNNED], talents: ['talent-strong-minded'], spells: [spellLayer('s', { Esquive: -1 })] } }),
     { actorRoll: 21, opponentRoll: 50, context: { preRollTalent: 'strong-minded' } });
-  // Comme au Test principal : la pénalité d'État n'est pas posée du tout (T0), le malus du sort est ramené à 0.
+  // Comme au Test principal : la pénalité d'État ne compte pas (T0), le malus du sort est ramené à 0. T10 (« malus ramené à 0 et
+  // visible ») : la pénalité d'État annulée reste au détail, barrée.
   assert.deepEqual(ids(plan.actorModifiers.slModifiers), [['spell-skill:Esquive', 0]]);
   assert.equal(plan.actorSl, 1);
-  assert.deepEqual(plan.actorModifiers.rows.map(row => [row.source, row.amount, row.dropped ?? false, row.rule ?? null]), [['Sort ou prière', -1, true, 'Obstiné']]);
+  assert.deepEqual(plan.actorModifiers.rows.map(row => [row.source, row.amount, row.dropped ?? false, row.rule ?? null]), [['Sort ou prière', -1, true, 'Obstiné'], ['État', -1, true, 'Obstiné']]);
 });
 
 test('Acrobaties : la compétence du catalogue « Représentation (Acrobatie) » donne le score et vise les sorts de ce nom', () => {

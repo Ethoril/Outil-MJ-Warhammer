@@ -197,9 +197,11 @@ export function renderPreviewTestQuestions(preview, draft, handlers, participant
   if (preview.v5MagicKind) {
     const rows = collectTestQuestions(preview.spellPreview || {}, { defaultAt: null });
     if (!rows.length) return null;
-    const root = { conditionContext: draft.magicConditionContext || {}, targetTests: draft.magicTargetTests || {}, mountedRideTests: draft.magicMountedRideTests || {}, arcaneTargets: draft.magicArcaneTargets || {} };
+    const root = { conditionContext: draft.magicConditionContext || {}, targetTests: draft.magicTargetTests || {}, mountedRideTests: draft.magicMountedRideTests || {}, arcaneTargets: draft.magicArcaneTargets || {},
+      dispelReaction: { conditionContext: draft.magicDispelConditionContext || {} } };
     return renderTestQuestions(rows, { root, nameOf, subjectOf, title: 'À préciser pour les Tests du sort', focusPrefix: 'magic-test-question', includeAnswered: false,
-      onChange: next => recalc({ magicConditionContext: next.conditionContext || {}, magicTargetTests: next.targetTests || {}, magicMountedRideTests: next.mountedRideTests || {}, magicArcaneTargets: next.arcaneTargets || {} }) });
+      onChange: next => recalc({ magicConditionContext: next.conditionContext || {}, magicTargetTests: next.targetTests || {}, magicMountedRideTests: next.mountedRideTests || {}, magicArcaneTargets: next.arcaneTargets || {},
+        magicDispelConditionContext: next.dispelReaction?.conditionContext || {} }) });
   }
   const rows = collectTestQuestions(preview);
   if (!rows.length) return null;

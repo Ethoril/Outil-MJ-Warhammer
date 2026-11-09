@@ -167,6 +167,8 @@ export function hasLivingMagicNature(participant) {
  * Prévisualisation de l'Attribut de Domaine V5 (Lore Attribute).
  * Fonction pure déterministe sans mutation d'état.
  */
+/** T10 : nom de la précision demandée selon son origine (État, séquelle ou les deux). */
+const precisionWord = needs => { const sequela = needs.filter(row => /^sequela/.test(row.field || '')).length; return !sequela ? 'précision d’État' : sequela === needs.length ? 'précision de séquelle' : 'précision d’État ou de séquelle'; };
 export function previewLoreAttribute({
   lore,
   caster,
@@ -393,7 +395,8 @@ export function previewLoreAttribute({
         }
       }
       if (conditionNeeds.length) return { lore: activeLore, loreName: LORE_ATTRIBUTES[activeLore].name, casterEffects: null, targetEffects, damageRules, missingRolls, conditionNeeds, ready: false,
-        missingLabel: 'précision d’État du Test de Corruption (' + [...new Set(conditionNeeds.flatMap(row => row.needsInput.map(need => need.label)))].join(' ; ') + ')' };
+        // T10 : « séquelle » quand la précision en vient d'une, plutôt qu'« État ».
+        missingLabel: precisionWord(conditionNeeds.flatMap(row => row.needsInput)) + ' du Test de Corruption (' + [...new Set(conditionNeeds.flatMap(row => row.needsInput.map(need => need.label)))].join(' ; ') + ')' };
       if (missingRolls.length) return { lore: activeLore, loreName: LORE_ATTRIBUTES[activeLore].name, casterEffects: null, targetEffects, damageRules, missingRolls, missingLabel: 'd100 du Test de Corruption', ready: false };
       break;
     }

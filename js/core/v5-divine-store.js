@@ -87,7 +87,7 @@ function projectWrathDamage(actor,rule,input,executionId,sinAtTest,round){
  const context=resolveV5ConditionTestContext(changed,{characteristic:'E',isAction:false,passive:true,involvesMovement:false,runningOrHiding:false,requiresSight:false,reliesOnSight:false,
   skill:'Résistance',skillId:'skill-52_e9_73_69_73_74_61_6e_63_65-base',talentContext:input.wrathConditionContext,
   conditionPenaltyMode:input.wrathConditionContext?.conditionPenaltyMode,conditionPenaltyReason:input.wrathConditionContext?.conditionPenaltyReason});
- if(!context.ready)return fail('Le contexte des États du Test de Résistance doit être précisé.',context.needsInput.map(row=>need('wrathConditionContext.'+row.field,row.label)).concat(context.restrictions.map(label=>need('wrathConditionContext',label))));
+ if(!context.ready)return fail(context.needsInput.some(row=>/^sequela/.test(row.field||''))?'Le contexte des États ou la circonstance de séquelle du Test de Résistance doit être précisé.':'Le contexte des États du Test de Résistance doit être précisé.',context.needsInput.map(row=>need('wrathConditionContext.'+row.field,row.label)).concat(context.restrictions.map(label=>need('wrathConditionContext',label))));
  let testPreview,test;
  try{
   testPreview=previewV5Test({score:Math.max(0,score+(context.scoreDelta||0)),roll:normalizeV5Roll(input.wrathEnduranceRoll),kind:'test',
@@ -1088,7 +1088,7 @@ function calculateWrathRecovery(state,input){
  const skills=(actor.skills||[]).filter(row=>['pray','priere'].includes(fold(row.name||row.nom)));
  if(!gmWrath&&(!skills.length||skills.some(row=>row.status!=='resolved'||!Number.isSafeInteger(row.total)||row.total<0||!['soc','fellowship'].includes(fold(row.carac||'Soc')))||new Set(skills.map(row=>row.total)).size!==1||!Number.isSafeInteger(actor.caracs?.Soc)))return failure('requires-input','Prière résolue et Sociabilité courante requises.',[{field:'actor.skills',label:'Score de Prière résolu'}]);
  const testContext=resolveV5ConditionTestContext(actor,{characteristic:'Soc',isAction:true,involvesMovement:false,runningOrHiding:false,requiresSight:false,reliesOnSight:false,skill:'Prière',skillId:'skill-50_72_69_e8_72_65-base',talentContext:input.conditionContext,conditionPenaltyMode:input.conditionContext?.conditionPenaltyMode,conditionPenaltyReason:input.conditionContext?.conditionPenaltyReason});
- if(!testContext.ready)return failure('requires-input','Précisez le contexte des États.',testContext.needsInput.concat(testContext.restrictions.map(label=>({field:'conditionContext',label}))));
+ if(!testContext.ready)return failure('requires-input',testContext.needsInput.some(row=>/^sequela/.test(row.field||''))?'Précisez le contexte des États ou la circonstance de séquelle.':'Précisez le contexte des États.',testContext.needsInput.concat(testContext.restrictions.map(label=>({field:'conditionContext',label}))));
  const relicRead=readDivineRelics(actor,lock.cult);if(!relicRead.ok)return failure('requires-input',relicRead.error,[{field:'actor.extensions.v5.divineRelics',label:'Reliques valides, une par dieu'}]);
  const relic=relicRead.relics[0]||null;
  let test,options;

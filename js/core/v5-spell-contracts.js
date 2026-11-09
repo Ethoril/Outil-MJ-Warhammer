@@ -1626,7 +1626,7 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
     const dispeller=(options.participants || []).find(p=>p.id===input.dispellerId);
     if(!dispeller || dispeller.id===actor.id)return {ready:false,valid:false,error:'Dissipateur distinct du lanceur requis.',contract};
     dispelReaction=previewDispelCasting(dispeller,castingPreview,{turnKey:options.turnKey,...input,round:options.round ?? 1});
-    if(!dispelReaction.allowed || !dispelReaction.ready)return {ready:false,valid:false,error:dispelReaction.reason || dispelReaction.summary,dispelReaction,contract};
+    if(!dispelReaction.allowed || !dispelReaction.ready)return {ready:false,valid:false,error:dispelReaction.reason || dispelReaction.summary,dispelReaction,...(dispelReaction.needsInput?{status:'condition-input-required',needsInput:dispelReaction.needsInput}:{}),contract};
     if(dispelReaction.dispelled){
       // D-03 : un sort dissipé ne produit ni effet ni jet d'épuisement ; Test, incident source, réserve, quota et rune restent à appliquer.
       return {

@@ -165,8 +165,9 @@ export function createV5CombatActionsApi({ api, currentEnvelope, issuedBrokenEsc
       if (input.action === 'flee' && used('system:turn-move') > 0) return {ready:false,status:'blocked',error:'Le quota Move du Tour est déjà dépensé.'};
       if (['sprint','hide'].includes(input.action) && used('system:turn-action') > 0) return {ready:false,status:'blocked',error:'Le quota Action du Tour est déjà dépensé.'};
       const value = previewV5BrokenEscape({state:envelope,actor,actorId:input.actorId,action:input.action,facts:input.facts,turn:clock,roll:input.roll,choice:input.choice,sequence:sequence && sequence.turnId===clock.turnId ? sequence : null});
+      // T10 : un aperçu en attente (question de séquelle du Sprint) porte aussi sa révision, sinon le panneau le jette avant d'en poser les questions.
+      value.baseRevision = envelope.localRevision || 0;
       if (value.ready) {
-        value.baseRevision = envelope.localRevision || 0;
         value.actionId = `broken-escape:${input.actorId}:${clock.turnId}:${input.action}`;
         value.facts = structuredClone(input.facts);
         const proof=JSON.stringify(value);

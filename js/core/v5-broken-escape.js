@@ -1,6 +1,6 @@
 import { previewV5Test, selectV5Test } from './v5-roll.js';
 import { effectiveSkillScore } from './v5-magic-talents.js';
-import { resolveV5ConditionTestContext } from './v5-test-context.js';
+import { resolveV5ConditionTestContext, withV5TestTalents } from './v5-test-context.js';
 import { previewV5SecondaryTest, secondaryTestDetail } from './v5-test-modifiers.js';
 
 export const BROKEN_ESCAPE_RULE_VERSION = 'l06-broken-escape-2026-10-18.1';
@@ -87,7 +87,9 @@ export function previewV5BrokenEscape({ state, actor, actorId=actor?.id, action,
       talentContext:{...answers(facts),sequelaTwoHands:false}});
     if (!context.ready) return {ready:false,status:'requires-input',error:'Le contexte du Test Athlétisme est incomplet.',needsInput:clone(context.needsInput),unresolved:clone(context.needsInput)};
     const score=Math.max(0,baseSkillScore+(context.scoreDelta||0));
-    const testPreview=previewV5Test({score,roll,slModifiers:[...context.slModifiers,{id:'broken-sprint-average',label:'Sprint moyen (+2 DR)',amount:2}],advantageSources:context.advantageSources,disadvantageSources:context.disadvantageSources});
+    // T10 : talents génériques du Test et plafonds de fin de calcul (Obstiné, Distrait) sur la liste complète, comme à la Prière.
+    const sprintLists=withV5TestTalents(actor,context,{slModifiers:[...context.slModifiers,{id:'broken-sprint-average',label:'Sprint moyen (+2 DR)',amount:2}],advantageSources:context.advantageSources,disadvantageSources:context.disadvantageSources});
+    const testPreview=previewV5Test({score,roll,...sprintLists});
     if (testPreview.choiceRequired && !['keep','reverse'].includes(choice)) return fail('Choisir le résultat du Test Athlétisme.','choice');
     const selectedChoice=testPreview.options.length===1?testPreview.options[0].id:choice;
     const test=selectV5Test(testPreview,selectedChoice);
@@ -105,7 +107,7 @@ export function previewV5BrokenEscape({ state, actor, actorId=actor?.id, action,
   const context=resolveV5ConditionTestContext(actor,{characteristic:skill.carac||'Ag',isAction:true,involvesMovement:false,runningOrHiding:true,requiresSight:false,reliesOnSight:false,talentContext:{...answers(facts),sequelaTwoHands:false}});
   if(!context.ready)return {ready:false,status:'requires-input',error:'Le contexte du Test de Hide est incomplet.',needsInput:clone(context.needsInput)};
   const score=Math.max(0,baseSkillScore+(context.scoreDelta||0));
-  const testPreview=previewV5Test({score,roll,slModifiers:context.slModifiers,advantageSources:context.advantageSources,disadvantageSources:context.disadvantageSources});
+  const testPreview=previewV5Test({score,roll,...withV5TestTalents(actor,context,{slModifiers:context.slModifiers,advantageSources:context.advantageSources,disadvantageSources:context.disadvantageSources})});
   if(testPreview.choiceRequired&&!['keep','reverse'].includes(choice))return fail('Choisir le résultat du Test de Hide.','choice');
   const selectedChoice=testPreview.options.length===1?testPreview.options[0].id:choice,test=selectV5Test(testPreview,selectedChoice);
   return {ready:true,status:'ready',ruleVersion:BROKEN_ESCAPE_RULE_VERSION,action,actorId,turn:clone(turn),facts:clone(facts),test:{...clone(test),score,characteristic:skill.carac||'Ag',result:clone(test),preview:clone(testPreview),context:clone(context)},sequenceAfter:sequence?clone(sequence):null,source:clone(BROKEN_ESCAPE_SOURCE)};

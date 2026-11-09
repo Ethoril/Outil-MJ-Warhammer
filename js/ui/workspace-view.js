@@ -128,6 +128,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     draft.magicConditionContext = {};
     draft.magicSecondaryNeeds = {};
     draft.magicSecondaryContexts = {};
+    draft.magicDispelConditionContext = {};
   }
   // Autre jet de critique : ses effets repartent cochés (les cases décochées visaient l'ancien tirage).
   // La localisation change aussi les dégâts, donc l'existence du second critique.
@@ -1757,7 +1758,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
             instinctiveDiction:Boolean(draft.magicInstinctiveDiction),miscastRoll2:draft.magicMiscastRoll2,miscastChoice:draft.magicMiscastChoice,
             ...(cadaiRerolls.length ? {cadaiRerolls,cadaiAccessible:Boolean(draft.magicCadaiAccessible)} : {}),
             burnoutRoll:draft.magicBurnoutRoll,warWizard:Boolean(draft.magicWarWizard),targetTests:draft.magicTargetTests || {},chosenLore:draft.magicChosenLore || null,
-            ...(draft.magicDispellerId ? {dispelReaction:{dispellerId:draft.magicDispellerId,roll:draft.magicDispelRoll,distance:dispelDistance(draft.magicDispelDistance),visible:dispelVisible(draft.magicDispelVisible)}} : {})
+            ...(draft.magicDispellerId ? {dispelReaction:{dispellerId:draft.magicDispellerId,roll:draft.magicDispelRoll,distance:dispelDistance(draft.magicDispelDistance),visible:dispelVisible(draft.magicDispelVisible),conditionContext:draft.magicDispelConditionContext || {}}} : {})
           };
           if (context.type === 'dispel') {
             const effect=Store.listParticipants().flatMap(p=>p.extensions?.v5?.spellEffects || []).find(e=>e.id===draft.magicPersistentId);
@@ -2305,6 +2306,8 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       return reloadPanel;
     }
   }
+  // T10 : réponses du MJ au Test de Guérison de chaque extraction, gardées d'un rendu à l'autre jusqu'au retrait.
+  const extractionContexts=new Map();
   function lodgedProjectilesPanel(participants){
     const lodged=(participants||[]).flatMap(participant=>(participant.extensions?.v5?.lodgedProjectiles||[]).filter(row=>row.removed!==true).map(projectile=>({participant,projectile})));
     if(!lodged.length)return null;
@@ -2316,7 +2319,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         const wrap=node('div','workspace-v5-context');
         wrap.appendChild(node('p','workspace-result-line',`${participant.name||participant.id} · ${projectile.ammunitionId} · ${projectile.removal==='surgery'?'chirurgie requise':'Test de Guérison requis'} · 1 Blessure bloquée`));
         const error=node('p','workspace-error');
-        let surgeryConfirmed=false,skillId='',testRoll='',conditionContext={};
+        let surgeryConfirmed=false,skillId='',testRoll='',conditionContext={...(extractionContexts.get(projectile.id)||{})};
         if(projectile.removal==='surgery'){
           const label=node('label','workspace-type','Le MJ confirme la chirurgie');
           const check=document.createElement('input');
@@ -2344,19 +2347,27 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
           if(obstinate)wrap.append(obstinate);
         }
         const questionsBox=node('div','workspace-extraction-questions');
-        const showQuestions=rows=>{questionsBox.replaceChildren();const box=renderTestQuestions(rows,{root:conditionContext,onChange:next=>{conditionContext=next;showQuestions(rows);},
-          subjectOf:()=>participant,title:'À préciser avant le Test de Guérison',focusPrefix:`extraction-${projectile.id}`});if(box)questionsBox.append(box);};
+        // Aperçu recalculé à chaque réponse (le message d'attente et les questions suivent), appliqué seulement au clic.
+        const recompute=()=>{
+          const plan=Store.previewV5ProjectileExtraction({participantId:participant.id,projectileId:projectile.id,
+            method:projectile.removal==='surgery'?'surgery':'heal-test',surgeryConfirmed,skillId,roll:testRoll===''?undefined:Number(testRoll),conditionContext});
+          extractionContexts.set(projectile.id,conditionContext);
+          showQuestions((plan.needsInput||[]).map(row=>({...row,answerAt:''})));
+          error.textContent=plan.ready?'':plan.error||'';
+          return plan;
+        };
+        const showQuestions=rows=>{questionsBox.replaceChildren();const box=renderTestQuestions(rows,{root:conditionContext,onChange:next=>{conditionContext=next;recompute();},
+          subjectOf:()=>participant,title:'À préciser avant le Test de Guérison',focusPrefix:`extraction-${projectile.id}`,answeredAt:['']});if(box)questionsBox.append(box);};
         wrap.append(questionsBox);
         const apply=button('Enregistrer le retrait','workspace-primary');
         apply.type='button';
         apply.addEventListener('click',async()=>{try{
           error.textContent='';
-          const plan=Store.previewV5ProjectileExtraction({participantId:participant.id,projectileId:projectile.id,
-            method:projectile.removal==='surgery'?'surgery':'heal-test',surgeryConfirmed,skillId,roll:testRoll===''?undefined:Number(testRoll),conditionContext});
-          showQuestions((plan.needsInput||[]).map(row=>({...row,answerAt:''})));
+          const plan=recompute();
           if(!plan.ready)throw new Error(plan.error);
             const result=await Store.applyV5ProjectileExtraction(plan);
             if(result?.status!=='applied')throw new Error(result?.reason||'Retrait non enregistré.');
+            extractionContexts.delete(projectile.id);
             render();
         }catch(cause){error.textContent=userMessage(cause,'Retrait non enregistré.');}});
         wrap.append(apply,error);

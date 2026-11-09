@@ -17,7 +17,7 @@ export function renderMagicControls({actor,participants,type,draft,handlers,targ
   const obstinate=renderObstinateChoice(actor,context.preRollTalent,value=>{const next={...context};if(value==='strong-minded')next.preRollTalent=value;else delete next.preRollTalent;set(next);},{focusKey:'magic-secondary-'+name+'-pre-roll-talent'});
   if(obstinate)container.append(obstinate);
   const rows=(draft.magicSecondaryNeeds?.[name] || []).map(row=>({...row,answerAt:''}));
-  const questions=renderTestQuestions(rows,{root:context,onChange:set,subjectOf:()=>actor,title:'À préciser avant de relancer',focusPrefix:'magic-secondary-'+name});
+  const questions=renderTestQuestions(rows,{root:context,onChange:set,subjectOf:()=>actor,title:'À préciser avant de relancer',focusPrefix:'magic-secondary-'+name,answeredAt:['']});
   if(questions)container.append(questions);
  };
  const baseRevision=handlers.magicRevision?.();
@@ -86,6 +86,12 @@ export function renderMagicControls({actor,participants,type,draft,handlers,targ
   if(selected?.domain==='high')field('magicBurnoutRoll','Jet d’épuisement si surpuissance dépasse le BFM (1d100)');
   if(magicTalentRank(actor,'war-wizard'))field('magicWarWizard','Mage de guerre : Action gratuite, perdre l’Élan (NI ≤ 5)','checkbox');
   field('magicDispellerId','Réaction de dissipation adverse','select',[['','Aucune'],...participants.filter(p=>p.id!==actor.id).map(p=>[p.id,p.name])]);
+  if(draft.magicDispellerId){
+   // T10 : Obstiné du dissipateur, choisi avant son jet ; réponse dans le contexte de la réaction (`magicDispelConditionContext`).
+   const dispeller=participants.find(p=>p.id===draft.magicDispellerId),dispelContext=draft.magicDispelConditionContext || {};
+   const dispelObstinate=renderObstinateChoice(dispeller,dispelContext.preRollTalent,value=>{const next={...dispelContext};if(value==='strong-minded')next.preRollTalent=value;else delete next.preRollTalent;handlers.select({magicDispelConditionContext:next});handlers.calculate?.();},{focusKey:'magic-dispeller-pre-roll-talent',title:'Obstiné avant le jet — '+(dispeller?.name || 'dissipateur')});
+   if(dispelObstinate)box.append(dispelObstinate);
+  }
   if(draft.magicDispellerId){field('magicDispelRoll','Jet Langue (Magick) du dissipateur (1d100)');distanceField('magicDispelDistance','Distance du dissipateur au lanceur ou au point ciblé, en mètres');visibleField('magicDispelVisible','Lanceur ou point ciblé visible du dissipateur');}
   for(const p of participants.filter(p=>(targetIds?.length?targetIds:draft.magicTargetIds || []).includes(p.id))){
    // Les jets secondaires sont rendus par le contrat dans renderSpellOptions.

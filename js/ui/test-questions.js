@@ -89,12 +89,14 @@ export function questionSelect({ text, field, value, onChange, focusKey }) {
 /**
  * Bloc des questions ouvertes (`rows`, avec leur `answerAt`) et des réponses déjà données dans `root`. `onChange(nouvelleRacine)`.
  * `nameOf(id)` : nom d'un participant (pour dire qui teste) ; `subjectOf(id)` : participant (nom de zone d'une séquelle).
- * Une restriction (champ nul) s'affiche comme motif. Rend null quand il n'y a rien à montrer.
+ * Une restriction (champ nul) s'affiche comme motif. `answeredAt` : chemins dont les réponses déjà données restent corrigeables.
+ * Rend null quand il n'y a rien à montrer.
  */
-export function renderTestQuestions(rows = [], { root = {}, onChange, nameOf = () => null, subjectOf = () => null, title = '', focusPrefix = 'test-question', includeAnswered = true } = {}) {
+export function renderTestQuestions(rows = [], { root = {}, onChange, nameOf = () => null, subjectOf = () => null, title = '', focusPrefix = 'test-question', includeAnswered = true, answeredAt = [] } = {}) {
   const open = rows.filter(row => row.field && isQuestionField(row.field));
   const blocked = rows.filter(row => !row.field || row.restriction);
-  const paths = new Set(open.map(row => row.answerAt || ''));
+  // `answeredAt` : chemins dont les réponses restent affichées même sans question ouverte (écran à un seul contexte de réponses).
+  const paths = new Set([...open.map(row => row.answerAt || ''), ...answeredAt]);
   const keys = new Set(open.map(row => `${row.answerAt || ''}|${row.field}`));
   const answered = includeAnswered ? answeredQuestions(root, paths).filter(row => !keys.has(`${row.answerAt}|${row.field}`)) : [];
   if (!open.length && !blocked.length && !answered.length) return null;
@@ -105,7 +107,8 @@ export function renderTestQuestions(rows = [], { root = {}, onChange, nameOf = (
   for (const row of blocked) box.append(node('p', 'workspace-field-error', [who(row), row.label].filter(Boolean).join(' : ')));
   for (const row of [...open, ...answered]) {
     const subject = row.participantId ? subjectOf(row.participantId) : null;
-    const question = testQuestionLabel(row.field, subject) || row.label || row.field;
+    // Libellé du moteur d'abord (il nomme la séquelle : « doigts perdus (main gauche) ») ; à défaut (réponse déjà donnée), celui du champ.
+    const question = row.label || testQuestionLabel(row.field, subject) || row.field;
     const text = [who(row), question].filter(Boolean).join(' : ');
     box.append(questionSelect({ text, field: row.field, value: getAt(root, row.answerAt)?.[row.field], focusKey: `${focusPrefix}-${row.answerAt || 'root'}-${row.field}`,
       onChange: value => onChange(answerTestQuestion(root, row.answerAt || '', row.field, value)) }));
