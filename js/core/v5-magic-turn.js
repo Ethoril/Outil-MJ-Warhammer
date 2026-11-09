@@ -31,10 +31,15 @@ export function spellTurnTest(person, { score, roll, stat, skill = '', slModifie
 /** Champs des réponses du MJ aux questions d'États (mêmes noms que `v5Context` du combat). */
 const CONDITION_FIELDS = ['involvesMovement', 'runningOrHiding', 'reliesOnSight', 'usesFellowship', 'conditionPenaltyMode'];
 /** Réponses lues dans les saisies booléennes d'une commande (`field(nom)`) ; le choix DR/Désavantage est un booléen « Oui = DR ». */
-export const spellTestContext = (data, field) => Object.fromEntries(CONDITION_FIELDS.flatMap(name => {
+export const spellTestContext = (data, field) => ({ ...Object.fromEntries(CONDITION_FIELDS.flatMap(name => {
   const value = data?.[field(name)];
   return typeof value === 'boolean' ? [[name, name === 'conditionPenaltyMode' ? (value ? 'sl' : 'disadvantage') : value]] : [];
-}));
+})),
+  // MJ 09/11 CA22 : réponses aux circonstances de séquelle (`sequela…`, noms variables : `sequelaUses:<zone>`), lues sous le même préfixe.
+  ...Object.fromEntries(Object.entries(data || {}).flatMap(([key, value]) => {
+    const prefix = field(''), name = key.startsWith(prefix) ? key.slice(prefix.length) : '';
+    return /^sequela/.test(name) && typeof value === 'boolean' ? [[name, value]] : [];
+  })) });
 /** Questions d'États (CA8) en demandes booléennes ; une restriction (CA14) en demande manuelle, qui bloque la commande. */
 export const spellTestRequests = (pending, field, label) => pending.needsInput.map((row, index) => row.field && !row.restriction
   ? { field: field(row.field), kind: 'boolean', label: `${label} : ${row.label}${row.field === 'conditionPenaltyMode' ? ' (Oui : DR ; Non : Désavantage)' : ''}` }

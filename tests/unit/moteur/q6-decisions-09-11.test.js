@@ -15,6 +15,8 @@ import { resoluteException } from '../../../js/core/v5-talent-replacements.js';
 import { acquireV5Conditions } from '../../../js/core/v5-effects.js';
 import { createAftermathState, registerWoundIncident, treatInfection } from '../../../js/core/v5-aftermath.js';
 import { recordPostEncounterTest } from '../../../js/core/v5-sequelae.js';
+import { previewSupplementalEquipment } from '../../../js/core/v5-supplemental-equipment.js';
+import { spellTestContext } from '../../../js/core/v5-magic-turn.js';
 import { visibleConditionQuestions } from '../../../js/ui/resolution-panel/condition-questions.js';
 import { createStore } from '../../../js/core/store.js';
 import { getReferenceCatalogue } from '../../../js/core/reference-catalog.js';
@@ -156,6 +158,12 @@ describe('CA21 Tests subis d’un Inconscient', () => {
     assert.equal(out.receipt.status, 'refused');
     assert.deepEqual(out.receipt.needsInput.map(row => row.label), ['Inconscient : aucun Test ne peut être tenté.']);
   });
+  test('Warp Blade : la cible Inconsciente fait sa Résistance', () => {
+    const out = previewSupplementalEquipment({ item: { id: 'w', name: 'Warp Blade' }, actor: { id: 'x', states: [] }, target: { ...person('victim', { states: [UNCONSCIOUS] }) },
+      hit: true, melee: true, damage: { finalDamage: 2 }, context: { warpBladeEnduranceTest: { score: 40, roll: 45 } } });
+    assert.ok(out.enduranceTest, (out.unresolved || []).join(' | '));
+    assert.equal(out.unresolved.some(text => /Inconscient/.test(text)), false);
+  });
   test('Résistance au Courroux (contexte de Test, passive) : faite par un Inconscient', () => {
     const facts = { characteristic: 'E', isAction: false, involvesMovement: false, runningOrHiding: false, requiresSight: false, reliesOnSight: false };
     assert.equal(resolveV5ConditionTestContext(person('p', { states: [UNCONSCIOUS] }), { ...facts, passive: true }).ready, true);
@@ -202,6 +210,11 @@ describe('CA22 séquelles à circonstance : question au MJ', () => {
     assert.deepEqual(prepared.conditionNeedRows.map(row => row.field), ['sequelaTwoHands']);
     assert.deepEqual(visibleConditionQuestions(prepared.conditionNeeds, {}, prepared.conditionNeedRows).map(row => row.field), ['sequelaTwoHands']);
     assert.deepEqual(visibleConditionQuestions([], { sequelaTwoHands: false }, []).map(row => [row.field, row.kind]), [['sequelaTwoHands', 'boolean']]);
+  });
+  test('sorts au fil des tours : la réponse à une question de séquelle est relue (plus de question en boucle)', () => {
+    const field = name => 'roundTest:' + name;
+    assert.deepEqual(spellTestContext({ [field('sequelaUses:arm:left')]: true, [field('involvesMovement')]: false, autre: true }, field),
+      { involvesMovement: false, 'sequelaUses:arm:left': true });
   });
   test('départage d’Initiative (sequelaNoCircumstanceInput) : aucune question', () => {
     const out = previewV5SecondaryTest(person('a', { v5: sequelae([HEAD, HAND]) }), { score: 40, roll: 23, test: { characteristic: 'E', skill: 'Résistance' }, context: { sequelaNoCircumstanceInput: true } });
