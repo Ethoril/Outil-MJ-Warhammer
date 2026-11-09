@@ -17,7 +17,7 @@ export function renderMagicControls({actor,participants,type,draft,handlers,targ
   const obstinate=renderObstinateChoice(actor,context.preRollTalent,value=>{const next={...context};if(value==='strong-minded')next.preRollTalent=value;else delete next.preRollTalent;set(next);},{focusKey:'magic-secondary-'+name+'-pre-roll-talent'});
   if(obstinate)container.append(obstinate);
   const rows=(draft.magicSecondaryNeeds?.[name] || []).map(row=>({...row,answerAt:''}));
-  const questions=renderTestQuestions(rows,{root:context,onChange:set,subjectOf:()=>actor,title:'À préciser avant de relancer',focusPrefix:'magic-secondary-'+name,answeredAt:['']});
+  const questions=renderTestQuestions(rows,{root:context,onChange:set,subjectOf:()=>actor,title:'À préciser avant le Test',focusPrefix:'magic-secondary-'+name,answeredAt:['']});
   if(questions)container.append(questions);
  };
  const baseRevision=handlers.magicRevision?.();
