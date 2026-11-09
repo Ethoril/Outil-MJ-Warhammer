@@ -1,4 +1,5 @@
 import { previewV5Test } from './v5-roll.js';
+import { previewV5SecondaryTest, secondaryTestDetail } from './v5-test-modifiers.js';
 import { effectiveSkillScore } from './v5-magic-talents.js';
 import { hasV5Talent } from './v5-talents.js';
 
@@ -80,12 +81,25 @@ function priorReceipt(state, operationId) {
   return state.receipts.find(item => item.id === operationId) || null;
 }
 
-/** A real V5 Test from a sheet score and a d100 typed by the MJ; DR modifiers are expressed in V5 DR. */
-function runTest(score, roll, amount, id, label) {
+/**
+ * A real V5 Test from a sheet score and a d100 typed by the MJ; DR modifiers are expressed in V5 DR.
+ * Q6 T6 (CA12) : `check` = `{ tester, characteristic, skill, context }` ajoute au score de fiche nu les modificateurs communs du
+ * testeur (États, talents, sorts, prières : `previewV5SecondaryTest`). Une précision d'État manquante rend `{ pending: true, needsInput }`
+ * et l'opération est refusée sans rien enregistrer (CA8). Sans testeur, le Test est celui d'avant le chantier.
+ */
+function runTest(score, roll, amount, id, label, check = null) {
   const slModifiers = amount ? [{ id, label, amount }] : [];
-  return previewV5Test({ score, roll, kind: 'test', slModifiers }).options[0].result;
+  if (!check?.tester) return previewV5Test({ score, roll, kind: 'test', slModifiers }).options[0].result;
+  const secondary = previewV5SecondaryTest(check.tester, { score, roll, slModifiers, test: { characteristic: check.characteristic, skill: check.skill }, context: check.context || {} });
+  if (!secondary.ready) return { pending: true, needsInput: secondary.needsInput };
+  return secondary.rows.length ? { ...secondary.result, detail: secondaryTestDetail(secondary) } : secondary.result;
 }
-const testFacts = test => ({ roll: test.roll, score: test.score, success: test.success, sl: test.sl, fumble: test.fumble, critical: test.critical });
+/** Modificateurs communs du soigneur (Guérison ou Soins aux animaux, Int) ou du patient (Résistance, E), lorsque le Store le fournit. */
+const healCheck = (healer, tester, context) => (tester ? { tester, characteristic: 'Int', skill: healer?.skillName || (healer?.skill === 'animal-care' ? 'Soins aux animaux' : 'Guérison'), context } : null);
+const enduranceCheck = (tester, context) => (tester ? { tester, characteristic: 'E', skill: 'Résistance', context } : null);
+/** Opération refusée tant que le MJ n'a pas répondu aux questions d'États du Test (CA8). */
+const pendingTest = (outcome, test) => { outcome.receipt.needsInput = test.needsInput.map(row => ({ ...row })); return outcome; };
+const testFacts = test => ({ roll: test.roll, score: test.score, success: test.success, sl: test.sl, fumble: test.fumble, critical: test.critical, ...(test.detail ? { detail: [...test.detail] } : {}) });
 /** Same healer, same d100 on the same incident right after the last applied operation of that kind: a double click. */
 const isDoubleSubmission = (state, kind, incidentId, healerId, roll) => {
   const last = state.receipts.at(-1);
@@ -229,7 +243,7 @@ export function previewAftermathAdvance(stateValue, { days, expectedRevision, ab
 }
 
 export function advanceAftermathCalendar(stateValue, {
-  operationId, expectedRevision, days, dailyTests = [], enduranceScores = {}, absentParticipantIds = []
+  operationId, expectedRevision, days, dailyTests = [], enduranceScores = {}, absentParticipantIds = [], testers = {}, conditionContext = {}
 } = {}) {
   const state = assertState(stateValue);
   const prior = priorReceipt(state, operationId);
@@ -258,7 +272,8 @@ export function advanceAftermathCalendar(stateValue, {
       if (!supplied) { missing.push(check); break; }
       const score = enduranceScores[incident.participantId];
       if (!validScore(score)) return refusal('endurance-score-missing', { participantId: incident.participantId });
-      const test = runTest(score, supplied.roll, 2, 'aftermath:open-wound', 'Blessure non traitée (Résistance +2 DR)');
+      const test = runTest(score, supplied.roll, 2, 'aftermath:open-wound', 'Blessure non traitée (Résistance +2 DR)', enduranceCheck(testers?.[incident.participantId], conditionContext));
+      if (test.pending) return pendingTest(refusal('condition-input-required', { participantId: incident.participantId }), test);
       const record = { day: check.day, ...testFacts(test) };
       incident.dailyChecks.push(record);
       processed.push({ incidentId: incident.id, participantId: incident.participantId, ...record });
@@ -278,7 +293,7 @@ export function advanceAftermathCalendar(stateValue, {
 }
 
 export function treatWoundIncident(stateValue, {
-  operationId, expectedRevision, incidentId, healer, roll, wounds = 0, supplies = false, difficultyDR = 0, d10 = null, inCombat = false, bleedingOnly = false, surgeryChoice = null
+  operationId, expectedRevision, incidentId, healer, roll, wounds = 0, supplies = false, difficultyDR = 0, d10 = null, inCombat = false, bleedingOnly = false, surgeryChoice = null, tester = null, conditionContext = {}
 } = {}) {
   const state = assertState(stateValue);
   const prior = priorReceipt(state, operationId);
@@ -300,7 +315,8 @@ export function treatWoundIncident(stateValue, {
   if (!validRoll(roll) || !Number.isSafeInteger(wounds) || wounds < 0 || !Number.isSafeInteger(difficultyDR)
     || typeof inCombat !== 'boolean' || (d10 !== null && (!Number.isSafeInteger(d10) || d10 < 1 || d10 > 10))) return refusal('invalid-test-facts');
   if (inCombat && difficultyDR > 0) return refusal('combat-heal-cannot-be-easier-than-challenging');
-  const test = runTest(healer.score, roll, difficultyDR, 'aftermath:heal-difficulty', 'Difficulté du soin');
+  const test = runTest(healer.score, roll, difficultyDR, 'aftermath:heal-difficulty', 'Difficulté du soin', healCheck(healer, tester, conditionContext));
+  if (test.pending) return pendingTest(refusal('condition-input-required'), test);
   if (test.fumble && d10 === null) return refusal('fumble-d10-required');
   // Talent Chirurgie (p.127) : hors combat, le soigneur choisit les DR ou le chiffre des unités du d100 (un 0 vaut 0).
   const talentChoice = healer.hasSurgeryTalent === true && !inCombat && test.success;
@@ -323,7 +339,7 @@ export function treatWoundIncident(stateValue, {
 }
 
 export function treatInfection(stateValue, {
-  operationId, expectedRevision, incidentId, healer = null, roll = null, remedy = false
+  operationId, expectedRevision, incidentId, healer = null, roll = null, remedy = false, tester = null, conditionContext = {}
 } = {}) {
   const state = assertState(stateValue);
   const prior = priorReceipt(state, operationId);
@@ -339,7 +355,8 @@ export function treatInfection(stateValue, {
   if (!remedy) {
     { const problem = healerProblem(healer, ['heal', 'animal-care']); if (problem) return refusal(problem); }
     if (!validRoll(roll)) return refusal('invalid-test-facts');
-    test = runTest(healer.score, roll, -1, 'aftermath:infection-difficulty', 'Infection (Guérison −1 DR)');
+    test = runTest(healer.score, roll, -1, 'aftermath:infection-difficulty', 'Infection (Guérison −1 DR)', healCheck(healer, tester, conditionContext));
+    if (test.pending) return pendingTest(refusal('condition-input-required'), test);
   }
   const cured = remedy || test.success;
   const next = clone(state);
@@ -354,7 +371,7 @@ export function treatInfection(stateValue, {
 }
 
 export function treatSurgicalIncident(stateValue, {
-  operationId, expectedRevision, incidentId, healer, roll, surgeryRequired = false, d10 = null, wounds = 0
+  operationId, expectedRevision, incidentId, healer, roll, surgeryRequired = false, d10 = null, wounds = 0, tester = null, conditionContext = {}
 } = {}) {
   const state = assertState(stateValue);
   const prior = priorReceipt(state, operationId);
@@ -370,7 +387,8 @@ export function treatSurgicalIncident(stateValue, {
   if (healer.hasSurgeryTalent !== true) return refusal('surgery-talent-required');
   if (!validRoll(roll) || !Number.isSafeInteger(wounds) || wounds < 0 || (d10 !== null && (!Number.isSafeInteger(d10) || d10 < 1 || d10 > 10))) return refusal('invalid-test-facts');
   if (isDoubleSubmission(state, 'surgery', incidentId, healer.participantId, roll)) return refusal('duplicate-submission');
-  const test = runTest(healer.score, roll, 0, 'aftermath:surgery-difficulty', 'Chirurgie (Guérison +0 DR)');
+  const test = runTest(healer.score, roll, 0, 'aftermath:surgery-difficulty', 'Chirurgie (Guérison +0 DR)', healCheck(healer, tester, conditionContext));
+  if (test.pending) return pendingTest(refusal('condition-input-required'), test);
   // Maladresse : comme un soin (p.170), 1d10 Blessures sans descendre sous 1.
   if (test.fumble && d10 === null) return refusal('fumble-d10-required');
   const fumbleDamage = test.fumble ? Math.min(d10, Math.max(0, wounds - 1)) : 0;
@@ -431,7 +449,7 @@ export function registerDisease(stateValue, {
  * shortens the disease by one extra day.
  */
 export function careForDisease(stateValue, {
-  operationId, expectedRevision, diseaseId, healer, roll, difficultyDR = 0, rested = false
+  operationId, expectedRevision, diseaseId, healer, roll, difficultyDR = 0, rested = false, tester = null, conditionContext = {}
 } = {}) {
   const state = assertState(stateValue);
   const prior = priorReceipt(state, operationId);
@@ -445,7 +463,8 @@ export function careForDisease(stateValue, {
   if (!validRoll(roll) || !Number.isSafeInteger(difficultyDR) || typeof rested !== 'boolean') return refusal('invalid-test-facts');
   const today = state.calendar.currentDay;
   if (disease.careLog.some(row => row.day === today && row.healerId === healer.participantId)) return refusal('care-already-recorded-today');
-  const test = runTest(healer.score, roll, difficultyDR, 'aftermath:disease-care', 'Soins quotidiens (Guérison +0 DR)');
+  const test = runTest(healer.score, roll, difficultyDR, 'aftermath:disease-care', 'Soins quotidiens (Guérison +0 DR)', healCheck(healer, tester, conditionContext));
+  if (test.pending) return pendingTest(refusal('condition-input-required'), test);
   const next = clone(state);
   const target = next.diseases.find(item => item.id === diseaseId);
   // Chaque soigneur fait son Test de protection ; le jour de maladie gagné par le repos ne l'est qu'une fois par jour.
@@ -480,4 +499,4 @@ export function archiveAftermathIncident(stateValue, { operationId, expectedRevi
 }
 
 /** Primitives partagées avec le suivi des séquelles durables (J2) : mêmes reçus, révisions, Tests et soigneurs que J1. */
-export const aftermathKit = { assertState, receipt, result, commit, priorReceipt, runTest, testFacts, healerProblem, validRoll, validScore, ID, clone };
+export const aftermathKit = { assertState, receipt, result, commit, priorReceipt, runTest, healCheck, enduranceCheck, pendingTest, testFacts, healerProblem, validRoll, validScore, ID, clone };

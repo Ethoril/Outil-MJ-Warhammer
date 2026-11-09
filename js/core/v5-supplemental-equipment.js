@@ -1,4 +1,4 @@
-import { previewV5Test, selectV5Test } from './v5-roll.js';
+import { previewV5SecondaryTest, secondaryTestDetail } from './v5-test-modifiers.js';
 
 /** F2-F: additional clauses for equipment described in supplements.
  * The equipment sheet remains authoritative for every printed profile value.
@@ -81,14 +81,20 @@ export function previewSupplementalEquipment({ item, actor, target, hit = false,
     else if (!poisonTest.success) effects.push({ participantId: target?.id, state: 'Empoisonné', sourceRuleId: ruleId });
   }
   // L11 p.94 : seule une frappe en mêlée impose le Test ; la décharge à distance du Warlock n'en impose pas.
+  // Q6 T6 (CA12) : la cible fait le Test ; score de fiche nu + ses modificateurs communs (États, talents, sorts, prières). Les
+  // précisions d'États de ce Test ont leur propre contexte (`warpBladeEnduranceTest.conditionContext`) ; sans réponse, non résolu (CA8).
+  let enduranceTest = null, enduranceDetail = [];
   if (rule.kind === 'warp-blade' && melee && hit && Number(damage?.finalDamage) > 1) {
     const test = context.warpBladeEnduranceTest;
-    if (!Number.isSafeInteger(test?.score)||test.score<0||!Number.isSafeInteger(test?.roll)||test.roll<1||test.roll>100) unresolved.push('Warp Blade : saisir le score et le jet d100 du Test de Résistance moyen V4 (+20, converti en +2 DR V5) après plus d’une Blessure.');
+    if (!Number.isSafeInteger(test?.score)||test.score<0||!Number.isSafeInteger(test?.roll)||test.roll<1||test.roll>100) unresolved.push('Warp Blade : saisir le score de fiche (sans modificateurs) et le jet d100 du Test de Résistance moyen V4 (+20, converti en +2 DR V5) après plus d’une Blessure.');
     else {
-      const preview=previewV5Test({score:test.score,roll:test.roll,slModifiers:[{id:'warp-blade-v4-average-test',label:'Test moyen V4 (+20) converti en V5',amount:2}]});
-      const enduranceTest=selectV5Test(preview,'keep');
-      if(!enduranceTest.success)effects.push({participantId:target?.id,state:'Sonné',sourceRuleId:ruleId});
-      reminders.push(`Warp Blade : Test de Résistance V5 ${enduranceTest.success?'réussi':'échoué'} (${enduranceTest.sl>=0?'+':''}${enduranceTest.sl} DR), difficulté +2 DR${enduranceTest.success?'':' ; Sonné appliqué'}.`);
+      const secondary=previewV5SecondaryTest(target,{score:test.score,roll:test.roll,test:{characteristic:'E',skill:'Résistance'},context:test.conditionContext||{},slModifiers:[{id:'warp-blade-v4-average-test',label:'Test moyen V4 (+20) converti en V5',amount:2}]});
+      if(!secondary.ready)unresolved.push(...secondary.needsInput.map(row=>'Warp Blade, Test de Résistance de la cible : '+row.label));
+      else {
+        enduranceTest=secondary.result;enduranceDetail=secondaryTestDetail(secondary);
+        if(!enduranceTest.success)effects.push({participantId:target?.id,state:'Sonné',sourceRuleId:ruleId});
+        reminders.push(`Warp Blade : Test de Résistance V5 ${enduranceTest.success?'réussi':'échoué'} (${enduranceTest.sl>=0?'+':''}${enduranceTest.sl} DR), difficulté +2 DR${enduranceDetail.length>1?' ; '+enduranceDetail.slice(1).join(', '):''}${enduranceTest.success?'':' ; Sonné appliqué'}.`);
+      }
     }
   }
   if(rule.kind==='poison'&&used){
@@ -141,8 +147,6 @@ export function previewSupplementalEquipment({ item, actor, target, hit = false,
   }
   if (rule.kind === 'printed-damage') reminders.push('Dégâts imprimés de créature : la valeur comprend déjà le BF approprié; ne pas ajouter de BF une seconde fois.');
   if (rule.kind === 'warpstone-critical') reminders.push('Éclat de malepierre : conserver Pénétrante; une Blessure Critique infligée cause une exposition mineure à la Corruption. Tout objet Skaven contenant de la malepierre porté hors boîte plombée expose aussi son porteur une fois par jour (déclaration MJ dans K1).');
-  const enduranceTest = rule.kind==='warp-blade'&&hit&&Number(damage?.finalDamage)>1&&Number.isSafeInteger(context.warpBladeEnduranceTest?.score)&&Number.isSafeInteger(context.warpBladeEnduranceTest?.roll)
-    ? selectV5Test(previewV5Test({score:context.warpBladeEnduranceTest.score,roll:context.warpBladeEnduranceTest.roll,slModifiers:[{id:'warp-blade-v4-average-test',label:'Test moyen V4 (+20) converti en V5',amount:2}]}),'keep') : null;
-  return Object.freeze({ ruleId, label: rule.label, itemId: item?.id || item?.baseId || null, effects: Object.freeze(effects), exposure, casting: Object.freeze(casting), enduranceTest, weaponDispositionUpdate,
+  return Object.freeze({ ruleId, label: rule.label, itemId: item?.id || item?.baseId || null, effects: Object.freeze(effects), exposure, casting: Object.freeze(casting), enduranceTest, enduranceDetail, weaponDispositionUpdate,
     reminders: Object.freeze(reminders), unresolved: Object.freeze(unresolved) });
 }

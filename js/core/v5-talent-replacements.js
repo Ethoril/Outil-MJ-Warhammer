@@ -1,7 +1,7 @@
 import{hasV5Talent,currentV5TalentHashes}from'./v5-talents.js';
 import{getReferenceCatalogue}from'./reference-catalog.js';
 import{situationPlan,activeSource}from'./v5-talent-situations.js';
-import{previewV5Test,selectV5Test}from'./v5-roll.js';
+import{previewV5SecondaryTest,secondaryTestDetail}from'./v5-test-modifiers.js';
 export function previewTalentReplacement(n,{hit,test,opposed,damage,location,qualityContext}){
  const c=n.v5.context||{},id=c.specialAttack,changes=[],states=[],plans=[],unresolved=[],reminders=[];
  if(!['dirty-fighting','disarm','shieldsman'].includes(id))return{changes,states,plans,unresolved,reminders,replacement:null,damage};
@@ -33,9 +33,13 @@ export function resoluteException(n,subject,settings,instances){
  const calm=getReferenceCatalogue().skills.find(s=>s.nom==='Calme'),base=subject.skills?.find(s=>s.id===calm.id&&s.status==='resolved')?.total??subject.caracs?.FM??c.resoluteBase;
  if(!Number.isSafeInteger(base)||!Number.isSafeInteger(c.resoluteRoll)||c.resoluteRoll<1||c.resoluteRoll>100)unresolved.push('Déterminé : compétence de Calme et jet réel requis.');
  if(unresolved.length)return{plans,unresolved,exceptions:[]};
- const penalty=Math.max(0,...(subject.states||[]).filter(s=>['sonne','extenue','empoisonne'].includes(s.key)).map(s=>s.level||1));
- const result=selectV5Test(previewV5Test({score:base,roll:c.resoluteRoll,kind:'test',slModifiers:penalty?[{id:'conditions',label:'États déjà présents',amount:-penalty}]:[]}), 'keep');
- return{plans,unresolved,exceptions:result.success?[{reason:'conditionAcquired',talentId:origin.talentId,applies:true}]:[],test:result};
+ // Q6 T6 (F8) : le calcul commun des Tests (États avec leurs exceptions, talents, sorts et prières) remplace l'ancien
+ // max(Sonné, Exténué, Empoisonné). Les précisions d'États de ce Test de Calme ont leur propre contexte (resoluteConditionContext),
+ // distinct de celui du Test principal de l'action ; sans réponse, le Test attend le MJ (CA8).
+ const secondary=previewV5SecondaryTest(subject,{score:base,roll:c.resoluteRoll,test:{characteristic:'FM',skill:'Calme'},context:c.resoluteConditionContext||{}});
+ if(!secondary.ready)return{plans,unresolved:secondary.needsInput.map(row=>'Déterminé (Calme) : '+row.label),needsInput:secondary.needsInput,exceptions:[]};
+ const result=secondary.result;
+ return{plans,unresolved,exceptions:result.success?[{reason:'conditionAcquired',talentId:origin.talentId,applies:true}]:[],test:result,detail:secondaryTestDetail(secondary)};
 }
 export function previewForgeAura(n){
  const plans=[],unresolved=[],c=n.v5.context||{},ids=c.forgeAuthorIds||[],all=n.v5State?.participants||[];let active=false;

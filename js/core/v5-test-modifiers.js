@@ -60,6 +60,7 @@
  *  été déplacé et y reste réexporté).
  */
 import { normalizeState } from './effects.js';
+import { previewV5Test } from './v5-roll.js';
 import { sourceActive } from './v5-talent-actions.js';
 import { withCompanionTalents } from './familiars.js';
 import { previewV5TalentTestModifiers } from './v5-talent-tests.js';
@@ -159,4 +160,37 @@ export function resolveV5TestModifiers(actor, test = {}, context = {}) {
 export function finalizeV5TestModifiers(actor, resolved, { slModifiers, advantageSources, disadvantageSources }) {
   if ((actor?.states || []).some(s => s.restriction === 'noMomentumOrAdvantage' && sourceActive(s))) advantageSources.length = 0;
   if (resolved.ignoreNegative) { for (const row of slModifiers) if (row.amount < 0) row.amount = 0; disadvantageSources.length = 0; }
+}
+
+const optionRank = result => [result.success ? 1 : 0, result.sl];
+/**
+ * Q6 · T6 : Test secondaire complet sur un score de fiche saisi ou lu (arquebuse à salve, Warp Blade, convalescence, Déterminé).
+ * `score` : score de fiche nu ; `slModifiers` / `advantageSources` / `disadvantageSources` : ceux propres au Test (difficulté…),
+ * placés avant les modificateurs communs ; `test` et `context` : ceux de `resolveV5TestModifiers` (le contexte est celui de CE
+ * Test, pas celui du Test principal de l'action). Une précision d'État manquante (`needsInput`) laisse le Test non résolu (CA8) :
+ * `{ ready: false, needsInput, unresolved }`. Sinon les plafonds (`finalizeV5TestModifiers`) portent sur la liste complète, comme au
+ * combat, et le testeur garde la meilleure option quand l'Avantage lui permet d'inverser le jet.
+ * Rend `{ ready: true, result, preview, modifiers, advantageSources, disadvantageSources, rows, unresolved, restrictions }` ;
+ * `modifiers` (montants après plafonds) et `rows` (source de chaque ligne commune, écartées comprises) forment le détail (CA5).
+ */
+export function previewV5SecondaryTest(actor, { score, roll, kind = 'test', test = {}, context = {}, slModifiers = [], advantageSources = [], disadvantageSources = [] } = {}) {
+  const common = resolveV5TestModifiers(actor, { kind, ...test }, context || {});
+  if (common.needsInput.length) return { ready: false, needsInput: common.needsInput, unresolved: common.unresolved, rows: common.rows };
+  const lists = { slModifiers: [...slModifiers, ...common.slModifiers].map(row => ({ ...row })),
+    advantageSources: [...advantageSources, ...common.advantageSources], disadvantageSources: [...disadvantageSources, ...common.disadvantageSources] };
+  finalizeV5TestModifiers(actor, common, lists);
+  const preview = previewV5Test({ score, roll, kind, ...lists });
+  const [first, ...others] = preview.options;
+  const option = others.reduce((best, row) => { const [a, b] = [optionRank(row.result), optionRank(best.result)]; return a[0] > b[0] || a[0] === b[0] && a[1] > b[1] ? row : best; }, first);
+  return { ready: true, result: option.result, optionId: option.id, preview, modifiers: lists.slModifiers, advantageSources: lists.advantageSources,
+    disadvantageSources: lists.disadvantageSources, rows: common.rows, needsInput: [], unresolved: common.unresolved, restrictions: common.restrictions };
+}
+
+/** Détail lisible d'un Test secondaire (CA5) : chaque modificateur avec son montant, puis Avantages et Désavantages. */
+export function secondaryTestDetail(secondary) {
+  if (!secondary?.ready) return [];
+  const sign = value => (value > 0 ? '+' : value < 0 ? '−' : '±') + Math.abs(value);
+  const dropped = (secondary.rows || []).filter(row => row.dropped).map(row => `${row.label} ${sign(row.amount)} DR (écarté${row.rule ? ' : ' + row.rule : ''})`);
+  return [...secondary.modifiers.map(row => `${row.label} ${sign(row.amount)} DR`), ...secondary.advantageSources.map(row => `Avantage : ${row.label || row.id}`),
+    ...secondary.disadvantageSources.map(row => `Désavantage : ${row.label || row.id}`), ...dropped];
 }

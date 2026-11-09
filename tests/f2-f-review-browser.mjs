@@ -45,7 +45,7 @@ try{
   await page.locator('[data-action-key="warp-attack"]').click();
   const foe=name=>workspace.getByRole('group',{name:'Adversaires'}).getByRole('button',{name,exact:true});
   await foe('Cible F').click();
-  const warpScore=workspace.getByLabel('Warp Blade : score de Résistance de la cible (Test +2 DR si >1 Blessure)',{exact:true});
+  const warpScore=workspace.getByLabel('Warp Blade : score de fiche de Résistance de la cible, sans modificateurs (Test +2 DR si >1 Blessure)',{exact:true});
   const warpRoll=workspace.getByLabel('Warp Blade : jet d100 du Test de Résistance de la cible',{exact:true});
   await warpScore.fill('110');await warpScore.press('Tab');
   await warpRoll.fill('61');await warpRoll.press('Tab');

@@ -68,7 +68,7 @@ try{
  // 5. Saut de trois jours : l'aperçu liste chaque Test quotidien ; rien n'est appliqué sans les jets ; l'infection du jour 1 ignore le jour 2.
  await panel.getByLabel('Jours à avancer').fill('3');await panel.getByRole('button',{name:'Aperçu des échéances'}).click();
  const rolls=panel.locator('.workspace-aftermath-check');assert.equal(await rolls.count(),3,'trois Tests quotidiens listés, jour par jour');
- assert.match(await rolls.nth(0).innerText(),/Éclopé.*fin du jour 0.*Résistance \+2 DR \(score 30\)/);assert.match(await rolls.nth(2).innerText(),/requis seulement si les jours précédents sont réussis/);
+ assert.match(await rolls.nth(0).innerText(),/Éclopé.*fin du jour 0.*Résistance \+2 DR \(score de fiche 30, sans modificateurs/);assert.match(await rolls.nth(2).innerText(),/requis seulement si les jours précédents sont réussis/);
  await panel.getByRole('button',{name:'Confirmer l’avancement'}).click();
  await page.waitForFunction(()=>/Refus/.test(document.querySelector('.workspace-aftermath-status')?.textContent||''));
  assert.equal((await read()).extensions.v5.aftermathRegister.calendar.currentDay,0,'aucun saut sans les jets demandés');

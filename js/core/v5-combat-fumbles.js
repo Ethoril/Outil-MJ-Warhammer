@@ -7,7 +7,7 @@ import {
 } from '../data/v5-combat-fumbles.js';
 import { getV5CriticalEffect } from '../data/v5-crits.js';
 import { evaluateWeaponDamage, strengthBonusOf } from './damage.js';
-import { previewV5Test } from './v5-roll.js';
+import { previewV5SecondaryTest, secondaryTestDetail } from './v5-test-modifiers.js';
 
 const fold = value => String(value ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase('fr');
 const keyOf = row => typeof row === 'string' ? row : row?.id;
@@ -143,11 +143,17 @@ function participantEffects(normalized, context, resolution = {}) {
     const base=Number(context.recoilTestBase), testRoll=Number(context.recoilTestRoll);
     if(!Number.isInteger(base)||base<1||base>100||!Number.isInteger(testRoll)||testRoll<1||testRoll>100)unresolved.push('Arquebuse à salve : saisissez le Test de Résistance à +2 DR et son d100 (L13-0179).');
     else {
-      const test=previewV5Test({score:base,roll:testRoll,kind:'test',slModifiers:[{id:'salvo-recoil',label:'Résistance (+2 DR)',amount:2}]}).options[0].result;
+      // Q6 T6 (CA12) : score de fiche nu + modificateurs communs du tireur (États, talents, sorts, prières) ; les précisions d'États de
+      // ce Test de Résistance ont leur propre contexte (recoilTestContext), sans réponse le recul reste non résolu (CA8).
+      const secondary=previewV5SecondaryTest(normalized.actor,{score:base,roll:testRoll,test:{characteristic:'E',skill:'Résistance'},context:context.recoilTestContext||{},slModifiers:[{id:'salvo-recoil',label:'Résistance (+2 DR)',amount:2}]});
+      if(!secondary.ready)unresolved.push(...secondary.needsInput.map(row=>'Arquebuse à salve, Test de Résistance : '+row.label));
+      else {
+      const test=secondary.result;
       const sl=test.sl,success=test.success,astoundingFailure=!success&&sl<=-5;
       let armCritical=null;
       if(astoundingFailure){const severity=Number(context.recoilCriticalRolls);if(!Number.isInteger(severity)||severity<1||severity>100)unresolved.push('Arquebuse à salve : le critique à l’épaule requiert un d100 sur la table critique du bras (L13-0179).');else {const tableEffect=getV5CriticalEffect('ARM',severity);armCritical={location:{key:'ARM',name:'Bras'},locationRoll:null,effectRoll:severity,effect:tableEffect,parsed:tableEffect?.parsed||null,pending:!tableEffect};if(!tableEffect)unresolved.push('Arquebuse à salve : ligne de critique du bras introuvable.');else if(tableEffect.parsed?.death)unresolved.push('Arquebuse à salve : effet mortel de la table du bras ; décision MJ explicite requise avant application.');}}
-      effects.push({type:'volley-recoil',targetId:actorId,sl,success,fumble:test.fumble,automatic:test.details.automatic,astoundingFailure,armCritical,convertedModifier:2});
+      effects.push({type:'volley-recoil',targetId:actorId,sl,success,fumble:test.fumble,automatic:test.details.automatic,astoundingFailure,armCritical,convertedModifier:2,score:base,detail:secondaryTestDetail(secondary)});
+      }
     }
   }
   if ((isGunAxe || isGunHalberd) && context.meleeUse === true && context.weaponLoaded === true && resolution.fumble===true) {

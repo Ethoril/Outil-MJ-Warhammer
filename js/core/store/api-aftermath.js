@@ -7,6 +7,10 @@ import { updateCriticalDeathCountdown } from '../v5-critical-aftermath.js';
 import { uid, cloneValue } from '../models.js';
 import { sequelaCharacteristicTotals, sequelaEffectRows, sequelaPhase } from '../v5-sequela-effects.js';
 
+/** Q6 T6 : le testeur (participant) et les réponses du MJ aux questions d'États de ce Test (CA8, CA12). */
+const aftermathTestOptions = (tester, input) => ({ tester: tester || null, conditionContext: input?.conditionContext || {} });
+const healerParticipant = (draft, input) => (draft.combat?.participants || []).find(row => row.id === input?.healerId) || null;
+
 export function createAftermathApi({ api, currentEnvelope, absentAftermathSubjects, runAftermathCommand, stageAftermathClock, aftermathHealerOf, sequelaAmputation, aftermathAmputation, withHealingFumble }) {
   return {
     getAftermathState() {
@@ -65,7 +69,7 @@ export function createAftermathApi({ api, currentEnvelope, absentAftermathSubjec
           const score = patient ? aftermathEnduranceScore(patient) : null;
           if (score !== null) enduranceScores[incident.participantId] = score;
         }
-        const outcome = advanceAftermathCalendar(state, { operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, days: input.days, dailyTests: input.dailyTests, enduranceScores, absentParticipantIds: absentAftermathSubjects(state, participants) });
+        const outcome = advanceAftermathCalendar(state, { operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, days: input.days, dailyTests: input.dailyTests, enduranceScores, absentParticipantIds: absentAftermathSubjects(state, participants), testers: Object.fromEntries(participants.map(row => [row.id, row])), conditionContext: input.conditionContext || {} });
         if (outcome.receipt.status !== 'applied') return outcome;
         // Un seul temps (C39) : les mêmes jours avancent l'horloge de campagne, dans la même commande (un seul ↶).
         const clocked = stageAftermathClock(draft, { days: outcome.receipt.days, operationId: input.operationId });
@@ -94,7 +98,7 @@ export function createAftermathApi({ api, currentEnvelope, absentAftermathSubjec
         // Un homoncule ne guérit que par guérison naturelle ou par magie : ni Soin ni médecine.
         if (patient && !previewFamiliarHealing(patient, { kind: 'heal' }).ok) return refuse('familiar-healing');
         const found = incident ? aftermathHealerOf(draft, incident.subjectKind === 'animal' ? 'animal-care' : 'heal', input) : { ok: false };
-        const outcome = treatWoundIncident(state, { operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, incidentId: input.incidentId, healer: found.ok ? found.healer : null, roll: input.roll, wounds: Number(patient?.hp) || 0, supplies: input.supplies, difficultyDR: input.difficultyDR ?? 0, d10: input.d10 ?? null, inCombat: input.inCombat === true, bleedingOnly: input.bleedingOnly === true, surgeryChoice: input.surgeryChoice ?? null });
+        const outcome = treatWoundIncident(state, { ...aftermathTestOptions(healerParticipant(draft, input), input), operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, incidentId: input.incidentId, healer: found.ok ? found.healer : null, roll: input.roll, wounds: Number(patient?.hp) || 0, supplies: input.supplies, difficultyDR: input.difficultyDR ?? 0, d10: input.d10 ?? null, inCombat: input.inCombat === true, bleedingOnly: input.bleedingOnly === true, surgeryChoice: input.surgeryChoice ?? null });
         if (outcome.receipt.reason === 'healer-skill-required' && found.reason) outcome.receipt.reason = found.reason;
         if (outcome.receipt.status === 'applied') {
           const receipt = outcome.receipt;
@@ -128,7 +132,7 @@ export function createAftermathApi({ api, currentEnvelope, absentAftermathSubjec
       return runAftermathCommand('treat-aftermath-infection', (state, draft) => {
         const incident = state.incidents.find(row => row.id === input.incidentId);
         const found = input.remedy === true || !incident ? { ok: false } : aftermathHealerOf(draft, incident.subjectKind === 'animal' ? 'animal-care' : 'heal', input);
-        const outcome = treatInfection(state, { operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, incidentId: input.incidentId, healer: found.ok ? found.healer : null, roll: input.roll ?? null, remedy: input.remedy === true });
+        const outcome = treatInfection(state, { ...aftermathTestOptions(healerParticipant(draft, input), input), operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, incidentId: input.incidentId, healer: found.ok ? found.healer : null, roll: input.roll ?? null, remedy: input.remedy === true });
         if (outcome.receipt.reason === 'healer-skill-required' && found.reason) outcome.receipt.reason = found.reason;
         return outcome;
       });
@@ -139,7 +143,7 @@ export function createAftermathApi({ api, currentEnvelope, absentAftermathSubjec
         const patient = incident && (draft.combat?.participants || []).find(row => row.id === incident.participantId);
         const record = incident?.source.kind === 'critical' ? (patient?.extensions?.v5?.criticalAftermath || []).find(row => row.id === incident.source.criticalId) : null;
         const found = aftermathHealerOf(draft, 'heal', input);
-        const outcome = treatSurgicalIncident(state, { operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, incidentId: input.incidentId, healer: found.ok ? found.healer : null, roll: input.roll, surgeryRequired: sequelaAmputation(record) === 'occurred' || (record?.sequela?.durableEffects || []).some(effect => effect.kind === 'surgery-deadline'), d10: input.d10 ?? null, wounds: Number(patient?.hp) || 0 });
+        const outcome = treatSurgicalIncident(state, { ...aftermathTestOptions(healerParticipant(draft, input), input), operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, incidentId: input.incidentId, healer: found.ok ? found.healer : null, roll: input.roll, surgeryRequired: sequelaAmputation(record) === 'occurred' || (record?.sequela?.durableEffects || []).some(effect => effect.kind === 'surgery-deadline'), d10: input.d10 ?? null, wounds: Number(patient?.hp) || 0 });
         if (outcome.receipt.reason === 'healer-skill-required' && found.reason) outcome.receipt.reason = found.reason;
         if (outcome.receipt.status === 'applied' && outcome.receipt.fumbleDamage) {
           outcome.afterApply = next => {
@@ -237,7 +241,7 @@ export function createAftermathApi({ api, currentEnvelope, absentAftermathSubjec
         const found = aftermathHealerOf(draft, 'heal', input);
         const sequela = (state.sequelae || []).find(row => row.id === input.sequelaId);
         const patient = sequela && (draft.combat?.participants || []).find(row => row.id === sequela.participantId);
-        const outcome = immobilizeFracture(state, { operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, sequelaId: input.sequelaId, healer: found.ok ? found.healer : null, roll: input.roll, d10: input.d10 ?? null, wounds: Number(patient?.hp) || 0 });
+        const outcome = immobilizeFracture(state, { ...aftermathTestOptions(healerParticipant(draft, input), input), operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, sequelaId: input.sequelaId, healer: found.ok ? found.healer : null, roll: input.roll, d10: input.d10 ?? null, wounds: Number(patient?.hp) || 0 });
         if (outcome.receipt.reason === 'healer-skill-required' && found.reason) outcome.receipt.reason = found.reason;
         return withHealingFumble(outcome, patient);
       });
@@ -249,7 +253,7 @@ export function createAftermathApi({ api, currentEnvelope, absentAftermathSubjec
       return runAftermathCommand('resolve-aftermath-fracture', (state, draft) => {
         const sequela = (state.sequelae || []).find(row => row.id === input.sequelaId);
         const patient = sequela && (draft.combat?.participants || []).find(row => row.id === sequela.participantId);
-        return resolveFractureHealing(state, { operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, sequelaId: input.sequelaId, enduranceScore: patient ? aftermathEnduranceScore(patient) : null, roll: input.roll ?? null });
+        return resolveFractureHealing(state, { ...aftermathTestOptions(patient, input), operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, sequelaId: input.sequelaId, enduranceScore: patient ? aftermathEnduranceScore(patient) : null, roll: input.roll ?? null });
       });
     },
     treatAftermathTornMuscle(input = {}) {
@@ -257,7 +261,7 @@ export function createAftermathApi({ api, currentEnvelope, absentAftermathSubjec
         const found = aftermathHealerOf(draft, 'heal', input);
         const sequela = (state.sequelae || []).find(row => row.id === input.sequelaId);
         const patient = sequela && (draft.combat?.participants || []).find(row => row.id === sequela.participantId);
-        const outcome = treatTornMuscle(state, { operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, sequelaId: input.sequelaId, healer: found.ok ? found.healer : null, roll: input.roll, difficultyDR: input.difficultyDR ?? 0, d10: input.d10 ?? null, wounds: Number(patient?.hp) || 0 });
+        const outcome = treatTornMuscle(state, { ...aftermathTestOptions(healerParticipant(draft, input), input), operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, sequelaId: input.sequelaId, healer: found.ok ? found.healer : null, roll: input.roll, difficultyDR: input.difficultyDR ?? 0, d10: input.d10 ?? null, wounds: Number(patient?.hp) || 0 });
         if (outcome.receipt.reason === 'healer-skill-required' && found.reason) outcome.receipt.reason = found.reason;
         return withHealingFumble(outcome, patient);
       });
@@ -269,7 +273,7 @@ export function createAftermathApi({ api, currentEnvelope, absentAftermathSubjec
       return runAftermathCommand('record-aftermath-post-encounter-test', (state, draft) => {
         const sequela = (state.sequelae || []).find(row => row.id === input.sequelaId);
         const patient = sequela && (draft.combat?.participants || []).find(row => row.id === sequela.participantId);
-        return recordPostEncounterTest(state, { operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, sequelaId: input.sequelaId, enduranceScore: patient ? aftermathEnduranceScore(patient) : null, roll: input.roll });
+        return recordPostEncounterTest(state, { ...aftermathTestOptions(patient, input), operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, sequelaId: input.sequelaId, enduranceScore: patient ? aftermathEnduranceScore(patient) : null, roll: input.roll });
       });
     },
     decideAftermathSurgeryDeadline(input = {}) {
@@ -300,7 +304,7 @@ export function createAftermathApi({ api, currentEnvelope, absentAftermathSubjec
     careForAftermathDisease(input = {}) {
       return runAftermathCommand('care-aftermath-disease', (state, draft) => {
         const found = aftermathHealerOf(draft, 'heal', input);
-        const outcome = careForDisease(state, { operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, diseaseId: input.diseaseId, healer: found.ok ? found.healer : null, roll: input.roll, difficultyDR: input.difficultyDR ?? 0, rested: input.rested === true });
+        const outcome = careForDisease(state, { ...aftermathTestOptions(healerParticipant(draft, input), input), operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, diseaseId: input.diseaseId, healer: found.ok ? found.healer : null, roll: input.roll, difficultyDR: input.difficultyDR ?? 0, rested: input.rested === true });
         if (outcome.receipt.reason === 'healer-skill-required' && found.reason) outcome.receipt.reason = found.reason;
         return outcome;
       });

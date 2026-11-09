@@ -6,7 +6,7 @@ import { BONE_DAYS, MAJOR_BONE_EXTRA_DAYS, MUSCLE_DAYS, IMMOBILIZATION_WEEK_DAYS
  * Chaque séquelle porte un identifiant stable dérivé de l'occurrence F2-I ; les Tests utilisent la compétence réelle et un d100 saisi.
  * Les DR sont des DR V5 : « +2 SL » du livre est +2 DR (plus facile), « −1 SL » est −1 DR.
  */
-const { assertState, receipt, result, commit, priorReceipt, runTest, testFacts, healerProblem, validRoll, validScore, ID, clone } = aftermathKit;
+const { assertState, receipt, result, commit, priorReceipt, runTest, healCheck, enduranceCheck, pendingTest, testFacts, healerProblem, validRoll, validScore, ID, clone } = aftermathKit;
 
 const SIDED_PARTS = new Set(['hand', 'arm', 'foot', 'leg', 'ear', 'eye']);
 const COUNTED_PARTS = new Set(['finger', 'toe']);
@@ -219,7 +219,7 @@ const immobilizationWindow = (sequela, day) => {
 };
 
 /** p.177 : un Test de Guérison dans la semaine (+2 DR, +0 si majeure) immobilise la fracture et dispense du Test final tant qu'elle reste attachée. */
-export function immobilizeFracture(stateValue, { operationId, expectedRevision, sequelaId, healer, roll, d10 = null, wounds = 0 } = {}) {
+export function immobilizeFracture(stateValue, { operationId, expectedRevision, sequelaId, healer, roll, d10 = null, wounds = 0, tester = null, conditionContext = {} } = {}) {
   const state = assertState(stateValue);
   const prior = priorReceipt(state, operationId);
   if (prior) return { state: clone(state), receipt: prior };
@@ -232,7 +232,8 @@ export function immobilizeFracture(stateValue, { operationId, expectedRevision, 
   { const problem = healerProblem(healer, ['heal']); if (problem) return refusal(problem); }
   if (!validRoll(roll) || !fumbleFactsValid(d10, wounds)) return refusal('invalid-test-facts');
   const dr = sequela.severity === 'major' ? 0 : 2;
-  const test = runTest(healer.score, roll, dr, 'aftermath:immobilization', 'Immobilisation (Guérison)');
+  const test = runTest(healer.score, roll, dr, 'aftermath:immobilization', 'Immobilisation (Guérison)', healCheck(healer, tester, conditionContext));
+  if (test.pending) return pendingTest(refusal('condition-input-required'), test);
   if (test.fumble && d10 === null) return refusal('fumble-d10-required');
   const fumbleDamage = healingFumbleDamage(test, d10, wounds);
   const next = clone(state);
@@ -262,7 +263,7 @@ export function unbindFracture(stateValue, { operationId, expectedRevision, sequ
 }
 
 /** Fin de la guérison d'une fracture (p.177) : dispensée si toujours attachée, sinon Résistance +2 DR (+0 si majeure) ; échec = séquelle permanente. */
-export function resolveFractureHealing(stateValue, { operationId, expectedRevision, sequelaId, enduranceScore = null, roll = null } = {}) {
+export function resolveFractureHealing(stateValue, { operationId, expectedRevision, sequelaId, enduranceScore = null, roll = null, tester = null, conditionContext = {} } = {}) {
   const state = assertState(stateValue);
   const prior = priorReceipt(state, operationId);
   if (prior) return { state: clone(state), receipt: prior };
@@ -283,14 +284,15 @@ export function resolveFractureHealing(stateValue, { operationId, expectedRevisi
   if (!validScore(enduranceScore)) return refusal('endurance-score-missing');
   if (!validRoll(roll)) return refusal('invalid-test-facts');
   const dr = sequela.severity === 'major' ? 0 : 2;
-  const test = runTest(enduranceScore, roll, dr, 'aftermath:fracture-final', 'Fin de guérison (Résistance)');
+  const test = runTest(enduranceScore, roll, dr, 'aftermath:fracture-final', 'Fin de guérison (Résistance)', enduranceCheck(tester, conditionContext));
+  if (test.pending) return pendingTest(refusal('condition-input-required'), test);
   target.finalTest = { day, waived: false, difficultyDR: dr, ...testFacts(test) };
   target.status = test.success ? 'healed' : 'permanent';
   return commit(next, receipt(state, operationId, 'fracture-healing', 'applied', test.success ? 'fracture-healed' : 'fracture-badly-healed', { sequelaId, waived: false, difficultyDR: dr, ...testFacts(test) }));
 }
 
 /** p.177 : un Test de Guérison réussi raccourcit une déchirure mineure de 1 jour plus 1 par DR après le premier, une seule fois. */
-export function treatTornMuscle(stateValue, { operationId, expectedRevision, sequelaId, healer, roll, difficultyDR = 0, d10 = null, wounds = 0 } = {}) {
+export function treatTornMuscle(stateValue, { operationId, expectedRevision, sequelaId, healer, roll, difficultyDR = 0, d10 = null, wounds = 0, tester = null, conditionContext = {} } = {}) {
   const state = assertState(stateValue);
   const prior = priorReceipt(state, operationId);
   if (prior) return { state: clone(state), receipt: prior };
@@ -303,7 +305,8 @@ export function treatTornMuscle(stateValue, { operationId, expectedRevision, seq
   if (sequela.healTest) return refusal('muscle-heal-already-used');
   { const problem = healerProblem(healer, ['heal']); if (problem) return refusal(problem); }
   if (!validRoll(roll) || !Number.isSafeInteger(difficultyDR) || !fumbleFactsValid(d10, wounds)) return refusal('invalid-test-facts');
-  const test = runTest(healer.score, roll, difficultyDR, 'aftermath:muscle-heal', 'Soin d’une déchirure (Guérison)');
+  const test = runTest(healer.score, roll, difficultyDR, 'aftermath:muscle-heal', 'Soin d’une déchirure (Guérison)', healCheck(healer, tester, conditionContext));
+  if (test.pending) return pendingTest(refusal('condition-input-required'), test);
   if (test.fumble && d10 === null) return refusal('fumble-d10-required');
   const fumbleDamage = healingFumbleDamage(test, d10, wounds);
   const reduction = test.success ? 1 + Math.max(0, test.sl - 1) : 0;
@@ -336,7 +339,7 @@ export function confirmResetLimb(stateValue, { operationId, expectedRevision, se
 }
 
 /** Test de Résistance posé « après la rencontre » (Orteil entaillé) : la perte éventuelle suit le choc d'amputation F2-I. */
-export function recordPostEncounterTest(stateValue, { operationId, expectedRevision, sequelaId, enduranceScore, roll } = {}) {
+export function recordPostEncounterTest(stateValue, { operationId, expectedRevision, sequelaId, enduranceScore, roll, tester = null, conditionContext = {} } = {}) {
   const state = assertState(stateValue);
   const prior = priorReceipt(state, operationId);
   if (prior) return { state: clone(state), receipt: prior };
@@ -347,7 +350,8 @@ export function recordPostEncounterTest(stateValue, { operationId, expectedRevis
   if (sequela.status !== 'open') return refusal('sequela-already-resolved');
   if (!validScore(enduranceScore)) return refusal('endurance-score-missing');
   if (!validRoll(roll)) return refusal('invalid-test-facts');
-  const test = runTest(enduranceScore, roll, sequela.difficultyDR ?? 0, 'aftermath:post-encounter', 'Test après la rencontre (Résistance)');
+  const test = runTest(enduranceScore, roll, sequela.difficultyDR ?? 0, 'aftermath:post-encounter', 'Test après la rencontre (Résistance)', enduranceCheck(tester, conditionContext));
+  if (test.pending) return pendingTest(refusal('condition-input-required'), test);
   const next = clone(state);
   const target = next.sequelae.find(row => row.id === sequelaId);
   target.status = test.success ? 'healed' : 'failed';

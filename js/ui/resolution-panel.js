@@ -26,7 +26,9 @@ import { deriveEngagementContext, engagedWith } from '../core/engagements.js';
 import { hasV5Talent, V5_TALENT_IDS } from '../core/v5-talents.js';
 import { ammunitionCompatibility, equipmentAttackContext, weaponSkillGroupInfo, conjuredWeaponMetadata, weaponHandsForParticipant } from '../core/equipment.js';
 import { isBlackpowderIncidentEligible } from '../core/v5-combat-fumbles.js';
-import { previewV5Test } from '../core/v5-roll.js';
+import { resolveV5TestModifiers, MIXED_CONDITION_QUESTION } from '../core/v5-test-modifiers.js';
+import { previewV5SecondaryTest, secondaryTestDetail } from '../core/v5-test-modifiers.js';
+import { CONDITION_QUESTIONS } from '../core/condition-effects.js';
 import { deriveHitMorphology, normalizeHitMorphology } from '../core/v5-hit-morphology.js';
 /**
  * Résolution intégrée de Jouer (sans modale). Ce module ne fait que construire
@@ -143,6 +145,35 @@ function blockingReasonItem(reason, field, { section, handlers }) {
     item.appendChild(ignore);
   }
   return item;
+}
+
+/**
+ * Q6 T6 (CA8) : questions d'États d'un Test secondaire sur score saisi (recul de l'arquebuse, Warp Blade, Déterminé). Chaque Test a
+ * son propre contexte de réponses, distinct de celui du Test principal ; on montre les questions ouvertes (États du testeur, plus
+ * celles que l'aperçu a renvoyées, `pendingLabels`) et celles déjà répondues, pour que le MJ puisse revenir dessus.
+ */
+const SECONDARY_QUESTIONS = [['involvesMovement', CONDITION_QUESTIONS.movement], ['runningOrHiding', CONDITION_QUESTIONS.escape],
+  ['reliesOnSight', CONDITION_QUESTIONS.sight], ['usesFellowship', CONDITION_QUESTIONS.fellowship], ['conditionPenaltyMode', MIXED_CONDITION_QUESTION]];
+function secondaryConditionFields(container, { subject, test, context = {}, pendingLabels = [], title, focusPrefix, onChange }) {
+  const open = new Set(subject ? resolveV5TestModifiers(subject, { kind: 'test', ...test }, context).needsInput.map(row => row.field) : []);
+  for (const [field, text] of SECONDARY_QUESTIONS) if (pendingLabels.some(label => String(label).endsWith(text))) open.add(field);
+  for (const [field, text] of SECONDARY_QUESTIONS) {
+    if (!open.has(field) && context[field] == null) continue;
+    const label = node('label', 'workspace-type', `${title} : ${text}`), select = document.createElement('select');
+    select.setAttribute('aria-label', label.textContent);
+    select.dataset.focusKey = `${focusPrefix}-${field}`;
+    if (field === 'conditionPenaltyMode') select.append(new Option('À préciser', ''), new Option('Pénalité en DR', 'sl'), new Option('Désavantage', 'disadvantage'));
+    else select.append(new Option('À préciser', ''), new Option('Oui', 'true'), new Option('Non', 'false'));
+    select.value = context[field] == null ? '' : String(context[field]);
+    select.addEventListener('change', () => {
+      const value = select.value === '' ? undefined : field === 'conditionPenaltyMode' ? select.value : select.value === 'true';
+      const next = { ...context, [field]: value };
+      if (value === undefined) delete next[field];
+      onChange(next);
+    });
+    label.append(select);
+    container.append(label);
+  }
 }
 
 export const ACTION_TYPES = Object.freeze([
@@ -1332,7 +1363,7 @@ export function renderResolutionPanel(options) {
       if(value===undefined)delete next[key];
       handlers.select({v5Context:{...current,warpBladeEnduranceTest:Object.keys(next).length?next:undefined}});
     };
-    for(const [key,text,min] of [['score','Warp Blade : score de Résistance de la cible (Test +2 DR si >1 Blessure)',0],['roll','Warp Blade : jet d100 du Test de Résistance de la cible',1]]){
+    for(const [key,text,min] of [['score','Warp Blade : score de fiche de Résistance de la cible, sans modificateurs (Test +2 DR si >1 Blessure)',0],['roll','Warp Blade : jet d100 du Test de Résistance de la cible',1]]){
       const label=node('label','workspace-type',text),input=document.createElement('input');
       input.type='number';
       input.min=String(min);
@@ -1344,7 +1375,9 @@ export function renderResolutionPanel(options) {
       label.append(input);
       fields.append(label);
     }
-    if(Number.isFinite(Number(target?.caracs?.E)))fields.append(node('p','workspace-muted',`Endurance de la cible : ${target.caracs.E} (reporter la compétence Résistance si elle figure sur la fiche).`));
+    if(Number.isFinite(Number(target?.caracs?.E)))fields.append(node('p','workspace-muted',`Endurance de la cible : ${target.caracs.E} (reporter la compétence Résistance si elle figure sur la fiche ; l’outil ajoute États, talents, sorts et prières).`));
+    secondaryConditionFields(fields,{subject:target,test:{characteristic:'E',skill:'Résistance'},context:stored.conditionContext||{},pendingLabels:(draft.preview?.unresolved||[]).filter(text=>String(text).startsWith('Warp Blade, Test de Résistance')),
+      title:'Warp Blade, Test de la cible',focusPrefix:'warp-blade-condition',onChange:next=>setTest('conditionContext',Object.keys(next).length?next:undefined)});
     fields.append(node('p','workspace-muted','La Warp Blade ignore les PA des pièces métalliques; ses qualités Défensive, Tailleuse et Empaleuse sont imprimées dans le profil d’attaque.'));
   }
   if(type==='attack'&&/antler hilted blade|lame.*poignee de bois|lame.*poignée de bois/i.test(String(linkedSupplementalItem?.name||focusActionLabel))){
@@ -2481,6 +2514,8 @@ export function renderResolutionPanel(options) {
       input.addEventListener('change',()=>handlers.select({[key]:{...values,resoluteRoll:input.value===''?undefined:Number(input.value)}}));
       label.append(input);
       v5.append(label);
+      secondaryConditionFields(v5,{subject,test:{characteristic:'FM',skill:'Calme'},context:values.resoluteConditionContext||{},pendingLabels:(draft.preview?.unresolved||[]).filter(text=>String(text).startsWith('Déterminé (Calme)')),
+        title:'Déterminé (Calme)'+(role==='defender'?' (défense)':''),focusPrefix:`${role}-resolute-condition`,onChange:next=>handlers.select({[key]:{...values,resoluteConditionContext:Object.keys(next).length?next:undefined}})});
     }
   }
   if(target&&hasV5Talent(target,'talent-shieldsman')){
@@ -2837,12 +2872,20 @@ export function renderResolutionPanel(options) {
       addCheck('weatherExtinguishesFuse','Pluie ou vent éteint la mèche');
     }
     if(isVolley){
-      addNumber('recoilTestBase','Résistance (+2 DR)',1,100);
+      addNumber('recoilTestBase','Résistance : score de fiche, sans modificateurs (Test à +2 DR)',1,100);
       addNumber('recoilTestRoll','d100 de Résistance',1,100);
-      const base=Number(current.recoilTestBase),roll=Number(current.recoilTestRoll);
+      const base=Number(current.recoilTestBase),roll=Number(current.recoilTestRoll),recoilContext=current.recoilTestContext||{};
+      secondaryConditionFields(controls,{subject:actor,test:{characteristic:'E',skill:'Résistance'},context:recoilContext,pendingLabels:(draft.preview?.unresolved||[]).filter(text=>String(text).startsWith('Arquebuse à salve, Test de Résistance')),
+        title:'Recul, Test de Résistance',focusPrefix:'recoil-condition',onChange:next=>handlers.select({v5Context:{...current,recoilTestContext:Object.keys(next).length?next:undefined}})});
       let recoilTest=null;
-      if(Number.isInteger(base)&&base>=1&&base<=100&&Number.isInteger(roll)&&roll>=1&&roll<=100)
-        recoilTest=previewV5Test({score:base,roll,kind:'test',slModifiers:[{id:'f2-e:salvo-recoil',label:'Recul de l’arquebuse à salve',amount:2}]}).options[0].result;
+      if(Number.isInteger(base)&&base>=1&&base<=100&&Number.isInteger(roll)&&roll>=1&&roll<=100){
+        // Q6 T6 : même calcul que la résolution (v5-combat-fumbles.js), score de fiche nu + modificateurs communs du tireur (CA12, CA5).
+        const secondary=previewV5SecondaryTest(actor,{score:base,roll,test:{characteristic:'E',skill:'Résistance'},context:recoilContext,slModifiers:[{id:'f2-e:salvo-recoil',label:'Recul de l’arquebuse à salve',amount:2}]});
+        if(secondary.ready){
+          recoilTest=secondary.result;
+          controls.append(node('p','workspace-muted',`Recul : Test de Résistance ${recoilTest.success?'réussi':'raté'} (${recoilTest.sl>=0?'+':''}${recoilTest.sl} DR) · ${secondaryTestDetail(secondary).join(' · ')}`));
+        }
+      }
       if(recoilTest&&!recoilTest.success&&recoilTest.sl<=-5)addNumber('recoilCriticalRolls','Critique d’épaule : d100 table du bras V5',1,100);
       const wrap=node('label','workspace-type','Nombre de servants'),input=document.createElement('input');
       input.type='number';
