@@ -177,6 +177,11 @@ export function renderDisengageForm(container, { actor, plan, state, active, onC
         form.appendChild(wrap);
       }
     }
+    // Messages non bloquants (talent ou sort à préciser, restriction d'État) : affichés pour que le MJ tranche, sans bloquer.
+    const questions = new Set((plan.needsInput || []).map(row => row.label));
+    for (const [who, side] of [[actor.name, plan.actorModifiers], [name(plan.bestOpponentId), plan.opponentModifiers]])
+      for (const message of [...new Set([...(side?.unresolved || []), ...(side?.restrictions || [])])].filter(text => !questions.has(text)))
+        form.appendChild(el('p', 'workspace-muted', `${who} : ${message} (à vérifier par le MJ)`));
     // CA5 : détail des modificateurs de chaque camp, avec leur source ; un modificateur écarté reste visible, barré.
     const sides = [[actor.name, plan.actorModifiers], [name(plan.bestOpponentId), plan.opponentModifiers]].filter(([, side]) => side?.rows?.length);
     if (sides.length) {

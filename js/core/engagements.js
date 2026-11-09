@@ -184,6 +184,8 @@ const skillScore = (person, pattern, carac) => {
   const value = Number(row?.total ?? row?.score);
   return Number.isFinite(value) ? value : Number(person?.caracs?.[carac]) || 0;
 };
+// Perform (Acrobatics), p. 163 : « Représentation (Acrobatie) » au catalogue ; « Acrobaties » reste accepté sur une fiche ancienne.
+const ACROBATICS = /acrobatie/;
 /** Libellé de la meilleure compétence de Corps à corps (celle de `bestMeleeScore`), « Corps à corps » à défaut (CC seule). */
 const bestMeleeSkill = person => {
   const rows = (person?.skills || []).filter(row => /^corps a corps/.test(fold(row?.name ?? row?.nom)) && Number.isFinite(Number(row.total ?? row.score)));
@@ -239,12 +241,12 @@ export function previewDisengage({ combat, participants = [], actorId, input = {
   const weight = list => list.reduce((sum, person) => sum + outnumberWeightOf(person, 'defender'), 0);
   const outnumbered = weight(opponents) >= 2 * weight(allies);
   const skill = input.skill === 'acrobaties' ? 'acrobaties' : 'esquive';
-  const actorScore = Number.isInteger(input.actorScore) ? input.actorScore : skill === 'acrobaties' ? skillScore(actor, /acrobaties/, 'Ag') : skillScore(actor, /^esquive/, 'Ag');
+  const actorScore = Number.isInteger(input.actorScore) ? input.actorScore : skill === 'acrobaties' ? skillScore(actor, ACROBATICS, 'Ag') : skillScore(actor, /^esquive/, 'Ag');
   const opponentScore = Number.isInteger(input.opponentScore) ? input.opponentScore : bestMeleeScore(best);
   // Q6 · T2 : calcul commun des deux côtés (CA3), la situation se somme (CA4). Le désengagé fait un Test d'Esquive ou d'Acrobaties
   // (Test de compétence : À terre et Enchevêtré demandent si le Test implique un mouvement, CA8) ; l'adversaire résiste avec sa
   // Mêlée (Test de mêlée, comme au combat) et ne lit pas les clés « … adverse » du désengagé (rôle de défenseur, comme au combat).
-  const actorSkill = skill === 'acrobaties' ? (actor.skills || []).map(row => row?.name ?? row?.nom).find(name => /acrobaties/.test(fold(name))) || 'Acrobaties' : 'Esquive';
+  const actorSkill = skill === 'acrobaties' ? (actor.skills || []).map(row => row?.name ?? row?.nom).find(name => ACROBATICS.test(fold(name))) || 'Représentation (Acrobatie)' : 'Esquive';
   const actorModifiers = disengageSide(actor, { characteristic: 'Ag', skill: actorSkill, skillCharacteristic: 'ag', kind: 'test', role: 'actor', opponent: best, participants },
     input.context || {}, { disadvantages: outnumbered ? [{ id: 'disengage:outnumbered', label: 'En infériorité numérique' }] : [] });
   const opponentModifiers = disengageSide(best, { characteristic: 'CC', skill: bestMeleeSkill(best), skillCharacteristic: 'cc', kind: 'melee', role: 'defender', opponent: actor, participants },

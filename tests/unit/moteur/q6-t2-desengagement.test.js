@@ -123,3 +123,11 @@ test('CA5 Esprit fort : un malus de sort reste affiché, barré, et ne compte pl
   assert.equal(plan.actorSl, 1);
   assert.deepEqual(plan.actorModifiers.rows.map(row => [row.source, row.amount, row.dropped ?? false, row.rule ?? null]), [['Sort ou prière', -1, true, 'Esprit fort']]);
 });
+
+test('Acrobaties : la compétence du catalogue « Représentation (Acrobatie) » donne le score et vise les sorts de ce nom', () => {
+  const plan = preview(duel({ actor: { skills: [{ name: 'Représentation (Acrobatie)', total: 60 }], spells: [spellLayer('s', { 'Représentation (Acrobatie)': 1 })] } }),
+    { skill: 'acrobaties', actorRoll: 21, opponentRoll: 50 });
+  assert.equal(plan.actorScore, 60);
+  assert.deepEqual(ids(plan.actorModifiers.slModifiers), [['spell-skill:Représentation (Acrobatie)', 1]]);
+  assert.equal(plan.actorSl, 6 - 2 + 1);
+});
