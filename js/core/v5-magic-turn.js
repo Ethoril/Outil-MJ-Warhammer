@@ -263,7 +263,7 @@ export function previewSpellInteraction(state, { effectId, targetId, kind, roll,
         if (!Number.isInteger(roll)||roll<1||roll>100) return block('Saisir le d100 du Test secondaire.');
         const tester=spec.testActor==='caster'?caster:target,skill=(tester.skills || []).find(s=>(s.name || '').toLowerCase()===testSpec.skill.toLowerCase());
         const rival=spec.opposedTest && tester.id!==target.id?target:null;
-        test=run(tester,{score:effectiveSkillScore(tester,skill?.total ?? tester.caracs?.[testSpec.stat],testSpec.stat),roll,stat:testSpec.stat,skill:testSpec.skill,opponent:rival,passive:tester.id===target.id,slModifiers:[{id:'spell-trigger',amount:testSpec.modifierSl}]});if(test.pending)return waiting(tester,test);
+        test=run(tester,{score:effectiveSkillScore(tester,skill?.total ?? tester.caracs?.[testSpec.stat],testSpec.stat),roll,stat:testSpec.stat,skill:testSpec.skill,opponent:rival,passive:kind==='trigger'&&tester.id===target.id&&tester.id!==caster.id,slModifiers:[{id:'spell-trigger',amount:testSpec.modifierSl}]});if(test.pending)return waiting(tester,test);
         failed=!test.success;
         if(spec.opposedTest){if(!d100(opponentRoll))return block('Auteur de l’effet magique : d100 adverse de FM requis.');const other=secondary(target,spec.opposedTest.skill,spec.opposedTest.stat,opponentRoll,0,{opponent:tester.id!==target.id?tester:null,role:'defender',passive:true});if(other.pending)return waiting(target,other);test={...test,opponentSl:other.sl,won:test.sl>other.sl};failed=!test.won;}
       }

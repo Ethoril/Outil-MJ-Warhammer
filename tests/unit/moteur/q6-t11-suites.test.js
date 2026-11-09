@@ -44,6 +44,17 @@ describe('CA21 : résistances des cibles au fil des tours, Tests subis', () => {
   });
 });
 
+describe('CA21 : un Test pour agir reste actif', () => {
+  test('Test de mouvement sous un sort (moveTest) : une cible Inconsciente ne le fait pas', () => {
+    const caster = person('c'), target = person('t', [OUT]);
+    target.extensions.v5.spellEffects = [{ id: 'mv', spellId: 'mz', spellName: 'Miasme', casterId: 'c', appliedAtRound: 1,
+      specialState: { moveTest: { skill: 'Perception', stat: 'I', modifierSl: 0 } } }];
+    const out = previewSpellInteraction({ combat: { round: 2, participants: [caster, target] }, localRevision: 1 }, { effectId: 'mv', targetId: 't', kind: 'move', roll: 15 });
+    assert.equal(out.ready, false);
+    assert.match(out.error, /Inconscient/);
+  });
+});
+
 describe('CA23 : Test actif d’un lanceur Inconscient en fin de Tour', () => {
   const comet = casterStates => roundSpellEffects([person('c', casterStates), withLayers(person('t'), [
     roundLayer('g1', { phase: 'endOfRound', guidance: true }),
