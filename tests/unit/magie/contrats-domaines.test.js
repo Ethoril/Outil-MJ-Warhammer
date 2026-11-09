@@ -302,8 +302,8 @@ test('Ombres — V5 pp. 169/254 : suffocation perd 1 B par Round, Inconscient à
 test('Ombres — V5 p. 254 : Miasme, Perception +0 pour bouger ; réussite et échec', async () => {
   const {store}=await encounter(); await cast(store,contracts.find(c=>c.canonicalName==='Mystifying Miasma'));
   const effectId=subject(store,'foe').extensions.v5.spellEffects[0].id;
-  await store.applySpellInteraction({effectId,targetId:'foe',kind:'move',roll:12}); assert.equal(level(subject(store,'foe'),'À Terre'),0);
-  await store.applySpellInteraction({effectId,targetId:'foe',kind:'move',roll:98}); assert.equal(level(subject(store,'foe'),'À Terre'),1);
+  await store.applySpellInteraction({effectId,targetId:'foe',kind:'move',roll:12,testContexts:{foe:{reliesOnSight:true,conditionPenaltyMode:'sl'}}}); assert.equal(level(subject(store,'foe'),'À Terre'),0);
+  await store.applySpellInteraction({effectId,targetId:'foe',kind:'move',roll:98,testContexts:{foe:{reliesOnSight:true,conditionPenaltyMode:'sl'}}}); assert.equal(level(subject(store,'foe'),'À Terre'),1);
 });
 test('Ombres — V5 p. 255 : bruit déclaré termine l’Invisibilité sans toucher une autre couche', async () => {
   const {store}=await encounter(); await cast(store,contracts.find(c=>c.canonicalName==='Shroud of Invisibility'));
