@@ -15,7 +15,7 @@ const METHODS = {
 export function recoveryMethodsFor(condition) {
   const key = String(condition.key || condition.name || '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[ -]+/g,'-');
   const silk = key === 'enchevetre' && condition.source?.ability === 'cliff-spider-lasso' ? [['cut-silk','Soie coupée (frappe tranchante de plus de 5 dégâts)']] : [];
-  return METHODS[key] ? [...METHODS[key], ...silk, ['fortune','Dépense d’un point de Fortune']] : [];
+  return METHODS[key] ? [...METHODS[key], ...silk, ['fortune','Dépense d’un point de Chance']] : [];
 }
 
 /** Map explicit recovery fields without inventing a phase or changing the chosen Round. */
@@ -40,14 +40,14 @@ export function chooseV5RecoveryMethod({ participantName, condition, getFortune,
     const dialog = el('dialog', null, 'tool-sheet v5-effect-dialog'), form = el('form');
     const heading = el('h2', 'Récupérer ' + condition.name + ' — ' + participantName); heading.id = 'v5-recovery-method-title'; dialog.setAttribute('aria-labelledby', heading.id);
     const label = el('label', 'Méthode de récupération'), select = el('select'); select.setAttribute('aria-label', 'Méthode de récupération'); select.append(new Option('Choisir…', ''), ...methods.map(([value, text]) => new Option(text, value))); label.append(select);
-    const fortuneHint = el('p', '', 'workspace-muted'), fortuneEdit = el('button', 'Initialiser Fortune', 'ghost'); fortuneEdit.type = 'button';
+    const fortuneHint = el('p', '', 'workspace-muted'), fortuneEdit = el('button', 'Initialiser la Chance', 'ghost'); fortuneEdit.type = 'button';
     const controls = el('div', null, 'row'), confirm = el('button', 'Continuer'), cancel = el('button', 'Annuler', 'ghost'); confirm.type = 'submit'; cancel.type = 'button'; controls.append(confirm, cancel);
     let fortune = typeof getFortune === 'function' ? getFortune() : { balance: null }, selected = null;
     const refreshFortune = () => {
       fortune = typeof getFortune === 'function' ? getFortune() : fortune;
-      fortuneHint.textContent = fortune.balance === null ? 'Fortune : solde courant inconnu. Initialisez le compteur avant une dépense.' : 'Fortune disponible : ' + formatV5Balance(fortune) + ' · coût de cette récupération : 1 point.';
+      fortuneHint.textContent = fortune.balance === null ? 'Chance : solde courant inconnu. Initialisez le compteur avant une dépense.' : 'Chance disponible : ' + formatV5Balance(fortune) + ' · coût de cette récupération : 1 point.';
       const option = Array.from(select.options).find(row => row.value === 'fortune'); if (option) option.disabled = fortune.balance === null || fortune.balance < 1;
-      fortuneEdit.hidden = typeof editFortune !== 'function'; fortuneEdit.textContent = fortune.balance === null ? 'Initialiser Fortune' : 'Modifier Fortune';
+      fortuneEdit.hidden = typeof editFortune !== 'function'; fortuneEdit.textContent = fortune.balance === null ? 'Initialiser la Chance' : 'Modifier la Chance';
       confirm.disabled = select.value === 'fortune' && (fortune.balance === null || fortune.balance < 1);
     };
     select.addEventListener('change', refreshFortune);

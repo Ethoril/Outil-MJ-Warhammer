@@ -18,7 +18,7 @@ const MAX_CHANGES = 40;
 // Compteurs : champ de la fiche → libellé et clé du snapshot (`durables` / `resources`). `zeroWhenAbsent` : absent vaut 0.
 const COUNTERS = Object.freeze({
   destin: { label: 'Destin modifié en jeu (outil MJ)', snapshot: ['durables', 'fate'] },
-  fortune: { label: 'Fortune modifiée en jeu (outil MJ)', snapshot: ['resources', 'fortune'] },
+  fortune: { label: 'Chance modifiée en jeu (outil MJ)', snapshot: ['resources', 'fortune'] },
   peche: { label: 'Péché modifié en jeu (outil MJ)', snapshot: ['durables', 'sin'], zeroWhenAbsent: true },
   corruption: { label: 'Corruption modifiée en jeu (outil MJ)', snapshot: ['durables', 'corruption'], zeroWhenAbsent: true }
 });

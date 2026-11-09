@@ -111,7 +111,7 @@ function profilePreview(profile) {
   row('Sorts', names(profile.spells).join(', '));
   row('Prières', names(profile.prayers).join(', '));
   row('Équipement', names(profile.equipment).join(', '));
-  row('Ressources', [['Fortune', profile.ficheSnapshot?.resources?.fortune], ['Destin', v5.fate], ['Résilience', v5.resilience], ['Corruption', v5.corruptionPoints], ['Péchés', v5.divine?.sin]]
+  row('Ressources', [['Chance', profile.ficheSnapshot?.resources?.fortune], ['Destin', v5.fate], ['Résilience', v5.resilience], ['Corruption', v5.corruptionPoints], ['Péchés', v5.divine?.sin]]
     .filter(([, value]) => Number.isInteger(value)).map(([label, value]) => `${label} ${value}`).join(' · '));
   card.appendChild(list);
   if (profile.actions?.length) {

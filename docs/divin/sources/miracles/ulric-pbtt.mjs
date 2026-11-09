@@ -69,7 +69,7 @@ export const miracles = [
       { id: 'reroll', mode: 'engine', text: 'Une fois par Round, relancer gratuitement une attaque ratée (mêlée ou distance), sans dépenser de Point de Chance.' },
       { id: 'end', mode: 'engine', text: 'Fin des effets après Bonus de Sociabilité rounds.' }
     ],
-    sourceDelta: 'La relance est modélisée comme une relance gratuite de Fortune d\'une attaque ratée (mêlée ou distance), une fois par Round, tant que la prière est active.'
+    sourceDelta: 'La relance est modélisée comme une relance gratuite de Chance d\'une attaque ratée (mêlée ou distance), une fois par Round, tant que la prière est active.'
   },
   {
     name: 'Engourdissement',

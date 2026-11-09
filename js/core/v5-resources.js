@@ -2,7 +2,7 @@
 const clone = structuredClone;
 const record = value => value && typeof value === 'object' && !Array.isArray(value);
 const text = value => typeof value === 'string' && value.trim() ? value : null;
-const balance = value => { if (!Number.isSafeInteger(value) || value < 0) throw new TypeError('Solde de Fortune invalide'); return value; };
+const balance = value => { if (!Number.isSafeInteger(value) || value < 0) throw new TypeError('Solde de Chance invalide'); return value; };
 import { markCorruptionThresholdTest } from './v5-corruption.js';
 import { sequelaMirror } from './v5-sequela-effects.js';
 
@@ -45,10 +45,10 @@ export function v5ResourceIdentity(envelope, subject) {
 }
 function registryOf(envelope) {
   const registry = envelope.extensions?.v5?.characterResources ?? [];
-  if (!Array.isArray(registry)) throw new TypeError('Registre de Fortune invalide');
+  if (!Array.isArray(registry)) throw new TypeError('Registre de Chance invalide');
   const seen = new Set();
   for (const row of registry) {
-    if (!record(row) || !text(row.characterId) || seen.has(row.characterId)) throw new TypeError('Identité de Fortune invalide ou dupliquée');
+    if (!record(row) || !text(row.characterId) || seen.has(row.characterId)) throw new TypeError('Identité de Chance invalide ou dupliquée');
     balance(row.fortune); seen.add(row.characterId);
   }
   return clone(registry);
@@ -186,7 +186,7 @@ function withRegistry(envelope, registry) {
 /** Initialize/correct the tool balance. Source fiche is never written or refreshed implicitly. */
 export function setV5Fortune(envelope, subject, value, { source = 'mj', characterId = null } = {}) {
   balance(value);
-  if (!['mj', 'fiche'].includes(source)) throw new TypeError('Source de Fortune invalide');
+  if (!['mj', 'fiche'].includes(source)) throw new TypeError('Source de Chance invalide');
   const known = getV5Fortune(envelope, subject);
   const existingEntry = registryOf(envelope).find(row => row.characterId === known.characterId);
   if (source === 'fiche' && (existingEntry || known.sourceBalance === null || known.sourceBalance !== value)) throw new TypeError('Solde courant de fiche non disponible pour initialisation');
@@ -245,12 +245,12 @@ export function commitV5Resources(envelope, participants = []) {
       if (spentTemp > 0) nextParticipants.splice(0, nextParticipants.length, ...spendV5Temporary(envelope, nextParticipants, nextParticipants[i], 'fortune', spentTemp).participants);
       if (entry || identity && Number.isSafeInteger(profileBalance)) {
         const nextPerm = balance(permBefore - spentPerm);
-        if (updates.has(identity) && updates.get(identity) !== nextPerm) throw new TypeError('Soldes de Fortune contradictoires pour un personnage');
+        if (updates.has(identity) && updates.get(identity) !== nextPerm) throw new TypeError('Soldes de Chance contradictoires pour un personnage');
         updates.set(identity, nextPerm);
       }
     } else if (entry || identity && Number.isSafeInteger(profileBalance)) {
       const nextPerm = balance(Math.max(0, value - tempBefore));
-      if (updates.has(identity) && updates.get(identity) !== nextPerm) throw new TypeError('Soldes de Fortune contradictoires pour un personnage');
+      if (updates.has(identity) && updates.get(identity) !== nextPerm) throw new TypeError('Soldes de Chance contradictoires pour un personnage');
       updates.set(identity, nextPerm);
     }
   }
@@ -312,7 +312,7 @@ export function reconcileV5ResourceBindings(before, next, entries = []) {
     if (sourceRecords.length) {
       const balances = new Set(sourceRecords.map(row => row.fortune));
       if (balances.size > 1) {
-        throw Object.assign(new Error('Association suspendue : les copies de ce PJ ont des soldes de Chance différents. Ouvrez chaque scène concernée, saisissez le même solde de Fortune pour ses copies, puis relancez la synchronisation.'),
+        throw Object.assign(new Error('Association suspendue : les copies de ce PJ ont des soldes de Chance différents. Ouvrez chaque scène concernée, saisissez le même solde de Chance pour ses copies, puis relancez la synchronisation.'),
           { code: 'fiche-fortune-binding-conflict', userFacing: true });
       }
       const chosen = sourceRecords[0];

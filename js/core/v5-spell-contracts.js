@@ -1445,7 +1445,7 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
     const lockedForm = beastFormRestriction(actor, 'cast');
     if (lockedForm) return { ready: false, valid: false, error: lockedForm, contract };
     try { prepareCastingOptions(actor, spellForCasting, options); } catch (error) {
-      if (!error?.userFacing && !/Mage de guerre|rune|Cadai|relance|Fortune/i.test(error?.message || '')) throw error;
+      if (!error?.userFacing && !/Mage de guerre|rune|Cadai|relance|Fortune|Chance/i.test(error?.message || '')) throw error;
       return { ready: false, valid: false, status: 'casting-forbidden', error: error.message, contract };
     }
     const testSl = Number(explicitSl);
@@ -2816,7 +2816,7 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
         targetReceipt.actions.push({
           kind: 'temporary-fortune',
           fortunePoints: computedTempFortune,
-          summary: `${contract.name} : +${computedTempFortune} Point(s) de Chance (Fortune) temporaire(s) accordé(s) à ${target.name || target.id}.`
+          summary: `${contract.name} : +${computedTempFortune} Point(s) de Chance temporaire(s) accordé(s) à ${target.name || target.id}.`
         });
       }
       if (computedTempFate > 0) {

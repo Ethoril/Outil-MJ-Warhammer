@@ -1447,8 +1447,8 @@ function resolvedCorruptionTest(participant, skillId, input) {
       }
       if (type === 'recover-condition-v5' && options.method === 'fortune' && receipt.removed.length) {
         const current = getV5Fortune(draft, participant);
-        if (current.balance === null) throw Object.assign(new Error('Initialisez le compteur de Fortune du personnage.'), { code: 'V5_FORTUNE_UNKNOWN', userFacing: true });
-        if (current.balance < 1) throw Object.assign(new Error('Aucun point de Fortune disponible.'), { code: 'V5_FORTUNE_INSUFFICIENT', userFacing: true });
+        if (current.balance === null) throw Object.assign(new Error('Initialisez le compteur de Chance du personnage.'), { code: 'V5_FORTUNE_UNKNOWN', userFacing: true });
+        if (current.balance < 1) throw Object.assign(new Error('Aucun point de Chance disponible.'), { code: 'V5_FORTUNE_INSUFFICIENT', userFacing: true });
         receipt.participant.extensions = { ...(receipt.participant.extensions || {}), v5: { ...(receipt.participant.extensions?.v5 || {}), resources: { ...(receipt.participant.extensions?.v5?.resources || {}), fortune: current.balance - 1 } } };
         receipt.resourceCost = { resource: 'fortune', characterId: current.characterId, before: current.balance, amount: 1, after: current.balance - 1 };
         draft = commitV5Resources(draft, (draft.combat?.participants || []).map(item => item.id === participantId ? receipt.participant : item));
@@ -2232,7 +2232,7 @@ function resolvedCorruptionTest(participant, skillId, input) {
     setFortune(id, amount, options = {}) {
       const captured = cloneValue(options), expected = captured.baseRevision ?? localRevision, characterId = uid();
       return api.executeCommand('set-fortune-v5', draft => {
-        if (draft.localRevision !== expected) throw Object.assign(new Error('La partie a changé. Recalculez le compteur de Fortune.'), { code: 'V5_EFFECT_STALE', userFacing: true });
+        if (draft.localRevision !== expected) throw Object.assign(new Error('La partie a changé. Recalculez le compteur de Chance.'), { code: 'V5_EFFECT_STALE', userFacing: true });
         const subject = (draft.combat?.participants || []).find(item => item.id === id) || (draft.reserve || []).find(item => item.id === id) || (draft.persistentCharacters || []).find(item => item.id === id);
         if (!subject) throw new TypeError('Personnage introuvable');
         if(captured.operation && !['correction','refresh'].includes(captured.operation))throw new TypeError('Opération de Chance invalide');

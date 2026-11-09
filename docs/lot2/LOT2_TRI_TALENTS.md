@@ -112,7 +112,7 @@ Les traitements mixtes sont visibles dans les colonnes. Les clauses, identités 
 | Feinte | Moteur raccordé | 1 clause(s) de Tests, combat ou calcul de situation épinglées et raccordées. |
 | Ferveur ardente | Moteur raccordé | 6 clause(s) de Tests, combat ou calcul de situation épinglées et raccordées. |
 | Feu de forge | Moteur raccordé | Aura à portée du BFM, Pénétrante temporaire et PA métallique supplémentaire ignoré. |
-| Fin glorieuse | Moteur raccordé | Réaction avant Inconscient ; 1 Fortune si Sonné ; attaque immédiate sans consommer le prochain Tour. |
+| Fin glorieuse | Moteur raccordé | Réaction avant Inconscient ; 1 point de Chance si Sonné ; attaque immédiate sans consommer le prochain Tour. |
 | Flagellant | Moteur raccordé | Entrée en Frénésie sans Test sur Blessure si accès préalable ; suppression des pénalités critiques raccordée. |
 | Flairer les ennuis | Moteur raccordé + Rappel narratif | 3 clause(s) de Tests, combat ou calcul de situation épinglées et raccordées. Rappel narratif : Trouver combats, paris ou boissons. |
 | Fortification liquide | Moteur raccordé + Fiche | 3 clause(s) de Tests, combat ou calcul de situation épinglées et raccordées. Fiche : Bonus temporaires de caractéristiques +10 F/E exclus du moteur conformément au périmètre demandé ; durée d’une heure après la dernière boisson à suivre sur la fiche. |
@@ -236,7 +236,7 @@ Les traitements mixtes sont visibles dans les colonnes. Les clauses, identités 
 | Tireur de précision | Bonus de caractéristique exclu | Bonus de caractéristique exclu : Bonus de caractéristique déjà compris dans la fiche. |
 | Tireur embusqué | Moteur raccordé | 3 clause(s) de Tests, combat ou calcul de situation épinglées et raccordées. |
 | Tour des souvenirs | Moteur raccordé + Rappel narratif | 3 clause(s) de Tests, combat ou calcul de situation épinglées et raccordées. Rappel narratif : Mémoire parfaite de nombreux faits. |
-| Tourbillon de mort | Moteur raccordé | 1 Fortune, opposition unique, dégâts/localisation communs à tous les engagés, alliés compris ; pas de critique du jet, critiques d’excédent par cible. |
+| Tourbillon de mort | Moteur raccordé | 1 point de Chance, opposition unique, dégâts/localisation communs à tous les engagés, alliés compris ; pas de critique du jet, critiques d’excédent par cible. |
 | Trappeur | Moteur raccordé + Rappel narratif | 3 clause(s) de Tests, combat ou calcul de situation épinglées et raccordées. Rappel narratif : Construire un petit piège après préparation. |
 | Travailleur qualifié | Moteur raccordé + Fiche | 3 clause(s) de Tests, combat ou calcul de situation épinglées et raccordées. Fiche : Acquisitions par spécialité de Métier. |
 | Très fort | Bonus de caractéristique exclu | Bonus de caractéristique exclu : Bonus de caractéristique déjà compris dans la fiche. |

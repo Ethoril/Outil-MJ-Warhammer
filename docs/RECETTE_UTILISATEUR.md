@@ -82,7 +82,7 @@ Incident magique transmis incomplet : jet d’incident (initialRoll / miscastRol
 
 - [x] G-U1-3 · Tiroir Circonstances
   1. Sous Protection, attaquer le PJ béni : le Test de Calme est dans le groupe **Obligatoire** du tiroir. 2. Cocher une circonstance, fermer puis rouvrir le tiroir, changer d’action puis revenir. 3. Fermer le tiroir et passer à une autre action. 4. Réduire la fenêtre sous 900 px, ouvrir le tiroir, le fermer par Échap puis par un clic dehors.
-  Attendu : groupes dans l’ordre Obligatoire, Combat, Défense de la cible, Avantage et Fortune, Talents, Arme et munitions, Magie, autres ; un groupe vide n’apparaît pas ; le compteur ne compte que ce que le MJ a changé (pas les valeurs déduites de l’arme) ; les valeurs survivent à la fermeture ; une fermeture reste fermée d’une action à l’autre ; le panneau latéral se replie en rail tant que le tiroir est ouvert et revient ensuite.
+  Attendu : groupes dans l’ordre Obligatoire, Combat, Défense de la cible, Avantage et Chance, Talents, Arme et munitions, Magie, autres ; un groupe vide n’apparaît pas ; le compteur ne compte que ce que le MJ a changé (pas les valeurs déduites de l’arme) ; les valeurs survivent à la fermeture ; une fermeture reste fermée d’une action à l’autre ; le panneau latéral se replie en rail tant que le tiroir est ouvert et revient ensuite.
   Remarques : déjà pour créer la protection c'est très compliqué. Quand on va sélectionner prières, le culte du prètre n'est pas automatiquement reconnu, ça devrait faire partie des infos d'une fiche. Ensuite les emplacements liés à pénitence et péchés ne devraient apparaitre que si le personnage est concerné. Accès à la prière: par défaut le sélecteur de capacité de prononcer la prière doit être à oui. Et il manque un bouton pour tirer le jet de prière. On ne doit pas demander si la portée et la zone sont confirmées, si le mj est en train de saisir l'action c'est que c'est le cas. Quand on veut appliquer la prière: erreur  Commande trop volumineuse pour maxBytes
 
 - [y] G-U1-4 · Sort, prière, Corruption
@@ -137,7 +137,7 @@ Ce parcours guidé permet au MJ de vérifier pas à pas, à la table dans l’on
   Attendu : Le talent injecté *Frappe blessante* permet de choisir la gravité parmi deux jets de critique, et la couche de *Sauvagerie* est consommée et retirée dès ce premier critique infligé.
   Remarques :
 - [ ] G-DIV-4 · Chance (échec propre et opposition perdue)
-  1. Appliquer la *Bénédiction de Chance* à un personnage. Dans **Résolution**, saisir un jet d’échec, cocher `Relancer ce Test avec 1 Point de Chance (Fortune)` et renseigner `Nouveau jet de relance (Chance, d100)`. Répéter l’essai sur un Test opposé où le jet propre de l’acteur est réussi (inférieur ou égal au seuil) mais battu aux DR par le défenseur.
+  1. Appliquer la *Bénédiction de Chance* à un personnage. Dans **Résolution**, saisir un jet d’échec, cocher `Relancer ce Test avec 1 Point de Chance` et renseigner `Nouveau jet de relance (Chance, d100)`. Répéter l’essai sur un Test opposé où le jet propre de l’acteur est réussi (inférieur ou égal au seuil) mais battu aux DR par le défenseur.
   Attendu : Dans les deux situations (Test propre raté ou Test propre réussi mais perdant l’opposition), la relance est gratuite : la faveur de *Chance* est consommée à l’application sans diminuer le solde de Points de Chance (Fortune) de la fiche.
   Remarques :
 
@@ -148,7 +148,7 @@ Ce parcours guidé permet au MJ de vérifier pas à pas, à la table dans l’on
   Attendu : En combat, le jet de gravité du critique est automatiquement majoré de `+20`. Lors d’un critique d’incantation (sort direct ou vortex), le reçu affiche explicitement `(+20 à la gravité : Morsure du Loup)` à côté de la sévérité saisie.
   Remarques :
 - [ ] G-DIV-6 · Écraser les faibles (Ulric)
-  1. Lancer *Écraser les faibles*, rater une attaque (mêlée ou tir), cocher `Relancer ce Test avec 1 Point de Chance (Fortune)` et saisir le nouveau jet ; recommencer au Round suivant. Tester aussi lorsque le personnage porte simultanément la *Bénédiction de Chance*.
+  1. Lancer *Écraser les faibles*, rater une attaque (mêlée ou tir), cocher `Relancer ce Test avec 1 Point de Chance` et saisir le nouveau jet ; recommencer au Round suivant. Tester aussi lorsque le personnage porte simultanément la *Bénédiction de Chance*.
   Attendu : Une attaque ratée par Round bénéficie d’une relance gratuite sans dépenser de Point de Chance, et le droit à relance se recharge au début du Round suivant. Si *Chance* est également active, la relance par Round d’*Écraser les faibles* est consommée en priorité afin d’épargner la relance unique de *Chance*.
   Remarques :
 - [ ] G-DIV-7 · Fortune généreuse (Ranald — case et indice d’inversion)
@@ -396,13 +396,13 @@ Ce parcours guidé permet au MJ de vérifier pas à pas, à la table dans l’on
 
 ### Destin et Chance
 
-- [ ] G-DES-1 · Fortune d’un personnage
-  1. Sur la carte du personnage, cliquer le bouton `Fortune : …`. 2. Saisir `Points de Fortune disponibles` (libellé suivi de « (permanents) » s’il existe de la Fortune temporaire), cliquer **Initialiser Fortune** (ensuite **Enregistrer Fortune**). 3. Rouvrir et choisir `Renouvellement normal`.
+- [ ] G-DES-1 · Chance d’un personnage
+  1. Sur la carte du personnage, cliquer le bouton `Chance : …`. 2. Saisir `Points de Chance disponibles` (libellé suivi de « (permanents) » s’il existe de la Fortune temporaire), cliquer **Initialiser Fortune** (ensuite **Enregistrer Fortune**). 3. Rouvrir et choisir `Renouvellement normal`.
   Attendu : le solde est conservé dans la rencontre (Recommencer, Suspendre/Reprendre, rechargement) ; d’une rencontre à l’autre seulement si le profil est lié à une fiche de personnage ; le dialogue dit lequel des deux cas s’applique ; **Annuler** restaure aussi la Fortune.
   Remarques :
 
 - [ ] G-DES-2 · Chance avant et après le jet
-  1. Avant le jet : cocher `Dépenser 1 Point de Chance pour obtenir Avantage avant le jet`. 2. Sur un échec : cocher `Relancer ce Test avec 1 Point de Chance (Fortune)` et saisir plusieurs d100 dans `Jets successifs de relance (d100, séparés par des virgules)`.
+  1. Avant le jet : cocher `Dépenser 1 Point de Chance pour obtenir Avantage avant le jet`. 2. Sur un échec : cocher `Relancer ce Test avec 1 Point de Chance` et saisir plusieurs d100 dans `Jets successifs de relance (d100, séparés par des virgules)`.
   Attendu : un Point de Chance par relance, les temporaires dépensés avant les permanents ; le résultat nomme le payeur.
   Remarques :
 

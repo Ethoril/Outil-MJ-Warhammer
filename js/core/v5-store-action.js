@@ -260,9 +260,9 @@ export function annotateV5StoreActionPreview(preview, input) {
   if (input.preCombatQuota?.length) preview = { ...preview, reminders: [...(preview.reminders || []), `Avant le premier Round : attaques gratuites limitées à ${input.preCombatQuota.map(q => q.maximum).join(' + ')} avant le début du combat (quota du Tour 0).`] };
   if (input.reactionValidation?.ready === false) preview ={ ...preview, unresolved: [...(preview.unresolved || []), input.reactionValidation.reason] };
   if (input.fortuneReroll) {
-    if(input.invalidRerollSequence){preview={...preview,ready:false,status:'manual',unresolved:[...(preview.unresolved||[]),'Relance de Fortune : chaque résultat doit être un entier de 1 à 100.']};}
+    if(input.invalidRerollSequence){preview={...preview,ready:false,status:'manual',unresolved:[...(preview.unresolved||[]),'Relance de Chance : chaque résultat doit être un entier de 1 à 100.']};}
     if (input.fortuneRerollRoll === null) {
-      preview = { ...preview, unresolved: [...(preview.unresolved || []), 'Relance de Fortune : saisir le nouveau jet d100 (1 à 100).'] };
+      preview = { ...preview, unresolved: [...(preview.unresolved || []), 'Relance de Chance : saisir le nouveau jet d100 (1 à 100).'] };
     }
     preview = { ...preview, fortuneReroll: { active: true, used: Boolean(input.fortuneRerollRoll !== null), initialRoll: input.initialRollBeforeFortune, rerollRoll: input.fortuneRerollRoll,
       rolls:input.fortuneRerollRolls||[],
@@ -276,7 +276,7 @@ export function annotateV5StoreActionPreview(preview, input) {
   if(postRequests.length)preview={...preview,talentUsageRequests:[...(preview.talentUsageRequests||[]),...postRequests]};
   if (!input.actionCostPlan) return preview;
   const decisions = clone(preview.decisions || {});
-  const label = resource => ({ momentum: 'Élan', fortune: 'Fortune' }[resource] || resource);
+  const label = resource => ({ momentum: 'Élan', fortune: 'Chance' }[resource] || resource);
   const summaries = [...input.actionCostPlan.paid.map(cost => label(cost.resource) + ' : ' + cost.amount + ' (payé avant le jet)'), ...input.actionCostPlan.waived.map(cost => label(cost.resource) + ' : exempté')];
   for (const decision of Object.values(decisions)) for (const option of decision.options || []) option.summary.costs = [...summaries];
   return { ...preview, decisions, actionCostPlan: clone(input.actionCostPlan),

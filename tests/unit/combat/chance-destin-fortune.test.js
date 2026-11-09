@@ -956,7 +956,7 @@ describe('Fortune et relance (caractérisation)', () => {
 // ne puisse pas le casser silencieusement. Ils ne testent pas la règle du livre,
 // seulement ce que le code fait aujourd'hui.
 
-const MESSAGE_JET_MANQUANT = 'Relance de Fortune : saisir le nouveau jet d100 (1 à 100).';
+const MESSAGE_JET_MANQUANT = 'Relance de Chance : saisir le nouveau jet d100 (1 à 100).';
 
 function mageDeBase() {
   return {

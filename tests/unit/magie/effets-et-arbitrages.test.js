@@ -738,7 +738,7 @@ function memory() {
 const person = (store, id) => store.listParticipants().find(p => p.id === id);
 const signe = (store, name = 'Le Second Signe d’Amul', roll = 15) => store.applySpellExecution(name, { actorId: 'mage', targetIds: ['mage'], roll, attributeActive: false });
 
-test('Boîte Fortune — préremplit et édite le Permanent, le temporaire est seulement annoncé', async () => {
+test('Boîte Chance — préremplit et édite le Permanent, le temporaire est seulement annoncé', async () => {
   const store = await combat(wizard());
   await store.setFortune('mage', 3);
   await signe(store);

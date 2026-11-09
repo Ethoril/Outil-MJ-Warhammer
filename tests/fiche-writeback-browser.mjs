@@ -83,7 +83,7 @@ async function main() {
   // CA2 : aperçu par fiche (identité, jamais le nom), « fiche → outil » et provenance.
   const wren = page.locator('[data-fiche="wren"]');
   await expect(wren).toContainText('Destin : 3 → 2');
-  await expect(wren).toContainText('Fortune : 2 → 0');
+  await expect(wren).toContainText('Chance : 2 → 0');
   await expect(wren).toContainText('Agilité (Base) : 32 → 27');
   await expect(wren).toContainText('Séquelles permanentes : Ag −5 au total');
   await expect(page.locator('[data-fiche="elysia"]')).toContainText('Destin : 2 → 1');

@@ -418,7 +418,7 @@ function proposeEquipmentSkill(item, role, skills) {
   return '';
 }
 
-export const FICHE_COUNTER_LABELS = Object.freeze({ fate: 'Destin', fortune: 'Fortune', resilience: 'Résilience', sin: 'Péché', corruption: 'Corruption' });
+export const FICHE_COUNTER_LABELS = Object.freeze({ fate: 'Destin', fortune: 'Chance', resilience: 'Résilience', sin: 'Péché', corruption: 'Corruption' });
 const COUNTER_READERS = Object.freeze({
   fate: subject => subject?.extensions?.v5?.fate ?? subject?.fate,
   fortune: subject => subject?.ficheSnapshot?.resources?.fortune,

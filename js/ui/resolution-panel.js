@@ -263,7 +263,7 @@ export function renderResolutionPanel(options) {
   drawer.append(heading, node('p', 'workspace-muted', 'Ce qui est coché entre dans le calcul.'));
   const engagedRolls = [];
   const fieldGroups = {};
-  for (const [key, label] of [['required','À régler maintenant'], ['scene','Scène (toute la rencontre)'], ['combat','Combat'], ['defense',target ? `Défense de ${target.name}` : 'Défense'], ['fortune','Avantage et Fortune'], ['talents','Talents'], ['weapon','Arme et munitions'], ['magic','Magie'], ['lethal','Issue létale']]) {
+  for (const [key, label] of [['required','À régler maintenant'], ['scene','Scène (toute la rencontre)'], ['combat','Combat'], ['defense',target ? `Défense de ${target.name}` : 'Défense'], ['fortune','Avantage et Chance'], ['talents','Talents'], ['weapon','Arme et munitions'], ['magic','Magie'], ['lethal','Issue létale']]) {
     const group = node('section', `workspace-circumstances-group is-${key}`);
     group.appendChild(node('h5', '', label));
     const content = node('div', 'workspace-v5-context');
@@ -1109,7 +1109,7 @@ export function renderResolutionPanel(options) {
     label.append(check, text);
     addCircumstance(key, label);
   };
-  talentToggle('fortuneReroll', 'Relancer ce Test avec 1 Point de Chance (Fortune)', draft.fortuneReroll);
+  talentToggle('fortuneReroll', 'Relancer ce Test avec 1 Point de Chance', draft.fortuneReroll);
   const fortuneAdvantageLocked=draft.preview!=null||draft.attackRoll!==undefined&&draft.attackRoll!==null&&String(draft.attackRoll).trim()!=='';
   talentToggle('fortuneForAdvantage', 'Dépenser 1 Point de Chance pour obtenir Avantage avant le jet', draft.fortuneForAdvantage,fortuneAdvantageLocked);
   if(fortuneAdvantageLocked)v5.appendChild(node('p','workspace-muted','Chance → Avantage se choisit avant de connaître le résultat du d100. Effacez le jet avant de modifier ce choix.'));

@@ -111,8 +111,8 @@ try {
   assert.equal(await b.evaluate(()=>document.documentElement.scrollWidth>window.innerWidth),false,'Mobile page must not overflow horizontally'); await b.screenshot({path:join(root,'tmp/lot2-control-ui/battement-mobile.png'),fullPage:true}); await beat.context.close();
 
   const fortune=await setup({actorMomentum:false}); const f=fortune.page;
-  await f.getByRole('button',{name:'Modifier la Fortune de Acteur de recette',exact:true}).click(); const dialog=f.getByRole('dialog',{name:'Fortune — Acteur de recette'});
-  await dialog.getByLabel('Points de Fortune disponibles',{exact:true}).fill('2'); await dialog.getByRole('button',{name:'Initialiser Fortune',exact:true}).click(); await expect(dialog).toHaveCount(0); assert.equal(await f.evaluate(()=>window.lot2UI.store.getFortune('actor').balance),2); await fortune.context.close();
+  await f.getByRole('button',{name:'Modifier la Chance de Acteur de recette',exact:true}).click(); const dialog=f.getByRole('dialog',{name:'Chance — Acteur de recette'});
+  await dialog.getByLabel('Points de Chance disponibles',{exact:true}).fill('2'); await dialog.getByRole('button',{name:'Initialiser la Chance',exact:true}).click(); await expect(dialog).toHaveCount(0); assert.equal(await f.evaluate(()=>window.lot2UI.store.getFortune('actor').balance),2); await fortune.context.close();
   const reaction=await setup({actorMomentum:false,actorTalents:[owned('talent-furious-assault')]}); const r=reaction.page;
   await r.evaluate(async()=>{await window.lot2UI.store.updateParticipant('target',{hp:40,maxHp:40});}); await defenseCC(r); await enterRolls(r,23,81); await expect(applyButton(r)).toBeEnabled(); await applyButton(r).click();
   const use=r.getByRole('button',{name:'Utiliser Assaut féroce de Acteur de recette',exact:true}); await expect(use).toBeVisible(); const before=await r.evaluate(()=>({revision:window.lot2UI.store.getLocalRevision(),draws:window.randomDraws,momentum:window.lot2UI.store.listParticipants().find(row=>row.id==='actor').extensions.v5.hasMomentum}));

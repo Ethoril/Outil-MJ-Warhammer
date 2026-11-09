@@ -13,7 +13,7 @@ const winds = [
       ['Enlightened Condescension', 'Son arrogance lui impose −10 à sa Sociabilité initiale.'],
       ['White Eyes', 'Il gagne 3 Aveuglé; après guérison, ses iris sont blancs et il subit −1 DR aux tests de Sociabilité.'],
       ['Bleaching', 'Ses cheveux deviennent blancs sous l’effet du vent.'],
-      ['Instant Recall', 'En dépensant Fortune pour relancer un test de rappel (ex. Connaissance), il réussit automatiquement; en test dramatique, un résultat sous +1 DR devient +1 DR.'],
+      ['Instant Recall', 'En dépensant un point de Chance pour relancer un test de rappel (ex. Connaissance), il réussit automatiquement; en test dramatique, un résultat sous +1 DR devient +1 DR.'],
       ['Purging', 'Réussir Endurance Difficile (−2 DR) évite Fièvre pendant 2d10 jours; après, +1 DR pour résister aux maladies.'],
       ['Mark of Hysh', 'Une rune d’Hysh apparaît sur le corps; le texte accorde le talent Suffuse with Hysh.']
     ]

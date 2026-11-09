@@ -302,12 +302,12 @@ try {
   const outsideOptions=await f.evaluate(()=>window.lot2UI.recoveryOptionsFor({currentRound:3,outOfCombat:true}));assert.deepEqual(outsideOptions,{outOfCombat:true,transition:{round:3}},'explicit out-of-combat Round is retained without inventing a phase');
   await f.getByRole('button',{name:'Récupérer Inconscient de Acteur de recette'}).click();const fortuneMethod=f.getByRole('dialog',{name:/Récupérer Inconscient/});
   await expect(fortuneMethod.locator('option[value="fortune"]')).toHaveJSProperty('disabled',true);
-  await fortuneMethod.getByRole('button',{name:'Initialiser Fortune'}).click();
-  const fortuneInit=f.getByRole('dialog',{name:'Fortune — Acteur de recette'});await expect(fortuneInit).toBeVisible();
+  await fortuneMethod.getByRole('button',{name:'Initialiser la Chance'}).click();
+  const fortuneInit=f.getByRole('dialog',{name:'Chance — Acteur de recette'});await expect(fortuneInit).toBeVisible();
   await fortuneInit.getByRole('button',{name:'Annuler',exact:true}).click();
   assert.equal(await f.evaluate(()=>window.lot2UI.store.getFortune('actor').balance),null,'cancelling initialization preserves unknown balance');
-  await fortuneMethod.getByRole('button',{name:'Initialiser Fortune'}).click();await fortuneInit.getByLabel('Points de Fortune disponibles').fill('2');await fortuneInit.getByRole('button',{name:'Initialiser Fortune',exact:true}).click();await expect(fortuneInit).toHaveCount(0);
-  await expect(fortuneMethod.locator('option[value="fortune"]')).toHaveJSProperty('disabled',false);await expect(fortuneMethod).toContainText('Fortune disponible : 2');
+  await fortuneMethod.getByRole('button',{name:'Initialiser la Chance'}).click();await fortuneInit.getByLabel('Points de Chance disponibles').fill('2');await fortuneInit.getByRole('button',{name:'Initialiser la Chance',exact:true}).click();await expect(fortuneInit).toHaveCount(0);
+  await expect(fortuneMethod.locator('option[value="fortune"]')).toHaveJSProperty('disabled',false);await expect(fortuneMethod).toContainText('Chance disponible : 2');
   await fortuneMethod.getByLabel('Méthode de récupération').selectOption('fortune');await fortuneMethod.getByRole('button',{name:'Continuer'}).click();await expect(fortuneMethod).toHaveCount(0);await expect(f.getByRole('button',{name:'Récupérer Inconscient de Acteur de recette'})).toHaveCount(0);
   assert.equal(await f.evaluate(()=>window.lot2UI.store.getFortune('actor').balance),1,'recovery spends exactly one Fortune');
   await f.getByRole('button',{name:'Annuler la dernière commande'}).click();await expect(f.getByRole('button',{name:'Récupérer Inconscient de Acteur de recette'})).toBeVisible();assert.equal(await f.evaluate(()=>window.lot2UI.store.getFortune('actor').balance),2);

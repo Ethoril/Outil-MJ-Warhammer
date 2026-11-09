@@ -2181,7 +2181,7 @@
     {
       "id": "divine:miracle:ranald:cheat-the-odds",
       "catalogueEntry": null,
-      "v5Summary": "Le livre ne dit pas si les points gagnés dépassent le maximum de Fortune du personnage, ni s’ils se perdent à la fin de la session s’ils n’ont pas été dépensés (lecture : ils persistent jusqu’à la fin de la session). Lecture MJ : points temporaires sans plafond, portés par une couche séparée et dépensés avant la Chance permanente ; la réinvocation est refusée tant que le total de Chance reste supérieur à 0.",
+      "v5Summary": "Le livre ne dit pas si les points gagnés dépassent le maximum de Chance du personnage, ni s’ils se perdent à la fin de la session s’ils n’ont pas été dépensés (lecture : ils persistent jusqu’à la fin de la session). Lecture MJ : points temporaires sans plafond, portés par une couche séparée et dépensés avant la Chance permanente ; la réinvocation est refusée tant que le total de Chance reste supérieur à 0.",
       "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
@@ -2781,7 +2781,7 @@
     {
       "id": "divine:miracle:ulric:crush-the-weak",
       "catalogueEntry": null,
-      "v5Summary": "La relance est modélisée comme une relance gratuite de Fortune d'une attaque ratée (mêlée ou distance), une fois par Round, tant que la prière est active.",
+      "v5Summary": "La relance est modélisée comme une relance gratuite de Chance d'une attaque ratée (mêlée ou distance), une fois par Round, tant que la prière est active.",
       "status": "implemented",
       "source": {
         "document": "WFRP_Power_Behind_the_Throne_Companion.pdf",
@@ -19449,7 +19449,7 @@
         "specialization": "Ranald"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": "Le livre ne dit pas si les points gagnés dépassent le maximum de Fortune du personnage, ni s’ils se perdent à la fin de la session s’ils n’ont pas été dépensés (lecture : ils persistent jusqu’à la fin de la session). Lecture MJ : points temporaires sans plafond, portés par une couche séparée et dépensés avant la Chance permanente ; la réinvocation est refusée tant que le total de Chance reste supérieur à 0.",
+      "sourceDelta": "Le livre ne dit pas si les points gagnés dépassent le maximum de Chance du personnage, ni s’ils se perdent à la fin de la session s’ils n’ont pas été dépensés (lecture : ils persistent jusqu’à la fin de la session). Lecture MJ : points temporaires sans plafond, portés par une couche séparée et dépensés avant la Chance permanente ; la réinvocation est refusée tant que le total de Chance reste supérieur à 0.",
       "params": {
         "range": {
           "kind": "self"
@@ -19510,26 +19510,26 @@
       ],
       "labels": {
         "canonicalName": "Cheat the Odds",
-        "effect": "Le prêtre gagne +1 point de Fortune, conservé jusqu’à la fin de la session ; +1 point par +2 DR. Il ne peut pas réinvoquer ce miracle tant qu’il n’est pas retombé à 0 point de Fortune.",
+        "effect": "Le prêtre gagne +1 point de Chance, conservé jusqu’à la fin de la session ; +1 point par +2 DR. Il ne peut pas réinvoquer ce miracle tant qu’il n’est pas retombé à 0 point de Chance.",
         "sourceStatus": "V5 base source checked"
       },
       "clauses": [
         {
           "id": "fortune-gain",
           "mode": "engine",
-          "text": "Le prêtre gagne +1 point de Fortune, qui dure jusqu’à la fin de la session.",
+          "text": "Le prêtre gagne +1 point de Chance, qui dure jusqu’à la fin de la session.",
           "sourceRef": "v5-cheat-the-odds"
         },
         {
           "id": "sl-fortune",
           "mode": "engine",
-          "text": "Par tranche de +2 DR : +1 point de Fortune supplémentaire.",
+          "text": "Par tranche de +2 DR : +1 point de Chance supplémentaire.",
           "sourceRef": "v5-cheat-the-odds"
         },
         {
           "id": "reinvoke-lock",
           "mode": "engine",
-          "text": "Interdit de réinvoquer ce miracle avant d’atteindre 0 point de Fortune.",
+          "text": "Interdit de réinvoquer ce miracle avant d’atteindre 0 point de Chance.",
           "sourceRef": "v5-cheat-the-odds"
         },
         {
@@ -19542,11 +19542,11 @@
       "needsInput": [
         {
           "field": "fortune-zero",
-          "label": "Le prêtre est-il à 0 point de Fortune (réinvocation) ?"
+          "label": "Le prêtre est-il à 0 point de Chance (réinvocation) ?"
         },
         {
           "field": "success-levels",
-          "label": "Nombre de DR obtenus (points de Fortune gagnés : 1 + 1 par +2 DR)."
+          "label": "Nombre de DR obtenus (points de Chance gagnés : 1 + 1 par +2 DR)."
         }
       ]
     },
@@ -25878,7 +25878,7 @@
         "specialization": "Ulric"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": "La relance est modélisée comme une relance gratuite de Fortune d'une attaque ratée (mêlée ou distance), une fois par Round, tant que la prière est active.",
+      "sourceDelta": "La relance est modélisée comme une relance gratuite de Chance d'une attaque ratée (mêlée ou distance), une fois par Round, tant que la prière est active.",
       "params": {
         "range": {
           "kind": "self"
@@ -28130,5 +28130,5 @@
       "needsInput": []
     }
   ],
-  "sourceFingerprint": "sha256:d2f3c50313743d15a95af8b21e28d59f12dcb0068606276907ba4bdc50ac075f"
+  "sourceFingerprint": "sha256:07592060a4f823b9d897b992daedd3582fb602e6fe443879cfb7ce5c1260100c"
 }

@@ -49,8 +49,8 @@ test('Aperçu — le détail nommé correspond exactement au profil écrit par a
   assert.deepEqual(details.movement, { old: 4, new: written.movement });
   assert.equal(written.movement, 5, 'Elfe sylvain');
   const counters = Object.fromEntries(details.counters.map(row => [row.label, [row.old, row.new]]));
-  assert.deepEqual(counters, { Destin: [3, written.extensions.v5.fate], Fortune: [1, written.ficheSnapshot.resources.fortune], Péché: [0, written.extensions.v5.divine.sin], Corruption: [1, written.extensions.v5.corruptionPoints], Résilience: [null, written.extensions.v5.resilience] });
-  assert.deepEqual(counters.Péché, [0, 2]); assert.deepEqual(counters.Corruption, [1, 3]); assert.deepEqual(counters.Fortune, [1, 2]);
+  assert.deepEqual(counters, { Destin: [3, written.extensions.v5.fate], Chance: [1, written.ficheSnapshot.resources.fortune], Péché: [0, written.extensions.v5.divine.sin], Corruption: [1, written.extensions.v5.corruptionPoints], Résilience: [null, written.extensions.v5.resilience] });
+  assert.deepEqual(counters.Péché, [0, 2]); assert.deepEqual(counters.Corruption, [1, 3]); assert.deepEqual(counters.Chance, [1, 2]);
   const names = rows => (rows || []).map(row => row.name);
   const addedTalents = written.talents.filter(row => !old.talents.some(prev => prev.id === row.id && (prev.specialty || '') === (row.specialty || '')));
   assert.deepEqual(details.talents.removed, ['Talent retiré']);

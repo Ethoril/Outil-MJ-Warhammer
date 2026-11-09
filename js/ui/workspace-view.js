@@ -1052,8 +1052,8 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     body.appendChild(momentumButton);
     if (callbacks.getFortune || callbacks.editFortune) {
       const fortune = callbacks.getFortune?.(participant.id);
-      const fortuneButton = button('Fortune : ' + formatV5Balance(fortune), 'workspace-secondary', {
-        'aria-label': 'Modifier la Fortune de ' + participant.name, 'data-focus-key': 'fortune-' + participant.id });
+      const fortuneButton = button('Chance : ' + formatV5Balance(fortune), 'workspace-secondary', {
+        'aria-label': 'Modifier la Chance de ' + participant.name, 'data-focus-key': 'fortune-' + participant.id });
       fortuneButton.dataset.workspaceAction = 'edit-fortune';
       fortuneButton.dataset.actorId = participant.id;
       fortuneButton.disabled = !callbacks.editFortune;

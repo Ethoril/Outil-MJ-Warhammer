@@ -1746,7 +1746,7 @@
           "id": "situation-glorious-demise",
           "contractClauseId": "situation-glorious-demise",
           "mode": "assisted",
-          "text": "Réaction avant Inconscient ; 1 Fortune si Sonné ; attaque immédiate sans consommer le prochain Tour. Activation ou choix temporaire explicite, avec son déclencheur et ses cibles."
+          "text": "Réaction avant Inconscient ; 1 point de Chance si Sonné ; attaque immédiate sans consommer le prochain Tour. Activation ou choix temporaire explicite, avec son déclencheur et ses cibles."
         }
       ]
     },
@@ -5328,7 +5328,7 @@
           "id": "situation-whirlwind",
           "contractClauseId": "situation-whirlwind",
           "mode": "assisted",
-          "text": "1 Fortune, opposition unique, dégâts/localisation communs à tous les engagés, alliés compris ; pas de critique du jet, critiques d’excédent par cible. Activation ou choix temporaire explicite, avec son déclencheur et ses cibles."
+          "text": "1 point de Chance, opposition unique, dégâts/localisation communs à tous les engagés, alliés compris ; pas de critique du jet, critiques d’excédent par cible. Activation ou choix temporaire explicite, avec son déclencheur et ses cibles."
         }
       ]
     },

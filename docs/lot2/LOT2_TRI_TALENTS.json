@@ -1533,7 +1533,7 @@
     {
       "talentId": "talent-glorious-demise",
       "name": "Fin glorieuse",
-      "implementationNotes": "Réaction avant Inconscient ; 1 Fortune si Sonné ; attaque immédiate sans consommer le prochain Tour.",
+      "implementationNotes": "Réaction avant Inconscient ; 1 point de Chance si Sonné ; attaque immédiate sans consommer le prochain Tour.",
       "source": {
         "reference": "Dwarf Player’s Guide (V4), p. 79",
         "effectHash": "sha256:a5e7929864f2a47a0b5df8848f627eb0c0dd3d1c01fd4eafefc3045e5793c911"
@@ -4660,7 +4660,7 @@
     {
       "talentId": "talent-whirlwind-of-death",
       "name": "Tourbillon de mort",
-      "implementationNotes": "1 Fortune, opposition unique, dégâts/localisation communs à tous les engagés, alliés compris ; pas de critique du jet, critiques d’excédent par cible.",
+      "implementationNotes": "1 point de Chance, opposition unique, dégâts/localisation communs à tous les engagés, alliés compris ; pas de critique du jet, critiques d’excédent par cible.",
       "source": {
         "reference": "Dwarf Player’s Guide (V4), p. 81",
         "effectHash": "sha256:c1add86ea7a65b8afa3b0a2ac95b60332fed9f8754039c7ecde456358b0fec2e"

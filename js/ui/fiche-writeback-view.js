@@ -4,7 +4,7 @@
 import { buildFicheCommand, buildUndoCommands, ficheConflictOf, ficheValueForKey, ficheKeyDuplicated, writebackErrorMessage } from '../core/fiche-writeback.js';
 
 const FIELD_LABELS = Object.freeze({
-  destin: 'Destin', fortune: 'Fortune', peche: 'Péché', corruption: 'Corruption',
+  destin: 'Destin', fortune: 'Chance', peche: 'Péché', corruption: 'Corruption',
   cc: 'Capacité de Combat', ct: 'Capacité de Tir', f: 'Force', e: 'Endurance', i: 'Initiative', ag: 'Agilité',
   dex: 'Dextérité', int: 'Intelligence', fm: 'Force Mentale', soc: 'Sociabilité'
 });
@@ -23,7 +23,7 @@ const MANUAL_REASONS = Object.freeze({
 });
 const NOTES = Object.freeze({
   'fiche-changed-tool-unchanged': 'la fiche a changé, l’outil n’a pas bougé : non cochée',
-  'fortune-anchor-unknown': 'valeur de départ de la Fortune inconnue dans l’outil : vérifier avant d’envoyer'
+  'fortune-anchor-unknown': 'valeur de départ de la Chance inconnue dans l’outil : vérifier avant d’envoyer'
 });
 // Ligne de fiche (talent, objet, entrée de suivi) : son nom ; absente : « — ».
 const shown = value => value === null || value === undefined || value === '' ? '—'
