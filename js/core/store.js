@@ -2391,6 +2391,7 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
         const subject = findCorruptionSubject(draft, id);
         if (!subject) throw new TypeError('Personnage introuvable');
         const result = corruptionThresholdPreview(subject, input, baseRevision);
+        if (result.status === 'blocked') throw Object.assign(new Error((result.unresolved || []).join(' ') || 'Test de Corruption interdit.'), { code: 'CORRUPTION_INPUT', userFacing: true });
         if (result.status === 'needs-input') throw Object.assign(new Error('Choix MJ requis avant d’appliquer le Test de Corruption.'), { code: 'CORRUPTION_INPUT', userFacing: true });
         const oldV5 = subject.extensions?.v5 || {};
         let pendingMutation = null;

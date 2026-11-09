@@ -141,10 +141,10 @@ export function previewV5FleeTalentDisengageMove({ actor, disengagedConfirmed, m
 
 /**
  * Q6 T5 : Test de poursuite (L06 p. 158) par le calcul commun (États, talents, couches, séquelles). Test actif : un Inconscient ne
- * le tente pas, un Surpris non plus pendant ce Round (CA14). La poursuite est une course : mouvement et fuite sont donnés ; la vue
- * reste une question au MJ (`context.reliesOnSight`, CA8).
+ * le tente pas, un Surpris non plus pendant ce Round (CA14). La poursuite est une course : le mouvement est donné, la fuite aussi pour
+ * la proie (`fleeing`) ; pour le poursuivant (Brisé) et la vue, le MJ répond (`context.runningOrHiding`, `context.reliesOnSight`, CA8).
  */
-function resolvePursuitActorTest(actor, roll, choice, slBonus, bonusLabel, extraSl = 0, context = {}) {
+function resolvePursuitActorTest(actor, roll, choice, slBonus, bonusLabel, extraSl = 0, context = {}, fleeing = false) {
   const skill = (actor?.skills || []).find(
     row => /athl[ée]tisme|chevaucher|conduite/i.test(row.name || row.nom || '') && row.status === 'resolved' && Number.isInteger(row.total ?? row.value)
   );
@@ -156,7 +156,7 @@ function resolvePursuitActorTest(actor, roll, choice, slBonus, bonusLabel, extra
   if (extraSl !== 0) slModifiers.push({ id: 'pursuit-obstacle-modifier', label: 'Modificateur d’obstacle', amount: extraSl });
   const secondary = previewV5SecondaryTest(actor, { score, roll, kind: 'test', slModifiers,
     test: { characteristic: skill?.carac || 'Ag', skill: skill?.name || skill?.nom || 'Athlétisme', isAction: true },
-    context: { ...(context || {}), involvesMovement: true, runningOrHiding: true } });
+    context: { ...(context || {}), involvesMovement: true, ...(fleeing ? { runningOrHiding: true } : {}) } });
   if (!secondary.ready) return { ready: false, error: secondary.needsInput.map(row => row.label).join(' '), needsInput: secondary.needsInput };
   const preview = secondary.preview;
   if (preview.choiceRequired && !['keep', 'reverse'].includes(choice)) {
@@ -190,7 +190,7 @@ export function resolveV5PursuitStep({
   const pending = (res, prefix, choiceField) => res.needsInput
     ? { ...fail(res.error), needsInput: res.needsInput.map(row => ({ ...row, field: row.field ? `${prefix}.${row.field}` : null })) }
     : fail(res.error, choiceField);
-  const qRes = resolvePursuitActorTest(quarry, quarryRoll, quarryChoice, quarrySlBonus, 'Fuite ! (+1 DR par rang)', 0, quarryContext);
+  const qRes = resolvePursuitActorTest(quarry, quarryRoll, quarryChoice, quarrySlBonus, 'Fuite ! (+1 DR par rang)', 0, quarryContext, true);
   if (!qRes.ready) return pending(qRes, 'quarryContext', 'quarryChoice');
   const pRes = resolvePursuitActorTest(pursuer, pursuerRoll, pursuerChoice, pursuerSlBonus, 'Impitoyable / Acharné (+1 DR par rang)', obstaclePenaltySl, pursuerContext);
   if (!pRes.ready) return pending(pRes, 'pursuerContext', 'pursuerChoice');

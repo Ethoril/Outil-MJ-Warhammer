@@ -164,3 +164,33 @@ test('déploiement de rune Cadai : Inconscient bloque, une question d’État au
   const answered = await deploy([PRONE], { conditionContext: { involvesMovement: false } });
   assert.match(answered.line.text, /Déploiement Cadai/);
 });
+
+// --- Retours de la contre-vérification ---------------------------------------------------------------------------------
+
+const SURPRISED = { key: 'surpris', name: 'Surpris', level: 1 };
+const BROKEN = { key: 'brise', name: 'Brisé', level: 1 };
+
+test('poursuite et rune Cadai : Tests d’action, un Surpris ne les tente pas ce Round (CA14)', async () => {
+  const out = pursue(runner('q'), runner('p', [SURPRISED]));
+  assert.equal(out.ready, false);
+  assert.match(out.error, /Surpris/);
+  await assert.rejects(async () => { const { result } = await deploy([SURPRISED]); if (result?.ok === false) throw new Error(result.error); }, /Surpris/);
+});
+
+test('poursuite : la proie Brisée fuit (pas de pénalité), le poursuivant Brisé pose la question de la fuite au MJ', () => {
+  const witness = pursue(runner('q'), runner('p'));
+  const quarry = pursue(runner('q', [BROKEN]), runner('p'));
+  assert.equal(quarry.quarryTest.sl, witness.quarryTest.sl, 'Brisé : pas de pénalité sur un Test pour fuir');
+  const pursuer = pursue(runner('q'), runner('p', [BROKEN]));
+  assert.equal(pursuer.ready, false);
+  assert.deepEqual(pursuer.needsInput.map(row => row.field), ['pursuerContext.runningOrHiding']);
+  const answered = pursue(runner('q'), runner('p', [BROKEN]), { pursuerContext: { runningOrHiding: false } });
+  assert.equal(answered.pursuerTest.sl, witness.pursuerTest.sl - 1);
+});
+
+test('Corruption (seuil) : la réponse du MJ est gardée jusqu’à l’application', async () => {
+  const store = await storeWith([person('hero', { states: [PRONE], v5: { pendingCorruptionTest: { id: 'p', status: 'pending' }, corruptionPoints: 9 } })]);
+  const preview = store.previewCorruptionThresholdTest('hero', { baseRevision: store.getCorruptionStatus('hero').baseRevision, roll: 45, conditionContext: { involvesMovement: false } });
+  assert.equal(preview.status, 'ready');
+  assert.equal((await store.applyCorruptionThresholdTest('hero', preview)).status, 'applied');
+});
