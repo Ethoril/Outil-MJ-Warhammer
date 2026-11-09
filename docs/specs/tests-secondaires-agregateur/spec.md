@@ -38,7 +38,7 @@ Le MJ a décidé les 05 et 06/11 que tous les Tests, et pas seulement le Test pr
 - **CA15** Le désengagement compte toujours comme un mouvement : À terre et Enchevêtré s'appliquent sans question.
 - **CA16** Les effets « … adverse » posés sur le désengagé ne jouent pas contre l'adversaire qui résiste, comme pour un défenseur au combat.
 - **CA17** La pause de Focalisation est un Test mental pour Clarté d'esprit (p. 251).
-- **CA18** Esprit fort annule aussi les malus propres à un Test (Courroux sur la Prière, Relique négative, difficulté de la Résistance au Courroux, −1 DR de l'infection…), en lecture littérale, comme au combat.
+- **CA18** Obstiné annule aussi les malus propres à un Test (Courroux sur la Prière, Relique négative, difficulté de la Résistance au Courroux, −1 DR de l'infection…), en lecture littérale, comme au combat.
 - **CA19** Déterminé applique les exceptions d'États (Endurance de l'anachorète, Clarté d'esprit…).
 - **CA20** L'État que Déterminé cherche à éviter ne compte pas dans son propre Test de Calme.
 

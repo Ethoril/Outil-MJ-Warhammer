@@ -1,6 +1,6 @@
 // Q6 (docs/specs/tests-secondaires-agregateur/spec.md, S6) : décisions du MJ du 09/11, CA13 à CA20.
 // CA13 séquelles dans le calcul commun ; CA14 Inconscient et Surpris bloquent ; CA15 désengagement = mouvement ; CA16 « … adverse »
-// du désengagé sans effet sur l'adversaire qui résiste ; CA17 pause de Focalisation = Test mental ; CA18 Esprit fort sur les malus
+// du désengagé sans effet sur l'adversaire qui résiste ; CA17 pause de Focalisation = Test mental ; CA18 Obstiné sur les malus
 // propres au Test ; CA19 Déterminé et exceptions d'États ; CA20 l'État évité ne compte pas dans le Calme de Déterminé.
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
@@ -58,7 +58,7 @@ describe('CA13 séquelles durables dans le calcul commun', () => {
     const out = previewV5SecondaryTest(person('a', { v5: sequelae([AG_LOSS, AG_FRACTURE]) }), { score: 40, roll: 23, test: { characteristic: 'E', skill: 'Résistance' } });
     assert.deepEqual([out.result.score, out.disadvantageSources.length, out.rows.length], [40, 0, 0]);
   });
-  test('les pertes durables ne sont pas des pénalités d’État : Esprit fort ne les efface pas', () => {
+  test('les pertes durables ne sont pas des pénalités d’État : Obstiné ne les efface pas', () => {
     const actor = person('a', { talents: ['talent-strong-minded'], states: [STUNNED], v5: sequelae([AG_FRACTURE, { id: 'sq-lang', type: 'language-dr', amount: -1, label: 'Langue mutilée' }]) });
     const out = previewV5SecondaryTest(actor, { score: 40, roll: 23, test: { characteristic: 'Ag', skill: 'Langue (Reikspiel)' }, context: STRONG });
     // Sonné annulé (aucune ligne d'État), séquelle de Langue gardée.
@@ -157,7 +157,7 @@ describe('CA17 pause de Focalisation, Test mental', () => {
   });
 });
 
-describe('CA18 Esprit fort sur les malus propres au Test', () => {
+describe('CA18 Obstiné sur les malus propres au Test', () => {
   const BATTLE = 'divine:blessing:myrmidia:battle';
   const PRAYER = { canSpeak: true, sourceFingerprint: registry.sourceFingerprint, round: 1, targetIds: ['priest'],
     facts: { targets: { priest: { withinRange: true } } }, roll: 23, expiry: { phase: 'endOfRound', round: 6 } };

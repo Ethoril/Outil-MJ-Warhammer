@@ -21,11 +21,11 @@
  *    Caractéristique ou la compétence. Le combat passe la main, le bouclier et l'arme (`test.sequela`) et ses réponses ; un Test
  *    secondaire, sans écran pour ces circonstances, n'applique que les séquelles inconditionnelles (`sequelaNoCircumstanceInput`,
  *    comme le départage d'Initiative), sauf les deux yeux perdus, qui posent la question de la vue des États. Lignes marquées
- *    `durable` : « les pertes durables ne sont pas des pénalités d'État », aucun plafond (Esprit fort, Distrait) ne les efface.
+ *    `durable` : « les pertes durables ne sont pas des pénalités d'État », aucun plafond (Obstiné, Distrait) ne les efface.
  *    `scoreDelta` (Caractéristique perdue) s'ajoute au score du Test.
  *  - Restrictions d'acteur (MJ 09/11 CA14) : Inconscient, aucun Test ; Surpris, aucun Test qui demande d'agir
  *    (`test.isAction` : désengagement, pause et interruption de Focalisation) ; `restrictions` bloque le Test secondaire.
- *  - Plafonds de fin de calcul (`finalizeV5TestModifiers`) : Esprit fort (`talent-strong-minded`, `ignoreNegativeModifiers`,
+ *  - Plafonds de fin de calcul (`finalizeV5TestModifiers`) : Obstiné (`talent-strong-minded`, `ignoreNegativeModifiers`,
  *    Livre de base V5 p. 127, contrat de js/data/v5-additional-talent-contracts.json) annule tout modificateur négatif d'un Test, et
  *    Distrait (`noMomentumOrAdvantage`, v5-talent-actions.js) ôte tout Avantage. Les deux visent un Test quelconque, mais portent
  *    sur la liste complète : l'appelant les applique en dernier, sur tous ses modificateurs (le combat le fait à la même place
@@ -181,7 +181,7 @@ export function resolveV5TestModifiers(actor, test = {}, context = {}) {
 
 /**
  * Plafonds de fin de calcul, sur la liste complète de l'appelant (modifiée sur place, comme le faisait `buildCombatTest`) :
- * Distrait (`noMomentumOrAdvantage`) ôte tout Avantage ; Esprit fort (`ignoreNegativeModifiers`, V5 p. 127) ramène à 0 tout
+ * Distrait (`noMomentumOrAdvantage`) ôte tout Avantage ; Obstiné (`ignoreNegativeModifiers`, V5 p. 127) ramène à 0 tout
  * modificateur négatif et ôte tout Désavantage. Les lignes `durable` (séquelles, CA13) échappent aux deux, comme au combat où
  * elles sont ajoutées après les plafonds.
  */
