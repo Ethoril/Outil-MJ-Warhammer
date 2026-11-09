@@ -19,15 +19,15 @@ Chaque tâche est un brief autonome pour une session (Opus : règles et store). 
   Fichiers : `js/core/v5-test-modifiers.js`, `v5-combat-rules.js`, `engagements.js`, `v5-magic-talents.js` (et les scores de `v5-magic-casting.js`, `v5-magic-channelling.js`, `v5-magic-dispel.js`), `v5-test-context.js` (et les scores de `v5-divine-engine.js`, `v5-divine-store.js`, `v5-broken-escape.js`), `v5-effects.js`, `v5-talent-replacements.js`, `resolution.js`, `store.js`, `js/ui/workspace/plateau.js`, `tests/unit/moteur/q6-decisions-09-11.test.js`.
   CA : CA13 à CA20. Acceptation : fichier de test, `combat/**`, `moteur/**`, `magie/lancement-focalisation`, `divin/**`, `sequelles/**` verts, `timeout 120 node tests/engagements-plateau-browser.mjs`.
 
-- [ ] **T3 · Magie secondaire de premier niveau.** Objectif : interruption de Focalisation (Avantages et Désavantages compris), méditation, relance Cadai, déploiement Cadai, Arcanes impitoyables passent par la fonction commune. Reprendre aussi un reste de T1 : au lancer et à la Focalisation, la difficulté et l'armure sont ajoutées après le calcul commun, donc Esprit fort ne les annule pas (corrigé pour la Dissipation). Après : T1.
+- [x] **T3 · Magie secondaire de premier niveau.** Objectif : interruption de Focalisation (Avantages et Désavantages compris), méditation, relance Cadai, déploiement Cadai, Arcanes impitoyables passent par la fonction commune. Reprendre aussi un reste de T1 : au lancer et à la Focalisation, la difficulté et l'armure sont ajoutées après le calcul commun, donc Esprit fort ne les annule pas (corrigé pour la Dissipation). Après : T1. Livré : `ec13d6a`.
   Fichiers : `js/core/v5-magic-channelling.js`, `js/core/v5-magic-talents.js` (méditation), `js/core/v5-magic-high.js`, `js/core/v5-magic-arcane-unforgiving.js`, la commande `v5-cadai-deploy` de `js/core/store.js`, test commun.
   CA : CA1, CA9, CA10.
 
-- [ ] **T4 · Monture et chutes.** Objectif : Chevaucher, Désarçonnement, Surpris à cheval, Endurance après Croche-pied monté, échappée de Filet ; le doublon `store.js` (Désarçonnement) appelle le calcul de `resolution.js` au lieu de le refaire. Après : T0 ; pas en même temps que T3 ni T5 (`store.js`).
+- [x] **T4 · Monture et chutes.** Objectif : Chevaucher, Désarçonnement, Surpris à cheval, Endurance après Croche-pied monté, échappée de Filet ; le doublon `store.js` (Désarçonnement) appelle le calcul de `resolution.js` au lieu de le refaire. Après : T0 ; pas en même temps que T3 ni T5 (`store.js`). Livré : `c4384c7, e5d3166`.
   Fichiers : `js/core/resolution.js` (plans de monture, Croche-pied, Filet), `js/core/store.js` (commandes de monture), test commun, `combat/empoignade-et-monture.test.js`.
   CA : CA1, CA3, CA9, CA10.
 
-- [ ] **T5 · Hors combat.** Objectif : Corruption, poursuite, extraction de projectile. Après : T4 (`store.js`).
+- [x] **T5 · Hors combat.** Objectif : Corruption, poursuite, extraction de projectile. Après : T4 (`store.js`). Livré : `bfe54ae, fdd7b33, 5168918`.
   Fichiers : `js/core/store.js` (`resolvedCorruptionTest`), `js/core/v5-broken-escape.js` (poursuite), `js/core/store/api-v5-combat-actions.js`, test commun.
   CA : CA1, CA9, CA10.
 
@@ -35,11 +35,11 @@ Chaque tâche est un brief autonome pour une session (Opus : règles et store). 
   Fichiers : `js/core/v5-combat-fumbles.js`, `js/core/v5-supplemental-equipment.js`, `js/core/v5-aftermath.js`, `js/core/v5-talent-replacements.js`, libellés dans `js/ui/resolution-panel.js` et l'écran de convalescence, test commun.
   CA : CA8 (séquelle À terre), CA12, CA9.
 
-- [ ] **T7 · Tests de sorts au fil des tours.** Objectif : les ~19 appels de `v5-magic-turn.js` (Calme contre la mort compris) passent par la fonction commune, des deux côtés pour les oppositions. Après : T1.
+- [x] **T7 · Tests de sorts au fil des tours.** Objectif : les ~19 appels de `v5-magic-turn.js` (Calme contre la mort compris) passent par la fonction commune, des deux côtés pour les oppositions. Après : T1. Livré : `02c3525, d8f28b3, 0618858`.
   Fichiers : `js/core/v5-magic-turn.js`, `js/core/v5-magic-attributes.js`, test commun, `magie/traditions-et-invocations.test.js`, `combat/liaison-cause-mort.test.js`.
   CA : CA1, CA3, CA7, CA9, CA10.
 
-- [ ] **T8 · Contrats de sorts** `[P avec T7]`. Objectif : les ~11 appels de `v5-spell-contracts.js` (oppositions, Souffle, résistances, Cor, Calme). Après : T1.
+- [x] **T8 · Contrats de sorts** `[P avec T7]`. Objectif : les ~11 appels de `v5-spell-contracts.js` (oppositions, Souffle, résistances, Cor, Calme). Après : T1. Livré : `f67817b, 0329061`.
   Fichiers : `js/core/v5-spell-contracts.js`, test commun, `magie/contrats-*.test.js`.
   CA : CA1, CA3, CA7, CA9, CA10.
 
@@ -53,8 +53,8 @@ Chaque tâche est un brief autonome pour une session (Opus : règles et store). 
   Fichiers en plus : `js/core/resolution.js`, commandes de monture de `js/core/store.js` (ne commiter que ses propres hunks : T5 travaille dans le même fichier), `js/core/v5-magic-casting.js`, `js/core/v5-magic-channelling.js`, `js/core/v5-magic-dispel.js`.
   Fichiers : `js/core/v5-magic-turn.js`, `js/core/v5-magic-attributes.js`, `js/core/v5-spell-contracts.js`, appelants passifs de T6, `spec.md` (CA23-CA25), tests `tests/unit/moteur/q6-t11-suites.test.js`.
 
-- [ ] **T9 · Fusion.** Suite complète une fois, parcours navigateur des zones touchées sous `timeout 120`, `verifier` sur toute la spec, CA11 (sauvegarde ancienne rechargée). Release proposée au MJ.
+- [x] **T9 · Fusion.** Suite complète une fois, parcours navigateur des zones touchées sous `timeout 120`, `verifier` sur toute la spec, CA11 (sauvegarde ancienne rechargée). Release proposée au MJ. Livré : `287ad8b, 0618858`.
 
-  Avancement du 09/11 après passation : CA35 et CA36 sont en cours de raccordement et de contre-vérification. Les essais de fin de Tour, du vortex et des scènes préparées ont révélé des cas supplémentaires ; ne pas considérer T9 comme achevée tant que la revue complète, la couverture CA1 et les écarts de présentation CA5 ne sont pas clos. En convalescence, une avance regroupant plusieurs Tests du même patient avec Obstiné est refusée atomiquement : avancer jour par jour permet de ne choisir qu'un Test.
+  Clôture du 09/11 : CA35 (quota unique d'Obstiné par séance) et CA36 (Obstiné proposé sur tous les Tests secondaires, y compris Chevaucher, arquebuse, Warp Blade, Déterminé, résistances de sorts, fin de Tour et scènes préparées) raccordés et contre-vérifiés (`287ad8b`), ainsi que CA27 pour les Tests récurrents d'Endurance en fin de Round (`0618858`). En convalescence, une avance regroupant plusieurs Tests du même patient avec Obstiné est refusée atomiquement : avancer jour par jour permet de ne choisir qu'un Test.
 
 Ordre suggéré : T0 → (T1 ∥ T2 ∥ T6) → (T3 ∥ T4 ∥ T7 ∥ T8) → T5 → T9. T3 et T4 touchent tous deux `store.js` : si on les lance ensemble, T3 laisse la commande `v5-cadai-deploy` à T5.
