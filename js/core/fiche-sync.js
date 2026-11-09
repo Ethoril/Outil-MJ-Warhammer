@@ -165,6 +165,7 @@ export function ficheSnapshot(charId, fiche, metadata = {}) {
   const raceKey = normalizeName(race).replace(/[-_]+/g, ' ');
   const movement = Object.hasOwn(MOVEMENT, raceKey) ? MOVEMENT[raceKey] : null;
   if (race && movement === null) warnings.push({ field: 'movement', code: 'unknown-species', severity: 'warning', message: `Espèce « ${race} » inconnue : saisir ou confirmer le Mouvement du profil.`, consequence: 'movement-preserved' });
+  else if (own(raw, 'race') && !raceKey) warnings.push({ field: 'movement', code: 'race-missing', severity: 'warning', message: 'Espèce non renseignée sur la fiche : Mouvement du profil conservé.', consequence: 'movement-preserved' });
   const max = coverage.talents !== 'present' ? null : woundsMax({ totals, race, talents: talentsRaw });
   if (coverage.talents !== 'present' && Object.keys(totals).length) warnings.push({ field: 'woundsMax', code: 'talents-unavailable', severity: 'warning', message: 'Talents indisponibles : maximum de Blessures antérieur conservé.', consequence: 'health-preserved' });
   const catalog = getReferenceCatalogue();
@@ -598,6 +599,7 @@ export function planProfileSync(snapshot, profile, choices = {}) {
   const health = planHealthSync(profile, usableMax(snapshot), { template: true });
   Object.assign(updated, maxPatch(profile, usableMax(snapshot), { template: true }));
   updated.extensions = { ...(profile.extensions || {}), ficheId: snapshot.charId };
+  delete updated.extensions.ficheHealthWarning;
   Object.assign(updated, importFicheDurables(updated, snapshot, profile.ficheSnapshot));
   // Keep latest source status, but each excluded collection retains its previous playable data.
   updated.ficheSnapshot = cloneValue(snapshot);
@@ -686,11 +688,11 @@ export function applyFicheSync(draft, entries) {
       return result;
     };
     const copyFields = subject => {
-      const health = planHealthSync(subject, usableMax(entry.snapshot));
+      const extensions = { ...(subject.extensions || {}), ficheId: entry.snapshot.charId };
+      delete extensions.ficheHealthWarning;
       const output = { ...subject, caracs: { ...subject.caracs, ...entry.snapshot.caracs },
         ...maxPatch(subject, usableMax(entry.snapshot)),
-        extensions: { ...(subject.extensions || {}), ficheId: entry.snapshot.charId,
-          ...(health.warning ? { ficheHealthWarning: health.warning } : {}) },
+        extensions,
         ficheSnapshot: cloneValue(updated.ficheSnapshot) };
       for (const key of ['skills', 'talents', 'equipment', 'spells', 'prayers']) if (entry.snapshot.coverage?.[key] === 'present') output[key] = cloneValue(updated[key]);
       for (const key of ['initiative', 'movement', 'race']) if (updated[key] != null && (key !== 'movement' || entry.snapshot.movement != null)) output[key] = updated[key];

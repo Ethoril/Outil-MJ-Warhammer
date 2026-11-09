@@ -1,4 +1,4 @@
-const CACHE_NAME = 'wfrp-cache-v3.45.0';
+const CACHE_NAME = 'wfrp-cache-v3.45.1';
 
 const ASSETS_TO_CACHE = [
   './',
@@ -204,7 +204,6 @@ const ASSETS_TO_CACHE = [
   './js/core/fiche-writeback.js',
   './js/core/keywords.js',
   './js/core/roll-qualities.js',
-  './js/data/keywords-fallback.json',
   './js/data/keyword-engines.js',
   './js/data/rules.js',
   './js/data/crits.js',
@@ -344,6 +343,9 @@ self.addEventListener('fetch', (event) => {
           caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseToCache));
         }
         return networkResponse;
+      }).catch((err) => {
+        if (event.request.mode === 'navigate') return caches.match('./index.html');
+        throw err;
       });
     })
   );

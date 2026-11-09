@@ -1,5 +1,6 @@
 import { uid } from './models.js';
 import { casterCaracs } from './creature-abilities.js';
+import { creatureSizeOf } from './creature-size.js';
 import {randomVortexStep,oppositeCamp} from './v5-magic-turn.js';
 import {buildParticipantFromBestiary,summonProfileLibrary} from './bestiary-profiles.js';
 import {spellObjectChoices,ARCANE_WEAPON_PROFILES} from './equipment.js';
@@ -1913,7 +1914,7 @@ function previewSpellExecutionWithQuestions(actor, contractOrId, targets = [], o
     if(effects.animalFriend && options.targetTests?.[target.id]?.targetSize>=domainFacts.casterSize)return {ready:false,valid:false,status:'invalid-target-admissibility',error:'Amitié animale : la cible doit être strictement plus petite que le lanceur.',contract};
     const rule = effects.targetRule || {};
     const traits = [...(target.traits || []), ...(target.extensions?.traits || [])].map(fold).join(' ');
-    const size = /petite|small/.test(traits) ? 'small' : /enorme|enormous|monstr/.test(traits) ? 'enormous' : /grande|large/.test(traits) ? 'large' : 'average';
+    const size = creatureSizeOf(target).key;
     if ((rule.requiredFact && options.targetTests?.[target.id]?.[rule.requiredFact]!==true) || (rule.exceptAnyTrait?.some(t=>hasTargetNatureOrTrait(target,t))) || (rule.requiredAllTraits?.some(group=>!group.some(t=>hasTargetNatureOrTrait(target,t)))) || (rule.exceptLore && hasArcaneMagicLore(target,rule.exceptLore)) || (rule.exceptTrait && hasTargetNatureOrTrait(target,rule.exceptTrait)) || (rule.requiredTrait && !hasTargetNatureOrTrait(target,rule.requiredTrait)) || (rule.requiredAnyTrait && !rule.requiredAnyTrait.some(t=>hasTargetNatureOrTrait(target,t))) || (rule.allowedSizes && !rule.allowedSizes.includes(size)) || (rule.alliesOnly && target.camp!==actor.camp) || (rule.enemiesOnly && !isHostileTarget(actor,target))) {
       targetReceipt.resisted = true; targetReceipt.banished = false; targetReceipt.destroyed = false; targetReceipt.actions.push({ kind: 'excluded', summary: 'Cible exemptée ou inadmissible selon les clauses du sort.' }); targetResults.push(targetReceipt); continue;
     }

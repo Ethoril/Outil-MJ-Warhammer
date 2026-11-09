@@ -35,12 +35,17 @@ const traitListOf = participant => [
 ];
 const describe = key => ({ key, rank: SIZE_RANKS[key], label: SIZE_LABELS[key] });
 
-/** « Size (Large) » / « Taille (Énorme) » (suite éventuelle ignorée) → `{ key, rank, label }` ; `null` sinon. */
+/** « Size (Large) » / « Taille (Énorme) » (suite éventuelle ignorée) ou mot de taille nu → `{ key, rank, label }` ; `null` sinon. */
 export function parseSizeTrait(trait) {
-  const match = /^\s*([^(]+?)\s*\(\s*([^)]*?)\s*\)/.exec(traitText(trait));
-  if (!match || !NAMES.has(fold(match[1]))) return null;
-  const key = SIZE_WORDS[fold(match[2])];
-  return key ? describe(key) : null;
+  const text = traitText(trait);
+  const match = /^\s*([^(]+?)\s*\(\s*([^)]*?)\s*\)/.exec(text);
+  if (match) {
+    if (!NAMES.has(fold(match[1]))) return null;
+    const key = SIZE_WORDS[fold(match[2])];
+    return key ? describe(key) : null;
+  }
+  const bare = SIZE_WORDS[fold(text)];
+  return bare ? describe(bare) : null;
 }
 
 // Espèce lue sur la fiche d'un PJ (champ `race`) : Taille V5 de l'espèce (Halfelin et Gnome Petits, Ogre Grand ; rappel du MJ, 07/11/2026).

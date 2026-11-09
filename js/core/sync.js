@@ -130,7 +130,10 @@ export function initFirebaseSync(onUserConnected, onStatus = () => {}, onUserDis
           };
         },
         subscribe(callback) {
-          return onValue(dbRef, snapshot => callback(snapshot.val()));
+          return onValue(dbRef, snapshot => callback(snapshot.val()), error => {
+            console.warn('⚠️ Lecture RTDB interrompue:', error?.message || error);
+            onStatus('offline');
+          });
         },
         async readLegacy() {
           const snapshot = await get(legacyDbRef);

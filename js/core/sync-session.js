@@ -319,6 +319,7 @@ export function createSyncSession({
       } else if (!storedSession || storedSession.protocolVersion !== PROTOCOL_VERSION) {
         await persistence.saveAtomic({ state: localState, session });
       }
+      let readFailed = false;
       try {
         const rawRemote = await transport.read();
         remoteAvailable = rawRemote != null && !(typeof rawRemote === 'object' && Object.keys(rawRemote).length === 0);
@@ -328,6 +329,7 @@ export function createSyncSession({
           onStatus('error');
           throw error;
         }
+        readFailed = true;
         remoteAvailable = false;
         remote = null;
         onStatus('offline');
@@ -377,7 +379,7 @@ export function createSyncSession({
           });
         });
       }
-      onStatus(conflictState ? 'conflict' : 'ready');
+      if (!readFailed) onStatus(conflictState ? 'conflict' : 'ready');
       return { session: clone(session), remote: clone(remote), remoteAvailable, localState: clone(localState) };
     })().finally(() => { opening = null; });
     return opening;

@@ -25,12 +25,12 @@ export function initKeyboardShortcuts(Store, CombatEngine, goToSpace, { advanceT
       e.preventDefault();
       if (e.shiftKey) {
         const ok = await Store.redo?.();
-        if (ok) showToast('↷ Action rétablie (⌘⇧Z)', 'info');
+        if (ok) showToast('↷ Action rétablie (Ctrl+Maj+Z / ⌘⇧Z)', 'info');
         return;
       }
       if (Store.canUndo()) {
         const ok = await Store.undo();
-        if (ok) showToast('⏪ Action annulée (⌘Z)', 'info');
+        if (ok) showToast('⏪ Action annulée (Ctrl+Z / ⌘Z)', 'info');
       } else {
         showToast('Aucune action à annuler', 'info');
       }

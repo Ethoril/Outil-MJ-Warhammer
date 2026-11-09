@@ -5747,6 +5747,7 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
       bus.emit('combat');
       bus.emit('log');
     }
+    persistence?.close?.();
     persistence = persistenceFactory(contextId);
     hydrationInFlight = hydratePersistence().finally(() => { hydrationInFlight = null; });
     return hydrationInFlight.then(result => {

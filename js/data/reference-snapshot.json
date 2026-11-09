@@ -10301,7 +10301,7 @@
     "sources": {
       "Mots Clés Armes et Armures": {
         "url": "https://docs.google.com/spreadsheets/d/1SCnAJCthdto7ROjovuyDYmz4y9GJBBLfThuYNmYR_Cs/gviz/tq?tqx=out:csv&headers=1&sheet=Mots%20Cl%C3%A9s%20Armes%20et%20Armures",
-        "sha256": "e9873c2ab6d40e6a652494cfee5cdbdf14005d993603474d63e01f3961189917"
+        "sha256": "1630bd962864be881ea3b82522a2d32cd75c2362521bf7f3efe8f25a8c5aa4a3"
       },
       "Armes Corps à Corps": {
         "url": "https://docs.google.com/spreadsheets/d/1SCnAJCthdto7ROjovuyDYmz4y9GJBBLfThuYNmYR_Cs/gviz/tq?tqx=out:csv&headers=1&sheet=Armes%20Corps%20%C3%A0%20Corps",
@@ -26592,7 +26592,7 @@
     {
       "worksheet": "Mots Clés Armes et Armures",
       "url": "https://docs.google.com/spreadsheets/d/1SCnAJCthdto7ROjovuyDYmz4y9GJBBLfThuYNmYR_Cs/gviz/tq?tqx=out:csv&headers=1&sheet=Mots%20Cl%C3%A9s%20Armes%20et%20Armures",
-      "sha256": "e9873c2ab6d40e6a652494cfee5cdbdf14005d993603474d63e01f3961189917",
+      "sha256": "1630bd962864be881ea3b82522a2d32cd75c2362521bf7f3efe8f25a8c5aa4a3",
       "fetchedAt": "2026-11-05",
       "status": "local-v5-mirror"
     },

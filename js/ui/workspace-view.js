@@ -72,7 +72,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
   const refs = createShell(mount, { showNavigation });
   const aftermathPanel = createV5AftermathPanel({ Store, refresh: () => render() });
   const campaign = mountCampaignWorkspace({ root: refs.campaign, Store, aftermathPanel, onAdvanceTime: async () => {
-    try { await openCampaignTimeDialog({ Store }); }
+    try { await openCampaignTimeDialog({ Store, returnFocus: '[data-campaign-focus="advance"]' }); }
     catch (error) { actions.showToast?.(userMessage(error, 'Le temps de campagne est indisponible.'), 'error'); }
   } });
   const secondaryOpen = new Map();

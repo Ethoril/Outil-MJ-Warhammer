@@ -102,11 +102,20 @@ export function createPersistence({
       };
       request.onsuccess = () => {
         const db = request.result;
-        db.onversionchange = () => db.close();
+        db.onversionchange = () => {
+          dbPromise = undefined;
+          db.close();
+        };
         resolve(db);
       };
-      request.onerror = () => reject(request.error || new Error('Ouverture IndexedDB impossible'));
-      request.onblocked = () => reject(new Error('Ouverture IndexedDB bloquée'));
+      request.onerror = () => {
+        dbPromise = undefined;
+        reject(request.error || new Error('Ouverture IndexedDB impossible'));
+      };
+      request.onblocked = () => {
+        dbPromise = undefined;
+        reject(new Error('Ouverture IndexedDB bloquée'));
+      };
     });
     return dbPromise;
   }

@@ -21,12 +21,12 @@ function timeText(seconds) {
   return parts.join(' ') || '0 s';
 }
 
-export function openCampaignTimeDialog({ Store, returnFocus, initialAmount, initialUnit, defaultReason } = {}) {
+export function openCampaignTimeDialog({ Store, returnFocus } = {}) {
   if (!Store?.advanceCampaignTime) throw new TypeError('Avance de campagne indisponible.');
   const baseRevision = Store.getLocalRevision();
   const clock = clockOf(Store),savedState=JSON.parse(Store.getFullJSON());
   return new Promise(resolve => {
-    const opener = returnFocus || document.activeElement;
+    const opener = typeof returnFocus === 'string' ? null : (returnFocus || document.activeElement);
     const dialog = node('dialog', null, 'tool-sheet v5-effect-dialog campaign-time-dialog');
     const form = node('form'); form.noValidate = true;
     const heading = node('h2', 'Temps de campagne'); heading.id = 'campaign-time-title';
@@ -80,10 +80,6 @@ export function openCampaignTimeDialog({ Store, returnFocus, initialAmount, init
       } catch { preview.textContent = 'Précisez une durée positive, exprimable en secondes entières.'; }
     };
     amount.addEventListener('input',()=>{morningConfirm.checked=false;updatePreview();});unit.addEventListener('change',()=>{morningConfirm.checked=false;updatePreview();});
-    if (initialAmount != null) amount.value = String(initialAmount);
-    if (initialUnit != null) unit.value = String(initialUnit);
-    if (defaultReason != null) reason.value = String(defaultReason);
-    if (initialAmount != null) updatePreview();
     form.addEventListener('submit', async event => {
       event.preventDefault(); if (busy) return;
       try {
@@ -116,7 +112,8 @@ export function openCampaignTimeDialog({ Store, returnFocus, initialAmount, init
     dialog.addEventListener('cancel', event => { if (busy) event.preventDefault(); });
     dialog.addEventListener('close', () => {
       dialog.remove();
-      if (opener?.isConnected && opener.checkVisibility()) opener.focus();
+      const target = typeof returnFocus === 'string' ? document.querySelector(returnFocus) : opener;
+      if (target?.isConnected && (typeof target.checkVisibility !== 'function' || target.checkVisibility())) target.focus();
       resolve(outcome);
     }, { once: true });
     dialog.showModal(); amount.focus();

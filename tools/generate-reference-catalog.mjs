@@ -123,23 +123,28 @@ if(process.argv.includes('--equipment-only')){
  const builder='// Generated from fiches/tools/refresh-equipment-catalog.mjs. Regenerate; do not edit.\n'+helpers+'\nexport function buildEquipmentRows(tables) {\n'+sheet+'\n'+body+'\nreturn {items,keywords};\n}\n';
  await writeFile(resolve(root,'js/data/reference-equipment-builder.js'),builder);
  let equipment=sourceEquipment;
- const tables={};let mirrorAvailable=true;
+ const tables={};const mirrorHashes={};let mirrorAvailable=true;
  for(const worksheet of ['Mots Clés Armes et Armures','Armes Corps à Corps','Armes à Distance','Armures']){
-  try{tables[worksheet]=parseReferenceCSV(await readFile(resolve(root,'js/data/reference-source-csv',`${worksheet}.csv`),'utf8'));}
+  try{
+   const csv=await readFile(resolve(root,'js/data/reference-source-csv',`${worksheet}.csv`),'utf8');
+   mirrorHashes[worksheet]=hash(csv);
+   tables[worksheet]=parseReferenceCSV(csv);
+  }
   catch(error){if(Object.keys(sourceEquipment.sources||{}).length>=4)throw new Error(`Miroir CSV requis absent : ${worksheet}.csv`,{cause:error});mirrorAvailable=false;break;}
  }
  if(mirrorAvailable){
   const {buildEquipmentRows}=await import(new URL(`../js/data/reference-equipment-builder.js?${Date.now()}`,import.meta.url));
   const rebuilt=buildEquipmentRows(tables);
   const catalogVersion=`equipment:${hash(JSON.stringify(rebuilt))}`;
-  equipment={...sourceEquipment,catalogVersion,items:rebuilt.items.map(item=>({...item,catalogVersion})),keywords:rebuilt.keywords,
+  const sources=Object.fromEntries(Object.entries(sourceEquipment.sources||{}).map(([k,v])=>[k,mirrorHashes[k]?{...v,sha256:mirrorHashes[k]}:v]));
+  equipment={...sourceEquipment,sources,catalogVersion,items:rebuilt.items.map(item=>({...item,catalogVersion})),keywords:rebuilt.keywords,
    keywordHistory:{...(sourceEquipment.keywordHistory||{})}};
   if(prior.equipment?.catalogVersion&&prior.equipment.catalogVersion!==catalogVersion)
    equipment.keywordHistory[prior.equipment.catalogVersion]=prior.equipment.keywords;
  }
  const next={...prior,equipment,sourceFiles};
  next.sourceManifest=await refreshMagicSourceManifest((prior.sourceManifest||[]).map(row=>sourceRows[row.worksheet]
-  ?{...row,...sourceRows[row.worksheet],status:'local-v5-mirror',fetchedAt:equipment.fetchedAt}
+  ?{...row,...sourceRows[row.worksheet],...(mirrorHashes[row.worksheet]?{sha256:mirrorHashes[row.worksheet]}:{}),status:'local-v5-mirror',fetchedAt:equipment.fetchedAt}
   :row));
  const canonical=(key,value)=>['catalogVersion','contentVersion','version','descriptionSnapshotVersion','fetchedAt','publishedAt'].includes(key)?undefined:value&&typeof value==='object'&&!Array.isArray(value)?Object.fromEntries(Object.keys(value).sort().map(k=>[k,value[k]])):value;
  const useful={skills:next.published.skills,talentContract:next.published.talents,

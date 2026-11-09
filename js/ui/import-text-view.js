@@ -165,7 +165,7 @@ export function initTextImportView({ mount, hosted = false, parser = parseProfil
     root.appendChild(previewButton);
     if (parsed) {
       const count = parsed.profiles.length;
-      const summary = document.createElement('p'); summary.textContent = `${plural(count, 'profil')} · ${parsed.status === 'ready' ? (count > 1 ? 'prêts' : 'prêt') : 'à vérifier'}`; root.appendChild(summary);
+      const summary = document.createElement('p'); summary.textContent = count === 0 ? 'Aucun profil trouvé' : `${plural(count, 'profil')} · ${parsed.status === 'ready' ? (count > 1 ? 'prêts' : 'prêt') : 'à vérifier'}`; root.appendChild(summary);
       parsed.profiles.forEach(profile => root.appendChild(profilePreview(profile)));
       const review = reviewItems(parsed);
       if (review.length) {
@@ -185,7 +185,7 @@ export function initTextImportView({ mount, hosted = false, parser = parseProfil
         // Texte posé à chaque changement : la zone `status` l'annonce aux lecteurs d'écran.
         staleNote.textContent = fresh ? '' : label.stale;
         staleNote.hidden = fresh;
-        importButton.disabled = importing || !fresh || (parsed.status !== 'ready' && !confirmed);
+        importButton.disabled = importing || count === 0 || !fresh || (parsed.status !== 'ready' && !confirmed);
       };
       refresh();
       importButton.addEventListener('click', async () => {

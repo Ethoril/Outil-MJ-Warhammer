@@ -146,11 +146,13 @@ function counterRows(state, charId, base) {
     const tool = toolCounter(state, charId, field);
     if (tool.value === null) continue;
     const raw = Object.hasOwn(base.fields || {}, field) ? base.fields[field] : null;
+    const baseCanonical = raw === null || (typeof raw === 'string' && /^\d{0,4}$/.test(raw));
     const ficheNumber = ficheCounterNumber(raw) ?? (zeroWhenAbsent ? 0 : null);
     if (ficheNumber === tool.value) continue;
     const ficheValue = raw === null ? null : String(raw);
     const row = { key: `counter:${field}`, op: 'counter', label, ficheValue, toolValue: String(tool.value), manual: false };
-    if (tool.value > 9999) Object.assign(row, { manual: true, reason: 'value-out-of-range', change: null });
+    if (!baseCanonical) Object.assign(row, { manual: true, reason: 'base-unknown', change: null });
+    else if (tool.value > 9999) Object.assign(row, { manual: true, reason: 'value-out-of-range', change: null });
     else row.change = { op: 'counter', field, base: ficheValue, value: String(tool.value), label };
     if (tool.disagree) row.warning = 'copies-disagree';
     if (field === 'fortune' && row.change) {
@@ -220,13 +222,13 @@ function caracRows(state, charId, base) {
     if (pending === 0) continue;
     const label = text(total > 0 ? `Séquelles permanentes : ${CARACS[key]} −${total} au total` : `Séquelles permanentes levées : ${CARACS[key]}`, 200);
     const ficheBase = base.carac?.[key]?.base;
-    const known = Number.isSafeInteger(Number(ficheBase)) && ficheBase !== '' && ficheBase !== null && typeof ficheBase !== 'boolean';
-    const value = known ? Number(ficheBase) - pending : null;
-    const row = { key: `carac:${key}`, op: 'carac', label, ficheValue: known ? Number(ficheBase) : null, toolValue: value, manual: false,
+    const known = typeof ficheBase === 'number' && Number.isSafeInteger(ficheBase) && ficheBase >= 0;
+    const value = known ? ficheBase - pending : null;
+    const row = { key: `carac:${key}`, op: 'carac', label, ficheValue: known ? ficheBase : null, toolValue: value, manual: false,
       meta: { caracReportedBefore: reported, caracReportedAfter: total, caracSourcesBefore: reportedSources, caracSourcesAfter: sources } };
     if (!known) Object.assign(row, { manual: true, reason: 'base-unknown', change: null });
     else if (value < 0) Object.assign(row, { manual: true, reason: 'loss-exceeds-base', change: null });
-    else row.change = { op: 'carac', carac: key, base: Number(ficheBase), value, label };
+    else row.change = { op: 'carac', carac: key, base: ficheBase, value, label };
     // Une Base qui remonte n'est jamais pré-cochée.
     if (pending < 0) row.defaultUnchecked = true;
     rows.push(row);
@@ -709,7 +711,7 @@ export function applyConflictChoice(state, charId, key, choice, ficheValue) {
   }
   if (op === 'carac' && Object.hasOwn(CARACS, name)) {
     const value = Number(ficheValue);
-    if (!Number.isSafeInteger(value) || ficheValue === null || ficheValue === '') throw new TypeError('Base de la fiche illisible : à faire à la main.');
+    if (typeof ficheValue === 'boolean' || !Number.isSafeInteger(value) || value < 0 || ficheValue === null || ficheValue === '') throw new TypeError('Base de la fiche illisible : à faire à la main.');
     setFicheCaracBase(next, charId, name, value);
     if (choice === 'fiche') {
       const { total, sources } = lossTotal(state, charId, name, resolvedLosses(state, charId).losses[name]);

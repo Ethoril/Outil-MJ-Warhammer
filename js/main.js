@@ -300,10 +300,11 @@ const activeSpace = () => document.querySelector('.tab.is-active')?.dataset.work
 tabArray.forEach((t, idx) => {
   t.addEventListener('click', () => goToSpace(t.dataset.workspaceSpace || 'prepare'));
   t.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowLeft' || e.key === 'Home' || e.key === 'End') {
       e.preventDefault();
-      const dir = e.key === 'ArrowRight' ? 1 : -1;
-      const nextIdx = (idx + dir + tabArray.length) % tabArray.length;
+      const nextIdx = e.key === 'Home' ? 0
+        : e.key === 'End' ? tabArray.length - 1
+        : (idx + (e.key === 'ArrowRight' ? 1 : -1) + tabArray.length) % tabArray.length;
       const nextTab = tabArray[nextIdx];
       if (nextTab && nextTab.dataset.tab) {
         goToSpace(nextTab.dataset.workspaceSpace || 'prepare');
@@ -1841,8 +1842,9 @@ on(DOM.combat.fileInput, 'change', (e) => {
     try {
       const preview = Store.previewImport(ev.target.result);
       const { profiles, participants, rejected, repaired, replacedProfiles, replacedParticipants } = preview.counts;
-      const summary = `Importer ${profiles} profil(s) et ${participants} participant(s) ?\n` +
-        `${replacedProfiles + replacedParticipants} élément(s) remplacé(s), ${repaired} réparé(s), ${rejected} rejeté(s).`;
+      const incomingEncounters = Array.isArray(preview.data?.encounters) ? preview.data.encounters.length : 0;
+      const summary = `Importer ${profiles} profil(s), ${participants} participant(s) et ${incomingEncounters} rencontre(s) ?\n` +
+        `La partie actuelle (horloge de campagne, suivis et rencontres) sera entièrement remplacée (${replacedProfiles + replacedParticipants} élément(s) remplacé(s), ${repaired} réparé(s), ${rejected} rejeté(s)).`;
       showToast(summary.replace('\n', ' — '), 'info');
       if (!confirm(summary)) return;
       await awaitStore(Store.loadFromJSON(ev.target.result), 'Chargement');
