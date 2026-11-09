@@ -104,6 +104,7 @@ import { reminderFlagTexts } from './v5-magic-reminder-flags.js';
 import { resolveSpecificOvercast, specificOvercastReminder, raiseTraitRating, SPECIFIC_OVERCAST_KINDS } from './v5-magic-overcast-options.js';
 import { normalizeArcaneOptions, previewArcaneUnforgiving, applyArcaneArmorDamage } from './v5-magic-arcane-unforgiving.js';
 import { getReferenceCatalogue } from './reference-catalog.js';
+import { previewV5SecondaryTest, secondaryTestDetail, resolveV5TestModifiers } from './v5-test-modifiers.js';
 
 export const V5_SPELL_CONTRACTS_VERSION = 'v5-spell-contracts-2026-10-10.3';
 
@@ -841,6 +842,49 @@ function spellSkillMatches(skill,name) {
   return canonical(skill.name || skill.nom || skill.sourceName)===canonical(name);
 }
 
+/**
+ * Q6 · T8 (docs/specs/tests-secondaires-agregateur/) : Test exigé par un contrat de sort (option, opposition, Souffle,
+ * résistance, Cor, Calme…), calculé par le calcul commun du combat (`previewV5SecondaryTest` : États, talents, sorts et
+ * prières, séquelles, plafonds Obstiné et Distrait), MJ 06/11 Q19. Les modificateurs propres au sort (`slModifiers`,
+ * `advantageSources`) s'ajoutent avant. `participant: false` : le testeur n'est pas un participant (score fixe d'une puissance
+ * invoquée, monture saisie par le MJ) : ni États ni couches, il garde son score (CA3). `role: 'defender'` pour le camp qui
+ * résiste à une opposition : il ne lit pas les clés « … adverse » du lanceur, comme un défenseur au combat (CA16).
+ * `choice` : option de jet imposée ; `'first'` garde la première option (comportement antérieur) ; à défaut, la meilleure.
+ * Rend `{ ready: true, test, detail }` (`test` au format de `selectV5Test`) ou `{ ready: false, blocked?, needsInput, error }` :
+ * une précision d'État manquante (CA8) ou une restriction (Inconscient, Surpris, CA14) arrête le Test.
+ */
+/** Libellé d'un Test de Caractéristique, pour les clés de couche (« Force Mentale »…). */
+const STAT_TEST_LABELS = { CC: 'Capacité de Combat', CT: 'Capacité de Tir', F: 'Force', E: 'Endurance', I: 'Initiative', Ag: 'Agilité', Dex: 'Dextérité',
+  Int: 'Intelligence', FM: 'Force Mentale', Soc: 'Sociabilité' };
+function spellContractTest(tester, { score, roll, kind = 'test', stat = null, skill = '', role = 'actor', opponent = null, participants = [], context = {},
+  slModifiers = [], advantageSources = [], choice = null, participant = true } = {}) {
+  if (!participant) {
+    const preview = previewV5Test({ score, roll, kind, slModifiers, advantageSources });
+    return { ready: true, test: selectV5Test(preview, choice && choice !== 'first' ? choice : preview.options[0].id), detail: [] };
+  }
+  const label = skill || STAT_TEST_LABELS[stat] || '';
+  // Défiance magique et autres avantages propres au sort : comptés une seule fois si le calcul commun les rend déjà.
+  const common = advantageSources.length ? resolveV5TestModifiers(tester, { kind, characteristic: stat, skill: label, skillCharacteristic: stat, role, opponent, participants }, context || {}) : null;
+  const known = new Set((common?.advantageSources || []).flatMap(row => [row.id, row.label].filter(Boolean)));
+  const ownAdvantages = advantageSources.filter(row => !known.has(row.id) && !known.has(row.label));
+  const secondary = previewV5SecondaryTest(tester, { score, roll, kind, slModifiers, advantageSources: ownAdvantages, context: context || {},
+    test: { characteristic: stat, skill: label, skillCharacteristic: stat, role, opponent, participants } });
+  const name = tester?.name || tester?.id || 'Le testeur';
+  if (!secondary.ready) return { ready: false, blocked: Boolean(secondary.blocked), needsInput: secondary.needsInput,
+    error: secondary.blocked ? `${name} ne peut pas faire le Test de ${label} : ${secondary.restrictions.join(' ')}`
+      : `${name}, Test de ${label} : à préciser avant le Test : ${secondary.needsInput.map(row => row.label).join(' ; ')}` };
+  const optionId = choice === 'first' ? secondary.preview.options[0].id : choice || secondary.optionId;
+  // Détail (CA5) seulement quand le calcul commun a joué : sans État ni effet, le reçu reste celui d'avant (CA9).
+  const detail = secondary.rows.length || ownAdvantages.length < advantageSources.length
+    ? secondaryTestDetail({ ...secondary, modifiers: secondary.modifiers.map(row => ({ ...row, label: row.label || row.id })) }) : [];
+  return { ready: true, test: selectV5Test(secondary.preview, optionId), detail };
+}
+/** Refus d'un aperçu de sort quand un Test du contrat ne peut pas être résolu (CA8, CA14). */
+const spellTestRefusal = (run, contract) => ({ ready: false, valid: false, status: run.blocked ? 'test-blocked' : 'condition-input-required',
+  error: run.error, needsInput: run.needsInput, contract });
+/** Détail des modificateurs d'un Test du contrat (CA5), rangé sur le reçu de la cible quand il n'est pas vide. */
+const noteSpellTest = (receipt, key, run) => { if (run.detail?.length) (receipt.testDetails ||= {})[key] = run.detail; };
+
 function previewSecondaryRecipients(contract, actor, options, spellNature, sl, primaryResults=[]) {
   const effects = contract.effects || {};
   const participants = options.participants || [];
@@ -1253,7 +1297,9 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
     if(rule.test){const spec=rule.test,die=domainFacts['optionRoll_'+id];
       if(!Number.isInteger(die)||die<1||die>100)return {ready:false,valid:false,status:'mj-fact-required',error:'Option '+id+' : saisir le d100 de '+spec.skill+'.',contract};
       const skill=(actor.skills || []).find(s=>spellSkillMatches(s,spec.skill));
-      const test=selectV5Test(previewV5Test({score:effectiveSkillScore(actor,skill?.total ?? skill?.value ?? actor.caracs[spec.stat],spec.stat),roll:die,slModifiers:[{id:'spell-option',amount:spec.modifierSl}]}),'keep');success=test.success;optionTests.push({id,test});
+      const run=spellContractTest(actor,{score:effectiveSkillScore(actor,skill?.total ?? skill?.value ?? actor.caracs[spec.stat],spec.stat),roll:die,stat:spec.stat,skill:skill?.name || spec.skill,participants:options.participants || [],context:options.conditionContext,slModifiers:[{id:'spell-option',amount:spec.modifierSl}]});
+      if(!run.ready)return spellTestRefusal(run,contract);
+      const test=run.test;success=test.success;optionTests.push({id,test,...(run.detail.length?{detail:run.detail}:{})});
     }
     if(rule.requiredFact && domainFacts[rule.requiredFact]!==true)return {ready:false,valid:false,status:'mj-fact-required',error:'Option '+id+' : '+rule.requiredFact+' doit être confirmé.',contract};
     if(!success)continue;activeOptionRules.push({...rule,id,steps:entry.steps});
@@ -1772,7 +1818,12 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
       const spec=effects.opposedTest,die=options.targetTests?.[target.id]?.opponentRoll,casterDie=domainFacts.opposedActorRoll;
       if(!Number.isInteger(die)||die<1||die>100||!Number.isInteger(casterDie)||casterDie<1||casterDie>100)return {ready:false,valid:false,status:'dice-required',error:'Deux d100 explicites du Test opposé requis.',contract};
       const skill=(target.skills || []).find(s=>spellSkillMatches(s,spec.targetSkill));
-      const casterTest=selectV5Test(previewV5Test({score:spec.casterScore ?? Number(actor.caracs[spec.casterStat]),roll:casterDie}),'keep'),targetTest=selectV5Test(previewV5Test({score:effectiveSkillScore(target,skill?.total ?? skill?.value ?? target.caracs[spec.targetStat],spec.targetStat),roll:die,slModifiers:spec.targetSlModifier?[{id:'opposition',label:'Difficulté de l’opposition',amount:spec.targetSlModifier}]:[]}),'keep');
+      // Q6 · T8 (CA3) : calcul commun des deux côtés ; un score fixé par le contrat (puissance invoquée, « Mork te veut ! ») n'est pas un participant.
+      const casterRun=spellContractTest(actor,{score:spec.casterScore ?? Number(actor.caracs[spec.casterStat]),roll:casterDie,stat:spec.casterStat,skill:spec.casterSkill || '',opponent:target,participants:options.participants || [],context:options.conditionContext,participant:spec.casterScore==null});
+      if(!casterRun.ready)return spellTestRefusal(casterRun,contract);
+      const targetRun=spellContractTest(target,{score:effectiveSkillScore(target,skill?.total ?? skill?.value ?? target.caracs[spec.targetStat],spec.targetStat),roll:die,stat:spec.targetStat,skill:skill?.name || spec.targetSkill,role:'defender',opponent:actor,participants:options.participants || [],context:options.targetTests?.[target.id]?.conditionContext,slModifiers:spec.targetSlModifier?[{id:'opposition',label:'Difficulté de l’opposition',amount:spec.targetSlModifier}]:[]});
+      if(!targetRun.ready)return spellTestRefusal(targetRun,contract);
+      const casterTest=casterRun.test,targetTest=targetRun.test;noteSpellTest(targetReceipt,'opposedCaster',casterRun);noteSpellTest(targetReceipt,'opposedTarget',targetRun);
       targetReceipt.opposedTest={casterTest,targetTest,won:casterTest.sl>targetTest.sl || Boolean(spec.casterWinsTies) && casterTest.sl===targetTest.sl};
       if(spec.resistOnLoss && !targetReceipt.opposedTest.won){targetReceipt.resisted=true;targetReceipt.actions.push({kind:'resisted',summary:'FM opposée : '+casterTest.sl+' contre '+targetTest.sl+', sort évité.'});targetResults.push(targetReceipt);continue;}targetReceipt.banished=(effects.banishOnOpposedWin || effects.destroyOnOpposedWin) && targetReceipt.opposedTest.won;targetReceipt.destroyed=Boolean(effects.destroyOnOpposedWin && targetReceipt.banished);
       targetReceipt.actions.push({kind:'opposed-test',summary:'FM '+casterTest.sl+' contre '+spec.targetSkill+' '+targetTest.sl+' : '+(effects.destroyOnOpposedWin?(targetReceipt.destroyed?'détruit':'non détruit'):effects.banishOnOpposedWin?(targetReceipt.banished?'banni sans Blessure':'non banni'):targetReceipt.opposedTest.won?'effet appliqué':'effet résisté')+'.'});
@@ -1784,12 +1835,17 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
       const distance=first?answers.distance:answers.fromPrimary;
       if(!Number.isFinite(distance)||distance<0||distance>limit)return {ready:false,valid:false,status:'mj-fact-required',error:'Souffle : distance déclarée hors limite ou manquante ('+limit+' mètres).',contract};
       if(!Number.isInteger(options.ctRoll)||options.ctRoll<1||options.ctRoll>100)return {ready:false,valid:false,status:'dice-required',error:'Souffle : saisir le Test de CT du lanceur (d100).',contract};
-      const shot=selectV5Test(previewV5Test({score:Number(actor.caracs.CT),roll:options.ctRoll,kind:'ranged',slModifiers:[{id:'breath-ct',amount:0}]}),'keep');
+      // Q6 · T8 (CA3) : Test de CT du lanceur et Esquive de la cible par le calcul commun (V5 p. 243 : Test Difficile +0, opposable à l'Esquive).
+      const shotRun=spellContractTest(actor,{score:Number(actor.caracs.CT),roll:options.ctRoll,kind:'ranged',stat:'CT',skill:'Capacité de Tir',opponent:target,participants:options.participants || [],context:options.conditionContext,slModifiers:[{id:'breath-ct',amount:0}]});
+      if(!shotRun.ready)return spellTestRefusal(shotRun,contract);
+      const shot=shotRun.test;noteSpellTest(targetReceipt,'breathShot',shotRun);
       let defended=null;
       if(answers.opposeBreath!==false){
         if(!Number.isInteger(answers.dodgeRoll)||answers.dodgeRoll<1||answers.dodgeRoll>100)return {ready:false,valid:false,status:'dice-required',error:target.name+' : saisir l’Esquive ou déclarer le refus d’opposition.',contract};
         const skill=(target.skills || []).find(s=>spellSkillMatches(s,'Esquive'));
-        defended=selectV5Test(previewV5Test({score:effectiveSkillScore(target,skill?.total ?? skill?.value ?? target.caracs.Ag,'Ag'),roll:answers.dodgeRoll}),'keep');
+        const dodgeRun=spellContractTest(target,{score:effectiveSkillScore(target,skill?.total ?? skill?.value ?? target.caracs.Ag,'Ag'),roll:answers.dodgeRoll,stat:'Ag',skill:skill?.name || 'Esquive',role:'defender',opponent:actor,participants:options.participants || [],context:answers.conditionContext});
+        if(!dodgeRun.ready)return spellTestRefusal(dodgeRun,contract);
+        defended=dodgeRun.test;noteSpellTest(targetReceipt,'breathDodge',dodgeRun);
       }
       targetReceipt.breath={shot,defended,variant:attributeLore};
       if(defended && defended.sl>shot.sl){targetReceipt.resisted=true;targetReceipt.actions.push({kind:'resisted',summary:'Esquive bat le Test de CT : Souffle évité.'});targetResults.push(targetReceipt);continue;}
@@ -1867,14 +1923,26 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
         }
       } else if (Number.isFinite(Number(explicitTargetRoll))) {
         const resRoll = Number(explicitTargetRoll);
-        const testPrev = previewV5Test({
+        // Q6 · T8 : résistance par le calcul commun. Le score de la monture saisi par le MJ (scoreWhenFact) n'est pas celui d'un
+        // participant : il reste nu. Défiance magique (inverser tout Test exigé par un sort) n'est ajoutée ici que si le calcul
+        // commun ne la rend pas déjà (comptée une fois).
+        const resistanceRun = spellContractTest(target, {
           score: targetScore,
           roll: resRoll,
           kind: 'test',
+          stat: statKey,
+          skill: foundSkill?.name || skillName,
+          ...(secondaryTestSpec.opposed ? { role: 'defender', opponent: actor } : {}),
+          participants: options.participants || [],
+          context: options.targetTests?.[target.id]?.conditionContext,
+          participant: !(secondaryTestSpec.scoreWhenFact && options.targetTests?.[target.id]?.[secondaryTestSpec.scoreWhenFact] === true),
           slModifiers: modifierSl !== 0 ? [{ id: 'spell-mod', label: 'Modificateur du sort', amount: modifierSl }] : [],
-          advantageSources: magicTalentRank(target,'magic-defiance') ? [{id:'magic-defiance',label:'Défiance magique'}] : []
+          advantageSources: magicTalentRank(target,'magic-defiance') ? [{id:'magic-defiance',label:'Défiance magique'}] : [],
+          choice: options.targetTests?.[target.id]?.choice || 'first'
         });
-        const selectedRes = selectV5Test(testPrev, options.targetTests?.[target.id]?.choice || testPrev.options?.[0]?.id || 'keep');
+        if (!resistanceRun.ready) return spellTestRefusal(resistanceRun, contract);
+        noteSpellTest(targetReceipt, 'resistance', resistanceRun);
+        const selectedRes = resistanceRun.test;
         const resisted = secondaryTestSpec.opposed
           ? (selectedRes.success && selectedRes.sl >= (Number(sl) || 0))
           : Boolean(selectedRes.success);
@@ -2159,7 +2227,9 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
       computedConditions.push(...(target.id===effectiveTargets[0].id?effects.primaryConditions:effects.splashConditions));
       const spec=effects.followupTest,die=options.targetTests?.[target.id]?.[spec.rollField];
       if(!Number.isInteger(die)||die<1||die>100)return {ready:false,valid:false,error:target.name+' : second Test de '+spec.skill+' (d100) requis.',contract};
-      const skill=(target.skills || []).find(s=>spellSkillMatches(s,spec.skill)),test=selectV5Test(previewV5Test({score:effectiveSkillScore(target,skill?.total ?? target.caracs[spec.stat],spec.stat),roll:die,slModifiers:[{id:'followup',amount:spec.modifierSl}]}),'keep');
+      const skill=(target.skills || []).find(s=>spellSkillMatches(s,spec.skill)),followupRun=spellContractTest(target,{score:effectiveSkillScore(target,skill?.total ?? target.caracs[spec.stat],spec.stat),roll:die,stat:spec.stat,skill:skill?.name || spec.skill,participants:options.participants || [],context:options.targetTests?.[target.id]?.conditionContext,slModifiers:[{id:'followup',amount:spec.modifierSl}]});
+      if(!followupRun.ready)return spellTestRefusal(followupRun,contract);
+      const test=followupRun.test;noteSpellTest(targetReceipt,'followup',followupRun);
       targetReceipt.followupTest=test;if(!test.success){computedConditions.push(...spec.conditions);Object.assign(computedSpecialState,spec.state);}
     }
     if(effects.factTable){const table=effects.factTable,outcome=table.outcomes.find(o=>domainFacts[table.fact]>=o.min&&domainFacts[table.fact]<=o.max);computedConditions.push(...(outcome.conditions || []));Object.assign(computedSpecialState,outcome.state || {});targetReceipt.actions.push({kind:'table',summary:outcome.label});}
@@ -2173,7 +2243,9 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
       if(!ids.includes(target.id))continue;
       const die=options.targetTests?.[target.id]?.optionResistanceRoll;
       if(!Number.isInteger(die)||die<1||die>100)return {ready:false,valid:false,error:target.name+' : d100 de FM contre suffocation requis.',contract};
-      const test=selectV5Test(previewV5Test({score:effectiveSkillScore(target,target.caracs.FM,'FM'),roll:die}),'keep');
+      const suffocationRun=spellContractTest(target,{score:effectiveSkillScore(target,target.caracs.FM,'FM'),roll:die,stat:'FM',participants:options.participants || [],context:options.targetTests?.[target.id]?.conditionContext});
+      if(!suffocationRun.ready)return spellTestRefusal(suffocationRun,contract);
+      const test=suffocationRun.test;noteSpellTest(targetReceipt,'optionResistance',suffocationRun);
       targetReceipt.optionResistanceTest=test;optionSuffocation=!test.success;
       if(optionSuffocation){computedSpecialState.suffocating=true;const lost=Math.min(1,Number(target.hp));targetReceipt.woundsLost+=lost;targetReceipt.finalHp-=lost;}
     }
@@ -2187,7 +2259,9 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
     if(effects.purifyAffliction === true){
       const spec=effects.secondaryTest,die=options[spec.rollField];
       if(!Number.isInteger(die)||die<1||die>100)return {ready:false,valid:false,status:'secondary-test-required',error:'Purification : saisir le d100 de Résistance du lanceur.',contract};
-      const skill=(actor.skills || []).find(s=>spellSkillMatches(s,spec.skill)),secondary=selectV5Test(previewV5Test({score:effectiveSkillScore(actor,skill?.total ?? skill?.value ?? actor.caracs[spec.stat],spec.stat),roll:die}),'keep');
+      const skill=(actor.skills || []).find(s=>spellSkillMatches(s,spec.skill)),purifyRun=spellContractTest(actor,{score:effectiveSkillScore(actor,skill?.total ?? skill?.value ?? actor.caracs[spec.stat],spec.stat),roll:die,stat:spec.stat,skill:skill?.name || spec.skill,participants:options.participants || [],context:options.conditionContext});
+      if(!purifyRun.ready)return spellTestRefusal(purifyRun,contract);
+      const secondary=purifyRun.test;noteSpellTest(targetReceipt,'purify',purifyRun);
       targetReceipt.afflictionReceipt={kind:domainFacts.affliction,name:domainFacts.afflictionName,purged:Boolean(secondary?.success),transferred:Boolean(secondary?.fumble)};
       computedSpecialState.afflictionReceipt=targetReceipt.afflictionReceipt;
       targetReceipt.actions.push({kind:'affliction-receipt',summary:domainFacts.afflictionName+' : '+(secondary?.success?'affection unique purgée':secondary?.fumble?'affection contractée par le lanceur':'aucune purification')+' ; à reporter sur la fiche.'});
@@ -2217,7 +2291,11 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
       const immune=target.extensions?.v5?.specialStates?.fearTerrorImmunity;
       if(!immune && (!Number.isInteger(die)||die<1||die>100))return {ready:false,valid:false,status:'dice-required',error:'Cor : saisir le d100 de Peur (Calme) de chaque ennemi.',contract};
       const skill=(target.skills || []).find(s=>spellSkillMatches(s,'Calme'));
-      const fear=immune?{success:true,sl:1,immune:true}:selectV5Test(previewV5Test({score:effectiveSkillScore(target,skill?.total ?? skill?.value ?? target.caracs.FM,'FM'),roll:die,slModifiers:[{id:'horn-morale',amount:-2}]}),'keep');
+      // Q6 · T8 : Peur (1) immédiate (Cor d'Andar, WoM p. 111) par le calcul commun, −2 DR du Cor en plus.
+      const fearRun=immune?null:spellContractTest(target,{score:effectiveSkillScore(target,skill?.total ?? skill?.value ?? target.caracs.FM,'FM'),roll:die,stat:'FM',skill:skill?.name || 'Calme',participants:options.participants || [],context:options.targetTests?.[target.id]?.conditionContext,slModifiers:[{id:'horn-morale',amount:-2}]});
+      if(fearRun && !fearRun.ready)return spellTestRefusal(fearRun,contract);
+      if(fearRun)noteSpellTest(targetReceipt,'fear',fearRun);
+      const fear=immune?{success:true,sl:1,immune:true}:fearRun.test;
       targetReceipt.fearTest=fear;targetReceipt.actions.push({kind:'fear-test',summary:'Peur (1) : '+(fear.success?'réussie/immunisé':'ratée')+', '+fear.sl+' DR.'});
       if(!fear.success)computedConditions.push({key:'fear-of-talent',name:'Peur du Cor d’Andar (1)',level:1,authorId:actor.id,rating:1,mode:'sl',successes:0,restriction:'cannotGainMomentum'});
     }}
@@ -2262,8 +2340,11 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
       const optionalRoll=choice[optionalTest.rollField];
       if(!Number.isInteger(optionalRoll)||optionalRoll<1||optionalRoll>100)return {ready:false,valid:false,status:'dice-required',error:target.name+' : saisir le d100 du Test de '+optionalTest.label+'.',contract};
       const remaining=(target.states || []).filter(s=>!(effects.removeConditions || []).some(name=>fold(name)===fold(s.name)));
-      const penalty=Math.max(0,...['sonne','extenue','empoisonne','brise'].map(key=>remaining.filter(s=>fold(s.key || s.name)===key).reduce((n,s)=>n+Number(s.level || 1),0)));
-      const test=selectV5Test(previewV5Test({score:Number(target.caracs?.[optionalTest.stat]),roll:optionalRoll,slModifiers:[{id:'optional-spell-test',amount:(optionalTest.modifierSl || 0)-penalty}]}),'keep');
+      // Q6 · T8 : Test de Frénésie (FM, V5 p. 184) par le calcul commun, sur les États restant après ceux que le sort retire
+      // (Cœurs Enflammés, V5 p. 248 : Brisé et Exténué ôtés avant le Test) ; la pénalité d'États n'est plus recalculée ici.
+      const optionalRun=spellContractTest({...target,states:remaining},{score:Number(target.caracs?.[optionalTest.stat]),roll:optionalRoll,stat:optionalTest.stat,participants:options.participants || [],context:choice.conditionContext,slModifiers:[{id:'optional-spell-test',amount:optionalTest.modifierSl || 0}]});
+      if(!optionalRun.ready)return spellTestRefusal(optionalRun,contract);
+      const test=optionalRun.test;noteSpellTest(targetReceipt,'optional',optionalRun);
       targetReceipt.optionalTest=test;
       if(test.success)computedConditions.push(structuredClone(optionalTest.successCondition));
       targetReceipt.actions.push({kind:'optional-test',summary:optionalTest.label+' : '+(test.success?'réussi':'raté')+', '+test.sl+' DR.'});
@@ -2627,8 +2708,12 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
         continue;
       }
       const calmRollNum = Number(fellowshipRoll);
-      const calmTestPrev = previewV5Test({ score: socScore, roll: calmRollNum, kind: 'test', slModifiers: [] });
-      const calmSelected = selectV5Test(calmTestPrev, calmTestPrev.options?.[0]?.id || 'keep');
+      // Q6 · T8 : Test de Sociabilité du lanceur (Calme, WoM p. 80) par le calcul commun.
+      const calmRun = spellContractTest(actor, { score: socScore, roll: calmRollNum, kind: 'test', stat: 'Soc', skill: foundSocSkill?.name || 'Sociabilité',
+        participants: options.participants || [], context: options.conditionContext, choice: 'first' });
+      if (!calmRun.ready) return spellTestRefusal(calmRun, contract);
+      noteSpellTest(targetReceipt, 'calm', calmRun);
+      const calmSelected = calmRun.test;
       const calmPassed = Boolean(calmSelected.success);
       targetReceipt.calmTest = {
         skill: 'Sociabilité',

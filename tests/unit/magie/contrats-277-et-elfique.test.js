@@ -650,6 +650,7 @@ test('Second Contrôle Codex P1 #1 : Les 277 contrats (dont les 76 effects.type=
   const specialContracts = all.filter(c => c.effects?.type === 'special');
   assert.ok(specialContracts.length >= 70, `Au moins 70 contrats special (${specialContracts.length})`);
 
+  const PROBE_CONDITION_ANSWERS = { involvesMovement: false, runningOrHiding: false, reliesOnSight: false, requiresSight: false, usesFellowship: false, conditionPenaltyMode: 'sl' };
   const probeCaster = {
     id: 'probe-caster',
     name: 'Probe Caster',
@@ -709,13 +710,18 @@ test('Second Contrôle Codex P1 #1 : Les 277 contrats (dont les 76 effects.type=
     else if (c.effects?.special === 'verdant-apotheosis' || c.effects.restoreCorpse) targets = [probeCorpse];
 
     const choiceOpts = getContractChoiceOptions(c);
-    const prev = previewSpellExecution(probeCaster, c, targets, {
+    // Q6 · T8 : un lanceur Aveuglé ne peut pas faire le Test de CT du Souffle (calcul commun : pas de tir Aveuglé) ; la sonde
+    // du Souffle tire donc sans Aveuglé, le blocage est vérifié dans tests/unit/moteur/q6-t8-contrats-sorts.test.js.
+    const caster = c.effects?.breath ? { ...probeCaster, states: probeCaster.states.filter(state => state !== 'Aveuglé') } : probeCaster;
+    const prev = previewSpellExecution(caster, c, targets, {
       ...declaredAnswers(targets.map(t=>t.id)), chosenLore:c.domain==='arcane'?'fire':undefined, sl: Math.max(6, (c.cn || 0) + 2),
       totalCastingSl: (c.cn || 0) + 6,
       attributeActive: false,
       fellowshipRoll: 20,
       enduranceRoll: 20,
-      locationRoll: 34, targetTests: Object.fromEntries(targets.map(t=>[t.id,{...declaredTarget,...(c.isCatalogue && ['life','light','death','shadow'].includes(c.domain)?declared5BTarget:{}),deathDelaySec:30,encumbranceStep:0,unburdenedM:4,unburdenedAg:50}])), monsterProfile: { name: 'Sonde',size:'large', M: 6, hp: 20, caracs: { CC: 50, CT: 0, F: 60, E: 60, I: 40, Ag: 40, Dex: 0, Soc: 10 }, traits: [] }, beastKey: 'wolf', chosenStats: ['CC'], roll3d10: 15, direction: 'N', directionRoll:4, willpowerSuccess: true, distanceRoll: 10,
+      // Q6 · T8 (CA8) : les États de la sonde (Aveuglé, Brisé, Sonné…) posent leurs questions aux Tests du contrat ; réponses déclarées.
+      conditionContext: PROBE_CONDITION_ANSWERS,
+      locationRoll: 34, targetTests: Object.fromEntries(targets.map(t=>[t.id,{...declaredTarget,conditionContext:PROBE_CONDITION_ANSWERS,...(c.isCatalogue && ['life','light','death','shadow'].includes(c.domain)?declared5BTarget:{}),deathDelaySec:30,encumbranceStep:0,unburdenedM:4,unburdenedAg:50}])), monsterProfile: { name: 'Sonde',size:'large', M: 6, hp: 20, caracs: { CC: 50, CT: 0, F: 60, E: 60, I: 40, Ag: 40, Dex: 0, Soc: 10 }, traits: [] }, beastKey: 'wolf', chosenStats: ['CC'], roll3d10: 15, direction: 'N', directionRoll:4, willpowerSuccess: true, distanceRoll: 10,
       ...(c.effects?.special === 'arcane-unforgiving' ? { arcaneTargets: { [targets[0].id]: { magicItemPresent: false } } } : {}),
       ...(choiceOpts.length > 0 ? { mjChoice: choiceOpts[0] } : {}),
       // V5 pp. 245–255 : faits explicites pour les nouveaux contrats de Domaines.
