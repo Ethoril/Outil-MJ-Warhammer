@@ -23,6 +23,7 @@ import { SUPPLEMENT_ERRORS } from './core/supplement-loader.js';
 import { mountSupplementErrors } from './ui/supplement-errors-banner.js';
 import { initKeyboardShortcuts } from './ui/keyboard.js';
 import { initThemeManager } from './ui/theme.js';
+import { statusSummary, LOCAL_STATUS_LABELS, SYNC_STATUS_LABELS } from './ui/status-summary.js';
 import { openV5EffectInputDialog, chooseV5RecoveryMethod, recoveryOptionsFor as normalizeV5RecoveryOptions } from './ui/v5-effect-dialog.js';
 import { renderObstinateChoice } from './ui/test-questions.js';
 import { openV5FortuneDialog } from './ui/v5-fortune-dialog.js';
@@ -55,20 +56,6 @@ const INITIATIVE_INPUT_LABELS = Object.freeze({ characteristic: 'Initiative', di
 
 // Indicateur unique de la barre du haut : il résume les deux statuts détaillés
 // (#local-status, #sync-status), qui restent lisibles dans la section « État » du menu.
-const SYNC_BUSY = ['sending', 'pending', 'connecting', 'transition'];
-const SYNC_OK = ['synced', 'connected', 'ready'];
-function statusSummary(local, sync) {
-  if (local === 'sandbox') return { label: 'Rencontre test : rien n’est enregistré', tone: 'warn' };
-  if (sync === 'conflict') return { label: 'Conflit à résoudre', tone: 'danger' };
-  if (local === 'error' || local === 'unavailable') return { label: 'Enregistrement local en échec', tone: 'danger' };
-  if (sync === 'error') return { label: 'Erreur de synchronisation', tone: 'warn' };
-  if (sync === 'offline') return { label: 'Hors ligne', tone: 'warn' };
-  if (SYNC_BUSY.includes(sync)) return { label: 'Synchronisation…', tone: 'neutral' };
-  if (local === 'saving') return { label: 'Enregistrement…', tone: 'neutral' };
-  if (SYNC_OK.includes(sync)) return { label: 'Synchronisé', tone: 'ok' };
-  if (sync === 'signedOut' && local === 'saved') return { label: 'Enregistré sur cet appareil', tone: 'ok' };
-  return { label: 'Vérification…', tone: 'neutral' };
-}
 
 function renderStatusIndicator() {
   const indicator = qs('#status-indicator');
@@ -84,14 +71,7 @@ function renderStatusIndicator() {
 
 function updateLocalStatus(status) {
   const el = qs('#local-status');
-  const labels = {
-    loading: 'Local : vérification…',
-    saving: 'Local : sauvegarde…',
-    unavailable: 'Local : indisponible',
-    saved: 'Local : enregistré',
-    error: 'Local : erreur de sauvegarde',
-    sandbox: 'Local : rencontre test, rien n’est enregistré'
-  };
+  const labels = LOCAL_STATUS_LABELS;
   if (el) {
     el.textContent = labels[status] || status;
     el.dataset.status = status;
@@ -101,19 +81,10 @@ function updateLocalStatus(status) {
 
 function updateSyncStatus(status) {
   const el = qs('#sync-status');
-  const labels = {
-    connecting: 'Connexion…',
-    pending: 'En attente d’envoi',
-    sending: 'Synchronisation…',
-    synced: 'Synchronisé',
-    connected: 'Connecté',
-    ready: 'Session prête',
-    transition: 'Migration de la file…',
-    conflict: 'Conflit à résoudre',
-    signedOut: 'Mode invité — local uniquement',
-    offline: 'Hors ligne — synchronisation suspendue',
-    error: 'Erreur distante — nouvelle tentative'
-  };
+  const labels = SYNC_STATUS_LABELS;
+  // BOOT-09 : le bouton de nouvel essai n'apparaît que si le SDK Firebase n'a pas démarré.
+  const retry = qs('#btn-sync-retry');
+  if (retry) retry.hidden = status !== 'sdkFailed';
   if (el) {
     el.textContent = labels[status] || status;
     el.dataset.status = status;
@@ -238,22 +209,25 @@ function startRemoteAdapter() {
   const retryQuery = remoteAdapterAttempt === 0 ? '' : `?retry=${remoteAdapterAttempt}`;
   remoteAdapterAttempt++;
   updateSyncStatus('connecting');
-  import(`./core/sync.js${retryQuery}`).then(({ initFirebaseSync }) => {
+  import(`./core/sync.js${retryQuery}`).then(({ initFirebaseSync, firebaseReady }) => {
     initFirebaseSync(
       syncHandle => Store.attachSync(syncHandle),
-      updateSyncStatus,
+      // BOOT-02 : sans stockage local, le Store refuse la synchronisation ; « Connecté » ne doit pas masquer ce refus.
+      status => updateSyncStatus(status === 'connected' && !appPersistence ? 'noLocalStore' : status),
       () => {
         Store.detachSync();
         if (Store.switchContext) Store.switchContext('guest').catch(error => console.warn('Retour au contexte invité impossible:', error));
       }
     );
-    remoteAdapterLoaded = true;
+    // BOOT-09 : si le SDK n'a pas démarré, l'adaptateur reste relançable (retour en ligne ou bouton « Réessayer la connexion »).
+    remoteAdapterLoaded = firebaseReady();
   }).catch(error => {
     console.warn('⚠️ Adaptateur Firebase indisponible — mode local conservé:', error);
     updateSyncStatus('offline');
   }).finally(() => { remoteAdapterStarting = false; });
 }
 if (typeof window !== 'undefined') window.addEventListener('online', startRemoteAdapter);
+on(qs('#btn-sync-retry'), 'click', startRemoteAdapter);
 
 export const Combat = createCombatEngine(Store);
 
@@ -1822,7 +1796,7 @@ on(DOM.combat.btnExport, 'click', async () => {
   }
 });
 on(DOM.combat.btnSaveFile, 'click', () => {
-  const json = Store.getFullJSON();
+  const json = Store.getFullJSON({ includeHistory: false });
   const blob = new Blob([json], { type: "application/json" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');

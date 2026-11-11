@@ -35,6 +35,9 @@ try {
   console.warn('⚠️ Impossible d\'initialiser Firebase:', e);
 }
 
+/** Faux si le SDK Firebase n'a pas démarré (BOOT-09) : main.js garde alors l'adaptateur relançable. */
+export const firebaseReady = () => Boolean(auth);
+
 export async function loginWithGoogle() {
   try {
     if (!auth || !provider) throw Object.assign(new Error('Firebase non initialisé'), { code: 'auth/not-initialized' });
@@ -73,10 +76,8 @@ export function initFirebaseSync(onUserConnected, onStatus = () => {}, onUserDis
 
   function startAuth() {
     if (initialized || !auth) {
-      if (!auth) {
-        onStatus('offline');
-        showOfflineBanner();
-      }
+      // BOOT-09 : SDK non démarré, ce n'est pas une coupure réseau ; pas de bandeau « hors ligne ».
+      if (!auth) onStatus('sdkFailed');
       return;
     }
     // Restore Firebase's persisted identity even when no network is available.

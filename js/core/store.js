@@ -5538,8 +5538,10 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
       const { encounterId, turnId } = api.getActionClock(actorId);
       return cloneValue((stateExtensions?.v5?.standardTurnActions || []).filter(row => row.actorId === actorId && row.encounterId === encounterId && row.turnId === turnId));
     },
-    getFullJSON() {
+    // `includeHistory: false` : fichier de sauvegarde, sans les instantanés d'annulation (l'import repart d'un historique neuf).
+    getFullJSON({ includeHistory = true } = {}) {
       const data = currentEnvelope();
+      if (!includeHistory) delete data.history;
       return JSON.stringify(data, null, 2);
     },
     async listRestorePoints() {
@@ -5854,6 +5856,9 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
   // ni symptôme visible.
   api.attachSync = (handle) => {
     if (!handle || syncListenerStarted) return;
+    // BOOT-02 : le protocole v3 (`createSession`) repose sur le stockage local. Sans lui, l'ancien chemin d'écriture
+    // (update/set) serait refusé par les règles distantes, en boucle : on ne s'attache pas, et on le dit.
+    if (!persistence && typeof handle.createSession === 'function') { reportSyncStatus('noLocalStore'); return; }
     sync = handle;
     if (persistence) {
       // E05 lit/réconcilie le serveur avant toute publication. Les mutations

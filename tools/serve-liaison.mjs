@@ -1,15 +1,26 @@
 // Serveur local de la liaison Map Display (contrat v1 §2.1) : sert les deux dépôts sous une même origine, comme
-// GitHub Pages, pour que BroadcastChannel relie les onglets. Usage : node tools/serve-liaison.mjs [port] [chemin rpg-map-display]
+// GitHub Pages, pour que BroadcastChannel relie les onglets. Usage : node tools/serve-liaison.mjs [--check] [port] [chemin rpg-map-display]
+// Le dossier de la carte doit porter la liaison (js/app/mjLink.js) : sinon l'indicateur resterait « Carte déconnectée » sans erreur (MAP-01).
+// `--check` fait ce contrôle et s'arrête, sans ouvrir de port.
 import { createServer } from 'node:http';
+import { existsSync } from 'node:fs';
 import { readFile, stat } from 'node:fs/promises';
 import { extname, join, normalize, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const port = Number(process.argv[2]) || 8770;
+const args = process.argv.slice(2).filter(arg => arg !== '--check');
+const checkOnly = process.argv.includes('--check');
+const port = Number(args[0]) || 8770;
 const roots = {
   '/Outil-MJ-Warhammer/': resolve(fileURLToPath(new URL('..', import.meta.url))),
-  '/rpg-map-display/': resolve(process.argv[3] || 'E:/rpg-map-display')
+  '/rpg-map-display/': resolve(args[1] || 'E:/rpg-map-display')
 };
+const linkModule = join(roots['/rpg-map-display/'], 'js', 'app', 'mjLink.js');
+if (!existsSync(linkModule)) {
+  console.error(`Liaison impossible : ${linkModule} est absent. Ce dossier de RPG Map Display ne contient pas la liaison avec l'outil MJ (dossier trop ancien ou mauvais chemin). Mettez-le à jour ou passez le bon chemin en second argument.`);
+  process.exit(1);
+}
+if (checkOnly) process.exit(0);
 const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.mjs': 'text/javascript; charset=utf-8',
   '.css': 'text/css; charset=utf-8', '.json': 'application/json; charset=utf-8', '.svg': 'image/svg+xml', '.png': 'image/png',
   '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.webp': 'image/webp', '.ico': 'image/x-icon', '.webmanifest': 'application/manifest+json',
