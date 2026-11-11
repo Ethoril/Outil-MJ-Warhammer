@@ -253,6 +253,17 @@
     "templates": 0,
     "pregenerated": 0
    }
+  },
+  {
+   "book": "L27",
+   "file": "L27.json",
+   "title": "Bestiaire du Vieux Monde (WJDR V2, converti en V5)",
+   "edition": "V5",
+   "counts": {
+    "profiles": 7,
+    "templates": 0,
+    "pregenerated": 0
+   }
   }
  ]
 }

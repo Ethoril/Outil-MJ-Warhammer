@@ -23981,6 +23981,136 @@
       "id": "E0-P-984",
       "blockKey": "L26:118:0",
       "addedOn": "2026-10-21"
+    },
+    {
+      "name": "WARHORSE",
+      "book": "L27",
+      "page": 117,
+      "physicalPage": 119,
+      "kind": "profile",
+      "traitsUsed": [
+        "Bestial",
+        "Size",
+        "Trained"
+      ],
+      "count": 3,
+      "abilityRefs": [],
+      "sourceNote": "L27 : scan sans texte, profil V2 transcrit à la main puis converti en V5 (règle maison du MJ, 11/11/2026).",
+      "id": "E0-P-985",
+      "blockKey": "L27:117:0",
+      "addedOn": "2026-11-11"
+    },
+    {
+      "name": "RIDING HORSE",
+      "book": "L27",
+      "page": 118,
+      "physicalPage": 120,
+      "kind": "profile",
+      "traitsUsed": [
+        "Bestial",
+        "Size",
+        "Skittish",
+        "Trained"
+      ],
+      "count": 4,
+      "abilityRefs": [],
+      "sourceNote": "L27 : scan sans texte, profil V2 transcrit à la main puis converti en V5 (règle maison du MJ, 11/11/2026).",
+      "id": "E0-P-986",
+      "blockKey": "L27:118:0",
+      "addedOn": "2026-11-11"
+    },
+    {
+      "name": "ELVEN STEED",
+      "book": "L27",
+      "page": 118,
+      "physicalPage": 120,
+      "kind": "profile",
+      "traitsUsed": [
+        "Bestial",
+        "Size",
+        "Skittish",
+        "Trained"
+      ],
+      "count": 4,
+      "abilityRefs": [],
+      "sourceNote": "L27 : scan sans texte, profil V2 transcrit à la main puis converti en V5 (règle maison du MJ, 11/11/2026).",
+      "id": "E0-P-987",
+      "blockKey": "L27:118:1",
+      "addedOn": "2026-11-11"
+    },
+    {
+      "name": "DESTRIER",
+      "book": "L27",
+      "page": 118,
+      "physicalPage": 120,
+      "kind": "profile",
+      "traitsUsed": [
+        "Bestial",
+        "Size",
+        "Trained"
+      ],
+      "count": 3,
+      "abilityRefs": [],
+      "sourceNote": "L27 : scan sans texte, profil V2 transcrit à la main puis converti en V5 (règle maison du MJ, 11/11/2026).",
+      "id": "E0-P-988",
+      "blockKey": "L27:118:2",
+      "addedOn": "2026-11-11"
+    },
+    {
+      "name": "CHAOS STEED",
+      "book": "L27",
+      "page": 118,
+      "physicalPage": 120,
+      "kind": "profile",
+      "traitsUsed": [
+        "Bestial",
+        "Size",
+        "Trained",
+        "Mutation"
+      ],
+      "count": 4,
+      "abilityRefs": [],
+      "sourceNote": "L27 : scan sans texte, profil V2 transcrit à la main puis converti en V5 (règle maison du MJ, 11/11/2026).",
+      "id": "E0-P-989",
+      "blockKey": "L27:118:3",
+      "addedOn": "2026-11-11"
+    },
+    {
+      "name": "PONY",
+      "book": "L27",
+      "page": 119,
+      "physicalPage": 121,
+      "kind": "profile",
+      "traitsUsed": [
+        "Bestial",
+        "Size",
+        "Skittish",
+        "Trained"
+      ],
+      "count": 4,
+      "abilityRefs": [],
+      "sourceNote": "L27 : scan sans texte, profil V2 transcrit à la main puis converti en V5 (règle maison du MJ, 11/11/2026).",
+      "id": "E0-P-990",
+      "blockKey": "L27:119:0",
+      "addedOn": "2026-11-11"
+    },
+    {
+      "name": "SMALL RAPTOR",
+      "book": "L27",
+      "page": 120,
+      "physicalPage": 122,
+      "kind": "profile",
+      "traitsUsed": [
+        "Bestial",
+        "Fly",
+        "Size"
+      ],
+      "count": 3,
+      "abilityRefs": [],
+      "sourceNote": "L27 : scan sans texte, profil V2 transcrit à la main puis converti en V5 (règle maison du MJ, 11/11/2026).",
+      "id": "E0-P-991",
+      "blockKey": "L27:120:0",
+      "addedOn": "2026-11-11"
     }
   ],
   "counts": {
@@ -25071,6 +25201,22 @@
       "pregeneratedCharacters": 0,
       "method": "Repérage des en-têtes de caractéristiques par colonnes (texte layout) ; chiffres lus par alignement sur l’en-tête, cases vides relues sur l’image ; capacités propres relues dans le texte.",
       "addedOn": "2026-10-21"
+    },
+    {
+      "book": "L27",
+      "profilePagesPhysical": [
+        119,
+        120,
+        121,
+        122
+      ],
+      "rulePagesPrinted": [],
+      "entries": 7,
+      "profiles": 7,
+      "templates": 0,
+      "pregeneratedCharacters": 0,
+      "method": "Scan sans texte : profils V2 relus sur l’image et transcrits à la main, puis convertis en V5 (tools/build-bestiary-l27.mjs).",
+      "addedOn": "2026-11-11"
     }
   ],
   "openQuestions": [

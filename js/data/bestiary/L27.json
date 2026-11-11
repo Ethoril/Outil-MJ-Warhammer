@@ -1,0 +1,552 @@
+{
+ "schemaVersion": 1,
+ "book": "L27",
+ "title": "Bestiaire du Vieux Monde (WJDR V2, converti en V5)",
+ "edition": "V5",
+ "sourceEdition": "V2",
+ "source": {
+  "corpusId": "L27",
+  "sha256": "c4fc6266d9ac35bcd8c1ffceb23e41fb04f0a119674974227924e5704f5706ef"
+ },
+ "conversionNote": "L27 : scan sans texte, profil V2 transcrit à la main puis converti en V5 (règle maison du MJ, 11/11/2026).",
+ "profiles": [
+  {
+   "id": "E0-P-985",
+   "book": "L27",
+   "page": 117,
+   "physicalPage": 119,
+   "kind": "profile",
+   "blockKey": "L27:117:0",
+   "name": "Warhorse",
+   "nameFr": "Cheval de guerre",
+   "stats": {
+    "M": 8,
+    "CC": 30,
+    "CT": null,
+    "F": 40,
+    "E": 40,
+    "I": 15,
+    "Ag": 30,
+    "Dex": null,
+    "Int": 10,
+    "FM": 10,
+    "Soc": 10
+   },
+   "wounds": 26,
+   "size": "large",
+   "armour": {
+    "toughnessBonus": 4,
+    "parts": [
+     {
+      "name": "Light Armour",
+      "ap": 1,
+      "optional": true
+     },
+     {
+      "name": "Medium Armour",
+      "ap": 3,
+      "optional": true
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Hooves",
+     "value": 30,
+     "damage": 12,
+     "qualities": [
+      "Pummel"
+     ]
+    }
+   ],
+   "skills": [
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 25
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Trained",
+     "param": "Mount, War",
+     "ref": "E0-T-060"
+    }
+   ],
+   "optionalTraits": [],
+   "keywords": [
+    "cheval"
+   ],
+   "nameFrSource": "L27 p.117",
+   "sourceEdition": "V2"
+  },
+  {
+   "id": "E0-P-986",
+   "book": "L27",
+   "page": 118,
+   "physicalPage": 120,
+   "kind": "profile",
+   "blockKey": "L27:118:0",
+   "name": "Riding Horse",
+   "nameFr": "Cheval de selle",
+   "stats": {
+    "M": 8,
+    "CC": 25,
+    "CT": null,
+    "F": 38,
+    "E": 38,
+    "I": 15,
+    "Ag": 30,
+    "Dex": null,
+    "Int": 10,
+    "FM": 10,
+    "Soc": 10
+   },
+   "wounds": 20,
+   "size": "large",
+   "armour": {
+    "toughnessBonus": 3,
+    "parts": [
+     {
+      "name": "Light Armour",
+      "ap": 1,
+      "optional": true
+     },
+     {
+      "name": "Medium Armour",
+      "ap": 3,
+      "optional": true
+     }
+    ]
+   },
+   "attacks": [],
+   "skills": [
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 25
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Skittish",
+     "ref": "E0-T-047"
+    },
+    {
+     "name": "Trained",
+     "param": "Mount",
+     "ref": "E0-T-060"
+    }
+   ],
+   "optionalTraits": [],
+   "keywords": [
+    "cheval"
+   ],
+   "nameFrSource": "L27 p.118",
+   "sourceEdition": "V2"
+  },
+  {
+   "id": "E0-P-987",
+   "book": "L27",
+   "page": 118,
+   "physicalPage": 120,
+   "kind": "profile",
+   "blockKey": "L27:118:1",
+   "name": "Elven Steed",
+   "nameFr": "Coursier elfique",
+   "stats": {
+    "M": 9,
+    "CC": 36,
+    "CT": null,
+    "F": 43,
+    "E": 41,
+    "I": 15,
+    "Ag": 42,
+    "Dex": null,
+    "Int": 10,
+    "FM": 10,
+    "Soc": 20
+   },
+   "wounds": 26,
+   "size": "large",
+   "armour": {
+    "toughnessBonus": 4,
+    "parts": [
+     {
+      "name": "Light Armour",
+      "ap": 1,
+      "optional": true
+     },
+     {
+      "name": "Medium Armour",
+      "ap": 3,
+      "optional": true
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Hooves",
+     "value": 36,
+     "damage": 12,
+     "qualities": [
+      "Pummel"
+     ]
+    }
+   ],
+   "skills": [
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 42
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 35
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Skittish",
+     "ref": "E0-T-047"
+    },
+    {
+     "name": "Trained",
+     "param": "Mount",
+     "ref": "E0-T-060"
+    }
+   ],
+   "optionalTraits": [],
+   "keywords": [
+    "cheval"
+   ],
+   "nameFrSource": "L27 p.118",
+   "sourceEdition": "V2"
+  },
+  {
+   "id": "E0-P-988",
+   "book": "L27",
+   "page": 118,
+   "physicalPage": 120,
+   "kind": "profile",
+   "blockKey": "L27:118:2",
+   "name": "Destrier",
+   "nameFr": "Destrier",
+   "stats": {
+    "M": 8,
+    "CC": 30,
+    "CT": null,
+    "F": 45,
+    "E": 45,
+    "I": 15,
+    "Ag": 30,
+    "Dex": null,
+    "Int": 10,
+    "FM": 10,
+    "Soc": 10
+   },
+   "wounds": 26,
+   "size": "large",
+   "armour": {
+    "toughnessBonus": 4,
+    "parts": [
+     {
+      "name": "Light Armour",
+      "ap": 1,
+      "optional": true
+     },
+     {
+      "name": "Medium Armour",
+      "ap": 3,
+      "optional": true
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Hooves",
+     "value": 30,
+     "damage": 12,
+     "qualities": [
+      "Pummel"
+     ]
+    }
+   ],
+   "skills": [
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 25
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Trained",
+     "param": "Mount, War",
+     "ref": "E0-T-060"
+    }
+   ],
+   "optionalTraits": [],
+   "keywords": [
+    "cheval"
+   ],
+   "nameFrSource": "L27 p.118",
+   "sourceEdition": "V2"
+  },
+  {
+   "id": "E0-P-989",
+   "book": "L27",
+   "page": 118,
+   "physicalPage": 120,
+   "kind": "profile",
+   "blockKey": "L27:118:3",
+   "name": "Chaos Steed",
+   "nameFr": "Destrier du Chaos",
+   "stats": {
+    "M": 8,
+    "CC": 38,
+    "CT": null,
+    "F": 49,
+    "E": 45,
+    "I": 15,
+    "Ag": 30,
+    "Dex": null,
+    "Int": 10,
+    "FM": 16,
+    "Soc": 10
+   },
+   "wounds": 26,
+   "size": "large",
+   "armour": {
+    "toughnessBonus": 4,
+    "parts": [
+     {
+      "name": "Light Armour",
+      "ap": 1,
+      "optional": true
+     },
+     {
+      "name": "Medium Armour",
+      "ap": 3,
+      "optional": true
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Hooves",
+     "value": 38,
+     "damage": 12,
+     "qualities": [
+      "Pummel"
+     ]
+    }
+   ],
+   "skills": [
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 25
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Trained",
+     "param": "Mount, War",
+     "ref": "E0-T-060"
+    },
+    {
+     "name": "Mutation",
+     "ref": "E0-T-040"
+    }
+   ],
+   "optionalTraits": [],
+   "specialRules": [
+    "Mutations du Chaos : 1d10, 1-5 = 1 mutation, 6-10 = 2 (table des mutations avancées)"
+   ],
+   "keywords": [
+    "cheval"
+   ],
+   "nameFrSource": "L27 p.118",
+   "sourceEdition": "V2"
+  },
+  {
+   "id": "E0-P-990",
+   "book": "L27",
+   "page": 119,
+   "physicalPage": 121,
+   "kind": "profile",
+   "blockKey": "L27:119:0",
+   "name": "Pony",
+   "nameFr": "Poney",
+   "stats": {
+    "M": 6,
+    "CC": 25,
+    "CT": null,
+    "F": 35,
+    "E": 35,
+    "I": 15,
+    "Ag": 35,
+    "Dex": null,
+    "Int": 10,
+    "FM": 10,
+    "Soc": 10
+   },
+   "wounds": 10,
+   "size": "average",
+   "armour": {
+    "toughnessBonus": 3
+   },
+   "attacks": [],
+   "skills": [
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 15
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Size",
+     "param": "Average",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Skittish",
+     "ref": "E0-T-047"
+    },
+    {
+     "name": "Trained",
+     "param": "Mount",
+     "ref": "E0-T-060"
+    }
+   ],
+   "optionalTraits": [],
+   "keywords": [
+    "cheval"
+   ],
+   "nameFrSource": "L27 p.119",
+   "sourceEdition": "V2"
+  },
+  {
+   "id": "E0-P-991",
+   "book": "L27",
+   "page": 120,
+   "physicalPage": 122,
+   "kind": "profile",
+   "blockKey": "L27:120:0",
+   "name": "Small Raptor",
+   "nameFr": "Rapace",
+   "stats": {
+    "M": 2,
+    "CC": 36,
+    "CT": null,
+    "F": 10,
+    "E": 10,
+    "I": 35,
+    "Ag": 35,
+    "Dex": null,
+    "Int": 11,
+    "FM": 20,
+    "Soc": 10
+   },
+   "wounds": 2,
+   "size": "small",
+   "armour": {
+    "toughnessBonus": 1
+   },
+   "attacks": [
+    {
+     "name": "Talons",
+     "value": 36,
+     "damage": 3
+    },
+    {
+     "name": "Beak",
+     "value": 36,
+     "damage": 3,
+     "free": "momentum"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 55
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Fly",
+     "rating": "100",
+     "ref": "E0-T-023"
+    },
+    {
+     "name": "Size",
+     "param": "Small",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "keywords": [
+    "bete"
+   ],
+   "nameFrSource": "L27 p.120",
+   "sourceEdition": "V2"
+  }
+ ]
+}

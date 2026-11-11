@@ -2,6 +2,7 @@ import test, { describe } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, readdirSync } from 'node:fs';
 import { validateBestiaryRecord } from '../../../js/core/bestiary-profiles.js';
+import { isMountCandidate } from '../../../js/core/mounts.js';
 
 describe('données du bestiaire — structure', () => {
 const read = path => JSON.parse(readFileSync(new URL(`../../../${path}`, import.meta.url), 'utf8'));
@@ -29,7 +30,7 @@ for (const item of index.books) {
       assert.equal(profile.page, entry.page, profile.id);
       assert.deepEqual(validateBestiaryRecord(profile), [], `${profile.id} ${profile.name}`);
       for (const ability of profile.abilities || []) assert.ok(inventory.traits.some(trait => trait.id === ability), `${profile.id} → ${ability}`);
-      if (profile.nameFr) assert.ok(['proposition'].includes(profile.nameFrSource) || /^L05 p\.\d+$/.test(profile.nameFrSource), `${profile.id} source du nom français`);
+      if (profile.nameFr) assert.ok(['proposition'].includes(profile.nameFrSource) || /^L(05|27) p\.\d+$/.test(profile.nameFrSource), `${profile.id} source du nom français`);
       assert.ok(!('_dropped' in profile), 'aucun résidu de génération');
     }
     const counts = { profile: 0, template: 0, 'pregenerated-character': 0 };
@@ -758,6 +759,32 @@ test('D24 : valeurs imprimées (Roland, Carrion) et mots-clés', () => {
   assert.deepEqual(byId('E0-P-984').keywords, ['mort-vivant']);
   assert.ok(!byId('E0-P-935').keywords.includes('cheval'));
   assert.ok(!byId('E0-P-960').keywords.includes('geant'));
+});
+});
+
+describe('bestiaire L27', () => {
+const book = JSON.parse(readFileSync(new URL('../../../js/data/bestiary/L27.json', import.meta.url), 'utf8'));
+const byFr = name => book.profiles.find(profile => profile.nameFr === name);
+
+test('L27 Bestiaire du Vieux Monde (V2, règle maison 11/11/2026) : 6 montures et le Rapace, convertis en V5', () => {
+  assert.equal(book.sourceEdition, 'V2');
+  assert.deepEqual(book.profiles.map(profile => profile.nameFr), ['Cheval de guerre', 'Cheval de selle', 'Coursier elfique', 'Destrier', 'Destrier du Chaos', 'Poney', 'Rapace']);
+  assert.deepEqual(book.profiles.flatMap(profile => validateBestiaryRecord(profile)), []);
+  // M et caractéristiques V2 repris ; CT 0 % absente ; Soc 0 % → 10 ; I 15 pour un cheval ; Blessures selon la formule V5.
+  assert.deepEqual(byFr('Destrier').stats, { M: 8, CC: 30, CT: null, F: 45, E: 45, I: 15, Ag: 30, Dex: null, Int: 10, FM: 10, Soc: 10 });
+  assert.equal(byFr('Destrier').wounds, 26);
+  assert.equal(byFr('Coursier elfique').stats.Soc, 20);
+  assert.equal(byFr('Poney').wounds, 10);
+  // A 0 : pas d'attaque ; A 1 : sabots comme le Cheval V5 ; A 2 : seconde attaque gratuite en perdant l'Élan.
+  assert.deepEqual(byFr('Cheval de selle').attacks, []);
+  assert.deepEqual(byFr('Destrier du Chaos').attacks, [{ name: 'Hooves', value: 38, damage: 12, qualities: ['Pummel'] }]);
+  assert.deepEqual(byFr('Rapace').attacks.map(attack => attack.free ?? null), [null, 'momentum']);
+  assert.equal(byFr('Rapace').stats.I, 35);
+  assert.ok(byFr('Rapace').traits.some(trait => trait.name === 'Fly' && trait.rating === '100'));
+});
+
+test('L27 : les six montures sont déclarables comme montures, pas le Rapace', () => {
+  for (const profile of book.profiles) assert.equal(isMountCandidate(profile), profile.nameFr !== 'Rapace', profile.nameFr);
 });
 });
 
