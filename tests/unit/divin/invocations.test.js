@@ -97,6 +97,7 @@ test('needs : Taal exige la bête (liste fermée de six) et la position ; le cho
   assert.deepEqual(effectNeeds(effect, { input: { summon: { beastKey: 'dragon', position: 'ici' } } }).map(row => row.field), ['summon.beastKey']);
   assert.deepEqual(effectNeeds(effect, { input: { summon: { beastKey: 'horse', position: '  ' } } }).map(row => row.field), ['summon.position']);
   assert.deepEqual(effectNeeds(effect, { input: { summon: { beastKey: 'horse', position: 'devant le prêtre' } } }), []);
+  // Les bêtes V4 de la règle maison (Ours, Pigeon, Serpent) restent hors des invocations.
   assert.deepEqual(SUMMON_BEAST_KEYS, ['boar', 'dog', 'giant-rat', 'giant-spider', 'horse', 'wolf']);
   assert.deepEqual(effectNeeds({ type: 'summon-creature', appliesTo: 'caster', kind: 'creature', profile: 'wolf' }, {}), []);
   const fields = effectHandlers['summon-creature'].inputFields(effect, {});

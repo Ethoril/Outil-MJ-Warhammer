@@ -444,7 +444,7 @@ export function renderSpellOptions({ actor, participants, contract, draft, handl
 
   if (special === 'beast-form') {
     const animals = Object.entries(BEAST_PROFILES);
-    selectField('magicBeastKey', 'Animal (Bêtes du Reikland)', [['', '— Choisir un animal —'], ...animals.map(([key, profile]) => [key, `${profile.name} (Taille ${SIZE_LABELS[profile.size]}, p. ${profile.page})`])],
+    selectField('magicBeastKey', 'Animal (Bêtes du Reikland)', [['', '— Choisir un animal —'], ...animals.map(([key, profile]) => [key, `${profile.name} (Taille ${SIZE_LABELS[profile.size]}, p. ${profile.page}${profile.edition ? `, livre ${profile.edition}` : ''})`])],
       draft.magicBeastKey || '', 'magic-beast-key', next => handlers.select({ magicBeastKey: next, magicBeastTraits: [] }));
     const profile = BEAST_PROFILES[draft.magicBeastKey];
     if (profile) {

@@ -6,7 +6,7 @@ import { getArcaneWornArmor } from '../../../js/core/v5-magic-arcane-unforgiving
 import { applySpellEffects, expireSpellEffects, resolveMagicMissile, resolveHitLocationAndAP } from '../../../js/core/v5-magic-effects.js';
 import { calculateMagicArmorPenalty } from '../../../js/core/v5-magic-channelling.js';
 import { locationProtection } from '../../../js/core/equipment.js';
-import { BEAST_PROFILES, KADON_PROFILES, applyBeastForm, creatureWounds, transformationOvercastCost, optionalTransformationTraits, previewVerdantApotheosis, previewBeastForm, transformationTraitsError } from '../../../js/core/v5-magic-arbitrations.js';
+import { BEAST_PROFILES, KADON_PROFILES, applyBeastForm, creatureWounds, transformationOvercastCost, optionalTransformationTraits, previewVerdantApotheosis, previewBeastForm, transformationTraitsError, transformationPlan } from '../../../js/core/v5-magic-arbitrations.js';
 import { beastFormActions, magicGrantedActions, transformationRestrictions } from '../../../js/core/v5-magic-combat.js';
 import { isTargetUndead, isTargetWearingMetalArmor } from '../../../js/core/v5-magic-attributes.js';
 import { processCombatTurnSpells } from '../../../js/core/v5-magic-turn.js';
@@ -250,7 +250,7 @@ const ARMOUR = { id: 'jack', kind: 'armour', name: 'Veste de cuir', layer: 'flex
 // ---------------------------------------------------------------------------------------------------------------------
 test('Bêtes du Reikland — valeurs clés des six animaux (pp. 325-327), « – » représenté par null', () => {
   const key = name => { const p = BEAST_PROFILES[name]; return [p.M, p.caracs.F, p.caracs.E, p.caracs.Ag, p.caracs.Dex, p.size, p.armor?.ap ?? 0, p.page]; };
-  assert.deepEqual(Object.keys(BEAST_PROFILES), ['boar', 'dog', 'giant-rat', 'giant-spider', 'horse', 'wolf']);
+  assert.deepEqual(Object.keys(BEAST_PROFILES), ['boar', 'dog', 'giant-rat', 'giant-spider', 'horse', 'wolf', 'bear', 'pigeon', 'snake']);
   assert.deepEqual(key('boar'), [7, 35, 40, 35, null, 'average', 1, 325]);
   assert.deepEqual(key('dog'), [6, 20, 20, 30, null, 'small', 0, 325]);
   assert.deepEqual(key('giant-rat'), [6, 20, 20, 35, 10, 'small', 0, 326]);
@@ -261,6 +261,22 @@ test('Bêtes du Reikland — valeurs clés des six animaux (pp. 325-327), « –
   assert.equal(BEAST_PROFILES.horse.attacks[0].qualities[0], 'assommante');
   assert.equal(BEAST_PROFILES.boar.attacks[1].free, 'charge');
   assert.equal(BEAST_PROFILES['giant-spider'].traits.includes('Toile 40'), true);
+});
+
+test('Règle maison (11/11/2026) — Ours, Pigeon et Serpent repris du Livre de base V4 FR pp. 315-317', () => {
+  const key = name => { const p = BEAST_PROFILES[name]; return [p.edition, p.M, p.caracs.F, p.caracs.E, p.caracs.Ag, p.caracs.Dex, p.size, p.armor?.ap ?? 0, p.page]; };
+  // Ours : M 4 + Foulée en V4 → M 6 sans Foulée (×1,5).
+  assert.deepEqual(key('bear'), ['V4', 6, 55, 45, 25, 15, 'large', 1, 315]);
+  assert.deepEqual(key('pigeon'), ['V4', 2, 5, 15, 40, null, 'small', 0, 316]);
+  assert.deepEqual(key('snake'), ['V4', 3, 30, 25, 40, null, 'small', 1, 317]);
+  for (const name of ['bear', 'pigeon', 'snake']) assert.equal(BEAST_PROFILES[name].traits.some(t => /^Foulée/.test(t)), false, name);
+  assert.deepEqual(BEAST_PROFILES.bear.attacks.map(a => [a.name, a.value, a.damage, a.free]), [['Griffes', 35, 8, null], ['Morsure', 35, 9, 'momentum']]);
+  assert.ok(BEAST_PROFILES.pigeon.traits.includes('Vol (100)'));
+  assert.deepEqual(optionalTransformationTraits(BEAST_PROFILES.snake), ['Constricteur', 'Limicole', 'Taille (Moyenne)', 'Taille (Grande)', 'Venin (Moyen)']);
+  const caster = { id: 'c', name: 'Lanceur', caracs: { F: 30, E: 30, Ag: 30, Dex: 30, FM: 30 }, skills: [], states: [] };
+  assert.equal(transformationPlan(caster, BEAST_PROFILES.bear).M, 6);
+  // Blessures recalculées : F et E de l'Ours, FM du lanceur : (5 + 2 × 4 + 3) × 2.
+  assert.equal(transformationPlan(caster, BEAST_PROFILES.bear).wounds, 32);
 });
 
 test('Formule de Blessures V5 (p. 361) : retrouve les Blessures du livre pour chaque bête et chaque monstre', () => {

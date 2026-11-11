@@ -9,7 +9,8 @@
 import { REIKLAND_BEASTS } from './v5-transformation-bestiary.js';
 import { creatureWounds } from '../core/v5-magic-arbitrations.js';
 
-export const SUMMON_BEAST_KEYS = Object.freeze(Object.keys(REIKLAND_BEASTS));
+// Les bêtes V4 ajoutées par règle maison à Forme bestiale ne sont pas invocables : les miracles gardent la liste V5.
+export const SUMMON_BEAST_KEYS = Object.freeze(Object.keys(REIKLAND_BEASTS).filter(key => !REIKLAND_BEASTS[key].edition));
 export const SUMMON_SIZES = Object.freeze(['small', 'average', 'large', 'enormous']);
 const SIZE_TRAITS = Object.freeze({ small: 'Taille (Petite)', large: 'Taille (Grande)', enormous: 'Taille (Énorme)' });
 // Caractéristique dont dépend chaque compétence des six bêtes ; une compétence inconnue n'est jamais décalée.

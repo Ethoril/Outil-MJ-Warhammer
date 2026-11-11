@@ -81,6 +81,46 @@ export const REIKLAND_BEASTS = Object.freeze({
       attack('claws', 'Griffes', 35, 6),
       attack('bite', 'Morsure', 35, 6, { free: 'momentum' })
     ]
+  },
+  // Règle maison du MJ (11/11/2026) : trois bêtes reprises du Livre de base V4 FR (pp. 315-317), absentes de la liste V5.
+  // Conversion : pas de compétences au profil V4, donc attaque = CC ; dégâts = bonus d'Arme ou de Morsure V4 (total, BF compris) ;
+  // Foulée retirée et intégrée au Mouvement (×1,5, comme Chien et Rat géant V4 → V5) ; Nerveux V4 = Craintif V5 ;
+  // Dompté = Brisé, Parasité = Infestation ; Taille (Minuscule) n'existe pas en V5 : le Pigeon est Petit.
+  // `wounds` : formule V5 (p. 361), pas le B du V4 (Pigeon 1, Serpent 8) ; l'Ours retombe sur ses 28.
+  bear: {
+    name: 'Ours', page: 315, edition: 'V4', M: 6, wounds: 28, size: 'large',
+    caracs: { CC: 35, CT: null, F: 55, E: 45, I: 20, Ag: 25, Dex: 15, Int: 10, FM: 15, Soc: null },
+    armor: { name: 'Peau', ap: 1 },
+    skills: [],
+    traits: ['Bestial', 'Craintif', 'Vision nocturne', 'Taille (Grande)'],
+    optionalTraits: ['Affamé', 'Dressé (Brisé, Divertir, Guerre)', 'Infecté', 'Infestation', 'Taille (Énorme)', 'Territorial'],
+    attacks: [
+      attack('claws', 'Griffes', 35, 8),
+      attack('bite', 'Morsure', 35, 9, { free: 'momentum' })
+    ]
+  },
+  pigeon: {
+    name: 'Pigeon', page: 316, edition: 'V4', M: 2, wounds: 2, size: 'small',
+    caracs: { CC: 15, CT: null, F: 5, E: 15, I: 25, Ag: 40, Dex: null, Int: 10, FM: 20, Soc: 10 },
+    armor: null,
+    skills: [],
+    traits: ['Bestial', 'Craintif', 'Taille (Petite)', 'Vol (100)'],
+    optionalTraits: ['Dressé (Brisé, Revenir au colombier)'],
+    attacks: [
+      attack('beak', 'Bec', 15, 0)
+    ]
+  },
+  snake: {
+    name: 'Serpent', page: 317, edition: 'V4', M: 3, wounds: 4, size: 'small',
+    caracs: { CC: 40, CT: null, F: 30, E: 25, I: 25, Ag: 40, Dex: null, Int: 5, FM: 45, Soc: null },
+    armor: { name: 'Écailles', ap: 1 },
+    skills: [],
+    traits: ['À Sang-froid', 'Bestial', 'Rapide', 'Taille (Petite)'],
+    // « Taille (de Minuscule à Énorme) » : une option par Taille V5 atteignable au-dessus de la Taille de base.
+    optionalTraits: ['Constricteur', 'Limicole', 'Nuée', 'Taille (Moyenne)', 'Taille (Grande)', 'Taille (Énorme)', 'Venin (Moyen)'],
+    attacks: [
+      attack('bite', 'Morsure', 40, 5)
+    ]
   }
 });
 
