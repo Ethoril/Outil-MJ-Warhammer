@@ -5,8 +5,8 @@ Branche locale `claude/epic-goodall-210a79`, rien de poussé. Constats traités 
 ## État à la fin
 
 - Suite unitaire : verte, 6097 tests `.test.js` et 148 tests `.test.mjs`, 0 échec.
-- Parcours navigateur : **158 verts sur 160** lançables, chacun sous 120 s (`node tools/run-browser-journeys.mjs --jobs 4`).
-- Deux rouges restent, antérieurs à ce ménage et indépendants de l'outillage : voir « Ce qui reste ».
+- Parcours navigateur : **159 verts sur 160** lançables, chacun sous 120 s (`node tools/run-browser-journeys.mjs --jobs 4`).
+- Un rouge reste, antérieur à ce ménage : un débordement réel de l'interface en mobile, dont la correction est dans `js/ui/workspace.css` (hors périmètre). Voir « Ce qui reste ».
 
 ## Ce qui est fait
 
@@ -18,13 +18,15 @@ Branche locale `claude/epic-goodall-210a79`, rien de poussé. Constats traités 
    - `npm run test:browser-general` : les 32 parcours généraux.
    - `npm run test:browser-all` : tout ce qui est lançable ; options `--famille`, `--socle`, `--jobs N`, filtre par nom.
 5. **Temporisations** : 10 attentes fixes remplacées par une attente sur condition (engagements-plateau ×4, lot4-c24, lot6-a, lot6-c, pro-q31, pro-q42) ; `fiche-writeback-browser` écoute sur un port libre (plus de conflit avec la recette sur 8766).
-6. **En passant** : `lot3-v5-magic-2b-ui` réparé (la liste attendue de Forme bestiale ignorait le libellé « livre V4 » ajouté par ed1d1fd).
+6. **En passant** : `lot3-v5-magic-2b-ui` réparé (la liste attendue de Forme bestiale ignorait le libellé « livre V4 » ajouté par ed1d1fd) ; `lot3-v5-wom-ui` réparé (le parcours ne répondait pas à la question d'État ajoutée par Q6 : la cible du Ver Grouillant est Empêtrée, « Résoudre la clause du sort » demande d'abord si le Test implique un mouvement ; la question n'apparaît qu'après un premier clic sur « Résoudre »).
 
 ## Ce qui reste
 
-**Deux parcours rouges (produit ou test à examiner, pas l'outillage)**
-- `lot2-v5-remaining-talents-browser` : à 390 px, après l'application du Piétinement, le bloc « 2 · Jets » du panneau de résolution fait 383 px et dépasse la fenêtre (bord droit à 422 px). Débordement réel de l'interface en mobile.
-- `lot3-v5-wom-ui-browser` : pour la clause du Ver Grouillant, « Résoudre la clause du sort » ne produit aucune écriture dans le Store en 30 s.
+**Un parcours rouge : défaut de l'interface, pas du test**
+- `lot2-v5-remaining-talents-browser` : à 390 px, quand la cible a le talent Petit, le panneau de résolution dépasse la fenêtre de 32 px (défilement horizontal de la page).
+  - Cause : le menu « défense » (`defense-stat`) prend la largeur de son libellé le plus long, « Petit : quitter un adversaire plus petit · 0 », soit 294 px. Avec le champ voisin, la ligne fait 365 px et ne peut pas rétrécir : la grille de `.workspace-resolution-step` n'a pas de colonne déclarée, sa piste s'étire donc à 383 px dans une boîte de 314 px.
+  - Correctif vérifié en l'injectant dans une copie du parcours, qui passe alors en entier : `.workspace-resolution-step, .workspace-defense { grid-template-columns: minmax(0, 1fr); }` et `.workspace-roll-row > select { min-width: 0; flex: 1 1 auto; }`. Non appliqué : le fichier est sous `js/`. À vérifier aussi en largeur bureau avant de publier.
+  - `min-width: 0` sur le menu seul ne suffit pas (essayé).
 
 **Parcours restés hors du helper (9)** : serveurs à logique propre — `browser-startup` (sert une ancienne révision par git), `e04-idb-browser`, `lot1-pwa-sessions-browser`, `sw-update-fresh-cache-browser`, `divin-v5-source-browser-independent` — et quatre parcours cloud non relançables sans émulateurs (`divin-v5-cloud-browser`, `divin-v5-p4c-cloud`, `lot2-v5-25-cloud-browser`, `lot3-v5-35-cloud-browser`).
 
