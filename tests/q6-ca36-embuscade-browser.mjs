@@ -1,13 +1,10 @@
 import assert from 'node:assert/strict';
-import { createServer } from 'node:http';
-import { readFileSync, statSync } from 'node:fs';
-import { resolve, sep, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { launchBrowser } from './helpers/browser.mjs';
+import { createStaticServer } from './helpers/static-server.mjs';
 
 const root=fileURLToPath(new URL('..',import.meta.url)),base='/Outil-MJ-Warhammer/';
-const types={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.json':'application/json','.css':'text/css; charset=utf-8'};
-const server=createServer((req,res)=>{try{const path=decodeURIComponent(new URL(req.url,'http://localhost').pathname);assert.ok(path.startsWith(base));const file=resolve(root,path.slice(base.length)||'index.html');assert.ok(file.startsWith(resolve(root)+sep)&&statSync(file).isFile());res.writeHead(200,{'Content-Type':types[extname(file)]||'application/octet-stream','Cache-Control':'no-store'});res.end(readFileSync(file));}catch{res.writeHead(404).end();}});
+const server=createStaticServer({ root, base, headers: { 'Cache-Control': 'no-store' } });
 await new Promise(done=>server.listen(0,'127.0.0.1',done));const browser=await launchBrowser();
 try{
  const page=await browser.newPage({viewport:{width:1440,height:1000},serviceWorkers:'block'});page.setDefaultTimeout(8000);

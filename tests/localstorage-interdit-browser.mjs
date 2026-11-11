@@ -1,22 +1,11 @@
 import assert from 'node:assert/strict';
-import { createServer } from 'node:http';
-import { readFileSync, statSync } from 'node:fs';
-import { resolve, extname, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { launchBrowser } from './helpers/browser.mjs';
+import { createStaticServer } from './helpers/static-server.mjs';
 
 // BOOT-05 : un localStorage interdit (SecurityError) ne fait plus échouer le démarrage ; l’outil démarre en mode dégradé.
 const root = fileURLToPath(new URL('..', import.meta.url));
-const types = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.json': 'application/json', '.css': 'text/css; charset=utf-8', '.svg': 'image/svg+xml' };
-const server = createServer((req, res) => {
-  try {
-    const path = new URL(req.url, 'http://localhost').pathname;
-    const file = resolve(root, '.' + decodeURIComponent(path === '/' ? '/index.html' : path));
-    if (!file.startsWith(resolve(root) + sep) || !statSync(file).isFile()) throw new Error('missing');
-    res.writeHead(200, { 'Content-Type': types[extname(file)] || 'application/octet-stream' });
-    res.end(readFileSync(file));
-  } catch { res.writeHead(404).end(); }
-});
+const server = createStaticServer({ root });
 await new Promise(done => server.listen(0, '127.0.0.1', done));
 const browser = await launchBrowser();
 try {

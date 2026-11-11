@@ -1,9 +1,7 @@
 import assert from 'node:assert/strict';
-import { createServer } from 'node:http';
-import { readFileSync, statSync } from 'node:fs';
-import { resolve, sep, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { launchBrowser } from './helpers/browser.mjs';
+import { createStaticServer } from './helpers/static-server.mjs';
 import { chooseConfirmation } from './helpers/confirmation.mjs';
 import { openU1TurnActions, openU1Settings, openU1Types } from './helpers/u1-drawer.mjs';
 
@@ -11,17 +9,7 @@ import { openU1TurnActions, openU1Settings, openU1Types } from './helpers/u1-dra
 // Un parcours par écran : amener l'acteur dans le cas qui pose la question, répondre via le champ, vérifier que le Test se résout.
 // Application complète (vrai Store, seed JSON) ; à lancer sous `timeout 120 node tests/q6-t10-ecrans-browser.mjs`.
 const root = fileURLToPath(new URL('../', import.meta.url)), base = '/Outil-MJ-Warhammer/';
-const types = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.json': 'application/json', '.css': 'text/css; charset=utf-8', '.svg': 'image/svg+xml', '.webmanifest': 'application/manifest+json' };
-const server = createServer((req, res) => {
-  try {
-    const pathname = decodeURIComponent(new URL(req.url, 'http://localhost').pathname);
-    assert.ok(pathname.startsWith(base));
-    const path = resolve(root, pathname.slice(base.length) || 'index.html');
-    assert.ok(path.startsWith(resolve(root) + sep) && statSync(path).isFile());
-    res.writeHead(200, { 'Content-Type': types[extname(path)] || 'application/octet-stream', 'Cache-Control': 'no-store' });
-    res.end(readFileSync(path));
-  } catch { res.writeHead(404); res.end('Not found'); }
-});
+const server = createStaticServer({ root, base, headers: { 'Cache-Control': 'no-store' } });
 
 const ATHLETICS = 'skill-41_74_68_6c_e9_74_69_73_6d_65-base';
 const fighter = (id, name, camp, extra = {}) => ({ id, name, kind: camp === 'ennemi' ? 'PNJ' : 'PJ', camp, zone: 'active', initiative: id === 'b' ? 35 : 60, hp: 30, maxHp: 30,
@@ -31,12 +19,13 @@ const RESISTANCE = 'skill-52_e9_73_69_73_74_61_6e_63_65-base', CALM = 'skill-43_
 const withSkills = (extra = {}) => ({ species: 'Human', size: 'average', ...extra, skills: [{ id: RESISTANCE, name: 'Résistance', carac: 'E', status: 'resolved', total: 50 }, { id: CALM, name: 'Calme', carac: 'FM', status: 'resolved', total: 50 }, ...(extra.skills || [])] });
 const PRONE = { id: 'prone-1', key: 'aterre', name: 'À terre', level: 1 };
 const OBSTINATE = { id: 'talent-strong-minded', name: 'Obstiné', status: 'resolved', rank: 1 };
-const seed = (participants, extra = {}) => ({ schemaVersion: 3, reserve: [], diceLines: [], log: [], extensions: { v5: { combatId: 'q6-t10', turnIndex: 1 } },
+// Une séance est ouverte (talentSessionId) : sans elle, l'option Obstiné est désactivée (« Commencez d’abord une séance »).
+const seed = (participants, extra = {}) => ({ schemaVersion: 3, reserve: [], diceLines: [], log: [], extensions: { v5: { combatId: 'q6-t10', turnIndex: 1, talentSessionId: 'q6-t10' } },
   combat: { round: 1, currentActorId: participants[0].id, order: participants.map(row => row.id), participants }, ...extra });
 
 // Les effets de séquelle sont une projection du registre de convalescence (`aftermathRegister`) : on charge un vrai registre.
 const tornLeg = participantId => ({ id: `tear-${participantId}`, participantId, incidentId: 'inc', key: 'tear', label: 'Déchirure musculaire', kind: 'torn-muscle', status: 'open', severity: 'minor', part: 'leg', side: 'left', startDay: 0, endDay: 30, toughnessBonus: 3, reducedDays: 0, history: [] });
-const registerWith = sequelae => ({ extensions: { v5: { combatId: 'q6-t10', turnIndex: 1, aftermathRegister: { schemaVersion: 1, revision: 0, calendar: { schemaVersion: 1, originDay: 0, currentDay: 0 }, incidents: [], diseases: [], sequelae, receipts: [] } } } });
+const registerWith = sequelae => ({ extensions: { v5: { combatId: 'q6-t10', turnIndex: 1, talentSessionId: 'q6-t10', aftermathRegister: { schemaVersion: 1, revision: 0, calendar: { schemaVersion: 1, originDay: 0, currentDay: 0 }, incidents: [], diseases: [], sequelae, receipts: [] } } } });
 const results = [];
 let browser, page;
 const errors = [];

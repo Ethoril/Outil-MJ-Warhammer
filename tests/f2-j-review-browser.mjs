@@ -1,16 +1,13 @@
 import { openU1Settings } from './helpers/u1-drawer.mjs';
 import assert from 'node:assert/strict';
-import { createServer } from 'node:http';
-import { readFileSync, statSync } from 'node:fs';
-import { resolve, sep, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { launchBrowser } from './helpers/browser.mjs';
+import { createStaticServer } from './helpers/static-server.mjs';
 
 // Parcours navigateur F2-J : un critique appliqué par l'interface crée l'occurrence F2-I, le panneau propose le suivi lié,
 // un soin passe par la compétence Guérison du soigneur et un d100, un saut de trois jours liste chaque Test quotidien.
 const root=fileURLToPath(new URL('../',import.meta.url)),base='/Outil-MJ-Warhammer/';
-const types={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.json':'application/json','.svg':'image/svg+xml','.webmanifest':'application/manifest+json'};
-const server=createServer((req,res)=>{try{const pathname=decodeURIComponent(new URL(req.url,'http://localhost').pathname);assert.ok(pathname.startsWith(base));const path=resolve(root,pathname.slice(base.length)||'index.html');assert.ok(path.startsWith(resolve(root)+sep)&&statSync(path).isFile());res.writeHead(200,{'Content-Type':types[extname(path)]||'application/octet-stream','Cache-Control':'no-store'});res.end(readFileSync(path));}catch{res.writeHead(404);res.end('Not found');}});
+const server=createStaticServer({ root, base, headers: { 'Cache-Control': 'no-store' } });
 const person=(id,name,kind='PJ',extra={})=>({id,name,kind,camp:kind==='PJ'?'pj':'ennemi',zone:'active',initiative:id==='hero'?60:30,hp:20,maxHp:20,caracs:{CC:60,CT:50,F:40,E:30,BE:3,I:40,Ag:35,Dex:35,Int:30,FM:35,Soc:25},skills:[{id:'dodge',name:'Esquive',status:'resolved',total:45,carac:'Ag'}],talents:[],equipment:[],traits:[],states:[],armor:{head:0,body:0,arms:0,legs:0},extensions:{v5:{}},...extra});
 const hero=person('hero','Héros','PJ',{caracs:{CC:60,CT:50,F:40,E:30,BE:3,I:40,Ag:35,Dex:35,Int:50,FM:35,Soc:25},skills:[{id:'dodge',name:'Esquive',status:'resolved',total:45,carac:'Ag'},{id:'heal',name:'Guérison',status:'resolved',total:60,carac:'Int',advances:10}],actions:[{id:'sword',note:'Coup d’épée',type:'attack',attr:'CC',base:60,damage:20,qualities:[]}]});
 const fixture=()=>({schemaVersion:3,reserve:[],diceLines:[],log:[],extensions:{v5:{combatId:'f2-j-review-browser',turnIndex:1}},combat:{round:1,currentActorId:'hero',order:['hero','foe','cripple'],participants:[hero,person('foe','Garde','PNJ',{hp:2,maxHp:20,states:[{id:'ko',key:'inconscient',name:'Inconscient',level:1}],actions:[]}),person('cripple','Éclopé','PJ',{hp:10,maxHp:20})]}});

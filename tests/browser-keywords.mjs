@@ -1,32 +1,17 @@
 import assert from 'node:assert/strict';
-import { createServer } from 'node:http';
-import { readFile, stat } from 'node:fs/promises';
-import { resolve, extname, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { launchBrowser } from './helpers/browser.mjs';
+import { createStaticServer } from './helpers/static-server.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
-const types = { '.js': 'text/javascript', '.json': 'application/json', '.css': 'text/css' };
 const page_html = '<!doctype html><meta charset="utf-8"><title>Recette mots-clés</title><link rel="stylesheet" href="/MJ.css"><div id="holder"></div><script type="module">'
   + 'import { createStore } from "/js/core/store.js"; import { createKeywordPicker } from "/js/ui/keyword-picker.js";'
   + 'const values = new Map(); const store = createStore({ storage: { getItem: k => values.get(k) ?? null, setItem: (k, v) => values.set(k, v), removeItem: k => values.delete(k) } });'
   + 'window.store = store; window.changes = [];'
   + 'window.picker = createKeywordPicker({ container: document.querySelector("#holder"), store, subject: { traits: ["Mort-vivant"] }, onChange: value => window.changes.push(value) });'
   + 'window.ready = true;</script>';
-const server = createServer(async (req, res) => {
-  try {
-    if (req.url === '/qa-keywords') { res.writeHead(200, { 'Content-Type': 'text/html' }); res.end(page_html); return; }
-    const path = resolve(root, '.' + decodeURIComponent(req.url.split('?')[0]));
-    if (!path.startsWith(resolve(root) + sep) || !(await stat(path)).isFile()) throw new Error('404');
-    res.writeHead(200, { 'Content-Type': types[extname(path)] || 'text/plain' }); res.end(await readFile(path));
-  } catch { res.writeHead(404); res.end('Not found'); }
-});
-// Chromium refuse les ports « dangereux » (6666, 6665-6669, 6000, 10080…) : on retire un port tant qu'il n'est pas au-dessus de la liste.
-for (;;) {
-  await new Promise(done => server.listen(0, '127.0.0.1', done));
-  if (server.address().port > 10080) break;
-  await new Promise(done => server.close(done));
-}
+const server = createStaticServer({ root, pages: { '/qa-keywords': () => page_html } });
+await new Promise(done => server.listen(0, '127.0.0.1', done)); // le helper écarte les ports que Chromium refuse
 const url = 'http://127.0.0.1:' + server.address().port;
 const browser = await launchBrowser();
 try {

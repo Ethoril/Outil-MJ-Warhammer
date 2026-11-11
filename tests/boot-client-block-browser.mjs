@@ -1,22 +1,12 @@
 /** Reproduce an extension blocking the former journal filename, then verify the renamed graph. */
 import assert from 'node:assert/strict';
-import { createServer } from 'node:http';
 import { execFileSync } from 'node:child_process';
-import { readFileSync, statSync } from 'node:fs';
-import { resolve, sep, extname } from 'node:path';
+import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { launchBrowser } from './helpers/browser.mjs';
+import { createStaticServer, blockExternalNetwork } from './helpers/static-server.mjs';
 const root = fileURLToPath(new URL('../', import.meta.url));
-const types = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.json': 'application/json', '.css': 'text/css', '.svg': 'image/svg+xml', '.woff2': 'font/woff2' };
-const server = createServer((req, res) => {
-  try {
-    const route = new URL(req.url, 'http://localhost').pathname;
-    const path = resolve(root, '.' + decodeURIComponent(route === '/' ? '/index.html' : route));
-    assert.ok(path.startsWith(resolve(root) + sep) && statSync(path).isFile());
-    res.writeHead(200, { 'Content-Type': types[extname(path)] || 'application/octet-stream' });
-    res.end(readFileSync(path));
-  } catch { res.writeHead(404); res.end('Not found'); }
-});
+const server = createStaticServer({ root });
 let browser;
 try {
   await new Promise(done => server.listen(0, '127.0.0.1', done));
@@ -25,7 +15,7 @@ try {
   async function isolatedContext() {
     // Real native IndexedDB; no authenticated account and no external requests.
     const context = await browser.newContext({ serviceWorkers: 'block' });
-    await context.route('**/*', route => route.request().url().startsWith(origin + '/') ? route.continue() : route.abort());
+    await blockExternalNetwork(context, origin);
     await context.route('**/js/ui/log-view.js', route => route.abort('blockedbyclient'));
     return context;
   }

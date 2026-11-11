@@ -1,64 +1,16 @@
 import { openU1Settings, clickU1Magic } from './helpers/u1-drawer.mjs';
 import { readFileSync } from 'node:fs';
 import assert from 'node:assert/strict';
-import { createServer } from 'node:http';
 import { existsSync } from 'node:fs';
-import { readFile, stat, mkdir } from 'node:fs/promises';
-import { extname, join, normalize, resolve } from 'node:path';
+import { mkdir } from 'node:fs/promises';
+import { resolve } from 'node:path';
 import { launchBrowser } from './helpers/browser.mjs';
+import { startStaticServer } from './helpers/static-server.mjs';
 
 const ROOT = resolve('.');
 const TMP_DIR = resolve('tmp/lot3');
 const LAUNCH_OPTS = { headless: true };
 
-const MIME_TYPES = {
-  '.css': 'text/css; charset=utf-8',
-  '.html': 'text/html; charset=utf-8',
-  '.ico': 'image/x-icon',
-  '.jpg': 'image/jpeg',
-  '.js': 'text/javascript; charset=utf-8',
-  '.json': 'application/json; charset=utf-8',
-  '.mjs': 'text/javascript; charset=utf-8',
-  '.png': 'image/png',
-  '.svg': 'image/svg+xml',
-  '.txt': 'text/plain; charset=utf-8',
-  '.webp': 'image/webp',
-  '.woff': 'font/woff',
-  '.woff2': 'font/woff2'
-};
-
-function startStaticServer() {
-  const server = createServer(async (req, res) => {
-    try {
-      const url = new URL(req.url || '/', 'http://127.0.0.1');
-      const rawPath = decodeURIComponent(url.pathname === '/' ? '/index.html' : url.pathname);
-      const safePath = normalize(rawPath).replace(/^(\.\.[/\\])+/, '');
-      const filePath = resolve(join(ROOT, safePath));
-      if (!filePath.startsWith(ROOT)) {
-        res.writeHead(403).end('Forbidden');
-        return;
-      }
-      const info = await stat(filePath);
-      const target = info.isDirectory() ? join(filePath, 'index.html') : filePath;
-      const body = await readFile(target);
-      res.writeHead(200, {
-        'Content-Type': MIME_TYPES[extname(target).toLowerCase()] || 'application/octet-stream',
-        'Cache-Control': 'no-cache'
-      });
-      res.end(body);
-    } catch {
-      res.writeHead(404).end('Not Found');
-    }
-  });
-
-  return new Promise((resolvePromise, reject) => {
-    server.once('error', reject);
-    server.listen(0, '127.0.0.1', () => {
-      const address = server.address();
-      resolvePromise({ server, baseUrl: `http://127.0.0.1:${address.port}` });
-    });
-  });
-}
 
 const HARNESS_HTML = `<!doctype html>
 <html lang="fr">
@@ -193,7 +145,7 @@ const HARNESS_HTML = `<!doctype html>
 </body>
 </html>`;
 
-const { server, baseUrl } = await startStaticServer();
+const { server, baseUrl } = await startStaticServer({ root: ROOT, headers: { 'Cache-Control': 'no-cache' } });
 let browser;
 
 try {

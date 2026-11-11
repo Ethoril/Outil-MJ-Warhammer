@@ -1,18 +1,18 @@
 import {chooseBoolean} from './helpers/confirmation.mjs';
 import { openU1Settings, closeU1Drawer } from './helpers/u1-drawer.mjs';
 import assert from 'node:assert/strict';
-import {createServer} from 'node:http';
-import {readFile,writeFile,mkdir} from 'node:fs/promises';
-import {resolve,extname,sep} from 'node:path';
+import {writeFile,mkdir} from 'node:fs/promises';
+import {resolve} from 'node:path';
 import {workspaceHarness} from './helpers/lot3-workspace-harness.mjs';
 import { launchBrowser } from './helpers/browser.mjs';
-const root=resolve('.'),server=createServer(async(req,res)=>{try{const u=new URL(req.url,'http://localhost');if(u.pathname==='/harness'){res.setHeader('Content-Type','text/html');res.end(workspaceHarness);return;}const p=resolve(root,'.'+decodeURIComponent(u.pathname));assert.ok(p.startsWith(root+sep));res.setHeader('Content-Type',extname(p)==='.js'?'application/javascript':extname(p)==='.json'?'application/json':'text/css');res.end(await readFile(p));}catch{res.writeHead(404).end();}});
+import { createStaticServer, blockExternalNetwork } from './helpers/static-server.mjs';
+const root=resolve('.'),server=createStaticServer({ root, pages: { '/harness': () => workspaceHarness } });
 await new Promise(ok=>server.listen(0,'127.0.0.1',ok));const origin='http://127.0.0.1:'+server.address().port;
 let browser;const receipts=[],errors=[];
 try{browser=await launchBrowser();
  for(const width of [1440,390])for(const theme of ['dark','parchment']){
   const context=await browser.newContext({viewport:{width,height:1050},serviceWorkers:'block'});
-  await context.route('**/*',route=>route.request().url().startsWith(origin)?route.continue():route.abort());
+  await blockExternalNetwork(context, origin);
   const page=await context.newPage();page.setDefaultTimeout(3000);page.on('pageerror',e=>errors.push(e.message));await page.goto(origin+'/harness');await page.waitForFunction(()=>window.ready);
   await page.evaluate(async theme=>{document.documentElement.dataset.theme=theme;const s=window.__TEST__.Store,p=s.listParticipants().find(p=>p.id==='mage');await s.updateParticipant('mage',{talents:[{id:'talent-suffuse-with',status:'resolved',rank:1,specialization:'Aqshy'},{id:'talent-lileath-s-blessing',status:'resolved',rank:2}],caracs:{...p.caracs,FM:20},skills:[{name:'Focalisation',total:60},{name:'Focalisation (Haute Magie)',total:60}]});},theme);
   if(width<=900)await closeU1Drawer(page);await page.locator('[data-action-key="activate:frenzy"]').click();await openU1Settings(page);await page.locator('[data-roll-input="attack"]').fill('45');await page.getByLabel('Compétence du Test de Frénésie',{exact:true}).selectOption('FM');if(width<=900)await closeU1Drawer(page);assert.equal(await page.locator('[data-roll-input="attack"]').inputValue(),'45');await page.locator('[data-focus-key="calculate"]').click();assert.equal(await page.evaluate(()=>window.__TEST__.view.getViewState().resolution.preview.test.score),20);await openU1Settings(page);await page.getByLabel('Compétence du Test de Frénésie',{exact:true}).selectOption('Aqshy');if(width<=900)await closeU1Drawer(page);assert.equal(await page.locator('[data-roll-input="attack"]').inputValue(),'45');await page.locator('[data-focus-key="calculate"]').click();assert.equal(await page.evaluate(()=>window.__TEST__.view.getViewState().resolution.preview.test.score),60);

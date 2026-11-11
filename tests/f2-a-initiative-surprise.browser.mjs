@@ -1,23 +1,11 @@
 import assert from 'node:assert/strict';
-import { createServer } from 'node:http';
-import { readFileSync, statSync } from 'node:fs';
-import { resolve, sep, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { launchBrowser } from './helpers/browser.mjs';
+import { createStaticServer } from './helpers/static-server.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
-const types = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.json': 'application/json', '.css': 'text/css', '.svg': 'image/svg+xml', '.webmanifest': 'application/manifest+json' };
 const base = '/Outil-MJ-Warhammer/';
-const server = createServer((req, res) => {
-  try {
-    const pathname = decodeURIComponent(new URL(req.url, 'http://localhost').pathname);
-    assert.ok(pathname.startsWith(base));
-    const path = resolve(root, pathname.slice(base.length) || 'index.html');
-    assert.ok(path.startsWith(resolve(root) + sep) && statSync(path).isFile());
-    res.writeHead(200, { 'Content-Type': types[extname(path)] || 'application/octet-stream', 'Cache-Control': 'no-store' });
-    res.end(readFileSync(path));
-  } catch { res.writeHead(404); res.end('Not found'); }
-});
+const server = createStaticServer({ root, base, headers: { 'Cache-Control': 'no-store' } });
 let browser;
 try {
   await new Promise(done => server.listen(0, '127.0.0.1', done));

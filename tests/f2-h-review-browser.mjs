@@ -1,19 +1,16 @@
 import { openU1Settings } from './helpers/u1-drawer.mjs';
 import assert from 'node:assert/strict';
-import { createServer } from 'node:http';
-import { readFileSync, statSync } from 'node:fs';
-import { resolve, sep, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import L18 from '../js/data/bestiary/L18.json' with { type: 'json' };
 import L22 from '../js/data/bestiary/L22.json' with { type: 'json' };
 import L25 from '../js/data/bestiary/L25.json' with { type: 'json' };
 import { buildParticipantFromBestiary } from '../js/core/bestiary-profiles.js';
 import { launchBrowser } from './helpers/browser.mjs';
+import { createStaticServer } from './helpers/static-server.mjs';
 
 // Parcours navigateur F2-H : section « Règles propres au profil », saisies de la décharge, confirmation du crâne, Lasso sans erreur UI.
 const root=fileURLToPath(new URL('../',import.meta.url)),base='/Outil-MJ-Warhammer/';
-const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.json':'application/json; charset=utf-8','.svg':'image/svg+xml'};
-const server=createServer((req,res)=>{try{const pathname=decodeURIComponent(new URL(req.url,'http://localhost').pathname);assert.ok(pathname.startsWith(base));const path=resolve(root,pathname.slice(base.length)||'index.html');assert.ok(path.startsWith(resolve(root)+sep)&&statSync(path).isFile());res.writeHead(200,{'Content-Type':mime[extname(path)]||'application/octet-stream','Cache-Control':'no-store'});res.end(readFileSync(path));}catch{res.writeHead(404);res.end();}});
+const server=createStaticServer({ root, base, headers: { 'Cache-Control': 'no-store' } });
 await new Promise(done=>server.listen(0,'127.0.0.1',done));
 const browser=await launchBrowser();
 const build=(library,id,newId,name,camp)=>{let i=0;const row=buildParticipantFromBestiary(id,{library:library.profiles,idFactory:()=>`${newId}-${++i}`});return {...row,id:newId,name,camp,zone:'active'};};

@@ -1,15 +1,12 @@
 // U3 (05/11) : colonne Jouer allégée — équipement en puces sur la fiche, repli des projectiles hors duel.
 import assert from 'node:assert/strict';
-import { createServer } from 'node:http';
-import { readFileSync, statSync } from 'node:fs';
-import { resolve, sep, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import reference from '../js/data/reference-snapshot.json' with { type: 'json' };
 import { launchBrowser } from './helpers/browser.mjs';
+import { createStaticServer } from './helpers/static-server.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url)), base = '/Outil-MJ-Warhammer/';
-const mime = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.json': 'application/json; charset=utf-8', '.svg': 'image/svg+xml' };
-const server = createServer((req, res) => { try { const pathname = decodeURIComponent(new URL(req.url, 'http://localhost').pathname); assert.ok(pathname.startsWith(base)); const path = resolve(root, pathname.slice(base.length) || 'index.html'); assert.ok(path.startsWith(resolve(root) + sep) && statSync(path).isFile()); res.writeHead(200, { 'Content-Type': mime[extname(path)] || 'application/octet-stream', 'Cache-Control': 'no-store' }); res.end(readFileSync(path)); } catch { res.writeHead(404); res.end('Not found'); } });
+const server = createStaticServer({ root, base, headers: { 'Cache-Control': 'no-store' } });
 await new Promise(done => server.listen(0, '127.0.0.1', done));
 const browser = await launchBrowser();
 try {

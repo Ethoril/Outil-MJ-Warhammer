@@ -1,14 +1,13 @@
 import {chooseBoolean} from './helpers/confirmation.mjs';
 import assert from 'node:assert/strict';
-import { createServer } from 'node:http';
-import { readFile, stat, mkdir } from 'node:fs/promises';
-import { extname, join, normalize, resolve } from 'node:path';
+import { mkdir } from 'node:fs/promises';
+import { join, resolve } from 'node:path';
 import { existsSync } from 'node:fs';
 import { launchBrowser } from './helpers/browser.mjs';
+import { createStaticServer } from './helpers/static-server.mjs';
 
 const ROOT = resolve('.');
 const EVIDENCE = resolve(process.env.DIVINE_UI_EVIDENCE_DIR || 'tmp/divin/browser');
-const mime = { '.css':'text/css','.html':'text/html','.js':'text/javascript','.json':'application/json','.svg':'image/svg+xml' };
 const html = `<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="/MJ.css"><link rel="stylesheet" href="/js/ui/workspace.css"></head><body><div id="workspace-mount"></div><script type="module">
 import {createStore} from '/js/core/store.js';import {initWorkspaceView} from '/js/ui/workspace-view.js';import {createCombatEngine} from '/js/core/combat.js';import {calculateEffectiveMagicAP} from '/js/core/v5-magic-effects.js';import registry from '/js/data/v5-divine-contracts.json' with {type:'json'};
 let saved=localStorage.getItem('divine-v5-state');const hadSaved=Boolean(saved);const listeners=new Map();const bus={on(e,f){if(!listeners.has(e))listeners.set(e,new Set());listeners.get(e).add(f)},emit(e,...a){for(const f of listeners.get(e)||[])f(...a)}};
@@ -20,7 +19,7 @@ if(!hadSaved)await Store.loadFromJSON(JSON.stringify({schemaVersion:3,reserve:[]
 const view=initWorkspaceView({mount:document.getElementById('workspace-mount'),Store,Bus:bus,actions:{applyResolution:p=>Store.applyResolution(p),acquireStates:(...a)=>Store.acquireStates(...a),recoverState:(...a)=>Store.recoverState(...a),setStates:(...a)=>Store.setStates(...a),setMomentum:(...a)=>Store.setMomentum(...a)}});view.setSpace('play');const combat=createCombatEngine(Store);window.__TEST__={Store,view,combat,calculateEffectiveMagicAP};
 </script></body></html>`;
 
-const server = createServer(async (req,res)=>{try{const url=new URL(req.url||'/', 'http://localhost');if(url.pathname==='/__divine__.html'){res.writeHead(200,{'Content-Type':'text/html'}).end(html);return;}const raw=decodeURIComponent(url.pathname),safe=normalize(raw).replace(/^(\.\.[/\\])+/,''),path=resolve(join(ROOT,safe));if(!path.startsWith(ROOT))throw new Error();const info=await stat(path),file=info.isDirectory()?join(path,'index.html'):path;res.writeHead(200,{'Content-Type':mime[extname(file)]||'application/octet-stream','Cache-Control':'no-cache'}).end(await readFile(file));}catch{res.writeHead(404).end('Not found');}});
+const server = createStaticServer({ root: ROOT, pages: { '/__divine__.html': () => html }, headers: { 'Cache-Control': 'no-cache' } });
 await mkdir(EVIDENCE,{recursive:true});
 await new Promise(resolveListen=>server.listen(0,'127.0.0.1',resolveListen));
 const base=`http://127.0.0.1:${server.address().port}`;

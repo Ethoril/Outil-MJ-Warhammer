@@ -1,23 +1,15 @@
 import {chooseBoolean} from './helpers/confirmation.mjs';
 import { openU1Settings, closeU1Drawer } from './helpers/u1-drawer.mjs';
 import assert from 'node:assert/strict';
-import { createServer } from 'node:http';
-import { readFileSync, statSync, mkdirSync } from 'node:fs';
-import { join, resolve, extname, sep } from 'node:path';
+import { mkdirSync } from 'node:fs';
+import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { expect } from 'playwright/test';
 import { launchBrowser } from './helpers/browser.mjs';
+import { createStaticServer, blockExternalNetwork } from './helpers/static-server.mjs';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
-const mime = { '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.html': 'text/html; charset=utf-8', '.json': 'application/json', '.svg': 'image/svg+xml' };
-const server = createServer((req, res) => {
-  try {
-    const pathname = decodeURIComponent(new URL(req.url, 'http://localhost').pathname);
-    const file = resolve(root, `.${pathname === '/' ? '/index.html' : pathname}`);
-    if (!file.startsWith(resolve(root) + sep) || !statSync(file).isFile()) throw new Error('not found');
-    res.writeHead(200, { 'Content-Type': mime[extname(file)] || 'application/octet-stream' }); res.end(readFileSync(file));
-  } catch { res.writeHead(404); res.end('Not found'); }
-});
+const server = createStaticServer({ root });
 await new Promise(resolveListen => server.listen(0, '127.0.0.1', resolveListen));
 const origin = `http://127.0.0.1:${server.address().port}`;
 const browser = await launchBrowser();
@@ -25,7 +17,7 @@ mkdirSync(join(root, 'tmp/lot2-keyword-control-ui'), { recursive: true });
 const errors = [];
 async function setup({ width = 1440, both = false, states = [], extraTarget = false, actorMomentum = true, actorTalents = [], targetTalents = [] } = {}) {
   const context = await browser.newContext({ viewport: { width, height: 980 }, serviceWorkers: 'block' });
-  await context.route('**/*', route => route.request().url().startsWith(origin) ? route.continue() : route.abort());
+  await blockExternalNetwork(context, origin);
   const page = await context.newPage(); page.on('pageerror', error => errors.push(error.message));
   await page.goto(`${origin}/blank`); await page.setContent('<main><div id="mount"></div><button id="test-undo">Annuler la dernière commande</button><div id="editor"></div><div id="dice-prep-results"></div><button id="test-quick-roll">Jet rapide V5</button><button id="test-next-turn">Terminer le tour de recette</button></main>');
   await page.addStyleTag({ path: join(root, 'MJ.css') }); await page.addStyleTag({ path: join(root, 'js/ui/workspace.css') });

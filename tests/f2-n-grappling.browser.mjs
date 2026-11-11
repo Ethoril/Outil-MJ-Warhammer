@@ -1,23 +1,21 @@
 import {chooseBoolean} from './helpers/confirmation.mjs';
 import { openU1Settings, openU1Types } from './helpers/u1-drawer.mjs';
 import assert from 'node:assert/strict';
-import { createServer } from 'node:http';
-import { readFileSync, statSync } from 'node:fs';
-import { resolve, extname, sep } from 'node:path';
+import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { launchBrowser } from './helpers/browser.mjs';
+import { createStaticServer, blockExternalNetwork } from './helpers/static-server.mjs';
 
 // Browser integration against index.html, the singleton production Store, the
 // real resolution panel and its IndexedDB adapter. No mock DOM or Store.
 const root=resolve(fileURLToPath(new URL('../',import.meta.url)));
-const mime={'.js':'text/javascript; charset=utf-8','.json':'application/json','.css':'text/css; charset=utf-8','.html':'text/html; charset=utf-8'};
-const server=createServer((req,res)=>{try{const pathname=decodeURIComponent(new URL(req.url,'http://localhost').pathname);const file=resolve(root,`.${pathname}`);assert.ok(file.startsWith(root+sep));assert.ok(statSync(file).isFile());res.writeHead(200,{'content-type':mime[extname(file)]||'application/octet-stream'});res.end(readFileSync(file));}catch{res.writeHead(404);res.end('Not found');}});
+const server=createStaticServer({ root });
 await new Promise(done=>server.listen(0,'127.0.0.1',done));
 const browser=await launchBrowser();
 const origin=`http://127.0.0.1:${server.address().port}`;
 try{
  const context=await browser.newContext({serviceWorkers:'block',viewport:{width:1440,height:900}}),page=await context.newPage(),errors=[];
- page.on('pageerror',e=>errors.push(e.message));page.on('dialog',async d=>d.accept());await page.route('**/*',route=>route.request().url().startsWith(origin+'/')?route.continue():route.abort());
+ page.on('pageerror',e=>errors.push(e.message));page.on('dialog',async d=>d.accept());await blockExternalNetwork(page, origin);
  await page.route('**/js/core/sync.js',route=>route.fulfill({contentType:'text/javascript',body:`export function initFirebaseSync(onConnected){document.querySelector('#login-screen')?.style.setProperty('display','none');document.querySelector('#app-content')?.style.setProperty('display','block');onConnected({dbRef:'isolated-test',onValue(){},update(){return Promise.resolve();}});}`}));
  await page.goto(origin+'/index.html');await page.waitForFunction(()=>document.querySelector('#app-content')?.style.display==='block');
  await page.evaluate(async()=>{window.__f2n=await import('./js/main.js');await window.__f2n.Store.ready;window.__panel=await import('./js/ui/resolution-panel.js');});

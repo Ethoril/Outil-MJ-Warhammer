@@ -1,25 +1,11 @@
 import assert from 'node:assert/strict';
-import { createServer } from 'node:http';
-import { readFileSync } from 'node:fs';
-import { extname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { expect } from 'playwright/test';
 import { launchBrowser } from './helpers/browser.mjs';
+import { createStaticServer } from './helpers/static-server.mjs';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
-const server = createServer((req, res) => {
-  const pathname = decodeURIComponent(new URL(req.url, 'http://localhost').pathname);
-  if (pathname === '/blank') { res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' }); res.end('<!doctype html><title>Test Campagne</title>'); return; }
-  if (pathname === '/favicon.ico') { res.writeHead(204).end(); return; }
-  if (pathname.includes('..')) { res.writeHead(400).end(); return; }
-  try {
-    const file = join(root, pathname);
-    const mime = { '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.json': 'application/json' };
-    const data = readFileSync(file);
-    res.writeHead(200, { 'Content-Type': mime[extname(file)] || 'text/html; charset=utf-8', 'Access-Control-Allow-Origin': '*' });
-    res.end(data);
-  } catch { res.writeHead(404).end(`Not found: ${pathname}`); }
-});
+const server = createStaticServer({ root, pages: { '/blank': '<!doctype html><title>Test Campagne</title>', '/favicon.ico': { status: 204 } }, headers: { 'Access-Control-Allow-Origin': '*' } });
 await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
 const origin = `http://127.0.0.1:${server.address().port}`;
 const browser = await launchBrowser();

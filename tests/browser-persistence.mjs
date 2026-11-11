@@ -1,41 +1,13 @@
 import assert from 'node:assert/strict';
-import { createServer } from 'node:http';
-import { readFileSync, statSync } from 'node:fs';
-import { join, normalize, extname } from 'node:path';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { expect } from 'playwright/test';
 import { launchBrowser } from './helpers/browser.mjs';
+import { startStaticServer, blockExternalNetwork } from './helpers/static-server.mjs';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const fixtures = join(root, 'tests', 'fixtures');
-const mime = {
-  '.html': 'text/html; charset=utf-8',
-  '.js': 'text/javascript; charset=utf-8',
-  '.css': 'text/css; charset=utf-8',
-  '.json': 'application/json',
-  '.svg': 'image/svg+xml',
-  '.woff2': 'font/woff2'
-};
-
-function startStaticServer() {
-  const server = createServer((req, res) => {
-    const requestPath = decodeURIComponent((req.url || '/').split('?')[0]);
-    const relative = normalize(requestPath === '/' ? '/index.html' : requestPath);
-    const file = join(root, relative);
-    try {
-      if (!file.startsWith(root) || !statSync(file).isFile()) throw new Error('not found');
-      res.writeHead(200, { 'Content-Type': mime[extname(file)] || 'application/octet-stream' });
-      res.end(readFileSync(file));
-    } catch {
-      res.writeHead(404);
-      res.end('Not found');
-    }
-  });
-  return new Promise((resolve, reject) => {
-    server.once('error', reject);
-    server.listen(0, '127.0.0.1', () => resolve({ server, port: server.address().port }));
-  });
-}
 
 // Les commandes de séance vivent dans le menu ⋯ de la barre du haut.
 async function openAppMenu(page) {
@@ -45,10 +17,7 @@ async function openAppMenu(page) {
 }
 
 async function isolateNetwork(context, port) {
-  await context.route('**/*', route => {
-    if (route.request().url().startsWith(`http://127.0.0.1:${port}/`)) return route.continue();
-    return route.abort();
-  });
+  await blockExternalNetwork(context, port);
 }
 
 async function waitForApp(page) {
@@ -132,7 +101,7 @@ async function runScenario(name, callback, results) {
 }
 
 async function main() {
-  const { server, port } = await startStaticServer();
+  const { server, port } = await startStaticServer({ root });
   const origin = `http://127.0.0.1:${port}`;
   const browser = await launchBrowser();
   const results = [];

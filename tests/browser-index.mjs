@@ -1,40 +1,12 @@
 import { tmpdir } from 'node:os';
 import assert from 'node:assert/strict';
-import { createServer } from 'node:http';
-import { readFileSync, statSync } from 'node:fs';
-import { join, normalize, extname } from 'node:path';
+import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { expect } from 'playwright/test';
 import { launchBrowser } from './helpers/browser.mjs';
+import { startStaticServer, blockExternalNetwork } from './helpers/static-server.mjs';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
-const mime = {
-  '.html': 'text/html; charset=utf-8',
-  '.js': 'text/javascript; charset=utf-8',
-  '.css': 'text/css; charset=utf-8',
-  '.json': 'application/json',
-  '.svg': 'image/svg+xml',
-  '.woff2': 'font/woff2'
-};
-
-function startServer() {
-  const server = createServer((request, response) => {
-    const requestPath = decodeURIComponent((request.url || '/').split('?')[0]);
-    const file = join(root, normalize(requestPath === '/' ? '/index.html' : requestPath));
-    try {
-      if (!file.startsWith(root) || !statSync(file).isFile()) throw new Error('not found');
-      response.writeHead(200, { 'Content-Type': mime[extname(file)] || 'application/octet-stream' });
-      response.end(readFileSync(file));
-    } catch {
-      response.writeHead(404);
-      response.end('Not found');
-    }
-  });
-  return new Promise((resolve, reject) => {
-    server.once('error', reject);
-    server.listen(0, '127.0.0.1', () => resolve({ server, port: server.address().port }));
-  });
-}
 
 // Les commandes de séance vivent dans le menu ⋯ de la barre du haut.
 // Le lancement ouvre le dialogue d'initiative (F2-A) : saisir des d10 distincts (pas d'égalité), calculer l'ordre, confirmer.
@@ -56,14 +28,11 @@ async function openAppMenu(page) {
 }
 
 async function main() {
-  const { server, port } = await startServer();
+  const { server, port } = await startStaticServer({ root });
   const browser = await launchBrowser();
   try {
     const context = await browser.newContext({ serviceWorkers: 'block', viewport: { width: 1440, height: 900 } });
-    await context.route('**/*', route => {
-      if (route.request().url().startsWith(`http://127.0.0.1:${port}/`)) return route.continue();
-      return route.abort();
-    });
+    await blockExternalNetwork(context, port);
     const page = await context.newPage();
     const errors = [];
     page.on('pageerror', error => errors.push(error.stack || error.message));

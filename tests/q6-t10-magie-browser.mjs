@@ -1,9 +1,7 @@
 import assert from 'node:assert/strict';
-import { createServer } from 'node:http';
-import { readFileSync, statSync } from 'node:fs';
-import { resolve, extname, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { launchBrowser } from './helpers/browser.mjs';
+import { createStaticServer } from './helpers/static-server.mjs';
 import { clickU1Magic } from './helpers/u1-drawer.mjs';
 import { chooseBoolean, confirmationValue } from './helpers/confirmation.mjs';
 
@@ -11,21 +9,7 @@ import { chooseBoolean, confirmationValue } from './helpers/confirmation.mjs';
 // dans le panneau de magie (lancer, Souffle, Tzeentch, méditation, rune des Cadai) et dans le panneau de Prière ; Obstiné est
 // proposé avant le jet et le détail par source s'affiche. Un parcours par écran.
 const root = fileURLToPath(new URL('..', import.meta.url));
-const types = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.json': 'application/json', '.css': 'text/css; charset=utf-8', '.svg': 'image/svg+xml' };
-const server = createServer((req, res) => {
-  try {
-    const path = new URL(req.url, 'http://localhost').pathname;
-    if (path === '/harness') {
-      res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
-      res.end('<!doctype html><html lang="fr"><head><link rel="stylesheet" href="/MJ.css"><link rel="stylesheet" href="/js/ui/workspace.css"></head><body><main id="mount"></main></body></html>');
-      return;
-    }
-    const file = resolve(root, '.' + decodeURIComponent(path));
-    if (!file.startsWith(resolve(root) + sep) || !statSync(file).isFile()) throw new Error('missing');
-    res.writeHead(200, { 'Content-Type': types[extname(file)] || 'application/octet-stream' });
-    res.end(readFileSync(file));
-  } catch { res.writeHead(404).end(); }
-});
+const server = createStaticServer({ root, pages: { '/harness': '<!doctype html><html lang="fr"><head><link rel="stylesheet" href="/MJ.css"><link rel="stylesheet" href="/js/ui/workspace.css"></head><body><main id="mount"></main></body></html>' } });
 await new Promise(done => server.listen(0, '127.0.0.1', done));
 const browser = await launchBrowser();
 const results = [];
@@ -53,8 +37,10 @@ try {
       const wizard = person('mage', 'Mage', 'pj', { skills: [{ name: 'Focalisation', total: 50 }, { name: 'Langue (Magick)', total: 60 }, { name: 'Prière', total: 50 }, { name: 'Calme', total: 50 }],
         spells: spellRows, ...mage, extensions: { v5: { magic: { lore: 'fire' }, channelling: { sl: 6, type: 'winds' }, ...v5 } } });
       const enemies = foes.map(foe => person(foe.id, foe.name || foe.id, 'ennemi', foe.patch || {}));
+      // Une séance est ouverte (talentSessionId) : sans elle, l'option Obstiné est désactivée (« Commencez d’abord une séance »).
       await store.loadFromJSON({ schemaVersion: 3, reserve: [], log: [], diceLines: [],
-        combat: { round: 1, currentActorId: 'mage', order: ['mage', ...enemies.map(row => row.id)], participants: [wizard, ...enemies] }, extensions });
+        combat: { round: 1, currentActorId: 'mage', order: ['mage', ...enemies.map(row => row.id)], participants: [wizard, ...enemies] },
+        extensions: { ...extensions, v5: { talentSessionId: 'q6-t10', ...extensions.v5 } } });
       if (sequela) {
         const current = store.listParticipants().find(row => row.id === 'mage');
         await store.updateParticipant('mage', { extensions: { ...current.extensions, v5: { ...current.extensions.v5, sequelaEffects: { rows: sequela } } } });

@@ -1,18 +1,15 @@
 import {chooseBoolean, confirmationValue} from './helpers/confirmation.mjs';
 import { openU1Settings, openU1Types } from './helpers/u1-drawer.mjs';
 import assert from 'node:assert/strict';
-import { createServer } from 'node:http';
-import { readFileSync, statSync } from 'node:fs';
-import { resolve, sep, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { getReferenceCatalogue } from '../js/core/reference-catalog.js';
 import { launchBrowser } from './helpers/browser.mjs';
+import { createStaticServer } from './helpers/static-server.mjs';
 
 // Parcours d'intégration sur l'application complète et son vrai Store. Les
 // semences sont injectées dans le Store invité du contexte navigateur jetable.
 const root=fileURLToPath(new URL('../',import.meta.url)),base='/Outil-MJ-Warhammer/';
-const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.json':'application/json; charset=utf-8','.svg':'image/svg+xml','.webmanifest':'application/manifest+json'};
-const server=createServer((req,res)=>{try{const pathname=decodeURIComponent(new URL(req.url,'http://localhost').pathname);assert.ok(pathname.startsWith(base));const path=resolve(root,pathname.slice(base.length)||'index.html');assert.ok(path.startsWith(resolve(root)+sep)&&statSync(path).isFile());res.writeHead(200,{'Content-Type':mime[extname(path)]||'application/octet-stream','Cache-Control':'no-store'});res.end(readFileSync(path));}catch{res.writeHead(404);res.end('Not found');}});
+const server=createStaticServer({ root, base, headers: { 'Cache-Control': 'no-store' } });
 const catalogue=getReferenceCatalogue();
 const catalogItem=name=>{const item=catalogue.items.find(row=>row.name===name);assert.ok(item,`profil catalogue disponible : ${name}`);return structuredClone(item);};
 const weapon=(id,name,actionId,extra={})=>{const source=catalogItem(name),item={...source,id,extensions:{...(source.extensions||{}),...(extra.extensions||{})}};const action={id:actionId,note:name,type:'attack',attr:'CT',base:60,damage:item.damage,qualities:structuredClone(item.keywords||[]),extensions:{fiche:{equipmentId:id}}};return {item,action};};

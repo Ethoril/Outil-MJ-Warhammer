@@ -1,28 +1,12 @@
 import assert from 'node:assert/strict';
-import { createServer } from 'node:http';
-import { readFileSync, statSync } from 'node:fs';
-import { resolve, extname, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { launchBrowser } from './helpers/browser.mjs';
+import { createStaticServer } from './helpers/static-server.mjs';
 
 // Plateau des mêlées (spec docs/specs/engagements S1-S4) : zones, jetons, déplacement par le MJ, barre d'actions,
 // Désengagement réglé et surnombre déduit dans le panneau de résolution.
 const root = fileURLToPath(new URL('..', import.meta.url));
-const types = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.json': 'application/json', '.css': 'text/css; charset=utf-8', '.svg': 'image/svg+xml' };
-const server = createServer((req, res) => {
-  try {
-    const path = new URL(req.url, 'http://localhost').pathname;
-    if (path === '/harness') {
-      res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
-      res.end('<!doctype html><html lang="fr"><head><link rel="stylesheet" href="/MJ.css"><link rel="stylesheet" href="/js/ui/workspace.css"></head><body><main id="mount"></main></body></html>');
-      return;
-    }
-    const file = resolve(root, '.' + decodeURIComponent(path));
-    if (!file.startsWith(resolve(root) + sep) || !statSync(file).isFile()) throw new Error('missing');
-    res.writeHead(200, { 'Content-Type': types[extname(file)] || 'application/octet-stream' });
-    res.end(readFileSync(file));
-  } catch { res.writeHead(404).end(); }
-});
+const server = createStaticServer({ root, pages: { '/harness': '<!doctype html><html lang="fr"><head><link rel="stylesheet" href="/MJ.css"><link rel="stylesheet" href="/js/ui/workspace.css"></head><body><main id="mount"></main></body></html>' } });
 await new Promise(done => server.listen(0, '127.0.0.1', done));
 const browser = await launchBrowser();
 try {
@@ -71,10 +55,10 @@ try {
   if (process.env.ENGAGEMENTS_SHOT) await page.screenshot({ path: process.env.ENGAGEMENTS_SHOT, fullPage: true });
   // CA18 : Forcer révèle les cases ; Revenir au plateau rétablit la déduction.
   await page.locator('.workspace-engagement-derived').first().getByRole('button', { name: 'Forcer' }).click();
-  await page.waitForTimeout(200);
+  await page.getByRole('button', { name: 'Revenir au plateau' }).first().waitFor();
   assert.ok(await page.getByRole('button', { name: 'Revenir au plateau' }).count() > 0);
   await page.getByRole('button', { name: 'Revenir au plateau' }).first().click();
-  await page.waitForTimeout(200);
+  await page.locator('.workspace-engagement-derived').first().waitFor();
   assert.ok(await page.locator('.workspace-engagement-derived').count() > 0);
   // CA6 : « Déplacer… » engage Elsa avec le Gobelin : une deuxième mêlée.
   await page.getByLabel('Déplacer Elsa').selectOption('engage:gob');
@@ -99,7 +83,7 @@ try {
   await assert.doesNotReject(hands.waitFor({ timeout: 5000 }));
   assert.match(await form.textContent(), /À saisir avant d’appliquer/);
   await hands.selectOption('false');
-  await page.waitForTimeout(200);
+  await page.waitForFunction(() => !/À saisir avant d’appliquer/.test(document.querySelector('.workspace-disengage')?.textContent || ''));
   assert.doesNotMatch(await form.textContent(), /À saisir avant d’appliquer/);
   const detail = await form.locator('.workspace-disengage-detail').textContent();
   assert.match(detail, /Gunther · À terre \(État\) : Désavantage/);
@@ -108,7 +92,7 @@ try {
   await form.getByLabel(/d100 de Gunther/).press('Tab');
   await form.getByLabel(/d100 de Orc/).fill('90');
   await form.getByLabel(/d100 de Orc/).press('Tab');
-  await page.waitForTimeout(200);
+  await page.waitForFunction(() => /Gunther se désengage/.test(document.querySelector('.workspace-disengage')?.textContent || ''));
   assert.match(await form.textContent(), /Gunther se désengage/);
   await form.getByRole('button', { name: 'Appliquer le désengagement' }).click();
   await page.waitForFunction(() => !window.__store.listEngagedWith('gunther').length, null, { timeout: 5000 });

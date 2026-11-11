@@ -1,22 +1,10 @@
 import assert from 'node:assert/strict';
-import { createServer } from 'node:http';
-import { readFileSync, statSync } from 'node:fs';
-import { join, normalize, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { launchBrowser } from './helpers/browser.mjs';
+import { createStaticServer } from './helpers/static-server.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
-const mime = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.json': 'application/json', '.svg': 'image/svg+xml', '.webmanifest': 'application/manifest+json' };
-const server = createServer((req, res) => {
-  try {
-    const pathname = decodeURIComponent((req.url || '/').split('?')[0]);
-    const relative = normalize(pathname === '/' ? '/index.html' : pathname);
-    const file = join(root, relative);
-    if (!file.startsWith(root) || !statSync(file).isFile()) throw new Error('missing');
-    res.writeHead(200, { 'Content-Type': mime[extname(file)] || 'application/octet-stream', 'Cache-Control': 'no-store' });
-    res.end(readFileSync(file));
-  } catch { res.writeHead(404); res.end('Not found'); }
-});
+const server = createStaticServer({ root, headers: { 'Cache-Control': 'no-store' } });
 
 await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
 const browser = await launchBrowser();

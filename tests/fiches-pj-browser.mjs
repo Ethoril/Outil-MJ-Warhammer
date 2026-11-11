@@ -2,23 +2,16 @@ import {chooseConfirmation} from './helpers/confirmation.mjs';
 import { openU1Settings } from './helpers/u1-drawer.mjs';
 /** Independent browser receipt for fiche sync. No Firebase/network account is used. */
 import assert from 'node:assert/strict';
-import { createServer } from 'node:http';
-import { readFileSync, statSync, existsSync, mkdirSync } from 'node:fs';
-import { join, normalize, extname } from 'node:path';
+import { readFileSync, existsSync, mkdirSync } from 'node:fs';
+import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
 import { expect } from 'playwright/test';
 import { launchBrowser } from './helpers/browser.mjs';
+import { createStaticServer, blockExternalNetwork } from './helpers/static-server.mjs';
 const root = fileURLToPath(new URL('..', import.meta.url));
 const fixture = JSON.parse(readFileSync(new URL('./fixtures/fiche-caelel.json', import.meta.url), 'utf8'));
-const mime = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.json': 'application/json', '.css': 'text/css', '.svg': 'image/svg+xml' };
-const server = createServer((req, res) => {
-  const route = (req.url || '/').split('?')[0];
-  if (route === '/control-harness.html') { res.writeHead(200, { 'Content-Type': mime['.html'] }); res.end('<!doctype html><html lang="fr"><meta charset="utf-8"><title>Recette fiches PJ</title><main id="mount"></main></html>'); return; }
-  const path = join(root, normalize(decodeURIComponent(route)));
-  try { assert.ok(path.startsWith(root)); assert.ok(statSync(path).isFile()); res.writeHead(200, { 'Content-Type': mime[extname(path)] || 'application/octet-stream' }); res.end(readFileSync(path)); }
-  catch { res.writeHead(404); res.end('Not found'); }
-});
+const server = createStaticServer({ root, pages: { '/control-harness.html': '<!doctype html><html lang="fr"><meta charset="utf-8"><title>Recette fiches PJ</title><main id="mount"></main></html>' } });
 const weapon = (id, extra = {}) => ({ id, baseId: 'fixture-same-model', catalogVersion: 'fixture-v1', kind: 'weapon', name: 'Épée de recette', category: 'Base', damage: 'BF+4', reach: 'Moyenne', range: '', ap: null, locations: [], layer: 'none', keywords: [{ id: 'unknown-test-keyword', parameter: 'valeur textuelle' }], notes: '<img src=x onerror="alert(1)">', source: 'Campagne', custom: true, ...extra });
 let browser;
 async function main() {
@@ -29,7 +22,7 @@ async function main() {
   const errors = []; const dialogs = [];
   page.on('pageerror', error => errors.push(error.stack || error.message));
   page.on('dialog', async dialog => { dialogs.push(dialog.message()); await dialog.dismiss(); });
-  await context.route('**/*', route => route.request().url().startsWith(origin + '/') ? route.continue() : route.abort());
+  await blockExternalNetwork(context, origin);
   await page.goto(origin + '/control-harness.html');
   await page.evaluate(async ({ fixture, equipment }) => {
     const { createStore } = await import('/js/core/store.js');

@@ -1,22 +1,13 @@
 // Lot 5 · C52 / G-MAG-2 : Brise-os, offrande Grande Gueule à 10 : l'aperçu doit annoncer le soin du lanceur.
 import assert from 'node:assert/strict';
-import { createServer } from 'node:http';
-import { readFile, stat } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
-import { extname, join, normalize, resolve } from 'node:path';
+import { resolve } from 'node:path';
 import { launchBrowser } from './helpers/browser.mjs';
+import { createStaticServer } from './helpers/static-server.mjs';
 import { openU1Settings, clickU1Magic } from './helpers/u1-drawer.mjs';
 
 const ROOT = resolve('.');
-const MIME = { '.css': 'text/css; charset=utf-8', '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.json': 'application/json; charset=utf-8', '.mjs': 'text/javascript; charset=utf-8', '.svg': 'image/svg+xml' };
-const server = createServer(async (req, res) => {
-  try {
-    const path = normalize(decodeURIComponent(new URL(req.url, 'http://x').pathname));
-    const file = resolve(join(ROOT, path));
-    if (!file.startsWith(ROOT) || !(await stat(file)).isFile()) throw new Error('missing');
-    res.writeHead(200, { 'Content-Type': MIME[extname(file)] || 'application/octet-stream' }); res.end(await readFile(file));
-  } catch { res.writeHead(404).end(); }
-});
+const server = createStaticServer({ root: ROOT });
 await new Promise(r => server.listen(0, '127.0.0.1', r));
 const baseUrl = `http://127.0.0.1:${server.address().port}`;
 const HARNESS = `<!doctype html><html lang="fr"><head><meta charset="utf-8"><link rel="stylesheet" href="/MJ.css"><link rel="stylesheet" href="/js/ui/workspace.css"></head>

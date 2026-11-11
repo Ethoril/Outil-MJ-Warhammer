@@ -1,15 +1,14 @@
 import {chooseBoolean} from './helpers/confirmation.mjs';
 import { openU1Settings, clickU1Magic } from './helpers/u1-drawer.mjs';
 import assert from 'node:assert/strict';
-import {createServer} from 'node:http';
-import {readFile} from 'node:fs/promises';
-import {resolve,extname} from 'node:path';
+import {resolve} from 'node:path';
 import contracts from '../js/data/v5-spell-contracts.json' with {type:'json'};
 import {workspaceHarness} from './helpers/lot3-workspace-harness.mjs';
 import { launchBrowser } from './helpers/browser.mjs';
+import { createStaticServer } from './helpers/static-server.mjs';
 
 const root=resolve('.');
-const server=createServer(async(req,res)=>{try{const url=new URL(req.url,'http://localhost');if(url.pathname==='/harness'){res.setHeader('Content-Type','text/html');res.end(workspaceHarness);return;}const path=resolve(root,'.'+decodeURIComponent(url.pathname));if(!path.startsWith(root+'\\')&&!path.startsWith(root+'/'))throw Error();res.setHeader('Content-Type',extname(path)==='.js'?'application/javascript':extname(path)==='.json'?'application/json':'text/css');res.end(await readFile(path));}catch{res.writeHead(404).end();}});
+const server=createStaticServer({ root, pages: { '/harness': () => workspaceHarness } });
 await new Promise(ok=>server.listen(0,'127.0.0.1',ok));
 const browser=await launchBrowser();
 const page=await browser.newPage({viewport:{width:1440,height:1000},serviceWorkers:'block'}),errors=[];page.on('pageerror',e=>{errors.push(e.message);console.log('Erreur de page : '+e.message);});

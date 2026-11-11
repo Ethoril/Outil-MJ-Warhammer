@@ -24,7 +24,7 @@ try {
   assert.equal(await dialog.locator('[name=camp]').inputValue(), 'pj', 'point de départ : camp PJ');
   await dialog.locator('[name=camp]').selectOption('neutre');
   await dialog.getByRole('button', { name: 'Enregistrer' }).click();
-  await page.waitForTimeout(300);
+  await page.waitForFunction(async () => { const { Store } = await import('/js/main.js'); return Store.listParticipants().find(item => item.name === 'Cobaye')?.camp === 'neutre'; });
   const stored = await page.evaluate(async () => { const { Store } = await import('/js/main.js'); return Store.listParticipants().find(item => item.name === 'Cobaye').camp; });
   assert.equal(stored, 'neutre', 'camp stocké');
   if (await dialog.isVisible()) await dialog.getByRole('button', { name: 'Fermer', exact: true }).click();
