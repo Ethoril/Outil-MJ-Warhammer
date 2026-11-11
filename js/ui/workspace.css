@@ -350,8 +350,11 @@
   min-width: 0;
   max-width: 100%;
   display: grid;
+  /* Les cartouches d'une zone se rangent côte à côte tant que la largeur le permet. */
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 185px), 1fr));
   gap: 6px;
   align-content: start;
+  align-items: start;
   padding: 10px;
   background: var(--j-wash);
   border: 1px solid var(--j-line-melee);
@@ -372,6 +375,7 @@
   outline-offset: 2px;
 }
 .workspace-zone-head {
+  grid-column: 1 / -1;
   display: flex;
   align-items: baseline;
   justify-content: space-between;
