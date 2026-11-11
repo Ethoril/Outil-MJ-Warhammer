@@ -1,3 +1,16 @@
+# Fins de ligne : tout texte est en LF, dans le dépôt comme dans l'arbre de travail,
+# quel que soit le réglage core.autocrlf de la machine (Windows : true par défaut).
+* text=auto eol=lf
+
+# Binaires : jamais convertis.
+*.png binary
+*.webp binary
+*.woff2 binary
+*.zip binary
+
+# Code tiers : octets conservés tels que livrés.
+vendor/** -text
+
 # Preserve the collected source bytes and their SHA256 proofs.
 # Whitespace inside raw CSV text belongs to the source content.
 js/data/reference-source-csv/*.csv -text -whitespace
