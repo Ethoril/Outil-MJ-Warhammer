@@ -267,7 +267,7 @@ try {
     assert.equal(await overcastBlock.locator('[data-focus-key="magic-beast-key"]').count(), 0, 'plus dans la surpuissance');
     assert.equal(await overcastBlock.getByLabel('Palier Main de Gloire').count(), 0, 'aucun champ d’un autre sort');
     assert.equal(await page.getByLabel('Jet 3d10 commun (Main de Gloire)').count(), 0);
-    assert.deepEqual(await page.locator('[data-focus-key="magic-beast-key"] option').allInnerTexts(), ['— Choisir un animal —', ...Object.values(BEAST_PROFILES).map(p => `${p.name} (Taille ${{ small: 'Petite', average: 'Moyenne', large: 'Grande' }[p.size]}, p. ${p.page})`)]);
+    assert.deepEqual(await page.locator('[data-focus-key="magic-beast-key"] option').allInnerTexts(), ['— Choisir un animal —', ...Object.values(BEAST_PROFILES).map(p => `${p.name} (Taille ${{ small: 'Petite', average: 'Moyenne', large: 'Grande' }[p.size]}, p. ${p.page}${p.edition ? `, livre ${p.edition}` : ''})`)]);
     await context.close();
   }
   for (const [key, profile] of Object.entries(BEAST_PROFILES)) {
