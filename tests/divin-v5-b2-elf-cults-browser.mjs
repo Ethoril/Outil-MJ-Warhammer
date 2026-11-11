@@ -1,19 +1,14 @@
 import {chooseConfirmation} from './helpers/confirmation.mjs';
 /** B02 : vrai panneau, IndexedDB native, attribution humaine puis Prière elfique. */
 import assert from 'node:assert/strict';
-import {createServer} from 'node:http';
-import {readFileSync,statSync,mkdirSync,writeFileSync} from 'node:fs';
-import {resolve,sep,extname} from 'node:path';
+import {mkdirSync,writeFileSync} from 'node:fs';
+import {resolve} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import { launchBrowser } from './helpers/browser.mjs';
+import { createStaticServer, blockExternalNetwork } from './helpers/static-server.mjs';
 const root=fileURLToPath(new URL('../',import.meta.url));
 const output=resolve(root,'tmp/gpt-phase-b/b2-browser');mkdirSync(output,{recursive:true});
-const types={'.html':'text/html; charset=utf-8','.js':'text/javascript','.json':'application/json','.css':'text/css','.svg':'image/svg+xml','.webmanifest':'application/manifest+json'};
-const server=createServer((req,res)=>{try{
- const file=resolve(root,decodeURIComponent(new URL(req.url,'http://localhost').pathname).slice(1)||'index.html');
- assert.ok(file.startsWith(resolve(root)+sep)&&statSync(file).isFile());
- res.writeHead(200,{'Content-Type':types[extname(file)]||'application/octet-stream','Cache-Control':'no-store'});res.end(readFileSync(file));
-}catch{res.writeHead(404).end();}});
+const server=createStaticServer({ root, headers: { 'Cache-Control': 'no-store' } });
 const receipt={passed:false,checks:[],screenshots:[]},MATH='divine:miracle:mathlann:waterlungs';
 let browser,page;
 const snapshot=()=>page.evaluate(async()=>{const {Store}=await import('/js/main.js');await Store.whenIdle();return JSON.parse(Store.getFullJSON());});
@@ -23,7 +18,7 @@ try{
  await new Promise(done=>server.listen(0,'127.0.0.1',done));
  browser=await launchBrowser();
  const context=await browser.newContext({serviceWorkers:'block',viewport:{width:1440,height:900}});
- await context.route('https://**',route=>route.abort());
+ await blockExternalNetwork(context, server);
  page=await context.newPage();page.setDefaultTimeout(8000);const errors=[];page.on('pageerror',error=>errors.push(error.message));
  await page.goto(`http://127.0.0.1:${server.address().port}/`,{waitUntil:'domcontentloaded'});await ready();
  await page.evaluate(async math=>{

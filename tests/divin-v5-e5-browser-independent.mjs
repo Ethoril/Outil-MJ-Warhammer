@@ -1,16 +1,15 @@
 /** Independent browser check of the existing end-turn control and native IndexedDB persistence. */
 import assert from 'node:assert/strict';
-import { createServer } from 'node:http';
-import { mkdir, readFile, stat, writeFile } from 'node:fs/promises';
-import { extname, join, normalize, resolve } from 'node:path';
+import { mkdir, writeFile } from 'node:fs/promises';
+import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { existsSync } from 'node:fs';
 import { launchBrowser } from './helpers/browser.mjs';
+import { createStaticServer } from './helpers/static-server.mjs';
 
 const ROOT = resolve(fileURLToPath(new URL('..', import.meta.url)));
 const EVIDENCE = join(ROOT, 'tmp', 'divin', 'e5-browser-independent');
 const RUN_ID = `${Date.now()}-${Math.random().toString(36).slice(2)}`;
-const mime = { '.css': 'text/css', '.html': 'text/html', '.js': 'text/javascript', '.json': 'application/json', '.svg': 'image/svg+xml' };
 const html = `<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="/MJ.css"><link rel="stylesheet" href="/js/ui/workspace.css"></head><body>
 <main><h1>Contrôle indépendant E5</h1><div id="combat-banner"></div><div id="history"><button id="undo">Annuler</button><button id="redo">Rétablir</button></div><pre id="state" style="max-width:100%;max-height:12rem;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere"></pre></main>
 <script type="module">
@@ -45,17 +44,7 @@ document.querySelector('#redo').onclick=async()=>{await Store.redo();await Store
 banner.render('play');window.__E5__={Store,Combat,persistence,banner,render,current};render();
 </script></body></html>`;
 
-const server = createServer(async (req, res) => {
-  try {
-    const url = new URL(req.url || '/', 'http://localhost');
-    if (url.pathname === '/favicon.ico') { res.writeHead(204).end(); return; }
-    if (url.pathname === '/__e5__') { res.writeHead(200, { 'Content-Type': 'text/html' }).end(html); return; }
-    const raw = decodeURIComponent(url.pathname), safe = normalize(raw).replace(/^(\.\.[/\\])+/, ''), path = resolve(join(ROOT, safe));
-    if (!path.startsWith(ROOT)) throw new Error('outside root');
-    const info = await stat(path), file = info.isDirectory() ? join(path, 'index.html') : path;
-    res.writeHead(200, { 'Content-Type': mime[extname(file)] || 'application/octet-stream', 'Cache-Control': 'no-cache' }).end(await readFile(file));
-  } catch { res.writeHead(404).end('Not found'); }
-});
+const server = createStaticServer({ root: ROOT, pages: { '/favicon.ico': { status: 204 }, '/__e5__': () => html }, headers: { 'Cache-Control': 'no-cache' } });
 await new Promise(resolveListen => server.listen(0, '127.0.0.1', resolveListen));
 await mkdir(EVIDENCE, { recursive: true });
 let browser;

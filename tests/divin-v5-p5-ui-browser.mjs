@@ -1,33 +1,11 @@
-import { createServer } from 'node:http';
-import { readFileSync, statSync } from 'node:fs';
-import { join, normalize, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { launchBrowser } from './helpers/browser.mjs';
+import { startStaticServer, blockExternalNetwork } from './helpers/static-server.mjs';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
-const mime = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.json': 'application/json' };
 const CALM_LABEL = 'Test de Calme de l’attaquant (Bénédiction de Protection)';
 const REVERSE_LABEL = 'Inverser les dés de ce Test (Fortune généreuse : 82 devient 28)';
 const QUICK_LABEL = 'Attaque rapide (Myrmidia) : attaque gratuite hors séquence';
-
-function startServer() {
-  const server = createServer((req, res) => {
-    const requestPath = decodeURIComponent((req.url || '/').split('?')[0]);
-    try {
-      const file = join(root, normalize(requestPath));
-      if (!file.startsWith(root) || !statSync(file).isFile()) throw new Error('not found');
-      res.writeHead(200, { 'Content-Type': mime[extname(file)] || 'text/plain; charset=utf-8' });
-      res.end(readFileSync(file));
-    } catch {
-      res.writeHead(404);
-      res.end('Not found');
-    }
-  });
-  return new Promise((resolve, reject) => {
-    server.once('error', reject);
-    server.listen(0, '127.0.0.1', () => resolve({ server, port: server.address().port }));
-  });
-}
 
 
 const failures = [];
@@ -37,7 +15,7 @@ const check = (ok, description) => {
   else { failures.push(description); console.log('FAIL — ' + description); }
 };
 
-const { server, port } = await startServer();
+const { server, port } = await startStaticServer({ root, pages: { '/': '<!doctype html><title>Page vierge</title>' } });
 const browser = await launchBrowser();
 try {
   const context = await browser.newContext({ serviceWorkers: 'block' });
@@ -169,7 +147,7 @@ try {
   check(await quickCheckbox.count() === 0, 'acteur sans couche freeAttack : aucune case « Attaque rapide »');
 
   // A11 : fiche réelle, commande publique du Store observée, puis Annuler par un geste.
-  await context.route('https://**', route => route.abort());
+  await blockExternalNetwork(context, server);
   const appPage = await context.newPage();
   appPage.on('pageerror', error => pageErrors.push(error.message));
   await appPage.goto(`http://127.0.0.1:${port}/index.html`);

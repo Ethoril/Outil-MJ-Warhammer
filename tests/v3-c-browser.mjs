@@ -1,25 +1,13 @@
 import { openU1Settings, openU1Types } from './helpers/u1-drawer.mjs';
 import assert from 'node:assert/strict';
-import { createServer } from 'node:http';
-import { readFileSync, statSync } from 'node:fs';
-import { resolve, sep, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { launchBrowser } from './helpers/browser.mjs';
+import { createStaticServer } from './helpers/static-server.mjs';
 
 // Lot v3-C : parcours navigateur sur l'application complète et son vrai Store (livre de base V5 v3) :
 // Diction instinctive refusée après un Test raté (p.121), attribut des Bêtes (p.245), attaque gratuite du Trait Grim (p.358).
 const root = fileURLToPath(new URL('../', import.meta.url)), base = '/Outil-MJ-Warhammer/';
-const mime = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.json': 'application/json; charset=utf-8', '.svg': 'image/svg+xml', '.webmanifest': 'application/manifest+json' };
-const server = createServer((req, res) => {
-  try {
-    const pathname = decodeURIComponent(new URL(req.url, 'http://localhost').pathname);
-    assert.ok(pathname.startsWith(base));
-    const path = resolve(root, pathname.slice(base.length) || 'index.html');
-    assert.ok(path.startsWith(resolve(root) + sep) && statSync(path).isFile());
-    res.writeHead(200, { 'Content-Type': mime[extname(path)] || 'application/octet-stream', 'Cache-Control': 'no-store' });
-    res.end(readFileSync(path));
-  } catch { res.writeHead(404); res.end('Not found'); }
-});
+const server = createStaticServer({ root, base, headers: { 'Cache-Control': 'no-store' } });
 const person = (id, name, camp, extra = {}) => ({ id, name, kind: camp === 'pj' ? 'PJ' : 'PNJ', camp, zone: 'active', initiative: 40, hp: 40, maxHp: 40,
   caracs: { CC: 60, CT: 60, F: 40, E: 30, BE: 3, I: 40, Ag: 40, Dex: 40, Int: 40, FM: 50, Soc: 40 },
   skills: [{ id: 'dodge', name: 'Esquive', status: 'resolved', total: 40, carac: 'Ag' }, { name: 'Langue (Magick)', total: 30 }, { name: 'Focalisation', total: 60 }],

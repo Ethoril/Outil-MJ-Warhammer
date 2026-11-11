@@ -1,24 +1,15 @@
 /** Real application menu/forms, native IDB, reload and history for explicit campaign time. */
 import assert from 'node:assert/strict';
-import { createServer } from 'node:http';
-import { readFileSync, statSync, mkdirSync, writeFileSync } from 'node:fs';
-import { resolve, sep, extname } from 'node:path';
+import { mkdirSync, writeFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { launchBrowser } from './helpers/browser.mjs';
+import { createStaticServer, blockExternalNetwork } from './helpers/static-server.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const output = resolve(root, 'tmp/divin/campaign-browser');
 mkdirSync(output, { recursive: true });
-const types = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.json': 'application/json', '.css': 'text/css', '.svg': 'image/svg+xml', '.woff2': 'font/woff2', '.webmanifest': 'application/manifest+json' };
-const server = createServer((req, res) => {
-  try {
-    const relative = decodeURIComponent(new URL(req.url, 'http://localhost').pathname).slice(1) || 'index.html';
-    const path = resolve(root, relative);
-    assert.ok(path.startsWith(resolve(root) + sep) && statSync(path).isFile());
-    res.writeHead(200, { 'Content-Type': types[extname(relative)] || 'application/octet-stream', 'Cache-Control': 'no-store' });
-    res.end(readFileSync(path));
-  } catch { res.writeHead(404).end('Resource unavailable'); }
-});
+const server = createStaticServer({ root, headers: { 'Cache-Control': 'no-store' } });
 const receipt = { passed: false, scope: 'actual application, native IndexedDB, simulated mobile', checks: [], screenshots: [] };
 const check = description => receipt.checks.push(description);
 let browser, page;
@@ -35,7 +26,7 @@ try {
   browser = await launchBrowser();
   const context = await browser.newContext({ serviceWorkers: 'block', viewport: { width: 1440, height: 900 } });
   // The application stays in guest mode; this recipe performs no external writes.
-  await context.route('https://**', route => route.abort());
+  await blockExternalNetwork(context, server);
   page = await context.newPage(); page.setDefaultTimeout(7000);
   const errors = []; page.on('pageerror', error => errors.push(error.message));
   await page.goto(`http://127.0.0.1:${server.address().port}/`, { waitUntil: 'domcontentloaded' });

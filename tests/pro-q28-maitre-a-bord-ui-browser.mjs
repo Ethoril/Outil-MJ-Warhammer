@@ -1,33 +1,17 @@
-import { createServer } from 'node:http';
-import { readFileSync, statSync } from 'node:fs';
-import { join, normalize, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { launchBrowser } from './helpers/browser.mjs';
+import { startStaticServer } from './helpers/static-server.mjs';
 
 // Q28 : un capitaine qui n'a que « Maître à bord » doit voir le champ « à bord » (rendu DOM réel), et la réponse « oui » donne +niveaux DR.
 const root = fileURLToPath(new URL('..', import.meta.url));
-const mime = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.json': 'application/json' };
 const COMMAND = 'skill-43_6f_6d_6d_61_6e_64_65_6d_65_6e_74-base';
 const FIELD = 'Test de Commandement à bord d’un navire (Maître à bord)';
-
-function startServer() {
-  const server = createServer((req, res) => {
-    const requestPath = decodeURIComponent((req.url || '/').split('?')[0]);
-    try {
-      const file = join(root, normalize(requestPath));
-      if (!file.startsWith(root) || !statSync(file).isFile()) throw new Error('not found');
-      res.writeHead(200, { 'Content-Type': mime[extname(file)] || 'text/plain; charset=utf-8' });
-      res.end(readFileSync(file));
-    } catch { res.writeHead(404); res.end('Not found'); }
-  });
-  return new Promise((resolve, reject) => { server.once('error', reject); server.listen(0, '127.0.0.1', () => resolve({ server, port: server.address().port })); });
-}
 
 const failures = [];
 const pageErrors = [];
 const check = (ok, description) => { if (ok) console.log('PASS — ' + description); else { failures.push(description); console.log('FAIL — ' + description); } };
 
-const { server, port } = await startServer();
+const { server, port } = await startStaticServer({ root, pages: { '/': '<!doctype html><title>Page vierge</title>' } });
 const browser = await launchBrowser();
 try {
   const context = await browser.newContext({ serviceWorkers: 'block' });

@@ -1,26 +1,11 @@
 import assert from 'node:assert/strict';
-import { createServer } from 'node:http';
-import { readFileSync, statSync, mkdirSync } from 'node:fs';
-import { resolve, extname, sep } from 'node:path';
+import { mkdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { launchBrowser } from './helpers/browser.mjs';
+import { createStaticServer } from './helpers/static-server.mjs';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
-const types = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.json': 'application/json', '.css': 'text/css; charset=utf-8', '.svg': 'image/svg+xml' };
-const server = createServer((req, res) => {
-  try {
-    const path = new URL(req.url, 'http://localhost').pathname;
-    if (path === '/harness') {
-      res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
-      res.end('<!doctype html><html lang="fr"><head><link rel="stylesheet" href="/MJ.css"><link rel="stylesheet" href="/js/ui/workspace.css"></head><body><main id="mount"></main></body></html>');
-      return;
-    }
-    const file = resolve(root, '.' + decodeURIComponent(path));
-    if (!file.startsWith(resolve(root) + sep) || !statSync(file).isFile()) throw new Error('missing');
-    res.writeHead(200, { 'Content-Type': types[extname(file)] || 'application/octet-stream' });
-    res.end(readFileSync(file));
-  } catch { res.writeHead(404).end(); }
-});
+const server = createStaticServer({ root, pages: { '/harness': '<!doctype html><html lang="fr"><head><link rel="stylesheet" href="/MJ.css"><link rel="stylesheet" href="/js/ui/workspace.css"></head><body><main id="mount"></main></body></html>' } });
 await new Promise(resolveServer => server.listen(0, '127.0.0.1', resolveServer));
 const browser = await launchBrowser();
 try {

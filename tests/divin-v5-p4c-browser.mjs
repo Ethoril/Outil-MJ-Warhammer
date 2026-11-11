@@ -1,15 +1,14 @@
 import {chooseConfirmation} from './helpers/confirmation.mjs';
 /** P4c B4 : invocations divines (Hurlement du loup, Roi de la Nature, Œil de l'aigle), application réelle, gestes réels, IndexedDB native. */
 import assert from 'node:assert/strict';
-import {createServer} from 'node:http';
-import {readFileSync,statSync,mkdirSync,writeFileSync} from 'node:fs';
-import {resolve,sep,extname} from 'node:path';
+import {mkdirSync,writeFileSync} from 'node:fs';
+import {resolve} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import { launchBrowser } from './helpers/browser.mjs';
+import { createStaticServer, blockExternalNetwork } from './helpers/static-server.mjs';
 const root=fileURLToPath(new URL('../',import.meta.url));
 const output=resolve(root,'tmp/divin/p4c-browser');mkdirSync(output,{recursive:true});
-const types={'.html':'text/html; charset=utf-8','.js':'text/javascript','.json':'application/json','.css':'text/css','.svg':'image/svg+xml','.woff2':'font/woff2','.webmanifest':'application/manifest+json'};
-const server=createServer((req,res)=>{try{const relative=decodeURIComponent(new URL(req.url,'http://localhost').pathname).slice(1)||'index.html';const path=resolve(root,relative);assert.ok(path.startsWith(resolve(root)+sep)&&statSync(path).isFile());res.writeHead(200,{'Content-Type':types[extname(relative)]||'application/octet-stream','Cache-Control':'no-store'});res.end(readFileSync(path));}catch{res.writeHead(404).end('Resource unavailable');}});
+const server=createStaticServer({ root, headers: { 'Cache-Control': 'no-store' } });
 const receipt={passed:false,scope:'Application réelle, IndexedDB native, invocations divines (summon-creature), mobile simulé',checks:[],screenshots:[]};
 const check=description=>{receipt.checks.push(description);console.log('PASS — '+description);};let browser,page;
 const HOWL='divine:miracle:ulric:howl-of-the-wolf',KING='divine:miracle:taal:king-of-the-wild',EAGLE='divine:miracle:il-de-l-aigle';
@@ -82,7 +81,7 @@ const castHowl=async({roll=45}={})=>{
 try{
  await new Promise(done=>server.listen(0,'127.0.0.1',done));
  browser=await launchBrowser();
- const context=await browser.newContext({serviceWorkers:'block',viewport:{width:1440,height:900}});await context.route('https://**',route=>route.abort());
+ const context=await browser.newContext({serviceWorkers:'block',viewport:{width:1440,height:900}});await blockExternalNetwork(context, server);
  page=await context.newPage();page.setDefaultTimeout(7000);const errors=[];page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push('console: '+m.text());});
  await page.goto(`http://127.0.0.1:${server.address().port}/`,{waitUntil:'domcontentloaded'});await ready();
  await loadState();

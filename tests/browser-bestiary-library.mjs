@@ -1,12 +1,9 @@
 import assert from 'node:assert/strict';
-import { createServer } from 'node:http';
-import { readFile, stat } from 'node:fs/promises';
-import { resolve, extname, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { launchBrowser } from './helpers/browser.mjs';
+import { createStaticServer } from './helpers/static-server.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
-const types = { '.js': 'text/javascript', '.json': 'application/json', '.css': 'text/css' };
 const requests = [];
 const page_html = '<!doctype html><meta charset="utf-8"><title>Recette bibliothèque</title><link rel="stylesheet" href="/MJ.css"><div id="holder"></div><script type="module">'
   + 'import { createStore } from "/js/core/store.js"; import { createBestiaryLibrary } from "/js/ui/bestiary-library.js";'
@@ -14,15 +11,8 @@ const page_html = '<!doctype html><meta charset="utf-8"><title>Recette biblioth�
   + 'window.store = store; window.messages = [];'
   + 'window.library = createBestiaryLibrary({ container: document.querySelector("#holder"), store, notify: (m, t) => window.messages.push([m, t]) });'
   + 'window.ready = true;</script>';
-const server = createServer(async (req, res) => {
-  try {
-    requests.push(req.url);
-    if (req.url === '/qa-library') { res.writeHead(200, { 'Content-Type': 'text/html' }); res.end(page_html); return; }
-    const path = resolve(root, '.' + decodeURIComponent(req.url.split('?')[0]));
-    if (!path.startsWith(resolve(root) + sep) || !(await stat(path)).isFile()) throw new Error('404');
-    res.writeHead(200, { 'Content-Type': types[extname(path)] || 'text/plain' }); res.end(await readFile(path));
-  } catch { res.writeHead(404); res.end('Not found'); }
-});
+const server = createStaticServer({ root, pages: { '/qa-library': page_html } });
+server.on('request', req => requests.push(req.url)); // journal des requêtes : le chargement paresseux se vérifie dessus
 await new Promise(done => server.listen(0, '127.0.0.1', done));
 const url = 'http://127.0.0.1:' + server.address().port;
 const browser = await launchBrowser();

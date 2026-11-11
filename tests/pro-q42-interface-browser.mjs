@@ -1,32 +1,16 @@
-import { createServer } from 'node:http';
-import { readFileSync, statSync } from 'node:fs';
-import { join, normalize, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { launchBrowser } from './helpers/browser.mjs';
+import { startStaticServer } from './helpers/static-server.mjs';
 
 // Q42 : (1) le rappel d'un participant en jeu s'affiche sur la fiche du personnage actif (onglet Jouer), « Fait » le retire ;
 // (2) la section « Compétences sans valeur imprimée » de la fiche est masquée quand elle est vide et visible sinon.
 const root = fileURLToPath(new URL('..', import.meta.url));
-const mime = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.json': 'application/json' };
-
-function startServer() {
-  const server = createServer((req, res) => {
-    const requestPath = decodeURIComponent((req.url || '/').split('?')[0]);
-    try {
-      const file = join(root, normalize(requestPath));
-      if (!file.startsWith(root) || !statSync(file).isFile()) throw new Error('not found');
-      res.writeHead(200, { 'Content-Type': mime[extname(file)] || 'text/plain; charset=utf-8' });
-      res.end(readFileSync(file));
-    } catch { res.writeHead(404); res.end('Not found'); }
-  });
-  return new Promise((resolve, reject) => { server.once('error', reject); server.listen(0, '127.0.0.1', () => resolve({ server, port: server.address().port })); });
-}
 
 const failures = [];
 const pageErrors = [];
 const check = (ok, description) => { if (ok) console.log('PASS — ' + description); else { failures.push(description); console.log('FAIL — ' + description); } };
 
-const { server, port } = await startServer();
+const { server, port } = await startStaticServer({ root });
 const browser = await launchBrowser();
 try {
   const context = await browser.newContext({ serviceWorkers: 'block', viewport: { width: 1440, height: 900 } });

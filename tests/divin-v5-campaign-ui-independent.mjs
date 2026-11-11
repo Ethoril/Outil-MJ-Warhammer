@@ -1,11 +1,11 @@
 /** Independent component gestures with a controlled Store, separate from the real-app integration recipe. */
 import assert from 'node:assert/strict';
-import { createServer } from 'node:http';
-import { readFile, stat, mkdir, writeFile } from 'node:fs/promises';
-import { extname, join, resolve } from 'node:path';
+import { mkdir, writeFile } from 'node:fs/promises';
+import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { existsSync } from 'node:fs';
 import { launchBrowser } from './helpers/browser.mjs';
+import { createStaticServer } from './helpers/static-server.mjs';
 const ROOT = resolve(fileURLToPath(new URL('..', import.meta.url)));
 const OUT = join(ROOT, 'tmp/divin/campaign-ui-independent');
 const html = `<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="/MJ.css"><link rel="stylesheet" href="/js/ui/workspace.css"></head><body><button id="open">Ouvrir temps</button><script type="module">
@@ -15,8 +15,7 @@ const Store={getLocalRevision:()=>probe.revision,getFullJSON:()=>JSON.stringify(
  advanceCampaignTime:async(...args)=>{probe.calls.push(args);if(probe.mode==='pending')return new Promise(resolve=>probe.finish=resolve);if(probe.mode==='false')return false;return {ok:false,status:'requires-input',needsInput:[{path:'persistentCharacters[0].extensions.v5.spellEffects[0]',message:'Durée calendaire sans ancre : personnage durable.'}]};}};
 document.querySelector('#open').onclick=()=>openCampaignTimeDialog({Store}).then(()=>probe.closed++);window.__probe=probe;
 </script></body></html>`;
-const types={'.html':'text/html','.js':'text/javascript','.json':'application/json','.css':'text/css','.svg':'image/svg+xml'};
-const server=createServer(async(req,res)=>{try{const url=new URL(req.url,'http://localhost');if(url.pathname==='/__independent__'){res.writeHead(200,{'Content-Type':'text/html'}).end(html);return;}const path=resolve(ROOT,'.'+decodeURIComponent(url.pathname));if(!path.startsWith(ROOT))throw Error('outside root');const info=await stat(path);if(!info.isFile())throw Error('not file');res.writeHead(200,{'Content-Type':types[extname(path)]||'application/octet-stream'}).end(await readFile(path));}catch{res.writeHead(404).end('absent');}});
+const server=createStaticServer({ root: ROOT, pages: { '/__independent__': () => html } });
 await mkdir(OUT,{recursive:true});await new Promise(done=>server.listen(0,'127.0.0.1',done));
 const checks=[],failures=[];let browser;
 try{

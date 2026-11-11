@@ -1,9 +1,7 @@
 import assert from 'node:assert/strict';
-import { createServer } from 'node:http';
-import { readFileSync, statSync } from 'node:fs';
-import { resolve, sep, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { launchBrowser } from './helpers/browser.mjs';
+import { createStaticServer } from './helpers/static-server.mjs';
 import { chooseConfirmation } from './helpers/confirmation.mjs';
 import { openU1TurnActions, openU1Settings, openU1Types } from './helpers/u1-drawer.mjs';
 
@@ -11,17 +9,7 @@ import { openU1TurnActions, openU1Settings, openU1Types } from './helpers/u1-dra
 // Un parcours par écran : amener l'acteur dans le cas qui pose la question, répondre via le champ, vérifier que le Test se résout.
 // Application complète (vrai Store, seed JSON) ; à lancer sous `timeout 120 node tests/q6-t10-ecrans-browser.mjs`.
 const root = fileURLToPath(new URL('../', import.meta.url)), base = '/Outil-MJ-Warhammer/';
-const types = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.json': 'application/json', '.css': 'text/css; charset=utf-8', '.svg': 'image/svg+xml', '.webmanifest': 'application/manifest+json' };
-const server = createServer((req, res) => {
-  try {
-    const pathname = decodeURIComponent(new URL(req.url, 'http://localhost').pathname);
-    assert.ok(pathname.startsWith(base));
-    const path = resolve(root, pathname.slice(base.length) || 'index.html');
-    assert.ok(path.startsWith(resolve(root) + sep) && statSync(path).isFile());
-    res.writeHead(200, { 'Content-Type': types[extname(path)] || 'application/octet-stream', 'Cache-Control': 'no-store' });
-    res.end(readFileSync(path));
-  } catch { res.writeHead(404); res.end('Not found'); }
-});
+const server = createStaticServer({ root, base, headers: { 'Cache-Control': 'no-store' } });
 
 const ATHLETICS = 'skill-41_74_68_6c_e9_74_69_73_6d_65-base';
 const fighter = (id, name, camp, extra = {}) => ({ id, name, kind: camp === 'ennemi' ? 'PNJ' : 'PJ', camp, zone: 'active', initiative: id === 'b' ? 35 : 60, hp: 30, maxHp: 30,

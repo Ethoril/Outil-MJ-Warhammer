@@ -1,20 +1,10 @@
 import assert from 'node:assert/strict';
-import { createServer } from 'node:http';
-import { readFileSync, statSync } from 'node:fs';
-import { resolve, extname, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { launchBrowser } from './helpers/browser.mjs';
+import { createStaticServer } from './helpers/static-server.mjs';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
-const server = createServer((req, res) => {
-  try {
-    const path = new URL(req.url, 'http://localhost').pathname;
-    if (path === '/harness') { res.writeHead(200, { 'Content-Type': 'text/html' }); res.end('<!doctype html><html><body></body></html>'); return; }
-    const file = resolve(root, '.' + decodeURIComponent(path));
-    if (!file.startsWith(resolve(root) + sep) || !statSync(file).isFile()) throw Error('missing');
-    res.writeHead(200, { 'Content-Type': extname(file) === '.js' ? 'text/javascript' : 'application/octet-stream' }); res.end(readFileSync(file));
-  } catch { res.writeHead(404).end(); }
-});
+const server = createStaticServer({ root, pages: { '/harness': '<!doctype html><html><body></body></html>' } });
 await new Promise(done => server.listen(0, '127.0.0.1', done));
 const browser = await launchBrowser();
 try {

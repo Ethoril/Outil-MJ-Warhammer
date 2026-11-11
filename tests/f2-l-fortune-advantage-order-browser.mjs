@@ -1,12 +1,10 @@
 import { openU1Settings } from './helpers/u1-drawer.mjs';
-import { createServer } from 'node:http';
-import { readFileSync, statSync } from 'node:fs';
-import { join, normalize, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { launchBrowser } from './helpers/browser.mjs';
+import { createStaticServer } from './helpers/static-server.mjs';
 
-const root=fileURLToPath(new URL('..',import.meta.url)),mime={'.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.json':'application/json'};
-const server=createServer((req,res)=>{try{const file=join(root,normalize(decodeURIComponent((req.url||'/').split('?')[0])));if(!file.startsWith(root)||!statSync(file).isFile())throw new Error('not found');res.writeHead(200,{'Content-Type':mime[extname(file)]||'text/plain; charset=utf-8'});res.end(readFileSync(file));}catch{res.writeHead(404);res.end('Not found');}});
+const root=fileURLToPath(new URL('..',import.meta.url));
+const server=createStaticServer({ root, pages: { '/': '<!doctype html><title>Page vierge</title>' } });
 await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
 const failures=[],check=(ok,label)=>{console.log(`${ok?'PASS':'FAIL'} — ${label}`);if(!ok)failures.push(label);};
 let browser;

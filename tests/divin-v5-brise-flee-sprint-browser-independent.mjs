@@ -2,16 +2,15 @@ import {chooseBoolean, confirmationValue} from './helpers/confirmation.mjs';
 import { openU1Settings, closeU1Drawer, openU1Types } from './helpers/u1-drawer.mjs';
 /** Recette indépendante Playwright pour Flee/Sprint Brisé: gestes visibles, preview, persistence et quatre vues. */
 import assert from 'node:assert/strict';
-import {createServer} from 'node:http';
-import {readFileSync,statSync,mkdirSync,writeFileSync} from 'node:fs';
-import {resolve,sep,extname} from 'node:path';
+import {mkdirSync,writeFileSync} from 'node:fs';
+import {resolve} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import { launchBrowser } from './helpers/browser.mjs';
+import { createStaticServer, blockExternalNetwork } from './helpers/static-server.mjs';
 
 const root=fileURLToPath(new URL('../',import.meta.url));
 const output=process.env.DIVIN_BROKEN_ESCAPE_UI_OUTPUT||resolve(root,'tmp/divin/brise-flee-sprint-browser-independent');mkdirSync(output,{recursive:true});
-const types={'.html':'text/html; charset=utf-8','.js':'text/javascript','.json':'application/json','.css':'text/css','.svg':'image/svg+xml','.woff2':'font/woff2','.webmanifest':'application/manifest+json'};
-const server=createServer((req,res)=>{try{const relative=decodeURIComponent(new URL(req.url,'http://localhost').pathname).slice(1)||'index.html';const path=resolve(root,relative);assert.ok(path.startsWith(resolve(root)+sep)&&statSync(path).isFile());res.writeHead(200,{'Content-Type':types[extname(relative)]||'application/octet-stream','Cache-Control':'no-store'});res.end(readFileSync(path));}catch{res.writeHead(404).end('Resource unavailable');}});
+const server=createStaticServer({ root, headers: { 'Cache-Control': 'no-store' } });
 const receipt={passed:false,scope:'Brisé Flee/Sprint et Hide: gestes, aperçu pur, Test Athlétisme partagé, garde Action Hide, reçus, reload/Undo/Redo, vues desktop/mobile sombre/parchemin',checks:[],screenshots:[]};
 const check=description=>receipt.checks.push(description);let browser,page,serverStarted=false;
 const state=()=>page.evaluate(async()=>{const{Store}=await import('/js/main.js');await Store.whenIdle();const value=JSON.parse(Store.getFullJSON());delete value.exportedAt;return value;});
@@ -33,7 +32,7 @@ const view=async(width,theme)=>{
 try{
  await new Promise(done=>server.listen(0,'127.0.0.1',done));serverStarted=true;
  browser=await launchBrowser();
- const context=await browser.newContext({serviceWorkers:'block',viewport:{width:1440,height:900}});await context.route('https://**',route=>route.abort());
+ const context=await browser.newContext({serviceWorkers:'block',viewport:{width:1440,height:900}});await blockExternalNetwork(context, server);
  page=await context.newPage();page.setDefaultTimeout(8000);const errors=[];page.on('pageerror',error=>errors.push(error.message));
  await page.goto(`http://127.0.0.1:${server.address().port}/`,{waitUntil:'domcontentloaded'});await ready();await seed();await page.getByRole('tab',{name:'Jouer',exact:true}).click();await closeU1Drawer(page);
  const panel=page.locator('[data-broken-escape-panel]');await panel.waitFor({state:'visible'});let actor=actorPanel();

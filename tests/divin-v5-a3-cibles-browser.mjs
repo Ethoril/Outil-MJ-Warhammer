@@ -1,16 +1,15 @@
 import assert from 'node:assert/strict';
-import {createServer} from 'node:http';
-import {readFileSync,statSync} from 'node:fs';
-import {resolve,sep,extname} from 'node:path';
+import {sep} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import { launchBrowser } from './helpers/browser.mjs';
+import { createStaticServer, blockExternalNetwork } from './helpers/static-server.mjs';
 const root=fileURLToPath(new URL('../',import.meta.url));
-const server=createServer((req,res)=>{try{const path=resolve(root,decodeURIComponent(new URL(req.url,'http://localhost').pathname).slice(1)||'index.html');assert.ok(path.startsWith(root)&&statSync(path).isFile());res.setHeader('Content-Type',({'.js':'text/javascript','.json':'application/json','.html':'text/html','.css':'text/css'})[extname(path)]||'application/octet-stream');res.end(readFileSync(path));}catch{res.writeHead(404).end();}});
+const server=createStaticServer({ root });
 await new Promise(done=>server.listen(0,'127.0.0.1',done));
 let browser;
 try{
  browser=await launchBrowser();
- const context=await browser.newContext({serviceWorkers:'block'});await context.route('https://**',route=>route.abort());
+ const context=await browser.newContext({serviceWorkers:'block'});await blockExternalNetwork(context, server);
  const page=await context.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
  await page.goto(`http://127.0.0.1:${server.address().port}/`);await page.waitForFunction(()=>document.querySelector('#app-content')?.style.display==='block');
  await page.evaluate(async()=>{

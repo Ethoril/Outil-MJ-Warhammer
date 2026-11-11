@@ -1,15 +1,12 @@
 import { openU1Settings, openU1Types } from './helpers/u1-drawer.mjs';
 import assert from 'node:assert/strict';
-import { createServer } from 'node:http';
-import { readFileSync, statSync } from 'node:fs';
-import { resolve, sep, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { launchBrowser } from './helpers/browser.mjs';
+import { createStaticServer } from './helpers/static-server.mjs';
 
 // Reproduction isolée : application complète, vrai Store, seed JSON de test.
 const root=fileURLToPath(new URL('../',import.meta.url)),base='/Outil-MJ-Warhammer/';
-const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.json':'application/json; charset=utf-8','.svg':'image/svg+xml','.webmanifest':'application/manifest+json'};
-const server=createServer((req,res)=>{try{const pathname=decodeURIComponent(new URL(req.url,'http://localhost').pathname);assert.ok(pathname.startsWith(base));const path=resolve(root,pathname.slice(base.length)||'index.html');assert.ok(path.startsWith(resolve(root)+sep)&&statSync(path).isFile());res.writeHead(200,{'Content-Type':mime[extname(path)]||'application/octet-stream','Cache-Control':'no-store'});res.end(readFileSync(path));}catch{res.writeHead(404);res.end('Not found');}});
+const server=createStaticServer({ root, base, headers: { 'Cache-Control': 'no-store' } });
 const actor={id:'net-actor',name:'Acteur filet',kind:'PJ',camp:'pj',zone:'active',initiative:60,hp:20,maxHp:20,caracs:{CC:40,CT:40,F:40,E:30,BE:3,I:40,Ag:40,Dex:35,Int:30,FM:35,Soc:25},skills:[],talents:[],traits:[],states:[{id:'net-state',key:'enchevetre',name:'Empêtré',level:2,strength:35,source:{hookedNet:true,authorId:'net-source',escapeStrength:35}}],armor:{head:0,body:0,arms:0,legs:0},extensions:{v5:{}},actions:[{id:'net-escape',note:'Sortir du filet',type:'test',attr:'F',base:50,damage:null,qualities:[]}]};
 const target={id:'net-source',name:'Source du filet',kind:'PNJ',camp:'ennemi',zone:'active',initiative:30,hp:20,maxHp:20,caracs:{CC:35,CT:30,F:30,E:30,BE:3,I:30,Ag:30},skills:[],talents:[],traits:[],states:[],armor:{head:0,body:0,arms:0,legs:0},extensions:{v5:{}}};
 const seed={schemaVersion:3,reserve:[],diceLines:[],log:[],combat:{round:1,currentActorId:actor.id,order:[actor.id,target.id],participants:[actor,target]}};
