@@ -1,12 +1,11 @@
 import {chooseBoolean, confirmationValue} from './helpers/confirmation.mjs';
 import { openU1Settings, clickU1Magic } from './helpers/u1-drawer.mjs';
 import assert from 'node:assert/strict';
-import { createServer } from 'node:http';
 import { existsSync } from 'node:fs';
-import { readFile, stat } from 'node:fs/promises';
-import { extname, join, normalize, resolve } from 'node:path';
+import { resolve } from 'node:path';
 import { BEAST_PROFILES, KADON_PROFILES, creatureWounds } from '../js/core/v5-magic-arbitrations.js';
 import { launchBrowser } from './helpers/browser.mjs';
+import { startStaticServer } from './helpers/static-server.mjs';
 
 /**
  * Livraison 2b du lot 3, retours de vérification, côté interface : désignation de plusieurs ennemis engagés, réponses de
@@ -16,23 +15,6 @@ import { launchBrowser } from './helpers/browser.mjs';
  */
 const ROOT = resolve('.');
 const LAUNCH_OPTS = { headless: true };
-const MIME_TYPES = { '.css': 'text/css; charset=utf-8', '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.json': 'application/json; charset=utf-8', '.mjs': 'text/javascript; charset=utf-8', '.png': 'image/png', '.svg': 'image/svg+xml' };
-
-function startStaticServer() {
-  const server = createServer(async (req, res) => {
-    try {
-      const url = new URL(req.url || '/', 'http://127.0.0.1');
-      const rawPath = decodeURIComponent(url.pathname === '/' ? '/index.html' : url.pathname);
-      const filePath = resolve(join(ROOT, normalize(rawPath).replace(/^(\.\.[/\\])+/, '')));
-      if (!filePath.startsWith(ROOT)) { res.writeHead(403).end('Forbidden'); return; }
-      const info = await stat(filePath);
-      const target = info.isDirectory() ? join(filePath, 'index.html') : filePath;
-      res.writeHead(200, { 'Content-Type': MIME_TYPES[extname(target).toLowerCase()] || 'application/octet-stream', 'Cache-Control': 'no-cache' });
-      res.end(await readFile(target));
-    } catch { res.writeHead(404).end('Not Found'); }
-  });
-  return new Promise((ok, ko) => { server.once('error', ko); server.listen(0, '127.0.0.1', () => ok({ server, baseUrl: 'http://127.0.0.1:' + server.address().port })); });
-}
 
 // `s` = cast (le mage lance) ou attack (le Guerrier attaque le mage) ; `w` = sorts déjà lancés (séparés par |, `Sort@lanceur>cible`), sinon par `t` sur lui-même.
 const HARNESS_HTML = `<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Lot 3 Magie V5 — 2b UI</title>
@@ -87,7 +69,7 @@ const view = initWorkspaceView({ mount: document.getElementById('workspace-mount
 view.setSpace('play');
 </script></body></html>`;
 
-const { server, baseUrl } = await startStaticServer();
+const { server, baseUrl } = await startStaticServer({ root: ROOT, headers: { 'Cache-Control': 'no-cache' } });
 const browser = await launchBrowser(LAUNCH_OPTS);
 const SETTLE_RATIO = 0.25;
 const RECIPIENTS = 'Ennemis engagés ou créatures affectées (désignés par le MJ) : ';

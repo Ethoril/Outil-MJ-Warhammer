@@ -1,23 +1,14 @@
 // Lot 6 · recette des partiels, groupe A : ligne « À saisir » du tir esquivé reliée à son champ (G-U1-1),
 // coût en Chance avec le nom du payeur (G-DES-2), dé secondaire d'incident lancé avec les dés des PNJ (G-U1-2).
 import assert from 'node:assert/strict';
-import { createServer } from 'node:http';
-import { readFile, stat } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
-import { extname, join, normalize, resolve } from 'node:path';
+import { resolve } from 'node:path';
 import { launchBrowser } from './helpers/browser.mjs';
+import { createStaticServer } from './helpers/static-server.mjs';
 import { openU1Settings, openU1Types, clickU1Magic } from './helpers/u1-drawer.mjs';
 
 const ROOT = resolve('.');
-const MIME = { '.css': 'text/css; charset=utf-8', '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.json': 'application/json; charset=utf-8', '.mjs': 'text/javascript; charset=utf-8', '.svg': 'image/svg+xml' };
-const server = createServer(async (req, res) => {
-  try {
-    const path = normalize(decodeURIComponent(new URL(req.url, 'http://x').pathname));
-    const file = resolve(join(ROOT, path));
-    if (!file.startsWith(ROOT) || !(await stat(file)).isFile()) throw new Error('missing');
-    res.writeHead(200, { 'Content-Type': MIME[extname(file)] || 'application/octet-stream' }); res.end(await readFile(file));
-  } catch { res.writeHead(404).end(); }
-});
+const server = createStaticServer({ root: ROOT });
 await new Promise(r => server.listen(0, '127.0.0.1', r));
 const baseUrl = `http://127.0.0.1:${server.address().port}`;
 const caracs = { CC: 45, CT: 50, F: 40, E: 30, I: 40, Ag: 40, Dex: 30, Int: 50, FM: 50, Soc: 30 };

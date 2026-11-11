@@ -1,14 +1,14 @@
 import {chooseBoolean} from './helpers/confirmation.mjs';
 import { openU1Settings, closeU1Drawer, clickU1Magic } from './helpers/u1-drawer.mjs';
 import assert from 'node:assert/strict';
-import {createServer} from 'node:http';
-import {readFile,writeFile,mkdir} from 'node:fs/promises';
-import {resolve,extname} from 'node:path';
+import {writeFile,mkdir} from 'node:fs/promises';
+import {resolve} from 'node:path';
 import contracts from '../js/data/v5-spell-contracts.json' with {type:'json'};
 import {workspaceHarness} from './helpers/lot3-workspace-harness.mjs';
 import { launchBrowser } from './helpers/browser.mjs';
+import { createStaticServer } from './helpers/static-server.mjs';
 const harness=workspaceHarness.replace('.filter(c=>c.isBookV5)','.filter(c=>true)');
-const root=resolve('.'),server=createServer(async(req,res)=>{try{const url=new URL(req.url,'http://localhost');if(url.pathname==='/harness'){res.setHeader('Content-Type','text/html');res.end(harness);return;}const path=resolve(root,'.'+decodeURIComponent(url.pathname));if(!path.startsWith(root+'\\')&&!path.startsWith(root+'/'))throw Error();res.setHeader('Content-Type',extname(path)==='.js'?'application/javascript':extname(path)==='.json'?'application/json':'text/css');res.end(await readFile(path));}catch{res.writeHead(404).end();}});
+const root=resolve('.'),server=createStaticServer({ root, pages: { '/harness': () => harness } });
 await new Promise(ok=>server.listen(0,'127.0.0.1',ok));const browser=await launchBrowser(),page=await browser.newPage({viewport:{width:1440,height:1080},serviceWorkers:'block'}),errors=[];page.on('pageerror',e=>errors.push(e.message));
 const origin='http://127.0.0.1:'+server.address().port,field=text=>page.getByLabel(text,{exact:true});let facts=0,clauses=0;
 const choose=async(name,active=false)=>{await page.goto(origin+'/harness'+(active?'?active='+encodeURIComponent(name):''));await page.waitForFunction(()=>window.ready);if(page.viewportSize().width<=900)await closeU1Drawer(page);await clickU1Magic(page, 'cast');await openU1Settings(page);await page.locator('[data-focus-key="magic-spell"]').selectOption(contracts.find(c=>c.name===name).id);};

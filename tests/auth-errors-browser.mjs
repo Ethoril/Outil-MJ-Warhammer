@@ -1,24 +1,10 @@
 /** Exercise actual sync.loginWithGoogle against isolated SDK failures; no account or remote writes. */
 import assert from 'node:assert/strict';
-import { createServer } from 'node:http';
-import { readFileSync, statSync } from 'node:fs';
-import { resolve, sep, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { launchBrowser } from './helpers/browser.mjs';
+import { createStaticServer, blockExternalNetwork } from './helpers/static-server.mjs';
 const root = fileURLToPath(new URL('../', import.meta.url));
-const types = { '.js': 'text/javascript', '.json': 'application/json' };
-const server = createServer((req, res) => {
-  try {
-    const route = new URL(req.url, 'http://localhost').pathname;
-    if (route === '/auth-harness.html') {
-      res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
-      res.end('<!doctype html><meta charset="utf-8"><button id="login" data-google-login>Connexion Google</button><div id="login-screen"></div><div id="app-content"></div><div id="user-info"></div>'); return;
-    }
-    const path = resolve(root, '.' + route);
-    assert.ok(path.startsWith(resolve(root) + sep) && statSync(path).isFile());
-    res.writeHead(200, { 'Content-Type': types[extname(path)] || 'application/octet-stream' }); res.end(readFileSync(path));
-  } catch { res.writeHead(404); res.end('Not found'); }
-});
+const server = createStaticServer({ root, pages: { '/auth-harness.html': '<!doctype html><meta charset="utf-8"><button id="login" data-google-login>Connexion Google</button><div id="login-screen"></div><div id="app-content"></div><div id="user-info"></div>' } });
 let browser;
 try {
   await new Promise(done => server.listen(0, '127.0.0.1', done));
@@ -36,7 +22,7 @@ try {
   ];
   for (const scenario of scenarios) {
     const context = await browser.newContext({ serviceWorkers: 'block' });
-    await context.route('**/*', route => route.request().url().startsWith(origin + '/') ? route.continue() : route.abort());
+    await blockExternalNetwork(context, origin);
     await context.route('**/vendor/firebase/firebase-app.js', route => route.fulfill({ contentType: 'text/javascript', body: `export const initializeApp=()=>{${scenario.uninitialized ? "throw Error('SDK initialization fixture');" : 'return {};'}};` }));
     await context.route('**/vendor/firebase/firebase-database.js', route => route.fulfill({ contentType: 'text/javascript', body: 'export const getDatabase=()=>({}),ref=()=>({}),get=()=>{},runTransaction=()=>{},onValue=()=>{},set=()=>{},update=()=>{};' }));
     await context.route('**/vendor/firebase/firebase-auth.js', route => route.fulfill({ contentType: 'text/javascript', body: `

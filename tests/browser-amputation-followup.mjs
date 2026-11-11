@@ -1,21 +1,15 @@
 import assert from 'node:assert/strict';
-import { createServer } from 'node:http';
-import { readFileSync, statSync } from 'node:fs';
-import { extname, join, normalize } from 'node:path';
+import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { launchBrowser } from './helpers/browser.mjs';
+import { startStaticServer, blockExternalNetwork } from './helpers/static-server.mjs';
 
 const root=fileURLToPath(new URL('..',import.meta.url));
-const mime={'.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.json':'application/json'};
-function startServer(){
-  const server=createServer((req,res)=>{const path=decodeURIComponent((req.url||'/').split('?')[0]),file=join(root,normalize(path==='/'?'/index.html':path));try{if(!file.startsWith(root)||!statSync(file).isFile())throw Error('missing');res.writeHead(200,{'Content-Type':mime[extname(file)]||'application/octet-stream','Access-Control-Allow-Origin':'*'});res.end(readFileSync(file));}catch{res.writeHead(404);res.end('Not found');}});
-  return new Promise((resolve,reject)=>{server.once('error',reject);server.listen(0,'127.0.0.1',()=>resolve({server,port:server.address().port}));});
-}
 
-const {server,port}=await startServer();
+const {server,port}=await startStaticServer({ root, headers: { 'Access-Control-Allow-Origin': '*' } });
 const browser=await launchBrowser();
 try{
-  const context=await browser.newContext({serviceWorkers:'block'});await context.route('**/*',route=>route.request().url().startsWith(`http://127.0.0.1:${port}/`)?route.continue():route.abort());
+  const context=await browser.newContext({serviceWorkers:'block'});await blockExternalNetwork(context, port);
   const page=await context.newPage();await page.goto(`http://127.0.0.1:${port}/blank`);await page.setContent('<main><div id="mount"></div></main>');await page.addStyleTag({path:join(root,'MJ.css')});await page.addStyleTag({path:join(root,'js/ui/workspace.css')});
   await page.evaluate(async({moduleUrl,resolutionUrl})=>{
     const{initWorkspaceView}=await import(moduleUrl),{previewResolution}=await import(resolutionUrl);
