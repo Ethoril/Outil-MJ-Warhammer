@@ -11,12 +11,7 @@ const page_html = '<!doctype html><meta charset="utf-8"><title>Recette mots-clé
   + 'window.picker = createKeywordPicker({ container: document.querySelector("#holder"), store, subject: { traits: ["Mort-vivant"] }, onChange: value => window.changes.push(value) });'
   + 'window.ready = true;</script>';
 const server = createStaticServer({ root, pages: { '/qa-keywords': () => page_html } });
-// Chromium refuse les ports « dangereux » (6666, 6665-6669, 6000, 10080…) : on retire un port tant qu'il n'est pas au-dessus de la liste.
-for (;;) {
-  await new Promise(done => server.listen(0, '127.0.0.1', done));
-  if (server.address().port > 10080) break;
-  await new Promise(done => server.close(done));
-}
+await new Promise(done => server.listen(0, '127.0.0.1', done)); // le helper écarte les ports que Chromium refuse
 const url = 'http://127.0.0.1:' + server.address().port;
 const browser = await launchBrowser();
 try {

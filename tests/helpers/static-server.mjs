@@ -38,7 +38,7 @@ export const MIME = {
 export function createStaticServer({ root = REPO_ROOT, base = '/', pages = {}, headers = {} } = {}) {
   const directory = resolve(root);
   const prefix = base.endsWith('/') ? base : `${base}/`;
-  return createServer(async (req, res) => {
+  return avoidUnsafePorts(createServer(async (req, res) => {
     try {
       const url = new URL(req.url || '/', 'http://localhost');
       const pathname = decodeURIComponent(url.pathname);
@@ -61,7 +61,28 @@ export function createStaticServer({ root = REPO_ROOT, base = '/', pages = {}, h
       res.writeHead(404, { 'Content-Type': MIME['.txt'] });
       res.end('Not found');
     }
-  });
+  }));
+}
+
+/** Ports que Chromium refuse d'ouvrir (net::ERR_UNSAFE_PORT). Sous Windows la plage dynamique peut commencer à 1024 :
+ * un listen(0) tombe alors parfois sur 1719, 1720, 6000, 6665-6669, 10080… et le parcours échoue sans raison. */
+export const UNSAFE_PORTS = new Set([1719, 1720, 1723, 2049, 3659, 4045, 4190, 5060, 5061, 6000, 6566, 6665, 6666, 6667, 6668, 6669, 6679, 6697, 10080]);
+
+// server.listen(0, …) recommence tant que le port attribué est refusé par Chromium ; le rappel n'est appelé qu'une fois, sur un port sûr.
+function avoidUnsafePorts(server) {
+  const listen = server.listen.bind(server);
+  server.listen = (...args) => {
+    if (args[0] !== 0) return listen(...args);
+    const callback = typeof args.at(-1) === 'function' ? args.pop() : null;
+    let attempts = 0;
+    const attempt = () => listen(...args, () => {
+      if (UNSAFE_PORTS.has(server.address().port) && ++attempts < 50) server.close(attempt);
+      else callback?.();
+    });
+    attempt();
+    return server;
+  };
+  return server;
 }
 
 /** createStaticServer déjà à l'écoute sur 127.0.0.1 (port libre par défaut). `baseUrl` = origin + base, sans barre finale. */
