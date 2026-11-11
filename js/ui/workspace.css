@@ -1312,10 +1312,6 @@
   font-weight: 600;
   color: var(--j-ink);
 }
-.workspace-damage-manual {
-  color: var(--j-red);
-  font-weight: 700;
-}
 .action-damage-value {
   font-size: 0.85em;
   color: var(--j-soft);
@@ -1324,12 +1320,6 @@
   font-family: var(--j-sans);
   font-size: 15px;
   color: var(--j-ink);
-}
-.workspace-formula-total,
-.workspace-result-hp {
-  color: var(--j-red);
-  font-size: 19px;
-  font-weight: 800;
 }
 .workspace-formula-notes {
   font-family: var(--j-sans);
@@ -1345,10 +1335,6 @@
   border-left: 4px solid var(--j-red);
   border-radius: 6px;
   background: var(--j-token-bg);
-}
-.workspace-critical.is-second {
-  margin-top: 6px;
-  background: var(--j-wash);
 }
 .workspace-critical .workspace-rubric {
   margin: 0;
@@ -1750,14 +1736,12 @@
 .v5-effect-field input { width:7em; }
 .v5-effect-field label { display:block; }
 .v5-effect-test { display:flex; flex-wrap:wrap; gap:12px; align-items:center; }
-.v5-effect-boolean { display:flex; gap:8px; align-items:center; }
 .v5-effect-dialog .workspace-muted { margin:4px 0; }
 
 /* Input confirmation is a modal with the height of its contents, including on a phone. */
-dialog.v5-effect-dialog { inset:0; width:min(640px,calc(100vw - 32px)); max-width:calc(100vw - 32px); height:auto; max-height:calc(100dvh - 32px); margin:auto; padding:0; display:block; overflow:auto; border:1px solid var(--border); border-radius:var(--radius); }
 dialog.v5-effect-dialog::backdrop { background:rgba(0,0,0,.4); }
 
-dialog.v5-effect-dialog { inset:auto; top:50%; left:50%; right:auto; bottom:auto; margin:0; transform:translate(-50%,-50%); }
+dialog.v5-effect-dialog { inset:auto; top:50%; left:50%; right:auto; bottom:auto; margin:0; transform:translate(-50%,-50%); width:min(640px,calc(100vw - 32px)); max-width:calc(100vw - 32px); height:auto; max-height:calc(100dvh - 32px); padding:0; display:block; overflow:auto; border:1px solid var(--border); border-radius:var(--radius); }
 .workspace-sheet-states { grid-column:1 / -1; }
 .workspace-state-form > .workspace-type { display:grid; gap:4px; flex:1 1 180px; }
 .workspace-state-expiration > .workspace-type { display:grid; gap:4px; flex:1 1 150px; }
