@@ -120,9 +120,9 @@ Cadrage du 11/11/2026, sur `7d636b6` (prod 3.45.1). Origine : constat CAMP-10 de
 - Synchronisation entre onglets ou appareils (un seul utilisateur, un seul endroit).
 - CAMP-11 (échappement des sélecteurs de focus) et CAMP-12 (tests unitaires de Campagne au-delà de ce chantier).
 
-## Choix de Claude à confirmer à la relecture
+## Choix complémentaires, validés par le MJ (11/11/2026)
 
-Ils découlent des décisions ci-dessus mais n'ont pas été posés en question :
+Proposés par Claude à partir des décisions ci-dessus, relus et validés en bloc par le MJ. La spec est validée ; le plan reste à relire avant le premier lot.
 
 1. Un PJ lié à une fiche reçoit son personnage suivi d'office (CA7), même s'il n'en avait pas dans Préparer.
 2. Retirer un participant en cours de combat pose la même question que la fin du combat (CA10).
