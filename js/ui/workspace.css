@@ -969,6 +969,8 @@
 /* Carte de chaque étape */
 .workspace-resolution-step {
   display: grid;
+  /* Piste rétrécissable : sans colonne déclarée, un menu au libellé long élargit la piste au-delà de la boîte (390 px). */
+  grid-template-columns: minmax(0, 1fr);
   gap: 12px;
   margin-block: 0;
   min-width: 0;
@@ -1146,6 +1148,8 @@
   align-items: center;
   gap: 8px;
 }
+/* Le menu d'une ligne de jet cède de la largeur plutôt que de faire défiler la page. */
+.workspace-roll-row > select { min-width: 0; }
 
 .workspace-roll-input {
   width: 4.4em;
@@ -1178,6 +1182,7 @@
 
 .workspace-defense {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 8px;
   padding-left: 16px;
   border-left: 2px solid var(--j-line);
