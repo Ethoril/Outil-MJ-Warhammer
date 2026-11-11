@@ -2,13 +2,13 @@
  * Le parcours construit lui-même son export (tools/build-lot3-local-release.mjs) : il ne dépend plus d'un artefact local resté d'une version antérieure. */
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { createServer } from 'node:http';
-import { readFileSync, realpathSync, writeFileSync, statSync } from 'node:fs';
+import { readFileSync, realpathSync, writeFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
-import { resolve, extname, sep } from 'node:path';
+import { resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { APP_VERSION } from '../js/version.js';
 import { launchBrowser } from './helpers/browser.mjs';
+import { createStaticServer, blockExternalNetwork } from './helpers/static-server.mjs';
 
 const root = realpathSync(fileURLToPath(new URL('../', import.meta.url)));
 execFileSync(process.execPath, [resolve(root, 'tools/build-lot3-local-release.mjs')], { cwd: root, stdio: 'inherit' });
@@ -23,16 +23,7 @@ for (const asset of manifest.files) {
   assert.equal(createHash('sha256').update(readFileSync(file)).digest('hex'), asset.sha256, asset.file);
 }
 const base = '/Outil-MJ-Warhammer/';
-const mime = { '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.webmanifest': 'application/manifest+json', '.html': 'text/html', '.svg': 'image/svg+xml', '.woff2': 'font/woff2' };
-const server = createServer((req, res) => {
-  try {
-    const path = decodeURIComponent(new URL(req.url, 'http://localhost').pathname);
-    assert.ok(path.startsWith(base));
-    const file = realpathSync(resolve(site, path.slice(base.length) || 'index.html'));
-    assert.ok(file.startsWith(site + sep) && statSync(file).isFile());
-    res.writeHead(200, { 'content-type': mime[extname(file)] || 'application/octet-stream', 'cache-control': 'no-cache' }); res.end(readFileSync(file));
-  } catch { res.writeHead(404); res.end('Unavailable'); }
-});
+const server = createStaticServer({ root: site, base, headers: { 'Cache-Control': 'no-cache' } });
 await new Promise(done => server.listen(0, '127.0.0.1', done));
 const origin = `http://127.0.0.1:${server.address().port}`;
 let browser;
@@ -44,7 +35,7 @@ try {
     await context.addInitScript(()=>{ if('serviceWorker' in navigator) window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{})); }); // index.html n'enregistre plus le service worker sur localhost/127.0.0.1 (d17639e) : le test le fait à sa place
     const page = await context.newPage(), errors = [];
     page.on('pageerror', error => errors.push(error.message));
-    await page.route('**/*', route => new URL(route.request().url()).origin === origin ? route.continue() : route.abort());
+    await blockExternalNetwork(page, origin);
     await page.goto(origin + base);
     await page.waitForFunction(() => document.querySelector('#app-content')?.style.display === 'block');
     await page.waitForFunction(() => !!navigator.serviceWorker.controller);

@@ -1,32 +1,16 @@
-import { createServer } from 'node:http';
-import { readFileSync, statSync } from 'node:fs';
-import { join, normalize, extname } from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { launchBrowser } from './browser.mjs';
+import { startStaticServer, blockExternalNetwork } from './static-server.mjs';
 
 // Démarre index.html (Firebase remplacé au niveau du module) pour les parcours du lot 4, sous-lot C-a.
-const root = fileURLToPath(new URL('../..', import.meta.url));
-const mime = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.json': 'application/json', '.svg': 'image/svg+xml', '.woff2': 'font/woff2' };
-
 export async function startApp() {
-  const server = createServer((req, res) => {
-    const requestPath = decodeURIComponent((req.url || '/').split('?')[0]);
-    const file = join(root, normalize(requestPath === '/' ? '/index.html' : requestPath));
-    try {
-      if (!file.startsWith(root) || !statSync(file).isFile()) throw new Error('not found');
-      res.writeHead(200, { 'Content-Type': mime[extname(file)] || 'application/octet-stream' });
-      res.end(readFileSync(file));
-    } catch { res.writeHead(404); res.end('Not found'); }
-  });
-  await new Promise((resolve, reject) => { server.once('error', reject); server.listen(0, '127.0.0.1', resolve); });
-  const port = server.address().port;
+  const { server, port } = await startStaticServer();
   const browser = await launchBrowser();
   const context = await browser.newContext({ serviceWorkers: 'block', viewport: { width: 1440, height: 900 } });
   const page = await context.newPage();
   const errors = [];
   page.on('pageerror', error => errors.push(error.stack || error.message));
   page.on('dialog', dialog => dialog.accept());
-  await page.route('**/*', route => route.request().url().startsWith(`http://127.0.0.1:${port}/`) ? route.continue() : route.abort());
+  await blockExternalNetwork(page, server);
   await page.route('**/js/core/sync.js', route => route.fulfill({ contentType: 'text/javascript', body: `
     export function initFirebaseSync(onConnected) {
       document.querySelector('#login-screen')?.style.setProperty('display', 'none');
