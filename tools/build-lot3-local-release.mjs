@@ -1,6 +1,6 @@
 /** Export only the application's explicit precache assets, never local sessions or fixtures. */
 import assert from 'node:assert/strict';
-import { readFileSync, writeFileSync, mkdirSync, copyFileSync, realpathSync, existsSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, copyFileSync, realpathSync, existsSync, readdirSync, rmSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { resolve, dirname, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -17,6 +17,9 @@ const files = new Set(['sw.js']);
 for (const match of declaration[1].matchAll(/['"]\.\/([^'"]*)['"]/g)) {
   files.add(match[1] || 'index.html');
 }
+// Un seul export à la fois (13 Mo chacun) : les exports précédents de ce même outil sont retirés avant d'en écrire un nouveau.
+const releases = resolve(root, 'tmp/lot3/release');
+if (existsSync(releases)) for (const name of readdirSync(releases)) if (/^outil-mj-[0-9.]+-[0-9]+$/.test(name)) rmSync(resolve(releases, name), { recursive: true, force: true });
 const out = resolve(root, 'tmp/lot3/release', `outil-mj-${APP_VERSION}-${Date.now()}`);
 assert.ok(!existsSync(out));
 const manifest = [];

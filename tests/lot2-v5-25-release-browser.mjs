@@ -1,5 +1,7 @@
-/** Verify the exported application, including a real SW/offline/native IDB reload. */
+/** Verify the exported application, including a real SW/offline/native IDB reload.
+ * Le parcours construit lui-même son export (tools/build-lot2-local-release.mjs) : il ne dépend plus d'un artefact local resté d'une version antérieure. */
 import assert from 'node:assert/strict';
+import { execFileSync } from 'node:child_process';
 import { createServer } from 'node:http';
 import { readFileSync, realpathSync, writeFileSync, statSync } from 'node:fs';
 import { createHash } from 'node:crypto';
@@ -9,6 +11,7 @@ import { APP_VERSION } from '../js/version.js';
 import { launchBrowser } from './helpers/browser.mjs';
 
 const root = realpathSync(fileURLToPath(new URL('../', import.meta.url)));
+execFileSync(process.execPath, [resolve(root, 'tools/build-lot2-local-release.mjs')], { cwd: root, stdio: 'inherit' });
 const pointer = JSON.parse(readFileSync(resolve(root, 'tmp/lot2-25/release-path.json')));
 const site = realpathSync(pointer.directory);
 assert.ok(site.startsWith(resolve(root, 'tmp/lot2-25/release') + sep));
