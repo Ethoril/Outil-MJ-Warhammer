@@ -50,7 +50,7 @@ describe('Correctifs de l’annexe d’audit du 08/11 (v3.45.1)', () => {
     }
   });
 
-  test('FICHES-01 / COMP-LIAISONS-01 & 10 : base de compteur ou de caractéristique non canonique signalée « à faire à la main » (jamais de conflit insoluble)', () => {
+  test('FICHES-01 / COMP-LIAISONS-01 : base de compteur ou de caractéristique non canonique signalée « à faire à la main » (jamais de conflit insoluble)', () => {
     const raw = {
       nom: 'Wren', race: 'Humain',
       destin: 3, // nombre au lieu de chaîne -> non canonique pour le serveur
@@ -95,7 +95,7 @@ describe('Correctifs de l’annexe d’audit du 08/11 (v3.45.1)', () => {
     assert.equal(agRow.reason, 'base-unknown');
     assert.equal(agRow.change, null);
 
-    // COMP-LIAISONS-10 : booléen et entier négatif refusés par applyConflictChoice sur une caractéristique
+    // Durcissement hors annexe : booléen et entier négatif refusés par applyConflictChoice sur une caractéristique
     assert.throws(() => applyConflictChoice(state, 'wren', 'carac:ag', 'fiche', true), /illisible/i);
     assert.throws(() => applyConflictChoice(state, 'wren', 'carac:ag', 'fiche', -5), /illisible/i);
   });
