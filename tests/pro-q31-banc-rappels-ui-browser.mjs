@@ -39,7 +39,7 @@ try {
   check(await armour.count() === 1, 'le rappel d’armure du participant au banc est affiché');
   check(/Armure imprimée/.test(await armour.first().innerText()), 'le texte est celui du rappel d’armure');
   await armour.locator('.btn-reminder[data-decision="resolve"]').click();
-  await page.waitForTimeout(100);
+  await page.locator('.workspace-bench .actor-reminder', { hasText: 'Armure imprimée' }).first().waitFor({ state: 'detached' });
   check(await page.locator('.workspace-bench .actor-reminder', { hasText: 'Armure imprimée' }).count() === 0, '« Fait » retire le rappel d’armure');
   check(pageErrors.length === 0, 'aucune erreur de page (' + (pageErrors[0] || 'rien') + ')');
   await context.close();

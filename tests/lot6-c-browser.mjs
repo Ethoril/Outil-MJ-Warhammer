@@ -38,8 +38,8 @@ try {
   assert.ok(await page.evaluate(() => window.__store.listParticipants().find(row => row.id === 'troll').hp) > 10, 'Régénérer rend des Blessures');
 
   await page.evaluate(async () => { const state = JSON.parse(window.__store.getFullJSON()); state.combat.currentActorId = 'swarm'; await window.__store.loadFromJSON(state); window.__view.setSpace('prepare'); window.__view.setSpace('play'); });
-  await page.waitForTimeout(300);
   const states = page.locator('.workspace-sheet-actor .actor-creature-states');
+  await states.first().waitFor();
   assert.equal(await states.count(), 1, 'la fiche de la Nuée propose Fin de Round et Venin');
   assert.ok(await states.locator('.btn-swarm-end-round').count(), 'bouton de fin de Round de la Nuée');
   assert.equal(errors.length, 0, errors.join(' | '));

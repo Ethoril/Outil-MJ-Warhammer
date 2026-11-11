@@ -75,7 +75,7 @@ try {
   assert.equal(await secondary.getAttribute('data-blocking-field'), 'magic-secondary');
   assert.ok(await page.locator('.workspace-field-error button', { hasText: 'dé de Force de l’incident (1d10)' }).count(), 'la liste « À saisir » nomme le dé manquant, avec un lien');
   await page.getByRole('button', { name: 'Lancer tous les dés des PNJ' }).click();
-  await page.waitForTimeout(500);
+  await page.waitForFunction(() => Number(document.querySelector('[data-focus-key="magicSecondaryDurationRoll"]')?.value) >= 1);
   const value = Number(await page.locator('[data-focus-key="magicSecondaryDurationRoll"]').inputValue());
   assert.ok(value >= 1 && value <= 10, `d10 de Force lancé : ${value}`);
   assert.equal(pageErrors.length, 0, pageErrors.join(' | '));

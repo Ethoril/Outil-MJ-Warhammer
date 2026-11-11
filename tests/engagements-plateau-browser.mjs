@@ -55,10 +55,10 @@ try {
   if (process.env.ENGAGEMENTS_SHOT) await page.screenshot({ path: process.env.ENGAGEMENTS_SHOT, fullPage: true });
   // CA18 : Forcer révèle les cases ; Revenir au plateau rétablit la déduction.
   await page.locator('.workspace-engagement-derived').first().getByRole('button', { name: 'Forcer' }).click();
-  await page.waitForTimeout(200);
+  await page.getByRole('button', { name: 'Revenir au plateau' }).first().waitFor();
   assert.ok(await page.getByRole('button', { name: 'Revenir au plateau' }).count() > 0);
   await page.getByRole('button', { name: 'Revenir au plateau' }).first().click();
-  await page.waitForTimeout(200);
+  await page.locator('.workspace-engagement-derived').first().waitFor();
   assert.ok(await page.locator('.workspace-engagement-derived').count() > 0);
   // CA6 : « Déplacer… » engage Elsa avec le Gobelin : une deuxième mêlée.
   await page.getByLabel('Déplacer Elsa').selectOption('engage:gob');
@@ -83,7 +83,7 @@ try {
   await assert.doesNotReject(hands.waitFor({ timeout: 5000 }));
   assert.match(await form.textContent(), /À saisir avant d’appliquer/);
   await hands.selectOption('false');
-  await page.waitForTimeout(200);
+  await page.waitForFunction(() => !/À saisir avant d’appliquer/.test(document.querySelector('.workspace-disengage')?.textContent || ''));
   assert.doesNotMatch(await form.textContent(), /À saisir avant d’appliquer/);
   const detail = await form.locator('.workspace-disengage-detail').textContent();
   assert.match(detail, /Gunther · À terre \(État\) : Désavantage/);
@@ -92,7 +92,7 @@ try {
   await form.getByLabel(/d100 de Gunther/).press('Tab');
   await form.getByLabel(/d100 de Orc/).fill('90');
   await form.getByLabel(/d100 de Orc/).press('Tab');
-  await page.waitForTimeout(200);
+  await page.waitForFunction(() => /Gunther se désengage/.test(document.querySelector('.workspace-disengage')?.textContent || ''));
   assert.match(await form.textContent(), /Gunther se désengage/);
   await form.getByRole('button', { name: 'Appliquer le désengagement' }).click();
   await page.waitForFunction(() => !window.__store.listEngagedWith('gunther').length, null, { timeout: 5000 });

@@ -38,7 +38,7 @@ try {
   check(await armour.count() === 1, 'le rappel d’armure du participant est affiché sur la fiche du personnage actif');
   check(/Armure imprimée/.test(await armour.first().innerText()), 'le texte est celui du rappel d’armure');
   await armour.locator('.btn-reminder[data-decision="resolve"]').click();
-  await page.waitForTimeout(100);
+  await page.locator('.workspace-actor-sheet .actor-reminder', { hasText: 'Armure imprimée' }).first().waitFor({ state: 'detached' });
   check(await page.locator('.workspace-actor-sheet .actor-reminder', { hasText: 'Armure imprimée' }).count() === 0, '« Fait » retire le rappel d’armure');
 
   const titles = await page.evaluate(async ({ base }) => {

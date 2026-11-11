@@ -1,5 +1,5 @@
 // Chantier H, T7 : écran « Envoyer aux fiches » sur une fonction simulée (contrat outil-mj, plan.md §1).
-// Servi sur 127.0.0.1:8766 (PORT pour changer). Aucun compte ni réseau : tout ce qui sort de l'origine est bloqué.
+// Servi sur 127.0.0.1, port libre (PORT pour en imposer un). Aucun compte ni réseau : tout ce qui sort de l'origine est bloqué.
 // À lancer sous `timeout 120 node tests/fiche-writeback-browser.mjs`. CAPTURES=<dossier> enregistre l'aperçu et le conflit.
 import assert from 'node:assert/strict';
 import { mkdirSync } from 'node:fs';
@@ -10,15 +10,15 @@ import { launchBrowser } from './helpers/browser.mjs';
 import { createStaticServer, blockExternalNetwork } from './helpers/static-server.mjs';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
-const port = Number(process.env.PORT || 8766);
+const requestedPort = Number(process.env.PORT || 0);
 const captures = process.env.CAPTURES || '';
 const harnessHtml = '<!doctype html><html lang="fr"><meta charset="utf-8"><title>Recette envoi aux fiches</title><link rel="stylesheet" href="/MJ.css"><link rel="stylesheet" href="/js/ui/workspace.css"><body><main id="mount" style="max-width:760px;padding:16px"></main></body></html>';
 const server = createStaticServer({ root, pages: { '/control-harness.html': () => harnessHtml } });
 
 let browser;
 async function main() {
-  await new Promise((resolve, reject) => { server.once('error', reject); server.listen(port, '127.0.0.1', resolve); });
-  const origin = `http://127.0.0.1:${port}`;
+  await new Promise((resolve, reject) => { server.once('error', reject); server.listen(requestedPort, '127.0.0.1', resolve); });
+  const origin = `http://127.0.0.1:${server.address().port}`;
   browser = await launchBrowser();
   const context = await browser.newContext({ serviceWorkers: 'block', viewport: { width: 820, height: 1000 } });
   const page = await context.newPage();
