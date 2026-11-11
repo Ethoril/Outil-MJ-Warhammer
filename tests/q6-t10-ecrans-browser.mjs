@@ -19,12 +19,13 @@ const RESISTANCE = 'skill-52_e9_73_69_73_74_61_6e_63_65-base', CALM = 'skill-43_
 const withSkills = (extra = {}) => ({ species: 'Human', size: 'average', ...extra, skills: [{ id: RESISTANCE, name: 'Résistance', carac: 'E', status: 'resolved', total: 50 }, { id: CALM, name: 'Calme', carac: 'FM', status: 'resolved', total: 50 }, ...(extra.skills || [])] });
 const PRONE = { id: 'prone-1', key: 'aterre', name: 'À terre', level: 1 };
 const OBSTINATE = { id: 'talent-strong-minded', name: 'Obstiné', status: 'resolved', rank: 1 };
-const seed = (participants, extra = {}) => ({ schemaVersion: 3, reserve: [], diceLines: [], log: [], extensions: { v5: { combatId: 'q6-t10', turnIndex: 1 } },
+// Une séance est ouverte (talentSessionId) : sans elle, l'option Obstiné est désactivée (« Commencez d’abord une séance »).
+const seed = (participants, extra = {}) => ({ schemaVersion: 3, reserve: [], diceLines: [], log: [], extensions: { v5: { combatId: 'q6-t10', turnIndex: 1, talentSessionId: 'q6-t10' } },
   combat: { round: 1, currentActorId: participants[0].id, order: participants.map(row => row.id), participants }, ...extra });
 
 // Les effets de séquelle sont une projection du registre de convalescence (`aftermathRegister`) : on charge un vrai registre.
 const tornLeg = participantId => ({ id: `tear-${participantId}`, participantId, incidentId: 'inc', key: 'tear', label: 'Déchirure musculaire', kind: 'torn-muscle', status: 'open', severity: 'minor', part: 'leg', side: 'left', startDay: 0, endDay: 30, toughnessBonus: 3, reducedDays: 0, history: [] });
-const registerWith = sequelae => ({ extensions: { v5: { combatId: 'q6-t10', turnIndex: 1, aftermathRegister: { schemaVersion: 1, revision: 0, calendar: { schemaVersion: 1, originDay: 0, currentDay: 0 }, incidents: [], diseases: [], sequelae, receipts: [] } } } });
+const registerWith = sequelae => ({ extensions: { v5: { combatId: 'q6-t10', turnIndex: 1, talentSessionId: 'q6-t10', aftermathRegister: { schemaVersion: 1, revision: 0, calendar: { schemaVersion: 1, originDay: 0, currentDay: 0 }, incidents: [], diseases: [], sequelae, receipts: [] } } } });
 const results = [];
 let browser, page;
 const errors = [];

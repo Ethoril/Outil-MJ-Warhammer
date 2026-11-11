@@ -37,8 +37,10 @@ try {
       const wizard = person('mage', 'Mage', 'pj', { skills: [{ name: 'Focalisation', total: 50 }, { name: 'Langue (Magick)', total: 60 }, { name: 'Prière', total: 50 }, { name: 'Calme', total: 50 }],
         spells: spellRows, ...mage, extensions: { v5: { magic: { lore: 'fire' }, channelling: { sl: 6, type: 'winds' }, ...v5 } } });
       const enemies = foes.map(foe => person(foe.id, foe.name || foe.id, 'ennemi', foe.patch || {}));
+      // Une séance est ouverte (talentSessionId) : sans elle, l'option Obstiné est désactivée (« Commencez d’abord une séance »).
       await store.loadFromJSON({ schemaVersion: 3, reserve: [], log: [], diceLines: [],
-        combat: { round: 1, currentActorId: 'mage', order: ['mage', ...enemies.map(row => row.id)], participants: [wizard, ...enemies] }, extensions });
+        combat: { round: 1, currentActorId: 'mage', order: ['mage', ...enemies.map(row => row.id)], participants: [wizard, ...enemies] },
+        extensions: { ...extensions, v5: { talentSessionId: 'q6-t10', ...extensions.v5 } } });
       if (sequela) {
         const current = store.listParticipants().find(row => row.id === 'mage');
         await store.updateParticipant('mage', { extensions: { ...current.extensions, v5: { ...current.extensions.v5, sequelaEffects: { rows: sequela } } } });
