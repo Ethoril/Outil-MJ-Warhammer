@@ -5,16 +5,17 @@
  * gardent le participant, donc le pion.
  */
 import { MAP_LINK_VERSION, tokenStatesOf, diffTokenStates, pjRosterOf, mapRefOf } from './map-link-state.js';
+import { LIAISON_CARTE } from '../data/donnees-communes.js';
 import { DISTANCE_QUERY_TIMEOUT_MS, pendingTokensOf, engagementPairsOf, isRefPlaced } from './map-link-feedback.js';
 
-export const MAP_LINK_CHANNEL = 'wfrp-map-link';
-export const MAP_LINK_PING_MS = 5000;
-export const MAP_LINK_TIMEOUT_MS = 15000;
+export const MAP_LINK_CHANNEL = LIAISON_CARTE.canal;
+export const MAP_LINK_PING_MS = LIAISON_CARTE.battementMs;
+export const MAP_LINK_TIMEOUT_MS = LIAISON_CARTE.delaiDeconnexionMs;
 /**
  * Écho du battement (contrat §2.3) : un onglet caché voit ses minuteries ralenties à une par minute, mais reçoit
  * toujours les messages. Il répond donc au battement de l'autre côté s'il n'a pas battu depuis ce délai.
  */
-export const MAP_LINK_ECHO_MS = 4000;
+export const MAP_LINK_ECHO_MS = LIAISON_CARTE.echoMs;
 /** Remonte (§8.2) : sans réponse de la carte dans ce délai, elle est traitée comme déconnectée et la bascule s'applique. */
 export const MOUNT_REQUEST_TIMEOUT_MS = 3000;
 export const MOUNT_NOT_ADJACENT_MESSAGE = 'Rapprochez le cavalier de sa monture sur la carte';
