@@ -1,7 +1,7 @@
 /** Declarative schema 2 plans. It intentionally does not replace schema 1. Clause validation and stacking are delegated to effect-engine.js (U8 L2). */
 import { EXCLUDED_BASE_CHARACTERISTIC_TALENTS } from './talent-contracts.js';
 import { previewV5ActionCosts } from './v5-action-costs.js';
-import { createV5TimedEffect } from './v5-effects.js';
+import { createV5TimedEffect } from './v5-timed-effect.js';
 import { ENEMY_FROM_KEYWORDS, contextMatchesSpecialization } from './creature-keywords.js';
 import { CLAUSE_EVENTS as EVENTS, CLAUSE_ROLES as ROLES, onlyFields as only, validateClauseShape, mergeProposals } from './effect-engine.js';
 export const TALENT_CONTRACT_V2_SCHEMA_VERSION = 2;

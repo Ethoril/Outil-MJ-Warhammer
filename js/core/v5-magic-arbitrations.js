@@ -5,7 +5,10 @@
  */
 
 import { applySpellEffects, expireSpellEffects } from './v5-magic-effects.js';
-import { isTargetUndead, isTargetDaemon } from './v5-magic-attributes.js';
+export { calculateSapheryWard } from './v5-saphery-ward.js';
+import { FORM_FIELDS } from './v5-beast-form-revert.js';
+export { revertBeastForm } from './v5-beast-form-revert.js';
+import { isTargetUndead, isTargetDaemon } from './v5-magic-target-nature.js';
 import { getReferenceCatalogue } from './reference-catalog.js';
 import { REIKLAND_BEASTS, KADON_MONSTERS } from '../data/v5-transformation-bestiary.js';
 
@@ -24,8 +27,6 @@ export const KADON_REPLACED_CARACS = Object.freeze(['CC', 'CT', 'F', 'E', 'I', '
 const EXCLUDED_BEAST_TRAITS = /^(bestial|craintif|skittish)/;
 /** Traits optionnels que Forme bestiale refuse (V5 p. 245) : Taille (Énorme) et Nuée. */
 const EXCLUDED_BEAST_OPTIONAL = /^(nuee|taille \(enorme\))/;
-/** Éléments de la fiche que la transformation remplace ou lâche, restitués au retour. */
-const FORM_FIELDS = Object.freeze(['armor', 'armorLocations', 'protection', 'equipment', 'skills', 'talents']);
 const ARMOR_LOCATIONS = Object.freeze(['head', 'body', 'rightArm', 'leftArm', 'rightLeg', 'leftLeg']);
 const CARAC_KEYS = Object.freeze({ cc: 'CC', ct: 'CT', f: 'F', e: 'E', i: 'I', ag: 'Ag', dex: 'Dex', int: 'Int', fm: 'FM', soc: 'Soc' });
 
@@ -274,84 +275,6 @@ export function applyBeastForm(caster, beastProfile, options = {}) {
     status: 'transformed',
     participant: next,
     preview
-  };
-}
-
-/**
- * Retour à la forme normale après Forme bestiale.
- * RÈGLE V5 :
- * - Les dégâts subis sous forme de bête restent subis au retour.
- * - Les Coups Critiques subis sous forme de bête sont reportés au retour.
- */
-export function revertBeastForm(beastParticipant) {
-  if (!beastParticipant?.extensions?.v5?.beastForm) {
-    throw new Error('Le participant n’est pas sous Forme bestiale');
-  }
-
-  const data = beastParticipant.extensions.v5.beastForm;
-  const original = data.originalParticipant;
-  if (!original || !original.caracs || typeof original.caracs !== 'object' || Array.isArray(original.caracs)) {
-    throw new Error('Forme bestiale invalide : profil d’origine manquant.');
-  }
-  const next = structuredClone(beastParticipant);
-
-  // Calculer les dégâts subis sous forme de bête
-  const currentBeastHp = Number(next.hp) || 0;
-  const initialBeastHp = Number(data.initialBeastHp) || 12;
-  const woundsLostInBeastForm = Math.max(0, initialBeastHp - currentBeastHp);
-
-  // Restaurer le profil normal
-  next.caracs = structuredClone(original.caracs);
-  next.baseCaracs = structuredClone(data.originalBaseCaracs || original.baseCaracs);
-  next.extensions.v5.baseCaracs = structuredClone(next.baseCaracs);
-  next.extensions.v5.baseTraits = structuredClone(data.originalBaseTraits || original.traits);
-  next.M = original.M;
-  next.caracs.M = original.M ?? original.caracs?.M ?? 4;
-  next.movement = next.caracs.M;
-  next.traits = structuredClone(original.traits);
-  next.maxHp = original.maxHp;
-
-  // Équipement, armure, compétences et talents retrouvés (les formes enregistrées avant ce correctif n'ont rien à rendre).
-  if (original.fields) {
-    for (const key of FORM_FIELDS) {
-      if (Object.hasOwn(original.fields, key)) next[key] = structuredClone(original.fields[key]);
-      else delete next[key];
-    }
-    const savedBase = original.baseArmor || {};
-    if (savedBase.extension !== null && savedBase.extension !== undefined) next.extensions.v5.baseArmor = structuredClone(savedBase.extension); else delete next.extensions.v5.baseArmor;
-    if (savedBase.flat !== null && savedBase.flat !== undefined) next.baseArmor = structuredClone(savedBase.flat); else delete next.baseArmor;
-  }
-
-  // Dégâts subis restent subis
-  const finalHp = Math.max(0, original.hp - woundsLostInBeastForm);
-  next.hp = Math.min(original.maxHp, finalHp);
-
-  // Critiques subis sous forme de bête sont reportés
-  const crits = Array.isArray(data.criticalWoundsSuffered) ? data.criticalWoundsSuffered : [];
-  if (crits.length > 0) {
-    next.criticals = [...(next.criticals || []), ...crits];
-  }
-
-  // Conserver les sources encore actives, jamais un ancien snapshot d'effets expirés.
-  // Reprise des anciennes formes : leurs traits de profil avaient aussi été rangés dans temporaryTraits.
-  const baseTraits = next.extensions.v5.baseTraits || [];
-  const formTraits = new Set(data.formTraits || [...(data.beastProfile?.traits || []), ...(data.optionalTraits || [])]);
-  const originalTemporary = new Set(data.originalTemporaryTraits || []);
-  const temporary = next.extensions.v5.temporaryTraits || [];
-  const activeTraits = (next.extensions.v5.spellEffects || []).filter(effect => !effect.beastFormMarker).flatMap(effect => effect.traits || []);
-  const incidentTraits = (next.extensions.v5.miscastEffects || []).flatMap(effect => effect.traitsGained || []);
-  next.extensions.v5.temporaryTraits = [...new Set([
-    ...temporary.filter(trait => originalTemporary.has(trait) || !formTraits.has(trait) && !baseTraits.includes(trait)),
-    ...activeTraits, ...incidentTraits
-  ])];
-  next.traits = [...new Set([...baseTraits, ...next.extensions.v5.temporaryTraits])];
-  delete next.extensions.v5.beastForm;
-
-  return {
-    status: 'reverted',
-    participant: next,
-    woundsCarriedOver: woundsLostInBeastForm,
-    criticalsCarriedOver: crits
   };
 }
 
@@ -766,27 +689,6 @@ export function applyHandOfGlory(targets = [], preview, options = {}) {
 // 5. BOUCLIER DE SAPHERY (SHIELD OF SAPHERY)
 // ============================================================================
 
-/**
- * Calcul du seuil de Protection du Bouclier de Saphery.
- * RÈGLE CONFIRMÉE :
- * - Protection de base 9+, améliorée de -1 par sort de Haute Magie supplémentaire maintenu.
- * - Pas de plancher ajouté à sa Protection croissante : un seuil calculé <= 1 réussit automatiquement sur 1d10.
- */
-export function calculateSapheryWard(otherSpellsCount = 0, baseWard = 9) {
-  const count = Math.max(0, Number(otherSpellsCount) || 0);
-  const threshold = baseWard - count;
-  const isAutomatic = threshold <= 1;
-
-  return {
-    baseWard,
-    otherSpellsCount: count,
-    threshold,
-    automaticSuccess: isAutomatic,
-    summary: isAutomatic
-      ? `Bouclier de Saphery : seuil ${threshold} ≤ 1 → Réussite automatique de la Protection sur 1d10.`
-      : `Bouclier de Saphery : Protection ${threshold}+ sur 1d10.`
-  };
-}
 
 /**
  * Test du Bouclier de Saphery sur un jet de 1d10.

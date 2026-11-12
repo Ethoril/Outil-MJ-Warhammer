@@ -19,7 +19,7 @@ import {
 import { resolveMiscast, applyMiscastToParticipant, missingMagicDiceMessage } from './v5-magic-miscasts.js';
 import { uid } from './models.js';
 import { totalPowerCritical } from './slann.js';
-import { creatureCastingBases } from './creature-magic.js';
+import { creatureCastingBases } from './creature-magic-traits.js';
 
 export const V5_MAGIC_CASTING_VERSION = 'v5-magic-casting-2026-10-10.1';
 

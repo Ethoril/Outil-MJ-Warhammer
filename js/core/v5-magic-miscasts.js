@@ -1,4 +1,5 @@
 import { uid } from './models.js';
+export { isMiscastConditionLocked } from './v5-miscast-locks.js';
 import {activeMagicTalent, prepareMiscastOptions} from './v5-magic-talents.js';
 import { markCorruptionThresholdTest } from './v5-corruption.js';
 /**
@@ -867,10 +868,6 @@ export function applyMiscastToParticipant(participant, miscast, options = {}) {
   };
 }
 
-export function isMiscastConditionLocked(participant, state) {
-  return (participant?.extensions?.v5?.miscastEffects || []).some(effect => effect.unremovable === true
-    && (effect.id === state?.source?.miscastEffectId || (effect.conditionIds || []).includes(state?.id)));
-}
 
 /** Nettoyage partagé par l’horloge des incidents ; 1 Round = 10 secondes (D-11). */
 export function expireMiscastConsequences(participant, { currentRound = null, minutes = 0 } = {}) {

@@ -13,7 +13,7 @@
  *
  * Un champ absent se lit comme vide : aucune couche, aucun blocage.
  */
-import { unsuppressedSpellEffects } from './v5-magic-effects.js';
+import { unsuppressedSpellEffects } from './v5-spell-effects-active.js';
 
 export const AWAKENING_FLAG = 'cannotActUntilNextRound';
 export const NO_FLEE_FLAG = 'cannotFlee';

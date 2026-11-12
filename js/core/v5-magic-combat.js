@@ -1,4 +1,4 @@
-import { baseCharacteristicScore } from './v5-magic-talents.js';
+import { baseCharacteristicScore } from './v5-magic-talent-rank.js';
 import { natureProtection, attacksAreMagical } from './creature-natures.js';
 
 /**

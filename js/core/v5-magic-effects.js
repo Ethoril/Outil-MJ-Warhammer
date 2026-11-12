@@ -1,7 +1,10 @@
 import { casterCaracs } from './creature-abilities.js';
+import { unsuppressedSpellEffects } from './v5-spell-effects-active.js';
+export { unsuppressedSpellEffects } from './v5-spell-effects-active.js';
 import { uid } from './models.js';
-import {revertBeastForm, calculateSapheryWard} from './v5-magic-arbitrations.js';
-import { magicTalentRank } from './v5-magic-talents.js';
+import { calculateSapheryWard } from './v5-saphery-ward.js';
+import { revertBeastForm } from './v5-beast-form-revert.js';
+import { magicTalentRank } from './v5-magic-talent-rank.js';
 /**
  * Moteur des Effets Magiques Communs V5 — Lot 3.2.
  * Conforme au Cahier des charges Lot 3 et au Cadrage Magie V5.
@@ -16,7 +19,7 @@ import { parseWeaponDamage, evaluateWeaponDamage } from './damage.js';
 import { HIT_LOCATIONS } from '../data/shared/fiche/equipment.js';
 import { normalizeArmorLocations, locationProtection } from './equipment.js';
 import { armorMaterial, wornArmourPieces } from './v5-armor-material.js';
-import { isTargetDaemon, isTargetUndead } from './v5-magic-attributes.js';
+import { isTargetDaemon, isTargetUndead } from './v5-magic-target-nature.js';
 import { projectDivineGear } from './v5-divine-effects-gear.js';
 
 export const V5_MAGIC_EFFECTS_VERSION = 'v5-magic-effects-2026-10-10.1';
@@ -486,8 +489,6 @@ function recomputeLayerValues(next, effects) {
   projectDivineGear(next);
   return { effectiveWard, effectiveTestModifiers };
 }
-/** Impasse conserve la couche d'origine et son horloge ; seules ses valeurs sont momentanément inactives. */
-export function unsuppressedSpellEffects(effects=[]){const list=(Array.isArray(effects)?effects:[]).filter(e=>e&&typeof e==='object'&&!Array.isArray(e));const ids=new Set(list.flatMap(e=>e.suppressedEffectIds || []));return list.filter(e=>!ids.has(e.id));}
 
 /**
  * S-05 : nouvelle base réelle (fiche synchronisée, modification MJ des caractéristiques ou de l'armure).

@@ -1,5 +1,5 @@
 /** Pure V5 action resource/quota transaction. No Store, RNG or implicit reset. */
-import { hasMomentum, withMomentum } from './v5-combat-rules.js';
+import { hasMomentum, withMomentum } from './v5-momentum-state.js';
 // Vocabulaire des coûts, exemptions et quotas : module sans dépendance, lu aussi par le chargeur de suppléments (U8 L7).
 import { normalizeV5ActionRequest } from './v5-action-costs-schema.js';
 export const V5_ACTION_COST_RULE_VERSION = 'v5-action-costs-2026-10-09.1';

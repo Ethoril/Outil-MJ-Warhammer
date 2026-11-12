@@ -7,7 +7,7 @@
  */
 import { creatureSizeOf } from './creature-size.js';
 import { V5_RIDE_SKILL_ID } from './v5-mounted-combat.js';
-import { participantCamp } from './encounters.js';
+import { participantCamp } from './participant-camp.js';
 
 const fold = value => String(value ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
 const v5Of = participant => participant?.extensions?.v5 || {};
