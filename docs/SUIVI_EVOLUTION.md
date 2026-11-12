@@ -10,6 +10,18 @@
 | E09–E10 | Intégré et validé dans la vraie coquille | Navigation Préparer/Jouer/Bibliothèque, profils complets, recherche actions/tags, favoris, règles réelles, sélection et suivi du tour. |
 | E11–E17 | Intégré ; parcours navigateur bornés passants | `tests/browser-index.mjs` couvre lancement, suspension/reprise, clôture, personnage persistant, E15, E16 et E04 sur l’index réel. |
 
+## 3.46.0 — Montures et Rapace du Bestiaire V2, Forme bestiale élargie, reliquat de l’audit du 08/11 (11/11/2026)
+
+- Bestiaire (règle maison du MJ) : livre `L27`, Bestiaire du Vieux Monde (WJDR V2), avec six montures déclarables (Cheval de guerre, Cheval de selle, Coursier elfique, Destrier, Destrier du Chaos, Poney) et le Rapace, convertis en V5 par `tools/build-bestiary-l27.mjs` (Blessures selon la formule V5, sabots comme le Cheval V5) ; le livre est dans le cache hors ligne.
+- Magie (règle maison du MJ) : Forme bestiale accepte l'Ours, le Pigeon et le Serpent du livre de base V4 ; les invocations divines gardent la liste V5 des six bêtes.
+- Interface : sur le plateau des mêlées, les cartouches d'une zone se rangent côte à côte sur la largeur ; le panneau de résolution ne déborde plus à 390 px quand un menu de défense a un libellé long (talent Petit).
+- Sauvegarde (`COMP-ZONESNON-07`) : le fichier exporté n'embarque plus l'historique d'annulation ; la partie en cours garde le sien, et l'import repart comme avant d'un historique neuf.
+- Démarrage (`BOOT-02`, `BOOT-07`, `BOOT-09`) : sans stockage local (IndexedDB), la synchronisation du compte ne s'attache plus et l'état l'annonce au lieu d'échouer en boucle ; un échec d'initialisation de Firebase a son propre état, « Compte indisponible », et un bouton « Réessayer la connexion » dans le menu ; icônes PNG d'installation (192, 512, masquable, Apple) produites par `tools/build-app-icons.mjs`, avec `id`, `scope` et `lang` au manifeste.
+- Liaison Map Display (`MAP-01`, `MAP-04`) : `tools/serve-liaison.mjs` refuse un dossier de la carte sans `js/app/mjLink.js` (option `--check`) ; `campaignName`, jamais envoyé ni lu, est retiré des deux copies du contrat, sans changement de version du protocole.
+- Hygiène (`CAMP-07`, `CAMP-09`, fins de ligne) : six règles CSS orphelines retirées, cinq documents de lot périmés rangés dans `docs/archives/campagne-jouer/` ; `.gitattributes` impose le LF à tout fichier texte, quel que soit le réglage de la machine.
+- Outillage de tests (`CAMP-08`, `COMP-ARBITRAG-03`, `TESTS-07`, `TESTS-09`, `TESTS-10`, `HYG-12`) : serveur de test partagé (`tests/helpers/static-server.mjs`), index des parcours (`tests/parcours.json`, socle de 15 parcours avant publication : `npm run test:browser-socle`), parcours de release qui construisent leur export, Playwright 1.65.0 ; détail et doublons à arbitrer dans `docs/MENAGE_PARCOURS_11_11_2026.md`.
+- Cadrage (`CAMP-10`) : spec, plan et tâches des soins hors rencontre dans `docs/specs/soins-hors-rencontre/`, validés par le MJ ; rien n'est encore codé.
+
 ## 3.45.1 — Correctifs du reliquat de l’audit du 08/11 (09/11/2026)
 
 - Contrats de sorts (`REGLES-05`) : l'admissibilité de Taille des cibles passe par `creatureSizeOf` (`js/core/creature-size.js` : traits `Taille (...)` / `Size (...)` et mots de taille nus, champ `size`, espèce de PJ) au lieu d'une expression régulière sur les traits qui classait Monstrueuse en Énorme et déclenchait des faux positifs sur `"monstr"`.
