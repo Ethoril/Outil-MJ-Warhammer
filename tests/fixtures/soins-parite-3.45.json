@@ -1,0 +1,335 @@
+{
+  "receipts": [
+    [
+      "registerAftermathIncident",
+      {
+        "id": "a1",
+        "kind": "incident",
+        "status": "applied",
+        "reason": "incident-registered",
+        "baseRevision": 0,
+        "resultRevision": 1,
+        "day": 0,
+        "incidentId": "incident:a1",
+        "source": {
+          "kind": "wounds-lost",
+          "cause": "combat"
+        }
+      }
+    ],
+    [
+      "treatAftermathWound",
+      {
+        "id": "a2",
+        "kind": "treatment",
+        "status": "applied",
+        "reason": "healing-success",
+        "baseRevision": 1,
+        "resultRevision": 2,
+        "day": 0,
+        "incidentId": "incident:a1",
+        "skill": "heal",
+        "HId": "H",
+        "roll": 20,
+        "score": 60,
+        "success": true,
+        "sl": 4,
+        "fumble": false,
+        "critical": false,
+        "healed": 9,
+        "amountChoice": "sl",
+        "bleedingOnly": false,
+        "bleedingToRemove": 0,
+        "fumbleDamage": 0,
+        "currentWoundsAfter": 14,
+        "bleedingRemoved": 1
+      }
+    ],
+    [
+      "registerAftermathIncident",
+      {
+        "id": "a3",
+        "kind": "incident",
+        "status": "applied",
+        "reason": "incident-registered",
+        "baseRevision": 2,
+        "resultRevision": 3,
+        "day": 0,
+        "incidentId": "incident:res1:aftermath:P:0",
+        "source": {
+          "kind": "critical",
+          "criticalId": "res1:aftermath:P:0",
+          "criticalWoundId": "res1:crit:P:0"
+        }
+      }
+    ],
+    [
+      "treatAftermathSurgicalIncident",
+      {
+        "id": "a4",
+        "kind": "surgery",
+        "status": "applied",
+        "reason": "surgery-fumble",
+        "baseRevision": 3,
+        "resultRevision": 4,
+        "day": 0,
+        "incidentId": "incident:res1:aftermath:P:0",
+        "HId": "H",
+        "roll": 99,
+        "score": 60,
+        "success": false,
+        "sl": -5,
+        "fumble": true,
+        "critical": false,
+        "fumbleDamage": 4,
+        "currentWoundsAfter": 10
+      }
+    ],
+    [
+      "treatAftermathSurgicalIncident",
+      {
+        "id": "a5",
+        "kind": "surgery",
+        "status": "applied",
+        "reason": "surgery-success",
+        "baseRevision": 4,
+        "resultRevision": 5,
+        "day": 0,
+        "incidentId": "incident:res1:aftermath:P:0",
+        "HId": "H",
+        "roll": 20,
+        "score": 60,
+        "success": true,
+        "sl": 4,
+        "fumble": false,
+        "critical": false,
+        "fumbleDamage": 0,
+        "currentWoundsAfter": 10
+      }
+    ],
+    [
+      "registerAftermathDisease",
+      {
+        "id": "a6",
+        "kind": "disease",
+        "status": "applied",
+        "reason": "disease-registered",
+        "baseRevision": 5,
+        "resultRevision": 6,
+        "day": 0,
+        "diseaseId": "disease:a6"
+      }
+    ],
+    [
+      "careForAftermathDisease",
+      {
+        "id": "a7",
+        "kind": "disease-care",
+        "status": "applied",
+        "reason": "carer-protected",
+        "baseRevision": 6,
+        "resultRevision": 7,
+        "day": 0,
+        "diseaseId": "disease:a6",
+        "HId": "H",
+        "roll": 20,
+        "score": 60,
+        "success": true,
+        "sl": 4,
+        "fumble": false,
+        "critical": false,
+        "carerProtected": true,
+        "othersProtected": 3,
+        "rested": true,
+        "restGained": true,
+        "remainingDays": 2
+      }
+    ],
+    [
+      "recordAftermathCharacteristicLoss",
+      {
+        "id": "a8",
+        "kind": "characteristic-loss",
+        "status": "applied",
+        "reason": "characteristic-loss-recorded",
+        "baseRevision": 7,
+        "resultRevision": 8,
+        "day": 0,
+        "participantId": "P",
+        "carac": "F",
+        "applied": 5,
+        "split": null
+      }
+    ],
+    [
+      "decideAftermathImpressiveScars",
+      {
+        "id": "a9",
+        "kind": "scar-decision",
+        "status": "applied",
+        "reason": "scars-agreed",
+        "baseRevision": 8,
+        "resultRevision": 9,
+        "day": 0,
+        "participantId": "P"
+      }
+    ],
+    [
+      "openAftermathSequelae",
+      {
+        "id": "a10",
+        "kind": "sequelae-open",
+        "status": "refused",
+        "reason": "nothing-to-follow",
+        "baseRevision": 9,
+        "resultRevision": 9,
+        "day": 0,
+        "incidentId": "incident:res1:aftermath:P:0"
+      }
+    ],
+    [
+      "closeAftermathIncident",
+      {
+        "id": "a11",
+        "kind": "close-incident",
+        "status": "applied",
+        "reason": "incident-closed",
+        "baseRevision": 9,
+        "resultRevision": 10,
+        "day": 0,
+        "incidentId": "incident:a1"
+      }
+    ],
+    [
+      "registerAftermathIncident",
+      {
+        "id": "a12",
+        "kind": "incident",
+        "status": "applied",
+        "reason": "incident-registered",
+        "baseRevision": 10,
+        "resultRevision": 11,
+        "day": 0,
+        "incidentId": "incident:a12",
+        "source": {
+          "kind": "wounds-lost",
+          "cause": "chute"
+        }
+      }
+    ],
+    [
+      "previewAftermathAdvance",
+      {
+        "status": "ready",
+        "fromDay": 0,
+        "toDay": 1,
+        "days": 1,
+        "requiredDailyChecks": [
+          {
+            "incidentId": "incident:res1:aftermath:P:0",
+            "participantId": "P",
+            "day": 0,
+            "test": "endurance",
+            "difficultyDR": 2,
+            "conditional": false,
+            "ruleId": "F-L06-0304",
+            "participantName": "P",
+            "score": 30
+          },
+          {
+            "incidentId": "incident:a12",
+            "participantId": "P",
+            "day": 0,
+            "test": "endurance",
+            "difficultyDR": 2,
+            "conditional": false,
+            "ruleId": "F-L06-0304",
+            "participantName": "P",
+            "score": 30
+          }
+        ],
+        "absentIncidents": [],
+        "sequelaEvents": []
+      }
+    ],
+    [
+      "advanceAftermathCalendar",
+      {
+        "id": "a13",
+        "kind": "advance-calendar",
+        "status": "applied",
+        "reason": "calendar-advanced",
+        "baseRevision": 11,
+        "resultRevision": 12,
+        "day": 0,
+        "fromDay": 0,
+        "toDay": 1,
+        "days": 1,
+        "processedDailyChecks": [
+          {
+            "incidentId": "incident:res1:aftermath:P:0",
+            "participantId": "P",
+            "day": 0,
+            "roll": 95,
+            "score": 30,
+            "success": false,
+            "sl": -4,
+            "fumble": false,
+            "critical": false
+          },
+          {
+            "incidentId": "incident:a12",
+            "participantId": "P",
+            "day": 0,
+            "roll": 30,
+            "score": 30,
+            "success": true,
+            "sl": 2,
+            "fumble": false,
+            "critical": false
+          }
+        ],
+        "ignoredDailyTests": [],
+        "absentIncidents": []
+      }
+    ],
+    [
+      "treatAftermathInfection",
+      {
+        "id": "a13b",
+        "kind": "infection-treatment",
+        "status": "applied",
+        "reason": "successful-heal-minus-one",
+        "baseRevision": 12,
+        "resultRevision": 13,
+        "day": 1,
+        "incidentId": "incident:res1:aftermath:P:0",
+        "HId": "H",
+        "roll": 10,
+        "score": 60,
+        "success": true,
+        "sl": 4,
+        "fumble": false,
+        "critical": false
+      }
+    ],
+    [
+      "closeAftermathIncident",
+      {
+        "id": "a14",
+        "kind": "close-incident",
+        "status": "applied",
+        "reason": "critical-healed",
+        "baseRevision": 13,
+        "resultRevision": 14,
+        "day": 1,
+        "incidentId": "incident:res1:aftermath:P:0"
+      }
+    ]
+  ],
+  "sujet": {
+    "hp": 10,
+    "states": [],
+    "criticalWounds": []
+  }
+}

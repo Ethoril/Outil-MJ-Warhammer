@@ -65,8 +65,14 @@ function getInitials(name) {
   return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
 }
 
+const PLACE_TEXT = { suspendue: 'Scène suspendue', aucun: 'Ancien suivi' };
+const PLACE_NOTICE = {
+  suspendue: 'Ce suivi appartient à un participant d’une scène suspendue : consultation seule. Reprenez la scène pour soigner.',
+  aucun: 'Ancien suivi sans personnage : consultation seule. Il peut être archivé.'
+};
+
 function getPersonStatus(entry, ownIncidents, ownDiseases, ownSequelae, ownProposals) {
-  if (entry.absent) return { text: 'Hors rencontre', color: 'blue' };
+  if (entry.absent) return { text: PLACE_TEXT[entry.place] || PLACE_TEXT.aucun, color: 'blue' };
   if (ownProposals.length || ownIncidents.some(i => !i.bandaged || i.infection || (i.requiresSurgery && !i.surgeryCompleted))) {
     return { text: 'À traiter', color: 'red' };
   }
@@ -81,7 +87,8 @@ function getPersonStatus(entry, ownIncidents, ownDiseases, ownSequelae, ownPropo
  * - Synthèse sobre inspirée de la maquette (fond parchemin, titres Georgia, sans-serif système, rouge profond).
  * - Commandes existantes de convalescence accessibles dans le détail et dans la section d'ensemble.
  * - Avance de temps par Store (commande existante).
- * - Identité rattachée à participantId, signalement clair des absents, aucun rapprochement automatique.
+ * - Participants de la rencontre, puis personnages suivis hors rencontre (mêmes opérations) ; les suivis sans sujet
+ *   (scène suspendue, ancien suivi) restent en consultation sous un nom stable, sans rapprochement automatique.
  */
 export function mountCampaignWorkspace({ root, Store, onAdvanceTime = () => {}, aftermathPanel = null } = {}) {
   if (!root || !Store) throw new TypeError('Conteneur et Store requis pour Campagne.');
@@ -124,7 +131,10 @@ export function mountCampaignWorkspace({ root, Store, onAdvanceTime = () => {}, 
       const state = Store.getAftermathState();
       const overview = typeof Store.listAftermathSequelae === 'function' ? Store.listAftermathSequelae() : { sequelae: state.sequelae || [], pending: [] };
       const proposals = typeof Store.listAftermathProposals === 'function' ? Store.listAftermathProposals() : [];
-      const participants = typeof Store.listParticipants === 'function' ? Store.listParticipants() : [];
+      // CA14 : participants de la rencontre en cours, puis personnages suivis hors rencontre (`offEncounter`).
+      const participants = typeof Store.listAftermathSubjects === 'function' ? Store.listAftermathSubjects()
+        : (typeof Store.listParticipants === 'function' ? Store.listParticipants() : []);
+      const conflicts = typeof Store.listFollowedCharacterConflicts === 'function' ? Store.listFollowedCharacterConflicts() : [];
       const byId = new Map(participants.map(person => [person.id, person]));
       const incidents = state.incidents || [];
       const diseases = state.diseases || [];
@@ -138,8 +148,15 @@ export function mountCampaignWorkspace({ root, Store, onAdvanceTime = () => {}, 
       ].map(row => row.participantId));
 
       const absentIds = [...activeIds].filter(id => !byId.has(id));
-      const people = participants.map(person => ({ id: person.id, person, name: person.name || 'Personnage sans nom', absent: false }));
-      absentIds.forEach((id, index) => people.push({ id, person: null, name: `Suivi hors rencontre ${index + 1}`, absent: true }));
+      const people = participants.map(person => ({ id: person.id, person, name: person.name || 'Personnage sans nom', absent: false, off: person.offEncounter === true }));
+      // CA2 à CA4 : un suivi sans sujet garde le nom enregistré à son ouverture, jamais un rang d'affichage.
+      const rowsOf = id => [...incidents, ...diseases, ...sequelae, ...(overview.pending || [])].filter(row => row.participantId === id);
+      for (const id of absentIds) {
+        const row = rowsOf(id)[0];
+        people.push({ id, person: null, absent: true, off: false,
+          name: (row && typeof Store.getAftermathRowLabel === 'function' ? Store.getAftermathRowLabel(row) : '') || 'Ancien suivi',
+          place: typeof Store.getAftermathSubjectPlace === 'function' ? Store.getAftermathSubjectPlace(id) : 'aucun' });
+      }
       const visible = filter === 'active' ? people.filter(person => activeIds.has(person.id)) : people;
       if (!visible.some(person => person.id === selected)) selected = visible[0]?.id ?? null;
       const day = aftermathDate(state);
@@ -183,12 +200,31 @@ export function mountCampaignWorkspace({ root, Store, onAdvanceTime = () => {}, 
           target?.focus();
         });
         selectTaskBtn.dataset.campaignTask = String(taskIndex);
-        selectTaskBtn.append(node('strong', '', owner?.name || 'Participant absent'), node('span', '', `${task.title} · ${task.text}`));
+        selectTaskBtn.append(node('strong', '', owner?.name || 'Suivi'), node('span', '', `${task.title} · ${task.text}`));
         item.append(selectTaskBtn);
         taskList.append(item);
       }
       if (taskRows.length) tasks.append(taskList);
       page.append(tasks);
+
+      // CA38 : deux personnages suivis pour une même fiche. L'outil ne choisit pas : le MJ dit lequel garder.
+      for (const conflict of conflicts) {
+        const box = node('section', 'campaign-conflict');
+        box.setAttribute('role', 'alert');
+        box.append(node('h3', '', 'Deux personnages suivis pour la même fiche'),
+          node('p', '', 'Tant que le doublon existe, aucun des deux n’entre d’office en rencontre. Gardez-en un : l’autre est supprimé et ses suivis sont archivés (annulable par ↶).'));
+        const choices = node('div', 'campaign-conflict-choices');
+        for (const character of conflict.characters) {
+          const keep = btn(`Garder « ${character.name} »${character.hp != null ? ` (${character.hp} PV)` : ''}`, 'campaign-secondary', async () => {
+            keep.disabled = true;
+            try { await Store.resolveFollowedCharacterConflict({ keepId: character.id }); } finally { render(); }
+          });
+          keep.dataset.campaignFocus = `conflict-${character.id}`;
+          choices.append(keep);
+        }
+        box.append(choices);
+        page.append(box);
+      }
 
       // Disposition principale en 2 colonnes
       const layout = node('div', 'campaign-layout');
@@ -198,7 +234,7 @@ export function mountCampaignWorkspace({ root, Store, onAdvanceTime = () => {}, 
       group.append(label('VUE D’ENSEMBLE'));
       const groupTitle = node('div', 'campaign-section-heading');
       groupTitle.append(node('h3', '', 'Personnages'), node('span', 'campaign-muted', countText(people.length, 'personnage ou suivi', 'personnages ou suivis')));
-      group.append(groupTitle, node('p', 'campaign-muted', 'Participants de la rencontre et suivis dont le participant est absent.'));
+      group.append(groupTitle, node('p', 'campaign-muted', 'Participants de la rencontre en cours, puis personnages suivis hors rencontre.'));
 
       const filters = node('div', 'campaign-filters');
       filters.setAttribute('role', 'group');
@@ -216,7 +252,7 @@ export function mountCampaignWorkspace({ root, Store, onAdvanceTime = () => {}, 
       const list = node('div', 'campaign-person-list');
       list.setAttribute('aria-label', 'Personnages et suivis');
       if (!visible.length) {
-        list.append(node('p', 'campaign-empty', filter === 'active' ? 'Aucun suivi actif.' : 'Aucun participant ni suivi actif.'));
+        list.append(node('p', 'campaign-empty', filter === 'active' ? 'Aucun suivi actif.' : 'Aucun participant ni personnage suivi.'));
       }
       for (const entry of visible) {
         const ownIncidents = incidents.filter(row => row.participantId === entry.id && activeIncident(row));
@@ -245,7 +281,7 @@ export function mountCampaignWorkspace({ root, Store, onAdvanceTime = () => {}, 
 
         const hp = entry.person && Number.isFinite(Number(entry.person.hp)) && Number.isFinite(Number(entry.person.maxHp))
           ? `${entry.person.hp} / ${entry.person.maxHp} PV`
-          : (entry.absent ? 'Hors rencontre' : 'PV indisponibles');
+          : (entry.absent ? 'Consultation' : 'PV indisponibles');
         const hpBox = node('span', 'campaign-person-hp');
         hpBox.append(node('small', '', 'BLESSURES'), node('strong', '', hp));
 
@@ -253,6 +289,12 @@ export function mountCampaignWorkspace({ root, Store, onAdvanceTime = () => {}, 
         const badge = node('span', `campaign-badge ${statusMeta.color}`);
         badge.append(node('i'), document.createTextNode(statusMeta.text));
         badgeBox.append(badge);
+        if (entry.off) {
+          // La pastille situe le personnage ; elle ne retire aucune opération.
+          const place = node('span', 'campaign-badge blue');
+          place.append(node('i'), document.createTextNode('Hors rencontre'));
+          badgeBox.append(place);
+        }
 
         const chevron = node('span', 'campaign-chevron', '›');
         chevron.setAttribute('aria-hidden', 'true');
@@ -291,7 +333,7 @@ export function mountCampaignWorkspace({ root, Store, onAdvanceTime = () => {}, 
         const pending = (overview.pending || []).filter(row => row.participantId === chosen.id);
 
         const top = node('div', 'campaign-detail-top');
-        top.append(label(chosen.absent ? 'PARTICIPANT ABSENT' : 'PERSONNAGE SÉLECTIONNÉ'));
+        top.append(label(chosen.absent ? 'SUIVI EN CONSULTATION' : (chosen.off ? 'PERSONNAGE SUIVI HORS RENCONTRE' : 'PERSONNAGE SÉLECTIONNÉ')));
 
         const profile = node('div', 'campaign-profile');
         const statusMeta = getPersonStatus(chosen, ownIncidents, ownDiseases, ownSequelae, ownProposals);
@@ -301,7 +343,7 @@ export function mountCampaignWorkspace({ root, Store, onAdvanceTime = () => {}, 
         profileInfo.append(node('h3', 'campaign-detail-title', chosen.name));
         const hp = chosen.person && Number.isFinite(Number(chosen.person.hp)) && Number.isFinite(Number(chosen.person.maxHp))
           ? `${chosen.person.hp} / ${chosen.person.maxHp} PV`
-          : (chosen.absent ? 'Participant absent de la rencontre' : 'PV indisponibles');
+          : (chosen.absent ? (PLACE_TEXT[chosen.place] || PLACE_TEXT.aucun) : 'PV indisponibles');
         profileInfo.append(node('p', 'campaign-muted', hp));
         profile.append(largeAvatar, profileInfo);
         top.append(profile);
@@ -313,7 +355,7 @@ export function mountCampaignWorkspace({ root, Store, onAdvanceTime = () => {}, 
         }
 
         if (chosen.absent) {
-          detail.append(node('p', 'campaign-notice', 'Ce suivi est lié à un participant absent de la rencontre. Son identité et les soins disponibles ne peuvent pas être déduits automatiquement ici. Les opérations de soin restent liées aux participants présents dans la rencontre.'));
+          detail.append(node('p', 'campaign-notice', PLACE_NOTICE[chosen.place] || PLACE_NOTICE.aucun));
         }
 
         if (pending.length) {
@@ -351,7 +393,7 @@ export function mountCampaignWorkspace({ root, Store, onAdvanceTime = () => {}, 
           actionsBox.append(aftermath.renderParticipantConvalescence(chosen.id, participants));
           detail.append(actionsBox);
         } else if (chosen.absent && typeof aftermath.renderParticipantConvalescence === 'function') {
-          // Pour un participant absent, seules les opérations d'archivage sur les incidents ouverts hors rencontre sont proposées
+          // Suivi sans sujet : seul l'archivage d'un ancien suivi est proposé
           const hasArchivable = incidents.some(row => row.participantId === chosen.id && row.status === 'open');
           if (hasArchivable) {
             const actionsBox = node('section', 'campaign-detail-actions-box');
@@ -362,8 +404,9 @@ export function mountCampaignWorkspace({ root, Store, onAdvanceTime = () => {}, 
         }
 
         detail.append(node('p', 'campaign-help', chosen.absent
-          ? 'Les opérations de soin restent liées aux participants présents dans la rencontre.'
-          : 'Les soins et décisions appliqués ici mettent à jour le registre et les PV de la partie.'));
+          ? 'Un suivi en consultation ne reçoit ni soin ni Test.'
+          : (chosen.off ? 'Les soins et décisions appliqués ici mettent à jour le registre et les PV du personnage suivi, hors rencontre.'
+            : 'Les soins et décisions appliqués ici mettent à jour le registre et les PV de la partie.')));
       }
       layout.append(detail);
       page.append(layout);
@@ -393,7 +436,7 @@ export function mountCampaignWorkspace({ root, Store, onAdvanceTime = () => {}, 
         node('p', '', 'L’avance du temps de campagne peut entraîner des échéances de convalescence. Les échéances liées à un Tour réel restent distinctes.')
       );
       if (absentIds.length) {
-        note.append(node('p', 'campaign-notice', `${countText(absentIds.length, 'suivi est associé', 'suivis sont associés')} à un participant absent. Aucun rapprochement automatique avec un autre personnage n’est effectué.`));
+        note.append(node('p', 'campaign-notice', `${countText(absentIds.length, 'suivi est', 'suivis sont')} en consultation seule (scène suspendue ou ancien suivi). Aucun rapprochement automatique avec un autre personnage n’est effectué.`));
       }
       page.append(note);
     } catch (error) {

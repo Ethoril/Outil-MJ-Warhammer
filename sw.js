@@ -171,6 +171,7 @@ const ASSETS_TO_CACHE = [
   './js/core/damage.js',
   './js/core/models.js',
   './js/core/migrations.js',
+  './js/core/aftermath-subjects.js',
   './js/core/persistence.js',
   './js/core/sync.js',
   './js/core/auth-errors.js',

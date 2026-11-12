@@ -783,19 +783,19 @@ test('1b — encadré p.170 : le soin de Blessures consommé, un autre Test reti
   assert.equal(get(store, 'patient').states.filter(row => row.key === 'hemorragique').length, 0, '9 Blessures auraient été rendues : les 4 Hémorragiques partent');
 });
 
-test('2 — un patient retiré du combat ne bloque pas le calendrier ; son incident est signalé puis archivable', async () => {
+// CAMP-10 (CA10) : le retrait d'un participant non gardé archive ses suivis tout de suite ; plus de suivi « absent ».
+test('2 — un patient retiré du combat ne bloque pas le calendrier ; son incident est archivé au retrait', async () => {
   const store = await setup([base('patient'), base('gone'), healerSheet()]);
   await open(store); const goneId = await open(store, 'gone');
   store.removeParticipant('gone'); await new Promise(done => setTimeout(done, 20));
   const patientIncident = store.getAftermathState().incidents[0].id;
+  assert.equal(store.getAftermathState().incidents.find(row => row.id === goneId).status, 'archived');
   const preview = store.previewAftermathAdvance({ days: 1, expectedRevision: store.getAftermathState().revision });
   assert.deepEqual(preview.requiredDailyChecks.map(row => row.incidentId), [patientIncident]);
-  assert.deepEqual(preview.absentIncidents.map(row => row.incidentId), [goneId]);
+  assert.deepEqual(preview.absentIncidents, []);
   const jump = await store.advanceAftermathCalendar({ operationId: 'j', days: 1, dailyTests: [{ incidentId: patientIncident, day: 0, roll: 10 }] });
   assert.equal(jump.receipt.status, 'applied', jump.receipt.reason);
-  const archived = await store.archiveAftermathIncident({ operationId: 'a', incidentId: goneId });
-  assert.equal(archived.receipt.status, 'applied');
-  assert.equal(store.getAftermathState().incidents.find(row => row.id === goneId).status, 'archived');
+  assert.equal((await store.archiveAftermathIncident({ operationId: 'a', incidentId: goneId })).receipt.reason, 'incident-closed');
   assert.equal((await store.archiveAftermathIncident({ operationId: 'a2', incidentId: patientIncident })).receipt.reason, 'subject-still-present');
 });
 
