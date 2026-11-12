@@ -1,6 +1,7 @@
 // Scénario commun de soins (CAMP-10) : joué sur des participants présents (`combat`) ou sur des personnages
 // suivis hors rencontre (`suivi`). Les reçus sont rendus avec les identifiants des sujets remplacés par P et H.
 import { createStore } from '../../../js/core/store.js';
+import { CURRENT_SCHEMA_VERSION } from '../../../js/core/migrations.js';
 import { createCriticalAftermathRecord } from '../../../js/core/v5-critical-aftermath.js';
 
 export const clone = structuredClone;
@@ -18,7 +19,7 @@ export function woundedPatient(extra = {}) {
 export async function storeWith(envelope = {}, persistence = memoryPersistence()) {
   const store = createStore({ storage: null, persistence });
   await store.ready;
-  await store.loadFromJSON({ schemaVersion: 3, reserve: [], combat: { round: 0, currentActorId: null, order: [], participants: [] }, log: [], diceLines: [], extensions: { v5: {} }, ...envelope });
+  await store.loadFromJSON({ schemaVersion: CURRENT_SCHEMA_VERSION, reserve: [], combat: { round: 0, currentActorId: null, order: [], participants: [] }, log: [], diceLines: [], extensions: { v5: {} }, ...envelope });
   return store;
 }
 export const combatOf = participants => ({ round: 0, currentActorId: null, order: [], participants });

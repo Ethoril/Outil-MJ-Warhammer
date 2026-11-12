@@ -2,7 +2,7 @@
  * Pure migration pipeline for persisted WFRP state.
  *
  * It accepts the historical local/file shape and Firebase's object maps, and returns
- * a schema v3 envelope without mutating the input. It deliberately does not write
+ * a current-schema envelope without mutating the input. It deliberately does not write
  * storage or execute extension fields.
  */
 import { normalizeCaracs, profileActionSource, normalizeFicheFields, FICHE_DATA_FIELDS, normalizeTokenColor, normalizeTokenImage } from './models.js';
@@ -10,8 +10,9 @@ import { normalizeDamageFields } from './damage.js';
 import { sanitizeMagicEnvelope } from './sanitize.js';
 import { emptyDivineAccess } from './v5-divine-access.js';
 import { createGameClock, readCombatPosition, reconcileGameClockPosition } from './v5-game-time.js';
+import { followedSubjectId, rekeyAftermathRegister, archiveAftermathRows, isLiveIncident, isLiveDisease, isLiveSequela } from './aftermath-subjects.js';
 
-export const CURRENT_SCHEMA_VERSION = 3;
+export const CURRENT_SCHEMA_VERSION = 4;
 
 export class MigrationError extends Error {
   constructor(message, details = {}) {
@@ -31,15 +32,86 @@ const isObject = value => value !== null && typeof value === 'object' && !Array.
  * sauvegarde transformée ; elle ne lit ni n'écrit aucun stockage. `context.report`
  * reçoit les entrées de rapport (`migrated`, `repaired`, `rejected`, `warnings`).
  * Une sauvegarde sans numéro est lue comme la version 0, celle d'avant le
- * versionnage. Les étapes 0→1, 1→2 et 2→3 n'ont rien à transformer : la
+ * versionnage. Les étapes 0→1, 1→2 et 2→3 n'ont rien à transformer (l'étape 3→4 est la première vraie) : la
  * normalisation tolérante de `migrateSnapshot`, rejouée à chaque lecture,
  * absorbe déjà ces anciennes formes. Pour ajouter une migration : voir README,
  * section « Version des sauvegardes ».
  */
+const rowsOf = value => (Array.isArray(value) ? value : (isObject(value) ? Object.values(value) : [])).filter(isObject);
+const ficheIdOf = row => (typeof row?.extensions?.ficheId === 'string' && row.extensions.ficheId.trim()) || (typeof row?.ficheSnapshot?.charId === 'string' && row.ficheSnapshot.charId.trim()) || '';
+
+/**
+ * Schéma 3 → 4 (CAMP-10, soins hors rencontre) : plus de suivi orphelin. Un suivi vivant (blessure ouverte, maladie
+ * active, séquelle en cours ou permanente) dont le participant n'est dans aucune scène est :
+ *  - rattaché au personnage suivi du PJ quand la trace `ficheWriteback.owners` le donne à une fiche portée par un seul
+ *    personnage persistant, ou à défaut par un seul profil de réserve (le personnage est alors créé, identifiant
+ *    `fiche:<charId>`) ;
+ *  - laissé tel quel, avec un avertissement, si la trace existe mais ne désigne personne sans ambiguïté ;
+ *  - archivé sinon.
+ * Pure et rejouable : aucun identifiant tiré au sort, aucun horodatage ; l'identifiant d'une ligne ne change jamais.
+ */
+function migrateOrphanFollowUps(data, { report }) {
+  const register = data.extensions?.v5?.aftermathRegister;
+  if (!isObject(register)) return data;
+  const lists = { incidents: isLiveIncident, diseases: isLiveDisease, sequelae: isLiveSequela };
+  const present = new Set([...rowsOf(data.combat?.participants), ...rowsOf(data.activeScene?.participants),
+    ...rowsOf(data.suspendedScenes).flatMap(scene => rowsOf(scene.participants))].map(row => row.id));
+  const orphanIds = [];
+  for (const [list, live] of Object.entries(lists)) for (const row of rowsOf(register[list])) {
+    const id = row.participantId;
+    if (typeof id !== 'string' || !id || row.ownerId || id.startsWith('suivi:') || present.has(id) || !live(row) || orphanIds.includes(id)) continue;
+    orphanIds.push(id);
+  }
+  if (!orphanIds.length) return data;
+  const owners = isObject(data.extensions.v5.ficheWriteback?.owners) ? data.extensions.v5.ficheWriteback.owners : {};
+  const fichesOf = id => Object.keys(owners).filter(charId => Array.isArray(owners[charId]) && owners[charId].includes(id));
+  let characters = rowsOf(data.persistentCharacters);
+  const created = [];
+  const mapping = new Map(), toArchive = [], kept = [];
+  for (const id of orphanIds) {
+    const fiches = fichesOf(id);
+    if (!fiches.length) { toArchive.push(id); continue; }
+    const charId = fiches.length === 1 ? fiches[0] : null;
+    let owner = null;
+    if (charId) {
+      const candidates = characters.filter(row => row.id && ficheIdOf(row) === charId);
+      const profiles = rowsOf(data.reserve).filter(row => row.id && ficheIdOf(row) === charId);
+      if (candidates.length === 1) owner = candidates[0];
+      else if (!candidates.length && profiles.length === 1) {
+        const profile = profiles[0];
+        owner = { id: `fiche:${charId}`, name: profile.name || '', kind: 'PJ', profileId: profile.id, hp: Number(profile.hp ?? profile.maxHp) || 0,
+          maxHp: profile.maxHp ?? profile.hp ?? null, states: [], extensions: { ficheId: charId } };
+        characters = [...characters, owner];
+        created.push(owner.id);
+      }
+    }
+    if (owner) mapping.set(id, { participantId: followedSubjectId(owner.id), ownerId: owner.id });
+    else kept.push(id);
+  }
+  const count = (source, ids) => Object.entries(lists).reduce((sum, [list, live]) => sum + rowsOf(source[list]).filter(row => ids.has(row.participantId) && live(row)).length, 0);
+  const attached = count(register, new Set(mapping.keys()));
+  const dense = { ...register };
+  for (const list of Object.keys(lists)) if (register[list] !== undefined) dense[list] = rowsOf(register[list]);
+  const swept = archiveAftermathRows(rekeyAftermathRegister(dense, mapping), toArchive);
+  if (!attached && !swept.archived.length) {
+    for (const id of kept) pushReport(report, 'warnings', 'extensions.v5.aftermathRegister', { participantId: id, reason: 'suivi-de-fiche-sans-personnage-unique' });
+    return data;
+  }
+  data.extensions.v5.aftermathRegister = swept.register;
+  if (created.length || data.persistentCharacters !== undefined) data.persistentCharacters = characters;
+  const parts = [attached ? `${attached} suivi(s) rattaché(s) à leur personnage` : '', swept.archived.length ? `${swept.archived.length} suivi(s) sans propriétaire archivé(s)` : ''].filter(Boolean);
+  const line = { id: 'migration-4-suivis', kind: 'management', text: `Mise à jour des suivis : ${parts.join(', ')}.` };
+  data.log = [line, ...(Array.isArray(data.log) ? data.log : rowsOf(data.log)).filter(row => row?.id !== line.id)];
+  pushReport(report, 'migrated', 'extensions.v5.aftermathRegister', { reason: 'suivis-sans-proprietaire', attached, archived: swept.archived.length, createdCharacters: created });
+  for (const id of kept) pushReport(report, 'warnings', 'extensions.v5.aftermathRegister', { participantId: id, reason: 'suivi-de-fiche-sans-personnage-unique' });
+  return data;
+}
+
 export const SCHEMA_MIGRATIONS = Object.freeze([
   Object.freeze({ from: 0, to: 1, description: 'Sauvegarde sans numéro de version : aucune transformation.', migrate: data => data }),
   Object.freeze({ from: 1, to: 2, description: 'Forme v1 : couverte par la normalisation commune.', migrate: data => data }),
-  Object.freeze({ from: 2, to: 3, description: 'Forme v2 (session cloud v2 comprise) : couverte par la normalisation commune.', migrate: data => data })
+  Object.freeze({ from: 2, to: 3, description: 'Forme v2 (session cloud v2 comprise) : couverte par la normalisation commune.', migrate: data => data }),
+  Object.freeze({ from: 3, to: 4, description: 'Soins hors rencontre : anciens suivis sans participant rattachés au personnage suivi du PJ (trace des fiches) ou archivés.', migrate: migrateOrphanFollowUps })
 ]);
 
 /** Numéro de schéma d'une sauvegarde brute ; une absence se lit comme 0. */

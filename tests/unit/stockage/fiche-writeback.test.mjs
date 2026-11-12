@@ -7,6 +7,7 @@ import { createFicheSource } from '../../../js/core/fiche-source.js';
 import { projectV5Resources } from '../../../js/core/v5-resources.js';
 import { sequelaTestRules } from '../../../js/core/v5-sequela-effects.js';
 import { planEncounterEnd, reconcileAftermathOwners } from '../../../js/core/aftermath-subjects.js';
+import { applySchemaMigrations } from '../../../js/core/migrations.js';
 import { decideImpressiveScars } from '../../../js/core/v5-sequelae.js';
 import {
   planFicheWriteback, buildFicheCommand, buildUndoCommands, applyWritebackSuccess, applyConflictChoice,
@@ -738,6 +739,22 @@ describe('CAMP-10 · attribution par propriétaire (CA36)', () => {
     assert.ok(back.extensions.v5.aftermathRegister.sequelae.every(row => row.participantId === 'p-nouveau'));
     assert.equal(back.extensions.v5.ficheWriteback?.owners, undefined);
     assert.equal(rowsJson(back), before);
+  });
+
+  test('CA36 — mise à jour d’une ancienne sauvegarde (schéma 3 → 4) : même aperçu d’envoi, rien perdu ni envoyé deux fois', async () => {
+    // Ancienne sauvegarde : le combat est fini, le participant a disparu, seule la trace `owners` attribue les suivis à la fiche.
+    const fiches = { wren: { revision: 7, data: FICHE_B() } };
+    const old = suivi(makeState(fiches));
+    old.combat.participants = [];
+    old.extensions.v5.ficheWriteback = { owners: { wren: ['p-wren'] } };
+    const before = rowsJson(old);
+    assert.ok(before.includes('outil:loss:foot') && before.includes('outil:dis-1'), 'précondition : la trace attribue les suivis à la fiche');
+    const migrated = applySchemaMigrations(clone(old)).data;
+    assert.ok(migrated.extensions.v5.aftermathRegister.sequelae.every(row => row.ownerId === 'fiche:wren' && row.participantId === 'suivi:fiche:wren'));
+    assert.equal(rowsJson(migrated), before);
+    // Déjà envoyé avant la mise à jour : rien ne repart après.
+    const sent = await sendAll(createFakeFunction(fiches), clone(old), planFicheWriteback(old));
+    assert.ok(!rowsOfPlan(planFicheWriteback(applySchemaMigrations(sent).data)).some(row => row.op === 'suivi'));
   });
 
   test('envoyé avant la fin du combat : rien n’est renvoyé après, ni après une nouvelle décision de cicatrices', async () => {

@@ -1,3 +1,4 @@
+import { applySchemaMigrations, CURRENT_SCHEMA_VERSION } from './migrations.js';
 import { migrateSnapshot } from './migrations.js';
 import { advanceGameClock } from './v5-game-time.js';
 import { validatePrayerSLCaps, getPrayerSLModifiers } from './v5-divine-prayer-caps.js';
@@ -26,6 +27,13 @@ function normalizeRemoteDocument(raw) {
     return createSyncDocument();
   }
   let candidate = raw;
+  // Document distant écrit par une version plus ancienne de l'outil : même chaîne de migrations que les sauvegardes
+  // locales, pour que l'état distant et l'état local se comparent dans le même schéma.
+  const remoteVersion = raw?.state?.schemaVersion;
+  if (raw?.state && typeof raw.state === 'object' && !Array.isArray(raw.state) && Number.isInteger(remoteVersion) && remoteVersion >= 3 && remoteVersion < CURRENT_SCHEMA_VERSION) {
+    candidate = { ...raw, state: applySchemaMigrations(raw.state).data };
+  }
+  raw = candidate;
   const access = raw?.state?.extensions?.v5?.divineAccess;
   if (access && typeof access === 'object' && !Array.isArray(access) && access.schemaVersion === 1) {
     let remoteAccess = access;

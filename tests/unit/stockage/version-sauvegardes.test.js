@@ -59,7 +59,8 @@ test('ARCH-10 — une sauvegarde sans numéro est lue comme la version 0 sans mo
   assert.equal(data.reserve[0].name, 'Garde');
   const entry = report.migrated.find(row => row.path === 'schemaVersion');
   assert.equal(entry.from, 'absent');
-  assert.deepEqual(entry.steps.map(step => `${step.from}>${step.to}`), ['0>1', '1>2', '2>3']);
+  assert.deepEqual(entry.steps.map(step => `${step.from}>${step.to}`), SCHEMA_MIGRATIONS.map(step => `${step.from}>${step.to}`));
+  assert.deepEqual(entry.steps.slice(0, 3).map(step => `${step.from}>${step.to}`), ['0>1', '1>2', '2>3']);
 });
 
 test('ARCH-10 — une sauvegarde à jour ne traverse aucune étape', () => {
@@ -116,7 +117,7 @@ test('ARCH-10 — une version future est refusée avec un message en français, 
   let caught;
   assert.throws(() => migrateSnapshot(source), error => { caught = error; return error instanceof MigrationError; });
   assert.equal(caught.details.reason, 'version-future');
-  assert.match(caught.message, /schéma 4, cet outil lit jusqu’au schéma 3/);
+  assert.match(caught.message, new RegExp(`schéma ${CURRENT_SCHEMA_VERSION + 1}, cet outil lit jusqu’au schéma ${CURRENT_SCHEMA_VERSION}`));
   assert.match(userMessage(caught), /version plus récente de l’outil/);
   assert.deepEqual(source, before);
 });

@@ -23,7 +23,7 @@ import { Profile, Participant } from '../../../js/core/models.js';
 import { parseProfileJson } from '../../../js/core/json-profile-import.js';
 import { parseProfileText } from '../../../js/core/text-profile-import.js';
 import { sanitizeProfile, sanitizeParticipant } from '../../../js/core/sanitize.js';
-import { migrateSnapshot } from '../../../js/core/migrations.js';
+import { migrateSnapshot, CURRENT_SCHEMA_VERSION } from '../../../js/core/migrations.js';
 import { launchEncounter } from '../../../js/core/encounters.js';
 import { V5_RULES, V5_CORRUPTION_BANDS } from '../../../js/data/v5-rules.js';
 import { V5_CRIT_DATA, getV5CriticalEffect } from '../../../js/data/v5-crits.js';
@@ -1003,7 +1003,7 @@ test('Contrôle R27 — constructeurs, sanitize, JSON, migration et scène conse
 test('Contrôle R16 — migration v2 des quatre familles vers six zones sans créer d’équipement', () => {
   const legacy = { schemaVersion: 2, reserve: [profile({ armor: { head: 0, body: 3, arms: 2, legs: 1 } })], combat: { participants: [actor('legacy')], round: 0 }, log: [], diceLines: [] };
   const before = structuredClone(legacy); const result = migrateSnapshot(legacy).data;
-  assert.equal(result.schemaVersion, 3);
+  assert.equal(result.schemaVersion, CURRENT_SCHEMA_VERSION);
   assert.deepEqual(result.reserve[0].armorLocations, { head: 0, body: 3, rightArm: 2, leftArm: 2, rightLeg: 1, leftLeg: 1 });
   assert.ok(!result.reserve[0].equipment || result.reserve[0].equipment.length === 0);
   assert.deepEqual(legacy, before);
