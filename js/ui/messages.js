@@ -26,7 +26,7 @@ const KNOWN_ERRORS = [
   [error => /^La rencontre n’a plus aucun combattant/.test(error?.message || ''), 'La rencontre n’a plus aucun combattant : complétez sa composition avant de recommencer.'],
   [error => /^Aucun combat à recommencer/.test(error?.message || ''), 'Aucun combat en cours à recommencer.'],
   [error => error?.name === 'QuotaExceededError' || /QuotaExceeded|IndexedDB indisponible|Persistance non prête/i.test(error?.message || ''), 'Stockage du navigateur plein ou bloqué : exportez une sauvegarde, puis libérez de l’espace.'],
-  [error => error?.name === 'MigrationError' && /future/i.test(error.message || ''), 'Cette sauvegarde vient d’une version plus récente de l’outil : mettez l’application à jour.'],
+  [error => error?.name === 'MigrationError' && (error.details?.reason === 'version-future' || /future/i.test(error.message || '')), 'Cette sauvegarde vient d’une version plus récente de l’outil : mettez l’application à jour. Elle n’a pas été modifiée.'],
   [error => error?.name === 'MigrationError' || error instanceof SyntaxError, FILE_INVALID]
 ];
 

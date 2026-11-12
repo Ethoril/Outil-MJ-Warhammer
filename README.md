@@ -56,6 +56,16 @@ docs/                     contrats, specs (docs/specs/), recettes, rapports ; do
 - Règles Firebase : `firebase.database.rules.json` (voir plus bas).
 - Analyse d’ensemble du 08/11/2026 : [docs/RAPPORT_ANALYSE_08_11_2026.md](docs/RAPPORT_ANALYSE_08_11_2026.md).
 
+### Version des sauvegardes
+
+Chaque sauvegarde (IndexedDB, points de restauration, fichier exporté, repli localStorage via la clé `wfrp.schema.v1`) porte `schemaVersion` (`CURRENT_SCHEMA_VERSION` dans `js/core/migrations.js`), distinct de `appVersion`. Toute lecture passe par `applySchemaMigrations` (via `migrateSnapshot`) : une absence vaut 0, les étapes de `SCHEMA_MIGRATIONS` s’appliquent dans l’ordre, et une version future est refusée sans rien écraser. Pour transformer des sauvegardes existantes :
+
+1. Ajouter à la fin de `SCHEMA_MIGRATIONS` l’étape `{ from: N, to: N + 1, description, migrate(data, { report }) }`. Elle est pure, rend la sauvegarde transformée et note dans `report` ce qu’elle change.
+2. Monter `CURRENT_SCHEMA_VERSION` à `N + 1`, et `SYNC_PROTOCOL_VERSION` (`js/core/sync-protocol.js`) avec, qui doit lui rester égal.
+3. Ajouter un test de l’étape sur une sauvegarde figée dans `tests/fixtures/`. `tests/unit/stockage/version-sauvegardes.test.js` échoue tant que la chaîne ne couvre pas la version courante.
+
+La lecture ne réécrit rien : la sauvegarde garde son ancien numéro jusqu’à la prochaine écriture, et l’étape se rejoue à chaque ouverture d’ici là. Elle doit donc rendre le même résultat si on la rejoue sur la même entrée. Une fois réécrite, la sauvegarde porte le nouveau numéro et ne repasse plus par l’étape.
+
 ## Lancement en local
 
 Aucune étape de build : servir le dossier avec n’importe quel serveur statique, puis ouvrir l’adresse affichée.

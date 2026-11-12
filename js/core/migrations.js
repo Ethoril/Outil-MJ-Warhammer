@@ -23,6 +23,70 @@ export class MigrationError extends Error {
 
 const isObject = value => value !== null && typeof value === 'object' && !Array.isArray(value);
 
+/**
+ * Chaîne des migrations du schéma de sauvegarde (ARCH-10), dans l'ordre.
+ *
+ * Chaque étape fait passer une sauvegarde brute de `from` à `to = from + 1`.
+ * `migrate(data, context)` reçoit une copie (qu'elle peut modifier) et rend la
+ * sauvegarde transformée ; elle ne lit ni n'écrit aucun stockage. `context.report`
+ * reçoit les entrées de rapport (`migrated`, `repaired`, `rejected`, `warnings`).
+ * Une sauvegarde sans numéro est lue comme la version 0, celle d'avant le
+ * versionnage. Les étapes 0→1, 1→2 et 2→3 n'ont rien à transformer : la
+ * normalisation tolérante de `migrateSnapshot`, rejouée à chaque lecture,
+ * absorbe déjà ces anciennes formes. Pour ajouter une migration : voir README,
+ * section « Version des sauvegardes ».
+ */
+export const SCHEMA_MIGRATIONS = Object.freeze([
+  Object.freeze({ from: 0, to: 1, description: 'Sauvegarde sans numéro de version : aucune transformation.', migrate: data => data }),
+  Object.freeze({ from: 1, to: 2, description: 'Forme v1 : couverte par la normalisation commune.', migrate: data => data }),
+  Object.freeze({ from: 2, to: 3, description: 'Forme v2 (session cloud v2 comprise) : couverte par la normalisation commune.', migrate: data => data })
+]);
+
+/** Numéro de schéma d'une sauvegarde brute ; une absence se lit comme 0. */
+export function readSchemaVersion(raw) {
+  const version = isObject(raw) ? raw.schemaVersion : undefined;
+  if (version === undefined || version === null) return 0;
+  if (!Number.isInteger(version) || version < 0) {
+    throw new MigrationError('schemaVersion invalide', { schemaVersion: version, reason: 'version-invalide' });
+  }
+  return version;
+}
+
+/** Erreur levée pour une sauvegarde écrite par une version plus récente de l'outil. */
+export function futureSchemaError(version, known = CURRENT_SCHEMA_VERSION) {
+  return new MigrationError(
+    `Version de sauvegarde future inconnue : schéma ${version}, cet outil lit jusqu’au schéma ${known}. La sauvegarde n’a été ni lue ni modifiée.`,
+    { schemaVersion: version, known, reason: 'version-future' }
+  );
+}
+
+/**
+ * Applique la chaîne de migrations à une sauvegarde brute, sans muter l'entrée.
+ * Rend `{ data, from, to, applied }` ; `data.schemaVersion` vaut `targetVersion`.
+ * Refuse une version future et une chaîne trouée.
+ */
+export function applySchemaMigrations(input, { steps = SCHEMA_MIGRATIONS, targetVersion = CURRENT_SCHEMA_VERSION, report = null } = {}) {
+  if (!isObject(input)) throw new MigrationError('Enveloppe de sauvegarde invalide', { reason: 'objet-attendu' });
+  const from = readSchemaVersion(input);
+  if (from > targetVersion) throw futureSchemaError(from, targetVersion);
+  const context = { report: report || { migrated: [], repaired: [], rejected: [], warnings: [] } };
+  let data = clone(input);
+  let version = from;
+  const applied = [];
+  while (version < targetVersion) {
+    const step = steps.find(candidate => candidate.from === version);
+    if (!step || step.to !== version + 1 || typeof step.migrate !== 'function') {
+      throw new MigrationError(`Étape de migration manquante : schéma ${version} vers ${version + 1}`, { reason: 'etape-manquante', from: version });
+    }
+    data = step.migrate(clone(data), context);
+    if (!isObject(data)) throw new MigrationError(`Étape de migration ${step.from} vers ${step.to} invalide`, { reason: 'etape-invalide', from: step.from });
+    version = step.to;
+    applied.push({ from: step.from, to: step.to });
+  }
+  safeSet(data, 'schemaVersion', targetVersion);
+  return { data, from, to: targetVersion, applied };
+}
+
 function safeSet(target, key, value) {
   Object.defineProperty(target, key, {
     value,
@@ -380,7 +444,18 @@ function optionalRootCollections(raw, profiles, report) {
 
 export function migrateSnapshot(input, options = {}) {
   if (!isObject(input)) throw new MigrationError('Enveloppe de sauvegarde invalide', { reason: 'objet-attendu' });
-  const raw = clone(input);
+  // Point de lecture unique : la version est lue (absente = 0), une version
+  // future est refusée, puis les étapes de migration s'appliquent dans l'ordre.
+  const report = { migrated: [], repaired: [], rejected: [], warnings: [] };
+  const chain = applySchemaMigrations(input, { report });
+  if (chain.from < CURRENT_SCHEMA_VERSION) {
+    pushReport(report, 'migrated', 'schemaVersion', {
+      from: input.schemaVersion === undefined || input.schemaVersion === null ? 'absent' : chain.from,
+      to: CURRENT_SCHEMA_VERSION,
+      steps: chain.applied
+    });
+  }
+  const raw = chain.data;
   const prayerCapExists=rows=>(Array.isArray(rows)?rows:[]).some(row=>(row?.extensions?.v5?.divineEffects||[]).some(effect=>effect?.type==='prayer-sl-cap'));
   const hasPrayerCalendarCap=prayerCapExists(raw.combat?.participants)||prayerCapExists(raw.reserve)||prayerCapExists(raw.persistentCharacters)
     ||prayerCapExists(raw.activeScene?.participants)||(raw.suspendedScenes||[]).some(scene=>prayerCapExists(scene?.participants));
@@ -393,19 +468,6 @@ export function migrateSnapshot(input, options = {}) {
       reason: 'reserve-et-combat-requis'
     });
   }
-  const report = { migrated: [], repaired: [], rejected: [], warnings: [] };
-  let version = raw.schemaVersion;
-  if (version === undefined) {
-    version = 0;
-    pushReport(report, 'migrated', 'schemaVersion', { from: 'absent', to: CURRENT_SCHEMA_VERSION });
-  } else if (!Number.isInteger(version) || version < 0) {
-    throw new MigrationError('schemaVersion invalide', { schemaVersion: version });
-  } else if (version > CURRENT_SCHEMA_VERSION) {
-    throw new MigrationError('Version de sauvegarde future inconnue', { schemaVersion: version });
-  } else if (version < CURRENT_SCHEMA_VERSION) {
-    pushReport(report, 'migrated', 'schemaVersion', { from: version, to: CURRENT_SCHEMA_VERSION });
-  }
-
   const reserve = migrateProfiles(raw.reserve, report);
   const participants = migrateParticipants(
     isObject(raw.combat) ? raw.combat.participants : undefined,
@@ -456,6 +518,18 @@ export function migrateSnapshot(input, options = {}) {
   return { data: sanitizeMagicEnvelope(result), report };
 }
 
+/** Clé du mode de repli localStorage qui porte le numéro de schéma (absente avant ARCH-10). */
+export const LEGACY_SCHEMA_KEY = 'wfrp.schema.v1';
+
+/** `{ schemaVersion }` lu dans le stockage de repli, ou `{}` si la clé est absente. */
+export function legacySchemaVersion(storage) {
+  const stored = storage.getItem(LEGACY_SCHEMA_KEY);
+  if (stored == null || stored === '') return {};
+  const version = /^\d+$/.test(String(stored)) ? Number(stored) : stored;
+  readSchemaVersion({ schemaVersion: version });
+  return { schemaVersion: version };
+}
+
 export function migrateLegacyStorage(storage, options = {}) {
   if (!storage || typeof storage.getItem !== 'function') {
     throw new MigrationError('Stockage legacy invalide', { reason: 'getItem-requis' });
@@ -469,6 +543,7 @@ export function migrateLegacyStorage(storage, options = {}) {
     }
   };
   const raw = {
+    ...legacySchemaVersion(storage),
     reserve: read('wfrp.reserve.v1') ?? [],
     combat: read('wfrp.combat.v1') ?? {},
     log: read('wfrp.log.v1') ?? [],

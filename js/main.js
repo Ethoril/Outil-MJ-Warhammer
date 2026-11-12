@@ -137,7 +137,10 @@ if (appContent) appContent.style.display = 'block';
 if (!appPersistence) updateLocalStatus('unavailable');
 if (storeReady?.ok === false) {
   if (appContent) appContent.dataset.recovery = 'true';
-  showToast('Lecture locale impossible : exportez ce qui reste en mémoire ou réessayez après correction du stockage.', 'error', {
+  const futureSave = storeReady.error?.name === 'MigrationError' && storeReady.error.details?.reason === 'version-future';
+  showToast(futureSave
+    ? 'La sauvegarde locale vient d’une version plus récente de l’outil : mettez l’application à jour. Rien n’est écrit tant qu’elle n’est pas lue.'
+    : 'Lecture locale impossible : exportez ce qui reste en mémoire ou réessayez après correction du stockage.', 'error', {
     label: 'Réessayer',
     onClick: async () => {
       updateLocalStatus('loading');
