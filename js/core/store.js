@@ -139,7 +139,7 @@ import {
 
 import { Profile, Participant, DiceLine, uid, cloneValue, normalizeCaracs, canonicalizeProfileFields, normalizeFicheFields, FICHE_DATA_FIELDS } from './models.js';
 import { sanitizeArray, sanitizeProfile, sanitizeParticipant, sanitizeMagicEnvelope } from './sanitize.js';
-import { migrateSnapshot, migrateLegacyStorage, CURRENT_SCHEMA_VERSION } from './migrations.js';
+import { migrateSnapshot, migrateLegacyStorage, applySchemaMigrations, legacySchemaVersion, LEGACY_SCHEMA_KEY, CURRENT_SCHEMA_VERSION } from './migrations.js';
 import { createStateCommand, createCompactStateCommand, applyStateChanges } from './commands.js';
 import { createHistory, recordCommand, canUndo as historyCanUndo, canRedo as historyCanRedo, undo as historyUndo, redo as historyRedo, historySnapshot, markExternalBoundary } from './history.js';
 import { ORDER_MODES, effectiveOrder, moveInOrder, insertReinforcement, insertParticipantsByInitiative, setOrderMode as computeOrderMode, nextTurn as computeNextTurn, removeFromCombat, prepareCombatInitiative } from './turn-order.js';
@@ -156,7 +156,7 @@ import { planMountedFall, V5_RIDE_SKILL_ID } from './v5-mounted-combat.js';
 import { declaredMountOf, linkDeclaredMounts, mountProfileId, planMountToggle, applyMountToggle } from './mounts.js';
 import { createAftermathState, validateAftermathState, aftermathHealer, aftermathEnduranceScore, advanceAftermathCalendar } from './v5-aftermath.js';
 
-export const KEY = { EXTENSIONS: 'wfrp.extensions.v1', RESERVE: 'wfrp.reserve.v1', COMBAT: 'wfrp.combat.v1', LOG: 'wfrp.log.v1', DICE: 'wfrp.dice.v1', TS: 'wfrp.sync.ts.v1' };
+export const KEY = { SCHEMA: LEGACY_SCHEMA_KEY, EXTENSIONS: 'wfrp.extensions.v1', RESERVE: 'wfrp.reserve.v1', COMBAT: 'wfrp.combat.v1', LOG: 'wfrp.log.v1', DICE: 'wfrp.dice.v1', TS: 'wfrp.sync.ts.v1' };
 
 import {
   withV5,
@@ -216,6 +216,9 @@ export function createStore({ storage = safeLocalStorage(), sync = null, persist
   let lastAppliedTimestamp = 0;
   let hydrationComplete = !persistence;
   let hydrationFailed = false;
+  // Mode de repli localStorage : une sauvegarde illisible par cette version
+  // (schéma futur ou invalide) n'est jamais réécrite.
+  let legacyWriteBlocked = null;
   let persistenceQueue = Promise.resolve();
   // All persistent commands are serialized before they can observe or replace
   // live state.  This is separate from the IDB write queue: a later command
@@ -1074,8 +1077,12 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
 
     if (persistence) {
       return queuePersistenceSave(updates, restore, null, { includeOperation });
+    } else if (storage && legacyWriteBlocked) {
+      reportLocalStatus('error');
+      return { ok: false, error: legacyWriteBlocked };
     } else if (storage) {
       try {
+        storage.setItem(KEY.SCHEMA, String(CURRENT_SCHEMA_VERSION));
         storage.setItem(KEY.RESERVE, JSON.stringify(rObj));
         storage.setItem(KEY.COMBAT, JSON.stringify(cObj));
         storage.setItem(KEY.LOG, JSON.stringify(log));
@@ -1210,13 +1217,36 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
 
   function load() {
     if (!storage) return;
+    let stored;
+    let unreadable = false;
+    const readKey = (key, fallback) => {
+      try { return JSON.parse(storage.getItem(key) || fallback); }
+      catch (e) { unreadable = true; console.warn('Load error', key, e); return JSON.parse(fallback); }
+    };
     try {
-      const extensions = JSON.parse(storage.getItem(KEY.EXTENSIONS) || '{}');
+      // Même chaîne de migrations que les autres lectures ; une version future
+      // ou invalide bloque toute écriture locale au lieu d'écraser la sauvegarde.
+      stored = applySchemaMigrations({
+        ...legacySchemaVersion(storage),
+        extensions: readKey(KEY.EXTENSIONS, '{}'),
+        reserve: readKey(KEY.RESERVE, '[]'),
+        combat: readKey(KEY.COMBAT, 'null'),
+        log: readKey(KEY.LOG, '[]'),
+        diceLines: readKey(KEY.DICE, '[]')
+      }).data;
+    } catch (e) {
+      legacyWriteBlocked = e;
+      console.warn('Load error', e);
+      reportLocalStatus('error');
+      return;
+    }
+    try {
+      const extensions = stored.extensions;
       stateExtensions = extensions && typeof extensions === 'object' && !Array.isArray(extensions) ? extensions : {};
       setActiveReferential(referentialFromExtensions(stateExtensions).referential);
-      const r = JSON.parse(storage.getItem(KEY.RESERVE) || '[]');
+      const r = stored.reserve;
       reserve = new Map(r.map(o => [o.id, new Profile(o)]));
-      const c = JSON.parse(storage.getItem(KEY.COMBAT) || 'null');
+      const c = stored.combat;
       if (c) {
         combat.round = c.round || 0;
         combat.order = Array.isArray(c.order) ? c.order : [];
@@ -1248,8 +1278,8 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
           save();
         }
       }
-      log = normalizeLogEntries(JSON.parse(storage.getItem(KEY.LOG) || '[]'));
-      const d = JSON.parse(storage.getItem(KEY.DICE) || '[]');
+      log = normalizeLogEntries(stored.log);
+      const d = stored.diceLines;
       diceLines = (Array.isArray(d) ? d : []).map(x => new DiceLine(x));
       lastAppliedTimestamp = Number(storage.getItem(KEY.TS) || '0') || 0;
       const resourceEnvelope = currentEnvelope();
@@ -1257,7 +1287,7 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
       combat.participants = new Map(projectV5Resources(resourceEnvelope, Array.from(combat.participants.values())).map(row => [row.id, new Participant(row)]));
       // Lecture complete du stockage : l’état local initial est confirmé.
       // Une écriture ultérieure en quota dépassé repassera explicitement en erreur.
-      reportLocalStatus('saved');
+      reportLocalStatus(unreadable ? 'error' : 'saved');
     } catch (e) {
       console.warn('Load error', e);
       reportLocalStatus('error');
