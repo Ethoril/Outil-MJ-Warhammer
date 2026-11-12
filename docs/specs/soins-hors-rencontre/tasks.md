@@ -1,6 +1,6 @@
 # Tâches · Soins hors rencontre
 
-Chaque tâche est un lot en **fenêtre secondaire**, dans un worktree dédié. Le test vient avant le code et échoue aujourd'hui. Tests ciblés par lot, suite complète à la fusion ; tout test navigateur sous `timeout 120` ; jamais de `git stash` ; rien n'est poussé sans le feu vert du MJ. Ne jamais toucher `js/data/bestiary/`.
+Mise à jour du 12/11 : les lots sont menés par une seule session, dans le worktree `soins-hors-rencontre`, l'un après l'autre (plan § 9). Le test vient avant le code et échoue aujourd'hui. Tests ciblés par lot, suite complète à la fusion ; tout test navigateur sous `timeout 120` ; jamais de `git stash` ; rien n'est poussé sans le feu vert du MJ. Ne jamais toucher `js/data/bestiary/`.
 
 `[P]` = parallélisable avec la tâche citée (aucun fichier commun). Les lots T3 à T8 touchent `js/core/store.js` ou `js/core/store/api-aftermath.js` : ils se suivent, jamais deux à la fois.
 
@@ -82,11 +82,11 @@ Chaque tâche est un lot en **fenêtre secondaire**, dans un worktree dédié. L
 
 ## Lot E · Sauvegardes existantes
 
-- [ ] **T12 · Rattacher les PJ à fiche, archiver les autres anciens suivis** — **bloquée par ARCH-10** ; après : T9
-  - Objectif : étape de version idempotente, rejouée zéro fois ; une ligne de journal.
-  - Fichiers : ceux que le chantier ARCH-10 désignera pour ses étapes, `tests/fixtures/` (sauvegardes figées), un test unitaire.
+- [ ] **T12 · Rattacher les PJ à fiche, archiver les autres anciens suivis** — après : T9
+  - Objectif : étape `{ from: 3, to: 4 }` de `SCHEMA_MIGRATIONS`, pure et rejouable (plan § 9) ; `CURRENT_SCHEMA_VERSION` et `SYNC_PROTOCOL_VERSION` à 4 ; une ligne de journal ; règle Firebase et lecture d'un document distant en version 3.
+  - Fichiers : `js/core/migrations.js`, `js/core/sync-protocol.js`, `js/core/sync-session.js` si la lecture distante l'exige, `firebase.database.rules.json`, `tests/fixtures/suivis-orphelins-v3.json` (nouveau), `tests/unit/stockage/migration-suivis.test.js` (nouveau), tests existants qui figent le numéro 3.
   - Critères : CA34 à CA37.
-  - Acceptation : à fixer avec la forme retenue par ARCH-10.
+  - Acceptation : `node --test tests/unit/stockage/migration-suivis.test.js` puis `node --test tests/unit/stockage/version-sauvegardes.test.js`.
 
 ## Clôture
 
