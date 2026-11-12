@@ -1627,8 +1627,6 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
           throw error;
         }
         if (next === undefined) throw new Error('La commande n’a produit aucun état');
-        // CAMP-10 : un suivi rattaché suit son personnage ; aucun suivi ne reste lié à un participant disparu.
-        next = settleAftermathSubjects(before, next);
         // Les soldes de Chance projetés sur les participants suivent toujours le registre (expirations comprises).
         next = finalizeDivineState(before,next);
         next = projectV5ResourceEnvelope(removeExpiredSummons(next));
@@ -1645,6 +1643,9 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
         const combatRequested = !sameValue(before?.combat, next?.combat);
         let canonical = migrateSnapshot(next, { appVersion, contextId }).data;
         canonical = synchronizeSceneCombat(before, canonical, localRevision + 1, { sceneRequested, combatRequested });
+        // CAMP-10 : une fois le combat aligné sur la scène, un suivi rattaché suit son personnage et aucun suivi vivant
+        // ne reste lié à un participant disparu.
+        canonical = settleAftermathSubjects(before, canonical);
         // Scene activation/suspension and legacy combat edits can change the
         // canonical combat position without representing elapsed time. Keep
         // the clock's projection in the same atomic command and history state;

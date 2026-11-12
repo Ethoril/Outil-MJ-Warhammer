@@ -181,15 +181,13 @@ export function rekeyAftermathRegister(register, mapping) {
   const next = { ...register };
   for (const list of ROW_LISTS) {
     if (!Array.isArray(register[list])) continue;
-    const taken = new Set(register[list].map(row => row.id));
     next[list] = register[list].map(row => {
       const to = mapping.get(row.participantId);
       if (!to) return row;
       const updated = { ...row, participantId: to.participantId };
       if (to.ownerId) updated.ownerId = to.ownerId;
       if (to.ownerLabel && !text(row.ownerLabel)) updated.ownerLabel = to.ownerLabel;
-      // La décision de cicatrices est identifiée par son sujet : elle le suit.
-      if (row.kind === 'scar-decision' && row.id === `scars:${row.participantId}` && !taken.has(`scars:${to.participantId}`)) updated.id = `scars:${to.participantId}`;
+      // L'identifiant d'une ligne ne change jamais : « Envoyer aux fiches » s'en sert pour ne rien envoyer deux fois.
       if (!same(updated, row)) changed = true;
       return updated;
     });

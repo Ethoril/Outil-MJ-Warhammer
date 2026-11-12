@@ -6,6 +6,8 @@ import { ficheSnapshot, ficheFingerprint } from '../../../js/core/fiche-sync.js'
 import { createFicheSource } from '../../../js/core/fiche-source.js';
 import { projectV5Resources } from '../../../js/core/v5-resources.js';
 import { sequelaTestRules } from '../../../js/core/v5-sequela-effects.js';
+import { planEncounterEnd, reconcileAftermathOwners } from '../../../js/core/aftermath-subjects.js';
+import { decideImpressiveScars } from '../../../js/core/v5-sequelae.js';
 import {
   planFicheWriteback, buildFicheCommand, buildUndoCommands, applyWritebackSuccess, applyConflictChoice,
   ficheConflictOf, ficheValueForKey, writebackErrorMessage
@@ -697,5 +699,56 @@ describe('Mutation manifestée seulement (décision du MJ du 07/11)', () => {
     const data = WREN(); data.suiviMj = [{ id: 'outil:mut-m', categorie: 'mutation', libelle: 'Animalistic Legs', detail: 'Jambes animales.' }];
     const rows = rowsOfPlan(planFicheWriteback(withMutation(makeState({ wren: { revision: 7, data } }), {})));
     assert.deepEqual(rows.filter(row => row.op === 'suivi'), []);
+  });
+});
+
+describe('CAMP-10 · attribution par propriétaire (CA36)', () => {
+  const suivi = state => {
+    state.extensions.v5.aftermathRegister = { schemaVersion: 1, revision: 1, calendar: { schemaVersion: 1, originDay: 0, currentDay: 40 }, receipts: [], incidents: [],
+      sequelae: [
+        { id: 'loss:foot', participantId: 'p-wren', kind: 'loss', part: 'foot', side: 'left', label: 'Perte : pied', status: 'permanent', history: [] },
+        { id: 'scars:p-wren', participantId: 'p-wren', kind: 'scar-decision', label: 'Cicatrices impressionnantes', status: 'permanent', agreed: true, history: [] },
+        agLoss(2)],
+      diseases: [{ id: 'dis-1', participantId: 'p-wren', label: 'Fièvre des marais', startDay: 30, remainingDays: 4, status: 'active', careLog: [] }] };
+    return state;
+  };
+  const rowsJson = state => JSON.stringify(planFicheWriteback(state).fiches.map(fiche => [fiche.charId, fiche.rows]));
+  const endOf = state => {
+    const plan = planEncounterEnd(state, { idFactory: () => 'pc-wren' });
+    return { ...plan.envelope, combat: { ...plan.envelope.combat, participants: [] } };
+  };
+
+  test('fin de combat : le PJ devient personnage suivi, l’aperçu d’envoi est identique', () => {
+    const state = suivi(makeState({ wren: { revision: 7, data: FICHE_B() } }));
+    const before = rowsJson(state);
+    assert.ok(before.includes('outil:loss:foot') && before.includes('outil:scars:p-wren') && before.includes('outil:dis-1'), 'précondition : le suivi part vers la fiche');
+    const after = endOf(clone(state));
+    assert.deepEqual(after.persistentCharacters.map(row => [row.id, row.extensions.ficheId]), [['pc-wren', 'wren']]);
+    assert.ok(after.extensions.v5.aftermathRegister.sequelae.every(row => row.participantId === 'suivi:pc-wren' && row.ownerId === 'pc-wren'));
+    assert.equal(rowsJson(after), before);
+    assert.deepEqual(planFicheWriteback(after).manual || [], planFicheWriteback(state).manual || []);
+  });
+
+  test('retour en rencontre sous un nouvel identifiant de participant : toujours le même aperçu, sans trace `owners`', () => {
+    const state = suivi(makeState({ wren: { revision: 7, data: FICHE_B() } }));
+    const before = rowsJson(state);
+    const off = endOf(clone(state));
+    const exemplar = { ...clone(state.combat.participants[0]), id: 'p-nouveau', persistentCharacterId: 'pc-wren' };
+    const back = reconcileAftermathOwners({ ...off, combat: { ...off.combat, participants: [exemplar] } });
+    assert.ok(back.extensions.v5.aftermathRegister.sequelae.every(row => row.participantId === 'p-nouveau'));
+    assert.equal(back.extensions.v5.ficheWriteback?.owners, undefined);
+    assert.equal(rowsJson(back), before);
+  });
+
+  test('envoyé avant la fin du combat : rien n’est renvoyé après, ni après une nouvelle décision de cicatrices', async () => {
+    const fiches = { wren: { revision: 7, data: FICHE_B() } };
+    let state = suivi(makeState(fiches));
+    state = await sendAll(createFakeFunction(fiches), state, planFicheWriteback(state));
+    assert.ok(!rowsOfPlan(planFicheWriteback(state)).some(row => row.op === 'suivi'), 'précondition : tout est envoyé');
+    const off = endOf(clone(state));
+    assert.ok(!rowsOfPlan(planFicheWriteback(off)).some(row => row.op === 'suivi'), 'aucun second envoi');
+    const register = off.extensions.v5.aftermathRegister;
+    const decided = decideImpressiveScars(register, { operationId: 'again', expectedRevision: register.revision, participantId: 'suivi:pc-wren', agreed: true });
+    assert.deepEqual(decided.state.sequelae.filter(row => row.kind === 'scar-decision').map(row => row.id), ['scars:p-wren'], 'la décision garde son identifiant');
   });
 });

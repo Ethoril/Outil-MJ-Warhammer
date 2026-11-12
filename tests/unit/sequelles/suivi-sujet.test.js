@@ -39,9 +39,9 @@ test('les suivis rattachés suivent leur personnage : en rencontre, puis hors re
   const register = { revision: 4, incidents: [row('suivi:pc-hilda', { ownerId: 'pc-hilda' })], diseases: [], sequelae: [{ id: 'scars:suivi:pc-hilda', kind: 'scar-decision', participantId: 'suivi:pc-hilda', ownerId: 'pc-hilda', status: 'permanent' }] };
   const inCombat = reconcileAftermathOwners(base({ combat: { participants: [{ id: 'p1', persistentCharacterId: 'pc-hilda' }] }, extensions: { v5: { aftermathRegister: register } } }));
   const moved = inCombat.extensions.v5.aftermathRegister;
-  assert.deepEqual([moved.incidents[0].participantId, moved.sequelae[0].participantId, moved.sequelae[0].id, moved.revision], ['p1', 'p1', 'scars:p1', 5]);
+  assert.deepEqual([moved.incidents[0].participantId, moved.sequelae[0].participantId, moved.sequelae[0].id, moved.revision], ['p1', 'p1', 'scars:suivi:pc-hilda', 5], 'l’identifiant d’une ligne ne change jamais');
   const back = reconcileAftermathOwners({ ...inCombat, combat: { participants: [] } }).extensions.v5.aftermathRegister;
-  assert.deepEqual([back.incidents[0].participantId, back.sequelae[0].id], ['suivi:pc-hilda', 'scars:suivi:pc-hilda']);
+  assert.deepEqual([back.incidents[0].participantId, back.sequelae[0].participantId], ['suivi:pc-hilda', 'suivi:pc-hilda']);
   const untouched = base({ extensions: { v5: { aftermathRegister: register } } });
   assert.equal(reconcileAftermathOwners(untouched), untouched, 'rien à réaligner : même objet');
 });

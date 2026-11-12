@@ -411,7 +411,8 @@ export function decideImpressiveScars(stateValue, { operationId, expectedRevisio
   const next = clone(state);
   next.sequelae ??= [];
   const id = `scars:${participantId}`;
-  const existing = next.sequelae.find(row => row.id === id);
+  // Une seule décision par sujet : elle garde son identifiant d'origine quand son sujet change d'identifiant (CAMP-10).
+  const existing = next.sequelae.find(row => row.kind === 'scar-decision' && row.participantId === participantId) || next.sequelae.find(row => row.id === id);
   if (existing) { existing.agreed = agreed; existing.decidedDay = state.calendar.currentDay; }
   else next.sequelae.push({ id, participantId, kind: 'scar-decision', label: 'Cicatrices impressionnantes', status: 'permanent', agreed, decidedDay: state.calendar.currentDay, history: [], ...ownership(owner) });
   return commit(next, receipt(state, operationId, 'scar-decision', 'applied', agreed ? 'scars-agreed' : 'scars-declined', { participantId }));
