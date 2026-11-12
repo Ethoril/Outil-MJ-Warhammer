@@ -109,7 +109,6 @@ import { previewV5SecondaryTest, secondaryTestDetail, resolveV5TestModifiers, co
 import { effectiveOrder } from './turn-order.js';
 import { AWAKENING_FLAG, awakeningLostTurnRound, awakeningLayer } from './v5-spell-restrictions.js';
 
-export const V5_SPELL_CONTRACTS_VERSION = 'v5-spell-contracts-2026-10-10.3';
 
 export const IMPLEMENTED_SPECIAL_HANDLERS = new Set([
   'abullas-snare', 'acceptance-of-fate', 'aethyric-arms', 'almanac', 'amaranth', 'amber-talons', 'amber-trance',

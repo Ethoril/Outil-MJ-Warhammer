@@ -1,12 +1,11 @@
 import talentQualityRegistry from '../data/v5-quality-talent-contracts.json' with {type:'json'};
 import contracts from '../data/keyword-engine-contracts.json' with { type: 'json' };
 import { ENGINES } from '../data/keyword-engines.js';
-import { referenceSlug, parseReferenceCSV, parseKeywordCSV, getReferenceCatalogue, getReferenceStatus, loadInitialReferences, refreshReferences, resolveKeyword } from './reference-catalog.js';
+import { referenceSlug, parseReferenceCSV, parseKeywordCSV, getReferenceCatalogue, getReferenceStatus, refreshReferences, resolveKeyword } from './reference-catalog.js';
 export const slugify=referenceSlug;
 const display=word=>({...word,slug:word.id,hasRating:Boolean(word.parameter)});
 /** Supports the historic two-column format for imports; network refresh requires the explicit contract. */
 export function parseCSV(text){const table=parseReferenceCSV(text);if(table[0]?.some(h=>h==='Identifiant'))return parseKeywordCSV(text).map(display);const [headers,...rows]=table;if(!headers||headers.length<2)return [];return rows.filter(row=>row[0]?.trim()).map(row=>({name:row[0].trim(),slug:slugify(row[0]),hasRating:/\bx\b/iu.test(row[0]),effect:row[1]||''}));}
-export const loadInitialKeywords=()=>{loadInitialReferences();return getKeywordList();};
 export async function fetchKeywords(forceRefresh=false){await refreshReferences({forceRefresh});return getKeywordList();}
 export const getKeywordList=()=>getReferenceCatalogue().keywords.map(display);
 export const getKeywordBySlug=value=>{const word=resolveKeyword(value);return word?display(word):null;};

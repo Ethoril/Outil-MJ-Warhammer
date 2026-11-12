@@ -26,7 +26,6 @@ const CONJURED_WEAPON_GROUPS=Object.freeze({
  halberd:'Hast',pike:'Hast',staff:'Hast',spear:'Hast',
  'bastard-sword':'Deux mains',greataxe:'Deux mains',pick:'Deux mains',warhammer:'Deux mains',zweihander:'Deux mains'
 });
-export const conjuredWeaponTrainingGroup=key=>CONJURED_WEAPON_GROUPS[key]||null;
 export function conjuredWeaponMetadata(participant,action){
  const actionV5=action?.extensions?.v5||{},effectId=action?.spellEffectId||actionV5.spellEffectId;
  const effect=effectId&&(participant?.extensions?.v5?.spellEffects||[]).find(row=>row.id===effectId);
@@ -82,7 +81,6 @@ export function normalizeEquipment(collection,{catalogue=getReferenceCatalogue()
  }
  return {coverage:'present',items,warnings};
 }
-export const validateEquipmentCollection=normalizeEquipment;
 export function normalizeArmorLocations(armor={}){
  const value=x=>Number.isFinite(Number(x))&&x!==null&&x!==''?Math.max(0,Number(x)):0;
  return Object.fromEntries(HIT_LOCATIONS.map(({id})=>[id,value(armor?.[id]??(/^.*Arm$/u.test(id)?armor.arms:/^.*Leg$/u.test(id)?armor.legs:0))]));

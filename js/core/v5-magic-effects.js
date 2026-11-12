@@ -22,7 +22,6 @@ import { armorMaterial, wornArmourPieces } from './v5-armor-material.js';
 import { isTargetDaemon, isTargetUndead } from './v5-magic-target-nature.js';
 import { projectDivineGear } from './v5-divine-effects-gear.js';
 
-export const V5_MAGIC_EFFECTS_VERSION = 'v5-magic-effects-2026-10-10.1';
 /** Expressions chiffrées déclarées par un contrat ; aucun dé et aucune interprétation de prose. */
 export function spellFormulaValue(formula,caster,sl=0){
  const stats=casterCaracs(caster),values={DR:sl,...Object.fromEntries(['FM','F','E','Int','I','Soc','Ag','Dex','CT','CC','M'].map(key=>[key,Number(stats[key])])),BF:Math.floor(Number(stats.F)/10),BFM:Math.floor(Number(stats.FM)/10),BE:Math.floor(Number(stats.E)/10),BIntelligence:Math.floor(Number(stats.Int)/10),BSoc:Math.floor(Number(stats.Soc)/10),BDex:Math.floor(Number(stats.Dex)/10),BInitiative:Math.floor(Number(stats.I)/10)};

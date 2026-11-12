@@ -17,7 +17,6 @@ import { previewV5SecondaryTest, secondaryTestDetail } from './v5-test-modifiers
 import { armorMaterial, wornArmourPieces } from './v5-armor-material.js';
 import { keywordMatches, participantKeywords, resolveKeyword } from './creature-keywords.js';
 
-export const V5_MAGIC_ATTRIBUTES_VERSION = 'v5-magic-attributes-2026-10-10.1';
 
 
 export const LORE_ATTRIBUTES = Object.freeze({

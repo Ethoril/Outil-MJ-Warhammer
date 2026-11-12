@@ -98,7 +98,6 @@ export function normalizeEffects(states = []) {
     .map((raw, index) => normalizeState(raw, index));
 }
 
-export const normalizeStates = normalizeEffects;
 
 const CAPABILITIES = Object.freeze({
   hemorragique: { mode: EFFECT_MODES.AUTOMATIC, trigger: 'endOfTurn', effect: 'hp-minus-per-level' },

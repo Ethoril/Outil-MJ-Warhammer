@@ -4,7 +4,6 @@ import { previewV5ActionCosts } from './v5-action-costs.js';
 import { createV5TimedEffect } from './v5-timed-effect.js';
 import { ENEMY_FROM_KEYWORDS, contextMatchesSpecialization } from './creature-keywords.js';
 import { CLAUSE_EVENTS as EVENTS, CLAUSE_ROLES as ROLES, onlyFields as only, validateClauseShape, mergeProposals } from './effect-engine.js';
-export const TALENT_CONTRACT_V2_SCHEMA_VERSION = 2;
 const clone = structuredClone;
 const isRecord = value => value && typeof value === 'object' && !Array.isArray(value);
 const id = (value, label) => { if (typeof value !== 'string' || !value.trim()) throw new TypeError(`${label} requis`); };

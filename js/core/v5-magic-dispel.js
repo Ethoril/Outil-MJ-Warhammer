@@ -13,7 +13,6 @@ import { resolveCastingSkill } from './v5-magic-casting.js';
 import { prepareMagicOptions, enforceMagicTestRestrictions, familiarSkillSupport, applyMagicAttempt } from './v5-magic-talents.js';
 import { finalizeV5TestModifiers } from './v5-test-modifiers.js';
 
-export const V5_MAGIC_DISPEL_VERSION = 'v5-magic-dispel-2026-10-11.1';
 
 /**
  * Normalisation de chaîne pour comparaison insensible à la casse et aux accents.
