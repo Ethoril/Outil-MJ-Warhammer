@@ -25,6 +25,7 @@ import { applyV5TalentPenaltyRules, applyV5AttackSituationModifiers, computeV5We
 import { normalizeState } from './effects.js';
 import { previewV5TalentSLChoices } from './v5-talent-tests.js';
 import { conditionLevels, resolveV5TestModifiers, finalizeV5TestModifiers } from './v5-test-modifiers.js';
+import { awakeningSpell, awakeningMessage } from './v5-spell-restrictions.js';
 export { conditionLevels };
 import { weaponHandsForParticipant } from './equipment.js';
 export const V5_COMBAT_RULE_VERSION = 'v5-combat-2026-10-09.24.6';
@@ -191,7 +192,7 @@ export function buildCombatTest(normalized, role = 'actor') {
   // Test opposé uniquement : la Malice de Ranald décale le score du prêtre contre l’adversaire désigné, la fiche reste intacte.
   if(!defending&&normalized.noTestAction){
     const test=structuredClone(previewV5Test({score:0,roll:1,kind:'test'})),first=test.options[0];first.result={...first.result,success:true,sl:0,critical:false,fumble:false,automatic:true,noTest:true,details:{...first.result.details,doubled:false}};test.options=[{...first,id:'keep'}];test.choiceRequired=false;test.forcedInversion=false;
-    return{test,talentPlans:[],talentSLChoices:[],kind:'test',penalty:0,penaltyStates:[],unresolved:[],restrictions:(actor.states||[]).some(s=>['inconscient','surpris'].includes(s.key))?['Inconscient ou Surpris : ce choix de talent est indisponible.']:[],charging:false,qualityBonus:0};
+    return{test,talentPlans:[],talentSLChoices:[],kind:'test',penalty:0,penaltyStates:[],unresolved:[],restrictions:[...((actor.states||[]).some(s=>['inconscient','surpris'].includes(s.key))?['Inconscient ou Surpris : ce choix de talent est indisponible.']:[]),...(awakeningSpell(actor)?[awakeningMessage(actor)]:[])],charging:false,qualityBonus:0};
   }
   const kind = settings.kind || (defending ? (/^(?:Ag|Esquive|Dodge)$/i.test(action.label) ? 'test' : 'melee') : inferV5Kind(action, normalized.attackContext));
   let mischiefMissing = false;
@@ -355,6 +356,8 @@ export function buildCombatTest(normalized, role = 'actor') {
   if(!defending&&(actor.states||[]).some(s=>s.key==='glorious-spent'&&sourceActive(s))&&levels.has('sonne')&&context.mandatoryTest!==true&&context.freeAttackTalent!=='glorious-demise')restrictions.push('Fin glorieuse : aucune Action au prochain Tour tant que Sonné.');
   if (levels.has('inconscient')&&!(normalized.combatPrelude?.immediate?.glorious&&!defending)) restrictions.push('Un combattant Inconscient ne peut pas agir ou se défendre.');
   if (levels.has('surpris')) restrictions.push('Un combattant Surpris ne peut pas agir ou se défendre.');
+  // REGLES-10 : Chant vivifiant, ni Action ni défense active pendant l'éveil (MJ 12/11, Q2).
+  if (awakeningSpell(actor)) restrictions.push(awakeningMessage(actor, defending ? 'defend' : 'act'));
   if (!defending && kind === 'melee') {
     if (targetLevels.has('aterre')&&!normalized.combatPrelude?.suppressProneBonus) advantages.push({ id: 'target-prone', label: 'Cible à terre' });
     if (targetLevels.has('aveugle') && !levels.has('aveugle')) advantages.push({ id: 'target-blinded', label: 'Cible Aveuglée' });

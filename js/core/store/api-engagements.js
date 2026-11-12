@@ -5,6 +5,7 @@ import { withEngagement, withoutEngagements, engagedWith, canBeEngaged, expireEn
 import { outnumberSide } from '../outnumbering.js';
 import { hasFleeTalent } from '../v5-broken-escape.js';
 import { consumeObstinate } from '../v5-obstinate.js';
+import { noFleeMessage, awakeningMessage } from '../v5-spell-restrictions.js';
 
 const POSITION_KEYS = ['surrounded', 'higherGround', 'cover'];
 // Scène (planche D) : posée une fois pour la rencontre, elle pré-remplit chaque action (une valeur saisie sur l'action l'emporte).
@@ -88,6 +89,9 @@ export function createEngagementsApi({ api, currentEnvelope }) {
       return api.executeCommand('flee-v5', draft => {
         const people = draft.combat?.participants || [], actor = people.find(row => row.id === actorId);
         if (!actor) throw Object.assign(new Error('Combattant introuvable.'), { userFacing: true });
+        // REGLES-10 : Acceptation du Destin interdit la fuite ; Chant vivifiant, tout Mouvement pendant l'éveil.
+        const refused = noFleeMessage(actor) || awakeningMessage(actor, 'move');
+        if (refused) throw Object.assign(new Error(refused), { userFacing: true });
         const foes = engagedWith(draft.combat, people, actorId).map(id => people.find(row => row.id === id)).filter(person => canBeEngaged(person) && outnumberSide(person) !== outnumberSide(actor));
         if (!foes.length) throw Object.assign(new Error(`${actor.name} n’est engagé avec aucun adversaire : un simple déplacement suffit.`), { userFacing: true });
         const orderly = actor.extensions?.v5?.specialStates?.orderlyDisengage === true, broken = hasFleeTalent(actor) ? 0 : foes.length;

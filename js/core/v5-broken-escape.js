@@ -2,6 +2,7 @@ import { selectV5Test } from './v5-roll.js';
 import { effectiveSkillScore } from './v5-magic-talents.js';
 import { resolveV5ConditionTestContext } from './v5-test-context.js';
 import { previewV5SecondaryTest, secondaryTestDetail } from './v5-test-modifiers.js';
+import { awakeningMessage, noFleeMessage, noFleeSpell } from './v5-spell-restrictions.js';
 
 export const BROKEN_ESCAPE_RULE_VERSION = 'l06-broken-escape-2026-10-18.1';
 export const BROKEN_ESCAPE_SOURCE = Object.freeze({
@@ -30,6 +31,10 @@ export function previewV5BrokenEscape({ state, actor, actorId=actor?.id, action,
   if (!actor || actor.id !== actorId) return fail('Personnage actif introuvable.','actorId');
   if (!broken(actor)) return {ready:false,status:'blocked',error:'Le personnage ne porte pas Brisé.'};
   if (!['flee','sprint','hide'].includes(action)) return fail('Choisir Flee, Sprint ou Hide.','action');
+  // REGLES-10 : Acceptation du Destin interdit Flee et Sprint (Se cacher reste permis) ; Chant vivifiant, tout pendant l'éveil.
+  const awakening = awakeningMessage(actor, 'act');
+  if (awakening) return {ready:false,status:'blocked',error:awakening};
+  if (action !== 'hide' && noFleeSpell(actor)) return {ready:false,status:'blocked',error:noFleeMessage(actor)};
   if (!turn?.encounterId || !turn?.turnId || !finiteInt(turn.round,1)) return fail('Horloge canonique de Tour indisponible.','turn');
   if (!facts || typeof facts !== 'object' || Array.isArray(facts)) return fail('Fournir les faits MJ de cette étape.','facts');
   if (action === 'flee' && typeof facts.visibleToAnyEnemy !== 'boolean') return fail('Le MJ doit préciser la visibilité actuelle envers tout ennemi.','facts.visibleToAnyEnemy');
