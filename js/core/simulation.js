@@ -56,9 +56,6 @@ export function simulateAction(state, input = {}) {
   };
 }
 
-export const beginSimulation = simulateAction;
-export const previewSimulation = simulateAction;
-
 /** Compare one deterministic action against explicit targets without sharing mutable previews. */
 export function compareSimulationTargets(state, input = {}, targets = input.targets || []) {
   assertRevisionedState(state);
@@ -86,5 +83,3 @@ export function discardSimulation(simulation) {
   if (!isRecord(simulation) || simulation.mode !== 'simulation') throw new TypeError('Simulation invalide');
   return { status: 'discarded', simulation: { ...cloneValue(simulation), status: 'discarded' } };
 }
-
-export const abandonSimulation = discardSimulation;
