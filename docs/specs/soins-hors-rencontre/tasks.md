@@ -6,13 +6,13 @@ Mise à jour du 12/11 : les lots sont menés par une seule session, dans le work
 
 ## Lot A · Nom stable (publiable seul)
 
-- [ ] **T1 · Nom et propriétaire enregistrés à l'ouverture d'un suivi**
+- [x] **T1 · Nom et propriétaire enregistrés à l'ouverture d'un suivi**
   - Objectif : chaque blessure, maladie ou séquelle ouverte reçoit `ownerLabel` (« nom — rencontre ») et, s'il existe, `ownerId` ; le registre accepte ces champs et les garde.
   - Fichiers : `js/core/v5-aftermath.js`, `js/core/v5-sequelae.js`, `js/core/store/api-aftermath.js`, `tests/unit/sequelles/suivi-nom-proprietaire.test.js` (nouveau).
   - Critères : CA1.
   - Acceptation : `node --test tests/unit/sequelles/suivi-nom-proprietaire.test.js`.
 
-- [ ] **T2 · Libellé stable dans Campagne** — après : T1
+- [x] **T2 · Libellé stable dans Campagne** — après : T1
   - Objectif : `aftermathRowLabel` remplace « Suivi hors rencontre N » ; libellé de repli pour un ancien suivi sans nom.
   - Fichiers : `js/core/aftermath-subjects.js` (nouveau, cette seule fonction), `js/ui/campaign-workspace.js`, `tests/unit/sequelles/suivi-libelle.test.js` (nouveau).
   - Critères : CA2, CA4, CA5.
@@ -20,19 +20,19 @@ Mise à jour du 12/11 : les lots sont menés par une seule session, dans le work
 
 ## Lot B · Le personnage suivi
 
-- [ ] **T3 · Sujet d'un suivi et personnages suivis** — après : T2
+- [x] **T3 · Sujet d'un suivi et personnages suivis** — après : T2
   - Objectif : `aftermathSubjectOf` et `followedCharacters`, purs ; la projection de Map Display passe par la même fonction, son comportement inchangé.
   - Fichiers : `js/core/aftermath-subjects.js`, `js/core/map-link-state.js`, `tests/unit/sequelles/suivi-sujet.test.js` (nouveau).
   - Critères : CA3, CA12, CA38, CA40, CA41.
   - Acceptation : `node --test tests/unit/sequelles/suivi-sujet.test.js` puis `node --test tests/unit/combat/liaison-carte-canal.test.js` (couvre `offScenePjParticipants`).
 
-- [ ] **T4 · Fin de combat : reporter, garder ou archiver** — après : T3
+- [x] **T4 · Fin de combat : reporter, garder ou archiver** — après : T3
   - Objectif : `previewEncounterEnd` et `endEncounter` ; PV, États et Blessures Critiques reportés ; PJ à fiche suivi d'office ; les autres au choix du MJ ; même règle au retrait d'un participant ; statut archivé pour maladies et séquelles ; scène suspendue sans question.
   - Fichiers : `js/core/aftermath-subjects.js`, `js/core/v5-aftermath.js`, `js/core/v5-sequelae.js`, `js/core/store.js`, `tests/unit/sequelles/fin-de-combat.test.js` (nouveau).
   - Critères : CA6 à CA13 (hors fenêtre), CA39.
   - Acceptation : `node --test tests/unit/sequelles/fin-de-combat.test.js`.
 
-- [ ] **T5 · Retour en rencontre** — après : T4
+- [x] **T5 · Retour en rencontre** — après : T4
   - Objectif : au lancement, un PJ à fiche prend son personnage suivi sans choix dans Préparer ; un seul exemplaire par ligne porte le personnage ; les Blessures Critiques reviennent sur le participant.
   - Fichiers : `js/core/encounters.js`, `js/core/store.js` (appels de `launchEncounter`), `tests/unit/sequelles/retour-en-rencontre.test.js` (nouveau).
   - Critères : CA24 à CA27.
@@ -40,27 +40,27 @@ Mise à jour du 12/11 : les lots sont menés par une seule session, dans le work
 
 ## Lot C · Soigner hors rencontre
 
-- [ ] **T6 · Commandes de soin sur le sujet résolu** — après : T4
+- [x] **T6 · Commandes de soin sur le sujet résolu** — après : T4
   - Objectif : toutes les commandes de `api-aftermath.js` lisent et écrivent le sujet du suivi ; ouverture d'une maladie et d'un suivi de Blessures perdues pour un personnage suivi.
   - Préalable : figer les reçus de 3.45.1 sur un jeu de cas (test de parité), avant toute modification.
   - Fichiers : `js/core/store/api-aftermath.js`, `js/core/store.js` (`aftermathHealerOf`, `withHealingFumble`, `absentAftermathSubjects`), `tests/unit/sequelles/soins-hors-rencontre.test.js` (nouveau), `tests/unit/sequelles/soins-parite.test.js` (nouveau).
   - Critères : CA15 à CA18, CA32, CA33, CA42.
   - Acceptation : `node --test tests/unit/sequelles/soins-hors-rencontre.test.js` puis `node --test tests/unit/sequelles/soins-parite.test.js`.
 
-- [ ] **T7 · Soigneurs : personnages suivis et soigneur extérieur** — après : T6
+- [x] **T7 · Soigneurs : personnages suivis et soigneur extérieur** — après : T6
   - Objectif : le soigneur peut être un personnage suivi hors rencontre ou un soigneur extérieur saisi (nom, score, Bonus d'Intelligence, talent Chirurgie).
   - Préalable : relire V5 p. 170 à 178 ; si une règle borne qui peut soigner (soi-même, distance, matériel), s'arrêter et poser la question au MJ.
   - Fichiers : `js/core/store/api-aftermath.js`, `js/core/store.js`, `js/core/v5-aftermath.js` (identifiant du soigneur extérieur), `tests/unit/sequelles/soigneurs.test.js` (nouveau).
   - Critères : CA20 à CA23 (hors écran).
   - Acceptation : `node --test tests/unit/sequelles/soigneurs.test.js`.
 
-- [ ] **T8 · Le temps avance pour les personnages suivis** — après : T6
+- [x] **T8 · Le temps avance pour les personnages suivis** — après : T6
   - Objectif : aperçu et avance du temps demandent les Tests quotidiens des personnages suivis, avec leur score ; seuls les suivis sans sujet restent « absents ».
   - Fichiers : `js/core/store.js` (`syncAftermathToClock`), `js/core/store/api-aftermath.js` (`previewAftermathAdvance`, `advanceAftermathCalendar`), `tests/unit/sequelles/temps-suivis.test.js` (nouveau).
   - Critères : CA28 à CA30.
   - Acceptation : `node --test tests/unit/sequelles/temps-suivis.test.js`.
 
-- [ ] **T9 · « Envoyer aux fiches » : attribution par propriétaire** — `[P]` avec T7 et T8 ; après : T4
+- [x] **T9 · « Envoyer aux fiches » : attribution par propriétaire** — `[P]` avec T7 et T8 ; après : T4
   - Objectif : les lignes du registre d'un PJ se comptent par propriétaire en plus de la trace `owners` ; aperçu d'envoi identique.
   - Fichiers : `js/core/fiche-writeback.js`, `tests/unit/` (test existant du chantier H à étendre).
   - Critères : CA36 (partie hors migration).
@@ -68,13 +68,13 @@ Mise à jour du 12/11 : les lots sont menés par une seule session, dans le work
 
 ## Lot D · Écrans
 
-- [ ] **T10 · Campagne : liste, détail, soins, nouveau suivi** — après : T7, T8
+- [x] **T10 · Campagne : liste, détail, soins, nouveau suivi** — après : T7, T8
   - Objectif : Campagne liste participants et personnages suivis, ouvre toutes les opérations hors rencontre, propose les trois sortes de soigneur ; les messages d'absence disparaissent.
   - Fichiers : `js/ui/campaign-workspace.js`, `js/ui/v5-aftermath-panel.js`, `js/ui/campaign-workspace.css`, `tests/campagne-soins-hors-rencontre-browser.mjs` (nouveau).
   - Critères : CA14, CA15, CA19, CA20, CA22, CA31.
   - Acceptation : `timeout 120 node tests/campagne-soins-hors-rencontre-browser.mjs`.
 
-- [ ] **T11 · Fenêtre « Garder ou archiver » et suppression d'un personnage** — `[P]` avec T10 ; après : T4
+- [x] **T11 · Fenêtre « Garder ou archiver » et suppression d'un personnage** — `[P]` avec T10 ; après : T4
   - Objectif : « Terminer le combat » et le retrait d'un participant ouvrent la fenêtre quand il le faut, toast « Annuler » conservé ; supprimer un personnage suivi avec suivis ouverts demande confirmation.
   - Fichiers : `js/main.js`, `js/ui/encounter-end-dialog.js` (nouveau), `js/ui/prepare-view.js`, `tests/fin-de-combat-browser.mjs` (nouveau).
   - Critères : CA8, CA9, CA10, CA11, CA39.
@@ -82,11 +82,18 @@ Mise à jour du 12/11 : les lots sont menés par une seule session, dans le work
 
 ## Lot E · Sauvegardes existantes
 
-- [ ] **T12 · Rattacher les PJ à fiche, archiver les autres anciens suivis** — après : T9
+- [x] **T12 · Rattacher les PJ à fiche, archiver les autres anciens suivis** — après : T9
   - Objectif : étape `{ from: 3, to: 4 }` de `SCHEMA_MIGRATIONS`, pure et rejouable (plan § 9) ; `CURRENT_SCHEMA_VERSION` et `SYNC_PROTOCOL_VERSION` à 4 ; une ligne de journal ; règle Firebase et lecture d'un document distant en version 3.
   - Fichiers : `js/core/migrations.js`, `js/core/sync-protocol.js`, `js/core/sync-session.js` si la lecture distante l'exige, `firebase.database.rules.json`, `tests/fixtures/suivis-orphelins-v3.json` (nouveau), `tests/unit/stockage/migration-suivis.test.js` (nouveau), tests existants qui figent le numéro 3.
   - Critères : CA34 à CA37.
   - Acceptation : `node --test tests/unit/stockage/migration-suivis.test.js` puis `node --test tests/unit/stockage/version-sauvegardes.test.js`.
+
+## Écarts constatés à l'exécution (12/11/2026)
+
+- T10 et T11 : un seul parcours navigateur, `tests/soins-hors-rencontre-browser.mjs` (fin de combat, ↶, Campagne, soigneur extérieur, rechargement, suppression confirmée), référencé dans `tests/parcours.json`, à la place des deux fichiers prévus.
+- T11 : Préparer n'offrait aucun moyen de choisir un personnage persistant pour une ligne de rencontre ; un sélecteur par ligne a été ajouté (CA25).
+- T6 : un suivi sans sujet (scène suspendue, ancien suivi) refuse désormais les soins (`subject-unavailable`) au lieu d'échouer.
+- T13 : `docs/CAMPAGNE_LOT2.md` est archivé depuis la 3.46.0 (`docs/archives/campagne-jouer/`) ; pas de note d'obsolescence à y ajouter. Pas de changement de version : il revient à la session principale, au feu vert du MJ.
 
 ## Clôture
 
